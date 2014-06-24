@@ -23,7 +23,7 @@ import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 @TranslatableClass (displayName = "Team")
-public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versionable,*/ FilterDataSetInterface {
+public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versionable,*/ FilterDataSetInterface<AmpTeamFilterData> {
 	private static final Logger logger = Logger.getLogger(AmpTeam.class);
 	private Long ampTeamId;
 	@TranslatableField
@@ -105,12 +105,14 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 			String elementClassName, String value) {
 		return new AmpTeamFilterData(filterRelObj, propertyName, propertyClassName, elementClassName, value);
 	}
+	
 	@Override
 	public Set<AmpTeamFilterData> getFilterDataSet() {
 		return filterDataSet;
 	}
+	
 	@Override
-	public void setFilterDataSet(Set filterDataSet) {
+	public void setFilterDataSet(Set<AmpTeamFilterData> filterDataSet) {
 		this.filterDataSet = filterDataSet;
 	}
 

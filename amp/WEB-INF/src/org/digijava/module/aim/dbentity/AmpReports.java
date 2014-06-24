@@ -38,11 +38,9 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
 @TranslatableClass (displayName = "Report")
-public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, Serializable, FilterDataSetInterface {
+public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, Serializable, FilterDataSetInterface<AmpFilterData> {
 
 	private Long ampReportId;
-
-	private Long id; // for logging
 
 	//private AmpARFilter defaultFilter;
 	
@@ -50,8 +48,6 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	@TranslatableField
 	private String name;
 	
-	private String nametrimed;
-
 	// private String description;
 	@TranslatableField
 	private String reportDescription;
@@ -108,7 +104,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	
 	private Set<AmpDesktopTabSelection> desktopTabSelections;
 	
-	private Set logs;
+	private Set<AmpReportLog> logs;
 	
 	private Set<AmpFilterData> filterDataSet;
 	
@@ -119,19 +115,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	
 	private AmpCategoryValue reportCategory;
 
-    // Some fields (say MTEF) may have totals too.
-    // And we need to calculate (track them) as well
-    private int extraTotalsCount;
-
-    // public static final String NOTE="NOTE: All shown funding items are in USD
-	// currency. All calendaristic date cells are shown using DD/MM/YYYY format.
-	// All amounts are in thousands.";
-	// private static SimpleDateFormat dateFormat = new
-	// SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
-
-	
-
-	public Set getLogs() {
+	public Set<AmpReportLog> getLogs() {
 		return logs;
 	}
 
@@ -143,7 +127,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 		this.publishedDate = publishedDate;
 	}
 
-	public void setLogs(Set logs) {
+	public void setLogs(Set<AmpReportLog> logs) {
 		this.logs = logs;
 	}
 
@@ -265,8 +249,6 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 		
 	}
 
-
-
 	public Set<AmpReportColumn> getShowAblesColumns(){
 		Set<AmpReportColumn> finalColumns=new HashSet<AmpReportColumn>();
 		if (hideActivities){
@@ -312,18 +294,6 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	public AmpReportHierarchy[] getHierarchiesArray() {
 		return hierarchies.toArray(new AmpReportHierarchy[hierarchies.size()]);
 	}
-	
-    /**
-     * Some of the columns should have total information. This must be taken into account when spans for the total row is calculated
-     * @return number of columns that have additional total information.
-     */
-    public int getExtraTotalsCount() {
-        return this.extraTotalsCount;
-    }
-
-    public void incrementExtraColumnsCount() {
-        extraTotalsCount++;
-    }
 
 	/**
 	 * @param hierarchies the hierarchies to set
@@ -355,20 +325,6 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 		this.orderedColumns = orderedColumns;
 	}
 
-	/**
-	 * @return Returns the defaultFilter.
-	 */
-//	public AmpARFilter getDefaultFilter() {
-//		return defaultFilter;
-//	}
-
-	/**
-	 * @param defaultFilter
-	 *            The defaultFilter to set.
-	 */
-//	public void setDefaultFilter(AmpARFilter defaultFilter) {
-//		this.defaultFilter = defaultFilter;
-//	}
 
 	/**
 	 * @return Returns the hideActivities.
@@ -463,10 +419,6 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 		return this.getAmpReportId();
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public String getObjectName() {
 		// TODO Auto-generated method stub
 		return this.getName();
@@ -495,16 +447,6 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	public void setActivityLevel(AmpCategoryValue activityLevel) {
 		this.activityLevel = activityLevel;
 	}
-
-	
-//	public void setAmpPage(AmpPages ampPage) {
-//		this.ampPage = ampPage;
-//	}
-//
-//	public AmpPages getAmpPage() {
-//		return ampPage;
-//	}
-	
 
 	/**
 	 * @return the budgetExporter
@@ -540,8 +482,9 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	public Set<AmpFilterData> getFilterDataSet() {
 		return filterDataSet;
 	}
+	
 	@Override
-	public void setFilterDataSet(Set filterDataSet) {
+	public void setFilterDataSet(Set<AmpFilterData> filterDataSet) {
 		this.filterDataSet = filterDataSet;
 	}
 
@@ -584,10 +527,6 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 		return this.name.replace("'","\\'");
 	}
 
-	public void setNametrimed(String nametrimed) {
-		this.nametrimed = nametrimed;
-	}
-
 	public Boolean getAllowEmptyFundingColumns() {
 		return allowEmptyFundingColumns;
 	}
@@ -622,26 +561,25 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 		}
 		return ret;
 	}
-         @Override
-        public String getObjectFilteredName() {
+	
+	@Override
+	public String getObjectFilteredName() {
 		return DbUtil.filter(getObjectName());
 	}
 
-		public AmpCategoryValue getReportCategory() {
-			return reportCategory;
-		}
+	public AmpCategoryValue getReportCategory() {
+		return reportCategory;
+	}
 
-		public void setReportCategory(AmpCategoryValue reportCategory) {
-			this.reportCategory = reportCategory;
-		}
+	public void setReportCategory(AmpCategoryValue reportCategory) {
+		this.reportCategory = reportCategory;
+	}
 		
-	public ReportGenerator getReportGenerator()
-	{
+	public ReportGenerator getReportGenerator() {
 		return this.reportGenerator;
 	}
 	
-	public void setReportGenerator(ReportGenerator generator)
-	{
+	public void setReportGenerator(ReportGenerator generator) {
 		this.reportGenerator = generator;
 	}
 
@@ -758,6 +696,10 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	 */
 	public boolean isSummaryReportNoHierachies () {
 		return (this.getHideActivities() && this.getHierarchies().size()==0);
+	}
+	
+	public boolean shouldInjectPledgeColumnsAsProjectColumns() {
+		return true && (this.getDrilldownTab() == null || !this.getDrilldownTab()) && (this.getName().contains("17746")); // BOZO! debug temp
 	}
 	
 	@Override

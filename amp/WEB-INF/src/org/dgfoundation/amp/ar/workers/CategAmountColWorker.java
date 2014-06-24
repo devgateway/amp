@@ -149,7 +149,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		int tr_type = -1;
 		String adj_type = "";
 		double tr_amount = rs.getDouble("transaction_amount");
-		java.sql.Date td= rs.getDate("transaction_date");
+		java.sql.Date td = rs.getDate("transaction_date");
 		
 		String currencyCode = "";
 		

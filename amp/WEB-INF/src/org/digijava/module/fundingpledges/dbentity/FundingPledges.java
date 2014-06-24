@@ -271,7 +271,7 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
 	
 	/**
 	 * calculates the sum of all the pledges <strong>in the currency of the workspace</strong>
-	 * @param currencyCode: the currency to make calculatins in. If null, then use defaultCurrency (workspace / base)
+	 * @param currencyCode: the currency to make calculations in. If null, then use defaultCurrency (workspace / base)
 	 * @return
 	 */
 	public Double getTotalPledgedAmount(String currencyCode) {

@@ -7,12 +7,10 @@
 package org.dgfoundation.amp.ar.workers;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -21,26 +19,15 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
-import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.GroupColumn;
-import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportGenerator;
-import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.filtercacher.FilterCacher;
-import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
-import org.dgfoundation.amp.ar.viewfetcher.InternationalizedPropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.budgetexport.util.MappingEncoder;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-
-import com.sun.rowset.CachedRowSetImpl;
-
 
 
 /**
@@ -73,7 +60,8 @@ public abstract class ColumnWorker {
 	protected Connection conn;
 	
 	protected ReportGenerator generator;
-	
+
+	protected FilterCacher filterCacher;
 	
 	protected ResultSetMetaData rsmd;
 	
@@ -92,21 +80,23 @@ public abstract class ColumnWorker {
 		this.sourceGroup = null;
 		extractor = true;
 		this.generator = generator;
+		this.filterCacher = generator.getFilterCacher();
 	}	
 	
-	public ColumnWorker(String destName, GroupColumn source,ReportGenerator generator) {
+	public ColumnWorker(String destName, GroupColumn source, ReportGenerator generator) {
 		this.columnName = destName;
 		this.sourceGroup = source;
 		extractor = false;
 		this.generator = generator;
+		this.filterCacher = generator.getFilterCacher();
 	}
 	
-	public Column populateCellColumn() {
-		Column c=null;
+	public Column<Cell> populateCellColumn() {
+		Column<Cell> c = null;
 		if(extractor) c = extractCellColumn();
 			else c = generateCellColumn();
 		c.setWorker(this);
-		c.setDescription(this.getRelatedColumn().getDescription());
+		c.setDescription(this.getRelatedColumn() == null ? null : this.getRelatedColumn().getDescription());
 		this.cleanup();
 		return c;
 	}
@@ -130,22 +120,28 @@ public abstract class ColumnWorker {
 	}
 	
 	protected Column generateCellColumn() {
-        CellColumn dest=null;
+        CellColumn dest = null;
         
-        Column sourceCol=sourceGroup.getColumn(sourceName);
-        dest=newColumnInstance(sourceCol.getItems().size());        
-		Iterator i=sourceCol.iterator();
-		while (i.hasNext()) {
-			Cell element = (Cell) i.next();
-			Cell destCell=getCellFromCell(element);
-			if (destCell!=null) dest.addCell(destCell);
+        Column<Cell> sourceCol = sourceGroup.getColumn(sourceName);
+        dest = newColumnInstance(sourceCol.getItems().size());        
+		for (Cell element:sourceCol.getItems()) {
+			Cell destCell = getCellFromCell(element);
+			if (destCell != null) dest.addCell(destCell);
 		}
 		return dest;
 	}
 	
+	protected FilterCacher getFilterCacher(){
+		return this.filterCacher;
+	}
+	
+	public void setFilterCacher(FilterCacher filterCacher) {
+		this.filterCacher = filterCacher;
+	}
+	
 	protected Column extractCellColumn() {
 		
-		FilterCacher filterCacher = generator.getFilterCacher();
+		FilterCacher filterCacher = getFilterCacher();
 		
 		Connection conn = filterCacher.getConnection();
 		
@@ -396,10 +392,9 @@ public abstract class ColumnWorker {
 
 	public void setPledge(boolean pledgereport) {
 		this.pledgereport = pledgereport;	
-		}
-	
-	public void setSession(HttpSession session) {
-		;
 	}
 	
+	public void setSession(HttpSession session) {
+		// nothing
+	}
 }

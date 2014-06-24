@@ -100,6 +100,11 @@ public class AmpARFilter extends PropertyListable {
 	public final static Long TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES = -997L;
 	
 	/**
+	 * holding my nose while writing this. This id should behave like "a pledge report without any filters whatsoever"
+	 */
+	public final static long DUMMY_SUPPLEMENTARY_PLEDGE_FETCHING_REPORT_ID = -996L;
+	
+	/**
 	 * list of all legal values of AmpActivity::"approvalStatus". DO NOT CHANGE, make a different set with a subset of these if you need the subset only
 	 */
 	public final static Set<String> activityStatus = Collections.unmodifiableSet(new HashSet<String>() {{
@@ -647,16 +652,19 @@ public class AmpARFilter extends PropertyListable {
 		return settings;
 	}
 	
+	public void initFilterQueryPledge() {
+		String showUnlinkedFunging	= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.UNLINKED_FUNDING_IN_PLEDGES_REPORTS);
+		if ( "true".equals(showUnlinkedFunging ) )
+			this.generatedFilterQuery = initialPledgeFilterQueryWithUnrelatedFunding;
+		else
+			this.generatedFilterQuery = initialPledgeFilterQueryWithoutUnrelatedFunding;
+	}
+	
 	public void initFilterQuery()
 	{
-		if (this.pledgeFilter) {
-			String showUnlinkedFunging	= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.UNLINKED_FUNDING_IN_PLEDGES_REPORTS);
-			if ( "true".equals(showUnlinkedFunging ) )
-				this.generatedFilterQuery = initialPledgeFilterQueryWithUnrelatedFunding;
-			else
-				this.generatedFilterQuery = initialPledgeFilterQueryWithoutUnrelatedFunding;
-		}
-		else			
+		if (this.pledgeFilter)
+			initFilterQueryPledge();
+		else
 			this.generatedFilterQuery = initialFilterQuery;
 	}
 	
@@ -699,6 +707,8 @@ public class AmpARFilter extends PropertyListable {
 					this.pledgeFilter = true;
 			}
 		}
+		this.pledgeFilter |= (this.ampReportId != null && this.ampReportId.longValue() == DUMMY_SUPPLEMENTARY_PLEDGE_FETCHING_REPORT_ID);
+		
 		this.initFilterQuery();
 
 		getEffectiveSettings(); // do not remove call - also writes into the caches
@@ -1021,87 +1031,90 @@ public class AmpARFilter extends PropertyListable {
 		return subquery;
 	}
 
+	public void generatePledgeFilterQuery()
+	{
+		this.pledgeFilter = true;
+		indexedParams=new ArrayList<FilterParam>();
+		
+		String WORKSPACE_ONLY = "";
+		if (this.workspaceonly && "Management".equals(this.getAccessType())){
+			WORKSPACE_ONLY = "SELECT v.pledge_id FROM v_pledges_projects v WHERE v.approval_status IN ("+Util.toCSString(activityStatus)+")";
+			pledgeQueryAppend(WORKSPACE_ONLY);
+		}
+		
+		String DONNOR_AGENCY_FILTER = " SELECT v.pledge_id FROM v_pledges_donor v  WHERE v.amp_donor_org_id IN ("
+			+ Util.toCSString(donnorgAgency) + ")";
+		
+		String DONOR_TYPE_FILTER	= "SELECT v.id FROM v_pledges_donor_type v WHERE org_type_id IN ("
+			+ Util.toCSString(donorTypes) + ")";
+
+		String DONOR_GROUP_FILTER = "SELECT v.pledge_id FROM v_pledges_donor_group v WHERE amp_org_grp_id IN ("
+				+ Util.toCSString(donorGroups) + ")";
+
+		String AID_MODALITIES_FILTER = "SELECT v.pledge_id FROM v_pledges_aid_modality v WHERE amp_modality_id IN ("
+			+ Util.toCSString(aidModalities) + ")";
+		
+		String TYPE_OF_ASSISTANCE_FILTER = "SELECT v.pledge_id FROM v_pledges_type_of_assistance v WHERE terms_assist_code IN ("
+			+ Util.toCSString(typeOfAssistance) + ")";
+		
+		String REGION_SELECTED_FILTER = "";
+		if (locationSelected != null) {
+			Set<AmpCategoryValueLocations> allSelectedLocations = new HashSet<AmpCategoryValueLocations>();
+			allSelectedLocations.addAll(locationSelected);
+			
+			DynLocationManagerUtil.populateWithDescendants(allSelectedLocations, locationSelected);
+			this.pledgesLocations = new ArrayList<AmpCategoryValueLocations>();
+			this.pledgesLocations.addAll(allSelectedLocations);
+			DynLocationManagerUtil.populateWithAscendants(this.pledgesLocations, locationSelected);
+			
+			this.relatedLocations = allSelectedLocations;
+			
+			String allSelectedLocationString = Util.toCSString(allSelectedLocations);
+			String subSelect = "SELECT aal.pledge_id FROM amp_funding_pledges_location aal, amp_location al " +
+					"WHERE ( aal.location_id=al.location_id AND " +
+					"al.location_id IN (" + allSelectedLocationString + ") )";
+			
+			if (REGION_SELECTED_FILTER.equals("")) {
+				REGION_SELECTED_FILTER	= subSelect;
+			} else {
+				REGION_SELECTED_FILTER += " OR amp_activity_id IN (" + subSelect + ")"; 
+			}			
+		}
+		
+		if (donnorgAgency != null && donnorgAgency.size() > 0){
+			pledgeQueryAppend(DONNOR_AGENCY_FILTER);
+		}
+		
+		if (donorGroups != null && donorGroups.size() > 0)
+			pledgeQueryAppend(DONOR_GROUP_FILTER);
+		
+		if (donorTypes != null && donorTypes.size() > 0)
+			pledgeQueryAppend(DONOR_TYPE_FILTER);
+		
+		if (aidModalities != null && aidModalities.size() > 0){
+			pledgeQueryAppend(AID_MODALITIES_FILTER);
+		}
+		if (typeOfAssistance != null && typeOfAssistance.size() > 0){
+			pledgeQueryAppend(TYPE_OF_ASSISTANCE_FILTER);
+		}
+		pledgeQueryAppend(generatePledgesSectorFilterSubquery(sectors, "Primary"));
+		pledgeQueryAppend(generatePledgesSectorFilterSubquery(secondarySectors, "Secondary"));
+		pledgeQueryAppend(generatePledgesSectorFilterSubquery(tertiarySectors, "Tertiary"));
+		pledgeQueryAppend(generatePledgesSectorFilterSubquery(tagSectors, "Tag"));
+		
+		pledgeQueryAppend(generatePledgesProgramFilterSubquery(nationalPlanningObjectives, "National Plan Objective"));
+		pledgeQueryAppend(generatePledgesProgramFilterSubquery(primaryPrograms, "Primary Program"));
+		pledgeQueryAppend(generatePledgesProgramFilterSubquery(secondaryPrograms, "Secondary Program"));
+
+		if (!REGION_SELECTED_FILTER.equals("")) {
+			pledgeQueryAppend(REGION_SELECTED_FILTER);
+		}
+	}
+	
 	public void generateFilterQuery(HttpServletRequest request, boolean workspaceFilter, boolean skipPledgeCheck) {
 		initFilterQuery(); //reinit filters or else they will grow indefinitely
 		if ( !skipPledgeCheck &&  !workspaceFilter && ReportContextData.getFromRequest().isPledgeReport()){
-			this.pledgeFilter = true;
-			indexedParams=new ArrayList<FilterParam>();
-			
-			
-			String WORKSPACE_ONLY = "";
-			if (this.workspaceonly && "Management".equals(this.getAccessType())){
-				WORKSPACE_ONLY = "SELECT v.pledge_id FROM v_pledges_projects v WHERE v.approval_status IN ("+Util.toCSString(activityStatus)+")";
-				pledgeQueryAppend(WORKSPACE_ONLY);
-			}
-			
-			String DONNOR_AGENCY_FILTER = " SELECT v.pledge_id FROM v_pledges_donor v  WHERE v.amp_donor_org_id IN ("
-				+ Util.toCSString(donnorgAgency) + ")";
-			
-			String DONOR_TYPE_FILTER	= "SELECT v.id FROM v_pledges_donor_type v WHERE org_type_id IN ("
-				+ Util.toCSString(donorTypes) + ")";
-
-			String DONOR_GROUP_FILTER = "SELECT v.pledge_id FROM v_pledges_donor_group v WHERE amp_org_grp_id IN ("
-					+ Util.toCSString(donorGroups) + ")";
-
-			String AID_MODALITIES_FILTER = "SELECT v.pledge_id FROM v_pledges_aid_modality v WHERE amp_modality_id IN ("
-				+ Util.toCSString(aidModalities) + ")";
-			
-			String TYPE_OF_ASSISTANCE_FILTER = "SELECT v.pledge_id FROM v_pledges_type_of_assistance v WHERE terms_assist_code IN ("
-				+ Util.toCSString(typeOfAssistance) + ")";
-			
-			String REGION_SELECTED_FILTER = "";
-			if (locationSelected != null) {
-				Set<AmpCategoryValueLocations> allSelectedLocations = new HashSet<AmpCategoryValueLocations>();
-				allSelectedLocations.addAll(locationSelected);
-				
-				DynLocationManagerUtil.populateWithDescendants(allSelectedLocations, locationSelected);
-				this.pledgesLocations = new ArrayList<AmpCategoryValueLocations>();
-				this.pledgesLocations.addAll(allSelectedLocations);
-				DynLocationManagerUtil.populateWithAscendants(this.pledgesLocations, locationSelected);
-				
-				this.relatedLocations = allSelectedLocations;
-				
-				String allSelectedLocationString = Util.toCSString(allSelectedLocations);
-				String subSelect = "SELECT aal.pledge_id FROM amp_funding_pledges_location aal, amp_location al " +
-						"WHERE ( aal.location_id=al.location_id AND " +
-						"al.location_id IN (" + allSelectedLocationString + ") )";
-				
-				if (REGION_SELECTED_FILTER.equals("")) {
-					REGION_SELECTED_FILTER	= subSelect;
-				} else {
-					REGION_SELECTED_FILTER += " OR amp_activity_id IN (" + subSelect + ")"; 
-				}			
-			}
-			
-			if (donnorgAgency != null && donnorgAgency.size() > 0){
-				pledgeQueryAppend(DONNOR_AGENCY_FILTER);
-			}
-			
-			if (donorGroups != null && donorGroups.size() > 0)
-				pledgeQueryAppend(DONOR_GROUP_FILTER);
-			
-			if (donorTypes != null && donorTypes.size() > 0)
-				pledgeQueryAppend(DONOR_TYPE_FILTER);
-			
-			if (aidModalities != null && aidModalities.size() > 0){
-				pledgeQueryAppend(AID_MODALITIES_FILTER);
-			}
-			if (typeOfAssistance != null && typeOfAssistance.size() > 0){
-				pledgeQueryAppend(TYPE_OF_ASSISTANCE_FILTER);
-			}
-			pledgeQueryAppend(generatePledgesSectorFilterSubquery(sectors, "Primary"));
-			pledgeQueryAppend(generatePledgesSectorFilterSubquery(secondarySectors, "Secondary"));
-			pledgeQueryAppend(generatePledgesSectorFilterSubquery(tertiarySectors, "Tertiary"));
-			pledgeQueryAppend(generatePledgesSectorFilterSubquery(tagSectors, "Tag"));
-			
-			pledgeQueryAppend(generatePledgesProgramFilterSubquery(nationalPlanningObjectives, "National Plan Objective"));
-			pledgeQueryAppend(generatePledgesProgramFilterSubquery(primaryPrograms, "Primary Program"));
-			pledgeQueryAppend(generatePledgesProgramFilterSubquery(secondaryPrograms, "Secondary Program"));
-
-			if (!REGION_SELECTED_FILTER.equals("")) {
-				pledgeQueryAppend(REGION_SELECTED_FILTER);
-			}
-		
+			generatePledgeFilterQuery();		
 			return;
 		}
 		

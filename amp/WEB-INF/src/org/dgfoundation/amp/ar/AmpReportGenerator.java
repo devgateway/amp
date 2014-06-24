@@ -38,6 +38,7 @@ import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.ar.filtercacher.FastFilterCacher;
 import org.dgfoundation.amp.ar.filtercacher.NopFilterCacher;
 import org.dgfoundation.amp.ar.viewfetcher.GeneratedPropertyDescription;
+import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -46,6 +47,7 @@ import org.dgfoundation.amp.exprlogic.Values;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpColumnsFilters;
 import org.digijava.module.aim.dbentity.AmpMeasures;
@@ -249,11 +251,10 @@ public class AmpReportGenerator extends ReportGenerator {
 	
 	/**
 	 * ugly! in case the reports engine survives mondrification, this will have to be properly handled through inheritance and dissolving of amp_columns_filters
-	 * @param col
 	 * @param extractorView
 	 * @return "" for nop, else an AND-prefixed SQL query
 	 */
-	protected String buildColumnFilterSQLClauseForPledges(AmpColumns col, String extractorView){
+	protected String buildColumnFilterSQLClauseForPledges(String extractorView){
 		Set<ViewDonorFilteringInfo> filteredColumns = ColumnFilterGenerator.PLEDGES_VIEWS_FILTERED_COLUMNS.get(extractorView);
 		if (filteredColumns == null)
 			return "";
@@ -285,7 +286,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 		String columnFilterSQLClause = "";
 		if (pledgereport)
-			columnFilterSQLClause = buildColumnFilterSQLClauseForPledges(col, extractorView);
+			columnFilterSQLClause = buildColumnFilterSQLClauseForPledges(extractorView);
 		else		
 			columnFilterSQLClause = ColumnFilterGenerator.generateColumnFilterSQLClause(filter, col.getFilters());
 
@@ -303,125 +304,197 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * 
 	 * @param extractable
 	 */
-	protected void createDataForColumns(Collection<AmpReportColumn> extractable) {
-		
-		List <SyntheticColumnsMeta> possibleSyntColMeta	= ArConstants.syntheticColumns;
-		if ( this.session != null ) {
-			possibleSyntColMeta	= ARUtil.getSyntheticGeneratorList(this.session);
-		}
-		List <SyntheticCellGenerator> syntCellGenerators	= new ArrayList<SyntheticCellGenerator>();
-		
-		
-		for (ArConstants.SyntheticColumnsMeta scm:  possibleSyntColMeta) {
-			SyntheticCellGenerator generator	= scm.getGenerator();
-			if ( generator.checkIfApplicabale(reportMetadata)  ) {
-				if ( this.session != null )
-					generator.setSession(this.session);
-				syntCellGenerators.add(generator);
-			}
-		}
-		
+	protected void createDataForColumns(Collection<AmpReportColumn> extractable) {			
 		try {
-
 			for(AmpReportColumn rcol:extractable){
 				long extractStartTime = System.currentTimeMillis();
-				
-				AmpColumns col = rcol.getColumn();
-				String cellTypeName = col.getCellType();
-				String extractorView = "";
-				
-				if (col.getExtractorView()!=null && this.filter.isPublicView()
-						// AND not a report used for budget export
-						&& (this.reportMetadata.getBudgetExporter() == null || !this.reportMetadata.getBudgetExporter()) ){
-					extractorView = ArConstants.VIEW_PUBLIC_PREFIX+col.getExtractorView();
-				}else{
-					extractorView  = col.getExtractorView();
+				Column column = extractColumn(rcol);
+				addExtractedColumn(rcol, column);
+				if (reportMetadata.shouldInjectPledgeColumnsAsProjectColumns()) {
+					insertPledgeSupplementaryColumn(rcol);
 				}
-				logger.info("Extracting column " + col.getColumnName() + " with view " + extractorView);
-				String columnName = col.getColumnName();
-				String relatedContentPersisterClass = col.getRelatedContentPersisterClass();
-
-				//logger.debug("Seeking class " + cellTypeName);
-
-				Class cellType = Class.forName(cellTypeName);
-
-				Constructor cellc = ARUtil.getConstrByParamNo(cellType, 0);
-
-				// create an instance of the cell that is of type described
-				Cell cell = (Cell) cellc.newInstance(new Object[] {});
-
-				// column worker is a class returned by getWorker method of each
-				// Cell
-				Class ceClass = cell.getWorker();
-
-				// create an instance of the column worker
-
-				ColumnWorker ce = null;
-
-				if (extractorView != null) {
-
-					Constructor<? extends ColumnWorker> ceCons = ARUtil.getConstrByParamNo(ceClass, 4, this.session);
-					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
-							filter.getGeneratedFilterQuery(), extractorView,
-							columnName, this });
-				} else {
-					Constructor<? extends ColumnWorker> ceCons = ARUtil.getConstrByParamNo(ceClass, 3, this.session);
-					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
-							columnName, rawColumns, this });
-				}
-				
-				ce.setRelatedColumn(col);
-
-				String columnFilterSQLClause = buildColumnFilterSQLClause(col, extractorView);
-				
-				ce.setInternalCondition(columnFilterSQLClause);
-				ce.setSession(this.session);
-				
-				
-				ce.setDebugMode(debugMode);
-				ce.setPledge(pledgereport);
-				
-				Column column = ce.populateCellColumn();
-				
-				if ( syntCellGenerators.size() > 0 && ArConstants.COLUMN_FUNDING.equals(column.getName()) ) {
-					for (SyntheticCellGenerator scg: syntCellGenerators) {
-						int order	= reportMetadata.getMeasureOrder( scg.getMeasureName() );
-						Collection<CategAmountCell> newCells	= scg.generate( column.getItems(), order );
-						if ( newCells!=null )
-							column.getItems().addAll(newCells);
-					}
-				}
-
-				if (relatedContentPersisterClass != null) {
-					column.setRelatedContentPersisterClass(Class.forName(relatedContentPersisterClass));
-					// instantiate a relatedContentPersister bean to get the
-					// ARDimension and store it for later use
-					Constructor contentPersisterCons = ARUtil.getConstrByParamNo(column.getRelatedContentPersisterClass(), 0);
-					ARDimensionable cp = (ARDimensionable) contentPersisterCons.newInstance();
-					column.setDimensionClass(cp.getDimensionClass());
-				}
-				//logger.info("Adding column " + column.getName());
-				CellColumn older = (CellColumn) rawColumns.getColumn(column.getColumnId());
-				if (older != null) {
-				    for ( Object o : column.getItems() ) 
-				    	older.addCell((Cell) o);
-				    
-				} else {
-					rawColumns.addColumn(rcol.getOrderId().intValue(), column);
-				    rawColumnsByName.put(column.getName(), (CellColumn) column);
-				}
-				
 				long extractEndTime = System.currentTimeMillis();
 				logger.info(String.format("extracting column %s took %d milliseconds\n", column.getName(), extractEndTime - extractStartTime));				
 			}
-
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 			//logger.error("Exception: ", e);
 		}
-
 	}
+	
+	protected AmpARFilter generateSupplementaryPledgeAmpARFilter() {
+		AmpARFilter res = FilterUtil.buildFilter(null, AmpARFilter.DUMMY_SUPPLEMENTARY_PLEDGE_FETCHING_REPORT_ID);
+		res.generatePledgeFilterQuery();
+		return res;
+	}
+	
+	protected Column extractPledgeCommitmentGap() {
+		AmpARFilter filter = generateSupplementaryPledgeAmpARFilter();
+		ColumnWorker ce = new CategAmountColWorker(filter.getGeneratedFilterQuery(), ArConstants.VIEW_PLEDGES_FUNDING, ArConstants.COLUMN_FUNDING, this);
+		ce.setRelatedColumn(null); // not needed for CategAmountColWorker
 
+		String columnFilterSQLClause = buildColumnFilterSQLClauseForPledges(ArConstants.VIEW_PLEDGES_FUNDING);
+		
+		ce.setInternalCondition(columnFilterSQLClause);
+		ce.setSession(null); // not needed for CategAmountColWorker
+		ce.setFilterCacher(new NopFilterCacher(filter));
+		
+		ce.setDebugMode(debugMode);
+		ce.setPledge(true);
+		
+		Column column = ce.populateCellColumn();
+		return column;
+	}
+	
+	/**
+	 * insert into the 
+	 * @param rcol
+	 */
+	protected void insertPledgeSupplementaryColumn(AmpReportColumn rcol){
+		if (rcol.getColumn().getColumnName().equals(ArConstants.COLUMN_FUNDING)){
+			//AmpReportColumn pledgeFunding = buildAmpReportColumn(ArConstants.COLUMN_FUNDING, ArConstants.VIEW_PLEDGES_FUNDING, CategAmountCell.class);
+			Column pledgesFundingColumn = extractPledgeCommitmentGap();
+		}
+//		AmpReportColumn complimentaryPledgesColumn = getComplimentaryPledgesColumn(rcol);
+//		if (complimentaryPledgesColumn != null){
+//			Column extraPledgesColumn = extractColumn(complimentaryPledgesColumn);
+//			addExtractedColumn(rcol, extraPledgesColumn);
+//		}
+	}
+	
+//	/**
+//	 * only call it if {@link AmpReports#shouldInjectPledgeColumnsAsProjectColumns()} is true!
+//	 * @param rcol
+//	 * @return
+//	 */
+//	protected AmpReportColumn getComplimentaryPledgesColumn(AmpReportColumn rcol) {
+//		if (rcol.getColumn().getColumnName().equals(ArConstants.COLUMN_FUNDING))
+//			return reportTypeToExtractorView.get(ArConstants.PLEDGES_TYPE);blabla
+//	}
+	
+	/**
+	 * either adds an extracted column to rawColumns or, if one with the same name already exists, adds its cells to the preexisting one
+	 * @param rcol
+	 * @param column
+	 */
+	protected void addExtractedColumn(AmpReportColumn rcol, Column<Cell> column) {
+		//logger.info("Adding column " + column.getName());
+		CellColumn older = (CellColumn) rawColumns.getColumn(column.getColumnId());
+		if (older != null) {
+			for (Cell cell:column.getItems())
+				older.addCell(cell);				    
+		} else {
+			rawColumns.addColumn(rcol.getOrderId().intValue(), column);
+		    rawColumnsByName.put(column.getName(), (CellColumn) column);
+		}	
+	}
+	
+	/**
+	 * extracts a column
+	 * @param rcol
+	 * @return
+	 * @throws Exception
+	 */
+	protected Column extractColumn(AmpReportColumn rcol) throws Exception {
+		AmpColumns col = rcol.getColumn();
+		String cellTypeName = col.getCellType();
+		String extractorView = "";
+		
+		if (col.getExtractorView()!=null && this.filter.isPublicView()
+				// AND not a report used for budget export
+				&& (this.reportMetadata.getBudgetExporter() == null || !this.reportMetadata.getBudgetExporter()) ){
+			extractorView = ArConstants.VIEW_PUBLIC_PREFIX + col.getExtractorView();
+		}else{
+			extractorView  = col.getExtractorView();
+		}
+		logger.info("Extracting column " + col.getColumnName() + " with view " + extractorView);
+		String columnName = col.getColumnName();
+		String relatedContentPersisterClass = col.getRelatedContentPersisterClass();
+
+		//logger.debug("Seeking class " + cellTypeName);
+
+		Class cellType = Class.forName(cellTypeName);
+
+		Constructor cellc = ARUtil.getConstrByParamNo(cellType, 0);
+
+		// create an instance of the cell that is of type described
+		Cell cell = (Cell) cellc.newInstance(new Object[] {});
+
+		// column worker is a class returned by getWorker method of each
+		// Cell
+		Class ceClass = cell.getWorker();
+
+		// create an instance of the column worker
+
+		ColumnWorker ce = null;
+
+		if (extractorView != null) {
+			Constructor<? extends ColumnWorker> ceCons = ARUtil.getConstrByParamNo(ceClass, 4, this.session);
+			ce = (ColumnWorker) ceCons.newInstance(new Object[] {
+					filter.getGeneratedFilterQuery(), extractorView,
+					columnName, this });
+		} else {
+			Constructor<? extends ColumnWorker> ceCons = ARUtil.getConstrByParamNo(ceClass, 3, this.session);
+			ce = (ColumnWorker) ceCons.newInstance(new Object[] {
+					columnName, rawColumns, this });
+		}
+		
+		ce.setRelatedColumn(col);
+
+		String columnFilterSQLClause = buildColumnFilterSQLClause(col, extractorView);
+		
+		ce.setInternalCondition(columnFilterSQLClause);
+		ce.setSession(this.session);
+		
+		ce.setDebugMode(debugMode);
+		ce.setPledge(pledgereport);
+		
+		Column column = ce.populateCellColumn();
+		if (ArConstants.COLUMN_FUNDING.equals(column.getName()))
+			processFundingColumn(column);
+		
+		if (relatedContentPersisterClass != null) {
+			column.setRelatedContentPersisterClass(Class.forName(relatedContentPersisterClass));
+			// instantiate a relatedContentPersister bean to get the
+			// ARDimension and store it for later use
+			Constructor contentPersisterCons = ARUtil.getConstrByParamNo(column.getRelatedContentPersisterClass(), 0);
+			ARDimensionable cp = (ARDimensionable) contentPersisterCons.newInstance();
+			column.setDimensionClass(cp.getDimensionClass());
+		}
+		return column;
+	}
+	
+	/**
+	 * does various postprocessing on the funding column, like for example: synthetic cells generators, injecting pledges columns into normal columns, etc
+	 * @param column
+	 */
+	protected void processFundingColumn(Column<CategAmountCell> column) {
+		List <SyntheticColumnsMeta> possibleSyntColMeta	= ArConstants.syntheticColumns;
+		if (this.session != null) {
+			possibleSyntColMeta	= ARUtil.getSyntheticGeneratorList(this.session);
+		}
+		
+		List<SyntheticCellGenerator> syntCellGenerators	= new ArrayList<SyntheticCellGenerator>();
+		for (ArConstants.SyntheticColumnsMeta scm:  possibleSyntColMeta) {
+			SyntheticCellGenerator generator	= scm.getGenerator();
+			if ( generator.checkIfApplicabale(reportMetadata)  ) {
+				if (this.session != null)
+					generator.setSession(this.session);
+				syntCellGenerators.add(generator);
+			}
+		}
+
+		if (syntCellGenerators.size() > 0) {
+			for (SyntheticCellGenerator scg: syntCellGenerators) {
+				int order	= reportMetadata.getMeasureOrder( scg.getMeasureName() );
+				Collection<CategAmountCell> newCells = scg.generate( column.getItems(), order );
+				if (newCells != null)
+					column.getItems().addAll(newCells);
+			}
+		}
+		
+	}
+	
 	/**
 	 * from the extractable list, we get the columns that are filter retrievable
 	 * and we apply percentages
@@ -429,7 +502,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * @throws InvocationTargetException 
 	 * @throws IllegalAccessException 
 	 */
-	protected void applyPercentagesToFilterColumns(){
+	protected void applyPercentagesToFilterColumns() {
 		TextCell fakeMc = new TextCell();
 		Set<String> hierarchyNames = reportMetadata.getHierarchyNames();
 		
@@ -483,35 +556,42 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 	}
 
-	protected void attachFundingMeta() {
-
-		// generate on-the-fly a customized AmpReportColumn - we need it for
-		// later steps
+	protected AmpReportColumn buildAmpReportColumn(String columnName, String extractorView, Class cellType) {
+		if (extractorView == null)
+			throw new RuntimeException("cannot build a dummy ARC for column " + columnName + " with a null extractorView");
 		AmpReportColumn arc = new AmpReportColumn();
 		AmpColumns ac = new AmpColumns();
 		arc.setColumn(ac);
 		arc.setOrderId(0L);
-		ac.setCellType("org.dgfoundation.amp.ar.cell.CategAmountCell");
-		ac.setColumnName(ArConstants.COLUMN_FUNDING);
-		if (reportMetadata.getType().intValue() == ArConstants.DONOR_TYPE)
-			ac.setExtractorView(ArConstants.VIEW_DONOR_FUNDING);
-		if (reportMetadata.getType().intValue() == ArConstants.COMPONENT_TYPE)
-			ac.setExtractorView(ArConstants.VIEW_COMPONENT_FUNDING);
-		if (reportMetadata.getType().intValue() == ArConstants.REGIONAL_TYPE)
-			ac.setExtractorView(ArConstants.VIEW_REGIONAL_FUNDING);
-		if (reportMetadata.getType().intValue() == ArConstants.CONTRIBUTION_TYPE)
-			ac.setExtractorView(ArConstants.VIEW_CONTRIBUTION_FUNDING);
-		if (reportMetadata.getType().intValue() == ArConstants.PLEDGES_TYPE)
-			ac.setExtractorView(ArConstants.VIEW_PLEDGES_FUNDING);
-
+		ac.setCellType(cellType.getName());
+		ac.setColumnName(columnName);
+		ac.setExtractorView(extractorView);
 		ColumnFilterGenerator.attachHardcodedFilters(ac);
+		return arc;
+	}
+	
+	/**
+	 * the funding extractor view for reports, indexed by report type
+	 */
+	static Map<Long, String> reportTypeToExtractorView = new java.util.TreeMap<Long, String>(){{
+		put((long) ArConstants.DONOR_TYPE, ArConstants.VIEW_DONOR_FUNDING);
+		put((long) ArConstants.COMPONENT_TYPE, ArConstants.VIEW_COMPONENT_FUNDING);
+		put((long) ArConstants.REGIONAL_TYPE, ArConstants.VIEW_REGIONAL_FUNDING);
+		put((long) ArConstants.CONTRIBUTION_TYPE, ArConstants.VIEW_CONTRIBUTION_FUNDING);
+		put((long) ArConstants.PLEDGES_TYPE, ArConstants.VIEW_PLEDGES_FUNDING);
+	}};
+	
+	
+	protected void attachFundingMeta() {
+		// generate on-the-fly a customized AmpReportColumn - we need it for
+		// later steps	
+		AmpReportColumn arc = buildAmpReportColumn(ArConstants.COLUMN_FUNDING, reportTypeToExtractorView.get(reportMetadata.getType()), CategAmountCell.class);
 
 		reportMetadata.getOrderedColumns().add(arc);
-
 		
-	
-		
-		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures())||ARUtil.containsColumn(ArConstants.COLUMN_UNCOMM_CUMULATIVE_BALANCE,reportMetadata.getShowAblesColumns())) {
+		if (ARUtil.containsMeasure(ArConstants.UNCOMMITTED_BALANCE,reportMetadata.getMeasures()) 
+			|| ARUtil.containsColumn(ArConstants.COLUMN_UNCOMM_CUMULATIVE_BALANCE, reportMetadata.getShowAblesColumns())) 
+		{
 			AmpReportColumn arcProp = new AmpReportColumn();
 			AmpColumns acProp = new AmpColumns();
 			arcProp.setColumn(acProp);
@@ -523,29 +603,12 @@ public class AmpReportGenerator extends ReportGenerator {
 			reportMetadata.getOrderedColumns().add(arcProp);
 		}
 		
-		Iterator<AmpReportColumn> iterRC	= reportMetadata.getColumns().iterator();
-		while ( iterRC.hasNext() ) {
-			
-			AmpReportColumn tempRC	= iterRC.next();
+		for (AmpReportColumn tempRC:reportMetadata.getColumns()) {
 			AmpColumns tempCol		= tempRC.getColumn();
-			if ( tempCol.getColumnName().toLowerCase().contains("mtef") ) {
-				AmpColumns clonedCol	= new AmpColumns();
-				clonedCol.setColumnName( tempCol.getColumnName() );
-				clonedCol.setColumnId( tempCol.getColumnId() );
-				clonedCol.setAliasName( tempCol.getAliasName() );
-				clonedCol.setCellType( tempCol.getCellType() );
-				clonedCol.setDescription( tempCol.getDescription() );
-				clonedCol.setExtractorView( tempCol.getExtractorView() );
-				clonedCol.setFilterRetrievable( tempCol.getFilterRetrievable() );
-				clonedCol.setRelatedContentPersisterClass( tempCol.getRelatedContentPersisterClass() );
-				clonedCol.setTokenExpression( tempCol.getTokenExpression() );
-				clonedCol.setTotalExpression( tempCol.getTotalExpression() );
-				
+			if (tempCol.getColumnName().toLowerCase().contains("mtef")) {
+				AmpColumns clonedCol	= tempCol.makeCopy();
 				tempRC.setColumn(clonedCol);
-				
 				ColumnFilterGenerator.attachHardcodedFilters(clonedCol);
-
-                reportMetadata.incrementExtraColumnsCount();
 			}
 		}
 	}
@@ -623,7 +686,6 @@ public class AmpReportGenerator extends ReportGenerator {
 					cc.addCellRaw(cellToAdd); //addCellRaw because we don't want TotalAmountCellColumn to merge everything in one huge cell
 				}
 			}
-			
 			
 			boolean shouldSplitTotalsByRealDisbursements = element.getMeasureName().equals(ArConstants.REAL_DISBURSEMENTS);
 			if (funding != null && shouldSplitTotalsByRealDisbursements)

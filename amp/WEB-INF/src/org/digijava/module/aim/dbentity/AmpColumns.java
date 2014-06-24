@@ -153,4 +153,19 @@ public class AmpColumns  implements Serializable, Comparable
 		this.showRowCalculations = showRowCalculations;
 	}
 	
+	public AmpColumns makeCopy() {
+		AmpColumns clonedCol = new AmpColumns();
+		clonedCol.columnName = this.getColumnName();
+		clonedCol.setColumnId( this.getColumnId() );
+		clonedCol.setAliasName( this.getAliasName() );
+		clonedCol.setCellType( this.getCellType() );
+		clonedCol.setDescription( this.getDescription() );
+		clonedCol.setExtractorView( this.getExtractorView() );
+		clonedCol.setFilterRetrievable( this.getFilterRetrievable() );
+		clonedCol.setRelatedContentPersisterClass( this.getRelatedContentPersisterClass() );
+		clonedCol.setTokenExpression( this.getTokenExpression() );
+		clonedCol.setTotalExpression( this.getTotalExpression() );
+		return clonedCol;
+	}
+	
 }

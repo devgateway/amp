@@ -56,9 +56,9 @@ public class EsriTestCases extends EsriTestCase
 		List<SimpleLocation> fundings = DbHelper.getFundingByRegionList(null, "Region", "USD", new Date(1980 - 1900, 0, 1),
 	            new Date(2020 - 1900, 0, 1), CategoryConstants.ADJUSTMENT_TYPE_ACTUAL, 2, new BigDecimal(1), mapFilter);
 		
-		SimpleLocation[] bla = 
-			{
-				new SimpleLocation("Anenii Noi County", "111333.00", "555111.00", "123654.00"),
+		SimpleLocation[] bla = {
+				//new SimpleLocation("Anenii Noi County", "111333.00", "555111.00", "123654.00"),
+				new SimpleLocation("Anenii Noi County", "0.00", "0.00", "123654.00"),
 				new SimpleLocation("Moldova", "0.00", "0.00", "789123.00")
 			};
 		checkSimpleLocations(fundings, bla);

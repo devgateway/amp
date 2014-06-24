@@ -1,6 +1,7 @@
 package org.digijava.module.esrigis.action;
 
 import java.awt.image.BufferedImage;
+import org.apache.commons.validator.UrlValidator;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -106,15 +107,23 @@ public class MapsConfiguration extends DispatchAction {
 		HttpSession session = request.getSession();
 		
 		//Validations
+		ActionMessages errors = new ActionMessages();
+		String[] schemes = {"http","https"};
+		UrlValidator urlValidator = new UrlValidator(schemes);
+    	
 		if(checkEmptyFields(mapForm)){
-			ActionMessages errors = new ActionMessages();
-    		errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.mapConfiguration.emptyFields"));
-    		if (errors.size() > 0)
-    			{
-    				saveErrors(request, errors);
-    			}
+			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.mapConfiguration.emptyFields"));
+    	}
+		else if (!urlValidator.isValid(mapForm.getUrl())) {
+			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.mapConfiguration.badUrl"));
+		}	
+		
+		if (errors.size() > 0)
+		{
+			saveErrors(request, errors);
 			return mapping.findForward("addEdit");
 		}
+	
 		
 		AmpMapConfig map;
 		if (mapForm.getMapId() != null
@@ -193,8 +202,8 @@ public class MapsConfiguration extends DispatchAction {
 	}
 
 	private boolean checkEmptyFields (MapsConfigurationForm form) {
-		if (form.getUrl() == null || form.getUrl().isEmpty() || form.getCount() == null 
-				|| form.getCount().isEmpty())
+		if (form.getUrl() == null || form.getUrl().trim().isEmpty() || form.getCount() == null 
+				|| form.getCount().trim().isEmpty())
 		{
 			return true;
 		}

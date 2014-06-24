@@ -154,7 +154,7 @@ html.chrome .bd_drop{margin-top:15px;}
 
 /* CONTENT */
 #content{z-index:10;}
-.help_body_table {margin-top:28px;}/*distance to content from top, for help page*/
+.help_body_table {margin-top:39px;background:#fff;}/*distance to content from top, for help page*/
 .tab {border-top:1px solid #BEBDB6; border-right: 1px solid #BEBDB6; border-bottom:1px solid #BEBDB6; margin-bottom:7px;}
 .tab_cont {padding-top:7px; padding-bottom:7px; padding-left:7px; font-size:13px;}
 .step_num {border:1px solid #CCCCCC; margin-right:3px; padding-left:5px; padding-right:5px; padding-top:2px; padding-bottom:2px; font-size:10px; color:#B3B3B3;}

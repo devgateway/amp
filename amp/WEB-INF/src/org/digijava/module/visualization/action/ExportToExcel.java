@@ -2141,82 +2141,84 @@ public class ExportToExcel extends Action {
     
     private void getResponsibleOrganizationTable(String responsibleOrganizationOpt, HSSFWorkbook wb, VisualizationForm vForm, HttpServletRequest request, String amountDesc,ExportToExcelData data) throws Exception{
     	//Beneficiary Agency Profile Table.
-	    if (!responsibleOrganizationOpt.equals("0")){
-	    	data.sheet13 = wb.createSheet(data.responsibleOrganizationProfTrn);
-	    	data.rowNum=1;
-	    }
-	    if (responsibleOrganizationOpt.equals("1") || responsibleOrganizationOpt.equals("3")){
-	    	//rowNum = rowNum + 2;
-	        data.cellNum = 0;
-	        
-	        data.headerText = null;
-        	data.row = data.sheet13.createRow(data.rowNum++);
-        	data.cell = data.row.createCell(data.cellNum++);
-        	String[] organizationProfRows = null;
-        	if(vForm.getExportData().getResponsibleOrganizationTableData()!=null){
-        		organizationProfRows = vForm.getExportData().getResponsibleOrganizationTableData().split("<");
-        	}
-            
-        	data.headerText = new HSSFRichTextString(data.responsibleOrganizationProfTrn + amountDesc);
-            data.cell.setCellValue(data.headerText);
-            data.cell.setCellStyle(data.subHeaderCS);
-            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
-            
-            data.cellNum = 0;
-            data.row = data.sheet13.createRow(data.rowNum++);
-            data.cell = data.row.createCell(data.cellNum++);
-            data.headerText = new HSSFRichTextString(data.organizationTrn);
-            data.cell.setCellValue(data.headerText);
-            data.cell.setCellStyle(data.subHeaderCS);
-            if (organizationProfRows!=null && organizationProfRows.length>1){
-	            String[] singleRow = organizationProfRows[1].split(">");
-	            for (int i = 1; i < singleRow.length; i++) {
-	            	data.cell = data.row.createCell(data.cellNum++);
-	 	            data.headerText = new HSSFRichTextString(singleRow[i]);
-	 	            data.cell.setCellValue(data.headerText);
-	 	            data.cell.setCellStyle(data.subHeaderCS);
-				}
-	            for (int i = 2; i < organizationProfRows.length; i++) {
-		        	data.cellNum = 0;
-			        data.row = data.sheet13.createRow(data.rowNum++);
-			        HSSFCellStyle st = null;
-			    	if (i == organizationProfRows.length-1)
-			    		st = data.lastCellStyle;
-		            else
-		            	st = data.cellStyle;
-	            	singleRow = organizationProfRows[i].split(">");
-	            	for (int j = 0; j < singleRow.length; j++) {
-	            		data.cell = data.row.createCell(data.cellNum++);
-	 		            data.headerText = new HSSFRichTextString(singleRow[j]);
-	 		            data.cell.setCellValue(data.headerText);
-	 		            data.cell.setCellStyle(st);
-	    			}
-				}
-            }
-	    }
-	    
-	    if (responsibleOrganizationOpt.equals("2") || responsibleOrganizationOpt.equals("3")){
-	    	data.rowNum++;
-	    	data.rowNum++;
-	        data.cellNum = 0;
-	        data.row = data.sheet13.createRow(data.rowNum++);
-            data.cell = data.row.createCell(data.cellNum++);
-            data.headerText = new HSSFRichTextString(data.responsibleOrganizationProfTrn + " Chart");
-            data.cell.setCellValue(data.headerText);
-            data.cell.setCellStyle(data.headerCS);
-            
-	        ByteArrayOutputStream ba6 = new ByteArrayOutputStream();
-            ImageIO.write(vForm.getExportData().getResponsibleOrganizationGraph(), "png", ba6);
-            int pictureIndex6 = wb.addPicture(ba6.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
-            HSSFPatriarch patriarch6 = data.sheet13.createDrawingPatriarch();
-            HSSFPicture pic6 =  patriarch6.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, data.rowNum, (short)5, data.rowNum+25), pictureIndex6);
-            HSSFClientAnchor anchor = (HSSFClientAnchor) pic6.getAnchor();
-            anchor.setCol2((short)5);
-            anchor.setDx1(0);
-            anchor.setDx2(0);
-            anchor.setRow2(data.rowNum+25);
-            anchor.setDy1(0);
-            anchor.setDy2(0);
+    	if(responsibleOrganizationOpt != null) {
+		    if (!responsibleOrganizationOpt.equals("0")){
+		    	data.sheet13 = wb.createSheet(data.responsibleOrganizationProfTrn);
+		    	data.rowNum=1;
+		    }
+		    if (responsibleOrganizationOpt.equals("1") || responsibleOrganizationOpt.equals("3")){
+		    	//rowNum = rowNum + 2;
+		        data.cellNum = 0;
+		        
+		        data.headerText = null;
+	        	data.row = data.sheet13.createRow(data.rowNum++);
+	        	data.cell = data.row.createCell(data.cellNum++);
+	        	String[] organizationProfRows = null;
+	        	if(vForm.getExportData().getResponsibleOrganizationTableData()!=null){
+	        		organizationProfRows = vForm.getExportData().getResponsibleOrganizationTableData().split("<");
+	        	}
+	            
+	        	data.headerText = new HSSFRichTextString(data.responsibleOrganizationProfTrn + amountDesc);
+	            data.cell.setCellValue(data.headerText);
+	            data.cell.setCellStyle(data.subHeaderCS);
+	            //sheet.addMergedRegion(new CellRangeAddress(rowNum-1,rowNum-1,0,5));
+	            
+	            data.cellNum = 0;
+	            data.row = data.sheet13.createRow(data.rowNum++);
+	            data.cell = data.row.createCell(data.cellNum++);
+	            data.headerText = new HSSFRichTextString(data.organizationTrn);
+	            data.cell.setCellValue(data.headerText);
+	            data.cell.setCellStyle(data.subHeaderCS);
+	            if (organizationProfRows!=null && organizationProfRows.length>1){
+		            String[] singleRow = organizationProfRows[1].split(">");
+		            for (int i = 1; i < singleRow.length; i++) {
+		            	data.cell = data.row.createCell(data.cellNum++);
+		 	            data.headerText = new HSSFRichTextString(singleRow[i]);
+		 	            data.cell.setCellValue(data.headerText);
+		 	            data.cell.setCellStyle(data.subHeaderCS);
+					}
+		            for (int i = 2; i < organizationProfRows.length; i++) {
+			        	data.cellNum = 0;
+				        data.row = data.sheet13.createRow(data.rowNum++);
+				        HSSFCellStyle st = null;
+				    	if (i == organizationProfRows.length-1)
+				    		st = data.lastCellStyle;
+			            else
+			            	st = data.cellStyle;
+		            	singleRow = organizationProfRows[i].split(">");
+		            	for (int j = 0; j < singleRow.length; j++) {
+		            		data.cell = data.row.createCell(data.cellNum++);
+		 		            data.headerText = new HSSFRichTextString(singleRow[j]);
+		 		            data.cell.setCellValue(data.headerText);
+		 		            data.cell.setCellStyle(st);
+		    			}
+					}
+	            }
+		    }
+		    
+		    if (responsibleOrganizationOpt.equals("2") || responsibleOrganizationOpt.equals("3")){
+		    	data.rowNum++;
+		    	data.rowNum++;
+		        data.cellNum = 0;
+		        data.row = data.sheet13.createRow(data.rowNum++);
+	            data.cell = data.row.createCell(data.cellNum++);
+	            data.headerText = new HSSFRichTextString(data.responsibleOrganizationProfTrn + " Chart");
+	            data.cell.setCellValue(data.headerText);
+	            data.cell.setCellStyle(data.headerCS);
+	            
+		        ByteArrayOutputStream ba6 = new ByteArrayOutputStream();
+	            ImageIO.write(vForm.getExportData().getResponsibleOrganizationGraph(), "png", ba6);
+	            int pictureIndex6 = wb.addPicture(ba6.toByteArray(), HSSFWorkbook.PICTURE_TYPE_PNG);
+	            HSSFPatriarch patriarch6 = data.sheet13.createDrawingPatriarch();
+	            HSSFPicture pic6 =  patriarch6.createPicture(new HSSFClientAnchor(0, 0, 0, 0, (short)0, data.rowNum, (short)5, data.rowNum+25), pictureIndex6);
+	            HSSFClientAnchor anchor = (HSSFClientAnchor) pic6.getAnchor();
+	            anchor.setCol2((short)5);
+	            anchor.setDx1(0);
+	            anchor.setDx2(0);
+	            anchor.setRow2(data.rowNum+25);
+	            anchor.setDy1(0);
+	            anchor.setDy2(0);
+		    }
 	    }
     }
 }

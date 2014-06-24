@@ -1511,58 +1511,59 @@ public class ExportToPDF extends Action {
     
     private void getResponsibleOrganizationTable(String responsibleOrganizationOpt, com.lowagie.text.Document doc, VisualizationForm vForm, HttpServletRequest request, String amountDesc) throws Exception{
     	//Beneficiary Agency Profile Table.
-        if (!responsibleOrganizationOpt.equals("0")){
-        	doc.newPage();
-        	Paragraph subTitle = new Paragraph(postprocessText(beneficiaryAgencyProfTrn + amountDesc), SUBTITLEFONT);
-            subTitle.setAlignment(Element.ALIGN_LEFT);
-            doc.add(subTitle);
-            doc.add(new Paragraph(" "));
-        }
-        if (responsibleOrganizationOpt.equals("1") || responsibleOrganizationOpt.equals("3")){
-            PdfPTable organizationProfTbl = null;
-            if(vForm.getExportData().getBeneficiaryAgencyTableData() != null) {
-	            String[] organizationProfRows = vForm.getExportData().getBeneficiaryAgencyTableData().split("<");
-	            if (organizationProfRows.length>1){
-		            int colspan = organizationProfRows[1].split(">").length; 
-		            organizationProfTbl = new PdfPTable(colspan);
-		            organizationProfTbl.setWidthPercentage(100);
-		            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(organizationTrn), HEADERFONT));
-		            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		            organizationProfTbl.addCell(cell);
-		            String[] singleRow = organizationProfRows[1].split(">");
-		            for (int i = 1; i < singleRow.length; i++) {
-		            	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
-		            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		            	organizationProfTbl.addCell(cell);
-					}
-		            for (int i = 2; i < organizationProfRows.length; i++) {
-		            	singleRow = organizationProfRows[i].split(">");
-		            	for (int j = 0; j < singleRow.length; j++) {
-		                	if(j > 0) { //Skip first and last column
-			                	BigDecimal bd = new BigDecimal(singleRow[j]);
-		                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
-		                	}
-		                	else
-		                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
-		                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-		                	organizationProfTbl.addCell(cell);
-		    			}
-					}
-		            doc.add(organizationProfTbl);
-	            }
+    	if(responsibleOrganizationOpt != null){
+	        if (!responsibleOrganizationOpt.equals("0")){
+	        	doc.newPage();
+	        	Paragraph subTitle = new Paragraph(postprocessText(beneficiaryAgencyProfTrn + amountDesc), SUBTITLEFONT);
+	            subTitle.setAlignment(Element.ALIGN_LEFT);
+	            doc.add(subTitle);
 	            doc.add(new Paragraph(" "));
-            }
-        }
-        if (responsibleOrganizationOpt.equals("2") || responsibleOrganizationOpt.equals("3")){
-            PdfPTable organizationGraph = new PdfPTable(1);
-            organizationGraph.setWidthPercentage(100);
-            ByteArrayOutputStream ba = new ByteArrayOutputStream();
-            ImageIO.write(vForm.getExportData().getBeneficiaryAgencyGraph(), "png", ba);
-            Image img = Image.getInstance(ba.toByteArray());
-            organizationGraph.addCell(img);
-            doc.add(organizationGraph);
-            doc.add(new Paragraph(" "));
-        }
+	        }
+	        if (responsibleOrganizationOpt.equals("1") || responsibleOrganizationOpt.equals("3")){
+	            PdfPTable organizationProfTbl = null;
+	            if(vForm.getExportData().getBeneficiaryAgencyTableData() != null) {
+		            String[] organizationProfRows = vForm.getExportData().getBeneficiaryAgencyTableData().split("<");
+		            if (organizationProfRows.length>1){
+			            int colspan = organizationProfRows[1].split(">").length; 
+			            organizationProfTbl = new PdfPTable(colspan);
+			            organizationProfTbl.setWidthPercentage(100);
+			            PdfPCell cell = new PdfPCell(new Paragraph(postprocessText(organizationTrn), HEADERFONT));
+			            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			            organizationProfTbl.addCell(cell);
+			            String[] singleRow = organizationProfRows[1].split(">");
+			            for (int i = 1; i < singleRow.length; i++) {
+			            	cell = new PdfPCell(new Paragraph(postprocessText(singleRow[i]), HEADERFONT));
+			            	cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			            	organizationProfTbl.addCell(cell);
+						}
+			            for (int i = 2; i < organizationProfRows.length; i++) {
+			            	singleRow = organizationProfRows[i].split(">");
+			            	for (int j = 0; j < singleRow.length; j++) {
+			                	if(j > 0) { //Skip first and last column
+				                	BigDecimal bd = new BigDecimal(singleRow[j]);
+			                		cell = new PdfPCell(new Paragraph(getFormattedNumber(bd)));
+			                	}
+			                	else
+			                		cell = new PdfPCell(new Paragraph(postprocessText(singleRow[j])));
+			                	cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			                	organizationProfTbl.addCell(cell);
+			    			}
+						}
+			            doc.add(organizationProfTbl);
+		            }
+		            doc.add(new Paragraph(" "));
+	            }
+	        }
+	        if (responsibleOrganizationOpt.equals("2") || responsibleOrganizationOpt.equals("3")){
+	            PdfPTable organizationGraph = new PdfPTable(1);
+	            organizationGraph.setWidthPercentage(100);
+	            ByteArrayOutputStream ba = new ByteArrayOutputStream();
+	            ImageIO.write(vForm.getExportData().getBeneficiaryAgencyGraph(), "png", ba);
+	            Image img = Image.getInstance(ba.toByteArray());
+	            organizationGraph.addCell(img);
+	            doc.add(organizationGraph);
+	            doc.add(new Paragraph(" "));
+	        }
+	    }
     }
-    
 }

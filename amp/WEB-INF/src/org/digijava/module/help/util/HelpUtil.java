@@ -311,26 +311,16 @@ public class HelpUtil {
 
 	public static void saveOrUpdateHelpTopic(HelpTopic topic, HttpServletRequest request) throws AimException{
 		Session session = null;
-		Transaction tx = null;
 		boolean update = topic.getHelpTopicId() != null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
 			session.saveOrUpdate(topic);
-			//tx.commit();
 			if (topic.getTopicType()==null || !topic.getTopicType().equals(GlossaryUtil.TYPE_GLOSSARY)){
 				//skip lucene work for glossary topics.
 				saveOrUpdateFromLucene(topic, request, update);
 			}
 		} catch (Exception e) {
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception ex) {
-					logger.error("...Rollback failed");
-					throw new AimException("Can't rollback topic update", ex);
-				}
-			}
+			logger.error(e.getMessage());
 			throw new AimException("Can't update help topic", e);
 		}
 	}

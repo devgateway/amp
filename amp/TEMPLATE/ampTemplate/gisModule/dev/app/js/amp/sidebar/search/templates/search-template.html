@@ -1,27 +1,10 @@
 <div class='container-fluid'>
-  <div class="input-group form-group">
-    <input type="text" class="form-control" placeholder="Search...">
-    <span class="input-group-btn">
-      <button class="btn btn-success" type="button">Go</button>
-    </span>
-  </div><!-- /input-group -->
-  
-  <form class="form-inline" role="form">
-    <div class="radio">
-      <label>
-        <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-        Projects
-      </label>
-    </div>
-    <div class="radio">
-      <label>
-        <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-        Locations
-      </label>
-    </div>
-  </form>
+
+  <%= searchWidget() %>
 
   <div class="search-results well">
     <div class="label label-warning no-results">Active filters appear here.</div>
   </div>
 </div>
+
+<div class="results-placeholder"></div>

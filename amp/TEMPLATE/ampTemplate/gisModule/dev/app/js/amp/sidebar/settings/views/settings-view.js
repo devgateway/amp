@@ -3,15 +3,15 @@ define(
     'underscore',
     'backbone',
     APP_ROOT + '/amp/sidebar/base-control/base-control-view.js',
-    'text!' + APP_ROOT + '/amp/sidebar/source-categories/templates/source-categories-template.html'
+    'text!' + APP_ROOT + '/amp/sidebar/settings/templates/settings-template.html'
   ],
   function (_, Backbone, BaseToolView, Template) {
     'use strict';
 
     var View = BaseToolView.extend({
 
-      title:  'Source Category',
-      iconClass:  'ampicon-source-categories',
+      title:  'Settings',
+      iconClass:  'ampicon-settings',
       description:  '',
 
       template:  _.template(Template),

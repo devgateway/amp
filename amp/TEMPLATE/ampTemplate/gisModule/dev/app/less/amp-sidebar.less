@@ -71,14 +71,14 @@
       > a {
         display: block;
 
-        color: desaturate(lighten(@amp-emph, 13%), 24%);
+        color: @amp-sidebar-item;
 
         &:hover,
         &:active,
         &:focus {
           // see amp-icons.less for the icon swaps on hover
           text-decoration: none;
-          color: desaturate(lighten(@amp-emph, 23%), 30%);
+          color: desaturate(lighten(@amp-sidebar-item, 5%), 10%);
         }
 
         &.collapsed {
@@ -87,10 +87,10 @@
 
         h3 {
           margin: 0;
-          padding: 11px 21px;
-          font-size: 14px;
+          padding: 7px 21px;
+          font-size: 13px;
           font-weight: @extrabold;
-          line-height: 30px;  // matched to icon
+          line-height: 20px;  // matched to icon
           text-transform: uppercase;
         }
       }

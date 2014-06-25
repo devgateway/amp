@@ -7,10 +7,9 @@ define(
     'js/amp/sidebar/filters/views/filters-view.js',
     'js/amp/sidebar/search/views/search-view.js',
     'js/amp/sidebar/tools/views/tools-view.js',
-    'js/amp/sidebar/source-categories/views/source-categories-view.js',
-    'js/amp/sidebar/data-sources/views/data-sources-view.js',
+    'js/amp/sidebar/settings/views/settings-view.js',
   ],
-  function ($, _, Backbone, LayersView, FiltersView, SearchView, ToolsView, SourceCategoriesView, DataSourcesView) {
+  function ($, _, Backbone, LayersView, FiltersView, SearchView, ToolsView, SettingsView) {
     'use strict';
 
     var SidebarToolsView = Backbone.View.extend({
@@ -37,13 +36,9 @@ define(
         var toolsView = new ToolsView({el:'#tool-tools'});
         toolsView.render();
 
-        this.$el.append('<div id="tool-sources-category" class="panel sidebar-tool"></div>');
-        var sourceCategoriesView = new SourceCategoriesView({el:'#tool-sources-category'});
-        sourceCategoriesView.render();
-
-        this.$el.append('<div id="tool-data-sources" class="panel sidebar-tool"></div>');
-        var dataSourcesView = new DataSourcesView({el:'#tool-data-sources'});
-        dataSourcesView.render();
+        this.$el.append('<div id="tool-settings" class="panel sidebar-tool"></div>');
+        var settingsView = new SettingsView({el:'#tool-settings'});
+        settingsView.render();
 
         // TODO: where does this jquery behavioural stuff go?
         // bind all the popovers

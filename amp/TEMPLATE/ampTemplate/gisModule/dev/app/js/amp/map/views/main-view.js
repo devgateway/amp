@@ -31,8 +31,8 @@ define(
         // Render ESRI map
         require(['esri/map'], function(Map) {
           self.map = new Map('map-canvas', {
-            center: [-56.049, 38.485],
-            zoom: 3,
+            center: [34.175185, -13.256563],
+            zoom: 6,
             basemap: 'streets',
             autoResize: true
           });

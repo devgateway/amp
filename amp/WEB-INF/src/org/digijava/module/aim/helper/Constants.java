@@ -189,7 +189,7 @@ public class Constants
 	public static final String ACTIVITY_STATUS_PROPOSED			= "Proposed";
 	public static final String ACTIVITY_STATUS_CONSIDERED		= "Considered";
 	
-	public static final String ACTIVITY_NEEDS_APPROVAL_STATUS	= "'created', 'started', 'edited'";
+	public static final String ACTIVITY_NEEDS_APPROVAL_STATUS	= "'created', 'started', 'edited', 'rejected'";
 
 	/* Team types */
 	@Deprecated

@@ -312,6 +312,7 @@ public class CreateEditSourceActions extends DispatchAction {
 		approvalStatusValues.add(new KeyValue(Constants.STARTED_APPROVED_STATUS, "New and validated") );
 		approvalStatusValues.add(new KeyValue(Constants.EDITED_STATUS, "Edited but not validated") );
 		approvalStatusValues.add(new KeyValue(Constants.APPROVED_STATUS, "Edited and validated") );
+		approvalStatusValues.add(new KeyValue(Constants.REJECTED_STATUS, "Edited and rejected"));
 		myform.setApprovalStatusValues(approvalStatusValues);
 		if(myform.isDisplaySource()){
 			//get sources

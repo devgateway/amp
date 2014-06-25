@@ -10,10 +10,12 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.ecs.vxml.Return;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.MetaInfoSet;
 import org.dgfoundation.amp.ar.workers.MetaTextColWorker;
+import org.digijava.module.aim.helper.Constants;
 
 /**
  * @author mihai
@@ -39,22 +41,21 @@ public class MetaTextCell extends TextCell {
 	
 	public String getStatusFlag() {
 		MetaInfo metaInfo = getMetaInfo(ArConstants.STATUS);
-		if(metaInfo!=null) return (String) metaInfo.getValue();
+		if (metaInfo!=null) return (String) metaInfo.getValue();
 		return "";
 	}
 	
 	public String getColour(){
-		// TODO This needs to be rewritten !
-		try{
-		if( getDraftFlag() && "started".equals(getStatusFlag()) ) return "RED";
-		if( !getDraftFlag() && "started".equals(getStatusFlag()) ) return "GREEN";
-		if( !getDraftFlag() && "edited".equals(getStatusFlag()) ) return "GREEN";
-		if( getDraftFlag()) return "RED";
-		if (!getDraftFlag() && ("approved".equals(getStatusFlag()) || "startedapproved".equals(getStatusFlag()))) return "#05528B";
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
-		return "";
+		String statusFlag = getStatusFlag() == null ? "" : getStatusFlag();
+			
+		if (getDraftFlag())
+			return "RED";
+			
+		// not a draft
+		if (AmpARFilter.validatedActivityStatus.contains(statusFlag)) 
+			return "#05528B";
+			
+		return "GREEN";
 	}
 	
 	public MetaInfo getMetaInfo(String category) {

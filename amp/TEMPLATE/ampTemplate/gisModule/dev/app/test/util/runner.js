@@ -24,7 +24,7 @@ require(
     // load all the tests
     require([
       '/test/scripts/load-dom-stuff.js',
-      '/test/scripts/sidebar-accordion.js'
+      '/test/scripts/sidebar.js'
     ], function() {
       // start testing!
       frame.runTests();

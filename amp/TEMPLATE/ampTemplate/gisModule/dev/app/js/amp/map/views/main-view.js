@@ -29,13 +29,11 @@ define(
         this.$el.html(this.template({}));
 
         // Render ESRI map
-        require(['esri/map'], function(Map) {
-          self.map = new Map('map-canvas', {
-            center: [34.175185, -13.256563],
-            zoom: 6,
-            basemap: 'streets',
-            autoResize: true
-          });
+        self.map = new Map('map-canvas', {
+          center: [34.175185, -13.256563],
+          zoom: 6,
+          basemap: 'streets',
+          autoResize: true
         });
 
         // Render map header

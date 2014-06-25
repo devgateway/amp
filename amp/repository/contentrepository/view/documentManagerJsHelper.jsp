@@ -492,7 +492,7 @@ myTable.enhanceMarkup = function(markupName) {
 	    this.columnHeaders.push({key:"resource_title",label:"${trans_headerResourceTitle}",sortable:true, width:60});
 	    this.columnHeaders.push({key:"type",label:"${trans_headerType}",sortable:true, width: 30});
 	    this.columnHeaders.push({key:"file_name",label:"${trans_headerFileName}",sortable:true, width:77});
-	    this.columnHeaders.push({key:"date",type:"Date",label:"${trans_headerDate}",sortable:true, formatter: YAHOO.widget.DataTable.formatDate, width:50 });
+	    this.columnHeaders.push({key:"date",type:"Date",label:"${trans_headerDate}",sortable:true, formatter: YAHOO.widget.DataTable.formatDate, width:50});
 	    this.columnHeaders.push({key:"yearOfPublication", type:"number",label:"${trans_headerYearofPubl}",sortable:true, width:50});
 	    this.columnHeaders.push({key:"cm_doc_type",label:"${trans_cmDocType}",sortable:true/*, width:50 + 3 * extraSpacePerFreeLoader / 2*/});
 	    if (show_index)
@@ -685,6 +685,46 @@ function confirmDelete() {
 	return ret;
 }
 </script> 
+
+
+<style type="text/css">
+.autofolding_table_header 
+{
+	white-space:normal !important;
+	text-align: center;
+
+}
+.centered_th_label 
+{
+	padding:0px !important;
+	margin: auto !important;
+	width:auto !important;
+}
+
+</style>
+
+<script type="text/javascript">
+
+/*
+  jQuery piece of code to add word wrapping to yui-generated table headers 
+ */
+ 
+ 
+$(window).load(function ()
+		{
+		    var i = setInterval(function ()
+		    {
+		        if ($('.yui-dt-label').length)
+		        {
+		            clearInterval(i);
+		            $("[id^=yui-dt0-th]").addClass("autofolding_table_header");
+		            $("autofolding_table_header, [id$=liner]").addClass("centered_th_label");
+		        }
+		    }, 100);
+		});
+
+
+</script>
 
 
 <script type="text/javascript">

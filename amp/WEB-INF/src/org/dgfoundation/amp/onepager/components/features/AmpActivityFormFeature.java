@@ -464,7 +464,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		
 		activityForm.add(saveAndSubmit);
 		
-		AmpAjaxLinkField saveReject=new AmpAjaxLinkField("saveReject", "Reject activity", "Reject activity") {
+		AmpAjaxLinkField saveReject=new AmpAjaxLinkField("saveReject", "Reject Activity", "Reject activity") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
 

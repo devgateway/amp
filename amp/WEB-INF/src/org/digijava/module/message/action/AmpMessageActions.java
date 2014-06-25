@@ -689,22 +689,25 @@ public class AmpMessageActions extends DispatchAction {
 		int msgType=0;
 		int approvalType=0;
 		int calEventType=0;
-                AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
-                int maxStorage = 0;
-                if (settings!=null && settings.getMsgStoragePerMsgType() != null) {
-                    maxStorage = settings.getMsgStoragePerMsgType().intValue();
-                }
-		msgType=AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(),true,false,maxStorage);
-		alertType=AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(),true,false,  maxStorage);
-		approvalType=AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(),true,false,  maxStorage);
-		calEventType=AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class, teamMember.getMemberId(),true,false,  maxStorage);
+		AmpMessageSettings settings=AmpMessageUtil.getMessageSettings();
+		int maxStorage = 0;
+		if (settings!=null && settings.getMsgStoragePerMsgType() != null) {
+			maxStorage = settings.getMsgStoragePerMsgType().intValue();
+		}
+		
+		if (teamMember != null) {
+			msgType = AmpMessageUtil.getInboxMessagesCount(UserMessage.class, teamMember.getMemberId(),true,false,maxStorage);
+			alertType = AmpMessageUtil.getInboxMessagesCount(AmpAlert.class, teamMember.getMemberId(),true,false,  maxStorage);
+			approvalType = AmpMessageUtil.getInboxMessagesCount(Approval.class, teamMember.getMemberId(),true,false,  maxStorage);
+			calEventType = AmpMessageUtil.getInboxMessagesCount(CalendarEvent.class, teamMember.getMemberId(),true,false,  maxStorage);
 
-		//checking if Any of the inbox is full
-		Class[] allTypesOfMessages=new Class [] {UserMessage.class, AmpAlert.class,Approval.class,CalendarEvent.class};
-		for (Class<AmpMessage> cls : allTypesOfMessages) {
-			if(AmpMessageUtil.isInboxFull(cls, teamMember.getMemberId())){
-				messagesForm.setInboxFull(true);
-				break;
+			//checking if Any of the inbox is full
+			Class[] allTypesOfMessages=new Class [] {UserMessage.class, AmpAlert.class,Approval.class,CalendarEvent.class};
+			for (Class<AmpMessage> cls : allTypesOfMessages) {
+				if(AmpMessageUtil.isInboxFull(cls, teamMember.getMemberId())){
+					messagesForm.setInboxFull(true);
+					break;
+				}
 			}
 		}
 

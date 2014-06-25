@@ -113,6 +113,7 @@ public class AmpARFilter extends PropertyListable {
 														this.add(Constants.STARTED_APPROVED_STATUS);
 														this.add(Constants.STARTED_STATUS);
 														this.add(Constants.NOT_APPRVED);
+														this.add(Constants.REJECTED_STATUS);
 														}});
 	
 	public final static Set<String> validatedActivityStatus = Collections.unmodifiableSet(new HashSet<String>() {{
@@ -1232,7 +1233,7 @@ public class AmpARFilter extends PropertyListable {
 					actStatusValue.append("1=1 ");					
 					break;
 				case 0://Existing Un-validated - This will show all the activities that have been approved at least once and have since been edited and not validated.
-					actStatusValue.append(" (approval_status='edited' and draft <> true)");break;
+					actStatusValue.append(" (approval_status IN ('edited', 'not_approved', 'rejected') and draft <> true)");break;
 				case 1://New Draft - This will show all the activities that have never been approved and are saved as drafts.
 					actStatusValue.append(" (approval_status in ('started', 'startedapproved') and draft is true) ");break;
 				case 2://New Un-validated - This will show all activities that are new and have never been approved by the workspace manager.

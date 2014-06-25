@@ -1345,7 +1345,7 @@ public class ActivityUtil {
 
                 } else 
                 {
-                	// none computed workspace
+                	// not computed (e.g. team) workspace
                     queryString = "select " + activityNameString + ", a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ")    ";
                     if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
                     	queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
@@ -1641,7 +1641,7 @@ public class ActivityUtil {
 		try
 		{			
 			String query = "SELECT a.amp_activity_id FROM amp_activity_version a WHERE a.amp_activity_id IN (" + TeamUtil.getCommaSeparatedList(activityIds) + ") " +
-				"AND (a.approval_status = 'started' OR a.approval_status='edited') AND (a.draft IS NULL OR a.draft IS FALSE)"; // AND (a.amp_team_id = " + tm.getTeamId() + ")";
+				"AND (a.approval_status = 'started' OR a.approval_status='edited' OR a.approval_status='rejected') AND (a.draft IS NULL OR a.draft IS FALSE)"; // AND (a.amp_team_id = " + tm.getTeamId() + ")";
 			
 			List<BigInteger> validated_activity_ids = PersistenceManager.getSession().createSQLQuery(query).list();
 			Set<Long> result = new HashSet<Long>();
@@ -1690,7 +1690,7 @@ public class ActivityUtil {
 					draft = false;
 					
 				if (true || tm.getTeamId().equals(teamId) ) {
-					if ( !draft && ("started".equals(status)||"edited".equals(status)) )
+					if ( !draft && (Constants.STARTED_STATUS.equals(status) || Constants.EDITED_STATUS.equals(status) || Constants.REJECTED_STATUS.equals(status)) )
 					returnValue = true;
 				}
 				

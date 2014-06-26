@@ -21,8 +21,18 @@ define(
     ];
 
     var SidebarToolsView = Backbone.View.extend({
-      initialize: function () {
 
+      events: {
+        'hide.bs.collapse .sidebar-tool': 'hidePopovers',
+        'show.bs.popover .layer-info': 'blah'
+      },
+
+      hidePopovers: function() {
+        console.log('hide em');
+      },
+
+      blah: function() {
+        console.log('blah');
       },
 
       // Render entire geocoding view.
@@ -34,18 +44,26 @@ define(
           sidebarConainer.append(view.render().el);
         });
 
-        return this;
+        // TODO: move popover binding somewhere better
+        this.popovers = this.$('.layer-info');
+        this.bindPopovers();
 
-        // TODO: where does this jquery behavioural stuff go?
-        // bind all the popovers
-        var popovers = $('.layer-info');
+        return this;
+      },
+
+      bindPopovers: function() {
+        var popovers = this.popovers;
+
+        // standard show/hide
         popovers.popover();
-        // hide popovers when the drawer closes
+
+        // go away when the accordion container collapses
         $('.sidebar-tool').on('hide.bs.collapse', function() {
           popovers.popover('hide');
         });
+
+        // hide all others when this cone comes up
         popovers.on('show.bs.popover', function() {
-          // hide other open popovers
           var opening = this;
           popovers.each(function(i, triggerer) {
             if (triggerer !== opening) {

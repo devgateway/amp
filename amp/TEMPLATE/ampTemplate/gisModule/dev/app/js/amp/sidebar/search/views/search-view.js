@@ -20,8 +20,8 @@ define(
 
       template: _.template(Template),
 
-      initialize: function() {
-        BaseToolView.prototype.initialize.apply(this);
+      events: {
+        'submit .search-form': 'renderResults'
       },
 
       render: function() {
@@ -34,11 +34,6 @@ define(
           title: this.title,
           searchWidget: searchWidget,
         }));
-
-        this.$('.search-form').on('submit', function(e) {
-          e.preventDefault();
-          self.renderResults();
-        });
 
         return this;
       },

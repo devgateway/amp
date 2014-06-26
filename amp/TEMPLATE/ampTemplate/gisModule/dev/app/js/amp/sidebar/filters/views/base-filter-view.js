@@ -20,8 +20,8 @@ define(
       titleTemplate: _.template(TitleTemplate),
       contentTemplate: _.template(ContentTemplate),
 
-      initialize: function () {
-
+      events: {
+        'click .filter-title': 'launchFilter'
       },
 
       renderTitle: function () {
@@ -40,12 +40,6 @@ define(
           this.$('input:checkbox').prop('checked', false);
           this.$('input:checkbox').prop('indeterminate', false);
         }
-
-        // Add listener to title.
-        this.$('.filter-title').click(function(evt){
-          self.launchFilter();
-          evt.preventDefault();
-        });
 
         return this;
       },
@@ -72,7 +66,6 @@ define(
         // trigger common event for applying filters.
         // this.convertTreeToJSONFilter(); //implemented by child, and if not fallback to base.
       },
-
 
 
     });

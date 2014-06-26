@@ -94,15 +94,21 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
 				language = "en";
 			
 			textAreaContainer.add(new AttributeModifier("style", "display: none;"));
-			preview.add(new AttributeModifier("onclick",
-					"function sleep(millis, callback) { setTimeout(function(){callback();}, millis);};"+
-					"$('#"+ closeLink.getMarkupId() +"').show();"+
-					"$('#"+ closeLink.getMarkupId() +"').click();"+
-					"sleep(1500, function(){"+
-	                    "$('#"+ preview.getMarkupId() +"').hide();" +
-	                    "CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "', {language: '" + language + "', on:{instanceReady:function(ev){this.focus();}, change:function(ev) {}}});" +                    
-	                    "$('#"+ closeLink.getMarkupId() +"').show();"+
-					"});"));
+			
+			 preview.add(new AttributeModifier("onclick",
+					 "function showRichEditor () {" +
+                    "$('#"+ preview.getMarkupId() +"').hide();" +
+                    "CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "', {language: '" + language + "', on:{instanceReady:function(ev){this.focus();}, change:function(ev) {}}});" +                    
+                    "$('#"+ closeLink.getMarkupId() +"').show();" +
+                    "}"+
+                    "$('#"+ closeLink.getMarkupId() +"').show();"+
+				     "if ($.browser.chrome != true && $.browser.webkit !=true) {" +
+				     "$('#"+ closeLink.getMarkupId() +"').click();"+
+				     "setTimeout(function(){showRichEditor()"+
+				     "},800);}" +
+				     "else {" +
+				     "showRichEditor();}" 
+				     ));
 		}
 		add(preview);
 		

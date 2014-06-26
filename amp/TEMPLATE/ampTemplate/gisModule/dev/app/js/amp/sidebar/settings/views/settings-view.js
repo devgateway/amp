@@ -3,7 +3,7 @@ define(
     'underscore',
     'backbone',
     'amp/sidebar/base-control/base-control-view',
-    'text!amp/sidebar/settings/templates/data-sources-template.html'
+    'text!amp/sidebar/settings/templates/settings-template.html'
   ],
   function (_, Backbone, BaseToolView, Template) {
     'use strict';

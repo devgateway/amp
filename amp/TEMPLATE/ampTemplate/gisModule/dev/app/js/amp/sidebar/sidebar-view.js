@@ -7,7 +7,7 @@ define(
     'amp/sidebar/filters/views/filters-view',
     'amp/sidebar/search/views/search-view',
     'amp/sidebar/tools/views/tools-view',
-    'amp/sidebar/settings/views/data-sources-view',
+    'amp/sidebar/settings/views/settings-view',
   ],
   function ($, _, Backbone, LayersView, FiltersView, SearchView, ToolsView, SettingsView) {
     'use strict';

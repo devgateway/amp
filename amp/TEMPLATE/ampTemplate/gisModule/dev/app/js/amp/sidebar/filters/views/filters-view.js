@@ -10,13 +10,16 @@ define(
   function (_, Backbone, BaseToolView, OrgFilterView, YearsFilterView, Template) {
     'use strict';
 
+    var filterViews = [OrgFilterView, YearsFilterView];
+
     var View = BaseToolView.extend({
+      id: 'tool-filters',
       title: 'Filters',
       iconClass: 'ampicon-filters',
       description: 'Apply filters to the map.',
 
       //Intentionally not a 'collection' because it won't be populated by the API, and it holds views not models.
-      filterViews:[],
+      filterViewsInstances:[],
 
       template: _.template(Template),
 
@@ -27,10 +30,12 @@ define(
         //      filterViews and call createFilterJSON on each model
         //      create master filter object and pass it to the map. to call api and re-render.
 
-        // add content
-        this.$('.content').html(this.template({title: this.title}));
+        var filtersContainer = this;
+        _.each(filterViews, function(FilterView) {
+          var view = new FilterView();
+          filtersContainer.filterViewsInstances.push(view);
+        });
       },
-
 
       render: function() {
         BaseToolView.prototype.render.apply(this);
@@ -38,18 +43,12 @@ define(
         // add content
         this.$('.content').html(this.template({title: this.title}));
 
-        this.$('.filter-list').append('<div class="filter-type filter-org"></div>');
-        var orgFilterView = new OrgFilterView({el: '.filter-org'});
-        this.filterViews.push(orgFilterView);
+        var filtersContainer = this;
+        _.each(this.filterViewsInstances, function(filterView) {
+          filtersContainer.$('.filter-list').append(filterView.renderTitle().el);
+        });
 
-        this.$('.filter-list').append('<div class="filter-type filter-years"></div>');
-        var yearsFilterView = new YearsFilterView({el: '.filter-years'});
-        this.filterViews.push(yearsFilterView);
-
-
-        // TODO -- render: Iterate over filterViews and render them all.
-        orgFilterView.renderTitle();
-        yearsFilterView.renderTitle();
+        return this;
       }
     });
 

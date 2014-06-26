@@ -11,16 +11,9 @@ define(
 
     var GISView = Backbone.View.extend({
 
-      initialize: function () {
-
-        console.log('init');
-
-      },
-
       // Render entire geocoding view.
       render: function () {
 
-        console.log('render');
         var mapView = new MapView({el:'#map-container'});
         mapView.render();
 

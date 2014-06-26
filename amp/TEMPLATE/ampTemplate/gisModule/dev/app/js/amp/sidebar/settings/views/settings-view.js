@@ -10,6 +10,7 @@ define(
 
     var View = BaseToolView.extend({
 
+      id: 'tool-settings',
       title:  'Settings',
       iconClass:  'ampicon-settings',
       description:  '',
@@ -25,6 +26,8 @@ define(
 
         // add content
         this.$('.content').html(this.template({title: this.title}));
+
+        return this;
       }
     });
 

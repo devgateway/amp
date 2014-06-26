@@ -19,35 +19,35 @@ define(
 
       template: _.template(Template),
 
-      initialize: function () {
-
-      },
-
       render: function () {
-        var self = this;
 
         this.$el.html(this.template({}));
 
-        // Render ESRI map
-        self.map = new Map('map-canvas', {
+        // Render ESRI map (but don't re-render if one exists)
+        this.map = this.map || new Map('map-canvas', {
           center: [34.175185, -13.256563],
           zoom: 6,
           basemap: 'streets',
           autoResize: true
         });
 
+        var headerContainer = this.$('#map-header > div');
+
         // Render map header
-        var headerView = new MapHeaderView({el: '.map-header'});
-        headerView.render();
+        var headerView = new MapHeaderView();
+        headerContainer.append(headerView.render().el);
 
         // Render BasemapGallery
-        var basemapView = new BasemapGalleryView({el: '#basemap-gallery', map: self.map});
-        basemapView.render();
+        var basemapView = new BasemapGalleryView();
+        headerContainer.append(basemapView.el);
+        basemapView.render();  // the Basemap widget is special, it needs an
+                               // on-page DOM node to work.
 
         // Render Legend
-        var legendView = new LegendView({el: '#legend'});
-        legendView.render();
+        var legendView = new LegendView();
+        this.$el.append(legendView.render().el);
 
+        return this;
       }
     });
 

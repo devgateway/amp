@@ -10,23 +10,12 @@ define(
 
     var View = BaseFilterView.extend({
 
+      className: BaseFilterView.className + ' filter-years',
+
       initialize: function() {
         BaseFilterView.prototype.initialize.apply(this);
 
         this.model = new YearsFilterModel();
-      },
-
-      renderTitle: function() {
-        BaseFilterView.prototype.renderTitle.apply(this);
-
-
-      },
-
-      // Called when user clicks on a title.
-      renderContent: function() {
-        BaseFilterView.prototype.renderContent.apply(this);
-
-
       },
 
     });

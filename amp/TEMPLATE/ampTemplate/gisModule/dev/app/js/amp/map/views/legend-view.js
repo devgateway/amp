@@ -11,22 +11,13 @@ define(
 
       template: _.template(Template),
 
-      tagName: 'div',
-
-      events: {
-
-      },
-
-      initialize: function () {
-        _.bindAll(this, 'render');
-      },
+      id: 'legend',
 
       render: function () {
-        var self = this;
-        this.$el.append(this.template());
+        this.$el.html(this.template());
+        return this;
 
         //TODO: chevron toggle: http://jsfiddle.net/zessx/R6EAW/12/
-
       }
 
     });

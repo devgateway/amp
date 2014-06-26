@@ -12,6 +12,14 @@ define(
   function ($, _, Backbone, LayersView, FiltersView, SearchView, ToolsView, SettingsView) {
     'use strict';
 
+    var controlViews = [
+      LayersView,
+      SearchView,
+      FiltersView,
+      ToolsView,
+      SettingsView
+    ];
+
     var SidebarToolsView = Backbone.View.extend({
       initialize: function () {
 
@@ -20,25 +28,13 @@ define(
       // Render entire geocoding view.
       render: function () {
 
-        this.$el.append('<div id="tool-layers"  class="panel sidebar-tool"></div>');
-        var layerView = new LayersView({el:'#tool-layers'});
-        layerView.render();
+        var sidebarConainer = this.$el;
+        _.each(controlViews, function(ControlView) {
+          var view = new ControlView();
+          sidebarConainer.append(view.render().el);
+        });
 
-        this.$el.append('<div id="tool-search" class="panel sidebar-tool"></div>');
-        var searchView = new SearchView({el:'#tool-search'});
-        searchView.render();
-
-        this.$el.append('<div id="tool-filters" class="panel sidebar-tool"></div>');
-        var filtersView = new FiltersView({el:'#tool-filters'});
-        filtersView.render();
-
-        this.$el.append('<div id="tool-tools" class="panel sidebar-tool"></div>');
-        var toolsView = new ToolsView({el:'#tool-tools'});
-        toolsView.render();
-
-        this.$el.append('<div id="tool-settings" class="panel sidebar-tool"></div>');
-        var settingsView = new SettingsView({el:'#tool-settings'});
-        settingsView.render();
+        return this;
 
         // TODO: where does this jquery behavioural stuff go?
         // bind all the popovers

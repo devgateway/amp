@@ -13,6 +13,7 @@ define(
 
     var View = BaseToolView.extend({
 
+      id: 'tool-search',
       title: 'Keyword Search',
       iconClass: 'ampicon-search',
       description: '',
@@ -38,12 +39,13 @@ define(
           e.preventDefault();
           self.renderResults();
         });
+
+        return this;
       },
 
       renderResults: function() {
         var resultsView = new ResultsView();
-        resultsView.render();
-        this.$('.results-placeholder').html(resultsView.$el);
+        this.$('.results-placeholder').html(resultsView.render().el);
         this.$('.results-placeholder .modal').modal({show: true, backdrop: false});
       }
     });

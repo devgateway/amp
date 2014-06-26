@@ -10,28 +10,19 @@ define(
   function (_, Backbone, Template) {
     'use strict';
 
-    var BasemapView = Backbone.View.extend({
+    var View = Backbone.View.extend({
+
+      className: 'map-header navbar-header navbar-brand',
 
       template: _.template(Template),
 
-      tagName: 'span',
-
-      events: {
-
-      },
-
-      initialize: function () {
-        _.bindAll(this, 'render');
-      },
-
       render: function () {
-        var self = this;
-        this.$el.append(this.template());
-        return this.$el;
+        this.$el.html(this.template());
+        return this;
       }
 
     });
 
-    return BasemapView;
+    return View;
   }
 );

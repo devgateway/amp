@@ -21,6 +21,8 @@ define(
           searchWidget: searchWidget
           // with results!
         }));
+
+        return this;
       },
     });
 

@@ -10,6 +10,7 @@ define(
 
     var LayersView = BaseToolView.extend({
 
+      id: 'tool-layers',
       title: 'Layers',
       iconClass: 'ampicon-layers',
       description: 'Tool desc, remove if possible.',
@@ -25,6 +26,8 @@ define(
 
         // add content
         this.$('.content').html(this.template({title: this.title}));
+
+        return this;
       }
     });
 

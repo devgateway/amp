@@ -19,13 +19,14 @@ define(
        *    `BaseToolView.prototype.method.apply(this);`
        */
 
+      className: 'panel sidebar-tool',
 
       // Required properties to be overridden by child classes
       title: unset,
       iconClass: unset,
       description: unset,
 
-      initialize: function () {
+      initialize: function() {
         this.baseTemplate = _.template(BaseTemplate);
       },
 
@@ -36,6 +37,7 @@ define(
           iconClass: this._getFromChild('iconClass'),
           description: this._getFromChild('description')
         }));
+        return this;
       },
 
       _getFromChild: function(property) {

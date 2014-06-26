@@ -23,6 +23,8 @@ define(
 
         this.$el.html(this.template({}));
         this.updateScore();
+
+        return this;
       },
 
 

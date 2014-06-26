@@ -15,6 +15,8 @@ define(
     // Parent base view for fitlers.
     var View = Backbone.View.extend({
 
+      className: 'filter-type ',
+
       titleTemplate: _.template(TitleTemplate),
       contentTemplate: _.template(ContentTemplate),
 
@@ -44,6 +46,8 @@ define(
           self.launchFilter();
           evt.preventDefault();
         });
+
+        return this;
       },
 
 
@@ -60,9 +64,11 @@ define(
         this.$('.modal-placeholder .modal').modal({show: true, backdrop: false});
         this.$('.modal-placeholder .modal-dialog').draggable({ cancel: '.modal-body, .cancel', cursor: 'move'  });
 
+        return this;
       },
 
       apply: function () {
+        // TODO: consider a different name to avoid collision with javascript function.apply
         // trigger common event for applying filters.
         // this.convertTreeToJSONFilter(); //implemented by child, and if not fallback to base.
       },

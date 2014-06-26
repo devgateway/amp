@@ -5,39 +5,35 @@ define(
   [
     'underscore',
     'backbone',
+    'esri/dijit/BasemapGallery',
     'text!amp/map/templates/basemap-gallery-template.html',
   ],
-  function (_, Backbone, Template) {
+  function (_, Backbone, BasemapGallery, Template) {
     'use strict';
 
     var BasemapView = Backbone.View.extend({
 
       template: _.template(Template),
 
-      tagName: 'li',
-
-      events: {
-
-      },
+      tagName: 'ul',
+      id: 'basemap-gallery',
+      className: 'nav navbar-nav navbar-right dropdown',
 
       initialize: function () {
         _.bindAll(this, 'render');
       },
 
       render: function () {
-        var self = this;
-        this.$el.append(this.template()).addClass('drop-down');
-        require(['esri/dijit/BasemapGallery', 'esri/arcgis/utils', 'dojo/parser', 'dijit/layout/BorderContainer', 'dijit/layout/ContentPane', 'dijit/TitlePane'], function (BasemapGallery, arcgisUtils, parser) {
+        this.$el.html(this.template());
 
-          var basemapGallery = new BasemapGallery({
-            showArcGISBasemaps: true,
-            map: self.options.map
-          }, 'basemapGallery');
+        this.basemapGallery = this.basemapGallery || new BasemapGallery({
+          showArcGISBasemaps: true,
+          map: this.options.map
+        }, 'basemapGallery');
 
-          basemapGallery.startup();
-        });
+        this.basemapGallery.startup();
 
-        return this.$el;
+        return this;
       }
 
     });

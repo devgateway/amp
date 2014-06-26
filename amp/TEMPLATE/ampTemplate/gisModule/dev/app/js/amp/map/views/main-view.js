@@ -38,7 +38,7 @@ define(
         headerContainer.append(headerView.render().el);
 
         // Render BasemapGallery
-        var basemapView = new BasemapGalleryView();
+        var basemapView = new BasemapGalleryView({map: this.map});
         headerContainer.append(basemapView.el);
         basemapView.render();  // the Basemap widget is special, it needs an
                                // on-page DOM node to work.

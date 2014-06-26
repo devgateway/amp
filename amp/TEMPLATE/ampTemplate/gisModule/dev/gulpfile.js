@@ -28,7 +28,6 @@ var paths = {
   app: {
     rootstuff: './app/*.{png,ico,html,txt,xml}',
     scripts: {
-      entry: './app/js/main.js',
       amp: './app/js/amp/**/*.js',
       top: './app/js/*.js',
       all: './app/js/**/*.js'
@@ -40,10 +39,10 @@ var paths = {
     },
     images: './app/img/**/*.{png, jpg}',
     fonts: './app/fonts/**/*.{eot,svg,ttf,woff}',
-    tests: './app/test/**'
-  },
-  aux: {
-    tests: './node_modules/qunitjs/qunit/*'
+    tests: [
+      './app/test/**',
+      './app/js/libs/vendor/qunit/qunit/qunit.css'
+    ]
   },
   dist: {
     root: '../dist',  // USE CAUTION IF CHANGING
@@ -102,8 +101,7 @@ gulp.task('fonts', function() {
 
 gulp.task('tests', function() {
   // simply copies the test files over, see the "test" task that runs them.
-  return gulp.src([paths.app.tests,
-                   paths.aux.tests])
+  return gulp.src(paths.app.tests)
     .pipe(g.changed(paths.dist.tests))
     .pipe(gulp.dest(paths.dist.tests))
 });

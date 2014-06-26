@@ -1,0 +1,12 @@
+{
+  "name": "AMP GIS front end",
+  "dependencies": {
+    "dojo": "~1.10.0",
+    "jquery": "~1.11.1",
+    "jquery-ui-amd": "~0.0.3",
+    "bootstrap": "~3.1.1",
+    "underscore-amd": "~1.5.2",
+    "backbone-amd": "~1.1.0",
+    "qunit": "~1.14.0"
+  }
+}

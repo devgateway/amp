@@ -28,7 +28,7 @@ define(
 
         this.basemapGallery = this.basemapGallery || new BasemapGallery({
           showArcGISBasemaps: true,
-          map: this.options.map
+          map: this.map
         }, 'basemapGallery');
 
         this.basemapGallery.startup();

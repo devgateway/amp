@@ -14,27 +14,27 @@
       },
       {
         'name': 'jquery',
-        'location': 'libs/amd',
+        'location': 'libs/vendor/jquery/dist',
         'main': 'jquery'
       },
       {
         'name': 'jqueryui',
-        'location': 'libs/amd/jqueryui',
+        'location': 'libs/vendor/jquery-ui-amd/jquery-ui-1.10.0/jqueryui',
         'main': 'core'
       },
       {
         'name': 'bootstrap',
-        'location': 'libs/bootstrap/js',
+        'location': 'libs/vendor/bootstrap/dist/js',
         'main': 'bootstrap',
       },
       {
         'name': 'underscore',
-        'location': 'libs/amd',
+        'location': 'libs/vendor/underscore-amd',
         'main': 'underscore'
       },
       {
         'name': 'backbone',
-        'location': 'libs/amd',
+        'location': 'libs/vendor/backbone-amd',
         'main': 'backbone'
       },
       'amp',

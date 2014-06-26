@@ -68,17 +68,19 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
         closeLink = new WebMarkupContainer("closeLink");
 		closeLink.setOutputMarkupId(true);
 		closeLink.add(new AttributeModifier("onclick",
-                "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) { CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].updateElement(); }" +
-                        "$('#" + preview.getMarkupId() + "').html($('#" + textAreaContainer.getMarkupId() + "').val()); " +
-                        "$('#" + preview.getMarkupId() + "').show(); " +
-                        "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) {CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].destroy();} " +
-                        "$('#" + textAreaContainer.getMarkupId() + "').show();" +
-                        "$('#" + textAreaContainer.getMarkupId() + "').focus();" +
+			"if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) { CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].updateElement(); }" +
+            "$('#" + preview.getMarkupId() + "').html($('#" + textAreaContainer.getMarkupId() + "').val()); " +
+            "$('#" + preview.getMarkupId() + "').show(); " +
+            "if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) {CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].destroy();} " +
+            "$('#" + textAreaContainer.getMarkupId() + "').show();" +
+            "$('#" + textAreaContainer.getMarkupId() + "').focus();" +
+                       
+            "$('#" + textAreaContainer.getMarkupId() + "').blur();"+            
+            "$('#" + textAreaContainer.getMarkupId() + "').hide(); " +
+            "$('#" + closeLink.getMarkupId() + "').hide(); " +
+            "$('#" + preview.getMarkupId() + "').show(); " +
+            "return false;"));
 
-                        "$('#" + textAreaContainer.getMarkupId() + "').blur();" +
-                        "$('#" + textAreaContainer.getMarkupId() + "').hide(); " +
-                        "$('#" + closeLink.getMarkupId() + "').hide(); " +
-                        "return false;"));
 		add(closeLink);
 		
 		preview.setVisible(false);
@@ -93,13 +95,18 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
 			
 			textAreaContainer.add(new AttributeModifier("style", "display: none;"));
 			preview.add(new AttributeModifier("onclick",
-                    "$('#"+ preview.getMarkupId() +"').hide();" +
-                    "CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "', {language: '" + language + "', on:{instanceReady : function( ev ){this.focus();}}} );" +
-                    "$('#"+ closeLink.getMarkupId() +"').show();"));
+					"function sleep(millis, callback) { setTimeout(function(){callback();}, millis);};"+
+					"$('#"+ closeLink.getMarkupId() +"').show();"+
+					"$('#"+ closeLink.getMarkupId() +"').click();"+
+					"sleep(1500, function(){"+
+	                    "$('#"+ preview.getMarkupId() +"').hide();" +
+	                    "CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "', {language: '" + language + "', on:{instanceReady:function(ev){this.focus();}, change:function(ev) {}}});" +                    
+	                    "$('#"+ closeLink.getMarkupId() +"').show();"+
+					"});"));
 		}
 		add(preview);
-
-        translationDecorator = TranslationDecorator.of("trnContainer", (IModel<String>) textAreaContainer.getModel(), (wysiwyg ? this : textAreaContainer));
+		
+		translationDecorator = TranslationDecorator.of("trnContainer", (IModel<String>) textAreaContainer.getModel(), (wysiwyg ? this : textAreaContainer));
         add(translationDecorator);
 		addFormComponent(textAreaContainer);
 	}

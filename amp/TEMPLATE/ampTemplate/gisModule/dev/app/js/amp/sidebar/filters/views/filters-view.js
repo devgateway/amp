@@ -2,10 +2,10 @@ define(
   [
     'underscore',
     'backbone',
-    APP_ROOT + '/amp/sidebar/base-control/base-control-view.js',
-    APP_ROOT + '/amp/sidebar/filters/views/org-filter-view.js',
-    APP_ROOT + '/amp/sidebar/filters/views/years-filter-view.js',
-    'text!' + APP_ROOT + '/amp/sidebar/filters/templates/filters-template.html'
+    'amp/sidebar/base-control/base-control-view',
+    'amp/sidebar/filters/views/org-filter-view',
+    'amp/sidebar/filters/views/years-filter-view',
+    'text!amp/sidebar/filters/templates/filters-template.html'
   ],
   function (_, Backbone, BaseToolView, OrgFilterView, YearsFilterView, Template) {
     'use strict';

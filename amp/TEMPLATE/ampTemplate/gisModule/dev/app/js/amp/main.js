@@ -5,8 +5,8 @@
 * they have a chance to be evaluated.
 **/
 define.amd.jQuery = true;
-require(['jquery', "dojo/domReady!"], function() {
-  require(["gis", "bootstrap", "js/log-safety.js"], function (GISView) {
+require(['jquery', 'domReady!'], function() {
+  require(['amp/gis/views/gis-view', 'bootstrap', 'js/log-safety'], function (GISView) {
     var gisView = new GISView();
     gisView.render();
   });

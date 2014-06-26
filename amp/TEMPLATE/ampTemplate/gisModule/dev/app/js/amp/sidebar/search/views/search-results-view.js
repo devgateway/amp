@@ -2,8 +2,8 @@ define(
   [
     'underscore',
     'backbone',
-    'text!' + APP_ROOT + '/amp/sidebar/search/templates/search-control-widget.html',
-    'text!' + APP_ROOT + '/amp/sidebar/search/templates/search-results-template.html'
+    'text!amp/sidebar/search/templates/search-control-widget.html',
+    'text!amp/sidebar/search/templates/search-results-template.html'
   ],
   function (_, Backbone, SearchWidget, Template) {
     'use strict';

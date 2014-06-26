@@ -7,11 +7,11 @@ define(
     'use strict';
 
 
-    var Model = Backbone.Model.extend({      
+    var Model = Backbone.Model.extend({
         defaults: {
         },
-        
-        initialize: function(){            
+
+        initialize: function(){
         },
 
         // returns a data quality score from 1-100
@@ -22,7 +22,7 @@ define(
           //temporary stub, random score:
           return Math.floor(Math.random()*100);
         },
-        
+
 
     });
 

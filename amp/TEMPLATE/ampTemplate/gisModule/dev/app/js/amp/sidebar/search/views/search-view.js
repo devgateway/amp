@@ -1,10 +1,10 @@
 define(
   [
     'underscore',
-    APP_ROOT + '/amp/sidebar/base-control/base-control-view.js',
-    APP_ROOT + '/amp/sidebar/search/views/search-results-view.js',
-    'text!' + APP_ROOT + '/amp/sidebar/search/templates/search-control-widget.html',
-    'text!' + APP_ROOT + '/amp/sidebar/search/templates/search-template.html'
+    'amp/sidebar/base-control/base-control-view',
+    'amp/sidebar/search/views/search-results-view',
+    'text!amp/sidebar/search/templates/search-control-widget.html',
+    'text!amp/sidebar/search/templates/search-template.html'
   ],
   function (_, BaseToolView, ResultsView, SearchWidget, Template, ResultsTemplate) {
     'use strict';

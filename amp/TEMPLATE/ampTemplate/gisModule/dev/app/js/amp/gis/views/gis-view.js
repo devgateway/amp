@@ -2,10 +2,9 @@ define(
   [
     'underscore',
     'backbone',
-    'js/amp/map/views/main-view.js',
-    'js/amp/dataquality/views/dataquality-view.js',
-    'js/amp/sidebar/sidebar-view.js'
-
+    'amp/map/views/main-view',
+    'amp/dataquality/views/dataquality-view',
+    'amp/sidebar/sidebar-view'
   ],
   function (_, Backbone, MapView, DataQualityView, SidebarView) {
     'use strict';

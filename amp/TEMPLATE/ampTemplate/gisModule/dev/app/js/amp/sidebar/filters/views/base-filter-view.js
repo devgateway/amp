@@ -1,13 +1,11 @@
-// Is this view used at all?
-
 define(
   [
     'underscore',
     'backbone',
 
-    'js/amp/sidebar/filters/models/base-filter-model.js',
-    'text!' + APP_ROOT + '/amp/sidebar/filters/templates/filter-title-template.html',
-    'text!' + APP_ROOT + '/amp/sidebar/filters/templates/filter-content-template.html',
+    'amp/sidebar/filters/models/base-filter-model',
+    'text!amp/sidebar/filters/templates/filter-title-template.html',
+    'text!amp/sidebar/filters/templates/filter-content-template.html',
 
     'jqueryui/draggable',
   ],

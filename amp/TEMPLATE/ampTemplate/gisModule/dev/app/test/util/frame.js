@@ -51,7 +51,7 @@ define(['qunit'], function(QUnit) {
         // grab AMD stuff from the frame
         var frameRequire = $iframe[0].contentWindow.require;
         // run the test (after loading backbone stuff)!
-        frameRequire(['/js/main.js'], function() {
+        frameRequire(['amp'], function() {
           // This seems to still race with other stuff
           // being loaded. Adding a little extra timeout
           // helps keep the tests results consistent.

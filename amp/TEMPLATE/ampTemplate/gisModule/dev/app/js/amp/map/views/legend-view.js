@@ -2,7 +2,7 @@ define(
   [
     'underscore',
     'backbone',
-    'text!' + APP_ROOT + '/amp/map/templates/map-legend-template.html',
+    'text!amp/map/templates/map-legend-template.html',
   ],
   function (_, Backbone, Template) {
     'use strict';

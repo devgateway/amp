@@ -64,11 +64,10 @@ gulp.task('rootstuff', function() {
 });
 
 
-// TODO: factor out common JS stuff (also see watch) (use gulp-if?)
 gulp.task('js', function() {
   return gulp.src(paths.app.scripts.all)
     .pipe(g.changed(paths.dist.scripts))
-    .pipe(gulp.dest(paths.dist.scripts))
+    .pipe(gulp.dest(paths.dist.scripts));
 });
 
 

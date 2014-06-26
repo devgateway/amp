@@ -2,8 +2,8 @@ define(
   [
     'underscore',
     'backbone',
-    APP_ROOT + '/amp/sidebar/filters/views/base-filter-view.js',
-    APP_ROOT + '/amp/sidebar/filters/models/years-filter-model.js'
+    'amp/sidebar/filters/views/base-filter-view',
+    'amp/sidebar/filters/models/years-filter-model'
   ],
   function (_, Backbone, BaseFilterView, YearsFilterModel) {
     'use strict';

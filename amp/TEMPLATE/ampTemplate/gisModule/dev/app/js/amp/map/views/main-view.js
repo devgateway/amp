@@ -2,13 +2,13 @@ define(
   [
     'underscore',
     'backbone',
-    'text!' + APP_ROOT + '/amp/map/templates/map-container-template.html',
+    'text!amp/map/templates/map-container-template.html',
 
     'esri/map',
 
-    'js/amp/map/views/map-header-view.js',
-    'js/amp/map/views/basemap-gallery-view.js',
-    'js/amp/map/views/legend-view.js'
+    'amp/map/views/map-header-view',
+    'amp/map/views/basemap-gallery-view',
+    'amp/map/views/legend-view'
   ],
   function (_, Backbone, Template,
             Map,

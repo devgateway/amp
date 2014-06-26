@@ -32,18 +32,19 @@
 
     <!-- set up testing env and make sure it is sane -->
     <script src="qunit.js"></script>
-    <script src="/js/config.js"></script>
-    <script src="http://js.arcgis.com/3.8" data-dojo-config="async: true"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.9.3/dojo/dojo.js"></script>
 
     <!-- lets run some tests  -->
     <script>
+      require(['/js/config.js'], function() {
 
-      // make QUnit behave for AMD
-      QUnit.config.autostart = false;
-      define('qunit', QUnit);
+        // make QUnit behave for AMD
+        QUnit.config.autostart = false;
+        define('qunit', QUnit);
 
-      // run the tests
-      require(['/test/util/runner.js']);
+        // run the tests
+        require(['/test/util/runner.js']);
+      });
     </script>
   </body>
 </script>

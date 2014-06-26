@@ -2,8 +2,8 @@ define(
   [
     'underscore',
     'backbone',
-    APP_ROOT + '/amp/sidebar/base-control/base-control-view.js',
-    'text!' + APP_ROOT + '/amp/sidebar/tools/templates/tools-template.html'
+    'amp/sidebar/base-control/base-control-view',
+    'text!amp/sidebar/tools/templates/tools-template.html'
   ],
   function (_, Backbone, BaseToolView, Template) {
     'use strict';

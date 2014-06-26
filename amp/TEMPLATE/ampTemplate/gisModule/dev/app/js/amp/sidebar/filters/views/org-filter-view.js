@@ -2,9 +2,9 @@ define(
   [
     'underscore',
     'backbone',
-    APP_ROOT + '/amp/sidebar/filters/views/base-filter-view.js',
-    APP_ROOT + '/amp/sidebar/filters/models/org-filter-model.js',
-    'text!' + APP_ROOT + '/amp/sidebar/filters/templates/org-filter-template.html'
+    'amp/sidebar/filters/views/base-filter-view',
+    'amp/sidebar/filters/models/org-filter-model',
+    'text!amp/sidebar/filters/templates/org-filter-template.html'
   ],
   function (_, Backbone, BaseFilterView, OrgFilterModel, Template) {
     'use strict';

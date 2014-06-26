@@ -3,11 +3,11 @@ define(
     'jquery',
     'underscore',
     'backbone',
-    'js/amp/sidebar/layers/views/layers-view.js',
-    'js/amp/sidebar/filters/views/filters-view.js',
-    'js/amp/sidebar/search/views/search-view.js',
-    'js/amp/sidebar/tools/views/tools-view.js',
-    'js/amp/sidebar/settings/views/settings-view.js',
+    'amp/sidebar/layers/views/layers-view',
+    'amp/sidebar/filters/views/filters-view',
+    'amp/sidebar/search/views/search-view',
+    'amp/sidebar/tools/views/tools-view',
+    'amp/sidebar/settings/views/data-sources-view',
   ],
   function ($, _, Backbone, LayersView, FiltersView, SearchView, ToolsView, SettingsView) {
     'use strict';

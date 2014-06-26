@@ -19,11 +19,11 @@ define(
       id: 'basemap-gallery',
       className: 'nav navbar-nav navbar-right dropdown',
 
-      initialize: function () {
-        _.bindAll(this, 'render');
+      initialize: function(options) {
+        _.extend(this, options);  // stores a reference to the arcgis map
       },
 
-      render: function () {
+      render: function() {
         this.$el.html(this.template());
 
         this.basemapGallery = this.basemapGallery || new BasemapGallery({

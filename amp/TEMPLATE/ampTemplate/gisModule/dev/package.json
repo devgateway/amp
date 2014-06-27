@@ -11,7 +11,6 @@
   "devDependencies": {
     "gulp": "~3.7.0",
     "gulp-changed": "~0.4.0",
-    "gulp-clean": "~0.3.0",
     "gulp-csso": "~0.2.9",
     "gulp-jshint": "~1.6.2",
     "gulp-less": "~1.2.3",
@@ -26,6 +25,7 @@
     "gulp-util": "~2.2.16",
     "gulp-watch": "~0.6.5",
     "jshint-stylish": "~0.2.0",
+    "rimraf": "~2.2.8",
     "underscore": "~1.6.0",
     "vinyl-source-stream": "~0.1.1"
   }

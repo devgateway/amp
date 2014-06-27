@@ -19,8 +19,9 @@
  *    Default mode is `gulp rev` -- build and revision the app.
  */
 
-var gulp = require('gulp');
+var rimraf = require('rimraf');
 var source = require('vinyl-source-stream');
+var gulp = require('gulp');
 var g = require('gulp-load-plugins')();
 
 
@@ -63,7 +64,7 @@ var paths = {
 // });
 
 
-gulp.task('less', function() {
+gulp.task('less', ['clean-dev'], function() {
   return gulp.src(paths.app.stylesheets.entry)
     .pipe(g.plumber())
     .pipe(g.less())
@@ -80,7 +81,7 @@ gulp.task('build-root', function() {
 });
 
 
-gulp.task('build-scripts', function() {
+gulp.task('build-scripts', ['clean-dev'], function() {
   return gulp.src(paths.app.scripts.compiledFiles)
     .pipe(g.changed(paths.dist.dest.scripts))
     .pipe(gulp.dest(paths.dist.dest.scripts));
@@ -108,7 +109,7 @@ gulp.task('build-fonts', function() {
 });
 
 
-gulp.task('build', ['build-root', 'build-scripts', 'build-stylesheets', 'build-images', 'build-fonts']);
+gulp.task('build', ['clean-build', 'build-root', 'build-scripts', 'build-stylesheets', 'build-images', 'build-fonts']);
 
 
 gulp.task('lint', function() {
@@ -145,11 +146,19 @@ gulp.task('reload', ['serve', 'watch'], function() {
 });
 
 
-gulp.task('clean', function() {
-  return gulp.src(paths.dist.dest.root, {read: false})
-    .pipe(g.clean({force: true}));
+gulp.task('clean-dev', function(done) {
+  rimraf(paths.app.stylesheets.compiled, function() {
+    rimraf(paths.app.scripts.compiled, done);
+  });
 });
 
+
+gulp.task('clean-build', function(done) {
+  rimraf(paths.app.stylesheets.compiled, done);
+});
+
+
+gulp.task('clean', ['clean-dev', 'clean-build']);
 
 // gulp.task('test', ['build', 'tests'], function() {
 //   // copy tests and stuff (grossly) (TODO: don't copy from node_modules...)

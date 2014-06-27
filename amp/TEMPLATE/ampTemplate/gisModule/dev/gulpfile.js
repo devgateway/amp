@@ -26,94 +26,89 @@ var g = require('gulp-load-plugins')();
 
 var paths = {
   app: {
+    root: './app',
+    everything: './app/**.*',
     rootstuff: './app/*.{png,ico,html,txt,xml}',
     scripts: {
       amp: './app/js/amp/**/*.js',
       top: './app/js/*.js',
-      all: './app/js/**/*.js'
+      libs: './app/js/libs/',
+      compiled: './app/compiled-js/',
+      compiledFiles: './app/compiled-js/**/*.js'
     },
-    json: './app/js/**/*.json',
-    templates: './app/js/**/*.{html,htm}',
     stylesheets: {
+      all: './app/less/**/*.less',
       entry: './app/less/main.less',
-      all: './app/less/**/*.less'
+      compiled: './app/compiled-css/',
+      compiledFiles: './app/compiled-css/**.*'
     },
     images: './app/img/**/*.{png, jpg}',
-    fonts: './app/fonts/**/*.{eot,svg,ttf,woff}',
-    tests: [
-      './app/test/**',
-      './app/js/libs/vendor/qunit/qunit/qunit.css'
-    ]
+    fonts: './app/fonts/**/*.{eot,svg,ttf,woff}'
   },
   dist: {
-    root: '../dist',  // USE CAUTION IF CHANGING
-    scripts: '../dist/js',
-    json:  '../dist/js',
-    templates: '../dist/js',
-    stylesheets: '../dist/css',
-    images: '../dist/img',
-    fonts: '../dist/fonts',
-    tests: '../dist/test'
+    dest: {
+      root: '../dist/',  // USE CAUTION IF CHANGING
+      scripts: '../dist/js/',
+      stylesheets: '../dist/compiled-css/',
+      images: '../dist/img/',
+      fonts: '../dist/fonts/'
+    }
   }
 };
 
-
-gulp.task('rootstuff', function() {
-  return gulp.src(paths.app.rootstuff)
-    .pipe(g.changed(paths.dist.root))
-    .pipe(gulp.dest(paths.dist.root));
-});
-
-
-gulp.task('js', function() {
-  return gulp.src(paths.app.scripts.all)
-    .pipe(g.changed(paths.dist.scripts))
-    .pipe(gulp.dest(paths.dist.scripts));
-});
+// gulp.task('js', function() {
+//   return gulp.src([paths.app.scripts.top, paths.app.scripts.amp])
+//     .pipe(g.changed(paths.dist.scripts))
+//     .pipe(gulp.dest(paths.dist.scripts));
+// });
 
 
-gulp.task('css', function() {
+gulp.task('less', function() {
   return gulp.src(paths.app.stylesheets.entry)
     .pipe(g.plumber())
     .pipe(g.less())
       .on('error', g.util.log)
       .on('error', g.util.beep)
-    //.pipe(g.csso())
-    .pipe(gulp.dest(paths.dist.stylesheets));
+    .pipe(gulp.dest(paths.app.stylesheets.compiled));
 });
 
 
-gulp.task('json', function() {
-  return gulp.src(paths.app.json)
-    .pipe(g.changed(paths.dist.json))
-    .pipe(gulp.dest(paths.dist.json));
+gulp.task('build-root', function() {
+  return gulp.src(paths.app.rootstuff)
+    .pipe(g.changed(paths.dist.dest.root))
+    .pipe(gulp.dest(paths.dist.dest.root));
 });
 
-gulp.task('templates', function() {
-  return gulp.src(paths.app.templates)
-    .pipe(g.changed(paths.dist.templates))
-    .pipe(gulp.dest(paths.dist.templates));
+
+gulp.task('build-scripts', function() {
+  return gulp.src(paths.app.scripts.compiledFiles)
+    .pipe(g.changed(paths.dist.dest.scripts))
+    .pipe(gulp.dest(paths.dist.dest.scripts));
 });
 
-gulp.task('img', function() {
+
+gulp.task('build-stylesheets', ['less'], function() {
+  return gulp.src(paths.app.stylesheets.compiledFiles)
+    .pipe(g.changed(paths.dist.dest.stylesheets))
+    .pipe(gulp.dest(paths.dist.dest.stylesheets));
+});
+
+
+gulp.task('build-images', function() {
   return gulp.src(paths.app.images)
-    .pipe(g.changed(paths.dist.images))
-    .pipe(gulp.dest(paths.dist.images));
+    .pipe(g.changed(paths.dist.dest.images))
+    .pipe(gulp.dest(paths.dist.dest.images));
 });
 
-gulp.task('fonts', function() {
+
+gulp.task('build-fonts', function() {
   return gulp.src(paths.app.fonts)
-    .pipe(g.changed(paths.dist.fonts))
-    .pipe(gulp.dest(paths.dist.fonts));
+    .pipe(g.changed(paths.dist.dest.fonts))
+    .pipe(gulp.dest(paths.dist.dest.fonts));
 });
 
 
-gulp.task('tests', function() {
-  // simply copies the test files over, see the "test" task that runs them.
-  return gulp.src(paths.app.tests)
-    .pipe(g.changed(paths.dist.tests))
-    .pipe(gulp.dest(paths.dist.tests))
-});
+gulp.task('build', ['build-root', 'build-scripts', 'build-stylesheets', 'build-images', 'build-fonts']);
 
 
 gulp.task('lint', function() {
@@ -131,56 +126,38 @@ gulp.task('lint', function() {
 });
 
 
-gulp.task('serve', ['build'], g.serve({
-  root: [paths.dist.root],
+gulp.task('serve', g.serve({
+  root: [paths.app.root],
   port: 3000
 }));
 
 
-gulp.task('watch', ['build'], function() {
-  gulp.watch(paths.app.rootstuff, ['rootstuff']);
-  gulp.watch(paths.app.scripts.all, ['js', 'lint']);
-  gulp.watch(paths.app.stylesheets.all, ['css']);
-  gulp.watch(paths.app.images, ['img']);
-  gulp.watch(paths.app.fonts, ['fonts']);
-  gulp.watch(paths.app.templates, ['templates']);
-  gulp.watch(paths.app.json, ['json']);
+gulp.task('watch', function() {
+  gulp.watch([paths.app.scripts.top, paths.app.scripts.amp], ['lint']);
+  gulp.watch(paths.app.stylesheets.all, ['less']);
 });
 
 
 gulp.task('reload', ['serve', 'watch'], function() {
   g.livereload.listen();
-  return gulp.watch(paths.dist.root + '/**')
-    .on('change', g.livereload.changed)
+  return gulp.watch(paths.app.everything)
+    .on('change', g.livereload.changed);
 });
 
 
 gulp.task('clean', function() {
-  return gulp.src(paths.dist.root, {read: false})
+  return gulp.src(paths.dist.dest.root, {read: false})
     .pipe(g.clean({force: true}));
 });
 
 
-gulp.task('test', ['build', 'tests'], function() {
-  // copy tests and stuff (grossly) (TODO: don't copy from node_modules...)
-  return gulp.src(paths.dist.tests + '/test-runner.html')
-    .pipe(g.qunit({verbose: true}));
-});
+// gulp.task('test', ['build', 'tests'], function() {
+//   // copy tests and stuff (grossly) (TODO: don't copy from node_modules...)
+//   // return gulp.src(paths.dist.tests + '/test-runner.html')
+//   //   .pipe(g.qunit({verbose: true}));
+// });
 
 
-gulp.task('build', ['rootstuff', 'js', 'templates', 'json', 'css', 'img', 'fonts']);
 
 
-gulp.task('dev', ['build', 'serve', 'watch', 'reload']);
-gulp.task('rev', ['build'], function() {
-  // var dontVersion = [
-  //  // /.*\.html$/g,  // skip templates
-  //   /^[^\/]+?\.(png|ico|txt|xml)$/  // skip rootstuff
-  // ];
-  // return gulp.src(paths.dist.root + '/**')
-  //   .pipe(g.revAll({ignore: dontVersion}))
-  //   .pipe(gulp.dest(paths.dist.root));
-});
-
-// Run gulp with no command to build and revision
-gulp.task('default', ['rev']);
+gulp.task('dev', ['lint', 'less', 'serve', 'watch', 'reload']);

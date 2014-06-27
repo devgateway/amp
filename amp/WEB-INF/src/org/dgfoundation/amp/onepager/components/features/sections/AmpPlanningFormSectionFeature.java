@@ -4,12 +4,18 @@
  */
 package org.dgfoundation.amp.onepager.components.features.sections;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.RangeValidator;
+import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
+import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.fields.AmpCommentSimpleWrapper;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
@@ -21,10 +27,10 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
  * 
  * @author mpostelnicu@dgateway.org since Oct 5, 2010
  */
-public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
+public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel implements AmpRequiredComponentContainer {
 
 	private static final long serialVersionUID = -6658492193242970618L;
-
+	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
 	/**
 	 * @param id
 	 * @param fmName
@@ -75,10 +81,23 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 		
 		proposedApprovalDate.setDuplicateFieldOnChange(dateOfSignedAgreement);
 		
-		AmpDatePickerFieldPanel proposedStartDate = new AmpDatePickerFieldPanel(
+		final AmpDatePickerFieldPanel proposedStartDate = new AmpDatePickerFieldPanel(
 				"proposedStartDate", new PropertyModel<Date>(actModel,
 						"proposedStartDate"), null, "Proposed Start Date");
+		add(new AmpComponentPanel("proposedStartDateRequired", "Required Validator for Proposed Start Date") {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (this.isVisible()){
+                	proposedStartDate.getDate().setRequired(true);
+                    requiredFormComponents.add(proposedStartDate.getDate());
+        			
+                }
+            }
+        });			
 		add(proposedStartDate);
+		
+
                 
 
 		AmpDatePickerFieldPanel dateOfEffectiveAgreement = new AmpDatePickerFieldPanel(
@@ -103,18 +122,23 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 		acsw.setOutputMarkupId(true);
 		add(acsw);
 
-		AmpDatePickerFieldPanel dateOfPlannedCompletion = new AmpDatePickerFieldPanel(
+		final AmpDatePickerFieldPanel dateOfPlannedCompletion = new AmpDatePickerFieldPanel(
 				"originalCompDate", new PropertyModel<Date>(actModel,
 						"originalCompDate"), null, "Original Completion Date");
+		add(new AmpComponentPanel("originalCompDateRequired", "Required Validator for Original Completion Date") {
+          @Override
+          protected void onConfigure() {
+              super.onConfigure();
+        	  if (this.isVisible()){
+        		  dateOfPlannedCompletion.getDate().setRequired(true);
+        		  requiredFormComponents.add(dateOfPlannedCompletion.getDate());
+        	  }
+
+          }
+		}
+				);
 		add(dateOfPlannedCompletion);
-
-                // why we use same actualCompletionDate  twice?
-		/*AmpDatePickerFieldPanel revisedCompletionDate = new AmpDatePickerFieldPanel(
-				"revisedCompletionDate", new PropertyModel<Date>(actModel,
-						"actualCompletionDate"), null,
-				"Revised Completion Date");
-		add(revisedCompletionDate);*/
-
+		
 		AmpCommentSimpleWrapper acsw2 = new AmpCommentSimpleWrapper("revisedComplDateTabs", "current completion date", actModel);
 		acsw2.setOutputMarkupId(true);
 		add(acsw2);
@@ -128,6 +152,12 @@ public class AmpPlanningFormSectionFeature extends AmpFormSectionFeaturePanel {
 		RangeValidator<Integer> proposedProjectLifeValidator = new RangeValidator<Integer>(0, 9999);
 		proposedProjectLife.getTextContainer().add(proposedProjectLifeValidator);
 		add(proposedProjectLife);
+	}
+
+	@Override
+	public List<FormComponent<?>> getRequiredFormComponents() {
+		// TODO Auto-generated method stub
+		return requiredFormComponents;
 	}
 
 }

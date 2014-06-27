@@ -390,12 +390,44 @@ implements AmpRequiredComponentContainer{
 			add(new AmpTextAreaFieldPanel("projectComments",
 					new PropertyModel<String>(am, "projectComments"),
 					"Project Comments", true, AmpFMTypes.MODULE));
-			add(new AmpTextAreaFieldPanel("description",
+			final AmpTextAreaFieldPanel description=
+			new AmpTextAreaFieldPanel("description",
 					new PropertyModel<String>(am, "description"), "Description",
-					true, AmpFMTypes.MODULE));
-			add(new AmpTextAreaFieldPanel("objective",
-					new PropertyModel<String>(am, "objective"), "Objective", true, AmpFMTypes.MODULE));
+					true, AmpFMTypes.MODULE);
+
 			
+			//validator for description
+            add(new AmpComponentPanel("descriptionRequired", "Required Validator for Description") {
+                @Override
+                protected void onConfigure() {
+                    super.onConfigure();
+                    if (this.isVisible()){
+                    	description.getTextAreaContainer().setRequired(true);
+                        requiredFormComponents.add(description.getTextAreaContainer());
+            			
+                    }
+                }
+            });			
+			add(description);
+			final AmpTextAreaFieldPanel objective=new AmpTextAreaFieldPanel("objective",
+					new PropertyModel<String>(am, "objective"), "Objective", true, AmpFMTypes.MODULE);
+			//validator for objective
+			
+			
+            add(new AmpComponentPanel("objectiveRequired", "Required Validator for Objective") {
+                @Override
+                protected void onConfigure() {
+                    super.onConfigure();
+                    if (this.isVisible()){
+                    	objective.getTextAreaContainer().setRequired(true);
+                        requiredFormComponents.add(objective.getTextAreaContainer());
+            			
+                    }
+                }
+            });
+            //we add objective AFTER the validator has been added so the star gets
+            //rendered if the component is required
+			add(objective);
 			AmpAuthWebSession session = (AmpAuthWebSession) getSession();
 			Site site = session.getSite();
 

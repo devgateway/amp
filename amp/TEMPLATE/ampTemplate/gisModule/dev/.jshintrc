@@ -9,7 +9,6 @@
   "indent": 2,
   "latedef": true,
   "newcap": true,
-  "nonbsp": true,
   "quotmark": "single",
   "undef": true,
   "trailing": true,

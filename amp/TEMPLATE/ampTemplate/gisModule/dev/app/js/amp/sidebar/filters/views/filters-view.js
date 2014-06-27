@@ -2,13 +2,14 @@ define(
   [
     'underscore',
     'backbone',
+    'jquery',
     'amp/sidebar/base-control/base-control-view',
     'amp/sidebar/filters/views/generic-filter-view',
     'amp/sidebar/filters/views/org-filter-view',
     'amp/sidebar/filters/views/years-filter-view',
     'text!amp/sidebar/filters/templates/filters-template.html'
   ],
-  function (_, Backbone, BaseToolView,  GenericFilterView, OrgFilterView, YearsFilterView, Template) {
+  function (_, Backbone, $, BaseToolView,  GenericFilterView, OrgFilterView, YearsFilterView, Template) {
     'use strict';
 
     var filterViews = [OrgFilterView, YearsFilterView];
@@ -29,7 +30,6 @@ define(
         BaseToolView.prototype.initialize.apply(this);
 
         this._getFilterList().done(function(filterList){
-            console.log(filterList);
             self.filterViewsInstances = filterList;
             self.render();
           });
@@ -65,7 +65,7 @@ define(
           .done(function(data){
             if( _.isEmpty(data) ){
               console.warn('Filters API returned empty', data);
-            }   
+            }
 
             _.each(data, function(APIFilter){
               var view = self._createFilterView(APIFilter);
@@ -77,7 +77,7 @@ define(
           .fail(function(jqXHR, textStatus, errorThrown){
             var errorMessage = 'Getting filters failed';
             console.error('Getting filters failed', jqXHR, textStatus, errorThrown);
-            deferred.reject(errorMessage);            
+            deferred.reject(errorMessage);
           });
 
         return deferred;
@@ -89,12 +89,12 @@ define(
         // TODO: magic strings are dangerous, config somewhere...
         var view = null;
         switch (APIFilter.name){
-          case "Organizations":
+          case 'Organizations':
             view = new OrgFilterView({url:APIFilter.endpoint});
-          break;
-          case "Years":
+            break;
+          case 'Years':
             view = new YearsFilterView({url:APIFilter.endpoint});
-          break;
+            break;
           default:
             view = new GenericFilterView();
             view.model.set({url:APIFilter.endpoint, title:APIFilter.name});

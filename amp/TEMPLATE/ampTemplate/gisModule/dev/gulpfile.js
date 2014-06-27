@@ -28,21 +28,21 @@ var g = require('gulp-load-plugins')();
 var paths = {
   app: {
     root: './app',
-    everything: './app/**.*',
     rootstuff: './app/*.{png,ico,html,txt,xml}',
     scripts: {
-      amp: './app/js/amp/**/*.js',
       top: './app/js/*.js',
+      amp: './app/js/amp/**/*.js',
       libs: './app/js/libs/',
-      compiled: './app/compiled-js/',
-      compiledFiles: './app/compiled-js/**/*.js'
+      buildDest: './app/compiled-js/',
+      built: './app/compiled-js/main.js'
     },
     stylesheets: {
       all: './app/less/**/*.less',
       entry: './app/less/main.less',
-      compiled: './app/compiled-css/',
-      compiledFiles: './app/compiled-css/**.*'
+      compileDest: './app/compiled-css/',
+      compiled: './app/compiled-css/main.css'
     },
+    templates: './app/js/amp/**/*.html',
     images: './app/img/**/*.{png, jpg}',
     fonts: './app/fonts/**/*.{eot,svg,ttf,woff}'
   },
@@ -56,6 +56,13 @@ var paths = {
     }
   }
 };
+paths.devCompiled = [
+  paths.app.stylesheets.compiled,
+  paths.app.scripts.top,
+  paths.app.scripts.amp,
+  paths.app.templates,
+  paths.app.images
+];
 
 // gulp.task('js', function() {
 //   return gulp.src([paths.app.scripts.top, paths.app.scripts.amp])
@@ -64,13 +71,13 @@ var paths = {
 // });
 
 
-gulp.task('less', ['clean-dev'], function() {
+gulp.task('less', function() {
   return gulp.src(paths.app.stylesheets.entry)
     .pipe(g.plumber())
     .pipe(g.less())
       .on('error', g.util.log)
       .on('error', g.util.beep)
-    .pipe(gulp.dest(paths.app.stylesheets.compiled));
+    .pipe(gulp.dest(paths.app.stylesheets.compileDest));
 });
 
 
@@ -81,15 +88,15 @@ gulp.task('build-root', function() {
 });
 
 
-gulp.task('build-scripts', ['clean-dev'], function() {
-  return gulp.src(paths.app.scripts.compiledFiles)
+gulp.task('build-scripts', function() {
+  return gulp.src(paths.app.scripts.built)
     .pipe(g.changed(paths.dist.dest.scripts))
     .pipe(gulp.dest(paths.dist.dest.scripts));
 });
 
 
 gulp.task('build-stylesheets', ['less'], function() {
-  return gulp.src(paths.app.stylesheets.compiledFiles)
+  return gulp.src(paths.app.stylesheets.compiled)
     .pipe(g.changed(paths.dist.dest.stylesheets))
     .pipe(gulp.dest(paths.dist.dest.stylesheets));
 });
@@ -109,7 +116,7 @@ gulp.task('build-fonts', function() {
 });
 
 
-gulp.task('build', ['clean-build', 'build-root', 'build-scripts', 'build-stylesheets', 'build-images', 'build-fonts']);
+gulp.task('build', ['build-root', 'build-scripts', 'build-stylesheets', 'build-images', 'build-fonts']);
 
 
 gulp.task('lint', function() {
@@ -139,26 +146,23 @@ gulp.task('watch', function() {
 });
 
 
+// gulp.task('reload', ['serve', 'watch'], function() {
+//   g.livereload.listen();
+//   return gulp.watch([paths.app.everything])
+//     .on('change', g.livereload.changed);
+// });
+
 gulp.task('reload', ['serve', 'watch'], function() {
-  g.livereload.listen();
-  return gulp.watch(paths.app.everything)
-    .on('change', g.livereload.changed);
+ g.livereload.listen();
+ return gulp.watch(paths.devCompiled)
+   .on('change', g.livereload.changed);
 });
 
 
-gulp.task('clean-dev', function(done) {
-  rimraf(paths.app.stylesheets.compiled, function() {
-    rimraf(paths.app.scripts.compiled, done);
-  });
-});
-
-
-gulp.task('clean-build', function(done) {
+gulp.task('clean', function(done) {
   rimraf(paths.app.stylesheets.compiled, done);
 });
 
-
-gulp.task('clean', ['clean-dev', 'clean-build']);
 
 // gulp.task('test', ['build', 'tests'], function() {
 //   // copy tests and stuff (grossly) (TODO: don't copy from node_modules...)

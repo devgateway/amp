@@ -14,7 +14,7 @@ import org.dgfoundation.amp.testutils.*;
 public class GroupReportModel extends ReportModel
 {
 	private ReportModel[] childModels;
-	private String[] trailCells;
+	//private String[] trailCells;
 	private List<String> positionDigest;
 	protected boolean positionDigestIsTotal;
 	
@@ -129,43 +129,6 @@ public class GroupReportModel extends ReportModel
 			if (!lineDigest.equals(corLineDigest))
 				return String.format("GRD %s has the report-headings-line-digest #%d different:\n\t%s instead of \n\t%s", this.getName(), i, lineDigest, corLineDigest);
 		}
-		return null;
-	}
-	
-	protected String matches_trail_cells(GroupReportData grd)
-	{
-		List<AmountCell> cells = grd.getTrailCells();
-		if (cells == null)
-			return String.format("GRD %s has no trail cells, but should have %d", this.getName(), trailCells.length);
-		
-		if (cells.size() != trailCells.length)
-			return String.format("GRD %s has %d trail cells, but should have %d", this.getName(), cells.size(), trailCells.length);
-			
-		for(int i = 0; i < trailCells.length; i++)		
-		{
-			AmountCell cell = cells.get(i);
-			
-			String cellContents = cell == null ? null : cell.toString();			
-			String correctCell = trailCells[i];
-
-			String rs = compareCells(cellContents, correctCell, i);
-			if (rs != null)
-				return rs;
-		}
-		return null;
-	}
-	
-	protected String compareCells(String cellContents, String correctCell, int i)
-	{
-		if (cellContents == null)
-			cellContents = "<null>";
-		
-		if (correctCell == null)
-			correctCell = "<null>";
-		
-		if (!correctCell.equals(cellContents))
-			return String.format("GRD %s has trail cell %d equal %s instead of %s", this.getName(), i, cellContents, correctCell);
-		
 		return null;
 	}
 	

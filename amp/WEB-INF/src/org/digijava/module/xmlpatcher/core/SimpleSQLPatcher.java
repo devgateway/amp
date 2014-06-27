@@ -191,7 +191,6 @@ public class SimpleSQLPatcher {
 					" DELETE FROM amp_report_column where columnid in  ( SELECT columnid FROM  amp_columns WHERE extractorview = 'v_description_chapitre' )",
 					" DELETE FROM amp_report_column where columnid in  ( SELECT columnid FROM  amp_columns WHERE extractorview = 'v_description_imputation' )",
 					" DELETE FROM amp_report_column where columnid in  ( SELECT columnid FROM  amp_columns WHERE extractorview = 'v_imputation' )",
-					" DELETE FROM AMP_REPORTS R WHERE NOT EXISTS(SELECT 1 FROM amp_report_column rc where rc.amp_report_id=r.amp_report_id)",
 					" DELETE FROM  amp_columns WHERE extractorview = 'v_convenio_numcont' ",
 					" DELETE FROM  amp_columns WHERE extractorview = 'v_contracting_arrangements'  ",
 					" DELETE FROM  amp_columns WHERE extractorview = 'v_budgeting_year' ",

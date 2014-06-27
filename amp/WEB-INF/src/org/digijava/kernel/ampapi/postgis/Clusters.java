@@ -7,15 +7,12 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 
-
-public class TestPostGis {
+public class Clusters {
 	
-	
-	public List getAll(){
+	public List getClustersByAdmin(String adm){
 	    Session session = PersistenceManager.getCurrentSession();
 	    Criteria testCriteria = session.createCriteria(Amp_Activity_Points.class);
 	    List results = testCriteria.list();
 	    return results;
 	}
-	
 }

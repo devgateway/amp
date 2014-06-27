@@ -1,0 +1,41 @@
+package org.digijava.kernel.ampapi.helpers.geojson;
+
+import java.util.Map;
+
+import org.codehaus.jackson.JsonNode;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+/**
+ * A Bean representation of a GeoJSON Feature.
+ * 
+ * From the GeoJSON Specification version 1.0:
+ * 
+ * A feature object must have a member with the name "geometry". The value
+ * of the geometry member is a geometry object as defined above or a JSON
+ * null value.
+ * 
+ * A feature object must have a member with the name "properties". The value
+ * of the properties member is an object (any JSON object or a JSON null
+ * value).
+ * 
+ * If a feature has a commonly used identifier, that identifier should be
+ * included as a member of the feature object with the name "id".
+ */
+@JsonPropertyOrder({"type","geometry","properties"})
+public class FeatureGeoJSON extends GeoJSON
+{
+	public GeoJSON geometry;
+	public Map<String,JsonNode> properties;
+	@JsonIgnore
+	public String id;
+
+	public boolean isValid( PositionValidator validator )
+	{
+		if (geometry==null ) return false;
+		if ( !geometry.isValid(validator) ) return false;
+
+		return super.isValid(validator);
+	}
+}

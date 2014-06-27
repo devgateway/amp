@@ -102,10 +102,12 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
                     "$('#"+ closeLink.getMarkupId() +"').show();" +
                     "}"+
                     "$('#"+ closeLink.getMarkupId() +"').show();"+
-				     "if ($.browser.chrome != true && $.browser.webkit !=true) {" +
-				     "$('#"+ closeLink.getMarkupId() +"').click();"+
+                    "var ua = window.navigator.userAgent;"+
+                    "var msie = ua.indexOf('MSIE ');"+
+                    "if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\\:11\\./)  || window.ActiveXObject) {  "+
+                    "$('#"+ closeLink.getMarkupId() +"').click();"+
 				     "setTimeout(function(){showRichEditor()"+
-				     "},800);}" +
+				     "},400);}" +
 				     "else {" +
 				     "showRichEditor();}" 
 				     ));

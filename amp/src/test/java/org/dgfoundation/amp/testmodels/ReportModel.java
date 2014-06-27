@@ -2,9 +2,13 @@ package org.dgfoundation.amp.testmodels;
 
 import java.util.Arrays;
 
+import org.dgfoundation.amp.ar.ReportData;
+import org.dgfoundation.amp.ar.cell.AmountCell;
+
 public abstract class ReportModel implements Comparable<ReportModel>{
 	
 	protected String name;
+	protected String[] trailCells;
 	
 	protected ReportModel(String name)
 	{
@@ -28,9 +32,43 @@ public abstract class ReportModel implements Comparable<ReportModel>{
 		return dest;
 	}
 	
+	protected String matches_trail_cells(ReportData<?> rd) {
+		java.util.List<AmountCell> cells = rd.getTrailCells();
+		if (cells == null)
+			return String.format("RD %s has no trail cells, but should have %d", this.getName(), trailCells.length);
+		
+		if (cells.size() != trailCells.length)
+			return String.format("RD %s has %d trail cells, but should have %d", this.getName(), cells.size(), trailCells.length);
+			
+		for(int i = 0; i < trailCells.length; i++)		
+		{
+			AmountCell cell = cells.get(i);
+			
+			String cellContents = cell == null ? null : cell.toString();			
+			String correctCell = trailCells[i];
+
+			String rs = compareCells(cellContents, correctCell, i);
+			if (rs != null)
+				return rs;
+		}
+		return null;
+	}
+	
+	protected String compareCells(String cellContents, String correctCell, int i) {
+		if (cellContents == null)
+			cellContents = "<null>";
+		
+		if (correctCell == null)
+			correctCell = "<null>";
+		
+		if (!correctCell.equals(cellContents))
+			return String.format("CRD %s has trail cell %d equal %s instead of %s", this.getName(), i, cellContents, correctCell);
+		
+		return null;
+	}
+
 	@Override
-	public int compareTo(ReportModel other)
-	{
+	public int compareTo(ReportModel other) {
 		int bla = this.getName().compareTo(other.getName()); 
 		
 		if (bla != 0)
@@ -40,8 +78,7 @@ public abstract class ReportModel implements Comparable<ReportModel>{
 	}
 	
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return String.format("[%s] %s", this.getClass().getSimpleName(), this.getName());
 	}
 }

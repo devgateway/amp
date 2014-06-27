@@ -20,7 +20,7 @@ public class ColumnReportDataModel extends ReportModel {
 	 * ColumnModel instances
 	 */
 	ReportModel[] columnsModels;
-	private String[] trailCells;
+	//private String[] trailCells;
 	
 	private ColumnReportDataModel(String name, ColumnModel[] columns)
 	{
@@ -79,44 +79,7 @@ public class ColumnReportDataModel extends ReportModel {
 		}
 		return null;
 	}
-	
-	protected String matches_trail_cells(ColumnReportData grd)
-	{
-		List<AmountCell> cells = grd.getTrailCells();
-		if (cells == null)
-			return String.format("CRD %s has no trail cells, but should have %d", this.getName(), trailCells.length);
-		
-		if (cells.size() != trailCells.length)
-			return String.format("CRD %s has %d trail cells, but should have %d", this.getName(), cells.size(), trailCells.length);
 			
-		for(int i = 0; i < trailCells.length; i++)		
-		{
-			AmountCell cell = cells.get(i);
-			
-			String cellContents = cell == null ? null : cell.toString();			
-			String correctCell = trailCells[i];
-
-			String rs = compareCells(cellContents, correctCell, i);
-			if (rs != null)
-				return rs;
-		}
-		return null;
-	}
-	
-	protected String compareCells(String cellContents, String correctCell, int i)
-	{
-		if (cellContents == null)
-			cellContents = "<null>";
-		
-		if (correctCell == null)
-			correctCell = "<null>";
-		
-		if (!correctCell.equals(cellContents))
-			return String.format("CRD %s has trail cell %d equal %s instead of %s", this.getName(), i, cellContents, correctCell);
-		
-		return null;
-	}	
-	
 	/**
 	 * returns list of children sorted by name
 	 * @param grd

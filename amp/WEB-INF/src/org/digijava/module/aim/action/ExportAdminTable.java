@@ -20,7 +20,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import com.sun.org.apache.xerces.internal.parsers.DOMParser;
+import org.apache.xerces.parsers.DOMParser;
 import org.digijava.module.aim.form.ExportTableForm;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;

@@ -26,8 +26,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.digester.Digester;
 import org.apache.commons.digester.RuleSet;
-import com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl;
-import com.sun.org.apache.xerces.internal.parsers.SAXParser;
+import org.apache.xerces.jaxp.SAXParserFactoryImpl;
+import org.apache.xerces.parsers.SAXParser;
 import org.xml.sax.SAXException;
 
 /**
@@ -43,7 +43,7 @@ public class DigesterFactory{
    protected static org.apache.commons.logging.Log log =
        org.apache.commons.logging.LogFactory.getLog(DigesterFactory.class);
 
-   protected static SAXParserFactoryImpl parserFactory = new 
+   protected static SAXParserFactoryImpl parserFactory = new org.apache.xerces.jaxp.
        SAXParserFactoryImpl();
 
     public static final String digiConfigPublicId_10 = "digi-config_1_0.xsd";

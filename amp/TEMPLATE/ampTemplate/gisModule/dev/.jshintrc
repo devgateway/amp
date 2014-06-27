@@ -1,0 +1,23 @@
+{
+  /* see www.jshint.com/docs/options/ */
+  "bitwise": true,
+  "camelcase": true,
+  "curly": true,
+  "eqeqeq": true,
+  "freeze": true,
+  "immed": true,
+  "indent": 2,
+  "latedef": true,
+  "newcap": true,
+  "nonbsp": true,
+  "quotmark": "single",
+  "undef": true,
+  "trailing": true,
+  "maxlen": 124,
+  "globals" : {
+    /* suppress warnings for amd globals */
+    "define": false,
+    "require": false
+  },
+  "devel": true
+}

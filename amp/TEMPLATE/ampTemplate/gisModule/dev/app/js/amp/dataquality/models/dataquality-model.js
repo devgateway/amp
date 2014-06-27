@@ -3,7 +3,7 @@ define(
     'underscore',
     'backbone'
   ],
-  function (_, backbone ) {
+  function (_, Backbone) {
     'use strict';
 
 

@@ -7,10 +7,6 @@ define(
   function (_, Backbone, BaseTemplate, Template) {
     'use strict';
 
-    /* jshint ignore:start */
-    var unset = new Object();  // singleton so we no if it has been set
-    /* jshint ignore:end */
-
     var BaseToolView = Backbone.View.extend({
       /*
        * Base view for all tool views
@@ -22,9 +18,9 @@ define(
       className: 'panel sidebar-tool',
 
       // Required properties to be overridden by child classes
-      title: unset,
-      iconClass: unset,
-      description: unset,
+      title: undefined,  // to make falsy in a child, set to null
+      iconClass: undefined,
+      description: undefined,
 
       initialize: function() {
         this.baseTemplate = _.template(BaseTemplate);
@@ -42,7 +38,7 @@ define(
 
       _getFromChild: function(property) {
         var value = this[property];
-        if (value === unset) {
+        if(typeof myVar !== 'undefined') {
           console.error('No value set for property "' + property + '" on ', this);
           return undefined;
         }

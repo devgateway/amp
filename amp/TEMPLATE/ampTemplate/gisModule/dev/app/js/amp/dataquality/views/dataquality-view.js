@@ -44,7 +44,7 @@ define(
           styleClass = 'danger';
 
         } else {
-          console.warn("data quality score is outside of acceptable range.");
+          console.warn('data quality score is outside of acceptable range.');
         }
 
         this.$('.label').removeClass().addClass('label label-' + styleClass);

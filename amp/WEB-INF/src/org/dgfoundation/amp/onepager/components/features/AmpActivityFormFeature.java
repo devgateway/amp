@@ -223,6 +223,17 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 						toggleFormComponent (enabled,target,ifs,visit);
 					}
 				});
+
+		visitChildren(AmpPlanningFormSectionFeature.class,
+				new IVisitor<AmpPlanningFormSectionFeature, Void>() {
+					@Override
+					public void component(
+							AmpPlanningFormSectionFeature ifs,
+							IVisit<Void> visit) {
+						toggleFormComponent (enabled,target,ifs,visit);
+					}
+				});		
+		
 		visitChildren(AmpProposedProjectCost.class,
 				new IVisitor<AmpProposedProjectCost, Void>() {
 					@Override

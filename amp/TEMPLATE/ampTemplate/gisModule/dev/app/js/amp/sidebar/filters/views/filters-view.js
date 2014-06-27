@@ -30,9 +30,9 @@ define(
         BaseToolView.prototype.initialize.apply(this);
 
         this._getFilterList().done(function(filterList){
-            self.filterViewsInstances = filterList;
-            self.render();
-          });
+          self.filterViewsInstances = filterList;
+          self.render();
+        });
 
         //TODO: register listener for FILTER_CHANGED event, then iterate over
         //      filterViews and call createFilterJSON on each model

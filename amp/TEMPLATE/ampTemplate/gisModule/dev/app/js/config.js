@@ -18,7 +18,7 @@
       },
       {
         'name': 'esri',
-        'location': 'http://js.arcgis.com/3.8amd/js/esri'
+        'location': 'libs/local/esriAMD'
       },
       {
         'name': 'jquery',

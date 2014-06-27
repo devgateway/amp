@@ -6,7 +6,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
-import org.apache.xerces.dom.DeferredElementImpl;
+import com.sun.org.apache.xerces.internal.dom.DeferredElementImpl;
 import org.digijava.module.dataExchange.dbentity.IatiCodeItem;
 import org.digijava.module.dataExchange.dbentity.IatiCodeType;
 import org.digijava.module.dataExchange.form.CodeImporterForm;

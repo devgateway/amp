@@ -1,7 +1,7 @@
 package org.digijava.module.aim.util;
 
 
-import java.io.IOException;
+import java.io.IOException; 
 import java.io.InputStream;
 import java.util.List;
 
@@ -11,13 +11,15 @@ import org.digijava.module.aim.helper.XMLCustomFieldParser;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
+import com.sun.org.apache.xerces.internal.parsers.SAXParser;
+
 
 public class CustomFieldsUtil {
 	private static List<CustomField<?>> customFields;
 	private static List<CustomFieldStep> customFieldsSteps;
 	
     static public void parseXMLFile(InputStream inputStreamString ){    	
-    	XMLReader xr = new org.apache.xerces.parsers.SAXParser();
+    	XMLReader xr = new SAXParser();
     	XMLCustomFieldParser handler = new XMLCustomFieldParser();
     	xr.setContentHandler(handler);
     	xr.setErrorHandler(handler);

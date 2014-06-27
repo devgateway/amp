@@ -260,6 +260,12 @@
 			<groupId>fop</groupId>
 			<artifactId>fop</artifactId>
 			<version>0.20.5</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>xercesImpl</artifactId>
+					<groupId>xerces</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>groovy</groupId>
@@ -315,6 +321,12 @@
 			<groupId>org.apache.jackrabbit</groupId>
 			<artifactId>jackrabbit-text-extractors</artifactId>
 			<version>1.6.5</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>xercesImpl</artifactId>
+					<groupId>xerces</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
@@ -870,13 +882,6 @@
 			<version>1.0.51</version>
 			<type>jar</type>
 		</dependency>
-
-		<dependency>
-			<groupId>xerces</groupId>
-			<artifactId>xercesImpl</artifactId>
-			<version>2.11.0</version>
-		</dependency>
-		
 
 		<dependency>
 			<groupId>net.fckeditor</groupId>

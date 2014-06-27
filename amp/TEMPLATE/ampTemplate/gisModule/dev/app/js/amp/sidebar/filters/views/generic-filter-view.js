@@ -3,10 +3,10 @@ define(
     'underscore',
     'backbone',
     'amp/sidebar/filters/views/base-filter-view',
-    'amp/sidebar/filters/models/org-filter-model',
-    'text!amp/sidebar/filters/templates/org-filter-template.html'
+    'amp/sidebar/filters/models/generic-filter-model',
+    'text!amp/sidebar/filters/templates/generic-filter-template.html'
   ],
-  function (_, Backbone, BaseFilterView, OrgFilterModel, Template) {
+  function (_, Backbone, BaseFilterView, GenericFilterModel, Template) {
     'use strict';
 
     var View = BaseFilterView.extend({
@@ -17,7 +17,7 @@ define(
       initialize: function() {
         BaseFilterView.prototype.initialize.apply(this);
 
-        this.model = new OrgFilterModel();
+        this.model = new GenericFilterModel();
       },
 
       renderFilters: function () {

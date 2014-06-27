@@ -56,9 +56,15 @@ define(
 
         this.$('.modal-placeholder').html(this.contentTemplate(this.model.toJSON()));
         this.$('.modal-placeholder .modal').modal({show: true, backdrop: false});
-        this.$('.modal-placeholder .modal-dialog').draggable({ cancel: '.modal-body, .cancel', cursor: 'move'  });
+        this.$('.modal-placeholder .modal-dialog').draggable({ cancel: '.modal-body, .modal-footer', cursor: 'move'  });
+
+        this.renderFilters();
 
         return this;
+      },
+
+      renderFilters: function () {
+        this.$('.filter-options').append('<p>Hi I\'m the base render Filter</p>');
       },
 
       apply: function () {

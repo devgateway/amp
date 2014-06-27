@@ -32,6 +32,7 @@ var paths = {
       top: './app/js/*.js',
       all: './app/js/**/*.js'
     },
+    json: './app/js/**/*.json',
     templates: './app/js/**/*.{html,htm}',
     stylesheets: {
       entry: './app/less/main.less',
@@ -47,6 +48,7 @@ var paths = {
   dist: {
     root: '../dist',  // USE CAUTION IF CHANGING
     scripts: '../dist/js',
+    json:  '../dist/js',
     templates: '../dist/js',
     stylesheets: '../dist/css',
     images: '../dist/img',
@@ -78,6 +80,13 @@ gulp.task('css', function() {
       .on('error', g.util.beep)
     //.pipe(g.csso())
     .pipe(gulp.dest(paths.dist.stylesheets));
+});
+
+
+gulp.task('json', function() {
+  return gulp.src(paths.app.json)
+    .pipe(g.changed(paths.dist.json))
+    .pipe(gulp.dest(paths.dist.json));
 });
 
 gulp.task('templates', function() {
@@ -135,6 +144,7 @@ gulp.task('watch', ['build'], function() {
   gulp.watch(paths.app.images, ['img']);
   gulp.watch(paths.app.fonts, ['fonts']);
   gulp.watch(paths.app.templates, ['templates']);
+  gulp.watch(paths.app.json, ['json']);
 });
 
 
@@ -158,7 +168,7 @@ gulp.task('test', ['build', 'tests'], function() {
 });
 
 
-gulp.task('build', ['rootstuff', 'js', 'templates', 'css', 'img', 'fonts']);
+gulp.task('build', ['rootstuff', 'js', 'templates', 'json', 'css', 'img', 'fonts']);
 
 
 gulp.task('dev', ['build', 'serve', 'watch', 'reload']);

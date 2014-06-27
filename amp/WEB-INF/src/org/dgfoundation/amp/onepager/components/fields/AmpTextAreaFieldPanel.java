@@ -107,7 +107,7 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
                     "if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\\:11\\./)  || window.ActiveXObject) {  "+
                     "$('#"+ closeLink.getMarkupId() +"').click();"+
 				     "setTimeout(function(){showRichEditor()"+
-				     "},400);}" +
+				     "},850);}" +
 				     "else {" +
 				     "showRichEditor();}" 
 				     ));

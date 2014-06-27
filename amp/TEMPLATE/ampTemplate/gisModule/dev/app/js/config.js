@@ -4,10 +4,18 @@
   require({
     baseUrl: '/js/',  // all relative paths will becomputed from this
     packages: [
-      // 'dojo',  // this form seems to be a dojo thing not from bdframework/amd
-      // 'dijit',
-      // 'dojox',
-      // 'esri',
+      {
+        'name': 'dojo',
+        'location': 'libs/vendor/dojo'
+      },
+      {
+        'name': 'dojox',
+        'location': 'libs/vendor/dojox'
+      },
+      {
+        'name': 'dijit',
+        'location': 'libs/vendor/dijit'
+      },
       {
         'name': 'esri',
         'location': 'http://js.arcgis.com/3.8amd/js/esri'

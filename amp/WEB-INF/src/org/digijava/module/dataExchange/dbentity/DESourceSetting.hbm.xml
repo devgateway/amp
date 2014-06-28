@@ -19,6 +19,7 @@
 		<property name="url" column="url" type="java.lang.String" />
 
         <property name="regionalFundings" column="is_regional_funding" type="java.lang.Boolean"/>
+        <property name="mergeDisbAndExp" column="is_merge_disb_and_exp" type="java.lang.Boolean"/>
 
         <many-to-one name="defaultLocation" class="org.digijava.module.aim.dbentity.AmpCategoryValueLocations" cascade="none" column="default_location"/>
 

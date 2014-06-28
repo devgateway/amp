@@ -97,7 +97,9 @@ public class CreateEditSourceActions extends DispatchAction {
         if (ss.getDefaultLocation() != null) {
             myform.setDefaultLocationID(ss.getDefaultLocation().getId());
         }
+
         myform.setRegionalFunding(ss.isRegionalFundings());
+        myform.setMergeDisbAndExp(ss.isMergeDisbAndExp());
 
 		myform.setName(ss.getName());
 		myform.setApprovalStatus(ss.getApprovalStatus());
@@ -179,7 +181,8 @@ public class CreateEditSourceActions extends DispatchAction {
             }
 
             srcSetting.setRegionalFundings(myForm.isRegionalFunding());
-			
+            srcSetting.setMergeDisbAndExp(myForm.isMergeDisbAndExp());
+
 			if ( myForm.getTeamValues() != null ) {
 				for (AmpTeam selTeam: myForm.getTeamValues() ) {
 					if ( selTeam.getAmpTeamId().equals(myForm.getTeamId() )) {

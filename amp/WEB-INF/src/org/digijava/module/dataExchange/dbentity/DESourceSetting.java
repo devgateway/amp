@@ -74,7 +74,9 @@ public class DESourceSetting implements XmlWrappable{
     private Map<String, Boolean> importFlds;
     private Map<String, Boolean> updateFlds;
     private AmpCategoryValueLocations defaultLocation;
+
     private boolean regionalFundings;
+    private boolean mergeDisbAndExp;
 
     public boolean isRegionalFundings() {
         return regionalFundings;
@@ -82,6 +84,14 @@ public class DESourceSetting implements XmlWrappable{
 
     public void setRegionalFundings(boolean regionalFundings) {
         this.regionalFundings = regionalFundings;
+    }
+
+    public boolean isMergeDisbAndExp() {
+        return mergeDisbAndExp;
+    }
+
+    public void setMergeDisbAndExp(boolean mergeDisbAndExp) {
+        this.mergeDisbAndExp = mergeDisbAndExp;
     }
 
     public AmpCategoryValueLocations getDefaultLocation() {

@@ -57,7 +57,8 @@ public class CreateSourceForm extends ActionForm {
 	private boolean errorName = false;
 	
 	private boolean displaySource = false;
-	
+    private boolean mergeDisbAndExp;
+
 	//holds attached files	
 	private Sdm sdmDocument;
 	
@@ -72,6 +73,19 @@ public class CreateSourceForm extends ActionForm {
     private Long defaultLocationID;
 
     private boolean regionalFunding;
+
+    public boolean isMergeDisbAndExp() {
+        return mergeDisbAndExp;
+    }
+
+    public void setMergeDisbAndExp(boolean mergeDisbAndExp) {
+        this.mergeDisbAndExp = mergeDisbAndExp;
+    }
+
+    public void reset() {
+
+    }
+
 
     public AmpCategoryValueLocations getDefaultLocation() {
         return defaultLocation;

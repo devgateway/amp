@@ -322,10 +322,10 @@ public class IatiActivityWorker {
 					if(existSector!=null) logs.add(existSector);
 				}
 
-                else if(contentItem instanceof Transaction){
+                else if(contentItem instanceof Transaction) {
 					Transaction item = (Transaction)contentItem;
 					boolean ok 		 = false;
-					ok 				 = checkIATITransaction(item,logs);
+					ok 				 = checkIATITransaction(item, logs);
 				}
 				
 				/*if(contentItem instanceof PlannedDisbursement){
@@ -965,117 +965,131 @@ public class IatiActivityWorker {
 		AmpCategoryValue typeOfAssistance = iatiDefaultFinanceType;
 		AmpCategoryValue modeOfPayment = null;
 		AmpCategoryValue financingInstrument = iatiDefaultAidType;
-		String transactionType = "";
+        // other
+		char transactionType = 'o';
 		String description ="";
 		Date tDate = new Date();
-		Double currencyValue = new Double(0);
+		double currencyValue = 0;
 		String currencyName = iatiDefaultCurrency;
-		
-		for (Iterator<Object> it = t.getValueOrDescriptionOrTransactionType().iterator(); it.hasNext();) {
-			Object contentItem = (Object) it.next();
-			if(contentItem instanceof JAXBElement){
-				JAXBElement i = (JAXBElement)contentItem;
 
-				//receiver-org - usually in AMP gov is the receiver
-				if(i.getName().equals(new QName("receiver-org"))){
-				}
+        for (Object contentItem : t.getValueOrDescriptionOrTransactionType()) {
+            if (contentItem instanceof JAXBElement) {
+                JAXBElement i = (JAXBElement) contentItem;
 
-				//provider-org
-				if(i.getName().equals(new QName("provider-org"))){
-					Transaction.ProviderOrg item = (Transaction.ProviderOrg)(i.getValue());
-					ampOrg = getAmpOrganization(printList(item.getContent()), this.getLang(), item.getRef());
-				}
-				
-				//disbursement-channel == mode of payment
-				if(i.getName().equals(new QName("disbursement-channel"))){
-					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
-					modeOfPayment = getAmpCategoryValue(item, DataExchangeConstants.IATI_DISBURSEMENT_CHANNEL,toIATIValues("disbursementChannelValue","disbursementChannelCode"),
-							this.getLang(),null,CategoryConstants.MODE_OF_PAYMENT_NAME,null,null,"active");
-				}
-				
-				//finance-type == type of assistance
-				if(i.getName().equals(new QName("finance-type"))){
-					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
-					typeOfAssistance = getAmpCategoryValue(item, DataExchangeConstants.IATI_FINANCE_TYPE,
-							toIATIValues("financeTypeValue","financeTypeCode"),this.getLang(),null,CategoryConstants.TYPE_OF_ASSISTENCE_NAME,null,null,"active");
-					if(typeOfAssistance == null ) typeOfAssistance = iatiDefaultFinanceType;
-				}
-				
-				//aid-type == financing instrument
-				if(i.getName().equals(new QName("aid-type"))){
-					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
-					financingInstrument = getAmpCategoryValue(item, DataExchangeConstants.IATI_AID_TYPE,
-							toIATIValues("aidTypeValue","aidTypeCode"),this.getLang(),null,CategoryConstants.FINANCING_INSTRUMENT_NAME,null,null,"active");
-					if( financingInstrument == null) financingInstrument = iatiDefaultAidType;
-				}
-				
-				//transaction-type
-				if(i.getName().equals(new QName("transaction-type"))){
-					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
-					String tName = printList(item.getValue().getContent()).toLowerCase();
-					String tCode = item.getValue().getCode().toLowerCase();
-					if("commitment".compareTo(tName) == 0 || "c".compareTo(tCode) ==0)
-						transactionType ="c";
-					else 
-						if("disbursement".compareTo(tName) == 0 || "d".compareTo(tCode) ==0)
-							transactionType ="d";
-						else
-							if("expenditure".compareTo(tName) == 0 || "e".compareTo(tCode) ==0)
-								transactionType ="e";
-					//the transaction is not C or D or E then it is not imported in AMP
-							else return null;
-				}
-				
-				//transaction-date
-				if(i.getName().equals(new QName("transaction-date"))){
-					Transaction.TransactionDate item = (Transaction.TransactionDate)i.getValue();
-					tDate = DataExchangeUtils.XMLGregorianDateToDate(item.getIsoDate());
-				}
-				
-				//transaction description
-				if(i.getName().equals(new QName("description"))){
-					JAXBElement<TextType> item = (JAXBElement<TextType>)i;
-					description = printList(item.getValue().getContent());
-				}
-				
-				//value and currency
-				if(i.getName().equals(new QName("value"))){
-					CurrencyType item = (CurrencyType)i.getValue();
-					currencyValue = new Double(item.getValue().doubleValue());
-					if(isValidString(item.getCurrency()))
-						currencyName = item.getCurrency();
-				}
-			}
-		}
+                //receiver-org - usually in AMP gov is the receiver
+                if (i.getName().equals(new QName("receiver-org"))) {
+                }
+
+                //provider-org
+                if (i.getName().equals(new QName("provider-org"))) {
+                    Transaction.ProviderOrg item = (Transaction.ProviderOrg) (i.getValue());
+                    ampOrg = getAmpOrganization(printList(item.getContent()), this.getLang(), item.getRef());
+                }
+
+                //disbursement-channel == mode of payment
+                if (i.getName().equals(new QName("disbursement-channel"))) {
+                    JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>) i;
+                    modeOfPayment = getAmpCategoryValue(item, DataExchangeConstants.IATI_DISBURSEMENT_CHANNEL, toIATIValues("disbursementChannelValue", "disbursementChannelCode"),
+                            this.getLang(), null, CategoryConstants.MODE_OF_PAYMENT_NAME, null, null, "active");
+                }
+
+                //finance-type == type of assistance
+                if (i.getName().equals(new QName("finance-type"))) {
+                    JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>) i;
+                    typeOfAssistance = getAmpCategoryValue(item, DataExchangeConstants.IATI_FINANCE_TYPE,
+                            toIATIValues("financeTypeValue", "financeTypeCode"), this.getLang(), null, CategoryConstants.TYPE_OF_ASSISTENCE_NAME, null, null, "active");
+                    if (typeOfAssistance == null) typeOfAssistance = iatiDefaultFinanceType;
+                }
+
+                //aid-type == financing instrument
+                if (i.getName().equals(new QName("aid-type"))) {
+                    JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>) i;
+                    financingInstrument = getAmpCategoryValue(item, DataExchangeConstants.IATI_AID_TYPE,
+                            toIATIValues("aidTypeValue", "aidTypeCode"), this.getLang(), null, CategoryConstants.FINANCING_INSTRUMENT_NAME, null, null, "active");
+                    if (financingInstrument == null) financingInstrument = iatiDefaultAidType;
+                }
+
+                //transaction-type
+                if (i.getName().equals(new QName("transaction-type"))) {
+                    JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>) i;
+                    String tName = printList(item.getValue().getContent()).toLowerCase();
+                    String tCode = item.getValue().getCode().toLowerCase();
+                    if ("commitment".compareTo(tName) == 0 || "c".compareTo(tCode) == 0) {
+                        transactionType = 'c';
+                    } else if ("disbursement".compareTo(tName) == 0 || "d".compareTo(tCode) == 0) {
+                        transactionType = 'd';
+                    } else if ("expenditure".compareTo(tName) == 0 || "e".compareTo(tCode) == 0) {
+                        transactionType = 'e';
+                    } else {
+                        //the transaction is not C or D or E then it is not imported in AMP
+                        return null;
+                    }
+                }
+
+                //transaction-date
+                if (i.getName().equals(new QName("transaction-date"))) {
+                    Transaction.TransactionDate item = (Transaction.TransactionDate) i.getValue();
+                    tDate = DataExchangeUtils.XMLGregorianDateToDate(item.getIsoDate());
+                }
+
+                //transaction description
+                if (i.getName().equals(new QName("description"))) {
+                    JAXBElement<TextType> item = (JAXBElement<TextType>) i;
+                    description = printList(item.getValue().getContent());
+                }
+
+                //value and currency
+                if (i.getName().equals(new QName("value"))) {
+                    CurrencyType item = (CurrencyType) i.getValue();
+                    currencyValue = item.getValue().doubleValue();
+                    if (isValidString(item.getCurrency()))
+                        currencyName = item.getCurrency();
+                }
+            }
+        }
 		
-		if(!settings.isRegionalFundings() && ampOrg == null)
-		{
-				ampOrg = findFundingOrganization(iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList);
-				//we can not import funding with Donor null
-				if (ampOrg == null) return null;
+		if (!settings.isRegionalFundings() && ampOrg == null) {
+            /**
+             * If transaction organization is not set then find it among
+             * iati-activities/iati-activity/participating-org/ where @type="Funding"
+             * See for details https://jira.dgfoundation.org/browse/AMP-17672
+             * ?focusedCommentId=113463&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-113463
+             */
+            ampOrg = findFundingOrganization(iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList);
+            //we can not import funding with Donor null
+            if (ampOrg == null) return null;
 		}
 		
 		Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
-		//DRC demand for DFID - merge disb with exp into disb
-		if("d".compareTo(transactionType) ==0 || "e".compareTo(transactionType) ==0) {
-			populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
-        } else if("c".compareTo(transactionType) ==0) {
-					{
-						populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
-						if(!isValidString(ppc.getCurrency()))
-							ppc.setCurrency(currencyName);
-						if(ppc.getDate() == null)
-							ppc.setDate(tDate);
-						Double amount = ppc.getAmount();
-						amount+=currencyValue;
-						ppc.setAmount(amount);
-						
-					}
-        }
-			//the transaction is not C,D,E and will not be imported.
-				else  return null;
 
-        if(a.getFunding() == null) {
+        switch(transactionType) {
+            case 'c':
+                populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
+                if (!isValidString(ppc.getCurrency()))
+                    ppc.setCurrency(currencyName);
+                if (ppc.getDate() == null)
+                    ppc.setDate(tDate);
+                Double amount = ppc.getAmount();
+                amount += currencyValue;
+                ppc.setAmount(amount);
+                break;
+            case 'd':
+                populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
+                break;
+            case 'e':
+                if (settings.isMergeDisbAndExp()) {
+                    //DRC demand for DFID - merge disb with exp into disb
+                    populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
+                } else {
+                    populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, Constants.EXPENDITURE, org.digijava.module.aim.helper.Constants.ACTUAL);
+                }
+                break;
+            //the transaction is not C or D or E then it is not imported in AMP
+            default: return null;
+        }
+
+
+        if (a.getFunding() == null) {
             a.setFunding(new HashSet<AmpFunding>());
         } /*else {
             removeFundingDetails
@@ -1087,7 +1101,7 @@ public class IatiActivityWorker {
 
         AmpFunding ampFunding = null;
 		for (AmpFunding af : ampFundings) {
-			if(ampOrg != null && ampOrg.compareTo(af.getAmpDonorOrgId()) == 0){
+			if (ampOrg != null && ampOrg.compareTo(af.getAmpDonorOrgId()) == 0) {
 //				ampFunding.setFinancingId(af.getFinancingId());
 //				ampFunding.setModeOfPayment(af.getModeOfPayment());
 //				ampFunding.setFundingStatus(af.getFundingStatus());
@@ -1110,7 +1124,7 @@ public class IatiActivityWorker {
 		//AmpFunding ampFunding = new AmpFunding();
 
 		//ampFunding.setAmpDonorOrgId(ampOrg);
-		if(ampFunding == null){
+		if (ampFunding == null) {
             ampFunding = new AmpFunding();
 			ampFunding.setAmpDonorOrgId(ampOrg);
 			ampFunding.setGroupVersionedFunding(System.currentTimeMillis());
@@ -1124,8 +1138,9 @@ public class IatiActivityWorker {
         ampFunding.setActive(true);
 		
 		
-		if(a !=null ) 
-			ampFunding.setAmpActivityId(a);
+		if (a != null) {
+            ampFunding.setAmpActivityId(a);
+        }
 		
 		//TODO: the language - lang attribute
 		if(isValidString(description)) ampFunding.setConditions(description);
@@ -1136,9 +1151,9 @@ public class IatiActivityWorker {
 		ampOrgRole.setOrganisation(ampOrg);
 		orgRole.add(ampOrgRole);
 		
-		if (a.getOrgrole()==null){
+		if (a.getOrgrole() == null) {
 			a.setOrgrole(orgRole);
-		}else{
+		}else {
 			a.getOrgrole().addAll(orgRole);
 		}
 		
@@ -1166,22 +1181,20 @@ public class IatiActivityWorker {
 			ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList,
 			ArrayList<ParticipatingOrg> iatiExtendingOrgList,
 			ArrayList<ReportingOrg> iatiRepOrgList) {
+
 		AmpOrganisation ampOrg = null;
-		if(iatiExtendingOrgList != null && !iatiExtendingOrgList.isEmpty())
-		{
-			ParticipatingOrg defaultFundingOrg = iatiExtendingOrgList.iterator().next();
+
+		if (iatiDefaultFundingOrgList != null && !iatiDefaultFundingOrgList.isEmpty())	{
+			ParticipatingOrg defaultFundingOrg = iatiDefaultFundingOrgList.iterator().next();
 			ampOrg = getAmpOrganization(printList(defaultFundingOrg.getContent()), this.getLang(), defaultFundingOrg.getRef());
-		}
-		else if(iatiDefaultFundingOrgList != null && !iatiDefaultFundingOrgList.isEmpty())
-				{
-					ParticipatingOrg defaultFundingOrg = iatiDefaultFundingOrgList.iterator().next();
-					ampOrg = getAmpOrganization(printList(defaultFundingOrg.getContent()), this.getLang(), defaultFundingOrg.getRef());
-				}
-				else if(iatiRepOrgList != null && !iatiRepOrgList.isEmpty())
-						{
-							ReportingOrg defaultFundingOrg = iatiRepOrgList.iterator().next();
-							ampOrg = getAmpOrganization(printList(defaultFundingOrg.getContent()), this.getLang(), defaultFundingOrg.getRef());
-						}
+		} else if (iatiExtendingOrgList != null && !iatiExtendingOrgList.isEmpty()) {
+            ParticipatingOrg defaultFundingOrg = iatiExtendingOrgList.iterator().next();
+            ampOrg = getAmpOrganization(printList(defaultFundingOrg.getContent()), this.getLang(), defaultFundingOrg.getRef());
+		} else if(iatiRepOrgList != null && !iatiRepOrgList.isEmpty()) {
+            ReportingOrg defaultFundingOrg = iatiRepOrgList.iterator().next();
+            ampOrg = getAmpOrganization(printList(defaultFundingOrg.getContent()), this.getLang(), defaultFundingOrg.getRef());
+        }
+
 		return ampOrg;
 	}
 
@@ -1803,57 +1816,55 @@ public class IatiActivityWorker {
 	}
 	
 	private boolean checkIATITransaction(Transaction t, ArrayList<AmpMappedField> logs) {
-		// TODO Auto-generated method stub
-		
-		for (Iterator it = t.getValueOrDescriptionOrTransactionType().iterator(); it.hasNext();) {
-			Object contentItem = (Object) it.next();
-			if(contentItem instanceof JAXBElement){
-				JAXBElement i = (JAXBElement)contentItem;
 
-				//flow-type, tied-status
-				//TODO
-				
-				//receiver-org - usually in AMP gov is the receiver
-				if(i.getName().equals(new QName("receiver-org"))){
-					Transaction.ReceiverOrg item = (Transaction.ReceiverOrg)(i.getValue());
-					AmpMappedField existReceiverOrg = checkOrganization(printList(item.getContent()), this.getLang(),item.getRef());
-					//TODO logging
-					if(existReceiverOrg!=null) logs.add(existReceiverOrg);
-				}
+        for (Object contentItem : t.getValueOrDescriptionOrTransactionType()) {
+            if (contentItem instanceof JAXBElement) {
+                JAXBElement i = (JAXBElement) contentItem;
 
-				//provider-org - usually in AMP gov is the receiver
-				if(i.getName().equals(new QName("provider-org"))){
-					Transaction.ProviderOrg item = (Transaction.ProviderOrg)(i.getValue());
-					AmpMappedField existReceiverOrg = checkOrganization(printList(item.getContent()), this.getLang(),item.getRef());
-					//TODO logging
-					if(existReceiverOrg!=null) logs.add(existReceiverOrg);
-				}
-				
-				//disbursement-channel == mode of payment
-				if(i.getName().equals(new QName("disbursement-channel"))){
-					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
-					AmpMappedField existDisbursementChannel = checkDisbursementChannel(item);
-					//TODO logging
-					if(existDisbursementChannel!=null) logs.add(existDisbursementChannel);
-				}
-				
-				//finance-type == type of assistance
-				if(i.getName().equals(new QName("finance-type"))){
-					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
-					AmpMappedField existFinanceType = checkFinanceType(item);
-					//TODO logging
-					if(existFinanceType!=null) logs.add(existFinanceType);
-				}
-				
-				//aid-type == financing instrument
-				if(i.getName().equals(new QName("aid-type"))){
-					JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
-					AmpMappedField existAidType = checkAidType(item);
-					if(existAidType!=null) logs.add(existAidType);
-				}
-				
-			}
-		}
+                //flow-type, tied-status
+                //TODO
+
+                //receiver-org - usually in AMP gov is the receiver
+                if (i.getName().equals(new QName("receiver-org"))) {
+                    Transaction.ReceiverOrg item = (Transaction.ReceiverOrg) (i.getValue());
+                    AmpMappedField existReceiverOrg = checkOrganization(printList(item.getContent()), this.getLang(), item.getRef());
+                    //TODO logging
+                    if (existReceiverOrg != null) logs.add(existReceiverOrg);
+                }
+
+                //provider-org - usually in AMP gov is the receiver
+                if (i.getName().equals(new QName("provider-org"))) {
+                    Transaction.ProviderOrg item = (Transaction.ProviderOrg) (i.getValue());
+                    AmpMappedField existReceiverOrg = checkOrganization(printList(item.getContent()), this.getLang(), item.getRef());
+                    //TODO logging
+                    if (existReceiverOrg != null) logs.add(existReceiverOrg);
+                }
+
+                //disbursement-channel == mode of payment
+                if (i.getName().equals(new QName("disbursement-channel"))) {
+                    JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>) i;
+                    AmpMappedField existDisbursementChannel = checkDisbursementChannel(item);
+                    //TODO logging
+                    if (existDisbursementChannel != null) logs.add(existDisbursementChannel);
+                }
+
+                //finance-type == type of assistance
+                if (i.getName().equals(new QName("finance-type"))) {
+                    JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>) i;
+                    AmpMappedField existFinanceType = checkFinanceType(item);
+                    //TODO logging
+                    if (existFinanceType != null) logs.add(existFinanceType);
+                }
+
+                //aid-type == financing instrument
+                if (i.getName().equals(new QName("aid-type"))) {
+                    JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>) i;
+                    AmpMappedField existAidType = checkAidType(item);
+                    if (existAidType != null) logs.add(existAidType);
+                }
+
+            }
+        }
 		
 		
 		return false;

@@ -320,9 +320,15 @@ function trim1 (str) {
 		                    		<html:radio property="approvalStatus" value="${appStatus.key}"><digi:trn>${appStatus.value}</digi:trn></html:radio> <br />
                     			</logic:iterate>
                     			
+
         				<br>
-        				
-        				<br>
+                <b><digi:trn>Merge Disbursements and Expenditures</digi:trn>:</b><br />
+								<html:checkbox property="mergeDisbAndExp" value="true"/>
+								<html:hidden property="mergeDisbAndExp" value="false"/>
+
+								<br>
+								<br>
+
                 <b><digi:trn>Please choose the funding type</digi:trn>:</b><br />
 								<html:radio property="regionalFunding" value="false"><digi:trn>Donor funding</digi:trn></html:radio> <br />
 								<html:radio property="regionalFunding" value="true"><digi:trn>Regional funding</digi:trn></html:radio> <br />

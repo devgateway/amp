@@ -132,26 +132,27 @@ function closePopup() {
 								<table cellpadding="0" cellspacing="0">
 								<tr>
 								<td>
-								<c:set var="formatTip">
-														<digi:trn key="aim:decimalforma">Format has to be: </digi:trn> <%=FormatHelper.formatNumber(FormatHelper.parseDouble("1"+FormatHelper.getDecimalSymbol()+"5"))%>
-								</c:set>
+
+                                    <c:set var="formatTip">
+                                        <digi:trn key="aim:decimalforma">Format has to be: </digi:trn>
+                                        <%=FormatHelper.formatNumber(FormatHelper.parseDouble("1"+FormatHelper.getDecimalSymbol()+"5"))%>
+                                    </c:set>
+
 								    <c:set var="codeBase"><%= CurrencyUtil.BASE_CODE %></c:set>
 									<c:if test="${aimCurrencyRateFormPop.updateCRateCode==codeBase}">
-									<html:text title="${formatTip}" property="updateCRateAmount" disabled="true" styleClass="amt" size="7"/>
+									<html:text title="${formatTip}" property="updateCRateAmount" disabled="true" styleClass="amt" size="10"/>
 									</c:if>
 									<c:if test="${aimCurrencyRateFormPop.updateCRateCode!=codeBase}">
-									<html:text title="${formatTip}" property="updateCRateAmount" styleClass="amt" size="7"/>
+									<html:text title="${formatTip}" property="updateCRateAmount" styleClass="amt" size="10"/>
 									</c:if>
 
-									<!-- 
-									<FONT color=red>
-									<digi:trn key="aim:USD">USD</digi:trn></FONT> -->
 								</td>
 								<td>
-								<digi:trn key="aim:currencyformat">Format: <%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.NUMBER_FORMAT) %> </digi:trn><br/>
-								<digi:trn key="aim:groupSymbol">Group Symbol: "<%=FormatHelper.getGroupSymbol()%>"</digi:trn><br/>
-								<digi:trn key="aim:decimalSymbol">Decimal symbol: "<%=FormatHelper.getDecimalSymbol()%>"</digi:trn>
-								
+								    <p style="padding-left: 5px;">
+                                        <digi:trn key="aim:currencyformat">Format: <%=org.digijava.module.aim.util.FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.GlobalSettingsConstants.NUMBER_FORMAT) %> </digi:trn><br/>
+                                        <digi:trn key="aim:groupSymbol">Group Symbol: "<%=FormatHelper.getGroupSymbol()%>"</digi:trn><br/>
+                                        <digi:trn key="aim:decimalSymbol">Decimal symbol: "<%=FormatHelper.getDecimalSymbol()%>"</digi:trn>
+                                    </p>
 								</td>
 								</tr>
 								</table>

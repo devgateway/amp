@@ -108,7 +108,10 @@ function refresh(isTab) {
 		document.forms[0].action = "/showDesktop.do";
 		document.forms[0].submit();
 	} else {
-		this.close();
+	    this.close();
+	    if (window.opener.location.href) {
+	        window.opener.location.href = window.opener.location.href;
+		}
 	}
 }
 

@@ -42,7 +42,8 @@
 		YAHOOAmp.namespace("YAHOOAmp.amp");
 
 		var myPanel = new YAHOOAmp.widget.Panel("newmyCurrencyRate", {
-			width:"600px",
+			width: "600px",
+			height: "370px",
 			fixedcenter: true,
 		    constraintoviewport: false,
 		    underlay:"none",

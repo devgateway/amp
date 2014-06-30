@@ -29,7 +29,7 @@ td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0;}
 
 	function exportList(){
 
-		document.visualizationform.action= "/visualization/exportPojectList.do" ;
+		document.visualizationform.action= "/visualization/exportProjectList.do" ;
 		document.visualizationform.target="_blank";
 		document.visualizationform.submit();
 

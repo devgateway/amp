@@ -10,6 +10,7 @@
 		<page name="addDashboard" page="addDashboard" title ="Add Dashboard" />
 		<page name="dashboardLauncher" page="dashboardLauncher" title ="Dashboard Launcher" />
 		<page name="launchDashboard" page="launchDashboard" title ="Launch Dashboard" />
+		<page name="exportProjectList" page="exportProjectList" title ="Visualization Dashboard" />
 	</secondary-pages>
 	
 </config>

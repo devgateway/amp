@@ -45,6 +45,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.esrigis.action.DataDispatcher;
 
@@ -235,7 +236,10 @@ public class XlsHelper {
 		columnNames.add(TranslatorWorker.translateText("Actual Disbursement for this location"));
 		columnNames.add(TranslatorWorker.translateText("Total Actual Commitments"));
 		columnNames.add(TranslatorWorker.translateText("Total Actual Disbursement"));
-		columnNames.add(TranslatorWorker.translateText("Total MTEF"));
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections"))
+		{
+			columnNames.add(TranslatorWorker.translateText("Total MTEF"));
+		}
 		
 		
 		int x = 0;
@@ -366,8 +370,10 @@ public class XlsHelper {
 				values.add(QueryUtil.getPercentage(calculations.getTotActualDisb().getValue(),new BigDecimal(ald.aalPercentage)));
 				values.add(calculations.getTotActualComm().toString());
 				values.add(calculations.getTotActualDisb().toString());
-				values.add(calculations.getTotalMtef().toString());
-					
+				if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections"))
+				{
+					values.add(calculations.getTotalMtef().toString());
+				}		
 				for (int j = 0; j < columnNames.size(); j++) {
 					HSSFCell cell = row.createCell(j);
 					str = new HSSFRichTextString(values.get(j));

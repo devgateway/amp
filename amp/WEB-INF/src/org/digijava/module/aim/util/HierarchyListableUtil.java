@@ -2,6 +2,7 @@ package org.digijava.module.aim.util;
 
 import java.util.Collection;
 
+import org.digijava.module.aim.util.time.StopWatch;
 import org.hibernate.LazyInitializationException;
 
 public class HierarchyListableUtil {
@@ -12,14 +13,15 @@ public class HierarchyListableUtil {
 			HierarchyListableUtil.changeTranslateable(hl.getChildren(), translateable);
 		}
 	}
-
+	
 	public static void changeTranslateable(Collection<? extends HierarchyListable> colHL, boolean translateable) 
 		throws LazyInitializationException {
 		
 		if ( colHL != null && colHL.size() > 0 ) {
 			for (HierarchyListable hl : colHL) {
 				hl.setTranslateable(translateable);
-				HierarchyListableUtil.changeTranslateable(hl.getChildren(), translateable);
+				Collection<? extends HierarchyListable> children = hl.getChildren();
+ 				HierarchyListableUtil.changeTranslateable(children, translateable);
 			}
 		}
 	}

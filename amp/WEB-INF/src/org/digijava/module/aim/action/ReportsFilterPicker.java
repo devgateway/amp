@@ -35,8 +35,11 @@ import org.digijava.module.aim.util.time.StopWatch;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.contentrepository.helper.FilterValues;
 import org.hibernate.LazyInitializationException;
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -44,6 +47,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -473,50 +479,84 @@ public class ReportsFilterPicker extends Action {
     	return (b.booleanValue() == false);
     }
     
+    
+
+    
     /**
-     * returns either the list of all the countries with sublocations in the system or the sole configured root country (see AMP-16857)
+     * selects all locations of a given type from entrySet
+     * 
+     * @param entrySet
+     * @param typeCategoryValue an AmpCategoryValue object, defining the location type
      * @return
      */
-    private static List<AmpCategoryValueLocations> getRootLocations(){    	
+    private static List<LocationSkeleton> filterLocationsByType(Collection<LocationSkeleton> entrySet, AmpCategoryValue typeCategoryValue) {
+    	List<LocationSkeleton> filteredLocations = new ArrayList<>();
+    	for (LocationSkeleton loc : entrySet) {
+    		if (loc.getCvId() == typeCategoryValue.getId()){
+    			filteredLocations.add(loc);
+    		}
+    	}
+    	return filteredLocations;
+    }
+    
+    /**
+     * gets defaul
+     * 
+     * @param locations a map of LocationSkeleton, the location ID is the key
+     * @return a LocationSkeleton of the default country
+     */
+    private static LocationSkeleton getDefaultCountry(Map<Long, LocationSkeleton> locations) {
+    	AmpCategoryValueLocations hibernatedLocation = DynLocationManagerUtil.getDefaultCountry();
+		return locations.get(hibernatedLocation.getIdentifier());
+    }
+    
+
+    
+    /**
+     * returns either the list of all the countries with sublocations in the system or the sole configured root country (see AMP-16857)
+     * optimized for AMP-17807
+     * @return
+     */
+    private static Set<LocationSkeleton> getRootLocations(){    	
+    	Map<Long, LocationSkeleton> allLocations = LocationSkeleton.populateSkeletonLocationsList();
         TeamMember currentMember = TeamUtil.getCurrentMember();
         AmpApplicationSettings ampAppSettings = null;
         boolean showAllCountries = false;
+        
         if (currentMember != null) {
             AmpTeamMember ampCurrentMember = TeamMemberUtil.getAmpTeamMemberCached(currentMember.getMemberId());
+        
             if (ampCurrentMember != null) {
                 ampAppSettings = DbUtil.getTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());
                 showAllCountries = ampAppSettings != null && ampAppSettings.getShowAllCountries();
+        
             } else {
                 showAllCountries = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_ALL_COUNTRIES));
+        
             }
         }
-
-    	List<AmpCategoryValueLocations> filterCountries = new ArrayList<AmpCategoryValueLocations>();
+    	Set<LocationSkeleton> filterCountries = new HashSet<LocationSkeleton>();
         if (showAllCountries) {
             AmpCategoryValue layer = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
             if (layer == null) {
                 logger.error("No Country value found in category Implementation Location. Please correct this.");
             } else {
-                Set<AmpCategoryValueLocations> countries = DynLocationManagerUtil.getLocationsByLayer(layer);
-                for (AmpCategoryValueLocations loc : countries) {
+                //Set<LocationSkeleton> countries = DynLocationManagerUtil.getLocationsByLayer(layer);
+            	List<LocationSkeleton> countries = filterLocationsByType(allLocations.values(), layer);
+            	//layer filtering already done above
+                for (LocationSkeleton loc : countries) {
                     if (loc.getChildLocations() != null && !loc.getChildLocations().isEmpty()) {
+                    	//adding countries, so that our structure is hierarchic
                         filterCountries.add(loc);
                     }
                 }
             }
         } else {
-            filterCountries.add(DynLocationManagerUtil.getDefaultCountry());
+        	
+            filterCountries.add(getDefaultCountry(allLocations));
         }
-        
-        for (AmpCategoryValueLocations country : filterCountries)
-        	HierarchyListableUtil.changeTranslateable(country.getChildLocations(), false);
-        
-        for (AmpCategoryValueLocations country : filterCountries) { // eager loading of children - slow as hell
-        	// TODO: optimize later
-        	for (AmpCategoryValueLocations loc:country.getChildLocations()) {
-                loc.getCountDescendants();
-            }
-        }
+       	for (LocationSkeleton country: filterCountries)
+       		HierarchyListableUtil.changeTranslateable(country, false);
         return filterCountries;
     }
     
@@ -788,15 +828,21 @@ public class ReportsFilterPicker extends Action {
 		if (true) {
 			StopWatch.next("Filters", true, "start rendering regions");
 
-            List<AmpCategoryValueLocations> filterCountries = getRootLocations();
-			
+
+            Set<LocationSkeleton> filterCountries = getRootLocations();
+			StopWatch.next("Filters", true, "after get root locations");
+
+            
+            
+            
 			HierarchyListableImplementation rootRegions	= new HierarchyListableImplementation();
 
             if (filterCountries.size() > 1) {
                 rootRegions.setLabel("All Locations");
                 rootRegions.setUniqueId("0");
                 rootRegions.setChildren(filterCountries);
-                for (AmpCategoryValueLocations country : filterCountries) {
+                
+                for (LocationSkeleton country: filterCountries) {
                     HierarchyListableImplementation countryRoot	= new HierarchyListableImplementation();
                     countryRoot.setLabel(country.getLabel());
                     countryRoot.setUniqueId(country.getUniqueId());
@@ -806,7 +852,14 @@ public class ReportsFilterPicker extends Action {
             } else {
                 rootRegions.setLabel("All Regions");
                 rootRegions.setUniqueId("0");
+                for (LocationSkeleton rootCandidate:filterCountries) {
+                	rootRegions.setChildren(rootCandidate.getChildren());
+                	break;
+                }
+                /*
+                 * this looks potentially buggy
     			rootRegions.setChildren( filterCountries.get(0).getChildren());
+    			*/
             }
 
 

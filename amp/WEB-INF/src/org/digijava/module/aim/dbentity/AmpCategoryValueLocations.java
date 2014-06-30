@@ -3,8 +3,6 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.*;
 
-import javax.persistence.FieldResult;
-
 import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.dimension.LocationsDimension;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;

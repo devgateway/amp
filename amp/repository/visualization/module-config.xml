@@ -11,6 +11,7 @@
 		<action login-required="false" pattern="/wordExport" />
 		<action login-required="false" pattern="/excelExport" />
 		<action login-required="false" pattern="/showProjectsList" />
+		<action login-required="false" pattern="/exportProjectList" />
 	</security>
 	
 	<!-- dashboard classes Begin -->

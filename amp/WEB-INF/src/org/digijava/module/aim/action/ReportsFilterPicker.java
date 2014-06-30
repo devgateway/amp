@@ -35,8 +35,11 @@ import org.digijava.module.aim.util.time.StopWatch;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.contentrepository.helper.FilterValues;
 import org.hibernate.LazyInitializationException;
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -44,6 +47,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.*;
 
@@ -782,15 +788,21 @@ public class ReportsFilterPicker extends Action {
 		if (true) {
 			StopWatch.next("Filters", true, "start rendering regions");
 
-            List<AmpCategoryValueLocations> filterCountries = getRootLocations();
-			
+
+            Set<LocationSkeleton> filterCountries = getRootLocations();
+			StopWatch.next("Filters", true, "after get root locations");
+
+            
+            
+            
 			HierarchyListableImplementation rootRegions	= new HierarchyListableImplementation();
 
             if (filterCountries.size() > 1) {
                 rootRegions.setLabel("All Locations");
                 rootRegions.setUniqueId("0");
                 rootRegions.setChildren(filterCountries);
-                for (AmpCategoryValueLocations country : filterCountries) {
+                
+                for (LocationSkeleton country: filterCountries) {
                     HierarchyListableImplementation countryRoot	= new HierarchyListableImplementation();
                     countryRoot.setLabel(country.getLabel());
                     countryRoot.setUniqueId(country.getUniqueId());
@@ -800,7 +812,14 @@ public class ReportsFilterPicker extends Action {
             } else {
                 rootRegions.setLabel("All Regions");
                 rootRegions.setUniqueId("0");
+                for (LocationSkeleton rootCandidate:filterCountries) {
+                	rootRegions.setChildren(rootCandidate.getChildren());
+                	break;
+                }
+                /*
+                 * this looks potentially buggy
     			rootRegions.setChildren( filterCountries.get(0).getChildren());
+    			*/
             }
 
 

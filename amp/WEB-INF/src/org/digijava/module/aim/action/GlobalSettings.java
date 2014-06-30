@@ -2,9 +2,6 @@ package org.digijava.module.aim.action;
 /*
 * @ author Govind G Dalwani
 */
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,16 +17,17 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.form.GlobalSettingsForm;
@@ -38,13 +36,13 @@ import org.digijava.module.aim.helper.CountryBean;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.services.auditcleaner.AuditCleaner;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.digijava.module.currencyrates.CurrencyRatesService;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.engine.spi.SessionImplementor;
 
 public class GlobalSettings extends Action {
 	private static Logger logger 				= Logger.getLogger(GlobalSettings.class);
@@ -94,12 +92,17 @@ public class GlobalSettings extends Action {
 			flushSessionObjects(session);
 			String allValues=gsForm.getAllValues();
 			StringTokenizer token=new StringTokenizer(allValues,"&");
-			
+			AmpGlobalSettings projectValidationSetting =  FeaturesUtil.getGlobalSettingsCache().get(GlobalSettingsConstants.PROJECTS_VALIDATION);
 			while (token.hasMoreTokens()) {
 	                    String element = token.nextToken();
 	                    String[] nameValue= element.split("=");
+	                    Long id = Long.parseLong(nameValue[0]);
+	                    String value = nameValue.length<2 ? "" : nameValue[1];
+	                    if (isChangingValidation(projectValidationSetting,id,value)) {
+	                    refreshAmpApplicationSettings(value);
+	                    }
 	                    //allow empty fields, like Public Portal URL when Public Portal = false
-	                    this.updateGlobalSetting(Long.parseLong(nameValue[0]), nameValue.length<2 ? "" : nameValue[1]);
+	                    this.updateGlobalSetting(id, value);
                         }
 			
 			//this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
@@ -160,6 +163,25 @@ public class GlobalSettings extends Action {
 
 		saveErrors(request, errors);
 		return mapping.findForward("viewGS");
+	}
+
+	private void refreshAmpApplicationSettings(String value) {
+		Collection <AmpApplicationSettings> appSettingsList = DbUtil.getAllAmpApplicationSettings ();
+		for (AmpApplicationSettings appSetting:appSettingsList) {
+			appSetting.setValidation(value);
+			PersistenceManager.getSession().save(appSetting);
+		}
+	}
+
+	private boolean isChangingValidation(
+			AmpGlobalSettings projectValidationSetting, Long id, String newValue) {
+		if (projectValidationSetting.getGlobalId().equals(id) &&
+				!projectValidationSetting.getGlobalSettingsValue().equals(newValue)	) {
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	@SuppressWarnings("unchecked")

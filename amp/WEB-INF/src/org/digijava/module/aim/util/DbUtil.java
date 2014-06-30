@@ -2384,6 +2384,22 @@ public class DbUtil {
 		return indc;
 	}
 	
+	public static Collection getAllAmpApplicationSettings() {
+		Session session = null;
+		Collection col = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "FROM " + AmpApplicationSettings.class.getName();
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+		} catch (Exception e) {
+			logger.error("Exception from getAllAmpApplicationSettings()", e);
+		}
+		return col;
+	}
+
+	
 	public static Collection<AmpGPISurveyIndicator> getAllGPISurveyIndicators(boolean onlyWithQuestions) {
 		Collection responses = new ArrayList();
 		Session session = null;

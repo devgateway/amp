@@ -1562,8 +1562,11 @@ public class DbUtil {
             	AmpFundingDetail currentFd = null;
             	FundingInformationItem fd = (FundingInformationItem) item[0];
            		currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-            	if (item.length==4) 
+            	if (item.length==4) {
+            		item[3]=item[3]==null?100f:item[3];
             		currentFd.setTransactionAmount(currentFd.getAbsoluteTransactionAmount()*(Float)item[3]/100);
+                    		
+            	}
             	if (item.length==5){
             		item[3]=item[3]==null?100f:item[3];
             		item[4]=item[4]==null?100f:item[4];

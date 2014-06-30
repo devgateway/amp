@@ -102,7 +102,8 @@ public class InternationalizedViewsRepository {
 
 				addViewDef(this, new I18nViewDescription("amp_activity").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_activity_id", AmpActivityVersion.class, "name")));
-
+				addViewDef(this, new I18nViewDescription("amp_category_value_location").
+						addColumnDef(new I18nViewColumnDescription("location_name", "id", AmpCategoryValueLocations.class, "name")));
 				addViewDef(this, new I18nViewDescription("v_actors").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_actor_id", AmpActor.class, "name")));
 				

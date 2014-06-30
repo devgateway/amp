@@ -479,46 +479,86 @@ public class ReportsFilterPicker extends Action {
     	return (b.booleanValue() == false);
     }
     
+
+    
     /**
-     * returns either the list of all the countries with sublocations in the system or the sole configured root country (see AMP-16857)
+     * selects all locations of a given type from entrySet
+     * 
+     * @param entrySet
+     * @param typeCategoryValue an AmpCategoryValue object, defining the location type
      * @return
      */
-    private static List<AmpCategoryValueLocations> getRootLocations(){    	
+    private static List<LocationSkeleton> filterLocationsByType(Collection<LocationSkeleton> entrySet, AmpCategoryValue typeCategoryValue) {
+    	List<LocationSkeleton> filteredLocations = new ArrayList<>();
+    	for (LocationSkeleton loc : entrySet) {
+    		if (loc.getCvId() == typeCategoryValue.getId()){
+    			filteredLocations.add(loc);
+    		}
+    	}
+    	return filteredLocations;
+    }
+    
+    /**
+     * gets default location
+     * 
+     * @param locations a map of LocationSkeleton, the location ID is the key
+     * @return a LocationSkeleton of the default country
+     */
+    private static LocationSkeleton getDefaultCountry(Map<Long, LocationSkeleton> locations) {
+    	AmpCategoryValueLocations hibernatedLocation = DynLocationManagerUtil.getDefaultCountry();
+		return locations.get(hibernatedLocation.getIdentifier());
+    }
+    
+
+    /**
+     * returns either the list of all the countries with sublocations in the system or the sole configured root country (see AMP-16857)
+     * optimized for AMP-17807
+     * @return
+     */
+    private static List<LocationSkeleton> getRootLocations(){    	
+    	Map<Long, LocationSkeleton> allLocations = LocationSkeleton.populateSkeletonLocationsList();
         TeamMember currentMember = TeamUtil.getCurrentMember();
         AmpApplicationSettings ampAppSettings = null;
+        boolean showAllCountries = false;
+        
         if (currentMember != null) {
             AmpTeamMember ampCurrentMember = TeamMemberUtil.getAmpTeamMemberCached(currentMember.getMemberId());
-            ampAppSettings = DbUtil.getTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());
+        
+            if (ampCurrentMember != null) {
+                ampAppSettings = DbUtil.getTeamAppSettings(ampCurrentMember.getAmpTeam().getAmpTeamId());
+                showAllCountries = ampAppSettings != null && ampAppSettings.getShowAllCountries();
+        
+            } else {
+                showAllCountries = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_ALL_COUNTRIES));
+        
+            }
         }
-
-    	List<AmpCategoryValueLocations> filterCountries = new ArrayList<>();
-        if (ampAppSettings.getShowAllCountries()) {
+    	List<LocationSkeleton> filterCountries = new ArrayList<LocationSkeleton>();
+        if (showAllCountries) {
             AmpCategoryValue layer = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getAmpCategoryValueFromDB();
             if (layer == null) {
                 logger.error("No Country value found in category Implementation Location. Please correct this.");
             } else {
-                Set<AmpCategoryValueLocations> countries = DynLocationManagerUtil.getLocationsByLayer(layer);
-                for (AmpCategoryValueLocations loc : countries) {
+                //Set<LocationSkeleton> countries = DynLocationManagerUtil.getLocationsByLayer(layer);
+            	List<LocationSkeleton> countries = filterLocationsByType(allLocations.values(), layer);
+            	//layer filtering already done above
+                for (LocationSkeleton loc : countries) {
                     if (loc.getChildLocations() != null && !loc.getChildLocations().isEmpty()) {
+                    	//adding countries, so that our structure is hierarchic
                         filterCountries.add(loc);
                     }
                 }
             }
         } else {
-            filterCountries.add(DynLocationManagerUtil.getDefaultCountry());
+        	
+            filterCountries.add(getDefaultCountry(allLocations));
         }
-        
-        for (AmpCategoryValueLocations country : filterCountries)
-        	HierarchyListableUtil.changeTranslateable(country.getChildLocations(), false);
-        
-        for (AmpCategoryValueLocations country : filterCountries) { // eager loading of children - slow as hell
-        	// TODO: optimize later
-        	for (AmpCategoryValueLocations loc:country.getChildLocations()) {
-                loc.getCountDescendants();
-            }
-        }
+       	for (LocationSkeleton country: filterCountries)
+       		HierarchyListableUtil.changeTranslateable(country, false);
         return filterCountries;
     }
+
+    
     
 	/**
 	 * populate all the non-setting fields in a form, like drop-down lists, checkbox lists etc etc etc
@@ -789,7 +829,7 @@ public class ReportsFilterPicker extends Action {
 			StopWatch.next("Filters", true, "start rendering regions");
 
 
-            Set<LocationSkeleton> filterCountries = getRootLocations();
+            List<LocationSkeleton> filterCountries = getRootLocations();
 			StopWatch.next("Filters", true, "after get root locations");
 
             

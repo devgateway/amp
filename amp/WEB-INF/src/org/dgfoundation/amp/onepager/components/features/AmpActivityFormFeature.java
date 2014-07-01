@@ -667,7 +667,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				// only in the eventuality that the title field is valid (is not
 				// empty) we proceed with the real save!
 				if (!activityForm.hasError())
+					{
+					redirected.setObject(STAY_ON_PAGE);
 					saveMethod(target, am, feedbackPanel, true, redirected,false);
+					}
 				else {
 					formSubmitErrorHandle(activityForm, target, feedbackPanel);
 				}
@@ -1034,6 +1037,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
 
 		//Before starting to save check lock
+		//logger.error("Activiy id: "+a.getId() + " hash "+a.getEditingKey());
 		if (oldId != null && !ActivityGatekeeper.verifyLock(String.valueOf(a.getId()), a.getEditingKey())){
 			//Someone else has grabbed the lock ... maybe connection slow and lock refresh timed out
             throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId()), currentUserId));
@@ -1109,10 +1113,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             replaceStr = String.valueOf(oldId);
         }
         if(draft && redirected.getObject().equals(STAY_ON_PAGE)){
-				target.appendJavaScript("var newLoc=window.location.href.replace(\"" + replaceStr + "\" , \"" + actId + "\");newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
+				target.appendJavaScript("window.onbeforeunload = null; var newLoc=window.location.href.replace(\"" + replaceStr + "\" , \"" + actId + "\");newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
         }
         else{
-            target.appendJavaScript("window.location.replace('/aim/');");
+            target.appendJavaScript("window.onbeforeunload = null; window.location.replace('/aim/');");
         }
         target.add(feedbackPanel);
 	}

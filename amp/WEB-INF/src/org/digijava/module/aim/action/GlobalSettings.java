@@ -88,22 +88,22 @@ public class GlobalSettings extends Action {
 		}
 		
 		
-		if(request.getParameter("saveAll")!=null){
+		if (request.getParameter("saveAll") != null) {
 			flushSessionObjects(session);
-			String allValues=gsForm.getAllValues();
-			StringTokenizer token=new StringTokenizer(allValues,"&");
-			AmpGlobalSettings projectValidationSetting =  FeaturesUtil.getGlobalSettingsCache().get(GlobalSettingsConstants.PROJECTS_VALIDATION);
+			String allValues = gsForm.getAllValues();
+			StringTokenizer token = new StringTokenizer(allValues, "&");
+			AmpGlobalSettings projectValidationSetting = FeaturesUtil.getGlobalSettingsCache().get(GlobalSettingsConstants.PROJECTS_VALIDATION);
 			while (token.hasMoreTokens()) {
-	                    String element = token.nextToken();
-	                    String[] nameValue= element.split("=");
-	                    Long id = Long.parseLong(nameValue[0]);
-	                    String value = nameValue.length<2 ? "" : nameValue[1];
-	                    if (isChangingValidation(projectValidationSetting,id,value)) {
-	                    refreshAmpApplicationSettings(value);
-	                    }
-	                    //allow empty fields, like Public Portal URL when Public Portal = false
-	                    this.updateGlobalSetting(id, value);
-                        }
+				String element = token.nextToken();
+				String[] nameValue = element.split("=");				
+				Long id = getLongOrNull(nameValue[0]);
+				String newValue = nameValue.length < 2 ? "" : nameValue[1];
+				if (projectValidationSetting.getGlobalId().equals(id) && !newValue.equals(projectValidationSetting.getGlobalSettingsValue())) {
+					resetWorkspaceValidationSettings(newValue);
+				}
+				// allow empty fields, like Public Portal URL when Public Portal = false
+				this.updateGlobalSetting(id, newValue);
+			}
 			
 			//this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
 			//ActionMessages errors = new ActionMessages();
@@ -165,23 +165,28 @@ public class GlobalSettings extends Action {
 		return mapping.findForward("viewGS");
 	}
 
-	private void refreshAmpApplicationSettings(String value) {
-		Collection <AmpApplicationSettings> appSettingsList = DbUtil.getAllAmpApplicationSettings ();
-		for (AmpApplicationSettings appSetting:appSettingsList) {
-			appSetting.setValidation(value);
-			PersistenceManager.getSession().save(appSetting);
+	/**
+	 * updates workspaces which have validation turned off to having it "allEdits" if the GlobalSettings has just been changed from "off" to "on"
+	 * @param gsNewValue
+	 */
+    private void resetWorkspaceValidationSettings(String gsNewValue) {
+    	if (gsNewValue.toLowerCase().equals("on")) { 
+    		PersistenceManager.getSession()
+    			.createQuery("UPDATE " + AmpApplicationSettings.class.getName() + " SET validation='allEdits' WHERE validation='validationOff'")
+    			.executeUpdate();
+	 	 }
+    }
+    
+	/**
+	 * parses a String as a Long. Returns null in case it fails to do so
+	 * @param s
+	 * @return
+	 */
+	private static Long getLongOrNull(String s) {
+		try {
+			return Long.parseLong(s);
 		}
-	}
-
-	private boolean isChangingValidation(
-			AmpGlobalSettings projectValidationSetting, Long id, String newValue) {
-		if (projectValidationSetting.getGlobalId().equals(id) &&
-				!projectValidationSetting.getGlobalSettingsValue().equals(newValue)	) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		catch(Exception e) {return null;}
 	}
 
 	@SuppressWarnings("unchecked")

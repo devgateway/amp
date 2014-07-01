@@ -52,17 +52,7 @@ public class LucTranslationModule implements LucModule<Message> {
 
 	@Override
 	public List<Message> getItemsToIndex() throws DgException {
-		Collection<Message> messages = null;
-		List<Message> messageList = null;
-		try {
-			messages = DbUtil.getAll(Message.class);
-		} catch (DgException e) {
-			e.printStackTrace();
-		}
-		if (messages!= null){
-			messageList = new ArrayList<Message>(messages);
-		}
-		return messageList;
+		return new ArrayList<>(DbUtil.getAll(Message.class));
 	}
 
 	@Override

@@ -846,8 +846,8 @@ public class DbUtil {
 	 * @return
 	 * @throws DgException
 	 */
-	public static <T> Collection<T> getAll(Class<T> object) throws DgException {
-		return getAll(object, PersistenceManager.getRequestDBSession());
+	public static <T> Collection<T> getAll(Class<T> object){
+		return getAll(object, PersistenceManager.getSession());
 	}
 
 	/**
@@ -862,18 +862,15 @@ public class DbUtil {
 	 * @return
 	 * @throws DgException
 	 */
-	public static <T> Collection<T> getAll(Class<T> object, Session session)
-			throws DgException {
-		Collection<T> col = null;
+	public static <T> Collection<T> getAll(Class<T> object, Session session) {
 		try {
 			String queryString = "from " + object.getName();
 			Query qry = session.createQuery(queryString);
-			col = qry.list();
+			return qry.list();
 		} catch (Exception e) {
 			logger.error("Exception from getAll()", e);
-			throw new DgException(e);
+			throw new RuntimeException(e);
 		}
-		return col;
 	}
 
 	public static Country getDgCountry(String iso) {
@@ -2383,22 +2380,6 @@ public class DbUtil {
 		}
 		return indc;
 	}
-	
-	public static Collection getAllAmpApplicationSettings() {
-		Session session = null;
-		Collection col = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "FROM " + AmpApplicationSettings.class.getName();
-			Query qry = session.createQuery(queryString);
-			col = qry.list();
-		} catch (Exception e) {
-			logger.error("Exception from getAllAmpApplicationSettings()", e);
-		}
-		return col;
-	}
-
 	
 	public static Collection<AmpGPISurveyIndicator> getAllGPISurveyIndicators(boolean onlyWithQuestions) {
 		Collection responses = new ArrayList();

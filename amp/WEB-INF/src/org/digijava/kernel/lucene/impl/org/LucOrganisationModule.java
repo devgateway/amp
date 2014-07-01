@@ -49,16 +49,7 @@ public class LucOrganisationModule implements LucModule<AmpOrganisation> {
 
 	@Override
 	public List<AmpOrganisation> getItemsToIndex() {
-		List<AmpOrganisation> orgList = null;
-		try {
-			Collection<AmpOrganisation> orgs = DbUtil.getAll(AmpOrganisation.class);
-			if (orgs!=null){
-				orgList = new ArrayList<AmpOrganisation>(orgs);
-			}
-		} catch (DgException e) {
-			e.printStackTrace();
-		}
-		return orgList;
+		return new ArrayList<>(DbUtil.getAll(AmpOrganisation.class));
 	}
 
 	@Override

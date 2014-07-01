@@ -116,7 +116,7 @@ public class ExportActivityToWord extends Action {
 		ServletContext ampContext = getServlet().getServletContext();
 		//to know whether print happens from Public View or not
 		HttpSession session = request.getSession();
-        TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+        //TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
 		Long actId=null;
 		AmpActivityVersion activity=null;
 		if(request.getParameter("activityid")!=null){
@@ -448,7 +448,7 @@ public class ExportActivityToWord extends Action {
 		            doc.add(new Paragraph(" "));
 				}
             
-				if (teamMember != null && FeaturesUtil.isVisibleModule("/Activity Form/Funding")) { 
+				if (FeaturesUtil.isVisibleModule("/Activity Form/Funding")) { 
 	                List<Table> donorFundingTables = getDonorFundingTables(request, ampContext, activity, myForm);
 					for (Table tbl : donorFundingTables) {
 	                    doc.add(tbl);
@@ -2652,10 +2652,7 @@ public class ExportActivityToWord extends Action {
         }
 
 		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments")) {
-			TeamMember teamMember = (TeamMember) request.getSession().getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
-			//objective comments
-			if(teamMember!=null ){ //Objective Comments shouldn't show up on Publc View
-	            
+			//objective comments            
 	            Table objTable=new Table(2);
 	            objTable.getDefaultCell().setBorder(0);
 	            for (Object commentKey : allComments.keySet()) {            	
@@ -2679,8 +2676,7 @@ public class ExportActivityToWord extends Action {
 					}
 				}			            
 	            generateOverAllTableRows(identificationSubTable1, TranslatorWorker.translateText("Objective Comments"), objTable,null);
-			}
-		}
+			}		
 		
 		if (FeaturesUtil.isVisibleField("Contract Number")) {
 			columnName = TranslatorWorker.translateText("Contract Number");

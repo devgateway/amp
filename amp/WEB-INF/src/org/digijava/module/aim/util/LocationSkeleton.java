@@ -16,8 +16,6 @@ import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.hibernate.jdbc.Work;
-
-
 /*
  * skeleton class for amp_category_value_location
  * 
@@ -60,32 +58,18 @@ public class LocationSkeleton implements Comparable<LocationSkeleton>, Hierarchy
 	public String getCode() {
 		return code;
 	}
-
-
-	
-
 	
 	public Long getAmpLocId() {
 		return id;
-	}
-	
-	public void setAmpLocId(long ampLocId) {
-		this.id = ampLocId;
 	}
 	
 	public String getAmpLocName() {
 		return this.name;
 	}
 	
-	public void setAmpLocName(String locName) {
-		this.name = locName;
-	}
 
 	public Long getAmpLocParentId() {
 		return this.locParentId;
-	}
-	public void setAmpLocParentId(long locParentId) {
-		this.locParentId= locParentId;
 	}
 	
 	public void addChild(LocationSkeleton child) {
@@ -111,7 +95,6 @@ public class LocationSkeleton implements Comparable<LocationSkeleton>, Hierarchy
 	
 	@Override
 	public String getLabel() {
-		// 
 		return this.name;
 	}
 	
@@ -158,10 +141,6 @@ public class LocationSkeleton implements Comparable<LocationSkeleton>, Hierarchy
 		return cvId;
 	}
 	
-	public void setCvId(Long cvId) {
-		this.cvId = cvId;
-	}
-	
     private static Long nullInsteadOfZero(long val) {
     	if (val == 0) {
     		return null;
@@ -174,19 +153,13 @@ public class LocationSkeleton implements Comparable<LocationSkeleton>, Hierarchy
      * @return a map of all locations from amp_category_value_location, indexed by their id's
      */
     public static Map<Long, LocationSkeleton>  populateSkeletonLocationsList() {
-        
-    	//cvLayer.getId()
         final Map<Long, LocationSkeleton> locations = new HashMap<Long, LocationSkeleton>();
         PersistenceManager.getSession().doWork(new Work(){
 				public void execute(Connection conn) throws SQLException {
 					ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_category_value_location", 
 							"", "ro", new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");		
 					ResultSet rs = v.fetch(null);
-					
-										
 					while (rs.next()) {
-//						logger.info(rs.getString("location_name"));
-//						if (layer.getId() == rs.getLong("parent_category_value")){
 						locations.put(rs.getLong("id"), new LocationSkeleton(nullInsteadOfZero(rs.getLong("id")), 
 													 	rs.getString("location_name"), 
 													 	rs.getString("code"),
@@ -205,5 +178,4 @@ public class LocationSkeleton implements Comparable<LocationSkeleton>, Hierarchy
 			});
         return locations;
     }
-	
 }

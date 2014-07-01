@@ -161,7 +161,7 @@ public class ExportActivityToPDF extends Action {
 		ampContext = getServlet().getServletContext();
 		//to know whether print happens from Public View or not
 		HttpSession session = request.getSession();
-        TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+        //TeamMember teamMember = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
 		Long actId=null;
 		AmpActivityVersion activity=null;
 		if(request.getParameter("activityid")!=null){
@@ -288,7 +288,7 @@ public class ExportActivityToPDF extends Action {
                   }
             }
             
-            if(teamMember!=null && FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments")){ //Objective Comments shouldn't show up on Publc View
+            if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments")) {
 				
 				PdfPTable objTable=new PdfPTable(2);
 	            objTable.getDefaultCell().setBorder(0);
@@ -1037,14 +1037,14 @@ public class ExportActivityToPDF extends Action {
 			/**
 			 * funding
 			 */
-			if(teamMember!=null && FeaturesUtil.isVisibleModule("/Activity Form/Funding")){ //funding Information shouldn't be visible on Public View
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Funding")){
 				//PdfPTable fundingTable = buildFundingInformationPart(myForm,mainLayout);
 				buildFundingInformationPart(myForm,mainLayout,ampContext,session);
 			}			
 			/*
 			 * AidEffectiveness
 			 */
-			if(teamMember!=null && FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes")){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes")){
 				
 				String aidEffectivenesToAdd = ActivityUtil.getAidEffectivenesForExport( activity);
 				if(aidEffectivenesToAdd!=null && aidEffectivenesToAdd.length()>0){
@@ -2402,8 +2402,8 @@ public class ExportActivityToPDF extends Action {
 							phProgressNestedCell.setBorder(0);
 							phProgressNestedCell.setColspan(2);
 							componentsNestedTable.addCell(phProgressNestedCell);
-						}
-						
+								}
+								
 					}else if(GlobalSettings.getInstance().getShowComponentFundingByYear() && FeaturesUtil.isVisibleModule("Components Resume")){ //true case
 						//comp code
 						PdfPCell compNestedCell=new PdfPCell();
@@ -2858,7 +2858,7 @@ public class ExportActivityToPDF extends Action {
 				
 				addTotalsOutput(fundingTable, "Consumption Rate", myForm.getFunding().getConsumptionRate(), currencyCode);
 				addTotalsOutput(fundingTable, "Delivery Rate", myForm.getFunding().getDeliveryRate(), currencyCode);
-			
+				
 			}				
 		}
 		PdfPCell fundingCell=new PdfPCell(fundingTable);

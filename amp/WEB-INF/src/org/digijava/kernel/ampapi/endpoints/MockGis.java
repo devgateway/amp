@@ -4,19 +4,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.codehaus.jackson.node.ObjectNode;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
 import org.digijava.kernel.ampapi.postgis.TestPostGis;
 import org.digijava.kernel.ampapi.postgis.entity.Amp_Activity_Points;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
@@ -39,7 +40,19 @@ public class MockGis {
 		points.add(test);
 		return points;
 	}
-
+    @GET
+    @Path("/testfilterparam")
+    @Produces(MediaType.APPLICATION_JSON)
+    public final FiltersParams getFiltersParams() {
+//        FiltersParams p=new FiltersParams();
+//        p.setFilterName("theFilter");
+//        p.setFilterValue(new ArrayList<String>());
+//        p.getFilterValue().add("hola");
+//        p.getFilterValue().add("chau");
+//        return p;
+        return null;
+    }
+	
 	/***
 	 * 
 	 * @return
@@ -61,19 +74,19 @@ public class MockGis {
 			result.features.add(getPoint(finalpoint.getY(), finalpoint.getX(), point.getAmp_activity_id().toString()));
 
 		}
+		
 		return result;
 	}
 	
-	
-	public FeatureGeoJSON getPoint(Double lat, Double lon, String activityid) {
-		FeatureGeoJSON fgj=new FeatureGeoJSON();
-		PointGeoJSON pg = new PointGeoJSON();
-		pg.coordinates.add(lat);
-		pg.coordinates.add(lon);
-		pg.properties.put("activityid", new TextNode(activityid));
-		fgj.geometry=pg;
-		return fgj;
-	}
+    public FeatureGeoJSON getPoint(Double lat, Double lon, String activityid) {
+        FeatureGeoJSON fgj=new FeatureGeoJSON();
+        PointGeoJSON pg = new PointGeoJSON();
+        pg.coordinates.add(lat);
+        pg.coordinates.add(lon);
+        pg.properties.put("activityid", new TextNode(activityid));
+        fgj.geometry=pg;
+        return fgj;
+    }	
 
 	/***
 	 * 
@@ -124,4 +137,6 @@ public class MockGis {
 			this.lon = lon;
 		}
 	}
+	
+	
 }

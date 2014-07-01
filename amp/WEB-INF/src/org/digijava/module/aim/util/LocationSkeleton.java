@@ -28,8 +28,7 @@ public class LocationSkeleton implements Comparable<LocationSkeleton>, Hierarchy
 	private String name;	//location name
 	private Long locParentId; //location parent (country<-region<-... or something)
 	private boolean translateable = false; 
-	private String code; //seems necessary for HierarchyListable, no idea what it does
-	private String description; 
+	private String code; 
 	private Set<LocationSkeleton> childLocations;
 
 	public LocationSkeleton(Long id, String locName, String code, Long parentId, Long cvId) {
@@ -62,17 +61,9 @@ public class LocationSkeleton implements Comparable<LocationSkeleton>, Hierarchy
 		return code;
 	}
 
-	public void setCode(String code) {
-		this.code = code;
-	}
-	
-	public String getDescription() {
-		return description;
-	}
 
-	public void setDescription(String description) {
-		this.description = description;
-	}	
+	
+
 	
 	public Long getAmpLocId() {
 		return id;

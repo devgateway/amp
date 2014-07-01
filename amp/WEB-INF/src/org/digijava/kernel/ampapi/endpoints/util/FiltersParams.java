@@ -1,7 +1,11 @@
-package org.digijava.kernel.ampapi.endpoints;
+package org.digijava.kernel.ampapi.endpoints.util;
 
 import java.util.List;
-
+/**
+ * Class that holds parameters sent by clients to the endpoints
+ * @author jdeanquin@developmentgateway.org
+ *
+ */
 public class FiltersParams {
     private List<FilterParam> params;
 

@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints;
+package org.digijava.kernel.ampapi.helpers.json;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;

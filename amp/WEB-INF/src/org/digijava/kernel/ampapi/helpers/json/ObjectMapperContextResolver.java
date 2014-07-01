@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints;
+package org.digijava.kernel.ampapi.helpers.json;
 
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;

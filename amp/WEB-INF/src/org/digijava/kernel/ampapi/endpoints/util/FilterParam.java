@@ -1,11 +1,21 @@
-package org.digijava.kernel.ampapi.endpoints;
+package org.digijava.kernel.ampapi.endpoints.util;
 
 import java.util.List;
 
 
-
+/**
+ * C
+ * @author jdeanquin@developmentgateway.com
+ *
+ */
 public class FilterParam {
+    /**
+     * Name of the filter
+     */
     private String filterName;
+    /*
+     * value what will be use by the endpoint to filter
+     */
     private List<String> filterValue;
     public FilterParam(){
         

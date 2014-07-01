@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.postgis.util;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -66,5 +67,9 @@ public class QueryUtil {
             }
         }
         return l;
+    }
+    public static List<String>getAdminLevels(){
+        return new ArrayList<String>(
+                Arrays.asList("Country","Region","Zone","District"));
     }
 }

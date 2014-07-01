@@ -165,7 +165,8 @@
 	 	<init-param>
 			<param-name>jersey.config.server.provider.packages</param-name>
 			<!--Package where end points are going to be placed-->
-			<param-value>org.digijava.kernel.ampapi.endpoints</param-value>
+			
+			<param-value>org.digijava.kernel.ampapi.endpoints,org.digijava.kernel.ampapi.helpers.json</param-value>
 	 	</init-param>
 	 	<init-param>
 			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>

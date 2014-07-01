@@ -500,7 +500,7 @@ public class ReportsFilterPicker extends Action {
     }
     
     /**
-     * gets defaul
+     * gets default country based on settings
      * 
      * @param locations a map of LocationSkeleton, the location ID is the key
      * @return a LocationSkeleton of the default country

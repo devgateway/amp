@@ -55,7 +55,10 @@ public class MetaTextCell extends TextCell {
 		if (AmpARFilter.validatedActivityStatus.contains(statusFlag)) 
 			return "#05528B";
 			
-		return "GREEN";
+		if (AmpARFilter.unvalidatedActivityStatus.contains(statusFlag))
+			return "GREEN";
+		
+		return "";		
 	}
 	
 	public MetaInfo getMetaInfo(String category) {

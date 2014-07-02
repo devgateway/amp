@@ -120,7 +120,13 @@ public class AmpARFilter extends PropertyListable {
 														this.add(Constants.APPROVED_STATUS);
 														this.add(Constants.STARTED_APPROVED_STATUS);
 		}});
-	
+
+	public final static Set<String> unvalidatedActivityStatus = Collections.unmodifiableSet(new HashSet<String>() {{
+		this.add(Constants.STARTED_STATUS);
+		this.add(Constants.EDITED_STATUS);
+		this.add(Constants.REJECTED_STATUS);
+}});
+
 
 	/**
 	 * Date string formatted for SQL queries

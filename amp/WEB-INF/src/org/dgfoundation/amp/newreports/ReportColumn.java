@@ -5,7 +5,7 @@ package org.dgfoundation.amp.newreports;
  * @author Dolghier Constantin
  *
  */
-public abstract class ReportColumn extends NamedTypedEntity {
+public class ReportColumn extends NamedTypedEntity {
 	
 	/**
 	 * 

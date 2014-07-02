@@ -5,7 +5,7 @@ package org.dgfoundation.amp.newreports;
  * @author Dolghier Constantin
  *
  */
-public abstract class ReportMeasure extends NamedTypedEntity {
+public class ReportMeasure extends NamedTypedEntity {
 	
 	/**
 	 * 

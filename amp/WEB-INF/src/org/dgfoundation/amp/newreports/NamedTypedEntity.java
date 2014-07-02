@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.newreports;
 
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
 /**
  * class describing a named entity to be used in a report
  * @author Dolghier Constantin
@@ -17,6 +19,8 @@ public abstract class NamedTypedEntity {
 	 */
 	protected final ReportEntityType entityType;
 	
+	protected final int hashCode; 
+	
 	/**
 	 * 
 	 * @param columnName - the name of the column
@@ -30,6 +34,9 @@ public abstract class NamedTypedEntity {
 		this.entityType = entityType;
 		if (this.entityType == null)
 			throw new NullPointerException("columnType cannot be null!");
+		
+		//entityName and entityType are immutable, thus we can generate once their cumulative hashCode and store it
+		this.hashCode = new HashCodeBuilder().append(entityName).append(entityType).toHashCode();
 	}
 	
 	/**
@@ -45,10 +52,10 @@ public abstract class NamedTypedEntity {
 	}
 	
 	@Override public boolean equals(Object oth) {
-		return this.entityName.equals(((NamedTypedEntity) oth).entityName);
+		return this.entityName.equals(((NamedTypedEntity) oth).entityName) && this.entityType.equals(((NamedTypedEntity) oth).entityType);
 	}
 	
 	@Override public int hashCode() {
-		return this.entityName.hashCode();
+		return this.hashCode; 
 	}
 }

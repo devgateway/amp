@@ -224,6 +224,8 @@ Troubleshooting
 
 **JS Files not updating**: Try calling 'gulp clean' or make sure 'gulp dev' hasn't stopped.
 
+**Windows Errors on install** Update your Node version: [nodejs.org/download/](http://nodejs.org/download/)
+
 
 Dev Reading
 -----------

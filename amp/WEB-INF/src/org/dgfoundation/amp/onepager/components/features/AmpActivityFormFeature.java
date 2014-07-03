@@ -468,9 +468,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		AttributePrepender updateEditors = new AttributePrepender("onclick", new Model<String>("window.onbeforeunload = null;  for (instance in CKEDITOR.instances) CKEDITOR.instances[instance].updateElement();disableButton();"), "");
 
 		saveAndSubmit.getButton().add(isSubmit);
-		saveAndSubmit.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
 		
+		AttributePrepender closeEditors = new AttributePrepender("onclick", new Model<String>("$('a[data-is_close=true]').click();"), "");
+		
+		saveAndSubmit.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
 		saveAndSubmit.getButton().add(updateEditors);
+		saveAndSubmit.getButton().add(closeEditors);
 		saveAndSubmit.getButton().setDefaultFormProcessing(false);
 		
 		activityForm.add(saveAndSubmit);
@@ -494,7 +497,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		};
 		saveReject.getButton().add(isSubmit);
         
-		saveReject.getButton().add(new AttributeModifier("onclick", "showRejectActivityPanel();"));
+		saveReject.getButton().add(new AttributeModifier("onclick", ""));
+		
+		saveReject.getButton().add(new AttributePrepender("onclick", new Model<String>("showRejectActivityPanel();"), ""));
+		saveReject.getButton().add(closeEditors);
+		
 		saveReject.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons rejectButton")));
         activityForm.add(saveReject);
 		
@@ -507,7 +514,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         
         saveAsDraft.getButton().add(isSubmit);
         
-		saveAsDraft.getButton().add(new AttributeModifier("onclick", "showDraftPanel();disableButton();"));
+//		saveAsDraft.getButton().add(new AttributeModifier("onclick", "showDraftPanel();disableButton();"));
+        saveAsDraft.getButton().add(new AttributePrepender("onclick", new Model<String>("showDraftPanel();disableButton();"), ""));
+        saveAsDraft.getButton().add(closeEditors);
+
 		saveAsDraft.setVisible(false);
 		saveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
         activityForm.add(saveAsDraft);

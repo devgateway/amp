@@ -11,10 +11,12 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.models.EditorWrapperModel;
 import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.dgfoundation.amp.onepager.validators.TranslatableValidators;
 
 /**
@@ -66,6 +68,9 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
 		final Label preview = (Label) new Label("previewText", model).setEscapeModelStrings(false);
 
         closeLink = new WebMarkupContainer("closeLink");
+        
+        closeLink.add(new AttributePrepender("data-is_close", new Model<String>("true"), ""));
+        
 		closeLink.setOutputMarkupId(true);
 		closeLink.add(new AttributeModifier("onclick",
 			"if (CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "']!=null) { CKEDITOR.instances['" + textAreaContainer.getMarkupId() + "'].updateElement(); }" +

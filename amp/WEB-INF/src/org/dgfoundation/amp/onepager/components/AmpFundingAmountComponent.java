@@ -110,6 +110,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 						visit.dontGoDeeper();
 					}
 				});
+				onFundingDetailChanged(target);
 			}
 			
 			public IConverter getInternalConverter(java.lang.Class<?> type) {
@@ -139,14 +140,24 @@ public class AmpFundingAmountComponent<T> extends Panel {
 		
 		currency = new AmpSelectFieldPanel<AmpCurrency>("currency",
 				new PropertyModel<AmpCurrency>(model, propertyCurrency),
-				currencyList,
-				fmCurrency, hideLabel, false, null, hideNewLine);
+				currencyList, fmCurrency, hideLabel, false, null, hideNewLine) {
+			@Override
+			protected void onAjaxOnUpdate(AjaxRequestTarget target) {
+				onFundingDetailChanged(target);
+			}
+		};
 		currency.getChoiceContainer().setRequired(true);
 		currency.getChoiceContainer().add(new AttributeModifier("class", "dropdwn_currency"));
 		add(currency);
 		if (!isMTEFProjection){
-			AmpDatePickerFieldPanel datetmp = new AmpDatePickerFieldPanel("date", new PropertyModel<Date>(
-					model, propertyDate), fmDate, null, hideLabel, hideNewLine);
+			AmpDatePickerFieldPanel datetmp = new AmpDatePickerFieldPanel(
+					"date", new PropertyModel<Date>(model, propertyDate),
+					fmDate, null, hideLabel, hideNewLine) {
+				@Override
+				protected void onAjaxOnUpdate(AjaxRequestTarget target) {
+					onFundingDetailChanged(target);
+				}
+			};
 			datetmp.getDate().setRequired(true);
 			datetmp.getDate().add(new AttributeModifier("class", "inputx_date"));
 			date = datetmp;
@@ -169,6 +180,14 @@ public class AmpFundingAmountComponent<T> extends Panel {
         add(quarterInfo);
 
 		setRenderBodyOnly(true);
+	}
+    
+	/**
+	 * Method called when the amount field value has been changed
+	 * 
+	 * @param target
+	 */
+	protected void onFundingDetailChanged(AjaxRequestTarget target) {
 	}
 
 	public AmpTextFieldPanel<Double> getAmount() {

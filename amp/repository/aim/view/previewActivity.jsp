@@ -1515,22 +1515,7 @@ function collapseAll() {
 						</c:if>					
 					</td>
 				</tr>
-				<tr bgcolor="#f0f0f0">
-					<c:if test="${aimEditActivityForm.funding.proProjCost.funDate!=null}">
-						<td>
-							<digi:trn>Date</digi:trn>					
-						</td>
-						<td bgcolor="#f0f0f0" align="left" width="150">
-								<b>${aimEditActivityForm.funding.proProjCost.funDate}</b>						
-						</td>
-					</c:if>
-					<c:if test="${aimEditActivityForm.funding.proProjCost.funDate==null}">
-						<td>
-							<digi:trn>*cost could not be exchanged to workspace currency bacause date is not set</digi:trn>	
-						</td>
-					</c:if>	
-				</tr>
-                <c:if test="${aimEditActivityForm.identification.fundingSourcesNumber != null}">
+				<c:if test="${aimEditActivityForm.identification.fundingSourcesNumber != null}">
                     <tr bgcolor="#f0f0f0">
                         <td>
                             <digi:trn>Total Number of Funding Sources</digi:trn>
@@ -1543,7 +1528,25 @@ function collapseAll() {
 			</table>
 		</c:if>
 	</div>
-</fieldset>
+	<c:if
+		test="${aimEditActivityForm.funding.proposedAnnualBudgets!=null}">
+		<table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa"
+			width="100%">
+			<tr bgcolor="#f0f0f0">
+				<td><b><digi:trn key="aim:cost">Cost</digi:trn></b></td>
+				<td><b><digi:trn key="aim:cost">Year</digi:trn></b></td>
+			</tr>
+			<c:forEach var="annualBudget"
+				items="${aimEditActivityForm.funding.proposedAnnualBudgets}">
+				<tr bgcolor="#f0f0f0">
+					<td>${annualBudget.funAmount}
+						${annualBudget.currencyCode}</td>
+					<td>${annualBudget.funDate}</td>
+				</tr>
+			</c:forEach>
+		</table>
+	</c:if>
+						</fieldset>
 </module:display>
 <!-- END PROPOSED PROJECT COST -->
 

@@ -5,21 +5,16 @@
 
 package org.digijava.module.aim.action;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import javax.jcr.Node;
 import javax.servlet.RequestDispatcher;
@@ -27,8 +22,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import net.sf.ehcache.hibernate.HibernateUtil;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
@@ -40,8 +33,6 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.GroupReportData;
-import org.dgfoundation.amp.ar.ReportContextData;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -55,6 +46,7 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -64,9 +56,6 @@ import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservation;
 import org.digijava.module.aim.dbentity.AmpLineMinistryObservationActor;
@@ -76,13 +65,11 @@ import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
-import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRegionalObservation;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.CMSContentItem;
@@ -92,26 +79,18 @@ import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AmpContactsWorker;
-import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Documents;
-import org.digijava.module.aim.helper.FilterParams;
-import org.digijava.module.aim.helper.FinancingBreakdown;
-import org.digijava.module.aim.helper.FinancingBreakdownWorker;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
-import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
-import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
@@ -119,7 +98,6 @@ import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.RegionalFundingsHelper;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
@@ -131,11 +109,10 @@ import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.ProposedProjCostHelper;
-import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.LocationUtil.HelperLocationAncestorLocationNamesAsc;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.ProposedProjCostHelper;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.version.exception.CannotGetLastVersionForVersionException;
@@ -151,7 +128,6 @@ import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
 import org.digijava.module.gateperm.core.GatePermConst;
-import org.digijava.module.message.jobs.ActivityVersionDeletionJob;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
@@ -573,7 +549,7 @@ public class EditActivity extends Action {
       }
 
       eaForm.setReset(false);
-
+     
       if (activityId != null) {
     	  /* Clearing Tanzania Adds */
     	  eaForm.getIdentification().setVote(null);
@@ -791,6 +767,35 @@ public class EditActivity extends Action {
         if (activity != null) {
         	// set title,description and objective
 
+        	Set<AmpAnnualProjectBudget> annualBudgets = activity.getAnnualProjectBudgets();
+			List<ProposedProjCost> proposedAnnualBudgets = new ArrayList<ProposedProjCost>();
+			if (annualBudgets != null) {
+				Iterator<AmpAnnualProjectBudget> it = annualBudgets.iterator();
+				while (it.hasNext()) {
+					ProposedProjCost ppc = new ProposedProjCost();
+					AmpAnnualProjectBudget anProjBudget = it.next();
+					java.sql.Date dt = new java.sql.Date(anProjBudget.getYear().getTime());
+					double frmExRt = Util.getExchange(activity.getCurrencyCode(), dt);
+					double toExRt;
+					String workspaceCurrency = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId())
+							.getCurrencyCode();
+					if (workspaceCurrency == null) {
+						toExRt = frmExRt;
+						ppc.setCurrencyCode(activity.getCurrencyCode());
+					} else {
+						toExRt = Util.getExchange(workspaceCurrency, dt);
+						ppc.setCurrencyCode(workspaceCurrency);
+					}
+					DecimalWraper amt = CurrencyWorker.convertWrapper(anProjBudget.getAmount(), frmExRt,
+							toExRt, dt);
+					ppc.setFunAmount(amt.getCalculations());
+					ppc.setFunAmountAsDouble(amt.doubleValue());
+					ppc.setFunDate(Integer.toString(dt.getYear() + 1900));
+					proposedAnnualBudgets.add(ppc);
+				}
+			}
+			Collections.sort(proposedAnnualBudgets);
+			eaForm.getFunding().setProposedAnnualBudgets(proposedAnnualBudgets);
         	ProposedProjCost pg = new ProposedProjCost();
         	if (activity.getFunAmount() != null)
         		pg.setFunAmountAsDouble(activity.getFunAmount());

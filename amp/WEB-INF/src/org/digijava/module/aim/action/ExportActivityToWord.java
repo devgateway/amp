@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -39,6 +40,7 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.Identification;
 import org.digijava.module.aim.form.EditActivityForm.Planning;
 import org.digijava.module.aim.form.EditActivityForm.Programs;
+import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -1535,11 +1537,17 @@ public class ExportActivityToWord extends Action {
 	        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Cost", null, null,  true).
 	                                                addRowData(FormatHelper.formatNumber(act.getFunAmount())).
 	                                                addRowData(translatedCurrency));
-	
-	        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Proposed Completion Date ", null, null,  true).
-	                                                        addRowData(DateConversion.ConvertDateToString(act.getFunDate())));
-	
-	
+	        
+	        List <ProposedProjCost> proposedProjectCostList = myForm.getFunding().getProposedAnnualBudgets();
+			
+			Iterator<ProposedProjCost> it = proposedProjectCostList.iterator();
+			while (it.hasNext()) {
+				ProposedProjCost ppc = it.next();
+				eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
+						ppc.getFunDate(), null, null, true).addRowData(
+						FormatHelper.formatNumber(ppc.getFunAmountAsDouble()))
+						.addRowData(ppc.getCurrencyCode()));
+			}
 	        retVal.add(createSectionTable(eshProjectCostTable, request, ampContext));
 		}
         return retVal;

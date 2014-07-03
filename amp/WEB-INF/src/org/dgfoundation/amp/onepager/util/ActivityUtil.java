@@ -44,6 +44,7 @@ import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAgreement;
+import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -131,7 +132,7 @@ public class ActivityUtil {
 	{
 		//saveFundingOrganizationRole(a);
         AmpActivityVersion a = am.getObject();
-		AmpActivityVersion oldA = a;
+        AmpActivityVersion oldA = a;
 		boolean newActivity = false;
 		
 		if (a.getAmpActivityId() == null){
@@ -218,7 +219,8 @@ public class ActivityUtil {
 		saveAgreements(session);
 		
 		updateComponentFunding(a, session);
-
+		saveAnnualProjectBudgets(a, session);
+		
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
             session.save(a);
@@ -853,6 +855,20 @@ public class ActivityUtil {
         }
 
     }
+    
+    
+	private static void saveAnnualProjectBudgets(AmpActivityVersion a,
+			Session session) throws Exception {
+		if (a.getAmpActivityId() != null) {
+			Iterator<AmpAnnualProjectBudget> it = a.getAnnualProjectBudgets()
+					.iterator();
+			while (it.hasNext()) {
+				AmpAnnualProjectBudget annualBudget = it.next();
+				annualBudget.setActivity(a);
+				session.saveOrUpdate(annualBudget);
+			}
 
+		}
+	}
 
 }

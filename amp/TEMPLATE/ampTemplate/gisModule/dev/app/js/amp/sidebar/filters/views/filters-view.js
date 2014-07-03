@@ -19,6 +19,7 @@ define(
       title: 'Filters',
       iconClass: 'ampicon-filters',
       description: 'Apply filters to the map.',
+      apiURL: 'js/mock-api/filters.json',
 
       // collection of child views..
       filterViewsInstances:[],
@@ -60,7 +61,7 @@ define(
         var deferred =  $.Deferred();
 
         $.ajax({
-            url:'js/mock-api/filters.json'
+            url: this.apiURL
           })
           .done(function(data){
             if( _.isEmpty(data) ){

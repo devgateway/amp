@@ -311,6 +311,7 @@ geometry/mathUtils.js
 geometry/Multipoint.js
 geometry/normalizeUtils.js
 geometry/Point.js
+geometry/Circle.js
 geometry/Polygon.js
 geometry/Polyline.js
 geometry/Rect.js

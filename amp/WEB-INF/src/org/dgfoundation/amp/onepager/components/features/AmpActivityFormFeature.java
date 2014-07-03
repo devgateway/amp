@@ -491,8 +491,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         		//or is the teamlead of the ws
         		//and the activity is not new (make not sense to reject a newly created activity)
         		
-        		this.setVisible( !newActivity && (wicketSession.getAmpCurrentMember().getAmpMemberRole().isApprover() 
-        				|| wicketSession.getAmpCurrentMember().getAmpTeam().getTeamLead().equals(wicketSession.getAmpCurrentMember())));
+        		this.setVisible(( !newActivity && (wicketSession.getAmpCurrentMember().getAmpMemberRole().isApprover() 
+        				|| wicketSession.getAmpCurrentMember().getAmpTeam().getTeamLead().equals(wicketSession.getAmpCurrentMember()))
+        				)&&  !am.getObject().getDraft());
             }
 		};
 		saveReject.getButton().add(isSubmit);
@@ -1203,8 +1204,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			if(isReject){ //is is reject we send the message
 				try {
 					AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
-					System.out.println(getRequest().getContainerRequest());
-					
 					sendRejectMessage("activity rejected",am.getObject().getActivityCreator(),wicketSession.getCurrentMember(),am.getObject());
 				} catch (AimException e) {
 					logger.error("Cannot create reject message",e);

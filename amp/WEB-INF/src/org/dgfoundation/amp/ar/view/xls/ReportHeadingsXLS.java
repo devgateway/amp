@@ -117,10 +117,10 @@ public class ReportHeadingsXLS extends XLSExporter {
 			colId.reset();
 			row = sheet.createRow(rowId.shortValue());
 			
-			
+			//AMP-17511: we should call first create Borders and then create Hierarchy where colId is incremented and create borders won't properly work in some cases  
+			this.createHeadingBorders(curDepth);
 			this.createHierarchyHeaderCell(curDepth);
 			
-			this.createHeadingBorders(curDepth);
 			int colIdBaseValue = colId.intValue();
 			for(Column col:columnReport.getItems())
 			{

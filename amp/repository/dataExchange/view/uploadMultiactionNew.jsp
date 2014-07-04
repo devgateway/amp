@@ -695,7 +695,7 @@
 								<td align="left">
 									<html:select name="importFormNew" property="selAmpClass">
 										<logic:iterate name="importFormNew" property="ampClasses" id="ampClass" type="String">
-											<html:option value="<%= ampClass %>"><bean:write name="ampClass"/></html:option>
+											<html:option value="<%= ampClass %>"><digi:trn ><bean:write name="ampClass"/></digi:trn></html:option>
 										</logic:iterate>
 									</html:select>
 								</td>

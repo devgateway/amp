@@ -37,9 +37,9 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
@@ -1492,7 +1492,7 @@ public class DEImportBuilder {
 		return null;
 	}
 
-    private Editor createEditor(Site site, String key, String language){
+	private Editor createEditor(Site site, String key, String language){
         Editor editor = new Editor();
         editor.setSiteId(site.getSiteId());
         editor.setSite(site);
@@ -1500,7 +1500,7 @@ public class DEImportBuilder {
         editor.setLanguage(language);
         return editor;
     }
-	
+
 	private Editor createEditor(String siteId, String key, String language){
 		Editor editor = new Editor();
 		editor.setSiteId(siteId);
@@ -1915,7 +1915,7 @@ public class DEImportBuilder {
 
 			if(contentLogger.getItems() != null && contentLogger.getItems().size() > 0)
 			{
-				item.setDescription("Activity: "+actType.getDbKey()+" "+contentLogger.display());
+				item.setDescription(TranslatorWorker.translateText("Activity: ")+actType.getDbKey()+" "+contentLogger.display());
 				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
 				//iLog.saveObject(item);
 				log.getLogItems().add(item);
@@ -1923,7 +1923,7 @@ public class DEImportBuilder {
 				continue;
 			}
 			item.setLogType(DELogPerItem.LOG_TYPE_INFO);
-			item.setDescription("Activity: "+actType.getDbKey()+" OK");
+			item.setDescription(TranslatorWorker.translateText("Activity: ")+actType.getDbKey()+" OK");
 			try {
 				if(activity == null && DESourceSetting.IMPORT_STRATEGY_NEW_PROJ_AND_UPD_PROJ.equals(getImportStrategy()) ||
 						activity == null && DESourceSetting.IMPORT_STRATEGY_NEW_PROJ.equals(getImportStrategy()) ){
@@ -1940,14 +1940,14 @@ public class DEImportBuilder {
 					else {
 						//write in log that this activity was skipped
 						item.setLogType(DELogPerItem.LOG_TYPE_INFO);
-						item.setDescription("Activity: "+actType.getDbKey()+" was skipped");
+						item.setDescription(TranslatorWorker.translateText("Activity: ")+actType.getDbKey()+TranslatorWorker.translateText(" was skipped"));
 					}
 			
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
 				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
-				item.setDescription("Activity: "+actType.getDbKey()+" "+e.getMessage());
+				item.setDescription(TranslatorWorker.translateText("Activity: ")+actType.getDbKey()+" "+e.getMessage());
 			}
 
 			log.getLogItems().add(item);
@@ -2269,7 +2269,7 @@ public class DEImportBuilder {
         processIATIFeed(request, log, iLog, actionType, itemId, null);
     }
 
-	private void processIATIFeed(HttpServletRequest request, DELogPerExecution log, SourceSettingDAO iLog, String actionType, String itemId, Map <IatiActivity, Set<DEMappingFields>> retVal) {
+    private void processIATIFeed(HttpServletRequest request, DELogPerExecution log, SourceSettingDAO iLog, String actionType, String itemId, Map <IatiActivity, Set<DEMappingFields>> retVal) {
 		logger.info("SYSOUT: processing iati activities");
 		
 			IatiActivities iatiActs = this.getAmpImportItem().getIatiActivities();
@@ -2462,7 +2462,7 @@ public class DEImportBuilder {
 		} else 
 		if("".compareTo(logResult)!=0 && "<br/>".compareTo(logResult)!=0)
 		{
-			item.setDescription("<br/>Errors<br/>"+logResult+"<br/>Warnings<br/>"+printArrayList(warn));
+			item.setDescription("<br/>"+TranslatorWorker.translateText("Errors")+"<br/>"+logResult+"<br/>"+TranslatorWorker.translateText("Warnings")+"<br/>"+printArrayList(warn));
 			item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
 			//iLog.saveObject(item);
 			log.getLogItems().add(item);
@@ -2471,21 +2471,21 @@ public class DEImportBuilder {
 		} else {
 			item.setLogType(DELogPerItem.LOG_TYPE_OK);
 		}
-		item.setDescription("OK" + "<br/>Warnings<br/>"+printArrayList(warn));
+		item.setDescription("OK" + "<br/>"+TranslatorWorker.translateText("Warnings")+"<br/>"+printArrayList(warn));
 		if(iWorker.getAmpID()!=null && !iWorker.getAmpID().equals(DEConstants.AMP_ID_DO_NOT_IMPORT) && iWorker.getExistingActivity()  && "check".compareTo(actionType) ==0){
 			AmpActivityGroup ampActGroup = DataExchangeUtils.getAmpActivityGroupById(iWorker.getAmpID());
 			AmpActivityVersion actualVersion = ampActGroup.getAmpActivityLastVersion();
 			if(actualVersion.getIatiLastUpdatedDate() != null && iWorker.getIatiLastUpdateDate()!=null && actualVersion.getIatiLastUpdatedDate().before(iWorker.getIatiLastUpdateDate()))
 			{
 				item.setLogType(DELogPerItem.LOG_TYPE_INFO);
-				item.setDescription("The last version of IATI Activity is already imported");
+				item.setDescription(TranslatorWorker.translateText("The last version of IATI Activity is already imported"));
 			}
 			else
 				if(this.changedIDs!=null && this.changedIDs.size()>0)
 					if( this.changedIDs.contains(iWorker.getIatiID()) )
 						{
 							item.setLogType(DELogPerItem.LOG_TYPE_INFO);
-							item.setDescription("The last version of IATI Activity is already imported");
+							item.setDescription(TranslatorWorker.translateText("The last version of IATI Activity is already imported"));
 						}
 		}
 		log.getLogItems().add(item);

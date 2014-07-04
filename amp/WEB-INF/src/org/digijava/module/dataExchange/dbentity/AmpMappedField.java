@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.axis.utils.StringUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
  * @author dan
@@ -76,7 +77,7 @@ public class AmpMappedField {
 
 	public String getErrors(){
 		if(this.getItem() == null ) return "";// return this.getDescription();
-		return this.getItem().getIatiPath()+": "+this.getItem().getIatiValues();
+		return TranslatorWorker.translateText(this.getItem().getIatiPath())+": "+this.getItem().getIatiValues();
 	}
 
 	public String getWarnings(){

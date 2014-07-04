@@ -13,6 +13,20 @@
 
 <style type="text/css">
 <!--
+#uploadBtn{
+	   font-family: calibri;
+	   width: 90px;
+	   height:20px;
+	   padding: 10px;
+	   -webkit-border-radius: 5px;
+	   -moz-border-radius: 5px;
+	   border: 1px dashed #BBB; 
+	   text-align: center;
+	   background-color: #DDD;
+	   cursor:pointer;
+	   border: 1px dashed #BBB;
+	  }
+	
 div.flowContainer {
 	height:500px;
 	overflow-x:hidden;
@@ -114,7 +128,23 @@ td.defaultTab {
 	
 -->
 </style>
+
+<script language="javascript">
+	function getFile(){
+	        $("#upfile").click();
+	  }
 	
+	 function setLabel(obj){
+		    var file = obj.value;
+		    var fileName = file.split("\\");
+		    var text = fileName[fileName.length-1];
+		    if (text.length > 15) {
+		    	text = text.substring (0,12) + "....";
+		    }
+		    $("#uploadLabel").text(text);
+	}
+</script>
+
 <digi:form action="/codeImporter.do?action=upload" method="post" enctype="multipart/form-data">
 	<table class="defaultTable" width=1000 border=1 bordercolor="#B8B7B7" cellpadding="0" cellspacing="0" style="margin:10px;">
 		<tr>
@@ -193,9 +223,20 @@ td.defaultTab {
 					
 			</td>
 		</tr>
-		<tr>
+		<tr style="height: 100px;">
 			<td colspan="2" nowrap align="right">
-				<digi:trn>Upload IATI codes (xml or zip)</digi:trn> <html:file name="codeImporterForm" property="file"/> <html:submit value="Upload"/>
+			<span>
+				<digi:trn>Upload IATI codes (xml or zip)</digi:trn> 
+				 <span id="uploadBtn" onclick="getFile()"><digi:trn>Upload file</digi:trn></span>
+			 	<span id="uploadLabel" style="display:inline;width:60px;"><digi:trn>No file chosen</digi:trn></span>
+				
+<!--    											 this is file input tag, so i hide it! -->
+  			<div style='height: 0px;width:0px; overflow:hidden;'><html:file property="file"  styleId="upfile" name="codeImporterForm" onchange="setLabel(this)" /></div>
+			
+			<c:set var="uploadLabel"><digi:trn>Upload</digi:trn></c:set>
+			</span>
+			<html:submit value="${uploadLabel}" style="diplay: inline;margin-top:30px" />
+		
 			</td>
 		</tr>
 	</table>

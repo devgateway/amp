@@ -97,7 +97,7 @@
 	
 	div.wizardNav {
 		height:20px;
-		width:50px;
+		width:70px;
 		border: 1px solid #B8B7B7;
 		cursor:pointer;
 		vertical-align:middle;

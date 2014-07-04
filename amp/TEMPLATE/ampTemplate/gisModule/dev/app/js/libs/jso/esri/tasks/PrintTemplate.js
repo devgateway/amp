@@ -1,0 +1,3 @@
+//>>built
+define("esri/tasks/PrintTemplate",["dojo/_base/declare","dojo/_base/lang","dojo/has","esri/kernel"],function(a,b,c,d){a=a(null,{declaredClass:"esri.tasks.PrintTemplate",label:null,exportOptions:{width:800,height:1100,dpi:96},layoutOptions:null,format:"PNG32",layout:"MAP_ONLY",preserveScale:!0,showAttribution:null});c("extend-esri")&&b.setObject("tasks.PrintTemplate",a,d);return a});
+//@ sourceMappingURL=PrintTemplate.js.map

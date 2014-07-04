@@ -1,9 +1,6 @@
 {
   "name": "AMP GIS front end",
   "dependencies": {
-    "dijit": "~1.10.0",
-    "dojo": "~1.10.0",
-    "dojox": "~1.10.0",
     "dojo-util": "~1.10.0",
     "jquery": "~1.11.1",
     "jquery-ui-amd": "~0.0.3",

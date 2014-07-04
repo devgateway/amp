@@ -1,0 +1,3 @@
+//>>built
+define("esri/dijit/editing/Editor-all","esri/layers/FeatureLayer esri/toolbars/_toolbar esri/toolbars/draw esri/toolbars/edit esri/tasks/geometry esri/dijit/AttributeInspector esri/dijit/editing/AttachmentEditor esri/dijit/editing/Editor esri/dijit/editing/TemplatePicker esri/dijit/editing/Util esri/dijit/editing/SelectionHelper".split(" "),function(a,b,c,d,e,f,g,h,k,l,m){return{}});
+//@ sourceMappingURL=Editor-all.js.map

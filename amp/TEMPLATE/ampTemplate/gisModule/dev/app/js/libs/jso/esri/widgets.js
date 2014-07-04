@@ -1,0 +1,4 @@
+//>>built
+define("esri/widgets",["esri/layers/FeatureLayer","esri/toolbars/_toolbar","esri/toolbars/draw","esri/toolbars/edit","esri/tasks/geometry","esri/dijit/AttributeInspector","esri/dijit/editing/AttachmentEditor","esri/dijit/editing/Editor","esri/dijit/editing/TemplatePicker","esri/dijit/editing/Util","esri/dijit/editing/SelectionHelper","esri/dijit/_TouchBase","esri/dijit/BasemapGallery","esri/dijit/Bookmarks","esri/dijit/Directions","esri/dijit/Gallery","esri/dijit/Gauge","esri/dijit/Geocoder","esri/dijit/InfoView","esri/dijit/InfoWindow","esri/dijit/InfoWindowLite","esri/dijit/Legend","esri/dijit/Measurement","esri/dijit/NavigationBar","esri/dijit/OverviewMap","esri/dijit/Popup","esri/dijit/PopupMobile","esri/dijit/Print","esri/dijit/Scalebar","esri/dijit/TimeSlider"],
+function(){return{}});
+//@ sourceMappingURL=widgets.js.map

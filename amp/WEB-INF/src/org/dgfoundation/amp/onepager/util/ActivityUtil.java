@@ -840,7 +840,10 @@ public class ActivityUtil {
         //add or edit activity contact and amp contact
         if(activityContacts != null && activityContacts.size() > 0) {
             for (AmpActivityContact activityContact : activityContacts) {
-
+                //we have to check if the contact is new, first we have to saveit
+                if(activityContact.getContact().getId()==null){
+                    session.saveOrUpdate(activityContact.getContact());
+                }
                 if (activityContact.getId() != null) {
                     session.merge(activityContact);
                 } else {

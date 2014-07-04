@@ -1,6 +1,6 @@
 // Avoid `console` errors in browsers that lack a console.
 // MIT -> https://github.com/h5bp/html5-boilerplate/blob/master/LICENSE.md
-(function() {
+(function(window) {
   var method;
   var noop = function () {};
   var methods = [
@@ -20,4 +20,4 @@
       console[method] = noop;
     }
   }
-}());
+}(window));

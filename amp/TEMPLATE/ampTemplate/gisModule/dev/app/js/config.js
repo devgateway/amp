@@ -56,6 +56,11 @@ require({
       location: 'libs/vendor/backbone-amd',
       main: 'backbone'
     },
+    {
+      name: 'convert',
+      location: 'libs/local/convert',
+      main: 'geo'
+    },
     'amp',
   ],
   aliases: [

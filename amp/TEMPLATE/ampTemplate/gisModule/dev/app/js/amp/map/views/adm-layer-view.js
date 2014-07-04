@@ -4,7 +4,8 @@ define(
     'backbone',
     'jquery',
     'text!amp/map/templates/map-container-template.html',
-    'amp/services/json-convertor',
+
+    'convert/geo',
 
     'esri/map',
     'esri/SpatialReference',
@@ -20,7 +21,8 @@ define(
     'amp/map/views/basemap-gallery-view',
     'amp/map/views/legend-view'
   ],
-  function (_, Backbone, $, Template, JsonConverters,
+  function (_, Backbone, $, Template,
+            convertGeo,
             Map, SpatialReference, JsonUtils, SimpleFillSymbol, Color, Graphic, GraphicsLayer, Point, Circle,
             MapHeaderView, BasemapGalleryView, LegendView) {
     'use strict';
@@ -41,11 +43,17 @@ define(
           .outline
             .setColor('blue');
 
+        // instead, maybe we can grab a reference to the model or collection,
+        // backing the filter, and subscribe to changes on it?
         Backbone.on('FILTERS_UPDATED', this._filtersUpdated, this);
 
         // TODO: just for testing for now, so I force a trigger.
         Backbone.trigger('FILTERS_UPDATED');
 
+      },
+
+      render: function () {
+        return this;
       },
 
       _filtersUpdated: function(){
@@ -70,12 +78,15 @@ define(
       },
 
       _renderFeatures: function(){
-        var self = this;
+        var self = this,
+            spacialReference = new SpatialReference({wkid:4326});
 
+        // TODO: this.features could be a backbone collection, so we could do
+        // this.collection.each(function(feature) { ... })
         _.each(this.features, function(feature){
           console.log(feature);
-          var esriGeometry = self.convertGeoJSONToESRI(feature);
-          var pt = new Point(esriGeometry.geometry, new SpatialReference({wkid:4326}));
+          var esriGeometry = convertGeo.geoJSONToESRI(feature);
+          var pt = new Point(esriGeometry.geometry, spacialReference);
           var radius = 30000;
           var circle = new Circle({
             center: pt,
@@ -98,17 +109,6 @@ define(
             url: this.apiURL, // or mock api json
             data: filter
           });
-      },
-
-      // Convert geo json to esri format.
-      convertGeoJSONToESRI: function(geoJSON){
-        return new JsonConverters().geoJsonConverter().toEsri(geoJSON);
-      },
-
-      render: function () {
-
-
-        return this;
       }
     });
 

@@ -52,7 +52,6 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 	 * Please refer to AmpTheme.hbm.xml and IndicatorConnection.hbm.xml for details.
 	 */
 	private Set<IndicatorTheme> indicators;
-	private Set activities;
 	private String leadAgency;
 	private String targetGroups;
 	private String background;
@@ -81,19 +80,6 @@ public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiabl
 
     private String programviewname;
     private Set<AmpActivityProgramSettings> programSettings;
-
-	public Set getActivities() {
-		return activities;
-	}
-
-	public void setActivities(Set activities) {
-		this.activities = activities;
-	}
-
-	public AmpTheme()
-	{
-		activities=new HashSet();
-	}
 
 	/**
 	 * @return

@@ -1687,9 +1687,9 @@ public class ProgramUtil {
                      AmpTheme program = iterProgram.next();
                      sess = PersistenceManager.getRequestDBSession();
                      AmpTheme themeToBeDeleted = (AmpTheme) sess.load(AmpTheme.class, program.getAmpThemeId());
-                     if (themeToBeDeleted.getActivities() != null) {
-                         activities.addAll(themeToBeDeleted.getActivities());
-                     }
+//                     if (themeToBeDeleted.getActivities() != null) {
+//                         activities.addAll(themeToBeDeleted.getActivities());
+//                     }
 //                     if (themeToBeDeleted.getActivityId() != null) {
 //                         activities.add(themeToBeDeleted.getActivityId());
 //                     }

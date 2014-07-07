@@ -135,6 +135,7 @@ public class SimpleSQLPatcher {
 					"DROP VIEW IF EXISTS amp_activity CASCADE ",
 					"DROP VIEW IF EXISTS v_amp_activity_expanded ",
 					"DROP VIEW IF EXISTS v_act_pp_details",
+					"DROP VIEW IF EXISTS v_mondrian_programs",
 					
 					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS linked_activities",
 					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS contract_details",
@@ -234,9 +235,8 @@ public class SimpleSQLPatcher {
 					" DELETE FROM  amp_fields_templates WHERE field IN (SELECT id FROM amp_fields_visibility WHERE name ='Description Chapitre')",
 					" DELETE FROM  amp_fields_visibility WHERE name ='Description Chapitre'",
 					" DELETE FROM  amp_fields_templates WHERE field IN (SELECT id FROM amp_fields_visibility WHERE name ='Description Imputation')",
-					" DELETE FROM  amp_fields_visibility WHERE name ='Description Imputation'"
-										
-					
+					" DELETE FROM  amp_fields_visibility WHERE name ='Description Imputation'",
+					"UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart'"					
 					));
 		
 		

@@ -490,7 +490,7 @@ public class PledgeForm extends ActionForm implements Serializable {
 	}
 	
 	/**
-	 * returns list of all the existant root programs in the system
+	 * returns list of all the existant root sectors in the system
 	 * @return
 	 */
 	public List<DisableableKeyValue> getAllRootSectors() {

@@ -5,7 +5,7 @@ package org.dgfoundation.amp.newreports;
  * @author Dolghier Constantin
  *
  */
-public abstract class ReportCell implements Comparable<ReportCell>{
+public abstract class ReportCell implements Comparable<ReportCell> {
 	public final Comparable value;
 	public final String displayedValue;
 	

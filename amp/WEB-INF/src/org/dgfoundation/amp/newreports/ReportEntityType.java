@@ -23,7 +23,24 @@ public enum ReportEntityType {
 	ENTITY_TYPE_SSC, 
 	
 	/**
+	 * a MTEF projection
+	 */
+	ENTITY_TYPE_MTEF,
+	
+	/**
 	 * "any", for attributes common to all of these - like Sector
 	 */
-	ENTITY_TYPE_ALL
+	ENTITY_TYPE_ALL;
+	
+	public char getAsChar() {
+		switch(this) {
+			case ENTITY_TYPE_ACTIVITY: return 'A';
+			case ENTITY_TYPE_PLEDGE: return 'P';
+			case ENTITY_TYPE_SSC: return 'S';
+			case ENTITY_TYPE_MTEF: return 'M';
+			case ENTITY_TYPE_ALL: return 'Z';
+			default:
+				throw new RuntimeException("unknown ReportEntityType: " + this);
+		}
+	}
 }

@@ -1915,7 +1915,7 @@ public class DEImportBuilder {
 
 			if(contentLogger.getItems() != null && contentLogger.getItems().size() > 0)
 			{
-				item.setDescription(TranslatorWorker.translateText("Activity: ")+actType.getDbKey()+" "+contentLogger.display());
+				item.setDescription(TranslatorWorker.translateText("Activity")+": "+actType.getDbKey()+" "+contentLogger.display());
 				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
 				//iLog.saveObject(item);
 				log.getLogItems().add(item);
@@ -1923,7 +1923,7 @@ public class DEImportBuilder {
 				continue;
 			}
 			item.setLogType(DELogPerItem.LOG_TYPE_INFO);
-			item.setDescription(TranslatorWorker.translateText("Activity: ")+actType.getDbKey()+" OK");
+			item.setDescription(TranslatorWorker.translateText("Activity")+": "+actType.getDbKey()+" OK");
 			try {
 				if(activity == null && DESourceSetting.IMPORT_STRATEGY_NEW_PROJ_AND_UPD_PROJ.equals(getImportStrategy()) ||
 						activity == null && DESourceSetting.IMPORT_STRATEGY_NEW_PROJ.equals(getImportStrategy()) ){
@@ -1940,14 +1940,14 @@ public class DEImportBuilder {
 					else {
 						//write in log that this activity was skipped
 						item.setLogType(DELogPerItem.LOG_TYPE_INFO);
-						item.setDescription(TranslatorWorker.translateText("Activity: ")+actType.getDbKey()+TranslatorWorker.translateText(" was skipped"));
+						item.setDescription(TranslatorWorker.translateText("Activity")+": "+actType.getDbKey()+TranslatorWorker.translateText(" was skipped"));
 					}
 			
 			} catch (Exception e) {
 				// TODO: handle exception
 				e.printStackTrace();
 				item.setLogType(DELogPerItem.LOG_TYPE_ERROR);
-				item.setDescription(TranslatorWorker.translateText("Activity: ")+actType.getDbKey()+" "+e.getMessage());
+				item.setDescription(TranslatorWorker.translateText("Activity")+": "+actType.getDbKey()+" "+e.getMessage());
 			}
 
 			log.getLogItems().add(item);

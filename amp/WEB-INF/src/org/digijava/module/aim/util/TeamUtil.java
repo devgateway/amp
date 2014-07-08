@@ -460,7 +460,12 @@ public class TeamUtil {
                 	 team.getOrganizations().size(); //lazy init;
                 }               
                 workspace = new Workspace();
-                workspace.setDescription(team.getDescription().trim());
+                if (null == team.getDescription()) {
+                	workspace.setDescription(null);
+                }
+                else {
+                	workspace.setDescription(team.getDescription().trim());	
+                }
                 workspace.setId(team.getAmpTeamId().toString());
                 workspace.setName(team.getName());
                 workspace.setChildOrgs(team.getOrganizations());

@@ -2,7 +2,7 @@ var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var DataQualityModel = require('../models/dataquality-model');
-var Template = fs.readFileSync(path.join(__dirname, '../templates/dataquality-template.html'));
+var Template = fs.readFileSync(__dirname + '/../templates/dataquality-template.html', 'utf8');
 
 
 module.exports = Backbone.View.extend({

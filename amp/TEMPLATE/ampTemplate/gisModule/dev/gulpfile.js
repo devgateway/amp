@@ -21,7 +21,10 @@
 
 var rimraf = require('rimraf');
 var source = require('vinyl-source-stream');
+var browserify = require('browserify');
+var watchify = require('watchify');
 var gulp = require('gulp');
+var gulpif = require('gulp-if');  // gulp-load-plugins won't work: if is reserved
 var g = require('gulp-load-plugins')();
 
 
@@ -32,6 +35,7 @@ var paths = {
     scripts: {
       top: './app/js/*.js',
       amp: './app/js/amp/**/*.js',
+      entry: './app/js/amp/main.js',
       libs: './app/js/libs/',
       buildDest: './app/compiled-js/',
       built: './app/compiled-js/main.js'
@@ -58,17 +62,40 @@ var paths = {
 };
 paths.devCompiled = [
   paths.app.stylesheets.compiled,
-  paths.app.scripts.top,
-  paths.app.scripts.amp,
+  paths.app.scripts.built,
   paths.app.templates,
   paths.app.images
 ];
 
-// gulp.task('js', function() {
-//   return gulp.src([paths.app.scripts.top, paths.app.scripts.amp])
-//     .pipe(g.changed(paths.dist.scripts))
-//     .pipe(gulp.dest(paths.dist.scripts));
-// });
+
+function bundlify(ifyer) {
+  var bundler = ifyer(paths.app.scripts.entry);
+  bundler.transform('brfs');
+
+  var rebundle = function() {
+    g.util.log('rebrowserifying...');
+    return bundler.bundle({debug: true})
+      .on('error', function(e) { g.util.log('Browserify error: ', e); })
+      .pipe(source('main.js'))
+      .pipe(gulpif(ifyer === browserify, g.streamify(g.uglify())))  // skip minification when watching (dev mode)
+      .pipe(gulp.dest(paths.app.scripts.buildDest));
+  };
+
+  bundler.on('update', rebundle);
+
+  return rebundle();
+}
+
+
+gulp.task('watchify', function() {
+  // recompile browserify modules
+  return bundlify(watchify);
+});
+
+
+gulp.task('browserify', function() {
+  return bundlify(browserify);
+});
 
 
 gulp.task('less', function() {
@@ -140,17 +167,11 @@ gulp.task('serve', g.serve({
 }));
 
 
-gulp.task('watch', function() {
+gulp.task('watch', ['watchify'], function() {
   gulp.watch([paths.app.scripts.top, paths.app.scripts.amp], ['lint']);
   gulp.watch(paths.app.stylesheets.all, ['less']);
 });
 
-
-// gulp.task('reload', ['serve', 'watch'], function() {
-//   g.livereload.listen();
-//   return gulp.watch([paths.app.everything])
-//     .on('change', g.livereload.changed);
-// });
 
 gulp.task('reload', ['serve', 'watch'], function() {
  g.livereload.listen();

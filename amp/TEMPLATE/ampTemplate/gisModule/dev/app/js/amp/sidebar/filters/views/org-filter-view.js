@@ -3,7 +3,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var BaseFilterView = require('../views/base-filter-view');
 var OrgFilterModel = require('../models/org-filter-model');
-var Template = fs.readFileSync(path.join(__dirname, '../templates/org-filter-template.html'));
+var Template = fs.readFileSync(__dirname + '/../templates/org-filter-template.html', 'utf8');
 
 
 module.exports = BaseFilterView.extend({

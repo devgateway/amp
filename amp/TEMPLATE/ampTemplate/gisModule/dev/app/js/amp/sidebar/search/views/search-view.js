@@ -2,8 +2,8 @@ var fs = require('fs');
 var _ = require('underscore');
 var BaseToolView = require('../../base-control/base-control-view');
 var ResultsView = require('../views/search-results-view');
-var SearchWidget = fs.readFileSync(path.join(__dirname, '../templates/search-control-widget.html'));
-var Template = fs.readFileSync(path.join(__dirname, '../templates/search-template'));
+var SearchWidget = fs.readFileSync(__dirname + '/../templates/search-control-widget.html', 'utf8');
+var Template = fs.readFileSync(__dirname + '/../templates/search-template.html', 'utf8');
 
 
 var searchWidget = _.template(SearchWidget);

@@ -1,7 +1,7 @@
 var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
-var Template = fs.readFileSync(path.join(__dirname, '/../templates/base-control-template.html'));
+var BaseTemplate = fs.readFileSync(__dirname + '/base-control-template.html', 'utf8');
 
 
 module.exports = Backbone.View.extend({

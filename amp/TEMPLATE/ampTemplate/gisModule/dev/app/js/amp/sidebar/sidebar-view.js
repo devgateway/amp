@@ -1,3 +1,4 @@
+var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var LayersView = require('./layers/views/layers-view');
@@ -53,7 +54,7 @@ module.exports = Backbone.View.extend({
     popovers.popover();
 
     // go away when the accordion container collapses
-    $('.sidebar-tool').on('hide.bs.collapse', function() {
+    this.$('.sidebar-tool').on('hide.bs.collapse', function() {
       popovers.popover('hide');
     });
 

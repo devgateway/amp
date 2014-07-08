@@ -1,5 +1,6 @@
 var fs = require('fs');
 
+var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -7,7 +8,7 @@ var MapHeaderView = require('../views/map-header-view');
 var BasemapGalleryView = require('../views/basemap-gallery-view');
 var LegendView = require('../views/legend-view');
 
-var Template = fs.readFileSync(path.join(__dirname, '../templates/map-container-template.html'));
+var Template = fs.readFileSync(__dirname + '/../templates/map-container-template.html', 'utf8');
 
 
 module.exports = Backbone.View.extend({
@@ -52,7 +53,7 @@ module.exports = Backbone.View.extend({
   },
 
   _renderFeatures: function() {
-    var self = this
+    var self = this;
 
     // TODO create an extent that has all of the points...
     // self.map.setExtent();

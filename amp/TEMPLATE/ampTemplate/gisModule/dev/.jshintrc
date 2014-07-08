@@ -14,9 +14,11 @@
   "trailing": true,
   "maxlen": 124,
   "globals" : {
-    /* suppress warnings for amd globals */
-    "define": false,
-    "require": false
+    /* suppress warnings for npm/browserify stuff */
+    "require": false,
+    "path": false,
+    "__dirname": false,
+    "module": false
   },
   "devel": true,
   "browser": true

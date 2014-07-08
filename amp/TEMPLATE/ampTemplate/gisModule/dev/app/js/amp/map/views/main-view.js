@@ -6,7 +6,7 @@ var MapHeaderView = require('../views/map-header-view');
 var BasemapGalleryView = require('../views/basemap-gallery-view');
 var LegendView = require('../views/legend-view');
 var admLayerView = require('../views/adm-layer-view');
-var Template = fs.readFileSync(path.join(__dirname, '../templates/map-container-template.html'));
+var Template = fs.readFileSync(__dirname + '/../templates/map-container-template.html', 'utf8');
 
 
 module.exports = Backbone.View.extend({

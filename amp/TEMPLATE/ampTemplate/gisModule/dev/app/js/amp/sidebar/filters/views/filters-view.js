@@ -1,11 +1,12 @@
 var fs = require('fs');
+var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var BaseToolView = require('../../base-control/base-control-view');
 var GenericFilterView = require('../views/generic-filter-view');
 var OrgFilterView = require('../views/org-filter-view');
 var YearsFilterView = require('../views/years-filter-view');
-var Template = fs.readFileSync(path.join(__dirname, '../templates/filters-template.html'));
+var Template = fs.readFileSync(__dirname + '/../templates/filters-template.html', 'utf8');
 
 
 var filterViews = [OrgFilterView, YearsFilterView];

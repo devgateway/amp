@@ -2,7 +2,7 @@ var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var BaseToolView = require('../../base-control/base-control-view');
-var Template = fs.readFileSync(path.join(__dirname, '../templates/layers-template.html'));
+var Template = fs.readFileSync(__dirname + '/../templates/layers-template.html', 'utf8');
 
 
 module.exports = BaseToolView.extend({

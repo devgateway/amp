@@ -1,7 +1,7 @@
 var fs = require('fs');
 var _ = require('underscore');
 var BaseToolView = require('../../base-control/base-control-view');
-var Template = fs.readFileSync(path.join(__dirname, '../templates/settings-template.html'));
+var Template = fs.readFileSync(__dirname + '/../templates/settings-template.html', 'utf8');
 
 
 module.exports = BaseToolView.extend({

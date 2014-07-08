@@ -2,8 +2,8 @@ var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var FilterModel = require('../models/base-filter-model');
-var TitleTemplate = fs.readFileSync(path.join(__dirname, '../templates/filter-title-template.html'));
-var ContentTemplate = fs.readFileSync(path.join(__dirname, '../templates/filter-content-template.html'));
+var TitleTemplate = fs.readFileSync(__dirname + '/../templates/filter-title-template.html', 'utf8');
+var ContentTemplate = fs.readFileSync(__dirname + '/../templates/filter-content-template.html', 'utf8');
 
 
 // Parent base view for fitlers.

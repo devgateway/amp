@@ -1,7 +1,7 @@
 var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
-var Template = fs.readFileSync(path.join(__dirname, '../templates/map-header-info-template.html'));
+var Template = fs.readFileSync(__dirname + '/../templates/map-header-info-template.html', 'utf8');
 
 
 /**

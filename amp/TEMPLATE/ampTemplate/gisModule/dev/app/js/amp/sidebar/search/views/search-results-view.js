@@ -1,8 +1,8 @@
 var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
-var SearchWidget = fs.readFileSync(path.join(__dirname, '../templates/search-control-widget.html'));
-var Template = fs.readFileSync(path.join(__dirname, '../templates/search-results-template.html'));
+var SearchWidget = fs.readFileSync(__dirname + '/../templates/search-control-widget.html', 'utf8');
+var Template = fs.readFileSync(__dirname + '/../templates/search-results-template.html', 'utf8');
 
 
 var searchWidget = _.template(SearchWidget);

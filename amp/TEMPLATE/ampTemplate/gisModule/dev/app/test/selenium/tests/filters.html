@@ -17,31 +17,45 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForText</td>
+	<td>css=#tool-filters &gt; div.accordion-heading &gt; a.accordion-toggle &gt; h3</td>
+	<td>Filters</td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>css=#tool-filters &gt; div.accordion-heading &gt; a.accordion-toggle.collapsed &gt; h3</td>
 	<td></td>
 </tr>
 <tr>
-	<td>verifyText</td>
+	<td>waitForText</td>
 	<td>css=h4.filter-title &gt; label</td>
-	<td>Organization</td>
+	<td>Sectors</td>
 </tr>
 <tr>
 	<td>verifyText</td>
-	<td>css=div.filter-type.filter-years &gt; h4.filter-title &gt; label</td>
-	<td>Years</td>
+	<td>css=h4.filter-title &gt; label</td>
+	<td>Sectors</td>
+</tr>
+<tr>
+	<td>verifyText</td>
+	<td>//div[@id='collapse-filters']/div/div[2]/div/div[2]/h4/label</td>
+	<td>Programs</td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>css=div.filter-type.filter-years &gt; h4.filter-title &gt; label</td>
+	<td>//div[@id='collapse-filters']/div/div[2]/div/div[3]/h4/label</td>
 	<td></td>
 </tr>
 <tr>
-	<td>assertElementPresent</td>
+	<td>waitForText</td>
+	<td>xpath=(//button[@type='button'])[3]</td>
+	<td>Apply</td>
+</tr>
+<tr>
+	<td>verifyElementPresent</td>
 	<td>xpath=(//button[@type='button'])[3]</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

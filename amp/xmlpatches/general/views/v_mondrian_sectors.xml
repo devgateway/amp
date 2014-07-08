@@ -21,11 +21,14 @@
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_mondrian_sectors;
 			    CREATE OR REPLACE VIEW v_mondrian_sectors AS 
-			    	SELECT s.amp_sector_id, s.name AS sectorname, ss.amp_sec_scheme_id, ss.sec_scheme_name, acc.name AS typename 
-			    		FROM amp_sector s, amp_sector_scheme ss, amp_classification_config acc 
-			    		WHERE ss.amp_sec_scheme_id = s.amp_sec_scheme_id AND acc.classification_id = ss.amp_sec_scheme_id
-			    	ORDER BY acc.name;
-        		</lang>
+					SELECT s.amp_sector_id, s.parent_sector_id, s.sector_code_official, s.name AS sector_name,
+						getparentsectorid(s.amp_sector_id) AS level0_sector_id, getsectorname(getparentsectorid(s.amp_sector_id)) AS level0_sector_name,
+						NULLIF(getparentsubsectorid(s.amp_sector_id), 0) AS level1_sector_id, getsectorname(getparentsubsectorid(s.amp_sector_id)) AS level1__sector_name,
+						NULLIF(getparentsubsubsectorid(s.amp_sector_id), 0) AS level2_sector_id, getsectorname(getparentsubsubsectorid(s.amp_sector_id)) AS level2__sector_name,
+						ss.amp_sec_scheme_id, ss.sec_scheme_name, acc.name AS typename 
+						FROM amp_sector s, amp_sector_scheme ss, amp_classification_config acc
+					WHERE ss.amp_sec_scheme_id = s.amp_sec_scheme_id AND acc.classification_id = ss.amp_sec_scheme_id;    		
+			</lang>
 		</script>
 	</apply>
 </tns:patch>

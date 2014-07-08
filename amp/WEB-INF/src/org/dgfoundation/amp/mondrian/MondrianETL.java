@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,7 +17,6 @@ import java.util.StringTokenizer;
 import java.util.List;
 import java.util.TreeSet;
 
-import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -36,6 +34,12 @@ import org.digijava.module.aim.helper.Constants;
 public class MondrianETL {
 	
 	public final static String FACT_TABLE_NAME = "mondrian_fact_table";
+	public final static String MONDRIAN_LOCATIONS_DIMENSION_TABLE = "mondrian_locations";
+	public final static String MONDRIAN_SECTORS_DIMENSION_TABLE = "mondrian_sectors";
+	public final static String MONDRIAN_PROGRAMS_DIMENSION_TABLE = "mondrian_programs";
+	public final static String MONDRIAN_ORGANIZATIONS_DIMENSION_TABLE = "mondrian_organizations";
+	
+	private final static String ETL_LOCK = "ETL_LOCK_OBJECT";
 	
 	/**
 	 * these two are hardcoded to activities, because pledges lack versioning, ergo a they need a much simpler treatment
@@ -138,10 +142,37 @@ public class MondrianETL {
 	}
 	
 	public void execute() throws SQLException{
-		checkFactTable();
-		deleteStaleFactTableEntries();
-		generateActivitiesEntries();
-		logger.error("done generating ETL");
+		synchronized(ETL_LOCK) {
+			checkFactTable();
+			deleteStaleFactTableEntries();
+			generateActivitiesEntries();
+			generateStarTables();
+			logger.error("done generating ETL");
+		}
+	}
+	
+	protected void generateStarTables() throws SQLException {
+		logger.warn("generating STAR tables...");
+		generateStarTable(MONDRIAN_LOCATIONS_DIMENSION_TABLE, "id", "parent_location", "country_id", "region_id", "zone_id", "district_id");
+		generateStarTable(MONDRIAN_SECTORS_DIMENSION_TABLE, "amp_sector_id", "parent_sector_id", "level0_sector_id", "level1_sector_id", "level2_sector_id");
+		generateStarTable(MONDRIAN_PROGRAMS_DIMENSION_TABLE, "amp_theme_id", "parent_theme_id", "program_setting_id", "program_setting_name", "id2", "id3", "id4", "id5", "id6", "id7", "id8");
+		generateStarTable(MONDRIAN_ORGANIZATIONS_DIMENSION_TABLE, "amp_org_id", "amp_org_grp_id", "amp_org_type_id");
+		logger.warn("...generating STAR tables done");
+	}
+
+	/**
+	 * makes a snapshot of the view v_<strong>tableName</strong> in the table <strong>tableName</strong>
+	 * @param tableName
+	 * @param columnsToIndex columns on which to create indices
+	 * @throws SQLException
+	 */
+	protected void generateStarTable(String tableName, String... columnsToIndex) throws SQLException {
+		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + tableName);
+		SQLUtils.executeQuery(conn, "CREATE TABLE " + tableName + " AS SELECT * FROM v_" + tableName);
+		for (String columnToIndex:columnsToIndex) {
+			String query = String.format("CREATE INDEX %s_%s ON %s(%s)", tableName, columnToIndex, tableName, columnToIndex);
+			SQLUtils.executeQuery(conn, query);
+		}
 	}
 	
 	/**

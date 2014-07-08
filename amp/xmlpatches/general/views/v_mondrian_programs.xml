@@ -21,8 +21,25 @@
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_mondrian_programs;
 			    CREATE OR REPLACE VIEW v_mondrian_programs AS 
-					SELECT th.*, getprogramsettingid(th.amp_theme_id) AS program_setting_id, aps.name AS program_setting_name 
-						FROM amp_theme th LEFT JOIN amp_program_settings aps ON aps.amp_program_settings_id = getprogramsettingid(th.amp_theme_id);
+					SELECT th.amp_theme_id, th.parent_theme_id, th.theme_code, th.name,
+						getprogramsettingid(th.amp_theme_id) AS program_setting_id, aps.name AS program_setting_name,
+						b2.amp_theme_id as id2, b2.name AS name2, b2.level_ AS l2,
+						b3.amp_theme_id as id3, b3.name AS name3, b3.level_ AS l3,
+						b4.amp_theme_id as id4, b4.name AS name4, b4.level_ AS l4,
+						b5.amp_theme_id as id5, b5.name AS name5, b5.level_ AS l5,
+						b6.amp_theme_id as id6, b6.name AS name6, b6.level_ AS l6,
+						b7.amp_theme_id as id7, b7.name AS name7, b7.level_ AS l7,
+						b8.amp_theme_id as id8, b8.name AS name8, b8.level_ AS l8
+						FROM amp_theme th
+   							LEFT JOIN amp_theme b2 ON b2.amp_theme_id = th.parent_theme_id
+							LEFT JOIN amp_theme b3 ON b3.amp_theme_id = b2.parent_theme_id
+						   	LEFT JOIN amp_theme b4 ON b4.amp_theme_id = b3.parent_theme_id
+							LEFT JOIN amp_theme b5 ON b5.amp_theme_id = b4.parent_theme_id
+							LEFT JOIN amp_theme b6 ON b6.amp_theme_id = b5.parent_theme_id
+							LEFT JOIN amp_theme b7 ON b7.amp_theme_id = b6.parent_theme_id
+							LEFT JOIN amp_theme b8 ON b8.amp_theme_id = b7.parent_theme_id
+							LEFT JOIN amp_program_settings aps ON aps.amp_program_settings_id = getprogramsettingid(th.amp_theme_id)
+						ORDER BY th.amp_theme_id;
 			</lang>
 		</script>
 	</apply>

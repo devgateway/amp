@@ -1940,7 +1940,7 @@ public class DEImportBuilder {
 					else {
 						//write in log that this activity was skipped
 						item.setLogType(DELogPerItem.LOG_TYPE_INFO);
-						item.setDescription(TranslatorWorker.translateText("Activity")+": "+actType.getDbKey()+TranslatorWorker.translateText(" was skipped"));
+						item.setDescription(TranslatorWorker.translateText("Activity")+": "+actType.getDbKey()+" "+TranslatorWorker.translateText("was skipped"));
 					}
 			
 			} catch (Exception e) {

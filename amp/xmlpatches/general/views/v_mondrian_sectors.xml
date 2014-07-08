@@ -19,6 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_mondrian_sectors;
 			    CREATE OR REPLACE VIEW v_mondrian_sectors AS 
 			    	SELECT s.amp_sector_id, s.name AS sectorname, ss.amp_sec_scheme_id, ss.sec_scheme_name, acc.name AS typename 
 			    		FROM amp_sector s, amp_sector_scheme ss, amp_classification_config acc 

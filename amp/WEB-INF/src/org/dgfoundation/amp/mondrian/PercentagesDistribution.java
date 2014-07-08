@@ -49,7 +49,7 @@ public class PercentagesDistribution {
 	 * @throws SQLException
 	 */
 	public static Map<Long, PercentagesDistribution> readInput(ReportEntityType baseEntity, ResultSet rs) throws SQLException {
-		Map<Long, PercentagesDistribution> res = new HashMap<>();
+		Map<Long, PercentagesDistribution> res = new TreeMap<>();
 		String columnName = rs.getMetaData().getColumnLabel(2);		
 		while (rs.next()) { 
 			long activityId = rs.getLong(1);
@@ -62,7 +62,7 @@ public class PercentagesDistribution {
 				res.put(activityId, new PercentagesDistribution(entity, columnName));
 			res.get(activityId).add(fieldId, percentage);
 		}
-		return null;
+		return res;
 	}
 	
 	/**
@@ -154,6 +154,14 @@ public class PercentagesDistribution {
 	 */
 	public Set<ReportRenderWarning> getErrors() {
 		return Collections.unmodifiableSet(this.errors);
+	}
+	
+	/**
+	 * gets an unmodifiable view of the percentages
+	 * @return
+	 */
+	public Map<Long, Double> getPercentages() {
+		return Collections.unmodifiableMap(this.percentages);
 	}
 	
 	@Override

@@ -1,20 +1,32 @@
 package org.dgfoundation.amp.mondrian;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.List;
 import java.util.TreeSet;
+
+import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.ReportEntityType;
+import org.digijava.module.aim.helper.Constants;
+
 
 /**
  * the entry point for doing ETL for Mondrian in AMP
@@ -28,7 +40,7 @@ public class MondrianETL {
 	/**
 	 * these two are hardcoded to activities, because pledges lack versioning, ergo a they need a much simpler treatment
 	 */
-	protected final Set<Long> activityIds; 
+	protected final Set<Long> activityIds;
 	protected final Set<Long> activityIdsToRemove;
 	
 	/**
@@ -55,32 +67,32 @@ public class MondrianETL {
 			/**
 			 * regarding currencies: if a transaction has a fixed_exchange_rate, BASE_CURRENCY would have been written in currency_id and transaction_amount would be translated
 			 */
-			add(new FactTableColumn("transaction_amount", "double NOT NULL", true)); // comment 
+			add(new FactTableColumn("transaction_amount", "double precision NOT NULL", false)); // comment 
 			add(new FactTableColumn("currency_id", "integer NOT NULL", true)); // comment 
 		
-			add(new FactTableColumn("donor_id", "integer", false)); // amp_org_id, might be null for example for pledges (which originate in donor groups)
-			add(new FactTableColumn("financing_instrument_id", "integer", false)); // ACV
-			add(new FactTableColumn("terms_of_assistance_id", "integer", false));  // ACV
+			add(new FactTableColumn("donor_id", "integer", true)); // amp_org_id, might be null for example for pledges (which originate in donor groups)
+			add(new FactTableColumn("financing_instrument_id", "integer", true)); // ACV
+			add(new FactTableColumn("terms_of_assistance_id", "integer", true));  // ACV
 		
-			add(new FactTableColumn("primary_sector_id", "integer", false));   // amp_sector_id, subject to Cartesian product
-			add(new FactTableColumn("secondary_sector_id", "integer", false)); // amp_sector_id, subject to Cartesian product
-			add(new FactTableColumn("tertiary_sector_id", "integer", false));  // amp_sector_id, subject to Cartesian product
+			add(new FactTableColumn("primary_sector_id", "integer", true));   // amp_sector_id, subject to Cartesian product
+			add(new FactTableColumn("secondary_sector_id", "integer", true)); // amp_sector_id, subject to Cartesian product
+			add(new FactTableColumn("tertiary_sector_id", "integer", true));  // amp_sector_id, subject to Cartesian product
 		
-			add(new FactTableColumn("location_id", "integer", false)); // amp_category_value_location_id, subject to Cartesian product
+			add(new FactTableColumn("location_id", "integer", true)); // amp_category_value_location_id, subject to Cartesian product
 		
-			add(new FactTableColumn("primary_program_id", "integer", false));   // amp_theme_id, subject to Cartesian product
-			add(new FactTableColumn("secondary_program_id", "integer", false)); // amp_theme_id, subject to Cartesian product
-			add(new FactTableColumn("tertiary_program_id", "integer", false));  // amp_theme_id, subject to Cartesian product
-			add(new FactTableColumn("national_objectives_program_id", "integer", false));  // amp_theme_id, subject to Cartesian product
+			add(new FactTableColumn("primary_program_id", "integer", true));   // amp_theme_id, subject to Cartesian product
+			add(new FactTableColumn("secondary_program_id", "integer", true)); // amp_theme_id, subject to Cartesian product
+			add(new FactTableColumn("tertiary_program_id", "integer", true));  // amp_theme_id, subject to Cartesian product
+			add(new FactTableColumn("national_objectives_program_id", "integer", true));  // amp_theme_id, subject to Cartesian product
 		
-			add(new FactTableColumn("ea_org_id", "integer", false)); // EXEC amp_org_id, subject to Cartesian product
-			add(new FactTableColumn("ba_org_id", "integer", false)); // BENF amp_org_id, subject to Cartesian product
-			add(new FactTableColumn("ia_org_id", "integer", false)); // IMPL amp_org_id, subject to Cartesian product
-			add(new FactTableColumn("ro_org_id", "integer", false)); // RESP amp_org_id, subject to Cartesian product
+			add(new FactTableColumn("ea_org_id", "integer", true)); // EXEC amp_org_id, subject to Cartesian product
+			add(new FactTableColumn("ba_org_id", "integer", true)); // BENF amp_org_id, subject to Cartesian product
+			add(new FactTableColumn("ia_org_id", "integer", true)); // IMPL amp_org_id, subject to Cartesian product
+			add(new FactTableColumn("ro_org_id", "integer", true)); // RESP amp_org_id, subject to Cartesian product
 		
-			add(new FactTableColumn("src_role_id", "integer", false));  // amp_role.amp_role_id
-			add(new FactTableColumn("dest_role_id", "integer", false)); // amp_role_id
-			add(new FactTableColumn("dest_org_id", "integer", false));   // amp_org_id		
+			add(new FactTableColumn("src_role_id", "integer", true));  // amp_role.amp_role_id
+			add(new FactTableColumn("dest_role_id", "integer", true)); // amp_role_id
+			add(new FactTableColumn("dest_org_id", "integer", true));   // amp_org_id
 		}
 	
 		protected void add(FactTableColumn col) {
@@ -113,7 +125,7 @@ public class MondrianETL {
 	}
 	
 	protected Set<Long> getAllValidatedAndLatestIds() {
-		Set<Long> latestIds = new TreeSet<Long>(SQLUtils.<Long>fetchAsList(conn, "SELECT amp_activity_last_version_id FROM amp_activity_group", 1));
+		Set<Long> latestIds = new TreeSet<Long>(SQLUtils.<Long>fetchAsList(conn, "SELECT amp_activity_id FROM amp_activity", 1));
 		Set<Long> latestValidatedIds = new TreeSet<Long>(SQLUtils.<Long>fetchAsList(conn,
 				"SELECT aag.amp_activity_group_id, max(aav.amp_activity_id) FROM amp_activity_version aav, amp_activity_group aag WHERE aag.amp_activity_group_id = aav.amp_activity_group_id AND (aav.deleted IS NULL OR aav.deleted = false) AND aav.approval_status IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") GROUP BY aag.amp_activity_group_id", 2));
 		
@@ -125,10 +137,11 @@ public class MondrianETL {
 		return res;
 	}
 	
-	protected void execute() throws SQLException{
+	public void execute() throws SQLException{
 		checkFactTable();
 		deleteStaleFactTableEntries();
 		generateActivitiesEntries();
+		logger.error("done generating ETL");
 	}
 	
 	/**
@@ -139,7 +152,8 @@ public class MondrianETL {
 	protected void checkFactTable() {
 		if (recreateFactTable) {
 			// creates an empty fact table
-			SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS" + FACT_TABLE_NAME);
+			logger.warn("RECREATING Mondrian Fact table");
+			SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + FACT_TABLE_NAME);
 			StringBuffer query = new StringBuffer(String.format("CREATE TABLE %s (", FACT_TABLE_NAME));
 			boolean first = true;
 			for (FactTableColumn col:FACT_TABLE_COLUMNS.values()) {
@@ -149,6 +163,14 @@ public class MondrianETL {
 			}
 			query.append(")");
 			SQLUtils.executeQuery(conn, query.toString());
+			
+			// create indices
+			logger.warn("Creating Mondrian indices");
+			for(FactTableColumn col:FACT_TABLE_COLUMNS.values())
+				if (col.indexed) {
+					String q = String.format("CREATE INDEX %s_%s_idx ON %s(%s)", FACT_TABLE_NAME, col.columnName, FACT_TABLE_NAME, col.columnName);
+					SQLUtils.executeQuery(conn, q);
+				}
 		}
 		
 		// check that the fact table has a sane structure
@@ -161,34 +183,102 @@ public class MondrianETL {
 	}
 	
 	protected void generateActivitiesEntries() throws SQLException{
-		String query = "SELECT af.amp_activity_id, af.amp_funding_id, af.amp_donor_org_id, af.type_of_assistance_category_va, af.financing_instr_category_value, af.source_role_id, afd.amp_fund_detail_id, afd.transaction_type, afd.adjustment_type, afd.transaction_date, afd.transaction_amount, afd.fixed_exchange_rate, afd.amp_currency_id, afd.pledge_id, afd.recipient_org_id, afd.recipient_role_id " + 
-				String.format("FROM amp_funding_detail afd, amp_funding af WHERE afd.amp_funding_id = af.amp_funding_id AND af.amp_activity_id IN (%s)", Util.toCSStringForIN(activityIds));
+		generateSectorsEtlTables();
+		generateProgramsEtlTables();
+		generateLocationsEtlTables();
+		generateOrganisationsEtlTables();
 		
-		ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
-		Map<String, Set<Long>> entitiesWithDistributions = new HashMap<>();
-		entitiesWithDistributions.putAll(getAllSectorsForActivities());
+		generateFactTable();
+	}
+
+	protected void generateFactTable() throws SQLException {
+		logger.warn("running the fact-table-generating cartesian...");
+		List<String> factTableQueries = generateFactTableQueries();
+		for(int i = 0; i < factTableQueries.size(); i++) {
+			logger.warn("\texecuting query #" + (i + 1) + "...");
+			SQLUtils.executeQuery(conn, factTableQueries.get(i));
+			logger.warn("\t...executing query #" + (i + 1) + " done");
+		}
+		logger.warn("...running the fact-table-generating cartesian done");
 	}
 	
-//	/**
-//	 * 
-//	 * @param cartesianHolder: Map<field_name, Map<entityId, Map<field_id, percentage>>>, e.g. for example Map<"primary_sector", Map<activityId, Map<sector_id, 33>>>
-//	 * @param column
-//	 * @param query
-//	 */
-//	protected void checkAndDistributePercentages(Map<String, Map<Long, >> cartesianHolder, FactTableColumn column, String query) {
-//		ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
-//		Map<Lon
-//	}
-	
-	protected Map<String, Set<Long>> getAllSectorsForActivities() throws SQLException {
-		String query = "select asl.amp_activity_id, asl.amp_sector_id, asl.sector_percentage from v_mondrian_sectors vms, amp_activity_sector asl where asl.amp_sector_id = vms.amp_sector_id AND vms.typename='Primary' ORDER BY amp_activity_id";
-		ResultSet rs = SQLUtils.rawRunQuery(conn, query, null); 
-		
-		Map<Long, String> sectorIdToSectorScheme = new HashMap<>();
-		while (rs.next())
-			sectorIdToSectorScheme.put(rs.getLong("amp_sector_id"), rs.getString("name"));
-		return null;
+	protected void runEtlOnTable(String query, String tableName) throws SQLException {
+		try (ResultSet rs = SQLUtils.rawRunQuery(conn, query, null)) {
+			// Map<activityId, percentages_on_sector_scheme
+			Map<Long, PercentagesDistribution> secs = PercentagesDistribution.readInput(ReportEntityType.ENTITY_TYPE_ACTIVITY, rs);
+			serializeETLTable(secs, tableName);
+		}
 	}
+	
+	protected void generateOrganisationsEtlTables() throws SQLException {
+		logger.warn("generating orgs ETL tables...");
+		runEtlOnTable("select amp_activity_id, amp_org_id, percentage from v_executing_agency", "etl_executing_agencies");
+		runEtlOnTable("select amp_activity_id, amp_org_id, percentage from v_beneficiary_agency", "etl_beneficiary_agencies");
+		runEtlOnTable("select amp_activity_id, amp_org_id, percentage from v_implementing_agency", "etl_implementing_agencies");
+		runEtlOnTable("select amp_activity_id, amp_org_id, percentage from v_responsible_organisation", "etl_responsible_agencies");
+	}
+	
+	protected void generateSectorsEtlTables() throws SQLException {
+		logger.warn("generating Sector ETL tables...");
+		generateSectorsEtlTables("Primary");
+		generateSectorsEtlTables("Secondary");
+		generateSectorsEtlTables("Tertiary");
+	}
+
+	protected void generateProgramsEtlTables() throws SQLException {
+		logger.warn("generating Program ETL tables...");
+		generateProgramsEtlTables("National Plan Objective");
+		generateProgramsEtlTables("Primary Program");
+		generateProgramsEtlTables("Secondary Program");
+		generateProgramsEtlTables("Tertiary Program");
+	}
+	
+	protected void generateLocationsEtlTables() throws SQLException {
+		logger.warn("generating location ETL tables...");
+		runEtlOnTable("select aal.amp_activity_id, acvl.id, aal.location_percentage from amp_activity_location aal, amp_category_value_location acvl, amp_location al WHERE aal.amp_location_id = al.amp_location_id AND al.location_id = acvl.id", "etl_locations");
+	}
+	
+	protected void generateProgramsEtlTables(String schemeName) throws SQLException {
+		String query = String.format("select aap.amp_activity_id, aap.amp_program_id, aap.program_percentage FROM amp_activity_program aap, v_mondrian_programs vmp WHERE aap.amp_program_id = vmp.amp_theme_id and vmp.program_setting_name = '%s'", schemeName);
+		runEtlOnTable(query, "etl_activity_program_" + schemeName.replace(' ', '_').toLowerCase());
+	}
+	
+	protected void generateSectorsEtlTables(String schemeName) throws SQLException {
+		String query = String.format("select aas.amp_activity_id, aas.amp_sector_id, aas.sector_percentage from amp_activity_sector aas, v_mondrian_sectors vms WHERE aas.amp_Sector_id = vms.amp_sector_id AND vms.typename='%s'", schemeName);
+		runEtlOnTable(query, "etl_activity_sector_" + schemeName.toLowerCase());
+	}
+	
+	/**
+	 * creates an ETL table with percentages
+	 * TODO: generate one query per N activities instead of a huge SQL query
+	 * @param percs
+	 * @param tableName
+	 * @throws SQLException
+	 */
+	protected void serializeETLTable(Map<Long, PercentagesDistribution> percs, String tableName) throws SQLException {
+		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + tableName);
+		SQLUtils.executeQuery(conn, "CREATE TABLE " + tableName + " (act_id integer, ent_id integer, percentage double precision)");
+		StringBuilder query = new StringBuilder("INSERT INTO " + tableName + " (act_id, ent_id, percentage) VALUES ");
+		boolean isFirst = true;
+		for (long actId:percs.keySet()) {
+			// build an SQL query for each activityId
+			PercentagesDistribution pd = percs.get(actId);
+			pd.postProcess();
+			for (Map.Entry<Long, Double> entry:pd.getPercentages().entrySet()) {
+				if (!isFirst)
+					query.append(", \n");
+				query.append(String.format("(%d, %d, %.3f)", actId, entry.getKey(), entry.getValue() / 100.0));
+				isFirst = false;
+			}
+		}
+		if (!isFirst) {
+			SQLUtils.executeQuery(conn, query.toString());
+		}
+		SQLUtils.executeQuery(conn, String.format("CREATE INDEX %s_act_id_idx ON %s(act_id)", tableName, tableName)); // create index on activityId
+		SQLUtils.executeQuery(conn, String.format("CREATE INDEX %s_ent_id_idx ON %s(ent_id)", tableName, tableName)); // create index on entityId (entity=sector/program/org)
+		SQLUtils.executeQuery(conn, String.format("CREATE INDEX %s_act_ent_id_idx ON %s(act_id, ent_id)", tableName, tableName)); // create index on entityId (entity=sector/program/org)
+	}
+	
 	/**
 	 * clears the fact table of the stale entries signaled by {@link #activityIdsToRemove} and {@link #pledgesToRedo}
 	 */
@@ -197,6 +287,35 @@ public class MondrianETL {
 		String deletePledgesQuery = String.format("DELETE FROM mondrian_fact_table WHERE entity_type = '%c' AND entity_id IN (%s)", ReportEntityType.ENTITY_TYPE_PLEDGE.getAsChar(), Util.toCSStringForIN(pledgesToRedo));
 		SQLUtils.executeQuery(conn, deleteActivitiesQuery);
 		SQLUtils.executeQuery(conn, deletePledgesQuery);
+	}
+	
+	/**
+	 * reads from factTableQuery the list of queries
+	 * @return
+	 */
+	protected List<String> generateFactTableQueries() {
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("factTableQuery.sql"), "utf-8"));
+			StringBuilder builder = new StringBuilder();
+			while (true) {
+				String line = reader.readLine();
+				if (line == null) break;
+				if (line.trim().startsWith("--"))
+					continue;
+				builder.append(line);
+				builder.append(" ");
+			};
+			reader.close();
+			String str = builder.toString().trim();
+			StringTokenizer stok = new StringTokenizer(str, ";");
+			List<String> res = new ArrayList<>();
+			while (stok.hasMoreTokens())
+				res.add(stok.nextToken());
+			return res;
+		}
+		catch(Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
 

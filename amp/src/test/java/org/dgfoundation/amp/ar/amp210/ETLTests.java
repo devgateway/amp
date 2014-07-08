@@ -71,13 +71,13 @@ public class ETLTests extends AmpTestCase
 	 */
 	public void testPercentagesDistributionWithNulls() {
 		testPercentage("{2=100.0}", "[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of ENTITY_TYPE_ACTIVITY 1]", 
-				new Pair(2, null));
+			new Pair(2, null));
 		testPercentage("{2=50.0, 3=50.0}", "[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of ENTITY_TYPE_ACTIVITY 1, WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 3) of ENTITY_TYPE_ACTIVITY 1]", 
-				new Pair(2, null), new Pair(3, null));
+			new Pair(2, null), new Pair(3, null));
 		testPercentage("{2=50.0, 3=50.0}", "[WARNING_TYPE_ENTRY_MIXES_NULL_AND_NOT_NULL on (primary_sector_id, -1) of ENTITY_TYPE_ACTIVITY 1, WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 3) of ENTITY_TYPE_ACTIVITY 1]", 
-				new Pair(2, 15.0), new Pair(3, null));
+			new Pair(2, 15.0), new Pair(3, null));
 		testPercentage("{2=12.5, 3=37.5, 4=50.0}", "[WARNING_TYPE_ENTRY_MIXES_NULL_AND_NOT_NULL on (primary_sector_id, -1) of ENTITY_TYPE_ACTIVITY 1, WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 4) of ENTITY_TYPE_ACTIVITY 1]", 
-				new Pair(2, 15.0), new Pair(3, 45.0), new Pair(4, null));
+			new Pair(2, 15.0), new Pair(3, 45.0), new Pair(4, null));
 	}
 
 	

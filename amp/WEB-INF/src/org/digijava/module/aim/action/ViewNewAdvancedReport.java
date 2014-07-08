@@ -6,6 +6,7 @@
  */
 package org.digijava.module.aim.action;
 
+import java.sql.Connection;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +30,7 @@ import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.utils.BoundedList;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -42,6 +44,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.AmpMath;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -76,6 +79,18 @@ public class ViewNewAdvancedReport extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
+		if (request.getParameter("mondrian_etl") != null) {
+			long start = System.currentTimeMillis();
+			try(Connection conn = PersistenceManager.getJdbcConnection()) {
+				MondrianETL etl = new MondrianETL(conn, null, null, null);
+				etl.execute();
+			}
+			long end = System.currentTimeMillis();
+			double secs = (end - start) / 1000.0;
+			ARUtil.writeResponse(response, String.format("ETL calculation done in %.2f seconds", secs));
+			return null;
+		}
+		
 		String loadStatus = request.getParameter("loadstatus");
 
 		if (loadStatus != null){

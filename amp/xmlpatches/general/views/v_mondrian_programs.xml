@@ -19,6 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_mondrian_programs;
 			    CREATE OR REPLACE VIEW v_mondrian_programs AS 
 					SELECT th.*, getprogramsettingid(th.amp_theme_id) AS program_setting_id, aps.name AS program_setting_name 
 						FROM amp_theme th LEFT JOIN amp_program_settings aps ON aps.amp_program_settings_id = getprogramsettingid(th.amp_theme_id);

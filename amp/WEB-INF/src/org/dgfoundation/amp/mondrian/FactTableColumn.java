@@ -8,16 +8,16 @@ package org.dgfoundation.amp.mondrian;
 public class FactTableColumn implements Comparable<FactTableColumn>{
 	public final String columnName;
 	public final String columnDefinition;
-	public final boolean mandatory;
+	public final boolean indexed;
 	
-	public FactTableColumn(String columnName, String columnDefinition, boolean mandatory) {
+	public FactTableColumn(String columnName, String columnDefinition, boolean indexed) {
 		this.columnName = columnName;
 		this.columnDefinition = columnDefinition;
-		this.mandatory = mandatory;
+		this.indexed = indexed;
 	}
 	
 	@Override public String toString() {
-		return String.format("column (name, definition, mandatory) = (%s, %s, %s)", columnName, columnDefinition, mandatory);
+		return String.format("column (name, definition, indexed) = (%s, %s, %s)", columnName, columnDefinition, indexed);
 	}
 	
 	@Override public int hashCode() {

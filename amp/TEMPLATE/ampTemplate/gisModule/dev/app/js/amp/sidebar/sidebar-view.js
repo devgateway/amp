@@ -1,79 +1,70 @@
-define(
-  [
-    'jquery',
-    'underscore',
-    'backbone',
-    'amp/sidebar/layers/views/layers-view',
-    'amp/sidebar/filters/views/filters-view',
-    'amp/sidebar/search/views/search-view',
-    'amp/sidebar/tools/views/tools-view',
-    'amp/sidebar/settings/views/settings-view',
-  ],
-  function ($, _, Backbone, LayersView, FiltersView, SearchView, ToolsView, SettingsView) {
-    'use strict';
+var _ = require('underscore');
+var Backbone = require('backbone');
+var LayersView = require('./layers/views/layers-view');
+var FiltersView = require('./filters/views/filters-view');
+var SearchView = require('./search/views/search-view');
+var ToolsView = require('./tools/views/tools-view');
+var SettingsView = require('./settings/views/settings-view');
 
-    var controlViews = [
-      LayersView,
-      SearchView,
-      FiltersView,
-      ToolsView,
-      SettingsView
-    ];
 
-    var SidebarToolsView = Backbone.View.extend({
+var controlViews = [
+  LayersView,
+  SearchView,
+  FiltersView,
+  ToolsView,
+  SettingsView
+];
 
-      events: {
-        'hide.bs.collapse .sidebar-tool': 'hidePopovers',
-        'show.bs.popover .layer-info': 'blah'
-      },
+module.exports = Backbone.View.extend({
 
-      hidePopovers: function() {
-        console.log('hide em');
-      },
+  events: {
+    'hide.bs.collapse .sidebar-tool': 'hidePopovers',
+    'show.bs.popover .layer-info': 'blah'
+  },
 
-      blah: function() {
-        console.log('blah');
-      },
+  hidePopovers: function() {
+    console.log('hide em');
+  },
 
-      // Render entire geocoding view.
-      render: function () {
+  blah: function() {
+    console.log('blah');
+  },
 
-        var sidebarConainer = this.$el;
-        _.each(controlViews, function(ControlView) {
-          var view = new ControlView();
-          sidebarConainer.append(view.render().el);
-        });
+  // Render entire geocoding view.
+  render: function () {
 
-        // TODO: move popover binding somewhere better
-        this.popovers = this.$('.layer-info');
-        this.bindPopovers();
-
-        return this;
-      },
-
-      bindPopovers: function() {
-        var popovers = this.popovers;
-
-        // standard show/hide
-        popovers.popover();
-
-        // go away when the accordion container collapses
-        $('.sidebar-tool').on('hide.bs.collapse', function() {
-          popovers.popover('hide');
-        });
-
-        // hide all others when this cone comes up
-        popovers.on('show.bs.popover', function() {
-          var opening = this;
-          popovers.each(function(i, triggerer) {
-            if (triggerer !== opening) {
-              $(triggerer).popover('hide');
-            }
-          });
-        });
-      }
+    var sidebarConainer = this.$el;
+    _.each(controlViews, function(ControlView) {
+      var view = new ControlView();
+      sidebarConainer.append(view.render().el);
     });
 
-    return SidebarToolsView;
+    // TODO: move popover binding somewhere better
+    this.popovers = this.$('.layer-info');
+    this.bindPopovers();
+
+    return this;
+  },
+
+  bindPopovers: function() {
+    var popovers = this.popovers;
+
+    // standard show/hide
+    popovers.popover();
+
+    // go away when the accordion container collapses
+    $('.sidebar-tool').on('hide.bs.collapse', function() {
+      popovers.popover('hide');
+    });
+
+    // hide all others when this cone comes up
+    popovers.on('show.bs.popover', function() {
+      var opening = this;
+      popovers.each(function(i, triggerer) {
+        if (triggerer !== opening) {
+          $(triggerer).popover('hide');
+        }
+      });
+    });
   }
-);
+});

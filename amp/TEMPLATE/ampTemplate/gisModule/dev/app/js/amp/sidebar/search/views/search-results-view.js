@@ -1,31 +1,24 @@
-define(
-  [
-    'underscore',
-    'backbone',
-    'text!amp/sidebar/search/templates/search-control-widget.html',
-    'text!amp/sidebar/search/templates/search-results-template.html'
-  ],
-  function (_, Backbone, SearchWidget, Template) {
-    'use strict';
+var fs = require('fs');
+var _ = require('underscore');
+var Backbone = require('backbone');
+var SearchWidget = fs.readFileSync(path.join(__dirname, '../templates/search-control-widget.html'));
+var Template = fs.readFileSync(path.join(__dirname, '../templates/search-results-template.html'));
 
-    var searchWidget = _.template(SearchWidget);
 
-    var View = Backbone.View.extend({
+var searchWidget = _.template(SearchWidget);
 
-      template: _.template(Template),
+module.exports = Backbone.View.extend({
 
-      render: function() {
+  template: _.template(Template),
 
-        // add content
-        this.$el.html(this.template({
-          searchWidget: searchWidget
-          // with results!
-        }));
+  render: function() {
 
-        return this;
-      },
-    });
+    // add content
+    this.$el.html(this.template({
+      searchWidget: searchWidget
+      // with results!
+    }));
 
-    return View;
-  }
-);
+    return this;
+  },
+});

@@ -1,36 +1,28 @@
-define(
-  [
-    'underscore',
-    'backbone',
-    'amp/sidebar/base-control/base-control-view',
-    'text!amp/sidebar/tools/templates/tools-template.html'
-  ],
-  function (_, Backbone, BaseToolView, Template) {
-    'use strict';
+var fs = require('fs');
+var _ = require('underscore');
+var BaseToolView = require('../../base-control/base-control-view');
+var Template = fs.readFileSync(path.join(__dirname, '../templates/tools-template.html'));
 
-    var View = BaseToolView.extend({
 
-      id: 'tool-tools',
-      title:  'Tools',
-      iconClass:  'ampicon-tools',
-      description:  '',
+module.exports = BaseToolView.extend({
 
-      template:  _.template(Template),
+  id: 'tool-tools',
+  title:  'Tools',
+  iconClass:  'ampicon-tools',
+  description:  '',
 
-      initialize: function() {
-        BaseToolView.prototype.initialize.apply(this);
-      },
+  template:  _.template(Template),
 
-      render: function() {
-        BaseToolView.prototype.render.apply(this);
+  initialize: function() {
+    BaseToolView.prototype.initialize.apply(this);
+  },
 
-        // add content
-        this.$('.content').html(this.template({title: this.title}));
+  render: function() {
+    BaseToolView.prototype.render.apply(this);
 
-        return this;
-      }
-    });
+    // add content
+    this.$('.content').html(this.template({title: this.title}));
 
-    return View;
+    return this;
   }
-);
+});

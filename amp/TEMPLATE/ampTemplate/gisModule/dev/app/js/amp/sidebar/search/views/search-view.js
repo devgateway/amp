@@ -1,52 +1,43 @@
-define(
-  [
-    'underscore',
-    'amp/sidebar/base-control/base-control-view',
-    'amp/sidebar/search/views/search-results-view',
-    'text!amp/sidebar/search/templates/search-control-widget.html',
-    'text!amp/sidebar/search/templates/search-template.html'
-  ],
-  function (_, BaseToolView, ResultsView, SearchWidget, Template, ResultsTemplate) {
-    'use strict';
+var fs = require('fs');
+var _ = require('underscore');
+var BaseToolView = require('../../base-control/base-control-view');
+var ResultsView = require('../views/search-results-view');
+var SearchWidget = fs.readFileSync(path.join(__dirname, '../templates/search-control-widget.html'));
+var Template = fs.readFileSync(path.join(__dirname, '../templates/search-template'));
 
-    var searchWidget = _.template(SearchWidget);
 
-    var View = BaseToolView.extend({
+var searchWidget = _.template(SearchWidget);
 
-      id: 'tool-search',
-      title: 'Keyword Search',
-      iconClass: 'ampicon-search',
-      description: '',
+module.exports = BaseToolView.extend({
 
-      template: _.template(Template),
+  id: 'tool-search',
+  title: 'Keyword Search',
+  iconClass: 'ampicon-search',
+  description: '',
 
-      events: {
-        'submit .search-form': 'renderResults'
-      },
+  template: _.template(Template),
 
-      render: function() {
-        BaseToolView.prototype.render.apply(this);
+  events: {
+    'submit .search-form': 'renderResults'
+  },
 
-        var self = this;
+  render: function() {
+    BaseToolView.prototype.render.apply(this);
 
-        // add content
-        this.$('.content').html(this.template({
-          title: this.title,
-          searchWidget: searchWidget,
-        }));
+    var self = this;
 
-        return this;
-      },
+    // add content
+    this.$('.content').html(this.template({
+      title: this.title,
+      searchWidget: searchWidget,
+    }));
 
-      renderResults: function() {
-        var resultsView = new ResultsView();
-        this.$('.results-placeholder').html(resultsView.render().el);
-        this.$('.results-placeholder .modal').modal({show: true, backdrop: false});
-      }
-    });
+    return this;
+  },
 
-    return View;
+  renderResults: function() {
+    var resultsView = new ResultsView();
+    this.$('.results-placeholder').html(resultsView.render().el);
+    this.$('.results-placeholder .modal').modal({show: true, backdrop: false});
   }
-);
-
-
+});

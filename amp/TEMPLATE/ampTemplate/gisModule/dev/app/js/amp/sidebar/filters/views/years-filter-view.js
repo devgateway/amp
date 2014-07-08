@@ -1,25 +1,17 @@
-define(
-  [
-    'underscore',
-    'backbone',
-    'amp/sidebar/filters/views/base-filter-view',
-    'amp/sidebar/filters/models/years-filter-model'
-  ],
-  function (_, Backbone, BaseFilterView, YearsFilterModel) {
-    'use strict';
+var _ = require('underscore');
+var Backbone = require('backbone');
+var BaseFilterView = require('../views/base-filter-view');
+var YearsFilterModel = require('../models/years-filter-model');
 
-    var View = BaseFilterView.extend({
 
-      className: BaseFilterView.className + ' filter-years',
+module.exports = BaseFilterView.extend({
 
-      initialize: function() {
-        BaseFilterView.prototype.initialize.apply(this);
+  className: BaseFilterView.className + ' filter-years',
 
-        this.model = new YearsFilterModel();
-      },
+  initialize: function() {
+    BaseFilterView.prototype.initialize.apply(this);
 
-    });
+    this.model = new YearsFilterModel();
+  },
 
-    return View;
-  }
-);
+});

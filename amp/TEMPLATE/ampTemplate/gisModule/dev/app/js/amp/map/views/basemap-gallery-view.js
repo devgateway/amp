@@ -1,43 +1,25 @@
-/**
- * This view wraps the ESRI base map gallery component
- */
-define(
-  [
-    'underscore',
-    'backbone',
-    'esri/dijit/BasemapGallery',
-    'text!amp/map/templates/basemap-gallery-template.html',
-  ],
-  function (_, Backbone, BasemapGallery, Template) {
-    'use strict';
+var fs = require('fs');
+var _ = require('underscore');
+var Backbone = require('backbone');
+var Template = fs.readFileSync(path.join(__dirname, '../templates/basemap-gallery-template.html'));
 
-    var BasemapView = Backbone.View.extend({
 
-      template: _.template(Template),
+module.exports = Backbone.View.extend({
 
-      tagName: 'ul',
-      id: 'basemap-gallery',
-      className: 'nav navbar-nav navbar-right dropdown',
+  template: _.template(Template),
 
-      initialize: function(options) {
-        _.extend(this, options);  // stores a reference to the arcgis map
-      },
+  tagName: 'ul',
+  id: 'basemap-gallery',
+  className: 'nav navbar-nav navbar-right dropdown',
 
-      render: function() {
-        this.$el.html(this.template());
+  initialize: function(options) {
+    _.extend(this, options);  // stores a reference to the arcgis map
+  },
 
-        this.basemapGallery = this.basemapGallery || new BasemapGallery({
-          showArcGISBasemaps: true,
-          map: this.map
-        }, 'basemapGallery');
+  render: function() {
+    this.$el.html(this.template());
 
-        this.basemapGallery.startup();
-
-        return this;
-      }
-
-    });
-
-    return BasemapView;
+    return this;
   }
-);
+
+});

@@ -1,27 +1,19 @@
-define(
-  [
-    'underscore',
-    'backbone',
-    'text!amp/map/templates/map-legend-template.html',
-  ],
-  function (_, Backbone, Template) {
-    'use strict';
+var fs = require('fs');
+var _ = require('underscore');
+var Backbone = require('backbone');
+var Template = fs.readFileSync(path.join(__dirname, '../templates/map-legend-template-template.html'));
 
-    var LegendView = Backbone.View.extend({
+module.exports = Backbone.View.extend({
 
-      template: _.template(Template),
+  template: _.template(Template),
 
-      id: 'legend',
+  id: 'legend',
 
-      render: function () {
-        this.$el.html(this.template());
-        return this;
+  render: function () {
+    this.$el.html(this.template());
+    return this;
 
-        //TODO: chevron toggle: http://jsfiddle.net/zessx/R6EAW/12/
-      }
-
-    });
-
-    return LegendView;
+    //TODO: chevron toggle: http://jsfiddle.net/zessx/R6EAW/12/
   }
-);
+
+});

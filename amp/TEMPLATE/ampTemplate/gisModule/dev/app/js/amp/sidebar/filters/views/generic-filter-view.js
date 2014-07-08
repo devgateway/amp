@@ -1,31 +1,24 @@
-define(
-  [
-    'underscore',
-    'backbone',
-    'amp/sidebar/filters/views/base-filter-view',
-    'amp/sidebar/filters/models/generic-filter-model',
-    'text!amp/sidebar/filters/templates/generic-filter-template.html'
-  ],
-  function (_, Backbone, BaseFilterView, GenericFilterModel, Template) {
-    'use strict';
+var fs = require('fs');
+var _ = require('underscore');
+var Backbone = require('backbone');
+var BaseFilterView = require('../views/base-filter-view');
+var GenericFilterModel = require('../models/generic-filter-model');
+var Template = fs.readFileSync(path.join(__dirname, '../templates/generic-filter-template.html'));
 
-    var View = BaseFilterView.extend({
 
-      className: BaseFilterView.className + ' filter-org',
-      template: _.template(Template),
+module.exports = BaseFilterView.extend({
 
-      initialize: function() {
-        BaseFilterView.prototype.initialize.apply(this);
+  className: BaseFilterView.className + ' filter-org',
+  template: _.template(Template),
 
-        this.model = new GenericFilterModel();
-      },
+  initialize: function() {
+    BaseFilterView.prototype.initialize.apply(this);
 
-      renderFilters: function () {
-        BaseFilterView.prototype.renderFilters.apply(this);
-        this.$('.filter-options').append(this.template());
-      }
-    });
+    this.model = new GenericFilterModel();
+  },
 
-    return View;
+  renderFilters: function () {
+    BaseFilterView.prototype.renderFilters.apply(this);
+    this.$('.filter-options').append(this.template());
   }
-);
+});

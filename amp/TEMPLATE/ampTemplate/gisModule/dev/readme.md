@@ -9,18 +9,13 @@ Setup
 
 A node runtime with npm is required.
 
-First, install `gulp` and `bower` globally:
+First, install `gulp` globally:
 
 ```bash
-$ sudo npm install -g gulp bower
+$ sudo npm install -g gulp
 ```
 
-Next grab the front-end libraries
-```bash
-$ bower install
-```
-
-Finally, install all of the build dependencies locally:
+Finally, install all of the library dependencies locally:
 
 ```bash
 $ npm install
@@ -28,8 +23,6 @@ $ npm install
 
 
 ### Updates
-
-#### Dev & build stuff
 
 Call `npm install` after each pull to make sure latest build plugins are there.
 
@@ -42,20 +35,6 @@ When installing new dev/build dependencies, use the `--save-dev` option for npm 
 ```bash
 $ npm install jshint --save-dev
 ```
-
-#### Front end libraries
-
-Keeping up to date is almost the same as for build/dev stuff:
-
-```bash
-$ bower install
-```
-
-Adding new libraries takes a few more steps.
-
- 1. I (phil) think there is an equivalent to `--save-dev` for bower, but I have just been updating [`bower.json`](bower.json) manually as new libraries come in. I do `bower install jquery`, and then add the entry, checking the version number that bower reports having installed.
-
- 2. Configure the package for AMD in [`app/js/config.js`](app/js/config.js), so that the new library can be conveniently listed as a dependency in `define` calls.
 
 
 Usage
@@ -142,21 +121,23 @@ Javascript coding style is somewhat enforced by jshint. The GIS module config ca
 
 Never, ever write inline html in javascript. JSHint will unfortunately let this slide, but it will make me very sad.
 
-Instead, use the dojo `text!` plugin to require the html string from a template file with AMD.
+Instead, use node's `fs.readFileSync` to load the html string from a template file.
 
 ```js
-define(['underscore', 'text!my-template.html'], function(_, myTemplate) {
+var fs = require('fs');
+var _ = require('underscore');
 
-  // convert the string into an underscore template object:
-  var templater = _.template(myTemplate);
+// load the html string for the template
+var Template = fs.readFileSync(path.join(__dirname, '../templates/template.html'))
 
-  // when you need the html, call it:
-  var rawHTML = templater();
+// convert the string into an underscore template object:
+var templater = _.template(myTemplate);
 
-  // see underscore templating docs for info about contexts, but:
-  var contextualHTML = templater({someTemplateVar: 'hello'});
+// when you need the html, call it:
+var rawHTML = templater();
 
-});
+// see underscore templating docs for info about contexts, but:
+var contextualHTML = templater({someTemplateVar: 'hello'});
 ```
 
 Note that normally you have to use `dojo/text!`, but for the DG GIS front-end, we have aliased that to just `text!` in the AMD config for convenience.
@@ -230,4 +211,13 @@ Troubleshooting
 Dev Reading
 -----------
 
-LESS: [lescss.org](http://lesscss.org/functions/)
+### CSS
+
+ * [lescss.org](http://lesscss.org/functions/)
+
+
+### JS
+
+ * [Backbone Fundamentals](http://addyosmani.github.io/backbone-fundamentals/) -- A thorough introduction to backbone.
+ * [Human Javascript](http://read.humanjavascript.com/) -- An excellent overview of a maintainable backbone application structure.
+ * [Composition and Inheritance](http://joostdevblog.blogspot.ca/2014/07/why-composition-is-often-better-than.html) -- some good ideas on when and when not to use inheritance.

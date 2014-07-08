@@ -70,12 +70,16 @@ public class AmpActivityContact implements Versionable, Comparable, Serializable
 	public Object getValue() {
 		return "" + this.contactType + "-" + this.primaryContact;
 	}
+
 	@Override
 	public int compareTo(Object o) {
 		// TODO Auto-generated method stub
 		if (!(o instanceof AmpActivityContact)) return -1;
 		AmpActivityContact aac = (AmpActivityContact)o;
-		int result=this.getContact().compareTo(aac.getContact());
+
+        if (this.getContact() == null || aac.getContact() == null) return -1;
+
+		int result = this.getContact().compareTo(aac.getContact());
 		if(result==0){
 			if ((this.activity != null || aac.getActivity() != null) && (this.activity == null || aac.getActivity() == null))
 				return -1;

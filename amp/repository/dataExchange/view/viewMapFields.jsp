@@ -657,7 +657,7 @@ span.extContactDropdownEmail {
 		});
 		optionsMarkup.push("</table>");
 		optionsContainer.html(optionsMarkup.join(''));
-		var totalLabel = "<digi:trn jsFriendly='true'>Total object count/Showing: </digi:trn>";
+		var totalLabel = "<digi:trn jsFriendly='true'>Total object count/Showing</digi:trn>: ";
 		infoWnd.html(totalLabel +  data.totalCount + "/" +  data.objects.length);
 		
 		$("td.optionItem").click(function (e) {

@@ -28,7 +28,6 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.util.upload.FileItem;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
@@ -48,10 +47,6 @@ import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpContactProperty;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -59,7 +54,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.*;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
@@ -844,18 +838,24 @@ public class ActivityUtil {
         //add or edit activity contact and amp contact
         if(activityContacts != null && activityContacts.size() > 0) {
             for (AmpActivityContact activityContact : activityContacts) {
-                //we have to check if the contact is new, first we have to saveit
-                if(activityContact.getContact().getId()==null){
+
+                //we have to check if the contact is new, first we have to save it
+
+                // save the contact first
+                if (activityContact.getContact().getId() == null) {
                     session.saveOrUpdate(activityContact.getContact());
                 }
-                if (activityContact.getId() != null) {
-                    session.merge(activityContact);
-                } else {
+
+                // then the reference
+                if (activityContact.getId() == null) {
                     session.saveOrUpdate(activityContact);
                 }
 
+                session.merge(activityContact.getContact());
             }
         }
+
+
 
     }
     

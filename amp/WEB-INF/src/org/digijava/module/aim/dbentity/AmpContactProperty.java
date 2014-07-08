@@ -112,5 +112,20 @@ public class AmpContactProperty  implements Comparable, Serializable {
 		return this.getId().compareTo(a.getId());
 	}
 
-	
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AmpContactProperty)) return false;
+
+        AmpContactProperty that = (AmpContactProperty) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
 }

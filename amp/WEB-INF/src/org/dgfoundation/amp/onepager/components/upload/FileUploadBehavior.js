@@ -8,6 +8,8 @@ function setupFileUpload(componentId, componentUrl, componentParamName){
             url: componentUrl,
             paramName: componentParamName,
             singleFileUploads: true,
+            iframe:true,
+            dataType:'json',
             minFileSize: 1,
             maxFileSize: 20000000,
             add: function (e, data) {
@@ -20,7 +22,7 @@ function setupFileUpload(componentId, componentUrl, componentParamName){
             },
             done: function (e, data){
                 //alert('upload done! result[' + JSON.stringify(data.result) + '] status[' + data.textStatus + '] jqXHR[' + JSON.stringify(data.jqXHR) +']');
-                var result=eval(data.result)[0];
+            	var result = eval(data.result)[0];
                 $(this).find('[role=fileUploadedMsg]').html(result.uploadTxt);
             },
             fail: function (e, data){

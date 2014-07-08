@@ -133,9 +133,6 @@ td.defaultTab {
 </style>
 
 <script language="javascript">
-	$( document ).ready(function() {
-   		 console.log( "ready!" );
-	});
 	function getFile(){
 	        $("#upfile").click();
 	  }

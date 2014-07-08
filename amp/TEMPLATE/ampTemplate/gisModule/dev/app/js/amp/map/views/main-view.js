@@ -1,6 +1,7 @@
 var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
+var L = require('leaflet');
 
 var MapHeaderView = require('../views/map-header-view');
 var BasemapGalleryView = require('../views/basemap-gallery-view');
@@ -18,6 +19,10 @@ module.exports = Backbone.View.extend({
     this.$el.html(this.template({}));
 
     var headerContainer = this.$('#map-header > div');
+
+    // Render the map
+    var map = L.map('map-canvas').setView([-4, 24], 6);
+    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
 
     // Render map header
     var headerView = new MapHeaderView();

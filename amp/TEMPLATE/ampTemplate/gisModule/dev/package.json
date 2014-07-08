@@ -30,6 +30,7 @@
     "gulp-watch": "^0.6.5",
     "jquery": "^2.1.1",
     "jshint-stylish": "^0.2.0",
+    "leaflet": "^0.7.3",
     "rimraf": "^2.2.8",
     "underscore": "^1.6.0",
     "vinyl-source-stream": "^0.1.1",

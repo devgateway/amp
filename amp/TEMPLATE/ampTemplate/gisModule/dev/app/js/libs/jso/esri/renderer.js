@@ -1,3 +1,0 @@
-//>>built
-define("esri/renderer",["esri/renderers/Renderer","esri/renderers/SimpleRenderer","esri/renderers/UniqueValueRenderer","esri/renderers/ClassBreaksRenderer","esri/renderers/TemporalRenderer","esri/renderers/SymbolAger","esri/renderers/TimeClassBreaksAger","esri/renderers/TimeRampAger","esri/renderers/jsonUtils"],function(a,b,c,d,e,f,g,h,k){return{Renderer:a,SimpleRenderer:b,UniqueValueRenderer:c,ClassBreaksRenderer:d,TemporalRenderer:e,SymbolAger:f,TimeClassBreaksAger:g,TimeRampAger:h,jsonUtils:k}});
-//@ sourceMappingURL=renderer.js.map

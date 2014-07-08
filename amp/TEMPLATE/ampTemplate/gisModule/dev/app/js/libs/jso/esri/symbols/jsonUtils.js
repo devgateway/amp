@@ -1,4 +1,0 @@
-//>>built
-define("esri/symbols/jsonUtils",["dojo/_base/lang","dojo/has","esri/kernel","esri/symbols/SimpleMarkerSymbol","esri/symbols/PictureMarkerSymbol","esri/symbols/SimpleLineSymbol","esri/symbols/CartographicLineSymbol","esri/symbols/SimpleFillSymbol","esri/symbols/PictureFillSymbol","esri/symbols/TextSymbol"],function(c,e,f,g,h,k,l,m,n,p){var d={fromJson:function(a){var b=null;switch(a.type.substring(0,6)){case "esriSM":b=new g(a);break;case "esriPM":b=new h(a);break;case "esriTS":b=new p(a);break;case "esriSL":b=
-void 0!==a.cap?new l(a):new k(a);break;case "esriSF":b=new m(a);break;case "esriPF":b=new n(a)}return b},getShapeDescriptors:function(a){return a&&a.getShapeDescriptors?a.getShapeDescriptors():{defaultShape:null,fill:null,stroke:null}}};e("extend-esri")&&c.mixin(c.getObject("symbol",!0,f),d);return d});
-//@ sourceMappingURL=jsonUtils.js.map

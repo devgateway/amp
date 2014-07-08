@@ -1,4 +1,0 @@
-//>>built
-define("esri/layers/agscommon",["esri/layers/ArcGISMapServiceLayer","esri/layers/LayerInfo","esri/layers/TimeInfo","esri/layers/LayerTimeOptions","esri/layers/TimeReference","esri/layers/Field","esri/layers/Domain","esri/layers/RangeDomain","esri/layers/CodedValueDomain","esri/layers/InheritedDomain","esri/layers/LayerSource","esri/layers/LayerMapSource","esri/layers/LayerDataSource","esri/layers/DataSource","esri/layers/TableDataSource","esri/layers/QueryDataSource","esri/layers/JoinDataSource","esri/layers/RasterDataSource","esri/layers/DynamicLayerInfo","esri/layers/LayerDrawingOptions","esri/geometry","esri/utils"],
-function(){return{}});
-//@ sourceMappingURL=agscommon.js.map

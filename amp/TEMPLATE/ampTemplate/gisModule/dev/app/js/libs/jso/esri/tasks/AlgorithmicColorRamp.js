@@ -1,4 +1,0 @@
-//>>built
-define("esri/tasks/AlgorithmicColorRamp",["dojo/_base/declare","dojo/_base/lang","dojo/has","esri/kernel","esri/Color","esri/tasks/ColorRamp"],function(b,d,e,f,c,g){b=b(g,{declaredClass:"esri.tasks.AlgorithmicColorRamp",type:"algorithmic",fromColor:null,toColor:null,algorithm:null,toJson:function(){var a;switch(this.algorithm.toLowerCase()){case "cie-lab":a="esriCIELabAlgorithm";break;case "hsv":a="esriHSVAlgorithm";break;case "lab-lch":a="esriLabLChAlgorithm"}a={type:"algorithmic",algorithm:a};a.fromColor=
-c.toJsonColor(this.fromColor);a.toColor=c.toJsonColor(this.toColor);return a}});e("extend-esri")&&d.setObject("tasks.AlgorithmicColorRamp",b,f);return b});
-//@ sourceMappingURL=AlgorithmicColorRamp.js.map

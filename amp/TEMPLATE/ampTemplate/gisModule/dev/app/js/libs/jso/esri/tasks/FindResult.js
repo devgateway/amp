@@ -1,3 +1,0 @@
-//>>built
-define("esri/tasks/FindResult",["dojo/_base/declare","dojo/_base/lang","dojo/has","esri/kernel","esri/graphic","esri/geometry/jsonUtils"],function(a,b,c,d,e,f){a=a(null,{declaredClass:"esri.tasks.FindResult",constructor:function(a){b.mixin(this,a);this.feature=new e(a.geometry?f.fromJson(a.geometry):null,null,a.attributes);delete this.geometry;delete this.attributes}});c("extend-esri")&&b.setObject("tasks.FindResult",a,d);return a});
-//@ sourceMappingURL=FindResult.js.map

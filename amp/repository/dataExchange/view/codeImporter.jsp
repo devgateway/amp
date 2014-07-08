@@ -13,18 +13,21 @@
 
 <style type="text/css">
 <!--
+.submitButtonClass {
+display: inline;
+margin-top:30px;
+margin-right:100px;
+}
 #uploadBtn{
-	   font-family: calibri;
 	   width: 90px;
 	   height:20px;
 	   padding: 10px;
-	   -webkit-border-radius: 5px;
-	   -moz-border-radius: 5px;
-	   border: 1px dashed #BBB; 
 	   text-align: center;
-	   background-color: #DDD;
+	   background-color: #EEE;
 	   cursor:pointer;
-	   border: 1px dashed #BBB;
+	   border: 1px solid #BBB;
+	   background-image: -moz-linear-gradient(top left, #707070 -50%, #FCFCFC 110.00000000000001%);
+	
 	  }
 	
 div.flowContainer {
@@ -130,6 +133,9 @@ td.defaultTab {
 </style>
 
 <script language="javascript">
+	$( document ).ready(function() {
+   		 console.log( "ready!" );
+	});
 	function getFile(){
 	        $("#upfile").click();
 	  }
@@ -138,8 +144,8 @@ td.defaultTab {
 		    var file = obj.value;
 		    var fileName = file.split("\\");
 		    var text = fileName[fileName.length-1];
-		    if (text.length > 15) {
-		    	text = text.substring (0,12) + "....";
+		    if (text.length > 33) {
+		    	text = text.substring (0,30) + "....";
 		    }
 		    $("#uploadLabel").text(text);
 	}
@@ -227,15 +233,15 @@ td.defaultTab {
 			<td colspan="2" nowrap align="right">
 			<span>
 				<digi:trn>Upload IATI codes (xml or zip)</digi:trn> 
-				 <span id="uploadBtn" onclick="getFile()"><digi:trn>Upload file</digi:trn></span>
-			 	<span id="uploadLabel" style="display:inline;width:60px;"><digi:trn>No file chosen</digi:trn></span>
+				 <span id="uploadBtn" onclick="getFile()"><digi:trn>Browse</digi:trn></span>
+			 	<span id="uploadLabel" style="display:inline;width:100px;margin-right: 100px;"><digi:trn>No file chosen</digi:trn></span>
 				
 <!--    											 this is file input tag, so i hide it! -->
   			<div style='height: 0px;width:0px; overflow:hidden;'><html:file property="file"  styleId="upfile" name="codeImporterForm" onchange="setLabel(this)" /></div>
 			
 			<c:set var="uploadLabel"><digi:trn>Upload</digi:trn></c:set>
 			</span>
-			<html:submit value="${uploadLabel}" style="diplay: inline;margin-top:30px" />
+			<html:submit value="${uploadLabel}"  styleClass="submitButtonClass" />
 		
 			</td>
 		</tr>

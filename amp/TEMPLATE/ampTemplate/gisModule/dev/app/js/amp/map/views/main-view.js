@@ -1,7 +1,7 @@
 var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
-var L = require('leaflet');
+var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 
 var MapHeaderView = require('../views/map-header-view');
 var BasemapGalleryView = require('../views/basemap-gallery-view');
@@ -21,8 +21,15 @@ module.exports = Backbone.View.extend({
     var headerContainer = this.$('#map-header > div');
 
     // Render the map
-    var map = L.map('map-canvas').setView([-4, 24], 6);
-    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+    // ESRI Leaflet Map
+    var map = L.map('map-canvas').setView([-4, 24], 7);
+    L.esri.basemapLayer("Gray").addTo(map);
+
+    // var map = L.map('map-canvas').setView([-4, 24], 6);
+    // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
+
+
+
 
     // Render map header
     var headerView = new MapHeaderView();

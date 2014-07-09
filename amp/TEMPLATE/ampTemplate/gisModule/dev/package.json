@@ -8,11 +8,18 @@
     "test": "echo 'Testing not yet configured...'"
   },
   "license": "TODO: what is the license for AMP?",
+  "browserify": {
+    "transform": [ "browserify-shim" ]
+  },
+  "browserify-shim": {
+    "./node_modules/esri-leaflet/dist/esri-leaflet.js" :  { "exports": "L", "depends": [ "./node_modules/leaflet/dist/leaflet.js:L" ] }
+  },
   "devDependencies": {
     "backbone": "^1.1.2",
     "bootstrap": "^3.2.0",
     "brfs": "^1.1.2",
     "browserify": "^4.2.0",
+    "browserify-shim": "~3.6.0",
     "gulp": "^3.7.0",
     "gulp-changed": "^0.4.0",
     "gulp-csso": "^0.2.9",
@@ -32,6 +39,7 @@
     "jquery": "^2.1.1",
     "jshint-stylish": "^0.2.0",
     "leaflet": "^0.7.3",
+    "esri-leaflet": "0.0.1-beta.5",
     "rimraf": "^2.2.8",
     "underscore": "^1.6.0",
     "vinyl-source-stream": "^0.1.1",

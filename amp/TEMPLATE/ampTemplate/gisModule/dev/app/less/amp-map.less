@@ -50,17 +50,17 @@
 
     #basemap-gallery{
       display: inline-block;  // force it to all jump down a line together
-      color: @amp-content;
 
-      a,
       a:hover {
+        color: lighten(@amp-inverse,20%);
         text-decoration: none;
       }
 
-      > a {
+      a {
           color: @amp-inverse;
           display: block;
           padding: 9px;
+          text-decoration: none;
       }
     }
   }
@@ -74,10 +74,10 @@
 }
 
 #legend {
-  z-index: 50;
+  z-index: 1050;
   position: fixed;
   bottom: 0;
-  right: 90px;
+  right: 190px;
   padding: 5px;
   width: 300px;
   color: @amp-inverse;

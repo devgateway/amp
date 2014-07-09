@@ -28,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -54,10 +55,6 @@ public class GPIReport1 extends GPIAbstractReport {
 	public Collection<GPIReportAbstractRow> generateReport(Collection<AmpActivityVersion> commonData, GPIFilter filter) {
 
 		Collection<GPIReportAbstractRow> list = new ArrayList<GPIReportAbstractRow>();
-		
-		if(!filter.isProgramSectionVisible()) {
-			return list;
-		}
 		
 		GPIReport1Row auxRow = null;
 		int yearRange = filter.getEndYer() - filter.getStartYear() + 1;
@@ -285,6 +282,17 @@ public class GPIReport1 extends GPIAbstractReport {
 		// Calculate final percentages and add 'All Donors' row.
 		if (!newList.isEmpty()) {
 			newList = this.calculatePercentages(newList, startYear, endYear);
+		}
+		
+		// Now we have the complete list with all donors then check the "kosovo" condition (AMP-17226)
+		if (!FeaturesUtil.isVisibleModule("/Activity Form/Program")) {
+			Iterator<GPIReportAbstractRow> i = newList.iterator();
+			while (i.hasNext()) {
+				GPIReport1Row row = (GPIReport1Row) i.next();
+				row.setColumn1(new Integer(0));
+				row.setColumn2(new Integer(0));
+				row.setColumn3(new Integer(0));
+			}
 		}
 
 		return newList;

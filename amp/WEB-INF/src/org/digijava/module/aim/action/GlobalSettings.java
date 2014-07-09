@@ -164,17 +164,22 @@ public class GlobalSettings extends Action {
 		saveErrors(request, errors);
 		return mapping.findForward("viewGS");
 	}
-
+	
 	/**
-	 * updates workspaces which have validation turned off to having it "allEdits" if the GlobalSettings has just been changed from "off" to "on"
+	 * updates workspaces's validation depending whether the GlobalSettings has changed to "off" or  "on"
 	 * @param gsNewValue
 	 */
     private void resetWorkspaceValidationSettings(String gsNewValue) {
-    	if (gsNewValue.toLowerCase().equals("on")) { 
-    		PersistenceManager.getSession()
-    			.createQuery("UPDATE " + AmpApplicationSettings.class.getName() + " SET validation='allEdits' WHERE validation='validationOff'")
-    			.executeUpdate();
-	 	 }
+    	String query ="UPDATE " + AmpApplicationSettings.class.getName();
+    	if (gsNewValue.toLowerCase().equals("on")) {
+    		query+=" SET validation='allEdits' WHERE validation='validationOff'";
+    	} 
+    	else if (gsNewValue.toLowerCase().equals("off")) {
+    		query+=" SET validation='validationOff'";
+    	}
+		PersistenceManager.getSession()
+			.createQuery(query)
+			.executeUpdate();
     }
     
 	/**

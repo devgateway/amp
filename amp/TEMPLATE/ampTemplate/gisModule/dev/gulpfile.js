@@ -44,7 +44,8 @@ var paths = {
       all: './app/less/**/*.less',
       entry: './app/less/main.less',
       compileDest: './app/compiled-css/',
-      compiled: './app/compiled-css/main.css'
+      compiled: './app/compiled-css/main.css',
+      libs: './node_modules/leaflet/dist/**/*.css'
     },
     templates: './app/js/amp/**/*.html',
     images: './app/img/**/*.{png, jpg}',
@@ -99,11 +100,12 @@ gulp.task('browserify', function() {
 
 
 gulp.task('less', function() {
-  return gulp.src(paths.app.stylesheets.entry)
+  return gulp.src([paths.app.stylesheets.libs, paths.app.stylesheets.entry])
     .pipe(g.plumber())
     .pipe(g.less())
       .on('error', g.util.log)
       .on('error', g.util.beep)
+    .pipe(g.concat('main.css'))
     .pipe(gulp.dest(paths.app.stylesheets.compileDest));
 });
 

@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.error.keeper;
 
 import java.lang.reflect.Method;
+import java.sql.SQLException;
 import java.util.Calendar;
 
 import javax.servlet.http.HttpServletRequest;
@@ -78,5 +79,14 @@ public class ErrorReportingPlugin {
 		}
 
 		log.error(e.getMessage(), e);
+	}
+	
+	public static String getSQLExceptionMessage(SQLException e) {
+		return getSQLExceptionMessage(e, 3);
+	}
+	
+	public static String getSQLExceptionMessage(SQLException e, int maxDepth) {
+		if (maxDepth <=0 || e==null) return "";
+		return "SQLState[" + e.getSQLState() + "] " + e.getMessage() + ". " + getSQLExceptionMessage(e.getNextException(), maxDepth-1);
 	}
 }

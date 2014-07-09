@@ -5,7 +5,29 @@ package org.digijava.kernel.ampapi.mondrian.util;
  * @since March 12 2009 - AMP 1.13
  */
 public final class MoConstants {
+
+	//AMP Cubes
+	public static String CONNECTION_DS = "jdbc:mondrian:Datasource=java:comp/env/ampDS";
+	public static final String SCHEMA_PATH = "WEB-INF/queries/AMP.xml".replace("/", System.getProperty("file.separator"));
+	public static final String FUNDING_CUBE_NAME = "Donor Funding";
+	public static final String DEFAULT_CUBE_NAME = FUNDING_CUBE_NAME;
 	
+	//Query
+	public static final String QUERY_NAME_KEY = "QUERY_NAME_KEY";
+	public static final String DEFAULT_QUERY_NAME = "Anonymous";
+	public static final String COLUMNS = "COLUMNS";
+	public static final String ROWS = "ROWS";
+	public static final String FILTER = "FILTER";
+	public static final String MEASURE = "Measure";
+	public static final String MEASURES = "Measures";
+	public static final String MEMBERS = "Members";
+	public static final String CURRENT_MEMBER = "CurrentMember";
+	public static final String FUNC_CROSS_JOIN = "CrossJoin";
+	public static final String FUNC_UNION = "Union";
+	public static final String FUNC_ORDER = "Order";
+	public static final String FUNC_FILTER = "Filter";
+	
+	//Activity
 	public static String AMP_ACTIVITY_TABLE = "(\\bamp_activity\\b)";
 	public static String CACHED_ACTIVITY_TABLE = "cached_amp_activity";
 	//Dimensions
@@ -30,6 +52,14 @@ public final class MoConstants {
 	public static String SEC_SUB_SUB_SECTORS = "Secondary Sector Sub-Sub-Sectors";
 	public static String CURRENCY = "currency";
 	public static String YEAR = "Year";
+	//Attributes
+	public static final String ATTR_ACTIVITY_NAME = "Activity Title";
+	public static final String ATTR_ACTIVITY_AMP_ID = "AMP ID";
+	public static final String ATTR_STATUS_NAME = "Status";
+	public static final String ATTR_PRIMARY_SECTOR_NAME = "Primary Sector";
+	public static final String ATTR_SECONDARY_SECTOR_NAME = "Secondary Sector";
+	public static final String ATTR_DONOR_TYPES_NAME = "DonorType";
+	public static final String ATTR_DONOR_GROUP_NAME = "DonorGroup";
 	
 	public static String ALL_PRIMARY_SECTOR = "All Primary Sectors";
 	public static String ALL_SECONDARY_SECTOR = "All Secondary Sectors";

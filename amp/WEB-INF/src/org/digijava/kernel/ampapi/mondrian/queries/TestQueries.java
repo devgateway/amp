@@ -37,6 +37,11 @@ public class TestQueries {
 		final CellSet cellSet = olapConnection.createStatement()
 				.executeOlapQuery(query);
 
+		return printResult(cellSet);
+
+	}
+	
+	public static StringBuffer printResult(CellSet cellSet) {
 		List<CellSetAxis> cellSetAxes = cellSet.getAxes();
 
 		// Print headings.

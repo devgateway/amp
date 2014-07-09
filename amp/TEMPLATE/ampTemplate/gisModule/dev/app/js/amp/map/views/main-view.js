@@ -6,7 +6,7 @@ var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js')
 var MapHeaderView = require('../views/map-header-view');
 var BasemapGalleryView = require('../views/basemap-gallery-view');
 var LegendView = require('../views/legend-view');
-var admLayerView = require('../views/adm-layer-view');
+var ADMLayerView = require('../views/adm-layer-view');
 var Template = fs.readFileSync(__dirname + '/../templates/map-container-template.html', 'utf8');
 
 
@@ -20,15 +20,12 @@ module.exports = Backbone.View.extend({
 
     var headerContainer = this.$('#map-header > div');
 
-    // Render the map
-    // ESRI Leaflet Map
-    var map = L.map('map-canvas').setView([-4, 24], 7);
-    L.esri.basemapLayer("Gray").addTo(map);
-
-    // var map = L.map('map-canvas').setView([-4, 24], 6);
-    // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png').addTo(map);
-
-
+    // Render  map (but don't re-render if one exists)
+    if(!this.map){
+        this.map = L.map('map-canvas').setView([24, -4], 5);
+        L.esri.basemapLayer('Gray').addTo(this.map);
+        this.admLayerView = new ADMLayerView({map: this.map});
+    }
 
 
     // Render map header

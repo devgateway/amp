@@ -1,10 +1,13 @@
 var fs = require('fs');
 var _ = require('underscore');
+var $ = require('jquery');
+
 var Backbone = require('backbone');
 var FilterModel = require('../models/base-filter-model');
 var TitleTemplate = fs.readFileSync(__dirname + '/../templates/filter-title-template.html', 'utf8');
 var ContentTemplate = fs.readFileSync(__dirname + '/../templates/filter-content-template.html', 'utf8');
 
+require('jquery-ui/draggable'); // ?not sure if working...
 
 // Parent base view for fitlers.
 module.exports = Backbone.View.extend({
@@ -49,7 +52,7 @@ module.exports = Backbone.View.extend({
   renderContent: function () {
 
     this.$('.modal-placeholder').html(this.contentTemplate(this.model.toJSON()));
-    this.$('.modal-placeholder .modal').modal({show: true, backdrop: false});
+    this.$('.modal-placeholder .modal').modal({show: true, backdrop: true});
     this.$('.modal-placeholder .modal-dialog').draggable({ cancel: '.modal-body, .modal-footer', cursor: 'move'  });
 
     this.renderFilters();

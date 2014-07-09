@@ -19,6 +19,9 @@ module.exports = Backbone.View.extend({
   render: function() {
     this.$el.html(this.template());
 
+    // TODO: create basemap from this: http://esri.github.io/esri-leaflet/examples/switching-basemaps.html
+    //  if possible do it in re-usable modular way, as a mini lib that can be used as a standalone plugin...
+    
     return this;
   }
 

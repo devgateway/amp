@@ -111,7 +111,7 @@
 	 * o.argument
 	 */
 		var response = o.responseText;
-	    console.log (response);
+	    //console.log (response);
 		var content = document.getElementById("myContentContent");
 	    //response = response.split("<!")[0];
 		content.innerHTML = response;
@@ -181,14 +181,14 @@
 		  {
 			var callbackImpl	= {
 			success: function (o) {
-				console.log ('Success');
+				//console.log ('Success');
 				myclose();
 				reload();
 				
 			},
 			failure: function(error) {
 				//alert (error);
-				console.log('Error');
+				//console.log('Error');
 				myclose();
 			
 			}
@@ -264,7 +264,7 @@ function saveRate() {
 	var callbackImpl	= {
 		success: function (o) {
 			var response = o.responseText;
-			console.log (response);
+			//console.log (response);
 			if (response =!null && response.indexOf("true")!=-1) {
 				 myConfirm ();
 			}

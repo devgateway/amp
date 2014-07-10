@@ -199,6 +199,14 @@ public class GPIReport6 extends GPIAbstractReport {
 								auxRow.setDonorGroup(auxFunding.getAmpDonorOrgId().getOrgGrpId());
 								auxRow.setYear(calendar.get(Calendar.YEAR));
 								list.add(auxRow);
+							} else {
+								// Save the donor always.
+								auxRow.setColumn1(null);
+								auxRow.setColumn2(null);
+								auxRow.setColumn3(0);
+								auxRow.setDonorGroup(auxFunding.getAmpDonorOrgId().getOrgGrpId());
+								auxRow.setYear(calendar.get(Calendar.YEAR));
+								list.add(auxRow);
 							}
 						}
 					}

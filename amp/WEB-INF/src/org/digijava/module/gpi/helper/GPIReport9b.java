@@ -199,6 +199,11 @@ public class GPIReport9b extends GPIAbstractReport {
 									auxRow.setYear(calendar.get(Calendar.YEAR));
 									list.add(auxRow);
 								}
+							} else {
+								auxRow.setColumn3(0);
+								auxRow.setDonorGroup(auxFunding.getAmpDonorOrgId().getOrgGrpId());
+								auxRow.setYear(calendar.get(Calendar.YEAR));
+								list.add(auxRow);
 							}
 						}
 					}

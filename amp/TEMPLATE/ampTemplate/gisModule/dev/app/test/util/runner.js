@@ -24,7 +24,8 @@ require(
     // load all the tests
     require([
       '/test/scripts/load-dom-stuff.js',
-      '/test/scripts/sidebar.js'
+      '/test/scripts/sidebar.js',
+      '/test/scripts/map.js'
     ], function() {
       // start testing!
       frame.runTests();

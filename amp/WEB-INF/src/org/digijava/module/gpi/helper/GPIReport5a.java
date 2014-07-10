@@ -216,8 +216,6 @@ public class GPIReport5a extends GPIAbstractReport {
 									case 2:
 										auxRow.setColumn2(amount);
 										break;
-									default:
-										continue;
 									}
 								auxRow.setColumn3(0);
 							//}

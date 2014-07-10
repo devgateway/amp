@@ -22,10 +22,9 @@ module.exports = Backbone.View.extend({
 
     // Render  map (but don't re-render if one exists)
     if(!this.map){
-        this.map = L.map('map-canvas').setView([24, -4], 5);
+        this.map = L.map('map-canvas').setView([11, 30], 4);
         this.admLayerView = new ADMLayerView({map: this.map});
     }
-
 
     // Render map header
     var headerView = new MapHeaderView();
@@ -41,6 +40,20 @@ module.exports = Backbone.View.extend({
     var legendView = new LegendView();
     this.$el.append(legendView.render().el);
 
+    this.loadBoundaries();
+
     return this;
+  },
+
+  // TODO: I'm  not sure of best place to put this. but just want to proof of concept for loading country layers...
+  loadBoundaries: function(){
+
+    // Styling tutorial: http://esri.github.io/esri-leaflet/examples/styling-feature-layer-polygons.html
+    // Can do stuff with feature properties if we want.
+    L.esri.featureLayer('http://gis.devgateway.org/arcgis/rest/services/wbi/Africa/MapServer/13',{
+        simplifyFactor: 0.9,
+        style:  {color: 'blue', weight: 2}
+    }).addTo(this.map);
+
   }
 });

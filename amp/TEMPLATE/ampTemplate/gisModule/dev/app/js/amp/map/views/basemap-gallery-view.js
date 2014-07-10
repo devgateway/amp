@@ -45,7 +45,6 @@ module.exports = Backbone.View.extend({
   },
 
   _setBasemap: function (basemapString, useLabels){
-    console.log('basemap ',basemapString, useLabels);
     // Remove current basemap
     if (this.basemapLayer) {
       this.map.removeLayer(this.basemapLayer);

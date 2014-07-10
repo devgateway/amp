@@ -3,6 +3,42 @@
     <span class="glyphicon glyphicon-globe"></span> Basemap <b class="caret"></b>
   </a>
   <ul class="dropdown-menu" style="width: 400px;height: 200px;overflow-y: scroll">
-    <li><div id="basemapGallery" ></div></li>
+    <li>
+      <div id="basemapGallery" >
+      
+      <!-- Abstract out this part of template into own mini plugin.. -->
+      <div class="esriBasemapGalleryNode" data-basemap="" ><img class="esriBasemapGalleryThumbnail" src="img/basemaps/empty.png">
+        <div class="esriBasemapGalleryLabelContainer"><span alt="Empty Basemap" title="Empty Basemap">Empty Basemap</span></div>
+      </div>
+      <div class="esriBasemapGalleryNode" data-basemap="Imagery" ><img class="esriBasemapGalleryThumbnail" src="img/basemaps/tempimagery.jpg">
+      	<div class="esriBasemapGalleryLabelContainer"><span alt="Imagery" title="Imagery">Imagery</span></div>
+      </div>
+      <div class="esriBasemapGalleryNode" data-basemap="Imagery" data-basemaplabels="true"><img class="esriBasemapGalleryThumbnail" src="img/basemaps/tempimagery_with_labels_ne_usa.png">
+      	<div class="esriBasemapGalleryLabelContainer"><span alt="Imagery with Labels" title="Imagery with Labels">Imagery with Labels</span></div>
+      </div>
+      <div class="esriBasemapGalleryNode" data-basemap="Streets"><img class="esriBasemapGalleryThumbnail" src="img/basemaps/world_street_map.jpg">
+      	<div class="esriBasemapGalleryLabelContainer"><span alt="Streets" title="Streets">Streets</span></div>
+      </div>
+      <div class="esriBasemapGalleryNode" data-basemap="Topographic"><img class="esriBasemapGalleryThumbnail" src="img/basemaps/topo_map_2.jpg">
+      	<div class="esriBasemapGalleryLabelContainer"><span alt="Topographic" title="Topographic">Topographic</span></div>
+      </div>
+      <div class="esriBasemapGalleryNode" data-basemap="Terrain" data-basemaplabels="true"><img class="esriBasemapGalleryThumbnail" src="img/basemaps/tempTerrain_with_labels_ne_usa.png">
+      	<div class="esriBasemapGalleryLabelContainer"><span alt="Terrain with Labels" title="Terrain with Labels">Terrain with Labels</span></div>
+      </div>
+      <div class="esriBasemapGalleryNode" data-basemap="Gray"><img class="esriBasemapGalleryThumbnail" src="img/basemaps/templight_gray_canvas_with_labels__ne_usa.png">
+      	<div class="esriBasemapGalleryLabelContainer"><span alt="Light Gray Canvas" title="Light Gray Canvas">Light Gray Canvas</span></div>
+      </div>
+      <div class="esriBasemapGalleryNode" data-basemap="NationalGeographic"><img class="esriBasemapGalleryThumbnail" src="img/basemaps/natgeo.jpg">
+      	<div class="esriBasemapGalleryLabelContainer"><span alt="National Geographic" title="National Geographic">National Geographic</span></div>
+      </div>
+      <div class="esriBasemapGalleryNode" data-basemap="Streets"><img class="esriBasemapGalleryThumbnail" src="img/basemaps/tempoceans.jpg">
+      	<div class="esriBasemapGalleryLabelContainer"><span alt="Oceans" title="Oceans">Oceans</span></div>
+      </div>
+      <div class="esriBasemapGalleryNode" data-basemap="OpenStreetMap"><img class="esriBasemapGalleryThumbnail" src="img/basemaps/temposm.jpg">
+      	<div class="esriBasemapGalleryLabelContainer"><span alt="OpenStreetMap" title="OpenStreetMap">OpenStreetMap NOT WORKING</span></div>
+      </div><br style="clear: both;">
+
+    </div>
+  </li>
   </ul>
 </li>

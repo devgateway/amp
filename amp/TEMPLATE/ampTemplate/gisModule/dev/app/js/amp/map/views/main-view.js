@@ -23,7 +23,6 @@ module.exports = Backbone.View.extend({
     // Render  map (but don't re-render if one exists)
     if(!this.map){
         this.map = L.map('map-canvas').setView([24, -4], 5);
-        L.esri.basemapLayer('Gray').addTo(this.map);
         this.admLayerView = new ADMLayerView({map: this.map});
     }
 
@@ -33,7 +32,7 @@ module.exports = Backbone.View.extend({
     headerContainer.append(headerView.render().el);
 
     // Render BasemapGallery
-    var basemapView = new BasemapGalleryView();
+    var basemapView = new BasemapGalleryView({map: this.map});
     headerContainer.append(basemapView.el);
     basemapView.render();  // the Basemap widget is special, it needs an
                            // on-page DOM node to work.

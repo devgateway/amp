@@ -9,8 +9,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				ALTER TABLE de_source_setting ADD COLUMN is_merge_disb_and_exp boolean;
-                UPDATE de_source_setting SET is_merge_disb_and_exp = false WHERE is_merge_disb_and_exp is null;
+				UPDATE de_source_setting SET is_merge_disb_and_exp = false WHERE is_merge_disb_and_exp is null;
             </lang>
 		</script>
 	</apply>

@@ -469,7 +469,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
 		saveAndSubmit.getButton().add(isSubmit);
 		
-		AttributePrepender closeEditors = new AttributePrepender("onclick", new Model<String>("$('a[data-is_close=true]').click();"), "");
+		AttributePrepender closeEditors = new AttributePrepender("onclick", new Model<String>("$('a[data-is_close=true]:visible').click();"), "");
 		
 		saveAndSubmit.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
 		saveAndSubmit.getButton().add(updateEditors);

@@ -58,7 +58,7 @@ module.exports = Backbone.View.extend({
   _renderFeatures: function() {
     var self = this;
 
-    L.geoJson(self.features, {
+    self.featureGroup = L.geoJson(self.features, {
       pointToLayer: function (feature, latlng) {
         var htmlString = self.admTemplate(feature);
         var myIcon = L.divIcon({
@@ -69,6 +69,9 @@ module.exports = Backbone.View.extend({
       },
       onEachFeature: self._onEachFeature
     }).addTo(self.map);
+
+    // set map bounds..
+    self.map.fitBounds(self.featureGroup.getBounds());
 
   },
 

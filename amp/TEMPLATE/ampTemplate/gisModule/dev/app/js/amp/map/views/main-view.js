@@ -50,19 +50,14 @@ module.exports = Backbone.View.extend({
     var self = this;
 
     // Styling tutorial: http://esri.github.io/esri-leaflet/examples/styling-feature-layer-polygons.html
-    // Can do stuff with feature properties if we want.
+    // Can do stuff with feature properties if we want. such as show ADM details on click.
     // TODO: Switch to AJAX style if same origin for boundary:  L.mapbox.featureLayer().loadURL('....');
-    this.boundaryLayer = L.esri.featureLayer('http://gis.devgateway.org/arcgis/rest/services/wbi/Europe_and_Central_Asia/MapServer/43',{ //http://gis.devgateway.org/arcgis/rest/services/wbi/Africa/MapServer/13',{
+    // DRC: http://gis.devgateway.org/arcgis/rest/services/wbi/Africa/MapServer/13'
+    this.boundaryLayer = L.esri.featureLayer('http://gis.devgateway.org/arcgis/rest/services/wbi/Europe_and_Central_Asia/MapServer/43',{ 
         simplifyFactor: 0.9,
         style:  {color: 'blue', weight: 2}
     }).addTo(self.map);
 
-    console.log(this.boundaryLayer);
-    this.boundaryLayer.query().bounds(function (error, latlngbounds) {
-      console.log(latlngbounds);
-      //self.map.fitBounds(latlngbounds);
-    });
-
-}
+  }
 
 });

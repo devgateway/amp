@@ -24,7 +24,7 @@ module.exports = Backbone.View.extend({
     this.defaultBasemapLabels = false;  //TODO: will get from config service/state    
     this._setBasemap(this.defaultBasemap,  this.defaultBasemapLabels);
 
-    _.bindAll(this, "clickBasemap");
+    _.bindAll(this, 'clickBasemap');
   },
 
   render: function() {

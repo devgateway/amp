@@ -52,7 +52,7 @@ module.exports = Backbone.View.extend({
   renderContent: function () {
 
     this.$('.modal-placeholder').html(this.contentTemplate(this.model.toJSON()));
-    this.$('.modal-placeholder .modal').modal({show: true, backdrop: true});
+    this.$('.modal-placeholder .modal').modal({show: true, backdrop: false});
     this.$('.modal-placeholder .modal-dialog').draggable({ cancel: '.modal-body, .modal-footer', cursor: 'move'  });
 
     this.renderFilters();

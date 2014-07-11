@@ -328,11 +328,11 @@ public class AmpReportGenerator extends ReportGenerator {
 		return res;
 	}
 	
-	protected Column extractPledgeCommitmentGap() {
+	protected List<Cell> extractPledgeColumn(String viewName, String columnName) {
 		AmpARFilter filter = generateSupplementaryPledgeAmpARFilter();
 		ColumnWorker ce = new CategAmountColWorker(filter.getGeneratedFilterQuery(), ArConstants.VIEW_PLEDGES_FUNDING, ArConstants.COLUMN_FUNDING, this);
 		ce.setRelatedColumn(null); // not needed for CategAmountColWorker
-
+		
 		String columnFilterSQLClause = buildColumnFilterSQLClauseForPledges(ArConstants.VIEW_PLEDGES_FUNDING);
 		
 		ce.setInternalCondition(columnFilterSQLClause);
@@ -342,8 +342,27 @@ public class AmpReportGenerator extends ReportGenerator {
 		ce.setDebugMode(debugMode);
 		ce.setPledge(true);
 		
-		Column column = ce.populateCellColumn();
-		return column;
+		Column<Cell> column = ce.populateCellColumn();
+		return column.getItems();
+	}
+	
+	protected Collection<CategAmountCell> extractPledgeCommitmentGap() {
+		List<CategAmountCell> fundingCells = (List<CategAmountCell>) (List) extractPledgeColumn(ArConstants.VIEW_PLEDGES_FUNDING, ArConstants.COLUMN_FUNDING);
+		
+		CommitmentGapCellGenerator cgcg = new CommitmentGapCellGenerator();
+		Collection<CategAmountCell> commGapCells = cgcg.generate(fundingCells, -1);
+		System.out.println(commGapCells.size());
+		return commGapCells;
+	}
+	
+	protected Collection<Cell> extractPledgeEquivalentColumn(AmpReportColumn rcol) {
+		//List<TextCell> textCells = (List<TextCell>) (List) extractPledgeColumn(ArConstants.)
+		return null;
+	}
+	
+	protected void markCellAsImportedPledge(Cell cell) {
+		if (cell.getOwnerId() != null)
+			cell.setOwnerId(cell.getOwnerId() + 1000 * 1000l * 1000l);
 	}
 	
 	/**
@@ -353,7 +372,27 @@ public class AmpReportGenerator extends ReportGenerator {
 	protected void insertPledgeSupplementaryColumn(AmpReportColumn rcol){
 		if (rcol.getColumn().getColumnName().equals(ArConstants.COLUMN_FUNDING)){
 			//AmpReportColumn pledgeFunding = buildAmpReportColumn(ArConstants.COLUMN_FUNDING, ArConstants.VIEW_PLEDGES_FUNDING, CategAmountCell.class);
-			Column pledgesFundingColumn = extractPledgeCommitmentGap();
+			Collection<CategAmountCell> commGapCells = extractPledgeCommitmentGap();
+			CellColumn fundingCol = (CellColumn) rawColumns.getColumnByName(rcol.getColumn().getColumnName());
+			MetaInfo<String> commMetaInfo = new MetaInfo<String>(ArConstants.TRANSACTION_TYPE, ArConstants.COMMITMENT);
+			MetaInfo<String> actualMetaInfo = new MetaInfo<String>(ArConstants.ADJUSTMENT_TYPE, ArConstants.ACTUAL);
+			for(CategAmountCell commGapCell:commGapCells) {
+				markCellAsImportedPledge(commGapCell);
+				commGapCell.getMetaData().replace(commMetaInfo);
+				commGapCell.getMetaData().replace(actualMetaInfo);
+				fundingCol.addCell(commGapCell);
+			}
+			System.out.println(fundingCol.prettyPrint());
+		}
+		
+		String correspondingPledgeView = PledgesToActivitiesBridge.activityViewToPledgeView.get(rcol.getColumn().getExtractorView());
+		if (correspondingPledgeView != null) {
+			Collection<Cell> nameCells = extractPledgeEquivalentColumn(rcol);
+			CellColumn normalCol = (CellColumn) rawColumns.getColumnByName(rcol.getColumn().getColumnName());
+			for(Cell pledgeCell:nameCells) {
+				markCellAsImportedPledge(pledgeCell);
+				normalCol.addCell(pledgeCell);
+			}
 		}
 //		AmpReportColumn complimentaryPledgesColumn = getComplimentaryPledgesColumn(rcol);
 //		if (complimentaryPledgesColumn != null){

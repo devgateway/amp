@@ -293,12 +293,8 @@ public class AMPStartupListener extends HttpServlet implements
 			logger.info("loading the column ancestorship relationships and checking for consistency with the database...");
 			logger.info("loaded relationships for " + ARDimension.columnAncestors.size() + " columns"); // DO NOT DELETE THIS LINE! it has the sideeffect of checking database for consistency (else it will crash anyway at the first run report)
 			
-			java.util.List<?> shouldBe1 = PersistenceManager.getSession().createSQLQuery("SELECT update_location_level_caches_internal() FROM (select 1) AS dual").list(); // force recreation of the location cached at each AMP startup
-			if (shouldBe1.size() != 1)
-				throw new Error("recreating AMP location caches failed");
-
-			if (PersistenceManager.getLong(shouldBe1.get(0)).longValue() != 1L)
-				throw new Error("recreating AMP location caches returned the wrong value: " + shouldBe1.get(0));
+			runCacheRefreshingQuery("update_location_level_caches_internal", "location");
+			runCacheRefreshingQuery("update_program_level_caches_internal", "program");
 			
 			PersistenceManager.getSession().getTransaction().commit();
 			
@@ -315,8 +311,24 @@ public class AMPStartupListener extends HttpServlet implements
 			checkDatabaseSanity();
 		} catch (Exception e) {
 			logger.error("Exception while initialising AMP :" + e.getMessage());
-			e.printStackTrace(System.out);
+			throw new Error(e);
 		}
+	}
+	
+	/**
+	 * runs a "cache refresh" function and checks that it returned ok
+	 * @param funcName
+	 * @param what
+	 */
+	protected void runCacheRefreshingQuery(String funcName, String what) {
+		String query = String.format("SELECT %s() FROM (select 1) AS dual", funcName);
+		java.util.List<?> shouldBe1 = PersistenceManager.getSession().createSQLQuery(query).list(); // force recreation of the location cached at each AMP startup
+		
+		if (shouldBe1.size() != 1)
+			throw new Error("recreating AMP " + what + " caches failed");
+
+		if (PersistenceManager.getLong(shouldBe1.get(0)).longValue() != 1L)
+			throw new Error("recreating AMP " + what + " caches returned the wrong value: " + shouldBe1.get(0));
 	}
 	
 	protected void checkDatabaseSanity()

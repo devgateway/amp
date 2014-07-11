@@ -22,7 +22,7 @@
 				DROP VIEW IF EXISTS v_districts;
 			    CREATE OR REPLACE VIEW v_districts AS 
 			    	SELECT ra.amp_activity_id, getlocationname(districts.district_id) AS location_name, districts.district_id AS location_id, sum(ra.location_percentage) AS location_percentage 
-						FROM amp_activity_location ra, amp_location_cache_districts districts
+						FROM amp_activity_location ra, amp_location_cache districts
 						WHERE (ra.amp_location_id = districts.amp_location_id) AND (districts.district_id IS NOT NULL)
 						GROUP BY ra.amp_activity_id, districts.district_id;
 			</lang>

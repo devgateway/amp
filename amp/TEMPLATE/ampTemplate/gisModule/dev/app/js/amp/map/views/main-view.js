@@ -7,12 +7,17 @@ var MapHeaderView = require('../views/map-header-view');
 var BasemapGalleryView = require('../views/basemap-gallery-view');
 var LegendView = require('../views/legend-view');
 var ADMLayerView = require('../views/adm-layer-view');
+var Basemaps = require('../models/basemap-collection');
 var Template = fs.readFileSync(__dirname + '/../templates/map-container-template.html', 'utf8');
 
 
 module.exports = Backbone.View.extend({
 
   template: _.template(Template),
+
+  initialize: function() {
+    this.basemaps = new Basemaps();
+  },
 
   render: function () {
 
@@ -31,10 +36,11 @@ module.exports = Backbone.View.extend({
     headerContainer.append(headerView.render().el);
 
     // Render BasemapGallery
-    var basemapView = new BasemapGalleryView({map: this.map});
-    headerContainer.append(basemapView.el);
-    basemapView.render();  // the Basemap widget is special, it needs an
-                           // on-page DOM node to work.
+    var basemapView = new BasemapGalleryView({
+      map: this.map,
+      collection: this.basemaps
+    });
+    headerContainer.append(basemapView.render().el);
 
     // Render Legend
     var legendView = new LegendView();

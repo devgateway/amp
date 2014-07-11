@@ -1,9 +1,9 @@
 var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
-var $ = require('jquery');
-var Template = fs.readFileSync(__dirname + '/../templates/basemap-gallery-template.html', 'utf8');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
+
+var Template = fs.readFileSync(__dirname + '/../templates/basemap-gallery-template.html', 'utf8');
 
 
 module.exports = Backbone.View.extend({
@@ -14,57 +14,60 @@ module.exports = Backbone.View.extend({
   id: 'basemap-gallery',
   className: 'nav navbar-nav navbar-right dropdown',
 
-  initialize: function(options) {
-    _.extend(this, options); // stores a reference to the map, and basemapLayer
-    this.basemapLayer = null;
-    this.layerLabels = null;
+  events: {
+    'click .esriBasemapGalleryNode': 'clickBasemap',
+  },
 
-    // Setup default basemap
-    this.defaultBasemap = 'Gray';       //TODO: will get from config service/state
-    this.defaultBasemapLabels = false;  //TODO: will get from config service/state    
-    this._setBasemap(this.defaultBasemap,  this.defaultBasemapLabels);
-
-    _.bindAll(this, 'clickBasemap');
+  initialize: function(extraProperties) {
+    _.extend(this, extraProperties);  // extraProperties={map: ...}
+    this.listenTo(this.collection, 'change:selected', this.updateSelected);
+    this.setBasemap(this.collection.currentlySelected); // since we missed the event
   },
 
   render: function() {
-    var self = this;
-
-    this.$el.html(this.template());
-
-    // TODO: if possible do it in re-usable modular way, as a mini lib that can be used as a standalone plugin...
-    this.$('.esriBasemapGalleryNode').click(self.clickBasemap);
-
+    this.$el.html(this.template({basemaps: this.collection}));
     return this;
   },
 
-  clickBasemap: function (event) {
-    var basemap = $(event.currentTarget).data('basemap');
-    var basemapLabels = $(event.currentTarget).data('basemaplabels');
-    this._setBasemap(basemap, basemapLabels);
+  clickBasemap: function(e) {
+    var newId = e.currentTarget.dataset.id;
+    this.collection.selectBasemap(newId);
   },
 
-  _setBasemap: function (basemapString, useLabels){
-    // Remove current basemap
-    if (this.basemapLayer) {
-      this.map.removeLayer(this.basemapLayer);
-    }
+  updateSelected: function(basemap, selectedNow) {
+    this[selectedNow ? 'setBasemap' : 'removeBasemap'](basemap);
+  },
 
-    // set basemap
-    if(basemapString){
-      this.basemapLayer = L.esri.basemapLayer(basemapString);
-      this.map.addLayer(this.basemapLayer);
+  setBasemap: function(basemap) {
+    if (this.mapLayer) {
+      throw new Error('Tried to set a new basemap layer before clearing the old one');
     }
-
-    // Remove current labels
-    if (this.layerLabels) {
-      this.map.removeLayer(this.layerLabels);
+    var source = basemap.get('source');
+    if (source === 'esri') {
+      var basemapId = basemap.get('esriId');
+      this.mapLayer = L.esri.basemapLayer(basemapId);
+      this.map.addLayer(this.mapLayer);
+      if (basemap.get('label')) {
+        this.labelsLayer = L.esri.basemapLayer(basemapId + 'Labels');
+        this.map.addLayer(this.labelsLayer);
+      }
+    } else if (source === 'tile') {
+      this.mapLayer = L.tileLayer(basemap.get('tileUrl'));
+      this.map.addLayer(this.mapLayer);
+    } else if (source !== null) {
+      console.warn('layers from source ', source, 'not implemented');
     }
+    // source === null is just an empty basemap, nothing to do
+  },
 
-    // Add labels if needed
-    if (useLabels) {
-      this.layerLabels = L.esri.basemapLayer(basemapString + 'Labels');
-      this.map.addLayer(this.layerLabels);
+  removeBasemap: function(basemap) {
+    if (this.mapLayer) {
+      this.map.removeLayer(this.mapLayer);
+      delete this.mapLayer;
+    }
+    if (this.labelsLayer) {
+      this.map.removeLayer(this.labelsLayer);
+      delete this.labelsLayer;
     }
   }
 });

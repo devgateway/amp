@@ -15,10 +15,10 @@
   "maxlen": 124,
   "globals" : {
     /* suppress warnings for npm/browserify stuff */
-    "require": false,
-    "path": false,
     "__dirname": false,
-    "module": false
+    "exports": false,
+    "module": false,
+    "require": false
   },
   "devel": true,
   "browser": true

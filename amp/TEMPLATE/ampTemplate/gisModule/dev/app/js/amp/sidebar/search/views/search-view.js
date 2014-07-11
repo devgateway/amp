@@ -36,7 +36,9 @@ module.exports = BaseToolView.extend({
   },
 
   renderResults: function(e) {
-    if (e) e.preventDefault();  // if triggered by an event (ie. submit), cancel it
+    if (e) {
+      e.preventDefault();  // if triggered by an event (ie. submit), cancel it
+    }
     var resultsView = new ResultsView();
     this.$('.results-placeholder').html(resultsView.render().el);
     this.$('.results-placeholder .modal').modal({show: true, backdrop: false});

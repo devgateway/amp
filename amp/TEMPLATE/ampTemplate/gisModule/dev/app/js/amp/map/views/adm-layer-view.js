@@ -60,11 +60,11 @@ module.exports = Backbone.View.extend({
 
     L.geoJson(self.features, {
       pointToLayer: function (feature, latlng) {
-        var htmlString = self.admTemplate(feature.geometry.properties);
+        var htmlString = self.admTemplate(feature);
         var myIcon = L.divIcon({
           className: 'map-adm-icon',  
           html: htmlString,
-          iconSize: [50, 50]});
+          iconSize: [60, 50]});
         return L.marker(latlng, {icon: myIcon});//L.circleMarker(latlng, geojsonMarkerOptions);
       },
       onEachFeature: self._onEachFeature
@@ -76,7 +76,7 @@ module.exports = Backbone.View.extend({
   _onEachFeature: function(feature, layer) {
       if (feature.geometry.properties) {
         var activities = feature.geometry.properties.activityid.split(',');
-        layer.bindPopup(feature.geometry.properties.adm + ' has ' + activities.length +' projects');
+        layer.bindPopup(feature.properties.adm + ' has ' + activities.length +' projects');
       }
   },
 

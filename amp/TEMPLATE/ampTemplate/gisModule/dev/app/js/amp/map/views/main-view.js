@@ -22,7 +22,7 @@ module.exports = Backbone.View.extend({
 
     // Render  map (but don't re-render if one exists)
     if(!this.map){
-        this.map = L.map('map-canvas').setView([11, 30], 4);
+        this.map = L.map('map-canvas').setView([47.02, 28.60], 8);
         this.admLayerView = new ADMLayerView({map: this.map});
     }
 
@@ -47,13 +47,22 @@ module.exports = Backbone.View.extend({
 
   // TODO: I'm  not sure of best place to put this. but just want to proof of concept for loading country layers...
   loadBoundaries: function(){
+    var self = this;
 
     // Styling tutorial: http://esri.github.io/esri-leaflet/examples/styling-feature-layer-polygons.html
     // Can do stuff with feature properties if we want.
-    L.esri.featureLayer('http://gis.devgateway.org/arcgis/rest/services/wbi/Africa/MapServer/13',{
+    // TODO: Switch to AJAX style if same origin for boundary:  L.mapbox.featureLayer().loadURL('....');
+    this.boundaryLayer = L.esri.featureLayer('http://gis.devgateway.org/arcgis/rest/services/wbi/Europe_and_Central_Asia/MapServer/43',{ //http://gis.devgateway.org/arcgis/rest/services/wbi/Africa/MapServer/13',{
         simplifyFactor: 0.9,
         style:  {color: 'blue', weight: 2}
-    }).addTo(this.map);
+    }).addTo(self.map);
 
-  }
+    console.log(this.boundaryLayer);
+    this.boundaryLayer.query().bounds(function (error, latlngbounds) {
+      console.log(latlngbounds);
+      //self.map.fitBounds(latlngbounds);
+    });
+
+}
+
 });

@@ -78,8 +78,8 @@ module.exports = Backbone.View.extend({
   // Create pop-ups for given feature of a layer
   _onEachFeature: function(feature, layer) {
       if (feature.geometry.properties) {
-        var activities = feature.geometry.properties.activityid.split(',');
-        layer.bindPopup(feature.properties.adm + ' has ' + activities.length +' projects');
+        var activities = feature.properties.activityid;
+        layer.bindPopup(feature.properties.admName + ' has ' + activities.length +' projects');
       }
   },
 

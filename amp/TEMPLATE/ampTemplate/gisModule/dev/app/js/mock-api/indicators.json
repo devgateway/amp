@@ -1,0 +1,14 @@
+[
+  {
+      "id": 1,
+      "title": "Poverty",
+      "featurePath": "http://gis.devgw.org/arcgis/rest/services/Moldova/Poverty_version_2/MapServer/0",
+      "property": "PovertyInd"
+  },
+  {
+      "id": 2,
+      "title": "Population",
+      "featurePath": "http://gis.devgw.org/arcgis/rest/services/Moldova/Population/MapServer/0",
+      "property": "Population"
+  }
+]

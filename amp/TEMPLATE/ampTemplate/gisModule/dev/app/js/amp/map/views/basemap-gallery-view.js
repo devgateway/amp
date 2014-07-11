@@ -65,6 +65,7 @@ module.exports = Backbone.View.extend({
       this.map.removeLayer(this.mapLayer);
       delete this.mapLayer;
     }
+    
     if (this.labelsLayer) {
       this.map.removeLayer(this.labelsLayer);
       delete this.labelsLayer;

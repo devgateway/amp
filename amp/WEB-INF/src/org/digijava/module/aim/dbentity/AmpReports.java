@@ -242,11 +242,8 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 		this.members = members;
 	}
 
-	public int compareTo(AmpReports rep) {
-	
-		return 
-				ObjectUtil4Amp.nullSafeIgnoreCaseStringCompare(this.name, rep.getName(), true);
-		
+	public int compareTo(AmpReports rep) {	
+		return ObjectUtil4Amp.nullSafeIgnoreCaseStringCompare(this.name, rep.getName(), true);
 	}
 
 	public Set<AmpReportColumn> getShowAblesColumns(){
@@ -695,7 +692,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	 * @return
 	 */
 	public boolean isSummaryReportNoHierachies () {
-		return (this.getHideActivities() && this.getHierarchies().size()==0);
+		return (this.getHideActivities() && this.getHierarchies().isEmpty());
 	}
 	
 	public boolean shouldInjectPledgeColumnsAsProjectColumns() {

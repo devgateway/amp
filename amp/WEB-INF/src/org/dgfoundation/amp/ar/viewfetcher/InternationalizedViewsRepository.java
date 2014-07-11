@@ -466,16 +466,16 @@ public class InternationalizedViewsRepository {
 				addViewDef(this, new I18nViewDescription("v_nationalobjectives").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_theme_id", AmpTheme.class, "name")));
 
-				addViewDef(this, new I18nViewDescription("v_primaryprogram_all_level").
-						addColumnDef(new I18nViewColumnDescription("n1", "amp_program_id1", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n2", "amp_program_id2", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n3", "amp_program_id3", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n4", "amp_program_id4", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n5", "amp_program_id5", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n6", "amp_program_id6", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n7", "amp_program_id7", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n8", "amp_program_id8", AmpTheme.class, "name"))
-						);
+//				addViewDef(this, new I18nViewDescription("v_primaryprogram_all_level").
+//						addColumnDef(new I18nViewColumnDescription("n1", "amp_program_id1", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n2", "amp_program_id2", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n3", "amp_program_id3", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n4", "amp_program_id4", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n5", "amp_program_id5", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n6", "amp_program_id6", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n7", "amp_program_id7", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n8", "amp_program_id8", AmpTheme.class, "name"))
+//						);
 
 				for(int i = 0; i <= 8; i++)
 				{
@@ -483,16 +483,16 @@ public class InternationalizedViewsRepository {
 							addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
 				}
 
-				addViewDef(this, new I18nViewDescription("v_secondaryprogram_all_level").
-						addColumnDef(new I18nViewColumnDescription("n1", "amp_program_id1", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n2", "amp_program_id2", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n3", "amp_program_id3", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n4", "amp_program_id4", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n5", "amp_program_id5", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n6", "amp_program_id6", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n7", "amp_program_id7", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n8", "amp_program_id8", AmpTheme.class, "name"))
-						);
+//				addViewDef(this, new I18nViewDescription("v_secondaryprogram_all_level").
+//						addColumnDef(new I18nViewColumnDescription("n1", "amp_program_id1", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n2", "amp_program_id2", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n3", "amp_program_id3", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n4", "amp_program_id4", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n5", "amp_program_id5", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n6", "amp_program_id6", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n7", "amp_program_id7", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n8", "amp_program_id8", AmpTheme.class, "name"))
+//						);
 
 				for(int i = 0; i <= 8; i++)
 				{
@@ -500,16 +500,16 @@ public class InternationalizedViewsRepository {
 							addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
 				}				
 
-				addViewDef(this, new I18nViewDescription("v_tertiaryprogram_all_level").
-						addColumnDef(new I18nViewColumnDescription("n1", "amp_program_id1", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n2", "amp_program_id2", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n3", "amp_program_id3", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n4", "amp_program_id4", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n5", "amp_program_id5", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n6", "amp_program_id6", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n7", "amp_program_id7", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n8", "amp_program_id8", AmpTheme.class, "name"))
-						);
+//				addViewDef(this, new I18nViewDescription("v_tertiaryprogram_all_level").
+//						addColumnDef(new I18nViewColumnDescription("n1", "amp_program_id1", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n2", "amp_program_id2", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n3", "amp_program_id3", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n4", "amp_program_id4", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n5", "amp_program_id5", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n6", "amp_program_id6", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n7", "amp_program_id7", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n8", "amp_program_id8", AmpTheme.class, "name"))
+//						);
 
 				for(int i = 0; i <= 8; i++)
 				{
@@ -517,16 +517,16 @@ public class InternationalizedViewsRepository {
 							addColumnDef(new I18nViewColumnDescription("name", "amp_program_id", AmpTheme.class, "name")));
 				}
 
-				addViewDef(this, new I18nViewDescription("v_nationalobjectives_all_level").
-						addColumnDef(new I18nViewColumnDescription("n1", "amp_program_id1", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n2", "amp_program_id2", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n3", "amp_program_id3", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n4", "amp_program_id4", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n5", "amp_program_id5", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n6", "amp_program_id6", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n7", "amp_program_id7", AmpTheme.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("n8", "amp_program_id8", AmpTheme.class, "name"))
-						);
+//				addViewDef(this, new I18nViewDescription("v_nationalobjectives_all_level").
+//						addColumnDef(new I18nViewColumnDescription("n1", "amp_program_id1", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n2", "amp_program_id2", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n3", "amp_program_id3", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n4", "amp_program_id4", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n5", "amp_program_id5", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n6", "amp_program_id6", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n7", "amp_program_id7", AmpTheme.class, "name")).
+//						addColumnDef(new I18nViewColumnDescription("n8", "amp_program_id8", AmpTheme.class, "name"))
+//						);
 
 				for(int i = 0; i <= 8; i++)
 				{

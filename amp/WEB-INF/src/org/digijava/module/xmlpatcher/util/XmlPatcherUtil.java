@@ -269,7 +269,9 @@ public final class XmlPatcherUtil {
 			AmpXmlPatch p, AmpXmlPatchLog log) {
 		try 
 		{
-			if (!loadedPatches.containsKey(p))
+//			if (p.getPatchId().contains("create-cache-table-programs"))
+//				System.out.println("BOZO DOZO");
+			if ((!loadedPatches.containsKey(p)))
 			{
 				//perform XSLT transformation. See xmlpatcher.xsl
 				javax.xml.transform.Transformer trans = getTransformer(serviceContext.getRealPath("/")+XmlPatcherConstants.xslLocation);
@@ -288,9 +290,9 @@ public final class XmlPatcherUtil {
 		}
 		catch (Exception e)
 		{
-			logger.error(String.format("erorr while processing patch %s: %s", p, e.getMessage()), e);
-			if(log!=null) log.appendToLog(e);
-			return null;
+			logger.error(String.format("error while unmarshalling patch %s: %s", p, e.getMessage()), e);
+			if (log != null) log.appendToLog(e);
+			throw new Error(e);
 		}
 	}
 	

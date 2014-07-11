@@ -22,12 +22,16 @@
 				DROP VIEW IF EXISTS v_mondrian_locations;
 			    CREATE OR REPLACE VIEW v_mondrian_locations AS 
 					SELECT acvl.id, acvl.parent_location, acvl.location_name, 
-						getlocationidbyimplloc(acvl.id, 'Country') AS country_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Country')) AS country_name,
-						getlocationidbyimplloc(acvl.id, 'Region') AS region_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Region')) AS region_name,
-						getlocationidbyimplloc(acvl.id, 'Zone') AS zone_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Zone')) AS zone_name,
-						getlocationidbyimplloc(acvl.id, 'District') AS district_id, getlocationname(getlocationidbyimplloc(acvl.id, 'District')) AS district_name
+						getlocationidbyimplloc(acvl.id, 'Country') AS country_id, COALESCE(getlocationname(getlocationidbyimplloc(acvl.id, 'Country')), 'Undefined') AS country_name,
+						getlocationidbyimplloc(acvl.id, 'Region') AS region_id, COALESCE(getlocationname(getlocationidbyimplloc(acvl.id, 'Region')), 'Undefined') AS region_name,
+						getlocationidbyimplloc(acvl.id, 'Zone') AS zone_id, COALESCE(getlocationname(getlocationidbyimplloc(acvl.id, 'Zone')), 'Undefined') AS zone_name,
+						getlocationidbyimplloc(acvl.id, 'District') AS district_id, COALESCE(getlocationname(getlocationidbyimplloc(acvl.id, 'District')), 'Undefined') AS district_name
 
 						FROM amp_category_value_location acvl
+						
+					UNION ALL
+						
+					SELECT 999999999, null, 'Undefined', 999999999, 'Undefined', 999999999, 'Undefined', 999999999, 'Undefined', 999999999, 'Undefined';
 			</lang>
 		</script>
 	</apply>

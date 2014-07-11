@@ -20,59 +20,13 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 				CREATE OR REPLACE VIEW v_nationalobjectives_level_7 AS
-			    	SELECT v_nationalobjectives_all_level.amp_activity_id, 
-			    		CASE 7 
-			    			WHEN v_nationalobjectives_all_level.l1 THEN v_nationalobjectives_all_level.n1
-			    			WHEN v_nationalobjectives_all_level.l2 THEN v_nationalobjectives_all_level.n2
-			    			WHEN v_nationalobjectives_all_level.l3 THEN v_nationalobjectives_all_level.n3
-			    			WHEN v_nationalobjectives_all_level.l4 THEN v_nationalobjectives_all_level.n4
-			    			WHEN v_nationalobjectives_all_level.l5 THEN v_nationalobjectives_all_level.n5
-			    			WHEN v_nationalobjectives_all_level.l6 THEN v_nationalobjectives_all_level.n6
-			    			WHEN v_nationalobjectives_all_level.l7 THEN v_nationalobjectives_all_level.n7
-			    			WHEN v_nationalobjectives_all_level.l8 THEN v_nationalobjectives_all_level.n8
-			    			ELSE NULL::character varying END AS name,
-			    		CASE 7
-			    			WHEN v_nationalobjectives_all_level.l1 THEN v_nationalobjectives_all_level.amp_program_id1
-			    			WHEN v_nationalobjectives_all_level.l2 THEN v_nationalobjectives_all_level.amp_program_id2
-			    			WHEN v_nationalobjectives_all_level.l3 THEN v_nationalobjectives_all_level.amp_program_id3
-			    			WHEN v_nationalobjectives_all_level.l4 THEN v_nationalobjectives_all_level.amp_program_id4
-			    			WHEN v_nationalobjectives_all_level.l5 THEN v_nationalobjectives_all_level.amp_program_id5
-			    			WHEN v_nationalobjectives_all_level.l6 THEN v_nationalobjectives_all_level.amp_program_id6
-			    			WHEN v_nationalobjectives_all_level.l7 THEN v_nationalobjectives_all_level.amp_program_id7
-			    			WHEN v_nationalobjectives_all_level.l8 THEN v_nationalobjectives_all_level.amp_program_id8
-			    			ELSE NULL::bigint END AS amp_program_id, 
-			    		sum(v_nationalobjectives_all_level.program_percentage) AS program_percentage
-			    	FROM v_nationalobjectives_all_level WHERE
-			    		(CASE 7
-			    			WHEN v_nationalobjectives_all_level.l1 THEN v_nationalobjectives_all_level.n1
-			    			WHEN v_nationalobjectives_all_level.l2 THEN v_nationalobjectives_all_level.n2
-			    			WHEN v_nationalobjectives_all_level.l3 THEN v_nationalobjectives_all_level.n3
-			    			WHEN v_nationalobjectives_all_level.l4 THEN v_nationalobjectives_all_level.n4
-			    			WHEN v_nationalobjectives_all_level.l5 THEN v_nationalobjectives_all_level.n5
-			    			WHEN v_nationalobjectives_all_level.l6 THEN v_nationalobjectives_all_level.n6
-			    			WHEN v_nationalobjectives_all_level.l7 THEN v_nationalobjectives_all_level.n7
-			    			WHEN v_nationalobjectives_all_level.l8 THEN v_nationalobjectives_all_level.n8
-			    		ELSE NULL::character varying END IS NOT NULL)
-			    			GROUP BY v_nationalobjectives_all_level.amp_activity_id,
-			    				CASE 7 WHEN v_nationalobjectives_all_level.l1 THEN v_nationalobjectives_all_level.n1
-			    				WHEN v_nationalobjectives_all_level.l2 THEN v_nationalobjectives_all_level.n2
-			    				WHEN v_nationalobjectives_all_level.l3 THEN v_nationalobjectives_all_level.n3
-			    				WHEN v_nationalobjectives_all_level.l4 THEN v_nationalobjectives_all_level.n4
-			    				WHEN v_nationalobjectives_all_level.l5 THEN v_nationalobjectives_all_level.n5
-			    				WHEN v_nationalobjectives_all_level.l6 THEN v_nationalobjectives_all_level.n6
-			    				WHEN v_nationalobjectives_all_level.l7 THEN v_nationalobjectives_all_level.n7
-			    				WHEN v_nationalobjectives_all_level.l8 THEN v_nationalobjectives_all_level.n8
-			    			ELSE NULL::character varying END, 
-			    				CASE 7 
-			    					WHEN v_nationalobjectives_all_level.l1 THEN v_nationalobjectives_all_level.amp_program_id1
-			    					WHEN v_nationalobjectives_all_level.l2 THEN v_nationalobjectives_all_level.amp_program_id2
-			    					WHEN v_nationalobjectives_all_level.l3 THEN v_nationalobjectives_all_level.amp_program_id3
-			    					WHEN v_nationalobjectives_all_level.l4 THEN v_nationalobjectives_all_level.amp_program_id4
-			    					WHEN v_nationalobjectives_all_level.l5 THEN v_nationalobjectives_all_level.amp_program_id5
-			    					WHEN v_nationalobjectives_all_level.l6 THEN v_nationalobjectives_all_level.amp_program_id6
-			    					WHEN v_nationalobjectives_all_level.l7 THEN v_nationalobjectives_all_level.amp_program_id7
-			    					WHEN v_nationalobjectives_all_level.l8 THEN v_nationalobjectives_all_level.amp_program_id8
-			    					ELSE NULL::bigint END;;;
+					SELECT a.amp_activity_id, level.name AS name, level.amp_theme_id AS amp_program_id, SUM(a.program_percentage) as percentage
+						FROM amp_activity_program a	
+							JOIN all_programs_with_levels apl ON a.amp_program_id = apl.amp_theme_id
+							JOIN amp_theme level ON level.amp_theme_id = apl.id7
+   						WHERE apl.id1 IS NOT NULL AND apl.program_setting_name = 'National Plan Objective'
+					GROUP BY a.amp_activity_id, level.amp_theme_id
+					ORDER BY amp_activity_id;
          	</lang>
 		</script>
 	</apply>

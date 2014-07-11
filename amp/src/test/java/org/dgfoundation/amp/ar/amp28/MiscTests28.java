@@ -1,17 +1,23 @@
 package org.dgfoundation.amp.ar.amp28;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.hibernate.jdbc.Work;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -34,6 +40,8 @@ public class MiscTests28 extends AmpTestCase
 		TestSuite suite = new TestSuite(MiscTests28.class.getName());
 		suite.addTest(new MiscTests28("testComparingObjectVisibility"));
 		suite.addTest(new MiscTests28("testComparingObjectVisibilityInterClass"));
+		suite.addTest(new MiscTests28("testProgramLevelsViews"));
+		suite.addTest(new MiscTests28("testProgramLevelsFunctions"));
 		return suite;
 	}
 	
@@ -79,6 +87,78 @@ public class MiscTests28 extends AmpTestCase
 			}
 	}
 	
+	public void testProgramLevelsViews() {
+		PersistenceManager.getSession().doWork(new Work() {
+
+			@Override
+			public void execute(Connection connection) throws SQLException {				
+				ResultSet rs = SQLUtils.rawRunQuery(connection, "SELECT * from all_programs_with_levels where amp_theme_id IN (1, 4, 8)", null);
+				while (rs.next()) {
+					int themeId = rs.getInt("amp_theme_id");
+					switch (themeId) {
+					case 1:
+						assertEquals(rs.getString("name"), "Program #1");
+						assertEquals(rs.getInt("id0"), 1);
+						assertEquals(rs.getInt("id1"), 0); // zero stands for null
+						assertEquals(rs.getInt("id2"), 0);
+						break;
+						
+					case 4:
+						assertEquals(rs.getString("name"), "Older Program");
+						assertEquals(rs.getInt("id0"), 4);
+						assertEquals(rs.getInt("id1"), 0); // zero stands for null
+						assertEquals(rs.getInt("id2"), 0);
+						break;						
+						
+					case 8:
+						assertEquals(rs.getString("name"), "OP112 name");
+						assertEquals(rs.getInt("id0"), 4);
+						assertEquals(rs.getInt("id1"), 5); // zero stands for null
+						assertEquals(rs.getInt("id2"), 6);
+						assertEquals(rs.getInt("id3"), 8);
+						assertEquals(rs.getInt("id4"), 0);
+						break;						
+					default:
+						fail("should not have a row with amp_theme_id of " + themeId);
+					}
+				}
+			}			
+		});
+	}
+	
+	public void testProgramLevelsFunctions() {
+		PersistenceManager.getSession().doWork(new Work() {
+
+			protected void checkSingleValue(java.sql.Connection conn, Long v, String query) throws SQLException {
+				ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
+				if (!rs.next())
+					fail("query returned no results");
+				Long l = rs.getLong(1);
+				Object obj = rs.getObject(1);
+				if (v == null) {
+					assertTrue("result should have been null but is " + obj + " for query " + query, obj == null);
+					return;
+				}
+				assertEquals("while running " + query, v.longValue(), l.longValue());
+			}
+			
+			@Override
+			public void execute(Connection conn) throws SQLException {				
+				checkSingleValue(conn, 0l, "select getprogramdepth(1)");
+				checkSingleValue(conn, 1l, "select getprogramdepth(2)");
+				checkSingleValue(conn, 1l, "select getprogramdepth(3)");
+				checkSingleValue(conn, 3l, "select getprogramdepth(7)");
+				
+				checkSingleValue(conn, null, "select getprogramlevel(1, 1)");
+				checkSingleValue(conn, 1l, "select getprogramlevel(1, 0)");
+				
+				checkSingleValue(conn, 4l, "select getprogramlevel(7, 0)");
+				checkSingleValue(conn, 5l, "select getprogramlevel(7, 1)");
+				checkSingleValue(conn, 6l, "select getprogramlevel(7, 2)");
+				checkSingleValue(conn, 7l, "select getprogramlevel(7, 3)");
+			}			
+		});
+	}
 	
 	@Override
     protected void setUp() throws Exception

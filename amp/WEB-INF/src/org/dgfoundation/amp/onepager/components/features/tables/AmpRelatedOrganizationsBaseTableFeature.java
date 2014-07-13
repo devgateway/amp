@@ -101,7 +101,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
         if (addFundingItemAutomatically.isVisible()){
             donorFundingSection.getOrgRoleSelector().getOrgSelect().getModel().setObject(ampOrgRole.getOrganisation());
             donorFundingSection.getOrgRoleSelector().getRoleSelect().getModel().setObject(ampOrgRole.getRole());
-            donorFundingSection.getList().addItem(ampOrgRole.getOrganisation());
+            donorFundingSection.addItemToList(ampOrgRole.getOrganisation());
             target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));
             target.add(donorFundingSection);
         }

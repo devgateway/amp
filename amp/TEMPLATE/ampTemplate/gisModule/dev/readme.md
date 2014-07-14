@@ -51,6 +51,12 @@ All commands are automated with [gulp](http://gulpjs.com), and configured in [gu
 $ gulp dev
 ```
 
+or simply
+
+```bash
+$ gulp
+```
+
 The site will be available at [localhost:3000](http://localhost:3000)
 
 Installing a [livereload browser extension](http://feedback.livereload.com/knowledgebase/articles/86242-how-do-i-install-and-use-the-browser-extensions-) is recommended.
@@ -96,13 +102,7 @@ Please always lint your code :)
 Compiled versions for testing and distribution are in `dist/`.
 
 ```bash
-$ gulp rev
-```
-
-or simply
-
-```bash
-$ gulp
+$ gulp build
 ```
 
 

@@ -3,20 +3,23 @@
  *
  * Usage:
  *
- * $ gulp rev
- *    Build app and revision assets
- *
+ * $ gulp
+ * or
  * $ gulp dev
- *    Un-optimized build, watch files, serve app, start livereload
+ *    Unoptimized build of js/css, runs a dev server on :3000 with livereload
  *
  * $ gulp test
- *    Run unit tests
+ *    Run unit tests -- currently broken
  *
  * $ gulp lint
- *    Lint javascript and css
+ *    Lint javascript and css -- currently only js
  *
- * $ gulp
- *    Default mode is `gulp rev` -- build and revision the app.
+ * $ gulp build
+ *    Build, optimize, copy everything needed to ../dist, revision files.
+ *
+ * $ gulp preview
+ *    Builds and then launches a local server on :3000 to check it out
+ *
  */
 
 var rimraf = require('rimraf');
@@ -24,7 +27,6 @@ var source = require('vinyl-source-stream');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var gulp = require('gulp');
-var gulpif = require('gulp-if');  // gulp-load-plugins won't work: if is reserved
 var g = require('gulp-load-plugins')();
 
 
@@ -43,33 +45,24 @@ var paths = {
     stylesheets: {
       all: './app/less/**/*.less',
       entry: './app/less/main.less',
+      libs: './node_modules/leaflet/dist/**/*.css',
       compileDest: './app/compiled-css/',
-      compiled: './app/compiled-css/main.css',
-      libs: './node_modules/leaflet/dist/**/*.css'
+      compiled: './app/compiled-css/main.css'
     },
-    templates: './app/js/amp/**/*.html',
     images: './app/img/**/*.{png, jpg}',
     fonts: './app/fonts/**/*.{eot,svg,ttf,woff}'
   },
   dist: {
-    dest: {
-      root: '../dist/',  // USE CAUTION IF CHANGING
-      scripts: '../dist/js/',
-      stylesheets: '../dist/compiled-css/',
-      images: '../dist/img/',
-      fonts: '../dist/fonts/'
-    }
+    root: '../dist/',  // USE CAUTION IF CHANGING (watch out for clean)
+    scripts: '../dist/compiled-js/',
+    stylesheets: '../dist/compiled-css/',
+    images: '../dist/img/',
+    fonts: '../dist/fonts/'
   }
 };
-paths.devCompiled = [
-  paths.app.stylesheets.compiled,
-  paths.app.scripts.built,
-  paths.app.templates,
-  paths.app.images
-];
 
 
-function bundlify(ifyer) {
+function _bundlify(ifyer) {
   var bundler = ifyer(paths.app.scripts.entry);
   bundler.transform('brfs');
 
@@ -78,7 +71,6 @@ function bundlify(ifyer) {
     return bundler.bundle({debug: true})
       .on('error', function(e) { g.util.log('Browserify error: ', e); })
       .pipe(source('main.js'))
-      .pipe(gulpif(ifyer === browserify, g.streamify(g.uglify())))  // skip minification when watching (dev mode)
       .pipe(gulp.dest(paths.app.scripts.buildDest));
   };
 
@@ -90,12 +82,12 @@ function bundlify(ifyer) {
 
 gulp.task('watchify', function() {
   // recompile browserify modules
-  return bundlify(watchify);
+  return _bundlify(watchify);
 });
 
 
 gulp.task('browserify', function() {
-  return bundlify(browserify);
+  return _bundlify(browserify);
 });
 
 
@@ -110,42 +102,69 @@ gulp.task('less', function() {
 });
 
 
-gulp.task('build-root', function() {
-  return gulp.src(paths.app.rootstuff)
-    .pipe(g.changed(paths.dist.dest.root))
-    .pipe(gulp.dest(paths.dist.dest.root));
+gulp.task('dev-server', g.serve({
+  root: [paths.app.root],
+  port: 3000
+}));
+
+
+gulp.task('watch', ['watchify'], function() {
+  gulp.watch([paths.app.scripts.top, paths.app.scripts.amp], ['lint']);
+  gulp.watch(paths.app.stylesheets.all, ['less']);
 });
 
 
-gulp.task('build-scripts', function() {
+gulp.task('reload', ['dev-server', 'watch'], function() {
+ g.livereload.listen();
+ return gulp.watch([
+    paths.app.rootstuff,
+    paths.app.stylesheets.compiled,
+    paths.app.scripts.built,
+    paths.app.images,
+    paths.app.fonts
+  ]).on('change', g.livereload.changed);
+});
+
+
+gulp.task('clean', function(done) {
+  rimraf(paths.dist.root, done);
+});
+
+
+gulp.task('build-js', ['clean', 'browserify'], function() {
   return gulp.src(paths.app.scripts.built)
-    .pipe(g.changed(paths.dist.dest.scripts))
-    .pipe(gulp.dest(paths.dist.dest.scripts));
+    .pipe(g.streamify(g.uglify))
+    .pipe(gulp.dest(paths.dist.scripts));
 });
 
 
-gulp.task('build-stylesheets', ['less'], function() {
+gulp.task('build-css', ['clean', 'less'], function() {
   return gulp.src(paths.app.stylesheets.compiled)
-    .pipe(g.changed(paths.dist.dest.stylesheets))
-    .pipe(gulp.dest(paths.dist.dest.stylesheets));
+    .pipe(g.csso())
+    .pipe(gulp.dest(paths.dist.stylesheets));
 });
 
 
-gulp.task('build-images', function() {
-  return gulp.src(paths.app.images)
-    .pipe(g.changed(paths.dist.dest.images))
-    .pipe(gulp.dest(paths.dist.dest.images));
+gulp.task('copy-stuff', ['clean'], function() {
+  gulp.src(paths.app.rootstuff).pipe(gulp.dest(paths.dist.root));
+  gulp.src(paths.app.images).pipe(gulp.dest(paths.dist.images));
+  gulp.src(paths.app.fonts).pipe(gulp.dest(paths.dist.fonts));
 });
 
 
-gulp.task('build-fonts', function() {
-  return gulp.src(paths.app.fonts)
-    .pipe(g.changed(paths.dist.dest.fonts))
-    .pipe(gulp.dest(paths.dist.dest.fonts));
+gulp.task('revision', ['clean', 'build-js', 'build-css'], function() {
+  var versionableGlob = '**/*.{js,css}'
+  var antiHtmlFilter =  g.filter(versionableGlob)  // so we can avoid versioning html
+  gulp.src([ paths.dist.root + versionableGlob,
+             paths.dist.root + '**/*.html' ])
+    .pipe(antiHtmlFilter)
+    .pipe(g.rimraf({ force: true }))
+    .pipe(g.rev())
+    .pipe(gulp.dest(paths.dist.root))
+    .pipe(antiHtmlFilter.restore())
+    .pipe(g.revReplace())
+    .pipe(gulp.dest(paths.dist.root))
 });
-
-
-gulp.task('build', ['build-root', 'build-scripts', 'build-stylesheets', 'build-images', 'build-fonts']);
 
 
 gulp.task('lint', function() {
@@ -163,37 +182,18 @@ gulp.task('lint', function() {
 });
 
 
-gulp.task('serve', g.serve({
-  root: [paths.app.root],
+gulp.task('test', ['build'], function() {
+  // TODO...
+});
+
+
+gulp.task('preview', ['build'], g.serve({
+  root: [paths.dist.root],
   port: 3000
 }));
 
 
-gulp.task('watch', ['watchify'], function() {
-  gulp.watch([paths.app.scripts.top, paths.app.scripts.amp], ['lint']);
-  gulp.watch(paths.app.stylesheets.all, ['less']);
-});
+gulp.task('dev', ['lint', 'less', 'dev-server', 'watch', 'reload']);
+gulp.task('build', ['clean', 'build-js', 'build-css', 'copy-stuff', 'revision']);
 
-
-gulp.task('reload', ['serve', 'watch'], function() {
- g.livereload.listen();
- return gulp.watch(paths.devCompiled)
-   .on('change', g.livereload.changed);
-});
-
-
-gulp.task('clean', function(done) {
-  rimraf(paths.app.stylesheets.compiled, done);
-});
-
-
-// gulp.task('test', ['build', 'tests'], function() {
-//   // copy tests and stuff (grossly) (TODO: don't copy from node_modules...)
-//   // return gulp.src(paths.dist.tests + '/test-runner.html')
-//   //   .pipe(g.qunit({verbose: true}));
-// });
-
-
-
-
-gulp.task('dev', ['lint', 'less', 'serve', 'watch', 'reload']);
+gulp.task('default', ['dev']);

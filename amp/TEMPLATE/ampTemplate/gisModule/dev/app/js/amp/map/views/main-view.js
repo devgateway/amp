@@ -1,4 +1,5 @@
 var fs = require('fs');
+var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
@@ -10,47 +11,65 @@ var ADMLayerView = require('../views/adm-layer-view');
 var Basemaps = require('../models/basemap-collection');
 var Template = fs.readFileSync(__dirname + '/../templates/map-container-template.html', 'utf8');
 
+var app = require('../../main');
+
 
 module.exports = Backbone.View.extend({
 
   template: _.template(Template),
 
   initialize: function() {
-    this.basemaps = new Basemaps();
+    this.mapEl = $('<div id="map-canvas">');
+    this.map = L.map(this.mapEl[0]);
 
+    app.state.register(this, 'map', {
+      get: this._getMapView,
+      set: this._setMapView,
+      empty: { center: [47.02, 28.60], zoom: 8 }
+    });
+
+    this.basemaps = new Basemaps();  // pre-loaded with hard-coded basemaps
+    this.admLayerView = new ADMLayerView({map: this.map});
+
+    this.headerView = new MapHeaderView();
+    this.legendView = new LegendView();
+    this.basemapView = new BasemapGalleryView({
+      map: this.map,
+      collection: this.basemaps
+    });
   },
 
   render: function () {
     var self = this;
-    this.$el.html(this.template({}));
+    this.$el.html(this.template({map: this.mapEl}));
+    this.$el.append(this.mapEl);
+    this.map.invalidateSize();
 
     var headerContainer = this.$('#map-header > div');
+    headerContainer.append(this.headerView.render().el);
+    headerContainer.append(this.basemapView.render().el);
 
-    // Render  map (but don't re-render if one exists)
-    if(!this.map){
-      this.map = L.map('map-canvas').setView([47.02, 28.60], 8);
-      this.admLayerView = new ADMLayerView({map: this.map});
-    }
-
-    // Render map header
-    var headerView = new MapHeaderView();
-    headerContainer.append(headerView.render().el);
-
-    // Render BasemapGallery
-    var basemapView = new BasemapGalleryView({
-      map: this.map,
-      collection: this.basemaps
-    });
-    headerContainer.append(basemapView.render().el);
-
-    // Render Legend
-    var legendView = new LegendView();
-    this.$el.append(legendView.render().el);
+    this.$el.append(this.legendView.render().el);
 
     this.loadBoundaries();
     Backbone.on('MAP_LOAD_INDICATOR', self._loadIndicatorLayer, this);
 
     return this;
+  },
+
+  _getMapView: function() {
+    var center = this.map.getCenter();
+    return {
+      center: [
+        center.lat,
+        center.lng
+      ],
+      zoom: this.map.getZoom()
+    };
+  },
+
+  _setMapView: function(stateBlob) {
+    this.map.setView(stateBlob.center, stateBlob.zoom);
   },
 
   // TODO: I'm  not sure of best place to put this. but just want to proof of concept

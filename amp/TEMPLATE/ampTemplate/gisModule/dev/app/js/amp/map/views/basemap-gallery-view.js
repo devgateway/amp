@@ -21,7 +21,7 @@ module.exports = Backbone.View.extend({
   initialize: function(extraProperties) {
     _.extend(this, extraProperties);  // extraProperties={map: ...}
     this.listenTo(this.collection, 'change:selected', this.updateSelected);
-    this.setBasemap(this.collection.currentlySelected); // since we missed the event
+    this.setBasemap(this.collection.getBasemap()); // since we missed the event
   },
 
   render: function() {
@@ -52,6 +52,7 @@ module.exports = Backbone.View.extend({
         this.map.addLayer(this.labelsLayer);
       }
     } else if (source === 'tile') {
+      // layers with simple tile URL templates, like osm.
       this.mapLayer = L.tileLayer(basemap.get('tileUrl'));
       this.map.addLayer(this.mapLayer);
     } else if (source !== null) {
@@ -65,7 +66,7 @@ module.exports = Backbone.View.extend({
       this.map.removeLayer(this.mapLayer);
       delete this.mapLayer;
     }
-    
+
     if (this.labelsLayer) {
       this.map.removeLayer(this.labelsLayer);
       delete this.labelsLayer;

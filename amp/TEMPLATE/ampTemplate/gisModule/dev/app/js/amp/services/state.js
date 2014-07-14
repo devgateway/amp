@@ -2,17 +2,29 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 
 function State() {
+  'use strict';
+
+  if (! (this instanceof State)) {
+    throw new Error('State needs to be created with the `new` keyword.');
+  }
+
+  // Anything that state must register itself. See `State.register`.
   this._stateRegistry = {};
+  // When loading state, some things might not have registered yet.
+  // It gets marked as unclaimed, and stored here.
+  this._unclaimed = {};
 
   // Make use of backbone's awesome events API for the state service
   _.extend(this, Backbone.Events);
 
 
   this.reset = function clearState() {
+    // Restore all states to their defaults (specified at registration)
     var changed = false;
     _.each(this._stateRegistry, function(state, id) {
       var currentState = state.get();
       if (! _.isEqual(currentState, state.empty)) {
+        // only call .set if resetting will actually change the state.
         state.set(state.empty);
         changed = true;
       }
@@ -24,14 +36,16 @@ function State() {
     }
   };
 
+
   this.load = function loadState(statesBlob) {
+
     var changed = false;
     _.each(statesBlob, function(stateToSet, id) {
       var current = this._stateRegistry[id];
       if (_.isUndefined(current)) {
-        throw new Error('Attempted to load state for unregistered id: ' + id);
-      }
-      if (! _.isEqual(current.get(), stateToSet)) {
+        this._unclaimed[id] = stateToSet;
+        console.warn('Saving state for unregistered id: ' + id);
+      } else if (! _.isEqual(current.get(), stateToSet)) {
         current.set(stateToSet);
         changed = true;
       }
@@ -39,9 +53,10 @@ function State() {
 
     this.trigger('load');
     if (changed) {
-      this.trigger('changed', changed);
+      this.trigger('changed');
     }
   };
+
 
   this.freeze = function freezeState() {
     var stateSnapshot = {};
@@ -52,20 +67,27 @@ function State() {
     return stateSnapshot;
   };
 
-  this.register = function registerStateSaver(id, getSetFns, emptyState) {
-    // Objects saving state must:
-    //  1. Deterministically create a unique id for themselves
-    //  2. Implement a getState method, returning a json blob
-    //  3. Implement a setState method, accepting a json blob
+
+  this.register = function registerStateSaver(obj, id, options) {
     if (id in this._stateRegistry) {
       throw new Error('Attempted registration of duplicate state id ' + id);
     }
+
+    // register the state
     this._stateRegistry[id] = {
-      get: getSetFns.get,
-      set: getSetFns.set,
-      empty: emptyState
+      get: _.bind(options.get, obj),
+      set: _.bind(options.set, obj),
+      empty: options.empty
     };
-    getSetFns.set(emptyState);  // TODO: look up in loaded state first
+
+    // set to the currently loaded state, or its default empty state
+    if (id in this._unclaimed) {
+      console.info('restoring state for previously unregistered id ', id);
+      options.set(this._unclaimed[id]);
+      delete this._unclaimed[id];
+    } else {
+      this._stateRegistry[id].set(options.empty);
+    }
   };
 }
 

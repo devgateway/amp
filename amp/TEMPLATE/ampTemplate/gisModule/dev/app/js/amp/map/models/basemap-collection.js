@@ -1,6 +1,6 @@
 var _ = require('underscore');
 var Backbone = require('backbone');
-var Basemap = require('./basemap-model');
+var BasemapModel = require('./basemap-model');
 
 var app = require('../../main');
 
@@ -72,24 +72,40 @@ var basemaps = [
 
 module.exports = Backbone.Collection.extend({
 
-  model: Basemap,
+  model: BasemapModel,
 
   initialize: function() {
     this.add(basemaps);
-    this.currentlySelected = null;
-    app.state.register('basemap', {
-      get: _.bind(function() { return this.currentlySelected.id; }, this),
-      set: _.bind(this.selectBasemap, this)
-    }, 'Gray');
+    app.state.register(this, 'basemap', {
+      get: function() { return this.getBasemap().id; },
+      set: this.selectBasemap,
+      empty: 'Gray'
+    });
+  },
+
+  getBasemap: function(name) {
+    return this.find(function(bmap) {
+      if (name) {
+        return bmap.id === name;  // find by name
+      } else {
+        return bmap.get('selected');  // (selected is bool) get currently selected
+      }
+    });
   },
 
   selectBasemap: function(basemapId) {
-    if (this.currentlySelected) {
-      this.currentlySelected.set('selected', false);
+
+    var newSelection = this.getBasemap(basemapId);
+    if (! newSelection) {
+      throw new Error('No basemap: ' + basemapId);
     }
-    var newSelection = this.find(function(bmap) { return bmap.id === basemapId; });
-    newSelection.set('selected', true);
-    this.currentlySelected = newSelection;
+
+    var oldSelection = this.getBasemap();
+    if (oldSelection) {  // first time around there will be nothing selected
+      oldSelection.set('selected', false);  // deselect the old
+    }
+
+    newSelection.set('selected', true);  // select the new one
   },
 
 });

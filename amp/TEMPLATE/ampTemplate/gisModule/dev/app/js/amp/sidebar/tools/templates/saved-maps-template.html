@@ -1,0 +1,10 @@
+<ul>
+  <% maps.each(function(map) { %>
+    <li>
+      <a class="gis-state-link" href="#<%= map.serialize() %>">
+        <h3><%= map.get('title') %></h3>
+        <p><% map.get('description') %>asdf</p>
+      </a>
+    </li>
+  <% }) %>
+</ul>

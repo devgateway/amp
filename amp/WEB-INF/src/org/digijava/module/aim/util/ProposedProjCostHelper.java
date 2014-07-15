@@ -33,6 +33,7 @@ public static ProposedProjCost getProposedProjCost(ProposedProjCost ppc,String c
     	
     	ProposedProjCost propProjCost = new ProposedProjCost();
     	propProjCost.setCurrencyCode(ppc.getCurrencyCode());
+    	propProjCost.setCurrencyName(CurrencyUtil.getCurrencyByCode(ppc.getCurrencyCode()).getCurrencyName());
     	propProjCost.setFunAmount(ppc.getFunAmount());
     	propProjCost.setFunDate(ppc.getFunDate());
     	if(ppc.getCurrencyCode()==null || ppc.getCurrencyCode().equals(currCode)|| ppc.getFunDate()==null)
@@ -47,6 +48,8 @@ public static ProposedProjCost getProposedProjCost(ProposedProjCost ppc,String c
 			double amt = CurrencyWorker.convert1(ppc.getFunAmountAsDouble(),frmExRt,toExRt);
 			propProjCost.setFunAmount(FormatHelper.formatNumber(amt));
 			propProjCost.setCurrencyCode(currCode);
+			propProjCost.setCurrencyName(CurrencyUtil.getCurrencyByCode(currCode).getCurrencyName());
+		    
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

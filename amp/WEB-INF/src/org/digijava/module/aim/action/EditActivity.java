@@ -393,14 +393,17 @@ public class EditActivity extends Action {
       if (tm != null && tm.getAppSettings() != null && tm.getAppSettings()
           .getCurrencyId() != null) {
               String currCode="";
+              String currName="";
               AmpCurrency curr=CurrencyUtil.
                   getAmpcurrency(
                           tm.getAppSettings()
                                   .getCurrencyId());
               if(curr!=null){
                       currCode = curr.getCurrencyCode();
+                      currName=curr.getCurrencyName();
               }
               eaForm.setCurrCode(currCode);
+              eaForm.setCurrName(currName);
               if(eaForm.getFundingCurrCode()==null){
               eaForm.setFundingCurrCode(currCode);
               }
@@ -782,9 +785,13 @@ public class EditActivity extends Action {
 					if (workspaceCurrency == null) {
 						toExRt = frmExRt;
 						ppc.setCurrencyCode(activity.getCurrencyCode());
+						ppc.setCurrencyName(CurrencyUtil.getCurrencyByCode(activity.getCurrencyCode()).getCurrencyName());
+			              
 					} else {
 						toExRt = Util.getExchange(workspaceCurrency, dt);
 						ppc.setCurrencyCode(workspaceCurrency);
+						ppc.setCurrencyName(CurrencyUtil.getCurrencyByCode(workspaceCurrency).getCurrencyName());
+			              
 					}
 					DecimalWraper amt = CurrencyWorker.convertWrapper(anProjBudget.getAmount(), frmExRt,
 							toExRt, dt);

@@ -303,7 +303,7 @@
 	                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">
 		                                <b>
 		                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedCommitments" /> 
-		                                <bean:write name="aimEditActivityForm" property="currCode" />
+		                                <bean:write name="aimEditActivityForm" property="currName" />
 		                                </b>
 		                             &nbsp;
                         		</td>
@@ -322,7 +322,7 @@
                                 
 	                                <b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalCommitments"/> 
-	                                <bean:write name="aimEditActivityForm" property="currCode"/>
+	                                <bean:write name="aimEditActivityForm" property="currName"/>
 	                                </b>
 	                        	&nbsp;        
 	                        </td>
@@ -339,7 +339,7 @@
 		                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">		                                
 		                                     <b>
 		                                     <bean:write name="aimEditActivityForm" property="funding.totalPipelineCommitments" /> 
-		                                     <bean:write name="aimEditActivityForm" property="currCode" />
+		                                     <bean:write name="aimEditActivityForm" property="currName" />
 		                                     </b>
 		                                &nbsp;        
 		                            </td>
@@ -362,7 +362,7 @@
                                 style="border-top: 1px solid #BBBBBB">                                
 	                               <b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /> 
-	                                <bean:write name="aimEditActivityForm" property="currCode" />
+	                                <bean:write name="aimEditActivityForm" property="currName" />
 	                               </b>
                                 &nbsp;
                              </td>
@@ -380,7 +380,7 @@
                                 style="border-top: 1px solid #BBBBBB">                                
 	                                <b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalDisbursements" /> 
-	                                <bean:write name="aimEditActivityForm" property="currCode" />
+	                                <bean:write name="aimEditActivityForm" property="currName" />
 	                                </b>
                                 &nbsp;
                              </td>
@@ -402,7 +402,7 @@
                                 style="border-top: 1px solid #BBBBBB">                                
 	                                <b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedExpenditures" /> 
-	                                <bean:write name="aimEditActivityForm" property="currCode" />
+	                                <bean:write name="aimEditActivityForm" property="currName" />
 	                                </b>
                                 &nbsp;
                              </td>
@@ -419,7 +419,7 @@
                                 style="border-top: 1px solid #BBBBBB">
 	                                <b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalExpenditures" /> 
-	                                <bean:write name="aimEditActivityForm" property="currCode" />
+	                                <bean:write name="aimEditActivityForm" property="currName" />
 	                                </b>
                                 &nbsp;
                            </td>
@@ -446,7 +446,7 @@
                                     
                                         <b>
                                         <bean:write name="aimEditActivityForm" property="funding.totalActualDisbursementsOrders" />
-                                        <bean:write name="aimEditActivityForm" property="currCode" />
+                                        <bean:write name="aimEditActivityForm" property="currName" />
                                         </b>
                                     &nbsp;
                                 </td>
@@ -466,7 +466,7 @@
                                     <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">                                         
 										<b>
 											<bean:write name="aimEditActivityForm" property="funding.totalPlannedRoF" />
-											<bean:write name="aimEditActivityForm" property="currCode" />
+											<bean:write name="aimEditActivityForm" property="currName" />
 										</b>
                                          &nbsp;
                                     </td>
@@ -483,7 +483,7 @@
                                         style="border-top: 1px solid #BBBBBB">                                        
                                             <b>
                                                 <bean:write name="aimEditActivityForm" property="funding.totalActualRoF"/>
-                                                <bean:write name="aimEditActivityForm" property="currCode"/>
+                                                <bean:write name="aimEditActivityForm" property="currName"/>
                                             </b>
                                         &nbsp;
                                     </td>
@@ -522,7 +522,7 @@
 	                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">	                                 
 									<b>
 		                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedEDD" /> 
-		                                <bean:write name="aimEditActivityForm" property="currCode" />
+		                                <bean:write name="aimEditActivityForm" property="currName" />
 		                            </b>		                             
 									&nbsp;
                         		</td>
@@ -540,7 +540,7 @@
                                 style="border-top: 1px solid #BBBBBB">                                
 	                                <b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalActualEDD"/> 
-	                                <bean:write name="aimEditActivityForm" property="currCode"/>
+	                                <bean:write name="aimEditActivityForm" property="currName"/>
 	                                </b>
 	                        	&nbsp;
 	                        </td>
@@ -557,7 +557,7 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">                                
 								<b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalOdaSscCommitments"/> 
-	                                <bean:write name="aimEditActivityForm" property="currCode"/>
+	                                <bean:write name="aimEditActivityForm" property="currName"/>
 								</b>
 	                        	&nbsp;
 	                        </td>
@@ -574,7 +574,7 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">                                
 								<b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalBilateralSscCommitments"/> 
-	                                <bean:write name="aimEditActivityForm" property="currCode"/>
+	                                <bean:write name="aimEditActivityForm" property="currName"/>
 								</b>
 	                        	&nbsp;
 	                        </td>
@@ -592,7 +592,7 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">                                
 								<b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalTriangularSscCommitments"/> 
-	                                <bean:write name="aimEditActivityForm" property="currCode"/>
+	                                <bean:write name="aimEditActivityForm" property="currName"/>
 								</b>
 	                        	&nbsp;
 	                        </td>
@@ -632,7 +632,7 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">                                
 	                                <b>
 	                                <bean:write name="aimEditActivityForm" property="funding.unDisbursementsBalance" /> 
-	                                <bean:write name="aimEditActivityForm" property="currCode" />
+	                                <bean:write name="aimEditActivityForm" property="currName" />
 	                               	</b>
                                 &nbsp;
                             </td>

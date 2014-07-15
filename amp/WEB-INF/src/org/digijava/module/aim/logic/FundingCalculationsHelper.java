@@ -134,7 +134,7 @@ public class FundingCalculationsHelper {
 				fundingDetail.setClassification(fundDet.getExpCategory());
 			}
 			fundingDetail.setCurrencyCode(fundDet.getAmpCurrencyId().getCurrencyCode());
-			fundingDetail.setCurrencyName(fundDet.getAmpCurrencyId().getCountryName());
+			fundingDetail.setCurrencyName(fundDet.getAmpCurrencyId().getCurrencyName());
 			fundingDetail.setTransactionAmount(CurrencyWorker.convert(fundDet.getTransactionAmount().doubleValue(), 1, 1));
 			fundingDetail.setTransactionDate(DateConversion.ConvertDateToString(fundDet.getTransactionDate()));
 			fundingDetail.setCapitalPercent(fundDet.getCapitalSpendingPercentage());

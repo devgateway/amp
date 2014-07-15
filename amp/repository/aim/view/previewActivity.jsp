@@ -360,7 +360,7 @@ function collapseAll() {
 		<legend>
 			<span class=legend_label>
 				<digi:trn>Funding Information</digi:trn>&nbsp; 
-				(${aimEditActivityForm.currCode})			
+				(${aimEditActivityForm.currName})			
 			</span>		
 		</legend>
 		<div class="field_text_big">
@@ -371,14 +371,14 @@ function collapseAll() {
 				<c:if test="${not empty aimEditActivityForm.funding.totalCommitments}">
 					<b>
 		                 <bean:write name="aimEditActivityForm" property="funding.totalCommitments" /> 
-		                 <bean:write name="aimEditActivityForm" property="currCode" />
+		                 ${aimEditActivityForm.currName}
 	            	</b>		         	
 		         </c:if>    
 		         <c:if test="${empty aimEditActivityForm.funding.totalCommitments}">
 			         <b>
 			         0
-			         <bean:write name="aimEditActivityForm" property="currCode" />
-			         </b>
+			            ${aimEditActivityForm.currName}
+	                 </b>
 		         </c:if>
 			<hr/>
 			</c:if>
@@ -387,13 +387,14 @@ function collapseAll() {
 				<c:if test="${not empty aimEditActivityForm.funding.totalPlannedCommitments}">
 					<b>
 					 <bean:write name="aimEditActivityForm" property="funding.totalPlannedCommitments" /> 
-		             <bean:write name="aimEditActivityForm" property="currCode" />
-                	</b>
+                     ${aimEditActivityForm.currName}
+	     	      	</b>
                 </c:if>
                 <c:if test="${empty aimEditActivityForm.funding.totalPlannedCommitments}">
                 	<b>
 			         0
-			         <bean:write name="aimEditActivityForm" property="currCode" />
+			         ${aimEditActivityForm.currName}
+	           
 			         </b>
 		         </c:if>
 		         <hr/>
@@ -407,14 +408,15 @@ function collapseAll() {
 				<c:if test="${not empty aimEditActivityForm.funding.totalDisbursements}">
 	                <b>
 	                 <bean:write name="aimEditActivityForm" property="funding.totalDisbursements" /> 
-	                 <bean:write name="aimEditActivityForm" property="currCode" />
+                      ${aimEditActivityForm.currName}
+	           
 	                </b>		          
 		         </c:if>
 		         <c:if test="${empty aimEditActivityForm.funding.totalDisbursements}">
 			         <b>
 			         0
-			         <bean:write name="aimEditActivityForm" property="currCode" />
-			         </b>
+                     ${aimEditActivityForm.currName}
+	                 </b>
 		         </c:if>
 			<hr/>
 			</c:if>
@@ -423,13 +425,13 @@ function collapseAll() {
 				<c:if test="${not empty aimEditActivityForm.funding.totalPlannedDisbursements}">
 	                <b>
 	                 <bean:write name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /> 
-	                 <bean:write name="aimEditActivityForm" property="currCode" />
+	                 ${aimEditActivityForm.currName}
 	                </b>		          
 		         </c:if>
 		         <c:if test="${empty aimEditActivityForm.funding.totalPlannedDisbursements}">
 			         <b>
 			         0
-			         <bean:write name="aimEditActivityForm" property="currCode" />
+			         ${aimEditActivityForm.currName}
 			         </b>
 		         </c:if>
 			<hr/>
@@ -442,13 +444,13 @@ function collapseAll() {
 				<c:if test="${not empty aimEditActivityForm.funding.totalExpenditures}">
 	                <b>
 	                 <bean:write name="aimEditActivityForm" property="funding.totalExpenditures" /> 
-	                 <bean:write name="aimEditActivityForm" property="currCode" />
+	                 ${aimEditActivityForm.currName}
 	                </b>		          
 		         </c:if>
 		          <c:if test="${empty aimEditActivityForm.funding.totalExpenditures}">
 			         <b>
 			         0
-			         <bean:write name="aimEditActivityForm" property="currCode" />
+			         ${aimEditActivityForm.currName}
 			         </b>
 		         </c:if>
 			<hr/>
@@ -458,13 +460,13 @@ function collapseAll() {
 				<c:if test="${not empty aimEditActivityForm.funding.unDisbursementsBalance}">
 	                <b>
 	                 <bean:write name="aimEditActivityForm" property="funding.unDisbursementsBalance" /> 
-	                 <bean:write name="aimEditActivityForm" property="currCode" />
+	                 ${aimEditActivityForm.currName}
 	                </b>		          
 		         </c:if>
 		          <c:if test="${empty aimEditActivityForm.funding.unDisbursementsBalance}">
 			         <b>
 			         0
-			         <bean:write name="aimEditActivityForm" property="currCode" />
+			         ${aimEditActivityForm.currName}
 			         </b>
 		         </c:if>
 			<hr/>
@@ -474,13 +476,13 @@ function collapseAll() {
 				<c:if test="${not empty aimEditActivityForm.funding.totalPlannedExpenditures}">
 	                <b>
 	                 <bean:write name="aimEditActivityForm" property="funding.totalPlannedExpenditures" /> 
-	                 <bean:write name="aimEditActivityForm" property="currCode" />
+	                 ${aimEditActivityForm.currName}
 	                </b>		          
 		         </c:if>
 		         <c:if test="${empty aimEditActivityForm.funding.totalPlannedExpenditures}">
 			         <b>
 			         0
-			         <bean:write name="aimEditActivityForm" property="currCode" />
+			         ${aimEditActivityForm.currName}
 			         </b>
 		         </c:if>
 			    <hr/>
@@ -1510,8 +1512,8 @@ function collapseAll() {
 						<c:if test="${aimEditActivityForm.funding.proProjCost.funAmount!=null}">
 							<b>${aimEditActivityForm.funding.proProjCost.funAmount}</b>						
 						</c:if>&nbsp;
-						<c:if test="${aimEditActivityForm.funding.proProjCost.currencyCode!=null}"> 
-							<b>${aimEditActivityForm.funding.proProjCost.currencyCode}</b>						
+						<c:if test="${aimEditActivityForm.funding.proProjCost.currencyName!=null}"> 
+							<b>${aimEditActivityForm.funding.proProjCost.currencyName}</b>						
 						</c:if>					
 					</td>
 				</tr>
@@ -1540,7 +1542,7 @@ function collapseAll() {
 				items="${aimEditActivityForm.funding.proposedAnnualBudgets}">
 				<tr bgcolor="#f0f0f0">
 					<td>${annualBudget.funAmount}
-						${annualBudget.currencyCode}</td>
+						${annualBudget.currencyName}</td>
 					<td>${annualBudget.funDate}</td>
 				</tr>
 			</c:forEach>
@@ -1722,7 +1724,7 @@ function collapseAll() {
 															<td align="right" width="100" bgcolor="#f0f0f0">
 																<c:out value="${fd.transactionAmount}"/>															</td>
 															<td class="prv_right">
-																<c:out value="${fd.currencyCode}"/>															</td>
+																<c:out value="${fd.currencyName}"/>															</td>
 															<td bgcolor="#f0f0f0" width="70">
 																<c:out value="${fd.transactionDate}"/>															</td>
 															<td class="prv_right"></td>
@@ -1754,7 +1756,7 @@ function collapseAll() {
 														<td align="right" width="100" bgcolor="#f0f0f0">
 															<c:out value="${fd.transactionAmount}"/>														</td>
 														<td class="prv_right">
-															<c:out value="${fd.currencyCode}"/>														</td>
+															<c:out value="${fd.currencyName}"/>														</td>
 														<td bgcolor="#f0f0f0" width="70">
 															<c:out value="${fd.transactionDate}"/>														</td>
 														<td class="prv_right"></td>
@@ -1787,7 +1789,7 @@ function collapseAll() {
 														<td align="right" width="100" bgcolor="#f0f0f0">
 															<c:out value="${fd.transactionAmount}"/>														</td>
 														<td class="prv_right">
-															<c:out value="${fd.currencyCode}"/></td>
+															<c:out value="${fd.currencyName}"/></td>
 														<td bgcolor="#f0f0f0" width="70">
 															<c:out value="${fd.transactionDate}"/>														</td>
 														<td class="prv_right"></td>
@@ -1879,7 +1881,7 @@ function collapseAll() {
 															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Currency"
 																parentModule="/Activity Form/Components/Component/Components Commitments/Commitment Table">
 																<td class="prv_right">
-																	<b><c:out value="${fd.currencyCode}"/></b>																
+																	<b><c:out value="${fd.currencyName}"/></b>																
 																</td>
 															</module:display>
 															<module:display name="/Activity Form/Components/Component/Components Commitments/Commitment Table/Component Organization"
@@ -1949,7 +1951,7 @@ function collapseAll() {
 														<module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Currency"
 																parentModule="/Activity Form/Components/Component/Components Disbursements/Disbursement Table">
 															<td class="prv_right">
-																<b><c:out value="${fd.currencyCode}"/></b>
+																<b><c:out value="${fd.currencyName}"/></b>
 															</td>
 														</module:display>
 														<module:display name="/Activity Form/Components/Component/Components Disbursements/Disbursement Table/Transaction Date"
@@ -1998,7 +2000,7 @@ function collapseAll() {
 												<module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Currency"
 													parentModule="/Activity Form/Components/Component/Components Expenditures/Expenditure Table">
 													<td class="prv_right">
-														<b><c:out value="${fd.currencyCode}"/></b>
+														<b><c:out value="${fd.currencyName}"/></b>
 													</td>
 												</module:display>
 												<module:display name="/Activity Form/Components/Component/Components Expenditures/Expenditure Table/Transaction Date"
@@ -2809,7 +2811,7 @@ function collapseAll() {
 											<td>
 												<b>
 												${contract.totalAmount}
-												${contract.totalAmountCurrency}
+												${contract.totalAmountCurrency.currencyName}
 												</b>											
 											</td>
 										</tr>
@@ -2829,7 +2831,7 @@ function collapseAll() {
 											<td>
 												<b>
 												${contract.totalECContribIBAmount}
-												${contract.totalAmountCurrency}
+												${contract.totalAmountCurrency.currencyName}
 												</b>											
 											</td>
 										</tr>
@@ -2842,7 +2844,7 @@ function collapseAll() {
 											<td>
 												<b>
 												${contract.totalECContribINVAmount}
-												${contract.totalAmountCurrency}
+												${contract.totalAmountCurrency.currencyName}
 												</b>											
 											</td>
 										</tr>
@@ -2860,7 +2862,7 @@ function collapseAll() {
 											<td>
 												<b>
 												${contract.totalNationalContribCentralAmount}
-												${contract.totalAmountCurrency}
+												${contract.totalAmountCurrency.currencyName}
 												</b>
 											</td>
 										</tr>
@@ -2873,7 +2875,7 @@ function collapseAll() {
 											<td>
 												<b>
 												${contract.totalNationalContribRegionalAmount}
-												${contract.totalAmountCurrency}
+												${contract.totalAmountCurrency.currencyName}
 												</b>
 											</td>
 										</tr>
@@ -2886,7 +2888,7 @@ function collapseAll() {
 											<td>
 												<b>
 												${contract.totalNationalContribIFIAmount}
-												${contract.totalAmountCurrency}
+												${contract.totalAmountCurrency.currencyName}
 												</b>											
 											</td>
 										</tr>
@@ -2904,7 +2906,7 @@ function collapseAll() {
 											<td>
 												<b>
 												${contract.totalPrivateContribAmount}
-												${contract.totalAmountCurrency}
+												${contract.totalAmountCurrency.currencyName}
 												</b>											
 											</td>
 										</tr>
@@ -2917,10 +2919,10 @@ function collapseAll() {
 											<td>
 												<b>${contract.totalDisbursements}</b> &nbsp; 
 											<logic:empty name="contract" property="dibusrsementsGlobalCurrency">
-													&nbsp; <b>${aimEditActivityForm.currCode}</b>		                                        
+													&nbsp; <b>${aimEditActivityForm.currName}</b>		                                        
 											</logic:empty> 
 		                                    <logic:notEmpty name="contract" property="dibusrsementsGlobalCurrency">
-											&nbsp; <b>${contract.dibusrsementsGlobalCurrency}</b>		                                         
+											&nbsp; <b>${contract.dibusrsementsGlobalCurrency.currencyName}</b>		                                         
 											</logic:notEmpty>	                                        
 											</td>
 										</tr>
@@ -2934,7 +2936,7 @@ function collapseAll() {
 													&nbsp;<b>${contract.totalAmountCurrency}</b>							              		
 												</logic:empty> 
 							              		<logic:notEmpty name="contract" property="dibusrsementsGlobalCurrency">
-						              				&nbsp;<b>${contract.dibusrsementsGlobalCurrency}</b>
+						              				&nbsp;<b>${contract.dibusrsementsGlobalCurrency.currencyName}</b>
 						              			</logic:notEmpty>
 						              		</td>
 										</tr>
@@ -3049,7 +3051,7 @@ function collapseAll() {
 																
 																<td align="center" valign="top">
 																<module:display name="/Activity Form/Contracts/Contract Item/Contract Disbursements/Currency" parentModule="/Activity Form/Contracts/Contract Item/Contract Disbursements">
-																	<b>${fundingDetail.currencyCode}</b>																
+																	<b>${fundingDetail.currencyCode.currencyName}</b>																
 																</module:display>
 																</td>
 																<td align="center" valign="top">

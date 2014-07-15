@@ -100,6 +100,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private FormFile fileImport = null;
 	private boolean popupView = false;
 	private String currCode;
+	private String currName;
 	private Collection currencies;
 	private boolean serializeFlag;
 	private List<CustomField<?>> customFields;
@@ -7232,6 +7233,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	}
 	
 	@java.lang.SuppressWarnings("all")
+	public String getCurrName() {
+		return this.currName;
+	}
+	
+	@java.lang.SuppressWarnings("all")
 	public Collection getCurrencies() {
 		return this.currencies;
 	}
@@ -7463,6 +7469,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	@java.lang.SuppressWarnings("all")
 	public void setCurrCode(final String currCode) {
 		this.currCode = currCode;
+	}
+	
+	@java.lang.SuppressWarnings("all")
+	public void setCurrName(final String currName) {
+		this.currName = currName;
 	}
 	
 	@java.lang.SuppressWarnings("all")

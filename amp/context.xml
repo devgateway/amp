@@ -5,6 +5,7 @@ allowLinking="true" antiJARLocking="" antiResourceLocking="" clearReferencesStop
 clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTlds="false">
   <Environment name="hostname" value="" type="java.lang.String"/> 
   <Resource 
+  factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" 
   defaultTransactionIsolation="READ_COMMITTED" 
   driverClassName="com.mysql.jdbc.Driver" 
   maxActive="500"

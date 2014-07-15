@@ -58,6 +58,13 @@ var paths = {
     stylesheets: '../dist/compiled-css/',
     images: '../dist/img/',
     fonts: '../dist/fonts/'
+  },
+  tests: {
+    css: './node_modules/qunitjs/qunit/qunit.css',
+    compiled: './app/test/compiled/compiled-test.js',
+    compileDest: './app/test/compiled/',
+    entry: './app/test/entry.js',
+    scripts: './app/test/scripts/*.js'
   }
 };
 
@@ -72,6 +79,23 @@ function _bundlify(ifyer) {
       .on('error', function(e) { g.util.log('Browserify error: ', e); })
       .pipe(source('main.js'))
       .pipe(gulp.dest(paths.app.scripts.buildDest));
+  };
+
+  bundler.on('update', rebundle);
+
+  return rebundle();
+}
+
+function _bundlifyTests(ifyer) {
+  var bundler = ifyer(paths.tests.entry);
+  bundler.transform('brfs');
+
+  var rebundle = function() {
+    g.util.log('rebrowserifying tests...');
+    return bundler.bundle({debug: true})
+      .on('error', function(e) { g.util.log('Browserify error: ', e); })
+      .pipe(source('compiled-test.js'))
+      .pipe(gulp.dest(paths.tests.compileDest));
   };
 
   bundler.on('update', rebundle);
@@ -182,8 +206,22 @@ gulp.task('lint', function() {
 });
 
 
-gulp.task('test', ['build'], function() {
+
+gulp.task('build-tests', function() {
+  return _bundlifyTests(browserify);
+});
+
+
+gulp.task('test', ['build-tests','dev-server'], function() {
   // TODO...
+  // copy qunit css from node_modules into test folder
+  gulp.src(paths.tests.css).pipe(gulp.dest(paths.tests.compileDest));
+
+  //g.livereload.listen();
+  gulp.watch(paths.tests.scripts, ['build-tests'])
+  //  .on('change', g.livereload.changed);
+
+  // TODO: continuous test integration mode? run tests from command line..
 });
 
 

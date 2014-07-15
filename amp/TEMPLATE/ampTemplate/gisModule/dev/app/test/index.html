@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <title>AMP GIS Front-end Tests</title>
-    <link rel="stylesheet" href="qunit.css" />
+    <link rel="stylesheet" href="compiled/qunit.css" />
   </head>
   <body>
     <iframe class="test-frame" height="480" width="800"></iframe>
@@ -31,20 +31,7 @@
     <div id="qunit-fixture"></div>
 
     <!-- set up testing env and make sure it is sane -->
-    <script src="/js/libs/vendor/qunit/qunit/qunit.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.9.3/dojo/dojo.js"></script>
+    <script src="compiled/compiled-test.js"></script>
 
-    <!-- lets run some tests  -->
-    <script>
-      require(['/js/config.js'], function() {
-
-        // make QUnit behave for AMD
-        QUnit.config.autostart = false;
-        define('qunit', QUnit);
-
-        // run the tests
-        require(['/test/util/runner.js']);
-      });
-    </script>
   </body>
 </script>

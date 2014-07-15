@@ -3,7 +3,6 @@ var Backbone = require('backbone');
 
 function State() {
   'use strict';
-  console.log('creating a state');
 
   if (! (this instanceof State)) {
     throw new Error('State needs to be created with the `new` keyword.');
@@ -70,7 +69,6 @@ function State() {
 
 
   this.register = function registerStateSaver(obj, id, options) {
-    console.log('state registering', id);
     if (id in this._stateRegistry) {
       throw new Error('Attempted registration of duplicate state id ' + id);
     }
@@ -88,7 +86,6 @@ function State() {
       options.set(this._unclaimed[id]);
       delete this._unclaimed[id];
     } else {
-      console.info('setting default empty state for ', id);
       this._stateRegistry[id].set(options.empty);
     }
   };

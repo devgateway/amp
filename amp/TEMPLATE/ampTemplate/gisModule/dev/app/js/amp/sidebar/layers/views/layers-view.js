@@ -2,13 +2,13 @@ var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var $ = require('jquery');
-var BaseToolView = require('../../base-control/base-control-view');
+var BaseControlView = require('../../base-control/base-control-view');
 var Template = fs.readFileSync(__dirname + '/../templates/layers-template.html', 'utf8');
 var IndicatorTemplate = fs.readFileSync(__dirname + '/../templates/indicator-template.html', 'utf8');
 var IndicatorCollection = require('../collections/indicator-collection');
 
 
-module.exports = BaseToolView.extend({
+module.exports = BaseControlView.extend({
   id: 'tool-layers',
   title: 'Layers',
   iconClass: 'ampicon-layers',
@@ -19,7 +19,7 @@ module.exports = BaseToolView.extend({
 
   initialize: function() {
     var self = this;
-    BaseToolView.prototype.initialize.apply(this);
+    BaseControlView.prototype.initialize.apply(this);
 
     // Get Indicators Collection and render...
     this.indicators =  new IndicatorCollection();
@@ -29,7 +29,7 @@ module.exports = BaseToolView.extend({
 
   render: function(){
     var self = this;
-    BaseToolView.prototype.render.apply(this);
+    BaseControlView.prototype.render.apply(this);
 
     // add content
     this.$('.content').html(this.template({title: this.title}));
@@ -50,7 +50,7 @@ module.exports = BaseToolView.extend({
 
     // setup listener:
     this.$('.indicator-selector input:radio').change(function(){
-      var modelId = $(this).val();      
+      var modelId = $(this).val();
       indicator = self.indicators.find(function(model) { return model.get('id') == modelId; });
       Backbone.trigger('MAP_LOAD_INDICATOR', indicator);
     });
@@ -58,11 +58,11 @@ module.exports = BaseToolView.extend({
 
   _addIndicatorListener: function(){
     var self = this;
-    
+
     this.$('#indicatorLayers').change(function(evt){
       var indicatorEnabled = $(this).prop('checked');
       if(indicatorEnabled){
-        self.$('.indicator-selector').show();        
+        self.$('.indicator-selector').show();
         var modelId = self.$('.indicator-selector input:radio:checked').val();
         indicator = self.indicators.find(function(model) { return model.get('id') == modelId; });
         Backbone.trigger('MAP_LOAD_INDICATOR', indicator);
@@ -71,6 +71,6 @@ module.exports = BaseToolView.extend({
         Backbone.trigger('MAP_LOAD_INDICATOR', null);
         self.$('.indicator-selector').hide();
       }
-    }); 
+    });
   }
 });

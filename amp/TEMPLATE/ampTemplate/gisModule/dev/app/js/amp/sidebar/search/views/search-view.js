@@ -1,6 +1,6 @@
 var fs = require('fs');
 var _ = require('underscore');
-var BaseToolView = require('../../base-control/base-control-view');
+var BaseControlView = require('../../base-control/base-control-view');
 var ResultsView = require('../views/search-results-view');
 var SearchWidget = fs.readFileSync(__dirname + '/../templates/search-control-widget.html', 'utf8');
 var Template = fs.readFileSync(__dirname + '/../templates/search-template.html', 'utf8');
@@ -8,7 +8,7 @@ var Template = fs.readFileSync(__dirname + '/../templates/search-template.html',
 
 var searchWidget = _.template(SearchWidget);
 
-module.exports = BaseToolView.extend({
+module.exports = BaseControlView.extend({
 
   id: 'tool-search',
   title: 'Keyword Search',
@@ -22,7 +22,7 @@ module.exports = BaseToolView.extend({
   },
 
   render: function() {
-    BaseToolView.prototype.render.apply(this);
+    BaseControlView.prototype.render.apply(this);
 
     var self = this;
 

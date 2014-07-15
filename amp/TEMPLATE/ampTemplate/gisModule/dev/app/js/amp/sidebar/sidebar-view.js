@@ -19,53 +19,35 @@ var controlViews = [
 module.exports = Backbone.View.extend({
 
   events: {
-    'hide.bs.collapse .sidebar-tool': 'hidePopovers',
-    'show.bs.popover .layer-info': 'blah'
-  },
-
-  hidePopovers: function() {
-    console.log('hide em');
-  },
-
-  blah: function() {
-    console.log('blah');
+    'hide.bs.collapse .sidebar-tool': 'hideAllPopovers',
+    'show.bs.popover .layer-info': 'exclusiveShowPopover'
   },
 
   // Render entire geocoding view.
   render: function () {
-
-    var sidebarConainer = this.$el;
-    _.each(controlViews, function(ControlView) {
+    this.$el.append(_.map(controlViews, function(ControlView) {
       var view = new ControlView();
-      sidebarConainer.append(view.render().el);
-    });
+      return view.render().el;
+    }));
 
-    // TODO: move popover binding somewhere better
+    // sidebar popover init
     this.popovers = this.$('.layer-info');
-    this.bindPopovers();
+    this.popovers.popover();
 
     return this;
   },
 
-  bindPopovers: function() {
-    var popovers = this.popovers;
+  hideAllPopovers: function() {
+    this.popovers.popover('hide');
+  },
 
-    // standard show/hide
-    popovers.popover();
-
-    // go away when the accordion container collapses
-    this.$('.sidebar-tool').on('hide.bs.collapse', function() {
-      popovers.popover('hide');
-    });
-
-    // hide all others when this cone comes up
-    popovers.on('show.bs.popover', function() {
-      var opening = this;
-      popovers.each(function(i, triggerer) {
-        if (triggerer !== opening) {
-          $(triggerer).popover('hide');
-        }
-      });
+  exclusiveShowPopover: function() {
+    var opening = this;
+    this.popovers.each(function(i, triggerer) {
+      if (triggerer !== opening) {
+        $(triggerer).popover('hide');
+      }
     });
   }
+
 });

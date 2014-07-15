@@ -1,6 +1,6 @@
 var fs = require('fs');
 var _ = require('underscore');
-var BaseToolView = require('../../base-control/base-control-view');
+var BaseControlView = require('../../base-control/base-control-view');
 
 var SavedMapModel = require('../models/saved-map-model');
 var SavedMaps = require('../models/saved-map-collection');
@@ -10,7 +10,7 @@ var SavedMapsTemplate = fs.readFileSync(__dirname + '/../templates/saved-maps-te
 var state = require('../../../services/state');
 
 
-module.exports = BaseToolView.extend({
+module.exports = BaseControlView.extend({
 
   id: 'tool-tools',
   title:  'Tools',
@@ -30,14 +30,14 @@ module.exports = BaseToolView.extend({
   },
 
   initialize: function() {
-    BaseToolView.prototype.initialize.apply(this);
+    BaseControlView.prototype.initialize.apply(this);
     this.savedMaps = new SavedMaps();
     this.listenTo(this.savedMaps, 'add', this.renderSavedMapsList);
     this.listenTo(this.savedMaps, 'remove', this.renderSavedMapsList);
   },
 
   render: function() {
-    BaseToolView.prototype.render.apply(this);
+    BaseControlView.prototype.render.apply(this);
     this.$('.content').html(this.template({title: this.title}));
     return this;
   },

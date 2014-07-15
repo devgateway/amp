@@ -2,7 +2,7 @@ var fs = require('fs');
 var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
-var BaseToolView = require('../../base-control/base-control-view');
+var BaseControlView = require('../../base-control/base-control-view');
 var GenericFilterView = require('../views/generic-filter-view');
 var OrgFilterView = require('../views/org-filter-view');
 var YearsFilterView = require('../views/years-filter-view');
@@ -11,7 +11,7 @@ var Template = fs.readFileSync(__dirname + '/../templates/filters-template.html'
 
 var filterViews = [OrgFilterView, YearsFilterView];
 
-module.exports = BaseToolView.extend({
+module.exports = BaseControlView.extend({
   id: 'tool-filters',
   title: 'Filters',
   iconClass: 'ampicon-filters',
@@ -25,7 +25,7 @@ module.exports = BaseToolView.extend({
 
   initialize: function() {
     var self = this;
-    BaseToolView.prototype.initialize.apply(this);
+    BaseControlView.prototype.initialize.apply(this);
 
     this._getFilterList().done(function(filterList){
       self.filterViewsInstances = filterList;
@@ -39,7 +39,7 @@ module.exports = BaseToolView.extend({
 
 
   render: function() {
-    BaseToolView.prototype.render.apply(this);
+    BaseControlView.prototype.render.apply(this);
 
     // add content
     this.$('.content').html(this.template({title: this.title}));

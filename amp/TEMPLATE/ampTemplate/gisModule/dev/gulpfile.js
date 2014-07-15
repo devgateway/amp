@@ -60,6 +60,7 @@ var paths = {
     fonts: '../dist/fonts/'
   },
   tests: {
+    root: './app/test',
     css: './node_modules/qunitjs/qunit/qunit.css',
     qunit: './node_modules/qunitjs/qunit/*.*',
     compiled: './app/test/compiled/compiled-test.js',
@@ -70,16 +71,16 @@ var paths = {
 };
 
 
-function _bundlify(ifyer) {
-  var bundler = ifyer(paths.app.scripts.entry);
+function _bundlify(ifyer, entry, destFolder, destName) {
+  var bundler = ifyer(entry);
   bundler.transform('brfs');
 
   var rebundle = function() {
-    g.util.log('rebrowserifying...');
+    g.util.log('rebrowserifying ' + entry + '....');
     return bundler.bundle({debug: true})
       .on('error', function(e) { g.util.log('Browserify error: ', e); })
-      .pipe(source('app.js'))
-      .pipe(gulp.dest(paths.app.scripts.buildDest));
+      .pipe(source(destName))
+      .pipe(gulp.dest(destFolder));
   };
 
   bundler.on('update', rebundle);
@@ -107,12 +108,14 @@ function _bundlifyTests(ifyer) {
 
 gulp.task('watchify', function() {
   // recompile browserify modules
-  return _bundlify(watchify);
+  return _bundlify(watchify, paths.app.scripts.entry,
+                   paths.app.scripts.buildDest, 'app.js');
 });
 
 
 gulp.task('browserify', function() {
-  return _bundlify(browserify);
+  return _bundlify(browserify. paths.app.scripts.entry,
+                   paths.app.scripts.buildDest, 'app.js');
 });
 
 
@@ -207,25 +210,25 @@ gulp.task('lint', function() {
 });
 
 
+gulp.task('serve-tests', ['test'], g.serve({
+    root: [paths.tests.root],
+    port: 3000
+}));
 
-gulp.task('build-tests', function() {
-  return _bundlifyTests(browserify);
+
+gulp.task('reload-tests', ['test'], function() {
+  gulp.watch(paths.tests.scripts, ['test']);
+  gulp.watch(paths.tests.compiled)
+    .on('change', g.livereload.changed);
 });
 
 
-gulp.task('test', ['build-tests','dev-server'], function() {
-  // TODO...
-  // copy qunit css from node_modules into test folder
-  //gulp.src(paths.tests.css).pipe(gulp.dest(paths.tests.compileDest));
-  gulp.src(paths.tests.qunit).pipe(gulp.dest(paths.tests.compileDest));
-  
-
-  //g.livereload.listen();
-  gulp.watch(paths.tests.scripts, ['build-tests'])
-  //  .on('change', g.livereload.changed);
-
-  // TODO: continuous test integration mode? run tests from command line..
+gulp.task('test', function() {
+  return _bundlify(browserify, paths.tests.entry,
+                   paths.tests.compileDest, 'compiled-test.js');
 });
+
+gulp.task('dev-tests', ['test', 'serve-tests', 'reload-tests']);
 
 
 gulp.task('preview', ['build'], g.serve({

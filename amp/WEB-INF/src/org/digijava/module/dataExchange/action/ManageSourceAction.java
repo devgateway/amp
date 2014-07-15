@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -109,6 +110,11 @@ public class ManageSourceAction extends MultiAction {
 
         //get sources
         List<DESourceSetting> sources = new SessionSourceSettingDAO().getPagedAmpSourceSettingsObjects(startIndex, msForm.getSort());
+        for (ListIterator<DESourceSetting> iter = sources.listIterator(); iter.hasNext(); ) {
+        	DESourceSetting dess = iter.next();
+        	if (dess.getAttachedFile()!=null) 
+        		iter.remove();
+        }
 
         msForm.setPagedSources(sources);
 

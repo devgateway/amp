@@ -38,6 +38,13 @@ public class MondrianETL {
 	public final static String MONDRIAN_SECTORS_DIMENSION_TABLE = "mondrian_sectors";
 	public final static String MONDRIAN_PROGRAMS_DIMENSION_TABLE = "mondrian_programs";
 	public final static String MONDRIAN_ORGANIZATIONS_DIMENSION_TABLE = "mondrian_organizations";
+	public final static String MONDRIAN_ACTIVITY_TEXTS = "mondrian_activity_texts";
+	
+	/**
+	 * the dummy id to insert into the Cartesian product calculated by ETL.
+	 * <strong>Do not change this unless you want to face Constantin's wrath</strong>
+	 */
+	public final static Long MONDRIAN_DUMMY_ID_FOR_ETL = 999999999l;
 	
 	private final static String ETL_LOCK = "ETL_LOCK_OBJECT";
 	
@@ -151,17 +158,22 @@ public class MondrianETL {
 		}
 	}
 	
+	/**
+	 * makes a snapshot of the views which back Mondrian ETL columns
+	 * @throws SQLException
+	 */
 	protected void generateStarTables() throws SQLException {
 		logger.warn("generating STAR tables...");
 		generateStarTable(MONDRIAN_LOCATIONS_DIMENSION_TABLE, "id", "parent_location", "country_id", "region_id", "zone_id", "district_id");
 		generateStarTable(MONDRIAN_SECTORS_DIMENSION_TABLE, "amp_sector_id", "parent_sector_id", "level0_sector_id", "level1_sector_id", "level2_sector_id");
 		generateStarTable(MONDRIAN_PROGRAMS_DIMENSION_TABLE, "amp_theme_id", "parent_theme_id", "program_setting_id", "program_setting_name", "id2", "id3", "id4", "id5", "id6", "id7", "id8");
 		generateStarTable(MONDRIAN_ORGANIZATIONS_DIMENSION_TABLE, "amp_org_id", "amp_org_grp_id", "amp_org_type_id");
+		generateStarTable(MONDRIAN_ACTIVITY_TEXTS, "amp_activity_id");
 		logger.warn("...generating STAR tables done");
 	}
 
 	/**
-	 * makes a snapshot of the view v_<strong>tableName</strong> in the table <strong>tableName</strong>
+	 * makes a snapshot of the view v_<strong>tableName</strong> in the table <strong>tableName</strong> and then creates indices on the relevant columns
 	 * @param tableName
 	 * @param columnsToIndex columns on which to create indices
 	 * @throws SQLException
@@ -169,6 +181,19 @@ public class MondrianETL {
 	protected void generateStarTable(String tableName, String... columnsToIndex) throws SQLException {
 		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + tableName);
 		SQLUtils.executeQuery(conn, "CREATE TABLE " + tableName + " AS SELECT * FROM v_" + tableName);
+		
+		// change text column types' collation to C -> 7x faster GROUP BY / ORDER BY for stupid Mondrian
+		Map<String, String> tableColumns = SQLUtils.getTableColumnsWithTypes(tableName, true);
+		Set<String> textColumnTypes = new HashSet<String>() {{add("text"); add("character varying"); add("varchar");}};
+		for (String columnName:tableColumns.keySet()) {
+			String columnType = tableColumns.get(columnName);
+			if (textColumnTypes.contains(columnType)) {
+				String q = String.format("ALTER TABLE %s ALTER COLUMN %s SET DATA TYPE text COLLATE \"C\"", tableName, columnName);
+				SQLUtils.executeQuery(conn, q);
+			}
+		}
+		
+		// create indices
 		for (String columnToIndex:columnsToIndex) {
 			String query = String.format("CREATE INDEX %s_%s ON %s(%s)", tableName, columnToIndex, tableName, columnToIndex);
 			SQLUtils.executeQuery(conn, query);
@@ -213,6 +238,10 @@ public class MondrianETL {
 		}		
 	}
 	
+	/**
+	 * generates the fact table's Cartesian Product sources (prim/sec/tert sectors + programs + locations + orgs) and then, the fact table
+	 * @throws SQLException
+	 */
 	protected void generateActivitiesEntries() throws SQLException{
 		generateSectorsEtlTables();
 		generateProgramsEtlTables();
@@ -249,6 +278,10 @@ public class MondrianETL {
 		runEtlOnTable("select amp_activity_id, amp_org_id, percentage from v_responsible_organisation", "etl_responsible_agencies");
 	}
 	
+	/**
+	 * cleans up percentages and NULLs for sectors and generates the tables which are the base for the Cartesian Product
+	 * @throws SQLException
+	 */
 	protected void generateSectorsEtlTables() throws SQLException {
 		logger.warn("generating Sector ETL tables...");
 		generateSectorsEtlTables("Primary");
@@ -256,6 +289,10 @@ public class MondrianETL {
 		generateSectorsEtlTables("Tertiary");
 	}
 
+	/**
+	 * cleans up percentages and NULLs for programs and generates the tables which are the base for the Cartesian Product
+	 * @throws SQLException
+	 */
 	protected void generateProgramsEtlTables() throws SQLException {
 		logger.warn("generating Program ETL tables...");
 		generateProgramsEtlTables("National Plan Objective");
@@ -263,7 +300,11 @@ public class MondrianETL {
 		generateProgramsEtlTables("Secondary Program");
 		generateProgramsEtlTables("Tertiary Program");
 	}
-	
+
+	/**
+	 * cleans up percentages and NULLs for locations and generates the tables which are the base for the Cartesian Product
+	 * @throws SQLException
+	 */
 	protected void generateLocationsEtlTables() throws SQLException {
 		logger.warn("generating location ETL tables...");
 		runEtlOnTable("select aal.amp_activity_id, acvl.id, aal.location_percentage from amp_activity_location aal, amp_category_value_location acvl, amp_location al WHERE aal.amp_location_id = al.amp_location_id AND al.location_id = acvl.id", "etl_locations");
@@ -280,7 +321,7 @@ public class MondrianETL {
 	}
 	
 	/**
-	 * creates an ETL table with percentages
+	 * creates an ETL table with cleaned-up percentages
 	 * TODO: generate one query per N activities instead of a huge SQL query
 	 * @param percs
 	 * @param tableName
@@ -294,7 +335,7 @@ public class MondrianETL {
 		for (long actId:percs.keySet()) {
 			// build an SQL query for each activityId
 			PercentagesDistribution pd = percs.get(actId);
-			pd.postProcess();
+			pd.postProcess(MONDRIAN_DUMMY_ID_FOR_ETL);
 			for (Map.Entry<Long, Double> entry:pd.getPercentages().entrySet()) {
 				if (!isFirst)
 					query.append(", \n");
@@ -302,7 +343,7 @@ public class MondrianETL {
 				isFirst = false;
 			}
 		}
-		if (!isFirst) {
+		if (!isFirst) { // if the table is non-empty
 			SQLUtils.executeQuery(conn, query.toString());
 		}
 		SQLUtils.executeQuery(conn, String.format("CREATE INDEX %s_act_id_idx ON %s(act_id)", tableName, tableName)); // create index on activityId

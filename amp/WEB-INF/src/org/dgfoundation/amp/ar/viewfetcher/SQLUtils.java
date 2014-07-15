@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -31,32 +32,33 @@ public class SQLUtils {
 	 * @return
 	 * @throws SQLException 
 	 */
-	public static LinkedHashSet<String> getTableColumns(final String tableName, boolean crashOnDuplicates)
-	{
-		LinkedHashSet<String> res = new LinkedHashSet<String>();
-		String query = String.format("SELECT c.column_name FROM information_schema.columns As c WHERE table_schema='public' AND table_name = '%s' ORDER BY c.ordinal_position", tableName.toLowerCase());
-		Connection jdbcConnection=null;
-		try {
-			jdbcConnection = PersistenceManager.getJdbcConnection();
-			
-			for(Object obj: fetchAsList(jdbcConnection				
-					, query, 1))
-			{
-				if (crashOnDuplicates && res.contains((String) obj))
-					throw new RuntimeException("not allowed to have duplicate column names in table " + tableName);
-				res.add((String) obj);
+	public static LinkedHashSet<String> getTableColumns(final String tableName, boolean crashOnDuplicates){
+		return new LinkedHashSet<String>(getTableColumnsWithTypes(tableName, crashOnDuplicates).keySet());
+	}
+	
+	/**
+	 * returns the list of all the columns of a table / view, in the same order as they appear in the table/view definition
+	 * @param tableName - the table / view whose columns to fetch
+	 * @param crashOnDuplicates - whether to throw exception in case the table/view has duplicate names
+	 * @return Map<ColumnName, data_type>
+	 */
+	public static LinkedHashMap<String, String> getTableColumnsWithTypes(final String tableName, boolean crashOnDuplicates){
+		LinkedHashMap<String, String> res = new LinkedHashMap<>();
+		String query = String.format("SELECT c.column_name, c.data_type FROM information_schema.columns As c WHERE table_schema='public' AND table_name = '%s' ORDER BY c.ordinal_position", tableName.toLowerCase());
+		try (Connection jdbcConnection = PersistenceManager.getJdbcConnection()) {
+			try(ResultSet rs = rawRunQuery(jdbcConnection, query, null)) {
+				while (rs.next()) {
+					String columnName = rs.getString(1);
+					String columnType = rs.getString(2);
+					
+					if (crashOnDuplicates && res.containsKey(columnName))
+						throw new RuntimeException("not allowed to have duplicate column names in table " + tableName);
+					res.put(columnName, columnType);
+				}
 			}
-		
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally { 
-			try {
-				jdbcConnection.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		}
+		catch(SQLException ex) {
+			throw new RuntimeException(ex);
 		}
 		return res;
 	}

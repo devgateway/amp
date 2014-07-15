@@ -23,11 +23,21 @@
 			    CREATE OR REPLACE VIEW v_mondrian_sectors AS 
 					SELECT s.amp_sector_id, s.parent_sector_id, s.sector_code_official, s.name AS sector_name,
 						getparentsectorid(s.amp_sector_id) AS level0_sector_id, getsectorname(getparentsectorid(s.amp_sector_id)) AS level0_sector_name,
-						NULLIF(getparentsubsectorid(s.amp_sector_id), 0) AS level1_sector_id, getsectorname(getparentsubsectorid(s.amp_sector_id)) AS level1_sector_name,
-						NULLIF(getparentsubsubsectorid(s.amp_sector_id), 0) AS level2_sector_id, getsectorname(getparentsubsubsectorid(s.amp_sector_id)) AS level2_sector_name,
-						ss.amp_sec_scheme_id, ss.sec_scheme_name, acc.name AS typename 
+						COALESCE(NULLIF(getparentsubsectorid(s.amp_sector_id), 0), 999999999) AS level1_sector_id, COALESCE(getsectorname(getparentsubsectorid(s.amp_sector_id)), 'Undefined') AS level1_sector_name,
+						COALESCE(NULLIF(getparentsubsubsectorid(s.amp_sector_id), 0), 999999999) AS level2_sector_id, COALESCE(getsectorname(getparentsubsubsectorid(s.amp_sector_id)), 'Undefined') AS level2_sector_name,
+						ss.amp_sec_scheme_id, ss.sec_scheme_name, acc.name AS typename
 						FROM amp_sector s, amp_sector_scheme ss, amp_classification_config acc
-					WHERE ss.amp_sec_scheme_id = s.amp_sec_scheme_id AND acc.classification_id = ss.amp_sec_scheme_id;    		
+					WHERE ss.amp_sec_scheme_id = s.amp_sec_scheme_id AND acc.classification_id = ss.amp_sec_scheme_id
+					
+					UNION ALL
+					
+					SELECT 999999999, null, 'Undefined', 'Undefined', 
+						999999999, 'Undefined', 
+						999999999, 'Undefined', 
+						999999999, 'Undefined', 
+						null, 'Undefined', 'Undefined'
+					
+					ORDER BY amp_sector_id;
 			</lang>
 		</script>
 	</apply>

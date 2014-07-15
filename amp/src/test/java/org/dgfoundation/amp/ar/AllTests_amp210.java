@@ -2,6 +2,14 @@ package org.dgfoundation.amp.ar;
 
 //import org.dgfoundation.amp.testutils.LiberiaFiller;
 import org.dgfoundation.amp.ar.amp210.ETLTests;
+import org.dgfoundation.amp.ar.amp210.SQLUtilsTests;
+import org.digijava.kernel.persistence.HibernateClassLoader;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.util.DigiConfigManager;
+import org.digijava.kernel.util.SiteUtils;
+import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -22,6 +30,7 @@ public class AllTests_amp210
 //		LiberiaFiller.fillInDatabase();
 		TestSuite suite = new TestSuite(AllTests_amp210.class.getName());
 		suite.addTest(ETLTests.suite());
+		suite.addTest(SQLUtilsTests.suite());
 		//$JUnit-BEGIN$
 
 		//$JUnit-END$
@@ -32,13 +41,8 @@ public class AllTests_amp210
 		junit.textui.TestRunner.run(suite());
 	}
 
-	/**
-	 * disabled for now
-	 */
-	public static void setUp()
-	{
-/*		try
-		{ 
+	public static void setUp() {
+		try {
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
 			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_210";
 			//HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_moldova_27";
@@ -52,13 +56,8 @@ public class AllTests_amp210
 			//System.out.println("AMP started up!");
 			TLSUtils.getThreadLocalInstance().setForcedLangCode(SiteUtils.getDefaultSite().getDefaultLanguage().getCode());
 		}
-		catch(Exception e)
-		{
+		catch(Exception e) {
 			throw new RuntimeException(e);
 		}
-		
-		// PersistenceManager.cleanup();*/
 	}
-	
-}
-
+} 

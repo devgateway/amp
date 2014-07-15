@@ -88,17 +88,25 @@ public class PercentagesDistribution {
 		
 		percentages.put(fieldId, percentage);		
 	}
-	
+
 	/**
 	 * postprocesses percentages in {@link #percentages} so that they sum up to 100%
+	 * @param idToAddIfEmpty - if not null, then a dummy entry will be added with the said id for activities without entries (e.g., a project with no Secondary Sector will have this dummy Secondary Sector added)
 	 */
-	public void postProcess() {
+	public void postProcess(Long idToAddIfEmpty) {
+		
 		if (this.postprocessed)
 			return;
+		
 		this.postprocessed = true;
 		
-		if (percentages.isEmpty())
+		if (percentages.isEmpty()) {
+			if (idToAddIfEmpty != null) {
+				// add a dummy entry with 100% if has been specified
+				percentages.put(idToAddIfEmpty, 100.0);
+			}
 			return; // nothing to do
+		}
 		
 		double sum = 0.0; // sum of percentages
 		int numberOfNulls = 0; // number of entries with null

@@ -87,7 +87,7 @@ public class ViewNewAdvancedReport extends Action {
 			}
 			long end = System.currentTimeMillis();
 			double secs = (end - start) / 1000.0;
-			ARUtil.writeResponse(response, String.format("ETL calculation done in %.2f seconds", secs));
+			ARUtil.writeResponse(response, String.format("ETL done in %.2f seconds", secs));
 			return null;
 		}
 		

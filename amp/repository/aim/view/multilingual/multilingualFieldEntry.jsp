@@ -38,7 +38,7 @@
 			<c:forEach items="${dta.locales}" var="cur_locale">  <!-- an input <div> for each language -->	
 				<div>
 					<input type="text" name="${dta.prefix}_${cur_locale}" 
-						value="${dta.translations[cur_locale]}"
+						value="<c:out value="${dta.translations[cur_locale]}"/>"
 						placeholder="(${cur_locale})"
 						<c:if test="${not empty param.onkeyup}">
 							onkeyup="${param.onkeyup}"							

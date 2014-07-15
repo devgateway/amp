@@ -41,7 +41,7 @@ var basemaps = [
     source: 'esri',
     esriId: 'Terrain',
     label: true,
-    thumb: 'img/basemaps/tempTerrain_with_labels_ne_usa.png',
+    thumb: '/img/basemaps/tempTerrain_with_labels_ne_usa.png',
   },
   {
     id: 'Gray',
@@ -106,6 +106,6 @@ module.exports = Backbone.Collection.extend({
     }
 
     newSelection.set('selected', true);  // select the new one
-  },
+  }
 
 });

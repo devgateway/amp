@@ -13,7 +13,7 @@ var ADMTemplate = fs.readFileSync(__dirname + '/../templates/map-adm-template.ht
 
 
 module.exports = Backbone.View.extend({
-  apiURL: 'js/mock-api/cluster.json', //'http://localhost:8080/rest/gis/cluster',
+  apiURL: '/js/mock-api/cluster.json', //'http://localhost:8080/rest/gis/cluster',
 
   admTemplate: _.template(ADMTemplate),
 

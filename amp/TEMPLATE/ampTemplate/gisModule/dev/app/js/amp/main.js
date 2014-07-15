@@ -3,6 +3,7 @@ var _ = require('underscore');
 var State = require('./services/state');
 var MainView = require('./gis/views/gis-view');
 
+// TODO: add some comments...
 function App() { return this; }
 var app = new App();
 

@@ -61,6 +61,7 @@ var paths = {
   },
   tests: {
     css: './node_modules/qunitjs/qunit/qunit.css',
+    qunit: './node_modules/qunitjs/qunit/*.*',
     compiled: './app/test/compiled/compiled-test.js',
     compileDest: './app/test/compiled/',
     entry: './app/test/entry.js',
@@ -215,7 +216,9 @@ gulp.task('build-tests', function() {
 gulp.task('test', ['build-tests','dev-server'], function() {
   // TODO...
   // copy qunit css from node_modules into test folder
-  gulp.src(paths.tests.css).pipe(gulp.dest(paths.tests.compileDest));
+  //gulp.src(paths.tests.css).pipe(gulp.dest(paths.tests.compileDest));
+  gulp.src(paths.tests.qunit).pipe(gulp.dest(paths.tests.compileDest));
+  
 
   //g.livereload.listen();
   gulp.watch(paths.tests.scripts, ['build-tests'])

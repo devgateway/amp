@@ -16,7 +16,7 @@ module.exports = BaseToolView.extend({
   title: 'Filters',
   iconClass: 'ampicon-filters',
   description: 'Apply filters to the map.',
-  apiURL: 'js/mock-api/filters.json',
+  apiURL: '/js/mock-api/filters.json',
 
   // collection of child views..
   filterViewsInstances:[],

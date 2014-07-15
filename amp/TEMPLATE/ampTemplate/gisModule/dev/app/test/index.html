@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <title>AMP GIS Front-end Tests</title>
     <link rel="stylesheet" href="compiled/qunit.css" />
+    
   </head>
   <body>
 
@@ -11,8 +12,11 @@
     <div id="qunit"></div>
     <div id="qunit-fixture"></div>
 
-    <!-- set up testing env and make sure it is sane -->
-    <script src="compiled/compiled-test.js"></script>
 
+    <!-- qunit.js stays seperate so we can calulate coverage-->
+    <script src="compiled/qunit.js" ></script>
+
+    <script src="blanket.js" data-cover-flags="debug"></script>
+    <script src="compiled/compiled-test.js" data-cover></script>
   </body>
 </script>

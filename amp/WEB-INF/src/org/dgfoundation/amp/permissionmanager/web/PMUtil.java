@@ -54,6 +54,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.type.StringType;
 
 /**
  * @author dan
@@ -1000,6 +1001,24 @@ public final class PMUtil {
         }
         return ;
 		
+	}
+	
+	public static List<GatePermission> getPermissionsByTeam (String teamId) {
+		Session dbSession			= null;
+		List<GatePermission> returnCollection	= null;
+		try {
+			dbSession= PersistenceManager.getRequestDBSession();
+			String queryString = "select v from "
+				+ GatePermission.class.getName()
+				+ " v join v.gateParameters as param where param=:teamId";
+			Query qry			= dbSession.createQuery(queryString);
+			qry.setParameter("teamId", teamId, StringType.INSTANCE);
+			returnCollection	= qry.list();
+
+		} catch (Exception ex) {
+			logger.error("Unable to getPermissionByTeam: " + ex.getMessage());
+		} 
+		return returnCollection;
 	}
 	
 }

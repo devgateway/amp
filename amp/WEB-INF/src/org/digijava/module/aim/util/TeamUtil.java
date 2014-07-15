@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.permissionmanager.web.PMUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -55,6 +56,8 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
 import org.digijava.module.contentrepository.dbentity.CrSharedDoc;
 import org.digijava.module.contentrepository.helper.CrConstants;
+import org.digijava.module.gateperm.core.CompositePermission;
+import org.digijava.module.gateperm.core.GatePermission;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
@@ -762,6 +765,19 @@ public class TeamUtil {
             qry.executeUpdate();
             
             session.delete(team);
+            
+            //remove related permissions
+            
+            List <GatePermission> gatePermissionList=PMUtil.getPermissionsByTeam(String.valueOf(teamId));
+        	for (GatePermission perm:gatePermissionList) {
+            	perm.setActions(null);
+            	perm.setGateParameters(null);
+            	for (CompositePermission comp:perm.getCompositeLinkedPermissions()) {
+            		comp.getPermissions().remove(perm);
+            	}
+            	
+                session.delete(perm);
+            }
             
             //tx.commit();
         } catch(ObjectNotFoundException objectNotFoundEx) {

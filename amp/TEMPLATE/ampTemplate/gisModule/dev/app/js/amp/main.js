@@ -9,7 +9,7 @@ var app = new App();
 
 exports.state = new State();
 
-var mainView = new MainView();
+var mainView = new MainView({el:'#gis-plugin'});
 mainView.render();
 
 exports.mainView = mainView;

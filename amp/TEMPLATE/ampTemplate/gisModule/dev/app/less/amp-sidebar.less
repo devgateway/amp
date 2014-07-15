@@ -41,7 +41,7 @@
 
   .vertical-expand {
     // sticky-footer
-    min-height: 100%;
+    min-height: 99%;
     height: auto !important;
     height: 100%;
     margin-bottom: -@amp-sidebar-quality-height;
@@ -74,18 +74,18 @@
       > a {
         display: block;
 
-        color: @amp-sidebar-item;
+        color: darken(@amp-sidebar-item,25%);
 
         &:hover,
         &:active,
         &:focus {
           // see amp-icons.less for the icon swaps on hover
           text-decoration: none;
-          color: desaturate(lighten(@amp-sidebar-item, 5%), 10%);
         }
 
         &.collapsed {
           background: @amp-sidebar-item-bg;
+          color: desaturate(lighten(@amp-sidebar-item, 5%), 10%);
         }
 
         h3 {

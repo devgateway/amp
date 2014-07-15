@@ -2,7 +2,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var BasemapModel = require('./basemap-model');
 
-var app = require('../../main');
+var state = require('../../services/state');
 
 
 var basemaps = [
@@ -76,7 +76,7 @@ module.exports = Backbone.Collection.extend({
 
   initialize: function() {
     this.add(basemaps);
-    app.state.register(this, 'basemap', {
+    state.register(this, 'basemap', {
       get: function() { return this.getBasemap().id; },
       set: this.selectBasemap,
       empty: 'Gray'

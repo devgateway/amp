@@ -37,10 +37,10 @@ var paths = {
     scripts: {
       top: './app/js/*.js',
       amp: './app/js/amp/**/*.js',
-      entry: './app/js/amp/main.js',
+      entry: './app/js/amp/app.js',
       libs: './app/js/libs/',
       buildDest: './app/compiled-js/',
-      built: './app/compiled-js/main.js'
+      built: './app/compiled-js/app.js'
     },
     stylesheets: {
       all: './app/less/**/*.less',
@@ -78,7 +78,7 @@ function _bundlify(ifyer) {
     g.util.log('rebrowserifying...');
     return bundler.bundle({debug: true})
       .on('error', function(e) { g.util.log('Browserify error: ', e); })
-      .pipe(source('main.js'))
+      .pipe(source('app.js'))
       .pipe(gulp.dest(paths.app.scripts.buildDest));
   };
 

@@ -11,7 +11,7 @@ var ADMLayerView = require('../views/adm-layer-view');
 var Basemaps = require('../models/basemap-collection');
 var Template = fs.readFileSync(__dirname + '/../templates/map-container-template.html', 'utf8');
 
-var app = require('../../main');
+var state = require('../../services/state');
 
 
 module.exports = Backbone.View.extend({
@@ -22,7 +22,7 @@ module.exports = Backbone.View.extend({
     this.mapEl = $('<div id="map-canvas">');
     this.map = L.map(this.mapEl[0]);
 
-    app.state.register(this, 'map', {
+    state.register(this, 'map', {
       get: this._getMapView,
       set: this._setMapView,
       empty: { center: [47.02, 28.60], zoom: 8 }

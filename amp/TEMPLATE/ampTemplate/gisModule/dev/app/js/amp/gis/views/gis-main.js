@@ -9,21 +9,22 @@ var SidebarView = require('../../sidebar/sidebar-view');
 var AmpNavTemplate = fs.readFileSync(__dirname + '/../templates/amp-nav-template.html', 'utf8');
 var ModuleTemplate = fs.readFileSync(__dirname + '/../templates/module-template.html', 'utf8');
 
+
 module.exports = Backbone.View.extend({
 
   initialize: function() {
-    this.$el.html(ModuleTemplate);
-    
-    this.mapView = new MapView({el:'#map-container'});
-    this.dataQualityView = new DataQualityView({el: '#quality-indicator'});
-    this.sidebarView = new SidebarView({el: '#sidebar-tools'});
+    this.mapView = new MapView();
+    this.dataQualityView = new DataQualityView();
+    this.sidebarView = new SidebarView();
   },
 
   // Render entire geocoding view.
   render: function () {
-    this.mapView.render();
-    this.dataQualityView.render();
-    this.sidebarView.render();
+    this.$el.html(ModuleTemplate);
+
+    this.mapView.setElement(this.$('#map-container')).render();
+    this.dataQualityView.setElement(this.$('#quality-indicator')).render();
+    this.sidebarView.setElement(this.$('#sidebar-tools')).render();
 
     // just for testing...
     this.renderStaticAmpTemplate();

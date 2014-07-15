@@ -86,6 +86,7 @@
 	<http pattern="/esrigis/**" security="none" />
 	<http pattern="/rest/**" security="none" />
 	<http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />
+	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />
 	
 	<!-- match images -->
 	<http pattern="[^ \t\r\n\v\f]+\.(gif|jpg|jpeg|tiff|png|js|css|swf)(\?)?.*$"

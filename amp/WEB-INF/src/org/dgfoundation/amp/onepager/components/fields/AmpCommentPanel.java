@@ -17,6 +17,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxEditableMultiLineLabel;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.basic.Label;
@@ -248,7 +249,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 		listView.setOutputMarkupId(true);
 		add(listView);
 		// hidden submit link to submit the new comment
-		AjaxSubmitLink asl = new AjaxSubmitLink("addCommentButton") {
+		AmpIndicatingAjaxSubmitLink asl = new AmpIndicatingAjaxSubmitLink("addCommentButton") {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				if (trnAddCommentModel.getObject() != null){

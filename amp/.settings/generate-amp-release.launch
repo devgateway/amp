@@ -7,10 +7,10 @@
 <stringAttribute key="M2_PROFILES" value=""/>
 <listAttribute key="M2_PROPERTIES">
 <listEntry value="serverName=local"/>
-<listEntry value="jdbc.db=amp_moldova_210"/>
+<listEntry value="jdbc.db=amp-moldova-stg-tc7"/>
 <listEntry value="jdbc.user=postgres"/>
-<listEntry value="jdbc.password=postgres"/>
-<listEntry value="jdbc.port=5432"/>
+<listEntry value="jdbc.password=juliano"/>
+<listEntry value="jdbc.port=5430"/>
 </listAttribute>
 <stringAttribute key="M2_RUNTIME" value="EMBEDDED"/>
 <booleanAttribute key="M2_SKIP_TESTS" value="false"/>
@@ -23,7 +23,6 @@
 <mapEntry key="ANT_OPTS" value="-Xmx1024"/>
 <mapEntry key="MAVEN_OPTS" value="-Xmx1024m"/>
 </mapAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/CDC-1.0%Foundation-1.0"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx1024m"/>
-<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:/amp-2.10-release}"/>
+<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${project_loc}"/>
 </launchConfiguration>

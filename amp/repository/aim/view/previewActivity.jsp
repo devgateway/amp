@@ -25,12 +25,13 @@
 </style>
 
 <script language="JavaScript1.2" type="text/javascript"src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
-<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"> </script>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="js_2/yui/yahoo/yahoo-min.js"/>" ></script>
 
-	
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.js"/>"> </script>
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src='js_2/yui/yahoo-dom-event/yahoo-dom-event.js'/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='js_2/yui/container/container-min.js'/>" ></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='js_2/yui/dragdrop/dragdrop-min.js'/>" ></script>
@@ -55,6 +56,8 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <link rel="stylesheet" type="text/css" href="<c:out value="${aimEditActivityForm.esriapiurl}"/>/jsapi/arcgis/2.2/js/dojo/dijit/themes/claro/claro.css">
 <script type="text/javascript" src="<c:out value="${aimEditActivityForm.esriapiurl}"/>/jsapi/arcgis/?v=2.2"></script>
+<link rel="stylesheet" type="text/css" href="<digi:file src= 'module/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.css'/>">
+
 
 
 
@@ -3230,7 +3233,7 @@ function collapseAll() {
 	var callback = 
 	{ 
 		success:responseSuccess, 
-		failure:responseFailure 
+		failure:responseFailure
 	}; 
 	
 	

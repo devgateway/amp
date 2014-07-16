@@ -9,22 +9,28 @@ var ProjectSitesCollection = require('../collections/project-sites-collection');
 
 module.exports = Backbone.View.extend({
 
-  initialize: function(options) {
-    this.map = options.map;
+  initialize: function(extraProperties) {
+    _.extend(this, extraProperties);  // extraProperties={map: ...}
     this.featureGroup = null;
     this.collection = new ProjectSitesCollection();
 
     // instead, maybe we can grab a reference to the model or collection,
     // backing the filter, and subscribe to changes on it?
     Backbone.on('FILTERS_UPDATED', this._filtersUpdated, this);
-
-    // TODO: just for testing for now, so I force a trigger.
-    Backbone.trigger('FILTERS_UPDATED');
-
+    Backbone.on('MAP_LOAD_POINT_LAYER', this._loadProjectLayer, this);
   },
 
   render: function() {
     return this;
+  },
+
+
+  _loadProjectLayer: function(type){
+    if(type === 'locations'){
+      this._filtersUpdated();
+    } else{
+      this._removeFromMap();
+    }
   },
 
   _filtersUpdated: function() {
@@ -48,13 +54,12 @@ module.exports = Backbone.View.extend({
     });
   },
 
+
   _renderFeatures: function() {
     var self = this;
 
     // remove current featureGroup
-    if(self.featureGroup){
-      self.map.removeLayer(self.featureGroup);
-    } 
+    this._removeFromMap();
 
     // add new featureGroup
     self.featureGroup = L.geoJson(self.features, {
@@ -82,6 +87,12 @@ module.exports = Backbone.View.extend({
   // fetch returns the deferred object of the raw (non-parsed) response.
   _getProjectSites: function(filter){
     return this.collection.fetch({filter:filter});
-  }
+  },
+
+  _removeFromMap: function(){
+    if(this.featureGroup){
+      this.map.removeLayer(this.featureGroup);
+    } 
+  },
 
 });

@@ -1,55 +1,11 @@
-<div class="layer-heading-container">
-  <label>
-    <input type="checkbox" />
-    <h4>Point Layers</h4>
-  </label>
-  <a href="#layer-info" class="layer-info"
-    data-toggle="popover"
-    data-container="body"
-    data-placement="right"
-    data-trigger="click"
-         title="Info about Point Layers"
-    data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
-    <span class="glyphicon glyphicon-info-sign"></span> info
-  </a>
-</div>
-
-<div class="container-fluid">
-  <div class="radio">
-    <label>
-      <input type="radio" name="optionsPoints" id="optionsAggregated" value="aggregated" checked>
-      Aggregated Projects
-    </label>
-  </div>
-  <div class="radio-group">
-    <div class="radio">
-      <label>
-        <input type="radio" name="optionsADM" id="optionsADMByADM1" value="aggregate-adm1" checked>
-        By Region
-      </label>
-    </div>
-    <div class="radio">
-      <label>
-        <input type="radio" name="optionsADM" id="optionsADMByADM2" value="aggregate-adm2" checked>
-        By District
-      </label>
-    </div>
-  </div>
-
-
-  <div class="radio">
-    <label>
-      <input type="radio" name="optionsPoints" id="optionsLocations" value="locations">
-      Projects by Locations
-    </label>
-  </div>
-</div>
-
+<div id='point-selector'></div>
 
 <div class="layer-heading-container">
   <label>
-    <input type="checkbox" id="indicatorLayers" />
-    <h4>Indicator Layers</h4>
+    <h4>
+      <input type="checkbox" id="indicatorLayers" />
+      Indicator Layers
+    </h4>
   </label>
   <a href="#layer-info" class="layer-info"
     data-toggle="popover"
@@ -62,24 +18,5 @@
   </a>
 </div>
 <div class="container-fluid indicator-selector" style="display:none;">
-  <div class="radio">
-    <label>
-      <input type="radio" name="optionsLayers" id="optionsFunding" value="funding" checked>
-      Projects Funding
-    </label>
-  </div>
-
-  <div class="radio">
-    <label>
-      <input type="radio" name="optionsLayers" id="optionsPoverty" value="poverty">
-      Poverty
-    </label>
-  </div>
-
-  <div class="radio">
-    <label>
-      <input type="radio" name="optionsLayers" id="optionsMalnutrition" value="malnutrition">
-      Malnutrition
-    </label>
-  </div>
+  <!-- populated by indicator layers -->
 </div>

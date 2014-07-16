@@ -33,7 +33,10 @@ public static ProposedProjCost getProposedProjCost(ProposedProjCost ppc,String c
     	
     	ProposedProjCost propProjCost = new ProposedProjCost();
     	propProjCost.setCurrencyCode(ppc.getCurrencyCode());
-    	propProjCost.setCurrencyName(CurrencyUtil.getCurrencyByCode(ppc.getCurrencyCode()).getCurrencyName());
+    	if (propProjCost.getCurrencyCode() != null)
+    	{
+    		propProjCost.setCurrencyName(CurrencyUtil.getCurrencyByCode(propProjCost.getCurrencyCode()).getCurrencyName());
+    	}
     	propProjCost.setFunAmount(ppc.getFunAmount());
     	propProjCost.setFunDate(ppc.getFunDate());
     	if(ppc.getCurrencyCode()==null || ppc.getCurrencyCode().equals(currCode)|| ppc.getFunDate()==null)

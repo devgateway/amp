@@ -61,10 +61,12 @@ import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.ParticipatingO
 import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.PlainType;
 import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.PlannedDisbursement;
 import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.RecipientCountry;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.RelatedActivity;
 import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.Sector;
 import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.TextType;
 import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.Transaction;
+
+import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
 
 /**
  * Transforms AMP data to IATI schema v 1.03 JAXB structure
@@ -288,7 +290,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 							if (StringUtils.isNotBlank(ampContact.getFullname()))
 								ci.getOrganisationOrPersonNameOrJobTitle().add(factory.createContactInfoPersonName(getTextType(ampContact.getFullname())));
 							break;
-						case "telephone": //addPhone = true; //TODO: not working for now  
+						case "telephone": addPhone = true;
 						break;
 						case "email": addEmail = true; break;
 						case "mailing-address": 
@@ -311,7 +313,11 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 						if (addPhone && Constants.CONTACT_PROPERTY_NAME_PHONE.equals(ampContProp.getName())) {
 							Telephone phone = factory.createContactInfoTelephone();
 							phone.setContent(ampContProp.getValue());
-							ci.getOrganisationOrPersonNameOrJobTitle().add(phone);
+
+                            JAXBElement<Telephone> telephoneJAXBElement = new JAXBElement<>
+                                    (new QName("", "telephone"), Telephone.class, phone);
+
+							ci.getOrganisationOrPersonNameOrJobTitle().add(telephoneJAXBElement);
 							//email
 						} else if (addEmail && Constants.CONTACT_PROPERTY_NAME_EMAIL.equals(ampContProp.getName())) {
 							ci.getOrganisationOrPersonNameOrJobTitle().add(factory.createContactInfoEmail(getPlainType(ampContProp.getValue())));
@@ -440,7 +446,12 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 								tempCategLoc = deque.pop();
 								adm.setAdm2(tempCategLoc.getCode());
 							}
-							//iatiLoc.getLocationTypeOrNameOrDescription().add(adm);
+
+                            // wrap into JAXB wrapper to avoid ambiguities
+                            JAXBElement<Administrative> administrativeJAXBElement = new JAXBElement<>
+                                    (new QName("", "administrative"), Administrative.class, adm);
+
+							iatiLoc.getLocationTypeOrNameOrDescription().add(administrativeJAXBElement);
 							break;
 						case "coordinates": 
 							if (StringUtils.isNotBlank(location.getLatitude()) && StringUtils.isNotBlank(location.getLongitude())) {
@@ -640,12 +651,20 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 										Transaction.ProviderOrg org = factory.createTransactionProviderOrg();
 										org.setRef(pair.getCodeValue());
 										org.getContent().add(pair.getCodeName());
-										//transaction.getValueOrDescriptionOrTransactionType().add(org);
+
+                                        JAXBElement<Transaction.ProviderOrg> providerOrgJAXBElement = new JAXBElement<>
+                                                (new QName("", "provider-org"), Transaction.ProviderOrg.class, org);
+
+										transaction.getValueOrDescriptionOrTransactionType().add(providerOrgJAXBElement);
 										break;
 									case "transaction-date":
 										Transaction.TransactionDate trDate = factory.createTransactionTransactionDate();
 										trDate.setIsoDate(ExportHelper.getGregorianCalendar(detail.getTransactionDate()));
-										//transaction.getValueOrDescriptionOrTransactionType().add(trDate);
+
+                                        JAXBElement<Transaction.TransactionDate> transactionDateJAXBElement = new JAXBElement<>
+                                                (new QName("", "transaction-date"), Transaction.TransactionDate.class, trDate);
+
+										transaction.getValueOrDescriptionOrTransactionType().add(transactionDateJAXBElement);
 										break;
 									case "transaction-type":
 										switch(detail.getTransactionType()) {

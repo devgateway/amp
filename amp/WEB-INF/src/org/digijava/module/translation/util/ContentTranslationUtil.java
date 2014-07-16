@@ -632,56 +632,48 @@ public class ContentTranslationUtil {
      */
     public static void saveFieldTranslations(final Long newId,
             final FieldTranslationPack ftp) {
-        Session session = null;
         PersistenceManager.getCurrentSession().doWork(
-                new org.hibernate.jdbc.Work() {
-                    public void execute(Connection conn) throws SQLException {
-                        Session newSession = null;
-                        try {
-                            newSession = PersistenceManager.sf().openSession(conn);
+        	new org.hibernate.jdbc.Work() {
+        		public void execute(Connection conn) throws SQLException {
+        			Session newSession = null;
+        			try {
+        				newSession = PersistenceManager.sf().openSession(conn);
 
-                            String objClass = ftp.getObjClass();
-                            String fieldName = ftp.getFieldName();
+        				String objClass = ftp.getObjClass();
+        				String fieldName = ftp.getFieldName();
 
-                            // load the translations from db, not cache
-                            List<AmpContentTranslation> oldTrns = loadTranslations(
-                                    newSession, objClass, newId, fieldName);
+        				// load the translations from db, not cache
+        				List<AmpContentTranslation> oldTrns = loadTranslations(newSession, objClass, newId, fieldName);
 
-                            HashMap<String, String> trns = ftp
-                                    .getTranslations();
-                            Set<String> locales = trns.keySet();
-                            for (String locale : locales) {
-                                String trn = trns.get(locale);
-
-                                // see if we need to update existing translation
-                                Iterator<AmpContentTranslation> it = oldTrns
-                                        .iterator();
-                                while (it.hasNext()) {
-                                    AmpContentTranslation oldTrn = it.next();
-                                    if (oldTrn.getLocale().equals(locale)) {
-                                        newSession.delete(oldTrn);
-                                        it.remove();
-                                        break;
-                                    }
-                                }
-                                AmpContentTranslation act = new AmpContentTranslation(
-                                        objClass, newId, fieldName, locale, trn);
-                                newSession.save(act);
-                            }
-                            newSession.flush();
-                        } catch (Exception e) {
-                            logger.error("can't save field translations", e);
-                            if (e.getCause() != null
-                                    && e.getCause() instanceof SQLException
-                                    && ((SQLException) e.getCause()).getNextException() != null)
-                                logger.error("Next exception: "+ ((SQLException) e.getCause())
-                                                .getNextException());
-                        } finally {
-                            newSession.close();
-                        }
-
-                    }
-                });
+        				HashMap<String, String> trns = ftp.getTranslations();
+        				Set<String> locales = trns.keySet();
+        				for (String locale : locales) {
+        					String trn = trns.get(locale);
+        					// see if we need to update existing translation
+        					Iterator<AmpContentTranslation> it = oldTrns.iterator();
+        					while (it.hasNext()) {
+        						AmpContentTranslation oldTrn = it.next();
+        						if (oldTrn.getLocale().equals(locale)) {
+        							newSession.delete(oldTrn);
+        							it.remove();
+        							break;
+        						}
+        					}
+        					AmpContentTranslation act = new AmpContentTranslation(objClass, newId, fieldName, locale, trn);
+        					newSession.save(act);
+        				}
+        				newSession.flush();
+        			} 
+        			catch (Exception e) {
+        				logger.error("can't save field translations", e);
+        				if (e.getCause() != null && e.getCause() instanceof SQLException && ((SQLException) e.getCause()).getNextException() != null)
+        					logger.error("Next exception: "+ ((SQLException) e.getCause()).getNextException());
+        			}
+        			finally {
+        				newSession.close();
+        			}
+        		}
+        	});
     }
 
     public static AmpContentTranslation getByTypeObjidFieldLocale (List<AmpContentTranslation> allTrns,

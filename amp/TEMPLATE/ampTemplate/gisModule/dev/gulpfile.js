@@ -114,7 +114,7 @@ gulp.task('watchify', function() {
 
 
 gulp.task('browserify', function() {
-  return _bundlify(browserify. paths.app.scripts.entry,
+  return _bundlify(browserify, paths.app.scripts.entry,
                    paths.app.scripts.buildDest, 'app.js');
 });
 

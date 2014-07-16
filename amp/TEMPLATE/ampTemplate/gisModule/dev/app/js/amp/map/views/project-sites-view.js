@@ -18,6 +18,7 @@ module.exports = Backbone.View.extend({
     // backing the filter, and subscribe to changes on it?
     Backbone.on('FILTERS_UPDATED', this._filtersUpdated, this);
     Backbone.on('MAP_LOAD_POINT_LAYER', this._loadProjectLayer, this);
+    _.bindAll(this, '_onEachFeature');    
   },
 
   render: function() {
@@ -73,15 +74,55 @@ module.exports = Backbone.View.extend({
     }).addTo(self.map);
 
     // set map bounds
-    self.map.fitBounds(self.featureGroup.getBounds());
+    this.map.fitBounds(self.featureGroup.getBounds());
 
   },
 
+
   // Create pop-ups
   _onEachFeature: function(feature, layer) {
-      if (feature.properties) {       
-        layer.bindPopup('Project: ' + feature.properties.title );
+    var self = this;
+
+    if (feature.properties) {       
+      layer.bindPopup('Project #: '+ feature.properties.projectID  +'<br />Site: ' + feature.properties.title );
+    }
+
+    layer.on('click', function(evt){
+      var feature = evt.target.feature;
+      if(feature){
+        var projectID = feature.properties.projectID;
+        self._hilightProject(projectID);
       }
+    });
+
+    layer.on('popupclose',function(evt){
+      var feature = evt.target.feature;
+      if(feature){
+        var projectID = feature.properties.projectID;
+        self._dehilightProject(projectID);
+      }
+    });
+  },
+
+  _hilightProject: function(projectID){
+    this.featureGroup.eachLayer(function(layer){
+      var properties = layer.feature.properties;
+      if(properties.projectID === projectID){
+        $(layer._icon).css('background-color', '#008');
+        $(layer._icon)
+          .animate({ 'width': '+=10px','height': '+=10px','left': '-=5px' }, 'slow' )
+          .animate({ 'width': '-=10px','height': '-=10px','left': '+=5px' }, 'slow' );
+      }
+    });
+  },
+
+  _dehilightProject: function(projectID){
+    this.featureGroup.eachLayer(function(layer){
+      var properties = layer.feature.properties;
+      if(properties.projectID === projectID){
+        $(layer._icon).css('background-color', '#77f');
+      }
+    });
   },
 
   // fetch returns the deferred object of the raw (non-parsed) response.

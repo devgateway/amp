@@ -59,9 +59,9 @@ module.exports = Backbone.View.extend({
     var self = this;
     this.indicatorLayer.eachFeature(function(layer){
       var id = layer.feature.id;
-      var rgb = 'rgb(' + Math.round(Math.min(255,layer.feature.properties[property]*255/maxValue)) + ' ,' +
+      var rgb = 'rgb(' + Math.round(Math.min(255,layer.feature.properties[property]*255/maxValue)+60) + ' ,' +
                           Math.round(Math.min(255,(layer.feature.properties[property]*255/maxValue))) + ',' +
-                          Math.round(Math.min(255,(layer.feature.properties[property]*255/maxValue)+60)) + ')';
+                          Math.round(Math.min(255,(layer.feature.properties[property]*255/maxValue))) + ')';
       self.indicatorLayer.setFeatureStyle(id, {color: rgb, fillColor:rgb, weight: 1, fillOpacity:0.5 });
     });
   },

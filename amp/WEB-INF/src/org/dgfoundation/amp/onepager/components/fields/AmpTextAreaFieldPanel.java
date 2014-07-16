@@ -155,4 +155,8 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
             target.add(((TranslationDecorator) translationDecorator).getCurrentLabel());
         }
     }
+    
+    public boolean isComponentMultilingual () {
+    	return translationDecorator instanceof TranslationDecorator;
+    }
 }

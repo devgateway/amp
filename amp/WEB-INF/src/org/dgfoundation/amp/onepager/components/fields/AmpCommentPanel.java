@@ -246,7 +246,7 @@ public class AmpCommentPanel extends AmpFieldPanel {
 		listView.setOutputMarkupId(true);
 		add(listView);
 		// hidden submit link to submit the new comment
-		AjaxSubmitLink asl = new AjaxSubmitLink("addCommentButton") {
+		AmpIndicatingAjaxSubmitLink asl = new AmpIndicatingAjaxSubmitLink("addCommentButton") {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				if (trnAddCommentModel.getObject() != null){

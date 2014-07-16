@@ -80,20 +80,32 @@ public class AmpStructuresFormSectionFeature extends
 
 				structureTypes.getChoiceContainer().setRequired(true);
 				structureTypes.setOutputMarkupId(true);
-                structureTypes.getChoiceContainer().add(new AttributeModifier("style", "max-width: 100px;"));
+                structureTypes.getChoiceContainer().add(new AttributeModifier("style", "max-width: 100px;margin-bottom:20px;"));
 				item.add(structureTypes);
+				
+				
 				
 				final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(structureModel, "title"), "Structure Title",true, true);
 				name.setOutputMarkupId(true);
 				name.getTextContainer().add(new AttributeAppender("size", new Model("10px"), ";"));
 				name.setTextContainerDefaultMaxSize();
 				name.getTextContainer().setRequired(true);
+				if (name.isComponentMultilingual()) {
+					name.getTextContainer().add(new AttributeAppender("style", "margin-bottom:40px;"));
+				}
 				item.add(name);
 				
 				final AmpTextAreaFieldPanel description = new AmpTextAreaFieldPanel("description", new PropertyModel<String>(structureModel, "description"),"Structure Description",false, true, true);
 				description.setOutputMarkupId(true);
 
-				description.getTextAreaContainer().add(new AttributeModifier("cols", "20"));
+				String descriptionStyle;
+				if (description.isComponentMultilingual()) {
+					descriptionStyle ="margin-bottom: 55px;"; 
+				}
+				else {
+					descriptionStyle ="margin-bottom: 20px;";
+				}
+				description.getTextAreaContainer().add(new AttributeModifier("style",descriptionStyle ));
 				item.add(description);		
 
 				final AmpTextFieldPanel<String> longitude = new AmpTextFieldPanel<String>("longitude", new PropertyModel<String>(structureModel, "longitude"),"Structure Longitude", true, true);

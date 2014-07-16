@@ -29,7 +29,9 @@ span.docTitle619{border:1px solid red;text-align:left;}
 .button_green {background-color:#83D847; border-top: 1px solid #B9E895; border-left:1px solid #B9E895; border-right:1px solid #499118; border-bottom:1px solid #499118; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; margin-top:10px; margin-bottom:15px; cursor:pointer}
 .button_green_btm {background-color:#83D847; border-top: 1px solid #B9E895; border-left:1px solid #B9E895; border-right:1px solid #499118; border-bottom:1px solid #499118; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px; margin-top:10px; margin-bottom:5px; cursor:pointer}
 .button_green_btm_sm {background-color:#83D847; border-top: 1px solid #B9E895; border-left:1px solid #B9E895; border-right:1px solid #499118; border-bottom:1px solid #499118; font-size:9px; color:#FFFFFF; font-weight:bold; padding-left:1px; padding-right:1px; padding-top:1px; padding-bottom:1px; margin-top:5px; margin-bottom:5px; cursor:pointer}
+.button_green_btm_st {background-color:#83D847; border-top: 1px solid #B9E895; border-left:1px solid #B9E895; border-right:1px solid #499118; border-bottom:1px solid #499118; font-size:11px; color:#FFFFFF; font-weight:bold; padding-left:5px; padding-right:5px; padding-top:3px; padding-bottom:3px;cursor:pointer;margin-bottom:12px;}
 .default_cursor {cursor:default;}
+.extra_margin_top {margin-top:70px;}
 .inputx, td input.inp-text, table#addUserContainer tr td input,   td select {border:1px solid #D0D0D0; background-color:#FFFFFF;}
 td select.inp-text-orgType{width:250px;}
 td input#keyWordTextField{height:22px;}
@@ -829,8 +831,8 @@ span.geostyle{background:#f1f1f1;padding:3px;border:1px solid #e0e0e0;color:#5d5
 
 .add_form_title .inputx {width:120px !important;}
 .add_form_description .inputx {width:120px !important;}
-.add_form_latitude .inputx {width:120px !important;}
-.add_form_longtitude .inputx {width:120px !important;}
+.add_form_latitude .inputx {width:60px !important;}
+.add_form_longtitude .inputx {width:60px !important;}
 .button_resources {margin-right:7px;}
 
 .bold_12 {font-size:12px; font-weight:bold;}

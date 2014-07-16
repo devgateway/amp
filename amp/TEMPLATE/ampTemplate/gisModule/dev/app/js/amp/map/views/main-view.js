@@ -82,7 +82,9 @@ module.exports = Backbone.View.extend({
     // Can do stuff with feature properties if we want. such as show ADM details on click.
     // TODO: Switch to AJAX style if same origin for boundary:  L.mapbox.featureLayer().loadURL('....');
     // DRC: http://gis.devgateway.org/arcgis/rest/services/wbi/Africa/MapServer/13'
-    this.boundaryLayer = L.esri.featureLayer('http://gis.devgateway.org/arcgis/rest/services/wbi/Europe_and_Central_Asia/MapServer/43',{
+    this.boundaryLayer = L.esri.featureLayer(
+      'http://gis.devgateway.org/arcgis/rest/services/wbi/Europe_and_Central_Asia/MapServer/43',
+      {
         simplifyFactor: 0.9,
         style:  {color: 'blue', fillColor:'none', weight: 1}
       }).addTo(self.map);

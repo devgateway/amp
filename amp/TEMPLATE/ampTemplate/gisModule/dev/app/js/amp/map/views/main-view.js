@@ -8,7 +8,8 @@ var MapHeaderView = require('../views/map-header-view');
 var BasemapGalleryView = require('../views/basemap-gallery-view');
 var LegendView = require('../views/legend-view');
 var ADMLayerView = require('../views/adm-layer-view');
-var Basemaps = require('../models/basemap-collection');
+var ProjectSitesLayerView = require('../views/project-sites-view');
+var Basemaps = require('../collections/basemap-collection');
 var Template = fs.readFileSync(__dirname + '/../templates/map-container-template.html', 'utf8');
 
 var state = require('../../services/state');
@@ -29,6 +30,7 @@ module.exports = Backbone.View.extend({
     });
 
     this.basemaps = new Basemaps();  // pre-loaded with hard-coded basemaps
+    this.projectSitesLayerView = new ProjectSitesLayerView({map: this.map});
     this.admLayerView = new ADMLayerView({map: this.map});
 
     this.headerView = new MapHeaderView();

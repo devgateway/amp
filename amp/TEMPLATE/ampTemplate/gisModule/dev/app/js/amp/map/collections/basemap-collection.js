@@ -1,9 +1,8 @@
 var _ = require('underscore');
 var Backbone = require('backbone');
-var BasemapModel = require('./basemap-model');
+var BasemapModel = require('../models/basemap-model');
 
 var state = require('../../services/state');
-
 
 var basemaps = [
   {

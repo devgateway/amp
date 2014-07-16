@@ -1032,11 +1032,11 @@ public class AmpARFilter extends PropertyListable {
 		this.pledgeFilter = true;
 		indexedParams=new ArrayList<FilterParam>();
 		
-		String WORKSPACE_ONLY = "";
-		if (this.workspaceonly && "Management".equals(this.getAccessType())){
-			WORKSPACE_ONLY = "SELECT v.pledge_id FROM v_pledges_projects v WHERE v.approval_status IN ("+Util.toCSString(activityStatus)+")";
-			pledgeQueryAppend(WORKSPACE_ONLY);
-		}
+//		String WORKSPACE_ONLY = "";
+//		if (this.workspaceonly && "Management".equals(this.getAccessType())){
+//			WORKSPACE_ONLY = "SELECT v.pledge_id FROM v_pledges_projects v WHERE v.approval_status IN ("+Util.toCSString(activityStatus)+")";
+//			pledgeQueryAppend(WORKSPACE_ONLY);
+//		}
 		
 		String DONNOR_AGENCY_FILTER = " SELECT v.pledge_id FROM v_pledges_donor v  WHERE v.amp_donor_org_id IN ("
 			+ Util.toCSString(donnorgAgency) + ")";

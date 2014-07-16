@@ -1007,7 +1007,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			
 			<!-- Inegrate Gulp with Maven -->
 			<plugin>
         		<groupId>com.github.eirslett</groupId>
@@ -1019,13 +1018,14 @@
     			<executions>
     				<!-- Installing node and npm -->
     				<execution>
-					    <!-- optional: you don't really need execution ids, but it looks nice in your build log. -->
+					    <!-- optional: you don't really need execution ids,
+					    but it looks nice in your build log. -->
 					    <id>install node and npm</id>
 					    <goals>
 					        <goal>install-node-and-npm</goal>
 					    </goals>
 					    <!-- optional: default phase is "generate-resources" -->
-					    <phase>generate-sources</phase>
+					    <phase>generate-resources</phase>
 					    <configuration>
 					        <nodeVersion>v0.10.29</nodeVersion>
 					        <npmVersion>1.3.8</npmVersion>
@@ -1041,34 +1041,36 @@
 					    </goals>
 					
 					    <!-- optional: default phase is "generate-resources" -->
-					    <phase>generate-sources</phase>
+					    <phase>generate-resources</phase>
 					
 					    <configuration>
-					        <!-- optional: The default argument is actually  "install", so unless you need to run some other npm command, 
-					        you can remove this whole <configuration> section.-->
+					        <!-- optional: The default argument is actually
+					        "install", so unless you need to run some other npm command,
+					        you can remove this whole <configuration> section.
+					        -->
 					        <arguments>install</arguments>
 					    </configuration>
-					</execution>
-					<!-- Running gulp -->
-					<execution>
-					    <id>gulp build</id>
-					    <goals>
-					        <goal>gulp</goal>
-					    </goals>
-					
-					    <!-- optional: the default phase is "generate-resources" -->
-					    <phase>generate-sources</phase>
-					
-					    <configuration>
-					        <!-- optional: if not specified, it will run gulp's default
-					        task (and you can remove this whole <configuration> section.) -->
-					        <arguments>build</arguments>
-					    </configuration>
-					</execution>
-				</executions>
+				</execution>
+				<!-- Running gulp -->
+				<execution>
+				    <id>gulp build</id>
+				    <goals>
+				        <goal>gulp</goal>
+				    </goals>
+				
+				    <!-- optional: the default phase is "generate-resources" -->
+				    <phase>generate-resources</phase>
+				
+				    <configuration>
+				        <!-- optional: if not specified, it will run gulp's default
+				        task (and you can remove this whole <configuration> section.) -->
+				        <arguments>build</arguments>
+				    </configuration>
+				</execution>
+				
+    			</executions>
     		</plugin>
 		</plugins>
-		
 		<pluginManagement>
 			<plugins>
 				<plugin>

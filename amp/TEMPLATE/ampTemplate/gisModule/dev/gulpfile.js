@@ -241,6 +241,6 @@ gulp.task('preview', ['build'], g.serve({
 
 
 gulp.task('dev', ['lint', 'less', 'dev-server', 'watch', 'reload']);
-gulp.task('build', ['clean', 'build-js', 'build-css', 'copy-stuff']);
+gulp.task('build', ['clean', 'build-js', 'build-css', 'copy-stuff', 'revision']);
 
 gulp.task('default', ['dev']);

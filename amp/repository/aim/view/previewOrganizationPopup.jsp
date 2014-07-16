@@ -6,6 +6,41 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 
+
+
+
+
+<style>
+  label {
+    display: inline-block;
+    width: 5em;
+    font-size:10px;
+  }
+  .new_tooltip, .ui-tooltip{
+  padding: 0px;
+  
+  font-size: 12px;
+  border: none;
+  }
+  .tooltip_header{
+  color:white;
+  display:block;
+  width: 100%;
+  background:#6b7a82;
+  }
+  
+  .tooltip_list {
+  padding-right: 10px;
+  
+  }
+  
+  .tooltip_wrapper{
+  	border-width: 2px;
+  	border-style: solid;
+  	border-color: #6b7a82;
+  }
+  </style>
+
 <bean:define id="org" name="selectedOrgForPopup"
 	type="org.digijava.module.aim.helper.OrgProjectId" scope="request" toScope="page" />
 
@@ -34,7 +69,26 @@
 <ul>
 <li>
 
-<div align="left" onMouseOver="stm(['<bean:write name="org" property="organisation.orgCode"/> Details',document.getElementById('org-<bean:write name="org" property="organisation.ampOrgId"/>').innerHTML],Style[0])" onMouseOut="htm()">[<u><bean:write name="org" property="organisation.name"/>  <bean:write name="org" property="projectId"/></u>]
+<script>
+  $(function() {
+    $( ".nice_tooltip" ).tooltip({
+    	track: true,
+    	show: false,
+    	tooltipClass: "new_tooltip",
+        content: function() {
+        	var element = '#org' +"<bean:write name="org" property="organisation.ampOrgId"/>";
+        	
+        	var header = "<span class=\"tooltip_header\"><bean:write name="org" property="organisation.orgCode"/> Details </span>";
+        	var list = "<div class=\"tooltip_list\">" + $('#org-<bean:write name="org" property="organisation.ampOrgId"/>').html() + "</div>";
+        	
+        	return "<div class=\"tooltip_wrapper\">" + header + list + "</div>";
+        }
+    });
+  });
+  </script>
+
+
+<div align="left" class="nice_tooltip" title=""  ">[<u><bean:write name="org" property="organisation.name"/>  <bean:write name="org" property="projectId"/></u>]
 
 </div>
 </li>

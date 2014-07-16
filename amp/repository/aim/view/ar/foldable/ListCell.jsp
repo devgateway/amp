@@ -28,7 +28,7 @@
 <c:set var="key">
 	aim:reportbuilder:<bean:write name="listCell" property="column.name"/>
 </c:set>
-
+CHLEN
 <div align="center" onMouseOver="stm(['<digi:trn key="${key}"><bean:write name="listCell" property="column.name"/></digi:trn>',document.getElementById('<bean:write name="listCell" property="column.name"/>-<bean:write name="listCell" property="ownerId"/>').innerHTML],Style[1])" onMouseOut="htm()">[<u><digi:trn key="aim:reportbuilder:list">list...</digi:trn></u>]
 </div>
 <%} %>

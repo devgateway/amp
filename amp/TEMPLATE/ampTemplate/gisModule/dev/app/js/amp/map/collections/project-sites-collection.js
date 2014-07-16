@@ -5,7 +5,7 @@ var ProjectSiteModel = require('../models/project-site-model');
 
 module.exports = Backbone.Collection.extend({
   model:  ProjectSiteModel,
-  url: '/js/mock-api/project-sites.json',
+  url: 'mock-api/project-sites.json',
 
   initialize: function() {
     

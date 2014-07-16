@@ -9,62 +9,62 @@ var basemaps = [
     id: 'Streets',
     source: 'esri',
     esriId: 'Streets',
-    thumb: '/img/basemaps/world_street_map.jpg'
+    thumb: 'img/basemaps/world_street_map.jpg'
   },
   {
     id: 'Empty Basemap',
     source: null,
-    thumb: '/img/basemaps/empty.png'
+    thumb: 'img/basemaps/empty.png'
   },
   {
     id: 'Imagery',
     source: 'esri',
     esriId: 'Imagery',
-    thumb: '/img/basemaps/tempimagery.jpg'
+    thumb: 'img/basemaps/tempimagery.jpg'
   },
   {
     id: 'Labeled Imagery',
     source: 'esri',
     esriId: 'Imagery',
     label: true,
-    thumb: '/img/basemaps/tempimagery_with_labels_ne_usa.png'
+    thumb: 'img/basemaps/tempimagery_with_labels_ne_usa.png'
   },
   {
     id: 'Topographic',
     source: 'esri',
     esriId: 'Topographic',
-    thumb: '/img/basemaps/topo_map_2.jpg'
+    thumb: 'img/basemaps/topo_map_2.jpg'
   },
   {
     id: 'Labeled Terrain',
     source: 'esri',
     esriId: 'Terrain',
     label: true,
-    thumb: '/img/basemaps/tempTerrain_with_labels_ne_usa.png',
+    thumb: 'img/basemaps/tempTerrain_with_labels_ne_usa.png',
   },
   {
     id: 'Gray',
     source: 'esri',
     esriId: 'Gray',
-    thumb: '/img/basemaps/templight_gray_canvas_with_labels__ne_usa.png'
+    thumb: 'img/basemaps/templight_gray_canvas_with_labels__ne_usa.png'
   },
   {
     id: 'National Geographic',
     source: 'esri',
     esriId: 'NationalGeographic',
-    thumb: '/img/basemaps/natgeo.jpg'
+    thumb: 'img/basemaps/natgeo.jpg'
   },
   {
     id: 'Oceans',
     source: 'esri',
     esriId: 'Oceans',
-    thumb: '/img/basemaps/tempoceans.jpg'
+    thumb: 'img/basemaps/tempoceans.jpg'
   },
   {
     id: 'Open Street Map',
     source: 'tile',
     tileUrl: 'http://{s}.tile.osm.org/{z}/{x}/{y}.png',
-    thumb: '/img/basemaps/temposm.jpg'
+    thumb: 'img/basemaps/temposm.jpg'
   }
 ];
 

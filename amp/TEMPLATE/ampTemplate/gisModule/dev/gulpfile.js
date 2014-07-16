@@ -33,7 +33,7 @@ var g = require('gulp-load-plugins')();
 var paths = {
   app: {
     root: './app',
-    rootstuff: './app/*.{png,ico,html,txt,xml}',
+    rootstuff: './app/*.{png,jpg,ico,html,txt,xml}',
     scripts: {
       top: './app/js/*.js',
       amp: './app/js/amp/**/*.js',
@@ -49,7 +49,8 @@ var paths = {
       compileDest: './app/compiled-css/',
       compiled: './app/compiled-css/main.css'
     },
-    images: './app/img/**/*.{png, jpg}',
+    mockAPI: './app/mock-api/*.json',    
+    images: './app/img/**/*.{png,jpg}',
     fonts: './app/fonts/**/*.{eot,svg,ttf,woff}'
   },
   dist: {
@@ -57,7 +58,8 @@ var paths = {
     scripts: '../dist/compiled-js/',
     stylesheets: '../dist/compiled-css/',
     images: '../dist/img/',
-    fonts: '../dist/fonts/'
+    fonts: '../dist/fonts/',
+    mockAPI: '../dist/mock-api/'
   },
   tests: {
     root: './app/test',
@@ -174,6 +176,7 @@ gulp.task('build-css', ['clean', 'less'], function() {
 
 
 gulp.task('copy-stuff', ['clean'], function() {
+  gulp.src(paths.app.mockAPI).pipe(gulp.dest(paths.dist.mockAPI));
   gulp.src(paths.app.rootstuff).pipe(gulp.dest(paths.dist.root));
   gulp.src(paths.app.images).pipe(gulp.dest(paths.dist.images));
   gulp.src(paths.app.fonts).pipe(gulp.dest(paths.dist.fonts));

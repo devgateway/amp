@@ -228,19 +228,6 @@ function validate(){
 												</digi:link>
 											</td>
 										</tr>
-										<tr>
-											<td class="inside">
-												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<c:set var="clickToViewRoles">
-												<digi:trn key="aim:clickToViewRoles">Click here to view Roles</digi:trn>
-												</c:set>
-												<digi:link href="/roles.do" title="${clickToViewRoles}" >
-												<digi:trn key="aim:roles">
-												Roles
-												</digi:trn>
-												</digi:link>
-											</td>
-										</tr>
 										
 										<tr>
 											<td class="inside">

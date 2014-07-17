@@ -1579,7 +1579,7 @@ public class DataDispatcher extends DispatchAction {
 		}
 
 		
-		String othersTitle = "Other";
+		String othersTitle = TranslatorWorker.translateText("Other");
         
 		BigDecimal organizationTotal = BigDecimal.ZERO;
 		String currCode = "USD";
@@ -2014,7 +2014,7 @@ public class DataDispatcher extends DispatchAction {
 		}
 
 		
-		String othersTitle = "Other";
+		String othersTitle = TranslatorWorker.translateText("Other");
         
 		BigDecimal organizationTotal = BigDecimal.ZERO;
 		String currCode = "USD";
@@ -2454,7 +2454,7 @@ public class DataDispatcher extends DispatchAction {
 		}
 
 		
-		String othersTitle = "Other";
+		String othersTitle = TranslatorWorker.translateText("Other");
         
 		BigDecimal organizationTotal = BigDecimal.ZERO;
 		String currCode = "USD";

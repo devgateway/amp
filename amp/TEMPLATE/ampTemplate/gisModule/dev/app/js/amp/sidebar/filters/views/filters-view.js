@@ -1,13 +1,15 @@
 var fs = require('fs');
 var $ = require('jquery');
 var _ = require('underscore');
+
+var APIBase = require('../../../../libs/local/api-base');
+
 var Backbone = require('backbone');
 var BaseControlView = require('../../base-control/base-control-view');
 var GenericFilterView = require('../views/generic-filter-view');
 var OrgFilterView = require('../views/org-filter-view');
 var YearsFilterView = require('../views/years-filter-view');
 var Template = fs.readFileSync(__dirname + '/../templates/filters-template.html', 'utf8');
-
 
 var filterViews = [OrgFilterView, YearsFilterView];
 
@@ -16,7 +18,7 @@ module.exports = BaseControlView.extend({
   title: 'Filters',
   iconClass: 'ampicon-filters',
   description: 'Apply filters to the map.',
-  apiURL: 'mock-api/filters.json',
+  apiURL: APIBase.getAPIBase() + '/rest/gis/filters',
 
   // collection of child views..
   filterViewsInstances:[],

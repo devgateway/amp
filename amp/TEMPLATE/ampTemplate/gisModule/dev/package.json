@@ -19,6 +19,9 @@
       "depends": [
         "./node_modules/leaflet/dist/leaflet.js:L"
       ]
+    },
+    "./app/mock-api/sinon-min.js": {
+      "exports": "sinon"
     }
   },
   "devDependencies": {
@@ -56,6 +59,8 @@
     "rimraf": "^2.2.8",
     "underscore": "^1.6.0",
     "vinyl-source-stream": "^0.1.1",
-    "watchify": "^0.10.2"
+    "watchify": "^0.10.2",
+    "gulp-inject": "~0.4.1",
+    "gulp-rename": "~1.2.0"
   }
 }

@@ -1577,8 +1577,8 @@ public class DataDispatcher extends DispatchAction {
 		}
 
 		
-		String othersTitle = "Other";
-        
+		String othersTitle = TranslatorWorker.translateText("Other");
+		
 		BigDecimal organizationTotal = BigDecimal.ZERO;
 		String currCode = "USD";
         if (filter.getCurrencyId()!=null) {
@@ -2012,8 +2012,8 @@ public class DataDispatcher extends DispatchAction {
 		}
 
 		
-		String othersTitle = "Other";
-        
+		String othersTitle = TranslatorWorker.translateText("Other");
+		
 		BigDecimal organizationTotal = BigDecimal.ZERO;
 		String currCode = "USD";
         if (filter.getCurrencyId()!=null) {
@@ -2451,9 +2451,8 @@ public class DataDispatcher extends DispatchAction {
 			endYear = filter.getEndYear();
 		}
 
+		String othersTitle = TranslatorWorker.translateText("Other");
 		
-		String othersTitle = "Other";
-        
 		BigDecimal organizationTotal = BigDecimal.ZERO;
 		String currCode = "USD";
         if (filter.getCurrencyId()!=null) {

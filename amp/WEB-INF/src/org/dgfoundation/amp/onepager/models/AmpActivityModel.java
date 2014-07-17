@@ -141,8 +141,8 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 			if(!hibernateSession.isOpen()) throw new RuntimeException("Attempted to close an already closed session!");
 			Throwable exceptionToThrow = null;
 			try {
-				hibernateSession.getTransaction().commit();
-				hibernateSession.flush();
+			    hibernateSession.flush();        
+			    hibernateSession.getTransaction().commit();
 				hibernateSession.setFlushMode(FlushMode.AUTO);
 			}
 			catch (Throwable t)

@@ -5,6 +5,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,6 +41,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.jdbc.Work;
 
 /**
  *
@@ -628,45 +630,50 @@ public class ContentTranslationUtil {
      * @param newId the object id for the translations
      * @param ftp pack with field translations
      */
-    public static void saveFieldTranslations(Long newId, FieldTranslationPack ftp){
-    	Session session = null;
-        try{
-        	session = PersistenceManager.openNewSession();
-            String objClass = ftp.getObjClass();
-            String fieldName = ftp.getFieldName();
+    public static void saveFieldTranslations(final Long newId,
+            final FieldTranslationPack ftp) {
+        PersistenceManager.getCurrentSession().doWork(
+        	new org.hibernate.jdbc.Work() {
+        		public void execute(Connection conn) throws SQLException {
+        			Session newSession = null;
+        			try {
+        				newSession = PersistenceManager.sf().openSession(conn);
 
-            //load the translations from db, not cache
-            List<AmpContentTranslation> oldTrns = loadTranslations(session, objClass, newId, fieldName);
+        				String objClass = ftp.getObjClass();
+        				String fieldName = ftp.getFieldName();
 
-            HashMap<String, String> trns = ftp.getTranslations();
-            Set<String> locales = trns.keySet();
-            for (String locale : locales) {
-                String trn = trns.get(locale);
+        				// load the translations from db, not cache
+        				List<AmpContentTranslation> oldTrns = loadTranslations(newSession, objClass, newId, fieldName);
 
-                //see if we need to update existing translation
-                Iterator<AmpContentTranslation> it = oldTrns.iterator();
-                while (it.hasNext()) {
-                    AmpContentTranslation oldTrn = it
-                            .next();
-                    if (oldTrn.getLocale().equals(locale)) {
-                        session.delete(oldTrn);
-                        it.remove();
-                        break;
-                    }
-                }
-                AmpContentTranslation act = new AmpContentTranslation(objClass, newId, fieldName, locale, trn);
-                session.save(act);
-            }
-            session.flush();
-        } catch (Exception e) {        	
-            logger.error("can't save field translations", e);
-            if(e.getCause()!=null && e.getCause() instanceof SQLException && 
-            		((SQLException)e.getCause()).getNextException()!=null) 
-            	logger.error("Next exception: "+((SQLException)e.getCause()).getNextException());
-        } finally {
-            if (session != null)
-        	    session.close();
-        }
+        				HashMap<String, String> trns = ftp.getTranslations();
+        				Set<String> locales = trns.keySet();
+        				for (String locale : locales) {
+        					String trn = trns.get(locale);
+        					// see if we need to update existing translation
+        					Iterator<AmpContentTranslation> it = oldTrns.iterator();
+        					while (it.hasNext()) {
+        						AmpContentTranslation oldTrn = it.next();
+        						if (oldTrn.getLocale().equals(locale)) {
+        							newSession.delete(oldTrn);
+        							it.remove();
+        							break;
+        						}
+        					}
+        					AmpContentTranslation act = new AmpContentTranslation(objClass, newId, fieldName, locale, trn);
+        					newSession.save(act);
+        				}
+        				newSession.flush();
+        			} 
+        			catch (Exception e) {
+        				logger.error("can't save field translations", e);
+        				if (e.getCause() != null && e.getCause() instanceof SQLException && ((SQLException) e.getCause()).getNextException() != null)
+        					logger.error("Next exception: "+ ((SQLException) e.getCause()).getNextException());
+        			}
+        			finally {
+        				newSession.close();
+        			}
+        		}
+        	});
     }
 
     public static AmpContentTranslation getByTypeObjidFieldLocale (List<AmpContentTranslation> allTrns,

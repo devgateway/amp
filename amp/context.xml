@@ -31,8 +31,7 @@ clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTld
   <Manager className="org.apache.catalina.session.PersistentManager" debug="0" distributable="false" saveOnRestart="false">
   	<Store className="org.apache.catalina.session.FileStore"/>
   </Manager>
-</Context> 
-
+</Context>
 <!-- 
 <Context path="/" debug="0" reloadable="false" unloadDelay="4000" swallowOutput="true" allowLinking="true" antiJARLocking="" antiResourceLocking="" clearReferencesStopTimerThreads="true" clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTlds="false">
 	<Environment name="hostname" value="" type="java.lang.String"/> 
@@ -41,5 +40,4 @@ clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTld
 	<Manager className="org.apache.catalina.session.PersistentManager" debug="0" distributable="false" saveOnRestart="false">
   		<Store className="org.apache.catalina.session.FileStore"/>
   </Manager>
-</Context>
- -->
+</Context> -->

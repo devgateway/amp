@@ -222,7 +222,7 @@ public class ContentTranslationUtil {
         String objClass = getObjectClassName(obj);
         Long objId = getObjectId(obj);
         
-        String processedId = objClass+objId;
+        String processedId = objClass+System.identityHashCode(obj);
         if( processed.contains(processedId) ) return;
         processed.add(processedId);
         
@@ -305,7 +305,7 @@ public class ContentTranslationUtil {
         } catch (Exception e){
             logger.error("Can't clone translations", e);
         }
-        logger.info("Done cloning");
+        logger.info("Done cloning " + obj.getClass().getName());
     }
 
     /**

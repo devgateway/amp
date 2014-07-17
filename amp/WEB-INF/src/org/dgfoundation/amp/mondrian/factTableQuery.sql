@@ -6,6 +6,7 @@
     fd.transaction_type AS transaction_type,
     fd.adjustment_type AS adjustment_type,
     fd.transaction_date AS transaction_date,
+    to_char(fd.transaction_date, 'J')::integer AS date_code,
 
 	fd.transaction_amount * (
          COALESCE(location.percentage, 1) *

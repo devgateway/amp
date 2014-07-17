@@ -13,17 +13,20 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.List;
 import java.util.TreeSet;
-
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.ReportEntityType;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 
 /**
@@ -39,6 +42,7 @@ public class MondrianETL {
 	public final static String MONDRIAN_PROGRAMS_DIMENSION_TABLE = "mondrian_programs";
 	public final static String MONDRIAN_ORGANIZATIONS_DIMENSION_TABLE = "mondrian_organizations";
 	public final static String MONDRIAN_ACTIVITY_TEXTS = "mondrian_activity_texts";
+	public final static String MONDRIAN_EXCHANGE_RATES_TABLE = "mondrian_exchange_rates";
 	
 	/**
 	 * the dummy id to insert into the Cartesian product calculated by ETL.
@@ -74,6 +78,7 @@ public class MondrianETL {
 			add(new FactTableColumn("transaction_type", "integer NOT NULL", true)); // ACV
 			add(new FactTableColumn("adjustment_type", "integer NOT NULL", true));  // ACV
 			add(new FactTableColumn("transaction_date", "date NOT NULL", true));
+			add(new FactTableColumn("date_code", "integer NOT NULL", true));
 		
 			/**
 			 * regarding currencies: if a transaction has a fixed_exchange_rate, BASE_CURRENCY would have been written in currency_id and transaction_amount would be translated
@@ -153,10 +158,56 @@ public class MondrianETL {
 			checkFactTable();
 			deleteStaleFactTableEntries();
 			generateActivitiesEntries();
+			generateExchangeRatesTable();
 			generateStarTables();
+			checkMondrianSanity();
 			logger.error("done generating ETL");
 		}
 	}
+	
+	protected void checkMondrianSanity() {
+		String query = "SELECT DISTINCT(mft.date_code) FROM mondrian_fact_table mft WHERE NOT EXISTS (SELECT exchange_rate FROM mondrian_exchange_rates mer WHERE mer.day = mft.date_code)";
+		List<Long> days = SQLUtils.fetchLongs(conn, query);
+		if (!days.isEmpty()) {
+			logger.error("after having run the ETL, some days do not have a corresponding exchange rate entry: " + days.toString());
+			throw new RuntimeException("MONDRIAN ETL BUG: some days have missing exchange rate entries and will not exist in the generated reports: " + days);
+		}
+	}
+	
+	/**
+	 * generates exchange rate entries for the cartesian product (transaction date, currency)
+	 * to be called every time:
+	 * 1) an exchange rate changes
+	 * 2) a new currency is added
+	 * 3) a new transaction date appears in the database
+	 */
+	protected void generateExchangeRatesTable() throws SQLException {
+		logger.warn("generating exchange rates ETL...");
+		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + MONDRIAN_EXCHANGE_RATES_TABLE);
+		SQLUtils.executeQuery(conn, "CREATE TABLE " + MONDRIAN_EXCHANGE_RATES_TABLE + "(" + 
+										"day integer NOT NULL," + 
+										"currency_id bigint NOT NULL," + 
+										"exchange_rate double precision NOT NULL CHECK (exchange_rate > 0)," + 
+										"CONSTRAINT day_pkey PRIMARY KEY (day, currency_id))");
+		
+		SortedSet<Long> allDates = new TreeSet<>(SQLUtils.fetchLongs(conn, "select distinct(date_code) as day from mondrian_fact_table"));
+		List<Long> allCurrencies = SQLUtils.fetchLongs(conn, "SELECT amp_currency_id FROM amp_currency");
+		for (Long currency:allCurrencies) {
+			generateExchangeRateEntriesForCurrency(CurrencyUtil.getAmpcurrency(currency), allDates);
+		}
+		logger.warn("... done generating exchange rates ETL...");
+	}
+
+	/**
+	 * generates the exchange rates for the said currency for all the given dates
+	 * @param ampCurrencyId
+	 * @param allDates
+	 * @throws SQLException
+	 */
+	protected void generateExchangeRateEntriesForCurrency(AmpCurrency currency, SortedSet<Long> allDates) throws SQLException {
+		new CurrencyETL(currency, conn).work(allDates);
+	}
+	
 	
 	/**
 	 * makes a snapshot of the views which back Mondrian ETL columns

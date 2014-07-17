@@ -122,6 +122,25 @@ public class SQLUtils {
 	}
 	
 	/**
+	 * fetches an ArrayList of longs
+	 * @param connection
+	 * @param query
+	 * @return
+	 */
+	public static List<Long> fetchLongs(Connection connection, String query) {
+		List<Long> res = new ArrayList<>();
+		try(ResultSet rs = rawRunQuery(connection, query, null)) {
+			while (rs.next()) {
+				res.add(rs.getLong(1));
+			}
+		}
+		catch(SQLException ex) {
+			throw new RuntimeException(ex);
+		}
+		return res;
+	}
+	
+	/**
 	 * runs a query and returns a list of the nth elements in each of the rows
 	 * @param connection
 	 * @param query
@@ -131,13 +150,11 @@ public class SQLUtils {
 	public static <T> List<T> fetchAsList(Connection connection, String query, int n)
 	{
 		ResultSet rs = null;
-		try
-		{
+		try {
 			rs = rawRunQuery(connection, query, null);
 			return fetchAsList(rs, n, " with query " + query);
 		}
-		catch(SQLException e)
-		{
+		catch(SQLException e) {
 			throw new RuntimeException("Error fetching list of values with query " + query, e);
 		}
 //		finally

@@ -469,7 +469,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
 		saveAndSubmit.getButton().add(isSubmit);
 		
-		AttributePrepender closeEditors = new AttributePrepender("onclick", new Model<String>("$('a[data-is_close=true]').click();"), "");
+		AttributePrepender closeEditors = new AttributePrepender("onclick", new Model<String>("$('a[data-is_close=true]:visible').click();"), "");
 		
 		saveAndSubmit.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
 		saveAndSubmit.getButton().add(updateEditors);
@@ -678,7 +678,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				// only in the eventuality that the title field is valid (is not
 				// empty) we proceed with the real save!
 				if (!activityForm.hasError())
+					{
+					redirected.setObject(STAY_ON_PAGE);
 					saveMethod(target, am, feedbackPanel, true, redirected,false);
+					}
 				else {
 					formSubmitErrorHandle(activityForm, target, feedbackPanel);
 				}
@@ -1120,10 +1123,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             replaceStr = String.valueOf(oldId);
         }
         if(draft && redirected.getObject().equals(STAY_ON_PAGE)){
-				target.appendJavaScript("var newLoc=window.location.href.replace(\"" + replaceStr + "\" , \"" + actId + "\");newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
+				target.appendJavaScript("window.onbeforeunload = null; var newLoc=window.location.href.replace(\"" + replaceStr + "\" , \"" + actId + "\");newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
         }
         else{
-            target.appendJavaScript("window.location.replace('/aim/');");
+            target.appendJavaScript("window.onbeforeunload = null; window.location.replace('/aim/');");
         }
         target.add(feedbackPanel);
 	}

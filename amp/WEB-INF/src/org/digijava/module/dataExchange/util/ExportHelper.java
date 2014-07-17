@@ -356,10 +356,17 @@ public class ExportHelper {
 		return retValue;
 	}
 	
+	/**
+	 * Get IATI Code Item for a specific code type and code name
+	 * @param typeName - IatiCodeTypeEnum type (e.g. IatiCodeTypeEnum.OrganisationType) 
+	 * @param iatiCodeName - code name like 'Government' 
+	 * @return IatiCodeItem (e.g. code='10' name='Government')
+	 * @throws AmpExportException
+	 */
 	public static IatiCodeItem getIatiCodeItem(IatiCodeTypeEnum typeName, String iatiCodeName) throws AmpExportException {
 		try {
 			IatiCodeType codeType = DbUtil.getIatiCodeTypeByName(typeName);
-			IatiCodeItem codeItem =  DbUtil.getIatiCodeByName(iatiCodeName, codeType.getId());
+			IatiCodeItem codeItem = codeType==null ? null : DbUtil.getIatiCodeByName(iatiCodeName, codeType.getId());
 			return codeItem;
 		} catch (AMPException e) {
 			throw new AmpExportException(e.getCause(), AmpExportException.ACTIVITY_DATA_INEFFICIENT);

@@ -408,11 +408,11 @@ DIV.panelList {
 	                   <%--  <c:set var="reportNameTrn"> 
 		                    <digi:trn key="aim:clickreport:tabs:${report.nameTrn}">${report.name}</digi:trn>
 	                    </c:set> --%>
-	                    <c:if test="${fn:length(report.name) > 25}" >
-							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${report.name}" />", "<c:out value="${fn:substring(report.name, 0, 25)}" />", "Tab-<c:out value="${report.ampReportId}" />");' title="<c:out value="${report.name}" />" id="<c:out value="${report.name}" />"><c:out value="${fn:substring(report.name, 0, 25)}" />...</div>
+	                   <c:if test="${fn:length(report.name) > 25}" >
+							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${fn:escapeXml(report.name)}" />", "<c:out value="${fn:escapeXml(fn:substring(report.name, 0, 25))}" />", "Tab-<c:out value="${report.ampReportId}" />");' title="<c:out value="${report.name}" />" id="<c:out value="${report.name}" />"><c:out value="${fn:substring(report.name, 0, 25)}" />...</div>
 	                    </c:if>
 	                    <c:if test="${fn:length(report.name) <= 25}" >
-							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${report.name}" />", "<c:out value="${report.name}" />", "Tab-<c:out value="${report.ampReportId}" />");'  title="<c:out value="${report.name}" />" id="<c:out value="${report.name}" />"><c:out value="${report.name}" /></div>
+							<div href="#" class="panelList" onclick='setNewTab("/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true", "<c:out value="${fn:escapeXml(report.name)}" />", "<c:out value="${fn:escapeXml(report.name)}" />", "Tab-<c:out value="${report.ampReportId}" />");'  title="<c:out value="${report.name}" />" id="<c:out value="${report.name}" />"><c:out value="${report.name}" /></div>
 	                    </c:if>
 					</logic:equal>
             </c:if>

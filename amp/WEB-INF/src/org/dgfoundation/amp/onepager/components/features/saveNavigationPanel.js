@@ -13,6 +13,10 @@ function showDraftPanel(){
         });
         $("span[name=saveAsDraftPanelButton]").find('input').removeAttr('disabled');
         $("#saveAsDraftPanel").show();
+        
+        saveAsDraftPanel.beforeHideEvent.subscribe(function() {
+        	enableButtons2();
+        	});
         saveAsDraftPanel.render();
 
     }

@@ -393,7 +393,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         IndicatingAjaxLink cancelButton = new IndicatingAjaxLink("warnPanelCancel") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                target.appendJavaScript("hideWarningPanel();enableButtons();");
+                target.appendJavaScript("hideWarningPanel();enableButtons2();");
             }
         };
         cancelButton.add(new AttributeModifier("value", TranslatorUtil.getTranslatedText("Cancel")));
@@ -403,7 +403,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         IndicatingAjaxLink saveButton = new IndicatingAjaxLink("warnPanelSave") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                target.appendJavaScript("hideWarningPanel();enableButtons();");
+                target.appendJavaScript("hideWarningPanel();enableButtons2();");
                 //TODO: fix draft param
                 saveMethod(target, am, feedbackPanel, false, redirected,false);
             }
@@ -444,7 +444,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 						onError(target, form);
 					}
 					//we only remove disable on buttons tagged as submit ones
-				target.appendJavaScript("enableButtons();");
+				target.appendJavaScript("enableButtons2();");
 			}
 			
 
@@ -452,7 +452,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			protected void onError(final AjaxRequestTarget target, Form<?> form) {
 				super.onError(target, form);
 				//if any error happens we enable again all buttons (tagged as submit
-				target.appendJavaScript("enableButtons();");
+				target.appendJavaScript("enableButtons2();");
 				formSubmitErrorHandle(form, target, feedbackPanel);
 			}
 
@@ -509,7 +509,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         AmpAjaxLinkField saveAsDraft = new AmpAjaxLinkField("saveAsDraft", "Save as Draft", "Save as Draft") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
-            	target.appendJavaScript("enableButtons();");
+            	target.appendJavaScript("enableButtons2();");
             }
         };
         
@@ -567,7 +567,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				
 			}
         };
-        cancelSaveAsDraft.getButton().add(new AttributeModifier("onclick", "hideDraftPanel();enableButtons();"));
+        cancelSaveAsDraft.getButton().add(new AttributeModifier("onclick", "hideDraftPanel();enableButtons2();"));
         cancelSaveAsDraft.add(isSubmit);
         cancelSaveAsDraft.setVisible(true);
         cancelSaveAsDraft.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
@@ -617,7 +617,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             }
 		};
 		cancelRejectActivity.getButton().add(isSubmit);
-		cancelRejectActivity.getButton().add(new AttributeModifier("onclick", "hideRejectActivityPanel();enableButtons();"));
+		cancelRejectActivity.getButton().add(new AttributeModifier("onclick", "hideRejectActivityPanel();enableButtons2();"));
 		cancelRejectActivity.setVisible(true);
 		cancelRejectActivity.getButton().add(new AttributeModifier("class", new Model<String>("sideMenuButtons")));
         activityForm.add(cancelRejectActivity);
@@ -719,7 +719,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		AmpButtonField logframe = new AmpButtonField("logframe", "Logframe", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				target.appendJavaScript("enableButtons();");
+				target.appendJavaScript("enableButtons2();");
 			}
 			@Override
 			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
@@ -746,7 +746,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					else{
 						target.appendJavaScript("window.location.replace(\"/aim/viewActivityPreview.do~pageId=2~activityId=" + am.getObject().getAmpActivityId() + "~isPreview=1\");");
 					}
-					target.appendJavaScript("enableButtons();");
+					target.appendJavaScript("enableButtons2();");
 			}
 			
 			@Override
@@ -754,7 +754,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				super.onError(target, form);
 
 					target.add(feedbackPanel);
-					target.appendJavaScript("enableButtons();");
+					target.appendJavaScript("enableButtons2();");
 			}
 			@Override
 			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
@@ -1167,7 +1167,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				// no sense but not to leave the
 				// buttons useless (although if we had an ajax failure the may
 				// already be useless)
-				return "enableButtons();";
+				return "enableButtons2();";
 			}
 		};
 		attributes.getAjaxCallListeners().add(listener);
@@ -1219,12 +1219,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			target.add(cancelSaveAsDraft);
 			onErrorSaveAsDraft(feedbackPanel, target, form);
 		}
-		target.appendJavaScript("enableButtons();");
+		target.appendJavaScript("enableButtons2();");
 	}
 
 	protected void onErrorSaveAsDraft(final FeedbackPanel feedbackPanel,
 			final AjaxRequestTarget target, Form<?> form) {
-		target.appendJavaScript("enableButtons();");
+		target.appendJavaScript("enableButtons2();");
 		formSubmitErrorHandle(form, target, feedbackPanel);
 	}
 

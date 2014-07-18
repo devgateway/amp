@@ -301,68 +301,6 @@ public class AmpDonorFundingFormSectionFeature extends
 
 			@Override
 			public void addItem(AmpOrganisation org) {
-				AmpFunding funding = new AmpFunding();
-				if (orgRoleSelector.getRoleSelect().getChoiceContainer()
-						.getModelObject() != null)
-					funding.setSourceRole((AmpRole) orgRoleSelector
-							.getRoleSelect().getChoiceContainer()
-							.getModelObject());
-				else
-					funding.setSourceRole(DbUtil
-							.getAmpRole(Constants.FUNDING_AGENCY));
-
-				funding.setAmpDonorOrgId(org);
-				funding.setAmpActivityId(am.getObject());
-				funding.setMtefProjections(new HashSet<AmpFundingMTEFProjection>());
-				funding.setFundingDetails(new HashSet<AmpFundingDetail>());
-				funding.setGroupVersionedFunding(System.currentTimeMillis());
-				// if it is a ssc activity we set a default type of assistance
-				if (ActivityUtil.ACTIVITY_TYPE_SSC
-						.equals(((AmpAuthWebSession) getSession())
-								.getFormType())) {
-					Collection<AmpCategoryValue> categoryValues = CategoryManagerUtil
-							.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
-					funding.setTypeOfAssistance(categoryValues.iterator()
-							.next());
-				}
-				list.updateModel();
-
-				if (listItems.containsKey(org)) {
-					AmpFundingGroupFeaturePanel fg = listItems.get(org);
-					fg.getList().addItem(funding);
-				} else {
-					if (fundingModel.getObject() == null)
-						fundingModel.setObject(new LinkedHashSet<AmpFunding>());
-
-					fundingModel.getObject().add(funding);
-					super.addItem(org);
-				}
-
-				// check if donor role for this org has been added, if not then
-				// add it
-				// Only for non-ssc activities
-				if (!ActivityUtil.ACTIVITY_TYPE_SSC
-						.equals(((AmpAuthWebSession) getSession())
-								.getFormType())) {
-					boolean found = false;
-					Set<AmpOrgRole> orgRoles = roleModel.getObject();
-					for (AmpOrgRole role : orgRoles)
-						if (role.getRole().getRoleCode()
-								.equals(Constants.FUNDING_AGENCY)
-								&& role.getOrganisation().getAmpOrgId()
-										.equals(org.getAmpOrgId())) {
-							found = true;
-							break;
-						}
-					if (!found) {
-						AmpOrgRole role = new AmpOrgRole();
-						role.setOrganisation(org);
-						role.setActivity(am.getObject());
-						role.setRole(DbUtil
-								.getAmpRole(Constants.FUNDING_AGENCY));
-						orgRoles.add(role);
-					}
-				}
 			}
 		};
 		wmc.add(list);
@@ -478,5 +416,67 @@ public class AmpDonorFundingFormSectionFeature extends
         
     }
 }
+	 
+	public void addItemToList(AmpOrganisation org) {
+		AmpFunding funding = new AmpFunding();
+		if (orgRoleSelector.getRoleSelect().getChoiceContainer()
+				.getModelObject() != null)
+			funding.setSourceRole((AmpRole) orgRoleSelector
+					.getRoleSelect().getChoiceContainer()
+					.getModelObject());
+		else
+			funding.setSourceRole(DbUtil
+					.getAmpRole(Constants.FUNDING_AGENCY));
+
+		funding.setAmpDonorOrgId(org);
+		funding.setAmpActivityId(am.getObject());
+		funding.setMtefProjections(new HashSet<AmpFundingMTEFProjection>());
+		funding.setFundingDetails(new HashSet<AmpFundingDetail>());
+		funding.setGroupVersionedFunding(System.currentTimeMillis());
+		// if it is a ssc activity we set a default type of assistance
+		if (ActivityUtil.ACTIVITY_TYPE_SSC
+				.equals(((AmpAuthWebSession) getSession())
+						.getFormType())) {
+			Collection<AmpCategoryValue> categoryValues = CategoryManagerUtil
+					.getAmpCategoryValueCollectionByKey(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+			funding.setTypeOfAssistance(categoryValues.iterator()
+					.next());
+		}
+		list.updateModel();
+
+		if (listItems.containsKey(org)) {
+			AmpFundingGroupFeaturePanel fg = listItems.get(org);
+			fg.getList().addItem(funding);
+		} else {
+			if (fundingModel.getObject() == null)
+				fundingModel.setObject(new LinkedHashSet<AmpFunding>());
+
+			fundingModel.getObject().add(funding);
+			list.origAddItem(org);
+		}
+	}
+
+	private void addOrganisationAsDonor(AmpOrganisation org) {
+		// check if donor role for this org has been added, if not then
+		// add it
+		// Only for non-ssc activities
+		if (!ActivityUtil.ACTIVITY_TYPE_SSC.equals(((AmpAuthWebSession) getSession()).getFormType())) {
+			boolean found = false;
+			Set<AmpOrgRole> orgRoles = roleModel.getObject();
+			for (AmpOrgRole role : orgRoles)
+				if (role.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY)
+						&& role.getOrganisation().getAmpOrgId().equals(org.getAmpOrgId())) {
+					found = true;
+					break;
+				}
+			if (!found) {
+				AmpOrgRole role = new AmpOrgRole();
+				role.setOrganisation(org);
+				role.setActivity(am.getObject());
+				role.setRole(DbUtil.getAmpRole(Constants.FUNDING_AGENCY));
+				orgRoles.add(role);
+			}
+		}
+	}
 
 }

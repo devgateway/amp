@@ -83,6 +83,7 @@ public class SuspendLoginManager extends DispatchAction {
         if (sl.getId() != null) {
             SuspendLogin slFromDb = DbUtil.getSuspendedLoginObjById(sl.getId());
             slFromDb.setName(sl.getName());
+            slFromDb.setReasonText(sl.getReasonText());
             slFromDb.setExpires(sl.getExpires());
             slFromDb.setActive(sl.getActive());
             slFromDb.setSuspendTil(sl.getSuspendTil());
@@ -91,7 +92,6 @@ public class SuspendLoginManager extends DispatchAction {
 
 
         DbUtil.saveSuspendedLoginObj(sl);
-
 
         return view(mapping, form, request, response);
     }

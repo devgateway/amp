@@ -403,7 +403,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         IndicatingAjaxLink saveButton = new IndicatingAjaxLink("warnPanelSave") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                target.appendJavaScript("hideWarningPanel();enableButtons2();");
+                target.appendJavaScript("hideWarningPanel();");
                 //TODO: fix draft param
                 saveMethod(target, am, feedbackPanel, false, redirected,false);
             }
@@ -444,7 +444,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 						onError(target, form);
 					}
 					//we only remove disable on buttons tagged as submit ones
-				target.appendJavaScript("enableButtons2();");
+				//target.appendJavaScript("enableButtons2();");
 			}
 			
 
@@ -509,7 +509,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         AmpAjaxLinkField saveAsDraft = new AmpAjaxLinkField("saveAsDraft", "Save as Draft", "Save as Draft") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
-            	target.appendJavaScript("enableButtons2();");
             }
         };
         
@@ -719,7 +718,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		AmpButtonField logframe = new AmpButtonField("logframe", "Logframe", AmpFMTypes.MODULE, true) {
 			@Override
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				target.appendJavaScript("enableButtons2();");
 			}
 			@Override
 			protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
@@ -746,7 +744,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					else{
 						target.appendJavaScript("window.location.replace(\"/aim/viewActivityPreview.do~pageId=2~activityId=" + am.getObject().getAmpActivityId() + "~isPreview=1\");");
 					}
-					target.appendJavaScript("enableButtons2();");
 			}
 			
 			@Override

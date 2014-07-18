@@ -161,8 +161,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityGroupCached</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityGroup</hibernate-class>		
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityVersion</hibernate-class>
-		<hibernate-class>org.digijava.module.aim.dbentity.AmpAnnualProjectBudget</hibernate-class>
-                
+		
 		<!-- Pledges classes -->
 		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledges</hibernate-class>
 		<hibernate-class>org.digijava.module.fundingpledges.dbentity.FundingPledgesLocation</hibernate-class>

@@ -2760,29 +2760,17 @@ body {background:none;}
 																 	<FONT color=blue>*</FONT> ${aimEditActivityForm.funding.proProjCost.funAmount}                                                          
 														  </c:if>&nbsp;
 														  <c:if test="${aimEditActivityForm.funding.proProjCost.currencyCode!=null}"> 
-																${aimEditActivityForm.funding.proProjCost.currencyName} </c:if>                                                        
+																${aimEditActivityForm.funding.proProjCost.currencyCode} </c:if>                                                        
 														</td>
 												      </tr>
 													  <tr bgcolor="#ffffff">
-														<td bgcolor="#FFFFFF" align="left">
-                                                         	<c:if
-															test="${aimEditActivityForm.funding.proposedAnnualBudgets!=null}">
-															<table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa"
-																width="100%">
-																<tr bgcolor="#f0f0f0">
-																	<td><b><digi:trn key="aim:cost">Cost</digi:trn></b></td>
-																	<td><b><digi:trn key="aim:cost">Year</digi:trn></b></td>
-																</tr>
-																<c:forEach var="annualBudget"
-																	items="${aimEditActivityForm.funding.proposedAnnualBudgets}">
-																	<tr bgcolor="#f0f0f0">
-																		<td>${annualBudget.funAmount}
-																			${annualBudget.currencyName}</td>
-																		<td>${annualBudget.funDate}</td>
-																	</tr>
-																</c:forEach>
-															</table>
-														</c:if>
+														<td>
+															<digi:trn key="aim:proposedcompletiondate">Proposed Completion Date</digi:trn>  
+														</td>
+                                                        <td bgcolor="#FFFFFF" align="left" width="150">
+                                                          <c:if test="${aimEditActivityForm.funding.proProjCost.funDate!=null}">
+                                                             ${aimEditActivityForm.funding.proProjCost.funDate}                                                          
+                                                         </c:if>                                                        
                                                          </td>
                                                        </tr>
                                                         <module:display name="/Activity Form/Funding/Total Number of Funding Sources" parentModule="/Activity Form/Funding">

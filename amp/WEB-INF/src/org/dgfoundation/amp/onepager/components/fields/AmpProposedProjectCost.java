@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
@@ -23,17 +21,12 @@ import org.apache.wicket.util.convert.converter.DoubleConverter;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.features.AmpActivityFormFeature;
-import org.dgfoundation.amp.onepager.components.features.subsections.AmpComponentAnnualBudgetSubsectionFeature;
-import org.dgfoundation.amp.onepager.events.ProposedProjectCostUpdateEvent;
-import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
-import org.dgfoundation.amp.onepager.models.ProposedProjectCostModel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.form.ActivityForm;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 
 /**
  * Encaspulates an ajax link of type {@link AjaxLink}
@@ -50,7 +43,7 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 		super(id, fmName);
 		
 		final AmpTextFieldPanel<Double> amount = new AmpTextFieldPanel<Double>("proposedAmount",
-				new ProposedProjectCostModel(new PropertyModel<Double>(am, "funAmount"), new PropertyModel<Set<AmpAnnualProjectBudget>>(am, "annualProjectBudgets")), "Amount",false)  {
+				new PropertyModel<Double>(am, CategoryConstants.PROPOSE_PRJC_AMOUNT_KEY), CategoryConstants.PROPOSE_PRJC_AMOUNT_NAME,false) {
 				public IConverter getInternalConverter(java.lang.Class<?> type) {
 				DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
 				NumberFormat formatter = FormatHelper.getDecimalFormat(true);
@@ -76,10 +69,7 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 				
 		};
 		amount.getTextContainer().add(new AttributeModifier("size", new Model<String>("12")));
-		amount.add(UpdateEventBehavior.of(ProposedProjectCostUpdateEvent.class));
-		amount.getTextContainer().add(new AttributeModifier("readonly", new Model<String>("readonly")));
-		               
-	          
+		
         add(amount);
         
 		AbstractReadOnlyModel<List<String>> currencyList = new AbstractReadOnlyModel<List<String>>() {
@@ -107,15 +97,9 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 				currencyModel, currencyList,
 				"Currency", false, false);
 		add(currency);
-        AmpComponentAnnualBudgetSubsectionFeature annualBudgets;
-		try {
-			annualBudgets = new AmpComponentAnnualBudgetSubsectionFeature(
-					"annualProposedCost", am, "Annual Proposed Project Cost");
-			add(annualBudgets);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	 	 		                
+        final PropertyModel<Date> funDateModel = new PropertyModel<Date>(am, CategoryConstants.PROPOSE_PRJC_DATE_KEY);
+        final AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("proposedDate", funDateModel, null, CategoryConstants.PROPOSE_PRJC_DATE_NAME);
+        add(date);
       
         //validator for poposed project cost amount AMP-17254
         add(new AmpComponentPanel("proposedAmountRequired", "Required Validator for " + CategoryConstants.PROPOSE_PRJC_AMOUNT_NAME) {

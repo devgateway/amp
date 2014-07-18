@@ -633,7 +633,8 @@ public class ExportActivityToPDF extends Action {
 					}else if (identification.getBudgetCV().equals(new Long(0))) {
 						budget = TranslatorWorker.translateText("Budget Unallocated");
 					}else{
-						budget = TranslatorWorker.translateText("Activity is on ")+identification.getBudgetCV() ;
+						AmpCategoryValue value = (AmpCategoryValue) DbUtil.getObject(AmpCategoryValue.class, identification.getBudgetCV());
+						budget = TranslatorWorker.translateText("Activity is on")+" "+value.getLabel() ;
 					}
 				}
 				

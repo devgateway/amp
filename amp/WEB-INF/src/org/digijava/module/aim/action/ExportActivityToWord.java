@@ -2991,8 +2991,9 @@ public class ExportActivityToWord extends Action {
 					//p1=new Paragraph(TranslatorWorker.translateText("Budget Unallocated"),PLAINFONT) ;
 					columnVal=TranslatorWorker.translateText("Budget Unallocated");
 				}else{
-					p1=new Paragraph(TranslatorWorker.translateText("Activity is on ")+identification.getBudgetCV(),PLAINFONT) ;
-					columnVal=TranslatorWorker.translateText("Activity is on ")+identification.getBudgetCV();
+					p1=new Paragraph(TranslatorWorker.translateText("Activity is on")+" "+identification.getBudgetCV(),PLAINFONT) ;
+					AmpCategoryValue value = (AmpCategoryValue) DbUtil.getObject(AmpCategoryValue.class, identification.getBudgetCV());
+					columnVal=TranslatorWorker.translateText("Activity is on")+" "+value.getLabel();
 				}
 				generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 			}

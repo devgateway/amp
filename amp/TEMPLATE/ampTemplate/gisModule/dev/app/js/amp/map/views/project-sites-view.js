@@ -140,7 +140,7 @@ module.exports = Backbone.View.extend({
 
   // fetch returns the deferred object of the raw (non-parsed) response.
   _getProjectSites: function(filter){
-    return this.collection.fetch({filter:filter});
+    return this.collection.fetch({data: filter});
   },
 
   _removeFromMap: function(){

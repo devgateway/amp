@@ -59,6 +59,12 @@ module.exports = BaseControlView.extend({
     // setup listener:
     this.$('#point-selector input:radio').change(function(){
       var val = $(this).val();
+      if(val === 'aggregated'){
+        self.$('.aggregate-group').show(); 
+        val = self.$('.point-options .amp-uses:input:radio:checked').val();
+      } else if(val === 'locations'){        
+        self.$('.aggregate-group').hide(); 
+      }
       Backbone.trigger('MAP_LOAD_POINT_LAYER', val);
     });
   },
@@ -107,10 +113,10 @@ module.exports = BaseControlView.extend({
 
     // TODO: make this collapse, null behaviour generic so we can use it on both...
     this.$('#point-layers').change(function(evt){
-      var indicatorEnabled = $(this).prop('checked');
-      if(indicatorEnabled){
+      var pointsEnabled = $(this).prop('checked');
+      if(pointsEnabled){
         self.$('.point-options').show();
-        var val = self.$('.point-options input:radio:checked').val();
+        var val = self.$('.point-options .amp-uses:input:radio:checked').val();
         Backbone.trigger('MAP_LOAD_POINT_LAYER', val);
 
       } else {        

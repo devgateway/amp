@@ -4,21 +4,21 @@ var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
+var ADMClusterCollection = require('../collections/adm-cluster-collection');
 
 var ADMTemplate = fs.readFileSync(__dirname + '/../templates/map-adm-template.html', 'utf8');
 
-var APIBase = require('../../../libs/local/api-base');
 
 module.exports = Backbone.View.extend({
-  apiURL: APIBase.getAPIBase() + '/rest/gis/cluster',
 
   admTemplate: _.template(ADMTemplate),
 
   initialize: function(extraProperties) {
     _.extend(this, extraProperties);
+    this.collection = new ADMClusterCollection();
 
-    // instead, maybe we can grab a reference to the model or collection,
-    // backing the filter, and subscribe to changes on it?
+
+    // TODO: move listener to collection, and subscribe to it's changes.
     Backbone.on('FILTERS_UPDATED', this._filtersUpdated, this);
     Backbone.on('MAP_LOAD_POINT_LAYER', this._loadProjectLayer, this);
 
@@ -28,26 +28,25 @@ module.exports = Backbone.View.extend({
     return this;
   },
 
+  // TODO: none hardcoded version.
   _loadProjectLayer: function(type){
-    if(type === 'aggregated'){
-      this._filtersUpdated();
-    } else{
+    if(type === 'aggregate-adm1'){
+      this._filtersUpdated({adminLevel: 1});
+    } else if(type === 'aggregate-adm2'){
+      this._filtersUpdated({adminLevel: 2});
+    } else {
       this._removeFromMap();
     }
   },
 
-  _filtersUpdated: function() {
+  _filtersUpdated: function(filterObj) {
     // TODO: Should only run if this layer is active.. check self.graphicLayer.active
-
-    // TODO: 1. get all the filters using an event or service
-    //      fitlers-view.js can iterate over array of filters, and ask each one to return it's filter key and value....
-    var filterObj = {};
     var self = this;
 
     // Get the values for the map. Sample URL:
     // /rest/gis/cluster?filter="{"FiltersParams":{"params":[{"filterName":"adminLevel","filterValue":["Region"]}]}}"
     // (don't forget to url-encode)
-    this._getCluster().then(function(data) {
+    this._getCluster(filterObj).then(function(data) {
       if(data && data.type === 'FeatureCollection') {
         self.features = data.features;
         self._renderFeatures();
@@ -92,13 +91,8 @@ module.exports = Backbone.View.extend({
   },
 
   // Can do some post-processing here if we want...
-  _getCluster: function(filter){
-    // TODO: may need to encode filter....
-    return $.ajax({
-        type: 'GET',
-        url: this.apiURL,
-        data: filter
-      });
+  _getCluster: function(filter){    
+    return this.collection.fetch({data:filter});
   },
 
   _removeFromMap: function(){

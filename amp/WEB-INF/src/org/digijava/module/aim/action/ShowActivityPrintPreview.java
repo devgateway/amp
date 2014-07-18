@@ -139,6 +139,7 @@ public class ShowActivityPrintPreview
                 	pg.setFunAmountAsDouble(activity.getFunAmount());
                 }                  
                 pg.setCurrencyCode(activity.getCurrencyCode());
+                pg.setCurrencyName(CurrencyUtil.getCurrencyByCode(activity.getCurrencyCode()).getCurrencyName());
                 pg.setFunDate(FormatHelper.formatDate(activity.getFunDate()));
                 eaForm.getFunding().setProProjCost(pg);
 
@@ -258,12 +259,15 @@ public class ShowActivityPrintPreview
                 if (tm != null && tm.getAppSettings() != null
 						&& tm.getAppSettings().getCurrencyId() != null) {
 					String currCode = "";
+					String currName="";
 					AmpCurrency curr = CurrencyUtil.getAmpcurrency(tm
 							.getAppSettings().getCurrencyId());
 					if (curr != null) {
 						currCode = curr.getCurrencyCode();
+						currName = curr.getCurrencyName();
 					}
 					eaForm.setCurrCode(currCode);
+					eaForm.setCurrName(currName);
 				}
 
                 // loading organizations and thier project ids.                

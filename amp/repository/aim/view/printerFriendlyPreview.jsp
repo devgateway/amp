@@ -1367,7 +1367,7 @@ body {background:none;}
 	                            	</td>
 	                            	<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
 										<bean:write name="aimEditActivityForm" property="funding.totalPlannedCommitments" />
-										<bean:write name="aimEditActivityForm" property="currCode" />
+										<bean:write name="aimEditActivityForm" property="currName" />
 		                            	 &nbsp;
 	                        		</td>
 	                        	</tr>
@@ -1380,7 +1380,7 @@ body {background:none;}
                             		</td>
                             		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">                                 
 	                                	<bean:write name="aimEditActivityForm" property="funding.totalCommitments" />
-	                                	<bean:write name="aimEditActivityForm" property="currCode" />
+	                                	<bean:write name="aimEditActivityForm" property="currName" />
 	                              		&nbsp;
 	                         		</td>
                         		</tr>
@@ -1391,7 +1391,7 @@ body {background:none;}
 	                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn> TOTAL PIPELINE COMMITMENTS: </digi:trn></td>
 	                            	<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
 										<bean:write name="aimEditActivityForm" property="funding.totalPipelineCommitments" /> 
-										<bean:write name="aimEditActivityForm" property="currCode" />
+										<bean:write name="aimEditActivityForm" property="currName" />
 										&nbsp;
 									</td>
 	                        	</tr>
@@ -1403,7 +1403,7 @@ body {background:none;}
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key='aim:totalplanneddisbursement'>TOTAL PLANNED DISBURSEMENT</digi:trn>:</td>
                             		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
 		                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /> 
-		                                <bean:write name="aimEditActivityForm" property="currCode" />
+		                                <bean:write name="aimEditActivityForm" property="currName" />
 		                          		&nbsp;
                             		</td>
                         		</tr>
@@ -1413,7 +1413,7 @@ body {background:none;}
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000"><digi:trn key='aim:totalActualdisbursement'>TOTAL ACTUAL DISBURSEMENT </digi:trn>:</td>
                             		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
 	                                	<bean:write name="aimEditActivityForm" property="funding.totalDisbursements" />
-	                                	<bean:write name="aimEditActivityForm" property="currCode" />
+	                                	<bean:write name="aimEditActivityForm" property="currName" />
 		                          		&nbsp;
                            			</td>
                         		</tr>
@@ -1425,7 +1425,7 @@ body {background:none;}
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:totalActualExpenditures">TOTAL PLANNED EXPENDITURES</digi:trn>:</td>
                             		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
 		                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedExpenditures" />
-		                                <bean:write name="aimEditActivityForm" property="currCode" />
+		                                <bean:write name="aimEditActivityForm" property="currName" />
 			                      		&nbsp;
                             		</td>
                         		</tr>
@@ -1435,7 +1435,7 @@ body {background:none;}
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:totalplannedExpenditures">TOTAL ACTUAL EXPENDITURES</digi:trn>:</td>
                             		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
 	                                	<bean:write name="aimEditActivityForm" property="funding.totalExpenditures" />
-	                                	<bean:write name="aimEditActivityForm" property="currCode" />
+	                                	<bean:write name="aimEditActivityForm" property="currName" />
 		                          		&nbsp;
 		                    		</td>
                         		</tr>
@@ -1460,7 +1460,7 @@ body {background:none;}
                                  <c:if test="${not empty aimEditActivityForm.funding.totalActualDisbursementsOrders}">
 	                                <bean:write
 	                                name="aimEditActivityForm" property="funding.totalActualDisbursementsOrders" />	<bean:write
-	                                name="aimEditActivityForm" property="currCode" />
+	                                name="aimEditActivityForm" property="currName" />
 	                             </c:if>&nbsp;
 	                       </td>
                       	</tr>
@@ -1471,7 +1471,7 @@ body {background:none;}
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase"><digi:trn key="aim:undisbursedBalance">UNDISBURSED BALANCE</digi:trn>:</td>
                             		<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">                                 
 		                                <bean:write name="aimEditActivityForm" property="funding.unDisbursementsBalance" /> 
-		                                <bean:write name="aimEditActivityForm" property="currCode" />
+		                                <bean:write name="aimEditActivityForm" property="currName" />
 		                         		&nbsp;
 		                  			</td>
                         		</tr>
@@ -2654,7 +2654,7 @@ body {background:none;}
 																 	<FONT color=blue>*</FONT> ${aimEditActivityForm.funding.proProjCost.funAmount}                                                          
 														  </c:if>&nbsp;
 														  <c:if test="${aimEditActivityForm.funding.proProjCost.currencyCode!=null}"> 
-																${aimEditActivityForm.funding.proProjCost.currencyCode} </c:if>                                                        
+																${aimEditActivityForm.funding.proProjCost.currencyName} </c:if>                                                        
 														</td>
 												      </tr>
 													  <tr bgcolor="#ffffff">

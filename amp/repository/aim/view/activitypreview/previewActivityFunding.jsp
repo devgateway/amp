@@ -6,10 +6,10 @@
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
-<%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/fmt" prefix="fmt"%>
 <%@ taglib uri="/taglib/category" prefix="category"%>
+<%@ taglib uri="/taglib/digijava" prefix="digi"%>
 
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
@@ -303,7 +303,7 @@
 	                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">
 		                                <b>
 		                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedCommitments" /> 
-		                                <bean:write name="aimEditActivityForm" property="currCode" />
+		                                <digi:currency code="${aimEditActivityForm.currCode}"/>
 		                                </b>
 		                             &nbsp;
                         		</td>
@@ -322,7 +322,8 @@
                                 
 	                                <b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalCommitments"/> 
-	                                <bean:write name="aimEditActivityForm" property="currCode"/>
+	                                <digi:currency code="${aimEditActivityForm.currCode}"/>
+		                           
 	                                </b>
 	                        	&nbsp;        
 	                        </td>
@@ -339,8 +340,8 @@
 		                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">		                                
 		                                     <b>
 		                                     <bean:write name="aimEditActivityForm" property="funding.totalPipelineCommitments" /> 
-		                                     <bean:write name="aimEditActivityForm" property="currCode" />
-		                                     </b>
+	                                         <digi:currency code="${aimEditActivityForm.currCode}"/>
+		                       			    </b>
 		                                &nbsp;        
 		                            </td>
 		                        </tr>
@@ -362,8 +363,8 @@
                                 style="border-top: 1px solid #BBBBBB">                                
 	                               <b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedDisbursements" /> 
-	                                <bean:write name="aimEditActivityForm" property="currCode" />
-	                               </b>
+                                     <digi:currency code="${aimEditActivityForm.currCode}"/>
+		                           </b>
                                 &nbsp;
                              </td>
                         </tr>
@@ -380,8 +381,8 @@
                                 style="border-top: 1px solid #BBBBBB">                                
 	                                <b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalDisbursements" /> 
-	                                <bean:write name="aimEditActivityForm" property="currCode" />
-	                                </b>
+                                     <digi:currency code="${aimEditActivityForm.currCode}"/>
+		                            </b>
                                 &nbsp;
                              </td>
                         </tr>
@@ -402,8 +403,8 @@
                                 style="border-top: 1px solid #BBBBBB">                                
 	                                <b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedExpenditures" /> 
-	                                <bean:write name="aimEditActivityForm" property="currCode" />
-	                                </b>
+                                     <digi:currency code="${aimEditActivityForm.currCode}"/>
+		                           </b>
                                 &nbsp;
                              </td>
                         </tr>
@@ -419,8 +420,8 @@
                                 style="border-top: 1px solid #BBBBBB">
 	                                <b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalExpenditures" /> 
-	                                <bean:write name="aimEditActivityForm" property="currCode" />
-	                                </b>
+                                    <digi:currency code="${aimEditActivityForm.currCode}"/>
+		                            </b>
                                 &nbsp;
                            </td>
                         </tr>
@@ -446,8 +447,8 @@
                                     
                                         <b>
                                         <bean:write name="aimEditActivityForm" property="funding.totalActualDisbursementsOrders" />
-                                        <bean:write name="aimEditActivityForm" property="currCode" />
-                                        </b>
+                                         <digi:currency code="${aimEditActivityForm.currCode}"/>
+		                        	   </b>
                                     &nbsp;
                                 </td>
                             </tr>
@@ -466,8 +467,8 @@
                                     <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">                                         
 										<b>
 											<bean:write name="aimEditActivityForm" property="funding.totalPlannedRoF" />
-											<bean:write name="aimEditActivityForm" property="currCode" />
-										</b>
+										     <digi:currency code="${aimEditActivityForm.currCode}"/>
+		                        		</b>
                                          &nbsp;
                                     </td>
                                 </tr>
@@ -483,8 +484,8 @@
                                         style="border-top: 1px solid #BBBBBB">                                        
                                             <b>
                                                 <bean:write name="aimEditActivityForm" property="funding.totalActualRoF"/>
-                                                <bean:write name="aimEditActivityForm" property="currCode"/>
-                                            </b>
+                               	                 <digi:currency code="${aimEditActivityForm.currCode}"/>
+		                                    </b>
                                         &nbsp;
                                     </td>
                                 </tr>
@@ -522,7 +523,7 @@
 	                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">	                                 
 									<b>
 		                                <bean:write name="aimEditActivityForm" property="funding.totalPlannedEDD" /> 
-		                                <bean:write name="aimEditActivityForm" property="currCode" />
+	                                     <digi:currency code="${aimEditActivityForm.currCode}"/>
 		                            </b>		                             
 									&nbsp;
                         		</td>
@@ -540,8 +541,8 @@
                                 style="border-top: 1px solid #BBBBBB">                                
 	                                <b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalActualEDD"/> 
-	                                <bean:write name="aimEditActivityForm" property="currCode"/>
-	                                </b>
+                                     <digi:currency code="${aimEditActivityForm.currCode}"/>
+		                            </b>
 	                        	&nbsp;
 	                        </td>
                         </tr>
@@ -557,8 +558,8 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">                                
 								<b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalOdaSscCommitments"/> 
-	                                <bean:write name="aimEditActivityForm" property="currCode"/>
-								</b>
+                                     <digi:currency code="${aimEditActivityForm.currCode}"/>
+		                       </b>
 	                        	&nbsp;
 	                        </td>
                         </tr>
@@ -574,8 +575,8 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">                                
 								<b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalBilateralSscCommitments"/> 
-	                                <bean:write name="aimEditActivityForm" property="currCode"/>
-								</b>
+                                     <digi:currency code="${aimEditActivityForm.currCode}"/>
+		                       </b>
 	                        	&nbsp;
 	                        </td>
                         </tr>
@@ -592,8 +593,8 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">                                
 								<b>
 	                                <bean:write name="aimEditActivityForm" property="funding.totalTriangularSscCommitments"/> 
-	                                <bean:write name="aimEditActivityForm" property="currCode"/>
-								</b>
+                                     <digi:currency code="${aimEditActivityForm.currCode}"/>
+		                       </b>
 	                        	&nbsp;
 	                        </td>
                         </tr>
@@ -632,8 +633,8 @@
                             <td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #BBBBBB">                                
 	                                <b>
 	                                <bean:write name="aimEditActivityForm" property="funding.unDisbursementsBalance" /> 
-	                                <bean:write name="aimEditActivityForm" property="currCode" />
-	                               	</b>
+                                    <digi:currency code="${aimEditActivityForm.currCode}"/>
+		                           	</b>
                                 &nbsp;
                             </td>
                         </tr>

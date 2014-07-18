@@ -37,7 +37,7 @@
 		</td>
 		<td colspan="2" nowrap="nowrap" align="right" bgcolor="#eeeeee"	style="border-top: 1px solid #000000">
 			 <c:if test="${not empty funding.subtotalMTEFs}">
-                <b>${funding.subtotalMTEFs} ${aimEditActivityForm.currCode}</b>
+                <b>${funding.subtotalMTEFs} ${aimEditActivityForm.currName}</b>
              </c:if>&nbsp;
         </td>
                    

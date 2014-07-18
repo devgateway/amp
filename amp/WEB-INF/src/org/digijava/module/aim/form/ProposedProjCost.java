@@ -1,5 +1,6 @@
 package org.digijava.module.aim.form;
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.FormatHelper;
 
 /**
@@ -14,9 +15,10 @@ import org.digijava.module.aim.helper.FormatHelper;
  * @author not attributable
  * @version 1.0
  */
-public class ProposedProjCost extends ActionForm{
+public class ProposedProjCost extends ActionForm implements Comparable<ProposedProjCost>{
 
     private String currencyCode;
+    private String currencyName;
     private String funAmount;
     private String funDate;
     private String funAmountFormated;
@@ -65,6 +67,32 @@ public class ProposedProjCost extends ActionForm{
 	 */
 	public void setFunAmountFormated(String funAmountFormated) {
 		this.funAmountFormated = FormatHelper.formatNumber(getFunAmountAsDouble());;
+	}
+
+	@Override
+	public int compareTo(ProposedProjCost o) {
+			if (this == o)
+			return 0;
+
+		if (this.funDate == null)
+			return -1;
+		if (o.funDate == null)
+			return 1;
+
+		if (Long.parseLong(this.funDate) < Long.parseLong(o.funDate))
+			return -1;
+		else
+			return 1;
+
+	}
+
+	public void setCurrencyName(String currencyName) {
+		this.currencyName = currencyName;
+		
+	}
+	
+	public String getCurrencyName () {
+		return this.currencyName;
 	}
 
 }

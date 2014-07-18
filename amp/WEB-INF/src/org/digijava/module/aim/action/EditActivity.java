@@ -383,14 +383,17 @@ public class EditActivity extends Action {
       if (tm != null && tm.getAppSettings() != null && tm.getAppSettings()
           .getCurrencyId() != null) {
               String currCode="";
+              String currName="";
               AmpCurrency curr=CurrencyUtil.
                   getAmpcurrency(
                           tm.getAppSettings()
                                   .getCurrencyId());
               if(curr!=null){
                       currCode = curr.getCurrencyCode();
+                      currName=curr.getCurrencyName();
               }
               eaForm.setCurrCode(currCode);
+              eaForm.setCurrName(currName);
               if(eaForm.getFundingCurrCode()==null){
               eaForm.setFundingCurrCode(currCode);
               }

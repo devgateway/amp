@@ -28,21 +28,21 @@
      f.financing_instr_category_value AS financing_instrument_id,
      f.type_of_assistance_category_va AS terms_of_assistance_id,
 
-     prim_sect.ent_id AS primary_sector_id,
-     sec_sect.ent_id AS secondary_sector_id,
-     tert_sect.ent_id AS tertiary_sector_id,
+     COALESCE(prim_sect.ent_id, 999999999) AS primary_sector_id,
+     COALESCE(sec_sect.ent_id, 999999999) AS secondary_sector_id,
+     COALESCE(tert_sect.ent_id, 999999999) AS tertiary_sector_id,
 
-     location.ent_id AS location_id,
+     COALESCE(location.ent_id, 999999999) AS location_id,
 
-     prim_prog.ent_id AS primary_program_id,
-     sec_prog.ent_id AS secondary_program_id,
-     tert_prog.ent_id AS tertiary_program_id,
-     npo_prog.ent_id AS national_objectives_program_id,
+     COALESCE(prim_prog.ent_id, 999999999) AS primary_program_id,
+     COALESCE(sec_prog.ent_id, 999999999) AS secondary_program_id,
+     COALESCE(tert_prog.ent_id, 999999999) AS tertiary_program_id,
+     COALESCE(npo_prog.ent_id, 999999999) AS national_objectives_program_id,
 
-     ea.ent_id AS ea_org_id,
-     ba.ent_id AS ba_org_id,
-     ia.ent_id AS ia_org_id,
-     ra.ent_id AS ro_org_id,
+     COALESCE(ea.ent_id, 999999999) AS ea_org_id,
+     COALESCE(ba.ent_id, 999999999) AS ba_org_id,
+     COALESCE(ia.ent_id, 999999999) AS ia_org_id,
+     COALESCE(ra.ent_id, 999999999) AS ro_org_id,
      
      NULL as src_role_id,
      NULL as dest_role_id,

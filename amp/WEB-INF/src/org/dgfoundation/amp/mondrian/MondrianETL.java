@@ -43,6 +43,7 @@ public class MondrianETL {
 	public final static String MONDRIAN_ORGANIZATIONS_DIMENSION_TABLE = "mondrian_organizations";
 	public final static String MONDRIAN_ACTIVITY_TEXTS = "mondrian_activity_texts";
 	public final static String MONDRIAN_EXCHANGE_RATES_TABLE = "mondrian_exchange_rates";
+	public final static String MONDRIAN_DATE_TABLE = "mondrian_dates";
 	
 	/**
 	 * the dummy id to insert into the Cartesian product calculated by ETL.
@@ -90,21 +91,21 @@ public class MondrianETL {
 			add(new FactTableColumn("financing_instrument_id", "integer", true)); // ACV
 			add(new FactTableColumn("terms_of_assistance_id", "integer", true));  // ACV
 		
-			add(new FactTableColumn("primary_sector_id", "integer", true));   // amp_sector_id, subject to Cartesian product
-			add(new FactTableColumn("secondary_sector_id", "integer", true)); // amp_sector_id, subject to Cartesian product
-			add(new FactTableColumn("tertiary_sector_id", "integer", true));  // amp_sector_id, subject to Cartesian product
+			add(new FactTableColumn("primary_sector_id", "integer NOT NULL", true));   // amp_sector_id, subject to Cartesian product
+			add(new FactTableColumn("secondary_sector_id", "integer NOT NULL", true)); // amp_sector_id, subject to Cartesian product
+			add(new FactTableColumn("tertiary_sector_id", "integer NOT NULL", true));  // amp_sector_id, subject to Cartesian product
 		
-			add(new FactTableColumn("location_id", "integer", true)); // amp_category_value_location_id, subject to Cartesian product
+			add(new FactTableColumn("location_id", "integer NOT NULL", true)); // amp_category_value_location_id, subject to Cartesian product
 		
-			add(new FactTableColumn("primary_program_id", "integer", true));   // amp_theme_id, subject to Cartesian product
-			add(new FactTableColumn("secondary_program_id", "integer", true)); // amp_theme_id, subject to Cartesian product
-			add(new FactTableColumn("tertiary_program_id", "integer", true));  // amp_theme_id, subject to Cartesian product
-			add(new FactTableColumn("national_objectives_program_id", "integer", true));  // amp_theme_id, subject to Cartesian product
+			add(new FactTableColumn("primary_program_id", "integer NOT NULL", true));   // amp_theme_id, subject to Cartesian product
+			add(new FactTableColumn("secondary_program_id", "integer NOT NULL", true)); // amp_theme_id, subject to Cartesian product
+			add(new FactTableColumn("tertiary_program_id", "integer NOT NULL", true));  // amp_theme_id, subject to Cartesian product
+			add(new FactTableColumn("national_objectives_program_id", "integer NOT NULL", true));  // amp_theme_id, subject to Cartesian product
 		
-			add(new FactTableColumn("ea_org_id", "integer", true)); // EXEC amp_org_id, subject to Cartesian product
-			add(new FactTableColumn("ba_org_id", "integer", true)); // BENF amp_org_id, subject to Cartesian product
-			add(new FactTableColumn("ia_org_id", "integer", true)); // IMPL amp_org_id, subject to Cartesian product
-			add(new FactTableColumn("ro_org_id", "integer", true)); // RESP amp_org_id, subject to Cartesian product
+			add(new FactTableColumn("ea_org_id", "integer NOT NULL", true)); // EXEC amp_org_id, subject to Cartesian product
+			add(new FactTableColumn("ba_org_id", "integer NOT NULL", true)); // BENF amp_org_id, subject to Cartesian product
+			add(new FactTableColumn("ia_org_id", "integer NOT NULL", true)); // IMPL amp_org_id, subject to Cartesian product
+			add(new FactTableColumn("ro_org_id", "integer NOT NULL", true)); // RESP amp_org_id, subject to Cartesian product
 		
 			add(new FactTableColumn("src_role_id", "integer", true));  // amp_role.amp_role_id
 			add(new FactTableColumn("dest_role_id", "integer", true)); // amp_role_id
@@ -136,8 +137,7 @@ public class MondrianETL {
 		
 		this.pledgesToRedo = new HashSet<>();
 		if (pledgesToRedo != null)
-			this.pledgesToRedo.addAll(pledgesToRedo);
-		
+			this.pledgesToRedo.addAll(pledgesToRedo);		
 	}
 	
 	protected Set<Long> getAllValidatedAndLatestIds() {
@@ -153,15 +153,25 @@ public class MondrianETL {
 		return res;
 	}
 	
+	/**
+	 * warning: CLOSES CONNECTION! Don't use it afterwards!
+	 * @throws SQLException
+	 */
 	public void execute() throws SQLException{
 		synchronized(ETL_LOCK) {
+			conn.setAutoCommit(false);
+			conn.setAutoCommit(true);
+			conn.setAutoCommit(false); // make it faster
 			checkFactTable();
 			deleteStaleFactTableEntries();
 			generateActivitiesEntries();
 			generateExchangeRatesTable();
 			generateStarTables();
-			checkMondrianSanity();
+			checkMondrianSanity();			
 			logger.error("done generating ETL");
+			conn.setAutoCommit(true);
+			conn.setAutoCommit(false);
+			conn.close();
 		}
 	}
 	
@@ -172,6 +182,13 @@ public class MondrianETL {
 			logger.error("after having run the ETL, some days do not have a corresponding exchange rate entry: " + days.toString());
 			throw new RuntimeException("MONDRIAN ETL BUG: some days have missing exchange rate entries and will not exist in the generated reports: " + days);
 		}
+		
+		query = "SELECT DISTINCT(mft.date_code) FROM mondrian_fact_table mft WHERE NOT EXISTS (SELECT full_date FROM " + MONDRIAN_DATE_TABLE + " mdt WHERE mdt.day = mft.date_code)";
+		days = SQLUtils.fetchLongs(conn, query);
+		if (!days.isEmpty()) {
+			logger.error("after having run the ETL, some days do not have a corresponding DATE entry: " + days.toString());
+			throw new RuntimeException("MONDRIAN ETL BUG: some days have missing date entries and will not exist in the generated reports: " + days);
+		};		
 	}
 	
 	/**
@@ -220,18 +237,29 @@ public class MondrianETL {
 		generateStarTable(MONDRIAN_PROGRAMS_DIMENSION_TABLE, "amp_theme_id", "parent_theme_id", "program_setting_id", "program_setting_name", "id2", "id3", "id4", "id5", "id6", "id7", "id8");
 		generateStarTable(MONDRIAN_ORGANIZATIONS_DIMENSION_TABLE, "amp_org_id", "amp_org_grp_id", "amp_org_type_id");
 		generateStarTable(MONDRIAN_ACTIVITY_TEXTS, "amp_activity_id");
+		generateStarTableWithQuery(MONDRIAN_DATE_TABLE,
+			"SELECT DISTINCT(mft.date_code) AS day, mft.transaction_date AS full_date, date_part('year'::text, mft.transaction_date)::integer AS year, date_part('month'::text, mft.transaction_date)::integer AS month, to_char(mft.transaction_date, 'TMMonth'::text) AS month_name, date_part('quarter'::text, mft.transaction_date)::integer AS quarter, ('Q'::text || date_part('quarter'::text, mft.transaction_date)) AS quarter_name " + 
+			"FROM mondrian_fact_table mft " + 
+			"UNION ALL " + 
+			"SELECT 999999999, '9999-1-1', 9999, 99, 'Undefined', 99, 'Undefined' " + 
+			"ORDER BY day",
+			
+			"day", "full_date", "year", "month", "quarter");
 		logger.warn("...generating STAR tables done");
 	}
 
+	protected void generateStarTable(String tableName, String... columnsToIndex) throws SQLException {
+		generateStarTableWithQuery(tableName, "SELECT * FROM v_" + tableName, columnsToIndex);
+	}
 	/**
 	 * makes a snapshot of the view v_<strong>tableName</strong> in the table <strong>tableName</strong> and then creates indices on the relevant columns
 	 * @param tableName
 	 * @param columnsToIndex columns on which to create indices
 	 * @throws SQLException
 	 */
-	protected void generateStarTable(String tableName, String... columnsToIndex) throws SQLException {
+	protected void generateStarTableWithQuery(String tableName, String tableCreationQuery, String... columnsToIndex) throws SQLException {
 		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + tableName);
-		SQLUtils.executeQuery(conn, "CREATE TABLE " + tableName + " AS SELECT * FROM v_" + tableName);
+		SQLUtils.executeQuery(conn, "CREATE TABLE " + tableName + " AS " + tableCreationQuery);
 		
 		// change text column types' collation to C -> 7x faster GROUP BY / ORDER BY for stupid Mondrian
 		Map<String, String> tableColumns = SQLUtils.getTableColumnsWithTypes(tableName, true);
@@ -246,8 +274,8 @@ public class MondrianETL {
 		
 		// create indices
 		for (String columnToIndex:columnsToIndex) {
-			String query = String.format("CREATE INDEX %s_%s ON %s(%s)", tableName, columnToIndex, tableName, columnToIndex);
-			SQLUtils.executeQuery(conn, query);
+			String indexCreationQuery = String.format("CREATE INDEX %s_%s ON %s(%s)", tableName, columnToIndex, tableName, columnToIndex);
+			SQLUtils.executeQuery(conn, indexCreationQuery);
 		}
 	}
 	

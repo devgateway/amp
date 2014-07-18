@@ -86,8 +86,13 @@ html[xmlns] .clearfix {
 }
 
 .changesPanel {
-	float: right;
+	
 	width: 30%;
+	position:fixed;
+	bottom:5px;
+	right:10px;
+	background:white;
+	border:2px solid black;
 }
 
 .chgangesTable {

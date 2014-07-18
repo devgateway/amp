@@ -45,7 +45,11 @@ module.exports = Backbone.View.extend({
     // Get the values for the map. Sample URL:
     // /rest/gis/cluster?filter="{"FiltersParams":{"params":[{"filterName":"adminLevel","filterValue":["Region"]}]}}"
     // (don't forget to url-encode)
+
+
+    this._startLoadingIcon();
     this._getProjectSites().then(function(data) {
+      self._stopLoadingIcon();
       if(data && data.type === 'FeatureCollection') {
         self.features = data.features;
         self._renderFeatures();
@@ -53,6 +57,15 @@ module.exports = Backbone.View.extend({
         console.warn('Project Sites response empty.');
       }
     });
+  },
+
+  // TODO: improve, so not global jQuery selectors..
+  // TODO: figure out why gif animation doesn't play while fetching..
+  _startLoadingIcon: function(){
+    $('#point-selector .loading-icon').show();
+  },
+  _stopLoadingIcon: function(){
+    $('#point-selector .loading-icon').hide();
   },
 
 
@@ -65,10 +78,14 @@ module.exports = Backbone.View.extend({
     // add new featureGroup
     self.featureGroup = L.geoJson(self.features, {
       pointToLayer: function (feature, latlng) {
-        var myIcon = L.divIcon({
-          className: 'map-project-site-icon',
-          iconSize: [10, 10]});
-        return L.marker(latlng, {icon: myIcon});//L.circleMarker(latlng, geojsonMarkerOptions);
+        return new L.CircleMarker(latlng, {
+            radius: 4,
+            fillColor: '#f70',
+            color: '#000',
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 1,
+          });
       },
       onEachFeature: self._onEachFeature
     }).addTo(self.map);
@@ -77,7 +94,6 @@ module.exports = Backbone.View.extend({
     this.map.fitBounds(self.featureGroup.getBounds());
 
   },
-
 
   // Create pop-ups
   _onEachFeature: function(feature, layer) {
@@ -107,11 +123,8 @@ module.exports = Backbone.View.extend({
   _hilightProject: function(projectID){
     this.featureGroup.eachLayer(function(layer){
       var properties = layer.feature.properties;
-      if(properties.projectID === projectID){
-        $(layer._icon).css('background-color', '#008');
-        $(layer._icon)
-          .animate({ 'width': '+=10px','height': '+=10px','left': '-=5px' }, 'slow' )
-          .animate({ 'width': '-=10px','height': '-=10px','left': '+=5px' }, 'slow' );
+      if(properties.projectID === projectID){ 
+        layer.setStyle({fillColor: '#008'});
       }
     });
   },
@@ -120,7 +133,7 @@ module.exports = Backbone.View.extend({
     this.featureGroup.eachLayer(function(layer){
       var properties = layer.feature.properties;
       if(properties.projectID === projectID){
-        $(layer._icon).css('background-color', '#77f');
+        layer.setStyle({fillColor: '#f70'});
       }
     });
   },
@@ -135,5 +148,24 @@ module.exports = Backbone.View.extend({
       this.map.removeLayer(this.featureGroup);
     } 
   },
+
+  // Owen asked for the circles to shrink if we're zoomed out there are lots of points..
+  // To hacky to do cleanly for now...
+  // _updateZoom: function(){    
+  //   if(this.featureGroup){
+  //     var zoom = this.map.getZoom();
+  //     // make small points
+  //     if(zoom < 9){
+  //       this.featureGroup.eachLayer(function(layer){ 
+  //           layer.setRadius(2);
+  //       });
+  //     } else {
+  //       this.featureGroup.eachLayer(function(layer){ 
+  //           layer.setRadius(5);
+  //       });
+  //     }
+  //   }
+  // },
+
 
 });

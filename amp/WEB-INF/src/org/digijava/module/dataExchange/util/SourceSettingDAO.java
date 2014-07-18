@@ -76,7 +76,7 @@ public class SourceSettingDAO {
 	}
 	
 	public DESourceSetting getAnySourceSetting() {
-		return (DESourceSetting) PersistenceManager.getCurrentSession().createQuery("selecy ss from " + DESourceSetting.class.getName() + " ss limit 1").uniqueResult();
+		return (DESourceSetting) PersistenceManager.getCurrentSession().createQuery("select ss from " + DESourceSetting.class.getName() + " ss").setMaxResults(1) .uniqueResult();
 	}
 	
 	public static DESourceSetting getSourceSettingByName(String name){

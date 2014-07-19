@@ -100,21 +100,25 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
 			
 			textAreaContainer.add(new AttributeModifier("style", "display: none;"));
 			
-			 preview.add(new AttributeModifier("onclick",
-					 "function showRichEditor () {" +
-                    "$('#"+ preview.getMarkupId() +"').hide();" +
-                    "CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "', {language: '" + language + "', on:{instanceReady:function(ev){this.focus();}, change:function(ev) {}}});" +                    
+			 preview.add(new AttributeModifier("onclick",			 
+					"$('#"+ preview.getMarkupId() +"').hide();" +
+					"function showRichEditor () {" +
+					"try {"+
+						"CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "', {language: '" + language + "', on:{instanceReady:function(ev){this.focus();}, change:function(ev) {}}});" +
+                    "} catch(err){};"+
                     "$('#"+ closeLink.getMarkupId() +"').show();" +
+                    "$('#"+ preview.getMarkupId() +"').hide();" +
                     "}"+
+                    "$('#"+ preview.getMarkupId() +"').hide();" +
                     "$('#"+ closeLink.getMarkupId() +"').show();"+
                     "var ua = window.navigator.userAgent;"+
-                    "var msie = ua.indexOf('MSIE ');"+
+                    "var msie = ua.indexOf('MSIE');"+
                     "if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\\:11\\./)  || window.ActiveXObject) {  "+
                     "$('#"+ closeLink.getMarkupId() +"').click();"+
 				     "setTimeout(function(){showRichEditor()"+
-				     "},1500);}" +
+				     "},2000);}" +
 				     "else {" +
-				     "showRichEditor();}" 
+				     "showRichEditor();}"				     
 				     ));
 		}
 		add(preview);

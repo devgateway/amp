@@ -11,6 +11,7 @@ import java.util.TreeSet;
 
 import org.apache.ecs.vxml.Return;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.AmpReportGenerator;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.MetaInfoSet;
@@ -46,6 +47,9 @@ public class MetaTextCell extends TextCell {
 	}
 	
 	public String getColour(){
+		if (this.getOwnerId() > AmpReportGenerator.PLEDGES_IDS_START && this.getColumn() != null && this.getColumn().getName().equals(ArConstants.COLUMN_PROJECT_TITLE))
+			return "#6A6A00"; // pledge disguising as an activity in a mixed report for AMP-17746
+		
 		String statusFlag = getStatusFlag() == null ? "" : getStatusFlag();
 			
 		if (getDraftFlag())
@@ -60,6 +64,7 @@ public class MetaTextCell extends TextCell {
 		
 		return "";		
 	}
+	
 	
 	public MetaInfo getMetaInfo(String category) {
 		return metaData.getMetaInfo(category);

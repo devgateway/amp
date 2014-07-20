@@ -36,6 +36,7 @@
 											<legend><span class="legend_label"><digi:trn>Funding Grouping</digi:trn></span></legend>
 											<div id="reportGroupDiv" class="inputx" style="text-align: left;">
 										<c:set var="pledges_type_const"><%=ArConstants.PLEDGES_TYPE%></c:set>
+										<c:set var="donor_type_const"><%=ArConstants.DONOR_TYPE%></c:set>
 										<c:choose>
 										<c:when test="${param.type==null || param.type!=pledges_type_const}">								
 													<feature:display name="Donor Report" module="Report Types">                                      	
@@ -158,6 +159,15 @@
 																<nested:checkbox property="workspaceLinked" /><digi:trn>Link public view with creating workspace</digi:trn>
 															</div>															
 				                                    	</c:if>
+			                                    	</feature:display>
+													<feature:display  name="Also show pledges checkbox" module="Report and Tab Options">
+														<c:if test="${(!myForm.desktopTab) and (param.type==null || param.type==donor_type_const)}">
+															<c:set var="alsoShowPledgesExplanation">
+																<digi:trn>Checking this box will lead to pledges being included in this report, with their commitment gap being displayed as Actual Commitments</digi:trn>
+															</c:set>
+															<nested:checkbox property="alsoShowPledges" title="${alsoShowPledgesExplanation}" />
+															<digi:trn key="aim:alsoShowPledges">Also show pledges</digi:trn> <br />
+														</c:if>
 			                                    	</feature:display>
 			                                    	<c:if test="${!myForm.desktopTab}">
 			                                    		<nested:checkbox property="allowEmptyFundingColumns"/>

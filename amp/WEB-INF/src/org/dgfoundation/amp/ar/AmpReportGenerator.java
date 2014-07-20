@@ -40,6 +40,8 @@ import org.dgfoundation.amp.ar.filtercacher.NopFilterCacher;
 import org.dgfoundation.amp.ar.viewfetcher.GeneratedPropertyDescription;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
+import org.dgfoundation.amp.ar.workers.MetaTextColWorker;
+import org.dgfoundation.amp.ar.workers.TextColWorker;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.dgfoundation.amp.ar.workers.ComputedAmountColWorker;
@@ -74,6 +76,8 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * true = use FastFilterCachier, false = use NopFilterCacher
 	 */
 	public final static boolean USE_FILTER_CACHING = true;
+	
+	public final static long PLEDGES_IDS_START = 1000 * 1000l * 1000l;
 	
 	List<AmpReportColumn> extractable; // columns extractable while building the report
 	private List<String> columnsToBeRemoved;
@@ -323,17 +327,28 @@ public class AmpReportGenerator extends ReportGenerator {
 	}
 	
 	protected AmpARFilter generateSupplementaryPledgeAmpARFilter() {
-		AmpARFilter res = FilterUtil.buildFilter(null, AmpARFilter.DUMMY_SUPPLEMENTARY_PLEDGE_FETCHING_REPORT_ID);
-		res.generatePledgeFilterQuery();
-		return res;
+		return this.getFilter().asPledgeFilter();
 	}
 	
 	protected List<Cell> extractPledgeColumn(String viewName, String columnName) {
 		AmpARFilter filter = generateSupplementaryPledgeAmpARFilter();
-		ColumnWorker ce = new CategAmountColWorker(filter.getGeneratedFilterQuery(), ArConstants.VIEW_PLEDGES_FUNDING, ArConstants.COLUMN_FUNDING, this);
+		ColumnWorker ce;
+		boolean transformToMetaTextCell = false;
+		
+		// this code stinks -> in the unlikely case Mondrian is ditched, needs to use AmpColumns[extractorView].cellType (which woul dneed to be refactor to in-java something
+		if (viewName.equals(ArConstants.VIEW_PLEDGES_FUNDING))
+			ce = new CategAmountColWorker(filter.getGeneratedFilterQuery(), viewName, columnName, this);
+		else
+			if (viewName.equals("v_pledges_titles")) {				
+				ce = new TextColWorker(filter.getGeneratedFilterQuery(), viewName, columnName, this);
+				transformToMetaTextCell = true;
+			}
+			else
+				ce = new MetaTextColWorker(filter.getGeneratedFilterQuery(), viewName, columnName, this);
+		
 		ce.setRelatedColumn(null); // not needed for CategAmountColWorker
 		
-		String columnFilterSQLClause = buildColumnFilterSQLClauseForPledges(ArConstants.VIEW_PLEDGES_FUNDING);
+		String columnFilterSQLClause = buildColumnFilterSQLClauseForPledges(viewName);
 		
 		ce.setInternalCondition(columnFilterSQLClause);
 		ce.setSession(null); // not needed for CategAmountColWorker
@@ -343,7 +358,17 @@ public class AmpReportGenerator extends ReportGenerator {
 		ce.setPledge(true);
 		
 		Column<Cell> column = ce.populateCellColumn();
-		return column.getItems();
+		List<Cell> res;
+		
+		// hack: pledge titles are TextCells, while activity titles are MetaTextCells. We need to convert some in others
+		if (transformToMetaTextCell) {
+			res = new ArrayList<>();
+			for(Cell textCell: column.getItems())
+				res.add(new MetaTextCell((TextCell) textCell));
+		} else {
+			res = column.getItems();
+		}
+		return res;
 	}
 	
 	protected Collection<CategAmountCell> extractPledgeCommitmentGap() {
@@ -351,18 +376,21 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 		CommitmentGapCellGenerator cgcg = new CommitmentGapCellGenerator();
 		Collection<CategAmountCell> commGapCells = cgcg.generate(fundingCells, -1);
-		System.out.println(commGapCells.size());
+		//System.out.println(commGapCells.size());
 		return commGapCells;
 	}
 	
-	protected Collection<Cell> extractPledgeEquivalentColumn(AmpReportColumn rcol) {
-		//List<TextCell> textCells = (List<TextCell>) (List) extractPledgeColumn(ArConstants.)
-		return null;
+	protected Collection<Cell> extractPledgeEquivalentColumn(AmpReportColumn rcol, String pledgeViewName) {
+		List<TextCell> textCells = (List<TextCell>) (List) extractPledgeColumn(pledgeViewName, rcol.getColumn().getColumnName());
+		for(TextCell pledgeCell:textCells) {
+			markCellAsImportedPledge(pledgeCell);
+		}
+		return (Collection) textCells;
 	}
 	
 	protected void markCellAsImportedPledge(Cell cell) {
 		if (cell.getOwnerId() != null)
-			cell.setOwnerId(cell.getOwnerId() + 1000 * 1000l * 1000l);
+			cell.setOwnerId(cell.getOwnerId() + PLEDGES_IDS_START);
 	}
 	
 	/**
@@ -374,25 +402,29 @@ public class AmpReportGenerator extends ReportGenerator {
 			//AmpReportColumn pledgeFunding = buildAmpReportColumn(ArConstants.COLUMN_FUNDING, ArConstants.VIEW_PLEDGES_FUNDING, CategAmountCell.class);
 			Collection<CategAmountCell> commGapCells = extractPledgeCommitmentGap();
 			CellColumn fundingCol = (CellColumn) rawColumns.getColumnByName(rcol.getColumn().getColumnName());
-			MetaInfo<String> commMetaInfo = new MetaInfo<String>(ArConstants.TRANSACTION_TYPE, ArConstants.COMMITMENT);
-			MetaInfo<String> actualMetaInfo = new MetaInfo<String>(ArConstants.ADJUSTMENT_TYPE, ArConstants.ACTUAL);
+			MetaInfo<String> commMetaInfo = new MetaInfo<>(ArConstants.TRANSACTION_TYPE, ArConstants.COMMITMENT);
+			MetaInfo<String> actualMetaInfo = new MetaInfo<>(ArConstants.ADJUSTMENT_TYPE, ArConstants.ACTUAL);
+			
+			Integer order = this.getReportMetadata().getMeasureOrder("Actual Commitments");
+			MetaInfo<FundingTypeSortedString> actualCommitmentMetaInfo = new MetaInfo<>(ArConstants.FUNDING_TYPE, new FundingTypeSortedString("Actual Commitments", order));
+			
+			//MetaInfo<String> actualCommitmentMetaInfo = new MetaInfo<String>(ArConstants.FUNDING_TYPE, ArConstants.ACTUAL + " " + ArConstants.COMMITMENT);
 			for(CategAmountCell commGapCell:commGapCells) {
 				markCellAsImportedPledge(commGapCell);
 				commGapCell.getMetaData().replace(commMetaInfo);
 				commGapCell.getMetaData().replace(actualMetaInfo);
+				commGapCell.getMetaData().replace(actualCommitmentMetaInfo);
 				fundingCol.addCell(commGapCell);
 			}
 			System.out.println(fundingCol.prettyPrint());
 		}
 		
-		String correspondingPledgeView = PledgesToActivitiesBridge.activityViewToPledgeView.get(rcol.getColumn().getExtractorView());
+		PledgesToActivitiesBridge.BridgeItem correspondingPledgeView = PledgesToActivitiesBridge.activityViewToPledgeView.get(rcol.getColumn().getExtractorView());
 		if (correspondingPledgeView != null) {
-			Collection<Cell> nameCells = extractPledgeEquivalentColumn(rcol);
+			Collection<Cell> nameCells = extractPledgeEquivalentColumn(rcol, correspondingPledgeView.pledgeView);
 			CellColumn normalCol = (CellColumn) rawColumns.getColumnByName(rcol.getColumn().getColumnName());
-			for(Cell pledgeCell:nameCells) {
-				markCellAsImportedPledge(pledgeCell);
+			for(Cell pledgeCell:nameCells)
 				normalCol.addCell(pledgeCell);
-			}
 		}
 //		AmpReportColumn complimentaryPledgesColumn = getComplimentaryPledgesColumn(rcol);
 //		if (complimentaryPledgesColumn != null){

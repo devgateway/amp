@@ -3650,27 +3650,7 @@ public class DbUtil {
 	 * @return
 	 */
 	public static AmpFiscalCalendar getFiscalCalendar(Long fiscalCalId) {
-		logger.debug("getFiscalCalendar with fiscalCalId" + fiscalCalId);
-		Session session = null;
-		Query q = null;
-		Collection collection = null;
-		Iterator iter = null;
-		AmpFiscalCalendar fc = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = new String();
-			queryString = "select f from " + AmpFiscalCalendar.class.getName()
-					+ " f where (f.ampFiscalCalId=:fiscalCalId) ";
-			q = session.createQuery(queryString);
-			q.setParameter("fiscalCalId", fiscalCalId, Hibernate.LONG);
-			collection = q.list();
-			if (collection.size() > 0) {
-				fc = (AmpFiscalCalendar) collection.toArray()[0];
-			}
-		} catch (Exception ex) {
-			logger.error("Unable to get fiscal calendar from database", ex);
-		}
-		return fc;
+		return (AmpFiscalCalendar) PersistenceManager.getSession().load(AmpFiscalCalendar.class, fiscalCalId);
 	}
 
 	public static Collection getMaxFiscalYears() {

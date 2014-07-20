@@ -1044,6 +1044,8 @@ deleted 6 fields, do not reinsert
 <field:display name="Remove Donor Button" feature="Donors"></field:display>
 <feature:display name="Computed Fields"  module="Report Generator"></feature:display>
 <feature:display name="Save and Open Button"  module="Report Generator"></feature:display>
+<feature:display name="Also show pledges checkbox" module="Report and Tab Options"></feature:display>
+<feature:display name="Public View Checkbox" module="Report and Tab Options"></feature:display>
 <field:display name="Overage Project" feature="Computed Fields"></field:display>
 <field:display name="Age of Project (Months)" feature="Computed Fields"></field:display>
 <field:display name="Predictability of Funding" feature="Computed Fields"></field:display>

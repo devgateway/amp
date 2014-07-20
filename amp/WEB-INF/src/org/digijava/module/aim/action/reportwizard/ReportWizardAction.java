@@ -211,6 +211,7 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setUseFilters(false);
 		myForm.setBudgetExporter(false);
 		myForm.setReportCategory(new Long(0));
+		myForm.setAlsoShowPledges(false);
 		
 		ReportContextData.getFromRequest(true).resetFilters();
 	}
@@ -346,6 +347,7 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setWorkspaceLinked(ampReport.getWorkspaceLinked());
 		myForm.setHideActivities( ampReport.getHideActivities() );
 		myForm.setAllowEmptyFundingColumns( ampReport.getAllowEmptyFundingColumns() );
+		myForm.setAlsoShowPledges(ampReport.getAlsoShowPledges());
 		if(ampReport.getReportCategory() !=null){
 			myForm.setReportCategory(ampReport.getReportCategory().getId());
 		}
@@ -426,6 +428,7 @@ public class ReportWizardAction extends MultiAction {
 		ReportWizardForm myForm		= (ReportWizardForm) form;
 		boolean dynamicSaveReport = Boolean.valueOf( request.getParameter("dynamicSaveReport") );
         myForm.setWorkspaceLinked(Boolean.valueOf(request.getParameter("workspaceLinked"))); //Struts for some reason ignores this field and I am tired of it
+        myForm.setAlsoShowPledges(Boolean.valueOf(request.getParameter("alsoShowPledges")));
 		
 		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
 		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
@@ -464,6 +467,7 @@ public class ReportWizardAction extends MultiAction {
 		ampReport.setUpdatedDate( new Date(System.currentTimeMillis()) );
 		ampReport.setName(MultilingualInputFieldValues.getDefaultName(AmpReports.class, "name", null, request)); // set the default
 		ampReport.setWorkspaceLinked(myForm.getWorkspaceLinked());
+		ampReport.setAlsoShowPledges(myForm.getAlsoShowPledges());
 		ampReport.setOwnerId(myForm.getAmpTeamMember() == null ? ampTeamMember : myForm.getAmpTeamMember());
 		if ((!dynamicSaveReport) || createReportFromScratch) {
 			ampReport.setHideActivities( myForm.getHideActivities() );
@@ -921,7 +925,6 @@ public class ReportWizardAction extends MultiAction {
 			ampReport.setHierarchies( hierarchies );
 			ampReport.setMeasures( measures );
 			ampReport.setReportMeasures( reportMeasures );
-			
 		}
 		catch (Exception e) {
 			e.printStackTrace();

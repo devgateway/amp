@@ -62,7 +62,9 @@ public abstract class ReportGenerator {
 	 * @return
 	 */
 	protected String getBaseEntityNameById(long actId){
-		return this.pledgereport ? PledgesEntityHelper.getPledgesById(actId).getEffectiveName() : ActivityUtil.getActivityName(actId);
+		return this.pledgereport || actId > AmpReportGenerator.PLEDGES_IDS_START ? 
+				PledgesEntityHelper.getPledgesById(actId % AmpReportGenerator.PLEDGES_IDS_START).getEffectiveName() 
+				: ActivityUtil.getActivityName(actId);
 	}
 	
 	/**

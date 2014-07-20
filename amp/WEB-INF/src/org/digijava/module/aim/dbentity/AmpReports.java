@@ -61,6 +61,11 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	private Boolean publicReport;
 	
 	private Boolean workspaceLinked;
+	
+	/**
+	 * see AMP-17746
+	 */
+	private Boolean alsoShowPledges;
 
 	private Long type;
 
@@ -532,6 +537,14 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 		this.allowEmptyFundingColumns = allowEmptyFundingColumns;
 	}
 	
+	public Boolean getAlsoShowPledges() {
+		return this.alsoShowPledges;
+	}
+	
+	public void setAlsoShowPledges(Boolean alsoShowPledges) {
+		this.alsoShowPledges = alsoShowPledges;
+	}
+
 	public int getNumOfHierarchies() {
 		int ret	= 0;
 		if ( this.hierarchies != null )
@@ -696,7 +709,13 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	}
 	
 	public boolean shouldInjectPledgeColumnsAsProjectColumns() {
-		return false && (this.getDrilldownTab() == null || !this.getDrilldownTab()) && (this.getName().contains("17746")); // BOZO! debug temp
+		return !isTrueBoolean(this.getDrilldownTab()) // NOT a tab
+				&&
+				(isTrueBoolean(this.getAlsoShowPledges()));
+	}
+		
+	private static boolean isTrueBoolean(Boolean b) {
+		return (b != null) && b;
 	}
 	
 	@Override

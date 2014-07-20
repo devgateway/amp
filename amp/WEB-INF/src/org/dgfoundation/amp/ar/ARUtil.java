@@ -772,5 +772,13 @@ public final class ARUtil {
 			}
 		}
 		return false;
-	}	
+	}
+	
+	public static AmpColumns getColumnForView(String viewName) {
+		String query = "select c from " + AmpColumns.class.getName() + " c WHERE c.extractorView = :ev ORDER BY c.columnId";
+		List<AmpColumns> res = PersistenceManager.getSession().createQuery(query).setString("ev", viewName).list();
+		if (res.isEmpty())
+			return null;
+		return res.get(0);
+	}
 }

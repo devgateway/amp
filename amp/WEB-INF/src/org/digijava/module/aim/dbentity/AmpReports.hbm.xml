@@ -20,8 +20,8 @@
 		<property name="publicReport" column="publicReport" type="java.lang.Boolean" />
 		<property name="workspaceLinked" column="workspaceLinked" type="java.lang.Boolean" />
 		<property name="budgetExporter" column="budget_exporter" type="java.lang.Boolean" />
-		<property name="allowEmptyFundingColumns" column="allow_empty_fund_cols"
-			type="java.lang.Boolean" />
+		<property name="allowEmptyFundingColumns" column="allow_empty_fund_cols" type="java.lang.Boolean" />
+		<property name="alsoShowPledges" column="also_show_pledges" type="java.lang.Boolean" />
 
 		<many-to-one name="ownerId" column="ownerId"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" />

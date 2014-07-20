@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 
 import org.apache.jackrabbit.util.TransientFileFactory;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.PledgesToActivitiesBridge;
 import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
@@ -280,6 +281,11 @@ public class AMPStartupListener extends HttpServlet implements
 				String s = InternationalizedViewsRepository.i18Models.get(viewName).toString();
 				//logger.info("loaded " + s);
 			}
+			
+			logger.info("loading the activity->pledge view twins configuration and checking for consistency...");
+			int a = PledgesToActivitiesBridge.activityViewToPledgeView.size();
+			if (a < 0)
+				throw new RuntimeException("should not happen!");
 			
 			logger.info("loading the column ancestorship relationships and checking for consistency with the database...");
 			logger.info("loaded relationships for " + ARDimension.columnAncestors.size() + " columns"); // DO NOT DELETE THIS LINE! it has the sideeffect of checking database for consistency (else it will crash anyway at the first run report)

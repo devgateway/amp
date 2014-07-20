@@ -37,6 +37,7 @@ public class ReportWizardForm extends ActionForm {
 	private Boolean overwritingForeignReport = false;
 	private Boolean publicReport = false;
 	private Boolean workspaceLinked = false;
+	private Boolean alsoShowPledges = false;
 	private Boolean useFilters = false;
 	private Boolean allowEmptyFundingColumns = false;
 	private Boolean onePager = false;
@@ -298,6 +299,14 @@ public class ReportWizardForm extends ActionForm {
 	
 	public void setForceNameOverwrite(boolean forceNameOverwrite){
 		this.forceNameOverwrite = forceNameOverwrite;
+	}
+	
+	public boolean getAlsoShowPledges() {
+		return this.alsoShowPledges;
+	}
+	
+	public void setAlsoShowPledges(Boolean alsoShowPledges) {
+		this.alsoShowPledges = alsoShowPledges == null ? false : alsoShowPledges;
 	}
 	
 	@java.lang.Override

@@ -757,7 +757,7 @@ public class AmpARFilter extends PropertyListable {
 	
 	private int getCalendarYear(AmpApplicationSettings settings, Integer settingsYear, String globalSettingsKey)
 	{
-		Long defaultCalendarId = null;
+		Long defaultCalendarId;
 		
 		if (settings != null){
 			if (settings.getFiscalCalendar() != null){
@@ -3166,6 +3166,24 @@ public class AmpARFilter extends PropertyListable {
 				
 			default:
 				throw new RuntimeException("unsupported amountInThousand option: " + this.computeEffectiveAmountInThousand());
+		}
+	}
+	
+	/**
+	 * makes a detached copy of this filter in something which will be runnable as a pledge filter
+	 * @return
+	 */
+	public AmpARFilter asPledgeFilter() {
+		try {
+			AmpARFilter res = (AmpARFilter) this.clone();
+			res.pledgeFilter = true;
+			res.ampReportId = DUMMY_SUPPLEMENTARY_PLEDGE_FETCHING_REPORT_ID;
+			res.initFilterQuery();
+			res.generatePledgeFilterQuery();
+			return res;
+		}
+		catch(Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 }

@@ -80,7 +80,7 @@ public class GroupColumn extends Column<Column> {
 					&& element instanceof TotalCommitmentsAmountColumn){ 
 				continue;
 			}
-				
+			
 			Column splitted = element.verticalSplitByCateg(category, ids, generateTotalCols, reportMetadata);
 				
 			if(splitted != null){

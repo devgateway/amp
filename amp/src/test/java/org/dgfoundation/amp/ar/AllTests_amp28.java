@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.ar;
 
 //import org.dgfoundation.amp.testutils.LiberiaFiller;
+import org.dgfoundation.amp.ar.amp28.CombinedPledgeAndActivitiesReportsTests;
 import org.dgfoundation.amp.ar.amp28.DashboardsTests;
 import org.dgfoundation.amp.ar.amp28.MiscReportsTest28;
 import org.dgfoundation.amp.ar.amp28.MiscTests28;
@@ -42,6 +43,7 @@ public class AllTests_amp28
 		suite.addTest(MiscTests28.suite());
 		suite.addTest(ProgramsTests.suite());
 		suite.addTest(PledgeReportsTests.suite());
+		suite.addTest(CombinedPledgeAndActivitiesReportsTests.suite());
 		suite.addTest(MiscReportsTest28.suite());
 		suite.addTest(DashboardsTests.suite());
 		//$JUnit-END$

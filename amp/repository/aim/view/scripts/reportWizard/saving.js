@@ -24,6 +24,13 @@ function getWorkspaceLinked() {
 	return checkboxObject.checked;
 }
 
+function getAlsoShowPledges() {
+	if (aimReportWizardForm.alsoShowPledges == null)
+			return false;
+	var checkboxObject		= aimReportWizardForm.alsoShowPledges;
+	return checkboxObject.checked;
+}
+
 function getReportTitleEl() {
 	var divEl	= document.getElementById("titlePanelBody");
 	var titleEl	= divEl.getElementsByTagName("input")[0];
@@ -225,6 +232,7 @@ SaveReportEngine.prototype.saveAndOrOpenReport	= function (openReport) {
 						"&desktopTab="+getDesktopTab() +
 						"&publicReport="+getPublicReport() +
 						"&workspaceLinked="+getWorkspaceLinked() +
+						"&alsoShowPledges="+getAlsoShowPledges() +
 						"&hideActivities="+getHideActivities() +
 						"&useFilters="+getUseFilters()+
 						"&openReport=" + openReport + 

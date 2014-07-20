@@ -166,6 +166,5 @@ public class AmpColumns  implements Serializable, Comparable
 		clonedCol.setTokenExpression( this.getTokenExpression() );
 		clonedCol.setTotalExpression( this.getTotalExpression() );
 		return clonedCol;
-	}
-	
+	}	
 }

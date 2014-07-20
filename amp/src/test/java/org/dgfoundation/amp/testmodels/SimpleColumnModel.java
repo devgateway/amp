@@ -2,6 +2,7 @@ package org.dgfoundation.amp.testmodels;
 
 import java.util.*;
 
+import org.dgfoundation.amp.ar.AmpReportGenerator;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.cell.Cell;
@@ -103,7 +104,9 @@ public class SimpleColumnModel extends ColumnModel {
 		
 		for(Long activityId: activityIds)
 		{
-			String activityName = this.isPledge ? PledgesEntityHelper.getPledgesById(activityId).getEffectiveName() : ReportTestingUtils.getActivityName(activityId);////System.out.println("da da");
+			String activityName = (this.isPledge || activityId > AmpReportGenerator.PLEDGES_IDS_START) ? 
+					PledgesEntityHelper.getPledgesById(activityId % AmpReportGenerator.PLEDGES_IDS_START).getEffectiveName() : 
+						ReportTestingUtils.getActivityName(activityId);////System.out.println("da da");
 			String activityCorOutput = correctContents.get(activityName);
 			if (activityCorOutput == null)
 				return String.format("SimpleColumnModel %s, activity %s should not exist in the output", this.getName(), activityName);

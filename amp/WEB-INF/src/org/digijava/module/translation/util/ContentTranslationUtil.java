@@ -637,7 +637,7 @@ public class ContentTranslationUtil {
         		public void execute(Connection conn) throws SQLException {
         			Session newSession = null;
         			try {
-        				newSession = PersistenceManager.sf().openSession(conn);
+        				newSession = PersistenceManager.sf().withOptions().connection(conn).openSession();
 
         				String objClass = ftp.getObjClass();
         				String fieldName = ftp.getFieldName();

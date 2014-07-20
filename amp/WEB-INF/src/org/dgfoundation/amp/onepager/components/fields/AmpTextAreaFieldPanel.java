@@ -15,6 +15,7 @@ import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.models.EditorWrapperModel;
 import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.dgfoundation.amp.onepager.validators.TranslatableValidators;
@@ -101,18 +102,28 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
 			textAreaContainer.add(new AttributeModifier("style", "display: none;"));
 			
 			 preview.add(new AttributeModifier("onclick",
-					 "function showRichEditor () {" +
-                    "$('#"+ preview.getMarkupId() +"').hide();" +
-                    "CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "', {language: '" + language + "', on:{instanceReady:function(ev){this.focus();}, change:function(ev) {}}});" +                    
-                    "$('#"+ closeLink.getMarkupId() +"').show();" +
-                    "}"+
-                    "$('#"+ closeLink.getMarkupId() +"').show();"+
-				     "if ($.browser.chrome != true && $.browser.webkit !=true) {" +
-				     "$('#"+ closeLink.getMarkupId() +"').click();"+
-				     "setTimeout(function(){showRichEditor()"+
-				     "},800);}" +
-				     "else {" +
-				     "showRichEditor();}" 
+					"if($('#loadingEditorDiv').length == 0) {"+
+						"$('#"+ preview.getMarkupId() +"').hide();" +
+						"function showRichEditor () {" +
+						"try {"+
+							"CKEDITOR.replace('" + textAreaContainer.getMarkupId() + "', {language: '" + language + "', on:{instanceReady:function(ev){this.focus();}, change:function(ev) {}}});" +
+	                    "} catch(err){};"+
+	                    "$('#"+ closeLink.getMarkupId() +"').show();" +
+	                    "$('#"+ preview.getMarkupId() +"').hide();" +
+	                    "}"+
+	                    "$('#"+ preview.getMarkupId() +"').hide();" +
+	                    "$('#"+ closeLink.getMarkupId() +"').show();"+
+	                    "var ua = window.navigator.userAgent;"+
+	                    "var msie = ua.indexOf('MSIE');"+
+	                    "if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\\:11\\./)  || window.ActiveXObject) {  "+
+	                    	"$('#"+textAreaContainer.getMarkupId()+"').parent().parent().append(\"<div id='loadingEditorDiv'><img src='/repository/aim/view/scripts/ajaxtabs/loading.gif' style='margin-right:7px;'/>" + TranslatorUtil.getTranslatedText("Loading please wait...") + "</div>\");"+
+	                    	"$('#"+ closeLink.getMarkupId() +"').click();"+
+	                    	"setTimeout(function(){showRichEditor();"+
+	                    	"$('#loadingEditorDiv').remove();"+
+	                    	"},2000);}" +
+					     "else {" +
+					     	"showRichEditor();}"+
+				     "};"
 				     ));
 		}
 		add(preview);

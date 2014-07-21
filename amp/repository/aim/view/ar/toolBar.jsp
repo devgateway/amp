@@ -1,3 +1,4 @@
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
@@ -482,9 +483,10 @@ function openPrinter(){
 							<digi:trn key="rep:pop:publicPortalMode">Rich Export Format</digi:trn>
 						</td>
 						<td>
+							<c:set var="richExportEnabled"><%=FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.RICH_EXCEL_EXPORT_ENABLED_BY_DEFAULT) %></c:set>
 							<select name="richReport">
-								<option selected="selected" value="true">${enable}</option>							
-								<option value="false">${disable}</option>
+								<option <c:if test="${richExportEnabled eq 'true'}">selected="selected" </c:if> value="true">${enable}</option>							
+								<option <c:if test="${richExportEnabled ne 'true'}">selected="selected" </c:if> value="false">${disable}</option>
 							</select>
 						</td>
 					</tr>				

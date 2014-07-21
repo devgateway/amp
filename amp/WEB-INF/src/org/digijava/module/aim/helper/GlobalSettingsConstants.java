@@ -142,7 +142,7 @@ public class GlobalSettingsConstants {
     public static final String UNLINKED_FUNDING_IN_PLEDGES_REPORTS = "Unlinked commitments and disburesements in pledges reports";
  
     public static final String READONLY_DATES= "Make Activity dates read only";
-
+	public static final String RICH_EXCEL_EXPORT_ENABLED_BY_DEFAULT = "Rich Excel Export Enabled by Default";
     public static final String MULTILINGUAL= "Multilingual";
     
     public static final String ENABLE_SITE_TRACKING= "Enable AMP usage tracking";

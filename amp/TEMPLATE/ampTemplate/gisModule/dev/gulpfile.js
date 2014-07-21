@@ -24,6 +24,7 @@
 
 var rimraf = require('rimraf');
 var source = require('vinyl-source-stream');
+var qunit = require('node-qunit-phantomjs');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var gulp = require('gulp');
@@ -53,7 +54,7 @@ var paths = {
       entry: './app/mock-api/fakeServer.js',
       compiledDest:'./app/compiled-js/',
       compiled:'./app/compiled-js/mock-api.js',
-    },    
+    },
     images: './app/img/**/*.{png,jpg, gif}',
     fonts: './app/fonts/**/*.{eot,svg,ttf,woff}'
   },
@@ -68,7 +69,7 @@ var paths = {
   tests: {
     root: './app/test',
     css: './node_modules/qunitjs/qunit/qunit.css',
-    qunit: './node_modules/qunitjs/qunit/*.*',
+    qunit: './node_modules/qunitjs/qunit/qunit.js',
     compiled: './app/test/compiled/compiled-test.js',
     compiledDest: './app/test/compiled/',
     entry: './app/test/entry.js',
@@ -78,7 +79,7 @@ var paths = {
 
 
 //------------------------------------
-// helpers 
+// helpers
 //------------------------------------
 
 function _bundlify(ifyer, entry, destFolder, destName) {
@@ -157,9 +158,9 @@ gulp.task('clean', function(done) {
 
 
 //------------------------------------
-// build for dist 
+// build for dist
 //------------------------------------
-gulp.task('build', ['clean', 'build-js', 'build-css', 'copy-stuff']);
+gulp.task('build', ['clean', 'build-js', 'build-css', 'revision', 'copy-stuff']);
 
 
 gulp.task('build-js', ['clean', 'browserify'], function() {
@@ -193,13 +194,12 @@ gulp.task('revision', ['clean', 'build-js', 'build-css'], function() {
   var antiHtmlFilter =  g.filter(versionableGlob);  // so we can avoid versioning html
   gulp.src([ paths.dist.root + versionableGlob,
              paths.dist.root + '**/*.html' ])
-    .pipe(antiHtmlFilter)
-    .pipe(g.rimraf({ force: true }))
-    .pipe(g.rev())
-    .pipe(gulp.dest(paths.dist.root))
-    .pipe(antiHtmlFilter.restore())
-    .pipe(g.revReplace())
-    .pipe(gulp.dest(paths.dist.root));
+    .pipe(antiHtmlFilter)             // put the html aside for now
+    .pipe(g.rimraf({ force: true }))  // remove the unversioned js/css from disk (they are still in the stream)
+    .pipe(g.rev())                    // revision & update their filenames
+    .pipe(antiHtmlFilter.restore())   // bring the html back into the stream
+    .pipe(g.revReplace())             // replace asset names in html as revisioned names
+    .pipe(gulp.dest(paths.dist.root));// write everything back to disk
 });
 
 
@@ -212,7 +212,7 @@ gulp.task('preview', ['build'], g.serve({
 
 
 //------------------------------------
-// dev 
+// dev
 //------------------------------------
 gulp.task('default', ['dev']);
 gulp.task('dev', ['lint', 'less', 'dev-server', 'watch', 'reload', 'dev-index']);
@@ -236,7 +236,7 @@ gulp.task('reload', ['dev-server', 'watch'], function() {
 });
 
 
-// takes src-index.html, injects mockAPI 
+// takes src-index.html, injects mockAPI
 gulp.task('dev-index', ['bundle-mock'], function(){
   return gulp.src('app/src-index.html')
             .pipe(
@@ -252,24 +252,37 @@ gulp.task('dev-index', ['bundle-mock'], function(){
 
 
 //------------------------------------
-// test 
+// test
 //------------------------------------
 
-gulp.task('dev-tests', ['test', 'serve-tests', 'reload-tests']);
+gulp.task('webtest', ['build-tests', 'serve-tests', 'reload-tests']);
 
-gulp.task('test', function() {
-  return _bundlify(browserify, paths.tests.entry,
-                   paths.tests.compiledDest, 'compiled-test.js');
+gulp.task('test', ['build-tests'], function() {
+  var q = qunit('./app/test/index.html', {}, function(code) {
+    if (code !== 0) {
+      g.util.log('Tests failed with code', code);
+      process.exit(code);
+    } else {
+      g.util.log('Tests passed :)');
+    }
+  });
 });
 
-gulp.task('serve-tests', ['test'], g.serve({
-    root: [paths.tests.root],
-    port: 3000
+gulp.task('build-tests', function() {
+  gulp.src([paths.tests.css, paths.tests.qunit])
+    .pipe(g.changed(paths.tests.compiledDest))
+    .pipe(gulp.dest(paths.tests.compiledDest));
+  return _bundlify(browserify, paths.tests.entry, paths.tests.compiledDest, 'compiled-test.js');
+});
+
+gulp.task('serve-tests', ['build-tests'], g.serve({
+  root: [paths.tests.root],
+  port: 3000
 }));
 
 
-gulp.task('reload-tests', ['test'], function() {
-  gulp.watch(paths.tests.scripts, ['test']);
+gulp.task('reload-tests', ['build-tests'], function() {
+  gulp.watch(paths.tests.scripts, ['build-tests']);
   gulp.watch(paths.tests.compiled)
     .on('change', g.livereload.changed);
 });

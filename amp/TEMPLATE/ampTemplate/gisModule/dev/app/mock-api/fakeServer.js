@@ -1,11 +1,12 @@
 var fs = require('fs'); 
 var sinon = require('../mock-api/sinon-min.js');
 
-var cluster = fs.readFileSync(__dirname + '/cluster.json', 'utf8');
-var clusterADM2 = fs.readFileSync(__dirname + '/clusterADM2.json', 'utf8');
-var projectSites = fs.readFileSync(__dirname + '/project-sites.json', 'utf8');
-var filters = fs.readFileSync(__dirname + '/filters.json', 'utf8');
-var indicators = fs.readFileSync(__dirname + '/indicators.json', 'utf8');
+var cluster = fs.readFileSync(__dirname + '/data/cluster.json', 'utf8');
+var clusterADM2 = fs.readFileSync(__dirname + '/data/clusterADM2.json', 'utf8');
+var projectSites = fs.readFileSync(__dirname + '/data/project-sites.json', 'utf8');
+var filters = fs.readFileSync(__dirname + '/data/filters.json', 'utf8');
+var indicators = fs.readFileSync(__dirname + '/data/indicators.json', 'utf8');
+var drcFood = fs.readFileSync(__dirname + '/data/drc-food.json', 'utf8');
 
 var fakeServer = {
   server: null,
@@ -20,6 +21,8 @@ var fakeServer = {
     this._addPath(filters, '/rest/gis/filters');
     this._addPath(projectSites, '/rest/gis/project-sites');
     this._addPath(indicators, '/rest/gis/indicator-layers');
+    this._addPath(drcFood, '/rest/gis/drc-food');
+
 
   },
 

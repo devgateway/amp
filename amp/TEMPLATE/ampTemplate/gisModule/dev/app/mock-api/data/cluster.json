@@ -1,0 +1,112 @@
+{
+"type":"FeatureCollection",
+"features":[{
+"type":"Feature",
+"geometry":{
+"type":"Point",
+"coordinates":[26.7890586853027,
+1.64294493198395]},
+"properties":{
+"activityid" : [ 354, 1436, 1444, 1446, 1447, 1448, 1436, 1444, 1446, 1447, 1448, 1436, 1444, 1446, 1447, 1448, 1436, 1444, 1446, 1447, 1448, 1449],
+"admName":"Orientale"}
+},
+{
+"type":"Feature",
+"geometry":{
+"type":"Point",
+"coordinates":[20.4933214542771,
+1.3137332201004]},
+"properties":{
+"activityid" : [ 354, 1436, 1446, 1447,  1436, 1444, 1446, 1447,  354, 1436, 1444, 1446,1444, 1446, 1447,  1436, 1444, 1446, 1447,  1446, 1447, 1448, 1449],
+"admName":"Equateur"}
+},
+{
+"type":"Feature",
+"geometry":{
+"type":"Point",
+"coordinates":[28.6159439086914,
+-0.552688509225845]},
+"properties":{
+"activityid" : [ 354, 1436, 1444, 1446, 1447, 1448,  354, 1436, 1444, 1446,1444, 1446, 1447,  1436, 1444, 1446, 1447,  354, 1436, 1444, 1446,1444, 1446, 1447,  1436, 1444, 1446, 1447,  354, 1436, 1444, 1446,1444, 1446, 1447,  1436, 1444, 1446, 1447, 1449],
+"admName":"Nord-Kivu"}
+},
+{
+"type":"Feature",
+"geometry":{
+"type":"Point",
+"coordinates":[26.7299966812134,
+-2.50279405573383]},
+"properties":{
+"activityid" : [ 354, 1436, 1444, 1446, 1447, 1448, 354, 1436, 1444, 1446,1444, 1446, 1447,  1436, 1444, 1446, 1447,  354, 1436, 1444, 1446,1444, 1446, 1447,  1436, 1444, 1446, 1447,  1449],
+"admName":"Maniema"}
+},
+{
+"type":"Feature",
+"geometry":{
+"type":"Point",
+"coordinates":[18.4834671970841,
+-4.43048360943794]},
+"properties":{
+"activityid" : [ 354, 1436, 1444, 1446, 1447, 1448, 1449],
+"admName":"Bandundu"}
+},
+{
+"type":"Feature",
+"geometry":{
+"type":"Point",
+"coordinates":[28.1175079345703,
+-3.29925327633567]},
+"properties":{
+"activityid" : [ 354, 1436, 1444, 1446, 1447,  1436, 1444, 1446, 1447, 1448,1448, 1449],
+"admName":"Sud-Kivu"}
+},
+{
+"type":"Feature",
+"geometry":{
+"type":"Point",
+"coordinates":[24.0776700973511,
+-4.81186425685883]},
+"properties":{
+"activityid" : [ 354, 1436, 1444, 1446, 1447, 1448, 1449],
+"admName":"Kasai-Oriental"}
+},
+{
+"type":"Feature",
+"geometry":{
+"type":"Point",
+"coordinates":[21.7436103820801,
+-5.07462799549103]},
+"properties":{
+"activityid" : [ 354, 1436, 1444, 1446, 1447, 1448, 1449],
+"admName":"Kasai-Occidental"}
+},
+{
+"type":"Feature",
+"geometry":{
+"type":"Point",
+"coordinates":[15.8618702644705,
+-4.45622801780701]},
+"properties":{
+"activityid" : [ 354, 1436, 1444, 1446, 1447, 1448, 1449],
+"admName":"Kinshasa"}
+},
+{
+"type":"Feature",
+"geometry":{
+"type":"Point",
+"coordinates":[14.2470593452454,
+-5.16947484016418]},
+"properties":{
+"activityid" : [ 354, 1436, 1444, 1446, 1447, 1448, 1449],
+"admName":"Bas-Congo"}
+},
+{
+"type":"Feature",
+"geometry":{
+"type":"Point",
+"coordinates":[26.2760797923073,
+-9.21372389793396]},
+"properties":{
+"activityid" : [ 354, 1436, 1444, 1446, 1447, 1448, 1449],
+"admName":"Katanga"}
+}]}

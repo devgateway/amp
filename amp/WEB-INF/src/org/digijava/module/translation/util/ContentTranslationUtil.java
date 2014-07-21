@@ -497,7 +497,8 @@ public class ContentTranslationUtil {
         if (fieldMap == null){
             List<AmpContentTranslation> list;
             synchronized (sessionLock){
-                list = loadTranslations(session, objClass, objId);
+                //we use the current session to be sure we load the latest values
+                list = loadTranslations(PersistenceManager.getCurrentSession(), objClass, objId);
             }
             fieldMap = new HashMap<String, HashMap<String, AmpContentTranslation>>();
             for (AmpContentTranslation t: list){
@@ -602,8 +603,10 @@ public class ContentTranslationUtil {
         }
         return null;
     }
-    
-    private static Session session = PersistenceManager.openNewSession();
+    //this session was used to load values since now the values are loaded within the same transaction
+    //we have no need to use a new one
+    //private static Session session = PersistenceManager.openNewSession();
+
     private static Object sessionLock = new Object();
     
     /**

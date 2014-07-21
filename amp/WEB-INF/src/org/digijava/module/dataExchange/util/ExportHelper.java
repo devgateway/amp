@@ -28,6 +28,7 @@ import org.digijava.module.dataExchange.dbentity.DEMappingFields;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.dbentity.IatiCodeItem;
 import org.digijava.module.dataExchange.dbentity.IatiCodeType;
+import org.digijava.module.dataExchange.iati.IatiVersion;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
 import org.digijava.module.dataExchange.util.DataExchangeConstants.IatiCodeTypeEnum;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;

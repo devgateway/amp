@@ -16,6 +16,7 @@ import org.digijava.module.aim.dbentity.AmpActivityExpanded;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.dbentity.IatiCodeItem;
+import org.digijava.module.dataExchange.iati.IatiVersion;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
 import org.digijava.module.dataExchange.type.IatiCode;
 import org.digijava.module.dataExchange.util.DataExchangeConstants.IatiCodeTypeEnum;

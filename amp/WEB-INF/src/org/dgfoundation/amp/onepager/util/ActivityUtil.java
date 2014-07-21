@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -46,6 +47,7 @@ import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -97,7 +99,8 @@ public class ActivityUtil {
 		try 
 		{
 			AmpTeamMember ampCurrentMember = wicketSession.getAmpCurrentMember();
-			AmpActivityVersion a = saveActivityNewVersion(am, ampCurrentMember, draft, session,rejected);
+			AmpActivityVersion a = saveActivityNewVersion(am.getObject(), am.getTranslationHashMap().values(), 
+					ampCurrentMember, draft, session, rejected, true);
 			am.setObject(a);
 		} catch (Exception exception) {
 			logger.error("Error saving activity:", exception); // Log the exception			
@@ -121,11 +124,11 @@ public class ActivityUtil {
 	 * saves a new version of an activity
 	 * returns newActivity
 	 */
-	public static AmpActivityVersion saveActivityNewVersion(AmpActivityModel am, AmpTeamMember ampCurrentMember, boolean draft, Session session,boolean rejected) throws Exception
+	public static AmpActivityVersion saveActivityNewVersion(AmpActivityVersion a, Collection<AmpContentTranslation> translations, 
+			AmpTeamMember ampCurrentMember, boolean draft, Session session, boolean rejected, boolean isActivityForm) throws Exception
 	{
 		//saveFundingOrganizationRole(a);
-        AmpActivityVersion a = am.getObject();
-		AmpActivityVersion oldA = a;
+        AmpActivityVersion oldA = a;
 		boolean newActivity = false;
 		
 		if (a.getAmpActivityId() == null){
@@ -143,7 +146,7 @@ public class ActivityUtil {
 		a.setDeleted(false);
 
         if (ContentTranslationUtil.multilingualIsEnabled())
-            ContentTranslationUtil.cloneTranslations(a, am.getTranslationHashMap().values());
+            ContentTranslationUtil.cloneTranslations(a, translations);
 
 		//is versioning activated?
         boolean createNewVersion = (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled();
@@ -152,7 +155,9 @@ public class ActivityUtil {
 				AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
 				
 				a = ActivityVersionUtil.cloneActivity(a, ampCurrentMember);
-				session.clear();
+				//keeping session.clear() only for acitivity form as it was before
+				if (isActivityForm)
+					session.clear();
 				if (tmpGroup == null){
 					//we need to create a group for this activity
 					tmpGroup = new AmpActivityGroup();
@@ -179,9 +184,6 @@ public class ActivityUtil {
 			session.save(tmpGroup);
 		}
 		
-		saveContacts(a, session,(draft != draftChange));
-		saveIndicators(a, session);
-		
 		setCreationTimeOnStructureImages(a);
 
 		AmpActivityGroup group = a.getAmpActivityGroup();
@@ -195,8 +197,6 @@ public class ActivityUtil {
 			group.setAmpActivityLastVersion(a);
 			session.update(group);
 		}
-
-		setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity,rejected);
 		a.setAmpActivityGroup(group);
 		Date updatedDate = Calendar.getInstance().getTime();
 		if (a.getCreatedDate() == null)
@@ -205,11 +205,17 @@ public class ActivityUtil {
 		a.setModifiedDate(updatedDate);
 		a.setModifiedBy(ampCurrentMember);
 		
-		
-		saveResources(a); 
-		saveEditors(session, createNewVersion); 
-		saveComments(a, session,draft); 
-		saveAgreements(session);
+		if (isActivityForm) {
+			setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity,rejected);
+			
+			saveContacts(a, session,(draft != draftChange));
+			saveIndicators(a, session);
+
+			saveResources(a); 
+			saveEditors(session, createNewVersion); 
+			saveComments(a, session,draft); 
+			saveAgreements(session);
+		}
 		
 		updateComponentFunding(a, session);
 

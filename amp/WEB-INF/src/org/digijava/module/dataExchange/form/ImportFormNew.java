@@ -27,6 +27,9 @@ public class ImportFormNew extends ActionForm {
     private Long configurationId;
     private List<AbstractMap.SimpleEntry <String, String>> countryList;
     private String[] selCountries;
+    private Set<Map.Entry <String, String>> languageList;
+    private String[] selLanguages;
+    private String defaultLanguage;
     private Map <IatiActivity, Set<DEMappingFields>> iatiImportedProjectMap;
     private Map <IatiActivity, Set<DEMappingFields>> iatiImportedProjectMapFiltered;
     private Map <String, Set<IatiActivity>> countryActMap;
@@ -169,7 +172,49 @@ public class ImportFormNew extends ActionForm {
         this.selCountries = selCountries;
     }
 
-    public FormFile getFile() {
+    /**
+	 * @return full list of languages detected in imported XML
+	 */
+	public Set<Map.Entry <String, String>> getLanguageList() {
+		return languageList;
+	}
+
+	/**
+	 * @param languageList - full list of languages detected in imported XML
+	 */
+	public void setLanguageList(Set<Map.Entry <String, String>> languageList) {
+		this.languageList = languageList;
+	}
+
+	/**
+	 * @return the selected languages for import
+	 */
+	public String[] getSelLanguages() {
+		return selLanguages;
+	}
+
+	/**
+	 * @param selLanguages - selected languages for import
+	 */
+	public void setSelLanguages(String[] selLanguages) {
+		this.selLanguages = selLanguages;
+	}
+
+	/**
+	 * @return the default language to be used if no language is detected for an element
+	 */
+	public String getDefaultLanguage() {
+		return defaultLanguage;
+	}
+
+	/**
+	 * @param defaultLanguge the default language to be used if no language is detected for an element
+	 */
+	public void setDefaultLanguage(String defaultLanguage) {
+		this.defaultLanguage = defaultLanguage;
+	}
+
+	public FormFile getFile() {
         return file;
     }
 

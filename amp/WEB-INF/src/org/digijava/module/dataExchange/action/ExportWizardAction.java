@@ -36,10 +36,11 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.dataExchange.Exception.AmpExportException;
 import org.digijava.module.dataExchange.form.ExportForm;
+import org.digijava.module.dataExchange.iati.IatiRules;
+import org.digijava.module.dataExchange.iati.IatiVersion;
 import org.digijava.module.dataExchange.util.ExportHelper;
 import org.digijava.module.dataExchange.util.ExportIatiBuilderVX;
 import org.digijava.module.dataExchange.util.ExportUtil;
-import org.digijava.module.dataExchange.util.IatiVersion;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 
 
@@ -54,7 +55,7 @@ public class ExportWizardAction extends DispatchAction {
 
 		ExportForm eForm = (ExportForm)form;
 
-		eForm.setIatiVersionList(Arrays.asList(IatiVersion.values()));
+		eForm.setIatiVersionList(Arrays.asList(IatiRules.EXPORT_VERSIONS));
 		eForm.setIatiVersion(IatiVersion.V_1_03.toString());
 		//TODO: build tree based on what? common Amp Activity structure, that will be mapped to diff Iati Activity schema versions
 		eForm.setActivityTree(ExportHelper.getActivityStruc(IatiVersion.V_1_03, 2)); //TODO: retrieve from selection

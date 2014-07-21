@@ -1,15 +1,16 @@
 /**
  * 
  */
-package org.digijava.module.dataExchange.util;
+package org.digijava.module.dataExchange.iati;
 
 
-/**
- * Keeps the list of IatiVersions supported in AMP
- * @author nmandrescu
- *
- */
+/** 
+ * Keeps the list of IatiVersions supported in AMP 
+ * @author Nadejda Mandrescu
+ */ 
 public enum IatiVersion {
+	V_1_01("1.01"),
+	V_1_02("1.02"),
 	V_1_03("1.03"),
 	V_1_04("1.04");
 	
@@ -30,6 +31,8 @@ public enum IatiVersion {
 	
 	public static IatiVersion getValueOf(String value) {
 		switch(value) {
+		case "1.01": return V_1_01;
+		case "1.02": return V_1_02;
 		case "1.03": return V_1_03;
 		case "1.04": return V_1_04;
 		default: return null;

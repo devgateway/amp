@@ -14,7 +14,6 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -45,6 +44,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -61,12 +61,12 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.dataExchange.dbentity.AmpDEImportLog;
 import org.digijava.module.dataExchange.dbentity.DELogPerItem;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
+import org.digijava.module.dataExchange.iati.IatiVersion;
 import org.digijava.module.dataExchange.jaxb.Activities;
 import org.digijava.module.dataExchange.jaxb.CodeValueType;
 import org.digijava.module.dataExchange.jaxb.ObjectFactory;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
-import org.digijava.module.dataExchange.util.IatiVersion;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.hibernate.Query;
@@ -976,63 +976,19 @@ public class DataExchangeUtils {
 		}
 	}
 
-
-	public static AmpActivityVersion saveActivity(HttpServletRequest request, Long grpId, AmpActivityVersion ampActivity, AmpTeam team) {
-		Session session = null;
-	    Transaction tx = null;
-	    Long activityId = null;
-	    try {
-				session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
-
-		    	AmpActivityGroup ampActGroup;
-				if(grpId.longValue()==-1)
-				{
-					//add new activity
-					ampActivity.setTeam(team);
-					ampActivity.setActivityCreator(team.getTeamLead());
-					ampActivity.setCreatedDate(Calendar.getInstance().getTime());
-					ampActivity.setModifiedBy(team.getTeamLead());
-					
-					ampActGroup = new AmpActivityGroup();
-					ampActGroup.setAmpActivityLastVersion(ampActivity);
-					session.save(ampActGroup);
-				}
-				else{
-					//add a new VERSION of an EXISTING activity
-					ampActGroup = DataExchangeUtils.getAmpActivityGroupById(grpId);
-					
-					AmpActivityVersion oldVersion = ampActGroup.getAmpActivityLastVersion();
-					ampActivity.setTeam(oldVersion.getTeam());
-					ampActivity.setActivityCreator(oldVersion.getActivityCreator());
-					ampActivity.setCreatedDate(oldVersion.getCreatedDate());
-					if(oldVersion.getTeam()!=null && oldVersion.getTeam().getTeamLead()!=null)
-						ampActivity.setModifiedBy(oldVersion.getTeam().getTeamLead());
-					
-					//the imported version from IATI should not be the current version
-					ampActGroup.setAmpActivityLastVersion(ampActivity);
-					session.update(ampActGroup);
-				}
-				
-				ampActivity.setAmpActivityGroup(ampActGroup);
-				ampActivity.setModifiedDate(Calendar.getInstance().getTime());
-				session.save(ampActivity);
-		        
-				activityId = ampActivity.getAmpActivityId();
-		        String ampId=ActivityUtil.numericAmpId("iati",activityId);
-		        ampActivity.setDeleted(false);
-		        ampActivity.setAmpId(ampId);
-		        //session.update(activity);
-		        
-		        //tx.commit();
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	
+	public static AmpActivityVersion saveActivity(HttpServletRequest request, Long grpId, AmpActivityVersion ampActivity, AmpTeam team,
+			List<AmpContentTranslation> translations) {
+		try {
+			ampActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(
+					ampActivity, translations, team.getTeamLead(),
+					false, PersistenceManager.getRequestDBSession(), false, false);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
 		}
 		return ampActivity;
 	}
 
-	
     public static TreeMap<Long,String> getNameGroupAllActivities() {
         Session session = null;
         Query qry = null;

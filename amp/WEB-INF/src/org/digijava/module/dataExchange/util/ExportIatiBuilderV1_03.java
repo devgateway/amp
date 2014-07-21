@@ -313,11 +313,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 						if (addPhone && Constants.CONTACT_PROPERTY_NAME_PHONE.equals(ampContProp.getName())) {
 							Telephone phone = factory.createContactInfoTelephone();
 							phone.setContent(ampContProp.getValue());
-
-                            JAXBElement<Telephone> telephoneJAXBElement = new JAXBElement<>
-                                    (new QName("", "telephone"), Telephone.class, phone);
-
-							ci.getOrganisationOrPersonNameOrJobTitle().add(telephoneJAXBElement);
+							ci.getOrganisationOrPersonNameOrJobTitle().add(getJAXBElementByQName(phone, "telephone"));
 							//email
 						} else if (addEmail && Constants.CONTACT_PROPERTY_NAME_EMAIL.equals(ampContProp.getName())) {
 							ci.getOrganisationOrPersonNameOrJobTitle().add(factory.createContactInfoEmail(getPlainType(ampContProp.getValue())));
@@ -446,12 +442,7 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 								tempCategLoc = deque.pop();
 								adm.setAdm2(tempCategLoc.getCode());
 							}
-
-                            // wrap into JAXB wrapper to avoid ambiguities
-                            JAXBElement<Administrative> administrativeJAXBElement = new JAXBElement<>
-                                    (new QName("", "administrative"), Administrative.class, adm);
-
-							iatiLoc.getLocationTypeOrNameOrDescription().add(administrativeJAXBElement);
+							iatiLoc.getLocationTypeOrNameOrDescription().add(getJAXBElementByQName(adm, "administrative"));
 							break;
 						case "coordinates": 
 							if (StringUtils.isNotBlank(location.getLatitude()) && StringUtils.isNotBlank(location.getLongitude())) {
@@ -651,20 +642,12 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 										Transaction.ProviderOrg org = factory.createTransactionProviderOrg();
 										org.setRef(pair.getCodeValue());
 										org.getContent().add(pair.getCodeName());
-
-                                        JAXBElement<Transaction.ProviderOrg> providerOrgJAXBElement = new JAXBElement<>
-                                                (new QName("", "provider-org"), Transaction.ProviderOrg.class, org);
-
-										transaction.getValueOrDescriptionOrTransactionType().add(providerOrgJAXBElement);
+										transaction.getValueOrDescriptionOrTransactionType().add(getJAXBElementByQName(org, "provider-org"));
 										break;
 									case "transaction-date":
 										Transaction.TransactionDate trDate = factory.createTransactionTransactionDate();
 										trDate.setIsoDate(ExportHelper.getGregorianCalendar(detail.getTransactionDate()));
-
-                                        JAXBElement<Transaction.TransactionDate> transactionDateJAXBElement = new JAXBElement<>
-                                                (new QName("", "transaction-date"), Transaction.TransactionDate.class, trDate);
-
-										transaction.getValueOrDescriptionOrTransactionType().add(transactionDateJAXBElement);
+										transaction.getValueOrDescriptionOrTransactionType().add(getJAXBElementByQName(trDate, "transaction-date"));
 										break;
 									case "transaction-type":
 										switch(detail.getTransactionType()) {
@@ -785,5 +768,10 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 		elem.setValue(value);
 		elem.setValueDate(ExportHelper.getGregorianCalendar(date));
 		return elem;
+	}
+	
+	//AMP-17797: wrapping into JAXBElement
+	protected <T> JAXBElement<T> getJAXBElementByQName(T elem, String qName) {
+		return new JAXBElement<T>(new QName(qName), (Class<T>) elem.getClass(), elem);
 	}
 }

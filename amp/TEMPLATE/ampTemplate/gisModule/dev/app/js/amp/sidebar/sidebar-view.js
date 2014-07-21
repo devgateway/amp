@@ -36,9 +36,9 @@ module.exports = Backbone.View.extend({
 
     // Temp dirty popover fix until 'exclusiveShowPopover' is fixed in next sprint.
     $('body').on('click', function (e) {
-                            if ($(e.target).data('toggle') !== 'popover'
-                                && $(e.target).parents('[data-toggle="popover"]').length === 0
-                                && $(e.target).parents('.popover.in').length === 0) {
+                            if ($(e.target).data('toggle') !== 'popover' &&
+                                $(e.target).parents('[data-toggle="popover"]').length === 0 &&
+                                $(e.target).parents('.popover.in').length === 0) {
                                 $('[data-toggle=popover]').popover('hide');
                             }
                         });
@@ -55,7 +55,7 @@ module.exports = Backbone.View.extend({
   exclusiveShowPopover: function() {
     /*
     var opening = this;
-    this.popovers.each(function(i, triggerer) {      
+    this.popovers.each(function(i, triggerer) {
       console.log('open ',opening);
       console.log('trgigo ', triggerer);
       if (triggerer !== opening) {

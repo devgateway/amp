@@ -60,10 +60,10 @@ module.exports = BaseControlView.extend({
     this.$('#point-selector input:radio').change(function(){
       var val = $(this).val();
       if(val === 'aggregated'){
-        self.$('.aggregate-group').show(); 
+        self.$('.aggregate-group').show();
         val = self.$('.point-options .amp-uses:input:radio:checked').val();
-      } else if(val === 'locations'){        
-        self.$('.aggregate-group').hide(); 
+      } else if(val === 'locations'){
+        self.$('.aggregate-group').hide();
       }
       Backbone.trigger('MAP_LOAD_POINT_LAYER', val);
     });
@@ -82,7 +82,7 @@ module.exports = BaseControlView.extend({
       var modelId = $(this).val();
 
       //dobule equal needed!!!
-      var indicator = self.indicators.find(function(model) { return model.get('id') == modelId; });
+      var indicator = self.indicators.find(function(model) { return model.get('id') === modelId; });
       Backbone.trigger('MAP_LOAD_INDICATOR', indicator);
     });
   },
@@ -98,10 +98,10 @@ module.exports = BaseControlView.extend({
         var modelId = self.$('.indicator-selector input:radio:checked').val();
 
       //dobule equal needed!!!
-        var indicator = self.indicators.find(function(model) { return model.get('id') == modelId; });
+        var indicator = self.indicators.find(function(model) { return model.get('id') === modelId; });
         Backbone.trigger('MAP_LOAD_INDICATOR', indicator);
 
-      } else {        
+      } else {
         Backbone.trigger('MAP_LOAD_INDICATOR', null);
         self.$('.indicator-selector').hide();
       }
@@ -119,7 +119,7 @@ module.exports = BaseControlView.extend({
         var val = self.$('.point-options .amp-uses:input:radio:checked').val();
         Backbone.trigger('MAP_LOAD_POINT_LAYER', val);
 
-      } else {        
+      } else {
         Backbone.trigger('MAP_LOAD_POINT_LAYER', null);
         self.$('.point-options').hide();
       }

@@ -9,7 +9,7 @@ module.exports = Backbone.Collection.extend({
   url: APIBase.getAPIBase() + '/rest/gis/indicator-layers',
 
   initialize: function() {
-    
+
   }
 
 });

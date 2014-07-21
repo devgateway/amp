@@ -18,7 +18,7 @@ module.exports = Backbone.View.extend({
     // backing the filter, and subscribe to changes on it?
     Backbone.on('FILTERS_UPDATED', this._filtersUpdated, this);
     Backbone.on('MAP_LOAD_POINT_LAYER', this._loadProjectLayer, this);
-    _.bindAll(this, '_onEachFeature');    
+    _.bindAll(this, '_onEachFeature');
   },
 
   render: function() {
@@ -99,7 +99,7 @@ module.exports = Backbone.View.extend({
   _onEachFeature: function(feature, layer) {
     var self = this;
 
-    if (feature.properties) {       
+    if (feature.properties) {
       layer.bindPopup('Project #: '+ feature.properties.projectID  +'<br />Site: ' + feature.properties.title );
     }
 
@@ -123,7 +123,7 @@ module.exports = Backbone.View.extend({
   _hilightProject: function(projectID){
     this.featureGroup.eachLayer(function(layer){
       var properties = layer.feature.properties;
-      if(properties.projectID === projectID){ 
+      if(properties.projectID === projectID){
         layer.setStyle({fillColor: '#008'});
       }
     });
@@ -146,21 +146,21 @@ module.exports = Backbone.View.extend({
   _removeFromMap: function(){
     if(this.featureGroup){
       this.map.removeLayer(this.featureGroup);
-    } 
+    }
   },
 
   // Owen asked for the circles to shrink if we're zoomed out there are lots of points..
   // To hacky to do cleanly for now...
-  // _updateZoom: function(){    
+  // _updateZoom: function(){
   //   if(this.featureGroup){
   //     var zoom = this.map.getZoom();
   //     // make small points
   //     if(zoom < 9){
-  //       this.featureGroup.eachLayer(function(layer){ 
+  //       this.featureGroup.eachLayer(function(layer){
   //           layer.setRadius(2);
   //       });
   //     } else {
-  //       this.featureGroup.eachLayer(function(layer){ 
+  //       this.featureGroup.eachLayer(function(layer){
   //           layer.setRadius(5);
   //       });
   //     }

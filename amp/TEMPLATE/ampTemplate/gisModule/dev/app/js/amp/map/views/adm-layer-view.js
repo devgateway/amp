@@ -37,14 +37,14 @@ module.exports = Backbone.View.extend({
     // remove current featureGroup
     if(self.featureGroup){
       self.map.removeLayer(self.featureGroup);
-    } 
+    }
 
     // add new featureGroup
     self.featureGroup = L.geoJson(self.features, {
       pointToLayer: function (feature, latlng) {
         var htmlString = self.admTemplate(feature);
         var myIcon = L.divIcon({
-          className: 'map-adm-icon',  
+          className: 'map-adm-icon',
           html: htmlString,
           iconSize: [60, 50]});
         return L.marker(latlng, {icon: myIcon});//L.circleMarker(latlng, geojsonMarkerOptions);
@@ -106,7 +106,7 @@ module.exports = Backbone.View.extend({
         simplifyFactor: 0.9,
         style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '3',}
       }).addTo(self.map);
-    
+
   },
 
   _removeBoundary: function(){
@@ -124,7 +124,7 @@ module.exports = Backbone.View.extend({
   },
 
   // Can do some post-processing here if we want...
-  _getCluster: function(filter){    
+  _getCluster: function(filter){
     return this.collection.fetch({data:filter});
   },
 
@@ -133,6 +133,6 @@ module.exports = Backbone.View.extend({
 
     if(this.featureGroup){
       this.map.removeLayer(this.featureGroup);
-    } 
+    }
   },
 });

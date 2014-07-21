@@ -9,7 +9,7 @@ module.exports = Backbone.Collection.extend({
   url: APIBase.getAPIBase() + '/rest/gis/cluster',
 
   initialize: function() {
-    
+
   },
 
   // parse geoJson response to pull out features as a collection.

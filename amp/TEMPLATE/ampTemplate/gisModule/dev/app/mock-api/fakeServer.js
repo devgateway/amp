@@ -1,4 +1,4 @@
-var fs = require('fs'); 
+var fs = require('fs');
 var sinon = require('../mock-api/sinon-min.js');
 
 var cluster = fs.readFileSync(__dirname + '/data/cluster.json', 'utf8');
@@ -28,21 +28,21 @@ var fakeServer = {
 
   // reg-ex can be used to pull out params and send dynamic response.
   _addClusterPath: function(){
-    this.server.respondWith(/\/rest\/gis\/cluster(\S+)/, 
-      function (xhr, param) {  
+    this.server.respondWith(/\/rest\/gis\/cluster(\S+)/,
+      function (xhr, param) {
         if(param.indexOf('adminLevel=2') > -1){
-          xhr.respond(200, { 'Content-Type': 'application/json' }, clusterADM2); 
+          xhr.respond(200, { 'Content-Type': 'application/json' }, clusterADM2);
         } else{
-          xhr.respond(200, { 'Content-Type': 'application/json' }, cluster); 
+          xhr.respond(200, { 'Content-Type': 'application/json' }, cluster);
         }
       });
 
   },
-  
+
   _addPath: function(resp, path){
-    this.server.respondWith('GET', 
-                      path, 
-                      [200, { 'Content-Type': 'application/json' }, resp]); 
+    this.server.respondWith('GET',
+                      path,
+                      [200, { 'Content-Type': 'application/json' }, resp]);
 
     // can do regex to get params:
     // server.respondWith(/\/todo-items\/(\d+)/, function (xhr, id) {  xhr.respond(200, { ?Content-Type?: ?application/json? }, ?[{ ?id?: ? + id + ? }]?); });

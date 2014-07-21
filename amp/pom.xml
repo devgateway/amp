@@ -980,7 +980,6 @@
 						</goals>
 					</execution>
 
-
 					<execution>
 						<id>clean</id>
 						<phase>clean</phase>
@@ -1063,6 +1062,22 @@
 					        <!-- optional: if not specified, it will run gulp's default
 					        task (and you can remove this whole <configuration> section.) -->
 					        <arguments>build</arguments>
+					    </configuration>
+					</execution>
+					<execution>
+					    <id>gulp test</id>
+					    <goals>
+					        <goal>gulp</goal>
+					    </goals>
+					
+					    <!-- optional: the default phase is "generate-resources" -->
+					    <phase>test</phase>
+					    
+					    
+					      <configuration>
+					        <!-- optional: if not specified, it will run gulp's default
+					        task (and you can remove this whole <configuration> section.) -->
+					        <arguments>dev-tests</arguments>
 					    </configuration>
 					</execution>
 				</executions>

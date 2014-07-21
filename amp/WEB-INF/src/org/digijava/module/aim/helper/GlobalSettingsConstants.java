@@ -155,5 +155,5 @@ public class GlobalSettingsConstants {
 	
 	public static final String ORGANISATION_TYPE_FOR_BENEFICIARY_AGENCY = "Organisation type for Beneficiary Agency";
     
-
+	public static final String RICH_EXCEL_EXPORT_ENABLED_BY_DEFAULT = "Rich Excel Export Enabled by Default";
 }

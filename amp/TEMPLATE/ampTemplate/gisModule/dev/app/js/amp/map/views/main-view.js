@@ -29,7 +29,7 @@ module.exports = Backbone.View.extend({
     state.register(this, 'map', {
       get: this._getMapView,
       set: this._setMapView,
-      empty: { center: [47.02, 28.60], zoom: 8 }
+      empty: { center: [-3, 22], zoom: 6 }
     });
 
     this.basemaps = new Basemaps();  // pre-loaded with hard-coded basemaps
@@ -87,11 +87,12 @@ module.exports = Backbone.View.extend({
     // Can do stuff with feature properties if we want. such as show ADM details on click.
     // TODO: Switch to AJAX style if same origin for boundary:  L.mapbox.featureLayer().loadURL('....');
     // DRC: http://gis.devgateway.org/arcgis/rest/services/wbi/Africa/MapServer/13'
+    // Moldova: http://gis.devgateway.org/arcgis/rest/services/wbi/Europe_and_Central_Asia/MapServer/43
 
     // only do once
     if(!this.boundaryLayer){
       this.boundaryLayer = L.esri.featureLayer(
-        'http://gis.devgateway.org/arcgis/rest/services/wbi/Europe_and_Central_Asia/MapServer/43',
+        'http://gis.devgateway.org/arcgis/rest/services/wbi/Africa/MapServer/13',
         {
           simplifyFactor: 0.9,
           style:  {color: 'blue', fillColor:'none', weight: 1}

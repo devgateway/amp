@@ -1,390 +1,271 @@
 {
-  "type" : "FeatureCollection",
-  "features" : [ {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 29.25, 46.91667 ]
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":863,
+        "title":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8837890625,
+          -9.752370139173285
+        ]
+      }
     },
-    "properties" : {
-      "projectID":7893,
-      "title" : "Anenii Noi"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 27.91667, 47.78433 ]
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":863,
+        "title":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.158203125,
+          -4.609278084409823
+        ]
+      }
     },
-    "properties" : {
-      "projectID":793,
-      "title" : "Bălţi"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.33333, 45.83333 ]
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":98443,
+        "title":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.916015625,
+          2.1088986592431382
+        ]
+      }
     },
-    "properties" : {
-      "projectID":123,
-      "title" : "Cahul"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.33333, 45.83333 ]
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":963,
+        "title":"Build a Dam"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          22.631835937499996,
+          1.8893059628373186
+        ]
+      }
     },
-    "properties" : {
-      "projectID":123,
-      "title" : "Cahul2"
-    }
-  },{
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.334333, 45.834333 ]
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":963,
+        "title":"Build a Dam"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.0380859375,
+          -1.4061088354351468
+        ]
+      }
     },
-    "properties" : {
-      "projectID":123,
-      "title" : "Cahul3"
-    }
-  },{
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.843333, 47.0 ]
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":9863,
+        "title":"Build a Dam"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.16015625,
+          -4.784468966579375
+        ]
+      }
     },
-    "properties" : {
-      "projectID":123,
-      "title" : "Chişinău"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 27.83333, 48.08733 ]
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":9863,
+        "title":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.4677734375,
+          -0.4833927027896987
+        ]
+      }
     },
-    "properties" : {"title" : "Drochia"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 29.18667, 47.27 ]
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":9863,
+        "title":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.3349609375,
+          -7.057282352971569
+        ]
+      }
     },
-    "properties" : {
-      "projectID":423,
-      "title" : "Dubăsari"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 27.25, 48.16667 ]
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":9863,
+        "title":"Build a Dam"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.97265625,
+          -3.7327083213358336
+        ]
+      }
     },
-    "properties" : {
-      "projectID":423,
-      "title" : "Edineţ"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 27.75, 47.58333 ]
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":984463,
+        "title":"Build a Dam"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          27.3779296875,
+          -0.17578097424708533
+        ]
+      }
     },
-    "properties" : {
-      "projectID":423,
-      "title" : "Fălești"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.48667, 46.88333 ]
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":984463,
+        "title":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.8837890625,
+          3.030812122664383
+        ]
+      }
     },
-    "properties" : {
-      "projectID":423,
-      "title" : "Hîncești"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.80333, 46.80333 ]
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":984463,
+        "title":"Build a Hospital"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          21.5771484375,
+          -0.5273363048115043
+        ]
+      }
     },
-    "properties" : {
-      "projectID":463,
-      "title" : "Ialoveni"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.41667, 46.5 ]
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":984463,
+        "title":"Build a Hospital"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          19.775390625,
+          3.425691524418075
+        ]
+      }
     },
-    "properties" : {
-      "projectID":463,
-      "title" : "Leova"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.18667, 46.18333 ]
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":563,
+        "title":"Build a Hospital"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          16.2158203565,
+          -5.04717073691972
+        ]
+      }
     },
-    "properties" : {
-      "projectID":463,
-      "title" : "Nisporeni"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.83333, 47.41667 ]
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":563,
+        "title":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          28.0810546875,
+          -7.144498849647323
+        ]
+      }
     },
-    "properties" : {
-      "projectID":463,
-      "title" : "Orhei"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 27.53509, 47.92778 ]
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":563,
+        "title":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          23.203125,
+          -9.44906182688142
+        ]
+      }
     },
-    "properties" : {
-      "projectID":463,
-      "title" : "Rîșcani"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.25, 48.16667 ]
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":563,
+        "title":"Build a Hospital"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          24.8291015625,
+          -4.434044005032582
+        ]
+      }
     },
-    "properties" : {
-      "projectID":463,
-      "title" : "Soroca"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.50333, 47.10667 ]
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":98443,
+        "title":"Build a Hospital"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          18.7646484375,
+          -2.2406396093827206
+        ]
+      }
     },
-    "properties" : {
-      "projectID":463,
-      "title" : "Strășeni"
+    {
+      "type": "Feature",
+      "properties": {
+        "projectID":863,
+        "title":"Build a School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          25.48828125,
+          1.537901237431487
+        ]
+      }
     }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.2, 47.50333 ]
-    },
-    "properties" : {
-      "projectID":463,
-      "title" : "Telenesti"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 29.25, 47.33333 ]
-    },
-    "properties" : {
-      "projectID":463,
-      "title" : "U.T.A. Stînga Nistrului"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 27.91667, 47.43333 ]
-    },
-    "properties" : {
-      "projectID":463,
-      "title" : "Ungheni"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.91667, 46.41667 ]
-    },
-    "properties" : {
-      "projectID":463,
-      "title" : "Basarabeasca"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 27.2, 48.22 ]
-    },
-    "properties" : {
-      "projectID":463,
-      "title" : "Briceni"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.33333, 46.25 ]
-    },
-    "properties" : {
-      "projectID":463,
-      "title" : "Cantemir"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.10836, 47.25365 ]
-    },
-    "properties" : {"title" : "Călăraşi"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 29.3135, 46.61884 ]
-    },
-    "properties" : {
-      "projectID":63,
-      "title" : "Căuşeni"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.23333, 46.50333 ]
-    },
-    "properties" : {
-      "projectID":63,
-      "title" : "Cimişlia"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 29.03065, 47.15861 ]
-    },
-    "properties" : {
-      "projectID":63,
-      "title" : "Criuleni"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 27.68616, 48.2677 ]
-    },
-    "properties" : {
-      "projectID":63,
-      "title" : "Dondușeni"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.07774, 47.57398 ]
-    },
-    "properties" : {
-      "projectID":63,
-      "title" : "Florești"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 27.6, 47.65 ]
-    },
-    "properties" : {
-      "projectID":3,
-      "title" : "Glodeni"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 27.5, 48.41667 ]
-    },
-    "properties" : {
-      "projectID":3,
-      "title" : "Ocniţa"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.73333, 47.66667 ]
-    },
-    "properties" : {
-      "projectID":3,
-      "title" : "Rezina"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.26667, 47.66667 ]
-    },
-    "properties" : {
-      "projectID":3,
-      "title" : "Sîngerei"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.36667, 47.183333 ]
-    },
-    "properties" : {
-      "projectID":3,
-      "title" : "Șoldănești"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 29.26667, 46.55 ]
-    },
-    "properties" : {
-      "projectID":3,
-      "title" : "Ștefan Vodă"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.158333, 45.691667 ]
-    },
-    "properties" : {
-      "projectID":7893,
-      "title" : "Taraclia"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 29.45, 46.683333 ]
-    },
-    "properties" : {
-      "projectID":7893,
-      "title" : "Bender"
-    }
-  }, {
-    "type" : "Feature",
-    "geometry" : {
-      "type" : "Point",
-      "coordinates" : [ 28.966667, 46.916667 ]
-    },
-    "properties" : {
-      "projectID":7893,
-      "title" : "U.T.A. Găgăuzia"
-    }
-  } ]
+  ]
 }

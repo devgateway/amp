@@ -5,22 +5,21 @@
       Point Layers
     </h4>
   </label>
-  <a href="#layer-info" class="layer-info"
-    data-toggle="popover"
-    data-container="body"
-    data-placement="right"
-    data-trigger="click"
-         title="Info about Point Layers"
-    data-content="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
-    <span class="glyphicon glyphicon-info-sign"></span> info
-  </a>
 </div>
 
 <div class="container-fluid point-options" style="display:none;">
   <div class="radio">
     <label>
       <input type="radio" name="optionsPoints" id="optionsAggregated" value="aggregated"  checked>
-      Aggregated Projects
+      Aggregated Projects   
+      <a href="#layer-info" class="layer-info"
+        data-toggle="popover"
+        data-container="body"
+        data-placement="right"
+        data-trigger="click"
+        data-content="Projects will be clustered by admin regions.">
+        <span class="glyphicon glyphicon-info-sign"></span>
+      </a>
     </label>
   </div>
   <div class="aggregate-group radio-group">
@@ -42,7 +41,15 @@
   <div class="radio">
     <label>
       <input type="radio" name="optionsPoints" id="optionsLocations" value="locations" class="amp-uses">
-      Projects by Locations
+      Projects Sites
+      <a href="#layer-info" class="layer-info"
+        data-toggle="popover"
+        data-container="body"
+        data-placement="right"
+        data-trigger="click"
+        data-content="Individual project sites will be shown.">
+        <span class="glyphicon glyphicon-info-sign"></span>
+      </a>      
     </label>
   </div>
 

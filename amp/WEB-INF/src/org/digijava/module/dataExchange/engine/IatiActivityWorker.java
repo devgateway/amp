@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -20,9 +21,30 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.util.*;
+import org.digijava.module.aim.util.ContactInfoUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -31,8 +53,8 @@ import org.digijava.module.dataExchange.dbentity.DEMappingFields;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.pojo.DEProposedProjectCost;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
-import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.dataExchange.utils.DEConstants;
+import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.ActivityDate;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.Budget;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.CodeReqType;
@@ -54,6 +76,7 @@ import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.TextType;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.Transaction;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 
 /**
  * @author dan
@@ -357,7 +380,8 @@ public class IatiActivityWorker {
 
 
 
-	public ArrayList<AmpMappedField> populateActivity(AmpActivityVersion a, AmpActivityVersion prevVer, DESourceSetting settings){
+	public ArrayList<AmpMappedField> populateActivity(AmpActivityVersion a, AmpActivityVersion prevVer, DESourceSetting settings, 
+			List<AmpContentTranslation> translations){
 		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
 		boolean isCreate = prevVer == null;
 
@@ -413,11 +437,11 @@ public class IatiActivityWorker {
 				iatiContactList, iatiLocationList,iatiDefaultFinanceType, iatiDefaultAidType, iatiID);
 
         if ((isCreate && settings.importEnabled("Title")) || (!isCreate && settings.updateEnabled("Title"))) {
-		    processTitle(a, iatiTitleList);
+        	processTitle(a, iatiTitleList, translations);
         }
 
 
-		processIdentificationStep(a,iatiStatusList,iatiImplementationLevelList,iatiDescriptionList,iatiID, isCreate, settings);
+        processIdentificationStep(a,iatiStatusList,iatiImplementationLevelList,iatiDescriptionList,iatiID, isCreate, settings);
 
 		processPlanningStep(a,iatiActDateList);
 
@@ -428,7 +452,8 @@ public class IatiActivityWorker {
 
 		processActInternalIdsStep(a,iatiOtherIdList, iatiRepOrgList);
 		processBudgetStep(a,iatiBudgetList,iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency, isCreate, settings);
-		processFundingStep(a,iatiTransactionList,iatiPlannedDisbList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency,iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList, isCreate, settings);
+		processFundingStep(a,iatiTransactionList,iatiPlannedDisbList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency,
+				iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList, isCreate, settings, translations);
 
         if (settings.isRegionalFundings()) {
             a.getRegionalFundings().clear();
@@ -453,20 +478,25 @@ public class IatiActivityWorker {
 	
 
 
-	private void processTitle(AmpActivityVersion a, ArrayList<JAXBElement<TextType>> iatiTitleList) {
-		// TODO Auto-generated method stub
+	private void processTitle(AmpActivityVersion a, ArrayList<JAXBElement<TextType>> iatiTitleList,
+			List<AmpContentTranslation> translations) {
 		if(iatiTitleList.isEmpty()) return;
-
-        JAXBElement<TextType> title = null;
+		
+        String title = null;
         for (Iterator <JAXBElement<TextType>> it = iatiTitleList.iterator(); it.hasNext();) {
             JAXBElement<TextType> itVal = it.next();
-            if (itVal.getValue().getLang() == null || itVal.getValue().getLang().equals(this.getLang())) {
-                title = itVal;
+            String lang = itVal.getValue().getLang() == null? this.getLang() : itVal.getValue().getLang();
+            String name = printList(itVal.getValue().getContent());
+            //detects default language title
+            if (lang.equals(this.getLang())) {
+                title = name;
+            } else {
+            	//multilingual titles
+            	translations.add(getAmpContentTranslation(a, a.getAmpActivityId(), "name", lang, name));
             }
         }
-
-        // limit to english temporary
-        a.setName(printList(title.getValue().getContent()));
+        // title to be used when multilingual is disabled
+        a.setName(title);
 		this.setTitle(a.getName());
 	}
 
@@ -491,8 +521,6 @@ public class IatiActivityWorker {
 		}
 		
 		a.setActivityContacts(activityContacts);
-		
-		
 	}
 
 	private void setAmpContactDetails(ContactInfo contactInfo, AmpContact ampContact) {
@@ -614,7 +642,7 @@ public class IatiActivityWorker {
 			ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList, 
 			ArrayList<ParticipatingOrg> iatiExtendingOrgList, 
 			ArrayList<ReportingOrg> iatiRepOrgList,
-            boolean isCreate, DESourceSetting settings) {
+            boolean isCreate, DESourceSetting settings, List<AmpContentTranslation> translations) {
 		
 		if(iatiTransactionList.isEmpty()) return;
 		JAXBElement<CodeReqType> iatiDefFinTypeLocal = null;
@@ -648,7 +676,7 @@ public class IatiActivityWorker {
 			Transaction transaction = (Transaction) it.next();
 			AmpFunding f = getFundingIATItoAMP(activity,transaction,typeOfAssistance, financingInstrument, iatiDefaultCurrency,
 					iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,
-					proposedProjectCost, isCreate, settings);
+					proposedProjectCost, isCreate, settings, translations);
 
             if(f!=null) {
                 if (!settings.isRegionalFundings()) {
@@ -717,7 +745,6 @@ public class IatiActivityWorker {
             return null;
         }
 
-		// TODO Auto-generated method stub
 		Double currencyValue = new Double(0);
 		String currencyName = iatiDefaultCurrency;
 		Date startDate = null;
@@ -953,7 +980,7 @@ public class IatiActivityWorker {
 			ArrayList<ParticipatingOrg> iatiExtendingOrgList, 
 			ArrayList<ReportingOrg> iatiRepOrgList, 
 			DEProposedProjectCost ppc,
-            boolean isCreate, DESourceSetting settings) {
+            boolean isCreate, DESourceSetting settings, List<AmpContentTranslation> translations) {
 
         if ((isCreate && !settings.importEnabled("Other Funding Items")) || (!isCreate && !settings.updateEnabled("Other Funding Items"))) {
             return null;
@@ -967,7 +994,7 @@ public class IatiActivityWorker {
 		AmpCategoryValue financingInstrument = iatiDefaultAidType;
         // other
 		char transactionType = 'o';
-		String description ="";
+		Map<String, String> descriptions = new HashMap<String,String>(); //<langISO, Translation>
 		Date tDate = new Date();
 		double currencyValue = 0;
 		String currencyName = iatiDefaultCurrency;
@@ -1035,7 +1062,8 @@ public class IatiActivityWorker {
                 //transaction description
                 if (i.getName().equals(new QName("description"))) {
                     JAXBElement<TextType> item = (JAXBElement<TextType>) i;
-                    description = printList(item.getValue().getContent());
+                    String lang = item.getValue().getLang();
+                    descriptions.put(lang, printList(item.getValue().getContent()));
                 }
 
                 //value and currency
@@ -1142,8 +1170,13 @@ public class IatiActivityWorker {
             ampFunding.setAmpActivityId(a);
         }
 		
-		//TODO: the language - lang attribute
-		if(isValidString(description)) ampFunding.setConditions(description);
+		for (Map.Entry<String, String> isoLangDesc : descriptions.entrySet()) {
+			translations.add(getAmpContentTranslation(
+					ampFunding, ampFunding.getAmpFundingId(), "conditions", isoLangDesc.getKey(), isoLangDesc.getValue()));
+			if (this.lang.equals(isoLangDesc.getKey())) {
+				ampFunding.setConditions(isoLangDesc.getValue());
+			}
+		}
 		
 		AmpOrgRole ampOrgRole = new AmpOrgRole();
 		ampOrgRole.setActivity(a);
@@ -1222,7 +1255,6 @@ public class IatiActivityWorker {
 	}
 	
 	private void processActInternalIdsStep(AmpActivityVersion a, ArrayList<OtherIdentifier> iatiOtherIdList, ArrayList<ReportingOrg> iatiRepOrgList) {
-		// TODO Auto-generated method stub
 		Set<AmpActivityInternalId> internalIds = new HashSet<AmpActivityInternalId>();
 		if(iatiOtherIdList.isEmpty()) {
 			for (Iterator<OtherIdentifier> it = iatiOtherIdList.iterator(); it.hasNext();) {
@@ -1368,16 +1400,17 @@ public class IatiActivityWorker {
 		}
 	}
 
-	private void processIdentificationStep(AmpActivityVersion a, ArrayList<JAXBElement<CodeType>> iatiStatusList,ArrayList<JAXBElement<CodeType>> iatiImplementationLevelList, ArrayList<Description> iatiDescriptionList,ArrayList<IatiIdentifier> iatiIDList, boolean isCreate, DESourceSetting settings) {
+	private void processIdentificationStep(AmpActivityVersion a, ArrayList<JAXBElement<CodeType>> iatiStatusList,
+			ArrayList<JAXBElement<CodeType>> iatiImplementationLevelList, ArrayList<Description> iatiDescriptionList,
+			ArrayList<IatiIdentifier> iatiIDList, boolean isCreate, DESourceSetting settings) {
         if ((isCreate && settings.importEnabled("Status")) || (!isCreate && settings.updateEnabled("Status"))) {
 		    processStatus(a,iatiStatusList);
         }
 	    processImplementationLevel(a,iatiImplementationLevelList);
         if ((isCreate && settings.importEnabled("Description")) || (!isCreate && settings.updateEnabled("Description"))) {
-		    processDescriptions(a,iatiDescriptionList);
+        	processDescriptions(a,iatiDescriptionList);
         }
 	    processIatiID(a,iatiIDList);
-
 	}
 
 	private void processIatiID(AmpActivityVersion a, ArrayList<IatiIdentifier> iatiIDList) {
@@ -1390,6 +1423,8 @@ public class IatiActivityWorker {
 	}
 
 	private void processDescriptions(AmpActivityVersion a, ArrayList<Description> iatiDescriptionList) {
+		//same editor key should be used for multiple translations
+		String descKey = "aim-iati-desc-" + System.currentTimeMillis();
 		for (Iterator it = iatiDescriptionList.iterator(); it.hasNext();) {
 			Description description = (Description) it.next();
 
@@ -1401,17 +1436,26 @@ public class IatiActivityWorker {
 			else 
 			//	if( description.getType()==null || "general".compareTo(description.getType().toLowerCase()) ==0 )
 				{
-					String d = setEditorDescription(description , "aim-iati-desc-");
-					//if(this.getLang().compareTo(description.getLang()) == 0)
-						a.setDescription(d);
+					setEditorDescription(description , descKey);
+					a.setDescription(descKey);
 				}
 			
 		}
-		
+	}
+	
+	private AmpContentTranslation getAmpContentTranslation(Object obj, Long objId, String field, String locale, String translation) {
+		if (objId==null)
+			objId = (long) System.identityHashCode(obj);
+		AmpContentTranslation trn = ContentTranslationUtil.loadCachedFieldTranslationsInLocale(
+				obj.getClass().getName(), objId, field, locale);
+        if (trn==null)
+        	trn = new AmpContentTranslation(obj.getClass().getName(), objId, field, locale, translation);
+        else
+        	trn.setTranslation(translation);
+        return trn;
 	}
 
-	private String setEditorDescription(Description obj , String preKey){
-			String key = preKey + System.currentTimeMillis();
+	private String setEditorDescription(Description obj , String key){
 			String value = printList(obj.getContent());
 			if(obj!=null && isValidString(value)){
 				Editor ed = createEditor("amp", key, obj.getLang()==null?this.getLang():obj.getLang()); //TODO: bugs source
@@ -1587,6 +1631,8 @@ public class IatiActivityWorker {
 			
 			if(contentItem instanceof Description){
 				Description item = (Description)contentItem;
+				if (item.getLang()==null) 
+					item.setLang(this.getiActivity().getLang());
 				iatiDescriptionList.add(item);
 			}
 			
@@ -1638,7 +1684,6 @@ public class IatiActivityWorker {
 
 
 	private AmpMappedField checkStatusCode(JAXBElement<CodeType> item) {
-		// TODO Auto-generated method stub
 		String code = getAttributeCodeType(item, "code");
 		String value = printCodeType(item);
 		DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_ACTIVITY_STATUS,toIATIValues("statusName","statusCode"),toIATIValues(value,code),

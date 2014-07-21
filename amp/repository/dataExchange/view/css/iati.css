@@ -1,0 +1,140 @@
+#uploadBtn{
+   position: relative;
+   font-family: calibri;
+   width: 90px;
+   height:20px;
+   padding: 5px;
+   -webkit-border-radius: 5px;
+   -moz-border-radius: 5px;
+   border: 1px solid #BBB; 
+   text-align: center;
+   vertical-align:middle;
+   background-color: #DDD;
+   cursor:pointer;
+  }
+td.defaultTab {
+	background-color:#f2f2f2;
+	border: 1px solid #b8b7b7;
+	color: #47608e;
+	width: 100px;
+	height: 30px;
+	text-align:center;
+   font-size: 11px;
+   font-weight: bold;
+}
+
+td.inactiveTab {
+	background-color:#4c6b7f;
+	border: 1px solid #b8b7b7;
+	border-bottom: none;
+	color: white;
+	width: 100px;
+	height: 30px;
+	text-align:center;
+	cursor: pointer;
+   font-size: 11px;
+   font-weight: bold;
+}
+
+td.disabledTab {
+	background-color:#8b8b8b;
+	border: 1px solid #b8b7b7;
+	border-bottom: none;
+	color: white;
+	width: 100px;
+	height: 30px;
+	text-align:center;
+   font-size: 11px;
+   font-weight: bold;
+}
+
+a.tabLinks {
+	color: white;
+}
+
+div#busyCover {
+	display:none;	
+}
+
+div#mappingTableBusy {
+	background-color:black;
+	position:absolute;
+	opacity:0.2;
+	filter:alpha(opacity=20); /* For IE8 and earlier */
+}
+
+img#busyImg {
+	position:absolute;
+}
+
+span.breadcrambCurrent {
+	color:red;
+}
+
+span.breadcrambOther {
+	color:black;
+}
+
+div.wizardNav {
+	height:20px;
+	width:70px;
+	border: 1px solid #B8B7B7;
+	cursor:pointer;
+	vertical-align:middle;
+};
+
+div.wizardBtn {
+	color:white;
+	background-color: #4b687a;
+	align:center;
+}
+
+div.wizardBtn:hover {
+	color:white;
+	background-color: #6b8b9e;
+}
+
+div.wizardBtn:active {
+	color:white;
+	background-color: #3d5768;
+}
+
+div.wizardBtnDisabled {
+	color:#d4d4d4;
+	background-color: #a6a8a9;
+}
+
+a.wizardLink {
+	color: white;
+   font-size: 12px;
+   font-weight:normal;
+   text-decoration:none;
+}
+
+table.wizardTable {
+	border: 1px solid #b8b7b7;
+	background-color: #e0e0e0;
+   font-weight:normal;
+   text-decoration:none;
+}
+
+table.wizardStepTable {
+	width: 980px;
+	border: 0;
+	padding: 0;
+	margin: 10px;
+}
+
+table.wizardStepTable .tableHeader{
+	text-align: center;
+	background: url('/TEMPLATE/ampTemplate/img_2/ins_header.gif');
+}
+table.wizardStepTable td {
+	bgcolor: "#FFFFFF";
+}
+table.wizardStepTable .defaultLang {
+	width: 100px;
+}
+table.wizardStepTable .selectOpt {
+	width: 10px;
+}

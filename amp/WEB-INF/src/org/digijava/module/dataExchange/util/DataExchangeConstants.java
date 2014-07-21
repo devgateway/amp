@@ -108,6 +108,7 @@ public class DataExchangeConstants {
     	GazetteerAgency("GazetteerAgency"),
     	GeographicalPrecision("GeographicalPrecision"),
     	IndicatorMeasure("IndicatorMeasure"),
+    	Language("Language"),
     	LoanRepaymentPeriod("LoanRepaymentPeriod"),
     	LoanRepaymentType("LoanRepaymentType"),
     	LocationType("LocationType"),

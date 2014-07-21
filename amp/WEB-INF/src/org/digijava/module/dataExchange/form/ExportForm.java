@@ -14,8 +14,8 @@ import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.dataExchange.iati.IatiVersion;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
-import org.digijava.module.dataExchange.util.IatiVersion;
 
 public class ExportForm extends ActionForm{
 

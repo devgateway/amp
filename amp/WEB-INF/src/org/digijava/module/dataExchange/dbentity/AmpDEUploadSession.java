@@ -1,9 +1,13 @@
 package org.digijava.module.dataExchange.dbentity;
 
-import org.digijava.kernel.user.User;
-
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,6 +27,8 @@ public class AmpDEUploadSession {
     Set<DEMappingFields> mappedFields;
     DESourceSetting settingsAssigned;
     String selCountryFilters;
+    String selLanugageFilters;
+    String selDefaultLanugage;
     List<DELogPerItem> logItems;
 
     public Long getId() {
@@ -97,7 +103,34 @@ public class AmpDEUploadSession {
         this.selCountryFilters = selCountryFilters;
     }
 
-    public String getFormatedUploadDate () {
+    public String getSelLanugageFilters() {
+    	return selLanugageFilters;
+    }
+    
+    public void setSelLanugageFilters(String selLanugageFilters) {
+    	this.selLanugageFilters = selLanugageFilters;
+    }
+    
+    public List<String> getSelLanugages() {
+		return Arrays.asList((selLanugageFilters==null? "":selLanugageFilters).split(","));
+	}
+
+	public void setSelLanugages(List<String> selLanugages) {
+		String langList = selLanugages==null ? "" : selLanugages.toString();
+		if (selLanugages!=null && langList.length()>0)
+			langList = langList.substring(1, langList.length()-1);
+		this.selLanugageFilters = langList;
+	}
+
+	public String getSelDefaultLanugage() {
+		return selDefaultLanugage;
+	}
+
+	public void setSelDefaultLanugage(String selDefaultLanugage) {
+		this.selDefaultLanugage = selDefaultLanugage;
+	}
+
+	public String getFormatedUploadDate () {
         return dateFormat.format(getUploadDate());
     }
 

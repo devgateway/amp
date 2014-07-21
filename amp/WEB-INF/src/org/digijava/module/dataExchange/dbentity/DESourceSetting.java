@@ -380,8 +380,8 @@ public class DESourceSetting implements XmlWrappable{
                 String name = st.nextToken();
                 String imp = st.nextToken();
                 String upd = st.nextToken();
-                importFlds.put(name, new Boolean(imp));
-                updateFlds.put(name, new Boolean(upd));
+                importFlds.put(name.trim(), new Boolean(imp));
+                updateFlds.put(name.trim(), new Boolean(upd));
             }
         }
 

@@ -1,33 +1,30 @@
 package org.digijava.module.dataExchange.action;
 
-import com.sun.jersey.api.json.JSONConfigurated;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
-import net.sf.json.util.PropertyFilter;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.actions.DispatchAction;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.module.dataExchange.dbentity.*;
-import org.digijava.module.dataExchange.engine.DEImportBuilder;
-import org.digijava.module.dataExchange.engine.SourceBuilder;
-import org.digijava.module.dataExchange.form.ImportFormNew;
-import org.digijava.module.dataExchange.pojo.DEImportItem;
-import org.digijava.module.dataExchange.pojo.DEImportValidationEventHandler;
-import org.digijava.module.dataExchange.util.DataExchangeConstants;
-import org.digijava.module.dataExchange.util.DbUtil;
-import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
-import org.digijava.module.dataExchange.util.SourceSettingDAO;
-import org.digijava.module.dataExchange.utils.DEConstants;
-import org.digijava.module.dataExchange.utils.DataExchangeUtils;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivities;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivity;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiIdentifier;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.RecipientCountry;
-import org.hibernate.HibernateException;
-import org.xml.sax.SAXException;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,13 +32,55 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.*;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.actions.DispatchAction;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.dataExchange.dbentity.AmpDEUploadSession;
+import org.digijava.module.dataExchange.dbentity.DELogPerExecution;
+import org.digijava.module.dataExchange.dbentity.DELogPerItem;
+import org.digijava.module.dataExchange.dbentity.DEMappingFields;
+import org.digijava.module.dataExchange.dbentity.DESourceSetting;
+import org.digijava.module.dataExchange.dbentity.IatiCodeType;
+import org.digijava.module.dataExchange.engine.DEImportBuilder;
+import org.digijava.module.dataExchange.engine.SourceBuilder;
+import org.digijava.module.dataExchange.form.ImportFormNew;
+import org.digijava.module.dataExchange.iati.IatiRules;
+import org.digijava.module.dataExchange.iati.IatiVersion;
+import org.digijava.module.dataExchange.pojo.DEImportItem;
+import org.digijava.module.dataExchange.pojo.DEImportValidationEventHandler;
+import org.digijava.module.dataExchange.util.DataExchangeConstants.IatiCodeTypeEnum;
+import org.digijava.module.dataExchange.util.DbUtil;
+import org.digijava.module.dataExchange.util.IatiHelper;
+import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
+import org.digijava.module.dataExchange.utils.DEConstants;
+import org.digijava.module.dataExchange.utils.DataExchangeUtils;
+import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivities;
+import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivity;
+import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.RecipientCountry;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Created with IntelliJ IDEA.
@@ -51,13 +90,16 @@ import java.util.*;
  * To change this template use File | Settings | File Templates.
  */
 public class ImportActionNew extends DispatchAction {
+	private static final Logger logger = Logger.getLogger(ImportActionNew.class); 
+	
     public static final String IATI_LABELS_SORTED = "IATI_LABELS_SORTED";
 
     public static final int IATI_IMPORT_PAGE_UPLOAD = 0;
     public static final int IATI_IMPORT_PAGE_LOGS = 1;
     public static final int IATI_IMPORT_PAGE_MAPPING = 2;
     public static final int IATI_IMPORT_PAGE_FILTERS = 3;
-    public static final int IATI_IMPORT_PAGE_SESSIONS = 4;
+    public static final int IATI_IMPORT_LANG_FILTERS = 4;
+    public static final int IATI_IMPORT_PAGE_SESSIONS = 5;
 
     private static String countryCodeNullVal = "N/A";
 
@@ -109,6 +151,13 @@ public class ImportActionNew extends DispatchAction {
         InputStream is = new ByteArrayInputStream(fileSrc.getBytes("UTF-8"));
         IatiActivities xmlActs = fromXml(is, fromXmllog);
         Map<String, Integer> countryISOs = getCountrySetActCountFromActivities(xmlActs);
+        
+        //configure Language filters
+        String currentLanguage = TLSUtils.getEffectiveLangCode(); 
+        Map<String, String> languageISOs = getLanguages(fileSrc, currentLanguage);
+        myform.setLanguageList(languageISOs.entrySet());
+        myform.setSelLanguages(new String[]{currentLanguage});
+        myform.setDefaultLanguage(currentLanguage);
 
         /*
         int tmpLogId = 0;
@@ -157,15 +206,11 @@ public class ImportActionNew extends DispatchAction {
         return mapping.findForward("filters");
     }
 
-    private Map <IatiActivity, Set<DEMappingFields>> importAndGetImportedItemMap(DESourceSetting dess, InputStream is, HttpServletRequest request, List<DELogPerItem> logItems, String itemId) {
-        return getImportedItemMap(dess, is, request, logItems, false, itemId);
+    private Map <IatiActivity, Set<DEMappingFields>> getImportedItemMap(AmpDEUploadSession upSess, InputStream is, HttpServletRequest request, List<DELogPerItem> logItems, boolean ignoreSameAs) {
+        return getImportedItemMap(upSess, is, request, logItems, ignoreSameAs, null);
     }
 
-    private Map <IatiActivity, Set<DEMappingFields>> getImportedItemMap(DESourceSetting dess, InputStream is, HttpServletRequest request, List<DELogPerItem> logItems, boolean ignoreSameAs) {
-        return getImportedItemMap(dess, is, request, logItems, ignoreSameAs, null);
-    }
-
-    private Map <IatiActivity, Set<DEMappingFields>> getImportedItemMap(DESourceSetting dess, InputStream is, HttpServletRequest request, List<DELogPerItem> logItems, boolean ignoreSameAs, String itemId) {
+    private Map <IatiActivity, Set<DEMappingFields>> getImportedItemMap(AmpDEUploadSession upSess, InputStream is, HttpServletRequest request, List<DELogPerItem> logItems, boolean ignoreSameAs, String itemId) {
         Map <IatiActivity, Set<DEMappingFields>> items = null;
         DEImportBuilder deib = new DEImportBuilder();
         DEImportItem deii = new DEImportItem();
@@ -177,12 +222,13 @@ public class ImportActionNew extends DispatchAction {
             }
         };
 
-        desb.setDESourceSetting(dess);
+        desb.setDESourceSetting(upSess.getSettingsAssigned());
         desb.setRawStream(is);
         desb.setInputString("");
         desb.setPreviousInputStream("");
         deii.setSourceBuilder(desb);
         deib.setAmpImportItem(deii);
+        deib.setDefaultLanguage(upSess.getSelDefaultLanugage());
         if (itemId == null) {
             deib.checkIATIInputString("check", true);
         } else {
@@ -190,10 +236,10 @@ public class ImportActionNew extends DispatchAction {
         }
 
 
-        DELogPerExecution execLog 	= new DELogPerExecution(dess);
+        DELogPerExecution execLog 	= new DELogPerExecution(upSess.getSettingsAssigned());
         if(execLog.getLogItems() == null)
             execLog.setLogItems(new ArrayList<DELogPerItem>());
-        execLog.setDeSourceSetting(dess);
+        execLog.setDeSourceSetting(upSess.getSettingsAssigned());
 
         if (itemId == null) {
             deib.setIgnoreSameAsCheck(ignoreSameAs);
@@ -233,6 +279,26 @@ public class ImportActionNew extends DispatchAction {
             }
         }
         return retVal;
+    }
+    
+    private Map<String, String> getLanguages(String fileSrc, String currentIsoLanguage) {
+    	Map<String, String> langMap = new HashMap<String, String>();
+    	Pattern p  = Pattern.compile("xml:lang=\"[a-zA-Z]{2}\"");
+    	Matcher m = p.matcher(fileSrc);
+    	while(m.find()) {
+    		String isoLang = m.group();
+    		isoLang = isoLang.substring("xml:lang=\"".length(), isoLang.length()-1);
+    		if (!langMap.containsKey(isoLang))
+    			langMap.put(isoLang, getLanguageNameOrIso(isoLang));
+    	}
+    	if (!langMap.containsKey(currentIsoLanguage))
+			langMap.put(currentIsoLanguage, getLanguageNameOrIso(currentIsoLanguage));
+    	return langMap;
+    }
+    
+    private String getLanguageNameOrIso(String isoLang) {
+    	String codeName = IatiHelper.getIatiCodeName(IatiCodeTypeEnum.Language, isoLang);
+		return codeName==null ? isoLang :codeName;
     }
 
     private Map <String, Set<IatiActivity>> getCountryActivityMap (Map <IatiActivity, Set<DEMappingFields>> items) {
@@ -328,7 +394,7 @@ public class ImportActionNew extends DispatchAction {
 
         InputStream is = new ByteArrayInputStream(sess.getFileSrc().getBytes("UTF-8"));
 
-        Map <IatiActivity, Set<DEMappingFields>> items = getImportedItemMap(dess, is, request, logItems, false);
+        Map <IatiActivity, Set<DEMappingFields>> items = getImportedItemMap(sess, is, request, logItems, false);
         Map <String, Set<IatiActivity>> countryActMap = getCountryActivityMap (items);
 
         Set<String> selCountries = sess.getSelCountries();
@@ -421,7 +487,7 @@ public class ImportActionNew extends DispatchAction {
 	         selLogItem = delog;
 	         List<DELogPerItem> logItems = new ArrayList<DELogPerItem>();
 	         InputStream is = new ByteArrayInputStream(sess.getFileSrc().getBytes("UTF-8"));
-	         Map <IatiActivity, Set<DEMappingFields>> importAndGetImportedItemMap = getImportedItemMap(dess, is, request, logItems, false, String.valueOf(selLogItem.getId()));
+	         Map <IatiActivity, Set<DEMappingFields>> importAndGetImportedItemMap = getImportedItemMap(sess, is, request, logItems, false, String.valueOf(selLogItem.getId()));
 	
 	         //Update import date
 	         Date newDateTime = new Date();
@@ -466,7 +532,7 @@ public class ImportActionNew extends DispatchAction {
 
         InputStream is = new ByteArrayInputStream(sess.getFileSrc().getBytes("UTF-8"));
 
-        Map <IatiActivity, Set<DEMappingFields>> importAndGetImportedItemMap = getImportedItemMap(dess, is, request, logItems, false, String.valueOf(selLogItem.getId()));
+        Map <IatiActivity, Set<DEMappingFields>> importAndGetImportedItemMap = getImportedItemMap(sess, is, request, logItems, false, String.valueOf(selLogItem.getId()));
 
         //Update import date
         Date newDateTime = new Date();
@@ -495,6 +561,13 @@ public class ImportActionNew extends DispatchAction {
         myform.setPage(IATI_IMPORT_PAGE_FILTERS);
         return mapping.findForward("forward");
     }
+    
+    public ActionForward showLangFilters(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
+    	ImportFormNew myform = (ImportFormNew) form;
+    	myform.setPage(IATI_IMPORT_LANG_FILTERS);
+    	return mapping.findForward("forward");
+	}
 
     public ActionForward showMapping(ActionMapping mapping, ActionForm form,
                                   HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
@@ -504,16 +577,18 @@ public class ImportActionNew extends DispatchAction {
         Set<String> selCountries = new HashSet<String> (Arrays.asList(myform.getSelCountries()));
         upSess.setSelCountries(selCountries);
         AmpDEUploadSession sess = myform.getUpSess();
-
-
+        addLanguageFilters(sess, myform);
 
         //Modify XML on initial serialization (will not be able to change country filters anymore)
         String xmlSrc = null;
         if (upSess.getId() == null) {
+        	//getting IATI Activities
+        	DEImportValidationEventHandler fromXmllog = new DEImportValidationEventHandler();
+        	InputStream is = myform.getFile().getInputStream();
+            IatiActivities parsed = fromXml(is, fromXmllog);
+            
+            //applying country filter, if any
             if (myform.getCountryList().size() > 1) {
-                DEImportValidationEventHandler fromXmllog = new DEImportValidationEventHandler();
-                InputStream is = myform.getFile().getInputStream();
-                IatiActivities parsed = fromXml(is, fromXmllog);
                 Set<String> countryISOs = selCountries;
                 for (Iterator it = parsed.getIatiActivityOrAny().iterator(); it.hasNext();) {
                     Object tmp = it.next();
@@ -531,18 +606,20 @@ public class ImportActionNew extends DispatchAction {
 
                     if (!contains) it.remove();
                 }
-                DEImportValidationEventHandler toXmllog = new DEImportValidationEventHandler();
-                try {
-                    xmlSrc = toXml(parsed, toXmllog);
-                } catch (Exception ex) {
-                    int gg = 1;
-                }
-                sess.setFileSrc(xmlSrc);
-            } else {
-                xmlSrc = new String(myform.getFile().getFileData(), "UTF-8");
-                sess.setFileSrc(xmlSrc);
             }
-            //upSess.setFileSrc(modifiedXML);
+            //propagate parent language (or default language if root without lang) 
+            IatiHelper.setLangToAll(parsed.getIatiActivityOrAny(), myform.getDefaultLanguage());
+            
+            DEImportValidationEventHandler toXmllog = new DEImportValidationEventHandler();
+            try {
+                xmlSrc = toXml(parsed, toXmllog);
+            } catch (Exception ex) {
+                logger.error(ex.getMessage());
+            }
+            
+            //remove useless translations
+            xmlSrc = cleanupByLang(xmlSrc, myform);
+            sess.setFileSrc(xmlSrc);
         } else {
             xmlSrc = upSess.getFileSrc();
         }
@@ -553,7 +630,7 @@ public class ImportActionNew extends DispatchAction {
 
         InputStream is = new ByteArrayInputStream(xmlSrc.getBytes("UTF-8"));
 
-        Map <IatiActivity, Set<DEMappingFields>> items = getImportedItemMap(dess, is, request, logItems, true);
+        Map <IatiActivity, Set<DEMappingFields>> items = getImportedItemMap(sess, is, request, logItems, true);
 
         myform.setIatiImportedProjectMapFiltered(items);
 
@@ -614,15 +691,122 @@ public class ImportActionNew extends DispatchAction {
         myform.setGroupFldsByPath(groupFldsByPath);
         myform.setAmpClasses(ampClassSet);
 
-
-
-
-
-
         myform.setPage(IATI_IMPORT_PAGE_MAPPING);
         return mapping.findForward("forward");
     }
+    
+    private void addLanguageFilters(AmpDEUploadSession sess, ImportFormNew form) {
+    	sess.setSelDefaultLanugage(form.getDefaultLanguage());
+    	sess.setSelLanugages(Arrays.asList(form.getSelLanguages()));
+    }
 
+    /**
+     * Removes from XML definition elements with unsupported language or useless translations. <br>
+     * Useful translations like activity title, description, etc. are kept intact. <br>
+     * Note: useful translations are defined in {@link IatiRules}
+     * @param xml - the XML to update
+     * @param importForm - import form that stores language preferences
+     * @return updated XML
+     */
+    private String cleanupByLang(String xml, ImportFormNew importForm) {
+    	IatiVersion iatiVersion = IatiVersion.V_1_01; //TODO: should be detected from XML, part upcoming AMP-17873
+    	boolean regenerateXML = false;
+    	List<String> removedElementsSignature = new ArrayList<String>();
+    	//extract translations that must be completely excluded from processing
+    	List<String> notAllowedLangs = getNotAllowedLangs(importForm);
+    	
+    	//prepare XQuery strings
+    	String allowedMultilingual = ""; //query for list of elements with useful translations to be kept
+    	String or = "";
+    	for(String allowedElem: IatiRules.getMultilingualElements(iatiVersion)) {
+    		allowedMultilingual += or + "//" + allowedElem;
+    		or = " | ";
+    	}
+    	String langNodes = "//iati-activity//*[@lang]"; 		//query for all nodes with lang attribute
+    	//String noLangNodes = "//iati-activity//*[not(@lang)]"; 	//query for all nodes with no lang attribute
+    	String notAllowed = "//iati-activity//*["; 				//query for elements to be completely ignored
+    	or = "";
+    	for(String notAllowedLang : notAllowedLangs) {
+    		notAllowed += or + "@lang='" + notAllowedLang + "'";
+    		or = " or ";
+    	}
+    	notAllowed += "]"; 
+
+    	XPath xpath = XPathFactory.newInstance().newXPath();
+    	try {
+    		InputStream is = new ByteArrayInputStream(xml.getBytes("UTF-8"));
+    		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+    		Document document = builder.parse(is);
+    		XPathExpression expr = null;
+    		NodeList nodes = null;
+    		
+    		//removes translations to be ignored 
+    		if (notAllowedLangs.size()>0) {
+	    		expr = xpath.compile(notAllowed);
+				nodes = (NodeList) expr.evaluate(document, XPathConstants.NODESET);
+				regenerateXML = IatiHelper.removeNodes(nodes, removedElementsSignature);
+    		}
+			
+			/*
+			//store the list of nodes with no lang attribute 
+			expr = xpath.compile(noLangNodes);
+			NodeList noLangNodeList = (NodeList) expr.evaluate(document, XPathConstants.NODESET);
+			
+			//update to parent or default language
+			IatiHelper.setAttr(document, document, "xml:lang", importForm.getDefaultLanguage(), true, false);
+			*/
+			
+			//get allowed multilingual nodes
+			Set<Node> processed = new HashSet<Node>();
+			expr = xpath.compile(allowedMultilingual);
+			nodes = (NodeList) expr.evaluate(document, XPathConstants.NODESET);
+			for (int i=0; i<nodes.getLength(); i++)
+				processed.add(nodes.item(i)); //mark them as processed to not be touched during duplicate elements removal below
+			
+			//remove duplicate elements with useless translations
+			expr = xpath.compile(langNodes);
+			nodes = (NodeList) expr.evaluate(document, XPathConstants.NODESET);
+			regenerateXML = IatiHelper.removeUselessTranslations(nodes, importForm.getDefaultLanguage(), processed, removedElementsSignature) || regenerateXML;
+			
+			/*
+			//restore noLang
+			for (int i=0; i<noLangNodeList.getLength(); i++) {
+				IatiHelper.removeAttr(noLangNodeList.item(i), "xml:lang");
+			}
+			*/
+			logger.info("The following XML entries are removed based on language filters (selected languages = " + importForm.getSelLanguages().toString() 
+					+ ", default language = " + importForm.getDefaultLanguage() + "): " + removedElementsSignature.toString());
+			
+			if (regenerateXML) { //from altered document structure 
+				Transformer transformer = TransformerFactory.newInstance().newTransformer();
+				transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+				StringWriter sw = new StringWriter();
+				transformer.transform(new DOMSource(document), new StreamResult(sw));
+				xml = sw.toString();
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}     	
+    	return xml;
+    }
+    
+    private List<String> getNotAllowedLangs(ImportFormNew importForm) {
+    	List<String> notAllowedLangs = new ArrayList<String>();
+    	for (Map.Entry<String, String> entry : importForm.getLanguageList()) {
+    		boolean found = false;
+    		for (String allowed : importForm.getSelLanguages())
+    		{
+    			if (allowed.equals(entry.getKey())) {
+    				found = true;
+    				break;
+    			}
+    		}
+    		if (!found)
+    			notAllowedLangs.add(entry.getKey());
+    	}
+    	return notAllowedLangs;
+    }
+    
     public ActionForward getMappingObjects(ActionMapping mapping, ActionForm form,
                                      HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
         ImportFormNew myform = (ImportFormNew) form;
@@ -901,15 +1085,6 @@ public class ImportActionNew extends DispatchAction {
             upSess.setFileSrc(modifiedXML);
         }  */
 
-
-
-
-
-
-
-
-
-
         Set <DEMappingFields> forCreate = new HashSet<DEMappingFields>();
         Set <DEMappingFields> forUpdate = new HashSet<DEMappingFields>();
         Set <DEMappingFields> forDelete = new HashSet<DEMappingFields>();
@@ -932,10 +1107,6 @@ public class ImportActionNew extends DispatchAction {
                 }
             }
         }
-
-
-
-
 
         if (upSess.getId() != null && !upSess.getId().equals(0l)) {  //Update
             upSess = DbUtil.getAmpDEUploadSession(upSess.getId());
@@ -965,9 +1136,8 @@ public class ImportActionNew extends DispatchAction {
         }
 
         String[] selCountries = myform.getSelCountries();
-
         upSess.setSelCountries(new HashSet<String> (Arrays.asList(selCountries)));
-
+        addLanguageFilters(upSess, myform);
 
         if (!forDeleteIds.isEmpty()) DbUtil.deleteMappings(forDeleteIds);
 
@@ -990,8 +1160,6 @@ public class ImportActionNew extends DispatchAction {
         } else {
             return mapping.findForward("logs");
         }
-
-
     }
 
     private IatiActivities fromXml(InputStream is, DEImportValidationEventHandler log) throws SAXException, JAXBException {
@@ -1049,12 +1217,14 @@ public class ImportActionNew extends DispatchAction {
         
         request.setAttribute("isLoad", true);
 
-        Map <IatiActivity, Set<DEMappingFields>> items = getImportedItemMap(dess, is, request, null, true);
+        Map <IatiActivity, Set<DEMappingFields>> items = getImportedItemMap(sess, is, request, null, true);
         myform.setIatiImportedProjectMap(items);
 
         Set<String> countryISOs = sess.getSelCountries();
 
         myform.setSelCountries(countryISOs.toArray(new String[0]));
+        myform.setSelLanguages(sess.getSelLanugages().toArray(new String[sess.getSelLanugages().size()]));
+        myform.setDefaultLanguage(sess.getSelDefaultLanugage());
 
         Map <String, Set<IatiActivity>> countryActMap = getCountryActivityMap(items);
         myform.setCountryActMap(countryActMap);

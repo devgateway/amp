@@ -13,7 +13,8 @@
         <property name="uploadDate" column="upload_date" type="java.util.Date" />
         <property name="lastEditDate" column="last_edit" type="java.util.Date" />
         <property name="selCountryFilters" column="sel_country_filter" type="java.lang.String" />
-
+        <property name="selLanugageFilters" column="sel_language_filter" type="java.lang.String" />
+        <property name="selDefaultLanugage" column="sel_default_language" type="java.lang.String" />
 
         <many-to-one name="settingsAssigned" column="de_source_setting_id" lazy="proxy"
                      class="org.digijava.module.dataExchange.dbentity.DESourceSetting" cascade="none" />

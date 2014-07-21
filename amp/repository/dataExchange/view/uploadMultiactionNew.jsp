@@ -10,138 +10,11 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn"%>
 
 
-
-
+<link href="/repository/dataExchange/view/css/iati.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/repository/dataExchange/view/scripts/iatiImport.js"></script>
 
 
 <digi:instance property="importFormNew"/>
-<style type="text/css">
-<!--
-
-	#uploadBtn{
-	   position: relative;
-	   font-family: calibri;
-	   width: 90px;
-	   height:20px;
-	   padding: 10px;
-	   -webkit-border-radius: 5px;
-	   -moz-border-radius: 5px;
-	   border: 1px dashed #BBB; 
-	   text-align: center;
-	   background-color: #DDD;
-	   cursor:pointer;
-	   border: 1px dashed #BBB;
-	  }
-	td.defaultTab {
-		background-color:#f2f2f2;
-		border: 1px solid #b8b7b7;
-		color: #47608e;
-		width: 100px;
-		height: 30px;
-		text-align:center;
-    font-size: 11px;
-    font-weight: bold;
-	}
-	
-	td.inactiveTab {
-		background-color:#4c6b7f;
-		border: 1px solid #b8b7b7;
-		border-bottom: none;
-		color: white;
-		width: 100px;
-		height: 30px;
-		text-align:center;
-		cursor: pointer;
-    font-size: 11px;
-    font-weight: bold;
-	}
-	
-	td.disabledTab {
-		background-color:#8b8b8b;
-		border: 1px solid #b8b7b7;
-		border-bottom: none;
-		color: white;
-		width: 100px;
-		height: 30px;
-		text-align:center;
-    font-size: 11px;
-    font-weight: bold;
-	}
-	
-	a.tabLinks {
-		color: white;
-	}
-	
-	div#busyCover {
-		display:none;	
-	}
-	
-	div#mappingTableBusy {
-		background-color:black;
-		position:absolute;
-		opacity:0.2;
-		filter:alpha(opacity=20); /* For IE8 and earlier */
-	}
-	
-	img#busyImg {
-		position:absolute;
-	}
-	
-	span.breadcrambCurrent {
-		color:red;
-	}
-	
-	span.breadcrambOther {
-		color:black;
-	}
-	
-	div.wizardNav {
-		height:20px;
-		width:70px;
-		border: 1px solid #B8B7B7;
-		cursor:pointer;
-		vertical-align:middle;
-	};
-	
-	div.wizardBtn {
-		color:white;
-		background-color: #4b687a;
-		align:center;
-	}
-	
-	div.wizardBtn:hover {
-		color:white;
-		background-color: #6b8b9e;
-	}
-	
-	div.wizardBtn:active {
-		color:white;
-		background-color: #3d5768;
-	}
-	
-	div.wizardBtnDisabled {
-		color:#d4d4d4;
-		background-color: #a6a8a9;
-	}
-	
-	a.wizardLink {
-		color: white;
-    font-size: 12px;
-    font-weight:normal;
-    text-decoration:none;
-	}
-	
-	table.wizardTable {
-		border: 1px solid #b8b7b7;
-		background-color: #e0e0e0;
-    font-weight:normal;
-    text-decoration:none;
-
-	}
-
--->
-</style>
-	
 	<script language="javascript">
 	function getFile(){
 	        $("#upfile").click();
@@ -253,6 +126,13 @@
 								<span class="breadcrambOther"><digi:trn>Country Filter</digi:trn></span>
 							</logic:notEqual>
 							&raquo;
+							<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_LANG_FILTERS) %>">
+								<span class="breadcrambCurrent"><digi:trn>Language Filter</digi:trn></span>
+							</logic:equal>
+							<logic:notEqual name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_LANG_FILTERS) %>">
+								<span class="breadcrambOther"><digi:trn>Language Filter</digi:trn></span>
+							</logic:notEqual>
+							&raquo;
 							<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_MAPPING) %>">
 								<span class="breadcrambCurrent"><digi:trn>Mapping</digi:trn></span>
 							</logic:equal>
@@ -295,6 +175,21 @@
 									</td>
 								</logic:equal>
 								
+								<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_LANG_FILTERS) %>">
+									<td width="50" nowrap>
+										<div class="wizardNav wizardBtn">
+											<input type="hidden" value="/dataExchange/importActionNew.do?action=showFilters">
+											&laquo;&nbsp;<digi:trn>back</digi:trn>
+										</div>
+									</td>
+									<td width="50" nowrap>
+										<div id="next" class="wizardNav wizardBtn">
+											<input type="hidden" value="submit">
+											<digi:trn>next</digi:trn>&nbsp;&raquo;
+										</div>
+									</td>
+								</logic:equal>
+								
 							<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_MAPPING) %>">
 								<td width="50" nowrap>
 									<img id='mappingSaveDis' style="display:block;" src='/TEMPLATE/ampTemplate/images/save_dis.png'>
@@ -303,7 +198,7 @@
 								<c:if test="${empty curSessId}">
 									<td width="50" nowrap>
 										<div class="wizardNav wizardBtn">
-											<input type="hidden" value="/dataExchange/importActionNew.do?action=showFilters">
+											<input type="hidden" value="/dataExchange/importActionNew.do?action=showLangFilters">
 											&laquo;&nbsp;<digi:trn>back</digi:trn>
 										</div>
 									</td>
@@ -373,7 +268,7 @@
 											<legend><span class="legend_label"><digi:trn>Choose file</digi:trn></span></legend>
 <%-- 											<html:file property="file"   name="importFormNew" /> --%>
 											
-											 <div id="uploadBtn" onclick="getFile()"><digi:trn>Click to upload!</digi:trn></div>
+											 <div id="uploadBtn" class="wizardBtn" onclick="getFile()"><digi:trn>Click to upload!</digi:trn></div>
    											 	<div id="uploadLabel" style="display:inline;position:relative;top:-25px;left:60px;text-overflow:ellipsis;overflow:hidden; -o-text-overflow: ellipsis; white-space: nowrap;width:60px;"><digi:trn>No file chosen</digi:trn></div>
 									
 <!--    											 this is file input tag, so i hide it! -->
@@ -534,15 +429,16 @@
 					</logic:equal>
 					
 					<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_FILTERS) %>">
-						<digi:form action="/importActionNew.do?action=showMapping" method="post">
-									<table class="inside" width=980 border=0 cellpadding="0" cellspacing="0" style="margin:10px;">
+						<digi:form action="/importActionNew.do?action=showLangFilters" method="post">
+									<table class="inside wizardStepTable">
 										<tr>
-											<td colspan="6" align=center background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class=inside>
-											<b><digi:trn>Select Countries</digi:trn></b>
-										</td>
+											<td colspan="2" class="inside tableHeader">
+												<b><digi:trn>Select Countries</digi:trn></b>
+											</td>
+										</tr>
 										<logic:empty name="importFormNew" property="countryList">
 											<tr>
-												<td bgcolor="#FFFFFF" class="inside" colspan="6">
+												<td class="inside" colspan="2">
 													<div class="t_sm"><digi:trn>No Records Found</digi:trn> </div>
 												</td>
 											</tr>
@@ -550,13 +446,14 @@
 										<logic:notEmpty name="importFormNew" property="countryList">
 											<logic:iterate name="importFormNew" property="countryList" id="item" >
 												<tr>
-													<td bgcolor=#FFFFFF class=inside width="10">
-											  		<html:multibox name="importFormNew" property="selCountries">
-											   			<bean:write name="item" property="key"/> 
-											  		</html:multibox> 
-													</td><td bgcolor=#FFFFFF class=inside>
-											   		<bean:write name="item" property="value"/> 
-											  	</td>
+													<td class="inside selectOpt" >
+												  		<html:multibox name="importFormNew" property="selCountries">
+												   			<bean:write name="item" property="key"/> 
+												  		</html:multibox> 
+													</td>
+													<td class=inside>
+											   			<bean:write name="item" property="value"/> 
+											  		</td>
 											  </tr>
 											</logic:iterate>
 										</logic:notEmpty>
@@ -581,6 +478,48 @@
 						checkSelCountry();
 						
 					</script>
+					</logic:equal>
+					
+					
+					<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_LANG_FILTERS) %>">
+						<digi:form action="/importActionNew.do?action=showMapping" method="post" onsubmit="enableAllLang()">
+									<table class="inside wizardStepTable" >
+										<tr>
+											<td class="inside tableHeader">
+												<b><digi:trn>Default Language</digi:trn></b>
+											</td>
+											<td colspan="2" class="inside tableHeader">
+												<b><digi:trn>Select Languages</digi:trn></b>
+											</td>
+										</tr>
+										<logic:empty name="importFormNew" property="languageList">
+											<tr>
+												<td class="inside">
+													<span class="t_sm"><digi:trn>No Records Found</digi:trn></span>
+												</td>
+											</tr>
+										</logic:empty>
+										<logic:notEmpty name="importFormNew" property="languageList">
+											<logic:iterate name="importFormNew" property="languageList" id="item" >
+												<tr>
+													<td class="inside defaultLang">
+														<html:radio name="importFormNew" property="defaultLanguage" value="${item.key}" 
+																	onchange="changeSelLang(this)" ></html:radio>
+													</td>
+													<td class="inside selectOpt">
+											  			<html:multibox name="importFormNew" property="selLanguages" 
+											  							disabled="${item.key==importFormNew.defaultLanguage}" >
+											   				<bean:write name="item" property="key"/> 
+											  			</html:multibox> 
+													</td>
+													<td class="inside">
+											   			<bean:write name="item" property="value"/> 
+											  		</td>
+											  	</tr>
+											</logic:iterate>
+										</logic:notEmpty>
+									</table>
+						</digi:form>
 					</logic:equal>
 					
 					<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_MAPPING) %>">

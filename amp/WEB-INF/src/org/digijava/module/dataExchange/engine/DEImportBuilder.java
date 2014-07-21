@@ -20,11 +20,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.naming.directory.InvalidAttributeIdentifierException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBContext;
@@ -33,7 +33,6 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -59,6 +58,7 @@ import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -77,7 +77,15 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.*;
+import org.digijava.module.aim.util.ActivityVersionUtil;
+import org.digijava.module.aim.util.AuditLoggerUtil;
+import org.digijava.module.aim.util.ComponentsUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DynLocationManagerUtil;
+import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -127,7 +135,6 @@ import org.digijava.module.dataExchange.utils.DEConstants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivities;
 import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivity;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiIdentifier;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
@@ -153,6 +160,7 @@ public class DEImportBuilder {
 	private DEImportItem ampImportItem;
 	private ArrayList<String> changedIDs;
     private boolean ignoreSameAsCheck = false;
+    private String defaultLanguage = null;
 
     public boolean isIgnoreSameAsCheck() {
         return ignoreSameAsCheck;
@@ -2194,70 +2202,6 @@ public class DEImportBuilder {
 		
 	}
 	
-	private void processIATIFeed2(HttpServletRequest request, DELogPerExecution log, SourceSettingDAO iLog, String actionType, String[] itemsId) {
-		logger.info("SYSOUT: processing iati activities");
-		
-			IatiActivities iatiActs = this.getAmpImportItem().getIatiActivities();
-			int noAct = 0;
-			for (Iterator it = iatiActs.getIatiActivityOrAny().iterator(); it.hasNext();) {
-				Object obj =  it.next();
-				if( !(obj instanceof IatiActivity) ) continue;
-				IatiActivity iAct = (IatiActivity) obj;
-				String logAct = "";
-				String title = "";
-				String iatiID = "";
-				String ampID = null;
-				IatiActivityWorker iWorker= new IatiActivityWorker(iAct, logAct);
-				noAct ++;
-				ArrayList<AmpMappedField> activityLogs = null;
-				if( "check".compareTo(actionType) ==0 )
-					//CHECK content
-					{
-						System.out.println(".......Starting processing activity "+noAct);
-						activityLogs	=	iWorker.checkContent(noAct, this.getHierarchies());
-						System.out.println("..................End processing activity "+noAct);
-					}
-				else
-					if( "import".compareTo(actionType) ==0 )
-						//import
-						{
-							if(itemsId!=null && itemsId.length>0){
-								for(int i=0;i<itemsId.length;i++){
-									DELogPerItem deLogPerItem = DataExchangeUtils.getDELogPerItemById(new Long(itemsId[i]));
-								}
-							}
-							DELogPerItem deLogPerItem = DataExchangeUtils.getDELogPerItemById(new Long(itemsId[0]));
-							if( iWorker.existActivityByTitleIatiId(deLogPerItem.getName())){
-								Long grpId = new Long(deLogPerItem.getItemType());
-								AmpActivityVersion ampActivity = new AmpActivityVersion();
-
-                                AmpActivityVersion prevVersion = null;
-
-                                if (grpId > -0l) {
-                                    prevVersion = DataExchangeUtils.getAmpActivityGroupById(grpId).getAmpActivityLastVersion();
-                                }
-
-								activityLogs	=	iWorker.populateActivity(ampActivity, prevVersion, this.getDESourceSetting());
-								AmpTeam team = getAssignedWorkspace();
-								ampActivity.setApprovalStatus(getApprovalStatus());
-								DataExchangeUtils.saveActivity(request,grpId, ampActivity, team);
-								
-								//update the AmpId of the DEMappingField.
-								AmpMappedField checkedActivity = iWorker.checkActivity(iWorker.getTitle(),iWorker.getIatiID(), iWorker.getLang());
-								DEMappingFields item = checkedActivity.getItem();
-								item.setAmpId(ampActivity.getAmpActivityGroup().getAmpActivityGroupId());//getAmpActivityId());
-								item.setAmpValues(iWorker.toIATIValues(iWorker.getTitle(),iWorker.getIatiID()));
-								DataExchangeUtils.addObjectoToAmp(item);
-							}
-							else continue;
-						}
-				//process log
-				if(activityLogs == null) continue;
-				processLog(log, iLog, iWorker, activityLogs, actionType);
-			}
-			iLog.saveObject(log.getDeSourceSetting());
-	}
-
     public Map <IatiActivity, Set<DEMappingFields>> processIATIFeedReturnItems(HttpServletRequest request, DELogPerExecution log, SourceSettingDAO iLog, String actionType, String itemId) {
         Map <IatiActivity, Set<DEMappingFields>> retVal = new HashMap<IatiActivity, Set<DEMappingFields>>();
         processIATIFeed(request, log, iLog, actionType, itemId, retVal);
@@ -2271,17 +2215,22 @@ public class DEImportBuilder {
 
     private void processIATIFeed(HttpServletRequest request, DELogPerExecution log, SourceSettingDAO iLog, String actionType, String itemId, Map <IatiActivity, Set<DEMappingFields>> retVal) {
 		logger.info("SYSOUT: processing iati activities");
+
+		IatiActivities iatiActs = this.getAmpImportItem().getIatiActivities();
+		int noAct = 0;
 		
-			IatiActivities iatiActs = this.getAmpImportItem().getIatiActivities();
-			int noAct = 0;
         for (Object obj : iatiActs.getIatiActivityOrAny()) {
             if (!(obj instanceof IatiActivity)) continue;
             IatiActivity iAct = (IatiActivity) obj;
+            if (iAct.getLang()==null) {
+            	iAct.setLang(defaultLanguage);
+            }
             String logAct = "";
             String title = "";
             String iatiID = "";
             String ampID = null;
             IatiActivityWorker iWorker = new IatiActivityWorker(iAct, logAct);
+            iWorker.setLang(defaultLanguage);
 
             //Only need to get structure
             if (retVal != null) {
@@ -2340,18 +2289,20 @@ public class DEImportBuilder {
                         ampActivity = new AmpActivityVersion();
                     }
 
-
-                    activityLogs = iWorker.populateActivity(ampActivity, prevVersion, this.getDESourceSetting());
+                    List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
+                    activityLogs = iWorker.populateActivity(ampActivity, prevVersion, this.getDESourceSetting(), translations);
                     AmpTeam team = getAssignedWorkspace();
                     ampActivity.setApprovalStatus(getApprovalStatus());
-                    DataExchangeUtils.saveActivity(request, grpId, ampActivity, team);
-
+                    fixEmptyEditorFields(ampActivity, request);
+                    ampActivity = DataExchangeUtils.saveActivity(request, grpId, ampActivity, team, translations);
+                    LuceneUtil.addUpdateActivity(request.getServletContext().getRealPath("/"), prevVersion!=null, 
+                    		RequestUtils.getSite(request), Locale.forLanguageTag(defaultLanguage), ampActivity, prevVersion);
+                    
                     //update the AmpId of the DEMappingField.
                     AmpMappedField checkedActivity = iWorker.checkActivity(iWorker.getTitle(), iWorker.getIatiID(), iWorker.getLang());
                     DEMappingFields item = checkedActivity.getItem();
                     item.setAmpId(ampActivity.getAmpActivityGroup().getAmpActivityGroupId());//getAmpActivityId());
                     item.setAmpValues(iWorker.toIATIValues(iWorker.getTitle(), iWorker.getIatiID()));
-                    fixEmptyEditorFields(ampActivity, request);
                     DataExchangeUtils.addObjectoToAmp(item);
                     logger.info("..................End importing activity " + noAct);
                     //System.out.println("..................End importing activity "+noAct);
@@ -2703,4 +2654,11 @@ public class DEImportBuilder {
 		this.changedIDs = changedIDs;
 	}
 	
+	public String getDefaultLanguage() {
+		return this.defaultLanguage;
+	}
+	
+	public void setDefaultLanguage(String defaultLanguage) {
+		this.defaultLanguage = defaultLanguage;
+	}
 }

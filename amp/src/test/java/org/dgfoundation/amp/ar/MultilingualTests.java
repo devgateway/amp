@@ -282,7 +282,7 @@ public class MultilingualTests extends TestCase
 	{
 		Map<String, String> renames = new HashMap<String, String>() {{put("name", "translateReportName()");put("report_description", "translateReportDescription()");}};
 		String res = SQLUtils.rewriteQuery("amp_reports", "r", renames);
-		String corQuery = "r.amp_report_id, translateReportName() AS name, r.options, translateReportDescription() AS report_description, r.type, r.hide_activities, r.drilldown_tab, r.publicreport, r.workspacelinked, r.budget_exporter, r.allow_empty_fund_cols, r.ownerid, r.cv_activity_level, r.report_category, r.updated_date, r.published_date";
+		String corQuery = "r.amp_report_id, translateReportName() AS name, r.options, translateReportDescription() AS report_description, r.type, r.hide_activities, r.drilldown_tab, r.publicreport, r.workspacelinked, r.budget_exporter, r.allow_empty_fund_cols, r.ownerid, r.cv_activity_level, r.report_category, r.updated_date, r.published_date, r.also_show_pledges";
 		assertEquals(corQuery, res);
 		
 		TLSUtils.getThreadLocalInstance().setForcedLangCode("en");

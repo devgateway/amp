@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 
 /**
  * <b>IMMUTABLE</b>class holding the data necessary reading the i18n value of a property of a Translatable model<br />
@@ -122,10 +123,12 @@ public class InternationalizedPropertyDescription implements PropertyDescription
 		 * 2) then overwrite those with the English-translated ones
 		 * 3) then overwrite those with the current-locale-translated ones (if current locale != English)
 		 */
-		importValues(res, SQLUtils.rawRunQuery(connection, generateEnglishQuery(ids), null)); 
-		importValues(res, SQLUtils.rawRunQuery(connection, generateGeneralizedQuery(ids, "en"), null));
-		if (!locale.equals("en"))
-			importValues(res, SQLUtils.rawRunQuery(connection, generateGeneralizedQuery(ids, locale), null));
+		importValues(res, SQLUtils.rawRunQuery(connection, generateEnglishQuery(ids), null));
+		if (ContentTranslationUtil.multilingualIsEnabled()) {
+			importValues(res, SQLUtils.rawRunQuery(connection, generateGeneralizedQuery(ids, "en"), null));
+			if (!locale.equals("en"))
+				importValues(res, SQLUtils.rawRunQuery(connection, generateGeneralizedQuery(ids, locale), null));
+		}
 		return res;
 	}
 	

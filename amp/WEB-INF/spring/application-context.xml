@@ -71,9 +71,6 @@
 	
 	<http pattern="/visualization/showProjectsList.do**" security="none" />
 	
-	<http pattern="/aim/viewTeamReports.do*" security="none" />
-	<http pattern="/viewTeamReports.do*" security="none" />
-
 	<!-- move this to the reports module -->
 	<http pattern="/reportsPublicView.do**" security="none" />
 	<http pattern="/aim/default/reportsPublicView.do**" security="none" />
@@ -87,7 +84,7 @@
 	<http pattern="/rest/**" security="none" />
 	<http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />
 	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />
-	
+
 	<!-- match images -->
 	<http pattern="[^ \t\r\n\v\f]+\.(gif|jpg|jpeg|tiff|png|js|css|swf)(\?)?.*$"
 		request-matcher="regex" security="none" />
@@ -133,8 +130,16 @@
     <http pattern="/contentrepository/documentManager.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
-
-
+    
+    <http pattern="/viewTeamReports.do**"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    </http>
+    
+    <http pattern="/aim/viewTeamReports.do*"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    </http>
+    
+   
 
 	<!-- set the digestEntryPoint to set up the HTTP headers for digest -->
 	<http entry-point-ref="digestEntryPoint" realm="AMP-Realm">

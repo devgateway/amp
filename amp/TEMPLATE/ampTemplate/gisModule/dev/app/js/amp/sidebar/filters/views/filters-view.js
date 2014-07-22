@@ -90,14 +90,13 @@ module.exports = BaseControlView.extend({
     var view = null;
     switch (APIFilter.name){
       case 'Organizations':
-        view = new OrgFilterView({url:APIFilter.endpoint});
+        view = new OrgFilterView({modelValues:{url:APIFilter.endpoint}});
         break;
       case 'Years':
-        view = new YearsFilterView({url:APIFilter.endpoint});
+        view = new YearsFilterView({modelValues:{url:APIFilter.endpoint}});
         break;
       default:
-        view = new GenericFilterView();
-        view.model.set({url:APIFilter.endpoint, title:APIFilter.name});
+        view = new GenericFilterView({modelValues:{url:APIFilter.endpoint, title:APIFilter.name}});
     }
     return view;
   }

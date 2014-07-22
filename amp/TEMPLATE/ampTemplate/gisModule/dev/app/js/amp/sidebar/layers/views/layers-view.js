@@ -81,8 +81,7 @@ module.exports = BaseControlView.extend({
     this.$('.indicator-selector input:radio').change(function(){
       var modelId = $(this).val();
 
-      //dobule equal needed!!!
-      var indicator = self.indicators.find(function(model) { return model.get('id') == modelId; });
+      var indicator = self.indicators.find(function(model) { return model.get('id') === parseInt(modelId); });
       Backbone.trigger('MAP_LOAD_INDICATOR', indicator);
     });
   },
@@ -115,8 +114,7 @@ module.exports = BaseControlView.extend({
         self.$('.indicator-selector').show();
         var modelId = self.$('.indicator-selector input:radio:checked').val();
 
-      //dobule equal needed!!!
-        var indicator = self.indicators.find(function(model) { return model.get('id') == modelId; });
+        var indicator = self.indicators.find(function(model) { return model.get('id') === parseInt(modelId); });
         Backbone.trigger('MAP_LOAD_INDICATOR', indicator);
 
       } else {

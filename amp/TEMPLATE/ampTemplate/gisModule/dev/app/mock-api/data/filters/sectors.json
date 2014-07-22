@@ -1,0 +1,1296 @@
+[ {
+  "id" : 6236,
+  "code" : "110",
+  "name" : "110 - EDUCATION",
+  "sectors" : [ {
+    "id" : 6237,
+    "code" : "111",
+    "name" : "111 - Education, level unspecified",
+    "sectors" : [ {
+      "id" : 6241,
+      "code" : "11182",
+      "name" : "11182 - Educational research",
+      "sectors" : [ ]
+    }, {
+      "id" : 6240,
+      "code" : "11130",
+      "name" : "11130 - Teacher training",
+      "sectors" : [ ]
+    }, {
+      "id" : 6239,
+      "code" : "11120",
+      "name" : "11120 - Education facilities and training",
+      "sectors" : [ ]
+    }, {
+      "id" : 6238,
+      "code" : "11110",
+      "name" : "11110 - Education policy and administrative management",
+      "sectors" : [ ]
+    } ]
+  }, {
+    "id" : 6249,
+    "code" : "114",
+    "name" : "114 - POST-SECONDARY EDUCATION",
+    "sectors" : [ {
+      "id" : 6251,
+      "code" : "11430",
+      "name" : "11430 - Advanced technical and managerial training",
+      "sectors" : [ ]
+    }, {
+      "id" : 6250,
+      "code" : "11420",
+      "name" : "11420 - Higher education",
+      "sectors" : [ ]
+    } ]
+  }, {
+    "id" : 6246,
+    "code" : "113",
+    "name" : "113 - SECONDARY EDUCATION",
+    "sectors" : [ {
+      "id" : 6247,
+      "code" : "11320",
+      "name" : "11320 - Secondary education",
+      "sectors" : [ ]
+    }, {
+      "id" : 6248,
+      "code" : "11330",
+      "name" : "11330 - Vocational training",
+      "sectors" : [ ]
+    } ]
+  }, {
+    "id" : 6242,
+    "code" : "112",
+    "name" : "112 - BASIC EDUCATION",
+    "sectors" : [ {
+      "id" : 6243,
+      "code" : "11220",
+      "name" : "11220 - Primary education",
+      "sectors" : [ ]
+    }, {
+      "id" : 6245,
+      "code" : "11240",
+      "name" : "11240 - Early childhood education",
+      "sectors" : [ ]
+    }, {
+      "id" : 6244,
+      "code" : "11230",
+      "name" : "11230 - Basic life skills for youth and adults",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6252,
+  "code" : "120",
+  "name" : "120 - HEALTH",
+  "sectors" : [ {
+    "id" : 6253,
+    "code" : "121",
+    "name" : "121 - Health, general",
+    "sectors" : [ {
+      "id" : 6257,
+      "code" : "12191",
+      "name" : "12191 - Medical services",
+      "sectors" : [ ]
+    }, {
+      "id" : 6255,
+      "code" : "12181",
+      "name" : "12181 - Medical education/training",
+      "sectors" : [ ]
+    }, {
+      "id" : 6256,
+      "code" : "12182",
+      "name" : "12182 - Medical research",
+      "sectors" : [ ]
+    }, {
+      "id" : 6254,
+      "code" : "12110",
+      "name" : "12110 - Health policy and administrative management",
+      "sectors" : [ ]
+    } ]
+  }, {
+    "id" : 6258,
+    "code" : "122",
+    "name" : "122 - BASIC HEALTH",
+    "sectors" : [ {
+      "id" : 6266,
+      "code" : "12281",
+      "name" : "12281 - Health personnel development",
+      "sectors" : [ ]
+    }, {
+      "id" : 6262,
+      "code" : "12250",
+      "name" : "12250 - Infectious disease control",
+      "sectors" : [ ]
+    }, {
+      "id" : 6260,
+      "code" : "12230",
+      "name" : "12230 - Basic health infrastructure",
+      "sectors" : [ ]
+    }, {
+      "id" : 6265,
+      "code" : "12263",
+      "name" : "12263 - Tuberculosis control",
+      "sectors" : [ ]
+    }, {
+      "id" : 6261,
+      "code" : "12240",
+      "name" : "12240 - Basic nutrition",
+      "sectors" : [ ]
+    }, {
+      "id" : 6263,
+      "code" : "12261",
+      "name" : "12261 - Health education",
+      "sectors" : [ ]
+    }, {
+      "id" : 6264,
+      "code" : "12262",
+      "name" : "12262 - Malaria control",
+      "sectors" : [ ]
+    }, {
+      "id" : 6259,
+      "code" : "12220",
+      "name" : "12220 - Basic health care",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6267,
+  "code" : "130",
+  "name" : "130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH",
+  "sectors" : [ {
+    "id" : 6714,
+    "code" : "1309",
+    "name" : "1309 - Population policies/programmes and reproductive health (Sub-sector)",
+    "sectors" : [ {
+      "id" : 6271,
+      "code" : "13040",
+      "name" : "13040 - STD control including HIV/AIDS",
+      "sectors" : [ ]
+    }, {
+      "id" : 6270,
+      "code" : "13030",
+      "name" : "13030 - Family planning",
+      "sectors" : [ ]
+    }, {
+      "id" : 6272,
+      "code" : "13081",
+      "name" : "13081 - Personnel development for population and reproductive health",
+      "sectors" : [ ]
+    }, {
+      "id" : 6268,
+      "code" : "13010",
+      "name" : "13010 - Population policy and administrative management",
+      "sectors" : [ ]
+    }, {
+      "id" : 6269,
+      "code" : "13020",
+      "name" : "13020 - Reproductive health care",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6273,
+  "code" : "140",
+  "name" : "140 - WATER AND SANITATION",
+  "sectors" : [ {
+    "id" : 6715,
+    "code" : "1409",
+    "name" : "1409 - Water supply and sanitation (Sub-sector)",
+    "sectors" : [ {
+      "id" : 6280,
+      "code" : "14031",
+      "name" : "14031 - Basic drinking water supply",
+      "sectors" : [ ]
+    }, {
+      "id" : 6277,
+      "code" : "14021",
+      "name" : "14021 - Water supply - large systems",
+      "sectors" : [ ]
+    }, {
+      "id" : 6278,
+      "code" : "14022",
+      "name" : "14022 - Sanitation - large systems",
+      "sectors" : [ ]
+    }, {
+      "id" : 6279,
+      "code" : "14030",
+      "name" : "14030 - Basic drinking water supply and basic sanitation",
+      "sectors" : [ ]
+    }, {
+      "id" : 6275,
+      "code" : "14015",
+      "name" : "14015 - Water resources conservation (including data collection)",
+      "sectors" : [ ]
+    }, {
+      "id" : 6274,
+      "code" : "14010",
+      "name" : "14010 - Water sector policy and administrative management",
+      "sectors" : [ ]
+    }, {
+      "id" : 6284,
+      "code" : "14081",
+      "name" : "14081 - Education and training in water supply and sanitation",
+      "sectors" : [ ]
+    }, {
+      "id" : 6281,
+      "code" : "14032",
+      "name" : "14032 - Basic sanitation",
+      "sectors" : [ ]
+    }, {
+      "id" : 6282,
+      "code" : "14040",
+      "name" : "14040 - River basins’ development",
+      "sectors" : [ ]
+    }, {
+      "id" : 6283,
+      "code" : "14050",
+      "name" : "14050 - Waste management / disposal",
+      "sectors" : [ ]
+    }, {
+      "id" : 6276,
+      "code" : "14020",
+      "name" : "14020 - Water supply and sanitation - large systems",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6285,
+  "code" : "150",
+  "name" : "150 - GOVERNMENT AND CIVIL SOCIETY",
+  "sectors" : [ {
+    "id" : 6298,
+    "code" : "152",
+    "name" : "152 - CONFLICT PREVENTION AND RESOLUTION, PEACE AND SECURITY",
+    "sectors" : [ {
+      "id" : 6302,
+      "code" : "15240",
+      "name" : "15240 - Reintegration and SALW control",
+      "sectors" : [ ]
+    }, {
+      "id" : 6299,
+      "code" : "15210",
+      "name" : "15210 - Security system management and reform",
+      "sectors" : [ ]
+    }, {
+      "id" : 6304,
+      "code" : "15261",
+      "name" : "15261 - Child soldiers (Prevention and demobilisation)",
+      "sectors" : [ ]
+    }, {
+      "id" : 6303,
+      "code" : "15250",
+      "name" : "15250 - Removal of land mines and explosive remnants of war",
+      "sectors" : [ ]
+    }, {
+      "id" : 6300,
+      "code" : "15220",
+      "name" : "15220 - Civilian peace-building, conflict prevention and resolution",
+      "sectors" : [ ]
+    }, {
+      "id" : 6301,
+      "code" : "15230",
+      "name" : "15230 - Participation in international peacekeeping operations",
+      "sectors" : [ ]
+    } ]
+  }, {
+    "id" : 6286,
+    "code" : "151",
+    "name" : "151 - Government and civil society, general",
+    "sectors" : [ {
+      "id" : 6289,
+      "code" : "15112",
+      "name" : "15112 - Decentralisation and support to subnational government",
+      "sectors" : [ ]
+    }, {
+      "id" : 6292,
+      "code" : "15150",
+      "name" : "15150 - Democratic participation and civil society",
+      "sectors" : [ ]
+    }, {
+      "id" : 6291,
+      "code" : "15130",
+      "name" : "15130 - Legal and judicial development",
+      "sectors" : [ ]
+    }, {
+      "id" : 6295,
+      "code" : "15153",
+      "name" : "15153 - Media and free flow of information",
+      "sectors" : [ ]
+    }, {
+      "id" : 6288,
+      "code" : "15111",
+      "name" : "15111 - Public finance management",
+      "sectors" : [ ]
+    }, {
+      "id" : 6293,
+      "code" : "15151",
+      "name" : "15151 - Elections",
+      "sectors" : [ ]
+    }, {
+      "id" : 6290,
+      "code" : "15113",
+      "name" : "15113 - Anti-corruption organisations and institutions",
+      "sectors" : [ ]
+    }, {
+      "id" : 6296,
+      "code" : "15160",
+      "name" : "15160 - Human rights",
+      "sectors" : [ ]
+    }, {
+      "id" : 6297,
+      "code" : "15170",
+      "name" : "15170 - Women’s equality organisations and institutions",
+      "sectors" : [ ]
+    }, {
+      "id" : 6287,
+      "code" : "15110",
+      "name" : "15110 - Public sector policy and administrative management",
+      "sectors" : [ ]
+    }, {
+      "id" : 6294,
+      "code" : "15152",
+      "name" : "15152 - Legislatures and political parties",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6305,
+  "code" : "160",
+  "name" : "160 - OTHER SOCIAL INFRASTRUCTURE AND SERVICES",
+  "sectors" : [ {
+    "id" : 6498,
+    "code" : "1609",
+    "name" : "1609 - Other social infrastructure and services (Sub-Sector)",
+    "sectors" : [ {
+      "id" : 6311,
+      "code" : "16061",
+      "name" : "16061 - Culture and recreation",
+      "sectors" : [ ]
+    }, {
+      "id" : 6310,
+      "code" : "16050",
+      "name" : "16050 - Multisector aid for basic social services",
+      "sectors" : [ ]
+    }, {
+      "id" : 6306,
+      "code" : "16010",
+      "name" : "16010 - Social/ welfare services",
+      "sectors" : [ ]
+    }, {
+      "id" : 6309,
+      "code" : "16040",
+      "name" : "16040 - Low-cost housing",
+      "sectors" : [ ]
+    }, {
+      "id" : 6307,
+      "code" : "16020",
+      "name" : "16020 - Employment policy and administrative management",
+      "sectors" : [ ]
+    }, {
+      "id" : 6313,
+      "code" : "16063",
+      "name" : "16063 - Narcotics control",
+      "sectors" : [ ]
+    }, {
+      "id" : 6314,
+      "code" : "16064",
+      "name" : "16064 - Social mitigation of HIV/AIDS",
+      "sectors" : [ ]
+    }, {
+      "id" : 6308,
+      "code" : "16030",
+      "name" : "16030 - Housing policy and administrative management",
+      "sectors" : [ ]
+    }, {
+      "id" : 6312,
+      "code" : "16062",
+      "name" : "16062 - Statistical capacity building",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6315,
+  "code" : "210",
+  "name" : "210 - TRANSPORT AND STORAGE",
+  "sectors" : [ {
+    "id" : 6499,
+    "code" : "2109",
+    "name" : "2109 - Transport and storage (Sub-sector)",
+    "sectors" : [ {
+      "id" : 6321,
+      "code" : "21061",
+      "name" : "21061 - Storage",
+      "sectors" : [ ]
+    }, {
+      "id" : 6319,
+      "code" : "21040",
+      "name" : "21040 - Water transport",
+      "sectors" : [ ]
+    }, {
+      "id" : 6320,
+      "code" : "21050",
+      "name" : "21050 - Air transport",
+      "sectors" : [ ]
+    }, {
+      "id" : 6316,
+      "code" : "21010",
+      "name" : "21010 - Transport policy and administrative management",
+      "sectors" : [ ]
+    }, {
+      "id" : 6317,
+      "code" : "21020",
+      "name" : "21020 - Road transport",
+      "sectors" : [ ]
+    }, {
+      "id" : 6318,
+      "code" : "21030",
+      "name" : "21030 - Rail transport",
+      "sectors" : [ ]
+    }, {
+      "id" : 6322,
+      "code" : "21081",
+      "name" : "21081 - Education and training in transport and storage",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6323,
+  "code" : "220",
+  "name" : "220 - COMMUNICATION",
+  "sectors" : [ {
+    "id" : 6500,
+    "code" : "2209",
+    "name" : "2209 - Communications (Sub-sector)",
+    "sectors" : [ {
+      "id" : 6326,
+      "code" : "22030",
+      "name" : "22030 - Radio/television/print media",
+      "sectors" : [ ]
+    }, {
+      "id" : 6327,
+      "code" : "22040",
+      "name" : "22040 - Information and communication technology (ICT)",
+      "sectors" : [ ]
+    }, {
+      "id" : 6325,
+      "code" : "22020",
+      "name" : "22020 - Telecommunications",
+      "sectors" : [ ]
+    }, {
+      "id" : 6324,
+      "code" : "22010",
+      "name" : "22010 - Communications policy and administrative management",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6328,
+  "code" : "230",
+  "name" : "230 - ENERGY GENERATION AND SUPPLY",
+  "sectors" : [ {
+    "id" : 6501,
+    "code" : "2309",
+    "name" : "2309 - Energy generation and supply (Sub-sector)",
+    "sectors" : [ {
+      "id" : 6329,
+      "code" : "23010",
+      "name" : "23010 - Energy policy and administrative management",
+      "sectors" : [ ]
+    }, {
+      "id" : 6345,
+      "code" : "23082",
+      "name" : "23082 - Energy research",
+      "sectors" : [ ]
+    }, {
+      "id" : 6334,
+      "code" : "23061",
+      "name" : "23061 - Oil-fired power plants",
+      "sectors" : [ ]
+    }, {
+      "id" : 6333,
+      "code" : "23050",
+      "name" : "23050 - Gas distribution",
+      "sectors" : [ ]
+    }, {
+      "id" : 6338,
+      "code" : "23065",
+      "name" : "23065 - Hydro-electric power plants",
+      "sectors" : [ ]
+    }, {
+      "id" : 6330,
+      "code" : "23020",
+      "name" : "23020 - Power generation/non-renewable sources",
+      "sectors" : [ ]
+    }, {
+      "id" : 6331,
+      "code" : "23030",
+      "name" : "23030 - Power generation/renewable sources",
+      "sectors" : [ ]
+    }, {
+      "id" : 6340,
+      "code" : "23067",
+      "name" : "23067 - Solar energy",
+      "sectors" : [ ]
+    }, {
+      "id" : 6342,
+      "code" : "23069",
+      "name" : "23069 - Ocean power",
+      "sectors" : [ ]
+    }, {
+      "id" : 6339,
+      "code" : "23066",
+      "name" : "23066 - Geothermal energy",
+      "sectors" : [ ]
+    }, {
+      "id" : 6332,
+      "code" : "23040",
+      "name" : "23040 - Electrical transmission/ distribution",
+      "sectors" : [ ]
+    }, {
+      "id" : 6337,
+      "code" : "23064",
+      "name" : "23064 - Nuclear power plants",
+      "sectors" : [ ]
+    }, {
+      "id" : 6336,
+      "code" : "23063",
+      "name" : "23063 - Coal-fired power plants",
+      "sectors" : [ ]
+    }, {
+      "id" : 6335,
+      "code" : "23062",
+      "name" : "23062 - Gas-fired power plants",
+      "sectors" : [ ]
+    }, {
+      "id" : 6341,
+      "code" : "23068",
+      "name" : "23068 - Wind power",
+      "sectors" : [ ]
+    }, {
+      "id" : 6343,
+      "code" : "23070",
+      "name" : "23070 - Biomass",
+      "sectors" : [ ]
+    }, {
+      "id" : 6344,
+      "code" : "23081",
+      "name" : "23081 - Energy education/training",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6346,
+  "code" : "240",
+  "name" : "240 - BANKING AND FINANCIAL SERVICES",
+  "sectors" : [ {
+    "id" : 6502,
+    "code" : "2409",
+    "name" : "2409 - Banking and financial services (Sub-sector)",
+    "sectors" : [ {
+      "id" : 6348,
+      "code" : "24020",
+      "name" : "24020 - Monetary institutions",
+      "sectors" : [ ]
+    }, {
+      "id" : 6351,
+      "code" : "24081",
+      "name" : "24081 - Education/training in banking and financial services",
+      "sectors" : [ ]
+    }, {
+      "id" : 6349,
+      "code" : "24030",
+      "name" : "24030 - Formal sector financial intermediaries",
+      "sectors" : [ ]
+    }, {
+      "id" : 6347,
+      "code" : "24010",
+      "name" : "24010 - Financial policy and administrative management",
+      "sectors" : [ ]
+    }, {
+      "id" : 6350,
+      "code" : "24040",
+      "name" : "24040 - Informal/semi-formal financial intermediaries",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6352,
+  "code" : "250",
+  "name" : "250 - BUSINESS AND OTHER SERVICES",
+  "sectors" : [ {
+    "id" : 6503,
+    "code" : "2509",
+    "name" : "2509 - Business and other services (Sub-Sector)",
+    "sectors" : [ {
+      "id" : 6353,
+      "code" : "25010",
+      "name" : "25010 - Business support services and institutions",
+      "sectors" : [ ]
+    }, {
+      "id" : 6354,
+      "code" : "25020",
+      "name" : "25020 - Privatisation",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6355,
+  "code" : "311",
+  "name" : "311 - AGRICULTURE",
+  "sectors" : [ {
+    "id" : 6504,
+    "code" : "3119",
+    "name" : "3119 - Agriculture (Sub-sector)",
+    "sectors" : [ {
+      "id" : 6360,
+      "code" : "31150",
+      "name" : "31150 - Agricultural inputs",
+      "sectors" : [ ]
+    }, {
+      "id" : 6372,
+      "code" : "31194",
+      "name" : "31194 - Agricultural co-operatives",
+      "sectors" : [ ]
+    }, {
+      "id" : 6357,
+      "code" : "31120",
+      "name" : "31120 - Agricultural development",
+      "sectors" : [ ]
+    }, {
+      "id" : 6366,
+      "code" : "31166",
+      "name" : "31166 - Agricultural extension",
+      "sectors" : [ ]
+    }, {
+      "id" : 6361,
+      "code" : "31161",
+      "name" : "31161 - Food crop production",
+      "sectors" : [ ]
+    }, {
+      "id" : 6369,
+      "code" : "31191",
+      "name" : "31191 - Agricultural services",
+      "sectors" : [ ]
+    }, {
+      "id" : 6356,
+      "code" : "31110",
+      "name" : "31110 - Agricultural policy and administrative management",
+      "sectors" : [ ]
+    }, {
+      "id" : 6363,
+      "code" : "31163",
+      "name" : "31163 - Livestock",
+      "sectors" : [ ]
+    }, {
+      "id" : 6365,
+      "code" : "31165",
+      "name" : "31165 - Agricultural alternative development",
+      "sectors" : [ ]
+    }, {
+      "id" : 6370,
+      "code" : "31192",
+      "name" : "31192 - Plant and post-harvest protection and pest control",
+      "sectors" : [ ]
+    }, {
+      "id" : 6362,
+      "code" : "31162",
+      "name" : "31162 - Industrial crops/export crops",
+      "sectors" : [ ]
+    }, {
+      "id" : 6368,
+      "code" : "31182",
+      "name" : "31182 - Agricultural research",
+      "sectors" : [ ]
+    }, {
+      "id" : 6364,
+      "code" : "31164",
+      "name" : "31164 - Agrarian reform",
+      "sectors" : [ ]
+    }, {
+      "id" : 6373,
+      "code" : "31195",
+      "name" : "31195 - Livestock/veterinary services",
+      "sectors" : [ ]
+    }, {
+      "id" : 6367,
+      "code" : "31181",
+      "name" : "31181 - Agricultural education/training",
+      "sectors" : [ ]
+    }, {
+      "id" : 6371,
+      "code" : "31193",
+      "name" : "31193 - Agricultural financial services",
+      "sectors" : [ ]
+    }, {
+      "id" : 6359,
+      "code" : "31140",
+      "name" : "31140 - Agricultural water resources",
+      "sectors" : [ ]
+    }, {
+      "id" : 6358,
+      "code" : "31130",
+      "name" : "31130 - Agricultural land resources",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6374,
+  "code" : "312",
+  "name" : "312 - FORESTRY",
+  "sectors" : [ {
+    "id" : 6505,
+    "code" : "3129",
+    "name" : "3129 - Forestry (Sub-sector)",
+    "sectors" : [ {
+      "id" : 6380,
+      "code" : "31291",
+      "name" : "31291 - Forestry services",
+      "sectors" : [ ]
+    }, {
+      "id" : 6375,
+      "code" : "31210",
+      "name" : "31210 - Forestry policy and administrative management",
+      "sectors" : [ ]
+    }, {
+      "id" : 6376,
+      "code" : "31220",
+      "name" : "31220 - Forestry development",
+      "sectors" : [ ]
+    }, {
+      "id" : 6379,
+      "code" : "31282",
+      "name" : "31282 - Forestry research",
+      "sectors" : [ ]
+    }, {
+      "id" : 6378,
+      "code" : "31281",
+      "name" : "31281 - Forestry education/training",
+      "sectors" : [ ]
+    }, {
+      "id" : 6377,
+      "code" : "31261",
+      "name" : "31261 - Fuelwood/charcoal",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6381,
+  "code" : "313",
+  "name" : "313 - FISHING",
+  "sectors" : [ {
+    "id" : 6716,
+    "code" : "3139",
+    "name" : "3139 - Fishing (Sub-sector)",
+    "sectors" : [ {
+      "id" : 6386,
+      "code" : "31391",
+      "name" : "31391 - Fishery services",
+      "sectors" : [ ]
+    }, {
+      "id" : 6382,
+      "code" : "31310",
+      "name" : "31310 - Fishing policy and administrative management",
+      "sectors" : [ ]
+    }, {
+      "id" : 6383,
+      "code" : "31320",
+      "name" : "31320 - Fishery development",
+      "sectors" : [ ]
+    }, {
+      "id" : 6385,
+      "code" : "31382",
+      "name" : "31382 - Fishery research",
+      "sectors" : [ ]
+    }, {
+      "id" : 6384,
+      "code" : "31381",
+      "name" : "31381 - Fishery education/training",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6387,
+  "code" : "321",
+  "name" : "321 - INDUSTRY",
+  "sectors" : [ {
+    "id" : 6506,
+    "code" : "3219",
+    "name" : "3219 - Industry (Sub-sector)",
+    "sectors" : [ {
+      "id" : 6398,
+      "code" : "32167",
+      "name" : "32167 - Energy manufacturing",
+      "sectors" : [ ]
+    }, {
+      "id" : 6401,
+      "code" : "32170",
+      "name" : "32170 - Non-ferrous metal industries",
+      "sectors" : [ ]
+    }, {
+      "id" : 6400,
+      "code" : "32169",
+      "name" : "32169 - Basic metal industries",
+      "sectors" : [ ]
+    }, {
+      "id" : 6395,
+      "code" : "32164",
+      "name" : "32164 - Chemicals",
+      "sectors" : [ ]
+    }, {
+      "id" : 6396,
+      "code" : "32165",
+      "name" : "32165 - Fertilizer plants",
+      "sectors" : [ ]
+    }, {
+      "id" : 6394,
+      "code" : "32163",
+      "name" : "32163 - Textiles, leather and substitutes",
+      "sectors" : [ ]
+    }, {
+      "id" : 6402,
+      "code" : "32171",
+      "name" : "32171 - Engineering",
+      "sectors" : [ ]
+    }, {
+      "id" : 6390,
+      "code" : "32130",
+      "name" : "32130 - Small and medium-sized enterprises (SME) development",
+      "sectors" : [ ]
+    }, {
+      "id" : 6399,
+      "code" : "32168",
+      "name" : "32168 - Pharmaceutical production",
+      "sectors" : [ ]
+    }, {
+      "id" : 6392,
+      "code" : "32161",
+      "name" : "32161 - Agro-industries",
+      "sectors" : [ ]
+    }, {
+      "id" : 6404,
+      "code" : "32182",
+      "name" : "32182 - Technological research and development",
+      "sectors" : [ ]
+    }, {
+      "id" : 6403,
+      "code" : "32172",
+      "name" : "32172 - Transport equipment industry",
+      "sectors" : [ ]
+    }, {
+      "id" : 6388,
+      "code" : "32110",
+      "name" : "32110 - Industrial policy and administrative management",
+      "sectors" : [ ]
+    }, {
+      "id" : 6389,
+      "code" : "32120",
+      "name" : "32120 - Industrial development",
+      "sectors" : [ ]
+    }, {
+      "id" : 6397,
+      "code" : "32166",
+      "name" : "32166 - Cement/lime/plaster",
+      "sectors" : [ ]
+    }, {
+      "id" : 6391,
+      "code" : "32140",
+      "name" : "32140 - Cottage industries and handicraft",
+      "sectors" : [ ]
+    }, {
+      "id" : 6393,
+      "code" : "32162",
+      "name" : "32162 - Forest industries",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6405,
+  "code" : "322",
+  "name" : "322 - MINERAL RESOURCES AND MINING",
+  "sectors" : [ {
+    "id" : 6507,
+    "code" : "3229",
+    "name" : "3229 - Mineral resources and mining (Sub-sector)",
+    "sectors" : [ {
+      "id" : 6413,
+      "code" : "32266",
+      "name" : "32266 - Industrial minerals",
+      "sectors" : [ ]
+    }, {
+      "id" : 6407,
+      "code" : "32220",
+      "name" : "32220 - Mineral prospection and exploration",
+      "sectors" : [ ]
+    }, {
+      "id" : 6412,
+      "code" : "32265",
+      "name" : "32265 - Precious metals/materials",
+      "sectors" : [ ]
+    }, {
+      "id" : 6411,
+      "code" : "32264",
+      "name" : "32264 - Nonferrous metals",
+      "sectors" : [ ]
+    }, {
+      "id" : 6408,
+      "code" : "32261",
+      "name" : "32261 - Coal",
+      "sectors" : [ ]
+    }, {
+      "id" : 6410,
+      "code" : "32263",
+      "name" : "32263 - Ferrous metals",
+      "sectors" : [ ]
+    }, {
+      "id" : 6409,
+      "code" : "32262",
+      "name" : "32262 - Oil and gas",
+      "sectors" : [ ]
+    }, {
+      "id" : 6414,
+      "code" : "32267",
+      "name" : "32267 - Fertilizer minerals",
+      "sectors" : [ ]
+    }, {
+      "id" : 6406,
+      "code" : "32210",
+      "name" : "32210 - Mineral/mining policy and administrative management",
+      "sectors" : [ ]
+    }, {
+      "id" : 6415,
+      "code" : "32268",
+      "name" : "32268 - Offshore minerals",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6416,
+  "code" : "323",
+  "name" : "323 - CONSTRUCTION",
+  "sectors" : [ {
+    "id" : 6508,
+    "code" : "3239",
+    "name" : "3239 - Construction (Sub-sector)",
+    "sectors" : [ {
+      "id" : 6417,
+      "code" : "32310",
+      "name" : "32310 - Construction policy and administrative management",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6418,
+  "code" : "331",
+  "name" : "331 - TRADE POLICY AND REGULATIONS AND TRADE-RELATED ADJUSTMENT",
+  "sectors" : [ {
+    "id" : 6509,
+    "code" : "3319",
+    "name" : "3319 - Trade policy and regulations and trade-related adjustments (Sub-sector)",
+    "sectors" : [ {
+      "id" : 6420,
+      "code" : "33120",
+      "name" : "33120 - Trade facilitation",
+      "sectors" : [ ]
+    }, {
+      "id" : 6421,
+      "code" : "33130",
+      "name" : "33130 - Regional trade agreements (RTAs)",
+      "sectors" : [ ]
+    }, {
+      "id" : 6423,
+      "code" : "33150",
+      "name" : "33150 - Trade-related adjustment",
+      "sectors" : [ ]
+    }, {
+      "id" : 6422,
+      "code" : "33140",
+      "name" : "33140 - Multilateral trade negotiations",
+      "sectors" : [ ]
+    }, {
+      "id" : 6424,
+      "code" : "33181",
+      "name" : "33181 - Trade education/training",
+      "sectors" : [ ]
+    }, {
+      "id" : 6419,
+      "code" : "33110",
+      "name" : "33110 - Trade policy and administrative management",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6425,
+  "code" : "332",
+  "name" : "332 - TOURISM",
+  "sectors" : [ {
+    "id" : 6510,
+    "code" : "3329",
+    "name" : "3329 - Tourism (Sub-sector)",
+    "sectors" : [ {
+      "id" : 6426,
+      "code" : "33210",
+      "name" : "33210 - Tourism policy and administrative management",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6427,
+  "code" : "400",
+  "name" : "400 - MULTISECTOR/CROSS-CUTTING",
+  "sectors" : [ {
+    "id" : 6436,
+    "code" : "430",
+    "name" : "430 - OTHER MULTISECTOR",
+    "sectors" : [ {
+      "id" : 6437,
+      "code" : "43010",
+      "name" : "43010 - Multisector aid",
+      "sectors" : [ ]
+    }, {
+      "id" : 6438,
+      "code" : "43030",
+      "name" : "43030 - Urban development and management",
+      "sectors" : [ ]
+    }, {
+      "id" : 6439,
+      "code" : "43040",
+      "name" : "43040 - Rural development",
+      "sectors" : [ ]
+    }, {
+      "id" : 6441,
+      "code" : "43081",
+      "name" : "43081 - Multisector education/training",
+      "sectors" : [ ]
+    }, {
+      "id" : 6442,
+      "code" : "43082",
+      "name" : "43082 - Research/scientific institutions",
+      "sectors" : [ ]
+    }, {
+      "id" : 6440,
+      "code" : "43050",
+      "name" : "43050 - Non-agricultural alternative development",
+      "sectors" : [ ]
+    } ]
+  }, {
+    "id" : 6428,
+    "code" : "410",
+    "name" : "410 - General environmental protection",
+    "sectors" : [ {
+      "id" : 6430,
+      "code" : "41020",
+      "name" : "41020 - Biosphere protection",
+      "sectors" : [ ]
+    }, {
+      "id" : 6434,
+      "code" : "41081",
+      "name" : "41081 - Environmental education/ training",
+      "sectors" : [ ]
+    }, {
+      "id" : 6431,
+      "code" : "41030",
+      "name" : "41030 - Bio-diversity",
+      "sectors" : [ ]
+    }, {
+      "id" : 6435,
+      "code" : "41082",
+      "name" : "41082 - Environmental research",
+      "sectors" : [ ]
+    }, {
+      "id" : 6429,
+      "code" : "41010",
+      "name" : "41010 - Environmental policy and administrative management",
+      "sectors" : [ ]
+    }, {
+      "id" : 6433,
+      "code" : "41050",
+      "name" : "41050 - Flood prevention/control",
+      "sectors" : [ ]
+    }, {
+      "id" : 6432,
+      "code" : "41040",
+      "name" : "41040 - Site preservation",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6443,
+  "code" : "500",
+  "name" : "500 - COMMODITY AID AND GENERAL PROGRAMME ASSISTANCE",
+  "sectors" : [ {
+    "id" : 6448,
+    "code" : "530",
+    "name" : "530 - OTHER COMMODITY ASSISTANCE",
+    "sectors" : [ {
+      "id" : 6450,
+      "code" : "53040",
+      "name" : "53040 - Import support (commodities)",
+      "sectors" : [ ]
+    }, {
+      "id" : 6449,
+      "code" : "53030",
+      "name" : "53030 - Import support (capital goods)",
+      "sectors" : [ ]
+    } ]
+  }, {
+    "id" : 6444,
+    "code" : "510",
+    "name" : "510 - General budget support",
+    "sectors" : [ {
+      "id" : 6445,
+      "code" : "51010",
+      "name" : "51010 - General budget support",
+      "sectors" : [ ]
+    } ]
+  }, {
+    "id" : 6446,
+    "code" : "520",
+    "name" : "520 - DEVELOPMENTAL FOOD AID/FOOD SECURITY ASSISTANCE",
+    "sectors" : [ {
+      "id" : 6447,
+      "code" : "52010",
+      "name" : "52010 - Food aid/Food security programmes",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6451,
+  "code" : "600",
+  "name" : "600 - ACTION RELATING TO DEBT",
+  "sectors" : [ {
+    "id" : 6511,
+    "code" : "6009",
+    "name" : "6009 - Action relating to debt (Sub-sector)",
+    "sectors" : [ {
+      "id" : 6455,
+      "code" : "60040",
+      "name" : "60040 - Rescheduling and refinancing",
+      "sectors" : [ ]
+    }, {
+      "id" : 6452,
+      "code" : "60010",
+      "name" : "60010 - Action relating to debt",
+      "sectors" : [ ]
+    }, {
+      "id" : 6458,
+      "code" : "60063",
+      "name" : "60063 - Debt buy-back",
+      "sectors" : [ ]
+    }, {
+      "id" : 6457,
+      "code" : "60062",
+      "name" : "60062 - Other debt swap",
+      "sectors" : [ ]
+    }, {
+      "id" : 6456,
+      "code" : "60061",
+      "name" : "60061 - Debt for development swap",
+      "sectors" : [ ]
+    }, {
+      "id" : 6454,
+      "code" : "60030",
+      "name" : "60030 - Relief of multilateral debt",
+      "sectors" : [ ]
+    }, {
+      "id" : 6453,
+      "code" : "60020",
+      "name" : "60020 - Debt forgiveness",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6459,
+  "code" : "700",
+  "name" : "700 - HUMANITARIAN AID",
+  "sectors" : [ {
+    "id" : 6464,
+    "code" : "730",
+    "name" : "730 - RECONSTRUCTION RELIEF AND REHABILITATION",
+    "sectors" : [ {
+      "id" : 6465,
+      "code" : "73010",
+      "name" : "73010 - Reconstruction relief and rehabilitation",
+      "sectors" : [ ]
+    } ]
+  }, {
+    "id" : 6466,
+    "code" : "740",
+    "name" : "740 - DISASTER PREVENTION AND PREPAREDNESS",
+    "sectors" : [ {
+      "id" : 6467,
+      "code" : "74010",
+      "name" : "74010 - Disaster prevention and preparedness",
+      "sectors" : [ ]
+    } ]
+  }, {
+    "id" : 6460,
+    "code" : "720",
+    "name" : "720 - Emergency Response",
+    "sectors" : [ {
+      "id" : 6462,
+      "code" : "72040",
+      "name" : "72040 - Emergency food aid",
+      "sectors" : [ ]
+    }, {
+      "id" : 6463,
+      "code" : "72050",
+      "name" : "72050 - Relief co-ordination; protection and support services",
+      "sectors" : [ ]
+    }, {
+      "id" : 6461,
+      "code" : "72010",
+      "name" : "72010 - Material relief assistance and services",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6468,
+  "code" : "910",
+  "name" : "910 - ADMINISTRATIVE COSTS OF DONORS",
+  "sectors" : [ {
+    "id" : 6512,
+    "code" : "9109",
+    "name" : "9109 - Administrative costs of donors (Sub-sector)",
+    "sectors" : [ {
+      "id" : 6469,
+      "code" : "91010",
+      "name" : "91010 - Administrative costs",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6470,
+  "code" : "930",
+  "name" : "930 - REFUGEES IN DONOR COUNTRIES",
+  "sectors" : [ {
+    "id" : 6513,
+    "code" : "9309",
+    "name" : "9309 - Refugees in donor countries (Sub-sector)",
+    "sectors" : [ {
+      "id" : 6471,
+      "code" : "93010",
+      "name" : "93010 - Refugees in donor countries",
+      "sectors" : [ ]
+    } ]
+  } ]
+}, {
+  "id" : 6472,
+  "code" : "998",
+  "name" : "998 - UNALLOCATED/ UNSPECIFIED",
+  "sectors" : [ {
+    "id" : 6514,
+    "code" : "9989",
+    "name" : "9989 - Unallocated/Unspecified (Sub-Sector)",
+    "sectors" : [ {
+      "id" : 6473,
+      "code" : "99810",
+      "name" : "99810 - Sectors not specified",
+      "sectors" : [ ]
+    }, {
+      "id" : 6474,
+      "code" : "99820",
+      "name" : "99820 - Promotion of development awareness",
+      "sectors" : [ ]
+    } ]
+  } ]
+} ]

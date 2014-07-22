@@ -1,7 +1,7 @@
 [
   {
     "name": "Sectors",
-    "endpoint": "mock-api/sectors.json"
+    "endpoint": "/rest/gis/filters/sectors"
   },
   {
     "name": "Programs",

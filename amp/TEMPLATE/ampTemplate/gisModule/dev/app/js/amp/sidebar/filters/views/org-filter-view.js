@@ -11,10 +11,10 @@ module.exports = BaseFilterView.extend({
   className: BaseFilterView.className + ' filter-org',
   template: _.template(Template),
 
-  initialize: function() {
+  initialize: function(options) {
     BaseFilterView.prototype.initialize.apply(this);
 
-    this.model = new OrgFilterModel();
+    this.model = new OrgFilterModel(options.modelValues);
   },
 
   renderFilters: function () {

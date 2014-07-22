@@ -106,9 +106,7 @@
 </logic:notPresent>
 <logic:present name="bootstrap_insert" scope="request">
 	<digi:insert attribute="body"/>
-	<div class="footerText" >
-    	<digi:insert attribute="footer"/>
-    </div>
+	<!-- no footer in boostrap-iframe hacks  -->
 </logic:present>
 </body>
 </html>

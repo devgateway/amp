@@ -19,16 +19,21 @@
 		return parseInt(nr);
 	}
 	
-	function window_resized(){
-		var buffer = 50;
-		/*
+	function window_resized() {
+		var buffer = 20;		
 	    var height = Math.max(get_number($(window).height()), 
 	    		get_number(window.innerHeight)); //document.documentElement.clientHeight; // was: clientHeight
 	    height -= pageY(document.getElementById('bootstrap_iframe'))+ buffer ;
 	    height = (height < 0) ? 0 : height;
 	    //outerDocument.getElementById('bootstrap_iframe').style.height = (height - 0) + 'px';
-	    */
-	    
-	    var height = document.getElementById('bootstrap_iframe').contentWindow.document.body.scrollHeight + buffer;
-		$('#bootstrap_iframe').height(height);
+	    $('#bootstrap_iframe').height(height);
 	}
+	
+	$(document).ready(function(){
+		window_resized();
+	});
+
+	window.onresize = function(){
+ 	 	window_resized();
+	};
+	

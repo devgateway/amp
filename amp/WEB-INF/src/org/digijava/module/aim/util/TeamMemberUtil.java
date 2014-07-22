@@ -30,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpContact;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -37,8 +38,10 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
+import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
@@ -1665,5 +1668,29 @@ public class TeamMemberUtil {
 	public static boolean isHeadRole(AmpTeamMemberRoles role){
 		AmpTeamMemberRoles headRole = getAmpTeamHeadRole();
 		return (headRole==null || role==null) ? false: headRole.getAmpTeamMemRoleId().equals(role.getAmpTeamMemRoleId());
+	}
+	
+	public static ApplicationSettings populateApplicationSettings(AmpApplicationSettings ampAppSettings) {
+		 ApplicationSettings appSettings = new ApplicationSettings();
+       appSettings.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
+       appSettings.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage());
+       appSettings.setDefReportsPerPage((ampAppSettings.getDefaultReportsPerPage()==null)?0:ampAppSettings.getDefaultReportsPerPage());
+       if (ampAppSettings.getCurrency()!=null){
+       	appSettings.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
+       } else {
+       	String currCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
+       	AmpCurrency baseCurr = CurrencyUtil.getAmpcurrency(currCode);
+       	appSettings.setCurrencyId(baseCurr.getAmpCurrencyId());
+       }
+       	
+       
+       if (ampAppSettings.getFiscalCalendar() != null && ampAppSettings.getFiscalCalendar().getAmpFiscalCalId() != null) {
+       	appSettings.setFisCalId(ampAppSettings.getFiscalCalendar().getAmpFiscalCalId());
+       }	
+       appSettings.setLanguage(ampAppSettings.getLanguage());
+       appSettings.setDefaultAmpReport(ampAppSettings.getDefaultTeamReport());
+       appSettings.setValidation(ampAppSettings.getValidation());
+       return appSettings;
+
 	}
 }

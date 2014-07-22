@@ -79,7 +79,7 @@ module.exports = Backbone.View.extend({
     self.featureGroup = L.geoJson(self.features, {
       pointToLayer: function (feature, latlng) {
         return new L.CircleMarker(latlng, {
-            radius: 4,
+            radius: 5,
             fillColor: '#f70',
             color: '#000',
             weight: 1,
@@ -149,7 +149,7 @@ module.exports = Backbone.View.extend({
     }
   },
 
-  // Owen asked for the circles to shrink if we're zoomed out there are lots of points..
+  // Owen asked for the circles to shrink if we're zoomed out and there are lots of points..
   // To hacky to do cleanly for now...
   // _updateZoom: function(){
   //   if(this.featureGroup){

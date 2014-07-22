@@ -47,7 +47,6 @@ module.exports = Backbone.View.extend({
   },
 
   hideAllPopovers: function() {
-    console.log('hide all');
     this.popovers.popover('hide');
   },
 
@@ -57,7 +56,7 @@ module.exports = Backbone.View.extend({
     var opening = this;
     this.popovers.each(function(i, triggerer) {
       console.log('open ',opening);
-      console.log('trgigo ', triggerer);
+      console.log('triggerer ', triggerer);
       if (triggerer !== opening) {
         console.log('hide', i);
         $(triggerer).popover('hide');

@@ -1,0 +1,18 @@
+[
+  {
+    "admLevel": 0,
+    "label": "Country"
+  },
+  {
+    "admLevel": 1,
+    "label": "Region"
+  },
+  {
+    "admLevel": 2,
+    "label": "Zone"
+  },
+  {
+    "admLevel": 3,
+    "label": "District"
+  }
+]

@@ -8,6 +8,12 @@ var filters = fs.readFileSync(__dirname + '/data/filters.json', 'utf8');
 var indicators = fs.readFileSync(__dirname + '/data/indicators.json', 'utf8');
 var drcFood = fs.readFileSync(__dirname + '/data/drc-food.json', 'utf8');
 
+// adm boundaries:
+var adminLevels = fs.readFileSync(__dirname + '/data/adminLevels.json', 'utf8');
+var adm0 = fs.readFileSync(__dirname + '/data/adm0.json', 'utf8');
+var adm1 = fs.readFileSync(__dirname + '/data/adm1.json', 'utf8');
+var adm2 = fs.readFileSync(__dirname + '/data/adm2.json', 'utf8');
+
 var fakeServer = {
   server: null,
 
@@ -22,6 +28,11 @@ var fakeServer = {
     this._addPath(projectSites, '/rest/gis/project-sites');
     this._addPath(indicators, '/rest/gis/indicator-layers');
     this._addPath(drcFood, '/rest/gis/drc-food');
+
+    this._addPath(adminLevels, '/rest/gis/adminLevels');
+    this._addPath(adm0, '/rest/gis/adminBoundary/0');
+    this._addPath(adm1, '/rest/gis/adminBoundary/1');
+    this._addPath(adm2, '/rest/gis/adminBoundary/2');
 
 
   },

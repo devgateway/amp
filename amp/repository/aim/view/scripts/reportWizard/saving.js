@@ -233,6 +233,7 @@ SaveReportEngine.prototype.saveAndOrOpenReport	= function (openReport) {
 						"&publicReport="+getPublicReport() +
 						"&workspaceLinked="+getWorkspaceLinked() +
 						"&alsoShowPledges="+getAlsoShowPledges() +
+						//"&onlyShowProjectsRelatedPledges=" + getOnlyShowProjectsRelatedPledges() + 
 						"&hideActivities="+getHideActivities() +
 						"&useFilters="+getUseFilters()+
 						"&openReport=" + openReport + 

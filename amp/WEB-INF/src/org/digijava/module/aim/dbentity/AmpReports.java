@@ -66,6 +66,11 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	 * see AMP-17746
 	 */
 	private Boolean alsoShowPledges;
+	
+	/**
+	 * see AMP-17746
+	 */
+	private Boolean onlyShowProjectsRelatedPledges;
 
 	private Long type;
 

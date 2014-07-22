@@ -93,6 +93,11 @@ public class AmpARFilter extends PropertyListable {
 	public final static String DYNAMIC_FILTER_ADD_OP = "+";
 	public final static String DYNAMIC_FILTER_SUBTRACT_OP = "-";
 	
+	/**
+	 * see {@link #selectedActivityPledgesSettings}
+	 */
+	public final static int SELECTED_ACTIVITY_PLEDGES_SETTINGS_WITH_PLEDGES_ONLY = 1;
+	public final static int SELECTED_ACTIVITY_PLEDGES_SETTINGS_WITHOUT_PLEDGES_ONLY = 2;
 	
 	public final static String SDF_OUT_FORMAT_STRING = "yyyy-MM-dd";
 	public final static String SDF_IN_FORMAT_STRING = "dd/MM/yyyy";
@@ -407,6 +412,11 @@ public class AmpARFilter extends PropertyListable {
 	private String dynProposedApprovalFilterOperator;
 	private String dynProposedApprovalFilterXPeriod;
 
+	/**
+	 * whether to only show activities linked/not linked to pledges
+	 */
+	private Integer selectedActivityPledgesSettings = -1;
+
 	private Integer fromMonth;
 	private Integer yearFrom;
 	private Integer toMonth;
@@ -555,7 +565,12 @@ public class AmpARFilter extends PropertyListable {
 		if (filter != null && !filter.isEmpty())
 			generatedFilterQuery += " AND amp_activity_id IN (" + filter + ")";
 	}
-	
+
+	private void queryNotAppend(String filter) {
+		if (filter != null && !filter.isEmpty())
+			generatedFilterQuery += " AND amp_activity_id NOT IN (" + filter + ")";
+	}
+
 	private void pledgeQueryAppend(String filter) {
 		if (filter != null && !filter.isEmpty())
 			generatedFilterQuery += " AND id IN (" + filter + ")";
@@ -1554,6 +1569,16 @@ public class AmpARFilter extends PropertyListable {
 		queryAppend(generateProgramFilterSubquery(nationalPlanningObjectives, "National Plan Objective"));
 		queryAppend(generateProgramFilterSubquery(primaryPrograms, "Primary Program"));
 		queryAppend(generateProgramFilterSubquery(secondaryPrograms, "Secondary Program"));
+		
+		if (this.getSelectedActivityPledgesSettings() != null && this.getSelectedActivityPledgesSettings() > 0) {
+			String hasPledgeFilter = "SELECT DISTINCT(amp_activity_id) FROM v_related_pledges";
+			if (this.getSelectedActivityPledgesSettings().equals(SELECTED_ACTIVITY_PLEDGES_SETTINGS_WITH_PLEDGES_ONLY)) {
+				queryAppend(hasPledgeFilter);
+			}
+			else {
+				queryNotAppend(hasPledgeFilter);
+			}
+		}
 		
 		if (regions != null && regions.size() > 0)
 			queryAppend(REGION_FILTER);
@@ -3047,7 +3072,16 @@ public class AmpARFilter extends PropertyListable {
 	public void setGroupingsize(Integer groupingsize) {
 		this.groupingsize = groupingsize;
 	}
+	
+	public Integer getSelectedActivityPledgesSettings() {
+		return selectedActivityPledgesSettings;
+	}
 
+	public void setSelectedActivityPledgesSettings(Integer selectedActivityPledgesSettings) {
+		if (selectedActivityPledgesSettings != null)
+			this.selectedActivityPledgesSettings = selectedActivityPledgesSettings;
+	}
+	
 	/**
 	 * @return the customusegroupings
 	 */

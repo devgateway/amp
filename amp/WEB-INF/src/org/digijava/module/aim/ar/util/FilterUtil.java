@@ -177,7 +177,7 @@ public class FilterUtil {
 		form.setCurrency(filter.getUsedCurrency().getAmpCurrencyId());
 		form.setDefaultCurrency(AmpARFilter.getDefaultCurrency().getAmpCurrencyId());
 		form.setCalendar(filter.getCalendarType().getAmpFiscalCalId());
-
+		form.setSelectedActivityPledgesSettings(filter.getSelectedActivityPledgesSettings().toString());
 		
 		if ( filter.getLineMinRank() != null && filter.getLineMinRank().size() > 0) {
 	 		int i = 0;

@@ -66,8 +66,8 @@ public class TextCellXLS extends XLSExporter {
 	
 	@Override
 	public void generate() {
-		TextCell c=(TextCell) item;
-		HSSFCell cell=this.getRegularCell();
+		TextCell c = (TextCell) item;
+		HSSFCell cell = c.isDisquisedPledgeCellWhichShouldBeHighlited() ? this.getPledgeDisguisedAsAnActivityCell() : this.getRegularCell();
 		String indent = "";
 	
 		//PLEASE USE TRNTEXTCELL.JAVA IF YOU NEED A TRANSLATION-ENABLED CELL.

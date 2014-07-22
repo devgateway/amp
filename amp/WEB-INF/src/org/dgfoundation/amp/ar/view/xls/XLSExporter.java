@@ -21,6 +21,7 @@ import org.apache.poi.hssf.util.CellRangeAddress;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.hssf.util.Region;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.ReportData;
@@ -62,6 +63,7 @@ public abstract class XLSExporter extends Exporter {
 	protected HSSFCellStyle regularStyle = null;
 	protected HSSFCellStyle amountStyle = null;
 	protected HSSFCellStyle highlightedStyle = null;
+	protected HSSFCellStyle pledgeStyle = null;
 	protected HSSFCellStyle hierarchyLevel1Style = null;
 	protected HSSFCellStyle hierarchyOtherStyle = null;
 	protected HSSFCellStyle amountHierarchyLevel1Style = null;
@@ -84,6 +86,15 @@ public abstract class XLSExporter extends Exporter {
         regularStyle = null;
         amountStyle = null;
         highlightedStyle = null;
+        pledgeStyle = null;
+	}
+	
+	protected HSSFCell getPledgeDisguisedAsAnActivityCell(HSSFRow row) {
+		HSSFCell cell = row.createCell((int)colId.shortValue());
+//		HSSFCellStyle cellstyle = wb.createCellStyle();
+//		cellstyle.cloneStyleFrom(this.getAmountStyle());
+		cell.setCellStyle(this.getDisquisedPledgeStyle());
+		return cell;
 	}
 
 	protected HSSFCell getRegularCell(HSSFRow row) {
@@ -94,6 +105,14 @@ public abstract class XLSExporter extends Exporter {
 		return cell;
 	}
 
+	/**
+	 * gets a regular cell which has colour / style of a "pledge disguised as an activity" style
+	 * @return
+	 */
+	protected HSSFCell getPledgeDisguisedAsAnActivityCell() {
+		return getPledgeDisguisedAsAnActivityCell(getOrCreateRow());
+	}
+	
 	protected HSSFCell getRegularCell() {
 //		if (row == null)
 //			row = sheet.createRow(rowId.shortValue());
@@ -150,6 +169,28 @@ public abstract class XLSExporter extends Exporter {
 			amountStyle = cs;
 		}
 		return amountStyle;
+	}
+	
+	protected HSSFCellStyle getDisquisedPledgeStyle() {
+		if (pledgeStyle == null) {
+			HSSFCellStyle cs = wb.createCellStyle();
+			HSSFFont font= wb.createFont();
+			font.setFontName(HSSFFont.FONT_ARIAL);
+			font.setColor(HSSFColor.BROWN.index);
+			font.setBoldweight(Font.BOLDWEIGHT_BOLD);
+			cs.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+			cs.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+			cs.setBorderRight(HSSFCellStyle.BORDER_THIN);
+			cs.setBorderTop(HSSFCellStyle.BORDER_THIN);
+			HSSFDataFormat df = wb.createDataFormat();
+			cs.setDataFormat(df.getFormat("General"));
+		
+			cs.setFont(font);
+			cs.setWrapText(true);
+			cs.setVerticalAlignment(HSSFCellStyle.VERTICAL_TOP);
+			pledgeStyle = cs;
+		}
+		return pledgeStyle;
 	}
 	
 	protected HSSFCellStyle getAmountHierarchyLevel1Style() {

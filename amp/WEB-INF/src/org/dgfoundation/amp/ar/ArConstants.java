@@ -350,6 +350,7 @@ public final class ArConstants {
 	public static final String INITIALIZE_FILTER_FROM_DB	= "Initialize filter from db";
 
 	public static final String COLUMN_PROJECT_TITLE			 		= "Project Title";
+	public static final String COLUMN_AMP_ID			 			= "AMP ID";
 	public static final String COLUMN_CUMULATIVE_COMMITMENT			= "Cumulative Commitment";
 	public static final String COLUMN_CUMULATIVE_DISBURSEMENT		= "Cumulative Disbursement";
 	public static final String COLUMN_UNDISB_CUMULATIVE_BALANCE		= "Undisbursed Cumulative Balance";

@@ -47,7 +47,7 @@ public class MetaTextCell extends TextCell {
 	}
 	
 	public String getColour(){
-		if (this.getOwnerId() > AmpReportGenerator.PLEDGES_IDS_START && this.getColumn() != null && this.getColumn().getName().equals(ArConstants.COLUMN_PROJECT_TITLE))
+		if (this.isDisquisedPledgeCellWhichShouldBeHighlited())
 			return "#6A6A00"; // pledge disguising as an activity in a mixed report for AMP-17746
 		
 		String statusFlag = getStatusFlag() == null ? "" : getStatusFlag();

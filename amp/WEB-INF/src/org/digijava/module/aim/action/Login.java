@@ -241,24 +241,7 @@ public class Login extends Action {
 
 					// Get the team members application settings
 					AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(member.getAmpTeam().getAmpTeamId());
-					ApplicationSettings appSettings = new ApplicationSettings();
-					appSettings.setAppSettingsId(ampAppSettings
-							.getAmpAppSettingsId());
-					appSettings.setDefRecsPerPage(ampAppSettings
-							.getDefaultRecordsPerPage());
-					appSettings.setCurrencyId(ampAppSettings.getCurrency()
-							.getAmpCurrencyId());
-					appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()
-							.getAmpFiscalCalId());
-					appSettings.setValidation(ampAppSettings.getValidation());
-
-					//appSettings.setLanguage(ampAppSettings.getLanguage());
-
-					String langCode = UserUtils.getUserLangPreferences(
-							usr,RequestUtils.getSite(request)).getAlertsLanguage().getCode();
-
-					appSettings.setLanguage(langCode);
-					
+					ApplicationSettings appSettings = TeamMemberUtil.populateApplicationSettings(ampAppSettings);
 					session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
 					tm.setAppSettings(appSettings);
 					if (usr != null) {

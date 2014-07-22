@@ -73,7 +73,7 @@ var paths = {
     compiled: './app/test/compiled/compiled-test.js',
     compiledDest: './app/test/compiled/',
     entry: './app/test/entry.js',
-    scripts: './app/test/scripts/*.js'
+    scripts: './app/test/tests/*.js'
   }
 };
 
@@ -258,7 +258,7 @@ gulp.task('dev-index', ['bundle-mock'], function(){
 gulp.task('webtest', ['build-tests', 'serve-tests', 'reload-tests']);
 
 gulp.task('test', ['build-tests'], function() {
-  var q = qunit('./app/test/index.html', {}, function(code) {
+  var q = qunit('./app/test/index.html?noglobals=true', {}, function(code) {
     if (code !== 0) {
       g.util.log('Tests failed with code', code);
       process.exit(code);

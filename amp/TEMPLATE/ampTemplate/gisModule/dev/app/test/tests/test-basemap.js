@@ -1,9 +1,9 @@
-
+var Qunit = require('qunitjs');
 require('../../mock-api/fakeServer.js');
-
-
 var BasemapCollection = require('../../js/amp/map/collections/basemap-collection');
 
+
+QUnit.module('Basemap Collection');
 
 
 QUnit.test( 'Basemap Collection test', function( assert ) {

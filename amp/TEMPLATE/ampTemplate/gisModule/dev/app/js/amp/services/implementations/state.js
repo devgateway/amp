@@ -32,7 +32,7 @@ function State() {
 
     this.trigger('reset');
     if (changed) {
-      this.trigger('changed');
+      this.trigger('change');
     }
   };
 
@@ -53,7 +53,7 @@ function State() {
 
     this.trigger('load');
     if (changed) {
-      this.trigger('changed');
+      this.trigger('change');
     }
   };
 
@@ -64,32 +64,34 @@ function State() {
       var currentState = state.get();
       stateSnapshot[id] = _.clone(currentState);  // TODO: deep clone(!!)
     });
+    this.trigger('freeze', stateSnapshot);
     return stateSnapshot;
   };
 
 
-  this.register = function registerStateSaver(obj, id, options) {
+  this.register = function registerStateSaver(registrable, id, options) {
     if (id in this._stateRegistry) {
       throw new Error('Attempted registration of duplicate state id ' + id);
     }
 
     // register the state
     this._stateRegistry[id] = {
-      get: _.bind(options.get, obj),
-      set: _.bind(options.set, obj),
+      get: _.bind(options.get, registrable),
+      set: _.bind(options.set, registrable),
       empty: options.empty
     };
 
     // set to the currently loaded state, or its default empty state
     if (id in this._unclaimed) {
       console.info('restoring state for previously unregistered id ', id);
-      options.set(this._unclaimed[id]);
+      this._stateRegistry[id].set(this._unclaimed[id]);
       delete this._unclaimed[id];
     } else {
       this._stateRegistry[id].set(options.empty);
     }
+
+    this.trigger('register');
   };
 }
-
 
 module.exports = State;

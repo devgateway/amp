@@ -870,7 +870,7 @@ public class ReportsFilterPicker extends Action {
 			StopWatch.next("Filters", true, "end rendering regions");
 		}
 		if( FeaturesUtil.isVisibleField("Joint Criteria") && 
-				FeaturesUtil.isVisibleField("Government Approval Procedures") ) { 
+				FeaturesUtil.isVisibleField("Government Approval Procedures") ) {
 			Collection<HierarchyListableImplementation> children	= 
 				new ArrayList<HierarchyListableImplementation>();
 			HierarchyListableImplementation activitySettings	= new HierarchyListableImplementation();
@@ -892,12 +892,35 @@ public class ReportsFilterPicker extends Action {
 			
 			if (!filterForm.isPledgeReport()){
 				GroupingElement<HierarchyListableImplementation> activitySettingsElement	=
-					new GroupingElement<HierarchyListableImplementation>("Activity Display Settings", "filter_act_settings_div", 
-							activitySettings, "selectedActivitySettings");
+					new GroupingElement<HierarchyListableImplementation>("Activity Display Settings", "filter_act_settings_div", activitySettings, "selectedActivitySettings");
 				filterForm.getFinancingLocationElements().add(activitySettingsElement);
 			}
 		}
 		
+		if ((!filterForm.isPledgeReport()) && (FeaturesUtil.isVisibleField("Only show projects related to pledges"))) {
+			Collection<HierarchyListableImplementation> children	= 
+				new ArrayList<HierarchyListableImplementation>();
+			HierarchyListableImplementation activitySettings	= new HierarchyListableImplementation();
+			activitySettings.setLabel("All Activities");
+			activitySettings.setUniqueId("-1");
+			activitySettings.setChildren( children );
+			{
+				HierarchyListableImplementation jointCriteriaDO	= new HierarchyListableImplementation();
+				jointCriteriaDO.setLabel("Only show activities related to pledges");
+				jointCriteriaDO.setUniqueId(Integer.toString(AmpARFilter.SELECTED_ACTIVITY_PLEDGES_SETTINGS_WITH_PLEDGES_ONLY));
+				children.add(jointCriteriaDO);
+			}
+//			{
+//				HierarchyListableImplementation jointCriteriaDO	= new HierarchyListableImplementation();
+//				jointCriteriaDO.setLabel("Show activities not related to pledges");
+//				jointCriteriaDO.setUniqueId(Integer.toString(AmpARFilter.SELECTED_ACTIVITY_PLEDGES_SETTINGS_WITHOUT_PLEDGES_ONLY));
+//				children.add(jointCriteriaDO);
+//			}
+			
+			GroupingElement<HierarchyListableImplementation> activitySettingsElement	=
+				new GroupingElement<HierarchyListableImplementation>("Activities with pledges", "filter_act_pledge_settings_div", activitySettings, "selectedActivityPledgesSettings");
+			filterForm.getFinancingLocationElements().add(activitySettingsElement);
+		}
 		
 		if (true) { //Here needs to be a check to see if the field/feature is enabled
 			if (teamMember != null){
@@ -1383,6 +1406,8 @@ public class ReportsFilterPicker extends Action {
 		arf.setDynActivityFinalContractingFilterAmount(filterForm.getDynamicActivityFinalContractingFilter().getAmount());
 		arf.setDynActivityFinalContractingFilterOperator(filterForm.getDynamicActivityFinalContractingFilter().getOperator());
 		arf.setDynActivityFinalContractingFilterXPeriod(filterForm.getDynamicActivityFinalContractingFilter().getxPeriod());
+		
+		arf.setSelectedActivityPledgesSettings(Integer.parseInt(filterForm.getSelectedActivityPledgesSettings()));
 
 		int curYear = new GregorianCalendar().get(Calendar.YEAR);
 		

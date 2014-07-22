@@ -162,6 +162,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Long reporttype;
 	private Boolean workspaceonly;
 	private boolean showWorkspaceFilter;
+	private String selectedActivityPledgesSettings;
 	
 	public int getCalendarsSize() {
 		if (calendars == null) return 0;
@@ -1321,6 +1322,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public boolean isPledgeReport(){
 		Object attr = TLSUtils.getRequest().getSession().getAttribute(ReportsFilterPicker.PLEDGE_REPORT_REQUEST_ATTRIBUTE);
 		return (attr != null && attr.toString().equals("true")) || (this.reporttype != null && this.reporttype.longValue() == ArConstants.PLEDGES_TYPE);
+	}
+	
+	public String getSelectedActivityPledgesSettings() {
+		return this.selectedActivityPledgesSettings;
+	}
+	
+	public void setSelectedActivityPledgesSettings(String selectedActivityPledgesSettings) {
+		this.selectedActivityPledgesSettings = selectedActivityPledgesSettings;
 	}
 	
 	@java.lang.Override

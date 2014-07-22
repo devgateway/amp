@@ -38,6 +38,7 @@ public class ReportWizardForm extends ActionForm {
 	private Boolean publicReport = false;
 	private Boolean workspaceLinked = false;
 	private Boolean alsoShowPledges = false;
+	private Boolean onlyShowProjectsRelatedPledges = false;
 	private Boolean useFilters = false;
 	private Boolean allowEmptyFundingColumns = false;
 	private Boolean onePager = false;
@@ -308,7 +309,7 @@ public class ReportWizardForm extends ActionForm {
 	public void setAlsoShowPledges(Boolean alsoShowPledges) {
 		this.alsoShowPledges = alsoShowPledges == null ? false : alsoShowPledges;
 	}
-	
+
 	@java.lang.Override
 	@java.lang.SuppressWarnings("all")
 	public boolean equals(final java.lang.Object o) {

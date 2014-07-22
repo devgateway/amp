@@ -40,12 +40,12 @@ public class WorkspaceManager extends Action {
 		Collection<AmpTeam> workspaces = new ArrayList<AmpTeam>();
 		WorkspaceForm wsForm = (WorkspaceForm) form;
 
-        boolean reloadWorkspaces = false;
+
 		if(request.getParameter("reset")!=null && request.getParameter("reset").equalsIgnoreCase("true")){
+
 			wsForm.setKeyword(null);
 			wsForm.setWorkspaceType("all");
 			wsForm.setNumPerPage(-1);
-            reloadWorkspaces = true; 
 		}
                 if(session.getAttribute("fromPage")!=null){
                     wsForm.setCurrentPage((Integer)session.getAttribute("fromPage"));
@@ -76,11 +76,12 @@ public class WorkspaceManager extends Action {
 			wsForm.setPage(1);
 		}
 		
-		Collection<AmpTeam> ampWorkspaces = (Collection<AmpTeam>) session.getAttribute("ampWorkspaces");
-		if (ampWorkspaces == null || reloadWorkspaces) {
-			ampWorkspaces = TeamUtil.getAllTeams();
-			session.setAttribute("ampWorkspaces", ampWorkspaces);
-		}
+		
+		//all teams need to be refreshed after any change, AMP-17855
+		Collection<AmpTeam> ampWorkspaces = TeamUtil.getAllTeams();
+		ampWorkspaces = TeamUtil.getAllTeams();
+		session.setAttribute("ampWorkspaces", ampWorkspaces);
+
 
 		if(wsForm.getNumPerPage()!=-1) {
 			NUM_RECORDS =wsForm.getNumPerPage();

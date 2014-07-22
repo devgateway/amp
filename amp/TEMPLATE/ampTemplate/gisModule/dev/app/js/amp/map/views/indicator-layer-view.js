@@ -32,7 +32,6 @@ module.exports = Backbone.View.extend({
 
     if(indicator){
       this.visible = true;
-
       if (indicator.get('type') === 'arcgis'){
         this._loadArcGISLayer(indicator);
       } else if(indicator.get('type') === 'geoJSON'){

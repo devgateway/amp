@@ -4,8 +4,10 @@ var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
-var ADMClusterCollection = require('../collections/adm-cluster-collection');
 
+var APIBase = require('../../../libs/local/api-base');
+
+var ADMClusterCollection = require('../collections/adm-cluster-collection');
 var ADMTemplate = fs.readFileSync(__dirname + '/../templates/map-adm-template.html', 'utf8');
 
 
@@ -99,15 +101,22 @@ module.exports = Backbone.View.extend({
     this._removeBoundary();
 
     // TODO: use filterObj.adminLevel to choose right boundary.
-    // create boundry
-    this.boundaryLayer = L.esri.featureLayer(
-      'http://gis.devgateway.org/arcgis/rest/services/wbi/Africa/MapServer/13',
-      {
-        simplifyFactor: 0.9,
-        style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '3',}
-      }).addTo(self.map);
+    // TODO: harcoded path is bad.
+    if(filterObj.adminLevel){
+      $.get( APIBase.getAPIBase() + '/rest/gis/adminBoundary/'+ filterObj.adminLevel).then(function(geoJSON){
+
+        self.boundaryLayer = L.geoJson(geoJSON,
+          {
+            simplifyFactor: 0.9,
+            style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '3',}
+          }).addTo(self.map);
+      });
+    } else{
+      console.warn('missing admin level in Filter');
+    }
 
   },
+
 
   _removeBoundary: function(){
     if(this.boundaryLayer){

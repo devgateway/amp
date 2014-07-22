@@ -4,6 +4,8 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 
+var APIBase = require('../../../libs/local/api-base');
+
 var MapHeaderView = require('../views/map-header-view');
 var BasemapGalleryView = require('../views/basemap-gallery-view');
 var LegendView = require('../views/legend-view');
@@ -59,7 +61,23 @@ module.exports = Backbone.View.extend({
 
     this.$el.append(this.legendView.render().el);
 
+    this._renderCountryBoundary();
+
     return this;
+  },
+
+
+  _renderCountryBoundary: function(){
+    var self = this;
+    // TODO: harcoded path is bad.
+    $.get( APIBase.getAPIBase() + '/rest/gis/adminBoundary/0').then(function(geoJSON){
+
+      self.countryBoundary = L.geoJson(geoJSON,
+        {
+          simplifyFactor: 0.9,
+          style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '3',}
+        }).addTo(self.map);
+    });
   },
 
   _getMapView: function() {

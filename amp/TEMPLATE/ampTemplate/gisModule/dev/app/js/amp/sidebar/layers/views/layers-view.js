@@ -82,8 +82,26 @@ module.exports = BaseControlView.extend({
       var modelId = $(this).val();
 
       //dobule equal needed!!!
-      var indicator = self.indicators.find(function(model) { return model.get('id') === modelId; });
+      var indicator = self.indicators.find(function(model) { return model.get('id') == modelId; });
       Backbone.trigger('MAP_LOAD_INDICATOR', indicator);
+    });
+  },
+
+  _addPointsListener: function(){
+    var self = this;
+
+    // TODO: make this collapse, null behaviour generic so we can use it on both...
+    this.$('#point-layers').change(function(evt){
+      var pointsEnabled = $(this).prop('checked');
+      if(pointsEnabled){
+        self.$('.point-options').show();
+        var val = self.$('.point-options .amp-uses:input:radio:checked:visible').val();
+        Backbone.trigger('MAP_LOAD_POINT_LAYER', val);
+
+      } else {
+        Backbone.trigger('MAP_LOAD_POINT_LAYER', null);
+        self.$('.point-options').hide();
+      }
     });
   },
 
@@ -98,7 +116,7 @@ module.exports = BaseControlView.extend({
         var modelId = self.$('.indicator-selector input:radio:checked').val();
 
       //dobule equal needed!!!
-        var indicator = self.indicators.find(function(model) { return model.get('id') === modelId; });
+        var indicator = self.indicators.find(function(model) { return model.get('id') == modelId; });
         Backbone.trigger('MAP_LOAD_INDICATOR', indicator);
 
       } else {
@@ -108,21 +126,4 @@ module.exports = BaseControlView.extend({
     });
   },
 
-  _addPointsListener: function(){
-    var self = this;
-
-    // TODO: make this collapse, null behaviour generic so we can use it on both...
-    this.$('#point-layers').change(function(evt){
-      var pointsEnabled = $(this).prop('checked');
-      if(pointsEnabled){
-        self.$('.point-options').show();
-        var val = self.$('.point-options .amp-uses:input:radio:checked').val();
-        Backbone.trigger('MAP_LOAD_POINT_LAYER', val);
-
-      } else {
-        Backbone.trigger('MAP_LOAD_POINT_LAYER', null);
-        self.$('.point-options').hide();
-      }
-    });
-  },
 });

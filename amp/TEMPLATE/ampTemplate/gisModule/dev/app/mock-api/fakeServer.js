@@ -3,7 +3,7 @@ var sinon = require('../mock-api/sinon-min.js');
 
 var cluster = fs.readFileSync(__dirname + '/data/cluster.json', 'utf8');
 var clusterADM2 = fs.readFileSync(__dirname + '/data/clusterADM2.json', 'utf8');
-var projectSites = fs.readFileSync(__dirname + '/data/project-sites.json', 'utf8');
+var projectSites = fs.readFileSync(__dirname + '/data/project-sites.json', 'utf8');//  drc-points-2000.json
 var filters = fs.readFileSync(__dirname + '/data/filters.json', 'utf8');
 var indicators = fs.readFileSync(__dirname + '/data/indicators.json', 'utf8');
 var drcFood = fs.readFileSync(__dirname + '/data/drc-food.json', 'utf8');

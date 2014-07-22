@@ -1199,7 +1199,7 @@ public class EditActivity extends Action {
                 	location.setPercent( strPercentage.replace(",", ".") );
                 }
 
-                if ( setFullPercForDefaultCountry && actLoc.getLocationPercentage() == 0.0 &&
+                if ( setFullPercForDefaultCountry && (actLoc.getLocationPercentage() ==null ||actLoc.getLocationPercentage() == 0.0 )&&
                 		CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(loc.getLocation().getParentCategoryValue()) &&
                 				loc.getLocation().getId() != defCountry.getId() )
                 {

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpReportGenerator;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
@@ -332,6 +333,15 @@ public abstract class Cell <C extends Cell> extends Viewable implements RowIdent
 
 	public String getObjectId() {
 		return super.toString();
+	}
+	
+	public boolean isPledgeDisquisedAsActivity() {
+		return this.getOwnerId() > AmpReportGenerator.PLEDGES_IDS_START;
+	}
+	
+	public boolean isDisquisedPledgeCellWhichShouldBeHighlited() {
+		return this.isPledgeDisquisedAsActivity() && this.getColumn() != null && 
+				(this.getColumn().getName().equals(ArConstants.COLUMN_PROJECT_TITLE) || this.getColumn().getName().equals(ArConstants.COLUMN_AMP_ID));	
 	}
 	
 	@Override

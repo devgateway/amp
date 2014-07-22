@@ -6,6 +6,8 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
+import java.awt.Color;
+
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
@@ -45,9 +47,17 @@ public class TextCellPDF extends PDFExporter {
 	 */
 	@Override
 	public void generate() {
-		TextCell c=(TextCell) item;
-		PdfPCell pdfc=null;
-		pdfc = new PdfPCell(new Paragraph(ExportActivityToPDF.postprocessText(c.toString()),new Font(ExportActivityToPDF.basefont, 9, Font.NORMAL)));
+		TextCell c = (TextCell) item;
+		PdfPCell pdfc = null;
+		Font font;
+		if (c.isDisquisedPledgeCellWhichShouldBeHighlited()) {
+			font = new Font(ExportActivityToPDF.basefont, 9, Font.BOLD); 
+			font.setColor(106, 106, 0);
+		}
+		else { 
+			font = new Font(ExportActivityToPDF.basefont, 9, Font.NORMAL);
+		}
+		pdfc = new PdfPCell(new Paragraph(ExportActivityToPDF.postprocessText(c.toString()), font));
 		
 		table.addCell(pdfc);
 	}

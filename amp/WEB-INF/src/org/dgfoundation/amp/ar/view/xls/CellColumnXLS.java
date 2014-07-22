@@ -52,10 +52,11 @@ public class CellColumnXLS extends XLSExporter {
 	 * @see org.dgfoundation.amp.ar.Exporter#generate()
 	 */
 	public void generate() {
-		CellColumn col=(CellColumn) item;
-		 Cell c=col.getByOwner(ownerId);		 
-		 if(c!=null)
-		 c.invokeExporter(this);
+		CellColumn col = (CellColumn) item;
+		Cell c = col.getByOwner(ownerId);
+		 if (c != null) {
+			 c.invokeExporter(this);
+		 }
 		 else {
 			 HSSFCell cell=this.getRegularCell();
 			 if (col.getClass().toString().equalsIgnoreCase("class org.dgfoundation.amp.ar.TotalAmountColumn") && FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.REPORTS_EMPTY_VALUES_AS_ZERO_XLS)){

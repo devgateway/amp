@@ -13,5 +13,5 @@
 </style>
 
 <div id="iframe-container">
-	<iframe src="/aim/selectPledgeLocation.do?edit=false" onLoad="window_resized()" width="100%" seamless="seamless" frameborder="0" marginheight="0" marginwidth="0" id="bootstrap_iframe"></iframe>
+	<iframe src="/aim/selectPledgeLocation.do?edit=false" width="100%" seamless="seamless" frameborder="0" marginheight="0" marginwidth="0" id="bootstrap_iframe"></iframe>
 </div>

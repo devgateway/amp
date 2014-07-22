@@ -39,9 +39,8 @@ public class WorkspaceManager extends Action {
 		int NUM_RECORDS = 10000;
 		Collection<AmpTeam> workspaces = new ArrayList<AmpTeam>();
 		WorkspaceForm wsForm = (WorkspaceForm) form;
-
-        boolean reloadWorkspaces = true;
-		if(reloadWorkspaces || (request.getParameter("reset")!=null && request.getParameter("reset").equalsIgnoreCase("true"))){
+		boolean reloadWorkspaces = false;
+		if(request.getParameter("reset")!=null && request.getParameter("reset").equalsIgnoreCase("true")){
 			wsForm.setKeyword(null);
 			wsForm.setWorkspaceType("all");
 			wsForm.setNumPerPage(-1);

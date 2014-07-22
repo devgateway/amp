@@ -29,6 +29,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.gateperm.core.GatePermConst;
@@ -103,26 +104,7 @@ public class SelectTeam extends Action {
             session.setAttribute("teamLeadFlag", String.valueOf(tm.getTeamHead()));
             
             AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(member.getAmpTeam().getAmpTeamId());
-            ApplicationSettings appSettings = new ApplicationSettings();
-            appSettings.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
-            appSettings.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage());
-            appSettings.setDefReportsPerPage((ampAppSettings.getDefaultReportsPerPage()==null)?0:ampAppSettings.getDefaultReportsPerPage());
-            if (ampAppSettings.getCurrency()!=null){
-            	appSettings.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
-            } else {
-            	String currCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-            	AmpCurrency baseCurr = CurrencyUtil.getAmpcurrency(currCode);
-            	appSettings.setCurrencyId(baseCurr.getAmpCurrencyId());
-            }
-            	
-            
-            if (ampAppSettings.getFiscalCalendar() != null && ampAppSettings.getFiscalCalendar().getAmpFiscalCalId() != null) {
-            	appSettings.setFisCalId(ampAppSettings.getFiscalCalendar().getAmpFiscalCalId());
-            }	
-            appSettings.setLanguage(ampAppSettings.getLanguage());
-            appSettings.setDefaultAmpReport(ampAppSettings.getDefaultTeamReport());
-            appSettings.setValidation(ampAppSettings.getValidation());
-
+            ApplicationSettings appSettings = TeamMemberUtil.populateApplicationSettings (ampAppSettings);
             session.setAttribute(Constants.TEAM_ID, tm.getTeamId());
             tm.setAppSettings(appSettings);
             

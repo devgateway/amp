@@ -89,7 +89,9 @@ public class ShowMasterLayout
             if (uri.startsWith("/servlet/", customPartStart) ||
                 uri.startsWith("/services/", customPartStart) ||
                 uri.startsWith("/rest/", customPartStart)) {
-
+                //Still needs to be define the best way to call the populate
+                //commiting for testing purposes
+                TLSUtils.populate((HttpServletRequest)request);
                 chain.doFilter(request, response);
             }
             else {

@@ -19,6 +19,7 @@ import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
 import org.digijava.kernel.ampapi.postgis.TestPostGis;
 import org.digijava.kernel.ampapi.postgis.entity.Amp_Activity_Points;
 
+import com.fasterxml.jackson.databind.node.POJONode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
@@ -84,7 +85,17 @@ public class MockGis {
         PointGeoJSON pg = new PointGeoJSON();
         pg.coordinates.add(lat);
         pg.coordinates.add(lon);
-        pg.properties.put("activityid", new TextNode(activityid));
+        List <Long>ids=new ArrayList<>();
+        ids.add(123L);
+        ids.add(122L);
+        ids.add(121L);
+        ids.add(121L);
+        POJONode o=new POJONode(ids);
+        //pg.properties.put("activityid", new TextNode(activityid));
+        pg.properties.put("activityid", o);
+        
+        
+        
         fgj.geometry=pg;
         return fgj;
     }	

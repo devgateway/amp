@@ -1,11 +1,13 @@
 package org.digijava.kernel.ampapi.helpers.geojson;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import org.codehaus.jackson.JsonNode;
+
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.databind.JsonNode;
 
 /**
  * A Bean representation of a GeoJSON Feature.
@@ -30,6 +32,9 @@ public class FeatureGeoJSON extends GeoJSON
 	public Map<String,JsonNode> properties;
 	@JsonIgnore
 	public String id;
+	public FeatureGeoJSON(){
+	    this.properties =  new HashMap<String, JsonNode>();
+	}
 
 	public boolean isValid( PositionValidator validator )
 	{

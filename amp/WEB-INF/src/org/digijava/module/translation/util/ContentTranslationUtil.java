@@ -500,7 +500,7 @@ public class ContentTranslationUtil {
                             Session newSession = null;
                             try {
                                 HashMap<String, HashMap<String, AmpContentTranslation>> fieldMap;
-                                newSession = PersistenceManager.sf().openSession(conn);
+                                newSession = PersistenceManager.sf().withOptions().connection(conn).openSession();
                                 
                                 List<AmpContentTranslation> list;
                                 synchronized (sessionLock){

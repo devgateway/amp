@@ -41,7 +41,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.jdbc.Work;
 
 /**
  *
@@ -492,27 +491,48 @@ public class ContentTranslationUtil {
      * @return map between locale and the translation object
      */
     @SuppressWarnings("unchecked")
-    private static HashMap<String, AmpContentTranslation> loadCachedFieldTranslations(String objClass, Long objId, String fieldName){
-        HashMap<String, HashMap<String, AmpContentTranslation>> fieldMap = (HashMap<String, HashMap<String, AmpContentTranslation>>) cache.get(getCacheKey(objClass, objId));
-        if (fieldMap == null){
-            List<AmpContentTranslation> list;
-            synchronized (sessionLock){
-                //we use the current session to be sure we load the latest values
-                list = loadTranslations(PersistenceManager.getCurrentSession(), objClass, objId);
-            }
-            fieldMap = new HashMap<String, HashMap<String, AmpContentTranslation>>();
-            for (AmpContentTranslation t: list){
-                HashMap<String, AmpContentTranslation> localeMap = fieldMap.get(t.getFieldName());
-                if (localeMap == null){
-                    localeMap = new HashMap<String, AmpContentTranslation>();
-                    fieldMap.put(t.getFieldName(), localeMap);
-                }
-                localeMap.put(t.getLocale(), t);
-            }
-            cache.put(getCacheKey(objClass, objId), fieldMap);
+    private static HashMap<String, AmpContentTranslation> loadCachedFieldTranslations(final String objClass, final Long objId, String fieldName){
+         HashMap<String, HashMap<String, AmpContentTranslation>> outerfieldMap = (HashMap<String, HashMap<String, AmpContentTranslation>>) cache.get(getCacheKey(objClass, objId));
+        if (outerfieldMap== null){
+            PersistenceManager.getCurrentSession().doWork(
+                    new org.hibernate.jdbc.Work() {
+                        public void execute(Connection conn) throws SQLException {
+                            Session newSession = null;
+                            try {
+                                HashMap<String, HashMap<String, AmpContentTranslation>> fieldMap;
+                                newSession = PersistenceManager.sf().openSession(conn);
+                                
+                                List<AmpContentTranslation> list;
+                                synchronized (sessionLock){
+                                    //we use the current session to be sure we load the latest values
+                                    list = loadTranslations(newSession, objClass, objId);
+                                }
+                                fieldMap = new HashMap<String, HashMap<String, AmpContentTranslation>>();
+                                for (AmpContentTranslation t: list){
+                                    HashMap<String, AmpContentTranslation> localeMap = fieldMap.get(t.getFieldName());
+                                    if (localeMap == null){
+                                        localeMap = new HashMap<String, AmpContentTranslation>();
+                                        fieldMap.put(t.getFieldName(), localeMap);
+                                    }
+                                    localeMap.put(t.getLocale(), t);
+                                }
+                                cache.put(getCacheKey(objClass, objId), fieldMap);                                
+                            }
+                            catch(Exception ex){
+                                logger.error("Cannot retreive translations",ex);
+                            }
+                            finally{
+                                newSession.close();
+                            }
+                            
+                        }
+                    });
+            outerfieldMap=(HashMap<String, HashMap<String, AmpContentTranslation>>) cache.get(getCacheKey(objClass, objId));
         }
-
-        return fieldMap.get(fieldName);
+        if(outerfieldMap==null)
+            return null;
+        else
+            return outerfieldMap.get(fieldName);
     }
 
     /**

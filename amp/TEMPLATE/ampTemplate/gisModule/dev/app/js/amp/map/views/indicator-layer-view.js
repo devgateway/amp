@@ -28,6 +28,7 @@ module.exports = Backbone.View.extend({
     if(this.indicatorLayer){
       this.visible = false;
       this.map.removeLayer(this.indicatorLayer);
+      this.indicatorLayer.off('load');
     }
 
     if(indicator){
@@ -42,6 +43,7 @@ module.exports = Backbone.View.extend({
     }
   },
 
+  // TODO: need tof ind some way of doing equivalent to geoJSON .bringToBack(); 
   _loadArcGISLayer: function(indicator){
     var self = this;
     var property = indicator.get('property');
@@ -77,7 +79,7 @@ module.exports = Backbone.View.extend({
             maxValue = Math.max(maxValue, feature.properties[property]);         
             return {color: 'blue',  weight: 1,  opacity:0.4, fillOpacity:0.5 };
           }
-      }).addTo(self.map);
+      }).addTo(self.map).bringToBack();
       self._updateIndicatorStyles(maxValue, property);
     });
 

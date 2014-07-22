@@ -7,6 +7,7 @@ import java.util.List;
  *
  */
 public class FiltersParams {
+    
     private List<FilterParam> params;
 
     public FiltersParams() {

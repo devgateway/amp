@@ -47,7 +47,7 @@ public class GisEndPoints {
     @Path("/cluster")
     @Produces(MediaType.APPLICATION_JSON)
     public final FeatureCollectionGeoJSON getClusteredPointsByAdm(
-            @QueryParam("filter") @DefaultValue("{\"FiltersParams\":{\"params\":[{\"filterName\":\"adminLevel\",\"filterValue\":[\"Region\"]}]}}") final FiltersParams filter) {
+            @QueryParam("filter") @DefaultValue("{\"params\":[{\"filterName\":\"adminLevel\",\"filterValue\":[\"Region\"]}]}") final FiltersParams filter) {
         
         FilterUtil.validateOneFilters(filter, "adminLevel",1, 1,QueryUtil.getAdminLevels());
 

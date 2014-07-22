@@ -17,7 +17,8 @@ public class ObjectMapperContextResolver implements ContextResolver<ObjectMapper
     @Override
     public ObjectMapper getContext(final Class<?> type) {
         return new ObjectMapper()
-                .configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true)
-                .configure(SerializationFeature.INDENT_OUTPUT, true);
+                .configure(DeserializationFeature.UNWRAP_ROOT_VALUE, false)
+                .configure(SerializationFeature.INDENT_OUTPUT, true)
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 }

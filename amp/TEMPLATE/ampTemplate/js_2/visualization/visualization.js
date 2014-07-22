@@ -2274,19 +2274,20 @@ function getTitlesObjects(){
 	var objs = document.getElementsByTagName("span");
 	var arrReturnElements = new Array();
 	for ( var i = 0; i < objs.length; i++) {
+		var att = null;
 		if(navigator.appName == "Microsoft Internet Explorer") {
-			var att = objs[i].getAttribute("className");
+			att = objs[i].getAttribute("className");
 			// Newer versions of IE might behave like all the other browsers.
 			if(att == null) {
 				att = objs[i].getAttribute("class");
 			}
 		} else {
-			var att = objs[i].getAttribute("class");
+			att = objs[i].getAttribute("class");
 		}
 		if (att=="legend_label"){
 			arrReturnElements.push(objs[i]);
 		}
-	}
+	}	
 	return (arrReturnElements);
 }
 

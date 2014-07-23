@@ -70,25 +70,25 @@ public class SchemaManager extends FilterDynamicSchemaProcessor implements
 	}
 	
 	private String Translate(String shema){	
-			shema = shema.replaceAll("#Activity#", TranslatorWorker.translateText(MoConstants.ACTIVITY));
+			shema = shema.replaceAll("#Activity#", TranslatorWorker.translateText(MoConstants.OLD_ACTIVITY));
 			shema = shema.replaceAll("#Primary_Program#", TranslatorWorker.translateText(MoConstants.PRIMARY_PROGRAMS));
 			shema = shema.replaceAll("#Secondary_Program#", TranslatorWorker.translateText(MoConstants.SECONDARY_PROGRAMS));
 			shema = shema.replaceAll("#Primary_Sector#", TranslatorWorker.translateText(MoConstants.PRIMARY_SECTOR));
 			shema = shema.replaceAll("#Secondary_Sector#", TranslatorWorker.translateText(MoConstants.SECONDARY_SECTOR));
-			shema = shema.replaceAll("#Donor_Dates#", TranslatorWorker.translateText(MoConstants.DONOR_DATES));
-			shema = shema.replaceAll("#Regions#", TranslatorWorker.translateText(MoConstants.REGIONS));
-			shema = shema.replaceAll("#Status#", TranslatorWorker.translateText(MoConstants.STATUS));
-			shema = shema.replaceAll("#Donor#", TranslatorWorker.translateText(MoConstants.DONOR));
-			shema = shema.replaceAll("#Donor_Group#", TranslatorWorker.translateText(MoConstants.DONOR_GROUP));
-			shema = shema.replaceAll("#Donors_types#", TranslatorWorker.translateText(MoConstants.DONOR_TYPES));
-			shema = shema.replaceAll("#Financing_Instrument#", TranslatorWorker.translateText(MoConstants.FINANCING_INTRUMENT));
-			shema = shema.replaceAll("#Terms_of_Assistance#", TranslatorWorker.translateText(MoConstants.TERMS_OF_ASSISTANCE));
-			shema = shema.replaceAll("#National_Program#", TranslatorWorker.translateText(MoConstants.NATIONAL_PROGRAM));
-			shema = shema.replaceAll("#Sub-Sectors#", TranslatorWorker.translateText(MoConstants.SUB_SECTORS));
-			shema = shema.replaceAll("#Sub-Sub-Sectors#", TranslatorWorker.translateText(MoConstants.SUB_SUB_SECTORS));
-			shema = shema.replaceAll("#Secondary-Sub-Sectors#", TranslatorWorker.translateText(MoConstants.SEC_SUB_SECTORS));
-			shema = shema.replaceAll("#Secondary-Sub-Sub-Sectors#", TranslatorWorker.translateText(MoConstants.SEC_SUB_SUB_SECTORS));
-			shema = shema.replaceAll("#Currency#", TranslatorWorker.translateText(MoConstants.CURRENCY));
+			shema = shema.replaceAll("#Donor_Dates#", TranslatorWorker.translateText(MoConstants.OLD_DONOR_DATES));
+			shema = shema.replaceAll("#Regions#", TranslatorWorker.translateText(MoConstants.OLD_REGIONS));
+			shema = shema.replaceAll("#Status#", TranslatorWorker.translateText(MoConstants.OLD_STATUS));
+			shema = shema.replaceAll("#Donor#", TranslatorWorker.translateText(MoConstants.OLD_DONOR));
+			shema = shema.replaceAll("#Donor_Group#", TranslatorWorker.translateText(MoConstants.OLD_DONOR_GROUP));
+			shema = shema.replaceAll("#Donors_types#", TranslatorWorker.translateText(MoConstants.OLD_DONOR_TYPES));
+			shema = shema.replaceAll("#Financing_Instrument#", TranslatorWorker.translateText(MoConstants.OLD_FINANCING_INTRUMENT));
+			shema = shema.replaceAll("#Terms_of_Assistance#", TranslatorWorker.translateText(MoConstants.OLD_TERMS_OF_ASSISTANCE));
+			shema = shema.replaceAll("#National_Program#", TranslatorWorker.translateText(MoConstants.OLD_NATIONAL_PROGRAM));
+			shema = shema.replaceAll("#Sub-Sectors#", TranslatorWorker.translateText(MoConstants.OLD_SUB_SECTORS));
+			shema = shema.replaceAll("#Sub-Sub-Sectors#", TranslatorWorker.translateText(MoConstants.OLD_SUB_SUB_SECTORS));
+			shema = shema.replaceAll("#Secondary-Sub-Sectors#", TranslatorWorker.translateText(MoConstants.OLD_SEC_SUB_SECTORS));
+			shema = shema.replaceAll("#Secondary-Sub-Sub-Sectors#", TranslatorWorker.translateText(MoConstants.OLD_SEC_SUB_SUB_SECTORS));
+			shema = shema.replaceAll("#Currency#", TranslatorWorker.translateText(MoConstants.OLD_CURRENCY));
 			
 			shema = shema.replaceAll("#All_Activities#", TranslatorWorker.translateText(MoConstants.ALL_ACTIVITIES));
 			shema = shema.replaceAll("#All_Programs#", TranslatorWorker.translateText(MoConstants.ALL_PROGRAMS));

@@ -23,6 +23,7 @@ public final class MoConstants {
 	public static final String MEMBERS = "Members";
 	public static final String CURRENT_MEMBER = "CurrentMember";
 	public static final String FUNC_CROSS_JOIN = "CrossJoin";
+	public static final String FUNC_HIERARCHIZE = "Hierarchize";
 	public static final String FUNC_UNION = "Union";
 	public static final String FUNC_ORDER = "Order";
 	public static final String FUNC_FILTER = "Filter";
@@ -31,35 +32,60 @@ public final class MoConstants {
 	public static String AMP_ACTIVITY_TABLE = "(\\bamp_activity\\b)";
 	public static String CACHED_ACTIVITY_TABLE = "cached_amp_activity";
 	//Dimensions
-	public static String PRIMARY_SECTOR = "Primary Sector";
-	public static String SECONDARY_SECTOR = "Secondary Sector";
-	public static String ACTIVITY = "Activity";
-	public static String DONOR_DATES = "Donor Dates";
-	public static String REGIONS = "Regions";
-	public static String PRIMARY_PROGRAMS = "Primary Programs";
-	public static String SECONDARY_PROGRAMS = "Secondary Program";
-	public static String STATUS = "Status";
-	public static String DONOR = "Donor";
-	public static String DONOR_TYPES = "Donor Types";
-	public static String DONOR_GROUP = "Donor Group";
-	public static String FINANCING_INTRUMENT= "Financing Instrument";
-	public static  String TERMS_OF_ASSISTANCE= "Terms of Assistance";
-	public static  String NATIONAL_PROGRAM= "National Program";
-	public static String SECTORS= "Sectors";
-	public static String SUB_SECTORS = "Primary Sector Sub-Sectors";
-	public static String SUB_SUB_SECTORS = "Primary Sector Sub-Sub-Sectors";
-	public static String SEC_SUB_SECTORS = "Secondary Sector Sub-Sectors";
-	public static String SEC_SUB_SUB_SECTORS = "Secondary Sector Sub-Sub-Sectors";
-	public static String CURRENCY = "currency";
-	public static String YEAR = "Year";
-	//Attributes
-	public static final String ATTR_ACTIVITY_NAME = "Activity Title";
-	public static final String ATTR_ACTIVITY_AMP_ID = "AMP ID";
+	public static final String PROJECT_TITLE = "Project Title"; //TODO: why cube def is split into separate dimensions for this info coming from same physical table
+	public static final String APPROVAL_STATUS = "Approval Status"; //TODO: why cube def is split into separate dimensions for this info coming from same physical table
+	public static final String AMP_ID = "AMP ID"; //TODO: why cube def is split into separate dimensions for this info coming from same physical table
+	public static final String DATES = "Dates";
+	public static final String LOCATION = "Location"; 
+	public static final String PRIMARY_SECTOR = "Primary Sector";
+	public static final String SECONDARY_SECTOR = "Secondary Sector";
+	public static final String TETRIARY_SECTOR = "Tertiary Sector";
+	public static final String PRIMARY_PROGRAMS = "Primary Program";
+	public static final String SECONDARY_PROGRAMS = "Secondary Program";
+	public static final String TETRIARY_PROGRAMS = "Tertiary Program";
+	public static final String NATIONAL_OBJECTIVES = "National Objectives";
+	public static final String DONOR_AGENCY = "Donor Agency";
+	public static final String IMPLEMENTING_AGENCY = "Implementing Agency";
+	public static final String EXECUTING_AGENCY = "Executing Agency";
+	public static final String BENEFICIARY_AGENCY = "Beneficiary Agency";
+	public static final String RESPONSIBLE_AGENCY = "Responsible Organization";
+	
+	//Attributes/Levels
+	public static final String ATTR_PROJECT_TITLE = "Project Title";
+	public static final String ATTR_APPROVAL_STATUS = "Approval Status";
+	public static final String ATTR_AMP_ID = "AMP ID";
 	public static final String ATTR_STATUS_NAME = "Status";
+	public static final String ATTR_YEAR = "Year";
+	public static final String ATTR_QUARTER = "Quarter";
+	public static final String ATTR_MONTH = "Month";
+	public static final String ATTR_COUNTRY_NAME = "Country Name";
+	public static final String ATTR_REGION_NAME = "Region Name";
+	public static final String ATTR_ZONE_NAME = "Zone Name";
+	public static final String ATTR_DISTRICT_NAME = "District Name";
+	public static final String ATTR_LOCATION_NAME = "Location";
 	public static final String ATTR_PRIMARY_SECTOR_NAME = "Primary Sector";
+	public static final String ATTR_PRIMARY_SECTOR_SUB_SECTOR_NAME = "Primary Sector Sub-sector";
+	public static final String ATTR_PRIMARY_SECTOR_SUB_SUB_SECTOR_NAME = "Primary Sector Sub-sub-sector";
 	public static final String ATTR_SECONDARY_SECTOR_NAME = "Secondary Sector";
-	public static final String ATTR_DONOR_TYPES_NAME = "DonorType";
-	public static final String ATTR_DONOR_GROUP_NAME = "DonorGroup";
+	public static final String ATTR_SECONDARY_SUB_SECTOR_NAME = "Secondary Sector Sub-sector";
+	public static final String ATTR_SECONDARY_SUB_SUB_SECTOR_NAME = "Secondary Sector Sub-sub-sector";
+	public static final String ATTR_TETRIARY_SECTOR = "Tertiary Sector";
+	public static final String ATTR_TETRIARY_SUB_SECTOR = "Tertiary Sector Sub-sector";
+	public static final String ATTR_TETRIARY_SUB_SUB_SECTOR = "Tertiary Sector Sub-sub-sector";
+	public static final String ATTR_ORG_TYPE_NAME = "Organization Type Name";
+	public static final String ATTR_ORG_GROUP_NAME = "Organization Group Name";
+	public static final String ATTR_ORG_NAME = "Organization Name";
+	public static final String ATTR_ORG_CODE = "Organization Code";
+	public static final String ATTR_PROGRAM_LEVEL_0_NAME = "Program Level 0 Name";
+	public static final String ATTR_PROGRAM_LEVEL_1_NAME = "Program Level 1 Name";
+	public static final String ATTR_PROGRAM_LEVEL_2_NAME = "Program Level 2 Name";
+	public static final String ATTR_PROGRAM_LEVEL_3_NAME = "Program Level 3 Name";
+	public static final String ATTR_PROGRAM_LEVEL_4_NAME = "Program Level 4 Name";
+	public static final String ATTR_PROGRAM_LEVEL_5_NAME = "Program Level 5 Name";
+	public static final String ATTR_PROGRAM_LEVEL_6_NAME = "Program Level 6 Name";
+	public static final String ATTR_PROGRAM_LEVEL_7_NAME = "Program Level 7 Name";
+	public static final String ATTR_PROGRAM_LEVEL_8_NAME = "Program Level 8 Name";
+
 	
 	public static String ALL_PRIMARY_SECTOR = "All Primary Sectors";
 	public static String ALL_SECONDARY_SECTOR = "All Secondary Sectors";
@@ -125,4 +151,24 @@ public final class MoConstants {
 	public static String MONTH_NOVEMBER = "november";
 	public static String MONTH_DECEMBER = "december";
 
+	//OLD CUBE refs - to be removed
+	public static String OLD_ACTIVITY = "Activity";
+	public static String OLD_STATUS = "Status";
+	public static String OLD_DONOR = "Donor";
+	public static String OLD_DONOR_TYPES = "Donor Types";
+	public static String OLD_DONOR_GROUP = "Donor Group";
+	public static String OLD_REGIONS = "Regions";
+	public static String OLD_DONOR_DATES = "Donor Dates";
+	
+	public static String OLD_NATIONAL_PROGRAM= "National Program";
+	public static String OLD_SECTORS= "Sectors";
+	public static String OLD_SUB_SECTORS = "Primary Sector Sub-Sectors";
+	public static String OLD_SUB_SUB_SECTORS = "Primary Sector Sub-Sub-Sectors";
+	public static String OLD_SEC_SUB_SECTORS = "Secondary Sector Sub-Sectors";
+	public static String OLD_SEC_SUB_SUB_SECTORS = "Secondary Sector Sub-Sub-Sectors";
+	public static String OLD_CURRENCY = "currency";
+	public static String OLD_FINANCING_INTRUMENT= "Financing Instrument";
+	public static String OLD_TERMS_OF_ASSISTANCE= "Terms of Assistance";
+
+	
 }

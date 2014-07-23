@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.digijava.kernel.ampapi.mondrian.queries;
+package org.digijava.kernel.ampapi.mondrian;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -21,8 +21,8 @@ import org.hibernate.cfg.Configuration;
 public class AllQueryTests_amp210 {
 	private static final String CONNECTION_PATH = ""
 			+ "jdbc:mondrian:Jdbc=jdbc:postgresql:" + "//localhost:5432/amp_moldova_210" + ";"
-			+ "JdbcUser=postgre;"
-			+ "JdbcPassword=postgre;"
+			+ "JdbcUser=amp;"
+			+ "JdbcPassword=amp321;"
 			+ "JdbcDrivers=org.postgresql.Driver";
 
 	public static Test suite() {
@@ -30,7 +30,8 @@ public class AllQueryTests_amp210 {
 		setUp();
 		TestSuite suite = new TestSuite(AllQueryTests_amp210.class.getName());
 		//$JUnit-BEGIN$
-		suite.addTest(MDXTests.suite());
+		//suite.addTest(MDXTests.suite());
+		suite.addTest(MondrianReportsTests.suite());
 		//$JUnit-END$
 		return suite;
 	}

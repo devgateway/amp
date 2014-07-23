@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.digijava.kernel.ampapi.mondrian.queries;
+package org.digijava.kernel.ampapi.mondrian;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,10 +12,13 @@ import junit.framework.TestSuite;
 
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
+import org.digijava.kernel.ampapi.mondrian.queries.MDXGenerator;
+import org.digijava.kernel.ampapi.mondrian.queries.TestQueries;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXConfig;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXFilter;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.olap4j.CellSet;
 
 /**
@@ -32,9 +35,9 @@ public class MDXTests extends AmpTestCase {
 	{
 		TestSuite suite = new TestSuite(MDXTests.class.getName());
 		suite.addTest(new MDXTests("testNoTotals"));
-		suite.addTest(new MDXTests("testTotals"));
-		suite.addTest(new MDXTests("testDataSimpleFilter"));
-		suite.addTest(new MDXTests("testDataFilters"));
+		//suite.addTest(new MDXTests("testTotals"));
+		//suite.addTest(new MDXTests("testDataSimpleFilter"));
+		//suite.addTest(new MDXTests("testDataFilters"));
 		return suite;
 	}
 	
@@ -42,7 +45,7 @@ public class MDXTests extends AmpTestCase {
 		String expectedRes = "SELECT NON EMPTY CrossJoin([Donor Dates].[Year].Members, {Measures.[Actual Commitments]}) ON COLUMNS, "
 				+ "NON EMPTY CrossJoin([Donor Group].[DonorGroup].Members, [Donor Types].[DonorType].Members) ON ROWS  "
 				+ "FROM [Donor Funding]";
-		generateAndValidateMDX(getDefaultConfig("testNoTotals", false), expectedRes, false);
+		generateAndValidateMDX(getDefaultConfig("testNoTotals", false), expectedRes, true);
 	}
 	
 	public void testTotals() {
@@ -81,10 +84,11 @@ public class MDXTests extends AmpTestCase {
 	private MDXConfig getDefaultConfig(String testName, boolean doTotals) {
 		MDXConfig config = new MDXConfig();
 		config.setMdxName(testName);
-		config.addColumnAttribute(new MDXAttribute("Donor Dates", "Year"));
-		config.addColumnMeasure(new MDXMeasure("Actual Commitments"));
-		config.addRowAttribute(new MDXAttribute("Donor Group", "DonorGroup"));
-		config.addRowAttribute(new MDXAttribute("Donor Types", "DonorType"));
+		config.addColumnAttribute(new MDXAttribute(MoConstants.DATES, MoConstants.ATTR_YEAR));
+		config.addColumnMeasure(new MDXMeasure(MoConstants.ACTUAL_COMMITMENTS));
+		config.addColumnMeasure(new MDXMeasure(MoConstants.ACTUAL_DISBURSEMENTS));
+		config.addRowAttribute(new MDXAttribute(MoConstants.LOCATION, MoConstants.ATTR_COUNTRY_NAME));
+		config.addRowAttribute(new MDXAttribute(MoConstants.DONOR_AGENCY, MoConstants.ATTR_ORG_TYPE_NAME));
 		config.setAllowEmptyData(false);
 		config.setDoColumnsTotals(doTotals);
 		config.setDoRowTotals(doTotals);
@@ -100,7 +104,7 @@ public class MDXTests extends AmpTestCase {
 			mdx = generator.getAdvancedOlapQuery(config);
 			if (runQuery) {
 				set = generator.runQuery(mdx); 
-				TestQueries.printResult(set);
+				TestQueries.printResult2(set);
 			}
 		} catch (AmpApiException e) {
 			System.err.println(e.getMessage());

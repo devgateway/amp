@@ -32,13 +32,13 @@ public class MondrianMaping {
 	 */
 	private static final Map<NamedTypedEntity,MDXElement> entityMap = new HashMap<NamedTypedEntity, MDXElement>() {{
 			//Dimensions
-			put(new ReportColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.ATTR_ACTIVITY_NAME, MoConstants.ACTIVITY));
-			put(new ReportColumn(ColumnConstants.AMP_ID, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.ATTR_ACTIVITY_NAME, MoConstants.ACTIVITY));
-			put(new ReportColumn(ColumnConstants.STATUS, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.ATTR_STATUS_NAME, MoConstants.STATUS));
-			put(new ReportColumn(ColumnConstants.DONOR_TYPE, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.ATTR_DONOR_TYPES_NAME, MoConstants.DONOR_TYPES));
-			put(new ReportColumn(ColumnConstants.DONOR_GROUP, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.ATTR_DONOR_GROUP_NAME, MoConstants.DONOR_GROUP));
-			put(new ReportColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.ATTR_PRIMARY_SECTOR_NAME, MoConstants.PRIMARY_SECTOR));
-			put(new ReportColumn(ColumnConstants.SECONDARY_SECTOR, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.ATTR_SECONDARY_SECTOR_NAME, MoConstants.SECONDARY_SECTOR));
+			put(new ReportColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.PROJECT_TITLE, MoConstants.ATTR_PROJECT_TITLE));
+			put(new ReportColumn(ColumnConstants.AMP_ID, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.AMP_ID, MoConstants.ATTR_AMP_ID));
+			//put(new ReportColumn(ColumnConstants.STATUS, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.STATUS, MoConstants.ATTR_STATUS_NAME));
+			put(new ReportColumn(ColumnConstants.DONOR_TYPE, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.DONOR_AGENCY, MoConstants.ATTR_ORG_TYPE_NAME));
+			put(new ReportColumn(ColumnConstants.DONOR_GROUP, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.DONOR_AGENCY, MoConstants.ATTR_ORG_GROUP_NAME));
+			put(new ReportColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.PRIMARY_SECTOR, MoConstants.ATTR_PRIMARY_SECTOR_NAME));
+			put(new ReportColumn(ColumnConstants.SECONDARY_SECTOR, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.SECONDARY_SECTOR, MoConstants.ATTR_SECONDARY_SECTOR_NAME));
 			//TODO: review/complete mappings based on Mondrian Schema
 			
 			//Measures - Entity type - All

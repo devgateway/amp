@@ -9,7 +9,7 @@
   },
   {
     "name": "Organizations",
-    "endpoint": "mock-api/organizations.json"
+    "endpoint": "/rest/gis/filters/orgs"
   },
   {
     "name": "Years",

@@ -10,6 +10,7 @@ var drcFood = fs.readFileSync(__dirname + '/data/drc-food.json', 'utf8');
 // filters
 var filters = fs.readFileSync(__dirname + '/data/filters.json', 'utf8');
 var sectors = fs.readFileSync(__dirname + '/data/filters/sectors.json', 'utf8');
+var orgs = fs.readFileSync(__dirname + '/data/filters/orgs.json', 'utf8');
 
 // adm boundaries:
 var adminLevels = fs.readFileSync(__dirname + '/data/adminLevels.json', 'utf8');
@@ -34,6 +35,7 @@ var fakeServer = {
     // filters
     this._addPath(filters, '/rest/gis/filters');
     this._addPath(sectors, '/rest/gis/filters/sectors');
+    this._addPath(orgs, '/rest/gis/filters/orgs');
 
     // admins and boundaries
     this._addPath(adminLevels, '/rest/gis/adminLevels');

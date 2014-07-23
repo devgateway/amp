@@ -6,12 +6,12 @@ var YearsFilterModel = require('../models/years-filter-model');
 
 module.exports = BaseFilterView.extend({
 
-  className: BaseFilterView.className + ' filter-years',
+  className: BaseFilterView.prototype.className + ' filter-years',
 
   initialize: function(options) {
     BaseFilterView.prototype.initialize.apply(this);
 
-    this.model = new YearsFilterModel(options.modelValues);
+    this.model = new YearsFilterModel(options);
   },
 
   renderContent: function (){

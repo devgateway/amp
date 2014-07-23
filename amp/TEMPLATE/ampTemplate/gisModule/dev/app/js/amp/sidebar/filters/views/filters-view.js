@@ -7,11 +7,9 @@ var APIBase = require('../../../../libs/local/api-base');
 var Backbone = require('backbone');
 var BaseControlView = require('../../base-control/base-control-view');
 var GenericFilterView = require('../views/generic-filter-view');
-var OrgFilterView = require('../views/org-filter-view');
 var YearsFilterView = require('../views/years-filter-view');
 var Template = fs.readFileSync(__dirname + '/../templates/filters-template.html', 'utf8');
 
-var filterViews = [OrgFilterView, YearsFilterView];
 
 module.exports = BaseControlView.extend({
   id: 'tool-filters',
@@ -89,14 +87,11 @@ module.exports = BaseControlView.extend({
     // TODO: magic strings are dangerous, config somewhere...
     var view = null;
     switch (APIFilter.name){
-      case 'Organizations':
-        view = new OrgFilterView({modelValues:{url:APIFilter.endpoint}});
-        break;
       case 'Years':
-        view = new YearsFilterView({modelValues:{url:APIFilter.endpoint}});
+        view = new YearsFilterView({url:APIFilter.endpoint});
         break;
       default:
-        view = new GenericFilterView({modelValues:{url:APIFilter.endpoint, title:APIFilter.name}});
+        view = new GenericFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
     }
     return view;
   }

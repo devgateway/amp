@@ -1,0 +1,223 @@
+[ 
+     {
+            "id": 2,
+            "name": "African Development Fund (AFDF)",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": 914,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 112064756
+        },
+        {
+            "id": 3,
+            "name": "Asian Development Bank (ASDB)",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": null,
+            "type_id": 1,
+            "type_name": "Multilateral",
+            "parent_agency_id": 112064757
+        },
+        {
+            "id": 4,
+            "name": "Asian Development Fund (ASDF)",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": null,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 112064757
+        },
+        {
+            "id": 57927714,
+            "name": "Australian Agency for International Development (AUSAID)",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": null,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 5
+        },
+        {
+            "id": 85180698,
+            "name": "CARE International Nepal",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": null,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 50923872
+        },
+        {
+            "id": 51973501,
+            "name": "CARE International UK",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": null,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 50923872
+        },
+        {
+            "id": 110592388,
+            "name": "Canadian International Development Agency (CIDA)",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": null,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 8
+        },
+        {
+            "id": 3001153,
+            "name": "Care Austria",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": null,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 50923872
+        },
+        {
+            "id": 81831902,
+            "name": "Centers for Disease Control and Prevention",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": null,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 52
+        },
+        {
+            "id": 104929646,
+            "name": "Danida - Danish International Development Agency",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": null,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 12
+        },
+        {
+            "id": 57299431,
+            "name": "Danish Church Aid",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": null,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 12
+        },
+        {
+            "id": 105045712,
+            "name": "Deutsche Gesellschaft fur Internationale Zusammenarbeit (GIZ)",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": null,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 53
+        },
+        {
+            "id": 40001642,
+            "name": "Global Partnership for Education",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": null,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 112064771
+        },
+        {
+            "id": 52178366,
+            "name": "Icelandic International Development Agency (ICEIDA)",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": null,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 3270662
+        },
+        {
+            "id": 40279598,
+            "name": "India EXIM Bank",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": null,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 4653485
+        },
+        {
+            "id": 24,
+            "name": "International Fund for Agricultural Development (IFAD)",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": 988,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 112064776
+        },
+        {
+            "id": 54295162,
+            "name": "International Labour Organisation (ILO)",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": null,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 112064776
+        },
+        {
+            "id": 64008061,
+            "name": "International Organisation for Migration (IOM)",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": null,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 112064776
+        },
+        {
+            "id": 110592567,
+            "name": "Japan International Cooperation Agency (JICA)",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": null,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 30
+        },
+        {
+            "id": 73,
+            "name": "Joint United Nations Programme on HIV/AIDS (UNAIDS)",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": 971,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 112064776
+        },
+        {
+            "id": 73,
+            "name": "UNICEF",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": 971,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 112064776
+        },
+        {
+            "id": 73,
+            "name": "World Bank",
+            "iso3": null,
+            "iso2": null,
+            "oecdCode": 971,
+            "type_id": null,
+            "type_name": null,
+            "parent_agency_id": 112064776
+        }
+]
+ 

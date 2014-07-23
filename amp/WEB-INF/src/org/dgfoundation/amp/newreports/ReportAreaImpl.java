@@ -1,0 +1,53 @@
+/**
+ * 
+ */
+package org.dgfoundation.amp.newreports;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Holds report output content as map of columns and cells, or as a parent of {@link ReportArea} children.
+ * @see ReportArea
+ * @author Nadejda Mandrescu
+ */
+public class ReportAreaImpl implements ReportArea {
+	private NamedTypedEntity owner;
+	private Map<ReportOutputColumn, ReportCell> contents;
+	private List<ReportArea> children;
+	
+	public ReportAreaImpl() {
+	}
+	
+	@Override
+	public NamedTypedEntity getOwner() {
+		return owner;
+	}
+	
+	@Override
+	public void setOwner(NamedTypedEntity owner) {
+		this.owner = owner;
+	}
+
+
+	@Override
+	public Map<ReportOutputColumn, ReportCell> getContents() {
+		return contents;
+	}
+	
+	@Override
+	public void setContents(Map<ReportOutputColumn, ReportCell> contents) {
+		this.contents = contents;
+	}
+
+	@Override
+	public List<ReportArea> getChildren() {
+		return children;
+	}
+
+	@Override
+	public void setChildren(List<ReportArea> children) {
+		this.children = children;
+	}
+
+}

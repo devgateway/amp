@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.newreports;
 
+import java.util.List;
+
 /**
  * class holding metadata about a report-output-column. It also holds  A "column" in this context might be either a Measure or a Column - anything which sits on the X axis, actually
  * @author Dolghier Constantin
@@ -17,11 +19,15 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	 */
 	public final ReportOutputColumn parentColumn;
 	
+	private List<ReportOutputColumn> children;
+	
 	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn) {
 		this.columnName = columnName;
 		if (columnName == null || columnName.isEmpty())
 			throw new NullPointerException();
 		this.parentColumn = parentColumn;
+		if (this.parentColumn != null)
+			this.parentColumn.children.add(this);
 	}
 	
 	/**
@@ -53,4 +59,12 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	@Override public int compareTo(ReportOutputColumn oth) {
 		return this.getHierarchicalName().compareTo(oth.getHierarchicalName());
 	}
+	
+	/**
+	 * @return {@link ReportOutputColumn} list of direct children 
+	 */
+	public List<ReportOutputColumn> getChildren() {
+		return children;
+	}
+
 }

@@ -15,6 +15,8 @@ public interface ReportArea {
 	 * @return
 	 */
 	public NamedTypedEntity getOwner();
+	
+	public void setOwner(NamedTypedEntity owner);
 			
 	/**
 	 * for a region, holds aggregates (trail cells). For a row, holds the values
@@ -23,9 +25,13 @@ public interface ReportArea {
 	 */
 	public Map<ReportOutputColumn, ReportCell> getContents();
 	
+	public void setContents(Map<ReportOutputColumn, ReportCell> contents);
+	
 	/**
 	 * returns the subareas, if any. Returns NULL if there are none (for example, a row)
 	 * @return
 	 */
 	public List<ReportArea> getChildren();
+	
+	public void setChildren(List<ReportArea> children);
 }

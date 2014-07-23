@@ -7,13 +7,13 @@ import java.math.BigDecimal;
  * @author Dolghier Constantin
  *
  */
-public final class ReportAmount extends ReportCell {
+public final class AmountCell extends ReportCell {
 	
-	public ReportAmount(BigDecimal value) {
+	public AmountCell(BigDecimal value) {
 		super(value);
 	}
 	
-	public ReportAmount(Double value) {
+	public AmountCell(Double value) {
 		super(value);
 	}
 }

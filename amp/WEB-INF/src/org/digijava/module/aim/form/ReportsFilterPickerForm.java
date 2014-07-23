@@ -162,7 +162,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Long reporttype;
 	private Boolean workspaceonly;
 	private boolean showWorkspaceFilter;
-	private String selectedActivityPledgesSettings;
+	private String selectedActivityPledgesSettings = "-1";
 	
 	public int getCalendarsSize() {
 		if (calendars == null) return 0;
@@ -1329,7 +1329,8 @@ public class ReportsFilterPickerForm extends ActionForm {
 	}
 	
 	public void setSelectedActivityPledgesSettings(String selectedActivityPledgesSettings) {
-		this.selectedActivityPledgesSettings = selectedActivityPledgesSettings;
+		if (selectedActivityPledgesSettings != null)
+			this.selectedActivityPledgesSettings = selectedActivityPledgesSettings;
 	}
 	
 	@java.lang.Override

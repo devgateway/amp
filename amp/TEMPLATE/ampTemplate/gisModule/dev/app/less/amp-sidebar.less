@@ -102,11 +102,20 @@
     .accordion-body {
       height: auto;
 
-      .layer-heading-container {
+        .layer-heading-container {
         background: @amp-content-highlight-bg;
+        margin-bottom: 2px;
+        &:hover{
+          cursor:pointer;
+          background-color: fadein(@amp-content-highlight-bg , 10%);
+        }
+
+        label:hover{
+          cursor:pointer;
+        }      
+
         label,
         h4 {
-          display: inline-block;
           margin: 0;
           background: transparent;
         }
@@ -115,6 +124,18 @@
 
   }
 }
+
+
+// HACK for user testing!! remove after july 23 and fix properly
+// needed the label to be pretty much full width so all clicks are captured. but this would break the filters...
+#tool-layers{
+  .layer-heading-container {
+    label{
+      width:90%;
+    }
+  }
+}
+
 
 // stickyfooter crap for quality indicator
 .quality-push,

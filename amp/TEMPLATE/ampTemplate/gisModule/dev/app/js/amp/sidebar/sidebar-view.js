@@ -10,8 +10,8 @@ var SettingsView = require('./settings/views/settings-view');
 
 var controlViews = [
   LayersView,
-  SearchView,
   FiltersView,
+  SearchView,
   ToolsView,
   SettingsView
 ];

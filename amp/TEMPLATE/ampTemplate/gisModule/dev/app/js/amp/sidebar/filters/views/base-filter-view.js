@@ -12,7 +12,7 @@ require('jquery-ui/draggable'); // ?not sure if working...
 // Parent base view for fitlers.
 module.exports = Backbone.View.extend({
 
-  className: 'filter-type ',
+  className: 'filter-type layer-heading-container',
 
   titleTemplate: _.template(TitleTemplate),
   contentTemplate: _.template(ContentTemplate),
@@ -61,7 +61,7 @@ module.exports = Backbone.View.extend({
   },
 
   renderFilters: function () {
-    this.$('.filter-options').append('<p>Hi I\'m the base render Filter</p>');
+    
   },
 
   apply: function () {

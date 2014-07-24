@@ -44,10 +44,10 @@ public class MondrianReportsTests extends AmpTestCase {
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
 		
-		MondrianReportGenerator generator = new MondrianReportGenerator();
+		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class);
 		GeneratedReport report = null;
 		try {
-			report = generator.executeReport(spec, ReportAreaImpl.class);
+			report = generator.executeReport(spec);
 		} catch (AMPException e) {
 			System.err.println(e.getMessage());
 			err = e.getMessage();

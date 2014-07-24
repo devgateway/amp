@@ -54,11 +54,14 @@ import org.olap4j.metadata.Member;
 public class MondrianReportGenerator implements ReportExecutor {
 	protected static final Logger logger = Logger.getLogger(MondrianReportGenerator.class);
 	
-	public MondrianReportGenerator() {
+	final Class<? extends ReportAreaImpl> reportAreaType;
+	
+	public MondrianReportGenerator(Class<? extends ReportAreaImpl> reportAreaType) {
+		this.reportAreaType = reportAreaType;
 	}
 	
 	@Override
-	public GeneratedReport executeReport(ReportSpecification spec, Class<? extends ReportArea> reportAreaType) throws AMPException {
+	public GeneratedReport executeReport(ReportSpecification spec) throws AMPException {
 		MDXConfig config = new MDXConfig();
 		config.setCubeName(MoConstants.DEFAULT_CUBE_NAME);
 		config.setMdxName(spec.getReportName());
@@ -86,14 +89,14 @@ public class MondrianReportGenerator implements ReportExecutor {
 		} catch (AmpApiException e) {
 			throw new AMPException("Cannot generate Mondrian Report: " + e.getMessage());
 		}
-		 
+		
 		return toGeneratedReport(spec, cellSet, reportAreaType, (int)(System.currentTimeMillis() - startTime));
 	}
 	
-	private GeneratedReport toGeneratedReport(ReportSpecification spec, CellSet cellSet, Class<? extends ReportArea> reportAreaType, int duration) throws AMPException {
+	private GeneratedReport toGeneratedReport(ReportSpecification spec, CellSet cellSet, Class<? extends ReportAreaImpl> reportAreaType, int duration) throws AMPException {
 		CellSetAxis rowAxis = cellSet.getAxes().get(Axis.ROWS.axisOrdinal());
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
-		ReportArea root = getNewReportArea(reportAreaType);
+		ReportAreaImpl root = getNewReportArea(reportAreaType);
 		List<ReportOutputColumn> leafHeaders = null; //leaf report columns list
 		
 		if (rowAxis.getPositionCount() > 0 && columnAxis.getPositionCount() > 0 ) {
@@ -111,7 +114,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			for (Position rowPos : rowAxis.getPositions()) {
 				int columnPos = 0;
 				boolean areaEnd = false; 
-				ReportArea reportArea = getNewReportArea(reportAreaType);
+				ReportAreaImpl reportArea = getNewReportArea(reportAreaType);
 				Map<ReportOutputColumn, ReportCell> contents = new LinkedHashMap<ReportOutputColumn, ReportCell>();
 				
 				for (Member member : rowPos.getMembers()) {
@@ -211,8 +214,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 		return Arrays.asList(rootHeaders.toArray(new ReportOutputColumn[1]));
 	}
 	
-	private ReportArea getNewReportArea(Class<? extends ReportArea> reportAreaType) throws AMPException {
-		ReportArea reportArea = null;
+	private ReportAreaImpl getNewReportArea(Class<? extends ReportAreaImpl> reportAreaType) throws AMPException {
+		ReportAreaImpl reportArea = null;
 		try {
 			reportArea = reportAreaType.newInstance();
 		} catch(Exception e) {

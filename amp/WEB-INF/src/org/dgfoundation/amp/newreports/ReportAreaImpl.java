@@ -24,18 +24,15 @@ public class ReportAreaImpl implements ReportArea {
 		return owner;
 	}
 	
-	@Override
 	public void setOwner(NamedTypedEntity owner) {
 		this.owner = owner;
 	}
-
 
 	@Override
 	public Map<ReportOutputColumn, ReportCell> getContents() {
 		return contents;
 	}
 	
-	@Override
 	public void setContents(Map<ReportOutputColumn, ReportCell> contents) {
 		this.contents = contents;
 	}
@@ -45,7 +42,6 @@ public class ReportAreaImpl implements ReportArea {
 		return children;
 	}
 
-	@Override
 	public void setChildren(List<ReportArea> children) {
 		this.children = children;
 	}

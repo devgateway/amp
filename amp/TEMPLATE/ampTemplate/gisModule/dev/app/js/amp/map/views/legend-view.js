@@ -5,15 +5,35 @@ var Template = fs.readFileSync(__dirname + '/../templates/map-legend-template.ht
 
 module.exports = Backbone.View.extend({
 
+  className: 'legend',
+
   template: _.template(Template),
 
-  id: 'legend',
+  events: {
+    'show.bs.collapse': 'uncollapse',
+    'hide.bs.collapse': 'collapse'
+  },
 
-  render: function () {
-    this.$el.html(this.template());
+  initialize: function() {
+    this.collapsed = true;
+    this.colors = {
+      indicator: null,
+      points: []
+    };
+    this.listenTo(Backbone, 'MAP_INDICATOR_COLORS', this.showMapIndicatorColors);
+  },
+
+  render: function() {
+    this.$el.html(this.template(_.extend({collapsed: this.collapsed}, this.colors)));
     return this;
+  },
 
-    //TODO: chevron toggle: http://jsfiddle.net/zessx/R6EAW/12/
+  collapse: function() { this.collapsed = true; },
+  uncollapse: function() { this.collapsed = false; },
+
+  showMapIndicatorColors: function(newColors) {
+    this.colors.indicator = newColors;
+    this.render();
   }
 
 });

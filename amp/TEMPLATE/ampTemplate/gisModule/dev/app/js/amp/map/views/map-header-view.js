@@ -13,9 +13,23 @@ module.exports = Backbone.View.extend({
 
   template: _.template(Template),
 
+  initialize: function() {
+    this.layerNames = null;
+    this.listenTo(Backbone, 'MAP_LOAD_INDICATOR', this.updatedIndicator);
+  },
+
   render: function () {
-    this.$el.html(this.template());
+    this.$el.html(this.template({layerNames: this.layerNames}));
     return this;
+  },
+
+  updatedIndicator: function(indicator) {
+    if (indicator === null) {
+      this.layerNames = null;
+    } else {
+      this.layerNames = indicator.get('title');
+    }
+    this.render();
   }
 
 });

@@ -105,39 +105,44 @@
   }
 }
 
-#legend {
+.legend {
   z-index: 1050;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   right: 190px;
-  padding: 5px;
-  width: 300px;
+  width: 240px;
   color: @amp-inverse;
-  background: @amp-inverse-bg;
+  background: @amp-map-header-bg;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.333);
 
-  .legend-header {
-    &:hover,a, a:hover{
+  .legend-header > a {
+    .vertical-chevrons;
+    display: block;
+    padding: 4px;
+    color: #eee;
+
+    &:hover,
+    &:focus {
       text-decoration: none;
-    }
-
-    > a {
-        color: #eee;
-        display: block;
-        padding: 4px;
     }
   }
 
-  #legend-content {
-    max-height: 200px;
-    padding:4px;
-    font-size: 12px;
+  .legend-content {
+    max-height: 240px;
+    padding: 1em;
+    font-size: 0.9em;
     overflow-y: scroll;
     color: #333;
+    border: 1px solid #aaa;
+    border-width: 0 1px;
     background: @amp-content-bg;
 
     h3 {
-      font-weight: 700;
-      font-size: 12px;
+      margin: 0.5em 0;
+      font-size: 1.2em;
+    }
+    ul, ol {
+      .color-blocks;
     }
   }
 }

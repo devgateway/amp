@@ -14,7 +14,7 @@ module.exports = BaseControlView.extend({
   id: 'tool-layers',
   title: 'Layers',
   iconClass: 'ampicon-layers',
-  description: 'Tool desc, remove if possible.',
+  description: 'Select Points or Indicators to visualize data on the main map.',
 
   template: _.template(Template),
   indicatorTemplate: _.template(IndicatorTemplate),

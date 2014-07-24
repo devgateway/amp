@@ -1,0 +1,36 @@
+.vertical-chevrons {
+  // This is a kind of invasive mixin. Heads up:
+  // the :before and :after pseudo-elements are used
+  &:before,
+  &:after {
+    content: "▴";
+    display: inline-block;
+    width: 2em;
+  }
+  &:before {
+    float: left;
+  }
+  &:after {
+    float: right;
+  }
+  &.collapsed:before,
+  &.collapsed:after {
+    content: "▾";
+  }
+}
+
+.color-blocks {
+  &, li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    line-height: 1.618em;
+  }
+  .color {
+    display: inline-block;
+    height: 1.2em;
+    width: 1.2em;
+    margin: 0 0.3em 0 0;
+    border: 1px solid #ccc;
+  }
+}

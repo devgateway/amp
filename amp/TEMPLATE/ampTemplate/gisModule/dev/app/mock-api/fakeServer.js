@@ -50,7 +50,7 @@ var fakeServer = {
   _addClusterPath: function(){
     this.server.respondWith(/\/rest\/gis\/cluster(\S+)/,
       function (xhr, param) {
-        if(param.indexOf('adminLevel=2') > -1){
+        if(param.indexOf('Zone') > -1){
           xhr.respond(200, { 'Content-Type': 'application/json' }, clusterADM2);
         } else{
           xhr.respond(200, { 'Content-Type': 'application/json' }, cluster);
@@ -60,6 +60,7 @@ var fakeServer = {
   },
 
   _addPath: function(resp, path){
+    console.info('debug path: ', path);
     this.server.respondWith('GET',
                       path,
                       [200, { 'Content-Type': 'application/json' }, resp]);

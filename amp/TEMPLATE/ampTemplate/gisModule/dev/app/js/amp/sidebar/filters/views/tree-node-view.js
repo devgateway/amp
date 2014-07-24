@@ -19,9 +19,10 @@ var TreeNodeView = Backbone.View.extend({
   //   'click  .toggle-nav': 'toggle'
   // },
 
-  template: _.template(Template),
 
-  // TODO: tkeep ref to parent and add 'update parent' to add / remove .half-fill when needed
+  // TODO optimize event listening / triggering especially for filter counts.
+  
+  template: _.template(Template),
 
   initialize: function(obj){
     var self = this;

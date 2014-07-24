@@ -4,7 +4,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 
-var APIBase = require('../../../libs/local/api-base');
+var APIHelper = require('../../../libs/local/api-helper');
 
 var MapHeaderView = require('../views/map-header-view');
 var BasemapGalleryView = require('../views/basemap-gallery-view');
@@ -70,7 +70,7 @@ module.exports = Backbone.View.extend({
   _renderCountryBoundary: function(){
     var self = this;
     // TODO: harcoded path is bad.
-    $.get( APIBase.getAPIBase() + '/rest/gis/adminBoundary/0').then(function(geoJSON){
+    $.get( APIHelper.getAPIBase() + '/rest/gis/adminBoundary/0').then(function(geoJSON){
 
       self.countryBoundary = L.geoJson(geoJSON,
         {

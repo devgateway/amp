@@ -9,8 +9,11 @@
  *    Unoptimized build of js/css, runs a dev server on :3000 with livereload
  *
  * $ gulp test
- *    Run unit tests -- currently broken
+ *    Run unit tests from command line
  *
+ * $ gulp webtest
+ *    Serve unit tests in browser
+
  * $ gulp lint
  *    Lint javascript and css -- currently only js
  *

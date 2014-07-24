@@ -8,7 +8,7 @@ var BaseFilterView = require('../views/base-filter-view');
 var GenericFilterModel = require('../models/generic-filter-model');
 var Template = fs.readFileSync(__dirname + '/../templates/generic-filter-template.html', 'utf8');
 
-var APIBase = require('../../../../libs/local/api-base');
+var APIHelper = require('../../../../libs/local/api-helper');
 
 module.exports = BaseFilterView.extend({
 
@@ -45,7 +45,7 @@ module.exports = BaseFilterView.extend({
 
   _createTree: function(url){
     var self = this;
-    return $.get(APIBase.getAPIBase() + url).then(function(data){
+    return $.get(APIHelper.getAPIBase() + url).then(function(data){
       // builds tree of views from returned data
       var rootNodeObj = {
         id : -1,

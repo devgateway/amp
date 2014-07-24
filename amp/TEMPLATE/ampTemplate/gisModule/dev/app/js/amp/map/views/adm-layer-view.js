@@ -5,7 +5,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 
-var APIBase = require('../../../libs/local/api-base');
+var APIHelper = require('../../../libs/local/api-helper');
 
 var ADMClusterCollection = require('../collections/adm-cluster-collection');
 var ADMTemplate = fs.readFileSync(__dirname + '/../templates/map-adm-template.html', 'utf8');
@@ -76,9 +76,12 @@ module.exports = Backbone.View.extend({
 
     this._loadBoundaries(filterObj);
 
+    //temp convert adminLevel to AMP strings:
+    var ampStrings = ['Country', 'Region', 'Zone', 'District'];
+    filterObj.adminLevel = ampStrings[filterObj.adminLevel];
+
     // Get the values for the map. Sample URL:
-    // /rest/gis/cluster?filter="{"FiltersParams":{"params":[{"filterName":"adminLevel","filterValue":["Region"]}]}}"
-    // (don't forget to url-encode)
+
     this._getCluster(filterObj).then(function(data) {
       if(data && data.type === 'FeatureCollection') {
         self.features = data.features;
@@ -103,7 +106,7 @@ module.exports = Backbone.View.extend({
     // TODO: use filterObj.adminLevel to choose right boundary.
     // TODO: harcoded path is bad.
     if(filterObj.adminLevel){
-      $.get( APIBase.getAPIBase() + '/rest/gis/adminBoundary/'+ filterObj.adminLevel).then(function(geoJSON){
+      $.get( APIHelper.getAPIBase() + '/rest/gis/adminBoundary/'+ filterObj.adminLevel).then(function(geoJSON){
 
         self.boundaryLayer = L.geoJson(geoJSON,
           {
@@ -134,8 +137,12 @@ module.exports = Backbone.View.extend({
 
   // Can do some post-processing here if we want...
   _getCluster: function(filter){
-    return this.collection.fetch({data:filter});
+    var parsedParam = {filter:null};    
+    parsedParam.filter = APIHelper.convertToAMPStyle(filter);
+
+    return this.collection.fetch({data:parsedParam});
   },
+
 
   _removeFromMap: function(){
     this._removeBoundary();

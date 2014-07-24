@@ -70,7 +70,7 @@
     "type" : "Feature",
     "geometry" : {
       "type" : "Point",
-      "coordinates" : [ 24.0, -4.5 ],
+      "coordinates" : [ 21.5, -5.4 ],
       "properties" : { }
     },
     "properties" : {

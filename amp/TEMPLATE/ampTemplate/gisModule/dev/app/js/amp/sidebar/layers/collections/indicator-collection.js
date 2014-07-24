@@ -2,11 +2,11 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var IndicatorModel = require('../models/indicator-model');
 
-var APIBase = require('../../../../libs/local/api-base');
+var APIHelper = require('../../../../libs/local/api-helper');
 
 module.exports = Backbone.Collection.extend({
   model: IndicatorModel,
-  url: APIBase.getAPIBase() + '/rest/gis/indicator-layers',
+  url: APIHelper.getAPIBase() + '/rest/gis/indicator-layers',
 
   initialize: function() {
 

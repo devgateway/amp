@@ -2,11 +2,11 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var ProjectSiteModel = require('../models/project-site-model');
 
-var APIBase = require('../../../libs/local/api-base');
+var APIHelper = require('../../../libs/local/api-helper');
 
 module.exports = Backbone.Collection.extend({
   model:  ProjectSiteModel,
-  url: APIBase.getAPIBase() + '/rest/gis/project-sites',
+  url: APIHelper.getAPIBase() + '/rest/gis/project-sites',
 
   initialize: function() {
 

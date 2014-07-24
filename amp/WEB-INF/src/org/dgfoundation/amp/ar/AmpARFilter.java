@@ -546,7 +546,11 @@ public class AmpARFilter extends PropertyListable {
 	private String searchMode;
 	private static final String initialPledgeFilterQueryWithUnrelatedFunding = "SELECT -1 AS pledge_id UNION SELECT distinct(id) as pledge_id FROM amp_funding_pledges WHERE 1=1 ";
 	private static final String initialPledgeFilterQueryWithoutUnrelatedFunding = "SELECT distinct(id) as pledge_id FROM amp_funding_pledges WHERE 1=1 ";
-	private static final String initialFilterQuery = "SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1=1 ";
+	
+	/*Maybe not the best place to add this condition but we need to ensure we 
+	  Never ever show activities which are not assigned to a workspace that is why this is added  "amp_team_id IS NOT NULL" */
+	
+	private static final String initialFilterQuery = "SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1=1 AND amp_team_id IS NOT NULL";
 	private String generatedFilterQuery;
 	private int initialQueryLength = initialFilterQuery.length();
 	

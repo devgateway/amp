@@ -39,7 +39,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	
 	
 	public AmpActivityModel() {
-		beginConversation();
+	    beginConversation();
 		a = new AmpActivityVersion();
 	}	
 	

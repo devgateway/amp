@@ -73,6 +73,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.help.helper.HelpSearchData;
 import org.digijava.module.help.util.HelpUtil;
 import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -97,7 +98,7 @@ public class LuceneUtil implements Serializable {
 	 * saved on the disk, if versions mismatch then we need to increment
 	 * the index
 	 */
-	private static final long serialVersionUID = 11L;
+	private static final long serialVersionUID = 12L;
 												
 	private static Logger logger = Logger.getLogger(LuceneUtil.class);
     /**
@@ -874,11 +875,13 @@ public class LuceneUtil implements Serializable {
 			Document doc = null;
 			String projectid = newActivity.getAmpId();
 			ArrayList<String> componentsCode = new ArrayList<String>();
-			Collection<AmpComponent> componentsList = newActivity.getComponents();
-			if (componentsList != null) {
-				for (AmpComponent c : componentsList) {
-					componentsCode.add(c.getCode());
-				}
+			if(Hibernate.isInitialized(newActivity.getComponents())){
+    			Collection<AmpComponent> componentsList = newActivity.getComponents();
+    			if (componentsList != null) {
+    				for (AmpComponent c : componentsList) {
+    					componentsCode.add(c.getCode());
+    				}
+    			}
 			}
 			
 			String language = navigationLanguage.getLanguage();

@@ -3,6 +3,7 @@
 <struts-config>
   <form-beans>
     <form-bean name="TranslatorForm" type="org.digijava.kernel.translator.form.TranslatorForm" />
+    <form-bean name="AjaxTranslatorForm" type="org.digijava.kernel.translator.form.AjaxTranslatorForm" />
     <form-bean name="TranslatorNavForm" type="org.digijava.kernel.translator.form.TranslatorNavForm" />
     <form-bean name="translationForm" type="org.digijava.module.translation.form.TranslationForm" />
     <form-bean name="modeSwitchForm" type="org.digijava.module.translation.form.ModeSwitchForm" />
@@ -35,6 +36,7 @@
       <forward name="success" path="/showLayout.do?layout=globaladdkey" />
     </action>
     <action name="TranslatorForm" type="org.digijava.kernel.translator.action.TranslatorAction" validate="true" input="/showLayout.do?layout=TranslatorPortlet" path="/translate/Translator" />
+    <action name="AjaxTranslatorForm" type="org.digijava.kernel.translator.action.AjaxTranslator" path="/translation/ajaxTranslator" />
     <action type="org.digijava.kernel.translator.action.ChangeLangGatewayAction" path="/translate/ChangeLangGateway" />
     <action name="TranslatorNavForm" type="org.digijava.kernel.translator.action.TranslatorLocaleUpdate" path="/translate/ChangeNavLang" />
     <action name="TranslatorForm" type="org.digijava.kernel.translator.action.RtAction" path="/translate/Translate" />

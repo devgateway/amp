@@ -26,18 +26,6 @@ module.exports = Backbone.View.extend({
 
     this.$el.html(this.titleTemplate(this.model.toJSON()));
 
-    // TODO: replace checkbox with a custom div since user doesn't actually input, it's read only.
-    if(this.model.get('activeCount') === this.model.get('totalCount')){
-      this.$('input:checkbox').prop('checked', true);
-      this.$('input:checkbox').prop('indeterminate', false);
-    } else if(this.model.get('activeCount') > 0){
-      this.$('input:checkbox').prop('checked', false);
-      this.$('input:checkbox').prop('indeterminate', true);
-    } else {
-      this.$('input:checkbox').prop('checked', false);
-      this.$('input:checkbox').prop('indeterminate', false);
-    }
-
     return this;
   },
 

@@ -22,6 +22,12 @@
     },
     "./app/mock-api/sinon-min.js": {
       "exports": "sinon"
+    },
+
+    "./app/js/libs/local/slider/jquery.nouislider.min.js":{
+      "depends": [
+        "./node_modules/jquery/dist/jquery.min.js:jQuery"
+      ] 
     }
   },
   "devDependencies": {

@@ -49,7 +49,7 @@ var paths = {
     stylesheets: {
       all: './app/less/**/*.less',
       entry: './app/less/main.less',
-      libs: './node_modules/leaflet/dist/**/*.css',
+      libs: ['./node_modules/leaflet/dist/**/*.css', './app/js/libs/local/slider/**/*.css'],
       compiledDest: './app/compiled-css/',
       compiled: './app/compiled-css/main.css'
     },
@@ -122,7 +122,7 @@ gulp.task('browserify', function() {
 
 
 gulp.task('less', function() {
-  return gulp.src([paths.app.stylesheets.libs, paths.app.stylesheets.entry])
+  return gulp.src(paths.app.stylesheets.libs.concat(paths.app.stylesheets.entry))
     .pipe(g.plumber())
     .pipe(g.less())
       .on('error', g.util.log)

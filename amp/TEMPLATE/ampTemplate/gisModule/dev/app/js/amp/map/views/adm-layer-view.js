@@ -76,12 +76,7 @@ module.exports = Backbone.View.extend({
 
     this._loadBoundaries(filterObj);
 
-    //temp convert adminLevel to AMP strings:
-    var ampStrings = ['Country', 'Region', 'Zone', 'District'];
-    filterObj.adminLevel = ampStrings[filterObj.adminLevel];
-
-    // Get the values for the map. Sample URL:
-
+    // Get the values for the map.
     this._getCluster(filterObj).then(function(data) {
       if(data && data.type === 'FeatureCollection') {
         self.features = data.features;
@@ -137,6 +132,11 @@ module.exports = Backbone.View.extend({
 
   // Can do some post-processing here if we want...
   _getCluster: function(filter){
+
+    //temp convert adminLevel to AMP strings:
+    var ampStrings = ['Country', 'Region', 'Zone', 'District'];
+    filter.adminLevel = [ampStrings[filter.adminLevel]];
+
     var parsedParam = {filter:null};    
     parsedParam.filter = APIHelper.convertToAMPStyle(filter);
 

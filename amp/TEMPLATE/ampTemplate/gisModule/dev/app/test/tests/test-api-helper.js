@@ -21,13 +21,13 @@ QUnit.test( 'Getting the API base url', function( assert ) {
 
 QUnit.test( 'Converting filters to AMP style', function( assert ) {
 
-  var filter = {adminLevel: 'Region'};
-  assert.ok( APIHelper.convertToAMPStyle(filter) === '%7B%22params%22:%5B%7B%22filterName%22:%22adminLevel%22,%22filterValue%22:%22Region%22%7D%5D%7D',
+  var filter = {adminLevel: ['Region']};
+  assert.ok( APIHelper.convertToAMPStyle(filter) === '%7B%22params%22:%5B%7B%22filterName%22:%22adminLevel%22,%22filterValue%22:%5B%22Region%22%5D%7D%5D%7D',
   'single adminLevel filter' );
 
 
-  var filter = {adminLevel: 'Region', year: 1999};
-  assert.ok( APIHelper.convertToAMPStyle(filter) === '%7B%22params%22:%5B%7B%22filterName%22:%22adminLevel%22,%22filterValue%22:%22Region%22%7D,%7B%22filterName%22:%22year%22,%22filterValue%22:1999%7D%5D%7D',
+  var filter = {adminLevel: ['Region'], year: 1999};
+  assert.ok( APIHelper.convertToAMPStyle(filter) === '%7B%22params%22:%5B%7B%22filterName%22:%22adminLevel%22,%22filterValue%22:%5B%22Region%22%5D%7D,%7B%22filterName%22:%22year%22,%22filterValue%22:1999%7D%5D%7D',
   'multi property filter adminLevel and year' );
 
 });

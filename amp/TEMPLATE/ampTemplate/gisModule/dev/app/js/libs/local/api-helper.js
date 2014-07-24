@@ -4,9 +4,9 @@ var _ = require('underscore');
 // 'static' lib for helping work with the API.
 module.exports = {
 
-  // converts a filter object like this:
+  // accepts a filter object like this:
   // {adminLevel: "Region"}
-  // into stringified, encoded, version of this:
+  // returns stringified  version of this format this:
   // {params: [{"filterName":"adminLevel","filterValue":["Region"]}]}
   convertToAMPStyle: function (filter){
     var paramsObj = { params:[]};
@@ -17,8 +17,7 @@ module.exports = {
       paramsObj.params.push(tmpObj);
     });
 
-    // encode for api
-    var string = encodeURI(JSON.stringify(paramsObj));
+    var string = JSON.stringify(paramsObj);
     return string;
   },
 

@@ -286,7 +286,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	        List <FormComponent<?>> requiredComponents = ifs.getRequiredRichTextFormComponents();
 	        for (FormComponent<?> component : requiredComponents) {
 	            component.setRequired(enabled);
-	            System.out.println(component.getParent().getId());
 	        }
 	        visit.stop();
 	   }

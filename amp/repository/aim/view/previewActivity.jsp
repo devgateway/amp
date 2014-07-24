@@ -590,10 +590,10 @@ function collapseAll() {
 			<hr />	
 
 			<module:display name="/Activity Form/Identification/Status Reason" parentModule="/Activity Form/Identification">
-			<c:if test="${not empty aimEditActivityForm.identification.statusReason}">
 				<digi:trn key="aim:status">Status</digi:trn>:&nbsp;<br />
 				<b><category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/></b>
 				<hr />
+				<c:if test="${not empty aimEditActivityForm.identification.statusReason}">
 				<b>${aimEditActivityForm.identification.statusReason}</b>
 				<hr />
 				</c:if>

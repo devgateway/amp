@@ -25,31 +25,66 @@ var TreeNodeView = Backbone.View.extend({
 
   initialize: function(obj){
     var self = this;
+    this.children = [];
 
     //iterate over children
     if (Array.isArray(obj.children)) {
-      this.children = [];
       _.each(obj.children, function(child){
-        self.children.push(new TreeNodeView(child));
+        var newChild = new TreeNodeView(child);
+        newChild.model.on('change:selected', function(){
+          console.log('update');
+          self.model.set('numSelected', self._updateCount());
+          self._updateCountUI();
+          self.trigger('updateCount');          
+        });
+
+        newChild.on('updateCount', function(){
+          self.model.set('numSelected', self._updateCount());
+          self._updateCountUI();
+          self.trigger('updateCount');  
+        });
+
+        self.children.push(newChild);
       });
-    }
+    }    
 
     // create model
     delete obj.children;  // remove children from model, already in view
     obj.selected = true;  // default is selected.
     obj.expanded = false;
+    obj.numSelected = 0;
     this.model = new TreeNodeModel(obj);
-    
+    this.model.set('numSelected', this._updateCount());
     this._addModelListeners();
-
   },
 
+  //should be in model if we move hierarchy to model.
+  _updateCount: function(){ 
+    if(!_.isEmpty(this.children)){
+      var count = 0;
+      _.each(this.children, function(child){
+        count += child._updateCount();
+      });
+      return count;
+    } else{
+      return (this.model.get('selected') ? 1: 0 );
+    }   
+  },
+
+  _updateCountUI: function(){   
+    if(!_.isEmpty(this.children)){
+      this.$('> span > span > .count').text(this.model.get('numSelected') );
+    } else {
+      this.$('> span > span > .count').text('');
+    }
+  },
 
   render: function(){
 
     //render this node
     this.$el.html(this.template(this.model.toJSON()));
     this.renderChildren();
+    this._updateCountUI();
 
     return this.el;
   },
@@ -89,9 +124,6 @@ var TreeNodeView = Backbone.View.extend({
 
     //Add model listeneres
     this.model.on('change:selected', function (model, argument, options) {
-      if (options.propagation) {
-        Backbone.trigger('NODE_SELECTED', self.model);
-      }
       self.updateSelection();
       self.updateChildNodes();
     });

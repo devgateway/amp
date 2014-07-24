@@ -4,10 +4,6 @@
     "endpoint": "/rest/gis/filters/sectors"
   },
   {
-    "name": "Programs",
-    "endpoint": "mock-api/programs.json"
-  },
-  {
     "name": "Organizations",
     "endpoint": "/rest/gis/filters/orgs"
   },

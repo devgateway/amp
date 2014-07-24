@@ -1,19 +1,5 @@
 [
   {
-      "id": 1,
-      "title": "Moldova Poverty",
-      "featurePath": "http://gis.devgw.org/arcgis/rest/services/Moldova/Poverty_version_2/MapServer/0",
-      "property": "PovertyInd",
-      "type": "arcgis"
-  },
-  {
-      "id": 2,
-      "title": "Moldova Population",
-      "featurePath": "http://gis.devgw.org/arcgis/rest/services/Moldova/Population/MapServer/0",
-      "property": "Population",
-      "type": "arcgis"
-  },
-  {
       "id": 3,
       "title": "DRC Food Scarcity",
       "featurePath": "/rest/gis/drc-food",

@@ -16,13 +16,23 @@ module.exports = BaseFilterView.extend({
   template: _.template(Template),
 
   initialize: function(options) {
+    var self = this;
     BaseFilterView.prototype.initialize.apply(this);
 
     this.model = new GenericFilterModel(options.modelValues);
 
     //TODO: modify to be on demand load style, so only done the first time the user wants that filter...
     // Create tree view
-    this._createTree(options.url);
+    this._createTree(options.url).then(function(){
+      
+        self.$('.filter-count').text(self.tree.model.get('numSelected'));
+      self.tree.on('updateCount', function(){
+        console.log('count', self.tree.model.get('numSelected'));
+        //self.model.set('activeCount', self.tree.model.get('numSelected'));
+        self.$('.filter-count').text(self.tree.model.get('numSelected'));
+        //self.renderTitle();
+      });
+    });
   },
 
   renderFilters: function () {
@@ -35,7 +45,7 @@ module.exports = BaseFilterView.extend({
 
   _createTree: function(url){
     var self = this;
-    $.get(APIBase.getAPIBase() + url).then(function(data){
+    return $.get(APIBase.getAPIBase() + url).then(function(data){
       // builds tree of views from returned data
       var rootNodeObj = {
         id : -1,

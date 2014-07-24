@@ -195,8 +195,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					public void component(
 							AmpIdentificationFormSectionFeature ifs,
 							IVisit<Void> visit) {
-						toggleFormComponent (enabled,target,ifs,visit);					}
+						toggleFormComponent (enabled,target,ifs,visit);					
+						toggleFormRichTextComponent(enabled, ifs,visit);	
+					}
 					});
+		
 		form.visitChildren(AmpDonorFundingFormSectionFeature.class,
 				new IVisitor<AmpDonorFundingFormSectionFeature, Void>() {
 					@Override
@@ -278,6 +281,17 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	      
 		
 	}
+	   private void toggleFormRichTextComponent (boolean enabled,
+	            AmpIdentificationFormSectionFeature ifs, IVisit<Void> visit) {
+	        List <FormComponent<?>> requiredComponents = ifs.getRequiredRichTextFormComponents();
+	        for (FormComponent<?> component : requiredComponents) {
+	            component.setRequired(enabled);
+	            System.out.println(component.getParent().getId());
+	        }
+	        visit.stop();
+	   }
+
+	       
 	private void toggleFormComponent (boolean enabled, final AjaxRequestTarget target,
 			AmpRequiredComponentContainer ifs, IVisit<Void> visit) {
 		List <FormComponent<?>> requiredComponents = ifs.getRequiredFormComponents();

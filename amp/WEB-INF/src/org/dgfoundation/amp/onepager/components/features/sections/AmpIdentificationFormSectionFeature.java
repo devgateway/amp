@@ -65,6 +65,7 @@ implements AmpRequiredComponentContainer{
 	private static final long serialVersionUID = 8568986144567957699L;
 	private AmpWarningComponentPanel<String> titleSimilarityWarning;
 	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
+	private List<FormComponent<?>> requiredRichTextFormComponents = new ArrayList<FormComponent<?>>();
 
 	
 	/**
@@ -403,7 +404,7 @@ implements AmpRequiredComponentContainer{
                     super.onConfigure();
                     if (this.isVisible()){
                     	description.getTextAreaContainer().setRequired(true);
-                        requiredFormComponents.add(description.getTextAreaContainer());
+                    	requiredRichTextFormComponents.add(description.getTextAreaContainer());
             			
                     }
                 }
@@ -420,7 +421,7 @@ implements AmpRequiredComponentContainer{
                     super.onConfigure();
                     if (this.isVisible()){
                     	objective.getTextAreaContainer().setRequired(true);
-                        requiredFormComponents.add(objective.getTextAreaContainer());
+                    	requiredRichTextFormComponents.add(objective.getTextAreaContainer());
             			
                     }
                 }
@@ -491,5 +492,10 @@ implements AmpRequiredComponentContainer{
 	public List<FormComponent<?>> getRequiredFormComponents() {
 		return requiredFormComponents;
 	}
+
+    public List<FormComponent<?>> getRequiredRichTextFormComponents() {
+        return requiredRichTextFormComponents;
+    }
+	
 
 }

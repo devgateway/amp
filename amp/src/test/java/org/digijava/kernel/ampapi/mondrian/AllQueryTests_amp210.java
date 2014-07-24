@@ -21,8 +21,8 @@ import org.hibernate.cfg.Configuration;
 public class AllQueryTests_amp210 {
 	private static final String CONNECTION_PATH = ""
 			+ "jdbc:mondrian:Jdbc=jdbc:postgresql:" + "//localhost:5432/amp_moldova_210" + ";"
-			+ "JdbcUser=amp;"
-			+ "JdbcPassword=amp321;"
+			+ "JdbcUser=postgre;"
+			+ "JdbcPassword=postgre;"
 			+ "JdbcDrivers=org.postgresql.Driver";
 
 	public static Test suite() {

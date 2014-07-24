@@ -104,7 +104,7 @@ public class MDXTests extends AmpTestCase {
 			mdx = generator.getAdvancedOlapQuery(config);
 			if (runQuery) {
 				set = generator.runQuery(mdx); 
-				TestQueries.printResult2(set);
+				TestQueries.printResult(set);
 			}
 		} catch (AmpApiException e) {
 			System.err.println(e.getMessage());

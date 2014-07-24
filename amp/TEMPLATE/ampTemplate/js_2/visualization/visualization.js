@@ -2263,9 +2263,11 @@ function updateTitles(){
 				anmtIn = trnInMillions;
 			var input = document.getElementById(id.substr(0,id.indexOf("Legend")));
 			var trnTitle = document.getElementById(id+"Trn").value + " - " + fundType + " (" + anmtIn + ")";
-			titlesObj[i].innerHTML = trnTitle;
-			if (input != null)
-				input.value = trnTitle;
+			ajaxTranslate(trnTitle, function(data) {
+				titlesObj[i].innerHTML = data;
+				if (input != null)
+					input.value = data;
+			});			
 		}
 	}
 }

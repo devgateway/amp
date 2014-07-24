@@ -54,7 +54,8 @@
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/element/element-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/tabview/tabview-min.js"></script> 
 <script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/selector/selector-min.js"></script> 
-<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script> 
+<script type="text/javascript" src="/TEMPLATE/ampTemplate/js_2/yui/yahoo/yahoo-min.js"></script>
+<script type="text/javascript" src="/repository/translation/js/translationUtils.js"></script> 
 <script type="text/javascript">
 //Global declaration
 var trnPrimary = "";
@@ -393,9 +394,9 @@ function initializeGlobalVariables(){
 													<img src="/TEMPLATE/ampTemplate/img_2/ico_quest.gif" title="${translation}"/>
 													<br />
 												</c:if>
-												<html:checkbox property="filter.showGroupsNotOrgs" styleId="show_groups_not_orgs">
-                                                	<digi:trn>Show Organization groups instead of Organizations</digi:trn>
-                                                </html:checkbox>
+													<html:checkbox property="filter.showGroupsNotOrgs" styleId="show_groups_not_orgs">
+														<digi:trn>Show Organization groups instead of Organizations</digi:trn>
+													</html:checkbox>
 												<hr />
 												<br />
 												<digi:trn>For Time Series Comparison, what data do you want to show?</digi:trn>

@@ -70,8 +70,6 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 		};
 		amount.getTextContainer().add(new AttributeModifier("size", new Model<String>("12")));
 		
-        add(amount);
-        
 		AbstractReadOnlyModel<List<String>> currencyList = new AbstractReadOnlyModel<List<String>>() {
 			@Override
 			public List<String> getObject() {
@@ -99,7 +97,7 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 		add(currency);
         final PropertyModel<Date> funDateModel = new PropertyModel<Date>(am, CategoryConstants.PROPOSE_PRJC_DATE_KEY);
         final AmpDatePickerFieldPanel date = new AmpDatePickerFieldPanel("proposedDate", funDateModel, null, CategoryConstants.PROPOSE_PRJC_DATE_NAME);
-        add(date);
+
       
         //validator for poposed project cost amount AMP-17254
         add(new AmpComponentPanel("proposedAmountRequired", "Required Validator for " + CategoryConstants.PROPOSE_PRJC_AMOUNT_NAME) {
@@ -108,11 +106,16 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
                 super.onConfigure();
                 if (this.isVisible()){
                 	amount.getTextContainer().setRequired(true);
+                	date.getDate().setRequired(true);
+                	requiredFormComponents.add(date.getDate());
                 	//date.getDate().setRequired(true);
                 	requiredFormComponents.add(amount.getTextContainer());
                 }
             }
         });		
+        //the amount should be added to the form AFTER the validator so it gets the star
+        add(amount);        
+        add(date);
 	}
 
 	/**

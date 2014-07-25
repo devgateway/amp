@@ -20,13 +20,8 @@
 	}
 	
 	function window_resized() {
-		var buffer = 20;		
-	    var height = Math.max(get_number($(window).height()), 
-	    		get_number(window.innerHeight)); //document.documentElement.clientHeight; // was: clientHeight
-	    height -= pageY(document.getElementById('bootstrap_iframe'))+ buffer ;
-	    height = (height < 0) ? 0 : height;
-	    //outerDocument.getElementById('bootstrap_iframe').style.height = (height - 0) + 'px';
-	    $('#bootstrap_iframe').height(height);
+		var height = $('#bootstrap_iframe').contents().find('html').height();
+		$('#bootstrap_iframe').height(height);
 	}
 	
 	$(document).ready(function(){

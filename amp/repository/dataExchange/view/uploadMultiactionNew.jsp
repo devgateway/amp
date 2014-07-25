@@ -62,7 +62,8 @@
 	<div id="mappingTableBusy">&nbsp;</div>
 	<img id="busyImg" src="/TEMPLATE/ampTemplate/images/amploading.gif">
 </div>
-	
+
+
 <table cellpadding="0" cellspacing="0">
 	<tr>
 		<td>
@@ -95,8 +96,10 @@
 						
 					</td>
 					</td>
-					<td width="548" style="border-bottom: 1px solid #b8b7b7">
-						&nbsp;
+					<td width="548" style="border-bottom: 1px solid #b8b7b7;text-align: right;">
+						<a href="/dataExchange/codeImporter.do?action=view" class="t_sm"><b><digi:trn>Import IATI Codes</digi:trn></b></a>&nbsp;
+						<a href="/dataExchange/importActionNew.do" class="t_sm"><b><digi:trn>Import IATI XML File</digi:trn></b></a>&nbsp;
+						<a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true&displaySource=false" class="t_sm"><b><digi:trn>Create New Import Configuration</digi:trn></b></a>
 					</td>
 				</tr>
 			</table>

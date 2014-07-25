@@ -11,6 +11,7 @@
 
 <digi:instance property="codeImporterForm"/>
 
+<link href="/repository/dataExchange/view/css/iati.css" rel="stylesheet" type="text/css" />
 <style type="text/css">
 <!--
 .submitButtonClass {
@@ -149,6 +150,11 @@ td.defaultTab {
 </script>
 
 <digi:form action="/codeImporter.do?action=upload" method="post" enctype="multipart/form-data">
+	<span class="navigationLinks">
+	<a href="/dataExchange/codeImporter.do?action=view" class="t_sm"><b><digi:trn>Import IATI Codes</digi:trn></b></a>&nbsp;
+	<a href="/dataExchange/importActionNew.do" class="t_sm"><b><digi:trn>Import IATI XML File</digi:trn></b></a>&nbsp;
+	<a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true&displaySource=false" class="t_sm"><b><digi:trn>Create New Import Configuration</digi:trn></b></a>
+	</span>
 	<table class="defaultTable" width=1000 border=1 bordercolor="#B8B7B7" cellpadding="0" cellspacing="0" style="margin:10px;">
 		<tr>
 			<td colspan=2 align=center background="/TEMPLATE/ampTemplate/img_2/ins_header.gif" class="inside"><b><digi:trn>IATI Codes</digi:trn></b></td>

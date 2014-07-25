@@ -22,6 +22,7 @@
 <script type="text/javascript" src="/repository/dataExchange/view/scripts/TaskNode.js"></script>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+<link href="/repository/dataExchange/view/css/iati.css" rel="stylesheet" type="text/css" />
 
 <style type="text/css">
 <!--
@@ -255,7 +256,13 @@ function trim1 (str) {
 <!-- MAIN CONTENT PART START -->
 <digi:form action="/createEditSource.do?action=saveSource" styleId="form" method="post" enctype="multipart/form-data">
 
-<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center >
+	<span class="navigationLinks">
+	<a href="/dataExchange/codeImporter.do?action=view" class="t_sm"><b><digi:trn>Import IATI Codes</digi:trn></b></a>&nbsp;
+	<a href="/dataExchange/importActionNew.do" class="t_sm"><b><digi:trn>Import IATI XML File</digi:trn></b></a>&nbsp;
+	<a href="/dataExchange/createEditSource.do?action=gotoCreatePage&htmlView=true&displaySource=false" class="t_sm"><b><digi:trn>Create New Import Configuration</digi:trn></b></a>
+	</span>
+
+<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:10px;" >
 	<!-- BREADCRUMP START -->
 	<!--<tr>
 		<td height="33">

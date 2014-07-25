@@ -261,7 +261,7 @@
                               </logic:present>
 														</td>
 														<td   class="inside1" >
-															<li>
+															<li class="bullet">
                                   <%
                                     if (reports.getType()!=null && reports.getType().equals(new Long(1))) {
                                   %>
@@ -284,39 +284,39 @@
                                 <%}%>
                             </li>
                               <logic:equal name="reports" property="drilldownTab" value="true">
-                                <li>
+                                <li class="bullet">
                                   <digi:trn key="aim:typeDrilldownTab">Desktop Tab</digi:trn>
                                 </li>
                               </logic:equal>
                               <logic:equal name="reports" property="publicReport" value="true">
-                                <li>
+                                <li class="bullet">
                                   <digi:trn key="aim:typePublicReport">Public Report</digi:trn>
                                 </li>
                               </logic:equal>
                               <logic:equal name="reports" property="hideActivities" value="true">
-                                <li>
+                                <li class="bullet">
                                   <digi:trn key="aim:typeSummaryReport">Summary Report</digi:trn>
                                 </li>
                               </logic:equal>                                  
                               <logic:equal name="reports" property="options" value="A">
-                                <li>
+                                <li class="bullet">
                                 	<digi:trn key="aim:annualreport">Annual</digi:trn>
                                 </li>
                               </logic:equal>
                               <logic:equal name="reports" property="options" value="Q">
-                                <li>
+                                <li class="bullet">
                                 	<digi:trn key="aim:quarterlyreport">Quarterly</digi:trn>
                                 </li>
                               </logic:equal>
                               <logic:equal name="reports" property="options" value="M">
-                                <li>
+                                <li class="bullet">
                                 	<digi:trn key="aim:monthlyreport">Monthly</digi:trn>	
                                 </li>
                               </logic:equal>
 														</td>
 														<td   class="inside1" >
 															<logic:iterate name="reports" property="hierarchies" id="hierarchy" >
-																<li>
+																<li class="bullet">
 										            	${hierarchy.column.columnName}
 										            </li>
 										          </logic:iterate>
@@ -325,7 +325,7 @@
 															<div style='position:relative;display:none;' id='report-<bean:write name="reports" property="ampReportId"/>'> 
                                 <logic:iterate name="reports" property="columns" id="column" indexId="index"  >
                                   <%if (index.intValue()%2==0){ %>
-                                    <li>                                      
+                                    <li class="bullet">                                      
                                     	<digi:trn key="aim:report:${column.column.columnName}">
                                       	<bean:write name="column" property="column.columnName" />
                                     	</digi:trn>
@@ -343,7 +343,7 @@
 
                               <div style='position:relative;display:none;' id='measure-<bean:write name="reports" property="measures"/>'> 
                                 <logic:iterate name="reports" property="measures" id="measure" indexId="index"  >
-                                  <li>
+                                  <li class="bullet">
                                   	<digi:trn key="aim:reportBuilder:${measure.measure.aliasName}">                                      
                                     		${measure.measure.aliasName}
                                     	</digi:trn>

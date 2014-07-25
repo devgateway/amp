@@ -9,7 +9,8 @@ import java.util.HashMap;
 
 import org.digijava.module.dataExchange.engine.SourceBuilder;
 import org.digijava.module.dataExchange.jaxb.Activities;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivities;
+
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.IatiActivities;
 
 /**
  * @author dan
@@ -18,6 +19,10 @@ import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivities;
  */
 public class DEImportItem {
 	private SourceBuilder sourceBuilder;
+
+    /**
+     * This is IDML2.0.xsd activities that should be eventually removed
+     */
 	private Activities activities;
 	private IatiActivities iatiActivities;
 	private IatiActivities previousIatiActivities;

@@ -55,28 +55,33 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
 import org.digijava.kernel.request.TLSUtils;
+
 import org.digijava.module.dataExchange.dbentity.AmpDEUploadSession;
 import org.digijava.module.dataExchange.dbentity.DELogPerExecution;
 import org.digijava.module.dataExchange.dbentity.DELogPerItem;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
 import org.digijava.module.dataExchange.dbentity.IatiCodeType;
+
 import org.digijava.module.dataExchange.engine.DEImportBuilder;
 import org.digijava.module.dataExchange.engine.SourceBuilder;
 import org.digijava.module.dataExchange.form.ImportFormNew;
+
 import org.digijava.module.dataExchange.iati.IatiRules;
 import org.digijava.module.dataExchange.iati.IatiVersion;
+
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.*;
+
 import org.digijava.module.dataExchange.pojo.DEImportItem;
 import org.digijava.module.dataExchange.pojo.DEImportValidationEventHandler;
+
 import org.digijava.module.dataExchange.util.DataExchangeConstants.IatiCodeTypeEnum;
 import org.digijava.module.dataExchange.util.DbUtil;
 import org.digijava.module.dataExchange.util.IatiHelper;
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.utils.DEConstants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivities;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivity;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.RecipientCountry;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -102,6 +107,7 @@ public class ImportActionNew extends DispatchAction {
     public static final int IATI_IMPORT_PAGE_SESSIONS = 5;
 
     private static String countryCodeNullVal = "N/A";
+    private static final Pattern LANG_PATTERN = Pattern.compile("xml:lang=\"[a-zA-Z]{2}\"");
 
     public ActionForward unspecified(ActionMapping mapping, ActionForm form,
                                      HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
@@ -174,7 +180,7 @@ public class ImportActionNew extends DispatchAction {
           */
 
         //Prepare country filter items
-        myform.setCountryList(new ArrayList<AbstractMap.SimpleEntry<String, String>>());
+        myform.setCountryList(new ArrayList<Map.Entry<String, String>>());
 
         /*
         for (Map.Entry <String, Set<IatiActivity>> me : countryActMap.entrySet()) {
@@ -237,18 +243,21 @@ public class ImportActionNew extends DispatchAction {
 
 
         DELogPerExecution execLog 	= new DELogPerExecution(upSess.getSettingsAssigned());
-        if(execLog.getLogItems() == null)
+        if (execLog.getLogItems() == null) {
             execLog.setLogItems(new ArrayList<DELogPerItem>());
+        }
         execLog.setDeSourceSetting(upSess.getSettingsAssigned());
 
         if (itemId == null) {
             deib.setIgnoreSameAsCheck(ignoreSameAs);
-            items = deib.processIATIFeedReturnItems(request,execLog, null,"check", null);
+            items = deib.processIATIFeedReturnItems(request, execLog, null, "check", null);
         } else {
-            items = deib.processIATIFeedReturnItems(request,execLog, null,"import", itemId);
+            items = deib.processIATIFeedReturnItems(request, execLog, null, "import", itemId);
         }
 
-        if (logItems != null) logItems.addAll(execLog.getLogItems());
+        if (logItems != null) {
+            logItems.addAll(execLog.getLogItems());
+        }
         return items;
     }
 
@@ -262,17 +271,16 @@ public class ImportActionNew extends DispatchAction {
     }
 
     private Map<String, Integer> getCountrySetActCountFromActivities(IatiActivities acts) {
-        Map<String, Integer> retVal = new HashMap<String, Integer>();
-        for (Iterator it = acts.getIatiActivityOrAny().iterator(); it.hasNext();) {
+        Map<String, Integer> retVal = new HashMap<>();
+        for (Object tmp : acts.getIatiActivityOrAny()) {
 
-            Object tmp = it.next();
-            if (tmp instanceof org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivity) {
+            if (tmp instanceof IatiActivity) {
                 IatiActivity act = (IatiActivity) tmp;
                 Set<String> countryISOs = getActivityCountries(act);
 
                 for (String countryISO : countryISOs) {
                     if (retVal.get(countryISO) == null) {
-                        retVal.put(countryISO, new Integer(0));
+                        retVal.put(countryISO, 0);
                     }
                     retVal.put(countryISO, retVal.get(countryISO) + 1);
                 }
@@ -283,8 +291,8 @@ public class ImportActionNew extends DispatchAction {
     
     private Map<String, String> getLanguages(String fileSrc, String currentIsoLanguage) {
     	Map<String, String> langMap = new HashMap<String, String>();
-    	Pattern p  = Pattern.compile("xml:lang=\"[a-zA-Z]{2}\"");
-    	Matcher m = p.matcher(fileSrc);
+
+    	Matcher m = LANG_PATTERN.matcher(fileSrc);
     	while(m.find()) {
     		String isoLang = m.group();
     		isoLang = isoLang.substring("xml:lang=\"".length(), isoLang.length()-1);
@@ -313,8 +321,6 @@ public class ImportActionNew extends DispatchAction {
                 }
                 countryActMap.get(countryCode).add(iatiAct);
             }
-
-
         }
         return countryActMap;
     }
@@ -340,17 +346,15 @@ public class ImportActionNew extends DispatchAction {
                 if (obj instanceof javax.xml.bind.JAXBElement) {
                     javax.xml.bind.JAXBElement objCasted = (javax.xml.bind.JAXBElement) obj;
                     if (objCasted.getName().getLocalPart().equals("title")) {
-                        String lang = (String)((org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.TextType) objCasted.getValue()).getLang();
+                        String lang = (String)((TextType) objCasted.getValue()).getLang();
                         if (lang == null || lang.equals("en")) {
-                            title = (String)((org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.TextType) objCasted.getValue()).getContent().get(0);
-
+                            title = (String)((TextType) objCasted.getValue()).getContent().get(0);
                         }
                     }
                 }
 
-                if (obj instanceof org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiIdentifier) {
-                    org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiIdentifier objCasted =
-                            (org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiIdentifier) obj;
+                if (obj instanceof IatiIdentifier) {
+                    IatiIdentifier objCasted = (IatiIdentifier) obj;
                     iatiIdt = objCasted.getContent();
                 }
 
@@ -593,7 +597,7 @@ public class ImportActionNew extends DispatchAction {
                 for (Iterator it = parsed.getIatiActivityOrAny().iterator(); it.hasNext();) {
                     Object tmp = it.next();
                     boolean contains = false;
-                    if (tmp instanceof org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivity) {
+                    if (tmp instanceof IatiActivity) {
                         IatiActivity iatiAct = (IatiActivity) tmp;
                         Set<String> countryCode = getActivityCountries(iatiAct);
                         for (String iso : countryCode) {
@@ -1165,10 +1169,10 @@ public class ImportActionNew extends DispatchAction {
     private IatiActivities fromXml(InputStream is, DEImportValidationEventHandler log) throws SAXException, JAXBException {
         JAXBContext jc = JAXBContext.newInstance(DEConstants.IATI_JAXB_INSTANCE);
         Unmarshaller m = jc.createUnmarshaller();
-        URL rootUrl   = this.getClass().getResource("/");
+        URL rootUrl = this.getClass().getResource("/");
         String path="";
         try {
-            path     = rootUrl.toURI().resolve("../../").getPath();
+            path = rootUrl.toURI().resolve("../../").getPath();
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }

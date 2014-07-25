@@ -4,7 +4,9 @@
 package org.digijava.module.dataExchange.iati;
 
 
-/** 
+import java.math.BigDecimal;
+
+/**
  * Keeps the list of IatiVersions supported in AMP 
  * @author Nadejda Mandrescu
  */ 
@@ -38,4 +40,16 @@ public enum IatiVersion {
 		default: return null;
 		}
 	}
+
+    /**
+     * Jaxb parses version as BigDecimal
+     * @param value
+     * @return
+     */
+    public static IatiVersion getValueOf(BigDecimal value) {
+        if (value == null) {
+            return null;
+        }
+        return getValueOf(value.toString());
+    }
 }

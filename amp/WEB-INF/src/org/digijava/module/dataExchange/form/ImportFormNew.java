@@ -1,15 +1,23 @@
 package org.digijava.module.dataExchange.form;
 
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
-import org.digijava.module.dataExchange.action.ImportActionNew;
-import org.digijava.module.dataExchange.dbentity.*;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivity;
 
-import javax.servlet.ServletRequest;
-import java.io.File;
-import java.util.*;
+import org.digijava.module.dataExchange.action.ImportActionNew;
+
+
+import org.digijava.module.dataExchange.dbentity.AmpDEUploadSession;
+import org.digijava.module.dataExchange.dbentity.DELogPerItem;
+import org.digijava.module.dataExchange.dbentity.DEMappingFields;
+import org.digijava.module.dataExchange.dbentity.DESourceSetting;
+
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.IatiActivity;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,7 +33,7 @@ public class ImportFormNew extends ActionForm {
     private FormFile file;
     private List<DESourceSetting> configurations;
     private Long configurationId;
-    private List<AbstractMap.SimpleEntry <String, String>> countryList;
+    private List<Map.Entry <String, String>> countryList;
     private String[] selCountries;
     private Set<Map.Entry <String, String>> languageList;
     private String[] selLanguages;
@@ -156,11 +164,11 @@ public class ImportFormNew extends ActionForm {
         this.page = page;
     }
 
-    public List<AbstractMap.SimpleEntry<String, String>> getCountryList() {
+    public List<Map.Entry<String, String>> getCountryList() {
         return countryList;
     }
 
-    public void setCountryList(List<AbstractMap.SimpleEntry<String, String>> countryList) {
+    public void setCountryList(List<Map.Entry<String, String>> countryList) {
         this.countryList = countryList;
     }
 
@@ -208,7 +216,7 @@ public class ImportFormNew extends ActionForm {
 	}
 
 	/**
-	 * @param defaultLanguge the default language to be used if no language is detected for an element
+	 * @param defaultLanguage the default language to be used if no language is detected for an element
 	 */
 	public void setDefaultLanguage(String defaultLanguage) {
 		this.defaultLanguage = defaultLanguage;

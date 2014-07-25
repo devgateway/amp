@@ -1,0 +1,16 @@
+<div class="radio">
+  <label>
+    <input type="radio" name="<%= obj.group || 'indicators' %>" value="<%= obj.id || obj.value %>" <% if(obj.selected){%> checked <%}%> >
+    <%= obj.title %>
+  </label>
+  <% if (obj.helpText){ %>
+    <a href="#layer-info" class="layer-info"
+      data-toggle="popover"
+      data-container="body"
+      data-placement="right"
+      data-trigger="click"
+      data-content="<%= helpText %>">
+      <span class="glyphicon glyphicon-info-sign"></span>
+    </a>
+  <%}%>
+</div>

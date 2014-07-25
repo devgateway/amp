@@ -64,7 +64,6 @@ var fakeServer = {
   },
 
   _addPath: function(resp, path){
-    console.info('debug path: ', path);
     this.server.respondWith('GET',
                       path,
                       [200, { 'Content-Type': 'application/json' }, resp]);

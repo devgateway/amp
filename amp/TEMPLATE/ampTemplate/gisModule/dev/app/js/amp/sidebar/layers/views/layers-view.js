@@ -2,12 +2,16 @@ var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var $ = require('jquery');
-var BaseControlView = require('../../base-control/base-control-view');
+var state = require('../../../services/state');
+
 var IndicatorCollection = require('../collections/indicator-collection');
+var ProjectLayerCollection = require('../collections/project-layer-collection');
+
+var BaseControlView = require('../../base-control/base-control-view');
 
 var Template = fs.readFileSync(__dirname + '/../templates/layers-template.html', 'utf8');
-var IndicatorTemplate = fs.readFileSync(__dirname + '/../templates/indicator-template.html', 'utf8');
-var PointsTemplate = fs.readFileSync(__dirname + '/../templates/points-template.html', 'utf8');
+var RadioOptionTemplate = fs.readFileSync(__dirname + '/../templates/radio-option-template.html', 'utf8');
+var ProjectLayersTemplate = fs.readFileSync(__dirname + '/../templates/project-layer-template.html', 'utf8');
 
 
 module.exports = BaseControlView.extend({
@@ -17,8 +21,8 @@ module.exports = BaseControlView.extend({
   description: 'Select Points or Indicators to visualize data on the main map.',
 
   template: _.template(Template),
-  indicatorTemplate: _.template(IndicatorTemplate),
-  pointsTemplate: _.template(PointsTemplate),
+  radioOptionTemplate: _.template(RadioOptionTemplate),
+  projectLayersTemplate: _.template(ProjectLayersTemplate),
 
 
   initialize: function() {
@@ -29,8 +33,37 @@ module.exports = BaseControlView.extend({
     this.indicators =  new IndicatorCollection();
     this.indicators.fetch({reset:true});
 
-    //TODO: onTrigger.. ?confirm syntax with phil
-    this.indicators.on('reset', this.renderIndicatorList, this);
+    this.listenTo(this.indicators, 'reset', this.renderIndicatorList);
+    this._initProjectLayerCollection();
+
+    // register state:    
+    state.register(this, 'layers-view', {
+      get: function(){ return this.projectLayerCollection.toJSON(); },
+      set: function(obj){ if(obj){this.projectLayerCollection.set(obj);} },
+      empty: null
+    });
+  },
+
+  _initProjectLayerCollection: function(){
+    this.projectLayerCollection = new ProjectLayerCollection([
+      {
+        selected: true,
+        title: 'Projects by Region',
+        value:'aggregate-adm1'
+      },
+      {
+        title: 'Projects by District',
+        value:'aggregate-adm2'
+      },
+      {
+        title: 'Projects Sites',
+        value:'locations',
+        helpText: 'See individual project sites.'
+      }
+    ]);
+
+    // TODO: on 'selected' change update ui...
+
   },
 
   render: function(){
@@ -39,8 +72,7 @@ module.exports = BaseControlView.extend({
 
     // add content
     this.$('.content').html(this.template({title: this.title}));
-
-    this.renderPointList();
+    this.renderProjectList();
 
     // Indicator listener
     this._addIndicatorListener();
@@ -49,32 +81,47 @@ module.exports = BaseControlView.extend({
   },
 
 
-
-  renderPointList: function(){
+  renderProjectList: function(){
     var self = this;
 
-    this.$('#point-selector').html(this.pointsTemplate());
+    this.$('#point-selector').html(this.projectLayersTemplate());
+    this.projectLayerCollection.each(function(model) {
+      self.$('#project-layer-options').append(self.radioOptionTemplate(model.toJSON()));
+    });
+
     this._addPointsListener();
 
     // setup listener:
     this.$('#point-selector input:radio').change(function(){
       var val = $(this).val();
-      if(val === 'aggregated'){
-        self.$('.aggregate-group').show();
-        val = self.$('.point-options .amp-uses:input:radio:checked').val();
-      } else if(val === 'locations'){
-        self.$('.aggregate-group').hide();
-      }
-      Backbone.trigger('MAP_LOAD_POINT_LAYER', val);
+      Backbone.trigger('MAP_LOAD_PROJECT_LAYER', val);
     });
   },
 
+  _addPointsListener: function(){
+    var self = this;
 
+
+    this.$('#point-layers').change(function(evt){
+      var pointsEnabled = $(this).prop('checked');
+      if(pointsEnabled){
+        self.$('#project-layer-options').show();
+        var val = self.$('#project-layer-options input:radio:checked:visible').val();
+        Backbone.trigger('MAP_LOAD_PROJECT_LAYER', val);
+
+      } else {
+        Backbone.trigger('MAP_LOAD_PROJECT_LAYER', null);
+        self.$('#project-layer-options').hide();
+      }
+    });
+  },
+
+  // TODO: Move indicators to own view.
   renderIndicatorList: function(){
     var self = this;
     this.$('.indicator-selector').html('');
     this.indicators.each(function(indicator){
-      self.$('.indicator-selector').append(self.indicatorTemplate(indicator.toJSON()));
+      self.$('.indicator-selector').append(self.radioOptionTemplate(indicator.toJSON()));
     });
 
     // setup listener:
@@ -83,24 +130,6 @@ module.exports = BaseControlView.extend({
 
       var indicator = self.indicators.find(function(model) { return model.get('id') === parseInt(modelId); });
       Backbone.trigger('MAP_LOAD_INDICATOR', indicator);
-    });
-  },
-
-  _addPointsListener: function(){
-    var self = this;
-
-    // TODO: make this collapse, null behaviour generic so we can use it on both...
-    this.$('#point-layers').change(function(evt){
-      var pointsEnabled = $(this).prop('checked');
-      if(pointsEnabled){
-        self.$('.point-options').show();
-        var val = self.$('.point-options .amp-uses:input:radio:checked:visible').val();
-        Backbone.trigger('MAP_LOAD_POINT_LAYER', val);
-
-      } else {
-        Backbone.trigger('MAP_LOAD_POINT_LAYER', null);
-        self.$('.point-options').hide();
-      }
     });
   },
 
@@ -113,10 +142,10 @@ module.exports = BaseControlView.extend({
       if(indicatorEnabled){
         self.$('.indicator-selector').show();
         var modelId = self.$('.indicator-selector input:radio:checked').val();
-
-        var indicator = self.indicators.find(function(model) { return model.get('id') === parseInt(modelId); });
-        Backbone.trigger('MAP_LOAD_INDICATOR', indicator);
-
+        if(modelId){      
+          var indicator = self.indicators.find(function(model) { return model.get('id') === parseInt(modelId); });
+          Backbone.trigger('MAP_LOAD_INDICATOR', indicator);
+        }
       } else {
         Backbone.trigger('MAP_LOAD_INDICATOR', null);
         self.$('.indicator-selector').hide();

@@ -25,7 +25,7 @@ module.exports = Backbone.View.extend({
 
     // TODO: move listener to collection, and subscribe to it's changes.
     Backbone.on('FILTERS_UPDATED', this._filtersUpdated, this);
-    Backbone.on('MAP_LOAD_POINT_LAYER', this._loadProjectLayer, this);
+    Backbone.on('MAP_LOAD_PROJECT_LAYER', this._loadProjectLayer, this);
 
   },
 

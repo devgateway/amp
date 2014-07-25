@@ -7,7 +7,8 @@ module.exports = Backbone.Model.extend({
       title: 'Indicator Name',
       featurePath: 'http://example.com',
       type: 'raster', // maybe not necessary....
-      admLevel: 0     // maybe not necessary....
+      admLevel: 0,     // maybe not necessary....
+      selected: false
   },
 
   initialize: function() {

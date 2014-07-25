@@ -17,7 +17,7 @@ module.exports = Backbone.View.extend({
     // instead, maybe we can grab a reference to the model or collection,
     // backing the filter, and subscribe to changes on it?
     Backbone.on('FILTERS_UPDATED', this._filtersUpdated, this);
-    Backbone.on('MAP_LOAD_POINT_LAYER', this._loadProjectLayer, this);
+    Backbone.on('MAP_LOAD_PROJECT_LAYER', this._loadProjectLayer, this);
     _.bindAll(this, '_onEachFeature');
   },
 

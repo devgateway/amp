@@ -29,20 +29,20 @@ module.exports = BaseFilterView.extend({
 
     // TODO: uses window.jQuery because that was the only way I had luck with browserify shim... 
     // uses https://github.com/leongersen/noUiSlider
-    window.jQuery(".year-slider").noUiSlider({
+    window.jQuery('.year-slider').noUiSlider({
       start: [1990, 2010],
       step: 1,
       connect: true,
       range: self.allowedRange,
       serialization: {
-          lower: [
-        jQuery.Link({
-        target: window.jQuery('.start-year')
-        })
+        lower: [
+          window.jQuery.Link({
+            target: window.jQuery('.start-year')
+          })
         ],
         upper: [
-          jQuery.Link({
-          target: window.jQuery('.end-year')
+          window.jQuery.Link({
+            target: window.jQuery('.end-year')
           })
         ],
         format: {

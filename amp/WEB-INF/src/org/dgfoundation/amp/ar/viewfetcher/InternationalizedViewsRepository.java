@@ -100,12 +100,24 @@ public class InternationalizedViewsRepository {
 			new HashMap<String, I18nViewDescription>()
 			{{
 
+				addViewDef(this, new I18nViewDescription("amp_organisation").
+						addColumnDef(new I18nViewColumnDescription("description", "amp_org_id", AmpOrganisation.class, "description")).
+						addColumnDef(new I18nViewColumnDescription("name", "amp_org_id", AmpOrganisation.class, "name")));
+				
 				addViewDef(this, new I18nViewDescription("amp_activity").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_activity_id", AmpActivityVersion.class, "name")));
 
 				addViewDef(this, new I18nViewDescription("amp_category_value_location").
 						addColumnDef(new I18nViewColumnDescription("location_name", "id", AmpCategoryValueLocations.class, "name")));
 
+				addViewDef(this, new I18nViewDescription("amp_org_group").
+						addColumnDef(new I18nViewColumnDescription("org_grp_name", "amp_org_grp_id", AmpOrgGroup.class, "orgGrpName")));
+
+				addViewDef(this, new I18nViewDescription("amp_org_type").
+						addColumnDef(new I18nViewColumnDescription("org_type", "amp_org_type_id", AmpOrgType.class, "orgType")));				
+				
+				addViewDef(this, new I18nViewDescription("amp_sector").
+						addColumnDef(new I18nViewColumnDescription("name", "amp_sector_id", AmpSector.class, "name")));				
 				
 				
 				addViewDef(this, new I18nViewDescription("v_act_pp_details").
@@ -157,7 +169,7 @@ public class InternationalizedViewsRepository {
 						addColumnDef(new I18nViewColumnDescription("orgname", "amp_org_id", AmpOrganisation.class, "name")));
 
 				
-				// QUESTION: AmpComponent should not be translateable? If it should - v_component_* should be added to the conf, too
+				// QUESTION: AmpComponent should not be translatable? If it should - v_component_* should be added to the conf, too
 				// backlog: v_organization_projectid does concatenation with orgname, but not used in reports
 				// backlog: v_project_id does concat with orgname
 				

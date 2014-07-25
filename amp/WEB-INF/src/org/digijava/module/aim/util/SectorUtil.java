@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -32,6 +33,7 @@ import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Sector;
 import org.digijava.module.aim.util.caching.AmpCaching;
+import org.digijava.module.aim.util.time.StopWatch;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -240,6 +242,23 @@ public class SectorUtil {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
+	public static Map<Long, SectorSkeleton> getAllParentSectorsFaster(Long secSchemeId){
+		return SectorSkeleton.getParentSectors(secSchemeId);
+//		try
+//		{ 
+//			String queryString = "select s from " + AmpSector.class.getName()
+//					+ " s " + "where amp_sec_scheme_id = " + secSchemeId
+//					+ " and parent_sector_id is null and (s.deleted is null or s.deleted = false)  " + "order by " + AmpSector.hqlStringForName("s");
+//			List<AmpSector> sectors = new ArrayList<>(PersistenceManager.getSession().createQuery(queryString).list());
+//			return sectors;
+//		} catch (Exception e) {
+//			throw new RuntimeException(e);
+//		}
+	}
+	
+	
+	
 	public static List<AmpSector> getAllParentSectors() {
 		Session session = null;
 		List<AmpSector> col = null;
@@ -312,6 +331,29 @@ public class SectorUtil {
 		return AmpCaching.getInstance().sectorsCache.getAllSectors();
 	}
 
+	
+	public static void linkChildrenToParents(Map<Long, SectorSkeleton> parents, Map<Long, SectorSkeleton> children) {
+		for (Map.Entry<Long, SectorSkeleton> entry : children.entrySet()) {
+		    Long childKey = entry.getKey();
+		    SectorSkeleton sec = entry.getValue();
+		    if (sec.getParentSectorId() != null) {
+		    	if (parents.get(sec.getParentSectorId()) != null) {
+		    		parents.get(sec.getParentSectorId()).addChild(sec);
+		    	}
+		    }
+		    if (sec.getParentSectorId() != null) {
+		    	if (children.get(sec.getParentSectorId()) != null) {
+		    		children.get(sec.getParentSectorId()).addChild(sec);
+		    	}
+		    }
+		}					
+	}
+	
+	
+	public static Map<Long, SectorSkeleton> getAllChildSectorsFaster(Map <Long, SectorSkeleton> sectors) {
+		return SectorSkeleton.getAllSectors(sectors);
+	}	
+	
 	public static Collection<AmpSector> getAllChildSectors(Long parSecId) {
 		if (AmpCaching.getInstance().sectorsCache == null)
 			getAllSectors(); // force initialization of cache
@@ -989,6 +1031,46 @@ public class SectorUtil {
 		return ret;
 	}
 
+	/**
+	 * TODO: this is poor man's recursion
+	 * it can certainly be rewritten
+	 * @param configurationName
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static Collection<SectorSkeleton> getAmpSectorsAndSubSectorsHierarchyFaster(String configurationName) {
+		Collection<SectorSkeleton> ret = new HashSet<SectorSkeleton>();
+		Long id = null;
+		try {
+
+			Collection<AmpClassificationConfiguration> configs = SectorUtil.getAllClassificationConfigs();
+			Iterator<AmpClassificationConfiguration> confIter = configs.iterator();
+			while (confIter.hasNext()) {
+				AmpClassificationConfiguration conf = confIter.next();
+				if (configurationName.equals(conf.getName())) {
+					if (conf.getClassification() != null)
+						id = conf.getClassification().getAmpSecSchemeId();
+				}
+			}
+			if (id != null) {
+				Map<Long, SectorSkeleton> parents = SectorUtil.getAllParentSectorsFaster(id);
+				Map<Long, SectorSkeleton> children = SectorUtil.getAllChildSectorsFaster(parents);
+				linkChildrenToParents(parents, children);
+				for (Map.Entry<Long, SectorSkeleton> entry : parents.entrySet()) {
+					ret.add(entry.getValue());
+				}
+				
+			}
+		} catch (DgException e) {
+			e.printStackTrace();
+		}
+		
+		return ret;
+	}
+
+
+	
+	
 	/**
 	 * TODO: this is poor man's recursion
 	 * @param configurationName

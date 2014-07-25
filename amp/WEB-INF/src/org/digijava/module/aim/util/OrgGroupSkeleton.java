@@ -1,17 +1,48 @@
 package org.digijava.module.aim.util;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
+import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
+import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
+import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
+import org.digijava.module.aim.dbentity.AmpOrgType;
+import org.hibernate.jdbc.Work;
 
 /**
  * lightweight alternative to AmpOrgGroup, usable in the (vast) majority of places in AMP where a full OrgGroup is not needed, but just a name and id
  * @author Dolghier Constantin
  *
  */
-public class OrgGroupSkeleton implements Comparable<OrgGroupSkeleton>
+public class OrgGroupSkeleton implements Comparable<OrgGroupSkeleton>, HierarchyListable
 {
 	private Long ampOrgGrpId;	
 	private String orgGrpName;	
 	private String orgGrpCode;
+	private Long orgGrpType;
+	private boolean translatable;
+	private AmpOrgType orgType;
+	
+	public OrgGroupSkeleton() {
+		
+	}
+	public OrgGroupSkeleton(Long id, String name, String code, Long orgTypeId) {
+		this.ampOrgGrpId = id;
+		this.orgGrpName = name;
+		this.orgGrpCode = code;
+		this.orgGrpType = orgTypeId; 
+		this.translatable = true;
+	}
 	
 	public Long getAmpOrgGrpId() {
 		return ampOrgGrpId;
@@ -25,6 +56,10 @@ public class OrgGroupSkeleton implements Comparable<OrgGroupSkeleton>
 		return orgGrpName;
 	}
 
+	public Long getOrgTypeId() {
+		return this.orgGrpType;
+	}
+	
 	public void setOrgGrpName(String orgGrpName) {
 		this.orgGrpName = orgGrpName;
 	}
@@ -58,4 +93,71 @@ public class OrgGroupSkeleton implements Comparable<OrgGroupSkeleton>
 	{
 		return String.format("%s (id: %d)", this.orgGrpName, this.ampOrgGrpId);
 	}
+    private static Long nullInsteadOfZero(long val) {
+    	if (val == 0) {
+    		return null;
+    	}
+    	else return val;
+    }
+
+    public static List<OrgGroupSkeleton>  populateSkeletonOrgGroupsList() {
+        final List<OrgGroupSkeleton> orgGroups = new ArrayList<OrgGroupSkeleton>();
+        PersistenceManager.getSession().doWork(new Work(){
+				public void execute(Connection conn) throws SQLException {
+					ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_org_group", 
+							"", TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");
+					ResultSet rs = v.fetch(null);
+					while (rs.next()) {
+						orgGroups.add(new OrgGroupSkeleton(nullInsteadOfZero(rs.getLong("amp_org_grp_id")), 
+													 	rs.getString("org_grp_name"), 
+													 	rs.getString("org_grp_code"), 
+													 	nullInsteadOfZero(rs.getLong("org_type"))));
+					}
+				}
+			});
+        return orgGroups;
+    }
+
+	@Override
+	public String getLabel() {
+		return this.getOrgGrpName();
+	}
+
+	@Override
+	public String getUniqueId() {
+		return String.valueOf(this.getAmpOrgGrpId());
+	}
+
+	@Override
+	public String getAdditionalSearchString() {
+		return this.orgGrpCode;
+
+	}
+
+	@Override
+	public boolean getTranslateable() {
+ 
+		return this.translatable;
+	}
+
+	@Override
+	public void setTranslateable(boolean translatable) {
+		this.translatable = translatable;
+		
+	}
+
+	@Override
+	public Collection<? extends HierarchyListable> getChildren() {
+		return null;
+	}
+
+	@Override
+	public int getCountDescendants() {
+		return 1;
+	}
+
+	
+	
+	
+	
 }

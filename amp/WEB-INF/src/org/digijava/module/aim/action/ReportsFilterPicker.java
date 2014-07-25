@@ -81,7 +81,7 @@ public class ReportsFilterPicker extends Action {
     
     @Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception{
-	
+    	AmpCaching.clearInstance();
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
 		//filterForm.setAmpReportId(ReportContextData.getFromRequest().getAmp);
         boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
@@ -294,7 +294,7 @@ public class ReportsFilterPicker extends Action {
 		if (featureName.contains("Agenc"))
 			throw new RuntimeException("invalid feature name: should not contain the word 'Agency' or derivated' " + featureName);
 
-		addAgencyFilter(filterForm, featureName + " Agency", roleCode, featureName + " Agencies", "filter_" + featureName.toLowerCase() + "_agencies_div", "selected" + featureName + "Agency", includeParent);
+		addAgencyFilterFaster(filterForm, featureName + " Agency", roleCode, featureName + " Agencies", "filter_" + featureName.toLowerCase() + "_agencies_div", "selected" + featureName + "Agency", includeParent);
 	}
 
 	/**
@@ -307,6 +307,7 @@ public class ReportsFilterPicker extends Action {
 	 * @param selectId - the id of the generated select
 	 * @param includeParent -includes the parent ids of the objects
 	 */
+	
 	private static void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filterDivId, String selectId, boolean includeParent)
 	{		
 	 	if (FeaturesUtil.isVisibleFeature(featureName) ) {
@@ -321,6 +322,28 @@ public class ReportsFilterPicker extends Action {
  	 	 	if (includeParent) {
  	 	 	for (AmpOrganisation donor:relevantAgencies) {
  	 	 		rootRelevantAgencies.getParentMapping().put(donor.getAmpOrgId(),donor.getOrgGrpId().getAmpOrgGrpId());
+ 	 	 	}
+ 	 	 	}
+ 	 		
+     	 
+		}	
+	}	
+	
+	private static void addAgencyFilterFaster(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filterDivId, String selectId, boolean includeParent)
+	{		
+		
+	 	if (FeaturesUtil.isVisibleFeature(featureName) ) {
+ 	 		List<OrganizationSkeleton> relevantAgencies = ReportsUtil.getAllOrgByRoleOfPortfolioFaster(roleCode);
+ 	 		HierarchyListableUtil.changeTranslateable(relevantAgencies, false);
+ 	 		HierarchyListableImplementation rootRelevantAgencies = new HierarchyListableImplementation();
+ 	 		rootRelevantAgencies.setLabel("All " + rootElementName);
+ 	 		rootRelevantAgencies.setUniqueId("0");
+ 	 		rootRelevantAgencies.setChildren( relevantAgencies );
+ 	 		GroupingElement<HierarchyListableImplementation> relevantAgenciesElement = new GroupingElement<HierarchyListableImplementation>(rootElementName, filterDivId, rootRelevantAgencies, selectId);
+ 	 		filterForm.getRelatedAgenciesElements().add(relevantAgenciesElement);
+ 	 	 	if (includeParent) {
+ 	 	 	for (OrganizationSkeleton donor:relevantAgencies) {
+ 	 	 		rootRelevantAgencies.getParentMapping().put(donor.getAmpOrgId(),donor.getOrgGrpId());
  	 	 	}
  	 	 	}
  	 		
@@ -341,7 +364,7 @@ public class ReportsFilterPicker extends Action {
 	private static void addSectorElement(ReportsFilterPickerForm filterForm, String fieldName, String sectorName, String rootLabel, String filterDiv, String selectId)
 	{
 	 	if (FeaturesUtil.isVisibleField(fieldName)){
-	 		List<AmpSector> ampSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchy(sectorName);
+	 		Collection<SectorSkeleton> ampSectors = SectorUtil.getAmpSectorsAndSubSectorsHierarchyFaster(sectorName);
 	 		HierarchyListableUtil.changeTranslateable(ampSectors, false);
 	 		
  	 		HierarchyListableImplementation rootAmpSectors  = new HierarchyListableImplementation();
@@ -597,7 +620,7 @@ public class ReportsFilterPicker extends Action {
  	 	addSectorElement(filterForm, "Secondary Sector", AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME, "Secondary Sectors", "filter_secondary_sectors_div", "selectedSecondarySectors");
  	 	addSectorElement(filterForm, "Tertiary Sector",  AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME,  "Tertiary Sectors",  "filter_tertiary_sectors_div",  "selectedTertiarySectors");
  	 	addSectorElement(filterForm, "Sector Tag",      AmpClassificationConfiguration.TAG_CLASSIFICATION_CONFIGURATION_NAME,  "Tag Sector",              "filter_tag_sectors_div",       "selectedTagSectors");
- 	 	        
+ 	 	 	 	        
  	 	
         StopWatch.next("Filters", true, "before programs");
         if ( FeaturesUtil.isVisibleModule("National Planning Dashboard") )
@@ -641,12 +664,15 @@ public class ReportsFilterPicker extends Action {
 	 	 	StopWatch.next("Filters", true, "After NPO");
         }
  	 	StopWatch.next("Filters", true, "After Programs");
+ 	 	
+ 	 	
+ 	 	StopWatch.next("Filters", true, "After Programs");
  	 	//long a = System.currentTimeMillis();
- 		List<AmpOrgType> donorTypes = DbUtil.getAllOrgTypesOfPortfolio();
- 	 	List<AmpOrgGroup> donorGroups = /*ARUtil.filterDonorGroups(*/DbUtil.getAllOrgGroupsOfPortfolio();
+ 		List<OrgTypeSkeleton> donorTypes = DbUtil.getAllOrgTypesFaster();
+ 	 	List<OrgGroupSkeleton> donorGroups = /*ARUtil.filterDonorGroups(*/DbUtil.getAllOrgGroupsOfPortfolioFaster();
 
- 	 	Collections.sort(donorGroups, new DbUtil.HelperAmpOrgGroupNameComparator());
- 	 	Collections.sort(donorTypes, new DbUtil.HelperAmpOrgTypeNameComparator());
+ 	 	Collections.sort(donorGroups);
+ 	 	Collections.sort(donorTypes);
  	 	
  	 	HierarchyListableUtil.changeTranslateable(donorTypes, false);
  	 	HierarchyListableUtil.changeTranslateable(donorGroups, false);
@@ -665,11 +691,11 @@ public class ReportsFilterPicker extends Action {
  	 	rootOrgGroup.setUniqueId("0");
  	 	rootOrgGroup.setChildren(donorGroups);
  	 	GroupingElement<HierarchyListableImplementation> donorGroupElement = new GroupingElement<HierarchyListableImplementation>("Donor Groups", "filter_donor_groups_div", rootOrgGroup, "selectedDonorGroups");
- 	 	for (AmpOrgGroup group:donorGroups) {
- 	 		rootOrgGroup.getParentMapping().put(group.getAmpOrgGrpId(),group.getOrgType().getAmpOrgTypeId());
+ 	 	for (OrgGroupSkeleton group:donorGroups) {
+ 	 		rootOrgGroup.getParentMapping().put(group.getAmpOrgGrpId(),group.getOrgTypeId());
  	 	}
  	 	filterForm.getDonorElements().add(donorGroupElement);
- 	 	
+ 	 	StopWatch.next("Filters", true, "After beta1");
  	 	Collection<AmpOrganisation> donors = ReportsUtil.getAllOrgByRoleOfPortfolio(Constants.ROLE_CODE_DONOR);
  	 	HierarchyListableUtil.changeTranslateable(donors, false);
  	 	HierarchyListableImplementation rootDonors = new HierarchyListableImplementation();
@@ -684,7 +710,11 @@ public class ReportsFilterPicker extends Action {
  	 	
  	 	filterForm.setRelatedAgenciesElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
  	 	
+ 	 	
+ 	 	
+ 	 	
 		StopWatch.next("Filters", true, "Donor stuff");
+		//------------------begin here-------------------------------------------------
  	 	// 	private void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filderDivId, String selectId, ServletContext ampContext)
  	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Executing Agency")){
  	 		addAgencyFilter(filterForm, "Executing", Constants.ROLE_CODE_EXECUTING_AGENCY, false);
@@ -705,6 +735,7 @@ public class ReportsFilterPicker extends Action {
 		// Contracting Agency Groups, based off Donor Groups
 		// stimate domnule GARTNER, ce face filterDonorGroups in afara de a exclude grupurile cu "guv" si "gouv" in nume din lista? E nevoie de ei aici? 
         if(FeaturesUtil.isVisibleField("Contracting Agency Groups")){
+        	
             Collection<AmpOrgGroup> contractingAgencyGroups = /*ARUtil.filterDonorGroups(*/DbUtil.getAllContractingAgencyGroupsOfPortfolio()/*)*/;
             HierarchyListableUtil.changeTranslateable(contractingAgencyGroups, false);
     
@@ -712,12 +743,14 @@ public class ReportsFilterPicker extends Action {
             rootContractingAgenciesGroup.setLabel("All Contracting Agency Groups");
             rootContractingAgenciesGroup.setUniqueId("0");
             rootContractingAgenciesGroup.setChildren(contractingAgencyGroups);
-          
      	 	GroupingElement<HierarchyListableImplementation> contractingAgencyGroupElement  = new GroupingElement<HierarchyListableImplementation>("Contracting Agency Groups", "filter_contracting_agency_groups_div", rootContractingAgenciesGroup, "selectedContractingAgencyGroups");
  	        filterForm.getRelatedAgenciesElements().add(contractingAgencyGroupElement);
         }
 		
 		filterForm.setFinancingLocationElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
+		
+		//-------------------end here--------------------------------------------------------------------------------------
+		
 		StopWatch.next("Filters", true, "Agency stuff");
 		
 		//private void addFinancingLocationElement(ReportsFilterPickerForm filterForm, String fieldName, String rootLabel, String financingModeKey, String elementName, String filterId, String selectId, HttpServletRequest request, ServletContext ampContext) throws Exception

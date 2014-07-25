@@ -92,6 +92,7 @@ import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.dbentity.OrgTypeSkeleton;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
@@ -110,6 +111,7 @@ import org.digijava.module.aim.helper.Question;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.helper.fiscalcalendar.BaseCalendar;
 import org.digijava.module.aim.util.caching.AmpCaching;
+import org.digijava.module.aim.util.time.StopWatch;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -5088,6 +5090,14 @@ public class DbUtil {
 		}
 	}
 
+	
+	public static List<OrgTypeSkeleton> getAllOrgTypesFaster() {
+		Session session = null;
+		List<OrgTypeSkeleton> col = OrgTypeSkeleton.populateTypeSkeletonList();
+		return col;
+	}	
+	
+	
 	public static Collection<AmpOrgType> getAllOrgTypes() {
 		Session session = null;
 		Collection<AmpOrgType> col = new ArrayList<AmpOrgType>();
@@ -5105,6 +5115,8 @@ public class DbUtil {
 		}
 		return col;
 	}
+
+	
 	
 	public static Collection<AmpOrgGroup> getAllContractingAgencyGroupsOfPortfolio()
 	{
@@ -5132,6 +5144,29 @@ public class DbUtil {
 		return col;
 	}
 
+	
+	
+	/**
+	 * fetches DONOR org groups of the database portfolio, but faster
+	 * @return
+	 */
+	public static List<OrgGroupSkeleton> getAllOrgGroupsOfPortfolioFaster() {
+//		if (AmpCaching.getInstance().allOrgGroupsOfPortfolio != null)
+//			return new ArrayList<OrgGroupSkeleton>(AmpCaching.getInstance().allOrgGroupsOfPortfolio);
+
+		Session session = null;
+		List<OrgGroupSkeleton> col = null;
+		
+		try {
+			col = OrgGroupSkeleton.populateSkeletonOrgGroupsList();
+		} catch (Exception e) {
+			logger.error("Got exception from getAllOrgGroupsOfPortfolio()", e);
+		}
+		StopWatch.next("Filters", true, "alpha 2.2");
+		return col;
+	}	
+	
+	
 	/**
 	 * fetches DONOR org groups of the database portfolio
 	 * @return
@@ -5158,7 +5193,9 @@ public class DbUtil {
 		} catch (Exception e) {
 			logger.error("Got exception from getAllOrgGroupsOfPortfolio()", e);
 		}
+		StopWatch.next("Filters", true, "alpha 2.1");
 		AmpCaching.getInstance().allOrgGroupsOfPortfolio = new ArrayList<AmpOrgGroup>(col);
+		StopWatch.next("Filters", true, "alpha 2.2");
 		return col;
 	}
 
@@ -5169,7 +5206,10 @@ public class DbUtil {
 		Session session = null;
 		List<AmpOrgType> col = new ArrayList<AmpOrgType>();
 		try {
+	 		StopWatch.next("Filters", true, "alpha 1.1");
 			session = PersistenceManager.getRequestDBSession();
+	 		StopWatch.next("Filters", true, "alpha 1.2");
+
 			String rewrittenColumns = SQLUtils.rewriteQuery("amp_org_type", "aot", 
 				new HashMap<String, String>(){{
 					put("org_type", InternationalizedModelDescription.getForProperty(AmpOrgType.class, "orgType").getSQLFunctionCall("aot.amp_org_type_id"));
@@ -5186,7 +5226,10 @@ public class DbUtil {
 		} catch (Exception e) {
 			logger.error("Exception from getAllOrgTypesOfPortfolio()", e);
 		}
+		StopWatch.next("Filters", true, "alpha 1.3");
 		AmpCaching.getInstance().allOrgTypesOfPortfolio = new ArrayList<AmpOrgType>(col);
+ 		StopWatch.next("Filters", true, "alpha 1.4");
+
 		return col;
 	}
 

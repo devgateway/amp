@@ -14,6 +14,7 @@ import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.hibernate.jdbc.Work;
 /*
@@ -25,7 +26,7 @@ public class LocationSkeleton implements Comparable<LocationSkeleton>, Hierarchy
 	private Long cvId; // category value id
 	private String name;	//location name
 	private Long locParentId; //location parent (country<-region<-... or something)
-	private boolean translateable = false; 
+	private boolean translatable = false; 
 	private String code; 
 	private Set<LocationSkeleton> childLocations;
 
@@ -114,12 +115,12 @@ public class LocationSkeleton implements Comparable<LocationSkeleton>, Hierarchy
 	
 	@Override
 	public boolean getTranslateable() {
-		return translateable;
+		return translatable;
 	}
 
 	@Override
-	public void setTranslateable(boolean translateable) {
-		this.translateable = translateable;
+	public void setTranslateable(boolean translatable) {
+		this.translatable = translatable;
 	}
 	
 	@Override
@@ -157,7 +158,7 @@ public class LocationSkeleton implements Comparable<LocationSkeleton>, Hierarchy
         PersistenceManager.getSession().doWork(new Work(){
 				public void execute(Connection conn) throws SQLException {
 					ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_category_value_location", 
-							"", "ro", new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");		
+							"", TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");		
 					ResultSet rs = v.fetch(null);
 					while (rs.next()) {
 						locations.put(rs.getLong("id"), new LocationSkeleton(nullInsteadOfZero(rs.getLong("id")), 

@@ -142,7 +142,7 @@ public class SelectPledgeProgram extends Action {
 			tdd.setName(file.getFileName());
 			tdd.setDescription("");
 			tdd.setNotes("");
-			tdd.setFileSize(file.getFileSize() / 1024 / 1024);
+			tdd.setFileSize((double)file.getFileSize() / 1024 / 1024);
 			tdd.setFormFile(file);
 			ActionMessages errors = new ActionMessages();
 			//NodeWrapper wrapper = tdd.saveToRepository(request, errors);

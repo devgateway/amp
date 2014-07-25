@@ -18,6 +18,9 @@ var adm0 = fs.readFileSync(__dirname + '/data/boundaries/adm0.json', 'utf8');
 var adm1 = fs.readFileSync(__dirname + '/data/boundaries/adm1.json', 'utf8');
 var adm2 = fs.readFileSync(__dirname + '/data/boundaries/adm2.json', 'utf8');
 
+// state
+var savedStates = fs.readFileSync(__dirname + '/data/states.json', 'utf8');
+
 var fakeServer = {
   server: null,
 
@@ -43,7 +46,8 @@ var fakeServer = {
     this._addPath(adm1, '/rest/gis/adminBoundary/1');
     this._addPath(adm2, '/rest/gis/adminBoundary/2');
 
-
+    // states
+    this._addPath(savedStates, '/rest/gis/states');
   },
 
   // reg-ex can be used to pull out params and send dynamic response.

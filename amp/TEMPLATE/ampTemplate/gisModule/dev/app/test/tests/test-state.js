@@ -28,7 +28,7 @@ QUnit.test('Empty State', function(assert) {
 
   var frozenEmptyState = emptyState.freeze();
   assert.ok(listener.heard('freeze'), 'Freeze event triggered on freeze');
-  assert.deepEqual(frozenEmptyState, {}, 'Empty frozen state is empty');
+  assert.equal(frozenEmptyState, '{}', 'Empty frozen state is empty');
   listener.reset();
 
   emptyState.reset();
@@ -36,7 +36,7 @@ QUnit.test('Empty State', function(assert) {
   assert.ok(! listener.heard('change'), 'Changed event did not fire on noop reset');
   listener.reset();
 
-  emptyState.load({});
+  emptyState.load("{}");
   assert.ok(listener.heard('load'), 'Load event fired on load');
   assert.ok(! listener.heard('change'), 'Changed event did not fire on noop load');
   listener.reset();
@@ -54,17 +54,17 @@ QUnit.test('Register and Reset', function(assert) {
   state.register(thing, 'thing', {get: thing.getter, set: thing.setter, empty: 'hello'});
 
   var frozenState = state.freeze();
-  assert.equal(frozenState.thing, 'hello', 'Empty state is frozen to default empty');
+  assert.equal(JSON.parse(frozenState).thing, 'hello', 'Empty state is frozen to default empty');
 
   thing.message = 'world';
   frozenState = state.freeze();
-  assert.equal(frozenState.thing, 'world', 'Updated state freezes to the new value');
+  assert.equal(JSON.parse(frozenState).thing, 'world', 'Updated state freezes to the new value');
 
   listener.reset();
   state.reset();
   assert.ok(listener.heard('change'), 'Changed event fired when a different state was applied from reset');
   var frozenState = state.freeze();
-  assert.equal(frozenState.thing, 'hello', 'Resetting reverts state to its empty value');
+  assert.equal(JSON.parse(frozenState).thing, 'hello', 'Resetting reverts state to its empty value');
 });
 
 
@@ -75,13 +75,13 @@ QUnit.test('Load and Preload', function(assert) {
 
   state.register(thing, 'thing', {get: thing.getter, set: thing.setter, empty: 'hello'});
   listener.reset();
-  state.load({thing: 'world'});
+  state.load('{"thing": "world"}');
   assert.ok(listener.heard('change'), 'load event triggered on load of a new state');
   assert.equal(thing.message, 'world', 'load event changed the registrable');
 
   var preloadedState = new State(),
       thing2 = new Registrable();
-  preloadedState.load({thing2: 'world'});
+  preloadedState.load('{"thing2": "world"}');
   preloadedState.register(thing2, 'thing2', {get: thing2.getter, set: thing2.setter, empty: 'hello'});
   assert.equal(thing2.message, 'world', 'preloaded state was applied to the registrable');
 });

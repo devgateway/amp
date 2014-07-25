@@ -3,7 +3,7 @@ var _ = require('underscore');
 var BaseControlView = require('../../base-control/base-control-view');
 
 var SavedMapModel = require('../models/saved-map-model');
-var SavedMaps = require('../models/saved-map-collection');
+var SavedMaps = require('../collections/saved-map-collection');
 var Template = fs.readFileSync(__dirname + '/../templates/tools-template.html', 'utf8');
 var SavedMapsTemplate = fs.readFileSync(__dirname + '/../templates/saved-maps-template.html', 'utf-8');
 
@@ -24,6 +24,7 @@ module.exports = BaseControlView.extend({
     'click .gis-tool-save': 'showSave',
     'click .gis-tool-save-save': 'reallySave',
     'click .gis-tool-load': 'load',
+    'click .gis-tool-load-url': 'loadUrl',
     'click .gis-state-link': 'loadLink',
     'click .gis-tool-export': 'export',
     'click .gis-tool-share': 'share'
@@ -51,13 +52,18 @@ module.exports = BaseControlView.extend({
     this.$('.gis-tool-save-form').toggleClass('hidden');
   },
 
-  reallySave: function() {
-    var saveableMap = new SavedMapModel({
+  getStateModel: function() {
+    return new SavedMapModel({
       title: this.$('#save-title').val(),
       description: this.$('#save-desc').val(),
       stateBlob: state.freeze()
     });
-    this.savedMaps.add(saveableMap);
+  },
+
+  reallySave: function() {
+    var currentStateModel = this.getStateModel();
+    this.savedMaps.add(currentStateModel);
+    this.savedMaps.sync();
   },
 
   load: function() {
@@ -65,8 +71,17 @@ module.exports = BaseControlView.extend({
     this.savedMaps.fetch();
   },
 
+  loadUrl: function() {
+    var serializedState = this.$('#load-url').val().slice(1);  // trim #
+    this.loadSerialized(serializedState);
+  },
+
   loadLink: function(e) {
     var serializedState = e.currentTarget.hash.slice(1);  // trim the "#"
+    this.loadSerialized(serializedState);
+  },
+
+  loadSerialized: function(serializedState) {
     var stateBlob = SavedMapModel.deserialize(serializedState);
     state.load(stateBlob);
   },
@@ -77,8 +92,9 @@ module.exports = BaseControlView.extend({
   },
 
   share: function() {
+    var currentStateModel = this.getStateModel();
+    this.$('#share-url').val('#' + currentStateModel.serialize());
     this.$('.gis-tool-share-form').toggleClass('hidden');
-    // drop-down a textbox with selected text of a share URL
     // TODO: social share buttons? embeddable widgets for news/blogs?
   }
 

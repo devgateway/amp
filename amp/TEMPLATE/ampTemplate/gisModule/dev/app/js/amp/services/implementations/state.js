@@ -38,9 +38,10 @@ function State() {
 
 
   this.load = function loadState(statesBlob) {
+    var parsed = JSON.parse(statesBlob);
 
     var changed = false;
-    _.each(statesBlob, function(stateToSet, id) {
+    _.each(parsed, function(stateToSet, id) {
       var current = this._stateRegistry[id];
       if (_.isUndefined(current)) {
         this._unclaimed[id] = stateToSet;
@@ -64,8 +65,9 @@ function State() {
       var currentState = state.get();
       stateSnapshot[id] = _.clone(currentState);  // TODO: deep clone(!!)
     });
-    this.trigger('freeze', stateSnapshot);
-    return stateSnapshot;
+    var statesBlob = JSON.stringify(stateSnapshot);
+    this.trigger('freeze', statesBlob);
+    return statesBlob;
   };
 
 

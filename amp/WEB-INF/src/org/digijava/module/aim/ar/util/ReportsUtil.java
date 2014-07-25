@@ -19,6 +19,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.exception.reports.ReportException;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.AdvancedReportUtil;
+import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Query;
@@ -50,6 +51,16 @@ public class ReportsUtil {
 //        }
 //        return col;
 //    }
+
+	public static List<OrganizationSkeleton> getAllOrgByRoleOfPortfolioFaster(String roleCode) {
+        Session session = null;
+        List<OrganizationSkeleton> col = OrganizationSkeleton.populateOrganisationSkeletonList(roleCode);
+        return col;
+
+    }
+	
+	
+	
 	
 	@SuppressWarnings("unchecked")
 	public static Collection<AmpOrganisation> getAllOrgByRoleOfPortfolio(String roleCode) {

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -139,6 +140,27 @@ public class SectorUtil {
 	}
 
 	@SuppressWarnings("unchecked")
+	public static Map<Long, SectorSkeleton> getAllParentSectorsFaster(Long secSchemeId){
+		return SectorSkeleton.getParentSectors(secSchemeId);
+	}	
+	public static void linkChildrenToParents(Map<Long, SectorSkeleton> parents, Map<Long, SectorSkeleton> children) {
+		for (Map.Entry<Long, SectorSkeleton> entry : children.entrySet()) {
+		    Long childKey = entry.getKey();
+		    SectorSkeleton sec = entry.getValue();
+		    if (sec.getParentSectorId() != null) {
+		    	if (parents.get(sec.getParentSectorId()) != null) {
+		    		parents.get(sec.getParentSectorId()).addChild(sec);
+		    	}
+		    }
+		    if (sec.getParentSectorId() != null) {
+		    	if (children.get(sec.getParentSectorId()) != null) {
+		    		children.get(sec.getParentSectorId()).addChild(sec);
+		    	}
+		    }
+		}					
+	}
+	
+	@SuppressWarnings("unchecked")
 	public static List<AmpSector> getAllParentSectors(Long secSchemeId){
 		try
 		{ 
@@ -199,6 +221,11 @@ public class SectorUtil {
 		return AmpCaching.getInstance().sectorsCache.getAllSectors();
 	}
 
+	public static Map<Long, SectorSkeleton> getAllChildSectorsFaster(Map <Long, SectorSkeleton> sectors) {
+			return SectorSkeleton.getAllSectors(sectors);
+	}	
+	
+	
 	public static Collection<AmpSector> getAllChildSectors(Long parSecId) {
 		if (AmpCaching.getInstance().sectorsCache == null)
 			getAllSectors(); // force initialization of cache
@@ -557,6 +584,38 @@ public class SectorUtil {
 		return ret;
 	}
 
+	@SuppressWarnings("unchecked")
+	public static Collection<SectorSkeleton> getAmpSectorsAndSubSectorsHierarchyFaster(String configurationName) {
+		Collection<SectorSkeleton> ret = new HashSet<SectorSkeleton>();
+		Long id = null;
+		try {
+
+			Collection<AmpClassificationConfiguration> configs = SectorUtil.getAllClassificationConfigs();
+			Iterator<AmpClassificationConfiguration> confIter = configs.iterator();
+			while (confIter.hasNext()) {
+				AmpClassificationConfiguration conf = confIter.next();
+				if (configurationName.equals(conf.getName())) {
+					if (conf.getClassification() != null)
+						id = conf.getClassification().getAmpSecSchemeId();
+				}
+			}
+			if (id != null) {
+				Map<Long, SectorSkeleton> parents = SectorUtil.getAllParentSectorsFaster(id);
+				Map<Long, SectorSkeleton> children = SectorUtil.getAllChildSectorsFaster(parents);
+				linkChildrenToParents(parents, children);
+				for (Map.Entry<Long, SectorSkeleton> entry : parents.entrySet()) {
+					ret.add(entry.getValue());
+				}
+				
+			}
+		} catch (DgException e) {
+			e.printStackTrace();
+		}
+		
+		return ret;
+	}
+
+	
 	/**
 	 * TODO: this is poor man's recursion
 	 * @param configurationName

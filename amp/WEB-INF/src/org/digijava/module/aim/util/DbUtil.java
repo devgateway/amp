@@ -79,6 +79,7 @@ import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.dbentity.EUActivityContribution;
 import org.digijava.module.aim.dbentity.IPAContract;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.dbentity.OrgTypeSkeleton;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CountryBean;
@@ -1745,6 +1746,12 @@ public class DbUtil {
 		}
 	}
 
+	public static List<OrgTypeSkeleton> getAllOrgTypesFaster() {
+			Session session = null;
+			List<OrgTypeSkeleton> col = OrgTypeSkeleton.populateTypeSkeletonList();
+			return col;
+	}	
+	
 	public static Collection<AmpOrgType> getAllOrgTypes() {
 		Session session = null;
 		Collection<AmpOrgType> col = new ArrayList<AmpOrgType>();
@@ -1788,7 +1795,21 @@ public class DbUtil {
 		AmpCaching.getInstance().allContractingAgencyGroupsOfPortfolio = new ArrayList<AmpOrgGroup>(col);
 		return col;
 	}
+	
+	public static List<OrgGroupSkeleton> getAllOrgGroupsOfPortfolioFaster() {
+//		if (AmpCaching.getInstance().allOrgGroupsOfPortfolio != null)
+//			return new ArrayList<OrgGroupSkeleton>(AmpCaching.getInstance().allOrgGroupsOfPortfolio);
 
+		Session session = null;
+		List<OrgGroupSkeleton> col = null;
+		
+		try {
+			col = OrgGroupSkeleton.populateSkeletonOrgGroupsList();
+		} catch (Exception e) {
+			logger.error("Got exception from getAllOrgGroupsOfPortfolio()", e);
+		}
+		return col;
+	}	
 	/**
 	 * fetches DONOR org groups of the database portfolio
 	 * @return

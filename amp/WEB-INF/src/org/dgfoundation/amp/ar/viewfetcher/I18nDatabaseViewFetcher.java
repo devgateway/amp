@@ -49,7 +49,7 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 	/**
 	 * multi-step translation:
 	 * 0. fetches the raw data from the database (does not fetch the translated-text-columns, as those are worthless anyway)
-	 * 1. collect all the ids of all the translateable columns (distinct set of ids for each column); build a "usedIds" set for each column
+	 * 1. collect all the ids of all the translatable columns (distinct set of ids for each column); build a "usedIds" set for each column
 	 * 2. consult the cache of each of the columns and remove from "usedIds" the already-fetched entries (by, for example, a different view which uses the same cache)
 	 * 3. run (2 or 3) SELECT's for each of the columns to fetch the respective translations into the caches
 	 * 4. return a proxying/delegating ResultSet which is a passthrough for all the columns except the translated ones. The translated columns are seeked in O(1) in the caches

@@ -144,11 +144,13 @@ public class TeamMemberUtil {
 	}
 
 	public static AmpTeamMember getAmpTeamMemberCached(Long id) {
-		AmpTeamMember ampMember		= TeamMemberUtil.atmUsers.get(id);
-		if ( ampMember != null )
-			return ampMember;
 		
-		else {
+		AmpTeamMember ampMember		= TeamMemberUtil.atmUsers.get(id);
+//		if ( ampMember != null )
+//			return ampMember;
+//		
+//		else 
+		{
 			ampMember				= getAmpTeamMember(id);
 			if (id != null && ampMember != null)
 				atmUsers.put(id, ampMember);

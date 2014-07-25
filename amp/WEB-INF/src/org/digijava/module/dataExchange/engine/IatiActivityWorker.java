@@ -39,41 +39,47 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
+
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.SectorUtil;
+
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
 import org.digijava.module.dataExchange.dbentity.AmpMappedField;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
+import org.digijava.module.dataExchange.iati.IatiVersion;
 import org.digijava.module.dataExchange.pojo.DEProposedProjectCost;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
 import org.digijava.module.dataExchange.utils.DEConstants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.ActivityDate;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.Budget;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.CodeReqType;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.CodeType;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.ContactInfo;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.CurrencyType;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.DateType;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.Description;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivity;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiIdentifier;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.Location;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.OtherIdentifier;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.ParticipatingOrg;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.PlainType;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.PlannedDisbursement;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.ReportingOrg;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.Sector;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.TextType;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.Transaction;
+
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.ActivityDate;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.Budget;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.CodeReqType;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.CodeType;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.ContactInfo;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.CurrencyType;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.DateType;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.Description;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.IatiActivity;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.IatiIdentifier;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.Location;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.OtherIdentifier;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.ParticipatingOrg;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.PlainType;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.PlannedDisbursement;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.ReportingOrg;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.Sector;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.TextType;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.Transaction;
+
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.translation.util.ContentTranslationUtil;
@@ -87,6 +93,8 @@ public class IatiActivityWorker {
     private boolean saveObjects = true;
     private boolean isLoad = false;
     private Set<DEMappingFields> accumulate = new HashSet<DEMappingFields>();
+
+    private IatiVersion iatiVersion;
 
     public boolean isIgnoreSameAsCheck() {
         return ignoreSameAsCheck;
@@ -165,25 +173,21 @@ public class IatiActivityWorker {
 		this.lang = lang;
 	}
 
-	public IatiActivityWorker(IatiActivity iActivity, String title,	String iatiID, String log) {
-		super();
+	private IatiActivityWorker(IatiActivity iActivity, String title, String iatiID, String log, String lang, IatiVersion version) {
 		this.iActivity = iActivity;
 		this.title = title;
 		this.iatiID = iatiID;
 		this.log = log;
+        this.lang = lang;
+        this.iatiVersion = version;
 	}
 
-	public IatiActivityWorker(IatiActivity iActivity, String lang, String log) {
-		super();
-		this.iActivity = iActivity;
-		this.lang = lang;
-		this.log = log;
+	public IatiActivityWorker(IatiActivity iActivity, String lang, String log, IatiVersion version) {
+		this(iActivity, null, null, log, lang, version);
 	}
 
-	public IatiActivityWorker(IatiActivity iActivity, String log) {
-		super();
-		this.iActivity = iActivity;
-		this.log = log;
+	public IatiActivityWorker(IatiActivity iActivity, String log, IatiVersion version) {
+        this(iActivity, null, null, log, null, version);
 	}
 
 	public IatiActivity getiActivity() {
@@ -244,138 +248,123 @@ public class IatiActivityWorker {
 	}
 
 		// TODO Auto-generated method stub
-	public ArrayList<AmpMappedField> checkContent(int noAct, String hierarchies) {
-		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
-		if(this.getiActivity()!=null && this.getiActivity().getHierarchy()!=null)
-			if(hierarchies!=null && !hierarchies.contains(this.getiActivity().getHierarchy())) 
-			{
-				//System.out.println("Skipping activity no "+noAct+ " - Hierarchy no: "+this.getiActivity().getHierarchy());
-				return null;
-			}
-		try{
-			this.iatiLastUpdateDate = DataExchangeUtils.XMLGregorianDateToDate(this.getiActivity().getLastUpdatedDatetime());
-			for (Iterator<Object> it = this.getiActivity().getActivityWebsiteOrReportingOrgOrParticipatingOrg().iterator(); it.hasNext();) {
-				Object contentItem = (Object) it.next();
-				if(contentItem instanceof JAXBElement){
-					JAXBElement i = (JAXBElement)contentItem;
-	
-					//title
-					if(i.getName().equals(new QName("title"))){
-						JAXBElement<TextType> item = (JAXBElement<TextType>)i;
-                        if (item.getValue().getLang() == null || item.getValue().getLang().equals(this.getLang())) {
-                            //System.out.println("Activity "+noAct+":" + printTextType(item)+"#");
-                            this.title += printTextType(item);
+        public ArrayList<AmpMappedField> checkContent(int noAct, String hierarchies) {
+            ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
+            if (this.getiActivity() != null && this.getiActivity().getHierarchy() != null) {
+                if (hierarchies != null && !hierarchies.contains(this.getiActivity().getHierarchy().toString())) {
+                    System.out.println("Skipping activity no " + noAct + " - Hierarchy no: " + this.getiActivity().getHierarchy());
+                    return null;
+                }
+            }
+            try {
+                this.iatiLastUpdateDate = DataExchangeUtils.XMLGregorianDateToDate(this.getiActivity().getLastUpdatedDatetime());
+                for (Object contentItem : this.getiActivity().getActivityWebsiteOrReportingOrgOrParticipatingOrg()) {
+                    if (contentItem instanceof JAXBElement) {
+                        JAXBElement i = (JAXBElement) contentItem;
+
+                        //title
+                        if (i.getName().equals(new QName("title"))) {
+                            JAXBElement<TextType> item = (JAXBElement<TextType>) i;
+                            if (item.getValue().getLang() == null || item.getValue().getLang().equals(this.getLang())) {
+                                System.out.println("Activity " + noAct + ":" + printTextType(item) + "#");
+                                this.title += printTextType(item);
+                            }
                         }
-					}
-					//status
-					else if(i.getName().equals(new QName("activity-status"))){
-						JAXBElement<CodeType> item = (JAXBElement<CodeType>)i;
-						AmpMappedField existStatusCode = checkStatusCode(item);
-						if(existStatusCode!=null) logs.add(existStatusCode);
-					}
-	
-					//default-finance-type == type of assistance
-                    else if(i.getName().equals(new QName("default-finance-type"))){
-						JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
-						AmpMappedField existFinanceType = checkFinanceType(item);
-						if(existFinanceType!=null) logs.add(existFinanceType);
-					}
-	
-					//default-aid-type == financing instrument
-                    else if(i.getName().equals(new QName("default-aid-type"))){
-						JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>)i;
-						AmpMappedField existAidType = checkAidType(item);
-						if(existAidType!=null) logs.add(existAidType);
-					}
-					
-					//implementation-level
-                    else if(i.getName().equals(new QName("implementation-level"))){
-						JAXBElement<CodeType> item = (JAXBElement<CodeType>)i;
-						AmpMappedField existAidType = checkLevelType(item);
-						if(existAidType!=null) logs.add(existAidType);
-					}
-					
-				}
+                        //status
+                        else if (i.getName().equals(new QName("activity-status"))) {
+                            JAXBElement<CodeType> item = (JAXBElement<CodeType>) i;
+                            AmpMappedField existStatusCode = checkStatusCode(item);
+                            if (existStatusCode != null) logs.add(existStatusCode);
+                        }
 
-                else if(contentItem instanceof IatiIdentifier){
-					IatiIdentifier item = (IatiIdentifier)contentItem;
-					this.iatiID += item.getContent();
-				}
+                        //default-finance-type == type of assistance
+                        else if (i.getName().equals(new QName("default-finance-type"))) {
+                            JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>) i;
+                            AmpMappedField existFinanceType = checkFinanceType(item);
+                            if (existFinanceType != null) logs.add(existFinanceType);
+                        }
 
-                else if (contentItem instanceof ReportingOrg) {
-					ReportingOrg item = (ReportingOrg)contentItem;
+                        //default-aid-type == financing instrument
+                        else if (i.getName().equals(new QName("default-aid-type"))) {
+                            JAXBElement<CodeReqType> item = (JAXBElement<CodeReqType>) i;
+                            AmpMappedField existAidType = checkAidType(item);
+                            if (existAidType != null) logs.add(existAidType);
+                        }
 
-					AmpMappedField existOrganization = checkOrganization(printList(item.getContent()),item.getLang(), item.getRef());
-					if (existOrganization != null) {
-                        logs.add(existOrganization);
-                    }
+                        //implementation-level
+                        else if (i.getName().equals(new QName("implementation-level"))) {
+                            JAXBElement<CodeType> item = (JAXBElement<CodeType>) i;
+                            AmpMappedField existAidType = checkLevelType(item);
+                            if (existAidType != null) logs.add(existAidType);
+                        }
+
+                    } else if (contentItem instanceof IatiIdentifier) {
+                        IatiIdentifier item = (IatiIdentifier) contentItem;
+                        this.iatiID += item.getContent();
+                    } else if (contentItem instanceof ReportingOrg) {
+                        ReportingOrg item = (ReportingOrg) contentItem;
+
+                        AmpMappedField existOrganization = checkOrganization(printList(item.getContent()), item.getLang(), item.getRef());
+                        if (existOrganization != null) {
+                            logs.add(existOrganization);
+                        }
                     /* AMP-17404 remove organization type from the IATI import
                     AmpMappedField existOrganizationType = checkOrganizationType(item.getType());
 					if(existOrganizationType!=null) logs.add(existOrganizationType);
 					*/
-				}
-
-                else if(contentItem instanceof ParticipatingOrg){
-					ParticipatingOrg item = (ParticipatingOrg)contentItem;
-					// AmpMappedField existOrganizationType = checkOrganizationType(item.getType());
-					AmpMappedField existOrganization	  = checkOrganization(printList(item.getContent()),item.getLang(), item.getRef());
-					if(existOrganization!=null) logs.add(existOrganization);
-					// if(existOrganizationType!=null) logs.add(existOrganizationType);
-				}
-
-                else if(contentItem instanceof OtherIdentifier){
-					OtherIdentifier item = (OtherIdentifier)contentItem;
-					AmpMappedField existOrganization	  = checkOrganization(item.getOwnerName(),this.getLang(), item.getOwnerRef());
-					if(existOrganization!=null) logs.add(existOrganization);
-				}
-
-                else if(contentItem instanceof Location){
-					Location item = (Location)contentItem;
-					AmpMappedField existLocation	  = checkLocation(item);
-					if(existLocation!=null) logs.add(existLocation);
-				}
-
-                else if (contentItem instanceof Sector) {
-					Sector item = (Sector)contentItem;
-					AmpMappedField existSector = checkSector(item);
+                    } else if (contentItem instanceof ParticipatingOrg) {
+                        ParticipatingOrg item = (ParticipatingOrg) contentItem;
+                        // AmpMappedField existOrganizationType = checkOrganizationType(item.getType());
+                        AmpMappedField existOrganization = checkOrganization(printList(item.getContent()), item.getLang(), item.getRef());
+                        if (existOrganization != null) logs.add(existOrganization);
+                        // if(existOrganizationType!=null) logs.add(existOrganizationType);
+                    } else if (contentItem instanceof OtherIdentifier) {
+                        OtherIdentifier item = (OtherIdentifier) contentItem;
+                        AmpMappedField existOrganization = checkOrganization(item.getOwnerName(), this.getLang(), item.getOwnerRef());
+                        if (existOrganization != null) logs.add(existOrganization);
+                    } else if (contentItem instanceof Location) {
+                        Location item = (Location) contentItem;
+                        AmpMappedField existLocation = checkLocation(item);
+                        if (existLocation != null) logs.add(existLocation);
+                    } else if (contentItem instanceof Sector) {
+                        Sector item = (Sector) contentItem;
+                        AmpMappedField existSector = checkSector(item);
                     /* AMP-17404 remove 'Sector Scheme from the IATI import'
                      AmpMappedField existVocabularyCode = checkVocabularyCode(item);
 					 if(existVocabularyCode!=null) logs.add(existVocabularyCode);
 					 */
-					if(existSector!=null) logs.add(existSector);
-				}
+                        if (existSector != null) logs.add(existSector);
+                    } else if (contentItem instanceof Transaction) {
+                        Transaction item = (Transaction) contentItem;
+                        boolean ok = false;
+                        ok = checkIATITransaction(item, logs);
+                    }
 
-                else if(contentItem instanceof Transaction) {
-					Transaction item = (Transaction)contentItem;
-					boolean ok 		 = false;
-					ok 				 = checkIATITransaction(item, logs);
-				}
-				
 				/*if(contentItem instanceof PlannedDisbursement){
 					PlannedDisbursement item = (PlannedDisbursement)contentItem;
 					boolean ok 		 = false;
 					ok 				 = checkIATITransaction(item,logs);
 				}*/
-			}
-			AmpMappedField checkedActivity = checkActivity(this.title, this.iatiID, this.lang);
-			if( checkedActivity!=null && checkedActivity.getItem()!=null ) {
-				if( (!this.isLoad()) && DEConstants.AMP_ID_DO_NOT_IMPORT.equals(checkedActivity.getItem().getAmpId()) ) {
-					checkedActivity.setWarningMsg("This activity will not be imported because the user has chosen to not import it.");
-					checkedActivity.setDoNotImport(true);
-					checkedActivity.setMainEntry(true);
-				} else if( checkedActivity.getItem().getAmpId() !=null){
-					this.ampID = checkedActivity.getItem().getAmpId();
-					if( !DEConstants.AMP_ID_CREATE_NEW.equals(this.ampID) && !DEConstants.AMP_ID_DO_NOT_IMPORT.equals(this.ampID) )
-							this.existingActivity = true;
-				}
-			}
-			logs.add(checkedActivity);
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-		return logs;
-	}
+                }
+                AmpMappedField checkedActivity = checkActivity(this.title, this.iatiID, this.lang);
+                if( checkedActivity!=null && checkedActivity.getItem()!=null ) {
+                    if( (!this.isLoad()) && DEConstants.AMP_ID_DO_NOT_IMPORT.equals(checkedActivity.getItem().getAmpId()) ) {
+                        checkedActivity.setWarningMsg("This activity will not be imported because the user has chosen to not import it.");
+                        checkedActivity.setDoNotImport(true);
+                        checkedActivity.setMainEntry(true);
+                    } else if( checkedActivity.getItem().getAmpId() !=null){
+                        this.ampID = checkedActivity.getItem().getAmpId();
+                        if( !DEConstants.AMP_ID_CREATE_NEW.equals(this.ampID) && !DEConstants.AMP_ID_DO_NOT_IMPORT.equals(this.ampID) )
+                            this.existingActivity = true;
+                    }
+                }
+                logs.add(checkedActivity);
+            }
+            catch(Exception e){
+                e.printStackTrace();
+            }
+            return logs;
+        }
 	
 
 
@@ -474,14 +463,14 @@ public class IatiActivityWorker {
         }
 		return logs;
 	}
-	
-	
 
 
-	private void processTitle(AmpActivityVersion a, ArrayList<JAXBElement<TextType>> iatiTitleList,
-			List<AmpContentTranslation> translations) {
-		if(iatiTitleList.isEmpty()) return;
-		
+
+
+    private void processTitle(AmpActivityVersion a, ArrayList<JAXBElement<TextType>> iatiTitleList,
+                              List<AmpContentTranslation> translations) {
+        if(iatiTitleList.isEmpty()) return;
+
         String title = null;
         for (Iterator <JAXBElement<TextType>> it = iatiTitleList.iterator(); it.hasNext();) {
             JAXBElement<TextType> itVal = it.next();
@@ -491,14 +480,14 @@ public class IatiActivityWorker {
             if (lang.equals(this.getLang())) {
                 title = name;
             } else {
-            	//multilingual titles
-            	translations.add(getAmpContentTranslation(a, a.getAmpActivityId(), "name", lang, name));
+                //multilingual titles
+                translations.add(getAmpContentTranslation(a, a.getAmpActivityId(), "name", lang, name));
             }
         }
         // title to be used when multilingual is disabled
         a.setName(title);
-		this.setTitle(a.getName());
-	}
+        this.setTitle(a.getName());
+    }
 
 	private void processContactsStep(AmpActivityVersion a, ArrayList<ContactInfo> iatiContactList) {
 		if (iatiContactList.isEmpty()) return;
@@ -524,47 +513,48 @@ public class IatiActivityWorker {
 	}
 
 	private void setAmpContactDetails(ContactInfo contactInfo, AmpContact ampContact) {
-		Set<AmpContactProperty> contactProperties=new TreeSet<AmpContactProperty>();
-		for (Iterator<Object> it = contactInfo.getOrganisationOrPersonNameOrTelephone().iterator(); it.hasNext();) {
-			Object contentItem = (Object) it.next();
-			if(contentItem instanceof JAXBElement){
-				JAXBElement i = (JAXBElement)contentItem;
+		Set<AmpContactProperty> contactProperties = new TreeSet<AmpContactProperty>();
 
-				//name
-				if(i.getName().equals(new QName("person-name"))){
-					JAXBElement<PlainType> item = (JAXBElement<PlainType>)i;
-					setContactName(item.getValue().getContent().trim(),ampContact);
-				}
-				//organisation
-				if(i.getName().equals(new QName("organisation"))){
-					JAXBElement<PlainType> item = (JAXBElement<PlainType>)i;
-					ampContact.setOrganisationName(item.getValue().getContent());
-				}
-				//phone
-				if(i.getName().equals(new QName("telephone"))){
-					ContactInfo.Telephone item = (ContactInfo.Telephone)i.getValue();
-					AmpContactProperty acp = new AmpContactProperty();
-					acp.setValue(item.getContent());
-					acp.setName(Constants.CONTACT_PROPERTY_NAME_PHONE);
-					contactProperties.add(acp);
-				}
+        // getOrganisationOrPersonNameOrTelephone method was renamed in 1_03
+        for (Object contentItem : contactInfo.getOrganisationOrPersonNameOrJobTitle()) {
+            if (contentItem instanceof JAXBElement) {
+                JAXBElement i = (JAXBElement) contentItem;
 
-				//email
-				if(i.getName().equals(new QName("email"))){
-					JAXBElement<PlainType> item = (JAXBElement<PlainType>)i;
-					AmpContactProperty acp = new AmpContactProperty();
-					acp.setValue(item.getValue().getContent());
-					acp.setName(Constants.CONTACT_PROPERTY_NAME_EMAIL);
-					contactProperties.add(acp);
-				}
+                //name
+                if (i.getName().equals(new QName("person-name"))) {
+                    JAXBElement<PlainType> item = (JAXBElement<PlainType>) i;
+                    setContactName(item.getValue().getContent().trim(), ampContact);
+                }
+                //organisation
+                if (i.getName().equals(new QName("organisation"))) {
+                    JAXBElement<PlainType> item = (JAXBElement<PlainType>) i;
+                    ampContact.setOrganisationName(item.getValue().getContent());
+                }
+                //phone
+                if (i.getName().equals(new QName("telephone"))) {
+                    ContactInfo.Telephone item = (ContactInfo.Telephone) i.getValue();
+                    AmpContactProperty acp = new AmpContactProperty();
+                    acp.setValue(item.getContent());
+                    acp.setName(Constants.CONTACT_PROPERTY_NAME_PHONE);
+                    contactProperties.add(acp);
+                }
 
-				//mailing-address
-				if(i.getName().equals(new QName("mailing-address"))){
-					ContactInfo.MailingAddress item = (ContactInfo.MailingAddress)i.getValue();
-					ampContact.setOfficeaddress(item.getContent());
-				}
-			}
-		}
+                //email
+                if (i.getName().equals(new QName("email"))) {
+                    JAXBElement<PlainType> item = (JAXBElement<PlainType>) i;
+                    AmpContactProperty acp = new AmpContactProperty();
+                    acp.setValue(item.getValue().getContent());
+                    acp.setName(Constants.CONTACT_PROPERTY_NAME_EMAIL);
+                    contactProperties.add(acp);
+                }
+
+                //mailing-address
+                if (i.getName().equals(new QName("mailing-address"))) {
+                    ContactInfo.MailingAddress item = (ContactInfo.MailingAddress) i.getValue();
+                    ampContact.setOfficeaddress(item.getContent());
+                }
+            }
+        }
 		ampContact.setProperties(contactProperties);
 	}
 
@@ -878,39 +868,53 @@ public class IatiActivityWorker {
 		Date eDate = new Date();
 		Double currencyValue = new Double(0);
 		String currencyName = iatiDefaultCurrency;
-		
-		for (Iterator<Object> it = t.getPeriodStartOrPeriodEndOrValue().iterator(); it.hasNext();) {
-			Object contentItem = (Object) it.next();
-			if(contentItem instanceof JAXBElement){
-				JAXBElement i = (JAXBElement)contentItem;
 
-				if(i.getName().equals(new QName("period-start"))){
-					PlannedDisbursement.PeriodStart item = (PlannedDisbursement.PeriodStart)i.getValue();
-					sDate = DataExchangeUtils.XMLGregorianDateToDate(item.getIsoDate());
-				}
-				
-				if(i.getName().equals(new QName("period-end"))){
-					DateType item = (DateType)i.getValue();
-					eDate = DataExchangeUtils.XMLGregorianDateToDate(item.getIsoDate());
-				}
-				
-				if(i.getName().equals(new QName("value"))){
-					CurrencyType item = (CurrencyType)i.getValue();
-					currencyValue = new Double(item.getValue().doubleValue());
-					if(isValidString(item.getCurrency()))
-						currencyName = item.getCurrency();
-				}
-				
-			}
-		}
+        for (Object contentItem : t.getPeriodStartOrPeriodEndOrValue()) {
+            if (contentItem instanceof JAXBElement) {
+                JAXBElement i = (JAXBElement) contentItem;
+
+
+                /**
+                 * 	<xsd:choice minOccurs="0" maxOccurs="unbounded">
+                 *      <xsd:element name="period-start" type="dateType">
+                 *      <xsd:element name="period-end" type="dateType">
+                 */
+
+                /**
+                 * Check version flag.
+                 * See https://jira.dgfoundation.org/browse/AMP-17830?focusedCommentId=114035&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-114035
+                 * For details
+                 */
+                if (i.getName().equals(new QName("period-start"))) {
+                    if (iatiVersion != null && (iatiVersion.ordinal() < IatiVersion.V_1_03.ordinal())) {
+                        org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.PlannedDisbursement.PeriodStart item =
+                                (org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.PlannedDisbursement.PeriodStart) i.getValue();
+                        sDate = DataExchangeUtils.XMLGregorianDateToDate(item.getIsoDate());
+                    } else {
+                        DateType item = (DateType) i.getValue();
+                        sDate = DataExchangeUtils.XMLGregorianDateToDate(item.getIsoDate());
+                    }
+                }
+
+                if (i.getName().equals(new QName("period-end"))) {
+                    DateType item = (DateType) i.getValue();
+                    eDate = DataExchangeUtils.XMLGregorianDateToDate(item.getIsoDate());
+                }
+
+                if (i.getName().equals(new QName("value"))) {
+                    CurrencyType item = (CurrencyType) i.getValue();
+                    currencyValue = item.getValue().doubleValue();
+                    if (isValidString(item.getCurrency()))
+                        currencyName = item.getCurrency();
+                }
+
+            }
+        }
 		
-		if(ampOrg == null) 
-		{
-				ampOrg = findFundingOrganization(iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList);
-				//we can not import funding with Donor null
-				if (ampOrg == null) return null;
-		}
-		
+        ampOrg = findFundingOrganization(iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList);
+        //we can not import funding with Donor null
+        if (ampOrg == null) return null;
+
 		Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
 		populateFundingDetails(currencyValue, currencyName, sDate, ampFundDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.PLANNED);
 		

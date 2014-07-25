@@ -35,11 +35,14 @@ import javax.xml.validation.SchemaFactory;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessages;
+
 import org.dgfoundation.amp.ar.AmpARFilter;
+
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
@@ -73,6 +76,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
+
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.TeamMember;
@@ -85,16 +89,20 @@ import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
+
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
+
 import org.digijava.module.dataExchange.dbentity.AmpMappedField;
 import org.digijava.module.dataExchange.dbentity.DELogPerExecution;
 import org.digijava.module.dataExchange.dbentity.DELogPerItem;
 import org.digijava.module.dataExchange.dbentity.DEMappingFields;
 import org.digijava.module.dataExchange.dbentity.DESourceSetting;
+
+import org.digijava.module.dataExchange.iati.IatiVersion;
 import org.digijava.module.dataExchange.jaxb.Activities;
 import org.digijava.module.dataExchange.jaxb.ActivityType;
 import org.digijava.module.dataExchange.jaxb.ActivityType.Component;
@@ -115,6 +123,7 @@ import org.digijava.module.dataExchange.jaxb.FundingType;
 import org.digijava.module.dataExchange.jaxb.FundingType.Projections;
 import org.digijava.module.dataExchange.jaxb.LocationFundingType;
 import org.digijava.module.dataExchange.jaxb.PercentageCodeValueType;
+
 import org.digijava.module.dataExchange.pojo.DEActivityLog;
 import org.digijava.module.dataExchange.pojo.DECurrencyMissingLog;
 import org.digijava.module.dataExchange.pojo.DEFinancInstrMissingLog;
@@ -128,12 +137,15 @@ import org.digijava.module.dataExchange.pojo.DEProgramPercentageLog;
 import org.digijava.module.dataExchange.pojo.DESectorMissingLog;
 import org.digijava.module.dataExchange.pojo.DEStatusMissingLog;
 import org.digijava.module.dataExchange.pojo.DETypeAssistMissingLog;
+
 import org.digijava.module.dataExchange.util.SessionSourceSettingDAO;
 import org.digijava.module.dataExchange.util.SourceSettingDAO;
 import org.digijava.module.dataExchange.utils.DEConstants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivities;
-import org.digijava.module.dataExchangeIATI.iatiSchema.jaxb.IatiActivity;
+
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.IatiActivities;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.IatiActivity;
+
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
@@ -2212,7 +2224,10 @@ public class DEImportBuilder {
             String title = "";
             String iatiID = "";
             String ampID = null;
-            IatiActivityWorker iWorker = new IatiActivityWorker(iAct, logAct);
+
+            IatiVersion version = IatiVersion.getValueOf(iatiActs.getVersion());
+
+            IatiActivityWorker iWorker = new IatiActivityWorker(iAct, logAct, version);
             iWorker.setLang(defaultLanguage);
 
             //Only need to get structure

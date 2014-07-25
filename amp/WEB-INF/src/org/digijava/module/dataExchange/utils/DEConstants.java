@@ -49,7 +49,7 @@ public class DEConstants {
 	public static final String CATEG_VALUE_MTEF_PROJECTION = "mtef_projection";
 	
 	public static final String IDML_JAXB_INSTANCE = "org.digijava.module.dataExchange.jaxb";
-	public static final String IATI_JAXB_INSTANCE = "org.digijava.module.dataExchangeIATI.iatiSchema.jaxb";
+	public static final String IATI_JAXB_INSTANCE = "org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb";
 	//this.getServlet().getServletContext().getRealPath("/")+
 	//public static final String IATI_SCHEMA_LOCATION = "/doc/iati/schemas/iati-activities-schema.xsd";
 	public static final String IDML_IATI_XSL= "/doc/iati/xslt/idml2iati.xslt";

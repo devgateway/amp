@@ -3,6 +3,12 @@
  * include this file in the INCLUDING page (old AMP) if not using bootstrap layout only
  * @param elem
  * @returns
+ *  
+ *  	DO NOT CHANGE THIS FILE IF YOU DO NOT UNDERSTAND WHAT YOU ARE DOING!
+ *  	IT IS VERY FRAGILE SINCE WE HAVE A RESIZEABLE IFRAME WHICH USES PNOTIFY!
+ *  
+ *  COUNTER: number of times pledges module has been broken: 2
+ * 
  */
 	function pageY(elem) {
 	    return elem.offsetParent ? (elem.offsetTop + pageY(elem.offsetParent)) : elem.offsetTop;
@@ -19,16 +25,22 @@
 		return parseInt(nr);
 	}
 	
-	function window_resized() {
-		var height = $('#bootstrap_iframe').contents().find('html').height();
+	function window_resized(){
+		var buffer = 20;
+	    var height = Math.max(get_number($(window).height()), 
+	    		get_number(window.innerHeight)); //document.documentElement.clientHeight; // was: clientHeight
+	    height -= pageY(document.getElementById('bootstrap_iframe'))+ buffer ;
+	    height = (height < 0) ? 0 : height;
+	    //outerDocument.getElementById('bootstrap_iframe').style.height = (height - 0) + 'px';
+
 		$('#bootstrap_iframe').height(height);
 	}
 	
 	$(document).ready(function(){
 		window_resized();
 	});
-
+	
 	window.onresize = function(){
- 	 	window_resized();
+		window_resized();
 	};
 	

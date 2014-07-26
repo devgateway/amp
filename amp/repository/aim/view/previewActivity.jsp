@@ -1469,9 +1469,7 @@ function collapseAll() {
 						</td>
 					</c:if>
 					<c:if test="${aimEditActivityForm.funding.proProjCost.funDate==null}">
-						<td>
-							<digi:trn>*cost could not be exchanged to workspace currency bacause date is not set</digi:trn>	
-						</td>
+						<td>*<digi:trn>cost could not be exchanged to workspace currency because date is not set</digi:trn></td>
 					</c:if>	
 				</tr>
 			</table>

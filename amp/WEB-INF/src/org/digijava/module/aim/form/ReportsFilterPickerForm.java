@@ -12,6 +12,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.action.ReportsFilterPicker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.AmpThemeSkeleton;
 import org.digijava.module.aim.util.filters.GroupingElement;
 import org.digijava.module.aim.util.filters.HierarchyListableImplementation;
 import org.springframework.beans.BeanWrapperImpl;
@@ -27,7 +28,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection<AmpCurrency> currencies;
 	private Collection calendars;
 	private Collection<GroupingElement<HierarchyListableImplementation>> sectorElements;
-	private Collection<GroupingElement<AmpTheme>> programElements;
+	private Collection<GroupingElement<AmpThemeSkeleton>> programElements;
 	private Collection<GroupingElement<HierarchyListableImplementation>> donorElements;
 	private Collection<GroupingElement<HierarchyListableImplementation>> relatedAgenciesElements;
 	private Collection<GroupingElement<HierarchyListableImplementation>> financingLocationElements;
@@ -197,7 +198,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	}
 	
 	@java.lang.SuppressWarnings("all")
-	public Collection<GroupingElement<AmpTheme>> getProgramElements() {
+	public Collection<GroupingElement<AmpThemeSkeleton>> getProgramElements() {
 		return this.programElements;
 	}
 	
@@ -766,7 +767,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	}
 	
 	@java.lang.SuppressWarnings("all")
-	public void setProgramElements(final Collection<GroupingElement<AmpTheme>> programElements) {
+	public void setProgramElements(final Collection<GroupingElement<AmpThemeSkeleton>> programElements) {
 		this.programElements = programElements;
 	}
 	

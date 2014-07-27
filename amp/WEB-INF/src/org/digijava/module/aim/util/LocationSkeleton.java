@@ -15,7 +15,6 @@ import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.hibernate.jdbc.Work;
 /*
  * skeleton class for amp_category_value_location
@@ -168,7 +167,6 @@ public class LocationSkeleton implements Comparable<LocationSkeleton>, Hierarchy
 													 	nullInsteadOfZero(rs.getLong("parent_category_value"))));
 					}
 					for (Map.Entry<Long, LocationSkeleton> entry : locations.entrySet()) {
-					    Long key = entry.getKey();
 					    LocationSkeleton loc = entry.getValue();
 					    if (loc.getAmpLocParentId() != null) {
 					    	if (locations.get(loc.getAmpLocParentId()) != null)

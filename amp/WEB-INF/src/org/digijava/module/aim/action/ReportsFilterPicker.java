@@ -612,7 +612,7 @@ public class ReportsFilterPicker extends Action {
 	    StopWatch.next("Filters", true, "calendars end");	    
 		 		
  	 	filterForm.setSectorElements(new ArrayList<GroupingElement<HierarchyListableImplementation>>());
- 	 	filterForm.setProgramElements(new ArrayList<GroupingElement<AmpTheme>>()); 	 	
+ 	 	filterForm.setProgramElements(new ArrayList<GroupingElement<AmpThemeSkeleton>>()); 	 	
 
  	 	StopWatch.next("Filters", true, "before sectors");
 // 		private void addSectorElement(ReportsFilterPickerForm filterForm, String featureName, String sectorName, String rootLabel, String filterDiv, String selectId, ServletContext ampContext)
@@ -625,28 +625,29 @@ public class ReportsFilterPicker extends Action {
         StopWatch.next("Filters", true, "before programs");
         if ( FeaturesUtil.isVisibleModule("National Planning Dashboard") )
         {
-	        List<AmpTheme> allPrograms	= ProgramUtil.getAllThemes(true);
-	        HashMap<Long, AmpTheme> progMap		= ProgramUtil.prepareStructure(allPrograms);
+	        Map<Long, AmpThemeSkeleton> allPrograms	= ProgramUtil.getAllThemesFaster(true);
+	        //this is now done automatically in the getallthemesfaster
+	        //HashMap<Long, AmpTheme> progMap		= ProgramUtil.prepareStructure(allPrograms);
 	        
 			AmpActivityProgramSettings primaryPrgSetting = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.PRIMARY_PROGRAM);
-			AmpTheme primaryProg = null;
+			AmpThemeSkeleton primaryProg = null;
 			//List<AmpTheme> primaryPrograms;		
 			if (primaryPrgSetting!=null && primaryPrgSetting.getDefaultHierarchy() != null) {
 				//primaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(primaryPrgSetting.getDefaultHierarchy());
-				primaryProg = progMap.get(primaryPrgSetting.getDefaultHierarchyId() );
+				primaryProg = allPrograms.get(primaryPrgSetting.getDefaultHierarchyId() );
 				HierarchyListableUtil.changeTranslateable(primaryProg, false);
-				GroupingElement<AmpTheme> primaryProgElement = new GroupingElement<AmpTheme>("Primary Program", "filter_primary_prog_div", primaryProg, "selectedPrimaryPrograms");
+				GroupingElement<AmpThemeSkeleton> primaryProgElement = new GroupingElement<AmpThemeSkeleton>("Primary Program", "filter_primary_prog_div", primaryProg, "selectedPrimaryPrograms");
 				filterForm.getProgramElements().add(primaryProgElement);
 			}
 			StopWatch.next("Filters", true, "After Primary Programs");
-			AmpTheme secondaryProg = null;
+			AmpThemeSkeleton secondaryProg = null;
 	 	 	AmpActivityProgramSettings secondaryPrg = ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.SECONDARY_PROGRAM);
 //	 	 	List<AmpTheme> secondaryPrograms;		
 			if (secondaryPrg!=null && secondaryPrg.getDefaultHierarchy() != null) {
 				//secondaryProg= ProgramUtil.getAmpThemesAndSubThemesHierarchy(secondaryPrg.getDefaultHierarchy());
-				secondaryProg	= progMap.get(secondaryPrg.getDefaultHierarchyId() );
+				secondaryProg	= allPrograms.get(secondaryPrg.getDefaultHierarchyId() );
 				HierarchyListableUtil.changeTranslateable(secondaryProg, false);
-				GroupingElement<AmpTheme> secondaryProgElement = new GroupingElement<AmpTheme>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
+				GroupingElement<AmpThemeSkeleton> secondaryProgElement = new GroupingElement<AmpThemeSkeleton>("Secondary Program", "filter_secondary_prog_div", secondaryProg, "selectedSecondaryPrograms");
 				filterForm.getProgramElements().add(secondaryProgElement);
 			}	 	
 			StopWatch.next("Filters", true, "After Secondary Programs");
@@ -656,9 +657,9 @@ public class ReportsFilterPicker extends Action {
 			//List<AmpTheme> nationalPlanningObjectives;
 	 	 	if (natPlanSetting != null && natPlanSetting.getDefaultHierarchy() != null) {
 	 	 		//AmpTheme nationalPlanningProg	= ProgramUtil.getAmpThemesAndSubThemesHierarchy(natPlanSetting.getDefaultHierarchy());
-	 	 		AmpTheme nationalPlanningProg	= progMap.get(natPlanSetting.getDefaultHierarchyId() );
+	 	 		AmpThemeSkeleton nationalPlanningProg	= allPrograms.get(natPlanSetting.getDefaultHierarchyId() );
 	 	 		HierarchyListableUtil.changeTranslateable(nationalPlanningProg, false);
-	 	 	 	GroupingElement<AmpTheme> natPlanProgElement = new GroupingElement<AmpTheme>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj"); 	 	
+	 	 	 	GroupingElement<AmpThemeSkeleton> natPlanProgElement = new GroupingElement<AmpThemeSkeleton>("National Planning Objective", "filter_nat_plan_obj_div", nationalPlanningProg, "selectedNatPlanObj"); 	 	
 	 	 	 	filterForm.getProgramElements().add(natPlanProgElement);
 			}
 	 	 	StopWatch.next("Filters", true, "After NPO");

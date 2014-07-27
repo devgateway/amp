@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -261,6 +262,20 @@ public class ProgramUtil {
 			return getAllThemes(false);
 		}
 
+		/**
+         * Returns All AmpThemes including sub Themes if parameter is true.
+         * @param includeSubThemes boolean false - only top level Themes, true - all themes
+		 * @return
+		 * @throws DgException
+		 */
+        @SuppressWarnings("unchecked")
+		public static Map<Long, AmpThemeSkeleton> getAllThemesFaster(boolean includeSubThemes) throws DgException
+		{
+            Map<Long, AmpThemeSkeleton> themes = AmpThemeSkeleton.populateThemesSkeletonList(includeSubThemes);
+            return themes;
+        }
+		
+		
 		/**
          * Returns All AmpThemes including sub Themes if parameter is true.
          * @param includeSubThemes boolean false - only top level Themes, true - all themes
@@ -1750,6 +1765,9 @@ public class ProgramUtil {
         	 return null;
 		}
 	}
+
+
+    
     
     public static HashMap<Long, AmpTheme> prepareStructure(Collection<AmpTheme> col) {
     	HashMap<Long, AmpTheme> ret		= new HashMap<Long, AmpTheme>();

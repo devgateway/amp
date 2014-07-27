@@ -7,16 +7,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.annotations.translation.TranslatableField;
-import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.hibernate.jdbc.Work;
 
 /**
@@ -31,11 +27,9 @@ public class OrgGroupSkeleton implements Comparable<OrgGroupSkeleton>, Hierarchy
 	private String orgGrpCode;
 	private Long orgGrpType;
 	private boolean translatable;
-	private AmpOrgType orgType;
 	
-	public OrgGroupSkeleton() {
-		
-	}
+	public OrgGroupSkeleton() {	}
+	
 	public OrgGroupSkeleton(Long id, String name, String code, Long orgTypeId) {
 		this.ampOrgGrpId = id;
 		this.orgGrpName = name;
@@ -44,12 +38,17 @@ public class OrgGroupSkeleton implements Comparable<OrgGroupSkeleton>, Hierarchy
 		this.translatable = true;
 	}
 	
+	public void setAmpOrgGrpId(Long id) {
+		this.ampOrgGrpId = id;
+	}
+	
+	public void setOrgGrpName(String name) {
+		this.orgGrpName = name;
+	}
+	
+	
 	public Long getAmpOrgGrpId() {
 		return ampOrgGrpId;
-	}
-
-	public void setAmpOrgGrpId(Long ampOrgGrpId) {
-		this.ampOrgGrpId = ampOrgGrpId;
 	}
 
 	public String getOrgGrpName() {
@@ -59,17 +58,9 @@ public class OrgGroupSkeleton implements Comparable<OrgGroupSkeleton>, Hierarchy
 	public Long getOrgTypeId() {
 		return this.orgGrpType;
 	}
-	
-	public void setOrgGrpName(String orgGrpName) {
-		this.orgGrpName = orgGrpName;
-	}
 
 	public String getOrgGrpCode() {
 		return orgGrpCode;
-	}
-
-	public void setOrgGrpCode(String orgGrpCode) {
-		this.orgGrpCode = orgGrpCode;
 	}
 
 	@Override
@@ -81,7 +72,6 @@ public class OrgGroupSkeleton implements Comparable<OrgGroupSkeleton>, Hierarchy
 				return 0; // null == null
 			return -1; // null < [anything]
 		}
-		
 		if (org.orgGrpName == null)
 			return 1; // [anything] > null
 		
@@ -93,6 +83,7 @@ public class OrgGroupSkeleton implements Comparable<OrgGroupSkeleton>, Hierarchy
 	{
 		return String.format("%s (id: %d)", this.orgGrpName, this.ampOrgGrpId);
 	}
+	
     private static Long nullInsteadOfZero(long val) {
     	if (val == 0) {
     		return null;
@@ -136,14 +127,12 @@ public class OrgGroupSkeleton implements Comparable<OrgGroupSkeleton>, Hierarchy
 
 	@Override
 	public boolean getTranslateable() {
- 
 		return this.translatable;
 	}
 
 	@Override
 	public void setTranslateable(boolean translatable) {
 		this.translatable = translatable;
-		
 	}
 
 	@Override

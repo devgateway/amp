@@ -3,13 +3,10 @@ package org.digijava.module.aim.util;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
@@ -29,9 +26,6 @@ public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyList
 	private Long parentSectorId;
 	private String code;
 	private Collection<SectorSkeleton> childSectors;
-
-
-
 	
 	boolean translatable;
 	
@@ -39,8 +33,8 @@ public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyList
 	public SectorSkeleton(Long id, String name, Long parentSectorId, String code) {
 		this.id = id;
 		this.name = name;
-		this.setParentSectorId(parentSectorId);
-		this.setCode(code);
+		this.parentSectorId = parentSectorId;
+		this.code = code;
 		this.childSectors = new HashSet<SectorSkeleton>();
 	}
 
@@ -92,10 +86,6 @@ public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyList
         return sectors;
     }
 	
-	
-	
-	
-	
 	/**
      * 
      * @return a list of all parent sectors
@@ -104,11 +94,8 @@ public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyList
         final Map<Long, SectorSkeleton> sectors = new HashMap<Long, SectorSkeleton>();
         PersistenceManager.getSession().doWork(new Work(){
 				public void execute(Connection conn) throws SQLException {
-					
 					String condition = "where amp_sec_scheme_id = " + secSchemeId
 							+ " and parent_sector_id is null and (deleted is null or deleted = false)";
-					
-					
 					ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_sector", 
 							condition, TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");		
 					ResultSet rs = v.fetch(null);
@@ -157,8 +144,6 @@ public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyList
 	public void setChildren(Collection<SectorSkeleton> sec) {
 		this.childSectors = sec;
 	}
-	
-	
 
 	@Override
 	public int getCountDescendants() {
@@ -176,44 +161,19 @@ public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyList
 		return this.id.compareTo(arg0.id);
 	}
 
-
-
 	public Long getParentSectorId() {
 		return parentSectorId;
 	}
 
-
-	public void setParentSectorId(Long parentSectorId) {
-		this.parentSectorId = parentSectorId;
-	}
-
-	
 	public String getName() {
 		return this.name;
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	
 	public Long getId() {
 		return this.id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-	
-	
 	public String getCode() {
 		return code;
-	}
-	
-
-
-
-	public void setCode(String code) {
-		this.code = code;
 	}
 }

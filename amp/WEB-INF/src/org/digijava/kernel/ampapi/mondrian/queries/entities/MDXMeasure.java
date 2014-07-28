@@ -17,16 +17,12 @@ public class MDXMeasure extends MDXElement {
 	 * @param name
 	 */
 	public MDXMeasure(String name) {
-		super(name, null);
-	}
-	
-	public MDXMeasure(String name, Boolean sortAsc) {
-		super(name, sortAsc);
+		super(name);
 	}
 	
 	@Override
 	public MDXMeasure clone() {
-		return new MDXMeasure(name, sortAsc);
+		return new MDXMeasure(name);
 	}
 	
 	@Override
@@ -37,5 +33,10 @@ public class MDXMeasure extends MDXElement {
 	@Override
 	public String getFullName() {
 		return MoConstants.MEASURES + "." + super.toString();
-	} 
+	}
+	
+	@Override
+	public String getSortName() {
+		return getFullName();
+	}
 }

@@ -8,7 +8,8 @@ module.exports = Backbone.Model.extend({
       featurePath: 'http://example.com',
       type: 'raster', // maybe not necessary....
       admLevel: 0,     // maybe not necessary....
-      selected: false
+      selected: false,
+      group: 'indicators' //used for radio buttons.
   },
 
   initialize: function() {

@@ -1,29 +1,26 @@
-//
-// AMP layout and bootstrap overrides
-// --------------------------------------------------
-#filter-modal {
-  //display:none;
-}
-
-.filter-title {
-  h4{
-    padding: 5px 15px;
-    margin: 4px 0;
-  }
-}
-
-.tree-container {
-  max-height: 400px;
-  overflow-y: scroll;
-}
+@tree_line_color: #f0ad4e;
 
 
 .expanded {
     font-weight: 700;
 }
 
-.tree {
+.selectable {
+    border: 1px solid @tree_line_color;
+    margin-right:5px;
+    display:inline-block;
+    float:left;
 
+    width: 15px;
+    height: 15px;
+
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+}
+
+.half-fill{
+    background: linear-gradient(45deg, @tree_line_color 50%, #fff 50%);
 }
 
 .tree ul {
@@ -46,7 +43,7 @@
 }
 
 .tree li::before {
-    border-left: 1px solid #f0ad4e;
+    border-left: 1px solid @tree_line_color;
     bottom: 50px;
     height: 100%;
     top: 0;
@@ -54,7 +51,7 @@
 }
 
 .tree li::after {
-    border-top: 1px solid #f0ad4e;
+    border-top: 1px solid @tree_line_color;
     height: 20px;
     top: 22px;
     width: 9px;
@@ -63,39 +60,19 @@
 .tree li .node {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    border: 1px solid #f0ad4e;
+    border: 1px solid @tree_line_color;
     border-radius: 5px;
     display: inline-block;
     padding: 3px 5px;
     text-decoration: none
 }
 
-.selectable {
-    border: 1px solid #f0ad4e;
-    margin-right:5px;
-    display:inline-block;
-    float:left;
-
-    width: 15px;
-    height: 15px;
-
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
-}
-
-.selectable.half-fill{
-    background: linear-gradient(45deg, #f0ad4e 50%, #fff 50%);
-}
-
 .tree li.parent_li > span {
     cursor: pointer;
-
 }
 
 .parent_li i {
     margin-right: 3px;
-
 }
 
 .tree > ul > li::before, .tree > ul > li::after {

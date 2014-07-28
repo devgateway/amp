@@ -1,0 +1,151 @@
+//
+// AMP layout and bootstrap overrides
+// --------------------------------------------------
+
+#amp-menu {
+  z-index: @amp_menu_layer;
+  position: relative;  // for layering
+  height: @amp_menu_height;
+  color: @amp_content;
+  background: @amp_content_bg;
+}
+
+
+#sidebar {
+  position: absolute;
+  top: @amp_menu_height;
+  left: 0;
+  bottom: 0;
+  width: @amp_sidebar_width;
+  background: @amp_inverse_bg;
+  color: @amp_inverse;
+  border-right: 2px solid  @amp_inverse_bg;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  .vertical-expand {
+    // sticky-footer
+    min-height: 99%;
+    margin-bottom: -@amp_sidebar_quality_height;
+  }
+}
+
+
+.accordion-group {
+  // This sucks, but we need to use panel to make accordion parent collapse work,
+  // but we don't actually want the panel styles.
+  // ticket to watch: https://github.com/twbs/bootstrap/issues/10966
+  >.panel{
+    border: 0;
+    border-radius: 0;
+    margin: 0;
+    margin-top: 2px;
+  }
+}
+
+.accordion-box {
+
+  color: @amp_content;
+  background: @amp_content_bg;
+
+  .radio-group{
+    margin-left: 15px;
+  }
+
+  .accordion-heading {
+
+    > a {
+      display: block;
+      color: darken(@amp_sidebar_item,25%);
+
+      &:hover,
+      &:active,
+      &:focus {
+        // see amp-icons.less for the icon swaps on hover
+        text-decoration: none;
+      }
+
+      &.collapsed {
+        background: @amp_sidebar_item_bg;
+        color: desaturate(lighten(@amp_sidebar_item, 5%), 10%);
+      }
+
+      h3 {
+        margin: 0;
+        padding: 7px 21px;
+        font-size: 13px;
+        font-weight: @extrabold;
+        line-height: 20px;  // matched to icon
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  .accordion-body {
+    height: auto;
+
+      .layer-heading-container {
+      background: @amp_content_highlight_bg;
+      margin-bottom: 2px;
+      &:hover{
+        cursor:pointer;
+        background-color: fadein(@amp_content_highlight_bg , 10%);
+      }
+
+      label:hover{
+        cursor:pointer;
+      }      
+
+      label,
+      h4 {
+        margin: 0;
+        background: transparent;
+      }
+    }
+  }
+
+}
+
+
+.description {
+  padding: 0 4px;
+}
+
+
+
+// TODO: find better way.
+// needed the label to be near full width so all clicks are captured.
+#tool-layers{
+  .layer-heading-container {
+    label{
+      width:90%;
+    }
+  }
+}
+
+
+// stickyfooter crap for quality indicator
+.quality-push,
+#quality-indicator {
+  height: @amp_sidebar_quality_height;
+}
+#quality-indicator {
+  // Heads up: any margins or overflow below this will trigger a scrollbar.
+  width: @amp_sidebar_width;
+  background: @amp_sidebar_special_bg;
+  padding-top:5px;
+
+  p {
+    margin-bottom: 0;
+  }
+  .label {
+    font-weight: @light;
+  }
+}
+
+#tool-tools{
+  .btn{
+    min-width:48%;
+  }
+}

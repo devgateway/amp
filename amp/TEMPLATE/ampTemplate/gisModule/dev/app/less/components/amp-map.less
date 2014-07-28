@@ -1,0 +1,145 @@
+//
+// AMP layout and bootstrap overrides
+// --------------------------------------------------
+
+@import "esri-basemap-gallery.less";
+
+#map-container {
+  z-index: @amp_map_layer;
+  position: absolute;
+  top: @amp_menu_height;
+  left: @amp_sidebar_width;
+  right: 0;
+  bottom: 5px;
+  border-radius: 0 0 0 5px;
+  overflow: hidden;
+
+
+  #map-header {
+    z-index: @amp_map_header_layer;
+    position: absolute;
+    width: 100%;
+    color: @amp_map_header;
+    background: @amp_map_header_bg;
+    border: none;
+    border-radius: 0;
+
+    // Set min-height of the navbar
+    min-height: @amp_map_header_height;  // see also .navbar-brand, .dropdown-toggle
+
+    .navbar-brand,
+    .dropdown-toggle {
+      height: @amp_map_header_height;
+      @content_height: 20px;  // the world according to bootstrap
+      @v_pad: (@amp_map_header_height - @content_height) / 2;
+      padding-top: @v_pad;
+      padding-bottom: @v_pad;
+    }
+
+    .navbar-brand {
+      width:60%;
+      border-right: 1px solid @amp_lightline;
+      font-size: 1em;
+      font-weight: @extrabold;
+      color: @amp_inverse;
+
+      small {
+        position: relative;
+        top: 1px;  // align with title baseline
+        color: @amp_inverse_accent;
+      }
+    }
+
+  }
+
+  #map-canvas {
+    /* always expand to fill the map container */
+    height: 100%;
+    width: 100%;
+    background: @amp_content_bg;
+  }
+}
+
+// Legend
+.legend {
+  z-index: @amp_map_header_layer;
+  position: absolute;
+  bottom: 0;
+  right: 190px;
+  width: 240px;
+  color: @amp_inverse;
+  background: @amp_map_header_bg;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.333);
+
+  .legend-header > a {
+    .vertical-chevrons;
+    display: block;
+    padding: 4px;
+    color: #eee;
+
+    &:hover,
+    &:focus {
+      text-decoration: none;
+    }
+  }
+
+  .legend-content {
+    max-height: 240px;
+    padding: 1em;
+    font-size: 0.9em;
+    overflow-y: scroll;
+    color: #333;
+    border: 1px solid #aaa;
+    border-width: 0 1px;
+    background: @amp_content_bg;
+
+    h3 {
+      margin: 0.5em 0;
+      font-size: 1.2em;
+    }
+    ul, ol {
+      .color-blocks;
+    }
+  }
+}
+
+// Leaflet Overrides
+.leaflet-top {
+  top: @amp_map_header_height;
+}
+
+
+// Map markers and icons
+.map-adm-icon {
+  color: #222;
+  font-weight:bold;
+  text-align:center;
+}
+
+.map-circle {
+  background: #f77;
+  color: #fff;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  line-height: 30px;
+  width: 30px;
+  margin-left: 15px;
+}
+
+.map-circle-label {
+  font-size: 0.8em;
+  background: rgba(255, 255, 255, 0.5);
+  padding:1px;
+  border-radius: 2px;
+}
+
+.map-project-site-icon {
+  background: #77f;
+  border: 1px solid #337;
+  border-radius: 50%;
+  -moz-border-radius: 50%;
+  width: 100%;
+  height: 100%;
+}

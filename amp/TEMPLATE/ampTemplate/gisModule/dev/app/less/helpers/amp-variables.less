@@ -1,0 +1,54 @@
+//
+// AMP Variables and bootstrap overrides
+// __________________________________________________
+
+
+// colours
+@amp_content: #666;
+@amp_content_bg: #f5f5f5;
+@amp_content_highlight: #0d253c;
+@amp_content_highlight_bg: rgba(0, 0, 0, 0.1);
+
+@amp_inverse: #eee;
+@amp_inverse_bg: #0d253c;
+
+@amp_emph: #163f66;
+@amp_inverse_accent: #b5dbfb;  // baby blue
+@amp_lightline: rgba(255, 255, 255, 0.25);
+
+@amp_map_header: #eee;
+@amp_map_header_bg: rgba(32, 32, 32, 0.666);
+@navbar_inverse_link_color: @amp_map_header; //override bootstrap
+
+@amp_sidebar_color: #1c4f80;
+@amp_sidebar_item: desaturate(lighten(@amp_sidebar_color, 48%), 26%);
+@amp_sidebar_item_active: #fff;
+@amp_sidebar_item_bg: desaturate(darken(@amp_sidebar_color, 8%), 16%);
+@amp_sidebar_item_bg_active: #f5f5f5;
+@amp_sidebar_special_bg: #172d41;
+
+
+// font weights
+
+@light: 300;
+@extrabold: 800;
+
+
+// dimensions
+
+@amp_menu_height: 31px;
+
+@amp_sidebar_width: 300px;
+@amp_sidebar_quality_height: 68px;
+
+@amp_map_header_height: 40px;
+
+
+// layering
+
+@amp_menu_layer: 200;
+// @amp_sidebar_layer: 100;  // must not be set because of chrome/bootstrap
+                             // rendering issues (see main.less)
+@amp_map_header_layer: 50;
+@amp_map_layer: 0;
+

@@ -12,7 +12,7 @@ module.exports = Backbone.View.extend({
    *    `BaseToolView.prototype.method.apply(this);`
    */
 
-  className: 'panel sidebar-tool',
+  className: 'panel accordion-box',
 
   // Required properties to be overridden by child classes
   title: undefined,  // to make falsy in a child, set to null

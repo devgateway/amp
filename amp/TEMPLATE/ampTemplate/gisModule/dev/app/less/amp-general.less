@@ -1,7 +1,7 @@
 body {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: @light;
-  background: @amp-inverse-bg;
+  background: @amp_inverse_bg;
 }
 
 
@@ -9,24 +9,12 @@ h4 {
   padding: 4px;
   font-size: 16px;
   font-weight: 700;
-  color: @amp-emph;
-  background: @amp-content-highlight-bg;
+  color: @amp_emph;
+  background: @amp_content_highlight_bg;
 
   label {
     margin: 0;
   }
-}
-
-.description {
-  padding: 0 4px;
-}
-
-
-.loading-icon{
-    background: url('../img/loading-icon.gif') no-repeat center center;
-    height:100%;
-    min-height: 50px;
-    min-width: 50px;
 }
 
 
@@ -37,8 +25,8 @@ h4 {
 
 // Override of Bootstrap for narrower amp nav
 #amp-menu{
-  .navbar-nav > li > a {padding-top:5px ; padding-bottom:5px ;}
-  .navbar { min-height:30px;border-left:0; border-bottom: 2px solid @amp-emph; border-radius: 0; }  
-  .navbar-brand {height:auto; padding-top:5px ; padding-bottom:5px ; }
-  border-bottom: 2px solid @amp-emph;
+  .navbar-nav > li > a { padding-top:5px ; padding-bottom:5px; }
+  .navbar { min-height:30px;border-left:0; border-bottom: 2px solid @amp_emph; border-radius: 0; }  
+  .navbar-brand {height:auto; padding-top:5px ; padding-bottom:5px; }
+  border-bottom: 2px solid @amp_emph;
 }

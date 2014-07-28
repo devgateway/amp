@@ -10,16 +10,18 @@ package org.digijava.kernel.ampapi.mondrian.queries.entities;
  */
 public abstract class MDXElement implements Cloneable {
 	protected String name = null;
-	protected Boolean sortAsc = null; //no sorting by default
 	
-	public MDXElement(String name, Boolean sortAsc) {
+	public MDXElement(String name) {
 		this.name = name;
-		this.sortAsc = sortAsc;
 	}
 	
 	@Override
 	public abstract MDXElement clone();
+	/**
+	 * @return full element name, e.g. [dimension.hierarchy].[level]
+	 */
 	public abstract String getFullName();
+	public abstract String getSortName();
 	
 	@Override
 	public String toString() {
@@ -46,19 +48,5 @@ public abstract class MDXElement implements Cloneable {
 	 */
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	/**
-	 * @return the sortAsc
-	 */
-	public Boolean getSortAsc() {
-		return sortAsc;
-	}
-
-	/**
-	 * @param sortAsc the sortAsc to set
-	 */
-	public void setSortAsc(Boolean sortAsc) {
-		this.sortAsc = sortAsc;
 	}
 }

@@ -6,8 +6,11 @@ package org.digijava.kernel.ampapi.mondrian.queries.entities;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang.ArrayUtils;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+
 /**
- * Hierarchy Level configuration based on dimension, hierarchy, (optionally) level name and (optionally) slicing values 
+ * Hierarchy Level configuration based on dimension, (optionally) hierarchy, level name and (optionally) slicing values 
  * @author Nadejda Mandrescu
  *
  */
@@ -18,23 +21,19 @@ public class MDXLevel extends MDXAttribute {
 	/**
 	 * Configures Level settings
 	 * @param dimension 
+	 * @param hierarchy - optional, i.e. can be null if there is only 1 hierarchy in the dimension
 	 * @param level
-	 */
-	public MDXLevel(String dimension, String level) {
-		this(dimension, null, level);
-	}
-	
-	/**
-	 * Configures Level settings
-	 * @param dimension 
-	 * @param hierarchy
-	 * @param level
-	 * @param values - list of hierarchy values to filter by
+	 * @param values - optional list of hierarchy values to filter by
 	 */
 	public MDXLevel(String dimension, String hierarchy, String level, String... values) {
 		super(dimension, level, null);
 		this.hierarchy = hierarchy;
-		this.values = values.length > 0 ? Arrays.asList(values) : null;
+		values = (String[])ArrayUtils.removeElement((Object[])values,  null);
+		this.values = values.length > 0 ?  Arrays.asList(values) : null;
+	}
+	
+	public MDXLevel(MDXAttribute mdxAttr) {
+		this(mdxAttr.getDimension(), (mdxAttr instanceof MDXLevel ? ((MDXLevel)mdxAttr).getHierarchy() : null), mdxAttr.getName(), mdxAttr.getValue());
 	}
 	
 	@Override
@@ -44,11 +43,12 @@ public class MDXLevel extends MDXAttribute {
 	
 	@Override
 	public String toString() {
-		return getFullName() + valuesToKey(); 
+		String keys = valuesToKey();
+		return getFullName() + (keys != null ? keys : "." + MoConstants.MEMBERS); 
 	}
 	
 	private String valuesToKey() {
-		String res = "";
+		String res = null;
 		if (values!=null && values.size()>0 ) {
 			res = ".";
 			if (values.size()==1) 
@@ -63,7 +63,12 @@ public class MDXLevel extends MDXAttribute {
 	
 	@Override
 	public String getFullName() {
-		return quote(this.dimension) + (this.hierarchy==null ? "" : "." + quote(this.hierarchy)) + (this.name==null? "" : "." + quote(this.name));
+		return getDimensionAndHierarchy() + (this.name==null? "" : "." + quote(this.name));
+	}
+	
+	@Override
+	public String getDimensionAndHierarchy() {
+		return quote(this.dimension + (this.hierarchy==null ? "" : "." + this.hierarchy));
 	}
 	
 	public String getLevel() {

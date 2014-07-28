@@ -22,9 +22,11 @@ public final class MoConstants {
 	public static final String MEASURES = "Measures";
 	public static final String MEMBERS = "Members";
 	public static final String CURRENT_MEMBER = "CurrentMember";
-	public static final String FUNC_CROSS_JOIN = "CrossJoin";
+	public static final String MEMBER_NAME = "name";
+	public static final String FUNC_CROSS_JOIN_FORMAT = "CrossJoin(%s, %s)";
 	public static final String FUNC_HIERARCHIZE = "Hierarchize";
 	public static final String FUNC_UNION = "Union";
+	public static final String FUNC_UNION_FORMAT = "Union(%s, %s)";
 	public static final String FUNC_ORDER = "Order";
 	public static final String FUNC_FILTER = "Filter";
 	
@@ -49,7 +51,11 @@ public final class MoConstants {
 	public static final String EXECUTING_AGENCY = "Executing Agency";
 	public static final String BENEFICIARY_AGENCY = "Beneficiary Agency";
 	public static final String RESPONSIBLE_AGENCY = "Responsible Organization";
-	
+	//Hierarchies
+	public static final String H_DATES = "Dates";
+	public static final String H_ORG_TYPE_NAME = "Organization Type Name";
+	public static final String H_ORG_GROUP_NAME = "Organization Group Name";
+	public static final String H_ORG_NAME = "All Orgs";
 	//Attributes/Levels
 	public static final String ATTR_PROJECT_TITLE = "Project Title";
 	public static final String ATTR_APPROVAL_STATUS = "Approval Status";

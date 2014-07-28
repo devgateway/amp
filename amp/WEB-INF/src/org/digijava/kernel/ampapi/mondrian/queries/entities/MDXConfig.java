@@ -5,10 +5,12 @@ package org.digijava.kernel.ampapi.mondrian.queries.entities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+import org.olap4j.query.SortOrder;
 
 /**
  * MDX query configuration, that stores information to query like Measures, Attributes, Filters ...
@@ -24,6 +26,7 @@ public class MDXConfig {
 	private Map<MDXElement, MDXFilter> axisFilters = new HashMap<MDXElement, MDXFilter>();
 	private Map<MDXAttribute, MDXFilter> dataFilters = new HashMap<MDXAttribute, MDXFilter>();
 	private List<MDXAttribute> singleValueFilters = new ArrayList<MDXAttribute>();
+	private LinkedHashMap<MDXElement, SortOrder> sortingOrder = new LinkedHashMap<MDXElement, SortOrder>();
 	private boolean allowEmptyData = false;
 	private boolean doRowTotals = false;
 	private boolean doColumnsTotals = false;
@@ -42,14 +45,14 @@ public class MDXConfig {
 		this.cubeName = cubeName;
 	}
 	/**
-	 * Label for the current MDXConfig for logging/debuging purpose
+	 * Label for the current MDXConfig for logging/debugging purpose
 	 * @return the mdxName - label
 	 */
 	public String getMdxName() {
 		return mdxName;
 	}
 	/**
-	 * (Optional) Label for the current MDXConfig for logging/debuging purpose <br>
+	 * (Optional) Label for the current MDXConfig for logging/debugging purpose <br>
 	 * If not set, {@link MoConstants#DEFAULT_QUERY_NAME} is used
 	 * @param mdxName - label for the current request <br>
 	 * E.g. for reports you can use Report Name
@@ -198,6 +201,25 @@ public class MDXConfig {
 	 */
 	public boolean isAllowEmptyData() {
 		return allowEmptyData;
+	}
+	/**
+	 * @return the map of MDXElement by sorting preference order and sorting rule
+	 * @see SortOrder
+	 */
+	public LinkedHashMap<MDXElement, SortOrder> getSortingOrder() {
+		return sortingOrder;
+	}
+	/**
+	 * Configures sorting rules over ordered list of MDXElement
+	 * @param sortingOrder - ordered list of MDXElement as their sorting order and sorting mechanism: <br>
+	 * SortOrder.ASC - ascending and keeping the hierarchies <br>
+	 * SortOrder.BASC - ascending and <b>breaking</b> hierarchies <br>
+	 * SortOrder.DESC - descending and keeping hierarchies <br>
+	 * SortOrder.BDESC - descending and breaking hierarchies
+	 * @see SortOrder
+	 */
+	public void setSortingOrder(LinkedHashMap<MDXElement, SortOrder> sortingOrder) {
+		this.sortingOrder = sortingOrder;
 	}
 	/**
 	 * Configures if empty data should be returned as an output

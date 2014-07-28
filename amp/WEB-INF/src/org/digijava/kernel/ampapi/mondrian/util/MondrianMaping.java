@@ -14,6 +14,7 @@ import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
+import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXLevel;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
 
 /**
@@ -35,8 +36,8 @@ public class MondrianMaping {
 			put(new ReportColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.PROJECT_TITLE, MoConstants.ATTR_PROJECT_TITLE));
 			put(new ReportColumn(ColumnConstants.AMP_ID, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.AMP_ID, MoConstants.ATTR_AMP_ID));
 			//put(new ReportColumn(ColumnConstants.STATUS, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.STATUS, MoConstants.ATTR_STATUS_NAME));
-			put(new ReportColumn(ColumnConstants.DONOR_TYPE, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.DONOR_AGENCY, MoConstants.ATTR_ORG_TYPE_NAME));
-			put(new ReportColumn(ColumnConstants.DONOR_GROUP, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.DONOR_AGENCY, MoConstants.ATTR_ORG_GROUP_NAME));
+			put(new ReportColumn(ColumnConstants.DONOR_TYPE, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_TYPE_NAME, MoConstants.ATTR_ORG_TYPE_NAME));
+			put(new ReportColumn(ColumnConstants.DONOR_GROUP, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
 			put(new ReportColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.PRIMARY_SECTOR, MoConstants.ATTR_PRIMARY_SECTOR_NAME));
 			put(new ReportColumn(ColumnConstants.SECONDARY_SECTOR, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.SECONDARY_SECTOR, MoConstants.ATTR_SECONDARY_SECTOR_NAME));
 			//TODO: review/complete mappings based on Mondrian Schema

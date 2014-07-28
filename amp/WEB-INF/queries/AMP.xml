@@ -2,113 +2,178 @@
 <!DOCTYPE AMP [
 <!ENTITY mondriandtd SYSTEM "mondrian.dtd">]>
 <Schema name="AMP">
-	<Dimension name="Activity">
-		<Hierarchy hasAll="true" primaryKey="amp_activity_id" primaryKeyTable="cached_amp_activity" allMemberCaption="All_Activities" allMemberName="All Activities" caption="Activity">
-			<!-- Limit the activities showed to those belonging to the workspace selected  -->
-			<Table name="cached_amp_activity"/>
-			<Level name="Activity Title" column="name" table="cached_amp_activity" uniqueMembers="true" />
-			<Level name="AMP ID" column="amp_id" table="cached_amp_activity" uniqueMembers="true" />
+<!--	<Dimension name="Sectors">
+		<Hierarchy hasAll="false" primaryKey="amp_sector_id">
+			<Table name="mondrian_sectors" />
+			<Level name="Level 0 Sector" uniqueMembers="true" type="Integer" column="level0_sector_id" nameColumn="level0_sector_name" />
+			<Level name="Level 1 Sector" uniqueMembers="true" type="Integer" column="level1_sector_id" nameColumn="level1_sector_name" />
+			<Level name="Level 2 Sector" uniqueMembers="true" type="Integer" column="level2_sector_id" nameColumn="level2_sector_name" />
+		</Hierarchy>
+	</Dimension> -->
+
+	<Dimension name="AMP Organization" >
+		<Hierarchy hasAll="true" allMemberName="All Orgs" primaryKey="amp_org_id" name="Organization Name">
+			<Table name="mondrian_organizations" />
+			
+			<Level name="Organization Name" uniqueMembers="true" type="Integer" column="amp_org_id" nameColumn="org_name" />
+			<Level name="Organization Code" type="Integer" column="amp_org_id" nameColumn="org_code" />
+		</Hierarchy>
+		<Hierarchy hasAll="true" allMemberName="All Types" primaryKey="amp_org_id" name="Organization Type Name">
+			<Table name="mondrian_organizations" />
+			<Level name="Organization Type Name" uniqueMembers="true" type="Integer" column="amp_org_type_id" nameColumn="org_type_name" />
+		</Hierarchy>
+		<Hierarchy hasAll="true" allMemberName="All Groups" primaryKey="amp_org_id" name="Organization Group Name">
+			<Table name="mondrian_organizations" />
+			<Level name="Organization Group Name" uniqueMembers="true" type="Integer" column="amp_org_grp_id" nameColumn="org_grp_name" />
 		</Hierarchy>
 	</Dimension>
-	<Dimension name="Donor Group"> 
-			<Hierarchy hasAll="true" allLevelName="All Donor Group" caption="Donor_Group" allMemberCaption="All_Donor_Group" primaryKey="amp_activity_id" primaryKeyTable="cached_v_donor_groups">
-				<Table name="cached_v_donor_groups"/>
-				<Level name="DonorGroup" column="name">
-					<NameExpression>
-						<SQL dialect="generic">
-							COALESCE(cached_v_donor_groups.name,'No_Data')
-						</SQL>
-					</NameExpression>
-				</Level>
-			</Hierarchy>
-		</Dimension>
-	<Dimension name="Donor Dates" type="TimeDimension">
-		<Hierarchy hasAll="true" allMemberName="All Periods" allMemberCaption="All_Donor_Dates" primaryKey="amp_fund_detail_id" caption="Donor_Dates">
-			<Table name="cached_v_donor_date_hierarchy" />
-				<Level name="Year" column="year" levelType="TimeYears" type="Numeric" />
-				<Level name="Quarter" column="quarter_name" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Numeric" />
-				<Level name="Month" column="month_name" uniqueMembers="false" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Numeric">
-				<NameExpression>
-					<SQL dialect="generic">
-						case WHEN cached_v_donor_date_hierarchy.month_name= 'january' THEN 'january'
-						WHEN month_name='february' THEN 'february' 
-						WHEN month_name='march' THEN 'march'
-						WHEN month_name='april' THEN 'april'
-						WHEN month_name='may' THEN 'may'
-						WHEN month_name='june' THEN 'june'
-						WHEN month_name='july' THEN 'july'
-						WHEN month_name='august' THEN 'august'
-						WHEN month_name='september' THEN 'september'
-						WHEN month_name='october' THEN 'october'
-						WHEN month_name='november' THEN 'november'
-						WHEN month_name='december' THEN 'december'
-						END
-					</SQL>
-				</NameExpression>
-				</Level>
-				
+
+	<Dimension name="AMP Program" >
+		<Hierarchy hasAll="true" allMemberName="All Programs" primaryKey="amp_theme_id">
+			<Table name="mondrian_programs" />
+			<Level name="Program Level 0 Name" type="Integer" column="id0" nameColumn="name0" />
+			<Level name="Program Level 1 Name" type="Integer" column="id1" nameColumn="name1" />
+			<Level name="Program Level 2 Name" type="Integer" column="id2" nameColumn="name2" />
+			<Level name="Program Level 3 Name" type="Integer" column="id3" nameColumn="name3" />
+			<Level name="Program Level 4 Name" type="Integer" column="id4" nameColumn="name4" />
+			<Level name="Program Level 5 Name" type="Integer" column="id5" nameColumn="name5" />
+			<Level name="Program Level 6 Name" type="Integer" column="id6" nameColumn="name6" />
+			<Level name="Program Level 7 Name" type="Integer" column="id7" nameColumn="name7" />
+			<Level name="Program Level 8 Name" type="Integer" column="id8" nameColumn="name8" />
 		</Hierarchy>
 	</Dimension>
-	<Dimension name="Status">
-		<Hierarchy hasAll="true" allMemberCaption="All_Status" allMemberName="All Status" primaryKey="amp_activity_id" caption="Status">
-			<Table name="cached_v_status" />
-			<Level name="Status" column="name" table="cached_v_status" />
-		</Hierarchy>
-	</Dimension>
-	<Dimension name="Donor Types" >
-			<Hierarchy hasAll="true" allLevelName="All Donors types" caption="Donors_types" allMemberCaption="All_Donors_types" primaryKey="amp_activity_id">
-				<Table name="cached_v_donor_type" />
-				<Level name="DonorType" column="org_type">
-				<NameExpression>
-						<SQL dialect="generic">
-							COALESCE(org_type,'No_Data')
-						</SQL>
-					</NameExpression>
-				</Level>
-			</Hierarchy>
-	</Dimension>
-	<Dimension name="Primary Sector">
-			<Hierarchy hasAll="true" allMemberCaption="All_Primary_Sectors" allMemberName="All Primary Sectors" primaryKey="amp_activity_id" caption="Primary_Sector">
-			<table name="cached_v_sectors"/>
-				<Level name="Primary Sector" column="sectorname">
-				<NameExpression>
-						<SQL dialect="generic">
-							COALESCE(sectorname,'No_Data')
-						</SQL>
-					</NameExpression>
-				</Level>
-			</Hierarchy>
-		</Dimension>
-	
+
 	<Cube name="Donor Funding">
-		<Table name="cached_v_donor_funding"/>
-		<DimensionUsage name="Activity" source="Activity" foreignKey="amp_activity_id" />
-		<DimensionUsage name="Donor Dates" source="Donor Dates" foreignKey="amp_activity_id" />
-		<DimensionUsage name="Status" source="Status" foreignKey="amp_activity_id" />
-		<DimensionUsage name="Donor Group" source="Donor Group" foreignKey="amp_activity_id" />
-		<DimensionUsage name="Donor Types" source="Donor Types" foreignKey="amp_activity_id" />
-		<DimensionUsage name="Primary Sector" source="Primary Sector" foreignKey="amp_activity_id" />
+		<Table name="mondrian_fact_table" />
+
+		<Dimension name="Project Title" foreignKey="entity_id">
+			<Hierarchy hasAll="true" allMemberName="All Activities" primaryKey="amp_activity_id" name="Project Title">
+				<Table name="mondrian_activity_texts" />
+				<Level name="Project Title" column="amp_activity_id" type="Integer" nameColumn="name" />
+			</Hierarchy>
+		</Dimension>
+
+		<Dimension name="Approval Status" foreignKey="entity_id">
+			<Hierarchy hasAll="true" allMemberName="All Approval Statuses" primaryKey="amp_activity_id">
+				<Table name="mondrian_activity_texts" />
+				<Level name="Approval Status" column="approval_status" nameColumn="approval_status" />
+			</Hierarchy>
+		</Dimension>
+
+		<Dimension name="AMP ID" foreignKey="entity_id">
+			<Hierarchy hasAll="true" allMemberName="All AMP IDs" primaryKey="amp_activity_id" name="AMP ID">
+				<Table name="mondrian_activity_texts" />
+				<Level name="AMP ID" column="amp_activity_id" type="Integer" nameColumn="amp_id" uniqueMembers="true" /> <!-- not sure about uniqueMembers -->
+			</Hierarchy>
+		</Dimension>
+
+		<Dimension name="Location" foreignKey="location_id">
+			<Hierarchy hasAll="true" allMemberName="All Locations" name="Locations" uniqueKeyLevelName="Location" primaryKey="id">
+				<Table name="mondrian_locations" />
+				<Level name="Country Name" column="country_id" type="Integer" nameColumn="country_name" />
+				<Level name="Region Name" column="region_id" type="Integer" nameColumn="region_name" />
+				<Level name="Zone Name" column="zone_id" type="Integer" nameColumn="zone_name" />
+				<Level name="District Name" column="district_id" type="Integer" nameColumn="district_name" />
+				<Level name="Location" column="id" type="Integer" nameColumn="location_name" />
+			</Hierarchy>
+		</Dimension>
+
+		<Dimension name="Primary Sector" foreignKey="primary_sector_id">
+			<Hierarchy hasAll="true" allMemberName="All Primary Sectors" primaryKey="amp_sector_id">
+				<Table name="mondrian_sectors" alias="primary_sector_table" />
+				<Level name="Primary Sector" type="Integer" column="level0_sector_id" nameColumn="level0_sector_name" />
+				<Level name="Primary Sector Sub-sector" type="Integer" column="level1_sector_id" nameColumn="level1_sector_name" />
+				<Level name="Primary Sector Sub-sub-sector" type="Integer" column="level2_sector_id" nameColumn="level2_sector_name" />
+			</Hierarchy>
+		</Dimension>
+
+		<Dimension name="Secondary Sector" foreignKey="secondary_sector_id">
+			<Hierarchy hasAll="true" allMemberName="All Secondary Sectors" primaryKey="amp_sector_id">
+				<Table name="mondrian_sectors" alias="secondary_sector_table" />
+				<Level name="Secondary Sector" type="Integer" column="level0_sector_id" nameColumn="level0_sector_name" />
+				<Level name="Secondary Sector Sub-sector" type="Integer" column="level1_sector_id" nameColumn="level1_sector_name" />
+				<Level name="Secondary Sector Sub-sub-sector" type="Integer" column="level2_sector_id" nameColumn="level2_sector_name" />
+			</Hierarchy>
+		</Dimension>
+
+		<Dimension name="Tertiary Sector" foreignKey="tertiary_sector_id">
+			<Hierarchy hasAll="true" allMemberName="All Tertiary Sectors" primaryKey="amp_sector_id">
+				<Table name="mondrian_sectors" alias="tertiary_sector_table" />
+				<Level name="Tertiary Sector" type="Integer" column="level0_sector_id" nameColumn="level0_sector_name" />
+				<Level name="Tertiary Sector Sub-sector" type="Integer" column="level1_sector_id" nameColumn="level1_sector_name" />
+				<Level name="Tertiary Sector Sub-sub-sector" type="Integer" column="level2_sector_id" nameColumn="level2_sector_name" />
+			</Hierarchy>
+		</Dimension>
+
+		<DimensionUsage name="Donor Agency" source="AMP Organization" caption="Donor Agency" foreignKey="donor_id" />
+		<DimensionUsage name="Implementing Agency" source="AMP Organization" caption="Implementing Agency" foreignKey="ia_org_id" />
+		<DimensionUsage name="Executing Agency" source="AMP Organization" caption="Executing Agency" foreignKey="ea_org_id" />
+		<DimensionUsage name="Beneficiary Agency" source="AMP Organization" caption="Beneficiary Agency" foreignKey="ba_org_id" />
+		<DimensionUsage name="Responsible Organization" source="AMP Organization" caption="Responsible Agency" foreignKey="ro_org_id" />
+
+		<DimensionUsage name="Primary Program" source="AMP Program" caption="Primary Program" foreignKey="primary_program_id" />
+		<DimensionUsage name="Secondary Program" source="AMP Program" caption="Secondary Program" foreignKey="secondary_program_id" />
+		<DimensionUsage name="Tertiary Program" source="AMP Program" caption="Tertiary Program" foreignKey="tertiary_program_id" />
+		<DimensionUsage name="National Objectives" source="AMP Program" caption="National Objectives" foreignKey="national_objectives_program_id" />
+
+		<Dimension name="Dates" type="TimeDimension" foreignKey="date_code">
+			<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day" name="Dates">
+				<Table name="mondrian_dates" />
+				<Level name="Year" column="year" levelType="TimeYears" type="Integer" />
+				<Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Integer"/>
+				<Level name="Month" column="month" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Integer" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day" name="DatesDuplicate">
+				<Table name="mondrian_dates" />
+				<Level name="Year" column="year" levelType="TimeYears" type="Integer" />
+				<Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Integer"/>
+				<Level name="Month" column="month" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Integer" />
+			</Hierarchy>
+		</Dimension>
+<!--
+		<DimensionUsage name="Primary Sector" source="Sectors" caption="Primary Sector" foreignKey="primary_sector_id" />
+		<DimensionUsage name="Secondary Sector" source="Sectors" caption="Secondary Sector" foreignKey="secondary_sector_id" usagePrefix="Secondary" />
+-->
 		<Measure name="Actual Commitments" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">
-					case when cached_v_donor_funding.transaction_type=0
-					and cached_v_donor_funding.adjustment_type=272 then
-					cached_v_donor_funding.transaction_amount * getExchange('USD',cached_v_donor_funding.transaction_date)
-					else 0 end
-					
+					CASE WHEN mondrian_fact_table.transaction_type=0 AND mondrian_fact_table.adjustment_type=(select id from amp_category_value where category_value = 'Actual' and amp_category_class_id = (select id from amp_category_class where category_name = 'Adjustment Type'))
+						THEN mondrian_fact_table.transaction_amount * (select exchange_rate from mondrian_exchange_rates mer WHERE mer.day = mondrian_fact_table.date_code AND mer.currency_id = mondrian_fact_table.currency_id) / (select exchange_rate from mondrian_exchange_rates mer WHERE mer.day = mondrian_fact_table.date_code AND mer.currency_id = 95)
+						ELSE 0
+					END
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		<Measure name="Actual Disbursement" aggregator="sum">
+		<Measure name="Actual Disbursements" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic">
-					(case when cached_v_donor_funding.transaction_type=1 
-					and cached_v_donor_funding.adjustment_type=272 then
-						cached_v_donor_funding.transaction_amount
-					else 0 end)
+					CASE WHEN mondrian_fact_table.transaction_type=1 AND mondrian_fact_table.adjustment_type=(select id from amp_category_value where category_value = 'Actual' and amp_category_class_id = (select id from amp_category_class where category_name = 'Adjustment Type'))
+						THEN mondrian_fact_table.transaction_amount * (select exchange_rate from mondrian_exchange_rates mer WHERE mer.day = mondrian_fact_table.date_code AND mer.currency_id = mondrian_fact_table.currency_id) / (select exchange_rate from mondrian_exchange_rates mer WHERE mer.day = mondrian_fact_table.date_code AND mer.currency_id = 95)
+						ELSE 0
+					END
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-		
+		<Measure name="Planned Commitments" aggregator="sum">
+			<MeasureExpression>
+				<SQL dialect="generic" aggregator="sum">
+					CASE WHEN mondrian_fact_table.transaction_type=0 AND mondrian_fact_table.adjustment_type=(select id from amp_category_value where category_value = 'Planned' and amp_category_class_id = (select id from amp_category_class where category_name = 'Adjustment Type'))
+						THEN mondrian_fact_table.transaction_amount * (select exchange_rate from mondrian_exchange_rates mer WHERE mer.day = mondrian_fact_table.date_code AND mer.currency_id = mondrian_fact_table.currency_id) / (select exchange_rate from mondrian_exchange_rates mer WHERE mer.day = mondrian_fact_table.date_code AND mer.currency_id = 95)
+						ELSE 0
+					END
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+		<Measure name="Planned Disbursements" aggregator="sum">
+			<MeasureExpression>
+				<SQL dialect="generic">
+					CASE WHEN mondrian_fact_table.transaction_type=1 AND mondrian_fact_table.adjustment_type=(select id from amp_category_value where category_value = 'Planned' and amp_category_class_id = (select id from amp_category_class where category_name = 'Adjustment Type'))
+						THEN mondrian_fact_table.transaction_amount * (select exchange_rate from mondrian_exchange_rates mer WHERE mer.day = mondrian_fact_table.date_code AND mer.currency_id = mondrian_fact_table.currency_id) / (select exchange_rate from mondrian_exchange_rates mer WHERE mer.day = mondrian_fact_table.date_code AND mer.currency_id = 95)
+						ELSE 0
+					END
+				</SQL>
+			</MeasureExpression>
+		</Measure>
 	</Cube>
  </Schema>
+

@@ -6,13 +6,16 @@ package org.digijava.kernel.ampapi.mondrian.queries;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import mondrian.olap.MondrianException;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -27,7 +30,6 @@ import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.olap4j.CellSet;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapException;
-import org.olap4j.mdx.parser.MdxParseException;
 import org.olap4j.mdx.parser.MdxParser;
 import org.olap4j.mdx.parser.MdxValidator;
 import org.olap4j.metadata.Cube;
@@ -36,6 +38,7 @@ import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
 import org.olap4j.metadata.NamedList;
+import org.olap4j.query.SortOrder;
 
 /**
  * MDX Query Generator
@@ -44,29 +47,32 @@ import org.olap4j.metadata.NamedList;
  */
 public class MDXGenerator {
 	protected static final Logger logger = Logger.getLogger(MDXGenerator.class); 
-	private static final Map<String, String> allNames; 
+	private static final Map<String, String> allNames;
+	//initialization of "All Members" names from all dimensions in the cube
 	static {
 		Map<String, String> mapping = new HashMap<String, String>();
 		boolean success = false;
 		OlapConnection olapConnection = null;
 		try {
 			olapConnection = Connection.getOlapConnectionByConnPath(Connection.getDefaultConnectionPath());
-			NamedList<Dimension> dimList = olapConnection.getOlapSchema().getSharedDimensions();
+			//NamedList<Dimension> dimList = olapConnection.getOlapSchema().getSharedDimensions();
+			List<Dimension> dimList = new ArrayList<Dimension>();
 			for (Cube cube:olapConnection.getOlapSchema().getCubes()) {
 				dimList.addAll(cube.getDimensions());
 			}
-			for (Dimension dim:dimList) {
-				boolean found = false;
-				for (Iterator<Hierarchy> h = dim.getHierarchies().iterator(); h.hasNext() && !found;)
+			for (Dimension dim:dimList) 
+				for (Iterator<Hierarchy> h = dim.getHierarchies().iterator(); h.hasNext(); ){
+					boolean found = false;
 					for (Iterator<Level> l = h.next().getLevels().iterator(); l.hasNext() && !found;)
 						for (Member m: l.next().getMembers())
 							if (m.isAll()) {
-								mapping.put(dim.getName(), m.getName());
+								mapping.put(MDXElement.quote(m.getHierarchy().getName()), m.toString());
+								if (dim.getHierarchies().size() == 1) //keep also the default All member per dimension when there is only 1 hierarchy 
+									mapping.put(MDXElement.quote(dim.getName()), m.toString());
 								found = true;
-								//mapping.put(dim.getName()+ h.getName(), m.getName());
 								break;
 							}
-			}
+				}
 			success = true;
 		} catch (OlapException e) {
 			logger.error(MondrianUtils.getOlapExceptionMessage(e));
@@ -106,7 +112,7 @@ public class MDXGenerator {
 		this.validator = olapConnection.getParserFactory().createMdxValidator(olapConnection);
 	}
 	
-	private void tearDown() {
+	public void tearDown() {
 		try {
 			this.olapConnection.close();
 		} catch (SQLException e) {
@@ -144,111 +150,140 @@ public class MDXGenerator {
 		
 		//Cube cube = getCube(config);
 		String cubeName = config.getCubeName();
-		//SelectNode select = new SelectNode();
-		//select.setFrom(new IdentifierNode(new NameSegment(cubeName)));
 		
-		String with = "";
-		String mdx = "SELECT ";
+		StringBuilder with = new StringBuilder("");
+		String select = "SELECT ";
 		String from = " FROM [" + cubeName + "]";
 		String columns = " ON COLUMNS, ";
 		String rows = " ON ROWS ";
 		String where = "";
+		String mdx = "";
 		String notEmpty = config.isAllowEmptyData() ? "" : "NON EMPTY ";
-		int setCount = 0;
 		
+		adjustDuplicateElementsOnDifferentAxis(config);
 
 		String axisMdx = null;
 		
-		//columns
-		//AxisNode axisNode = select.getAxisList().get(Axis.COLUMNS.axisOrdinal());
-		//axisNode.setNonEmpty(config.isAllowEmptyData());
-		List<String> sortingList = new ArrayList<String>(); 
-		List<String> crossJoins = new ArrayList<String>();
+		/* COLUMNS */
 		//if column attributes are not configured, display only measures
-		if (config.getColumnAttributes().size()==0) {
-			axisMdx = "";
-			for (MDXMeasure colMeasure:config.getColumnMeasures()) {
-				axisMdx += "," + colMeasure.toString();
-			}
-			axisMdx = "{Hierarchize({" + axisMdx.substring(1) + "})}"; //
-		} else {
-			for (MDXAttribute colAttr:config.getColumnAttributes()) {
-				String attrNode = null;
-				String all = config.isDoRowTotals() ? "{ %s, " + getAll(colAttr) + "}" : "%s";
-				if (config.getAxisFilters().containsKey(colAttr)) {
-					attrNode = "COLSET" + (++setCount);
-					with += " SET " + attrNode + " AS '"  
-							+ String.format(all, toAxisAttrFilter(colAttr, config.getAxisFilters().get(colAttr))) 
-							+ "'";
-				} else {
-					attrNode = String.format(all, colAttr.toString());
-				}
-				for (MDXMeasure colMeasure:config.getColumnMeasures()) {
-					String measureNode = colMeasure.toString();
-					crossJoins.add(MoConstants.FUNC_CROSS_JOIN + "(" + attrNode + ", {" + measureNode +"}" + ")");
-					if (colMeasure.getSortAsc()!=null)
-						sortingList.add(measureNode + ", " + (colMeasure.getSortAsc() ? "ASC" : "DESC"));
-				}
-			}
-			axisMdx = toMDXGroup(crossJoins, MoConstants.FUNC_UNION, "");
-		}
+		axisMdx = getColumns(config, with);
+		
 		columns  =  notEmpty + axisMdx + columns;
 		
-		//rows
-		//TODO: do we expect measures on rows?
-		List<String> attrList = new ArrayList<String>();
-		for (MDXAttribute rowAttr: config.getRowAttributes()) {
-			String attrNode = null;
-			String all = config.isDoColumnsTotals() ? "{ %s, " + getAll(rowAttr) + "}" : "%s";
-			if (config.getAxisFilters().containsKey(rowAttr)) {
-				attrNode = "COLSET" + (++setCount);
-				with += " SET " + attrNode + " AS '" + String.format(all, toAxisAttrFilter(rowAttr, config.getAxisFilters().get(rowAttr))) + "'";
-			} else {
-				attrNode = String.format(all, rowAttr.toString());
-			}
-			attrList.add(attrNode);
-		}
-		axisMdx = toMDXGroup(attrList, MoConstants.FUNC_CROSS_JOIN, "{}");
-		//filter by measures
+		/* ROWS */
+		axisMdx = getRows(config, with);
+				
+		//filter axis by measures
 		if (config.getAxisFilters().size()>0) {
 			for (Map.Entry<MDXElement, MDXFilter> pair : config.getAxisFilters().entrySet()) {
-				//normally all attr elements should have been removed by now from filter map
 				if (pair.getKey() instanceof MDXMeasure) {
 					axisMdx = toFilter(axisMdx, pair.getKey(), pair.getValue());
 				}
 			}
  		}
 		//sorting
-		if (sortingList.size()>0) {
-			for (String sortData: sortingList) {
-				axisMdx = MoConstants.FUNC_ORDER + "(" + axisMdx + ", " + sortData + ")"; //TBD
-			}
+		if (config.getSortingOrder().size() > 0) {
+			axisMdx = sorting(config.getSortingOrder(), axisMdx);
 		}
 		rows  = notEmpty + axisMdx + rows;
 		
-		//where (slice data, aka filters in Reports)
+		/* WHERE  (slice data, aka filters in Reports) */
 		if (config.getLevelFilters().size()>0 || config.getDataFilters().size()>0) {
-			axisMdx = "";
+			StringBuilder whereFilter = new StringBuilder(20 * (config.getDataFilters().size() + config.getLevelFilters().size())); 
 			for (Map.Entry<MDXAttribute, MDXFilter> pair:config.getDataFilters().entrySet()) {
-				axisMdx += "," + toFilter(pair.getKey().toString(), currentMemeber(pair.getKey()), pair.getKey(), pair.getValue());
+				whereFilter.append(",").append(toFilter(pair.getKey().toString(), pair.getKey().getCurrentMemberName(), pair.getKey(), pair.getValue()));
 			}
 			for (MDXAttribute mdxAttr:config.getLevelFilters()) {
-				axisMdx += "," + mdxAttr.toString();
+				whereFilter.append(",").append(mdxAttr.toString());
 			}
-			where = " WHERE (" + axisMdx.substring(1) + ")";
+			where = " WHERE (" + whereFilter.append(")").substring(1);
 		}
 		
-		if (StringUtils.isNotBlank(with)) with = "WITH " + with;
-		mdx += with + columns + rows + from + where;
-		logger.info("MDX query: " + mdx);
-
-		if (!isValid(mdx))
-			throw new AmpApiException("Invalid query");
+		mdx = (with.length() > 0 ? "WITH " + with.toString() : "") + select + columns + rows + from + where;
+		
+		logger.info("[" + config.getMdxName() + "] MDX query: " + mdx);
+		validate(mdx);
+			
 		return mdx;
 	}
 	
+	/**
+	 * Builds 'ON COLUMNS' MDX query
+	 * @param config - MDXConfig
+	 * @param with - the 'WITH' string to be prefixed to MDX select
+	 * @return 'ON COLUMNS' MDX query portion
+	 * @throws AmpApiException
+	 */
+	private String getColumns(MDXConfig config, StringBuilder with) throws AmpApiException {
+		if (config.getColumnMeasures().isEmpty())
+			throw new AmpApiException("MDX Generation error: No measure specified for Columns");
+		
+		String axisMdx = null;
+		
+		String measures = "";
+		for (MDXMeasure colMeasure:config.getColumnMeasures()) {
+			measures += "," + colMeasure.toString();
+		}
+		axisMdx = "{" + measures.substring(1) + "}";
+		if (config.getColumnAttributes().size()==0) {
+			//aka simple summary totals report or can be used by dashboards/reports charts (e.g. pie chart)
+			axisMdx = "{" + MoConstants.FUNC_HIERARCHIZE + "(" + axisMdx + ")}"; //
+		} else {
+			axisMdx = getAxis(config, config.getColumnAttributes().listIterator(config.getColumnAttributes().size()), 
+					with, "COLSET", axisMdx, config.isDoColumnsTotals());
+		}
+		return axisMdx;
+	}
+	
+	/**
+	 * Builds 'ON ROWS' MDX query
+	 * @param config - MDX Config
+	 * @param with - the 'WITH' string to be prefixed to MDX select 
+	 * @return 'ON ROWS' MDX query portion
+	 * @throws AmpApiException
+	 */
+	private String getRows(MDXConfig config, StringBuilder with) throws AmpApiException {
+		//assumption: only attributes are displayed per rows, no measures
+		return getAxis(config, config.getRowAttributes().listIterator(config.getRowAttributes().size()), with, "ROWSET", null, config.isDoColumnsTotals());
+	}
+	
+	/** supporting common method used by getRows and getColumns, because the algorithm is the same similar */
+	private String getAxis(MDXConfig config, ListIterator<MDXAttribute> reverseIterator, StringBuilder with, String withPrefix,
+							String initMember, boolean doTotals) throws AmpApiException {
+		int setId = 0; //identifier suffix for 'with' member name
+		String crossJoin = initMember;
+		String prevAttrAll = initMember; //used if config.isDoColumnsTotals() is true
+		
+		for (ListIterator<MDXAttribute> iter = reverseIterator; iter.hasPrevious(); ) {
+			MDXAttribute rowAttr = iter.previous();
+			String attrNode = null;
+			String attrAll = doTotals ? getAll(rowAttr) : null;
+			String all = (crossJoin == null && doTotals) ? "{ %s, " + attrAll + "}" : "%s"; //build all in first crossJoin only for last element
+			if (config.getAxisFilters().containsKey(rowAttr)) {
+				//build a separate rowset to have a more readable MDX 
+				attrNode = withPrefix + (++setId);
+				with.append(" SET " + attrNode + " AS '" + String.format(all, toAxisAttrFilter(rowAttr, config.getAxisFilters().get(rowAttr))) + "'");
+			} else {
+				attrNode = String.format(all, rowAttr.toString());
+			}
+			if (crossJoin == null) { 
+				crossJoin = attrNode; //note: if 1 row element, then no crossjoins/unions are needed and this element will be simply returned  
+				if (attrAll != null) prevAttrAll = attrAll;
+			} else {
+				//for query with no totals, it is enough to do cross join 
+				crossJoin = String.format(MoConstants.FUNC_CROSS_JOIN_FORMAT, attrNode, crossJoin);
+				//for query with totals, we need to cross join 'all' members and make a union with standard members cross join
+				if (attrAll != null) {
+					prevAttrAll = String.format(MoConstants.FUNC_CROSS_JOIN_FORMAT, attrAll, prevAttrAll);
+					crossJoin = String.format(MoConstants.FUNC_UNION_FORMAT, crossJoin, prevAttrAll); //totals are displayed after level's members
+				}
+			}
+		}
+		return crossJoin;
+	}
+	
 	private String toAxisAttrFilter(MDXAttribute mdxAttr, MDXFilter mdxFilter) {
-		return toFilter(mdxAttr.toString(), currentMemeber(mdxAttr), mdxAttr, mdxFilter);
+		return toFilter(mdxAttr.toString(), mdxAttr.getCurrentMemberName(), mdxAttr, mdxFilter);
 	}
 	
 	private String toFilter(String toFilterSet, MDXElement filterBy, MDXFilter mdxFilter) {
@@ -309,61 +344,156 @@ public class MDXGenerator {
 		return elem.getFullName() + "." + MDXElement.quote(value);
 	}
 	
-	private String currentMemeber(MDXAttribute mdxAttr) {
-		return MDXElement.quote(mdxAttr.getDimension()) + "." + MDXElement.quote(mdxAttr.getName()) + "." + MoConstants.CURRENT_MEMBER;
-	}
-	
 	private String getAll(MDXAttribute mdxAttr) throws AmpApiException {
-		String all = allNames==null ? null : allNames.get(mdxAttr.getDimension());
+		String all = allNames==null ? null : allNames.get(mdxAttr.getDimensionAndHierarchy());
 		if (all==null)
-			throw new AmpApiException("No 'All' definition found for Dimension '" + mdxAttr.getDimension() + "'");
-		return MDXElement.quote(mdxAttr.getDimension()) + "." + MDXElement.quote(all);
+			throw new AmpApiException("No 'All' definition found for '" + mdxAttr.getDimensionAndHierarchy() + "'");
+		return all;
 	}
 	
+	/* candidate for removal
 	private String toMDXGroup(List<String> list, String groupFuncion, String defaultVal) {
 		switch (list.size()) {
 		case 0: return defaultVal;
 		case 1: return list.get(0);
 		default: //>=2
-		return addFunc(list, groupFuncion);
+			StringBuilder result = new StringBuilder(list.size() * (list.get(0).length() + 10)); //10=buffer for string length variations
+			addFunc(list.listIterator(list.size()), groupFuncion, result);
+			return result.toString();
 		}
 	}
+	*/
 	
-	private String addFunc(List<String> list, String func) {
-		Iterator<String> iter = list.iterator();
-		if (!iter.hasNext()) return "";
-		String mdx = func + "(" + iter.next() + ", ";
-		String end = ")";
-		while (iter.hasNext()) {
-			String value = iter.next();
-			if (iter.hasNext()) {
-				mdx += func + "(" + value + ", ";
-				end += ")";
-			} else {
-				mdx += value;
+	/**
+	 * traverses the list in reverse order and builds the function list
+	 * @param reversIterator
+	 * @param func
+	 * @param 
+	 * @return
+	 */
+	/* candidate for removal
+	private void addFunc(ListIterator<String> reversIterator, String func, StringBuilder result) {
+		//if at least 2 elements are left
+		if (reversIterator.previousIndex() > 0) {
+			String value = reversIterator.previous(); 
+			result.append(func).append("(");
+			addFunc(reversIterator, func, result);
+			result.append(", ").append(value).append(")");
+		} else {
+			//last element
+			result.append(reversIterator.previous());
+		}
+	}
+	*/
+	
+	private String sorting(Map<MDXElement, SortOrder> sortingOrder, String axisMdx) {
+		if (sortingOrder == null || sortingOrder.size() == 0) return axisMdx;
+		StringBuilder fullPrefix = new StringBuilder(sortingOrder.size() * (MoConstants.FUNC_ORDER + "(").length());
+		StringBuilder fullSuffix = new StringBuilder(sortingOrder.size() * (sortingOrder.entrySet().iterator().next().getKey().getSortName().length() + 16)); //16 aprox reserve for sort name diff + delimiters
+		
+		buildSuffixAndPrefix(fullPrefix, fullSuffix, sortingOrder.entrySet().iterator());
+		
+		axisMdx =  fullPrefix.toString() + axisMdx +  fullSuffix.toString();
+		
+		return axisMdx;
+	}
+	
+	private void buildSuffixAndPrefix(StringBuilder fullPrefix, StringBuilder fullSuffix, Iterator<Entry<MDXElement,SortOrder>> iter) {
+		if (!iter.hasNext()) return;
+		final String prefix = MoConstants.FUNC_ORDER + "(";
+		final String delim = ", ";
+		final String end = ")";
+		Entry<MDXElement,SortOrder> elem = iter.next();
+		buildSuffixAndPrefix(fullPrefix, fullSuffix, iter);
+		fullPrefix.append(prefix);
+		fullSuffix.append(delim).append(elem.getKey().getSortName()).append(delim).append(elem.getValue().name()).append(end);
+	}
+	
+	/** 
+	 * replaces levels from same hierarchy that are used in different axis by another duplicate hierarchy 
+	 * (any other solution for same hierarchy on multiple axis?) 
+	 */
+	private void adjustDuplicateElementsOnDifferentAxis(MDXConfig config) {
+		Set<String> usedDimensions = new HashSet<String>();
+		
+		usedDimensions.addAll(adjustDuplicates(usedDimensions, config.getColumnAttributes()));
+		//check against column axis
+		usedDimensions.addAll(adjustDuplicates(usedDimensions, config.getRowAttributes()));
+		//check against column & rows axis
+		adjustDuplicates(usedDimensions, config.getLevelFilters());
+		
+		Map<MDXAttribute, MDXFilter> replaceFilters = new HashMap<MDXAttribute, MDXFilter>();
+		for (Iterator<Entry<MDXAttribute, MDXFilter>> iter = config.getDataFilters().entrySet().iterator(); iter.hasNext(); ) {
+			Entry<MDXAttribute, MDXFilter> pair = iter.next();
+			MDXAttribute mdxAttr  = pair.getKey();
+			if (usedDimensions.contains(mdxAttr.getDimensionAndHierarchy())) {
+				iter.remove();
+				replaceFilters.put(MondrianUtils.getDuplicate(mdxAttr), pair.getValue());
 			}
 		}
-		mdx += end;
-		return mdx;
+		config.getDataFilters().putAll(replaceFilters);  
 	}
 	
+	/** replaces attr hierarchy with duplicate one; supporting method for of {@link #adjustDuplicateElementsOnDifferentAxis */ 
+	private Set<String> adjustDuplicates(Set<String> usedDimensions, List<MDXAttribute> attrList) {
+		Set<String> newDimensions = new HashSet<String>();
+		for (ListIterator<MDXAttribute> iter = attrList.listIterator(); iter.hasNext();) {
+			MDXAttribute mdxAttr  = iter.next();
+			if (usedDimensions.contains(mdxAttr.getDimensionAndHierarchy())) {
+				iter.set(MondrianUtils.getDuplicate(mdxAttr));
+			}
+			newDimensions.add(mdxAttr.getDimensionAndHierarchy());
+		}
+		return newDimensions;
+	}
+	
+	/* candidate for removal
+	private List<String> hierchize(List<MDXAttribute> origList, List<String> mdxList) {
+		List<String> attrListUpdated = new ArrayList<String>();
+		Queue<String> hierarcharizeStack = new LinkedList<String>();
+		for (ListIterator<MDXAttribute> iter = origList.listIterator(); iter.hasNext(); ) {
+			MDXAttribute previous = iter.hasPrevious() ? iter.previous() : null; 
+			if (previous !=null) iter.next(); //move back 
+			MDXAttribute current = iter.next();
+			if (previous != null && current.getDimension().equals(previous.getDimension())) {
+				if (hierarcharizeStack.isEmpty()) {
+					attrListUpdated.remove(attrListUpdated.size()-1);
+					hierarcharizeStack.add(mdxList.get(iter.previousIndex()-1));
+				}
+				hierarcharizeStack.add(mdxList.get(iter.previousIndex()));
+			} else if (hierarcharizeStack.size() > 0) {
+				attrListUpdated.add(getHierarcharize(hierarcharizeStack));
+			} else { 
+				attrListUpdated.add(mdxList.get(iter.previousIndex()));
+			}
+		}
+		if (hierarcharizeStack.size() > 0) 
+			attrListUpdated.add(getHierarcharize(hierarcharizeStack));
+		return attrListUpdated;
+	} 
+	
+	private String getHierarcharize(Queue<String> hierarcharizeStack) {
+		if (hierarcharizeStack.size() == 0) return "";
+		String hierarchize = "{" + MoConstants.FUNC_HIERARCHIZE + "({";
+		String sep = ", ";
+		while (!hierarcharizeStack.isEmpty()) {
+			String elem = hierarcharizeStack.remove();
+			hierarchize += (elem.startsWith("{") ? elem : "{" + elem + "}") + sep;
+		}
+		hierarchize = hierarchize.substring(0, hierarchize.length()- sep.length()) + "})}";
+		return hierarchize;
+	}
+	*/
+
 	synchronized
-	public boolean isValid(String mdx) throws AmpApiException {
+	public void validate(String mdx) throws AmpApiException {
 		try {
 			validator.validateSelect(parser.parseSelect(mdx));
-			return true;
-		} catch (MdxParseException e) {
-			logger.error(MondrianUtils.getMdxParseException(e));
-		} catch (OlapException e) {
-			logger.error(MondrianUtils.getOlapExceptionMessage(e));
-		} catch (RuntimeException e) {
-			if (e.getCause() instanceof MdxParseException) {
-				logger.error(MondrianUtils.getMdxParseException((MdxParseException)e.getCause()));
-			} else {
-				logger.error(e.getMessage());
-			}
-		} 
-		return false;
+		} catch (Exception e) {
+			String err = MondrianUtils.toString(e);
+			logger.error("Invalid MDX query\"" + mdx + "\". \nError details: " + err);
+			throw new AmpApiException("Invalid MDX query:" + err);
+		}
 	}
 	
 	/*

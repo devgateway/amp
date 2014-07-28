@@ -63,6 +63,7 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalObservation;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationActor;
 import org.digijava.module.aim.dbentity.AmpRegionalObservationMeasure;
@@ -70,6 +71,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.ActivityContactInfo;
 import org.digijava.module.aim.form.ProposedProjCost;
@@ -79,7 +81,9 @@ import org.digijava.module.aim.helper.AmpContactsWorker;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.CustomField;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
@@ -88,8 +92,10 @@ import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
+import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.RegionalFundingsHelper;
+import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ActivityVersionUtil;
@@ -275,21 +281,6 @@ public class EditActivity extends Action {
 
     if (!gatePermEditAllowed) {
 
-//			if (errorMsgKey.trim().length() > 0) {
-//				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
-//						errorMsgKey));
-//				saveErrors(request, errors);
-//
-//				errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
-//				String url = "/aim/viewChannelOverview.do?ampActivityId="
-//						+ activityId + "&tabIndex=0";
-//				RequestDispatcher rd = getServlet().getServletContext()
-//						.getRequestDispatcher(url);
-//				rd.forward(request, response);
-//				return null;
-//
-//			}
-
 			//TODO this for tanzania. think we should have plugable rules cos all cantries have different rules.
 			if (!isPreview && activity!=null && activity.getTeam()!=null && currentTeam!=null){
 				AmpTeam activityTeam=activity.getTeam();
@@ -319,6 +310,8 @@ public class EditActivity extends Action {
     // load all themes
     Collection themes = new ArrayList(ProgramUtil.getAllThemes());
     eaForm.getPrograms().setProgramCollection(themes);
+
+    try {
 
       // Checking whether the activity is already opened for editing
       // by some other user
@@ -353,7 +346,7 @@ public class EditActivity extends Action {
         }
       }
       
-      List<AmpActivityBudgetStructure> budgetStructure = DbUtil.getBudgetStructure(eaForm.getActivityId());
+      ArrayList<AmpActivityBudgetStructure> budgetStructure = DbUtil.getBudgetStructure(eaForm.getActivityId());
       eaForm.setBudgetStructure(budgetStructure);
       List nationalPlanObjectivePrograms=new ArrayList();
       List primaryPrograms=new ArrayList();
@@ -365,14 +358,15 @@ public class EditActivity extends Action {
       eaForm.getPrograms().setTertiaryPrograms(tertiaryPrograms);
       
     //allComments
-	  List<AmpComments> colAux	= null;
+	  ArrayList<AmpComments> colAux	= null;
       Collection ampFields 			= DbUtil.getAmpFields();
       HashMap allComments 			= new HashMap();
       
       if (ampFields!=null) {
       	for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
               AmpField field = (AmpField) itAux.next();
-              	colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(), activityId);
+              	colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),
+                                                    activityId);
               allComments.put(field.getFieldName(), colAux);
             }
       }
@@ -552,6 +546,7 @@ public class EditActivity extends Action {
     	  eaForm.getIdentification().setSubProgram(null);
     	  eaForm.getIdentification().setProjectCode(null);
     	  eaForm.getIdentification().setMinistryCode(null);
+    	  eaForm.getIdentification().setGbsSbs(null);
     	  eaForm.getIdentification().setGovernmentApprovalProcedures(null);
     	  eaForm.getIdentification().setJointCriteria(null);
     	  /* END - Clearing Tanzania Adds */
@@ -613,8 +608,8 @@ public class EditActivity extends Action {
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
                 CategoryConstants.FINANCIAL_INSTRUMENT_KEY, activity.getCategories());
-//            if (ampCategoryValue != null)
-//              eaForm.getIdentification().setGbsSbs(new Long(ampCategoryValue.getId()));
+            if (ampCategoryValue != null)
+              eaForm.getIdentification().setGbsSbs(new Long(ampCategoryValue.getId()));
 
         ampCategoryValue = CategoryManagerUtil.getAmpCategoryValueFromListByKey(
                 CategoryConstants.IMPLEMENTATION_LOCATION_KEY, activity.getCategories());
@@ -821,6 +816,12 @@ public class EditActivity extends Action {
 
           eaForm.getIdentification().setBudgetCodes(ActivityUtil.getBudgetCodes());
 
+        //Budget classification
+      	eaForm.getIdentification().setSelectedbudgedsector(ActivityUtil.getBudgetSector(eaForm.getActivityId()));
+      	eaForm.getIdentification().setSelectedorg(ActivityUtil.getBudgetOrganization(eaForm.getActivityId()));
+      	eaForm.getIdentification().setSelecteddepartment(ActivityUtil.getBudgetDepartment(eaForm.getActivityId()));
+      	eaForm.getIdentification().setSelectedprogram(ActivityUtil.getBudgetProgram(eaForm.getActivityId()));
+
 
       	eaForm.getIdentification().setBudgetsectors(BudgetDbUtil.getBudgetSectors());
       	eaForm.getIdentification().setBudgetprograms(BudgetDbUtil.getBudgetPrograms());
@@ -860,7 +861,8 @@ public class EditActivity extends Action {
           if (activity.getMinistryCode() != null)
               eaForm.getIdentification().setMinistryCode(activity.getMinistryCode().trim());
 
-
+          if (activity.getGbsSbs() != null)
+            eaForm.getIdentification().setGbsSbs(activity.getGbsSbs());
 
           if (activity.isGovernmentApprovalProcedures() != null)
             eaForm.getIdentification().setGovernmentApprovalProcedures(activity.isGovernmentApprovalProcedures());
@@ -900,12 +902,42 @@ public class EditActivity extends Action {
 
       	eaForm.getIdentification().setProjectImpact(activity.getProjectImpact());
 
+      	if(activity.getChapter()!=null) {
+      		eaForm.getIdentification().setChapterCode(activity.getChapter().getCode());
+      		eaForm.getIdentification().setChapterYear(activity.getChapter().getYear());
+      		eaForm.getIdentification().setChapterForPreview(activity.getChapter());
+      		logger.info("GETTING CHAPTER AND IMPUTATIONS : "+activity.getChapter().getCode());
+      		logger.info("GETTING CHAPTER AND IMPUTATIONS : "+activity.getChapter().getImputations().size());
+      		//
+//      		Iterator it = activity.getChapter().getImputations().iterator();
+//      		while (it.hasNext()) {
+//
+//      		}
+      	}
+
     	eaForm.getIdentification().setActivitySummary(activity.getActivitySummary());
+
+
+    	eaForm.getIdentification().setContractingArrangements(activity.getContractingArrangements());
+
+
+    	eaForm.getIdentification().setCondSeq(activity.getCondSeq());
+
+
+    	eaForm.getIdentification().setLinkedActivities(activity.getLinkedActivities());
+
 
     	eaForm.getIdentification().setConditionality(activity.getConditionality());
 
 
     	eaForm.getIdentification().setProjectManagement(activity.getProjectManagement());
+
+
+    	eaForm.getContracts().setContractDetails(activity.getContractDetails());
+
+
+  		eaForm.getIdentification().setConvenioNumcont(activity.getConvenioNumcont());
+  		eaForm.getIdentification().setClasiNPD(activity.getClasiNPD());
 
   		if (activity.getProjectComments() != null)
             eaForm.getIdentification().setProjectComments(activity.getProjectComments().trim());
@@ -945,6 +977,12 @@ public class EditActivity extends Action {
           } else {
               eaForm.getPlanning().setLineMinRank("-1");
           }
+          if (null != activity.getPlanMinRank()) {
+              eaForm.getPlanning().setPlanMinRank(activity.getPlanMinRank().toString());
+          } else {
+              eaForm.getPlanning().setPlanMinRank("-1");
+          }
+
           eaForm.getPlanning().setProposedProjectLife(activity.getProposedProjectLife());
 
           eaForm.getPlanning().setActRankCollection(new ArrayList());
@@ -1048,7 +1086,6 @@ public class EditActivity extends Action {
             	if (actLoc == null)
             		continue;
             	AmpLocation loc=actLoc.getLocation();								//AMP-2250
-
               if (loc != null) {
                 Location location = new Location();
                 location.setLocId(loc.getAmpLocationId());
@@ -1073,11 +1110,6 @@ public class EditActivity extends Action {
         			DynLocationManagerUtil.getAncestorByLayer(loc.getLocation(), CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
 
         		if ( ampCVRegion != null ) {
-//                if (loc.getAmpRegion() != null) {
-//                  location.setRegion(loc.getAmpRegion()
-//                                     .getName());
-//                  location.setRegionId(loc.getAmpRegion()
-//                                       .getAmpRegionId());
                   if (eaForm.getFunding().getFundingRegions() == null) {
                     eaForm.getFunding()
                         .setFundingRegions(new ArrayList());
@@ -1095,7 +1127,7 @@ public class EditActivity extends Action {
                 	location.setPercent( strPercentage.replace(",", ".") );
                 }
 
-                if ( setFullPercForDefaultCountry && (actLoc.getLocationPercentage()==null || actLoc.getLocationPercentage() == 0.0) &&
+                if ( setFullPercForDefaultCountry && (actLoc.getLocationPercentage() ==null ||actLoc.getLocationPercentage() == 0.0 )&&
                 		CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(loc.getLocation().getParentCategoryValue()) &&
                 				loc.getLocation().getId() != defCountry.getId() )
                 {
@@ -1120,6 +1152,9 @@ public class EditActivity extends Action {
             	List<AmpClassificationConfiguration> classificationConfigs=SectorUtil.getAllClassificationConfigs();
             	eaForm.getSectors().setClassificationConfigs(classificationConfigs);
             }    
+          if (activity.getThemeId() != null) {
+            eaForm.getPrograms().setProgram(activity.getThemeId().getAmpThemeId());
+          }
           
           if (activity.getProgramDescription() != null)
         	  eaForm.getPrograms().setProgramDescription(activity
@@ -1180,6 +1215,47 @@ public class EditActivity extends Action {
             getComponents(activity, eaForm, toCurrCode);
           }
 
+          Collection memLinks = null;
+          if (tm != null)
+            memLinks = TeamMemberUtil.getMemberLinks(tm.getMemberId());
+          Collection actDocs = activity.getDocuments();
+          if (tm != null && actDocs != null && actDocs.size() > 0) {
+            //Collection docsList = new ArrayList();
+            Collection linksList = new ArrayList();
+
+            Iterator docItr = actDocs.iterator();
+            while (docItr.hasNext()) {
+              RelatedLinks rl = new RelatedLinks();
+
+              CMSContentItem cmsItem = (CMSContentItem) docItr
+                  .next();
+              rl.setRelLink(cmsItem);
+              if (tm != null)
+                rl.setMember(TeamMemberUtil.getAmpTeamMember(tm
+                    .getMemberId()));
+              Iterator tmpItr = memLinks.iterator();
+              while (tmpItr.hasNext()) {
+                Documents doc = (Documents) tmpItr.next();
+                if ( cmsItem.getDocType() != null)
+                		doc.setDocType(cmsItem.getDocType().getValue());
+                if (doc.getDocId().longValue() == cmsItem
+                    .getId()) {
+                  rl.setShowInHomePage(true);
+                  break;
+                }
+              }
+
+              if (cmsItem.getIsFile()) {
+                //docsList.add(rl);
+              }
+              else {
+                linksList.add(rl);
+              }
+            }
+            eaForm.getDocuments().setDocuments(DbUtil.getKnowledgeDocuments(eaForm.getActivityId()));
+            //eaForm.getDocuments().setDocumentList(docsList);
+            eaForm.getDocuments().setLinksList(linksList);
+          }
           Site currentSite = RequestUtils.getSite(request);
           eaForm.getDocuments().setManagedDocumentList(DocumentUtil.getDocumentsForActivity(currentSite, activity));
           eaForm.getAgencies().setExecutingAgencies(new ArrayList<AmpOrganisation>());
@@ -1385,6 +1461,8 @@ public class EditActivity extends Action {
 		}
 
 
+          // loading the contact person details and condition
+       
           ActivityContactInfo contactInfo=eaForm.getContactInformation();
           //Reset contact info
           contactInfo.setDonorContacts(new ArrayList<AmpActivityContact>());
@@ -1417,12 +1495,6 @@ public class EditActivity extends Action {
 					}
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimaryDonorContId(ampActContact.getContact().getTemporaryId());
-                        /*
-						contactInfo.setPrimaryDonorContId(ampActContact.getContact().getTemporaryId());
-						/*if(contactInfo.getPrimaryDonorContIds()==null){
-							contactInfo.setPrimaryDonorContIds(new String[1]);
-						}
-						contactInfo.getPrimaryDonorContIds()[0]=ampActContact.getContact().getTemporaryId();*/
 
 					}
 					contactInfo.getDonorContacts().add(ampActContact);
@@ -1434,14 +1506,7 @@ public class EditActivity extends Action {
 					}
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimaryMofedContId(ampActContact.getContact().getTemporaryId());
-                        /*
-						contactInfo.setPrimaryMofedContId(ampActContact.getContact().getTemporaryId());
-						/*if(contactInfo.getPrimaryMofedContIds()==null){
-							contactInfo.setPrimaryMofedContIds(new String[1]);
-						}
-						contactInfo.getPrimaryMofedContIds()[0]=ampActContact.getContact().getTemporaryId();*/
-
-					}
+                    }
 					contactInfo.getMofedContacts().add(ampActContact);
 				}
 				//project coordinator contact
@@ -1452,14 +1517,6 @@ public class EditActivity extends Action {
 
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimaryProjCoordContId (ampActContact.getContact().getTemporaryId());
-                        /*
-						contactInfo.setPrimaryProjCoordContId (ampActContact.getContact().getTemporaryId());
-						/*if(contactInfo.getPrimaryProjCoordContIds()==null){
-							contactInfo.setPrimaryProjCoordContIds(new String[1]);
-						}
-						contactInfo.getPrimaryProjCoordContIds()[0]=ampActContact.getContact().getTemporaryId();*/
-
-
 					}
 					contactInfo.getProjCoordinatorContacts().add(ampActContact);
 				}
@@ -1470,13 +1527,6 @@ public class EditActivity extends Action {
 					}
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimarySecMinContId (ampActContact.getContact().getTemporaryId());
-                        /*
-						contactInfo.setPrimarySecMinContId (ampActContact.getContact().getTemporaryId());
-						/*if(contactInfo.getPrimarySecMinContIds()==null){
-							contactInfo.setPrimarySecMinContIds(new String[1]);
-						}
-						contactInfo.getPrimarySecMinContIds()[0]=ampActContact.getContact().getTemporaryId();*/
-
 					}
 					contactInfo.getSectorMinistryContacts().add(ampActContact);
 				}
@@ -1487,13 +1537,6 @@ public class EditActivity extends Action {
 					}
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimaryImplExecutingContId (ampActContact.getContact().getTemporaryId());
-                        /*
-						contactInfo.setPrimaryImplExecutingContId (ampActContact.getContact().getTemporaryId());
-						/*if(contactInfo.getPrimaryImplExecutingContIds()==null){
-							contactInfo.setPrimaryImplExecutingContIds(new String[1]);
-						}
-						contactInfo.getPrimaryImplExecutingContIds()[0]=ampActContact.getContact().getTemporaryId();*/
-
 					}
 					contactInfo.getImplExecutingAgencyContacts().add(ampActContact);
 				}
@@ -1505,6 +1548,9 @@ public class EditActivity extends Action {
 	    	  AmpContactsWorker.copyContactsToSubLists(activityContacts, eaForm);
 	      }
 
+	      
+          if (activity.getCondition() != null)
+        	  eaForm.getIdentification().setConditions(activity.getCondition().trim());
 
           if (activity.getActivityCreator() != null) {
             User usr = activity.getActivityCreator().getUser();
@@ -1517,6 +1563,18 @@ public class EditActivity extends Action {
           }
         }
 
+        if(eaForm.getCustomFields()!=null){
+	        Iterator<CustomField<?>> itcf = eaForm.getCustomFields().iterator();
+	        while(itcf.hasNext()){
+	        	CustomField cf = itcf.next();
+	        	try{
+	        		Object value = PropertyUtils.getSimpleProperty(activity, cf.getAmpActivityPropertyName());
+	        		cf.setValue(value);
+	        	}catch(Exception e){
+	        		logger.error("Error getting property [" + cf.getAmpActivityPropertyName() + "] from bean ", e);
+	        	}
+	        }
+        }
       }
 
       // Initally set the modality as "Project Support"
@@ -1534,15 +1592,6 @@ public class EditActivity extends Action {
         		  }
         }
       }
-      //Collection levelCol = null;
-      // Loading the levels from the database
-      /*if(eaForm.getLevelCollection() == null) {
-          levelCol = DbUtil.getAmpLevels();
-          eaForm.setLevelCollection(levelCol);
-                   } else {
-          levelCol = eaForm.getLevelCollection();
-                   }
-       */
 
       // load all the active currencies
       eaForm.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
@@ -1567,32 +1616,25 @@ public class EditActivity extends Action {
     eaForm.getFunding().fillFinancialBreakdowns(activityId, DbUtil.getAmpFunding(activityId), debug);
     AmpApplicationSettings appSettings = AmpARFilter.getEffectiveSettings();
     String validationOption = appSettings != null ? appSettings.getValidation() : null;
+    Boolean crossteamvalidation = appSettings.getTeam() != null ? appSettings.getTeam().getCrossteamvalidation() : false;
 
     String actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
+    
+    //Check if cross team validation is enable
+    Boolean crossteamcheck = false;
+    if (crossteamvalidation){
+    	crossteamcheck = true;
+    }else{
+    	//check if the activity belongs to the team where the user is logged.
+    	crossteamcheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
+    }
+    
     if(teamMember != null){
     	Long ampTeamId = teamMember.getTeamId();
     	boolean teamLeadFlag    = teamMember.getTeamHead() || teamMember.isApprover();
     	boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
-    	//commented under AMP-10788
-//    	if (workingTeamFlag) {
-//    		eaForm.setButtonText("edit");	// In case of regular working teams
-//    		if (!(activity.getDraft()!=null && activity.getDraft()) && ( actApprovalStatus != null && Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(actApprovalStatus.toLowerCase())))
-//    	 	{
-//    	 		//burkina
-//    	 		// if an user save an activity he could edit it even it is not approved by team leader
-//    	 		//if(workingTeamFlag && !teamLeadFlag && teamMember.getMemberId().equals(activity.getCreatedBy().getAmpTeamMemId()))
-//    	 		if (workingTeamFlag && teamLeadFlag && teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId())) {
-//    	 			eaForm.setButtonText("validate");
-//    	 		}/*else {
-//    	 			formBean.setButtonText("approvalAwaited");
-//    	 		}*/
-//    	 	}
-//    	} else {
-//    		eaForm.setButtonText("none");	// In case of management-workspace
-//    	}
 
     	String globalProjectsValidation		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION);
-//    	boolean isManagement = false;
     	if("Management".toLowerCase().compareTo(teamMember.getTeamAccessType().toLowerCase()) == 0) {
     		eaForm.setButtonText("none");
     	}
@@ -1606,31 +1648,21 @@ public class EditActivity extends Action {
     			}
     			else{
     				//global validation is on
-
-//    				if("alloff".compareTo(apps.getValidation().toLowerCase())==0)
-//    					eaForm.setButtonText("edit");
-
-    				//only the team leader of the team that owns the activity has rights to validate it
-    				//if activity is already approved it will display the edit value
+    				//only the team leader of the team that owns the activity has rights to validate it if cross team validation is off
     				if ( validationOption != null && "alledits".equalsIgnoreCase(validationOption)) {
-    					if (teamLeadFlag && activity.getTeam() != null &&
-    					   teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId()) &&
+    					if (teamLeadFlag && activity.getTeam() != null && crossteamcheck  &&
     					   (Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus()) ||
     					    Constants.EDITED_STATUS.equalsIgnoreCase(activity.getApprovalStatus()))
     					   ) {
     					    eaForm.setButtonText("validate");
                         }
                     }
-    					//else eaForm.setButtonText("edit");
-
-    				//only the team leader of the team that owns the activity has rights to validate it
     				//it will display the validate label only if it is just started and was not approved not even once
-    				if (validationOption != null && "newonly".equalsIgnoreCase(validationOption))
-    					if (teamLeadFlag &&
-    							Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus())
-    							 && teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId())
-    					) eaForm.setButtonText("validate");
-    					//else eaForm.setButtonText("edit");
+    				if (validationOption != null && "newonly".equalsIgnoreCase(validationOption) && crossteamcheck){
+    					if (teamLeadFlag && Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus())){ 
+    						eaForm.setButtonText("validate");
+    					}
+    				}
     			}
     	}
     }
@@ -1648,6 +1680,10 @@ public class EditActivity extends Action {
 
     eaForm.setStructures(structures);
 
+
+    } finally {
+    	org.digijava.kernel.persistence.PersistenceManager.releaseSession(hsession);
+    }
 
     String debugFM = request.getParameter("debugFM");
     if (debugFM != null && "true".equals(debugFM)) {
@@ -1880,6 +1916,24 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 			}
 
 			ComponentsUtil.calculateFinanceByYearInfo(tempComp, fundingComponentActivity);
+
+			Collection<AmpPhysicalPerformance> phyProgress = ActivityUtil.getPhysicalProgressComponentActivity(tempComp.getComponentId(), activity.getAmpActivityId());
+
+			if (phyProgress != null && phyProgress.size() > 0) {
+				Collection physicalProgress = new ArrayList();
+				Iterator phyProgItr = phyProgress.iterator();
+				while (phyProgItr.hasNext()) {
+					AmpPhysicalPerformance phyPerf = (AmpPhysicalPerformance) phyProgItr.next();
+					PhysicalProgress phyProg = new PhysicalProgress();
+					phyProg.setPid(phyPerf.getAmpPpId());
+					phyProg.setDescription(phyPerf.getDescription());
+					phyProg.setReportingDate(DateConversion.ConvertDateToString(phyPerf.getReportingDate()));
+					phyProg.setTitle(phyPerf.getTitle());
+					physicalProgress.add(phyProg);
+				}
+				tempComp.setPhyProgress(physicalProgress);
+			}
+
 			selectedComponents.add(tempComp);
 		}
 

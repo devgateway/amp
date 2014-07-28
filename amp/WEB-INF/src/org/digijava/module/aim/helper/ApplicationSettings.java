@@ -21,6 +21,7 @@ public class ApplicationSettings {
 		  private AmpReports defaultAmpReport;
           private int defReportsPerPage;
           private String validation;
+          private  Boolean crossteamvalidation;
 
   public String getValidation() {
 			return validation;
@@ -109,4 +110,14 @@ public Long getAppSettingsId() {
 		public void setNumberOfPagesToDisplay(Integer numberOfPagesToDisplay) {
 			this.numberOfPagesToDisplay = numberOfPagesToDisplay;
 		}
+
+		public Boolean getCrossteamvalidation() {
+			return crossteamvalidation;
+		}
+
+		public void setCrossteamvalidation(Boolean crossteamvalidation) {
+			this.crossteamvalidation = crossteamvalidation;
+		}
+		
+		
 }

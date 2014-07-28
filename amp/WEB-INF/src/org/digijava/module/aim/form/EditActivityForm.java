@@ -7,9 +7,12 @@ package org.digijava.module.aim.form;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -575,21 +578,29 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 		
 		@java.lang.SuppressWarnings("all")
+		public String getContractDetails() {
+			return this.contractDetails;
+		}
+		
+		@java.lang.SuppressWarnings("all")
 		public void setContracts(final List contracts) {
 			this.contracts = contracts;
 		}
-//		
-//		@java.lang.SuppressWarnings("all")
-//		public void setIpaBudget(final Double ipaBudget) {
-//			this.ipaBudget = ipaBudget;
-//		}
+		
+		@java.lang.SuppressWarnings("all")
+		public void setIpaBudget(final Double ipaBudget) {
+			this.ipaBudget = ipaBudget;
+		}
 		
 		@java.lang.SuppressWarnings("all")
 		public void setSelContractId(final Integer selContractId) {
 			this.selContractId = selContractId;
 		}
 		
-
+		@java.lang.SuppressWarnings("all")
+		public void setContractDetails(final String contractDetails) {
+			this.contractDetails = contractDetails;
+		}
 		
 		@java.lang.Override
 		@java.lang.SuppressWarnings("all")
@@ -607,7 +618,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			final java.lang.Object this$selContractId = this.getSelContractId();
 			final java.lang.Object other$selContractId = other.getSelContractId();
 			if (this$selContractId == null ? other$selContractId != null : !this$selContractId.equals(other$selContractId)) return false;
-
+			final java.lang.Object this$contractDetails = this.getContractDetails();
+			final java.lang.Object other$contractDetails = other.getContractDetails();
+			if (this$contractDetails == null ? other$contractDetails != null : !this$contractDetails.equals(other$contractDetails)) return false;
 			return true;
 		}
 		
@@ -627,13 +640,15 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			result = result * PRIME + ($ipaBudget == null ? 0 : $ipaBudget.hashCode());
 			final java.lang.Object $selContractId = this.getSelContractId();
 			result = result * PRIME + ($selContractId == null ? 0 : $selContractId.hashCode());
-		return result;
+			final java.lang.Object $contractDetails = this.getContractDetails();
+			result = result * PRIME + ($contractDetails == null ? 0 : $contractDetails.hashCode());
+			return result;
 		}
 		
 		@java.lang.Override
 		@java.lang.SuppressWarnings("all")
 		public java.lang.String toString() {
-			return "EditActivityForm.Contracts(contracts=" + this.getContracts() + ", ipaBudget=" + this.getIpaBudget() + ", selContractId=" + this.getSelContractId() + ")";
+			return "EditActivityForm.Contracts(contracts=" + this.getContracts() + ", ipaBudget=" + this.getIpaBudget() + ", selContractId=" + this.getSelContractId() + ", contractDetails=" + this.getContractDetails() + ")";
 		}
 	}
 	
@@ -653,7 +668,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String lessonsLearned = null;
 		private String projectImpact = null;
 		private String activitySummary = null;
-		
+		private String contractingArrangements = null;
+		private String condSeq = null;
+		private String linkedActivities = null;
 		private String conditionality = null;
 		private String projectManagement = null;
 		private Long procurementSystem = new Long(0);
@@ -684,6 +701,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String actAthAgencySource;
 		private String actAthFirstName;
 		private String actAthLastName;
+		private String conditions;
 		private String ssc_typeOfCooperation;
 		private String ssc_typeOfImplementation;
 		private String [] ssc_modalities;
@@ -697,18 +715,20 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private String subProgram;
 		private String projectCode;
 		private String ministryCode;
-		
+		private Long gbsSbs;
 		private String approvalStatus;
 		private String previousApprovalStatus;
 		private Boolean wasDraft;
+		private String convenioNumcont;
 		private Collection levelCollection = null;
 		private Long activityLevel;
 		private String author;
-		
+		private String clasiNPD;
 		private String[] budgetCodes;
 		//code chapitre
 		private Collection<BeanWrapperImpl> chapterCodes;
 		private Collection<BeanWrapperImpl> chapterYears;
+		private String chapterCode;
 		private AmpChapter chapterForPreview;
 		private Integer chapterYear;
 		private ArrayList<AmpBudgetSector> budgetsectors;
@@ -802,10 +822,20 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			return this.activitySummary;
 		}
 		
+		@java.lang.SuppressWarnings("all")
+		public String getContractingArrangements() {
+			return this.contractingArrangements;
+		}
 		
-
+		@java.lang.SuppressWarnings("all")
+		public String getCondSeq() {
+			return this.condSeq;
+		}
 		
-
+		@java.lang.SuppressWarnings("all")
+		public String getLinkedActivities() {
+			return this.linkedActivities;
+		}
 		
 		@java.lang.SuppressWarnings("all")
 		public String getConditionality() {
@@ -958,6 +988,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 		
 		@java.lang.SuppressWarnings("all")
+		public String getConditions() {
+			return this.conditions;
+		}
+		
+		@java.lang.SuppressWarnings("all")
 		public String getSsc_typeOfCooperation() {
 			return this.ssc_typeOfCooperation;
 		}
@@ -1021,7 +1056,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public String getMinistryCode() {
 			return this.ministryCode;
 		}
-
+		
+		@java.lang.SuppressWarnings("all")
+		public Long getGbsSbs() {
+			return this.gbsSbs;
+		}
 		
 		@java.lang.SuppressWarnings("all")
 		public String getApprovalStatus() {
@@ -1039,6 +1078,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 		
 		@java.lang.SuppressWarnings("all")
+		public String getConvenioNumcont() {
+			return this.convenioNumcont;
+		}
+		
+		@java.lang.SuppressWarnings("all")
 		public Collection getLevelCollection() {
 			return this.levelCollection;
 		}
@@ -1052,7 +1096,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public String getAuthor() {
 			return this.author;
 		}
-
+		
+		@java.lang.SuppressWarnings("all")
+		public String getClasiNPD() {
+			return this.clasiNPD;
+		}
 		
 		@java.lang.SuppressWarnings("all")
 		public String[] getBudgetCodes() {
@@ -1067,6 +1115,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		@java.lang.SuppressWarnings("all")
 		public Collection<BeanWrapperImpl> getChapterYears() {
 			return this.chapterYears;
+		}
+		
+		@java.lang.SuppressWarnings("all")
+		public String getChapterCode() {
+			return this.chapterCode;
 		}
 		
 		@java.lang.SuppressWarnings("all")
@@ -1203,7 +1256,22 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setActivitySummary(final String activitySummary) {
 			this.activitySummary = activitySummary;
 		}
-	
+		
+		@java.lang.SuppressWarnings("all")
+		public void setContractingArrangements(final String contractingArrangements) {
+			this.contractingArrangements = contractingArrangements;
+		}
+		
+		@java.lang.SuppressWarnings("all")
+		public void setCondSeq(final String condSeq) {
+			this.condSeq = condSeq;
+		}
+		
+		@java.lang.SuppressWarnings("all")
+		public void setLinkedActivities(final String linkedActivities) {
+			this.linkedActivities = linkedActivities;
+		}
+		
 		@java.lang.SuppressWarnings("all")
 		public void setConditionality(final String conditionality) {
 			this.conditionality = conditionality;
@@ -1354,7 +1422,10 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.actAthLastName = actAthLastName;
 		}
 		
-
+		@java.lang.SuppressWarnings("all")
+		public void setConditions(final String conditions) {
+			this.conditions = conditions;
+		}
 		
 		@java.lang.SuppressWarnings("all")
 		public void setSsc_typeOfCooperation(final String ssc_typeOfCooperation) {
@@ -1422,6 +1493,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 		
 		@java.lang.SuppressWarnings("all")
+		public void setGbsSbs(final Long gbsSbs) {
+			this.gbsSbs = gbsSbs;
+		}
+		
+		@java.lang.SuppressWarnings("all")
 		public void setApprovalStatus(final String approvalStatus) {
 			this.approvalStatus = approvalStatus;
 		}
@@ -1436,7 +1512,10 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.wasDraft = wasDraft;
 		}
 		
-
+		@java.lang.SuppressWarnings("all")
+		public void setConvenioNumcont(final String convenioNumcont) {
+			this.convenioNumcont = convenioNumcont;
+		}
 		
 		@java.lang.SuppressWarnings("all")
 		public void setLevelCollection(final Collection levelCollection) {
@@ -1452,7 +1531,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setAuthor(final String author) {
 			this.author = author;
 		}
-
+		
+		@java.lang.SuppressWarnings("all")
+		public void setClasiNPD(final String clasiNPD) {
+			this.clasiNPD = clasiNPD;
+		}
 		
 		@java.lang.SuppressWarnings("all")
 		public void setBudgetCodes(final String[] budgetCodes) {
@@ -1467,6 +1550,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		@java.lang.SuppressWarnings("all")
 		public void setChapterYears(final Collection<BeanWrapperImpl> chapterYears) {
 			this.chapterYears = chapterYears;
+		}
+		
+		@java.lang.SuppressWarnings("all")
+		public void setChapterCode(final String chapterCode) {
+			this.chapterCode = chapterCode;
 		}
 		
 		@java.lang.SuppressWarnings("all")
@@ -1578,6 +1666,15 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			final java.lang.Object this$activitySummary = this.getActivitySummary();
 			final java.lang.Object other$activitySummary = other.getActivitySummary();
 			if (this$activitySummary == null ? other$activitySummary != null : !this$activitySummary.equals(other$activitySummary)) return false;
+			final java.lang.Object this$contractingArrangements = this.getContractingArrangements();
+			final java.lang.Object other$contractingArrangements = other.getContractingArrangements();
+			if (this$contractingArrangements == null ? other$contractingArrangements != null : !this$contractingArrangements.equals(other$contractingArrangements)) return false;
+			final java.lang.Object this$condSeq = this.getCondSeq();
+			final java.lang.Object other$condSeq = other.getCondSeq();
+			if (this$condSeq == null ? other$condSeq != null : !this$condSeq.equals(other$condSeq)) return false;
+			final java.lang.Object this$linkedActivities = this.getLinkedActivities();
+			final java.lang.Object other$linkedActivities = other.getLinkedActivities();
+			if (this$linkedActivities == null ? other$linkedActivities != null : !this$linkedActivities.equals(other$linkedActivities)) return false;
 			final java.lang.Object this$conditionality = this.getConditionality();
 			final java.lang.Object other$conditionality = other.getConditionality();
 			if (this$conditionality == null ? other$conditionality != null : !this$conditionality.equals(other$conditionality)) return false;
@@ -1664,7 +1761,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			final java.lang.Object this$actAthLastName = this.getActAthLastName();
 			final java.lang.Object other$actAthLastName = other.getActAthLastName();
 			if (this$actAthLastName == null ? other$actAthLastName != null : !this$actAthLastName.equals(other$actAthLastName)) return false;
-
+			final java.lang.Object this$conditions = this.getConditions();
+			final java.lang.Object other$conditions = other.getConditions();
+			if (this$conditions == null ? other$conditions != null : !this$conditions.equals(other$conditions)) return false;
 			final java.lang.Object this$ssc_typeOfCooperation = this.getSsc_typeOfCooperation();
 			final java.lang.Object other$ssc_typeOfCooperation = other.getSsc_typeOfCooperation();
 			if (this$ssc_typeOfCooperation == null ? other$ssc_typeOfCooperation != null : !this$ssc_typeOfCooperation.equals(other$ssc_typeOfCooperation)) return false;
@@ -1702,6 +1801,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			final java.lang.Object this$ministryCode = this.getMinistryCode();
 			final java.lang.Object other$ministryCode = other.getMinistryCode();
 			if (this$ministryCode == null ? other$ministryCode != null : !this$ministryCode.equals(other$ministryCode)) return false;
+			final java.lang.Object this$gbsSbs = this.getGbsSbs();
+			final java.lang.Object other$gbsSbs = other.getGbsSbs();
+			if (this$gbsSbs == null ? other$gbsSbs != null : !this$gbsSbs.equals(other$gbsSbs)) return false;
 			final java.lang.Object this$approvalStatus = this.getApprovalStatus();
 			final java.lang.Object other$approvalStatus = other.getApprovalStatus();
 			if (this$approvalStatus == null ? other$approvalStatus != null : !this$approvalStatus.equals(other$approvalStatus)) return false;
@@ -1711,6 +1813,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			final java.lang.Object this$wasDraft = this.getWasDraft();
 			final java.lang.Object other$wasDraft = other.getWasDraft();
 			if (this$wasDraft == null ? other$wasDraft != null : !this$wasDraft.equals(other$wasDraft)) return false;
+			final java.lang.Object this$convenioNumcont = this.getConvenioNumcont();
+			final java.lang.Object other$convenioNumcont = other.getConvenioNumcont();
+			if (this$convenioNumcont == null ? other$convenioNumcont != null : !this$convenioNumcont.equals(other$convenioNumcont)) return false;
 			final java.lang.Object this$levelCollection = this.getLevelCollection();
 			final java.lang.Object other$levelCollection = other.getLevelCollection();
 			if (this$levelCollection == null ? other$levelCollection != null : !this$levelCollection.equals(other$levelCollection)) return false;
@@ -1720,6 +1825,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			final java.lang.Object this$author = this.getAuthor();
 			final java.lang.Object other$author = other.getAuthor();
 			if (this$author == null ? other$author != null : !this$author.equals(other$author)) return false;
+			final java.lang.Object this$clasiNPD = this.getClasiNPD();
+			final java.lang.Object other$clasiNPD = other.getClasiNPD();
+			if (this$clasiNPD == null ? other$clasiNPD != null : !this$clasiNPD.equals(other$clasiNPD)) return false;
 			if (!java.util.Arrays.deepEquals(this.getBudgetCodes(), other.getBudgetCodes())) return false;
 			final java.lang.Object this$chapterCodes = this.getChapterCodes();
 			final java.lang.Object other$chapterCodes = other.getChapterCodes();
@@ -1727,6 +1835,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			final java.lang.Object this$chapterYears = this.getChapterYears();
 			final java.lang.Object other$chapterYears = other.getChapterYears();
 			if (this$chapterYears == null ? other$chapterYears != null : !this$chapterYears.equals(other$chapterYears)) return false;
+			final java.lang.Object this$chapterCode = this.getChapterCode();
+			final java.lang.Object other$chapterCode = other.getChapterCode();
+			if (this$chapterCode == null ? other$chapterCode != null : !this$chapterCode.equals(other$chapterCode)) return false;
 			final java.lang.Object this$chapterForPreview = this.getChapterForPreview();
 			final java.lang.Object other$chapterForPreview = other.getChapterForPreview();
 			if (this$chapterForPreview == null ? other$chapterForPreview != null : !this$chapterForPreview.equals(other$chapterForPreview)) return false;
@@ -1807,6 +1918,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			result = result * PRIME + ($projectImpact == null ? 0 : $projectImpact.hashCode());
 			final java.lang.Object $activitySummary = this.getActivitySummary();
 			result = result * PRIME + ($activitySummary == null ? 0 : $activitySummary.hashCode());
+			final java.lang.Object $contractingArrangements = this.getContractingArrangements();
+			result = result * PRIME + ($contractingArrangements == null ? 0 : $contractingArrangements.hashCode());
+			final java.lang.Object $condSeq = this.getCondSeq();
+			result = result * PRIME + ($condSeq == null ? 0 : $condSeq.hashCode());
+			final java.lang.Object $linkedActivities = this.getLinkedActivities();
+			result = result * PRIME + ($linkedActivities == null ? 0 : $linkedActivities.hashCode());
 			final java.lang.Object $conditionality = this.getConditionality();
 			result = result * PRIME + ($conditionality == null ? 0 : $conditionality.hashCode());
 			final java.lang.Object $projectManagement = this.getProjectManagement();
@@ -1865,6 +1982,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			result = result * PRIME + ($actAthFirstName == null ? 0 : $actAthFirstName.hashCode());
 			final java.lang.Object $actAthLastName = this.getActAthLastName();
 			result = result * PRIME + ($actAthLastName == null ? 0 : $actAthLastName.hashCode());
+			final java.lang.Object $conditions = this.getConditions();
+			result = result * PRIME + ($conditions == null ? 0 : $conditions.hashCode());
 			final java.lang.Object $ssc_typeOfCooperation = this.getSsc_typeOfCooperation();
 			result = result * PRIME + ($ssc_typeOfCooperation == null ? 0 : $ssc_typeOfCooperation.hashCode());
 			final java.lang.Object $ssc_typeOfImplementation = this.getSsc_typeOfImplementation();
@@ -1890,23 +2009,31 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			result = result * PRIME + ($projectCode == null ? 0 : $projectCode.hashCode());
 			final java.lang.Object $ministryCode = this.getMinistryCode();
 			result = result * PRIME + ($ministryCode == null ? 0 : $ministryCode.hashCode());
+			final java.lang.Object $gbsSbs = this.getGbsSbs();
+			result = result * PRIME + ($gbsSbs == null ? 0 : $gbsSbs.hashCode());
 			final java.lang.Object $approvalStatus = this.getApprovalStatus();
 			result = result * PRIME + ($approvalStatus == null ? 0 : $approvalStatus.hashCode());
 			final java.lang.Object $previousApprovalStatus = this.getPreviousApprovalStatus();
 			result = result * PRIME + ($previousApprovalStatus == null ? 0 : $previousApprovalStatus.hashCode());
 			final java.lang.Object $wasDraft = this.getWasDraft();
 			result = result * PRIME + ($wasDraft == null ? 0 : $wasDraft.hashCode());
+			final java.lang.Object $convenioNumcont = this.getConvenioNumcont();
+			result = result * PRIME + ($convenioNumcont == null ? 0 : $convenioNumcont.hashCode());
 			final java.lang.Object $levelCollection = this.getLevelCollection();
 			result = result * PRIME + ($levelCollection == null ? 0 : $levelCollection.hashCode());
 			final java.lang.Object $activityLevel = this.getActivityLevel();
 			result = result * PRIME + ($activityLevel == null ? 0 : $activityLevel.hashCode());
 			final java.lang.Object $author = this.getAuthor();
 			result = result * PRIME + ($author == null ? 0 : $author.hashCode());
+			final java.lang.Object $clasiNPD = this.getClasiNPD();
+			result = result * PRIME + ($clasiNPD == null ? 0 : $clasiNPD.hashCode());
 			result = result * PRIME + java.util.Arrays.deepHashCode(this.getBudgetCodes());
 			final java.lang.Object $chapterCodes = this.getChapterCodes();
 			result = result * PRIME + ($chapterCodes == null ? 0 : $chapterCodes.hashCode());
 			final java.lang.Object $chapterYears = this.getChapterYears();
 			result = result * PRIME + ($chapterYears == null ? 0 : $chapterYears.hashCode());
+			final java.lang.Object $chapterCode = this.getChapterCode();
+			result = result * PRIME + ($chapterCode == null ? 0 : $chapterCode.hashCode());
 			final java.lang.Object $chapterForPreview = this.getChapterForPreview();
 			result = result * PRIME + ($chapterForPreview == null ? 0 : $chapterForPreview.hashCode());
 			final java.lang.Object $chapterYear = this.getChapterYear();
@@ -1939,7 +2066,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		@java.lang.Override
 		@java.lang.SuppressWarnings("all")
 		public java.lang.String toString() {
-			return "EditActivityForm.Identification(ampId=" + this.getAmpId() + ", budgetCV=" + this.getBudgetCV() + ", budgetCVOff=" + this.getBudgetCVOff() + ", budgetCVOn=" + this.getBudgetCVOn() + ", team=" + this.getTeam() + ", title=" + this.getTitle() + ", projectComments=" + this.getProjectComments() + ", objectives=" + this.getObjectives() + ", description=" + this.getDescription() + ", purpose=" + this.getPurpose() + ", results=" + this.getResults() + ", lessonsLearned=" + this.getLessonsLearned() + ", projectImpact=" + this.getProjectImpact() + ", activitySummary=" + this.getActivitySummary() +", conditionality=" + this.getConditionality() + ", projectManagement=" + this.getProjectManagement() + ", procurementSystem=" + this.getProcurementSystem() + ", reportingSystem=" + this.getReportingSystem() + ", auditSystem=" + this.getAuditSystem() + ", institutions=" + this.getInstitutions() + ", accessionInstrument=" + this.getAccessionInstrument() + ", projectCategory=" + this.getProjectCategory() + ", govAgreementNumber=" + this.getGovAgreementNumber() + ", budgetCodeProjectID=" + this.getBudgetCodeProjectID() + ", budgetCheckbox=" + this.getBudgetCheckbox() + ", governmentApprovalProcedures=" + this.getGovernmentApprovalProcedures() + ", jointCriteria=" + this.getJointCriteria() + ", humanitarianAid=" + this.getHumanitarianAid() + ", crisNumber=" + this.getCrisNumber() + ", selOrgs=" + java.util.Arrays.deepToString(this.getSelOrgs()) + ", selectedOrganizations=" + java.util.Arrays.deepToString(this.getSelectedOrganizations()) + ", acChapter=" + this.getAcChapter() + ", status=" + this.getStatus() + ", createdBy=" + this.getCreatedBy() + ", modifiedBy=" + this.getModifiedBy() + ", approvedBy=" + this.getApprovedBy() + ", createdDate=" + this.getCreatedDate() + ", updatedDate=" + this.getUpdatedDate() + ", approvalDate=" + this.getApprovalDate() + ", draft=" + this.getDraft() + ", actAthEmail=" + this.getActAthEmail() + ", actAthAgencySource=" + this.getActAthAgencySource() + ", actAthFirstName=" + this.getActAthFirstName() + ", actAthLastName=" + this.getActAthLastName() +  ", ssc_typeOfCooperation=" + this.getSsc_typeOfCooperation() + ", ssc_typeOfImplementation=" + this.getSsc_typeOfImplementation() + ", ssc_modalities=" + this.getSsc_modalities() + ", fundingSourcesNumber=" + this.getFundingSourcesNumber() + ", FY=" + this.getFY() + ", yearsRange=" + this.getYearsRange() + ", selectedFYs=" + java.util.Arrays.deepToString(this.getSelectedFYs()) + ", resetselectedFYs=" + this.getResetselectedFYs() + ", vote=" + this.getVote() + ", subVote=" + this.getSubVote() + ", subProgram=" + this.getSubProgram() + ", projectCode=" + this.getProjectCode() + ", ministryCode=" + this.getMinistryCode() + ", approvalStatus=" + this.getApprovalStatus() + ", previousApprovalStatus=" + this.getPreviousApprovalStatus() + ", wasDraft=" + this.getWasDraft() +  ", levelCollection=" + this.getLevelCollection() + ", activityLevel=" + this.getActivityLevel() + ", author=" + this.getAuthor() + ", budgetCodes=" + java.util.Arrays.deepToString(this.getBudgetCodes()) + ", chapterCodes=" + this.getChapterCodes() + ", chapterYears=" + this.getChapterYears() +	 ", chapterForPreview=" + this.getChapterForPreview() + ", chapterYear=" + this.getChapterYear() + ", budgetsectors=" + this.getBudgetsectors() + ", budgetorgs=" + this.getBudgetorgs() + ", budgetdepartments=" + this.getBudgetdepartments() + ", budgetprograms=" + this.getBudgetprograms() + ", selectedbudgedsector=" + this.getSelectedbudgedsector() + ", selectedorg=" + this.getSelectedorg() + ", selecteddepartment=" + this.getSelecteddepartment() + ", selectedprogram=" + this.getSelectedprogram() + ", statusId=" + this.getStatusId() + ", statusReason=" + this.getStatusReason() + ", projectImplUnitId=" + this.getProjectImplUnitId() + ")";
+			return "EditActivityForm.Identification(ampId=" + this.getAmpId() + ", budgetCV=" + this.getBudgetCV() + ", budgetCVOff=" + this.getBudgetCVOff() + ", budgetCVOn=" + this.getBudgetCVOn() + ", team=" + this.getTeam() + ", title=" + this.getTitle() + ", projectComments=" + this.getProjectComments() + ", objectives=" + this.getObjectives() + ", description=" + this.getDescription() + ", purpose=" + this.getPurpose() + ", results=" + this.getResults() + ", lessonsLearned=" + this.getLessonsLearned() + ", projectImpact=" + this.getProjectImpact() + ", activitySummary=" + this.getActivitySummary() + ", contractingArrangements=" + this.getContractingArrangements() + ", condSeq=" + this.getCondSeq() + ", linkedActivities=" + this.getLinkedActivities() + ", conditionality=" + this.getConditionality() + ", projectManagement=" + this.getProjectManagement() + ", procurementSystem=" + this.getProcurementSystem() + ", reportingSystem=" + this.getReportingSystem() + ", auditSystem=" + this.getAuditSystem() + ", institutions=" + this.getInstitutions() + ", accessionInstrument=" + this.getAccessionInstrument() + ", projectCategory=" + this.getProjectCategory() + ", govAgreementNumber=" + this.getGovAgreementNumber() + ", budgetCodeProjectID=" + this.getBudgetCodeProjectID() + ", budgetCheckbox=" + this.getBudgetCheckbox() + ", governmentApprovalProcedures=" + this.getGovernmentApprovalProcedures() + ", jointCriteria=" + this.getJointCriteria() + ", humanitarianAid=" + this.getHumanitarianAid() + ", crisNumber=" + this.getCrisNumber() + ", selOrgs=" + java.util.Arrays.deepToString(this.getSelOrgs()) + ", selectedOrganizations=" + java.util.Arrays.deepToString(this.getSelectedOrganizations()) + ", acChapter=" + this.getAcChapter() + ", status=" + this.getStatus() + ", createdBy=" + this.getCreatedBy() + ", modifiedBy=" + this.getModifiedBy() + ", approvedBy=" + this.getApprovedBy() + ", createdDate=" + this.getCreatedDate() + ", updatedDate=" + this.getUpdatedDate() + ", approvalDate=" + this.getApprovalDate() + ", draft=" + this.getDraft() + ", actAthEmail=" + this.getActAthEmail() + ", actAthAgencySource=" + this.getActAthAgencySource() + ", actAthFirstName=" + this.getActAthFirstName() + ", actAthLastName=" + this.getActAthLastName() + ", conditions=" + this.getConditions() + ", ssc_typeOfCooperation=" + this.getSsc_typeOfCooperation() + ", ssc_typeOfImplementation=" + this.getSsc_typeOfImplementation() + ", ssc_modalities=" + this.getSsc_modalities() + ", fundingSourcesNumber=" + this.getFundingSourcesNumber() + ", FY=" + this.getFY() + ", yearsRange=" + this.getYearsRange() + ", selectedFYs=" + java.util.Arrays.deepToString(this.getSelectedFYs()) + ", resetselectedFYs=" + this.getResetselectedFYs() + ", vote=" + this.getVote() + ", subVote=" + this.getSubVote() + ", subProgram=" + this.getSubProgram() + ", projectCode=" + this.getProjectCode() + ", ministryCode=" + this.getMinistryCode() + ", gbsSbs=" + this.getGbsSbs() + ", approvalStatus=" + this.getApprovalStatus() + ", previousApprovalStatus=" + this.getPreviousApprovalStatus() + ", wasDraft=" + this.getWasDraft() + ", convenioNumcont=" + this.getConvenioNumcont() + ", levelCollection=" + this.getLevelCollection() + ", activityLevel=" + this.getActivityLevel() + ", author=" + this.getAuthor() + ", clasiNPD=" + this.getClasiNPD() + ", budgetCodes=" + java.util.Arrays.deepToString(this.getBudgetCodes()) + ", chapterCodes=" + this.getChapterCodes() + ", chapterYears=" + this.getChapterYears() + ", chapterCode=" + this.getChapterCode() + ", chapterForPreview=" + this.getChapterForPreview() + ", chapterYear=" + this.getChapterYear() + ", budgetsectors=" + this.getBudgetsectors() + ", budgetorgs=" + this.getBudgetorgs() + ", budgetdepartments=" + this.getBudgetdepartments() + ", budgetprograms=" + this.getBudgetprograms() + ", selectedbudgedsector=" + this.getSelectedbudgedsector() + ", selectedorg=" + this.getSelectedorg() + ", selecteddepartment=" + this.getSelecteddepartment() + ", selectedprogram=" + this.getSelectedprogram() + ", statusId=" + this.getStatusId() + ", statusReason=" + this.getStatusReason() + ", projectImplUnitId=" + this.getProjectImplUnitId() + ")";
 		}
         public String getSscModalitiesAsString(String newLineCharacter){
         	String modality="";
@@ -1957,6 +2084,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public class Planning {
 		private Collection actRankCollection;
 		private String lineMinRank;
+		private String planMinRank;
 		private String originalAppDate;
 		private String revisedAppDate;
 		private String originalStartDate;
@@ -2001,6 +2129,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		@java.lang.SuppressWarnings("all")
 		public String getLineMinRank() {
 			return this.lineMinRank;
+		}
+		
+		@java.lang.SuppressWarnings("all")
+		public String getPlanMinRank() {
+			return this.planMinRank;
 		}
 		
 		@java.lang.SuppressWarnings("all")
@@ -2071,6 +2204,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		@java.lang.SuppressWarnings("all")
 		public void setLineMinRank(final String lineMinRank) {
 			this.lineMinRank = lineMinRank;
+		}
+		
+		@java.lang.SuppressWarnings("all")
+		public void setPlanMinRank(final String planMinRank) {
+			this.planMinRank = planMinRank;
 		}
 		
 		@java.lang.SuppressWarnings("all")
@@ -2146,6 +2284,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			final java.lang.Object this$lineMinRank = this.getLineMinRank();
 			final java.lang.Object other$lineMinRank = other.getLineMinRank();
 			if (this$lineMinRank == null ? other$lineMinRank != null : !this$lineMinRank.equals(other$lineMinRank)) return false;
+			final java.lang.Object this$planMinRank = this.getPlanMinRank();
+			final java.lang.Object other$planMinRank = other.getPlanMinRank();
+			if (this$planMinRank == null ? other$planMinRank != null : !this$planMinRank.equals(other$planMinRank)) return false;
 			final java.lang.Object this$originalAppDate = this.getOriginalAppDate();
 			final java.lang.Object other$originalAppDate = other.getOriginalAppDate();
 			if (this$originalAppDate == null ? other$originalAppDate != null : !this$originalAppDate.equals(other$originalAppDate)) return false;
@@ -2199,6 +2340,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			result = result * PRIME + ($actRankCollection == null ? 0 : $actRankCollection.hashCode());
 			final java.lang.Object $lineMinRank = this.getLineMinRank();
 			result = result * PRIME + ($lineMinRank == null ? 0 : $lineMinRank.hashCode());
+			final java.lang.Object $planMinRank = this.getPlanMinRank();
+			result = result * PRIME + ($planMinRank == null ? 0 : $planMinRank.hashCode());
 			final java.lang.Object $originalAppDate = this.getOriginalAppDate();
 			result = result * PRIME + ($originalAppDate == null ? 0 : $originalAppDate.hashCode());
 			final java.lang.Object $revisedAppDate = this.getRevisedAppDate();
@@ -2229,7 +2372,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		@java.lang.Override
 		@java.lang.SuppressWarnings("all")
 		public java.lang.String toString() {
-			return "EditActivityForm.Planning(actRankCollection=" + this.getActRankCollection() + ", lineMinRank=" + this.getLineMinRank() + ", originalAppDate=" + this.getOriginalAppDate() + ", revisedAppDate=" + this.getRevisedAppDate() + ", originalStartDate=" + this.getOriginalStartDate() + ", revisedStartDate=" + this.getRevisedStartDate() + ", contractingDate=" + this.getContractingDate() + ", disbursementsDate=" + this.getDisbursementsDate() + ", proposedCompDate=" + this.getProposedCompDate() + ", originalCompDate=" + this.getOriginalCompDate() + ", currentCompDate=" + this.getCurrentCompDate() + ", revisedCompDate=" + this.getRevisedCompDate() + ", activityCloseDates=" + this.getActivityCloseDates() + ", creditTypeId=" + this.getCreditTypeId() + ")";
+			return "EditActivityForm.Planning(actRankCollection=" + this.getActRankCollection() + ", lineMinRank=" + this.getLineMinRank() + ", planMinRank=" + this.getPlanMinRank() + ", originalAppDate=" + this.getOriginalAppDate() + ", revisedAppDate=" + this.getRevisedAppDate() + ", originalStartDate=" + this.getOriginalStartDate() + ", revisedStartDate=" + this.getRevisedStartDate() + ", contractingDate=" + this.getContractingDate() + ", disbursementsDate=" + this.getDisbursementsDate() + ", proposedCompDate=" + this.getProposedCompDate() + ", originalCompDate=" + this.getOriginalCompDate() + ", currentCompDate=" + this.getCurrentCompDate() + ", revisedCompDate=" + this.getRevisedCompDate() + ", activityCloseDates=" + this.getActivityCloseDates() + ", creditTypeId=" + this.getCreditTypeId() + ")";
 		}
 
 		@java.lang.SuppressWarnings("all")
@@ -3661,7 +3804,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private List programLevels;
 		private Long[] selPrograms;
 		private Long selProgramId;
-		private List<AmpTheme> actPrograms;
+		private List actPrograms;
 		private Collection programCollection;
 		private Long[] selectedPrograms;
 		private Long program;
@@ -3716,7 +3859,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 		
 		@java.lang.SuppressWarnings("all")
-		public List<AmpTheme> getActPrograms() {
+		public List getActPrograms() {
 			return this.actPrograms;
 		}
 		
@@ -3821,7 +3964,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 		
 		@java.lang.SuppressWarnings("all")
-		public void setActPrograms(final List<AmpTheme> actPrograms) {
+		public void setActPrograms(final List actPrograms) {
 			this.actPrograms = actPrograms;
 		}
 		
@@ -4953,6 +5096,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		private Collection<DocumentData> crDocuments;
 		private Collection managedDocumentList;
 		private long[] selDocs;
+		private Collection linksList;
 		private long[] selLinks;
 		private String[] selManagedDocs;
 		private String actionFlag = null;
@@ -5037,6 +5181,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		@java.lang.SuppressWarnings("all")
 		public long[] getSelDocs() {
 			return this.selDocs;
+		}
+		
+		@java.lang.SuppressWarnings("all")
+		public Collection getLinksList() {
+			return this.linksList;
 		}
 		
 		@java.lang.SuppressWarnings("all")
@@ -5163,7 +5312,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setSelDocs(final long[] selDocs) {
 			this.selDocs = selDocs;
 		}
-				
+		
+		@java.lang.SuppressWarnings("all")
+		public void setLinksList(final Collection linksList) {
+			this.linksList = linksList;
+		}
+		
 		@java.lang.SuppressWarnings("all")
 		public void setSelLinks(final long[] selLinks) {
 			this.selLinks = selLinks;
@@ -5260,6 +5414,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			final java.lang.Object other$managedDocumentList = other.getManagedDocumentList();
 			if (this$managedDocumentList == null ? other$managedDocumentList != null : !this$managedDocumentList.equals(other$managedDocumentList)) return false;
 			if (!java.util.Arrays.equals(this.getSelDocs(), other.getSelDocs())) return false;
+			final java.lang.Object this$linksList = this.getLinksList();
+			final java.lang.Object other$linksList = other.getLinksList();
+			if (this$linksList == null ? other$linksList != null : !this$linksList.equals(other$linksList)) return false;
 			if (!java.util.Arrays.equals(this.getSelLinks(), other.getSelLinks())) return false;
 			if (!java.util.Arrays.deepEquals(this.getSelManagedDocs(), other.getSelManagedDocs())) return false;
 			final java.lang.Object this$actionFlag = this.getActionFlag();
@@ -5316,6 +5473,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			final java.lang.Object $managedDocumentList = this.getManagedDocumentList();
 			result = result * PRIME + ($managedDocumentList == null ? 0 : $managedDocumentList.hashCode());
 			result = result * PRIME + java.util.Arrays.hashCode(this.getSelDocs());
+			final java.lang.Object $linksList = this.getLinksList();
+			result = result * PRIME + ($linksList == null ? 0 : $linksList.hashCode());
 			result = result * PRIME + java.util.Arrays.hashCode(this.getSelLinks());
 			result = result * PRIME + java.util.Arrays.deepHashCode(this.getSelManagedDocs());
 			final java.lang.Object $actionFlag = this.getActionFlag();
@@ -5337,7 +5496,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		@java.lang.Override
 		@java.lang.SuppressWarnings("all")
 		public java.lang.String toString() {
-			return "EditActivityForm.Documents(documentSpace=" + this.getDocumentSpace() + ", docFile=" + this.getDocFile() + ", docWebResource=" + this.getDocWebResource() + ", docTitle=" + this.getDocTitle() + ", docDescription=" + this.getDocDescription() + ", docDate=" + this.getDocDate() + ", docFileOrLink=" + this.getDocFileOrLink() + ", docReset=" + this.isDocReset() + ", showInHomePage=" + this.isShowInHomePage() + ", pageId=" + this.getPageId() + ", documents=" + this.getDocuments() + ", crDocuments=" + this.getCrDocuments() + ", managedDocumentList=" + this.getManagedDocumentList() + ", selDocs=" + java.util.Arrays.toString(this.getSelDocs()) + ", selLinks=" + java.util.Arrays.toString(this.getSelLinks()) + ", selManagedDocs=" + java.util.Arrays.deepToString(this.getSelManagedDocs()) + ", actionFlag=" + this.getActionFlag() + ", pagesToShow=" + this.getPagesToShow() + ", pagesSize=" + this.getPagesSize() + ", startPage=" + this.getStartPage() + ", referenceDocs=" + java.util.Arrays.deepToString(this.getReferenceDocs()) + ", docType=" + this.getDocType() + ", docLang=" + this.getDocLang() + ", docComment=" + this.getDocComment() + ", allReferenceDocNameIds=" + java.util.Arrays.deepToString(this.getAllReferenceDocNameIds()) + ")";
+			return "EditActivityForm.Documents(documentSpace=" + this.getDocumentSpace() + ", docFile=" + this.getDocFile() + ", docWebResource=" + this.getDocWebResource() + ", docTitle=" + this.getDocTitle() + ", docDescription=" + this.getDocDescription() + ", docDate=" + this.getDocDate() + ", docFileOrLink=" + this.getDocFileOrLink() + ", docReset=" + this.isDocReset() + ", showInHomePage=" + this.isShowInHomePage() + ", pageId=" + this.getPageId() + ", documents=" + this.getDocuments() + ", crDocuments=" + this.getCrDocuments() + ", managedDocumentList=" + this.getManagedDocumentList() + ", selDocs=" + java.util.Arrays.toString(this.getSelDocs()) + ", linksList=" + this.getLinksList() + ", selLinks=" + java.util.Arrays.toString(this.getSelLinks()) + ", selManagedDocs=" + java.util.Arrays.deepToString(this.getSelManagedDocs()) + ", actionFlag=" + this.getActionFlag() + ", pagesToShow=" + this.getPagesToShow() + ", pagesSize=" + this.getPagesSize() + ", startPage=" + this.getStartPage() + ", referenceDocs=" + java.util.Arrays.deepToString(this.getReferenceDocs()) + ", docType=" + this.getDocType() + ", docLang=" + this.getDocLang() + ", docComment=" + this.getDocComment() + ", allReferenceDocNameIds=" + java.util.Arrays.deepToString(this.getAllReferenceDocNameIds()) + ")";
 		}
 	}
 	
@@ -6599,6 +6758,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		editAct = false;
 		pageId = 0;
 		editKey = "";
+		customFields = CustomFieldsUtil.getCustomFields();
+		customFieldsSteps = CustomFieldsUtil.getCustomFieldsSteps();
 	}
 	
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
@@ -6631,7 +6792,13 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.budgetStructure = null;
 			this.observations = null;
 			reset = false;
-
+			if (this.customFields != null && this.customFields.size() > 0) {
+				Iterator<CustomField<?>> itcf = this.customFields.iterator();
+				while (itcf.hasNext()) {
+					CustomField<?> cf = itcf.next();
+					cf.setValue(null);
+				}
+			}
 			if (this.costing != null) {
 				this.costing.allCosts = null;
 				this.costing.costs = null;
@@ -6731,6 +6898,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		return this.funding;
 	}
 	
+//	public ActivityFundingDigest getOldFunding() {
+//		if (this.oldFunding == null) {
+//			this.oldFunding = new ActivityFundingDigest();
+//		}
+//		return this.oldFunding;
+//	}
 	public Documents getDocuments() {
 		if (this.documents == null) {
 			this.documents = new Documents();
@@ -6828,6 +7001,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		return funding.getFundingDetails().get(index);
 	}
 	
+//	public MTEFProjection getMtefProjection(int index) {
+//		while (funding.fundingMTEFProjections.size() <= index) {
+//			funding.fundingMTEFProjections.add(new MTEFProjection());
+//		}
+//		return funding.fundingMTEFProjections.get(index);
+//	}
 	public IndicatorME getIndicator() {
 		if (this.indicatorME == null) {
 			this.indicatorME = new IndicatorME();
@@ -7041,6 +7220,17 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public boolean isSerializeFlag() {
 		return this.serializeFlag;
 	}
+	
+	@java.lang.SuppressWarnings("all")
+	public List<CustomField<?>> getCustomFields() {
+		return this.customFields;
+	}
+	
+	@java.lang.SuppressWarnings("all")
+	public List<CustomFieldStep> getCustomFieldsSteps() {
+		return this.customFieldsSteps;
+	}
+	
 	/**
 	 * The currency code in which we want to  see total funding
 	 * on the components and regional funding page...
@@ -7270,7 +7460,16 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		this.serializeFlag = serializeFlag;
 	}
 	
-
+	@java.lang.SuppressWarnings("all")
+	public void setCustomFields(final List<CustomField<?>> customFields) {
+		this.customFields = customFields;
+	}
+	
+	@java.lang.SuppressWarnings("all")
+	public void setCustomFieldsSteps(final List<CustomFieldStep> customFieldsSteps) {
+		this.customFieldsSteps = customFieldsSteps;
+	}
+	
 	/**
 	 * The currency code in which we want to  see total funding
 	 * on the components and regional funding page...
@@ -7545,6 +7744,12 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		final java.lang.Object other$currencies = other.getCurrencies();
 		if (this$currencies == null ? other$currencies != null : !this$currencies.equals(other$currencies)) return false;
 		if (this.isSerializeFlag() != other.isSerializeFlag()) return false;
+		final java.lang.Object this$customFields = this.getCustomFields();
+		final java.lang.Object other$customFields = other.getCustomFields();
+		if (this$customFields == null ? other$customFields != null : !this$customFields.equals(other$customFields)) return false;
+		final java.lang.Object this$customFieldsSteps = this.getCustomFieldsSteps();
+		final java.lang.Object other$customFieldsSteps = other.getCustomFieldsSteps();
+		if (this$customFieldsSteps == null ? other$customFieldsSteps != null : !this$customFieldsSteps.equals(other$customFieldsSteps)) return false;
 		final java.lang.Object this$fundingCurrCode = this.getFundingCurrCode();
 		final java.lang.Object other$fundingCurrCode = other.getFundingCurrCode();
 		if (this$fundingCurrCode == null ? other$fundingCurrCode != null : !this$fundingCurrCode.equals(other$fundingCurrCode)) return false;
@@ -7705,6 +7910,10 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		final java.lang.Object $currencies = this.getCurrencies();
 		result = result * PRIME + ($currencies == null ? 0 : $currencies.hashCode());
 		result = result * PRIME + (this.isSerializeFlag() ? 79 : 97);
+		final java.lang.Object $customFields = this.getCustomFields();
+		result = result * PRIME + ($customFields == null ? 0 : $customFields.hashCode());
+		final java.lang.Object $customFieldsSteps = this.getCustomFieldsSteps();
+		result = result * PRIME + ($customFieldsSteps == null ? 0 : $customFieldsSteps.hashCode());
 		final java.lang.Object $fundingCurrCode = this.getFundingCurrCode();
 		result = result * PRIME + ($fundingCurrCode == null ? 0 : $fundingCurrCode.hashCode());
 		final java.lang.Object $regFundingPageCurrCode = this.getRegFundingPageCurrCode();
@@ -7789,7 +7998,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	@java.lang.Override
 	@java.lang.SuppressWarnings("all")
 	public java.lang.String toString() {
-		return "EditActivityForm(errors=" + this.getErrors() + ", messages=" + this.getMessages() + ", activityId=" + this.getActivityId() + ", context=" + this.getContext() + ", editAct=" + this.isEditAct() + ", editKey=" + this.getEditKey() + ", reset=" + this.isReset() + ", svAction=" + this.getSvAction() + ", isPreview=" + this.getIsPreview() + ", buttonText=" + this.getButtonText() + ", activityExists=" + this.getActivityExists() + ", workingTeamLeadFlag=" + this.getWorkingTeamLeadFlag() + ", teamLead=" + this.isTeamLead() + ", pageId=" + this.getPageId() + ", fileImport=" + this.getFileImport() + ", popupView=" + this.isPopupView() + ", currCode=" + this.getCurrCode() + ", currencies=" + this.getCurrencies() + ", serializeFlag=" + this.isSerializeFlag() +  ", fundingCurrCode=" + this.getFundingCurrCode() + ", regFundingPageCurrCode=" + this.getRegFundingPageCurrCode() + ", contactInformation=" + this.getContactInformation() + ", activityContacts=" + this.getActivityContacts() + ", mofedContacts=" + this.getMofedContacts() + ", donorContacts=" + this.getDonorContacts() + ", sectorMinistryContacts=" + this.getSectorMinistryContacts() + ", projCoordinatorContacts=" + this.getProjCoordinatorContacts() + ", implExecutingAgencyContacts=" + this.getImplExecutingAgencyContacts() + ", structures=" + this.getStructures() + ", lineMinistryObservations=" + this.getLineMinistryObservations() + ", esriapiurl=" + this.getEsriapiurl() + ", displayProgram=" + this.getDisplayProgram() + ", surveyFundings=" + this.getSurveyFundings() + ", draftRedirectedPage=" + this.getDraftRedirectedPage() + ", warningMessges=" + this.getWarningMessges() + ", identification=" + this.getIdentification() + ", aidEffectivenes=" + this.getAidEffectivenes() + ", planning=" + this.getPlanning() + ", location=" + this.getLocation() + ", sectors=" + this.getSectors() + ", components=" + this.getComponents() + ", programs=" + this.getPrograms() + ", crossIssues=" + this.getCrossIssues() + ", funding=" + this.getFunding() + ", documents=" + this.getDocuments() + ", agencies=" + this.getAgencies() + ", survey=" + this.getSurvey() + ", surveys=" + this.getSurveys() + ", ampAhsurveys=" + this.getAmpAhsurveys() + ", contactInfo=" + this.getContactInfo() + ", comments=" + this.getComments() + ", phisycalProgress=" + this.getPhisycalProgress() + ", indicatorME=" + this.getIndicatorME() + ", contracts=" + this.getContracts() + ", costing=" + this.getCosting() + ", issues=" + this.getIssues() + ", observations=" + this.getObservations() + ", totDisbIsBiggerThanTotCom=" + this.isTotDisbIsBiggerThanTotCom() + ")";
+		return "EditActivityForm(errors=" + this.getErrors() + ", messages=" + this.getMessages() + ", activityId=" + this.getActivityId() + ", context=" + this.getContext() + ", editAct=" + this.isEditAct() + ", editKey=" + this.getEditKey() + ", reset=" + this.isReset() + ", svAction=" + this.getSvAction() + ", isPreview=" + this.getIsPreview() + ", buttonText=" + this.getButtonText() + ", activityExists=" + this.getActivityExists() + ", workingTeamLeadFlag=" + this.getWorkingTeamLeadFlag() + ", teamLead=" + this.isTeamLead() + ", pageId=" + this.getPageId() + ", fileImport=" + this.getFileImport() + ", popupView=" + this.isPopupView() + ", currCode=" + this.getCurrCode() + ", currencies=" + this.getCurrencies() + ", serializeFlag=" + this.isSerializeFlag() + ", customFields=" + this.getCustomFields() + ", customFieldsSteps=" + this.getCustomFieldsSteps() + ", fundingCurrCode=" + this.getFundingCurrCode() + ", regFundingPageCurrCode=" + this.getRegFundingPageCurrCode() + ", contactInformation=" + this.getContactInformation() + ", activityContacts=" + this.getActivityContacts() + ", mofedContacts=" + this.getMofedContacts() + ", donorContacts=" + this.getDonorContacts() + ", sectorMinistryContacts=" + this.getSectorMinistryContacts() + ", projCoordinatorContacts=" + this.getProjCoordinatorContacts() + ", implExecutingAgencyContacts=" + this.getImplExecutingAgencyContacts() + ", structures=" + this.getStructures() + ", lineMinistryObservations=" + this.getLineMinistryObservations() + ", esriapiurl=" + this.getEsriapiurl() + ", displayProgram=" + this.getDisplayProgram() + ", surveyFundings=" + this.getSurveyFundings() + ", draftRedirectedPage=" + this.getDraftRedirectedPage() + ", warningMessges=" + this.getWarningMessges() + ", identification=" + this.getIdentification() + ", aidEffectivenes=" + this.getAidEffectivenes() + ", planning=" + this.getPlanning() + ", location=" + this.getLocation() + ", sectors=" + this.getSectors() + ", components=" + this.getComponents() + ", programs=" + this.getPrograms() + ", crossIssues=" + this.getCrossIssues() + ", funding=" + this.getFunding() + ", documents=" + this.getDocuments() + ", agencies=" + this.getAgencies() + ", survey=" + this.getSurvey() + ", surveys=" + this.getSurveys() + ", ampAhsurveys=" + this.getAmpAhsurveys() + ", contactInfo=" + this.getContactInfo() + ", comments=" + this.getComments() + ", phisycalProgress=" + this.getPhisycalProgress() + ", indicatorME=" + this.getIndicatorME() + ", contracts=" + this.getContracts() + ", costing=" + this.getCosting() + ", issues=" + this.getIssues() + ", observations=" + this.getObservations() + ", totDisbIsBiggerThanTotCom=" + this.isTotDisbIsBiggerThanTotCom() + ")";
 	}
 
 	

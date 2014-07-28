@@ -66,7 +66,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 
     private AmpTemplatesVisibility fmTemplate;
     private AmpCategoryValue workspacePrefix;
-
+    private Boolean crossteamvalidation;
 
 	//Global function to initialize the team filters inside the session
 	public static void initializeTeamFiltersSession(AmpTeamMember member, HttpServletRequest request, HttpSession session){
@@ -83,7 +83,6 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 		
 		if (ampTeam.getFilterDataSet()!=null && ampTeam.getFilterDataSet().size()>0 ){
 			af = FilterUtil.buildFilter(ampTeam, null);
-			//af.generateFilterQuery(request, true);
 		}
 
 		/* The prepare function needs to have the filter (af) already populated */
@@ -187,14 +186,6 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 	public void setTeamLead(AmpTeamMember teamLead) {
 		this.teamLead = teamLead;
 	}
-
-//	public String getType() {
-//		return type;
-//	}
-
-//	public void setType(String type) {
-//		this.type = type;
-//	}
 
 	/**
 	 * @return Returns the parentTeamId.
@@ -335,17 +326,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 	public void setHideDraftActivities(Boolean hideDraftActivities) {
 		this.hideDraftActivities = hideDraftActivities;
 	}
-	/*
-	@Override
-	public Object getValue() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	@Override
-	public Output getOutput() {
-		return new Output(null, new String[] { this.name }, new Object[] { "" });
-	}*/
 	public void setWorkspaceGroup(AmpCategoryValue workspaceGroup) {
 		this.workspaceGroup = workspaceGroup;
 	}
@@ -384,19 +365,17 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
     	return InternationalizedModelDescription.getForProperty(AmpTeam.class, "name").getSQLFunctionCall(idSource + ".ampTeamId");
     }
     
-    /*@Override
-	public boolean equalsForVersioning(Object obj) {
-		return this.equals(obj);
-	}
-	
-	@Override
-	public Object prepareMerge(AmpActivityVersion newActivity) {
-		this.activityList = new HashSet<AmpActivityVersion>();
-		this.activityList.add(newActivity);
-		return this;
-	}*/
-    
     public boolean isSSCWorkspace () {
     	return this.getWorkspacePrefix() != null && "SSC_".equals(this.getWorkspacePrefix().getValue());
     }
+
+	public Boolean getCrossteamvalidation() {
+		return crossteamvalidation;
+	}
+
+	public void setCrossteamvalidation(Boolean crossteamvalidation) {
+		this.crossteamvalidation = crossteamvalidation;
+	}
+    
+    
 }

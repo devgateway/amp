@@ -51,7 +51,7 @@ function validate () {
 				<!--
 				<a id="clear1" href='javascript:clearDate(document.getElementById("txtExpireDate"), "clear1")'>remove</a>
 				-->
-				<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("txtExpireDate"),"clear1")'>show</a>
+				<a id="date1" href='javascript:pickDateWithClear("date1",document.getElementById("txtExpireDate"),"clear1")'><digi:trn>Show</digi:trn></a>
 				</td>
 		</tr>
 		<tr>
@@ -59,7 +59,8 @@ function validate () {
 			<td><html:checkbox name="suspendLoginManagerForm" property="currentObj.active"/></td>
 		</tr>
 		<tr>
-			<td colspan="2"><input type="button" value="Save" onclick="validate()"/></td>
+
+			<td colspan="2"><input type="button" value="<digi:trn>Save</digi:trn>" onclick="validate()"/></td>
 		</tr>
 	</table>
 </digi:form>

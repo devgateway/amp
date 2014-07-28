@@ -86,21 +86,38 @@ var TreeNodeView = Backbone.View.extend({
   },
 
   _updateSelection: function () {
-    if (this.model.get('selected')) {
-      this.$('> span > .selectable').addClass('label-success');
-    } else {
-      this.$('> span > .selectable').removeClass('label-success');
+    if(this.model.get('children').isEmpty()){
+      if (this.model.get('selected')) {
+        this.$('> span > .selectable').addClass('label-success');
+      } else {
+        this.$('> span > .selectable').removeClass('label-success');
+      }
+    } else{
+      this._updateCheckboxFill();
     }
   },
 
   _updateCountUI: function(){
     if(!this.model.get('children').isEmpty()){
       this.$('> span > span > .count').text(this.model.get('numSelected')+ '/' +this.model.get('numPossible'));
+      this._updateCheckboxFill();
+    }
+  },
 
-      if(this.model.get('numSelected') > 0 && this.model.get('numSelected') < this.model.get('numPossible')){
-        this.$('> span > .selectable').addClass('half-fill');
-      } else{
+  // For updating non-leaf nodes
+  _updateCheckboxFill: function(){
+    if(!this.model.get('children').isEmpty()){
+      if(this.model.get('numSelected') > 0){
+        if(this.model.get('numSelected') < this.model.get('numPossible')){
+          this.$('> span > .selectable').addClass('half-fill');
+          this.$('> span > .selectable').removeClass('label-success');
+        } else {
+          this.$('> span > .selectable').removeClass('half-fill');
+          this.$('> span > .selectable').addClass('label-success');
+        }
+      } else if(this.model.get('numSelected') === 0){
         this.$('> span > .selectable').removeClass('half-fill');
+        this.$('> span > .selectable').removeClass('label-success');
       }
     }
   },
@@ -131,7 +148,7 @@ var TreeNodeView = Backbone.View.extend({
   clickName: function () {
     // if we have children expand
     if(!this.model.get('children').isEmpty()){
-        this.model.set('expanded', !this.model.get('expanded'));
+      this.model.set('expanded', !this.model.get('expanded'));
     } else{
       // leaf node, so pretend the clicked on the box
       this.clickBox();

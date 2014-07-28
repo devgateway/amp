@@ -65,10 +65,7 @@ public class UpdateTeamActivities extends Action {
 
 		TeamActivitiesForm taForm = (TeamActivitiesForm) form;
 
-		Long id = null;
-		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		
-		String archiveCmd	= taForm.getRemoveActivity();
+		String archiveCmd = taForm.getRemoveActivity();
 		if ( archiveCmd != null ) {
 			ArrayList<Long> selectedActivities	= new ArrayList<Long>();
 			if ( taForm.getSelActivities() != null ) {
@@ -94,20 +91,22 @@ public class UpdateTeamActivities extends Action {
 		int page = 0;
 		String reset = request.getParameter("reset");
 
-		if (session.getAttribute("currentMember") != null) {
+        Long id = null;
+        TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+
+		if (tm != null && tm.getAppSettings() != null) {
 			id = tm.getTeamId();
 			numRecords = tm.getAppSettings().getDefRecsPerPage();
 			 
-			String appSettingsForPages = request.getParameter("appSettingsForPages");
-						
-             if(reset!=null && reset.equalsIgnoreCase("true")){
-            	 taForm.setTempNumResults(numRecords==0?-1:numRecords);
+            if (reset!=null && reset.equalsIgnoreCase("true")){
+            	 taForm.setTempNumResults(numRecords == 0 ? -1 : numRecords);
             	 taForm.setKeyword(null);
  				 taForm.setPage(1);
-		}
-             if(taForm.getTempNumResults()!=-1){
+		    }
+
+            if (taForm.getTempNumResults() != -1){
              	numRecords = taForm.getTempNumResults();
-             }
+            }
 		}
 
 		if (taForm.getSelActivities() != null && taForm.getRemoveActivity().equals("remove")) {
@@ -118,7 +117,7 @@ public class UpdateTeamActivities extends Action {
 	        }
 	 		    
 			Long selActivities[] = taForm.getSelActivities();
-			for(Long selActivityId:selActivities){
+			for (Long selActivityId:selActivities) {
 				AmpActivityVersion activity=ActivityUtil.getAmpActivityVersion(selActivityId);
 				String detail="unassigned from team";
 				List<String> details=new ArrayList<String>();

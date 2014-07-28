@@ -61,63 +61,64 @@ public class GetTeamReports extends Action {
         	tabs = true;
         }
 
-
 		Long id = null;
         int defReportsPerPage=0;
 
 		if (request.getParameter("id") != null) {
-			id = new Long(Long.parseLong(request.getParameter("id")));
+			id = Long.parseLong(request.getParameter("id"));
 		} else if (request.getAttribute("teamId") != null) {
 			id = (Long) request.getAttribute("teamId");
 		} else if (session.getAttribute("currentMember") != null) {
 			TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-			id = tm.getTeamId();
-			
-			if(tm.getAppSettings()!=null&&tm.getAppSettings().getDefReportsPerPage()!=0){
-				raForm.setDefReportsPerPage(tm.getAppSettings().getDefReportsPerPage());
-            }
-			
-			String reset = request.getParameter("reset");
-			String tempNumResultsParam = request.getParameter("tempNumResults");
-            
-			raForm.setDefaultNumResults(tm.getAppSettings().getDefReportsPerPage());
-			
-            if(reset!=null && reset.equalsIgnoreCase("true")){
-            	//raForm.setTempNumResults(-1);
-            	defReportsPerPage=tm.getAppSettings().getDefReportsPerPage();
-            	tempNumResultsParam = ""+defReportsPerPage;
-            	raForm.setTempNumResults(defReportsPerPage==0?-1:defReportsPerPage);
-            	raForm.setKeyword(null);
-            }
-            
-            if(raForm.getTempNumResults()!=-1){
-            	defReportsPerPage = raForm.getTempNumResults();
-            }
-            
-            if (tempNumResultsParam != null && tempNumResultsParam.length() > 0) {
-            	try {
-            		defReportsPerPage = Integer.parseInt(tempNumResultsParam);
-            	} catch (NumberFormatException e) {
-            		
-            	}
+
+            if (tm.getAppSettings() != null) {
+                id = tm.getTeamId();
+
+                if (tm.getAppSettings().getDefReportsPerPage() != 0) {
+                    raForm.setDefReportsPerPage(tm.getAppSettings().getDefReportsPerPage());
+                }
+
+                String reset = request.getParameter("reset");
+                String tempNumResultsParam = request.getParameter("tempNumResults");
+
+                raForm.setDefaultNumResults(tm.getAppSettings().getDefReportsPerPage());
+
+                if (reset != null && reset.equalsIgnoreCase("true")) {
+                    //raForm.setTempNumResults(-1);
+                    defReportsPerPage = tm.getAppSettings().getDefReportsPerPage();
+                    tempNumResultsParam = "" + defReportsPerPage;
+                    raForm.setTempNumResults(defReportsPerPage == 0 ? -1 : defReportsPerPage);
+                    raForm.setKeyword(null);
+                }
+
+                if (raForm.getTempNumResults() != -1) {
+                    defReportsPerPage = raForm.getTempNumResults();
+                }
+
+                if (tempNumResultsParam != null && tempNumResultsParam.length() > 0) {
+                    try {
+                        defReportsPerPage = Integer.parseInt(tempNumResultsParam);
+                    } catch (NumberFormatException e) {
+
+                    }
+                }
             }
 		}
 
 		if (id != null) {
 			
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(id);
-            Double totalPages=null;
-            Collection col =null;
-            if(defReportsPerPage>0){
-                int curPage=raForm.getCurrentPage()-1;
-                col= TeamUtil.getTeamReportsCollection(id, curPage * defReportsPerPage, defReportsPerPage, tabs, raForm.getKeyword());
-                int size=TeamUtil.getTeamReportsCollectionSize(id,tabs,raForm.getKeyword());
-                totalPages=Math.ceil(1.0*size/defReportsPerPage);
-             }
-             else{
+            Double totalPages = null;
+            Collection col = null;
+            if (defReportsPerPage > 0) {
+                int curPage=raForm.getCurrentPage() - 1;
+                col = TeamUtil.getTeamReportsCollection(id, curPage * defReportsPerPage, defReportsPerPage, tabs, raForm.getKeyword());
+                int size = TeamUtil.getTeamReportsCollectionSize(id,tabs,raForm.getKeyword());
+                totalPages = Math.ceil(1.0*size/defReportsPerPage);
+            } else {
                 col= TeamUtil.getTeamReportsCollection(id,tabs,raForm.getKeyword());
-                totalPages=new Double(FIRST_PAGE);
-              }
+                totalPages = (double) FIRST_PAGE;
+            }
 
             raForm.setTotalPages(totalPages.intValue());
 			raForm.setReports(col);

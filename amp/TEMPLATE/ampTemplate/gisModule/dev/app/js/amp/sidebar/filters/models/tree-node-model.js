@@ -24,16 +24,12 @@ var TreeNodeModel = Backbone.Model.extend({
       _.each(obj.children, function(child){
         var newChild = new TreeNodeModel(child);
         newChild.on('change:selected', function(){
-          var countTotal =  self._updateCount()
-          self.set('numSelected',countTotal.selected);
-          self.set('numPossible',countTotal.possible);
+          var countTotal =  self._updateCount();
           self.trigger('updateCount');
         });
 
         newChild.on('updateCount', function(){
-          var countTotal =  self._updateCount()
-          self.set('numSelected',countTotal.selected);
-          self.set('numPossible',countTotal.possible);
+          var countTotal =  self._updateCount();
         });
 
         childrenCollection.add(newChild);
@@ -44,34 +40,32 @@ var TreeNodeModel = Backbone.Model.extend({
       self._updateChildNodes();
     });
 
-
-    var countTotal =  this._updateCount()
-    this.set('numSelected',countTotal.selected);
-    this.set('numPossible',countTotal.possible);
+    var countTotal =  this._updateCount();
   },
 
   _updateCount: function(){ 
     var children = this.get('children');
-
-    if(!children.isEmpty()){
-      var countTotal= {
-        selected: 0, 
-        possible:0
-      };
+    var countTotal= {
+      selected: 0, 
+      possible:0
+    };
+    if(!children.isEmpty()){     
       children.each(function(child){
         var count = child._updateCount();
         countTotal.selected += count.selected;
         countTotal.possible += count.possible;
       });
-      return countTotal;
     } else{
-      return {
+      countTotal = {
         selected: (this.get('selected') ? 1: 0 ), 
         possible: 1
       };
-    }   
-  },
+    }
 
+    this.set('numSelected',countTotal.selected);
+    this.set('numPossible',countTotal.possible);   
+    return  countTotal;
+  },
 
   _updateChildNodes: function () {
     var self = this;

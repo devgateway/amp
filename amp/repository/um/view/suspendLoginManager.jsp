@@ -74,10 +74,30 @@
 							<bean:write name="suspendLoginObject" property="reasonText"/>
 						</td>
 						<td nowrap="nowrap" class="inside">
-							<bean:write name="suspendLoginObject" property="active"/>
+							<c:set var="activeVar">
+                                <bean:write name="suspendLoginObject" property="active"/>
+                            </c:set>
+                            <c:choose>
+                                <c:when test="${activeVar}">
+                                    <digi:trn>Yes</digi:trn>
+                                </c:when>
+                                <c:otherwise>
+                                    <digi:trn>No</digi:trn>
+                                </c:otherwise>
+                            </c:choose>
 						</td>
 						<td nowrap="nowrap" class="inside">
-							<bean:write name="suspendLoginObject" property="expires"/>
+						    <c:set var="expiresVar">
+						        <bean:write name="suspendLoginObject" property="expires"/>
+						    </c:set>
+						    <c:choose>
+						        <c:when test="${expiresVar}">
+						            <digi:trn>Yes</digi:trn>
+						        </c:when>
+						        <c:otherwise>
+						            <digi:trn>No</digi:trn>
+						        </c:otherwise>
+						    </c:choose>
 						</td>
 						<td nowrap="nowrap" class="inside">
 							<bean:write name="suspendLoginObject" property="formatedDate"/>

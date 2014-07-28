@@ -15,9 +15,9 @@ var RadioOptionTemplate = fs.readFileSync(__dirname + '/../templates/radio-optio
 
 module.exports = BaseControlView.extend({
   id: 'tool-layers',
-  title: 'Project Data',
+  title: 'Statistical Data',
   iconClass: 'ampicon-layers',
-  description: 'Select Points or Indicators to visualize data on the main map.',
+  description: 'Country indicators.',
 
   template: _.template(Template),
   radioOptionTemplate: _.template(RadioOptionTemplate),
@@ -27,37 +27,20 @@ module.exports = BaseControlView.extend({
     var self = this;
     BaseControlView.prototype.initialize.apply(this);
 
+    // Get Indicators Collection and render...
+    this.indicators =  new IndicatorCollection();
+    this.indicators.fetch({reset:true});
 
-    this._initProjectLayerCollection();
+    this.listenTo(this.indicators, 'reset', this.renderIndicatorList);
 
     // register state:    
-    state.register(this, 'layers-view', {
+    state.register(this, 'indicator-layers-view', {
       get: function(){ return this.projectLayerCollection.toJSON(); },
       set: function(obj){ if(obj){this.projectLayerCollection.set(obj);} },
       empty: null
     });
   },
 
-  _initProjectLayerCollection: function(){
-    this.projectLayerCollection = new ProjectLayerCollection([
-      {
-        title: 'Projects by Region',
-        value:'aggregate-adm1'
-      },
-      {
-        title: 'Projects by District',
-        value:'aggregate-adm2'
-      },
-      {
-        title: 'Projects Sites',
-        value:'locations',
-        helpText: 'See individual project sites.'
-      }
-    ]);
-
-    // TODO: on 'selected' change update ui...
-
-  },
 
   render: function(){
     var self = this;
@@ -65,18 +48,17 @@ module.exports = BaseControlView.extend({
 
     // add content
     this.$('.content').html(this.template({title: this.title}));
-    this.renderProjectList();
-
 
     return this;
   },
 
 
-  renderProjectList: function(){
-    var self = this;
 
-    this.projectLayerCollection.each(function(model) {
-      self.$('.layer-selector').append(self.radioOptionTemplate(model.toJSON()));
+  renderIndicatorList: function(){
+    var self = this;
+    this.$('.layer-selector').html('');
+    this.indicators.each(function(indicator){
+      self.$('.layer-selector').append(self.radioOptionTemplate(indicator.toJSON()));
     });
 
     // setup listener:
@@ -91,15 +73,15 @@ module.exports = BaseControlView.extend({
         }
       });
 
-      var pointsEnabled = $(this).prop('checked');
-      if(pointsEnabled){
-        var val = $(this).val();
-        Backbone.trigger('MAP_LOAD_PROJECT_LAYER', val);
+      var isEnabled = $(this).prop('checked');
+      if(isEnabled){
+        var modelId = $(this).val();
+        var indicator = self.indicators.find(function(model) { return model.get('id') === parseInt(modelId); });
+        Backbone.trigger('MAP_LOAD_INDICATOR', indicator);
       } else {
-        Backbone.trigger('MAP_LOAD_PROJECT_LAYER', null);
+        Backbone.trigger('MAP_LOAD_INDICATOR', null);
       }
     });
   },
-
 
 });

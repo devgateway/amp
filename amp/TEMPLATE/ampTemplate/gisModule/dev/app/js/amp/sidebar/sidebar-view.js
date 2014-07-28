@@ -2,6 +2,7 @@ var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var LayersView = require('./layers/views/layers-view');
+var IndicatorLayersView = require('./layers/views/indicator-layers-view');
 var FiltersView = require('./filters/views/filters-view');
 var SearchView = require('./search/views/search-view');
 var ToolsView = require('./tools/views/tools-view');
@@ -10,6 +11,7 @@ var SettingsView = require('./settings/views/settings-view');
 
 var controlViews = [
   LayersView,
+  IndicatorLayersView,
   FiltersView,
   SearchView,
   ToolsView,

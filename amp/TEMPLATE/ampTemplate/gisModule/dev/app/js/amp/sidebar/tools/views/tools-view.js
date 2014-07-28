@@ -13,7 +13,7 @@ var state = require('../../../services/state');
 module.exports = BaseControlView.extend({
 
   id: 'tool-tools',
-  title:  'Tools',
+  title:  'Share',
   iconClass:  'ampicon-tools',
   description:  '',
 

@@ -68,6 +68,8 @@ public class MDXAttribute extends MDXElement {
 
 	@Override
 	public String getSortName() {
+		if (this.value != null)
+			return toString();
 		return getCurrentMemberName() + "." + MoConstants.MEMBER_NAME;
 	}
 

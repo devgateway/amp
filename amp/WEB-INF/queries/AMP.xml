@@ -123,6 +123,10 @@
 				<Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Integer"/>
 				<Level name="Month" column="month" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Integer" />
 			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day" name="Quarter">
+			  <Table name="mondrian_dates" />
+			  <Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Integer"/>
+			</Hierarchy>
 			<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day" name="DatesDuplicate">
 				<Table name="mondrian_dates" />
 				<Level name="Year" column="year" levelType="TimeYears" type="Integer" />

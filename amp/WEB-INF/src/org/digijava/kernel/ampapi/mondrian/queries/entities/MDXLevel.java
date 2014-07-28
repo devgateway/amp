@@ -34,6 +34,8 @@ public class MDXLevel extends MDXAttribute {
 	
 	public MDXLevel(MDXAttribute mdxAttr) {
 		this(mdxAttr.getDimension(), (mdxAttr instanceof MDXLevel ? ((MDXLevel)mdxAttr).getHierarchy() : null), mdxAttr.getName(), mdxAttr.getValue());
+		if (mdxAttr instanceof MDXLevel) 
+			this.values = ((MDXLevel)mdxAttr).values;
 	}
 	
 	@Override
@@ -69,6 +71,12 @@ public class MDXLevel extends MDXAttribute {
 	@Override
 	public String getDimensionAndHierarchy() {
 		return quote(this.dimension + (this.hierarchy==null ? "" : "." + this.hierarchy));
+	}
+	
+	public String getSortName() {
+		if (this.values !=null)
+			return toString();
+		return getCurrentMemberName() + "." + MoConstants.MEMBER_NAME;
 	}
 	
 	public String getLevel() {

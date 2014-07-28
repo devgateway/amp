@@ -17,6 +17,7 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXConfig;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXFilter;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXLevel;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
+import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.olap4j.CellSet;
 import org.olap4j.query.SortOrder;
@@ -40,7 +41,8 @@ public class MDXTests extends AmpTestCase {
 		suite.addTest(new MDXTests("testDataSingleValueFilter"));
 		suite.addTest(new MDXTests("testDataFilters"));
 		suite.addTest(new MDXTests("testMultipleHierarchies"));
-		suite.addTest(new MDXTests("testSorting"));
+		suite.addTest(new MDXTests("testSortingNoTotals"));
+		suite.addTest(new MDXTests("testSortingBy2012Q1ActualCommitments"));
 		return suite;
 	}
 	
@@ -90,12 +92,29 @@ public class MDXTests extends AmpTestCase {
 		generateAndValidateMDX(config, expectedRes, false);
 	}
 	
-	public void testSorting() {
+	public void testSortingNoTotals() {
 		String expectedRes = null;
-		MDXConfig config = getDefaultConfig("testSorting", false);
-		config.getSortingOrder().put(config.getRowAttributes().get(1), SortOrder.BASC);
-		config.getSortingOrder().put(config.getRowAttributes().get(0), SortOrder.DESC);
+		MDXConfig config = getDefaultConfig("testSortingNoTotals", false);
+		MDXTuple sortingTouple1 = new MDXTuple();
+		sortingTouple1.add(config.getRowAttributes().get(1));
+		MDXTuple sortingTouple2 = new MDXTuple();
+		sortingTouple2.add(config.getRowAttributes().get(0));
+		config.getSortingOrder().put(sortingTouple1, SortOrder.BASC);
+		config.getSortingOrder().put(sortingTouple2, SortOrder.DESC);
 		generateAndValidateMDX(config, expectedRes, false);
+	}
+	
+	public void testSortingBy2012Q1ActualCommitments() {
+		MDXConfig config = getDefaultConfig("testSortingBy2012Q1ActualCommitments", false);
+		config.addColumnAttribute(new MDXLevel(MoConstants.DATES, MoConstants.H_QUARTER, MoConstants.ATTR_QUARTER));
+		config.getRowAttributes().clear();
+		config.addRowAttribute(new MDXAttribute(MoConstants.PRIMARY_SECTOR, MoConstants.ATTR_PRIMARY_SECTOR_NAME));
+		MDXTuple sortingTouple1 = new MDXTuple();
+		sortingTouple1.add(new MDXLevel(MoConstants.DATES, MoConstants.H_DATES_DUPLICATE, "2012", "Q1"));
+		sortingTouple1.add(config.getColumnMeasures().get(0));
+		config.getSortingOrder().put(sortingTouple1, SortOrder.BASC);
+		config.addSingleValueFilters(new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, MoConstants.ATTR_YEAR, "2012"));
+		generateAndValidateMDX(config, null, false);
 	}
 	
 	private MDXConfig getDefaultConfig(String testName, boolean doTotals) {

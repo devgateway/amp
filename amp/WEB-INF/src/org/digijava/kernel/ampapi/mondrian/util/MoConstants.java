@@ -53,6 +53,8 @@ public final class MoConstants {
 	public static final String RESPONSIBLE_AGENCY = "Responsible Organization";
 	//Hierarchies
 	public static final String H_DATES = "Dates";
+	public static final String H_DATES_DUPLICATE = "DatesDuplicate";
+	public static final String H_QUARTER = "Quarter";
 	public static final String H_ORG_TYPE_NAME = "Organization Type Name";
 	public static final String H_ORG_GROUP_NAME = "Organization Group Name";
 	public static final String H_ORG_NAME = "All Orgs";

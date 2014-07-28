@@ -24,6 +24,7 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXConfig;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXFilter;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
+import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
 import org.digijava.kernel.ampapi.mondrian.util.Connection;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
@@ -386,10 +387,10 @@ public class MDXGenerator {
 	}
 	*/
 	
-	private String sorting(Map<MDXElement, SortOrder> sortingOrder, String axisMdx) {
+	private String sorting(Map<MDXTuple, SortOrder> sortingOrder, String axisMdx) {
 		if (sortingOrder == null || sortingOrder.size() == 0) return axisMdx;
 		StringBuilder fullPrefix = new StringBuilder(sortingOrder.size() * (MoConstants.FUNC_ORDER + "(").length());
-		StringBuilder fullSuffix = new StringBuilder(sortingOrder.size() * (sortingOrder.entrySet().iterator().next().getKey().getSortName().length() + 16)); //16 aprox reserve for sort name diff + delimiters
+		StringBuilder fullSuffix = new StringBuilder(sortingOrder.size() * (sortingOrder.entrySet().iterator().next().getKey().toSortingString().length() + 16)); //16 aprox reserve for sort name diff + delimiters
 		
 		buildSuffixAndPrefix(fullPrefix, fullSuffix, sortingOrder.entrySet().iterator());
 		
@@ -398,15 +399,15 @@ public class MDXGenerator {
 		return axisMdx;
 	}
 	
-	private void buildSuffixAndPrefix(StringBuilder fullPrefix, StringBuilder fullSuffix, Iterator<Entry<MDXElement,SortOrder>> iter) {
+	private void buildSuffixAndPrefix(StringBuilder fullPrefix, StringBuilder fullSuffix, Iterator<Entry<MDXTuple,SortOrder>> iter) {
 		if (!iter.hasNext()) return;
 		final String prefix = MoConstants.FUNC_ORDER + "(";
 		final String delim = ", ";
 		final String end = ")";
-		Entry<MDXElement,SortOrder> elem = iter.next();
+		Entry<MDXTuple, SortOrder> elem = iter.next();
 		buildSuffixAndPrefix(fullPrefix, fullSuffix, iter);
 		fullPrefix.append(prefix);
-		fullSuffix.append(delim).append(elem.getKey().getSortName()).append(delim).append(elem.getValue().name()).append(end);
+		fullSuffix.append(delim).append(elem.getKey().toSortingString()).append(delim).append(elem.getValue().name()).append(end);
 	}
 	
 	/** 

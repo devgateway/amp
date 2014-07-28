@@ -26,7 +26,7 @@ public class MDXConfig {
 	private Map<MDXElement, MDXFilter> axisFilters = new HashMap<MDXElement, MDXFilter>();
 	private Map<MDXAttribute, MDXFilter> dataFilters = new HashMap<MDXAttribute, MDXFilter>();
 	private List<MDXAttribute> singleValueFilters = new ArrayList<MDXAttribute>();
-	private LinkedHashMap<MDXElement, SortOrder> sortingOrder = new LinkedHashMap<MDXElement, SortOrder>();
+	private LinkedHashMap<MDXTuple, SortOrder> sortingOrder = new LinkedHashMap<MDXTuple, SortOrder>();
 	private boolean allowEmptyData = false;
 	private boolean doRowTotals = false;
 	private boolean doColumnsTotals = false;
@@ -203,22 +203,23 @@ public class MDXConfig {
 		return allowEmptyData;
 	}
 	/**
-	 * @return the map of MDXElement by sorting preference order and sorting rule
+	 * @return the map of MDXTuple by sorting preference order and sorting rule
 	 * @see SortOrder
 	 */
-	public LinkedHashMap<MDXElement, SortOrder> getSortingOrder() {
+	public LinkedHashMap<MDXTuple, SortOrder> getSortingOrder() {
 		return sortingOrder;
 	}
 	/**
 	 * Configures sorting rules over ordered list of MDXElement
-	 * @param sortingOrder - ordered list of MDXElement as their sorting order and sorting mechanism: <br>
+	 * @param sortingOrder - ordered list of MDXTuple as their sorting order and sorting mechanism: <br>
 	 * SortOrder.ASC - ascending and keeping the hierarchies <br>
 	 * SortOrder.BASC - ascending and <b>breaking</b> hierarchies <br>
 	 * SortOrder.DESC - descending and keeping hierarchies <br>
 	 * SortOrder.BDESC - descending and breaking hierarchies
+	 * @see MDXTuple
 	 * @see SortOrder
 	 */
-	public void setSortingOrder(LinkedHashMap<MDXElement, SortOrder> sortingOrder) {
+	public void setSortingOrder(LinkedHashMap<MDXTuple, SortOrder> sortingOrder) {
 		this.sortingOrder = sortingOrder;
 	}
 	/**

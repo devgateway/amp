@@ -2,13 +2,14 @@ var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var $ = require('jquery');
+var APIHelper = require('../../../../libs/local/api-helper');
 
+var GenericFilterModel = require('../models/generic-filter-model');
+var TreeNodeModel= require('../models/tree-node-model');
 var TreeNodeView = require('../views/tree-node-view');
 var BaseFilterView = require('../views/base-filter-view');
-var GenericFilterModel = require('../models/generic-filter-model');
 var Template = fs.readFileSync(__dirname + '/../templates/generic-filter-template.html', 'utf8');
 
-var APIHelper = require('../../../../libs/local/api-helper');
 
 module.exports = BaseFilterView.extend({
 
@@ -24,22 +25,18 @@ module.exports = BaseFilterView.extend({
     //TODO: modify to be on demand load style, so only done the first time the user wants that filter...
     // Create tree view
     this._createTree(options.url).then(function(){
-      
-        self.$('.filter-count').text(self.tree.model.get('numSelected'));
-      self.tree.on('updateCount', function(){
-        console.log('count', self.tree.model.get('numSelected'));
-        //self.model.set('activeCount', self.tree.model.get('numSelected'));
-        self.$('.filter-count').text(self.tree.model.get('numSelected'));
-        //self.renderTitle();
+      self.$('.filter-count').text(self.treeModel.get('numSelected'));
+      self.treeModel.on('updateCount', function(){
+        self.$('.filter-count').text(self.treeModel.get('numSelected'));
       });
     });
   },
 
   renderFilters: function () {
     BaseFilterView.prototype.renderFilters.apply(this);
-    this.$('.filter-options').append(this.template());    
-    this.$('.tree-container').append(this.tree.render());
-    this.tree.expand();
+    this.$('.filter-options').append(this.template());
+    this.$('.tree-container').append(this.treeView.render(this.treeModel).$el);
+    this.treeView.expand();
 
   },
 
@@ -56,7 +53,8 @@ module.exports = BaseFilterView.extend({
         expanded: true
       };
 
-      self.tree = new TreeNodeView(rootNodeObj);
+      self.treeModel = new TreeNodeModel(rootNodeObj);
+      self.treeView = new TreeNodeView();
     });
 
   }

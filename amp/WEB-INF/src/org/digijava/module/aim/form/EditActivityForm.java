@@ -91,11 +91,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	private String activityExists = "yes";
 	private String workingTeamLeadFlag;
 	private boolean teamLead;
-	
-//	private String stepText[];
-//	private Boolean stepFailure[];
-//	private String stepFailureText[];
-//	private String step = null;
 	private int pageId;
 	private FormFile fileImport = null;
 	private boolean popupView = false;

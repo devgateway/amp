@@ -2094,6 +2094,7 @@ public class TeamMemberUtil {
         appSettings.setLanguage(ampAppSettings.getLanguage());
         appSettings.setDefaultAmpReport(ampAppSettings.getDefaultTeamReport());
         appSettings.setValidation(ampAppSettings.getValidation());
+        appSettings.setCrossteamvalidation(ampAppSettings.getTeam().getCrossteamvalidation());
         return appSettings;
 
 	}

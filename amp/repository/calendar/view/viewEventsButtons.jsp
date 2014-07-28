@@ -10,8 +10,7 @@
 
 <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/amptabs.css"/>"/>
 
-<!-- Yahoo Panel --> 
-<link rel="stylesheet" type="text/css" href="<digi:file src='module/aim/scripts/panel/assets/container.css'/>"/>
+
 
 <digi:instance property="calendarViewForm"/>
     <DIV id="tabs">

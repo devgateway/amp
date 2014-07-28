@@ -30,7 +30,7 @@ public class AllQueryTests_amp210 {
 		setUp();
 		TestSuite suite = new TestSuite(AllQueryTests_amp210.class.getName());
 		//$JUnit-BEGIN$
-		suite.addTest(MDXTests.suite());
+		//suite.addTest(MDXTests.suite());
 		suite.addTest(MondrianReportsTests.suite());
 		//$JUnit-END$
 		return suite;

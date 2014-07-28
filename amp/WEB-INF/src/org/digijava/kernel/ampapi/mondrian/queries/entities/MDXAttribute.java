@@ -7,8 +7,7 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 
 /**
- * Configuration of an Attribute based on its dimension, name and (optionally) value <br>
- * More directly useful for Mondrian 4 version
+ * Configuration of an Attribute based on its dimension, name and (optionally) value 
  * @author Nadejda Mandrescu
  *
  */
@@ -32,14 +31,18 @@ public class MDXAttribute extends MDXElement {
 	 * @param value
 	 */
 	public MDXAttribute(String dimension, String name, String value) {
-		super(name);
+		this(dimension, name, value, null);
+	}
+	
+	public MDXAttribute(String dimension, String name, String value, Boolean sortAsc) {
+		super(name, sortAsc);
 		this.dimension  = dimension;
 		this.value = value;
 	}
 	
 	@Override
 	public MDXAttribute clone() {
-		return new MDXAttribute(this.dimension, this.name, this.value);
+		return new MDXAttribute(this.dimension, this.name, this.value, this.sortAsc);
 	}
 	
 	@Override
@@ -48,27 +51,12 @@ public class MDXAttribute extends MDXElement {
 		return  getFullName() + "." + (this.value==null ? MoConstants.MEMBERS : quote(this.value));
 	}
 	
-	@Override
 	public String getFullName() {
 		return quote(this.dimension) + "." + quote(this.name);
 	}
 	
-	@Override
 	public boolean hasFullName() {
 		return this.dimension!=null && this.name!=null;
-	}
-	
-	public String getDimensionAndHierarchy() {
-		return quote(this.dimension);
-	}
-
-	public String getCurrentMemberName() {
-		return getFullName() + "." + MoConstants.CURRENT_MEMBER;
-	}
-
-	@Override
-	public String getSortName() {
-		return getCurrentMemberName() + "." + MoConstants.MEMBER_NAME;
 	}
 
 	/**

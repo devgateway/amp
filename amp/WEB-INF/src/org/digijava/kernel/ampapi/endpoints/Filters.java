@@ -79,7 +79,7 @@ public class Filters {
     @Path("/sectors")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Sectors> getSectors(
-            @QueryParam("filter") @DefaultValue("{\"FiltersParams\":{\"params\":[{\"filterName\":\"sectorName\",\"filterValue\":[\"Primary\"]}]}}") final FiltersParams filter) {
+           final FiltersParams filter) {
         // DozerBeanMapperSingletonWrapper.getInstance().
         List<Sectors> ampSectorsList = new ArrayList<Sectors>();
 

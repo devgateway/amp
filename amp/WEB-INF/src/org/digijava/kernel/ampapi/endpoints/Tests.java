@@ -43,9 +43,7 @@ public class Tests {
 //            params.add(param2);            
             p.setParams(params);
             String json;
-            Filtro fff=new Filtro();
-            fff.setNombre("Fleco");
-            json = mapper.writer().writeValueAsString(fff);
+            json = mapper.writer().writeValueAsString(p);
             System.out.println(json);
             String enconded = UriComponent.encode(json,
                     UriComponent.Type.QUERY_PARAM);

@@ -2,16 +2,15 @@ var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var $ = require('jquery');
-
 var TreeNodeCollection = Backbone.Collection.extend({  model:TreeNodeModel });
 
 var TreeNodeModel = Backbone.Model.extend({
   defaults:{
-    selected: true,  // default is selected.
+    selected: true, // default is selected.
     expanded: false,
     numSelected: 0,
     numPossible: 0,
-    children:null, //type TreeNodeCollection
+    children:null,  //type TreeNodeCollection
   },
 
   initialize: function(obj) {
@@ -27,7 +26,7 @@ var TreeNodeModel = Backbone.Model.extend({
       });
     }
 
-    // if we have children, then add self as a 'unkown' child
+    // if we have children, then add self as a leaf node, 'unkown'
     if(!childrenCollection.isEmpty()){
       var unkownNode = new TreeNodeModel(self.toJSON());
       unkownNode.set('name', 'unkown');
@@ -36,52 +35,65 @@ var TreeNodeModel = Backbone.Model.extend({
 
     this._addListenersToChildren();
 
-    this.on('change:selected', function (model, argument, options) {
-      if (!childrenCollection.isEmpty()) {
-        self._updateChildNodes();
-      } else {
-        self._updateCount();
-        self.trigger('updateCount'); 
-      }
-    });
+    this.on('change:selected', self._onSelectChange);
 
-    var countTotal =  this._updateCount();
+    this._updateCount();
   },
+
+
+  _onSelectChange: function (model, argument, options) {
+    var self = this;
+    var children = this.get('children');
+
+    if(this.get('selected')){
+      this.set('numSelected',this.get('numPossible'));
+    } else{
+      this.set('numSelected',0);
+    }
+
+    if (!children.isEmpty()) {
+      self._updateChildNodes();
+    }
+
+    if(options.propagation){
+      self.trigger('updateCount');
+    }
+  },
+
+
 
   _addListenersToChildren: function(){
     var self = this;
     var children = this.get('children');
     children.each(function(child){
       child.on('updateCount', function(){
-        var countTotal =  self._updateCount();
-        self.trigger('updateCount'); 
+        self._updateCount();
+        self.trigger('updateCount');
       });
-
     });
   },
 
-  _updateCount: function(){ 
+  _updateCount: function(){
     var children = this.get('children');
     var countTotal= {
-      selected: 0, 
+      selected: 0,
       possible:0
     };
-    if(!children.isEmpty()){     
+
+    if(!children.isEmpty()){
       children.each(function(child){
-        var count = child._updateCount();
-        countTotal.selected += count.selected;
-        countTotal.possible += count.possible;
+        countTotal.selected += child.get('numSelected');
+        countTotal.possible += child.get('numPossible');
       });
     } else{
       countTotal = {
-        selected: (this.get('selected') ? 1: 0 ), 
+        selected: (this.get('selected') ? 1: 0 ),
         possible: 1
       };
     }
 
     this.set('numSelected',countTotal.selected);
     this.set('numPossible',countTotal.possible);
-    return  countTotal;
   },
 
   _updateChildNodes: function () {

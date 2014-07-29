@@ -68,7 +68,7 @@ var TreeNodeView = Backbone.View.extend({
       self._updateExpanded();
     });
 
-    this.model.on('updateCount', function(){
+    this.model.on('change:numSelected', function(){
       self._updateCountUI();
     });
 
@@ -141,7 +141,7 @@ var TreeNodeView = Backbone.View.extend({
 
 
   clickBox: function () {
-    this.model.set('selected', !this.model.get('selected'));
+    this.model.set('selected', !this.model.get('selected'), {propagation: true});
   },
 
 

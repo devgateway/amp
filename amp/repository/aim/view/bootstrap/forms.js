@@ -263,7 +263,9 @@ InteractiveFormArea.prototype.showAdditionArea = function(elem){
 		$(_self.addItemsButtonId).hide();
 		$(_self.dataDivId).disable();
 		$(_self.changeDivId).show();
+		window.parent.$('iframe').trigger("parentResized");
 	});
+	
 };
 
 /**
@@ -286,6 +288,8 @@ InteractiveFormArea.prototype.hideAddArea = function() {
 	$(_self.changeDivId).hide();
 	$(_self.addItemsButtonId).show();
 	$(_self.dataDivId).enable();
+	window.parent.$('iframe').trigger("parentResized");
+	
 };
 
 /**
@@ -293,8 +297,9 @@ InteractiveFormArea.prototype.hideAddArea = function() {
  */
 InteractiveFormArea.prototype.refreshDataArea = function() {
 	_self = this;
-	amp_bootstrap_form_update_area(_self.ajaxPage, _self.refreshDataActionName, _self.dataDivId);
-};
+	amp_bootstrap_form_update_area(_self.ajaxPage, _self.refreshDataActionName, _self.dataDivId, function () 
+			{window.parent.$('iframe').trigger("parentResized");});
+	};
 
 /**
  * refreshes the "addition" area

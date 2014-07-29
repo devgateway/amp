@@ -816,9 +816,10 @@ public class DataDispatcher extends MultiAction {
 			
 		//cache structure type names
 		Map<Long, String> typeNames = new HashMap<Long, String>();
-		List<Object[]> strucTypes = PersistenceManager.getSession().createSQLQuery("SELECT typeid, name FROM amp_structure_type").list();
-		for(Object[] strucType:strucTypes)
-			typeNames.put(PersistenceManager.getLong(strucType[0]), TranslatorWorker.translateText(PersistenceManager.getString(strucType[1])));
+		Collection<AmpStructureType> sts = new ArrayList<AmpStructureType>();
+		sts = DbHelper.getAllStructureTypes();
+		for(AmpStructureType strucType:sts)
+			typeNames.put(strucType.getTypeId(), strucType.getName());
 
         String structureTitle = AmpStructure.sqlStringForTitle("amp_structure_id");
         String structureDescription = AmpStructure.sqlStringForDescription("amp_structure_id");
@@ -838,7 +839,7 @@ public class DataDispatcher extends MultiAction {
 			String shape = PersistenceManager.getString(struct[5]);			
 				
 			long typeId = PersistenceManager.getLong(struct[6]); // guaranteed not null			
-			String typeName = PersistenceManager.getString(typeNames.get(typeId));
+			String typeName = typeNames.get(typeId);
 				
 			Structure structureJSON = new Structure();
 			structureJSON.setId(strucId);

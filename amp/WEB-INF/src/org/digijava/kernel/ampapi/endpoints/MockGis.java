@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.codehaus.jackson.node.POJONode;
 import org.digijava.kernel.ampapi.endpoints.util.FiltersParams;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
@@ -19,8 +20,6 @@ import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
 import org.digijava.kernel.ampapi.postgis.TestPostGis;
 import org.digijava.kernel.ampapi.postgis.entity.Amp_Activity_Points;
 
-import com.fasterxml.jackson.databind.node.POJONode;
-import com.fasterxml.jackson.databind.node.TextNode;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 

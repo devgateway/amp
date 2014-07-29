@@ -3,15 +3,13 @@ package org.digijava.kernel.ampapi.helpers.geojson;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
-import com.fasterxml.jackson.databind.JsonNode;
-
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.annotate.JsonAnyGetter;
+import org.codehaus.jackson.annotate.JsonAnySetter;
+import org.codehaus.jackson.annotate.JsonSubTypes;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
+import org.codehaus.jackson.annotate.JsonTypeInfo.As;
+import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
 
 
 /**
@@ -31,28 +29,26 @@ import com.fasterxml.jackson.databind.JsonNode;
 })
 public abstract class GeoJSON implements Validation
 {
-	@JsonIgnore
-	public CRSGeoJSON crs;
-	@JsonIgnore
-	public List<Double> bbox;
-	protected Map<String,JsonNode> properties;
+    public CRSGeoJSON crs;
+    public List<Double> bbox;
+    protected Map<String,JsonNode> properties;
 
-	@JsonAnySetter
-	public void add(String key, JsonNode value)
-	{
-		properties.put(key, value);
-	}
+    @JsonAnySetter
+    public void add(String key, JsonNode value)
+    {
+            properties.put(key, value);
+    }
 
-	@JsonAnyGetter
-	public Map<String,JsonNode> getProperties()
-	{
-		return properties;
-	}
-	    
-	public boolean isValid( PositionValidator validator )
-	{
-		if ( crs!=null && !crs.isValid(validator) ) return false;
-		if ( !validator.isValidBB(bbox) ) return false;
-		return true;
-	}
+    @JsonAnyGetter
+    public Map<String,JsonNode> getProperties()
+    {
+            return properties;
+    }
+        
+    public boolean isValid( PositionValidator validator )
+    {
+            if ( crs!=null && !crs.isValid(validator) ) return false;
+            if ( !validator.isValidBB(bbox) ) return false;
+            return true;
+    }
 }

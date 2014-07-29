@@ -1,23 +1,28 @@
 package org.digijava.kernel.ampapi.endpoints;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 
+
+
+
+
+
+import org.codehaus.jackson.JsonProcessingException;
+import org.codehaus.jackson.map.DeserializationConfig;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.digijava.kernel.ampapi.endpoints.util.FilterParam;
 import org.digijava.kernel.ampapi.endpoints.util.FiltersParams;
-import org.glassfish.jersey.uri.UriComponent;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.sun.jersey.api.uri.UriComponent;
 
 public class Tests {
     private final static ObjectMapper mapper = new ObjectMapper().configure(
-            SerializationFeature.WRAP_ROOT_VALUE, false);
+    		DeserializationConfig.Feature.UNWRAP_ROOT_VALUE, true);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         try {
             FiltersParams p = new FiltersParams();
             p.setParams(new ArrayList<FilterParam>());
@@ -38,11 +43,12 @@ public class Tests {
 //            params.add(param2);            
             p.setParams(params);
             String json;
-
-            json = mapper.writer().writeValueAsString(p);
+            Filtro fff=new Filtro();
+            fff.setNombre("Fleco");
+            json = mapper.writer().writeValueAsString(fff);
             System.out.println(json);
             String enconded = UriComponent.encode(json,
-                    UriComponent.Type.QUERY_PARAM_SPACE_ENCODED);
+                    UriComponent.Type.QUERY_PARAM);
             System.out.println(enconded);
         } catch (JsonProcessingException e) {
             // TODO Auto-generated catch block

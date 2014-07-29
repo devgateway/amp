@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.JsonNode;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.annotate.JsonPropertyOrder;
 
 
 /**

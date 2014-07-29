@@ -47,7 +47,7 @@ public class FilterUtil {
 
     public static void getException(String message) {
         logger.debug(message);
-        throw new WebApplicationException(message);
+        throw new WebApplicationException();
     }
 
 }

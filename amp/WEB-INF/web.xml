@@ -10,6 +10,28 @@
 	<!-- ******************************************* -->
 	<!-- * DO NOT ADD ANYTHING BEFORE THIS SEGMENT * -->
 	<!-- ******************************************* -->
+
+<!-- Saiku parts -->
+	<filter>
+		<filter-name>org.springframework.security.filterChainProxy</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter>
+		<filter-name>http-request-context</filter-name>
+		<filter-class>org.codehaus.enunciate.webapp.HTTPRequestContextFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>org.springframework.security.filterChainProxy</filter-name>
+		<url-pattern>/saiku</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>http-request-context</filter-name>
+		<url-pattern>/saiku</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+	</filter-mapping>
+<!-- Saiku parts -->
+
 	<listener>
 		<listener-class>
 			org.dgfoundation.amp.error.keeper.DigiXmlECSLoaderListener
@@ -75,6 +97,7 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			/WEB-INF/spring/application-context.xml
+			/WEB-INF/saiku/context.xml
 		</param-value>
 	</context-param>
 
@@ -161,12 +184,12 @@
 	<!-- Jersey Servlet  -->
 	<servlet>
 		<servlet-name>AMP API End Points</servlet-name>
-	 	<servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+	 	<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
 	 	<init-param>
-			<param-name>jersey.config.server.provider.packages</param-name>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
 			<!--Package where end points are going to be placed-->
 			
-			<param-value>org.digijava.kernel.ampapi.endpoints,org.digijava.kernel.ampapi.helpers.json</param-value>
+			<param-value>org.digijava.kernel.ampapi.endpoints</param-value>
 	 	</init-param>
 	 	<init-param>
 			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
@@ -205,6 +228,40 @@
 		<url-pattern>/mdxquery</url-pattern>
 	</servlet-mapping>
 	<!-- End MDX -->
+	
+	<!--  Start for Saiku Webapp Support -->
+	<servlet>
+		<servlet-name>spring</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>jersey2</servlet-name>
+		<servlet-class>org.codehaus.enunciate.modules.jersey.EnunciateJerseyServletContainer</servlet-class>
+		<init-param>
+			<param-name>com.sun.jersey.config.property.packages</param-name>
+			<param-value>org.saiku.web</param-value>
+		</init-param>
+		<init-param>
+			<param-name>com.sun.jersey.spi.container.ContainerRequestFilters</param-name>
+			<param-value>com.sun.jersey.api.container.filter.PostReplaceFilter</param-value>
+		</init-param>
+		<init-param>
+			<param-name>org.codehaus.enunciate.modules.jersey.config.ServletPath</param-name>
+			<param-value>/saiku/rest</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>jersey2</servlet-name>
+		<url-pattern>/saiku/rest/saiku/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>jersey2</servlet-name>
+		<url-pattern>/saiku/rest/saiku/session</url-pattern>
+	</servlet-mapping>
+	<!--  End Saiku Webapp Support -->
+
+
 	
 	<servlet>
 		<servlet-name>action</servlet-name>

@@ -3,11 +3,12 @@ package org.digijava.kernel.ampapi.helpers.geojson;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonPropertyOrder;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.fasterxml.jackson.databind.JsonNode;
+
 
 /**
  * A Bean representation of a GeoJSON Feature.

@@ -23,7 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -224,6 +223,14 @@ public class EditActivity extends Action {
 
     hsession=PersistenceManager.getSession();
 
+    if (activityId != null) {
+    	//check whether activity exists
+    	Integer count = ActivityUtil.activityExists(activityId, hsession);
+    	if(count==null || count==0){
+			eaForm.setActivityExists("no");
+			return mapping.findForward("forward");
+    	}else{
+    		eaForm.setActivityExists("yes");
     	}
 
         activity = (AmpActivityVersion) hsession.load(AmpActivityVersion.class, activityId);
@@ -703,8 +710,7 @@ public class EditActivity extends Action {
 
         // load the activity details
         String actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
-       // HttpSession session = request.getSession();
-
+        
         //eaForm.setApprovalStatus(actApprovalStatus);
         if (tm != null && tm.getTeamId()!=null && activity.getTeam() != null && activity.getTeam().getAmpTeamId() != null) {
 					if (("true".compareTo((String) session
@@ -1409,6 +1415,12 @@ public class EditActivity extends Action {
 					}
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimaryDonorContId(ampActContact.getContact().getTemporaryId());
+                        /*
+						contactInfo.setPrimaryDonorContId(ampActContact.getContact().getTemporaryId());
+						/*if(contactInfo.getPrimaryDonorContIds()==null){
+							contactInfo.setPrimaryDonorContIds(new String[1]);
+						}
+						contactInfo.getPrimaryDonorContIds()[0]=ampActContact.getContact().getTemporaryId();*/
 
 					}
 					contactInfo.getDonorContacts().add(ampActContact);
@@ -1420,7 +1432,14 @@ public class EditActivity extends Action {
 					}
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimaryMofedContId(ampActContact.getContact().getTemporaryId());
-                    }
+                        /*
+						contactInfo.setPrimaryMofedContId(ampActContact.getContact().getTemporaryId());
+						/*if(contactInfo.getPrimaryMofedContIds()==null){
+							contactInfo.setPrimaryMofedContIds(new String[1]);
+						}
+						contactInfo.getPrimaryMofedContIds()[0]=ampActContact.getContact().getTemporaryId();*/
+
+					}
 					contactInfo.getMofedContacts().add(ampActContact);
 				}
 				//project coordinator contact
@@ -1431,6 +1450,14 @@ public class EditActivity extends Action {
 
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimaryProjCoordContId (ampActContact.getContact().getTemporaryId());
+                        /*
+						contactInfo.setPrimaryProjCoordContId (ampActContact.getContact().getTemporaryId());
+						/*if(contactInfo.getPrimaryProjCoordContIds()==null){
+							contactInfo.setPrimaryProjCoordContIds(new String[1]);
+						}
+						contactInfo.getPrimaryProjCoordContIds()[0]=ampActContact.getContact().getTemporaryId();*/
+
+
 					}
 					contactInfo.getProjCoordinatorContacts().add(ampActContact);
 				}
@@ -1441,6 +1468,13 @@ public class EditActivity extends Action {
 					}
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimarySecMinContId (ampActContact.getContact().getTemporaryId());
+                        /*
+						contactInfo.setPrimarySecMinContId (ampActContact.getContact().getTemporaryId());
+						/*if(contactInfo.getPrimarySecMinContIds()==null){
+							contactInfo.setPrimarySecMinContIds(new String[1]);
+						}
+						contactInfo.getPrimarySecMinContIds()[0]=ampActContact.getContact().getTemporaryId();*/
+
 					}
 					contactInfo.getSectorMinistryContacts().add(ampActContact);
 				}
@@ -1451,6 +1485,13 @@ public class EditActivity extends Action {
 					}
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimaryImplExecutingContId (ampActContact.getContact().getTemporaryId());
+                        /*
+						contactInfo.setPrimaryImplExecutingContId (ampActContact.getContact().getTemporaryId());
+						/*if(contactInfo.getPrimaryImplExecutingContIds()==null){
+							contactInfo.setPrimaryImplExecutingContIds(new String[1]);
+						}
+						contactInfo.getPrimaryImplExecutingContIds()[0]=ampActContact.getContact().getTemporaryId();*/
+
 					}
 					contactInfo.getImplExecutingAgencyContacts().add(ampActContact);
 				}
@@ -1491,6 +1532,15 @@ public class EditActivity extends Action {
         		  }
         }
       }
+      //Collection levelCol = null;
+      // Loading the levels from the database
+      /*if(eaForm.getLevelCollection() == null) {
+          levelCol = DbUtil.getAmpLevels();
+          eaForm.setLevelCollection(levelCol);
+                   } else {
+          levelCol = eaForm.getLevelCollection();
+                   }
+       */
 
       // load all the active currencies
       eaForm.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
@@ -1516,7 +1566,7 @@ public class EditActivity extends Action {
     AmpApplicationSettings appSettings = AmpARFilter.getEffectiveSettings();
     String validationOption = appSettings != null ? appSettings.getValidation() : null;
     Boolean crossteamvalidation = appSettings.getTeam() != null ? appSettings.getTeam().getCrossteamvalidation() : false;
-
+    
     String actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
     
     //Check if cross team validation is enable

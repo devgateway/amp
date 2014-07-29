@@ -17,6 +17,7 @@
 		<property name="computation" column="computation" type="java.lang.Boolean" />
 		<property name="hideDraftActivities" column="hide_draft" type="java.lang.Boolean" />
 		<property name="useFilter" column="use_filter" type="java.lang.Boolean" />
+		<property name="crossteamvalidation" column="cross_team_validation" type="java.lang.Boolean" />
 		
 		<many-to-one name="teamLead" column="team_lead_id"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />

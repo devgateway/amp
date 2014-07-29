@@ -224,14 +224,6 @@ public class EditActivity extends Action {
 
     hsession=PersistenceManager.getSession();
 
-    if (activityId != null) {
-    	//check whether activity exists
-    	Integer count = ActivityUtil.activityExists(activityId, hsession);
-    	if(count==null || count==0){
-			eaForm.setActivityExists("no");
-			return mapping.findForward("forward");
-    	}else{
-    		eaForm.setActivityExists("yes");
     	}
 
         activity = (AmpActivityVersion) hsession.load(AmpActivityVersion.class, activityId);
@@ -1417,12 +1409,6 @@ public class EditActivity extends Action {
 					}
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimaryDonorContId(ampActContact.getContact().getTemporaryId());
-                        /*
-						contactInfo.setPrimaryDonorContId(ampActContact.getContact().getTemporaryId());
-						/*if(contactInfo.getPrimaryDonorContIds()==null){
-							contactInfo.setPrimaryDonorContIds(new String[1]);
-						}
-						contactInfo.getPrimaryDonorContIds()[0]=ampActContact.getContact().getTemporaryId();*/
 
 					}
 					contactInfo.getDonorContacts().add(ampActContact);
@@ -1434,14 +1420,7 @@ public class EditActivity extends Action {
 					}
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimaryMofedContId(ampActContact.getContact().getTemporaryId());
-                        /*
-						contactInfo.setPrimaryMofedContId(ampActContact.getContact().getTemporaryId());
-						/*if(contactInfo.getPrimaryMofedContIds()==null){
-							contactInfo.setPrimaryMofedContIds(new String[1]);
-						}
-						contactInfo.getPrimaryMofedContIds()[0]=ampActContact.getContact().getTemporaryId();*/
-
-					}
+                    }
 					contactInfo.getMofedContacts().add(ampActContact);
 				}
 				//project coordinator contact
@@ -1452,14 +1431,6 @@ public class EditActivity extends Action {
 
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimaryProjCoordContId (ampActContact.getContact().getTemporaryId());
-                        /*
-						contactInfo.setPrimaryProjCoordContId (ampActContact.getContact().getTemporaryId());
-						/*if(contactInfo.getPrimaryProjCoordContIds()==null){
-							contactInfo.setPrimaryProjCoordContIds(new String[1]);
-						}
-						contactInfo.getPrimaryProjCoordContIds()[0]=ampActContact.getContact().getTemporaryId();*/
-
-
 					}
 					contactInfo.getProjCoordinatorContacts().add(ampActContact);
 				}
@@ -1470,13 +1441,6 @@ public class EditActivity extends Action {
 					}
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimarySecMinContId (ampActContact.getContact().getTemporaryId());
-                        /*
-						contactInfo.setPrimarySecMinContId (ampActContact.getContact().getTemporaryId());
-						/*if(contactInfo.getPrimarySecMinContIds()==null){
-							contactInfo.setPrimarySecMinContIds(new String[1]);
-						}
-						contactInfo.getPrimarySecMinContIds()[0]=ampActContact.getContact().getTemporaryId();*/
-
 					}
 					contactInfo.getSectorMinistryContacts().add(ampActContact);
 				}
@@ -1487,13 +1451,6 @@ public class EditActivity extends Action {
 					}
 					if(ampActContact.getPrimaryContact()!=null && ampActContact.getPrimaryContact()){
                         contactInfo.setPrimaryImplExecutingContId (ampActContact.getContact().getTemporaryId());
-                        /*
-						contactInfo.setPrimaryImplExecutingContId (ampActContact.getContact().getTemporaryId());
-						/*if(contactInfo.getPrimaryImplExecutingContIds()==null){
-							contactInfo.setPrimaryImplExecutingContIds(new String[1]);
-						}
-						contactInfo.getPrimaryImplExecutingContIds()[0]=ampActContact.getContact().getTemporaryId();*/
-
 					}
 					contactInfo.getImplExecutingAgencyContacts().add(ampActContact);
 				}
@@ -1534,15 +1491,6 @@ public class EditActivity extends Action {
         		  }
         }
       }
-      //Collection levelCol = null;
-      // Loading the levels from the database
-      /*if(eaForm.getLevelCollection() == null) {
-          levelCol = DbUtil.getAmpLevels();
-          eaForm.setLevelCollection(levelCol);
-                   } else {
-          levelCol = eaForm.getLevelCollection();
-                   }
-       */
 
       // load all the active currencies
       eaForm.setCurrencies(CurrencyUtil.getActiveAmpCurrencyByName());
@@ -1567,32 +1515,25 @@ public class EditActivity extends Action {
     eaForm.getFunding().fillFinancialBreakdowns(activityId, DbUtil.getAmpFunding(activityId), debug);
     AmpApplicationSettings appSettings = AmpARFilter.getEffectiveSettings();
     String validationOption = appSettings != null ? appSettings.getValidation() : null;
+    Boolean crossteamvalidation = appSettings.getTeam() != null ? appSettings.getTeam().getCrossteamvalidation() : false;
 
     String actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
+    
+    //Check if cross team validation is enable
+    Boolean crossteamcheck = false;
+    if (crossteamvalidation){
+    	crossteamcheck = true;
+    }else{
+    	//check if the activity belongs to the team where the user is logged.
+    	crossteamcheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
+    }
+    
     if(teamMember != null){
     	Long ampTeamId = teamMember.getTeamId();
     	boolean teamLeadFlag    = teamMember.getTeamHead() || teamMember.isApprover();
     	boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
-    	//commented under AMP-10788
-//    	if (workingTeamFlag) {
-//    		eaForm.setButtonText("edit");	// In case of regular working teams
-//    		if (!(activity.getDraft()!=null && activity.getDraft()) && ( actApprovalStatus != null && Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(actApprovalStatus.toLowerCase())))
-//    	 	{
-//    	 		//burkina
-//    	 		// if an user save an activity he could edit it even it is not approved by team leader
-//    	 		//if(workingTeamFlag && !teamLeadFlag && teamMember.getMemberId().equals(activity.getCreatedBy().getAmpTeamMemId()))
-//    	 		if (workingTeamFlag && teamLeadFlag && teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId())) {
-//    	 			eaForm.setButtonText("validate");
-//    	 		}/*else {
-//    	 			formBean.setButtonText("approvalAwaited");
-//    	 		}*/
-//    	 	}
-//    	} else {
-//    		eaForm.setButtonText("none");	// In case of management-workspace
-//    	}
 
     	String globalProjectsValidation		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION);
-//    	boolean isManagement = false;
     	if("Management".toLowerCase().compareTo(teamMember.getTeamAccessType().toLowerCase()) == 0) {
     		eaForm.setButtonText("none");
     	}
@@ -1606,31 +1547,21 @@ public class EditActivity extends Action {
     			}
     			else{
     				//global validation is on
-
-//    				if("alloff".compareTo(apps.getValidation().toLowerCase())==0)
-//    					eaForm.setButtonText("edit");
-
-    				//only the team leader of the team that owns the activity has rights to validate it
-    				//if activity is already approved it will display the edit value
+    				//only the team leader of the team that owns the activity has rights to validate it if cross team validation is off
     				if ( validationOption != null && "alledits".equalsIgnoreCase(validationOption)) {
-    					if (teamLeadFlag && activity.getTeam() != null &&
-    					   teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId()) &&
+    					if (teamLeadFlag && activity.getTeam() != null && crossteamcheck  &&
     					   (Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus()) ||
     					    Constants.EDITED_STATUS.equalsIgnoreCase(activity.getApprovalStatus()))
     					   ) {
     					    eaForm.setButtonText("validate");
                         }
                     }
-    					//else eaForm.setButtonText("edit");
-
-    				//only the team leader of the team that owns the activity has rights to validate it
     				//it will display the validate label only if it is just started and was not approved not even once
-    				if (validationOption != null && "newonly".equalsIgnoreCase(validationOption))
-    					if (teamLeadFlag &&
-    							Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus())
-    							 && teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId())
-    					) eaForm.setButtonText("validate");
-    					//else eaForm.setButtonText("edit");
+    				if (validationOption != null && "newonly".equalsIgnoreCase(validationOption) && crossteamcheck){
+    					if (teamLeadFlag && Constants.STARTED_STATUS.equalsIgnoreCase(activity.getApprovalStatus())){ 
+    						eaForm.setButtonText("validate");
+    					}
+    				}
     			}
     	}
     }

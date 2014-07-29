@@ -18,29 +18,28 @@ public class UpdateAppSettingsForm extends ActionForm {
 	private Long appSettingsId = null;
 
 	private Integer defRecsPerPage;
-	
-    // The type is String because Struts1 does not support
-    // empty(null) values for Integers
+
 	private String numberOfPagesToDisplay;
 
 	private String language = null;
-	
-	private String validation=null;
 
+	private String validation = null;
+	
 	private Long currencyId = null;
 
 	private Long fisCalendarId = null;
 
 	private int reportStartYear;
+
 	private int reportEndYear;
-	
+
 	/**
 	 * null - creating, "default" - saving
 	 */
 	private String type = null;
-	
+
 	private String workspaceType = null;
-	
+
 	private Collection currencies = null;
 
 	private Collection fisCalendars = null;
@@ -56,44 +55,46 @@ public class UpdateAppSettingsForm extends ActionForm {
 	private boolean updateFlag = false;
 
 	private boolean updated = false;
-	
+
 	private boolean errors = false;
 
-	private Long defaultReportForTeamId	= new Long(0);
+	private Long defaultReportForTeamId = new Long(0);
 
 	private List languages;
 
 	private Collection reports;
 
-        private int defReportsPerPage;
+	private int defReportsPerPage;
 
-    private Collection<KeyValue> possibleValsAddTR;
-    
-    private Collection<KeyValue> shareResAmongWorkspacesPossibleVals; //share resources among workspaces allowed by
-    
-    private Collection<KeyValue> publishResourcesPossibleVals;
-    
-	private Integer allowAddTeamRes	= CrConstants.TEAM_RESOURCES_ADD_ONLY_WORKSP_MANAGER;
+	private Collection<KeyValue> possibleValsAddTR;
 	
-	private Integer allowShareAccrossWRK	= CrConstants.SHARE_AMONG_WRKSPACES_ALLOWED_WM;
-	
-	private Integer allowPublishingResources	= CrConstants.PUBLISHING_RESOURCES_ALLOWED_ONLY_TL;
-	
-	private Long [] selTeamMembers;
+	// share resources among workspaces allowed by
+	private Collection<KeyValue> shareResAmongWorkspacesPossibleVals; 
+
+	private Collection<KeyValue> publishResourcesPossibleVals;
+
+	private Integer allowAddTeamRes = CrConstants.TEAM_RESOURCES_ADD_ONLY_WORKSP_MANAGER;
+
+	private Integer allowShareAccrossWRK = CrConstants.SHARE_AMONG_WRKSPACES_ALLOWED_WM;
+
+	private Integer allowPublishingResources = CrConstants.PUBLISHING_RESOURCES_ALLOWED_ONLY_TL;
+
+	private Long[] selTeamMembers;
 	private List<TeamMember> teamMembers;
 	private Boolean resetTeamMembers;
 
-    private Boolean showAllCountries;
+	
+	private Boolean showAllCountries;
 
-    public Boolean getShowAllCountries() {
-        return showAllCountries;
-    }
+	public Boolean getShowAllCountries() {
+		return showAllCountries;
+	}
 
-    public void setShowAllCountries(Boolean showAllCountries) {
-        this.showAllCountries = showAllCountries;
-    }
+	public void setShowAllCountries(Boolean showAllCountries) {
+		this.showAllCountries = showAllCountries;
+	}
 
-    public Collection getReports() {
+	public Collection getReports() {
 		return reports;
 	}
 
@@ -212,14 +213,17 @@ public class UpdateAppSettingsForm extends ActionForm {
 	public void setMemberName(String memberName) {
 		this.memberName = memberName;
 	}
+
 	/**
 	 * @return Returns the languages.
 	 */
 	public List getLanguages() {
 		return languages;
 	}
+
 	/**
-	 * @param languages The languages to set.
+	 * @param languages
+	 *            The languages to set.
 	 */
 	public void setLanguages(List languages) {
 		this.languages = languages;
@@ -233,29 +237,28 @@ public class UpdateAppSettingsForm extends ActionForm {
 		this.defaultReportForTeamId = defaultReportForTeamId;
 	}
 
-        public void setDefReportsPerPage(int defReportsPerPage) {
-          this.defReportsPerPage = defReportsPerPage;
-        }
+	public void setDefReportsPerPage(int defReportsPerPage) {
+		this.defReportsPerPage = defReportsPerPage;
+	}
 
-
-        public int getDefReportsPerPage() {
-          return defReportsPerPage;
-        }
+	public int getDefReportsPerPage() {
+		return defReportsPerPage;
+	}
 
 	public int getReportStartYear() {
-	    return reportStartYear;
+		return reportStartYear;
 	}
 
 	public void setReportStartYear(int reportStartYear) {
-	    this.reportStartYear = reportStartYear;
+		this.reportStartYear = reportStartYear;
 	}
 
 	public int getReportEndYear() {
-	    return reportEndYear;
+		return reportEndYear;
 	}
 
 	public void setReportEndYear(int reportEndYear) {
-	    this.reportEndYear = reportEndYear;
+		this.reportEndYear = reportEndYear;
 	}
 
 	public String getValidation() {
@@ -265,7 +268,7 @@ public class UpdateAppSettingsForm extends ActionForm {
 	public void setValidation(String validation) {
 		this.validation = validation;
 	}
-
+	
 	public boolean isErrors() {
 		return errors;
 	}
@@ -282,7 +285,8 @@ public class UpdateAppSettingsForm extends ActionForm {
 	}
 
 	/**
-	 * @param allowAddTeamRes the allowAddTeamRes to set
+	 * @param allowAddTeamRes
+	 *            the allowAddTeamRes to set
 	 */
 	public void setAllowAddTeamRes(Integer allowAddTeamRes) {
 		this.allowAddTeamRes = allowAddTeamRes;
@@ -296,7 +300,8 @@ public class UpdateAppSettingsForm extends ActionForm {
 	}
 
 	/**
-	 * @param possibleValsAddTR the possibleValsAddTR to set
+	 * @param possibleValsAddTR
+	 *            the possibleValsAddTR to set
 	 */
 	public void setPossibleValsAddTR(Collection<KeyValue> possibleValsAddTR) {
 		this.possibleValsAddTR = possibleValsAddTR;
@@ -306,7 +311,8 @@ public class UpdateAppSettingsForm extends ActionForm {
 		return shareResAmongWorkspacesPossibleVals;
 	}
 
-	public void setShareResAmongWorkspacesPossibleVals(Collection<KeyValue> shareResAmongWorkspacesPossibleVals) {
+	public void setShareResAmongWorkspacesPossibleVals(
+			Collection<KeyValue> shareResAmongWorkspacesPossibleVals) {
 		this.shareResAmongWorkspacesPossibleVals = shareResAmongWorkspacesPossibleVals;
 	}
 
@@ -322,7 +328,8 @@ public class UpdateAppSettingsForm extends ActionForm {
 		return publishResourcesPossibleVals;
 	}
 
-	public void setPublishResourcesPossibleVals(Collection<KeyValue> publishResourcesPossibleVals) {
+	public void setPublishResourcesPossibleVals(
+			Collection<KeyValue> publishResourcesPossibleVals) {
 		this.publishResourcesPossibleVals = publishResourcesPossibleVals;
 	}
 
@@ -367,11 +374,12 @@ public class UpdateAppSettingsForm extends ActionForm {
 	}
 
 	public String getNumberOfPagesToDisplay() {
-		return "null".equals(numberOfPagesToDisplay) ? "" : numberOfPagesToDisplay;
+		return "null".equals(numberOfPagesToDisplay) ? ""
+				: numberOfPagesToDisplay;
 	}
 
 	public void setNumberOfPagesToDisplay(String numberOfPagesToDisplay) {
 		this.numberOfPagesToDisplay = numberOfPagesToDisplay;
 	}
-	
+
 }

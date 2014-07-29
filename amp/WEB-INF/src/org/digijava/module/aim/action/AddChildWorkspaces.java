@@ -35,13 +35,9 @@ public class AddChildWorkspaces extends Action {
 		String dest = request.getParameter("dest");
 		uwForm.setActionType(null);
 	if(request.getParameter("childorgs")!=null){
-		
-		//uwForm.setOrganizations(DbUtil.getAll(AmpOrganisation.class));
-		//uwForm.setActionType("addOrgs");
 		if (uwForm.getSelChildOrgs() != null && uwForm.getSelChildOrgs().length > 0) {
 			logger.info("Selchildworkspaces.length :" + uwForm.getSelChildOrgs().length);
 			ArrayList allOrgs = (ArrayList) DbUtil.getAll(AmpOrganisation.class);
-			//uwForm.setOrganizations(new ArrayList());
 			if (uwForm.getOrganizations() == null) {
 				logger.debug("childWorkspace is null");
 				uwForm.setOrganizations(new ArrayList());

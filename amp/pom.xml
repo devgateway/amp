@@ -29,6 +29,19 @@
 			<id>Hibernate Spatial repo</id>
 			<url>http://www.hibernatespatial.org/repository</url>
 		</repository>
+		 <repository>
+   			<id>Analytical Labs Repo</id>
+   			<name>Analytical Labs Repo-releases</name>
+   			<url>http://repo.analytical-labs.com/alabs-release-local</url>
+  		</repository>
+  		<repository>
+            <id>EU-DEVFIN Central</id>
+            <name>DG EU-DEVFIN Central Repo</name>
+            <url>http://artifactory.ampdev.net/artifactory/eudevfin/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>

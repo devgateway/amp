@@ -29,6 +29,10 @@
     min-height: 99%;
     margin-bottom: -@amp_sidebar_quality_height;
   }
+
+  .glyphicon-info-sign {
+    color: @amp_sidebar_help_icon;
+  }
 }
 
 
@@ -57,18 +61,18 @@
 
     > a {
       display: block;
-      color: darken(@amp_sidebar_item,25%);
-
-      &:hover,
-      &:active,
-      &:focus {
-        // see amp-icons.less for the icon swaps on hover
-        text-decoration: none;
-      }
+      color: @amp_sidebar_header_text_active;
+      background: @amp_sidebar_header_active_bg ;
+      text-decoration: none;
 
       &.collapsed {
-        background: @amp_sidebar_item_bg;
-        color: desaturate(lighten(@amp_sidebar_item, 5%), 10%);
+        background: @amp_sidebar_header_bg;
+        color: @amp_sidebar_header_text_inactive;
+      }
+
+      &.collapsed:hover,{
+        // see amp-icons.less for the icon swaps on hover
+        color: @amp_sidebar_header_text_active;
       }
 
       h3 {
@@ -109,7 +113,11 @@
 
 
 .description {
-  padding: 0 4px;
+  padding: 4px 9px;
+  background: @amp_sidebar_description_bg;
+  color: @amp_content_highlight;
+  font-size: 0.9em;
+  font-weight: 500;
 }
 
 
@@ -133,7 +141,7 @@
 #quality-indicator {
   // Heads up: any margins or overflow below this will trigger a scrollbar.
   width: @amp_sidebar_width;
-  background: @amp_sidebar_special_bg;
+  background: @amp_sidebar_header_bg;
   padding-top:5px;
 
   p {

@@ -14,7 +14,7 @@ module.exports = BaseControlView.extend({
 
   id: 'tool-tools',
   title:  'Share',
-  iconClass:  'ampicon-tools',
+  iconClass:  'ampicon-share',
   description:  '',
 
   template:  _.template(Template),

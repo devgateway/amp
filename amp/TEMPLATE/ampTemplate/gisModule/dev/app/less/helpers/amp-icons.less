@@ -10,13 +10,13 @@
   display: inline-block;
   vertical-align: middle;
   margin-right: 5px;
-  width: 30px;
+  width: 31px;
   height: 30px;
   background-image: url(../img/icons.png);
 }
 
 // List of icons to create, order matters:
-@icons: ampicon-tools, ampicon-search, ampicon-filters, ampicon-layers, ampicon-settings;
+@icons: ampicon-projects, ampicon-layers, ampicon-filters, ampicon-search,  ampicon-share,   ampicon-settings;
 @amp-icons-grid: 40px;
 
 .iconize();
@@ -30,12 +30,16 @@
     background-position: -@amp-icons-grid @position-y;
   }
 
+  .collapsed .ampicon.@{value} {
+      background-position: 0 @position-y;
+    }
+
   .accordion-heading > a {
     // see also amp-sidebar.less for broader hover styling
     &:hover .ampicon.@{value},
     &:active .ampicon.@{value},
-    &:focus .ampicon.@{value} {
-      background-position: 0 @position-y;
+    &:focus .ampicon.@{value},{
+      background-position: -@amp-icons-grid @position-y;
     }
   }
 

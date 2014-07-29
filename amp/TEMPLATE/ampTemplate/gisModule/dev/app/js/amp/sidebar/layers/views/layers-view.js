@@ -16,7 +16,7 @@ var RadioOptionTemplate = fs.readFileSync(__dirname + '/../templates/radio-optio
 module.exports = BaseControlView.extend({
   id: 'tool-layers',
   title: 'Project Data',
-  iconClass: 'ampicon-layers',
+  iconClass: 'ampicon-projects',
   description: 'Select Points or Indicators to visualize data on the main map.',
 
   template: _.template(Template),

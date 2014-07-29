@@ -34,6 +34,7 @@ public class addWorkSpaceUser extends Action{
 		
 		String actionFlag = request.getParameter("actionFlag");
 		logger.debug("actionFlag: " + actionFlag);
+
 		if ("deleteWS".equals(actionFlag)) {
             logger.debug("In delete team member");
             Long selMembers[] = new Long[1];

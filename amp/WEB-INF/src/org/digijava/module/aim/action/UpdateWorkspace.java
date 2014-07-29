@@ -71,17 +71,31 @@ public class UpdateWorkspace extends Action {
 		UpdateWorkspaceForm uwForm = (UpdateWorkspaceForm) form;
 
 		String event = request.getParameter("event");
+//		String dest = request.getParameter("dest");
 		String tId1 = request.getParameter("tId");
 		ActionMessages errors = new ActionMessages();
 		if (uwForm.getWorkspaceType() != null
 				&& "Team".compareTo(uwForm.getWorkspaceType()) == 0) {
+			/*
+			 * Since we added Filters in the workspace you can have no child orgs
+			if ((uwForm.getComputation() != null && uwForm.getComputation() == true)
+					&& (uwForm.getOrganizations() == null || uwForm
+							.getOrganizations().size() == 0)) {
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(
+						"error.aim.updateWorkspace.noChildOrg"));
+				saveErrors(request, errors);
+				return mapping.getInputForward();
+			}
+			*/
 			uwForm.setChildWorkspaces(new ArrayList());
-			if (uwForm.getComputation() == null || uwForm.getComputation() == false) {
+			if (uwForm.getComputation() == null
+					|| uwForm.getComputation() == false) {
 				uwForm.setAddActivity(true);
 				uwForm.setOrganizations(null);
 			}
 		}
-		if (uwForm.getWorkspaceType() != null && "Management".compareTo(uwForm.getWorkspaceType()) == 0) {
+		if (uwForm.getWorkspaceType() != null
+				&& "Management".compareTo(uwForm.getWorkspaceType()) == 0) {
 			uwForm.setOrganizations(new ArrayList());
 			uwForm.setComputation(null);
 			uwForm.setUseFilter(null);
@@ -97,7 +111,6 @@ public class UpdateWorkspace extends Action {
 			newTeam.setAccessType(uwForm.getWorkspaceType());
 			newTeam.setAddActivity(uwForm.getAddActivity());
 			newTeam.setComputation(uwForm.getComputation());
-			newTeam.setCrossteamvalidation(uwForm.getCrossteamvalidation());
 			newTeam.setUseFilter(uwForm.getUseFilter());
 			newTeam.setHideDraftActivities(uwForm.getHideDraftActivities());
                 newTeam.setWorkspaceGroup(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspaceGroup()));
@@ -146,7 +159,6 @@ public class UpdateWorkspace extends Action {
 			uwForm.setAddActivity(null);
 			uwForm.setHideDraftActivities(false);
 			uwForm.setComputation(null);
-			uwForm.setCrossteamvalidation(null);
 			uwForm.setUseFilter(null);
 			if (uwForm.getChildWorkspaces() != null)
 				uwForm.getChildWorkspaces().clear();

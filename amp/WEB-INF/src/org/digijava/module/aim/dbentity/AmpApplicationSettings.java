@@ -8,12 +8,13 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
-@SuppressWarnings("serial")
 public class AmpApplicationSettings implements Serializable {
 
 	private Long ampAppSettingsId;
 
 	private AmpTeam team;
+
+	//private AmpTeamMember member;
 
 	private Integer defaultRecordsPerPage;
 	
@@ -31,9 +32,13 @@ public class AmpApplicationSettings implements Serializable {
 
     private Boolean showAllCountries = false;
 
-	private AmpReports defaultTeamReport;
+//	private Boolean useDefault; /*
+//								 * use customized settings or use default team
+//								 * settings
+//								 */
 
-	private Integer defaultReportsPerPage;
+	private AmpReports defaultTeamReport;
+    private Integer defaultReportsPerPage;
         
     private Integer allowAddTeamRes;
     
@@ -42,7 +47,7 @@ public class AmpApplicationSettings implements Serializable {
     private Integer allowPublishingResources;
     
     private Integer numberOfPagesToDisplay;
-    
+
     public Boolean getShowAllCountries() {
         return showAllCountries;
     }
@@ -77,6 +82,14 @@ public class AmpApplicationSettings implements Serializable {
 		this.team = team;
 	}
 
+//	public AmpTeamMember getMember() {
+//		return this.member;
+//	}
+//
+//	public void setMember(AmpTeamMember member) {
+//		this.member = member;
+//	}
+
 	public Integer getDefaultRecordsPerPage() {
 		return this.defaultRecordsPerPage;
 	}
@@ -109,13 +122,21 @@ public class AmpApplicationSettings implements Serializable {
 		this.language = language;
 	}
 
-    public Integer getDefaultReportsPerPage() {
-      return defaultReportsPerPage;
-    }
+//	public Boolean getUseDefault() {
+//		return this.useDefault;
+//	}
+//
+//	public void setUseDefault(Boolean useDefault) {
+//		this.useDefault = useDefault;
+//	}
 
-    public void setDefaultReportsPerPage(Integer  defaultReportsPerPage) {
-      this.defaultReportsPerPage = defaultReportsPerPage;
-    }
+        public Integer getDefaultReportsPerPage() {
+          return defaultReportsPerPage;
+        }
+
+        public void setDefaultReportsPerPage(Integer  defaultReportsPerPage) {
+          this.defaultReportsPerPage = defaultReportsPerPage;
+        }
 
 	public Integer getReportStartYear() {
 	    return reportStartYear;

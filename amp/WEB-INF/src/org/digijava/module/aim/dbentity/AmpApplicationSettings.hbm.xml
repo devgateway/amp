@@ -17,7 +17,9 @@
 		<property name="language" column="language" type="java.lang.String" />
 		<property name="validation" column="validation" type="java.lang.String" />
         <property name="showAllCountries" column="show_all_countries" type="java.lang.Boolean"/>
-		
+
+<!--  <property name="useDefault" column="use_default" type="java.lang.Boolean" />
+-->
 		<many-to-one name="defaultTeamReport" column="default_team_ampreport_id"
 			class="org.digijava.module.aim.dbentity.AmpReports" cascade="none" />
 		<many-to-one name="team" column="team_id" class="org.digijava.module.aim.dbentity.AmpTeam"
@@ -26,7 +28,9 @@
 			class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none" />
 		<many-to-one name="fiscalCalendar" column="fis_cal_id"
 			class="org.digijava.module.aim.dbentity.AmpFiscalCalendar" cascade="none" />
-
+<!--	<many-to-one name="member" column="member"
+			class="org.digijava.module.aim.dbentity.AmpTeamMember" /> 
+-->
 		<property name="allowAddTeamRes" column="allow_add_team_res" type="java.lang.Integer" />
 		<property name="allowShareTeamRes" column="allow_share_res_globally" type="java.lang.Integer" />
 		<property name="allowPublishingResources" column="allow_publishing_resources" type="java.lang.Integer" />

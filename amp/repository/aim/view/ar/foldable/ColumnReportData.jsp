@@ -1,5 +1,3 @@
-<%@page import="org.digijava.module.aim.util.TeamUtil"%>
-<%@page import="org.digijava.module.aim.dbentity.AmpTeam"%>
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@ page import="org.dgfoundation.amp.ar.cell.MetaTextCell"%>
@@ -50,7 +48,6 @@
 	int rowIdx = 2;
 	Boolean showColumn = false;
 	TeamMember currentMember = (TeamMember) request.getSession().getAttribute("currentMember");
-	Boolean crossteamenable = currentMember.getAppSettings().getCrossteamvalidation();
 	if(currentMember != null && "Management".toLowerCase().compareTo(currentMember.getTeamAccessType().toLowerCase()) != 0) {
 		showColumn = true;
 	validatedActivities = showColumn ? ActivityUtil.getActivitiesWhichShouldBeValidated(currentMember, columnReport.getOwnerIds()) : null;	
@@ -80,25 +77,28 @@
 <%
 //This scriptlet searchs for rows marked green (for validation) and later, sets the "action" attribute to "validate" to change the icon. 
 Boolean validateItem = false;
+
+
+/* if(showColumn && columnReport.getItem(0) instanceof org.dgfoundation.amp.ar.CellColumn)
+{
+	org.dgfoundation.amp.ar.CellColumn cellColumn = (org.dgfoundation.amp.ar.CellColumn)columnReport.getItem(0);
+	Cell cell = cellColumn.getByOwner((Long)ownerId);
+	MetaTextCell metaCell = (MetaTextCell) cell;
+	if(metaCell.getColour().equalsIgnoreCase("green")){
+		if(ActivityUtil.getAmpActivityVersion((Long)ownerId).getTeam().getAmpTeamId() == currentMember.getTeamId() && currentMember.getTeamHead())
+			validateItem = true;
+	}
+	
+} */
+
 if ( showColumn && validatedActivities.contains(ownerId) )
 	validateItem = true;
-	/*Show validate icon only to Workspace manager or Aprrover who are allowed to validate an activity.*/
-	boolean teamLeadFlag = currentMember.getTeamHead() || currentMember.isApprover();
-	
-	boolean crossteamvalidation = false;
-	if(crossteamenable){
-		crossteamvalidation =true;
-	}else{
-		//Not sure if this is going to affect the perfomance of tabs - let's disscuss about this change. (Diego)
-		crossteamvalidation = currentMember.getTeamId().equals(ActivityUtil.getAmpActivityVersion((Long)ownerId).getTeam().getIdentifier());
-	}
-
 %>
 <c:set var="action" value="edit"/>
 <c:set var="actionString" value="${translatedEdit}"/>
 <%
-if(validateItem && teamLeadFlag && crossteamvalidation){
-%>
+if(validateItem){
+	%>
 	<c:set var="action" value="validate"/>
 	<c:set var="actionString" value="${translatedValidate}"/>
 	<%
@@ -112,7 +112,7 @@ if(validateItem && teamLeadFlag && crossteamvalidation){
 <bean:define id="bckColor" value="false" toScope="page"/>
 <tr style="<%=display%>">
 	<c:if test="${addFakeColumn}">
-		<td class="desktop_project_name"></td>
+		<td class="desktop_project_name" ></td>
 	</c:if>
 		<td align="center" class="report_inside" width="25">
 			<logic:present name="currentMember" scope="session">

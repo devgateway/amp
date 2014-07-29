@@ -252,15 +252,14 @@ public class ActivityUtil {
 
 	private static void setActivityStatus(AmpTeamMember ampCurrentMember, boolean draft, AmpActivityFields a, AmpActivityVersion oldA, boolean newActivity,boolean rejected) {
 		Long teamMemberTeamId=ampCurrentMember.getAmpTeam().getAmpTeamId();
+		//Long  activityTeamId=(a.getTeam()!=null)?a.getTeam().getAmpTeamId():teamMemberTeamId;
+		
 		String validation=org.digijava.module.aim.util.DbUtil.getValidationFromTeamAppSettings(teamMemberTeamId);
 		
 		//setting activity status....
 		AmpTeamMemberRoles role = ampCurrentMember.getAmpMemberRole();
-		boolean teamLeadFlag =  role.getTeamHead() || role.isApprover();
-		Boolean crossTeamValidation = ampCurrentMember.getAmpTeam().getCrossteamvalidation();
-		Boolean isSameWorkspace = ampCurrentMember.getAmpTeam().getAmpTeamId()==a.getTeam().getAmpTeamId();
-		
-		if(teamLeadFlag){
+		boolean teamLeadFlag    = role.isApprover() ;
+		if(teamLeadFlag/* && activityTeamId.equals(teamMemberTeamId)*/){
 			if(draft){
 				if(rejected){
 					a.setApprovalStatus(Constants.REJECTED_STATUS);
@@ -269,42 +268,38 @@ public class ActivityUtil {
 				}
 			}
 			else{
-				if(isSameWorkspace){
-					a.setApprovalStatus(Constants.APPROVED_STATUS);
-					a.setApprovedBy(ampCurrentMember);
-					a.setApprovalDate(Calendar.getInstance().getTime());
-				}else{
-					if(crossTeamValidation){
-						a.setApprovalStatus(Constants.APPROVED_STATUS);
-						a.setApprovedBy(ampCurrentMember);
-						a.setApprovalDate(Calendar.getInstance().getTime());
-					}else{
-						a.setApprovalStatus(Constants.STARTED_STATUS);
-					}
-				}
-				
+				a.setApprovalStatus(Constants.APPROVED_STATUS);
+				a.setApprovedBy(ampCurrentMember);
+				a.setApprovalDate(Calendar.getInstance().getTime());
 			}
-		}else{
-			if(validation == null || "validationOff".equals(validation)){
-				if(newActivity){
-					a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
-				}else{
-					a.setApprovalStatus(Constants.APPROVED_STATUS);
+		}
+		else{
+//			if(draft){
+//				a.setApprovalStatus(Constants.STARTED_STATUS);
+//			}
+//			else
+				if(validation == null || "validationOff".equals(validation)){
+					if(newActivity)
+						a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
+					else a.setApprovalStatus(Constants.APPROVED_STATUS);
 				}
-			}else{
-				if("newOnly".equals(validation)){
-					if(newActivity){
-						//all the new activities will have the started status
-						a.setApprovalStatus(Constants.STARTED_STATUS);
-					}
-					else{
-						//if we edit an existing not validated status it will keep the old status - started
-						if(oldA.getApprovalStatus()!=null && Constants.STARTED_STATUS.compareTo(oldA.getApprovalStatus())==0)
+				else{
+					if("newOnly".equals(validation)){
+						if(newActivity){
+							//all the new activities will have the started status
 							a.setApprovalStatus(Constants.STARTED_STATUS);
-						//if we edit an existing activity that is validated or startedvalidated or edited
-						else  a.setApprovalStatus(Constants.APPROVED_STATUS);
+						}
+						else{
+	//						if(!a.getApprovalStatus().equals(Constants.APPROVED_STATUS)){
+	//							a.setApprovalStatus(Constants.EDITED_STATUS);
+	//						}
+							//if we edit an existing not validated status it will keep the old status - started
+							if(oldA.getApprovalStatus()!=null && Constants.STARTED_STATUS.compareTo(oldA.getApprovalStatus())==0)
+								a.setApprovalStatus(Constants.STARTED_STATUS);
+							//if we edit an existing activity that is validated or startedvalidated or edited
+							else  a.setApprovalStatus(Constants.APPROVED_STATUS);
+						}
 					}
-				}
 					else{
 						if("allEdits".equals(validation)){
 							if(newActivity){

@@ -785,20 +785,7 @@ function cancel()
 															</logic:equal>
 														</td>
 													</tr>
-													<tr>
-														<td colspan="4">
-															<table>
-																<tr>
-																	<td style="font-size:12px; font-weight:bold;">
-																		<html:checkbox property="crossteamvalidation" value="true">
-																			<digi:trn>Cross Team Validation</digi:trn>
-																		</html:checkbox>
-																	</td>
-																</tr>
-															</table>
-															
-														</td>
-													</tr>
+													
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
 														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'no'}">
 															<tr  id="relTeamRow">
@@ -930,6 +917,7 @@ function cancel()
 														</td>
 													</tr>
 													
+
 													<tr id="team_workspace" style="display: none;background: #FFFFFF">
 														<td colspan="4">
 															
@@ -1030,6 +1018,8 @@ function cancel()
 																</fieldset>																			
 														</td>
 													</tr>
+													
+													
 													
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 													<tr>

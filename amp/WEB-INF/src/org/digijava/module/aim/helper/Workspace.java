@@ -31,8 +31,6 @@ public class Workspace {
 
     private AmpTemplatesVisibility fmTemplate;
     private AmpCategoryValue workspacePrefix;
-    
-    private Boolean crossteamvalidation;
 	
 	public Boolean getAddActivity() {
 		return addActivity;
@@ -223,13 +221,4 @@ public class Workspace {
     public void setWorkspacePrefix(AmpCategoryValue workspacePrefix) {
         this.workspacePrefix = workspacePrefix;
     }
-
-	public Boolean getCrossteamvalidation() {
-		return crossteamvalidation;
-	}
-
-	public void setCrossteamvalidation(Boolean crossteamvalidation) {
-		this.crossteamvalidation = crossteamvalidation;
-	}
-    
 }

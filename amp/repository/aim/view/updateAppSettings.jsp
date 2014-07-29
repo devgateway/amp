@@ -253,16 +253,19 @@ function loadShareRules(){
 								</td>
 								<td class="inside">
 									<html:select property="language" styleClass="inputx insidex">
-									  	<bean:define id="languages" name="aimUpdateAppSettingsForm" property="languages" type="java.util.Collection" />
-									    <c:forEach var="element" items="${aimUpdateAppSettingsForm.languages}">
-											<c:set var="trn">
-												<digi:trn>${element.name}</digi:trn>
-											</c:set>
-											<html:option value="${element.code}">
-												${trn}
-											</html:option>
-										</c:forEach>
-			                		</html:select>
+								  	<bean:define id="languages" name="aimUpdateAppSettingsForm" property="languages" type="java.util.Collection" />
+								    
+										                		 
+										                		<c:forEach var="element" items="${aimUpdateAppSettingsForm.languages}">
+																	<c:set var="trn">
+																		<digi:trn>${element.name}</digi:trn>
+																	</c:set>
+																	<html:option value="${element.code}">
+																		${trn}
+																	</html:option>
+																</c:forEach>
+										                		
+									</html:select>
 								</td>
 							</tr>
 							<tr bgcolor=#f8f8f8>
@@ -283,7 +286,7 @@ function loadShareRules(){
 								<td class="inside">
 									<bean:define id="newOnly" value=""/>
 									<bean:define id="allEdits" value=""/>
-									<bean:define id="validationOff" value=""/>
+															<bean:define id="validationOff" value=""/>
 									<c:if test="${aimUpdateAppSettingsForm.validation=='newOnly'}">
 										<bean:define id="newOnly" value="selected"/>
 									</c:if>

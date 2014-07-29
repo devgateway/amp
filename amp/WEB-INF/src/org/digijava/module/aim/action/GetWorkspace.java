@@ -69,6 +69,30 @@ public class GetWorkspace extends Action {
             uwForm.setUpdateFlag(false);
             uwForm.setFmTemplateList(FeaturesUtil.getAMPTemplatesVisibility());
 
+            //uwForm.setOrganizations(DbUtil.getAll(AmpOrganisation.class));
+
+            //ReportContextData.clearSession(); - cleaning session is done in SelectTeam
+            // nothing to clean here, as filters etc. are stored on a per-tab basis
+            // request.getSession().setAttribute( ReportWizardAction.EXISTING_SESSION_FILTER, null );
+            // request.getSession().setAttribute( ReportWizardAction.SESSION_FILTER, null );
+            // request.getSession().setAttribute( ArConstants.REPORTS_Z_FILTER, null );
+
+//		/**
+//		 * The ReportsFilterPickerForm needs to be cleaned before using in the wizard
+//		 */
+//		ReportsFilterPicker rfp		= new ReportsFilterPicker();
+//		ReportsFilterPickerForm rfpForm	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
+//		if (rfpForm == null ) {
+//			rfpForm		= new ReportsFilterPickerForm();
+////			AmpARFilter arf = createOrFillFilter(filterForm, subsection);
+////			request.setAttribute(ReportWizardAction.REPORT_WIZARD_INIT_ON_FILTERS, "true");
+////			rfp.modePrepare(mapping, rfpForm, request, response);
+//			TagUtil.setForm(request, "aimReportsFilterPickerForm", rfpForm, false);
+//		}
+//		rfpForm.setIsnewreport(true);
+//		rfp.reset(rfpForm, request, mapping);
+//		rfpForm.setIsnewreport(false);
+
             if(action!=null && "reset".compareTo(action)==0){
                 uwForm.setReset(true);
                 uwForm.reset(mapping, request);
@@ -108,6 +132,10 @@ public class GetWorkspace extends Action {
                 Set<AmpTeamFilterData> fdSet	= ampTeam.getFilterDataSet();
                 if ( fdSet != null && fdSet.size() > 0 ) {
                     ReportContextData.getFromRequest().initFilters(ampTeam);
+//				ReportsFilterPickerForm rfpForm2	= (ReportsFilterPickerForm)TagUtil.getForm(request, "aimReportsFilterPickerForm");
+//				ReportsFilterPicker.modeRefreshDropdowns(mapping, rfpForm2, request, response, getServlet().getServletContext() );
+//				FilterUtil.populateForm(rfpForm2, filter, null);
+                    //myForm.setUseFilters(true);
                 }
             }
 
@@ -140,10 +168,10 @@ public class GetWorkspace extends Action {
                 }
                 else
                     uwForm.getOrganizations().clear();
+                //uwForm.getOrganizations().addAll(orgs);
                 uwForm.setOrganizations(orgs);
                 uwForm.setAddActivity(workspace.getAddActivity());
                 uwForm.setComputation(workspace.getComputation());
-                uwForm.setCrossteamvalidation(workspace.getCrossteamvalidation());
                 uwForm.setUseFilter(workspace.getUseFilter());
                 uwForm.setRelatedTeam(workspace.getRelatedTeam());
                 uwForm.setTeamAccessType(tmember.getTeamAccessType());
@@ -174,7 +202,13 @@ public class GetWorkspace extends Action {
                                     typeValue		= team.getType().getValue();
                                 }
 							
-						        if ( Constants.TEAM_TYPE_BILATERAL.equals( typeValue ) )
+						/*if (uwtype.equalsIgnoreCase(team.getType())) {
+								if ("Bilateral".equalsIgnoreCase(uwtype))
+									uwForm.getRelatedTeamBilatColl().add(team);
+								else if ("Multilateral".equalsIgnoreCase(uwtype))
+									uwForm.getRelatedTeamMutilatColl().add(team);
+							} */
+                                if ( Constants.TEAM_TYPE_BILATERAL.equals( typeValue ) )
                                     uwForm.getRelatedTeamBilatColl().add(team);
                                 else if ( Constants.TEAM_TYPE_MULTILATERAL.equals( typeValue ) )
                                     uwForm.getRelatedTeamMutilatColl().add(team);

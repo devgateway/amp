@@ -438,7 +438,6 @@ public class TeamUtil {
                 workspace.setHideDraftActivities(team.getHideDraftActivities() );
                 workspace.setFmTemplate(team.getFmTemplate());
                 workspace.setWorkspacePrefix(team.getWorkspacePrefix());
-                workspace.setCrossteamvalidation(team.getCrossteamvalidation());
                 
                 if(null == team.getRelatedTeamId())
                     workspace.setRelatedTeam(null);
@@ -547,7 +546,6 @@ public class TeamUtil {
                 updTeam.setOrganizations(team.getOrganizations());
                 updTeam.setAddActivity(team.getAddActivity());
                 updTeam.setComputation(team.getComputation());
-                updTeam.setCrossteamvalidation(team.getCrossteamvalidation());
                 updTeam.setUseFilter(team.getUseFilter());
                 updTeam.setHideDraftActivities(team.getHideDraftActivities() );
                 updTeam.setWorkspaceGroup(team.getWorkspaceGroup());

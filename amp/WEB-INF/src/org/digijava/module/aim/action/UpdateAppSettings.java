@@ -121,7 +121,7 @@ public class UpdateAppSettings extends Action {
 				uForm.setReportEndYear(reportEndYear);
 				uForm.setLanguage(ampAppSettings.getLanguage());
 				uForm.setValidation(ampAppSettings.getValidation());
-				uForm.setShowAllCountries(ampAppSettings.getShowAllCountries());
+                uForm.setShowAllCountries(ampAppSettings.getShowAllCountries());
 
                 if (ampAppSettings.getCurrency() != null) {
 				    uForm.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
@@ -263,12 +263,19 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings.setAllowShareTeamRes(uForm.getAllowShareAccrossWRK());
 				ampAppSettings.setAllowPublishingResources(uForm.getAllowPublishingResources());
                 ampAppSettings.setShowAllCountries(uForm.getShowAllCountries());
-                AmpReports ampReport = DbUtil.getAmpReports(uForm.getDefaultReportForTeamId());
-                ampAppSettings.setDefaultTeamReport(ampReport);
-
+				//
+				AmpReports ampReport = DbUtil.getAmpReports(uForm.getDefaultReportForTeamId());
+				//
+				ampAppSettings.setDefaultTeamReport(ampReport);
+				//
 				session.setAttribute(Constants.DEFAULT_TEAM_REPORT, ampAppSettings.getDefaultTeamReport());
 				session.setAttribute(Constants.CURRENT_TAB_REPORT, ampAppSettings.getDefaultTeamReport());
-			
+				// this.updateAllTeamMembersDefaultReport( tm.getTeamId(), ampReport);
+				// added by mouhamad for burkina on 21/02/08
+				//BOZO: should update all currencies in all sessions?
+//				String name = "- "+ ampAppSettings.getCurrency().getCurrencyName();
+//				session.setAttribute(ArConstants.SELECTED_CURRENCY, name);
+				// end
 				try {
 					DbUtil.update(ampAppSettings);
 					//update team members
@@ -305,6 +312,15 @@ public class UpdateAppSettings extends Action {
 				}
 			} else if (uForm.getRestore() != null) {
 				throw new RuntimeException("unimplemented functionality: restoring workspace settings");
+				//ampAppSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
+				//AmpApplicationSettings memSettings = DbUtil.getMemberAppSettings(tm.getMemberId());
+				//AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(tm.getMemberId());
+				//try {
+				//	//restoreApplicationSettings(memSettings, ampAppSettings, member);
+				//	uForm.setUpdated(true);
+				//} catch (Exception e) {
+				//	uForm.setUpdated(false);
+				//}
 			}
 			AmpApplicationSettings tempSettings = DbUtil.getTeamAppSettings(tm.getTeamId());
 			if(tempSettings!=null){
@@ -334,6 +350,7 @@ public class UpdateAppSettings extends Action {
 						+ uForm.getUpdated();
 				response.sendRedirect(url);
 				logger.debug("redirecting " + url + " ....");
+				// return mapping.findForward("default");
 				return null;
 			} else 
 			{
@@ -362,6 +379,39 @@ public class UpdateAppSettings extends Action {
 		return appSettings;
 	}
 
+//	private void updateAllTeamMembersDefaultReport(Long teamId,AmpReports ampReport) {
+//		Session session = null;
+//		try {
+//			session = PersistenceManager.getSession();
+////beginTransaction();
+//			String queryString = "SELECT a FROM "
+//					+ AmpApplicationSettings.class.getName() + " a WHERE  "
+//					+ "a.team=:teamId";
+//			Query query = session.createQuery(queryString);
+//			query.setParameter("teamId", teamId, LongType.INSTANCE);
+//			Collection reports = query.list();
+//			Iterator iterator = reports.iterator();
+//
+//			while (iterator.hasNext()) {
+//				AmpApplicationSettings setting = (AmpApplicationSettings) iterator.next();
+//				setting.setDefaultTeamReport(ampReport);
+//			}
+//
+//			//tx.commit();
+////session.flush();
+//
+//		} catch (Exception ex) {
+//			logger.error("Unable to get fundingDetails :" + ex);
+//		} finally {
+//			try {
+//				PersistenceManager.releaseSession(session);
+//			} catch (Exception ex2) {
+//				logger.error("releaseSession() failed :" + ex2);
+//			}
+//		}
+//
+//	}
+	
 	private void populatePossibleValsAddTR (UpdateAppSettingsForm uForm) {
 		if (uForm.getPossibleValsAddTR() == null || uForm.getPossibleValsAddTR().size() == 0 ) {
 			KeyValue elem1	= new KeyValue(CrConstants.TEAM_RESOURCES_ADD_ONLY_WORKSP_MANAGER.toString(), "Managed by Workspace Manager");

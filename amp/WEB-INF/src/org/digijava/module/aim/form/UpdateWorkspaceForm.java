@@ -16,6 +16,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
+//public class UpdateWorkspaceForm extends ValidatorForm {
 public class UpdateWorkspaceForm extends MultiStepActionForm{
 	private Long selectedOrgId;
 	@Checkbox(step=1, resetValue="false")
@@ -26,9 +27,6 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 	
 	@Checkbox(step=1, resetValue="false")
 	private Boolean hideDraftActivities=null;
-	
-	@Checkbox(step=1, resetValue="false")
-	private Boolean crossteamvalidation=null;
 	
 	private Collection organizations;
 	private String id = null;
@@ -45,7 +43,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 	// Available multilateral mofed-teams for mapping with donor-team
 	private Collection relatedTeamMutilatColl = new ArrayList();
 	private String relatedTeamFlag = "no";		// 'yes', means relatedTeamColl collection is loaded, 'no' otherwise
-	//private String type = null;				// 'Multilateral' or 'Bilateral'
+	//private String type = null;					// 'Multilateral' or 'Bilateral'
 	Long typeId;								// replaces type
 	private Integer relatedTeamBilatCollSize = null;
 	private String deleteFlag = null;
@@ -65,6 +63,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 	
 	// for select child workspaces popup
 	private String childWorkspaceType;
+//	private String childTeamCategoryId;
 	private Long childTeamTypeId;
 	private Collection availChildWorkspaces;
 	private Collection availChildOrgs;
@@ -431,6 +430,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 			popupReset = true;
 			mainAction = null;
 			dest = null;
+			
 			category = null;
 			relatedTeam = null;
 			relatedTeamName = null;
@@ -442,6 +442,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 			updateFlag = false;
             fmTemplate = null;
 			workspaceType = null;
+			//availChildWorkspaces = null;
 			actionType=null;
 			selChildWorkspaces = null;
 			selChildOrgs=null;
@@ -449,9 +450,9 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 			reset	= false;
 			addActivity=null;
 			computation=null;
-			crossteamvalidation=null;
 			useFilter=true;
-			workspacePrefix=null;
+
+            workspacePrefix=null;
             fmTemplate=null;
 		}
 		if (popupReset) {
@@ -468,6 +469,13 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 		
 		if ("no".equals(relatedTeamFlag)) {
 			errors = super.validate(mapping, request);
+			
+//			if(("DONOR".equalsIgnoreCase(category) &&("Team".equalsIgnoreCase(workspaceType)|| "Management".equalsIgnoreCase(workspaceType)))
+//					||("GOVERNMENT".equalsIgnoreCase(category) && ("Donor".equals(workspaceType))) ){
+//				ActionMessage error = new ActionMessage("error.aim.updateWorkspace.incorrectWorkspaceType");
+//				errors.add("workspaceType", error);
+//			}
+			
 			if ("DONOR".equalsIgnoreCase(category) && "Donor".equalsIgnoreCase(workspaceType)) {
 				if ("edit".equalsIgnoreCase(actionEvent)) {
 					if (typeCategoryValue!=null && CategoryConstants.TEAM_TYPE_BILATERAL.equalsCategoryValue(typeCategoryValue) ) {
@@ -668,14 +676,6 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 
 	public void setComputation(Boolean computation) {
 		this.computation = computation;
-	}
-	
-	public Boolean getCrossteamvalidation() {
-		return crossteamvalidation;
-	}
-
-	public void setCrossteamvalidation(Boolean crossteamvalidation) {
-		this.crossteamvalidation = crossteamvalidation;
 	}
 
 	public String getTeamAccessType() {

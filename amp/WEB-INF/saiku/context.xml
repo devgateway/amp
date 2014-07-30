@@ -29,7 +29,7 @@
 
  	<bean id="classpathDsManager"
 		class="org.saiku.service.datasource.ClassPathResourceDatasourceManager">
-		<property name="path" value="res:saiku-datasources" />
+		<property name="path" value="res:../saiku/saiku-datasources" />
 	</bean>
 	<!-- <property name="path" value="file:///var/saiku/saiku-datasources/"/> -->
 
@@ -82,12 +82,12 @@
 	<bean id="repositoryBean" scope="request"
 		class="org.saiku.web.rest.resources.BasicRepositoryResource">
 		<property name="olapQueryService" ref="olapQueryBean" />
-		<property name="path" value="res:saiku-repository" />
+		<property name="path" value="res:../saiku/saiku-repository" />
 	</bean>
 	<!-- <property name="path" value="file:///var/saiku/saiku-datasources/"/> -->
 
 	<bean id="acl" scope="singleton" class="org.saiku.web.rest.objects.acl.Acl">
-		<property name="path" value="res:saiku-repository" />
+		<property name="path" value="res:../saiku/saiku-repository" />
 		<property name="adminRoles">
 			<list>
 				<value>ROLE_ADMIN</value>
@@ -97,7 +97,7 @@
 
 	<bean id="repository2bean" scope="request"
 		class="org.saiku.web.rest.resources.BasicRepositoryResource2">
-		<property name="path" value="res:saiku-repository" />
+		<property name="path" value="res:../saiku/saiku-repository" />
 		<property name="sessionService" ref="sessionService" />
 		<property name="acl" ref="acl" />
 	</bean>
@@ -105,13 +105,13 @@
 	<bean id="tagRepositoryBean" scope="request"
 		class="org.saiku.web.rest.resources.BasicTagRepositoryResource">
 		<property name="olapQueryService" ref="olapQueryBean" />
-		<property name="path" value="res:saiku-repository" />
+		<property name="path" value="res:../saiku/saiku-repository" />
 	</bean>
 
 	<bean id="filterRepositoryBean" scope="session"
 		class="org.saiku.web.rest.resources.FilterRepositoryResource">
 		<property name="olapQueryService" ref="olapQueryBean" />
-		<property name="path" value="res:saiku-repository" />
+		<property name="path" value="res:../saiku/saiku-repository" />
 	</bean>
 
 

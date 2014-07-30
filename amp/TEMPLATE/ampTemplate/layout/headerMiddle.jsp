@@ -568,13 +568,12 @@ function openAdmin () {
 										</a>
 									</li>
 								</feature:display>
-								<feature:display name="Saiku" module="REPORTING">
+								<!-- Add feature to the feature manager or reause the old one -->
 									<li class="yuiampmenuitem_drop" title='Saiku'>
 										<a class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/saikuui/index.html" target="_blank" onclick="return canExit()"> 
 											<digi:trn>Saiku</digi:trn>
 										</a>
 									</li>
-								</feature:display>
 							</ul>
 						</div>
 					</div></li>

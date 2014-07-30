@@ -13,8 +13,8 @@
 		<springVersion>3.0.7.RELEASE</springVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<buildVersion>2.10-SNAPSHOT</buildVersion>
-<!-- 		<jersey.version>1.18</jersey.version>
-		<saiku.version>2.6-SNAPSHOT</saiku.version> -->
+ 		<jersey.version>1.18</jersey.version>
+		<saiku.version>2.6-SNAPSHOT</saiku.version> 
 	</properties>
 	<repositories>
 		<repository>
@@ -68,7 +68,7 @@
 		<dependency>
 			<groupId>asm</groupId>
 			<artifactId>asm</artifactId>
-			<version>1.5.3</version>
+			<version>3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>avalon</groupId>
@@ -388,38 +388,18 @@
 			<artifactId>je</artifactId>
 			<version>1.7.0</version>
 		</dependency>
-
-		<!-- Jersey -->
-		<dependency>
-			<groupId>org.glassfish.jersey.containers</groupId>
-			<!-- if your container implements Servlet API older than 3.0, use "jersey-container-servlet-core" -->
-			<artifactId>jersey-container-servlet</artifactId>
-			<version>2.9</version>
-		</dependency>
-		<!-- Required only when you are using JAX-RS Client -->
-		<dependency>
-			<groupId>org.glassfish.jersey.core</groupId>
-			<artifactId>jersey-client</artifactId>
-			<version>2.9</version>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.jersey.media</groupId>
-			<artifactId>jersey-media-json-jackson</artifactId>
-			<version>2.10</version>
-		</dependency>
-		<!-- End Jersey -->
-
+		
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-json</artifactId>
-			<version>1.2</version>
+			<version>${jersey.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
 			<version>1.7.1</version>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>jfree</groupId>
 			<artifactId>jfreechart</artifactId>
@@ -884,7 +864,7 @@
 			<version>3.3</version>
 		</dependency>
 
-<!--		<dependency>
+		<dependency>
 			<groupId>org.saiku</groupId>
 			<artifactId>saiku-service</artifactId>
 			<version>${saiku.version}</version>
@@ -947,7 +927,7 @@
 			<groupId>com.sun.jersey.contribs</groupId>
 			<artifactId>jersey-multipart</artifactId>
 			<version>${jersey.version}</version>
-		</dependency> -->
+		</dependency> 
 	</dependencies>
 
 	<build>

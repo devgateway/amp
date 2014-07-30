@@ -24,6 +24,15 @@
 		    var file = obj.value;
 		    var fileName = file.split("\\");
 		    var text = fileName[fileName.length-1];
+		    var suffix=".zip";
+	        var suffix2=".xml";
+	        if(text.indexOf(suffix, text.length - suffix.length) == -1 &&
+	        		text.indexOf(suffix2, text.length - suffix2.length) == -1){
+	        	 var errorMsg='<font color="red"><digi:trn>Allowed extensions: zip,xml</digi:trn></font>';
+	        	$("#uploadLabel").html(errorMsg);
+	        	$("#upfile").val("");
+	        	return;
+	        }
 		    if (text.length > 15) {
 		    	text = text.substring (0,12) + "....";
 		    }

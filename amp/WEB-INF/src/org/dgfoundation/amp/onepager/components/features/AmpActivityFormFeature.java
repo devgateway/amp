@@ -1155,7 +1155,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				//The folllogin exception will provide a redirection 
 				throw new RestartResponseException(
 				        new PageProvider(
-				            OnePager.class,p),RedirectPolicy.NEVER_REDIRECT);
+				            OnePager.class,p),RedirectPolicy.ALWAYS_REDIRECT);
 
         }
         else{

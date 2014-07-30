@@ -7,7 +7,7 @@
  *  	DO NOT CHANGE THIS FILE IF YOU DO NOT UNDERSTAND WHAT YOU ARE DOING!
  *  	IT IS VERY FRAGILE SINCE WE HAVE A RESIZEABLE IFRAME WHICH USES PNOTIFY!
  *  
- *  COUNTER: number of times pledges module has been broken: 2
+ *  COUNTER: number of times pledges module has been broken: <!== 3 ==!>
  * 
  */
 	function pageY(elem) {
@@ -26,14 +26,19 @@
 	}
 	
 	function window_resized(){
-	    var height = $('#bootstrap_iframe').contents().find('html').height();
-       $('#bootstrap_iframe').height(height);
+		var buffer = 50;
+	    var height = Math.max(get_number($(window).height()), 
+	    		get_number(window.innerHeight)); //document.documentElement.clientHeight; // was: clientHeight
+	    height -= pageY(document.getElementById('bootstrap_iframe'))+ buffer ;
+	    height = (height < 0) ? 0 : height;
+	    //outerDocument.getElementById('bootstrap_iframe').style.height = (height - 0) + 'px';
+
+		$('#bootstrap_iframe').height(height);
 	}
 	
 	$(document).ready(function(){
 		window_resized();
-		$('iframe').on("parentResized", window_resized);
-		});
+	});
 	
 	window.onresize = function(){
 		window_resized();

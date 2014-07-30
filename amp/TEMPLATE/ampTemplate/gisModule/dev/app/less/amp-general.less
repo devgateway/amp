@@ -17,6 +17,20 @@ h4 {
   }
 }
 
+// styled checkboxes. + is a sibling selector
+input[type="checkbox"] + .styled-checkbox{
+  width:10px;
+  height:10px;
+  background: #999;
+  border-radius: 5px;
+  display:inline-block;
+}
+
+input[type="checkbox"]:checked + .styled-checkbox{
+  background: @amp_sidebar_input_active;
+}
+
+
 // Fix a chrome/bootstrap render issue: http://codepen.io/uniphil/pen/jfbem
 #sidebar .modal.in .modal-dialog {
   -webkit-transform: none;

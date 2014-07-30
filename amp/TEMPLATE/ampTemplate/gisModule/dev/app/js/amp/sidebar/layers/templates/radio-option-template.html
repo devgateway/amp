@@ -1,6 +1,7 @@
 <div class="radio">
   <label>
     <input type="checkbox" name="<%= obj.group %>" value="<%= obj.id || obj.value %>" <% if(obj.selected){%> checked <%}%> >
+    <span class="styled-checkbox"></span>
     <%= obj.title %>
   </label>
   <% if (obj.helpText){ %>

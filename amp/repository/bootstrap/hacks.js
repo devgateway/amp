@@ -7,7 +7,7 @@
  *  	DO NOT CHANGE THIS FILE IF YOU DO NOT UNDERSTAND WHAT YOU ARE DOING!
  *  	IT IS VERY FRAGILE SINCE WE HAVE A RESIZEABLE IFRAME WHICH USES PNOTIFY!
  *  
- *  COUNTER: number of times pledges module has been broken: 2
+ *  COUNTER: number of times pledges module has been broken: <!== 3 ==!>
  * 
  */
 	function pageY(elem) {
@@ -26,7 +26,7 @@
 	}
 	
 	function window_resized(){
-		var buffer = 20;
+		var buffer = 50;
 	    var height = Math.max(get_number($(window).height()), 
 	    		get_number(window.innerHeight)); //document.documentElement.clientHeight; // was: clientHeight
 	    height -= pageY(document.getElementById('bootstrap_iframe'))+ buffer ;

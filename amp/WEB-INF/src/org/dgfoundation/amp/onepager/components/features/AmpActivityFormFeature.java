@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.RestartResponseException;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -25,6 +26,8 @@ import org.apache.wicket.ajax.attributes.AjaxCallListener;
 import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.core.request.handler.PageProvider;
+import org.apache.wicket.core.request.handler.RenderPageRequestHandler.RedirectPolicy;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.feedback.FeedbackMessage;
@@ -50,6 +53,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.apache.wicket.util.time.Duration;
 import org.apache.wicket.util.visit.IVisit;
@@ -57,8 +61,10 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.ValidatorAdapter;
+import org.bouncycastle.crypto.RuntimeCryptoException;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
@@ -811,7 +817,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
     private void processAndUpdateForm(boolean notDraft, IModel<AmpActivityVersion> am, final Form<?> form, final AjaxRequestTarget target, IndicatingAjaxButton button) {
         am.setObject(am.getObject());
         toggleSemanticValidation(notDraft, form, target);
+        try{
         form.process(button);
+        }catch(Exception e){
+            e.printStackTrace();
+            System.out.print("erroraso***********************");
+            throw new RuntimeException(e);
+        }
         form.visitChildren(AbstractTextComponent.class,
                 new IVisitor<Component, Object>() {
                     @Override
@@ -1060,8 +1072,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		//Before starting to save check lock
 		//logger.error("Activiy id: "+a.getId() + " hash "+a.getEditingKey());
 		if (oldId != null && !ActivityGatekeeper.verifyLock(String.valueOf(a.getId()), a.getEditingKey())){
-			//Someone else has grabbed the lock ... maybe connection slow and lock refresh timed out
-            throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId()), currentUserId));
+		    throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId()), currentUserId));
 		}
 		
 		ActivityUtil.saveActivity((AmpActivityModel) am, draft,rejected);
@@ -1134,12 +1145,28 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             replaceStr = String.valueOf(oldId);
         }
         if(draft && redirected.getObject().equals(STAY_ON_PAGE)){
-				target.appendJavaScript("window.onbeforeunload = null; var newLoc=window.location.href.replace(\"" + replaceStr + "\" , \"" + actId + "\");newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
+
+				AmpAuthWebSession session = (AmpAuthWebSession) org.apache.wicket.Session.get();
+
+				PageParameters p=new PageParameters();
+				if(!session.getFormType().equals(ActivityUtil.ACTIVITY_TYPE_SSC)){
+				    //if the for is not ssc we use the traditional parameter for activity id
+				    p.set(0,OnePagerConst.ONEPAGER_URL_PARAMETER_ACTIVITY);
+				}else{
+				    //if the form is SSC we use its url
+				    p.set(0,OnePagerConst.ONEPAGER_URL_PARAMETER_SSC);
+				}
+				p.set(1,actId);
+				//The folllogin exception will provide a redirection 
+				throw new RestartResponseException(
+				        new PageProvider(
+				            OnePager.class,p),RedirectPolicy.NEVER_REDIRECT);
+
         }
         else{
             target.appendJavaScript("window.onbeforeunload = null; window.location.replace('/aim/');");
+            target.add(feedbackPanel);
         }
-        target.add(feedbackPanel);
 	}
 
 	private void quickMenu(IModel<AmpActivityVersion> am, AbstractReadOnlyModel<List<AmpComponentPanel>> listModel) {
@@ -1177,7 +1204,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				// no sense but not to leave the
 				// buttons useless (although if we had an ajax failure the may
 				// already be useless)
-				return "enableButtons2();";
+				return "enableButtons2();console.log('it failed the call');";
 			}
 		};
 		attributes.getAjaxCallListeners().add(listener);

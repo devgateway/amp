@@ -817,13 +817,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
     private void processAndUpdateForm(boolean notDraft, IModel<AmpActivityVersion> am, final Form<?> form, final AjaxRequestTarget target, IndicatingAjaxButton button) {
         am.setObject(am.getObject());
         toggleSemanticValidation(notDraft, form, target);
-        try{
+
         form.process(button);
-        }catch(Exception e){
-            e.printStackTrace();
-            System.out.print("erroraso***********************");
-            throw new RuntimeException(e);
-        }
         form.visitChildren(AbstractTextComponent.class,
                 new IVisitor<Component, Object>() {
                     @Override
@@ -1070,8 +1065,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
 
 		//Before starting to save check lock
-		//logger.error("Activiy id: "+a.getId() + " hash "+a.getEditingKey());
 		if (oldId != null && !ActivityGatekeeper.verifyLock(String.valueOf(a.getId()), a.getEditingKey())){
+	          //Someone else has grabbed the lock ... maybe connection slow and lock refresh timed out
 		    throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(a.getId()), currentUserId));
 		}
 		
@@ -1204,7 +1199,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				// no sense but not to leave the
 				// buttons useless (although if we had an ajax failure the may
 				// already be useless)
-				return "enableButtons2();console.log('it failed the call');";
+				return "enableButtons2();";
 			}
 		};
 		attributes.getAjaxCallListeners().add(listener);

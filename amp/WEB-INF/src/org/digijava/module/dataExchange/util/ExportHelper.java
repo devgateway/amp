@@ -126,29 +126,12 @@ public class ExportHelper {
 	
 	
 	public static String renderActivityTree(AmpColumnEntry node, HttpServletRequest request) {
-		
-		StringBuffer retValue = new StringBuffer();
-		
-		DESourceSetting setting = null ;
-		
-			try {
-				//commenting out the line, and just getting any for now - there is no setting with ID=2, but I guess it was meant to have a base config for export??
-				//setting = new SessionSourceSettingDAO().getSourceSettingById( new Long(2) );
-				setting = new SessionSourceSettingDAO().getAnySourceSetting();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
-		
-		retValue.append(renderActivityTreeNode(node, "tree.getRoot()" , setting, request));
-
-		return retValue.toString();
+        return renderActivityTreeNode(node, "tree.getRoot()", null, request);
 	}
 	
-	public static String renderActivityTree(AmpColumnEntry node,Long sourceId, HttpServletRequest request) {
+	public static String renderActivityTree(AmpColumnEntry node, Long sourceId, HttpServletRequest request) {
 		DESourceSetting setting = null ;
-		if(sourceId != null && ! sourceId.equals(new Long(-1))){
+		if (sourceId != null && sourceId != -1) {
 			try {
 				setting = new SessionSourceSettingDAO().getSourceSettingById( sourceId );
 			} catch (Exception e) {
@@ -156,12 +139,8 @@ public class ExportHelper {
 				e.printStackTrace();
 			}
 		}
-		
-		StringBuffer retValue = new StringBuffer();
 
-		retValue.append(renderActivityTreeNode(node, "tree.getRoot()" , setting,request));
-
-		return retValue.toString();
+        return renderActivityTreeNode(node, "tree.getRoot()", setting, request);
 	}
 
 	private static String renderActivityTreeNode(AmpColumnEntry node, String parentNode,DESourceSetting setting, HttpServletRequest request) {

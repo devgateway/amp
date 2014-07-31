@@ -238,22 +238,15 @@ function setHoveredRow(rowId) {
 	</tr>
 </table>
 
-
-					<table width="1000" cellSpacing="5" cellPadding="3" vAlign="top" border="0" align=center>
-						<tr>
-							<td width="75%" vAlign="middle" height="40" align=center>
-								<feature:display name="Add Pledge Button" module="Pledges">
-								<table cellpadding="0" cellspacing="0" width="100%" border="0">
-									<a href="/addPledge.do?reset=true">
-										<html:button styleClass="buttonx" property="submitButton">
-	                                       <digi:trn key="btn:AddPlegde">Add Pledge</digi:trn>
-										</html:button>
-									</a>
-								</table>
-								</feature:display>
-							</td>
-						</tr>
-					</table>
+<feature:display name="Add Pledge Button" module="Pledges">
+	<div style="text-align:center;padding:10px;">
+		<a href="/addPledge.do?reset=true">
+			<html:button styleClass="buttonx" property="submitButton" onclick="window.location.assign('/addPledge.do?reset=true')">
+	    		<digi:trn key="btn:AddPlegde">Add Pledge</digi:trn>
+			</html:button>
+		</a>
+	</div>
+</feature:display>
 	
 <script language="javascript">
 

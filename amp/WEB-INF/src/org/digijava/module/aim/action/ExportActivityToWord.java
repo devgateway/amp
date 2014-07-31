@@ -1498,10 +1498,8 @@ public class ExportActivityToWord extends Action {
         List<Table> retVal = new ArrayList<Table>();
         HttpSession session=request.getSession();
 		if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Proposed Project Cost")) {
-
 	        ExportSectionHelper eshTitle = new ExportSectionHelper("Proposed Project Cost", true).setWidth(100f).setAlign("left");
 	        retVal.add(createSectionTable(eshTitle, request, ampContext));
-
 	        String currencyCode = null;
 	        if(myForm.getFunding().getProProjCost()!=null){
 	        	currencyCode = myForm.getFunding().getProProjCost().getCurrencyCode();
@@ -1509,31 +1507,22 @@ public class ExportActivityToWord extends Action {
 	        if(currencyCode == null) {
 	            currencyCode = Constants.DEFAULT_CURRENCY;
 	        }
-	        
 	        String translatedCurrency = TranslatorWorker.translateText(currencyCode);
 	        translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
-	
-	
 	//        FundingCalculationsHelper fch = new FundingCalculationsHelper();
 	//        fch.doCalculations(allComponents, currencyCode);
-
             ExportSectionHelper eshProjectCostTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-
             if (act.getFundingSourcesNumber() != null)
             {
             	eshProjectCostTable
             		.addRowData(new ExportSectionHelperRowData(TranslatorWorker.translateText("Total Number of Funding Sources"), null, null,  true)
             		.addRowData(String.valueOf(act.getFundingSourcesNumber())));
             }
-	
 	        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Cost", null, null,  true).
 	                                                addRowData(FormatHelper.formatNumber(act.getFunAmount())).
 	                                                addRowData(translatedCurrency));
-	
 	        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Proposed Completion Date ", null, null,  true).
-	                                                        addRowData(DateConversion.ConvertDateToString(act.getFunDate())));
-	
-	
+	                                                        addRowData(DateConversion.ConvertDateToString(act.getProposedCompletionDate())));
 	        retVal.add(createSectionTable(eshProjectCostTable, request, ampContext));
 		}
         return retVal;

@@ -75,8 +75,6 @@ public class SourceSettingDAO {
 			return ret;
 	}
 	
-	public DESourceSetting getAnySourceSetting() {
-
 	public static DESourceSetting getSourceSettingByName(String name){
 		  Session session = null;
 	      Query qry = null;

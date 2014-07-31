@@ -7,7 +7,9 @@ import java.util.Set;
 
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -62,9 +64,9 @@ public class Filters {
      * @return
      */
     @GET
-    @Path("/adminLevels")
+    @Path("/boundaries")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<String> getAdminLevels() {
+    public List<String> getBoundaries() {
         // This should never change should they return from database?
         return new ArrayList<String>(Arrays.asList("Country", "Region", "Zone",
                 "District"));
@@ -76,15 +78,16 @@ public class Filters {
      * @return
      */
     @GET
-    @Path("/sectors")
+    @Path("/sectors/{sectorConfigName}")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Sectors> getSectors(
-           final FiltersParams filter) {
+    		@PathParam("sectorConfigName") String sectorConfigName) {
         // DozerBeanMapperSingletonWrapper.getInstance().
         List<Sectors> ampSectorsList = new ArrayList<Sectors>();
-
+        
+        //Primary
         List<AmpSector> s = SectorUtil
-                .getAmpSectorsAndSubSectorsHierarchy("Primary");
+                .getAmpSectorsAndSubSectorsHierarchy(sectorConfigName);
         for (AmpSector ampSector : s) {
             ampSectorsList.add(getSectors(ampSector));
         }
@@ -111,6 +114,11 @@ public class Filters {
             return null;
         }
     }
+    /**
+     * Get JsonEnable object for programs
+     * @param t AmpThem to get the programFrom
+     * @return
+     */
     private Programs getPrograms(AmpTheme t){
         Programs p=new Programs();
         p.setId(t.getAmpThemeId());
@@ -122,15 +130,20 @@ public class Filters {
         }
         return p;
     }
+    /**
+     * Get Sectors from AmpSector
+     * @param as
+     * @return
+     */
     
     private Sectors getSectors(AmpSector as) {
         Sectors s = new Sectors();
         s.setId(as.getAmpSectorId());
         s.setCode(as.getSectorCodeOfficial());
         s.setName(as.getName());
-        s.setSectors(new ArrayList<Sectors>());
+        s.setChildren(new ArrayList<Sectors>());
         for (AmpSector ampSectorChild : as.getSectors()) {
-            s.getSectors().add(getSectors(ampSectorChild));
+            s.getChildren().add(getSectors(ampSectorChild));
         }
 
         return s;

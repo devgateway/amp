@@ -6,7 +6,7 @@ public class Sectors {
     Long id;
     String code;
     String name;
-    List<Sectors> sectors;
+    List<Sectors> children;
 
     public Sectors() {
 
@@ -37,12 +37,12 @@ public class Sectors {
         this.name = name;
     }
 
-    public List<Sectors> getSectors() {
-        return sectors;
+    public List<Sectors> getChildren() {
+        return children;
     }
 
-    public void setSectors(List<Sectors> sectors) {
-        this.sectors = sectors;
+    public void setChildren(List<Sectors> children) {
+        this.children = children;
     }
 
 }

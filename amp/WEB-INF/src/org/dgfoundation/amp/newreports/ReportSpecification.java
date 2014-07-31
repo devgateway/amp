@@ -47,4 +47,14 @@ public interface ReportSpecification {
 	 * @return
 	 */
 	public boolean isSummaryReport();
+	
+	/**
+	 * @return true if totals per each row must be calculated
+	 */
+	public boolean isCalculateRowTotals();
+	
+	/**
+	 * @return true if totals per each measure column must be calculated
+	 */
+	public boolean isCalculateColumnTotals();
 }

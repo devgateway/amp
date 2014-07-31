@@ -20,8 +20,10 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	private List<ReportMeasure> measures = null;
 	private ReportFilters filters = null;
 	private List<SortingInfo> sorters = null;
-	private GroupingCriteria groupingCriteria = null;
+	private GroupingCriteria groupingCriteria = GroupingCriteria.GROUPING_TOTALS_ONLY;
 	private boolean summaryReport = false;
+	private boolean calculateRowTotals = false;
+	private boolean calculateColumnTotals = false;
 	
 	public ReportSpecificationImpl(String reportName) {
 		this.reportName = reportName;
@@ -144,6 +146,32 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	 */
 	public void setSummaryReport(boolean summaryReport) {
 		this.summaryReport = summaryReport;
+	}
+
+	/**
+	 * Configures whether totals per each row must be calculated
+	 * @param calculateRowTotals 
+	 */
+	public void setCalculateRowTotals(boolean calculateRowTotals) {
+		this.calculateRowTotals = calculateRowTotals;
+	}
+
+	@Override
+	public boolean isCalculateRowTotals() {
+		return calculateRowTotals;
+	}
+
+	/**
+	 * Configures whether totals per each measure column must be calculated
+	 * @param calculateColumnTotals 
+	 */
+	public void setCalculateColumnTotals(boolean calculateColumnTotals) {
+		this.calculateColumnTotals = calculateColumnTotals;
+	}
+	
+	@Override
+	public boolean isCalculateColumnTotals() {
+		return calculateColumnTotals;
 	}
 
 }

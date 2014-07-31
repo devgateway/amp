@@ -245,7 +245,7 @@ public class MDXGenerator {
 	 */
 	private String getRows(MDXConfig config, StringBuilder with) throws AmpApiException {
 		//assumption: only attributes are displayed per rows, no measures
-		return getAxis(config, config.getRowAttributes().listIterator(config.getRowAttributes().size()), with, "ROWSET", null, config.isDoColumnsTotals());
+		return getAxis(config, config.getRowAttributes().listIterator(config.getRowAttributes().size()), with, "ROWSET", null, config.isDoRowTotals());
 	}
 	
 	/** supporting common method used by getRows and getColumns, because the algorithm is the same similar */
@@ -405,9 +405,15 @@ public class MDXGenerator {
 		final String delim = ", ";
 		final String end = ")";
 		Entry<MDXTuple, SortOrder> elem = iter.next();
-		buildSuffixAndPrefix(fullPrefix, fullSuffix, iter);
+		boolean breakingSort = SortOrder.BASC.equals(elem.getValue()) || SortOrder.BDESC.equals(elem.getValue());
+		//for breaking sort, add first sorting rule at the end
+		if (breakingSort)
+			buildSuffixAndPrefix(fullPrefix, fullSuffix, iter);
 		fullPrefix.append(prefix);
 		fullSuffix.append(delim).append(elem.getKey().toSortingString()).append(delim).append(elem.getValue().name()).append(end);
+		//for non breaking sort, add first sorting rule at the beginning
+		if (!breakingSort)
+			buildSuffixAndPrefix(fullPrefix, fullSuffix, iter);
 	}
 	
 	/** 

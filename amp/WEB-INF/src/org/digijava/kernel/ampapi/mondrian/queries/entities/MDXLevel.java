@@ -3,6 +3,7 @@
  */
 package org.digijava.kernel.ampapi.mondrian.queries.entities;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class MDXLevel extends MDXAttribute {
 		super(dimension, level, null);
 		this.hierarchy = hierarchy;
 		values = (String[])ArrayUtils.removeElement((Object[])values,  null);
-		this.values = values.length > 0 ?  Arrays.asList(values) : null;
+		this.values = (values!=null && values.length > 0) ?  Arrays.asList(values) : null;
 	}
 	
 	public MDXLevel(MDXAttribute mdxAttr) {
@@ -40,7 +41,7 @@ public class MDXLevel extends MDXAttribute {
 	
 	@Override
 	public MDXLevel clone() {
-		return new MDXLevel(this.dimension, this.hierarchy, this.name, this.values.toArray(new String[this.values.size()]));
+		return new MDXLevel(this.dimension, this.hierarchy, this.name, (this.values == null ? null : this.values.toArray(new String[this.values.size()])));
 	}
 	
 	@Override
@@ -95,5 +96,23 @@ public class MDXLevel extends MDXAttribute {
 	 */
 	public void setHierarchy(String hierarchy) {
 		this.hierarchy = hierarchy;
+	}
+	
+	/**
+	 * Sets a single value filter over the level. 
+	 * Use {@link MDXLevel#setValues(List)} to configure hierarchy filter list 
+	 */
+	@Override
+	public void setValue(String value) {
+		this.values = new ArrayList<String>();
+		this.values.add(value);
+	}
+	
+	/**
+	 * Configures level hierarchy filter values
+	 * @param values
+	 */
+	public void setValues(List<String> values) {
+		this.values = values;
 	}
 }

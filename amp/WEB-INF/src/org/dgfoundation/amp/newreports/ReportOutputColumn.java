@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.newreports;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,8 +27,9 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 		if (columnName == null || columnName.isEmpty())
 			throw new NullPointerException();
 		this.parentColumn = parentColumn;
-		if (this.parentColumn != null)
-			this.parentColumn.children.add(this);
+		if (this.parentColumn != null) {
+			this.parentColumn.addChild(this);
+		}
 	}
 	
 	/**
@@ -65,6 +67,13 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	 */
 	public List<ReportOutputColumn> getChildren() {
 		return children;
+	}
+	
+	public void addChild(ReportOutputColumn child) {
+		if (children == null) {
+			children = new ArrayList<ReportOutputColumn>();
+		}
+		children.add(child);
 	}
 
 }

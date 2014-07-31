@@ -3,13 +3,17 @@
  */
 package org.digijava.kernel.ampapi.mondrian.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.NamedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
@@ -27,6 +31,46 @@ public class MondrianMaping {
 		MDXElement elem = entityMap.get(entity); 
 		return elem==null ? null : elem.clone();
 	}
+	
+	public static List<MDXAttribute> getDateElements(GroupingCriteria grouping) {
+		List<MDXAttribute> dateTuple = new ArrayList<MDXAttribute>();
+		switch(grouping) {
+		case GROUPING_MONTHLY: dateTuple.add(new MDXLevel(MoConstants.DATES, MoConstants.H_MONTH, MoConstants.ATTR_MONTH));
+		case GROUPING_QUARTERLY: dateTuple.add(0, new MDXLevel(MoConstants.DATES, MoConstants.H_QUARTER, MoConstants.ATTR_QUARTER));
+		case GROUPING_YEARLY: dateTuple.add(0, new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR));
+		default:
+			break;
+		}
+		return dateTuple;
+	}
+	
+	public static MDXAttribute getElementByType(ElementType type) {
+		if (ElementType.YEAR.equals(type))
+			return new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR);
+		if (ElementType.QUARTER.equals(type))
+			return new MDXLevel(MoConstants.DATES, MoConstants.H_QUARTER, MoConstants.ATTR_QUARTER);
+		if (ElementType.MONTH.equals(type))
+			return new MDXLevel(MoConstants.DATES, MoConstants.H_MONTH, MoConstants.ATTR_MONTH);
+		return null;
+	}
+	
+	public static String getDuplicateHierarchy(String hierarchy) {
+		String dupHierarchy = duplicateHierarchy.get(hierarchy);
+		if (dupHierarchy == null)
+			dupHierarchy = hierarchy;
+		return dupHierarchy;
+	}
+	
+	/**
+	 * Mappings between actual hierarchies and their duplicates to be used on Filter axis
+	 */
+	private static final Map<String, String> duplicateHierarchy = new HashMap<String, String>() {{
+		put(null, "Duplicate");
+		put(MoConstants.H_DATES, MoConstants.H_DATES_DUPLICATE);
+		put(MoConstants.H_YEAR, MoConstants.H_DATES_DUPLICATE);
+		put(MoConstants.H_QUARTER, MoConstants.H_DATES_DUPLICATE);
+		put(MoConstants.H_MONTH, MoConstants.H_DATES_DUPLICATE);
+	}};
 	
 	/**
 	 * Mappings between AMP Data and Mondrian Schema 

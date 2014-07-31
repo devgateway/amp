@@ -50,6 +50,17 @@ module.exports = BaseFilterView.extend({
         }
       }
     });
-  }
+  },
+
+  renderTitle: function () {
+    var self = this;
+    BaseFilterView.prototype.renderTitle.apply(this);
+
+    // TODO: hookup to some model that backs it....
+    this.$('.filter-count').text('1900 - 2015');
+
+    return this;
+  },
+
 
 });

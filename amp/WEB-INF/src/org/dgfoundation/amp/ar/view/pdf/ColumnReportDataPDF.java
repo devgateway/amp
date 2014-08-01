@@ -94,25 +94,18 @@ public class ColumnReportDataPDF extends PDFExporter {
 			
 			//String prefix="rep:pop:";
 			String translatedName=null;
-			try{
-				//translatedName=TranslatorWorker.translate(prefix+columnReport.getName(),locale,siteId);
-				
-				//AMP-6253  
-				String simplename ="";
-				if (columnReport.getName().indexOf(":")>0){
-					simplename = columnReport.getName().substring(0,columnReport.getName().indexOf(":"));
-				}else{
-					simplename = columnReport.getName();
-				}
+			//AMP-6253  
+			String simplename = "";
+			if (columnReport.getName().indexOf(":") > 0) {
+				simplename = columnReport.getName().substring(0,columnReport.getName().indexOf(":"));
+			}else{
+				simplename = columnReport.getName();
+			}
 				
 				
-				translatedName=TranslatorWorker.translateText(simplename,locale,siteId);
-				if (columnReport.getName().indexOf(":")>0){
-					translatedName += columnReport.getName().substring(columnReport.getName().indexOf(":"));
-				}
-			} catch (WorkerException e) {////System.out.println(e);
-				
-				
+			translatedName=TranslatorWorker.translateText(simplename,locale,siteId);
+			if (columnReport.getName().indexOf(":") > 0) {
+				translatedName += columnReport.getName().substring(columnReport.getName().indexOf(":"));
 			}
 			
 			PdfPCell pdfc; 

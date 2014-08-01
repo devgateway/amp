@@ -126,7 +126,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
      * This one searches in cache
      * @see TranslatorWorker#getByKey(String, String, String, String, String)
      */
-    public Message getByKey(String key, String body, String keyWords, String locale, Long siteId) throws WorkerException {
+    public Message getByKey(String key, String body, String keyWords, String locale, Long siteId) {
     	return getByKey(key, locale, siteId, true, keyWords);
     }
 
@@ -147,7 +147,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
     }
 
 
-    public Message getByKey(String key, String locale, Long siteId, boolean overwriteKeywords,String keywords) throws WorkerException {
+    public Message getByKey(String key, String locale, Long siteId, boolean overwriteKeywords,String keywords) {
         String prefix = getTrnPrefix();
 
         if (prefix != null){
@@ -159,7 +159,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         return internalGetByKey(key, locale, siteId, overwriteKeywords, keywords);
     }
 
-    private Message internalGetByKey(String key, String locale, Long siteId, boolean overwriteKeywords,String keywords) throws WorkerException {
+    private Message internalGetByKey(String key, String locale, Long siteId, boolean overwriteKeywords,String keywords) {
     	Message message = new Message();
         //set up key trio
         message.setKey(processKeyCase(key));
@@ -202,7 +202,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
     }
     
 
-    public void save(Message message) throws WorkerException {
+    public void save(Message message) {
         //add prefix to the message key if we're in the right workspace
         String prefix = getTrnPrefix();
         if (prefix != null){

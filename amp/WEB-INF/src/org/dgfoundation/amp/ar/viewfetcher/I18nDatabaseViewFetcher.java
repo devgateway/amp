@@ -35,17 +35,30 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 	 */
 	private Map<Integer, String> colNumberToColName;
 	
+	/**
+	 * if a column has an index-column value found in this set, then do not translate it
+	 */
+	public final Set<Long> indicesNotToTranslate = new HashSet<>();
+	
 	public I18nDatabaseViewFetcher(String viewName, String condition, String locale, Map<PropertyDescription, ColumnValuesCacher> cachers, Connection connection, String... columnNames)
 	{
-		super(viewName, condition, connection, columnNames);
-		this.locale = locale;
-		this.cachers = cachers;
-		this.viewDesc = InternationalizedViewsRepository.i18Models.get(this.viewName);
-		if (this.viewDesc == null)
-			throw new RuntimeException("asked to i18n an unconfigured view: " + this.viewName);
-
+		this(getViewDescription(viewName), condition, locale, cachers, connection, columnNames);
 	}
 	
+	public I18nDatabaseViewFetcher(I18nViewDescription viewDescription, String condition, String locale, Map<PropertyDescription, ColumnValuesCacher> cachers, Connection connection, String... columnNames)
+	{
+		super(viewDescription.viewName, condition, connection, columnNames);
+		this.locale = locale;
+		this.cachers = cachers;
+		this.viewDesc = viewDescription;
+	}
+
+	private static I18nViewDescription getViewDescription(String viewName) {
+		I18nViewDescription res = InternationalizedViewsRepository.i18Models.get(viewName);
+		if (res == null)
+			throw new RuntimeException("asked to i18n an unconfigured view: " + viewName);
+		return res;
+	}
 	/**
 	 * multi-step translation:
 	 * 0. fetches the raw data from the database (does not fetch the translated-text-columns, as those are worthless anyway)
@@ -215,12 +228,12 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 			I18nViewColumnDescription colDesc = viewDesc.getColumnDescription(columnLabel);
 			if (colDesc.isCalculated())
 			{
-				return colDesc.prop.getValueFor(this, this.getDelegate(), cachers.get(colDesc.prop));
+				return colDesc.prop.getValueFor(this, this.getDelegate(), cachers.get(colDesc.prop), locale);
 			}
 			
 			Long idToTranslate = super.getDelegate().getLong(colDesc.indexColumnName);
 			
-			if ((idToTranslate == null) || (idToTranslate.longValue() <= 0))
+			if ((idToTranslate == null) || (idToTranslate.longValue() <= 0) || indicesNotToTranslate.contains(idToTranslate))
 				return super.getString(columnLabel); // this particular entry should not be translated
 			
 			

@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.SiteUtils;
 
 /**
  * a column-in-a-view translator which does a translateText() call on the input for its outputs 
@@ -29,9 +30,9 @@ public class ColumnValueTranslator implements ColumnValueCalculator {
 	}
 	
 	@Override
-	public String calculateValue(ResultSet resultSet, java.sql.ResultSet rawCurrentLine) throws SQLException
+	public String calculateValue(ResultSet resultSet, java.sql.ResultSet rawCurrentLine, String locale) throws SQLException
 	{
-		String translatedValue = TranslatorWorker.translateText(rawCurrentLine.getString(columnToTranslate));
+		String translatedValue = TranslatorWorker.translateText(rawCurrentLine.getString(columnToTranslate), locale, SiteUtils.getDefaultSite());
 		return translatedValue;
 	}
 	

@@ -10,7 +10,8 @@ import java.sql.SQLException;
  */
 public abstract class SimpleColumnValueCalculator implements ColumnValueCalculator {
 	
-	public String calculateValue(ResultSet resultSet, java.sql.ResultSet rawCurrentLine) throws SQLException
+	@Override
+	public String calculateValue(ResultSet resultSet, java.sql.ResultSet rawCurrentLine, String locale) throws SQLException
 	{
 		return calculateValue(resultSet);
 	}

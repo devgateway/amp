@@ -88,11 +88,7 @@ public class BudgetReportHeadingsXLS extends ReportHeadingsXLS {
 				for (AmpReportHierarchy arh: this.getMetadata().getHierarchies() ) {
 					String colName			= arh.getColumn().getColumnName();
 					String translColName	= null;
-					try{			
-						translColName	= TranslatorWorker.translateText(colName, this.getMetadata().getLocale(), this.getMetadata().getSiteId());
-					}catch(WorkerException e){
-						translColName = colName;
-					}
+					translColName	= TranslatorWorker.translateText(colName, this.getMetadata().getLocale(), this.getMetadata().getSiteId());
 					
 					if ( translColName != null && translColName.trim().length() > 0 ) {
 						HSSFCell cell1 =  this.getCell(row,this.getHighlightedStyle());

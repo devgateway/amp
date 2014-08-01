@@ -32,7 +32,7 @@ public interface PropertyDescription
 	 * @return
 	 * @throws SQLException
 	 */
-	public String getValueFor(java.sql.ResultSet currentLine, java.sql.ResultSet rawCurrentLine, ColumnValuesCacher cacher) throws SQLException;
+	public String getValueFor(java.sql.ResultSet currentLine, java.sql.ResultSet rawCurrentLine, ColumnValuesCacher cacher, String locale) throws SQLException;
 	
 	/**
 	 * nice, human readable, description, for debugging

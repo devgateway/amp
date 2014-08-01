@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.CurrencyETL;
 import org.dgfoundation.amp.mondrian.DateRateInfo;
 import org.dgfoundation.amp.mondrian.ExchangeRates;
 import org.dgfoundation.amp.mondrian.MondrianETL;
+import org.dgfoundation.amp.mondrian.MondrianTableDescription;
 import org.dgfoundation.amp.mondrian.PercentagesDistribution;
 import org.dgfoundation.amp.newreports.NumberedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportEntityType;
@@ -50,8 +54,67 @@ public class ETLTests extends AmpTestCase
 		suite.addTest(new ETLTests("testExchangeRates"));
 		suite.addTest(new ETLTests("testCurrencyETL"));
 		suite.addTest(new ETLTests("testCurrencyCombining"));
+		suite.addTest(new ETLTests("testSQLUtilsWriter"));
+		suite.addTest(new ETLTests("testSQLUtilsMultiLineWriter"));
+		suite.addTest(new ETLTests("testMondrianTableDescription"));
 		return suite;
 	}
+	
+	public void testMondrianTableDescription() {
+		// test that idColumnNames = null means to it mirroring indexedColumns and is iterated in the right sequence
+		MondrianTableDescription mtd = new MondrianTableDescription("someTableName", Arrays.asList("1", "2", "3", "c", "5", "a"));
+		//assertEquals("[1, 2, 3, c, 5, a]", mtd.idColumnNames.toString());
+		assertEquals("[1, 2, 3, c, 5, a]", mtd.indexedColumns.toString());
+		
+		mtd = new MondrianTableDescription("someTableName", Arrays.asList("1", "2", "3", "c", "5", "a"));
+		//assertEquals("[1, 5, c]", mtd.idColumnNames.toString());
+		assertEquals("[1, 2, 3, c, 5, a]", mtd.indexedColumns.toString());
+
+	}
+	
+	public void testSQLUtilsMultiLineWriter() {
+		Map<String, Object> row1 = new LinkedHashMap<String, Object>() {{
+			put("col1", 1l);
+			put("col2", "Some String, man! A very long string indeed");
+			put("col3", 2.5);
+		}};
+		
+		Map<String, Object> row2 = new LinkedHashMap<String, Object>() {{
+			put("col1", 15l);
+			put("col3", SQLUtils.SQL_UTILS_NULL);
+			put("col2", "an another string");
+		}};
+
+		List<Map<String, Object>> toInsert = Arrays.asList(row1, row2);
+		String str = SQLUtils.buildMultiRowInsert("table_name", null, null, toInsert);
+		assertEquals("INSERT INTO table_name (col1,col2,col3) VALUES "
+				+ "(1,$pleaseGodMoldovaRulz$Some String, man! A very long string indeed$pleaseGodMoldovaRulz$,2.5)," 
+				+ "(15,$pleaseGodMoldovaRulz$an another string$pleaseGodMoldovaRulz$,NULL);",
+				str
+				);
+	}
+	
+	
+	public void testSQLUtilsWriter() {
+		List<String> keys = Arrays.asList("col1", "col2", "col3");
+		Map<String, Object> coords = new LinkedHashMap<String, Object>() {{
+			put("col1", 1l);
+			put("col2", "Some String, man! A very long string indeed");
+			put("col3", 2.5);
+		}};
+		String res = SQLUtils.buildCoordsLine(coords, keys, null, null);		
+		assertEquals("(1,$pleaseGodMoldovaRulz$Some String, man! A very long string indeed$pleaseGodMoldovaRulz$,2.5)", res);
+		
+		// a null and a missing value
+		Map<String, Object> coords2 = new LinkedHashMap<String, Object>() {{
+			put("col1", SQLUtils.SQL_UTILS_NULL);
+			put("col2", 2);
+		}};
+		String res2 = SQLUtils.buildCoordsLine(coords2, keys, null, null);
+		assertEquals("(NULL,2,NULL)", res2);
+		System.out.println(res);
+	}
+	
 	
 	protected void testPercentage(String cor, String errors, Long idToAddIfEmpty, Pair... entries) {
 		NumberedTypedEntity activity = new NumberedTypedEntity(1, ReportEntityType.ENTITY_TYPE_ACTIVITY);

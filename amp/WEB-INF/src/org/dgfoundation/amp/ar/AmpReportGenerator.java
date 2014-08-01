@@ -1419,12 +1419,8 @@ public class AmpReportGenerator extends ReportGenerator {
 				String translatedText = null;
 				String translatedText2 = null;
 				//String prefix = "aim:reportGenerator:"; not used cos hash keys
-				try {
-					translatedText = TranslatorWorker.translateText(text, locale, siteId);
-					translatedText2 = TranslatorWorker.translateText(text2, locale, siteId);
-				} catch (WorkerException e) {
-					e.printStackTrace();
-				}
+				translatedText = TranslatorWorker.translateText(text, locale, siteId);
+				translatedText2 = TranslatorWorker.translateText(text2, locale, siteId);
 				
 				fakeC.setValue(translatedText2 + " " + translatedText);
 				

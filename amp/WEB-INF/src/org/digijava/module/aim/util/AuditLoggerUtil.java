@@ -625,22 +625,18 @@ public class AuditLoggerUtil {
 
         public int compare(AmpAuditLogger o1, AmpAuditLogger o2) {
             int result=0;
-            try {
-                collator = Collator.getInstance(locale);
-                collator.setStrength(Collator.TERTIARY);
-                String iso = locale.getLanguage();
-                String o1detail=o1.getDetail();
-                String o2detail=o2.getDetail();
-                if(o1detail==null){
-                    o1detail="";
-                }
-                if(o2detail==null){
-                    o2detail="";
-                }
-                result =collator.compare(TranslatorWorker.translateText(o1detail, iso, siteId), TranslatorWorker.translateText(o2detail, iso, siteId));
-            } catch (WorkerException ex) {
-               logger.error("unable to translate log's detail",ex);
+            collator = Collator.getInstance(locale);
+            collator.setStrength(Collator.TERTIARY);
+            String iso = locale.getLanguage();
+            String o1detail=o1.getDetail();
+            String o2detail=o2.getDetail();
+            if (o1detail == null){
+            	o1detail = "";
             }
+            if (o2detail == null){
+            	o2detail = "";
+            }
+            result = collator.compare(TranslatorWorker.translateText(o1detail, iso, siteId), TranslatorWorker.translateText(o2detail, iso, siteId));
             return result;
         }
     }

@@ -192,11 +192,11 @@ public class TranslatorWorker {
      * @return text translated text or default text 
      * @throws WorkerException
      */
-    public static String translateText(String text, String locale, Long siteId) throws WorkerException{
+    public static String translateText(String text, String locale, Long siteId){
     	return translateText(text, null, locale, siteId);
     }
     
-    public static String translateText(String text, String locale, Site site) throws WorkerException{
+    public static String translateText(String text, String locale, Site site){
     	return translateText(text, null, locale, site == null ? null : Site.getIdOf(site));
     }
     
@@ -212,7 +212,7 @@ public class TranslatorWorker {
     	{
     		return translateText(text, null, TLSUtils.getEffectiveLangCode(), TLSUtils.getSiteId());
     	}
-    	catch(WorkerException e)
+    	catch(Exception e)
     	{
     		logger.error("cannot translate text " + text, e);
     		return text;
@@ -230,7 +230,7 @@ public class TranslatorWorker {
      * @return
      * @throws WorkerException
      */    
-    public static String translateText(String text, String keyWords, String locale, Long siteId) throws WorkerException
+    public static String translateText(String text, String keyWords, String locale, Long siteId)
     {
     	if (text == null)
     		return "";
@@ -404,20 +404,20 @@ public class TranslatorWorker {
      * @return message bean which contains translated text or default text if translation was not not found.
      * @throws WorkerException
      */
-    public Message getByBody(String originalText, String local, Long siteId) throws WorkerException{
+    public Message getByBody(String originalText, String local, Long siteId) {
     	return getByBody(originalText, null, local, siteId);
     }
 
-    public Message getByBody(String originalText, String keyWords, String local, Long siteId) throws WorkerException{
+    public Message getByBody(String originalText, String keyWords, String local, Long siteId) {
     	String hashCode = generateTrnKey(originalText);
     	return getByKey(hashCode,originalText, keyWords,local,siteId);
     }
     
-    public Message getByKey(String key, String locale, Long siteId) throws WorkerException {
+    public Message getByKey(String key, String locale, Long siteId) {
     	return getByKey(key, "", null, locale, siteId);
     }
     
-    public Message getByKey(String key, String locale, Site site) throws WorkerException {
+    public Message getByKey(String key, String locale, Site site) {
     	return getByKey(key, "", null, locale, Site.getIdOf(site));
     }    
 
@@ -433,7 +433,7 @@ public class TranslatorWorker {
      * @return
      * @throws WorkerException
      */
-    public Message getByKey(String key, String defaultText, String keyWords, String locale, Long siteId) throws WorkerException {
+    public Message getByKey(String key, String defaultText, String keyWords, String locale, Long siteId) {
 
         /**
          * @todo This stuff needs to be changed. All developers should use
@@ -472,7 +472,7 @@ public class TranslatorWorker {
             logger.error("Error reading translation. siteId="
                          + siteId + ", key = " + key +
                          ",locale=" + locale, he);
-            throw new WorkerException(he);
+            throw new RuntimeException(he);
         }
         
     }
@@ -919,7 +919,7 @@ public class TranslatorWorker {
      * in the cache
      * @throws WorkerException
      */
-    public void save(Message message) throws WorkerException {
+    public void save(Message message) {
         saveDb(message);
 
         fireRefreshAlert(message);
@@ -1039,7 +1039,7 @@ public class TranslatorWorker {
      * @param message
      * @throws WorkerException
      */
-    protected void saveDb(Message message) throws WorkerException {
+    protected void saveDb(Message message) {
         logger.debug("Saving translation. siteId="+ message.getSiteId() + ", key = " + message.getKey() +
                      ",locale=" + message.getLocale());
         Session ses = null;
@@ -1080,7 +1080,7 @@ public class TranslatorWorker {
                         + message.getSiteId() + ", key = " + message.getKey() +
                         ",locale=" + message.getLocale(), e1);
         		//
-                   throw new WorkerException("TranslatorWorker.HibExSaveMessage.err", e); 
+                   throw new RuntimeException("TranslatorWorker.HibExSaveMessage.err", e); 
 			}
        	        
         }
@@ -1233,8 +1233,7 @@ public class TranslatorWorker {
         }
     }
 
-    protected boolean isKeyExpired(String key) throws
-        WorkerException {
+    protected boolean isKeyExpired(String key) {
         if (key == null)
             return false;
 
@@ -1261,7 +1260,7 @@ public class TranslatorWorker {
         }
         catch (HibernateException e) {
             logger.error("Error updating translations. key=" + key + ", HibernateException=" + e.getMessage());
-            throw new WorkerException("Error updating translations. key=" + key + ", "+e.getMessage(), e);
+            throw new RuntimeException("Error updating translations. key=" + key + ", "+e.getMessage(), e);
         }
         return result;
     }

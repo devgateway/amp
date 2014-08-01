@@ -14,6 +14,9 @@ public class I18nViewDescription {
 	public final String viewName;
 	public final Set<String> viewColumns;
 	
+	/**
+	 * Map<translated-column-name, description>
+	 */
 	protected final Map<String, I18nViewColumnDescription> columns = new HashMap<String, I18nViewColumnDescription>();
 	
 	public I18nViewDescription(String viewName)
@@ -65,5 +68,16 @@ public class I18nViewDescription {
 	public String toString()
 	{
 		return String.format("i18n view description of %s, columns: [%s]", this.viewName, Util.toCSString(this.columns.keySet()));
+	}
+	
+	/**
+	 * returns Map<indexColumnName, valueColumnName>
+	 * @return
+	 */
+	public Map<String, String> getMappedColumns() {
+		Map<String, String> res = new HashMap<>();
+		for (I18nViewColumnDescription ivcd:this.columns.values())
+			res.put(ivcd.indexColumnName, ivcd.columnName);
+		return res;
 	}
 }

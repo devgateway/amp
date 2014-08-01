@@ -67,7 +67,7 @@ public class GeneratedPropertyDescription implements PropertyDescription
 	}
 	
 	@Override
-	public String getValueFor(java.sql.ResultSet currentLine, java.sql.ResultSet rawCurrentLine, ColumnValuesCacher cacher) throws SQLException // will only be called for cacheable
+	public String getValueFor(java.sql.ResultSet currentLine, java.sql.ResultSet rawCurrentLine, ColumnValuesCacher cacher, String locale) throws SQLException // will only be called for cacheable
 	{
 		_generatedPropertyCalls ++;
 		
@@ -84,7 +84,7 @@ public class GeneratedPropertyDescription implements PropertyDescription
 		String translatedValue;
 		if (shouldTranslate)
 		{
-			translatedValue = calculator.calculateValue(currentLine, rawCurrentLine);
+			translatedValue = calculator.calculateValue(currentLine, rawCurrentLine, locale);
 		}
 		else
 		{

@@ -106,23 +106,21 @@ public class TrailCellsPDF extends PDFExporter {
 			
 			//AMP-6253 grd.getName()is (field : Name) for report hierarchies simplename hold only the field name until it's translated 
 			String simplename ="";
-			try{
-				if (grd.getName().indexOf(":")>0){
-					simplename = grd.getName().substring(0,grd.getName().indexOf(":"));
-				}else{
-					simplename = grd.getName();
-				}
-				simplename = TranslatorWorker.translateText(simplename,locale,siteId);
-			
-				//TODO TRN: no record for this key. its all right to have key here but it is better to replace with default text
-				totalsFor=TranslatorWorker.translateText(totalsFor,locale,siteId);
-				//String namePrefix="rep:pop:";
-				//translatedName=TranslatorWorker.translateText(simplename,locale,siteId);
-				if (grd.getName().indexOf(":")>0){
-					simplename += grd.getName().substring(grd.getName().indexOf(":"));
-				}
+
+			if (grd.getName().indexOf(":")>0){
+				simplename = grd.getName().substring(0,grd.getName().indexOf(":"));
+			}else{
+				simplename = grd.getName();
 			}
-			catch (WorkerException e){;}
+			simplename = TranslatorWorker.translateText(simplename,locale,siteId);
+			
+			//TODO TRN: no record for this key. its all right to have key here but it is better to replace with default text
+			totalsFor = TranslatorWorker.translateText(totalsFor,locale,siteId);
+			//String namePrefix="rep:pop:";
+			//translatedName=TranslatorWorker.translateText(simplename,locale,siteId);
+			if (grd.getName().indexOf(":")>0){
+				simplename += grd.getName().substring(grd.getName().indexOf(":"));
+			}
 			String result;
 			
 			//create the actual output string for the totals line

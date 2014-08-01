@@ -241,12 +241,7 @@ public class DbUtil {
 	@Deprecated
 	public static Message getMessage(String key, String langCode, Long siteId) throws
 	DgException {
-		try {
-			return TranslatorWorker.getInstance(key).getByKey(key, langCode,
-					siteId);
-		} catch (WorkerException ex) {
-			throw new DgException(ex);
-		}
+		return TranslatorWorker.getInstance(key).getByKey(key, langCode, siteId);
 	}
 
 	/**
@@ -257,12 +252,7 @@ public class DbUtil {
 	 *
 	 */
 	public static void saveMessage(Message msg) throws DgException {
-		try {
-			TranslatorWorker.getInstance(msg.getKey()).save(msg);
-		}
-		catch (WorkerException ex) {
-			throw new DgException(ex);
-		}
+		TranslatorWorker.getInstance(msg.getKey()).save(msg);
 	}
 
 	/**

@@ -99,25 +99,18 @@ private static Logger logger =
 
 						tForm.setType(request.getParameter("type"));
 
-						try{
-							Message msg = new TranslatorWorker().getByKey(request.getParameter("key"),"en",siteId);
-							if(msg.getMessage() != null){
-								tForm.setMessageEn(msg.getMessage());
+
+						Message msg = new TranslatorWorker().getByKey(request.getParameter("key"),"en",siteId);
+						if (msg.getMessage() != null){
+							tForm.setMessageEn(msg.getMessage());
 								//System.out.println("Data " + msg.getMessage());
-							}else{
-								tForm.setMessageEn("");
-								}
-
-						}catch(WorkerException we){
-								Object[] param = { "RtAction" };
-								logger.l7dlog(Level.ERROR, "ActionClass.Exception.err", param, we);
-							}
-
+						}else{
+							tForm.setMessageEn("");
+						}
 
 						//dtermine target locale
 
 						tForm.setDestLocale(RequestUtils.getNavigationLanguage(request).getCode());
-
 				}
 
 

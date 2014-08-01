@@ -881,11 +881,7 @@ public class HelpUtil {
 	 }
 	 
     public static String getTrn(String defResult,String	lange, Long	siteId){
-    	try {
     	return TranslatorWorker.translateText(defResult, lange, siteId);
-		} catch (WorkerException e) {
-			throw new RuntimeException("Cannot translate text"+defResult, e);
-		}
 	 }
 
      public static List<HelpTopic> getAllHelpTopics() throws Exception{

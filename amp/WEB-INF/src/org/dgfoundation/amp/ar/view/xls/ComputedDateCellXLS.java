@@ -80,13 +80,7 @@ public class ComputedDateCellXLS extends TextCellXLS {
 			String finalStatus = new String();// the actual text to be added to
 			// the column
 
-			String translatedStatus = null;
-			// String prefix="aim:";
-			try {
-				translatedStatus = TranslatorWorker.translateText(actualStatus, locale, siteId);
-			} catch (WorkerException e) {
-				e.printStackTrace();
-			}
+			String translatedStatus = TranslatorWorker.translateText(actualStatus, locale, siteId);
 			if (translatedStatus.compareTo("") == 0)
 				translatedStatus = actualStatus;
 			finalStatus += translatedStatus;

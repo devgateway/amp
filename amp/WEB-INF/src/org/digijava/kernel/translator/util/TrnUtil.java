@@ -397,31 +397,24 @@ public class TrnUtil {
                   site = SiteCache.lookupByName(siteId);
                 }
 
-                try {
-                  Message trnMess = null;
-                  if (site != null) {
-                    trnMess = trnWork.getByBody(defTrans, locale.getCode(), site.getId());
-                    if (trnMess == null && groupTranslation && site.getParentId() != null) {
-                      Site root = SiteCache.getInstance().getRootSite(site);
-                      trnMess = trnWork.getByBody(defTrans, locale.getCode(), root.getId());
-                    }
-                  } else {
-                    trnMess = trnWork.getByBody(defTrans, locale.getCode(), 0L);
-                  }
-                    if (trnMess == null) {
-                        trnString = defTrans;
-                    }
-                    else {
-                        trnString = trnMess.getMessage();
-                    }
+                Message trnMess = null;
+                if (site != null) {
+                	trnMess = trnWork.getByBody(defTrans, locale.getCode(), site.getId());
+                	if (trnMess == null && groupTranslation && site.getParentId() != null) {
+                		Site root = SiteCache.getInstance().getRootSite(site);
+                		trnMess = trnWork.getByBody(defTrans, locale.getCode(), root.getId());
+                	}
+                } else {
+                	trnMess = trnWork.getByBody(defTrans, locale.getCode(), 0L);
                 }
-                catch (WorkerException ex) {
-                    logger.debug("Unable translation for specified key ", ex);
-                    throw new DgException(
-                        "Unable translation for specified key ", ex);
+                if (trnMess == null) {
+                	trnString = defTrans;
                 }
-                Object[] sortObj = new Object[] {
-                    trnString, obj};
+                else {
+                	trnString = trnMess.getMessage();
+                }
+
+                Object[] sortObj = new Object[] {trnString, obj};
                 sortedList.add(sortObj);
             }
         }

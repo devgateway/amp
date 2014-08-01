@@ -83,26 +83,19 @@ public class GetTag extends BodyTagSupport {
 				}
 			}
 
-			try {
-				Message msg =
+			Message msg =
 					new TranslatorWorker().getByKey(getKey(), getLocale(), siteId);
 
+			if (msg != null) {
+				if (msg.getMessage() != null) {
+					output = msg.getMessage();
 
-				if (msg != null) {
-					if (msg.getMessage() != null) {
-						output = msg.getMessage();
-
-					}else{
-						output="key:" + getKey();
-					}
 				}else{
 					output="key:" + getKey();
 				}
-
-			} catch (WorkerException we) {
-				we.printStackTrace();
+			}else{
+				output="key:" + getKey();
 			}
-
 		}
 
 		writeData(output, body);

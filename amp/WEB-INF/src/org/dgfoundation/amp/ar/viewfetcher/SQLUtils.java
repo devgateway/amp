@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -24,6 +25,8 @@ import org.hibernate.dialect.PostgreSQLDialect;
 import org.hibernate.engine.spi.TypedValue;
 
 public class SQLUtils {
+	
+	public final static String SQL_UTILS_NULL = "###NULL###";
 	
 	/**
 	 * returns the list of all the columns of a table / view, in the same order as they appear in the table/view definition
@@ -61,6 +64,16 @@ public class SQLUtils {
 			throw new RuntimeException(ex);
 		}
 		return res;
+	}
+	
+	/**
+	 * returns the rowcount in a table
+	 * @param conn
+	 * @param tableName
+	 * @return
+	 */
+	public static long countRows(Connection conn, String tableName) {
+		return fetchLongs(conn, "SELECT COUNT(*) FROM " +tableName).get(0);
 	}
 	
 	/**
@@ -258,5 +271,125 @@ public class SQLUtils {
 			}
    		
 			return Util.collectionAsString(outputs);
+		}
+		
+		/**
+		 * runs an INSERT query with all the bells and whistles and escaping
+		 * @param conn
+		 * @param tableName
+		 * @param idColumnName
+		 * @param seqName
+		 * @param coordsList - each entry corresponds to a row to insert
+		 */
+		public static void insert(Connection conn, String tableName, String idColumnName, String seqName, List<Map<String, Object>> coordsList) {
+			if ((idColumnName == null) ^ (seqName == null))
+				throw new RuntimeException("idColumnName should be both null or both non-null");
+			
+			int rowsPerInsert = 300;
+			int nrSegments = coordsList.size() / rowsPerInsert + 1;			
+			for(int i = 0; i < nrSegments; i++) {
+				int segmentStart = i * rowsPerInsert; // inclusive
+				int segmentEnd = Math.min(coordsList.size(), (i + 1) * rowsPerInsert); // exclusive
+				if (segmentStart >= segmentEnd)
+					break; 
+				String query = buildMultiRowInsert(tableName, idColumnName, seqName, coordsList.subList(segmentStart, segmentEnd));
+				//System.out.println("executing mondrian dimension table insert " + query);
+				SQLUtils.executeQuery(conn, query.toString());
+			}
+		}
+		
+		/**
+		 * builds a statement of the form INSERT INTO $tableName$ (col1, col2, col3) VALUES (val11, val12, val13), (val21, val22, val23);
+		 * @param tableName
+		 * @param idColumnName
+		 * @param seqName
+		 * @param coordsList
+		 * @return
+		 */
+		public static String buildMultiRowInsert(String tableName, String idColumnName, String seqName, List<Map<String, Object>> coordsList) {
+			if ((idColumnName == null) ^ (seqName == null))
+				throw new RuntimeException("idColumnName and seqName should be either both null or both nonnull");
+			
+			if (coordsList.isEmpty())
+				return null; // nothing to do
+			
+			List<String> keys = new ArrayList<String>(coordsList.get(0).keySet());
+			StringBuilder query = new StringBuilder("INSERT INTO " + tableName + " (");
+			boolean needComma = false;
+			for(String key:keys) {
+				if (needComma)
+					query.append(",");
+				query.append(key);
+				needComma = true;
+			}
+			
+			if (idColumnName != null) {
+				if (!keys.isEmpty())
+					query.append(",");
+				query.append(idColumnName);
+			}
+			
+			query.append(") VALUES");
+			boolean firstRow = true;
+			for(Map<String, Object> coords:coordsList) {
+				query.append(firstRow ? " " : ",");
+				query.append(buildCoordsLine(coords, keys, idColumnName, seqName));
+				firstRow = false;
+			}
+			query.append(";");
+			
+			return query.toString();
+		}
+		
+		/**
+		 * builds a line of type (colValue, colValue, colValue)
+		 * @param coords
+		 * @param keys
+		 * @param idColumnName
+		 * @param seqName
+		 * @return
+		 */
+		public static String buildCoordsLine(Map<String, Object> coords, List<String> keys, String idColumnName, String seqName) {
+			boolean needComma = false;
+			StringBuilder query = new StringBuilder("(");
+			for(String key:keys) {
+				if (needComma)
+					query.append(",");
+				query.append(stringifyObject(coords.get(key)));
+				needComma = true;
+			}
+			
+			if (idColumnName != null) {
+				if (!keys.isEmpty())
+					query.append(",");
+				query.append(String.format("nextval('%s')", seqName));
+			}
+			query.append(")");
+			return query.toString();
+		}
+		
+		/**
+		 * returns a ready-to-be-included-into-SQL-query representation of a var
+		 * @param obj
+		 * @return
+		 */
+		public static String stringifyObject(Object obj) {
+			if (obj instanceof Number)
+				return obj.toString();
+			else if (obj instanceof String)
+			{
+				if (obj.toString().equals(SQL_UTILS_NULL))
+					return "NULL";
+				//$t$blablabla$t$ - dollar-quoting
+				//return "'" + obj.toString() + "'";
+				String dollarQuote = "$dAaD41$";
+				return dollarQuote + obj.toString() + dollarQuote;
+			}
+			else if (obj == null)
+				return "NULL";
+			else
+			{
+				return "'" + obj.toString() + "'";
+			}
 		}
 }

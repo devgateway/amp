@@ -223,11 +223,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 				return colName.toLowerCase().trim().replace(" ", "_");
 			}
 		}else{
-			try{			
-				translColName	= TranslatorWorker.translateText(colName, this.getMetadata().getLocale(), this.getMetadata().getSiteId());
-			}catch(WorkerException e){
-				translColName = colName;
-			}
+			translColName	= TranslatorWorker.translateText(colName, this.getMetadata().getLocale(), this.getMetadata().getSiteId());
 		}
 		return translColName;
 

@@ -130,12 +130,8 @@ public class HelpTopicTreeNode {
 		String result = text;
 		if (this.site != null && this.locale != null){
 			//translate if in translatable mode
-			try {
-				result = TranslatorWorker.translateText(text, this.locale, this.site);
-				result = result.replaceAll("'", "\\\\'");
-			} catch (WorkerException e) {
-				e.printStackTrace();
-			}
+			result = TranslatorWorker.translateText(text, this.locale, this.site);
+			result = result.replaceAll("'", "\\\\'");
 		}
 		return result;
 	}

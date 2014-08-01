@@ -53,7 +53,7 @@ public abstract class DatabaseViewFetcher implements ViewFetcher
 		this.viewName = viewName;
 		this.connection = connection;
 		this.columnNamesRaw = defensiveCopy(columnNames);
-		this.condition = condition;
+		this.condition = condition != null ? condition : "";
 	}
 	
 	@Override
@@ -105,7 +105,7 @@ public abstract class DatabaseViewFetcher implements ViewFetcher
 	 * the implementation-dependent way of fetching rows from a database - either rawly or through translations
 	 * @return
 	 */
-	public abstract ResultSet fetchRows(ArrayList<FilterParam> params) throws SQLException;
+	protected abstract ResultSet fetchRows(ArrayList<FilterParam> params) throws SQLException;
 	
 	@Override
 	public String toString()

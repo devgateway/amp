@@ -77,7 +77,8 @@ public class UploadImage extends Action {
 	        sdmItem.setContentTitle(attachment.getFileName());
 	        
 	        if(helpAttachmentsHolder.getItems()!=null){
-	        	sdmItem.setParagraphOrder(new Long(helpAttachmentsHolder.getItems().size()));
+	        	//sdmItem.setParagraphOrder(new Long(helpAttachmentsHolder.getItems().size()));
+	        	sdmItem.setParagraphOrder(org.digijava.module.sdm.util.DbUtil.getNewParagraphOrder(helpAttachmentsHolder));
 	        	helpAttachmentsHolder.getItems().add(sdmItem);
 	        }else{
 	        	HashSet items = new HashSet();

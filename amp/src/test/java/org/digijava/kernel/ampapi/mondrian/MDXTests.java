@@ -11,7 +11,6 @@ import junit.framework.TestSuite;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.queries.MDXGenerator;
-import org.digijava.kernel.ampapi.mondrian.queries.TestQueries;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXConfig;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXFilter;
@@ -19,6 +18,7 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXLevel;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.olap4j.CellSet;
 import org.olap4j.query.SortOrder;
 
@@ -140,8 +140,8 @@ public class MDXTests extends AmpTestCase {
 			generator = new MDXGenerator();
 			mdx = generator.getAdvancedOlapQuery(config);
 			if (runQuery) {
-				set = generator.runQuery(mdx); 
-				TestQueries.printResult(set);
+				set = generator.runQuery(mdx);
+				MondrianUtils.print(set, config.getMdxName());
 			}
 		} catch (AmpApiException e) {
 			System.err.println(e.getMessage());
@@ -154,4 +154,176 @@ public class MDXTests extends AmpTestCase {
 		return set;
 	}
 	
+	/*******************************************************************
+	 *				 Mondrian Cache Control API tests
+	 ********************************************************************/
+	/*
+	public void testCacheDimension() {
+		MondrianUtils.PRINT_PATH = "/home/nadia/Documents/AMP/work/Mondrian/reports";
+		MDXConfig config = new MDXConfig();
+		config.setMdxName("testCacheDimension");
+		config.addColumnMeasure(new MDXMeasure(MoConstants.ACTUAL_COMMITMENTS));
+		//config.addColumnMeasure(new MDXMeasure(MoConstants.ACTUAL_DISBURSEMENTS));
+		//config.addRowAttribute(new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_TYPE_NAME, MoConstants.ATTR_ORG_TYPE_NAME));
+		//config.addRowAttribute(new MDXAttribute(MoConstants.PRIMARY_SECTOR, MoConstants.ATTR_PRIMARY_SECTOR_NAME));
+		config.addRowAttribute(new MDXAttribute(MoConstants.PROJECT_TITLE, MoConstants.ATTR_PROJECT_TITLE));
+		
+		updateData(true);
+
+		initCacheSettings();
+		//initDimensionCache(config);
+
+		generateAndValidateMDX(config, null, true);
+		
+		updateData(false);
+		
+		config.setMdxName("testCacheDimensionRefresh");
+		
+		updateDimensionCache(config);
+		
+		generateAndValidateMDX(config, null, true);
+		
+		//testFound(config);
+		
+		try {
+			olapConnection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void updateData(boolean doRestore) {
+		String[] restore = {"update mondrian_fact_table set transaction_amount=356741.5 where entity_id=109", 
+				"update mondrian_fact_table set transaction_amount=1000000 where entity_id=110",
+				"update mondrian_activity_texts set name='CENTER FOR PREVENTION OF TRAFFICKING IN WOMEN' where amp_activity_id = (select max(amp_activity_id) from mondrian_activity_texts where amp_id='idea_1374')"
+		};
+		String[] change = {"update mondrian_fact_table set transaction_amount=456741.5 where entity_id=109",
+				"update mondrian_fact_table set transaction_amount=2000000 where entity_id=110",
+				"update mondrian_activity_texts set name='CENTER FOR PREVENTION OF TRAFFICKING IN WOMEN111' where amp_activity_id = (select max(amp_activity_id) from mondrian_activity_texts where amp_id='idea_1374')"
+		};
+
+		final String c = "jdbc:postgresql://localhost/amp_moldova_210";
+		java.sql.Connection conn = null;
+		try {
+			conn = DriverManager.getConnection(c, "amp", "amp321");
+			String[] toExecute = doRestore ? restore : change;
+			for (String update : toExecute)
+				SQLUtils.executeQuery(conn, update);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		//Session session = PersistenceManager.openNewSession();
+		//SQLQuery query = session.createSQLQuery(doRestore ? restore : change);
+		//query.executeUpdate();
+		//session.flush();
+		//session.close();
+	}
+	
+	private OlapConnection olapConnection = null;
+	private CacheControl cacheControl = null;
+	private mondrian.olap.Connection mondrianConnection;
+	
+	private void initCacheSettings() {
+		mondrian.olap.MondrianProperties.instance().EnableRolapCubeMemberCache.set(false);
+		
+		try {
+			olapConnection = Connection.getOlapConnectionByConnPath(Connection.getDefaultConnectionPath());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (olapConnection != null) {
+			try {
+				mondrianConnection = olapConnection.unwrap(RolapConnection.class);
+				cacheControl = mondrianConnection.getCacheControl(null);
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private void initDimensionCache(MDXConfig config) {
+		try {
+			Cube cube = getCube(config);
+			SchemaReader schemaReader = cube.getSchemaReader(null).withLocus(); 
+			Member member = schemaReader.getMemberByUniqueName(mondrian.olap.Id.Segment.toList(
+					MoConstants.PROJECT_TITLE, "CENTER FOR PREVENTION OF TRAFFICKING IN WOMEN"), true);
+			//for (Memeber m : )
+			MemberEditCommand addCommand = cacheControl.createAddCommand(member);
+
+			cacheControl.execute(addCommand);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void updateDimensionCache(MDXConfig config) {
+		try {
+			Cube cube = getCube(config);
+			SchemaReader schemaReader = cube.getSchemaReader(null).withLocus(); 
+			Member parent = schemaReader.getMemberByUniqueName(mondrian.olap.Id.Segment.toList(
+					MoConstants.PROJECT_TITLE, "CENTER FOR PREVENTION OF TRAFFICKING IN WOMEN111"), true);//.getParentMember();
+			MemberSet memberSet = cacheControl.createMemberSet(parent, true);
+			MemberEditCommand delCommand = cacheControl.createDeleteCommand(memberSet);
+			
+			CellRegion measuresRegion = cacheControl.createMeasuresRegion(cube);
+			CellRegion dimensionRegion = cacheControl.createMemberRegion(parent, true);
+
+			CellRegion[] regions = new mondrian.olap.CacheControl.CellRegion[2]; 
+			regions[0] = measuresRegion;
+			regions[1] = dimensionRegion;
+			
+			CellRegion crossJoin = cacheControl.createCrossjoinRegion(regions);
+			cacheControl.flush(crossJoin);
+
+			//cacheControl.execute(delCommand);
+			//cacheControl.flush(memberSet);
+			
+			//olapConnection.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private void testFound(MDXConfig config) {
+		try {
+			Cube cube = getCube(config);
+			SchemaReader schemaReader = cube.getSchemaReader(null).withLocus();
+			Member other = schemaReader.getMemberByUniqueName(mondrian.olap.Id.Segment.toList(
+					MoConstants.PROJECT_TITLE, "CENTER FOR PREVENTION OF TRAFFICKING IN WOMEN111"), true);//.getParentMember();
+			MemberSet otherMemberSet = cacheControl.createMemberSet(other, true);
+		} catch(Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private Cube getCube(MDXConfig config) throws AmpApiException {
+		String cubeName = config.getCubeName();
+		Cube cube = null;
+		//get the Cube reference
+		try {
+			cube = mondrianConnection.getSchema().lookupCube(config.getCubeName(), true);
+		} catch (Exception e) {
+			System.err.println("Cannot get cubes list from Mondrian Schema");
+			throw new AmpApiException(AmpApiException.MONDRIAN_ERROR, false, e);
+		}
+		return cube;
+	}
+	*/
 }

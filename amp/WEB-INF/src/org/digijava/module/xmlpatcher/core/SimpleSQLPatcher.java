@@ -266,7 +266,7 @@ public class SimpleSQLPatcher {
    				java.util.List<String> hashes = SQLUtils.fetchAsList(conn, "SELECT hash FROM amp_simple_sql_patches WHERE id='" + patch.id + "'", 1);
    				if (hashes.size() > 1)
    					throw new RuntimeException("amp_simple_sql_patches is corrupted, please review code / database (patch with id " + patch.id + " is mentioned > 1 times)");   				
-   				boolean shouldRunPatch = hashes.isEmpty() || hashes.get(0).equals(patch.hash);
+   				boolean shouldRunPatch = hashes.isEmpty() || (!hashes.get(0).equals(patch.hash));
    				if (shouldRunPatch)
    					executePatch(patch, conn, hashes.isEmpty());
    			}

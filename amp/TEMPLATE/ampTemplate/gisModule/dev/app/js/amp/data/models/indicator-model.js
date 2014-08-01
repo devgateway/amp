@@ -17,6 +17,8 @@ module.exports = Backbone.Model.extend({
   },
 
   toggle: function() {
+//phil I'm not sure i get this array notation...maybe walk me through it and we'll 
+// see if there is a more readable way with native backbone collection ops... findWhere etc.
     this.collection[this.get('selected') ? 'unselect' : 'select'](this);
   },
 

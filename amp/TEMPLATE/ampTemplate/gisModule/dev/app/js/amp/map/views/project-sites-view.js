@@ -46,9 +46,8 @@ module.exports = Backbone.View.extend({
     // /rest/gis/cluster?filter="{"FiltersParams":{"params":[{"filterName":"adminLevel","filterValue":["Region"]}]}}"
     // (don't forget to url-encode)
 
-
     this._startLoadingIcon();
-    this._getProjectSites().then(function(data) {
+    this._getProjectSites(filterObj).then(function(data) {
       self._stopLoadingIcon();
       if(data && data.type === 'FeatureCollection') {
         self.features = data.features;

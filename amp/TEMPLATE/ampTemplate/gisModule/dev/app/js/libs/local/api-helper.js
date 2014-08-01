@@ -13,7 +13,7 @@ module.exports = {
 
     //iterate over properties.
     _.each(filter, function(val, key){
-      var tmpObj = {filterName: key, filterValue: val};  
+      var tmpObj = {filterName: key, filterValue: val};
       paramsObj.params.push(tmpObj);
     });
 
@@ -27,11 +27,12 @@ module.exports = {
       var url = document.URL;
       return this._findBase(url);
     } else {
+      console.warn('not found');
       return ''
     }
   },
 
-  // Hacky way of finding the 'base' url for the api. 
+  // Hacky way of finding the 'base' url for the api.
   // Eventually will be a config, but we don't have config built yet.
   _findBase: function(url){
     var baseURL = '';

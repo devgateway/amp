@@ -7,6 +7,7 @@ var state = require('../../../services/state');
 var ProjectLayerCollection = require('../collections/project-layer-collection');
 
 var BaseControlView = require('../../base-control/base-control-view');
+var OptionView = require('./option-view');
 
 var Template = fs.readFileSync(__dirname + '/../templates/layers-template.html', 'utf8');
 var RadioOptionTemplate = fs.readFileSync(__dirname + '/../templates/radio-option-template.html', 'utf8');
@@ -74,9 +75,11 @@ module.exports = BaseControlView.extend({
   renderProjectList: function(){
     var self = this;
 
-    this.projectLayerCollection.each(function(model) {
-      self.$('.layer-selector').append(self.radioOptionTemplate(model.toJSON()));
-    });
+    //TODO move projectLayerCollection to app.data
+    this.$('.layer-selector').html(this.projectLayerCollection.map(function(indicator) {
+      return (new OptionView({ model: indicator })).render().el;
+    }));
+
 
     // setup listener:
     this.$('.layer-selector input:checkbox').change(function(){

@@ -84,6 +84,9 @@ module.exports = BaseFilterView.extend({
 
       self.treeModel = new TreeNodeModel(rootNodeObj);
       self.treeView = new TreeNodeView();
+    })
+    .fail(function(jqXHR, textStatus, errorThrown){
+      console.error('failed to get filter ', jqXHR, textStatus, errorThrown);
     });
 
   }

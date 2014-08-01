@@ -544,6 +544,37 @@ public class DbUtil {
         }
         return document;
     }
+    
+	/**
+	 * After this issue: AMP-18018 we use this method to always have a unique paragraph.
+	 * @param document
+	 * @return
+	 */
+    public static Long getNewParagraphOrder(Sdm document) {
+		Long order = null;
+		try {
+			int i = 0;
+			boolean add = false;
+			if (document.getItems() != null) {
+				Iterator<SdmItem> iItems = document.getItems().iterator();
+				while (iItems.hasNext()) {
+					SdmItem item = iItems.next();
+					if (item.getParagraphOrder().intValue() > i) {
+						i = item.getParagraphOrder().intValue();
+					}
+					add = true;
+				}
+			}
+			if (add) {
+				order = new Long(i + 1);
+			} else {
+				order = new Long(i);
+			}
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return order;
+	}
 
     public static List getDocuments(HttpServletRequest request) throws
         SDMException {

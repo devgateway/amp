@@ -43,6 +43,7 @@ public class MDXTests extends AmpTestCase {
 		suite.addTest(new MDXTests("testMultipleHierarchies"));
 		suite.addTest(new MDXTests("testSortingNoTotals"));
 		suite.addTest(new MDXTests("testSortingBy2012Q1ActualCommitments"));
+		//suite.addTest(new MDXTests("testCacheDimension"));
 		return suite;
 	}
 	
@@ -187,7 +188,7 @@ public class MDXTests extends AmpTestCase {
 		
 		try {
 			olapConnection.close();
-		} catch (SQLException e) {
+		} catch (java.sql.SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -206,17 +207,17 @@ public class MDXTests extends AmpTestCase {
 		final String c = "jdbc:postgresql://localhost/amp_moldova_210";
 		java.sql.Connection conn = null;
 		try {
-			conn = DriverManager.getConnection(c, "amp", "amp321");
+			conn = java.sql.DriverManager.getConnection(c, "amp", "amp321");
 			String[] toExecute = doRestore ? restore : change;
 			for (String update : toExecute)
-				SQLUtils.executeQuery(conn, update);
-		} catch (SQLException e) {
+				org.dgfoundation.amp.ar.viewfetcher.SQLUtils.executeQuery(conn, update);
+		} catch (java.sql.SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
 				conn.close();
-			} catch (SQLException e) {
+			} catch (java.sql.SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -230,24 +231,25 @@ public class MDXTests extends AmpTestCase {
 		//session.close();
 	}
 	
-	private OlapConnection olapConnection = null;
-	private CacheControl cacheControl = null;
+	private org.olap4j.OlapConnection olapConnection = null;
+	private mondrian.olap.CacheControl cacheControl = null;
 	private mondrian.olap.Connection mondrianConnection;
 	
 	private void initCacheSettings() {
 		mondrian.olap.MondrianProperties.instance().EnableRolapCubeMemberCache.set(false);
 		
 		try {
-			olapConnection = Connection.getOlapConnectionByConnPath(Connection.getDefaultConnectionPath());
+			olapConnection = org.digijava.kernel.ampapi.mondrian.util.Connection.getOlapConnectionByConnPath(
+					org.digijava.kernel.ampapi.mondrian.util.Connection.getDefaultConnectionPath());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (olapConnection != null) {
 			try {
-				mondrianConnection = olapConnection.unwrap(RolapConnection.class);
+				mondrianConnection = olapConnection.unwrap(mondrian.rolap.RolapConnection.class);
 				cacheControl = mondrianConnection.getCacheControl(null);
-			} catch (SQLException e) {
+			} catch (java.sql.SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -256,12 +258,12 @@ public class MDXTests extends AmpTestCase {
 	
 	private void initDimensionCache(MDXConfig config) {
 		try {
-			Cube cube = getCube(config);
-			SchemaReader schemaReader = cube.getSchemaReader(null).withLocus(); 
-			Member member = schemaReader.getMemberByUniqueName(mondrian.olap.Id.Segment.toList(
+			mondrian.olap.Cube cube = getCube(config);
+			mondrian.olap.SchemaReader schemaReader = cube.getSchemaReader(null).withLocus(); 
+			mondrian.olap.Member member = schemaReader.getMemberByUniqueName(mondrian.olap.Id.Segment.toList(
 					MoConstants.PROJECT_TITLE, "CENTER FOR PREVENTION OF TRAFFICKING IN WOMEN"), true);
 			//for (Memeber m : )
-			MemberEditCommand addCommand = cacheControl.createAddCommand(member);
+			mondrian.olap.CacheControl.MemberEditCommand addCommand = cacheControl.createAddCommand(member);
 
 			cacheControl.execute(addCommand);
 		} catch (Exception e) {
@@ -272,23 +274,29 @@ public class MDXTests extends AmpTestCase {
 	
 	private void updateDimensionCache(MDXConfig config) {
 		try {
-			Cube cube = getCube(config);
-			SchemaReader schemaReader = cube.getSchemaReader(null).withLocus(); 
-			Member parent = schemaReader.getMemberByUniqueName(mondrian.olap.Id.Segment.toList(
+			mondrian.olap.Cube cube = getCube(config);
+			mondrian.olap.SchemaReader schemaReader = cube.getSchemaReader(null).withLocus(); 
+			mondrian.olap.Member parent = schemaReader.getMemberByUniqueName(mondrian.olap.Id.Segment.toList(
 					MoConstants.PROJECT_TITLE, "CENTER FOR PREVENTION OF TRAFFICKING IN WOMEN111"), true);//.getParentMember();
-			MemberSet memberSet = cacheControl.createMemberSet(parent, true);
-			MemberEditCommand delCommand = cacheControl.createDeleteCommand(memberSet);
+			mondrian.olap.CacheControl.MemberSet memberSet = cacheControl.createMemberSet(parent, true);
+			mondrian.olap.CacheControl.MemberEditCommand delCommand = cacheControl.createDeleteCommand(memberSet);
 			
-			CellRegion measuresRegion = cacheControl.createMeasuresRegion(cube);
-			CellRegion dimensionRegion = cacheControl.createMemberRegion(parent, true);
+			mondrian.olap.CacheControl.CellRegion measuresRegion = cacheControl.createMeasuresRegion(cube);
+			mondrian.olap.CacheControl.CellRegion dimensionRegion = cacheControl.createMemberRegion(parent, true);
 
-			CellRegion[] regions = new mondrian.olap.CacheControl.CellRegion[2]; 
+			mondrian.olap.CacheControl.CellRegion[] regions = new mondrian.olap.CacheControl.CellRegion[2]; 
 			regions[0] = measuresRegion;
 			regions[1] = dimensionRegion;
 			
-			CellRegion crossJoin = cacheControl.createCrossjoinRegion(regions);
+			mondrian.olap.CacheControl.CellRegion crossJoin = cacheControl.createCrossjoinRegion(regions);
+			//flushes only the region data for associated member
 			cacheControl.flush(crossJoin);
+			//flushes the entire schema cache
+			//cacheControl.flushSchemaCache();
+			//flushes all measures related data  
+			//cacheControl.flush(measuresRegion);
 
+			//flushes member set it is part of AND! associated regions to the set => in this case all project titles & their regions 
 			//cacheControl.execute(delCommand);
 			//cacheControl.flush(memberSet);
 			
@@ -302,20 +310,20 @@ public class MDXTests extends AmpTestCase {
 	
 	private void testFound(MDXConfig config) {
 		try {
-			Cube cube = getCube(config);
-			SchemaReader schemaReader = cube.getSchemaReader(null).withLocus();
-			Member other = schemaReader.getMemberByUniqueName(mondrian.olap.Id.Segment.toList(
+			mondrian.olap.Cube cube = getCube(config);
+			mondrian.olap.SchemaReader schemaReader = cube.getSchemaReader(null).withLocus();
+			mondrian.olap.Member other = schemaReader.getMemberByUniqueName(mondrian.olap.Id.Segment.toList(
 					MoConstants.PROJECT_TITLE, "CENTER FOR PREVENTION OF TRAFFICKING IN WOMEN111"), true);//.getParentMember();
-			MemberSet otherMemberSet = cacheControl.createMemberSet(other, true);
+			mondrian.olap.CacheControl.MemberSet otherMemberSet = cacheControl.createMemberSet(other, true);
 		} catch(Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-	private Cube getCube(MDXConfig config) throws AmpApiException {
+	private mondrian.olap.Cube getCube(MDXConfig config) throws AmpApiException {
 		String cubeName = config.getCubeName();
-		Cube cube = null;
+		mondrian.olap.Cube cube = null;
 		//get the Cube reference
 		try {
 			cube = mondrianConnection.getSchema().lookupCube(config.getCubeName(), true);

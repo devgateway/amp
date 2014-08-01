@@ -309,25 +309,25 @@ public class MondrianETL {
 		String localizedTableName = mondrianTable.tableName + "_" + locale;
 		boolean autoCommit = conn.getAutoCommit();
 		try {
-		// flush schema changes
-		conn.setAutoCommit(true);
-		conn.setAutoCommit(false);
-		conn.setAutoCommit(true);
-		Map<PropertyDescription, ColumnValuesCacher> cachers = new HashMap<>();
-		I18nDatabaseViewFetcher fetcher = new I18nDatabaseViewFetcher(mondrianTable.getI18nDescription(), null, locale, cachers, this.conn, "*");
-		fetcher.indicesNotToTranslate.add(MONDRIAN_DUMMY_ID_FOR_ETL);
+			// flush schema changes
+			conn.setAutoCommit(true);
+			conn.setAutoCommit(false);
+			conn.setAutoCommit(true);
+			Map<PropertyDescription, ColumnValuesCacher> cachers = new HashMap<>();
+			I18nDatabaseViewFetcher fetcher = new I18nDatabaseViewFetcher(mondrianTable.getI18nDescription(), null, locale, cachers, this.conn, "*");
+			fetcher.indicesNotToTranslate.add(MONDRIAN_DUMMY_ID_FOR_ETL);
 		
-		LinkedHashSet<String> columns = SQLUtils.getTableColumns(mondrianTable.tableName);		
-		List<Map<String, Object>> vals = new ArrayList<>();
-		ResultSet rs = fetcher.fetch(null);
-		while (rs.next()) {
-			Map<String, Object> row = readMondrianDimensionRow(mondrianTable, columns, locale, rs);
-			vals.add(row);
-		}
-		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + localizedTableName);
-		SQLUtils.executeQuery(conn, "CREATE TABLE " + localizedTableName + " AS TABLE " + mondrianTable + " WITH NO DATA");
-		postprocessDimensionTable(localizedTableName, mondrianTable.indexedColumns);
-		SQLUtils.insert(conn, localizedTableName, null, null, vals);
+			LinkedHashSet<String> columns = SQLUtils.getTableColumns(mondrianTable.tableName);		
+			List<Map<String, Object>> vals = new ArrayList<>();
+			ResultSet rs = fetcher.fetch(null);
+			while (rs.next()) {
+				Map<String, Object> row = readMondrianDimensionRow(mondrianTable, columns, locale, rs);
+				vals.add(row);
+			}
+			SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + localizedTableName);
+			SQLUtils.executeQuery(conn, "CREATE TABLE " + localizedTableName + " AS TABLE " + mondrianTable + " WITH NO DATA");
+			postprocessDimensionTable(localizedTableName, mondrianTable.indexedColumns);
+			SQLUtils.insert(conn, localizedTableName, null, null, vals);
 		}
 		catch(Exception e) {
 			conn.setAutoCommit(autoCommit);

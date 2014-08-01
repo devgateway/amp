@@ -58,13 +58,15 @@ module.exports = BaseFilterView.extend({
   },
 
   _selectAll: function(){
-    this.treeModel.set('selected',true);
-    //this.treeModel.set('expanded',false);
+    // force trigger even if already this state (important for half-fill ui
+    this.treeModel.set('selected',true,{ "silent": true }); 
+    this.treeModel.trigger('change:selected',this.treeModel, null,{propogation:false});
   },
 
   _selectNone: function(){
-    this.treeModel.set('selected',false);
-    //this.treeModel.set('expanded',true);
+    // force trigger even if already this state (important for half-fill ui)
+    this.treeModel.set('selected',false,{ "silent": true });
+    this.treeModel.trigger('change:selected',this.treeModel, null,{propogation:false});
   },
 
 

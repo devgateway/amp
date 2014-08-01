@@ -86,15 +86,7 @@ var TreeNodeView = Backbone.View.extend({
   },
 
   _updateSelection: function () {
-    if(this.model.get('children').isEmpty()){
-      if (this.model.get('selected')) {
-        this.$('> span > .selectable').addClass('label-success');
-      } else {
-        this.$('> span > .selectable').removeClass('label-success');
-      }
-    } else{
-      this._updateCheckboxFill();
-    }
+    this._updateCheckboxFill();
   },
 
   _updateCountUI: function(){
@@ -117,6 +109,12 @@ var TreeNodeView = Backbone.View.extend({
         }
       } else if(this.model.get('numSelected') === 0){
         this.$('> span > .selectable').removeClass('half-fill');
+        this.$('> span > .selectable').removeClass('label-success');
+      }
+    } else{ // else leaf node      
+      if (this.model.get('selected')) {
+        this.$('> span > .selectable').addClass('label-success');
+      } else {
         this.$('> span > .selectable').removeClass('label-success');
       }
     }

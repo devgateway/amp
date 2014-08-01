@@ -24,7 +24,8 @@ module.exports = Backbone.View.extend({
 
   template: _.template(Template),
 
-  initialize: function() {
+  initialize: function(options) {
+    this.app = options.app;
     this.mapEl = $('<div id="map-canvas">');
     this.map = L.map(this.mapEl[0]);
 
@@ -41,8 +42,8 @@ module.exports = Backbone.View.extend({
     this.admLayerView = new ADMLayerView({map: this.map});
     this.indicatorLayerView = new IndicatorLayerView({map: this.map});
 
-    this.headerView = new MapHeaderView();
-    this.legendView = new LegendView();
+    this.headerView = new MapHeaderView({app: this.app});
+    this.legendView = new LegendView({app: this.app});
     this.basemapView = new BasemapGalleryView({
       map: this.map,
       collection: this.basemaps
@@ -70,7 +71,7 @@ module.exports = Backbone.View.extend({
   _renderCountryBoundary: function(){
     var self = this;
     // TODO: harcoded path is bad.
-    $.get( APIHelper.getAPIBase() + '/rest/gis/adminBoundary/0').then(function(geoJSON){
+    $.get( APIHelper.getAPIBase() + '/rest/gis/boundaries/adm0').then(function(geoJSON){
 
       self.countryBoundary = L.geoJson(geoJSON,
         {

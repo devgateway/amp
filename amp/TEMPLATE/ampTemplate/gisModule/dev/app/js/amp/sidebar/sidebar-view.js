@@ -25,10 +25,14 @@ module.exports = Backbone.View.extend({
     'show.bs.popover .layer-info': 'exclusiveShowPopover'
   },
 
+  initialize: function(options) {
+    this.app = options.app;
+  },
+
   // Render entire geocoding view.
   render: function () {
     this.$el.append(_.map(controlViews, function(ControlView) {
-      var view = new ControlView();
+      var view = new ControlView({app: this.app});
       return view.render().el;
     }));
 

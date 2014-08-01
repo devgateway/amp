@@ -16,7 +16,7 @@ module.exports = BaseControlView.extend({
   title: 'Filters',
   iconClass: 'ampicon-filters',
   description: 'Apply filters to the map.',
-  apiURL: APIHelper.getAPIBase() + '/rest/gis/filters',
+  apiURL: APIHelper.getAPIBase() + '/rest/gis/filters/',
 
   // collection of child views..
   filterViewsInstances:[],
@@ -25,7 +25,7 @@ module.exports = BaseControlView.extend({
 
   initialize: function() {
     var self = this;
-    BaseControlView.prototype.initialize.apply(this);
+    BaseControlView.prototype.initialize.apply(this, arguments);
 
     this._getFilterList().done(function(filterList){
       self.filterViewsInstances = filterList;

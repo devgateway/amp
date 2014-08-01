@@ -1,0 +1,63 @@
+/* Simplest for front-end */
+[
+  {
+    "id": 0,
+    "title": "DRC Food Scarcity",
+    "type": "geoJSON",
+    "joinBoundary": "/rest/gis/boundaries/adm1",  /* GeoJSON FeatureCollection of polygons */
+    "link": "/rest/gis/statistical/drc-food",
+  },
+  {
+    "id": 1,
+    "title": "An ArcGIS Feature Layer",
+    "type": "ArcGISFeature",
+    "link": "http://gis.devgw.org/arcgis/rest/services/Moldova/Poverty_version_2/MapServer/0"
+  },
+  {
+    "id": 2,
+    "title": "An ArcGIS Raster Layer",
+    "type": "ArcGISRaster",
+    "link": "http://gis.devgateway.org:6080/arcgis/rest/services/gis-reeng/UmbrellasPer100Ppl/MapServer"
+  },
+  {
+    "id": 3,
+    "title": "A WMS Layer",
+    "type": "WMS",
+    "link": "http://gis.devgateway.org:6080/arcgis/services/gis-reeng/UmbrellasPer100Ppl/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+  }
+]/* */
+
+
+/* another posibility
+{
+  "geoJSON": [
+    {
+      "id": 0,
+      "title": "DRC Food Scarcity",
+      "joinBoundary": "/rest/gis/boundaries/adm1",
+      "link": "/rest/gis/statistical/drc-food",
+    }
+  ],
+  "ArcGISFeature": [
+    {
+      "id": 1,
+      "title": "An ArcGIS Feature Layer",
+      "link": "http://gis.devgw.org/arcgis/rest/services/Moldova/Poverty_version_2/MapServer/0"
+    }
+  ],
+  "ArcGISRaster": [
+    {
+      "id": 2,
+      "title": "An ArcGIS Raster Layer",
+      "link": "http://gis.devgateway.org:6080/arcgis/rest/services/gis-reeng/UmbrellasPer100Ppl/MapServer"
+    }
+  ],
+  "WMS": [
+    {
+      "id": 3,
+      "title": "A WMS Layer",
+      "link": "http://gis.devgateway.org:6080/arcgis/services/gis-reeng/UmbrellasPer100Ppl/MapServer/WMSServer?request=GetCapabilities&service=WMS"
+    }
+  ]
+} /* */
+

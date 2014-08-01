@@ -13,23 +13,15 @@ module.exports = Backbone.View.extend({
 
   template: _.template(Template),
 
-  initialize: function() {
-    this.layerNames = null;
-    this.listenTo(Backbone, 'MAP_LOAD_INDICATOR', this.updatedIndicator);
+  initialize: function(options) {
+    this.app = options.app;
+    this.listenTo(this.app.display.title, 'update', this.render);
   },
 
-  render: function () {
-    this.$el.html(this.template({layerNames: this.layerNames}));
+  render: function(newTitle) {
+    var title = newTitle || this.app.display.title.current;
+    this.$el.html(this.template({title: title}));
     return this;
-  },
-
-  updatedIndicator: function(indicator) {
-    if (indicator === null) {
-      this.layerNames = null;
-    } else {
-      this.layerNames = indicator.get('title');
-    }
-    this.render();
   }
 
 });

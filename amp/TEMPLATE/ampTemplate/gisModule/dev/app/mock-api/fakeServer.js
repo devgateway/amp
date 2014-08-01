@@ -1,76 +1,88 @@
 var fs = require('fs');
+var _ = require('underscore');
 var sinon = require('../mock-api/sinon-min.js');
 
-var cluster = fs.readFileSync(__dirname + '/data/cluster.json', 'utf8');
-var clusterADM2 = fs.readFileSync(__dirname + '/data/clusterADM2.json', 'utf8');
-var projectSites = fs.readFileSync(__dirname + '/data/drc-points-2000.json', 'utf8');//  drc-points-2000.json
-var indicators = fs.readFileSync(__dirname + '/data/indicators.json', 'utf8');
-var drcFood = fs.readFileSync(__dirname + '/data/drc-food.json', 'utf8');
 
-// filters
-var filters = fs.readFileSync(__dirname + '/data/filters.json', 'utf8');
-var sectors = fs.readFileSync(__dirname + '/data/filters/sectors.json', 'utf8');
-var orgs = fs.readFileSync(__dirname + '/data/filters/orgs.json', 'utf8');
+var FakeServer = function() {
+  this.server = null;
+  this.init();
+}; _.extend(FakeServer.prototype, {
 
-// adm boundaries:
-var adminLevels = fs.readFileSync(__dirname + '/data/adminLevels.json', 'utf8');
-var adm0 = fs.readFileSync(__dirname + '/data/boundaries/adm0.json', 'utf8');
-var adm1 = fs.readFileSync(__dirname + '/data/boundaries/adm1.json', 'utf8');
-var adm2 = fs.readFileSync(__dirname + '/data/boundaries/adm2.json', 'utf8');
-
-// state
-var savedStates = fs.readFileSync(__dirname + '/data/states.json', 'utf8');
-
-var fakeServer = {
-  server: null,
-
-  init: function(){
+  init: function() {
     this.server = sinon.fakeServer.create();
     this.server.autoRespond = true;
     this.server.autoRespondAfter = 6; // delay in ms, good for latency tests.
-
-    // Create paths for mock API
+    this.routeMockFiles();
     this._addClusterPath();
-    this._addPath(projectSites, '/rest/gis/project-sites');
-    this._addPath(indicators, '/rest/gis/indicator-layers');
-    this._addPath(drcFood, '/rest/gis/drc-food');
-
-    // filters
-    this._addPath(filters, '/rest/gis/filters');
-    this._addPath(sectors, '/rest/gis/filters/sectors');
-    this._addPath(orgs, '/rest/gis/filters/orgs');
-
-    // admins and boundaries
-    this._addPath(adminLevels, '/rest/gis/adminLevels');
-    this._addPath(adm0, '/rest/gis/adminBoundary/0');
-    this._addPath(adm1, '/rest/gis/adminBoundary/1');
-    this._addPath(adm2, '/rest/gis/adminBoundary/2');
-
-    // states
-    this._addPath(savedStates, '/rest/gis/states');
   },
 
+  routeMockFiles: function() {
+    _.each(this.apiMockFileMap, function(resp, method_path) {
+      var methodPathList = method_path.split(' ');
+      this.server.respondWith(methodPathList[0], methodPathList[1],
+                      [200, { 'Content-Type': 'application/json' }, resp]);
+    }, this);
+  },
+
+  apiMockFileMap: {
+    // API: https://docs.google.com/a/developmentgateway.org/document/d/13F0YHVIHw3DSBV9P_WRw0ltmqIgMPuWa7ZaCGzbAkDY/
+    // this object maps '/rest/api/path': 'json/mock/file/path'
+
+    // Filters
+    'GET /rest/gis/filters/':         fs.readFileSync(__dirname + '/data/filters/list.json', 'utf8'),
+    'GET /rest/gis/fitlers/orgs':     fs.readFileSync(__dirname + '/data/filters/orgs.json', 'utf8'),
+    'GET /rest/gis/fitlers/sectors':  fs.readFileSync(__dirname + '/data/filters/sectors.json', 'utf8'),
+
+    // Boundaries
+    'GET /rest/gis/boundaries/':      fs.readFileSync(__dirname + '/data/boundaries/list.json', 'utf8'),
+    'GET /rest/gis/boundaries/adm-0': fs.readFileSync(__dirname + '/data/boundaries/adm-0.json', 'utf8'),
+    'GET /rest/gis/boundaries/adm-1': fs.readFileSync(__dirname + '/data/boundaries/adm-1.json', 'utf8'),
+    'GET /rest/gis/boundaries/adm-2': fs.readFileSync(__dirname + '/data/boundaries/adm-2.json', 'utf8'),
+
+    // Clusters... can we just join with ADM client-side?
+
+    // Activities
+    // 'GET /rest/...': fs.readFileSync(__dirname + '/data/....json', 'utf8'),
+
+    // Project Sites
+    // 'GET /rest/gis/project-sites/': fs.readFileSync(__dirname + '/data/project-sites/....json', 'utf8'),
+    'GET /rest/gis/project-sites/random': fs.readFileSync(__dirname + '/data/project-sites/random.json', 'utf8'),
+
+    // Indicator Layers
+    'GET /rest/gis/indicator-layers/':         fs.readFileSync(__dirname + '/data/indicator-layers/list.json', 'utf8'),
+    'GET /rest/gis/indicator-layers/drc-food':fs.readFileSync(__dirname + '/data/indicator-layers/drc-food.json', 'utf8'),
+
+    // Config
+    // 'GET /rest/gis/config': fs.readFileSync(__dirname + '/data/config/....json', 'utf8'),
+
+    // Saved Map States
+    'GET /rest/gis/saved-maps/':  fs.readFileSync(__dirname + '/data/saved-maps/list.json', 'utf8'),
+    // 'GET /rest/gis/saved-maps/0': fs.readFileSync(__dirname + '/data/saved-maps/0.json', 'utf8'),
+    // 'GET /rest/gis/saved-maps/1': fs.readFileSync(__dirname + '/data/saved-maps/1.json', 'utf8'),
+    // 'POST /rest/gis/saved-maps/ ...
+
+    // Translations
+    // 'GET /rest/gis/label-translations/': fs.readFileSync(__dirname + '/data/label-translations/....json', 'utf8'),
+    // 'GET /rest/gis/label-translations/en': fs.readFileSync(__dirname + '/data/label-translations/....json', 'utf8'),
+
+  },
+
+  _addClusterPath: function() {
   // reg-ex can be used to pull out params and send dynamic response.
-  _addClusterPath: function(){
     this.server.respondWith(/\/rest\/gis\/cluster(\S+)/,
       function (xhr, param) {
         if(param.indexOf('Zone') > -1){
-          xhr.respond(200, { 'Content-Type': 'application/json' }, clusterADM2);
+          xhr.respond(200, { 'Content-Type': 'application/json' },
+            fs.readFileSync(__dirname + '/data/clusters/clusterADM2.json', 'utf8'));
         } else{
-          xhr.respond(200, { 'Content-Type': 'application/json' }, cluster);
+          xhr.respond(200, { 'Content-Type': 'application/json' },
+            fs.readFileSync(__dirname + '/data/clusters/cluster.json', 'utf8'));
         }
       });
 
-  },
-
-  _addPath: function(resp, path){
-    this.server.respondWith('GET',
-                      path,
-                      [200, { 'Content-Type': 'application/json' }, resp]);
-
-    // can do regex to get params:
-    // server.respondWith(/\/todo-items\/(\d+)/, function (xhr, id) {  xhr.respond(200, { ?Content-Type?: ?application/json? }, ?[{ ?id?: ? + id + ? }]?); });
   }
-};
 
-fakeServer.init();
+});
+
+
+window.server = new FakeServer();

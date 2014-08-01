@@ -4,7 +4,6 @@ var Backbone = require('backbone');
 var $ = require('jquery');
 var state = require('../../../services/state');
 
-var IndicatorCollection = require('../collections/indicator-collection');
 var ProjectLayerCollection = require('../collections/project-layer-collection');
 
 var BaseControlView = require('../../base-control/base-control-view');
@@ -25,7 +24,7 @@ module.exports = BaseControlView.extend({
 
   initialize: function() {
     var self = this;
-    BaseControlView.prototype.initialize.apply(this);
+    BaseControlView.prototype.initialize.apply(this, arguments);
 
 
     this._initProjectLayerCollection();

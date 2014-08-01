@@ -9,31 +9,17 @@ module.exports = Backbone.View.extend({
 
   template: _.template(Template),
 
-  events: {
-    'show.bs.collapse': 'uncollapse',
-    'hide.bs.collapse': 'collapse'
-  },
-
-  initialize: function() {
-    this.collapsed = true;
-    this.colors = {
-      indicator: null,
-      points: []
-    };
-    this.listenTo(Backbone, 'MAP_INDICATOR_COLORS', this.showMapIndicatorColors);
+  initialize: function(options) {
+    this.app = options.app;
+    this.listenTo(this.app.display, 'update:layers', this.render);
   },
 
   render: function() {
-    this.$el.html(this.template(_.extend({collapsed: this.collapsed}, this.colors)));
+    var context = {
+      layers: this.app.data.getSelectedLayers()
+    };
+    this.$el.html(this.template(context));
     return this;
-  },
-
-  collapse: function() { this.collapsed = true; },
-  uncollapse: function() { this.collapsed = false; },
-
-  showMapIndicatorColors: function(newColors) {
-    this.colors.indicator = newColors;
-    this.render();
   }
 
 });

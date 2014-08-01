@@ -22,7 +22,7 @@ module.exports = BaseControlView.extend({
   },
 
   render: function() {
-    BaseControlView.prototype.render.apply(this);
+    BaseControlView.prototype.render.apply(this, arguments);
 
     var self = this;
 

@@ -23,8 +23,12 @@ module.exports = {
 
 
   getAPIBase: function(){
-    var url = document.URL;
-    return this._findBase(url);
+    if (typeof document !== 'undefined') {
+      var url = document.URL;
+      return this._findBase(url);
+    } else {
+      return ''
+    }
   },
 
   // Hacky way of finding the 'base' url for the api. 

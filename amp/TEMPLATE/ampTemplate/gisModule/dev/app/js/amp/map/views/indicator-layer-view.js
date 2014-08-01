@@ -3,7 +3,7 @@ var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
-var Colors = require('../collections/layer-colors-collection');
+// var Colors = require('../collections/layer-colors-collection');
 
 module.exports = Backbone.View.extend({
 
@@ -48,17 +48,6 @@ module.exports = Backbone.View.extend({
     var property = indicator.get('property');
     var maxValue = 0;
 
-    var colors = Colors.range({
-      seed: indicator.get('featurePath'),
-      title: indicator.get('title'),
-      mode: 'range',
-      min: 0,
-      max: 100,
-      steps: 5
-    });
-
-    Backbone.trigger('MAP_INDICATOR_COLORS', colors);
-
     this.indicatorLayer = L.esri.Layers.featureLayer(indicator.get('featurePath'),{
       simplifyFactor: 0.9,
       style:  function (feature) {
@@ -70,7 +59,7 @@ module.exports = Backbone.View.extend({
     // load is triggered after every pan, because on pan it asks for more feature info from server.
     // set all styles after they are on page and we know the max
     this.listenTo(this.indicatorLayer, 'load', function() {
-      self._updateESRIIndicatorStyles(maxValue, colors, property);
+      self._updateESRIIndicatorStyles(maxValue);
     });
     this.listenToOnce(this.indicatorLayer, 'load', function(e) {
       // this.map.fitBounds(e.bounds);  // not even once...
@@ -83,17 +72,6 @@ module.exports = Backbone.View.extend({
     var property = indicator.get('property');
     var maxValue = 0;
 
-    var colors = Colors.range({
-      seed: indicator.get('featurePath'),
-      title: indicator.get('title'),
-      mode: 'range',
-      min: 0,
-      max: 100,
-      steps: 5
-    });
-
-    Backbone.trigger('MAP_INDICATOR_COLORS', colors);
-
     //TODO: may need to apply API base url to begining of path
     $.get(indicator.get('featurePath')).then(function(geoJsonData) {
 
@@ -105,7 +83,7 @@ module.exports = Backbone.View.extend({
             return {color: 'blue',  weight: 1,  opacity:0.4, fillOpacity:0.5 };
           }
       }).addTo(self.map).bringToBack();
-      self._updateIndicatorStyles(maxValue, colors, property);
+      self._updateIndicatorStyles(maxValue, property);
 
       self.map.fitBounds(self.indicatorLayer.getBounds());
     });
@@ -113,39 +91,25 @@ module.exports = Backbone.View.extend({
   },
 
   // for esri indicator groups..
-  _updateESRIIndicatorStyles: function(maxValue, colors, property) {
+  _updateESRIIndicatorStyles: function(maxValue, property) {
     var self = this;
 
     this.indicatorLayer.eachFeature(function(layer){
       var id = layer.feature.id;
       var featurePercent = layer.feature.properties[property] * 100 / maxValue;
-      var featureColor = colors.find(function(color) {
-        return color.match(featurePercent);
-      });
-      if (! featureColor) {
-        throw new Error('No color matched feature', layer.feature);
-      }
-      var rgb = featureColor.getRGB();
-      self.indicatorLayer.setFeatureStyle(id, {color: rgb, fillColor:rgb, weight: 1, fillOpacity:0.5 });
+      // self.indicatorLayer.setFeatureStyle(id, {color: rgb, fillColor:rgb, weight: 1, fillOpacity:0.5 });
     });
 
     // this.map.fitBounds(bounds);  // lol.. does not work...
   },
 
   // For normal Leaflet feature group
-  _updateIndicatorStyles: function(maxValue, colors, property) {
+  _updateIndicatorStyles: function(maxValue, property) {
 
-    this.indicatorLayer.setStyle(function(feature) {
-      var featurePercent = feature.properties[property] * 100 / maxValue;
-      var featureColor = colors.find(function(color) {
-        return color.match(featurePercent);
-      });
-      if (! featureColor) {
-        throw new Error('No color matched feature', feature);
-      }
-      var rgb = featureColor.getRGB();
-      return {color: rgb, fillColor: rgb, weight: 1, fillOpacity:0.6 };
-    });
+    // this.indicatorLayer.setStyle(function(feature) {
+    //   var featurePercent = feature.properties[property] * 100 / maxValue;
+    //   return {color: rgb, fillColor: rgb, weight: 1, fillOpacity:0.6 };
+    // });
   },
 
 });

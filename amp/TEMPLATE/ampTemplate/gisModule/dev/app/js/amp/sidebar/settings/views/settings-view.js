@@ -13,7 +13,7 @@ module.exports = BaseControlView.extend({
   template:  _.template(Template),
 
   initialize: function() {
-    BaseControlView.prototype.initialize.apply(this);
+    BaseControlView.prototype.initialize.apply(this, arguments);
   },
 
   render: function() {

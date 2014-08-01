@@ -12,10 +12,14 @@ var ModuleTemplate = fs.readFileSync(__dirname + '/../templates/module-template.
 
 module.exports = Backbone.View.extend({
 
-  initialize: function() {
-    this.mapView = new MapView();
-    this.dataQualityView = new DataQualityView();
-    this.sidebarView = new SidebarView();
+  data: null,  // data attaches here
+
+  initialize: function(options) {
+    this.data = options.data;
+    this.display = options.display;
+    this.mapView = new MapView({app: this});
+    this.dataQualityView = new DataQualityView({app: this});
+    this.sidebarView = new SidebarView({app: this});
   },
 
   // Render entire geocoding view.

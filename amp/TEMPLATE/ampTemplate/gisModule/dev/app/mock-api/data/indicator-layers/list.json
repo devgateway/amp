@@ -1,0 +1,21 @@
+[
+  {
+    "id": "drc-food",
+    "title": "ADM Join Sample",
+    "type": "joinBoundaries",
+    "link": "/rest/gis/drc-food",
+    "joinBoundariesLink": "/rest/gis/boundaries/adm-1"
+  },
+  {
+    "id": "arggis-feature",
+    "title": "ArcGIS Feature Sample",
+    "type": "ArcGISFeature",
+    "link": "http://gis.devgw.org/arcgis/rest/services/Moldova/Poverty_version_2/MapServer/0"
+  },
+  {
+    "id": "arcgis-raster",
+    "title": "ArcGIS Raster Sample",
+    "type": "ArcGISRaster",
+    "link": "http://gis.devgw.org/arcgis/rest/services/Moldova/Population/MapServer/0"
+  }
+]

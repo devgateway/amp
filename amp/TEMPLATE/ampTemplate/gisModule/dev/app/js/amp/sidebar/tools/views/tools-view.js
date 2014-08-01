@@ -31,7 +31,7 @@ module.exports = BaseControlView.extend({
   },
 
   initialize: function() {
-    BaseControlView.prototype.initialize.apply(this);
+    BaseControlView.prototype.initialize.apply(this, arguments);
     this.savedMaps = new SavedMaps();
     this.listenTo(this.savedMaps, 'add', this.renderSavedMapsList);
     this.listenTo(this.savedMaps, 'remove', this.renderSavedMapsList);

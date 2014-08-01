@@ -19,7 +19,8 @@ module.exports = Backbone.View.extend({
   iconClass: undefined,
   description: undefined,
 
-  initialize: function() {
+  initialize: function(options) {
+    this.app = options.app;
     this.baseTemplate = _.template(BaseTemplate);
   },
 

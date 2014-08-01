@@ -1,35 +1,14 @@
 <div class="legend-header text-center" >
-  <a class="accordion-toggle <%= collapsed ? 'collapsed' : '' %>" data-toggle="collapse" data-parent=".legend" href=".legend-content">
+  <a href="#toggle-legend-collapse">
     Legend
   </a>
 </div>
-<div class="legend-content accordion-body <%= collapsed ? 'collapse' : '' %>">
-  <div class="accordion-inner">
-    <% if (indicator) { %>
-      <h3><%= indicator.title %></h3>
-      <ol>
-        <% indicator.each(function(color) { %>
-          <li>
-            <span class="color square" style="background: <%= color.getHex() %>"></span>
-            <%= color.get('matchLow') %>&mdash;<%= color.get('matchHigh') %>
-          </li>
-        <% }); %>
-      </ol>
-    <% } %>
-    <% _.each(points, function(point) { %>
-      <h3><%= point.name %></h3>
-      <ul>
-        <% _.each(point.values, function(value) { %>
-          <li>
-            <span class="color circle" style="background: <%= value.color %>"></span>
-            <%= value.name %>
-          </li>
-        <% }); %>
-      </ul>
-    <% }); %>
-    <% if (!indicator && points.length < 1) { %>
-      <h3>No layers loaded</h3>
-      <p>This space is used to explain symbols on the map when Indicator Layers or Point Layers are loaded.</p>
-    <% } %>
-  </div>
+<div class="legend-content">
+  <% layers.each(function(layer) { %>
+    <h3><%= layer.get('title') %></h3>
+  <% }); %>
+  <% if (layers.length < 1) { %>
+    <h3>No layers loaded</h3>
+    <p>This space is used to explain symbols on the map when Indicator Layers or Point Layers are loaded.</p>
+  <% } %>
 </div>

@@ -1,9 +1,0 @@
-[
-  {
-      "id": 3,
-      "title": "DRC Food Scarcity",
-      "featurePath": "/rest/gis/drc-food",
-      "property": "Poor",
-      "type": "geoJSON"
-  }
-]

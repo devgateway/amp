@@ -54,6 +54,7 @@ var FakeServer = function() {
     // Indicator Layers
     'GET /rest/gis/indicator-layers':         fs.readFileSync(__dirname + '/data/indicator-layers/list.json', 'utf8'),
     'GET /rest/gis/indicator-layers/drc-food':fs.readFileSync(__dirname + '/data/indicator-layers/drc-food.json', 'utf8'),
+    'GET /rest/gis/indicator-layers/drc-geojson':fs.readFileSync(__dirname + '/data/indicator-layers/drc-geojson.json', 'utf8'),
 
     // Config
     // 'GET /rest/gis/config': fs.readFileSync(__dirname + '/data/config/....json', 'utf8'),

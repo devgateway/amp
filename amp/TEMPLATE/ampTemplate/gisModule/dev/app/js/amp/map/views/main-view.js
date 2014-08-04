@@ -39,8 +39,8 @@ module.exports = Backbone.View.extend({
 
     // init layers
     this.projectSitesLayerView = new ProjectSitesLayerView({map: this.map});
-    this.admLayerView = new ADMLayerView({map: this.map});
-    this.indicatorLayerView = new IndicatorLayerView({map: this.map});
+    this.admLayerView = new ADMLayerView({map: this.map, app: this.app});
+    this.indicatorLayerView = new IndicatorLayerView({map: this.map, app: this.app});
 
     this.headerView = new MapHeaderView({app: this.app});
     this.legendView = new LegendView({app: this.app});

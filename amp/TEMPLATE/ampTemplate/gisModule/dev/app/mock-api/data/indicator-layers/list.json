@@ -1,21 +1,28 @@
 [
   {
-    "id": "drc-food",
-    "title": "ADM Join Sample",
-    "type": "joinBoundaries",
-    "link": "/rest/gis/drc-food",
-    "joinBoundariesLink": "/rest/gis/boundaries/adm-1"
+    "id": "arggis-feature",
+    "title": "ArcGIS DRC Feature Sample",
+    "type": "ArcGISFeature",
+    "link": "http://gis.devgateway.org:6080/arcgis/rest/services/gis-reeng/UmbrellasPer100Ppl/MapServer/0"
   },
   {
-    "id": "arggis-feature",
-    "title": "ArcGIS Feature Sample",
-    "type": "ArcGISFeature",
-    "link": "http://gis.devgw.org/arcgis/rest/services/Moldova/Poverty_version_2/MapServer/0"
-  },
+    "id": "drc-geojson",
+    "title": "Food Scarcity GeoJSON",
+    "type": "GeoJSON",
+    "property": "Poor",
+    "link": "/rest/gis/indicator-layers/drc-geojson"
+  },  
   {
     "id": "arcgis-raster",
-    "title": "ArcGIS Raster Sample",
+    "title": "TODO: ArcGIS Raster",
     "type": "ArcGISRaster",
     "link": "http://gis.devgw.org/arcgis/rest/services/Moldova/Population/MapServer/0"
+  },
+  {
+    "id": "drc-food",
+    "title": "TODO: ADM Join Sample",
+    "type": "joinBoundaries",
+    "link": "/rest/gis/indicator-layers/drc-food",
+    "joinBoundariesLink": "/rest/gis/boundaries/adm-1"
   }
 ]

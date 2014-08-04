@@ -42,11 +42,11 @@ module.exports = BaseControlView.extend({
     this.projectLayerCollection = new ProjectLayerCollection([
       {
         title: 'Projects by Region',
-        value:'aggregate-adm1'
+        value:'adm-1'
       },
       {
         title: 'Projects by District',
-        value:'aggregate-adm2'
+        value:'adm-2'
       },
       {
         title: 'Projects Sites',

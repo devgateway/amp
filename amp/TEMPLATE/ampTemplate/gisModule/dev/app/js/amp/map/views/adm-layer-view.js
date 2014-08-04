@@ -61,10 +61,10 @@ module.exports = Backbone.View.extend({
 
   // TODO: non hardcoded version.
   _loadProjectLayer: function(type){
-    if(type === 'aggregate-adm1'){
-      this._filtersUpdated({adminLevel: 1});
-    } else if(type === 'aggregate-adm2'){
-      this._filtersUpdated({adminLevel: 2});
+    if(type === 'adm-1'){
+      this._filtersUpdated({adminLevel: type});
+    } else if(type === 'adm-2'){
+      this._filtersUpdated({adminLevel: type});
     } else {
       this._removeFromMap();
     }
@@ -91,28 +91,22 @@ module.exports = Backbone.View.extend({
   _loadBoundaries: function(filterObj){
     var self = this;
 
-    // TODO: Switch to AJAX style if same origin for boundary:  L.mapbox.featureLayer().loadURL('....');
-    // DRC: http://gis.devgateway.org/arcgis/rest/services/wbi/Africa/MapServer/13'
-    // Moldova: http://gis.devgateway.org/arcgis/rest/services/wbi/Europe_and_Central_Asia/MapServer/43
-
-    // only do once
     this._removeBoundary();
 
-    // TODO: use filterObj.adminLevel to choose right boundary.
-    // TODO: harcoded path is bad.
     if(filterObj.adminLevel){
-      $.get( APIHelper.getAPIBase() + '/rest/gis/adminBoundary/'+ filterObj.adminLevel).then(function(geoJSON){
+      // get current boundary.
+      var boundaries = app.data.boundaries;
+      var currentBoundary = boundaries.findWhere({id:filterObj.adminLevel});
+      var geoJSON = currentBoundary.toJSON();
 
-        self.boundaryLayer = L.geoJson(geoJSON,
-          {
-            simplifyFactor: 0.9,
-            style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '3',}
-          }).addTo(self.map);
-      });
+      self.boundaryLayer = L.geoJson(geoJSON,
+        {
+          simplifyFactor: 0.9,
+          style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '3',}
+        }).addTo(self.map);
     } else{
       console.warn('missing admin level in Filter');
     }
-
   },
 
 
@@ -133,14 +127,27 @@ module.exports = Backbone.View.extend({
   // Can do some post-processing here if we want...
   _getCluster: function(filter){
 
-    //temp convert adminLevel to AMP strings:
-    var ampStrings = ['Country', 'Region', 'Zone', 'District'];
-    filter.adminLevel = [ampStrings[filter.adminLevel]];
+    filter.adminLevel = this._tempConvertToString(filter.adminLevel);
 
-    var parsedParam = {filter:null};    
+    var parsedParam = {filter:null};
     parsedParam.filter = APIHelper.convertToAMPStyle(filter);
 
     return this.collection.fetch({data:parsedParam});
+  },
+
+  // !temp convert adminLevel to AMP strings:
+  _tempConvertToString: function(id){
+    var str = '';
+    if(id =='adm-0'){
+      str = 'Country';
+    } else if(id =='adm-1'){
+      str = 'Region';
+    } else if(id =='adm-2'){
+      str = 'Zone';
+    } else if(id =='adm-3'){
+      str = 'District';
+    }
+    return str;
   },
 
 

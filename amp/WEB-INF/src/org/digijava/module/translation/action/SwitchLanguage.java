@@ -69,6 +69,7 @@ public class SwitchLanguage
                                  response) throws java.lang.Exception {
 
         //TranslationForm formBean = (TranslationForm) form;
+    	Boolean isActivityForm=false; 
         String localeKey = null;
         String referrerUrl = request.getParameter("rfr");
         localeKey = request.getParameter("code");
@@ -92,10 +93,12 @@ public class SwitchLanguage
         	String actId = referrerUrl.substring(referrerUrl.indexOf(ACT_FORM_PATH) + ACT_FORM_PATH.length());
         	//free lock
         	ActivityGatekeeper.pageModeChange(actId);
+        	isActivityForm=true;
         }
         else if (referrerUrl.contains(ACT_SSC_FORM_PATH)) {
         	String actId = referrerUrl.substring(referrerUrl.indexOf(ACT_SSC_FORM_PATH) + ACT_SSC_FORM_PATH.length());
-        	ActivityGatekeeper.pageModeChange(actId);	
+        	ActivityGatekeeper.pageModeChange(actId);
+        	isActivityForm=true;
         }
         
         
@@ -138,7 +141,10 @@ public class SwitchLanguage
         	request.getSession().setAttribute("currentMember",teamMember );
         	request.getSession().setAttribute(Constants.USER_WORKSPACES, TeamMemberUtil.getTeamMembers(tm.getEmail()));
         }
-
+        if(isActivityForm){
+        	response.sendRedirect(referrerUrl);
+        	return null;
+        }
         return new ActionForward(referrerUrl, true);
     }
 }

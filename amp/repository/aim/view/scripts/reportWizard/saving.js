@@ -204,7 +204,8 @@ SaveReportEngine.prototype.showTitlePanel	= function () {
 		this.titlePanel.render( document.body );
 	}
 	this.titlePanel.show();
-	getReportTitleEl().focus();
+	this.titlePanel.subscribe("show", function () {getReportTitleEl().focus(); });
+
 };
 
 SaveReportEngine.prototype.saveReport = function()

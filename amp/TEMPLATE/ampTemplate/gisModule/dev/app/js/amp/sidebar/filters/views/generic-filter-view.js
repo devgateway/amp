@@ -26,7 +26,7 @@ module.exports = BaseFilterView.extend({
     // Create tree view
     this._createTree(options.url).then(function(){
       self._updateCountInMenu();
-      self.treeModel.on('updateCount', function(){
+      self.treeModel.on('change:numSelected', function(){
         self._updateCountInMenu();
       });
     });
@@ -59,13 +59,13 @@ module.exports = BaseFilterView.extend({
 
   _selectAll: function(){
     // force trigger even if already this state (important for half-fill ui
-    this.treeModel.set('selected',true,{ "silent": true }); 
+    this.treeModel.set('selected',true,{ 'silent': true }); 
     this.treeModel.trigger('change:selected',this.treeModel, null,{propogation:false});
   },
 
   _selectNone: function(){
     // force trigger even if already this state (important for half-fill ui)
-    this.treeModel.set('selected',false,{ "silent": true });
+    this.treeModel.set('selected',false,{ 'silent': true });
     this.treeModel.trigger('change:selected',this.treeModel, null,{propogation:false});
   },
 

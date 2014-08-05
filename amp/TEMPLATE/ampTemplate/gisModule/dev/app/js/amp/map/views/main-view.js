@@ -71,7 +71,7 @@ module.exports = Backbone.View.extend({
   _renderCountryBoundary: function(){
     var self = this;
     // TODO: harcoded path is bad.
-    $.get( APIHelper.getAPIBase() + '/rest/gis/boundaries/adm0').then(function(geoJSON){
+    $.get( APIHelper.getAPIBase() + '/rest/gis/boundaries/adm-0').then(function(geoJSON){
 
       self.countryBoundary = L.geoJson(geoJSON,
         {

@@ -48,8 +48,8 @@ var FakeServer = function() {
     // 'GET /rest/...': fs.readFileSync(__dirname + '/data/....json', 'utf8'),
 
     // Project Sites
-    // 'GET /rest/gis/project-sites': fs.readFileSync(__dirname + '/data/project-sites/....json', 'utf8'),
-    'GET /rest/gis/project-sites': fs.readFileSync(__dirname + '/data/project-sites/random.json', 'utf8'),
+    'GET /rest/gis/project-sites': fs.readFileSync(__dirname + '/data/project-sites/drc-points-2000.json', 'utf8'),
+    //'GET /rest/gis/project-sites': fs.readFileSync(__dirname + '/data/project-sites/random.json', 'utf8'),
 
     // Indicator Layers
     'GET /rest/gis/indicator-layers':         fs.readFileSync(__dirname + '/data/indicator-layers/list.json', 'utf8'),

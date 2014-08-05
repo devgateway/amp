@@ -89,6 +89,9 @@ module.exports = Backbone.View.extend({
   },
 
   // TODO: this is just a proof of concept
+  // Phil: do you use boundaries for joining?
+  // I'm considering making boundary-view on the map where it just listens to the app.data collection,
+  // and draws the selected / active boundary....
   _loadBoundaries: function(filterObj){
     var self = this;
 

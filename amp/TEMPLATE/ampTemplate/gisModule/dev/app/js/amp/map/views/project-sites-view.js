@@ -4,13 +4,22 @@ var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
+require('../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster.js');
 var ProjectSitesCollection = require('../collections/project-sites-collection');
 
 
 module.exports = Backbone.View.extend({
+  // These will eventually move to a config. 
+  // They control when to resize points based on zoom
+  ZOOM_BREAKPOINT: 7,
+  SMALL_ICON_RADIUS: 2,
+  BIG_ICON_RADIUS: 7,
 
   initialize: function(extraProperties) {
     _.extend(this, extraProperties);  // extraProperties={map: ...}
+
+    L.Icon.Default.imagePath = '/img/map-icons';
+
     this.featureGroup = null;
     this.collection = new ProjectSitesCollection();
 
@@ -18,6 +27,7 @@ module.exports = Backbone.View.extend({
     // backing the filter, and subscribe to changes on it?
     Backbone.on('FILTERS_UPDATED', this._filtersUpdated, this);
     Backbone.on('MAP_LOAD_PROJECT_LAYER', this._loadProjectLayer, this);
+
     _.bindAll(this, '_onEachFeature');
   },
 
@@ -29,13 +39,14 @@ module.exports = Backbone.View.extend({
   _loadProjectLayer: function(type){
     if(type === 'locations'){
       this._filtersUpdated();
+      this.map.on('zoomend', this._updateZoom, this);
     } else{
       this._removeFromMap();
+      this.map.off('zoomend',this._updateZoom);
     }
   },
 
   _filtersUpdated: function() {
-    // TODO: Should only run if this layer is active.. check something like self.graphicLayer.active
 
     // TODO: 1. get all the filters using an event or service
     //      fitlers-view.js can iterate over array of filters, and ask each one to return it's filter key and value....
@@ -59,7 +70,7 @@ module.exports = Backbone.View.extend({
   },
 
   // TODO: improve, so not global jQuery selectors..
-  // TODO: figure out why gif animation doesn't play while fetching..
+  // move to be inside sidebar view, and use app.data.model.
   _startLoadingIcon: function(){
     $('#point-selector .loading-icon').show();
   },
@@ -74,23 +85,43 @@ module.exports = Backbone.View.extend({
     // remove current featureGroup
     this._removeFromMap();
 
+//     // "exports": "L",
+    var markers = new L.markerClusterGroup({
+      maxClusterRadius: 0.1,       
+      iconCreateFunction: function (cluster) {
+        var markers = cluster.getAllChildMarkers();
+        return L.divIcon({ html: markers.length, className: 'marker-cluster', iconSize: L.point(16, 16) });
+      },
+      zoomToBoundsOnClick:false, 
+      showCoverageOnHover:false, 
+      spiderfyOnMaxZoom:false, 
+      removeOutsideVisibleBounds:true
+    });
+
     // add new featureGroup
     self.featureGroup = L.geoJson(self.features, {
       pointToLayer: function (feature, latlng) {
-        return new L.CircleMarker(latlng, {
-            radius: 5,
+        var point = new L.CircleMarker(latlng, {
+            radius: self.SMALL_ICON_RADIUS,
             fillColor: '#f70',
             color: '#000',
             weight: 1,
             opacity: 1,
             fillOpacity: 1,
           });
+
+        //var point2 = new L.Marker(latlng);
+        markers.addLayer(point);
+
+        return point;
       },
       onEachFeature: self._onEachFeature
-    }).addTo(self.map);
+    });//.addTo(self.map);
 
+
+    self.map.addLayer(markers);
     // set map bounds
-    this.map.fitBounds(self.featureGroup.getBounds());
+    //this.map.fitBounds(self.featureGroup.getBounds());
 
   },
 
@@ -150,21 +181,25 @@ module.exports = Backbone.View.extend({
 
   // Owen asked for the circles to shrink if we're zoomed out and there are lots of points..
   // To hacky to do cleanly for now...
-  // _updateZoom: function(){
-  //   if(this.featureGroup){
-  //     var zoom = this.map.getZoom();
-  //     // make small points
-  //     if(zoom < 9){
-  //       this.featureGroup.eachLayer(function(layer){
-  //           layer.setRadius(2);
-  //       });
-  //     } else {
-  //       this.featureGroup.eachLayer(function(layer){
-  //           layer.setRadius(5);
-  //       });
-  //     }
-  //   }
-  // },
+  _updateZoom: function(){
+    var self = this;
+    console.log('_updateZoom');    
+    
+    if(this.featureGroup){
+      var zoom = this.map.getZoom();
+      // make small points
+      if(zoom < this.ZOOM_BREAKPOINT){
+        this.featureGroup.eachLayer(function(layer){
+            layer.setRadius(self.SMALL_ICON_RADIUS);
+          });
+      } else {
+        this.featureGroup.eachLayer(function(layer){
+            layer.setRadius(self.BIG_ICON_RADIUS);
+          });
+      }
+    }
+
+  },
 
 
 });

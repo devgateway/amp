@@ -32,6 +32,8 @@ _.extend(GISData.prototype, Backbone.Events, {
     this.indicators.fetch();
   },
 
+  // Phil, I think we should be a method to indicator-collection, we should discuss,
+  // but I think less logic in this obj the better...unless this is for getting all types of layers...?
   getSelectedLayers: function() {
     var layers = _([]);
 

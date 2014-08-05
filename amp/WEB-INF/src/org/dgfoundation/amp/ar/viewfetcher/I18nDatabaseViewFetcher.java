@@ -226,13 +226,27 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 		protected String getTranslation(String columnLabel) throws SQLException
 		{
 			I18nViewColumnDescription colDesc = viewDesc.getColumnDescription(columnLabel);
-			if (colDesc.isCalculated())
-			{
-				return colDesc.prop.getValueFor(this, this.getDelegate(), cachers.get(colDesc.prop), locale);
+			Long idToTranslate = colDesc.indexColumnName == null ? null : super.getDelegate().getLong(colDesc.indexColumnName);
+
+			if (colDesc.isCalculated()) {
+				/**
+				 * some calculated values are cacheable. This is the case when:
+				 * 1. an id column has been defined  
+				 *  - AND -
+				 * 2. the id column has a non-null value for the current row
+				 */
+				
+				ColumnValuesCacher cacher = cachers.get(colDesc.prop);
+				boolean entryIsCacheable = cacher != null && idToTranslate != null;  
+				if (entryIsCacheable && cacher.values.containsKey(idToTranslate))
+					return cacher.values.get(idToTranslate); // computable column is cacheable -> try to retrieve cache
+				
+				String value = colDesc.prop.getValueFor(this, this.getDelegate(), cacher, locale);
+				if (entryIsCacheable)
+					cacher.values.put(idToTranslate, value);
+				return value;
 			}
-			
-			Long idToTranslate = super.getDelegate().getLong(colDesc.indexColumnName);
-			
+						
 			if ((idToTranslate == null) || (idToTranslate.longValue() <= 0) || indicesNotToTranslate.contains(idToTranslate))
 				return super.getString(columnLabel); // this particular entry should not be translated
 			

@@ -380,6 +380,8 @@ public class SQLUtils {
 			{
 				if (obj.toString().equals(SQL_UTILS_NULL))
 					return "NULL";
+				if (obj.toString().indexOf('\'') < 0)
+					return String.format("'%s'", obj.toString());
 				//$t$blablabla$t$ - dollar-quoting
 				//return "'" + obj.toString() + "'";
 				String dollarQuote = "$dAaD41$";

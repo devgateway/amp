@@ -320,16 +320,20 @@ public class MondrianETL {
 			LinkedHashSet<String> columns = SQLUtils.getTableColumns(mondrianTable.tableName);		
 			List<Map<String, Object>> vals = new ArrayList<>();
 			ResultSet rs = fetcher.fetch(null);
+			// direct: index-column to value-column
+			HashBiMap<String, String> indexColToValueCol = HashBiMap.create(mondrianTable.getI18nDescription().getMappedColumns());
+			String UNDEFINED_VALUE = "Undefined";
+			String translated_undefined = TranslatorWorker.translateText(UNDEFINED_VALUE, locale, SiteUtils.getDefaultSite());;
 			while (rs.next()) {
-				Map<String, Object> row = readMondrianDimensionRow(mondrianTable, columns, locale, rs);
+				Map<String, Object> row = readMondrianDimensionRow(indexColToValueCol, columns, UNDEFINED_VALUE, translated_undefined, rs);
 				vals.add(row);
 			}
 			SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + localizedTableName);
 			SQLUtils.executeQuery(conn, "CREATE TABLE " + localizedTableName + " AS TABLE " + mondrianTable + " WITH NO DATA");
-			postprocessDimensionTable(localizedTableName, mondrianTable.indexedColumns);
 			SQLUtils.insert(conn, localizedTableName, null, null, vals);
+			postprocessDimensionTable(localizedTableName, mondrianTable.indexedColumns);
 		}
-		catch(Exception e) {
+		finally {
 			conn.setAutoCommit(autoCommit);
 		}
 		
@@ -349,20 +353,16 @@ public class MondrianETL {
 	 * @return
 	 * @throws SQLException
 	 */
-	protected Map<String, Object> readMondrianDimensionRow(MondrianTableDescription mondrianTable, Collection<String> columns, String locale, ResultSet rs) throws SQLException {
+	protected Map<String, Object> readMondrianDimensionRow(HashBiMap<String, String> indexColToValueCol, Collection<String> columns, String undefined, String translated_undefined, ResultSet rs) throws SQLException {
 		Map<String, Object> row = new LinkedHashMap<>();
-		String UNDEFINED_ID = MONDRIAN_DUMMY_ID_FOR_ETL.toString();
-		String UNDEFINED_VALUE = "Undefined";
-		String TRANSLATED_UNDEFINED = TranslatorWorker.translateText(UNDEFINED_VALUE, locale, SiteUtils.getDefaultSite());
-		// direct: index-column to value-column
-		HashBiMap<String, String> indexColToValueCol = HashBiMap.create(mondrianTable.getI18nDescription().getMappedColumns());
+		String UNDEFINED_ID = MONDRIAN_DUMMY_ID_FOR_ETL.toString();	
 		for(String colName:columns) {
 			Object colValue = rs.getObject(colName);			
 			if (indexColToValueCol.containsKey(colName) && (colValue != null && colValue.toString().equals(UNDEFINED_ID))) {
 				colValue = MONDRIAN_DUMMY_ID_FOR_ETL;
 			}
-			if (indexColToValueCol.containsValue(colName) && (colValue == null || colValue.toString().isEmpty() || colValue.toString().equalsIgnoreCase(UNDEFINED_VALUE))) {
-				colValue = TRANSLATED_UNDEFINED;
+			if (indexColToValueCol.containsValue(colName) && (colValue == null || colValue.toString().isEmpty() || colValue.toString().equalsIgnoreCase(undefined))) {
+				colValue = translated_undefined;
 			}
 			row.put(colName, colValue);
 		}

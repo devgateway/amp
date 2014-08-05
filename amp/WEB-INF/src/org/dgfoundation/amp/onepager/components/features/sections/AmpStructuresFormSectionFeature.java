@@ -14,6 +14,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -31,11 +32,13 @@ import org.digijava.module.aim.dbentity.AmpStructureType;
 import org.digijava.module.aim.util.StructuresUtil;
 
 public class AmpStructuresFormSectionFeature extends
-		AmpFormSectionFeaturePanel {
+		AmpFormSectionFeaturePanel implements AmpRequiredComponentContainer{
 
 	private static final long serialVersionUID = -6654390083754446344L;
 	
 	protected Collection<AmpStructureType> structureTypes;
+	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
+	
 
 	public AmpStructuresFormSectionFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am) throws Exception {
@@ -79,6 +82,8 @@ public class AmpStructuresFormSectionFeature extends
 						"Structure Type",true, false,  new ChoiceRenderer<AmpStructureType>("name","typeId")) ;
 
 				structureTypes.getChoiceContainer().setRequired(true);
+			    requiredFormComponents.add(structureTypes.getChoiceContainer());
+        		
 				structureTypes.setOutputMarkupId(true);
                 structureTypes.getChoiceContainer().add(new AttributeModifier("style", "max-width: 100px;margin-bottom:20px;"));
 				item.add(structureTypes);
@@ -90,6 +95,8 @@ public class AmpStructuresFormSectionFeature extends
 				name.getTextContainer().add(new AttributeAppender("size", new Model("10px"), ";"));
 				name.setTextContainerDefaultMaxSize();
 				name.getTextContainer().setRequired(true);
+				requiredFormComponents.add(name.getTextContainer());
+	        		
 				if (name.isComponentMultilingual()) {
 					name.getTextContainer().add(new AttributeAppender("style", "margin-bottom:40px;"));
 				}
@@ -153,6 +160,11 @@ public class AmpStructuresFormSectionFeature extends
 			}
 		};
 		add(addbutton);
+	}
+	
+
+	public List<FormComponent<?>> getRequiredFormComponents() {
+		return requiredFormComponents;
 	}
 
 }

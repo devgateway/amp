@@ -9,11 +9,12 @@ var ProjectSitesCollection = require('../collections/project-sites-collection');
 
 
 module.exports = Backbone.View.extend({
-  // These will eventually move to a config. 
+  // These will eventually move to a config.
   // They control when to resize points based on zoom
   ZOOM_BREAKPOINT: 7,
   SMALL_ICON_RADIUS: 2,
   BIG_ICON_RADIUS: 7,
+  markerCluster: null,
 
   initialize: function(extraProperties) {
     _.extend(this, extraProperties);  // extraProperties={map: ...}
@@ -22,6 +23,20 @@ module.exports = Backbone.View.extend({
 
     this.featureGroup = null;
     this.collection = new ProjectSitesCollection();
+
+    this.markerCluster = new L.markerClusterGroup({
+      maxClusterRadius: 0.1,
+      iconCreateFunction: function (cluster) {
+        var markers = cluster.getAllChildMarkers();
+        return L.divIcon({ html: markers.length, className: 'marker-cluster', iconSize: L.point(16, 16) });
+      },
+      zoomToBoundsOnClick:false,
+      showCoverageOnHover:false,
+      spiderfyOnMaxZoom:false,
+      removeOutsideVisibleBounds:true
+    });
+
+    this._filtersUpdated(); // explicitly call once at begining...maybe not needed later.
 
     // instead, maybe we can grab a reference to the model or collection,
     // backing the filter, and subscribe to changes on it?
@@ -38,7 +53,7 @@ module.exports = Backbone.View.extend({
 
   _loadProjectLayer: function(type){
     if(type === 'locations'){
-      this._filtersUpdated();
+      this._addToMap();
       this.map.on('zoomend', this._updateZoom, this);
     } else{
       this._removeFromMap();
@@ -47,56 +62,32 @@ module.exports = Backbone.View.extend({
   },
 
   _filtersUpdated: function() {
-
     // TODO: 1. get all the filters using an event or service
     //      fitlers-view.js can iterate over array of filters, and ask each one to return it's filter key and value....
     var filterObj = {};
     var self = this;
 
+
     // Get the values for the map. Sample URL:
     // /rest/gis/cluster?filter="{"FiltersParams":{"params":[{"filterName":"adminLevel","filterValue":["Region"]}]}}"
     // (don't forget to url-encode)
-
     this._startLoadingIcon();
-    this._getProjectSites(filterObj).then(function(data) {
+    return this._getProjectSites(filterObj).then(function(data) {
       self._stopLoadingIcon();
+
       if(data && data.type === 'FeatureCollection') {
         self.features = data.features;
         self._renderFeatures();
       } else{
-        console.warn('Project Sites response empty.');
+        console.warn('Project Sites response empty or improper type.');
       }
     });
   },
 
-  // TODO: improve, so not global jQuery selectors..
-  // move to be inside sidebar view, and use app.data.model.
-  _startLoadingIcon: function(){
-    $('#point-selector .loading-icon').show();
-  },
-  _stopLoadingIcon: function(){
-    $('#point-selector .loading-icon').hide();
-  },
-
-
   _renderFeatures: function() {
     var self = this;
 
-    // remove current featureGroup
-    this._removeFromMap();
-
-//     // "exports": "L",
-    var markers = new L.markerClusterGroup({
-      maxClusterRadius: 0.1,       
-      iconCreateFunction: function (cluster) {
-        var markers = cluster.getAllChildMarkers();
-        return L.divIcon({ html: markers.length, className: 'marker-cluster', iconSize: L.point(16, 16) });
-      },
-      zoomToBoundsOnClick:false, 
-      showCoverageOnHover:false, 
-      spiderfyOnMaxZoom:false, 
-      removeOutsideVisibleBounds:true
-    });
+    self.markerCluster.clearLayers();
 
     // add new featureGroup
     self.featureGroup = L.geoJson(self.features, {
@@ -110,20 +101,26 @@ module.exports = Backbone.View.extend({
             fillOpacity: 1,
           });
 
-        //var point2 = new L.Marker(latlng);
-        markers.addLayer(point);
+        self.markerCluster.addLayer(point);
 
         return point;
       },
       onEachFeature: self._onEachFeature
-    });//.addTo(self.map);
-
-
-    self.map.addLayer(markers);
-    // set map bounds
-    //this.map.fitBounds(self.featureGroup.getBounds());
-
+    });
   },
+
+  _addToMap: function(){
+    if(this.markerCluster && !this.map.hasLayer(this.markerCluster)){
+      this.map.addLayer(this.markerCluster);
+    }
+  },
+
+  _removeFromMap: function(){
+    if(this.markerCluster && this.map.hasLayer(this.markerCluster)){
+      this.map.removeLayer(this.markerCluster);
+    }
+  },
+
 
   // Create pop-ups
   _onEachFeature: function(feature, layer) {
@@ -173,18 +170,11 @@ module.exports = Backbone.View.extend({
     return this.collection.fetch({data: filter});
   },
 
-  _removeFromMap: function(){
-    if(this.featureGroup){
-      this.map.removeLayer(this.featureGroup);
-    }
-  },
-
-  // Owen asked for the circles to shrink if we're zoomed out and there are lots of points..
-  // To hacky to do cleanly for now...
+  // circles  shrink if we're zoomed out, get big if zoomed in
   _updateZoom: function(){
     var self = this;
-    console.log('_updateZoom');    
-    
+    console.log('_updateZoom');
+
     if(this.featureGroup){
       var zoom = this.map.getZoom();
       // make small points
@@ -200,6 +190,16 @@ module.exports = Backbone.View.extend({
     }
 
   },
+
+  // TODO: improve, so not global jQuery selectors..
+  // move to be inside sidebar view, and use app.data.model.
+  _startLoadingIcon: function(){
+    $('#point-selector .loading-icon').show();
+  },
+  _stopLoadingIcon: function(){
+    $('#point-selector .loading-icon').hide();
+  },
+
 
 
 });

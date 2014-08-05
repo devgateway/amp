@@ -24,6 +24,8 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	private boolean summaryReport = false;
 	private boolean calculateRowTotals = false;
 	private boolean calculateColumnTotals = false;
+	private boolean displayEmptyFundingColumns = false;
+	private boolean displayEmptyFundingRows = false;
 	
 	public ReportSpecificationImpl(String reportName) {
 		this.reportName = reportName;
@@ -172,6 +174,32 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	@Override
 	public boolean isCalculateColumnTotals() {
 		return calculateColumnTotals;
+	}
+	
+	/**
+	 * Configures whether columns with no funding data should be displayed or not
+	 * @param displayEmptyFundingColumns
+	 */
+	public void setDisplayEmptyFundingColumns(boolean displayEmptyFundingColumns) {
+		this.displayEmptyFundingColumns = displayEmptyFundingColumns;
+	}
+
+	@Override
+	public boolean isDisplayEmptyFundingColumns() {
+		return this.displayEmptyFundingColumns;
+	}
+
+	/**
+	 * 
+	 * @param displayEmptyFundingRows
+	 */
+	public void setDisplayEmptyFundingRows(boolean displayEmptyFundingRows) {
+		this.displayEmptyFundingRows = displayEmptyFundingRows;
+	}
+	
+	@Override
+	public boolean isDisplayEmptyFundingRows() {
+		return this.displayEmptyFundingRows;
 	}
 
 }

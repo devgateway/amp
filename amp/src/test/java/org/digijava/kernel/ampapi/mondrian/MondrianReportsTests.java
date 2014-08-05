@@ -18,9 +18,12 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.reports.ReportUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpReports;
 
 /**
  * Test Reports generation via Reports API provided by {@link org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator MondrianReportGenerator}
@@ -42,6 +45,8 @@ public class MondrianReportsTests extends AmpTestCase {
 		suite.addTest(new MondrianReportsTests("testColumnSortingNoTotals"));
 		suite.addTest(new MondrianReportsTests("testColumnMeasureSortingTotals"));
 		suite.addTest(new MondrianReportsTests("testSortingByTuplesTotals"));
+		suite.addTest(new MondrianReportsTests("testAmpReportToReportSpecification"));
+		
 		return suite;
 	}
 	
@@ -87,6 +92,12 @@ public class MondrianReportsTests extends AmpTestCase {
 		spec.setCalculateColumnTotals(doTotals);
 		spec.setCalculateRowTotals(doTotals);
 		return spec;
+	}
+	
+	public void testAmpReportToReportSpecification() {
+		AmpReports report = (AmpReports) PersistenceManager.getSession().get(AmpReports.class, 1018L);//id is from Moldova DB, TODO: update for tests db 
+		ReportSpecificationImpl spec = ReportUtils.toReportSpecification(report);
+		generateAndValidate(spec, true);
 	}
 	
 	private void generateAndValidate(ReportSpecification spec, boolean print) {

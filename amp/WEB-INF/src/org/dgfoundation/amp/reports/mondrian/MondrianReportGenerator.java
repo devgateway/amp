@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.FilterRule;
+import org.dgfoundation.amp.newreports.FilterRule.FilterType;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
@@ -32,7 +33,6 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
-import org.dgfoundation.amp.reports.FilterType;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.queries.MDXGenerator;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
@@ -76,7 +76,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	
 	/**
 	 * Mondrian Report Generator
-	 * @param reportAreaType - report area type to be used for output generation.
+	 * @param reportAreaType - report area type to be used for output genetration.
 	 */
 	public MondrianReportGenerator(Class<? extends ReportAreaImpl> reportAreaType) {
 		this (reportAreaType, false);
@@ -137,26 +137,36 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//add requested columns
 		for (ReportColumn col:spec.getColumns()) {
 			MDXAttribute elem = (MDXAttribute)MondrianMaping.toMDXElement(col);
-			config.addRowAttribute(elem);
+			if (elem == null) 
+				reportError("No mapping found for column name = " + (col==null ? null : col.getColumnName()) + ", entity type = " + (col == null ? null : col.getEntityName()));
+			else 
+				config.addRowAttribute(elem);
 		}
 		//add requested measures
 		for (ReportMeasure measure: spec.getMeasures()) {
 			MDXMeasure elem = (MDXMeasure)MondrianMaping.toMDXElement(measure);
-			config.addColumnMeasure(elem);
+			if (elem == null) 
+				reportError("No mapping found for column name = " + (measure==null ? null : measure.getMeasureName()) + ", entity type = " + (measure == null ? null : measure.getEntityName()));
+			else
+				config.addColumnMeasure(elem);
 		}
 		//add grouping columns for measure
 		config.getColumnAttributes().addAll(MondrianMaping.getDateElements(spec.getGroupingCriteria()));
 		//add sorting
 		configureSortingRules(config, spec, doHierarchiesTotals);
 		
-		
-		//TODO: configure filters
-		//temporary filtes
-		config.addDataFilter(MondrianMaping.getElementByType(ElementType.YEAR), new MDXFilter(Arrays.asList("2013", "2014"), true));
-		
-		
+		config.setAllowEmptyColumnsData(spec.isDisplayEmptyFundingColumns());
+		config.setAllowEmptyRowsData(spec.isDisplayEmptyFundingRows());		
 		
 		return config;
+	}
+	
+	private void reportError(String error) {
+		logger.error(error);
+		/* TODO: commenting out until in development
+		throw new AMPException(error);
+		*/ 
+
 	}
 	
 	private void configureSortingRules(MDXConfig config, ReportSpecification spec, boolean doHierarchiesTotals) throws AMPException {

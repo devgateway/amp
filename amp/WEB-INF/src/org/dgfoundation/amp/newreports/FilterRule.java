@@ -5,12 +5,16 @@ package org.dgfoundation.amp.newreports;
 
 import java.util.List;
 
-import org.dgfoundation.amp.reports.FilterType;
-
 /**
  * @author Nadejda Mandrescu
  */
 public class FilterRule {
+	public enum FilterType {
+		/** A range from 'min' to 'max' value */
+		RANGE,
+		SINGLE_VALUE,
+		VALUES
+	};
 	public final FilterType filterType;
 	public final String value;
 	public final String min; 
@@ -20,6 +24,13 @@ public class FilterRule {
 	public final boolean maxInclusive;
 	public final boolean valuesInclusive;
 	
+	/**
+	 * Range filter rule to apply over some data
+	 * @param min - minimum value of the range, or null if no minimum limit
+	 * @param max - maximum value of the range, or null if no maximum limit
+	 * @param minInclusive - if true and 'min' is specified, then 'min' is an inclusive limit of the range  
+	 * @param maxInclusive - if true and 'max' is specified, then 'max' is an inclusive limit of the range 
+	 */
 	public FilterRule(String min, String max, boolean minInclusive, boolean maxInclusive) {
 		this(FilterType.RANGE, null, min, max, minInclusive, maxInclusive, null, false);
 	}

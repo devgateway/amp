@@ -84,6 +84,25 @@ public class MondrianMaping {
 			put(new ReportColumn(ColumnConstants.DONOR_GROUP, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
 			put(new ReportColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.PRIMARY_SECTOR, MoConstants.ATTR_PRIMARY_SECTOR_NAME));
 			put(new ReportColumn(ColumnConstants.SECONDARY_SECTOR, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.SECONDARY_SECTOR, MoConstants.ATTR_SECONDARY_SECTOR_NAME));
+			put(new ReportColumn(ColumnConstants.TERTIARY_SECTOR, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.TERTIARY_SECTOR, MoConstants.ATTR_SECONDARY_SECTOR_NAME));
+			put(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_0_NAME));
+			put(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_1_NAME));
+			put(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_2_NAME));
+			put(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_3_NAME));
+			put(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_4, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_4_NAME));
+			put(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_5, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_5_NAME));
+			put(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_6_NAME));
+			put(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_7_NAME));
+			put(new ReportColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_8_NAME));
+			put(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXAttribute(MoConstants.PRIMARY_PROGRAMS, MoConstants.ATTR_PROGRAM_LEVEL_0_NAME));
+			put(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXAttribute(MoConstants.SECONDARY_PROGRAMS, MoConstants.ATTR_PROGRAM_LEVEL_1_NAME));
+			put(new ReportColumn(ColumnConstants.TERTIARY_PROGRAM, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXAttribute(MoConstants.TERTIARY_PROGRAMS, MoConstants.ATTR_PROGRAM_LEVEL_2_NAME));
+			//put(new ReportColumn(ColumnConstants.FINANCING_INSTRUMENT, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants., MoConstants.ATTR_));
+			//put(new ReportColumn(ColumnConstants.MODALITIES, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXAttribute(MoConstants., MoConstants.ATTR_));
+			//put(new ReportColumn(ColumnConstants.TYPE_OF_ASSISTANCE, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXAttribute(MoConstants., MoConstants.ATTR_));
+			//put(new ReportColumn(ColumnConstants.ON_OFF_TREASURY_BUDGET, ReportEntityType.ENTITY_TYPE_ACTIVITY, new MDXAttribute(MoConstants., MoConstants.ATTR_));
+			
+			
 			//TODO: review/complete mappings based on Mondrian Schema
 			
 			//Measures - Entity type - All

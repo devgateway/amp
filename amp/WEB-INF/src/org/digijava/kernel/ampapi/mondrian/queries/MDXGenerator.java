@@ -159,7 +159,8 @@ public class MDXGenerator {
 		String rows = " ON ROWS ";
 		String where = "";
 		String mdx = "";
-		String notEmpty = config.isAllowEmptyData() ? "" : "NON EMPTY ";
+		String notEmptyColumns = config.isAllowColumnsEmptyData() ? "" : "NON EMPTY ";
+		String notEmptyRows = config.isAllowRowsEmptyData() ? "" : "NON EMPTY ";
 		
 		adjustDuplicateElementsOnDifferentAxis(config);
 
@@ -169,7 +170,7 @@ public class MDXGenerator {
 		//if column attributes are not configured, display only measures
 		axisMdx = getColumns(config, with);
 		
-		columns  =  notEmpty + axisMdx + columns;
+		columns  =  notEmptyColumns + axisMdx + columns;
 		
 		/* ROWS */
 		axisMdx = getRows(config, with);
@@ -186,7 +187,7 @@ public class MDXGenerator {
 		if (config.getSortingOrder().size() > 0) {
 			axisMdx = sorting(config.getSortingOrder(), axisMdx);
 		}
-		rows  = notEmpty + axisMdx + rows;
+		rows  = notEmptyRows + axisMdx + rows;
 		
 		/* WHERE  (slice data, aka filters in Reports) */
 		if (config.getLevelFilters().size()>0 || config.getDataFilters().size()>0) {

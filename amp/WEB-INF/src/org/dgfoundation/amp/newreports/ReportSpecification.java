@@ -57,4 +57,14 @@ public interface ReportSpecification {
 	 * @return true if totals per each measure column must be calculated
 	 */
 	public boolean isCalculateColumnTotals();
+	
+	/**
+	 * @return whether columns with no funding data should be displayed or not
+	 */
+	public boolean isDisplayEmptyFundingColumns();
+	
+	/**
+	 * @return whether rows with no funding data should be displayed or not
+	 */
+	public boolean isDisplayEmptyFundingRows();
 }

@@ -41,10 +41,10 @@ public final class MoConstants {
 	public static final String LOCATION = "Location"; 
 	public static final String PRIMARY_SECTOR = "Primary Sector";
 	public static final String SECONDARY_SECTOR = "Secondary Sector";
-	public static final String TETRIARY_SECTOR = "Tertiary Sector";
+	public static final String TERTIARY_SECTOR = "Tertiary Sector";
 	public static final String PRIMARY_PROGRAMS = "Primary Program";
 	public static final String SECONDARY_PROGRAMS = "Secondary Program";
-	public static final String TETRIARY_PROGRAMS = "Tertiary Program";
+	public static final String TERTIARY_PROGRAMS = "Tertiary Program";
 	public static final String NATIONAL_OBJECTIVES = "National Objectives";
 	public static final String DONOR_AGENCY = "Donor Agency";
 	public static final String IMPLEMENTING_AGENCY = "Implementing Agency";

@@ -27,7 +27,8 @@ public class MDXConfig {
 	private Map<MDXAttribute, MDXFilter> dataFilters = new HashMap<MDXAttribute, MDXFilter>();
 	private List<MDXAttribute> singleValueFilters = new ArrayList<MDXAttribute>();
 	private LinkedHashMap<MDXTuple, SortOrder> sortingOrder = new LinkedHashMap<MDXTuple, SortOrder>();
-	private boolean allowEmptyData = false;
+	private boolean allowColumnsEmptyData = false;
+	private boolean allowRowsEmptyData = false;
 	private boolean doRowTotals = false;
 	private boolean doColumnsTotals = false;
 	/**
@@ -197,11 +198,16 @@ public class MDXConfig {
 		this.singleValueFilters.add(singleValueFilter);
 	}
 	/**
-	 * @return the allowEmptyData
+	 * @return the allowColumnsEmptyData
 	 */
-	public boolean isAllowEmptyData() {
-		return allowEmptyData;
+	public boolean isAllowColumnsEmptyData() {
+		return allowColumnsEmptyData;
 	}
+	
+	public boolean isAllowRowsEmptyData() {
+		return allowRowsEmptyData;
+	}
+	
 	/**
 	 * @return the map of MDXTuple by sorting preference order and sorting rule
 	 * @see SortOrder
@@ -224,13 +230,18 @@ public class MDXConfig {
 	}
 	/**
 	 * Configures if empty data should be returned as an output
-	 * @param allowEmptyData - true if empty data should be returned. 
+	 * @param allowColumnsEmptyData - true if empty data should be returned. 
 	 * E.g. set to 'true' for Line/Tabular Charts where 0 values should be displayed. 
 	 * Set to 'false' to not pollute a report with empty lines, or a PieChart with no data slices 
 	 */
-	public void setAllowEmptyData(boolean allowEmptyData) {
-		this.allowEmptyData = allowEmptyData;
+	public void setAllowEmptyColumnsData(boolean allowColumnsEmptyData) {
+		this.allowColumnsEmptyData = allowColumnsEmptyData;
 	}
+	/** @see #setAllowEmptyColumnsData */
+	public void setAllowEmptyRowsData(boolean allowRowsEmptyData) {
+		this.allowRowsEmptyData = allowRowsEmptyData;
+	}
+	
 	/**
 	 * @return the doRowTotals
 	 */

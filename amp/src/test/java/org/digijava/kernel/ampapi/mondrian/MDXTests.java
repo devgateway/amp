@@ -126,7 +126,8 @@ public class MDXTests extends AmpTestCase {
 		config.addColumnMeasure(new MDXMeasure(MoConstants.ACTUAL_DISBURSEMENTS));
 		config.addRowAttribute(new MDXAttribute(MoConstants.LOCATION, MoConstants.ATTR_COUNTRY_NAME));
 		config.addRowAttribute(new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_TYPE_NAME, MoConstants.ATTR_ORG_TYPE_NAME));
-		config.setAllowEmptyData(false);
+		config.setAllowEmptyColumnsData(false);
+		config.setAllowEmptyRowsData(false);
 		config.setDoColumnsTotals(doTotals);
 		config.setDoRowTotals(doTotals);
 		return config;

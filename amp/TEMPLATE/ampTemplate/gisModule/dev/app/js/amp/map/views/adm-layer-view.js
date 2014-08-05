@@ -48,7 +48,8 @@ module.exports = Backbone.View.extend({
         var myIcon = L.divIcon({
           className: 'map-adm-icon',
           html: htmlString,
-          iconSize: [60, 50]});
+          iconSize: [60, 50]
+        });
         return L.marker(latlng, {icon: myIcon});//L.circleMarker(latlng, geojsonMarkerOptions);
       },
       onEachFeature: self._onEachFeature
@@ -95,7 +96,7 @@ module.exports = Backbone.View.extend({
 
     if(filterObj.adminLevel){
       // get current boundary.
-      var boundaries = app.data.boundaries;
+      var boundaries = this.app.data.boundaries;
       var currentBoundary = boundaries.findWhere({id:filterObj.adminLevel});
       var geoJSON = currentBoundary.toJSON();
 
@@ -118,10 +119,10 @@ module.exports = Backbone.View.extend({
 
   // Create pop-ups
   _onEachFeature: function(feature, layer) {
-      if (feature.properties) {
-        var activities = feature.properties.activityid;
-        layer.bindPopup(feature.properties.admName + ' has ' + activities.length +' projects');
-      }
+    if (feature.properties) {
+      var activities = feature.properties.activityid;
+      layer.bindPopup(feature.properties.admName + ' has ' + activities.length +' projects');
+    }
   },
 
   // Can do some post-processing here if we want...
@@ -138,13 +139,13 @@ module.exports = Backbone.View.extend({
   // !temp convert adminLevel to AMP strings:
   _tempConvertToString: function(id){
     var str = '';
-    if(id =='adm-0'){
+    if(id ==='adm-0'){
       str = 'Country';
-    } else if(id =='adm-1'){
+    } else if(id ==='adm-1'){
       str = 'Region';
-    } else if(id =='adm-2'){
+    } else if(id ==='adm-2'){
       str = 'Zone';
-    } else if(id =='adm-3'){
+    } else if(id ==='adm-3'){
       str = 'District';
     }
     return str;

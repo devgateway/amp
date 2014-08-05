@@ -88,8 +88,8 @@ public class ETLTests extends AmpTestCase
 		List<Map<String, Object>> toInsert = Arrays.asList(row1, row2);
 		String str = SQLUtils.buildMultiRowInsert("table_name", null, null, toInsert);
 		assertEquals("INSERT INTO table_name (col1,col2,col3) VALUES "
-				+ "(1,$pleaseGodMoldovaRulz$Some String, man! A very long string indeed$pleaseGodMoldovaRulz$,2.5)," 
-				+ "(15,$pleaseGodMoldovaRulz$an another string$pleaseGodMoldovaRulz$,NULL);",
+				+ "(1,'Some String, man! A very long string indeed',2.5)," 
+				+ "(15,'an another string',NULL);",
 				str
 				);
 	}
@@ -103,7 +103,7 @@ public class ETLTests extends AmpTestCase
 			put("col3", 2.5);
 		}};
 		String res = SQLUtils.buildCoordsLine(coords, keys, null, null);		
-		assertEquals("(1,$pleaseGodMoldovaRulz$Some String, man! A very long string indeed$pleaseGodMoldovaRulz$,2.5)", res);
+		assertEquals("(1,'Some String, man! A very long string indeed',2.5)", res);
 		
 		// a null and a missing value
 		Map<String, Object> coords2 = new LinkedHashMap<String, Object>() {{
@@ -160,6 +160,10 @@ public class ETLTests extends AmpTestCase
 		
 		testPercentage("{2=100.0}", "[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of ENTITY_TYPE_ACTIVITY 1]", MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL, 
 			new Pair(2, null)); // test that a single null is not completed by the dummy id
+		
+		testPercentage("{2=100.0}", "[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of ENTITY_TYPE_ACTIVITY 1]", MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL,
+			new Pair(2, null),
+			new Pair(3, 0.0));
 	}
 
 	public void testDateRateInfo() {

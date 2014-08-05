@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -57,6 +58,9 @@ public class PercentagesDistribution {
 			Double percentage = rs.getDouble(3);
 			if (rs.getObject(3) == null) percentage = null;
 			
+			if (percentage != null && percentage.doubleValue() < 0.001)
+				continue; // ignore zero-values
+			
 			NumberedTypedEntity entity = new NumberedTypedEntity(activityId, baseEntity);
 			if (!res.containsKey(activityId))
 				res.put(activityId, new PercentagesDistribution(entity, columnName));
@@ -86,7 +90,10 @@ public class PercentagesDistribution {
 		if (percentages.containsKey(fieldId))
 			percentage = combinePercentages(percentage, percentages.get(fieldId));
 		
-		percentages.put(fieldId, percentage);		
+		if (percentage != null && percentage.doubleValue() < 0.0001)
+			return;
+
+		percentages.put(fieldId, percentage);
 	}
 
 	/**
@@ -99,7 +106,7 @@ public class PercentagesDistribution {
 			return;
 		
 		this.postprocessed = true;
-		
+				
 		if (percentages.isEmpty()) {
 			if (idToAddIfEmpty != null) {
 				// add a dummy entry with 100% if has been specified
@@ -140,7 +147,7 @@ public class PercentagesDistribution {
 		}
 		boolean isOutputOk = Math.abs(percentagesSum - 100.0) < 0.001;
 		if (!isOutputOk)
-			throw new RuntimeException("BUG while distributing percentages!");
+			throw new RuntimeException("BUG while distributing percentages, sum is " + percentagesSum + ", had numberOfNulls: " + numberOfNulls + " and percentages is now " + percentages.toString());
 	}
 	
 	/**

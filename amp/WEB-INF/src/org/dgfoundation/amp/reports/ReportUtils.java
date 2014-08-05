@@ -3,6 +3,8 @@
  */
 package org.dgfoundation.amp.reports;
 
+import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -16,9 +18,9 @@ import org.digijava.module.aim.dbentity.AmpReports;
 public class ReportUtils {
 	
 	/**
-	 * Translation of 
-	 * @param report
-	 * @return
+	 * Translation of {@link AmpReports} report to Reports API report structure 
+	 * @param report - {@link AmpReports} 
+	 * @return {@link ReportSpecificationImpl}
 	 */
 	public static ReportSpecificationImpl toReportSpecification(AmpReports report) {
 		//basic
@@ -31,6 +33,13 @@ public class ReportUtils {
 		}
 		spec.setDisplayEmptyFundingColumns(report.getAllowEmptyFundingColumns());
 		spec.setDisplayEmptyFundingRows(false); //default expectation
+		
+		switch(report.getOptions()) {
+		case "A": spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY); break;
+		case "Q": spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY); break;
+		case "M": spec.setGroupingCriteria(GroupingCriteria.GROUPING_MONTHLY); break;
+		default: spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY); break;
+		}
 		
 		//TODO:
 		//report.getAlsoShowPledges()

@@ -65,7 +65,7 @@
   z-index: @amp_map_header_layer;
   position: absolute;
   bottom: 0;
-  right: 190px;
+  right: 5px;
   width: 240px;
   color: @amp_inverse;
   background: @amp_map_header_bg;
@@ -166,4 +166,9 @@
   text-align: center;
   border-radius: 7px;
   font: 11px "Helvetica Neue", Arial, Helvetica, sans-serif;
-  }
+}
+
+//Overide esri attribution img style
+.leaflet-control a > img{
+    left: 0px !important;
+}

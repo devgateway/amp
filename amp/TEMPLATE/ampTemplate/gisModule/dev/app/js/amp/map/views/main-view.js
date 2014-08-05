@@ -28,6 +28,7 @@ module.exports = Backbone.View.extend({
     this.app = options.app;
     this.mapEl = $('<div id="map-canvas">');
     this.map = L.map(this.mapEl[0]);
+    this.map.attributionControl.setPosition('bottomleft');
 
     state.register(this, 'map', {
       get: this._getMapView,

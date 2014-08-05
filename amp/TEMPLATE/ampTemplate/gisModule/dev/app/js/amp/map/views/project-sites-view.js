@@ -14,6 +14,7 @@ module.exports = Backbone.View.extend({
   ZOOM_BREAKPOINT: 7,
   SMALL_ICON_RADIUS: 2,
   BIG_ICON_RADIUS: 7,
+  currentRadius: 2,
   markerCluster: null,
 
   initialize: function(extraProperties) {
@@ -24,6 +25,8 @@ module.exports = Backbone.View.extend({
     this.featureGroup = null;
     this.collection = new ProjectSitesCollection();
 
+    //TODO: checkout prune cluster, supposedly way faster...
+    // may also be worth doing manually since we don't want updates on zoom
     this.markerCluster = new L.markerClusterGroup({
       maxClusterRadius: 0.1,
       iconCreateFunction: function (cluster) {
@@ -93,7 +96,7 @@ module.exports = Backbone.View.extend({
     self.featureGroup = L.geoJson(self.features, {
       pointToLayer: function (feature, latlng) {
         var point = new L.CircleMarker(latlng, {
-            radius: self.SMALL_ICON_RADIUS,
+            radius: self.currentRadius,
             fillColor: '#f70',
             color: '#000',
             weight: 1,
@@ -178,14 +181,16 @@ module.exports = Backbone.View.extend({
     if(this.featureGroup){
       var zoom = this.map.getZoom();
       // make small points
-      if(zoom < this.ZOOM_BREAKPOINT){
+      if(zoom < this.ZOOM_BREAKPOINT && self.currentRadius !== self.SMALL_ICON_RADIUS){
+        self.currentRadius = self.SMALL_ICON_RADIUS;
         this.featureGroup.eachLayer(function(layer){
-            layer.setRadius(self.SMALL_ICON_RADIUS);
-          });
-      } else {
+          layer.setRadius(self.currentRadius);
+        });
+      } else if(zoom >= this.ZOOM_BREAKPOINT && self.currentRadius !== self.BIG_ICON_RADIUS){
+        self.currentRadius = self.BIG_ICON_RADIUS;
         this.featureGroup.eachLayer(function(layer){
-            layer.setRadius(self.BIG_ICON_RADIUS);
-          });
+          layer.setRadius(self.currentRadius);
+        });
       }
     }
 

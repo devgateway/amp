@@ -81,7 +81,7 @@ public class ReportsFilterPicker extends Action {
     
     @Override
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception{
-    	AmpCaching.clearInstance();
+//    	AmpCaching.clearInstance();
 		ReportsFilterPickerForm filterForm = (ReportsFilterPickerForm) form;
 		//filterForm.setAmpReportId(ReportContextData.getFromRequest().getAmp);
         boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));

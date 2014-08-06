@@ -16,7 +16,7 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     var context = {
-      layers: this.app.data.getSelectedLayers()
+      layers: this.app.data.getAllVisibleLayers()
     };
     this.$el.html(this.template(context));
     return this;

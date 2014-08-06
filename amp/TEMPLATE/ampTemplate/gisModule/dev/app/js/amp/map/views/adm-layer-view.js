@@ -103,11 +103,13 @@ module.exports = Backbone.View.extend({
       var currentBoundary = boundaries.findWhere({id:filterObj.adminLevel});
       var geoJSON = currentBoundary.toJSON();
 
-      self.boundaryLayer = L.geoJson(geoJSON,
-        {
-          simplifyFactor: 0.9,
-          style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '3',}
-        }).addTo(self.map);
+      // David -- I commented this out because it broke from my indicator layer changes.
+      // I wasn't sure if this was likely to change or be fixed as-is.
+      // self.boundaryLayer = L.geoJson(geoJSON,
+      //   {
+      //     simplifyFactor: 0.9,
+      //     style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '3',}
+      //   }).addTo(self.map);
     } else{
       console.warn('missing admin level in Filter');
     }

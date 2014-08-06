@@ -12,7 +12,7 @@ var LegendView = require('../views/legend-view');
 
 var ADMLayerView = require('../views/adm-layer-view');
 var ProjectSitesLayerView = require('../views/project-sites-view');
-var IndicatorLayerView = require('../views/indicator-layer-view');
+var IndicatorLayersView = require('../views/indicator-layers-view');
 
 var Basemaps = require('../collections/basemap-collection');
 var Template = fs.readFileSync(__dirname + '/../templates/map-container-template.html', 'utf8');
@@ -41,7 +41,7 @@ module.exports = Backbone.View.extend({
     // init layers
     this.projectSitesLayerView = new ProjectSitesLayerView({map: this.map});
     this.admLayerView = new ADMLayerView({map: this.map, app: this.app});
-    this.indicatorLayerView = new IndicatorLayerView({map: this.map, app: this.app});
+    this.indicatorLayersView = new IndicatorLayersView({map: this.map, app: this.app});
 
     this.headerView = new MapHeaderView({app: this.app});
     this.legendView = new LegendView({app: this.app});

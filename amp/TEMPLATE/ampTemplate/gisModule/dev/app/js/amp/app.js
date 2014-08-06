@@ -9,14 +9,18 @@ var App = require('./gis/views/gis-main');
 
 var state = require('./services/state');
 
+
 // initialize everything that doesn't need to touch the DOM
 var gisData = new GISData();
+var gisDisplay = new GISDisplay({data: gisData});
+
 var app = new App({
   data: gisData,
-  display: new GISDisplay({data: gisData})
+  display: gisDisplay
 });
 
 app.data.load();
+
 
 // attach a ref to services
 app.state = state;

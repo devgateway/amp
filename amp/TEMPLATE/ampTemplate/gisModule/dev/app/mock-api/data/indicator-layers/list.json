@@ -20,7 +20,7 @@
   },
   {
     "id": "drc-food",
-    "title": "TODO: ADM Join Sample",
+    "title": "ADM Join Sample",
     "type": "joinBoundaries",
     "link": "/rest/gis/indicator-layers/drc-food",
     "joinBoundariesLink": "/rest/gis/boundaries/adm-1"

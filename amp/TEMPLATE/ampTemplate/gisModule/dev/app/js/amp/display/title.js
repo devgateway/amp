@@ -19,7 +19,7 @@ _.extend(Title.prototype, Backbone.Events, {
   updateTitle: function() {
     // currently this just joins all the titles of the layers on ", "
     // ... but it should probably be smarter.
-    var titles = this.data.getSelectedLayers().map(function(layer) {
+    var titles = this.data.getAllVisibleLayers().map(function(layer) {
       return layer.get('title');
     }).value();  // getLayers() returns a underscore chain()
     this.current = titles.join(', ');

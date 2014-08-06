@@ -3,42 +3,45 @@
   "title": "DRC Food Scarcity",
   "type": "joinBoundaries",
   "joinBoundariesLink": "/rest/gis/boundaries/adm-1",
-  "data": [
-    {
-      "boundariesFeatureId": 1,
-      "value": 648
-    },
-    {
-      "boundariesFeatureId": 2,
-      "value": 503
-    },
-    {
-      "boundariesFeatureId": 3,
-      "value": 976
-    },
-    {
-      "boundariesFeatureId": 4,
-      "value": 267
-    },
-    {
-      "boundariesFeatureId": 5,
-      "value": 349
-    },
-    {
-      "boundariesFeatureId": 6,
-      "value": 832
-    },
-    {
-      "boundariesFeatureId": 7,
-      "value": 325
-    },
-    {
-      "boundariesFeatureId": 8,
-      "value": 714
-    },
-    {
-      "boundariesFeatureId": 9,
-      "value": 601
-    }
-  ]
+  "data": {
+    "unit": "%",
+    "values": [
+      {
+        "boundariesFeatureId": 1,
+        "value": 64.8
+      },
+      {
+        "boundariesFeatureId": 2,
+        "value": 50.3
+      },
+      {
+        "boundariesFeatureId": 3,
+        "value": 97.6
+      },
+      {
+        "boundariesFeatureId": 4,
+        "value": 26.7
+      },
+      {
+        "boundariesFeatureId": 5,
+        "value": 34.9
+      },
+      {
+        "boundariesFeatureId": 6,
+        "value": 83.2
+      },
+      {
+        "boundariesFeatureId": 7,
+        "value": 32.5
+      },
+      {
+        "boundariesFeatureId": 8,
+        "value": 71.4
+      },
+      {
+        "boundariesFeatureId": 9,
+        "value": 60.1
+      }
+    ]
+  }
 }

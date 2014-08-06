@@ -267,7 +267,7 @@ public class IatiActivityWorker {
                             JAXBElement<TextType> item = (JAXBElement<TextType>) i;
                             if (item.getValue().getLang() == null || item.getValue().getLang().equals(this.getLang())) {
                                 System.out.println("Activity " + noAct + ":" + printTextType(item) + "#");
-                                this.title += printTextType(item);
+                                this.title = printTextType(item);
                             }
                         }
                         //status
@@ -300,7 +300,7 @@ public class IatiActivityWorker {
 
                     } else if (contentItem instanceof IatiIdentifier) {
                         IatiIdentifier item = (IatiIdentifier) contentItem;
-                        this.iatiID += item.getContent();
+                        this.iatiID = item.getContent();
                     } else if (contentItem instanceof ReportingOrg) {
                         ReportingOrg item = (ReportingOrg) contentItem;
 

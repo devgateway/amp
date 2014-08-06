@@ -133,7 +133,7 @@ function getReportTitles()
 SaveReportEngine.prototype.saveReport		= function () {
 	//this.titlePanel.setFooter ("");
 	var isTitleEntered = check_multilingual_value_entered('AmpReports_name');
-	if (isTitleEntered == false)
+	if (!isTitleEntered)
 	{
 		this.panel.setFooter( '<font size="2" color="red"><digi:trn>Please enter a title</digi:trn></font><br />');
 		this.saveButton.enable();

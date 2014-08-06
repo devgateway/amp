@@ -218,7 +218,7 @@ public class ActivityUtil {
 		}
 		
 		updateComponentFunding(a, session);
-
+		
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
             session.save(a);
@@ -236,7 +236,7 @@ public class ActivityUtil {
         }
         return a;
 	}
-	
+
 	private static void setCreationTimeOnStructureImages(AmpActivityVersion activity){
 		if (activity.getStructures() != null){
 			for(AmpStructure str :  activity.getStructures()){
@@ -857,14 +857,14 @@ public class ActivityUtil {
                 if (activityContact.getId() == null) {
                     session.saveOrUpdate(activityContact);
                 }
-
-                session.merge(activityContact.getContact());
+                
+                //session.merge(activityContact.getContact());
             }
         }
 
 
 
     }
-
+  
 
 }

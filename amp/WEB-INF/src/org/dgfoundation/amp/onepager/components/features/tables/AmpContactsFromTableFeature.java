@@ -42,15 +42,15 @@ import org.hibernate.Hibernate;
  * @author dmihaila@dginternational.org
  * since Dec 6, 2010
  */
-public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpActivityVersion,AmpContact>  {
+public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpActivityVersion, AmpActivityContact>  {
 
     private static final long serialVersionUID = -2114204838953838609L;
-    protected ListView<AmpActivityContact> idsList;
+    //protected ListView<AmpActivityContact> idsList;
     private AjaxCheckBox primaryContact=null;
 
-    public ListView<AmpActivityContact> getIdsList() {
+    /*public ListView<AmpActivityContact> getIdsList() {
         return idsList;
-    }
+    }*/
 
     /**
      * @param id
@@ -88,7 +88,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
             }
         };
 
-        idsList = new ListView<AmpActivityContact>("contactsList", listModel) {
+        list = new ListView<AmpActivityContact>("contactsList", listModel) {
 
             private static final long serialVersionUID = 7218457979728871528L;
 
@@ -127,21 +127,18 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
 					}
                     primary.setOutputMarkupId(true);
                     item.add(primary);
-                    AmpDeleteLinkField delContact = new AmpDeleteLinkField(
-                                                    "delContact", "Delete Contact") {
+					AmpDeleteLinkField delContact = new AmpDeleteLinkField("delContact", "Delete Contact") {
+						@Override
+						public void onClick(AjaxRequestTarget target) {
+							setModel.getObject().remove(item.getModelObject());
+							target.add(listParent);
+							list.removeAll();
+							if (primaryContact != null && primaryContact.equals(primary)) {
+								primaryContact = null;
+							}
 
-														private static final long serialVersionUID = 1L;
-
-											@Override
-                                            public void onClick(AjaxRequestTarget target) {
-                                                    setModel.getObject().remove(item.getModelObject());
-                                                    target.add(listParent);
-                                                    if( primaryContact!=null&& primaryContact.equals(primary)){
-                                                    	primaryContact=null;
-                                                    }
-                                                    
-                                            }
-                    };
+						}
+					};
                     item.add(delContact);
                     
 
@@ -193,8 +190,8 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                 }
             }
         };
-        idsList.setReuseItems(true);
-        add(idsList);
+        list.setReuseItems(true);
+        add(list);
 
 
         final AmpAutocompleteFieldPanel<AmpContact> searchContacts = new AmpContactAutocompleteFieldPanel("searchContact", "Search Contact",false, AmpContactSearchModel.class,false,false) {
@@ -224,13 +221,15 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
 					activityContact.setContact(choice);			
 					activityContact.setActivity(am.getObject());
 					activityContact.setContactType(contactType);
-                    Hibernate.initialize(choice.getActivityContacts()); //lazy init:)
+					activityContact.setPrimaryContact(false);
+                    //Hibernate.initialize(choice.getActivityContacts()); //lazy init:)
+                    choice.getActivityContacts().add(activityContact);
 					
 					setModel.getObject().add(activityContact);
 				}
 				
-				idsList.removeAll();
-				target.add(idsList.getParent());
+				list.removeAll();
+				target.add(list.getParent());
             }
 
         };

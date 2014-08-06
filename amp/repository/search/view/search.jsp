@@ -122,6 +122,13 @@
 				<html:option value="3">
 					<digi:trn>Resources</digi:trn>
 				</html:option>
+
+
+				<html:option value="7">
+					<digi:trn>Pledges</digi:trn>
+				</html:option>
+
+
 				
                 <feature:display name="Responsible Organization" module="Organizations">
                 	<field:display name="Search Feature - Responsible Organization" feature="Search Feature">
@@ -232,6 +239,19 @@
 								</ul>
 								</div>
 							</c:if>
+							
+							<c:if test="${searchform.queryType==-1||searchform.queryType==7}">
+								<div class="${search_results_block_class}"><span
+									class="button_green default_cursor">${fn:length(resultPledges)}</span> ${resultFound} <span class="button_green default_cursor"><digi:trn>Pledges</digi:trn></span>
+								<ul>
+									<c:forEach items="${resultPledges}" var="pledge">
+										<li><a
+											title="<digi:trn>Click here to view the pledge]</digi:trn>"
+											href="/viewPledge.do?id=${pledge.ampId}">${pledge.objectFilteredName}</a>
+									</c:forEach>
+								</ul>
+								</div>
+							</c:if>							
 							
 							<c:if test="${searchform.queryType==-1||searchform.queryType==1}">
 								<div class="${search_results_block_class}"><span

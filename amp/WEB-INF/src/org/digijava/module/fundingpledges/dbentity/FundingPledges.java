@@ -6,7 +6,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -477,4 +479,10 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
 	public void setDocuments(Set<FundingPledgesDocument> documents){
 		this.documents = documents;
 	}
+    public static String sqlStringForName(String idSource)
+    {
+    	return InternationalizedModelDescription.getForProperty(FundingPledges.class, "name").getSQLFunctionCall(idSource);
+    }
+
+	
 }

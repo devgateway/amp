@@ -38,6 +38,7 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriter.MaxFieldLength;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
@@ -62,6 +63,7 @@ import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.admin.helper.AmpPledgeFake;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -98,7 +100,7 @@ public class LuceneUtil implements Serializable {
 	 * saved on the disk, if versions mismatch then we need to increment
 	 * the index
 	 */
-	private static final long serialVersionUID = 12L;
+	private static final long serialVersionUID = 13L;
 												
 	private static Logger logger = Logger.getLogger(LuceneUtil.class);
     /**
@@ -130,6 +132,7 @@ public class LuceneUtil implements Serializable {
     public final static String HELP_INDEX_SUFIX = "help";
     public final static String HELP_INDEX_DIRECTORY = LUCENE_BASE_DIR +"/" + HELP_INDEX_SUFIX;
     
+    
     /**
      * name of the activity index directory
      * please don't use for other indexes
@@ -138,6 +141,9 @@ public class LuceneUtil implements Serializable {
     public final static String ACTIVITY_INDEX_SUFFIX = "activity";
     public final static String ACTVITY_INDEX_DIRECTORY = LUCENE_BASE_DIR + "/" + ACTIVITY_INDEX_SUFFIX;
 
+    public final static String PLEDGE_INDEX_SUFFIX = "pledge";
+    public final static String PLEDGE_INDEX_DIRECTORY = LUCENE_BASE_DIR + "/" + PLEDGE_INDEX_SUFFIX;
+    
 	private static final int CHUNK_SIZE = 10000;
 	
 	public final static Integer SEARCH_MODE_AND	= 1;
@@ -697,7 +703,22 @@ public class LuceneUtil implements Serializable {
     	}
     }
     
-	public static int deleteActivity(String idx, String field, String search){
+    public static int deletePledge(String idx, String field, String search){
+		Term term = new Term(field, search);
+		IndexReader indexReader;
+		try {
+			indexReader = IndexReader.open(idx);
+			//listDocuments(indexReader);
+			int ret = indexReader.deleteDocuments(term);
+			indexReader.close();
+			return ret;
+		} catch (Exception e) {
+			logger.error("error deleting pledge from Lucene index", e);
+			return 0;
+		}
+	}        
+    
+	public static int deleteEntry(String idx, String field, String search){
 		Term term = new Term(field, search);
 		IndexReader indexReader;
 		try {
@@ -712,8 +733,12 @@ public class LuceneUtil implements Serializable {
 		}
 	}
     
+    public static int deletePledge(String rootRealPath, Long pledgeId){
+    	return deleteEntry(rootRealPath + PLEDGE_INDEX_DIRECTORY, ID_FIELD, String.valueOf(pledgeId));
+    }		
+	
     public static int deleteActivity(String rootRealPath, Long activityId){
-    	return deleteActivity(rootRealPath + ACTVITY_INDEX_DIRECTORY, ID_FIELD, String.valueOf(activityId));
+    	return deleteEntry(rootRealPath + ACTVITY_INDEX_DIRECTORY, ID_FIELD, String.valueOf(activityId));
     }
 	 
     static String activityClassName = AmpActivityVersion.class.getName();
@@ -752,6 +777,69 @@ public class LuceneUtil implements Serializable {
         
         return result.toString();
     }
+    
+    /**
+		 * Add a PLEDGE to the index
+		 * why, oh whyyyyyyyyyyyyyyyyyyyyyy
+		 * 
+		 * @param request is used to retrieve curent site and navigation language
+		 * @param act the activity that will be added
+		 */
+	    public static Document pledge2Document(Long pledgeId, String title, String additionalInfo) {
+			Document doc = new Document();
+			String all = new String("");
+	
+	        HashMap<String, String> regularFieldNames = new HashMap<String, String>();
+	        regularFieldNames.put("pledgeId", String.valueOf(pledgeId));
+	        regularFieldNames.put("title", title);
+	
+	        Long id = pledgeId;
+	
+	        for (String field: regularFieldNames.keySet())
+	        {
+	            String luceneValue = buildLuceneValueForField(id, field);
+	            if (luceneValue == null)
+	            	luceneValue = regularFieldNames.get(field);
+	
+	         // Added try/catch because Field can throw an exception if any of the parameters is wrong and that would break the process. 
+	            try {
+		            if ("name".equals(field)){
+		                doc.add(new Field(field, luceneValue, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
+		            } else {
+		                doc.add(new Field(field, luceneValue, Field.Store.NO, Field.Index.ANALYZED));
+		            }
+	            } catch (Exception e) {
+	            	logger.error("Error reindexing document - field:" + field + " - value:" + luceneValue);
+	            	logger.error(e);
+	            }
+	            all = all.concat(" " + luceneValue);
+	        }
+	
+	/*
+	        if (projectId != null){
+				doc.add(new Field("projectId", projectId, Field.Store.NO, Field.Index.ANALYZED));
+				all = all.concat(" " + projectId);
+			}
+			if (title != null){
+				doc.add(new Field("title", title, Field.Store.YES, Field.Index.ANALYZED,Field.TermVector.YES));
+				all = all.concat(" " + title);
+			}*/
+			if (additionalInfo!= null && additionalInfo.length()>0){
+				doc.add(new Field("additionalInfo", additionalInfo, Field.Store.NO, Field.Index.ANALYZED));
+				all = all.concat(" " + additionalInfo);
+			}
+			
+			
+			
+			if (all.length() == 0)
+				return null;
+			
+			doc.add(new Field("all", all, Field.Store.NO, Field.Index.ANALYZED));
+			return doc;
+		}    
+
+    
+    
     
     /**
 		 * Add an activity to the index
@@ -861,6 +949,39 @@ public class LuceneUtil implements Serializable {
 			return doc;
 		}
 
+		public static void addUpdatePledge(String rootRealPath, boolean update, AmpPledgeFake newfakePledge){
+	    	logger.info("Updating activity!");
+			try {
+				
+				if (update/* && false*/) {
+					int nrDeleted = deletePledge(rootRealPath, newfakePledge.getAmpId());
+					if (nrDeleted != 1)
+						logger.warn("Lucene.addUpdateActivity(): deleted " + nrDeleted + " activities from index, normal value would be: 1");
+				}
+				
+				IndexWriter indexWriter = null;
+				indexWriter = new IndexWriter(rootRealPath + PLEDGE_INDEX_DIRECTORY, LuceneUtil.analyzer, false, MaxFieldLength.LIMITED);
+//				indexWriter = new IndexWriter(rootRealPath + ACTVITY_INDEX_DIRECTORY, LuceneUtil.analyzer, false);
+				// Util.getEditorBody(site,act.getDescription(),navigationLanguage);
+				Document doc = null;
+				doc = pledge2Document(newfakePledge.getAmpId(), newfakePledge.getName(), newfakePledge.getAdditionalInfo());
+
+				if (doc != null) {
+					try {
+						indexWriter.addDocument(doc);
+						indexWriter.optimize();
+						indexWriter.close();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			} catch (Exception e) {
+				logger.error(e);
+			}
+	    }
+	    
+	    
+	    
 	public static void addUpdateActivity(String rootRealPath, boolean update, Site site, java.util.Locale navigationLanguage, AmpActivityVersion newActivity, AmpActivityVersion previousActivity){
     	logger.info("Updating activity!");
 		try {

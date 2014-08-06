@@ -85,7 +85,7 @@ public class LuceneIndex extends Action {
 					  String field = request.getParameter("field");
 					  String search = request.getParameter("search");
 
-					  LuceneUtil.deleteActivity(request.getSession().getServletContext().getRealPath("/") + "/" + LuceneUtil.ACTVITY_INDEX_DIRECTORY, field, search);
+					  LuceneUtil.deleteEntry(request.getSession().getServletContext().getRealPath("/") + "/" + LuceneUtil.ACTVITY_INDEX_DIRECTORY, field, search);
 				  }
 				  else{
 					  if ("checked".compareTo(action) == 0){

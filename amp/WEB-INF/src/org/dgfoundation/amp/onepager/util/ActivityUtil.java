@@ -876,8 +876,8 @@ public class ActivityUtil {
                 if (activityContact.getId() == null) {
                     session.saveOrUpdate(activityContact);
                 }
-
-                session.merge(activityContact.getContact());
+                
+                //session.merge(activityContact.getContact());
             }
         }
 

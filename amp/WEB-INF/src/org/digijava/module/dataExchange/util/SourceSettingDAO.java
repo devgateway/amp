@@ -40,26 +40,33 @@ public class SourceSettingDAO {
 	}
 	
 	public List<DESourceSetting> getAmpSourceSettingsObjects(int fromIndex, String sortBy, boolean isPaged) {
-			String queryString 	= "select ss from "	+ DESourceSetting.class.getName() + " ss";
+			String queryString 	= "select ss from "	+ DESourceSetting.class.getName() + " ss where ss.attachedFile is empty ";
 			//sort
-			if(sortBy!=null){
-				if (sortBy.equals("name")) {
-					queryString += " order by ss.name " ;
-				} else if (sortBy.equals("name_desc")) {
-					queryString += " order by ss.name desc " ;
-				}else if(sortBy.equals("source")){
-					queryString += " order by ss.source ";
-				}else if(sortBy.equals("source_desc")){
-					queryString += " order by ss.source desc ";
-				}else if(sortBy.equals("workspace")){
-					queryString += " order by ss.importWorkspace.name ";
-				}else if(sortBy.equals("workspace_desc")){
-					queryString += " order by ss.importWorkspace.name desc ";
-				}
-			}else{
+			if(sortBy != null) {
+                switch (sortBy) {
+                    case "name":
+                        queryString += " order by ss.name ";
+                        break;
+                    case "name_desc":
+                        queryString += " order by ss.name desc ";
+                        break;
+                    case "source":
+                        queryString += " order by ss.source ";
+                        break;
+                    case "source_desc":
+                        queryString += " order by ss.source desc ";
+                        break;
+                    case "workspace":
+                        queryString += " order by ss.importWorkspace.name ";
+                        break;
+                    case "workspace_desc":
+                        queryString += " order by ss.importWorkspace.name desc ";
+                        break;
+                }
+			} else {
 				queryString += " order by ss.name " ;
 			}
-			Query query			= hbSession.createQuery(queryString);
+			Query query	= hbSession.createQuery(queryString);
 			query.setFirstResult(fromIndex);
 			if( isPaged )
 				query.setMaxResults(DEConstants.RECORDS_AMOUNT_PER_PAGE);

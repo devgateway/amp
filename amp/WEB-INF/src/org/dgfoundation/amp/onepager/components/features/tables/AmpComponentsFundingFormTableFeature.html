@@ -1,20 +1,13 @@
 <wicket:extend>
-	<tr wicket:id="tableHeading" class="invisible-item">
-		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside" align="right"><b class="ins_title">
-			<wicket:trn key="trn:adjType">Adjustment Type</wicket:trn></b></td>
-        <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn>Organisation</wicket:trn></b></td>
-        <td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn>Amount</wicket:trn></b></td>
-		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn>Currency</wicket:trn></b></td>
-		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title"><wicket:trn>Transaction Date</wicket:trn></b></td>
-		<td background="/TEMPLATE/ampTemplate/img_2/ins_bg.gif" class="inside"><b class="ins_title">&nbsp;</b></td>
-	</tr>
-    <tr class="wicketFundingRowItem" wicket:id="list">
+  <tr wicket:id="tableHeading">
+  </tr>
+	<tr class="wicketFundingRowItem" wicket:id="list">
         <td>
             <div>
                 <span class="wicketFloatLeft wicketFundingBoxItem" wicket:id="adjustmentType"/>
                 <span class="wicketFloatLeft wicketFundingBoxItem" wicket:id="orgSelect"/>
                 <span class="wicketFloatLeft wicketFundingBoxItem" wicket:id="fundingAmount"/>
-                <span class="wicketFloatLeft wicketFundingBoxItem wicketClearRight">
+               <span class="wicketFloatLeft wicketFundingBoxItem wicketClearRight">
                     &nbsp;
                 </span>
                 <span class="wicketFloatLeft wicketFundingBoxItem" wicket:id="description"/>

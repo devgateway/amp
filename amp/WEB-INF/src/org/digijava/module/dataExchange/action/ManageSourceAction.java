@@ -93,14 +93,6 @@ public class ManageSourceAction extends MultiAction {
 
     public ActionForward modeShowSourceList(ActionMapping mapping, ManageSourceForm msForm,	HttpServletRequest request, HttpServletResponse response)
             throws Exception {
-        int allSourcesAmount = new SessionSourceSettingDAO().getAllAmpSourceSettingsObjectsCount();
-        int lastPage = 1;
-        if (allSourcesAmount > RECORDS_AMOUNT_PER_PAGE) {
-            lastPage = allSourcesAmount % RECORDS_AMOUNT_PER_PAGE == 0
-                    ? allSourcesAmount / RECORDS_AMOUNT_PER_PAGE
-                    : allSourcesAmount / RECORDS_AMOUNT_PER_PAGE + 1;
-        }
-
 
         int startIndex = 0;
         //msForm.setShowResources(msForm.isShowResources());
@@ -110,10 +102,13 @@ public class ManageSourceAction extends MultiAction {
 
         //get sources
         List<DESourceSetting> sources = new SessionSourceSettingDAO().getPagedAmpSourceSettingsObjects(startIndex, msForm.getSort());
-        for (ListIterator<DESourceSetting> iter = sources.listIterator(); iter.hasNext(); ) {
-        	DESourceSetting dess = iter.next();
-        	if (dess.getAttachedFile()!=null) 
-        		iter.remove();
+        int allSourcesAmount = new SessionSourceSettingDAO().getAllAmpSourceSettingsObjectsCount();
+
+        int lastPage = 1;
+        if (allSourcesAmount > RECORDS_AMOUNT_PER_PAGE) {
+            lastPage = allSourcesAmount % RECORDS_AMOUNT_PER_PAGE == 0
+                    ? allSourcesAmount / RECORDS_AMOUNT_PER_PAGE
+                    : allSourcesAmount / RECORDS_AMOUNT_PER_PAGE + 1;
         }
 
         msForm.setPagedSources(sources);

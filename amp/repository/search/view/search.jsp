@@ -138,6 +138,9 @@
                    	<html:option value="6"><digi:trn>Implementing Agency</digi:trn></html:option>
                    </field:display>
                </feature:display>
+				<html:option value="7">
+					<digi:trn>Pledges</digi:trn>
+				</html:option>
                
 			</html:select> </td>
     <td><b><digi:trn>Search Mode</digi:trn></b>:</td>
@@ -232,6 +235,19 @@
 								</ul>
 								</div>
 							</c:if>
+							
+							<c:if test="${searchform.queryType==-1||searchform.queryType==7}">
+								<div class="${search_results_block_class}"><span
+									class="button_green default_cursor">${fn:length(resultPledges)}</span> ${resultFound} <span class="button_green default_cursor"><digi:trn>Pledges</digi:trn></span>
+								<ul>
+									<c:forEach items="${resultPledges}" var="pledge">
+										<li><a
+											title="<digi:trn>Click here to view the pledge]</digi:trn>"
+											href="/viewPledge.do?id=${pledge.ampId}">${pledge.objectFilteredName}</a>
+									</c:forEach>
+								</ul>
+								</div>
+							</c:if>							
 							
 							<c:if test="${searchform.queryType==-1||searchform.queryType==1}">
 								<div class="${search_results_block_class}"><span

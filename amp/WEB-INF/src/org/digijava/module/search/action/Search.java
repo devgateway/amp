@@ -89,11 +89,13 @@ public class Search extends Action {
 				Collection<LoggerIdentifiable> resultActivitiesWithRespOrgs = new ArrayList<LoggerIdentifiable>();
 				Collection<LoggerIdentifiable> resultActivitiesWithExeOrgs = new ArrayList<LoggerIdentifiable>();
 				Collection<LoggerIdentifiable> resultActivitiesWithImpOrgs = new ArrayList<LoggerIdentifiable>();
+				Collection<LoggerIdentifiable> resultPledges = new ArrayList<LoggerIdentifiable>();
 	
 				switch (searchForm.getQueryType()) {
 				case SearchUtil.QUERY_ALL:
 					resultActivities = SearchUtil.getActivities(searchForm
 							.getKeyword(), request, tm);
+					resultPledges = SearchUtil.getPledges(searchForm.getKeyword(), request);
 					resultReports = SearchUtil.getReports(tm, searchForm
 							.getKeyword());
 					resultTabs = SearchUtil.getTabs(tm, searchForm.getKeyword());
@@ -119,6 +121,10 @@ public class Search extends Action {
 					resultActivities = SearchUtil.getActivities(searchForm
 							.getKeyword(), request, tm);
 					break;
+				case SearchUtil.PLEDGE:
+					resultPledges = SearchUtil.getPledges(searchForm
+							.getKeyword(), request);
+					break;					
 				case SearchUtil.REPORTS:
 					resultReports = SearchUtil.getReports(tm, searchForm
 							.getKeyword());
@@ -144,11 +150,13 @@ public class Search extends Action {
 					resultActivitiesWithImpOrgs = SearchUtil
 							.getActivitiesUsingRelatedOrgs(searchForm.getKeyword(),
 									tm, Constants.ROLE_CODE_IMPLEMENTING_AGENCY);
-					break; 
+					break;
+					
 				}
 	
 				if (searchForm.getKeyword() != "") {
 					resultList.addAll(resultActivities);
+					resultList.addAll(resultPledges);
 					resultList.addAll(resultReports);
 					resultList.addAll(resultTabs);
 					resultList.addAll(resultResources);
@@ -163,6 +171,9 @@ public class Search extends Action {
 				if (resultActivities.size() > 0
 						|| searchForm.getQueryType() == SearchUtil.ACTIVITIES)
 					request.setAttribute("resultActivities", resultActivities);
+				if (resultPledges.size() > 0
+						|| searchForm.getQueryType() == SearchUtil.PLEDGE)
+					request.setAttribute("resultPledges", resultPledges);				
 				if (resultReports.size() > 0
 						|| searchForm.getQueryType() == SearchUtil.REPORTS)
 					request.setAttribute("resultReports", resultReports);

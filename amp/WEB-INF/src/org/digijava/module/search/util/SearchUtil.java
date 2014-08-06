@@ -19,9 +19,11 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.admin.helper.AmpActivityFake;
+import org.digijava.module.admin.helper.AmpPledgeFake;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpPledge;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -35,6 +37,7 @@ import org.digijava.module.aim.util.time.StopWatch;
 import org.digijava.module.contentrepository.dbentity.CrDocumentNodeAttributes;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 import org.digijava.module.search.helper.Resource;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -52,6 +55,8 @@ public class SearchUtil {
     public static final int RESPONSIBLE_ORGANIZATION = 4;
     public static final int EXECUTING_AGENCY = 5;
     public static final int IMPLEMENTING_AGENCY = 6;
+    public static final int PLEDGE = 7;
+    
 
 	public static Collection<? extends LoggerIdentifiable> getReports(TeamMember tm,
 			String string) {
@@ -178,6 +183,46 @@ public class SearchUtil {
 
 	}
 
+	public static Collection<LoggerIdentifiable> getPledges(String keyword, HttpServletRequest request) {
+		Collection<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
+		StopWatch.reset("Search");
+		
+		AmpARFilter filter = new AmpARFilter();
+
+        /**
+         * AmpARFilter.FILTER_SECTION_ALL, null - parameters were added on merge, might not be right
+         */
+		Session session = null;
+		List<FundingPledges> col = new ArrayList<FundingPledges>();
+		try {
+			session = PersistenceManager.getRequestDBSession();
+
+			//not a very nice solution, but I kept the old code and idea and just added some speed
+//			String newQueryString = "SELECT f.id " + AmpActivity.sqlStringForName("f.id") + " AS name, FROM amp_funding_pledges f";
+			String newQueryString = "SELECT f.pledge_id, f.title FROM v_pledges_titles f WHERE lower(f.title) LIKE  lower('%" + keyword + "%')" ;
+			SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("pledge_id", org.hibernate.type.StandardBasicTypes.LONG);
+			newQuery		  = newQuery.addScalar("title", org.hibernate.type.StandardBasicTypes.STRING);
+
+			Iterator iter = newQuery.list().iterator();
+			
+            while (iter.hasNext()) {
+                Object[] item = (Object[])iter.next();
+                Long ampId = (Long) item[0];
+                String name = (String) item[1];
+                AmpPledgeFake pledge = new AmpPledgeFake(name, ampId);
+                resultList.add(pledge);
+            }
+//			StopWatch.next("Search", true,"mycomment 3");
+
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+		return resultList;
+	}	
+	
 	public static Collection<LoggerIdentifiable> getActivities(String keyword, HttpServletRequest request, TeamMember tm) {
 		Collection<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
 		StopWatch.reset("Search");

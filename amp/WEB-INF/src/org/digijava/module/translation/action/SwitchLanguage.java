@@ -71,7 +71,8 @@ public class SwitchLanguage
                                  response) throws java.lang.Exception {
 
         //TranslationForm formBean = (TranslationForm) form;
-    	String actId=null; 
+    	String actId=null;
+    	Boolean isActivityForm=false;
         String localeKey = null;
         String referrerUrl = request.getParameter("rfr");
         localeKey = request.getParameter("code");
@@ -95,12 +96,13 @@ public class SwitchLanguage
         	actId = referrerUrl.substring(referrerUrl.indexOf(ACT_FORM_PATH) + ACT_FORM_PATH.length());
         	//free lock
         	ActivityGatekeeper.pageModeChange(actId);
+        	isActivityForm=true;
         	
         }
         else if (referrerUrl.contains(ACT_SSC_FORM_PATH)) {
         	actId = referrerUrl.substring(referrerUrl.indexOf(ACT_SSC_FORM_PATH) + ACT_SSC_FORM_PATH.length());
         	ActivityGatekeeper.pageModeChange(actId);
-        	
+        	isActivityForm=true;
         }
         
         
@@ -143,8 +145,12 @@ public class SwitchLanguage
         	request.getSession().setAttribute("currentMember",teamMember );
         	request.getSession().setAttribute(Constants.USER_WORKSPACES, TeamMemberUtil.getTeamMembers(tm.getEmail()));
         }
-        if(actId!=null){
-        	response.sendRedirect(ActivityGatekeeper.buildPreviewUrl(actId));
+        if(isActivityForm){
+        	if( actId.equals("new")){ //if its a new activity we go to desktop
+        		response.sendRedirect("/showDesktop.do");
+        	}else{ //if not we go to activity preview
+        		response.sendRedirect(ActivityGatekeeper.buildPreviewUrl(actId));
+        	}
         	return null;
         }
         return new ActionForward(referrerUrl, true);

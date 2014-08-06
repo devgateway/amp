@@ -446,33 +446,30 @@ public class AmpDonorFundingFormSectionFeature extends
 	}
 
 	private void addToOrganisationSection(AmpOrganisation org) {
-		// check if org has been added with the selected role to the Related Organisation se, if not then
-		// add it
+		// check if org has been added with the selected role to the Related
+		// Organisation section, if not then add it
 		// Only for non-ssc activities
-		AmpRole selectedRole = (AmpRole)orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject();
-		String roleCode = Constants.FUNDING_AGENCY;
+		AmpRole selectedRole = (AmpRole) orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject();
 		if (selectedRole != null) {
-			roleCode = selectedRole.getRoleCode();
-		}
-		if (!ActivityUtil.ACTIVITY_TYPE_SSC.equals(((AmpAuthWebSession) getSession()).getFormType())) {
-			boolean found = false;
-			Set<AmpOrgRole> orgRoles = roleModel.getObject();
-			for (AmpOrgRole role : orgRoles) {
-				if (role.getRole().getRoleCode().equals(roleCode)
-						&& role.getOrganisation().getAmpOrgId().equals(org.getAmpOrgId())) {
-					found = true;
-					break;
+			String roleCode = selectedRole.getRoleCode();
+			// Constants.FUNDING_AGENCY;
+			if (!ActivityUtil.ACTIVITY_TYPE_SSC.equals(((AmpAuthWebSession) getSession()).getFormType())) {
+				boolean found = false;
+				Set<AmpOrgRole> orgRoles = roleModel.getObject();
+				for (AmpOrgRole role : orgRoles) {
+					if (role.getRole().getRoleCode().equals(roleCode)
+							&& role.getOrganisation().getAmpOrgId().equals(org.getAmpOrgId())) {
+						found = true;
+						break;
+					}
 				}
-			}
-			if (!found) {
-				AmpOrgRole role = new AmpOrgRole();
-				role.setOrganisation(org);
-				//orgRoleSelector.getRoleSelect().getChoiceContainer()
-				//.getModelObject() --ampRole....getRoleCode()
-			
-				role.setActivity(am.getObject());
-				role.setRole(DbUtil.getAmpRole(roleCode));
-				orgRoles.add(role);
+				if (!found) {
+					AmpOrgRole role = new AmpOrgRole();
+					role.setOrganisation(org);
+					role.setActivity(am.getObject());
+					role.setRole(DbUtil.getAmpRole(roleCode));
+					orgRoles.add(role);
+				}
 			}
 		}
 

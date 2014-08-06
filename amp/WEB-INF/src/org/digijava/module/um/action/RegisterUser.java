@@ -189,7 +189,7 @@ public class RegisterUser extends Action {
 				AmpUserUtil.saveAmpUserExtension(userExt);
 			}
 		} catch (Exception e) {
-			logger.error("Exception from RegisterUser :" + e);
+			logger.error("Exception from RegisterUser", e);
 		}
 		if(userRegisterForm.isAddWorkspace()){
 			userRegisterForm.setAssignedWorskpaces(null);

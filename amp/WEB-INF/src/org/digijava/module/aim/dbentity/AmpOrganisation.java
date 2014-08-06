@@ -496,10 +496,9 @@ public class AmpOrganisation implements Comparable<AmpOrganisation>, Identifiabl
 	}
 
 	public String getAcronymAndName() {
-	acronymAndName = (acronym != null) ? acronym + " - " + name
-		: name;
-	return acronymAndName;
-    }
+		acronymAndName = (acronym != null) ? acronym + " - " + name : name;
+		return acronymAndName;
+	}
 
     public void setAcronymAndName(String acronymAndName) {
 	this.acronymAndName = acronymAndName;

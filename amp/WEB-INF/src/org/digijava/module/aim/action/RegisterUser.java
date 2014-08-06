@@ -134,11 +134,17 @@ public class RegisterUser extends Action {
                                 try{
                                 	DgEmailManager.sendMail(user.getEmail(), "Confirm your registration", description);
                                 }catch (Exception e) {
-                                	logger.error("Exception from RegisterUser :" + e);
+                                	logger.error("Exception from RegisterUser", e);
 								}
                                
                 }
                   
+                 // save amp user extensions;
+                 AmpUserExtensionPK extPK=new AmpUserExtensionPK(user);
+                 userExt.setAmpUserExtId(extPK);
+                 AmpUserUtil.saveAmpUserExtension(userExt);
+                 user.setUserExtension(userExt);
+
 				UserRegistrationTrigger urt=new UserRegistrationTrigger(user);
 
 				Site site = RequestUtils.getSite(request);
@@ -146,17 +152,12 @@ public class RegisterUser extends Action {
 				Long uid[] = new Long[1];
 				uid[0] = user.getId();
 				org.digijava.module.admin.util.DbUtil.addUsersToGroup(memberGroup.getId(),uid);
-
-				//save amp user extensions;
-				AmpUserExtensionPK extPK=new AmpUserExtensionPK(user);
-				userExt.setAmpUserExtId(extPK);
-				AmpUserUtil.saveAmpUserExtension(userExt);
 			}
 
 
 
 		} catch (Exception e) {
-			logger.error("Exception from RegisterUser :" + e);
+			logger.error("Exception from RegisterUser", e);
 		}
 
 		return (mapping.findForward("forward"));

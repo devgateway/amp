@@ -39,6 +39,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPan
 import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.events.DonorFundingRolesEvent;
+import org.dgfoundation.amp.onepager.events.OrganisationUpdateEvent;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.models.AmpFundingGroupModel;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
@@ -302,7 +303,7 @@ public class AmpDonorFundingFormSectionFeature extends
 			@Override
 			public void addItem(AmpOrganisation org) {
 				addItemToList (org);
-				addOrganisationAsDonor (org);
+				addToOrganisationSection (org);
 			}
 		};
 		wmc.add(list);
@@ -332,6 +333,9 @@ public class AmpDonorFundingFormSectionFeature extends
 
 				target.appendJavaScript(OnePagerUtil
 						.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
+				send(getPage(), Broadcast.BREADTH,
+						new OrganisationUpdateEvent(target));
+								
 				target.add(wmc);
 			}
 
@@ -441,25 +445,31 @@ public class AmpDonorFundingFormSectionFeature extends
 		}
 	}
 
-	private void addOrganisationAsDonor(AmpOrganisation org) {
-		// check if donor role for this org has been added, if not then
-		// add it
+	private void addToOrganisationSection(AmpOrganisation org) {
+		// check if org has been added with the selected role to the Related
+		// Organisation section, if not then add it
 		// Only for non-ssc activities
-		if (!ActivityUtil.ACTIVITY_TYPE_SSC.equals(((AmpAuthWebSession) getSession()).getFormType())) {
-			boolean found = false;
-			Set<AmpOrgRole> orgRoles = roleModel.getObject();
-			for (AmpOrgRole role : orgRoles)
-				if (role.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY)
-						&& role.getOrganisation().getAmpOrgId().equals(org.getAmpOrgId())) {
-					found = true;
-					break;
+		AmpRole selectedRole = (AmpRole) orgRoleSelector.getRoleSelect().getChoiceContainer().getModelObject();
+		if (selectedRole != null) {
+			String roleCode = selectedRole.getRoleCode();
+			// Constants.FUNDING_AGENCY;
+			if (!ActivityUtil.ACTIVITY_TYPE_SSC.equals(((AmpAuthWebSession) getSession()).getFormType())) {
+				boolean found = false;
+				Set<AmpOrgRole> orgRoles = roleModel.getObject();
+				for (AmpOrgRole role : orgRoles) {
+					if (role.getRole().getRoleCode().equals(roleCode)
+							&& role.getOrganisation().getAmpOrgId().equals(org.getAmpOrgId())) {
+						found = true;
+						break;
+					}
 				}
-			if (!found) {
-				AmpOrgRole role = new AmpOrgRole();
-				role.setOrganisation(org);
-				role.setActivity(am.getObject());
-				role.setRole(DbUtil.getAmpRole(Constants.FUNDING_AGENCY));
-				orgRoles.add(role);
+				if (!found) {
+					AmpOrgRole role = new AmpOrgRole();
+					role.setOrganisation(org);
+					role.setActivity(am.getObject());
+					role.setRole(DbUtil.getAmpRole(roleCode));
+					orgRoles.add(role);
+				}
 			}
 		}
 

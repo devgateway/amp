@@ -12,6 +12,7 @@ import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpRelatedOrganizationsOtherTableFeature;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpRelatedOrganizationsResponsibleTableFeature;
 import org.dgfoundation.amp.onepager.events.DonorFundingRolesEvent;
+import org.dgfoundation.amp.onepager.events.OrganisationUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -71,6 +72,7 @@ public class AmpRelatedOrganizationsFormSectionFeature extends
 		add(new AmpRelatedOrganizationsOtherTableFeature(
 				"sectorGroup", "Sector Group", am, Constants.SECTOR_GROUP,fundingSection, null));
 		
+		this.add(UpdateEventBehavior.of(OrganisationUpdateEvent.class));
 	}
 
 }

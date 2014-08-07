@@ -44,3 +44,13 @@ function initMultilingualInput(holderId){
 		yahooTabs.set('activeIndex', 0); // select first tab
 	})(holderId);
 }
+
+
+function focusOnTitle (language) {
+	var name = "AmpReports_name_"+language;
+	
+	//leave a few milliseconds for the component to render
+	setTimeout (function(){$( "[name='"+name+"']" ).focus();}, 150);
+}
+
+

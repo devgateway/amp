@@ -135,7 +135,10 @@ module.exports = Backbone.View.extend({
 
     filter.adminLevel = this._tempConvertToString(filter.adminLevel);
 
-    return this.collection.fetch({data: filter, type: 'POST'});
+    return this.collection.fetch({data: filter, type: 'POST'})
+      .fail(function(jqXHR, textStatus, errorThrown){
+        console.error('failed ', jqXHR, textStatus, errorThrown);
+      });
   },
 
   // !temp convert adminLevel to AMP strings:

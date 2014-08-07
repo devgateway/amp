@@ -6,7 +6,9 @@ var sinon = require('../mock-api/sinon-min.js');
 var FakeServer = function() {
   this.server = null;
   this.init();
-}; _.extend(FakeServer.prototype, {
+}; 
+
+_.extend(FakeServer.prototype, {
 
   init: function() {
     this.server = sinon.fakeServer.create();
@@ -72,21 +74,16 @@ var FakeServer = function() {
   },
 
   _addClusterPath: function() {
-  // reg-ex can be used to pull out params and send dynamic response.
-    this.server.respondWith(/\/rest\/gis\/cluster(\S+)/,
-      //TODO: POST...
-      console.log('xhr', xhr);
-      console.log('param', param);
-      function (xhr, param) {
-        if(param.indexOf('Zone') > -1){
-          xhr.respond(200, { 'Content-Type': 'application/json' },
-            fs.readFileSync(__dirname + '/data/clusters/clusterADM2.json', 'utf8'));
-        } else{
-          xhr.respond(200, { 'Content-Type': 'application/json' },
-            fs.readFileSync(__dirname + '/data/clusters/cluster.json', 'utf8'));
-        }
-      });
-
+    this.server.respondWith('POST', '/rest/gis/cluster', function (xhr, param) {
+      console.log('cluster ', xhr.requestBody);
+      if(xhr.requestBody.indexOf('Zone') > -1){
+        xhr.respond(200, { 'Content-Type': 'application/json' },
+          fs.readFileSync(__dirname + '/data/clusters/clusterADM2.json', 'utf8'));
+      } else{
+        xhr.respond(200, { 'Content-Type': 'application/json' },
+          fs.readFileSync(__dirname + '/data/clusters/cluster.json', 'utf8'));
+      }
+    });
   }
 
 });

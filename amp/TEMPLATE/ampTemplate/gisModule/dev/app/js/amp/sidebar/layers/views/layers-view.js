@@ -45,7 +45,7 @@ module.exports = BaseControlView.extend({
         value:'adm-1'
       },
       {
-        title: 'Projects by District',
+        title: 'Projects by Zone',
         value:'adm-2'
       },
       {

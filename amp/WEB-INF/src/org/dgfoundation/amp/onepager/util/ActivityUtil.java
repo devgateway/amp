@@ -152,7 +152,6 @@ public class ActivityUtil {
         boolean createNewVersion = (draft == draftChange) && ActivityVersionUtil.isVersioningEnabled();
 		if (createNewVersion){
 			try {
-				
 				AmpActivityGroup tmpGroup = a.getAmpActivityGroup();
 				
 				a = ActivityVersionUtil.cloneActivity(a, ampCurrentMember);
@@ -219,11 +218,7 @@ public class ActivityUtil {
 		}
 		
 		updateComponentFunding(a, session);
-		
-		//check consistency for Structures when saving as draft. https://jira.dgfoundation.org/browse/AMP-18047
-		checkActivityStructureConsistency(a);
-		
-		
+
         if (createNewVersion){
             //a.setAmpActivityId(null); //hibernate will save as a new version
             session.save(a);
@@ -240,18 +235,6 @@ public class ActivityUtil {
             session.update(a);
         }
         return a;
-	}
-
-	private static void checkActivityStructureConsistency(AmpActivityVersion a) {
-		if (a.getDraft()) {
-			Iterator<AmpStructure> structureIterator = a.getStructures().iterator();
-			while (structureIterator.hasNext()) {
-				AmpStructure currentElement = structureIterator.next();
-				if (currentElement.getTitle() == null || currentElement.getType() == null) {
-					structureIterator.remove();
-				}
-			}
-		}
 	}
 	
 	private static void setCreationTimeOnStructureImages(AmpActivityVersion activity){
@@ -884,6 +867,6 @@ public class ActivityUtil {
 
 
     }
-  
+
 
 }

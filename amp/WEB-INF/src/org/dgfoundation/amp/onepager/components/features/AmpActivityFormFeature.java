@@ -73,7 +73,6 @@ import org.dgfoundation.amp.onepager.components.features.sections.AmpAidEffectiv
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpPlanningFormSectionFeature;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpStructuresFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpActivityBudgetExtrasPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
@@ -254,14 +253,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					}
 				});
 		
-		form.visitChildren(AmpStructuresFormSectionFeature.class,
-				new IVisitor<AmpStructuresFormSectionFeature, Void>() {
-					@Override
-					public void component(
-							AmpStructuresFormSectionFeature ifs,
-							IVisit<Void> visit) {
-						toggleFormComponent (enabled,target,ifs,visit);					}
-				});
+		
 		visitChildren(AmpProposedProjectCost.class,
 				new IVisitor<Component, Object>() {
 					@Override

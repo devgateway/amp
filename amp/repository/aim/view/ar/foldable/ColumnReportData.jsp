@@ -50,10 +50,13 @@
 	int rowIdx = 2;
 	Boolean showColumn = false;
 	TeamMember currentMember = (TeamMember) request.getSession().getAttribute("currentMember");
-	Boolean crossteamenable = currentMember.getAppSettings().getCrossteamvalidation();
+	Boolean crossteamenable=false;
+	Boolean isPublic = request.getParameter("public")!=null ? request.getParameter("public").equalsIgnoreCase("true"):false;
+	
 	if(currentMember != null && "Management".toLowerCase().compareTo(currentMember.getTeamAccessType().toLowerCase()) != 0) {
+		crossteamenable = currentMember.getAppSettings().getCrossteamvalidation();
 		showColumn = true;
-	validatedActivities = showColumn ? ActivityUtil.getActivitiesWhichShouldBeValidated(currentMember, columnReport.getOwnerIds()) : null;	
+		validatedActivities = showColumn ? ActivityUtil.getActivitiesWhichShouldBeValidated(currentMember, columnReport.getOwnerIds()) : null;	
 }
 %>
 
@@ -89,8 +92,7 @@ if ( showColumn && validatedActivities.contains(ownerId) )
 	if(crossteamenable){
 		crossteamvalidation =true;
 	}else{
-		//Not sure if this is going to affect the perfomance of tabs - let's disscuss about this change. (Diego)
-		crossteamvalidation = currentMember.getTeamId().equals(ActivityUtil.getAmpActivityVersion((Long)ownerId).getTeam().getIdentifier());
+		crossteamvalidation = !isPublic ? currentMember.getTeamId().equals(ActivityUtil.getAmpActivityVersion((Long)ownerId).getTeam().getIdentifier()):false;
 	}
 
 %>

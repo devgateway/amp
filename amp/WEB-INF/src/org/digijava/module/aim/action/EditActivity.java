@@ -1616,7 +1616,7 @@ public class EditActivity extends Action {
     eaForm.getFunding().fillFinancialBreakdowns(activityId, DbUtil.getAmpFunding(activityId), debug);
     AmpApplicationSettings appSettings = AmpARFilter.getEffectiveSettings();
     String validationOption = appSettings != null ? appSettings.getValidation() : null;
-    Boolean crossteamvalidation = appSettings.getTeam() != null ? appSettings.getTeam().getCrossteamvalidation() : false;
+    Boolean crossteamvalidation = appSettings!= null && appSettings.getTeam()!=null ? appSettings.getTeam().getCrossteamvalidation() : false;
 
     String actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
     
@@ -1626,7 +1626,9 @@ public class EditActivity extends Action {
     	crossteamcheck = true;
     }else{
     	//check if the activity belongs to the team where the user is logged.
-    	crossteamcheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
+    	if (teamMember!=null){
+    		crossteamcheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
+    	}
     }
     
     if(teamMember != null){

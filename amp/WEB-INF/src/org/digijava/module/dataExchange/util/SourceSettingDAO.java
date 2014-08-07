@@ -42,7 +42,7 @@ public class SourceSettingDAO {
 	
 	public int getAllAmpSourceSettingsObjectsCount() {
 		try{
-			String queryString 	= "select count(*) from "	+ DESourceSetting.class.getName() + " ss";
+			String queryString 	= "select count(*) from "	+ DESourceSetting.class.getName() + " ss where ss.attachedFile is null ";
 			Query query			= hbSession.createQuery(queryString);
 			int resultList	=  (Integer)query.uniqueResult();
 			return resultList;
@@ -58,7 +58,7 @@ public class SourceSettingDAO {
 	
 	public List<DESourceSetting> getAmpSourceSettingsObjects(int fromIndex, String sortBy, boolean isPaged) {
 		try{
-			String queryString 	= "select ss from "	+ DESourceSetting.class.getName() + " ss where ss.attachedFile is empty ";
+			String queryString 	= "select ss from "	+ DESourceSetting.class.getName() + " ss where ss.attachedFile is null ";
 			//sort
 			if(sortBy != null) {
                 switch (sortBy) {
@@ -86,7 +86,7 @@ public class SourceSettingDAO {
 			}
 			Query query	= hbSession.createQuery(queryString);
 			query.setFirstResult(fromIndex);
-			if( isPaged )
+			if(isPaged)
 				query.setMaxResults(DEConstants.RECORDS_AMOUNT_PER_PAGE);
 //			if(resultNum!=-1){
 //				query.setMaxResults(resultNum);

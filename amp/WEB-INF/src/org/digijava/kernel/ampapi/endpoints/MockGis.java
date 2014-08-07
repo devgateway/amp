@@ -4,16 +4,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.node.POJONode;
-import org.digijava.kernel.ampapi.endpoints.util.FiltersParams;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
@@ -41,18 +37,7 @@ public class MockGis {
 		points.add(test);
 		return points;
 	}
-    @GET
-    @Path("/testfilterparam")
-    @Produces(MediaType.APPLICATION_JSON)
-    public final FiltersParams getFiltersParams() {
-//        FiltersParams p=new FiltersParams();
-//        p.setFilterName("theFilter");
-//        p.setFilterValue(new ArrayList<String>());
-//        p.getFilterValue().add("hola");
-//        p.getFilterValue().add("chau");
-//        return p;
-        return null;
-    }
+
 	
 	/***
 	 * 

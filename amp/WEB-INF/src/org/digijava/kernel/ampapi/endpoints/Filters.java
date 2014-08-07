@@ -5,21 +5,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.ampapi.endpoints.dto.Programs;
 import org.digijava.kernel.ampapi.endpoints.dto.Sectors;
-import org.digijava.kernel.ampapi.endpoints.util.FiltersParams;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -72,6 +69,29 @@ public class Filters {
                 "District"));
     }
 
+    
+    /**
+     * Returns the sector schema lists
+     * 
+     * @return
+     */
+    @GET
+    @Path("/sectors/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<FiltersHelper> getSectorsSchemas(
+    		) {
+    	List<FiltersHelper>schemalist=new ArrayList<FiltersHelper>();
+    	try {
+    		List<AmpClassificationConfiguration>schems=SectorUtil.getAllClassificationConfigs();
+    		for (AmpClassificationConfiguration ampClassificationConfiguration : schems) {
+    			schemalist.add(new FiltersHelper(ampClassificationConfiguration.getId().toString(),ampClassificationConfiguration.getName()));
+			}
+		} catch (DgException e) {
+			// TODO till we find out the exception strategy
+			e.printStackTrace();
+		}
+        return schemalist;
+    }
     /**
      * Return the sector filtered by the given sectorName
      * 
@@ -148,5 +168,32 @@ public class Filters {
 
         return s;
     }
+    public class FiltersHelper{
+    	private String id;
+    	private String name;
+    	public FiltersHelper(){
+    		
+    	}
+    	public FiltersHelper(String id,String name){
+        	this.id=id;
+        	this.name=name;    		
+    	}
+		public String getId() {
+			return id;
+		}
+		public void setId(String id) {
+			this.id = id;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+    	
+    	
+    	
+    }
+    
     
 }

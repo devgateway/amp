@@ -3,15 +3,12 @@ package org.digijava.kernel.ampapi.endpoints;
 import java.util.Random;
 
 import javax.servlet.ServletContext;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import org.digijava.kernel.ampapi.endpoints.util.FiltersParams;
 import org.digijava.kernel.ampapi.mondrian.queries.TestQueries;
 
 
@@ -61,16 +58,7 @@ public class TestEndPoints {
 		return "Can't execute query .. :(";
 	}
 
-	@POST
-	@Path("/post")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public FiltersParams createTrackInJSON(FiltersParams fp) {
 
-		return fp;
-		
-	}
-	
 	@Context
 	public void setServletContext(ServletContext context) {
 		System.out.println("servlet context set here");

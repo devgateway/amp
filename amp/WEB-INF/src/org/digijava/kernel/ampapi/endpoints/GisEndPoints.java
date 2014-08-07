@@ -10,8 +10,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
-import org.digijava.kernel.ampapi.endpoints.util.FilterUtil;
-import org.digijava.kernel.ampapi.endpoints.util.FiltersParams;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
@@ -43,12 +42,9 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public final FeatureCollectionGeoJSON getClusteredPointsByAdm(
-			final FiltersParams filter) {
-			
-        FilterUtil.validateOneFilters(filter, "adminLevel",1, 1,QueryUtil.getAdminLevels());
-
-        List<ClusteredPoints> c = QueryUtil.getClusteredPoints(filter
-                .getParams().get(0).getFilterValue().get(0));
+			final JsonBean filter) {
+        
+        List<ClusteredPoints> c = QueryUtil.getClusteredPoints(filter.get("adminLevel").toString());
         FeatureCollectionGeoJSON result = new FeatureCollectionGeoJSON();
         for (ClusteredPoints clusteredPoints : c) {
             result.features.add(getPoint(new Double(clusteredPoints.getLon()),

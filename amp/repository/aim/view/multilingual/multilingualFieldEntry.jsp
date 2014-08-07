@@ -30,7 +30,7 @@
 	<div id="${dta.prefix}_holder" class="yui-navset">
 		<ul class="yui-nav">  <!-- a header tab for each language -->
 			<c:forEach items="${dta.locales}" var="cur_locale">
-				<li><a href="#${dta.prefix}_${cur_locale}"><em>${cur_locale}</em></a></li>
+				<li><a href="#${dta.prefix}_${cur_locale}" onclick="javascript:focusOnTitle('${cur_locale}')"><em>${cur_locale}</em></a></li>
 			</c:forEach>
 			<%-- <li class="selected"><a href="#${param.group_name}_en"><em>en</em></a></li>  --%>
 		</ul>

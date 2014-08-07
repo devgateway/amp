@@ -60,7 +60,7 @@ var FakeServer = function() {
     // 'GET /rest/gis/config': fs.readFileSync(__dirname + '/data/config/....json', 'utf8'),
 
     // Saved Map States
-    'GET /rest/gis/saved-maps':  fs.readFileSync(__dirname + '/data/saved-maps/list.json', 'utf8'),
+    'GET /rest/gis/states':  fs.readFileSync(__dirname + '/data/saved-maps/list.json', 'utf8'),
     // 'GET /rest/gis/saved-maps/0': fs.readFileSync(__dirname + '/data/saved-maps/0.json', 'utf8'),
     // 'GET /rest/gis/saved-maps/1': fs.readFileSync(__dirname + '/data/saved-maps/1.json', 'utf8'),
     // 'POST /rest/gis/saved-maps/ ...
@@ -74,6 +74,9 @@ var FakeServer = function() {
   _addClusterPath: function() {
   // reg-ex can be used to pull out params and send dynamic response.
     this.server.respondWith(/\/rest\/gis\/cluster(\S+)/,
+      //TODO: POST...
+      console.log('xhr', xhr);
+      console.log('param', param);
       function (xhr, param) {
         if(param.indexOf('Zone') > -1){
           xhr.respond(200, { 'Content-Type': 'application/json' },

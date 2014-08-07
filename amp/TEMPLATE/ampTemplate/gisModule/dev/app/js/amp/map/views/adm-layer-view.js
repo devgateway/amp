@@ -135,10 +135,7 @@ module.exports = Backbone.View.extend({
 
     filter.adminLevel = this._tempConvertToString(filter.adminLevel);
 
-    var parsedParam = {filter:null};
-    parsedParam.filter = APIHelper.convertToAMPStyle(filter);
-
-    return this.collection.fetch({data:parsedParam});
+    return this.collection.fetch({data: filter, type: 'POST'});
   },
 
   // !temp convert adminLevel to AMP strings:

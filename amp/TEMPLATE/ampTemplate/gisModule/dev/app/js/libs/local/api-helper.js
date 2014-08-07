@@ -4,24 +4,6 @@ var _ = require('underscore');
 // 'static' lib for helping work with the API.
 module.exports = {
 
-  // accepts a filter object like this:
-  // {adminLevel: "Region"}
-  // returns stringified  version of this format this:
-  // {params: [{"filterName":"adminLevel","filterValue":["Region"]}]}
-  convertToAMPStyle: function (filter){
-    var paramsObj = { params:[]};
-
-    //iterate over properties.
-    _.each(filter, function(val, key){
-      var tmpObj = {filterName: key, filterValue: val};
-      paramsObj.params.push(tmpObj);
-    });
-
-    var string = JSON.stringify(paramsObj);
-    return string;
-  },
-
-
   getAPIBase: function(){
     if (typeof document !== 'undefined') {
       var url = document.URL;

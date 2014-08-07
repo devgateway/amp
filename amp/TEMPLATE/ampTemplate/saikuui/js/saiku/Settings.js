@@ -20,7 +20,6 @@
 
 var parser = document.createElement('a');
 parser.href = document.location;
-debugger;
 var Settings = {
 	    VERSION: "Saiku 2.5",
 	    BIPLUGIN: false,
@@ -31,6 +30,7 @@ var Settings = {
 	    ERROR_LOGGING: false,
 	    // number of erroneous ajax calls in a row before UI cant recover
 	    ERROR_TOLERANCE: 3,
+	    AMP_PATH: '/rest/data/report',
     QUERY_PROPERTIES: {
         'saiku.olap.query.automatic_execution': 'true',
         'saiku.olap.query.nonempty': 'true',

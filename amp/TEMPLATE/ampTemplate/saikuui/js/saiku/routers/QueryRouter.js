@@ -20,7 +20,8 @@
 var QueryRouter = Backbone.Router.extend({
     routes: {
         'query/open/*query_name': 'open_query',
-        'query/open': 'open_query_repository'
+        'query/open': 'open_query_repository',
+        'report/:report_id': 'open_report'
     },
     
     open_query: function(query_name) {
@@ -46,7 +47,46 @@ var QueryRouter = Backbone.Router.extend({
 
     open_query_repository: function( ) {
         Toolbar.prototype.open_query( );
+    },
+    
+    open_report: function(report_id) {
+            $.getJSON(Settings.AMP_PATH + "/" + report_id, function( data ) {
+				var query = new SavedQuery({file:'amp_source_file'});
+				var xmlTemplate = '<?xml version="1.0" encoding="UTF-8"?> \
+				<Query name="__NAME__" type="MDX" connection="__CONNECTION__" cube="__CUBE__" catalog="__CATALOG__" schema="__SCHEMA__"> \
+				  <MDX>__MDX__</MDX> \
+				  <Totals /> \
+				  <Properties> \
+				    <Property name="saiku.olap.query.nonempty" value="true" /> \
+				    <Property name="saiku.olap.query.nonempty.rows" value="true" /> \
+				    <Property name="org.saiku.query.explain" value="false" /> \
+				    <Property name="org.saiku.connection.scenario" value="false" /> \
+				    <Property name="saiku.ui.render.mode" value="table" /> \
+				    <Property name="saiku.olap.query.nonempty.columns" value="true" /> \
+				    <Property name="saiku.olap.query.drillthrough" value="true" /> \
+				    <Property name="saiku.olap.query.automatic_execution" value="true" /> \
+				  </Properties> \
+				</Query> ';
+				xmlTemplate = xmlTemplate.replace("__MDX__", data.mdx);
+				xmlTemplate = xmlTemplate.replace("__CATALOG__", data.reportMetadata.catalog);
+				xmlTemplate = xmlTemplate.replace("__CUBE__", data.reportMetadata.cube);
+				xmlTemplate = xmlTemplate.replace("__NAME__", data.reportMetadata.queryName);
+				xmlTemplate = xmlTemplate.replace("__CONNECTION__", data.reportMetadata.connection);
+				xmlTemplate = xmlTemplate.replace("__SCHEMA__", data.reportMetadata.schema);
+
+				var model = Backbone.Model.extend({
+					defaults: {
+						file: data.reportMetadata.name
+					},
+					initialize: function(){
+						console.log("model created");
+					}
+				});
+
+				query.move_query_to_workspace(new model(), xmlTemplate);
+            });
     }
+
 });
 
 Saiku.routers.push(new QueryRouter());

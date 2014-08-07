@@ -10,11 +10,5 @@ module.exports = Backbone.Model.extend({
       helpText:'',
       group: 'projects', //used for radio button grouping.
      // children: null, // collection of more options, use for nesting.
-  },
-
-  toggle: function() {
-    this.set('selected',this.get('selected'));
-  },
-
-
+  }
 });

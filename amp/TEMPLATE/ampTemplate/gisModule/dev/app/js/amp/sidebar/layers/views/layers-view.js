@@ -30,10 +30,22 @@ module.exports = BaseControlView.extend({
 
     this._initProjectLayerCollection();
 
-    // register state:    
+    // register state:
     state.register(this, 'layers-view', {
-      get: function(){ return this.projectLayerCollection.toJSON(); },
-      set: function(obj){ if(obj){this.projectLayerCollection.set(obj);} },
+      get: function(){
+        var tmp = self.projectLayerCollection.getSelected().first().value();
+        if(tmp){
+          return tmp.toJSON().title; //TODO: should be an id....
+        } else{
+          return null;
+        }
+      },
+      set: function(id){ 
+        if(id){
+          var selectedModel = self.projectLayerCollection.findWhere({'title':id}); //TODO: should be an id....
+          self.projectLayerCollection.select(selectedModel);
+        } 
+      },
       empty: null
     });
   },
@@ -55,7 +67,6 @@ module.exports = BaseControlView.extend({
       }
     ]);
 
-    // TODO: on 'selected' change update ui...
 
   },
 
@@ -74,34 +85,10 @@ module.exports = BaseControlView.extend({
 
   renderProjectList: function(){
     var self = this;
-
-    //TODO move projectLayerCollection to app.data
     this.$('.layer-selector').html(this.projectLayerCollection.map(function(indicator) {
-      return (new OptionView({ model: indicator })).render().el;
+      var tmpView = new OptionView({ model: indicator });
+      return tmpView.render().el;
     }));
-
-
-    // setup listener:
-    this.$('.layer-selector input:checkbox').change(function(){
-      var currentTarget = $(this);
-
-      // TODO: make sure doesn't trigger many 'null requests'
-      //disable rest, mutually eclusive:
-      self.$('.layer-selector input:checkbox').each(function(){
-        if(currentTarget.val() !== $(this).val()){
-          $(this).prop('checked',false);
-        }
-      });
-
-      var pointsEnabled = $(this).prop('checked');
-      if(pointsEnabled){
-        var val = $(this).val();
-        Backbone.trigger('MAP_LOAD_PROJECT_LAYER', val);
-      } else {
-        Backbone.trigger('MAP_LOAD_PROJECT_LAYER', null);
-      }
-    });
   },
-
 
 });

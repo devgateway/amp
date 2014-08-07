@@ -222,7 +222,10 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
 					activityContact.setActivity(am.getObject());
 					activityContact.setContactType(contactType);
 					activityContact.setPrimaryContact(false);
-                    //Hibernate.initialize(choice.getActivityContacts()); //lazy init:)
+                    Hibernate.initialize(choice.getActivityContacts()); //lazy init:)
+                    if(choice.getActivityContacts() == null) {
+                    	choice.setActivityContacts(new TreeSet<AmpActivityContact>());
+                    }
                     choice.getActivityContacts().add(activityContact);
 					
 					setModel.getObject().add(activityContact);

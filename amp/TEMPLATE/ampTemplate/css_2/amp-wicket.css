@@ -444,6 +444,8 @@ div.trnpanel div.trn-row a:hover {
 .feedbackPanelERROR{color: red;}
 .feedbackPanelINFO{color: green;}
 .wicketFloatLeft{float: left;}
+.wicketComponentsDeleteButton{position: absolute;margin-top: 20px;margin-left:-25px;}
+.wicketAlignTop{vertical-align: top;}
 .wicketFloatRight{float: right;}
 .wicketPaddingRight10{padding-right: 10px;}
 .wicketPadding2{padding: 2px;}

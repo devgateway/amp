@@ -16,13 +16,13 @@
    <td align="left" class="r-dotted-lg" vAlign="top">
       <table cellPadding="5" cellSpacing="0" width="100%">
         <tr>
-          <td nowrap="nowrap" vAlign="top" align="center">
+          <td style="white-space:normal" vAlign="top" align="center">
 
 <fieldset style="background-color:#F2F2F2;position:relative;padding-top:25px;">
 <legend class="admtoolsttl"><span class="legend_label"><digi:trn>Administrative Tools</digi:trn></span></legend>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="admin_landing_page_tbl">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="admin_landing_page_tbl" style="table-layout:fixed">
   <tr>
-    <td width=314 class="admin_landing_page_box" valign=top>
+    <td width=33% class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
             <div class="admin_landing_page_box_title"><digi:trn>Global administration and maintenance of AMP</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
@@ -108,7 +108,7 @@
 </table>
 	</div></td>
     <td width=10>&nbsp;</td>
-    <td width=314 class="admin_landing_page_box" valign=top>
+    <td width=33% class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
 	<div class="admin_landing_page_box_title"><digi:trn>User management</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
@@ -144,7 +144,7 @@
 
 	</div></td>
     <td width=11>&nbsp;</td>
-    <td width=314 class="admin_landing_page_box" valign=top>
+    <td width=33% class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
             <div class="admin_landing_page_box_title"><digi:trn>Backbone lists of AMP</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
@@ -310,9 +310,9 @@
 </td>
 </tr>
 </table>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="admin_landing_page_tbl">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="admin_landing_page_tbl" style="table-layout:fixed">
   <tr>
-    <td width=314 class="admin_landing_page_box" valign=top>
+    <td width=33% class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
             <div class="admin_landing_page_box_title"><digi:trn>Currencies and rates</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
@@ -346,7 +346,7 @@
 
 	</div></td>
     <td width=10>&nbsp;</td>
-    <td width=314 class="admin_landing_page_box" valign=top>
+    <td width=33% class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
             <div class="admin_landing_page_box_title"><digi:trn>Import and export of data</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
@@ -413,7 +413,7 @@
 
 	</div></td>
     <td width=11>&nbsp;</td>
-    <td width=314 class="admin_landing_page_box" valign=top>
+    <td width=33% class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
             <div class="admin_landing_page_box_title"><digi:trn>AMP workflow auditor</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
@@ -448,10 +448,10 @@
 	</div></td>
   </tr>
 </table>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="admin_landing_page_tbl">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="admin_landing_page_tbl" style="table-layout:fixed">
 
   <tr>
-    <td width=314 class="admin_landing_page_box" valign=top>
+    <td width=33% class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
             <div class="admin_landing_page_box_title"><digi:trn>Public view toolbox</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
@@ -485,7 +485,7 @@
 
 	</div></td>
     <td width=10>&nbsp;</td>
-    <td width=314 class="admin_landing_page_box" valign=top>
+    <td width=33% class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
 	<div class="admin_landing_page_box_title"><digi:trn>Developer Tools</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
@@ -535,7 +535,7 @@
 
 	</div></td>
     <td width=11>&nbsp;</td>
-    <td width=314 class="admin_landing_page_box" valign=top>
+    <td width=33% class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
             <div class="admin_landing_page_box_title"><digi:trn>Paris indicator Tools</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
@@ -570,9 +570,9 @@
 	</div></td>
   </tr>
 </table>
-<table width="100%" border="0" cellspacing="0" cellpadding="0" class="admin_landing_page_tbl">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="admin_landing_page_tbl" style="table-layout:fixed">
   <tr>
-    <td width=314 class="admin_landing_page_box" valign=top>
+    <td width=33% class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
             <div class="admin_landing_page_box_title"><digi:trn>Message tools</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
@@ -593,7 +593,7 @@
 
 	</div></td>
     <td width=10>&nbsp;</td>
-    <td width=314 class="admin_landing_page_box" valign=top>
+    <td width=33% class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
             <div class="admin_landing_page_box_title"><digi:trn>Resources tools</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
@@ -627,7 +627,7 @@
 
 	</div></td>
     <td width=11>&nbsp;</td>
-    <td width=314 class="admin_landing_page_box" valign=top>
+    <td width=33% class="admin_landing_page_box" valign=top>
 	<div class="admin_landing_page_box_cont">
             <div class="admin_landing_page_box_title"><digi:trn>Results dashboard tools</digi:trn></div>
 	<table border="0" cellspacing="2" cellpadding="2">
@@ -737,17 +737,14 @@
       	</td>
     </tr>
     </module:display>
-                          <module:display name="Budget Integration" parentModule="ADMINISTRATIVE SECTION">
+          <module:display name="Budget Integration" parentModule="ADMINISTRATIVE SECTION">
 							<tr>
-														<td><img width="16" align="left"
-															src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-														<td class="admin_box_label"><digi:link
-																module="budgetexport" href="/"
-																title="Budget Integration">
-																<digi:trn>Budget Integration</digi:trn>
-															</digi:link></td>
-							</tr>
-                          </module:display>
+		<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+			<td class="admin_box_label"><digi:link module="budgetexport" href="/" title="Budget Integration">
+				<digi:trn>Budget Integration</digi:trn>
+				</digi:link></td>
+				</tr>
+                </module:display>
 </table>
 </div></td>
   </tr>

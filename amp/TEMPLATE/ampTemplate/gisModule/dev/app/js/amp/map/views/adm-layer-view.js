@@ -101,7 +101,11 @@ module.exports = Backbone.View.extend({
       // get current boundary.
       var boundaries = this.app.data.boundaries;
       var currentBoundary = boundaries.findWhere({id:filterObj.adminLevel});
-      var geoJSON = currentBoundary.toJSON();
+      if(currentBoundary){
+        var geoJSON = currentBoundary.toJSON();
+      } else{
+        console.warn('no boundary found');
+      }
 
       // David -- I commented this out because it broke from my indicator layer changes.
       // I wasn't sure if this was likely to change or be fixed as-is.
@@ -135,10 +139,16 @@ module.exports = Backbone.View.extend({
 
     filter.adminLevel = this._tempConvertToString(filter.adminLevel);
 
-    return this.collection.fetch({data: filter, type: 'POST'})
-      .fail(function(jqXHR, textStatus, errorThrown){
-        console.error('failed ', jqXHR, textStatus, errorThrown);
-      });
+    return this.collection.fetch({
+        data: filter, 
+        type: 'POST',    
+        headers: { //needed to add this to fix amp 415 unsuported media type err, but most API's don;t require this...
+            'Accept': 'application/json',
+            'Content-Type': 'application/json' 
+          }
+        }).fail(function(jqXHR, textStatus, errorThrown){
+          console.error('failed ', jqXHR, textStatus, errorThrown);
+        });
   },
 
   // !temp convert adminLevel to AMP strings:

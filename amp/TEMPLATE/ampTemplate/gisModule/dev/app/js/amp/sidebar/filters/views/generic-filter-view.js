@@ -35,8 +35,10 @@ module.exports = BaseFilterView.extend({
   _updateCountInMenu: function(){
     if(this.treeModel.get('numSelected') === this.treeModel.get('numPossible') || this.treeModel.get('numSelected') === 0){
       this.$('.filter-count').text('all');
+      this.$el.removeClass('active');
     } else{
       this.$('.filter-count').text(this.treeModel.get('numSelected') + '/' + this.treeModel.get('numPossible'));
+      this.$el.addClass('active');
     }
   },
 

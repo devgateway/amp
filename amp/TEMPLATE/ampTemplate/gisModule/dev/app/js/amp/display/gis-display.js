@@ -17,7 +17,7 @@
 
 var _ = require('underscore');
 var Backbone = require('backbone');
-var indicators = require('./collections/indicator-collection');
+var Indicators = require('./collections/indicator-collection');
 var Title = require('./title');
 
 
@@ -31,7 +31,7 @@ _.extend(GISDisplay.prototype, Backbone.Events, {
   initialize: function() {
     var initArgs = {display: this, data: this.data};
     this.title = new Title(initArgs);
-    this.indicators = new indicators([], initArgs);
+    this.indicators = new Indicators([], initArgs);
 
     // TODO david -- this should listen for any newly added layer type
     // ... or maybe this event should be triggered in data?

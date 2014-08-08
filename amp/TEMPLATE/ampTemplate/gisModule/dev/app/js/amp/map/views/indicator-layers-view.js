@@ -3,7 +3,7 @@ var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
-// var Colors = require('../collections/layer-colors-collection');
+
 
 module.exports = Backbone.View.extend({
 
@@ -45,8 +45,25 @@ module.exports = Backbone.View.extend({
   },
 
   showNewGeoJSONLayer: function(layer) {
+    var featureValue,
+        colour;
+
     return new L.geoJson(layer.indicator.get('geoJSON'), {
-      onEachFeature: function() { console.log('feature', arguments); }
+      style: function(feature) {
+        featureValue = feature.properties.value;
+        colour = layer.palette.colours.find(function(colour) {
+          return colour.get('test')(featureValue);
+        });
+        if (! colour) {
+          throw new Error('No colour matched for the value ' + featureValue);
+        }
+        return {
+          color: colour.hex(),
+          weight: 4,
+          opacity: 0.9,
+          fillOpacity: 0.6
+        };
+      }
     });
   }
 

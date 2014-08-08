@@ -8,7 +8,7 @@ var APIHelper = require('../../../libs/local/api-helper');
 
 var MapHeaderView = require('../views/map-header-view');
 var BasemapGalleryView = require('../views/basemap-gallery-view');
-var LegendView = require('../views/legend-view');
+var LegendView = require('../legend/legend-view');
 
 var ADMLayerView = require('../views/adm-layer-view');
 var ProjectSitesLayerView = require('../views/project-sites-view');

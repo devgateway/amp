@@ -80,6 +80,7 @@ module.exports = Backbone.Model.extend({
         })
       });
       this.set('geoJSON', geoJSON);
+      this.trigger('load', this);
       this._boundaryJoinDeferrer.resolve(geoJSON);
     }
     return this._boundaryJoinDeferrer.promise();

@@ -26,8 +26,11 @@ module.exports = Backbone.View.extend({
     }
 
     layer.indicator.load().then(function ShowLoadedLayer() {
-      if (layer.indicator.has('geoJSON')) {
+      var layerType = layer.indicator.get('type');
+      if (layerType === 'joinBoundaries') {  // geojson
         loadedLayer = self.showNewGeoJSONLayer(layer);
+      } else if (layerType === 'wms') {
+        loadedLayer = self.showNewWMSLayer(layer);
       } else {
         throw new Error('Map view for layer type not implemented. layer:', layer);
       }
@@ -64,6 +67,16 @@ module.exports = Backbone.View.extend({
           fillOpacity: 0.6
         };
       }
+    });
+  },
+
+  showNewWMSLayer: function(layer) {
+    return L.tileLayer.wms(layer.indicator.get('link'), {
+      layers: layer.indicator.get('layer'),
+      // TODO: should these details be obtained from the API?
+      format: 'image/png',
+      transparent: true,
+      opacity: 0.75
     });
   }
 

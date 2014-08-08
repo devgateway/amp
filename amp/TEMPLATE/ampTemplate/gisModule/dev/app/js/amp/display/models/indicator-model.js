@@ -19,7 +19,7 @@ module.exports = Backbone.Model.extend({
     this.palette = new Palette.FromRange({ seed: this.indicator.id});
     this.listenTo(this.indicator, 'change:selected', this.triggerShowHide);
 
-    if (_.has(this.indicator.attributes, 'geoJSON')) {
+    if (this.indicator.get('type') === 'joinBoundary') {  // geoJSON
       this.listenTo(this.indicator, 'change:geoJSON', this.updateGeoJSON);
     }
   },

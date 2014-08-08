@@ -11,7 +11,14 @@
     "type": "GeoJSON",
     "property": "Poor",
     "link": "/rest/gis/indicator-layers/drc-geojson"
-  },  
+  },
+  {
+    "id": "umbrellas",
+    "title": "WMS Sample",
+    "type": "wms",
+    "layer": "0",
+    "link": "http://gis.devgateway.org:6080/arcgis/services/gis-reeng/UmbrellasPer100Ppl/MapServer/WmsServer"
+  },
   {
     "id": "arcgis-raster",
     "title": "TODO: ArcGIS Raster",

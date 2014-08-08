@@ -1,4 +1,3 @@
-var ajax = require('jquery').ajax;
 var Deferred = require('jquery').Deferred;
 var when = require('jquery').when;
 var _ = require('underscore');
@@ -13,9 +12,13 @@ module.exports = Backbone.Model.extend({
   },
 
   initialize: function() {
-    if (this.get('type') === 'joinBoundaries') {
+    var layerType = this.get('type');
+    if (layerType === 'joinBoundaries') {
       this.initJoinLayer();
       this.load = this.loadJoinLayer;
+    } else if (layerType === 'wms') {
+      this.initWMSLayer();
+      this.load = this.loadWMSLayer;
     }
   },
 
@@ -25,8 +28,10 @@ module.exports = Backbone.Model.extend({
     return new Deferred().fail(this);
   },
 
+
+  /////// joinBoundaries
+
   initJoinLayer: function() {
-    var self = this;
     this._dataLoadDeferrer = new Deferred();
     this._boundaryLoadDeferrer = new Deferred();
     this._boundaryJoinDeferrer = new Deferred();
@@ -41,9 +46,6 @@ module.exports = Backbone.Model.extend({
      * 1. Attach a callback with the returned promise
      * 2. Listen on this model for change:geoJSON
      */
-    if (this.get('type') !== 'joinBoundaries') {
-      throw new Error('loadJoinLayer is for "joinBoundaries" layers, this: ', this);
-    }
     var self = this;
     if (this._dataLoadDeferrer.state() === 'pending') {
       this.fetch().then(self._dataLoadDeferrer.resolve);
@@ -84,6 +86,27 @@ module.exports = Backbone.Model.extend({
       this._boundaryJoinDeferrer.resolve(geoJSON);
     }
     return this._boundaryJoinDeferrer.promise();
+  },
+
+
+  //////// wms
+
+  initWMSLayer: function() {
+    this._wmsLoadDeferrer = new Deferred();
+  },
+
+  loadWMSLayer: function() {
+    var self = this;
+    if (this._wmsLoadDeferrer.state() === 'pending') {
+      // noop... no data to load for a tile layer
+      this._wmsLoadDeferrer.resolve();
+    }
+    this._wmsLoadDeferrer.then(function() {
+      // just go ahead and declare us loaded.
+      self.trigger('load', this);
+    });
+    return this._wmsLoadDeferrer.promise();
   }
+
 
 });

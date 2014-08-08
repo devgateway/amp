@@ -45,16 +45,13 @@ module.exports = Backbone.View.extend({
     var source = basemap.get('source');
     if (source === 'esri') {
       var basemapId = basemap.get('esriId');
-      this.mapLayer = L.esri.basemapLayer(basemapId);
-      this.map.addLayer(this.mapLayer);
       if (basemap.get('label')) {
-        this.labelsLayer = L.esri.basemapLayer(basemapId + 'Labels');
-        this.map.addLayer(this.labelsLayer);
+        this.labelsLayer = L.esri.basemapLayer(basemapId + 'Labels').addTo(this.map).bringToBack();
       }
+      this.mapLayer = L.esri.basemapLayer(basemapId).addTo(this.map).bringToBack();
     } else if (source === 'tile') {
       // layers with simple tile URL templates, like osm.
-      this.mapLayer = L.tileLayer(basemap.get('tileUrl'));
-      this.map.addLayer(this.mapLayer);
+      this.mapLayer = L.tileLayer(basemap.get('tileUrl')).addTo(this.map).bringToBack();
     } else if (source !== null) {
       console.warn('layers from source ', source, 'not implemented');
     }

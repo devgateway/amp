@@ -409,7 +409,7 @@ function fnSubmit() {
 							<tr><td><hr>
 							
 								<!-- Pagination -->
-								<table width="460" cellSpacing="1" cellPadding="2" vAlign="top" align="left" style="fon-size:12px;">
+								<table width="460" cellSpacing="1" cellPadding="2" vAlign="top" align="left" style="font-size:12px;table-layout:fixed;white-space: normal">
 									<tr>
 										<td>
 											<bean:size name="aimCurrencyRateForm" property="pages" id="totpages"/>
@@ -445,7 +445,7 @@ function fnSubmit() {
 							<c:if test="${empty aimCurrencyRateForm.pages}">
 							<tr><td>
 								<!-- Pagination -->
-								<table width="460" cellSpacing="1" cellPadding="2" vAlign="top" align="left" style="fon-size:12px;">
+								<table width="460"  cellSpacing="1" cellPadding="2" vAlign="top" align="left" style="font-size:12px;table-layout:fixed;">
 									<tr>
 										<td>
 											 1 <digi:trn key="aim:of">of</digi:trn> 1

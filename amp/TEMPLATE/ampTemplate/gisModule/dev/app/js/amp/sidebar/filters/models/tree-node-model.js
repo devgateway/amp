@@ -2,7 +2,7 @@ var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var $ = require('jquery');
-var TreeNodeCollection = Backbone.Collection.extend({  model:TreeNodeModel });
+var TreeNodeCollection;
 
 var TreeNodeModel = Backbone.Model.extend({
   defaults:{
@@ -108,6 +108,9 @@ var TreeNodeModel = Backbone.Model.extend({
   },
 
 });
+
+
+var TreeNodeCollection = Backbone.Collection.extend({  model:TreeNodeModel });
 
 
 module.exports = TreeNodeModel;

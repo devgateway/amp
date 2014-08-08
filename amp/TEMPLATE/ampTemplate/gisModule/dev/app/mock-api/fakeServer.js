@@ -3,10 +3,10 @@ var _ = require('underscore');
 var sinon = require('../mock-api/sinon-min.js');
 
 
-var FakeServer = function() {
+var FakeServer = function FakeServer() {
   this.server = null;
-  this.init();
-}; 
+  this.init.apply(this);
+};
 
 _.extend(FakeServer.prototype, {
 
@@ -14,8 +14,17 @@ _.extend(FakeServer.prototype, {
     this.server = sinon.fakeServer.create();
     this.server.autoRespond = true;
     this.server.autoRespondAfter = 6; // delay in ms, good for latency tests.
+    window.XMLHttpRequest.useFilters = true;  // let us pass through some requests
+    window.XMLHttpRequest.addFilter(this.filterRequests);
     this.routeMockFiles();
     this._addClusterPath();
+  },
+
+  filterRequests: function(method, url) {
+    var PASS = true,
+        FAKE = false,
+        fakeIf = '/rest/';
+    return (url.substring(0, fakeIf.length) === fakeIf) ? FAKE : PASS;
   },
 
   routeMockFiles: function() {

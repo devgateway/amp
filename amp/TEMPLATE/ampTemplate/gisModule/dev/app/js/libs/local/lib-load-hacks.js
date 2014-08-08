@@ -7,3 +7,6 @@ Backbone.$ = jQuery;
 // boostrap looks for jquery in the global namespace, so put it there.
 window.jQuery = jQuery;
 require('bootstrap/dist/js/bootstrap');
+
+// enable CORS
+jQuery.support.cors = true;

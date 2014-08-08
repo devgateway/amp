@@ -1,0 +1,9 @@
+<div>
+  Multiple project sites here:
+  <ul class="small">
+    <%   _.each(projects, function(project){ %>
+
+      <li><%= project.feature.properties.title %></li>
+    <% });%>
+  </ul>
+</div>

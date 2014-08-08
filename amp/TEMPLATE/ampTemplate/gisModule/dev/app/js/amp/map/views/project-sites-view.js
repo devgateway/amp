@@ -7,6 +7,8 @@ var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js')
 require('../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster.js');
 var ProjectSitesCollection = require('../collections/project-sites-collection');
 
+var ProjectListTemplate =  fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
+
 
 module.exports = Backbone.View.extend({
   // These will eventually move to a config.
@@ -17,9 +19,12 @@ module.exports = Backbone.View.extend({
   currentRadius: 2,
   markerCluster: null,
 
+  popup:null,
+  projectListTemplate: _.template(ProjectListTemplate),
+
   initialize: function(extraProperties) {
     _.extend(this, extraProperties);  // extraProperties={map: ...}
-
+    var self = this;
     L.Icon.Default.imagePath = '/img/map-icons';
 
     this.featureGroup = null;
@@ -27,16 +32,43 @@ module.exports = Backbone.View.extend({
 
     //TODO: checkout prune cluster, supposedly way faster...
     // may also be worth doing manually since we don't want updates on zoom
+    // TODO: make sizing dynamic based on highest cluster... and put into own function...
     this.markerCluster = new L.markerClusterGroup({
-      maxClusterRadius: 0.1,
+      maxClusterRadius: 1,
       iconCreateFunction: function (cluster) {
         var markers = cluster.getAllChildMarkers();
-        return L.divIcon({ html: markers.length, className: 'marker-cluster', iconSize: L.point(16, 16) });
+        var size = markers.length;
+        // logarithmic in base 10:
+        //var size =  Math.log(markers.length) / Math.LN10;
+        size = 5 + size;
+
+        // zoomed out. so no numbers.
+        if(self.currentRadius == self.BIG_ICON_RADIUS){
+          size+=5;
+          return L.divIcon({ 
+            html: markers.length, 
+            className: 'marker-cluster', 
+            iconSize: L.point(size, size) });
+
+        } else{      
+          var mark = new L.divIcon({ 
+            html: '', 
+            className: 'marker-cluster', 
+            iconSize: L.point(size, size) });
+         // mark.bindPopup('<div>' + markers.length + '</div>');
+          return mark;
+        }
       },
       zoomToBoundsOnClick:false,
       showCoverageOnHover:false,
       spiderfyOnMaxZoom:false,
       removeOutsideVisibleBounds:true
+    });
+
+    this.markerCluster.on('clusterclick', function (a) {
+      //TODO: seems silly to bind on every click...
+      a.layer.bindPopup(self.projectListTemplate({projects: a.layer.getAllChildMarkers()}));
+      a.layer.openPopup(self.map);
     });
 
     this._filtersUpdated(); // explicitly call once at begining...maybe not needed later.
@@ -80,6 +112,7 @@ module.exports = Backbone.View.extend({
 
       if(data && data.type === 'FeatureCollection') {
         self.features = data.features;
+        self.rawData = data;
         self._renderFeatures();
       } else{
         console.warn('Project Sites response empty or improper type.');
@@ -93,7 +126,8 @@ module.exports = Backbone.View.extend({
     self.markerCluster.clearLayers();
 
     // add new featureGroup
-    self.featureGroup = L.geoJson(self.features, {
+    //console.log(JSON.stringify(self.rawData));
+    self.featureGroup = L.geoJson(self.rawData , {
       pointToLayer: function (feature, latlng) {
         var point = new L.CircleMarker(latlng, {
             radius: self.currentRadius,
@@ -176,7 +210,6 @@ module.exports = Backbone.View.extend({
   // circles  shrink if we're zoomed out, get big if zoomed in
   _updateZoom: function(){
     var self = this;
-    console.log('_updateZoom');
 
     if(this.featureGroup){
       var zoom = this.map.getZoom();

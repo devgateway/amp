@@ -1,24 +1,56 @@
 @tree_line_color: #f0ad4e;
+@selected_color: #a1d367;
+@disabled_color: #ddd;
+@secondary_color: #66d;
 
-.expanded {
-    font-weight: 700;
+.toggle-nav{
+    display: inline-block;
 }
 
 .selectable {
-    border: 1px solid @tree_line_color;
+    border: 2px solid @disabled_color;
     margin-right:5px;
+    margin-top:1px;
     display:inline-block;
- 
-    width:12px;
-    height:12px;
+    float:left;
 
-    border-radius: 2px;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
+    width:14px;
+    height:14px;
+
+    border-radius: 7px;
+    -moz-border-radius: 7px;
+    -webkit-border-radius: 7px;
 }
 
 .half-fill{
-    background: linear-gradient(45deg, @tree_line_color 50%, #fff 50%);
+    border: 2px solid @selected_color;
+    background: linear-gradient(90deg,  #fff 50%,@selected_color 50%);
+}
+.selected {
+    border: 1px solid @selected_color;
+    background: @selected_color;
+}
+.expanded {
+    font-weight: 700;
+    color:@secondary_color;
+}
+
+.count{
+    color: #666;
+}
+
+//This is the root node. gets specials styles.
+.tree > .parent_li > .node{
+    text-transform: uppercase;
+    font-size: 1em;
+}
+.tree > .parent_li > .node > .selectable{
+    margin-top:3px;
+}
+//end of root node styles.
+
+.tree{
+  color:#333;
 }
 
 .tree ul {
@@ -28,7 +60,7 @@
 .tree li {
     list-style-type: none;
     margin: 0;
-    padding: 5px 5px 0 5px;
+    padding: 0px 5px 0 5px;
     position: relative;
     margin-left: -5px;
 }
@@ -39,32 +71,6 @@
     position: absolute;
     right: auto
 }
-
-.tree li::before {
-    border-left: 1px solid @tree_line_color;
-    bottom: 50px;
-    height: 100%;
-    top: 0;
-    width: 1px
-}
-
-.tree li::after {
-    border-top: 1px solid @tree_line_color;
-    height: 20px;
-    top: 22px;
-    width: 9px;
-}
-
-.tree li .node {
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border: 1px solid @tree_line_color;
-    border-radius: 5px;
-    display: inline-block;
-    padding: 3px 5px;
-    text-decoration: none
-}
-
 .tree li.parent_li > span {
     cursor: pointer;
 }
@@ -84,3 +90,31 @@
 .tree li.parent_li > span:hover, .tree li.parent_li > span:hover + ul li span {
 
 }
+
+/*
+// For tree hierarchy lines and borders:
+.tree li::before {
+   // border-left: 1px solid @tree_line_color;
+    bottom: 50px;
+    height: 100%;
+    top: 0;
+    width: 1px
+}
+
+.tree li::after {
+   // border-top: 1px solid @tree_line_color;
+    height: 20px;
+    top: 22px;
+    width: 9px;
+}
+*/
+.tree li .node {
+    // -moz-border-radius: 5px;
+    // -webkit-border-radius: 5px;
+    // border: 1px solid @tree_line_color;
+    // border-radius: 5px;
+    //display: inline-block;
+    padding: 3px 0;
+    //text-decoration: none
+}
+

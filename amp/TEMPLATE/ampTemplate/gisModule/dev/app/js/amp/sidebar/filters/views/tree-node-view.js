@@ -46,7 +46,7 @@ var TreeNodeView = Backbone.View.extend({
     }
     else{
       this.$('.expanded').remove();
-      this.$('> span > span > .count').text('');
+      this.$('> .node > .toggle-nav > .count').text('');
     }
 
     this._addModelListeners();
@@ -76,11 +76,11 @@ var TreeNodeView = Backbone.View.extend({
 
   _addUIListeners: function(){
     var self = this;
-    this.$('> span > .selectable').on('click', function(evnt){
+    this.$('> .node > .selectable').on('click', function(evnt){
       self.clickBox();
 
     });
-    this.$('> span > .toggle-nav').on('click', function(evnt){
+    this.$('> .node > .toggle-nav').on('click', function(evnt){
       self.clickName();
     });
   },
@@ -91,7 +91,7 @@ var TreeNodeView = Backbone.View.extend({
 
   _updateCountUI: function(){
     if(!this.model.get('children').isEmpty()){
-      this.$('> span > span > .count').text(this.model.get('numSelected')+ '/' +this.model.get('numPossible'));
+      this.$('> .node > .toggle-nav > .count').text('('+this.model.get('numSelected')+ '/' +this.model.get('numPossible')+')');
       this._updateCheckboxFill();
     }
   },
@@ -101,27 +101,27 @@ var TreeNodeView = Backbone.View.extend({
     if(!this.model.get('children').isEmpty()){
       if(this.model.get('numSelected') > 0){
         if(this.model.get('numSelected') < this.model.get('numPossible')){
-          this.$('> span > .selectable').addClass('half-fill');
-          this.$('> span > .selectable').removeClass('label-success');
+          this.$('> .node > .selectable').addClass('half-fill');
+          this.$('> .node > .selectable').removeClass('selected');
         } else {
-          this.$('> span > .selectable').removeClass('half-fill');
-          this.$('> span > .selectable').addClass('label-success');
+          this.$('> .node > .selectable').removeClass('half-fill');
+          this.$('> .node > .selectable').addClass('selected');
         }
       } else if(this.model.get('numSelected') === 0){
-        this.$('> span > .selectable').removeClass('half-fill');
-        this.$('> span > .selectable').removeClass('label-success');
+        this.$('> .node > .selectable').removeClass('half-fill');
+        this.$('> .node > .selectable').removeClass('selected');
       }
     } else{ // else leaf node      
       if (this.model.get('selected')) {
-        this.$('> span > .selectable').addClass('label-success');
+        this.$('> .node > .selectable').addClass('selected');
       } else {
-        this.$('> span > .selectable').removeClass('label-success');
+        this.$('> .node > .selectable').removeClass('selected');
       }
     }
   },
 
   _updateExpanded: function(ul){
-    var iElement = this.$('> span > span > .expanded');
+    var iElement = this.$('> .node > .toggle-nav > .expanded');
     if (this.model.get('expanded')) {
       this.expand();
       iElement.text('-');

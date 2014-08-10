@@ -299,8 +299,19 @@ public class ImportActionNew extends DispatchAction {
     		if (!langMap.containsKey(isoLang))
     			langMap.put(isoLang, getLanguageNameOrIso(isoLang));
     	}
+
+        /** Do not add language if one is absent in the import file. AMP-18053
     	if (!langMap.containsKey(currentIsoLanguage))
 			langMap.put(currentIsoLanguage, getLanguageNameOrIso(currentIsoLanguage));
+		*/
+        /** add it only if map is empty - i.e. no languages are defined in the import file
+         *
+         */
+        if (langMap.isEmpty()) {
+            langMap.put(currentIsoLanguage, getLanguageNameOrIso(currentIsoLanguage));
+        }
+
+
     	return langMap;
     }
     
@@ -347,9 +358,13 @@ public class ImportActionNew extends DispatchAction {
                     javax.xml.bind.JAXBElement objCasted = (javax.xml.bind.JAXBElement) obj;
                     if (objCasted.getName().getLocalPart().equals("title")) {
                         String lang = (String)((TextType) objCasted.getValue()).getLang();
-                        if (lang == null || lang.equals("en")) {
+                        /*
+                         * Remove this condition. Process titles of other languages as well
+                         * AMP-18053
+                         * if (lang == null || lang.equals("en")) {
+                         */
                             title = (String)((TextType) objCasted.getValue()).getContent().get(0);
-                        }
+                         //}
                     }
                 }
 

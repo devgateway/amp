@@ -46,6 +46,7 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -754,6 +755,39 @@ public class EditActivity extends Action {
         if (activity != null) {
         	// set title,description and objective
 
+        	Set<AmpAnnualProjectBudget> annualBudgets = activity.getAnnualProjectBudgets();
+			List<ProposedProjCost> proposedAnnualBudgets = new ArrayList<ProposedProjCost>();
+			if (annualBudgets != null) {
+				Iterator<AmpAnnualProjectBudget> it = annualBudgets.iterator();
+				while (it.hasNext()) {
+					ProposedProjCost ppc = new ProposedProjCost();
+					AmpAnnualProjectBudget anProjBudget = it.next();
+					java.sql.Date dt = new java.sql.Date(anProjBudget.getYear().getTime());
+					double frmExRt = Util.getExchange(activity.getCurrencyCode(), dt);
+					double toExRt;
+					String workspaceCurrency = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId())
+							.getCurrencyCode();
+					if (workspaceCurrency == null) {
+						toExRt = frmExRt;
+						ppc.setCurrencyCode(activity.getCurrencyCode());
+						ppc.setCurrencyName(CurrencyUtil.getCurrencyByCode(activity.getCurrencyCode()).getCurrencyName());
+			              
+					} else {
+						toExRt = Util.getExchange(workspaceCurrency, dt);
+						ppc.setCurrencyCode(workspaceCurrency);
+						ppc.setCurrencyName(CurrencyUtil.getCurrencyByCode(workspaceCurrency).getCurrencyName());
+			              
+					}
+					DecimalWraper amt = CurrencyWorker.convertWrapper(anProjBudget.getAmount(), frmExRt,
+							toExRt, dt);
+					ppc.setFunAmount(amt.getCalculations());
+					ppc.setFunAmountAsDouble(amt.doubleValue());
+					ppc.setFunDate(Integer.toString(dt.getYear() + 1900));
+					proposedAnnualBudgets.add(ppc);
+				}
+			}
+			Collections.sort(proposedAnnualBudgets);
+			eaForm.getFunding().setProposedAnnualBudgets(proposedAnnualBudgets);
         	ProposedProjCost pg = new ProposedProjCost();
         	if (activity.getFunAmount() != null)
         		pg.setFunAmountAsDouble(activity.getFunAmount());

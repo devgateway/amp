@@ -1546,7 +1546,26 @@ function collapseAll() {
 			</table>
 		</c:if>
 	</div>
-</fieldset>
+	<c:if
+		test="${aimEditActivityForm.funding.proposedAnnualBudgets!=null 
+		&& aimEditActivityForm.funding.proposedAnnualBudgets.size()>0}">
+		<table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa"
+			width="100%">
+			<tr bgcolor="#f0f0f0">
+				<td><b><digi:trn key="aim:cost">Cost</digi:trn></b></td>
+				<td><b><digi:trn key="aim:cost">Year</digi:trn></b></td>
+			</tr>
+			<c:forEach var="annualBudget"
+				items="${aimEditActivityForm.funding.proposedAnnualBudgets}">
+				<tr bgcolor="#f0f0f0">
+					<td>${annualBudget.funAmount}
+						${annualBudget.currencyName}</td>
+					<td>${annualBudget.funDate}</td>
+				</tr>
+			</c:forEach>
+		</table>
+	</c:if>
+						</fieldset>
 </module:display>
 <!-- END PROPOSED PROJECT COST -->
 

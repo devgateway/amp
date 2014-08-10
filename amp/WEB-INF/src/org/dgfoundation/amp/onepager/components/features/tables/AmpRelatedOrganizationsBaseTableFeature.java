@@ -33,6 +33,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpMinSizeCollectionValid
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpUniqueCollectionValidatorField;
 import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpDividePercentageField;
@@ -306,8 +307,8 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 				return null;
 			}
 		};
-
-		searchOrganization = new AmpSearchOrganizationComponent<String>("search", new Model<String> (), "Search Organizations", searchOrgs, availableOrgGroupChoices);
+		searchOrgs.add(UpdateEventBehavior.of(FundingOrgListUpdateEvent.class));
+    	searchOrganization = new AmpSearchOrganizationComponent<String>("search", new Model<String> (), "Search Organizations", searchOrgs, availableOrgGroupChoices);
 		add(searchOrganization);
 	}
 //	private boolean existOrganization(Set<AmpOrgRole> set, AmpOrgRole ampOrgRole) {

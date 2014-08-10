@@ -15,7 +15,7 @@ import org.digijava.module.aim.helper.FormatHelper;
  * @author not attributable
  * @version 1.0
  */
-public class ProposedProjCost extends ActionForm{
+public class ProposedProjCost extends ActionForm implements Comparable<ProposedProjCost>{
 
     private String currencyCode;
     private String currencyName;
@@ -67,6 +67,23 @@ public class ProposedProjCost extends ActionForm{
 	 */
 	public void setFunAmountFormated(String funAmountFormated) {
 		this.funAmountFormated = FormatHelper.formatNumber(getFunAmountAsDouble());;
+	}
+
+	@Override
+	public int compareTo(ProposedProjCost o) {
+			if (this == o)
+			return 0;
+
+		if (this.funDate == null)
+			return -1;
+		if (o.funDate == null)
+			return 1;
+
+		if (Long.parseLong(this.funDate) < Long.parseLong(o.funDate))
+			return -1;
+		else
+			return 1;
+
 	}
 
 	public void setCurrencyName(String currencyName) {

@@ -527,8 +527,18 @@ public class IatiActivityWorker {
                 }
                 //organisation
                 if (i.getName().equals(new QName("organisation"))) {
-                    JAXBElement<PlainType> item = (JAXBElement<PlainType>) i;
-                    ampContact.setOrganisationName(item.getValue().getContent());
+                    String orgName = null;
+
+                    if (i.getValue() instanceof PlainType) {
+                        orgName = ((PlainType)i.getValue()).getContent();
+                    } else if (i.getValue() instanceof TextType) {
+                        List contentObj = ((TextType)i.getValue()).getContent();
+                        if (contentObj != null && contentObj.size() > 0) {
+                            orgName = contentObj.get(0).toString();
+                        }
+                    }
+
+                    ampContact.setOrganisationName(orgName);
                 }
                 //phone
                 if (i.getName().equals(new QName("telephone"))) {

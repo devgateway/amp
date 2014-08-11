@@ -18,16 +18,3 @@ QUnit.test( 'Getting the API base url', function( assert ) {
 
 
 });
-
-QUnit.test( 'Converting filters to AMP style', function( assert ) {
-
-  var filter = {adminLevel: ['Region']};
-  assert.ok( APIHelper.convertToAMPStyle(filter) === '{"params":[{"filterName":"adminLevel","filterValue":["Region"]}]}',
-  'single adminLevel filter' );
-
-
-  var filter = {adminLevel: ['Region'], year: 1999};
-  assert.ok( APIHelper.convertToAMPStyle(filter) === '{"params":[{"filterName":"adminLevel","filterValue":["Region"]},{"filterName":"year","filterValue":1999}]}',
-  'multi property filter adminLevel and year' );
-
-});

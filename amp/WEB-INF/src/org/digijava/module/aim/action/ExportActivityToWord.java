@@ -1521,8 +1521,8 @@ public class ExportActivityToWord extends Action {
 	        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Cost", null, null,  true).
 	                                                addRowData(FormatHelper.formatNumber(act.getFunAmount())).
 	                                                addRowData(translatedCurrency));
-	        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Proposed Completion Date ", null, null,  true).
-	                                                        addRowData(DateConversion.ConvertDateToString(act.getProposedCompletionDate())));
+	        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Signature date", null, null,  true).
+	        			                                                        addRowData(DateConversion.ConvertDateToString(act.getFunDate())));
 	        retVal.add(createSectionTable(eshProjectCostTable, request, ampContext));
 		}
         return retVal;

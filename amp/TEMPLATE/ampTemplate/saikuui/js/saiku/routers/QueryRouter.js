@@ -68,10 +68,10 @@ var QueryRouter = Backbone.Router.extend({
 				  </Properties> \
 				</Query> ';
 				xmlTemplate = xmlTemplate.replace("__MDX__", data.mdx);
-				xmlTemplate = xmlTemplate.replace("__CATALOG__", data.reportMetadata.catalog);
 				xmlTemplate = xmlTemplate.replace("__CUBE__", data.reportMetadata.cube);
 				xmlTemplate = xmlTemplate.replace("__NAME__", data.reportMetadata.queryName);
 				xmlTemplate = xmlTemplate.replace("__CONNECTION__", data.reportMetadata.connection);
+                xmlTemplate = xmlTemplate.replace("__CATALOG__", data.reportMetadata.catalog);
 				xmlTemplate = xmlTemplate.replace("__SCHEMA__", data.reportMetadata.schema);
 
 				var model = Backbone.Model.extend({
@@ -82,8 +82,7 @@ var QueryRouter = Backbone.Router.extend({
 						console.log("model created");
 					}
 				});
-
-				query.move_query_to_workspace(new model(), xmlTemplate);
+				query.move_query_to_workspace(new model(), xmlTemplate, true);
             });
     }
 

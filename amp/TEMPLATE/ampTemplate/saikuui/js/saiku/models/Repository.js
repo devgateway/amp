@@ -53,7 +53,7 @@ var SavedQuery = Backbone.Model.extend({
         return u;
     },
     
-    move_query_to_workspace: function(model, response) {
+    move_query_to_workspace: function(model, response, close_others) {
         var file = response;
         var filename = model.get('file');
         for (var key in Settings) {
@@ -74,6 +74,14 @@ var SavedQuery = Backbone.Model.extend({
         });
         
         var tab = Saiku.tabs.add(new Workspace({ query: query }));
+        if(close_others) {
+            try {
+            	Saiku.tabs.close_others(tab);
+            }
+            catch(e) {
+            	console.log("Something went wrong");
+            }
+        }
     }
 });
 

@@ -5,8 +5,13 @@ Keep list of changes from Saiku. Original branched version "2.6-SNAPSHOT", only 
 
 ===================
 Feature: Executing MDX queries coming from AMP
-
 Modified files:
-
 saiku/routers/QueryRouter.js
 saiku/Settings.js
+saiku/Repository.js
+
+
+Feature: Deactivated Global Toolbar
+Modified files:
+saiku/Toolbar.js
+

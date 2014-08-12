@@ -6,13 +6,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
-import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportEntityType;
-import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ReportUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;

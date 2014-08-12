@@ -22,7 +22,7 @@ import org.digijava.module.fundingpledges.form.PledgeForm;
 import org.digijava.module.fundingpledges.form.TransientDocumentShim;
 
 /**
- * misnamed centralized place for the AJAX callback of the PledgeForm (did not want to pollute the application with dozens of Action's which have 2-3 lines of usable code each)
+ * misnamed centralized place for the AJAX callback of the PledgeForm (did not want to pollute the application with dozens of Actions which have 2-3 lines of usable code each)
  * activities are discriminated using the parameter "extraAction"
  * @author simple
  *

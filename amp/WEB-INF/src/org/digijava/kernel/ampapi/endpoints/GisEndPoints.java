@@ -16,6 +16,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.node.LongNode;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -70,6 +71,40 @@ public class GisEndPoints {
 
 		return result;
 	}
+	/**
+	 * Returns Aggregate ADM info by ADM Level
+	 * 
+	 * @param filter
+	 *            adminLevel to filter, the json should look like {
+	 *            "FiltersParams":
+	 *            {"params":[{"filterName":"adminLevel","filterValue"
+	 *            :["Region"]}] } }
+	 * 
+	 *            Available regions
+	 * @return
+	 */
+	@POST
+	@Path("/projects-sites")
+	@Produces(MediaType.APPLICATION_JSON)
+	public final FeatureCollectionGeoJSON getProjectsSites(
+			final JsonBean filter) {
+		FeatureCollectionGeoJSON f= new FeatureCollectionGeoJSON();
+		
+		
+		FeatureGeoJSON fgj = new FeatureGeoJSON();
+		PointGeoJSON pg = new PointGeoJSON();
+		pg.coordinates.add( 27.91667);
+		pg.coordinates.add( 47.78333);
+
+		pg.properties.put("structureid", new LongNode(205));
+		pg.properties.put("title", new TextNode("Building a School"));
+		pg.properties.put("projectId", new LongNode(1253));
+		pg.properties.put("admId", new LongNode(23));
+		fgj.geometry = pg;
+		f.features.add(fgj);
+		
+		return f;
+	}
 
 	@POST
 	@Path("/saved-maps")
@@ -120,23 +155,6 @@ public class GisEndPoints {
 
 	}
 
-	private JsonBean getJsonBeanFromMapState(AmpMapState map,Boolean getBlob) {
-		JsonBean jMap = new JsonBean();
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
-		TimeZone tz = TimeZone.getTimeZone("UTC");
-
-		df.setTimeZone(tz);
-		jMap.set("id", map.getId());
-		jMap.set("title", map.getTitle());
-		jMap.set("description", map.getDescription());
-		if(getBlob){
-			jMap.set("stateBlob", map.getStateBlob());
-		}
-		jMap.set("created", df.format(map.getCreatedDate()));
-		jMap.set("lastAccess", df.format(map.getLastAccesedDate()));
-		return jMap;
-	}
-
 	@SuppressWarnings("rawtypes")
 	@GET
 	@Path("/saved-maps")
@@ -157,8 +175,7 @@ public class GisEndPoints {
 			throw new WebApplicationException(e);
 		}
 	}
-
-	@Path("/sectors/{sectorConfigName}")
+	
 	private FeatureGeoJSON getPoint(Double lat, Double lon,
 			List<Long> activityid, String adm) {
 		FeatureGeoJSON fgj = new FeatureGeoJSON();
@@ -171,6 +188,23 @@ public class GisEndPoints {
 
 		fgj.geometry = pg;
 		return fgj;
+	}
+
+	private JsonBean getJsonBeanFromMapState(AmpMapState map,Boolean getBlob) {
+		JsonBean jMap = new JsonBean();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+		TimeZone tz = TimeZone.getTimeZone("UTC");
+
+		df.setTimeZone(tz);
+		jMap.set("id", map.getId());
+		jMap.set("title", map.getTitle());
+		jMap.set("description", map.getDescription());
+		if(getBlob){
+			jMap.set("stateBlob", map.getStateBlob());
+		}
+		jMap.set("created", df.format(map.getCreatedDate()));
+		jMap.set("lastAccess", df.format(map.getLastAccesedDate()));
+		return jMap;
 	}
 
 }

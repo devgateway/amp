@@ -10,7 +10,7 @@ import org.codehaus.jackson.annotate.JsonSubTypes;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.annotate.JsonTypeInfo.As;
 import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
-
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
  * A Bean representation of a GeoJSON base object.
@@ -29,7 +29,9 @@ import org.codehaus.jackson.annotate.JsonTypeInfo.Id;
 })
 public abstract class GeoJSON implements Validation
 {
+	@JsonIgnore
     public CRSGeoJSON crs;
+    @JsonIgnore
     public List<Double> bbox;
     protected Map<String,JsonNode> properties;
 

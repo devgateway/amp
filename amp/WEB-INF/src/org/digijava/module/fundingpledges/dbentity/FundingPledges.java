@@ -2,11 +2,17 @@
 package org.digijava.module.fundingpledges.dbentity;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -15,6 +21,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.hibernate.jdbc.Work;
 
 /**
  * @author Diego Dimunzio
@@ -283,7 +290,6 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
 		calc.doCalculations(this.getFundingPledgesDetails(), currencyCode, true);
 		return calc.getTotalPledged().doubleValue();
 	}
-	
 		
 	@java.lang.SuppressWarnings("all")
 	public TreeSet<String> getYearsList() {
@@ -466,7 +472,6 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
 		this.contactAlternativeEmail_1 = contactAlternativeEmail_1;
 	}
 	
-	
 	@java.lang.SuppressWarnings("all")
 	public void setYearsList(final TreeSet<String> yearsList) {
 		this.yearsList = yearsList;
@@ -479,10 +484,40 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
 	public void setDocuments(Set<FundingPledgesDocument> documents){
 		this.documents = documents;
 	}
+	
     public static String sqlStringForName(String idSource)
     {
     	return InternationalizedModelDescription.getForProperty(FundingPledges.class, "name").getSQLFunctionCall(idSource);
     }
+    
+    //introduced for the sake of AMP-18058
+    public static Collection<String> getPledgeDocumentUuids() {
+    	final Collection<String> uuids = new HashSet<String>();
+        PersistenceManager.getSession().doWork(new Work(){
+				public void execute(Connection conn) throws SQLException {
+					
+	            
+		    		String query = "SELECT uuid FROM amp_funding_pledges_document";
+		    		//the only limitation here might be that 500 results are fetched only there -- look out for it
+		    		ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
+		            
+		            
+		            
 
-	
+					
+					while (rs.next()) {
+						uuids.add(rs.getString("uuid"));
+						}
+				}
+			});    	
+    	
+    	
+    	return uuids;
+    }
+    
+    
+    
+    
+    
+    
 }

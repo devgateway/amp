@@ -49,6 +49,7 @@ import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
 import org.digijava.module.contentrepository.util.DocumentManagerRights;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
 public class DocumentManager extends Action {
 	
@@ -226,7 +227,7 @@ public class DocumentManager extends Action {
 			Collection otherTeamMembers		= TeamMemberUtil.getTMTeamMembers( documentFilter.getBaseUsername() );
 			
 			Iterator iterator				= otherTeamMembers.iterator();
-			
+			//this search is terribly inefficient
 			while ( iterator.hasNext() ) {
 				TeamMember someTeamMember	= (TeamMember) iterator.next(); 
 				if ( someTeamMember.getTeamId().longValue() == documentFilter.getBaseTeamId().longValue() ) {
@@ -478,6 +479,12 @@ public class DocumentManager extends Action {
 		ArrayList<DocumentData> documents										= new ArrayList<DocumentData>();
 		HashMap<String,CrDocumentNodeAttributes> uuidMapOrg		= CrDocumentNodeAttributes.getPublicDocumentsMap(false);
 		HashMap<String,CrDocumentNodeAttributes> uuidMapVer		= CrDocumentNodeAttributes.getPublicDocumentsMap(true);
+		
+		Collection<String> PledgeDocumentsUuids = FundingPledges.getPledgeDocumentUuids();
+		
+		
+		
+		
 		try {
 			while ( nodeIterator.hasNext() ) {
 				Node documentNode	= (Node)nodeIterator.next();
@@ -545,7 +552,21 @@ public class DocumentManager extends Action {
 				
 				String uuid						= documentNode.getUUID();
 				boolean isPublicVersion		= uuidMapVer.containsKey(uuid);
-								
+				
+				/*
+				 
+				pledge documents aren't workspace-bound and therefore can only be added or removed from the pledge itself
+				this sounds a bit underdesigned, though, and in my honest opinion should be revised with the whole 
+				document management concept
+				
+				*/
+				if (PledgeDocumentsUuids.contains(uuid))
+					continue;
+				
+				
+				
+				
+				
 				if ( isPublicVersion ) { // This document is public and exactly this version is the public one
 						hasViewRights			= true;
 				}else{

@@ -81,12 +81,14 @@ public class SavePledge extends Action {
     				
     				Long id = plForm.getPledgeId();
     				
-    				IdWithValueShim idv = null;
+//    				IdWithValueShim idv = null;
     				if (plForm.getPledgeNames().size() > 0)
     					plForm.getPledgeNames().get(0);
-    				String name = idv.value;
+//    				idv = plForm.getEffectiveName();
+//    				String name = idv.value;
     				String additionalInfo = plForm.getAdditionalInformation();
-    				
+    				String name = plForm.getEffectiveName();
+    						
     				LuceneUtil.addUpdatePledge(sc.getRealPath("/"), !newPledge, new AmpPledgeFake(name, id, additionalInfo));
     				
     			} catch (Exception e) {

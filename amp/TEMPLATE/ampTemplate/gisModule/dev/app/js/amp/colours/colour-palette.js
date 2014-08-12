@@ -2,7 +2,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var seedrandom = require('seedrandom');
 var niceBuckets = require('nice-buckets');
-var Colour = require('../models/colour-model');
+var Colour = require('./colour-model');
 
 
 // magic numbers

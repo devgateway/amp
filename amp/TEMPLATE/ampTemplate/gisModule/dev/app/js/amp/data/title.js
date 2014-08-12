@@ -12,8 +12,8 @@ _.extend(Title.prototype, Backbone.Events, {
 
   initialize: function(options) {
     this.data = options.data;
-    this.display = options.display;
-    this.listenTo(this.display, 'update:layers', this.updateTitle);
+
+    this.listenTo(this.data, 'show hide', this.updateTitle);
   },
 
   updateTitle: function() {

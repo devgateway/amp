@@ -11,8 +11,8 @@ module.exports = Backbone.View.extend({
     this.app = options.app;
     this.map = options.map;
     this.leafletLayerMap = {};
-    this.listenTo(this.app.display.indicators, 'show', this.showLayer);
-    this.listenTo(this.app.display.indicators, 'hide', this.hideLayer);
+    this.listenTo(this.app.data.indicators, 'show', this.showLayer);
+    this.listenTo(this.app.data.indicators, 'hide', this.hideLayer);
   },
 
   showLayer: function(layer) {
@@ -25,8 +25,8 @@ module.exports = Backbone.View.extend({
       this.leafletLayerMap[layer.cid] = 'loading';  // will be replaced in time...
     }
 
-    layer.indicator.load().then(function ShowLoadedLayer() {
-      var layerType = layer.indicator.get('type');
+    this.listenToOnce(layer, 'processed', function ShowLoadedLayer() {
+      var layerType = layer.get('type');
       if (layerType === 'joinBoundaries') {  // geojson
         loadedLayer = self.showNewGeoJSONLayer(layer);
       } else if (layerType === 'wms') {
@@ -37,6 +37,8 @@ module.exports = Backbone.View.extend({
       self.leafletLayerMap[layer.cid] = loadedLayer;
       self.map.addLayer(loadedLayer);
     });
+
+    layer.load();
   },
 
   hideLayer: function(layer) {
@@ -51,7 +53,7 @@ module.exports = Backbone.View.extend({
     var featureValue,
         colour;
 
-    return new L.geoJson(layer.indicator.get('geoJSON'), {
+    return new L.geoJson(layer.get('geoJSON'), {
       style: function(feature) {
         featureValue = feature.properties.value;
         colour = layer.palette.colours.find(function(colour) {
@@ -71,8 +73,8 @@ module.exports = Backbone.View.extend({
   },
 
   showNewWMSLayer: function(layer) {
-    return L.tileLayer.wms(layer.indicator.get('link'), {
-      layers: layer.indicator.get('layer'),
+    return L.tileLayer.wms(layer.get('link'), {
+      layers: layer.get('layer'),
       // TODO: should these details be obtained from the API?
       format: 'image/png',
       transparent: true,

@@ -12,18 +12,18 @@ module.exports = Backbone.View.extend({
 
   initialize: function(options) {
     this.app = options.app;
-    this.listenTo(this.app.display, 'update:layers', this.render);
+    this.listenTo(this.app.data, 'show hide', this.render);
   },
 
   render: function() {
     this.$el.html(this.template());
 
     this.$('.legend-content').html(
-      this.app.display.indicators.chain()
+      this.app.data.indicators.chain()
         .filter(function(layer) {
-          return layer.indicator.get('selected');
+          return layer.get('selected');
         }).map(function(layer) {
-          return (new LegendItem({model: layer})).render().el;
+          return (new LegendItem({ model: layer })).render().el;
         }).value()
     );
 

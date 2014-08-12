@@ -91,7 +91,8 @@ var TreeNodeView = Backbone.View.extend({
 
   _updateCountUI: function(){
     if(!this.model.get('children').isEmpty()){
-      this.$('> .node > .toggle-nav > .count').text('('+this.model.get('numSelected')+ '/' +this.model.get('numPossible')+')');
+      this.$('> .node > .toggle-nav > .count').text(
+        '(' + this.model.get('numSelected') + '/' + this.model.get('numPossible') + ')' );
       this._updateCheckboxFill();
     }
   },

@@ -13,15 +13,13 @@ module.exports = Backbone.View.extend({
       status: 'loading'
     }, this.model.toJSON())));
 
-    if (_.has(this.model, 'indicator')) {
-      var layerType = this.model.indicator.get('type');
-      if (layerType === 'joinBoundaries') { // geoJSON
-        this.renderGeoJSON();
-      } else if (layerType === 'wms') {
-        this.renderWMS();
-      } else {
-        console.warn('legend for indicator type not implemented: ', layerType);
-      }
+    var layerType = this.model.get('type');
+    if (layerType === 'joinBoundaries') { // geoJSON
+      this.renderGeoJSON();
+    } else if (layerType === 'wms') {
+      this.renderWMS();
+    } else {
+      console.warn('legend for indicator type not implemented: ', layerType);
     }
 
     return this;
@@ -30,20 +28,20 @@ module.exports = Backbone.View.extend({
   renderGeoJSON: function() {
     var self = this;
 
-    this.model.indicator.load().then(function() {
+    this.model.load().then(function() {
       self.$el.html(self.template(_.extend({}, self.model.toJSON(), {
         status: 'loaded',
         legendType: 'colours',
         colourBuckets: self.model.palette.colours,
-        unit: self.model.indicator.get('data').unit
+        unit: self.model.get('data').unit
       })));
     });
   },
 
   renderWMS: function() {
-    var base = this.model.indicator.get('link');
+    var base = this.model.get('link');
     var qs = '?request=GetLegendGraphic&version=1.1.1&format=image/png%26layer=';
-    var wmsLayer = this.model.indicator.get('layer');
+    var wmsLayer = this.model.get('layer');
     this.$el.html(this.template(_.extend({}, this.model.toJSON(), {
       status: 'loaded',
       legendType: 'img',

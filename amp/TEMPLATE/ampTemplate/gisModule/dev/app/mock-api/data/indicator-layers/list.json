@@ -1,29 +1,10 @@
 [
   {
-    "id": "arggis-feature",
-    "title": "ArcGIS DRC Feature Sample",
-    "type": "ArcGISFeature",
-    "link": "http://gis.devgateway.org:6080/arcgis/rest/services/gis-reeng/UmbrellasPer100Ppl/MapServer/0"
-  },
-  {
-    "id": "drc-geojson",
-    "title": "Food Scarcity GeoJSON",
-    "type": "GeoJSON",
-    "property": "Poor",
-    "link": "/rest/gis/indicator-layers/drc-geojson"
-  },
-  {
     "id": "umbrellas",
     "title": "WMS Sample",
     "type": "wms",
     "layer": "0",
     "link": "http://gis.devgateway.org:6080/arcgis/services/gis-reeng/UmbrellasPer100Ppl/MapServer/WmsServer"
-  },
-  {
-    "id": "arcgis-raster",
-    "title": "TODO: ArcGIS Raster",
-    "type": "ArcGISRaster",
-    "link": "http://gis.devgw.org/arcgis/rest/services/Moldova/Population/MapServer/0"
   },
   {
     "id": "drc-food",

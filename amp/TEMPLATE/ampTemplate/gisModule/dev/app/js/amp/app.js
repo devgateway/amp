@@ -4,19 +4,14 @@ require('../libs/local/lib-load-hacks');
 var $ = require('jquery');
 
 var GISData = require('./data/gis-data');
-var GISDisplay = require('./display/gis-display');
 var App = require('./gis/views/gis-main');
 
 var state = require('./services/state');
 
 
 // initialize everything that doesn't need to touch the DOM
-var gisData = new GISData();
-var gisDisplay = new GISDisplay({data: gisData});
-
 var app = new App({
-  data: gisData,
-  display: gisDisplay
+  data: new GISData()
 });
 
 app.data.load();

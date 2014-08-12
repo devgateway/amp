@@ -2,23 +2,28 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var APIHelper = require('../../../libs/local/api-helper');
 var RadioMixin = require('../../mixins/radio-mixin');
-var Indicator = require('../models/indicator-model');
+var JoinIndicator = require('../models/join-indicator-model');
+var WMSIndicator = require('../models/wms-indicator-model');
 
 
-// I like the semantics of "reduce" here, but it's the same as
-// var mixins = _.extend({}, RadioMixin, AnotherMixin, ...);
-var mixins = _.reduce([
-  RadioMixin
-], _.extend, {});
-
-
-module.exports = Backbone.Collection.extend(mixins).extend({
+module.exports = Backbone.Collection
+  .extend(RadioMixin)  // manages 'selected' state and api of models
+  .extend({
 
   url: APIHelper.getAPIBase() + '/rest/gis/indicator-layers',
 
-  model: Indicator,
+  model: function(attrs, opts) {
+    var typeName = attrs.type;
+    if (typeName === 'joinBoundaries') {
+      return new JoinIndicator(attrs);
+    } else if (typeName === 'wms') {
+      return new WMSIndicator(attrs);
+    } else {
+      throw new Error('Unrecognized indicator type: ' + attrs.type);
+    }
+  },
 
-  initialize: function(options) {
+  initialize: function(models, options) {
     this.boundaries = options.boundaries;
   }
 

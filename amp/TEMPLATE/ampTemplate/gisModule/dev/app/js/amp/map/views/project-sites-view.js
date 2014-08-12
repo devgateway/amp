@@ -43,7 +43,7 @@ module.exports = Backbone.View.extend({
         size = 5 + size;
 
         // zoomed out. so no numbers.
-        if(self.currentRadius == self.BIG_ICON_RADIUS){
+        if(self.currentRadius === self.BIG_ICON_RADIUS){
           size+=5;
           return L.divIcon({ 
             html: markers.length, 

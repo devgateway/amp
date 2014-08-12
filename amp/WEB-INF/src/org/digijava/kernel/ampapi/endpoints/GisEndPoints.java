@@ -1,13 +1,21 @@
 package org.digijava.kernel.ampapi.endpoints;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
-import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -16,6 +24,12 @@ import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.esrigis.dbentity.AmpMapState;
+import org.hibernate.Criteria;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Session;
 
 /**
  * Class that holds entrypoing for GIS api methods
@@ -25,6 +39,7 @@ import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
  */
 @Path("gis")
 public class GisEndPoints {
+	private static final Logger logger = Logger.getLogger(GisEndPoints.class);
 	/**
 	 * Returns Aggregate ADM info by ADM Level
 	 * 
@@ -40,22 +55,110 @@ public class GisEndPoints {
 	@POST
 	@Path("/cluster")
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
 	public final FeatureCollectionGeoJSON getClusteredPointsByAdm(
 			final JsonBean filter) {
-        
-        List<ClusteredPoints> c = QueryUtil.getClusteredPoints(filter.get("adminLevel").toString());
-        FeatureCollectionGeoJSON result = new FeatureCollectionGeoJSON();
-        for (ClusteredPoints clusteredPoints : c) {
-            result.features.add(getPoint(new Double(clusteredPoints.getLon()),
-                    new Double(clusteredPoints.getLat()),
-                    clusteredPoints.getActivityids(),
-                    clusteredPoints.getAdmin()));
-        }
 
-        return result;
+		List<ClusteredPoints> c = QueryUtil.getClusteredPoints(filter.get(
+				"adminLevel").toString());
+		FeatureCollectionGeoJSON result = new FeatureCollectionGeoJSON();
+		for (ClusteredPoints clusteredPoints : c) {
+			result.features.add(getPoint(new Double(clusteredPoints.getLon()),
+					new Double(clusteredPoints.getLat()),
+					clusteredPoints.getActivityids(),
+					clusteredPoints.getAdmin()));
+		}
+
+		return result;
 	}
 
+	@POST
+	@Path("/saved-maps")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JsonBean savedMaps(final JsonBean pMap) {
+		Date creationDate = new Date();
+		JsonBean mapId = new JsonBean();
+
+		AmpMapState map = new AmpMapState();
+		map.setTitle(pMap.getString("title"));
+		map.setDescription(pMap.getString("description"));
+		map.setStateBlob(pMap.getString("stateBlob"));
+		map.setCreatedDate(creationDate);
+		map.setUpdatedDate(creationDate);
+		map.setLastAccesedDate(creationDate);
+
+		try {
+			Session s = PersistenceManager.getRequestDBSession();
+			s.save(map);
+			s.flush();
+			mapId.set("mapId", map.getId());
+		} catch (DgException e) {
+			logger.error("Cannot Save map",e);
+			throw new WebApplicationException(e);
+		}
+		return mapId;
+	}
+
+	@GET
+	@Path("/saved-maps/{mapId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JsonBean savedMaps(@PathParam("mapId") Long mapId) {
+		JsonBean jMap = null;
+		try {
+			Session s = PersistenceManager.getRequestDBSession();
+			AmpMapState map = (AmpMapState) s.load(AmpMapState.class, mapId);
+			jMap = getJsonBeanFromMapState(map,Boolean.TRUE);
+			map.setLastAccesedDate(new Date());
+			s.merge(map);
+
+		} catch (ObjectNotFoundException e) {
+			jMap = new JsonBean();
+		} catch (DgException e) {
+			logger.error("cannot get map by id " + mapId,e);
+			throw new WebApplicationException(e);
+		}
+		return jMap;
+
+	}
+
+	private JsonBean getJsonBeanFromMapState(AmpMapState map,Boolean getBlob) {
+		JsonBean jMap = new JsonBean();
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+		TimeZone tz = TimeZone.getTimeZone("UTC");
+
+		df.setTimeZone(tz);
+		jMap.set("id", map.getId());
+		jMap.set("title", map.getTitle());
+		jMap.set("description", map.getDescription());
+		if(getBlob){
+			jMap.set("stateBlob", map.getStateBlob());
+		}
+		jMap.set("created", df.format(map.getCreatedDate()));
+		jMap.set("lastAccess", df.format(map.getLastAccesedDate()));
+		return jMap;
+	}
+
+	@SuppressWarnings("rawtypes")
+	@GET
+	@Path("/saved-maps")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<JsonBean> savedMaps() {
+		List<JsonBean> maps = new ArrayList<JsonBean>();
+
+		try {
+			Criteria mapsCriteria = PersistenceManager.getRequestDBSession()
+					.createCriteria(AmpMapState.class);
+			List l = mapsCriteria.list();
+			for (Object map : l) {
+				maps.add(getJsonBeanFromMapState((AmpMapState) map, Boolean.FALSE));
+			}
+			return maps;
+		} catch (DgException e) {
+			logger.error("Cannot get maps list",e);
+			throw new WebApplicationException(e);
+		}
+	}
+
+	@Path("/sectors/{sectorConfigName}")
 	private FeatureGeoJSON getPoint(Double lat, Double lon,
 			List<Long> activityid, String adm) {
 		FeatureGeoJSON fgj = new FeatureGeoJSON();

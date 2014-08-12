@@ -30,4 +30,13 @@ public class JsonBean {
     	//we firs try to translate the text
     	param.put(name, value);
     }
+
+	public String getString(String name) {
+		Object o = get(name);
+		if (o != null) {
+			return o.toString();
+		} else {
+			return null;
+		}
+	}
 }

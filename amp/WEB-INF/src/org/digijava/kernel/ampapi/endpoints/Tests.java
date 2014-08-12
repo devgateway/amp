@@ -26,9 +26,18 @@ public class Tests {
             ids.add(2L);
             ids.add(3L);
             ids.add(4L);
-            //j.set("activityId", ids);
+            j.set("activityId", ids);
             j.set("adminLevel", "Region");
+            
+            
+            List<String>idString=new ArrayList<String>();
+            idString.add("string1");
+            idString.add("string2");
+            idString.add("string3");
+            idString.add("string4");
+            j.set("idString", idString);
             json = mapper.writer().writeValueAsString(j);
+            
             System.out.println(json);
         } catch (JsonProcessingException e) {
             // TODO Auto-generated catch block

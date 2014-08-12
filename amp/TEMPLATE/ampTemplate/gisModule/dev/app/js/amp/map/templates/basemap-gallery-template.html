@@ -1,13 +1,15 @@
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-    <span class="glyphicon glyphicon-globe"></span> Basemap <b class="caret"></b>
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" title="Change the map's base layer">
+    <img src="<%= current.get('thumb') %>" alt="Current basemap: <%= current.get('id') %>" height="21" width="32" />
+    <%= current.get('id') %>
+    <b class="caret"></b>
   </a>
   <ul class="dropdown-menu" style="width: 400px;height: 200px;overflow-y: scroll">
     <li>
       <div id="basemapGallery" class="clearfix">
 
         <% basemaps.each(function(basemap) { %>
-          <div class="esriBasemapGalleryNode" data-id="<%= basemap.get('id') %>">
+          <div class="esriBasemapGalleryNode <%= basemap.get('id') === current.get('id') ? 'current' : '' %>" data-id="<%= basemap.get('id') %>">
             <img class="esriBasemapGalleryThumbnail" src="<%= basemap.get('thumb') %>" alt="<%= basemap.get('id') %>" />
             <div class="esriBasemapGalleryLabelContainer">
               <%= basemap.get('id') %>

@@ -25,7 +25,10 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
-    this.$el.html(this.template({basemaps: this.collection}));
+    this.$el.html(this.template({
+      basemaps: this.collection,
+      current: this.collection.getBasemap()
+    }));
     return this;
   },
 
@@ -56,6 +59,8 @@ module.exports = Backbone.View.extend({
       console.warn('layers from source ', source, 'not implemented');
     }
     // source === null is just an empty basemap, nothing to do
+
+    this.render();
   },
 
   removeBasemap: function(basemap) {

@@ -506,12 +506,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
             protected void onBeforeRender() {
             	super.onBeforeRender();
         		AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
-        		//if the user is aprovver of the workspace
+        		//if the user is approver of the workspace
         		//or is the teamlead of the ws
         		//and the activity is not new (make not sense to reject a newly created activity)
         		
         		this.setVisible(( !newActivity && (wicketSession.getAmpCurrentMember().getAmpMemberRole().isApprover() 
-        				|| wicketSession.getAmpCurrentMember().getAmpTeam().getTeamLead().equals(wicketSession.getAmpCurrentMember()))
+        				|| (wicketSession.getAmpCurrentMember().getAmpTeam().getTeamLead()!=null &&wicketSession.getAmpCurrentMember().getAmpTeam().getTeamLead().equals(wicketSession.getAmpCurrentMember())))
         				)&&  !am.getObject().getDraft());
             }
 		};

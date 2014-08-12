@@ -166,7 +166,7 @@ public class ImportActionNew extends DispatchAction {
         if (languageISOs.containsKey(currentLanguage)) {
             myform.setSelLanguages(new String[]{currentLanguage});
             myform.setDefaultLanguage(currentLanguage);
-        } else {
+        } else if (languageISOs.size() > 0) {
             String firstRandomLanguage = languageISOs.get(languageISOs.keySet().iterator().next());
             myform.setSelLanguages(new String[]{firstRandomLanguage});
             myform.setDefaultLanguage(firstRandomLanguage);

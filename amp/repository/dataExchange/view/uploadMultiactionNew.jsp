@@ -494,7 +494,7 @@
 					
 					
 					<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_LANG_FILTERS) %>">
-						<digi:form action="/importActionNew.do?action=showMapping" method="post" onsubmit="javascript: enableAllLang(this);">
+						<digi:form action="/importActionNew.do?action=showMapping" method="post" onsubmit="enableAllLang()">
 									<table class="inside wizardStepTable" >
 										<tr>
 											<td class="inside tableHeader">
@@ -532,11 +532,6 @@
 										</logic:notEmpty>
 									</table>
 						</digi:form>
-
-                        <script language="javascript">
-                            changeSelLang($("input[type=radio][name='defaultLanguage']").get(0));
-                        </script>
-
 					</logic:equal>
 					
 					<logic:equal name="importFormNew" property="page" value="<%= String.valueOf(ImportActionNew.IATI_IMPORT_PAGE_MAPPING) %>">

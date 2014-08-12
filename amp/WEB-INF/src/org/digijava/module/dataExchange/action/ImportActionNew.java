@@ -162,8 +162,15 @@ public class ImportActionNew extends DispatchAction {
         String currentLanguage = TLSUtils.getEffectiveLangCode(); 
         Map<String, String> languageISOs = getLanguages(fileSrc, currentLanguage);
         myform.setLanguageList(languageISOs.entrySet());
-        myform.setSelLanguages(new String[]{currentLanguage});
-        myform.setDefaultLanguage(currentLanguage);
+
+        if (languageISOs.containsKey(currentLanguage)) {
+            myform.setSelLanguages(new String[]{currentLanguage});
+            myform.setDefaultLanguage(currentLanguage);
+        } else {
+            String firstRandomLanguage = languageISOs.get(languageISOs.keySet().iterator().next());
+            myform.setSelLanguages(new String[]{firstRandomLanguage});
+            myform.setDefaultLanguage(firstRandomLanguage);
+        }
 
         /*
         int tmpLogId = 0;
@@ -290,7 +297,7 @@ public class ImportActionNew extends DispatchAction {
     }
     
     private Map<String, String> getLanguages(String fileSrc, String currentIsoLanguage) {
-    	Map<String, String> langMap = new HashMap<String, String>();
+    	Map<String, String> langMap = new TreeMap<String, String>();
 
     	Matcher m = LANG_PATTERN.matcher(fileSrc);
     	while(m.find()) {

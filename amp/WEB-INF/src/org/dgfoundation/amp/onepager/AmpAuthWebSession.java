@@ -88,6 +88,7 @@ public class AmpAuthWebSession extends AuthenticatedWebSession {
 			ampCurrentMember = TeamMemberUtil.getAmpTeamMemberCached(currentMember.getMemberId());
 		else
 			ampCurrentMember = null;
+		dirty();
 	}
 	
 	

@@ -112,6 +112,9 @@ public class ActivityGatekeeper {
 	public static String buildPermissionRedirectLink(String id){
 		return "/aim/viewActivityPreview.do~public=true~activityId=" + id + "~pageId=2~editPermissionError=1";
 	}
+	public static String buildPreviewUrl(String id){
+		return "/aim/viewActivityPreview.do~public=true~pageId=2~activityId=" + id;
+	}
 	
 	/**
 	 * THIS FUNCTION IS NOT AUTHORITATIVE (e.g. it filters out attempts to cheat the system, but does not check into account all the parameters)

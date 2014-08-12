@@ -31,7 +31,9 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
+import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DgUtil;
@@ -68,6 +70,8 @@ public class SwitchLanguage
                                  response) throws java.lang.Exception {
 
         //TranslationForm formBean = (TranslationForm) form;
+    	String actId=null;
+    	Boolean isActivityForm=false;
         String localeKey = null;
         String referrerUrl = request.getParameter("rfr");
         localeKey = request.getParameter("code");
@@ -88,13 +92,16 @@ public class SwitchLanguage
        
         if (referrerUrl.contains(ACT_FORM_PATH)){ 
         	//get activity id
-        	String actId = referrerUrl.substring(referrerUrl.indexOf(ACT_FORM_PATH) + ACT_FORM_PATH.length());
+        	actId = referrerUrl.substring(referrerUrl.indexOf(ACT_FORM_PATH) + ACT_FORM_PATH.length());
         	//free lock
         	ActivityGatekeeper.pageModeChange(actId);
+        	isActivityForm=true;
+        	
         }
         else if (referrerUrl.contains(ACT_SSC_FORM_PATH)) {
-        	String actId = referrerUrl.substring(referrerUrl.indexOf(ACT_SSC_FORM_PATH) + ACT_SSC_FORM_PATH.length());
-        	ActivityGatekeeper.pageModeChange(actId);	
+        	actId = referrerUrl.substring(referrerUrl.indexOf(ACT_SSC_FORM_PATH) + ACT_SSC_FORM_PATH.length());
+        	ActivityGatekeeper.pageModeChange(actId);
+        	isActivityForm=true;
         }
         
         
@@ -138,7 +145,14 @@ public class SwitchLanguage
        	request.getSession().setAttribute("currentMember",teamMember );
        	request.getSession().setAttribute(Constants.USER_WORKSPACES, TeamMemberUtil.getTeamMembers(tm.getEmail()));
        }
-
+        if(isActivityForm){
+        	if( actId.equals("new")){ //if its a new activity we go to desktop
+        		response.sendRedirect("/showDesktop.do");
+        	}else{ //if not we go to activity preview
+        		response.sendRedirect(ActivityGatekeeper.buildPreviewUrl(actId));
+        	}
+        	return null;
+        }
         return new ActionForward(referrerUrl, true);
     }
 }

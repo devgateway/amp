@@ -103,6 +103,9 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
             donorFundingSection.getOrgRoleSelector().getOrgSelect().getModel().setObject(ampOrgRole.getOrganisation());
             donorFundingSection.getOrgRoleSelector().getRoleSelect().getModel().setObject(ampOrgRole.getRole());
             donorFundingSection.addItemToList(ampOrgRole.getOrganisation());
+            if(ampOrgRole.getRole().getRoleCode().equals(Constants.FUNDING_AGENCY)) {
+            	donorFundingSection.setOriginalSearchOrganizationSelector(searchOrganization);
+            }
             target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));
             target.add(donorFundingSection);
         }

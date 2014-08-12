@@ -57,6 +57,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.calendar.action.SearchOrganisation;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -80,6 +81,7 @@ public class AmpDonorFundingFormSectionFeature extends
 	private AmpAjaxLinkField addNewFunding;
 	private AmpOrgRoleSelectorComponent orgRoleSelector;
 	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
+	private AmpSearchOrganizationComponent<String> originalSearchOrganizationSelector;
 
 	private final static String[] ACTIVITY_ROLE_FILTER = { Constants.FUNDING_AGENCY };
 	private final static String[] SSC_ROLE_FILTER = { Constants.FUNDING_AGENCY,
@@ -174,15 +176,21 @@ public class AmpDonorFundingFormSectionFeature extends
 				if (role.getRole().getRoleCode()
 						.equals(Constants.FUNDING_AGENCY)
 						&& role.getOrganisation().getAmpOrgId()
-								.equals(missing.getAmpOrgId())) {
+								.equals(missing.getAmpOrgId())) {														
 					it2.remove();
 					send(getPage(), Broadcast.BREADTH,
-							new DonorFundingRolesEvent(target));
+							new DonorFundingRolesEvent(target));								
+					
+					if(this.originalSearchOrganizationSelector != null) {
+						this.originalSearchOrganizationSelector.setVisibilityAllowed(true);
+						target.add(this.originalSearchOrganizationSelector);
+					}
+					
 					break;
 				}
 			}
 
-		}
+		}				
 	}
 
 	/**
@@ -491,5 +499,9 @@ public class AmpDonorFundingFormSectionFeature extends
         
     }
 }
+	 
+	 public void setOriginalSearchOrganizationSelector(AmpSearchOrganizationComponent<String> selector) {
+		 this.originalSearchOrganizationSelector = selector;
+	 }
 
 }

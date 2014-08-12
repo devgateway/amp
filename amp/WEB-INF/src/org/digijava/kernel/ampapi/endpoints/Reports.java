@@ -33,7 +33,6 @@ public class Reports {
 	private static final String DEFAULT_CATALOG_NAME = "AMP";
 	private static final String DEFAULT_CUBE_NAME = "[Donor Funding]";
 	private static final String DEFAULT_QUERY_NAME = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
-	private static final String DEFAULT_REPORT_NAME = "Report Name";
 	private static final String DEFAULT_CONNECTION_NAME = "amp";
 	private static final String DEFAULT_SCHEMA_NAME = "AMP";
 
@@ -42,17 +41,15 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON)
 	public final JSONResult getReport(@PathParam("report_id") Long reportId) {
 		
-		//Get the AMP Report
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
 
-		//Get the Report Spec for said report
 		ReportSpecificationImpl spec = ReportUtils.toReportSpecification(ampReport);;
-		//Put together json object
 
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, false);
-		//Return it
+
 		JSONResult result = new JSONResult();
 		ReportMetadata metadata = new ReportMetadata();
+		metadata.setReportSpec(spec);
 		metadata.setCatalog(DEFAULT_CATALOG_NAME);
 		metadata.setCube(DEFAULT_CUBE_NAME);
 		metadata.setQueryName(DEFAULT_QUERY_NAME);

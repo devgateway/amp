@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.util;
 
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+
 public class ReportMetadata {
 	private String name = "";
 	private String connection = "";
@@ -7,6 +9,7 @@ public class ReportMetadata {
 	private String catalog = "";
 	private String schema = "";
 	private String queryName = "";
+	private ReportSpecificationImpl reportSpec;
 	
 	public String getName() {
 		return name;
@@ -43,6 +46,12 @@ public class ReportMetadata {
 	}
 	public void setQueryName(String queryName) {
 		this.queryName = queryName;
+	}
+	public ReportSpecificationImpl getReportSpec() {
+		return reportSpec;
+	}
+	public void setReportSpec(ReportSpecificationImpl report) {
+		this.reportSpec = report;
 	}
 	
 }

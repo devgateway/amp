@@ -206,7 +206,16 @@ module.exports = Backbone.View.extend({
 
   // fetch returns the deferred object of the raw (non-parsed) response.
   _getProjectSites: function(filter){
-    return this.collection.fetch({data: filter});
+    return this.collection.fetch({
+	    data: JSON.stringify(filter),
+	    type: 'POST',
+	    headers: { //needed to add this to fix amp 415 unsuported media type err, but most API's don;t require this...
+	        'Accept': 'application/json',
+	        'Content-Type': 'application/json' 
+	      }
+    }).fail(function(jqXHR, textStatus, errorThrown){
+      console.error('failed ', jqXHR, textStatus, errorThrown);
+    });
   },
 
   // circles  shrink if we're zoomed out, get big if zoomed in

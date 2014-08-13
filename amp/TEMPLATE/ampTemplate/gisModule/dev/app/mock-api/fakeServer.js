@@ -60,7 +60,7 @@ _.extend(FakeServer.prototype, {
 
     // Project Sites
     //'GET /rest/gis/project-sites': fs.readFileSync(__dirname + '/data/project-sites/drc-points-2000.json', 'utf8'),
-    'GET /rest/gis/project-sites': fs.readFileSync(__dirname + '/data/project-sites/wb-data.json', 'utf8'),
+    'POST /rest/gis/project-sites': fs.readFileSync(__dirname + '/data/project-sites/wb-data.json', 'utf8'),
     //'GET /rest/gis/project-sites': fs.readFileSync(__dirname + '/data/project-sites/random.json', 'utf8'),
 
     // Indicator Layers

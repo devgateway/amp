@@ -202,12 +202,16 @@ var QueryRouter = Backbone.Router.extend({
 			});
 			var measureDimensionXml = dimensionXml.replace(/__ENTITYNAME__/g, "Measures");
 			var measuresXML = _.map(data.reportMetadata.reportSpec.measures, function(v){
-				var currSelectionXml = selectionXml.replace(/__ENTITYNAME__/g, "Measures");
-				currSelectionXml = currSelectionXml.replace(/__NAME__/g, MeasureMap[v.entityName]);
-				currSelectionXml = currSelectionXml.replace(/__OPERATOR__/g, "MEMBER");
-				currSelectionXml = currSelectionXml.replace(/__TYPE__/g, "member");
-				return currSelectionXml;
-			})
+				if( MeasureMap[v.entityName]) {
+					var currSelectionXml = selectionXml.replace(/__ENTITYNAME__/g, "Measures");
+					currSelectionXml = currSelectionXml.replace(/__NAME__/g, MeasureMap[v.entityName]);
+					currSelectionXml = currSelectionXml.replace(/__OPERATOR__/g, "MEMBER");
+					currSelectionXml = currSelectionXml.replace(/__TYPE__/g, "member");
+					return currSelectionXml;
+				}
+			});
+			measuresXML = _.compact(measuresXML);
+			
 			var columnsXml = measureDimensionXml.replace(/__INCLUSIONS__/g, measuresXML.join(''));
 			xmlTemplate = xmlTemplate.replace(/__ROWS__/g, rowsXML.join(''));
 			xmlTemplate = xmlTemplate.replace(/__COLUMNS__/g, columnsXml);

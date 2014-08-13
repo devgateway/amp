@@ -48,11 +48,11 @@
 	int rowIdx = 2;
 	Boolean showColumn = false;
 	TeamMember currentMember = (TeamMember) request.getSession().getAttribute("currentMember");
-	Boolean crossteamenable=false;
+	Boolean crossteamenable= false;
 	Boolean isPublic = request.getParameter("public")!=null ? request.getParameter("public").equalsIgnoreCase("true"):false;
 	
 	if(currentMember != null && "Management".toLowerCase().compareTo(currentMember.getTeamAccessType().toLowerCase()) != 0) {
-		crossteamenable = currentMember.getAppSettings().getCrossteamvalidation();
+		crossteamenable = currentMember.getAppSettings().getCrossteamvalidation()!=null ? currentMember.getAppSettings().getCrossteamvalidation():false;
 		showColumn = true;
 		validatedActivities = showColumn ? ActivityUtil.getActivitiesWhichShouldBeValidated(currentMember, columnReport.getOwnerIds()) : null;	
 }
@@ -84,7 +84,7 @@ Boolean validateItem = false;
 if ( showColumn && validatedActivities.contains(ownerId) )
 	validateItem = true;
 	/*Show validate icon only to Workspace manager or Aprrover who are allowed to validate an activity.*/
-	boolean teamLeadFlag = currentMember.getTeamHead() || currentMember.isApprover();
+	boolean teamLeadFlag = currentMember!=null ?currentMember.getTeamHead() || currentMember.isApprover():false;
 	
 	boolean crossteamvalidation = false;
 	if(crossteamenable){

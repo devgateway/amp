@@ -34,17 +34,19 @@ module.exports = Backbone.View.extend({
     // may also be worth doing manually since we don't want updates on zoom
     // TODO: make sizing dynamic based on highest cluster... and put into own function...
     this.markerCluster = new L.markerClusterGroup({
-      maxClusterRadius: 1,
+      maxClusterRadius: 0.001,
       iconCreateFunction: function (cluster) {
         var markers = cluster.getAllChildMarkers();
         var size = markers.length;
         // logarithmic in base 10:
         //var size =  Math.log(markers.length) / Math.LN10;
+
         size = 5 + size;
+        var zoom = self.map.getZoom();
 
         // zoomed out. so no numbers.
-        if(self.currentRadius === self.BIG_ICON_RADIUS){
-          size+=5;
+        if(zoom >= self.ZOOM_BREAKPOINT){
+          size += 2 + self.BIG_ICON_RADIUS;
           return L.divIcon({ 
             html: markers.length, 
             className: 'marker-cluster', 

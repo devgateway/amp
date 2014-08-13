@@ -140,7 +140,7 @@ module.exports = Backbone.View.extend({
     filter.adminLevel = this._tempConvertToString(filter.adminLevel);
 
     return this.collection.fetch({
-        data: filter, 
+        data: JSON.stringify(filter),
         type: 'POST',    
         headers: { //needed to add this to fix amp 415 unsuported media type err, but most API's don;t require this...
             'Accept': 'application/json',

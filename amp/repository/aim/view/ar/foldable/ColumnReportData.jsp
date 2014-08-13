@@ -90,7 +90,7 @@ if ( showColumn && validatedActivities.contains(ownerId) )
 	if(crossteamenable){
 		crossteamvalidation =true;
 	}else{
-		crossteamvalidation = !isPublic ? currentMember.getTeamId().equals(ActivityUtil.getAmpActivityVersion((Long)ownerId).getTeam().getIdentifier()):false;
+		crossteamvalidation = !isPublic ? currentMember.getTeamId().equals(ActivityUtil.loadAmpActivity((Long)ownerId).getTeam().getIdentifier()):false;
 	}
 
 %>

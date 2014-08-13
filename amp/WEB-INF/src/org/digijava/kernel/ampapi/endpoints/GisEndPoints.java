@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -86,8 +88,7 @@ public class GisEndPoints {
 	@POST
 	@Path("/projects-sites")
 	@Produces(MediaType.APPLICATION_JSON)
-	public final FeatureCollectionGeoJSON getProjectsSites(
-			final JsonBean filter) {
+	public final FeatureCollectionGeoJSON getProjectsSites(final JsonBean filter) {
 		FeatureCollectionGeoJSON f= new FeatureCollectionGeoJSON();
 		
 		
@@ -95,12 +96,13 @@ public class GisEndPoints {
 		PointGeoJSON pg = new PointGeoJSON();
 		pg.coordinates.add( 27.91667);
 		pg.coordinates.add( 47.78333);
-
-		pg.properties.put("structureid", new LongNode(205));
-		pg.properties.put("title", new TextNode("Building a School"));
-		pg.properties.put("projectId", new LongNode(1253));
-		pg.properties.put("admId", new LongNode(23));
+		
+		fgj.properties.put("structureid", new LongNode(205));
+		fgj.properties.put("title", new TextNode("Building a School"));
+		fgj.properties.put("projectId", new LongNode(1253));
+		fgj.properties.put("admId", new LongNode(23));
 		fgj.geometry = pg;
+		
 		f.features.add(fgj);
 		
 		return f;
@@ -135,6 +137,7 @@ public class GisEndPoints {
 
 	@GET
 	@Path("/saved-maps/{mapId}")
+	
 	@Produces(MediaType.APPLICATION_JSON)
 	public JsonBean savedMaps(@PathParam("mapId") Long mapId) {
 		JsonBean jMap = null;
@@ -186,6 +189,8 @@ public class GisEndPoints {
 		fgj.properties.put("activityid", new POJONode(activityid));
 		fgj.properties.put("admName", new TextNode(adm));
 
+		
+		
 		fgj.geometry = pg;
 		return fgj;
 	}

@@ -24,7 +24,7 @@ public class PointGeoJSON extends GeometryGeoJSON
 	public PointGeoJSON() {
 		super();
 		this.coordinates = new ArrayList<Double>();
-		this.properties =  new HashMap<String, JsonNode>();
+		//this.properties =  new HashMap<String, JsonNode>();
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 
 
@@ -27,6 +28,7 @@ import org.codehaus.jackson.annotate.JsonPropertyOrder;
  * included as a member of the feature object with the name "id".
  */
 @JsonPropertyOrder({"type","geometry","properties"})
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class FeatureGeoJSON extends GeoJSON
 {
 	public GeoJSON geometry;

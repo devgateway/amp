@@ -19,12 +19,9 @@ module.exports = Backbone.View.extend({
     this.$el.html(this.template());
 
     this.$('.legend-content').html(
-      this.app.data.indicators.chain()
-        .filter(function(layer) {
-          return layer.get('selected');
-        }).map(function(layer) {
-          return (new LegendItem({ model: layer })).render().el;
-        }).value()
+      this.app.data.getAllVisibleLayers().map(function(layer) {
+        return (new LegendItem({ model: layer })).render().el;
+      }).value()
     );
 
     return this;

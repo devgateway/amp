@@ -3,6 +3,11 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var Template = fs.readFileSync(__dirname + '/legend-item-template.html', 'utf8');
 
+// classes for instanceof checks
+var IndicatorJoin = require('../../data/models/indicator-join-model');
+var IndicatorWMS = require('../../data/models/indicator-wms-model');
+var ProjectSites = require('../../data/models/project-sites-model');
+
 
 module.exports = Backbone.View.extend({
 
@@ -13,22 +18,22 @@ module.exports = Backbone.View.extend({
       status: 'loading'
     }, this.model.toJSON())));
 
-    var layerType = this.model.get('type');
-    if (layerType === 'joinBoundaries') { // geoJSON
-      this.renderGeoJSON();
-    } else if (layerType === 'wms') {
-      this.renderWMS();
+    if (this.model instanceof IndicatorJoin) {
+      this.renderAsGeoJSON();
+    } else if (this.model instanceof IndicatorWMS) {
+      this.renderAsWMS();
+    } else if (this.model instanceof ProjectSites) {
+      this.renderAsProjectSites();
     } else {
-      console.warn('legend for indicator type not implemented: ', layerType);
+      console.warn('legend for layer type not implemented: ', this.model);
     }
 
     return this;
   },
 
-  renderGeoJSON: function() {
+  renderAsGeoJSON: function() {
     var self = this;
-
-    this.model.load().then(function() {
+    self.model.load().then(function() {
       self.$el.html(self.template(_.extend({}, self.model.toJSON(), {
         status: 'loaded',
         legendType: 'colours',
@@ -38,7 +43,7 @@ module.exports = Backbone.View.extend({
     });
   },
 
-  renderWMS: function() {
+  renderAsWMS: function() {
     var base = this.model.get('link');
     var qs = '?request=GetLegendGraphic&version=1.1.1&format=image/png%26layer=';
     var wmsLayer = this.model.get('layer');
@@ -47,6 +52,17 @@ module.exports = Backbone.View.extend({
       legendType: 'img',
       legendSrc: base + qs + wmsLayer
     })));
+  },
+
+  renderAsProjectSites: function() {
+    var self = this;
+    self.model.load().then(function() {
+      self.$el.html(self.template(_.extend({}, self.model.toJSON(), {
+        status: 'loaded',
+        legendType: 'colours',
+        colourBuckets: self.model.palette.colours
+      })));
+    });
   }
 
 });

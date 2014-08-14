@@ -24,6 +24,8 @@ var GISData = function(options) {
 
 _.extend(GISData.prototype, Backbone.Events, {
 
+  layerEvents: ['show', 'hide', 'loaded', 'processed'],
+
   initialize: function() {
     this.boundaries = new Boundaries();
     this.indicators = new Indicators([], { boundaries: this.boundaries });
@@ -32,7 +34,8 @@ _.extend(GISData.prototype, Backbone.Events, {
     this.title = new Title({ data: this });
 
     // bubble indicator events on the data object
-    this.listenTo(this.indicators, 'all', this.bubbleIndicatorEvents);
+    this.listenTo(this.indicators, 'all', this.bubbleLayerEvents('indicator'));
+    this.listenTo(this.projectSites, 'all', this.bubbleLayerEvents('project-sites'));
   },
 
   load: function() {
@@ -40,37 +43,33 @@ _.extend(GISData.prototype, Backbone.Events, {
     this.indicators.fetch();
   },
 
-  bubbleIndicatorEvents: function(eventName) {
+  bubbleLayerEvents: function(namespace) {
     /*
      * Bubble some events, including namespaced versions of the event.
      *
      * If an indicator triggers 'show', data will bubble it as both 'show' and 'show:indicator'.
      * All arguments are forwarded.
      */
-    if (_.contains('show hide loaded processed'.split(' '), eventName)) {
-      this.trigger.apply(this, arguments);  // pass-through everything unmodified
-      var namespacedName = eventName + ':indicator',
-          args = _.tail(arguments);  // cut off the event name
-      args.unshift(namespacedName);
-      this.trigger.apply(this, args);
-    }
+    var namespacer = _.template('<%= ev %> <%= ev %>:' + namespace);
+
+    return function(eventName) {
+      if (_.contains(this.layerEvents, eventName)) {
+        var args = _.tail(arguments);  // everything after eventName
+        args.unshift(namespacer({ ev: eventName }));  // prepend the events to triger
+        this.trigger.apply(this, args);
+      }
+    };
   },
 
   getAllVisibleLayers: function() {
-    var layers = _([]);
-
-    // TODO: find a better way to merge these arrays
-    this.indicators.getSelected().each(function(indicator) {
-      layers.push(indicator);
-    }, this);
-
-    this.projectSites.getSelected().each(function(site) {
-      layers.push(site);
-    }, this);
+    var layers = _.union(
+      this.indicators.getSelected().value(),
+      this.projectSites.getSelected().value()
+    );
 
     // TODO add clusters
 
-    return layers.chain();
+    return _.chain(layers);
   }
 
 });

@@ -33,7 +33,7 @@ module.exports = Backbone.Model.extend({
 
     // skip the work if we're already loaded
     if (this._dataLoaded.state() === 'pending') {
-      this.fetch().then(function() {
+      this.fetch({type: 'POST'}).then(function() {
         self._dataLoaded.resolve();
         self.updatePaletteSet();  // in here so we don't re-do it later
       });

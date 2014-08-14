@@ -18,6 +18,7 @@ module.exports = Backbone.View.extend({
   currentRadius: 2,
   markerCluster: null,
 
+  layer: undefined,
   popup: null,
   projectListTemplate: _.template(ProjectListTemplate),
 
@@ -28,7 +29,8 @@ module.exports = Backbone.View.extend({
     this.initCluster();
 
     this.listenTo(this.app.data.projectSites, 'show', this.showLayer);
-    this.listenTo(this.app.data.projectSites, 'showhide', this.hideLayer);
+    this.listenTo(this.app.data.projectSites, 'hide', this.hideLayer);
+
     this.listenTo(this.markerCluster, 'clusterclick', this.clusterClick);
 
     _.bindAll(this, '_onEachFeature');
@@ -76,13 +78,45 @@ module.exports = Backbone.View.extend({
     });
   },
 
-  showLayer: function(l) {
-    this._loadProjectLayer('locations');
+  showLayer: function(projectSitesModel) {
+    if (this.layer === 'loading') {
+      console.warn('tried to show project sites while they are still loading');
+      return;
+    } else if (typeof this.layer === 'undefined') {
+      this.layer = 'loading';  // will be replaced in time...
+    }
+
+    this.listenToOnce(projectSitesModel, 'processed', function() {
+      this.layer = this.getNewProjectSitesLayer(projectSitesModel);
+      this.map.addLayer(this.layer);
+    });
+
+    this.map.on('zoomend', this._updateZoom, this);
+
+    projectSitesModel.load();
   },
+
 
   hideLayer: function() {
+    if (typeof this.layer === 'undefined') {
+      throw new Error('Tried to remove project sites but they have not been added');
+    } else if (this.layer === 'loading') {
+      console.warn('removing layers while they are loading is not yet supported');
+    }
 
+    this.map.off('zoomend', this._updateZoom);
+
+    this.map.removeLayer(this.layer);
   },
+
+
+  getNewProjectSitesLayer: function(projectSitesModel) {
+    this.features = projectSitesModel.get('features');
+    this.rawData = projectSitesModel.attributes;
+    this._renderFeatures();
+    return this.featureGroup;
+  },
+
 
   render: function() {
     return this;
@@ -95,39 +129,27 @@ module.exports = Backbone.View.extend({
     a.layer.openPopup(self.map);
   },
 
-  _loadProjectLayer: function(type) {
-    if (type === 'locations') {
-      this._addToMap();
-      this.map.on('zoomend', this._updateZoom, this);
-    } else {
-      this._removeFromMap();
-      this.map.off('zoomend',this._updateZoom);
-    }
-  },
-
-  _filtersUpdated: function() {
-    // TODO: 1. get all the filters using an event or service
-    //      fitlers-view.js can iterate over array of filters, and ask each one to return it's filter key and value....
-    var filterObj = {};
-    var self = this;
+  // _filtersUpdated: function() {
+  //   // TODO: 1. get all the filters using an event or service
+  //   //      fitlers-view.js can iterate over array of filters, and ask each one to return it's filter key and value....
+  //   var filterObj = {};
+  //   var self = this;
 
 
-    // Get the values for the map. Sample URL:
-    // /rest/gis/cluster?filter="{"FiltersParams":{"params":[{"filterName":"adminLevel","filterValue":["Region"]}]}}"
-    // (don't forget to url-encode)
-    this._startLoadingIcon();
-    return this._getProjectSites(filterObj).then(function(data) {
-      self._stopLoadingIcon();
+  //   // Get the values for the map. Sample URL:
+  //   // /rest/gis/cluster?filter="{"FiltersParams":{"params":[{"filterName":"adminLevel","filterValue":["Region"]}]}}"
+  //   // (don't forget to url-encode)
+  //   return this._getProjectSites(filterObj).then(function(data) {
 
-      if (data && data.type === 'FeatureCollection') {
-        self.features = data.features;
-        self.rawData = data;
-        self._renderFeatures();
-      } else {
-        console.warn('Project Sites response empty or improper type.');
-      }
-    });
-  },
+  //     if (data && data.type === 'FeatureCollection') {
+  //       self.features = data.features;
+  //       self.rawData = data;
+  //       self._renderFeatures();
+  //     } else {
+  //       console.warn('Project Sites response empty or improper type.');
+  //     }
+  //   });
+  // },
 
   _renderFeatures: function() {
     var self = this;
@@ -153,18 +175,6 @@ module.exports = Backbone.View.extend({
       },
       onEachFeature: self._onEachFeature
     });
-  },
-
-  _addToMap: function() {
-    if (this.markerCluster && !this.map.hasLayer(this.markerCluster)) {
-      this.map.addLayer(this.markerCluster);
-    }
-  },
-
-  _removeFromMap: function() {
-    if (this.markerCluster && this.map.hasLayer(this.markerCluster)) {
-      this.map.removeLayer(this.markerCluster);
-    }
   },
 
 
@@ -212,18 +222,18 @@ module.exports = Backbone.View.extend({
   },
 
   // fetch returns the deferred object of the raw (non-parsed) response.
-  _getProjectSites: function(filter) {
-    return this.collection.fetch({
-	    data: JSON.stringify(filter),
-	    type: 'POST',
-	    headers: { //needed to add this to fix amp 415 unsuported media type err, but most API's don;t require this...
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }).fail(function(jqXHR, textStatus, errorThrown){
-      console.error('failed ', jqXHR, textStatus, errorThrown);
-    });
-  },
+  // _getProjectSites: function(filter) {
+  //   return this.collection.fetch({
+	 //    data: JSON.stringify(filter),
+	 //    type: 'POST',
+	 //    headers: { //needed to add this to fix amp 415 unsuported media type err, but most API's don;t require this...
+  //       'Accept': 'application/json',
+  //       'Content-Type': 'application/json'
+  //     }
+  //   }).fail(function(jqXHR, textStatus, errorThrown){
+  //     console.error('failed ', jqXHR, textStatus, errorThrown);
+  //   });
+  // },
 
   // circles  shrink if we're zoomed out, get big if zoomed in
   _updateZoom: function() {
@@ -245,15 +255,6 @@ module.exports = Backbone.View.extend({
       }
     }
 
-  },
-
-  // TODO: improve, so not global jQuery selectors..
-  // move to be inside sidebar view, and use app.data.model.
-  _startLoadingIcon: function() {
-    $('#point-selector .loading-icon').show();
-  },
-  _stopLoadingIcon: function() {
-    $('#point-selector .loading-icon').hide();
-  },
+  }
 
 });

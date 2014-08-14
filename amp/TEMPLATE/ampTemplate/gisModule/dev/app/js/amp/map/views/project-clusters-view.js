@@ -4,254 +4,175 @@ var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
-var ProjectSitesCollection = require('../../data/collections/project-sites-collection');
 
-var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
+var APIHelper = require('../../../libs/local/api-helper');
 
-
-// Legacy note: this used to handle both project sites and project clusters
-// and may need further cleaning
+var ADMClusterCollection = require('../collections/adm-cluster-collection');
+var ADMTemplate = fs.readFileSync(__dirname + '/../templates/map-adm-template.html', 'utf8');
 
 
 module.exports = Backbone.View.extend({
-  // These will eventually move to a config.
-  // They control when to resize points based on zoom
-  ZOOM_BREAKPOINT: 7,
-  SMALL_ICON_RADIUS: 2,
-  BIG_ICON_RADIUS: 7,
-  currentRadius: 2,
-  markerCluster: null,
+  features: null,
+  featureGroup: null,
+  boundaryLayer: null,
 
-  popup: null,
-  projectListTemplate: _.template(ProjectListTemplate),
+  admTemplate: _.template(ADMTemplate),
 
-  initialize: function(extraProperties) {
-    _.extend(this, extraProperties);  // extraProperties={map: ...}
-    var self = this;
-    L.Icon.Default.imagePath = '/img/map-icons';
+  initialize: function(options) {
+    this.app = options.app;
+    this.map = options.map;
+    this.collection = new ADMClusterCollection();
 
-    this.featureGroup = null;
-    this.collection = new ProjectSitesCollection();
 
-    //TODO: checkout prune cluster, supposedly way faster...
-    // may also be worth doing manually since we don't want updates on zoom
-    // TODO: make sizing dynamic based on highest cluster... and put into own function...
-    this.markerCluster = new L.markerClusterGroup({
-      maxClusterRadius: 0.001,
-      iconCreateFunction: function(cluster) {
-        var markers = cluster.getAllChildMarkers();
-        var size = markers.length;
-        // logarithmic in base 10:
-        //var size =  Math.log(markers.length) / Math.LN10;
-
-        size = 5 + size;
-        var zoom = self.map.getZoom();
-
-        // zoomed out. so no numbers.
-        if (zoom >= self.ZOOM_BREAKPOINT) {
-          size += 2 + self.BIG_ICON_RADIUS;
-          return L.divIcon({
-            html: markers.length,
-            className: 'marker-cluster',
-            iconSize: L.point(size, size)
-          });
-
-        } else {
-          var mark = new L.divIcon({
-            html: '',
-            className: 'marker-cluster',
-            iconSize: L.point(size, size)
-          });
-         // mark.bindPopup('<div>' + markers.length + '</div>');
-          return mark;
-        }
-      },
-      zoomToBoundsOnClick: false,
-      showCoverageOnHover: false,
-      spiderfyOnMaxZoom: false,
-      removeOutsideVisibleBounds: true
-    });
-
-    this.markerCluster.on('clusterclick', function(a) {
-      //TODO: seems silly to bind on every click...
-      a.layer.bindPopup(self.projectListTemplate({ projects: a.layer.getAllChildMarkers() }));
-      a.layer.openPopup(self.map);
-    });
-
-    this._filtersUpdated(); // explicitly call once at begining...maybe not needed later.
-
-    // instead, maybe we can grab a reference to the model or collection,
-    // backing the filter, and subscribe to changes on it?
+    // TODO: move listener to collection, and subscribe to it's changes.
     Backbone.on('FILTERS_UPDATED', this._filtersUpdated, this);
     Backbone.on('MAP_LOAD_PROJECT_LAYER', this._loadProjectLayer, this);
 
-    _.bindAll(this, '_onEachFeature');
   },
 
   render: function() {
     return this;
   },
 
-
-  _loadProjectLayer: function(type) {
-    if (type === 'locations') {
-      this._addToMap();
-      this.map.on('zoomend', this._updateZoom, this);
-    } else {
-      this._removeFromMap();
-      this.map.off('zoomend',this._updateZoom);
-    }
-  },
-
-  _filtersUpdated: function() {
-    // TODO: 1. get all the filters using an event or service
-    //      fitlers-view.js can iterate over array of filters, and ask each one to return it's filter key and value....
-    var filterObj = {};
-    var self = this;
-
-
-    // Get the values for the map. Sample URL:
-    // /rest/gis/cluster?filter="{"FiltersParams":{"params":[{"filterName":"adminLevel","filterValue":["Region"]}]}}"
-    // (don't forget to url-encode)
-    this._startLoadingIcon();
-    return this._getProjectSites(filterObj).then(function(data) {
-      self._stopLoadingIcon();
-
-      if (data && data.type === 'FeatureCollection') {
-        self.features = data.features;
-        self.rawData = data;
-        self._renderFeatures();
-      } else {
-        console.warn('Project Sites response empty or improper type.');
-      }
-    });
-  },
-
   _renderFeatures: function() {
     var self = this;
 
-    self.markerCluster.clearLayers();
+    // remove current featureGroup
+    if(self.featureGroup){
+      self.map.removeLayer(self.featureGroup);
+    }
 
     // add new featureGroup
-    //console.log(JSON.stringify(self.rawData));
-    self.featureGroup = L.geoJson(self.rawData, {
+    self.featureGroup = L.geoJson(self.features, {
       pointToLayer: function (feature, latlng) {
-        var point = new L.CircleMarker(latlng, {
-          radius: self.currentRadius,
-          fillColor: '#f70',
-          color: '#000',
-          weight: 1,
-          opacity: 1,
-          fillOpacity: 1,
+        var htmlString = self.admTemplate(feature);
+        var myIcon = L.divIcon({
+          className: 'map-adm-icon',
+          html: htmlString,
+          iconSize: [60, 50]
         });
-
-        self.markerCluster.addLayer(point);
-
-        return point;
+        return L.marker(latlng, {icon: myIcon});//L.circleMarker(latlng, geojsonMarkerOptions);
       },
       onEachFeature: self._onEachFeature
+    }).addTo(self.map);
+
+    // set map bounds
+    self.map.fitBounds(self.featureGroup.getBounds());
+
+  },
+
+  // TODO: non hardcoded version.
+  _loadProjectLayer: function(type){
+    if(type === 'adm-1'){
+      this._filtersUpdated({adminLevel: type});
+    } else if(type === 'adm-2'){
+      this._filtersUpdated({adminLevel: type});
+    } else {
+      this._removeFromMap();
+    }
+  },
+
+  _filtersUpdated: function(filterObj) {
+    // TODO: Should only run if this layer is active.. check for equiv of self.graphicLayer.active
+    var self = this;
+
+    this._loadBoundaries(filterObj);
+
+    // Get the values for the map.
+    this._getCluster(filterObj).then(function(data) {
+      if(data && data.type === 'FeatureCollection') {
+        self.features = data.features;
+        self._renderFeatures();
+      } else{
+        console.warn('Cluster response empty.');
+      }
     });
   },
 
-  _addToMap: function() {
-    if (this.markerCluster && !this.map.hasLayer(this.markerCluster)) {
-      this.map.addLayer(this.markerCluster);
+  // TODO: this is just a proof of concept
+  // Phil: do you use boundaries for joining?
+  // I'm considering making boundary-view on the map where it just listens to the app.data collection,
+  // and draws the selected / active boundary....
+  _loadBoundaries: function(filterObj){
+    var self = this;
+
+    this._removeBoundary();
+
+    if(filterObj.adminLevel){
+      // get current boundary.
+      var boundaries = this.app.data.boundaries;
+      var currentBoundary = boundaries.findWhere({id:filterObj.adminLevel});
+      if(currentBoundary){
+        var geoJSON = currentBoundary.toJSON();
+      } else{
+        console.warn('no boundary found');
+      }
+
+      // David -- I commented this out because it broke from my indicator layer changes.
+      // I wasn't sure if this was likely to change or be fixed as-is.
+      // self.boundaryLayer = L.geoJson(geoJSON,
+      //   {
+      //     simplifyFactor: 0.9,
+      //     style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '3',}
+      //   }).addTo(self.map);
+    } else{
+      console.warn('missing admin level in Filter');
     }
   },
 
-  _removeFromMap: function() {
-    if (this.markerCluster && this.map.hasLayer(this.markerCluster)) {
-      this.map.removeLayer(this.markerCluster);
+
+  _removeBoundary: function(){
+    if(this.boundaryLayer){
+      this.map.removeLayer(this.boundaryLayer);
     }
   },
-
 
   // Create pop-ups
   _onEachFeature: function(feature, layer) {
-    var self = this;
-
     if (feature.properties) {
-      layer.bindPopup('Project #: '+ feature.properties.projectID  +'<br />Site: ' + feature.properties.title );
+      var activities = feature.properties.activityid;
+      layer.bindPopup(feature.properties.admName + ' has ' + activities.length +' projects');
     }
-
-    layer.on('click', function(evt) {
-      var feature = evt.target.feature;
-      if (feature) {
-        var projectID = feature.properties.projectID;
-        self._hilightProject(projectID);
-      }
-    });
-
-    layer.on('popupclose',function(evt) {
-      var feature = evt.target.feature;
-      if (feature) {
-        var projectID = feature.properties.projectID;
-        self._dehilightProject(projectID);
-      }
-    });
   },
 
-  _hilightProject: function(projectID) {
-    this.featureGroup.eachLayer(function(layer) {
-      var properties = layer.feature.properties;
-      if (properties.projectID === projectID) {
-        layer.setStyle({fillColor: '#008'});
-      }
-    });
-  },
+  // Can do some post-processing here if we want...
+  _getCluster: function(filter){
 
-  _dehilightProject: function(projectID) {
-    this.featureGroup.eachLayer(function(layer) {
-      var properties = layer.feature.properties;
-      if (properties.projectID === projectID) {
-        layer.setStyle({fillColor: '#f70'});
-      }
-    });
-  },
+    filter.adminLevel = this._tempConvertToString(filter.adminLevel);
 
-  // fetch returns the deferred object of the raw (non-parsed) response.
-  _getProjectSites: function(filter) {
     return this.collection.fetch({
-	    data: JSON.stringify(filter),
-	    type: 'POST',
-	    headers: { //needed to add this to fix amp 415 unsuported media type err, but most API's don;t require this...
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }).fail(function(jqXHR, textStatus, errorThrown){
-      console.error('failed ', jqXHR, textStatus, errorThrown);
-    });
+        data: JSON.stringify(filter),
+        type: 'POST',    
+        headers: { //needed to add this to fix amp 415 unsuported media type err, but most API's don;t require this...
+            'Accept': 'application/json',
+            'Content-Type': 'application/json' 
+          }
+        }).fail(function(jqXHR, textStatus, errorThrown){
+          console.error('failed ', jqXHR, textStatus, errorThrown);
+        });
   },
 
-  // circles  shrink if we're zoomed out, get big if zoomed in
-  _updateZoom: function() {
-    var self = this;
-
-    if (this.featureGroup) {
-      var zoom = this.map.getZoom();
-      // make small points
-      if (zoom < this.ZOOM_BREAKPOINT && self.currentRadius !== self.SMALL_ICON_RADIUS) {
-        self.currentRadius = self.SMALL_ICON_RADIUS;
-        this.featureGroup.eachLayer(function(layer) {
-          layer.setRadius(self.currentRadius);
-        });
-      } else if (zoom >= this.ZOOM_BREAKPOINT && self.currentRadius !== self.BIG_ICON_RADIUS) {
-        self.currentRadius = self.BIG_ICON_RADIUS;
-        this.featureGroup.eachLayer(function(layer) {
-          layer.setRadius(self.currentRadius);
-        });
-      }
+  // !temp convert adminLevel to AMP strings:
+  _tempConvertToString: function(id){
+    var str = '';
+    if(id ==='adm-0'){
+      str = 'Country';
+    } else if(id ==='adm-1'){
+      str = 'Region';
+    } else if(id ==='adm-2'){
+      str = 'Zone';
+    } else if(id ==='adm-3'){
+      str = 'District';
     }
-
+    return str;
   },
 
-  // TODO: improve, so not global jQuery selectors..
-  // move to be inside sidebar view, and use app.data.model.
-  _startLoadingIcon: function() {
-    $('#point-selector .loading-icon').show();
-  },
-  _stopLoadingIcon: function() {
-    $('#point-selector .loading-icon').hide();
-  },
 
+  _removeFromMap: function(){
+    this._removeBoundary();
+
+    if(this.featureGroup){
+      this.map.removeLayer(this.featureGroup);
+    }
+  },
 });

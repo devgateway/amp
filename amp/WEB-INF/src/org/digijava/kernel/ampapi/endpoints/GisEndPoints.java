@@ -86,9 +86,9 @@ public class GisEndPoints {
 	 * @return
 	 */
 	@POST
-	@Path("/projects-sites")
+	@Path("/project-sites")
 	@Produces(MediaType.APPLICATION_JSON)
-	public final FeatureCollectionGeoJSON getProjectsSites(final JsonBean filter) {
+	public final FeatureCollectionGeoJSON getProjectSites(final JsonBean filter) {
 		FeatureCollectionGeoJSON f= new FeatureCollectionGeoJSON();
 		
 		

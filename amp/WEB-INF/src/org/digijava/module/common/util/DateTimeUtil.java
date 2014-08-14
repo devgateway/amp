@@ -19,6 +19,7 @@ package org.digijava.module.common.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -136,5 +137,19 @@ public class DateTimeUtil {
                 }
 		return result;
 	}
+		
+		public static int toJulianDayNumber(Date date){
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date);
+			int year = cal.get(Calendar.YEAR);
+			int month = cal.get(Calendar.MONTH)+1;
+			int day = cal.get(Calendar.DAY_OF_MONTH);
+			int a = (14 - month) / 12;
+			int y = year + 4800 - a;
+			int m = month + 12 * a -3;
+			int jDayNo = day + ((int)(153 * m + 2)/5) + 365 * y + ((int)(y/4)) - ((int)(y/100)) + ((int)(y/400)) - 32045;
+			
+			return jDayNo;
+		}
 
 }

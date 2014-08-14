@@ -22,14 +22,18 @@ public final class MoConstants {
 	public static final String MEASURES = "Measures";
 	public static final String MEMBERS = "Members";
 	public static final String CURRENT_MEMBER = "CurrentMember";
+	public static final String FIRST_CHILD = "FirstChild";
+	public static final String LAST_CHILD = "LastChild";
+	public static final String PROPERTIES = "Properties";
 	public static final String MEMBER_NAME = "name";
+	public static final String FUNC_CROSS_JOIN = "CrossJoin";
 	public static final String FUNC_CROSS_JOIN_FORMAT = "CrossJoin(%s, %s)";
 	public static final String FUNC_HIERARCHIZE = "Hierarchize";
 	public static final String FUNC_UNION = "Union";
 	public static final String FUNC_UNION_FORMAT = "Union(%s, %s)";
 	public static final String FUNC_ORDER = "Order";
 	public static final String FUNC_FILTER = "Filter";
-	
+	public static final String FUNC_CAST = "Cast";
 	//Activity
 	public static String AMP_ACTIVITY_TABLE = "(\\bamp_activity\\b)";
 	public static String CACHED_ACTIVITY_TABLE = "cached_amp_activity";
@@ -60,6 +64,10 @@ public final class MoConstants {
 	public static final String H_ORG_TYPE_NAME = "Organization Type Name";
 	public static final String H_ORG_GROUP_NAME = "Organization Group Name";
 	public static final String H_ORG_NAME = "All Orgs";
+	public static final String H_ORG_DUPLICATE = "Organization Hierarchy Duplicate";
+	
+	public static final String H_LOCATIONS = "Locations";
+	public static final String H_LOCATIONS_DUPLICATE= "LocationsDuplicate";
 	//Attributes/Levels
 	public static final String ATTR_PROJECT_TITLE = "Project Title";
 	public static final String ATTR_APPROVAL_STATUS = "Approval Status";
@@ -68,6 +76,7 @@ public final class MoConstants {
 	public static final String ATTR_YEAR = "Year";
 	public static final String ATTR_QUARTER = "Quarter";
 	public static final String ATTR_MONTH = "Month";
+	public static final String ATTR_DATE = "Date";
 	public static final String ATTR_COUNTRY_NAME = "Country Name";
 	public static final String ATTR_REGION_NAME = "Region Name";
 	public static final String ATTR_ZONE_NAME = "Zone Name";
@@ -95,7 +104,19 @@ public final class MoConstants {
 	public static final String ATTR_PROGRAM_LEVEL_6_NAME = "Program Level 6 Name";
 	public static final String ATTR_PROGRAM_LEVEL_7_NAME = "Program Level 7 Name";
 	public static final String ATTR_PROGRAM_LEVEL_8_NAME = "Program Level 8 Name";
-
+	//properties
+	public static final String P_KEY = "Key";
+	public static final String P_COUNTRY_ID = "countryId";
+	public static final String P_REGION_ID = "regionId";
+	public static final String P_ZONE_ID = "zoneId";
+	public static final String P_DISTRIC_ID = "districtId";
+	public static final String P_LOCATION_ID = "locationId";
+	public static final String P_ORG_TYPE_ID = "orgTypeId";
+	public static final String P_ORG_GROUP_ID = "orgGroupId";
+	public static final String P_ORG_ID = "orgId";
+	public static final String P_PRIMARY_SECTOR = "primarySectorId";
+	public static final String P_PRIMARY_SECTOR_SUB_SECTOR = "primarySectorSubSectorId";
+	public static final String P_PRIMARY_SECTOR_SUB_SUB_SECTOR = "primarySectorSubSubSectorId";
 	
 	public static String ALL_PRIMARY_SECTOR = "All Primary Sectors";
 	public static String ALL_SECONDARY_SECTOR = "All Secondary Sectors";
@@ -180,5 +201,6 @@ public final class MoConstants {
 	public static String OLD_FINANCING_INTRUMENT= "Financing Instrument";
 	public static String OLD_TERMS_OF_ASSISTANCE= "Terms of Assistance";
 
+	public static final String DATE_FORMAT = "YYYY-MM-dd";
 	
 }

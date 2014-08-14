@@ -58,4 +58,8 @@ public abstract class NamedTypedEntity {
 	@Override public int hashCode() {
 		return this.hashCode; 
 	}
+	
+	public ReportEntityType getEntityType() {
+		return this.entityType;
+	}
 }

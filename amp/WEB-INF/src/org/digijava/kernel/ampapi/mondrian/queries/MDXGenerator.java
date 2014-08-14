@@ -14,8 +14,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import mondrian.olap.MondrianException;
-
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -23,6 +21,7 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXConfig;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXFilter;
+import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXLevel;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
 import org.digijava.kernel.ampapi.mondrian.util.Connection;
@@ -39,6 +38,7 @@ import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
 import org.olap4j.metadata.NamedList;
+import org.olap4j.metadata.Property;
 import org.olap4j.query.SortOrder;
 
 /**
@@ -48,10 +48,13 @@ import org.olap4j.query.SortOrder;
  */
 public class MDXGenerator {
 	protected static final Logger logger = Logger.getLogger(MDXGenerator.class); 
-	private static final Map<String, String> allNames;
-	//initialization of "All Members" names from all dimensions in the cube
+	private static Map<String, String> allNames;
+	private static Map<String, MDXLevel> propertiesLevels; //<Dimension name, MDXLevel that stores properties for filtering by ids>
+	private static Map<MDXLevel, Map<String, String>> levelPropertyType;
 	static {
 		Map<String, String> mapping = new HashMap<String, String>();
+		Map<String, MDXLevel> properties = new HashMap<String, MDXLevel>();
+		Map<MDXLevel, Map<String, String>> propTypes = new HashMap<MDXLevel, Map<String, String>>();
 		boolean success = false;
 		OlapConnection olapConnection = null;
 		try {
@@ -63,26 +66,38 @@ public class MDXGenerator {
 			}
 			for (Dimension dim:dimList) 
 				for (Iterator<Hierarchy> h = dim.getHierarchies().iterator(); h.hasNext(); ){
-					boolean found = false;
-					for (Iterator<Level> l = h.next().getLevels().iterator(); l.hasNext() && !found;)
-						for (Member m: l.next().getMembers())
+					boolean foundAll = false;
+					boolean foundProperties = false;
+					for (Iterator<Level> l = h.next().getLevels().iterator(); l.hasNext() && !(foundAll && foundProperties);) {
+						Level level = l.next();
+						for (Member m: level.getMembers())
 							if (m.isAll()) {
 								mapping.put(MDXElement.quote(m.getHierarchy().getName()), m.toString());
 								if (dim.getHierarchies().size() == 1) //keep also the default All member per dimension when there is only 1 hierarchy 
 									mapping.put(MDXElement.quote(dim.getName()), m.toString());
-								found = true;
+								foundAll = true;
 								break;
+							} 
+						if (level.getProperties().get("default") != null) {
+							String hName = level.getHierarchy().getName().substring(dim.getName().length()+1);
+							MDXLevel propLevel = new MDXLevel(dim.getName(), hName , level.getName());
+							properties.put(dim.getName(), propLevel);
+							Map<String, String> propTypeMap = new HashMap<String, String>();
+							for(Property prop : level.getProperties()) {
+								propTypeMap.put(prop.getName(), MondrianUtils.getDatatypeName(prop.getDatatype()));
 							}
+							propTypes.put(propLevel, propTypeMap);
+							foundProperties = true;
+						}
+					}
 				}
 			success = true;
-		} catch (OlapException e) {
-			logger.error(MondrianUtils.getOlapExceptionMessage(e));
-		} catch (MondrianException e) {
-			logger.error(MondrianUtils.getMondrianException(e));
 		} catch (Exception e) {
-			logger.error(e.getMessage());
+			logger.error(MondrianUtils.toString(e));
 		} finally {
 			allNames = success ? mapping : null;
+			propertiesLevels = success ? properties : null;
+			levelPropertyType = success ? propTypes : null;
 			if (olapConnection!=null) {
 				try {
 					olapConnection.close();
@@ -190,16 +205,7 @@ public class MDXGenerator {
 		rows  = notEmptyRows + axisMdx + rows;
 		
 		/* WHERE  (slice data, aka filters in Reports) */
-		if (config.getLevelFilters().size()>0 || config.getDataFilters().size()>0) {
-			StringBuilder whereFilter = new StringBuilder(20 * (config.getDataFilters().size() + config.getLevelFilters().size())); 
-			for (Map.Entry<MDXAttribute, MDXFilter> pair:config.getDataFilters().entrySet()) {
-				whereFilter.append(",").append(toFilter(pair.getKey().toString(), pair.getKey().getCurrentMemberName(), pair.getKey(), pair.getValue()));
-			}
-			for (MDXAttribute mdxAttr:config.getLevelFilters()) {
-				whereFilter.append(",").append(mdxAttr.toString());
-			}
-			where = " WHERE (" + whereFilter.append(")").substring(1);
-		}
+		where = getWhere(config);
 		
 		mdx = (with.length() > 0 ? "WITH " + with.toString() : "") + select + columns + rows + from + where;
 		
@@ -284,58 +290,180 @@ public class MDXGenerator {
 		return crossJoin;
 	}
 	
-	private String toAxisAttrFilter(MDXAttribute mdxAttr, MDXFilter mdxFilter) {
+	private String getWhere(MDXConfig config) throws AmpApiException {
+		if (config.getLevelFilters().size() == 0 && config.getDataFilters().size() == 0) return "";
+		
+		final String sep = ", ";
+		//initialize with the number of commas ","  
+		int size = ((config.getDataFilters().entrySet().size() == 0 ? 0 : config.getDataFilters().entrySet().size() - 1)
+				+ (config.getLevelFilters().size() == 0 ? 0 : config.getLevelFilters().size() - 1) 
+				+ (config.getDataFilters().entrySet().size() > 0 && config.getLevelFilters().size() > 0 ? 1 : 0)) * sep.length();
+		boolean doCrossJoin = false;
+		
+		
+		//store groups of filters by same level to reduce the number of cross joins
+		Map<String, List<String>> filtersMap = new HashMap<String, List<String>>();
+		Set<String> usesFilterFunc = new HashSet<String>();
+		 
+		for (Map.Entry<MDXAttribute, MDXFilter> pair:config.getDataFilters().entrySet()) {
+			String filter = toFilter(pair.getKey().toString(), pair.getKey().getCurrentMemberName(), pair.getKey(), pair.getValue());
+			size += filter.length();
+			addToFilterMap(filtersMap, filter, pair.getKey());
+			doCrossJoin = doCrossJoin || pair.getValue().singleValue == null;
+			if (isFilterFuncUsed(pair.getKey(), pair.getValue())) {
+				usesFilterFunc.add(pair.getKey().getFullName());
+				doCrossJoin = true;
+			}
+		}
+		for (MDXAttribute mdxAttr:config.getLevelFilters()) {
+			String filter = mdxAttr.toString();
+			size += filter.length();
+			addToFilterMap(filtersMap, filter, mdxAttr);
+		}
+		
+		if (filtersMap.keySet().size() <= 1) //though cannot be 0
+			doCrossJoin = false;
+		else
+			size += filtersMap.keySet().size() * 2 //2 = {} to be added around each filter set, except if Filter func was used, so .size() is max number of {} 
+					+ (filtersMap.keySet().size() - 1) * (MoConstants.FUNC_CROSS_JOIN.length() + 2); //2 = ()
+		
+		final String prefix = " WHERE (";
+		StringBuilder whereFilter = new StringBuilder(size + prefix.length() + 1); //1 for closing )
+		whereFilter.append(prefix);
+		
+		for(Iterator<List<String>> iter = filtersMap.values().iterator(); iter.hasNext(); ) {
+			List<String> filterList = iter.next();
+			if (doCrossJoin)
+				if (iter.hasNext())
+					whereFilter.append(MoConstants.FUNC_CROSS_JOIN + "({");
+				else
+					whereFilter.append("{");
+			String values = filterList.toString();
+			whereFilter.append(values.substring(1, values.length()-1)); //strip of []
+			if (doCrossJoin)
+				whereFilter.append("}");
+			if (iter.hasNext())
+				whereFilter.append(",");
+		}
+		if (doCrossJoin)
+			for(int i = 0; i < filtersMap.values().size() -1; i++)
+				whereFilter.append(")");
+		whereFilter.append(")");
+		
+		return whereFilter.toString();
+	}
+	
+	private int addToFilterMap(Map<String, List<String>> filtersMap, String filter, MDXAttribute mdxAttr) {
+		String filterKey = mdxAttr.getFullName();
+		List<String> filtersList = filtersMap.get(filterKey);
+		if (filtersList == null) {
+			filtersList = new ArrayList<String>();
+			filtersMap.put(filterKey, filtersList);
+		}
+		filtersList.add(filter);
+		return filter.length();
+	}
+	
+	private String toAxisAttrFilter(MDXAttribute mdxAttr, MDXFilter mdxFilter) throws AmpApiException {
 		return toFilter(mdxAttr.toString(), mdxAttr.getCurrentMemberName(), mdxAttr, mdxFilter);
 	}
 	
-	private String toFilter(String toFilterSet, MDXElement filterBy, MDXFilter mdxFilter) {
+	private String toFilter(String toFilterSet, MDXElement filterBy, MDXFilter mdxFilter) throws AmpApiException {
 		return toFilter(toFilterSet, filterBy.toString(), filterBy, mdxFilter);
 	}
 	
-	private String toFilter(String toFilterSet, String filterBy, MDXElement ref, MDXFilter mdxFilter) {
+	private String toFilter(String toFilterSet, String filterBy, MDXElement ref, MDXFilter mdxFilter) throws AmpApiException {
 		String filter = "";
 		boolean isMeasure = ref instanceof MDXMeasure;
+		boolean addFilterFunc = isMeasure || mdxFilter.property !=null;
+		
+		//this is a filter by a property value
+		if (mdxFilter.property !=null) {
+			if (isMeasure) 
+				throw new AmpApiException("Not supported. Keys are applicable to MDX Attributes only.");
+			
+			MDXLevel propLevel = propertiesLevels.get(((MDXAttribute)ref).getDimension()); 
+			if (propLevel == null)
+				throw new AmpApiException("No level with properties is defined for dimension = " + ((MDXAttribute)ref).getDimension() + ". Define a 'default' property to flag the level to be used");
+			
+			String propertyType = levelPropertyType.get(propLevel).get(mdxFilter.property);
+			if (propertyType == null) 
+				throw new AmpApiException("Property '" + mdxFilter.property + "' not defined within dimension = " + ((MDXAttribute)ref).getDimension());
+			
+			//replace filter by to be filter by key
+			filterBy = MoConstants.FUNC_CAST + "(" + propLevel.getCurrentMemberName() + "." 
+					+ MoConstants.PROPERTIES + "('" + mdxFilter.property + "') AS " +  propertyType + ")";
+			toFilterSet = propLevel.toString();
+		} 
+		
 		//one value to select
-		if (!isMeasure && mdxFilter.allowedFilteredValues && mdxFilter.filteredValues!=null && mdxFilter.filteredValues.size()==1)
-			filter = toMDX(ref, mdxFilter.filteredValues.get(0).toString());
-		else if (!isMeasure && mdxFilter.endRangeInclusive && mdxFilter.startRangeInclusive && mdxFilter.startRange.equals(mdxFilter.endRange)) {
-			filter = toMDX(ref, mdxFilter.startRange);
-		}
-		else {
-			//multiple values to select
+		if (!isMeasure && mdxFilter.singleValue != null) {
+			if (mdxFilter.property != null)
+				filter = filterBy + (mdxFilter.allowedFilteredValues ? " = " : " <> ") + mdxFilter.singleValue; 
+			else {
+				filter = toMDX(ref, mdxFilter.singleValue);
+			}
+		} else {
+			//multiple values to select			
 			if (mdxFilter.filteredValues!=null) {
-				String values = isMeasure ? mdxFilter.filteredValues.toString() : null;
-				if (isMeasure) {
-					values = values.substring(1, values.length()-2);//strip of "[]"
-				} else {
-					String fullName = ref.getFullName();
-					StringBuilder sb = new StringBuilder((fullName.length() + 20)*mdxFilter.filteredValues.size());
-					String sep = ", ";
+				if (!isMeasure && mdxFilter.property!=null) {
+					//TODO: we should find another solution to make a similar approach done with strings, i.e. IN / NOT IN {list}, which is not working with simple integers
+					StringBuilder sb = new StringBuilder((filterBy.length() + 20) *mdxFilter.filteredValues.size());
+					String sep = " OR ";
+					String operator = (mdxFilter.allowedFilteredValues ? " = " : " <> ");
 					for (String value: mdxFilter.filteredValues) {
-						sb.append(fullName).append(".").append(MDXElement.quote(value)).append(sep);
+						sb.append(filterBy).append(operator).append(value).append(sep);
+					} 
+					filter = sb.substring(0, sb.length()-sep.length());
+				} else {
+					String values = mdxFilter.filteredValues.toString();
+					values = values.substring(1, values.length()-1);//strip of "[]"
+					if (!isMeasure && mdxFilter.property == null) { 
+						String fullName = ref.getFullName();
+						StringBuilder sb = new StringBuilder((fullName.length() + 20)*mdxFilter.filteredValues.size());
+						String sep = ", ";
+						for (String value: mdxFilter.filteredValues) {
+							sb.append(fullName).append(".").append(MDXElement.quote(value)).append(sep);
+						}
+						values = sb.substring(0, sb.length()-sep.length());
 					}
-					values = sb.substring(0, sb.length()-sep.length());
+					filter = "{" + values + "}";
+					if (addFilterFunc)
+						filter = filterBy + (mdxFilter.allowedFilteredValues ? " IN " : " NOT IN ") + filter;
 				}
-				filter = filterBy + (mdxFilter.allowedFilteredValues ? " IN " : " NOT IN ") + "{" + values + "}";
 			} else {
+				//a range of values
+				String prefix = addFilterFunc ? "(" + filterBy : "";
+				String suffix = addFilterFunc ? ")" : "";
 				if (mdxFilter.startRange!=null) {
-					filter += "(" + filterBy + (mdxFilter.startRangeInclusive ? " >= " : " > ") 
-							+ (isMeasure ? mdxFilter.startRange : toMDX(ref, mdxFilter.startRange)) + ")"
-							+ (mdxFilter.startRange!=null ? " AND " : ""); 
+					filter += prefix 
+							+ (addFilterFunc ? (mdxFilter.startRangeInclusive ? " >= " : " > ") : "") 
+							+ (isMeasure ? mdxFilter.startRange : toMDX(ref, mdxFilter.startRange)) 
+							+ suffix 
+							+ (mdxFilter.endRange!=null ? (addFilterFunc ? " AND " : ":") : ""); 
+				} else if (!addFilterFunc) {
+					filter += toFirstChild(ref);
 				}
 				if (mdxFilter.endRange!=null) {
-					filter += "(" + filterBy + (mdxFilter.endRangeInclusive ? " <= " : " < ") 
-							+ (isMeasure ? mdxFilter.endRange : toMDX(ref, mdxFilter.endRange)) + ")";
+					filter += prefix 
+							+ (addFilterFunc ? (mdxFilter.endRangeInclusive ? " <= " : " < ") : "") 
+							+ (isMeasure ? mdxFilter.endRange : toMDX(ref, mdxFilter.endRange)) 
+							+ suffix;
+				} else if (!addFilterFunc) {
+					filter += toLastChild(ref);
 				}
 			}
-			if ( !"".equals(filter)) {
-				filter = MoConstants.FUNC_FILTER + "(" + toFilterSet + ", " +filter + ")";
-			}
 		}
+		if (addFilterFunc && !"".equals(filter))
+			filter = MoConstants.FUNC_FILTER + "(" + toFilterSet + ", " +filter + ")";
 		//should not be this
 		if ("".equals(filter)) 
 			filter = toFilterSet;
 		return filter;
+	}
+	
+	private boolean isFilterFuncUsed(MDXElement ref, MDXFilter mdxFilter) {
+		return ref instanceof MDXMeasure || mdxFilter.property !=null;
 	}
 	
 	private String toMDX(MDXElement elem, String value) {
@@ -344,6 +472,14 @@ public class MDXGenerator {
 			return "";
 		}
 		return elem.getFullName() + "." + MDXElement.quote(value);
+	}
+	
+	private String toFirstChild(MDXElement elem) {
+		return elem.getFullName() + "." + MoConstants.FIRST_CHILD;
+	}
+	
+	private String toLastChild(MDXElement elem) {
+		return elem.getFullName() + "." + MoConstants.LAST_CHILD;
 	}
 	
 	private String getAll(MDXAttribute mdxAttr) throws AmpApiException {
@@ -499,8 +635,12 @@ public class MDXGenerator {
 			validator.validateSelect(parser.parseSelect(mdx));
 		} catch (Exception e) {
 			String err = MondrianUtils.toString(e);
-			logger.error("Invalid MDX query\"" + mdx + "\". \nError details: " + err);
-			throw new AmpApiException("Invalid MDX query:" + err);
+			//for some reason validation fails when Properties are in MDX queries and a NullPointerException is thrown
+			//the MDX is valid (verified in Saiku) so we'll avoid throwing exception only in this particular case
+			if (!(mdx.contains(MoConstants.PROPERTIES) && e instanceof NullPointerException)) {
+				logger.error("Invalid MDX query\"" + mdx + "\". \nError details: " + err);
+				throw new AmpApiException("Invalid MDX query:" + err);
+			}
 		}
 	}
 	

@@ -28,6 +28,7 @@ import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportExecutor;
+import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -42,7 +43,7 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXFilter;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
-import org.digijava.kernel.ampapi.mondrian.util.MondrianMaping;
+import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
@@ -61,6 +62,9 @@ import org.olap4j.query.SortOrder;
 public class MondrianReportGenerator implements ReportExecutor {
 	protected static final Logger logger = Logger.getLogger(MondrianReportGenerator.class);
 	
+	//TODO: set to false
+	//e.g. skips to throw exceptions until schema def is complete and all mappings are configured based on it
+	private static final boolean IS_DEV = true;
 	private final Class<? extends ReportAreaImpl> reportAreaType;
 	private final boolean printMode;
 	
@@ -95,7 +99,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			cellSet = generator.runQuery(mdxQuery);
 			if (printMode) 
 				MondrianUtils.print(cellSet, spec.getReportName());
-		} catch (AmpApiException e) {
+		} catch (Exception e) {
 			if (generator != null) generator.tearDown();
 			throw new AMPException("Cannot generate Mondrian Report: " + e.getMessage());
 		}
@@ -136,37 +140,33 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//TODO: split row totals in 2 options: hierarchy sub-totals and final totals 
 		//add requested columns
 		for (ReportColumn col:spec.getColumns()) {
-			MDXAttribute elem = (MDXAttribute)MondrianMaping.toMDXElement(col);
+			MDXAttribute elem = (MDXAttribute)MondrianMapping.toMDXElement(col);
 			if (elem == null) 
-				reportError("No mapping found for column name = " + (col==null ? null : col.getColumnName()) + ", entity type = " + (col == null ? null : col.getEntityName()));
+				reportError("No mapping found for column name = " + (col==null ? null : col.getColumnName()) + ", entity type = " + (col == null ? null : col.getEntityType()));
 			else 
 				config.addRowAttribute(elem);
 		}
 		//add requested measures
 		for (ReportMeasure measure: spec.getMeasures()) {
-			MDXMeasure elem = (MDXMeasure)MondrianMaping.toMDXElement(measure);
+			MDXMeasure elem = (MDXMeasure)MondrianMapping.toMDXElement(measure);
 			if (elem == null) 
 				reportError("No mapping found for column name = " + (measure==null ? null : measure.getMeasureName()) + ", entity type = " + (measure == null ? null : measure.getEntityName()));
 			else
 				config.addColumnMeasure(elem);
 		}
 		//add grouping columns for measure
-		config.getColumnAttributes().addAll(MondrianMaping.getDateElements(spec.getGroupingCriteria()));
+		config.getColumnAttributes().addAll(MondrianMapping.getDateElements(spec.getGroupingCriteria()));
 		//add sorting
 		configureSortingRules(config, spec, doHierarchiesTotals);
+		
+		//add filters
+		//temporary disable filters, the query is taking too long
+		//addFilters(spec.getFilters(), config);
 		
 		config.setAllowEmptyColumnsData(spec.isDisplayEmptyFundingColumns());
 		config.setAllowEmptyRowsData(spec.isDisplayEmptyFundingRows());		
 		
 		return config;
-	}
-	
-	private void reportError(String error) {
-		logger.error(error);
-		/* TODO: commenting out until in development
-		throw new AMPException(error);
-		*/ 
-
 	}
 	
 	private void configureSortingRules(MDXConfig config, ReportSpecification spec, boolean doHierarchiesTotals) throws AMPException {
@@ -177,9 +177,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 			MDXTuple tuple = new MDXTuple();
 			for (Entry<ReportElement, FilterRule> entry : sortInfo.sortByTuple.entrySet()) {
 				if (ElementType.ENTITY.equals(entry.getKey().type))
-					tuple.add(applySingleFilter(MondrianMaping.toMDXElement(entry.getKey().entity), entry.getValue()));
+					tuple.add(applySingleFilter(MondrianMapping.toMDXElement(entry.getKey().entity), entry.getValue()));
 				else {
-					MDXAttribute mdxAttr = MondrianMaping.getElementByType(entry.getKey().type);
+					MDXAttribute mdxAttr = MondrianMapping.getElementByType(entry.getKey().type);
 					if (mdxAttr == null) {
 						String err = "No mapping found for Element type = " + entry.getKey().type;
 						logger.error(err);
@@ -202,6 +202,48 @@ public class MondrianReportGenerator implements ReportExecutor {
 			throw new AMPException("Single value sorting filter cannot be applied over measures");
 		((MDXAttribute)elem).setValue(filter.value);
 		return elem;
+	}
+	
+	private void addFilters(ReportFilters reportFilter, MDXConfig config) throws AmpApiException {
+		if (reportFilter == null) return;
+		for(Entry<ReportElement, FilterRule> entry : reportFilter.getFilterRules().entrySet()) {
+			ReportElement elem = entry.getKey();
+			FilterRule filter = entry.getValue();
+			MDXFilter mdxFilter = null;
+			MDXAttribute mdxElem = null;
+			String property = null;
+			
+			switch (elem.type) {
+			case ENTITY : 
+				mdxElem = (MDXAttribute)MondrianMapping.toMDXElement(elem.entity);
+			break;
+			default: mdxElem = MondrianMapping.getElementByType(elem.type);
+			break; 
+			}
+			if (mdxElem == null) {
+				reportError("Mapping not defined for report element = " + elem);
+				if (IS_DEV) break;
+			}
+			
+			if (filter.isIdFilter) {
+				property = MondrianMapping.getPropertyName(elem);
+				if (property == null){
+					reportError("Property not defined for report element = " + elem);
+					if (IS_DEV) break;
+				}
+			}
+			
+			switch(filter.filterType) {
+			case RANGE: mdxFilter = new MDXFilter(filter.min, filter.minInclusive, filter.max, filter.maxInclusive, property); 
+			break;
+			case SINGLE_VALUE: mdxFilter = new MDXFilter(filter.value, filter.valuesInclusive, property);
+			break;
+			case VALUES: mdxFilter = new MDXFilter(filter.values, filter.valuesInclusive, property);
+			break;
+			}
+			
+			config.addDataFilter(mdxElem, mdxFilter);
+		}
 	}
 	
 	private GeneratedReport toGeneratedReport(ReportSpecification spec, CellSet cellSet, int duration) throws AMPException {
@@ -322,6 +364,13 @@ public class MondrianReportGenerator implements ReportExecutor {
 			throw new AMPException("Cannot instantiate " + reportAreaType.getName() + ". " + e.getMessage());
 		}
 		return reportArea;
+	}
+	
+	private void reportError(String error) throws AmpApiException {
+		if (IS_DEV)
+			logger.error(error);
+		else
+			throw new AmpApiException(error);
 	}
 }
 

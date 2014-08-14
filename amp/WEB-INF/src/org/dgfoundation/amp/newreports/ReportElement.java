@@ -3,6 +3,9 @@
  */
 package org.dgfoundation.amp.newreports;
 
+import java.util.List;
+import java.util.Objects;
+
 
 /**
  * A report element that can be either a NamedTypedEntity or an element of type YEAR, QUARTER, MONTH
@@ -13,21 +16,27 @@ public class ReportElement {
 		ENTITY,
 		YEAR,
 		QUARTER,
-		MONTH;
+		MONTH,
+		DATE;
 	};
 	
 	/** Report element type. If it is ENTITY type, then {@link #entity} is specified */
 	public final ElementType type;
 	/** Report column or measure, if {@link #type} is ENTITY. Otherwise null. */
 	public final NamedTypedEntity entity;
+	/** Report element hierarchy */
+	public final List<String> hierarchyPath;
 	
 	/**
 	 * Constructs a report element as a NamedTypedEntity
 	 * @param entity
 	 */
 	public ReportElement(NamedTypedEntity entity) {
-		this.entity = entity;
-		this.type = ElementType.ENTITY;
+		this(entity, ElementType.ENTITY, null);
+	}
+	
+	public ReportElement(NamedTypedEntity entity, List<String> hierarchyPath) {
+		this(entity, ElementType.ENTITY, hierarchyPath);
 	}
 	
 	/**
@@ -35,7 +44,26 @@ public class ReportElement {
 	 * @param type - anything, except ENTITY
 	 */
 	public ReportElement(ElementType type) {
+		this(null, type, null);
+	}
+	
+	public ReportElement(ElementType type, List<String> hierarchyPath) {
+		this(null, type, hierarchyPath);
+	}
+	
+	private ReportElement(NamedTypedEntity entity, ElementType type, List<String> hierarchyPath) {
+		this.entity = entity;
 		this.type = type;
-		this.entity = null;
+		this.hierarchyPath = hierarchyPath;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return 	Objects.deepEquals(this, o);
+	}
+	
+	@Override
+	public String toString() {
+		return "ElementType = " + type + ", NamedTypedEntity =[" + (entity == null ? "null]" : entity.getEntityName() + "] of type " + entity.getEntityType());  
 	}
 }

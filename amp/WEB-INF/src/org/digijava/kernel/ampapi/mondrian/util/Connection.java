@@ -16,6 +16,8 @@ import org.olap4j.OlapConnection;
  */
 public class Connection {
 
+	public static boolean IS_TESTING = false;
+	
 	private static String separator = System.getProperty("file.separator");
 	private static String connection;
 
@@ -38,7 +40,7 @@ public class Connection {
 	}
 	public static String getConnectionBySchemaPath(String schemaPath) {
 		ServletRequest request = TLSUtils.getRequest();
-		if (request!=null) 
+		if (request!=null && !IS_TESTING) 
 			schemaPath = request.getServletContext().getRealPath(schemaPath);
 		else 
 			schemaPath = Paths.get(schemaPath).toAbsolutePath().toString();

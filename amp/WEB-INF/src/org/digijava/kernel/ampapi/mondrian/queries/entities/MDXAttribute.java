@@ -3,7 +3,6 @@
  */
 package org.digijava.kernel.ampapi.mondrian.queries.entities;
 
-import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 
 /**

@@ -6,6 +6,7 @@ package org.digijava.kernel.ampapi.mondrian;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.digijava.kernel.ampapi.mondrian.util.Connection;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -46,6 +47,7 @@ public class AllQueryTests_amp210 {
 		{
 			//hack for ampDS initialization
 			MoConstants.CONNECTION_DS = CONNECTION_PATH;
+			Connection.IS_TESTING = true;
 	   		
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
 			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_moldova_210";

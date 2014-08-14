@@ -3,7 +3,6 @@
  */
 package org.dgfoundation.amp.reports;
 
-import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportMeasure;

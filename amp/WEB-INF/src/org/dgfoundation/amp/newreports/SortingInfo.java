@@ -7,7 +7,6 @@ import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 /**
  * class which identifies a path to sort by, like for Example [Primary Sector] or [Measures][2013][Q3][Actual Commitments]
  * @author Dolghier Constantin, Nadejda Mandrescu
- *
  */
 public class SortingInfo {
 	/** sorting ascending or descending */
@@ -59,11 +58,11 @@ public class SortingInfo {
 		this.isTotals = false;
 		this.ascending = ascending;
 		this.sortByTuple = new LinkedHashMap<ReportElement, FilterRule>();
-		this.sortByTuple.put(new ReportElement(ElementType.YEAR), new FilterRule(year));
+		this.sortByTuple.put(new ReportElement(ElementType.YEAR), new FilterRule(year, false));
 		if (quarter !=null) 
-			this.sortByTuple.put(new ReportElement(ElementType.QUARTER), new FilterRule(quarter));
+			this.sortByTuple.put(new ReportElement(ElementType.QUARTER), new FilterRule(quarter, false));
 		if (month !=null) 
-			this.sortByTuple.put(new ReportElement(ElementType.MONTH), new FilterRule(month));
+			this.sortByTuple.put(new ReportElement(ElementType.MONTH), new FilterRule(month, false));
 		this.sortByTuple.put(new ReportElement(measure), null);
 	}
 	

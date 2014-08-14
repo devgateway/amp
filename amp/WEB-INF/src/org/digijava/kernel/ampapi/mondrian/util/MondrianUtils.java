@@ -23,6 +23,7 @@ import org.olap4j.CellSet;
 import org.olap4j.OlapException;
 import org.olap4j.layout.RectangularCellSetFormatter;
 import org.olap4j.mdx.parser.MdxParseException;
+import org.olap4j.metadata.Datatype;
 
 /**
  * Mondrian utility class 
@@ -82,7 +83,7 @@ public class MondrianUtils {
 	
 	public static MDXAttribute getDuplicate(MDXAttribute mdxAttr) {
 		MDXLevel newLevel = new MDXLevel(mdxAttr);
-		String hierarchy = MondrianMaping.getDuplicateHierarchy(newLevel.getHierarchy());   
+		String hierarchy = MondrianMapping.getDuplicateHierarchy(newLevel.getHierarchy());   
 		newLevel.setHierarchy(hierarchy);
 		return newLevel;
 	}
@@ -113,5 +114,14 @@ public class MondrianUtils {
 		formatter.format(cellSet, writer);
 		writer.flush();
 		writer.close();
+	}
+	
+	public static String getDatatypeName(Datatype type) {
+		switch(type) {
+		case INTEGER:
+		case UNSIGNED_INTEGER : return "Integer";
+		//to see if other needs conversion
+		default: return type.name();
+		}
 	}
 }

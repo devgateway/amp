@@ -9,7 +9,6 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.queries.MDXGenerator;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXConfig;
@@ -39,7 +38,11 @@ public class MDXTests extends AmpTestCase {
 		suite.addTest(new MDXTests("testTotals"));
 		suite.addTest(new MDXTests("testNoColumnAttr"));
 		suite.addTest(new MDXTests("testDataSingleValueFilter"));
+		suite.addTest(new MDXTests("testDataSingleValueFilterByLocation"));
 		suite.addTest(new MDXTests("testDataFilters"));
+		suite.addTest(new MDXTests("testRangeFilter"));
+		suite.addTest(new MDXTests("testSinglePropertyFilter"));
+		suite.addTest(new MDXTests("testPropertiesListFilter"));
 		suite.addTest(new MDXTests("testMultipleHierarchies"));
 		suite.addTest(new MDXTests("testSortingNoTotals"));
 		suite.addTest(new MDXTests("testSortingBy2012Q1ActualCommitments"));
@@ -71,6 +74,13 @@ public class MDXTests extends AmpTestCase {
 		generateAndValidateMDX(config, expectedRes, false);
 	}
 	
+	public void testDataSingleValueFilterByLocation() {
+		String expectedRes = null;
+		MDXConfig config = getDefaultConfig("testDataSingleValueFilterByLocation", true);
+		config.addSingleValueFilters(new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS, MoConstants.ATTR_COUNTRY_NAME, "Moldova"));
+		generateAndValidateMDX(config, expectedRes, false);
+	}
+	
 	public void testDataFilters() {
 		String expectedRes = null;
 		MDXConfig config = getDefaultConfig("testDataFilters", true);
@@ -80,13 +90,40 @@ public class MDXTests extends AmpTestCase {
 	
 	private void addSimpleFilter(MDXConfig config) {
 		MDXAttribute attrYear = new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, MoConstants.ATTR_YEAR);
-		MDXFilter filter = new MDXFilter(Arrays.asList("1980", "1994"), true);
+		MDXFilter filter = new MDXFilter(Arrays.asList("1980", "1994"), true, null);
 		config.getDataFilters().put(attrYear, filter);
+	}
+	
+	public void testRangeFilter() {
+		String expectedRes = null;
+		MDXConfig config = getDefaultConfig("testRangeFilter", true);
+		MDXAttribute attrYear = new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, MoConstants.ATTR_YEAR);
+		MDXFilter filter = new MDXFilter("2010", true, "2012", true, null);
+		config.getDataFilters().put(attrYear, filter);
+		generateAndValidateMDX(config, expectedRes, false);
+	}
+	
+	public void testSinglePropertyFilter() {
+		String expectedRes = null;
+		MDXConfig config = getDefaultConfig("testSinglePropertyFilter", true);
+		MDXAttribute attrLocation = new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS, MoConstants.ATTR_LOCATION_NAME);
+		MDXFilter filter = new MDXFilter("8977", true, MoConstants.P_COUNTRY_ID);
+		config.getDataFilters().put(attrLocation, filter);
+		generateAndValidateMDX(config, expectedRes, false);
+	}
+	
+	public void testPropertiesListFilter() {
+		String expectedRes = null;
+		MDXConfig config = getDefaultConfig("testPropertiesListFilter", true);
+		MDXAttribute attrLocation = new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS, MoConstants.ATTR_LOCATION_NAME);
+		MDXFilter filter = new MDXFilter(Arrays.asList("8977", "9015", "8857"), true, MoConstants.P_COUNTRY_ID);
+		config.getDataFilters().put(attrLocation, filter);
+		generateAndValidateMDX(config, expectedRes, false);
 	}
 	
 	public void testMultipleHierarchies() {
 		String expectedRes = null;
-		MDXConfig config = getDefaultConfig("testDataFilter1", true);
+		MDXConfig config = getDefaultConfig("testMultipleHierarchies", true);
 		config.getColumnAttributes().add(0, new MDXAttribute(MoConstants.APPROVAL_STATUS, MoConstants.ATTR_APPROVAL_STATUS));
 		config.getRowAttributes().add(0, new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
 		addSimpleFilter(config); //filter for easier testing
@@ -124,7 +161,7 @@ public class MDXTests extends AmpTestCase {
 		config.addColumnAttribute(new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, MoConstants.ATTR_YEAR));
 		config.addColumnMeasure(new MDXMeasure(MoConstants.ACTUAL_COMMITMENTS));
 		config.addColumnMeasure(new MDXMeasure(MoConstants.ACTUAL_DISBURSEMENTS));
-		config.addRowAttribute(new MDXAttribute(MoConstants.LOCATION, MoConstants.ATTR_COUNTRY_NAME));
+		config.addRowAttribute(new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS, MoConstants.ATTR_COUNTRY_NAME));
 		config.addRowAttribute(new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_TYPE_NAME, MoConstants.ATTR_ORG_TYPE_NAME));
 		config.setAllowEmptyColumnsData(false);
 		config.setAllowEmptyRowsData(false);
@@ -145,7 +182,7 @@ public class MDXTests extends AmpTestCase {
 				set = generator.runQuery(mdx);
 				MondrianUtils.print(set, config.getMdxName());
 			}
-		} catch (AmpApiException e) {
+		} catch (Exception e) {
 			System.err.println(e.getMessage());
 			err = e.getMessage();
 		}

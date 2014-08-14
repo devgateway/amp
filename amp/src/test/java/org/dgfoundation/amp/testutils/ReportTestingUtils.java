@@ -79,6 +79,19 @@ public class ReportTestingUtils
 	}
 	
 	/**
+	 * Retrieves the report filter 
+	 * @param report 
+	 * @return 
+	 */
+	public static AmpARFilter getReportFilter(AmpReports report) {
+		org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
+		mockRequest.setAttribute("ampReportId", report.getId().toString());
+		TLSUtils.populate(mockRequest);
+		ReportContextData.createWithId(report.getId().toString(), true);
+		return FilterUtil.buildFilter(report, report.getAmpReportId());
+	}
+	
+	/**
 	 * loads a report with a given name. If multiple reports with the name exist, it is not defined which of them will be chosen. Given that this will only be run on a testcases database, it is ok
 	 * @param reportName
 	 * @return

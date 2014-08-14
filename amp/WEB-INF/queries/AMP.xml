@@ -12,9 +12,27 @@
 	</Dimension> -->
 
 	<Dimension name="AMP Organization" >
+		<Hierarchy hasAll="true" allMemberName="All Orgs" primaryKey="amp_org_id" name="Organization Hierarchy">
+			<Table name="mondrian_organizations" />
+			<Level name="Organization Type Name" uniqueMembers="true" type="Integer" column="amp_org_type_id" nameColumn="org_type_name" />
+			<Level name="Organization Group Name" uniqueMembers="true" type="Integer" column="amp_org_grp_id" nameColumn="org_grp_name" />
+			<Level name="Organization Name" uniqueMembers="true" type="Integer" column="amp_org_id" nameColumn="org_name" />
+			<Level name="Organization Code" type="Integer" column="amp_org_id" nameColumn="org_code" />
+		</Hierarchy>
+		<Hierarchy hasAll="true" allMemberName="All Orgs" primaryKey="amp_org_id" name="Organization Hierarchy Duplicate">
+			<Table name="mondrian_organizations" />
+			<Level name="Organization Type Name" uniqueMembers="true" type="Integer" column="amp_org_type_id" nameColumn="org_type_name" >
+				<Property name="default" column="amp_org_id" type="Integer"/>
+				<Property name="orgTypeId" column="amp_org_type_id" type="Integer"/>
+				<Property name="orgGroupId" column="amp_org_grp_id" type="Integer"/>
+				<Property name="orgId" column="amp_org_id" type="Integer"/>
+			</Level>
+			<Level name="Organization Group Name" uniqueMembers="true" type="Integer" column="amp_org_grp_id" nameColumn="org_grp_name" />
+			<Level name="Organization Name" uniqueMembers="true" type="Integer" column="amp_org_id" nameColumn="org_name" />
+			<Level name="Organization Code" type="Integer" column="amp_org_id" nameColumn="org_code" />
+		</Hierarchy>
 		<Hierarchy hasAll="true" allMemberName="All Orgs" primaryKey="amp_org_id" name="Organization Name">
 			<Table name="mondrian_organizations" />
-			
 			<Level name="Organization Name" uniqueMembers="true" type="Integer" column="amp_org_id" nameColumn="org_name" />
 			<Level name="Organization Code" type="Integer" column="amp_org_id" nameColumn="org_code" />
 		</Hierarchy>
@@ -76,12 +94,33 @@
 				<Level name="District Name" column="district_id" type="Integer" nameColumn="district_name" />
 				<Level name="Location" column="id" type="Integer" nameColumn="location_name" />
 			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Locations" name="LocationsDuplicate" uniqueKeyLevelName="Location" primaryKey="id">
+				<Table name="mondrian_locations" />
+				<Level name="Country Name" column="country_id" type="Integer" nameColumn="country_name" >
+					<Property name="default" column="id" type="Integer"/>
+					<Property name="countryId" column="country_id" type="Integer"/>
+					<Property name="regionId" column="region_id" type="Integer"/>
+					<Property name="zoneId" column="zone_id" type="Integer"/>
+					<Property name="districtId" column="district_id" type="Integer"/>
+					<Property name="locationId" column="id" type="Integer"/>
+				</Level>
+				<Level name="Region Name" column="region_id" type="Integer" nameColumn="region_name" />
+				<Level name="Zone Name" column="zone_id" type="Integer" nameColumn="zone_name" />
+				<Level name="District Name" column="district_id" type="Integer" nameColumn="district_name" />
+				<Level name="Location" column="id" type="Integer" nameColumn="location_name" >
+				</Level>
+			</Hierarchy>
 		</Dimension>
 
 		<Dimension name="Primary Sector" foreignKey="primary_sector_id">
-			<Hierarchy hasAll="true" allMemberName="All Primary Sectors" primaryKey="amp_sector_id">
+			<Hierarchy hasAll="true" allMemberName="All Primary Sectors" primaryKey="amp_sector_id" name="Primary Sector">
 				<Table name="mondrian_sectors" alias="primary_sector_table" />
-				<Level name="Primary Sector" type="Integer" column="level0_sector_id" nameColumn="level0_sector_name" />
+				<Level name="Primary Sector" type="Integer" column="level0_sector_id" nameColumn="level0_sector_name" >
+					<Property name="default" column="level0_sector_id" type="Integer"/>
+					<Property name="primarySectorId" column="level0_sector_id" type="Integer"/>
+					<Property name="primarySectorSubSectorId" column="level1_sector_id" type="Integer"/>
+					<Property name="primarySectorSubSubSectorId" column="level2_sector_id" type="Integer"/>
+				</Level>
 				<Level name="Primary Sector Sub-sector" type="Integer" column="level1_sector_id" nameColumn="level1_sector_name" />
 				<Level name="Primary Sector Sub-sub-sector" type="Integer" column="level2_sector_id" nameColumn="level2_sector_name" />
 			</Hierarchy>
@@ -122,6 +161,7 @@
 				<Level name="Year" column="year" levelType="TimeYears" type="Integer" />
 				<Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Integer"/>
 				<Level name="Month" column="month" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Integer" />
+				<Level name="Date" column="day" ordinalColumn="day" nameColumn="full_date" levelType="TimeDays" type="Integer" />
 			</Hierarchy>
 			<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day" name="Year">
 			  <Table name="mondrian_dates" />
@@ -137,11 +177,16 @@
 			</Hierarchy>
 			<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day" name="DatesDuplicate">
 				<Table name="mondrian_dates" />
-				<Level name="Year" column="year" levelType="TimeYears" type="Integer" />
+				<Level name="Year" column="year" levelType="TimeYears" type="Integer" >
+					<Property name="default" column="day" type="Integer"/>
+					<Property name="day" column="day" type="Integer"/>
+				</Level>
 				<Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Integer"/>
 				<Level name="Month" column="month" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Integer" />
+				<Level name="Date" column="day" ordinalColumn="day" nameColumn="full_date" levelType="TimeDays" type="Integer" />
 			</Hierarchy>
 		</Dimension>
+		
 <!--
 		<DimensionUsage name="Primary Sector" source="Sectors" caption="Primary Sector" foreignKey="primary_sector_id" />
 		<DimensionUsage name="Secondary Sector" source="Sectors" caption="Secondary Sector" foreignKey="secondary_sector_id" usagePrefix="Secondary" />

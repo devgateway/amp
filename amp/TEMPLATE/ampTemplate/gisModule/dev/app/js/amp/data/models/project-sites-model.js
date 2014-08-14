@@ -21,7 +21,7 @@ module.exports = Backbone.Model.extend({
     this.palette = new Palette.FromSet();
 
     // private load state tracking
-    this._dataLoaded = new Deferred();
+    this._dataLoaded = null;
 
     this.listenTo(this, 'change:selected', function(blah, show) {
       this.trigger(show ? 'show' : 'hide', this);
@@ -32,7 +32,8 @@ module.exports = Backbone.Model.extend({
     var self = this;
 
     // skip the work if we're already loaded
-    if (this._dataLoaded.state() === 'pending') {
+    if (_.isNull(this._dataLoaded)) {
+      this._dataLoaded = new Deferred();
       this.fetch({type: 'POST'}).then(function() {
         self._dataLoaded.resolve();
         self.updatePaletteSet();  // in here so we don't re-do it later

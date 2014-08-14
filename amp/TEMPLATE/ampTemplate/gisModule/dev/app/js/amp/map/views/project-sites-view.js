@@ -17,8 +17,8 @@ module.exports = Backbone.View.extend({
   BIG_ICON_RADIUS: 7,
   currentRadius: 2,
   markerCluster: null,
+  layerLoadState: 'pending',  // 'loading', 'loaded'.
 
-  layer: undefined,
   popup: null,
   projectListTemplate: _.template(ProjectListTemplate),
 
@@ -79,16 +79,17 @@ module.exports = Backbone.View.extend({
   },
 
   showLayer: function(projectSitesModel) {
-    if (this.layer === 'loading') {
+    if (this.layerLoadState === 'loading') {
       console.warn('tried to show project sites while they are still loading');
       return;
-    } else if (typeof this.layer === 'undefined') {
-      this.layer = 'loading';  // will be replaced in time...
+    } else if (this.layerLoadState === 'pending') {
+      this.layerLoadState = 'loading';
     }
 
     this.listenToOnce(projectSitesModel, 'processed', function() {
-      this.layer = this.getNewProjectSitesLayer(projectSitesModel);
-      this.map.addLayer(this.layer);
+      this.layerLoadState = 'loaded';
+      this.getNewProjectSitesLayer(projectSitesModel);
+      this.map.addLayer(this.markerCluster);
     });
 
     this.map.on('zoomend', this._updateZoom, this);
@@ -98,15 +99,15 @@ module.exports = Backbone.View.extend({
 
 
   hideLayer: function() {
-    if (typeof this.layer === 'undefined') {
+    if (this.layerLoadState === 'pending') {
       throw new Error('Tried to remove project sites but they have not been added');
-    } else if (this.layer === 'loading') {
+    } else if (this.layerLoadState === 'loading') {
       console.warn('removing layers while they are loading is not yet supported');
     }
 
     this.map.off('zoomend', this._updateZoom);
 
-    this.map.removeLayer(this.layer);
+    this.map.removeLayer(this.markerCluster);
   },
 
 

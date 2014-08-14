@@ -10,3 +10,8 @@ require('bootstrap/dist/js/bootstrap');
 
 // enable CORS
 jQuery.support.cors = true;
+
+// init leaflet plugins
+var L = require('../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
+L.Icon.Default.imagePath = '/img/map-icons';
+require('../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster.js');

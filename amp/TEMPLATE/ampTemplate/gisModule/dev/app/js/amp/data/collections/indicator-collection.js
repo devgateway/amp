@@ -2,8 +2,8 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var APIHelper = require('../../../libs/local/api-helper');
 var RadioMixin = require('../../mixins/radio-mixin');
-var JoinIndicator = require('../models/join-indicator-model');
-var WMSIndicator = require('../models/wms-indicator-model');
+var JoinIndicator = require('../models/indicator-join-model');
+var WMSIndicator = require('../models/indicator-wms-model');
 
 
 module.exports = Backbone.Collection

@@ -14,6 +14,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var Boundaries = require('./collections/boundary-collection');
 var Indicators = require('./collections/indicator-collection');
+var ProjectSites = require('./collections/project-sites-collection');
 var Title = require('./title');
 
 
@@ -26,6 +27,8 @@ _.extend(GISData.prototype, Backbone.Events, {
   initialize: function() {
     this.boundaries = new Boundaries();
     this.indicators = new Indicators([], { boundaries: this.boundaries });
+    this.projectSites = new ProjectSites();
+
     this.title = new Title({ data: this });
 
     // bubble indicator events on the data object
@@ -56,11 +59,16 @@ _.extend(GISData.prototype, Backbone.Events, {
   getAllVisibleLayers: function() {
     var layers = _([]);
 
+    // TODO: find a better way to merge these arrays
     this.indicators.getSelected().each(function(indicator) {
       layers.push(indicator);
     }, this);
 
-    // TODO David: add point layers
+    this.projectSites.getSelected().each(function(site) {
+      layers.push(site);
+    }, this);
+
+    // TODO add clusters
 
     return layers.chain();
   }

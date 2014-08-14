@@ -87,10 +87,9 @@ function FromRange(options) {
 }
 
 function FromSet(options) {
-  // ...
-  // return new Palette({
-  //   mode: 'discrete',
-  // });
+  return new Palette({
+    mode: 'discrete',
+  });
 }
 
 

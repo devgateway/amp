@@ -9,6 +9,10 @@ var ProjectSitesCollection = require('../../data/collections/project-sites-colle
 var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
 
 
+// Legacy note: this used to handle both project sites and project clusters
+// and may need further cleaning
+
+
 module.exports = Backbone.View.extend({
   // These will eventually move to a config.
   // They control when to resize points based on zoom
@@ -21,21 +25,14 @@ module.exports = Backbone.View.extend({
   popup: null,
   projectListTemplate: _.template(ProjectListTemplate),
 
-  initialize: function(options) {
-    this.app = options.app;
-    this.map = options.map;
-
-    this.initCluster();
-
-    this.listenTo(this.app.data.projectSites, 'show', this.showLayer);
-    this.listenTo(this.app.data.projectSites, 'showhide', this.hideLayer);
-    this.listenTo(this.markerCluster, 'clusterclick', this.clusterClick);
-
-    _.bindAll(this, '_onEachFeature');
-  },
-
-  initCluster: function() {
+  initialize: function(extraProperties) {
+    _.extend(this, extraProperties);  // extraProperties={map: ...}
     var self = this;
+    L.Icon.Default.imagePath = '/img/map-icons';
+
+    this.featureGroup = null;
+    this.collection = new ProjectSitesCollection();
+
     //TODO: checkout prune cluster, supposedly way faster...
     // may also be worth doing manually since we don't want updates on zoom
     // TODO: make sizing dynamic based on highest cluster... and put into own function...
@@ -74,26 +71,27 @@ module.exports = Backbone.View.extend({
       spiderfyOnMaxZoom: false,
       removeOutsideVisibleBounds: true
     });
-  },
 
-  showLayer: function(l) {
-    this._loadProjectLayer('locations');
-  },
+    this.markerCluster.on('clusterclick', function(a) {
+      //TODO: seems silly to bind on every click...
+      a.layer.bindPopup(self.projectListTemplate({ projects: a.layer.getAllChildMarkers() }));
+      a.layer.openPopup(self.map);
+    });
 
-  hideLayer: function() {
+    this._filtersUpdated(); // explicitly call once at begining...maybe not needed later.
 
+    // instead, maybe we can grab a reference to the model or collection,
+    // backing the filter, and subscribe to changes on it?
+    Backbone.on('FILTERS_UPDATED', this._filtersUpdated, this);
+    Backbone.on('MAP_LOAD_PROJECT_LAYER', this._loadProjectLayer, this);
+
+    _.bindAll(this, '_onEachFeature');
   },
 
   render: function() {
     return this;
   },
 
-  clusterClick: function(a) {
-    var self = this;
-    //TODO: seems silly to bind on every click...
-    a.layer.bindPopup(self.projectListTemplate({ projects: a.layer.getAllChildMarkers() }));
-    a.layer.openPopup(self.map);
-  },
 
   _loadProjectLayer: function(type) {
     if (type === 'locations') {

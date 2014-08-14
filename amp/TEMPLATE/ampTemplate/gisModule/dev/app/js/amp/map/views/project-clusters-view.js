@@ -38,7 +38,7 @@ module.exports = Backbone.View.extend({
     var self = this;
 
     // remove current featureGroup
-    if(self.featureGroup){
+    if (self.featureGroup) {
       self.map.removeLayer(self.featureGroup);
     }
 
@@ -62,10 +62,10 @@ module.exports = Backbone.View.extend({
   },
 
   // TODO: non hardcoded version.
-  _loadProjectLayer: function(type){
-    if(type === 'adm-1'){
+  _loadProjectLayer: function(type) {
+    if (type === 'adm-1') {
       this._filtersUpdated({adminLevel: type});
-    } else if(type === 'adm-2'){
+    } else if (type === 'adm-2') {
       this._filtersUpdated({adminLevel: type});
     } else {
       this._removeFromMap();
@@ -80,10 +80,10 @@ module.exports = Backbone.View.extend({
 
     // Get the values for the map.
     this._getCluster(filterObj).then(function(data) {
-      if(data && data.type === 'FeatureCollection') {
+      if (data && data.type === 'FeatureCollection') {
         self.features = data.features;
         self._renderFeatures();
-      } else{
+      } else {
         console.warn('Cluster response empty.');
       }
     });
@@ -93,18 +93,18 @@ module.exports = Backbone.View.extend({
   // Phil: do you use boundaries for joining?
   // I'm considering making boundary-view on the map where it just listens to the app.data collection,
   // and draws the selected / active boundary....
-  _loadBoundaries: function(filterObj){
+  _loadBoundaries: function(filterObj) {
     var self = this;
 
     this._removeBoundary();
 
-    if(filterObj.adminLevel){
+    if (filterObj.adminLevel) {
       // get current boundary.
       var boundaries = this.app.data.boundaries;
       var currentBoundary = boundaries.findWhere({id:filterObj.adminLevel});
-      if(currentBoundary){
+      if (currentBoundary) {
         var geoJSON = currentBoundary.toJSON();
-      } else{
+      } else {
         console.warn('no boundary found');
       }
 
@@ -113,16 +113,16 @@ module.exports = Backbone.View.extend({
       // self.boundaryLayer = L.geoJson(geoJSON,
       //   {
       //     simplifyFactor: 0.9,
-      //     style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '3',}
+      //     style: {color: 'blue', fillColor:'none', weight: 1, dashArray: '3',}
       //   }).addTo(self.map);
-    } else{
+    } else {
       console.warn('missing admin level in Filter');
     }
   },
 
 
-  _removeBoundary: function(){
-    if(this.boundaryLayer){
+  _removeBoundary: function() {
+    if (this.boundaryLayer) {
       this.map.removeLayer(this.boundaryLayer);
     }
   },
@@ -136,42 +136,42 @@ module.exports = Backbone.View.extend({
   },
 
   // Can do some post-processing here if we want...
-  _getCluster: function(filter){
+  _getCluster: function(filter) {
 
     filter.adminLevel = this._tempConvertToString(filter.adminLevel);
 
     return this.collection.fetch({
         data: JSON.stringify(filter),
-        type: 'POST',    
+        type: 'POST',
         headers: { //needed to add this to fix amp 415 unsuported media type err, but most API's don;t require this...
             'Accept': 'application/json',
-            'Content-Type': 'application/json' 
+            'Content-Type': 'application/json'
           }
-        }).fail(function(jqXHR, textStatus, errorThrown){
+        }).fail(function(jqXHR, textStatus, errorThrown) {
           console.error('failed ', jqXHR, textStatus, errorThrown);
         });
   },
 
   // !temp convert adminLevel to AMP strings:
-  _tempConvertToString: function(id){
+  _tempConvertToString: function(id) {
     var str = '';
-    if(id ==='adm-0'){
+    if (id ==='adm-0') {
       str = 'Country';
-    } else if(id ==='adm-1'){
+    } else if (id ==='adm-1') {
       str = 'Region';
-    } else if(id ==='adm-2'){
+    } else if (id ==='adm-2') {
       str = 'Zone';
-    } else if(id ==='adm-3'){
+    } else if (id ==='adm-3') {
       str = 'District';
     }
     return str;
   },
 
 
-  _removeFromMap: function(){
+  _removeFromMap: function() {
     this._removeBoundary();
 
-    if(this.featureGroup){
+    if (this.featureGroup) {
       this.map.removeLayer(this.featureGroup);
     }
   },

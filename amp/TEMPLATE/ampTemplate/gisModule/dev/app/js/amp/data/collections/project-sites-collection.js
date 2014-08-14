@@ -18,11 +18,11 @@ module.exports = Backbone.Collection
     this.add([
       new ProjectSitesModel(),
       {
-        title: 'Projects by Region',
+        title: 'Projects by Province',
         value: 'adm-1'
       },
       {
-        title: 'Projects by Zone',
+        title: 'Projects by District',
         value: 'adm-2'
       }
     ]);

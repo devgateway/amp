@@ -78,8 +78,9 @@ _.extend(FakeServer.prototype, {
     // 'POST /rest/gis/saved-maps/ ...
 
     // Translations
-    // 'GET /rest/gis/label-translations/': fs.readFileSync(__dirname + '/data/label-translations/....json', 'utf8'),
-    // 'GET /rest/gis/label-translations/en': fs.readFileSync(__dirname + '/data/label-translations/....json', 'utf8'),
+     'POST /rest/translations/label-translations': fs.readFileSync(__dirname + '/data/label-translations/sample-en.json', 'utf8'),
+     'POST /rest/translations/label-translations/en': fs.readFileSync(__dirname + '/data/label-translations/sample-en.json', 'utf8'),
+     'POST /rest/translations/label-translations/fr': fs.readFileSync(__dirname + '/data/label-translations/sample-fr.json', 'utf8'),
 
   },
 

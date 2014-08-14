@@ -5,6 +5,7 @@ var Backbone = require('backbone');
 var MapView = require('../../map/views/main-view');
 var DataQualityView = require('../../dataquality/views/dataquality-view');
 var SidebarView = require('../../sidebar/sidebar-view');
+var TranslationHelper = require('../../../libs/local/translation-helper');
 
 var AmpNavTemplate = fs.readFileSync(__dirname + '/../templates/amp-nav-template.html', 'utf8');
 var ModuleTemplate = fs.readFileSync(__dirname + '/../templates/module-template.html', 'utf8');
@@ -32,6 +33,19 @@ module.exports = Backbone.View.extend({
 
     // just for testing...
     this.renderStaticAmpTemplate();
+
+    // update translations
+    TranslationHelper.searchTranslations(this.$el);
+    this.translationToggle();
+  },
+
+  translationToggle: function(){
+    var self = this;
+    this.$('.lang-change').click(function(evt){
+      evt.preventDefault();
+      var lng = $(this).data('lng');
+      TranslationHelper.searchTranslations(self.$el, lng);
+    });
   },
 
   // not a view, because it's static and just for testing.

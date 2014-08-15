@@ -32,7 +32,7 @@ var browserify = require('browserify');
 var watchify = require('watchify');
 var gulp = require('gulp');
 var g = require('gulp-load-plugins')();
-
+var gulpi18nScraper = require('gulp-i18n-scraper');
 
 var paths = {
   app: {
@@ -46,6 +46,7 @@ var paths = {
       buildDest: './app/compiled-js/',
       built: './app/compiled-js/app.js'
     },
+    templates: './app/js/**/*.html',
     stylesheets: {
       all: './app/less/**/*.less',
       entry: './app/less/main.less',
@@ -103,6 +104,18 @@ function _bundlify(ifyer, entry, destFolder, destName) {
 
   return rebundle();
 }
+
+// generate translate file
+// TODO: figure out how to do elements that are created dynamically with templates...
+gulp.task('translate',  function() {
+  return gulp.src(paths.app.templates)
+    .pipe(g.plumber())
+    .pipe(gulpi18nScraper("*[data-i18n^='amp.']"))
+      .on('error', g.util.log)
+    .pipe(g.concat('i18n-mapping.json'))
+    .pipe(gulp.dest(paths.app.scripts.buildDest));
+});
+
 
 gulp.task('bundle-mock',  function() {
   return _bundlify(browserify, paths.app.mockAPI.entry,

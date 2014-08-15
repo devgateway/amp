@@ -1,10 +1,11 @@
 {
-  "amp.common:username": "Username",
-  "amp.common:title": "DRC AMP",
   "amp.gis:title-projectdata": "Project Data",
   "amp.gis:title-statisticaldata": "Statistical Data",
   "amp.gis:title-filters": "Filter",
   "amp.gis:title-keywordsearch": "Keyword",
   "amp.gis:title-share": "Share",
-  "amp.gis:title-settings": "Setting"
+  "amp.gis:title-settings": "Setting",
+
+  "amp.common:username": "Username",
+  "amp.common:title": "DRC AMP"
 }

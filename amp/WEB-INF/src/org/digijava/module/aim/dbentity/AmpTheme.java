@@ -15,12 +15,13 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.HierarchyListableComparator;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 import java.util.TreeSet;
 @TranslatableClass (displayName = "Theme")
-public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiable, ARDimensionable, HierarchyListable,  AmpAutoCompleteDisplayable
+public class AmpTheme implements Serializable, Comparable<AmpTheme>, Identifiable, ARDimensionable, HierarchyListable,  AmpAutoCompleteDisplayable, NameableOrIdentifiable
 {
 	private static final long serialVersionUID = 1L;
 	//private AmpActivityVersion activityId;

@@ -160,8 +160,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		configureSortingRules(config, spec, doHierarchiesTotals);
 		
 		//add filters
-		//temporary disable filters, the query is taking too long
-		//addFilters(spec.getFilters(), config);
+		addFilters(spec.getFilters(), config);
 		
 		config.setAllowEmptyColumnsData(spec.isDisplayEmptyFundingColumns());
 		config.setAllowEmptyRowsData(spec.isDisplayEmptyFundingRows());		

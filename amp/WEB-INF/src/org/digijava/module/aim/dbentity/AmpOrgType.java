@@ -12,9 +12,10 @@ import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.donorReport.OrganizationReportColumn;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.NameableOrIdentifiable;
 
 @TranslatableClass (displayName = "Organisation Type")
-public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimensionable, HierarchyListable {
+public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimensionable, HierarchyListable, NameableOrIdentifiable {
 	
 	private Long ampOrgTypeId;
     @TranslatableField
@@ -145,6 +146,14 @@ public class AmpOrgType implements Serializable,Comparable,Identifiable, ARDimen
     
     public void setOrgGroups(Set<AmpOrgGroup> aog){
     	this.orgGroups = aog;
+    }
+    
+    public String getName() {
+    	return this.orgType;
+    }
+    
+    public void setName(String orgType) {
+    	this.setOrgType(orgType);
     }
     
     public static String hqlStringForName(String idSource)

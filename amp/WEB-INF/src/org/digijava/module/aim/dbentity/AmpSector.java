@@ -13,6 +13,7 @@ import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.NameableOrIdentifiable;
 
 import java.util.Arrays;
 
@@ -20,7 +21,7 @@ import java.util.Arrays;
 @TranslatableClass (displayName = "Sector")
 public class AmpSector implements Serializable, Comparable, Identifiable,
 		ARDimensionable, HierarchyListable, AmpAutoCompleteDisplayable,
-		Cloneable, OrgProfileValue {
+		Cloneable, OrgProfileValue, NameableOrIdentifiable {
 	private Long ampSectorId;
 	private AmpSector parentSectorId;
 	private String sectorCode;

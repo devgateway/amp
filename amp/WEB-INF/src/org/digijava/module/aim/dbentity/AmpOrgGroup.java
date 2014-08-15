@@ -15,9 +15,10 @@ import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.NameableOrIdentifiable;
 
 @TranslatableClass (displayName = "Organisation Group")
-public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable,OrgProfileValue
+public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDimensionable, HierarchyListable,OrgProfileValue, NameableOrIdentifiable
 {
 	private Long ampOrgGrpId;
 	
@@ -164,6 +165,14 @@ public class AmpOrgGroup implements Serializable, Comparable, Identifiable, ARDi
 	}
 	public void setOrgGrpKeyAreas(String orgKeyAreas) {
 		this.orgGrpKeyAreas = orgKeyAreas;
+	}
+	
+	public String getName() {
+		return this.orgGrpName;
+	}
+	
+	public void setName(String orgGrpName) {
+		this.setOrgGrpName(orgGrpName);
 	}
 	
     public static String hqlStringForName(String idSource)

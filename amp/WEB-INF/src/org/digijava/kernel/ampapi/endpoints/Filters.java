@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.ampapi.endpoints.dto.Programs;
 import org.digijava.kernel.ampapi.endpoints.dto.Sectors;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -38,9 +39,37 @@ public class Filters {
     }
 
     @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String ping() {
-        return "Hello filters";
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<AvailableFilters> getAvailableFilters() {
+    	List<AvailableFilters>availableFilters=new ArrayList<Filters.AvailableFilters>(); 
+    	AvailableFilters sector=new AvailableFilters();
+    	sector.setName("Sectors");
+    	sector.setEndpoint("/rest/filters/sectors");
+    	availableFilters.add(sector);
+
+    	AvailableFilters activityStatus=new AvailableFilters();
+    	sector.setName("ActivityStatus");
+    	sector.setEndpoint("/rest/filters/activityStatus");
+    	availableFilters.add(sector);
+
+    	AvailableFilters boundaries=new AvailableFilters();
+    	sector.setName("Boundaries");
+    	sector.setEndpoint("/rest/filters/boundaries");
+    	availableFilters.add(sector);    	
+    	
+    	AvailableFilters sectorConfigName=new AvailableFilters();
+    	sector.setName("SectorConfigName");
+    	sector.setEndpoint("/rest/filters/sectorConfigName");
+    	availableFilters.add(sector);    	
+
+    	AvailableFilters programs=new AvailableFilters();
+    	sector.setName("Programs");
+    	sector.setEndpoint("/rest/filters/programs");
+    	availableFilters.add(sector);
+    	
+    	
+    	
+        return availableFilters;
     }
 
     /**
@@ -194,6 +223,33 @@ public class Filters {
     	
     	
     }
+
+	public class AvailableFilters {
+		public AvailableFilters() {
+
+		}
+
+		private String name;
+		private String endpoint;
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getEndpoint() {
+			return endpoint;
+		}
+
+		public void setEndpoint(String endpoint) {
+			this.endpoint = endpoint;
+		}
+
+	}
+    
     
     
 }

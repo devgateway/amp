@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints;
+package org.digijava.kernel.ampapi.endpoints.gis;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

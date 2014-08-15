@@ -8,6 +8,7 @@ import junit.framework.TestSuite;
 
 import org.digijava.kernel.ampapi.mondrian.util.Connection;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiConfigManager;
@@ -25,6 +26,8 @@ public class AllQueryTests_amp210 {
 			+ "JdbcUser=postgre;"
 			+ "JdbcPassword=postgre;"
 			+ "JdbcDrivers=org.postgresql.Driver";
+	
+	private static String PRINT_PATH = null;
 
 	public static Test suite() {
 		
@@ -48,6 +51,7 @@ public class AllQueryTests_amp210 {
 			//hack for ampDS initialization
 			MoConstants.CONNECTION_DS = CONNECTION_PATH;
 			Connection.IS_TESTING = true;
+			MondrianUtils.PRINT_PATH = PRINT_PATH;
 	   		
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
 			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_moldova_210";

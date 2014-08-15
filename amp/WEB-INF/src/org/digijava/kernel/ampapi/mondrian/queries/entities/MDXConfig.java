@@ -31,6 +31,9 @@ public class MDXConfig {
 	private boolean allowRowsEmptyData = false;
 	private boolean doRowTotals = false;
 	private boolean doColumnsTotals = false;
+	private int rowsHierarchiesTotals = 0;
+	private int colsHierarchiesTotals = 0;
+	
 	/**
 	 * @return the cubeName
 	 */
@@ -262,10 +265,34 @@ public class MDXConfig {
 		return doColumnsTotals;
 	}
 	/**
+	 * @return the number of rows hierarchies for which totals must be done
+	 */
+	public int getRowsHierarchiesTotals() {
+		return rowsHierarchiesTotals;
+	}
+	/**
+	 * @param rowsHierarchiesTotals the number of rows hierarchies for which totals must be done
+	 */
+	public void setRowsHierarchiesTotals(int rowsHierarchiesTotals) {
+		this.rowsHierarchiesTotals = rowsHierarchiesTotals;
+	}
+	/**
 	 * @param doColumnsTotals the doColumnsTotals to set
 	 */
 	public void setDoColumnsTotals(boolean doColumnsTotals) {
 		this.doColumnsTotals = doColumnsTotals;
+	}
+	/**
+	 * @return the number of columns hierarchies for each totals to be done
+	 */
+	public int getColsHierarchiesTotals() {
+		return colsHierarchiesTotals;
+	}
+	/**
+	 * @param columnHierarchiesTotals the number of columns hierarchies for each totals to be done
+	 */
+	public void setColumnsHierarchiesTotals(int colsHierarchiesTotals) {
+		this.colsHierarchiesTotals = colsHierarchiesTotals;
 	}
 	
 }

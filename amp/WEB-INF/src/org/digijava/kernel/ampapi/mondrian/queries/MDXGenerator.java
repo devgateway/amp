@@ -238,7 +238,7 @@ public class MDXGenerator {
 			axisMdx = "{" + MoConstants.FUNC_HIERARCHIZE + "(" + axisMdx + ")}"; //
 		} else {
 			axisMdx = getAxis(config, config.getColumnAttributes().listIterator(config.getColumnAttributes().size()), 
-					with, "COLSET", axisMdx, config.isDoColumnsTotals());
+					with, "COLSET", axisMdx, config.isDoColumnsTotals(), config.getColsHierarchiesTotals());
 		}
 		return axisMdx;
 	}
@@ -252,12 +252,13 @@ public class MDXGenerator {
 	 */
 	private String getRows(MDXConfig config, StringBuilder with) throws AmpApiException {
 		//assumption: only attributes are displayed per rows, no measures
-		return getAxis(config, config.getRowAttributes().listIterator(config.getRowAttributes().size()), with, "ROWSET", null, config.isDoRowTotals());
+		return getAxis(config, config.getRowAttributes().listIterator(config.getRowAttributes().size()), 
+				with, "ROWSET", null, config.isDoRowTotals(), config.getRowsHierarchiesTotals());
 	}
 	
 	/** supporting common method used by getRows and getColumns, because the algorithm is the same similar */
 	private String getAxis(MDXConfig config, ListIterator<MDXAttribute> reverseIterator, StringBuilder with, String withPrefix,
-							String initMember, boolean doTotals) throws AmpApiException {
+							String initMember, boolean doTotals, int numSubTotals) throws AmpApiException {
 		int setId = 0; //identifier suffix for 'with' member name
 		String crossJoin = initMember;
 		String prevAttrAll = initMember; //used if config.isDoColumnsTotals() is true
@@ -265,8 +266,8 @@ public class MDXGenerator {
 		for (ListIterator<MDXAttribute> iter = reverseIterator; iter.hasPrevious(); ) {
 			MDXAttribute rowAttr = iter.previous();
 			String attrNode = null;
-			String attrAll = doTotals ? getAll(rowAttr) : null;
-			String all = (crossJoin == null && doTotals) ? "{ %s, " + attrAll + "}" : "%s"; //build all in first crossJoin only for last element
+			String attrAll = doTotals || numSubTotals > 0 ? getAll(rowAttr) : null;
+			String all = (crossJoin == null && numSubTotals > 0) ? "{ %s, " + attrAll + "}" : "%s"; //build all in first crossJoin only for last element
 			if (config.getAxisFilters().containsKey(rowAttr)) {
 				//build a separate rowset to have a more readable MDX 
 				attrNode = withPrefix + (++setId);
@@ -281,11 +282,14 @@ public class MDXGenerator {
 				//for query with no totals, it is enough to do cross join 
 				crossJoin = String.format(MoConstants.FUNC_CROSS_JOIN_FORMAT, attrNode, crossJoin);
 				//for query with totals, we need to cross join 'all' members and make a union with standard members cross join
-				if (attrAll != null) {
+				if (doTotals) {
 					prevAttrAll = String.format(MoConstants.FUNC_CROSS_JOIN_FORMAT, attrAll, prevAttrAll);
+				}
+				if (numSubTotals > 0 || !iter.hasPrevious() && doTotals) {
 					crossJoin = String.format(MoConstants.FUNC_UNION_FORMAT, crossJoin, prevAttrAll); //totals are displayed after level's members
 				}
 			}
+			numSubTotals--;
 		}
 		return crossJoin;
 	}

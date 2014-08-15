@@ -61,6 +61,13 @@ public class MDXTests extends AmpTestCase {
 		generateAndValidateMDX(config, expectedRes, false);
 	}
 	
+	public void testNoHierarchicalTotals() {
+		String expectedRes = null;
+		MDXConfig config = getDefaultConfig("testNoHierarchicalTotals", true);
+		config.setRowsHierarchiesTotals(0);
+		generateAndValidateMDX(config, expectedRes, false);
+	}
+	
 	public void testNoColumnAttr() {
 		MDXConfig config = getDefaultConfig("testNoColumnAttr", true);
 		config.getColumnAttributes().clear();
@@ -90,7 +97,7 @@ public class MDXTests extends AmpTestCase {
 	
 	private void addSimpleFilter(MDXConfig config) {
 		MDXAttribute attrYear = new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, MoConstants.ATTR_YEAR);
-		MDXFilter filter = new MDXFilter(Arrays.asList("1980", "1994"), true, null);
+		MDXFilter filter = new MDXFilter(Arrays.asList("2010", "2012"), true, null);
 		config.getDataFilters().put(attrYear, filter);
 	}
 	
@@ -124,7 +131,7 @@ public class MDXTests extends AmpTestCase {
 	public void testMultipleHierarchies() {
 		String expectedRes = null;
 		MDXConfig config = getDefaultConfig("testMultipleHierarchies", true);
-		config.getColumnAttributes().add(0, new MDXAttribute(MoConstants.APPROVAL_STATUS, MoConstants.ATTR_APPROVAL_STATUS));
+		config.getColumnAttributes().add(new MDXAttribute(MoConstants.APPROVAL_STATUS, MoConstants.ATTR_APPROVAL_STATUS));
 		config.getRowAttributes().add(0, new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
 		addSimpleFilter(config); //filter for easier testing
 		generateAndValidateMDX(config, expectedRes, false);
@@ -165,7 +172,9 @@ public class MDXTests extends AmpTestCase {
 		config.addRowAttribute(new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_TYPE_NAME, MoConstants.ATTR_ORG_TYPE_NAME));
 		config.setAllowEmptyColumnsData(false);
 		config.setAllowEmptyRowsData(false);
+		config.setColumnsHierarchiesTotals(0);
 		config.setDoColumnsTotals(doTotals);
+		config.setRowsHierarchiesTotals(config.getRowAttributes().size());
 		config.setDoRowTotals(doTotals);
 		return config;
 	}

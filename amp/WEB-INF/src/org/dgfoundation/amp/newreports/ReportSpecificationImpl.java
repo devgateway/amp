@@ -24,6 +24,8 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	private boolean summaryReport = false;
 	private boolean calculateRowTotals = false;
 	private boolean calculateColumnTotals = false;
+	private int rowsHierarchiesTotals = 0;
+	private int colsHierarchyTotals = 0;
 	private boolean displayEmptyFundingColumns = false;
 	private boolean displayEmptyFundingRows = false;
 	
@@ -200,6 +202,34 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	@Override
 	public boolean isDisplayEmptyFundingRows() {
 		return this.displayEmptyFundingRows;
+	}
+
+	/**
+	 * @return the number of rows hierarchies to calculate the subtotals
+	 */
+	public int getRowsHierarchiesTotals() {
+		return rowsHierarchiesTotals;
+	}
+
+	/**
+	 * @param rowsHierarchiesTotals the rowHierarchiesTotals to set
+	 */
+	public void setRowsHierarchiesTotals(int rowsHierarchiesTotals) {
+		this.rowsHierarchiesTotals = rowsHierarchiesTotals;
+	}
+
+	/**
+	 * @return the number of column hierarchies to calculate the subtotals
+	 */
+	public int getColsHierarchyTotals() {
+		return colsHierarchyTotals;
+	}
+
+	/**
+	 * @param colsHierarchyTotals the number of column hierarchies to calculate the subtotals
+	 */
+	public void setColsHierarchyTotals(int colsHierarchyTotals) {
+		this.colsHierarchyTotals = colsHierarchyTotals;
 	}
 
 }

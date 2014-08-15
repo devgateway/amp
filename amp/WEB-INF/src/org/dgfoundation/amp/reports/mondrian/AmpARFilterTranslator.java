@@ -15,12 +15,10 @@ import java.util.Set;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportEntityType;
-import org.dgfoundation.amp.newreports.ReportFilters;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -34,43 +32,47 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  * Translates report filters from ARFilters to a configuration that is applicable for Mondrian Reports API
  * @author Nadejda Mandrescu
  */
-public class MondrianReportFilters implements ReportFilters {
+public class AmpARFilterTranslator {
 	//either transform filter by IDS, either by Names => if by IDS, then Level properties will be used
-	private static final boolean USE_IDS = false;  
+	private Map<ReportElement, FilterRule> filterRules;
+	private static final boolean USE_IDS = false;
 	private AmpARFilter arFilter;
-	private GroupingCriteria groupingCriteria;
 	ReportEntityType entityType;
 
-	public MondrianReportFilters(AmpARFilter arFilter, GroupingCriteria groupingCriteria) {
+	public AmpARFilterTranslator(AmpARFilter arFilter) {
 		this.setArFilter(arFilter);
 	}
 	
-	@Override
-	public Map<ReportElement, FilterRule> getFilterRules() {
-		Map<ReportElement, FilterRule> filterRules = new HashMap<ReportElement, FilterRule>();
-
-		this.entityType = arFilter.isPledgeFilter() ? ReportEntityType.ENTITY_TYPE_PLEDGE : ReportEntityType.ENTITY_TYPE_ACTIVITY;
+	public Map<ReportElement, FilterRule> buildFilters() {
+		filterRules = new HashMap<ReportElement, FilterRule>();
+		buildCurrentFilters();
 		//TODO: to clarify how pledge specific filters should be applied, e.g. if "include pledges" is selected, then translate current filter into pledge filter?
-		
-		addFilters(filterRules);
+		/*
+		AmpARFilter tmpArFilter = arFilter;
+		arFilter = arFilter.asPledgeFilter();
+		buildCurrentFilters();
+		arFilter = tmpArFilter;
+		*/
 		
 		return filterRules;
 	}
 	
-	private void addFilters(Map<ReportElement, FilterRule> filterRules) {
-		addOrganizationsFilters(filterRules);
-		addSectorFilters(filterRules);
-		addProgramAndNationalObjectivesFilters(filterRules);
+	private void buildCurrentFilters() {
+		this.entityType = arFilter.isPledgeFilter() ? ReportEntityType.ENTITY_TYPE_PLEDGE : ReportEntityType.ENTITY_TYPE_ACTIVITY;
+
+		addOrganizationsFilters();
+		addSectorFilters();
+		addProgramAndNationalObjectivesFilters();
 		
-		addLocationFilters(filterRules);
+		addLocationFilters();
 		
 		//financing
-		addFinancingFilters(filterRules);
+		addFinancingFilters();
 		
-		addFundingDatesFilters(filterRules);
+		addFundingDatesFilters();
 	}
 	
-	private void addFundingDatesFilters(Map<ReportElement, FilterRule> filterRules) {
+	private void addFundingDatesFilters() {
 		//if (!arFilter.hasDateFilter()) return;
 		String min = arFilter.getYearFrom() == null ? null : arFilter.getYearFrom().toString();
 		String max = arFilter.getYearTo() == null ? null : arFilter.getYearTo().toString();
@@ -98,29 +100,29 @@ public class MondrianReportFilters implements ReportFilters {
 		
 	}
 	
-	private void addOrganizationsFilters(Map<ReportElement, FilterRule> filterRules) {
+	private void addOrganizationsFilters() {
 		//Donor Agencies
-		addFilter(filterRules, arFilter.getDonorTypes(), ColumnConstants.DONOR_TYPE, ReportEntityType.ENTITY_TYPE_ALL);
-		addFilter(filterRules, arFilter.getDonorGroups(), 
+		addFilter(arFilter.getDonorTypes(), ColumnConstants.DONOR_TYPE, ReportEntityType.ENTITY_TYPE_ALL);
+		addFilter(arFilter.getDonorGroups(), 
 				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_DONOR_GROUP : ColumnConstants.DONOR_GROUP), entityType);
-		addFilter(filterRules, arFilter.getDonnorgAgency(), ColumnConstants.DONOR_AGENCY, ReportEntityType.ENTITY_TYPE_ALL);
+		addFilter(arFilter.getDonnorgAgency(), ColumnConstants.DONOR_AGENCY, ReportEntityType.ENTITY_TYPE_ALL);
 		
 		//Related Agencies
-		addFilter(filterRules, arFilter.getImplementingAgency(), ColumnConstants.IMPLEMENTING_AGENCY, ReportEntityType.ENTITY_TYPE_ALL);
-		addFilter(filterRules, arFilter.getExecutingAgency(), ColumnConstants.EXECUTING_AGENCY, ReportEntityType.ENTITY_TYPE_ALL);
-		addFilter(filterRules, arFilter.getBeneficiaryAgency(), ColumnConstants.BENEFICIARY_AGENCY, ReportEntityType.ENTITY_TYPE_ALL);
-		addFilter(filterRules, arFilter.getImplementingAgency(), ColumnConstants.RESPONSIBLE_ORGANIZATION, ReportEntityType.ENTITY_TYPE_ALL);
-		addFilter(filterRules, arFilter.getContractingAgency(), ColumnConstants.CONTRACTING_AGENCY, ReportEntityType.ENTITY_TYPE_ALL);
+		addFilter(arFilter.getImplementingAgency(), ColumnConstants.IMPLEMENTING_AGENCY, ReportEntityType.ENTITY_TYPE_ALL);
+		addFilter(arFilter.getExecutingAgency(), ColumnConstants.EXECUTING_AGENCY, ReportEntityType.ENTITY_TYPE_ALL);
+		addFilter(arFilter.getBeneficiaryAgency(), ColumnConstants.BENEFICIARY_AGENCY, ReportEntityType.ENTITY_TYPE_ALL);
+		addFilter(arFilter.getImplementingAgency(), ColumnConstants.RESPONSIBLE_ORGANIZATION, ReportEntityType.ENTITY_TYPE_ALL);
+		addFilter(arFilter.getContractingAgency(), ColumnConstants.CONTRACTING_AGENCY, ReportEntityType.ENTITY_TYPE_ALL);
 		//TODO: Secondary Beneficiary Agency Group	
 	}
 	
 	/** adds primary, secondary and tertiary sectors to the filters if specified */
-	private void addSectorFilters(Map<ReportElement, FilterRule> filterRules) { 
-		addFilter(filterRules, removeDescendents(arFilter.getSelectedSectors(), 0), 
+	private void addSectorFilters() { 
+		addFilter(removeDescendents(arFilter.getSelectedSectors(), 0), 
 				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECTORS : ColumnConstants.PRIMARY_SECTOR), entityType);
-		addFilter(filterRules, removeDescendents(arFilter.getSelectedSecondarySectors(), 1), 
+		addFilter(removeDescendents(arFilter.getSelectedSecondarySectors(), 1), 
 				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECONDARY_SECTORS : ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR), entityType);
-		addFilter(filterRules, arFilter.getSelectedTertiarySectors(), 
+		addFilter(arFilter.getSelectedTertiarySectors(), 
 				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_SECTORS : ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR), entityType);
 	}
 	
@@ -143,16 +145,16 @@ public class MondrianReportFilters implements ReportFilters {
 	}
 	
 	/** adds programs and national objectives filters */
-	private void addProgramAndNationalObjectivesFilters(Map<ReportElement, FilterRule> filterRules) {
-		addFilter(filterRules, arFilter.getSelectedPrimaryPrograms(), 
+	private void addProgramAndNationalObjectivesFilters() {
+		addFilter(arFilter.getSelectedPrimaryPrograms(), 
 				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_PROGRAMS : ColumnConstants.PRIMARY_PROGRAM), entityType);
-		addFilter(filterRules, arFilter.getSelectedSecondaryPrograms(), 
+		addFilter(arFilter.getSelectedSecondaryPrograms(), 
 				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECONDARY_PROGRAMS : ColumnConstants.SECONDARY_PROGRAM), entityType);
 		//TODO: how to detect tertiary programs
-		//addFilter(filterRules, arFilter.get(), 
+		//addFilter(arFilter.get(), 
 		//		(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_PROGRAMS : ColumnConstants.TERTIARY_PROGRAM), entityType);
 		
-		addFilter(filterRules, arFilter.getSelectedNatPlanObj(), 
+		addFilter(arFilter.getSelectedNatPlanObj(), 
 				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES : ColumnConstants.NATIONAL_PLANNING_OBJECTIVES), entityType);
 		
 		if (!arFilter.isPledgeFilter()) {
@@ -160,7 +162,7 @@ public class MondrianReportFilters implements ReportFilters {
 		}
 	}
 	
-	private void addLocationFilters(Map<ReportElement, FilterRule> filterRules) {
+	private void addLocationFilters() {
 		if (arFilter.isPledgeFilter()) { 
 			if (arFilter.getPledgesLocations() == null || arFilter.getPledgesLocations().size() == 0) return;
 		} else if (arFilter.getLocationSelected() == null || arFilter.getLocationSelected().size() == 0) return;
@@ -187,16 +189,16 @@ public class MondrianReportFilters implements ReportFilters {
 				locations.add(loc);
 		}
 		
-		addFilter(filterRules, countries, ColumnConstants.COUNTRY, ReportEntityType.ENTITY_TYPE_ALL);
-		addFilter(filterRules, regions, ColumnConstants.REGION, ReportEntityType.ENTITY_TYPE_ALL);
-		addFilter(filterRules, zones, ColumnConstants.ZONE, ReportEntityType.ENTITY_TYPE_ALL);
-		addFilter(filterRules, districts, ColumnConstants.DISTRICT, ReportEntityType.ENTITY_TYPE_ALL);
-		//addIdsFilter(filterRules, locations, ColumnConstants.??); //TODO:
+		addFilter(countries, ColumnConstants.COUNTRY, ReportEntityType.ENTITY_TYPE_ALL);
+		addFilter(regions, ColumnConstants.REGION, ReportEntityType.ENTITY_TYPE_ALL);
+		addFilter(zones, ColumnConstants.ZONE, ReportEntityType.ENTITY_TYPE_ALL);
+		addFilter(districts, ColumnConstants.DISTRICT, ReportEntityType.ENTITY_TYPE_ALL);
+		//addIdsFilter(locations, ColumnConstants.??); //TODO:
 	}
 	
-	private void addFilter(Map<ReportElement, FilterRule> filterRules, Set<? extends NameableOrIdentifiable> set, String columnName, 
+	private void addFilter(Set<? extends NameableOrIdentifiable> set, String columnName, 
 			ReportEntityType type) {
-		addFilter(filterRules, set, columnName, type, null);
+		addFilter(set, columnName, type, null);
 	}
 	
 	/**
@@ -207,7 +209,7 @@ public class MondrianReportFilters implements ReportFilters {
 	 * @param type - column type or null if elemType is provided
 	 * @param elemType - element type or null if columnName is provided
 	 */
-	private void addFilter(Map<ReportElement, FilterRule> filterRules, Collection<? extends NameableOrIdentifiable> set, String columnName, 
+	private void addFilter(Collection<? extends NameableOrIdentifiable> set, String columnName, 
 			ReportEntityType type, ReportElement.ElementType elemType) {
 		if (set == null || set.size() == 0) return;
 		List<String> values = new ArrayList<String>(set.size());
@@ -225,16 +227,16 @@ public class MondrianReportFilters implements ReportFilters {
 			filterRules.put(new ReportElement(elemType), new FilterRule(values, true, USE_IDS));
 	}
 	
-	private void addFinancingFilters(Map<ReportElement, FilterRule> filterRules) {
-		addCategoryValueNamesFilter(filterRules, arFilter.getFinancingInstruments(), ColumnConstants.FINANCING_INSTRUMENT, ReportEntityType.ENTITY_TYPE_ALL);
-		addCategoryValueNamesFilter(filterRules, arFilter.getAidModalities(), ColumnConstants.MODALITIES, ReportEntityType.ENTITY_TYPE_ACTIVITY);
-		addCategoryValueNamesFilter(filterRules, arFilter.getTypeOfAssistance(), ColumnConstants.TYPE_OF_ASSISTANCE, ReportEntityType.ENTITY_TYPE_ACTIVITY);
+	private void addFinancingFilters() {
+		addCategoryValueNamesFilter(arFilter.getFinancingInstruments(), ColumnConstants.FINANCING_INSTRUMENT, ReportEntityType.ENTITY_TYPE_ALL);
+		addCategoryValueNamesFilter(arFilter.getAidModalities(), ColumnConstants.MODALITIES, ReportEntityType.ENTITY_TYPE_ACTIVITY);
+		addCategoryValueNamesFilter(arFilter.getTypeOfAssistance(), ColumnConstants.TYPE_OF_ASSISTANCE, ReportEntityType.ENTITY_TYPE_ACTIVITY);
 		//TODO capital vs Recurrent
-		//addCategoryValueNamesFilter(filterRules, arFilter.get, ColumnConstants., ReportEntityType.ENTITY_TYPE_ACTIVITY);
-		addCategoryValueNamesFilter(filterRules, arFilter.getBudget(), ColumnConstants.ON_OFF_TREASURY_BUDGET, ReportEntityType.ENTITY_TYPE_ACTIVITY);
+		//addCategoryValueNamesFilter(arFilter.get, ColumnConstants., ReportEntityType.ENTITY_TYPE_ACTIVITY);
+		addCategoryValueNamesFilter(arFilter.getBudget(), ColumnConstants.ON_OFF_TREASURY_BUDGET, ReportEntityType.ENTITY_TYPE_ACTIVITY);
 	}
 	
-	private void addCategoryValueNamesFilter(Map<ReportElement, FilterRule> filterRules, Set<AmpCategoryValue> set, String columnName, ReportEntityType type) {
+	private void addCategoryValueNamesFilter(Set<AmpCategoryValue> set, String columnName, ReportEntityType type) {
 		if (set == null || set.size() == 0) return;
 		//TODO: can we filter by ids? no schema definition is available yet 
 		List<String> names = new ArrayList<String>(set.size());

@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
@@ -22,13 +21,11 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.ReportUtils;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -39,15 +36,13 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  * @author Nadejda Mandrescu
  */
 public class MondrianReportsTests extends AmpTestCase {
-	private static String PRINT_PATH = null;
-
+	
 	private MondrianReportsTests(String name) {
 		super(name);
 	}
 	
 	public static Test suite()
 	{
-		MondrianUtils.PRINT_PATH = PRINT_PATH;
 		TestSuite suite = new TestSuite(MondrianReportsTests.class.getName());
 		suite.addTest(new MondrianReportsTests("testNoTotals"));
 		suite.addTest(new MondrianReportsTests("testTotals"));
@@ -113,17 +108,14 @@ public class MondrianReportsTests extends AmpTestCase {
 	public void testAmpReportToReportSpecification() {
 		//AmpReports report = (AmpReports) PersistenceManager.getSession().get(AmpReports.class, 1018L);//id is from Moldova DB, TODO: update for tests db 
 		AmpReports report = ReportTestingUtils.loadReportByName("NadiaMondrianTest");
-		ReportSpecificationImpl spec = ReportUtils.toReportSpecification(report);
-		
+
 		org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
 		mockRequest.setAttribute("ampReportId", report.getId().toString());
 		TLSUtils.populate(mockRequest);
 		ReportContextData.createWithId(report.getId().toString(), true);
-		
-		AmpARFilter filter = FilterUtil.buildFilter(report, report.getAmpReportId());
-		
-		spec.setFilters(new MondrianReportFilters(filter, spec.getGroupingCriteria()));
 
+		ReportSpecificationImpl spec = ReportUtils.toReportSpecification(report);
+		
 		generateAndValidate(spec, true);
 	}
 	

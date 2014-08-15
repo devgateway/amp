@@ -21,6 +21,7 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.node.LongNode;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
+import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
@@ -29,7 +30,10 @@ import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.dbentity.AmpMapState;
+import org.digijava.module.esrigis.helpers.DbHelper;
+import org.digijava.module.esrigis.helpers.MapConstants;
 import org.hibernate.Criteria;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
@@ -43,6 +47,7 @@ import org.hibernate.Session;
 @Path("gis")
 public class GisEndPoints {
 	private static final Logger logger = Logger.getLogger(GisEndPoints.class);
+
 	/**
 	 * Returns Aggregate ADM info by ADM Level
 	 * 
@@ -73,6 +78,7 @@ public class GisEndPoints {
 
 		return result;
 	}
+
 	/**
 	 * Returns Aggregate ADM info by ADM Level
 	 * 
@@ -89,22 +95,21 @@ public class GisEndPoints {
 	@Path("/project-sites")
 	@Produces(MediaType.APPLICATION_JSON)
 	public final FeatureCollectionGeoJSON getProjectSites(final JsonBean filter) {
-		FeatureCollectionGeoJSON f= new FeatureCollectionGeoJSON();
-		
-		
+		FeatureCollectionGeoJSON f = new FeatureCollectionGeoJSON();
+
 		FeatureGeoJSON fgj = new FeatureGeoJSON();
 		PointGeoJSON pg = new PointGeoJSON();
-		pg.coordinates.add( 27.91667);
-		pg.coordinates.add( 47.78333);
-		
+		pg.coordinates.add(27.91667);
+		pg.coordinates.add(47.78333);
+
 		fgj.properties.put("structureid", new LongNode(205));
 		fgj.properties.put("title", new TextNode("Building a School"));
 		fgj.properties.put("projectId", new LongNode(1253));
 		fgj.properties.put("admId", new LongNode(23));
 		fgj.geometry = pg;
-		
+
 		f.features.add(fgj);
-		
+
 		return f;
 	}
 
@@ -129,7 +134,7 @@ public class GisEndPoints {
 			s.flush();
 			mapId.set("mapId", map.getId());
 		} catch (DgException e) {
-			logger.error("Cannot Save map",e);
+			logger.error("Cannot Save map", e);
 			throw new WebApplicationException(e);
 		}
 		return mapId;
@@ -137,21 +142,20 @@ public class GisEndPoints {
 
 	@GET
 	@Path("/saved-maps/{mapId}")
-	
 	@Produces(MediaType.APPLICATION_JSON)
 	public JsonBean savedMaps(@PathParam("mapId") Long mapId) {
 		JsonBean jMap = null;
 		try {
 			Session s = PersistenceManager.getRequestDBSession();
 			AmpMapState map = (AmpMapState) s.load(AmpMapState.class, mapId);
-			jMap = getJsonBeanFromMapState(map,Boolean.TRUE);
+			jMap = getJsonBeanFromMapState(map, Boolean.TRUE);
 			map.setLastAccesedDate(new Date());
 			s.merge(map);
 
 		} catch (ObjectNotFoundException e) {
 			jMap = new JsonBean();
 		} catch (DgException e) {
-			logger.error("cannot get map by id " + mapId,e);
+			logger.error("cannot get map by id " + mapId, e);
 			throw new WebApplicationException(e);
 		}
 		return jMap;
@@ -170,15 +174,35 @@ public class GisEndPoints {
 					.createCriteria(AmpMapState.class);
 			List l = mapsCriteria.list();
 			for (Object map : l) {
-				maps.add(getJsonBeanFromMapState((AmpMapState) map, Boolean.FALSE));
+				maps.add(getJsonBeanFromMapState((AmpMapState) map,
+						Boolean.FALSE));
 			}
 			return maps;
 		} catch (DgException e) {
-			logger.error("Cannot get maps list",e);
+			logger.error("Cannot get maps list", e);
 			throw new WebApplicationException(e);
 		}
 	}
-	
+
+	@GET
+	@Path("/indicator-layers")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<IndicatorLayers> getIndicatorLayers() {
+		List<IndicatorLayers> indicatorLayers = new ArrayList<IndicatorLayers>();
+		List<AmpMapConfig> mapsConfigs = DbHelper.getMaps();
+		for (AmpMapConfig ampMapConfig : mapsConfigs) {
+			IndicatorLayers i = new IndicatorLayers();
+			i.setId(ampMapConfig.getId());
+			i.setTitle(ampMapConfig.getConfigName());
+			i.setLink(ampMapConfig.getMapUrl());
+			String type = MapConstants.mapTypeNames.get(ampMapConfig
+					.getMapType());
+			i.setType(type);
+			indicatorLayers.add(i);
+		}
+		return indicatorLayers;
+	}
+
 	private FeatureGeoJSON getPoint(Double lat, Double lon,
 			List<Long> activityid, String adm) {
 		FeatureGeoJSON fgj = new FeatureGeoJSON();
@@ -189,13 +213,11 @@ public class GisEndPoints {
 		fgj.properties.put("activityid", new POJONode(activityid));
 		fgj.properties.put("admName", new TextNode(adm));
 
-		
-		
 		fgj.geometry = pg;
 		return fgj;
 	}
 
-	private JsonBean getJsonBeanFromMapState(AmpMapState map,Boolean getBlob) {
+	private JsonBean getJsonBeanFromMapState(AmpMapState map, Boolean getBlob) {
 		JsonBean jMap = new JsonBean();
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
 		TimeZone tz = TimeZone.getTimeZone("UTC");
@@ -204,7 +226,7 @@ public class GisEndPoints {
 		jMap.set("id", map.getId());
 		jMap.set("title", map.getTitle());
 		jMap.set("description", map.getDescription());
-		if(getBlob){
+		if (getBlob) {
 			jMap.set("stateBlob", map.getStateBlob());
 		}
 		jMap.set("created", df.format(map.getCreatedDate()));

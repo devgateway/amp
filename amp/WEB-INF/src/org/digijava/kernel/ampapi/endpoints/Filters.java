@@ -42,30 +42,31 @@ public class Filters {
     @Produces(MediaType.APPLICATION_JSON)
     public List<AvailableFilters> getAvailableFilters() {
     	List<AvailableFilters>availableFilters=new ArrayList<Filters.AvailableFilters>(); 
+    	
     	AvailableFilters sector=new AvailableFilters();
     	sector.setName("Sectors");
     	sector.setEndpoint("/rest/filters/sectors");
     	availableFilters.add(sector);
 
     	AvailableFilters activityStatus=new AvailableFilters();
-    	sector.setName("ActivityStatus");
-    	sector.setEndpoint("/rest/filters/activityStatus");
-    	availableFilters.add(sector);
+    	activityStatus.setName("ActivityStatus");
+    	activityStatus.setEndpoint("/rest/filters/activityStatus");
+    	availableFilters.add(activityStatus);
 
     	AvailableFilters boundaries=new AvailableFilters();
-    	sector.setName("Boundaries");
-    	sector.setEndpoint("/rest/filters/boundaries");
-    	availableFilters.add(sector);    	
+    	boundaries.setName("Boundaries");
+    	boundaries.setEndpoint("/rest/filters/boundaries");
+    	availableFilters.add(boundaries);    	
     	
     	AvailableFilters sectorConfigName=new AvailableFilters();
-    	sector.setName("SectorConfigName");
-    	sector.setEndpoint("/rest/filters/sectorConfigName");
-    	availableFilters.add(sector);    	
+    	sectorConfigName.setName("SectorConfigName");
+    	sectorConfigName.setEndpoint("/rest/filters/sectorConfigName");
+    	availableFilters.add(sectorConfigName);    	
 
     	AvailableFilters programs=new AvailableFilters();
-    	sector.setName("Programs");
-    	sector.setEndpoint("/rest/filters/programs");
-    	availableFilters.add(sector);
+    	programs.setName("Programs");
+    	programs.setEndpoint("/rest/filters/programs");
+    	availableFilters.add(programs);
     	
     	
     	

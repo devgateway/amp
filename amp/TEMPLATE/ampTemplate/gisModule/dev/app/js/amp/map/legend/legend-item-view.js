@@ -6,6 +6,7 @@ var Template = fs.readFileSync(__dirname + '/legend-item-template.html', 'utf8')
 // classes for instanceof checks
 var IndicatorJoin = require('../../data/models/indicator-join-model');
 var IndicatorWMS = require('../../data/models/indicator-wms-model');
+var IndicatorArcGIS = require('../../data/models/indicator-arcgis-model');
 var ProjectSites = require('../../data/models/project-sites-model');
 
 
@@ -22,6 +23,8 @@ module.exports = Backbone.View.extend({
       this.renderAsGeoJSON();
     } else if (this.model instanceof IndicatorWMS) {
       this.renderAsWMS();
+    } else if (this.model instanceof IndicatorArcGIS) {
+      this.renderAsArcGIS();
     } else if (this.model instanceof ProjectSites) {
       this.renderAsProjectSites();
     } else {
@@ -52,6 +55,17 @@ module.exports = Backbone.View.extend({
       legendType: 'img',
       legendSrc: base + qs + wmsLayer
     })));
+  },
+
+  renderAsArcGIS: function() {
+    this.listenTo(this.model, 'change:min change:max', function() {
+      this.$el.html(this.template(_.extend({}, this.model.toJSON(), {
+        status: 'loaded',
+        legendType: 'colours',
+        colourBuckets: this.model.palette.colours,
+        unit: ''
+      })));
+    });
   },
 
   renderAsProjectSites: function() {

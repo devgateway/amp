@@ -1,5 +1,12 @@
 [
   {
+    "id": "drc-food",
+    "title": "ADM Join Sample",
+    "type": "joinBoundaries",
+    "link": "/rest/gis/indicator-layers/drc-food",
+    "joinBoundariesLink": "/rest/gis/boundaries/adm-1"
+  },
+  {
     "id": "umbrellas",
     "title": "WMS Sample",
     "type": "wms",
@@ -7,10 +14,17 @@
     "link": "http://gis.devgateway.org:6080/arcgis/services/gis-reeng/UmbrellasPer100Ppl/MapServer/WmsServer"
   },
   {
-    "id": "drc-food",
-    "title": "ADM Join Sample",
-    "type": "joinBoundaries",
-    "link": "/rest/gis/indicator-layers/drc-food",
-    "joinBoundariesLink": "/rest/gis/boundaries/adm-1"
+    "id": "dense",
+    "title": "WMS 2",
+    "type": "wms",
+    "layer": "0",
+    "link": "http://gis.devgateway.org:6080/arcgis/services/gis-reeng/DensityOfSomePointsIMade/MapServer/WMSServer"
+  },
+  {
+    "id": "umbrellas-again",
+    "title": "ArcGIS Feature Sample",
+    "type": "arcgis",
+    "link": "http://gis.devgateway.org:6080/arcgis/rest/services/gis-reeng/UmbrellasPer100Ppl/MapServer/0",
+    "property": "COD_adm2.UmbsPer100"
   }
 ]

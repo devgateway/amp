@@ -28,9 +28,11 @@ module.exports = Backbone.View.extend({
     this.listenToOnce(layer, 'processed', function ShowLoadedLayer() {
       var layerType = layer.get('type');
       if (layerType === 'joinBoundaries') {  // geojson
-        loadedLayer = self.showNewGeoJSONLayer(layer);
+        loadedLayer = self.getNewGeoJSONLayer(layer);
       } else if (layerType === 'wms') {
-        loadedLayer = self.showNewWMSLayer(layer);
+        loadedLayer = self.getNewWMSLayer(layer);
+      } else if (layerType === 'arcgis') {
+        loadedLayer = self.getNewArcGISLayer(layer);
       } else {
         throw new Error('Map view for layer type not implemented. layer:', layer);
       }
@@ -49,7 +51,7 @@ module.exports = Backbone.View.extend({
     this.map.removeLayer(leafletLayer);
   },
 
-  showNewGeoJSONLayer: function(layer) {
+  getNewGeoJSONLayer: function(layer) {
     var featureValue,
         colour;
 
@@ -72,7 +74,7 @@ module.exports = Backbone.View.extend({
     });
   },
 
-  showNewWMSLayer: function(layer) {
+  getNewWMSLayer: function(layer) {
     return L.tileLayer.wms(layer.get('link'), {
       layers: layer.get('layer'),
       // TODO: should these details be obtained from the API?
@@ -80,6 +82,10 @@ module.exports = Backbone.View.extend({
       transparent: true,
       opacity: 0.75
     });
+  },
+
+  getNewArcGISLayer: function(layer) {
+    return layer.esriLayer;
   }
 
 });

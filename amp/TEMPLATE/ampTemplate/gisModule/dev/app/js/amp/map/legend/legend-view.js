@@ -6,7 +6,7 @@ var Template = fs.readFileSync(__dirname + '/legend-template.html', 'utf8');
 
 module.exports = Backbone.View.extend({
 
-  className: 'legend expanded',
+  className: 'legend',
 
   template: _.template(Template),
 
@@ -16,29 +16,27 @@ module.exports = Backbone.View.extend({
 
   initialize: function(options) {
     this.app = options.app;
-    this.expanded = false;
     this.listenTo(this.app.data, 'show hide', this.render);
   },
 
-  render: function() {
+  render: function(ev) {
+    console.log(ev);
     this.$el.html(this.template());
 
-    this.$('.legend-content').html(
-      this.app.data.getAllVisibleLayers().map(function(layer) {
-        return (new LegendItem({ model: layer })).render().el;
-      }).value()
-    );
+    var content = this.app.data.getAllVisibleLayers().map(function(layer) {
+      return (new LegendItem({ model: layer })).render().el;
+    }).value();
+
+    if (! _.isEmpty(content)) {
+      this.$el.addClass('expanded');  // always expand when new layers are added
+      this.$('.legend-content').html(content);
+    };
 
     return this;
   },
 
   toggleLegend: function() {
-    this.expanded = !this.expanded;
-    if (this.expanded) {
-      this.$el.addClass('expanded');
-    } else {
-      this.$el.removeClass('expanded');
-    }
+    this.$el.toggleClass('expanded');
   }
 
 });

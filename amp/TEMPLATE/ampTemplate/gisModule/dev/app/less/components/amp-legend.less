@@ -29,7 +29,8 @@
       top: 5px;
       height: 17px;
       width: 16px;
-      border-bottom: 2px solid white;
+      border: 2px solid white;
+      border-width: 0 0 2px;
     }
     &:hover:after {
       background: rgba(0, 0, 0, 0.25);
@@ -56,8 +57,14 @@
   }
 
   &:not(.expanded) {
-    .legend-header > a:after {
-      display: none;
+    .legend-header > a {
+      &:after {
+        display: none;
+      }
+      &:hover:after {
+        display: block;
+        border-width: 2px 0 0;
+      }
     }
     .legend-content {
       height: 0;

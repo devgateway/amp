@@ -55,6 +55,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.*;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
@@ -260,67 +261,80 @@ public class ActivityUtil {
 		Boolean crossTeamValidation = ampCurrentMember.getAmpTeam().getCrossteamvalidation();
 		Boolean isSameWorkspace = ampCurrentMember.getAmpTeam().getAmpTeamId()==a.getTeam().getAmpTeamId();
 		
-		if(teamLeadFlag){
-			if(draft){
-				if(rejected){
-					a.setApprovalStatus(Constants.REJECTED_STATUS);
-				}else{
-					a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
-				}
-			}
-			else{
-				if(isSameWorkspace){
-					a.setApprovalStatus(Constants.APPROVED_STATUS);
-					a.setApprovedBy(ampCurrentMember);
-					a.setApprovalDate(Calendar.getInstance().getTime());
-				}else{
-					if(crossTeamValidation){
+		// Check if validation is ON in GS and APP Settings 
+		if ("On".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION))
+				&& !"validationOff".equalsIgnoreCase(validation)) {
+			if (teamLeadFlag) {
+				if (draft) {
+					if (rejected) {
+						a.setApprovalStatus(Constants.REJECTED_STATUS);
+					} else {
+						a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
+					}
+				} else {
+					// If activity belongs to the same workspace where TL/AP is
+					// logged set it validated
+					if (isSameWorkspace) {
 						a.setApprovalStatus(Constants.APPROVED_STATUS);
 						a.setApprovedBy(ampCurrentMember);
 						a.setApprovalDate(Calendar.getInstance().getTime());
-					}else{
-						a.setApprovalStatus(Constants.STARTED_STATUS);
-					}
-				}
-				
-			}
-		}else{
-			if(validation == null || "validationOff".equals(validation)){
-				if(newActivity){
-					a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
-				}else{
-					a.setApprovalStatus(Constants.APPROVED_STATUS);
-				}
-			}else{
-				if("newOnly".equals(validation)){
-					if(newActivity){
-						//all the new activities will have the started status
-						a.setApprovalStatus(Constants.STARTED_STATUS);
-					}
-					else{
-						//if we edit an existing not validated status it will keep the old status - started
-						if(oldA.getApprovalStatus()!=null && Constants.STARTED_STATUS.compareTo(oldA.getApprovalStatus())==0)
+					} else {
+						/*
+						 * If activity doesn't belongs to the same workspace
+						 * where TL/AP is logged but cross team validation is on
+						 * set it validated
+						 */
+						if (crossTeamValidation) {
+							a.setApprovalStatus(Constants.APPROVED_STATUS);
+							a.setApprovedBy(ampCurrentMember);
+							a.setApprovalDate(Calendar.getInstance().getTime());
+						} else {
 							a.setApprovalStatus(Constants.STARTED_STATUS);
-						//if we edit an existing activity that is validated or startedvalidated or edited
-						else  a.setApprovalStatus(Constants.APPROVED_STATUS);
-					}
-				}
-					else{
-						if("allEdits".equals(validation)){
-							if(newActivity){
-								a.setApprovalStatus(Constants.STARTED_STATUS);
-							}
-							else{
-								if(oldA.getApprovalStatus()!=null && Constants.STARTED_STATUS.compareTo(oldA.getApprovalStatus())==0)
-									a.setApprovalStatus(Constants.STARTED_STATUS);
-								else a.setApprovalStatus(Constants.EDITED_STATUS);
-							}
 						}
 					}
-					
 				}
+			} else {
+				if ("newOnly".equals(validation)) {
+					if (newActivity) {
+						// all the new activities will have the started status
+						a.setApprovalStatus(Constants.STARTED_STATUS);
+					} else {
+						// if we edit an existing not validated status it will
+						// keep the old status - started
+						if (oldA.getApprovalStatus() != null
+								&& Constants.STARTED_STATUS.compareTo(oldA.getApprovalStatus()) == 0)
+							a.setApprovalStatus(Constants.STARTED_STATUS);
+						// if we edit an existing activity that is validated or
+						// startedvalidated or edited
+						else
+							a.setApprovalStatus(Constants.APPROVED_STATUS);
+					}
+				} else {
+					if ("allEdits".equals(validation)) {
+						if (newActivity) {
+							a.setApprovalStatus(Constants.STARTED_STATUS);
+						} else {
+							if (oldA.getApprovalStatus() != null
+									&& Constants.STARTED_STATUS.compareTo(oldA.getApprovalStatus()) == 0)
+								a.setApprovalStatus(Constants.STARTED_STATUS);
+							else
+								a.setApprovalStatus(Constants.EDITED_STATUS);
+						}
+					}
+				}
+
+			}
+
+		} else {
+			// Validation is OF in GS activity approved
+			if (newActivity) {
+				a.setApprovalStatus(Constants.STARTED_APPROVED_STATUS);
+			} else {
+				a.setApprovalStatus(Constants.APPROVED_STATUS);
+			}
+			a.setApprovedBy(ampCurrentMember);
+			a.setApprovalDate(Calendar.getInstance().getTime());
 		}
-				
 	}
 
 	/**

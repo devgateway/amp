@@ -58,29 +58,7 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
 	
 	private static Logger logger = Logger.getLogger(CloseExpiredActivitiesJob.class);
 	
-//	/**
-//	 * returns a map of "activity status by amp_activity_id"
-//	 * @param session
-//	 * @param eligibleIds
-//	 * @return
-//	 */
-//	public java.util.Map<Long, Long> getStatuses(Session session, List<Long> eligibleIds)
-//	{
-//		java.util.Map<Long, Long> res = new java.util.TreeMap<Long, Long>();
-//		if (eligibleIds.isEmpty())
-//			return res; // nothing to return, avoid generating an invalid SQL query
-//		String query = "SELECT amp_activity_id, amp_status_id FROM v_status WHERE amp_activity_id IN (" + Util.toCSString(eligibleIds) + ")";
-//		List<Object[]> bla = session.createSQLQuery(query).list();
-//		for(Object[] ass:bla)
-//		{
-//			BigInteger amp_bi = (BigInteger) ass[0], status_bi = (BigInteger) ass[1];			
-//			Long amp_id = amp_bi.longValue();
-//			Long status_id = status_bi.longValue();
-//			res.put(amp_id, status_id);
-//		}
-//		return res;
-//	}
-	
+
 	/**
 	 * clones activity, sets modifying member, modification date, etc
 	 * @param session
@@ -196,9 +174,12 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
     			closeableActivities = session.createQuery(queryString).list();
     		}
     		
+    		String newStatus = Constants.APPROVED_STATUS;
     		for(AmpActivityVersion ver:closeableActivities)
     		{
-        		String newStatus = ver.getApprovalStatus().equals(Constants.STARTED_APPROVED_STATUS) ? Constants.STARTED_STATUS : Constants.EDITED_STATUS;
+    			if ("On".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION))) {
+    				 newStatus = ver.getApprovalStatus().equals(Constants.STARTED_APPROVED_STATUS) ? Constants.STARTED_STATUS : Constants.EDITED_STATUS;
+    			}
         		
         		AmpCategoryValue oldActivityStatus = CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACTIVITY_STATUS_NAME, ver.getCategories());
         		

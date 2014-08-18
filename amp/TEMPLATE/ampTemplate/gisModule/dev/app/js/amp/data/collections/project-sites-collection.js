@@ -12,32 +12,10 @@ module.exports = Backbone.Collection.extend({
   url: APIHelper.getAPIBase() + '/rest/gis/cluster',
 
   initialize : function(videos) {
-    this.add([
-      new ProjectSitesModel()//,
-      // new ADMClusterModel({
-      //   title: 'Projects by Province',
-      //   value: 'adm-1'
-      // }),
-      // new ADMClusterModel({
-      //   title: 'Projects by District',
-      //   value: 'adm-2'
-      // })
+    this.add([  // TODO: move to gis-data
+      new ProjectSitesModel()
     ]);
 
-    // LEGACY
-    // this.listenTo(this, 'change:selected', this._selectionChanged);
-  },
+  }
 
-  // LEGACY
-  // _selectionChanged: function(model, newSelectState) {
-  //   // child is selected, disable rest, and emit
-  //   // TODO: move to app.data and let layer listen to its changes
-  //   if (_.contains(['adm-1', 'adm-2'], model.get('value'))) {
-  //     if (newSelectState) {
-  //       Backbone.trigger('MAP_LOAD_PROJECT_LAYER', model.get('value'));
-  //     } else { // no children selected
-  //       Backbone.trigger('MAP_LOAD_PROJECT_LAYER', null);
-  //     }
-  //   }
-  // }
 });

@@ -16,7 +16,6 @@ module.exports = Backbone.View.extend({
   BIG_ICON_RADIUS: 7,
   currentRadius: 2,
   markerCluster: null,
-  layerLoadState: 'pending',  // 'loading', 'loaded'.
 
   popup: null,
   projectListTemplate: _.template(ProjectListTemplate),
@@ -37,6 +36,10 @@ module.exports = Backbone.View.extend({
 
   initCluster: function() {
     var self = this;
+
+    this.layerLoadState = 'pending';  // 'loading', 'loaded'.
+
+
     //TODO: checkout prune cluster, supposedly way faster...
     // may also be worth doing manually since we don't want updates on zoom
     // TODO: make sizing dynamic based on highest cluster... and put into own function...

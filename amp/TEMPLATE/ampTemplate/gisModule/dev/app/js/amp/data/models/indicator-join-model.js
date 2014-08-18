@@ -9,7 +9,6 @@ var Palette = require('../../colours/colour-palette');
 module.exports = Backbone.Model.extend({
 
   initialize: function() {
-    var self = this;
 
     // private load/processing state tracking
     this._dataLoaded = new Deferred();
@@ -28,10 +27,6 @@ module.exports = Backbone.Model.extend({
   load: function() {
     /*
      * Load the data for this layer, load the boundary to join with, and join.
-     *
-     * This method is asynchronous, and there are two ways to follow up:
-     * 1. Attach a callback with the returned promise
-     * 2. Listen on this model for change:geoJSON
      */
     var self = this;
     if (this._dataLoaded.state() === 'pending') {
@@ -55,13 +50,13 @@ module.exports = Backbone.Model.extend({
       self.updatePaletteRange();
     });
 
-    this._boundaryJoined.then(function() {
-      self.trigger('processed', self);
-    });
-
     when(this._boundaryLoaded, this._dataLoaded).then(function(geoJSON) {
       // TODO: passing the geoJSON through here is sketch
       self._joinDataWithBoundaries(geoJSON);
+    });
+
+    this._boundaryJoined.then(function() {
+      self.trigger('processed', self);
     });
 
     return this._dataLoaded.promise();

@@ -4,8 +4,6 @@ var Backbone = require('backbone');
 var $ = require('jquery');
 var state = require('../../../services/state');
 
-// var ProjectLayerCollection = require('../collections/project-layer-collection');
-
 var BaseControlView = require('../../base-control/base-control-view');
 var OptionView = require('./option-view');
 

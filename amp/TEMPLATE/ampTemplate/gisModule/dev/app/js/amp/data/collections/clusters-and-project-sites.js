@@ -17,8 +17,10 @@ module.exports = Backbone.Collection
 
   watchCollection: function(collection) {
     this._watched.push(collection);
+
     // hijack an expected method on the collections for RadioMixin
     collection.toggleSelect = _.bind(this.toggleSelect, this);
+
     this.listenTo(collection, 'all', this.trigger);
     this.listenTo(collection, 'all', this.stuffUpdated);
   },

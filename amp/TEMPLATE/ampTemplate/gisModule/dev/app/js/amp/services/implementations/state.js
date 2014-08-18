@@ -21,7 +21,7 @@ function State() {
   this.reset = function clearState() {
     // Restore all states to their defaults (specified at registration)
     var changed = false;
-    _.each(this._stateRegistry, function(state, id) {
+    _.each(this._stateRegistry, function(state) {
       var currentState = state.get();
       if (! _.isEqual(currentState, state.empty)) {
         // only call .set if resetting will actually change the state.

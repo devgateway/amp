@@ -1,5 +1,3 @@
-var _ = require('underscore');
-var Backbone = require('backbone');
 var BaseFilterModel = require('../models/base-filter-model');
 
 
@@ -11,7 +9,7 @@ module.exports = BaseFilterModel.extend({
         title: 'Years',
         totalCount: 126,
         activeCount: 0
-    });
-  },
+      });
+  }
 
 });

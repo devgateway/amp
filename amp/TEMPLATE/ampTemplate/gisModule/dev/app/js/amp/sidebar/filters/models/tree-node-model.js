@@ -1,16 +1,16 @@
-var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
-var $ = require('jquery');
-var TreeNodeCollection;
+var TreeNodeModel; // declare here to help with ref loop of collection and model
+var TreeNodeCollection = Backbone.Collection.extend({  model:TreeNodeModel });
 
-var TreeNodeModel = Backbone.Model.extend({
+
+TreeNodeModel = Backbone.Model.extend({
   defaults:{
     selected: true, // default is selected.
     expanded: false,
     numSelected: 0,
     numPossible: 0,
-    children:null,  //type TreeNodeCollection
+    children:null  //type TreeNodeCollection
   },
 
   initialize: function(obj) {
@@ -105,12 +105,9 @@ var TreeNodeModel = Backbone.Model.extend({
         child.set('selected', self.get('selected'), {propagation: false});
       });
     }
-  },
+  }
 
 });
-
-
-var TreeNodeCollection = Backbone.Collection.extend({  model:TreeNodeModel });
 
 
 module.exports = TreeNodeModel;

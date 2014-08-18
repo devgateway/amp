@@ -1,5 +1,4 @@
 var fs = require('fs');
-var _ = require('underscore');
 var $ = require('jquery');
 var Backbone = require('backbone');
 var MapView = require('../../map/views/main-view');

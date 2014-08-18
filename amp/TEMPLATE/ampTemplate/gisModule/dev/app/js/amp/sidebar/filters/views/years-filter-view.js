@@ -1,6 +1,5 @@
 var fs = require('fs');
 var _ = require('underscore');
-var Backbone = require('backbone');
 var BaseFilterView = require('../views/base-filter-view');
 var YearsFilterModel = require('../models/years-filter-model');
 
@@ -53,14 +52,13 @@ module.exports = BaseFilterView.extend({
   },
 
   renderTitle: function () {
-    var self = this;
     BaseFilterView.prototype.renderTitle.apply(this);
 
     // TODO: hookup to some model that backs it....
     this.$('.filter-count').text('1900 - 2015');
 
     return this;
-  },
+  }
 
 
 });

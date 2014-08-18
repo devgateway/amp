@@ -52,7 +52,6 @@ module.exports = Backbone.View.extend({
   },
 
   render: function () {
-    var self = this;
     this.$el.html(this.template({map: this.mapEl}));
     this.$el.append(this.mapEl);
     this.map.invalidateSize();
@@ -77,7 +76,7 @@ module.exports = Backbone.View.extend({
       self.countryBoundary = L.geoJson(geoJSON,
         {
           simplifyFactor: 0.9,
-          style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '3',}
+          style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '3'}
         }).addTo(self.map);
     });
   },
@@ -95,6 +94,6 @@ module.exports = Backbone.View.extend({
 
   _setMapView: function(stateBlob) {
     this.map.setView(stateBlob.center, stateBlob.zoom);
-  },
+  }
 
 });

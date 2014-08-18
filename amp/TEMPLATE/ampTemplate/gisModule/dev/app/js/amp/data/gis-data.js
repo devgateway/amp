@@ -20,7 +20,7 @@ var ProjectSitesAndClusters = require('./collections/clusters-and-project-sites'
 var Title = require('./title');
 
 
-var GISData = function(options) {
+var GISData = function() {
   this.initialize.apply(this, arguments);
 };
 

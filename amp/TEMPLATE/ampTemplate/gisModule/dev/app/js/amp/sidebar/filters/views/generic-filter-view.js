@@ -1,6 +1,5 @@
 var fs = require('fs');
 var _ = require('underscore');
-var Backbone = require('backbone');
 var $ = require('jquery');
 var APIHelper = require('../../../../libs/local/api-helper');
 

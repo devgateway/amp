@@ -1,6 +1,4 @@
 var fs = require('fs');
-
-var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
@@ -88,7 +86,6 @@ module.exports = Backbone.View.extend({
       var activities = feature.properties.activityid;
       layer.bindPopup(feature.properties.admName + ' has ' + activities.length +' projects. <br>Graphs will go here.');
     }
-  },
-
+  }
 
 });

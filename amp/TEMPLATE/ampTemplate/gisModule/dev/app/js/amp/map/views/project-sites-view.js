@@ -1,6 +1,4 @@
 var fs = require('fs');
-
-var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
@@ -169,7 +167,7 @@ module.exports = Backbone.View.extend({
           color: '#000',
           weight: 1,
           opacity: 1,
-          fillOpacity: 1,
+          fillOpacity: 1
         });
 
         self.markerCluster.addLayer(point);
@@ -227,9 +225,9 @@ module.exports = Backbone.View.extend({
   // fetch returns the deferred object of the raw (non-parsed) response.
   // _getProjectSites: function(filter) {
   //   return this.collection.fetch({
-	 //    data: JSON.stringify(filter),
-	 //    type: 'POST',
-	 //    headers: { //needed to add this to fix amp 415 unsuported media type err, but most API's don;t require this...
+  //    data: JSON.stringify(filter),
+  //    type: 'POST',
+  //    headers: { //needed to add this to fix amp 415 unsuported media type err, but most API's don;t require this...
   //       'Accept': 'application/json',
   //       'Content-Type': 'application/json'
   //     }

@@ -15,7 +15,7 @@ module.exports = Backbone.View.extend({
   className: 'nav navbar-nav navbar-right dropdown',
 
   events: {
-    'click .esriBasemapGalleryNode': 'clickBasemap',
+    'click .esriBasemapGalleryNode': 'clickBasemap'
   },
 
   initialize: function(extraProperties) {
@@ -63,7 +63,7 @@ module.exports = Backbone.View.extend({
     this.render();
   },
 
-  removeBasemap: function(basemap) {
+  removeBasemap: function() {
     if (this.mapLayer) {
       this.map.removeLayer(this.mapLayer);
       delete this.mapLayer;

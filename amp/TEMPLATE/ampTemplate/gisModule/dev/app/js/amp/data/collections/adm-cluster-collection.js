@@ -1,6 +1,4 @@
-var _ = require('underscore');
 var Backbone = require('backbone');
-var RadioMixin = require('../../mixins/radio-mixin');
 var ADMClusterModel = require('../models/adm-cluster-model');
 
 var APIHelper = require('../../../libs/local/api-helper');

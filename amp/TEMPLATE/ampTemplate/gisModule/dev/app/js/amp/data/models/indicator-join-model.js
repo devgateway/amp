@@ -97,6 +97,6 @@ module.exports = Backbone.Model.extend({
       this._boundaryJoined.resolve(geoJSON);
     }
     return this._boundaryJoined.promise();
-  },
+  }
 
 });

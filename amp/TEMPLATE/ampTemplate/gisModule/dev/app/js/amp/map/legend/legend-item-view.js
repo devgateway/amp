@@ -7,8 +7,8 @@ var Template = fs.readFileSync(__dirname + '/legend-item-template.html', 'utf8')
 var IndicatorJoin = require('../../data/models/indicator-join-model');
 var IndicatorWMS = require('../../data/models/indicator-wms-model');
 var IndicatorArcGIS = require('../../data/models/indicator-arcgis-model');
-var ProjectSites = require('../../data/models/project-sites-model');
-var ADMClusters = require('../../data/models/adm-cluster-model');
+// var ProjectSites = require('../../data/models/project-sites-model');
+// var ADMClusters = require('../../data/models/adm-cluster-model');
 
 
 module.exports = Backbone.View.extend({

@@ -14,7 +14,7 @@ module.exports = Backbone.Model.extend({
   defaults: {
     title: 'Project Sites',
     value: '',
-    helpText: '',
+    helpText: ''
   },
 
   initialize: function() {

@@ -1,6 +1,3 @@
-var fs = require('fs');
-var $ = require('jquery');
-var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 

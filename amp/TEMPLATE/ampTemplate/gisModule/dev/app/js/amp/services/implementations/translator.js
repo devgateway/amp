@@ -1,6 +1,4 @@
 var fs = require('fs');
-var _ = require('underscore');
-var Backbone = require('backbone');
 var $ = require('jquery');
 
 var APIHelper = require('../../../libs/local/api-helper');
@@ -13,7 +11,8 @@ function Translator() {
   }
 
   // this is the object that has all  the key value pairs for the widget.
-  this._defaultKeys = JSON.parse(fs.readFileSync(__dirname + '/../../../../mock-api/data/label-translations/sample-en.json', 'utf8'));
+  this._defaultKeys = JSON.parse(fs.readFileSync(__dirname + 
+    '/../../../../mock-api/data/label-translations/sample-en.json', 'utf8'));
   this.translations = null;
   this._promise = null;
 
@@ -33,7 +32,7 @@ function Translator() {
       })
       .fail(function(jqXHR, textStatus, errorThrown){
         console.error('failed ', jqXHR, textStatus, errorThrown);
-      });;
+      });
 
   };
 
@@ -61,12 +60,12 @@ function Translator() {
       headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'
-      },
-      'type': 'POST',
-      'url': url,
-      'data': JSON.stringify(data),
-      'dataType': 'json'
-    });
+        },
+        'type': 'POST',
+        'url': url,
+        'data': JSON.stringify(data),
+        'dataType': 'json'
+      });
   };
 
 

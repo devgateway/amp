@@ -35,12 +35,12 @@ var Palette = Backbone.Model.extend({
         buckets = niceBuckets.minFigs(5, [this.get('min'), this.get('max')]),
         hStopSize = DEFAULT.H_SKEW / (stops - 1),
         sStopSize = (DEFAULT.S_MAX - DEFAULT.S_MIN) / (stops - 1),
-        lStopSize = (DEFAULT.L_MAX - DEFAULT.L_MIN) / (stops - 1),
-        stopMin,
-        stopMax,
-        h,
-        s,
-        l;
+        lStopSize = (DEFAULT.L_MAX - DEFAULT.L_MIN) / (stops - 1);
+        // stopMin,
+        // stopMax,
+        // h,
+        // s,
+        // l;
 
     function makeTest(bucket) {
       return function(value) {
@@ -86,9 +86,9 @@ function FromRange(options) {
   return palette;
 }
 
-function FromSet(options) {
+function FromSet() {
   return new Palette({
-    mode: 'discrete',
+    mode: 'discrete'
   });
 }
 

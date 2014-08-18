@@ -33,7 +33,6 @@ var TreeNodeView = Backbone.View.extend({
   },
 
   renderChildren: function () {
-    var self = this;
     var ul = $('<ul>');
     this.$el.append(ul);
 
@@ -60,11 +59,11 @@ var TreeNodeView = Backbone.View.extend({
     var self = this;
 
     //Add model listeneres
-    this.model.on('change:selected', function (model, argument, options) {
+    this.model.on('change:selected', function () {
       self._updateSelection();
     });
 
-    this.model.on('change:expanded', function (model, argument, options) {
+    this.model.on('change:expanded', function () {
       self._updateExpanded();
     });
 
@@ -76,11 +75,11 @@ var TreeNodeView = Backbone.View.extend({
 
   _addUIListeners: function(){
     var self = this;
-    this.$('> .node > .selectable').on('click', function(evnt){
+    this.$('> .node > .selectable').on('click', function(){
       self.clickBox();
 
     });
-    this.$('> .node > .toggle-nav').on('click', function(evnt){
+    this.$('> .node > .toggle-nav').on('click', function(){
       self.clickName();
     });
   },
@@ -164,8 +163,7 @@ var TreeNodeView = Backbone.View.extend({
   expand: function () {
     var children = this.$el.find(' > ul > li');
     children.show('fast');
-  },
-
+  }
 
 });
 

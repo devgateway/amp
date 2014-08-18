@@ -1,6 +1,4 @@
 var Deferred = require('jquery').Deferred;
-var when = require('jquery').when;
-var _ = require('underscore');
 var Backbone = require('backbone');
 
 

@@ -24,12 +24,10 @@ module.exports = BaseControlView.extend({
   render: function() {
     BaseControlView.prototype.render.apply(this, arguments);
 
-    var self = this;
-
     // add content
     this.$('.content').html(this.template({
       title: this.title,
-      searchWidget: searchWidget,
+      searchWidget: searchWidget
     }));
 
     return this;

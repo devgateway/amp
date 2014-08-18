@@ -45,9 +45,9 @@ module.exports = Backbone.View.extend({
                             if ($(e.target).data('toggle') !== 'popover' &&
                                 $(e.target).parents('[data-toggle="popover"]').length === 0 &&
                                 $(e.target).parents('.popover.in').length === 0) {
-                                $('[data-toggle=popover]').popover('hide');
+                              $('[data-toggle=popover]').popover('hide');
                             }
-                        });
+                          });
 
     return this;
   },

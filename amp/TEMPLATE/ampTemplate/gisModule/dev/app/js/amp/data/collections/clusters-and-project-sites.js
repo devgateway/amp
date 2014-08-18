@@ -25,7 +25,7 @@ module.exports = Backbone.Collection
     this.listenTo(collection, 'all', this.stuffUpdated);
   },
 
-  stuffUpdated: function(ev) {
+  stuffUpdated: function() {
     this.reset(_.union.apply(this, this._watched.map(function(collection) {
       return collection.models;
     })));

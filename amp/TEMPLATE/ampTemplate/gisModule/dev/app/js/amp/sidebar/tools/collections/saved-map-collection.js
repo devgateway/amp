@@ -1,4 +1,3 @@
-var _ = require('underscore');
 var Backbone = require('backbone');
 var APIHelper = require('../../../../libs/local/api-helper');
 
@@ -9,7 +8,7 @@ module.exports = Backbone.Collection.extend({
 
   model: SavedMapModel,
 
-  url: APIHelper.getAPIBase() + '/rest/gis/states',
+  url: APIHelper.getAPIBase() + '/rest/gis/states'
 
 });
 

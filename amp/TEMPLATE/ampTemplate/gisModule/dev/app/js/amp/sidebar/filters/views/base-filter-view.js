@@ -1,9 +1,7 @@
 var fs = require('fs');
 var _ = require('underscore');
-var $ = require('jquery');
 
 var Backbone = require('backbone');
-var FilterModel = require('../models/base-filter-model');
 var TitleTemplate = fs.readFileSync(__dirname + '/../templates/filter-title-template.html', 'utf8');
 var ContentTemplate = fs.readFileSync(__dirname + '/../templates/filter-content-template.html', 'utf8');
 
@@ -22,8 +20,6 @@ module.exports = Backbone.View.extend({
   },
 
   renderTitle: function () {
-    var self = this;
-
     this.$el.html(this.titleTemplate(this.model.toJSON()));
 
     return this;
@@ -56,7 +52,6 @@ module.exports = Backbone.View.extend({
     // TODO: consider a different name to avoid collision with javascript function.apply
     // trigger common event for applying filters.
     // this.convertTreeToJSONFilter(); //implemented by child, and if not fallback to base.
-  },
-
+  }
 
 });

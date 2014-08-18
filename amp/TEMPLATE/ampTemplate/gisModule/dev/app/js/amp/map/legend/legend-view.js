@@ -30,7 +30,7 @@ module.exports = Backbone.View.extend({
     if (! _.isEmpty(content)) {
       this.$el.addClass('expanded');  // always expand when new layers are added
       this.$('.legend-content').html(content);
-    };
+    }
 
     return this;
   },

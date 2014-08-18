@@ -1,4 +1,3 @@
-var _ = require('underscore');
 var Backbone = require('backbone');
 var APIHelper = require('../../../libs/local/api-helper');
 var RadioMixin = require('../../mixins/radio-mixin');
@@ -13,7 +12,7 @@ module.exports = Backbone.Collection
 
   url: APIHelper.getAPIBase() + '/rest/gis/indicator-layers',
 
-  model: function(attrs, opts) {
+  model: function(attrs) {
     var typeName = attrs.type;
     if (typeName === 'joinBoundaries') {
       return new JoinIndicator(attrs);

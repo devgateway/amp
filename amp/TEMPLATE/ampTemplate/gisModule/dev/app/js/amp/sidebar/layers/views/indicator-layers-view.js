@@ -1,7 +1,5 @@
 var fs = require('fs');
 var _ = require('underscore');
-var Backbone = require('backbone');
-
 var BaseControlView = require('../../base-control/base-control-view');
 var OptionView = require('./option-view');
 var Template = fs.readFileSync(__dirname + '/../templates/layers-template.html', 'utf8');

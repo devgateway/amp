@@ -1,7 +1,5 @@
 var fs = require('fs');
 var _ = require('underscore');
-var Backbone = require('backbone');
-var $ = require('jquery');
 var state = require('../../../services/state');
 
 var BaseControlView = require('../../base-control/base-control-view');
@@ -47,7 +45,6 @@ module.exports = BaseControlView.extend({
   },
 
   render: function() {
-    var self = this;
     BaseControlView.prototype.render.apply(this);
 
     // add content
@@ -58,11 +55,9 @@ module.exports = BaseControlView.extend({
   },
 
   renderProjectList: function() {
-    var self = this;
     this.$('.layer-selector').html(this.projectLayerCollection.map(function(indicator) {
       var tmpView = new OptionView({ model: indicator });
       return tmpView.render().el;
     }));
-  },
-
+  }
 });

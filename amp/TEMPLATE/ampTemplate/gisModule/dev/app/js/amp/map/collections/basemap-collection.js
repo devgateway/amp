@@ -1,4 +1,3 @@
-var _ = require('underscore');
 var Backbone = require('backbone');
 var BasemapModel = require('../models/basemap-model');
 
@@ -40,7 +39,7 @@ var basemaps = [
     source: 'esri',
     esriId: 'Terrain',
     label: true,
-    thumb: 'img/basemaps/tempTerrain_with_labels_ne_usa.png',
+    thumb: 'img/basemaps/tempTerrain_with_labels_ne_usa.png'
   },
   {
     id: 'Gray',

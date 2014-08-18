@@ -26,7 +26,7 @@ module.exports = BaseControlView.extend({
     'click .gis-tool-load': 'load',
     'click .gis-tool-load-url': 'loadUrl',
     'click .gis-state-link': 'loadLink',
-    'click .gis-tool-export': 'export',
+    'click .gis-tool-export': 'exportOption',
     'click .gis-tool-share': 'share'
   },
 
@@ -86,7 +86,8 @@ module.exports = BaseControlView.extend({
     state.load(stateBlob);
   },
 
-  export: function() {
+  // can't call it export because that's a reserved word.
+  exportOption: function() {
     this.$('.gis-tool-export-form').toggleClass('hidden');
     // ???
   },

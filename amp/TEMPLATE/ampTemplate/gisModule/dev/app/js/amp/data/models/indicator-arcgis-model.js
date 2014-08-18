@@ -1,5 +1,4 @@
 var Deferred = require('jquery').Deferred;
-var when = require('jquery').when;
 var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
@@ -75,8 +74,8 @@ module.exports = Backbone.Model.extend({
   },
 
   styleNewFeature: function(feature) {
-    var id = feature.id,
-        value = feature.properties[this.get('property')];
+    // var id = feature.id;
+    var value = feature.properties[this.get('property')];
     return this._valueStyleObj(value);
   },
 

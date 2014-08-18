@@ -4,6 +4,7 @@
   "camelcase": true,
   "curly": true,
   "eqeqeq": true,
+  "es3": true,
   "freeze": true,
   "immed": true,
   "indent": 2,
@@ -12,6 +13,7 @@
   "quotmark": "single",
   "undef": true,
   "maxlen": 124,
+  "unused": true,
   "globals" : {
     /* suppress warnings for npm/browserify stuff */
     "__dirname": false,

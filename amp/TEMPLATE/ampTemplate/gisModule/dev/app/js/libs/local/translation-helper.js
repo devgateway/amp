@@ -1,6 +1,5 @@
 var $ = require('jquery');
 var _ = require('underscore');
-var APIHelper = require('../local/api-helper');
 
 var translator = require('../../amp/services/translator');
 
@@ -25,15 +24,15 @@ module.exports = {
   // update translateable elements in the dom
   _updateDom: function(data) {
     $.each(data, function(key, value) {
-        $("*[data-i18n='" + key + "']").text(value);
-    });
+        $('*[data-i18n="' + key + '"]').text(value);
+      });
   },
 
   // get all translateable elements from dom
   // (not needed since we trust our initial json)
   _getTranslateableFromDom: function(el){
     var translateables = {};
-    _.each(el.find("*[data-i18n^='amp.']"), function(i, val) {
+    _.each(el.find('*[data-i18n^="amp."]'), function(i) {
       var key = $(i).attr('data-i18n');
       var value = $(i).text();
       translateables[key] = value;

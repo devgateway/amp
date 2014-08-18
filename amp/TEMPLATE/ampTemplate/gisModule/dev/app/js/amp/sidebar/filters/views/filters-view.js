@@ -4,7 +4,6 @@ var _ = require('underscore');
 
 var APIHelper = require('../../../../libs/local/api-helper');
 
-var Backbone = require('backbone');
 var BaseControlView = require('../../base-control/base-control-view');
 var GenericFilterView = require('../views/generic-filter-view');
 var YearsFilterView = require('../views/years-filter-view');

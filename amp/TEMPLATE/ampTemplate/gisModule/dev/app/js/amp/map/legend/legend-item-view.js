@@ -8,6 +8,7 @@ var IndicatorJoin = require('../../data/models/indicator-join-model');
 var IndicatorWMS = require('../../data/models/indicator-wms-model');
 var IndicatorArcGIS = require('../../data/models/indicator-arcgis-model');
 var ProjectSites = require('../../data/models/project-sites-model');
+var ADMClusters = require('../../data/models/adm-cluster-model');
 
 
 module.exports = Backbone.View.extend({
@@ -25,10 +26,13 @@ module.exports = Backbone.View.extend({
       this.renderAsWMS();
     } else if (this.model instanceof IndicatorArcGIS) {
       this.renderAsArcGIS();
-    } else if (this.model instanceof ProjectSites) {
-      this.renderAsProjectSites();
+    // } else if (this.model instanceof ProjectSites) {
+    //   this.renderAsProjectSites();
+    // } else if (this.model instanceof ADMClusters) {
+    //   this.renderAsClusters();
     } else {
       console.warn('legend for layer type not implemented: ', this.model);
+      this.renderAsUnknown(this.model);
     }
 
     return this;
@@ -77,6 +81,10 @@ module.exports = Backbone.View.extend({
         colourBuckets: self.model.palette.colours
       })));
     });
+  },
+
+  renderAsUnknown: function() {
+    this.$('em').html('legend not yet configured for this layer type');
   }
 
 });

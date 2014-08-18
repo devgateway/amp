@@ -58,7 +58,7 @@ module.exports = Backbone.Model.extend({
 
     this._boundaryJoined.then(function() {
       self.trigger('processed', self);
-    })
+    });
 
     return this._dataLoaded.promise();
   },

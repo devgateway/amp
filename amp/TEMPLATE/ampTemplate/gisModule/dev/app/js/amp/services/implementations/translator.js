@@ -17,10 +17,11 @@ function Translator() {
   this._promise = null;
 
 
-  // Phil: I maybe naive, but why do we need to have names for these functions... (copied style from state service.)
-
-  // TODO:add support for local storage with timestamp, and ability to keep object for each language.
+  // Phil: I maybe naive, but why do we need to have names for these functions... (copied style from state service.)  
+  // TODO: add support for local storage with timestamp, and ability to keep object for each language.
   // TODO: review use of promises.
+  // TODO: LowPriority: If user toggles language manually during use will need to re-send all 
+  // API requests so that filter list etc. use new language....
 
   this.initTranslations = function get() {
     var self = this;

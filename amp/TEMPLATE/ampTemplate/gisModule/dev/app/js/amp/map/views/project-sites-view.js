@@ -97,6 +97,11 @@ module.exports = Backbone.View.extend({
     projectSitesModel.load();
   },
 
+  bringToFront: function(){
+    if(this.markerCluster && this.markerCluster._featureGroup){
+      this.markerCluster._featureGroup.bringToFront();
+    }
+  },
 
   hideLayer: function() {
     if (this.layerLoadState === 'pending') {
@@ -130,27 +135,6 @@ module.exports = Backbone.View.extend({
     a.layer.openPopup(self.map);
   },
 
-  // _filtersUpdated: function() {
-  //   // TODO: 1. get all the filters using an event or service
-  //   //      fitlers-view.js can iterate over array of filters, and ask each one to return it's filter key and value....
-  //   var filterObj = {};
-  //   var self = this;
-
-
-  //   // Get the values for the map. Sample URL:
-  //   // /rest/gis/cluster?filter="{"FiltersParams":{"params":[{"filterName":"adminLevel","filterValue":["Region"]}]}}"
-  //   // (don't forget to url-encode)
-  //   return this._getProjectSites(filterObj).then(function(data) {
-
-  //     if (data && data.type === 'FeatureCollection') {
-  //       self.features = data.features;
-  //       self.rawData = data;
-  //       self._renderFeatures();
-  //     } else {
-  //       console.warn('Project Sites response empty or improper type.');
-  //     }
-  //   });
-  // },
 
   _renderFeatures: function() {
     var self = this;
@@ -175,7 +159,7 @@ module.exports = Backbone.View.extend({
         return point;
       },
       onEachFeature: self._onEachFeature
-    });
+    }).addTo(self.map);
   },
 
 
@@ -222,19 +206,6 @@ module.exports = Backbone.View.extend({
     });
   },
 
-  // fetch returns the deferred object of the raw (non-parsed) response.
-  // _getProjectSites: function(filter) {
-  //   return this.collection.fetch({
-  //    data: JSON.stringify(filter),
-  //    type: 'POST',
-  //    headers: { //needed to add this to fix amp 415 unsuported media type err, but most API's don;t require this...
-  //       'Accept': 'application/json',
-  //       'Content-Type': 'application/json'
-  //     }
-  //   }).fail(function(jqXHR, textStatus, errorThrown){
-  //     console.error('failed ', jqXHR, textStatus, errorThrown);
-  //   });
-  // },
 
   // circles  shrink if we're zoomed out, get big if zoomed in
   _updateZoom: function() {
@@ -255,7 +226,42 @@ module.exports = Backbone.View.extend({
         });
       }
     }
-
   }
+
+  // fetch returns the deferred object of the raw (non-parsed) response.
+  // _getProjectSites: function(filter) {
+  //   return this.collection.fetch({
+  //    data: JSON.stringify(filter),
+  //    type: 'POST',
+  //    headers: { //needed to add this to fix amp 415 unsuported media type err, but most API's don;t require this...
+  //       'Accept': 'application/json',
+  //       'Content-Type': 'application/json'
+  //     }
+  //   }).fail(function(jqXHR, textStatus, errorThrown){
+  //     console.error('failed ', jqXHR, textStatus, errorThrown);
+  //   });
+  // },
+
+  // _filtersUpdated: function() {
+  //   // TODO: 1. get all the filters using an event or service
+  //   //      fitlers-view.js can iterate over array of filters, and ask each one to return it's filter key and value....
+  //   var filterObj = {};
+  //   var self = this;
+
+
+  //   // Get the values for the map. Sample URL:
+  //   // /rest/gis/cluster?filter="{"FiltersParams":{"params":[{"filterName":"adminLevel","filterValue":["Region"]}]}}"
+  //   // (don't forget to url-encode)
+  //   return this._getProjectSites(filterObj).then(function(data) {
+
+  //     if (data && data.type === 'FeatureCollection') {
+  //       self.features = data.features;
+  //       self.rawData = data;
+  //       self._renderFeatures();
+  //     } else {
+  //       console.warn('Project Sites response empty or improper type.');
+  //     }
+  //   });
+  // },
 
 });

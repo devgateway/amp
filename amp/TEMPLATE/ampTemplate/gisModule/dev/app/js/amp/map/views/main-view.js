@@ -49,6 +49,8 @@ module.exports = Backbone.View.extend({
       map: this.map,
       collection: this.basemaps
     });
+
+    this.listenTo(this.indicatorLayersView, 'addedToMap', this._indicatorsShown);
   },
 
   render: function () {
@@ -94,6 +96,11 @@ module.exports = Backbone.View.extend({
 
   _setMapView: function(stateBlob) {
     this.map.setView(stateBlob.center, stateBlob.zoom);
-  }
+  },
 
+  // when indicator is shown, bring project sites to the front...
+  // should be able to do better once panes and leaflet v.08 are in
+  _indicatorsShown: function(){
+    this.projectSitesLayersView.bringToFront();
+  }
 });

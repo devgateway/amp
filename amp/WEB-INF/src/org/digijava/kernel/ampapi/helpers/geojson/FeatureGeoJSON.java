@@ -33,7 +33,7 @@ public class FeatureGeoJSON extends GeoJSON
 {
 	public GeoJSON geometry;
 	public Map<String,JsonNode> properties;
-	@JsonIgnore
+	
 	public String id;
 	public FeatureGeoJSON(){
 	    this.properties =  new HashMap<String, JsonNode>();

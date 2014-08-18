@@ -110,8 +110,7 @@ public class GisEndPoints {
 			PointGeoJSON pg = new PointGeoJSON();	
 			pg.coordinates.add(Double.parseDouble(structure.getLongitude()));
 			pg.coordinates.add(Double.parseDouble(structure.getLatitude()));
-
-			fgj.properties.put("id", new LongNode(structure.getAmpStructureId()));
+			fgj.id=structure.getAmpStructureId().toString();
 			fgj.properties.put("activityTitle", new TextNode(structure.getTitle()));
 			if(structure.getDescription()!=null && !structure.getDescription().trim().equals("")){
 				fgj.properties.put("activityDescription", new TextNode(structure.getDescription()));

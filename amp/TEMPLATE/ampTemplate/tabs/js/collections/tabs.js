@@ -1,12 +1,6 @@
-/*global Backbone */
-var app = app || {};
-
-(function() {
-	'use strict';
-
-	app.Tabs = Backbone.Collection.extend({
-		// Reference to this collection's model.
-		model : app.Tab
+define([ 'underscore', 'backbone', 'models/tab' ], function(_, Backbone, Tab) {
+	var Tabs = Backbone.Collection.extend({
+		model : Tab
 	});
-
-})();
+	return Tabs;
+});

@@ -1,11 +1,7 @@
-/*global Backbone */
-var app = app || {};
-
-(function() {
-	'use strict';
+define([ 'underscore', 'backbone' ], function(_, Backbone) {
 
 	// Tab Model
-	app.Tab = Backbone.Model.extend({
+	var Tab = Backbone.Model.extend({
 		defaults : {
 			name : '',
 			title : '',
@@ -13,5 +9,5 @@ var app = app || {};
 			content : ''
 		}
 	});
-
-})();
+	return Tab;
+});

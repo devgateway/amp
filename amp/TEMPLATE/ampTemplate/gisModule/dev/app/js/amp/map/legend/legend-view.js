@@ -19,8 +19,7 @@ module.exports = Backbone.View.extend({
     this.listenTo(this.app.data, 'show hide', this.render);
   },
 
-  render: function(ev) {
-    console.log(ev);
+  render: function() {
     this.$el.html(this.template());
 
     var content = this.app.data.getAllVisibleLayers().map(function(layer) {

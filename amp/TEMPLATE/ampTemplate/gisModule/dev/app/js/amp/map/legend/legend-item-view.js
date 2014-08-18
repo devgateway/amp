@@ -7,7 +7,7 @@ var Template = fs.readFileSync(__dirname + '/legend-item-template.html', 'utf8')
 var IndicatorJoin = require('../../data/models/indicator-join-model');
 var IndicatorWMS = require('../../data/models/indicator-wms-model');
 var IndicatorArcGIS = require('../../data/models/indicator-arcgis-model');
-// var ProjectSites = require('../../data/models/project-sites-model');
+var ProjectSites = require('../../data/models/project-sites-model');
 // var ADMClusters = require('../../data/models/adm-cluster-model');
 
 
@@ -26,8 +26,8 @@ module.exports = Backbone.View.extend({
       this.renderAsWMS();
     } else if (this.model instanceof IndicatorArcGIS) {
       this.renderAsArcGIS();
-    // } else if (this.model instanceof ProjectSites) {
-    //   this.renderAsProjectSites();
+    } else if (this.model instanceof ProjectSites) {
+      this.renderAsProjectSites();
     // } else if (this.model instanceof ADMClusters) {
     //   this.renderAsClusters();
     } else {
@@ -78,6 +78,7 @@ module.exports = Backbone.View.extend({
       self.$el.html(self.template(_.extend({}, self.model.toJSON(), {
         status: 'loaded',
         legendType: 'colours',
+        blah: true,
         colourBuckets: self.model.palette.colours
       })));
     });

@@ -11,7 +11,69 @@ var DEFAULT = {
   S_MIN: 45,    // percent
   S_MAX: 90,    // percent
   L_MIN: 33,    // percent
-  L_MAX: 85     // percent
+  L_MAX: 85,    // percent
+  SET: [  // thanks awesome http://colorbrewer2.org/
+    {
+      h: 243.79103959577307,
+      s: 93.5281050401762,
+      l: 48.101727992819335
+    },
+    {
+      h: 126.84485704801882,
+      s: 88.58742930928982,
+      l: 57.84973819174576
+    },
+    {
+      h: 12.047884070314995,
+      s: 93.31646783803632,
+      l: 48.27282919820934
+    },
+    {
+      h: 29.78265489386481,
+      s: 99.99999999999984,
+      l: 66.61813759038522
+    },
+    {
+      h: 280.9828886146671,
+      s: 62.46783887305841,
+      l: 35.32931965574711
+    },
+    {
+      h: 27.62423428162062,
+      s: 85.61992551050342,
+      l: 47.633959963623596
+    },
+    {
+      h: 225.92524050581477,
+      s: 46.59601824068325,
+      l: 80.34151308154121
+    },
+    {
+      h: 112.03003811901955,
+      s: 56.06236829633495,
+      l: 83.71129027873012
+    },
+    {
+      h: 12.705363439543902,
+      s: 91.67945574513531,
+      l: 73.23662062556197
+    },
+    {
+      h: 50.30444261020004,
+      s: 92.83936878503897,
+      l: 81.16888137643387
+    },
+    {
+      h: 293.5175982278909,
+      s: 38.46499287730516,
+      l: 75.34199526449905
+    },
+    {
+      h: 85.87273351614228,
+      s: 82.87185740645297,
+      l: 97.72843903461742
+    }
+  ]
 };
 
 
@@ -26,6 +88,8 @@ var Palette = Backbone.Model.extend({
     this.colours = new Colours();
     if (options.mode === 'range') {
       this.listenTo(this, 'change', this.generateRange);
+    } else if (options.mode === 'discrete') {
+      this.listenTo(this, 'change', this.generateSet);
     }
   },
 
@@ -36,11 +100,6 @@ var Palette = Backbone.Model.extend({
         hStopSize = DEFAULT.H_SKEW / (stops - 1),
         sStopSize = (DEFAULT.S_MAX - DEFAULT.S_MIN) / (stops - 1),
         lStopSize = (DEFAULT.L_MAX - DEFAULT.L_MIN) / (stops - 1);
-        // stopMin,
-        // stopMax,
-        // h,
-        // s,
-        // l;
 
     function makeTest(bucket) {
       return function(value) {
@@ -60,6 +119,21 @@ var Palette = Backbone.Model.extend({
     }
 
     this.colours.reset(newColours);
+  },
+
+  generateSet: function() {
+    if (this.get('elements').length > DEFAULT.SET.length) {
+      throw new Error('Cannot make more than 12 visually distinct colours');
+    }
+
+    this.colours.reset(_.map(this.get('elements'), function(element, index) {
+      return _.extend({}, {
+          value: element,
+          test: function(value) { return value === element; }
+        },
+        DEFAULT.SET[index]  // h, s, l
+      );
+    }));
   }
 
 });
@@ -86,9 +160,11 @@ function FromRange(options) {
   return palette;
 }
 
-function FromSet() {
+function FromSet(options) {
+  options = options || {};
   return new Palette({
-    mode: 'discrete'
+    mode: 'discrete',
+    elements: options.elements || ['a', 'b', 'c', 'd']
   });
 }
 

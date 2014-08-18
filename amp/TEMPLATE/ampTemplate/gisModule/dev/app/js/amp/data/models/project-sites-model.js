@@ -35,8 +35,8 @@ module.exports = Backbone.Model.extend({
     if (_.isNull(this._dataLoaded)) {
       this._dataLoaded = new Deferred();
       this.fetch({type: 'POST'}).then(function() {
-        self._dataLoaded.resolve();
         self.updatePaletteSet();  // in here so we don't re-do it later
+        self._dataLoaded.resolve();
       });
     }
 
@@ -48,7 +48,16 @@ module.exports = Backbone.Model.extend({
   },
 
   updatePaletteSet: function() {
-    // TODO...
+    this.palette.set('elements', [
+      'first thing',
+      'second thing',
+      'third thing',
+      'fourth thing',
+      'fifth thing',
+      'sixth...',
+      'seventh...',
+      '...'
+    ]);
   }
 
 });

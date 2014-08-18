@@ -7,8 +7,12 @@
     <% colourBuckets.each(function(bucket) { %>
       <div>
         <span style="background: <%= bucket.hex() %>">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-        <%= bucket.get('value')[0] %>&mdash;<%= bucket.get('value')[1] %>
-        <%= unit ? unit : '' %>
+        <% if (typeof blah !== 'undefined') { %>
+          <%= bucket.get('value') %>
+        <% } else { %>
+          <%= bucket.get('value')[0] %>&mdash;<%= bucket.get('value')[1] %>
+          <%= (typeof unit !== 'undefined') ? unit : '' %>
+        <% } %>
       </div>
     <% }) %>
   <% } else if (legendType === 'img') { %>

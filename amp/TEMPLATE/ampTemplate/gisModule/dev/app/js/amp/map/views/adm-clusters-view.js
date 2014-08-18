@@ -86,7 +86,7 @@ module.exports = Backbone.View.extend({
   _onEachFeature: function(feature, layer) {
     if (feature.properties) {
       var activities = feature.properties.activityid;
-      layer.bindPopup(feature.properties.admName + ' has ' + activities.length +' projects');
+      layer.bindPopup(feature.properties.admName + ' has ' + activities.length +' projects. <br>Graphs will go here.');
     }
   },
 

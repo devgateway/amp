@@ -7,6 +7,7 @@ var GISData = require('./data/gis-data');
 var App = require('./gis/views/gis-main');
 
 var state = require('./services/state');
+var translator = require('./services/translator');
 
 
 // initialize everything that doesn't need to touch the DOM
@@ -19,6 +20,7 @@ app.data.load();
 
 // attach a ref to services
 app.state = state;
+app.translator = translator;
 
 
 $(document).ready(function() {

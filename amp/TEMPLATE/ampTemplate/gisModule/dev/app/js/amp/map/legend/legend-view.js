@@ -6,12 +6,17 @@ var Template = fs.readFileSync(__dirname + '/legend-template.html', 'utf8');
 
 module.exports = Backbone.View.extend({
 
-  className: 'legend',
+  className: 'legend expanded',
 
   template: _.template(Template),
 
+  events: {
+    'click a[href="#toggle-legend-collapse"]': 'toggleLegend'
+  },
+
   initialize: function(options) {
     this.app = options.app;
+    this.expanded = false;
     this.listenTo(this.app.data, 'show hide', this.render);
   },
 
@@ -26,5 +31,14 @@ module.exports = Backbone.View.extend({
 
     return this;
   },
+
+  toggleLegend: function() {
+    this.expanded = !this.expanded;
+    if (this.expanded) {
+      this.$el.addClass('expanded');
+    } else {
+      this.$el.removeClass('expanded');
+    }
+  }
 
 });

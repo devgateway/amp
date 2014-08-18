@@ -60,49 +60,6 @@
   }
 }
 
-// Legend
-.legend {
-  z-index: @amp_map_header_layer;
-  position: absolute;
-  bottom: 0;
-  right: 5px;
-  width: 240px;
-  color: @amp_inverse;
-  background: @amp_map_header_bg;
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.333);
-
-  .legend-header > a {
-    .vertical-chevrons;
-    display: block;
-    padding: 4px;
-    color: #eee;
-
-    &:hover,
-    &:focus {
-      text-decoration: none;
-    }
-  }
-
-  .legend-content {
-    max-height: 240px;
-    padding: 1em;
-    font-size: 0.9em;
-    overflow-y: scroll;
-    color: #333;
-    border: 1px solid #aaa;
-    border-width: 0 1px;
-    background: @amp_content_bg;
-
-    h3 {
-      margin: 0.5em 0;
-      font-size: 1.2em;
-    }
-    ul, ol {
-      .color-blocks;
-    }
-  }
-}
-
 // Leaflet Overrides
 .leaflet-top {
   top: @amp_map_header_height;

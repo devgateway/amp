@@ -22,7 +22,9 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.node.LongNode;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
+import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
+import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
@@ -220,7 +222,24 @@ public class GisEndPoints {
 		}
 		return indicatorLayers;
 	}
-
+	@GET
+	@Path("/activities/{activityId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Activity getActivities(@PathParam("activityId") Long activityId){
+		Activity a=new Activity();
+		a.setId(123L);
+		a.setDescription("Activity description");
+		a.setCommitments(new ArrayList<Activity.ActivityFunding>());
+		a.setDisbursments(new ArrayList<Activity.ActivityFunding>());
+		a.addCommitments(123.34D, GisUtil.formatDate(new Date()));
+		a.addCommitments(423.34D, GisUtil.formatDate(new Date()));
+		a.addDisbursment(523.34D, GisUtil.formatDate(new Date()));
+		a.addDisbursment(623.34D, GisUtil.formatDate(new Date()));
+		
+		return a;
+	}
+	
+	
 	private FeatureGeoJSON getPoint(Double lat, Double lon,
 			List<Long> activityid, String adm) {
 		FeatureGeoJSON fgj = new FeatureGeoJSON();
@@ -237,18 +256,15 @@ public class GisEndPoints {
 
 	private JsonBean getJsonBeanFromMapState(AmpMapState map, Boolean getBlob) {
 		JsonBean jMap = new JsonBean();
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
-		TimeZone tz = TimeZone.getTimeZone("UTC");
 
-		df.setTimeZone(tz);
 		jMap.set("id", map.getId());
 		jMap.set("title", map.getTitle());
 		jMap.set("description", map.getDescription());
 		if (getBlob) {
 			jMap.set("stateBlob", map.getStateBlob());
 		}
-		jMap.set("created", df.format(map.getCreatedDate()));
-		jMap.set("lastAccess", df.format(map.getLastAccesedDate()));
+		jMap.set("created", GisUtil.formatDate(map.getCreatedDate()));
+		jMap.set("lastAccess", GisUtil.formatDate(map.getLastAccesedDate()));
 		return jMap;
 	}
 

@@ -56,7 +56,8 @@ module.exports = Backbone.View.extend({
 
   getNewADMLayer: function(admLayer) {
     var self = this;
-    return new L.geoJson(admLayer.get('features'), {
+
+    var clusters = new L.geoJson(admLayer.get('features'), {
       pointToLayer: function (feature, latlng) {
         var htmlString = self.admTemplate(feature);
         var myIcon = L.divIcon({
@@ -68,6 +69,17 @@ module.exports = Backbone.View.extend({
       },
       onEachFeature: self._onEachFeature
     });
+
+    var boundaries = new L.geoJson(admLayer.get('boundary'), {
+      style: {
+        weight: 1,
+        dashArray: '3',
+        fillColor: 'transparent'
+      }
+    });
+    window.b = boundaries;
+
+    return new L.layerGroup([clusters, boundaries]);
   },
 
   // Create pop-ups

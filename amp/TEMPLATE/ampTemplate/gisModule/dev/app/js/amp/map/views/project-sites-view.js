@@ -4,7 +4,6 @@ var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
-var ProjectSitesCollection = require('../../data/collections/project-sites-collection');
 
 var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
 

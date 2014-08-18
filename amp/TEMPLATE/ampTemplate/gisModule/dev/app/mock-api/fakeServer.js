@@ -86,8 +86,11 @@ _.extend(FakeServer.prototype, {
 
   _addClusterPath: function() {
     this.server.respondWith('POST', '/rest/gis/cluster', function (xhr, param) {
+      if (_.isNull(xhr.requestBody)) {
+        console.warn('no request body posted to cluster');
+      }
       console.log('cluster ', xhr.requestBody);
-      if(xhr.requestBody.indexOf('Zone') > -1){
+      if(xhr.requestBody.indexOf('adm-2') > -1){
         xhr.respond(200, { 'Content-Type': 'application/json' },
           fs.readFileSync(__dirname + '/data/clusters/clusterADM2.json', 'utf8'));
       } else{

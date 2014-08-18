@@ -15,6 +15,8 @@ var Backbone = require('backbone');
 var Boundaries = require('./collections/boundary-collection');
 var Indicators = require('./collections/indicator-collection');
 var ProjectSites = require('./collections/project-sites-collection');
+var ADMClusters = require('./collections/adm-cluster-collection');
+var ProjectSitesAndClusters = require('./collections/clusters-and-project-sites');
 var Title = require('./title');
 
 
@@ -30,17 +32,35 @@ _.extend(GISData.prototype, Backbone.Events, {
     this.boundaries = new Boundaries();
     this.indicators = new Indicators([], { boundaries: this.boundaries });
     this.projectSites = new ProjectSites();
+    this.admClusters = new ADMClusters([
+      // TODO get these from the api
+      {
+        title: 'Projects by Province',
+        value: 'adm-1'
+      },
+      {
+        title: 'Projects by District',
+        value: 'adm-2'
+      }
+    ], { boundaries: this.boundaries });
+    this.sitesAndClusters = new ProjectSitesAndClusters({
+      sites: this.projectSites,
+      clusters: this.admClusters
+    });
 
     this.title = new Title({ data: this });
 
     // bubble indicator events on the data object
     this.listenTo(this.indicators, 'all', this.bubbleLayerEvents('indicator'));
-    this.listenTo(this.projectSites, 'all', this.bubbleLayerEvents('project-sites'));
+    this.listenTo(this.projectSites, 'all', this.bubbleLayerEvents('project-site'));
+    this.listenTo(this.admClusters, 'all', this.bubbleLayerEvents('adm-cluster'));
   },
 
   load: function() {
     this.boundaries.fetch();
     this.indicators.fetch();
+    // no need to fetch project sites (it's special)
+    this.admClusters.fetch({ remove: false });  // also special for now
   },
 
   bubbleLayerEvents: function(namespace) {
@@ -64,10 +84,8 @@ _.extend(GISData.prototype, Backbone.Events, {
   getAllVisibleLayers: function() {
     var layers = _.union(
       this.indicators.getSelected().value(),
-      this.projectSites.getSelected().value()
+      this.sitesAndClusters.getSelected().value()
     );
-
-    // TODO add clusters
 
     return _.chain(layers);
   }

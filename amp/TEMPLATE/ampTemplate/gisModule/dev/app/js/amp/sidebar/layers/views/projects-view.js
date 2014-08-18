@@ -26,7 +26,7 @@ module.exports = BaseControlView.extend({
     var self = this;
     BaseControlView.prototype.initialize.apply(this, arguments);  // sets this.app
 
-    this._initProjectLayerCollection();
+    this.projectLayerCollection = this.app.data.sitesAndClusters;
 
     // register state:
     state.register(this, 'layers-view', {
@@ -46,26 +46,6 @@ module.exports = BaseControlView.extend({
       },
       empty: null
     });
-  },
-
-  _initProjectLayerCollection: function() {
-    // LEGACY
-    this.projectLayerCollection = this.app.data.projectSites;
-    // this.projectLayerCollection = new ProjectLayerCollection([
-    //   {
-    //     title: 'Projects by Region',
-    //     value: 'adm-1'
-    //   },
-    //   {
-    //     title: 'Projects by Zone',
-    //     value: 'adm-2'
-    //   },
-    //   {
-    //     title: 'Projects Sites',
-    //     value: 'locations',
-    //     helpText: 'See individual project sites.'
-    //   }
-    // ]);
   },
 
   render: function() {

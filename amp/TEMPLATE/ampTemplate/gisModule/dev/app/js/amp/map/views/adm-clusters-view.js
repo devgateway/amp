@@ -5,9 +5,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 
-var APIHelper = require('../../../libs/local/api-helper');
-
-var ADMClusterCollection = require('../collections/adm-cluster-collection');
+var ADMClusterCollection = require('../../data/collections/adm-cluster-collection');
 var ADMTemplate = fs.readFileSync(__dirname + '/../templates/map-adm-template.html', 'utf8');
 
 
@@ -21,7 +19,7 @@ module.exports = Backbone.View.extend({
   initialize: function(options) {
     this.app = options.app;
     this.map = options.map;
-    this.collection = new ADMClusterCollection();
+    this.collection = this.app.admClusters;
 
 
     // TODO: move listener to collection, and subscribe to it's changes.

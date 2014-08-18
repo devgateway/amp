@@ -11,7 +11,7 @@ var BasemapGalleryView = require('../views/basemap-gallery-view');
 var LegendView = require('../legend/legend-view');
 
 var ProjectSitesLayerView = require('../views/project-sites-view');
-var ProjectClustersView = require('../views/project-clusters-view');
+var ADMClustersLayersView = require('../views/adm-clusters-view');
 var IndicatorLayersView = require('../views/indicator-layers-view');
 
 var Basemaps = require('../collections/basemap-collection');
@@ -40,7 +40,7 @@ module.exports = Backbone.View.extend({
 
     // init layers
     this.projectSitesLayersView = new ProjectSitesLayerView({map: this.map, app: this.app});
-    this.projectClustersLayersView = new ProjectClustersView({map: this.map, app: this.app});
+    this.admClustersLayersView = new ADMClustersLayersView({map: this.map, app: this.app});
     this.indicatorLayersView = new IndicatorLayersView({map: this.map, app: this.app});
 
     this.headerView = new MapHeaderView({app: this.app});

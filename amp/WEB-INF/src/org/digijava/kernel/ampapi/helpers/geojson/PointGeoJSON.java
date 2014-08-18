@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 
 /**
@@ -17,6 +18,7 @@ import org.codehaus.jackson.annotate.JsonPropertyOrder;
  * For type "Point", the "coordinates" member must be a single position.
  */
 @JsonPropertyOrder({"type","coordinates","properties"})
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class PointGeoJSON extends GeometryGeoJSON
 {
 	public List<Double> coordinates;

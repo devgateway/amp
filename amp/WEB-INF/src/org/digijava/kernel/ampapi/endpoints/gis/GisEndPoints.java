@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.ws.rs.Consumes;
@@ -30,6 +31,10 @@ import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.dbentity.AmpMapState;
 import org.digijava.module.esrigis.helpers.DbHelper;
@@ -92,24 +97,38 @@ public class GisEndPoints {
 	 * @return
 	 */
 	@POST
-	@Path("/project-sites")
+	@Path("/structures")
 	@Produces(MediaType.APPLICATION_JSON)
 	public final FeatureCollectionGeoJSON getProjectSites(final JsonBean filter) {
 		FeatureCollectionGeoJSON f = new FeatureCollectionGeoJSON();
 
-		FeatureGeoJSON fgj = new FeatureGeoJSON();
-		PointGeoJSON pg = new PointGeoJSON();
-		pg.coordinates.add(27.91667);
-		pg.coordinates.add(47.78333);
+		
+		
+		List<AmpStructure> al = QueryUtil.getProjectSites();
+		for (AmpStructure structure : al) {
+			FeatureGeoJSON fgj = new FeatureGeoJSON();
+			PointGeoJSON pg = new PointGeoJSON();	
+			pg.coordinates.add(Double.parseDouble(structure.getLongitude()));
+			pg.coordinates.add(Double.parseDouble(structure.getLatitude()));
 
-		fgj.properties.put("structureid", new LongNode(205));
-		fgj.properties.put("title", new TextNode("Building a School"));
-		fgj.properties.put("projectId", new LongNode(1253));
-		fgj.properties.put("admId", new LongNode(23));
-		fgj.geometry = pg;
+			fgj.properties.put("id", new LongNode(structure.getAmpStructureId()));
+			fgj.properties.put("activityTitle", new TextNode(structure.getTitle()));
+			if(structure.getDescription()!=null && !structure.getDescription().trim().equals("")){
+				fgj.properties.put("activityDescription", new TextNode(structure.getDescription()));
+			}
+			Set<AmpActivityVersion> av=structure.getActivities();
+			List<Long>actIds=new ArrayList<Long>();
+			
+			for (AmpActivityVersion ampActivity : av) {
+				actIds.add(ampActivity.getAmpActivityId());
+			}
+			
+			fgj.properties.put("activity", new POJONode(actIds));
+			//fgj.properties.put("admId", new LongNode(23));
+			fgj.geometry = pg;
 
-		f.features.add(fgj);
-
+			f.features.add(fgj);
+		}
 		return f;
 	}
 

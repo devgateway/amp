@@ -9,7 +9,17 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.type.LongType;
 
 public class QueryUtil {
     protected static Logger logger = Logger.getLogger(QueryUtil.class);
@@ -72,4 +82,25 @@ public class QueryUtil {
         return new ArrayList<String>(
                 Arrays.asList("Country","Region","Zone","District"));
     }
+    public static List<AmpStructure>  getProjectSites(){
+    	 List<AmpStructure>al=  null;
+			try {
+				Session s=PersistenceManager.getRequestDBSession();
+				
+				  String queryString = "select s from " +
+						  AmpStructure.class.getName() +" s inner join s.activities a";
+				  		Query q=PersistenceManager.getSession().createQuery(queryString);
+						q.setMaxResults(100); 
+				  		al= q.list();
+				
+
+				
+			} catch (DgException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			  return al;
+
+    }
+    
 }

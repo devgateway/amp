@@ -186,39 +186,39 @@ module.exports = Backbone.View.extend({
     var self = this;
 
     if (feature.properties) {
-      layer.bindPopup('Project #: '+ feature.properties.projectID  +'<br />Site: ' + feature.properties.title );
+      layer.bindPopup('Project #: '+ feature.properties.projectId  +'<br />Site: ' + feature.properties.title );
     }
 
     layer.on('click', function(evt) {
       var feature = evt.target.feature;
       if (feature) {
-        var projectID = feature.properties.projectID;
-        self._hilightProject(projectID);
+        var projectId = feature.properties.projectId;
+        self._hilightProject(projectId);
       }
     });
 
     layer.on('popupclose',function(evt) {
       var feature = evt.target.feature;
       if (feature) {
-        var projectID = feature.properties.projectID;
-        self._dehilightProject(projectID);
+        var projectId = feature.properties.projectId;
+        self._dehilightProject(projectId);
       }
     });
   },
 
-  _hilightProject: function(projectID) {
+  _hilightProject: function(projectId) {
     this.featureGroup.eachLayer(function(layer) {
       var properties = layer.feature.properties;
-      if (properties.projectID === projectID) {
+      if (properties.projectId === projectId) {
         layer.setStyle({fillColor: '#008'});
       }
     });
   },
 
-  _dehilightProject: function(projectID) {
+  _dehilightProject: function(projectId) {
     this.featureGroup.eachLayer(function(layer) {
       var properties = layer.feature.properties;
-      if (properties.projectID === projectID) {
+      if (properties.projectId === projectId) {
         layer.setStyle({fillColor: '#f70'});
       }
     });

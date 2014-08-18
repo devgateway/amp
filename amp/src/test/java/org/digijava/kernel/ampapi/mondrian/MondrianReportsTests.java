@@ -50,6 +50,7 @@ public class MondrianReportsTests extends AmpTestCase {
 		suite.addTest(new MondrianReportsTests("testColumnMeasureSortingTotals"));
 		suite.addTest(new MondrianReportsTests("testSortingByTuplesTotals"));
 		suite.addTest(new MondrianReportsTests("testAmpReportToReportSpecification"));
+		suite.addTest(new MondrianReportsTests("testHeavyQuery"));
 		
 		return suite;
 	}
@@ -119,12 +120,27 @@ public class MondrianReportsTests extends AmpTestCase {
 		generateAndValidate(spec, true);
 	}
 	
+	public void testHeavyQuery() {
+		long start = System.currentTimeMillis();
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("testHeavyQuery");
+		spec.addColumn(new ReportColumn(ColumnConstants.REGION, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ACTIVITY));
+		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+		generateAndValidate(spec, true);
+		long end = System.currentTimeMillis();
+		System.out.println("Full time (with printing) = " + (end-start) + "(ms)");
+	}
+	
 	private void generateAndValidate(ReportSpecification spec, boolean print) {
 		String err = null;
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, print);
 		GeneratedReport report = null;
 		try {
 			report = generator.executeReport(spec);
+			System.out.println("Generation duration = " + report.generationTime + "(ms)");
 		} catch (Exception e) {
 			System.err.println(e.getMessage());
 			err = e.getMessage();

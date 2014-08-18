@@ -71,6 +71,13 @@ public class MDXAttribute extends MDXElement {
 			return toString();
 		return getCurrentMemberName() + "." + MoConstants.MEMBER_NAME;
 	}
+	
+	public static boolean filterEquals(MDXAttribute a1, MDXAttribute a2) {
+		if (a1 != null && a2 != null) { 
+			return a1.getDimensionAndHierarchy() != null && a1.getDimensionAndHierarchy().equals(a2.getDimensionAndHierarchy());
+		}
+		return a1 == null && a2 == null;
+	}
 
 	/**
 	 * @return the dimension

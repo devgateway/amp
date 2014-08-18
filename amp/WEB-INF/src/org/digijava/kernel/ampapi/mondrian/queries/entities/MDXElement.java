@@ -35,6 +35,29 @@ public abstract class MDXElement implements Cloneable {
 	public boolean hasFullName() {
 		return this.name!=null;
 	}
+	
+	public int hashCode() {
+		return this.getFullName().hashCode();
+	}
+	
+	/**
+	 * The equality is based upon element full name, without any value filters
+	 */
+	public boolean equals(Object o) {
+		if (o!=null && MDXElement.class.isAssignableFrom(o.getClass())) {
+			MDXElement mdxAttr = (MDXElement)o;
+			return mdxAttr.getFullName().equals(this.getFullName());
+		}
+		return false;
+	}
+	
+	public static boolean filterEquals(MDXElement e1, MDXElement e2) {
+		if (e1 != null && e2 != null) {
+			return e1.equals(e2) 
+					|| MDXAttribute.class.isAssignableFrom(e1.getClass()) && MDXAttribute.class.isAssignableFrom(e2.getClass()) && MDXAttribute.filterEquals((MDXAttribute)e1, (MDXAttribute)e2); 
+		}
+		return e1 == null && e2 == null;
+	}
 
 	/**
 	 * @return the name

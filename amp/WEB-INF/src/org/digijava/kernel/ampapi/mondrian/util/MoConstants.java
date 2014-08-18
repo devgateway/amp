@@ -21,6 +21,7 @@ public final class MoConstants {
 	public static final String MEASURE = "Measure";
 	public static final String MEASURES = "Measures";
 	public static final String MEMBERS = "Members";
+	public static final String MEMBER = "MEMBER";
 	public static final String CURRENT_MEMBER = "CurrentMember";
 	public static final String FIRST_CHILD = "FirstChild";
 	public static final String LAST_CHILD = "LastChild";
@@ -29,6 +30,7 @@ public final class MoConstants {
 	public static final String FUNC_CROSS_JOIN = "CrossJoin";
 	public static final String FUNC_CROSS_JOIN_FORMAT = "CrossJoin(%s, %s)";
 	public static final String FUNC_HIERARCHIZE = "Hierarchize";
+	public static final String FUNC_INTERSECT = "Intersect";
 	public static final String FUNC_UNION = "Union";
 	public static final String FUNC_UNION_FORMAT = "Union(%s, %s)";
 	public static final String FUNC_ORDER = "Order";
@@ -57,17 +59,18 @@ public final class MoConstants {
 	public static final String RESPONSIBLE_AGENCY = "Responsible Organization";
 	//Hierarchies
 	public static final String H_DATES = "Dates";
-	public static final String H_DATES_DUPLICATE = "DatesDuplicate";
+	//public static final String H_DATES_DUPLICATE = "DatesDuplicate";
 	public static final String H_YEAR = "Year";
 	public static final String H_QUARTER = "Quarter";
 	public static final String H_MONTH = "Month";
+	public static final String H_ORGANIZATIONS = "Organization Hierarchy";
 	public static final String H_ORG_TYPE_NAME = "Organization Type Name";
 	public static final String H_ORG_GROUP_NAME = "Organization Group Name";
 	public static final String H_ORG_NAME = "All Orgs";
-	public static final String H_ORG_DUPLICATE = "Organization Hierarchy Duplicate";
+	//public static final String H_ORG_DUPLICATE = "Organization Hierarchy Duplicate";
 	
 	public static final String H_LOCATIONS = "Locations";
-	public static final String H_LOCATIONS_DUPLICATE= "LocationsDuplicate";
+	//public static final String H_LOCATIONS_DUPLICATE= "LocationsDuplicate";
 	//Attributes/Levels
 	public static final String ATTR_PROJECT_TITLE = "Project Title";
 	public static final String ATTR_APPROVAL_STATUS = "Approval Status";
@@ -77,6 +80,7 @@ public final class MoConstants {
 	public static final String ATTR_QUARTER = "Quarter";
 	public static final String ATTR_MONTH = "Month";
 	public static final String ATTR_DATE = "Date";
+	public static final String ATTR_ALL_DATES = "All Periods";
 	public static final String ATTR_COUNTRY_NAME = "Country Name";
 	public static final String ATTR_REGION_NAME = "Region Name";
 	public static final String ATTR_ZONE_NAME = "Zone Name";

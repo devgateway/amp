@@ -81,12 +81,14 @@ public class MondrianUtils {
 		return e.getMessage();
 	}
 	
+	/* candidate for removal
 	public static MDXAttribute getDuplicate(MDXAttribute mdxAttr) {
 		MDXLevel newLevel = new MDXLevel(mdxAttr);
 		String hierarchy = MondrianMapping.getDuplicateHierarchy(newLevel.getHierarchy());   
 		newLevel.setHierarchy(hierarchy);
 		return newLevel;
 	}
+	*/
 	
 	/**
 	 * Prints formated cellSet to standard system console or file if {@link PRINT_PATH} is configured

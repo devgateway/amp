@@ -66,16 +66,24 @@ public class MondrianMapping {
 		return idProperty.get(entity);
 	}
 	
+	public static String getAll(MDXAttribute mdxAttr) {
+		if (mdxAttr.getDimension().equals(MoConstants.DATES))
+			return (new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, MoConstants.ATTR_ALL_DATES)).getFullName(); 
+		return null;
+	}
+	/* candidate for removal
 	public static String getDuplicateHierarchy(String hierarchy) {
 		String dupHierarchy = duplicateHierarchy.get(hierarchy);
 		if (dupHierarchy == null)
 			dupHierarchy = hierarchy;
 		return dupHierarchy;
 	}
+	*/
 	
 	/**
 	 * Mappings between actual hierarchies and their duplicates to be used on Filter axis
 	 */
+	/* candidate for removal
 	private static final Map<String, String> duplicateHierarchy = new HashMap<String, String>() {{
 		put(null, "Duplicate");
 		put(MoConstants.H_DATES, MoConstants.H_DATES_DUPLICATE);
@@ -87,6 +95,7 @@ public class MondrianMapping {
 		put(MoConstants.H_ORG_NAME, MoConstants.H_ORG_DUPLICATE);
 		put(MoConstants.H_LOCATIONS, MoConstants.H_LOCATIONS_DUPLICATE);
 	}};
+	*/
 	
 	/**
 	 * Mappings between AMP Data and Mondrian Schema 

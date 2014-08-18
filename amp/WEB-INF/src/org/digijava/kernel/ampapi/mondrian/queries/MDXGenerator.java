@@ -26,6 +26,7 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
 import org.digijava.kernel.ampapi.mondrian.util.Connection;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.olap4j.CellSet;
 import org.olap4j.OlapConnection;
@@ -112,7 +113,6 @@ public class MDXGenerator {
 	private MdxParser parser = null;
 	private MdxValidator validator = null;
 	
-	
 	public MDXGenerator() throws AmpApiException {
 		setup();
 	}
@@ -177,7 +177,8 @@ public class MDXGenerator {
 		String notEmptyColumns = config.isAllowColumnsEmptyData() ? "" : "NON EMPTY ";
 		String notEmptyRows = config.isAllowRowsEmptyData() ? "" : "NON EMPTY ";
 		
-		adjustDuplicateElementsOnDifferentAxis(config);
+		//TODO: candiate for removal - no needed anymore with latest solution
+		//adjustDuplicateElementsOnDifferentAxis(config);
 
 		String axisMdx = null;
 		
@@ -229,17 +230,64 @@ public class MDXGenerator {
 		String axisMdx = null;
 		
 		String measures = "";
-		for (MDXMeasure colMeasure:config.getColumnMeasures()) {
+		String totalMeasures = "";
+		Map<MDXMeasure, String> measureTotalMemberMap = new HashMap<MDXMeasure, String>();
+		Map<String, String> measureTotalMemberDefinitionMap = new HashMap<String, String>();
+		for (MDXMeasure colMeasure : config.getColumnMeasures()) {
 			measures += "," + colMeasure.toString();
+			//define measure totals
+			String measureTotalMember = MoConstants.MEASURES + "." + MDXElement.quote("Total " + colMeasure.getName());
+			totalMeasures += "," + measureTotalMember;
+			//by default no special formular is needed, just using the measure itself
+			String measureTotalMemberDefinition = colMeasure.toString();
+			measureTotalMemberMap.put(colMeasure, measureTotalMember);
+			measureTotalMemberDefinitionMap.put(measureTotalMember, measureTotalMemberDefinition);
 		}
-		axisMdx = "{" + measures.substring(1) + "}";
+		
+		String measuresStr = "{" + measures.substring(1) + "}";
+		axisMdx = measuresStr;
+		totalMeasures = "{" + totalMeasures.substring(1) + "}";
+		
 		if (config.getColumnAttributes().size()==0) {
 			//aka simple summary totals report or can be used by dashboards/reports charts (e.g. pie chart)
 			axisMdx = "{" + MoConstants.FUNC_HIERARCHIZE + "(" + axisMdx + ")}"; //
 		} else {
+			List<String> dataFilterSets = new ArrayList<String>();
 			axisMdx = getAxis(config, config.getColumnAttributes().listIterator(config.getColumnAttributes().size()), 
-					with, "COLSET", axisMdx, config.isDoColumnsTotals(), config.getColsHierarchiesTotals());
+					with, "COLSET", axisMdx, config.isDoColumnsTotals(), 
+					Math.min(config.getColsHierarchiesTotals(), config.getColumnAttributes().size()-1) , dataFilterSets);
+			
+			//if there are data filters applied directly on columns, then we need to update total measures member definition
+			if (dataFilterSets.size() > 0) {
+				//build formulae to be applied to all measures
+				StringBuilder formulae = new StringBuilder();
+				//TODO: TBD if for all measures SUM function is applicable
+				formulae.append("Sum(");
+				for (String dataFilterName : dataFilterSets) {
+					formulae.append(MoConstants.FUNC_CROSS_JOIN).append("(").append(dataFilterName).append(",");
+				}
+				formulae.append("%s").append(")"); // ) enclosing from sum
+				for (int i = 0; i < dataFilterSets.size(); i++)
+					formulae.append(")");
+				//replace total measure member definition 
+				for (MDXMeasure measure : config.getColumnMeasures()) {
+					String measureTotalMember = measureTotalMemberMap.get(measure);
+					String newMemberDef = String.format(formulae.toString(), measure.toString());
+					measureTotalMemberDefinitionMap.put(measureTotalMember, newMemberDef);
+				}
+			}
 		}
+		
+		if (config.isDoColumnsTotals()) {
+			//replace last occurance of measures set tot total measures
+			int lastMeasuresPos = axisMdx.lastIndexOf(measuresStr); 
+			axisMdx = axisMdx.substring(0, lastMeasuresPos) + totalMeasures + axisMdx.substring(lastMeasuresPos + measuresStr.length());
+			
+			for (Entry<String, String> pair : measureTotalMemberDefinitionMap.entrySet()) {
+				with.append(" ").append(MoConstants.MEMBER).append(" ").append(pair.getKey()).append(" AS ").append(pair.getValue());
+			}
+		}
+		
 		return axisMdx;
 	}
 	
@@ -253,26 +301,25 @@ public class MDXGenerator {
 	private String getRows(MDXConfig config, StringBuilder with) throws AmpApiException {
 		//assumption: only attributes are displayed per rows, no measures
 		return getAxis(config, config.getRowAttributes().listIterator(config.getRowAttributes().size()), 
-				with, "ROWSET", null, config.isDoRowTotals(), config.getRowsHierarchiesTotals());
+				with, "ROWSET", null, config.isDoRowTotals(), 
+				Math.min(config.getRowsHierarchiesTotals(), config.getRowAttributes().size() - 1), null);
 	}
 	
 	/** supporting common method used by getRows and getColumns, because the algorithm is the same similar */
 	private String getAxis(MDXConfig config, ListIterator<MDXAttribute> reverseIterator, StringBuilder with, String withPrefix,
-							String initMember, boolean doTotals, int numSubTotals) throws AmpApiException {
+							String initMember, boolean doTotals, int numSubTotals, List<String> dataFilterSets) throws AmpApiException {
 		int setId = 0; //identifier suffix for 'with' member name
 		String crossJoin = initMember;
-		String prevAttrAll = initMember; //used if config.isDoColumnsTotals() is true
+		String prevAttrAll = initMember; //used if totals must be calculated
 		
 		for (ListIterator<MDXAttribute> iter = reverseIterator; iter.hasPrevious(); ) {
 			MDXAttribute rowAttr = iter.previous();
 			String attrNode = null;
 			String attrAll = doTotals || numSubTotals > 0 ? getAll(rowAttr) : null;
 			String all = (crossJoin == null && numSubTotals > 0) ? "{ %s, " + attrAll + "}" : "%s"; //build all in first crossJoin only for last element
-			if (config.getAxisFilters().containsKey(rowAttr)) {
-				//build a separate rowset to have a more readable MDX 
-				attrNode = withPrefix + (++setId);
-				with.append(" SET " + attrNode + " AS '" + String.format(all, toAxisAttrFilter(rowAttr, config.getAxisFilters().get(rowAttr))) + "'");
-			} else {
+			//build a separate rowset to have a more readable MDX 
+			attrNode = configureFilters(config, rowAttr, with, withPrefix + (++setId), all, attrAll, dataFilterSets);
+			if (attrNode == null) {
 				attrNode = String.format(all, rowAttr.toString());
 			}
 			if (crossJoin == null) { 
@@ -294,6 +341,86 @@ public class MDXGenerator {
 		return crossJoin;
 	}
 	
+	/**
+	 * Configures the filter sets, which filters to be used for visual filters and which one for all data filters, i.e. including totals 
+	 * @param config - MDXConfig
+	 * @param mdxAttr - the attribute to configure the filters for
+	 * @param with - WITH clause StringBuilder that keeps track of all SETS or MEMBERS
+	 * @param suffix
+	 * @param visualFormat - the format string (with or without Totals)
+	 * @return row filter set name or null if no filter is applied
+	 * @throws AmpApiException 
+	 */
+	private String configureFilters(MDXConfig config, MDXAttribute mdxAttr, StringBuilder with, String suffix, 
+			String visualFormat, String attrAll, List<String> dataFilters) throws AmpApiException {
+		MDXFilter mdxAxisFilter = findAndRemoveFilter(config.getAxisFilters(), mdxAttr);
+		MDXFilter mdxDataFilter = findAndRemoveFilter(config.getDataFilters(), mdxAttr);
+		MDXAttribute mdxLevelFilter = findAndRemoveFilter(config.getLevelFilters(), mdxAttr);
+		boolean hasAxisFilter = mdxAxisFilter != null;
+		boolean hasDataFilter = mdxDataFilter != null;
+		boolean hasLevelFilter = mdxLevelFilter != null;
+		
+		String axisFilter =  hasAxisFilter ? toAxisAttrFilter(mdxAttr, mdxAxisFilter) : null;
+		String dataFilter = hasDataFilter ? toAxisAttrFilter(mdxAttr, mdxDataFilter) : null;
+		String levelFilter = hasLevelFilter ? mdxLevelFilter.toString() : null;
+		String axisFilterName = "Axis" + suffix;
+		String dataFilterName = "Data" + suffix;
+		
+		hasDataFilter = hasDataFilter || hasLevelFilter;
+		if (dataFilter == null)
+			dataFilter = "{" + levelFilter + "}";
+		else if (levelFilter != null)
+			dataFilter = "{" + dataFilter + ", " + levelFilter + "}";
+		
+		if (hasAxisFilter)
+			with.append(" SET " + axisFilterName + " AS " + axisFilter).append(System.lineSeparator());
+		
+		if (hasDataFilter) {
+			with.append(" SET " + dataFilterName + " AS " + dataFilter);
+			if (dataFilters != null)
+				dataFilters.add(dataFilterName);
+		}
+		if (hasLevelFilter) {
+			config.getLevelFilters().remove(mdxLevelFilter);
+		}
+		
+		String visualFilter = null;
+		if (hasAxisFilter && hasDataFilter) {
+			visualFilter = MoConstants.FUNC_INTERSECT + "(" + axisFilterName + ", " + dataFilterName + ")";
+			with.append(" SET " + visualFilter + " AS '" + String.format(visualFormat, visualFilter) + "'");
+		} else if (hasAxisFilter)
+			visualFilter = axisFilterName;
+		else if (hasDataFilter)
+			visualFilter = dataFilterName;
+		
+		if (attrAll != null)
+			with.append(" MEMBER " + attrAll + " AS Sum(" + (hasDataFilter ? dataFilterName : mdxAttr.toString()) + ")");
+		
+		return visualFilter;
+	}
+	
+	// we also remove the filter to avoid duplicate filtering on where for selected columns
+	private MDXFilter findAndRemoveFilter(Map<? extends MDXElement, MDXFilter> filterMap, MDXElement mdxElem) {
+		for (Entry<? extends MDXElement, MDXFilter> pair : filterMap.entrySet()) {
+			//if same mdx element is detected and this is not a property filter, which should be applied in where axis as it speeds up 
+			if (MDXElement.filterEquals(pair.getKey(), mdxElem) && pair.getValue().property == null) {
+				filterMap.remove(pair.getKey());
+				return pair.getValue();
+			}
+		}
+		return null;
+	}
+	
+	private MDXAttribute findAndRemoveFilter(List<MDXAttribute> filterList, MDXAttribute mdxAttr) {
+		for (MDXAttribute filter : filterList) {
+			if (MDXAttribute.filterEquals(filter, mdxAttr)) {
+				filterList.remove(filter);
+				return filter;
+			}
+		}
+		return null;
+	}
+	
 	private String getWhere(MDXConfig config) throws AmpApiException {
 		if (config.getLevelFilters().size() == 0 && config.getDataFilters().size() == 0) return "";
 		
@@ -304,21 +431,24 @@ public class MDXGenerator {
 				+ (config.getDataFilters().entrySet().size() > 0 && config.getLevelFilters().size() > 0 ? 1 : 0)) * sep.length();
 		boolean doCrossJoin = false;
 		
-		
 		//store groups of filters by same level to reduce the number of cross joins
 		Map<String, List<String>> filtersMap = new HashMap<String, List<String>>();
 		Set<String> usesFilterFunc = new HashSet<String>();
-		 
+		
+		//build filters Map from MDXFilters
 		for (Map.Entry<MDXAttribute, MDXFilter> pair:config.getDataFilters().entrySet()) {
 			String filter = toFilter(pair.getKey().toString(), pair.getKey().getCurrentMemberName(), pair.getKey(), pair.getValue());
 			size += filter.length();
 			addToFilterMap(filtersMap, filter, pair.getKey());
+			//remember that we'll need crossJoins if there is at least one range/multiple values filter (i.e. whenever a filter has no singleValue filter)
 			doCrossJoin = doCrossJoin || pair.getValue().singleValue == null;
+			//if Filter function is used, basically only when properties are used, then we must do cross join even if this is a single value filter 
 			if (isFilterFuncUsed(pair.getKey(), pair.getValue())) {
 				usesFilterFunc.add(pair.getKey().getFullName());
 				doCrossJoin = true;
 			}
 		}
+		//build filters Map from Single Level filters
 		for (MDXAttribute mdxAttr:config.getLevelFilters()) {
 			String filter = mdxAttr.toString();
 			size += filter.length();
@@ -335,6 +465,7 @@ public class MDXGenerator {
 		StringBuilder whereFilter = new StringBuilder(size + prefix.length() + 1); //1 for closing )
 		whereFilter.append(prefix);
 		
+		//builds WHERE slicer based on filters
 		for(Iterator<List<String>> iter = filtersMap.values().iterator(); iter.hasNext(); ) {
 			List<String> filterList = iter.next();
 			if (doCrossJoin)
@@ -487,11 +618,19 @@ public class MDXGenerator {
 	}
 	
 	private String getAll(MDXAttribute mdxAttr) throws AmpApiException {
+		String all = MondrianMapping.getAll(mdxAttr);
+		if (all == null)
+			all = mdxAttr.getDimensionAndHierarchy() + "." + MDXElement.quote (mdxAttr.getName() + " Totals");
+		return all;
+	}
+	/* canditate for removal
+	private String getAll(MDXAttribute mdxAttr) throws AmpApiException {
 		String all = allNames==null ? null : allNames.get(mdxAttr.getDimensionAndHierarchy());
 		if (all==null)
 			throw new AmpApiException("No 'All' definition found for '" + mdxAttr.getDimensionAndHierarchy() + "'");
 		return all;
 	}
+	*/
 	
 	/* candidate for removal
 	private String toMDXGroup(List<String> list, String groupFuncion, String defaultVal) {
@@ -561,6 +700,7 @@ public class MDXGenerator {
 	 * replaces levels from same hierarchy that are used in different axis by another duplicate hierarchy 
 	 * (any other solution for same hierarchy on multiple axis?) 
 	 */
+	/*candidate for removal
 	private void adjustDuplicateElementsOnDifferentAxis(MDXConfig config) {
 		Set<String> usedDimensions = new HashSet<String>();
 		
@@ -581,8 +721,10 @@ public class MDXGenerator {
 		}
 		config.getDataFilters().putAll(replaceFilters);  
 	}
+	*/
 	
-	/** replaces attr hierarchy with duplicate one; supporting method for of {@link #adjustDuplicateElementsOnDifferentAxis */ 
+	/** replaces attr hierarchy with duplicate one; supporting method for of {@link #adjustDuplicateElementsOnDifferentAxis */
+	/* candidate for removal
 	private Set<String> adjustDuplicates(Set<String> usedDimensions, List<MDXAttribute> attrList) {
 		Set<String> newDimensions = new HashSet<String>();
 		for (ListIterator<MDXAttribute> iter = attrList.listIterator(); iter.hasNext();) {
@@ -594,6 +736,7 @@ public class MDXGenerator {
 		}
 		return newDimensions;
 	}
+	*/
 	
 	/* candidate for removal
 	private List<String> hierchize(List<MDXAttribute> origList, List<String> mdxList) {
@@ -639,6 +782,8 @@ public class MDXGenerator {
 			validator.validateSelect(parser.parseSelect(mdx));
 		} catch (Exception e) {
 			String err = MondrianUtils.toString(e);
+			//known Mondrian BUG for MDX validation not supporting named sets: http://jira.pentaho.com/browse/MONDRIAN-877 
+			if (!(e instanceof UnsupportedOperationException && err.contains("NamedSetExpr")))
 			//for some reason validation fails when Properties are in MDX queries and a NullPointerException is thrown
 			//the MDX is valid (verified in Saiku) so we'll avoid throwing exception only in this particular case
 			if (!(mdx.contains(MoConstants.PROPERTIES) && e instanceof NullPointerException)) {

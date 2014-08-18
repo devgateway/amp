@@ -26,6 +26,8 @@ import org.olap4j.query.SortOrder;
  * @author Nadejda Mandrescu
  */
 public class MDXTests extends AmpTestCase {
+	//we can selectively run MDX query tests or force to run all, not only validate
+	private static final boolean FORCE_RUN = false; 
 
 	private MDXTests(String name) {
 		super(name);
@@ -41,8 +43,8 @@ public class MDXTests extends AmpTestCase {
 		suite.addTest(new MDXTests("testDataSingleValueFilterByLocation"));
 		suite.addTest(new MDXTests("testDataFilters"));
 		suite.addTest(new MDXTests("testRangeFilter"));
-		suite.addTest(new MDXTests("testSinglePropertyFilter"));
-		suite.addTest(new MDXTests("testPropertiesListFilter"));
+		//suite.addTest(new MDXTests("testSinglePropertyFilter")); 
+		//suite.addTest(new MDXTests("testPropertiesListFilter"));
 		suite.addTest(new MDXTests("testMultipleHierarchies"));
 		suite.addTest(new MDXTests("testSortingNoTotals"));
 		suite.addTest(new MDXTests("testSortingBy2012Q1ActualCommitments"));
@@ -116,7 +118,7 @@ public class MDXTests extends AmpTestCase {
 		MDXAttribute attrLocation = new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS, MoConstants.ATTR_LOCATION_NAME);
 		MDXFilter filter = new MDXFilter("8977", true, MoConstants.P_COUNTRY_ID);
 		config.getDataFilters().put(attrLocation, filter);
-		generateAndValidateMDX(config, expectedRes, false);
+		generateAndValidateMDX(config, expectedRes, true); //running the query because cannot validate when properties are used
 	}
 	
 	public void testPropertiesListFilter() {
@@ -125,7 +127,7 @@ public class MDXTests extends AmpTestCase {
 		MDXAttribute attrLocation = new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS, MoConstants.ATTR_LOCATION_NAME);
 		MDXFilter filter = new MDXFilter(Arrays.asList("8977", "9015", "8857"), true, MoConstants.P_COUNTRY_ID);
 		config.getDataFilters().put(attrLocation, filter);
-		generateAndValidateMDX(config, expectedRes, false);
+		generateAndValidateMDX(config, expectedRes, true); //running the query because cannot validate when properties are used
 	}
 	
 	public void testMultipleHierarchies() {
@@ -155,10 +157,10 @@ public class MDXTests extends AmpTestCase {
 		config.getRowAttributes().clear();
 		config.addRowAttribute(new MDXAttribute(MoConstants.PRIMARY_SECTOR, MoConstants.ATTR_PRIMARY_SECTOR_NAME));
 		MDXTuple sortingTouple1 = new MDXTuple();
-		sortingTouple1.add(new MDXLevel(MoConstants.DATES, MoConstants.H_DATES_DUPLICATE, "2012", "Q1"));
+		sortingTouple1.add(new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, "2012", "Q1"));
 		sortingTouple1.add(config.getColumnMeasures().get(0));
 		config.getSortingOrder().put(sortingTouple1, SortOrder.BASC);
-		config.addSingleValueFilters(new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, MoConstants.ATTR_YEAR, "2012"));
+		config.addSingleValueFilters(new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR, "2012"));
 		generateAndValidateMDX(config, null, false);
 	}
 	
@@ -187,7 +189,7 @@ public class MDXTests extends AmpTestCase {
 		try {
 			generator = new MDXGenerator();
 			mdx = generator.getAdvancedOlapQuery(config);
-			if (runQuery) {
+			if (runQuery || FORCE_RUN) {
 				set = generator.runQuery(mdx);
 				MondrianUtils.print(set, config.getMdxName());
 			}

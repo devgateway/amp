@@ -97,8 +97,10 @@ public class MondrianReportGenerator implements ReportExecutor {
 			startTime = System.currentTimeMillis();
 			String mdxQuery = generator.getAdvancedOlapQuery(config);
 			cellSet = generator.runQuery(mdxQuery);
-			if (printMode) 
+			if (printMode) {
 				MondrianUtils.print(cellSet, spec.getReportName());
+				System.out.println("[" + config.getMdxName() + "] MDX query: " + mdxQuery);
+			}
 		} catch (Exception e) {
 			if (generator != null) generator.tearDown();
 			throw new AMPException("Cannot generate Mondrian Report: " + e.getMessage());

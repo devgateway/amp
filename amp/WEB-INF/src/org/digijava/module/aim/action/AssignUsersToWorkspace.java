@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -17,8 +18,12 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.digijava.kernel.config.DigiConfig;
+import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -29,6 +34,8 @@ import org.digijava.module.aim.form.TeamMemberForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.message.triggers.UserAddedToFirstWorkspaceTrigger;
+import org.digijava.module.message.triggers.UserRegistrationTrigger;
 
 public class AssignUsersToWorkspace extends Action {
 	private static Logger logger = Logger.getLogger(AssignUsersToWorkspace.class);
@@ -90,7 +97,17 @@ public class AssignUsersToWorkspace extends Action {
 //				newAppSettings.setUseDefault(new Boolean(true));
 //				newAppSettings.setValidation(ampAppSettings.getValidation());
 				try{
+					
+					
+					Collection<AmpTeamMember> teamMembers = TeamMemberUtil.getAllAmpTeamMembersByUser(user);
 					TeamUtil.addTeamMember(newMember,site);
+					//let's refresh now
+					teamMembers = TeamMemberUtil.getAllAmpTeamMembersByUser(user);
+					if (teamMembers.size() == 1) {
+						//here we message the user via the messaging engine and via email
+						@SuppressWarnings("unused")
+						UserAddedToFirstWorkspaceTrigger trigger = new UserAddedToFirstWorkspaceTrigger((Object)Arrays.asList(user, ampTeam));
+					}
 				}catch (Exception e){
 						e.printStackTrace();
 						logger.error("error when trying to add a new member: " + newMember.getUser().getEmail() + " from team: "+ newMember.getAmpTeam().getName());

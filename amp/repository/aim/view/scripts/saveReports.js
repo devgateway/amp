@@ -63,7 +63,9 @@ SaveReportEngine.prototype.showPanel		= function () {
 	this.panel.setFooter("");
 	this.panel.show();
 	initMultilingualInput('AmpReports_name');
-	//$('#AmpReports_name_holder .yui-content input').first().focus(); // focus on first-language
+	var divEl	= document.getElementById("titlePanelBody");
+	var titleEl	= divEl.getElementsByTagName("input")[0];
+	this.panel.subscribe("show", function () {titleEl.focus(); });	
 };
 	
 SaveReportEngine.prototype.closePanel		= function () {

@@ -159,7 +159,7 @@ module.exports = Backbone.View.extend({
         return point;
       },
       onEachFeature: self._onEachFeature
-    }).addTo(self.map);
+    });
   },
 
 

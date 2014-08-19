@@ -10,8 +10,8 @@ module.exports = Backbone.Collection
   _watched: _([]),
 
   initialize: function(options) {
-    this.watchCollection(options.sites);
     this.watchCollection(options.clusters);
+    this.watchCollection(options.sites);
     this.stuffUpdated();
   },
 

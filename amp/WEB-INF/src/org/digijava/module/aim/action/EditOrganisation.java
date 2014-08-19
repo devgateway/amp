@@ -898,13 +898,18 @@ public class EditOrganisation extends DispatchAction {
 	  boolean isAdmin=!sessionChk(request);
 	  HttpSession session = request.getSession();
 	  TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+	  AddOrgForm editForm = (AddOrgForm) form;
+
+	  request.setAttribute(MULTILINGUAL_ORG_PREFIX + "_name", editForm.restoreMultilingualNameInputInstance(request));
+
+		
 	  boolean isTeamHead=tm!=null&&tm.getTeamHead();
       if (!isAdmin) {
     	  if(!isTeamHead){
     		  return mapping.findForward("index");
     	  }
       }
-      AddOrgForm editForm = (AddOrgForm) form;
+//      AddOrgForm editForm = (AddOrgForm) form;
       AmpOrganisation organization = null;
       Long orgId = editForm.getAmpOrgId();
       String action = "create";

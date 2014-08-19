@@ -63,9 +63,7 @@ SaveReportEngine.prototype.showPanel		= function () {
 	this.panel.setFooter("");
 	this.panel.show();
 	initMultilingualInput('AmpReports_name');
-	var divEl	= document.getElementById("titlePanelBody");
-	var titleEl	= divEl.getElementsByTagName("input")[0];
-	this.panel.subscribe("show", function () {titleEl.focus(); });
+	this.panel.subscribe("show", function () {$('#titlePanelBody input').first().focus(); });
 };
 	
 SaveReportEngine.prototype.closePanel		= function () {

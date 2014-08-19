@@ -62,11 +62,11 @@ public class ETLTests extends AmpTestCase
 	
 	public void testMondrianTableDescription() {
 		// test that idColumnNames = null means to it mirroring indexedColumns and is iterated in the right sequence
-		MondrianTableDescription mtd = new MondrianTableDescription("someTableName", Arrays.asList("1", "2", "3", "c", "5", "a"));
+		MondrianTableDescription mtd = new MondrianTableDescription("someTableName", null, Arrays.asList("1", "2", "3", "c", "5", "a"));
 		//assertEquals("[1, 2, 3, c, 5, a]", mtd.idColumnNames.toString());
 		assertEquals("[1, 2, 3, c, 5, a]", mtd.indexedColumns.toString());
 		
-		mtd = new MondrianTableDescription("someTableName", Arrays.asList("1", "2", "3", "c", "5", "a"));
+		mtd = new MondrianTableDescription("someTableName", null, Arrays.asList("1", "2", "3", "c", "5", "a"));
 		//assertEquals("[1, 5, c]", mtd.idColumnNames.toString());
 		assertEquals("[1, 2, 3, c, 5, a]", mtd.indexedColumns.toString());
 

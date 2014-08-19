@@ -121,6 +121,8 @@ public class MessageConstants {
     public static final String START_DATE="start date";
     public static final String END_DATE="end date";
 	public static final String APPROVED_BY="approved by";
+	public static final String OBJECT_LOGIN="login";
+	public static final String OBJECT_ORGANIZATION = "organization";
     
     /**
      * email statuses

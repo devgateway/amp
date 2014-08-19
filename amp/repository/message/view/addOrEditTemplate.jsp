@@ -288,46 +288,7 @@ var submmited = false;
 																	<tr>
 																		<td class="inside">
 																			<TABLE width="100%" style="font-size:11px;">
-																				<TR>
-																					<TD COLSPAN="2">
-																						<strong><digi:trn>Patterns Reference</digi:trn></strong>
-																					</TD>
-																				</TR>
-																				<TR>
-																					<TD nowrap="nowrap">
-																						<digi:trn> <b>{name}</b> - Stands for the name of the activity &nbsp;</digi:trn>
-																						<br />
-																					</TD>
-																				</TR>
-																				<TR>
-																					<TD nowrap="nowrap">
-																						<digi:trn> <b>{Created By}</b> - Stands for the name of the creator of the activity &nbsp;</digi:trn>
-																						<br />
-																					</TD>
-																				</TR>
-																				<TR>
-																					<TD nowrap="nowrap"><digi:trn> <b>{approved by}</b> - Stands for activity approver &nbsp; &nbsp;</digi:trn>
-																					<br />
-																					</TD>
-																				</TR>
-																				<TR>
-																					<TD nowrap="nowrap">
-																						<digi:trn> <b>{url}</b> - This will enable you to resolve the URL related to actvity or the new user registeration &nbsp;</digi:trn>
-																						<br />
-																					</TD>
-																				</TR>
-																				<TR>
-																					<TD nowrap="nowrap">
-																						<digi:trn> <b>{start date}</b> - Stands for Calendar Event's Start Date &nbsp;</digi:trn>
-																						<br />
-																					</TD>
-																				</TR>
-																				<TR>
-																					<TD nowrap="nowrap">
-																						<digi:trn> <b>{end date}</b> - Stands for Calendar Event's End Date &nbsp; &nbsp;</digi:trn>
-																						<br />
-																					</TD>
-																				</TR>
+																				<%@include file="messagesLegend.jspf" %>
 																			</TABLE>
 																		</td>
 																	</tr>																							

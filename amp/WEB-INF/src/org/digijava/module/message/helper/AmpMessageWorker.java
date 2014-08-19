@@ -482,6 +482,8 @@ public class AmpMessageWorker {
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(UserRegistrationTrigger.PARAM_NAME));
         myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(UserRegistrationTrigger.PARAM_URL) + "\">User Profile URL</a>");
+        myHashMap.put(MessageConstants.OBJECT_LOGIN, (String) e.getParameters().get(UserRegistrationTrigger.PARAM_LOGIN));
+        myHashMap.put(MessageConstants.OBJECT_ORGANIZATION, (String) e.getParameters().get(UserRegistrationTrigger.PARAM_ORGANIZATION));
         alert.setObjectURL("/" + e.getParameters().get(UserRegistrationTrigger.PARAM_URL));
         alert.setSenderType(MessageConstants.SENDER_TYPE_USER_MANAGER);
         return createAlertFromTemplate(template, myHashMap, alert);

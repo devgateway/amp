@@ -127,36 +127,33 @@ public class RegisterUser extends Action {
 				DbUtil.registerUser(user);
 				//create User Registration Trigger
                  if(FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.USER_REGISTRATION_BY_MAIL)){
-                                String link=RequestUtils.getFullModuleUrl(request);
-                                String id=ShaCrypt.crypt(user.getEmail().trim()+user.getId()).trim();
-                                String description = "Welcome to AMP!"+ '\n'+'\n'+"We must first verify your email address before you become a full registered member (with login privileges)." +'\n'+ "In order to verify your email and complete the registration process, please click on the link below. " +
+                	 String link = RequestUtils.getFullModuleUrl(request);
+                	 String id = ShaCrypt.crypt(user.getEmail().trim()+user.getId()).trim();
+                	 String description = "Welcome to AMP!"+ '\n'+'\n'+"We must first verify your email address before you become a full registered member (with login privileges)." +'\n'+ "In order to verify your email and complete the registration process, please click on the link below. " +
                                       '\n'+link+ "confirmRegisteration.do?id="+id;
-                                try{
-                                	DgEmailManager.sendMail(user.getEmail(), "Confirm your registration", description);
-                                }catch (Exception e) {
-                                	logger.error("Exception from RegisterUser :" + e);
-								}
-                               
+                	 try{
+                		 DgEmailManager.sendMail(user.getEmail(), "Confirm your registration", description);
+                	 }catch (Exception e) {
+                		 logger.error("Exception from RegisterUser", e);
+                	 }
                 }
                   
-				UserRegistrationTrigger urt=new UserRegistrationTrigger(user);
+                // save amp user extensions;
+            	AmpUserExtensionPK extPK=new AmpUserExtensionPK(user);
+            	userExt.setAmpUserExtId(extPK);
+            	AmpUserUtil.saveAmpUserExtension(userExt);
+            	user.setUserExtension(userExt);
+
+            	UserRegistrationTrigger urt = new UserRegistrationTrigger(user);
 
 				Site site = RequestUtils.getSite(request);
 				Group memberGroup = org.digijava.module.aim.util.DbUtil.getGroup(Group.MEMBERS,site.getId());
 				Long uid[] = new Long[1];
 				uid[0] = user.getId();
 				org.digijava.module.admin.util.DbUtil.addUsersToGroup(memberGroup.getId(),uid);
-
-				//save amp user extensions;
-				AmpUserExtensionPK extPK=new AmpUserExtensionPK(user);
-				userExt.setAmpUserExtId(extPK);
-				AmpUserUtil.saveAmpUserExtension(userExt);
 			}
-
-
-
 		} catch (Exception e) {
-			logger.error("Exception from RegisterUser :" + e);
+			logger.error("Exception from RegisterUser", e);
 		}
 
 		return (mapping.findForward("forward"));

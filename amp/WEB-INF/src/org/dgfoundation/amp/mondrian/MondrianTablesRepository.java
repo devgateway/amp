@@ -20,7 +20,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
  */
 public class MondrianTablesRepository {
 	public final static MondrianTableDescription MONDRIAN_LOCATIONS_DIMENSION_TABLE = 
-			new MondrianTableDescription("mondrian_locations", Arrays.asList("id", "parent_location", "country_id", "region_id", "zone_id", "district_id"))
+			new MondrianTableDescription("mondrian_locations", "id", Arrays.asList("id", "parent_location", "country_id", "region_id", "zone_id", "district_id"))
 				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
 					@Override public I18nViewDescription getObject() {
 						return new I18nViewDescription("mondrian_locations")
@@ -32,7 +32,7 @@ public class MondrianTablesRepository {
 					}});
 
 	public final static MondrianTableDescription MONDRIAN_SECTORS_DIMENSION_TABLE = 
-			new MondrianTableDescription("mondrian_sectors", Arrays.asList("amp_sector_id", "parent_sector_id", "level0_sector_id", "level1_sector_id", "level2_sector_id", "amp_sec_scheme_id"))
+			new MondrianTableDescription("mondrian_sectors", "amp_sector_id", Arrays.asList("amp_sector_id", "parent_sector_id", "level0_sector_id", "level1_sector_id", "level2_sector_id", "amp_sec_scheme_id"))
 				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
 					@Override public I18nViewDescription getObject() {
 						return new I18nViewDescription("mondrian_sectors")
@@ -44,7 +44,7 @@ public class MondrianTablesRepository {
 					}});
 	
 	public final static MondrianTableDescription MONDRIAN_PROGRAMS_DIMENSION_TABLE = 
-			new MondrianTableDescription("mondrian_programs",
+			new MondrianTableDescription("mondrian_programs", "amp_theme_id",
 					Arrays.asList("amp_theme_id", "parent_theme_id", "program_setting_id", "program_setting_name", "id2", "id3", "id4", "id5", "id6", "id7", "id8"))
 				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
 					@Override public I18nViewDescription getObject() {
@@ -63,7 +63,7 @@ public class MondrianTablesRepository {
 
 			
 	public final static MondrianTableDescription MONDRIAN_ORGANIZATIONS_DIMENSION_TABLE = 
-			new MondrianTableDescription("mondrian_organizations", Arrays.asList("amp_org_id", "amp_org_grp_id", "amp_org_type_id"))
+			new MondrianTableDescription("mondrian_organizations", "amp_org_id", Arrays.asList("amp_org_id", "amp_org_grp_id", "amp_org_type_id"))
 				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
 					@Override public I18nViewDescription getObject() {
 						return new I18nViewDescription("mondrian_organizations")
@@ -74,7 +74,7 @@ public class MondrianTablesRepository {
 					}});
 	
 	public final static MondrianTableDescription MONDRIAN_ACTIVITY_TEXTS = 
-			new MondrianTableDescription("mondrian_activity_texts", Arrays.asList("amp_activity_id"))
+			new MondrianTableDescription("mondrian_activity_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
 				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
 					@Override public I18nViewDescription getObject() {
 						return new I18nViewDescription("mondrian_activity_texts")

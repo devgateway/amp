@@ -41,6 +41,7 @@ import org.digijava.kernel.entity.UserPreferences;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpUserExtension;
 
 public class User
     extends Entity implements Serializable, Comparable{
@@ -81,6 +82,7 @@ public class User
     private String organizationTypeOther;
     private Set contacts;
     private Long assignedOrgId;
+    private AmpUserExtension userExtension;
 
     private Set<AmpOrganisation> assignedOrgs;
     
@@ -446,6 +448,14 @@ public class User
    		this.assignedOrgs = assignedOrgs;
    	}
 
+   	public void setUserExtension(AmpUserExtension userExt) {
+   		this.userExtension = userExt;
+   	}
+   	
+   	public AmpUserExtension getUserExtension() {
+   		return this.userExtension;
+   	}
+   	
 	public boolean hasVerifiedOrganizationId(Long ampOrgId) {
    		//First, check if the user has the Funding Organization in the property this.getAssignedOrgId()
    		if(ampOrgId == null) return false;

@@ -249,46 +249,7 @@ div.fakefile2 input{
 				</tr>
 				<tr><td>
 				<TABLE width="750" style="font-size:11px; border:1px solid #CCCCCC; margin-left:4px;">
-					<TR>
-						<TD COLSPAN="2"><strong><digi:trn
-							key="message:PatternsReference">Patterns Reference</digi:trn></strong></TD>
-					</TR>
-					<TR>
-						<TD nowrap="nowrap">
-							<digi:trn key="message:patternName"> <b>{name}</b> - Stands for the name of the activity &nbsp;</digi:trn>
-						<br />
-						</TD>
-					</TR>
-					<TR>
-						<TD nowrap="nowrap">
-							<digi:trn key="message:patternCreatedBy"> <b>{Created By}</b> - Stands for the name of the creator of the activity &nbsp;</digi:trn>
-						<br />
-						</TD>
-					</TR>
-					<TR>
-						<TD nowrap="nowrap">
-							<digi:trn> <b>{approved by}</b> - Stands for activity approver &nbsp; &nbsp;</digi:trn>
-						<br />
-						</TD>
-					</TR>
-					<TR>
-						<TD nowrap="nowrap">
-							<digi:trn key="message:patternUrl"> <b>{url}</b> - This will enable you to resolve the URL related to actvity or the new user registeration &nbsp;</digi:trn>
-						<br />
-						</TD>
-					</TR>
-					<TR>
-						<TD nowrap="nowrap">
-							<digi:trn key="message:patternstartDate"> <b>{start date}</b> - Stands for Calendar Event's Start Date &nbsp;</digi:trn>
-						<br />
-						</TD>
-					</TR>
-					<TR>
-						<TD nowrap="nowrap">
-							<digi:trn key="message:patternEndDate"> <b>{end date}</b> - Stands for Calendar Event's End Date &nbsp; &nbsp;</digi:trn>
-						<br />
-						</TD>
-					</TR>				
+					<%@include file="messagesLegend.jspf" %>
 				</TABLE>
 
 				</td></tr>

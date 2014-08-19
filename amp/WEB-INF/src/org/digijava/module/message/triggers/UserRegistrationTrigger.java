@@ -11,8 +11,12 @@ public class UserRegistrationTrigger extends Trigger {
 	public static final String PARAM_TRIGGER_SENDER="sentBy";
 	public static final String PARAM_CREATION_DATE="Creation date";
 	public static final String PARAM_URL="User profile url";
+	public static final String PARAM_LOGIN = "login";
+	public static final String PARAM_ORGANIZATION = "organization";
 
-	public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_TRIGGER_SENDER,PARAM_CREATION_DATE,PARAM_URL};
+	public static final String [] parameterNames=new String[]{
+		PARAM_NAME, PARAM_TRIGGER_SENDER, PARAM_CREATION_DATE,
+		PARAM_URL, PARAM_LOGIN, PARAM_ORGANIZATION};
 
 	public UserRegistrationTrigger(Object source) {
 		if(! (source instanceof User)) throw new RuntimeException("Incompatible object. Source must be a User!");
@@ -31,6 +35,13 @@ public class UserRegistrationTrigger extends Trigger {
 		e.getParameters().put(PARAM_TRIGGER_SENDER,MessageConstants.SENDER_TYPE_USER_MANAGER);
 		e.getParameters().put(PARAM_CREATION_DATE, System.currentTimeMillis());
 		e.getParameters().put(PARAM_URL, "aim/default/userProfile.do~edit=true~id="+user.getId());
+		e.getParameters().put(PARAM_LOGIN, user.getEmail());
+		
+		String orgName = "<none>";
+		if (user.getUserExtension() != null && user.getUserExtension().getOrganization() != null)
+			orgName = user.getUserExtension().getOrganization().getAcronymAndName();		
+		e.getParameters().put(PARAM_ORGANIZATION, orgName);
+		
 		return e;
 	}
 

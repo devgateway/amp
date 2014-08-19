@@ -16,7 +16,9 @@ import org.dgfoundation.amp.ar.viewfetcher.I18nViewDescription;
  *
  */
 public class MondrianTableDescription {
+	
 	public final String tableName;
+	public final String primaryKeyColumnName;
 	
 	/**
 	 * list of columns which should have indices created on them. Will be iterated in the order given by the constructor
@@ -32,10 +34,11 @@ public class MondrianTableDescription {
 	 * @param idColumnNames - the internal ids column-names of the table. They are checked against 999999999 when multilingualising. If null, will mirror indexedColumns
 	 * @param indexedColumns - the column-names of cols to whoch to add indices
 	 */
-	public MondrianTableDescription(String tableName, Collection<String> indexedColumns) {
+	public MondrianTableDescription(String tableName, String primaryKeyColumnName, Collection<String> indexedColumns) {
 		if (indexedColumns == null)
 			indexedColumns = new ArrayList<>();
 		this.tableName = tableName;
+		this.primaryKeyColumnName = primaryKeyColumnName;
 		this.indexedColumns = Collections.unmodifiableSet(new LinkedHashSet<>(indexedColumns));
 //		this.idColumnNames = idColumnNames == null ? 
 //								this.indexedColumns : // not specified

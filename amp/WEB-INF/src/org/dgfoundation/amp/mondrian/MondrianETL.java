@@ -90,9 +90,16 @@ public class MondrianETL {
 	protected static Logger logger = Logger.getLogger(MondrianETL.class);
 	
 	/**
+	 * not used for now
+	 */
+	public final static List<String> FACT_TABLE_PRIMARY_KEY_COLUMNS = Arrays.asList("entity_type", "entity_internal_id", "primary_sector_id", "secondary_sector_id", "tertiary_sector_id", "location_id",
+			"primary_program_id", "secondary_program_id", "tertiary_program_id", "national_objectives_program_id", "ea_org_id", "ba_org_id", "ia_org_id", "ro_org_id"); 
+	
+	/**
 	 * order of iteration is important, thus LinkedHashSet
 	 */
 	public final static Map<String, FactTableColumn> FACT_TABLE_COLUMNS = new LinkedHashMap<String, FactTableColumn>() {{
+			add(new FactTableColumn("pk", "SERIAL PRIMARY KEY", false));
 			add(new FactTableColumn("entity_type", "char NOT NULL", true)); /* see ReportEntityType.getAsChar() */
 			add(new FactTableColumn("entity_id", "integer NOT NULL", true)); // P/A id 
 			add(new FactTableColumn("entity_internal_id", "integer NOT NULL", true)); // amp_funding_detail_id, amp_mtef_detail_id, amp_funding_pledges_detail_id
@@ -177,7 +184,7 @@ public class MondrianETL {
 	 * warning: CLOSES CONNECTION! Don't use it afterwards!
 	 * @throws SQLException
 	 */
-	public void execute() throws SQLException{
+	public void execute() throws SQLException {
 		synchronized(ETL_LOCK) {
 			String mondrianEtl = "Mondrian-etl";
 			conn.setAutoCommit(false);
@@ -273,7 +280,7 @@ public class MondrianETL {
 		for (MondrianTableDescription mondrianTable:MondrianTablesRepository.MONDRIAN_TRANSLATED_TABLES)
  			generateStarTable(mondrianTable);
 		
-		generateStarTableWithQuery(MONDRIAN_DATE_TABLE,
+		generateStarTableWithQuery(MONDRIAN_DATE_TABLE, "day",
 			"SELECT DISTINCT(mft.date_code) AS day, mft.transaction_date AS full_date, date_part('year'::text, mft.transaction_date)::integer AS year, date_part('month'::text, mft.transaction_date)::integer AS month, to_char(mft.transaction_date, 'TMMonth'::text) AS month_name, date_part('quarter'::text, mft.transaction_date)::integer AS quarter, ('Q'::text || date_part('quarter'::text, mft.transaction_date)) AS quarter_name " + 
 			"FROM mondrian_fact_table mft " + 
 			"UNION ALL " + 
@@ -290,7 +297,7 @@ public class MondrianETL {
 	 * @throws SQLException
 	 */
 	protected void generateStarTable(MondrianTableDescription mondrianTable) throws SQLException {
-		generateStarTableWithQuery(mondrianTable.tableName, "SELECT * FROM v_" + mondrianTable.tableName, mondrianTable.indexedColumns);
+		generateStarTableWithQuery(mondrianTable.tableName, mondrianTable.primaryKeyColumnName, "SELECT * FROM v_" + mondrianTable.tableName, mondrianTable.indexedColumns);
 		
 		// now, the base (non-multilingual) dimension table is ready, now we need to make multilingual clones of it
 		LinkedHashSet<String> locales = new LinkedHashSet<>(TranslatorUtil.getLocaleCache(SiteUtils.getDefaultSite()));
@@ -309,10 +316,7 @@ public class MondrianETL {
 		String localizedTableName = mondrianTable.tableName + "_" + locale;
 		boolean autoCommit = conn.getAutoCommit();
 		try {
-			// flush schema changes
-			conn.setAutoCommit(true);
-			conn.setAutoCommit(false);
-			conn.setAutoCommit(true);
+			SQLUtils.flushSchemaChanges(conn);
 			Map<PropertyDescription, ColumnValuesCacher> cachers = new HashMap<>();
 			I18nDatabaseViewFetcher fetcher = new I18nDatabaseViewFetcher(mondrianTable.getI18nDescription(), null, locale, cachers, this.conn, "*");
 			fetcher.indicesNotToTranslate.add(MONDRIAN_DUMMY_ID_FOR_ETL);
@@ -331,7 +335,7 @@ public class MondrianETL {
 			SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + localizedTableName);
 			SQLUtils.executeQuery(conn, "CREATE TABLE " + localizedTableName + " AS TABLE " + mondrianTable + " WITH NO DATA");
 			SQLUtils.insert(conn, localizedTableName, null, null, vals);
-			postprocessDimensionTable(localizedTableName, mondrianTable.indexedColumns);
+			postprocessDimensionTable(localizedTableName, mondrianTable.primaryKeyColumnName, mondrianTable.indexedColumns);
 		}
 		finally {
 			conn.setAutoCommit(autoCommit);
@@ -376,11 +380,11 @@ public class MondrianETL {
 	 * @param columnsToIndex columns on which to create indices
 	 * @throws SQLException
 	 */
-	protected void generateStarTableWithQuery(String tableName, String tableCreationQuery, Collection<String> columnsToIndex) throws SQLException {
+	protected void generateStarTableWithQuery(String tableName, String primaryKey, String tableCreationQuery, Collection<String> columnsToIndex) throws SQLException {
 		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + tableName);
 		SQLUtils.executeQuery(conn, "CREATE TABLE " + tableName + " AS " + tableCreationQuery);
 
-		postprocessDimensionTable(tableName, columnsToIndex);
+		postprocessDimensionTable(tableName, primaryKey, columnsToIndex);
 	}
 	
 	
@@ -389,7 +393,7 @@ public class MondrianETL {
 	 * @param tableName
 	 * @param columnsToIndex
 	 */
-	protected void postprocessDimensionTable(String tableName, Collection<String> columnsToIndex) {
+	protected void postprocessDimensionTable(String tableName, String primaryKey, Collection<String> columnsToIndex) {
 		// change text column types' collation to C -> 7x faster GROUP BY / ORDER BY for stupid Mondrian
 		Map<String, String> tableColumns = SQLUtils.getTableColumnsWithTypes(tableName, true);
 		Set<String> textColumnTypes = new HashSet<String>() {{add("text"); add("character varying"); add("varchar");}};
@@ -406,6 +410,11 @@ public class MondrianETL {
 			String indexCreationQuery = String.format("CREATE INDEX %s_%s ON %s(%s)", tableName, columnToIndex, tableName, columnToIndex);
 			SQLUtils.executeQuery(conn, indexCreationQuery);
 		}
+		
+		// create primary key
+		if (primaryKey != null) {
+			SQLUtils.executeQuery(conn, String.format("ALTER TABLE %s ADD CONSTRAINT %s_PK PRIMARY KEY (%s)", tableName, tableName, primaryKey));
+		}
 	}
 	
 	/**
@@ -415,6 +424,23 @@ public class MondrianETL {
 	 */
 	protected void checkFactTable() {
 		if (recreateFactTable) {
+			recreateFactTable();
+		}
+		
+		// check that the fact table has a sane structure
+		// notice that this is also run if we had just recreated it - to make sure everything is ok (better safe than sorry)
+		Set<String> factTableColumnNames = SQLUtils.getTableColumns(FACT_TABLE_NAME);
+		for (String colName:factTableColumnNames) {
+			if (!FACT_TABLE_COLUMNS.containsKey(colName))
+				throw new RuntimeException(String.format("the fact table does not contain the mandatory column %s", colName));
+		}		
+	}
+	
+	protected void recreateFactTable() {
+	try {
+		boolean autoCommit = conn.getAutoCommit();
+		try {
+			SQLUtils.flushSchemaChanges(conn);
 			// creates an empty fact table
 			logger.warn("RECREATING Mondrian Fact table");
 			SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + FACT_TABLE_NAME);
@@ -427,7 +453,7 @@ public class MondrianETL {
 			}
 			query.append(")");
 			SQLUtils.executeQuery(conn, query.toString());
-			
+		
 			// create indices
 			logger.warn("Creating Mondrian indices");
 			for(FactTableColumn col:FACT_TABLE_COLUMNS.values())
@@ -436,14 +462,13 @@ public class MondrianETL {
 					SQLUtils.executeQuery(conn, q);
 				}
 		}
-		
-		// check that the fact table has a sane structure
-		// notice that this is also run if we had just recreated it - to make sure everything is ok (better safe than sorry)
-		Set<String> factTableColumnNames = SQLUtils.getTableColumns(FACT_TABLE_NAME);
-		for (String colName:factTableColumnNames) {
-			if (!FACT_TABLE_COLUMNS.containsKey(colName))
-				throw new RuntimeException(String.format("the fact table does not contain the mandatory column %s", colName));
-		}		
+		finally {
+			conn.setAutoCommit(autoCommit);
+		}
+	}
+	catch(SQLException e) {
+		throw new RuntimeException(e);
+	}
 	}
 	
 	/**

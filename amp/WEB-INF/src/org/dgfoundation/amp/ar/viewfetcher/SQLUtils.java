@@ -394,4 +394,19 @@ public class SQLUtils {
 				return "'" + obj.toString() + "'";
 			}
 		}
+		
+	/**
+	 * flush schema changes so that they can used for introspection via {@link #getTableColumnsWithTypes(String, boolean)} and the likes
+	 * @param conn
+	 */
+	public static void flushSchemaChanges(Connection conn){
+		try {			
+			conn.setAutoCommit(true);
+			conn.setAutoCommit(false);
+			conn.setAutoCommit(true);
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

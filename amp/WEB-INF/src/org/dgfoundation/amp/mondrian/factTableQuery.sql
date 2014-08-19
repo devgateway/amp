@@ -1,4 +1,7 @@
-  INSERT INTO mondrian_fact_table 
+  INSERT INTO mondrian_fact_table (entity_type, entity_id, entity_internal_id, transaction_type, adjustment_type, transaction_date, date_code, transaction_amount, 
+  currency_id, donor_id, financing_instrument_id, terms_of_assistance_id, primary_sector_id, secondary_sector_id, tertiary_sector_id, location_id,
+  primary_program_id, secondary_program_id, tertiary_program_id, national_objectives_program_id,
+  ea_org_id, ba_org_id, ia_org_id, ro_org_id, src_role_id, dest_role_id, dest_org_id)
   select 
 	'A' as entity_type,
 	aa.amp_activity_id AS entity_id,

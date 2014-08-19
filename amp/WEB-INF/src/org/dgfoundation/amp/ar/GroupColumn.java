@@ -74,7 +74,7 @@ public class GroupColumn extends Column<Column> {
     public GroupColumn verticalSplitByCateg(String category, Set ids, boolean generateTotalCols, AmpReports reportMetadata) 
     { 
    		GroupColumn dest = null;
-		dest = new GroupColumn(this);
+		dest = new GroupColumn(this);		
 		for(Column element:this.getItems()){
 			if((category.equals(ArConstants.TERMS_OF_ASSISTANCE) || category.equals(ArConstants.MODE_OF_PAYMENT))
 					&& element instanceof TotalCommitmentsAmountColumn){ 
@@ -541,6 +541,9 @@ public class GroupColumn extends Column<Column> {
         super();
     }
     
+    public static long addColumnCalls = 0;
+    public static long addColumnAddingCalls = 0;
+    public static long addColumnTotalItems = 0;
     
     /**
      * Adds a Column to this GroupColumn. The Parent property of the added Column will be set to this GroupColumn.
@@ -549,10 +552,15 @@ public class GroupColumn extends Column<Column> {
      * @param c
      */
     public void addColumn(Column c) {
+    	addColumnCalls ++;
+    	addColumnTotalItems += items.size();
+    	if (items.size() > 2015)
+    		System.out.println("BOZO: " + items.size());
         if (!items.contains(c)){
         	getItems().add(c);        
         	c.setParent(this);
         } else {
+        	addColumnAddingCalls ++;
             Column older = (Column) items.get(items.indexOf(c));
             older.getItems().addAll(c.getItems());
         }

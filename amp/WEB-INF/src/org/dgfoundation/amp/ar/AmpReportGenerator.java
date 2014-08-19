@@ -225,8 +225,6 @@ public class AmpReportGenerator extends ReportGenerator {
 		if (ARUtil.containsColumn(ArConstants.COSTING_GRAND_TOTAL,reportMetadata.getShowAblesColumns())){
 			rawColumns.getItems().remove(rawColumns.getColumn(ArConstants.COSTING_GRAND_TOTAL));
 		}
-		
-		logger.info(String.format("generatedProperty calls: %d, out of which cached %d (%.2f percent)", GeneratedPropertyDescription._generatedPropertyCalls, GeneratedPropertyDescription._generatedPropertyCached, GeneratedPropertyDescription._generatedPropertyCached * 100.0 / (0.0001 + GeneratedPropertyDescription._generatedPropertyCalls)));
 	}
 	
 	/**
@@ -1231,6 +1229,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		logger.info(String.format("AmpReportGenerator: AmountCell.getAmountWithMergedCells calls = %d, iterations = %d, iterations / call = %.2f\n", AmountCell.merged_cells_get_amount_calls, AmountCell.merged_cells_get_amount_iterations, 1.0 * AmountCell.merged_cells_get_amount_iterations / (0.01 + AmountCell.merged_cells_get_amount_calls)));
 		logger.info(String.format("AmpReportGenerator: Values.nr_CTV_called = %dK", Values.nr_CTV_called / 1000));
 		logger.info(String.format("AmpReportGenerator: Values.ctv_values_per_call = %.2f", Values.cumulative_CTV_sizes / (Values.nr_CTV_called + 0.0001)));
+		logger.info(String.format("addColumn calls: %d, out of which went the slow way: %d (%.2f percent) and which had items: %d (%.2f items per call)", GroupColumn.addColumnCalls, GroupColumn.addColumnAddingCalls, 1.0 * (GroupColumn.addColumnAddingCalls + 0.001) / GroupColumn.addColumnCalls, GroupColumn.addColumnTotalItems, (GroupColumn.addColumnTotalItems + 0.001) / GroupColumn.addColumnCalls));
+		logger.info(String.format("generatedProperty calls: %d, out of which cached %d (%.2f percent)", GeneratedPropertyDescription._generatedPropertyCalls, GeneratedPropertyDescription._generatedPropertyCached, GeneratedPropertyDescription._generatedPropertyCached * 100.0 / (0.0001 + GeneratedPropertyDescription._generatedPropertyCalls)));
 	}
 
 	protected void applyYearRangeSettings(GroupReportData report)

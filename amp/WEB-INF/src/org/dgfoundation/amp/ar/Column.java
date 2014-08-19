@@ -493,6 +493,12 @@ public abstract class Column<K> extends Viewable implements ColumnIdentifiable {
 		}
 	}
 
+	@Override public int hashCode() {
+		if (this.getName() == null)
+			return 0;
+		return this.getName().hashCode();
+	}
+	
 	public String getExpression() {
 		return expression;
 	}

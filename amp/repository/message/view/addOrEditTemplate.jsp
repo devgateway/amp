@@ -47,6 +47,18 @@ var submmited = false;
   	addUserOrTeam();//fills out the list with teams and members
 
   }
+  
+  /*if trigger is "user added to workspace", then Receivers becomes invisible, otherwise - make it visible 
+  
+  */
+  function refreshReceiversOnDynamicity() {
+		if(document.getElementById('triggerSelect').value == "org.digijava.module.message.triggers.UserAddedToFirstWorkspaceTrigger" ){
+			document.getElementById('receiver_area').style.visibility="hidden";
+		} else {
+			document.getElementById('receiver_area').style.visibility="visible";
+		}
+	  
+  }
 
 	function validate(){
 		if(document.messageForm.messageName.value.length==0){
@@ -197,16 +209,18 @@ var submmited = false;
 																				<tr>
 																					<td align="right"><digi:trn>related trigger</digi:trn><font color="red">*</font></td>
 																					<td align="left"> 
-																						<html:select property="selectedTrigger" name="messageForm" styleClass="inp-text" styleId="triggerSelect">
+																						<html:select property="selectedTrigger" name="messageForm" styleClass="inp-text"  onclick="refreshReceiversOnDynamicity()" styleId="triggerSelect">
 																							<html:option value="-1"><digi:trn>Select from below</digi:trn></html:option>
 																							<logic:iterate id="trigger" name="messageForm" property="availableTriggersList">																																															
 																								<html:option value="${trigger.value}"><digi:trn>${trigger.label}</digi:trn></html:option>																		
 																							</logic:iterate>
 																						</html:select> 
 																					</td>
-																				</tr>													
-																				<tr>
-																					<td nowrap="nowrap" valign="top" align="right"><digi:trn>Receivers</digi:trn><font color="red">*</font></td>
+																				</tr>
+
+							
+																				<tr id="receiver_area">
+																					<td nowrap="nowrap" valign="top" align="right"  ><digi:trn>Receivers</digi:trn><font color="red">*</font></td>
 																                    <td>
 																                        <table border="0" >
 																                            <tr>
@@ -214,7 +228,7 @@ var submmited = false;
 																                                    <table border="0" width="100%">																                                        
 																                                        <tr>
 																                                            <td>
-																                                              <select multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:200px">
+																                                              <select  multiple="multiple" size="5" id="whoIsReceiver"  class="inp-text" style="width:200px">
 																												<logic:empty name="messageForm" property="teamMapValues">
 																													<option value="-1">No receivers</option>
 																												</logic:empty>
@@ -261,7 +275,11 @@ var submmited = false;
 																                            </tr>
 																                        </table>
 																                    </td>
-																				</tr>																											
+																				</tr>	
+<script type="text/javascript">
+//ugly hack to make sure dynamicity is checked after tr load
+refreshReceiversOnDynamicity();
+</script>						
 																				<tr>
 																					<td colspan="2">
 																						<table width="100%" >

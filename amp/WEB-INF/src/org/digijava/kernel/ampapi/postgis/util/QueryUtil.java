@@ -17,6 +17,8 @@ import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.esrigis.dbentity.AmpMapState;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.type.LongType;
@@ -102,5 +104,15 @@ public class QueryUtil {
 			  return al;
 
     }
+    /**
+     * return a list of saved maps.
+     * @return
+     * @throws DgException
+     */
+	public static List<AmpMapState> getMapList() throws DgException {
+		Criteria mapsCriteria = PersistenceManager.getRequestDBSession()
+				.createCriteria(AmpMapState.class);
+		return mapsCriteria.list();
+	}
     
 }

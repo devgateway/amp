@@ -113,9 +113,9 @@ public class GisEndPoints {
 			pg.coordinates.add(Double.parseDouble(structure.getLongitude()));
 			pg.coordinates.add(Double.parseDouble(structure.getLatitude()));
 			fgj.id=structure.getAmpStructureId().toString();
-			fgj.properties.put("activityTitle", new TextNode(structure.getTitle()));
+			fgj.properties.put("structureTitle", new TextNode(structure.getTitle()));
 			if(structure.getDescription()!=null && !structure.getDescription().trim().equals("")){
-				fgj.properties.put("activityDescription", new TextNode(structure.getDescription()));
+				fgj.properties.put("structureDescription", new TextNode(structure.getDescription()));
 			}
 			Set<AmpActivityVersion> av=structure.getActivities();
 			List<Long>actIds=new ArrayList<Long>();
@@ -190,12 +190,9 @@ public class GisEndPoints {
 		List<JsonBean> maps = new ArrayList<JsonBean>();
 
 		try {
-			Criteria mapsCriteria = PersistenceManager.getRequestDBSession()
-					.createCriteria(AmpMapState.class);
-			List l = mapsCriteria.list();
-			for (Object map : l) {
-				maps.add(getJsonBeanFromMapState((AmpMapState) map,
-						Boolean.FALSE));
+			List<AmpMapState> l = QueryUtil.getMapList();
+			for (AmpMapState map : l) {
+				maps.add(getJsonBeanFromMapState( map,Boolean.FALSE));
 			}
 			return maps;
 		} catch (DgException e) {
@@ -203,6 +200,7 @@ public class GisEndPoints {
 			throw new WebApplicationException(e);
 		}
 	}
+
 
 	@GET
 	@Path("/indicator-layers")

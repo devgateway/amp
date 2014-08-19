@@ -222,6 +222,31 @@ public class GisEndPoints {
 		}
 		return indicatorLayers;
 	}
+	
+	@POST
+	@Path("/activities/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Activity> getActivities(JsonBean filter){
+		 List<Activity> activities = new ArrayList<Activity>();
+		Activity a=new Activity();
+		a.setId(123L);
+		a.setDescription("Activity description");
+		activities.add(a);
+		Activity a1=new Activity();
+		a1.setId(124L);
+		a1.setDescription("Activity description1");
+		activities.add(a1);
+		Activity a2=new Activity();
+		a2.setId(125L);
+		a2.setDescription("Activity description2");
+		activities.add(a2);
+		Activity a3=new Activity();
+		a3.setId(126L);
+		a3.setDescription("Activity description3");
+		activities.add(a3);
+		
+		return activities;
+	}	
 	@GET
 	@Path("/activities/{activityId}")
 	@Produces(MediaType.APPLICATION_JSON)

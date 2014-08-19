@@ -1,5 +1,4 @@
 var Backbone = require('backbone');
-var APIHelper = require('../../../libs/local/api-helper');
 var RadioMixin = require('../../mixins/radio-mixin');
 var JoinIndicator = require('../models/indicator-join-model');
 var ArcGISIndicator = require('../models/indicator-arcgis-model');
@@ -10,7 +9,7 @@ module.exports = Backbone.Collection
   .extend(RadioMixin)  // manages 'selected' state and api of models
   .extend({
 
-  url: APIHelper.getAPIBase() + '/rest/gis/indicator-layers',
+  url: '/rest/gis/indicator-layers',
 
   model: function(attrs) {
     var typeName = attrs.type;

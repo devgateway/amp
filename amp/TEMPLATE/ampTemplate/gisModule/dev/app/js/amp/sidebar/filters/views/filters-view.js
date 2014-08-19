@@ -2,8 +2,6 @@ var fs = require('fs');
 var $ = require('jquery');
 var _ = require('underscore');
 
-var APIHelper = require('../../../../libs/local/api-helper');
-
 var BaseControlView = require('../../base-control/base-control-view');
 var GenericFilterView = require('../views/generic-filter-view');
 var YearsFilterView = require('../views/years-filter-view');
@@ -15,7 +13,7 @@ module.exports = BaseControlView.extend({
   title: 'Filters',
   iconClass: 'ampicon-filters',
   description: 'Apply filters to the map.',
-  apiURL: APIHelper.getAPIBase() + '/rest/gis/filters',
+  apiURL: '/rest/gis/filters',
 
   // collection of child views..
   filterViewsInstances:[],

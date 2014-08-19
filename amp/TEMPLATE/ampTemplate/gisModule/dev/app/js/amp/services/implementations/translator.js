@@ -1,8 +1,6 @@
 var fs = require('fs');
 var $ = require('jquery');
 
-var APIHelper = require('../../../libs/local/api-helper');
-
 function Translator() {
   'use strict';
 
@@ -46,7 +44,7 @@ function Translator() {
 
   this._getTranslationsFromAPI = function(translateables, lng){
 
-    var url = APIHelper.getAPIBase() + '/rest/translations/label-translations';
+    var url = '/rest/translations/label-translations';
 
     //lng is optional, if not provided rely on server to choose.
     if(lng){

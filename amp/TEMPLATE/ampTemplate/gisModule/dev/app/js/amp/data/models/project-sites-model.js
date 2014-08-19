@@ -2,14 +2,12 @@ var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var Backbone = require('backbone');
 var Palette = require('../../colours/colour-palette');
-var APIHelper = require('../../../libs/local/api-helper');
+
 
 
 module.exports = Backbone.Model.extend({
 
-  url: function() {
-    return APIHelper.getAPIBase() + '/rest/gis/project-sites';
-  },
+  url: '/rest/gis/project-sites',
 
   defaults: {
     title: 'Project Sites',

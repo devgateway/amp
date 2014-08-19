@@ -1,7 +1,6 @@
 var fs = require('fs');
 var _ = require('underscore');
 var $ = require('jquery');
-var APIHelper = require('../../../../libs/local/api-helper');
 
 var GenericFilterModel = require('../models/generic-filter-model');
 var TreeNodeModel= require('../models/tree-node-model');
@@ -73,7 +72,7 @@ module.exports = BaseFilterView.extend({
 
   _createTree: function(url){
     var self = this;
-    return $.get(APIHelper.getAPIBase() + url).then(function(data){
+    return $.get(url).then(function(data){
 
       // builds tree of views from returned data
       var rootNodeObj = {

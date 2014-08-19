@@ -13,7 +13,7 @@ module.exports = BaseControlView.extend({
   title: 'Filters',
   iconClass: 'ampicon-filters',
   description: 'Apply filters to the map.',
-  apiURL: '/rest/gis/filters',
+  apiURL: '/rest/filters',
 
   // collection of child views..
   filterViewsInstances:[],

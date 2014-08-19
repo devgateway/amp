@@ -26,7 +26,7 @@ module.exports = Backbone.Model.extend({
       this._dataLoaded = new Deferred();
 
       // TODO: admin clusters should get url endpoints, not query endpoints.
-      var filter = {adminLevel: this.get('value')};
+      var filter = {adminLevel: self._translateADMToMagicWord(this.get('value'))};
       this.fetch({
         data: JSON.stringify(filter),
         type: 'POST'
@@ -62,6 +62,18 @@ module.exports = Backbone.Model.extend({
 
     return this._dataLoaded.promise();
   },
+
+  _translateADMToMagicWord: function(admString){
+    var magicWords = {
+      'adm-0': 'Country',
+      'adm-1': 'Region',
+      'adm-2': 'Zone',
+      'adm-3': 'District'
+    };
+    
+    return magicWords[admString];
+  },
+
 
   updatePaletteRange: function() {
     // TODO...

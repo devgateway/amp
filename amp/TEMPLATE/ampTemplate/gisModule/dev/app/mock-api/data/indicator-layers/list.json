@@ -26,5 +26,9 @@
     "type": "arcgis",
     "link": "http://gis.devgateway.org:6080/arcgis/rest/services/gis-reeng/UmbrellasPer100Ppl/MapServer/0",
     "property": "COD_adm2.UmbsPer100"
-  }
-]
+  },
+{"id":1,"title":"","type":"Javascript API","link":"http://serverapi.arcgisonline.com"},
+{"id":5,"title":"","type":"Main Map","link":"http://gis.devgateway.org/arcgis/rest/services/drc/adm1_and_adm2/MapServer"},
+{"id":4,"title":"","type":"Geometry Service","link":"http://gis.devgateway.org/arcgis/rest/services/Utilities/Geometry/GeometryServer"},
+{"id":6,"title":"","type":"Base Map Root path","link":"http://gis.devgateway.org/arcgis/rest/services/"},
+{"id":2,"title":"","type":"Base Map","link":"http://gis.devgateway.org/arcgis/rest/services/World_Light_Gray_Base/MapServer"}]

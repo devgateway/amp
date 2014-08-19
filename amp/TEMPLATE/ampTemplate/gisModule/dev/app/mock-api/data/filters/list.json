@@ -1,11 +1,11 @@
 [
   {
     "name": "Sectors",
-    "endpoint": "/rest/gis/filters/sectors"
+    "endpoint": "/rest/filters/sectors"
   },
   {
     "name": "Organizations",
-    "endpoint": "/rest/gis/filters/orgs"
+    "endpoint": "/rest/filters/orgs"
   },
   {
     "name": "Years",

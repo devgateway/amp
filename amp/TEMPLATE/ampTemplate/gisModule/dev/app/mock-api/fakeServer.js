@@ -43,9 +43,9 @@ _.extend(FakeServer.prototype, {
     // this object maps '/rest/api/path': 'json/mock/file/path'
 
     // Filters
-    'GET /rest/gis/filters':         fs.readFileSync(__dirname + '/data/filters/list.json', 'utf8'),
-    'GET /rest/gis/filters/orgs':     fs.readFileSync(__dirname + '/data/filters/orgs.json', 'utf8'),
-    'GET /rest/gis/filters/sectors':  fs.readFileSync(__dirname + '/data/filters/sectors.json', 'utf8'),
+    'GET /rest/filters':         fs.readFileSync(__dirname + '/data/filters/list.json', 'utf8'),
+    'GET /rest/filters/orgs':     fs.readFileSync(__dirname + '/data/filters/orgs.json', 'utf8'),
+    'GET /rest/filters/sectors':  fs.readFileSync(__dirname + '/data/filters/sectors.json', 'utf8'),
 
     // Boundaries
     'GET /rest/gis/boundaries':      fs.readFileSync(__dirname + '/data/boundaries/list.json', 'utf8'),
@@ -59,9 +59,9 @@ _.extend(FakeServer.prototype, {
     // 'GET /rest/...': fs.readFileSync(__dirname + '/data/....json', 'utf8'),
 
     // Project Sites
-    //'GET /rest/gis/project-sites': fs.readFileSync(__dirname + '/data/project-sites/drc-points-2000.json', 'utf8'),
-    'POST /rest/gis/project-sites': fs.readFileSync(__dirname + '/data/project-sites/wb-data.json', 'utf8'),
-    //'GET /rest/gis/project-sites': fs.readFileSync(__dirname + '/data/project-sites/random.json', 'utf8'),
+    //'GET /rest/gis/structures': fs.readFileSync(__dirname + '/data/structures/drc-points-2000.json', 'utf8'),
+    'POST /rest/gis/structures': fs.readFileSync(__dirname + '/data/structures/wb-data.json', 'utf8'),
+    //'GET /rest/gis/structures': fs.readFileSync(__dirname + '/data/structures/random.json', 'utf8'),
 
     // Indicator Layers
     'GET /rest/gis/indicator-layers':         fs.readFileSync(__dirname + '/data/indicator-layers/list.json', 'utf8'),
@@ -90,7 +90,7 @@ _.extend(FakeServer.prototype, {
         console.warn('no request body posted to cluster');
       }
       console.log('cluster ', xhr.requestBody);
-      if(xhr.requestBody.indexOf('adm-2') > -1){
+      if(xhr.requestBody.indexOf('Region') > -1){
         xhr.respond(200, { 'Content-Type': 'application/json' },
           fs.readFileSync(__dirname + '/data/clusters/clusterADM2.json', 'utf8'));
       } else{

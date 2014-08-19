@@ -7,7 +7,7 @@ var Palette = require('../../colours/colour-palette');
 
 module.exports = Backbone.Model.extend({
 
-  url: '/rest/gis/project-sites',
+  url: '/rest/gis/structures',
 
   defaults: {
     title: 'Project Sites',

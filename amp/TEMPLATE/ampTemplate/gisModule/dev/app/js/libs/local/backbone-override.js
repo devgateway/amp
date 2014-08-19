@@ -8,7 +8,8 @@ var _findBase = function(url){
   var baseURL = '';
 
   if(url.indexOf('http://localhost:3000') > -1){
-    baseURL = '';
+    //baseURL = 'http://localhost:8080'; //if running amp, find way to do cross domain requests...
+    baseURL = ''; //if not running amp
   } else if(url.indexOf('/TEMPLATE') > -1){
     var endOfBase = url.indexOf('/TEMPLATE');
     baseURL = url.substr(0, endOfBase);
@@ -42,8 +43,10 @@ Backbone.sync = function (method, model, options) {
     // Note a url can be either a string, or a function.
     if( typeof model.url === 'string'){
       model.url = _getAPIBase() + model.url;
+    console.log('rewrite url to ',model.url);
     } else{
-      model.url = _getAPIBase() + model.url();
+      // it will recurse, so not needed to explicit append, or it will double append.
+      // model.url = _getAPIBase() + model.url();
     }
   }
 

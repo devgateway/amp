@@ -20,6 +20,7 @@ import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.PendingResourceShareTrigger;
 import org.digijava.module.message.triggers.RejectResourceSharetrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
+import org.digijava.module.message.triggers.UserAddedToFirstWorkspaceTrigger;
 import org.digijava.module.message.triggers.UserRegistrationTrigger;
 /**
  * Constants for AmpMessage class and it's subclasses
@@ -32,7 +33,9 @@ public class MessageConstants {
      * Add here all the other classes that extend Trigger class. Alternatively you can use a singleton for dynamic instantiation, see:
      * @see org.digijava.module.gateperm.util.PermissionUtil#getAvailableGates(javax.servlet.ServletContext)
      */
-    public static final  Class[] availableTriggers=new Class[] {ActivitySaveTrigger.class,
+    public static final  Class[] availableTriggers=new Class[] {
+    															UserAddedToFirstWorkspaceTrigger.class,
+    															ActivitySaveTrigger.class,
                                                                 ActivityDisbursementDateTrigger.class,
                                                                 ApprovedActivityTrigger.class,
                                                                 NotApprovedActivityTrigger.class,
@@ -54,7 +57,8 @@ public class MessageConstants {
                                                                 RejectResourceSharetrigger.class,
                                                                 UserRegistrationTrigger.class};
 
-    public static final  String[] triggerName=new String[] {"Save Actvity",
+    public static final  String[] triggerName=new String[] {"User added to workspace", 
+    														"Save Actvity",
                                                             "Activity Disbursement Date",
                                                             "Activity Approved",
                                                             "Activity Not Approved",

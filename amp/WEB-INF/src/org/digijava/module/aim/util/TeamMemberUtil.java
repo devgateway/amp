@@ -169,6 +169,7 @@ public class TeamMemberUtil {
 			return ampMember;
 		}
 	}
+	//this returns the last one -- it should return a list of all team members associated to a userID
 	public static AmpTeamMember getAmpTeamMemberByUserId(Long userId) {
 		AmpTeamMember ampMember = null;
 		Session session = null;
@@ -835,9 +836,9 @@ public class TeamMemberUtil {
 		return member;
 	}
 	
-	public static Collection getTeamMembers(Long teamId) {
+	public static Collection<TeamMember> getTeamMembers(Long teamId) {
 		Session session = null;
-		Collection col = new ArrayList();
+		Collection<TeamMember> col = new ArrayList();
 
 		try {
 			session = PersistenceManager.getSession();
@@ -1020,14 +1021,14 @@ public class TeamMemberUtil {
 		}
 		return role;
 	}
-
-	public static Collection getTeamMembers(String email) {
+	
+	public static Collection<AmpTeamMember> getTeamMembers(String email) {
 		 User user = org.digijava.module.aim.util.DbUtil.getUser(email);
 		 if (user == null) return null;
 
 		Session session = null;
 		Query qry = null;
-		List col = new ArrayList<AmpTeamMember>();
+		List<AmpTeamMember> col = new ArrayList<AmpTeamMember>();
 
 		try {
 			session = PersistenceManager.getSession();

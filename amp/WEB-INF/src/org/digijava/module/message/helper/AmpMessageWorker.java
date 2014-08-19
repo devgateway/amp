@@ -9,7 +9,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.bouncycastle.crypto.RuntimeCryptoException;
 import org.digijava.kernel.config.DigiConfig;
+import org.digijava.kernel.mail.DgEmailManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
@@ -52,6 +55,7 @@ import org.digijava.module.message.triggers.NotApprovedCalendarEventTrigger;
 import org.digijava.module.message.triggers.PendingResourceShareTrigger;
 import org.digijava.module.message.triggers.RejectResourceSharetrigger;
 import org.digijava.module.message.triggers.RemoveCalendarEventTrigger;
+import org.digijava.module.message.triggers.UserAddedToFirstWorkspaceTrigger;
 import org.digijava.module.message.triggers.UserRegistrationTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
 
@@ -73,6 +77,8 @@ public class AmpMessageWorker {
 
                 if (e.getTrigger().equals(ActivitySaveTrigger.class)) { //<------ Someone created new Activity
                     newMsg = processActivitySaveEvent(e, newAlert, template);
+                } else if (e.getTrigger().equals(UserAddedToFirstWorkspaceTrigger.class)) { //<----- User added to his first workspace
+                    newMsg = proccessUserWorkspaceAssignmentEvent(e, newAlert, template);                    
                 } else if (e.getTrigger().equals(UserRegistrationTrigger.class)) { //<----- Registered New User
                     newMsg = proccessUserRegistrationEvent(e, newAlert, template);
                 } else if (e.getTrigger().equals(ActivityDisbursementDateTrigger.class)) {
@@ -130,8 +136,7 @@ public class AmpMessageWorker {
                 	defineReceiversForCalendarEvents(e, template, newMsg,true,false);
                 }else if(e.getTrigger().equals(RemoveCalendarEventTrigger.class)){
                 	defineReceiversForCalendarEvents(e, template, newMsg,false,true);
-                }
-                else if(e.getTrigger().equals(ActivitySaveTrigger.class)) {
+                }else if(e.getTrigger().equals(ActivitySaveTrigger.class)) {
                     defineActivityCreationReceievrs(template, newMsg);
                 }else if(e.getTrigger().equals(ActivityActualStartDateTrigger.class)) {
                     defineReceievrsByActivityTeam(template, newMsg,new Long(e.getParameters().get(ActivityActualStartDateTrigger.PARAM_TEAM_ID).toString()));
@@ -151,6 +156,9 @@ public class AmpMessageWorker {
                 	defineReceiversForResourceShare(template,newMsg,true);
                 }else if(e.getTrigger().equals(ApprovedResourceShareTrigger.class) || e.getTrigger().equals(RejectResourceSharetrigger.class)){
                 	defineReceiversForResourceShare(template,newMsg,false);
+                	
+                } else if (e.getTrigger().equals(UserAddedToFirstWorkspaceTrigger.class)) {
+                	defineReceiversForUserAddedToWorkspace(template, newMsg, e);
                 } else{ //<-- currently for else is left user registration or activity disbursement date triggers
                 	List<String> emailReceivers=new ArrayList<String>();
                     List<AmpMessageState> statesRelatedToTemplate = null;
@@ -474,7 +482,23 @@ public class AmpMessageWorker {
         return createAlertFromTemplate(template, myHashMap, alert);
 
     }
-
+//proccessUserWorkspaceAssignmentEvent(e, newAlert, template);
+    
+    /**
+     *	User Assignation to his first workspace event
+     */
+    private static AmpAlert proccessUserWorkspaceAssignmentEvent(Event e, AmpAlert alert, TemplateAlert template) {
+        HashMap<String, String> myHashMap = new HashMap<String, String> ();
+        myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(UserAddedToFirstWorkspaceTrigger.PARAM_NAME));
+        myHashMap.put(MessageConstants.OBJECT_URL, "<a href=\"" + "/" + e.getParameters().get(UserAddedToFirstWorkspaceTrigger.PARAM_URL) + "\">User Profile URL</a>");
+        myHashMap.put(MessageConstants.OBJECT_LOGIN, (String) e.getParameters().get(UserAddedToFirstWorkspaceTrigger.PARAM_LOGIN));
+        myHashMap.put(MessageConstants.OBJECT_ORGANIZATION, (String) e.getParameters().get(UserAddedToFirstWorkspaceTrigger.PARAM_ORGANIZATION));
+        alert.setObjectURL("/" + e.getParameters().get(UserAddedToFirstWorkspaceTrigger.PARAM_URL));
+        alert.setSenderType(MessageConstants.SENDER_TYPE_USER_MANAGER);
+        return createAlertFromTemplate(template, myHashMap, alert);
+    }
+    
+    
     /**
      *	User Registration Event processing
      */
@@ -493,7 +517,7 @@ public class AmpMessageWorker {
      * Activity's disbursement date Event processing
      */
     private static AmpAlert processActivityDisbursementDateComingEvent(Event e, AmpAlert alert, TemplateAlert template) {
-
+ 
        
         HashMap<String, String> myHashMap = new HashMap<String, String> ();
         myHashMap.put(MessageConstants.OBJECT_NAME, (String) e.getParameters().get(ActivityDisbursementDateTrigger.PARAM_NAME));
@@ -601,7 +625,41 @@ public class AmpMessageWorker {
         newEvent.setCreationDate(cal.getTime());
         return newEvent;
     }
-    
+    /**
+     * does the ugly hack for AMP-18045:
+     * since we don't have an outside templating engine for emails, 
+     * we'll get the template from the alert template and issue one, 
+     * though it doesn't make much sense to send it (the user has to first log in to get said message).
+     * 
+     * 
+     * @param template
+     * @param newMsg
+     * @param e
+     * @throws Exception
+     */
+    private static void defineReceiversForUserAddedToWorkspace(TemplateAlert template, AmpMessage newMsg, Event e) throws Exception{
+    	
+		String email = (String)e.getParameters().get("login");
+		if (email == null) {
+			throw new RuntimeException("login parameter not set for event");
+		}
+		List<String> emailReceivers = new ArrayList<String>();
+		Collection<AmpTeamMember> receivers = TeamMemberUtil.getTeamMembers(email);
+		//since the user had just been assigned to his first team, this shouldn't have >1 member
+    	for (AmpTeamMember mmb : receivers) {
+        	AmpMessageState state = new AmpMessageState();    	
+            state.setReceiver(mmb);
+            emailReceivers.add(email);
+    		createMsgState(state, newMsg,false);
+    	}
+    	createEmailsAndReceivers(newMsg,emailReceivers,false);
+    	//this is the email the fresh user will get
+    	//shouldn't belong here, but the framework is the way it is -- and no other place 
+    	//of getting the message template other than here
+    	//he'll also get a message alert
+        DgEmailManager.sendMail(email, newMsg.getName(), newMsg.getDescription());
+    }
+ 
     private static void defineReceiversForResourceShare(TemplateAlert template,AmpMessage approval, boolean needsApproval) throws Exception{
     	List<String> emailReceivers=new ArrayList<String>();
     	List<TeamMember> receiverTeamMembers=new ArrayList<TeamMember>();

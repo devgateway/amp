@@ -676,7 +676,7 @@ div.adminicon{float:right;}
     padding: 0;}
 .soria .infowindow .sprite{background-image:url(/TEMPLATE/ampTemplate/img_2/gis/boxbg.gif);background-repeat:repeat;}
 .yui-navset, .yui-navset ul, .yui-navset ul li, .yui-navset ul li a{z-index:-1px;}
-.admin_landing_page_box {background-color:#FFFFFF; border-left:1px solid #DADAD6; border-top:1px solid #DADAD6; border-right:2px solid #DADAD6; border-bottom:2px solid #DADAD6;}
+.admin_landing_page_box {background-color:#FFFFFF; border-left:1px solid #DADAD6; border-top:1px solid #DADAD6; border-right:2px solid #DADAD6; border-bottom:2px solid #DADAD6; width: 33%; vertical-align: top;}
 .admin_landing_page_box_cont {padding:10px;}
 .admin_landing_page_box_title {font-size:12px; color:#000000; font-weight:bold; border-bottom:1px solid #CCCCCC; padding-bottom:5px; margin-bottom:10px;}
 .admin_landing_page_box_cont table a {font-size:11px; font-weight:bold;}
@@ -686,6 +686,7 @@ div.adminicon{float:right;}
     border-collapse: separate;
     font-family:arial;
 	font-size:12px !important;
+	table-layout:fixed;
 }
 /**-----IE FIXES-----**/
 /* 
@@ -1092,3 +1093,5 @@ table.component-funding-table tr
 .dataTable li{
 	list-style-position: inside;
 }
+
+

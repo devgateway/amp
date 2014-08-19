@@ -554,8 +554,8 @@ public class GroupColumn extends Column<Column> {
     public void addColumn(Column c) {
     	addColumnCalls ++;
     	addColumnTotalItems += items.size();
-    	if (items.size() > 2015)
-    		System.out.println("BOZO: " + items.size());
+//    	if (items.size() > 2015)
+//    		System.out.println("BOZO: " + items.size());
         if (!items.contains(c)){
         	getItems().add(c);        
         	c.setParent(this);

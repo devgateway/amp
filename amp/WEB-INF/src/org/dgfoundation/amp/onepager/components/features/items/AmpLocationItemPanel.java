@@ -64,8 +64,9 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 			}
 			@Override
 			protected void onAjaxOnUpdate(AjaxRequestTarget target) {
-				// TODO Auto-generated method stub
+				percentageValidationField.reloadValidationField(target);
 				target.add(totalLabel);
+				
 			}
 		};				
 		add(percentageField);

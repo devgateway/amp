@@ -2,10 +2,13 @@
 
 define(
 		[ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'views/tabItemsView', 'views/tabContentView',
-				'views/tabContentsView', 'jquery', 'jqueryui' ],
-		function(Marionette, Tabs, Tab, TabItemView, TabItemsView, TabContentView, TabContentsView, jQuery) {
+				'views/tabContentsView', 'text!views/html/regions.html', 'jquery', 'jqueryui' ],
+		function(Marionette, Tabs, Tab, TabItemView, TabItemsView, TabContentView, TabContentsView, regionsHtml, jQuery) {
 
 			var app = app || {};
+
+			// Load the regions html into the DOM.
+			jQuery('#tabs-container').append(regionsHtml);
 
 			// Create our Marionette app.
 			app.TabsApp = new Marionette.Application();

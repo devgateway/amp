@@ -1,9 +1,9 @@
-define([ 'marionette' ], function(Marionette) {
+define([ 'marionette', 'text!views/html/tabTemplate.html' ], function(Marionette, tabTemplate) {
 
 	// Tab item.
 	var TabItemView = Marionette.ItemView.extend({
 		tagName : 'li',
-		template : '#tab-template'
+		template : _.template(tabTemplate)
 	});
 
 	return TabItemView;

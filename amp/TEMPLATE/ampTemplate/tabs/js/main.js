@@ -4,7 +4,8 @@ require.config({
 		underscore : 'lib/backbone.marionette/underscore',
 		jquery : 'lib/jquery_1.10.2',
 		jqueryui : 'lib/jquery-ui.min_1.11.0',
-		marionette : 'lib/backbone.marionette/backbone.marionette'
+		marionette : 'lib/backbone.marionette/backbone.marionette',
+		text : 'lib/text_2.0.12'
 	},
 	shim : {
 		jquery : {

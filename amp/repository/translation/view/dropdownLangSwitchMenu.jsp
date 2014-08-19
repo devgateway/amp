@@ -37,11 +37,16 @@
 <script>
 function 
 SwitchLanguageMenu(value) {
-        if(typeof quitRnot1 != 'function'||quitRnot1('${msg}')!=false){
+		if(typeof quitRnot1 != 'function'||quitRnot1('${msg}')!=false){
                 var referrer = document.location.href;
                 if (referrer.indexOf("wicket") > -1){
                     //In Wicket we must erase the pageId
                     referrer = referrer.substring(0, referrer.indexOf("?"));
+                	var wicketLanguageChange = "<digi:trn>If you switch the current language the Activity changes will be lost.</digi:trn>";
+                    var wantContinue="<digi:trn>Are you sure you want to continue?</digi:trn>";
+                   	 window.onbeforeunload = null;
+                   	 confirm (wicketLanguageChange+"\n"+wantContinue);
+                    
                 }
                 var newLoc = value + referrer;
 

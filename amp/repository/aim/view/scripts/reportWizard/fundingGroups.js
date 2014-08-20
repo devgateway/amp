@@ -217,19 +217,25 @@ function generateHierarchies(e) {
 	for (var i=0; i<items.length; i++ ) {
 		colId	= (items[i].getElementsByTagName("input")[0]).value;
 		if ( checkIfColIsHierarchy(colId) && (document.getElementById('hier_li_'+colId)==null) ) {
-				var childNodes				= items[i].childNodes;
+			var childNodes				= items[i].childNodes;
 				//var startHtml				= "<input type='checkbox' name='selectedColumns' id='hier_chk_"+colId+"' value='"+colId+"' />  ";
 				//var newObj					= document.createElement("li");
 				//newObj.innerHTML			= startHtml + childNodes[childNodes.length-1].data;
 				//newObj.setAttribute('class','list1');
 				//newObj.setAttribute('id', 'hier_li_'+colId);
-				
-				var newObj					= ColumnsDragAndDropObject.generateLi(
-											"hier_li_"+colId, "list1", "hier_chk_"+colId, colId, "selectedHierarchies", childNodes[childNodes.length-1].data
-											);
-				hierUlEl.appendChild( newObj );
-				var newDDProxy				= new YAHOO.util.DDProxy( newObj.id );
-				newDDObj.addActions( newDDProxy );
+				//rotten code!
+			var itemData;
+			hasDescription = childNodes.length > 2;
+			if (hasDescription) {
+				itemData = childNodes[1].data + childNodes[2].outerHTML;
+			} else {
+				itemData = childNodes[childNodes.length-1].data;
+			}
+			var newObj = ColumnsDragAndDropObject.generateLi("hier_li_"+colId, 
+					"list1", "hier_chk_"+colId, colId, "selectedHierarchies", itemData);
+			hierUlEl.appendChild( newObj );
+			var newDDProxy				= new YAHOO.util.DDProxy( newObj.id );
+			newDDObj.addActions( newDDProxy );
 				
 		}
 	}

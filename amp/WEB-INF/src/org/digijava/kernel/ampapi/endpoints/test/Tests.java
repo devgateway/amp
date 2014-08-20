@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints;
+package org.digijava.kernel.ampapi.endpoints.test;
 
 import java.io.IOException;
 import java.util.ArrayList;

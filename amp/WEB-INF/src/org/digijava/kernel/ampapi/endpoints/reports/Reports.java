@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints;
+package org.digijava.kernel.ampapi.endpoints.reports;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints;
+package org.digijava.kernel.ampapi.endpoints.common;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;

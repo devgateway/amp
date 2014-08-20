@@ -1,4 +1,4 @@
-package org.digijava.kernel.ampapi.endpoints;
+package org.digijava.kernel.ampapi.endpoints.test;
 //TODO: Add documentation to this class;
 import java.util.Random;
 

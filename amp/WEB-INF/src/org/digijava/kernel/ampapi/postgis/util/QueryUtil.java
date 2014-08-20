@@ -14,6 +14,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -104,6 +105,16 @@ public class QueryUtil {
 				e.printStackTrace();
 			}
 			  return al;
+
+    }
+    public static AmpActivity getActivity(Long ampActivityId){
+    	try {
+			return (AmpActivity )PersistenceManager.getRequestDBSession().load(AmpActivity.class, ampActivityId);
+		} catch (DgException e) {
+			logger.error("cannot retrieve activity");
+			return null;
+		}
+//        eaForm.getFunding().populateFromFundings(activity.getFunding(), toCurrCode, tm, debug);
 
     }
     public static List<AmpActivity>  getActivities(){

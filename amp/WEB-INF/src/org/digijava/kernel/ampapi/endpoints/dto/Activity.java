@@ -1,5 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.dto;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class Activity {
 	private Long id;
-	private String title;
+	private String name;
 	private String description;
 	private String ampUrl;
 	private List<ActivityFunding> commitments;
@@ -32,12 +33,12 @@ public class Activity {
 	}
 
 
-	public String getTitle() {
-		return title;
+	public String getName() {
+		return name;
 	}
 
-	public void setTitle(String title) {
-		this.title = title;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getDescription() {
@@ -71,17 +72,23 @@ public class Activity {
 	public void setDisbursments(List<ActivityFunding> disbursments) {
 		this.disbursments = disbursments;
 	}
-	public void addCommitments(Double amount,String transactionDate){
+	public void addCommitments(String amount,String transactionDate){
+		if(commitments==null){
+			commitments=new ArrayList<Activity.ActivityFunding>();
+		}
 		this.commitments.add(new ActivityFunding(amount,transactionDate));
 	}
-	public void addDisbursment(Double amount,String transactionDate){
+	public void addDisbursment(String amount,String transactionDate){
+		if(disbursments==null){
+			disbursments=new ArrayList<Activity.ActivityFunding>();
+		}
 		this.disbursments.add(new ActivityFunding(amount,transactionDate));
 	}
 	public class ActivityFunding {
-		private Double amount;
+		private String amount;
 		private String transactionDate;
 
-		public ActivityFunding( Double amount,String transactionDate) {
+		public ActivityFunding( String amount,String transactionDate) {
 			this.amount=amount;
 			this.transactionDate=transactionDate;
 		}
@@ -89,11 +96,11 @@ public class Activity {
 
 		}
 
-		public Double getAmount() {
+		public String getAmount() {
 			return amount;
 		}
 
-		public void setAmount(Double amount) {
+		public void setAmount(String amount) {
 			this.amount = amount;
 		}
 

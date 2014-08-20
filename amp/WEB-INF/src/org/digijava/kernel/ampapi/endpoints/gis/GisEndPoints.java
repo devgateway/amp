@@ -28,9 +28,16 @@ import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
+import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.editor.exception.EditorException;
+import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.dbentity.AmpMapState;
 import org.digijava.module.esrigis.helpers.DbHelper;
@@ -240,7 +247,7 @@ public class GisEndPoints {
 	private Activity buildActivityDto(AmpActivity ampActivity) {
 		Activity a = new Activity();
 		a.setId(ampActivity.getAmpActivityId());
-		a.setTitle(ampActivity.getName());
+		a.setName(ampActivity.getName());
 		String description = null;
 		//do not return description yet since they are stored 
 		//in dg_message table an would need to do a query for each
@@ -266,14 +273,35 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Activity getActivities(@PathParam("activityId") Long activityId) {
 		Activity a = new Activity();
-		a.setId(123L);
-		a.setTitle("Activity description");
-		a.setCommitments(new ArrayList<Activity.ActivityFunding>());
-		a.setDisbursments(new ArrayList<Activity.ActivityFunding>());
-		a.addCommitments(123.34D, GisUtil.formatDate(new Date()));
-		a.addCommitments(423.34D, GisUtil.formatDate(new Date()));
-		a.addDisbursment(523.34D, GisUtil.formatDate(new Date()));
-		a.addDisbursment(623.34D, GisUtil.formatDate(new Date()));
+		
+		
+		AmpActivity activity=QueryUtil.getActivity(activityId);
+		if(activity!=null){
+			a.setId(activity.getAmpActivityId());
+			a.setName(activity.getName());
+			String 
+			description =null;
+//			try {
+//				description = DbUtil.getEditorBody(TLSUtils.getSite(),
+//				        activity.getDescription(),
+//				        RequestUtils.
+//				        getNavigationLanguage(TLSUtils.getRequest()).
+//				        getCode());
+//				a.setDescription(description);
+//			} catch (EditorException e) {
+//				logger.error("cannot get description");
+//			}
+			ActivityFundingDigest fundingDigest=new ActivityFundingDigest();
+			fundingDigest.populateFromFundings(activity.getFunding(), "US", null, false);
+			for(FundingDetail fd:fundingDigest.getCommitmentsDetails()){
+			a.addCommitments(fd.getTransactionAmount(), fd.getTransactionDate());	
+			}
+			for(FundingDetail fd:fundingDigest.getDisbursementsDetails()){
+			a.addDisbursment(fd.getTransactionAmount(), fd.getTransactionDate());	
+			}			
+			
+			
+		}
 
 		return a;
 	}

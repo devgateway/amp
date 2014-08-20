@@ -234,6 +234,7 @@ gulp.task('preview', ['build'], g.serve({
 //------------------------------------
 gulp.task('default', ['dev']);
 gulp.task('dev', ['lint', 'less', 'dev-server', 'watch', 'reload', 'dev-index']);
+gulp.task('dev-no-mock', ['lint', 'less', 'dev-server', 'watch', 'reload', 'dev-index-no-mock']);
 
 
 gulp.task('dev-server', g.serve({
@@ -266,6 +267,14 @@ gulp.task('dev-index', ['bundle-mock'], function(){
             .pipe(g.rename('index.html'))
             .pipe(gulp.dest('app/'));
 });
+
+// takes src-index.html, injects mockAPI
+gulp.task('dev-index-no-mock', function(){
+  return gulp.src('app/src-index.html')
+            .pipe(g.rename('index.html'))
+            .pipe(gulp.dest('app/'));
+});
+
 
 
 

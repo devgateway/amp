@@ -168,7 +168,7 @@ module.exports = Backbone.View.extend({
     var self = this;
 
     if (feature.properties) {
-      layer.bindPopup('Project #: '+ feature.properties.projectId  +'<br />Site: ' + feature.properties.title );
+      layer.bindPopup('Project #: '+ feature.properties.activity[0]  +'<br />Site: ' + feature.properties.structureTitle );
     }
 
     layer.on('click', function(evt) {

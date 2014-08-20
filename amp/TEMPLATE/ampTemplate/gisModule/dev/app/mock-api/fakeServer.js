@@ -46,6 +46,8 @@ _.extend(FakeServer.prototype, {
     'GET /rest/filters':         fs.readFileSync(__dirname + '/data/filters/list.json', 'utf8'),
     'GET /rest/filters/orgs':     fs.readFileSync(__dirname + '/data/filters/orgs.json', 'utf8'),
     'GET /rest/filters/sectors':  fs.readFileSync(__dirname + '/data/filters/sectors.json', 'utf8'),
+    'GET /rest/filters/sectors/Primary':  fs.readFileSync(__dirname + '/data/filters/sectors-primary.json', 'utf8'),
+    'GET /rest/filters/sectors/Secondary':  fs.readFileSync(__dirname + '/data/filters/sectors-secondary.json', 'utf8'),
 
     // Boundaries
     'GET /rest/gis/boundaries':      fs.readFileSync(__dirname + '/data/boundaries/list.json', 'utf8'),

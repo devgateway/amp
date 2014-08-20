@@ -10,5 +10,21 @@
   {
     "name": "Years",
     "endpoint": "mock-api/years.json"
+  },
+  {
+      "name": "ActivityStatus",
+      "endpoint": "/rest/filters/activityStatus"
+  },
+  {
+      "name": "Boundaries",
+      "endpoint": "/rest/filters/boundaries"
+  },
+  {
+      "name": "SectorConfigName",
+      "endpoint": "/rest/filters/sectorConfigName"
+  },
+  {
+      "name": "Programs",
+      "endpoint": "/rest/filters/programs"
   }
 ]

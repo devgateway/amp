@@ -13,7 +13,9 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class Activity {
 	private Long id;
+	private String title;
 	private String description;
+	private String ampUrl;
 	private List<ActivityFunding> commitments;
 	private List<ActivityFunding> disbursments;
 
@@ -29,12 +31,29 @@ public class Activity {
 		this.id = id;
 	}
 
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
 	public String getDescription() {
 		return description;
 	}
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getAmpUrl() {
+		return ampUrl;
+	}
+
+	public void setAmpUrl(String ampUrl) {
+		this.ampUrl = ampUrl;
 	}
 
 	public List<ActivityFunding> getCommitments() {

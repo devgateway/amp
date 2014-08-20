@@ -1,15 +1,10 @@
 package org.digijava.kernel.ampapi.endpoints.gis;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.TimeZone;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -19,9 +14,9 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.node.LongNode;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
+import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
@@ -34,14 +29,12 @@ import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.dbentity.AmpMapState;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
-import org.hibernate.Criteria;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Session;
 
@@ -104,28 +97,29 @@ public class GisEndPoints {
 	public final FeatureCollectionGeoJSON getProjectSites(final JsonBean filter) {
 		FeatureCollectionGeoJSON f = new FeatureCollectionGeoJSON();
 
-		
-		
 		List<AmpStructure> al = QueryUtil.getProjectSites();
 		for (AmpStructure structure : al) {
 			FeatureGeoJSON fgj = new FeatureGeoJSON();
-			PointGeoJSON pg = new PointGeoJSON();	
+			PointGeoJSON pg = new PointGeoJSON();
 			pg.coordinates.add(Double.parseDouble(structure.getLongitude()));
 			pg.coordinates.add(Double.parseDouble(structure.getLatitude()));
-			fgj.id=structure.getAmpStructureId().toString();
-			fgj.properties.put("structureTitle", new TextNode(structure.getTitle()));
-			if(structure.getDescription()!=null && !structure.getDescription().trim().equals("")){
-				fgj.properties.put("structureDescription", new TextNode(structure.getDescription()));
+			fgj.id = structure.getAmpStructureId().toString();
+			fgj.properties.put("structureTitle",
+					new TextNode(structure.getTitle()));
+			if (structure.getDescription() != null
+					&& !structure.getDescription().trim().equals("")) {
+				fgj.properties.put("structureDescription", new TextNode(
+						structure.getDescription()));
 			}
-			Set<AmpActivityVersion> av=structure.getActivities();
-			List<Long>actIds=new ArrayList<Long>();
-			
+			Set<AmpActivityVersion> av = structure.getActivities();
+			List<Long> actIds = new ArrayList<Long>();
+
 			for (AmpActivityVersion ampActivity : av) {
 				actIds.add(ampActivity.getAmpActivityId());
 			}
-			
+
 			fgj.properties.put("activity", new POJONode(actIds));
-			//fgj.properties.put("admId", new LongNode(23));
+			// fgj.properties.put("admId", new LongNode(23));
 			fgj.geometry = pg;
 
 			f.features.add(fgj);
@@ -192,7 +186,7 @@ public class GisEndPoints {
 		try {
 			List<AmpMapState> l = QueryUtil.getMapList();
 			for (AmpMapState map : l) {
-				maps.add(getJsonBeanFromMapState( map,Boolean.FALSE));
+				maps.add(getJsonBeanFromMapState(map, Boolean.FALSE));
 			}
 			return maps;
 		} catch (DgException e) {
@@ -200,7 +194,6 @@ public class GisEndPoints {
 			throw new WebApplicationException(e);
 		}
 	}
-
 
 	@GET
 	@Path("/indicator-layers")
@@ -220,49 +213,71 @@ public class GisEndPoints {
 		}
 		return indicatorLayers;
 	}
-	
+
 	@POST
 	@Path("/activities/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Activity> getActivities(JsonBean filter){
-		 List<Activity> activities = new ArrayList<Activity>();
-		Activity a=new Activity();
-		a.setId(123L);
-		a.setDescription("Activity description");
-		activities.add(a);
-		Activity a1=new Activity();
-		a1.setId(124L);
-		a1.setDescription("Activity description1");
-		activities.add(a1);
-		Activity a2=new Activity();
-		a2.setId(125L);
-		a2.setDescription("Activity description2");
-		activities.add(a2);
-		Activity a3=new Activity();
-		a3.setId(126L);
-		a3.setDescription("Activity description3");
-		activities.add(a3);
-		
+	public List<Activity> getActivities(JsonBean filter) {
+		List<Activity> activities = new ArrayList<Activity>();
+		List<AmpActivity> ampActivities = QueryUtil.getActivities();
+
+		if (ampActivities != null) {
+			for (AmpActivity ampActivity : ampActivities) {
+				activities.add(buildActivityDto(ampActivity));
+			}
+
+		}
+
 		return activities;
-	}	
+	}
+
+	/**
+	 * build an activity to be serialized base upon AmpActivity class
+	 * 
+	 * @param ampActivity
+	 * @return
+	 */
+	private Activity buildActivityDto(AmpActivity ampActivity) {
+		Activity a = new Activity();
+		a.setId(ampActivity.getAmpActivityId());
+		a.setTitle(ampActivity.getName());
+		String description = null;
+		//do not return description yet since they are stored 
+		//in dg_message table an would need to do a query for each
+		//row
+//		if (ampActivity.getDescription() != null) {
+//			if (ampActivity.getDescription().length() > 50) {
+//				description = StringUtils
+//						.left(ampActivity.getDescription(), 50) + "...";
+//			} else {
+//				description = ampActivity.getDescription();
+//			}
+//
+//		}
+		a.setDescription(description);
+		a.setAmpUrl(ActivityGatekeeper.buildPreviewUrl(String.valueOf(ampActivity
+				.getAmpActivityId())));
+
+		return a;
+	}
+
 	@GET
 	@Path("/activities/{activityId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Activity getActivities(@PathParam("activityId") Long activityId){
-		Activity a=new Activity();
+	public Activity getActivities(@PathParam("activityId") Long activityId) {
+		Activity a = new Activity();
 		a.setId(123L);
-		a.setDescription("Activity description");
+		a.setTitle("Activity description");
 		a.setCommitments(new ArrayList<Activity.ActivityFunding>());
 		a.setDisbursments(new ArrayList<Activity.ActivityFunding>());
 		a.addCommitments(123.34D, GisUtil.formatDate(new Date()));
 		a.addCommitments(423.34D, GisUtil.formatDate(new Date()));
 		a.addDisbursment(523.34D, GisUtil.formatDate(new Date()));
 		a.addDisbursment(623.34D, GisUtil.formatDate(new Date()));
-		
+
 		return a;
 	}
-	
-	
+
 	private FeatureGeoJSON getPoint(Double lat, Double lon,
 			List<Long> activityid, String adm) {
 		FeatureGeoJSON fgj = new FeatureGeoJSON();

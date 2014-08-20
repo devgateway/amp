@@ -8,9 +8,11 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -104,6 +106,25 @@ public class QueryUtil {
 			  return al;
 
     }
+    public static List<AmpActivity>  getActivities(){
+   	 List<AmpActivity> a =  null;
+			try {
+				Session s=PersistenceManager.getRequestDBSession();
+				
+				  String queryString = "select a from " +
+						  AmpActivity.class.getName() +" a";
+				  		Query q=PersistenceManager.getSession().createQuery(queryString);
+						q.setMaxResults(5); 
+				  		a = q.list();
+				
+
+				
+			} catch (DgException e) {
+				logger.error("cannot get list of activities",e);
+			}
+			  return a;
+
+   }    
     /**
      * return a list of saved maps.
      * @return

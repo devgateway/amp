@@ -2362,7 +2362,7 @@ function collapseAll() {
 			</logic:notEmpty>				
 		<hr />	
 		</module:display>					
-	
+     <module:display name="/Activity Form/Related Organizations/Responsible Organization" parentModule="/Activity Form/Related Organizations">	
 		<logic:notEmpty name="aimEditActivityForm" property="agencies.respOrganisations" >
 			<div id="act_responsible_organisation" style="display: block;">
 				<digi:trn key="aim:responsibleorganisation">Responsible Organization</digi:trn>
@@ -2395,8 +2395,9 @@ function collapseAll() {
 				<hr />
 			</logic:notEmpty>
 		<br/>
-		
-		<logic:notEmpty name="aimEditActivityForm" property="agencies.executingAgencies">
+		</module:display>
+        <module:display name="/Activity Form/Related Organizations/Executing Agency" parentModule="/Activity Form/Related Organizations">               
+ 		<logic:notEmpty name="aimEditActivityForm" property="agencies.executingAgencies">
 			<digi:trn key="aim:executingAgency">Executing Agency</digi:trn>
 			<div id="act_executing_agency" style="display: block;">
 			<table width="100%" cellSpacing="1" cellPadding="5" class="box-border-nopadding">
@@ -2426,7 +2427,8 @@ function collapseAll() {
 			</div>
 			<hr/>
 		</logic:notEmpty>
-		
+		</module:display>
+		<module:display name="/Activity Form/Related Organizations/Implementing Agency" parentModule="/Activity Form/Related Organizations">
 		<logic:notEmpty name="aimEditActivityForm" property="agencies.impAgencies" >
 			<digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn>
 			<br/>			
@@ -2458,8 +2460,9 @@ function collapseAll() {
 			</div>
 			<hr />
 		</logic:notEmpty>
-
-		<logic:notEmpty name="aimEditActivityForm" property="agencies.benAgencies">
+		</module:display>
+		<module:display name="/Activity Form/Related Organizations/Beneficiary Agency" parentModule="/Activity Form/Related Organizations">
+ 		<logic:notEmpty name="aimEditActivityForm" property="agencies.benAgencies">
 			<digi:trn key="aim:beneficiary2Agency">Beneficiary Agency</digi:trn>
 			<br />
 				<div id="act_benAgencies_agency" style="display: block;">
@@ -2490,7 +2493,8 @@ function collapseAll() {
 			</div>
 			<hr />		
 		</logic:notEmpty>
-
+		</module:display>
+		<module:display name="/Activity Form/Related Organizations/Contracting Agency" parentModule="/Activity Form/Related Organizations">
 		<logic:notEmpty name="aimEditActivityForm" property="agencies.conAgencies">
 			<digi:trn key="aim:contracting2Agency">Contracting Agency</digi:trn>
 			<br />
@@ -2522,7 +2526,7 @@ function collapseAll() {
 				</div>
 				<hr />			
 			</logic:notEmpty>
-	
+			</module:display>	
 		<!--SECTOR GROUP SECTION -->
 		<module:display name="/Activity Form/Related Organizations/Sector Group" parentModule="/Activity Form/Related Organizations">
 			<logic:notEmpty name="aimEditActivityForm" property="agencies.sectGroups">

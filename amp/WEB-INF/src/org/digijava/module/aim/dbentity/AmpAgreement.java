@@ -20,6 +20,7 @@ public class AmpAgreement implements Serializable, Versionable {
 	private Date effectiveDate;
 	private Date signatureDate;
 	private Date closeDate;
+	private Date parlimentaryApprovalDate;
 	
 	public AmpAgreement() {
 		super();
@@ -86,5 +87,13 @@ public class AmpAgreement implements Serializable, Versionable {
 	@Override
 	public Object prepareMerge(AmpActivityVersion newActivity) throws Exception, AmpNotImplementedException {
 		throw new AmpNotImplementedException();
+	}
+	
+	public Date getParlimentaryApprovalDate() {
+		return parlimentaryApprovalDate;
+	}
+
+	public void setParlimentaryApprovalDate(Date parlimentaryApprovalDate) {
+		this.parlimentaryApprovalDate = parlimentaryApprovalDate;
 	}
 }

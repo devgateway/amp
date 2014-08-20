@@ -136,6 +136,7 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgEfDate", new PropertyModel<Date>(editAgModel, "effectiveDate"), "Effective Date"));
 		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgSgDate", new PropertyModel<Date>(editAgModel, "signatureDate"), "Signature Date"));
 		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgClDate", new PropertyModel<Date>(editAgModel, "closeDate"), "Close Date"));
+		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgPaDate", new PropertyModel<Date>(editAgModel, "parlimentaryApprovalDate"), "Parlimentary Approval Date"));
 		AmpButtonField submit = new AmpButtonField("submit", "Save", true, true) {
 			private static final long serialVersionUID = 1L;
 

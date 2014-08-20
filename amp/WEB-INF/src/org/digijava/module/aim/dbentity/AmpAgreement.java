@@ -21,6 +21,7 @@ public class AmpAgreement implements Serializable, Versionable {
 	private Date effectiveDate;
 	private Date signatureDate;
 	private Date closeDate;
+	private Date parlimentaryApprovalDate;
 	
 	public AmpAgreement() {
 		super();
@@ -86,6 +87,7 @@ public class AmpAgreement implements Serializable, Versionable {
 		ret.append("-Signature date:" + (this.signatureDate != null ? this.signatureDate : ""));
 		ret.append("-Effective date:" + (this.effectiveDate != null ? this.effectiveDate : ""));
 		ret.append("-Close date:" + (this.closeDate != null ? this.closeDate : ""));
+		ret.append("-Parlimentary Approval date:" + (this.parlimentaryApprovalDate != null ? this.parlimentaryApprovalDate : ""));
 		return ret.toString();
 	}
 
@@ -104,5 +106,13 @@ public class AmpAgreement implements Serializable, Versionable {
 	@Override
 	public Object prepareMerge(AmpActivityVersion newActivity) throws Exception{
 		return this;
+	}
+
+	public Date getParlimentaryApprovalDate() {
+		return parlimentaryApprovalDate;
+	}
+
+	public void setParlimentaryApprovalDate(Date parlimentaryApprovalDate) {
+		this.parlimentaryApprovalDate = parlimentaryApprovalDate;
 	}
 }

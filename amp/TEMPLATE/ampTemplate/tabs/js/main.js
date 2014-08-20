@@ -5,7 +5,8 @@ require.config({
 		jquery : 'lib/jquery_1.10.2',
 		jqueryui : 'lib/jquery-ui.min_1.11.0',
 		marionette : 'lib/backbone.marionette/backbone.marionette',
-		text : 'lib/text_2.0.12'
+		text : 'lib/text_2.0.12',
+		localStorage : 'lib/Backbone.localStorage-master/backbone.localStorage-min'
 	},
 	shim : {
 		jquery : {

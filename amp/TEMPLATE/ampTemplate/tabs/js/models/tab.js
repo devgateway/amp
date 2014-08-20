@@ -4,8 +4,7 @@ define([ 'underscore', 'backbone' ], function(_, Backbone) {
 	var Tab = Backbone.Model.extend({
 		defaults : {
 			name : '',
-			title : '',
-			order : 0,
+			id : 0,
 			content : ''
 		}
 	});

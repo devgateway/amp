@@ -4,7 +4,7 @@
       "id": 0,
       "type": "Feature",
       "properties": {
-        "title": "3A-Southern Afr Power Mrkt APL 1 (FY04)",
+        "structureTitle": "3A-Southern Afr Power Mrkt APL 1 (FY04)",
         "projectId": "P069258"
       },
       "geometry": {
@@ -19,7 +19,7 @@
       "id": 1,
       "type": "Feature",
       "properties": {
-        "title": "3A-Southern Afr Power Mrkt APL 1 (FY04)",
+        "structureTitle": "3A-Southern Afr Power Mrkt APL 1 (FY04)",
         "projectId": "P069258"
       },
       "geometry": {
@@ -34,7 +34,7 @@
       "id": 2,
       "type": "Feature",
       "properties": {
-        "title": "3A-Southern Afr Power Mrkt APL 1 (FY04)",
+        "structureTitle": "3A-Southern Afr Power Mrkt APL 1 (FY04)",
         "projectId": "P069258"
       },
       "geometry": {
@@ -49,7 +49,7 @@
       "id": 3,
       "type": "Feature",
       "properties": {
-        "title": "3A-Southern Afr Power Mrkt APL 1 (FY04)",
+        "structureTitle": "3A-Southern Afr Power Mrkt APL 1 (FY04)",
         "projectId": "P069258"
       },
       "geometry": {
@@ -64,7 +64,7 @@
       "id": 4,
       "type": "Feature",
       "properties": {
-        "title": "3A-Southern Afr Power Mrkt APL 1 (FY04)",
+        "structureTitle": "3A-Southern Afr Power Mrkt APL 1 (FY04)",
         "projectId": "P069258"
       },
       "geometry": {
@@ -79,7 +79,7 @@
       "id": 5,
       "type": "Feature",
       "properties": {
-        "title": "3A-Southern Afr Power Mrkt APL 1 (FY04)",
+        "structureTitle": "3A-Southern Afr Power Mrkt APL 1 (FY04)",
         "projectId": "P069258"
       },
       "geometry": {
@@ -94,7 +94,7 @@
       "id": 6,
       "type": "Feature",
       "properties": {
-        "title": "3A-Southern Afr Power Mrkt APL 1 (FY04)",
+        "structureTitle": "3A-Southern Afr Power Mrkt APL 1 (FY04)",
         "projectId": "P069258"
       },
       "geometry": {
@@ -109,7 +109,7 @@
       "id": 7,
       "type": "Feature",
       "properties": {
-        "title": "Support for the Rehabilitation of the Protected Areas System",
+        "structureTitle": "Support for the Rehabilitation of the Protected Areas System",
         "projectId": "P083813"
       },
       "geometry": {
@@ -124,7 +124,7 @@
       "id": 8,
       "type": "Feature",
       "properties": {
-        "title": "Support for the Rehabilitation of the Protected Areas System",
+        "structureTitle": "Support for the Rehabilitation of the Protected Areas System",
         "projectId": "P083813"
       },
       "geometry": {
@@ -139,7 +139,7 @@
       "id": 9,
       "type": "Feature",
       "properties": {
-        "title": "Support for the Rehabilitation of the Protected Areas System",
+        "structureTitle": "Support for the Rehabilitation of the Protected Areas System",
         "projectId": "P083813"
       },
       "geometry": {
@@ -154,7 +154,7 @@
       "id": 10,
       "type": "Feature",
       "properties": {
-        "title": "Support for the Rehabilitation of the Protected Areas System",
+        "structureTitle": "Support for the Rehabilitation of the Protected Areas System",
         "projectId": "P083813"
       },
       "geometry": {
@@ -169,7 +169,7 @@
       "id": 11,
       "type": "Feature",
       "properties": {
-        "title": "Democratic Republic of Congo Emergency Social Action Project",
+        "structureTitle": "Democratic Republic of Congo Emergency Social Action Project",
         "projectId": "P086874"
       },
       "geometry": {
@@ -184,7 +184,7 @@
       "id": 12,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -199,7 +199,7 @@
       "id": 13,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -214,7 +214,7 @@
       "id": 14,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -229,7 +229,7 @@
       "id": 15,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -244,7 +244,7 @@
       "id": 16,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -259,7 +259,7 @@
       "id": 17,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -274,7 +274,7 @@
       "id": 18,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -289,7 +289,7 @@
       "id": 19,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -304,7 +304,7 @@
       "id": 20,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -319,7 +319,7 @@
       "id": 21,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -334,7 +334,7 @@
       "id": 22,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -349,7 +349,7 @@
       "id": 23,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -364,7 +364,7 @@
       "id": 24,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -379,7 +379,7 @@
       "id": 25,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -394,7 +394,7 @@
       "id": 26,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -409,7 +409,7 @@
       "id": 27,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -424,7 +424,7 @@
       "id": 28,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -439,7 +439,7 @@
       "id": 29,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -454,7 +454,7 @@
       "id": 30,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -469,7 +469,7 @@
       "id": 31,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -484,7 +484,7 @@
       "id": 32,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -499,7 +499,7 @@
       "id": 33,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -514,7 +514,7 @@
       "id": 34,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -529,7 +529,7 @@
       "id": 35,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -544,7 +544,7 @@
       "id": 36,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -559,7 +559,7 @@
       "id": 37,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -574,7 +574,7 @@
       "id": 38,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -589,7 +589,7 @@
       "id": 39,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -604,7 +604,7 @@
       "id": 40,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -619,7 +619,7 @@
       "id": 41,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -634,7 +634,7 @@
       "id": 42,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -649,7 +649,7 @@
       "id": 43,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -664,7 +664,7 @@
       "id": 44,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -679,7 +679,7 @@
       "id": 45,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -694,7 +694,7 @@
       "id": 46,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -709,7 +709,7 @@
       "id": 47,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -724,7 +724,7 @@
       "id": 48,
       "type": "Feature",
       "properties": {
-        "title": "Emergency Living Conditions Improvement Support Project",
+        "structureTitle": "Emergency Living Conditions Improvement Support Project",
         "projectId": "P088619"
       },
       "geometry": {
@@ -739,7 +739,7 @@
       "id": 49,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -754,7 +754,7 @@
       "id": 50,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -769,7 +769,7 @@
       "id": 51,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -784,7 +784,7 @@
       "id": 52,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -799,7 +799,7 @@
       "id": 53,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -814,7 +814,7 @@
       "id": 54,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -829,7 +829,7 @@
       "id": 55,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -844,7 +844,7 @@
       "id": 56,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -859,7 +859,7 @@
       "id": 57,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -874,7 +874,7 @@
       "id": 58,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -889,7 +889,7 @@
       "id": 59,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -904,7 +904,7 @@
       "id": 60,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -919,7 +919,7 @@
       "id": 61,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -934,7 +934,7 @@
       "id": 62,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -949,7 +949,7 @@
       "id": 63,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -964,7 +964,7 @@
       "id": 64,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -979,7 +979,7 @@
       "id": 65,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -994,7 +994,7 @@
       "id": 66,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1009,7 +1009,7 @@
       "id": 67,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1024,7 +1024,7 @@
       "id": 68,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1039,7 +1039,7 @@
       "id": 69,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1054,7 +1054,7 @@
       "id": 70,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1069,7 +1069,7 @@
       "id": 71,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1084,7 +1084,7 @@
       "id": 72,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1099,7 +1099,7 @@
       "id": 73,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1114,7 +1114,7 @@
       "id": 74,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1129,7 +1129,7 @@
       "id": 75,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1144,7 +1144,7 @@
       "id": 76,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1159,7 +1159,7 @@
       "id": 77,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1174,7 +1174,7 @@
       "id": 78,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1189,7 +1189,7 @@
       "id": 79,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1204,7 +1204,7 @@
       "id": 80,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1219,7 +1219,7 @@
       "id": 81,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1234,7 +1234,7 @@
       "id": 82,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1249,7 +1249,7 @@
       "id": 83,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1264,7 +1264,7 @@
       "id": 84,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1279,7 +1279,7 @@
       "id": 85,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1294,7 +1294,7 @@
       "id": 86,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1309,7 +1309,7 @@
       "id": 87,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1324,7 +1324,7 @@
       "id": 88,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1339,7 +1339,7 @@
       "id": 89,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1354,7 +1354,7 @@
       "id": 90,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1369,7 +1369,7 @@
       "id": 91,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1384,7 +1384,7 @@
       "id": 92,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1399,7 +1399,7 @@
       "id": 93,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1414,7 +1414,7 @@
       "id": 94,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1429,7 +1429,7 @@
       "id": 95,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1444,7 +1444,7 @@
       "id": 96,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1459,7 +1459,7 @@
       "id": 97,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1474,7 +1474,7 @@
       "id": 98,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1489,7 +1489,7 @@
       "id": 99,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1504,7 +1504,7 @@
       "id": 100,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1519,7 +1519,7 @@
       "id": 101,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1534,7 +1534,7 @@
       "id": 102,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1549,7 +1549,7 @@
       "id": 103,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1564,7 +1564,7 @@
       "id": 104,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1579,7 +1579,7 @@
       "id": 105,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1594,7 +1594,7 @@
       "id": 106,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1609,7 +1609,7 @@
       "id": 107,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1624,7 +1624,7 @@
       "id": 108,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1639,7 +1639,7 @@
       "id": 109,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1654,7 +1654,7 @@
       "id": 110,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1669,7 +1669,7 @@
       "id": 111,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1684,7 +1684,7 @@
       "id": 112,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1699,7 +1699,7 @@
       "id": 113,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1714,7 +1714,7 @@
       "id": 114,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1729,7 +1729,7 @@
       "id": 115,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1744,7 +1744,7 @@
       "id": 116,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1759,7 +1759,7 @@
       "id": 117,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1774,7 +1774,7 @@
       "id": 118,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1789,7 +1789,7 @@
       "id": 119,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1804,7 +1804,7 @@
       "id": 120,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1819,7 +1819,7 @@
       "id": 121,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1834,7 +1834,7 @@
       "id": 122,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1849,7 +1849,7 @@
       "id": 123,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1864,7 +1864,7 @@
       "id": 124,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1879,7 +1879,7 @@
       "id": 125,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1894,7 +1894,7 @@
       "id": 126,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1909,7 +1909,7 @@
       "id": 127,
       "type": "Feature",
       "properties": {
-        "title": "DRC Health Sector Rehabilitation Support Project",
+        "structureTitle": "DRC Health Sector Rehabilitation Support Project",
         "projectId": "P088751"
       },
       "geometry": {
@@ -1924,7 +1924,7 @@
       "id": 128,
       "type": "Feature",
       "properties": {
-        "title": "Additional Financing for Private Sector Development and Competitiveness Project",
+        "structureTitle": "Additional Financing for Private Sector Development and Competitiveness Project",
         "projectId": "P090872"
       },
       "geometry": {
@@ -1939,7 +1939,7 @@
       "id": 129,
       "type": "Feature",
       "properties": {
-        "title": "Additional Financing for Private Sector Development and Competitiveness Project",
+        "structureTitle": "Additional Financing for Private Sector Development and Competitiveness Project",
         "projectId": "P090872"
       },
       "geometry": {
@@ -1954,7 +1954,7 @@
       "id": 130,
       "type": "Feature",
       "properties": {
-        "title": "Additional Financing for Private Sector Development and Competitiveness Project",
+        "structureTitle": "Additional Financing for Private Sector Development and Competitiveness Project",
         "projectId": "P090872"
       },
       "geometry": {
@@ -1969,7 +1969,7 @@
       "id": 131,
       "type": "Feature",
       "properties": {
-        "title": "Additional Financing for Private Sector Development and Competitiveness Project",
+        "structureTitle": "Additional Financing for Private Sector Development and Competitiveness Project",
         "projectId": "P090872"
       },
       "geometry": {
@@ -1984,7 +1984,7 @@
       "id": 132,
       "type": "Feature",
       "properties": {
-        "title": "Additional Financing for Private Sector Development and Competitiveness Project",
+        "structureTitle": "Additional Financing for Private Sector Development and Competitiveness Project",
         "projectId": "P090872"
       },
       "geometry": {
@@ -1999,7 +1999,7 @@
       "id": 133,
       "type": "Feature",
       "properties": {
-        "title": "Additional Financing for Private Sector Development and Competitiveness Project",
+        "structureTitle": "Additional Financing for Private Sector Development and Competitiveness Project",
         "projectId": "P090872"
       },
       "geometry": {
@@ -2014,7 +2014,7 @@
       "id": 134,
       "type": "Feature",
       "properties": {
-        "title": "Additional Financing for Private Sector Development and Competitiveness Project",
+        "structureTitle": "Additional Financing for Private Sector Development and Competitiveness Project",
         "projectId": "P090872"
       },
       "geometry": {
@@ -2029,7 +2029,7 @@
       "id": 135,
       "type": "Feature",
       "properties": {
-        "title": "Urban Water Supply Project",
+        "structureTitle": "Urban Water Supply Project",
         "projectId": "P091092"
       },
       "geometry": {
@@ -2044,7 +2044,7 @@
       "id": 136,
       "type": "Feature",
       "properties": {
-        "title": "Urban Water Supply Project",
+        "structureTitle": "Urban Water Supply Project",
         "projectId": "P091092"
       },
       "geometry": {
@@ -2059,7 +2059,7 @@
       "id": 137,
       "type": "Feature",
       "properties": {
-        "title": "Urban Water Supply Project",
+        "structureTitle": "Urban Water Supply Project",
         "projectId": "P091092"
       },
       "geometry": {
@@ -2074,7 +2074,7 @@
       "id": 138,
       "type": "Feature",
       "properties": {
-        "title": "Urban Water Supply Project",
+        "structureTitle": "Urban Water Supply Project",
         "projectId": "P091092"
       },
       "geometry": {
@@ -2089,7 +2089,7 @@
       "id": 139,
       "type": "Feature",
       "properties": {
-        "title": "Urban Water Supply Project",
+        "structureTitle": "Urban Water Supply Project",
         "projectId": "P091092"
       },
       "geometry": {
@@ -2104,7 +2104,7 @@
       "id": 140,
       "type": "Feature",
       "properties": {
-        "title": "Urban Water Supply Project",
+        "structureTitle": "Urban Water Supply Project",
         "projectId": "P091092"
       },
       "geometry": {
@@ -2119,7 +2119,7 @@
       "id": 141,
       "type": "Feature",
       "properties": {
-        "title": "Urban Water Supply Project",
+        "structureTitle": "Urban Water Supply Project",
         "projectId": "P091092"
       },
       "geometry": {
@@ -2134,7 +2134,7 @@
       "id": 142,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2149,7 +2149,7 @@
       "id": 143,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2164,7 +2164,7 @@
       "id": 144,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2179,7 +2179,7 @@
       "id": 145,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2194,7 +2194,7 @@
       "id": 146,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2209,7 +2209,7 @@
       "id": 147,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2224,7 +2224,7 @@
       "id": 148,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2239,7 +2239,7 @@
       "id": 149,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2254,7 +2254,7 @@
       "id": 150,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2269,7 +2269,7 @@
       "id": 151,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2284,7 +2284,7 @@
       "id": 152,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2299,7 +2299,7 @@
       "id": 153,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2314,7 +2314,7 @@
       "id": 154,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2329,7 +2329,7 @@
       "id": 155,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2344,7 +2344,7 @@
       "id": 156,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2359,7 +2359,7 @@
       "id": 157,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2374,7 +2374,7 @@
       "id": 158,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2389,7 +2389,7 @@
       "id": 159,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2404,7 +2404,7 @@
       "id": 160,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2419,7 +2419,7 @@
       "id": 161,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2434,7 +2434,7 @@
       "id": 162,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2449,7 +2449,7 @@
       "id": 163,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2464,7 +2464,7 @@
       "id": 164,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2479,7 +2479,7 @@
       "id": 165,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2494,7 +2494,7 @@
       "id": 166,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2509,7 +2509,7 @@
       "id": 167,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2524,7 +2524,7 @@
       "id": 168,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2539,7 +2539,7 @@
       "id": 169,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2554,7 +2554,7 @@
       "id": 170,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2569,7 +2569,7 @@
       "id": 171,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2584,7 +2584,7 @@
       "id": 172,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2599,7 +2599,7 @@
       "id": 173,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2614,7 +2614,7 @@
       "id": 174,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2629,7 +2629,7 @@
       "id": 175,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2644,7 +2644,7 @@
       "id": 176,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2659,7 +2659,7 @@
       "id": 177,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2674,7 +2674,7 @@
       "id": 178,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2689,7 +2689,7 @@
       "id": 179,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2704,7 +2704,7 @@
       "id": 180,
       "type": "Feature",
       "properties": {
-        "title": "DRC Multi-modal Transport",
+        "structureTitle": "DRC Multi-modal Transport",
         "projectId": "P092537"
       },
       "geometry": {
@@ -2719,7 +2719,7 @@
       "id": 181,
       "type": "Feature",
       "properties": {
-        "title": "BCF - IBI Carbon Sink - Bateke",
+        "structureTitle": "BCF - IBI Carbon Sink - Bateke",
         "projectId": "P096414"
       },
       "geometry": {
@@ -2734,7 +2734,7 @@
       "id": 182,
       "type": "Feature",
       "properties": {
-        "title": "BCF - IBI Carbon Sink - Bateke",
+        "structureTitle": "BCF - IBI Carbon Sink - Bateke",
         "projectId": "P096414"
       },
       "geometry": {
@@ -2749,7 +2749,7 @@
       "id": 183,
       "type": "Feature",
       "properties": {
-        "title": "Regional and Domestic Power Markets Development Project (Southern Africa Power Market Project: APL-1b)",
+        "structureTitle": "Regional and Domestic Power Markets Development Project (Southern Africa Power Market Project: APL-1b)",
         "projectId": "P097201"
       },
       "geometry": {
@@ -2764,7 +2764,7 @@
       "id": 184,
       "type": "Feature",
       "properties": {
-        "title": "Regional and Domestic Power Markets Development Project (Southern Africa Power Market Project: APL-1b)",
+        "structureTitle": "Regional and Domestic Power Markets Development Project (Southern Africa Power Market Project: APL-1b)",
         "projectId": "P097201"
       },
       "geometry": {
@@ -2779,7 +2779,7 @@
       "id": 185,
       "type": "Feature",
       "properties": {
-        "title": "Regional and Domestic Power Markets Development Project (Southern Africa Power Market Project: APL-1b)",
+        "structureTitle": "Regional and Domestic Power Markets Development Project (Southern Africa Power Market Project: APL-1b)",
         "projectId": "P097201"
       },
       "geometry": {
@@ -2794,7 +2794,7 @@
       "id": 186,
       "type": "Feature",
       "properties": {
-        "title": "Regional and Domestic Power Markets Development Project (Southern Africa Power Market Project: APL-1b)",
+        "structureTitle": "Regional and Domestic Power Markets Development Project (Southern Africa Power Market Project: APL-1b)",
         "projectId": "P097201"
       },
       "geometry": {
@@ -2809,7 +2809,7 @@
       "id": 187,
       "type": "Feature",
       "properties": {
-        "title": "Regional and Domestic Power Markets Development Project (Southern Africa Power Market Project: APL-1b)",
+        "structureTitle": "Regional and Domestic Power Markets Development Project (Southern Africa Power Market Project: APL-1b)",
         "projectId": "P097201"
       },
       "geometry": {
@@ -2824,7 +2824,7 @@
       "id": 188,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -2839,7 +2839,7 @@
       "id": 189,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -2854,7 +2854,7 @@
       "id": 190,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -2869,7 +2869,7 @@
       "id": 191,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -2884,7 +2884,7 @@
       "id": 192,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -2899,7 +2899,7 @@
       "id": 193,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -2914,7 +2914,7 @@
       "id": 194,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project3",
+        "structureTitle": "Forest and Nature Conservation Project3",
         "projectId": "P100620"
       },
       "geometry": {
@@ -2929,7 +2929,7 @@
       "id": 195,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -2944,7 +2944,7 @@
       "id": 196,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -2959,7 +2959,7 @@
       "id": 197,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -2974,7 +2974,7 @@
       "id": 198,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -2989,7 +2989,7 @@
       "id": 199,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -3004,7 +3004,7 @@
       "id": 200,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -3019,7 +3019,7 @@
       "id": 201,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -3034,7 +3034,7 @@
       "id": 202,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -3049,7 +3049,7 @@
       "id": 203,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -3064,7 +3064,7 @@
       "id": 204,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -3079,7 +3079,7 @@
       "id": 205,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -3094,7 +3094,7 @@
       "id": 206,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -3109,7 +3109,7 @@
       "id": 207,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -3124,7 +3124,7 @@
       "id": 208,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -3139,7 +3139,7 @@
       "id": 209,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -3154,7 +3154,7 @@
       "id": 210,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -3169,7 +3169,7 @@
       "id": 211,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -3184,7 +3184,7 @@
       "id": 212,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -3199,7 +3199,7 @@
       "id": 213,
       "type": "Feature",
       "properties": {
-        "title": "Forest and Nature Conservation Project",
+        "structureTitle": "Forest and Nature Conservation Project",
         "projectId": "P100620"
       },
       "geometry": {
@@ -3214,7 +3214,7 @@
       "id": 214,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project",
+        "structureTitle": "CONGO DRC - Pro-Routes Project",
         "projectId": "P101745"
       },
       "geometry": {
@@ -3229,7 +3229,7 @@
       "id": 215,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project",
+        "structureTitle": "CONGO DRC - Pro-Routes Project",
         "projectId": "P101745"
       },
       "geometry": {
@@ -3244,7 +3244,7 @@
       "id": 216,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project",
+        "structureTitle": "CONGO DRC - Pro-Routes Project",
         "projectId": "P101745"
       },
       "geometry": {
@@ -3259,7 +3259,7 @@
       "id": 217,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project",
+        "structureTitle": "CONGO DRC - Pro-Routes Project",
         "projectId": "P101745"
       },
       "geometry": {
@@ -3274,7 +3274,7 @@
       "id": 218,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project",
+        "structureTitle": "CONGO DRC - Pro-Routes Project",
         "projectId": "P101745"
       },
       "geometry": {
@@ -3289,7 +3289,7 @@
       "id": 219,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project",
+        "structureTitle": "CONGO DRC - Pro-Routes Project",
         "projectId": "P101745"
       },
       "geometry": {
@@ -3304,7 +3304,7 @@
       "id": 220,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project",
+        "structureTitle": "CONGO DRC - Pro-Routes Project",
         "projectId": "P101745"
       },
       "geometry": {
@@ -3319,7 +3319,7 @@
       "id": 221,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project",
+        "structureTitle": "CONGO DRC - Pro-Routes Project",
         "projectId": "P101745"
       },
       "geometry": {
@@ -3334,7 +3334,7 @@
       "id": 222,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project",
+        "structureTitle": "CONGO DRC - Pro-Routes Project",
         "projectId": "P101745"
       },
       "geometry": {
@@ -3349,7 +3349,7 @@
       "id": 223,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project",
+        "structureTitle": "CONGO DRC - Pro-Routes Project",
         "projectId": "P101745"
       },
       "geometry": {
@@ -3364,7 +3364,7 @@
       "id": 224,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project",
+        "structureTitle": "CONGO DRC - Pro-Routes Project",
         "projectId": "P101745"
       },
       "geometry": {
@@ -3379,7 +3379,7 @@
       "id": 225,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project",
+        "structureTitle": "CONGO DRC - Pro-Routes Project",
         "projectId": "P101745"
       },
       "geometry": {
@@ -3394,7 +3394,7 @@
       "id": 226,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project",
+        "structureTitle": "CONGO DRC - Pro-Routes Project",
         "projectId": "P101745"
       },
       "geometry": {
@@ -3409,7 +3409,7 @@
       "id": 227,
       "type": "Feature",
       "properties": {
-        "title": "DRC Emergency Urban and Social Rehabilitation Project",
+        "structureTitle": "DRC Emergency Urban and Social Rehabilitation Project",
         "projectId": "P104497"
       },
       "geometry": {
@@ -3424,7 +3424,7 @@
       "id": 228,
       "type": "Feature",
       "properties": {
-        "title": "DRC Emergency Urban and Social Rehabilitation Project",
+        "structureTitle": "DRC Emergency Urban and Social Rehabilitation Project",
         "projectId": "P104497"
       },
       "geometry": {
@@ -3439,7 +3439,7 @@
       "id": 229,
       "type": "Feature",
       "properties": {
-        "title": "Additional Financing for Southern Africa Power Market Project (APL1)",
+        "structureTitle": "Additional Financing for Southern Africa Power Market Project (APL1)",
         "projectId": "P105654"
       },
       "geometry": {
@@ -3454,7 +3454,7 @@
       "id": 230,
       "type": "Feature",
       "properties": {
-        "title": "Additional Financing for Southern Africa Power Market Project (APL1)",
+        "structureTitle": "Additional Financing for Southern Africa Power Market Project (APL1)",
         "projectId": "P105654"
       },
       "geometry": {
@@ -3469,7 +3469,7 @@
       "id": 231,
       "type": "Feature",
       "properties": {
-        "title": "Additonal Financing for the Regional and Domestic Power Market Project",
+        "structureTitle": "Additonal Financing for the Regional and Domestic Power Market Project",
         "projectId": "P114782"
       },
       "geometry": {
@@ -3484,7 +3484,7 @@
       "id": 232,
       "type": "Feature",
       "properties": {
-        "title": "Additonal Financing for the Regional and Domestic Power Market Project",
+        "structureTitle": "Additonal Financing for the Regional and Domestic Power Market Project",
         "projectId": "P114782"
       },
       "geometry": {
@@ -3499,7 +3499,7 @@
       "id": 233,
       "type": "Feature",
       "properties": {
-        "title": "Additonal Financing for the Regional and Domestic Power Market Project",
+        "structureTitle": "Additonal Financing for the Regional and Domestic Power Market Project",
         "projectId": "P114782"
       },
       "geometry": {
@@ -3514,7 +3514,7 @@
       "id": 234,
       "type": "Feature",
       "properties": {
-        "title": "Additonal Financing for the Regional and Domestic Power Market Project",
+        "structureTitle": "Additonal Financing for the Regional and Domestic Power Market Project",
         "projectId": "P114782"
       },
       "geometry": {
@@ -3529,7 +3529,7 @@
       "id": 235,
       "type": "Feature",
       "properties": {
-        "title": "Additonal Financing for the Regional and Domestic Power Market Project",
+        "structureTitle": "Additonal Financing for the Regional and Domestic Power Market Project",
         "projectId": "P114782"
       },
       "geometry": {
@@ -3544,7 +3544,7 @@
       "id": 236,
       "type": "Feature",
       "properties": {
-        "title": "Additonal Financing for the Regional and Domestic Power Market Project",
+        "structureTitle": "Additonal Financing for the Regional and Domestic Power Market Project",
         "projectId": "P114782"
       },
       "geometry": {
@@ -3559,7 +3559,7 @@
       "id": 237,
       "type": "Feature",
       "properties": {
-        "title": "Additonal Financing for the Regional and Domestic Power Market Project",
+        "structureTitle": "Additonal Financing for the Regional and Domestic Power Market Project",
         "projectId": "P114782"
       },
       "geometry": {
@@ -3574,7 +3574,7 @@
       "id": 238,
       "type": "Feature",
       "properties": {
-        "title": "Street Children Project",
+        "structureTitle": "Street Children Project",
         "projectId": "P115318"
       },
       "geometry": {
@@ -3589,7 +3589,7 @@
       "id": 239,
       "type": "Feature",
       "properties": {
-        "title": "Street Children Project",
+        "structureTitle": "Street Children Project",
         "projectId": "P115318"
       },
       "geometry": {
@@ -3604,7 +3604,7 @@
       "id": 240,
       "type": "Feature",
       "properties": {
-        "title": "Street Children Project",
+        "structureTitle": "Street Children Project",
         "projectId": "P115318"
       },
       "geometry": {
@@ -3619,7 +3619,7 @@
       "id": 241,
       "type": "Feature",
       "properties": {
-        "title": "Street Children Project",
+        "structureTitle": "Street Children Project",
         "projectId": "P115318"
       },
       "geometry": {
@@ -3634,7 +3634,7 @@
       "id": 242,
       "type": "Feature",
       "properties": {
-        "title": "Street Children Project",
+        "structureTitle": "Street Children Project",
         "projectId": "P115318"
       },
       "geometry": {
@@ -3649,7 +3649,7 @@
       "id": 243,
       "type": "Feature",
       "properties": {
-        "title": "Street Children Project",
+        "structureTitle": "Street Children Project",
         "projectId": "P115318"
       },
       "geometry": {
@@ -3664,7 +3664,7 @@
       "id": 244,
       "type": "Feature",
       "properties": {
-        "title": "Street Children Project",
+        "structureTitle": "Street Children Project",
         "projectId": "P115318"
       },
       "geometry": {
@@ -3679,7 +3679,7 @@
       "id": 245,
       "type": "Feature",
       "properties": {
-        "title": "Street Children Project",
+        "structureTitle": "Street Children Project",
         "projectId": "P115318"
       },
       "geometry": {
@@ -3694,7 +3694,7 @@
       "id": 246,
       "type": "Feature",
       "properties": {
-        "title": "DRC Street Children Project",
+        "structureTitle": "DRC Street Children Project",
         "projectId": "P115318"
       },
       "geometry": {
@@ -3709,7 +3709,7 @@
       "id": 247,
       "type": "Feature",
       "properties": {
-        "title": "DRC Street Children Project",
+        "structureTitle": "DRC Street Children Project",
         "projectId": "P115318"
       },
       "geometry": {
@@ -3724,7 +3724,7 @@
       "id": 248,
       "type": "Feature",
       "properties": {
-        "title": "DRC Street Children Project",
+        "structureTitle": "DRC Street Children Project",
         "projectId": "P115318"
       },
       "geometry": {
@@ -3739,7 +3739,7 @@
       "id": 249,
       "type": "Feature",
       "properties": {
-        "title": "DRC Street Children Project",
+        "structureTitle": "DRC Street Children Project",
         "projectId": "P115318"
       },
       "geometry": {
@@ -3754,7 +3754,7 @@
       "id": 250,
       "type": "Feature",
       "properties": {
-        "title": "DRC Street Children Project",
+        "structureTitle": "DRC Street Children Project",
         "projectId": "P115318"
       },
       "geometry": {
@@ -3769,7 +3769,7 @@
       "id": 251,
       "type": "Feature",
       "properties": {
-        "title": "DRC Street Children Project",
+        "structureTitle": "DRC Street Children Project",
         "projectId": "P115318"
       },
       "geometry": {
@@ -3784,7 +3784,7 @@
       "id": 252,
       "type": "Feature",
       "properties": {
-        "title": "DRC Street Children Project",
+        "structureTitle": "DRC Street Children Project",
         "projectId": "P115318"
       },
       "geometry": {
@@ -3799,7 +3799,7 @@
       "id": 253,
       "type": "Feature",
       "properties": {
-        "title": "DRC Street Children Project",
+        "structureTitle": "DRC Street Children Project",
         "projectId": "P115318"
       },
       "geometry": {
@@ -3814,7 +3814,7 @@
       "id": 254,
       "type": "Feature",
       "properties": {
-        "title": "DRC Establishing Capacity for Core Public Management",
+        "structureTitle": "DRC Establishing Capacity for Core Public Management",
         "projectId": "P117382"
       },
       "geometry": {
@@ -3829,7 +3829,7 @@
       "id": 255,
       "type": "Feature",
       "properties": {
-        "title": "DRC Establishing Capacity for Core Public Management",
+        "structureTitle": "DRC Establishing Capacity for Core Public Management",
         "projectId": "P117382"
       },
       "geometry": {
@@ -3844,7 +3844,7 @@
       "id": 256,
       "type": "Feature",
       "properties": {
-        "title": "DRC Establishing Capacity for Core Public Management",
+        "structureTitle": "DRC Establishing Capacity for Core Public Management",
         "projectId": "P117382"
       },
       "geometry": {
@@ -3859,7 +3859,7 @@
       "id": 257,
       "type": "Feature",
       "properties": {
-        "title": "DRC Establishing Capacity for Core Public Management",
+        "structureTitle": "DRC Establishing Capacity for Core Public Management",
         "projectId": "P117382"
       },
       "geometry": {
@@ -3874,7 +3874,7 @@
       "id": 258,
       "type": "Feature",
       "properties": {
-        "title": "DRC Establishing Capacity for Core Public Management",
+        "structureTitle": "DRC Establishing Capacity for Core Public Management",
         "projectId": "P117382"
       },
       "geometry": {
@@ -3889,7 +3889,7 @@
       "id": 259,
       "type": "Feature",
       "properties": {
-        "title": "DRC Establishing Capacity for Core Public Management",
+        "structureTitle": "DRC Establishing Capacity for Core Public Management",
         "projectId": "P117382"
       },
       "geometry": {
@@ -3904,7 +3904,7 @@
       "id": 260,
       "type": "Feature",
       "properties": {
-        "title": "DRC Establishing Capacity for Core Public Management",
+        "structureTitle": "DRC Establishing Capacity for Core Public Management",
         "projectId": "P117382"
       },
       "geometry": {
@@ -3919,7 +3919,7 @@
       "id": 261,
       "type": "Feature",
       "properties": {
-        "title": "DRC Establishing Capacity for Core Public Management",
+        "structureTitle": "DRC Establishing Capacity for Core Public Management",
         "projectId": "P117382"
       },
       "geometry": {
@@ -3934,7 +3934,7 @@
       "id": 262,
       "type": "Feature",
       "properties": {
-        "title": "DRC Establishing Capacity for Core Public Management",
+        "structureTitle": "DRC Establishing Capacity for Core Public Management",
         "projectId": "P117382"
       },
       "geometry": {
@@ -3949,7 +3949,7 @@
       "id": 263,
       "type": "Feature",
       "properties": {
-        "title": "DRC Establishing Capacity for Core Public Management",
+        "structureTitle": "DRC Establishing Capacity for Core Public Management",
         "projectId": "P117382"
       },
       "geometry": {
@@ -3964,7 +3964,7 @@
       "id": 264,
       "type": "Feature",
       "properties": {
-        "title": "DRC Establishing Capacity for Core Public Management",
+        "structureTitle": "DRC Establishing Capacity for Core Public Management",
         "projectId": "P117382"
       },
       "geometry": {
@@ -3979,7 +3979,7 @@
       "id": 265,
       "type": "Feature",
       "properties": {
-        "title": "DRC Establishing Capacity for Core Public Management",
+        "structureTitle": "DRC Establishing Capacity for Core Public Management",
         "projectId": "P117382"
       },
       "geometry": {
@@ -3994,7 +3994,7 @@
       "id": 266,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project (Additional Financing)",
+        "structureTitle": "CONGO DRC - Pro-Routes Project (Additional Financing)",
         "projectId": "P120709"
       },
       "geometry": {
@@ -4009,7 +4009,7 @@
       "id": 267,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project (Additional Financing)",
+        "structureTitle": "CONGO DRC - Pro-Routes Project (Additional Financing)",
         "projectId": "P120709"
       },
       "geometry": {
@@ -4024,7 +4024,7 @@
       "id": 268,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project (Additional Financing)",
+        "structureTitle": "CONGO DRC - Pro-Routes Project (Additional Financing)",
         "projectId": "P120709"
       },
       "geometry": {
@@ -4039,7 +4039,7 @@
       "id": 269,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project (Additional Financing)",
+        "structureTitle": "CONGO DRC - Pro-Routes Project (Additional Financing)",
         "projectId": "P120709"
       },
       "geometry": {
@@ -4054,7 +4054,7 @@
       "id": 270,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project (Additional Financing)",
+        "structureTitle": "CONGO DRC - Pro-Routes Project (Additional Financing)",
         "projectId": "P120709"
       },
       "geometry": {
@@ -4069,7 +4069,7 @@
       "id": 271,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project (Additional Financing)",
+        "structureTitle": "CONGO DRC - Pro-Routes Project (Additional Financing)",
         "projectId": "P120709"
       },
       "geometry": {
@@ -4084,7 +4084,7 @@
       "id": 272,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project (Additional Financing)",
+        "structureTitle": "CONGO DRC - Pro-Routes Project (Additional Financing)",
         "projectId": "P120709"
       },
       "geometry": {
@@ -4099,7 +4099,7 @@
       "id": 273,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project (Additional Financing)",
+        "structureTitle": "CONGO DRC - Pro-Routes Project (Additional Financing)",
         "projectId": "P120709"
       },
       "geometry": {
@@ -4114,7 +4114,7 @@
       "id": 274,
       "type": "Feature",
       "properties": {
-        "title": "CONGO DRC - Pro-Routes Project (Additional Financing)",
+        "structureTitle": "CONGO DRC - Pro-Routes Project (Additional Financing)",
         "projectId": "P120709"
       },
       "geometry": {
@@ -4129,7 +4129,7 @@
       "id": 275,
       "type": "Feature",
       "properties": {
-        "title": "DRC Emergency Urban and Social Rehabilitation Project Additional Financing",
+        "structureTitle": "DRC Emergency Urban and Social Rehabilitation Project Additional Financing",
         "projectId": "P120898"
       },
       "geometry": {
@@ -4144,7 +4144,7 @@
       "id": 276,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4159,7 +4159,7 @@
       "id": 277,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4174,7 +4174,7 @@
       "id": 278,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4189,7 +4189,7 @@
       "id": 279,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4204,7 +4204,7 @@
       "id": 280,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4219,7 +4219,7 @@
       "id": 281,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4234,7 +4234,7 @@
       "id": 282,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4249,7 +4249,7 @@
       "id": 283,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4264,7 +4264,7 @@
       "id": 284,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4279,7 +4279,7 @@
       "id": 285,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4294,7 +4294,7 @@
       "id": 286,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4309,7 +4309,7 @@
       "id": 287,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4324,7 +4324,7 @@
       "id": 288,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4339,7 +4339,7 @@
       "id": 289,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4354,7 +4354,7 @@
       "id": 290,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4369,7 +4369,7 @@
       "id": 291,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4384,7 +4384,7 @@
       "id": 292,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4399,7 +4399,7 @@
       "id": 293,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4414,7 +4414,7 @@
       "id": 294,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4429,7 +4429,7 @@
       "id": 295,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4444,7 +4444,7 @@
       "id": 296,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4459,7 +4459,7 @@
       "id": 297,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4474,7 +4474,7 @@
       "id": 298,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4489,7 +4489,7 @@
       "id": 299,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4504,7 +4504,7 @@
       "id": 300,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4519,7 +4519,7 @@
       "id": 301,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4534,7 +4534,7 @@
       "id": 302,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4549,7 +4549,7 @@
       "id": 303,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4564,7 +4564,7 @@
       "id": 304,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4579,7 +4579,7 @@
       "id": 305,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4594,7 +4594,7 @@
       "id": 306,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4609,7 +4609,7 @@
       "id": 307,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4624,7 +4624,7 @@
       "id": 308,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4639,7 +4639,7 @@
       "id": 309,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4654,7 +4654,7 @@
       "id": 310,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4669,7 +4669,7 @@
       "id": 311,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4684,7 +4684,7 @@
       "id": 312,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4699,7 +4699,7 @@
       "id": 313,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4714,7 +4714,7 @@
       "id": 314,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4729,7 +4729,7 @@
       "id": 315,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4744,7 +4744,7 @@
       "id": 316,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4759,7 +4759,7 @@
       "id": 317,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4774,7 +4774,7 @@
       "id": 318,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4789,7 +4789,7 @@
       "id": 319,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4804,7 +4804,7 @@
       "id": 320,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4819,7 +4819,7 @@
       "id": 321,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4834,7 +4834,7 @@
       "id": 322,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4849,7 +4849,7 @@
       "id": 323,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4864,7 +4864,7 @@
       "id": 324,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4879,7 +4879,7 @@
       "id": 325,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4894,7 +4894,7 @@
       "id": 326,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4909,7 +4909,7 @@
       "id": 327,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4924,7 +4924,7 @@
       "id": 328,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4939,7 +4939,7 @@
       "id": 329,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4954,7 +4954,7 @@
       "id": 330,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4969,7 +4969,7 @@
       "id": 331,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4984,7 +4984,7 @@
       "id": 332,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -4999,7 +4999,7 @@
       "id": 333,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -5014,7 +5014,7 @@
       "id": 334,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -5029,7 +5029,7 @@
       "id": 335,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -5044,7 +5044,7 @@
       "id": 336,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -5059,7 +5059,7 @@
       "id": 337,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -5074,7 +5074,7 @@
       "id": 338,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -5089,7 +5089,7 @@
       "id": 339,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -5104,7 +5104,7 @@
       "id": 340,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -5119,7 +5119,7 @@
       "id": 341,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -5134,7 +5134,7 @@
       "id": 342,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -5149,7 +5149,7 @@
       "id": 343,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -5164,7 +5164,7 @@
       "id": 344,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -5179,7 +5179,7 @@
       "id": 345,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -5194,7 +5194,7 @@
       "id": 346,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -5209,7 +5209,7 @@
       "id": 347,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -5224,7 +5224,7 @@
       "id": 348,
       "type": "Feature",
       "properties": {
-        "title": "DRC additional financing malaria control",
+        "structureTitle": "DRC additional financing malaria control",
         "projectId": "P122251"
       },
       "geometry": {
@@ -5239,7 +5239,7 @@
       "id": 349,
       "type": "Feature",
       "properties": {
-        "title": "Central African Backbone - APL3 - Republic of Congo",
+        "structureTitle": "Central African Backbone - APL3 - Republic of Congo",
         "projectId": "P122398"
       },
       "geometry": {
@@ -5254,7 +5254,7 @@
       "id": 350,
       "type": "Feature",
       "properties": {
-        "title": "PADIR/Projet d'Appui au Developpement des Infrastructures Rurales",
+        "structureTitle": "PADIR/Projet d'Appui au Developpement des Infrastructures Rurales",
         "projectId": "11200988730"
       },
       "geometry": {
@@ -5269,7 +5269,7 @@
       "id": 351,
       "type": "Feature",
       "properties": {
-        "title": "PADIR/Projet d'Appui au Developpement des Infrastructures Rurales",
+        "structureTitle": "PADIR/Projet d'Appui au Developpement des Infrastructures Rurales",
         "projectId": "11200988730"
       },
       "geometry": {
@@ -5284,7 +5284,7 @@
       "id": 352,
       "type": "Feature",
       "properties": {
-        "title": "Appui au developpement de l'agroforesterie",
+        "structureTitle": "Appui au developpement de l'agroforesterie",
         "projectId": "1120098711440"
       },
       "geometry": {
@@ -5299,7 +5299,7 @@
       "id": 353,
       "type": "Feature",
       "properties": {
-        "title": "Rehabilitation des routes Nsele-Lufimi & Kwango-Kenge (y compris etudes d'amenagement du tron\uff8don Tshikapa-Mbuji-Mayi)",
+        "structureTitle": "Rehabilitation des routes Nsele-Lufimi & Kwango-Kenge (y compris etudes d'amenagement du tron\uff8don Tshikapa-Mbuji-Mayi)",
         "projectId": "1120098711426"
       },
       "geometry": {
@@ -5314,7 +5314,7 @@
       "id": 354,
       "type": "Feature",
       "properties": {
-        "title": "Rehabilitation des routes Nsele-Lufimi & Kwango-Kenge (y compris etudes d'amenagement du tron\uff8don Tshikapa-Mbuji-Mayi)",
+        "structureTitle": "Rehabilitation des routes Nsele-Lufimi & Kwango-Kenge (y compris etudes d'amenagement du tron\uff8don Tshikapa-Mbuji-Mayi)",
         "projectId": "1120098711426"
       },
       "geometry": {
@@ -5329,7 +5329,7 @@
       "id": 355,
       "type": "Feature",
       "properties": {
-        "title": "Rehabilitation des routes Nsele-Lufimi & Kwango-Kenge (y compris etudes d'amenagement du tron\uff8don Tshikapa-Mbuji-Mayi)",
+        "structureTitle": "Rehabilitation des routes Nsele-Lufimi & Kwango-Kenge (y compris etudes d'amenagement du tron\uff8don Tshikapa-Mbuji-Mayi)",
         "projectId": "1120098711426"
       },
       "geometry": {
@@ -5344,7 +5344,7 @@
       "id": 356,
       "type": "Feature",
       "properties": {
-        "title": "Route Batshamba - TSHIKAPA",
+        "structureTitle": "Route Batshamba - TSHIKAPA",
         "projectId": "1120098735424"
       },
       "geometry": {
@@ -5359,7 +5359,7 @@
       "id": 357,
       "type": "Feature",
       "properties": {
-        "title": "Route Batshamba - TSHIKAPA",
+        "structureTitle": "Route Batshamba - TSHIKAPA",
         "projectId": "1120098735424"
       },
       "geometry": {
@@ -5374,7 +5374,7 @@
       "id": 358,
       "type": "Feature",
       "properties": {
-        "title": "Route Batshamba - TSHIKAPA",
+        "structureTitle": "Route Batshamba - TSHIKAPA",
         "projectId": "1120098735424"
       },
       "geometry": {
@@ -5389,7 +5389,7 @@
       "id": 359,
       "type": "Feature",
       "properties": {
-        "title": "Route Batshamba - TSHIKAPA",
+        "structureTitle": "Route Batshamba - TSHIKAPA",
         "projectId": "1120098735424"
       },
       "geometry": {
@@ -5404,7 +5404,7 @@
       "id": 360,
       "type": "Feature",
       "properties": {
-        "title": "Route Batshamba - TSHIKAPA",
+        "structureTitle": "Route Batshamba - TSHIKAPA",
         "projectId": "1120098735424"
       },
       "geometry": {
@@ -5419,7 +5419,7 @@
       "id": 361,
       "type": "Feature",
       "properties": {
-        "title": "Route Batshamba - TSHIKAPA",
+        "structureTitle": "Route Batshamba - TSHIKAPA",
         "projectId": "1120098735424"
       },
       "geometry": {
@@ -5434,7 +5434,7 @@
       "id": 362,
       "type": "Feature",
       "properties": {
-        "title": "Route Batshamba - TSHIKAPA",
+        "structureTitle": "Route Batshamba - TSHIKAPA",
         "projectId": "1120098735424"
       },
       "geometry": {
@@ -5449,7 +5449,7 @@
       "id": 363,
       "type": "Feature",
       "properties": {
-        "title": "Projet de prologement route Batshamba-Tshipaka",
+        "structureTitle": "Projet de prologement route Batshamba-Tshipaka",
         "projectId": "11200958532178"
       },
       "geometry": {
@@ -5464,7 +5464,7 @@
       "id": 364,
       "type": "Feature",
       "properties": {
-        "title": "Projet de prologement route Batshamba-Tshipaka",
+        "structureTitle": "Projet de prologement route Batshamba-Tshipaka",
         "projectId": "11200958532178"
       },
       "geometry": {
@@ -5479,7 +5479,7 @@
       "id": 365,
       "type": "Feature",
       "properties": {
-        "title": "Projet de prologement route Batshamba-Tshipaka",
+        "structureTitle": "Projet de prologement route Batshamba-Tshipaka",
         "projectId": "11200958532178"
       },
       "geometry": {
@@ -5494,7 +5494,7 @@
       "id": 366,
       "type": "Feature",
       "properties": {
-        "title": "Projet de prologement route Batshamba-Tshipaka",
+        "structureTitle": "Projet de prologement route Batshamba-Tshipaka",
         "projectId": "11200958532178"
       },
       "geometry": {
@@ -5509,7 +5509,7 @@
       "id": 367,
       "type": "Feature",
       "properties": {
-        "title": "Projet de prologement route Batshamba-Tshipaka",
+        "structureTitle": "Projet de prologement route Batshamba-Tshipaka",
         "projectId": "11200958532178"
       },
       "geometry": {
@@ -5524,7 +5524,7 @@
       "id": 368,
       "type": "Feature",
       "properties": {
-        "title": "Projet de prologement route Batshamba-Tshipaka",
+        "structureTitle": "Projet de prologement route Batshamba-Tshipaka",
         "projectId": "11200958532178"
       },
       "geometry": {
@@ -5539,7 +5539,7 @@
       "id": 369,
       "type": "Feature",
       "properties": {
-        "title": "Projet de prologement route Batshamba-Tshipaka",
+        "structureTitle": "Projet de prologement route Batshamba-Tshipaka",
         "projectId": "11200958532178"
       },
       "geometry": {
@@ -5554,7 +5554,7 @@
       "id": 370,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Appui institutionnel",
+        "structureTitle": "PEASU/Appui institutionnel",
         "projectId": "1120098710054"
       },
       "geometry": {
@@ -5569,7 +5569,7 @@
       "id": 371,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Appui institutionnel",
+        "structureTitle": "PEASU/Appui institutionnel",
         "projectId": "1120098710054"
       },
       "geometry": {
@@ -5584,7 +5584,7 @@
       "id": 372,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Appui institutionnel",
+        "structureTitle": "PEASU/Appui institutionnel",
         "projectId": "1120098710054"
       },
       "geometry": {
@@ -5599,7 +5599,7 @@
       "id": 373,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Etude programme national d'Adduction Eau Potable et Assainissement en milieu rural",
+        "structureTitle": "PEASU/Etude programme national d'Adduction Eau Potable et Assainissement en milieu rural",
         "projectId": "1120098711434"
       },
       "geometry": {
@@ -5614,7 +5614,7 @@
       "id": 374,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Etude programme national d'Adduction Eau Potable et Assainissement en milieu rural",
+        "structureTitle": "PEASU/Etude programme national d'Adduction Eau Potable et Assainissement en milieu rural",
         "projectId": "1120098711434"
       },
       "geometry": {
@@ -5629,7 +5629,7 @@
       "id": 375,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Etude programme national d'Adduction Eau Potable et Assainissement en milieu rural",
+        "structureTitle": "PEASU/Etude programme national d'Adduction Eau Potable et Assainissement en milieu rural",
         "projectId": "1120098711434"
       },
       "geometry": {
@@ -5644,7 +5644,7 @@
       "id": 376,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Gestion du projet",
+        "structureTitle": "PEASU/Gestion du projet",
         "projectId": "1120098711438"
       },
       "geometry": {
@@ -5659,7 +5659,7 @@
       "id": 377,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Gestion du projet",
+        "structureTitle": "PEASU/Gestion du projet",
         "projectId": "1120098711438"
       },
       "geometry": {
@@ -5674,7 +5674,7 @@
       "id": 378,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Gestion du projet",
+        "structureTitle": "PEASU/Gestion du projet",
         "projectId": "1120098711438"
       },
       "geometry": {
@@ -5689,7 +5689,7 @@
       "id": 379,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Communication pour un changement de comportement",
+        "structureTitle": "PEASU/Communication pour un changement de comportement",
         "projectId": "1120098711443"
       },
       "geometry": {
@@ -5704,7 +5704,7 @@
       "id": 380,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Communication pour un changement de comportement",
+        "structureTitle": "PEASU/Communication pour un changement de comportement",
         "projectId": "1120098711443"
       },
       "geometry": {
@@ -5719,7 +5719,7 @@
       "id": 381,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Communication pour un changement de comportement",
+        "structureTitle": "PEASU/Communication pour un changement de comportement",
         "projectId": "1120098711443"
       },
       "geometry": {
@@ -5734,7 +5734,7 @@
       "id": 382,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Infrastructures d'adduction d'eau potable et assainissement",
+        "structureTitle": "PEASU/Infrastructures d'adduction d'eau potable et assainissement",
         "projectId": "1120098711885"
       },
       "geometry": {
@@ -5749,7 +5749,7 @@
       "id": 383,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Infrastructures d'adduction d'eau potable et assainissement",
+        "structureTitle": "PEASU/Infrastructures d'adduction d'eau potable et assainissement",
         "projectId": "1120098711885"
       },
       "geometry": {
@@ -5764,7 +5764,7 @@
       "id": 384,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Infrastructures d'adduction d'eau potable et assainissement",
+        "structureTitle": "PEASU/Infrastructures d'adduction d'eau potable et assainissement",
         "projectId": "1120098711885"
       },
       "geometry": {
@@ -5779,7 +5779,7 @@
       "id": 385,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Autres produits et charges",
+        "structureTitle": "PEASU/Autres produits et charges",
         "projectId": "1120098730335"
       },
       "geometry": {
@@ -5794,7 +5794,7 @@
       "id": 386,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Autres produits et charges",
+        "structureTitle": "PEASU/Autres produits et charges",
         "projectId": "1120098730335"
       },
       "geometry": {
@@ -5809,7 +5809,7 @@
       "id": 387,
       "type": "Feature",
       "properties": {
-        "title": "PEASU/Autres produits et charges",
+        "structureTitle": "PEASU/Autres produits et charges",
         "projectId": "1120098730335"
       },
       "geometry": {
@@ -5824,7 +5824,7 @@
       "id": 388,
       "type": "Feature",
       "properties": {
-        "title": "PMEDE H296/Coet des operations et Renforcement des capacites",
+        "structureTitle": "PMEDE H296/Coet des operations et Renforcement des capacites",
         "projectId": "1120098710366"
       },
       "geometry": {
@@ -5839,7 +5839,7 @@
       "id": 389,
       "type": "Feature",
       "properties": {
-        "title": "PMEDE H296/Coet des operations et Renforcement des capacites",
+        "structureTitle": "PMEDE H296/Coet des operations et Renforcement des capacites",
         "projectId": "1120098710366"
       },
       "geometry": {
@@ -5854,7 +5854,7 @@
       "id": 390,
       "type": "Feature",
       "properties": {
-        "title": "PMEDE H296/Coet des operations et Renforcement des capacites",
+        "structureTitle": "PMEDE H296/Coet des operations et Renforcement des capacites",
         "projectId": "1120098710366"
       },
       "geometry": {
@@ -5869,7 +5869,7 @@
       "id": 391,
       "type": "Feature",
       "properties": {
-        "title": "PMEDE H296/Coet des operations et Renforcement des capacites",
+        "structureTitle": "PMEDE H296/Coet des operations et Renforcement des capacites",
         "projectId": "1120098710366"
       },
       "geometry": {
@@ -5884,7 +5884,7 @@
       "id": 392,
       "type": "Feature",
       "properties": {
-        "title": "PMEDE/Distribution",
+        "structureTitle": "PMEDE/Distribution",
         "projectId": "1120098711456"
       },
       "geometry": {
@@ -5899,7 +5899,7 @@
       "id": 393,
       "type": "Feature",
       "properties": {
-        "title": "PMEDE/Distribution",
+        "structureTitle": "PMEDE/Distribution",
         "projectId": "1120098711456"
       },
       "geometry": {
@@ -5914,7 +5914,7 @@
       "id": 394,
       "type": "Feature",
       "properties": {
-        "title": "PMEDE/Distribution",
+        "structureTitle": "PMEDE/Distribution",
         "projectId": "1120098711456"
       },
       "geometry": {
@@ -5929,7 +5929,7 @@
       "id": 395,
       "type": "Feature",
       "properties": {
-        "title": "PMEDE/Distribution",
+        "structureTitle": "PMEDE/Distribution",
         "projectId": "1120098711456"
       },
       "geometry": {
@@ -5944,7 +5944,7 @@
       "id": 396,
       "type": "Feature",
       "properties": {
-        "title": "PMEDE/ Production",
+        "structureTitle": "PMEDE/ Production",
         "projectId": "1120098711462"
       },
       "geometry": {
@@ -5959,7 +5959,7 @@
       "id": 397,
       "type": "Feature",
       "properties": {
-        "title": "PMEDE/ Production",
+        "structureTitle": "PMEDE/ Production",
         "projectId": "1120098711462"
       },
       "geometry": {
@@ -5974,7 +5974,7 @@
       "id": 398,
       "type": "Feature",
       "properties": {
-        "title": "PMEDE/ Production",
+        "structureTitle": "PMEDE/ Production",
         "projectId": "1120098711462"
       },
       "geometry": {
@@ -5989,7 +5989,7 @@
       "id": 399,
       "type": "Feature",
       "properties": {
-        "title": "PMEDE/ Production",
+        "structureTitle": "PMEDE/ Production",
         "projectId": "1120098711462"
       },
       "geometry": {
@@ -6004,7 +6004,7 @@
       "id": 400,
       "type": "Feature",
       "properties": {
-        "title": "PEPUR/Projet d'electrification periurbaine et rurale",
+        "structureTitle": "PEPUR/Projet d'electrification periurbaine et rurale",
         "projectId": "1120098711430"
       },
       "geometry": {
@@ -6019,7 +6019,7 @@
       "id": 401,
       "type": "Feature",
       "properties": {
-        "title": "PEPUR/Projet d'electrification periurbaine et rurale",
+        "structureTitle": "PEPUR/Projet d'electrification periurbaine et rurale",
         "projectId": "1120098711430"
       },
       "geometry": {
@@ -6034,7 +6034,7 @@
       "id": 402,
       "type": "Feature",
       "properties": {
-        "title": "PEPUR/Projet d'electrification periurbaine et rurale",
+        "structureTitle": "PEPUR/Projet d'electrification periurbaine et rurale",
         "projectId": "1120098711430"
       },
       "geometry": {
@@ -6049,7 +6049,7 @@
       "id": 403,
       "type": "Feature",
       "properties": {
-        "title": "PEPUR/Projet d'electrification periurbaine et rurale",
+        "structureTitle": "PEPUR/Projet d'electrification periurbaine et rurale",
         "projectId": "1120098711430"
       },
       "geometry": {
@@ -6064,7 +6064,7 @@
       "id": 404,
       "type": "Feature",
       "properties": {
-        "title": "PEPUR/Projet d'electrification periurbaine et rurale",
+        "structureTitle": "PEPUR/Projet d'electrification periurbaine et rurale",
         "projectId": "1120098711430"
       },
       "geometry": {
@@ -6079,7 +6079,7 @@
       "id": 405,
       "type": "Feature",
       "properties": {
-        "title": "PEPUR/Projet d'electrification periurbaine et rurale",
+        "structureTitle": "PEPUR/Projet d'electrification periurbaine et rurale",
         "projectId": "1120098711430"
       },
       "geometry": {
@@ -6094,7 +6094,7 @@
       "id": 406,
       "type": "Feature",
       "properties": {
-        "title": "PEPUR/Projet d'electrification periurbaine et rurale",
+        "structureTitle": "PEPUR/Projet d'electrification periurbaine et rurale",
         "projectId": "1120098711430"
       },
       "geometry": {
@@ -6109,7 +6109,7 @@
       "id": 407,
       "type": "Feature",
       "properties": {
-        "title": "PEPUR/Projet d'electrification periurbaine et rurale",
+        "structureTitle": "PEPUR/Projet d'electrification periurbaine et rurale",
         "projectId": "1120098711430"
       },
       "geometry": {
@@ -6124,7 +6124,7 @@
       "id": 408,
       "type": "Feature",
       "properties": {
-        "title": "PEPUR/Projet d'electrification periurbaine et rurale",
+        "structureTitle": "PEPUR/Projet d'electrification periurbaine et rurale",
         "projectId": "1120098711430"
       },
       "geometry": {
@@ -6139,7 +6139,7 @@
       "id": 409,
       "type": "Feature",
       "properties": {
-        "title": "PAPDDS/Revitalisation de 26 zones de sante",
+        "structureTitle": "PAPDDS/Revitalisation de 26 zones de sante",
         "projectId": "1120098711433"
       },
       "geometry": {
@@ -6154,7 +6154,7 @@
       "id": 410,
       "type": "Feature",
       "properties": {
-        "title": "PAPDDS/Revitalisation de 26 zones de sante",
+        "structureTitle": "PAPDDS/Revitalisation de 26 zones de sante",
         "projectId": "1120098711433"
       },
       "geometry": {
@@ -6169,7 +6169,7 @@
       "id": 411,
       "type": "Feature",
       "properties": {
-        "title": "PAPDDS/Revitalisation de 26 zones de sante",
+        "structureTitle": "PAPDDS/Revitalisation de 26 zones de sante",
         "projectId": "1120098711433"
       },
       "geometry": {
@@ -6184,7 +6184,7 @@
       "id": 412,
       "type": "Feature",
       "properties": {
-        "title": "PAPDDS/Revitalisation de 26 zones de sante",
+        "structureTitle": "PAPDDS/Revitalisation de 26 zones de sante",
         "projectId": "1120098711433"
       },
       "geometry": {
@@ -6199,7 +6199,7 @@
       "id": 413,
       "type": "Feature",
       "properties": {
-        "title": "PAPDDS/Revitalisation de 26 zones de sante",
+        "structureTitle": "PAPDDS/Revitalisation de 26 zones de sante",
         "projectId": "1120098711433"
       },
       "geometry": {
@@ -6214,7 +6214,7 @@
       "id": 414,
       "type": "Feature",
       "properties": {
-        "title": "PAPDDS/Revitalisation de 26 zones de sante",
+        "structureTitle": "PAPDDS/Revitalisation de 26 zones de sante",
         "projectId": "1120098711433"
       },
       "geometry": {
@@ -6229,7 +6229,7 @@
       "id": 415,
       "type": "Feature",
       "properties": {
-        "title": "PAPDDS/Revitalisation de 26 zones de sante",
+        "structureTitle": "PAPDDS/Revitalisation de 26 zones de sante",
         "projectId": "1120098711433"
       },
       "geometry": {
@@ -6244,7 +6244,7 @@
       "id": 416,
       "type": "Feature",
       "properties": {
-        "title": "PAPDDS/Revitalisation de 26 zones de sante",
+        "structureTitle": "PAPDDS/Revitalisation de 26 zones de sante",
         "projectId": "1120098711433"
       },
       "geometry": {
@@ -6259,7 +6259,7 @@
       "id": 417,
       "type": "Feature",
       "properties": {
-        "title": "PAPDDS/Revitalisation de 26 zones de sante",
+        "structureTitle": "PAPDDS/Revitalisation de 26 zones de sante",
         "projectId": "1120098711433"
       },
       "geometry": {

@@ -38,12 +38,15 @@ module.exports = Backbone.Model.extend({
 
       var boundary = this.collection.boundaries.findWhere({id: this.get('value')});
       if (! boundary) {  // sanity check
-        throw new Error('No boundary found for indicator layer ' + this.get('value'));
+        //phil I changed from throw error to log error...
+        // I see merits to both approach. I didn't want failed boundary to prevent users from seeing clusters...
+        console.error('No boundary found for ' + this.get('value'));
+      } else{
+        boundary.loadGeoJSON()
+          .then(function(geoJSON) {
+            self._boundaryLoaded.resolve(geoJSON);
+          });
       }
-      boundary.loadGeoJSON()
-        .then(function(geoJSON) {
-          self._boundaryLoaded.resolve(geoJSON);
-        });
     }
 
     this._dataLoaded.then(function() {

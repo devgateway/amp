@@ -5,7 +5,7 @@
       "type": "Feature",
       "properties": {
         "projectId":863,
-        "title":"Build a School"
+        "structureTitle":"Build a School"
       },
       "geometry": {
         "type": "Point",
@@ -19,7 +19,7 @@
       "type": "Feature",
       "properties": {
         "projectId":863,
-        "title":"Build a School"
+        "structureTitle":"Build a School"
       },
       "geometry": {
         "type": "Point",
@@ -33,7 +33,7 @@
       "type": "Feature",
       "properties": {
         "projectId":98443,
-        "title":"Build a School"
+        "structureTitle":"Build a School"
       },
       "geometry": {
         "type": "Point",
@@ -47,7 +47,7 @@
       "type": "Feature",
       "properties": {
         "projectId":963,
-        "title":"Build a Dam"
+        "structureTitle":"Build a Dam"
       },
       "geometry": {
         "type": "Point",
@@ -61,7 +61,7 @@
       "type": "Feature",
       "properties": {
         "projectId":963,
-        "title":"Build a Dam"
+        "structureTitle":"Build a Dam"
       },
       "geometry": {
         "type": "Point",
@@ -75,7 +75,7 @@
       "type": "Feature",
       "properties": {
         "projectId":9863,
-        "title":"Build a Dam"
+        "structureTitle":"Build a Dam"
       },
       "geometry": {
         "type": "Point",
@@ -89,7 +89,7 @@
       "type": "Feature",
       "properties": {
         "projectId":9863,
-        "title":"Build a School"
+        "structureTitle":"Build a School"
       },
       "geometry": {
         "type": "Point",
@@ -103,7 +103,7 @@
       "type": "Feature",
       "properties": {
         "projectId":9863,
-        "title":"Build a School"
+        "structureTitle":"Build a School"
       },
       "geometry": {
         "type": "Point",
@@ -117,7 +117,7 @@
       "type": "Feature",
       "properties": {
         "projectId":9863,
-        "title":"Build a Dam"
+        "structureTitle":"Build a Dam"
       },
       "geometry": {
         "type": "Point",
@@ -131,7 +131,7 @@
       "type": "Feature",
       "properties": {
         "projectId":984463,
-        "title":"Build a Dam"
+        "structureTitle":"Build a Dam"
       },
       "geometry": {
         "type": "Point",
@@ -145,7 +145,7 @@
       "type": "Feature",
       "properties": {
         "projectId":984463,
-        "title":"Build a School"
+        "structureTitle":"Build a School"
       },
       "geometry": {
         "type": "Point",
@@ -159,7 +159,7 @@
       "type": "Feature",
       "properties": {
         "projectId":984463,
-        "title":"Build a Hospital"
+        "structureTitle":"Build a Hospital"
       },
       "geometry": {
         "type": "Point",
@@ -173,7 +173,7 @@
       "type": "Feature",
       "properties": {
         "projectId":984463,
-        "title":"Build a Hospital"
+        "structureTitle":"Build a Hospital"
       },
       "geometry": {
         "type": "Point",
@@ -187,7 +187,7 @@
       "type": "Feature",
       "properties": {
         "projectId":563,
-        "title":"Build a Hospital"
+        "structureTitle":"Build a Hospital"
       },
       "geometry": {
         "type": "Point",
@@ -201,7 +201,7 @@
       "type": "Feature",
       "properties": {
         "projectId":563,
-        "title":"Build a School"
+        "structureTitle":"Build a School"
       },
       "geometry": {
         "type": "Point",
@@ -215,7 +215,7 @@
       "type": "Feature",
       "properties": {
         "projectId":563,
-        "title":"Build a School"
+        "structureTitle":"Build a School"
       },
       "geometry": {
         "type": "Point",
@@ -229,7 +229,7 @@
       "type": "Feature",
       "properties": {
         "projectId":563,
-        "title":"Build a Hospital"
+        "structureTitle":"Build a Hospital"
       },
       "geometry": {
         "type": "Point",
@@ -243,7 +243,7 @@
       "type": "Feature",
       "properties": {
         "projectId":98443,
-        "title":"Build a Hospital"
+        "structureTitle":"Build a Hospital"
       },
       "geometry": {
         "type": "Point",
@@ -257,7 +257,7 @@
       "type": "Feature",
       "properties": {
         "projectId":863,
-        "title":"Build a School"
+        "structureTitle":"Build a School"
       },
       "geometry": {
         "type": "Point",

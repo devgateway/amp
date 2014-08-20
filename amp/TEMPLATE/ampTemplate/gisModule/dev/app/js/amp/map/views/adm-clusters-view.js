@@ -29,18 +29,22 @@ module.exports = Backbone.View.extend({
     var self = this;
     var loadedLayer = this.leafletLayerMap[admLayer.cid];
     if (loadedLayer === 'loading') {
-      console.warn('tried to show project sites while they are still loading');
+      console.warn('tried to show project clusters while they are still loading');
       return;
     } else if (typeof loadedLayer === 'undefined') {
       this.leafletLayerMap[admLayer.cid] = 'loading';  // will be replaced soon...
     }
 
-    this.listenToOnce(admLayer, 'processed', function() {
-      self.leafletLayerMap[admLayer.cid] = this.getNewADMLayer(admLayer);
-      this.map.addLayer(self.leafletLayerMap[admLayer.cid]);
+    // fires when just the clusters have loaded
+    admLayer.load().then(function() {
+      self.leafletLayerMap[admLayer.cid] = self.getNewADMLayer(admLayer);
+      self.map.addLayer(self.leafletLayerMap[admLayer.cid]);
     });
 
-    admLayer.load();
+    // fires once boundary data has been joined. could do other joiney things
+    this.listenToOnce(admLayer, 'processed', function() {
+      self._loadBoundaryLayer(admLayer);
+    });
   },
 
 
@@ -68,16 +72,25 @@ module.exports = Backbone.View.extend({
       onEachFeature: self._onEachFeature
     });
 
-    var boundaries = new L.geoJson(admLayer.get('boundary'), {
-      style: {
-        weight: 1,
-        dashArray: '3',
-        fillColor: 'transparent'
-      }
-    });
-    window.b = boundaries;
+    return new L.layerGroup([clusters]);
+  },
 
-    return new L.layerGroup([clusters, boundaries]);
+  _loadBoundaryLayer: function(admLayer){    
+    var boundaries = admLayer.get('boundary');
+    if(boundaries){
+      var boundaryLayer = new L.geoJson(boundaries, {
+        style: {
+          weight: 1,
+          dashArray: '3',
+          fillColor: 'transparent'
+        }
+      });
+      if(! this.leafletLayerMap[admLayer.cid]){
+        console.error('No layer yet...maybe a bad race condition... :(');
+      } else {
+        this.leafletLayerMap[admLayer.cid].addLayer(boundaryLayer);
+      }
+    }
   },
 
   // Create pop-ups

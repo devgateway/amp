@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -13,15 +14,19 @@ import javax.ws.rs.core.MediaType;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.ampapi.endpoints.dto.Programs;
-import org.digijava.kernel.ampapi.endpoints.dto.Sectors;
+import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * Class that holds method related to filtres for gis querys (available options,
@@ -46,10 +51,12 @@ public class Filters {
     	AvailableFilters sector=new AvailableFilters();
     	sector.setName("Sectors");
     	sector.setEndpoint("/rest/filters/sectors");
+    	sector.setUi("true");
     	availableFilters.add(sector);
 
     	AvailableFilters activityStatus=new AvailableFilters();
     	activityStatus.setName("ActivityStatus");
+    	activityStatus.setUi("true");
     	activityStatus.setEndpoint("/rest/filters/activityStatus");
     	availableFilters.add(activityStatus);
 
@@ -66,6 +73,7 @@ public class Filters {
     	AvailableFilters programs=new AvailableFilters();
     	programs.setName("Programs");
     	programs.setEndpoint("/rest/filters/programs");
+    	programs.setUi("true");
     	availableFilters.add(programs);
     	
     	
@@ -81,8 +89,45 @@ public class Filters {
     @GET
     @Path("/activityStatus")
     @Produces(MediaType.APPLICATION_JSON)
-    public Set<String> getActivityStatus() {
-        return AmpARFilter.activityStatus;
+    public List<SimpleJsonBean> getActivityStatus() {
+
+    	List<SimpleJsonBean>activityStatus=new ArrayList<SimpleJsonBean>();
+		
+    	Set<String>aprovedStatus=
+    	AmpARFilter.activityStatus ;
+    	for (String s : aprovedStatus) {
+   		 SimpleJsonBean sjb=new SimpleJsonBean();
+
+			switch(s){
+			case Constants.APPROVED_STATUS:
+				sjb.setId(Constants.APPROVED_STATUS);
+				sjb.setName("Edited and validated");
+				break;
+			case Constants.EDITED_STATUS:
+				sjb.setId(Constants.EDITED_STATUS);
+				sjb.setName("Edited but not validated");
+				break;
+			case Constants.STARTED_APPROVED_STATUS:
+				sjb.setId(Constants.STARTED_APPROVED_STATUS);
+				sjb.setName("New and validated");
+				break;
+			case Constants.STARTED_STATUS:
+				sjb.setId(Constants.STARTED_STATUS);
+				sjb.setName("New");
+				break;
+			case Constants.NOT_APPRVED:
+				sjb.setId(Constants.NOT_APPRVED);
+				sjb.setName("Not Approved");
+				break;
+			case Constants.REJECTED_STATUS:
+				sjb.setId(Constants.REJECTED_STATUS);
+				sjb.setName("Edited and rejected");
+				break;
+	    	}
+			activityStatus.add(sjb);
+		}
+
+        return activityStatus;
     }
 
     /**
@@ -108,13 +153,13 @@ public class Filters {
     @GET
     @Path("/sectors/")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<FiltersHelper> getSectorsSchemas(
+    public List<SimpleJsonBean> getSectorsSchemas(
     		) {
-    	List<FiltersHelper>schemalist=new ArrayList<FiltersHelper>();
+    	List<SimpleJsonBean>schemalist=new ArrayList<SimpleJsonBean>();
     	try {
     		List<AmpClassificationConfiguration>schems=SectorUtil.getAllClassificationConfigs();
     		for (AmpClassificationConfiguration ampClassificationConfiguration : schems) {
-    			schemalist.add(new FiltersHelper(ampClassificationConfiguration.getId().toString(),ampClassificationConfiguration.getName()));
+    			schemalist.add(new SimpleJsonBean(ampClassificationConfiguration.getId(),ampClassificationConfiguration.getName()));
 			}
 		} catch (DgException e) {
 			// TODO till we find out the exception strategy
@@ -130,10 +175,10 @@ public class Filters {
     @GET
     @Path("/sectors/{sectorConfigName}")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Sectors> getSectors(
+    public List<SimpleJsonBean> getSectors(
     		@PathParam("sectorConfigName") String sectorConfigName) {
         // DozerBeanMapperSingletonWrapper.getInstance().
-        List<Sectors> ampSectorsList = new ArrayList<Sectors>();
+        List<SimpleJsonBean> ampSectorsList = new ArrayList<SimpleJsonBean>();
         
         //Primary
         List<AmpSector> s = SectorUtil
@@ -186,51 +231,26 @@ public class Filters {
      * @return
      */
     
-    private Sectors getSectors(AmpSector as) {
-        Sectors s = new Sectors();
+    private SimpleJsonBean getSectors(AmpSector as) {
+        SimpleJsonBean s = new SimpleJsonBean();
         s.setId(as.getAmpSectorId());
         s.setCode(as.getSectorCodeOfficial());
         s.setName(as.getName());
-        s.setChildren(new ArrayList<Sectors>());
+        s.setChildren(new ArrayList<SimpleJsonBean>());
         for (AmpSector ampSectorChild : as.getSectors()) {
             s.getChildren().add(getSectors(ampSectorChild));
         }
 
         return s;
     }
-    public class FiltersHelper{
-    	private String id;
-    	private String name;
-    	public FiltersHelper(){
-    		
-    	}
-    	public FiltersHelper(String id,String name){
-        	this.id=id;
-        	this.name=name;    		
-    	}
-		public String getId() {
-			return id;
-		}
-		public void setId(String id) {
-			this.id = id;
-		}
-		public String getName() {
-			return name;
-		}
-		public void setName(String name) {
-			this.name = name;
-		}
-    	
-    	
-    	
-    }
 
 	public class AvailableFilters {
 		public AvailableFilters() {
-
+			this.ui="false";
 		}
 
 		private String name;
+		private String ui;
 		private String endpoint;
 
 		public String getName() {
@@ -247,6 +267,14 @@ public class Filters {
 
 		public void setEndpoint(String endpoint) {
 			this.endpoint = endpoint;
+		}
+
+		public String getUi() {
+			return ui;
+		}
+
+		public void setUi(String ui) {
+			this.ui = ui;
 		}
 
 	}

@@ -2,21 +2,27 @@ package org.digijava.kernel.ampapi.endpoints.dto;
 
 import java.util.List;
 
-public class Sectors {
-    Long id;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+public class SimpleJsonBean {
+	Object id;
     String code;
     String name;
-    List<Sectors> children;
-
-    public Sectors() {
-
+    List<SimpleJsonBean> children;
+	public SimpleJsonBean(){
+		
+	}
+    public SimpleJsonBean(Object id,String name) {
+    	this.id=id;
+    	this.name=name;
     }
+    
 
-    public Long getId() {
+    public Object getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Object id) {
         this.id = id;
     }
 
@@ -37,11 +43,11 @@ public class Sectors {
         this.name = name;
     }
 
-    public List<Sectors> getChildren() {
+    public List<SimpleJsonBean> getChildren() {
         return children;
     }
 
-    public void setChildren(List<Sectors> children) {
+    public void setChildren(List<SimpleJsonBean> children) {
         this.children = children;
     }
 

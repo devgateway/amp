@@ -62,14 +62,17 @@ module.exports = Backbone.View.extend({
   },
 
   renderAsArcGIS: function() {
-    this.listenTo(this.model, 'change:min change:max', function() {
+    var drawLegend = _.bind(function() {
       this.$el.html(this.template(_.extend({}, this.model.toJSON(), {
         status: 'loaded',
         legendType: 'colours',
         colourBuckets: this.model.palette.colours,
         unit: ''
       })));
-    });
+    }, this);
+
+    drawLegend();
+    this.listenTo(this.model, 'change:min change:max', drawLegend);
   },
 
   renderAsProjectSites: function() {

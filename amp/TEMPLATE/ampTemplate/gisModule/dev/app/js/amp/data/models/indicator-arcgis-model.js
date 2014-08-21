@@ -1,12 +1,15 @@
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var Backbone = require('backbone');
+var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 
 var Palette = require('../../colours/colour-palette');
 
 
-module.exports = Backbone.Model.extend({
+module.exports = Backbone.Model
+  // .extend(LoadOnceMixin)  // not needed since we use it directly later
+  .extend({
 
   defaults: {
     min: Infinity,
@@ -14,41 +17,36 @@ module.exports = Backbone.Model.extend({
   },
 
   initialize: function() {
-    // provide the promises API for a "load" method, even though we don't have to load anything
-    this._esriLoaded = null;  // Deferred created in this.load
-    this._esriProcessed = new Deferred();
+    this.palette = new Palette.FromRange({ seed: this.get('id') });
+    _.bindAll(this, 'onEachFeature', 'styleNewFeature');
+    this.listenTo(this, 'change:min change:max', this.updatePaletteRange);
 
     // TODO: factor this behavior into an indicator base class
     this.listenTo(this, 'change:selected', function(blah, show) {
       this.trigger(show ? 'show' : 'hide', this);
     });
-
-    this.listenTo(this, 'change:min change:max', this.updatePaletteRange);
-
-    _.bindAll(this, 'onEachFeature', 'styleNewFeature');
-
-    this.palette = new Palette.FromRange({ seed: this.get('id') });
   },
 
-  load: function() {
-    var self = this;
-
-    if (_.isNull(this._esriLoaded)) {
+  fetch: function() {
+    if (!_(this).has('_esriLoaded')) {
       this._esriLoaded = new Deferred();
-      this.esriLayer = L.esri.featureLayer(this.get('link'), {
+      this.esriLayer = new L.esri.featureLayer(this.get('link'), {
         simplifyFactor: 0.9,
         style: this.styleNewFeature,
         onEachFeature: this.onEachFeature
-      }).on('load', this._esriLoaded.resolve);
-      this._esriLoaded.resolve();
+      });
+      this._esriLoaded.resolveWith(this, [this, this.esriLayer]);
     }
+    return this._esriLoaded.promise();
+  },
 
-    this._esriLoaded.then(function() {
-      self.trigger('loaded processed', self);  // have to trigger processed here, because we can't
+  load: function() {
+    var esriPromise = LoadOnceMixin.load.apply(this);
+    esriPromise.done(function() {
+      this.trigger('loaded processed', this);  // have to trigger processed here, because we can't
                                                // get any features until we add the layer to the map
     });
-
-    return this._esriLoaded.promise();
+    return esriPromise;
   },
 
   onEachFeature: function(feature) {
@@ -66,7 +64,7 @@ module.exports = Backbone.Model.extend({
       return colour.get('test')(value);
     });
     return {
-      color: colour.hex(),
+      color: colour && colour.hex(),
       weight: 4,
       opacity: 0.9,
       fillOpacity: 0.6

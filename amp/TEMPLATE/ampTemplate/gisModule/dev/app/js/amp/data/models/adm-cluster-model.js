@@ -1,69 +1,56 @@
-var Deferred = require('jquery').Deferred;
 var when = require('jquery').when;
 var _ = require('underscore');
 var Backbone = require('backbone');
+var LoadOnceMixin = require('../../mixins/load-once-mixin');
 
 
-module.exports = Backbone.Model.extend({
+module.exports = Backbone.Model
+  // .extend(LoadOnceMixin)  // not necessary since we override load anyway
+  .extend({
 
   initialize: function() {
-
-      // private load/processing state tracking
-    this._dataLoaded = null;
-    this._boundaryLoaded = null;
-    this._boundaryJoined = new Deferred();  // resolves after processing
 
     this.listenTo(this, 'change:selected', function(blah, show) {
       this.trigger(show ? 'show' : 'hide', this);
     });
+    this.listenTo(this, 'sync', this.updatePaletteRange);
+  },
+
+  fetch: function(options) {
+    // TODO: admin clusters should get url endpoints, not query endpoints.
+    var filter = {adminLevel: this._translateADMToMagicWord(this.get('value'))};
+
+    options = _.defaults((options || {}), {
+      type: 'POST',
+      data: JSON.stringify(filter)
+    });
+
+    return Backbone.Model.prototype.fetch.call(this, options);
   },
 
   load: function() {
-    var self = this;
+    var loaded = LoadOnceMixin.load.apply(this);
+    loaded.done(function() {
+      this.trigger('loaded', this);  // LEGACY
+    });
 
-    // don't load more than once
-    if (_.isNull(this._dataLoaded)) {
-      this._dataLoaded = new Deferred();
+    this.loadBoundary(loaded);
 
-      // TODO: admin clusters should get url endpoints, not query endpoints.
-      var filter = {adminLevel: self._translateADMToMagicWord(this.get('value'))};
-      this.fetch({
-        data: JSON.stringify(filter),
-        type: 'POST'
-      }).then(self._dataLoaded.resolve);
+    return loaded;
+  },
+
+  loadBoundary: function(dataLoaded) {
+    var boundary = this.collection.boundaries.findWhere({id: this.get('value')});  // TODO ...
+    if (boundary) {
+      var boundaryLoaded = boundary.load();
+      when(boundaryLoaded, dataLoaded)         // Order is important!
+        .done(function(boundaryModel, self) {  // ... because their return value is passed here
+          self.set('boundary', boundaryModel.toJSON());
+          self.trigger('processed');  // LEGACY
+        });
+    } else {
+      console.error('No boundary found for ' + this.get('value'));
     }
-
-    if (_.isNull(this._boundaryLoaded)) {
-      this._boundaryLoaded = new Deferred();
-
-      var boundary = this.collection.boundaries.findWhere({id: this.get('value')});
-      if (! boundary) {  // sanity check
-        //phil I changed from throw error to log error...
-        // I see merits to both approach. I didn't want failed boundary to prevent users from seeing clusters...
-        console.error('No boundary found for ' + this.get('value'));
-      } else{
-        boundary.loadGeoJSON()
-          .then(function(geoJSON) {
-            self._boundaryLoaded.resolve(geoJSON);
-          });
-      }
-    }
-
-    this._dataLoaded.then(function() {
-      self.trigger('loaded', self);
-      self.updatePaletteRange();
-    });
-
-    when(this._boundaryLoaded, this._dataLoaded).then(function(geoJSON) {
-      // TODO: see indicator-join-model (geoJSON here is sketch)
-      self._joinDataWithBoundaries(geoJSON);
-    });
-
-    this._boundaryJoined.then(function() {
-      self.trigger('processed', self);
-    });
-
-    return this._dataLoaded.promise();
   },
 
   _translateADMToMagicWord: function(admString){
@@ -73,21 +60,13 @@ module.exports = Backbone.Model.extend({
       'adm-2': 'Zone',
       'adm-3': 'District'
     };
-    
+
     return magicWords[admString];
   },
 
 
   updatePaletteRange: function() {
     // TODO...
-  },
-
-  _joinDataWithBoundaries: function(boundaryGeoJSON) {
-    if (this._boundaryJoined.state() === 'pending') {
-      this.set('boundary', boundaryGeoJSON);
-      this._boundaryJoined.resolve(boundaryGeoJSON);
-    }
-    return this._boundaryJoined.promise();
   }
 
 });

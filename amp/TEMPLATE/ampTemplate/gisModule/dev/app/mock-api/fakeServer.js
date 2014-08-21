@@ -93,7 +93,7 @@ _.extend(FakeServer.prototype, {
         console.warn('no request body posted to cluster');
       }
       console.log('cluster ', xhr.requestBody);
-      if(xhr.requestBody.indexOf('Region') > -1){
+      if(xhr.requestBody.indexOf('Zone') > -1){
         xhr.respond(200, { 'Content-Type': 'application/json' },
           fs.readFileSync(__dirname + '/data/clusters/clusterADM2.json', 'utf8'));
       } else{

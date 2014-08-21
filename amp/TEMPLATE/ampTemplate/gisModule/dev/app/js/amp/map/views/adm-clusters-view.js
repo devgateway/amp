@@ -26,25 +26,21 @@ module.exports = Backbone.View.extend({
   },
 
   showLayer: function(admLayer) {
-    var self = this;
-    var loadedLayer = this.leafletLayerMap[admLayer.cid];
-    if (loadedLayer === 'loading') {
-      console.warn('tried to show project clusters while they are still loading');
-      return;
-    } else if (typeof loadedLayer === 'undefined') {
-      this.leafletLayerMap[admLayer.cid] = 'loading';  // will be replaced soon...
+    var leafletLayer = this.leafletLayerMap[admLayer.cid];
+    if (_.isUndefined(leafletLayer)) {
+      leafletLayer = this.leafletLayerMap[admLayer.cid] = new L.layerGroup([]);
+      admLayer.load().then(_.bind(function() {
+        var clusters = this.getNewADMLayer(admLayer);
+        leafletLayer.addLayer(clusters);
+      }, this));
+      this.listenToOnce(admLayer, 'processed', function() {
+        var boundaries = this.getNewBoundary(admLayer);
+        leafletLayer.addLayer(boundaries);
+      });
     }
 
-    // fires when just the clusters have loaded
-    admLayer.load().then(function() {
-      self.leafletLayerMap[admLayer.cid] = self.getNewADMLayer(admLayer);
-      self.map.addLayer(self.leafletLayerMap[admLayer.cid]);
-    });
+    this.map.addLayer(leafletLayer);
 
-    // fires once boundary data has been joined. could do other joiney things
-    this.listenToOnce(admLayer, 'processed', function() {
-      self._loadBoundaryLayer(admLayer);
-    });
   },
 
 
@@ -59,7 +55,7 @@ module.exports = Backbone.View.extend({
   getNewADMLayer: function(admLayer) {
     var self = this;
 
-    var clusters = new L.geoJson(admLayer.get('features'), {
+    return new L.geoJson(admLayer.get('features'), {
       pointToLayer: function (feature, latlng) {
         var htmlString = self.admTemplate(feature);
         var myIcon = L.divIcon({
@@ -71,25 +67,20 @@ module.exports = Backbone.View.extend({
       },
       onEachFeature: self._onEachFeature
     });
-
-    return new L.layerGroup([clusters]);
   },
 
-  _loadBoundaryLayer: function(admLayer){    
+  getNewBoundary: function(admLayer) {
     var boundaries = admLayer.get('boundary');
-    if(boundaries){
-      var boundaryLayer = new L.geoJson(boundaries, {
+    if (boundaries) {
+      return new L.geoJson(boundaries, {
         style: {
           weight: 1,
           dashArray: '3',
           fillColor: 'transparent'
         }
       });
-      if(! this.leafletLayerMap[admLayer.cid]){
-        console.error('No layer yet...maybe a bad race condition... :(');
-      } else {
-        this.leafletLayerMap[admLayer.cid].addLayer(boundaryLayer);
-      }
+    } else {
+      console.error('no boundaries for admLayer?', admLayer);
     }
   },
 

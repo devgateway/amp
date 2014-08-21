@@ -1,11 +1,13 @@
-var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var Backbone = require('backbone');
 var Palette = require('../../colours/colour-palette');
+var LoadOnceMixin = require('../../mixins/load-once-mixin');
 
 
 
-module.exports = Backbone.Model.extend({
+module.exports = Backbone.Model
+  .extend(LoadOnceMixin)
+  .extend({
 
   url: '/rest/gis/structures',
 
@@ -24,25 +26,21 @@ module.exports = Backbone.Model.extend({
     this.listenTo(this, 'change:selected', function(blah, show) {
       this.trigger(show ? 'show' : 'hide', this);
     });
+    this.listenTo(this, 'sync', this.updatePaletteSet);
+  },
+
+  fetch: function(options) {
+    options = _.defaults((options || {}), {
+      type: 'POST'
+    });
+    return Backbone.Model.prototype.fetch.call(this, options);
   },
 
   load: function() {
-    var self = this;
-
-    // skip the work if we're already loaded
-    if (_.isNull(this._dataLoaded)) {
-      this._dataLoaded = new Deferred();
-      this.fetch({type: 'POST', data:'{}'}).then(function() {
-        self.updatePaletteSet();  // in here so we don't re-do it later
-        self._dataLoaded.resolve();
+    return LoadOnceMixin.load.apply(this)
+      .done(function() {
+        this.trigger('loaded processed', this);  // LEGACY
       });
-    }
-
-    this._dataLoaded.then(function() {
-      self.trigger('loaded processed', self);
-    });
-
-    return this._dataLoaded.promise();
   },
 
   updatePaletteSet: function() {

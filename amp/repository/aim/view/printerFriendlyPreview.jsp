@@ -699,7 +699,7 @@ body {background:none;}
 													${aimEditActivityForm.planning.lineMinRank}													</c:if>													</td>
 												</tr>
 												</field:display>
-											
+										
 												<module:display name="/Activity Form/Planning/Proposed Approval Date" parentModule="/Activity Form/Planning">
 												<tr>
 													<td width="32%">
@@ -2667,6 +2667,41 @@ body {background:none;}
                                                          </c:if>                                                        
                                                          </td>
                                                        </tr>
+                                                       	<c:if
+															test="${aimEditActivityForm.funding.proposedAnnualBudgets!=null
+															&& aimEditActivityForm.funding.proposedAnnualBudgets.size()>0}">
+													   <tr>
+                                                       <td bgcolor="#FFFFFF" align="left" colspan="2">
+                                                         	<table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa"
+																width="100%">
+																<tr bgcolor="#f0f0f0">
+																	<td><b><digi:trn key="aim:cost">Cost</digi:trn></b></td>
+																	<td><b><digi:trn key="aim:cost">Year</digi:trn></b></td>
+																</tr>
+																<c:forEach var="annualBudget"
+																	items="${aimEditActivityForm.funding.proposedAnnualBudgets}">
+																	<tr bgcolor="#f0f0f0">
+																		<td>${annualBudget.funAmount}
+																			${annualBudget.currencyName}</td>
+																		<td>${annualBudget.funDate}</td>
+																	</tr>
+																</c:forEach>
+															</table>
+													      </td>
+                                                       </tr>
+                                                    	</c:if>
+                                                        <module:display name="/Activity Form/Funding/Total Number of Funding Sources" parentModule="/Activity Form/Funding">
+														 <tr bgcolor="#ffffff">
+														<td>
+															<digi:trn>Total Number of Funding Sources</digi:trn>  
+														</td>
+                                                        <td bgcolor="#FFFFFF" align="left" width="150">
+                                                          <c:if test="${aimEditActivityForm.identification.fundingSourcesNumber!=null}">
+                                                             ${aimEditActivityForm.identification.fundingSourcesNumber}                                                          
+                                                         </c:if>                                                        
+                                                         </td>
+                                                       </tr>
+														</module:display>
                                               		</table>
                             				</c:if>										</td>
 									</tr>

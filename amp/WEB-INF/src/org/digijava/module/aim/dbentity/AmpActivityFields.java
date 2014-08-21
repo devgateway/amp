@@ -475,6 +475,8 @@ LoggerIdentifiable, Cloneable {
 	 */
     protected Long activityType = org.dgfoundation.amp.onepager.util.ActivityUtil.ACTIVITY_TYPE_PROJECT; //default type
 
+    @VersionableCollection(fieldTitle = "Annual Project Budgets")
+	protected Set<AmpAnnualProjectBudget> annualProjectBudgets;
 	//protected Set <AmpActivityContact> activityContacts;
 
 	public Boolean getMergedActivity() {
@@ -1840,5 +1842,14 @@ LoggerIdentifiable, Cloneable {
 
 	public void setProposedProjectLife(Integer proposedProjectLife) {
 		this.proposedProjectLife = proposedProjectLife;
+	}
+
+	public Set<AmpAnnualProjectBudget> getAnnualProjectBudgets() {
+		return annualProjectBudgets;
+	}
+
+	public void setAnnualProjectBudgets(
+			Set<AmpAnnualProjectBudget> annualProjectBudgets) {
+		this.annualProjectBudgets = annualProjectBudgets;
 	}
 }

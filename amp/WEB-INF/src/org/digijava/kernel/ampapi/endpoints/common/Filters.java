@@ -45,12 +45,12 @@ public class Filters {
     	AvailableFilters sector=new AvailableFilters();
     	sector.setName("Sectors");
     	sector.setEndpoint("/rest/filters/sectors");
-    	sector.setUi("true");
+    	sector.setUi(Boolean.TRUE);
     	availableFilters.add(sector);
 
     	AvailableFilters activityStatus=new AvailableFilters();
     	activityStatus.setName("ActivityStatus");
-    	activityStatus.setUi("true");
+    	activityStatus.setUi(Boolean.TRUE);
     	activityStatus.setEndpoint("/rest/filters/activityStatus");
     	availableFilters.add(activityStatus);
 
@@ -67,7 +67,7 @@ public class Filters {
     	AvailableFilters programs=new AvailableFilters();
     	programs.setName("Programs");
     	programs.setEndpoint("/rest/filters/programs");
-    	programs.setUi("true");
+    	programs.setUi(Boolean.TRUE);
     	availableFilters.add(programs);
     	
     	
@@ -182,6 +182,9 @@ public class Filters {
         }
         return ampSectorsList;
     }
+    
+    
+
     /**
      * Return the programs filtered by the given sectorName
      * 
@@ -189,11 +192,32 @@ public class Filters {
      */
     @GET
     @Path("/programs")
+    @Produces(MediaType.APPLICATION_JSON)   
+    public List<SimpleJsonBean> getPrograms() 
+    {
+    	List<SimpleJsonBean> l=new ArrayList<SimpleJsonBean>();
+    	SimpleJsonBean npo=new SimpleJsonBean("National Plan Objective","National Plan Objective");
+    	l.add(npo);
+    	SimpleJsonBean pp=new SimpleJsonBean("Primary Program","Primary Program");
+    	l.add(pp);
+    	SimpleJsonBean sp=new SimpleJsonBean("Secondary Program","Secondary Program");
+    	l.add(sp);
+    	SimpleJsonBean tp=new SimpleJsonBean("Tertiary Program","Tertiary Program");
+    	l.add(tp);
+    	return l;
+    }
+    /**
+     * Return the programs filtered by the given sectorName
+     * 
+     * @return
+     */
+    @GET
+    @Path("/programs/{programName}")
     @Produces(MediaType.APPLICATION_JSON)
-    public SimpleJsonBean getPrograms(){
+    public SimpleJsonBean getPrograms(@PathParam("programName") String programName){
     	SimpleJsonBean program=new SimpleJsonBean();
         try {
-            AmpActivityProgramSettings npd=ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
+            AmpActivityProgramSettings npd=ProgramUtil.getAmpActivityProgramSettings(programName);
             
             return getPrograms(npd.getDefaultHierarchy());
             
@@ -240,11 +264,11 @@ public class Filters {
 
 	public class AvailableFilters {
 		public AvailableFilters() {
-			this.ui="false";
+			this.ui=false;
 		}
 
 		private String name;
-		private String ui;
+		private Boolean ui;
 		private String endpoint;
 
 		public String getName() {
@@ -263,11 +287,11 @@ public class Filters {
 			this.endpoint = endpoint;
 		}
 
-		public String getUi() {
+		public Boolean getUi() {
 			return ui;
 		}
 
-		public void setUi(String ui) {
+		public void setUi(Boolean ui) {
 			this.ui = ui;
 		}
 

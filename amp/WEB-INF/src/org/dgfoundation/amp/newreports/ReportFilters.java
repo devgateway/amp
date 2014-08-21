@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.newreports;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -9,5 +10,5 @@ import java.util.Map;
  */
 public interface ReportFilters {
 	
-	public Map<ReportElement, FilterRule> getFilterRules();
+	public Map<ReportElement, List<FilterRule>> getFilterRules();
 }

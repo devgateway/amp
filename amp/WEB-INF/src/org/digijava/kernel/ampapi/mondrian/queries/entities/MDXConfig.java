@@ -23,8 +23,8 @@ public class MDXConfig {
 	private List<MDXMeasure> columnMeasures = new ArrayList<MDXMeasure>();
 	private List<MDXAttribute> columnAttributes = new ArrayList<MDXAttribute>(); 
 	private List<MDXAttribute> rowAttributes = new ArrayList<MDXAttribute>();
-	private Map<MDXElement, MDXFilter> axisFilters = new HashMap<MDXElement, MDXFilter>();
-	private Map<MDXAttribute, MDXFilter> dataFilters = new HashMap<MDXAttribute, MDXFilter>();
+	private Map<MDXElement, List<MDXFilter>> axisFilters = new HashMap<MDXElement, List<MDXFilter>>();
+	private Map<MDXAttribute, List<MDXFilter>> dataFilters = new HashMap<MDXAttribute, List<MDXFilter>>();
 	private List<MDXAttribute> singleValueFilters = new ArrayList<MDXAttribute>();
 	private LinkedHashMap<MDXTuple, SortOrder> sortingOrder = new LinkedHashMap<MDXTuple, SortOrder>();
 	private boolean allowColumnsEmptyData = false;
@@ -134,7 +134,7 @@ public class MDXConfig {
 	 * <b>Note</b>: measures are not filtered by these filters<br>
 	 * Use {@link #getDataFilters()} to filter data
 	 */
-	public Map<MDXElement, MDXFilter> getAxisFilters() {
+	public Map<MDXElement, List<MDXFilter>> getAxisFilters() {
 		return axisFilters;
 	}
 	/**
@@ -144,7 +144,7 @@ public class MDXConfig {
 	 * It is similar to 'Date Settings' option from reports
 	 * @param filters the filters to set
 	 */
-	public void setAxisFilters(Map<MDXElement, MDXFilter> axisFilters) {
+	public void setAxisFilters(Map<MDXElement, List<MDXFilter>> axisFilters) {
 		this.axisFilters = axisFilters;
 	}
 	/**
@@ -156,12 +156,17 @@ public class MDXConfig {
 	 * @param filter - the filter to apply
 	 */
 	public void addAxisFilter(MDXElement mdxElement, MDXFilter filter) {
-		this.axisFilters.put(mdxElement, filter);
+		List<MDXFilter> filtersList = this.axisFilters.get(mdxElement);
+		if (filtersList == null) {
+			filtersList = new ArrayList<MDXFilter>();
+			this.axisFilters.put(mdxElement, filtersList);
+		}
+		filtersList.add(filter);
 	}
 	/**
 	 * @return the dataFilters
 	 */
-	public Map<MDXAttribute, MDXFilter> getDataFilters() {
+	public Map<MDXAttribute, List<MDXFilter>> getDataFilters() {
 		return dataFilters;
 	}
 	/**
@@ -169,7 +174,7 @@ public class MDXConfig {
 	 * Use {@link #setLevelFilters(List)} for single value filters (e.g. 2014 year only)
 	 * @param dataFilters the dataFilters to set
 	 */
-	public void setDataFilters(Map<MDXAttribute, MDXFilter> dataFilters) {
+	public void setDataFilters(Map<MDXAttribute, List<MDXFilter>> dataFilters) {
 		this.dataFilters = dataFilters;
 	}
 	/**
@@ -178,8 +183,23 @@ public class MDXConfig {
 	 * @param dataFilters the dataFilters to set
 	 */
 	public void addDataFilter(MDXAttribute mdxElement, MDXFilter dataFilter) {
-		this.dataFilters.put(mdxElement, dataFilter);
+		List<MDXFilter> filtersList = this.dataFilters.get(mdxElement);
+		if (filtersList == null) {
+			filtersList = new ArrayList<MDXFilter>();
+			this.dataFilters.put(mdxElement, filtersList);
+		}
+		filtersList.add(dataFilter);
 	}
+	
+	public void addDataFilter(MDXAttribute mdxElement, List<MDXFilter> dataFilter) {
+		List<MDXFilter> filtersList = this.dataFilters.get(mdxElement);
+		if (filtersList == null) {
+			filtersList = new ArrayList<MDXFilter>();
+			this.dataFilters.put(mdxElement, filtersList);
+		}
+		filtersList.addAll(dataFilter);
+	}
+	
 	/**
 	 * @return the singleValueFilters
 	 */

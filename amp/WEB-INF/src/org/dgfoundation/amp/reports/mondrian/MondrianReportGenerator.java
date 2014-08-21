@@ -103,7 +103,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			}
 		} catch (Exception e) {
 			if (generator != null) generator.tearDown();
-			throw new AMPException("Cannot generate Mondrian Report: " + e.getMessage());
+			throw new AMPException("Cannot generate Mondrian Report: " + e.getMessage() == null ? e.getClass().getName() : e.getMessage());
 		}
 		
 		GeneratedReport report =  toGeneratedReport(spec, cellSet, (int)(System.currentTimeMillis() - startTime));
@@ -207,12 +207,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 	
 	private void addFilters(ReportFilters reportFilter, MDXConfig config) throws AmpApiException {
 		if (reportFilter == null) return;
-		for(Entry<ReportElement, FilterRule> entry : reportFilter.getFilterRules().entrySet()) {
+		for(Entry<ReportElement, List<FilterRule>> entry : reportFilter.getFilterRules().entrySet()) {
 			ReportElement elem = entry.getKey();
-			FilterRule filter = entry.getValue();
-			MDXFilter mdxFilter = null;
 			MDXAttribute mdxElem = null;
-			String property = null;
 			
 			switch (elem.type) {
 			case ENTITY : 
@@ -226,24 +223,29 @@ public class MondrianReportGenerator implements ReportExecutor {
 				if (IS_DEV) break;
 			}
 			
-			if (filter.isIdFilter) {
-				property = MondrianMapping.getPropertyName(elem);
-				if (property == null){
-					reportError("Property not defined for report element = " + elem);
-					if (IS_DEV) break;
+			for (FilterRule filter : entry.getValue()) {
+				MDXFilter mdxFilter = null;
+				String property = null;
+	
+				if (filter.isIdFilter) {
+					property = MondrianMapping.getPropertyName(elem);
+					if (property == null){
+						reportError("Property not defined for report element = " + elem);
+						if (IS_DEV) break;
+					}
 				}
+				
+				switch(filter.filterType) {
+				case RANGE: mdxFilter = new MDXFilter(filter.min, filter.minInclusive, filter.max, filter.maxInclusive, property); 
+				break;
+				case SINGLE_VALUE: mdxFilter = new MDXFilter(filter.value, filter.valuesInclusive, property);
+				break;
+				case VALUES: mdxFilter = new MDXFilter(filter.values, filter.valuesInclusive, property);
+				break;
+				}
+				
+				config.addDataFilter(mdxElem, mdxFilter);
 			}
-			
-			switch(filter.filterType) {
-			case RANGE: mdxFilter = new MDXFilter(filter.min, filter.minInclusive, filter.max, filter.maxInclusive, property); 
-			break;
-			case SINGLE_VALUE: mdxFilter = new MDXFilter(filter.value, filter.valuesInclusive, property);
-			break;
-			case VALUES: mdxFilter = new MDXFilter(filter.values, filter.valuesInclusive, property);
-			break;
-			}
-			
-			config.addDataFilter(mdxElem, mdxFilter);
 		}
 	}
 	

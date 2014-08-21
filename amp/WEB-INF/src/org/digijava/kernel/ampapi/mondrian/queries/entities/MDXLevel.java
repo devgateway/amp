@@ -58,7 +58,7 @@ public class MDXLevel extends MDXAttribute {
 				res += quote(values.get(0));
 			else 
 				for (String val:values) {
-					res += "&" + quote(val);
+					res += "." + quote(val);
 				}
 		}
 		return res;

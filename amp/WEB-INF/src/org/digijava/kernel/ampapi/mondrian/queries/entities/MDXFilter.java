@@ -12,6 +12,16 @@ import java.util.List;
  * @author Nadejda Mandrescu
  */
 public class MDXFilter {
+	public enum MDXFilterType {
+		/** A range from 'min' to 'max' */
+		RANGE,
+		/** Exactly one value */
+		SINGLE_VALUE,
+		/** List of values */
+		VALUES
+	};
+	/** filter rule type of {@link FilterType}, always not null */
+	public final MDXFilterType filterType;
 	/** bottom limit of the range, or null if no bottom limit */
 	public final String startRange;
 	/** upper limit of the range, or null if no upper limit */
@@ -39,7 +49,7 @@ public class MDXFilter {
 	 * @param property - can be null, if specified, then this property value will be used during filtering
 	 */
 	public MDXFilter(String startRange, boolean startRangeInclusive, String endRange, boolean endRangeInclusive, String property) {
-		this(property, startRange, endRange, startRangeInclusive, endRangeInclusive, null, false, null);
+		this(property, startRange, endRange, startRangeInclusive, endRangeInclusive, null, false, null, MDXFilterType.RANGE);
 	}
 	
 	/**
@@ -49,7 +59,7 @@ public class MDXFilter {
 	 * @param property - can be null, if specified, then this property value will be used during filtering 
 	 */
 	public MDXFilter(List<String> filteredValues, boolean allowedValues, String property) {
-		this(property, null, null, false, false, filteredValues, allowedValues, null);
+		this(property, null, null, false, false, filteredValues, allowedValues, null, MDXFilterType.VALUES);
 	}
 	
 	/**
@@ -59,11 +69,12 @@ public class MDXFilter {
 	 * @param property - can be null, if specified, then this property value will be used during filtering
 	 */
 	public MDXFilter(String singleValue, boolean isAllowedValue, String property) {
-		this(property, null, null, false, false, null, isAllowedValue, singleValue);
+		this(property, null, null, false, false, null, isAllowedValue, singleValue, MDXFilterType.SINGLE_VALUE);
 	}
 	
-	private MDXFilter(String property, String startRange, String endRange, boolean startRangeInclusive, boolean endRangeInclusive, 
-			List<String>filteredValues, boolean allowedFilteredValues, String singleValue) {
+	private MDXFilter(String property, String startRange, String endRange, boolean startRangeInclusive, boolean endRangeInclusive,
+			List<String>filteredValues, boolean allowedFilteredValues, String singleValue, MDXFilterType filterType) {
+		this.filterType = filterType;
 		this.startRange = startRange;
 		this.endRange = endRange;
 		this.startRangeInclusive = startRangeInclusive;
@@ -78,5 +89,15 @@ public class MDXFilter {
 		}  
 		this.singleValue = singleValue;
 		this.allowedFilteredValues = allowedFilteredValues;
-	}	
+	}
+	
+	@Override
+	public String toString() {
+		switch(filterType) {
+		case SINGLE_VALUE: return "singleValue = " + singleValue + ", property = " + property; 
+		case VALUES: return "filteredValues = " + filteredValues + ", property = " + property;
+		case RANGE: return "range = " + (startRangeInclusive ? "[" : "(") + startRange + ":" + endRange + (endRangeInclusive ? "]" : ")");
+		default: return null;//nether the case
+		}
+	}
 }

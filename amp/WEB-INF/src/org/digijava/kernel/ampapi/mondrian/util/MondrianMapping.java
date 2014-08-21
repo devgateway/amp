@@ -67,10 +67,13 @@ public class MondrianMapping {
 	}
 	
 	public static String getAll(MDXAttribute mdxAttr) {
-		if (mdxAttr.getDimension().equals(MoConstants.DATES))
-			return (new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, MoConstants.ATTR_ALL_DATES)).getFullName(); 
+		if (mdxAttr.getDimension().equals(MoConstants.DATES)) {
+			String hierarchy = mdxAttr instanceof MDXLevel ? ((MDXLevel)mdxAttr).getHierarchy() : MoConstants.H_DATES; 
+			return (new MDXLevel(MoConstants.DATES, hierarchy , MoConstants.ATTR_ALL_DATES)).getFullName();
+		}
 		return null;
 	}
+	
 	/* candidate for removal
 	public static String getDuplicateHierarchy(String hierarchy) {
 		String dupHierarchy = duplicateHierarchy.get(hierarchy);

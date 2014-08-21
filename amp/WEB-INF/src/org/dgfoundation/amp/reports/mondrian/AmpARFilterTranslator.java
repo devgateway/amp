@@ -34,7 +34,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  */
 public class AmpARFilterTranslator {
 	//either transform filter by IDS, either by Names => if by IDS, then Level properties will be used
-	private Map<ReportElement, FilterRule> filterRules;
+	private Map<ReportElement, List<FilterRule>> filterRules;
 	private static final boolean USE_IDS = false;
 	private AmpARFilter arFilter;
 	ReportEntityType entityType;
@@ -43,8 +43,8 @@ public class AmpARFilterTranslator {
 		this.setArFilter(arFilter);
 	}
 	
-	public Map<ReportElement, FilterRule> buildFilters() {
-		filterRules = new HashMap<ReportElement, FilterRule>();
+	public Map<ReportElement, List<FilterRule>> buildFilters() {
+		filterRules = new HashMap<ReportElement, List<FilterRule>>();
 		buildCurrentFilters();
 		//TODO: to clarify how pledge specific filters should be applied, e.g. if "include pledges" is selected, then translate current filter into pledge filter?
 		/*
@@ -76,8 +76,8 @@ public class AmpARFilterTranslator {
 		//if (!arFilter.hasDateFilter()) return;
 		String min = arFilter.getYearFrom() == null ? null : arFilter.getYearFrom().toString();
 		String max = arFilter.getYearTo() == null ? null : arFilter.getYearTo().toString();
-		if (min !=null || max !=null) 
-			filterRules.put(new ReportElement(ElementType.YEAR), new FilterRule(min, max, true, true, false));
+		if (min != null || max != null)
+			addFilterRule(new ReportElement(ElementType.YEAR), new FilterRule(min, max, true, true, false));
 
 		min = null;
 		max = null;
@@ -92,8 +92,8 @@ public class AmpARFilterTranslator {
 			String maxDate = (new SimpleDateFormat(MoConstants.DATE_FORMAT)).format(arFilter.buildToDateAsDate());
 			max = String.valueOf(maxDate);
 		}
-		if (min !=null || max !=null) 
-			filterRules.put(new ReportElement(ElementType.DATE), new FilterRule(min, max, true, true, false));
+		if (min != null || max != null) 
+			addFilterRule(new ReportElement(ElementType.DATE), new FilterRule(min, max, true, true, false));
 	}
 	
 	private void addActivityDatesFilters(Map<ReportElement, FilterRule> filterRules) {
@@ -221,10 +221,21 @@ public class AmpARFilterTranslator {
 			for (Nameable identifiable: set) { 
 				values.add(identifiable.getName());
 			}
+		ReportElement elem = null;
 		if (elemType ==null )
-			filterRules.put(new ReportElement(new ReportColumn(columnName, type)), new FilterRule(values, true, USE_IDS));
+			elem = new ReportElement(new ReportColumn(columnName, type));
 		else
-			filterRules.put(new ReportElement(elemType), new FilterRule(values, true, USE_IDS));
+			elem = new ReportElement(elemType);
+		addFilterRule(elem, new FilterRule(values, true, USE_IDS));
+	}
+	
+	private void addFilterRule(ReportElement elem, FilterRule rule) {
+		List<FilterRule> filterList = filterRules.get(elem);
+		if (filterList == null) {
+			filterList = new ArrayList<FilterRule>();
+			filterRules.put(elem, filterList);
+		}
+		filterList.add(rule);
 	}
 	
 	private void addFinancingFilters() {
@@ -243,7 +254,7 @@ public class AmpARFilterTranslator {
 		for (AmpCategoryValue categValue: set) { 
 			names.add(categValue.getValue());
 		}
-		filterRules.put(new ReportElement(new ReportColumn(columnName, type)), new FilterRule(names, true, false));
+		addFilterRule(new ReportElement(new ReportColumn(columnName, type)), new FilterRule(names, true, false));
 	}
 	
 

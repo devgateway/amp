@@ -68,7 +68,6 @@ public final class MoConstants {
 	public static final String H_ORG_GROUP_NAME = "Organization Group Name";
 	public static final String H_ORG_NAME = "All Orgs";
 	//public static final String H_ORG_DUPLICATE = "Organization Hierarchy Duplicate";
-	
 	public static final String H_LOCATIONS = "Locations";
 	//public static final String H_LOCATIONS_DUPLICATE= "LocationsDuplicate";
 	//Attributes/Levels
@@ -80,6 +79,7 @@ public final class MoConstants {
 	public static final String ATTR_QUARTER = "Quarter";
 	public static final String ATTR_MONTH = "Month";
 	public static final String ATTR_DATE = "Date";
+	public static final String ATTR_DAY = "Day";
 	public static final String ATTR_ALL_DATES = "All Periods";
 	public static final String ATTR_COUNTRY_NAME = "Country Name";
 	public static final String ATTR_REGION_NAME = "Region Name";

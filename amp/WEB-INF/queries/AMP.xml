@@ -161,7 +161,11 @@
 				<Level name="Year" column="year" levelType="TimeYears" type="Integer" />
 				<Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Integer"/>
 				<Level name="Month" column="month" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Integer" />
-				<Level name="Date" column="day" ordinalColumn="day" nameColumn="full_date" levelType="TimeDays" type="Integer" />
+				<!-- Level name="Day" column="day_of_month" ordinalColumn="day_of_month" nameColumn="day_of_month_name" levelType="TimeDays" type="Integer" /-->
+				<Level name="Date" column="day" ordinalColumn="day" nameColumn="full_date" type="Integer" levelType="TimeDays" >
+					<Property name="default" column="day" type="Integer"/>
+					<Property name="date" column="day" type="Integer"/>
+				</Level>
 			</Hierarchy>
 			<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day" name="Year">
 			  <Table name="mondrian_dates" />
@@ -177,13 +181,14 @@
 			</Hierarchy>
 			<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day" name="DatesDuplicate">
 				<Table name="mondrian_dates" />
-				<Level name="Year" column="year" levelType="TimeYears" type="Integer" >
-					<Property name="default" column="day" type="Integer"/>
-					<Property name="day" column="day" type="Integer"/>
-				</Level>
+				<Level name="Year" column="year" levelType="TimeYears" type="Integer" />
 				<Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Integer"/>
 				<Level name="Month" column="month" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Integer" />
-				<Level name="Date" column="day" ordinalColumn="day" nameColumn="full_date" levelType="TimeDays" type="Integer" />
+				<!-- Level name="Day" column="day_of_month" ordinalColumn="day_of_month" nameColumn="day_of_month_name" levelType="TimeDays" type="Integer" /-->
+				<Level name="Date" column="day" ordinalColumn="day" nameColumn="full_date" type="Integer" levelType="TimeDays" >
+					<Property name="default" column="day" type="Integer"/>
+					<Property name="date" column="day" type="Integer"/>
+				</Level>
 			</Hierarchy>
 		</Dimension>
 		

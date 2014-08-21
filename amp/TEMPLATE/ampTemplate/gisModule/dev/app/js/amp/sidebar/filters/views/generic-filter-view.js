@@ -8,7 +8,8 @@ var TreeNodeView = require('../views/tree-node-view');
 var BaseFilterView = require('../views/base-filter-view');
 var Template = fs.readFileSync(__dirname + '/../templates/generic-filter-template.html', 'utf8');
 
-
+// This is a generic model for filters. It assumes a tree structure.
+// If you don't want a tree structure just extend base-filter
 module.exports = BaseFilterView.extend({
 
   className: BaseFilterView.prototype.className + ' filter-generic',
@@ -59,7 +60,7 @@ module.exports = BaseFilterView.extend({
 
   _selectAll: function(){
     // force trigger even if already this state (important for half-fill ui
-    this.treeModel.set('selected',true,{ 'silent': true }); 
+    this.treeModel.set('selected',true,{ 'silent': true });
     this.treeModel.trigger('change:selected',this.treeModel, null,{propogation:false});
   },
 
@@ -72,24 +73,43 @@ module.exports = BaseFilterView.extend({
 
   _createTree: function(url){
     var self = this;
+
+    //TODO: should be a model so we get proper url api base prepended... from sync...
+    // ...should i use this.model or a new tmp model...think about it...
     return $.get(url).then(function(data){
 
-      // builds tree of views from returned data
-      var rootNodeObj = {
-        id : -1,
-        code : '-1',
-        name : self.model.get('title'),
-        children: data,
-        selected: true,
-        expanded: false
-      };
 
-      self.treeModel = new TreeNodeModel(rootNodeObj);
-      self.treeView = new TreeNodeView();
+      //tmp hack solution, if it's an obj, jam it into an array first (needed for /filters/programs)
+      if(!_.isArray(data)){
+        data = [data];
+      }
+
+
+      if(_.isArray(data) && data.length > 0){
+
+        // builds tree of views from returned data
+        var rootNodeObj = {
+          id : -1,
+          code : '-1',
+          name : self.model.get('title'),
+          children: data,
+          selected: true,
+          expanded: false,
+          isSelectable: false
+        };
+
+        self.treeModel = new TreeNodeModel(rootNodeObj);
+        self.treeView = new TreeNodeView();
+      } else{
+        console.error(' _createTree got bad data', data);
+      }
+
     })
     .fail(function(jqXHR, textStatus, errorThrown){
       console.error('failed to get filter ', jqXHR, textStatus, errorThrown);
     });
+
+
 
   }
 

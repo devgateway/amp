@@ -6,11 +6,12 @@ var TreeNodeCollection = Backbone.Collection.extend({  model:TreeNodeModel });
 
 TreeNodeModel = Backbone.Model.extend({
   defaults:{
-    selected: true, // default is selected.
+    selected: true,    // default is selected.
     expanded: false,
     numSelected: 0,
     numPossible: 0,
-    children:null  //type TreeNodeCollection
+    children:null,     // type TreeNodeCollection
+    isSelectable: true // is this node itself selectable (ie. should it have an 'unkown' child)
   },
 
   initialize: function(obj) {
@@ -27,7 +28,7 @@ TreeNodeModel = Backbone.Model.extend({
     }
 
     // if we have children, then add self as a leaf node, 'unkown'
-    if(!childrenCollection.isEmpty()){
+    if(!childrenCollection.isEmpty() &&  this.get('isSelectable')){
       var unkownNode = new TreeNodeModel(self.toJSON());
       unkownNode.set('name', 'unkown');
       childrenCollection.add(unkownNode);

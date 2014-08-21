@@ -5,6 +5,7 @@ var _ = require('underscore');
 var BaseControlView = require('../../base-control/base-control-view');
 var GenericFilterView = require('../views/generic-filter-view');
 var YearsFilterView = require('../views/years-filter-view');
+var SectorsFilterView = require('../views/sector-filter-view');
 var Template = fs.readFileSync(__dirname + '/../templates/filters-template.html', 'utf8');
 
 
@@ -63,9 +64,16 @@ module.exports = BaseControlView.extend({
         }
 
         _.each(data, function(APIFilter){
-          var view = self._createFilterView(APIFilter);
-          filterList.push(view);
+          if(APIFilter.ui == 'true'){
+            var view = self._createFilterView(APIFilter);
+            filterList.push(view);
+          }
         });
+
+        //manually add years for now:
+        var view = self._createFilterView({name:'Years', url:'rest/filter/years'});
+        filterList.push(view);
+
 
         deferred.resolve(filterList);
       })
@@ -87,6 +95,9 @@ module.exports = BaseControlView.extend({
       case 'Years':
         view = new YearsFilterView({url:APIFilter.endpoint});
         break;
+      case 'Sectors':
+        view = new SectorsFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
+        break;        
       default:
         view = new GenericFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
     }

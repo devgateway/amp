@@ -1,30 +1,27 @@
 [
-  {
-    "name": "Sectors",
-    "endpoint": "/rest/filters/sectors"
-  },
-  {
-    "name": "Organizations",
-    "endpoint": "/rest/filters/orgs"
-  },
-  {
-    "name": "Years",
-    "endpoint": "mock-api/years.json"
-  },
-  {
-      "name": "ActivityStatus",
-      "endpoint": "/rest/filters/activityStatus"
-  },
-  {
-      "name": "Boundaries",
-      "endpoint": "/rest/filters/boundaries"
-  },
-  {
-      "name": "SectorConfigName",
-      "endpoint": "/rest/filters/sectorConfigName"
-  },
-  {
-      "name": "Programs",
-      "endpoint": "/rest/filters/programs"
-  }
+{
+"name": "Sectors",
+"ui": "true",
+"endpoint": "/rest/filters/sectors"
+},
+{
+"name": "ActivityStatus",
+"ui": "true",
+"endpoint": "/rest/filters/activityStatus"
+},
+{
+"name": "Boundaries",
+"ui": "false",
+"endpoint": "/rest/filters/boundaries"
+},
+{
+"name": "SectorConfigName",
+"ui": "false",
+"endpoint": "/rest/filters/sectorConfigName"
+},
+{
+"name": "Programs",
+"ui": "true",
+"endpoint": "/rest/filters/programs"
+}
 ]

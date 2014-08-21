@@ -2,7 +2,6 @@ package org.digijava.kernel.ampapi.endpoints.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -13,9 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.digijava.kernel.ampapi.endpoints.dto.Programs;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
@@ -24,9 +21,6 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * Class that holds method related to filtres for gis querys (available options,
@@ -196,8 +190,8 @@ public class Filters {
     @GET
     @Path("/programs")
     @Produces(MediaType.APPLICATION_JSON)
-    public Programs getPrograms(){
-        Programs program=new Programs();
+    public SimpleJsonBean getPrograms(){
+    	SimpleJsonBean program=new SimpleJsonBean();
         try {
             AmpActivityProgramSettings npd=ProgramUtil.getAmpActivityProgramSettings(ProgramUtil.NATIONAL_PLAN_OBJECTIVE);
             
@@ -214,14 +208,14 @@ public class Filters {
      * @param t AmpThem to get the programFrom
      * @return
      */
-    private Programs getPrograms(AmpTheme t){
-        Programs p=new Programs();
+    private SimpleJsonBean getPrograms(AmpTheme t){
+       SimpleJsonBean p=new SimpleJsonBean();
         p.setId(t.getAmpThemeId());
-        p.setDescription(t.getName());
-        p.setPrograms(new ArrayList<Programs>());
+        p.setName(t.getName());
+        p.setChildren(new ArrayList<SimpleJsonBean>());
         
         for(AmpTheme tt:t.getSiblings()){
-            p.getPrograms().add(getPrograms(tt));
+            p.getChildren().add(getPrograms(tt));
         }
         return p;
     }

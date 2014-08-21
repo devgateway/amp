@@ -1,13 +1,14 @@
 'use strict';
 
-define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'views/tabItemsView', 'views/tabContentView',
-		'views/tabContentsView', 'text!views/html/regions.html', [ 'TabsCollectionStorage' ], 'jquery', 'jqueryui' ], function(Marionette,
-		Tabs, Tab, TabItemView, TabItemsView, TabContentView, TabContentsView, regionsHtml, tabsCollectionStorage, jQuery) {
+// Global variable for dev purposes.
+var app = app || {};
 
-	var app = app || {};
+define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'views/tabItemsView', 'views/tabContentView',
+		'views/tabContentsView', 'text!views/html/regions.html', 'business/tabEvents', 'jquery', 'jqueryui' ], function(Marionette, Tabs, Tab, TabItemView,
+		TabItemsView, TabContentView, TabContentsView, regionsHtml, TabEvents, jQuery) {	
 
 	// Load the regions html into the DOM.
-	jQuery('#tabs-container').append(regionsHtml);
+	jQuery('#tabs-container').append(regionsHtml);    
 
 	// Create our Marionette app.
 	app.TabsApp = new Marionette.Application();
@@ -24,7 +25,8 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 		Backbone.history.start();
 	});
 
-	// Create test data.
+	// Instantiate the collection of Tab (now the collection handles that but
+	// should be moved elsewhere)
 	var tabs = new Tabs();
 
 	// Instantiate both CollectionView containers with the data to
@@ -35,9 +37,9 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 		collection : tabs
 	});
 	var content = new TabContentsView({
-		collection : tabs2
-	// If we iterate tabs object again then TabContentsView will throw
-	// an error.
+    // If we iterate tabs object again then TabContentsView will throw
+	  // an error.
+		collection : tabs2	
 	});
 
 	// Render both CollectionView containers, each one on a region.
@@ -46,9 +48,14 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 	// into the region it belongs.
 	app.TabsApp.tabsRegion.show(tabs);
 	app.TabsApp.tabsContentRegion.show(content);
-
-	// JQuery create the tabs.
-	jQuery('#tabs-container').tabs();
+  
+  // Save the tabs collection for later usage.
+  app.tabs = tabs;
+    
+  var tabEvents = new TabEvents();
+	// JQuery create the tabs and assign some events to our event manager class.
+  jQuery('#tabs-container').tabs({activate: function(event, ui){tabEvents.onActivateTab(event, ui)}, 
+    create: function(event, ui){tabEvents.onCreateTab(event, ui)}});	
 
 	app.TabsApp.start();
 

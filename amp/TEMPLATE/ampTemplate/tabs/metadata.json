@@ -1,0 +1,39 @@
+{
+    "id": 0,
+    "name": "Report One",
+    "metadata": {
+        "filter": {
+            "sector": [
+                1,
+                2,
+                3
+            ],
+            "donor": [
+                1,
+                2
+            ]
+        }
+    },
+    "resultset": [
+        [
+            "cupidatat",
+            1000000
+        ],
+        [
+            "cupidatat",
+            2300000
+        ],
+        [
+            "cupidatat",
+            1400000
+        ],
+        [
+            "cupidatat",
+            1600000
+        ],
+        [
+            "cupidatat",
+            500000
+        ]
+    ]
+}

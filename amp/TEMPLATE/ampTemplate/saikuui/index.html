@@ -28,6 +28,9 @@
 
         <!-- Saiku CSS -->
         <link rel="stylesheet" href="css/saiku/src/styles.css" type="text/css">
+		<!-- Start Custom Code for Pagination -->
+        <link rel="stylesheet" href="js/saiku/plugins/Pagination/pagination.css" type="text/css">
+		<!-- End Custom Code for Pagination -->
         <link rel="shortcut icon" href="favicon.ico">
 
     </head>
@@ -134,6 +137,9 @@
             <script type="text/javascript" src="js/saiku/plugins/CCC_Chart/plugin.js"></script>
 
         <script type="text/javascript" src="js/ace/ace.js" charset="utf-8"></script>
+		<!--Start Custom Code for Pagination-->
+        <script type="text/javascript" src="js/saiku/plugins/Pagination/plugin.js" defer></script>        
+        <!--End Custom Code for Pagination-->
 
 
 
@@ -308,7 +314,24 @@
             <li><a href="#automatic_execution" 
                 class="i18n auto button disabled_toolbar sprite" 
                 title="Automatic execution"></a></li>
-            <li><a href="#toggle_fields" 
+<!-- Start Custom Code for Pagination -->
+            <li class="seperator"><a href="#first_page" 
+                class="i18n first_page button disabled_toolbar pagination_sprite" 
+                title="First Page"></a></li>
+            <li><a href="#prev_page" 
+                class="i18n prev_page button disabled_toolbar pagination_sprite" 
+                title="Prev Page"></a></li>
+			<li>
+				<input type="text" class="pagination_info" disabled></input>
+			</li>
+            <li><a href="#next_page" 
+                class="i18n next_page button disabled_toolbar pagination_sprite" 
+                title="Next Page"></a></li>
+            <li><a href="#last_page" 
+                class="i18n last_page button disabled_toolbar pagination_sprite" 
+                title="Last Page"></a></li>
+<!-- End Custom Code for Pagination -->
+            <li class="seperator"><a href="#toggle_fields" 
                 class="i18n toggle_fields button sprite"
                 title="Toggle fields"></a></li>
             <li><a href="#toggle_sidebar" 

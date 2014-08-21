@@ -14,6 +14,7 @@
  *   limitations under the License.
  */
 
+// Start Custom Code for Pagination
 var XmlTemplates = {};
 XmlTemplates['templateMDX'] = '<?xml version="1.0" encoding="UTF-8"?> \
 	<Query name="__NAME__" type="MDX" connection="__CONNECTION__" cube="__CUBE__" catalog="__CATALOG__" schema="__SCHEMA__"> \
@@ -71,9 +72,7 @@ var dimensionXml = '<Dimension name="__ENTITYNAME__" hierarchizeMode="PRE" hiera
 	</Dimension>';
 
 var selectionXml = '<Selection dimension="__ENTITYNAME__" type="__TYPE__" node="__NAME__" operator="__OPERATOR__" />';
-
-//var measureXml = '<Selection dimension="Measures" type="member" node="__MEASURE__" operator="MEMBER" />';
-
+//TODO: This mappings need to be moved to the REST endpoints and calculated server side
 var DimensionMap = {
 		"Project Title": {
 			entityName: "Project Title",
@@ -116,13 +115,14 @@ var DimensionMap = {
 			dimensionName: "[AMP ID].[AMP ID]"
 		}
 };
-
+//TODO: Add these measures to the REST Endpoint to make them dynamic
 var MeasureMap = {
 		"Actual Commitments":"[Measures].[Actual Commitments]",
 		"Planned Commitments":"[Measures].[Planned Commitments]",
 		"Actual Disbursements":"[Measures].[Actual Disbursements]",
 		"Planned Disbursements":"[Measures].[Planned Disbursements]",
 };
+//End Custom Code for Pagination
 
 /**
  * Router for opening query when session is initialized
@@ -131,8 +131,10 @@ var QueryRouter = Backbone.Router.extend({
     routes: {
         'query/open/*query_name': 'open_query',
         'query/open': 'open_query_repository',
+		//Start Custom Code for Pagination
         'report/mdx/:report_id': 'open_report_mdx',
         'report/:report_id': 'open_report'
+		//End Custom Code for Pagination
     },
     
     open_query: function(query_name) {
@@ -159,7 +161,7 @@ var QueryRouter = Backbone.Router.extend({
     open_query_repository: function( ) {
         Toolbar.prototype.open_query( );
     },
-    
+    //Start Custom Code for Pagination
     open_report_mdx: function(report_id) {
             $.getJSON(Settings.AMP_PATH + "/" + report_id, function( data ) {
 				var query = new SavedQuery({file:'amp_source_file'});
@@ -232,6 +234,7 @@ var QueryRouter = Backbone.Router.extend({
 			});
 			query.move_query_to_workspace(new model(), xmlTemplate, true);
         });
+        //End Custom Code for Pagination
 }
 
     

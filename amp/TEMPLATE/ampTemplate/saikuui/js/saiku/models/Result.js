@@ -33,6 +33,9 @@ var Result = Backbone.Model.extend({
         Saiku.ui.unblock();
         this.result = response;
         this.firstRun = true;
+		//Start Custom Code for Pagination
+        this.query.set({'total_rows': response.height});
+        //End Custom Code for Pagination
         this.query.workspace.trigger('query:result', {
             workspace: this.query.workspace,
             data: response
@@ -49,6 +52,17 @@ var Result = Backbone.Model.extend({
     },
     
     url: function() {
-        return encodeURI(this.query.url() + "/result/" + this.query.get('formatter'));
-    }
+    	//Start Custom Code for Pagination
+    	var result_type = "result";
+    	if(Settings.PAGINATION) {
+    		result_type = "paginatedresult";
+        	var start = this.query.get('page')*Settings.RESULTS_PER_PAGE;
+        	var end = start  + Settings.RESULTS_PER_PAGE;
+        	this.set({'start': start});
+        	this.set({'end': end});
+    	}
+        return encodeURI(this.query.url() + "/" + result_type + "/" + this.query.get('formatter'));
+    	//End Custom Code for Pagination
+    },
+    
 });

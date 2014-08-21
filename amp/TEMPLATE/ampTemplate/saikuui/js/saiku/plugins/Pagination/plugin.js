@@ -1,0 +1,32 @@
+Saiku.events.bind('session:new', function(session) {
+	if(!Settings.PAGINATION) {
+		$(".pagination_sprite").hide();
+		$(".pagination_info").hide();
+	}
+
+    function new_workspace(args) {
+        args.workspace.bind('query:result', function(){
+	        	if(Settings.PAGINATION) {
+		        	var current_page = this.query.get('page')+1;
+		        	var total_pages = Math.floor(this.query.get('total_rows')/Settings.RESULTS_PER_PAGE)+1;
+		        	$(this.el).find(".pagination_info").val(current_page + "/" + total_pages);
+	        	}
+	        	else
+        		{
+	        		$(".pagination_sprite").hide();
+	        		$(".pagination_info").hide();
+        		}
+        	});
+    }
+
+    // Attach stats to existing tabs
+    for(var i = 0; i < Saiku.tabs._tabs.length; i++) {
+        var tab = Saiku.tabs._tabs[i];
+        new_workspace({
+            workspace: tab.content
+        });
+    };
+
+    // Attach stats to future tabs
+    Saiku.session.bind("workspace:new", new_workspace);
+});

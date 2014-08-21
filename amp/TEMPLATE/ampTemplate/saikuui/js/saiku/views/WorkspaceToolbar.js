@@ -162,7 +162,24 @@ var WorkspaceToolbar = Backbone.View.extend({
     run_query: function(event) {
         this.workspace.query.run(true);
     },
-    
+    //Start Custom Code for Pagination
+    first_page: function(event) {
+        this.workspace.query.first_page();
+    },
+
+    prev_page: function(event) {
+        this.workspace.query.prev_page();
+    },
+
+    next_page: function(event) {
+        this.workspace.query.next_page();
+    },
+
+    last_page: function(event) {
+        this.workspace.query.last_page();
+    },
+
+    //End Custom Code for Pagination
     automatic_execution: function(event) {
         // Change property
         this.workspace.query.properties

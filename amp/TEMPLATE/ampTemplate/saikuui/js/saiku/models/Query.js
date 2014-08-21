@@ -41,6 +41,9 @@ var Query = Backbone.Model.extend({
         this.action = new QueryAction({}, { query: this });
         this.result = new Result({ limit: Settings.RESULT_LIMIT }, { query: this });
         this.scenario = new QueryScenario({}, { query: this });
+        //Start Custom Code for Pagination
+        this.set({page:0}) ;
+        //End Custom Code for Pagination
 
         this.set({type:'QM'});
     },
@@ -138,6 +141,26 @@ var Query = Backbone.Model.extend({
         }
     },
     
+	//Start Custom Code for Pagination    
+    first_page: function() {
+    	this.set({page: 0});
+    	this.run(true);
+    },
+    prev_page: function() {
+    	var prev_page = this.get('page') == 0 ? 0 : (this.get('page')-1);
+    	this.set({page: prev_page});
+    	this.run(true);
+    },
+    next_page: function() {
+    	this.set({page: (this.get('page')+1)});
+    	this.run(true);
+    },
+    last_page: function() {
+    	var last_page = this.get('total_rows')/Settings.RESULTS_PER_PAGE;
+    	this.set({page: Math.floor(last_page)});
+    	this.run(true);
+    },
+    //End Custom Code for Pagination
     move_dimension: function(dimension, target, index) {
         $(this.workspace.el).find('.run').removeClass('disabled_toolbar');
         var url = "/axis/" + target + "/dimension/" + dimension;

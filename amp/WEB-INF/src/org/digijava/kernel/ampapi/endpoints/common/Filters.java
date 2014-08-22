@@ -12,10 +12,12 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Constants;
@@ -59,11 +61,6 @@ public class Filters {
     	boundaries.setEndpoint("/rest/filters/boundaries");
     	availableFilters.add(boundaries);    	
     	
-    	AvailableFilters sectorConfigName=new AvailableFilters();
-    	sectorConfigName.setName("SectorConfigName");
-    	sectorConfigName.setEndpoint("/rest/filters/sectorConfigName");
-    	availableFilters.add(sectorConfigName);    	
-
     	AvailableFilters programs=new AvailableFilters();
     	programs.setName("Programs");
     	programs.setEndpoint("/rest/filters/programs");
@@ -206,6 +203,44 @@ public class Filters {
     	l.add(tp);
     	return l;
     }
+    
+    /**
+     * Return the sector filtered by the given sectorName
+     * 
+     * @return
+     */
+    @GET
+    @Path("/organizations/{ampRoleId}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<SimpleJsonBean> getOrganizations(@PathParam("ampRoleId") Long sectorConfigName){
+    	return null;
+    }
+    
+    		
+    
+    /**
+     * Return the organization type list
+     * 
+     * @return
+     */
+    @GET
+    @Path("/organizations")
+    @Produces(MediaType.APPLICATION_JSON)   
+    public List<SimpleJsonBean> getOrganizations() 
+    {
+    	List<SimpleJsonBean> orgs=new ArrayList<SimpleJsonBean>();
+    	List<AmpRole>roles = OnePagerUtil.getOrgRoles();
+    	for (AmpRole ampRole : roles) {
+    		SimpleJsonBean o=new SimpleJsonBean();
+    		o.setId(ampRole.getAmpRoleId());
+    		o.setCode(ampRole.getRoleCode());
+    		o.setName(ampRole.getName());
+    		orgs.add(o);
+		}
+
+    	return orgs;
+    }    
+    
     /**
      * Return the programs filtered by the given sectorName
      * 
@@ -262,6 +297,10 @@ public class Filters {
         return s;
     }
 
+    
+    
+    
+    
 	public class AvailableFilters {
 		public AvailableFilters() {
 			this.ui=false;

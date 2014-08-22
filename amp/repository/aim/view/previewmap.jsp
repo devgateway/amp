@@ -8,7 +8,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=7,IE=9" />
     <!--The viewport meta tag is used to improve the presentation and behavior of the samples on iOS devices-->
     <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
-    <style type="text/css"> a { color: blue; } </style>
+    <style type="text/css"> a { color: blue; }
+    .user {
+    background-color:white;
+    }
+    
+     </style>
 
 <script type="text/javascript" src="<c:out value="${paramValues.esriapiurl[0]}"/>/jsapi/arcgis/?v=2.2"></script>
 
@@ -151,8 +156,8 @@
      function addPoints(xloc,yloc,loc){
     	 var pt = new esri.geometry.Point(xloc,yloc,new esri.SpatialReference({"wkid":4326}));
     	 var sms = new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE).setColor(new dojo.Color([255,0,0,0.5]));
-     	 var attr = {"Location":loc};
-     	 var infoTemplate = new esri.InfoTemplate("Location Information");   
+    	 var attr = {"Location":loc};
+      	 var infoTemplate = new esri.InfoTemplate("<b>Location Information</b>");   
      	 var transpt = esri.geometry.geographicToWebMercator(pt);
      	 var graphic = new esri.Graphic(transpt,sms,attr,infoTemplate);
      	 map.graphics.add(graphic);

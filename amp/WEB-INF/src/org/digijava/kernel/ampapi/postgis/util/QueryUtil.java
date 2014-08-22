@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
@@ -118,12 +119,20 @@ public class QueryUtil {
 
     }
     public static List<AmpActivity>  getActivities(){
+    	return getActivities(null);
+    }
+    public static List<AmpActivity>  getActivities(String ampActivityIds){
+    
    	 List<AmpActivity> a =  null;
 			try {
 				Session s=PersistenceManager.getRequestDBSession();
 				
 				  String queryString = "select a from " +
 						  AmpActivity.class.getName() +" a";
+				  if(ampActivityIds!=null){
+					queryString+=" where a.ampActivityId in (" +ampActivityIds  + ")";  
+				  }
+				  
 				  		Query q=PersistenceManager.getSession().createQuery(queryString);
 						q.setMaxResults(5); 
 				  		a = q.list();

@@ -12,7 +12,9 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.PathSegment;
 
+import org.apache.ecs.storage.Array;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
@@ -268,42 +270,48 @@ public class GisEndPoints {
 		return a;
 	}
 
+	
 	@GET
 	@Path("/activities/{activityId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Activity getActivities(@PathParam("activityId") Long activityId) {
-		Activity a = new Activity();
+	public List<Activity> getActivities(@PathParam("activityId") PathSegment activityIds) {
+		List<Activity> l=new ArrayList<Activity>();
 		
-		
-		AmpActivity activity=QueryUtil.getActivity(activityId);
-		if(activity!=null){
-			a.setId(activity.getAmpActivityId());
-			a.setName(activity.getName());
-			String 
-			description =null;
-//			try {
-//				description = DbUtil.getEditorBody(TLSUtils.getSite(),
-//				        activity.getDescription(),
-//				        RequestUtils.
-//				        getNavigationLanguage(TLSUtils.getRequest()).
-//				        getCode());
-//				a.setDescription(description);
-//			} catch (EditorException e) {
-//				logger.error("cannot get description");
-//			}
-			ActivityFundingDigest fundingDigest=new ActivityFundingDigest();
-			fundingDigest.populateFromFundings(activity.getFunding(), "US", null, false);
-			for(FundingDetail fd:fundingDigest.getCommitmentsDetails()){
-			a.addCommitments(fd.getTransactionAmount(), fd.getTransactionDate());	
+		List<AmpActivity>activities=QueryUtil.getActivities(activityIds.getPath());
+		for (AmpActivity activity : activities) {
+			
+			
+			if(activity!=null){
+				Activity a = new Activity();
+				a.setId(activity.getAmpActivityId());
+				a.setName(activity.getName());
+				String 
+				description =null;
+//				try {
+//					description = DbUtil.getEditorBody(TLSUtils.getSite(),
+//					        activity.getDescription(),
+//					        RequestUtils.
+//					        getNavigationLanguage(TLSUtils.getRequest()).
+//					        getCode());
+//					a.setDescription(description);
+//				} catch (EditorException e) {
+//					logger.error("cannot get description");
+//				}
+				a.setAmpUrl(ActivityGatekeeper.buildPreviewUrl(String.valueOf(activity
+						.getAmpActivityId())));
+				ActivityFundingDigest fundingDigest=new ActivityFundingDigest();
+				fundingDigest.populateFromFundings(activity.getFunding(), "US", null, false);
+				for(FundingDetail fd:fundingDigest.getCommitmentsDetails()){
+				a.addCommitments(fd.getTransactionAmount(), fd.getTransactionDate());	
+				}
+				for(FundingDetail fd:fundingDigest.getDisbursementsDetails()){
+				a.addDisbursment(fd.getTransactionAmount(), fd.getTransactionDate());	
+				}			
+				
+				l.add(a);
 			}
-			for(FundingDetail fd:fundingDigest.getDisbursementsDetails()){
-			a.addDisbursment(fd.getTransactionAmount(), fd.getTransactionDate());	
-			}			
-			
-			
 		}
-
-		return a;
+		return l;
 	}
 
 	private FeatureGeoJSON getPoint(Double lat, Double lon,

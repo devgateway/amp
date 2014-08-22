@@ -3,6 +3,7 @@
  */
 package org.digijava.kernel.ampapi.mondrian;
 
+import java.sql.Date;
 import java.util.Arrays;
 
 import junit.framework.Test;
@@ -18,6 +19,7 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.olap4j.CellSet;
 import org.olap4j.query.SortOrder;
 
@@ -43,9 +45,10 @@ public class MDXTests extends AmpTestCase {
 		suite.addTest(new MDXTests("testDataSingleValueFilterByLocation"));
 		suite.addTest(new MDXTests("testDataFilters"));
 		suite.addTest(new MDXTests("testRangeFilter"));
+		suite.addTest(new MDXTests("testRangeFilterByProperties")); 
 		suite.addTest(new MDXTests("testMultipleDatesFilter"));
 		suite.addTest(new MDXTests("testMultipleDatesAndOtherFilters"));
-		//suite.addTest(new MDXTests("testSinglePropertyFilter")); 
+		suite.addTest(new MDXTests("testSinglePropertyFilter")); 
 		//suite.addTest(new MDXTests("testPropertiesListFilter"));
 		suite.addTest(new MDXTests("testMultipleHierarchies"));
 		suite.addTest(new MDXTests("testSortingNoTotals"));
@@ -81,7 +84,7 @@ public class MDXTests extends AmpTestCase {
 	public void testDataSingleValueFilter() {
 		String expectedRes = null;
 		MDXConfig config = getDefaultConfig("testDataSingleValueFilter", true);
-		config.addSingleValueFilters(new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR, "2014"));
+		config.addDataFilter(new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR), new MDXFilter("2014", true, MoConstants.P_YEAR));
 		generateAndValidateMDX(config, expectedRes, false);
 	}
 	
@@ -101,7 +104,7 @@ public class MDXTests extends AmpTestCase {
 	
 	private void addSimpleFilter(MDXConfig config) {
 		MDXAttribute attrYear = new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR);
-		MDXFilter filter = new MDXFilter(Arrays.asList("2010", "2012"), true, null);
+		MDXFilter filter = new MDXFilter(Arrays.asList("2010", "2012"), true, MoConstants.P_YEAR);
 		config.addDataFilter(attrYear, filter);
 	}
 
@@ -109,9 +112,24 @@ public class MDXTests extends AmpTestCase {
 		String expectedRes = null;
 		MDXConfig config = getDefaultConfig("testRangeFilter", true);
 		MDXAttribute attrYear = new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR);
-		MDXFilter filter = new MDXFilter("2010", true, "2012", true, null);
+		MDXFilter filter = new MDXFilter("2010", true, "2012", true, MoConstants.P_YEAR);
 		config.addDataFilter(attrYear, filter);
 		generateAndValidateMDX(config, expectedRes, false);
+	}
+	
+	public void testRangeFilterByProperties() {
+		String expectedRes = null;
+		MDXConfig config = getDefaultConfig("testRangeFilterByProperties", true);
+		addJulianDates(config);
+		generateAndValidateMDX(config, expectedRes, false);
+	}
+	
+	private void addJulianDates(MDXConfig config) {
+		MDXAttribute attrDate = new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, MoConstants.ATTR_DATE);
+		String julianDateStart = DateTimeUtil.toJulianDayString(Date.valueOf("2009-01-01"));
+		String julianDateEnd = DateTimeUtil.toJulianDayString(Date.valueOf("2009-05-31")); //2009-05-31 doesn't exist in Moldova DB, but filter should work without date member
+		MDXFilter filter = new MDXFilter(julianDateStart, true, julianDateEnd, true, MoConstants.P_DATE); 
+		config.addDataFilter(attrDate, filter);
 	}
 
 	public void testMultipleDatesFilter() {
@@ -132,14 +150,13 @@ public class MDXTests extends AmpTestCase {
 	
 	private void addMultipleDatesFilters(MDXConfig config) {
 		MDXAttribute attrYear = new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, MoConstants.ATTR_YEAR);
-		MDXFilter filter = new MDXFilter("2010", true, "2011", true, null);
+		MDXFilter filter = new MDXFilter("2010", true, "2011", true, MoConstants.P_YEAR);
 		config.addDataFilter(attrYear, filter);
-		MDXFilter filter2 = new MDXFilter(Arrays.asList("2013","2014"), true, null);
+		MDXFilter filter2 = new MDXFilter(Arrays.asList("2013","2014"), true, MoConstants.P_YEAR);
 		config.addDataFilter(attrYear, filter2);
 		MDXLevel attrDate = new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, "2005", "Q2");
 		config.addSingleValueFilters(attrDate);
-		MDXLevel attrDate2 = new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, MoConstants.ATTR_DATE);
-		config.addDataFilter(attrDate2, new MDXFilter("2009-01-01", true, "2009-05-26", true, null));
+		addJulianDates(config);
 	}
 	
 	public void testSinglePropertyFilter() {

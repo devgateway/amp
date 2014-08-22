@@ -35,8 +35,10 @@ public class MDXLevel extends MDXAttribute {
 	
 	public MDXLevel(MDXAttribute mdxAttr) {
 		this(mdxAttr.getDimension(), (mdxAttr instanceof MDXLevel ? ((MDXLevel)mdxAttr).getHierarchy() : null), mdxAttr.getName(), mdxAttr.getValue());
-		if (mdxAttr instanceof MDXLevel) 
-			this.values = ((MDXLevel)mdxAttr).values;
+		if (mdxAttr instanceof MDXLevel) { 
+			MDXLevel toCopy = ((MDXLevel)mdxAttr);
+			this.values = toCopy.values == null ? null : toCopy.values.subList(0, toCopy.values.size());
+		}
 	}
 	
 	@Override
@@ -114,5 +116,9 @@ public class MDXLevel extends MDXAttribute {
 	 */
 	public void setValues(List<String> values) {
 		this.values = values;
+	}
+	
+	public List<String> getValues() {
+		return this.values;
 	}
 }

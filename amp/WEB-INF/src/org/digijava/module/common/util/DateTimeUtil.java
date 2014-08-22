@@ -151,5 +151,9 @@ public class DateTimeUtil {
 			
 			return jDayNo;
 		}
+		
+		public static String toJulianDayString(Date date){
+			return String.valueOf(toJulianDayNumber(date));
+		}
 
 }

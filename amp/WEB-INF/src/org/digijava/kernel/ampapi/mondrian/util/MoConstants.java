@@ -1,4 +1,8 @@
 package org.digijava.kernel.ampapi.mondrian.util;
+
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * 
  * @author Diego Dimunzio
@@ -110,6 +114,8 @@ public final class MoConstants {
 	public static final String ATTR_PROGRAM_LEVEL_8_NAME = "Program Level 8 Name";
 	//properties
 	public static final String P_KEY = "Key";
+	public static final String P_YEAR = "year";
+	public static final String P_DATE = "date";
 	public static final String P_COUNTRY_ID = "countryId";
 	public static final String P_REGION_ID = "regionId";
 	public static final String P_ZONE_ID = "zoneId";
@@ -121,6 +127,10 @@ public final class MoConstants {
 	public static final String P_PRIMARY_SECTOR = "primarySectorId";
 	public static final String P_PRIMARY_SECTOR_SUB_SECTOR = "primarySectorSubSectorId";
 	public static final String P_PRIMARY_SECTOR_SUB_SUB_SECTOR = "primarySectorSubSubSectorId";
+	public static final Set<String> AMP_SCHEMA_PROPERTIES = new HashSet<String>() {{
+		add(P_KEY); add(P_YEAR); add(P_DATE); add(P_COUNTRY_ID); add(P_REGION_ID); add(P_ZONE_ID); add(P_DISTRIC_ID); add(P_LOCATION_ID);
+		add(P_ORG_TYPE_ID); add(P_ORG_GROUP_ID); add(P_ORG_ID); add(P_PRIMARY_SECTOR); add(P_PRIMARY_SECTOR_SUB_SECTOR); add(P_PRIMARY_SECTOR_SUB_SUB_SECTOR);
+	}};
 	
 	public static String ALL_PRIMARY_SECTOR = "All Primary Sectors";
 	public static String ALL_SECONDARY_SECTOR = "All Secondary Sectors";
@@ -206,5 +216,6 @@ public final class MoConstants {
 	public static String OLD_TERMS_OF_ASSISTANCE= "Terms of Assistance";
 
 	public static final String DATE_FORMAT = "YYYY-MM-dd";
+	public static final String HAS_AMP_PROPERTIES = "HAS_AMP_PROPERTIES";
 	
 }

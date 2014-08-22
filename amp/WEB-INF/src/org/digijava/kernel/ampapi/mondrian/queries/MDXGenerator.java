@@ -57,13 +57,18 @@ public class MDXGenerator {
 	private static final MDXLevel mainDates = new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, MoConstants.ATTR_DATE);
 	
 	protected static final Logger logger = Logger.getLogger(MDXGenerator.class); 
+	/* candidate for removal
 	private static Map<String, String> allNames;
-	private static Map<String, MDXLevel> propertiesLevels; //<Dimension name, MDXLevel that stores properties for filtering by ids>
-	private static Map<MDXLevel, Map<String, String>> levelPropertyType;
+	//Based on convention to define unique property names
+	private static Map<String, MDXLevel> propertiesLevels; //<Property name, MDXLevel that stores properties for filtering by ids>
+	private static Map<String, String> levelPropertyType; //<Property name, Property type>
+	*/
+	/** Automatic detection of some schema information */ 
+	/* candidate for removal
 	static {
 		Map<String, String> mapping = new HashMap<String, String>();
-		Map<String, MDXLevel> properties = new HashMap<String, MDXLevel>();
-		Map<MDXLevel, Map<String, String>> propTypes = new HashMap<MDXLevel, Map<String, String>>();
+		Map<String, MDXLevel> properties = new HashMap<String, MDXLevel>(); 
+		Map<String, String> propTypes = new HashMap<String, String>();
 		boolean success = false;
 		OlapConnection olapConnection = null;
 		try {
@@ -75,28 +80,26 @@ public class MDXGenerator {
 			}
 			for (Dimension dim:dimList) 
 				for (Iterator<Hierarchy> h = dim.getHierarchies().iterator(); h.hasNext(); ){
-					boolean foundAll = false;
-					boolean foundProperties = false;
-					for (Iterator<Level> l = h.next().getLevels().iterator(); l.hasNext() && !(foundAll && foundProperties);) {
+					for (Iterator<Level> l = h.next().getLevels().iterator(); l.hasNext();) {
 						Level level = l.next();
 						for (Member m: level.getMembers())
 							if (m.isAll()) {
 								mapping.put(MDXElement.quote(m.getHierarchy().getName()), m.toString());
 								if (dim.getHierarchies().size() == 1) //keep also the default All member per dimension when there is only 1 hierarchy 
 									mapping.put(MDXElement.quote(dim.getName()), m.toString());
-								foundAll = true;
 								break;
-							} 
-						if (level.getProperties().get("default") != null) {
+							}
+						if (MoConstants.HAS_AMP_PROPERTIES.equals(level.getDescription())) {
 							String hName = level.getHierarchy().getName().substring(dim.getName().length()+1);
 							MDXLevel propLevel = new MDXLevel(dim.getName(), hName , level.getName());
-							properties.put(dim.getName(), propLevel);
 							Map<String, String> propTypeMap = new HashMap<String, String>();
 							for(Property prop : level.getProperties()) {
-								propTypeMap.put(prop.getName(), MondrianUtils.getDatatypeName(prop.getDatatype()));
+								if (MoConstants.AMP_SCHEMA_PROPERTIES.contains(prop.getName())) {
+									if (properties.put(prop.getName(), propLevel) != null)
+										throw new AmpApiException("Duplicate definition of the proprty = " + prop.getName());
+									propTypeMap.put(prop.getName(), MondrianUtils.getDatatypeName(prop.getDatatype()));
+								}
 							}
-							propTypes.put(propLevel, propTypeMap);
-							foundProperties = true;
 						}
 					}
 				}
@@ -116,6 +119,7 @@ public class MDXGenerator {
 			}
 		}
 	}
+	*/
 	
 	private OlapConnection olapConnection = null;
 	private MdxParser parser = null;
@@ -187,6 +191,7 @@ public class MDXGenerator {
 		
 		//TODO: candiate for removal - no needed anymore with latest solution
 		//adjustDuplicateElementsOnDifferentAxis(config);
+		//adjustPropertyFilters(config);
 		adjustDateFilters(config);
 
 		String axisMdx = null;
@@ -376,7 +381,7 @@ public class MDXGenerator {
 		String dataFilterName = "Data" + suffix;
 		
 		hasDataFilter = hasDataFilter || hasLevelFilter;
-		if (dataFilter == null)
+		if (hasDataFilter && dataFilter == null)
 			dataFilter = "{" + levelFilter + "}";
 		else if (levelFilter != null)
 			dataFilter = "{" + dataFilter + ", " + levelFilter + "}";
@@ -410,12 +415,12 @@ public class MDXGenerator {
 	
 	// we also remove the filter to avoid duplicate filtering on where for selected columns
 	private List<MDXFilter> findAndRemoveFilter(Map<? extends MDXElement, List<MDXFilter>> filterMap, MDXElement mdxElem) {
+		List<MDXFilter> totalFiltersList = new ArrayList<MDXFilter>();
 		for (Entry<? extends MDXElement, List<MDXFilter>> pair : filterMap.entrySet()) {
 			//if same mdx element is detected and this is not a property filter, which should be applied in where axis as it speeds up 
 			if (MDXElement.filterEquals(pair.getKey(), mdxElem)) {
-				List<MDXFilter> filtersList = null;
+				List<MDXFilter> filtersList = new ArrayList<MDXFilter>();
 				if (PROPERTIES_FILTERING_ON_WHERE) {
-					filtersList = new ArrayList<MDXFilter>();
 					for (MDXFilter filter : pair.getValue())
 						if (filter.property == null)
 							filtersList.add(filter);
@@ -426,10 +431,10 @@ public class MDXGenerator {
 					filtersList = pair.getValue();
 					filterMap.remove(pair.getKey());
 				}
-				return filtersList;
+				totalFiltersList.addAll(filtersList);
 			}
 		}
-		return null;
+		return totalFiltersList.size() == 0 ? null : totalFiltersList;
 	}
 	
 	private MDXAttribute findAndRemoveFilter(List<MDXAttribute> filterList, MDXAttribute mdxAttr) {
@@ -558,17 +563,13 @@ public class MDXGenerator {
 				if (isMeasure) 
 					throw new AmpApiException("Not supported. Keys are applicable to MDX Attributes only.");
 				
-				MDXLevel propLevel = propertiesLevels.get(((MDXAttribute)ref).getDimension()); 
-				if (propLevel == null)
-					throw new AmpApiException("No level with properties is defined for dimension = " + ((MDXAttribute)ref).getDimension() + ". Define a 'default' property to flag the level to be used");
-				
-				String propertyType = levelPropertyType.get(propLevel).get(mdxFilter.property);
-				if (propertyType == null) 
-					throw new AmpApiException("Property '" + mdxFilter.property + "' not defined within dimension = " + ((MDXAttribute)ref).getDimension());
+				MDXAttribute propLevel =  getPropertyLevel((MDXAttribute)ref, mdxFilter.property);
+				String propertyType = "Integer";//levelPropertyType.get(mdxFilter.property);
+				String property = MoConstants.P_KEY; //mdxFilter.property
 				
 				//replace filter by to be filter by key
 				filterBy = MoConstants.FUNC_CAST + "(" + propLevel.getCurrentMemberName() + "." 
-						+ MoConstants.PROPERTIES + "('" + mdxFilter.property + "') AS " +  propertyType + ")";
+						+ MoConstants.PROPERTIES + "('" + property + "') AS " +  propertyType + ")";
 				toFilterSet = propLevel.toString();
 			} 
 			
@@ -629,7 +630,7 @@ public class MDXGenerator {
 		addFilterFunc = addFilterFunc || filter.length() - or.length() > 0 || notAllowedFilterList.length() > 0;
 		if (allowedFilterList.length() > 0) 
 			if (addFilterFunc)
-				filter += or + filterBy + " IN {" +  allowedFilterList;
+				filter += or + filterBy + " IN {" +  allowedFilterList + "}";
 			else
 				filter += "{" + allowedFilterList + "}";
 		if (notAllowedFilterList.length() > 0)
@@ -650,12 +651,13 @@ public class MDXGenerator {
 	}
 	
 	private String getRange(MDXFilter mdxFilter, MDXElement ref, String filterBy, boolean isMeasure) {
-		String startRange = mdxFilter.startRange == null ? null : (isMeasure ? mdxFilter.startRange : toMDX(ref, mdxFilter.startRange));
-		String endRange = mdxFilter.endRange == null ? null : (isMeasure ? mdxFilter.endRange : toMDX(ref, mdxFilter.endRange));
+		boolean isProperty = mdxFilter.property != null;
+		String startRange = mdxFilter.startRange == null ? null : (isMeasure || isProperty ? mdxFilter.startRange : toMDX(ref, mdxFilter.startRange));
+		String endRange = mdxFilter.endRange == null ? null : (isMeasure || isProperty ? mdxFilter.endRange : toMDX(ref, mdxFilter.endRange));
 		String filterRange = "";
 		
 		//checking if we can represent the range as { START : END } set
-		if (!isMeasure && (
+		if (!isMeasure && !isProperty && (
 				mdxFilter.startRangeInclusive && mdxFilter.endRangeInclusive
 				|| mdxFilter.startRangeInclusive && mdxFilter.endRange == null
 				|| mdxFilter.startRange == null && mdxFilter.endRangeInclusive
@@ -777,6 +779,62 @@ public class MDXGenerator {
 			default: return -1;
 			}
 		return -2;
+	}
+	
+	/*
+	private void adjustPropertyFilters(MDXConfig config) throws AmpApiException {
+		adjustPropertyFilters(config.getColumnAttributes(), config);
+		adjustPropertyFilters(config.getRowAttributes(), config);
+	}
+	
+	private void adjustPropertyFilters(List<MDXAttribute> attrList, MDXConfig config) throws AmpApiException {
+		for (MDXAttribute mdxAttr : attrList) {
+			if(!adjustPropertyFilters(mdxAttr, config.getAxisFilters())) //process axis filters first of all
+				adjustPropertyFilters(mdxAttr, config.getDataFilters());
+		}
+	}
+	*/
+	
+	/**
+	 * @return true if original attribute was adjusted
+	 */
+	/*
+	private boolean adjustPropertyFilters(MDXAttribute mdxAttr, Map<? extends MDXElement, List<MDXFilter>> filterMap) throws AmpApiException {
+		for (Entry<? extends MDXElement, List<MDXFilter>> pair : filterMap.entrySet()) 
+			if (MDXElement.filterEquals(pair.getKey(), mdxAttr)) 
+				for (MDXFilter filter : pair.getValue()) 
+					if (filter.property != null && MDXLevel.class.isAssignableFrom(mdxAttr.getClass())) {
+						MDXLevel mdxLevel = (MDXLevel)mdxAttr;
+						MDXLevel propLevel = getPropertyLevel(mdxAttr, filter.property);
+						if (!propLevel.getDimensionAndHierarchy().equals(propLevel.getDimensionAndHierarchy())) {
+							mdxLevel.setDimension(propLevel.getDimension());
+							mdxLevel.setHierarchy(propLevel.getHierarchy());
+							//Once we move current element to another hierarchy, we stick with it and any further properties will remain on WHERE.
+							//Properties must be defined carefully so that they work best with MDX: 
+							//define them under main hierarchy (with multiple levels), though request members on their individual hierarchies. Exception is for DATE filter only 
+							return true;  
+						} 
+					}
+		return false;
+	}
+	*/
+		
+	private MDXAttribute getPropertyLevel(MDXAttribute mdxAttr, String property) throws AmpApiException {/*
+		if (MoConstants.DATES.equals(mdxAttr.getDimension())) {
+			MDXAttribute a = mainDates.clone();
+			a.setName(mdxAttr.getName());
+			return a;
+		} */
+		return mdxAttr;			
+		/*
+		MDXLevel propLevel = propertiesLevels.get(property); 
+		if (propLevel == null)
+			throw new AmpApiException("No level for \"" + property + "\" property found");
+		if (!propLevel.getDimension().equals(mdxAttr.getDimension()))
+			throw new AmpApiException("'" + property + "' defined under '" + propLevel.getDimension() 
+					+ "' dimension, but requested from '" + mdxAttr.getDimension() + "' dimension. Dimensions must match.");
+		return propLevel;
+		*/
 	}
 	
 	/* canditate for removal

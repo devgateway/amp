@@ -58,11 +58,12 @@ public class MondrianMapping {
 	public static String getPropertyName(ReportElement elem) {
 		switch(elem.type) {
 		case ENTITY: return getPropertyName(elem.entity);
+		case DATE: return MoConstants.P_DATE;
 		default: return null;
 		}
 	}
 	
-	public static String getPropertyName(NamedTypedEntity entity) {
+	private static String getPropertyName(NamedTypedEntity entity) {
 		return idProperty.get(entity);
 	}
 	

@@ -70,6 +70,12 @@ public class Filters {
 		programs.setUi(Boolean.TRUE);
 		availableFilters.add(programs);
 
+		
+		AvailableFilters organization= new AvailableFilters();
+		organization.setName("Organizations");
+		organization.setEndpoint("/rest/filters/organizations");
+		organization.setUi(Boolean.TRUE);
+		availableFilters.add(organization);
 		return availableFilters;
 	}
 

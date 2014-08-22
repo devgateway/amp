@@ -1,15 +1,18 @@
 var fs = require('fs');
 var _ = require('underscore');
+var $ = require('jquery');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 
 var ADMTemplate = fs.readFileSync(__dirname + '/../templates/map-adm-template.html', 'utf8');
+var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
 
 
 module.exports = Backbone.View.extend({
   leafletLayerMap: {},
 
   admTemplate: _.template(ADMTemplate),
+  projectListTemplate: _.template(ProjectListTemplate),
 
   initialize: function(options) {
     this.app = options.app;
@@ -26,12 +29,17 @@ module.exports = Backbone.View.extend({
   },
 
   showLayer: function(admLayer) {
+    var self = this;
     var leafletLayer = this.leafletLayerMap[admLayer.cid];
+
     if (_.isUndefined(leafletLayer)) {
       leafletLayer = this.leafletLayerMap[admLayer.cid] = new L.layerGroup([]);
       admLayer.load().then(_.bind(function() {
         var clusters = this.getNewADMLayer(admLayer);
         leafletLayer.addLayer(clusters);
+        clusters.on('popupopen', function (e) {
+          self.generateInfoWindow(e.popup, admLayer);
+        });
       }, this));
       this.listenToOnce(admLayer, 'processed', function() {
         var boundaries = this.getNewBoundary(admLayer);
@@ -40,7 +48,6 @@ module.exports = Backbone.View.extend({
     }
 
     this.map.addLayer(leafletLayer);
-
   },
 
 
@@ -84,12 +91,60 @@ module.exports = Backbone.View.extend({
     }
   },
 
+
   // Create pop-ups
   _onEachFeature: function(feature, layer) {
     if (feature.properties) {
       var activities = feature.properties.activityid;
+      layer._clusterId = feature.properties.admName;
       layer.bindPopup(feature.properties.admName + ' has ' + activities.length +' projects. <br>Graphs will go here.');
     }
+  },
+
+  // TODO: infowindow code should go into own view.
+  generateInfoWindow: function(popup, admLayer){
+    var featureCollection = admLayer.get('features');
+    var cluster = _.find(featureCollection,function(feature){
+      return feature.properties.admName === popup._source._clusterId;
+    });
+
+    // get appropriate cluster model:
+    if(cluster){
+      this._generateProjectList(popup, cluster);
+    }else{
+      console.error('no matching cluster: ', admLayer, popup._source._clusterId);
+    }
+  },
+
+  _generateProjectList: function(popup, cluster){
+    var self = this;
+    var PAGE_SIZE = 10; ///TODO: move elsewhere when real pagination is done.
+    var activities = _.first(cluster.properties.activityid, PAGE_SIZE);
+    var activityCollection = [];
+    var deferreds = [];    
+
+    _.each(activities, function(activityId){
+      // TODO: do as a proper model or collection and fetch.. once api accepts asking for 
+      // many id in single request will be better.
+      deferreds.push($.ajax(
+      {
+        type:'GET',
+        url:'/rest/gis/activities/'+activityId,
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }).then(function(data){
+        activityCollection.push(data);
+      }));
+    });
+
+    $.when.apply($, deferreds).then(function(){
+      //console.log('say when!', activityCollection);
+      // TODO: append to popup instead of setContent
+      popup.setContent(self.projectListTemplate(activityCollection)); 
+    });
   }
+
 
 });

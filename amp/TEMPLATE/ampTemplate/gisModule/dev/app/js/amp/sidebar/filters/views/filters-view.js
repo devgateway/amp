@@ -64,7 +64,7 @@ module.exports = BaseControlView.extend({
         }
 
         _.each(data, function(APIFilter){
-          if(APIFilter.ui == 'true'){
+          if(APIFilter.ui){
             var view = self._createFilterView(APIFilter);
             filterList.push(view);
           }
@@ -96,6 +96,7 @@ module.exports = BaseControlView.extend({
         view = new YearsFilterView({url:APIFilter.endpoint});
         break;
       case 'Sectors':
+      case 'Programs':
         view = new SectorsFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
         break;        
       default:

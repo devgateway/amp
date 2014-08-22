@@ -31,7 +31,8 @@ module.exports = Backbone.Model
 
   fetch: function(options) {
     options = _.defaults((options || {}), {
-      type: 'POST'
+      type: 'POST',
+      data:'{}'
     });
     return Backbone.Model.prototype.fetch.call(this, options);
   },

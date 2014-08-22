@@ -3,7 +3,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 
-var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
+var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/structure-list-template.html', 'utf8');
 
 
 module.exports = Backbone.View.extend({

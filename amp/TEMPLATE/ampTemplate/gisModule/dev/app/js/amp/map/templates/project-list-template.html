@@ -1,9 +1,10 @@
+<!-- this template is for adm clusters -->
 <div>
-  Multiple project sites here:
+  Activity List
   <ul class="small">
-    <%   _.each(projects, function(project){ %>
+    <%   _.each(activities, function(activity){ %>
 
-      <li><%= project.feature.properties.structureTitle %></li>
+      <li><a href="<%= activity.ampUrl %>"><%= activity.name %></a></li>
     <% });%>
   </ul>
 </div>

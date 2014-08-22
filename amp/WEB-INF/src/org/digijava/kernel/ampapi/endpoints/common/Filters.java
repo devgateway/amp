@@ -11,12 +11,13 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
+import org.digijava.kernel.ampapi.endpoints.gis.GisEndPoints;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpRole;
@@ -36,6 +37,8 @@ import org.digijava.module.aim.util.SectorUtil;
  */
 @Path("filters")
 public class Filters {
+	private static final Logger logger = Logger.getLogger(Filters.class);
+
 	AmpARFilter filters;
 
 	public Filters() {
@@ -265,7 +268,6 @@ public class Filters {
 	@Produces(MediaType.APPLICATION_JSON)
 	public SimpleJsonBean getPrograms(
 			@PathParam("programName") String programName) {
-		SimpleJsonBean program = new SimpleJsonBean();
 		try {
 			AmpActivityProgramSettings npd = ProgramUtil
 					.getAmpActivityProgramSettings(programName);
@@ -273,8 +275,7 @@ public class Filters {
 			return getPrograms(npd.getDefaultHierarchy());
 
 		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Cannot get program",e);
 			return null;
 		}
 	}

@@ -3,6 +3,11 @@ package org.digijava.kernel.ampapi.endpoints.dto;
 import java.util.List;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+/**
+ * 
+ * @author jdeanquin
+ *
+ */
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class SimpleJsonBean {
 	Object id;

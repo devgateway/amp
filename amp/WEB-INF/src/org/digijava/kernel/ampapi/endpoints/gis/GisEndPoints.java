@@ -14,7 +14,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.PathSegment;
 
-import org.apache.ecs.storage.Array;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
@@ -30,16 +29,11 @@ import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
 import org.digijava.module.aim.helper.FundingDetail;
-import org.digijava.module.editor.exception.EditorException;
-import org.digijava.module.editor.util.DbUtil;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.dbentity.AmpMapState;
 import org.digijava.module.esrigis.helpers.DbHelper;
@@ -100,6 +94,7 @@ public class GisEndPoints {
 	 *            Available regions
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	@POST
 	@Path("/structures")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -185,7 +180,7 @@ public class GisEndPoints {
 
 	}
 
-	@SuppressWarnings("rawtypes")
+
 	@GET
 	@Path("/saved-maps")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -285,8 +280,8 @@ public class GisEndPoints {
 				Activity a = new Activity();
 				a.setId(activity.getAmpActivityId());
 				a.setName(activity.getName());
-				String 
-				description =null;
+//				String 
+//				description =null;
 //				try {
 //					description = DbUtil.getEditorBody(TLSUtils.getSite(),
 //					        activity.getDescription(),

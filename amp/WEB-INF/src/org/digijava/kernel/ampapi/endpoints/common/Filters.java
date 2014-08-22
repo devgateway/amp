@@ -14,13 +14,16 @@ import javax.ws.rs.core.MediaType;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
+import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 
@@ -33,63 +36,60 @@ import org.digijava.module.aim.util.SectorUtil;
  */
 @Path("filters")
 public class Filters {
-    AmpARFilter filters;
+	AmpARFilter filters;
 
-    public Filters() {
-        filters = new AmpARFilter();
-    }
+	public Filters() {
+		filters = new AmpARFilter();
+	}
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<AvailableFilters> getAvailableFilters() {
-    	List<AvailableFilters>availableFilters=new ArrayList<Filters.AvailableFilters>(); 
-    	
-    	AvailableFilters sector=new AvailableFilters();
-    	sector.setName("Sectors");
-    	sector.setEndpoint("/rest/filters/sectors");
-    	sector.setUi(Boolean.TRUE);
-    	availableFilters.add(sector);
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<AvailableFilters> getAvailableFilters() {
+		List<AvailableFilters> availableFilters = new ArrayList<Filters.AvailableFilters>();
 
-    	AvailableFilters activityStatus=new AvailableFilters();
-    	activityStatus.setName("ActivityStatus");
-    	activityStatus.setUi(Boolean.TRUE);
-    	activityStatus.setEndpoint("/rest/filters/activityStatus");
-    	availableFilters.add(activityStatus);
+		AvailableFilters sector = new AvailableFilters();
+		sector.setName("Sectors");
+		sector.setEndpoint("/rest/filters/sectors");
+		sector.setUi(Boolean.TRUE);
+		availableFilters.add(sector);
 
-    	AvailableFilters boundaries=new AvailableFilters();
-    	boundaries.setName("Boundaries");
-    	boundaries.setEndpoint("/rest/filters/boundaries");
-    	availableFilters.add(boundaries);    	
-    	
-    	AvailableFilters programs=new AvailableFilters();
-    	programs.setName("Programs");
-    	programs.setEndpoint("/rest/filters/programs");
-    	programs.setUi(Boolean.TRUE);
-    	availableFilters.add(programs);
-    	
-    	
-    	
-        return availableFilters;
-    }
+		AvailableFilters activityStatus = new AvailableFilters();
+		activityStatus.setName("ActivityStatus");
+		activityStatus.setUi(Boolean.TRUE);
+		activityStatus.setEndpoint("/rest/filters/activityStatus");
+		availableFilters.add(activityStatus);
 
-    /**
-     * Return activity status options
-     * 
-     * @return
-     */
-    @GET
-    @Path("/activityStatus")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<SimpleJsonBean> getActivityStatus() {
+		AvailableFilters boundaries = new AvailableFilters();
+		boundaries.setName("Boundaries");
+		boundaries.setEndpoint("/rest/filters/boundaries");
+		availableFilters.add(boundaries);
 
-    	List<SimpleJsonBean>activityStatus=new ArrayList<SimpleJsonBean>();
-		
-    	Set<String>aprovedStatus=
-    	AmpARFilter.activityStatus ;
-    	for (String s : aprovedStatus) {
-   		 SimpleJsonBean sjb=new SimpleJsonBean();
+		AvailableFilters programs = new AvailableFilters();
+		programs.setName("Programs");
+		programs.setEndpoint("/rest/filters/programs");
+		programs.setUi(Boolean.TRUE);
+		availableFilters.add(programs);
 
-			switch(s){
+		return availableFilters;
+	}
+
+	/**
+	 * Return activity status options
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/activityStatus")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SimpleJsonBean> getActivityStatus() {
+
+		List<SimpleJsonBean> activityStatus = new ArrayList<SimpleJsonBean>();
+
+		Set<String> aprovedStatus = AmpARFilter.activityStatus;
+		for (String s : aprovedStatus) {
+			SimpleJsonBean sjb = new SimpleJsonBean();
+
+			switch (s) {
 			case Constants.APPROVED_STATUS:
 				sjb.setId(Constants.APPROVED_STATUS);
 				sjb.setName("Edited and validated");
@@ -114,196 +114,207 @@ public class Filters {
 				sjb.setId(Constants.REJECTED_STATUS);
 				sjb.setName("Edited and rejected");
 				break;
-	    	}
+			}
 			activityStatus.add(sjb);
 		}
 
-        return activityStatus;
-    }
+		return activityStatus;
+	}
 
-    /**
-     * Return the adminlevels for filtering
-     * 
-     * @return
-     */
-    @GET
-    @Path("/boundaries")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<String> getBoundaries() {
-        // This should never change should they return from database?
-        return new ArrayList<String>(Arrays.asList("Country", "Region", "Zone",
-                "District"));
-    }
+	/**
+	 * Return the adminlevels for filtering
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/boundaries")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<String> getBoundaries() {
+		// This should never change should they return from database?
+		return new ArrayList<String>(Arrays.asList("Country", "Region", "Zone",
+				"District"));
+	}
 
-    
-    /**
-     * Returns the sector schema lists
-     * 
-     * @return
-     */
-    @GET
-    @Path("/sectors/")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<SimpleJsonBean> getSectorsSchemas(
-    		) {
-    	List<SimpleJsonBean>schemalist=new ArrayList<SimpleJsonBean>();
-    	try {
-    		List<AmpClassificationConfiguration>schems=SectorUtil.getAllClassificationConfigs();
-    		for (AmpClassificationConfiguration ampClassificationConfiguration : schems) {
-    			schemalist.add(new SimpleJsonBean(ampClassificationConfiguration.getId(),ampClassificationConfiguration.getName()));
+	/**
+	 * Returns the sector schema lists
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/sectors/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SimpleJsonBean> getSectorsSchemas() {
+		List<SimpleJsonBean> schemalist = new ArrayList<SimpleJsonBean>();
+		try {
+			List<AmpClassificationConfiguration> schems = SectorUtil
+					.getAllClassificationConfigs();
+			for (AmpClassificationConfiguration ampClassificationConfiguration : schems) {
+				schemalist.add(new SimpleJsonBean(
+						ampClassificationConfiguration.getId(),
+						ampClassificationConfiguration.getName()));
 			}
 		} catch (DgException e) {
 			// TODO till we find out the exception strategy
 			e.printStackTrace();
 		}
-        return schemalist;
-    }
-    /**
-     * Return the sector filtered by the given sectorName
-     * 
-     * @return
-     */
-    @GET
-    @Path("/sectors/{sectorConfigName}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<SimpleJsonBean> getSectors(
-    		@PathParam("sectorConfigName") String sectorConfigName) {
-        // DozerBeanMapperSingletonWrapper.getInstance().
-        List<SimpleJsonBean> ampSectorsList = new ArrayList<SimpleJsonBean>();
-        
-        //Primary
-        List<AmpSector> s = SectorUtil
-                .getAmpSectorsAndSubSectorsHierarchy(sectorConfigName);
-        for (AmpSector ampSector : s) {
-            ampSectorsList.add(getSectors(ampSector));
-        }
-        return ampSectorsList;
-    }
-    
-    
+		return schemalist;
+	}
 
-    /**
-     * Return the programs filtered by the given sectorName
-     * 
-     * @return
-     */
-    @GET
-    @Path("/programs")
-    @Produces(MediaType.APPLICATION_JSON)   
-    public List<SimpleJsonBean> getPrograms() 
-    {
-    	List<SimpleJsonBean> l=new ArrayList<SimpleJsonBean>();
-    	SimpleJsonBean npo=new SimpleJsonBean("National Plan Objective","National Plan Objective");
-    	l.add(npo);
-    	SimpleJsonBean pp=new SimpleJsonBean("Primary Program","Primary Program");
-    	l.add(pp);
-    	SimpleJsonBean sp=new SimpleJsonBean("Secondary Program","Secondary Program");
-    	l.add(sp);
-    	SimpleJsonBean tp=new SimpleJsonBean("Tertiary Program","Tertiary Program");
-    	l.add(tp);
-    	return l;
-    }
-    
-    /**
-     * Return the sector filtered by the given sectorName
-     * 
-     * @return
-     */
-    @GET
-    @Path("/organizations/{ampRoleId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<SimpleJsonBean> getOrganizations(@PathParam("ampRoleId") Long sectorConfigName){
-    	return null;
-    }
-    
-    		
-    
-    /**
-     * Return the organization type list
-     * 
-     * @return
-     */
-    @GET
-    @Path("/organizations")
-    @Produces(MediaType.APPLICATION_JSON)   
-    public List<SimpleJsonBean> getOrganizations() 
-    {
-    	List<SimpleJsonBean> orgs=new ArrayList<SimpleJsonBean>();
-    	List<AmpRole>roles = OnePagerUtil.getOrgRoles();
-    	for (AmpRole ampRole : roles) {
-    		SimpleJsonBean o=new SimpleJsonBean();
-    		o.setId(ampRole.getAmpRoleId());
-    		o.setCode(ampRole.getRoleCode());
-    		o.setName(ampRole.getName());
-    		orgs.add(o);
+	/**
+	 * Return the sector filtered by the given sectorName
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/sectors/{sectorConfigName}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SimpleJsonBean> getSectors(
+			@PathParam("sectorConfigName") String sectorConfigName) {
+		// DozerBeanMapperSingletonWrapper.getInstance().
+		List<SimpleJsonBean> ampSectorsList = new ArrayList<SimpleJsonBean>();
+
+		// Primary
+		List<AmpSector> s = SectorUtil
+				.getAmpSectorsAndSubSectorsHierarchy(sectorConfigName);
+		for (AmpSector ampSector : s) {
+			ampSectorsList.add(getSectors(ampSector));
+		}
+		return ampSectorsList;
+	}
+
+	/**
+	 * Return the programs filtered by the given sectorName
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/programs")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SimpleJsonBean> getPrograms() {
+		List<SimpleJsonBean> programas = new ArrayList<SimpleJsonBean>();
+		SimpleJsonBean npo = new SimpleJsonBean("National Plan Objective",
+				"National Plan Objective");
+		programas.add(npo);
+		SimpleJsonBean pp = new SimpleJsonBean("Primary Program",
+				"Primary Program");
+		programas.add(pp);
+		SimpleJsonBean sp = new SimpleJsonBean("Secondary Program",
+				"Secondary Program");
+		programas.add(sp);
+		SimpleJsonBean tp = new SimpleJsonBean("Tertiary Program",
+				"Tertiary Program");
+		programas.add(tp);
+		return programas;
+	}
+
+	/**
+	 * Return the sector filtered by the given sectorName
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/organizations/{ampRoleId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SimpleJsonBean> getOrganizations(
+			@PathParam("ampRoleId") Long orgRole) {
+		List<SimpleJsonBean> organizations = new ArrayList<SimpleJsonBean>();
+		List<OrganizationSkeleton> s = QueryUtil.getOrganizations(orgRole);
+		for (OrganizationSkeleton organizationSkeleton : s) {
+			organizations.add(new SimpleJsonBean(organizationSkeleton
+					.getAmpOrgId(), organizationSkeleton.getName()));
 		}
 
-    	return orgs;
-    }    
-    
-    /**
-     * Return the programs filtered by the given sectorName
-     * 
-     * @return
-     */
-    @GET
-    @Path("/programs/{programName}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public SimpleJsonBean getPrograms(@PathParam("programName") String programName){
-    	SimpleJsonBean program=new SimpleJsonBean();
-        try {
-            AmpActivityProgramSettings npd=ProgramUtil.getAmpActivityProgramSettings(programName);
-            
-            return getPrograms(npd.getDefaultHierarchy());
-            
-        } catch (DgException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
-        }
-    }
-    /**
-     * Get JsonEnable object for programs
-     * @param t AmpThem to get the programFrom
-     * @return
-     */
-    private SimpleJsonBean getPrograms(AmpTheme t){
-       SimpleJsonBean p=new SimpleJsonBean();
-        p.setId(t.getAmpThemeId());
-        p.setName(t.getName());
-        p.setChildren(new ArrayList<SimpleJsonBean>());
-        
-        for(AmpTheme tt:t.getSiblings()){
-            p.getChildren().add(getPrograms(tt));
-        }
-        return p;
-    }
-    /**
-     * Get Sectors from AmpSector
-     * @param as
-     * @return
-     */
-    
-    private SimpleJsonBean getSectors(AmpSector as) {
-        SimpleJsonBean s = new SimpleJsonBean();
-        s.setId(as.getAmpSectorId());
-        s.setCode(as.getSectorCodeOfficial());
-        s.setName(as.getName());
-        s.setChildren(new ArrayList<SimpleJsonBean>());
-        for (AmpSector ampSectorChild : as.getSectors()) {
-            s.getChildren().add(getSectors(ampSectorChild));
-        }
+		return organizations;
+	}
 
-        return s;
-    }
+	/**
+	 * Return the organization type list
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/organizations")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<SimpleJsonBean> getOrganizations() {
+		List<SimpleJsonBean> orgs = new ArrayList<SimpleJsonBean>();
+		List<AmpRole> roles = OnePagerUtil.getOrgRoles();
+		for (AmpRole ampRole : roles) {
+			SimpleJsonBean o = new SimpleJsonBean();
+			o.setId(ampRole.getAmpRoleId());
+			o.setCode(ampRole.getRoleCode());
+			o.setName(ampRole.getName());
+			orgs.add(o);
+		}
 
-    
-    
-    
-    
+		return orgs;
+	}
+
+	/**
+	 * Return the programs filtered by the given sectorName
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/programs/{programName}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public SimpleJsonBean getPrograms(
+			@PathParam("programName") String programName) {
+		SimpleJsonBean program = new SimpleJsonBean();
+		try {
+			AmpActivityProgramSettings npd = ProgramUtil
+					.getAmpActivityProgramSettings(programName);
+
+			return getPrograms(npd.getDefaultHierarchy());
+
+		} catch (DgException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Get JsonEnable object for programs
+	 * 
+	 * @param t
+	 *            AmpThem to get the programFrom
+	 * @return
+	 */
+	private SimpleJsonBean getPrograms(AmpTheme t) {
+		SimpleJsonBean p = new SimpleJsonBean();
+		p.setId(t.getAmpThemeId());
+		p.setName(t.getName());
+		p.setChildren(new ArrayList<SimpleJsonBean>());
+
+		for (AmpTheme tt : t.getSiblings()) {
+			p.getChildren().add(getPrograms(tt));
+		}
+		return p;
+	}
+
+	/**
+	 * Get Sectors from AmpSector
+	 * 
+	 * @param as
+	 * @return
+	 */
+
+	private SimpleJsonBean getSectors(AmpSector as) {
+		SimpleJsonBean s = new SimpleJsonBean();
+		s.setId(as.getAmpSectorId());
+		s.setCode(as.getSectorCodeOfficial());
+		s.setName(as.getName());
+		s.setChildren(new ArrayList<SimpleJsonBean>());
+		for (AmpSector ampSectorChild : as.getSectors()) {
+			s.getChildren().add(getSectors(ampSectorChild));
+		}
+
+		return s;
+	}
+
 	public class AvailableFilters {
 		public AvailableFilters() {
-			this.ui=false;
+			this.ui = false;
 		}
 
 		private String name;
@@ -335,7 +346,5 @@ public class Filters {
 		}
 
 	}
-    
-    
-    
+
 }

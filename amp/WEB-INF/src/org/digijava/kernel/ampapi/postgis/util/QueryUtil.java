@@ -13,14 +13,18 @@ import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.ar.util.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.esrigis.dbentity.AmpMapState;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -155,5 +159,14 @@ public class QueryUtil {
 				.createCriteria(AmpMapState.class);
 		return mapsCriteria.list();
 	}
-    
+	public static List<OrganizationSkeleton> getOrganizations(Long roleId){
+		try {
+			AmpRole r=(AmpRole)PersistenceManager.getRequestDBSession().load(AmpRole.class, roleId);
+			return ReportsUtil.getAllOrgByRoleOfPortfolioFaster(r.getRoleCode());
+		} catch (DgException e) {
+			logger.error("cannot load orgs",e);
+			return null;
+		}
+		
+	}
 }

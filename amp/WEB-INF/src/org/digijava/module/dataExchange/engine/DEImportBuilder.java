@@ -2286,6 +2286,9 @@ public class DEImportBuilder {
                 if (iWorker.existActivityByTitleIatiId(deLogPerItem.getName())) {
                     logger.info(".......Starting importing activity " + noAct);
                     //System.out.println(".......Starting importing activity "+noAct);
+                    if (deLogPerItem.getItemType() == null) {
+                    	continue;
+                    }
                     Long grpId = new Long(deLogPerItem.getItemType());
 
                     AmpActivityVersion prevVersion = null;

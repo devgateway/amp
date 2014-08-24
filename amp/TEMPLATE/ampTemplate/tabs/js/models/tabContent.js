@@ -1,22 +1,20 @@
 /*https://stackoverflow.com/questions/6535948/nested-models-in-backbone-js-how-to-approach?rq=1*/
-define([ 'underscore', 'backbone', '/filter' ], function(_, Backbone, Filter) {
+/*https://github.com/icereval/backbone-documentmodel*/
+define([ 'underscore', 'backbone', 'documentModel' ], function (_, Backbone, DocumentModel) {
 
-	var TabContent = Backbone.Model.extend({
-		model : {
-			filter : Filter
-		},
+    var TabContent = Backbone.DocumentModel.extend({
+        defaults: {
+            name: '',
+            id: 0,
+            metadata: {
+                filter: {
+                    sector: [0],
+                    donor: [0]
+                }
+            },
+            resultset: ['', 0]
+        }
+    });
 
-		parse : function(response) {
-			for ( var key in this.model) {
-				var embeddedClass = this.model[key];
-				var embeddedData = response[key];
-				response[key] = new embeddedClass(embeddedData, {
-					parse : true
-				});
-			}
-			return response;
-		}
-	});
-
-	return TabContent;
+    return TabContent;
 });

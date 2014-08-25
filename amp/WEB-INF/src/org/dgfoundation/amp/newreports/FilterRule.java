@@ -69,10 +69,11 @@ public class FilterRule {
 	/**
 	 * Single value filter
 	 * @param value - value or id to filter by
+	 * @param valueToInclude - true if this value must be kept, false if it must be excluded
 	 * @param isId - true if this is an Id, false if this is a value
 	 */
-	public FilterRule(String value, boolean isId) {
-		this(FilterType.SINGLE_VALUE, isId, value, null, null, true, true, null, false);
+	public FilterRule(String value, boolean valueToInclude, boolean isId) {
+		this(FilterType.SINGLE_VALUE, isId, value, null, null, true, true, null, valueToInclude);
 	}
 
 	private FilterRule(FilterType filterType, boolean isIdFilter, String value, String min, String max, boolean minInclusive, boolean maxInclusive, 

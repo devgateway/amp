@@ -1,29 +1,29 @@
 /**
  * 
  */
-package org.dgfoundation.amp.reports;
+package org.dgfoundation.amp.reports.mondrian;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportFiltersImpl;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.mondrian.AmpARFilterTranslator;
+import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReports;
 
 /**
- * Utility methods
+ * Reports utility methods
  * @author Nadejda Mandrescu
  */
-public class ReportUtils {
+public class MondrianReportUtils {
 	
 	/**
 	 * Translation of {@link AmpReports} report to Reports API report structure 
 	 * @param report - {@link AmpReports} 
 	 * @return {@link ReportSpecificationImpl}
+	 * @throws AmpApiException 
 	 */
 	public static ReportSpecificationImpl toReportSpecification(AmpReports report) {
 		//basic
@@ -48,7 +48,7 @@ public class ReportUtils {
 		
 		AmpARFilter arFilter = FilterUtil.buildFilter(report, report.getAmpReportId());
 		AmpARFilterTranslator arFilterTranslator = new AmpARFilterTranslator(arFilter); 
-		spec.setFilters(new ReportFiltersImpl(arFilterTranslator.buildFilters()));
+		spec.setFilters(arFilterTranslator.buildFilters());
 		
 		//TODO:
 		//report.getAlsoShowPledges()

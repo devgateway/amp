@@ -9,8 +9,8 @@ import javax.ws.rs.core.MediaType;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.ReportUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -38,7 +38,7 @@ public class Reports {
 		
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
 
-		ReportSpecificationImpl spec = ReportUtils.toReportSpecification(ampReport);;
+		ReportSpecificationImpl spec = MondrianReportUtils.toReportSpecification(ampReport);;
 
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, false);
 

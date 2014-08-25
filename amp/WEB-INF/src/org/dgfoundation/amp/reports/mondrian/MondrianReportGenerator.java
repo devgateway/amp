@@ -225,22 +225,13 @@ public class MondrianReportGenerator implements ReportExecutor {
 			
 			for (FilterRule filter : entry.getValue()) {
 				MDXFilter mdxFilter = null;
-				String property = null;
-	
-				if (filter.isIdFilter) {
-					property = MondrianMapping.getPropertyName(elem);
-					if (property == null){
-						reportError("Property not defined for report element = " + elem);
-						if (IS_DEV) break;
-					}
-				}
 				
 				switch(filter.filterType) {
-				case RANGE: mdxFilter = new MDXFilter(filter.min, filter.minInclusive, filter.max, filter.maxInclusive, property); 
+				case RANGE: mdxFilter = new MDXFilter(filter.min, filter.minInclusive, filter.max, filter.maxInclusive, filter.isIdFilter); 
 				break;
-				case SINGLE_VALUE: mdxFilter = new MDXFilter(filter.value, filter.valuesInclusive, property);
+				case SINGLE_VALUE: mdxFilter = new MDXFilter(filter.value, filter.valuesInclusive, filter.isIdFilter);
 				break;
-				case VALUES: mdxFilter = new MDXFilter(filter.values, filter.valuesInclusive, property);
+				case VALUES: mdxFilter = new MDXFilter(filter.values, filter.valuesInclusive, filter.isIdFilter);
 				break;
 				}
 				

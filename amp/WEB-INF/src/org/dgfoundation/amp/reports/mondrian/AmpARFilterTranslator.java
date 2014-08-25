@@ -3,23 +3,22 @@
  */
 package org.dgfoundation.amp.reports.mondrian;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
+import org.dgfoundation.amp.newreports.NamedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
-import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportEntityType;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.util.Identifiable;
@@ -33,8 +32,10 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  * @author Nadejda Mandrescu
  */
 public class AmpARFilterTranslator {
+	protected static final Logger logger = Logger.getLogger(AmpARFilterTranslator.class);
+	
 	//either transform filter by IDS, either by Names => if by IDS, then Level properties will be used
-	private Map<ReportElement, List<FilterRule>> filterRules;
+	private MondrianReportFilters filterRules;
 	private static final boolean USE_IDS = false;
 	private AmpARFilter arFilter;
 	ReportEntityType entityType;
@@ -43,8 +44,8 @@ public class AmpARFilterTranslator {
 		this.setArFilter(arFilter);
 	}
 	
-	public Map<ReportElement, List<FilterRule>> buildFilters() {
-		filterRules = new HashMap<ReportElement, List<FilterRule>>();
+	public MondrianReportFilters buildFilters() {
+		filterRules = new MondrianReportFilters();
 		buildCurrentFilters();
 		//TODO: to clarify how pledge specific filters should be applied, e.g. if "include pledges" is selected, then translate current filter into pledge filter?
 		/*
@@ -74,26 +75,21 @@ public class AmpARFilterTranslator {
 	
 	private void addFundingDatesFilters() {
 		//if (!arFilter.hasDateFilter()) return;
-		String min = arFilter.getYearFrom() == null ? null : arFilter.getYearFrom().toString();
-		String max = arFilter.getYearTo() == null ? null : arFilter.getYearTo().toString();
-		if (min != null || max != null)
-			addFilterRule(new ReportElement(ElementType.YEAR), new FilterRule(min, max, true, true, false));
+		try {
+		if (arFilter.getYearFrom() != null || arFilter.getYearTo() != null)
+			if (arFilter.getYearFrom() == arFilter.getYearTo())
+				filterRules.addSingleYearFilterRule(arFilter.getYearFrom(), true);
+			else
+				filterRules.addYearsRangeFilterRule(arFilter.getYearFrom(), arFilter.getYearTo());
 
-		min = null;
-		max = null;
-				
-		if (arFilter.buildFromDateAsDate() != null) {
-			//int minDate  = DateTimeUtil.toJulianDayNumber(arFilter.buildFromDateAsDate());
-			String minDate = (new SimpleDateFormat(MoConstants.DATE_FORMAT)).format(arFilter.buildFromDateAsDate()); 
-			min = String.valueOf(minDate);
+		if (arFilter.buildFromDateAsDate() != null || arFilter.buildToDateAsDate() != null)
+			if (arFilter.buildFromDateAsDate() != null && arFilter.buildFromDateAsDate().equals(arFilter.buildToDateAsDate()))
+				filterRules.addSingleDateFilterRule(arFilter.buildFromDateAsDate(), true);
+			else 
+				filterRules.addDateRangeFilterRule(arFilter.buildFromDateAsDate(), arFilter.buildToDateAsDate());
+		} catch(AmpApiException ex) {
+			logger.error(ex.getMessage());
 		}
-		if (arFilter.buildToDateAsDate() != null) {
-			//int maxDate = DateTimeUtil.toJulianDayNumber(arFilter.buildToDateAsDate());
-			String maxDate = (new SimpleDateFormat(MoConstants.DATE_FORMAT)).format(arFilter.buildToDateAsDate());
-			max = String.valueOf(maxDate);
-		}
-		if (min != null || max != null) 
-			addFilterRule(new ReportElement(ElementType.DATE), new FilterRule(min, max, true, true, false));
 	}
 	
 	private void addActivityDatesFilters(Map<ReportElement, FilterRule> filterRules) {
@@ -196,21 +192,14 @@ public class AmpARFilterTranslator {
 		//addIdsFilter(locations, ColumnConstants.??); //TODO:
 	}
 	
-	private void addFilter(Set<? extends NameableOrIdentifiable> set, String columnName, 
-			ReportEntityType type) {
-		addFilter(set, columnName, type, null);
-	}
-	
 	/**
 	 * Adds values (ids/names) list to the filter rules
 	 * @param filterRules - filter rules storage
 	 * @param set - a collection of {@link Identifiable} objects to retrieve the values from
 	 * @param columnName - column name of the to apply the rule over or null if this is a custom ElementType
 	 * @param type - column type or null if elemType is provided
-	 * @param elemType - element type or null if columnName is provided
 	 */
-	private void addFilter(Collection<? extends NameableOrIdentifiable> set, String columnName, 
-			ReportEntityType type, ReportElement.ElementType elemType) {
+	private void addFilter(Collection<? extends NameableOrIdentifiable> set, String columnName, ReportEntityType type) {
 		if (set == null || set.size() == 0) return;
 		List<String> values = new ArrayList<String>(set.size());
 		if (USE_IDS)
@@ -221,21 +210,12 @@ public class AmpARFilterTranslator {
 			for (Nameable identifiable: set) { 
 				values.add(identifiable.getName());
 			}
-		ReportElement elem = null;
-		if (elemType ==null )
-			elem = new ReportElement(new ReportColumn(columnName, type));
-		else
-			elem = new ReportElement(elemType);
-		addFilterRule(elem, new FilterRule(values, true, USE_IDS));
+		
+		addFilterRule(new ReportColumn(columnName, type), new FilterRule(values, true, USE_IDS));
 	}
 	
-	private void addFilterRule(ReportElement elem, FilterRule rule) {
-		List<FilterRule> filterList = filterRules.get(elem);
-		if (filterList == null) {
-			filterList = new ArrayList<FilterRule>();
-			filterRules.put(elem, filterList);
-		}
-		filterList.add(rule);
+	private void addFilterRule(NamedTypedEntity entity, FilterRule rule) {
+		filterRules.addFilterRule(entity, rule);
 	}
 	
 	private void addFinancingFilters() {
@@ -254,7 +234,7 @@ public class AmpARFilterTranslator {
 		for (AmpCategoryValue categValue: set) { 
 			names.add(categValue.getValue());
 		}
-		addFilterRule(new ReportElement(new ReportColumn(columnName, type)), new FilterRule(names, true, false));
+		addFilterRule(new ReportColumn(columnName, type), new FilterRule(names, true, false));
 	}
 	
 

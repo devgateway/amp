@@ -3,6 +3,7 @@
  */
 package org.digijava.kernel.ampapi.mondrian;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,23 +14,21 @@ import junit.framework.TestSuite;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
-import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportElement;
-import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportEntityType;
-import org.dgfoundation.amp.newreports.ReportFiltersImpl;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
-import org.dgfoundation.amp.reports.ReportUtils;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -64,7 +63,7 @@ public class MondrianReportsTests extends AmpTestCase {
 	public void testNoTotals() {
 		ReportSpecificationImpl spec = getDefaultSpec("testNoTotals", false);
 		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL));
-		generateAndValidate(spec, false);
+		generateAndValidate(spec, true);
 	}
 	
 	public void testTotals() {
@@ -75,7 +74,7 @@ public class MondrianReportsTests extends AmpTestCase {
 	public void testColumnSortingNoTotals() {
 		ReportSpecificationImpl spec = getDefaultSpec("testColumnSortingNoTotals", false);
 		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.DONOR_TYPE, ReportEntityType.ENTITY_TYPE_ALL), true)); //ascending
-		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ALL), false)); //descending
+		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ACTIVITY), false)); //descending
 		generateAndValidate(spec, true);
 	}
 	
@@ -96,10 +95,19 @@ public class MondrianReportsTests extends AmpTestCase {
 	
 	public void testMultipleDateFilters() {
 		ReportSpecificationImpl spec = getDefaultSpec("testMultipleDateFilters", true);
+		String err = null;
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY);
-		ReportFiltersImpl filters = new ReportFiltersImpl();
-		filters.addFilterRule(new ReportElement(ElementType.DATE), new FilterRule("2010-01-01", "2011-09-15", true, true, false));
-		filters.addFilterRule(new ReportElement(ElementType.YEAR), new FilterRule(Arrays.asList("2013", "2014"), true, false));
+		MondrianReportFilters filters = new MondrianReportFilters();
+		SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
+		try {
+			filters.addDateRangeFilterRule(sdf.parse("2010-01-01"), sdf.parse("2011-09-15"));
+			filters.addYearsFilterRule(Arrays.asList(2013, 2014), true);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			err = e.getMessage();
+		}
+		assertNull(err);
 		spec.setFilters(filters);
 		generateAndValidate(spec, true);
 	}
@@ -107,7 +115,7 @@ public class MondrianReportsTests extends AmpTestCase {
 	private ReportSpecificationImpl getDefaultSpec(String name, boolean doTotals) {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(name);
 		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_TYPE, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ACTIVITY));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.setCalculateColumnTotals(doTotals);
@@ -131,7 +139,7 @@ public class MondrianReportsTests extends AmpTestCase {
 		TLSUtils.populate(mockRequest);
 		ReportContextData.createWithId(report.getId().toString(), true);
 
-		ReportSpecificationImpl spec = ReportUtils.toReportSpecification(report);
+		ReportSpecificationImpl spec = MondrianReportUtils.toReportSpecification(report);
 		
 		generateAndValidate(spec, true);
 	}

@@ -58,11 +58,11 @@ public class SortingInfo {
 		this.isTotals = false;
 		this.ascending = ascending;
 		this.sortByTuple = new LinkedHashMap<ReportElement, FilterRule>();
-		this.sortByTuple.put(new ReportElement(ElementType.YEAR), new FilterRule(year, false));
+		this.sortByTuple.put(new ReportElement(ElementType.YEAR), new FilterRule(year, true, false));
 		if (quarter !=null) 
-			this.sortByTuple.put(new ReportElement(ElementType.QUARTER), new FilterRule(quarter, false));
+			this.sortByTuple.put(new ReportElement(ElementType.QUARTER), new FilterRule(quarter, true, false));
 		if (month !=null) 
-			this.sortByTuple.put(new ReportElement(ElementType.MONTH), new FilterRule(month, false));
+			this.sortByTuple.put(new ReportElement(ElementType.MONTH), new FilterRule(month, true, false));
 		this.sortByTuple.put(new ReportElement(measure), null);
 	}
 	

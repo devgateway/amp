@@ -4,21 +4,20 @@
 package org.digijava.kernel.ampapi.mondrian.util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
-import javax.validation.Path;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import mondrian.olap.MondrianException;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
-import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
-import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXLevel;
+import org.dgfoundation.amp.newreports.FilterRule;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
+import org.digijava.kernel.ampapi.exception.AmpApiException;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.olap4j.CellSet;
 import org.olap4j.OlapException;
 import org.olap4j.layout.RectangularCellSetFormatter;
@@ -125,5 +124,174 @@ public class MondrianUtils {
 		//to see if other needs conversion
 		default: return type.name();
 		}
+	}
+	
+	/**
+	 * Builds a filter between [from .. to] or [from .. infinite) or (-infinite .. to] year ranges.
+	 * @param from - the year to start from or null
+	 * @param to - the year to end with or null
+	 * @throws AmpApiException if range is invalid
+	 */
+	public static FilterRule getYearsRangeFilter(Integer from, Integer to) throws AmpApiException {
+		return getDatesRangeFilterRule(ElementType.YEAR, from, to, false);
+	}
+	
+	/**
+	 * Builds a filter for specific  [from .. to] quarters, with no year limits
+	 * @param from - from quarter limit
+	 * @param to - to quarter limit
+	 * @throws AmpApiException if range is invalid
+	 */
+	public static FilterRule getQuarterRangeFilterRule(Integer from, Integer to) throws AmpApiException {
+		return getDatesRangeFilterRule(ElementType.QUARTER, from, to, false);
+	}
+	
+	/**
+	 * Builds a filter for specific months in all years. Month numbers between [1..12] 
+	 * @param from - first month number of the range
+	 * @param to - last month number of the range 
+	 * @throws AmpApiException if range is invalid
+	 */
+	public static FilterRule getMonthRangeFilterRule(Integer from, Integer to) throws AmpApiException {
+		return getDatesRangeFilterRule(ElementType.MONTH, from, to, true);
+	}
+	
+	/**
+	 * Builds a date range filter [from .. to] or [from .. infinite ) or (infinite .. to]
+	 * @param from - the date to start from or null
+	 * @param to - the date to end with or null
+	 * @throws AmpApiException if range is invalid
+	 */
+	public static FilterRule getDateRangeFilterRule(Date from, Date to) throws AmpApiException {
+		return getDatesRangeFilterRule(ElementType.DATE,  DateTimeUtil.toJulianDayNumber(from), DateTimeUtil.toJulianDayNumber(to), false);
+	}
+	
+	private static FilterRule getDatesRangeFilterRule(ElementType elemType, Integer from, Integer to, boolean bothLimits) throws AmpApiException {
+		validate (elemType, from);
+		validate (elemType, to);
+		if (from == null && to == null)
+			throw new AmpApiException(elemType + ": at least 'from' or 'to' range limit must be specified. Do not use the range filter if no filter is needed.");
+		if (from != null && to != null && from > to)
+			throw new AmpApiException("The lower limit 'from' must be smaller or equal to the upper limit 'to'. Failed request for from = " + from + ", to = " + to);
+		return new FilterRule(toStringOrNull(from), toStringOrNull(to), true, true, true);
+	}
+	
+	/**
+	 * Builds a filter for list of years 
+	 * @param years - years to filter by
+	 * @param valuesToInclude - true if this years to be kept, false if this years must be excluded
+	 * @throws AmpApiException if list is invalid
+	 */
+	public static FilterRule getYearsFilterRule(List<Integer> years, boolean valuesToInclude) throws AmpApiException {
+		return getDatesListFilterRule(ElementType.YEAR, years, valuesToInclude);
+	}
+	
+	/**
+	 * Builds a filter for a list of quarters 
+	 * @param quarters - the list of quarters [1..4]
+	 * @param valuesToInclude - configures if this is a list of quarters to be kept (true) or to be excluded (false)
+	 * @throws AmpApiException if list is invalid
+	 */
+	public static FilterRule getQuarterFilterRule(List<Integer> quarters, boolean valuesToInclude) throws AmpApiException {
+		return getDatesListFilterRule(ElementType.QUARTER, quarters, valuesToInclude);
+	}
+	
+	/**
+	 * Builds a filter for specific months list in all years
+	 * @param months - month numbers between [1..12]
+	 * @param valuesToInclude - true if this months must be kept, false if they must be excluded
+	 * @throws AmpApiException if list is invalid
+	 */
+	public static FilterRule getMonthsFilterRule(List<Integer> months, boolean valuesToInclude) throws AmpApiException {
+		return getDatesListFilterRule(ElementType.MONTH, months, valuesToInclude);
+	}
+	
+	/**
+	 * Builds a date list filter 
+	 * @param dates - the dates to filter by 
+	 * @param valuesToInclude - true if this dates must be kept, false if they must be excluded
+	 * @throws AmpApiException if list is invalid
+	 */
+	public static FilterRule getDatesFilterRule(List<Date> dates, boolean valuesToInclude) throws AmpApiException {
+		List<Integer> julianDateNumbers = new ArrayList<Integer>(dates.size());
+		for (Date date : dates) {
+			julianDateNumbers.add(DateTimeUtil.toJulianDayNumber(date));
+		}
+		return getDatesListFilterRule(ElementType.DATE, julianDateNumbers, valuesToInclude);
+	}
+	
+	private static FilterRule getDatesListFilterRule(ElementType elemType, List<Integer> values, boolean valuesToInclude) throws AmpApiException {
+		List<String> strValues = new ArrayList<String>(values.size());
+		for (Integer value : values) {
+			validate(elemType, value);
+			strValues.add(value == null ? null : value.toString());
+		}
+		return new FilterRule(strValues, valuesToInclude, true);
+	}
+	
+	/**
+	 * Builds a single year filter 
+	 * @param year
+	 * @param valueToInclude
+	 * @throws AmpApiException
+	 */
+	public static FilterRule getSingleYearFilterRule(Integer year, boolean valueToInclude) throws AmpApiException {
+		return getSingleDateFilterRule(ElementType.YEAR, year, valueToInclude);
+	}
+	
+	/**
+	 * Builds a single quarter filter, no years filter
+	 * @param quarter
+	 * @param valueToInclude
+	 * @throws AmpApiException
+	 */
+	public static FilterRule getSingleQuarterFilterRule(Integer quarter, boolean valueToInclude) throws AmpApiException {
+		return getSingleDateFilterRule(ElementType.QUARTER, quarter, valueToInclude);
+	}
+	
+	/**
+	 * Builds a single month filter, no years filter
+	 * @param month
+	 * @param valueToInclude
+	 * @throws AmpApiException
+	 */
+	public static FilterRule getSingleMonthFilterRule(Integer month, boolean valueToInclude) throws AmpApiException {
+		return getSingleDateFilterRule(ElementType.MONTH, month, valueToInclude);
+	}
+	
+	/**
+	 * Builds a single date filter
+	 * @param month
+	 * @param valueToInclude
+	 * @throws AmpApiException
+	 */
+	public static FilterRule getSingleDateFilterRule(Date date, boolean valueToInclude) throws AmpApiException {
+		return getSingleDateFilterRule(ElementType.MONTH, DateTimeUtil.toJulianDayNumber(date), valueToInclude);
+	}
+	
+	private static FilterRule getSingleDateFilterRule(ElementType elemType, Integer value, boolean valueToInclude) throws AmpApiException {
+		validate (elemType, value);
+		if (value == null)
+			throw new AmpApiException("Single value filter must have a value specified. value = " + value);
+		return new FilterRule(value.toString(), valueToInclude, true);
+	}
+	
+	private static void validate(ElementType elemType, Integer value) throws AmpApiException {
+		Integer lowerLimit = null;
+		Integer upperLimit = null;
+		boolean mustBeNotNull = false;
+		switch (elemType) {
+		case YEAR : 
+		case DATE : break;
+		case QUARTER : lowerLimit = 1; upperLimit  = 4; mustBeNotNull = true; break;
+		case MONTH : lowerLimit = 1; upperLimit  = 12; mustBeNotNull = true; break;
+		default: break;
+		}
+		if (mustBeNotNull && value == null || lowerLimit != null && value != null && (value < lowerLimit || value > upperLimit ))
+			throw new AmpApiException(elemType + " range limits must be within [" + lowerLimit + ", " + upperLimit + "]. Value not in the range = " + value);
+	}
+	
+	private static String toStringOrNull(Object o) {
+		return o == null ? null : o.toString();
 	}
 }

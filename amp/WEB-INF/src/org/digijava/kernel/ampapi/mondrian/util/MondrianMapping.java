@@ -55,6 +55,7 @@ public class MondrianMapping {
 		}
 	}
 	
+	/* candidate for removal
 	public static String getPropertyName(ReportElement elem) {
 		switch(elem.type) {
 		case ENTITY: return getPropertyName(elem.entity);
@@ -62,10 +63,11 @@ public class MondrianMapping {
 		default: return null;
 		}
 	}
-	
+		
 	private static String getPropertyName(NamedTypedEntity entity) {
 		return idProperty.get(entity);
 	}
+	*/
 	
 	public static String getAll(MDXAttribute mdxAttr) {
 		if (mdxAttr.getDimension().equals(MoConstants.DATES)) {
@@ -176,6 +178,7 @@ public class MondrianMapping {
 		}
 	};
 	
+	/* candidate for removal
 	private static final Map<NamedTypedEntity, String> idProperty = new HashMap<NamedTypedEntity, String>() {{
 		put(new ReportColumn(ColumnConstants.COUNTRY, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_COUNTRY_ID);
 		put(new ReportColumn(ColumnConstants.REGION, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_REGION_ID);
@@ -204,4 +207,5 @@ public class MondrianMapping {
 		put(new ReportColumn(ColumnConstants.PLEDGES_SECONDARY_SECTORS, ReportEntityType.ENTITY_TYPE_PLEDGE), MoConstants.P_PRIMARY_SECTOR_SUB_SECTOR);
 		put(new ReportColumn(ColumnConstants.PLEDGES_TERTIARY_SECTORS, ReportEntityType.ENTITY_TYPE_PLEDGE), MoConstants.P_PRIMARY_SECTOR_SUB_SUB_SECTOR);
 	}};
+	*/
 }

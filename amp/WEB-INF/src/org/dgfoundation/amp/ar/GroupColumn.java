@@ -637,12 +637,7 @@ public class GroupColumn extends Column<Column> {
     @Override
     public Column filterCopy(Cell filter, Set<Long> ids) {
         GroupColumn dest = new GroupColumn(this.getName());
-        for(Column element:items)
-        {
-            if (filter.toString().equals("Programme d'appui à la politique nationale des Transports (FED/2009/021-608)") && 
-            		element.toString().equals("Actual Commitments (1 items)") &&
-            		(element.getParent() != null) && element.getParent().toString().equals("Fiscal Year 2009 (3 items)"))
-            	//System.out.println("BOZO BREAKPOINT TO REMOVE");
+        for(Column element:items) {
             dest.addColumn(element.filterCopy(filter, ids));
         }
         return dest;

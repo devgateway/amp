@@ -580,14 +580,14 @@ public final class ARUtil {
 		throw new Exception("The specified type is neither YEAR, QUARTER nor MONTH: " + type);
 	}
 	private static void initializePeriodValues(String type, Collection<Comparable<? extends Object>> periods, AmpARFilter filter) throws Exception {
-		if ( ArConstants.YEAR.equals(type) ) {
-			if ( filter == null  )
-				throw new Exception("Filter is null when adding empty years to report");
-			if ( filter.getRenderStartYear() != null && filter.getRenderStartYear() > 1800  && filter.getRenderStartYear() < 2200 )
-				periods.add(  filter.getRenderStartYear() -1 );
-			if ( filter.getRenderEndYear() != null && filter.getRenderStartYear() > 1800  && filter.getRenderEndYear() < 2200 )
-				periods.add( filter.getRenderEndYear() + 1 );
-		}
+//		if ( ArConstants.YEAR.equals(type) ) {
+//			if ( filter == null  )
+//				throw new Exception("Filter is null when adding empty years to report");
+//			if ( filter.getRenderStartYear() != null && filter.getRenderStartYear() > 1800  && filter.getRenderStartYear() < 2200 )
+//				periods.add(  filter.getRenderStartYear() -1 );
+//			if ( filter.getRenderEndYear() != null && filter.getRenderStartYear() > 1800  && filter.getRenderEndYear() < 2200 )
+//				periods.add( filter.getRenderEndYear() + 1 );
+//		}
 		if ( ArConstants.QUARTER.equals(type) ) {
 			periods.add("Q0");
 			periods.add("Q5");

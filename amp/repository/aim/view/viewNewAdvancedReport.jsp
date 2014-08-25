@@ -13,6 +13,7 @@
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> 
   <!-- Dependencies --> 
 
 <%
@@ -247,7 +248,7 @@ function toggleSettings(){
                 	if (arf.isPublicView()==false){%>
                 <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
 	          	 	|
-	          	 	<a class="settingsLink"  style="cursor: pointer;color:#376091;" onClick="initSaveReportEngine(false);saveReportEngine.showPanel(); " title="${saveFiltersTooltip}" >
+	          	 	<a class="settingsLink"  style="cursor: pointer;color:#376091;" onClick="initSaveReportEngine(false);saveReportEngine.showPanel(); " title=""${fn:escapeXml(saveFiltersTooltip)}" >
 	                	${saveFilters}
 	                </a>
                 </feature:display>
@@ -346,7 +347,7 @@ function toggleSettings(){
 		                if (arf.isPublicView()==false){%>
 		                <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
 			                &nbsp;|&nbsp;
-			          	 	<a style="cursor: pointer;text-decoration: underline;" class="l_sm" onClick="initSaveReportEngine(true);saveReportEngine.showPanel(); " title="${saveFiltersTooltip}">
+			          	 	<a style="cursor: pointer;text-decoration: underline;" class="l_sm" onClick="initSaveReportEngine(true);saveReportEngine.showPanel(); " title=""${fn:escapeXml(saveFiltersTooltip)}">
 			                	${saveFilters}
 			                </a>
 		           		</feature:display>
@@ -435,7 +436,7 @@ function toggleSettings(){
 		                if (arf.isPublicView()==false){%>
 		                <feature:display name="Save Report/Tab with Filters" module="Report and Tab Options">
 			                &nbsp;|&nbsp;
-			          	 	<a style="cursor: pointer;text-decoration: underline;" class="l_sm" onClick="initSaveReportEngine(true);saveReportEngine.showPanel(); " title="${saveFiltersTooltip}">
+			          	 	<a style="cursor: pointer;text-decoration: underline;" class="l_sm" onClick="initSaveReportEngine(true);saveReportEngine.showPanel(); " title="${fn:escapeXml(saveFiltersTooltip)}">
 			                	${saveFilters}
 			                </a>
 		           		</feature:display>

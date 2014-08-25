@@ -1,5 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,6 +19,7 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.gis.GisEndPoints;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
@@ -50,38 +54,38 @@ public class Filters {
 	public List<AvailableFilters> getAvailableFilters() {
 		List<AvailableFilters> availableFilters = new ArrayList<Filters.AvailableFilters>();
 
-		AvailableFilters sector = new AvailableFilters();
-		sector.setName("Sectors");
-		sector.setEndpoint("/rest/filters/sectors");
-		sector.setUi(Boolean.TRUE);
-		availableFilters.add(sector);
-
-		AvailableFilters activityStatus = new AvailableFilters();
-		activityStatus.setName("ActivityStatus");
-		activityStatus.setUi(Boolean.TRUE);
-		activityStatus.setEndpoint("/rest/filters/activityStatus");
-		availableFilters.add(activityStatus);
-
-		AvailableFilters boundaries = new AvailableFilters();
-		boundaries.setName("Boundaries");
-		boundaries.setEndpoint("/rest/filters/boundaries");
-		availableFilters.add(boundaries);
-
-		AvailableFilters programs = new AvailableFilters();
-		programs.setName("Programs");
-		programs.setEndpoint("/rest/filters/programs");
-		programs.setUi(Boolean.TRUE);
-		availableFilters.add(programs);
-
 		
-		AvailableFilters organization= new AvailableFilters();
-		organization.setName("Organizations");
-		organization.setEndpoint("/rest/filters/organizations");
-		organization.setUi(Boolean.TRUE);
-		availableFilters.add(organization);
-		return availableFilters;
-	}
+		try {
+			Class<?> c = Class.forName(Filters.class.getName());
+			javax.ws.rs.Path p=c.getAnnotation(javax.ws.rs.Path.class);
+			String path="/rest/"+p.value();
+			Member[] mbrs=c.getMethods();
+			for (Member mbr : mbrs) {
+				ApiMethod apiAnnotation=
+		    			((Method) mbr).getAnnotation(ApiMethod.class);
+				if(apiAnnotation!=null){
+					//then we have to add it to the filters list
+					javax.ws.rs.Path methodPath=((Method) mbr).getAnnotation(javax.ws.rs.Path.class);
+					AvailableFilters filter = new AvailableFilters();
+					filter.setName(apiAnnotation.name());
+					String endpoint="/rest/"+ p.value();
+					
+					if(methodPath!=null){
+						endpoint+=methodPath.value();
+					}
+					filter.setEndpoint(endpoint);
+					filter.setUi(apiAnnotation.ui());
+					availableFilters.add(filter);
 
+				}
+			}
+		}
+		 catch (ClassNotFoundException e) {
+			logger.error("cannot retrieve filters list",e);
+			return null;
+		}
+		return availableFilters;
+		}
 	/**
 	 * Return activity status options
 	 * 
@@ -90,6 +94,7 @@ public class Filters {
 	@GET
 	@Path("/activityStatus")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=true,name="ActivityStatus")
 	public List<SimpleJsonBean> getActivityStatus() {
 
 		List<SimpleJsonBean> activityStatus = new ArrayList<SimpleJsonBean>();
@@ -138,6 +143,7 @@ public class Filters {
 	@GET
 	@Path("/boundaries")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=true,name="Boundaries")
 	public List<String> getBoundaries() {
 		// This should never change should they return from database?
 		return new ArrayList<String>(Arrays.asList("Country", "Region", "Zone",
@@ -150,8 +156,9 @@ public class Filters {
 	 * @return
 	 */
 	@GET
-	@Path("/sectors/")
+	@Path("/sectors")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=true,name="Sectors")
 	public List<SimpleJsonBean> getSectorsSchemas() {
 		List<SimpleJsonBean> schemalist = new ArrayList<SimpleJsonBean>();
 		try {
@@ -163,8 +170,7 @@ public class Filters {
 						ampClassificationConfiguration.getName()));
 			}
 		} catch (DgException e) {
-			// TODO till we find out the exception strategy
-			e.printStackTrace();
+			logger.error("cannot get Sectors List",e);
 		}
 		return schemalist;
 	}
@@ -199,6 +205,8 @@ public class Filters {
 	@GET
 	@Path("/programs")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=true,name="Programs")
+	
 	public List<SimpleJsonBean> getPrograms() {
 		List<SimpleJsonBean> programas = new ArrayList<SimpleJsonBean>();
 		SimpleJsonBean npo = new SimpleJsonBean("National Plan Objective",
@@ -244,6 +252,7 @@ public class Filters {
 	@GET
 	@Path("/organizations")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=true,name="Organizations")
 	public List<SimpleJsonBean> getOrganizations() {
 		List<SimpleJsonBean> orgs = new ArrayList<SimpleJsonBean>();
 		List<AmpRole> roles = OnePagerUtil.getOrgRoles();

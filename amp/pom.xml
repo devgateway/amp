@@ -395,6 +395,16 @@
 			<version>${jersey.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>com.sun.jersey.contribs.jersey-oauth</groupId>
+			<artifactId>oauth-server</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.jersey.contribs.jersey-oauth</groupId>
+			<artifactId>oauth-signature</artifactId>
+			<version>${jersey.version}</version>
+		</dependency>	
+		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
 			<version>1.7.1</version>

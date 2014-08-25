@@ -90,9 +90,6 @@ public class ShowMasterLayout
                 uri.startsWith("/services/", customPartStart) ||
                 uri.startsWith("/saiku/", customPartStart) ||
                 uri.startsWith("/rest/", customPartStart)) {
-                //Still needs to be define the best way to call the populate
-                //commiting for testing purposes
-                TLSUtils.populate((HttpServletRequest)request);
                 chain.doFilter(request, response);
             }
             else {

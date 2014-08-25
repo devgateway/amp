@@ -123,20 +123,38 @@ var Palette = Backbone.Model.extend({
 
   generateSet: function() {
 
-    var elements = this.get('elements');
+    var elements = this.get('elements'),
+        maxNamed = DEFAULT.SET.length - 2;  // leave two for "multple" and "other"
 
-    var top10 = _(elements.slice(0, 10)).map(function(el, idx) {
+    var topN = _(elements.slice(0, maxNamed)).map(function(el, idx) {
       return _({
         ids: [el.id],  // org id
         value: el.name,  // org name
         sites: el.sites,  // project sites
-        test: function(site) {
-          return _(this.get('sites')).contains(site);
+        test: function(siteId) {
+          return _(this.get('sites')).contains(siteId);
         }
       }).extend(DEFAULT.SET[idx]);
-    });
+    }, this);
 
-    this.colours.reset(top10);
+    topN.push(_({
+      value: 'Multiple',
+      test: function() {
+        return false;  // don't match this unless it's asked for
+      },
+      multiple: true
+    }).extend(DEFAULT.SET[topN.length]));
+
+    if (elements.length > maxNamed) {
+      topN.push(_({
+        value: 'Others',
+        test: function() {
+          return true;  // fall-through default case
+        }
+      }).extend(DEFAULT.SET[topN.length]));
+    }
+
+    this.colours.reset(topN);
   }
 
 });

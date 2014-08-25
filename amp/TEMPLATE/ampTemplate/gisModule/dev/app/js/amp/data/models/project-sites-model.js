@@ -95,7 +95,7 @@ module.exports = Backbone.Model
           return {
             id: orgId,
             name: ONAMES[orgId],
-            sites: sites
+            sites: _(sites).map(function(site) { return site.get('id'); })
           };
         })
         .sortBy(function(item) {

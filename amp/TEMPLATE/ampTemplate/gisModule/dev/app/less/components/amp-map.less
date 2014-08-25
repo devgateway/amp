@@ -106,23 +106,47 @@
 // clusters
 
 .marker-cluster {
-  border-radius: 18px;
-  width:17px;
-  height: 17px;
-  background-color: #ff7808;
-  color:#fff;
   padding-top: 0px;
-  border: 1px solid #111;
   text-align: center;
-}
+  color: #fff;
+  text-shadow: 0 0 2px black;
 
-.marker-cluster div {
-  width: 17px;
-  height: 15px;
+  div {
+    margin: 0;
+    width: auto;
+    height: auto;
+    font: inherit;
+  }
 
-  text-align: center;
-  border-radius: 7px;
-  font: 11px "Helvetica Neue", Arial, Helvetica, sans-serif;
+  .circle {
+    @fontsize: 18px;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    font: bold @fontsize/1 "Helvetica Neue", Arial, Helvetica, sans-serif;
+    border-radius: 24px;
+    border: 1px solid #fff;
+    .text {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      margin: -@fontsize/2 0 0;
+    }
+  }
+
+  &.marker-cluster-small {
+    div {
+      background: none;
+    }
+    .circle {
+      @fontsize: 12px;
+      font-weight: normal;
+      font-size: @fontsize;
+      .text {
+        margin-top: -@fontsize/2
+      }
+    }
+  }
 }
 
 //Overide esri attribution img style

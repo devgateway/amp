@@ -1,7 +1,12 @@
+/*
+ * This model is effectively a singleton, handling state for the project sites.
+ */
+
 var _ = require('underscore');
 var Backbone = require('backbone');
 var Palette = require('../../colours/colour-palette');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
+var Structures = require('../collections/project-sites-structures');
 
 
 
@@ -42,6 +47,12 @@ module.exports = Backbone.Model
       .done(function() {
         this.trigger('loaded processed', this);  // LEGACY
       });
+  },
+
+  parse: function(data) {
+    // TODO: don't keep data.features around
+    data.structures = new Structures(data.features);
+    return data;
   },
 
   updatePaletteSet: function() {

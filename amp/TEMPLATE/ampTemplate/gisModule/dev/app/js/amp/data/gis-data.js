@@ -14,7 +14,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var Boundaries = require('./collections/boundary-collection');
 var Indicators = require('./collections/indicator-collection');
-var ProjectSites = require('./collections/project-sites-collection');
+var ProjectSites = require('./collections/project-sites-monocollection');
 var ADMClusters = require('./collections/adm-cluster-collection');
 var ProjectSitesAndClusters = require('./collections/clusters-and-project-sites');
 var Title = require('./title');
@@ -31,7 +31,7 @@ _.extend(GISData.prototype, Backbone.Events, {
   initialize: function() {
     this.boundaries = new Boundaries();
     this.indicators = new Indicators([], { boundaries: this.boundaries });
-    this.projectSites = new ProjectSites();
+    this.projectSites = new ProjectSites([{}]);  // just the one model, all defaults
     this.admClusters = new ADMClusters([
       // TODO get these from the api
       {

@@ -101,7 +101,7 @@ public class GisEndPoints {
 	public final FeatureCollectionGeoJSON getProjectSites(final JsonBean filter) {
 		FeatureCollectionGeoJSON f = new FeatureCollectionGeoJSON();
 
-		List<AmpStructure> al = QueryUtil.getProjectSites();
+		List<AmpStructure> al = QueryUtil.getStructures();
 		for (AmpStructure structure : al) {
 			FeatureGeoJSON fgj = new FeatureGeoJSON();
 			PointGeoJSON pg = new PointGeoJSON();

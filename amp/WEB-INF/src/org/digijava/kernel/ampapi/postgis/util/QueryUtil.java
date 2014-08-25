@@ -92,13 +92,14 @@ public class QueryUtil {
         return new ArrayList<String>(
                 Arrays.asList("Country","Region","Zone","District"));
     }
-    public static List<AmpStructure>  getProjectSites(){
+    public static List<AmpStructure>  getStructures(){
     	 List<AmpStructure>al=  null;
 			try {
 				Session s=PersistenceManager.getRequestDBSession();
 				
 				  String queryString = "select s from " +
-						  AmpStructure.class.getName() +" s inner join s.activities a";
+						  AmpStructure.class.getName() +" s inner join s.activities a where"
+						  		+ " a.ampActivityId in (select aa from " + AmpActivity.class.getName() +" aa )";
 				  		Query q=PersistenceManager.getSession().createQuery(queryString);
 						q.setMaxResults(100); 
 				  		al= q.list();

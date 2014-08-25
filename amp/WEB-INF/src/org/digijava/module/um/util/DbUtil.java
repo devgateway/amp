@@ -499,7 +499,7 @@ public class DbUtil {
             String queryString = "select ID from DG_USER where sha1((cast(EMAIL as bytea) || cast(cast(ID as text)as bytea)))=:hash and EMAIL_VERIFIED=false";
             Query query = session.createSQLQuery(queryString);
             query.setString("hash", id);
-            iduser = (BigInteger) query.list().get(0);
+            iduser = (BigInteger) query.uniqueResult();
             if (iduser!= null){
 	            User user = (User) session.load(User.class, iduser.longValue());
 	            user.setActivate(true);

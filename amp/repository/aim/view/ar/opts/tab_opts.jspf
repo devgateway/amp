@@ -28,7 +28,7 @@
 			          	 	<a style="cursor: pointer; text-decoration: underline;"
 					class="l_sm" <%-- <%=ReportContextData.getCurrentReportContextId(request, true)%>  --%>
 					onClick="initMultilingualInput('AmpReports_name');initSaveReportEngine(true);saveReportEngine.showPanel(); "
-					title="${saveFiltersTooltip}"> ${saveFilters} </a>
+					title="${fn:escapeXml(saveFiltersTooltip)}"> ${saveFilters} </a>
 			</feature:display>
 			<%
 				}

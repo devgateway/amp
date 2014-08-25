@@ -13,6 +13,7 @@
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature"%>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> 
   <!-- Dependencies --> 
 
 <%

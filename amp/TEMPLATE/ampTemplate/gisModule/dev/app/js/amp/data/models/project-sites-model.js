@@ -10,6 +10,33 @@ var Structures = require('../collections/project-sites-structures');
 
 
 
+var ONAMES = {  // TODO: temp hack until filters have a proper data structure
+  3001153: 'Care Austria',
+  2: 'African Development Fund (AFDF)',
+  3: 'Asian Development Bank (ASDB)',
+  4: 'Asian Development Fund (ASDF)',
+  73: 'Joint United Nations Programme on HIV/AIDS (UNAIDS)',
+  74: 'UNICEF',
+  75: 'World Bank',
+  105045712: 'Deutsche Gesellschaft fur Internationale Zusammenarbeit (GIZ)',
+  40279598: 'India EXIM Bank',
+  24: 'International Fund for Agricultural Development (IFAD)',
+  110592388: 'Canadian International Development Agency (CIDA)',
+  85180698: 'CARE International Nepal',
+  81831902: 'Centers for Disease Control and Prevention',
+  57927714: 'Australian Agency for International Development (AUSAID)',
+  57299431: 'Danish Church Aid',
+  40001642: 'Global Partnership for Education',
+  104929646: 'Danida - Danish International Development Agency',
+  51973501: 'CARE International UK',
+  110592567: 'Japan International Cooperation Agency (JICA)',
+  54295162: 'International Labour Organisation (ILO)',
+  64008061: 'International Organisation for Migration (IOM)',
+  52178366: 'Icelandic International Development Agency (ICEIDA)'
+};
+
+
+
 module.exports = Backbone.Model
   .extend(LoadOnceMixin)
   .extend({
@@ -22,11 +49,9 @@ module.exports = Backbone.Model
     helpText: ''
   },
 
-  initialize: function() {
+  initialize: function(things, options) {
+    this.activities = options.activities;
     this.palette = new Palette.FromSet();
-
-    // private load state tracking
-    this._dataLoaded = null;
 
     this.listenTo(this, 'change:selected', function(blah, show) {
       this.trigger(show ? 'show' : 'hide', this);
@@ -43,6 +68,7 @@ module.exports = Backbone.Model
   },
 
   load: function() {
+    this.activities.load();  // not needed right away, but start it as early as possible
     return LoadOnceMixin.load.apply(this)
       .done(function() {
         this.trigger('loaded processed', this);  // LEGACY
@@ -51,21 +77,36 @@ module.exports = Backbone.Model
 
   parse: function(data) {
     // TODO: don't keep data.features around
-    data.structures = new Structures(data.features);
+    data.sites = new Structures(data.features);
     return data;
   },
 
   updatePaletteSet: function() {
-    this.palette.set('elements', [
-      'first thing',
-      'second thing',
-      'third thing',
-      'fourth thing',
-      'fifth thing',
-      'sixth...',
-      'seventh...',
-      '...'
-    ]);
+    this.activities.load().done(_.bind(function(activities) {
+      var activity;
+
+      var orgSites = this.get('sites')
+        .chain()
+        .groupsBy(function(site) {
+          activity = activities.get(site.get('properties').projectId);
+          return activity.get('matchesFilters').org;
+        })
+        .map(function(sites, orgId) {
+          return {
+            id: orgId,
+            name: ONAMES[orgId],
+            sites: sites
+          };
+        })
+        .sortBy(function(item) {
+          return item.sites.length;
+        })
+        .reverse()
+        .value();
+
+      this.palette.set('elements', orgSites);
+
+    }, this));
   }
 
 });

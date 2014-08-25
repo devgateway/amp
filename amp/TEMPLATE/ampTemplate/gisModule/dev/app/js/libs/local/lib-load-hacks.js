@@ -1,5 +1,8 @@
 var jQuery = require('jquery');
 
+// underscore mixins
+require('underscore-groups-by');
+
 // backbone needs a little help finding jQuery with our browserify setup
 var Backbone = require('backbone');
 Backbone.$ = jQuery;

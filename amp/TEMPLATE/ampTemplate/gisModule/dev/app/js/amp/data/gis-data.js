@@ -32,8 +32,13 @@ _.extend(GISData.prototype, Backbone.Events, {
   initialize: function() {
     this.activities = new Activities();
     this.boundaries = new Boundaries();
+
     this.indicators = new Indicators([], { boundaries: this.boundaries });
-    this.projectSites = new ProjectSites([{}]);  // just the one model, all defaults
+
+    this.projectSites = new ProjectSites([
+      {}  // just the one model, all defaults
+    ], { activities: this.activities});
+
     this.admClusters = new ADMClusters([
       // TODO get these from the api
       {
@@ -45,6 +50,7 @@ _.extend(GISData.prototype, Backbone.Events, {
         value: 'adm-2'
       }
     ], { boundaries: this.boundaries });
+
     this.sitesAndClusters = new ProjectSitesAndClusters({
       sites: this.projectSites,
       clusters: this.admClusters
@@ -59,7 +65,7 @@ _.extend(GISData.prototype, Backbone.Events, {
   },
 
   load: function() {
-    this.activities.fetch();
+    // this.activities.fetch();
     this.boundaries.fetch();
     this.indicators.fetch();
     // no need to fetch project sites (it's special)

@@ -40,6 +40,7 @@
     "brfs": "^1.1.2",
     "browserify": "^4.2.0",
     "browserify-shim": "~3.6.0",
+    "cheerio": "*",
     "esri-leaflet": "0.0.1-beta.5",
     "gulp": "^3.7.0",
     "gulp-changed": "^0.4.0",
@@ -66,6 +67,7 @@
     "gulp-util": "^2.2.16",
     "gulp-watch": "^0.6.5",
     "husl": "^4.0.2",
+    "i18next": "~1.7.4",
     "jquery": "^2.1.1",
     "jquery-ui": "^1.10.5",
     "jshint-stylish": "^0.2.0",
@@ -76,11 +78,10 @@
     "qunitjs": "^1.14.0",
     "rimraf": "^2.2.8",
     "seedrandom": "^2.3.6",
-    "underscore": "^1.6.0",
-    "vinyl-source-stream": "^0.1.1",
-    "watchify": "^0.10.2",
-    "i18next": "~1.7.4",
     "through2": "*",
-    "cheerio": "*"
+    "underscore": "^1.6.0",
+    "underscore-groups-by": "0.0.1",
+    "vinyl-source-stream": "^0.1.1",
+    "watchify": "^0.10.2"
   }
 }

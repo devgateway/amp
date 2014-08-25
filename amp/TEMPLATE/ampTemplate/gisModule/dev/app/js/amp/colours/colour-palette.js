@@ -122,18 +122,21 @@ var Palette = Backbone.Model.extend({
   },
 
   generateSet: function() {
-    if (this.get('elements').length > DEFAULT.SET.length) {
-      throw new Error('Cannot make more than 12 visually distinct colours');
-    }
 
-    this.colours.reset(_.map(this.get('elements'), function(element, index) {
-      return _.extend({}, {
-          value: element,
-          test: function(value) { return value === element; }
-        },
-        DEFAULT.SET[index]  // h, s, l
-      );
-    }));
+    var elements = this.get('elements');
+
+    var top10 = _(elements.slice(0, 10)).map(function(el, idx) {
+      return _({
+        ids: [el.id],  // org id
+        value: el.name,  // org name
+        sites: el.sites,  // project sites
+        test: function(site) {
+          return _(this.get('sites')).contains(site);
+        }
+      }).extend(DEFAULT.SET[idx]);
+    });
+
+    this.colours.reset(top10);
   }
 
 });

@@ -12,6 +12,7 @@
 
 var _ = require('underscore');
 var Backbone = require('backbone');
+var Activities = require('./collections/activity-collection');
 var Boundaries = require('./collections/boundary-collection');
 var Indicators = require('./collections/indicator-collection');
 var ProjectSites = require('./collections/project-sites-monocollection');
@@ -29,6 +30,7 @@ _.extend(GISData.prototype, Backbone.Events, {
   layerEvents: ['show', 'hide', 'loaded', 'processed'],
 
   initialize: function() {
+    this.activities = new Activities();
     this.boundaries = new Boundaries();
     this.indicators = new Indicators([], { boundaries: this.boundaries });
     this.projectSites = new ProjectSites([{}]);  // just the one model, all defaults
@@ -57,6 +59,7 @@ _.extend(GISData.prototype, Backbone.Events, {
   },
 
   load: function() {
+    this.activities.fetch();
     this.boundaries.fetch();
     this.indicators.fetch();
     // no need to fetch project sites (it's special)

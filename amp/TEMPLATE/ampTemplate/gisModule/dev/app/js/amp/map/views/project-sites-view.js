@@ -160,12 +160,9 @@ module.exports = Backbone.View.extend({
           return colour.get('test').call(colour, feature.id);
         });
         if (colors.length > 2) {  // 2, because "other" is always true...
-          console.log('m', colors.length);
           colors = [model.palette.colours.find(function(colour) {
             return colour.get('multiple') === true;
           })];
-        } else {
-          console.log('o', colors.length);
         }
         var point = new L.CircleMarker(latlng, {
           radius: self.currentRadius,

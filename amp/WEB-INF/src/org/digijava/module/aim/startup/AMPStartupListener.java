@@ -292,6 +292,7 @@ public class AMPStartupListener extends HttpServlet implements
 			
 			runCacheRefreshingQuery("update_location_level_caches_internal", "location");
 			runCacheRefreshingQuery("update_program_level_caches_internal", "program");
+			runCacheRefreshingQuery("update_sector_level_caches_internal", "program");
 			
 			PersistenceManager.getSession().getTransaction().commit();
 			

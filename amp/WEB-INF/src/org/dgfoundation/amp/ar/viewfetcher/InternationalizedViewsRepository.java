@@ -357,11 +357,11 @@ public class InternationalizedViewsRepository {
 						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
 
 				addViewDef(this, new I18nViewDescription("v_secondary_sub_sectors").
-						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("sec_scheme_name", "amp_sec_scheme_id", AmpSectorScheme.class, "secSchemeName")));
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
+						//.addColumnDef(new I18nViewColumnDescription("sec_scheme_name", "amp_sec_scheme_id", AmpSectorScheme.class, "secSchemeName")));
 
 				addViewDef(this, new I18nViewDescription("v_secondary_sub_sub_sectors").
-						addColumnDef(new I18nViewColumnDescription("name", "amp_sector_id", AmpSector.class, "name")));
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
 				
 				addViewDef(this, new I18nViewDescription("v_sect_min_cont_org").
 						addColumnDef(new I18nViewColumnDescription("org", "amp_org_id", AmpOrganisation.class, "name")));
@@ -373,8 +373,8 @@ public class InternationalizedViewsRepository {
 						addColumnDef(new I18nViewColumnDescription("location_name", "location_id", AmpCategoryValueLocations.class, "name")));
 
 				addViewDef(this, new I18nViewDescription("v_sectors").
-						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("sec_scheme_name", "amp_sector_scheme_id", AmpSectorScheme.class, "secSchemeName")));
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
+						//.addColumnDef(new I18nViewColumnDescription("sec_scheme_name", "amp_sector_scheme_id", AmpSectorScheme.class, "secSchemeName")));
 
 				addViewDef(this, new I18nViewDescription("v_status").
 						addTrnColDef("name", "amp_status_id"));
@@ -383,21 +383,21 @@ public class InternationalizedViewsRepository {
 						addColumnDef(new I18nViewColumnDescription("title", "amp_structure_id", AmpStructure.class, "title")));
 
 				addViewDef(this, new I18nViewDescription("v_sub_sectors").
-						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("sec_scheme_name", "amp_sec_scheme_id", AmpSectorScheme.class, "secSchemeName")));
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
+						//.addColumnDef(new I18nViewColumnDescription("sec_scheme_name", "amp_sec_scheme_id", AmpSectorScheme.class, "secSchemeName")));
 
 				addViewDef(this, new I18nViewDescription("v_sub_sub_sectors").
-						addColumnDef(new I18nViewColumnDescription("name", "amp_sector_id", AmpSector.class, "name")));
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
 
 				addViewDef(this, new I18nViewDescription("v_tag_sectors").
 						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
 
 				addViewDef(this, new I18nViewDescription("v_tag_sub_sectors").
-						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("sec_scheme_name", "amp_sec_scheme_id", AmpSectorScheme.class, "secSchemeName")));
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
+						//.addColumnDef(new I18nViewColumnDescription("sec_scheme_name", "amp_sec_scheme_id", AmpSectorScheme.class, "secSchemeName")));
 
 				addViewDef(this, new I18nViewDescription("v_tag_sub_sub_sectors").
-						addColumnDef(new I18nViewColumnDescription("name", "amp_sector_id", AmpSector.class, "name")));
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
 
 				addViewDef(this, new I18nViewDescription("v_teams").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_team_id", AmpTeam.class, "name")));
@@ -409,11 +409,11 @@ public class InternationalizedViewsRepository {
 						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
 
 				addViewDef(this, new I18nViewDescription("v_tertiary_sub_sectors").
-						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")).
-						addColumnDef(new I18nViewColumnDescription("sec_scheme_name", "amp_sec_scheme_id", AmpSectorScheme.class, "secSchemeName")));
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
+						//.addColumnDef(new I18nViewColumnDescription("sec_scheme_name", "amp_sec_scheme_id", AmpSectorScheme.class, "secSchemeName")));
 
 				addViewDef(this, new I18nViewDescription("v_tertiary_sub_sub_sectors").
-						addColumnDef(new I18nViewColumnDescription("name", "amp_sector_id", AmpSector.class, "name")));
+						addColumnDef(new I18nViewColumnDescription("sectorname", "amp_sector_id", AmpSector.class, "name")));
 				
 				addViewDef(this, new I18nViewDescription("v_titles").
 						addColumnDef(new I18nViewColumnDescription("name", "amp_activity_id", AmpActivityVersion.class, "name"))); // if changing this line: ESRI GIS DataDispatcher references it, change it there too! 

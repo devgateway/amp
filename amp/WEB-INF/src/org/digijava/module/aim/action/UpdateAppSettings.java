@@ -343,22 +343,7 @@ public class UpdateAppSettings extends Action {
 	}
 
 	public ApplicationSettings getReloadedAppSettings(AmpApplicationSettings ampAppSettings) {
-		ApplicationSettings appSettings = new ApplicationSettings();
-		appSettings.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
-		appSettings.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage());
-		appSettings.setNumberOfPagesToDisplay(ampAppSettings.getNumberOfPagesToDisplay());
-		appSettings.setReportStartYear(ampAppSettings.getReportStartYear());
-		appSettings.setReportEndYear(ampAppSettings.getReportEndYear());
-
-		appSettings.setDefReportsPerPage(ampAppSettings.getDefaultReportsPerPage());
-        if (ampAppSettings.getCurrency() != null) {
-		    appSettings.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
-        }
-
-        appSettings.setFisCalId(ampAppSettings.getFiscalCalendar().getAmpFiscalCalId());
-		appSettings.setLanguage(ampAppSettings.getLanguage());
-		appSettings.setValidation(ampAppSettings.getValidation());
-		appSettings.setDefaultAmpReport(ampAppSettings.getDefaultTeamReport());
+		ApplicationSettings appSettings = new ApplicationSettings(ampAppSettings);
 		return appSettings;
 	}
 

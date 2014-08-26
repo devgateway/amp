@@ -140,7 +140,7 @@ public class SwitchLanguage
         	 TeamMember teamMember= new TeamMember(TeamMemberUtil.getAmpTeamMember(tm.getMemberId()));
         	 //populate also the appSettings
         	 AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(teamMember.getTeamId());
-             ApplicationSettings appSettings = TeamMemberUtil.populateApplicationSettings (ampAppSettings);
+             ApplicationSettings appSettings = new ApplicationSettings(ampAppSettings);
             teamMember.setAppSettings(appSettings);
         	request.getSession().setAttribute("currentMember",teamMember );
         	request.getSession().setAttribute(Constants.USER_WORKSPACES, TeamMemberUtil.getTeamMembers(tm.getEmail()));

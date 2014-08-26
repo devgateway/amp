@@ -178,4 +178,5 @@ public class AmpApplicationSettings implements Serializable {
 	public void setNumberOfPagesToDisplay(Integer numberOfPagesToDisplay) {
 		this.numberOfPagesToDisplay = numberOfPagesToDisplay;
 	}
+
 }

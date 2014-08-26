@@ -50,11 +50,12 @@
 	int rowIdx = 2;
 	Boolean showColumn = false;
 	TeamMember currentMember = (TeamMember) request.getSession().getAttribute("currentMember");
-	Boolean crossteamenable= false;
-	Boolean isPublic = request.getParameter("public")!=null ? request.getParameter("public").equalsIgnoreCase("true"):false;
+	//Boolean crossteamValidationEnabled = false;
+	Boolean isPublic = request.getParameter("public") != null && request.getParameter("public").equalsIgnoreCase("true");
+	boolean canApproveActivities = currentMember != null && (currentMember.getTeamHead() || currentMember.isApprover());
 	
-	if(currentMember != null && "Management".toLowerCase().compareTo(currentMember.getTeamAccessType().toLowerCase()) != 0) {
-		crossteamenable = currentMember.getAppSettings().getCrossteamvalidation()!=null ? currentMember.getAppSettings().getCrossteamvalidation():false;
+	if (currentMember != null && "Management".toLowerCase().compareTo(currentMember.getTeamAccessType().toLowerCase()) != 0) {
+		//crossteamValidationEnabled = currentMember.getAppSettings().isCrossTeamValidationEnabled();
 		showColumn = true;
 		validatedActivities = showColumn ? ActivityUtil.getActivitiesWhichShouldBeValidated(currentMember, columnReport.getOwnerIds()) : null;	
 }
@@ -75,31 +76,13 @@
 
 <logic:equal name="columnReport" property="canDisplayRow" value="true">
 
-
-<%
-	ReportContextData.getFromRequest().increaseProgressValue(1);
-%>
-
-<%
-//This scriptlet searchs for rows marked green (for validation) and later, sets the "action" attribute to "validate" to change the icon. 
-Boolean validateItem = false;
-if ( showColumn && validatedActivities.contains(ownerId) )
-	validateItem = true;
-	/*Show validate icon only to Workspace manager or Aprrover who are allowed to validate an activity.*/
-	boolean teamLeadFlag = currentMember!=null ?currentMember.getTeamHead() || currentMember.isApprover():false;
-	
-	boolean crossteamvalidation = false;
-	if(crossteamenable){
-		crossteamvalidation =true;
-	}else{
-		crossteamvalidation = !isPublic ? currentMember.getTeamId().equals(ActivityUtil.getAmpActivityVersion((Long)ownerId).getTeam().getIdentifier()):false;
-	}
-
-%>
 <c:set var="action" value="edit"/>
 <c:set var="actionString" value="${translatedEdit}"/>
 <%
-if(validateItem && teamLeadFlag && crossteamvalidation){
+	ReportContextData.getFromRequest().increaseProgressValue(1);
+	//This scriptlet searchs for rows marked green (for validation) and later, sets the "action" attribute to "validate" to change the icon.
+	Boolean validateItem = showColumn && canApproveActivities && validatedActivities.contains(ownerId);
+	if (validateItem){
 %>
 	<c:set var="action" value="validate"/>
 	<c:set var="actionString" value="${translatedValidate}"/>

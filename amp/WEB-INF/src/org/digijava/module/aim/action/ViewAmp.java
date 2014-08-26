@@ -252,30 +252,7 @@ public class ViewAmp
             
             // Get the team members application settings
             AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(member.getAmpTeam().getAmpTeamId());
-            ApplicationSettings appSettings = new ApplicationSettings();
-            appSettings.setAppSettingsId(ampAppSettings
-                    .getAmpAppSettingsId());
-            try {
-
-                appSettings.setDefRecsPerPage(ampAppSettings
-                        .getDefaultRecordsPerPage());
-                if(ampAppSettings.getDefaultReportsPerPage()!=null){
-                  appSettings.setDefReportsPerPage(ampAppSettings.
-                      getDefaultReportsPerPage());
-                }
-                else{
-                  appSettings.setDefReportsPerPage(0);
-                }
-                appSettings.setCurrencyId(ampAppSettings.getCurrency()
-                        .getAmpCurrencyId());
-                appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()
-                        .getAmpFiscalCalId());
-                appSettings.setDefaultAmpReport(ampAppSettings.getDefaultTeamReport());
-                appSettings.setValidation(ampAppSettings.getValidation());
-
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+            ApplicationSettings appSettings = new ApplicationSettings(ampAppSettings);
             //appSettings.setLanguage(ampAppSettings.getLanguage());
 
             //as the users is member of only one team we mas ensure that the correct
@@ -291,17 +268,6 @@ public class ViewAmp
             ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
             FeaturesUtil.setAmpTreeVisibility(request.getServletContext(), session,ampTreeVisibility);
             
-            
-            
-            
-            
-            
-            String langCode = UserUtils.getUserLangPreferences(
-                    usr, site).getNavigationLanguage().getCode();
-
-            appSettings.setLanguage(langCode);
-            
-
             session.setAttribute(Constants.TEAM_ID, tm.getTeamId());
             tm.setAppSettings(appSettings);
             session.setAttribute(Constants.CURRENT_MEMBER, tm);            

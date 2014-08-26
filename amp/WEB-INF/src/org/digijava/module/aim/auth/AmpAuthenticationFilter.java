@@ -311,22 +311,8 @@ public class AmpAuthenticationFilter
             
             // Get the team members application settings
             AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(member.getAmpTeam().getAmpTeamId());
-            ApplicationSettings appSettings = new ApplicationSettings();
-            appSettings.setAppSettingsId(ampAppSettings
-                                         .getAmpAppSettingsId());
-            appSettings.setDefRecsPerPage(ampAppSettings
-                                          .getDefaultRecordsPerPage());
-            appSettings.setCurrencyId(ampAppSettings.getCurrency()
-                                      .getAmpCurrencyId());
-            appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()
-                                    .getAmpFiscalCalId());
-            appSettings.setValidation(ampAppSettings.getValidation());
+            ApplicationSettings appSettings = new ApplicationSettings(ampAppSettings);
             //appSettings.setLanguage(ampAppSettings.getLanguage());
-
-            String langCode = UserUtils.getUserLangPreferences(
-                usr, site).getAlertsLanguage().getCode();
-
-            appSettings.setLanguage(langCode);
 
             session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
             tm.setAppSettings(appSettings);

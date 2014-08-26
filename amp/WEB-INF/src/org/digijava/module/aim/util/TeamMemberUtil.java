@@ -2073,30 +2073,5 @@ public class TeamMemberUtil {
 	public static boolean isHeadRole(AmpTeamMemberRoles role){
 		AmpTeamMemberRoles headRole = getAmpTeamHeadRole();
 		return (headRole==null || role==null) ? false: headRole.getAmpTeamMemRoleId().equals(role.getAmpTeamMemRoleId());
-	}
-	
-	public static ApplicationSettings populateApplicationSettings(AmpApplicationSettings ampAppSettings) {
-		 ApplicationSettings appSettings = new ApplicationSettings();
-        appSettings.setAppSettingsId(ampAppSettings.getAmpAppSettingsId());
-        appSettings.setDefRecsPerPage(ampAppSettings.getDefaultRecordsPerPage());
-        appSettings.setDefReportsPerPage((ampAppSettings.getDefaultReportsPerPage()==null)?0:ampAppSettings.getDefaultReportsPerPage());
-        if (ampAppSettings.getCurrency()!=null){
-        	appSettings.setCurrencyId(ampAppSettings.getCurrency().getAmpCurrencyId());
-        } else {
-        	String currCode = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY);
-        	AmpCurrency baseCurr = CurrencyUtil.getAmpcurrency(currCode);
-        	appSettings.setCurrencyId(baseCurr.getAmpCurrencyId());
-        }
-        	
-        
-        if (ampAppSettings.getFiscalCalendar() != null && ampAppSettings.getFiscalCalendar().getAmpFiscalCalId() != null) {
-        	appSettings.setFisCalId(ampAppSettings.getFiscalCalendar().getAmpFiscalCalId());
-        }	
-        appSettings.setLanguage(ampAppSettings.getLanguage());
-        appSettings.setDefaultAmpReport(ampAppSettings.getDefaultTeamReport());
-        appSettings.setValidation(ampAppSettings.getValidation());
-        appSettings.setCrossteamvalidation(ampAppSettings.getTeam().getCrossteamvalidation());
-        return appSettings;
-
-	}
+	}	
 }

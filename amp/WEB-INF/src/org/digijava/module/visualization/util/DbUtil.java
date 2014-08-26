@@ -565,7 +565,7 @@ public class DbUtil {
         for (Iterator iterator = programs.iterator(); iterator.hasNext();) {
 			AmpTheme ampTheme = (AmpTheme) iterator.next();
 			if (ampTheme.getIndlevel()>0){
-				if (sett.getDefaultHierarchyId()== DashboardUtil.getTopLevelProgram(ampTheme).getParentThemeId().getAmpThemeId())
+				if (sett!=null && sett.getDefaultHierarchyId()== DashboardUtil.getTopLevelProgram(ampTheme).getParentThemeId().getAmpThemeId())
 					programs2.add(ampTheme);
 			} else {
 				if (sett.getDefaultHierarchyId()== ampTheme.getAmpThemeId())
@@ -607,7 +607,7 @@ public class DbUtil {
         for (Iterator iterator = programs.iterator(); iterator.hasNext();) {
 			AmpTheme ampTheme = (AmpTheme) iterator.next();
 			if (ampTheme.getIndlevel()>0)
-				if (sett.getDefaultHierarchyId()== DashboardUtil.getTopLevelProgram(ampTheme).getParentThemeId().getAmpThemeId())
+				if (sett!=null && sett.getDefaultHierarchyId()== DashboardUtil.getTopLevelProgram(ampTheme).getParentThemeId().getAmpThemeId())
 					programs2.add(ampTheme);
 		}
         return programs2;

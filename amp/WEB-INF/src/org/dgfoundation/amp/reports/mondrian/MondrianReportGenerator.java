@@ -114,6 +114,37 @@ public class MondrianReportGenerator implements ReportExecutor {
 	}
 	
 	/**
+	 * Generates a report as an Olap4J CellSet, without any translation into our Reports API structures
+	 * @param spec - {@link ReportSpecification}
+	 * @return {@link org.olap4j.CellSet}
+	 * @throws AMPException
+	 */
+	public CellSet generateReportAsOlap4JCellSet(ReportSpecification spec) throws AMPException {
+		MDXConfig config = toMDXConfig(spec);
+		CellSet cellSet = null;
+		long startTime = 0;
+		MDXGenerator generator = null;
+		try {
+			generator = new MDXGenerator();
+			startTime = System.currentTimeMillis();
+			String mdxQuery = generator.getAdvancedOlapQuery(config);
+			cellSet = generator.runQuery(mdxQuery);
+			if (printMode) {
+				MondrianUtils.print(cellSet, spec.getReportName());
+				System.out.println("[" + config.getMdxName() + "] MDX query: " + mdxQuery);
+			}
+		} catch (Exception e) {
+			if (generator != null) generator.tearDown();
+			throw new AMPException("Cannot generate Mondrian Report '" + config.getMdxName() +"' : " 
+					+ e.getMessage() == null ? e.getClass().getName() : e.getMessage());
+		}
+		
+		logger.info("CellSet for " + config.getMdxName() + " generated within :" + String.valueOf((int)(System.currentTimeMillis() - startTime)));
+		//TODO: add a method to teardown connection
+		return cellSet;
+	}
+	
+	/**
 	 * Generates MDX Query string that can be passed to Saiku or any other MDX processor
 	 * @param spec - {@link ReportSpecification}
 	 * @return mdx string

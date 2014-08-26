@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.features.items;
 
 import java.util.TreeSet;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
@@ -72,12 +73,15 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		
 		AmpLabelFieldPanel<AmpOrganisation> sourceOrg = new AmpLabelFieldPanel<AmpOrganisation>(
 				"sourceOrg", new PropertyModel<AmpOrganisation>(fundingModel, "ampDonorOrgId"), "Source Organisation", true);
+		sourceOrg.add(new AttributeModifier("style", "display:inline-block"));
+		
 		add(sourceOrg);
 
 		
 
 		AmpLabelFieldPanel<AmpRole> sourceRoleLabel = new AmpLabelFieldPanel<AmpRole>(
 				"sourceRoleLabel", new PropertyModel<AmpRole>(fundingModel, "sourceRole"), "Source Role", true);
+		sourceRoleLabel.add(new AttributeModifier("style", "display:inline-block"));
 		add(sourceRoleLabel);
 
 		String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this funding item?");

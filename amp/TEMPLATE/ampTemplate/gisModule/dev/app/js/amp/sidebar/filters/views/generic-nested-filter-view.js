@@ -19,9 +19,8 @@ var Template = fs.readFileSync(__dirname + '/../templates/generic-filter-templat
 // each endpoint creating a tree for it.
 module.exports = GenericFilterView.extend({
 
-  className: GenericFilterView.prototype.className + ' filter-years',
+  className: GenericFilterView.prototype.className,
   template: _.template(Template),
-  allowedRange: {min: 1980,max: 2015},
 
   initialize: function(options) {
     var self = this;
@@ -38,8 +37,8 @@ module.exports = GenericFilterView.extend({
     });
   },
 
-  // 1. get all schemas
-  // 2. create root JSON, with each schema as a child.
+  // 1. get all children
+  // 2. create root JSON, with each child endpoint as 'children'.
   // 3. when all done create tree
   _createTree: function(url){
     var self = this;

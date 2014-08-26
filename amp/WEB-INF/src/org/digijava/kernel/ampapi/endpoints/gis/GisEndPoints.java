@@ -114,11 +114,11 @@ public class GisEndPoints {
 			pg.coordinates.add(Double.parseDouble(structure.getLongitude()));
 			pg.coordinates.add(Double.parseDouble(structure.getLatitude()));
 			fgj.id = structure.getAmpStructureId().toString();
-			fgj.properties.put("structureTitle",
+			fgj.properties.put("title",
 					new TextNode(structure.getTitle()));
 			if (structure.getDescription() != null
 					&& !structure.getDescription().trim().equals("")) {
-				fgj.properties.put("structureDescription", new TextNode(
+				fgj.properties.put("description", new TextNode(
 						structure.getDescription()));
 			}
 			Set<AmpActivityVersion> av = structure.getActivities();

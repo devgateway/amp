@@ -1,5 +1,6 @@
 var fs = require('fs');
 var _ = require('underscore');
+var $ = require('jquery');
 var BaseFilterView = require('../views/base-filter-view');
 var YearsFilterModel = require('../models/years-filter-model');
 
@@ -11,13 +12,12 @@ module.exports = BaseFilterView.extend({
 
   className: BaseFilterView.prototype.className + ' filter-years',
   template: _.template(Template),
-  allowedRange: {min: 1980,max: 2015},
 
   initialize: function(options) {
     BaseFilterView.prototype.initialize.apply(this);
 
     this.model = new YearsFilterModel(options);
-
+    this.listenTo(this.model, 'change', this._updateTitle); 
   },
 
 
@@ -28,11 +28,11 @@ module.exports = BaseFilterView.extend({
 
     // TODO: uses window.jQuery because that was the only way I had luck with browserify shim... 
     // uses https://github.com/leongersen/noUiSlider
-    window.jQuery('.year-slider').noUiSlider({
-      start: [1990, 2012],
+    this.slider = window.jQuery('.year-slider').noUiSlider({
+      start: [self.model.get('start'), self.model.get('end')],
       step: 1,
       connect: true,
-      range: self.allowedRange,
+      range: {min: self.model.get('min'), max:self.model.get('max')},
       serialization: {
         lower: [
           window.jQuery.Link({
@@ -49,16 +49,28 @@ module.exports = BaseFilterView.extend({
         }
       }
     });
+
+    //ugly, too much data in the dom...but it's how the example goes.
+    this.slider.on('change', function(){
+      self.model.set('start', parseInt(self.$('.start-year').text(),10));
+    });
+
+    //ugly, too much data in the dom...but it's how the example goes.
+    this.slider.on('change', function(){
+      self.model.set('end',  parseInt(self.$('.end-year').text(),10));
+    });
   },
 
   renderTitle: function () {
     BaseFilterView.prototype.renderTitle.apply(this);
 
-    // TODO: hookup to some model that backs it....
-    this.$('.filter-count').text('1900 - 2015');
+    this.$('.filter-count').text(this.model.get('start') + ' - ' + this.model.get('end'));
 
     return this;
-  }
+  },
 
+  _updateTitle: function(){
+    this.$('.filter-count').text(this.model.get('start') + ' - ' + this.model.get('end'));
+  }
 
 });

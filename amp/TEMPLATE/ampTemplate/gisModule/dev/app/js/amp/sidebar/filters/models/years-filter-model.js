@@ -7,8 +7,10 @@ module.exports = BaseFilterModel.extend({
     BaseFilterModel.prototype.initialize.apply(this);
     this.set({
         title: 'Years',
-        totalCount: 126,
-        activeCount: 0
+        start: 1990,
+        end: 2014,
+        min:1960,
+        max:2015
       });
   }
 

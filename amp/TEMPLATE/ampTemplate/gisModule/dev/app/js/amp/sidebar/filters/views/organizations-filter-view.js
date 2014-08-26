@@ -62,8 +62,6 @@ module.exports = GenericFilterView.extend({
     deferreds.push(this.organizations.fetch());
 
 		$.when.apply($, deferreds).then(function(){
-			console.log(' self.organizations.toJSON()', self.organizations.toJSON());
-			console.log('this.organizationRoles', self.organizationRoles);
 			self.organizationRoles.each(function(orgRole){
 			    var tmpRoleNode = {
 			      id : orgRole.get('id'),

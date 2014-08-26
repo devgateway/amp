@@ -131,15 +131,27 @@ public class QueryUtil {
    	 List<AmpActivity> a =  null;
 			try {
 				Session s=PersistenceManager.getRequestDBSession();
-				
+//				//AmpActivityVersion(Long ampActivityId, String name, String ampid)
+//				this.ampActivityId=ampActivityId;
+//				this.name=name;
+//				this.ampId=ampid;
+//			}
+				//this HQL does a lot of sql queries, yet to be determined how we will optimized
 				  String queryString = "select a from " +
-						  AmpActivity.class.getName() +" a";
+						  AmpActivity.class.getName() +" as a  inner join fetch a.sectors as s"
+						  		+ " inner join fetch s.classificationConfig as cc inner join fetch s.sectorId as ss"
+						  		+ " inner join fetch a.orgrole as org "
+						  		+ " inner join fetch org.organisation as orga "
+						  		+ " inner join fetch a.actPrograms ap "
+						  		+ " inner join fetch ap.programSetting ps " 
+						  		+ " inner join fetch ap.program p "
+						  		+ "";
 				  if(ampActivityIds!=null){
 					queryString+=" where a.ampActivityId in (" +ampActivityIds  + ")";  
 				  }
 				  
 				  		Query q=PersistenceManager.getSession().createQuery(queryString);
-						q.setMaxResults(5); 
+				  		q.setMaxResults(10); 
 				  		a = q.list();
 				
 

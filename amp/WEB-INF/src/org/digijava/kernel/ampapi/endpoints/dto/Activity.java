@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 /**
  * Class that holds the activitiy data to be serialized as a JsonObject we ignore an object if its null
  * 
@@ -17,6 +18,7 @@ public class Activity {
 	private String name;
 	private String description;
 	private String ampUrl;
+	private JsonBean matchesFilters;
 	private List<ActivityFunding> commitments;
 	private List<ActivityFunding> disbursments;
 
@@ -84,6 +86,17 @@ public class Activity {
 		}
 		this.disbursments.add(new ActivityFunding(amount,transactionDate));
 	}
+	
+	
+	public JsonBean getMatchesFilters() {
+		return matchesFilters;
+	}
+
+	public void setMatchesFilters(JsonBean matchesFilters) {
+		this.matchesFilters = matchesFilters;
+	}
+
+
 	public class ActivityFunding {
 		private String amount;
 		private String transactionDate;

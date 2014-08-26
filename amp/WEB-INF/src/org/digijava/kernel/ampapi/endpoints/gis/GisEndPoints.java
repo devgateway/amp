@@ -2,7 +2,9 @@ package org.digijava.kernel.ampapi.endpoints.gis;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.GET;
@@ -30,9 +32,13 @@ import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
+import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.dbentity.AmpMapState;
@@ -261,7 +267,40 @@ public class GisEndPoints {
 		a.setDescription(description);
 		a.setAmpUrl(ActivityGatekeeper.buildPreviewUrl(String.valueOf(ampActivity
 				.getAmpActivityId())));
-
+		JsonBean j=new JsonBean();
+		Map<Long,List<Long>> sectors=new HashMap<Long,List<Long>>();
+		Map<Long,List<Long>> roles=new HashMap<Long,List<Long>>();
+		Map<Long,List<Long>> programs=new HashMap<Long,List<Long>>();
+		for (Object o : ampActivity.getSectors()) {
+			AmpActivitySector as=(AmpActivitySector)o;
+			if(
+			sectors.get(as.getClassificationConfig().getId())  ==null){
+				sectors.put(as.getClassificationConfig().getId(), new ArrayList<Long>());
+			}
+			sectors.get(as.getClassificationConfig().getId()).add(as.getSectorId().getAmpSectorId());
+		}
+		for(AmpOrgRole orgRole:ampActivity.getOrgrole()){
+			if(roles.get(orgRole.getAmpOrgRoleId())==null){
+				roles.put(orgRole.getAmpOrgRoleId(),new ArrayList<Long>());
+			}
+			roles.get(orgRole.getAmpOrgRoleId()).add(orgRole.getOrganisation().getAmpOrgId());
+		}
+		
+		
+		for(Object o :ampActivity.getActPrograms()){
+			AmpActivityProgram aap=(AmpActivityProgram)o;
+			if(programs.get(aap.getProgramSetting().getAmpProgramSettingsId()) ==null){
+				programs.put(aap.getProgramSetting().getAmpProgramSettingsId(),new ArrayList<Long>());
+			}
+			programs.get(aap.getProgramSetting().getAmpProgramSettingsId()).add(aap.getProgram().getAmpThemeId());
+			
+		}
+		
+		j.set("sectors", sectors);
+		j.set("organizations", roles);
+		j.set("programs", programs);
+		
+		a.setMatchesFilters(j);
 		return a;
 	}
 
@@ -297,10 +336,10 @@ public class GisEndPoints {
 				ActivityFundingDigest fundingDigest=new ActivityFundingDigest();
 				fundingDigest.populateFromFundings(activity.getFunding(), "US", null, false);
 				for(FundingDetail fd:fundingDigest.getCommitmentsDetails()){
-				a.addCommitments(fd.getTransactionAmount(), fd.getTransactionDate());	
+					a.addCommitments(fd.getTransactionAmount(), fd.getTransactionDate());	
 				}
 				for(FundingDetail fd:fundingDigest.getDisbursementsDetails()){
-				a.addDisbursment(fd.getTransactionAmount(), fd.getTransactionDate());	
+					a.addDisbursment(fd.getTransactionAmount(), fd.getTransactionDate());	
 				}			
 				
 				l.add(a);

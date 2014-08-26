@@ -10,9 +10,9 @@ module.exports = Backbone.View.extend({
   // These will eventually move to a config.
   // They control when to resize points based on zoom
   ZOOM_BREAKPOINT: 7,
-  SMALL_ICON_RADIUS: 7,
-  BIG_ICON_RADIUS: 12,
-  currentRadius: 7,
+  SMALL_ICON_RADIUS: 2,
+  BIG_ICON_RADIUS: 7,
+  currentRadius: 2,
   markerCluster: null,
 
   popup: null,
@@ -46,8 +46,12 @@ module.exports = Backbone.View.extend({
       maxClusterRadius: 0.001,
       iconCreateFunction: function(cluster) {
         var markers = cluster.getAllChildMarkers();
-        var size = 2 + markers.length + self.currentRadius * 2,  // diameter here, not radius
+        var size = markers.length + 5;
             zoomedIn = (self.map.getZoom() >= self.ZOOM_BREAKPOINT);
+
+        if (zoomedIn) {
+          size += 2 + self.BIG_ICON_RADIUS;
+        }
 
         var colours = _(markers)
           .chain()
@@ -70,7 +74,7 @@ module.exports = Backbone.View.extend({
           className: 'marker-cluster' + (zoomedIn ? '' : ' marker-cluster-small'),
           iconSize: L.point(size, size),
           html: '<div class="circle" style="background-color:' + (colours[0] && colours[0].hex()) + '">'+
-                  '<div class="text">' + markers.length + '</div>' +
+                  (zoomedIn ? '<div class="text">' + markers.length + '</div>' : '') +
                 '</div>'
         });
 
@@ -158,7 +162,7 @@ module.exports = Backbone.View.extend({
         var point = new L.CircleMarker(latlng, {
           radius: self.currentRadius,
           fillColor: color && color.hex(),
-          color: '#fff',
+          color: '#333',
           weight: 1,
           opacity: 1,
           fillOpacity: 1
@@ -224,14 +228,15 @@ module.exports = Backbone.View.extend({
     var self = this;
 
     if (this.featureGroup) {
-      var zoomedIn = (this.map.getZoom() >= this.ZOOM_BREAKPOINT);
-      if (zoomedIn && self.currentRadius !== self.BIG_ICON_RADIUS) {
-        self.currentRadius = self.BIG_ICON_RADIUS;
+      var zoom = this.map.getZoom();
+      // make small points
+      if (zoom < this.ZOOM_BREAKPOINT && self.currentRadius !== self.SMALL_ICON_RADIUS) {
+        self.currentRadius = self.SMALL_ICON_RADIUS;
         this.featureGroup.eachLayer(function(layer) {
           layer.setRadius(self.currentRadius);
         });
-      } else if ( self.currentRadius !== self.SMALL_ICON_RADIUS) {
-        self.currentRadius = self.SMALL_ICON_RADIUS;
+      } else if (zoom >= this.ZOOM_BREAKPOINT && self.currentRadius !== self.BIG_ICON_RADIUS) {
+        self.currentRadius = self.BIG_ICON_RADIUS;
         this.featureGroup.eachLayer(function(layer) {
           layer.setRadius(self.currentRadius);
         });

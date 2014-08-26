@@ -165,6 +165,9 @@ public class GlobalSettingsConstants {
 
     public static final String SUPPORT_EMAIL = "Support Email";
     public static final String ALLOW_SAME_ORG_IN_DIFF_ROLES = "Allow same organization in different roles";
+    
+    public static final String GIS_DEFAUL_MAX_YEAR_RANGE ="GIS Default Max Year Filter Range";
+    public static final String GIS_DEFAUL_MIN_YEAR_RANGE ="GIS Default Min Year Filter Range";
         
 
 }

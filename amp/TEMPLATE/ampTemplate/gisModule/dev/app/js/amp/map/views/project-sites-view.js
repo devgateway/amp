@@ -46,7 +46,7 @@ module.exports = Backbone.View.extend({
       maxClusterRadius: 0.001,
       iconCreateFunction: function(cluster) {
         var markers = cluster.getAllChildMarkers();
-        var size = markers.length + 5;
+        var size = markers.length + 5,
             zoomedIn = (self.map.getZoom() >= self.ZOOM_BREAKPOINT);
 
         if (zoomedIn) {
@@ -156,12 +156,20 @@ module.exports = Backbone.View.extend({
     //console.log(JSON.stringify(self.rawData));
     self.featureGroup = L.geoJson(self.rawData, {
       pointToLayer: function (feature, latlng) {
-        var color = model.palette.colours.find(function(colour) {
+        var colors = model.palette.colours.filter(function(colour) {
           return colour.get('test').call(colour, feature.id);
         });
+        if (colors.length > 2) {  // 2, because "other" is always true...
+          console.log('m', colors.length);
+          colors = [model.palette.colours.find(function(colour) {
+            return colour.get('multiple') === true;
+          })];
+        } else {
+          console.log('o', colors.length);
+        }
         var point = new L.CircleMarker(latlng, {
           radius: self.currentRadius,
-          fillColor: color && color.hex(),
+          fillColor: colors[0].hex(),
           color: '#333',
           weight: 1,
           opacity: 1,

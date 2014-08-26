@@ -8,6 +8,7 @@ var TreeNodeView = require('../views/tree-node-view');
 var BaseFilterView = require('../views/base-filter-view');
 var Template = fs.readFileSync(__dirname + '/../templates/generic-filter-template.html', 'utf8');
 
+
 // This is a generic model for filters. It assumes a tree structure.
 // If you don't want a tree structure just extend base-filter
 module.exports = BaseFilterView.extend({

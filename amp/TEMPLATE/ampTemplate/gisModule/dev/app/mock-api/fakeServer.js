@@ -44,6 +44,8 @@ _.extend(FakeServer.prototype, {
 
     // Filters
     'GET /rest/filters':         fs.readFileSync(__dirname + '/data/filters/list.json', 'utf8'),
+    'GET /rest/filters/organizations/1':     fs.readFileSync(__dirname + '/data/filters/orgs.json', 'utf8'),
+    'GET /rest/filters/organizations':     fs.readFileSync(__dirname + '/data/filters/orgRoles.json', 'utf8'),
     'GET /rest/filters/programs':     fs.readFileSync(__dirname + '/data/filters/programs.json', 'utf8'),
     'GET /rest/filters/activityStatus':  fs.readFileSync(__dirname + '/data/filters/activity-status.json', 'utf8'),
     'GET /rest/filters/sectors':  fs.readFileSync(__dirname + '/data/filters/sectors.json', 'utf8'),

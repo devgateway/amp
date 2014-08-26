@@ -4,8 +4,8 @@ var _ = require('underscore');
 
 var BaseControlView = require('../../base-control/base-control-view');
 var GenericFilterView = require('../views/generic-filter-view');
+var GenericNestedFilterView = require('../views/generic-nested-filter-view');
 var YearsFilterView = require('../views/years-filter-view');
-var SectorsFilterView = require('../views/sector-filter-view');
 var Template = fs.readFileSync(__dirname + '/../templates/filters-template.html', 'utf8');
 
 
@@ -97,7 +97,7 @@ module.exports = BaseControlView.extend({
         break;
       case 'Sectors':
       case 'Programs':
-        view = new SectorsFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
+        view = new GenericNestedFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
         break;        
       default:
         view = new GenericFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});

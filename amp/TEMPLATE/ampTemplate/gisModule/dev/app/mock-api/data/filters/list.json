@@ -1,27 +1,32 @@
 [
 {
 "name": "Sectors",
-"ui": "true",
+"ui": true,
 "endpoint": "/rest/filters/sectors"
 },
 {
 "name": "ActivityStatus",
-"ui": "true",
+"ui": true,
 "endpoint": "/rest/filters/activityStatus"
 },
 {
 "name": "Boundaries",
-"ui": "false",
+"ui": false,
 "endpoint": "/rest/filters/boundaries"
 },
 {
 "name": "SectorConfigName",
-"ui": "false",
+"ui": false,
 "endpoint": "/rest/filters/sectorConfigName"
 },
 {
 "name": "Programs",
-"ui": "true",
+"ui": true,
 "endpoint": "/rest/filters/programs"
+},
+{
+"name": "Organizations",
+"ui": true,
+"endpoint": "/rest/filters/orgs"
 }
 ]

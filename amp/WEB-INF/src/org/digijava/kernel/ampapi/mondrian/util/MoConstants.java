@@ -73,6 +73,8 @@ public final class MoConstants {
 	public static final String H_ORG_NAME = "All Orgs";
 	//public static final String H_ORG_DUPLICATE = "Organization Hierarchy Duplicate";
 	public static final String H_LOCATIONS = "Locations";
+	public static final String H_PRIMARY_SECTOR = "Primary Sector";
+	public static final String H_PROJECT_TITLE = "Project Title";
 	//public static final String H_LOCATIONS_DUPLICATE= "LocationsDuplicate";
 	//Attributes/Levels
 	public static final String ATTR_PROJECT_TITLE = "Project Title";

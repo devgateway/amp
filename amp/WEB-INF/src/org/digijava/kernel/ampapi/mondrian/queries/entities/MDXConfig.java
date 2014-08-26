@@ -311,8 +311,8 @@ public class MDXConfig {
 	/**
 	 * @param columnHierarchiesTotals the number of columns hierarchies for each totals to be done
 	 */
-	public void setColumnsHierarchiesTotals(int colsHierarchiesTotals) {
-		this.colsHierarchiesTotals = colsHierarchiesTotals;
+	public void setColumnsHierarchiesTotals(int columnHierarchiesTotals) {
+		this.colsHierarchiesTotals = columnHierarchiesTotals;
 	}
 	
 }

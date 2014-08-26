@@ -119,12 +119,7 @@
 		<Dimension name="Primary Sector" foreignKey="primary_sector_id">
 			<Hierarchy hasAll="true" allMemberName="All Primary Sectors" primaryKey="amp_sector_id" name="Primary Sector">
 				<Table name="mondrian_sectors" alias="primary_sector_table" />
-				<Level name="Primary Sector" type="Integer" column="level0_sector_id" nameColumn="level0_sector_name" >
-					<Property name="default" column="level0_sector_id" type="Integer"/>
-					<Property name="primarySectorId" column="level0_sector_id" type="Integer"/>
-					<Property name="primarySectorSubSectorId" column="level1_sector_id" type="Integer"/>
-					<Property name="primarySectorSubSubSectorId" column="level2_sector_id" type="Integer"/>
-				</Level>
+				<Level name="Primary Sector" type="Integer" column="level0_sector_id" nameColumn="level0_sector_name" />
 				<Level name="Primary Sector Sub-sector" type="Integer" column="level1_sector_id" nameColumn="level1_sector_name" />
 				<Level name="Primary Sector Sub-sub-sector" type="Integer" column="level2_sector_id" nameColumn="level2_sector_name" />
 			</Hierarchy>

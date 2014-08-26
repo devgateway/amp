@@ -51,6 +51,7 @@ public class MDXTests extends AmpTestCase {
 		suite.addTest(new MDXTests("testSinglePropertyFilter")); 
 		suite.addTest(new MDXTests("testPropertiesListFilter"));
 		suite.addTest(new MDXTests("testMultipleHierarchies"));
+		suite.addTest(new MDXTests("testHierarchiesWithTotalsNoDateGrouping"));
 		suite.addTest(new MDXTests("testSortingNoTotals"));
 		suite.addTest(new MDXTests("testSortingBy2012Q1ActualCommitments"));
 		//suite.addTest(new MDXTests("testCacheDimension"));
@@ -185,6 +186,24 @@ public class MDXTests extends AmpTestCase {
 		config.getRowAttributes().add(0, new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
 		addSimpleFilter(config); //filter for easier testing
 		//on no cache: runs about 237 secs of filtering with filter on where vs 81.37 sec when filtering directly on axis 
+		generateAndValidateMDX(config, expectedRes, false);
+	}
+	
+	public void testHierarchiesWithTotalsNoDateGrouping() {
+		String expectedRes = null;
+		MDXConfig config = new MDXConfig();
+		config.setMdxName("testHierarchiesWithTotalsNoDateGrouping");
+		config.addColumnMeasure(new MDXMeasure(MoConstants.ACTUAL_COMMITMENTS));
+		config.addColumnMeasure(new MDXMeasure(MoConstants.ACTUAL_DISBURSEMENTS));
+		config.addRowAttribute(new MDXAttribute(MoConstants.PRIMARY_SECTOR, MoConstants.ATTR_PRIMARY_SECTOR_NAME));
+		config.addRowAttribute(new MDXAttribute(MoConstants.PROJECT_TITLE, MoConstants.ATTR_PROJECT_TITLE));
+		config.addRowAttribute(new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS, MoConstants.ATTR_REGION_NAME));
+		config.setAllowEmptyColumnsData(false);
+		config.setAllowEmptyRowsData(false);
+		config.setColumnsHierarchiesTotals(0);
+		config.setDoColumnsTotals(true);
+		config.setRowsHierarchiesTotals(config.getRowAttributes().size());
+		config.setDoRowTotals(true);
 		generateAndValidateMDX(config, expectedRes, false);
 	}
 	

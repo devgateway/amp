@@ -19,6 +19,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	private Set<ReportColumn> hierarchies = null;
 	private List<ReportMeasure> measures = null;
 	private ReportFilters filters = null;
+	private ReportSettings settings = null;
 	private List<SortingInfo> sorters = null;
 	private GroupingCriteria groupingCriteria = GroupingCriteria.GROUPING_TOTALS_ONLY;
 	private boolean summaryReport = false;
@@ -101,6 +102,20 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	
 	public void setFilters(ReportFilters filters) {
 		this.filters = filters;
+	}
+
+	/**
+	 * @return the settings
+	 */
+	public ReportSettings getSettings() {
+		return settings;
+	}
+
+	/**
+	 * @param settings the settings to set
+	 */
+	public void setSettings(ReportSettings settings) {
+		this.settings = settings;
 	}
 
 	@Override

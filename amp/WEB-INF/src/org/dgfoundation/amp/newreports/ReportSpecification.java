@@ -38,6 +38,9 @@ public interface ReportSpecification {
 	
 	public ReportFilters getFilters();
 	
+	/** @return {@link ReportSettings} - settings of the current report */
+	public ReportSettings getSettings();
+	
 	public List<SortingInfo> getSorters();
 	
 	public GroupingCriteria getGroupingCriteria();

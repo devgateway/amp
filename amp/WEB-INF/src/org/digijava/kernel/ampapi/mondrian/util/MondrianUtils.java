@@ -23,6 +23,8 @@ import org.olap4j.OlapException;
 import org.olap4j.layout.RectangularCellSetFormatter;
 import org.olap4j.mdx.parser.MdxParseException;
 import org.olap4j.metadata.Datatype;
+import org.saiku.olap.dto.resultset.AbstractBaseCell;
+import org.saiku.olap.dto.resultset.CellDataSet;
 
 /**
  * Mondrian utility class 
@@ -97,6 +99,36 @@ public class MondrianUtils {
 	public static void print(CellSet cellSet, String reportName) {
 		RectangularCellSetFormatter formatter = new RectangularCellSetFormatter(false);
 		
+		PrintWriter writer = getOutput(reportName);
+		
+		formatter.format(cellSet, writer);
+		writer.flush();
+		writer.close();
+	}
+	
+	public static void print(CellDataSet cellDataSet, String reportName) {
+		PrintWriter writer = getOutput(reportName);
+		print(writer, cellDataSet.getCellSetHeaders());
+		print(writer, cellDataSet.getCellSetBody());
+		
+		writer.flush();
+		writer.close();
+	}
+	
+	private static void print(PrintWriter writer, AbstractBaseCell[][] data) {
+		for (int i = 0; i < data.length; i++) {
+			for (int j = 0; j< data[i].length; j++ )
+				writer.format("%-20s\t|", data[i][j].getFormattedValue());
+			writer.write(System.lineSeparator());
+		}
+		int length = data.length > 0 ? (data[0].length * 25) : 0;
+		for (int j = 0; j < length; j++ ) {
+			writer.write("-");
+		}
+		writer.write(System.lineSeparator());
+	}
+	
+	private static PrintWriter getOutput(String reportName) {
 		PrintWriter writer = null;
 		if (PRINT_PATH != null){
 			String fileName = PRINT_PATH + (PRINT_PATH.endsWith(File.separator) ? "" : File.separator) + reportName + ".txt";
@@ -112,9 +144,7 @@ public class MondrianUtils {
 		if (writer == null)
 			writer = new PrintWriter(System.out);
 		
-		formatter.format(cellSet, writer);
-		writer.flush();
-		writer.close();
+		return writer;
 	}
 	
 	public static String getDatatypeName(Datatype type) {

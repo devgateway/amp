@@ -8,12 +8,15 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
@@ -21,6 +24,7 @@ import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.FilterRule.FilterType;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
@@ -53,6 +57,9 @@ import org.olap4j.OlapException;
 import org.olap4j.Position;
 import org.olap4j.metadata.Member;
 import org.olap4j.query.SortOrder;
+import org.saiku.olap.dto.resultset.AbstractBaseCell;
+import org.saiku.olap.dto.resultset.CellDataSet;
+import org.saiku.olap.util.OlapResultSetUtil;
 
 /**
  * Generates a report via Mondrian
@@ -67,6 +74,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 	private static final boolean IS_DEV = true;
 	private final Class<? extends ReportAreaImpl> reportAreaType;
 	private final boolean printMode;
+	
+	private List<ReportOutputColumn> leafHeaders = null; //leaf report columns list
 	
 	/**
 	 * Mondrian Report Generator
@@ -114,13 +123,14 @@ public class MondrianReportGenerator implements ReportExecutor {
 	}
 	
 	/**
-	 * Generates a report as an Olap4J CellSet, without any translation into our Reports API structures
+	 * Generates a report as a Saiku {@link CellDataSet}, without any translation into our Reports API structures
 	 * @param spec - {@link ReportSpecification}
-	 * @return {@link org.olap4j.CellSet}
+	 * @return {@link CellDataSet}
 	 * @throws AMPException
 	 */
-	public CellSet generateReportAsOlap4JCellSet(ReportSpecification spec) throws AMPException {
+	public CellDataSet generateReportAsSaikuCellDataSet(ReportSpecification spec) throws AMPException {
 		MDXConfig config = toMDXConfig(spec);
+		CellDataSet cellDataSet = null;
 		CellSet cellSet = null;
 		long startTime = 0;
 		MDXGenerator generator = null;
@@ -140,8 +150,12 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 		
 		logger.info("CellSet for " + config.getMdxName() + " generated within :" + String.valueOf((int)(System.currentTimeMillis() - startTime)));
+		cellDataSet = postProcess(spec, cellSet);
+		if (printMode) {
+			MondrianUtils.print(cellDataSet, spec.getReportName() + "_POST");
+		}
 		//TODO: add a method to teardown connection
-		return cellSet;
+		return cellDataSet;
 	}
 	
 	/**
@@ -167,10 +181,12 @@ public class MondrianReportGenerator implements ReportExecutor {
 		MDXConfig config = new MDXConfig();
 		config.setCubeName(MoConstants.DEFAULT_CUBE_NAME);
 		config.setMdxName(spec.getReportName());
-		boolean doHierarchiesTotals = spec.getHierarchies() != null && spec.getHierarchies().size() > 0;
-		config.setDoColumnsTotals(spec.isCalculateRowTotals()); //columns totals in MDX are equivalent to what we perceive as row totals in standard report
-		config.setDoRowTotals(spec.isCalculateColumnTotals()); //row totals in MDX are equivalent to what we perceive as column totals
-		//TODO: split row totals in 2 options: hierarchy sub-totals and final totals 
+		boolean doHierarchiesTotals = false;//we are moving totals calculation out of MDX. spec.getHierarchies() != null && spec.getHierarchies().size() > 0;
+		//totals to be done post generation, because in MDX it take too long
+		config.setDoColumnsTotals(false);// we are moving totals calculation out of MDX. spec.isCalculateRowTotals()); //columns totals in MDX are equivalent to what we perceive as row totals in standard report
+		config.setDoRowTotals(spec.isCalculateColumnTotals()); //row totals in MDX are equivalent to what we perceive as column totals, e.g. this is for Total Actual Commitments
+		config.setColumnsHierarchiesTotals(0); //we are moving subtotals out of MDX.
+		config.setRowsHierarchiesTotals(0); //we are moving subtotals out of MDX.
 		//add requested columns
 		for (ReportColumn col:spec.getColumns()) {
 			MDXAttribute elem = (MDXAttribute)MondrianMapping.toMDXElement(col);
@@ -196,7 +212,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		addFilters(spec.getFilters(), config);
 		
 		config.setAllowEmptyColumnsData(spec.isDisplayEmptyFundingColumns());
-		config.setAllowEmptyRowsData(spec.isDisplayEmptyFundingRows());		
+		config.setAllowEmptyRowsData(spec.isDisplayEmptyFundingRows());
 		
 		return config;
 	}
@@ -271,15 +287,158 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 	}
 	
+	private CellDataSet postProcess(ReportSpecification spec, CellSet cellSet) throws AMPException {
+		CellSetAxis rowAxis = cellSet.getAxes().get(Axis.ROWS.axisOrdinal());
+		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
+		
+		if (rowAxis.getPositionCount() > 0 && columnAxis.getPositionCount() > 0 ) {
+			leafHeaders = getOrderedLeafColumnsList(rowAxis, columnAxis);
+		} else 
+			leafHeaders = null;
+		
+		CellDataSet cellDataSet = OlapResultSetUtil.cellSet2Matrix(cellSet); // we can also pass a formater to cellSet2Matrix(cellSet, formatter)
+		
+		if (spec.isCalculateColumnTotals()) {
+			//TODO: do the totals first, need to reuse the part that Saiku does with totals
+		}
+		
+		applyFilterSetting(spec, cellDataSet);
+		
+		//TODO: concatenate columns for non-hierarchical reports
+		
+		return cellDataSet;
+	}
+	
+	private void applyFilterSetting(ReportSpecification spec, CellDataSet cellDataSet) throws AMPException {
+		for (Entry<ReportElement, List<FilterRule>> pair : spec.getSettings().getFilterRules().entrySet()) {
+			switch(pair.getKey().type) {
+			case YEAR: 
+				if (!GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria()))
+					applyYearRangeSetting(spec, pair.getValue(), cellDataSet);
+				break;
+			default: throw new AMPException("Not supported: settings behavior over " + pair.getKey().type);
+			}
+		}
+	}
+	
+	private void applyYearRangeSetting(ReportSpecification spec, List<FilterRule> filters, CellDataSet cellDataSet) {
+		if (leafHeaders == null || leafHeaders.size() == 0) return;
+
+		//detect the level where years are displayed
+		int level = 0; //this is measures level
+		switch(spec.getGroupingCriteria()) {
+		case GROUPING_YEARLY : level = 1; break;
+		case GROUPING_QUARTERLY : level = 2; break; //i.e. level 0 is for measures, level 1 is for quarters and level 2 is for years
+		case GROUPING_MONTHLY : level = 3; break;
+		case GROUPING_TOTALS_ONLY : return;  
+		}
+
+		List<Integer[]> yearRanges = new ArrayList<Integer[]>();
+		Set<Integer> yearSet = new TreeSet<Integer>();
+		getYearSettings(filters, yearRanges, yearSet);
+		
+		Iterator<ReportOutputColumn> iter = leafHeaders.iterator();
+		int pos = spec.getColumns().size(); //initial position in the list
+		//skip report columns unrelated to years
+		while(pos > 0 && iter.hasNext()) {
+			iter.next();
+			pos--;
+		}
+		
+		//detect the columns that are not in the years ranges or years set
+		SortedSet<Integer> leafColumnsNumberToRemove = new TreeSet<Integer>();
+		pos = spec.getColumns().size(); //re-init the starting position
+		while(iter.hasNext()) {
+			ReportOutputColumn column = iter.next();
+			//move to year level header
+			int currentLevel = level;
+			while(currentLevel > 0 && column!= null) {
+				column = column.parentColumn;
+				currentLevel--; 
+			}
+			
+			if (column != null) { //must not be null actually
+				Integer year = Integer.parseInt(column.columnName);
+				boolean isAllowed = yearSet.contains(year); //first check if it is in the set
+				if (!isAllowed)
+					for (Integer[] range : yearRanges)
+						if (range[0] <= year && year <= range[1]) { //check if the year is within any [min, max] allowed range from the list of configured ranges
+							isAllowed = true;
+							break;
+						}
+				
+				if (!isAllowed) {
+					leafColumnsNumberToRemove.add(pos);
+					//TODO: iter.remove();//remove also the leaf header
+				}
+			}
+			pos ++;
+		}
+		
+		cellDataSet.setCellSetHeaders(removeYearsToHideCells(cellDataSet.getCellSetHeaders(), leafColumnsNumberToRemove));
+		cellDataSet.setCellSetBody(removeYearsToHideCells(cellDataSet.getCellSetBody(), leafColumnsNumberToRemove));
+	}
+	
+	private AbstractBaseCell[][] removeYearsToHideCells(AbstractBaseCell[][] cellSetHeaders, SortedSet<Integer> leafColumnsNumberToRemove) {
+		if (cellSetHeaders.length == 0) return cellSetHeaders; //not the case, but.. 
+		AbstractBaseCell[][] newCellSetHeaders = new AbstractBaseCell[cellSetHeaders.length][cellSetHeaders[0].length - leafColumnsNumberToRemove.size()];
+		for (int i = 0; i < cellSetHeaders.length; i++) {
+			int newJ = 0;
+			for (int j = 0; j< cellSetHeaders[i].length; j++) {
+				if (!leafColumnsNumberToRemove.contains(j)) {
+					newCellSetHeaders[i][newJ++] = cellSetHeaders[i][j];  
+				}
+			}	
+		}
+		return newCellSetHeaders;
+		
+		/*
+		int deduct = 0;
+		
+		for(Integer pos : leafColumnsNumberToRemove) {
+			columnAxis.getPositions().remove(pos - deduct);
+			deduct ++;
+		}
+		*/
+		
+		/*
+		int columnPos = rowAxis.getPositions().get(0).getMembers().size(); //initial position of the column
+		for (ListIterator<Position> iter  = columnAxis.iterator(); iter.hasNext(); ) {
+			if (leafColumnsNumberToRemove.contains(columnPos)) {
+				iter.remove();
+			}
+			columnPos ++;
+		}
+		*/
+	}
+	
+	private void getYearSettings(List<FilterRule> filters, List<Integer[]> yearRanges, Set<Integer> yearSet) {
+		//build the list of ranges and selective set of years
+		for(FilterRule rule : filters) {
+			switch(rule.filterType) {
+			case RANGE :
+				Integer min = rule.min == null ? Integer.MIN_VALUE : Integer.parseInt(rule.min);
+				Integer max = rule.max == null ? Integer.MAX_VALUE : Integer.parseInt(rule.max);
+				yearRanges.add(new Integer[]{min, max});
+				break;
+			case SINGLE_VALUE : 
+				yearSet.add(Integer.parseInt(rule.value)); 
+				break;
+			case VALUES : 
+				for (String value : rule.values) {
+					yearSet.add(Integer.parseInt(value));
+				}
+				break;
+			}
+		} 
+	}
+	
 	private GeneratedReport toGeneratedReport(ReportSpecification spec, CellSet cellSet, int duration) throws AMPException {
 		CellSetAxis rowAxis = cellSet.getAxes().get(Axis.ROWS.axisOrdinal());
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 		ReportAreaImpl root = getNewReportArea(reportAreaType);
-		List<ReportOutputColumn> leafHeaders = null; //leaf report columns list
 		
 		if (rowAxis.getPositionCount() > 0 && columnAxis.getPositionCount() > 0 ) {
-			leafHeaders = getOrderedLeafColumnsList(rowAxis, columnAxis); 
-			
 			/* Build Report Areas */
 			// stack of current group of children
 			Deque<List<ReportArea>> stack = new ArrayDeque<List<ReportArea>>();

@@ -36,6 +36,7 @@ public class AmpARFilterTranslator {
 	
 	//either transform filter by IDS, either by Names => if by IDS, then Level properties will be used
 	private MondrianReportFilters filterRules;
+	private MondrianReportSettings settings;
 	private static final boolean USE_IDS = false;
 	private AmpARFilter arFilter;
 	ReportEntityType entityType;
@@ -237,6 +238,35 @@ public class AmpARFilterTranslator {
 		addFilterRule(new ReportColumn(columnName, type), new FilterRule(names, true, false));
 	}
 	
+	public MondrianReportSettings buildSettings() {
+		settings = new MondrianReportSettings();
+		
+		addCurrencySettings();
+		addDateSettings();
+		
+		return settings;
+	}
+	
+	private void addCurrencySettings() {
+		if(arFilter.getCurrency() != null )
+			settings.setCurrencyCode(arFilter.getCurrency().getCurrencyCode());
+		if(arFilter.getCurrentFormat() != null)
+			settings.setCurrencyFormat(arFilter.getCurrentFormat().toPattern());
+	}
+	
+	/**
+	 * Adds any display filter settings and calendar settings
+	 */
+	private void addDateSettings() {
+		try {
+			if (arFilter.getRenderStartYear()!=null || arFilter.getRenderEndYear() != null)
+				settings.addYearsRangeFilterRule(arFilter.getRenderStartYear(), arFilter.getRenderEndYear());
+		} catch(AmpApiException ex) {
+			logger.error(ex.getMessage());
+		}
+		//TODO: calendar
+	}
+
 
 	/**
 	 * @return the arFilter

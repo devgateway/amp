@@ -38,6 +38,8 @@ public class MondrianReportUtils {
 		spec.setDisplayEmptyFundingRows(false); //default expectation
 		spec.setColsHierarchyTotals(0);
 		spec.setRowsHierarchiesTotals(report.getHierarchies().size());
+		spec.setCalculateColumnTotals(true);
+		spec.setCalculateRowTotals(true);
 		
 		switch(report.getOptions()) {
 		case "A": spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY); break;
@@ -49,6 +51,7 @@ public class MondrianReportUtils {
 		AmpARFilter arFilter = FilterUtil.buildFilter(report, report.getAmpReportId());
 		AmpARFilterTranslator arFilterTranslator = new AmpARFilterTranslator(arFilter); 
 		spec.setFilters(arFilterTranslator.buildFilters());
+		spec.setSettings(arFilterTranslator.buildSettings());
 		
 		//TODO:
 		//report.getAlsoShowPledges()

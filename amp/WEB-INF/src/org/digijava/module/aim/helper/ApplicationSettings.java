@@ -1,123 +1,96 @@
-
 package org.digijava.module.aim.helper;
 
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
+/**
+ * immutable mirror of AmpApplicationSettings
+ * @author Constantin Dolghier
+ *
+ */
 public class ApplicationSettings {
 
-			public ApplicationSettings()
-			{
-				
-			}
-			
-		  private Long appSettingsId;
-		  private Integer defRecsPerPage;
-		  private Integer numberOfPagesToDisplay;
-		  private String language;
-		  private Long currencyId;
-		  private Long fisCalId;
-		  private Integer reportStartYear;
-		  private Integer reportEndYear;
-		  private AmpReports defaultAmpReport;
-          private int defReportsPerPage;
-          private String validation;
-          private  Boolean crossteamvalidation;
+	public ApplicationSettings(AmpApplicationSettings ampAppSettings) {
+        this.appSettingsId = ampAppSettings.getAmpAppSettingsId();
+        this.defRecsPerPage = ampAppSettings.getDefaultRecordsPerPage();
+        this.defReportsPerPage = (ampAppSettings.getDefaultReportsPerPage()==null)?0:ampAppSettings.getDefaultReportsPerPage();
+        this.currencyId = ampAppSettings.getCurrency() != null ? ampAppSettings.getCurrency().getAmpCurrencyId() : 
+        	CurrencyUtil.getAmpcurrency(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY)).getAmpCurrencyId();
+        
+        this.fisCalId = ampAppSettings.getFiscalCalendar() != null ? ampAppSettings.getFiscalCalendar().getAmpFiscalCalId() : null;	        
+        this.language = ampAppSettings.getLanguage();
+        this.defaultAmpReport = ampAppSettings.getDefaultTeamReport();
+        this.validation = ampAppSettings.getValidation();
+        this.crossteamvalidation = ampAppSettings.getTeam().getCrossteamvalidation();
+        this.reportStartYear = ampAppSettings.getReportStartYear();
+        this.reportEndYear = ampAppSettings.getReportEndYear();
+        this.numberOfPagesToDisplay = ampAppSettings.getNumberOfPagesToDisplay();
+	}
 
-  public String getValidation() {
-			return validation;
-		}
+	private final Long appSettingsId;
+	private final Integer defRecsPerPage;
+	private final Integer numberOfPagesToDisplay;
+	private final String language;
+	private final Long currencyId;
+	private final Long fisCalId;
+	private final Integer reportStartYear;
+	private final Integer reportEndYear;
+	private final AmpReports defaultAmpReport;
+	private final int defReportsPerPage;
+	private final String validation;
+	private final Boolean crossteamvalidation;
 
-		public void setValidation(String validation) {
-			this.validation = validation;
-		}
+	public String getValidation() {
+		return validation;
+	}
 
-public Long getAppSettingsId() {
-					 return this.appSettingsId;
-		  }
+	public Long getAppSettingsId() {
+		return this.appSettingsId;
+	}
 
-		  public void setAppSettingsId(Long appSettingsId) {
-					 this.appSettingsId = appSettingsId;
-		  }
+	public Integer getDefRecsPerPage() {
+		return this.defRecsPerPage;
+	}
 
-		  public Integer getDefRecsPerPage() {
-			  return this.defRecsPerPage;
-		  }
+	public String getLanguage() {
+		return this.language;
+	}
 
-		  public void setDefRecsPerPage(Integer defRecsPerPage) {
-			  this.defRecsPerPage = defRecsPerPage;
-		  }
+	public Long getCurrencyId() {
+		return this.currencyId;
+	}
 
-		  public String getLanguage() {
-					 return this.language;
-		  }
+	public Long getFisCalId() {
+		return this.fisCalId;
+	}
 
-		  public void setLanguage(String language) {
-					 this.language = language;
-		  }
+	public AmpReports getDefaultAmpReport() {
+		return defaultAmpReport;
+	}
 
-		  public Long getCurrencyId() {
-					 return this.currencyId;
-		  }
+	public int getDefReportsPerPage() {
+		return defReportsPerPage;
+	}
 
-		  public void setCurrencyId(Long currencyId) {
-					 this.currencyId = currencyId;
-		  }
+	public Integer getReportStartYear() {
+		return reportStartYear;
+	}
 
-		  public Long getFisCalId() {
-					 return this.fisCalId;
-		  }
+	public Integer getReportEndYear() {
+		return reportEndYear;
+	}
 
-		  public void setFisCalId(Long fisCalId) {
-					 this.fisCalId = fisCalId;
-		  }
+	public Integer getNumberOfPagesToDisplay() {
+		return numberOfPagesToDisplay;
+	}
 
-		public AmpReports getDefaultAmpReport() {
-			return defaultAmpReport;
-		}
+	public Boolean getCrossteamvalidation() {
+		return crossteamvalidation;
+	}
 
-                public int getDefReportsPerPage() {
-                  return defReportsPerPage;
-                }
-
-  public void setDefaultAmpReport(AmpReports defaultAmpReport) {
-			this.defaultAmpReport = defaultAmpReport;
-		}
-
-                public void setDefReportsPerPage(int defReportsPerPage) {
-                  this.defReportsPerPage = defReportsPerPage;
-                }
-
-		public Integer getReportStartYear() {
-		    return reportStartYear;
-		}
-
-		public void setReportStartYear(Integer reportStartYear) {
-		    this.reportStartYear = reportStartYear;
-		}
-
-		public Integer getReportEndYear() {
-		    return reportEndYear;
-		}
-
-		public void setReportEndYear(Integer reportEndYear) {
-		    this.reportEndYear = reportEndYear;
-		}
-
-		public Integer getNumberOfPagesToDisplay() {
-			return numberOfPagesToDisplay;
-		}
-
-		public void setNumberOfPagesToDisplay(Integer numberOfPagesToDisplay) {
-			this.numberOfPagesToDisplay = numberOfPagesToDisplay;
-		}
-
-		public Boolean getCrossteamvalidation() {
-			return crossteamvalidation;
-		}
-
-		public void setCrossteamvalidation(Boolean crossteamvalidation) {
-			this.crossteamvalidation = crossteamvalidation;
-		}
-		
-		
+	public boolean isCrossTeamValidationEnabled() {
+		return getCrossteamvalidation() != null ? getCrossteamvalidation() : false;
+	}
 }

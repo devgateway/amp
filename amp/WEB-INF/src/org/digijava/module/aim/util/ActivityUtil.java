@@ -1638,13 +1638,14 @@ public class ActivityUtil {
 	 */
 	public static Set<Long> getActivitiesWhichShouldBeValidated(TeamMember tm, Collection<Long> activityIds)
 	{
-		
 		Set<Long> result = new HashSet<Long>();
-		
+		boolean crossTeamValidationEnabled = tm != null && tm.getAppSettings() != null && tm.getAppSettings().isCrossTeamValidationEnabled();
 		try
-		{			
+		{
 			String query = "SELECT a.amp_activity_id FROM amp_activity a WHERE a.amp_activity_id IN (" + TeamUtil.getCommaSeparatedList(activityIds) + ") " +
 				"AND (a.approval_status = 'started' OR a.approval_status='edited' OR a.approval_status='rejected') AND (a.draft IS NULL OR a.draft IS FALSE)"; // AND (a.amp_team_id = " + tm.getTeamId() + ")";
+			if (!crossTeamValidationEnabled)
+				query += "  AND (a.amp_team_id = " + tm.getTeamId() + ")";
 			
 			List<BigInteger> validated_activity_ids = PersistenceManager.getSession().createSQLQuery(query).list();
 			for(BigInteger bi:validated_activity_ids)
@@ -1656,6 +1657,7 @@ public class ActivityUtil {
 			throw new RuntimeException(e);
 		}
 	}
+
 	
 	public static boolean shouldThisUserBeAbleToEdit(TeamMember tm, Long activityId)
 	{

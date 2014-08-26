@@ -140,10 +140,10 @@ public class SwitchLanguage
        	
        	 //populate also the appSettings
        	 AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(teamMember.getTeamId());
-            ApplicationSettings appSettings = TeamMemberUtil.populateApplicationSettings (ampAppSettings);
-           teamMember.setAppSettings(appSettings);
-       	request.getSession().setAttribute("currentMember",teamMember );
-       	request.getSession().setAttribute(Constants.USER_WORKSPACES, TeamMemberUtil.getTeamMembers(tm.getEmail()));
+       	 ApplicationSettings appSettings = new ApplicationSettings(ampAppSettings);
+       	 teamMember.setAppSettings(appSettings);
+       	 request.getSession().setAttribute("currentMember",teamMember );
+       	 request.getSession().setAttribute(Constants.USER_WORKSPACES, TeamMemberUtil.getTeamMembers(tm.getEmail()));
        }
         if(isActivityForm){
         	if( actId.equals("new")){ //if its a new activity we go to desktop

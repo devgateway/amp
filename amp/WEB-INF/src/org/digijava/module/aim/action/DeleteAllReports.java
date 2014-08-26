@@ -126,7 +126,7 @@ public class DeleteAllReports extends Action {
 		 if ( tm!=null && tm.getAppSettings() != null) {
 			 AmpReports defTmReport	= tm.getAppSettings().getDefaultAmpReport();
 			 if ( defTmReport!=null && defTmReport.getAmpReportId().equals(reportId) ) {
-				 tm.getAppSettings().setDefaultAmpReport(null);
+				 //tm.getAppSettings().setDefaultAmpReport(null);
 			 }
 		 }
 		 

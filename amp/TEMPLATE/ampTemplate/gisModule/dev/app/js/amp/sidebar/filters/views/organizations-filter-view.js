@@ -28,7 +28,7 @@ module.exports = GenericFilterView.extend({
     BaseFilterView.prototype.initialize.apply(this);
     this.model = new GenericFilterModel(options.modelValues);
 
-    this._createTree(options.url).then(function(){
+    this._createTree().then(function(){
       self._updateCountInMenu();
       self.treeModel.on('change:numSelected', function(){
         self._updateCountInMenu();
@@ -37,8 +37,8 @@ module.exports = GenericFilterView.extend({
   },
 
 
-  _createTree: function(url){
-  	var self = this;
+  _createTree: function(){
+    var self = this;
     var deferred = $.Deferred();
     var deferreds = [];
     // builds tree of views from returned data
@@ -56,30 +56,30 @@ module.exports = GenericFilterView.extend({
     this.organizationRoles = new Backbone.Collection({});
     this.organizationRoles.url = '/rest/filters/organizations';
     this.organizations = new Backbone.Collection({});
-    this.organizations.url = '/rest/filters/organizations/1';;
+    this.organizations.url = '/rest/filters/organizations/1';
 
     deferreds.push(this.organizationRoles.fetch());
     deferreds.push(this.organizations.fetch());
 
-		$.when.apply($, deferreds).then(function(){
-			self.organizationRoles.each(function(orgRole){
-			    var tmpRoleNode = {
-			      id : orgRole.get('id'),
-			      code : '-1',
-			      name : orgRole.get('name'),
-			      selected: true,
-			      expanded: false,
-			      isSelectable: false,
-			      children: self.organizations.toJSON()
-			    };
-			    rootNodeObj.children.push(tmpRoleNode)
-			});
+    $.when.apply($, deferreds).then(function(){
+      self.organizationRoles.each(function(orgRole){
+          var tmpRoleNode = {
+            id : orgRole.get('id'),
+            code : '-1',
+            name : orgRole.get('name'),
+            selected: true,
+            expanded: false,
+            isSelectable: false,
+            children: self.organizations.toJSON()
+          };
+          rootNodeObj.children.push(tmpRoleNode);
+        });
 
       self.treeModel = new TreeNodeModel(rootNodeObj);
       self.treeView = new TreeNodeView();
-			deferred.resolve();
-		});
+      deferred.resolve();
+    });
 
-		return deferred;
+    return deferred;
   }
 });

@@ -103,9 +103,9 @@ _.extend(FakeServer.prototype, {
 
 
     // Project Sites
-    //'GET /rest/gis/structures': fs.readFileSync(__dirname + '/data/structures/drc-points-2000.json', 'utf8'),
+    //'POST /rest/gis/structures': fs.readFileSync(__dirname + '/data/structures/drc-points-2000.json', 'utf8'),
     'POST /rest/gis/structures': fs.readFileSync(__dirname + '/data/structures/wb-data.json', 'utf8'),
-    //'GET /rest/gis/structures': fs.readFileSync(__dirname + '/data/structures/random.json', 'utf8'),
+    //'POST /rest/gis/structures': fs.readFileSync(__dirname + '/data/structures/random.json', 'utf8'),
 
     // Indicator Layers
     'GET /rest/gis/indicator-layers':         fs.readFileSync(__dirname + '/data/indicator-layers/list.json', 'utf8'),

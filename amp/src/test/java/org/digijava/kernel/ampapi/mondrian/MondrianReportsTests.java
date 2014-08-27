@@ -46,8 +46,7 @@ public class MondrianReportsTests extends AmpTestCase {
 		super(name);
 	}
 	
-	public static Test suite()
-	{
+	public static Test suite() {
 		TestSuite suite = new TestSuite(MondrianReportsTests.class.getName());
 		/* tests are failing so far, because we are moving out the totals calculation from MDX, 
 		 * to revise when GeneratedReport structure will be build based on CellDataSet  
@@ -59,7 +58,7 @@ public class MondrianReportsTests extends AmpTestCase {
 		suite.addTest(new MondrianReportsTests("testMultipleDateFilters"));
 		suite.addTest(new MondrianReportsTests("testAmpReportToReportSpecification"));
 		*/
-		suite.addTest(new MondrianReportsTests("testGenerateReportAsOlap4JCellSet"));
+		suite.addTest(new MondrianReportsTests("testGenerateReportAsSaikuCellDataSet"));
 		//suite.addTest(new MondrianReportsTests("testHeavyQuery"));
 		
 		return suite;
@@ -140,7 +139,7 @@ public class MondrianReportsTests extends AmpTestCase {
 		generateAndValidate(spec, true);
 	}
 	
-	public void testGenerateReportAsOlap4JCellSet() {
+	public void testGenerateReportAsSaikuCellDataSet() {
 		ReportSpecificationImpl spec = getReportSpecificatin("NadiaMondrianTest");
 		generateAndValidate(spec, true, true);
 	}

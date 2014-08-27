@@ -36,12 +36,7 @@ import org.olap4j.OlapException;
 import org.olap4j.mdx.parser.MdxParser;
 import org.olap4j.mdx.parser.MdxValidator;
 import org.olap4j.metadata.Cube;
-import org.olap4j.metadata.Dimension;
-import org.olap4j.metadata.Hierarchy;
-import org.olap4j.metadata.Level;
-import org.olap4j.metadata.Member;
 import org.olap4j.metadata.NamedList;
-import org.olap4j.metadata.Property;
 import org.olap4j.query.SortOrder;
 
 /**
@@ -1040,7 +1035,7 @@ public class MDXGenerator {
 	/**
 	 * 				WON'T USE THE ORG.OLAP4J.QUERY API - it is experimental and limited
 	 */
-	/*
+	/*.
 	/**
 	 * Builds OLAP Query using Olap4J API
 	 * @param config 

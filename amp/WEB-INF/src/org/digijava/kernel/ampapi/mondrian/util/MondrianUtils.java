@@ -106,29 +106,7 @@ public class MondrianUtils {
 		writer.close();
 	}
 	
-	public static void print(CellDataSet cellDataSet, String reportName) {
-		PrintWriter writer = getOutput(reportName);
-		print(writer, cellDataSet.getCellSetHeaders());
-		print(writer, cellDataSet.getCellSetBody());
-		
-		writer.flush();
-		writer.close();
-	}
-	
-	private static void print(PrintWriter writer, AbstractBaseCell[][] data) {
-		for (int i = 0; i < data.length; i++) {
-			for (int j = 0; j< data[i].length; j++ )
-				writer.format("%-20s\t|", data[i][j].getFormattedValue());
-			writer.write(System.lineSeparator());
-		}
-		int length = data.length > 0 ? (data[0].length * 25) : 0;
-		for (int j = 0; j < length; j++ ) {
-			writer.write("-");
-		}
-		writer.write(System.lineSeparator());
-	}
-	
-	private static PrintWriter getOutput(String reportName) {
+	public static PrintWriter getOutput(String reportName) {
 		PrintWriter writer = null;
 		if (PRINT_PATH != null){
 			String fileName = PRINT_PATH + (PRINT_PATH.endsWith(File.separator) ? "" : File.separator) + reportName + ".txt";

@@ -49,6 +49,7 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
+import org.digijava.kernel.ampapi.saiku.util.SaikuUtils;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
@@ -60,6 +61,8 @@ import org.olap4j.query.SortOrder;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.olap.util.OlapResultSetUtil;
+import org.saiku.service.olap.totals.TotalNode;
+import org.saiku.service.olap.totals.aggregators.TotalAggregator;
 
 /**
  * Generates a report via Mondrian
@@ -132,27 +135,35 @@ public class MondrianReportGenerator implements ReportExecutor {
 		MDXConfig config = toMDXConfig(spec);
 		CellDataSet cellDataSet = null;
 		CellSet cellSet = null;
+		String mdxQuery = null;
 		long startTime = 0;
+		int totalTime = 0;
 		MDXGenerator generator = null;
 		try {
 			generator = new MDXGenerator();
 			startTime = System.currentTimeMillis();
-			String mdxQuery = generator.getAdvancedOlapQuery(config);
+			mdxQuery = generator.getAdvancedOlapQuery(config);
 			cellSet = generator.runQuery(mdxQuery);
-			if (printMode) {
-				MondrianUtils.print(cellSet, spec.getReportName());
-				System.out.println("[" + config.getMdxName() + "] MDX query: " + mdxQuery);
-			}
 		} catch (Exception e) {
 			if (generator != null) generator.tearDown();
 			throw new AMPException("Cannot generate Mondrian Report '" + config.getMdxName() +"' : " 
 					+ e.getMessage() == null ? e.getClass().getName() : e.getMessage());
 		}
 		
-		logger.info("CellSet for " + config.getMdxName() + " generated within :" + String.valueOf((int)(System.currentTimeMillis() - startTime)));
+		if (printMode)
+			System.out.println("[" + config.getMdxName() + "] MDX query run time: " + (int)(System.currentTimeMillis() - startTime));
 		cellDataSet = postProcess(spec, cellSet);
+		totalTime = (int)(System.currentTimeMillis() - startTime);
+		if (printMode)
+			System.out.println("[" + config.getMdxName() + "] With post process run time: " + totalTime);
+		cellDataSet.setRuntime(totalTime);
+		logger.info("CellSet for " + config.getMdxName() + " generated within :" + String.valueOf(totalTime));
 		if (printMode) {
-			MondrianUtils.print(cellDataSet, spec.getReportName() + "_POST");
+			if (cellSet != null)
+				MondrianUtils.print(cellSet, spec.getReportName());
+			System.out.println("[" + config.getMdxName() + "] MDX query: " + mdxQuery);
+			if (cellDataSet != null)
+				SaikuUtils.print(cellDataSet, spec.getReportName() + "_POST");
 		}
 		//TODO: add a method to teardown connection
 		return cellDataSet;
@@ -299,7 +310,12 @@ public class MondrianReportGenerator implements ReportExecutor {
 		CellDataSet cellDataSet = OlapResultSetUtil.cellSet2Matrix(cellSet); // we can also pass a formater to cellSet2Matrix(cellSet, formatter)
 		
 		if (spec.isCalculateColumnTotals()) {
-			//TODO: do the totals first, need to reuse the part that Saiku does with totals
+			try {
+				SaikuUtils.doTotals(spec, cellDataSet, cellSet);
+			} catch (Exception e) {
+				logger.error(e.getMessage());
+				throw new AMPException(e.getMessage());
+			}
 		}
 		
 		applyFilterSetting(spec, cellDataSet);
@@ -377,6 +393,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		
 		cellDataSet.setCellSetHeaders(removeYearsToHideCells(cellDataSet.getCellSetHeaders(), leafColumnsNumberToRemove));
 		cellDataSet.setCellSetBody(removeYearsToHideCells(cellDataSet.getCellSetBody(), leafColumnsNumberToRemove));
+		removeYearsToHideCells(cellDataSet, leafColumnsNumberToRemove);
 	}
 	
 	private AbstractBaseCell[][] removeYearsToHideCells(AbstractBaseCell[][] cellSetHeaders, SortedSet<Integer> leafColumnsNumberToRemove) {
@@ -391,25 +408,26 @@ public class MondrianReportGenerator implements ReportExecutor {
 			}	
 		}
 		return newCellSetHeaders;
-		
-		/*
-		int deduct = 0;
-		
-		for(Integer pos : leafColumnsNumberToRemove) {
-			columnAxis.getPositions().remove(pos - deduct);
-			deduct ++;
-		}
-		*/
-		
-		/*
-		int columnPos = rowAxis.getPositions().get(0).getMembers().size(); //initial position of the column
-		for (ListIterator<Position> iter  = columnAxis.iterator(); iter.hasNext(); ) {
-			if (leafColumnsNumberToRemove.contains(columnPos)) {
-				iter.remove();
+	}
+	
+	private void removeYearsToHideCells(CellDataSet cellDataSet, SortedSet<Integer> leafColumnsNumberToRemove) {
+		for(List<TotalNode> totalLists : cellDataSet.getRowTotalsLists()) {
+			for(TotalNode totalNode : totalLists) {
+				if (totalNode.getTotalGroups() != null && totalNode.getTotalGroups().length > 0) {
+					int offset = cellDataSet.getLeftOffset();
+					for (int i = 0; i < totalNode.getTotalGroups().length; i++) {
+						int newJ  = 0; 
+						TotalAggregator[] newLine = new TotalAggregator[totalNode.getTotalGroups()[i].length - leafColumnsNumberToRemove.size()];
+						for (int j = 0; j< totalNode.getTotalGroups()[i].length; j++) {
+							if ( !leafColumnsNumberToRemove.contains(j+offset) ) {
+								newLine[newJ ++ ] = totalNode.getTotalGroups()[i][j];
+							} 
+						}
+						totalNode.getTotalGroups()[i] = newLine; 
+					}
+				}
 			}
-			columnPos ++;
 		}
-		*/
 	}
 	
 	private void getYearSettings(List<FilterRule> filters, List<Integer[]> yearRanges, Set<Integer> yearSet) {

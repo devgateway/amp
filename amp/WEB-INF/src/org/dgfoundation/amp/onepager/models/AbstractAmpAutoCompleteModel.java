@@ -192,8 +192,12 @@ public abstract class AbstractAmpAutoCompleteModel<T> extends
 		super();
 		this.input = input;
 		this.language=language;
-		this.params = new HashMap<AmpAutoCompleteModelParam, Object>(params);
-		if (params != null && getParam(PARAM.MAX_RESULTS) == null)
+		if (params != null) {
+			this.params = new HashMap<AmpAutoCompleteModelParam, Object>(params);
+		} else {
+			this.params = new HashMap<AmpAutoCompleteModelParam, Object>();
+		}
+		if (getParam(PARAM.MAX_RESULTS) == null)
 			this.params.put(PARAM.MAX_RESULTS, MAX_RESULTS_VALUE);
 	}
 

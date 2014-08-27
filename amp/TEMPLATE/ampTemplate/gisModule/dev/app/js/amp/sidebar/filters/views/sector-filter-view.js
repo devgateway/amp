@@ -18,7 +18,6 @@ module.exports = GenericFilterView.extend({
 
   className: GenericFilterView.prototype.className + ' filter-years',
   template: _.template(Template),
-  allowedRange: {min: 1980,max: 2015},
 
   initialize: function(options) {
     var self = this;

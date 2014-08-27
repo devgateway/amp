@@ -56,11 +56,12 @@ module.exports = GenericFilterView.extend({
       isSelectable: false
     };
 
+        console.log(''+self.model.get('title') ,rootNodeObj);
 
     //get available endpoint children
     this.childEndpoints = new Backbone.Collection();
     this.childEndpoints.url = url;
-    this.childEndpoints.fetch().then(function(){
+    this.childEndpoints.fetch().done(function(){
       self.childEndpoints.each(function(child){
         var tmpNode = {
           id : child.get('id'),
@@ -71,23 +72,36 @@ module.exports = GenericFilterView.extend({
           isSelectable: false
         };
 
-        child.url = url + '/'+ child.get('name');
+        child.url = url + '/'+ child.get('id'); //TODO: something smarter...mroe reliable.. id
         deferreds.push(
-          child.fetch().then(function(data){
+          child.fetch().done(function(data){
+            if(data.id){ //not an array. hack temp solution while Julian fixes API so all obj or all array
+              data = [data];
+            }
             tmpNode.children = data;
             rootNodeObj.children.push(tmpNode);
+          }).fail(function(){
+            console.error('Failed child node of API', child.get('id'));
           })
         );
       });
 
       // when all are done create tree.
       $.when.apply($, deferreds).then(function(){
-        self.treeModel = new TreeNodeModel(rootNodeObj);
-        self.treeView = new TreeNodeView();
+        self._buildTreeFromRoot(rootNodeObj);
+        deferred.resolve();
+      }).fail(function(){ 
+        //this happens if just one child fails...no point in stopping whole tree.
+        self._buildTreeFromRoot(rootNodeObj);
         deferred.resolve();
       });
     });
 
     return deferred;
+  },
+
+  _buildTreeFromRoot: function(rootNodeObj){
+    this.treeModel = new TreeNodeModel(rootNodeObj);
+    this.treeView = new TreeNodeView();
   }
 });

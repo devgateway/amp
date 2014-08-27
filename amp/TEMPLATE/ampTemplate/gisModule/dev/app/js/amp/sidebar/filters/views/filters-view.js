@@ -98,7 +98,7 @@ module.exports = BaseControlView.extend({
       case 'Organizations':
         view = new OrganizationsFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
         break;  
-      case 'Years':
+      case 'Dates':
         view = new YearsFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
         break;  
       default:

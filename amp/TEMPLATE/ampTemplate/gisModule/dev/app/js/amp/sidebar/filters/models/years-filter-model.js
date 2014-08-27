@@ -9,9 +9,20 @@ module.exports = BaseFilterModel.extend({
         title: 'Years',
         selectedStart: 1990,
         selectedEnd: 2014,
-        startYear:1960,
-        endYear:2015
+        // range is provided by api, but will fallback to this if ot provided, or set to -1
+        startYear: 1960,
+        endYear: 2015
       });
+  },
+  parse: function(data){
+    if(data.startYear == -1){
+      data.startYear = this.attributes.startYear;
+    }
+
+    if(data.endYear == -1){
+      data.endYear = this.attributes.endYear;
+    } 
+    return data;
   }
 
 });

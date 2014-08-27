@@ -1,6 +1,6 @@
-define([ 'underscore', 'backbone', 'documentModel', 'models/tabContent' ], function (_, Backbone, DocumentModel, TabContent) {
-    var TabContents = Backbone.DocumentCollection.extend({
-        model: TabContent,
+define([ 'underscore', 'backbone', 'documentModel', 'models/content' ], function (_, Backbone, DocumentModel, Content) {
+    var Contents = Backbone.DocumentCollection.extend({
+        model: Content,
         url: '/content.json',
         initialize: function () {
             console.log('Initialized TabContents Collection');
@@ -16,5 +16,5 @@ define([ 'underscore', 'backbone', 'documentModel', 'models/tabContent' ], funct
         }
     });
 
-    return TabContents;
+    return Contents;
 });

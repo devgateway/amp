@@ -2,7 +2,7 @@
 /*https://github.com/icereval/backbone-documentmodel*/
 define([ 'underscore', 'backbone', 'documentModel' ], function (_, Backbone, DocumentModel) {
 
-    var TabContent = Backbone.DocumentModel.extend({
+    var Content = Backbone.DocumentModel.extend({
         defaults: {
             name: '',
             id: 0,
@@ -16,5 +16,5 @@ define([ 'underscore', 'backbone', 'documentModel' ], function (_, Backbone, Doc
         }
     });
 
-    return TabContent;
+    return Content;
 });

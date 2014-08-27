@@ -3,8 +3,8 @@
 // Global variable for dev purposes.
 var app = app || {};
 
-define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'views/tabItemsView', 'views/tabContentView',
-    'views/tabContentsView', 'text!views/html/regions.html', 'business/tabEvents', 'jquery', 'jqueryui' ], function (Marionette, Tabs, Tab, TabItemView, TabItemsView, TabContentView, TabContentsView, regionsHtml, TabEvents, jQuery) {
+define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'views/tabItemsView', 'views/tabBodyView',
+    'views/tabBodysView', 'text!views/html/regions.html', 'business/tabEvents', 'jquery', 'jqueryui' ], function (Marionette, Tabs, Tab, TabItemView, TabItemsView, TabBodyView, TabBodysView, regionsHtml, TabEvents, jQuery) {
 
     // Load the regions html into the DOM.
     var tabsObject = jQuery('#tabs-container');
@@ -17,7 +17,7 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
     // Each region is mapped to a <section> element on the html.
     app.TabsApp.addRegions({
         'tabsRegion': '#tabs-section',
-        'tabsContentRegion': '#tabs-content-section'
+        'tabsBodyRegion': '#tabs-body-section'
     });
 
     app.TabsApp.on('start', function () {
@@ -36,7 +36,7 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
     var tabs = new TabItemsView({
         collection: tabs
     });
-    var content = new TabContentsView({
+    var content = new TabBodysView({
         // If we iterate tabs object again then TabContentsView will throw
         // an error.
         collection: tabs2
@@ -47,7 +47,7 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
     // template and
     // into the region it belongs.
     app.TabsApp.tabsRegion.show(tabs);
-    app.TabsApp.tabsContentRegion.show(content);
+    app.TabsApp.tabsBodyRegion.show(content);
 
     // Save the tabs collection for later usage.
     app.tabs = tabs;

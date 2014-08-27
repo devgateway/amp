@@ -71,11 +71,6 @@ module.exports = BaseControlView.extend({
           }
         });
 
-        //manually add years for now:
-        var view = self._createFilterView({name:'Years', url:'rest/filter/years'});
-        filterList.push(view);
-
-
         deferred.resolve(filterList);
       })
       .fail(function(jqXHR, textStatus, errorThrown){
@@ -94,7 +89,7 @@ module.exports = BaseControlView.extend({
     var view = null;
     switch (APIFilter.name){
       case 'Years':
-        view = new YearsFilterView({url:APIFilter.endpoint});
+        view = new YearsFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
         break;
       case 'Sectors':
       case 'Programs':
@@ -102,7 +97,10 @@ module.exports = BaseControlView.extend({
         break;
       case 'Organizations':
         view = new OrganizationsFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
-        break;                
+        break;  
+      case 'Years':
+        view = new YearsFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
+        break;  
       default:
         view = new GenericFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
     }

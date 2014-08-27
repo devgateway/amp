@@ -14,9 +14,17 @@ module.exports = BaseFilterView.extend({
   template: _.template(Template),
 
   initialize: function(options) {
+    var self = this;
     BaseFilterView.prototype.initialize.apply(this);
 
-    this.model = new YearsFilterModel(options);
+    this.model = new YearsFilterModel(options.modelValues);
+    this.model.url = options.url;
+
+    this.model.fetch().then(function(){
+      self.model.set('selectedStart', self.model.get('startYear'));
+      self.model.set('selectedEnd', self.model.get('endYear'));
+      self._updateTitle();
+    });
     this.listenTo(this.model, 'change', this._updateTitle); 
   },
 
@@ -29,10 +37,10 @@ module.exports = BaseFilterView.extend({
     // TODO: uses window.jQuery because that was the only way I had luck with browserify shim... 
     // uses https://github.com/leongersen/noUiSlider
     this.slider = window.jQuery('.year-slider').noUiSlider({
-      start: [self.model.get('start'), self.model.get('end')],
+      start: [self.model.get('selectedStart'), self.model.get('selectedEnd')],
       step: 1,
       connect: true,
-      range: {min: self.model.get('min'), max:self.model.get('max')},
+      range: {min: self.model.get('startYear'), max:self.model.get('endYear')},
       serialization: {
         lower: [
           window.jQuery.Link({
@@ -52,25 +60,24 @@ module.exports = BaseFilterView.extend({
 
     //ugly, too much data in the dom...but it's how the example goes.
     this.slider.on('change', function(){
-      self.model.set('start', parseInt(self.$('.start-year').text(),10));
+      self.model.set('selectedStart', parseInt(self.$('.start-year').text(),10));
     });
 
     //ugly, too much data in the dom...but it's how the example goes.
     this.slider.on('change', function(){
-      self.model.set('end',  parseInt(self.$('.end-year').text(),10));
+      self.model.set('selectedEnd',  parseInt(self.$('.end-year').text(),10));
     });
   },
 
   renderTitle: function () {
     BaseFilterView.prototype.renderTitle.apply(this);
-
-    this.$('.filter-count').text(this.model.get('start') + ' - ' + this.model.get('end'));
+    this._updateTitle();
 
     return this;
   },
 
   _updateTitle: function(){
-    this.$('.filter-count').text(this.model.get('start') + ' - ' + this.model.get('end'));
+    this.$('.filter-count').text(this.model.get('selectedStart') + ' - ' + this.model.get('selectedEnd'));
   }
 
 });

@@ -43,7 +43,6 @@ Backbone.sync = function (method, model, options) {
     // Note a url can be either a string, or a function.
     if( typeof model.url === 'string'){
       model.url = _getAPIBase() + model.url;
-    console.log('rewrite url to ',model.url);
     } else{
       // it will recurse, so not needed to explicit append, or it will double append.
       // model.url = _getAPIBase() + model.url();

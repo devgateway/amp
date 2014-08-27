@@ -28,5 +28,10 @@
 "name": "Organizations",
 "ui": true,
 "endpoint": "/rest/filters/orgs"
+},
+{
+"name": "Years",
+"ui": true,
+"endpoint": "/rest/filters/dates"
 }
 ]

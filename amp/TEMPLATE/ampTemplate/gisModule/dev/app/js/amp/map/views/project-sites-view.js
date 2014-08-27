@@ -5,7 +5,6 @@ var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js')
 
 var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/structure-list-template.html', 'utf8');
 
-
 module.exports = Backbone.View.extend({
   // These will eventually move to a config.
   // They control when to resize points based on zoom
@@ -17,6 +16,13 @@ module.exports = Backbone.View.extend({
 
   popup: null,
   projectListTemplate: _.template(ProjectListTemplate),
+
+  //TODO: 2d hash to bucket clusters and get size of biggest cluster.
+  //  write well enough to be foundation of our own clustering.
+  // can do a map where key is trim(lat, PRECISION)+','+trim(lng, PRECISION)
+  // and value is array of matching objects.
+  customClusterMap: {},
+  maxClusterSize: 0,
 
   initialize: function(options) {
     this.app = options.app;
@@ -43,12 +49,13 @@ module.exports = Backbone.View.extend({
     // may also be worth doing manually since we don't want updates on zoom
     // TODO: make sizing dynamic based on highest cluster... and put into own function...
     this.markerCluster = new L.markerClusterGroup({
-      maxClusterRadius: 0.001,
+      maxClusterRadius: 0.0001,
       iconCreateFunction: function(cluster) {
         var markers = cluster.getAllChildMarkers();
         var size = markers.length + 5,
             zoomedIn = (self.map.getZoom() >= self.ZOOM_BREAKPOINT);
 
+        console.log('render', self.maxClusterSize);
         if (zoomedIn) {
           size += 2 + self.BIG_ICON_RADIUS;
         }
@@ -140,6 +147,8 @@ module.exports = Backbone.View.extend({
   clusterClick: function(a) {
     var self = this;
     //TODO: seems silly to bind on every click...
+    // Once we have nailed down desired fuhnctionality it will be worth writing our own clusterer since it only
+    // needs to run once on project site load and that is it. (not each zoom etc.)
     a.layer.bindPopup(self.projectListTemplate({ projects: a.layer.getAllChildMarkers() }));
     a.layer.openPopup(self.map);
   },
@@ -174,6 +183,16 @@ module.exports = Backbone.View.extend({
         });
 
         self.markerCluster.addLayer(point);
+
+
+        // DRS in progress custom own clustering. big efficiency gains.
+        var latLngString = latlng.lat +','+latlng.lng; // TODO: truncate by PRECISOM
+        if(self.customClusterMap[latLngString]){
+          self.customClusterMap[latLngString].push(point); //TODO: should push point or feature?
+          self.maxClusterSize = Math.max(self.maxClusterSize,self.customClusterMap[latLngString].length);
+        } else{
+          self.customClusterMap[latLngString] =[point];
+        }
 
         return point;
       },
@@ -230,7 +249,7 @@ module.exports = Backbone.View.extend({
 
   // circles  shrink if we're zoomed out, get big if zoomed in
   _updateZoom: function() {
-    var self = this;
+    var self = this;    
 
     if (this.featureGroup) {
       var zoom = this.map.getZoom();

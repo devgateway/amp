@@ -20,7 +20,13 @@ module.exports = Backbone.Collection
     } else if (typeName === 'arcgis') {
       return new ArcGISIndicator(attrs);
     } else {
-      throw new Error('Unrecognized indicator type: ' + attrs.type);
+      console.error('Unrecognized indicator type: ' + attrs.type);
+      return new Backbone.Model(); 
+      //TODO: phil I couldn't figure out what to return to tell the collection to
+      // not create this model...
+      // I thought best to not crash all indicators if typo/unsupported type. 
+      // Hopefully we can have a convo soon on the pros and cons to blocking errors / silent errors.
+      // I don't want to block working functionality due to isolated non-working functionality.
     }
   },
 

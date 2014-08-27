@@ -7,10 +7,10 @@ module.exports = BaseFilterModel.extend({
     BaseFilterModel.prototype.initialize.apply(this);
     this.set({
         title: 'Years',
-        start: 1990,
-        end: 2014,
-        min:1960,
-        max:2015
+        selectedStart: 1990,
+        selectedEnd: 2014,
+        startYear:1960,
+        endYear:2015
       });
   }
 

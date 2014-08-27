@@ -5,9 +5,11 @@ import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.models.AmpAgreementSearchModel;
@@ -18,8 +20,10 @@ import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.util.DbUtil;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 
 public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 	private static final long serialVersionUID = 1L;
@@ -129,10 +133,11 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 		agCode.getTextContainer().setRequired(true);
 		newAgreementForm.add(agCode);
 		AmpTextFieldPanel<String> agTitle = new AmpTextFieldPanel<String>("newAgTitle", new PropertyModel<String>(editAgModel, "title"), "Title");
-        agTitle.getTextContainer().add(new AttributeModifier("size", new Model<String>("50")));
+        agTitle.getTextContainer().add(new AttributeModifier("size", new Model<String>("34")));
 		agTitle.getTextContainer().setRequired(true);
 		newAgreementForm.add(agTitle);
-		
+		FeedbackPanel fp = new FeedbackPanel("duplicateWarning");
+		newAgreementForm.add(fp);
 		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgEfDate", new PropertyModel<Date>(editAgModel, "effectiveDate"), "Effective Date"));
 		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgSgDate", new PropertyModel<Date>(editAgModel, "signatureDate"), "Signature Date"));
 		newAgreementForm.add(new AmpDatePickerFieldPanel("newAgClDate", new PropertyModel<Date>(editAgModel, "closeDate"), "Close Date"));
@@ -144,6 +149,24 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 				IModel<AmpAgreement> formModel = (IModel<AmpAgreement>) form.getModel();
 				AmpAgreement ag = formModel.getObject();
+				
+				AmpAuthWebSession session = (AmpAuthWebSession) this.getSession();
+				String language=session.getLocale().getLanguage();
+				AmpAgreementSearchModel agr1 = new AmpAgreementSearchModel(ag.getCode(),language, null);
+				Collection<AmpAgreement> ret = agr1.getObject();
+				Iterator<AmpAgreement> it = ret.iterator();
+				while (it.hasNext()) {
+					AmpAgreement agr = it.next();
+					if ((agr.getCode() != null && agr.getCode().compareToIgnoreCase(ag.getCode()) == 0)
+							&& (ag.getId() == null || agr.getId().compareTo(ag.getId()) != 0)) {
+						error(TranslatorUtil
+								.getTranslation("Warning! The database already contains agreement with similar title"));
+						target.add(newAgreementForm.getParent());
+						return;
+					}
+
+				}
+				
 				Session wSession = Session.get();
 				HashSet<AmpAgreement> agItems = wSession.getMetaData(OnePagerConst.AGREEMENT_ITEMS);
 				if (agItems == null){

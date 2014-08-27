@@ -1,7 +1,7 @@
 /*https://gist.github.com/jonnyreeves/2474026*/
 /*https://github.com/icereval/backbone-documentmodel*/
-define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicContentView' ],
-    function (Marionette, Contents, Content, DynamicContentView) {
+define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicContentView', 'text!views/html/filtersTemplate.html' ],
+    function (Marionette, Contents, Content, DynamicContentView, filtersTemplate) {
 
         "use strict";
 
@@ -37,21 +37,35 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
             var regionsName = '#main-dynamic-content-region_' + selectedTabIndex;
             app.TabsApp.addRegions({'filtersRegion': regionsName});
 
-            var Item = Marionette.ItemView.extend({
+            // "Filter" item (todo: cleanup this part).
+            /*var values = [];
+             firstContent.get('metadata').get('filter').get('sector').each(function (item) {
+             values.push(item.attributes.value);
+             }, this);*/
+            var Filter = Backbone.Model.extend({
+                defaults: {
+                    name: 'sector',
+                    value: [1, 4, 6]
+                }
+            });
+            var filter1 = new Filter();
+            var ItemView = Marionette.ItemView.extend({
                 tagName: 'li',
-                template: '<p>nada</p>'
+                template: $(filtersTemplate, '#template-filters').html()
+            });
+            var itemView1 = new ItemView({
+                model: filter1
             });
 
             // Create LayoutView object setting template.
             var dynamicLayoutView = new DynamicContentView();
             app.TabsApp.filtersRegion.show(dynamicLayoutView);
-            dynamicLayoutView.filters.show(new Item());
+            dynamicLayoutView.filters.show(itemView1);
 
             content = firstContent.get('name');
             firstContent.get('metadata').get('filter').get('sector').each(function (item) {
                 content += ' ' + item.attributes.value;
             }, this);
-            return content;
         }
 
         // "Class" methods definition here.
@@ -63,8 +77,6 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
             },
             onActivateTab: function (event, ui) {
                 console.log('activate tab');
-                console.log(event);
-                console.log(ui);
 
                 //TODO: move this logic elsewhere.
                 var panel = null;
@@ -80,9 +92,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
                 //$(panel).html(putAnimation());
                 // Simulate time consuming content.
                 setTimeout(function () {
-                    console.log(app.tabs);
-                    var content = retrieveTabContent(selectedTabIndex);
-                    //$(panel).html('<p>' + content + '</p>');
+                    retrieveTabContent(selectedTabIndex);
                 }, 1000);
             }
         };

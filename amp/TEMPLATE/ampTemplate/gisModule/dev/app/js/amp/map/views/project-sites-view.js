@@ -17,12 +17,10 @@ module.exports = Backbone.View.extend({
   popup: null,
   projectListTemplate: _.template(ProjectListTemplate),
 
-  //TODO: 2d hash to bucket clusters and get size of biggest cluster.
-  //  write well enough to be foundation of our own clustering.
-  // can do a map where key is trim(lat, PRECISION)+','+trim(lng, PRECISION)
-  // and value is array of matching objects.
   customClusterMap: {},
-  maxClusterSize: 0,
+  maxClusterCount: 0,
+  CLUSTER_PRECISION: 8, //decimal places of lat, lng precision for clustering. (doesn't effect plugin.)
+  MAX_CLUSTER_SIZE: 20,
 
   initialize: function(options) {
     this.app = options.app;
@@ -84,10 +82,10 @@ module.exports = Backbone.View.extend({
 
 
         // DRS in progress custom own clustering. big efficiency gains.
-        var latLngString = latlng.lat +','+latlng.lng; // TODO: truncate by PRECISOM
+        var latLngString = Math.round(latlng.lat* self.CLUSTER_PRECISION * 10) +','+ Math.round(latlng.lng*self.CLUSTER_PRECISION * 10);
         if(self.customClusterMap[latLngString]){
           self.customClusterMap[latLngString].push(point); //TODO: should push point or feature?
-          self.maxClusterSize = Math.max(self.maxClusterSize,self.customClusterMap[latLngString].length);
+          self.maxClusterCount = Math.max(self.maxClusterCount,self.customClusterMap[latLngString].length);
         } else{
           self.customClusterMap[latLngString] =[point];
         }
@@ -100,7 +98,7 @@ module.exports = Backbone.View.extend({
 
   // circles  shrink if we're zoomed out, get big if zoomed in
   _updateZoom: function() {
-    var self = this;    
+    var self = this;
 
     if (this.featureGroup) {
       var zoom = this.map.getZoom();
@@ -118,7 +116,7 @@ module.exports = Backbone.View.extend({
       }
     }
   },
-  
+
   _hilightProject: function(projectId) {
     this.featureGroup.eachLayer(function(layer) {
       var properties = layer.feature.properties;
@@ -152,8 +150,8 @@ module.exports = Backbone.View.extend({
     // may also be worth doing manually since we don't want updates on zoom
     // TODO: make sizing dynamic based on highest cluster... and put into own function...
     this.markerCluster = new L.markerClusterGroup({
-      maxClusterRadius: 0.0001,
-      iconCreateFunction: function(cluster){return self._createCluster(cluster, model, self);}, // TODO: dirty context passing, fix.
+      maxClusterRadius: 0.5,
+      iconCreateFunction: function(cluster){return self._createCluster(cluster, model);}, // TODO: dirty context passing, fix.
       zoomToBoundsOnClick: false,
       showCoverageOnHover: false,
       spiderfyOnMaxZoom: false,
@@ -161,12 +159,15 @@ module.exports = Backbone.View.extend({
     });
   },
 
-  _createCluster: function(cluster, model, self){
+  _createCluster: function(cluster, model){
+    var self = this;
     var markers = cluster.getAllChildMarkers();
-    var size = markers.length + 5,
-        zoomedIn = (self.map.getZoom() >= self.ZOOM_BREAKPOINT);
+    var size = (markers.length / self.maxClusterCount) * self.MAX_CLUSTER_SIZE;
+    size = Math.min(self.MAX_CLUSTER_SIZE, size);
+    size = Math.max(self.BIG_ICON_RADIUS, size);
 
-    console.log('render', self.maxClusterSize);
+    var zoomedIn = (self.map.getZoom() >= self.ZOOM_BREAKPOINT);
+
     if (zoomedIn) {
       size += 2 + self.BIG_ICON_RADIUS;
     }
@@ -188,13 +189,14 @@ module.exports = Backbone.View.extend({
       })];
     }
 
+    // TODO: try some way of doing SVGs to get better performance.
     var marker = new L.divIcon({
-      className: 'marker-cluster' + (zoomedIn ? '' : ' marker-cluster-small'),
-      iconSize: L.point(size, size),
-      html: '<div class="circle" style="background-color:' + (colours[0] && colours[0].hex()) + '">'+
-              (zoomedIn ? '<div class="text">' + markers.length + '</div>' : '') +
-            '</div>'
-    });
+        className: 'marker-cluster' + (zoomedIn ? '' : ' marker-cluster-small'),
+        iconSize: L.point(size, size),
+        html: '<div class="circle" style="background-color:' + (colours[0] && colours[0].hex()) + '">'+
+                (zoomedIn ? '<div class="text">' + markers.length + '</div>' : '') +
+              '</div>'
+      });
 
     return marker;
   },

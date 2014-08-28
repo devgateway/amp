@@ -338,11 +338,11 @@ public class AmpLocationFormTableFeature extends
             if (choice.getId().longValue() == defCountry.getId().longValue())
                 activityLocation.setLocationPercentage(100f);
             else
-                activityLocation.setLocationPercentage(0f);
+                activityLocation.setLocationPercentage(null);
         }
         else{
             if(list.size()>0)
-                activityLocation.setLocationPercentage(0f);
+                activityLocation.setLocationPercentage(null);
             else
                 activityLocation.setLocationPercentage(100f);
         }

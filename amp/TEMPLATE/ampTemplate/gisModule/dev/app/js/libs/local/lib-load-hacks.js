@@ -18,6 +18,7 @@ jQuery.support.cors = true;
 var L = require('../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 L.Icon.Default.imagePath = '/img/map-icons';
 require('../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster.js');
+require('leaflet-div-style-icon');
 
 // Override backbone as needed for AMP
 require('./backbone-override');

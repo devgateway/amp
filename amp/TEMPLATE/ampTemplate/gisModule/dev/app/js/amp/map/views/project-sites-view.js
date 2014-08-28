@@ -190,12 +190,12 @@ module.exports = Backbone.View.extend({
     }
 
     // TODO: try some way of doing SVGs to get better performance.
-    var marker = new L.divIcon({
+    var marker = new L.circleDivIcon(size / 2, {
         className: 'marker-cluster' + (zoomedIn ? '' : ' marker-cluster-small'),
-        iconSize: L.point(size, size),
-        html: '<div class="circle" style="background-color:' + (colours[0] && colours[0].hex()) + '">'+
-                (zoomedIn ? '<div class="text">' + markers.length + '</div>' : '') +
-              '</div>'
+        html: (zoomedIn ? '<div class="text">' + markers.length + '</div>' : ''),
+        color: '#444',
+        fillColor: (colours[0] && colours[0].hex()),
+        weight: 1
       });
 
     return marker;

@@ -13,6 +13,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.PatternValidator;
+import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
@@ -20,6 +21,7 @@ import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpRegionalFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -53,7 +55,7 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 		this.locationModel = model;
 		
 		PropertyModel<Double> percModel = new PropertyModel<Double>(model, "locationPercentage");
-		AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",percModel,"locationPercentage",percentageValidationField,locationPercentageRequired.isVisible()){
+		final AmpPercentageTextField percentageField=new AmpPercentageTextField("percentage",percModel,"locationPercentage",percentageValidationField,locationPercentageRequired.isVisible()){
 			private static final long serialVersionUID = 1L;
 			@Override
 			protected void onBeforeRender() {
@@ -68,7 +70,10 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
 				target.add(totalLabel);
 				
 			}
-		};				
+			
+	};	
+		RangeValidator <Double> validator = new RangeValidator<Double>(0.1d, 100d);
+		percentageField.getTextContainer().add(validator);
 		add(percentageField);
 		add(new Label("locationLabel", model.getObject().getLocation().getLocation().getAutoCompleteLabel()));
 
@@ -151,6 +156,8 @@ public class AmpLocationItemPanel extends AmpFeaturePanel<AmpActivityLocation> {
                 minSizeCollectionValidationField.reloadValidationField(target);
                 treeCollectionValidatorField.reloadValidationField(target);
                 setModel.getObject().remove(model.getObject());
+                
+              
 				target.add(list.getParent());
 				list.removeAll();
 			}

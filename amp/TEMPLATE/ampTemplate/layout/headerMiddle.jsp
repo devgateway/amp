@@ -158,7 +158,7 @@ ${fn:replace(message,quote,escapedQuote)}
 													</li>
 												</feature:display>
 											</module:display>
-
+											
 											<module:display name="GIS DASHBOARD">
 												<feature:display name="Show in public view" module="GIS DASHBOARD">
 													<li class="yuiampmenuitem_drop">
@@ -698,7 +698,14 @@ function openAdmin () {
 									</a>
 								</li>
 							</module:display>
-
+							
+							<!-- New GIS Module-->
+							<li class="yuiampmenuitem_drop">
+								<a target="_blank" class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/gisModule/dist/index.html" onclick="return canExit()"> 
+									<digi:trn key="fm:gis">NEW GIS (BETA)</digi:trn>
+								</a>
+							</li>
+							
 							<module:display name="Dashboard Generator" parentModule="Visualization Dashboards">
 								<li class="yuiampmenuitem_drop">
 									<a class="yuiampmenuitemlabel" href="/visualization/dashboardLauncher.do" onclick="return canExit()"> 

@@ -271,8 +271,11 @@ public class Filters {
 		try {
 			AmpActivityProgramSettings npd = ProgramUtil
 					.getAmpActivityProgramSettings(programName);
-
-			return getPrograms(npd.getDefaultHierarchy());
+			if(npd.getDefaultHierarchy()!=null){
+				return getPrograms(npd.getDefaultHierarchy());
+			}else{
+				return new SimpleJsonBean();
+			}
 
 		} catch (DgException e) {
 			logger.error("Cannot get program",e);

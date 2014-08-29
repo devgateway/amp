@@ -1,7 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import java.lang.reflect.Member;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,6 +32,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.hibernate.ObjectNotFoundException;
 
 /**
  * Class that holds method related to filtres for gis querys (available options,
@@ -197,20 +196,23 @@ public class Filters {
 	@ApiMethod(ui=true,name="Programs")
 	
 	public List<SimpleJsonBean> getPrograms() {
-		List<SimpleJsonBean> programas = new ArrayList<SimpleJsonBean>();
-		SimpleJsonBean npo = new SimpleJsonBean("National Plan Objective",
-				"National Plan Objective");
-		programas.add(npo);
-		SimpleJsonBean pp = new SimpleJsonBean("Primary Program",
-				"Primary Program");
-		programas.add(pp);
-		SimpleJsonBean sp = new SimpleJsonBean("Secondary Program",
-				"Secondary Program");
-		programas.add(sp);
-		SimpleJsonBean tp = new SimpleJsonBean("Tertiary Program",
-				"Tertiary Program");
-		programas.add(tp);
-		return programas;
+		List<SimpleJsonBean> programs = new ArrayList<SimpleJsonBean>();
+		try {
+			
+			for (Object p : ProgramUtil.getAmpActivityProgramSettingsList()) {
+				
+				AmpActivityProgramSettings program=(AmpActivityProgramSettings)p;
+				programs.add( new SimpleJsonBean(program.getAmpProgramSettingsId(),
+						program.getName()) );
+				
+			}
+			return programs;
+		} catch (DgException e) {
+			logger.error("cannot get program list",e);
+			return programs;
+		}
+
+		
 	}
 
 	/**
@@ -263,22 +265,22 @@ public class Filters {
 	 * @return
 	 */
 	@GET
-	@Path("/programs/{programName}")
+	@Path("/programs/{programId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="ProgramsByProgramName")
-	public SimpleJsonBean getPrograms(
-			@PathParam("programName") String programName) {
+	@ApiMethod(ui = false, name = "ProgramsByProgramName")
+	public SimpleJsonBean getPrograms(@PathParam("programId") Long programId) {
 		try {
-			AmpActivityProgramSettings npd = ProgramUtil
-					.getAmpActivityProgramSettings(programName);
-			if(npd.getDefaultHierarchy()!=null){
+			AmpActivityProgramSettings npd = ProgramUtil.getAmpActivityProgramSettings(programId);
+			if (npd != null && npd.getDefaultHierarchy() != null) {
 				return getPrograms(npd.getDefaultHierarchy());
-			}else{
+			} else {
 				return new SimpleJsonBean();
 			}
 
+		} catch (ObjectNotFoundException e) {
+			return new SimpleJsonBean();
 		} catch (DgException e) {
-			logger.error("Cannot get program",e);
+			logger.error("Cannot get program", e);
 			return null;
 		}
 	}

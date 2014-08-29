@@ -52,6 +52,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.IndicatorsBean;
 import org.digijava.module.aim.helper.TreeItem;
 import org.hibernate.HibernateException;
+import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -1426,6 +1427,9 @@ public class ProgramUtil {
             }
             result += "</progTree>\n";
             return result;
+        }
+        public static AmpActivityProgramSettings getAmpActivityProgramSettings(Long id) throws DgException {
+        	return (AmpActivityProgramSettings) PersistenceManager.getRequestDBSession().load(AmpActivityProgramSettings.class, id);
         }
 
         public static AmpActivityProgramSettings getAmpActivityProgramSettings(String name) throws DgException {

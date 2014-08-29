@@ -18,6 +18,8 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
+import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
@@ -52,41 +54,11 @@ public class Filters {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<AvailableFilters> getAvailableFilters() {
-		List<AvailableFilters> availableFilters = new ArrayList<Filters.AvailableFilters>();
+	public List<AvailableMethod> getAvailableFilters() {
+		return GisUtil.getAvailableMethods(Filters.class.getName());
+	}
 
-		
-		try {
-			Class<?> c = Class.forName(Filters.class.getName());
-			javax.ws.rs.Path p=c.getAnnotation(javax.ws.rs.Path.class);
-			String path="/rest/"+p.value();
-			Member[] mbrs=c.getMethods();
-			for (Member mbr : mbrs) {
-				ApiMethod apiAnnotation=
-		    			((Method) mbr).getAnnotation(ApiMethod.class);
-				if(apiAnnotation!=null){
-					//then we have to add it to the filters list
-					javax.ws.rs.Path methodPath=((Method) mbr).getAnnotation(javax.ws.rs.Path.class);
-					AvailableFilters filter = new AvailableFilters();
-					filter.setName(apiAnnotation.name());
-					String endpoint="/rest/"+ p.value();
-					
-					if(methodPath!=null){
-						endpoint+=methodPath.value();
-					}
-					filter.setEndpoint(endpoint);
-					filter.setUi(apiAnnotation.ui());
-					availableFilters.add(filter);
-
-				}
-			}
-		}
-		 catch (ClassNotFoundException e) {
-			logger.error("cannot retrieve filters list",e);
-			return null;
-		}
-		return availableFilters;
-		}
+	
 	/**
 	 * Return activity status options
 	 * 
@@ -184,6 +156,7 @@ public class Filters {
 	@GET
 	@Path("/sectors/{sectorConfigName}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="SectorsByConfigName")
 	public List<SimpleJsonBean> getSectors(
 			@PathParam("sectorConfigName") String sectorConfigName) {
 		// DozerBeanMapperSingletonWrapper.getInstance().
@@ -248,6 +221,7 @@ public class Filters {
 	@GET
 	@Path("/organizations/{ampRoleId}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="OrganizationsByRole")
 	public List<SimpleJsonBean> getOrganizations(
 			@PathParam("ampRoleId") Long orgRole) {
 		List<SimpleJsonBean> organizations = new ArrayList<SimpleJsonBean>();
@@ -291,6 +265,7 @@ public class Filters {
 	@GET
 	@Path("/programs/{programName}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="ProgramsByProgramName")
 	public SimpleJsonBean getPrograms(
 			@PathParam("programName") String programName) {
 		try {
@@ -344,39 +319,6 @@ public class Filters {
 		return s;
 	}
 
-	public class AvailableFilters {
-		public AvailableFilters() {
-			this.ui = false;
-		}
-
-		private String name;
-		private Boolean ui;
-		private String endpoint;
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public String getEndpoint() {
-			return endpoint;
-		}
-
-		public void setEndpoint(String endpoint) {
-			this.endpoint = endpoint;
-		}
-
-		public Boolean getUi() {
-			return ui;
-		}
-
-		public void setUi(Boolean ui) {
-			this.ui = ui;
-		}
-
-	}
+	
 
 }

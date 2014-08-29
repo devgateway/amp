@@ -22,6 +22,8 @@ import org.codehaus.jackson.node.TextNode;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
 import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
@@ -38,7 +40,6 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
-import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.dbentity.AmpMapState;
@@ -56,6 +57,12 @@ import org.hibernate.Session;
 @Path("gis")
 public class GisEndPoints {
 	private static final Logger logger = Logger.getLogger(GisEndPoints.class);
+	
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<AvailableMethod> getAvailableFilters() {
+		return GisUtil.getAvailableMethods(GisEndPoints.class.getName());
+	}	
 
 	/**
 	 * Returns Aggregate ADM info by ADM Level
@@ -72,6 +79,7 @@ public class GisEndPoints {
 	@POST
 	@Path("/cluster")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="ClusterPointsByAdmin")
 	public final FeatureCollectionGeoJSON getClusteredPointsByAdm(
 			final JsonBean filter) {
 
@@ -104,6 +112,7 @@ public class GisEndPoints {
 	@POST
 	@Path("/structures")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="Structures")
 	public final FeatureCollectionGeoJSON getProjectSites(final JsonBean filter) {
 		FeatureCollectionGeoJSON f = new FeatureCollectionGeoJSON();
 
@@ -140,6 +149,7 @@ public class GisEndPoints {
 	@POST
 	@Path("/saved-maps")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="SaveMap")
 	public JsonBean savedMaps(final JsonBean pMap) {
 		Date creationDate = new Date();
 		JsonBean mapId = new JsonBean();
@@ -167,6 +177,7 @@ public class GisEndPoints {
 	@GET
 	@Path("/saved-maps/{mapId}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="MapById")
 	public JsonBean savedMaps(@PathParam("mapId") Long mapId) {
 		JsonBean jMap = null;
 		try {
@@ -190,6 +201,7 @@ public class GisEndPoints {
 	@GET
 	@Path("/saved-maps")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="MapList")
 	public List<JsonBean> savedMaps() {
 		List<JsonBean> maps = new ArrayList<JsonBean>();
 
@@ -208,6 +220,7 @@ public class GisEndPoints {
 	@GET
 	@Path("/indicator-layers")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="IndiactorLayers")
 	public List<IndicatorLayers> getIndicatorLayers() {
 		List<IndicatorLayers> indicatorLayers = new ArrayList<IndicatorLayers>();
 		List<AmpMapConfig> mapsConfigs = DbHelper.getMaps();
@@ -227,6 +240,7 @@ public class GisEndPoints {
 	@POST
 	@Path("/activities/")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="ActivitiesLists")
 	public List<Activity> getActivities(JsonBean filter) {
 		List<Activity> activities = new ArrayList<Activity>();
 		List<AmpActivity> ampActivities = QueryUtil.getActivities();
@@ -308,6 +322,7 @@ public class GisEndPoints {
 	@GET
 	@Path("/activities/{activityId}")
 	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="ActivitiesById")
 	public List<Activity> getActivities(@PathParam("activityId") PathSegment activityIds) {
 		List<Activity> l=new ArrayList<Activity>();
 		

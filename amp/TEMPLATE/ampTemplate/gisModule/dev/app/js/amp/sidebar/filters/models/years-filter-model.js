@@ -15,11 +15,11 @@ module.exports = BaseFilterModel.extend({
       });
   },
   parse: function(data){
-    if(data.startYear == -1){
+    if(!data.startYear || data.startYear === -1){
       data.startYear = this.attributes.startYear;
     }
 
-    if(data.endYear == -1){
+    if(!data.endYear || data.endYear === -1){
       data.endYear = this.attributes.endYear;
     } 
     return data;

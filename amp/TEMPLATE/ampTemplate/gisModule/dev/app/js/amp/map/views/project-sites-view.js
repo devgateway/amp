@@ -88,7 +88,8 @@ module.exports = Backbone.View.extend({
 
 
         // DRS in progress custom own clustering. big efficiency gains.
-        var latLngString = Math.round(latlng.lat* self.CLUSTER_PRECISION * 10) +','+ Math.round(latlng.lng*self.CLUSTER_PRECISION * 10);
+        var latLngString = Math.round(latlng.lat* self.CLUSTER_PRECISION * 10) + 
+          ',' + Math.round(latlng.lng*self.CLUSTER_PRECISION * 10);
         if(self.customClusterMap[latLngString]){
           self.customClusterMap[latLngString].push(point); //TODO: should push point or feature?
           self.maxClusterCount = Math.max(self.maxClusterCount,self.customClusterMap[latLngString].length);
@@ -157,7 +158,7 @@ module.exports = Backbone.View.extend({
     // TODO: make sizing dynamic based on highest cluster... and put into own function...
     this.markerCluster = new L.markerClusterGroup({
       maxClusterRadius: 0.5,
-      iconCreateFunction: function(cluster){return self._createCluster(cluster, model);}, // TODO: dirty context passing, fix.
+      iconCreateFunction: function(cluster){return self._createCluster(cluster, model);},
       zoomToBoundsOnClick: false,
       showCoverageOnHover: false,
       spiderfyOnMaxZoom: false,

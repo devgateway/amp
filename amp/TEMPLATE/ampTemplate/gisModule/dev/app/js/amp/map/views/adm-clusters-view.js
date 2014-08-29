@@ -97,7 +97,10 @@ module.exports = Backbone.View.extend({
     if (feature.properties) {
       var activities = feature.properties.activityid;
       layer._clusterId = feature.properties.admName;
-      layer.bindPopup(feature.properties.admName + ' has ' + activities.length +' projects. <br><img src="img/loading-icon.gif" />');
+      // temp. will be template.
+      layer.bindPopup(feature.properties.admName + 
+        ' has ' +  activities.length +
+        ' projects. <br><img src="img/loading-icon.gif" />');
     }
   },
 
@@ -133,7 +136,7 @@ module.exports = Backbone.View.extend({
       }
     }).then(function(activityCollection){
       // TODO: *append* to popup instead of *setContent*
-      popup.setContent(self.projectListTemplate({activities: activityCollection})); 
+      popup.setContent(self.projectListTemplate({activities: activityCollection}));
     });
   }
 

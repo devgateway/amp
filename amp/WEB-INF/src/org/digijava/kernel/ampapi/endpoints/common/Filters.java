@@ -115,7 +115,7 @@ public class Filters {
 	@GET
 	@Path("/boundaries")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=true,name="Boundaries")
+	@ApiMethod(ui=false,name="Boundaries")
 	public List<String> getBoundaries() {
 		// This should never change should they return from database?
 		return new ArrayList<String>(Arrays.asList("Country", "Region", "Zone",

@@ -56,8 +56,6 @@ module.exports = GenericFilterView.extend({
       isSelectable: false
     };
 
-        console.log(''+self.model.get('title') ,rootNodeObj);
-
     //get available endpoint children
     this.childEndpoints = new Backbone.Collection();
     this.childEndpoints.url = url;

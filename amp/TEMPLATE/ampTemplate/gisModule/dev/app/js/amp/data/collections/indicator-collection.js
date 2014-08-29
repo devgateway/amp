@@ -1,3 +1,4 @@
+var _ = require('underscore');
 var Backbone = require('backbone');
 var RadioMixin = require('../../mixins/radio-mixin');
 var JoinIndicator = require('../models/indicator-join-model');
@@ -11,22 +12,37 @@ module.exports = Backbone.Collection
 
   url: '/rest/gis/indicator-layers',
 
+  parse: function(data){
+    var parsedData = data;
+    console.log('data',data);
+    parsedData = _.filter(data, function(layer){
+      switch (layer.type){
+        case 'joinBoundaries':
+        case 'wms':
+        case 'arcgis':
+          return true;
+          break;
+        default:
+          return false;
+      }
+    });
+
+    return parsedData;
+  },
+
   model: function(attrs) {
     var typeName = attrs.type;
-    if (typeName === 'joinBoundaries') {
-      return new JoinIndicator(attrs);
-    } else if (typeName === 'wms') {
-      return new WMSIndicator(attrs);
-    } else if (typeName === 'arcgis') {
-      return new ArcGISIndicator(attrs);
-    } else {
-      console.error('Unrecognized indicator type: ' + attrs.type);
-      return new Backbone.Model(); 
-      //TODO: phil I couldn't figure out what to return to tell the collection to
-      // not create this model...
-      // I thought best to not crash all indicators if typo/unsupported type. 
-      // Hopefully we can have a convo soon on the pros and cons to blocking errors / silent errors.
-      // I don't want to block working functionality due to isolated non-working functionality.
+
+    switch (typeName){
+      case 'joinBoundaries':
+        return new JoinIndicator(attrs);
+      case 'wms':
+        return new WMSIndicator(attrs);
+      case: 'arcgis':
+        return new ArcGISIndicator(attrs);
+      default:
+        console.error('Unrecognized indicator type. Check parse function.: ' + attrs.type);
+        return new Backbone.Model();
     }
   },
 

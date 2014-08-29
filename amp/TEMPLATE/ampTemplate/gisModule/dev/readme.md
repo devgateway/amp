@@ -45,7 +45,7 @@ All commands are automated with [gulp](http://gulpjs.com), and configured in [gu
 
 ### Local development
 
-#### Build, watch for changes, serve, and livereload:
+#### Build, watch for changes, serve, and livereload with mock API:
 
 ```bash
 $ gulp dev
@@ -60,6 +60,20 @@ $ gulp
 The site will be available at [localhost:3000](http://localhost:3000)
 
 Installing a [livereload browser extension](http://feedback.livereload.com/knowledgebase/articles/86242-how-do-i-install-and-use-the-browser-extensions-) is recommended.
+
+
+#### Build, watch for changes, livereload with local AMP API:
+
+1. Run AMP on eclipse.
+
+2.
+
+```bash
+$ gulp dev-no-mock
+```
+
+3. http://localhost:8080/TEMPLATE/ampTemplate/gisModule/dev/app/index.html
+
 
 #### Run tests
 

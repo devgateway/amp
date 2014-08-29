@@ -7,6 +7,9 @@
  * or
  * $ gulp dev
  *    Unoptimized build of js/css, runs a dev server on :3000 with livereload
+
+ * $ gulp dev-no-mock
+ *    Unoptimized build of js/css, with livereload, but no mock-file. Good for dev with AMP running in eclipse.
  *
  * $ gulp test
  *    Run unit tests from command line

@@ -47,11 +47,12 @@ _.extend(FakeServer.prototype, {
     'GET /rest/filters/organizations/1':     fs.readFileSync(__dirname + '/data/filters/orgs.json', 'utf8'),
     'GET /rest/filters/organizations':     fs.readFileSync(__dirname + '/data/filters/orgRoles.json', 'utf8'),
     'GET /rest/filters/programs':     fs.readFileSync(__dirname + '/data/filters/programs.json', 'utf8'),
+    'GET /rest/filters/programs/1':     fs.readFileSync(__dirname + '/data/filters/programs-1.json', 'utf8'),
     'GET /rest/filters/dates':     fs.readFileSync(__dirname + '/data/filters/years.json', 'utf8'),
     'GET /rest/filters/activityStatus':  fs.readFileSync(__dirname + '/data/filters/activity-status.json', 'utf8'),
     'GET /rest/filters/sectors':  fs.readFileSync(__dirname + '/data/filters/sectors.json', 'utf8'),
-    'GET /rest/filters/sectors/Primary':  fs.readFileSync(__dirname + '/data/filters/sectors-primary.json', 'utf8'),
-    'GET /rest/filters/sectors/Secondary':  fs.readFileSync(__dirname + '/data/filters/sectors-secondary.json', 'utf8'),
+    'GET /rest/filters/sectors/1':  fs.readFileSync(__dirname + '/data/filters/sectors-1.json', 'utf8'),
+    'GET /rest/filters/sectors/2':  fs.readFileSync(__dirname + '/data/filters/sectors-2.json', 'utf8'),
 
     // Boundaries
     'GET /rest/gis/boundaries':      fs.readFileSync(__dirname + '/data/boundaries/list.json', 'utf8'),

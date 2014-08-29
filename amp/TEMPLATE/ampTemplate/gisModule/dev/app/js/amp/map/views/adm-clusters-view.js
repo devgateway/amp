@@ -97,7 +97,7 @@ module.exports = Backbone.View.extend({
     if (feature.properties) {
       var activities = feature.properties.activityid;
       layer._clusterId = feature.properties.admName;
-      layer.bindPopup(feature.properties.admName + ' has ' + activities.length +' projects. <br>Graphs will go here.');
+      layer.bindPopup(feature.properties.admName + ' has ' + activities.length +' projects. <br><img src="img/loading-icon.gif" />');
     }
   },
 
@@ -118,31 +118,22 @@ module.exports = Backbone.View.extend({
 
   _generateProjectList: function(popup, cluster){
     var self = this;
-    var PAGE_SIZE = 10; ///TODO: move elsewhere when real pagination is done.
+    var PAGE_SIZE = 20; ///TODO: move elsewhere when real pagination is done.
     var activities = _.first(cluster.properties.activityid, PAGE_SIZE);
-    var activityCollection = [];
-    var deferreds = [];    
+    var activitiesString = activities.join(',');
 
-    _.each(activities, function(activityId){
-      // TODO: do as a proper model or collection and fetch.. once api accepts asking for 
-      // many id in single request will be better.
-      deferreds.push($.ajax(
-      {
-        type:'GET',
-        url:'/rest/gis/activities/'+activityId,
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      }).then(function(data){
-        activityCollection.push(data);
-      }));
-    });
-
-    $.when.apply($, deferreds).then(function(){
-      //console.log('say when!', activityCollection);
-      // TODO: append to popup instead of setContent
-      popup.setContent(self.projectListTemplate(activityCollection)); 
+    // TODO: do as a proper model or collection and fetch.
+    $.ajax(
+    {
+      type:'GET',
+      url:'/rest/gis/activities/'+activitiesString,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    }).then(function(activityCollection){
+      // TODO: *append* to popup instead of *setContent*
+      popup.setContent(self.projectListTemplate({activities: activityCollection})); 
     });
   }
 

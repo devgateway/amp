@@ -2,7 +2,7 @@
 <div>
   Activity List
   <ul class="small">
-    <%   _.each(activities, function(activity){ %>
+    <%   _.each(obj.activities, function(activity){ %>
 
       <li><a href="<%= activity.ampUrl %>"><%= activity.name %></a></li>
     <% });%>

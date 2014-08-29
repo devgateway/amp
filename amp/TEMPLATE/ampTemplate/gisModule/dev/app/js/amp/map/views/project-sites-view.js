@@ -69,6 +69,12 @@ module.exports = Backbone.View.extend({
             return colour.get('multiple') === true;
           })];
         }
+
+        // temp hack for if pallette part didn't work.
+        if (colors.length === 0) {
+          colors[0] = {hex: function(){ return '#fa5';}};
+        }
+
         var point = new L.CircleMarker(latlng, {
           radius: self.currentRadius,
           fillColor: colors[0].hex(),

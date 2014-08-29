@@ -14,14 +14,12 @@ module.exports = Backbone.Collection
 
   parse: function(data){
     var parsedData = data;
-    console.log('data',data);
     parsedData = _.filter(data, function(layer){
       switch (layer.type){
         case 'joinBoundaries':
         case 'wms':
         case 'arcgis':
           return true;
-          break;
         default:
           return false;
       }
@@ -38,7 +36,7 @@ module.exports = Backbone.Collection
         return new JoinIndicator(attrs);
       case 'wms':
         return new WMSIndicator(attrs);
-      case: 'arcgis':
+      case 'arcgis':
         return new ArcGISIndicator(attrs);
       default:
         console.error('Unrecognized indicator type. Check parse function.: ' + attrs.type);

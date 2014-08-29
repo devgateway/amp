@@ -62,6 +62,13 @@ module.exports = GenericFilterView.extend({
     deferreds.push(this.organizations.fetch());
 
     $.when.apply($, deferreds).then(function(){
+
+      // sort orgs
+      self.organizations.comparator = function(model) {
+        return model.get('name');
+      };
+      self.organizations.sort();
+
       self.organizationRoles.each(function(orgRole){
           var tmpRoleNode = {
             id : orgRole.get('id'),

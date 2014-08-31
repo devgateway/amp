@@ -4,13 +4,29 @@
     "metadata": {
         "filter": {
             "sector": [
-                1,
-                2,
-                3
+                {
+                    "id": 0,
+                    "name": "Government"
+                },
+                {
+                    "id": 1,
+                    "name": "Health"
+                },
+                {
+                    "id": 2,
+                   "name": "Water and Sanitation"
+                },
+                {
+                    "id": 3,
+                    "name": "Power"
+                }
+
             ],
             "donor": [
-                1,
-                2
+                {
+                    "id": 0,
+                    "name": "USAID"
+                }
             ]
         }
     },

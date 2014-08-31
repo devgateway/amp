@@ -44,28 +44,51 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
              }, this);*/
             var Filter = Backbone.Model.extend({
                 defaults: {
-                    name: 'sector',
-                    value: [1, 4, 6]
+                    name: '',
+                    values: []
                 }
             });
-            var filter1 = new Filter();
-            var ItemView = Marionette.ItemView.extend({
-                tagName: 'li',
-                template: $(filtersTemplate, '#template-filters').html()
+            var Filters = Backbone.Collection.extend({
+                model: Filter
             });
-            var itemView1 = new ItemView({
-                model: filter1
+            var filtersInstance = new Filters();
+            var filtersJson = firstContent.get('metadata').get('filter');
+            $(filtersJson.keys()).each(function (i, item) {
+                if (filtersJson.get(item) instanceof Backbone.Collection) {
+                    var content = [];
+                    $(filtersJson.get(item)).each(function (j, item2) {
+                        $(item2.models).each(function (j, item3) {
+                            content.push(item3.get('name'));
+                        });
+                    });
+                    var auxFilter = new Filter({name: item, values: content});
+                    filtersInstance.push(auxFilter);
+                }
+            });
+            console.log(filtersInstance);
+
+            var FilterItemView = Marionette.ItemView.extend({
+                template: $(filtersTemplate, '#template-filters').html(),
+                model: Filter
+            });
+            var CompositeItemView = Marionette.CompositeView.extend({
+                template: $(filtersTemplate, '#template-composite-filters').html(),
+                childViewContainer: 'div',
+                childView: FilterItemView
+            });
+            var compositeView1 = new CompositeItemView({
+                collection: filtersInstance
             });
 
             // Create LayoutView object setting template.
             var dynamicLayoutView = new DynamicContentView();
             app.TabsApp.filtersRegion.show(dynamicLayoutView);
-            dynamicLayoutView.filters.show(itemView1);
+            dynamicLayoutView.filters.show(compositeView1);
 
-            content = firstContent.get('name');
-            firstContent.get('metadata').get('filter').get('sector').each(function (item) {
-                content += ' ' + item.attributes.value;
-            }, this);
+            /*content = firstContent.get('name');
+             firstContent.get('metadata').get('filter').get('sector').each(function (item) {
+             content += ' ' + item.attributes.value;
+             }, this);*/
         }
 
         // "Class" methods definition here.

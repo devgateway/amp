@@ -1,7 +1,7 @@
 /*https://gist.github.com/jonnyreeves/2474026*/
 /*https://github.com/icereval/backbone-documentmodel*/
-define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicContentView', 'text!views/html/filtersWrapperTemplate.html', 'text!views/html/filtersItemTemplate.html' ],
-    function (Marionette, Contents, Content, DynamicContentView, filtersTemplate, filtersItemTemplate) {
+define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicContentView', 'text!views/html/filtersWrapperTemplate.html', 'text!views/html/filtersItemTemplate.html', 'models/filter', 'collections/filters' ],
+    function (Marionette, Contents, Content, DynamicContentView, filtersTemplate, filtersItemTemplate, Filter, Filters) {
 
         "use strict";
 
@@ -16,43 +16,9 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
             return '<span><img src="/images/ajax-loader.gif"/></span>';
         }
 
-        function retrieveTabContent(selectedTabIndex) {
-            var content = "";
-            // Get collection with data we will use to render the tab content.
-            var tabContents = new Contents();
-            var firstContent = tabContents.first();
-
-            /*
-             1) Defino class Filter(model)
-             2) defino class Filters(collection)
-             3) defino class FilterItemView(itemView)
-             4) defino class FiltersCollectionView(collectionView)
-             5) defino region donde insertar la FiltersCollectionView.
-             6) defino los templates para las 2 vistas (inline y simples por ahora).
-             7) tomo los datos de firstContent.metadata.filters y los convierto en una colección de objetos Filter.
-             8) instancio todos los objetos y los meto en la region.
-             */
-
-            // Create a region where the dynamic content will be rendered inside the tab.
-            var regionsName = '#main-dynamic-content-region_' + selectedTabIndex;
-            app.TabsApp.addRegions({'filtersRegion': regionsName});
-
-            // "Filter" item (todo: cleanup this part).
-            /*var values = [];
-             firstContent.get('metadata').get('filter').get('sector').each(function (item) {
-             values.push(item.attributes.value);
-             }, this);*/
-            var Filter = Backbone.Model.extend({
-                defaults: {
-                    name: '',
-                    values: []
-                }
-            });
-            var Filters = Backbone.Collection.extend({
-                model: Filter
-            });
-            var filtersInstance = new Filters();
-            var filtersJson = firstContent.get('metadata').get('filter');
+        function extractFilters(content) {
+            var filters = new Filters();
+            var filtersJson = content.get('metadata').get('filter');
             $(filtersJson.keys()).each(function (i, item) {
                 if (filtersJson.get(item) instanceof Backbone.Collection) {
                     var content = [];
@@ -62,34 +28,46 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
                         });
                     });
                     var auxFilter = new Filter({name: item, values: content});
-                    filtersInstance.push(auxFilter);
+                    filters.push(auxFilter);
                 }
             });
-            console.log(filtersInstance);
+            return filters;
+        }
 
+        function retrieveTabContent(selectedTabIndex) {
+            var content = "";
+            // Get collection with data we will use to render the tab content.
+            var tabContents = new Contents();
+            var firstContent = tabContents.first();
+
+            // Create a region where the dynamic content will be rendered inside the tab.
+            var regionsName = '#main-dynamic-content-region_' + selectedTabIndex;
+            app.TabsApp.addRegions({'filtersRegion': regionsName});
+
+            // Create collection of Filters.
+            var filters = extractFilters(firstContent);
+
+            // Define the views.
             var FilterItemView = Marionette.ItemView.extend({
                 tagName: 'tr',
                 template: $(filtersItemTemplate, '#template-filters').html()
             });
             var CompositeItemView = Marionette.CompositeView.extend({
-                template: $(filtersTemplate, '#template-composite-filters').html(),
+                template: $(filtersTemplate, '#template-table-filters').html(),
                 childView: FilterItemView,
                 tagName: 'table'
             });
-            var compositeView1 = new CompositeItemView({
-                collection: filtersInstance
+            var compositeView = new CompositeItemView({
+                collection: filters
             });
 
-            // Create LayoutView object setting template.
+            // Render views.
             var dynamicLayoutView = new DynamicContentView();
             app.TabsApp.filtersRegion.show(dynamicLayoutView);
-            compositeView1.render();
-            dynamicLayoutView.filters.show(compositeView1);
+            dynamicLayoutView.filters.show(compositeView);
 
-            /*content = firstContent.get('name');
-             firstContent.get('metadata').get('filter').get('sector').each(function (item) {
-             content += ' ' + item.attributes.value;
-             }, this);*/
+            // Create accordion for filters area.
+            $("#main-dynamic-content-region_" + selectedTabIndex + " #filters-collapsible-area").accordion({collapsible: true});
         }
 
         // "Class" methods definition here.

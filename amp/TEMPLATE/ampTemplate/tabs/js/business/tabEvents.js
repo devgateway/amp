@@ -1,7 +1,7 @@
 /*https://gist.github.com/jonnyreeves/2474026*/
 /*https://github.com/icereval/backbone-documentmodel*/
-define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicContentView', 'text!views/html/filtersTemplate.html' ],
-    function (Marionette, Contents, Content, DynamicContentView, filtersTemplate) {
+define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicContentView', 'text!views/html/filtersWrapperTemplate.html', 'text!views/html/filtersItemTemplate.html' ],
+    function (Marionette, Contents, Content, DynamicContentView, filtersTemplate, filtersItemTemplate) {
 
         "use strict";
 
@@ -68,13 +68,13 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
             console.log(filtersInstance);
 
             var FilterItemView = Marionette.ItemView.extend({
-                template: $(filtersTemplate, '#template-filters').html(),
-                model: Filter
+                tagName: 'tr',
+                template: $(filtersItemTemplate, '#template-filters').html()
             });
             var CompositeItemView = Marionette.CompositeView.extend({
                 template: $(filtersTemplate, '#template-composite-filters').html(),
-                childViewContainer: 'div',
-                childView: FilterItemView
+                childView: FilterItemView,
+                tagName: 'table'
             });
             var compositeView1 = new CompositeItemView({
                 collection: filtersInstance
@@ -83,6 +83,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
             // Create LayoutView object setting template.
             var dynamicLayoutView = new DynamicContentView();
             app.TabsApp.filtersRegion.show(dynamicLayoutView);
+            compositeView1.render();
             dynamicLayoutView.filters.show(compositeView1);
 
             /*content = firstContent.get('name');

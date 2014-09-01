@@ -94,6 +94,10 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	public Set<ReportColumn> getHierarchies() {
 		return hierarchies;
 	}
+	
+	public void setHierarchies(Set<ReportColumn> hierarchies) {
+		this.hierarchies = hierarchies;
+	}
 
 	@Override
 	public ReportFilters getFilters() {

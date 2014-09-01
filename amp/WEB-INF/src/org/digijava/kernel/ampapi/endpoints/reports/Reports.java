@@ -38,7 +38,14 @@ public class Reports {
 		
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
 
-		ReportSpecificationImpl spec = MondrianReportUtils.toReportSpecification(ampReport);;
+		//TODO: for now we do not translate other types of reports than Donor Type reports (hide icons for non-donor-type reports?)
+		ReportSpecificationImpl spec = null;
+		try {
+			spec = MondrianReportUtils.toReportSpecification(ampReport);
+		} catch (AMPException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		};
 
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, false);
 

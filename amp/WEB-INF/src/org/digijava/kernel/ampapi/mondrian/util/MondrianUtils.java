@@ -290,7 +290,7 @@ public class MondrianUtils {
 		boolean mustBeNotNull = false;
 		switch (elemType) {
 		case YEAR : 
-		case DATE : break;
+		case DATE : lowerLimit = 0; upperLimit  = Integer.MAX_VALUE; break;
 		case QUARTER : lowerLimit = 1; upperLimit  = 4; mustBeNotNull = true; break;
 		case MONTH : lowerLimit = 1; upperLimit  = 12; mustBeNotNull = true; break;
 		default: break;

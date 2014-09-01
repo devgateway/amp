@@ -78,6 +78,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 	private final Class<? extends ReportAreaImpl> reportAreaType;
 	private final boolean printMode;
 	
+	private MDXGenerator generator = null;
+	
 	private List<ReportOutputColumn> leafHeaders = null; //leaf report columns list
 	
 	/**
@@ -100,27 +102,13 @@ public class MondrianReportGenerator implements ReportExecutor {
 	
 	@Override
 	public GeneratedReport executeReport(ReportSpecification spec) throws AMPException {
-		MDXConfig config = toMDXConfig(spec);
-		CellSet cellSet = null;
-		long startTime = 0;
-		MDXGenerator generator = null;
-		try {
-			generator = new MDXGenerator();
-			startTime = System.currentTimeMillis();
-			String mdxQuery = generator.getAdvancedOlapQuery(config);
-			cellSet = generator.runQuery(mdxQuery);
-			if (printMode) {
-				MondrianUtils.print(cellSet, spec.getReportName());
-				System.out.println("[" + config.getMdxName() + "] MDX query: " + mdxQuery);
-			}
-		} catch (Exception e) {
-			if (generator != null) generator.tearDown();
-			throw new AMPException("Cannot generate Mondrian Report: " + e.getMessage() == null ? e.getClass().getName() : e.getMessage());
-		}
+		CellDataSet cellDataSet = generateReportAsSaikuCellDataSet(spec);
 		
-		GeneratedReport report =  toGeneratedReport(spec, cellSet, (int)(System.currentTimeMillis() - startTime));
+		//TODO: translation from CellDataSet instead of CellSet
+		GeneratedReport report = null;  
+		//toGeneratedReport(spec, cellDataSet, cellDataSet.runtime);
 		
-		generator.tearDown();
+		tearDown();
 		
 		return report;
 	}
@@ -132,40 +120,40 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * @throws AMPException
 	 */
 	public CellDataSet generateReportAsSaikuCellDataSet(ReportSpecification spec) throws AMPException {
-		MDXConfig config = toMDXConfig(spec);
 		CellDataSet cellDataSet = null;
-		CellSet cellSet = null;
-		String mdxQuery = null;
-		long startTime = 0;
 		int totalTime = 0;
-		MDXGenerator generator = null;
+		long startTime = System.currentTimeMillis();
+		CellSet cellSet = null;
+		String mdxQuery = getMDXQuery(spec);
+		
+		if (printMode) System.out.println("[" + spec.getReportName() + "] MDX query: " + mdxQuery);
+		
 		try {
-			generator = new MDXGenerator();
-			startTime = System.currentTimeMillis();
-			mdxQuery = generator.getAdvancedOlapQuery(config);
 			cellSet = generator.runQuery(mdxQuery);
 		} catch (Exception e) {
-			if (generator != null) generator.tearDown();
-			throw new AMPException("Cannot generate Mondrian Report '" + config.getMdxName() +"' : " 
+			tearDown();
+			throw new AMPException("Cannot generate Mondrian Report '" + spec.getReportName() +"' : " 
 					+ e.getMessage() == null ? e.getClass().getName() : e.getMessage());
 		}
 		
-		if (printMode)
-			System.out.println("[" + config.getMdxName() + "] MDX query run time: " + (int)(System.currentTimeMillis() - startTime));
+		if (printMode) System.out.println("[" + spec.getReportName() + "] MDX query run time: " + (int)(System.currentTimeMillis() - startTime));
+		
 		cellDataSet = postProcess(spec, cellSet);
 		totalTime = (int)(System.currentTimeMillis() - startTime);
-		if (printMode)
-			System.out.println("[" + config.getMdxName() + "] With post process run time: " + totalTime);
+		
+
+		if (printMode) System.out.println("[" + spec.getReportName() + "] total run timem, including post-processing: " + totalTime);
+		
 		cellDataSet.setRuntime(totalTime);
-		logger.info("CellSet for " + config.getMdxName() + " generated within :" + String.valueOf(totalTime));
+		logger.info("CellSet for " + spec.getReportName() + " generated within :" + String.valueOf(totalTime));
+		
 		if (printMode) {
 			if (cellSet != null)
 				MondrianUtils.print(cellSet, spec.getReportName());
-			System.out.println("[" + config.getMdxName() + "] MDX query: " + mdxQuery);
 			if (cellDataSet != null)
 				SaikuUtils.print(cellDataSet, spec.getReportName() + "_POST");
 		}
-		//TODO: add a method to teardown connection
+		
 		return cellDataSet;
 	}
 	
@@ -177,15 +165,21 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 */
 	public String getMDXQuery(ReportSpecification spec) throws AMPException {
 		MDXConfig config = toMDXConfig(spec);
-		MDXGenerator generator = null;
 		try {
 			generator = new MDXGenerator();
 			return generator.getAdvancedOlapQuery(config);
 		} catch (AmpApiException e) {
+			tearDown();
 			throw new AMPException("Cannot generate Mondrian Report: " + e.getMessage());
-		} finally {
-			if (generator != null) generator.tearDown();
-		}
+		} 
+	}
+	
+	/**
+	 * Releases the resources
+	 */
+	public void tearDown() {
+		if (generator != null) 
+			generator.tearDown();
 	}
 	
 	private MDXConfig toMDXConfig(ReportSpecification spec) throws AMPException {
@@ -194,8 +188,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 		config.setMdxName(spec.getReportName());
 		boolean doHierarchiesTotals = false;//we are moving totals calculation out of MDX. spec.getHierarchies() != null && spec.getHierarchies().size() > 0;
 		//totals to be done post generation, because in MDX it take too long
-		config.setDoColumnsTotals(false);// we are moving totals calculation out of MDX. spec.isCalculateRowTotals()); //columns totals in MDX are equivalent to what we perceive as row totals in standard report
-		config.setDoRowTotals(spec.isCalculateColumnTotals()); //row totals in MDX are equivalent to what we perceive as column totals, e.g. this is for Total Actual Commitments
+		config.setDoColumnsTotals(false);//we are moving totals calculation out of MDX. columns totals in MDX are equivalent to what we perceive as row totals in standard report
+		config.setDoRowTotals(false); //we are moving totals calculation out of MDX. row totals in MDX are equivalent to what we perceive as column totals, e.g. this is for Total Actual Commitments
 		config.setColumnsHierarchiesTotals(0); //we are moving subtotals out of MDX.
 		config.setRowsHierarchiesTotals(0); //we are moving subtotals out of MDX.
 		//add requested columns
@@ -320,7 +314,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		
 		applyFilterSetting(spec, cellDataSet);
 		
-		//TODO: concatenate columns for non-hierarchical reports
+		SaikuUtils.concatenateNonHierarchicalColumns(spec, cellDataSet);
 		
 		return cellDataSet;
 	}

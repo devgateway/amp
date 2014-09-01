@@ -259,8 +259,14 @@ public class AmpARFilterTranslator {
 	 */
 	private void addDateSettings() {
 		try {
-			if (arFilter.getRenderStartYear()!=null || arFilter.getRenderEndYear() != null)
-				settings.addYearsRangeFilterRule(arFilter.getRenderStartYear(), arFilter.getRenderEndYear());
+			if ((arFilter.getRenderStartYear()!=null || arFilter.getRenderEndYear() != null)
+					//also check if this is not a both ends unlimited range (-1 in old filters means no limit...)
+					&& !(arFilter.getRenderStartYear() == -1 && arFilter.getRenderEndYear() == -1)) {
+				settings.addYearsRangeFilterRule(
+						(arFilter.getRenderStartYear() == -1 ? null : arFilter.getRenderStartYear()), 
+						(arFilter.getRenderEndYear() == -1 ? null : arFilter.getRenderEndYear())
+						);
+			}
 		} catch(AmpApiException ex) {
 			logger.error(ex.getMessage());
 		}

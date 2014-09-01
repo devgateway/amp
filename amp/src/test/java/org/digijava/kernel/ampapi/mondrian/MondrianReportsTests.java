@@ -5,6 +5,8 @@ package org.digijava.kernel.ampapi.mondrian;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -14,6 +16,7 @@ import junit.framework.TestSuite;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
+import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
@@ -141,6 +144,13 @@ public class MondrianReportsTests extends AmpTestCase {
 	
 	public void testGenerateReportAsSaikuCellDataSet() {
 		ReportSpecificationImpl spec = getReportSpecificatin("NadiaMondrianTest");
+		assertNotNull(spec);
+		
+		//TODO: remove
+		Set<ReportColumn> hierarchies = new LinkedHashSet<ReportColumn>();
+		hierarchies.add(spec.getColumns().iterator().next());//adding first column as hierarchy
+		spec.setHierarchies(hierarchies);
+		//end to remove
 		generateAndValidate(spec, true, true);
 	}
 	
@@ -153,7 +163,13 @@ public class MondrianReportsTests extends AmpTestCase {
 		TLSUtils.populate(mockRequest);
 		ReportContextData.createWithId(report.getId().toString(), true);
 
-		return MondrianReportUtils.toReportSpecification(report);
+		ReportSpecificationImpl spec = null;
+		try {
+			spec = MondrianReportUtils.toReportSpecification(report);
+		} catch (AMPException e) {
+			System.err.println(e.getMessage());
+		}
+		return spec;
 	}
 	
 	
@@ -189,7 +205,7 @@ public class MondrianReportsTests extends AmpTestCase {
 				System.out.println("Generation duration = " + report.generationTime + "(ms)");
 			}	
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			err = e.getMessage();
 		}
 		//basic tests, todo more

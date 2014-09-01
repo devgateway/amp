@@ -61,7 +61,6 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.ValidatorAdapter;
-import org.bouncycastle.crypto.RuntimeCryptoException;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
@@ -69,6 +68,7 @@ import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
+import org.dgfoundation.amp.onepager.components.features.items.AmpAgreementItemPanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpAidEffectivenessFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
@@ -456,8 +456,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	                        target.add(warningsWrapper);
 	                        target.appendJavaScript("showWarningPanel();");
 	                    }
-	                    else
+	                    else{
 	                        saveMethod(target, am, feedbackPanel, false, redirected,false);
+	                    }
 	                }
 					else{
 						onError(target, form);
@@ -809,7 +810,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		};
 		featureList.setReuseItems(true);
 		activityForm.add(featureList);
-		
 		quickMenu(am, listModel);
 	}
 
@@ -819,6 +819,21 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
         toggleSemanticValidation(notDraft, form, target);
 
         form.process(button);
+        
+			form.visitChildren(AmpAgreementItemPanel.class,new IVisitor<AmpAgreementItemPanel, Void>() {
+
+				@Override
+				public void component(AmpAgreementItemPanel object,
+						IVisit<Void> visit) {
+					object.validateIsNewAgreementFormClosed(target);
+					visit.dontGoDeeper();
+				}
+				
+			});
+        
+        System.out.println("has errors: " + form.hasError());
+        System.out.println("has error messages:" + form.hasErrorMessage());
+        
         form.visitChildren(AbstractTextComponent.class,
                 new IVisitor<Component, Object>() {
                     @Override

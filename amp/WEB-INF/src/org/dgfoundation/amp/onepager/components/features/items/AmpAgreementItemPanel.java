@@ -1,5 +1,10 @@
 package org.dgfoundation.amp.onepager.components.features.items;
 
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Iterator;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -11,7 +16,14 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
-import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
+import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpEditLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpAgreementSearchModel;
 import org.dgfoundation.amp.onepager.models.AutocompleteAcronymTitleModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -20,14 +32,9 @@ import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.util.DbUtil;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
-
 public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 	private static final long serialVersionUID = 1L;
-
+	private boolean isFormOpen=false;
 	public AmpAgreementItemPanel(String id, final IModel<AmpFunding> model,
 			String fmName) {
 		super(id, model, fmName);
@@ -44,6 +51,7 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 
         final Form<AmpAgreement> newAgreementForm = new Form<AmpAgreement>("newAgreement", editAgModel);
         newAgreementForm.setVisibilityAllowed(false);
+        AmpAgreementItemPanel.this.isFormOpen=false;
 
         AmpEditLinkField editAgreement = new AmpEditLinkField("editAgreement", "Edit Agreement") {
             @Override
@@ -59,6 +67,7 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
                 //prepare the editing
                 editAgModel.setObject(agreement.getObject());
                 newAgreementForm.setVisibilityAllowed(true);
+                AmpAgreementItemPanel.this.isFormOpen=true;
                 target.add(this.getParent());
             }
         };
@@ -117,6 +126,7 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 					if (choice.getId() != null && choice.getId() < 0){
 						newAgreementForm.setVisibilityAllowed(true);
 						editAgModel.setObject(agreement.getObject());
+		                AmpAgreementItemPanel.this.isFormOpen=true;
 					}
 				target.add(this.getParent());
 			}
@@ -178,6 +188,7 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 				target.add(agreementTextLabel);
 				editAgModel.setObject(new AmpAgreement());
 				newAgreementForm.setVisibilityAllowed(false);
+                AmpAgreementItemPanel.this.isFormOpen=false;
 				target.add(newAgreementForm.getParent());
 				target.add(search);
 			}
@@ -188,6 +199,7 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
             @Override
             protected void onClick(AjaxRequestTarget target) {
                 newAgreementForm.setVisibilityAllowed(false);
+                AmpAgreementItemPanel.this.isFormOpen=false;
                 target.add(newAgreementForm.getParent());
             }
         };
@@ -196,5 +208,14 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 		add(newAgreementForm);
 
 	}
+	public void validateIsNewAgreementFormClosed(AjaxRequestTarget target){
+		if(this.isFormOpen){
+			//if the form is still open we reject validation
+			error(TranslatorUtil
+					.getTranslation("Warning: The agreement form should be confirmed or cancelled."));
+			target.add(this);
+		}
+	}
+	
 
 }

@@ -46,18 +46,32 @@ public class SQLUtils {
 	 * @return Map<ColumnName, data_type>
 	 */
 	public static LinkedHashMap<String, String> getTableColumnsWithTypes(final String tableName, boolean crashOnDuplicates){
-		LinkedHashMap<String, String> res = new LinkedHashMap<>();
 		String query = String.format("SELECT c.column_name, c.data_type FROM information_schema.columns As c WHERE table_schema='public' AND table_name = '%s' ORDER BY c.ordinal_position", tableName.toLowerCase());
 		try (Connection jdbcConnection = PersistenceManager.getJdbcConnection()) {
-			try(ResultSet rs = rawRunQuery(jdbcConnection, query, null)) {
-				while (rs.next()) {
-					String columnName = rs.getString(1);
-					String columnType = rs.getString(2);
+			return getTableColumnsWithTypes(jdbcConnection, tableName, query, crashOnDuplicates);
+		}
+		catch(SQLException ex) {
+			throw new RuntimeException(ex);
+		}
+	}
+	
+	/**
+	 * generically builds a linkedhashmap of (colname, coltype), based on a query
+	 * @param jdbcConnection
+	 * @param query - a query which returns (colname, coltype) ORDERED BY appearance in db
+	 * @param crashOnDuplicates
+	 * @return
+	 */
+	public static LinkedHashMap<String, String> getTableColumnsWithTypes(Connection jdbcConnection, String tableName, String query, boolean crashOnDuplicates) {
+		LinkedHashMap<String, String> res = new LinkedHashMap<>();
+		try(ResultSet rs = rawRunQuery(jdbcConnection, query, null)) {
+			while (rs.next()) {
+				String columnName = rs.getString(1);
+				String columnType = rs.getString(2);
 					
-					if (crashOnDuplicates && res.containsKey(columnName))
-						throw new RuntimeException("not allowed to have duplicate column names in table " + tableName);
-					res.put(columnName, columnType);
-				}
+				if (crashOnDuplicates && res.containsKey(columnName))
+					throw new RuntimeException("not allowed to have duplicate column names in table " + tableName);
+				res.put(columnName, columnType);
 			}
 		}
 		catch(SQLException ex) {
@@ -129,7 +143,8 @@ public class SQLUtils {
 		}
 		
 		ResultSet rs = ps.executeQuery();
-		rs.setFetchSize(500);
+		if (!connection.getMetaData().getDatabaseProductName().equals("MonetDB"))
+			rs.setFetchSize(500);
 		
 		return rs;
 	}

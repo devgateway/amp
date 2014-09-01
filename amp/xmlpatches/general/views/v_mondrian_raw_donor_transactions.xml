@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-17836</jira>
+	<keyword>Views</keyword>
+	<author>Constantin Dolghier</author>
+	<description>recreate view, this will always be the last version of the view</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_mondrian_raw_donor_transactions;
+			    CREATE OR REPLACE VIEW v_mondrian_raw_donor_transactions AS 
+SELECT 
+	aa.amp_activity_id AS amp_activity_id,
+	fd.amp_fund_detail_id AS amp_fund_detail_id,
+	fd.transaction_type AS transaction_type,
+	fd.adjustment_type AS adjustment_type,
+	fd.transaction_date AS transaction_date,
+	to_char(fd.transaction_date, 'J')::integer AS date_code,
+
+	fd.transaction_amount AS transaction_amount,
+
+	fd.amp_currency_id AS currency_id,
+	f.amp_donor_org_id AS donor_id,
+	f.financing_instr_category_value AS financing_instrument_id,
+	f.type_of_assistance_category_va AS terms_of_assistance_id,
+     
+	cast (NULL as bigint) as src_role_id,
+	cast (NULL as bigint) as dest_role_id,
+	cast (NULL as bigint) as dest_org_id
+          
+	FROM amp_activity aa JOIN amp_funding f ON aa.amp_activity_id = f.amp_activity_id
+		JOIN amp_funding_detail fd ON f.amp_funding_id = fd.amp_funding_id
+
+ORDER BY aa.amp_activity_id;
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

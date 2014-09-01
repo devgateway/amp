@@ -25,7 +25,7 @@
 	<property name="jackrabbit" location="./jackrabbit"/>
     <property name="ampTest" location="./WEB-INF/amp-test" />
 	<property name="ampSelenium" location="./WEB-INF/amp-selenium-test" />
-	<property name="jdbc.driverClassName" value="org.postgresql.Driver"/>
+	<!-- <property name="jdbc.driverClassName" value="org.postgresql.Driver"/> -->
 	<property name="dbName" value="postgresql"/>
 	
 	<condition property="external-lib" value="${jboss-lib}"> 

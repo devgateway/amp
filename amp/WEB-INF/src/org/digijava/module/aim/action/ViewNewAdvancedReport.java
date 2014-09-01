@@ -31,6 +31,7 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.mondrian.MondrianETL;
+import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.dgfoundation.amp.utils.BoundedList;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -88,6 +89,13 @@ public class ViewNewAdvancedReport extends Action {
 			long end = System.currentTimeMillis();
 			double secs = (end - start) / 1000.0;
 			ARUtil.writeResponse(response, String.format("ETL done in %.2f seconds", secs));
+			return null;
+		}
+		
+		if (request.getParameter("monet_etl") != null) {
+			try(MonetConnection monetConn = MonetConnection.getConnection()) {
+				ARUtil.writeResponse(response, String.format("the monet table mondrian_fact_table has columns: %s", monetConn.getTableColumnsWithTypes("mondrian_fact_table",  true)));
+			}
 			return null;
 		}
 		

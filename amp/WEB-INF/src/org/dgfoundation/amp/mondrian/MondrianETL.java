@@ -481,9 +481,18 @@ public class MondrianETL {
 		generateLocationsEtlTables();
 		generateOrganisationsEtlTables();
 		
+		generateRawTransactionTables();
+		
 		generateFactTable();
 	}
 
+	protected void generateRawTransactionTables() throws SQLException {
+		logger.warn("materializing the raw transactions tables...");
+		for (MondrianTableDescription mondrianTable: MondrianTablesRepository.MONDRIAN_RAW_TRANSACTIONS_TABLES) {
+			generateStarTableWithQuery(mondrianTable.tableName, mondrianTable.primaryKeyColumnName, "SELECT * FROM v_" + mondrianTable.tableName, mondrianTable.indexedColumns);
+		}
+	}
+	
 	protected void generateFactTable() throws SQLException {
 		logger.warn("running the fact-table-generating cartesian...");
 		List<String> factTableQueries = generateFactTableQueries();

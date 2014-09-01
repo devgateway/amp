@@ -153,21 +153,31 @@ public class Filters {
 	 * @return
 	 */
 	@GET
-	@Path("/sectors/{sectorConfigName}")
+	@Path("/sectors/{sectorId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="SectorsByConfigName")
-	public List<SimpleJsonBean> getSectors(
-			@PathParam("sectorConfigName") String sectorConfigName) {
-		// DozerBeanMapperSingletonWrapper.getInstance().
-		List<SimpleJsonBean> ampSectorsList = new ArrayList<SimpleJsonBean>();
+	@ApiMethod(ui = false, name = "SectorsById")
+	public SimpleJsonBean getSectors(@PathParam("sectorId") Long sectorId) {
 
-		// Primary
-		List<AmpSector> s = SectorUtil
-				.getAmpSectorsAndSubSectorsHierarchy(sectorConfigName);
-		for (AmpSector ampSector : s) {
-			ampSectorsList.add(getSectors(ampSector));
+		SimpleJsonBean sector = new SimpleJsonBean();
+
+		try {
+			AmpClassificationConfiguration c = SectorUtil
+					.getClassificationConfigById(sectorId);
+
+			String sectorConfigName = c.getName();
+			List<SimpleJsonBean> ampSectorsList = new ArrayList<SimpleJsonBean>();
+			sector.setId(sectorId);
+			sector.setName(sectorConfigName);
+			List<AmpSector> s = SectorUtil
+					.getAmpSectorsAndSubSectorsHierarchy(sectorConfigName);
+			for (AmpSector ampSector : s) {
+				ampSectorsList.add(getSectors(ampSector));
+			}
+			sector.setChildren(ampSectorsList);
+		} catch (DgException e) {
+			logger.error("Cannot get sector by id",e);
 		}
-		return ampSectorsList;
+		return sector;
 	}
 	/**
 	 * Return the year range configure for GIS

@@ -3,7 +3,7 @@
     "name": "Report One",
     "metadata": {
         "filter": {
-            "sector": [
+            "Sector": [
                 {
                     "id": 0,
                     "name": "Government"
@@ -22,7 +22,7 @@
                 }
 
             ],
-            "donor": [
+            "Donor": [
                 {
                     "id": 0,
                     "name": "USAID"

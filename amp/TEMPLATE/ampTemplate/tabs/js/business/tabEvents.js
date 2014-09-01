@@ -13,7 +13,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
         // Some private method.
         function putAnimation() {
-            return '<span><img src="/images/ajax-loader.gif"/></span>';
+            return '<span><img src="/TEMPLATE/ampTemplate/tabs/css/images/ajax-loader.gif"/></span>';
         }
 
         function extractFilters(content) {
@@ -34,14 +34,15 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
             return filters;
         }
 
-        function retrieveTabContent(selectedTabIndex) {
-            var content = "";
+        function retrieveTabContent(selectedTabIndex) {           
+            var id = app.tabs.collection.models[selectedTabIndex].get('id');                       
+            
             // Get collection with data we will use to render the tab content.
             var tabContents = new Contents();
             var firstContent = tabContents.first();
 
             // Create a region where the dynamic content will be rendered inside the tab.
-            var regionsName = '#main-dynamic-content-region_' + selectedTabIndex;
+            var regionsName = '#main-dynamic-content-region_' + id;
             app.TabsApp.addRegions({'filtersRegion': regionsName});
 
             // Create collection of Filters.
@@ -49,13 +50,13 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
             // Define the views.
             var FilterItemView = Marionette.ItemView.extend({
-                tagName: 'tr',
+                tagName: 'span',
+                className: 'round-filter',
                 template: $(filtersItemTemplate, '#template-filters').html()
             });
             var CompositeItemView = Marionette.CompositeView.extend({
                 template: $(filtersTemplate, '#template-table-filters').html(),
-                childView: FilterItemView,
-                tagName: 'table'
+                childView: FilterItemView
             });
             var compositeView = new CompositeItemView({
                 collection: filters
@@ -67,10 +68,10 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
             dynamicLayoutView.filters.show(compositeView);
 
             // Create accordion for filters area.
-            $("#main-dynamic-content-region_" + selectedTabIndex + " #filters-collapsible-area").accordion({collapsible: true, active: false});
-            $("#main-dynamic-content-region_" + selectedTabIndex + " #filters-button").button();
-            $("#main-dynamic-content-region_" + selectedTabIndex + " #save-tab-button").button();
-            $("#main-dynamic-content-region_" + selectedTabIndex + " #settings-tab-button").button();
+            $("#main-dynamic-content-region_" + id + " #filters-collapsible-area").accordion({collapsible: true, active: false});
+            $("#main-dynamic-content-region_" + id + " #filters-button").button();
+            $("#main-dynamic-content-region_" + id + " #save-tab-button").button();
+            $("#main-dynamic-content-region_" + id + " #settings-tab-button").button();
         }
 
         // "Class" methods definition here.

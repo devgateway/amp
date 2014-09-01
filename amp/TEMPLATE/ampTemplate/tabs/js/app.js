@@ -55,10 +55,10 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
     var tabEvents = new TabEvents();
     // JQuery create the tabs and assign some events to our event manager class.
     tabsObject.tabs({activate: function (event, ui) {
-        tabEvents.onActivateTab(event, ui)
+        tabEvents.onActivateTab(event, ui);
     },
         create: function (event, ui) {
-            tabEvents.onCreateTab(event, ui)
+            tabEvents.onCreateTab(event, ui);
         }});
 
     app.TabsApp.start();

@@ -14,7 +14,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<buildVersion>2.10-SNAPSHOT</buildVersion>
  		<jersey.version>1.18</jersey.version>
-		<saiku.version>2.6.1-DG</saiku.version> 
+		<saiku.version>2.6.2-DG</saiku.version> 
 	</properties>
 	<repositories>
 		<repository>

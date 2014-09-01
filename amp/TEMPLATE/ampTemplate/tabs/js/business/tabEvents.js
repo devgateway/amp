@@ -67,7 +67,10 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
             dynamicLayoutView.filters.show(compositeView);
 
             // Create accordion for filters area.
-            $("#main-dynamic-content-region_" + selectedTabIndex + " #filters-collapsible-area").accordion({collapsible: true});
+            $("#main-dynamic-content-region_" + selectedTabIndex + " #filters-collapsible-area").accordion({collapsible: true, active: false});
+            $("#main-dynamic-content-region_" + selectedTabIndex + " #filters-button").button();
+            $("#main-dynamic-content-region_" + selectedTabIndex + " #save-tab-button").button();
+            $("#main-dynamic-content-region_" + selectedTabIndex + " #settings-tab-button").button();
         }
 
         // "Class" methods definition here.

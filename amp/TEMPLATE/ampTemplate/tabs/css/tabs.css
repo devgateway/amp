@@ -1,3 +1,13 @@
 .right_text {
     text-align: right;
 }
+
+.blue_widget {
+    background: #EBEBEB !important;
+}
+
+.filters-area-button {
+    position: fixed;
+    top: 59px;
+    z-index: 10;
+}

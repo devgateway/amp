@@ -1,12 +1,6 @@
 package org.digijava.module.dataExchange.action;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.AbstractMap;
@@ -1218,12 +1212,12 @@ public class ImportActionNew extends DispatchAction {
         }
         SchemaFactory sf = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
         Schema schema = sf.newSchema(new File(path+DEConstants.IATI_SCHEMA_LOCATION));
-        OutputStream bOut = new ByteArrayOutputStream();
+        Writer writer = new StringWriter();
         Marshaller marshaller = jc.createMarshaller();
         marshaller.setSchema(schema);
 
-        marshaller.marshal(parsed, bOut);
-        return bOut.toString();
+        marshaller.marshal(parsed, writer);
+        return writer.toString();
     }
 
 

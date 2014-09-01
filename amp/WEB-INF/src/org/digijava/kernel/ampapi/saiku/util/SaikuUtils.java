@@ -98,16 +98,16 @@ public class SaikuUtils {
 		int leftOffset = cellDataSet.getLeftOffset(); //this is actually the number of columns in the cellDataSet
 
 		//the starting index of the column to concatenate all totals 
-		int startColumnIndex = spec.getHierarchies() != null ? spec.getHierarchies().size() : 1;
+		int startColumnIndex = spec.getHierarchies() != null && spec.getHierarchies().size() > 0 ? spec.getHierarchies().size() : 1;
 		int end = spec.getColumns().size();
 		int noOfColumnsToMerge = end - startColumnIndex ;
 		//if we have hierarchies only and this is not a print call, then we have nothing to do, because no concatenation is needed
 		if (noOfColumnsToMerge == 0 || data.length == 0) return;
 		
-		//for debug:
-		final String sep = System.lineSeparator() + String.format("%" + (21 * startColumnIndex -1) + "s\t|", "");
-		//for production:
-		//final String sep = ", ";
+		//TODO: for debug:
+		//final String sep = System.lineSeparator() + String.format("%" + (21 * startColumnIndex -1) + "s\t|", "");
+		//TODO: for production:
+		final String sep = ", ";
 		StringBuilder[] sbList = new StringBuilder[noOfColumnsToMerge];
 		for (int i = 0; i < noOfColumnsToMerge; i++)
 			sbList[i] = new StringBuilder();
@@ -170,7 +170,8 @@ public class SaikuUtils {
 					
 					//a) update concatenated data
 					for (int j = startColumnIndex; j < end; j++) {
-						data[groupStartRowId][j].setFormattedValue(sbList[j - startColumnIndex].toString());
+						int subStrEnd = sbList[j - startColumnIndex].length() - sep.length();
+						data[groupStartRowId][j].setFormattedValue(sbList[j - startColumnIndex].substring(0, subStrEnd));
 					}
 					
 					Cell[][] res = total.getCells();
@@ -179,12 +180,11 @@ public class SaikuUtils {
 						data[groupStartRowId][a].setRawValue(res[0][a - leftOffset].getValue());
 						data[groupStartRowId][a].setFormattedValue(res[0][a - leftOffset].getValue());
 					}
-					
-					//c) remember cumulative measures totals && reset the current storage
-					if (colTotals != null && colTotals.length > 0) {
-						measuresTotalsToKeep.add(currentTotalMeasuresColumnTotals.clone());
-						Arrays.fill(currentTotalMeasuresColumnTotals, 0);
-					}
+				}
+				//remember cumulative measures totals && reset the current storage
+				if (colTotals != null && colTotals.length > 0) {
+					measuresTotalsToKeep.add(currentTotalMeasuresColumnTotals.clone());
+					Arrays.fill(currentTotalMeasuresColumnTotals, 0);
 				}
 				//update indexes
 				groupStartRowId = i + 1;
@@ -251,7 +251,7 @@ public class SaikuUtils {
 		//print or concatenate data
 		AbstractBaseCell[][] data = cellDataSet.getCellSetBody();
 		int leftOffset = cellDataSet.getLeftOffset(); //this is actually the number of columns in the cellDataSet
-		int lineLength = data.length > 0 ? ((data[0].length + noOfMeasures) * 25) : 0;
+		int lineLength = data.length > 0 ? ((data[0].length + noOfMeasures) * 25 + leftOffset * 20) : 0;
 
 		//print headers
 		printHeaders (writer, cellDataSet, noOfMeasures, lineLength);
@@ -265,8 +265,9 @@ public class SaikuUtils {
 				//iterating through actual values
 				for (int j = 0; j < data[i].length; j++ ) {
 					String value = data[i][j].getRawValue() == null ? "" : data[i][j].getFormattedValue();
-					writer.format("%20s\t|", value);
-					if (data[i][j].getRawValue() == null)
+					if (value.length() > 40) value = value.substring(0, 37) + "...";
+					writer.format("%" + (j < leftOffset ? "-" + 40 : 20) + "s\t|", value);
+					if (j < leftOffset && data[i][j].getRawValue() == null)
 						curTotColId ++;
 				}
 				
@@ -294,15 +295,14 @@ public class SaikuUtils {
 				}
 				
 				writer.write(System.lineSeparator());
-			}
+			} else 
+				currentSubGroupIndex = 0;
 			//print row totals for the latest group
 			if (rowTotals != null && rowTotals.length > 0 && 
 					(i == data.length || i + 1 == data.length //this is the last line 
-					|| i + 1 < data.length && data[i+1][0].getRawValue() != null)) {//this is the last line of the group columns > 1
+					|| curTotColId > 0 && i + 1 < data.length && data[i+1][curTotColId-1].getRawValue() != null)) {//this is the last line of the group columns > 1
 				
-				Total total = null;
-				if (curTotColId < lastTotalsColumnIndex || i == data.length)
-					total = rowTotals[curTotColId][currentSubGroupIndex];
+				Total total = rowTotals[curTotColId][currentSubGroupIndex];
 				
 				if (total == null || total.getWidth() == 0 && !(i == data.length) ) continue;
 				currentSubGroupIndex ++;
@@ -340,11 +340,6 @@ public class SaikuUtils {
 				
 			}
 		}
-	}
-	
-	private static void refillStack(Deque<Integer> stack, int count, Integer defaultValue) {
-		for (int i = stack.size(); i < count; i++)
-			stack.push(defaultValue);
 	}
 	
 	/**
@@ -392,7 +387,7 @@ public class SaikuUtils {
 				String value = data[i][j].getFormattedValue();
 				if (j < cellDataSet.getLeftOffset() && topOffset != 1)
 					value = "";
-				writer.format("%-20s\t|", value);
+				writer.format("%-" + (j < cellDataSet.getLeftOffset() ? 40 : 20) + "s\t|", value);
 			}	
 			
 			//print column totals header	
@@ -417,7 +412,7 @@ public class SaikuUtils {
 		printDashLine(writer, lineLength);
 		for (int a = 0; a < leftOffset; a++) {
 			String value = "Totals";
-			writer.format("%20s\t|", value);
+			writer.format("%" + (a < leftOffset ? 40 : 20) + "s\t|", value);
 		}
 		
 		Cell[][] res = total.getCells();

@@ -141,7 +141,6 @@ public class MondrianReportGenerator implements ReportExecutor {
 		cellDataSet = postProcess(spec, cellSet);
 		totalTime = (int)(System.currentTimeMillis() - startTime);
 		
-
 		if (printMode) System.out.println("[" + spec.getReportName() + "] total run timem, including post-processing: " + totalTime);
 		
 		cellDataSet.setRuntime(totalTime);

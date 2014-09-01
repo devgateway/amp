@@ -57,7 +57,11 @@ import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.*;
+import org.digijava.module.aim.util.ActivityVersionUtil;
+import org.digijava.module.aim.util.ContactInfoUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.util.IndicatorUtil;
+import org.digijava.module.aim.util.LuceneUtil;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
@@ -518,16 +522,23 @@ public class ActivityUtil {
 	}
 
 	private static void saveAgreements(Session session) {
-		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
+
+		AmpAuthWebSession s = (AmpAuthWebSession) org.apache.wicket.Session.get();
 		HashSet<AmpAgreement> agreements = s.getMetaData(OnePagerConst.AGREEMENT_ITEMS);
-		
+		// AmpFundiong
 		if (agreements == null)
 			return;
 		Iterator<AmpAgreement> it = agreements.iterator();
 		while (it.hasNext()) {
 			AmpAgreement agg = (AmpAgreement) it.next();
-			session.saveOrUpdate(agg);
+			if (agg.getId() == null || agg.getId().equals(-1L)) {
+				agg.setId(null);
+				session.save(agg);
+			} else {
+				session.merge(agg);
+			}
 		}
+		session.flush();
 	}
 
 	private static void saveResources(AmpActivityVersion a) {

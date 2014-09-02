@@ -1,0 +1,7 @@
+<h3><%= title %></h3>
+
+<% if (status === 'loading') { %>
+  <p><em>loading...</em></p>
+<% } else { %>
+  <img alt="legend" title="Image legend for <%= title %>" src="<%= legendSrc %>" />
+<% } %>

@@ -1,0 +1,25 @@
+var fs = require('fs');
+var _ = require('underscore');
+var Backbone = require('backbone');
+var Template = fs.readFileSync(__dirname + '/legend-item-indicator-arcgis.html', 'utf8');
+
+
+module.exports = Backbone.View.extend({
+
+  template: _.template(Template),
+
+  render: function() {
+    var drawLegend = _.bind(function() {
+      this.$el.html(this.template(_.extend({}, this.model.toJSON(), {
+        status: 'loaded',
+        colourBuckets: this.model.palette.colours
+      })));
+    }, this);
+
+    drawLegend();
+    this.listenTo(this.model, 'change:min change:max', drawLegend);
+
+    return this;
+  }
+
+});

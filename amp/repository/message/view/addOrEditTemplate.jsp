@@ -59,7 +59,11 @@ var submmited = false;
 		}
 	  
   }
-
+  
+  $( document ).ready(function() {
+	    refreshReceiversOnDynamicity();
+	});
+  
 	function validate(){
 		if(document.messageForm.messageName.value.length==0){
 			alert('Please Enter Name');
@@ -276,10 +280,6 @@ var submmited = false;
 																                        </table>
 																                    </td>
 																				</tr>	
-<script type="text/javascript">
-//ugly hack to make sure dynamicity is checked after tr load
-refreshReceiversOnDynamicity();
-</script>						
 																				<tr>
 																					<td colspan="2">
 																						<table width="100%" >

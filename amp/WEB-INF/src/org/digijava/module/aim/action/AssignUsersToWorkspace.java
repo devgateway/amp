@@ -99,14 +99,13 @@ public class AssignUsersToWorkspace extends Action {
 				try{
 					
 					
-					Collection<AmpTeamMember> teamMembers = TeamMemberUtil.getAllAmpTeamMembersByUser(user);
 					TeamUtil.addTeamMember(newMember,site);
 					//let's refresh now
-					teamMembers = TeamMemberUtil.getAllAmpTeamMembersByUser(user);
+					Collection<AmpTeamMember> teamMembers = TeamMemberUtil.getAllAmpTeamMembersByUser(user);
 					if (teamMembers.size() == 1) {
 						//here we message the user via the messaging engine and via email
-						@SuppressWarnings("unused")
-						UserAddedToFirstWorkspaceTrigger trigger = new UserAddedToFirstWorkspaceTrigger((Object)Arrays.asList(user, ampTeam));
+						
+						new UserAddedToFirstWorkspaceTrigger((Object)Arrays.asList(user, ampTeam));
 					}
 				}catch (Exception e){
 						e.printStackTrace();

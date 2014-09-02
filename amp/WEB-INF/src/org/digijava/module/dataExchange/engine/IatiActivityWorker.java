@@ -451,12 +451,14 @@ public class IatiActivityWorker {
                     a.getRegionalFundings()
                             .addAll(getRegFundingsFromFunding(af, settings.getDefaultLocation(), a));
                 }
+
+                a.getFunding().clear();
             }
-            a.getFunding().clear();
+
         }
 
         if ((isCreate && settings.importEnabled("Location")) || (!isCreate && settings.updateEnabled("Location"))) {
-            processLocationStep(a,iatiLocationList);
+            processLocationStep(a, iatiLocationList, settings.getDefaultLocation());
         }
         if ((isCreate && settings.importEnabled("Contacts")) || (!isCreate && settings.updateEnabled("Contacts"))) {
 		    processContactsStep(a,iatiContactList);
@@ -522,8 +524,19 @@ public class IatiActivityWorker {
 
                 //name
                 if (i.getName().equals(new QName("person-name"))) {
-                    JAXBElement<PlainType> item = (JAXBElement<PlainType>) i;
-                    setContactName(item.getValue().getContent().trim(), ampContact);
+
+                    String contactName = null;
+
+                    if (i.getValue() instanceof PlainType) {
+                        contactName = ((PlainType)i.getValue()).getContent();
+                    } else if (i.getValue() instanceof TextType) {
+                        List contentObj = ((TextType)i.getValue()).getContent();
+                        if (contentObj != null && contentObj.size() > 0) {
+                            contactName = contentObj.get(0).toString();
+                        }
+                    }
+
+                    setContactName(contactName, ampContact);
                 }
                 //organisation
                 if (i.getName().equals(new QName("organisation"))) {
@@ -575,32 +588,35 @@ public class IatiActivityWorker {
 		ampContact.setLastname(s.substring(i+1,s.length()));
 	}
 
-	private void processLocationStep(AmpActivityVersion a, ArrayList<Location> iatiLocationList) {
-		
-		// TODO Implementation Location and Implementation Level 
-		
-		if(iatiLocationList.isEmpty()) return;
-		Set<AmpActivityLocation> locations = new HashSet<AmpActivityLocation>();
-		for (Iterator it = iatiLocationList.iterator(); it.hasNext();) {
-			Location location = (Location) it.next();
-			TreeMap<String, String> locationDetails = new TreeMap<String, String>();
-			getLocationDetails(location,locationDetails);
-			AmpLocation ampLocation = getAmpLocation(toIATIValues("locationName","locationType","locationCountry","adm1","adm2","adm3"),
-					toIATIValues(locationDetails.get("name"),locationDetails.get("location-type"),locationDetails.get("country"),locationDetails.get("adm1"),locationDetails.get("adm2"),locationDetails.get("adm3")));
-			AmpActivityLocation actLoc	=	new AmpActivityLocation();
-			actLoc.setActivity(a);
-			actLoc.setLocation(ampLocation);
-			Double percent=new Double(location.getPercentage().doubleValue());
-            actLoc.setLocationPercentage(percent.floatValue());
-			locations.add(actLoc);
-			
-		}
-		if(a.getLocations() == null)
-			a.setLocations(new HashSet<AmpActivityLocation>());
-		else a.getLocations().clear();
-		a.getLocations().addAll(locations);
-		
+	private void processLocationStep(AmpActivityVersion a, ArrayList<Location> iatiLocationList, AmpCategoryValueLocations defaultLocation) {
+
+        if (iatiLocationList != null && !iatiLocationList.isEmpty()) {
+            Set<AmpActivityLocation> locations = new HashSet<AmpActivityLocation>();
+            for (Location location : iatiLocationList) {
+                TreeMap<String, String> locationDetails = new TreeMap<String, String>();
+                getLocationDetails(location, locationDetails);
+                AmpLocation ampLocation = getAmpLocation(toIATIValues("locationName", "locationType", "locationCountry", "adm1", "adm2", "adm3"),
+                        toIATIValues(locationDetails.get("name"), locationDetails.get("location-type"), locationDetails.get("country"), locationDetails.get("adm1"), locationDetails.get("adm2"), locationDetails.get("adm3")));
+                AmpActivityLocation actLoc = new AmpActivityLocation();
+                actLoc.setActivity(a);
+                actLoc.setLocation(ampLocation);
+                Double percent = location.getPercentage().doubleValue();
+                actLoc.setLocationPercentage(percent.floatValue());
+                locations.add(actLoc);
+            }
+            a.getLocations().clear();
+            a.getLocations().addAll(locations);
+
+        // if locations section is empty in the imported activity, then set the default one
+        } else if (defaultLocation != null) {
+            Set locations = new HashSet<AmpActivityLocation>();
+            locations.add(defaultLocation);
+            a.setLocations(locations);
+        } else {
+            a.setLocations(new HashSet<AmpActivityLocation>());
+        }
 	}
+
 	private void processBudgetStep(AmpActivityVersion activity, ArrayList<Budget> iatiBudgetList,
 			ArrayList<ParticipatingOrg> iatiDefaultFundingOrgList, 
 			ArrayList<ParticipatingOrg> iatiExtendingOrgList, 

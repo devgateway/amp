@@ -48,6 +48,9 @@ module.exports = BaseControlView.extend({
       filtersContainer.$('.filter-list').append(filterView.renderTitle().el);
     });
 
+    // setup filter-panel
+    this.$('#filter-popup').draggable({ cancel: '.panel-body, .panel-footer', cursor: 'move'  });
+
     return this;
   },
 

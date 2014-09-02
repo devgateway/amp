@@ -1,5 +1,6 @@
 var fs = require('fs');
 var _ = require('underscore');
+var $ = require('jquery');
 
 var Backbone = require('backbone');
 var TitleTemplate = fs.readFileSync(__dirname + '/../templates/filter-title-template.html', 'utf8');
@@ -34,10 +35,13 @@ module.exports = Backbone.View.extend({
 
   // render common box with apply button, cancel button, etc.
   renderContent: function () {
+    var self = this;
 
-    this.$('.modal-placeholder').html(this.contentTemplate(this.model.toJSON()));
-    this.$('.modal-placeholder .modal').modal({show: true, backdrop: false});
-    this.$('.modal-placeholder .modal-dialog').draggable({ cancel: '.modal-body, .modal-footer', cursor: 'move'  });
+    //TODO: move out of global namespace
+    this.$el.append($('#filter-popup'));
+    $('#filter-popup').html(this.contentTemplate(this.model.toJSON()));
+    $('#filter-popup').show();
+    $('#filter-popup').on('click','.cancel', self.cancel);
 
     this.renderFilters();
 
@@ -52,6 +56,11 @@ module.exports = Backbone.View.extend({
     // TODO: consider a different name to avoid collision with javascript function.apply
     // trigger common event for applying filters.
     // this.convertTreeToJSONFilter(); //implemented by child, and if not fallback to base.
+    $('#filter-popup').hide();
+  },
+
+  cancel: function () {
+    $('#filter-popup').hide();
   }
 
 });

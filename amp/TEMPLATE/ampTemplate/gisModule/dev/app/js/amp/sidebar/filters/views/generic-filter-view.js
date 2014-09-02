@@ -56,7 +56,7 @@ module.exports = BaseFilterView.extend({
     this.$('.select-all').click(function(){self._selectAll();});
     this.$('.select-none').click(function(){self._selectNone();});
 
-
+    return this;
   },
 
   _selectAll: function(){

@@ -9,6 +9,7 @@ import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -218,6 +219,8 @@ public class WorkspaceFilter
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		return generateWorkspaceFilterQuery(session, null);
 	}
+
+
 	
 	/**
 	 * user entry point for getting the filter query of the current workspace
@@ -235,6 +238,21 @@ public class WorkspaceFilter
     		usedQuery = generateWorkspaceFilterQuery(session);
     	return usedQuery;
 	}
+
+	
+	/**
+	 * returns true IFF an activity is visible from within a workspace
+	 * @param ampActivityId
+	 * @param tm
+	 * @return
+	 */
+	public static boolean isActivityWithinWorkspace(long ampActivityId, TeamMember tm)
+	{
+		String str = generateWorkspaceFilterQuery(tm);
+		String query = String.format("SELECT (%d IN (%s)) AS rs", ampActivityId, str);
+		java.util.List<?> res = PersistenceManager.getSession().createSQLQuery(query).list();
+		return (Boolean) res.get(0);
+	}	
 	
 	/**
 	 * returns true IFF an activity is visible from within an workspace
@@ -248,18 +266,14 @@ public class WorkspaceFilter
 		java.util.List<?> res = PersistenceManager.getSession().createSQLQuery(query).list();
 		return (Boolean) res.get(0);
 	}
-	
 	/**
-	 * if forcedTeamMemberId == null, use the logged-in user (or public view). Else use the forcedTeamMember <b>which might have the special value TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES</b>
+	 * forcedTeamMember <b>might have the special value TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES</b>
 	 * @param session
 	 * @param forcedTeamMemberId
 	 * @return
 	 */
-	public static String generateWorkspaceFilterQuery(HttpSession session, Long forcedTeamMemberId)
+	public static String generateWorkspaceFilterQuery(TeamMember tm)
 	{
-		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		if (forcedTeamMemberId != null && AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES.compareTo(forcedTeamMemberId)!=0)
-			tm = TeamMemberUtil.getTeamMember(forcedTeamMemberId);
 
         //Hotfix for timor budget integration report
 		if (tm == null || tm.getMemberName().equalsIgnoreCase("AMP Admin"))
@@ -287,8 +301,19 @@ public class WorkspaceFilter
 		}
 	}
 	
-	public Set getTeamAssignedOrgs() {
-		return teamAssignedOrgs;
+	/**
+	 * if forcedTeamMemberId == null, use the logged-in user (or public view). Else use the forcedTeamMember <b>which might have the special value TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES</b>
+	 * @param session
+	 * @param forcedTeamMemberId
+	 * @return
+	 */
+	public static String generateWorkspaceFilterQuery(HttpSession session, Long forcedTeamMemberId)
+	{
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		if (forcedTeamMemberId != null && AmpARFilter.TEAM_MEMBER_ALL_MANAGEMENT_WORKSPACES.compareTo(forcedTeamMemberId)!=0)
+			tm = TeamMemberUtil.getTeamMember(forcedTeamMemberId);
+
+		return generateWorkspaceFilterQuery(tm);
 	}
 
 	public void setTeamAssignedOrgs(Set teamAssignedOrgs) {

@@ -3,28 +3,37 @@ package org.digijava.module.message.helper;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.bouncycastle.crypto.RuntimeCryptoException;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.config.DigiConfig;
 import org.digijava.kernel.mail.DgEmailManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.exception.AimException;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarAttendee;
 import org.digijava.module.calendar.util.AmpDbUtil;
+import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.message.dbentity.AmpAlert;
 import org.digijava.module.message.dbentity.AmpEmail;
 import org.digijava.module.message.dbentity.AmpEmailReceiver;
@@ -137,7 +146,7 @@ public class AmpMessageWorker {
                 }else if(e.getTrigger().equals(RemoveCalendarEventTrigger.class)){
                 	defineReceiversForCalendarEvents(e, template, newMsg,false,true);
                 }else if(e.getTrigger().equals(ActivitySaveTrigger.class)) {
-                    defineActivityCreationReceievrs(template, newMsg);
+                    defineActivityCreationReceievrs(template, newMsg, new Long(e.getParameters().get(ActivitySaveTrigger.PARAM_ID).toString()));
                 }else if(e.getTrigger().equals(ActivityActualStartDateTrigger.class)) {
                     defineReceievrsByActivityTeam(template, newMsg,new Long(e.getParameters().get(ActivityActualStartDateTrigger.PARAM_TEAM_ID).toString()));
                 }else if(e.getTrigger().equals(ActivityCurrentCompletionDateTrigger.class)) {
@@ -861,8 +870,12 @@ public class AmpMessageWorker {
             createEmailsAndReceivers(alert,emailReceivers,false);
         }
     }
-
-    private static void defineActivityCreationReceievrs(TemplateAlert template, AmpMessage alert) throws Exception {
+    
+    
+    
+    
+    //TODO: fix typo in function name
+    private static void defineActivityCreationReceievrs(TemplateAlert template, AmpMessage alert, Long activityId) throws Exception {
         List<AmpMessageState> statesRelatedToTemplate = null;
         //get the member who created an activity. it's the current member
         AmpTeamMember activityCreator = TeamMemberUtil.getAmpTeamMember(alert.getSenderId());
@@ -876,18 +889,30 @@ public class AmpMessageWorker {
             receivers = fillTOfieldForReceivers(teamMembers, statesRelatedToTemplate);
             alert.setReceivers(receivers);
 
+            //and here we define the receivers
             for (AmpMessageState state : statesRelatedToTemplate) {
                 //get receiver Team Member.
             	AmpTeamMember teamMember=state.getReceiver();
-                /**
+            	/**
                  * Alert about new activity creation should get only members of the same team in which activity was created,if this team is listed as receivers in template.
-                 */
+                 */ 
+            	/*  alert about new activity creation should also be delivered to all other workspace validators,
+            	 *  if cross team validation is enabled
+            	 */
+            	boolean ctv = (teamMember.getAmpTeam().getCrossteamvalidation()); 
+            	boolean validReceiver = false;
                 if (teamMember.getAmpTeam().getAmpTeamId().equals(activityCreator.getAmpTeam().getAmpTeamId())) {
+                	validReceiver = true;
+                }
+                if (ctv) {
+                    if (teamMember.isActivityValidatableByUser(activityId))
+                    	validReceiver = true;
+                }
+                if (validReceiver) {
                     createMsgState(state, alert,false);
                     receiversAddresses.add(teamMember.getUser().getEmail());
                 }
             }
-            
             //Emails and Receivers
             createEmailsAndReceivers(alert,receiversAddresses,false);
         }
@@ -925,7 +950,7 @@ public class AmpMessageWorker {
      * This function is used to create receivers String, which will be shown on view message page in TO: section
      */
     private static String fillTOfieldForReceivers(Collection<TeamMember> teamMembers, List<AmpMessageState> states) {
-        String receivers = "";
+        String receivers = "";//TODO:this is potentially ridiculously slow
         for (AmpMessageState state : states) {
             for (TeamMember tm : teamMembers) {
                 if (state.getReceiver().getAmpTeamMemId().equals(tm.getMemberId())) {

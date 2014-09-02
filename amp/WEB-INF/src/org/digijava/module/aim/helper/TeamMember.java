@@ -3,8 +3,10 @@ package org.digijava.module.aim.helper;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
@@ -285,4 +287,10 @@ public class TeamMember implements Comparable, Serializable{
 		Long newId = (Long)arg0;
 		return this.getMemberId().compareTo(newId); 
 	}
+    
+
+    
+    
+    
+    
 }

@@ -244,7 +244,8 @@ var Table = Backbone.View.extend({
     process_data: function(data) {
 
         var contents = "";
-        var table = data ? data : [];
+        var table = data ? _.reject(data, function(v){return (v[0] == null);}) : [];
+        var data = _.toArray(table);
         var colSpan;
         var colValue;
         var isHeaderLowestLvl;

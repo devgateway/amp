@@ -19,8 +19,14 @@
 		<wicket:fm fmNames="relOrgadditionalInfo">
 			<td class="inside"><span wicket:id="departmentDivision"/></td>
 		</wicket:fm>
-		<wicket:fm fmNames="Budget Code">
-			<td class="inside"><div wicket:id="budgetCodeEdit" /></td>
+		<wicket:fm fmNames="Budget Code; Add New Budget;Delete Budget">
+		<td class="inside">
+		<div wicket:id="budgets" style="display: table-row;">
+			<span wicket:id="budgetCodeEdit" style="display:inline-block" />
+			<span wicket:id="delBudget" style="display:table-cell"/>
+		</div>
+		<span wicket:id="addBudget" style="margin-top: 10px;" class="clear related_org_buttn"/>
+		</td>
 		</wicket:fm>
 		<wicket:fm fmNames="percentage">
 			<td class="inside"><span wicket:id="percentage"/></td>

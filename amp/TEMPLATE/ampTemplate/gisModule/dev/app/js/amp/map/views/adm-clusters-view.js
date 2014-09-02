@@ -7,6 +7,7 @@ var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js')
 var ADMTemplate = fs.readFileSync(__dirname + '/../templates/map-adm-template.html', 'utf8');
 var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
 
+var ClusterPopupView = require('../views/cluster-popup-view');
 
 module.exports = Backbone.View.extend({
   leafletLayerMap: {},
@@ -38,7 +39,8 @@ module.exports = Backbone.View.extend({
         var clusters = this.getNewADMLayer(admLayer);
         leafletLayer.addLayer(clusters);
         clusters.on('popupopen', function (e) {
-          self.generateInfoWindow(e.popup, admLayer);
+          var clusterPopupView = new ClusterPopupView(e.popup, admLayer);
+          clusterPopupView.render();
         });
       }, this));
       this.listenToOnce(admLayer, 'processed', function() {
@@ -102,43 +104,5 @@ module.exports = Backbone.View.extend({
         ' has ' +  activities.length +
         ' projects. <br><img src="img/loading-icon.gif" />');
     }
-  },
-
-  // TODO: infowindow code should go into own view.
-  generateInfoWindow: function(popup, admLayer){
-    var featureCollection = admLayer.get('features');
-    var cluster = _.find(featureCollection,function(feature){
-      return feature.properties.admName === popup._source._clusterId;
-    });
-
-    // get appropriate cluster model:
-    if(cluster){
-      this._generateProjectList(popup, cluster);
-    }else{
-      console.error('no matching cluster: ', admLayer, popup._source._clusterId);
-    }
-  },
-
-  _generateProjectList: function(popup, cluster){
-    var self = this;
-    var PAGE_SIZE = 20; ///TODO: move elsewhere when real pagination is done.
-    var activities = _.first(cluster.properties.activityid, PAGE_SIZE);
-    var activitiesString = activities.join(',');
-
-    // TODO: do as a proper model or collection and fetch.
-    $.ajax(
-    {
-      type:'GET',
-      url:'/rest/gis/activities/'+activitiesString,
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }).then(function(activityCollection){
-      // TODO: *append* to popup instead of *setContent*
-      popup.setContent(self.projectListTemplate({activities: activityCollection}));
-    });
   }
-
-
 });

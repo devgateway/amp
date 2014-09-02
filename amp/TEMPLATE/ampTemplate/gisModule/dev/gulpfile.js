@@ -55,14 +55,15 @@ var paths = {
       entry: './app/less/main.less',
       libs: ['./node_modules/leaflet/dist/**/*.css', 
             './node_modules/leaflet.markercluster/dist/**/*.css',  
-            './app/js/libs/local/slider/**/*.css', ],
+            './app/js/libs/local/slider/**/*.css',
+            './node_modules/nvd3/**/*.css' ],
       compiledDest: './app/compiled-css/',
       compiled: './app/compiled-css/main.css'
     },
     mockAPI: {
       entry: './app/mock-api/fakeServer.js',
       compiledDest:'./app/compiled-js/',
-      compiled:'./app/compiled-js/mock-api.js',
+      compiled:'./app/compiled-js/mock-api.js'
     },
     images: './app/img/**/*.{png,jpg,gif}',
     fonts: './app/fonts/**/*.{eot,svg,ttf,woff}'

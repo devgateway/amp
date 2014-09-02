@@ -1,4 +1,4 @@
 type=OLAP
 name=amp
 driver=mondrian.olap4j.MondrianOlap4jDriver
-location=jdbc:mondrian:Datasource=java:comp/env/ampDS;Catalog=res:../saiku/saiku-repository/AMP.xml
+location=jdbc:mondrian:Datasource=java:comp/env/ampDS;Catalog=res:../queries/AMP.xml

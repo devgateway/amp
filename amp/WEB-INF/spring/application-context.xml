@@ -87,6 +87,7 @@
 	<http pattern="/TEMPLATE/ampTEMPLATE**" security="none" />
 	<http pattern="/TEMPLATE/ampTemplate/gisModule/dist/**" security="none" />
   <http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />
+  <http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />
 
 	<!-- match images -->
 	<http pattern="[^ \t\r\n\v\f]+\.(gif|jpg|jpeg|tiff|png|js|css|swf)(\?)?.*$"

@@ -49,6 +49,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.security.DigiSecurityManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.translator.util.TrnLocale;
@@ -118,18 +119,18 @@ public class TranslationManager {
 
             session = PersistenceManager.getRequestDBSession();
 
-            String queryString = localeQuery + rightPart;
+            
+
+
+            
+            
+
+            List locales = getLocale(session, rightPart);
+
+            String queryString  = trnQuery + rightPart;
             logger.debug(queryString);
 
-            Query query = session.createQuery(queryString);
-            query.setCacheable(true);
-
-            List locales = query.list();
-
-            queryString = trnQuery + rightPart;
-            logger.debug(queryString);
-
-            query = session.createQuery(queryString);
+            Query query  = session.createQuery(queryString);
             query.setCacheable(true);
 
             List translations = query.list();
@@ -654,4 +655,18 @@ public class TranslationManager {
             }
         };
     }
+    public static List getLocale(Session session) {
+    	String righPart=getRightPart(RequestUtils.getSite(TLSUtils.getRequest()), DgUtil.isLocalTranslatorForSite(TLSUtils.getRequest()));
+    	return getLocale(session,righPart);
+    }
+	public static List getLocale(Session session, String rightPart) {
+		String queryString = localeQuery + rightPart;
+		logger.debug(queryString);
+
+		Query query = session.createQuery(queryString);
+		query.setCacheable(true);
+
+		List locales = query.list();
+		return locales;
+	}
 }

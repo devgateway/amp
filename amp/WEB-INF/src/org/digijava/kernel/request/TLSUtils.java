@@ -41,7 +41,8 @@ public class TLSUtils {
 					}
 				}
 				//no cookie found
-				logger.error("Barely missed an exception, probably running Chrome on localhost");//, new RuntimeException("please enable cookies!")); //we shouldn't get here :) - but we do EVERYTIME IN CHROME
+				//not needed since no cookies on rest
+//				logger.error("Barely missed an exception, probably running Chrome on localhost");//, new RuntimeException("please enable cookies!")); //we shouldn't get here :) - but we do EVERYTIME IN CHROME
 				return "en";
 			}
 			String code = lang.getCode();

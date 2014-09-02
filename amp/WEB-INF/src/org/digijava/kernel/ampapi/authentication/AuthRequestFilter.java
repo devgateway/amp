@@ -1,17 +1,12 @@
 package org.digijava.kernel.ampapi.authentication;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 
+import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember;
-import com.sun.jersey.oauth.server.OAuthServerRequest;
-import com.sun.jersey.oauth.signature.OAuthParameters;
-import com.sun.jersey.oauth.signature.OAuthSecrets;
-import com.sun.jersey.oauth.signature.OAuthSignature;
+import org.digijava.kernel.util.SiteCache;
+
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
 
@@ -27,6 +22,11 @@ public class AuthRequestFilter implements ContainerRequestFilter {
 
 	@Override
 	public ContainerRequest filter(ContainerRequest arg0) {
+        SiteDomain siteDomain = null;
+        //yet to strip the mainPath dynamically, committed hardcoded for testing purposes
+        String mainPath="/rest";
+        siteDomain = SiteCache.getInstance().getSiteDomain(httpRequest.getServerName(),mainPath);
+        httpRequest.setAttribute(org.digijava.kernel.Constants.CURRENT_SITE,siteDomain);
 		TLSUtils.populate(httpRequest);
 		return arg0;
 	}

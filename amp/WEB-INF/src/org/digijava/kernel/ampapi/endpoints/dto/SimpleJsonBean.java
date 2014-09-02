@@ -5,7 +5,7 @@ import java.util.List;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 /**
  * 
- * @author jdeanquin
+ * @author jdeanquin elfleco
  *
  */
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)

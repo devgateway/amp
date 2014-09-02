@@ -18,19 +18,14 @@ public class UserAddedToFirstWorkspaceTrigger extends Trigger {
 	public static final String PARAM_ORGANIZATION = "organization";
 	public static final String PARAM_TEAM = "team";
 	
-	public static final String [] parameterNames=new String[]{
+	private static final String [] parameterNames=new String[]{
 		PARAM_NAME, PARAM_TRIGGER_SENDER, PARAM_CREATION_DATE,
 		PARAM_URL, PARAM_LOGIN, PARAM_ORGANIZATION, PARAM_TEAM};
 
 	public UserAddedToFirstWorkspaceTrigger(Object source) {
-//		if(! (source instanceof User)) throw new RuntimeException("Incompatible object. Source must be a User!");
 		this.source=source;
 		forwardEvent();
 	}
-
-//	 static{
-//	    	TriggerRegistry.getInstance().register(ActivitySaveTrigger.class,"User assigned to his first activity");
-//	    }
 
 	protected Event generateEvent() {
 		Event e=new Event(UserAddedToFirstWorkspaceTrigger.class);

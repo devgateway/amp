@@ -167,7 +167,7 @@ public class AmpMessageWorker {
                 	defineReceiversForResourceShare(template,newMsg,false);
                 	
                 } else if (e.getTrigger().equals(UserAddedToFirstWorkspaceTrigger.class)) {
-                	defineReceiversForUserAddedToWorkspace(template, newMsg, e);
+                	defineReceiversForUserAddedToWorkspace(newMsg, e);
                 } else{ //<-- currently for else is left user registration or activity disbursement date triggers
                 	List<String> emailReceivers=new ArrayList<String>();
                     List<AmpMessageState> statesRelatedToTemplate = null;
@@ -641,12 +641,11 @@ public class AmpMessageWorker {
      * though it doesn't make much sense to send it (the user has to first log in to get said message).
      * 
      * 
-     * @param template
      * @param newMsg
      * @param e
      * @throws Exception
      */
-    private static void defineReceiversForUserAddedToWorkspace(TemplateAlert template, AmpMessage newMsg, Event e) throws Exception{
+    private static void defineReceiversForUserAddedToWorkspace(AmpMessage newMsg, Event e) throws Exception{
     	
 		String email = (String)e.getParameters().get("login");
 		if (email == null) {

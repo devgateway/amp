@@ -42,8 +42,13 @@ module.exports = Backbone.View.extend({
     $('#filter-popup').html(this.contentTemplate(this.model.toJSON()));
     $('#filter-popup').show();
     $('#filter-popup').on('click','.cancel', self.cancel);
+    $('#filter-popup').on('click','.apply', self.apply);
 
     this.renderFilters();
+
+    //setup any popovers as needed...
+    this.popovers = this.$('[data-toggle="popover"]');
+    this.popovers.popover();
 
     return this;
   },

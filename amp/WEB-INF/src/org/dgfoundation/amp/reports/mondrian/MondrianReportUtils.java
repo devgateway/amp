@@ -11,6 +11,7 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.Mappings;
+import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportMeasure;
@@ -109,5 +110,15 @@ public class MondrianReportUtils {
 			throw new AMPException("Not supported report translation for report type: " + report.getType());
 		}
 
+	}
+	
+	public static ReportAreaImpl getNewReportArea(Class<? extends ReportAreaImpl> reportAreaType) throws AMPException {
+		ReportAreaImpl reportArea = null;
+		try {
+			reportArea = reportAreaType.newInstance();
+		} catch(Exception e) {
+			throw new AMPException("Cannot instantiate " + reportAreaType.getName() + ". " + e.getMessage());
+		}
+		return reportArea;
 	}
 }

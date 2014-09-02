@@ -5,6 +5,7 @@ package org.digijava.kernel.ampapi.mondrian;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -58,10 +59,9 @@ public class MondrianReportsTests extends AmpTestCase {
 		suite.addTest(new MondrianReportsTests("testColumnSortingNoTotals"));
 		suite.addTest(new MondrianReportsTests("testColumnMeasureSortingTotals"));
 		suite.addTest(new MondrianReportsTests("testSortingByTuplesTotals"));
-		suite.addTest(new MondrianReportsTests("testMultipleDateFilters"));
+		suite.addTest(new MondrianReportsTests("testMultipleDateFilters")); */
 		suite.addTest(new MondrianReportsTests("testAmpReportToReportSpecification"));
-		*/
-		suite.addTest(new MondrianReportsTests("testGenerateReportAsSaikuCellDataSet"));
+		//suite.addTest(new MondrianReportsTests("testGenerateReportAsSaikuCellDataSet"));
 		//suite.addTest(new MondrianReportsTests("testHeavyQuery"));
 		
 		return suite;
@@ -144,13 +144,6 @@ public class MondrianReportsTests extends AmpTestCase {
 	
 	public void testGenerateReportAsSaikuCellDataSet() {
 		ReportSpecificationImpl spec = getReportSpecificatin("NadiaMondrianTest");
-		assertNotNull(spec);
-		
-		//TODO: remove
-		Set<ReportColumn> hierarchies = new LinkedHashSet<ReportColumn>();
-		hierarchies.add(spec.getColumns().iterator().next());//adding first column as hierarchy
-		spec.setHierarchies(hierarchies);
-		//end to remove
 		generateAndValidate(spec, true, true);
 	}
 	
@@ -169,10 +162,18 @@ public class MondrianReportsTests extends AmpTestCase {
 		} catch (AMPException e) {
 			System.err.println(e.getMessage());
 		}
+		assertNotNull(spec);
+		
+		//TODO: remove
+		Set<ReportColumn> hierarchies = new LinkedHashSet<ReportColumn>();
+		Iterator<ReportColumn> iter = spec.getColumns().iterator();
+		hierarchies.add(iter.next());
+		//hierarchies.add(iter.next());
+		//hierarchies.add(iter.next());
+		spec.setHierarchies(hierarchies);
+		//end to remove
 		return spec;
 	}
-	
-	
 	
 	public void testHeavyQuery() {
 		long start = System.currentTimeMillis();
@@ -197,13 +198,16 @@ public class MondrianReportsTests extends AmpTestCase {
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, print);
 		GeneratedReport report = null;
 		CellDataSet cellSet = null;
+		int duration = 0;
 		try {
-			if (asCellSet)
+			if (asCellSet) {
 				cellSet = generator.generateReportAsSaikuCellDataSet(spec);
-			else { 
+				duration = cellSet.runtime;
+			} else { 
 				report = generator.executeReport(spec);
-				System.out.println("Generation duration = " + report.generationTime + "(ms)");
-			}	
+				duration = report.generationTime;
+			}
+			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + duration + "(ms)");
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			err = e.getMessage();

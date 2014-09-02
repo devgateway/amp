@@ -49,6 +49,9 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
+import org.digijava.kernel.ampapi.saiku.util.CellDataSetToAmpHierachies;
+import org.digijava.kernel.ampapi.saiku.util.CellDataSetToGeneratedReport;
+import org.digijava.kernel.ampapi.saiku.util.SaikuPrintUtils;
 import org.digijava.kernel.ampapi.saiku.util.SaikuUtils;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
@@ -104,9 +107,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	public GeneratedReport executeReport(ReportSpecification spec) throws AMPException {
 		CellDataSet cellDataSet = generateReportAsSaikuCellDataSet(spec);
 		
-		//TODO: translation from CellDataSet instead of CellSet
-		GeneratedReport report = null;  
-		//toGeneratedReport(spec, cellDataSet, cellDataSet.runtime);
+		GeneratedReport report = toGeneratedReport(spec, cellDataSet, cellDataSet.runtime);
 		
 		tearDown();
 		
@@ -141,8 +142,6 @@ public class MondrianReportGenerator implements ReportExecutor {
 		cellDataSet = postProcess(spec, cellSet);
 		totalTime = (int)(System.currentTimeMillis() - startTime);
 		
-		if (printMode) System.out.println("[" + spec.getReportName() + "] total run timem, including post-processing: " + totalTime);
-		
 		cellDataSet.setRuntime(totalTime);
 		logger.info("CellSet for " + spec.getReportName() + " generated within :" + String.valueOf(totalTime));
 		
@@ -150,7 +149,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			if (cellSet != null)
 				MondrianUtils.print(cellSet, spec.getReportName());
 			if (cellDataSet != null)
-				SaikuUtils.print(cellDataSet, spec.getReportName() + "_POST");
+				SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST");
 		}
 		
 		return cellDataSet;
@@ -313,7 +312,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		
 		applyFilterSetting(spec, cellDataSet);
 		
-		SaikuUtils.concatenateNonHierarchicalColumns(spec, cellDataSet);
+		CellDataSetToAmpHierachies.concatenateNonHierarchicalColumns(spec, cellDataSet);
 		
 		return cellDataSet;
 	}
@@ -444,10 +443,19 @@ public class MondrianReportGenerator implements ReportExecutor {
 		} 
 	}
 	
+	private GeneratedReport toGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, int duration) throws AMPException {
+		CellDataSetToGeneratedReport translator = new CellDataSetToGeneratedReport(spec, cellDataSet, leafHeaders);
+		ReportAreaImpl root = translator.transformTo(reportAreaType);
+		
+		GeneratedReport genRep = new GeneratedReport(spec, duration, null, root, getRootHeaders(leafHeaders), leafHeaders); 
+		return genRep;
+	}
+	
+	@Deprecated
 	private GeneratedReport toGeneratedReport(ReportSpecification spec, CellSet cellSet, int duration) throws AMPException {
 		CellSetAxis rowAxis = cellSet.getAxes().get(Axis.ROWS.axisOrdinal());
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
-		ReportAreaImpl root = getNewReportArea(reportAreaType);
+		ReportAreaImpl root = MondrianReportUtils.getNewReportArea(reportAreaType);
 		
 		if (rowAxis.getPositionCount() > 0 && columnAxis.getPositionCount() > 0 ) {
 			/* Build Report Areas */
@@ -462,7 +470,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			for (Position rowPos : rowAxis.getPositions()) {
 				int columnPos = 0;
 				boolean areaEnd = false; 
-				ReportAreaImpl reportArea = getNewReportArea(reportAreaType);
+				ReportAreaImpl reportArea = MondrianReportUtils.getNewReportArea(reportAreaType);
 				Map<ReportOutputColumn, ReportCell> contents = new LinkedHashMap<ReportOutputColumn, ReportCell>();
 				
 				for (Member member : rowPos.getMembers()) {
@@ -549,16 +557,6 @@ public class MondrianReportGenerator implements ReportExecutor {
 			rootHeaders.add(leaf);
 		}
 		return Arrays.asList(rootHeaders.toArray(new ReportOutputColumn[1]));
-	}
-	
-	private ReportAreaImpl getNewReportArea(Class<? extends ReportAreaImpl> reportAreaType) throws AMPException {
-		ReportAreaImpl reportArea = null;
-		try {
-			reportArea = reportAreaType.newInstance();
-		} catch(Exception e) {
-			throw new AMPException("Cannot instantiate " + reportAreaType.getName() + ". " + e.getMessage());
-		}
-		return reportArea;
 	}
 	
 	private void reportError(String error) throws AmpApiException {

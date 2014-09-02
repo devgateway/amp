@@ -22,8 +22,9 @@ public class ActivitySaveTrigger extends Trigger {
     public static final String PARAM_CREATED_DATE="createdDate";
     public static final String PARAM_CREATED_BY="createdBy";
     public static final String PARAM_URL="url";
+    public static final String PARAM_ID = "id";
 
-    public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_CREATED_DATE,PARAM_CREATED_BY,PARAM_URL};
+    public static final String [] parameterNames=new String[]{PARAM_NAME,PARAM_CREATED_DATE,PARAM_CREATED_BY,PARAM_URL,PARAM_ID};
 
     public ActivitySaveTrigger(Object source) {
 	if(! (source instanceof AmpActivityVersion)) throw new RuntimeException("Incompatible object. Source must be an AmpActivity!");
@@ -45,6 +46,7 @@ public class ActivitySaveTrigger extends Trigger {
 	e.getParameters().put(PARAM_CREATED_DATE, act.getCreatedDate());
 	e.getParameters().put(PARAM_CREATED_BY, act.getActivityCreator());
 	e.getParameters().put(PARAM_URL,"aim/viewActivityPreview.do~public=true~pageId=2~activityId="+act.getAmpActivityId());
+	e.getParameters().put(PARAM_ID, act.getAmpActivityId());
 	return e;
     }
 

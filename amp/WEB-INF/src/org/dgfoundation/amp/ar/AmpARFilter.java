@@ -1125,17 +1125,23 @@ public class AmpARFilter extends PropertyListable {
 			pledgeQueryAppend(REGION_SELECTED_FILTER);
 		}
 	}
-	
+
 	public void generateFilterQuery(HttpServletRequest request, boolean workspaceFilter, boolean skipPledgeCheck) {
+		AmpARFilterParams params =  org.dgfoundation.amp.ar.AmpARFilterParams.getParamsFromRequest(request, workspaceFilter, skipPledgeCheck);
+		generateFilterQuery(params);
+	}
+	
+	
+	public void generateFilterQuery(AmpARFilterParams params) {
 		initFilterQuery(); //reinit filters or else they will grow indefinitely
-		if ( !skipPledgeCheck &&  !workspaceFilter && ReportContextData.getFromRequest().isPledgeReport()){
+		if ( !params.getSkipPledgeCheck() &&  !params.getWorkspaceFilter() && ReportContextData.getFromRequest().isPledgeReport()){
 			generatePledgeFilterQuery();		
 			return;
 		}
 		
 		this.pledgeFilter = false;
 		
-		TeamMember loggedInTeamMember = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);		
+		TeamMember loggedInTeamMember = params.getMember();		
 						
 		indexedParams=new ArrayList<FilterParam>();
 		
@@ -1498,17 +1504,18 @@ public class AmpARFilter extends PropertyListable {
 				queryAppend(TEXT_FILTER);
 			}
 		}
-
+		
 		if (indexText != null)
+			//shouldn't enter here if not using an httprequest!
 			if ("".equals(indexText.trim()) == false) {
 				String LUCENE_ID_LIST = "";
-				HttpSession session = request.getSession();
-				ServletContext ampContext = session.getServletContext();
+//				HttpSession session = request.getSession();
+//				ServletContext ampContext = session.getServletContext();
 //				Directory idx = (Directory) ampContext
 //						.getAttribute(Constants.LUCENE_INDEX);
-				if(request.getParameter("searchMode") != null)
-					searchMode = request.getParameter("searchMode");
-				Hits hits = LuceneUtil.search(ampContext.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, "all", indexText, searchMode);
+				if(params.getLuceneSearchModeParam() != null)
+					searchMode = params.getLuceneSearchModeParam();
+				Hits hits = LuceneUtil.search(params.getLuceneRealPath() + LuceneUtil.ACTVITY_INDEX_DIRECTORY, "all", indexText, searchMode);
 				logger.info("New lucene search !");
 				if(hits!=null)
 				for (int i = 0; i < hits.length(); i++) {
@@ -1541,15 +1548,15 @@ public class AmpARFilter extends PropertyListable {
 		if (budget != null)
 			queryAppend(BUDGET_FILTER);
 
-		if (!workspaceFilter)
+		if (!params.getWorkspaceFilter())
 		{
 			// not workspace, e.g. normal report/tab filter
 			// Merge Filter with the Workspace Filter
-			AmpARFilter teamFilter = (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER);
+//			AmpARFilter teamFilter = (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER);
 
-			if (!this.budgetExport && (teamFilter != null))
+			if (!this.budgetExport && (params.getTeamFilter()!= null))
 			{
-				queryAppend(teamFilter.getGeneratedFilterQuery());
+				queryAppend(params.getTeamFilter().getGeneratedFilterQuery());
 			}
 		}
 		if (statuses != null && statuses.size() > 0)
@@ -1665,7 +1672,7 @@ public class AmpARFilter extends PropertyListable {
 		 * because in certain situations this zone can add an OR, any queryAppend calls MUST be done BEFORE THIS AREA
 		 */
 		
-		processTeamFilter(request, loggedInTeamMember, workspaceFilter);
+		processTeamFilter(loggedInTeamMember, params.getWorkspaceFilter());
 		
 		/**
 		 * NO queryAppend CALLS AFTER THIS POINT !
@@ -1739,6 +1746,49 @@ public class AmpARFilter extends PropertyListable {
 		}
 	}
 	
+
+	protected void processTeamFilter(TeamMember member, boolean workspaceFilter)
+	{
+		if (overridingTeamFilter != null)
+		{
+			if (overridingTeamFilter.getString() != null)
+				queryAppend(overridingTeamFilter.getString());
+			return;
+		}
+		
+		boolean thisIsComputedWorkspaceWithFilters = workspaceFilter && (member != null) && 
+				(member.getComputation() != null) && (member.getComputation()) &&
+				(member.getUseFilters() != null) && (member.getUseFilters());
+
+		String TEAM_FILTER = WorkspaceFilter.generateWorkspaceFilterQuery(member);
+
+		if (needsTeamFilter)
+		{
+			/* needsTeamFilter can only be true in public view
+			 * public views cannot be shared from within a computed Workspace (THIS IS NOT SUPPORTED NOW)
+			 */
+			 queryAppend(TEAM_FILTER);
+		}
+		else
+		if (workspaceFilter)
+		{
+			if (thisIsComputedWorkspaceWithFilters)
+			{
+				/* do a somewhat ugly hack: the TEAM_FILTER will only contain the activities from within the workspace
+				 * here we run the filter part of the workspace and OR with the own activities returned in TEAM_FILTER
+				 */
+				String hideDraftSQL = TeamUtil.hideDraft(member)?"draft<> true AND ":"";
+				String allActivitiesInTheDatabaseQuery = "SELECT amp_activity_id from amp_activity WHERE "+hideDraftSQL+" approval_status IN (" + Util.toCSString(AmpARFilter.activityStatus) +")";				
+				queryAppend(allActivitiesInTheDatabaseQuery);
+				generatedFilterQuery += " OR amp_activity_id IN (" + TEAM_FILTER + ")";
+			}
+			else
+			{
+				// normal workspace filter, works hackless
+				queryAppend(TEAM_FILTER);
+			}
+		}
+	}
 	
 	private String[] calculateDateFilters(String startDate, String lastDate, String currentPeriod, Integer amount, String op, String xPeriod){
 		

@@ -7,8 +7,10 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -20,6 +22,7 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.util.Identifiable;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 @TranslatableClass (displayName = "Team")
@@ -68,6 +71,8 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
     private AmpCategoryValue workspacePrefix;
     private Boolean crossteamvalidation;
 
+    
+    
 	//Global function to initialize the team filters inside the session
 	public static void initializeTeamFiltersSession(AmpTeamMember member, HttpServletRequest request, HttpSession session){
 		//Initialize Team Filter
@@ -189,6 +194,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 
 	/**
 	 * @return Returns the parentTeamId.
+	 * TODO: no it doesn't. returns AmpTeam
 	 */
 	public AmpTeam getParentTeamId() {
 		return parentTeamId;

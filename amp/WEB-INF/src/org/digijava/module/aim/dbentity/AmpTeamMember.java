@@ -7,13 +7,26 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
+import org.apache.jackrabbit.core.persistence.PersistenceManager;
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.action.GlobalSettings;
+import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.Output;
 import org.digijava.module.message.dbentity.AmpMessageState;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 
 public class AmpTeamMember implements Serializable/*, Versionable*/ {
 
@@ -205,8 +218,42 @@ public class AmpTeamMember implements Serializable/*, Versionable*/ {
 		return this;
 	}*/
 	
+	
+	
 	public TeamMember toTeamMember()
 	{
 		return new TeamMember(this);
 	}
+	
+	
+    //uses AmpARFilter and is ridiculously slow
+    public boolean isActivityValidatableByUser(Long ampActivityId) {
+		AmpTeam ampTeam = this.getAmpTeam();
+		AmpARFilter af = new AmpARFilter();
+		af.fillWithDefaultsSettings();
+		af.fillWithDefaultsFilter(null);
+		if (ampTeam.getFilterDataSet()!=null && ampTeam.getFilterDataSet().size()>0 ){
+			af = FilterUtil.buildFilter(ampTeam, null);
+		}
+
+		af.generateFilterQuery((org.dgfoundation.amp.ar.AmpARFilterParams.getParamsForWorkspaceFilter(this.toTeamMember())));
+		
+		try(Connection conn = org.digijava.kernel.persistence.PersistenceManager.getJdbcConnection()){
+				
+				java.sql.Statement st = conn.createStatement();
+				ResultSet rs		= st.executeQuery(af.getGeneratedFilterQuery());
+				
+				while (rs.next()) {
+					Long iterId = (Long) rs.getLong("amp_activity_id");
+					if (ampActivityId.equals(iterId))
+						return true;
+				}
+            }
+            catch(SQLException exc) {
+            	Logger.getLogger(GlobalSettings.class).info("exception here");
+
+            } 
+    	return false;
+    }
+    
 }

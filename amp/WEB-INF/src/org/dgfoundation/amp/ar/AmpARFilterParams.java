@@ -21,6 +21,20 @@ import org.digijava.module.aim.helper.TeamMember;
 public class AmpARFilterParams {
 	
 	
+	/*TeamMember tm, String searchModeParam, String realPath, AmpARFilter teamFilter, AmpTeam team, boolean workspaceFilter, boolean skipPledgeCheck*/
+	private TeamMember member;
+	private String luceneSearchModeParam;
+	private String luceneRealPath;
+	private AmpARFilter teamFilter;
+	private Boolean workspaceFilter;
+	private Boolean skipPledgeCheck;	
+	private Long activityIdFilter;
+	
+	
+	public Long getActivityIdFilter() {
+		return activityIdFilter;
+	}
+	
 	public TeamMember getMember() {
 		return member;
 	}
@@ -43,17 +57,15 @@ public class AmpARFilterParams {
 	public Boolean getSkipPledgeCheck() {
 		return skipPledgeCheck;
 	}
-	/*TeamMember tm, String searchModeParam, String realPath, AmpARFilter teamFilter, AmpTeam team, boolean workspaceFilter, boolean skipPledgeCheck*/
-	private TeamMember member;
-	private String luceneSearchModeParam;
-	private String luceneRealPath;
-	private AmpARFilter teamFilter;
-	private Boolean workspaceFilter;
-	private Boolean skipPledgeCheck;
+
 	
 	private AmpARFilterParams() {	}
 	
-	public static AmpARFilterParams getParamsForWorkspaceFilter(TeamMember tm) {
+	/*
+	 * activity ID filter should be the ID of the only activity you want to see,
+	 * or null if you don't want to use said filter
+	 * */
+	public static AmpARFilterParams getParamsForWorkspaceFilter(TeamMember tm, Long ampActivityId) {
 		AmpARFilterParams params = new AmpARFilterParams();
 		params.member = tm;
 		params.luceneRealPath = null;
@@ -61,6 +73,7 @@ public class AmpARFilterParams {
 		params.teamFilter = null;
 		params.workspaceFilter = true;
 		params.skipPledgeCheck = false;
+		params.activityIdFilter = ampActivityId;
 		return params;
 	}
 	
@@ -77,7 +90,7 @@ public class AmpARFilterParams {
 		params.member = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
 		params.skipPledgeCheck = skipPledgeCheck;
 		params.workspaceFilter = workspaceFilter;
-        
+        params.activityIdFilter = null;
         return params;
 	}
 	

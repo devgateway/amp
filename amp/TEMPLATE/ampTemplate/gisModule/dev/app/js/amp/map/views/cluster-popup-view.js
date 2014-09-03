@@ -2,7 +2,7 @@ var fs = require('fs');
 var _ = require('underscore');
 var $ = require('jquery');
 var Backbone = require('backbone');
-var d3 = require('d3');
+var d3 = require('d3-browserify');
 var nv =  require('nvd3');
 var nvd3 = window.nv;
 
@@ -68,15 +68,17 @@ module.exports = Backbone.View.extend({
             .transition().duration(350)
             .call(chart);
       return chart;
-    });   
+    });
   },
 
   _generateProjectList: function(popup, cluster){
     var self = this;
     var PAGE_SIZE = 20; ///TODO: move elsewhere when real pagination is done.
     var activityIDs = _.first(cluster.properties.activityid, PAGE_SIZE);
-    
+
     // Phil: is this how we want to do app access...?
+    // David: no. window.app is for debug convenience only.
+    //        we should pass the app into this constructor and save to `this` in initialize.
     return window.app.data.activities.getActivites(activityIDs).then(function(activityCollection){
       console.log('activityCollection', activityCollection);
       self.tempDOM.find('.project-list').append(

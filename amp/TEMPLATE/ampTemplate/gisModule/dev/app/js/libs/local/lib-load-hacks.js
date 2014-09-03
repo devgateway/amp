@@ -22,3 +22,7 @@ require('leaflet-div-style-icon');
 
 // Override backbone as needed for AMP
 require('./backbone-override');
+
+// make backbone and d3 play nice
+window.d3 = require('d3-browserify');
+require('nvd3');

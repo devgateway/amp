@@ -33,15 +33,12 @@
         "./node_modules/jquery/dist/jquery.min.js:jQuery"
       ]
     },
-    "d3": {
-      "exports": "d3"
-    },
     "nvd3": {
       "exports": "nvd3",
       "depends": [
         "d3:d3"
       ]
-    }    
+    }
   },
   "devDependencies": {
     "backbone": "^1.1.2",
@@ -50,7 +47,7 @@
     "browserify": "^4.2.0",
     "browserify-shim": "~3.6.0",
     "cheerio": "*",
-    "d3": "~3.4.11",
+    "d3-browserify": "^3.3.13",
     "esri-leaflet": "0.0.1-beta.5",
     "gulp": "^3.7.0",
     "gulp-changed": "^0.4.0",

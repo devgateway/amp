@@ -141,6 +141,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityProgramSettings</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityProgram</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpActivityLocation</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgRoleBudget</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpUserExtension</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.IPAContract</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.IPAContractDisbursement</hibernate-class>

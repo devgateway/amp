@@ -287,27 +287,28 @@ public class SQLUtils {
    		
 			return Util.collectionAsString(outputs);
 		}
-		
+
 		/**
-		 * runs an INSERT query with all the bells and whistles and escaping
-		 * @param conn
-		 * @param tableName
-		 * @param idColumnName
-		 * @param seqName
-		 * @param coordsList - each entry corresponds to a row to insert
+		 * inserts, as fastly as possible, a series of rows into a table
+		 * @param conn - the connection to use
+		 * @param tableName - the table to insert into
+		 * @param idColumnName - the name if the id column, might be null IFF seqname is also null
+		 * @param seqName - the name of the sequence giving values to the id column. should be null if idColumnName is null
+		 * @param colNames - the names of the columns to insert into
+		 * @param values - a series of rows. each of them should have exactle colNames.size() rows
 		 */
-		public static void insert(Connection conn, String tableName, String idColumnName, String seqName, List<Map<String, Object>> coordsList) {
+		public static void insert(Connection conn, String tableName, String idColumnName, String seqName, Collection<String> colNames, List<List<Object>> values) {
 			if ((idColumnName == null) ^ (seqName == null))
 				throw new RuntimeException("idColumnName should be both null or both non-null");
 			
 			int rowsPerInsert = 300;
-			int nrSegments = coordsList.size() / rowsPerInsert + 1;			
+			int nrSegments = values.size() / rowsPerInsert + 1;			
 			for(int i = 0; i < nrSegments; i++) {
 				int segmentStart = i * rowsPerInsert; // inclusive
-				int segmentEnd = Math.min(coordsList.size(), (i + 1) * rowsPerInsert); // exclusive
+				int segmentEnd = Math.min(values.size(), (i + 1) * rowsPerInsert); // exclusive
 				if (segmentStart >= segmentEnd)
 					break; 
-				String query = buildMultiRowInsert(tableName, idColumnName, seqName, coordsList.subList(segmentStart, segmentEnd));
+				String query = buildMultiRowInsert(tableName, idColumnName, seqName, colNames, values.subList(segmentStart, segmentEnd));
 				//System.out.println("executing mondrian dimension table insert " + query);
 				SQLUtils.executeQuery(conn, query.toString());
 			}
@@ -321,14 +322,14 @@ public class SQLUtils {
 		 * @param coordsList
 		 * @return
 		 */
-		public static String buildMultiRowInsert(String tableName, String idColumnName, String seqName, List<Map<String, Object>> coordsList) {
+		public static String buildMultiRowInsert(String tableName, String idColumnName, String seqName, Collection<String> colNames, List<List<Object>> values) {
 			if ((idColumnName == null) ^ (seqName == null))
 				throw new RuntimeException("idColumnName and seqName should be either both null or both nonnull");
 			
-			if (coordsList.isEmpty())
+			if (values.isEmpty())
 				return null; // nothing to do
 			
-			List<String> keys = new ArrayList<String>(coordsList.get(0).keySet());
+			List<String> keys = new ArrayList<>(colNames);
 			StringBuilder query = new StringBuilder("INSERT INTO " + tableName + " (");
 			boolean needComma = false;
 			for(String key:keys) {
@@ -346,9 +347,11 @@ public class SQLUtils {
 			
 			query.append(") VALUES");
 			boolean firstRow = true;
-			for(Map<String, Object> coords:coordsList) {
+			for(List<Object> coords:values) {
+				if (coords.size() != keys.size())
+					throw new RuntimeException("row has a wrong number of columns: <" + coords + "> does not match <" + keys + ">");
 				query.append(firstRow ? " " : ",");
-				query.append(buildCoordsLine(coords, keys, idColumnName, seqName));
+				query.append(buildCoordsLine(coords, idColumnName, seqName));
 				firstRow = false;
 			}
 			query.append(";");
@@ -364,18 +367,18 @@ public class SQLUtils {
 		 * @param seqName
 		 * @return
 		 */
-		public static String buildCoordsLine(Map<String, Object> coords, List<String> keys, String idColumnName, String seqName) {
+		public static String buildCoordsLine(List<Object> coords, String idColumnName, String seqName) {
 			boolean needComma = false;
 			StringBuilder query = new StringBuilder("(");
-			for(String key:keys) {
+			for(Object value:coords) {
 				if (needComma)
 					query.append(",");
-				query.append(stringifyObject(coords.get(key)));
+				query.append(stringifyObject(value));
 				needComma = true;
 			}
 			
 			if (idColumnName != null) {
-				if (!keys.isEmpty())
+				if (!coords.isEmpty())
 					query.append(",");
 				query.append(String.format("nextval('%s')", seqName));
 			}
@@ -397,10 +400,13 @@ public class SQLUtils {
 					return "NULL";
 				if (obj.toString().indexOf('\'') < 0)
 					return String.format("'%s'", obj.toString());
+				return String.format("'%s'", sqlEscapeStr(obj.toString()));
+				
 				//$t$blablabla$t$ - dollar-quoting
 				//return "'" + obj.toString() + "'";
-				String dollarQuote = "$dAaD41$";
-				return dollarQuote + obj.toString() + dollarQuote;
+				
+				/*String dollarQuote = "$dAaD41$";
+				return dollarQuote + obj.toString() + dollarQuote;*/
 			}
 			else if (obj == null)
 				return "NULL";
@@ -410,15 +416,25 @@ public class SQLUtils {
 			}
 		}
 		
+		public static String sqlEscapeStr(String input) {
+			StringBuilder res = new StringBuilder();
+			for (char ch:input.toCharArray()) {
+				if (ch != '\'')
+					res.append(ch);
+				else
+					res.append("''");
+			}
+			return res.toString();
+		}
+		
 	/**
 	 * flush schema changes so that they can used for introspection via {@link #getTableColumnsWithTypes(String, boolean)} and the likes
 	 * @param conn
 	 */
-	public static void flushSchemaChanges(Connection conn){
+	public static void flush(Connection conn){
 		try {			
-			conn.setAutoCommit(true);
-			conn.setAutoCommit(false);
-			conn.setAutoCommit(true);
+			if (!conn.getAutoCommit())
+				conn.commit();
 		}
 		catch (Exception e) {
 			throw new RuntimeException(e);

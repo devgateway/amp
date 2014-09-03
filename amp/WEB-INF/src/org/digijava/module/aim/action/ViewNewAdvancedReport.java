@@ -83,8 +83,10 @@ public class ViewNewAdvancedReport extends Action {
 		if (request.getParameter("mondrian_etl") != null) {
 			long start = System.currentTimeMillis();
 			try(Connection conn = PersistenceManager.getJdbcConnection()) {
-				MondrianETL etl = new MondrianETL(conn, null, null, null);
-				etl.execute();
+				try(MonetConnection monetConn = MonetConnection.getConnection()) {
+					MondrianETL etl = new MondrianETL(conn, monetConn, null, null, null);
+					etl.execute();
+				}
 			}
 			long end = System.currentTimeMillis();
 			double secs = (end - start) / 1000.0;
@@ -92,12 +94,12 @@ public class ViewNewAdvancedReport extends Action {
 			return null;
 		}
 		
-		if (request.getParameter("monet_etl") != null) {
-			try(MonetConnection monetConn = MonetConnection.getConnection()) {
-				ARUtil.writeResponse(response, String.format("the monet table mondrian_fact_table has columns: %s", monetConn.getTableColumnsWithTypes("mondrian_fact_table",  true)));
-			}
-			return null;
-		}
+//		if (request.getParameter("monet_etl") != null) {
+//			try(MonetConnection monetConn = MonetConnection.getConnection()) {
+//				ARUtil.writeResponse(response, String.format("the monet table mondrian_fact_table has columns: %s", monetConn.getTableColumnsWithTypes("mondrian_fact_table",  true)));
+//			}
+//			return null;
+//		}
 		
 		String loadStatus = request.getParameter("loadstatus");
 

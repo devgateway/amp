@@ -1,14 +1,30 @@
 package org.dgfoundation.amp.mondrian;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
+import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
+import org.dgfoundation.amp.ar.viewfetcher.I18nDatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewDescription;
+import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.SiteUtils;
+
+import com.google.common.collect.HashBiMap;
+
+import static org.dgfoundation.amp.mondrian.MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL;
 
 /**
  * describes a table used by Mondrian: table name, columns-with-indices, internationalized-columns
@@ -60,6 +76,50 @@ public class MondrianTableDescription {
 		if (!res.viewName.equals(tableName))
 			throw new RuntimeException("I18nViewDescription source should return a view describing " + tableName + ", but id describes " + res.viewName + " instead");
 		return res;
+	}
+	
+	public List<List<Object>> readTranslatedTable(java.sql.Connection conn, String locale) throws SQLException {
+		Map<PropertyDescription, ColumnValuesCacher> cachers = new HashMap<>();
+		I18nDatabaseViewFetcher fetcher = new I18nDatabaseViewFetcher(getI18nDescription(), null, locale, cachers, conn, "*");
+		fetcher.indicesNotToTranslate.add(MONDRIAN_DUMMY_ID_FOR_ETL);
+		
+		LinkedHashSet<String> columns = SQLUtils.getTableColumns(tableName);
+		try(ResultSet rs = fetcher.fetch(null)) {
+			List<List<Object>> vals = new ArrayList<>();
+			// direct: index-column to value-column
+			HashBiMap<String, String> indexColToValueCol = HashBiMap.create(getI18nDescription().getMappedColumns());
+			String UNDEFINED_VALUE = "Undefined";
+			String translated_undefined = TranslatorWorker.translateText(UNDEFINED_VALUE, locale, SiteUtils.getDefaultSite());;
+			while (rs.next()) {
+				List<Object> row = readMondrianDimensionRow(indexColToValueCol, columns, UNDEFINED_VALUE, translated_undefined, rs);
+				vals.add(row);
+			}
+			return vals;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param mondrianTable
+	 * @param columns
+	 * @param rs
+	 * @return
+	 * @throws SQLException
+	 */
+	protected List<Object> readMondrianDimensionRow(HashBiMap<String, String> indexColToValueCol, Collection<String> columns, String undefined, String translated_undefined, ResultSet rs) throws SQLException {
+		List<Object> row = new ArrayList<>();
+		String UNDEFINED_ID = MONDRIAN_DUMMY_ID_FOR_ETL.toString();	
+		for(String colName:columns) {
+			Object colValue = rs.getObject(colName);			
+			if (indexColToValueCol.containsKey(colName) && (colValue != null && colValue.toString().equals(UNDEFINED_ID))) {
+				colValue = MONDRIAN_DUMMY_ID_FOR_ETL;
+			}
+			if (indexColToValueCol.containsValue(colName) && (colValue == null || colValue.toString().isEmpty() || colValue.toString().equalsIgnoreCase(undefined))) {
+				colValue = translated_undefined;
+			}
+			row.add(colValue);
+		}
+		return row;
 	}
 	
 	@Override public String toString() {

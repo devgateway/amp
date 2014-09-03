@@ -3,8 +3,11 @@ package org.dgfoundation.amp.mondrian.monet;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -26,6 +29,7 @@ public class MonetConnection implements AutoCloseable {
 	
 	private MonetConnection() throws SQLException {
 		this.conn = dataSource.getConnection();
+		this.conn.setAutoCommit(false);
 	}
 	
 	public static MonetConnection getConnection() {
@@ -35,7 +39,11 @@ public class MonetConnection implements AutoCloseable {
 		catch(SQLException e) {throw new RuntimeException(e);}
 	}
 	
-	public void close(){
+	@Override public void finalize() {
+		close();
+	}
+	
+	@Override public void close(){
 		PersistenceManager.closeQuietly(conn);
 	}
 	
@@ -57,7 +65,7 @@ public class MonetConnection implements AutoCloseable {
 	 * @return Map<ColumnName, data_type>
 	 */
 	public LinkedHashMap<String, String> getTableColumnsWithTypes(final String tableName, boolean crashOnDuplicates){
-		String query = String.format("SELECT c.name, c.type FROM sys.columns c WHERE c.table_id = (SELECT t.id FROM sys.tables t WHERE t.name='mondrian_fact_table') ORDER BY c.number", tableName.toLowerCase());
+		String query = String.format("SELECT c.name, c.type FROM sys.columns c WHERE c.table_id = (SELECT t.id FROM sys.tables t WHERE t.name='%s') ORDER BY c.number", tableName.toLowerCase());
 		return SQLUtils.getTableColumnsWithTypes(this.conn, tableName, query, crashOnDuplicates);
 	}
 		
@@ -74,6 +82,88 @@ public class MonetConnection implements AutoCloseable {
 		return !getTableColumns(tableName).isEmpty();
 	}
 	
+	public void flush() {
+		try {
+			SQLUtils.flush(conn);
+		}
+		catch(Exception e) {}
+	}
+	
+	public boolean dropTable(String tableName) {
+		try {
+			flush();
+			if (tableExists(tableName)) {
+				SQLUtils.executeQuery(this.conn, "DROP TABLE " + tableName);
+				flush();
+			}
+		} catch (Exception e) {return false;}		
+		return true;
+	}
+
+	/**
+	 * pumps the result of running a query on a database in the enclosed Monet DB
+	 * @param srcConn
+	 * @param srcQuery
+	 * @param destTableName
+	 * @throws SQLException
+	 */
+	public void createTableFromQuery(java.sql.Connection srcConn, String srcQuery, String destTableName) throws SQLException {
+		ResultSet rs = SQLUtils.rawRunQuery(srcConn, srcQuery, null);
+		if (tableExists(destTableName)) {
+			dropTable(destTableName);
+		};
+		/*else */{
+			// create table based on the results structure
+			DatabaseTableDescription tableDescription = DatabaseTableDescription.describeResultSet(destTableName, getMapper(), rs);
+			tableDescription.create(this.conn, false);
+		}
+			
+		copyEntries(destTableName, rs);
+	}
+	
+	public void copyTableFromPostgres(java.sql.Connection srcConn, String tableName) throws SQLException {
+		createTableFromPostgresQuery(tableName, srcConn, "select * from " + tableName);
+	}
+	
+	/**
+	 * makes a snapshot of a query, which is copied to MonetDB
+	 * @param tableName
+	 * @param columnsToIndex columns on which to create indices
+	 * @throws SQLException
+	 */
+	protected void createTableFromPostgresQuery(String tableName, java.sql.Connection srcConn, String tableCreationQuery) throws SQLException {
+		dropTable(tableName);
+		createTableFromQuery(srcConn, tableCreationQuery, tableName);
+	}
+	
+	/**
+	 * copies entries contained in a RS to the Monet DB
+	 * @param destTableName
+	 * @param rs
+	 */
+	public void copyEntries(String destTableName, ResultSet rs) throws SQLException {
+		List<List<Object>> cols = new ArrayList<>();
+		int nrColumns = rs.getMetaData().getColumnCount();
+		while (rs.next()) {
+			List<Object> line = new ArrayList<>();
+			for(int i = 1; i <= nrColumns; i++)
+				line.add(rs.getObject(i));
+			cols.add(line);
+		}
+		Collection<String> colNames = this.getTableColumns(destTableName);
+		SQLUtils.insert(this.conn, destTableName, null, null, colNames, cols);
+	}
+	
+	public void copyTableStructureFromPostgres(Connection srcConn, String srcTable, String destTable) throws SQLException {
+		DatabaseTableDescription tableDescription = DatabaseTableDescription.describeResultSet(destTable, getMapper(), SQLUtils.rawRunQuery(srcConn, "select * from " + srcTable, null));
+		dropTable(tableDescription.tableName);
+		tableDescription.create(this.conn, false);
+	}
+	
+	public void executeQuery(String query){
+		SQLUtils.executeQuery(conn, query);
+	}
+	
 	private static DataSource getMonetDataSource() {
 		try {
 			Context initialContext = new InitialContext();
@@ -85,5 +175,48 @@ public class MonetConnection implements AutoCloseable {
 		catch(Exception e) {
 			throw new Error(e);
 		}
+	}
+	
+	public static DbColumnTypesMapper getMapper() {
+		return new DbColumnTypesMapper() {
+			
+			@Override
+			public String mapSqlTypeToName(int rsType) {
+				switch(rsType) {
+				case java.sql.Types.TINYINT:
+				case java.sql.Types.SMALLINT:
+				case java.sql.Types.INTEGER:
+				case java.sql.Types.BIGINT:
+					return "integer";
+					
+				case java.sql.Types.FLOAT:
+				case java.sql.Types.REAL:
+				case java.sql.Types.DOUBLE:
+				case java.sql.Types.NUMERIC:
+				case java.sql.Types.DECIMAL:
+					return "double";
+					
+				case java.sql.Types.CHAR:
+				case java.sql.Types.VARCHAR:
+					return "varchar(255)";
+					
+				case java.sql.Types.LONGVARCHAR:
+					return "text";
+					
+				case java.sql.Types.DATE:
+				case java.sql.Types.TIME:
+				case java.sql.Types.TIMESTAMP:
+				case java.sql.Types.TIME_WITH_TIMEZONE:
+				case java.sql.Types.TIMESTAMP_WITH_TIMEZONE:
+					return "date";
+				
+				case java.sql.Types.BIT:
+					return "boolean";
+					
+				default:
+					throw new RuntimeException("don't know how to map this column type to MonetDB: " + rsType);
+			}
+			}
+		};
 	}
 }

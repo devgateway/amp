@@ -2,9 +2,13 @@ package org.dgfoundation.amp.mondrian;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.LinkedHashMap;
 
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewColumnDescription;
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewDescription;
+import org.dgfoundation.amp.mondrian.monet.DatabaseTableColumn;
+import org.dgfoundation.amp.mondrian.monet.DatabaseTableDescription;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -94,6 +98,55 @@ public class MondrianTablesRepository {
 			MONDRIAN_ACTIVITY_TEXTS);
 	
 	public final static List<MondrianTableDescription> MONDRIAN_RAW_TRANSACTIONS_TABLES = Arrays.asList(MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE);
+	
+	/**
+	 * not used for now
+	 */
+	public final static List<String> FACT_TABLE_PRIMARY_KEY_COLUMNS = Arrays.asList("entity_type", "entity_internal_id", "primary_sector_id", "secondary_sector_id", "tertiary_sector_id", "location_id",
+			"primary_program_id", "secondary_program_id", "tertiary_program_id", "national_objectives_program_id", "ea_org_id", "ba_org_id", "ia_org_id", "ro_org_id"); 
+
+		
+	/**
+	 * order of iteration is important, thus LinkedHashSet
+	 */
+	public final static DatabaseTableDescription FACT_TABLE = new DatabaseTableDescription("mondrian_fact_table", Arrays.asList(
+				new DatabaseTableColumn("entity_id", "integer NOT NULL", true), // P/A id 
+				new DatabaseTableColumn("entity_internal_id", "integer NOT NULL", true), // amp_funding_detail_id, amp_mtef_detail_id, amp_funding_pledges_detail_id
+				new DatabaseTableColumn("transaction_type", "integer NOT NULL", true), // ACV
+				new DatabaseTableColumn("adjustment_type", "integer NOT NULL", true),  // ACV
+				new DatabaseTableColumn("transaction_date", "date NOT NULL", true),
+				new DatabaseTableColumn("date_code", "integer NOT NULL", true),
+		
+				/**
+				 * regarding currencies: if a transaction has a fixed_exchange_rate, BASE_CURRENCY would have been written in currency_id and transaction_amount would be translated
+				 */
+				new DatabaseTableColumn("transaction_amount", "double NOT NULL", false), // comment 
+				new DatabaseTableColumn("currency_id", "integer NOT NULL", true), // comment 
+		
+				new DatabaseTableColumn("donor_id", "integer", true), // amp_org_id, might be null for example for pledges (which originate in donor groups)
+				new DatabaseTableColumn("financing_instrument_id", "integer", true), // ACV
+				new DatabaseTableColumn("terms_of_assistance_id", "integer", true),  // ACV
+		
+				new DatabaseTableColumn("primary_sector_id", "integer NOT NULL", true),   // amp_sector_id, subject to Cartesian product
+				new DatabaseTableColumn("secondary_sector_id", "integer NOT NULL", true), // amp_sector_id, subject to Cartesian product
+				new DatabaseTableColumn("tertiary_sector_id", "integer NOT NULL", true),  // amp_sector_id, subject to Cartesian product
+		
+				new DatabaseTableColumn("location_id", "integer NOT NULL", true), // amp_category_value_location_id, subject to Cartesian product
+		
+				new DatabaseTableColumn("primary_program_id", "integer NOT NULL", true),   // amp_theme_id, subject to Cartesian product
+				new DatabaseTableColumn("secondary_program_id", "integer NOT NULL", true), // amp_theme_id, subject to Cartesian product
+				new DatabaseTableColumn("tertiary_program_id", "integer NOT NULL", true),  // amp_theme_id, subject to Cartesian product
+				new DatabaseTableColumn("national_objectives_program_id", "integer NOT NULL", true),  // amp_theme_id, subject to Cartesian product
+		
+				new DatabaseTableColumn("ea_org_id", "integer NOT NULL", true), // EXEC amp_org_id, subject to Cartesian product
+				new DatabaseTableColumn("ba_org_id", "integer NOT NULL", true), // BENF amp_org_id, subject to Cartesian product
+				new DatabaseTableColumn("ia_org_id", "integer NOT NULL", true), // IMPL amp_org_id, subject to Cartesian product
+				new DatabaseTableColumn("ro_org_id", "integer NOT NULL", true), // RESP amp_org_id, subject to Cartesian product
+		
+				new DatabaseTableColumn("src_role_id", "integer", true),  // amp_role.amp_role_id
+				new DatabaseTableColumn("dest_role_id", "integer", true), // amp_role_id
+				new DatabaseTableColumn("dest_org_id", "integer", true)   // amp_org_id
+		));
 }
 
 /**

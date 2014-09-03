@@ -73,7 +73,7 @@ public class ETLTests extends AmpTestCase
 	}
 	
 	public void testSQLUtilsMultiLineWriter() {
-		Map<String, Object> row1 = new LinkedHashMap<String, Object>() {{
+/*		Map<String, Object> row1 = new LinkedHashMap<String, Object>() {{
 			put("col1", 1l);
 			put("col2", "Some String, man! A very long string indeed");
 			put("col3", 2.5);
@@ -91,26 +91,19 @@ public class ETLTests extends AmpTestCase
 				+ "(1,'Some String, man! A very long string indeed',2.5)," 
 				+ "(15,'an another string',NULL);",
 				str
-				);
+				); */
 	}
 	
 	
 	public void testSQLUtilsWriter() {
 		List<String> keys = Arrays.asList("col1", "col2", "col3");
-		Map<String, Object> coords = new LinkedHashMap<String, Object>() {{
-			put("col1", 1l);
-			put("col2", "Some String, man! A very long string indeed");
-			put("col3", 2.5);
-		}};
-		String res = SQLUtils.buildCoordsLine(coords, keys, null, null);		
+		List<Object> coords = Arrays.<Object>asList(1l, "Some String, man! A very long string indeed", 2.5);
+		String res = SQLUtils.buildCoordsLine(coords, null, null);		
 		assertEquals("(1,'Some String, man! A very long string indeed',2.5)", res);
 		
 		// a null and a missing value
-		Map<String, Object> coords2 = new LinkedHashMap<String, Object>() {{
-			put("col1", SQLUtils.SQL_UTILS_NULL);
-			put("col2", 2);
-		}};
-		String res2 = SQLUtils.buildCoordsLine(coords2, keys, null, null);
+		List<Object> coords2 = Arrays.<Object>asList(SQLUtils.SQL_UTILS_NULL, 2, null);
+		String res2 = SQLUtils.buildCoordsLine(coords2, null, null);
 		assertEquals("(NULL,2,NULL)", res2);
 		System.out.println(res);
 	}

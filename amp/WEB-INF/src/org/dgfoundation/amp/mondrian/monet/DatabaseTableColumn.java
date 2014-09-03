@@ -1,16 +1,16 @@
-package org.dgfoundation.amp.mondrian;
+package org.dgfoundation.amp.mondrian.monet;
 
 /**
- * describes a column in the fact table
+ * describes a column in a database table
  * @author Dolghier Constantin
  *
  */
-public class FactTableColumn implements Comparable<FactTableColumn>{
+public class DatabaseTableColumn implements Comparable<DatabaseTableColumn>{
 	public final String columnName;
 	public final String columnDefinition;
 	public final boolean indexed;
 	
-	public FactTableColumn(String columnName, String columnDefinition, boolean indexed) {
+	public DatabaseTableColumn(String columnName, String columnDefinition, boolean indexed) {
 		this.columnName = columnName;
 		this.columnDefinition = columnDefinition;
 		this.indexed = indexed;
@@ -25,11 +25,11 @@ public class FactTableColumn implements Comparable<FactTableColumn>{
 	}
 	
 	@Override public boolean equals(Object oth) {
-		FactTableColumn other = (FactTableColumn) oth;
+		DatabaseTableColumn other = (DatabaseTableColumn) oth;
 		return this.columnName.equals(other.columnName);
 	}
 	
-	@Override public int compareTo(FactTableColumn other) {
+	@Override public int compareTo(DatabaseTableColumn other) {
 		return this.columnName.compareTo(other.columnName);
 	}
 }

@@ -1,9 +1,7 @@
 package org.dgfoundation.amp.mondrian;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.InputStreamReader;
-import java.io.LineNumberReader;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,37 +18,28 @@ import java.util.StringTokenizer;
 import java.util.List;
 import java.util.TreeSet;
 
-import org.apache.commons.collections.BidiMap;
+import org.apache.jackrabbit.core.fs.db.DatabaseFileSystem;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.AmpReportGenerator;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.I18nDatabaseViewFetcher;
-import org.dgfoundation.amp.ar.viewfetcher.I18nViewColumnDescription;
-import org.dgfoundation.amp.ar.viewfetcher.I18nViewDescription;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
+import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpSectorScheme;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.time.StopWatch;
 
 import com.google.common.collect.HashBiMap;
+
+import static org.dgfoundation.amp.mondrian.MondrianTablesRepository.FACT_TABLE;
 
 
 /**
@@ -59,9 +48,7 @@ import com.google.common.collect.HashBiMap;
  *
  */
 public class MondrianETL {
-	
-	public final static String FACT_TABLE_NAME = "mondrian_fact_table";
-	
+		
 	public final static String MONDRIAN_EXCHANGE_RATES_TABLE = "mondrian_exchange_rates";
 	public final static String MONDRIAN_DATE_TABLE = "mondrian_dates";
 	
@@ -71,7 +58,7 @@ public class MondrianETL {
 	 */
 	public final static Long MONDRIAN_DUMMY_ID_FOR_ETL = 999999999l;
 	
-	private final static String ETL_LOCK = "ETL_LOCK_OBJECT";
+	private final static ReadWriteLockHolder MONDRIAN_LOCK = new ReadWriteLockHolder("Mondrian reports/etl lock");
 	
 	/**
 	 * these two are hardcoded to activities, because pledges lack versioning, ergo a they need a much simpler treatment
@@ -84,76 +71,29 @@ public class MondrianETL {
 	 */
 	protected final Set<Long> pledgesToRedo;
 	
-	protected final boolean recreateFactTable;
+	protected boolean recreateFactTable;
+	
+	/**
+	 * the postgres connection
+	 */
 	protected java.sql.Connection conn;
+	protected MonetConnection monetConn;
 		
 	protected static Logger logger = Logger.getLogger(MondrianETL.class);
-	
-	/**
-	 * not used for now
-	 */
-	public final static List<String> FACT_TABLE_PRIMARY_KEY_COLUMNS = Arrays.asList("entity_type", "entity_internal_id", "primary_sector_id", "secondary_sector_id", "tertiary_sector_id", "location_id",
-			"primary_program_id", "secondary_program_id", "tertiary_program_id", "national_objectives_program_id", "ea_org_id", "ba_org_id", "ia_org_id", "ro_org_id"); 
-	
-	/**
-	 * order of iteration is important, thus LinkedHashSet
-	 */
-	public final static Map<String, FactTableColumn> FACT_TABLE_COLUMNS = new LinkedHashMap<String, FactTableColumn>() {{
-			add(new FactTableColumn("pk", "SERIAL PRIMARY KEY", false));
-			add(new FactTableColumn("entity_type", "char NOT NULL", true)); /* see ReportEntityType.getAsChar() */
-			add(new FactTableColumn("entity_id", "integer NOT NULL", true)); // P/A id 
-			add(new FactTableColumn("entity_internal_id", "integer NOT NULL", true)); // amp_funding_detail_id, amp_mtef_detail_id, amp_funding_pledges_detail_id
-			add(new FactTableColumn("transaction_type", "integer NOT NULL", true)); // ACV
-			add(new FactTableColumn("adjustment_type", "integer NOT NULL", true));  // ACV
-			add(new FactTableColumn("transaction_date", "date NOT NULL", true));
-			add(new FactTableColumn("date_code", "integer NOT NULL", true));
 		
-			/**
-			 * regarding currencies: if a transaction has a fixed_exchange_rate, BASE_CURRENCY would have been written in currency_id and transaction_amount would be translated
-			 */
-			add(new FactTableColumn("transaction_amount", "double precision NOT NULL", false)); // comment 
-			add(new FactTableColumn("currency_id", "integer NOT NULL", true)); // comment 
-		
-			add(new FactTableColumn("donor_id", "integer", true)); // amp_org_id, might be null for example for pledges (which originate in donor groups)
-			add(new FactTableColumn("financing_instrument_id", "integer", true)); // ACV
-			add(new FactTableColumn("terms_of_assistance_id", "integer", true));  // ACV
-		
-			add(new FactTableColumn("primary_sector_id", "integer NOT NULL", true));   // amp_sector_id, subject to Cartesian product
-			add(new FactTableColumn("secondary_sector_id", "integer NOT NULL", true)); // amp_sector_id, subject to Cartesian product
-			add(new FactTableColumn("tertiary_sector_id", "integer NOT NULL", true));  // amp_sector_id, subject to Cartesian product
-		
-			add(new FactTableColumn("location_id", "integer NOT NULL", true)); // amp_category_value_location_id, subject to Cartesian product
-		
-			add(new FactTableColumn("primary_program_id", "integer NOT NULL", true));   // amp_theme_id, subject to Cartesian product
-			add(new FactTableColumn("secondary_program_id", "integer NOT NULL", true)); // amp_theme_id, subject to Cartesian product
-			add(new FactTableColumn("tertiary_program_id", "integer NOT NULL", true));  // amp_theme_id, subject to Cartesian product
-			add(new FactTableColumn("national_objectives_program_id", "integer NOT NULL", true));  // amp_theme_id, subject to Cartesian product
-		
-			add(new FactTableColumn("ea_org_id", "integer NOT NULL", true)); // EXEC amp_org_id, subject to Cartesian product
-			add(new FactTableColumn("ba_org_id", "integer NOT NULL", true)); // BENF amp_org_id, subject to Cartesian product
-			add(new FactTableColumn("ia_org_id", "integer NOT NULL", true)); // IMPL amp_org_id, subject to Cartesian product
-			add(new FactTableColumn("ro_org_id", "integer NOT NULL", true)); // RESP amp_org_id, subject to Cartesian product
-		
-			add(new FactTableColumn("src_role_id", "integer", true));  // amp_role.amp_role_id
-			add(new FactTableColumn("dest_role_id", "integer", true)); // amp_role_id
-			add(new FactTableColumn("dest_org_id", "integer", true));   // amp_org_id
-		}
-	
-		protected void add(FactTableColumn col) {
-			this.put(col.columnName, col);
-		}
-	};
-	
 	/**
 	 * constructs an instance, does an initial assessment (scans for IDs). The {@link #execute()} method should be run as closely to the constructor as possible (to avoid race conditions)
 	 * @param conn
 	 * @param activities
 	 * @param activitiesToRemove
 	 */
-	public MondrianETL(java.sql.Connection conn, Collection<Long> activities, Collection<Long> activitiesToRemove, Collection<Long> pledgesToRedo) {
+	public MondrianETL(java.sql.Connection postgresConn, MonetConnection monetConn, Collection<Long> activities, Collection<Long> activitiesToRemove, Collection<Long> pledgesToRedo) {
 		
 		logger.warn("Mondrian ETL started");
-		this.conn = conn;
+		
+		this.conn = postgresConn;
+		this.monetConn = monetConn;
+		
 		this.recreateFactTable = activities == null;
 		
 		this.activityIds = new HashSet<>(activities == null ? this.getAllValidatedAndLatestIds() : activities);
@@ -181,55 +121,62 @@ public class MondrianETL {
 	}
 	
 	/**
-	 * warning: CLOSES CONNECTION! Don't use it afterwards!
-	 * @throws SQLException
+	 * runs the ETL
 	 */
-	public void execute() throws SQLException {
-		synchronized(ETL_LOCK) {
-			String mondrianEtl = "Mondrian-etl";
-			conn.setAutoCommit(false);
-			conn.setAutoCommit(true);
-			conn.setAutoCommit(false); // make it faster
+	public void execute(){
+		MONDRIAN_LOCK.runUnderWriteLock(new ExceptionRunnable() {
+			public void run() throws Exception {
+				
+				String mondrianEtl = "Mondrian-etl";
 			
-			StopWatch.reset(mondrianEtl);
-			StopWatch.next(mondrianEtl, true, "start");
-			checkFactTable();
+				StopWatch.reset(mondrianEtl);
+				StopWatch.next(mondrianEtl, true, "start");
+				checkFactTable();
 			
-			StopWatch.next(mondrianEtl, true, "checkFactTable");
-			deleteStaleFactTableEntries();
+				StopWatch.next(mondrianEtl, true, "checkFactTable");
+				deleteStaleFactTableEntries();
 			
-			StopWatch.next(mondrianEtl, true, "deleteStaleFactTableEntries");
-			generateActivitiesEntries();
+				StopWatch.next(mondrianEtl, true, "deleteStaleFactTableEntries");
+				generateActivitiesEntries();
 			
-			StopWatch.next(mondrianEtl, true, "generateActivitiesEntries");
-			generateExchangeRatesTable();
+				StopWatch.next(mondrianEtl, true, "generateActivitiesEntries");
+				generateExchangeRatesTable();
 			
-			StopWatch.next(mondrianEtl, true, "generateExchangeRatesTable");
-			generateStarTables();
+				StopWatch.next(mondrianEtl, true, "generateExchangeRatesTable");
+				generateStarTables();
 			
-			StopWatch.next(mondrianEtl, true, "generateStarTables");
-			checkMondrianSanity();
+				StopWatch.next(mondrianEtl, true, "generateStarTables");
+				checkMondrianSanity();
 			
-			StopWatch.next(mondrianEtl, true, "checkMondrianSanity");
-			StopWatch.reset(mondrianEtl);
+				StopWatch.next(mondrianEtl, true, "checkMondrianSanity");
+				copyMiscTables();
+				
+				StopWatch.next(mondrianEtl, true, "copyMiscTables");
+				StopWatch.reset(mondrianEtl);
 			
-			logger.error("done generating ETL");
-			conn.setAutoCommit(true);
-			conn.setAutoCommit(false);
-			conn.close();
-		}
+				logger.error("done generating ETL");
+				SQLUtils.flush(conn);
+				SQLUtils.flush(monetConn.conn);
+				conn.close();
+			};
+		});
+	}
+	
+	protected void copyMiscTables() throws SQLException {
+		monetConn.copyTableFromPostgres(this.conn, "amp_category_value");
+		monetConn.copyTableFromPostgres(this.conn, "amp_category_class");
 	}
 	
 	protected void checkMondrianSanity() {
-		String query = "SELECT DISTINCT(mft.date_code) FROM mondrian_fact_table mft WHERE NOT EXISTS (SELECT exchange_rate FROM mondrian_exchange_rates mer WHERE mer.day = mft.date_code)";
-		List<Long> days = SQLUtils.fetchLongs(conn, query);
+		String query = "SELECT DISTINCT(mft.date_code) FROM mondrian_fact_table mft WHERE NOT EXISTS (SELECT exchange_rate FROM mondrian_exchange_rates mer WHERE mer.day_code = mft.date_code)";
+		List<Long> days = SQLUtils.fetchLongs(monetConn.conn, query);
 		if (!days.isEmpty()) {
 			logger.error("after having run the ETL, some days do not have a corresponding exchange rate entry: " + days.toString());
 			throw new RuntimeException("MONDRIAN ETL BUG: some days have missing exchange rate entries and will not exist in the generated reports: " + days);
 		}
 		
-		query = "SELECT DISTINCT(mft.date_code) FROM mondrian_fact_table mft WHERE NOT EXISTS (SELECT full_date FROM " + MONDRIAN_DATE_TABLE + " mdt WHERE mdt.day = mft.date_code)";
-		days = SQLUtils.fetchLongs(conn, query);
+		query = "SELECT DISTINCT(mft.date_code) FROM mondrian_fact_table mft WHERE NOT EXISTS (SELECT full_date FROM " + MONDRIAN_DATE_TABLE + " mdt WHERE mdt.day_code = mft.date_code)";
+		days = SQLUtils.fetchLongs(monetConn.conn, query);
 		if (!days.isEmpty()) {
 			logger.error("after having run the ETL, some days do not have a corresponding DATE entry: " + days.toString());
 			throw new RuntimeException("MONDRIAN ETL BUG: some days have missing date entries and will not exist in the generated reports: " + days);
@@ -247,16 +194,18 @@ public class MondrianETL {
 		logger.warn("generating exchange rates ETL...");
 		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + MONDRIAN_EXCHANGE_RATES_TABLE);
 		SQLUtils.executeQuery(conn, "CREATE TABLE " + MONDRIAN_EXCHANGE_RATES_TABLE + "(" + 
-										"day integer NOT NULL," + 
+										"day_code integer NOT NULL," + 
 										"currency_id bigint NOT NULL," + 
 										"exchange_rate double precision NOT NULL CHECK (exchange_rate > 0)," + 
-										"CONSTRAINT day_pkey PRIMARY KEY (day, currency_id))");
+										"CONSTRAINT day_pkey PRIMARY KEY (day_code, currency_id))");
 		
-		SortedSet<Long> allDates = new TreeSet<>(SQLUtils.fetchLongs(conn, "select distinct(date_code) as day from mondrian_fact_table"));
+		SortedSet<Long> allDates = new TreeSet<>(SQLUtils.fetchLongs(conn, "select distinct(date_code) as day_code from mondrian_raw_donor_transactions"));
 		List<Long> allCurrencies = SQLUtils.fetchLongs(conn, "SELECT amp_currency_id FROM amp_currency");
 		for (Long currency:allCurrencies) {
 			generateExchangeRateEntriesForCurrency(CurrencyUtil.getAmpcurrency(currency), allDates);
 		}
+		monetConn.copyTableFromPostgres(this.conn, MONDRIAN_EXCHANGE_RATES_TABLE);
+		monetConn.copyTableFromPostgres(this.conn, "amp_currency");
 		logger.warn("... done generating exchange rates ETL...");
 	}
 
@@ -280,14 +229,15 @@ public class MondrianETL {
 		for (MondrianTableDescription mondrianTable:MondrianTablesRepository.MONDRIAN_TRANSLATED_TABLES)
  			generateStarTable(mondrianTable);
 		
-		generateStarTableWithQuery(MONDRIAN_DATE_TABLE, "day",
-			"SELECT DISTINCT(mft.date_code) AS day, mft.transaction_date AS full_date, date_part('year'::text, mft.transaction_date)::integer AS year, date_part('month'::text, mft.transaction_date)::integer AS month, to_char(mft.transaction_date, 'TMMonth'::text) AS month_name, date_part('quarter'::text, mft.transaction_date)::integer AS quarter, ('Q'::text || date_part('quarter'::text, mft.transaction_date)) AS quarter_name " + 
+		generateStarTableWithQueryInPostgres(MONDRIAN_DATE_TABLE, "day_code",
+			"SELECT DISTINCT(mft.date_code) AS day_code, mft.transaction_date AS full_date, date_part('year'::text, mft.transaction_date)::integer AS year_code, date_part('month'::text, mft.transaction_date)::integer AS month_code, to_char(mft.transaction_date, 'TMMonth'::text) AS month_name, date_part('quarter'::text, mft.transaction_date)::integer AS quarter_code, ('Q'::text || date_part('quarter'::text, mft.transaction_date)) AS quarter_name " + 
 			"FROM mondrian_fact_table mft " + 
 			"UNION ALL " + 
 			"SELECT 999999999, '9999-1-1', 9999, 99, 'Undefined', 99, 'Undefined' " + 
-			"ORDER BY day",
+			"ORDER BY day_code",
 			
-			Arrays.asList("day", "full_date", "year", "month", "quarter"));
+			Arrays.asList("day_code", "full_date", "year_code", "month_code", "quarter_code"));
+		monetConn.copyTableFromPostgres(this.conn, MONDRIAN_DATE_TABLE);
 		logger.warn("...generating STAR tables done");
 	}
 
@@ -297,7 +247,10 @@ public class MondrianETL {
 	 * @throws SQLException
 	 */
 	protected void generateStarTable(MondrianTableDescription mondrianTable) throws SQLException {
-		generateStarTableWithQuery(mondrianTable.tableName, mondrianTable.primaryKeyColumnName, "SELECT * FROM v_" + mondrianTable.tableName, mondrianTable.indexedColumns);
+		//generateStarTableWithQueryToMonet(mondrianTable.tableName, mondrianTable.primaryKeyColumnName, "SELECT * FROM v_" + mondrianTable.tableName, mondrianTable.indexedColumns);
+		generateStarTableWithQueryInPostgres(mondrianTable.tableName, mondrianTable.primaryKeyColumnName, "SELECT * FROM v_" + mondrianTable.tableName, mondrianTable.indexedColumns);
+		monetConn.copyTableFromPostgres(conn, mondrianTable.tableName);
+		//generateStarTableWithQueryToMonet(mondrianTable.tableName, mondrianTable.primaryKeyColumnName, "SELECT * FROM " + mondrianTable.tableName, mondrianTable.indexedColumns);
 		
 		// now, the base (non-multilingual) dimension table is ready, now we need to make multilingual clones of it
 		LinkedHashSet<String> locales = new LinkedHashSet<>(TranslatorUtil.getLocaleCache(SiteUtils.getDefaultSite()));
@@ -314,63 +267,17 @@ public class MondrianETL {
 	protected void cloneMondrianTableForLocale(MondrianTableDescription mondrianTable, String locale) throws SQLException {
 		logger.warn("cloning table " + mondrianTable.tableName + " into locale " + locale);
 		String localizedTableName = mondrianTable.tableName + "_" + locale;
-		boolean autoCommit = conn.getAutoCommit();
-		try {
-			SQLUtils.flushSchemaChanges(conn);
-			Map<PropertyDescription, ColumnValuesCacher> cachers = new HashMap<>();
-			I18nDatabaseViewFetcher fetcher = new I18nDatabaseViewFetcher(mondrianTable.getI18nDescription(), null, locale, cachers, this.conn, "*");
-			fetcher.indicesNotToTranslate.add(MONDRIAN_DUMMY_ID_FOR_ETL);
 		
-			LinkedHashSet<String> columns = SQLUtils.getTableColumns(mondrianTable.tableName);		
-			List<Map<String, Object>> vals = new ArrayList<>();
-			ResultSet rs = fetcher.fetch(null);
-			// direct: index-column to value-column
-			HashBiMap<String, String> indexColToValueCol = HashBiMap.create(mondrianTable.getI18nDescription().getMappedColumns());
-			String UNDEFINED_VALUE = "Undefined";
-			String translated_undefined = TranslatorWorker.translateText(UNDEFINED_VALUE, locale, SiteUtils.getDefaultSite());;
-			while (rs.next()) {
-				Map<String, Object> row = readMondrianDimensionRow(indexColToValueCol, columns, UNDEFINED_VALUE, translated_undefined, rs);
-				vals.add(row);
-			}
-			SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + localizedTableName);
-			SQLUtils.executeQuery(conn, "CREATE TABLE " + localizedTableName + " AS TABLE " + mondrianTable + " WITH NO DATA");
-			SQLUtils.insert(conn, localizedTableName, null, null, vals);
-			postprocessDimensionTable(localizedTableName, mondrianTable.primaryKeyColumnName, mondrianTable.indexedColumns);
-		}
-		finally {
-			conn.setAutoCommit(autoCommit);
-		}
+		List<List<Object>> vals = mondrianTable.readTranslatedTable(this.conn, locale);
+		monetConn.copyTableStructureFromPostgres(this.conn, mondrianTable.tableName, localizedTableName);
+		SQLUtils.insert(monetConn.conn, localizedTableName, null, null, monetConn.getTableColumns(localizedTableName), vals);
+
 		
 		// checking sanity
 		long initTableSz = SQLUtils.countRows(conn, mondrianTable.tableName);
-		long createdTableSz = SQLUtils.countRows(conn, localizedTableName);
+		long createdTableSz = SQLUtils.countRows(monetConn.conn, localizedTableName);
 		if (initTableSz != createdTableSz)
-			throw new RuntimeException(String.format("HUGE BUG: multilingual-cloned dimension table has a size of %d, while the original dimension table has a size of %d", createdTableSz, initTableSz));		
-	}
-	
-	
-	/**
-	 * 
-	 * @param mondrianTable
-	 * @param columns
-	 * @param rs
-	 * @return
-	 * @throws SQLException
-	 */
-	protected Map<String, Object> readMondrianDimensionRow(HashBiMap<String, String> indexColToValueCol, Collection<String> columns, String undefined, String translated_undefined, ResultSet rs) throws SQLException {
-		Map<String, Object> row = new LinkedHashMap<>();
-		String UNDEFINED_ID = MONDRIAN_DUMMY_ID_FOR_ETL.toString();	
-		for(String colName:columns) {
-			Object colValue = rs.getObject(colName);			
-			if (indexColToValueCol.containsKey(colName) && (colValue != null && colValue.toString().equals(UNDEFINED_ID))) {
-				colValue = MONDRIAN_DUMMY_ID_FOR_ETL;
-			}
-			if (indexColToValueCol.containsValue(colName) && (colValue == null || colValue.toString().isEmpty() || colValue.toString().equalsIgnoreCase(undefined))) {
-				colValue = translated_undefined;
-			}
-			row.put(colName, colValue);
-		}
-		return row;
+			throw new RuntimeException(String.format("HUGE BUG: multilingual-cloned dimension table has a size of %d, while the original dimension table has a size of %d", createdTableSz, initTableSz));
 	}
 	
 	
@@ -380,13 +287,12 @@ public class MondrianETL {
 	 * @param columnsToIndex columns on which to create indices
 	 * @throws SQLException
 	 */
-	protected void generateStarTableWithQuery(String tableName, String primaryKey, String tableCreationQuery, Collection<String> columnsToIndex) throws SQLException {
+	protected void generateStarTableWithQueryInPostgres(String tableName, String primaryKey, String tableCreationQuery, Collection<String> columnsToIndex) throws SQLException {
 		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + tableName);
 		SQLUtils.executeQuery(conn, "CREATE TABLE " + tableName + " AS " + tableCreationQuery);
-
-		postprocessDimensionTable(tableName, primaryKey, columnsToIndex);
+		//postprocessDimensionTable(tableName, primaryKey, columnsToIndex);
 	}
-	
+
 	
 	/**
 	 * makes any needed postprocessing on a Mondrian Dimension table (indices, collations, etc)
@@ -396,7 +302,7 @@ public class MondrianETL {
 	protected void postprocessDimensionTable(String tableName, String primaryKey, Collection<String> columnsToIndex) {
 		// change text column types' collation to C -> 7x faster GROUP BY / ORDER BY for stupid Mondrian
 		Map<String, String> tableColumns = SQLUtils.getTableColumnsWithTypes(tableName, true);
-		Set<String> textColumnTypes = new HashSet<String>() {{add("text"); add("character varying"); add("varchar");}};
+		Set<String> textColumnTypes = new HashSet<>(Arrays.asList("text", "character varying", "varchar"));
 		for (String columnName:tableColumns.keySet()) {
 			String columnType = tableColumns.get(columnName);
 			if (textColumnTypes.contains(columnType)) {
@@ -423,52 +329,30 @@ public class MondrianETL {
 	 * 2. the fact table has been sanity checked
 	 */
 	protected void checkFactTable() {
-		if (recreateFactTable) {
-			recreateFactTable();
-		}
 		
 		// check that the fact table has a sane structure
 		// notice that this is also run if we had just recreated it - to make sure everything is ok (better safe than sorry)
-		Set<String> factTableColumnNames = SQLUtils.getTableColumns(FACT_TABLE_NAME);
+		Set<String> factTableColumnNames = monetConn.getTableColumns(FACT_TABLE.tableName);
 		for (String colName:factTableColumnNames) {
-			if (!FACT_TABLE_COLUMNS.containsKey(colName))
-				throw new RuntimeException(String.format("the fact table does not contain the mandatory column %s", colName));
-		}		
+			recreateFactTable |= !FACT_TABLE.columns.containsKey(colName);
+		}
+
+		if (recreateFactTable) {
+			recreateFactTable();
+		}
 	}
 	
 	protected void recreateFactTable() {
-	try {
-		boolean autoCommit = conn.getAutoCommit();
 		try {
-			SQLUtils.flushSchemaChanges(conn);
+			//SQLUtils.flushSchemaChanges(conn);
 			// creates an empty fact table
 			logger.warn("RECREATING Mondrian Fact table");
-			SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + FACT_TABLE_NAME);
-			StringBuffer query = new StringBuffer(String.format("CREATE TABLE %s (", FACT_TABLE_NAME));
-			boolean first = true;
-			for (FactTableColumn col:FACT_TABLE_COLUMNS.values()) {
-				if (!first) query.append(", ");
-				query.append(String.format("%s %s", col.columnName, col.columnDefinition));
-				first = false;
-			}
-			query.append(")");
-			SQLUtils.executeQuery(conn, query.toString());
-		
-			// create indices
-			logger.warn("Creating Mondrian indices");
-			for(FactTableColumn col:FACT_TABLE_COLUMNS.values())
-				if (col.indexed) {
-					String q = String.format("CREATE INDEX %s_%s_idx ON %s(%s)", FACT_TABLE_NAME, col.columnName, FACT_TABLE_NAME, col.columnName);
-					SQLUtils.executeQuery(conn, q);
-				}
+			monetConn.dropTable(FACT_TABLE.tableName);
+			FACT_TABLE.create(monetConn.conn, false);
 		}
-		finally {
-			conn.setAutoCommit(autoCommit);
+		catch(SQLException e) {
+			throw new RuntimeException(e);
 		}
-	}
-	catch(SQLException e) {
-		throw new RuntimeException(e);
-	}
 	}
 	
 	/**
@@ -489,31 +373,38 @@ public class MondrianETL {
 	protected void generateRawTransactionTables() throws SQLException {
 		logger.warn("materializing the raw transactions tables...");
 		for (MondrianTableDescription mondrianTable: MondrianTablesRepository.MONDRIAN_RAW_TRANSACTIONS_TABLES) {
-			generateStarTableWithQuery(mondrianTable.tableName, mondrianTable.primaryKeyColumnName, "SELECT * FROM v_" + mondrianTable.tableName, mondrianTable.indexedColumns);
+			monetConn.createTableFromQuery(this.conn, "SELECT * FROM v_" + mondrianTable.tableName, mondrianTable.tableName);
 		}
 	}
 	
 	protected void generateFactTable() throws SQLException {
 		logger.warn("running the fact-table-generating cartesian...");
 		List<String> factTableQueries = generateFactTableQueries();
+		//monetConn.dropTable(FACT_TABLE.tableName);
 		for(int i = 0; i < factTableQueries.size(); i++) {
 			logger.warn("\texecuting query #" + (i + 1) + "...");
-			SQLUtils.executeQuery(conn, factTableQueries.get(i));
+			monetConn.executeQuery(factTableQueries.get(i));
 			logger.warn("\t...executing query #" + (i + 1) + " done");
 		}
 		logger.warn("...running the fact-table-generating cartesian done");
-		long factTableSize = SQLUtils.fetchLongs(conn, "select count(*) from mondrian_fact_table").get(0);
-		long nrTransactions = SQLUtils.fetchLongs(conn, "select count(*) from amp_activity aa join amp_funding f on aa.amp_activity_id = f.amp_activity_id join amp_funding_detail fd on f.amp_funding_id = fd.amp_funding_id").get(0);
+		long factTableSize = SQLUtils.countRows(monetConn.conn, "mondrian_fact_table");
+		long nrTransactions = SQLUtils.countRows(monetConn.conn, "mondrian_raw_donor_transactions");
 		double explosionFactor = nrTransactions > 0 ? ((1.0 * factTableSize) / nrTransactions) : 1.0;
 		logger.warn(
 				String.format("fact table generated %d fact table entries using %d initial transactions (multiplication factor: %.2f)", factTableSize, nrTransactions, explosionFactor));
 	}
 	
+	/**
+	 * runs a query on the PostgreSQL database, redistributes percentages, then writes results (one-table-per-locale) to Monet
+	 * @param query
+	 * @param tableName
+	 * @throws SQLException
+	 */
 	protected void runEtlOnTable(String query, String tableName) throws SQLException {
 		try (ResultSet rs = SQLUtils.rawRunQuery(conn, query, null)) {
 			// Map<activityId, percentages_on_sector_scheme
 			Map<Long, PercentagesDistribution> secs = PercentagesDistribution.readInput(ReportEntityType.ENTITY_TYPE_ACTIVITY, rs);
-			serializeETLTable(secs, tableName);
+			serializeETLTable(secs, tableName, false);
 		}
 	}
 	
@@ -574,38 +465,38 @@ public class MondrianETL {
 	 * @param tableName
 	 * @throws SQLException
 	 */
-	protected void serializeETLTable(Map<Long, PercentagesDistribution> percs, String tableName) throws SQLException {
-		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + tableName);
-		SQLUtils.executeQuery(conn, "CREATE TABLE " + tableName + " (act_id integer, ent_id integer, percentage double precision)");
-		StringBuilder query = new StringBuilder("INSERT INTO " + tableName + " (act_id, ent_id, percentage) VALUES ");
-		boolean isFirst = true;
+	protected void serializeETLTable(Map<Long, PercentagesDistribution> percs, String tableName, boolean createIndices) throws SQLException {
+		monetConn.dropTable(tableName);
+		monetConn.executeQuery("CREATE TABLE " + tableName + " (act_id integer, ent_id integer, percentage double)");
+		List<List<Object>> entries = new ArrayList<>();
 		for (long actId:percs.keySet()) {
-			// build an SQL query for each activityId
 			PercentagesDistribution pd = percs.get(actId);
 			pd.postProcess(MONDRIAN_DUMMY_ID_FOR_ETL);
-			for (Map.Entry<Long, Double> entry:pd.getPercentages().entrySet()) {
-				if (!isFirst)
-					query.append(", \n");
-				query.append(String.format("(%d, %d, %.3f)", actId, entry.getKey(), entry.getValue() / 100.0));
-				isFirst = false;
-			}
+			for (Map.Entry<Long, Double> entry:pd.getPercentages().entrySet())
+				entries.add(Arrays.<Object>asList(actId, entry.getKey(), entry.getValue() / 100.0));
 		}
-		if (!isFirst) { // if the table is non-empty
-			SQLUtils.executeQuery(conn, query.toString());
+		SQLUtils.insert(monetConn.conn, tableName, null, null, Arrays.asList("act_id", "ent_id", "percentage"), entries);
+
+		if (createIndices) {
+			SQLUtils.executeQuery(conn, String.format("CREATE INDEX %s_act_id_idx ON %s(act_id)", tableName, tableName)); // create index on activityId
+			SQLUtils.executeQuery(conn, String.format("CREATE INDEX %s_ent_id_idx ON %s(ent_id)", tableName, tableName)); // create index on entityId (entity=sector/program/org)
+			SQLUtils.executeQuery(conn, String.format("CREATE INDEX %s_act_ent_id_idx ON %s(act_id, ent_id)", tableName, tableName)); // create index on entityId (entity=sector/program/org)
 		}
-		SQLUtils.executeQuery(conn, String.format("CREATE INDEX %s_act_id_idx ON %s(act_id)", tableName, tableName)); // create index on activityId
-		SQLUtils.executeQuery(conn, String.format("CREATE INDEX %s_ent_id_idx ON %s(ent_id)", tableName, tableName)); // create index on entityId (entity=sector/program/org)
-		SQLUtils.executeQuery(conn, String.format("CREATE INDEX %s_act_ent_id_idx ON %s(act_id, ent_id)", tableName, tableName)); // create index on entityId (entity=sector/program/org)
+		monetConn.flush();
 	}
 	
 	/**
 	 * clears the fact table of the stale entries signaled by {@link #activityIdsToRemove} and {@link #pledgesToRedo}
 	 */
 	protected void deleteStaleFactTableEntries() {
-		String deleteActivitiesQuery = String.format("DELETE FROM mondrian_fact_table WHERE entity_type = '%c' AND entity_id IN (%s)", ReportEntityType.ENTITY_TYPE_ACTIVITY.getAsChar(), Util.toCSStringForIN(activityIdsToRemove));
-		String deletePledgesQuery = String.format("DELETE FROM mondrian_fact_table WHERE entity_type = '%c' AND entity_id IN (%s)", ReportEntityType.ENTITY_TYPE_PLEDGE.getAsChar(), Util.toCSStringForIN(pledgesToRedo));
-		SQLUtils.executeQuery(conn, deleteActivitiesQuery);
-		SQLUtils.executeQuery(conn, deletePledgesQuery);
+//		String deleteActivitiesQuery = String.format("DELETE FROM mondrian_fact_table WHERE entity_type = '%c' AND entity_id IN (%s)", ReportEntityType.ENTITY_TYPE_ACTIVITY.getAsChar(), Util.toCSStringForIN(activityIdsToRemove));
+		String deleteActivitiesQuery = String.format("DELETE FROM mondrian_fact_table WHERE entity_id IN (%s)", Util.toCSStringForIN(activityIdsToRemove));
+		Set<Long> pledgesToRedoChanged = new HashSet<>();
+		for(Long pledgeId:pledgesToRedo)
+			pledgesToRedoChanged.add(pledgeId + AmpReportGenerator.PLEDGES_IDS_START);
+		String deletePledgesQuery = String.format("DELETE FROM mondrian_fact_table WHERE entity_id IN (%s)", Util.toCSStringForIN(pledgesToRedoChanged));
+		monetConn.executeQuery(deleteActivitiesQuery);
+		monetConn.executeQuery(deletePledgesQuery);
 	}
 	
 	/**

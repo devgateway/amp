@@ -89,7 +89,7 @@ public class CurrencyETL {
 		if (values.isEmpty())
 			return; // nothing to do
 		
-		StringBuilder query = new StringBuilder("INSERT INTO " + MONDRIAN_EXCHANGE_RATES_TABLE + "(day, currency_id, exchange_rate) VALUES ");
+		StringBuilder query = new StringBuilder("INSERT INTO " + MONDRIAN_EXCHANGE_RATES_TABLE + "(day_code, currency_id, exchange_rate) VALUES ");
 		boolean first = true;
 		for (Entry<Long, Double> entry:values.entrySet()) {
 			if (!first) {

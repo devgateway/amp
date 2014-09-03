@@ -193,7 +193,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 	}
 
 	/**
-	 * @return Returns the parentTeamId.
+	 * @return Returns the parent team, for some reason mislabeled as parentTeamId
 	 * TODO: no it doesn't. returns AmpTeam
 	 */
 	public AmpTeam getParentTeamId() {

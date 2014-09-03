@@ -1342,6 +1342,12 @@ public class AmpARFilter extends PropertyListable {
 					+ ((this.showArchived) ? "archived=true"
 							: "(archived=false or archived is null)");
 
+		String ACTIVITY_ID_FILTER = ""; 
+		if (params.getActivityIdFilter() != null) {
+			ACTIVITY_ID_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id = " + params.getActivityIdFilter();
+		}
+		
+		
 		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
 		
 		String[] dates = this.calculateDateFilters(fromDate, toDate, dynDateFilterCurrentPeriod, dynDateFilterAmount, dynDateFilterOperator, dynDateFilterXPeriod);
@@ -1672,7 +1678,11 @@ public class AmpARFilter extends PropertyListable {
 		if ( multiDonor != null ) {
 			queryAppend( MULTI_DONOR );
 		}
+		if (params.getActivityIdFilter() != null) {
+			queryAppend(ACTIVITY_ID_FILTER);
+		}
 
+		
 		/* TEAM FILTER HACK ZONE
 		 * because in certain situations this zone can add an OR, any queryAppend calls MUST be done BEFORE THIS AREA
 		 */

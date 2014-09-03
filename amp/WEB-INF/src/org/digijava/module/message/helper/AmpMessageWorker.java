@@ -146,7 +146,7 @@ public class AmpMessageWorker {
                 }else if(e.getTrigger().equals(RemoveCalendarEventTrigger.class)){
                 	defineReceiversForCalendarEvents(e, template, newMsg,false,true);
                 }else if(e.getTrigger().equals(ActivitySaveTrigger.class)) {
-                    defineActivityCreationReceievrs(template, newMsg, new Long(e.getParameters().get(ActivitySaveTrigger.PARAM_ID).toString()));
+                    defineActivityCreationReceivers(template, newMsg, new Long(e.getParameters().get(ActivitySaveTrigger.PARAM_ID).toString()));
                 }else if(e.getTrigger().equals(ActivityActualStartDateTrigger.class)) {
                     defineReceievrsByActivityTeam(template, newMsg,new Long(e.getParameters().get(ActivityActualStartDateTrigger.PARAM_TEAM_ID).toString()));
                 }else if(e.getTrigger().equals(ActivityCurrentCompletionDateTrigger.class)) {
@@ -873,8 +873,7 @@ public class AmpMessageWorker {
     
     
     
-    //TODO: fix typo in function name
-    private static void defineActivityCreationReceievrs(TemplateAlert template, AmpMessage alert, Long activityId) throws Exception {
+    private static void defineActivityCreationReceivers(TemplateAlert template, AmpMessage alert, Long activityId) throws Exception {
         List<AmpMessageState> statesRelatedToTemplate = null;
         //get the member who created an activity. it's the current member
         AmpTeamMember activityCreator = TeamMemberUtil.getAmpTeamMember(alert.getSenderId());
@@ -899,15 +898,9 @@ public class AmpMessageWorker {
             	 *  if cross team validation is enabled
             	 */
             	boolean ctv = (teamMember.getAmpTeam().getCrossteamvalidation()); 
-            	boolean validReceiver = false;
-                if (teamMember.getAmpTeam().getAmpTeamId().equals(activityCreator.getAmpTeam().getAmpTeamId())) {
-                	validReceiver = true;
-                }
-                if (ctv) {
-                    if (teamMember.isActivityValidatableByUser(activityId))
-                    	validReceiver = true;
-                }
-                if (validReceiver) {
+            	
+                if (teamMember.getAmpTeam().getAmpTeamId().equals(activityCreator.getAmpTeam().getAmpTeamId()) || 
+                		(ctv && teamMember.isActivityValidatableByUser(activityId))){
                     createMsgState(state, alert,false);
                     receiversAddresses.add(teamMember.getUser().getEmail());
                 }

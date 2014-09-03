@@ -237,17 +237,16 @@ public class AmpTeamMember implements Serializable/*, Versionable*/ {
 			af = FilterUtil.buildFilter(ampTeam, null);
 		}
 
-		af.generateFilterQuery((org.dgfoundation.amp.ar.AmpARFilterParams.getParamsForWorkspaceFilter(this.toTeamMember())));
+		af.generateFilterQuery((org.dgfoundation.amp.ar.AmpARFilterParams.getParamsForWorkspaceFilter(this.toTeamMember(), ampActivityId)));
 		
 		try(Connection conn = org.digijava.kernel.persistence.PersistenceManager.getJdbcConnection()){
 				
 				java.sql.Statement st = conn.createStatement();
 				ResultSet rs		= st.executeQuery(af.getGeneratedFilterQuery());
-				
-				while (rs.next()) {
-					Long iterId = (Long) rs.getLong("amp_activity_id");
-					if (ampActivityId.equals(iterId))
-						return true;
+				//if there would be many results, we would have a "while rs.next"
+				//but since the filter has been moved to SQL, it's only an if
+				if (rs.next()) {
+					return true;
 				}
             }
             catch(SQLException exc) {

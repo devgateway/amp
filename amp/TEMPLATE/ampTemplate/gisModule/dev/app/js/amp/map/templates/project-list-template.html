@@ -1,10 +1,10 @@
 <!-- this template is for adm clusters -->
-<div>
-  Activity List
-  <ul class="small">
-    <%   _.each(obj.activities, function(activity){ %>
-
-      <li><a href="<%= activity.ampUrl %>"><%= activity.name %></a></li>
-    <% });%>
-  </ul>
-</div>
+<table class="project-list table table-striped table-condensed">
+	<tr>
+		<th>Title</th>
+		<th>Amount</th>
+	</tr>	
+	<%   _.each(obj.activities, function(activity){ %>
+		<tr><td><a href="<%= activity.ampUrl %>"><%= activity.name %></a></td><td>$TBD</td></tr>
+	<% });%>
+</table>

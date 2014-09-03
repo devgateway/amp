@@ -1,3 +1,15 @@
 <h5><%= obj.properties.admName%> has <%= obj.properties.activityid.length %> projects </h5>
-<div class="charts"><svg style="height: 200px; width:260px;"></svg></div>
-<div class="project-list"> </div>
+
+<ul class="nav nav-tabs" role="tablist">
+  <li class="active"><a href="#charts-pane" role="tab" data-toggle="tab">Charts</a></li>
+  <li><a href="#projects-pane" role="tab" data-toggle="tab">Projects</a></li>
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane active" id="charts-pane">
+  	<div class="charts"><svg style="height: 200px; width:260px;"></svg></div>
+  </div>
+  <div class="tab-pane" id="projects-pane" style="max-height:260px; overflow-y: auto">
+  </div>
+</div>

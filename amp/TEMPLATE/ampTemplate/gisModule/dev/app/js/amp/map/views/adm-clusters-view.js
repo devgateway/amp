@@ -1,11 +1,9 @@
 var fs = require('fs');
 var _ = require('underscore');
-var $ = require('jquery');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 
 var ADMTemplate = fs.readFileSync(__dirname + '/../templates/map-adm-template.html', 'utf8');
-var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
 
 var ClusterPopupView = require('../views/cluster-popup-view');
 
@@ -13,7 +11,6 @@ module.exports = Backbone.View.extend({
   leafletLayerMap: {},
 
   admTemplate: _.template(ADMTemplate),
-  projectListTemplate: _.template(ProjectListTemplate),
 
   initialize: function(options) {
     this.app = options.app;
@@ -30,7 +27,6 @@ module.exports = Backbone.View.extend({
   },
 
   showLayer: function(admLayer) {
-    var self = this;
     var leafletLayer = this.leafletLayerMap[admLayer.cid];
 
     if (_.isUndefined(leafletLayer)) {

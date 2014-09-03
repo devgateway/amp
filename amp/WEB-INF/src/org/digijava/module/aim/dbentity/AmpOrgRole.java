@@ -3,6 +3,7 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Set;
 
 import org.digijava.module.aim.util.Output;
 
@@ -14,7 +15,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 	private AmpOrganisation organisation;
 	private AmpRole role;
 	private Float 	percentage;
-	private String budgetCode;
+	private Set <AmpOrgRoleBudget> budgets;
 	private String additionalInfo;
 	
 	
@@ -87,13 +88,6 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 		this.additionalInfo = additionalInfo;
 	}
 	
-	public String getBudgetCode() {
-		return budgetCode;
-	}
-	public void setBudgetCode(String budgetCode) {
-		this.budgetCode = budgetCode;
-	}
-
 	@Override
 	public boolean equalsForVersioning(Object obj) {
 		AmpOrgRole aux = (AmpOrgRole) obj;
@@ -117,14 +111,23 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 		}
 		if (this.additionalInfo != null && this.additionalInfo.trim().length() > 0)
 			out.getOutputs().add(new Output(null, new String[] {"Department/Division"}, new Object[] {this.additionalInfo}));
-		if (this.budgetCode != null)
-			out.getOutputs().add(new Output(null, new String[] {"Budget Code"}, new Object[] {this.budgetCode}));
+		if (this.budgets != null){
+			StringBuffer budgetCode = new StringBuffer();
+			for (AmpOrgRoleBudget budget :budgets) {
+			budgetCode.append(budget.getBudgetCode()+ ",");	
+			}
+			out.getOutputs().add(new Output(null, new String[] {"Budget Code"}, new Object[] {budgetCode.substring(0,budgetCode.length()-1)}));
+		}
 		return out;
 	}
 
 	@Override
 	public Object getValue() {
-		return "" + this.percentage + "" + this.additionalInfo + "" + this.budgetCode;
+		StringBuffer budgetCode = new StringBuffer();
+		for (AmpOrgRoleBudget budget :budgets) {
+		budgetCode.append(budget.getBudgetCode()+ ",");	
+		}
+		return "" + this.percentage + "" + this.additionalInfo + ""+budgetCode.toString();
 	}
 	
 	@Override
@@ -157,4 +160,12 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 			return o1.getOrganisation().getAcronymAndName().compareTo(o2.getOrganisation().getAcronymAndName());
 		}
 	};
+
+
+	public Set<AmpOrgRoleBudget> getBudgets() {
+		return budgets;
+	}
+	public void setBudgets(Set<AmpOrgRoleBudget> budgets) {
+		this.budgets = budgets;
+	}
 }	

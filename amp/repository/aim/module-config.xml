@@ -82,6 +82,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpField</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpComments</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgRole</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgRoleBudget</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpColumns</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpColumnsFilters</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpColumnsOrder</hibernate-class>

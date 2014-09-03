@@ -4,23 +4,27 @@
 */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.components.ListEditor;
+import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
-import org.dgfoundation.amp.onepager.events.FundingOrgListUpdateEvent;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrgRoleBudget;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -64,22 +68,53 @@ public class AmpRelatedOrganizationsResponsibleTableFeature extends AmpRelatedOr
 				AmpPercentageTextField percentageField = new AmpPercentageTextField("percentage", percModel, "percentage",percentageValidationField);
 				item.add(percentageField);
 				
-				AmpOrgRole oRole = item.getModelObject();
-				String orgCode = oRole.getOrganisation().getBudgetOrgCode();
+				final AmpOrgRole oRole = item.getModelObject();
+				if (oRole.getBudgets() == null) {
+					oRole.setBudgets(new HashSet <AmpOrgRoleBudget> ());
+				}
+				final String orgCode = oRole.getOrganisation().getBudgetOrgCode();
+				final PropertyModel<Set<Object>> budgetsModel = new PropertyModel<Set<Object>>(oRole, "budgets");
 
-                PropertyModel<String> bcModel = new PropertyModel<String>(item.getModel(), "budgetCode");
-                if (bcModel.getObject() == null || "".equals(bcModel.getObject().trim()))
-                    bcModel.setObject(orgCode); //if budget code not entered yet, add the first part from the org budget code
+				final ListEditor list = new ListEditor<Object>("budgets", budgetsModel) {
+					private static final long serialVersionUID = 7218457979728871528L;
+					@Override
+					protected void onPopulateItem(
+							org.dgfoundation.amp.onepager.components.ListItem item) {
+							 final PropertyModel <String> budgetModel = new PropertyModel<String>(item.getModelObject(), "budgetCode"); 	
+				             if (budgetModel.getObject() == null || "".equals(budgetModel.getObject().trim()))
+				                	budgetModel.setObject(orgCode); //if budget code not entered yet, add the first part from the org budget code
 
-                AmpTextFieldPanel<String> budgetCode = new AmpTextFieldPanel<String>("budgetCodeEdit", bcModel, "Budget Code", true, true);
-				budgetCode.getTextContainer().add(new AttributeModifier("style", "width: 80px;"));
-				budgetCode.getTextContainer().add(new AttributeModifier("maxlength", "6"));
+							AmpTextFieldPanel<String> budgetCode = new AmpTextFieldPanel<String>("budgetCodeEdit", budgetModel, "Budget Code", true, true);
+							budgetCode.getTextContainer().add(new AttributeModifier("style", "width: 80px;"));
+							budgetCode.getTextContainer().add(new AttributeModifier("maxlength", "6"));
+							budgetCode.setOutputMarkupId(true);
+							budgetCode.getTextContainer().setRequired(true);
+							ListEditorRemoveButton delBudget = new ListEditorRemoveButton("delBudget", "Delete Budget");
+							item.add(delBudget);
+							item.add(budgetCode);
+					}
+				};
+			
 
+				list.setOutputMarkupId(true);
+				item.setOutputMarkupId(true);
+				item.add(list);
+				
+				AmpAjaxLinkField add = new AmpAjaxLinkField("addBudget", "Add New Budget", "Add New Budget"){
+		          @Override
+					protected void onClick(AjaxRequestTarget target) {
+		        	  AmpOrgRoleBudget budget = new AmpOrgRoleBudget();
+		        	  budget.setBudgetCode(orgCode);
+		        	  list.addItem(budget);
+		        	  target.add(this.getParent());
+					}
+		        };
+		        item.add(add);
+		    
 				/*if (disableBudgetCode){
 					budgetCode.setIgnorePermissions(true);
 					budgetCode.setEnabled(false);
 				}*/
-				item.add(budgetCode);
 				
 				AmpDeleteLinkField delRelOrg = new AmpDeleteLinkField("delRelOrg", "Delete Related Organisation") {
 					private static final long serialVersionUID = 1L;
@@ -92,6 +127,7 @@ public class AmpRelatedOrganizationsResponsibleTableFeature extends AmpRelatedOr
 				item.add(delRelOrg);
 			}
 		});
+		
 		add(list.getObject());
 	}
 

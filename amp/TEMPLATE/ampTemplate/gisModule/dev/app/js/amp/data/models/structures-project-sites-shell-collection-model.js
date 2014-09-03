@@ -6,7 +6,7 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var Palette = require('../../colours/colour-palette');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
-var Structures = require('../collections/project-sites-structures');
+var Structures = require('../collections/structures-collection');
 
 
 

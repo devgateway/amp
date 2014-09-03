@@ -15,9 +15,9 @@ var Backbone = require('backbone');
 var Activities = require('./collections/activity-collection');
 var Boundaries = require('./collections/boundary-collection');
 var Indicators = require('./collections/indicator-collection');
-var ProjectSites = require('./collections/project-sites-monocollection');
+var Structures = require('./collections/structures-project-sites-shell-collection');
 var ADMClusters = require('./collections/adm-cluster-collection');
-var ProjectSitesAndClusters = require('./collections/clusters-and-project-sites');
+var StructuresAndClusters = require('./collections/clusters-and-project-sites');
 var Title = require('./title');
 
 
@@ -35,7 +35,7 @@ _.extend(GISData.prototype, Backbone.Events, {
 
     this.indicators = new Indicators([], { boundaries: this.boundaries });
 
-    this.projectSites = new ProjectSites([
+    this.projectSites = new Structures([
       {}  // just the one model, all defaults
     ], { activities: this.activities});
 
@@ -51,7 +51,7 @@ _.extend(GISData.prototype, Backbone.Events, {
       }
     ], { boundaries: this.boundaries });
 
-    this.sitesAndClusters = new ProjectSitesAndClusters({
+    this.sitesAndClusters = new StructuresAndClusters({
       sites: this.projectSites,
       clusters: this.admClusters
     });
@@ -60,7 +60,7 @@ _.extend(GISData.prototype, Backbone.Events, {
 
     // bubble indicator events on the data object
     this.listenTo(this.indicators, 'all', this.bubbleLayerEvents('indicator'));
-    this.listenTo(this.projectSites, 'all', this.bubbleLayerEvents('project-site'));
+    this.listenTo(this.projectSites, 'all', this.bubbleLayerEvents('structure'));
     this.listenTo(this.admClusters, 'all', this.bubbleLayerEvents('adm-cluster'));
   },
 
@@ -68,7 +68,7 @@ _.extend(GISData.prototype, Backbone.Events, {
     // this.activities.fetch();
     this.boundaries.fetch();
     this.indicators.fetch();
-    // no need to fetch project sites (it's special)
+    // no need to fetch structures (they're special)
     this.admClusters.fetch({ remove: false });  // also special for now
   },
 

@@ -7,7 +7,7 @@
 
 
 var Backbone = require('backbone');
-var ProjectSitesModel = require('../models/project-sites-model');
+var ProjectSitesModel = require('../models/structures-project-sites-shell-collection-model');
 
 
 module.exports = Backbone.Collection.extend({

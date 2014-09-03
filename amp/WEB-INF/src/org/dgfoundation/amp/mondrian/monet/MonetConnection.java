@@ -206,8 +206,8 @@ public class MonetConnection implements AutoCloseable {
 				case java.sql.Types.DATE:
 				case java.sql.Types.TIME:
 				case java.sql.Types.TIMESTAMP:
-				case java.sql.Types.TIME_WITH_TIMEZONE:
-				case java.sql.Types.TIMESTAMP_WITH_TIMEZONE:
+				case 2013: //java.sql.Types.TIME_WITH_TIMEZONE:
+				case 2014: //java.sql.Types.TIMESTAMP_WITH_TIMEZONE:
 					return "date";
 				
 				case java.sql.Types.BIT:

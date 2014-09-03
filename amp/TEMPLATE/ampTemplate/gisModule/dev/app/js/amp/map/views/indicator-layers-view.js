@@ -22,7 +22,8 @@ module.exports = Backbone.View.extend({
       this.leafletLayerMap[layer.cid] = 'loading';  // will be replaced in time...
     }
 
-    this.listenToOnce(layer, 'processed', function ShowLoadedLayer() {
+    layer.loadAll().done(function() {
+      console.log('lalala');
       var layerType = layer.get('type');
       if (layerType === 'joinBoundaries') {  // geojson
         loadedLayer = self.getNewGeoJSONLayer(layer);
@@ -35,7 +36,7 @@ module.exports = Backbone.View.extend({
       }
       self.leafletLayerMap[layer.cid] = loadedLayer;
       self.map.addLayer(loadedLayer);
-      this.trigger('addedToMap'); //TODO: Phil should i do this better?... 
+      self.trigger('addedToMap'); //TODO: Phil should i do this better?... 
       // ...the main map view needs to know when layer is actually added to map.
     });
 

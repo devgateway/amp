@@ -249,6 +249,8 @@ module.exports = Backbone.View.extend({
   // ==================
 
   showLayer: function(projectSitesModel) {
+    var self = this;
+
     if (this.layerLoadState === 'loading') {
       console.warn('tried to show project sites while they are still loading');
       return;
@@ -256,10 +258,10 @@ module.exports = Backbone.View.extend({
       this.layerLoadState = 'loading';
     }
 
-    this.listenToOnce(projectSitesModel, 'processed', function() {
-      this.layerLoadState = 'loaded';
-      this.getNewProjectSitesLayer(projectSitesModel);
-      this.map.addLayer(this.markerCluster);
+    projectSitesModel.loadAll().done(function() {
+      self.layerLoadState = 'loaded';
+      self.getNewProjectSitesLayer(projectSitesModel);
+      self.map.addLayer(self.markerCluster);
     });
 
     this.map.on('zoomend', this._updateZoom, this);

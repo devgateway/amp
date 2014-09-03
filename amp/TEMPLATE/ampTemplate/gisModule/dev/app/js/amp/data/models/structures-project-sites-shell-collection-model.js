@@ -69,10 +69,7 @@ module.exports = Backbone.Model
 
   load: function() {
     this.activities.load();  // not needed right away, but start it as early as possible
-    return LoadOnceMixin.load.apply(this)
-      .done(function() {
-        this.trigger('loaded processed', this);  // LEGACY
-      });
+    return LoadOnceMixin.load.apply(this);
   },
 
   parse: function(data) {

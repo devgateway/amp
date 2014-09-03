@@ -8,7 +8,7 @@ var Palette = require('../../colours/colour-palette');
 
 
 module.exports = Backbone.Model
-  // .extend(LoadOnceMixin)  // not needed since we use it directly later
+  .extend(LoadOnceMixin)
   .extend({
 
   defaults: {
@@ -38,15 +38,6 @@ module.exports = Backbone.Model
       this._esriLoaded.resolveWith(this, [this, this.esriLayer]);
     }
     return this._esriLoaded.promise();
-  },
-
-  load: function() {
-    var esriPromise = LoadOnceMixin.load.apply(this);
-    esriPromise.done(function() {
-      this.trigger('loaded processed', this);  // have to trigger processed here, because we can't
-                                               // get any features until we add the layer to the map
-    });
-    return esriPromise;
   },
 
   onEachFeature: function(feature) {

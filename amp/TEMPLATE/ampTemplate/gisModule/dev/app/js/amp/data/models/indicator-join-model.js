@@ -6,7 +6,7 @@ var Palette = require('../../colours/colour-palette');
 
 
 module.exports = Backbone.Model
-  // .extend(LoadOnceMixin)  // not needed: load is called directly
+  .extend(LoadOnceMixin)
   .extend({
 
   initialize: function() {
@@ -20,17 +20,7 @@ module.exports = Backbone.Model
     this.palette = new Palette.FromRange({ seed: this.get('id') });
   },
 
-  load: function() {
-    var loaded = LoadOnceMixin.load.apply(this);
-    loaded.done(function() {
-      this.trigger('loaded', this);  // LEGACY
-    });
-
-    this.loadBoundary(loaded);
-    return loaded;
-  },
-
-  loadBoundary: function(dataLoaded) {
+  loadBoundary: function() {
     var boundaryLink = this.get('joinBoundariesLink');  // TODO: handle IDs vs links consitently
     var boundaryId = boundaryLink.split('gis/boundaries/')[1];  // for now, (for ever?,) they are all local
     var boundary = this.collection.boundaries.find(function(boundary) { return boundary.id === boundaryId; });
@@ -39,12 +29,16 @@ module.exports = Backbone.Model
     }
 
     var boundaryLoaded = boundary.load();
-
-    when(boundaryLoaded, dataLoaded)         // Order is important...
+    when(boundaryLoaded, this.load())         // Order is important...
       .done(function(boundaryModel, self) {  // ...args follow "when" order
         self._joinDataWithBoundaries(boundaryModel.toJSON());
-        self.trigger('processed');
       });
+
+    return boundaryLoaded;
+  },
+
+  loadAll: function() {
+    return when(this.load(), this.loadBoundary()).promise();
   },
 
   updatePaletteRange: function() {

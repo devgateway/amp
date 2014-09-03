@@ -5,11 +5,10 @@ var LoadOnceMixin = require('../../mixins/load-once-mixin');
 
 
 module.exports = Backbone.Model
-  // .extend(LoadOnceMixin)  // not necessary since we override load anyway
+  .extend(LoadOnceMixin)
   .extend({
 
   initialize: function() {
-
     this.listenTo(this, 'change:selected', function(blah, show) {
       this.trigger(show ? 'show' : 'hide', this);
     });
@@ -28,29 +27,22 @@ module.exports = Backbone.Model
     return Backbone.Model.prototype.fetch.call(this, options);
   },
 
-  load: function() {
-    var loaded = LoadOnceMixin.load.apply(this);
-    loaded.done(function() {
-      this.trigger('loaded', this);  // LEGACY
-    });
-
-    this.loadBoundary(loaded);
-
-    return loaded;
-  },
-
-  loadBoundary: function(dataLoaded) {
+  loadBoundary: function() {
     var boundary = this.collection.boundaries.findWhere({id: this.get('value')});  // TODO ...
     if (boundary) {
       var boundaryLoaded = boundary.load();
-      when(boundaryLoaded, dataLoaded)         // Order is important!
+      when(boundaryLoaded, this.load())         // Order is important!
         .done(function(boundaryModel, self) {  // ... because their return value is passed here
           self.set('boundary', boundaryModel.toJSON());
-          self.trigger('processed');  // LEGACY
         });
+      return boundaryLoaded.promise();
     } else {
       console.error('No boundary found for ' + this.get('value'));
     }
+  },
+
+  loadAll: function() {
+    return when(this.load(), this.loadBoundary()).promise();
   },
 
   _translateADMToMagicWord: function(admString){

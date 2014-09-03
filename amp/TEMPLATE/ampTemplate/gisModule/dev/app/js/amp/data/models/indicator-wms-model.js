@@ -15,7 +15,6 @@ module.exports = Backbone.Model
   },
 
   fetch: function() {
-    this.trigger('loaded processed', this);
     return (new Deferred()).resolve().promise();  // nothing to actually do here...
   }
 

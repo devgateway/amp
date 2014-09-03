@@ -27,6 +27,7 @@ module.exports = Backbone.View.extend({
   },
 
   showLayer: function(admLayer) {
+    var self = this;
     var leafletLayer = this.leafletLayerMap[admLayer.cid];
 
     if (_.isUndefined(leafletLayer)) {
@@ -39,8 +40,8 @@ module.exports = Backbone.View.extend({
           clusterPopupView.render();
         });
       }, this));
-      this.listenToOnce(admLayer, 'processed', function() {
-        var boundaries = this.getNewBoundary(admLayer);
+      admLayer.loadAll().done(function() {
+        var boundaries = self.getNewBoundary(admLayer);
         leafletLayer.addLayer(boundaries);
       });
     }

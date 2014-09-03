@@ -12,9 +12,6 @@ var ProjectSitesModel = require('../models/structures-project-sites-shell-collec
 
 module.exports = Backbone.Collection.extend({
 
-  // LEGACY
-  url: '/rest/gis/cluster',
-
   model: ProjectSitesModel
 
 });

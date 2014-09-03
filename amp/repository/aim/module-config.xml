@@ -95,6 +95,7 @@
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpPhysicalComponentReport</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpTeamPageFilters</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgRole</hibernate-class>
+		<hibernate-class>org.digijava.module.aim.dbentity.AmpOrgRoleBudget</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpColumns</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpColumnsFilters</hibernate-class>
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpColumnsOrder</hibernate-class>

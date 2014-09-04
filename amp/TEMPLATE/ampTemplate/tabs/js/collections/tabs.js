@@ -7,7 +7,7 @@ define([ 'underscore', 'backbone', 'models/tab' ], function (_, Backbone, Tab) {
             this.fetch({
                 async: false,
                 error: function (collection, response) {
-                    console.log('error loading tabs url')
+                    console.log('error loading tabs url');
                 },
                 success: function (collection, response) {
                     console.log(response);

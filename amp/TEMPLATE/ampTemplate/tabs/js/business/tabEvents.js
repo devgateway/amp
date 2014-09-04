@@ -69,9 +69,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
             // Create accordion for filters area.
             $("#main-dynamic-content-region_" + id + " #filters-collapsible-area").accordion({collapsible: true, active: false});
-            $("#main-dynamic-content-region_" + id + " #filters-button").button();
-            $("#main-dynamic-content-region_" + id + " #save-tab-button").button();
-            $("#main-dynamic-content-region_" + id + " #settings-tab-button").button();
+            $("#main-dynamic-content-region_" + id + " .buttonify").button();
         }
 
         // "Class" methods definition here.

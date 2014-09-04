@@ -51,17 +51,19 @@ public class Reports {
 	@Path("/report/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public final JSONResult getReport(@PathParam("report_id") Long reportId) {
-		
+
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
 
-		//TODO: for now we do not translate other types of reports than Donor Type reports (hide icons for non-donor-type reports?)
+		// TODO: for now we do not translate other types of reports than Donor
+		// Type reports (hide icons for non-donor-type reports?)
 		ReportSpecificationImpl spec = null;
 		try {
 			spec = MondrianReportUtils.toReportSpecification(ampReport);
 		} catch (AMPException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-		};
+		}
+		;
 
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, false);
 
@@ -90,10 +92,8 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON)
 	public final List<JSONTab> getTabs() {
 
-		TeamMember tm = (TeamMember) httpRequest.getSession().getAttribute(
-				Constants.CURRENT_MEMBER);
-		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm
-				.getMemberId());
+		TeamMember tm = (TeamMember) httpRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
+		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
 		if (ampTeamMember != null) {
 			return getDefaultTabs(ampTeamMember);
 		} else {
@@ -105,40 +105,44 @@ public class Reports {
 		List<JSONTab> tabs = new ArrayList<JSONTab>();
 
 		// Look for the Default Tab and add it visible to the list
-		AmpApplicationSettings ampAppSettings = DbUtil
-				.getTeamAppSettings(ampTeamMember.getAmpTeam().getAmpTeamId());
+		AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(ampTeamMember.getAmpTeam().getAmpTeamId());
 		AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
-		if(defaultTeamReport != null) {
-			tabs.add(Util.convert(defaultTeamReport, true));	
+		if (defaultTeamReport != null) {
+			tabs.add(Util.convert(defaultTeamReport, true));
 		}
 
 		// Get the visible tabs of the currently logged user
-		if (ampTeamMember.getDesktopTabSelections() != null
-				&& ampTeamMember.getDesktopTabSelections().size() > 0) {
-			TreeSet<AmpDesktopTabSelection> sortedSelection = new TreeSet<AmpDesktopTabSelection>(
-					AmpDesktopTabSelection.tabOrderComparator);
+		if (ampTeamMember.getDesktopTabSelections() != null && ampTeamMember.getDesktopTabSelections().size() > 0) {
+			TreeSet<AmpDesktopTabSelection> sortedSelection = new TreeSet<AmpDesktopTabSelection>(AmpDesktopTabSelection.tabOrderComparator);
 			sortedSelection.addAll(ampTeamMember.getDesktopTabSelections());
 			Iterator<AmpDesktopTabSelection> iter = sortedSelection.iterator();
 
 			while (iter.hasNext()) {
 				AmpReports report = iter.next().getReport();
-				JSONTab tab = new JSONTab(report.getAmpReportId(),
-						report.getName(), true);
+				JSONTab tab = new JSONTab(report.getAmpReportId(), report.getName(), true);
 				tabs.add(tab);
 			}
 		}
 
 		// Get the rest of the tabs that aren't visible on first instance
-		List<AmpReports> userActiveTabs = TeamUtil.getAllTeamReports(
-				ampTeamMember.getAmpTeam().getAmpTeamId(), true, null, null,
-				true, ampTeamMember.getAmpTeamMemId(), null, null);
+		List<AmpReports> userActiveTabs = TeamUtil.getAllTeamReports(ampTeamMember.getAmpTeam().getAmpTeamId(), true, null, null, true,
+				ampTeamMember.getAmpTeamMemId(), null, null);
 		Iterator<AmpReports> iter = userActiveTabs.iterator();
-		
+
 		while (iter.hasNext()) {
 			AmpReports report = iter.next();
-			JSONTab tab = new JSONTab(report.getAmpReportId(),
-					report.getName(), false);
-			tabs.add(tab);
+			JSONTab tab = new JSONTab(report.getAmpReportId(), report.getName(), false);
+			boolean found = false;
+			Iterator<JSONTab> iTabs = tabs.iterator();
+			while (iTabs.hasNext() && !found) {
+				JSONTab auxTab = iTabs.next();
+				if (auxTab.getId() == tab.getId()) {
+					found = true;
+				}
+			}
+			if (!found) {
+				tabs.add(tab);
+			}
 		}
 		// tabs.addAll(userActiveTabs);
 		return tabs;

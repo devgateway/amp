@@ -1,15 +1,9 @@
 .right_text {
-    text-align: right;
+    /*text-align: right;*/
 }
 
 .blue_widget {
     background: #EBEBEB !important;
-}
-
-.filters-area-button {
-    position: fixed;
-    top: 59px;
-    z-index: 10;
 }
 
 .round-filter {
@@ -17,4 +11,20 @@
     border-radius: 4px;
     padding: 4px;
     margin-right: 5px;
+    background: #ffffff;
+}
+
+#filters-collapsible-area {
+	float:right;
+	width:675px;
+}
+
+.filters-area-button {
+	float:left;
+	width:230px;
+	padding-top: 3px;
+}
+
+.ui-accordion-content-active {
+	background: #f5f5f5;
 }

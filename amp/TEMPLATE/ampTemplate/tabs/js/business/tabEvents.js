@@ -50,7 +50,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
             // Define the views.
             var FilterItemView = Marionette.ItemView.extend({
-                tagName: 'span',
+                tagName: 'div',
                 className: 'round-filter',
                 template: $(filtersItemTemplate, '#template-filters').html()
             });

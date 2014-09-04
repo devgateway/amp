@@ -6,6 +6,8 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/jstl-core" prefix="fn"%>
+
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
@@ -339,7 +341,7 @@
                                                             </td>
                                                         </logic:equal>
                                                     <td bgcolor="#F8F8F8" width="90%">
-														<bean:write	name="organisations" property="acronym" />&nbsp;&nbsp; ( <bean:write  name="organisations" property="name" /> )
+														<c:out	value="${organisations.acronym}" />&nbsp;&nbsp; ( <c:out	value="${organisations.name}"/> )
 													</td>		
 													<logic:equal name="aimSelectOrganizationForm" property="multiSelect" value="false">
 														<td bgcolor="#F8F8F8" width="1%">
@@ -350,10 +352,10 @@
 															</logic:equal>
 															<logic:equal name="aimSelectOrganizationForm" property="useClient" value="true">
 																<logic:equal name="aimSelectOrganizationForm" property="useAcronym" value="true">
-																	<input type="button" class="buttonx" title="<digi:trn>Add</digi:trn>" value="+" onclick="setValues(<bean:write name="organisations" property="ampOrgId" />,'<bean:write name="organisations" property="acronym" />')" />
+																	<input type="button" class="buttonx" title="<digi:trn>Add</digi:trn>" value="+" onclick="setValues(<c:out value="${organisations.ampOrgId}"/>,'<%=org.apache.commons.lang.StringEscapeUtils.escapeJavaScript(organisations.getName())%>')" />
 																</logic:equal>
 																<logic:equal name="aimSelectOrganizationForm" property="useAcronym" value="false">
-																	<input class="buttonx" type="button" title="<digi:trn>Add</digi:trn>" value="+" onclick='setValues(<bean:write name="organisations" property="ampOrgId" />,"<bean:write name="organisations" property="name" />")' />
+																	<input class="buttonx" type="button" title="<digi:trn>Add</digi:trn>" value="+" onclick="setValues(<c:out value="${organisations.ampOrgId}"/>,'<%=org.apache.commons.lang.StringEscapeUtils.escapeJavaScript(organisations.getName())%>')" />
 																</logic:equal>
 															</logic:equal>
 														</td>

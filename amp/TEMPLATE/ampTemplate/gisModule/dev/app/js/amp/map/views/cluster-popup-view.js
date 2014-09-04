@@ -20,7 +20,6 @@ module.exports = Backbone.View.extend({
   initialize: function(popup, admLayer) {
     this.popup = popup;
     this.admLayer = admLayer;
-    this.tempDOM =$('<div/>');
   },
 
   render: function() {
@@ -37,8 +36,9 @@ module.exports = Backbone.View.extend({
 
     // get appropriate cluster model:
     if(this.cluster){
-      this.tempDOM.html(this.template(this.cluster));
-      popup.setContent(this.tempDOM.html());
+      popup.setContent(this.template(this.cluster));
+      this.tempDOM = $(popup._contentNode);
+
       this._generateChart();
       return this._generateProjectList(popup, this.cluster);
     }else{
@@ -49,31 +49,34 @@ module.exports = Backbone.View.extend({
 
   _generateChart: function(){
 
-    var exampleData = [ { 'label': 'U.N','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5) } , 
-    { 'label': 'World Bank','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5) }, 
-    { 'label': 'UNICEF','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5) }, 
-    { 'label': 'AfDB','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5 )}, 
-    { 'label': 'DFID','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5 )}];
+    var exampleData = [
+      { 'label': 'U.N','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5) } ,
+      { 'label': 'World Bank','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5) },
+      { 'label': 'UNICEF','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5) },
+      { 'label': 'AfDB','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5 )},
+      { 'label': 'DFID','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5 )}
+    ];
 
     //this.tempDOM.find('.charts').html("TODO: chart");
     nvd3.addGraph(function() {
       var chart = nvd3.models.pieChart()
-          .x(function(d) { return d.label })
-          .y(function(d) { return d.value })
+          .x(function(d) { return d.label; })
+          .y(function(d) { return d.value; })
           .showLabels(true)
           .showLegend(false);
 
-        d3.select(".charts svg")
-            .datum(exampleData)
-            .transition().duration(350)
-            .call(chart);
+      d3.select('.charts svg')
+          .datum(exampleData)
+          .transition().duration(350)
+          .call(chart);
+
       return chart;
     });
   },
 
   _generateProjectList: function(popup, cluster){
     var self = this;
-    var PAGE_SIZE = 20; ///TODO: move elsewhere when real pagination is done.
+    var PAGE_SIZE = 50; ///TODO: move elsewhere when real pagination is done.
     var activityIDs = _.first(cluster.properties.activityid, PAGE_SIZE);
 
     // Phil: is this how we want to do app access...?
@@ -81,7 +84,8 @@ module.exports = Backbone.View.extend({
     //        we should pass the app into this constructor and save to `this` in initialize.
     return window.app.data.activities.getActivites(activityIDs).then(function(activityCollection){
       console.log('activityCollection', activityCollection);
-      self.tempDOM.find('.project-list').append(
+
+      self.tempDOM.find('#projects-pane').append(
         self.projectListTemplate({activities: activityCollection})
         );
     });

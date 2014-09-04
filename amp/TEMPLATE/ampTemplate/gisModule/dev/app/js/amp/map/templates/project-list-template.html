@@ -5,6 +5,9 @@
 		<th>Amount</th>
 	</tr>	
 	<%   _.each(obj.activities, function(activity){ %>
-		<tr><td><a href="<%= activity.ampUrl %>"><%= activity.name %></a></td><td>$TBD</td></tr>
+		<tr>
+      <td><a href="<%= activity.ampUrl %>"><%= activity.name %></a></td>
+      <td><%= _(activity.commitments).first().amount %></td>
+    </tr>
 	<% });%>
 </table>

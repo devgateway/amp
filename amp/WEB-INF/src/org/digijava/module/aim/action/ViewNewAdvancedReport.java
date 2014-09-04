@@ -81,16 +81,8 @@ public class ViewNewAdvancedReport extends Action {
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
 		if (request.getParameter("mondrian_etl") != null) {
-			long start = System.currentTimeMillis();
-			try(Connection conn = PersistenceManager.getJdbcConnection()) {
-				try(MonetConnection monetConn = MonetConnection.getConnection()) {
-					MondrianETL etl = new MondrianETL(conn, monetConn, null, null, null);
-					etl.execute();
-				}
-			}
-			long end = System.currentTimeMillis();
-			double secs = (end - start) / 1000.0;
-			ARUtil.writeResponse(response, String.format("ETL done in %.2f seconds", secs));
+			double elapsedSecs = MondrianETL.doFastAndDirtyETL();
+			ARUtil.writeResponse(response, String.format("ETL done in %.2f seconds", elapsedSecs));
 			return null;
 		}
 		

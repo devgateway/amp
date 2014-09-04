@@ -2,7 +2,10 @@ package org.dgfoundation.amp.mondrian;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -14,7 +17,6 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 
-import static org.dgfoundation.amp.mondrian.MondrianETL.MONDRIAN_EXCHANGE_RATES_TABLE;
 
 /**
  * an instance of this class runs the ETL for a certain currency against the [Base Currency], writing the results in the mondrian_exchange_rates DB table
@@ -55,13 +57,12 @@ public class CurrencyETL {
 	}
 		
 	/**
-	 * write the exchange rates for all the dates specified (or maybe more)
+	 * writes the exchange rates for all the dates specified (or maybe more)
+	 * (day_code, currency_id, exchange_rate)
 	 * @param allDates
 	 * @throws SQLException
 	 */
-	public void work(SortedSet<Long> allDates) throws SQLException {
-		SQLUtils.executeQuery(conn, "DELETE FROM " + MONDRIAN_EXCHANGE_RATES_TABLE + " WHERE currency_id = " + currency.getAmpCurrencyId());
-		
+	public List<List<Object>> work(SortedSet<Long> allDates) throws SQLException {
 		Map<Long, Double> values;
 		
 		if (baseCurrency.getAmpCurrencyId().equals(this.currency.getAmpCurrencyId())) {
@@ -77,31 +78,22 @@ public class CurrencyETL {
 			values = computeCurrencyRates(allDates, fromBase, fromCurrency);
 		}
 		
-		serializeCurrencyRates(values);
+		return serializeCurrencyRates(values);
 	}
 	
 	/**
+	 * (day_code, currency_id, exchange_rate)
 	 * serializes currency rates to the database table mondrian_exchange_rates
 	 * @param values
 	 * @throws SQLException
 	 */
-	protected void serializeCurrencyRates(Map<Long, Double> values) throws SQLException {
-		if (values.isEmpty())
-			return; // nothing to do
-		
-		StringBuilder query = new StringBuilder("INSERT INTO " + MONDRIAN_EXCHANGE_RATES_TABLE + "(day_code, currency_id, exchange_rate) VALUES ");
-		boolean first = true;
+	protected List<List<Object>> serializeCurrencyRates(Map<Long, Double> values) throws SQLException {
+		List<List<Object>> res = new ArrayList<>();
 		for (Entry<Long, Double> entry:values.entrySet()) {
-			if (!first) {
-				query.append(", ");
-			}
 			Double valueToWrite = Math.max(entry.getValue(), MINIMUM_EXCHANGE_RATE_VALUE);
-			String formatSpecifier = "(%d, %d, " + SQL_FORMATTER + ")";
-			query.append(String.format(formatSpecifier, entry.getKey(), this.currency.getAmpCurrencyId(), valueToWrite));
-			first = false;
+			res.add(Arrays.<Object>asList(entry.getKey(), this.currency.getAmpCurrencyId(), valueToWrite));
 		}
-		query.append(";");
-		SQLUtils.executeQuery(conn, query.toString());	
+		return res;
 	}
 	
 	/**

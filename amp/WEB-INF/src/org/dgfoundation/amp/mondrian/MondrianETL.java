@@ -2,6 +2,7 @@ package org.dgfoundation.amp.mondrian;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -143,6 +145,9 @@ public class MondrianETL {
 				generateExchangeRatesTable();
 			
 				StopWatch.next(mondrianEtl, true, "generateExchangeRatesTable");
+				generateExchangeRatesColumns();
+				
+				StopWatch.next(mondrianEtl, true, "generateExchangeRatesColumns");
 				generateStarTables();
 			
 				StopWatch.next(mondrianEtl, true, "generateStarTables");
@@ -191,24 +196,43 @@ public class MondrianETL {
 	 * 3) a new transaction date appears in the database
 	 */
 	protected void generateExchangeRatesTable() throws SQLException {
-		logger.warn("generating exchange rates ETL...");
-		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + MONDRIAN_EXCHANGE_RATES_TABLE);
-		SQLUtils.executeQuery(conn, "CREATE TABLE " + MONDRIAN_EXCHANGE_RATES_TABLE + "(" + 
+		logger.warn("generating exchange rates ETL...");		
+		monetConn.dropTable(MONDRIAN_EXCHANGE_RATES_TABLE);
+		monetConn.executeQuery("CREATE TABLE " + MONDRIAN_EXCHANGE_RATES_TABLE + "(" + 
 										"day_code integer NOT NULL," + 
 										"currency_id bigint NOT NULL," + 
-										"exchange_rate double precision NOT NULL CHECK (exchange_rate > 0)," + 
-										"CONSTRAINT day_pkey PRIMARY KEY (day_code, currency_id))");
+										"exchange_rate double)");
 		
-		SortedSet<Long> allDates = new TreeSet<>(SQLUtils.fetchLongs(conn, "select distinct(date_code) as day_code from mondrian_raw_donor_transactions"));
-		List<Long> allCurrencies = SQLUtils.fetchLongs(conn, "SELECT amp_currency_id FROM amp_currency");
+		monetConn.copyTableFromPostgres(this.conn, "amp_currency");
+		SortedSet<Long> allDates = new TreeSet<>(SQLUtils.fetchLongs(monetConn.conn, "select distinct(date_code) as day_code from mondrian_raw_donor_transactions"));
+		List<Long> allCurrencies = SQLUtils.fetchLongs(monetConn.conn, "SELECT amp_currency_id FROM amp_currency");
 		for (Long currency:allCurrencies) {
 			generateExchangeRateEntriesForCurrency(CurrencyUtil.getAmpcurrency(currency), allDates);
-		}
-		monetConn.copyTableFromPostgres(this.conn, MONDRIAN_EXCHANGE_RATES_TABLE);
-		monetConn.copyTableFromPostgres(this.conn, "amp_currency");
+		}		
 		logger.warn("... done generating exchange rates ETL...");
+		//monetConn.copyTableFromPostgres(this.conn, MONDRIAN_EXCHANGE_RATES_TABLE);
 	}
 
+	protected void generateExchangeRatesColumns() throws SQLException {
+		logger.info("generating exchange rate columns...");
+		List<Long> allCurrencies = SQLUtils.fetchLongs(monetConn.conn, "SELECT amp_currency_id FROM amp_currency");
+		Set<String> tableColumns = monetConn.getTableColumns(FACT_TABLE.tableName);
+		for (Long currency:allCurrencies) {
+			generateExchangeRateColumnsForCurrency(currency, tableColumns);
+		}
+		logger.info("\t...generating exchange rate columns done");
+	}
+	
+	protected void generateExchangeRateColumnsForCurrency(long currency, Set<String> factTableColumns) {
+		String columnName = "transaction_exch_" + currency;
+		if (!factTableColumns.contains(columnName))
+			monetConn.executeQuery(String.format("ALTER TABLE %s ADD %s DOUBLE", FACT_TABLE.tableName, columnName));
+		String query = String.format(
+				"UPDATE %s SET %s = transaction_amount * (select mer.exchange_rate from %s mer WHERE mer.day_code = %s.date_code AND mer.currency_id = %s.currency_id) / (select mer2.exchange_rate from %s mer2 WHERE mer2.day_code = %s.date_code AND mer2.currency_id = %s)",
+				FACT_TABLE.tableName, columnName, MONDRIAN_EXCHANGE_RATES_TABLE, FACT_TABLE.tableName, FACT_TABLE.tableName, MONDRIAN_EXCHANGE_RATES_TABLE, FACT_TABLE.tableName, currency);
+		monetConn.executeQuery(query);
+	}
+	
 	/**
 	 * generates the exchange rates for the said currency for all the given dates
 	 * @param ampCurrencyId
@@ -216,9 +240,24 @@ public class MondrianETL {
 	 * @throws SQLException
 	 */
 	protected void generateExchangeRateEntriesForCurrency(AmpCurrency currency, SortedSet<Long> allDates) throws SQLException {
-		new CurrencyETL(currency, conn).work(allDates);
+		List<List<Object>> entries = new CurrencyETL(currency, conn).work(allDates);
+		monetConn.executeQuery("DELETE FROM " + MONDRIAN_EXCHANGE_RATES_TABLE + " WHERE currency_id = " + currency.getAmpCurrencyId());
+		SQLUtils.insert(monetConn.conn, MONDRIAN_EXCHANGE_RATES_TABLE, null, null, Arrays.asList("day_code", "currency_id", "exchange_rate"), entries);
 	}
 	
+	protected String buildMftQuery() throws SQLException {
+		ResultSet dayCodes = SQLUtils.rawRunQuery(monetConn.conn, "SELECT DISTINCT(date_code), transaction_date FROM mondrian_fact_table", null);
+		StringBuilder mftQuery = new StringBuilder("(SELECT mft.date_code, mft.transaction_date FROM (values");
+		boolean isFirst = true;
+		while (dayCodes.next()) {
+			if (!isFirst)
+				mftQuery.append(",");
+			mftQuery.append(String.format("(%d, '%s')", dayCodes.getLong(1), dayCodes.getString(2)));
+			isFirst = false;
+		}
+		mftQuery.append(") as mft(date_code, transaction_date)) mft");
+		return mftQuery.toString();
+	}
 	
 	/**
 	 * makes a snapshot of the views which back Mondrian ETL columns
@@ -228,15 +267,16 @@ public class MondrianETL {
 		logger.warn("generating STAR tables...");
 		for (MondrianTableDescription mondrianTable:MondrianTablesRepository.MONDRIAN_TRANSLATED_TABLES)
  			generateStarTable(mondrianTable);
-		
-		generateStarTableWithQueryInPostgres(MONDRIAN_DATE_TABLE, "day_code",
-			"SELECT DISTINCT(mft.date_code) AS day_code, mft.transaction_date AS full_date, date_part('year'::text, mft.transaction_date)::integer AS year_code, date_part('month'::text, mft.transaction_date)::integer AS month_code, to_char(mft.transaction_date, 'TMMonth'::text) AS month_name, date_part('quarter'::text, mft.transaction_date)::integer AS quarter_code, ('Q'::text || date_part('quarter'::text, mft.transaction_date)) AS quarter_name " + 
-			"FROM mondrian_fact_table mft " + 
-			"UNION ALL " + 
-			"SELECT 999999999, '9999-1-1', 9999, 99, 'Undefined', 99, 'Undefined' " + 
-			"ORDER BY day_code",
-			
-			Arrays.asList("day_code", "full_date", "year_code", "month_code", "quarter_code"));
+				
+		String mftQuery = buildMftQuery();
+		//select mft.date_code FROM (values (1), (2), (3)) as mft(date_code)
+		generateStarTableWithQueryInPostgres(MONDRIAN_DATE_TABLE, "date_code",
+				"SELECT DISTINCT(mft.date_code) AS day_code, (CAST (mft.transaction_date as date)) AS full_date, date_part('year'::text, (CAST (mft.transaction_date as date)))::integer AS year_code, date_part('month'::text, (CAST (mft.transaction_date as date)))::integer AS month_code, to_char((CAST (mft.transaction_date as date)), 'TMMonth'::text) AS month_name, date_part('quarter'::text, (CAST (mft.transaction_date as date)))::integer AS quarter_code, ('Q'::text || date_part('quarter'::text, (CAST (mft.transaction_date as date)))) AS quarter_name " + 
+						"FROM " + mftQuery +  
+						" UNION ALL " + 
+						" SELECT 999999999, '9999-1-1', 9999, 99, 'Undefined', 99, 'Undefined' " + 
+						" ORDER BY day_code",
+						new ArrayList<String>());
 		monetConn.copyTableFromPostgres(this.conn, MONDRIAN_DATE_TABLE);
 		logger.warn("...generating STAR tables done");
 	}
@@ -290,6 +330,7 @@ public class MondrianETL {
 	protected void generateStarTableWithQueryInPostgres(String tableName, String primaryKey, String tableCreationQuery, Collection<String> columnsToIndex) throws SQLException {
 		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + tableName);
 		SQLUtils.executeQuery(conn, "CREATE TABLE " + tableName + " AS " + tableCreationQuery);
+		SQLUtils.flush(conn);
 		//postprocessDimensionTable(tableName, primaryKey, columnsToIndex);
 	}
 
@@ -526,6 +567,19 @@ public class MondrianETL {
 		catch(Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public static double doFastAndDirtyETL() throws SQLException {
+		long start = System.currentTimeMillis();
+		try(Connection conn = PersistenceManager.getJdbcConnection()) {
+			try(MonetConnection monetConn = MonetConnection.getConnection()) {
+				MondrianETL etl = new MondrianETL(conn, monetConn, null, null, null);
+				etl.execute();
+			}
+		}
+		long end = System.currentTimeMillis();
+		double secs = (end - start) / 1000.0;
+		return secs;
 	}
 }
 

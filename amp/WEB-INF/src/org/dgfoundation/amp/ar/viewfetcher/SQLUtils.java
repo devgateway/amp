@@ -5,8 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -386,6 +388,9 @@ public class SQLUtils {
 			return query.toString();
 		}
 		
+		private static ThreadLocal<SimpleDateFormat> dbDateExportFormat = new ThreadLocal<>(); 
+		//private static SimpleDateFormat dbDateExportFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
 		/**
 		 * returns a ready-to-be-included-into-SQL-query representation of a var
 		 * @param obj
@@ -398,8 +403,8 @@ public class SQLUtils {
 			{
 				if (obj.toString().equals(SQL_UTILS_NULL))
 					return "NULL";
-				if (obj.toString().indexOf('\'') < 0)
-					return String.format("'%s'", obj.toString());
+//				if (obj.toString().indexOf('\'') < 0)
+//					return String.format("'%s'", obj.toString());
 				return String.format("'%s'", sqlEscapeStr(obj.toString()));
 				
 				//$t$blablabla$t$ - dollar-quoting
@@ -410,6 +415,11 @@ public class SQLUtils {
 			}
 			else if (obj == null)
 				return "NULL";
+			else if (obj instanceof Date) {
+				if (dbDateExportFormat.get() == null) 
+					dbDateExportFormat.set(new SimpleDateFormat("yyyy-MM-dd"));
+				return "'" + dbDateExportFormat.get().format((Date) obj) + "'";
+			}
 			else
 			{
 				return "'" + obj.toString() + "'";
@@ -419,7 +429,9 @@ public class SQLUtils {
 		public static String sqlEscapeStr(String input) {
 			StringBuilder res = new StringBuilder();
 			for (char ch:input.toCharArray()) {
-				if (ch != '\'')
+				if (ch < ' ')
+					res.append(' ');
+				else if (ch != '\'')
 					res.append(ch);
 				else
 					res.append("''");

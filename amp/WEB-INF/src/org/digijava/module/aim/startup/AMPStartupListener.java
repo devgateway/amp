@@ -5,6 +5,7 @@ package org.digijava.module.aim.startup;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Hashtable;
 
@@ -19,6 +20,7 @@ import org.dgfoundation.amp.ar.PledgesToActivitiesBridge;
 import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
+import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.job.chachedtables.PublicViewColumnsUtil;
 import org.digijava.kernel.lucene.LuceneModules;
@@ -206,6 +208,12 @@ public class AMPStartupListener extends HttpServlet implements
 		
 	}
 
+	protected void doMonetETL() throws SQLException {
+		logger.error("running MonetETL - overwriting everything");
+		double elapsedSecs = MondrianETL.doFastAndDirtyETL();
+		logger.error(String.format("ETL took %.2f seconds", elapsedSecs));
+	}
+	
 	public void contextInitialized(ServletContextEvent sce) {
 		ServletContext ampContext = null;
 
@@ -307,6 +315,7 @@ public class AMPStartupListener extends HttpServlet implements
 				logger.info("\t... JackRabbit startup failed!");
 			
 			checkDatabaseSanity();
+			doMonetETL();
 		} catch (Exception e) {
 			logger.error("Exception while initialising AMP :" + e.getMessage());
 			throw new Error(e);

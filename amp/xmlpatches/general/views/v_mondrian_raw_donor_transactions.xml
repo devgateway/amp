@@ -2,7 +2,7 @@
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-17836</jira>
+	<jira>AMP-18110</jira>
 	<keyword>Views</keyword>
 	<author>Constantin Dolghier</author>
 	<description>recreate view, this will always be the last version of the view</description>
@@ -42,8 +42,8 @@ SELECT
           
 	FROM amp_activity aa JOIN amp_funding f ON aa.amp_activity_id = f.amp_activity_id
 		JOIN amp_funding_detail fd ON f.amp_funding_id = fd.amp_funding_id
-
-ORDER BY aa.amp_activity_id;
+	WHERE (transaction_date BETWEEN '1950-1-1' AND '2100-1-1')
+	ORDER BY aa.amp_activity_id;
 			</lang>
 		</script>
 	</apply>

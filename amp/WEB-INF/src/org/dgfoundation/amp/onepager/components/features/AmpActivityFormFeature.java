@@ -202,7 +202,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 							AmpIdentificationFormSectionFeature ifs,
 							IVisit<Void> visit) {
 						toggleFormComponent (enabled,target,ifs,visit);					
-						toggleFormRichTextComponent(enabled, ifs,visit);	
+						toggleFormRichTextComponent(enabled,target, ifs,visit);	
 					}
 					});
 		
@@ -287,10 +287,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	      
 		
 	}
-	   private void toggleFormRichTextComponent (boolean enabled,
+	   private void toggleFormRichTextComponent (boolean enabled, final AjaxRequestTarget target,
 	            AmpIdentificationFormSectionFeature ifs, IVisit<Void> visit) {
 	        List <FormComponent<?>> requiredComponents = ifs.getRequiredRichTextFormComponents();
 	        for (FormComponent<?> component : requiredComponents) {
+				String js = String.format("$('#%s').blur();",
+						component.getMarkupId());
+				target.appendJavaScript(js);
 	            component.setRequired(enabled);
 	        }
 	        visit.stop();

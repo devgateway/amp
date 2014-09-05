@@ -34,7 +34,7 @@ module.exports = Backbone.View.extend({
     this.renderStaticAmpTemplate();
 
     // update translations
-    TranslationHelper.searchTranslations(this.$el);
+    TranslationHelper.setTranslationsOnDOM(this.$el);
     this.translationToggle();
   },
 
@@ -43,7 +43,9 @@ module.exports = Backbone.View.extend({
     this.$('.lang-change').click(function(evt){
       evt.preventDefault();
       var lng = $(this).data('lng');
-      TranslationHelper.searchTranslations(self.$el, lng);
+      TranslationHelper.setLanguage(lng).then(function(){
+        TranslationHelper.setTranslationsOnDOM(self.$el);
+      });
     });
   },
 

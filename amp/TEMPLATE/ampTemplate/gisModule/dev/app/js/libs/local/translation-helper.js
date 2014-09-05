@@ -13,18 +13,26 @@ var translator = require('../../amp/services/translator');
 
 // modifying from Julian's sample.
 module.exports = {
-  searchTranslations: function(el, lng){
+
+  setLanguage: function(lng){
+    return translator.setLanguage(lng);
+  },
+
+  // Phil: the 'el' object is a jquery element. 
+  // what is the preferred naming convention for jQuery object?
+  // something with a $ in it right?
+  setTranslationsOnDOM: function(el){
     var self = this;
 
-    translator.getTranslations(lng).then(function(data){
-      self._updateDom(data);
+    return translator.getTranslations().then(function(data){
+      self._updateDom(el, data);
     });
   },
 
   // update translateable elements in the dom
-  _updateDom: function(data) {
+  _updateDom: function(el, data) {
     $.each(data, function(key, value) {
-        $('*[data-i18n="' + key + '"]').text(value);
+        el.find('*[data-i18n="' + key + '"]').text(value);
       });
   },
 

@@ -47,7 +47,7 @@
     "browserify": "^4.2.0",
     "browserify-shim": "~3.6.0",
     "cheerio": "*",
-    "d3-browserify": "https://github.com/uniphil/d3-browserify/archive/upgrade-3.4.11.tar.gz",
+    "d3-browserify": "~3.4.11",
     "esri-leaflet": "0.0.1-beta.5",
     "gulp": "^3.7.0",
     "gulp-changed": "^0.4.0",

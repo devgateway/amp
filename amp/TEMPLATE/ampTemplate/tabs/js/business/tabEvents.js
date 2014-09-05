@@ -91,7 +91,8 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			});
 
 			var InvisibleTabsCollectionView = Marionette.CollectionView.extend({
-				childView : ItemView
+				childView : ItemView,
+				tagName: 'ul'
 			});
 
 			app.TabsApp.filtersRegion.show(new InvisibleTabsCollectionView({

@@ -8,20 +8,22 @@ define(function() {
 		}
 	}
 
-	TabUtils.hideInvisibleTabs = function(tabsCollection) {
+	TabUtils.hideInvisibleTabs = function(tabsCollection, animate) {
+		var duration = animate != undefined ? animate : 0;
 		var allTabs = $("#tabs-section ul li");
 		_.each(tabsCollection, function(val, i) {
 			if (val.get('visible') == false) {
-				$(allTabs[i]).hide();
+				$(allTabs[i]).hide(duration);
 			}
 		});
 	};
 
-	TabUtils.showInvisibleTab = function(id) {
-		this.hideInvisibleTabs(app.TabsApp.tabsCollection.models);
+	TabUtils.showInvisibleTab = function(id, animate) {
+		var duration = animate != undefined ? animate : 0;
+		this.hideInvisibleTabs(app.TabsApp.tabsCollection.models, 250);
 		_.each(app.TabsApp.tabsCollection.models, function(item, i) {
 			if (item.get('id') == id) {
-				$($("#tabs-section ul li")[i]).show();
+				$($("#tabs-section ul li")[i]).show(duration);
 				$(app.TabsApp.tabContainer).tabs("option", "active", i);
 			}
 		});

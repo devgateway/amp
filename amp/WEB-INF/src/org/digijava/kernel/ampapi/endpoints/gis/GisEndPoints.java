@@ -247,7 +247,7 @@ public class GisEndPoints {
 
 		if (ampActivities != null) {
 			for (AmpActivity ampActivity : ampActivities) {
-				activities.add(buildActivityDto(ampActivity));
+				activities.add(buildActivityDto(ampActivity,false));
 			}
 
 		}
@@ -261,7 +261,7 @@ public class GisEndPoints {
 	 * @param ampActivity
 	 * @return
 	 */
-	private Activity buildActivityDto(AmpActivity ampActivity) {
+	private Activity buildActivityDto(AmpActivity ampActivity,boolean addFunding) {
 		Activity a = new Activity();
 		a.setId(ampActivity.getAmpActivityId());
 		a.setName(ampActivity.getName());
@@ -315,6 +315,19 @@ public class GisEndPoints {
 		j.set("programs", programs);
 		
 		a.setMatchesFilters(j);
+		
+		
+		//add funding in case its not the list
+		if(addFunding){
+			ActivityFundingDigest fundingDigest=new ActivityFundingDigest();
+			fundingDigest.populateFromFundings(ampActivity.getFunding(), "US", null, false);
+			for(FundingDetail fd:fundingDigest.getCommitmentsDetails()){
+				a.addCommitments(fd.getTransactionAmount(), fd.getTransactionDate());	
+			}
+			for(FundingDetail fd:fundingDigest.getDisbursementsDetails()){
+				a.addDisbursment(fd.getTransactionAmount(), fd.getTransactionDate());	
+			}		
+		}
 		return a;
 	}
 
@@ -325,39 +338,11 @@ public class GisEndPoints {
 	@ApiMethod(ui=false,name="ActivitiesById")
 	public List<Activity> getActivities(@PathParam("activityId") PathSegment activityIds) {
 		List<Activity> l=new ArrayList<Activity>();
-		
 		List<AmpActivity>activities=QueryUtil.getActivities(activityIds.getPath());
 		for (AmpActivity activity : activities) {
-			
-			
+
 			if(activity!=null){
-				Activity a = new Activity();
-				a.setId(activity.getAmpActivityId());
-				a.setName(activity.getName());
-//				String 
-//				description =null;
-//				try {
-//					description = DbUtil.getEditorBody(TLSUtils.getSite(),
-//					        activity.getDescription(),
-//					        RequestUtils.
-//					        getNavigationLanguage(TLSUtils.getRequest()).
-//					        getCode());
-//					a.setDescription(description);
-//				} catch (EditorException e) {
-//					logger.error("cannot get description");
-//				}
-				a.setAmpUrl(ActivityGatekeeper.buildPreviewUrl(String.valueOf(activity
-						.getAmpActivityId())));
-				ActivityFundingDigest fundingDigest=new ActivityFundingDigest();
-				fundingDigest.populateFromFundings(activity.getFunding(), "US", null, false);
-				for(FundingDetail fd:fundingDigest.getCommitmentsDetails()){
-					a.addCommitments(fd.getTransactionAmount(), fd.getTransactionDate());	
-				}
-				for(FundingDetail fd:fundingDigest.getDisbursementsDetails()){
-					a.addDisbursment(fd.getTransactionAmount(), fd.getTransactionDate());	
-				}			
-				
-				l.add(a);
+				l.add(buildActivityDto(activity,true));
 			}
 		}
 		return l;

@@ -49,7 +49,6 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			'filtersRegion' : regionsName
 		});
 
-		// id == -1 is the "more tabs.." tab.
 		if (id >= 0) {
 			// Get collection with data we will use to render the tab content.
 			var tabContents = new Contents();
@@ -85,6 +84,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			// Create jQuery buttons.
 			$("#main-dynamic-content-region_" + id + " .buttonify").button();
 		} else if (id == -1) {
+			// "More Tabs..." tab.
 			var ItemView = Marionette.ItemView.extend({
 				model : Tab,
 				template : $(invisibleTabLinkTemplate, '#invisibleTabLink').html()
@@ -95,10 +95,8 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			});
 
 			app.TabsApp.filtersRegion.show(new InvisibleTabsCollectionView({
-				collection : app.TabsApp.notVisibleTabsCollection
+				collection : app.TabsApp.tabsCollection
 			}));
-		} else if (id == -2) {
-
 		}
 	}
 

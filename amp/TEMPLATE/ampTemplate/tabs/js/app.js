@@ -4,12 +4,12 @@
 var app = app || {};
 
 define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'views/tabItemsView', 'views/tabBodyView',
-		'views/tabBodysView', 'text!views/html/regions.html', 'business/tabEvents', 'jquery', 'jqueryui' ], function(Marionette, Tabs, Tab,
-		TabItemView, TabItemsView, TabBodyView, TabBodysView, regionsHtml, TabEvents, jQuery) {
+		'views/tabBodysView', 'text!views/html/regions.html', 'business/tabEvents', 'util/tabUtils', 'jquery', 'jqueryui' ], function(Marionette, Tabs, Tab,
+		TabItemView, TabItemsView, TabBodyView, TabBodysView, regionsHtml, TabEvents, TabUtils, jQuery) {
 
 	// Load the regions html into the DOM.
-	var tabsObject = jQuery('#tabs-container');
-	tabsObject.append(regionsHtml);
+	var tabContainer = jQuery('#tabs-container');
+	tabContainer.append(regionsHtml);
 
 	// Create our Marionette app.
 	app.TabsApp = new Marionette.Application();
@@ -36,22 +36,13 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 	 */
 	var tabsCollection = new Tabs();
 	tabsCollection.fetchData();
-	var notVisibleTabsCollection = new Tabs();
 	var hasMoreTabs = false;
-	for ( var i = tabsCollection.models.length - 1; i >= 0; i--) {
-		if (tabsCollection.models[i].get('visible') == false) {
-			var row = tabsCollection.models.splice(i, 1);
-			notVisibleTabsCollection.push(row);
-			hasMoreTabs = true;
-		}
+	if (_.find(tabsCollection.models, function(val) {
+		return val.get('visible') == false;
+	})) {
+		hasMoreTabs = true;
 	}
 	if (hasMoreTabs) {
-		var hiddenTab = new Tab({
-			id : -2,
-			name : '',
-			visible : true
-		});
-		tabsCollection.push(hiddenTab);
 		var moreTabsTab = new Tab({
 			id : -1,
 			name : 'More Tabs...',
@@ -82,12 +73,15 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 
 	// Save the tabs collection for later usage.
 	app.TabsApp.tabItemsView = tabItemsView;
-	app.TabsApp.notVisibleTabsCollection = notVisibleTabsCollection;
+	app.TabsApp.tabContainer = tabContainer;
+	app.TabsApp.tabsCollection = tabsCollection;
+	app.TabsApp.tabUtils = TabUtils;
 
+	// This class manages how to retrieve content and render each tab.
 	var tabEvents = new TabEvents();
 
 	// JQuery create the tabs and assign some events to our event manager class.
-	tabsObject.tabs({
+	tabContainer.tabs({
 		activate : function(event, ui) {
 			tabEvents.onActivateTab(event, ui);
 		},
@@ -97,11 +91,9 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 	});
 
 	// If we are grouping tabs under the last "more tabs..." tab then we need to
-	// create another hidden tab for later use.
+	// hide the "invisible" tabs.
 	if (hasMoreTabs) {
-		var hiddenTab = $("#tabs-section ul li")[app.TabsApp.tabItemsView.collection.models.length - 2];
-		$(hiddenTab).hide();
-		// tabsObject.tabs("refresh");
+		TabUtils.hideInvisibleTabs(tabsCollection.models);		
 	}
 
 	app.TabsApp.start();

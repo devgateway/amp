@@ -1,5 +1,7 @@
 <div id="invisibleTabLink">
 	<script type="text/template">
-		<a href="#" onclick="addInvisibleTab(<%=id%>)"><%=name%></a>
+		<% if(!visible) { %>
+			<a href="#" onclick="app.TabsApp.tabUtils.showInvisibleTab(<%=id%>)"><%=name%></a>
+		<% } %>
 	</script>
 </div>

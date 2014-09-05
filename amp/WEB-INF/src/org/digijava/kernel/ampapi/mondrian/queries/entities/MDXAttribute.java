@@ -12,7 +12,7 @@ import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
  *
  */
 public class MDXAttribute extends MDXElement {
-	protected String dimension;
+	protected final String dimension;
 	protected String value;
 	
 	/**
@@ -84,13 +84,6 @@ public class MDXAttribute extends MDXElement {
 	 */
 	public String getDimension() {
 		return dimension;
-	}
-
-	/**
-	 * @param dimension the dimension to set
-	 */
-	public void setDimension(String dimension) {
-		this.dimension = dimension;
 	}
 
 	/**

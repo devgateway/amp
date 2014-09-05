@@ -9,7 +9,7 @@ package org.digijava.kernel.ampapi.mondrian.queries.entities;
  *
  */
 public abstract class MDXElement implements Cloneable {
-	protected String name = null;
+	protected final String name;
 	
 	public MDXElement(String name) {
 		this.name = name;
@@ -66,10 +66,4 @@ public abstract class MDXElement implements Cloneable {
 		return name;
 	}
 
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
 }

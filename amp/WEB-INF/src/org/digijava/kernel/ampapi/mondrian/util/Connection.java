@@ -18,7 +18,7 @@ public class Connection {
 
 	public static boolean IS_TESTING = false;
 	
-	private static String separator = System.getProperty("file.separator");
+	private static String separator = "/";//System.getProperty("file.separator");
 	private static String connection;
 
 	/**
@@ -33,8 +33,7 @@ public class Connection {
 	
 	public static String getConnection(String rootPath) {
 		connection = MoConstants.CONNECTION_DS + ";"
-				+ "Catalog=file:" + rootPath + separator + "queries" + separator
-				+ "AMP.xml;";
+				+ "Catalog=file:" + rootPath + "/saiku/saiku-repository/AMP.xml;";
 		return connection;
 
 	}

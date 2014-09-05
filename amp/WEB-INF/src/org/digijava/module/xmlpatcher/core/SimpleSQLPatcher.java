@@ -238,8 +238,64 @@ public class SimpleSQLPatcher {
 					" DELETE FROM  amp_fields_visibility WHERE name ='Description Imputation'",
 					"UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart'"					
 					));
-		
-		
+			addPatch(new SimpleSQLPatch("007",
+					"DROP VIEW IF EXISTS v_m_secondary_sectors",
+					"DROP VIEW IF EXISTS v_m_sectors",
+					"DROP VIEW IF EXISTS v_donor_funding_cached",
+					"DROP VIEW IF EXISTS v_primaryprogram_cached",
+					"DROP VIEW IF EXISTS v_regions_cached",
+					"DROP VIEW IF EXISTS v_secondaryprogram_cached",
+					"DROP VIEW IF EXISTS v_tertiaryprogram_cached",
+					"DROP VIEW IF EXISTS v_sectors_cached"
+					));
+			
+			addPatch(new SimpleSQLPatch("008",
+					"DROP TABLE IF EXISTS mondrian_raw_donor_transactions",
+					
+					"DROP TABLE IF EXISTS mondrian_locations",
+					"DROP TABLE IF EXISTS mondrian_locations_en",
+					"DROP TABLE IF EXISTS mondrian_locations_ro",
+					"DROP TABLE IF EXISTS mondrian_locations_fr",
+					
+					"DROP TABLE IF EXISTS mondrian_sectors",
+					"DROP TABLE IF EXISTS mondrian_sectors_en",
+					"DROP TABLE IF EXISTS mondrian_sectors_ro",
+					"DROP TABLE IF EXISTS mondrian_sectors_fr",
+					
+					"DROP TABLE IF EXISTS mondrian_programs",
+					"DROP TABLE IF EXISTS mondrian_programs_en",
+					"DROP TABLE IF EXISTS mondrian_programs_ro",
+					"DROP TABLE IF EXISTS mondrian_programs_fr",
+					
+					"DROP TABLE IF EXISTS mondrian_organizations",
+					"DROP TABLE IF EXISTS mondrian_organizations_en",
+					"DROP TABLE IF EXISTS mondrian_organizations_ro",
+					"DROP TABLE IF EXISTS mondrian_organizations_fr",
+					
+					"DROP TABLE IF EXISTS mondrian_activity_texts",
+					"DROP TABLE IF EXISTS mondrian_activity_texts_en",
+					"DROP TABLE IF EXISTS mondrian_activity_texts_ro",
+					"DROP TABLE IF EXISTS mondrian_activity_texts_fr",
+					
+					"DROP TABLE IF EXISTS mondrian_raw_donor_transactions",
+					"DROP TABLE IF EXISTS etl_executing_agencies",
+					"DROP TABLE IF EXISTS etl_beneficiary_agencies",
+					"DROP TABLE IF EXISTS etl_implementing_agencies",
+					"DROP TABLE IF EXISTS etl_responsible_agencies",
+					"DROP TABLE IF EXISTS etl_locations",
+					"DROP TABLE IF EXISTS etl_activity_program_national_plan_objective",
+					"DROP TABLE IF EXISTS etl_activity_program_primary_program",
+					"DROP TABLE IF EXISTS etl_activity_program_secondary_program",
+					"DROP TABLE IF EXISTS etl_activity_program_tertiary_program",
+					"DROP TABLE IF EXISTS etl_activity_sector_primary",
+					"DROP TABLE IF EXISTS etl_activity_sector_secondary",
+					"DROP TABLE IF EXISTS etl_activity_sector_tertiary",
+					"DROP TABLE IF EXISTS etl_locations",
+					
+					"DROP TABLE IF EXISTS mondrian_dates",
+					"DROP TABLE IF EXISTS mondrian_fact_table",
+					"DROP TABLE IF EXISTS mondrian_exchange_rates"
+					));
 	}};
 	DataSource dataSource;
 	

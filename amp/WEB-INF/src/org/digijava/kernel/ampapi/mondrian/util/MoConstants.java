@@ -1,18 +1,15 @@
 package org.digijava.kernel.ampapi.mondrian.util;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * 
  * @author Diego Dimunzio
- * @since March 12 2009 - AMP 1.13
+ * @since July 2014 - Mondrian from-scratch reimplementation
  */
 public final class MoConstants {
 
 	//AMP Cubes
-	public static String CONNECTION_DS = "jdbc:mondrian:Datasource=java:comp/env/ampDS";
-	public static final String SCHEMA_PATH = "WEB-INF/queries/AMP.xml".replace("/", System.getProperty("file.separator"));
+	public static String CONNECTION_DS = "jdbc:mondrian:Datasource=java:comp/env/monetDS";
+	public static final String SCHEMA_PATH = "WEB-INF/saiku/saiku-repository/AMP.xml";//.replace("/", System.getProperty("file.separator"));
 	public static final String FUNDING_CUBE_NAME = "Donor Funding";
 	public static final String DEFAULT_CUBE_NAME = FUNDING_CUBE_NAME;
 	
@@ -40,9 +37,7 @@ public final class MoConstants {
 	public static final String FUNC_ORDER = "Order";
 	public static final String FUNC_FILTER = "Filter";
 	public static final String FUNC_CAST = "Cast";
-	//Activity
-	public static String AMP_ACTIVITY_TABLE = "(\\bamp_activity\\b)";
-	public static String CACHED_ACTIVITY_TABLE = "cached_amp_activity";
+
 	//Dimensions
 	public static final String PROJECT_TITLE = "Project Title"; //TODO: why cube def is split into separate dimensions for this info coming from same physical table
 	public static final String APPROVAL_STATUS = "Approval Status"; //TODO: why cube def is split into separate dimensions for this info coming from same physical table
@@ -117,90 +112,20 @@ public final class MoConstants {
 	//properties
 	public static final String P_KEY = "Key";
 	
-	public static String ALL_PRIMARY_SECTOR = "All Primary Sectors";
-	public static String ALL_SECONDARY_SECTOR = "All Secondary Sectors";
-	public static String ALL_ACTIVITIES = "All Activities";
-	public static String ALL_PERIODS = "All Periods";
-	public static String ALL_REGIONS = "All Regions";
-	public static String ALL_PROGRAMS = "All Programs";
-	public static String ALL_STATUS = "All Status";
-	public static String ALL_DONOR = "All Donors";
-	public static String ALL_DONOR_TYPES = "All Donors Types";
-	public static String ALL_DONOR_GROUP = "All Donors Group";
-	public static String ALL_FINANCING_INTRUMENT= "All Financing Instruments";
-	public static String ALL_TERMS_OF_ASSISTANCE= "All Terms of Assistance";
-	public static String ALL_SUB_SECTORS = "All Sub-Sectors";
-	public static String ALL_SUB_SUB_SECTORS = "All Sub-Sub-Sectors";
-	public static String ALL_CURRENCIES = "All Currencies";
-	
 	//Measures
-	public static String RAW_ACTUAL_COMMITMENTS = "Raw Actual Commitments";
-	public static String RAW_ACTUAL_DISBURSEMENTS = "Raw Actual Disbursements";
-	public static String RAW_ACTUAL_EXPENDITURES = "Raw Actual Expenditures";
-	public static String RAW_PLANNED_COMMITMENTS = "Raw Planned Commitments";
-	public static String RAW_PLANNED_DISBURSEMENTS = "Raw Planned Disbursements";
-	public static String RAW_PLANNED_EXPENDITURES = "Raw Planned Expenditures";
 	public static String ACTUAL_COMMITMENTS = "Actual Commitments";
 	public static String ACTUAL_DISBURSEMENTS = "Actual Disbursements";
 	public static String ACTUAL_EXPENDITURES = "Actual Expenditures";
 	public static String PLANNED_COMMITMENTS = "Planned Commitments";
 	public static String PLANNED_DISBURSEMENTS = "Planned Disbursements";
 	public static String PLANNED_EXPENDITURES = "Planned Expenditures";
-	public static String ACTIVITY_COUNT = "Activity Count";
 	
 	
 	//Pledges Constant
-	public static String PLEDGES_MEASURE = "Pledges Total";
-	public static String PLEDGE_TITTLE = "Tilte";
-	public static String PLEDGE_ALL_TITTLE = "All Titles";
-	public static String PLEDGE_TYPE_OF_ASSINETANCE = "Type of Assistance";
-	public static String PLEDGE_ALL_TYPE_OF_ASSINETANCE = "All Type of Assistance";
-	public static String PLEDGE_AID_MODALITY = "Aid Modality";
-	public static String PLEDGE_ALL_AID_MODALITY = "All Aid Modality";
-	public static String PLEDGE_PLEDGES_DATES = "Pledges Dates";
-	public static String PLEDGE_ALL_PLEDGES_DATES = "All Pledges Dates";
-	public static String PLEDGE_ALL_PLEDGES_TYPES = "All Pledges Types";
-	public static String PLEDGE_PLEDGES_TYPES = "Pledges Types";
-	public static String PLEDGE_PLEDGES_CONTACT_NAME = "Contact Name";
-	public static String PLEDGE_PLEDGES_CONTACT_EMAIL = "Contact Email";
 	public static String PLEDGE_PLEDGES_COMMITMENTS = "Pledges Actual Commitments";
 	public static String PLEDGE_PLEDGES_DISBURSEMENTS = "Pledges Actual Disbursements";
 	public static String PLEDGE_PLEDGES_COMMITMENTS_GAP = "Commitment Gap";
 	
-	//Months
-	public static String MONTH_JANUARY = "january";
-	public static String MONTH_FEBRUARY = "february";
-	public static String MONTH_MARCH = "march";
-	public static String MONTH_APRIL = "april";
-	public static String MONTH_MAY = "may";
-	public static String MONTH_JUNE = "june";
-	public static String MONTH_JULY = "july";
-	public static String MONTH_AGOUST = "august";
-	public static String MONTH_SEPTEMBER = "september";
-	public static String MONTH_OCTOBER = "october";
-	public static String MONTH_NOVEMBER = "november";
-	public static String MONTH_DECEMBER = "december";
-
-	//OLD CUBE refs - to be removed
-	public static String OLD_ACTIVITY = "Activity";
-	public static String OLD_STATUS = "Status";
-	public static String OLD_DONOR = "Donor";
-	public static String OLD_DONOR_TYPES = "Donor Types";
-	public static String OLD_DONOR_GROUP = "Donor Group";
-	public static String OLD_REGIONS = "Regions";
-	public static String OLD_DONOR_DATES = "Donor Dates";
-	
-	public static String OLD_NATIONAL_PROGRAM= "National Program";
-	public static String OLD_SECTORS= "Sectors";
-	public static String OLD_SUB_SECTORS = "Primary Sector Sub-Sectors";
-	public static String OLD_SUB_SUB_SECTORS = "Primary Sector Sub-Sub-Sectors";
-	public static String OLD_SEC_SUB_SECTORS = "Secondary Sector Sub-Sectors";
-	public static String OLD_SEC_SUB_SUB_SECTORS = "Secondary Sector Sub-Sub-Sectors";
-	public static String OLD_CURRENCY = "currency";
-	public static String OLD_FINANCING_INTRUMENT= "Financing Instrument";
-	public static String OLD_TERMS_OF_ASSISTANCE= "Terms of Assistance";
-
 	public static final String DATE_FORMAT = "YYYY-MM-dd";
 	public static final String HAS_AMP_PROPERTIES = "HAS_AMP_PROPERTIES";
-	
 }

@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -20,6 +21,7 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
+import org.digijava.kernel.ampapi.mondrian.queries.MDXGenerator;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -44,6 +46,8 @@ public class Reports {
 	private static final String DEFAULT_CONNECTION_NAME = "amp";
 	private static final String DEFAULT_SCHEMA_NAME = "AMP";
 
+	protected static final Logger logger = Logger.getLogger(Reports.class); 
+	
 	@Context
 	private HttpServletRequest httpRequest;
 
@@ -82,7 +86,7 @@ public class Reports {
 		try {
 			result.setMdx(generator.getMDXQuery(spec));
 		} catch (AMPException e) {
-			System.err.println(e.getMessage());
+			logger.error(e);
 		}
 		return result;
 	}

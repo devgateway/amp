@@ -181,6 +181,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	}
 	
 	private MDXConfig toMDXConfig(ReportSpecification spec) throws AMPException {
+		System.out.println("aha");
 		MDXConfig config = new MDXConfig();
 		config.setCubeName(MoConstants.DEFAULT_CUBE_NAME);
 		config.setMdxName(spec.getReportName());

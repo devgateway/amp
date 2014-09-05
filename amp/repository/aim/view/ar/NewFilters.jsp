@@ -17,7 +17,6 @@
 
 		<%
 			int fcnt = fcount.intValue();
-			System.out.println("FC = " +fcnt);
 		%>              
       <table border="0" cellspacing="0" cellpadding="2" width="100%">
 			<tr bgcolor="#c0c0c0" height=30><td>

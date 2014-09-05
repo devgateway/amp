@@ -8,7 +8,6 @@
 <bean:define id="xmlCell" name="viewable" type="org.dgfoundation.amp.ar.cell.XmlHierarchyCell" scope="request" toScope="page" />
 
 
-<% System.out.println("BBBBBBBB print" ); %>
 <div align="left" style="padding-left:<%=request.getAttribute("pading")%>" >
 <c:if test="${xmlCell.rootItems != null && not empty xmlCell.rootItems }">
 	<bean:define id="xmlItemList" name="xmlCell" property="rootItems" toScope="request" />

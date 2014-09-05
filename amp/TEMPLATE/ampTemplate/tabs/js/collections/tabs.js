@@ -2,7 +2,7 @@ define([ 'underscore', 'backbone', 'models/tab' ], function (_, Backbone, Tab) {
     var Tabs = Backbone.Collection.extend({
         model: Tab,
         url: '/rest/data/tabs',
-        initialize: function () {
+        fetchData: function () {
             console.log('Initialized Tabs Collection');
             this.fetch({
                 async: false,

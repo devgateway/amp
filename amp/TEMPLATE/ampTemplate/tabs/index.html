@@ -1,44 +1,39 @@
 <!doctype html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>Tabs</title>
-    <link rel="stylesheet" href="css/jquery-ui.css">
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.css">
-    
-    <link rel="stylesheet" href="css/tabs.css">
-    <script data-main="js/main.js" src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js"></script>
+<meta charset="utf-8">
+<title>Tabs</title>
+<link rel="stylesheet" href="css/jquery-ui.css">
+<link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="css/bootstrap-theme.css">
+
+<link rel="stylesheet" href="css/tabs.css">
+<script data-main="js/main.js"
+	src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js"></script>
+	
+<!-- TODO: MOVE THIS INSIDE THE MARIONETTE LOGIC!!! -->
+<script type="text/javascript">
+	function addInvisibleTab(id) {
+		console.log(id);
+		var totalTabs = app.originalTabs.length;
+		var lastLI = $("#tabs-section ul li")[2]
+	}
+</script>
+
 </head>
 <body>
-<style>
 
-.header {
-	font-size:24pt;
-	height:80px;
-}
-.leftcol {
-	height:40em;
-}
-.tabs {
-	padding-top:20px;
-}
-</style>
-
-<div class="container">
-	<div class="row">
-	  <div class="col-md-12 bg-info header"></div>
-	</div>
-	<div class="row">
-	  <div class="col-md-10 tabs">
-			<div id="tabs-container">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 bg-info header"></div>
+		</div>
+		<div class="row">
+			<div class="col-md-10 tabs">
+				<div id="tabs-container"></div>
 			</div>
-	  </div>
-	  <div class="col-md-2 bg-info leftcol"></div>
+			<div class="col-md-2 bg-info leftcol"></div>
+		</div>
 	</div>
-</div>
-
-
 
 </body>
 </html>

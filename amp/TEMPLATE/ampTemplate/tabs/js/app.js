@@ -27,56 +27,65 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 	});
 
 	/*
-	 * We need to group those tabs that are not visible so assuming the REST
-	 * endpoint will return a list with the visible tabs FIRST we do the
-	 * following: 1) Clone the original list of tabs. 2) Iterate over the
-	 * original list from bottom to top (no visible tabs first) and move all
-	 * invisible tabs to the new list. 3) Add a new "More Tabs.." tab if needed.
+	 * We need to group those tabs that are not visible, so assuming the REST
+	 * endpoint will return a list with the visible tabs FIRST, then we do the
+	 * following: 1) Iterate over the original list from bottom to top (no
+	 * visible tabs first) and move all invisible tabs to the new list. 2) Add a
+	 * new "More Tabs.." tab if needed plus a hidden tab we will use to allocate
+	 * content for the invisible tabs.
 	 */
-	var originalTabs = new Tabs();
-	var notVisibleTabs = originalTabs.clone();
+	var tabsCollection = new Tabs();
+	tabsCollection.fetchData();
+	var notVisibleTabsCollection = new Tabs();
 	var hasMoreTabs = false;
-	notVisibleTabs.reset();
-	for ( var i = originalTabs.models.length - 1; i >= 0; i--) {
-		if (originalTabs.models[i].get('visible') == false) {
-			var row = originalTabs.models.splice(i, 1);
-			notVisibleTabs.push(row);
-			hasMoreTabs = true
+	for ( var i = tabsCollection.models.length - 1; i >= 0; i--) {
+		if (tabsCollection.models[i].get('visible') == false) {
+			var row = tabsCollection.models.splice(i, 1);
+			notVisibleTabsCollection.push(row);
+			hasMoreTabs = true;
 		}
 	}
 	if (hasMoreTabs) {
+		var hiddenTab = new Tab({
+			id : -2,
+			name : '',
+			visible : true
+		});
+		tabsCollection.push(hiddenTab);
 		var moreTabsTab = new Tab({
 			id : -1,
 			name : 'More Tabs...',
 			visible : true
 		});
-		originalTabs.push(moreTabsTab);
+		tabsCollection.push(moreTabsTab);
 	}
 
 	// Instantiate both CollectionView containers with the data to
 	// create the
 	// tabs.
-	var tabs2 = originalTabs;
-	var tabs = new TabItemsView({
-		collection : originalTabs
+	var tabsCollectionCopy = tabsCollection;
+	var tabItemsView = new TabItemsView({
+		collection : tabsCollection
 	});
-	var content = new TabBodysView({
+	var tabBodysView = new TabBodysView({
 		// If we iterate tabs object again then TabContentsView will throw
 		// an error.
-		collection : tabs2
+		collection : tabsCollectionCopy
 	});
 
 	// Render both CollectionView containers, each one on a region.
 	// Basically what we do is render each CollectionView using its
 	// template and
 	// into the region it belongs.
-	app.TabsApp.tabsRegion.show(tabs);
-	app.TabsApp.tabsBodyRegion.show(content);
+	app.TabsApp.tabsRegion.show(tabItemsView);
+	app.TabsApp.tabsBodyRegion.show(tabBodysView);
 
 	// Save the tabs collection for later usage.
-	app.tabs = tabs;
+	app.TabsApp.tabItemsView = tabItemsView;
+	app.TabsApp.notVisibleTabsCollection = notVisibleTabsCollection;
 
 	var tabEvents = new TabEvents();
+
 	// JQuery create the tabs and assign some events to our event manager class.
 	tabsObject.tabs({
 		activate : function(event, ui) {
@@ -86,6 +95,14 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 			tabEvents.onCreateTab(event, ui);
 		}
 	});
+
+	// If we are grouping tabs under the last "more tabs..." tab then we need to
+	// create another hidden tab for later use.
+	if (hasMoreTabs) {
+		var hiddenTab = $("#tabs-section ul li")[app.TabsApp.tabItemsView.collection.models.length - 2];
+		$(hiddenTab).hide();
+		// tabsObject.tabs("refresh");
+	}
 
 	app.TabsApp.start();
 

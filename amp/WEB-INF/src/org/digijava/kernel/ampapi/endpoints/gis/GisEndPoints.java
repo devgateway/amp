@@ -22,6 +22,7 @@ import org.codehaus.jackson.node.TextNode;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
+import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
 import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
@@ -242,110 +243,17 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ActivitiesLists")
 	public List<Activity> getActivities(JsonBean filter) {
-		List<Activity> activities = new ArrayList<Activity>();
-		List<AmpActivity> ampActivities = QueryUtil.getActivities();
-
-		if (ampActivities != null) {
-			for (AmpActivity ampActivity : ampActivities) {
-				activities.add(buildActivityDto(ampActivity,false));
-			}
-
-		}
-
-		return activities;
+		return ActivityService.getActivities(filter);
 	}
 
-	/**
-	 * build an activity to be serialized base upon AmpActivity class
-	 * 
-	 * @param ampActivity
-	 * @return
-	 */
-	private Activity buildActivityDto(AmpActivity ampActivity,boolean addFunding) {
-		Activity a = new Activity();
-		a.setId(ampActivity.getAmpActivityId());
-		a.setName(ampActivity.getName());
-		String description = null;
-		//do not return description yet since they are stored 
-		//in dg_message table an would need to do a query for each
-		//row
-//		if (ampActivity.getDescription() != null) {
-//			if (ampActivity.getDescription().length() > 50) {
-//				description = StringUtils
-//						.left(ampActivity.getDescription(), 50) + "...";
-//			} else {
-//				description = ampActivity.getDescription();
-//			}
-//
-//		}
-		a.setDescription(description);
-		a.setAmpUrl(ActivityGatekeeper.buildPreviewUrl(String.valueOf(ampActivity
-				.getAmpActivityId())));
-		JsonBean j=new JsonBean();
-		Map<Long,List<Long>> sectors=new HashMap<Long,List<Long>>();
-		Map<Long,List<Long>> roles=new HashMap<Long,List<Long>>();
-		Map<Long,List<Long>> programs=new HashMap<Long,List<Long>>();
-		for (Object o : ampActivity.getSectors()) {
-			AmpActivitySector as=(AmpActivitySector)o;
-			if(
-			sectors.get(as.getClassificationConfig().getId())  ==null){
-				sectors.put(as.getClassificationConfig().getId(), new ArrayList<Long>());
-			}
-			sectors.get(as.getClassificationConfig().getId()).add(as.getSectorId().getAmpSectorId());
-		}
-		for(AmpOrgRole orgRole:ampActivity.getOrgrole()){
-			if(roles.get(orgRole.getAmpOrgRoleId())==null){
-				roles.put(orgRole.getAmpOrgRoleId(),new ArrayList<Long>());
-			}
-			roles.get(orgRole.getAmpOrgRoleId()).add(orgRole.getOrganisation().getAmpOrgId());
-		}
-		
-		
-		for(Object o :ampActivity.getActPrograms()){
-			AmpActivityProgram aap=(AmpActivityProgram)o;
-			if(programs.get(aap.getProgramSetting().getAmpProgramSettingsId()) ==null){
-				programs.put(aap.getProgramSetting().getAmpProgramSettingsId(),new ArrayList<Long>());
-			}
-			programs.get(aap.getProgramSetting().getAmpProgramSettingsId()).add(aap.getProgram().getAmpThemeId());
-			
-		}
-		
-		j.set("sectors", sectors);
-		j.set("organizations", roles);
-		j.set("programs", programs);
-		
-		a.setMatchesFilters(j);
-		
-		
-		//add funding in case its not the list
-		if(addFunding){
-			ActivityFundingDigest fundingDigest=new ActivityFundingDigest();
-			fundingDigest.populateFromFundings(ampActivity.getFunding(), "US", null, false);
-			for(FundingDetail fd:fundingDigest.getCommitmentsDetails()){
-				a.addCommitments(fd.getTransactionAmount(), fd.getTransactionDate());	
-			}
-			for(FundingDetail fd:fundingDigest.getDisbursementsDetails()){
-				a.addDisbursment(fd.getTransactionAmount(), fd.getTransactionDate());	
-			}		
-		}
-		return a;
-	}
-
+	
 	
 	@GET
 	@Path("/activities/{activityId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ActivitiesById")
 	public List<Activity> getActivities(@PathParam("activityId") PathSegment activityIds) {
-		List<Activity> l=new ArrayList<Activity>();
-		List<AmpActivity>activities=QueryUtil.getActivities(activityIds.getPath());
-		for (AmpActivity activity : activities) {
-
-			if(activity!=null){
-				l.add(buildActivityDto(activity,true));
-			}
-		}
-		return l;
+		return ActivityService.getActivities(activityIds.getPath());
 	}
 
 	private FeatureGeoJSON getPoint(Double lat, Double lon,

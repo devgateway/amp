@@ -151,7 +151,7 @@ public class QueryUtil {
 				  }
 				  
 				  		Query q=PersistenceManager.getSession().createQuery(queryString);
-				  		q.setMaxResults(10); 
+				  		q.setMaxResults(200); 
 				  		a = q.list();
 				
 

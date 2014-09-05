@@ -22,12 +22,12 @@ module.exports = Backbone.Collection
   		var index = _.indexOf(aryOfIDs, activity.id);
   		if(index > -1){
   			matches.push(activity);	 // add activity to array
-  			aryOfIDs.slice(index,1); // remove id from array
+  			aryOfIDs.splice(index,1); // remove id from array
   		}
   	});
 
   	// if there are activities we don't have locally.
-  	if(aryOfIDs.length > 0){
+  	if( !_.isEmpty(aryOfIDs)){
 	  	// do an api request to get remaining ones
 			this.url = '/rest/gis/activities/' + aryOfIDs.join(',');			
 		  this.fetch({remove: false}).then(function(newData){

@@ -1,13 +1,8 @@
-<!-- this template is for adm clusters -->
-<table class="project-list table table-striped table-condensed">
-	<tr>
-		<th>Title</th>
-		<th>Amount</th>
-	</tr>	
+
 	<%   _.each(obj.activities, function(activity){ %>
 		<tr>
       <td><a href="<%= activity.ampUrl %>"><%= activity.name %></a></td>
       <td><%= _(activity.commitments).first().amount %></td>
     </tr>
 	<% });%>
-</table>
+

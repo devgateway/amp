@@ -9,11 +9,12 @@ var nvd3 = window.nv;
 var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
 var Template = fs.readFileSync(__dirname + '/../templates/cluster-popup-template.html', 'utf8');
 
-// Tabs: https://www.mapbox.com/mapbox.js/example/v1.0.0/marker-tooltip-tab-groups/
-
+// TODO: remove tempDOM and use this.$el
 module.exports = Backbone.View.extend({
   template: _.template(Template),
   projectListTemplate: _.template(ProjectListTemplate),
+  PAGE_SIZE: 50,
+  _currentPage:0,
 
   tempDOM:null,
 
@@ -74,18 +75,30 @@ module.exports = Backbone.View.extend({
     });
   },
 
-  _generateProjectList: function(popup, cluster){
+  _generateProjectList: function(){
     var self = this;
-    var PAGE_SIZE = 50; ///TODO: move elsewhere when real pagination is done.
-    var activityIDs = _.first(cluster.properties.activityid, PAGE_SIZE);
+    this._currentPage = 0;
+
+    this.tempDOM.find('.load-more').click(function(){
+      self._currentPage++;
+      console.log('click',self._currentPage);
+      self._loadMoreProjects();
+    });
+
+    return this._loadMoreProjects();
+  },
+
+  _loadMoreProjects: function(){
+    var self = this;
+    var startIndex = this._currentPage * this.PAGE_SIZE;
+    var activityIDs = this.cluster.properties.activityid.slice(startIndex, startIndex + this.PAGE_SIZE);
 
     // Phil: is this how we want to do app access...?
     // David: no. window.app is for debug convenience only.
     //        we should pass the app into this constructor and save to `this` in initialize.
     return window.app.data.activities.getActivites(activityIDs).then(function(activityCollection){
       console.log('activityCollection', activityCollection);
-
-      self.tempDOM.find('#projects-pane').append(
+      self.tempDOM.find('#project-list').append(
         self.projectListTemplate({activities: activityCollection})
         );
     });

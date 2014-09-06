@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -32,6 +33,9 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.ObjectNotFoundException;
 
 /**
@@ -295,6 +299,43 @@ public class Filters {
 		}
 	}
 
+
+	/**
+	 * Return financing instruments 
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/typeOfAssistance/")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui = false, name = "TypeOfAssistanceList")
+	public List<SimpleJsonBean> getTypeOfAssistance() {
+		return getCategoryValue(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+	}
+
+	/**
+	 * Return financing instruments 
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/financingInstruments/")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui = false, name = "FinancingInstrumentsList")
+	public List<SimpleJsonBean> getFinancingInstruments() {
+		return getCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+	}
+
+	private List<SimpleJsonBean> getCategoryValue(String categoryKey) {
+		List<SimpleJsonBean> fi = new ArrayList<SimpleJsonBean>();
+		Collection<AmpCategoryValue> col = CategoryManagerUtil
+				.getAmpCategoryValueCollectionByKey(categoryKey);
+		for (AmpCategoryValue ampCategoryValue : col) {
+			fi.add(new SimpleJsonBean(ampCategoryValue.getIdentifier(),
+					ampCategoryValue.getLabel()));
+		}
+		return fi;
+	}
 	/**
 	 * Get JsonEnable object for programs
 	 * 

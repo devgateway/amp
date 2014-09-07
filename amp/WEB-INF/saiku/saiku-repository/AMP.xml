@@ -155,11 +155,11 @@
 		<DimensionUsage name="National Objectives" source="AMP Program" caption="National Objectives" foreignKey="national_objectives_program_id" />
 
 		<Dimension name="Dates" type="TimeDimension" foreignKey="date_code">
-			<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day" name="Dates">
+			<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Dates">
 				<Table name="mondrian_dates" />
-				<Level name="Year" column="year" levelType="TimeYears" type="Integer" />
-				<Level name="Quarter" column="quarter" ordinalColumn="quarter" nameColumn="quarter_name" levelType="TimeQuarters" type="Integer"/>
-				<Level name="Month" column="month" ordinalColumn="month" nameColumn="month_name" levelType="TimeMonths" type="Integer" />
+				<Level name="Year" column="year_code" levelType="TimeYears" type="Integer" />
+				<Level name="Quarter" column="quarter_code" ordinalColumn="quarter_code" nameColumn="quarter_name" levelType="TimeQuarters" type="Integer"/>
+				<Level name="Month" column="month_code" ordinalColumn="month_code" nameColumn="month_name" levelType="TimeMonths" type="Integer" />
 				<!-- Level name="Day" column="day_of_month" ordinalColumn="day_of_month" nameColumn="day_of_month_name" levelType="TimeDays" type="Integer" /-->
 				<Level name="Date" column="day_code" ordinalColumn="day_code" nameColumn="full_date" type="Integer" levelType="TimeDays">
 					<Property name="year_code" column="year_code" type="Integer"/>

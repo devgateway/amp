@@ -470,24 +470,14 @@ public class CurrencyUtil {
 	}
 
 	public static AmpCurrency getCurrencyByCode(String currCode) {
-		Session session = null;
-		Query qry = null;
-		AmpCurrency ampCurrency = null;
-
 		try {
-			session = PersistenceManager.getSession();
 			String queryString = "select c from " + AmpCurrency.class.getName()
 					+ " c where (c.currencyCode=:currCode)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("currCode", currCode, StringType.INSTANCE);
-			Iterator<AmpCurrency> itr = qry.list().iterator();
-			if (itr.hasNext())
-				ampCurrency = itr.next();
+			return (AmpCurrency) PersistenceManager.getSession().createQuery(queryString).setParameter("currCode", currCode, StringType.INSTANCE).uniqueResult();
 		} catch (Exception e) {
-			logger.error("Unable to get currency");
-			logger.debug("Exceptiion " + e);
+			logger.error("Unable to get currency with code " + currCode, e);
+			return null;
 		}
-		return ampCurrency;
 	}
 	
 	public static Currency getCurrency(Long id) {

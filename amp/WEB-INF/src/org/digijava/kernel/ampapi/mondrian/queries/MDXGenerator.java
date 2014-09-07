@@ -16,6 +16,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
+import mondrian.rolap.RolapConnection;
+
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -127,12 +129,35 @@ public class MDXGenerator {
 	private void setup() throws AmpApiException {
 		try {
 			this.olapConnection = Connection.getOlapConnectionByConnPath(Connection.getDefaultConnectionPath());
+			if (shouldFlushCache())
+				flushCache();
 		} catch (Exception e) {
 			logger.error("Cannot create OlapConnection using connectionPath = " + Connection.getConnectionBySchemaPath(MoConstants.SCHEMA_PATH));
 			throw new AmpApiException(AmpApiException.MONDRIAN_ERROR, false, e);
 		}
 		this.parser = olapConnection.getParserFactory().createMdxParser(olapConnection);
 		this.validator = olapConnection.getParserFactory().createMdxValidator(olapConnection);
+	}
+	
+	/**
+	 * dummy placeholder in the meantime
+	 * @return
+	 */
+	private boolean shouldFlushCache() {
+		return true;
+	}
+	
+	/**
+	 * flushes Mondrian Cache
+	 */
+	private void flushCache() {
+		try {
+			RolapConnection rolapConn = olapConnection.unwrap(mondrian.rolap.RolapConnection.class);
+			rolapConn.getCacheControl(null).flushSchema(rolapConn.getSchema());
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public void tearDown() {

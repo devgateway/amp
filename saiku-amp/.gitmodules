@@ -1,0 +1,3 @@
+[submodule "saiku-ui"]
+	path = saiku-ui
+	url = https://github.com/OSBI/saiku-ui.git

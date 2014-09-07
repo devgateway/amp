@@ -1,0 +1,11 @@
+org.saiku.web.export
+org.saiku.web.impl
+org.saiku.web.rest.objects
+org.saiku.web.rest.objects.acl
+org.saiku.web.rest.objects.acl.enumeration
+org.saiku.web.rest.objects.repository
+org.saiku.web.rest.objects.resultset
+org.saiku.web.rest.resources
+org.saiku.web.rest.util
+org.saiku.web.service
+org.saiku.web.svg

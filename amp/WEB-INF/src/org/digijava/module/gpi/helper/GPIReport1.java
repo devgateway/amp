@@ -88,22 +88,22 @@ public class GPIReport1 extends GPIAbstractReport {
 						&& !GPIUtils.containStatus(filter.getStatuses(), CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, auxActivity.getCategories()))) {
 					// Ignore this AmpGPISurvey and continue with the next.
 					continue;
-				}
-
-				// Create a set of years (no duplicates) that will be used to populate the report.
-				// ie: if an activity has 2 funding with some funding details:
-				// F1 - FD1 - 2010
-				// F1 - FD2 - 2010
-				// F1 - FD3 - 2014
-				// F2 - FD1 - 2012
-				// F2 - FD2 - 2013
-				// F2 - FD3 - 2014
-				// Then we will count ONLY 1 project for 2010, 2012, 2013 and 2014.
-				Set<Integer> yearsFromFunding = new HashSet<Integer>();
+				}				
 				
 				Iterator<AmpFunding> iFunding = auxActivity.getFunding().iterator();
 				while (iFunding.hasNext()) {					
 					AmpFunding auxFunding = iFunding.next();
+					
+					// Create a set of years (no duplicates) that will be used to populate the report.
+					// ie: if an activity has 2 funding with some funding details:
+					// F1 - FD1 - 2010
+					// F1 - FD2 - 2010
+					// F1 - FD3 - 2014
+					// F2 - FD1 - 2012
+					// F2 - FD2 - 2013
+					// F2 - FD3 - 2014
+					// Then we will count ONLY 1 project for 2010, 2012, 2013 and 2014.
+					Set<Integer> yearsFromFunding = new HashSet<Integer>();
 
 					// Filter by organization.
 					if (filter.getDonors() != null && !GPIUtils.containOrganisations(filter.getDonors(), auxFunding.getAmpDonorOrgId())) {

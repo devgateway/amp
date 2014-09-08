@@ -536,7 +536,9 @@ public class IatiActivityWorker {
                         }
                     }
 
-                    setContactName(contactName, ampContact);
+                    if (contactName != null) {
+                        setContactName(contactName, ampContact);
+                    }
                 }
                 //organisation
                 if (i.getName().equals(new QName("organisation"))) {
@@ -596,13 +598,17 @@ public class IatiActivityWorker {
                 TreeMap<String, String> locationDetails = new TreeMap<String, String>();
                 getLocationDetails(location, locationDetails);
                 AmpLocation ampLocation = getAmpLocation(toIATIValues("locationName", "locationType", "locationCountry", "adm1", "adm2", "adm3"),
-                        toIATIValues(locationDetails.get("name"), locationDetails.get("location-type"), locationDetails.get("country"), locationDetails.get("adm1"), locationDetails.get("adm2"), locationDetails.get("adm3")));
-                AmpActivityLocation actLoc = new AmpActivityLocation();
-                actLoc.setActivity(a);
-                actLoc.setLocation(ampLocation);
-                Double percent = location.getPercentage().doubleValue();
-                actLoc.setLocationPercentage(percent.floatValue());
-                locations.add(actLoc);
+                        toIATIValues(locationDetails.get("name"), locationDetails.get("location-type"), locationDetails.get("country"),
+                                locationDetails.get("adm1"), locationDetails.get("adm2"), locationDetails.get("adm3")));
+
+                if (ampLocation != null) {
+                    AmpActivityLocation actLoc = new AmpActivityLocation();
+                    actLoc.setActivity(a);
+                    actLoc.setLocation(ampLocation);
+                    Double percent = location.getPercentage().doubleValue();
+                    actLoc.setLocationPercentage(percent.floatValue());
+                    locations.add(actLoc);
+                }
             }
             a.getLocations().clear();
             a.getLocations().addAll(locations);

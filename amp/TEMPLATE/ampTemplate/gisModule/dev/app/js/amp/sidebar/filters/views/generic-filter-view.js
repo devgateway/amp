@@ -18,7 +18,7 @@ module.exports = BaseFilterView.extend({
 
   initialize: function(options) {
     var self = this;
-    BaseFilterView.prototype.initialize.apply(this);
+    BaseFilterView.prototype.initialize.apply(this,[options]);
 
     this.model = new GenericFilterModel(options.modelValues);
 

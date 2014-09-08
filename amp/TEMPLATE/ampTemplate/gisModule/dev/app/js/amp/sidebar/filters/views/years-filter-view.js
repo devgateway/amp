@@ -14,7 +14,7 @@ module.exports = BaseFilterView.extend({
 
   initialize: function(options) {
     var self = this;
-    BaseFilterView.prototype.initialize.apply(this);
+    BaseFilterView.prototype.initialize.apply(this, [options]);
 
     this.model = new YearsFilterModel(options.modelValues);
     this.model.url = options.url;

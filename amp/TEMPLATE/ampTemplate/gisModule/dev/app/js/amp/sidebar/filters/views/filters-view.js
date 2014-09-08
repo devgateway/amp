@@ -22,7 +22,8 @@ module.exports = BaseControlView.extend({
 
   template: _.template(Template),
 
-  initialize: function() {
+  initialize: function(options) {
+    this.app = options.app;
     var self = this;
     BaseControlView.prototype.initialize.apply(this, arguments);
 
@@ -30,10 +31,6 @@ module.exports = BaseControlView.extend({
       self.filterViewsInstances = filterList;
       self.render();
     });
-
-    //TODO: register listener for FILTER_CHANGED event, then iterate over
-    //      filterViews and call createFilterJSON on each model
-    //      create master filter object and pass it to the map. to call api and re-render.
   },
 
 
@@ -92,20 +89,20 @@ module.exports = BaseControlView.extend({
     var view = null;
     switch (APIFilter.name){
       case 'Years':
-        view = new YearsFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
+        view = new YearsFilterView({app:this.app,url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
         break;
       case 'Sectors':
       case 'Programs':
-        view = new GenericNestedFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
+        view = new GenericNestedFilterView({app:this.app,url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
         break;
       case 'Organizations':
-        view = new OrganizationsFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
+        view = new OrganizationsFilterView({app:this.app,url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
         break;  
       case 'Dates':
-        view = new YearsFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
+        view = new YearsFilterView({app:this.app,url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
         break;  
       default:
-        view = new GenericFilterView({url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
+        view = new GenericFilterView({app:this.app,url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
     }
     return view;
   }

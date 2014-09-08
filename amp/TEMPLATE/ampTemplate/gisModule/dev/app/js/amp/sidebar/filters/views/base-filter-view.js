@@ -20,8 +20,18 @@ module.exports = Backbone.View.extend({
     'click .filter-title': 'launchFilter'
   },
 
+  initialize: function(options) {
+    this.app = options.app;
+
+  },
+
   renderTitle: function () {
-    this.$el.html(this.titleTemplate(this.model.toJSON()));
+    var self = this;
+    this.app.translator.translateDOM(
+      this.titleTemplate(this.model.toJSON())).then(
+        function(newEl){
+          self.$el.html(newEl);
+        });
 
     return this;
   },
@@ -49,6 +59,9 @@ module.exports = Backbone.View.extend({
     //setup any popovers as needed...
     this.popovers = this.$('[data-toggle="popover"]');
     this.popovers.popover();
+
+    // Translate
+    this.app.translator.translateDOM(this.el);
 
     return this;
   },

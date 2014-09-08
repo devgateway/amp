@@ -25,7 +25,7 @@ module.exports = GenericFilterView.extend({
   initialize: function(options) {
     var self = this;
     //intentinoally not GenericFilterView.prototype, we want to do it our way
-    BaseFilterView.prototype.initialize.apply(this);
+    BaseFilterView.prototype.initialize.apply(this, [options]);
     this.model = new GenericFilterModel(options.modelValues);
 
     this._createTree().then(function(){

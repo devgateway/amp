@@ -308,7 +308,7 @@ public class Filters {
 	@GET
 	@Path("/typeOfAssistance/")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = false, name = "TypeOfAssistanceList")
+	@ApiMethod(ui = true, name = "TypeOfAssistanceList")
 	public List<SimpleJsonBean> getTypeOfAssistance() {
 		return getCategoryValue(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
 	}
@@ -321,7 +321,7 @@ public class Filters {
 	@GET
 	@Path("/financingInstruments/")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = false, name = "FinancingInstrumentsList")
+	@ApiMethod(ui = true, name = "FinancingInstrumentsList")
 	public List<SimpleJsonBean> getFinancingInstruments() {
 		return getCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY);
 	}

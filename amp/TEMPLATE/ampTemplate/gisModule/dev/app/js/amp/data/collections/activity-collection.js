@@ -21,8 +21,8 @@ module.exports = Backbone.Collection
   	this.each(function(activity){
   		var index = _.indexOf(aryOfIDs, activity.id);
   		if(index > -1){
-  			matches.push(activity);	 // add activity to array
-  			aryOfIDs.splice(index,1); // remove id from array
+  			matches.push(activity.toJSON());	 // add activity to array
+  			aryOfIDs.splice(index,1);          // remove id from array
   		}
   	});
 
@@ -32,7 +32,6 @@ module.exports = Backbone.Collection
 			this.url = '/rest/gis/activities/' + aryOfIDs.join(',');			
 		  this.fetch({remove: false}).then(function(newData){
 		  	matches = _.union(matches, newData);
-        console.log('matches', matches);
 		  	this.url = '/rest/gis/activities';	// reset url
 		  	deferred.resolve(matches);
 		  }).fail(function(err){

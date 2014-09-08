@@ -18,7 +18,8 @@ module.exports = Backbone.View.extend({
 
   tempDOM:null,
 
-  initialize: function(popup, admLayer) {
+  initialize: function(options, popup, admLayer) {
+    this.app = options.app;
     this.popup = popup;
     this.admLayer = admLayer;
   },
@@ -81,7 +82,6 @@ module.exports = Backbone.View.extend({
 
     this.tempDOM.find('.load-more').click(function(){
       self._currentPage++;
-      console.log('click',self._currentPage);
       self._loadMoreProjects();
     });
 
@@ -93,12 +93,14 @@ module.exports = Backbone.View.extend({
     var startIndex = this._currentPage * this.PAGE_SIZE;
     var activityIDs = this.cluster.properties.activityid.slice(startIndex, startIndex + this.PAGE_SIZE);
 
-    // Phil: is this how we want to do app access...?
-    // David: no. window.app is for debug convenience only.
-    //        we should pass the app into this constructor and save to `this` in initialize.
-    return window.app.data.activities.getActivites(activityIDs).then(function(activityCollection){
-      console.log('activityCollection', activityCollection);
-      self.tempDOM.find('#project-list').append(
+    // hide load more button if all activities loaded.
+    if(startIndex + this.PAGE_SIZE >= this.cluster.properties.activityid.length){
+        this.tempDOM.find('.load-more').hide();
+    }
+
+
+    return this.app.data.activities.getActivites(activityIDs).then(function(activityCollection){
+      self.tempDOM.find('.project-list').append(
         self.projectListTemplate({activities: activityCollection})
         );
     });

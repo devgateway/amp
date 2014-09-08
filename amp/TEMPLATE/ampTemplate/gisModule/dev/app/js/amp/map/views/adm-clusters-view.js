@@ -36,7 +36,7 @@ module.exports = Backbone.View.extend({
         var clusters = this.getNewADMLayer(admLayer);
         leafletLayer.addLayer(clusters);
         clusters.on('popupopen', function (e) {
-          var clusterPopupView = new ClusterPopupView(e.popup, admLayer);
+          var clusterPopupView = new ClusterPopupView({app: self.app}, e.popup, admLayer);
           clusterPopupView.render();
         });
       }, this));

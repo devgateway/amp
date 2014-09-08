@@ -1,8 +1,15 @@
 
 	<%   _.each(obj.activities, function(activity){ %>
 		<tr>
-      <td><a href="<%= activity.ampUrl %>"><%= activity.name %></a></td>
-      <td><%= _(activity.commitments).first().amount %></td>
+      <td><a href="<%= activity.ampUrl %>" title="<%= activity.name %>"><%= (activity.name.length>27 ? activity.name.substring(0, 30)+'...': activity.name) %></a></td>
+      <td class="text-right">
+        <% var firstCommitment = _(activity.commitments).first();
+          if(firstCommitment){ %>
+            <%= firstCommitment.amount %>
+        <% } else{ %>
+          - 
+        <% }%>
+      </td>
     </tr>
 	<% });%>
 

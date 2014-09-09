@@ -115,10 +115,10 @@ public class ActivityService {
 			sectors.get(as.getClassificationConfig().getId()).add(as.getSectorId().getAmpSectorId());
 		}
 		for(AmpOrgRole orgRole:ampActivity.getOrgrole()){
-			if(roles.get(orgRole.getAmpOrgRoleId())==null){
-				roles.put(orgRole.getAmpOrgRoleId(),new ArrayList<Long>());
+				if(roles.get(orgRole.getRole().getAmpRoleId())==null){
+				roles.put(orgRole.getRole().getAmpRoleId(),new ArrayList<Long>());
 			}
-			roles.get(orgRole.getAmpOrgRoleId()).add(orgRole.getOrganisation().getAmpOrgId());
+			roles.get(orgRole.getRole().getAmpRoleId()).add(orgRole.getOrganisation().getAmpOrgId());
 		}
 		
 		
@@ -142,12 +142,17 @@ public class ActivityService {
 		if(addFunding){
 			ActivityFundingDigest fundingDigest=new ActivityFundingDigest();
 			fundingDigest.populateFromFundings(ampActivity.getFunding(), "US", null, false);
-			for(FundingDetail fd:fundingDigest.getCommitmentsDetails()){
-				a.addCommitments(fd.getTransactionAmount(), fd.getTransactionDate());	
-			}
-			for(FundingDetail fd:fundingDigest.getDisbursementsDetails()){
-				a.addDisbursment(fd.getTransactionAmount(), fd.getTransactionDate());	
-			}		
+			a.setTotalCommitments(fundingDigest.getTotalCommitments());
+			a.setTotalDisbursments(fundingDigest.getTotalDisbursements());
+			
+			//commented out since for now the details are not needed in case they are needed
+			//just uncoment both fors
+//			for(FundingDetail fd:fundingDigest.getCommitmentsDetails()){
+//				a.addCommitments(fd.getTransactionAmount(), fd.getTransactionDate());	
+//			}
+//			for(FundingDetail fd:fundingDigest.getDisbursementsDetails()){
+//				a.addDisbursment(fd.getTransactionAmount(), fd.getTransactionDate());	
+//			}		
 		}
 		return a;
 	}

@@ -18,6 +18,9 @@ public class Activity {
 	private String name;
 	private String description;
 	private String ampUrl;
+	private String TotalCommitments;
+	private String totalDisbursments;
+	
 	private JsonBean matchesFilters;
 	private List<ActivityFunding> commitments;
 	private List<ActivityFunding> disbursments;
@@ -57,6 +60,22 @@ public class Activity {
 
 	public void setAmpUrl(String ampUrl) {
 		this.ampUrl = ampUrl;
+	}
+
+	public String getTotalCommitments() {
+		return TotalCommitments;
+	}
+
+	public void setTotalCommitments(String totalCommitments) {
+		TotalCommitments = totalCommitments;
+	}
+
+	public String getTotalDisbursments() {
+		return totalDisbursments;
+	}
+
+	public void setTotalDisbursments(String totalDisbursments) {
+		this.totalDisbursments = totalDisbursments;
 	}
 
 	public List<ActivityFunding> getCommitments() {

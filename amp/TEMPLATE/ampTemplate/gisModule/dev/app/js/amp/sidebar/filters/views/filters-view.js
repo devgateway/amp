@@ -93,10 +93,8 @@ module.exports = BaseControlView.extend({
         break;
       case 'Sectors':
       case 'Programs':
-        view = new GenericNestedFilterView({app:this.app,url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
-        break;
       case 'Organizations':
-        view = new OrganizationsFilterView({app:this.app,url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
+        view = new GenericNestedFilterView({app:this.app,url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
         break;  
       case 'Dates':
         view = new YearsFilterView({app:this.app,url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});

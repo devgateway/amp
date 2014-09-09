@@ -158,19 +158,26 @@ public class WorkspaceManager extends Action {
 		Collection<AmpTeam> workspacesFiltered=new ArrayList<AmpTeam>();
 		if(!workspaces.isEmpty())
 		{
+			logger.error("indirect llk debugging: workspaces not empty");
 			for (Iterator<AmpTeam> it = workspaces.iterator(); it.hasNext();) {
 				AmpTeam team = (AmpTeam) it.next();
+				logger.error("indirect llk debugging: team is " + team.toString());
 				boolean found=false;
 				for (Iterator jt = keywords.iterator(); jt.hasNext();) {
+					
 					String keyw = (String) jt.next();
+					logger.error("indirect llk debugging:----------keyword is: " + keyw);
 					if( (team.getDescription()!=null && team.getDescription().toLowerCase().contains(keyw)) 
 							|| (team.getName() !=null && team.getName().toLowerCase().contains(keyw)) ) {
+						logger.error("indirect llk debugging:---------- FOUND! " + team.toString());
 						found=true;break;
 					}
 				}
 				if(found) workspacesFiltered.add(team);
+				
 			}
 		}
+		
 		if(workspacesFiltered.isEmpty() && keywords.isEmpty())
 		  wsForm.setWorkspaces(workspaces);
 		else wsForm.setWorkspaces(workspacesFiltered);

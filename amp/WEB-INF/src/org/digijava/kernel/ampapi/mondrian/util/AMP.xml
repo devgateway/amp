@@ -2,31 +2,25 @@
 <!DOCTYPE AMP [
 <!ENTITY mondriandtd SYSTEM "mondrian.dtd">]>
 <Schema name="AMP">
-<!--	<Dimension name="Sectors">
-		<Hierarchy hasAll="false" primaryKey="amp_sector_id">
-			<Table name="mondrian_sectors" />
-			<Level name="Level 0 Sector" uniqueMembers="true" type="Integer" column="level0_sector_id" nameColumn="level0_sector_name" />
-			<Level name="Level 1 Sector" uniqueMembers="true" type="Integer" column="level1_sector_id" nameColumn="level1_sector_name" />
-			<Level name="Level 2 Sector" uniqueMembers="true" type="Integer" column="level2_sector_id" nameColumn="level2_sector_name" />
+	<Dimension name="AMP Sector">
+		<Hierarchy hasAll="true" allMemberName="All Level 0 Sectors" primaryKey="amp_sector_id" name="Level 0 Sector">
+			<Table name="mondrian_sectors@@locale@@" />
+			<Level name="Level 0 Sector" type="Integer" column="level0_sector_id" nameColumn="level0_sector_name" />
 		</Hierarchy>
-	</Dimension> -->
+		<Hierarchy hasAll="true" allMemberName="All Level 1 Sectors" primaryKey="amp_sector_id" name="Level 1 Sector">
+			<Table name="mondrian_sectors@@locale@@" />
+			<Level name="Level 1 Sector" type="Integer" column="level1_sector_id" nameColumn="level1_sector_name" />
+		</Hierarchy>
+		<Hierarchy hasAll="true" allMemberName="All Level 2 Sectors" primaryKey="amp_sector_id" name="Level 2 Sector">
+			<Table name="mondrian_sectors@@locale@@" />
+			<Level name="Level 2 Sector" type="Integer" column="level2_sector_id" nameColumn="level2_sector_name" />
+		</Hierarchy>
+	</Dimension>
 
 	<Dimension name="AMP Organization" >
 		<Hierarchy hasAll="true" allMemberName="All Orgs" primaryKey="amp_org_id" name="Organization Hierarchy">
 			<Table name="mondrian_organizations@@locale@@" />
 			<Level name="Organization Type Name" uniqueMembers="true" type="Integer" column="amp_org_type_id" nameColumn="org_type_name" />
-			<Level name="Organization Group Name" uniqueMembers="true" type="Integer" column="amp_org_grp_id" nameColumn="org_grp_name" />
-			<Level name="Organization Name" uniqueMembers="true" type="Integer" column="amp_org_id" nameColumn="org_name" />
-			<Level name="Organization Code" type="Integer" column="amp_org_id" nameColumn="org_code" />
-		</Hierarchy>
-		<Hierarchy hasAll="true" allMemberName="All Orgs" primaryKey="amp_org_id" name="Organization Hierarchy Duplicate">
-			<Table name="mondrian_organizations@@locale@@" />
-			<Level name="Organization Type Name" uniqueMembers="true" type="Integer" column="amp_org_type_id" nameColumn="org_type_name" >
-				<Property name="default" column="amp_org_id" type="Integer"/>
-				<Property name="orgTypeId" column="amp_org_type_id" type="Integer"/>
-				<Property name="orgGroupId" column="amp_org_grp_id" type="Integer"/>
-				<Property name="orgId" column="amp_org_id" type="Integer"/>
-			</Level>
 			<Level name="Organization Group Name" uniqueMembers="true" type="Integer" column="amp_org_grp_id" nameColumn="org_grp_name" />
 			<Level name="Organization Name" uniqueMembers="true" type="Integer" column="amp_org_id" nameColumn="org_name" />
 			<Level name="Organization Code" type="Integer" column="amp_org_id" nameColumn="org_code" />
@@ -120,21 +114,6 @@
 			</Hierarchy>
 		</Dimension>
 
-		<Dimension name="Primary Sector" foreignKey="primary_sector_id">
-			<Hierarchy hasAll="true" allMemberName="All Primary Sectors" primaryKey="amp_sector_id" name="Primary Sector">
-				<Table name="mondrian_sectors@@locale@@" alias="primary_sector_table" />
-				<Level name="Primary Sector" type="Integer" column="level0_sector_id" nameColumn="level0_sector_name" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Primary Sectors" primaryKey="amp_sector_id" name="Primary Sector Sub-sector">
-				<Table name="mondrian_sectors@@locale@@" alias="primary_sector_table" />
-				<Level name="Primary Sector Sub-sector" type="Integer" column="level1_sector_id" nameColumn="level1_sector_name" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Primary Sectors" primaryKey="amp_sector_id" name="Primary Sector Sub-sub-sector">
-				<Table name="mondrian_sectors@@locale@@" alias="primary_sector_table" />
-				<Level name="Primary Sector Sub-sub-sector" type="Integer" column="level2_sector_id" nameColumn="level2_sector_name" />
-			</Hierarchy>
-		</Dimension>
-
 		<Dimension name="Secondary Sector" foreignKey="secondary_sector_id">
 			<Hierarchy hasAll="true" allMemberName="All Secondary Sectors" primaryKey="amp_sector_id">
 				<Table name="mondrian_sectors@@locale@@" alias="secondary_sector_table" />
@@ -164,6 +143,10 @@
 		<DimensionUsage name="Tertiary Program" source="AMP Program" caption="Tertiary Program" foreignKey="tertiary_program_id" />
 		<DimensionUsage name="National Objectives" source="AMP Program" caption="National Objectives" foreignKey="national_objectives_program_id" />
 
+		<DimensionUsage name="Primary Sector"   source="AMP Sector" caption="Primary Sector" foreignKey="primary_sector_id" />
+		<DimensionUsage name="Secondary Sector" source="AMP Sector" caption="Secondary Sector" foreignKey="secondary_sector_id" />
+		<DimensionUsage name="Tertiary Sector"  source="AMP Sector" caption="Tertiary Sector" foreignKey="tertiary_sector_id" />
+		
 		<Dimension name="Dates" type="TimeDimension" foreignKey="date_code">
 			<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Dates">
 				<Table name="mondrian_dates" />

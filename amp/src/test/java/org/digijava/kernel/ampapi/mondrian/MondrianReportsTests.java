@@ -27,15 +27,15 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.reports.mondrian.AmpReportTranslator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.saiku.olap.dto.resultset.CellDataSet;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -60,8 +60,8 @@ public class MondrianReportsTests extends AmpTestCase {
 		suite.addTest(new MondrianReportsTests("testColumnMeasureSortingTotals"));
 		suite.addTest(new MondrianReportsTests("testSortingByTuplesTotals"));
 		suite.addTest(new MondrianReportsTests("testMultipleDateFilters")); */
-		suite.addTest(new MondrianReportsTests("testAmpReportToReportSpecification"));
-		//suite.addTest(new MondrianReportsTests("testGenerateReportAsSaikuCellDataSet"));
+		//suite.addTest(new MondrianReportsTests("testAmpReportToReportSpecification"));
+		suite.addTest(new MondrianReportsTests("testGenerateReportAsSaikuCellDataSet"));
 		//suite.addTest(new MondrianReportsTests("testHeavyQuery"));
 		
 		return suite;
@@ -110,7 +110,6 @@ public class MondrianReportsTests extends AmpTestCase {
 			filters.addDateRangeFilterRule(sdf.parse("2010-01-01"), sdf.parse("2011-09-15"));
 			filters.addYearsFilterRule(Arrays.asList(2013, 2014), true);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			err = e.getMessage();
 		}
@@ -138,7 +137,7 @@ public class MondrianReportsTests extends AmpTestCase {
 	}
 	
 	public void testAmpReportToReportSpecification() {
-		ReportSpecificationImpl spec = getReportSpecificatin("NadiaMondrianTest");
+		ReportSpecificationImpl spec = getReportSpecificatin("NadiaMondrianTest1");
 		generateAndValidate(spec, true);
 	}
 	
@@ -158,7 +157,7 @@ public class MondrianReportsTests extends AmpTestCase {
 
 		ReportSpecificationImpl spec = null;
 		try {
-			spec = MondrianReportUtils.toReportSpecification(report);
+			spec = AmpReportTranslator.toReportSpecification(report);
 		} catch (AMPException e) {
 			System.err.println(e.getMessage());
 		}
@@ -170,7 +169,7 @@ public class MondrianReportsTests extends AmpTestCase {
 		hierarchies.add(iter.next());
 		//hierarchies.add(iter.next());
 		//hierarchies.add(iter.next());
-		spec.setHierarchies(hierarchies);
+		//spec.setHierarchies(hierarchies);
 		//end to remove
 		return spec;
 	}
@@ -193,32 +192,24 @@ public class MondrianReportsTests extends AmpTestCase {
 		generateAndValidate(spec, print, false);
 	}
 	
-	private void generateAndValidate(ReportSpecification spec, boolean print, boolean asCellSet) {
+	private void generateAndValidate(ReportSpecification spec, boolean print, boolean asSaikuReport) {
 		String err = null;
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, print);
+		MondrianReportGenerator generator = new MondrianReportGenerator(asSaikuReport ? SaikuReportArea.class : ReportAreaImpl.class, print);
 		GeneratedReport report = null;
-		CellDataSet cellSet = null;
-		int duration = 0;
 		try {
-			if (asCellSet) {
-				cellSet = generator.generateReportAsSaikuCellDataSet(spec);
-				duration = cellSet.runtime;
+			if (asSaikuReport) {
+				report = generator.generateReportForSaiku(spec);
 			} else { 
 				report = generator.executeReport(spec);
-				duration = report.generationTime;
 			}
-			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + duration + "(ms)");
+			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + report.generationTime + "(ms)");
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			err = e.getMessage();
 		}
 		//basic tests, todo more
 		assertNull(err);
-		if (asCellSet)
-			assertNotNull(cellSet);
-		else {
-			assertNotNull(report);
-			assertNotNull(report.reportContents);
-		}
+		assertNotNull(report);
+		assertNotNull(report.reportContents);
 	}
 }

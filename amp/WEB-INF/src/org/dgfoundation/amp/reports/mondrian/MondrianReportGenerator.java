@@ -26,15 +26,16 @@ import org.dgfoundation.amp.newreports.FilterRule.FilterType;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
+import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.dgfoundation.amp.newreports.ReportSorter;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
@@ -49,6 +50,9 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
+import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
+import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
+import org.digijava.kernel.ampapi.saiku.SaikuReportSorter;
 import org.digijava.kernel.ampapi.saiku.util.CellDataSetToAmpHierachies;
 import org.digijava.kernel.ampapi.saiku.util.CellDataSetToGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.util.SaikuPrintUtils;
@@ -97,7 +101,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	
 	/**
 	 * Mondrian Report Generator
-	 * @param reportAreaType - report area type to be used for output genetration.
+	 * @param reportAreaType - report area type to be used for output generation.
 	 */
 	public MondrianReportGenerator(Class<? extends ReportAreaImpl> reportAreaType) {
 		this (reportAreaType, false);
@@ -108,10 +112,29 @@ public class MondrianReportGenerator implements ReportExecutor {
 		CellDataSet cellDataSet = generateReportAsSaikuCellDataSet(spec);
 		
 		GeneratedReport report = toGeneratedReport(spec, cellDataSet, cellDataSet.runtime);
+		ReportSorter.sort(report);
 		
 		tearDown();
 		
 		return report;
+	}
+	
+	public SaikuGeneratedReport generateReportForSaiku(ReportSpecification spec) throws AMPException {
+		if (!SaikuReportArea.class.isAssignableFrom(reportAreaType))
+			throw new AMPException("To generate Saiku report please configure with SaikuReportArea.");
+		
+		CellDataSet cellDataSet = generateReportAsSaikuCellDataSet(spec);
+		GeneratedReport report = toGeneratedReport(spec, cellDataSet, cellDataSet.runtime);
+		
+		SaikuGeneratedReport saikuReport = new SaikuGeneratedReport(
+				spec, report.generationTime, report.requestingUser,
+				(SaikuReportArea)report.reportContents, cellDataSet, report.rootHeaders, report.leafHeaders);
+		SaikuReportSorter.sort(saikuReport);
+		if (printMode)
+			SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST_SORT");
+				
+		tearDown();
+		return saikuReport;
 	}
 	
 	/**
@@ -120,7 +143,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * @return {@link CellDataSet}
 	 * @throws AMPException
 	 */
-	public CellDataSet generateReportAsSaikuCellDataSet(ReportSpecification spec) throws AMPException {
+	private CellDataSet generateReportAsSaikuCellDataSet(ReportSpecification spec) throws AMPException {
 		CellDataSet cellDataSet = null;
 		int totalTime = 0;
 		long startTime = System.currentTimeMillis();
@@ -181,7 +204,6 @@ public class MondrianReportGenerator implements ReportExecutor {
 	}
 	
 	private MDXConfig toMDXConfig(ReportSpecification spec) throws AMPException {
-		System.out.println("aha");
 		MDXConfig config = new MDXConfig();
 		config.setCubeName(MoConstants.DEFAULT_CUBE_NAME);
 		config.setMdxName(spec.getReportName());
@@ -192,13 +214,14 @@ public class MondrianReportGenerator implements ReportExecutor {
 		config.setColumnsHierarchiesTotals(0); //we are moving subtotals out of MDX.
 		config.setRowsHierarchiesTotals(0); //we are moving subtotals out of MDX.
 		//add requested columns
-		for (ReportColumn col:spec.getColumns()) {
-			MDXAttribute elem = (MDXAttribute)MondrianMapping.toMDXElement(col);
-			if (elem == null) 
-				reportError("No mapping found for column name = " + (col==null ? null : col.getColumnName()) + ", entity type = " + (col == null ? null : col.getEntityType()));
-			else 
-				config.addRowAttribute(elem);
-		}
+		if (!spec.isSummaryReport())
+			for (ReportColumn col:spec.getColumns()) {
+				MDXAttribute elem = (MDXAttribute)MondrianMapping.toMDXElement(col);
+				if (elem == null) 
+					reportError("No mapping found for column name = " + (col==null ? null : col.getColumnName()) + ", entity type = " + (col == null ? null : col.getEntityType()));
+				else 
+					config.addRowAttribute(elem);
+			}
 		//add requested measures
 		for (ReportMeasure measure: spec.getMeasures()) {
 			MDXMeasure elem = (MDXMeasure)MondrianMapping.toMDXElement(measure);
@@ -223,26 +246,28 @@ public class MondrianReportGenerator implements ReportExecutor {
 	
 	private void configureSortingRules(MDXConfig config, ReportSpecification spec, boolean doHierarchiesTotals) throws AMPException {
 		if (spec.getSorters() == null || spec.getSorters().size() == 0 ) return;
-		boolean nonBreakingSort = config.isDoRowTotals() || doHierarchiesTotals;
+		boolean nonBreakingSort = spec.isCalculateRowTotals() || doHierarchiesTotals;
 		
 		for (SortingInfo sortInfo : spec.getSorters()) {
 			MDXTuple tuple = new MDXTuple();
-			for (Entry<ReportElement, FilterRule> entry : sortInfo.sortByTuple.entrySet()) {
-				if (ElementType.ENTITY.equals(entry.getKey().type))
-					tuple.add(applySingleFilter(MondrianMapping.toMDXElement(entry.getKey().entity), entry.getValue()));
-				else {
-					MDXAttribute mdxAttr = MondrianMapping.getElementByType(entry.getKey().type);
-					if (mdxAttr == null) {
-						String err = "No mapping found for Element type = " + entry.getKey().type;
-						logger.error(err);
-						throw new AMPException(err);
-					}
-					tuple.add(applySingleFilter(mdxAttr, entry.getValue()));
-				}	
+			if (!sortInfo.isTotals) {//totals sorting will be done during post-processing
+				for (Entry<ReportElement, FilterRule> entry : sortInfo.sortByTuple.entrySet()) {
+					if (ElementType.ENTITY.equals(entry.getKey().type))
+						tuple.add(applySingleFilter(MondrianMapping.toMDXElement(entry.getKey().entity), entry.getValue()));
+					else { 
+						MDXAttribute mdxAttr = MondrianMapping.getElementByType(entry.getKey().type);
+						if (mdxAttr == null) {
+							String err = "No mapping found for Element type = " + entry.getKey().type;
+							logger.error(err);
+							throw new AMPException(err);
+						}
+						tuple.add(applySingleFilter(mdxAttr, entry.getValue()));
+					}	
+				}
+				config.getSortingOrder().put(tuple, sortInfo.ascending ? 
+													(nonBreakingSort ? SortOrder.ASC : SortOrder.BASC) : 
+													(nonBreakingSort ? SortOrder.DESC : SortOrder.BDESC));
 			}
-			config.getSortingOrder().put(tuple, sortInfo.ascending ? 
-												(nonBreakingSort ? SortOrder.ASC : SortOrder.BASC) : 
-												(nonBreakingSort ? SortOrder.DESC : SortOrder.BDESC));
 		}
 	}
 	
@@ -302,7 +327,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		
 		CellDataSet cellDataSet = OlapResultSetUtil.cellSet2Matrix(cellSet); // we can also pass a formater to cellSet2Matrix(cellSet, formatter)
 		
-		if (spec.isCalculateColumnTotals()) {
+		if (spec.isCalculateColumnTotals() || spec.isCalculateRowTotals()) {
 			try {
 				SaikuUtils.doTotals(spec, cellDataSet, cellSet);
 			} catch (Exception e) {
@@ -378,7 +403,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				
 				if (!isAllowed) {
 					leafColumnsNumberToRemove.add(pos);
-					//TODO: iter.remove();//remove also the leaf header
+					iter.remove();//remove also the leaf header
 				}
 			}
 			pos ++;
@@ -404,6 +429,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	}
 	
 	private void removeYearsToHideCells(CellDataSet cellDataSet, SortedSet<Integer> leafColumnsNumberToRemove) {
+		//navigate through the totals list and remember the totals only for the columns we display 
 		for(List<TotalNode> totalLists : cellDataSet.getRowTotalsLists()) {
 			for(TotalNode totalNode : totalLists) {
 				if (totalNode.getTotalGroups() != null && totalNode.getTotalGroups().length > 0) {
@@ -445,10 +471,10 @@ public class MondrianReportGenerator implements ReportExecutor {
 	}
 	
 	private GeneratedReport toGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, int duration) throws AMPException {
+		long start = System.currentTimeMillis();
 		CellDataSetToGeneratedReport translator = new CellDataSetToGeneratedReport(spec, cellDataSet, leafHeaders);
 		ReportAreaImpl root = translator.transformTo(reportAreaType);
-		
-		GeneratedReport genRep = new GeneratedReport(spec, duration, null, root, getRootHeaders(leafHeaders), leafHeaders); 
+		GeneratedReport genRep = new GeneratedReport(spec, duration + (int)(System.currentTimeMillis() - start), null, root, getRootHeaders(leafHeaders), leafHeaders); 
 		return genRep;
 	}
 	

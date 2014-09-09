@@ -28,7 +28,8 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
- * Translates report filters from ARFilters to a configuration that is applicable for Mondrian Reports API
+ * Translates report filters from ARFilters to a configuration that is applicable for Mondrian Reports API.
+ * Old AmpARFilter structure stores multiple information like the actual report filters, report settings, sorting info...  
  * @author Nadejda Mandrescu
  */
 public class AmpARFilterTranslator {
@@ -39,8 +40,13 @@ public class AmpARFilterTranslator {
 	private MondrianReportSettings settings;
 	private static final boolean USE_IDS = false;
 	private AmpARFilter arFilter;
-	ReportEntityType entityType;
+	private ReportEntityType entityType;
 
+	/**
+	 * Translates report filters from ARFilters to a configuration that is applicable for Mondrian Reports API.
+	 * Old AmpARFilter structure stores multiple information: the actual report filters, report settings, sorting info...
+	 * @param arFilter - old configuration of the reports filters {@link AmpARFilter}
+	 */
 	public AmpARFilterTranslator(AmpARFilter arFilter) {
 		this.setArFilter(arFilter);
 	}

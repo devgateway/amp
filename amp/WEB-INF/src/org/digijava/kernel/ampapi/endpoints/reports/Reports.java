@@ -15,13 +15,12 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.reports.mondrian.AmpReportTranslator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
-import org.digijava.kernel.ampapi.mondrian.queries.MDXGenerator;
+import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -58,18 +57,17 @@ public class Reports {
 
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
 
-		// TODO: for now we do not translate other types of reports than Donor
-		// Type reports (hide icons for non-donor-type reports?)
+		//TODO: for now we do not translate other types of reports than Donor Type reports (hide icons for non-donor-type reports?)
 		ReportSpecificationImpl spec = null;
 		try {
-			spec = MondrianReportUtils.toReportSpecification(ampReport);
+			spec = AmpReportTranslator.toReportSpecification(ampReport);
 		} catch (AMPException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		;
 
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, false);
+		MondrianReportGenerator generator = new MondrianReportGenerator(SaikuReportArea.class, false);
 
 		JSONResult result = new JSONResult();
 		ReportMetadata metadata = new ReportMetadata();

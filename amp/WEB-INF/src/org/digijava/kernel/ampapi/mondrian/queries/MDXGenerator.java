@@ -47,77 +47,12 @@ import org.olap4j.query.SortOrder;
  *
  */
 public class MDXGenerator {
-	/** when properties are configured on main hierarchy, then it slows down some queries that are using all members */
-	//TODO: if filtering by properties (i.e. IDS) is very important, 
-	//then to implement a solution to automatically replace the axis hierarchy to the one with properties, when properties are used 
+	// when properties are configured on main hierarchy, then it slows down some queries that are using all members 
 	private static final boolean PROPERTIES_FILTERING_ON_WHERE = false;
 	private static final MDXLevel mainDates = new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, MoConstants.ATTR_DATE);
 	
 	protected static final Logger logger = Logger.getLogger(MDXGenerator.class); 
-	/* candidate for removal
-	private static Map<String, String> allNames;
-	//Based on convention to define unique property names
-	private static Map<String, MDXLevel> propertiesLevels; //<Property name, MDXLevel that stores properties for filtering by ids>
-	private static Map<String, String> levelPropertyType; //<Property name, Property type>
-	*/
-	/** Automatic detection of some schema information */ 
-	/* candidate for removal
-	static {
-		Map<String, String> mapping = new HashMap<String, String>();
-		Map<String, MDXLevel> properties = new HashMap<String, MDXLevel>(); 
-		Map<String, String> propTypes = new HashMap<String, String>();
-		boolean success = false;
-		OlapConnection olapConnection = null;
-		try {
-			olapConnection = Connection.getOlapConnectionByConnPath(Connection.getDefaultConnectionPath());
-			//NamedList<Dimension> dimList = olapConnection.getOlapSchema().getSharedDimensions();
-			List<Dimension> dimList = new ArrayList<Dimension>();
-			for (Cube cube:olapConnection.getOlapSchema().getCubes()) {
-				dimList.addAll(cube.getDimensions());
-			}
-			for (Dimension dim:dimList) 
-				for (Iterator<Hierarchy> h = dim.getHierarchies().iterator(); h.hasNext(); ){
-					for (Iterator<Level> l = h.next().getLevels().iterator(); l.hasNext();) {
-						Level level = l.next();
-						for (Member m: level.getMembers())
-							if (m.isAll()) {
-								mapping.put(MDXElement.quote(m.getHierarchy().getName()), m.toString());
-								if (dim.getHierarchies().size() == 1) //keep also the default All member per dimension when there is only 1 hierarchy 
-									mapping.put(MDXElement.quote(dim.getName()), m.toString());
-								break;
-							}
-						if (MoConstants.HAS_AMP_PROPERTIES.equals(level.getDescription())) {
-							String hName = level.getHierarchy().getName().substring(dim.getName().length()+1);
-							MDXLevel propLevel = new MDXLevel(dim.getName(), hName , level.getName());
-							Map<String, String> propTypeMap = new HashMap<String, String>();
-							for(Property prop : level.getProperties()) {
-								if (MoConstants.AMP_SCHEMA_PROPERTIES.contains(prop.getName())) {
-									if (properties.put(prop.getName(), propLevel) != null)
-										throw new AmpApiException("Duplicate definition of the proprty = " + prop.getName());
-									propTypeMap.put(prop.getName(), MondrianUtils.getDatatypeName(prop.getDatatype()));
-								}
-							}
-						}
-					}
-				}
-			success = true;
-		} catch (Exception e) {
-			logger.error(MondrianUtils.toString(e));
-		} finally {
-			allNames = success ? mapping : null;
-			propertiesLevels = success ? properties : null;
-			levelPropertyType = success ? propTypes : null;
-			if (olapConnection!=null) {
-				try {
-					olapConnection.close();
-				} catch (SQLException e) {
-					logger.error(ErrorReportingPlugin.getSQLExceptionMessage(e));
-				}
-			}
-		}
-	}
-	*/
-	
+
 	private OlapConnection olapConnection = null;
 	private MdxParser parser = null;
 	private MdxValidator validator = null;
@@ -133,7 +68,8 @@ public class MDXGenerator {
 				flushCache();
 		} catch (Exception e) {
 			logger.error("Cannot create OlapConnection using connectionPath = " + Connection.getConnectionBySchemaPath(MoConstants.SCHEMA_PATH));
-			throw new AmpApiException(AmpApiException.MONDRIAN_ERROR, false, e);
+			throw new AmpApiException(AmpApiException.MONDRIAN_ERROR, false, e.getMessage() + 
+					(e.getCause() == null ? "" : ", Caused by: " + e.getCause().getMessage()) );
 		}
 		this.parser = olapConnection.getParserFactory().createMdxParser(olapConnection);
 		this.validator = olapConnection.getParserFactory().createMdxValidator(olapConnection);
@@ -202,7 +138,7 @@ public class MDXGenerator {
 		StringBuilder with = new StringBuilder("");
 		String select = "SELECT ";
 		String from = " FROM [" + cubeName + "]";
-		String columns = " ON COLUMNS, ";
+		String columns = " ON COLUMNS";
 		String rows = " ON ROWS ";
 		String where = "";
 		String mdx = "";
@@ -224,20 +160,25 @@ public class MDXGenerator {
 		
 		/* ROWS */
 		axisMdx = getRows(config, with);
-				
-		//filter axis by measures
-		if (config.getAxisFilters().size()>0) {
-			for (Map.Entry<MDXElement, List<MDXFilter>> pair : config.getAxisFilters().entrySet()) {
-				if (pair.getKey() instanceof MDXMeasure) {
-					axisMdx = toFilter(axisMdx, pair.getKey(), pair.getValue(), false);
+		
+		if (axisMdx == null) {//no attributes are defined on rows
+			rows = "";
+		} else {
+			//filter axis by measures
+			if (config.getAxisFilters().size()>0) {
+				for (Map.Entry<MDXElement, List<MDXFilter>> pair : config.getAxisFilters().entrySet()) {
+					if (pair.getKey() instanceof MDXMeasure) {
+						axisMdx = toFilter(axisMdx, pair.getKey(), pair.getValue(), false);
+					}
 				}
+	 		}
+			//sorting
+			if (config.getSortingOrder().size() > 0) {
+				axisMdx = sorting(config.getSortingOrder(), axisMdx);
 			}
- 		}
-		//sorting
-		if (config.getSortingOrder().size() > 0) {
-			axisMdx = sorting(config.getSortingOrder(), axisMdx);
+			rows  = notEmptyRows + axisMdx + rows;
+			columns += ", ";
 		}
-		rows  = notEmptyRows + axisMdx + rows;
 		
 		/* WHERE  (slice data, aka filters in Reports) */
 		where = getWhere(config);
@@ -333,6 +274,8 @@ public class MDXGenerator {
 	 * @throws AmpApiException
 	 */
 	private String getRows(MDXConfig config, StringBuilder with) throws AmpApiException {
+		//if no attributes are configured on rows (e.g. summary report), the just exist
+		if (config.getRowAttributes() == null || config.getRowAttributes().size() == 0) return null;
 		//assumption: only attributes are displayed per rows, no measures
 		return getAxis(config, config.getRowAttributes().listIterator(config.getRowAttributes().size()), 
 				with, "ROWSET", null, config.isDoRowTotals(), 

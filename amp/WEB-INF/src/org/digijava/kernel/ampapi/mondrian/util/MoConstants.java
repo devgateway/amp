@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.mondrian.util;
 
+import org.digijava.module.aim.helper.Constants;
+
 /**
  * 
  * @author Diego Dimunzio
@@ -8,8 +10,8 @@ package org.digijava.kernel.ampapi.mondrian.util;
 public final class MoConstants {
 
 	//AMP Cubes
-	public static String CONNECTION_DS = "jdbc:mondrian:Datasource=java:comp/env/monetDS";
-	public static final String SCHEMA_PATH = "WEB-INF/saiku/saiku-repository/AMP.xml";//.replace("/", System.getProperty("file.separator"));
+	public static String CONNECTION_DS = "jdbc:mondrian:Datasource=" + Constants.MONETDB_JNDI_ALIAS;
+	public static final String SCHEMA_PATH = "WEB-INF/saiku/saiku-repository/AMP.xml".replace("/", System.getProperty("file.separator"));
 	public static final String FUNDING_CUBE_NAME = "Donor Funding";
 	public static final String DEFAULT_CUBE_NAME = FUNDING_CUBE_NAME;
 	
@@ -65,9 +67,10 @@ public final class MoConstants {
 	public static final String H_ORGANIZATIONS = "Organization Hierarchy";
 	public static final String H_ORG_TYPE_NAME = "Organization Type Name";
 	public static final String H_ORG_GROUP_NAME = "Organization Group Name";
-	public static final String H_ORG_NAME = "All Orgs";
+	public static final String H_ORG_NAME = "Organization Name";
 	//public static final String H_ORG_DUPLICATE = "Organization Hierarchy Duplicate";
 	public static final String H_LOCATIONS = "Locations";
+	public static final String H_REGIONS = "Region Name";
 	public static final String H_PRIMARY_SECTOR = "Primary Sector";
 	public static final String H_PROJECT_TITLE = "Project Title";
 	//public static final String H_LOCATIONS_DUPLICATE= "LocationsDuplicate";
@@ -125,6 +128,12 @@ public final class MoConstants {
 	public static String PLEDGE_PLEDGES_COMMITMENTS = "Pledges Actual Commitments";
 	public static String PLEDGE_PLEDGES_DISBURSEMENTS = "Pledges Actual Disbursements";
 	public static String PLEDGE_PLEDGES_COMMITMENTS_GAP = "Commitment Gap";
+	
+	//Quarters
+	public static final String Q1 = "Q1";
+	public static final String Q2 = "Q2";
+	public static final String Q3 = "Q3";
+	public static final String Q4 = "Q4";
 	
 	public static final String DATE_FORMAT = "YYYY-MM-dd";
 	public static final String HAS_AMP_PROPERTIES = "HAS_AMP_PROPERTIES";

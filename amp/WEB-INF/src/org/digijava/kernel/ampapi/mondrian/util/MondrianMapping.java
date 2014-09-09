@@ -13,7 +13,6 @@ import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.NamedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportMeasure;
@@ -145,7 +144,7 @@ public class MondrianMapping {
 			put(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXAttribute(MoConstants.SECONDARY_PROGRAMS, MoConstants.ATTR_PROGRAM_LEVEL_1_NAME));
 			put(new ReportColumn(ColumnConstants.TERTIARY_PROGRAM, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXAttribute(MoConstants.TERTIARY_PROGRAMS, MoConstants.ATTR_PROGRAM_LEVEL_2_NAME));
 			put(new ReportColumn(ColumnConstants.COUNTRY, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS,  MoConstants.ATTR_COUNTRY_NAME));
-			put(new ReportColumn(ColumnConstants.REGION, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS,  MoConstants.ATTR_REGION_NAME));
+			put(new ReportColumn(ColumnConstants.REGION, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.LOCATION, MoConstants.H_REGIONS,  MoConstants.ATTR_REGION_NAME));
 			put(new ReportColumn(ColumnConstants.ZONE, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS,  MoConstants.ATTR_ZONE_NAME));
 			put(new ReportColumn(ColumnConstants.DISTRICT, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS,  MoConstants.ATTR_DISTRICT_NAME));
 			//put(new ReportColumn(ColumnConstants. location?, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS,  MoConstants.ATTR_LOCATION_NAME));
@@ -177,35 +176,4 @@ public class MondrianMapping {
 			//TODO: review/complete mappings based on Mondrian Schema
 		}
 	};
-	
-	/* candidate for removal
-	private static final Map<NamedTypedEntity, String> idProperty = new HashMap<NamedTypedEntity, String>() {{
-		put(new ReportColumn(ColumnConstants.COUNTRY, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_COUNTRY_ID);
-		put(new ReportColumn(ColumnConstants.REGION, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_REGION_ID);
-		put(new ReportColumn(ColumnConstants.ZONE, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_ZONE_ID);
-		put(new ReportColumn(ColumnConstants.DISTRICT, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_DISTRIC_ID);
-		//put(new ReportColumn(ColumnConstants. location?, ReportEntityType.P_LOCATION_ID)
-		put(new ReportColumn(ColumnConstants.DONOR_TYPE, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_ORG_TYPE_ID);
-		put(new ReportColumn(ColumnConstants.EXECUTING_AGENCY_TYPE, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_ORG_TYPE_ID);
-		put(new ReportColumn(ColumnConstants.IMPLEMENTING_AGENCY_TYPE, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_ORG_TYPE_ID);
-		//put(new ReportColumn(ColumnConstants.Benef?, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_ORG_TYPE_ID);
-		//put(new ReportColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION_DEPARTMENT_DIVISION??, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_ORG_TYPE_ID);
-		put(new ReportColumn(ColumnConstants.DONOR_GROUP, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_ORG_GROUP_ID);
-		put(new ReportColumn(ColumnConstants.EXECUTING_AGENCY_GROUPS, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_ORG_GROUP_ID);
-		put(new ReportColumn(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_ORG_GROUP_ID);
-		put(new ReportColumn(ColumnConstants.BENEFICIARY_AGENCY_GROUPS, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_ORG_GROUP_ID);
-		put(new ReportColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_ORG_GROUP_ID);
-		put(new ReportColumn(ColumnConstants.DONOR_AGENCY, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_ORG_ID);
-		put(new ReportColumn(ColumnConstants.EXECUTING_AGENCY, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_ORG_ID);
-		put(new ReportColumn(ColumnConstants.IMPLEMENTING_AGENCY, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_ORG_ID);
-		put(new ReportColumn(ColumnConstants.BENEFICIARY_AGENCY, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_ORG_ID);
-		put(new ReportColumn(ColumnConstants.RESPONSIBLE_ORGANIZATION, ReportEntityType.ENTITY_TYPE_ALL), MoConstants.P_ORG_ID);
-		put(new ReportColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ACTIVITY), MoConstants.P_PRIMARY_SECTOR);
-		put(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, ReportEntityType.ENTITY_TYPE_ACTIVITY), MoConstants.P_PRIMARY_SECTOR_SUB_SECTOR);
-		put(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, ReportEntityType.ENTITY_TYPE_ACTIVITY), MoConstants.P_PRIMARY_SECTOR_SUB_SUB_SECTOR);
-		put(new ReportColumn(ColumnConstants.PLEDGES_SECTORS, ReportEntityType.ENTITY_TYPE_PLEDGE), MoConstants.P_PRIMARY_SECTOR);
-		put(new ReportColumn(ColumnConstants.PLEDGES_SECONDARY_SECTORS, ReportEntityType.ENTITY_TYPE_PLEDGE), MoConstants.P_PRIMARY_SECTOR_SUB_SECTOR);
-		put(new ReportColumn(ColumnConstants.PLEDGES_TERTIARY_SECTORS, ReportEntityType.ENTITY_TYPE_PLEDGE), MoConstants.P_PRIMARY_SECTOR_SUB_SUB_SECTOR);
-	}};
-	*/
 }

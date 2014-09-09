@@ -22,6 +22,7 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
+import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.service.olap.totals.TotalNode;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
@@ -77,6 +78,9 @@ public class CellDataSetToGeneratedReport {
 			int nextNotNullColId = nextNotNull(rowId, maxDepth);
 			
 			reportArea.setContents(contents);
+			//remember the source row id that will be used during sorting
+			if (reportArea instanceof SaikuReportArea)
+				((SaikuReportArea)reportArea).setOrigId(rowId);
 			
 			boolean areaEnd = isEndOfArea(rowId, notNullColId, nextNotNullColId);
 			
@@ -180,6 +184,12 @@ public class CellDataSetToGeneratedReport {
 		if (rowTotals == null || rowTotals.length == 0) return; //if needed, we can be built manually in this case, but... it's getting more and more like a custom report generation
 		Map<ReportOutputColumn, ReportCell> contents = new LinkedHashMap<ReportOutputColumn, ReportCell>(leafHeaders.size());
 		
+		if (current instanceof SaikuReportArea) {
+			((SaikuReportArea)current).setOrigId(currentSubGroupIndex[colId]);
+			((SaikuReportArea)current).setTotalRow(true);
+		}
+		
+		//taking row totals for the subgroup identified by colId and this is currentSubGroupIndex[colId] retrieval from this subgroup
 		TotalAggregator[][] totals = rowTotals[colId].get(currentSubGroupIndex[colId]).getTotalGroups();
 		currentSubGroupIndex[colId] ++;
 		int headerPos = 0;
@@ -189,7 +199,7 @@ public class CellDataSetToGeneratedReport {
 			contents.put(leafHeaders.get(headerPos), new TextCell(value));
 		}
 		//adding data totals of the current area
-		for (int a = 0; a < totals.length; a ++) //normaly totals.length == 0
+		for (int a = 0; a < totals.length; a ++) //normally totals.length == 1
 			for (int b = 0; b < totals[a].length; b++) 
 				contents.put(leafHeaders.get(headerPos++), new AmountCell(totals[a][b].getValue()));
 			

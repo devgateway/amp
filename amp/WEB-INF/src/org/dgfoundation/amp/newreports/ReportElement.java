@@ -47,6 +47,11 @@ public class ReportElement {
 		this(null, type, null);
 	}
 	
+	/**
+	 * No entity report element, that is under the specified hierarchy path, e.g. quarter under ["2011"] hierarchy path 
+	 * @param type - anything, except ENTITY
+	 * @param hierarchyPath - a list of parent hierarchies the element is expected to be a part of
+	 */
 	public ReportElement(ElementType type, List<String> hierarchyPath) {
 		this(null, type, hierarchyPath);
 	}

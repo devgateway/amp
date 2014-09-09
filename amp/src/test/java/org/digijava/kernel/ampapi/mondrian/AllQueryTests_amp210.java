@@ -22,10 +22,11 @@ import org.hibernate.cfg.Configuration;
  */
 public class AllQueryTests_amp210 {
 	private static final String CONNECTION_PATH = ""
-			+ "jdbc:mondrian:Jdbc=jdbc:postgresql:" + "//localhost:5432/amp_moldova_210" + ";"
-			+ "JdbcUser=postgre;"
-			+ "JdbcPassword=postgre;"
-			+ "JdbcDrivers=org.postgresql.Driver";
+			+ "jdbc:mondrian:Jdbc=jdbc:monetdb:" + "//localhost/amp_moldova_210" + ";"
+			+ "JdbcUser=monetdb;"
+			+ "JdbcPassword=monetdb;"
+			+ "JdbcDrivers=nl.cwi.monetdb.jdbc.MonetDriver;"
+			+ "DynamicSchemaProcessor=org.digijava.kernel.ampapi.mondrian.util.AmpMondrianSchemaProcessor";
 	
 	private static String PRINT_PATH = null;
 

@@ -17,12 +17,12 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 
 	@Override
 	public String processSchema(String schemaURL, PropertyList connectInfo) throws Exception {
-		String rootDir = AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH;
-		String url2 = schemaURL.replaceAll("res:\\.\\.", rootDir + File.separator + "WEB-INF");
-		String url = schemaURL.replaceAll("res:\\.\\.", "WEB-INF");
+		//String rootDir = AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH;
+//		String url2 = schemaURL.replaceAll("res:\\.\\.", rootDir + File.separator + "WEB-INF");
+//		String url = schemaURL.replaceAll("res:\\.\\.", "WEB-INF");
 		String contents = null;
-		//try(InputStreamReader isr = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(url), "utf-8")) { 
-		try(InputStreamReader isr = new InputStreamReader(new FileInputStream(url2), "utf-8")) {
+		try(InputStreamReader isr = new InputStreamReader(this.getClass().getResourceAsStream("AMP.xml"), "utf-8")) { 
+		//try(InputStreamReader isr = new InputStreamReader(new FileInputStream(url2), "utf-8")) {
 			try(Scanner scanner = new Scanner(isr)) {
 				contents = scanner.useDelimiter("\\Z").next();
 			}}

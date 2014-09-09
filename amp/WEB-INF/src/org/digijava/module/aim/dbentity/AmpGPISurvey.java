@@ -39,8 +39,9 @@ public class AmpGPISurvey implements Versionable, Serializable, Cloneable, Compa
 
 	@Override
 	public boolean equalsForVersioning(Object obj) {
+		// Since each project can have only 1 GPI survey then we consider them always the same.
 		AmpGPISurvey aux = (AmpGPISurvey) obj;
-		if (this.getAmpGPISurveyId().equals(aux.getAmpGPISurveyId())) {
+		if (aux != null) {
 			return true;
 		} else {
 			return false;

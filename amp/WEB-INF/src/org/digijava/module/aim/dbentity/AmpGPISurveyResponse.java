@@ -69,8 +69,7 @@ public class AmpGPISurveyResponse implements Versionable, Cloneable, Serializabl
 
 	@Override
 	public Object getValue() {
-		// TODO Auto-generated method stub
-		return null;
+		return response;
 	}
 
 	@Override
@@ -78,12 +77,12 @@ public class AmpGPISurveyResponse implements Versionable, Cloneable, Serializabl
 		Output out = new Output();
 		out.setTitle(new String[] { " Q", this.ampQuestionId.getQuestionNumber().toString(), ": " });
 		out.setOutputs(new ArrayList<Output>());
-		if (this.response != null && !this.response.equals("nil")) {
-			out.getOutputs().add(new Output(null, new String[] { "Response:&nbsp;" }, new Object[] { this.getResponse() }));
-		}
-		if (this.references != null) {
-			out.getOutputs().add(new Output(null, new String[] { "References:&nbsp;" }, new Object[] { this.getReferences() }));
-		}
+		/*
+		 * if (this.response != null && !this.response.equals("nil")) {
+		 * out.getOutputs().add(new Output(null, new String[] {
+		 * "Response:&nbsp;" }, new Object[] { this.getResponse() })); }
+		 */
+		out.setValue(new Object[] { this.getResponse() != null ? this.getResponse() : "" });
 		return out;
 	}
 

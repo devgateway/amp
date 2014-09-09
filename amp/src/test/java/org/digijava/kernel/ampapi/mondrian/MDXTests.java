@@ -195,7 +195,7 @@ public class MDXTests extends AmpTestCase {
 		config.setMdxName("testHierarchiesWithTotalsNoDateGrouping");
 		config.addColumnMeasure(new MDXMeasure(MoConstants.ACTUAL_COMMITMENTS));
 		config.addColumnMeasure(new MDXMeasure(MoConstants.ACTUAL_DISBURSEMENTS));
-		config.addRowAttribute(new MDXAttribute(MoConstants.PRIMARY_SECTOR, MoConstants.ATTR_PRIMARY_SECTOR_NAME));
+		config.addRowAttribute(new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.H_PRIMARY_SECTOR, MoConstants.ATTR_PRIMARY_SECTOR_NAME));
 		config.addRowAttribute(new MDXAttribute(MoConstants.PROJECT_TITLE, MoConstants.ATTR_PROJECT_TITLE));
 		config.addRowAttribute(new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS, MoConstants.ATTR_REGION_NAME));
 		config.setAllowEmptyColumnsData(false);
@@ -223,7 +223,7 @@ public class MDXTests extends AmpTestCase {
 		MDXConfig config = getDefaultConfig("testSortingBy2012Q1ActualCommitments", false);
 		config.addColumnAttribute(new MDXLevel(MoConstants.DATES, MoConstants.H_QUARTER, MoConstants.ATTR_QUARTER));
 		config.getRowAttributes().clear();
-		config.addRowAttribute(new MDXAttribute(MoConstants.PRIMARY_SECTOR, MoConstants.ATTR_PRIMARY_SECTOR_NAME));
+		config.addRowAttribute(new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.H_PRIMARY_SECTOR, MoConstants.ATTR_PRIMARY_SECTOR_NAME));
 		MDXTuple sortingTouple1 = new MDXTuple();
 		sortingTouple1.add(new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, "2012", "Q1"));
 		sortingTouple1.add(config.getColumnMeasures().get(0));

@@ -15,14 +15,13 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.AmpReportTranslator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
+import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -56,7 +55,24 @@ public class Reports {
 	@Path("/report/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public final JSONResult getReport(@PathParam("report_id") Long reportId) {
-
+		return getReport(reportId, true, false);
+	}
+	
+	@GET
+	@Path("/report/{report_id}/result")
+	@Produces(MediaType.APPLICATION_JSON)
+	public final JSONResult getReportResult(@PathParam("report_id") Long reportId) {
+		return getReport(reportId, true, true);
+	}
+	
+	@GET
+	@Path("/tab/{report_id}/result")
+	@Produces(MediaType.APPLICATION_JSON)
+	public final JSONResult getTabResult(@PathParam("report_id") Long reportId) {
+		return getReport(reportId, false, true);
+	}
+	
+	private final JSONResult getReport(Long reportId, boolean forSaiku, boolean generateReport) {
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
 
 		//TODO: for now we do not translate other types of reports than Donor Type reports (hide icons for non-donor-type reports?)
@@ -69,7 +85,8 @@ public class Reports {
 		}
 		;
 
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, false);
+		Class<? extends ReportAreaImpl> reportAreaType = forSaiku ? SaikuReportArea.class : ReportAreaImpl.class;
+		MondrianReportGenerator generator = new MondrianReportGenerator(reportAreaType, false);
 
 		JSONResult result = new JSONResult();
 		ReportMetadata metadata = new ReportMetadata();
@@ -83,10 +100,15 @@ public class Reports {
 
 		result.setReportMetadata(metadata);
 
-		try {
-			result.setMdx(generator.getMDXQuery(spec));
-		} catch (AMPException e) {
-			logger.error(e);
+		if (generateReport) {
+			try {
+				if (forSaiku)
+					result.setGeneratedReport(generator.generateReportForSaiku(spec));
+				else
+					result.setGeneratedReport(generator.executeReport(spec));
+			} catch (AMPException e) {
+				logger.error(e);
+			}
 		}
 		return result;
 	}
@@ -156,23 +178,4 @@ public class Reports {
 		List<JSONTab> tabs = new ArrayList<JSONTab>();
 		return tabs;
 	}
-	
-	@GET
-	@Path("/report/{report_id}/result")
-	@Produces(MediaType.APPLICATION_JSON)
-	public final ReportArea getReportResult(@PathParam("report_id") Long reportId) {
-
-		AmpReports ampReport = DbUtil.getAmpReport(reportId);
-		ReportSpecificationImpl spec = null;
-		try {
-			spec = AmpReportTranslator.toReportSpecification(ampReport);
-			MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, false);
-			GeneratedReport sgr = generator.executeReport(spec);
-			return sgr.reportContents;
-		} catch (AMPException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-
 }

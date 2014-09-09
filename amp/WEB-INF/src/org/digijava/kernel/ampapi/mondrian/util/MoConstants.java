@@ -71,7 +71,9 @@ public final class MoConstants {
 	//public static final String H_ORG_DUPLICATE = "Organization Hierarchy Duplicate";
 	public static final String H_LOCATIONS = "Locations";
 	public static final String H_REGIONS = "Region Name";
-	public static final String H_PRIMARY_SECTOR = "Primary Sector";
+	public static final String H_PRIMARY_SECTOR = "Level 0 Sector";
+	public static final String H_SECONDARY_SECTOR = "Level 1 Sector";
+	public static final String H_TETRIARY_SECTOR = "Level 2 Sector";
 	public static final String H_PROJECT_TITLE = "Project Title";
 	//public static final String H_LOCATIONS_DUPLICATE= "LocationsDuplicate";
 	//Attributes/Levels
@@ -90,13 +92,13 @@ public final class MoConstants {
 	public static final String ATTR_ZONE_NAME = "Zone Name";
 	public static final String ATTR_DISTRICT_NAME = "District Name";
 	public static final String ATTR_LOCATION_NAME = "Location";
-	public static final String ATTR_PRIMARY_SECTOR_NAME = "Primary Sector";
+	public static final String ATTR_PRIMARY_SECTOR_NAME = "Level 0 Sector";
 	public static final String ATTR_PRIMARY_SECTOR_SUB_SECTOR_NAME = "Primary Sector Sub-sector";
 	public static final String ATTR_PRIMARY_SECTOR_SUB_SUB_SECTOR_NAME = "Primary Sector Sub-sub-sector";
-	public static final String ATTR_SECONDARY_SECTOR_NAME = "Secondary Sector";
+	public static final String ATTR_SECONDARY_SECTOR_NAME = "Level 1 Sector";
 	public static final String ATTR_SECONDARY_SUB_SECTOR_NAME = "Secondary Sector Sub-sector";
 	public static final String ATTR_SECONDARY_SUB_SUB_SECTOR_NAME = "Secondary Sector Sub-sub-sector";
-	public static final String ATTR_TETRIARY_SECTOR = "Tertiary Sector";
+	public static final String ATTR_TETRIARY_SECTOR = "Level 2 Sector";
 	public static final String ATTR_TETRIARY_SUB_SECTOR = "Tertiary Sector Sub-sector";
 	public static final String ATTR_TETRIARY_SUB_SUB_SECTOR = "Tertiary Sector Sub-sub-sector";
 	public static final String ATTR_ORG_TYPE_NAME = "Organization Type Name";

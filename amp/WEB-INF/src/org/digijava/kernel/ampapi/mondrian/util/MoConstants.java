@@ -11,7 +11,7 @@ public final class MoConstants {
 
 	//AMP Cubes
 	public static String CONNECTION_DS = "jdbc:mondrian:Datasource=" + Constants.MONETDB_JNDI_ALIAS;
-	public static final String SCHEMA_PATH = "WEB-INF/saiku/saiku-repository/AMP.xml".replace("/", System.getProperty("file.separator"));
+	public static final String SCHEMA_PATH = "WEB-INF/src/org/digijava/kernel/ampapi/mondrian/util/AMP.xml".replace("/", System.getProperty("file.separator"));
 	public static final String FUNDING_CUBE_NAME = "Donor Funding";
 	public static final String DEFAULT_CUBE_NAME = FUNDING_CUBE_NAME;
 	

@@ -129,22 +129,7 @@ public class AmpReportTranslator {
 	private void configureSorting() {
 		//TODO: please cleanup this function from workarounds when AMP-18205 is fixed
 
-		//check sort by setting first
-		if (StringUtils.isNotBlank(arFilter.getSortBy())) {
-			//sort by syntax example: 
-			//1) sorting by non-hierarchical column: /Primary Sector
-			//2) sorting by funding: /Funding/2010/Actual Disbursements
-			//3) sorting by totals: /Total Costs/Actual Commitments
-			String[] sorting = arFilter.getSortBy().substring(1).split("/");
-			if (sorting.length == 1){ //use case 1) non-hierarchical column
-				ReportColumn rCol = MondrianReportUtils.getColumn(sorting[0], entityType);
-				if (!spec.getHierarchies().contains(rCol)) //workaround for AMP-18205, issue #4 if column changes from non-hierarchy to hierarchy
-					spec.addSorter(new SortingInfo(rCol, arFilter.getSortByAsc()));
-			} else //use case 2) or 3) 
-				addFundingSorting(sorting, arFilter.getSortByAsc(), null);
-			
-		} 
-		
+		//hierarchy sorting has a priority
 		//now check if we have hierarchies sorting
 		if (arFilter.getHierarchySorters() != null && arFilter.getHierarchySorters().size() > 0) { 
 			ReportColumn[] hierarchies = spec.getHierarchies().toArray(new ReportColumn[0]);
@@ -158,6 +143,7 @@ public class AmpReportTranslator {
 					validSortingRules.put(Integer.valueOf(sortingArray[0]) - 1, sortingArray); //keep the latest sorting, which is the valid one
 				}
 			}
+			logger.info("[" + spec.getReportName() +"] sorting rules :" + validSortingRules.values().toString());
 			//end workaround for AMP-18205, issue #1 & #2, now we'll work with valid sortings
 			for(Entry<Integer, String[]> pair : validSortingRules.entrySet()) {
 				ReportColumn hierarchyColumn = hierarchies[pair.getKey()]; 
@@ -171,6 +157,21 @@ public class AmpReportTranslator {
 				}
 			}
 		}
+		
+		//check sort by setting first
+		if (StringUtils.isNotBlank(arFilter.getSortBy())) {
+			//sort by syntax example: 
+			//1) sorting by non-hierarchical column: /Primary Sector
+			//2) sorting by funding: /Funding/2010/Actual Disbursements
+			//3) sorting by totals: /Total Costs/Actual Commitments
+			String[] sorting = arFilter.getSortBy().substring(1).split("/");
+			if (sorting.length == 1){ //use case 1) non-hierarchical column
+				ReportColumn rCol = MondrianReportUtils.getColumn(sorting[0], entityType);
+				if (!spec.getHierarchies().contains(rCol)) //workaround for AMP-18205, issue #4 if column changes from non-hierarchy to hierarchy
+					spec.addSorter(new SortingInfo(rCol, arFilter.getSortByAsc()));
+			} else //use case 2) or 3) 
+				addFundingSorting(sorting, arFilter.getSortByAsc(), null);
+		} 
 	}
 	
 	private void addFundingSorting(String[] fundingColumns, boolean asc, ReportColumn hierarchyColumn) {

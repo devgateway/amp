@@ -98,6 +98,10 @@
 				<Table name="mondrian_locations@@locale@@" />
 				<Level name="Country Name" column="country_id" type="Integer" nameColumn="country_name" />
 			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Locations" name="Region Name" primaryKey="id">
+				<Table name="mondrian_locations@@locale@@" />
+				<Level name="Region Name" column="region_id" type="Integer" nameColumn="region_name" />
+			</Hierarchy>
 			<Hierarchy hasAll="true" allMemberName="All Locations" name="LocationsDuplicate" uniqueKeyLevelName="Location" primaryKey="id">
 				<Table name="mondrian_locations@@locale@@" />
 				<Level name="Country Name" column="country_id" type="Integer" nameColumn="country_name" >
@@ -120,7 +124,13 @@
 			<Hierarchy hasAll="true" allMemberName="All Primary Sectors" primaryKey="amp_sector_id" name="Primary Sector">
 				<Table name="mondrian_sectors@@locale@@" alias="primary_sector_table" />
 				<Level name="Primary Sector" type="Integer" column="level0_sector_id" nameColumn="level0_sector_name" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Primary Sectors" primaryKey="amp_sector_id" name="Primary Sector Sub-sector">
+				<Table name="mondrian_sectors@@locale@@" alias="primary_sector_table" />
 				<Level name="Primary Sector Sub-sector" type="Integer" column="level1_sector_id" nameColumn="level1_sector_name" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Primary Sectors" primaryKey="amp_sector_id" name="Primary Sector Sub-sub-sector">
+				<Table name="mondrian_sectors@@locale@@" alias="primary_sector_table" />
 				<Level name="Primary Sector Sub-sub-sector" type="Integer" column="level2_sector_id" nameColumn="level2_sector_name" />
 			</Hierarchy>
 		</Dimension>
@@ -230,4 +240,3 @@
 		</Measure>				
 	</Cube>
  </Schema>
-

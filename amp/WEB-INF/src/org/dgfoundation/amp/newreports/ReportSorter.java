@@ -16,7 +16,7 @@ import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 /**
  * Sorts {@link GeneratedReport} based on sorting information from {@link ReportSpecification}, 
  * but only for the sorting that is needed during post-processing.<br> 
- * Lowest level sorting is delegated to MDX, while totals and non-hierarchies sorting have to be done 
+ * Lowest level sorting is delegated to MDX, while totals, hierarchies and non-hierarchies sorting have to be done 
  * after totals are calculated and non-hierarchies columns are merged during post-processing phase.  
  * @author Nadejda Mandrescu
  */
@@ -45,6 +45,8 @@ public class ReportSorter {
 	protected int sort() throws AMPException {
 		if (spec.getSorters() == null || spec.getSorters().size() == 0) return -1;
 		long startTime = System.currentTimeMillis();
+		//we need to sort by hierarchis titles only if any other sorting in post-processing phase breaks up the sorting done in MDX, in our case is the sorting by measures totals 
+		boolean wasSortedByMeasuresTotals = false;
 		
 		//lowest level sorting is done via MDX, now we need to sort by non-hierarchical columns that were merged and by totals
 		for(ListIterator<SortingInfo> iter = spec.getSorters().listIterator(spec.getSorters().size() - 1); iter.hasPrevious(); ) {
@@ -56,15 +58,16 @@ public class ReportSorter {
 				if (ElementType.ENTITY.equals(first.type))
 					if (ReportMeasure.class.isAssignableFrom(first.entity.getClass())) {
 						sortMeasureTotals(sortingInfo);
+						wasSortedByMeasuresTotals = true;
 					} else {
-						sortByHierarchy(sortingInfo);
+						sortByHierarchy(sortingInfo, wasSortedByMeasuresTotals);
 					}
 				else
 					throw new AMPException("Not supported sorting configuration for isTotals = true and non entity");
 			} else {
 				if (ElementType.ENTITY.equals(first.type))
 					if(spec.getHierarchies().contains(first)){
-						sortByHierarchy(sortingInfo);
+						sortByHierarchy(sortingInfo, wasSortedByMeasuresTotals);
 					} else if(spec.getColumns().contains(first)) {
 						sortByNonHierarchyColumn(sortingInfo);
 					} //else -> this is a funding column sorting, which was already done in MDX and thus nothing to post-sort
@@ -95,30 +98,34 @@ public class ReportSorter {
 		sortByColumn(rootArea, colId , level);
 	}
 	
-	private void sortByHierarchy(SortingInfo sInfo) throws AMPException {
-		//if the sorting by hierarchy was a sorting by title, then it was already sorted via MDX and nothing to do
-		if (sInfo.sortByTuple.size() == 1) return;
-
-		//this is a sorting by hierarchy totals
+	private void sortByHierarchy(SortingInfo sInfo, boolean doSortingByTitle) throws AMPException {
 		Iterator<Entry<ReportElement, FilterRule>> iter = sInfo.sortByTuple.entrySet().iterator();
 		//first entry must be the hierarchy column itself
 		ReportColumn hierarchyColumn =  (ReportColumn) iter.next().getKey().entity;
 		int level = getColumnId(hierarchyColumn) + 1; //stores the exact level totals that must be sorted
-		Entry<ReportElement, FilterRule> nextEntry = iter.next();
-				
-		if (sInfo.isTotals && nextEntry.getKey().entity != null) {
-			//this is sorting by hierarchy total on Total Costs (Total Measures) column
-			ReportMeasure measure = (ReportMeasure)iter.next().getKey().entity;
-			sortByMeasuresTotals(measure, level);
-		} else {
-			//next entry is funding column sorting  
-			//build the expected leaf header name
-			String colName = "";
-			if (ElementType.QUARTER.equals(nextEntry.getKey().type) || ElementType.MONTH.equals(nextEntry.getKey().type) )
-				for (String path : nextEntry.getKey().hierarchyPath)
-					colName += "[" + path + "]";
-			colName += "[" + nextEntry.getValue().value + "]";
-			sortByColumn(rootArea, leafHeaders.indexOf(colName), level);
+		
+		if (iter.hasNext()) {
+			//this is a sorting by hierarchy totals
+			Entry<ReportElement, FilterRule> nextEntry = iter.next();
+					
+			if (sInfo.isTotals && nextEntry.getKey().entity != null) {
+				//this is sorting by hierarchy total on Total Costs (Total Measures) column
+				ReportMeasure measure = (ReportMeasure)iter.next().getKey().entity;
+				sortByMeasuresTotals(measure, level);
+			} else {
+				//next entry is funding column sorting  
+				//build the expected leaf header name
+				String colName = "";
+				if (ElementType.QUARTER.equals(nextEntry.getKey().type) || ElementType.MONTH.equals(nextEntry.getKey().type) )
+					for (String path : nextEntry.getKey().hierarchyPath)
+						colName += "[" + path + "]";
+				colName += "[" + nextEntry.getValue().value + "]";
+				sortByColumn(rootArea, leafHeaders.indexOf(colName), level);
+			}
+		} else if (doSortingByTitle) {
+			//this is the sorting by hierarchy title
+			//if the sorting by hierarchy was a sorting by title, then it was already sorted via MDX and nothing to do if not explicitly requested
+			sortByColumn(rootArea, level, level);
 		}
 	}
 	

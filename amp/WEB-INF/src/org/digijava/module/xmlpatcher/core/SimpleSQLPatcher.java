@@ -1,6 +1,7 @@
 package org.digijava.module.xmlpatcher.core;
 
 import java.sql.Connection;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -326,10 +327,43 @@ public class SimpleSQLPatcher {
    				if (shouldRunPatch)
    					executePatch(patch, conn, hashes.isEmpty());
    			}
+   			
+   			runDrcCleanup(conn);
    			conn.setAutoCommit(false);
    			
    			conn.setAutoCommit(autoCommit);
    		}
+	}
+	
+	/**
+	 * the DRC database is miserable as of September 2014 - quick&dirty run-once fixes for it
+	 * @param conn
+	 */
+	void runDrcCleanup(Connection conn) {
+		if (SQLUtils.fetchLongs(conn, "SELECT count(*) from amp_columns WHERE columnname in ('Description of Component Funding', 'Component Funding Organization')").get(0) == 0) {
+			SQLUtils.executeQuery(conn, "INSERT INTO amp_columns (columnid, columnname, aliasname, celltype, extractorview) VALUES " + 
+				"(nextval('amp_columns_seq'), 'Description of Component Funding', 'component_funding_description', 'org.dgfoundation.amp.ar.cell.TextCell', 'v_component_funding_description'), " + 
+				"(nextval('amp_columns_seq'), 'Component Funding Organization', 'component_funding_organization_name', 'org.dgfoundation.amp.ar.cell.TextCell', 'v_component_funding_organization_name')");			
+		}
+		
+		boolean reindexACV = false;
+		List<Long> aa = SQLUtils.fetchLongs(conn, "select count(*) from amp_category_value acv where (select count(*) from amp_category_value acv2 where acv2.amp_category_class_id = acv.amp_category_class_id AND acv2.index_column = acv.index_column) > 1"); 
+		reindexACV |= aa.get(0) > 0;
+
+		aa = SQLUtils.fetchLongs(conn, "select amp_location_id from amp_location where location_id = 1397 order by amp_location_id");
+		if (aa.size() == 2 && aa.get(0) == 107 && aa.get(1) == 109) {
+			SQLUtils.executeQuery(conn, "delete from amp_location where amp_location_id = 109");
+		}
+		
+		aa = SQLUtils.fetchLongs(conn, "select id from amp_category_value acv WHERE (select count(*) from amp_category_value acv2 where acv.category_value = acv2.category_value and acv.amp_category_class_id = acv2.amp_category_class_id) > 1 order by id");
+		
+		if (aa.size() == 2 && aa.get(0) == 248 && aa.get(1) == 249) {
+			SQLUtils.executeQuery(conn, "delete from amp_category_value where id = 248");
+			reindexACV |= true;
+		}
+		
+		if (reindexACV)
+			SQLUtils.executeQuery(conn, "UPDATE amp_category_value acv SET index_column = (SELECT count(*) FROM amp_category_value acv2 WHERE acv2.amp_category_class_id = acv.amp_category_class_id AND (acv2.index_column < acv.index_column OR (acv2.id < acv.id AND acv2.index_column = acv.index_column)))");
 	}
 	
 	void executePatch(SimpleSQLPatch patch, Connection conn, boolean shouldInsert){

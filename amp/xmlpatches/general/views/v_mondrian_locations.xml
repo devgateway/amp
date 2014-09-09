@@ -21,17 +21,20 @@
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_mondrian_locations;
 			    CREATE OR REPLACE VIEW v_mondrian_locations AS 
-					SELECT acvl.id, acvl.parent_location, acvl.location_name, 
-						COALESCE(getlocationidbyimplloc(acvl.id, 'Country'), 999999999) AS country_id, COALESCE(getlocationname(getlocationidbyimplloc(acvl.id, 'Country')), 'Undefined') AS country_name,
-						COALESCE(getlocationidbyimplloc(acvl.id, 'Region'), 999999999) AS region_id, COALESCE(getlocationname(getlocationidbyimplloc(acvl.id, 'Region')), 'Undefined') AS region_name,
-						COALESCE(getlocationidbyimplloc(acvl.id, 'Zone'), 999999999) AS zone_id, COALESCE(getlocationname(getlocationidbyimplloc(acvl.id, 'Zone')), 'Undefined') AS zone_name,
-						COALESCE(getlocationidbyimplloc(acvl.id, 'District'), 999999999) AS district_id, COALESCE(getlocationname(getlocationidbyimplloc(acvl.id, 'District')), 'Undefined') AS district_name
+					SELECT alc.acvl_id AS id, COALESCE(alc.parent_location, 999999999) AS parent_location, alc.acvl_name AS location_name, 
+						COALESCE(alc.country_id, 999999999) AS country_id, COALESCE(alc.country_name, 'Undefined') AS country_name,
+						COALESCE(alc.region_id, 999999999) AS region_id, COALESCE(alc.region_name, 'Undefined') AS region_name,
+						COALESCE(alc.zone_id, 999999999) AS zone_id, COALESCE(alc.zone_name, 'Undefined') AS zone_name,
+						COALESCE(alc.district_id, 999999999) AS district_id, COALESCE(alc.district_name, 'Undefined') AS district_name
 
-						FROM amp_category_value_location acvl
+						FROM amp_location_cache alc
 						
 					UNION ALL
 						
-					SELECT 999999999, null, 'Undefined', 999999999, 'Undefined', 999999999, 'Undefined', 999999999, 'Undefined', 999999999, 'Undefined';
+					SELECT 999999999, null, 'Undefined', 999999999, 'Undefined', 999999999, 'Undefined', 999999999, 'Undefined', 999999999, 'Undefined'
+					
+					ORDER BY id;
+					
 			</lang>
 		</script>
 	</apply>

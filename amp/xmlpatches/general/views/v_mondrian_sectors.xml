@@ -21,14 +21,14 @@
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_mondrian_sectors;
 			    CREATE OR REPLACE VIEW v_mondrian_sectors AS 
-					SELECT s.amp_sector_id, s.parent_sector_id, s.sector_code_official, s.name AS sector_name,
-						getparentsectorid(s.amp_sector_id) AS level0_sector_id, getsectorname(getparentsectorid(s.amp_sector_id)) AS level0_sector_name,
-						COALESCE(NULLIF(getparentsubsectorid(s.amp_sector_id), 0), 999999999) AS level1_sector_id, COALESCE(getsectorname(getparentsubsectorid(s.amp_sector_id)), 'Undefined') AS level1_sector_name,
-						COALESCE(NULLIF(getparentsubsubsectorid(s.amp_sector_id), 0), 999999999) AS level2_sector_id, COALESCE(getsectorname(getparentsubsubsectorid(s.amp_sector_id)), 'Undefined') AS level2_sector_name,
-						ss.amp_sec_scheme_id, ss.sec_scheme_name, acc.name AS typename
-						FROM amp_sector s, amp_sector_scheme ss, amp_classification_config acc
-					WHERE ss.amp_sec_scheme_id = s.amp_sec_scheme_id AND acc.classification_id = ss.amp_sec_scheme_id
-					
+					SELECT s.amp_sector_id, s.parent_sector_id, s.sector_code, s.name AS sector_name, s.id0 AS level0_sector_id, s0.name AS level0_sector_name,
+						COALESCE(s.id1, 999999999) AS level1_sector_id, COALESCE(s1.name, 'Undefined') AS level1_sector_name,
+						COALESCE(s.id2, 999999999) AS level2_sector_id, COALESCE(s2.name, 'Undefined') AS level2_sector_name,
+						s.amp_sec_scheme_id, s.sec_scheme_name, s.sector_config_name AS typename
+					FROM all_sectors_with_levels s
+						LEFT JOIN amp_sector s0 ON s0.amp_sector_id = s.id0
+						LEFT JOIN amp_sector s1 ON s1.amp_sector_id = s.id1
+						LEFT JOIN amp_sector s2 ON s2.amp_sector_id = s.id2					
 					UNION ALL
 					
 					SELECT 999999999, null, 'Undefined', 'Undefined', 

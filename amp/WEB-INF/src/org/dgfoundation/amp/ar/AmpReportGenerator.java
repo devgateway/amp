@@ -414,7 +414,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				commGapCell.getMetaData().replace(actualCommitmentMetaInfo);
 				fundingCol.addCell(commGapCell);
 			}
-			System.out.println(fundingCol.prettyPrint());
+			//System.out.println(fundingCol.prettyPrint());
 		}
 		
 		PledgesToActivitiesBridge.BridgeItem correspondingPledgeView = PledgesToActivitiesBridge.activityViewToPledgeView.get(rcol.getColumn().getExtractorView());

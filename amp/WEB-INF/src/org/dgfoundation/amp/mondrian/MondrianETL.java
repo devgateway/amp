@@ -19,27 +19,19 @@ import java.util.StringTokenizer;
 import java.util.List;
 import java.util.TreeSet;
 
-import org.apache.jackrabbit.core.fs.db.DatabaseFileSystem;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.AmpReportGenerator;
-import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
-import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
-import org.dgfoundation.amp.ar.viewfetcher.I18nDatabaseViewFetcher;
-import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.time.StopWatch;
-
-import com.google.common.collect.HashBiMap;
 
 import static org.dgfoundation.amp.mondrian.MondrianTablesRepository.FACT_TABLE;
 
@@ -145,7 +137,7 @@ public class MondrianETL {
 				generateExchangeRatesTable();
 			
 				StopWatch.next(mondrianEtl, true, "generateExchangeRatesTable");
-				generateExchangeRatesColumns();
+				new CalculateExchangeRatesEtlJob(null, monetConn).work();
 				
 				StopWatch.next(mondrianEtl, true, "generateExchangeRatesColumns");
 				generateStarTables();
@@ -211,26 +203,6 @@ public class MondrianETL {
 		}		
 		logger.warn("... done generating exchange rates ETL...");
 		//monetConn.copyTableFromPostgres(this.conn, MONDRIAN_EXCHANGE_RATES_TABLE);
-	}
-
-	protected void generateExchangeRatesColumns() throws SQLException {
-		logger.info("generating exchange rate columns...");
-		List<Long> allCurrencies = SQLUtils.fetchLongs(monetConn.conn, "SELECT amp_currency_id FROM amp_currency");
-		Set<String> tableColumns = monetConn.getTableColumns(FACT_TABLE.tableName);
-		for (Long currency:allCurrencies) {
-			generateExchangeRateColumnsForCurrency(currency, tableColumns);
-		}
-		logger.info("\t...generating exchange rate columns done");
-	}
-	
-	protected void generateExchangeRateColumnsForCurrency(long currency, Set<String> factTableColumns) {
-		String columnName = "transaction_exch_" + currency;
-		if (!factTableColumns.contains(columnName))
-			monetConn.executeQuery(String.format("ALTER TABLE %s ADD %s DOUBLE", FACT_TABLE.tableName, columnName));
-		String query = String.format(
-				"UPDATE %s SET %s = transaction_amount * (select mer.exchange_rate from %s mer WHERE mer.day_code = %s.date_code AND mer.currency_id = %s.currency_id) / (select mer2.exchange_rate from %s mer2 WHERE mer2.day_code = %s.date_code AND mer2.currency_id = %s)",
-				FACT_TABLE.tableName, columnName, MONDRIAN_EXCHANGE_RATES_TABLE, FACT_TABLE.tableName, FACT_TABLE.tableName, MONDRIAN_EXCHANGE_RATES_TABLE, FACT_TABLE.tableName, currency);
-		monetConn.executeQuery(query);
 	}
 	
 	/**

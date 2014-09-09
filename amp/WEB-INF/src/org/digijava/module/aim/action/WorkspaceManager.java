@@ -167,7 +167,7 @@ public class WorkspaceManager extends Action {
 				for (Iterator jt = keywords.iterator(); jt.hasNext();) {
 					String keyw = (String) jt.next();
 					logger.error("indirect llk debugging:----------keyword is: " + keyw);
-					
+					/*test comment*/
 					if ((team.getDescription() != null && (SearchUtil.stringContainsKeyword(team.getDescription(), keyw))) 
 							|| (team.getName() != null) && SearchUtil.stringContainsKeyword(team.getName(), keyw))
 						{

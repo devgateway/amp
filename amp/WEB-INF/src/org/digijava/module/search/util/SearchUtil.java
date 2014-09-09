@@ -465,7 +465,7 @@ public class SearchUtil {
         return activities;
     }
 	
-	
+	/*Unicode-friendly function for search, ignores diacritics via Normalizer*/
 	public static boolean stringContainsKeyword(String source, String keyword) {
 		return Normalizer.normalize(source.toLowerCase(), Normalizer.Form.NFC).contains(Normalizer.normalize(keyword, Normalizer.Form.NFC));
 	}

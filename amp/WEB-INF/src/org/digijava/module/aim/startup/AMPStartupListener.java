@@ -346,6 +346,7 @@ public class AMPStartupListener extends HttpServlet implements
 			
 			ReportsUtil.checkDatabaseSanity(session);
 			ReportsUtil.checkPledgesViewsSanity(session);
+			ReportsUtil.checkLocationsSanity(session);
 			CurrencyUtil.checkDatabaseSanity(session);
 		}catch(Exception e){
 			throw new Error("database does not conform to minimum sanity requirements, shutting down AMP", e);

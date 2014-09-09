@@ -362,6 +362,12 @@ public class SimpleSQLPatcher {
 			reindexACV |= true;
 		}
 		
+		aa = SQLUtils.fetchLongs(conn, "select amp_location_id from amp_location where location_id = 9088 order by amp_location_id");
+		if (aa.size() == 2 && aa.get(0) == 513 && aa.get(1) == 514) {
+			SQLUtils.executeQuery(conn, "update amp_activity_location set amp_location_id = 513 where amp_location_id = 514");
+			SQLUtils.executeQuery(conn, "delete from amp_location where amp_location_id = 514");
+		}
+		
 		if (reindexACV)
 			SQLUtils.executeQuery(conn, "UPDATE amp_category_value acv SET index_column = (SELECT count(*) FROM amp_category_value acv2 WHERE acv2.amp_category_class_id = acv.amp_category_class_id AND (acv2.index_column < acv.index_column OR (acv2.id < acv.id AND acv2.index_column = acv.index_column)))");
 	}

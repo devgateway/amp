@@ -22,6 +22,7 @@ import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpRole;
@@ -82,27 +83,27 @@ public class Filters {
 			switch (s) {
 			case Constants.APPROVED_STATUS:
 				sjb.setId(Constants.APPROVED_STATUS);
-				sjb.setName("Edited and validated");
+				sjb.setName(TranslatorWorker.translateText("Edited and validated"));
 				break;
 			case Constants.EDITED_STATUS:
 				sjb.setId(Constants.EDITED_STATUS);
-				sjb.setName("Edited but not validated");
+				sjb.setName(TranslatorWorker.translateText("Edited but not validated"));
 				break;
 			case Constants.STARTED_APPROVED_STATUS:
 				sjb.setId(Constants.STARTED_APPROVED_STATUS);
-				sjb.setName("New and validated");
+				sjb.setName(TranslatorWorker.translateText("New and validated"));
 				break;
 			case Constants.STARTED_STATUS:
 				sjb.setId(Constants.STARTED_STATUS);
-				sjb.setName("New");
+				sjb.setName(TranslatorWorker.translateText("New"));
 				break;
 			case Constants.NOT_APPRVED:
 				sjb.setId(Constants.NOT_APPRVED);
-				sjb.setName("Not Approved");
+				sjb.setName(TranslatorWorker.translateText("Not Approved"));
 				break;
 			case Constants.REJECTED_STATUS:
 				sjb.setId(Constants.REJECTED_STATUS);
-				sjb.setName("Edited and rejected");
+				sjb.setName(TranslatorWorker.translateText("Edited and rejected"));
 				break;
 			}
 			activityStatus.add(sjb);

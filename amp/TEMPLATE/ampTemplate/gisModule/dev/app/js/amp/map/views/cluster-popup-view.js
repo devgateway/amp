@@ -41,7 +41,7 @@ module.exports = Backbone.View.extend({
       popup.setContent(this.template(this.cluster));
       this.tempDOM = $(popup._contentNode);
 
-      this._generateChart();
+      this._generateCharts();
       return this._generateProjectList(popup, this.cluster);
     }else{
       console.error('no matching cluster: ', admLayer, popup._source._clusterId);
@@ -49,7 +49,24 @@ module.exports = Backbone.View.extend({
     }
   },
 
-  _generateChart: function(){
+  _generateCharts: function(){
+    this._generateSectorChart();
+    this._generateDonorChart();
+  },
+
+  _generateSectorChart: function(){
+
+    var exampleData = [
+      { 'label': 'Health','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5) } ,
+      { 'label': 'Agriculture','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5) },
+      { 'label': 'Science','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5) },
+      { 'label': 'Transport','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5 )},
+      { 'label': 'Planning','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5 )}
+    ];
+    this._generateBaseChart(exampleData, '#charts-pane-sector .amp-chart svg');
+  },
+
+  _generateDonorChart: function(){
 
     var exampleData = [
       { 'label': 'U.N','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5) } ,
@@ -59,7 +76,10 @@ module.exports = Backbone.View.extend({
       { 'label': 'DFID','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5 )}
     ];
 
-    //this.tempDOM.find('.charts').html("TODO: chart");
+    this._generateBaseChart(exampleData, '#charts-pane-donor .amp-chart svg');
+  },
+
+  _generateBaseChart: function(data, selector){
     nvd3.addGraph(function() {
       var chart = nvd3.models.pieChart()
           .x(function(d) { return d.label; })
@@ -67,13 +87,14 @@ module.exports = Backbone.View.extend({
           .showLabels(true)
           .showLegend(false);
 
-      d3.select('.charts svg')
-          .datum(exampleData)
+      d3.select(selector)
+          .datum(data)
           .transition().duration(350)
           .call(chart);
 
       return chart;
     });
+
   },
 
   _generateProjectList: function(){
@@ -96,8 +117,9 @@ module.exports = Backbone.View.extend({
     // hide load more button if all activities loaded.
     if(startIndex + this.PAGE_SIZE >= this.cluster.properties.activityid.length){
         this.tempDOM.find('.load-more').hide();
+    } else {
+      this.tempDOM.find('.load-more').text('load more '+(startIndex + this.PAGE_SIZE)+'/'+this.cluster.properties.activityid.length);
     }
-
 
     return this.app.data.activities.getActivites(activityIDs).then(function(activityCollection){
       self.tempDOM.find('.project-list').append(

@@ -85,7 +85,7 @@ public class AmpARFilterParams {
 			params.luceneSearchModeParam = request.getParameter("searchMode");
 		HttpSession session = request.getSession();
 		ServletContext ampContext = session.getServletContext();
-		params.luceneRealPath = ampContext.getRealPath("/");
+		params.luceneRealPath = ampContext == null ? "/" : ampContext.getRealPath("/");
 		params.teamFilter = (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER);
 		params.member = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
 		params.skipPledgeCheck = skipPledgeCheck;

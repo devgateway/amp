@@ -19,6 +19,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.WorkspaceForm;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.search.util.SearchUtil;
 
 public class WorkspaceManager extends Action {
 
@@ -164,9 +165,18 @@ public class WorkspaceManager extends Action {
 				logger.error("indirect llk debugging: team is " + team.toString());
 				boolean found=false;
 				for (Iterator jt = keywords.iterator(); jt.hasNext();) {
-					
 					String keyw = (String) jt.next();
 					logger.error("indirect llk debugging:----------keyword is: " + keyw);
+					
+					if ((team.getDescription() != null && (SearchUtil.stringContainsKeyword(team.getDescription(), keyw))) 
+							|| (team.getName() != null) && SearchUtil.stringContainsKeyword(team.getName(), keyw))
+						{
+							logger.error("indirect llk debugging:---------- FOUND! " + team.toString());
+							found = true;
+							break;
+						}
+					
+					
 					if( (team.getDescription()!=null && team.getDescription().toLowerCase().contains(keyw)) 
 							|| (team.getName() !=null && team.getName().toLowerCase().contains(keyw)) ) {
 						logger.error("indirect llk debugging:---------- FOUND! " + team.toString());
@@ -174,10 +184,9 @@ public class WorkspaceManager extends Action {
 					}
 				}
 				if(found) workspacesFiltered.add(team);
-				
+				logger.error("FOUND, therefore, adding team:");
 			}
 		}
-		
 		if(workspacesFiltered.isEmpty() && keywords.isEmpty())
 		  wsForm.setWorkspaces(workspaces);
 		else wsForm.setWorkspaces(workspacesFiltered);

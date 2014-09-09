@@ -279,6 +279,7 @@ public class MultilingualInputFieldValues
 		String translationToSet = translations.get("currentLanguage").getTranslation();
 		ContentTranslationUtil.setProperty(obj, propertyName, translationToSet);
 		session.saveOrUpdate(obj);
+		session.flush();
 		
 		// prepare for writing trn in the DB
 		ContentTranslationUtil.evictEntityFromCache(obj);

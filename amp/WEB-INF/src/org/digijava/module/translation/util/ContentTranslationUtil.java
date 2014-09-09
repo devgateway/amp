@@ -661,10 +661,12 @@ public class ContentTranslationUtil {
         			Session newSession = null;
         			try {
         				newSession = PersistenceManager.sf().openSession(conn);
-
+//        				if (ftp.getObjClass().endsWith("eports")) {
+//        					logger.error("With translations: " + ftp.getTranslations().toString());
+//        				}
         				String objClass = ftp.getObjClass();
         				String fieldName = ftp.getFieldName();
-
+        				
         				// load the translations from db, not cache
         				List<AmpContentTranslation> oldTrns = loadTranslations(newSession, objClass, newId, fieldName);
 

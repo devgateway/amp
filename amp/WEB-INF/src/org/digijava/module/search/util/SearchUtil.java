@@ -1,5 +1,6 @@
 package org.digijava.module.search.util;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -463,6 +464,11 @@ public class SearchUtil {
         }
         return activities;
     }
+	
+	
+	public static boolean stringContainsKeyword(String source, String keyword) {
+		return Normalizer.normalize(source.toLowerCase(), Normalizer.Form.NFC).contains(Normalizer.normalize(keyword, Normalizer.Form.NFC));
+	}
 
 
 }

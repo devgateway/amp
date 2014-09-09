@@ -177,7 +177,7 @@ html.chrome .bd_drop{margin-top:15px;}
 /*--rafy--*/
 .right_menu_cont {padding:10px; font-size:11px;word-wrap:break-word;}
 .right_menu_cont ul {margin:0px;padding:0px;}
-.right_menu_cont select, .right_menu_cont input {width: 95px;}
+.right_menu_cont select, .right_menu_cont input {width: 95px; white-space: nowrap; text-overflow:ellipsis;}
 
 .search_label {font-size:10px; color:#7F7F7F;}
 .tbl_spacing {padding-bottom:5px;}

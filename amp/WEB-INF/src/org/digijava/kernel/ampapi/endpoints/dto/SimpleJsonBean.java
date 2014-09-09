@@ -17,6 +17,10 @@ public class SimpleJsonBean {
 	public SimpleJsonBean(){
 		
 	}
+    public SimpleJsonBean(Object id,String name,String code) {
+    	this(id,name);
+    	this.code=code;
+    }
     public SimpleJsonBean(Object id,String name) {
     	this.id=id;
     	this.name=name;

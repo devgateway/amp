@@ -25,11 +25,13 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -69,10 +71,10 @@ public class Filters {
 	 * @return
 	 */
 	@GET
-	@Path("/activityStatus")
+	@Path("/activityapprovalStatus")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=true,name="ActivityStatus")
-	public List<SimpleJsonBean> getActivityStatus() {
+	@ApiMethod(ui=true,name="ActivityApprovalStatus")
+	public List<SimpleJsonBean> getActivityApprovalStatus() {
 
 		List<SimpleJsonBean> activityStatus = new ArrayList<SimpleJsonBean>();
 
@@ -313,7 +315,33 @@ public class Filters {
 	public List<SimpleJsonBean> getTypeOfAssistance() {
 		return getCategoryValue(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
 	}
+	/**
+	 * Return Activitystatus 
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/activityStatus/")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui = true, name = "ActivityStatusList")
+	public List<SimpleJsonBean> getActivityStatus() {
+		return getCategoryValue(CategoryConstants.ACTIVITY_STATUS_KEY);
+	}
 
+	/**
+	 * Return Activity Budget
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/activityBudget/")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui = true, name = "ActivityBudgetList")
+	public List<SimpleJsonBean> getActivityBudget() {
+		return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY);
+	}	
+	
+	
 	/**
 	 * Return financing instruments 
 	 * 
@@ -327,6 +355,25 @@ public class Filters {
 		return getCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY);
 	}
 
+	/**
+	 * Return Organization Group 
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/organizationGroup/")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui = true, name = "OrganizationGroupList")
+	public List<SimpleJsonBean> getorganizationGroup() {
+		List<SimpleJsonBean>orgGroupReturn=new ArrayList<SimpleJsonBean>();
+		List<AmpOrgGroup> aogList = DbUtil.getAllOrgGroups();
+		for (AmpOrgGroup ampOrgGroup : aogList) {
+			orgGroupReturn.add(new SimpleJsonBean(ampOrgGroup.getIdentifier(),ampOrgGroup.getName(),ampOrgGroup.getOrgGrpCode()));
+		}
+		return orgGroupReturn;
+	}
+	
+	
 	private List<SimpleJsonBean> getCategoryValue(String categoryKey) {
 		List<SimpleJsonBean> fi = new ArrayList<SimpleJsonBean>();
 		Collection<AmpCategoryValue> col = CategoryManagerUtil

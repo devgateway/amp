@@ -16,6 +16,9 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.WorkspaceForm;
 import org.digijava.module.aim.util.TeamUtil;
@@ -168,8 +171,10 @@ public class WorkspaceManager extends Action {
 					String keyw = (String) jt.next();
 					logger.error("indirect llk debugging:----------keyword is: " + keyw);
 					/*test comment*/
-					if ((team.getDescription() != null && (SearchUtil.stringContainsKeyword(team.getDescription(), keyw))) 
-							|| (team.getName() != null) && SearchUtil.stringContainsKeyword(team.getName(), keyw))
+					/*            Locale currentLocale = RequestUtils.getNavigationLanguage(request);*/
+					java.util.Locale currentLocale = new java.util.Locale(TLSUtils.getEffectiveLangCode());
+					if ((team.getDescription() != null && (SearchUtil.stringContainsKeyword(team.getDescription(), keyw, currentLocale))) 
+							|| (team.getName() != null) && SearchUtil.stringContainsKeyword(team.getName(), keyw, currentLocale))
 						{
 							logger.error("indirect llk debugging:---------- FOUND! " + team.toString());
 							found = true;

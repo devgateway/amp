@@ -1,5 +1,6 @@
 package org.digijava.module.search.util;
 
+import java.text.Collator;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,8 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.admin.helper.AmpPledgeFake;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -466,8 +469,16 @@ public class SearchUtil {
     }
 	
 	/*Unicode-friendly function for search, ignores diacritics via Normalizer*/
-	public static boolean stringContainsKeyword(String source, String keyword) {
-		return Normalizer.normalize(source.toLowerCase(), Normalizer.Form.NFC).contains(Normalizer.normalize(keyword, Normalizer.Form.NFC));
+	public static boolean stringContainsKeyword(String source, String keyword, java.util.Locale locale) {
+		String normSource = Normalizer.normalize(source.toLowerCase(), Normalizer.Form.NFD);
+		String normKeyword = Normalizer.normalize(keyword, Normalizer.Form.NFD);
+		
+		String remSource = normSource.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+		String remKeyword = normKeyword.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+		
+		return remSource.toLowerCase(locale).contains(remKeyword.toLowerCase(locale));
+		
+		
 	}
 
 

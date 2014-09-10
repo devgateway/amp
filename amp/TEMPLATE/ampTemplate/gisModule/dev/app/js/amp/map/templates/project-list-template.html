@@ -3,9 +3,8 @@
 		<tr>
       <td><a href="<%= activity.ampUrl %>" title="<%= activity.name %>"><%= (activity.name.length>27 ? activity.name.substring(0, 30)+'...': activity.name) %></a></td>
       <td class="text-right">
-        <% var firstCommitment = _(activity.commitments).first();
-          if(firstCommitment){ %>
-            <%= firstCommitment.amount %>
+        <% if(activity.totalCommitments){ %>
+            <%= activity.totalCommitments %>
         <% } else{ %>
           - 
         <% }%>

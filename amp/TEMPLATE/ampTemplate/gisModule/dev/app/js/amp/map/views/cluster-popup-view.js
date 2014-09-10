@@ -109,6 +109,8 @@ module.exports = Backbone.View.extend({
     return this._loadMoreProjects();
   },
 
+
+  //TODO: should be done in data.adm cluster..then we can render full list on second or third click...
   _loadMoreProjects: function(){
     var self = this;
     var startIndex = this._currentPage * this.PAGE_SIZE;

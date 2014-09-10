@@ -43,7 +43,7 @@ public class Connection {
 			schemaPath = request.getServletContext().getRealPath(schemaPath);
 		else 
 			schemaPath = Paths.get(schemaPath).toAbsolutePath().toString();
-		return MoConstants.CONNECTION_DS +";Catalog=file:" + schemaPath;
+		return MoConstants.CONNECTION_DS +";Catalog=file:" + schemaPath + ";" + MoConstants.SCHEMA_PROCESSOR;
 	}
 	
 	public static OlapConnection getOlapConnectionByConnPath(String connPath) throws Exception {

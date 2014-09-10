@@ -112,7 +112,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		CellDataSet cellDataSet = generateReportAsSaikuCellDataSet(spec);
 		
 		GeneratedReport report = toGeneratedReport(spec, cellDataSet, cellDataSet.runtime);
-		ReportSorter.sort(report);
+		//ReportSorter.sort(report);
 		
 		tearDown();
 		
@@ -129,7 +129,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		SaikuGeneratedReport saikuReport = new SaikuGeneratedReport(
 				spec, report.generationTime, report.requestingUser,
 				(SaikuReportArea)report.reportContents, cellDataSet, report.rootHeaders, report.leafHeaders);
-		SaikuReportSorter.sort(saikuReport);
+		//SaikuReportSorter.sort(saikuReport);
 		if (printMode)
 			SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST_SORT");
 				

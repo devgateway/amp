@@ -20,16 +20,18 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	 */
 	public final ReportOutputColumn parentColumn;
 	
-	private List<ReportOutputColumn> children;
+	//private List<ReportOutputColumn> children;
 	
 	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn) {
 		this.columnName = columnName;
 		if (columnName == null || columnName.isEmpty())
 			throw new NullPointerException();
 		this.parentColumn = parentColumn;
+		/*
 		if (this.parentColumn != null) {
 			this.parentColumn.addChild(this);
 		}
+		*/
 	}
 	
 	/**
@@ -65,6 +67,7 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	/**
 	 * @return {@link ReportOutputColumn} list of direct children 
 	 */
+	/*
 	public List<ReportOutputColumn> getChildren() {
 		return children;
 	}
@@ -75,5 +78,6 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 		}
 		children.add(child);
 	}
+	*/
 
 }

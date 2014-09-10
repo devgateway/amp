@@ -25,8 +25,7 @@ public class AllQueryTests_amp210 {
 			+ "jdbc:mondrian:Jdbc=jdbc:monetdb:" + "//localhost/amp_moldova_210" + ";"
 			+ "JdbcUser=monetdb;"
 			+ "JdbcPassword=monetdb;"
-			+ "JdbcDrivers=nl.cwi.monetdb.jdbc.MonetDriver;"
-			+ "DynamicSchemaProcessor=org.digijava.kernel.ampapi.mondrian.util.AmpMondrianSchemaProcessor";
+			+ "JdbcDrivers=nl.cwi.monetdb.jdbc.MonetDriver";
 	
 	private static String PRINT_PATH = null;
 

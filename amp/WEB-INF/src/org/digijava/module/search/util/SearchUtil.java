@@ -1,5 +1,6 @@
 package org.digijava.module.search.util;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -464,6 +465,19 @@ public class SearchUtil {
         }
         return activities;
     }
+	
+	/*Unicode-friendly function for search, ignores diacritics via Normalizer*/
+	public static boolean stringContainsKeyword(String source, String keyword, java.util.Locale locale) {
+		String normSource = Normalizer.normalize(source.toLowerCase(), Normalizer.Form.NFD);
+		String normKeyword = Normalizer.normalize(keyword, Normalizer.Form.NFD);
+		
+		String remSource = normSource.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+		String remKeyword = normKeyword.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
+		
+		return remSource.toLowerCase(locale).contains(remKeyword.toLowerCase(locale));
+		
+		
+	}
 
 
 }

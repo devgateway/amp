@@ -16,9 +16,11 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.WorkspaceForm;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.search.util.SearchUtil;
 
 public class WorkspaceManager extends Action {
 
@@ -161,6 +163,12 @@ public class WorkspaceManager extends Action {
 				boolean found=false;
 				for (Iterator jt = keywords.iterator(); jt.hasNext();) {
 					String keyw = (String) jt.next();
+					java.util.Locale currentLocale = new java.util.Locale(TLSUtils.getEffectiveLangCode());
+					if ((team.getDescription() != null && (SearchUtil.stringContainsKeyword(team.getDescription(), keyw, currentLocale))) 
+							|| (team.getName() != null) && SearchUtil.stringContainsKeyword(team.getName(), keyw, currentLocale)) {
+							found = true;
+							break;
+						}
 					if( (team.getDescription()!=null && team.getDescription().toLowerCase().contains(keyw)) 
 							|| (team.getName() !=null && team.getName().toLowerCase().contains(keyw)) ) {
 						found=true;break;

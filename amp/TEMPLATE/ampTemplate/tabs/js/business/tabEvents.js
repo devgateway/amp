@@ -61,7 +61,13 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			var FilterItemView = Marionette.ItemView.extend({
 				tagName : 'div',
 				className : 'round-filter',
-				template : $(filtersItemTemplate, '#template-filters').html()
+				template : $(filtersItemTemplate, '#template-filters').html(),
+				events : {
+					'click': "testclick"
+				},
+				testclick: function(){
+					console.log('testclick');
+				}
 			});
 			var CompositeItemView = Marionette.CompositeView.extend({
 				template : $(filtersTemplate, '#template-table-filters').html(),

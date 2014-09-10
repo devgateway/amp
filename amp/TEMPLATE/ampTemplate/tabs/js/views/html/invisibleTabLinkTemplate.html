@@ -1,7 +1,8 @@
 <div id="invisibleTabLink">
 	<script type="text/template">
 		<% if(!visible) { %>
-			<li>
+			<li class="invisible-tabs">
+				<!-- TODO: Define this event inside the view. -->
 				<a href="#" onclick="app.TabsApp.tabUtils.showInvisibleTab(<%=id%>, 250)"><%=name%></a>
 			</li>
 		<% } %>

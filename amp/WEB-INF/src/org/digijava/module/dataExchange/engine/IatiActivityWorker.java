@@ -605,12 +605,16 @@ public class IatiActivityWorker {
                     AmpActivityLocation actLoc = new AmpActivityLocation();
                     actLoc.setActivity(a);
                     actLoc.setLocation(ampLocation);
-                    Double percent = location.getPercentage().doubleValue();
-                    actLoc.setLocationPercentage(percent.floatValue());
+                    // the percentage is an optional field according to 1_03 schema.
+                    // https://jira.dgfoundation.org/browse/AMP-18206
+                    if (location.getPercentage() != null) {
+                        Double percent = location.getPercentage().doubleValue();
+                        actLoc.setLocationPercentage(percent.floatValue());
+                    }
                     locations.add(actLoc);
                 }
             }
-            a.getLocations().clear();
+            a.setLocations(new HashSet<AmpActivityLocation>());
             a.getLocations().addAll(locations);
 
         // if locations section is empty in the imported activity, then set the default one

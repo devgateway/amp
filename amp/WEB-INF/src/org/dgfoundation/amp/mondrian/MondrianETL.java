@@ -23,7 +23,10 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.AmpReportGenerator;
+import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.mondrian.jobs.EtlJob;
+import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
@@ -32,6 +35,8 @@ import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.time.StopWatch;
+
+import com.google.common.base.Predicate;
 
 import static org.dgfoundation.amp.mondrian.MondrianTablesRepository.FACT_TABLE;
 
@@ -117,9 +122,11 @@ public class MondrianETL {
 	/**
 	 * runs the ETL
 	 */
-	public void execute(){
+	public void execute() {
+		
 		MONDRIAN_LOCK.runUnderWriteLock(new ExceptionRunnable() {
 			public void run() throws Exception {
+				List<EtlJob> jobs = new ArrayList<>();
 				
 				String mondrianEtl = "Mondrian-etl";
 			
@@ -232,25 +239,49 @@ public class MondrianETL {
 	}
 	
 	/**
+	 * callback for "hash equals, not redoing part of ETL"
+	 */
+	protected Predicate<Fingerprint> stepSkipped = new Predicate<Fingerprint>() {
+		@Override public boolean apply(Fingerprint obj) {
+			logger.info(String.format("skipping calculating %s, as hash not changed", obj.keyName));
+			return true;
+		}
+	};
+	
+	/**
 	 * makes a snapshot of the views which back Mondrian ETL columns
 	 * @throws SQLException
 	 */
 	protected void generateStarTables() throws SQLException {
 		logger.warn("generating STAR tables...");
-		for (MondrianTableDescription mondrianTable:MondrianTablesRepository.MONDRIAN_TRANSLATED_TABLES)
- 			generateStarTable(mondrianTable);
+		for (final MondrianTableDescription mondrianTable:MondrianTablesRepository.MONDRIAN_TRANSLATED_TABLES)
+			mondrianTable.fingerprint.runIfFingerprintChanged(conn, monetConn, stepSkipped, new ExceptionRunnable<SQLException>() {
+				@Override public void run() throws SQLException {
+					generateStarTable(mondrianTable);
+				}});
 				
-		String mftQuery = buildMftQuery();
-		//select mft.date_code FROM (values (1), (2), (3)) as mft(date_code)
-		generateStarTableWithQueryInPostgres(MONDRIAN_DATE_TABLE, "date_code",
-				"SELECT DISTINCT(mft.date_code) AS day_code, (CAST (mft.transaction_date as date)) AS full_date, date_part('year'::text, (CAST (mft.transaction_date as date)))::integer AS year_code, date_part('month'::text, (CAST (mft.transaction_date as date)))::integer AS month_code, to_char((CAST (mft.transaction_date as date)), 'TMMonth'::text) AS month_name, date_part('quarter'::text, (CAST (mft.transaction_date as date)))::integer AS quarter_code, ('Q'::text || date_part('quarter'::text, (CAST (mft.transaction_date as date)))) AS quarter_name " + 
-						"FROM " + mftQuery +  
-						" UNION ALL " + 
-						" SELECT 999999999, '9999-1-1', 9999, 99, 'Undefined', 99, 'Undefined' " + 
-						" ORDER BY day_code",
-						new ArrayList<String>());
-		monetConn.copyTableFromPostgres(this.conn, MONDRIAN_DATE_TABLE);
+		generateMondrianDateTable();
 		logger.warn("...generating STAR tables done");
+	}
+
+	protected void generateMondrianDateTable() throws SQLException {
+		Fingerprint fp = new Fingerprint(MONDRIAN_DATE_TABLE, Arrays.asList(
+				Fingerprint.buildTableHashingQuery("v_mondrian_raw_donor_transactions")));
+		
+		fp.runIfFingerprintChanged(conn, monetConn, stepSkipped, new ExceptionRunnable<SQLException>() {
+		
+			@Override public void run() throws SQLException {
+				String mftQuery = buildMftQuery();
+				//select mft.date_code FROM (values (1), (2), (3)) as mft(date_code)
+				generateStarTableWithQueryInPostgres(MONDRIAN_DATE_TABLE, "date_code",
+						"SELECT DISTINCT(mft.date_code) AS day_code, (CAST (mft.transaction_date as date)) AS full_date, date_part('year'::text, (CAST (mft.transaction_date as date)))::integer AS year_code, date_part('month'::text, (CAST (mft.transaction_date as date)))::integer AS month_code, to_char((CAST (mft.transaction_date as date)), 'TMMonth'::text) AS month_name, date_part('quarter'::text, (CAST (mft.transaction_date as date)))::integer AS quarter_code, ('Q'::text || date_part('quarter'::text, (CAST (mft.transaction_date as date)))) AS quarter_name " + 
+								"FROM " + mftQuery +  
+								" UNION ALL " + 
+								" SELECT 999999999, '9999-1-1', 9999, 99, 'Undefined', 99, 'Undefined' " + 
+								" ORDER BY day_code",
+								new ArrayList<String>());
+				monetConn.copyTableFromPostgres(conn, MONDRIAN_DATE_TABLE);
+			}});		
 	}
 
 	/**

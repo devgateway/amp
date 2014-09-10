@@ -1,5 +1,6 @@
 package org.dgfoundation.amp.mondrian;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,11 +15,13 @@ import java.util.Map;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
-import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.I18nDatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewDescription;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.mondrian.jobs.EtlJob;
+import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
 
@@ -40,6 +43,8 @@ public class MondrianTableDescription {
 	 * list of columns which should have indices created on them. Will be iterated in the order given by the constructor
 	 */
 	public final Set<String> indexedColumns;
+	
+	public Fingerprint fingerprint;
 	//public final Set<String> idColumnNames; 
 			
 	protected ObjectSource<I18nViewDescription> translations;
@@ -65,6 +70,13 @@ public class MondrianTableDescription {
 		this.translations = translations;
 		return this;
 	}
+			
+	public MondrianTableDescription withFingerprintedJob(List<String> hashQueries) {
+		if (fingerprint != null)
+			throw new RuntimeException("not allowed to respecify fingerprint");
+		this.fingerprint = new Fingerprint("v_" + this.tableName, hashQueries);
+		return this;
+	}	
 	
 	/**
 	 * this one goes through a layer of indirection, because the tables might be unavailable at MTD construction time - but they will be available when needed at ETL time
@@ -125,4 +137,5 @@ public class MondrianTableDescription {
 	@Override public String toString() {
 		return this.tableName;
 	}
+
 }

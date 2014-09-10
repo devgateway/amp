@@ -317,6 +317,7 @@ public class SimpleSQLPatcher {
    			boolean autoCommit = conn.getAutoCommit();
    			
    			conn.setAutoCommit(true);
+   			SQLUtils.executeQuery(conn, "UPDATE amp_xml_patch SET state = 0 WHERE state != 0 AND state != 4 AND location = 'xmlpatches/general/views/'");
    			SQLUtils.executeQuery(conn, 
    					"CREATE TABLE IF NOT EXISTS amp_simple_sql_patches(id varchar(255), hash text, date_applied bigint)");
    			for(SimpleSQLPatch patch:patches){

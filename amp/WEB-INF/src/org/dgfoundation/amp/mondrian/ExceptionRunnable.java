@@ -1,5 +1,5 @@
 package org.dgfoundation.amp.mondrian;
 
-public interface ExceptionRunnable{
-	public void run() throws Exception;
+public interface ExceptionRunnable<K extends Exception>{
+	public void run() throws K;
 }

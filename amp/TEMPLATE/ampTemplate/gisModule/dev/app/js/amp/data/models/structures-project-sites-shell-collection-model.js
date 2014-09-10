@@ -4,6 +4,7 @@
 
 var _ = require('underscore');
 var Backbone = require('backbone');
+var $ = require('jquery');
 var Palette = require('../../colours/colour-palette');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var Structures = require('../collections/structures-collection');
@@ -75,11 +76,28 @@ module.exports = Backbone.Model
     return Backbone.Model.prototype.fetch.call(this, options);
   },
 
-  // David replacec this with: _loadActivities
   load: function() {
-    //this.activities.load();  // not needed right away, but start it as early as possible
-    
-    return LoadOnceMixin.load.apply(this).then(this._loadActivities);
+    return LoadOnceMixin.load.apply(this);
+  },
+
+  // Loads structures and all their activitites.
+  loadAll: function(){
+    var self = this;
+    var deferred = $.Deferred();
+    var allActivityIds = [];
+
+    this.load().then(function(){
+      // join all activity ids
+      self.get('sites').each(function(site){
+        allActivityIds = _(allActivityIds).union(allActivityIds,site.get('properties').activity);
+      });
+
+      self.activities.getActivites(allActivityIds).then(function(){
+        deferred.resolve();
+      });
+    });
+
+    return deferred;
   },
 
   parse: function(data) {
@@ -89,39 +107,40 @@ module.exports = Backbone.Model
     return data;
   },
 
-  // Loads all activities for these structures/sites.
-  _loadActivities: function(){
-    var allActivityIds = [];
-    // join all activity ids
-    this.get('sites').each(function(site){
-      allActivityIds = _(allActivityIds).union(allActivityIds,site.get('properties').activity);
-    });
-
-    return this.activities.getActivites(allActivityIds);
-  },
 
   updatePaletteSet: function() {
+    var deferred = $.Deferred();
     var self = this;
 
     //load the necessary activities.
-    this._loadActivities().done(_.bind(function(activities) {
+    this.loadAll().done(_.bind(function() {
       var activity;
 
       var orgSites = this.get('sites')
         .chain()
         .groupsBy(function(site) {
-          // TODO: only grabs first activity...does't handle multiple activities, 
-          // which may be introduced in the future..
-          activity = self.activities.get(site.get('properties').activity[0]); 
-          //TODO: / Phil: organizations is a map of arrays, don't think this code does what we want...
-          // I think we want just organizations[1]  for donor.
-          // I asked Julian about API, returning funny values for org role..
-          return activity.get('matchesFilters').organizations; 
+
+          if(!_.isEmpty(self.activities.get(site.get('properties').activity))){
+            // doesn't handle multiple activities, which may be introduced in the future..
+            activity = self.activities.get(site.get('properties').activity[0]);
+
+            // TODO:  for now we want just organizations[1]  for donor.
+            // Choosing a vertical will need to be configurable from drop down..
+            if(!_.isEmpty(activity.get('matchesFilters').organizations['1'])){
+              return activity.get('matchesFilters').organizations['1'];
+            } else {              
+              console.warn('Activity is missing desired vertical');
+              return -1;
+            }
+          } else {
+            console.warn('Structure is missing an activity');
+            return -1;
+          }
         })
         .map(function(sites, orgId) {
           return {
             id: orgId,
-            name: ONAMES[orgId],
+            name: ONAMES[orgId], // TODO: use filters for lookup once we have app.data.filters
             sites: _(sites).map(function(site) { return site.get('id'); })
           };
         })
@@ -130,9 +149,13 @@ module.exports = Backbone.Model
         })
         .reverse()
         .value();
+        
       this.palette.set('elements', orgSites);
+      deferred.resolve();
 
     }, this));
+
+    return deferred;
   }
 
 });

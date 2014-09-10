@@ -29,16 +29,16 @@ module.exports = Backbone.Collection
     // if there are activities we don't have locally.
     if( !_.isEmpty(aryOfIDs)){
       // do an api request to get remaining ones
-      this.url = '/rest/gis/activities/' + aryOfIDs.join(',');      
+      this.url = '/rest/gis/activities/' + aryOfIDs.join(',');
       this.fetch({remove: false}).then(function(newData){
         matches = _.union(matches, newData);
         this.url = '/rest/gis/activities';  // reset url
         deferred.resolve(matches);
       }).fail(function(err){
-          console.error('failed to get ' + this.url, err);
-          this.url = '/rest/gis/activities';  // reset url
-          deferred.resolve(matches);
-      });     
+        console.error('failed to get ' + this.url, err);
+        this.url = '/rest/gis/activities';  // reset url
+        deferred.resolve(matches);
+      });
     } else{
       deferred.resolve(matches);
     }

@@ -58,7 +58,6 @@ module.exports = Backbone.View.extend({
     var model = self.app.data.projectSites.at(0);
 
     // add new featureGroup
-    //console.log(JSON.stringify(self.rawData));
     self.featureGroup = L.geoJson(self.rawData, {
       pointToLayer: function (feature, latlng) {
         var colors = model.palette.colours.filter(function(colour) {
@@ -259,14 +258,15 @@ module.exports = Backbone.View.extend({
     }
 
     projectSitesModel.loadAll().done(function() {
-      self.layerLoadState = 'loaded';
-      self.getNewProjectSitesLayer(projectSitesModel);
-      self.map.addLayer(self.markerCluster);
+      projectSitesModel.updatePaletteSet().done(function() {
+        self.layerLoadState = 'loaded';
+        self.getNewProjectSitesLayer(projectSitesModel);
+        self.map.addLayer(self.markerCluster);
+      });
     });
 
     this.map.on('zoomend', this._updateZoom, this);
 
-    projectSitesModel.load();
   },
 
   bringToFront: function(){

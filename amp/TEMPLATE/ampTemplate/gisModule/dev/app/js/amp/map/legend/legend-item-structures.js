@@ -10,7 +10,7 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     var self = this;
-    self.model.load().then(function() {
+    self.model.loadAll().then(function() {
       self.$el.html(self.template(_.extend({}, self.model.toJSON(), {
         status: 'loaded',
         colourBuckets: self.model.palette.colours

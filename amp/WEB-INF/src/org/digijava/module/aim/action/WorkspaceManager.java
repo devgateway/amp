@@ -162,21 +162,11 @@ public class WorkspaceManager extends Action {
 		Collection<AmpTeam> workspacesFiltered=new ArrayList<AmpTeam>();
 		if(!workspaces.isEmpty())
 		{
-			for (Iterator<AmpTeam> it = workspaces.iterator(); it.hasNext();) {
-				AmpTeam team = (AmpTeam) it.next();
+			for (AmpTeam team:workspaces) {
 				boolean found=false;
-				for (Iterator jt = keywords.iterator(); jt.hasNext();) {
-					String keyw = (String) jt.next();
+				for (String keyw: keywords) {
 					java.util.Locale currentLocale = new java.util.Locale(TLSUtils.getEffectiveLangCode());
-					if ((team.getDescription() != null && (SearchUtil.stringContainsKeyword(team.getDescription(), keyw, currentLocale))) 
-							|| (team.getName() != null) && SearchUtil.stringContainsKeyword(team.getName(), keyw, currentLocale)) {
-							found = true;
-							break;
-						}
-					if( (team.getDescription()!=null && team.getDescription().toLowerCase().contains(keyw)) 
-							|| (team.getName() !=null && team.getName().toLowerCase().contains(keyw)) ) {
-						found=true;break;
-					}
+					found |= SearchUtil.TeamContainsKeyword(team, keyword, currentLocale);
 				}
 				if(found) workspacesFiltered.add(team);
 			}

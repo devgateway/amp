@@ -43,6 +43,7 @@
 <module:display name="HELP"></module:display> 
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Regional Observations" parentModule="PROJECT MANAGEMENT"></module:display>
+<module:display name="Line Ministries" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display> 
 <module:display name="MONITORING AND EVALUATING"></module:display> 
 <module:display name="Measures" parentModule="REPORTING"></module:display> 
@@ -246,6 +247,7 @@
 <feature:display name="Indicator chart Widgets" module="WIDGETS"></feature:display> 
 <feature:display name="Issues" module="Issues"></feature:display>
 <feature:display name="Regional Observations" module="Regional Observations"></feature:display>
+<feature:display name="Line Ministries" module="Line Ministries"></feature:display>
 <feature:display name="Logframe" module="Previews"></feature:display> 
 <feature:display name="Message Manager" module="ADMIN"></feature:display> 
 <feature:display name="Message tab" module="Messages"></feature:display>
@@ -346,7 +348,9 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <field:display name="Regional Observations Actors" feature="Regional Observations"></field:display>
 <field:display name="Regional Observations Date" feature="Regional Observations"></field:display>
 
-<field:display feature="Activity Pledges" name="Activity Pledges Title"></field:display> 
+<field:display name="Line Ministries Observations" feature="Line Ministries"></field:display>
+
+<field:display feature="Activity Pledges" name="Activity Pledges Title"></field:display>
 <field:display feature="Disbursement Orders" name="Disbursement Orders Tab"></field:display> 
 <field:display feature="Edit Activity" name="Edit Activity Button"></field:display> 
 <field:display feature="Edit Activity" name="Validate Activity Button"></field:display> 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-18210</jira>
+	<keyword>Line Ministry Observations</keyword>
+	<author>Diego Dimunzio</author>
+	<description>Add Line Ministry column</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger> 
+	 <apply>
+        <script>
+            <lang  delimiter=";" type="postgres">
+            		INSERT INTO amp_columns (columnId,columnName,aliasName,cellType,extractorView) VALUES 
+			 		(nextval('amp_columns_seq'),'Line Ministries Observations','Line Ministries observations','org.dgfoundation.amp.ar.cell.TrnTextCell','v_line_ministries_observations');
+			 		
+			 		insert into amp_columns_order  (id,columnname,indexorder)
+					values (setval('"amp_columns_order_seq"'::regclass, (select coalesce(max(id),0)+1 FROM "amp_columns_order"))  ,'Line Ministries', (select(select max(indexorder ) +1 from amp_columns_order)));             
+            </lang>
+        </script>
+	</apply>
+</tns:patch>

@@ -3,6 +3,7 @@
  */
 package org.dgfoundation.amp.reports.mondrian;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -143,7 +144,8 @@ public class AmpReportTranslator {
 					validSortingRules.put(Integer.valueOf(sortingArray[0]) - 1, sortingArray); //keep the latest sorting, which is the valid one
 				}
 			}
-			logger.info("[" + spec.getReportName() +"] sorting rules :" + validSortingRules.values().toString());
+			
+			logger.info("[" + spec.getReportName() +"] sorting rules :" + getSorters(validSortingRules));
 			//end workaround for AMP-18205, issue #1 & #2, now we'll work with valid sortings
 			for(Entry<Integer, String[]> pair : validSortingRules.entrySet()) {
 				ReportColumn hierarchyColumn = hierarchies[pair.getKey()]; 
@@ -253,5 +255,11 @@ public class AmpReportTranslator {
 		}
 		return true;
 	}
-
+	
+	private String getSorters(Map<Integer,String[]> sorters) {
+		String str = "";
+		for(String[] s : sorters.values()) 
+			str += "," + Arrays.toString(s);
+		return str.length() > 0 ? str.substring(0) : str;
+	}
 }

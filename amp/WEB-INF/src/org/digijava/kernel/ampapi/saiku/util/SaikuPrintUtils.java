@@ -242,11 +242,13 @@ public class SaikuPrintUtils {
 	 */
 	public static void print(CellDataSet cellDataSet, String reportName) {
 		PrintWriter writer = MondrianUtils.getOutput(reportName);
-		(new SaikuPrintUtils(cellDataSet, writer)).print();
-		
-		writer.write(System.lineSeparator() + "Runtime = " + cellDataSet.runtime + " ms");
-		
-		writer.flush();
-		writer.close();
+		try {
+			(new SaikuPrintUtils(cellDataSet, writer)).print();
+		} finally {
+			writer.write(System.lineSeparator() + "Runtime = " + cellDataSet.runtime + " ms");
+			
+			writer.flush();
+			writer.close();
+		}
 	}
 }

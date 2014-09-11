@@ -8,6 +8,7 @@ import java.text.ParseException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,6 +96,8 @@ public class CellDataSetToGeneratedReport {
 		root.setChildren(stack.pop());
 		if (root.getChildren().size() == 1)
 			root = (ReportAreaImpl) root.getChildren().get(0);
+		else if(root instanceof SaikuReportArea)
+			((SaikuReportArea)root).setOrigLeafId(getOrigLeafId((SaikuReportArea)root));
 		
 		return root;
 	}
@@ -168,6 +171,8 @@ public class CellDataSetToGeneratedReport {
 			if (spec.isCalculateRowTotals()) {
 				current = MondrianReportUtils.getNewReportArea(current.getClass());
 				current.setChildren(stack.pop());
+				if(current instanceof SaikuReportArea)
+					((SaikuReportArea)current).setOrigLeafId(getOrigLeafId((SaikuReportArea)current));
 				addCurentRowTotal(current, totColId);
 				totColId --;
 				if (depth == 0)
@@ -178,6 +183,12 @@ public class CellDataSetToGeneratedReport {
 			}
 		}
 		refillStack(stack, maxStackSize);
+	}
+	
+	private int getOrigLeafId(SaikuReportArea current) {
+		if (current.getChildren() != null && current.getChildren().size() > 0)
+			return getOrigLeafId((SaikuReportArea)current.getChildren().get(0));
+		return current.getOrigId();
 	}
 	
 	private void addCurentRowTotal(ReportAreaImpl current, int colId) {
@@ -194,8 +205,10 @@ public class CellDataSetToGeneratedReport {
 		currentSubGroupIndex[colId] ++;
 		int headerPos = 0;
 		//adding textual column data
+		String totalsName = getTotalsName(current, colId - 1);
+		int totColNameId = Math.max(0,  colId - 1);
 		for (int a = 0; a < cellDataSet.getLeftOffset(); a++, headerPos++) {
-			String value = a == colId ? "Totals" : ""; //TODO: replace with translatable value and TBD how to name?
+			String value = a == totColNameId ? totalsName : ""; 
 			contents.put(leafHeaders.get(headerPos), new TextCell(value));
 		}
 		//adding data totals of the current area
@@ -217,6 +230,20 @@ public class CellDataSetToGeneratedReport {
 			contents.put(leafHeaders.get(headerPos), new AmountCell(currentTotalMeasuresColumnTotals[b]));
 		
 		current.setContents(contents);
+	}
+	
+	//TODO: replace with translatable value and TBD how to name?
+	private String getTotalsName(ReportAreaImpl current, int colId) {
+		if (colId == -1)
+			return "Report Totals";
+		if (current.getChildren() != null && current.getChildren().size() > 0)
+			return getTotalsName((ReportAreaImpl)current.getChildren().get(0), colId);
+		Iterator<ReportCell> iter = current.getContents().values().iterator();
+		while(iter.hasNext() && colId > 0) {
+			colId --;
+			iter.next();
+		}
+		return iter.hasNext() ? iter.next().displayedValue + " Totals" : "Totals"; 
 	}
 	
 	/**

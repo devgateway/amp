@@ -13,6 +13,7 @@ import org.dgfoundation.amp.newreports.ReportAreaImpl;
  */
 public class SaikuReportArea extends ReportAreaImpl {
 	private int origId;
+	private int origLeafId = -1; //not set
 	private boolean isTotalRow = false;
 
 	/**
@@ -41,6 +42,20 @@ public class SaikuReportArea extends ReportAreaImpl {
 	 */
 	public void setTotalRow(boolean isTotalRow) {
 		this.isTotalRow = isTotalRow;
+	}
+
+	/**
+	 * @return the origLeafId
+	 */
+	public int getOrigLeafId() {
+		return origLeafId;
+	}
+
+	/**
+	 * @param origLeafId the origLeafId to set
+	 */
+	public void setOrigLeafId(int origLeafId) {
+		this.origLeafId = origLeafId;
 	}
 	
 }

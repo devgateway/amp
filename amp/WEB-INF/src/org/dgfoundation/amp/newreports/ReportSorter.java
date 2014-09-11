@@ -45,11 +45,11 @@ public class ReportSorter {
 	protected int sort() throws AMPException {
 		if (spec.getSorters() == null || spec.getSorters().size() == 0) return -1;
 		long startTime = System.currentTimeMillis();
-		//we need to sort by hierarchis titles only if any other sorting in post-processing phase breaks up the sorting done in MDX, in our case is the sorting by measures totals 
+		//we need to sort by hierarchies titles only if any other sorting in post-processing phase breaks up the sorting done in MDX, in our case is the sorting by measures totals 
 		boolean wasSortedByMeasuresTotals = false;
 		
 		//lowest level sorting is done via MDX, now we need to sort by non-hierarchical columns that were merged and by totals
-		for(ListIterator<SortingInfo> iter = spec.getSorters().listIterator(spec.getSorters().size() - 1); iter.hasPrevious(); ) {
+		for(ListIterator<SortingInfo> iter = spec.getSorters().listIterator(spec.getSorters().size()); iter.hasPrevious(); ) {
 			SortingInfo sortingInfo = iter.previous();
 			//based on the 1st element from the tuple we are going to detect the sorting expectation
 			ReportElement first = sortingInfo.sortByTuple.keySet().iterator().next();
@@ -66,9 +66,9 @@ public class ReportSorter {
 					throw new AMPException("Not supported sorting configuration for isTotals = true and non entity");
 			} else {
 				if (ElementType.ENTITY.equals(first.type))
-					if(spec.getHierarchies().contains(first)){
+					if(spec.getHierarchies().contains(first.entity)){
 						sortByHierarchy(sortingInfo, wasSortedByMeasuresTotals);
-					} else if(spec.getColumns().contains(first)) {
+					} else if(spec.getColumns().contains(first.entity)) {
 						sortByNonHierarchyColumn(sortingInfo);
 					} //else -> this is a funding column sorting, which was already done in MDX and thus nothing to post-sort
 			} 
@@ -80,7 +80,7 @@ public class ReportSorter {
 	private void sortMeasureTotals(SortingInfo sInfo) throws AMPException {
 		//validation for report measure was done before, we can cast now
 		ReportMeasure measure =  (ReportMeasure) sInfo.sortByTuple.keySet().iterator().next().entity;
-		sortByMeasuresTotals(measure, -1);
+		sortByMeasuresTotals(measure, -1, sInfo.ascending);
 	}
 	
 	/**
@@ -89,13 +89,13 @@ public class ReportSorter {
 	 * @param level - level number (hierarchy number) for which the totals to consider or -1 only actual data must be sorted 
 	 * @throws AMPException 
 	 */
-	private void sortByMeasuresTotals(ReportMeasure measure, int level) throws AMPException {
+	private void sortByMeasuresTotals(ReportMeasure measure, int level, boolean asc) throws AMPException {
 		//detect first the measure number
 		int colId = spec.getMeasures().indexOf(measure);
 		if (colId == -1)
 			throw new AMPException("Cannot sort by inexistent ReportMeasure = " + measure);
 		colId = leafHeaders.size() - spec.getMeasures().size() + colId;
-		sortByColumn(rootArea, colId , level);
+		sortByColumn(rootArea, colId , level, asc);
 	}
 	
 	private void sortByHierarchy(SortingInfo sInfo, boolean doSortingByTitle) throws AMPException {
@@ -111,7 +111,7 @@ public class ReportSorter {
 			if (sInfo.isTotals && nextEntry.getKey().entity != null) {
 				//this is sorting by hierarchy total on Total Costs (Total Measures) column
 				ReportMeasure measure = (ReportMeasure)iter.next().getKey().entity;
-				sortByMeasuresTotals(measure, level);
+				sortByMeasuresTotals(measure, level, sInfo.ascending);
 			} else {
 				//next entry is funding column sorting  
 				//build the expected leaf header name
@@ -120,18 +120,18 @@ public class ReportSorter {
 					for (String path : nextEntry.getKey().hierarchyPath)
 						colName += "[" + path + "]";
 				colName += "[" + nextEntry.getValue().value + "]";
-				sortByColumn(rootArea, leafHeaders.indexOf(colName), level);
+				sortByColumn(rootArea, leafHeaders.indexOf(colName), level, sInfo.ascending);
 			}
 		} else if (doSortingByTitle) {
 			//this is the sorting by hierarchy title
 			//if the sorting by hierarchy was a sorting by title, then it was already sorted via MDX and nothing to do if not explicitly requested
-			sortByColumn(rootArea, level, level);
+			sortByColumn(rootArea, level -1, level, sInfo.ascending);
 		}
 	}
 	
 	private void sortByNonHierarchyColumn(SortingInfo sInfo) throws AMPException {
 		ReportColumn nonHierarchyColumn =  (ReportColumn) sInfo.sortByTuple.keySet().iterator().next().entity;
-		sortByColumn(rootArea, getColumnId(nonHierarchyColumn), -1);
+		sortByColumn(rootArea, getColumnId(nonHierarchyColumn), -1, sInfo.ascending);
 	}
 	
 	private int getColumnId(ReportColumn col) {
@@ -147,40 +147,53 @@ public class ReportSorter {
 	 * @param parent - the parent area to sort
 	 * @param colId - column index to sort by
 	 * @param level - the level of sorting if this is for totals sorting only or -1 if only non-hierarchical data must be sorted
+	 * @param asc - true if sorting ascending
 	 */
-	private void sortByColumn(ReportArea parent, int colId, int level) {
+	private void sortByColumn(ReportArea parent, int colId, int level, boolean asc) {
 		//we'll collect the cells to sort, so that we don't have to iterate through the area content each time we compare 2 areas during the sorting by the specified column
 		ReportCell[] cellsToSort = new ReportCell[parent.getChildren().size()];
 		int childId = 0;
 		boolean hasContent = true;
-		boolean hasGrandChildren = false;
+		boolean goToChildren = level == -1 || level > 1;
+		ReportArea prevFirstChild = null;
 		for(ReportArea child : parent.getChildren()) {
 			//if there are grandchildren, then sort them first
-			if (child.getChildren() != null && child.getChildren().size() > 0) {
-				sortByColumn(child, colId, level);
-				hasGrandChildren = true;
-			}
-			if (!(hasGrandChildren && level == -1)) {
+			if (goToChildren && hasChildren(child))
+				sortByColumn(child, colId, level == -1 ? level : level - 1, asc);
+			if (!goToChildren || level == -1) {
+				//detect first leaf content that will be used for sorting the current level
+				prevFirstChild = findFirstLeafArea(child);
 				//all children must have content, is abnormal to have a mix of children with content and without
-				hasContent = hasContent && child.getContents() != null && child.getContents().size() > 0;
-				if (hasContent)
-					cellsToSort[childId++] = findCell(child, colId);
+				hasContent = hasContent && prevFirstChild.getContents() != null && prevFirstChild.getContents().size() > 0;
+				if (hasContent) {
+					cellsToSort[childId] = findCell(prevFirstChild, colId);
+					cellsToSort[childId].setArea(child); //remember the area we are sorting 
+					childId++;
+				}
 			}
 		}
-		//sorting must be done at the lowest level for nonHierarchical sort, that means parent area must have only children and no grandchildren 
-		if (hasGrandChildren && level == -1) return;
+		//check if any content was detected at this level 
+		if (childId == 0) return;
 		
-		ReportArea prevFirstChild = cellsToSort[0].getArea();
+		int first = asc ? 0 : cellsToSort.length - 1;
+		int last = asc ? cellsToSort.length : -1;
+		int inc = asc ? 1 : -1;
+		prevFirstChild = findFirstLeafArea(cellsToSort[0].getArea());
 		
+		//sorts ascending
 		Arrays.sort(cellsToSort);
-		
-		ReportArea currFirstChld = cellsToSort[0].getArea();
+				
+		//update first child prefix
+		ReportArea currFirstChld = findFirstLeafArea(cellsToSort[first].getArea());
 		swapPrefix(prevFirstChild, currFirstChld);
 		
+		//update children list in sorting order
 		parent.getChildren().clear();
-		for(ReportCell cell : cellsToSort)
-			parent.getChildren().add(cell.getArea());
-	}
+		for(int idx = first; idx != last; idx += inc) {
+			parent.getChildren().add(cellsToSort[idx].getArea());
+			cellsToSort[idx].setArea(null);//clear reference
+		}
+	} 
 	
 	private ReportCell findCell(ReportArea area, int colId) {
 		Iterator<ReportCell> iter = area.getContents().values().iterator();
@@ -189,7 +202,6 @@ public class ReportSorter {
 			//assumption that content size is a valid size, between all report areas and that col id was correctly detected to be within the size
 		}
 		ReportCell cell = iter.next();
-		cell.setArea(area);
 		return cell;
 	}
 	
@@ -210,5 +222,15 @@ public class ReportSorter {
 				currEntry.setValue(tmp);
 			}
 		}
+	}
+	
+	private ReportArea findFirstLeafArea(ReportArea current) {
+		while(hasChildren(current))
+			current = current.getChildren().get(0);
+		return current;
+	}
+	
+	private boolean hasChildren(ReportArea reportArea) {
+		return reportArea.getChildren() != null && reportArea.getChildren().size() > 0; 
 	}
 }

@@ -104,32 +104,29 @@ public class SaikuReportSorter extends ReportSorter {
 		}	
 		if (current.getChildren() != null && current.getChildren().size() > 0) {
 			int currFirstChildRowId = rowId;
-			int prevFirstChildRowId = -1;
 			for(ReportArea child : current.getChildren()) {
 				rowId = updateRecursively((SaikuReportArea)child, rowId, depth + 1, 
 						newData, newRowTotalsList, rowTotalsIds, 
 						oldColTotals, newColTotals);
-				//if the current child stores the leaf data, then check if it was first child before, i.e. for the current depth column it has values
-				if (prevFirstChildRowId == -1 && !((SaikuReportArea)child).isTotalRow() 
-						&& child.getContents() != null && child.getContents().size() > 0
-						&& depth > 0 && newData[rowId -1][depth-1].getFormattedValue() != null) 
-					prevFirstChildRowId = rowId - 1;
 			}
+			//swap prefixes
+			int prevFirstChildRowId = current.getOrigLeafId();
 			swapFirstChildPrefix(currFirstChildRowId, prevFirstChildRowId, depth, newData);
+			current.setOrigLeafId(currFirstChildRowId);
 		}
 		return rowId;
 	}
 	
 	private void swapFirstChildPrefix(int currFirstChildRowId, int prevFirstChildRowId, int depth, AbstractBaseCell[][] newData) {
 		//update only if sorting changed the 1st child position in the list
-		if (prevFirstChildRowId == -1 || currFirstChildRowId == prevFirstChildRowId) return;
+		if (prevFirstChildRowId == -1) return;
 		
-		for (int idx = 0; idx < depth; idx ++) {
+		for (int idx = 0; idx < depth && newData[currFirstChildRowId][idx].getFormattedValue() == null; idx ++) {
 			//update actual data prefix from previous first entry to the current first entry 
-			newData[currFirstChildRowId][idx].setFormattedValue(newData[prevFirstChildRowId][idx].getFormattedValue());
-			newData[currFirstChildRowId][idx].setRawValue(newData[prevFirstChildRowId][idx].getRawValue());
-			newData[prevFirstChildRowId][idx].setFormattedValue(null);
-			newData[prevFirstChildRowId][idx].setRawValue(null);
+			newData[currFirstChildRowId][idx].setFormattedValue(cellDataSet.getCellSetBody()[prevFirstChildRowId][idx].getFormattedValue());
+			newData[currFirstChildRowId][idx].setRawValue(cellDataSet.getCellSetBody()[prevFirstChildRowId][idx].getRawValue());
+			cellDataSet.getCellSetBody()[prevFirstChildRowId][idx].setFormattedValue(null);
+			cellDataSet.getCellSetBody()[prevFirstChildRowId][idx].setRawValue(null);
 		}
 	}
 	

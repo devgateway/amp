@@ -48,7 +48,8 @@ public class MetaTextColWorker extends TextColWorker {
 		
 		boolean thisViewHasPercentage = (columnName.indexOf("National Planning Objectives") > -1);
 		thisViewHasPercentage |= ArConstants.SECTOR_COLUMNS.contains(columnName) && reportsTypesWithHiers.contains(generator.getReportMetadata().getType());   
-		thisViewHasPercentage |= (columnName.equals("Executing Agency"));	
+		thisViewHasPercentage |= (columnName.equals("Executing Agency")) || (columnName.equals("Budget Structure"));	
+		
 	
  		//TODO I think the columnName comparisons with ArConstants should be replaced by comparisons with the values from 
  		// category manager "Implementation Location"

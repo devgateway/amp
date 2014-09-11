@@ -174,7 +174,7 @@ public class WorkspaceFilter
 		//return /*"33"; */"36";
 		//return "41, 43, 44, 45";
 		//return "20, 21"; // masha
-		//return "24";
+		//return "17041";
 /*		return "SELECT amp_activity_id from amp_activity WHERE name IN ('Eth Water', 'mtef activity 1', 'mtef activity 2', 'ptc activity 1', 'ptc activity 2', 'SSC Project 1', " + 
 				"'SSC Project 2', 'TAC_activity_1', 'TAC_activity_2', 'date-filters-activity', " + 
 				"'Proposed Project Cost 1 - USD', 'Proposed Project Cost 2 - EUR', 'Pure MTEF Project', 'Test MTEF directed', " +  

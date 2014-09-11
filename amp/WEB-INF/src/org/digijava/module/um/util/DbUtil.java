@@ -61,8 +61,6 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.um.dbentity.ResetPassword;
 import org.digijava.module.um.exception.UMException;
 
-import sun.security.util.BigInt;
-
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
 

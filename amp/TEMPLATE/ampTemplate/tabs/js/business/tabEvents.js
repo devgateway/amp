@@ -20,20 +20,32 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
 	function extractFilters(content) {
 		var filters = new Filters();
-		var filtersJson = content.get('metadata').get('filter');
+		var filtersJson = content.get('reportMetadata').get('reportSpec').get('filters').get('filterRules');
 		$(filtersJson.keys()).each(function(i, item) {
-			if (filtersJson.get(item) instanceof Backbone.Collection) {
-				var content = [];
-				$(filtersJson.get(item)).each(function(j, item2) {
-					$(item2.models).each(function(j, item3) {
-						content.push(item3.get('name'));
+			var subElement = filtersJson.get(item);
+			if (subElement instanceof Backbone.Collection) {
+				if (item.indexOf('ElementType = ENTITY') > -1) {
+					var name = item.substring(item.indexOf('[') + 1, item.indexOf(']'));
+					var element = subElement.models[0];
+					var content = [];
+					if (element.get('value') != null) {
+						content = element.get('value');
+					} else if (element.get('values') != null) {
+						_.each(element.get('values').models, function(item, i) {
+							content.push(item.get('value'));
+						});
+					}
+
+					var auxFilter = new Filter({
+						name : name,
+						values : content
 					});
-				});
-				var auxFilter = new Filter({
-					name : item,
-					values : content
-				});
-				filters.push(auxFilter);
+					filters.push(auxFilter);
+				} else if (item.indexOf('ElementType = DATE') > -1) {
+
+				} else if (item.indexOf('ElementType = YEAR') > -1) {
+					
+				}
 			}
 		});
 		return filters;
@@ -51,8 +63,9 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
 		if (id >= 0) {
 			// Get collection with data we will use to render the tab content.
-			var tabContents = new Contents();
-			var firstContent = tabContents.first();
+			var firstContent = new Content({
+				id : id
+			});
 
 			// Create collection of Filters.
 			var filters = extractFilters(firstContent);
@@ -63,9 +76,9 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 				className : 'round-filter',
 				template : $(filtersItemTemplate, '#template-filters').html(),
 				events : {
-					'click': "testclick"
+					'click' : "testclick"
 				},
-				testclick: function(){
+				testclick : function() {
 					console.log('testclick');
 				}
 			});
@@ -98,7 +111,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
 			var InvisibleTabsCollectionView = Marionette.CollectionView.extend({
 				childView : ItemView,
-				tagName: 'ul'
+				tagName : 'ul'
 			});
 
 			app.TabsApp.filtersRegion.show(new InvisibleTabsCollectionView({

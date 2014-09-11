@@ -10,9 +10,10 @@
 .round-filter {
 	border: 1px solid #376091;
 	border-radius: 4px;
-	padding: 4px;
+	padding: 3px;
 	margin-right: 5px;
 	background: #ffffff;
+	margin-bottom: 3px;
 }
 
 #filters-collapsible-area {
@@ -46,6 +47,12 @@
 .invisible-tabs a {
 	color: blue;
 	font-size: 1em;
+}
+
+#dynamic-filters-region {
+	border: 2px solid rgb(56, 121, 146);
+	max-height: 500px;
+	padding: 5px;
 }
 
 /* Overriding jQueryUI section */

@@ -26,9 +26,9 @@ module.exports = GenericFilterView.extend({
 
     this.model = new GenericFilterModel(options.modelValues);
 
-    this._createTree(options.url).then(function(){
+    this._createTree(options.url).then(function() {
       self._updateCountInMenu();
-      self.treeModel.on('change:numSelected', function(){
+      self.treeModel.on('change:numSelected', function() {
         self._updateCountInMenu();
       });
     });
@@ -37,16 +37,16 @@ module.exports = GenericFilterView.extend({
   // 1. get all schemas
   // 2. create root JSON, with each schema as a child.
   // 3. when all done create tree
-  _createTree: function(url){
+  _createTree: function(url) {
     var self = this;
     var deferred = $.Deferred();
     var deferreds = [];
 
     // builds tree of views from returned data
     var rootNodeObj = {
-      id : -1,
-      code : '-1',
-      name : self.model.get('title'),
+      id: -1,
+      code: '-1',
+      name: self.model.get('title'),
       children: [],
       selected: true,
       expanded: false,
@@ -57,12 +57,12 @@ module.exports = GenericFilterView.extend({
     //get available sector schema's
     this.sectorConfigNames = new Backbone.Collection();
     this.sectorConfigNames.url = url;
-    this.sectorConfigNames.fetch().then(function(){
-      self.sectorConfigNames.each(function(schema){
+    this.sectorConfigNames.fetch().then(function() {
+      self.sectorConfigNames.each(function(schema) {
         var tmpNode = {
-          id : schema.get('id'),
-          code : '-1',
-          name : schema.get('name'),
+          id: schema.get('id'),
+          code: '-1',
+          name: schema.get('name'),
           selected: true,
           expanded: false,
           isSelectable: false
@@ -70,7 +70,7 @@ module.exports = GenericFilterView.extend({
 
         schema.url = url + '/' + schema.get('name');
         deferreds.push(
-          schema.fetch().then(function(data){
+          schema.fetch().then(function(data) {
             tmpNode.children = data;
             rootNodeObj.children.push(tmpNode);
           })
@@ -78,7 +78,7 @@ module.exports = GenericFilterView.extend({
       });
 
       // when all done create tree.
-      $.when.apply($, deferreds).then(function(){
+      $.when.apply($, deferreds).then(function() {
         self.treeModel = new TreeNodeModel(rootNodeObj);
         self.treeView = new TreeNodeView();
         deferred.resolve();

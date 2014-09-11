@@ -51,7 +51,7 @@ module.exports = Backbone.View.extend({
     this.listenTo(this.indicatorLayersView, 'addedToMap', this._indicatorsShown);
   },
 
-  render: function () {
+  render: function() {
     this.$el.html(this.template({map: this.mapEl}));
     this.$el.append(this.mapEl);
     this.map.invalidateSize();
@@ -68,10 +68,10 @@ module.exports = Backbone.View.extend({
   },
 
 
-  _renderCountryBoundary: function(){
+  _renderCountryBoundary: function() {
     var self = this;
     // TODO: harcoded path is bad.
-    $.get( '/rest/gis/boundaries/adm-0').then(function(geoJSON){
+    $.get('/rest/gis/boundaries/adm-0').then(function(geoJSON) {
 
       self.countryBoundary = L.geoJson(geoJSON,
         {
@@ -98,7 +98,7 @@ module.exports = Backbone.View.extend({
 
   // when indicator is shown, bring project sites to the front...
   // should be able to do better once panes and leaflet v.08 are in
-  _indicatorsShown: function(){
+  _indicatorsShown: function() {
     this.projectSitesLayersView.bringToFront();
   }
 });

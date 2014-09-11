@@ -28,24 +28,24 @@ module.exports = GenericFilterView.extend({
     BaseFilterView.prototype.initialize.apply(this, [options]);
     this.model = new GenericFilterModel(options.modelValues);
 
-    this._createTree().then(function(){
+    this._createTree().then(function() {
       self._updateCountInMenu();
-      self.treeModel.on('change:numSelected', function(){
+      self.treeModel.on('change:numSelected', function() {
         self._updateCountInMenu();
       });
     });
   },
 
 
-  _createTree: function(){
+  _createTree: function() {
     var self = this;
     var deferred = $.Deferred();
     var deferreds = [];
     // builds tree of views from returned data
     var rootNodeObj = {
-      id : -1,
-      code : '-1',
-      name : self.model.get('title'),
+      id: -1,
+      code: '-1',
+      name: self.model.get('title'),
       children: [],
       selected: true,
       expanded: false,
@@ -61,7 +61,7 @@ module.exports = GenericFilterView.extend({
     deferreds.push(this.organizationRoles.fetch());
     deferreds.push(this.organizations.fetch());
 
-    $.when.apply($, deferreds).then(function(){
+    $.when.apply($, deferreds).then(function() {
 
       // sort orgs
       self.organizations.comparator = function(model) {
@@ -69,18 +69,18 @@ module.exports = GenericFilterView.extend({
       };
       self.organizations.sort();
 
-      self.organizationRoles.each(function(orgRole){
-          var tmpRoleNode = {
-            id : orgRole.get('id'),
-            code : '-1',
-            name : orgRole.get('name'),
-            selected: true,
-            expanded: false,
-            isSelectable: false,
-            children: self.organizations.toJSON()
-          };
-          rootNodeObj.children.push(tmpRoleNode);
-        });
+      self.organizationRoles.each(function(orgRole) {
+        var tmpRoleNode = {
+          id: orgRole.get('id'),
+          code: '-1',
+          name: orgRole.get('name'),
+          selected: true,
+          expanded: false,
+          isSelectable: false,
+          children: self.organizations.toJSON()
+        };
+        rootNodeObj.children.push(tmpRoleNode);
+      });
 
       self.treeModel = new TreeNodeModel(rootNodeObj);
       self.treeView = new TreeNodeView();

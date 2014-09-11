@@ -29,9 +29,9 @@ module.exports = GenericFilterView.extend({
 
     this.model = new GenericFilterModel(options.modelValues);
 
-    this._createTree(options.url).then(function(){
+    this._createTree(options.url).then(function() {
       self._updateCountInMenu();
-      self.treeModel.on('change:numSelected', function(){
+      self.treeModel.on('change:numSelected', function() {
         self._updateCountInMenu();
       });
     });
@@ -40,16 +40,16 @@ module.exports = GenericFilterView.extend({
   // 1. get all children
   // 2. create root JSON, with each child endpoint as 'children'.
   // 3. when all done create tree
-  _createTree: function(url){
+  _createTree: function(url) {
     var self = this;
     var deferred = $.Deferred();
     var deferreds = [];
 
     // builds tree of views from returned data
     var rootNodeObj = {
-      id : -1,
-      code : '-1',
-      name : self.model.get('title'),
+      id: -1,
+      code: '-1',
+      name: self.model.get('title'),
       children: [],
       selected: true,
       expanded: false,
@@ -59,12 +59,12 @@ module.exports = GenericFilterView.extend({
     //get available endpoint children
     this.childEndpoints = new Backbone.Collection();
     this.childEndpoints.url = url;
-    this.childEndpoints.fetch().done(function(){
-      self.childEndpoints.each(function(child){
+    this.childEndpoints.fetch().done(function() {
+      self.childEndpoints.each(function(child) {
         var tmpNode = {
-          id : child.get('id'),
-          code : '-1',
-          name : child.get('name'),
+          id: child.get('id'),
+          code: '-1',
+          name: child.get('name'),
           selected: true,
           expanded: false,
           isSelectable: false
@@ -72,23 +72,23 @@ module.exports = GenericFilterView.extend({
 
         child.url = url + '/' + child.get('id'); //TODO: something smarter...mroe reliable.. id
         deferreds.push(
-          child.fetch().done(function(data){
-            if(data.id){ //not an array. hack temp solution while Julian fixes API so all obj or all array
+          child.fetch().done(function(data) {
+            if (data.id) { //not an array. hack temp solution while Julian fixes API so all obj or all array
               data = [data];
             }
             tmpNode.children = data;
             rootNodeObj.children.push(tmpNode);
-          }).fail(function(){
+          }).fail(function() {
             console.error('Failed child node of API', child.get('id'));
           })
         );
       });
 
       // when all are done create tree.
-      $.when.apply($, deferreds).then(function(){
+      $.when.apply($, deferreds).then(function() {
         self._buildTreeFromRoot(rootNodeObj);
         deferred.resolve();
-      }).fail(function(){
+      }).fail(function() {
         //this happens if just one child fails...no point in stopping whole tree.
         self._buildTreeFromRoot(rootNodeObj);
         deferred.resolve();
@@ -98,7 +98,7 @@ module.exports = GenericFilterView.extend({
     return deferred;
   },
 
-  _buildTreeFromRoot: function(rootNodeObj){
+  _buildTreeFromRoot: function(rootNodeObj) {
     this.treeModel = new TreeNodeModel(rootNodeObj);
     this.treeView = new TreeNodeView();
   }

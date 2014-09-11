@@ -26,7 +26,7 @@ module.exports = Backbone.View.extend({
       return (new LegendItem({ model: layer })).render().el;
     }).value();
 
-    if (! _.isEmpty(content)) {
+    if (!_.isEmpty(content)) {
       this.$el.addClass('expanded');  // always expand when new layers are added
       this.$('.legend-content').html(content);
     }

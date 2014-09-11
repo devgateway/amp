@@ -4,8 +4,7 @@ var RadioMixin = require('../../mixins/radio-mixin');
 
 
 module.exports = Backbone.Collection
-  .extend(RadioMixin)
-  .extend({
+.extend(RadioMixin).extend({
 
   _watched: _([]),
 

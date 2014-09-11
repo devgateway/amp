@@ -163,7 +163,7 @@ var Palette = Backbone.Model.extend({
 // Constructors
 
 function FromRange(options) {
-  if (! _.has(options, 'seed')) {
+  if (!_.has(options, 'seed')) {
     throw new Error('seed is required.');
   }
 

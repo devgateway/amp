@@ -36,7 +36,7 @@ module.exports = Backbone.View.extend({
 
   _getFromChild: function(property) {
     var value = this[property];
-    if(typeof myVar !== 'undefined') {
+    if (typeof myVar !== 'undefined') {
       console.error('No value set for property "' + property + '" on ', this);
       return undefined;
     }

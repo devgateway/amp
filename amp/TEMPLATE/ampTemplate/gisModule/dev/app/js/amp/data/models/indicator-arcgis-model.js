@@ -8,8 +8,7 @@ var Palette = require('../../colours/colour-palette');
 
 
 module.exports = Backbone.Model
-  .extend(LoadOnceMixin)
-  .extend({
+.extend(LoadOnceMixin).extend({
 
   defaults: {
     min: Infinity,

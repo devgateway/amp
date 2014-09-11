@@ -25,11 +25,11 @@ module.exports = Backbone.View.extend({
 
   },
 
-  renderTitle: function () {
+  renderTitle: function() {
     var self = this;
     this.app.translator.translateDOM(
       this.titleTemplate(this.model.toJSON())).then(
-        function(newEl){
+        function(newEl) {
           self.$el.html(newEl);
         });
 
@@ -44,7 +44,7 @@ module.exports = Backbone.View.extend({
   },
 
   // render common box with apply button, cancel button, etc.
-  renderContent: function () {
+  renderContent: function() {
     var self = this;
 
     //TODO: move out of global namespace
@@ -66,18 +66,18 @@ module.exports = Backbone.View.extend({
     return this;
   },
 
-  renderFilters: function () {
+  renderFilters: function() {
 
   },
 
-  apply: function () {
+  apply: function() {
     // TODO: consider a different name to avoid collision with javascript function.apply
     // trigger common event for applying filters.
     // this.convertTreeToJSONFilter(); //implemented by child, and if not fallback to base.
     $('#filter-popup').hide();
   },
 
-  cancel: function () {
+  cancel: function() {
     $('#filter-popup').hide();
   }
 

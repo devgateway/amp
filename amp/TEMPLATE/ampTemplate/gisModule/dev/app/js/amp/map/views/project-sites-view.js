@@ -59,7 +59,7 @@ module.exports = Backbone.View.extend({
 
     // add new featureGroup
     self.featureGroup = L.geoJson(self.rawData, {
-      pointToLayer: function (feature, latlng) {
+      pointToLayer: function(feature, latlng) {
         var colors = model.palette.colours.filter(function(colour) {
           return colour.get('test').call(colour, feature.id);
         });
@@ -71,7 +71,7 @@ module.exports = Backbone.View.extend({
 
         // temp hack for if pallette part didn't work.
         if (colors.length === 0) {
-          colors[0] = {hex: function(){ return '#fa5';}};
+          colors[0] = {hex: function() { return '#fa5';}};
         }
 
         var point = new L.CircleMarker(latlng, {
@@ -89,10 +89,10 @@ module.exports = Backbone.View.extend({
         // DRS in progress custom own clustering. big efficiency gains.
         var latLngString = Math.round(latlng.lat * self.CLUSTER_PRECISION * 10) +
           ',' + Math.round(latlng.lng * self.CLUSTER_PRECISION * 10);
-        if(self.customClusterMap[latLngString]){
+        if (self.customClusterMap[latLngString]) {
           self.customClusterMap[latLngString].push(point); //TODO: should push point or feature?
           self.maxClusterCount = Math.max(self.maxClusterCount, self.customClusterMap[latLngString].length);
-        } else{
+        } else {
           self.customClusterMap[latLngString] = [point];
         }
 
@@ -157,7 +157,7 @@ module.exports = Backbone.View.extend({
     // TODO: make sizing dynamic based on highest cluster... and put into own function...
     this.markerCluster = new L.markerClusterGroup({
       maxClusterRadius: 0.5,
-      iconCreateFunction: function(cluster){return self._createCluster(cluster, model);},
+      iconCreateFunction: function(cluster) {return self._createCluster(cluster, model);},
       zoomToBoundsOnClick: false,
       showCoverageOnHover: false,
       spiderfyOnMaxZoom: false,
@@ -165,7 +165,7 @@ module.exports = Backbone.View.extend({
     });
   },
 
-  _createCluster: function(cluster, model){
+  _createCluster: function(cluster, model) {
     var self = this;
     var markers = cluster.getAllChildMarkers();
     var size = (markers.length / self.maxClusterCount) * self.MAX_CLUSTER_SIZE;
@@ -222,8 +222,8 @@ module.exports = Backbone.View.extend({
 
     if (feature.properties) {
       //TODO: template:
-      layer.bindPopup('Project #: ' + (feature.properties.activity ? feature.properties.activity[0] :'') +
-        '<br />Site: ' + feature.properties.structureTitle );
+      layer.bindPopup('Project #: ' + (feature.properties.activity ? feature.properties.activity[0] : '') +
+        '<br />Site: ' + feature.properties.structureTitle);
     }
 
     layer.on('click', function(evt) {
@@ -269,8 +269,8 @@ module.exports = Backbone.View.extend({
 
   },
 
-  bringToFront: function(){
-    if(this.markerCluster && this.markerCluster._featureGroup){
+  bringToFront: function() {
+    if (this.markerCluster && this.markerCluster._featureGroup) {
       this.markerCluster._featureGroup.bringToFront();
     }
   },

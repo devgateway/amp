@@ -4,8 +4,7 @@ var LoadOnceMixin = require('../../mixins/load-once-mixin');
 
 
 module.exports = Backbone.Model
-  .extend(LoadOnceMixin)
-  .extend({
+.extend(LoadOnceMixin).extend({
 
   initialize: function() {
     // TODO: factor this behavior into an indicator base class

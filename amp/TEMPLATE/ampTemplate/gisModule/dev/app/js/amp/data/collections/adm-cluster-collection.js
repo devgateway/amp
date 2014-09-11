@@ -13,7 +13,7 @@ module.exports = Backbone.Collection.extend({
   },
 
   // parse geoJson response to pull out features as a collection.
-  parse: function (response) {
+  parse: function(response) {
     return response.features;
   }
 

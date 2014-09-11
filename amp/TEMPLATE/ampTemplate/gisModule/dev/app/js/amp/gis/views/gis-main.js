@@ -22,7 +22,7 @@ module.exports = Backbone.View.extend({
   },
 
   // Render entire geocoding view.
-  render: function () {
+  render: function() {
     this.$el.html(ModuleTemplate);
 
     this.mapView.setElement(this.$('#map-container')).render();
@@ -37,19 +37,19 @@ module.exports = Backbone.View.extend({
     this.translationToggle();
   },
 
-  translationToggle: function(){
+  translationToggle: function() {
     var self = this;
-    this.$('.lang-change').click(function(evt){
+    this.$('.lang-change').click(function(evt) {
       evt.preventDefault();
       var lng = $(this).data('lng');
-      self.translator.setLanguage(lng).then(function(){
+      self.translator.setLanguage(lng).then(function() {
         self.translator.translateDOM(self.el);
       });
     });
   },
 
   // not a view, because it's static and just for testing.
-  renderStaticAmpTemplate: function(){
+  renderStaticAmpTemplate: function() {
     $('#amp-menu').html(AmpNavTemplate);
     // TODO: If it's our responsibility...
     // render translation selector using: this.translator.getAvailableLanguages

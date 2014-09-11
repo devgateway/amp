@@ -2,7 +2,7 @@
 // MIT -> https://github.com/h5bp/html5-boilerplate/blob/master/LICENSE.md
 (function(window) {
   var method;
-  var noop = function () {};
+  var noop = function() {};
   var methods = [
     'assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error',
     'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log',

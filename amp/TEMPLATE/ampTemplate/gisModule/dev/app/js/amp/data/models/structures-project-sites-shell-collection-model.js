@@ -47,8 +47,7 @@ var ONAMES = {  // TODO: temp hack until filters have a proper data structure
 
 
 module.exports = Backbone.Model
-  .extend(LoadOnceMixin)
-  .extend({
+.extend(LoadOnceMixin).extend({
 
   url: '/rest/gis/structures',
 
@@ -81,18 +80,18 @@ module.exports = Backbone.Model
   },
 
   // Loads structures and all their activitites.
-  loadAll: function(){
+  loadAll: function() {
     var self = this;
     var deferred = $.Deferred();
     var allActivityIds = [];
 
-    this.load().then(function(){
+    this.load().then(function() {
       // join all activity ids
-      self.get('sites').each(function(site){
+      self.get('sites').each(function(site) {
         allActivityIds = _(allActivityIds).union(allActivityIds, site.get('properties').activity);
       });
 
-      self.activities.getActivites(allActivityIds).then(function(){
+      self.activities.getActivites(allActivityIds).then(function() {
         deferred.resolve();
       });
     });
@@ -120,13 +119,13 @@ module.exports = Backbone.Model
         .chain()
         .groupsBy(function(site) {
 
-          if(!_.isEmpty(self.activities.get(site.get('properties').activity))){
+          if (!_.isEmpty(self.activities.get(site.get('properties').activity))) {
             // doesn't handle multiple activities, which may be introduced in the future..
             activity = self.activities.get(site.get('properties').activity[0]);
 
             // TODO:  for now we want just organizations[1]  for donor.
             // Choosing a vertical will need to be configurable from drop down..
-            if(!_.isEmpty(activity.get('matchesFilters').organizations['1'])){
+            if (!_.isEmpty(activity.get('matchesFilters').organizations['1'])) {
               return activity.get('matchesFilters').organizations['1'];
             } else {
               console.warn('Activity is missing desired vertical');

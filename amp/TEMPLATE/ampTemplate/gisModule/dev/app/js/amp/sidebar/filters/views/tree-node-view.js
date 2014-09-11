@@ -20,11 +20,11 @@ var TreeNodeView = Backbone.View.extend({
 
   template: _.template(Template),
 
-  initialize: function(){
+  initialize: function() {
   },
 
 
-  render: function(model){
+  render: function(model) {
     this.model = model;
     this.$el.html(this.template(model.toJSON()));
     this.renderChildren();
@@ -32,18 +32,17 @@ var TreeNodeView = Backbone.View.extend({
     return this;
   },
 
-  renderChildren: function () {
+  renderChildren: function() {
     var ul = $('<ul>');
     this.$el.append(ul);
 
     var children = this.model.get('children');
-    if(!children.isEmpty()){
-      children.each(function(child){
+    if (!children.isEmpty()) {
+      children.each(function(child) {
         var tmpView = new TreeNodeView();
         ul.append(tmpView.render(child).$el);
       });
-    }
-    else{
+    } else {
       this.$('.expanded').remove();
       this.$('> .node > .toggle-nav > .count').text('');
     }
@@ -55,63 +54,63 @@ var TreeNodeView = Backbone.View.extend({
     this._updateExpanded(ul);
   },
 
-  _addModelListeners: function(){
+  _addModelListeners: function() {
     var self = this;
 
     //Add model listeneres
-    this.model.on('change:selected', function () {
+    this.model.on('change:selected', function() {
       self._updateSelection();
     });
 
-    this.model.on('change:expanded', function () {
+    this.model.on('change:expanded', function() {
       self._updateExpanded();
     });
 
-    this.model.on('change:numSelected', function(){
+    this.model.on('change:numSelected', function() {
       self._updateCountUI();
     });
 
   },
 
-  _addUIListeners: function(){
+  _addUIListeners: function() {
     var self = this;
-    this.$('> .node > .selectable').on('click', function(){
+    this.$('> .node > .selectable').on('click', function() {
       self.clickBox();
 
     });
-    this.$('> .node > .toggle-nav').on('click', function(){
+    this.$('> .node > .toggle-nav').on('click', function() {
       self.clickName();
     });
   },
 
-  _updateSelection: function () {
+  _updateSelection: function() {
     this._updateCheckboxFill();
   },
 
-  _updateCountUI: function(){
-    if(!this.model.get('children').isEmpty()){
+  _updateCountUI: function() {
+    if (!this.model.get('children').isEmpty()) {
       this.$('> .node > .toggle-nav > .count').text(
-        '(' + this.model.get('numSelected') + '/' + this.model.get('numPossible') + ')' );
+        '(' + this.model.get('numSelected') + '/' + this.model.get('numPossible') + ')');
       this._updateCheckboxFill();
     }
   },
 
   // For updating non-leaf nodes
-  _updateCheckboxFill: function(){
-    if(!this.model.get('children').isEmpty()){
-      if(this.model.get('numSelected') > 0){
-        if(this.model.get('numSelected') < this.model.get('numPossible')){
+  _updateCheckboxFill: function() {
+    if (!this.model.get('children').isEmpty()) {
+      if (this.model.get('numSelected') > 0) {
+        if (this.model.get('numSelected') < this.model.get('numPossible')) {
           this.$('> .node > .selectable').addClass('half-fill');
           this.$('> .node > .selectable').removeClass('selected');
         } else {
           this.$('> .node > .selectable').removeClass('half-fill');
           this.$('> .node > .selectable').addClass('selected');
         }
-      } else if(this.model.get('numSelected') === 0){
+      } else if (this.model.get('numSelected') === 0) {
         this.$('> .node > .selectable').removeClass('half-fill');
         this.$('> .node > .selectable').removeClass('selected');
       }
-    } else{ // else leaf node
+    } else { // else leaf node
       if (this.model.get('selected')) {
         this.$('> .node > .selectable').addClass('selected');
       } else {
@@ -120,7 +119,7 @@ var TreeNodeView = Backbone.View.extend({
     }
   },
 
-  _updateExpanded: function(ul){
+  _updateExpanded: function(ul) {
     var iElement = this.$('> .node > .toggle-nav > .expanded');
     if (this.model.get('expanded')) {
       this.expand();
@@ -129,7 +128,7 @@ var TreeNodeView = Backbone.View.extend({
       this.collapse();
 
       // to run on first time...need to use ul, since el is not on DOM yet
-      if(ul){
+      if (ul) {
         ul.find('> li').hide();
       }
 
@@ -138,29 +137,29 @@ var TreeNodeView = Backbone.View.extend({
   },
 
 
-  clickBox: function () {
+  clickBox: function() {
     this.model.set('selected', !this.model.get('selected'), {propagation: true});
   },
 
 
-  clickName: function () {
+  clickName: function() {
     // if we have children expand
-    if(!this.model.get('children').isEmpty()){
+    if (!this.model.get('children').isEmpty()) {
       this.model.set('expanded', !this.model.get('expanded'));
-    } else{
+    } else {
       // leaf node, so pretend the clicked on the box
       this.clickBox();
     }
   },
 
 
-  collapse: function () {
+  collapse: function() {
     var children = this.$el.find(' > ul > li');
     children.hide('fast');
 
   },
 
-  expand: function () {
+  expand: function() {
     var children = this.$el.find(' > ul > li');
     children.show('fast');
   }

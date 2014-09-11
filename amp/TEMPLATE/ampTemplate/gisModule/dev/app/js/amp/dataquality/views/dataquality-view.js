@@ -12,11 +12,11 @@ module.exports = Backbone.View.extend({
 
   template: _.template(Template),
 
-  initialize: function () {
+  initialize: function() {
     this.model = new DataQualityModel();
   },
 
-  render: function () {
+  render: function() {
 
     this.$el.html(this.template({}));
     this.updateScore();
@@ -26,18 +26,18 @@ module.exports = Backbone.View.extend({
 
 
   // TODO make sure updateScore is triggered by map filter changes.
-  updateScore: function(){
+  updateScore: function() {
     this.currentScore = this.model.getScore();
     var styleClass = 'info';
 
 
-    if(this.currentScore >= this.minGoodScore && this.currentScore <= 100){
+    if (this.currentScore >= this.minGoodScore && this.currentScore <= 100) {
       styleClass = 'success';
 
-    } else if(this.currentScore >= this.minWarningScore && this.currentScore < this.minGoodScore){
+    } else if (this.currentScore >= this.minWarningScore && this.currentScore < this.minGoodScore) {
       styleClass = 'warning';
 
-    } else if(this.currentScore >= 0 && this.currentScore < this.minWarningScore){
+    } else if (this.currentScore >= 0 && this.currentScore < this.minWarningScore) {
       styleClass = 'danger';
 
     } else {

@@ -26,7 +26,7 @@ module.exports = BaseControlView.extend({
     var self = this;
     BaseControlView.prototype.initialize.apply(this, arguments);
 
-    this._getFilterList().done(function(filterList){
+    this._getFilterList().done(function(filterList) {
       self.filterViewsInstances = filterList;
       self.render();
     });
@@ -50,21 +50,21 @@ module.exports = BaseControlView.extend({
     return this;
   },
 
-  _getFilterList: function(){
+  _getFilterList: function() {
     var self = this;
     var filterList = [];
     var deferred =  $.Deferred();
 
     $.ajax({
-        url: this.apiURL
-      })
-      .done(function(data){
-        if( _.isEmpty(data) ){
+      url: this.apiURL
+    })
+      .done(function(data) {
+        if (_.isEmpty(data)) {
           console.warn('Filters API returned empty', data);
         }
 
-        _.each(data, function(APIFilter){
-          if(APIFilter.ui){
+        _.each(data, function(APIFilter) {
+          if (APIFilter.ui) {
             var view = self._createFilterView(APIFilter);
             filterList.push(view);
           }
@@ -72,7 +72,7 @@ module.exports = BaseControlView.extend({
 
         deferred.resolve(filterList);
       })
-      .fail(function(jqXHR, textStatus, errorThrown){
+      .fail(function(jqXHR, textStatus, errorThrown) {
         var errorMessage = 'Getting filters failed';
         console.error('Getting filters failed', jqXHR, textStatus, errorThrown);
         deferred.reject(errorMessage);
@@ -81,25 +81,41 @@ module.exports = BaseControlView.extend({
     return deferred;
   },
 
-  _createFilterView: function(APIFilter){
+  _createFilterView: function(APIFilter) {
     // Assume all filters are genericView, but if we want, we can
     // use specific granular views for some filters: OrgFilterView
     // TODO: magic strings are dangerous, config somewhere...
     var view = null;
-    switch (APIFilter.name){
+    switch (APIFilter.name) {
       case 'Years':
-        view = new YearsFilterView({app:this.app, url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
+        view = new YearsFilterView({
+          app:this.app,
+          url:APIFilter.endpoint,
+          modelValues:{title:APIFilter.name}
+        });
         break;
       case 'Sectors':
       case 'Programs':
       case 'Organizations':
-        view = new GenericNestedFilterView({app:this.app, url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
+        view = new GenericNestedFilterView({
+          app:this.app,
+          url:APIFilter.endpoint,
+          modelValues:{title:APIFilter.name}
+        });
         break;
       case 'Dates':
-        view = new YearsFilterView({app:this.app, url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
+        view = new YearsFilterView({
+          app:this.app,
+          url:APIFilter.endpoint,
+          modelValues:{title:APIFilter.name}
+        });
         break;
       default:
-        view = new GenericFilterView({app:this.app, url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
+        view = new GenericFilterView({
+          app:this.app,
+          url:APIFilter.endpoint,
+          modelValues:{title:APIFilter.name}
+        });
     }
     return view;
   }

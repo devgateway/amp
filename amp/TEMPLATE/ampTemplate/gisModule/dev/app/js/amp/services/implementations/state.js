@@ -4,7 +4,7 @@ var Backbone = require('backbone');
 function State() {
   'use strict';
 
-  if (! (this instanceof State)) {
+  if (!(this instanceof State)) {
     throw new Error('State needs to be created with the `new` keyword.');
   }
 
@@ -23,7 +23,7 @@ function State() {
     var changed = false;
     _.each(this._stateRegistry, function(state) {
       var currentState = state.get();
-      if (! _.isEqual(currentState, state.empty)) {
+      if (!_.isEqual(currentState, state.empty)) {
         // only call .set if resetting will actually change the state.
         state.set(state.empty);
         changed = true;
@@ -46,7 +46,7 @@ function State() {
       if (_.isUndefined(current)) {
         this._unclaimed[id] = stateToSet;
         console.warn('Saving state for unregistered id: ' + id);
-      } else if (! _.isEqual(current.get(), stateToSet)) {
+      } else if (!_.isEqual(current.get(), stateToSet)) {
         current.set(stateToSet);
         changed = true;
       }

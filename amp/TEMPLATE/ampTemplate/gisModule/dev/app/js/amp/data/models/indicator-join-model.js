@@ -6,8 +6,7 @@ var Palette = require('../../colours/colour-palette');
 
 
 module.exports = Backbone.Model
-  .extend(LoadOnceMixin)
-  .extend({
+.extend(LoadOnceMixin).extend({
 
   initialize: function() {
 
@@ -24,7 +23,7 @@ module.exports = Backbone.Model
     var boundaryLink = this.get('joinBoundariesLink');  // TODO: handle IDs vs links consitently
     var boundaryId = boundaryLink.split('gis/boundaries/')[1];  // for now, (for ever?,) they are all local
     var boundary = this.collection.boundaries.find(function(boundary) { return boundary.id === boundaryId; });
-    if (! boundary) {  // sanity check
+    if (!boundary) {  // sanity check
       throw new Error('No boundary found for indicator layer:', this.get('title'));
     }
 

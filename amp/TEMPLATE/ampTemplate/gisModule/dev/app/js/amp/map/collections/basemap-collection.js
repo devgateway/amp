@@ -94,7 +94,7 @@ module.exports = Backbone.Collection.extend({
   selectBasemap: function(basemapId) {
 
     var newSelection = this.getBasemap(basemapId);
-    if (! newSelection) {
+    if (!newSelection) {
       throw new Error('No basemap: ' + basemapId);
     }
 

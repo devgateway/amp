@@ -35,7 +35,7 @@ module.exports = Backbone.View.extend({
       admLayer.load().then(_.bind(function() {
         var clusters = this.getNewADMLayer(admLayer);
         leafletLayer.addLayer(clusters);
-        clusters.on('popupopen', function (e) {
+        clusters.on('popupopen', function(e) {
           var clusterPopupView = new ClusterPopupView({app: self.app}, e.popup, admLayer);
           clusterPopupView.render();
         });
@@ -62,7 +62,7 @@ module.exports = Backbone.View.extend({
     var self = this;
 
     return new L.geoJson(admLayer.get('features'), {
-      pointToLayer: function (feature, latlng) {
+      pointToLayer: function(feature, latlng) {
         var htmlString = self.admTemplate(feature);
         var myIcon = L.divIcon({
           className: 'map-adm-icon',

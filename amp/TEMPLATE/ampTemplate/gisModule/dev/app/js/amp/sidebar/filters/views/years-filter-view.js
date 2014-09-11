@@ -19,7 +19,7 @@ module.exports = BaseFilterView.extend({
     this.model = new YearsFilterModel(options.modelValues);
     this.model.url = options.url;
 
-    this.model.fetch().then(function(){
+    this.model.fetch().then(function() {
       self.model.set('selectedStart', self.model.get('startYear'));
       self.model.set('selectedEnd', self.model.get('endYear'));
       self._updateTitle();
@@ -28,7 +28,7 @@ module.exports = BaseFilterView.extend({
   },
 
 
-  renderFilters: function () {
+  renderFilters: function() {
     var self = this;
     BaseFilterView.prototype.renderFilters.apply(this);
     this.$('.filter-options').append(this.template());
@@ -58,24 +58,24 @@ module.exports = BaseFilterView.extend({
     });
 
     //ugly, too much data in the dom...but it's how the example goes.
-    this.slider.on('change', function(){
+    this.slider.on('change', function() {
       self.model.set('selectedStart', parseInt(self.$('.start-year').text(), 10));
     });
 
     //ugly, too much data in the dom...but it's how the example goes.
-    this.slider.on('change', function(){
+    this.slider.on('change', function() {
       self.model.set('selectedEnd',  parseInt(self.$('.end-year').text(), 10));
     });
   },
 
-  renderTitle: function () {
+  renderTitle: function() {
     BaseFilterView.prototype.renderTitle.apply(this);
     this._updateTitle();
 
     return this;
   },
 
-  _updateTitle: function(){
+  _updateTitle: function() {
     this.$('.filter-count').text(this.model.get('selectedStart') + ' - ' + this.model.get('selectedEnd'));
   }
 

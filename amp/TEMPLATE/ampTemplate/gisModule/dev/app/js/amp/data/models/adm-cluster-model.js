@@ -5,8 +5,7 @@ var LoadOnceMixin = require('../../mixins/load-once-mixin');
 
 
 module.exports = Backbone.Model
-  .extend(LoadOnceMixin)
-  .extend({
+.extend(LoadOnceMixin).extend({
 
   initialize: function() {
     this.listenTo(this, 'change:selected', function(blah, show) {
@@ -45,7 +44,7 @@ module.exports = Backbone.Model
     return when(this.load(), this.loadBoundary()).promise();
   },
 
-  _translateADMToMagicWord: function(admString){
+  _translateADMToMagicWord: function(admString) {
     var magicWords = {
       'adm-0': 'Country',
       'adm-1': 'Region',

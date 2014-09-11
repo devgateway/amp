@@ -7,15 +7,14 @@ var WMSIndicator = require('../models/indicator-wms-model');
 
 
 module.exports = Backbone.Collection
-  .extend(RadioMixin)  // manages 'selected' state and api of models
-  .extend({
+.extend(RadioMixin).extend({
 
   url: '/rest/gis/indicator-layers',
 
-  parse: function(data){
+  parse: function(data) {
     var parsedData = data;
-    parsedData = _.filter(data, function(layer){
-      switch (layer.type){
+    parsedData = _.filter(data, function(layer) {
+      switch (layer.type) {
         case 'joinBoundaries':
         case 'wms':
         case 'arcgis':
@@ -31,7 +30,7 @@ module.exports = Backbone.Collection
   model: function(attrs) {
     var typeName = attrs.type;
 
-    switch (typeName){
+    switch (typeName) {
       case 'joinBoundaries':
         return new JoinIndicator(attrs);
       case 'wms':

@@ -5,11 +5,11 @@ module.exports = Backbone.Model.extend({
   defaults: {
   },
 
-  initialize: function(){
+  initialize: function() {
   },
 
   // returns a data quality score from 1-100
-  getScore: function(){
+  getScore: function() {
     //TODO: emit an event, or some other way of finding all relevant models.
     //      and use responses to calculate an aproximate dataQuality score
 

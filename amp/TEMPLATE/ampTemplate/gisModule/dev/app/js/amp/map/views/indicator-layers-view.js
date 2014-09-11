@@ -45,7 +45,7 @@ module.exports = Backbone.View.extend({
 
   hideLayer: function(layer) {
     var leafletLayer = this.leafletLayerMap[layer.cid];
-    if (! leafletLayer) {
+    if (!leafletLayer) {
       throw new Error('cannot remove a layer that is not loaded????', layer);
     }
     this.map.removeLayer(leafletLayer);
@@ -61,7 +61,7 @@ module.exports = Backbone.View.extend({
         colour = layer.palette.colours.find(function(colour) {
           return colour.get('test')(featureValue);
         });
-        if (! colour) {
+        if (!colour) {
           throw new Error('No colour matched for the value ' + featureValue);
         }
         return {

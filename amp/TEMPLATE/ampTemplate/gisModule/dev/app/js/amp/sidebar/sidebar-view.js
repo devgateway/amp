@@ -30,7 +30,7 @@ module.exports = Backbone.View.extend({
   },
 
   // Render entire geocoding view.
-  render: function () {
+  render: function() {
     this.$el.append(_.map(controlViews, function(ControlView) {
       var view = new ControlView({app: this.app});
       return view.render().el;
@@ -41,13 +41,13 @@ module.exports = Backbone.View.extend({
     this.popovers.popover();
 
     // Temp dirty popover fix until 'exclusiveShowPopover' is fixed in next sprint.
-    $('body').on('click', function (e) {
-                            if ($(e.target).data('toggle') !== 'popover' &&
-                                $(e.target).parents('[data-toggle="popover"]').length === 0 &&
-                                $(e.target).parents('.popover.in').length === 0) {
-                              $('[data-toggle=popover]').popover('hide');
-                            }
-                          });
+    $('body').on('click', function(e) {
+      if ($(e.target).data('toggle') !== 'popover' &&
+          $(e.target).parents('[data-toggle="popover"]').length === 0 &&
+          $(e.target).parents('.popover.in').length === 0) {
+        $('[data-toggle=popover]').popover('hide');
+      }
+    });
 
     return this;
   },

@@ -40,11 +40,11 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 						name : name,
 						values : content
 					});
-					filters.push(auxFilter);
+					filters.add(auxFilter);
 				} else if (item.indexOf('ElementType = DATE') > -1) {
 
 				} else if (item.indexOf('ElementType = YEAR') > -1) {
-					
+
 				}
 			}
 		});
@@ -145,7 +145,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			// Simulate time consuming content.
 			setTimeout(function() {
 				retrieveTabContent(selectedTabIndex);
-			}, 200);
+			}, 10);
 		}
 	};
 

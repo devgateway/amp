@@ -5,7 +5,6 @@ var _ = require('underscore');
 var BaseControlView = require('../../base-control/base-control-view');
 var GenericFilterView = require('../views/generic-filter-view');
 var GenericNestedFilterView = require('../views/generic-nested-filter-view');
-var OrganizationsFilterView = require('../views/organizations-filter-view');
 var YearsFilterView = require('../views/years-filter-view');
 var Template = fs.readFileSync(__dirname + '/../templates/filters-template.html', 'utf8');
 
@@ -40,9 +39,9 @@ module.exports = BaseControlView.extend({
     // add content
     this.$('.content').html(this.template({title: this.title}));
 
-    var filtersContainer = this;
+    var self = this;
     _.each(this.filterViewsInstances, function(filterView) {
-      filtersContainer.$('.filter-list').append(filterView.renderTitle().el);
+      self.$('.filter-list').append(filterView.renderTitle().el);
     });
 
     // setup filter-panel
@@ -89,18 +88,18 @@ module.exports = BaseControlView.extend({
     var view = null;
     switch (APIFilter.name){
       case 'Years':
-        view = new YearsFilterView({app:this.app,url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
+        view = new YearsFilterView({app:this.app, url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
         break;
       case 'Sectors':
       case 'Programs':
       case 'Organizations':
-        view = new GenericNestedFilterView({app:this.app,url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
-        break;  
+        view = new GenericNestedFilterView({app:this.app, url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
+        break;
       case 'Dates':
-        view = new YearsFilterView({app:this.app,url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
-        break;  
+        view = new YearsFilterView({app:this.app, url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
+        break;
       default:
-        view = new GenericFilterView({app:this.app,url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
+        view = new GenericFilterView({app:this.app, url:APIFilter.endpoint, modelValues:{title:APIFilter.name}});
     }
     return view;
   }

@@ -3,7 +3,7 @@ var _ = require('underscore');
 var $ = require('jquery');
 
 var GenericFilterModel = require('../models/generic-filter-model');
-var TreeNodeModel= require('../models/tree-node-model');
+var TreeNodeModel = require('../models/tree-node-model');
 var TreeNodeView = require('../views/tree-node-view');
 var BaseFilterView = require('../views/base-filter-view');
 var Template = fs.readFileSync(__dirname + '/../templates/generic-filter-template.html', 'utf8');
@@ -18,7 +18,7 @@ module.exports = BaseFilterView.extend({
 
   initialize: function(options) {
     var self = this;
-    BaseFilterView.prototype.initialize.apply(this,[options]);
+    BaseFilterView.prototype.initialize.apply(this, [options]);
 
     this.model = new GenericFilterModel(options.modelValues);
 
@@ -47,8 +47,8 @@ module.exports = BaseFilterView.extend({
     BaseFilterView.prototype.renderFilters.apply(this);
     this.$('.filter-options').append(this.template(this.model.toJSON()));
     this.$('.tree-container').append(this.treeView.render(this.treeModel).$el);
-    this.treeModel.set('selected',false);
-    this.treeModel.set('expanded',true);
+    this.treeModel.set('selected', false);
+    this.treeModel.set('expanded', true);
 
 
     // Add listeners, tried doing in 'events' but didn't work..i had issues before with
@@ -61,14 +61,14 @@ module.exports = BaseFilterView.extend({
 
   _selectAll: function(){
     // force trigger even if already this state (important for half-fill ui
-    this.treeModel.set('selected',true,{ 'silent': true });
-    this.treeModel.trigger('change:selected',this.treeModel, null,{propogation:false});
+    this.treeModel.set('selected', true, { 'silent': true });
+    this.treeModel.trigger('change:selected', this.treeModel, null, {propogation:false});
   },
 
   _selectNone: function(){
     // force trigger even if already this state (important for half-fill ui)
-    this.treeModel.set('selected',false,{ 'silent': true });
-    this.treeModel.trigger('change:selected',this.treeModel, null,{propogation:false});
+    this.treeModel.set('selected', false, { 'silent': true });
+    this.treeModel.trigger('change:selected', this.treeModel, null, {propogation:false});
   },
 
 

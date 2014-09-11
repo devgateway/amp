@@ -87,13 +87,13 @@ module.exports = Backbone.View.extend({
 
 
         // DRS in progress custom own clustering. big efficiency gains.
-        var latLngString = Math.round(latlng.lat* self.CLUSTER_PRECISION * 10) + 
-          ',' + Math.round(latlng.lng*self.CLUSTER_PRECISION * 10);
+        var latLngString = Math.round(latlng.lat * self.CLUSTER_PRECISION * 10) +
+          ',' + Math.round(latlng.lng * self.CLUSTER_PRECISION * 10);
         if(self.customClusterMap[latLngString]){
           self.customClusterMap[latLngString].push(point); //TODO: should push point or feature?
-          self.maxClusterCount = Math.max(self.maxClusterCount,self.customClusterMap[latLngString].length);
+          self.maxClusterCount = Math.max(self.maxClusterCount, self.customClusterMap[latLngString].length);
         } else{
-          self.customClusterMap[latLngString] =[point];
+          self.customClusterMap[latLngString] = [point];
         }
 
         return point;
@@ -222,7 +222,7 @@ module.exports = Backbone.View.extend({
 
     if (feature.properties) {
       //TODO: template:
-      layer.bindPopup('Project #: '+ (feature.properties.activity ? feature.properties.activity[0] :'') +
+      layer.bindPopup('Project #: ' + (feature.properties.activity ? feature.properties.activity[0] :'') +
         '<br />Site: ' + feature.properties.structureTitle );
     }
 
@@ -234,7 +234,7 @@ module.exports = Backbone.View.extend({
       }
     });
 
-    layer.on('popupclose',function(evt) {
+    layer.on('popupclose', function(evt) {
       var feature = evt.target.feature;
       if (feature) {
         var projectId = feature.properties.projectId;

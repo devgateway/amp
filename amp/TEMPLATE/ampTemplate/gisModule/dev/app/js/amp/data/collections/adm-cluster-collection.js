@@ -2,8 +2,6 @@ var Backbone = require('backbone');
 var ADMClusterModel = require('../models/adm-cluster-model');
 
 
-
-
 module.exports = Backbone.Collection.extend({
 
   model:  ADMClusterModel,

@@ -47,9 +47,9 @@ TreeNodeModel = Backbone.Model.extend({
     var children = this.get('children');
 
     if(this.get('selected')){
-      this.set('numSelected',this.get('numPossible'));
+      this.set('numSelected', this.get('numPossible'));
     } else{
-      this.set('numSelected',0);
+      this.set('numSelected', 0);
     }
 
     if (!children.isEmpty()) {
@@ -76,7 +76,7 @@ TreeNodeModel = Backbone.Model.extend({
 
   _updateCount: function(){
     var children = this.get('children');
-    var countTotal= {
+    var countTotal = {
       selected: 0,
       possible:0
     };
@@ -93,8 +93,8 @@ TreeNodeModel = Backbone.Model.extend({
       };
     }
 
-    this.set('numSelected',countTotal.selected);
-    this.set('numPossible',countTotal.possible);
+    this.set('numSelected', countTotal.selected);
+    this.set('numPossible', countTotal.possible);
   },
 
   _updateChildNodes: function () {

@@ -14,6 +14,6 @@ module.exports = Backbone.Model.extend({
     //      and use responses to calculate an aproximate dataQuality score
 
     //temporary stub, random score:
-    return Math.floor(Math.random()*100);
+    return Math.floor(Math.random() * 100);
   }
 });

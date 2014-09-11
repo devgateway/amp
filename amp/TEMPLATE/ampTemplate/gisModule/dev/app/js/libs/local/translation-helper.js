@@ -18,7 +18,7 @@ module.exports = {
     return translator.setLanguage(lng);
   },
 
-  // Phil: the 'el' object is a jquery element. 
+  // Phil: the 'el' object is a jquery element.
   // what is the preferred naming convention for jQuery object?
   // something with a $ in it right?
   setTranslationsOnDOM: function(el){

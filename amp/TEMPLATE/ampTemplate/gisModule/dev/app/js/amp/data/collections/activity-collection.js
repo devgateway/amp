@@ -22,7 +22,7 @@ module.exports = Backbone.Collection
       var index = _.indexOf(aryOfIDs, activity.id);
       if(index > -1){
         matches.push(activity.toJSON());   // add activity to array
-        aryOfIDs.splice(index,1);          // remove id from array
+        aryOfIDs.splice(index, 1);          // remove id from array
       }
     });
 

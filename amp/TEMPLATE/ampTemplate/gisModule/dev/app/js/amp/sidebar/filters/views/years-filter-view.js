@@ -24,7 +24,7 @@ module.exports = BaseFilterView.extend({
       self.model.set('selectedEnd', self.model.get('endYear'));
       self._updateTitle();
     });
-    this.listenTo(this.model, 'change', this._updateTitle); 
+    this.listenTo(this.model, 'change', this._updateTitle);
   },
 
 
@@ -33,7 +33,7 @@ module.exports = BaseFilterView.extend({
     BaseFilterView.prototype.renderFilters.apply(this);
     this.$('.filter-options').append(this.template());
 
-    // TODO: uses window.jQuery because that was the only way I had luck with browserify shim... 
+    // TODO: uses window.jQuery because that was the only way I had luck with browserify shim...
     // uses https://github.com/leongersen/noUiSlider
     this.slider = window.jQuery('.year-slider').noUiSlider({
       start: [self.model.get('selectedStart'), self.model.get('selectedEnd')],
@@ -59,12 +59,12 @@ module.exports = BaseFilterView.extend({
 
     //ugly, too much data in the dom...but it's how the example goes.
     this.slider.on('change', function(){
-      self.model.set('selectedStart', parseInt(self.$('.start-year').text(),10));
+      self.model.set('selectedStart', parseInt(self.$('.start-year').text(), 10));
     });
 
     //ugly, too much data in the dom...but it's how the example goes.
     this.slider.on('change', function(){
-      self.model.set('selectedEnd',  parseInt(self.$('.end-year').text(),10));
+      self.model.set('selectedEnd',  parseInt(self.$('.end-year').text(), 10));
     });
   },
 

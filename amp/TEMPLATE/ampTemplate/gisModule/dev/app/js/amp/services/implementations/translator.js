@@ -4,14 +4,13 @@ var Backbone = require('backbone');
 
 function Translator() {
   'use strict';
-  var self = this;
 
   if (! (this instanceof Translator)) {
     throw new Error('Translator needs to be created with the `new` keyword.');
   }
 
   // this is the object that has all  the key value pairs for the widget.
-  this._defaultKeys = JSON.parse(fs.readFileSync(__dirname + 
+  this._defaultKeys = JSON.parse(fs.readFileSync(__dirname +
     '/../../../../mock-api/data/label-translations/sample-en.json', 'utf8'));
   this.availableLanguages = null;// backbone collection
   this.translations = {
@@ -59,7 +58,7 @@ function Translator() {
   // important to let the api know, so all responses are translated.
   this.setLanguage = function(lng){
     this._currentLng = lng;
-    return this._apiCall('/rest/translations/languages/'+lng, null, 'GET');
+    return this._apiCall('/rest/translations/languages/' + lng, null, 'GET');
   };
 
 
@@ -102,7 +101,7 @@ function Translator() {
       if(lng){
         self.translations.locales[lng] = data;
       } else{
-        console.warn('no lng set, can\'t cache',data);
+        console.warn('no lng set, can\'t cache', data);
       }
 
       return data;
@@ -111,7 +110,7 @@ function Translator() {
 
 
   // helper to wrap api call
-  this._apiCall= function(url, data, type) {
+  this._apiCall = function(url, data, type) {
     var ajaxOptions = {
       headers: {
           'Accept': 'application/json',

@@ -51,8 +51,8 @@ module.exports = Backbone.View.extend({
     this.$el.append($('#filter-popup'));
     $('#filter-popup').html(this.contentTemplate(this.model.toJSON()));
     $('#filter-popup').show();
-    $('#filter-popup').on('click','.cancel', self.cancel);
-    $('#filter-popup').on('click','.apply', self.apply);
+    $('#filter-popup').on('click', '.cancel', self.cancel);
+    $('#filter-popup').on('click', '.apply', self.apply);
 
     this.renderFilters();
 
@@ -67,7 +67,7 @@ module.exports = Backbone.View.extend({
   },
 
   renderFilters: function () {
-    
+
   },
 
   apply: function () {

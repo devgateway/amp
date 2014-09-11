@@ -97,7 +97,7 @@ module.exports = Backbone.View.extend({
       var activities = feature.properties.activityid;
       layer._clusterId = feature.properties.admName;
       // temp. will be template.
-      layer.bindPopup(feature.properties.admName + 
+      layer.bindPopup(feature.properties.admName +
         ' has ' +  activities.length +
         ' projects. <br><img src="img/loading-icon.gif" />');
     }

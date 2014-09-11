@@ -6,7 +6,7 @@ var Backbone = require('backbone');
 var BaseFilterView = require('../views/base-filter-view');
 var GenericFilterView = require('../views/generic-filter-view');
 var GenericFilterModel = require('../models/generic-filter-model');
-var TreeNodeModel= require('../models/tree-node-model');
+var TreeNodeModel = require('../models/tree-node-model');
 var TreeNodeView = require('../views/tree-node-view');
 
 require('../../../../libs/local/slider/jquery.nouislider.min.js');
@@ -70,7 +70,7 @@ module.exports = GenericFilterView.extend({
           isSelectable: false
         };
 
-        child.url = url + '/'+ child.get('id'); //TODO: something smarter...mroe reliable.. id
+        child.url = url + '/' + child.get('id'); //TODO: something smarter...mroe reliable.. id
         deferreds.push(
           child.fetch().done(function(data){
             if(data.id){ //not an array. hack temp solution while Julian fixes API so all obj or all array
@@ -88,7 +88,7 @@ module.exports = GenericFilterView.extend({
       $.when.apply($, deferreds).then(function(){
         self._buildTreeFromRoot(rootNodeObj);
         deferred.resolve();
-      }).fail(function(){ 
+      }).fail(function(){
         //this happens if just one child fails...no point in stopping whole tree.
         self._buildTreeFromRoot(rootNodeObj);
         deferred.resolve();

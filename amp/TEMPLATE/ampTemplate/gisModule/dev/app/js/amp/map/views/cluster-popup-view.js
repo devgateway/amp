@@ -3,7 +3,6 @@ var _ = require('underscore');
 var $ = require('jquery');
 var Backbone = require('backbone');
 var d3 = require('d3-browserify');
-var nv =  require('nvd3');
 var nvd3 = window.nv;
 
 var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
@@ -32,7 +31,7 @@ module.exports = Backbone.View.extend({
 
   generateInfoWindow: function(popup, admLayer){
     var featureCollection = admLayer.get('features');
-    this.cluster = _.find(featureCollection,function(feature){
+    this.cluster = _.find(featureCollection, function(feature){
       return feature.properties.admName === popup._source._clusterId;
     });
 
@@ -57,11 +56,11 @@ module.exports = Backbone.View.extend({
   _generateSectorChart: function(){
 
     var exampleData = [
-      { 'label': 'Health','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5) } ,
-      { 'label': 'Agriculture','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5) },
-      { 'label': 'Science','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5) },
-      { 'label': 'Transport','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5 )},
-      { 'label': 'Planning','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5 )}
+      { 'label': 'Health', 'value' : Math.round(Math.random() * this.cluster.properties.activityid.length / 5) },
+      { 'label': 'Agriculture', 'value' : Math.round(Math.random() * this.cluster.properties.activityid.length / 5) },
+      { 'label': 'Science', 'value' : Math.round(Math.random() * this.cluster.properties.activityid.length / 5) },
+      { 'label': 'Transport', 'value' : Math.round(Math.random() * this.cluster.properties.activityid.length / 5 )},
+      { 'label': 'Planning', 'value' : Math.round(Math.random() * this.cluster.properties.activityid.length / 5 )}
     ];
     this._generateBaseChart(exampleData, '#charts-pane-sector .amp-chart svg');
   },
@@ -69,11 +68,11 @@ module.exports = Backbone.View.extend({
   _generateDonorChart: function(){
 
     var exampleData = [
-      { 'label': 'U.N','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5) } ,
-      { 'label': 'World Bank','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5) },
-      { 'label': 'UNICEF','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5) },
-      { 'label': 'AfDB','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5 )},
-      { 'label': 'DFID','value' : Math.round(Math.random()*this.cluster.properties.activityid.length/5 )}
+      { 'label': 'U.N', 'value' : Math.round(Math.random() * this.cluster.properties.activityid.length / 5) },
+      { 'label': 'World Bank', 'value' : Math.round(Math.random() * this.cluster.properties.activityid.length / 5) },
+      { 'label': 'UNICEF', 'value' : Math.round(Math.random() * this.cluster.properties.activityid.length / 5) },
+      { 'label': 'AfDB', 'value' : Math.round(Math.random() * this.cluster.properties.activityid.length / 5 )},
+      { 'label': 'DFID', 'value' : Math.round(Math.random() * this.cluster.properties.activityid.length / 5 )}
     ];
 
     this._generateBaseChart(exampleData, '#charts-pane-donor .amp-chart svg');
@@ -120,7 +119,8 @@ module.exports = Backbone.View.extend({
     if(startIndex + this.PAGE_SIZE >= this.cluster.properties.activityid.length){
         this.tempDOM.find('.load-more').hide();
     } else {
-      this.tempDOM.find('.load-more').text('load more '+(startIndex + this.PAGE_SIZE)+'/'+this.cluster.properties.activityid.length);
+      this.tempDOM.find('.load-more').text('load more ' + (startIndex + this.PAGE_SIZE) + '/' +
+                                           this.cluster.properties.activityid.length);
     }
 
     return this.app.data.activities.getActivites(activityIDs).then(function(activityCollection){

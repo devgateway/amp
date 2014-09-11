@@ -107,7 +107,7 @@ var Palette = Backbone.Model.extend({
       };
     }
 
-    for (var stop=0; stop < stops; stop++) {
+    for (var stop = 0; stop < stops; stop++) {
       newColours.push({
         h: (this.get('rootHue') + (hStopSize * stop) + 360) % 360,
         s: DEFAULT.S_MIN + (sStopSize * stop),

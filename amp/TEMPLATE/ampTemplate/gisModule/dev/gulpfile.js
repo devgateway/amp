@@ -159,6 +159,8 @@ gulp.task('watch', ['watchify'], function() {
 
 gulp.task('lint', function() {
   gulp.src([paths.app.scripts.amp, paths.app.scripts.top])
+    .pipe(g.plumber())
+    .pipe(g.jscs())
     .pipe(g.jshint())
     .pipe(g.jshint.reporter('jshint-stylish'));
 

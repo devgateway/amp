@@ -6,7 +6,7 @@ var Backbone = require('backbone');
 var BaseFilterView = require('../views/base-filter-view');
 var GenericFilterView = require('../views/generic-filter-view');
 var GenericFilterModel = require('../models/generic-filter-model');
-var TreeNodeModel= require('../models/tree-node-model');
+var TreeNodeModel = require('../models/tree-node-model');
 var TreeNodeView = require('../views/tree-node-view');
 
 require('../../../../libs/local/slider/jquery.nouislider.min.js');

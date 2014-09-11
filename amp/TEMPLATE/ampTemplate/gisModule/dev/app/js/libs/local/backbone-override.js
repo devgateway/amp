@@ -47,10 +47,10 @@ Backbone.sync = function (method, model, options) {
       if(model.url.indexOf(apiBase) < 0){
         model.url = _getAPIBase() + model.url;
       }
-    } else{
+    } //else{
       // it will recurse, so not needed to explicit append, or it will double append.
       // model.url = _getAPIBase() + model.url();
-    }
+      //}
   }
 
   return originalSync.apply(Backbone, arguments);

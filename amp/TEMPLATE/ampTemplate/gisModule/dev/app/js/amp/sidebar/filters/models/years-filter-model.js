@@ -21,7 +21,7 @@ module.exports = BaseFilterModel.extend({
 
     if(!data.endYear || data.endYear === -1){
       data.endYear = this.attributes.endYear;
-    } 
+    }
     return data;
   }
 

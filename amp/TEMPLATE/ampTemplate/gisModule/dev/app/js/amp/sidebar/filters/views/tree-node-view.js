@@ -111,7 +111,7 @@ var TreeNodeView = Backbone.View.extend({
         this.$('> .node > .selectable').removeClass('half-fill');
         this.$('> .node > .selectable').removeClass('selected');
       }
-    } else{ // else leaf node      
+    } else{ // else leaf node
       if (this.model.get('selected')) {
         this.$('> .node > .selectable').addClass('selected');
       } else {

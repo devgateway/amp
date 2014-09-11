@@ -89,7 +89,7 @@ module.exports = Backbone.Model
     this.load().then(function(){
       // join all activity ids
       self.get('sites').each(function(site){
-        allActivityIds = _(allActivityIds).union(allActivityIds,site.get('properties').activity);
+        allActivityIds = _(allActivityIds).union(allActivityIds, site.get('properties').activity);
       });
 
       self.activities.getActivites(allActivityIds).then(function(){
@@ -128,7 +128,7 @@ module.exports = Backbone.Model
             // Choosing a vertical will need to be configurable from drop down..
             if(!_.isEmpty(activity.get('matchesFilters').organizations['1'])){
               return activity.get('matchesFilters').organizations['1'];
-            } else {              
+            } else {
               console.warn('Activity is missing desired vertical');
               return -1;
             }
@@ -149,7 +149,7 @@ module.exports = Backbone.Model
         })
         .reverse()
         .value();
-        
+
       this.palette.set('elements', orgSites);
       deferred.resolve();
 

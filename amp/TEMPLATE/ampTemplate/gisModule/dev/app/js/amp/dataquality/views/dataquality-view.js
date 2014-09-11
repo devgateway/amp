@@ -35,7 +35,7 @@ module.exports = Backbone.View.extend({
       styleClass = 'success';
 
     } else if(this.currentScore >= this.minWarningScore && this.currentScore < this.minGoodScore){
-      styleClass ='warning';
+      styleClass = 'warning';
 
     } else if(this.currentScore >= 0 && this.currentScore < this.minWarningScore){
       styleClass = 'danger';

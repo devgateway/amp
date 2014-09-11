@@ -466,6 +466,16 @@ public class SearchUtil {
         return activities;
     }
 	
+	
+	
+	public static boolean TeamContainsKeyword(AmpTeam team, String keyword, java.util.Locale locale) {
+		return ((team.getDescription() != null) && SearchUtil.stringContainsKeyword(team.getDescription(), keyword, locale)) 
+				   || ((team.getName() != null) && SearchUtil.stringContainsKeyword(team.getName(), keyword, locale));
+
+	}
+	
+	
+	
 	/*Unicode-friendly function for search, ignores diacritics via Normalizer*/
 	public static boolean stringContainsKeyword(String source, String keyword, java.util.Locale locale) {
 		String normSource = Normalizer.normalize(source.toLowerCase(), Normalizer.Form.NFD);

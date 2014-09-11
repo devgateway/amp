@@ -8,14 +8,16 @@ package org.dgfoundation.amp.newreports;
 public abstract class ReportCell implements Comparable<ReportCell> {
 	public final Comparable value;
 	public final String displayedValue;
+	transient public final Object formatter;
 	//to facilitate the sorting, we will store the parent area
-	private ReportArea area;
+	transient protected ReportArea area;
 	
-	public ReportCell(Comparable<?> value) {
+	public ReportCell(Comparable<?> value, Object formatter) {
 		this.value = value;
 		if (this.value == null)
 			throw new NullPointerException();
-		this.displayedValue = value.toString();
+		this.formatter = formatter;
+		this.displayedValue = getFormattedValue();
 	}
 	
 	@Override public int compareTo(ReportCell oth) {
@@ -37,17 +39,7 @@ public abstract class ReportCell implements Comparable<ReportCell> {
 		return String.format("[%s]", this.displayedValue);
 	}
 
-	/**
-	 * @return the area
-	 */
-	public ReportArea getArea() {
-		return area;
-	}
-
-	/**
-	 * @param area the area to set
-	 */
-	public void setArea(ReportArea area) {
-		this.area = area;
+	protected String getFormattedValue() {
+		return value.toString();
 	}
 }

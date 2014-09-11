@@ -257,7 +257,7 @@ public class AmpARFilterTranslator {
 		if(arFilter.getCurrency() != null )
 			settings.setCurrencyCode(arFilter.getCurrency().getCurrencyCode());
 		if(arFilter.getCurrentFormat() != null)
-			settings.setCurrencyFormat(arFilter.getCurrentFormat().toPattern());
+			settings.setCurrencyFormat(arFilter.getCurrentFormat());
 	}
 	
 	/**

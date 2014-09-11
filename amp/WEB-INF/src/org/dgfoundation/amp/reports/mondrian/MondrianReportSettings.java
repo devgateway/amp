@@ -3,6 +3,8 @@
  */
 package org.dgfoundation.amp.reports.mondrian;
 
+import java.text.DecimalFormat;
+
 import org.dgfoundation.amp.newreports.ReportSettings;
 
 /**
@@ -12,7 +14,7 @@ import org.dgfoundation.amp.newreports.ReportSettings;
  */
 public class MondrianReportSettings extends MondrianReportFilters implements ReportSettings {
 	private String currencyCode = null;
-	private String currencyFormat = null;
+	private DecimalFormat currencyFormat = null;
 	
 	@Override
 	public String getCurrencyCode() {
@@ -28,7 +30,7 @@ public class MondrianReportSettings extends MondrianReportFilters implements Rep
 	}
 
 	@Override
-	public String getCurrencyFormat() {
+	public DecimalFormat getCurrencyFormat() {
 		return currencyFormat;
 	}
 	
@@ -36,7 +38,7 @@ public class MondrianReportSettings extends MondrianReportFilters implements Rep
 	 * Configures the currency pattern to be used to display the amount 
 	 * @param currencyFormat
 	 */
-	public void setCurrencyFormat(String currencyFormat) {
+	public void setCurrencyFormat(DecimalFormat currencyFormat) {
 		this.currencyFormat = currencyFormat;
 	}
 	

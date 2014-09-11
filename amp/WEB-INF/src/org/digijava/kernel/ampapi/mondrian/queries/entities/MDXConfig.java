@@ -34,6 +34,8 @@ public class MDXConfig {
 	private int rowsHierarchiesTotals = 0;
 	private int colsHierarchiesTotals = 0;
 	
+	private String amountsFormat;
+	
 	/**
 	 * @return the cubeName
 	 */
@@ -313,6 +315,18 @@ public class MDXConfig {
 	 */
 	public void setColumnsHierarchiesTotals(int columnHierarchiesTotals) {
 		this.colsHierarchiesTotals = columnHierarchiesTotals;
+	}
+	/**
+	 * @return the amountsFormat
+	 */
+	public String getAmountsFormat() {
+		return amountsFormat;
+	}
+	/**
+	 * @param amountsFormat the amountsFormat to set
+	 */
+	public void setAmountsFormat(String amountsFormat) {
+		this.amountsFormat = amountsFormat;
 	}
 	
 }

@@ -167,7 +167,7 @@ public class ReportSorter {
 				hasContent = hasContent && prevFirstChild.getContents() != null && prevFirstChild.getContents().size() > 0;
 				if (hasContent) {
 					cellsToSort[childId] = findCell(prevFirstChild, colId);
-					cellsToSort[childId].setArea(child); //remember the area we are sorting 
+					cellsToSort[childId].area = child; //remember the area we are sorting 
 					childId++;
 				}
 			}
@@ -178,20 +178,20 @@ public class ReportSorter {
 		int first = asc ? 0 : cellsToSort.length - 1;
 		int last = asc ? cellsToSort.length : -1;
 		int inc = asc ? 1 : -1;
-		prevFirstChild = findFirstLeafArea(cellsToSort[0].getArea());
+		prevFirstChild = findFirstLeafArea(cellsToSort[0].area);
 		
 		//sorts ascending
 		Arrays.sort(cellsToSort);
 				
 		//update first child prefix
-		ReportArea currFirstChld = findFirstLeafArea(cellsToSort[first].getArea());
+		ReportArea currFirstChld = findFirstLeafArea(cellsToSort[first].area);
 		swapPrefix(prevFirstChild, currFirstChld);
 		
 		//update children list in sorting order
 		parent.getChildren().clear();
 		for(int idx = first; idx != last; idx += inc) {
-			parent.getChildren().add(cellsToSort[idx].getArea());
-			cellsToSort[idx].setArea(null);//clear reference
+			parent.getChildren().add(cellsToSort[idx].area);
+			cellsToSort[idx].area = null;//clear reference
 		}
 	} 
 	

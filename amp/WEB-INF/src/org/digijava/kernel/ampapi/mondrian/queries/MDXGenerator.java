@@ -18,6 +18,7 @@ import java.util.TreeSet;
 
 import mondrian.rolap.RolapConnection;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -206,10 +207,12 @@ public class MDXGenerator {
 		
 		String measures = "";
 		String totalMeasures = "";
+		
+		boolean format = StringUtils.isNotBlank(config.getAmountsFormat());
 		Map<MDXMeasure, String> measureTotalMemberMap = new HashMap<MDXMeasure, String>();
 		Map<String, String> measureTotalMemberDefinitionMap = new HashMap<String, String>();
 		for (MDXMeasure colMeasure : config.getColumnMeasures()) {
-			measures += "," + colMeasure.toString();
+			measures += "," + (format ? addMeasureFormat(config, colMeasure, with) : colMeasure.toString()); 
 			//define measure totals
 			String measureTotalMember = MoConstants.MEASURES + "." + MDXElement.quote("Total " + colMeasure.getName());
 			totalMeasures += "," + measureTotalMember;
@@ -264,6 +267,23 @@ public class MDXGenerator {
 		}
 		
 		return axisMdx;
+	}
+	
+	/**
+	 * Adds formated measure member definition
+	 * @param config - MDX configuration
+	 * @param measure - measure to format
+	 * @param with - will store formatted member definition
+	 * @return member name of the formatted measure
+	 */
+	private String addMeasureFormat(MDXConfig config, MDXMeasure measure, StringBuilder with) {
+		String formattedMeasureName = MoConstants.MEASURES + "." + MDXElement.quote(measure.getName() + " Formatted");
+		
+		with.append(" ").append(MoConstants.MEMBER).append(" ").append(formattedMeasureName)
+		.append(" AS ").append("'").append(measure.toString()).append("', ")
+		.append(MoConstants.PROP_FORMAT_STRING).append("=").append("'").append(config.getAmountsFormat()).append("'");
+		
+		return formattedMeasureName;
 	}
 	
 	/**
@@ -799,50 +819,6 @@ public class MDXGenerator {
 		return propLevel;
 		*/
 	}
-	
-	/* canditate for removal
-	private String getAll(MDXAttribute mdxAttr) throws AmpApiException {
-		String all = allNames==null ? null : allNames.get(mdxAttr.getDimensionAndHierarchy());
-		if (all==null)
-			throw new AmpApiException("No 'All' definition found for '" + mdxAttr.getDimensionAndHierarchy() + "'");
-		return all;
-	}
-	*/
-	
-	/* candidate for removal
-	private String toMDXGroup(List<String> list, String groupFuncion, String defaultVal) {
-		switch (list.size()) {
-		case 0: return defaultVal;
-		case 1: return list.get(0);
-		default: //>=2
-			StringBuilder result = new StringBuilder(list.size() * (list.get(0).length() + 10)); //10=buffer for string length variations
-			addFunc(list.listIterator(list.size()), groupFuncion, result);
-			return result.toString();
-		}
-	}
-	*/
-	
-	/**
-	 * traverses the list in reverse order and builds the function list
-	 * @param reversIterator
-	 * @param func
-	 * @param 
-	 * @return
-	 */
-	/* candidate for removal
-	private void addFunc(ListIterator<String> reversIterator, String func, StringBuilder result) {
-		//if at least 2 elements are left
-		if (reversIterator.previousIndex() > 0) {
-			String value = reversIterator.previous(); 
-			result.append(func).append("(");
-			addFunc(reversIterator, func, result);
-			result.append(", ").append(value).append(")");
-		} else {
-			//last element
-			result.append(reversIterator.previous());
-		}
-	}
-	*/
 	
 	private String sorting(Map<MDXTuple, SortOrder> sortingOrder, String axisMdx) {
 		if (sortingOrder == null || sortingOrder.size() == 0) return axisMdx;

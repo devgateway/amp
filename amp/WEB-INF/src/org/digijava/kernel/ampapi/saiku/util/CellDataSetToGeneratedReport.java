@@ -3,7 +3,7 @@
  */
 package org.digijava.kernel.ampapi.saiku.util;
 
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class CellDataSetToGeneratedReport {
 	private ReportSpecification spec;
 	private CellDataSet cellDataSet;
 	List<ReportOutputColumn> leafHeaders;
-	NumberFormat numberFormat;
+	DecimalFormat numberFormat;
 	TotalAggregator[][] measureTotals = null;
 	List<TotalNode>[] rowTotals = null;
 	int[] currentSubGroupIndex;
@@ -50,7 +50,10 @@ public class CellDataSetToGeneratedReport {
 	}
 	
 	private void init() {
-		this.numberFormat = NumberFormat.getInstance();
+		if (spec.getSettings().getCurrencyFormat() != null )
+			this.numberFormat = spec.getSettings().getCurrencyFormat();
+		else 
+			this.numberFormat = (DecimalFormat)DecimalFormat.getCurrencyInstance();
 		//init measure totals if they are available
 		if (cellDataSet.getColTotalsLists() != null && cellDataSet.getColTotalsLists().length > 0 
 				&& cellDataSet.getColTotalsLists()[0] != null && cellDataSet.getColTotalsLists()[0].size() > 0) {
@@ -117,7 +120,9 @@ public class CellDataSetToGeneratedReport {
 				if (value == null)
 					notNullColId ++;
 			} else { //measure columns
-				cellData = new AmountCell(parseValue(value));
+				double dVal = parseValue(value);
+				cellData = new AmountCell(dVal, this.numberFormat);
+				cellDataSet.getCellSetBody()[rowId][colId].setFormattedValue(this.numberFormat.format(dVal));
 			}	
 			contents.put(leafHeaders.get(colId), cellData);
 		}
@@ -128,7 +133,9 @@ public class CellDataSetToGeneratedReport {
 			for (int colId = measureTotals.length - spec.getMeasures().size(); colId < measureTotals.length; colId ++) {
 				//Unfortunately cannot use getValue() because during concatenation we override the value, but the only way to override is via formatted value
 				double value = parseValue(measureTotals[colId][rowId].getFormattedValue()); 
-				contents.put(leafHeaders.get(headerColId++), new AmountCell(value));
+				contents.put(leafHeaders.get(headerColId++), new AmountCell(value, this.numberFormat));
+				//also re-format, via MDX formatting works a bit differently
+				measureTotals[colId][rowId].setFormattedValue(this.numberFormat.format(value));
 			}
 		}
 		
@@ -213,8 +220,10 @@ public class CellDataSetToGeneratedReport {
 		}
 		//adding data totals of the current area
 		for (int a = 0; a < totals.length; a ++) //normally totals.length == 1
-			for (int b = 0; b < totals[a].length; b++) 
-				contents.put(leafHeaders.get(headerPos++), new AmountCell(totals[a][b].getValue()));
+			for (int b = 0; b < totals[a].length; b++) {
+				contents.put(leafHeaders.get(headerPos++), new AmountCell(totals[a][b].getValue(), this.numberFormat));
+				totals[a][b].setFormattedValue(this.numberFormat.format(totals[a][b].getValue()));
+			}
 			
 		//calculate total measures of the current area
 		double[] currentTotalMeasuresColumnTotals = new double[spec.getMeasures().size()];
@@ -227,7 +236,7 @@ public class CellDataSetToGeneratedReport {
 		}
 		//adding total measures
 		for (int b = 0; b < spec.getMeasures().size(); b++, headerPos++) 
-			contents.put(leafHeaders.get(headerPos), new AmountCell(currentTotalMeasuresColumnTotals[b]));
+			contents.put(leafHeaders.get(headerPos), new AmountCell(currentTotalMeasuresColumnTotals[b], this.numberFormat));
 		
 		current.setContents(contents);
 	}

@@ -13,7 +13,7 @@ import java.text.Normalizer.Form;
 public class TextCell extends ReportCell {
 
 	public TextCell(Comparable<?> value) {
-		super(value);
+		super(value, null);
 	}
 	
 	//TODO: we need to decide how to compare Unicode strings

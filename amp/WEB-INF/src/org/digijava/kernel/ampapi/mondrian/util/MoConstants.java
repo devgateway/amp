@@ -30,6 +30,7 @@ public final class MoConstants {
 	public static final String FIRST_CHILD = "FirstChild";
 	public static final String LAST_CHILD = "LastChild";
 	public static final String PROPERTIES = "Properties";
+	public static final String PROP_FORMAT_STRING = "FORMAT_STRING";
 	public static final String MEMBER_NAME = "name";
 	public static final String FUNC_CROSS_JOIN = "CrossJoin";
 	public static final String FUNC_CROSS_JOIN_FORMAT = "CrossJoin(%s, %s)";

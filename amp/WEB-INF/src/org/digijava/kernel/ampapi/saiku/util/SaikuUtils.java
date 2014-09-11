@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.olap4j.Axis;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
@@ -41,7 +42,9 @@ public class SaikuUtils {
 			for (Member member :  colPosition.getMembers()) {
 				if (Member.Type.MEASURE.equals(member.getMemberType())) {
 					measures.add((Measure) member);
-				} 
+				} else if (MoConstants.MEASURES.equals(member.getDimension().getName())) {
+					measures.add((Measure) member);
+				}
 			}
 		Measure[] selectedMeasures = measures.toArray(new Measure[0]);
 		/* end of AMP custom part to detect the selectedMeasures list */

@@ -35,6 +35,7 @@ import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSorter;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.SortingInfo;
@@ -238,6 +239,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//add filters
 		addFilters(spec.getFilters(), config);
 		
+		//add settings
+		addSettings(spec.getSettings(), config);
+		
 		config.setAllowEmptyColumnsData(spec.isDisplayEmptyFundingColumns());
 		config.setAllowEmptyRowsData(spec.isDisplayEmptyFundingRows());
 		
@@ -314,6 +318,17 @@ public class MondrianReportGenerator implements ReportExecutor {
 				config.addDataFilter(mdxElem, mdxFilter);
 			}
 		}
+	}
+	
+	private void addSettings(ReportSettings reportSettings, MDXConfig config) {
+		if (reportSettings == null) return;
+		/* unfortunately the formatting works a bit differently in Mondrian, e.g.:
+		 * 1) original value '19,795,441,979.544' => MDX pattern '# ##0,##' => displayed value '1979544 1,979,544'
+		 * 2) original value '162,330' => MDX pattern '#,##0.##' => displayed value '162,330.' (with dot at the end)
+		 * so we'll do this as well manually during post process...  
+		if (reportSettings.getCurrencyFormat() != null)
+			config.setAmountsFormat(reportSettings.getCurrencyFormat().toPattern());
+		*/
 	}
 	
 	private CellDataSet postProcess(ReportSpecification spec, CellSet cellSet) throws AMPException {
@@ -512,7 +527,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 						logger.error("Unexpected cell error: " + MondrianUtils.getOlapExceptionMessage((OlapException)cell.getValue()));
 					} else {
 						if (cell.getValue() != null) {
-							AmountCell amount = new AmountCell(new BigDecimal(cell.getValue().toString()));
+							AmountCell amount = new AmountCell(new BigDecimal(cell.getValue().toString()), null);
 							contents.put(leafHeaders.get(columnPos++), amount);
 						} else 
 							columnPos++; //skip column

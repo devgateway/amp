@@ -541,7 +541,8 @@
 <field:display name="Funding start date" feature="Funding Information"></field:display>  
 <field:display name="Funding end date" feature="Funding Information"></field:display>  
 <field:display name="Government Agreement Number" feature="Identification"></field:display> 
-<field:display name="Government Approval Procedures" feature="Budget"></field:display> 
+<field:display name="Government Approval Procedures" feature="Budget"></field:display>
+<field:display name="Indirect On Budget" feature="Budget"></field:display>  
 <field:display name="Government Email" feature="Government Contact Information"></field:display> 
 <field:display name="Government Fax Number" feature="Government Contact Information"></field:display> 
 <field:display name="Government First Name" feature="Government Contact Information"></field:display> 
@@ -580,6 +581,7 @@
 <field:display name="Level 2 Sectors List" feature="Sectors"></field:display> 
 <field:display name="Level 3 Sectors List" feature="Sectors"></field:display> 
 <field:display name="Line Ministry Rank" feature="Planning"></field:display> 
+<field:display name="Indirect On Budget" feature="Budget"></field:display>
 <field:display name="Link to Disbursement Order ID" feature="Disbursement"></field:display> 
 <field:display name="Logframe Category" feature="Activity"></field:display> 
 <field:display name="Logframe Preview Button" feature="Logframe" ></field:display> 

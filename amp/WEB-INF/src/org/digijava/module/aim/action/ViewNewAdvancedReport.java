@@ -81,7 +81,7 @@ public class ViewNewAdvancedReport extends Action {
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
 		if (request.getParameter("mondrian_etl") != null) {
-			double elapsedSecs = MondrianETL.doFastAndDirtyETL();
+			double elapsedSecs = MondrianETL.runETL();
 			ARUtil.writeResponse(response, String.format("ETL done in %.2f seconds", elapsedSecs));
 			return null;
 		}

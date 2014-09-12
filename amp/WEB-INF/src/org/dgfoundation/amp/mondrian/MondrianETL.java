@@ -35,6 +35,7 @@ import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.time.StopWatch;
+import org.hibernate.SQLQuery;
 
 import com.google.common.base.Predicate;
 
@@ -60,23 +61,41 @@ public class MondrianETL {
 	private final static ReadWriteLockHolder MONDRIAN_LOCK = new ReadWriteLockHolder("Mondrian reports/etl lock");
 	
 	/**
-	 * these two are hardcoded to activities, because pledges lack versioning, ergo a they need a much simpler treatment
+	 * the Postgres timestamp when this ETL process started
+	 */
+	protected final long currentEtlTime;
+	
+	/**
+	 * the postgres timestamp when the previous ETL was started
+	 */
+	protected final long previousEtlTime;
+	
+	/**
+	 * activities to add/remove from all the relevant tables
 	 */
 	protected final Set<Long> activityIds;
-	protected final Set<Long> activityIdsToRemove;
-	
+
 	/**
 	 * pledge ids to remove from the fact table and regenerate
 	 */
-	protected final Set<Long> pledgesToRedo;
+	protected Set<Long> pledgeIds;
 	
-	protected boolean recreateFactTable;
+	/**
+	 * Julian date codes to add/remove from the relevant tables. null means "all"
+	 */
+	protected final Set<Long> dateCodes;
+	
+	protected final boolean etlFromScratch;
+	
+	//protected boolean recreateFactTable;
 	
 	/**
 	 * the postgres connection
 	 */
 	protected java.sql.Connection conn;
 	protected MonetConnection monetConn;
+	
+	protected final static Fingerprint ETL_TIME_FINGERPRINT = new Fingerprint("etl_time", new ArrayList<String>(), "-1");
 		
 	protected static Logger logger = Logger.getLogger(MondrianETL.class);
 		
@@ -86,24 +105,47 @@ public class MondrianETL {
 	 * @param activities
 	 * @param activitiesToRemove
 	 */
-	public MondrianETL(java.sql.Connection postgresConn, MonetConnection monetConn, Collection<Long> activities, Collection<Long> activitiesToRemove, Collection<Long> pledgesToRedo) {
+	public MondrianETL(java.sql.Connection postgresConn, MonetConnection monetConn) {
 		
 		logger.warn("Mondrian ETL started");
 		
 		this.conn = postgresConn;
 		this.monetConn = monetConn;
 		
-		this.recreateFactTable = activities == null;
+		this.etlFromScratch = shouldRecreateFactTable();
+		this.currentEtlTime = (Long) SQLUtils.fetchAsList(conn, "SELECT cast (extract(epoch from statement_timestamp()) as bigint)", 1).get(0);
+		this.previousEtlTime = Long.valueOf(ETL_TIME_FINGERPRINT.readOrReturnDefaultFingerprint(monetConn));
+		this.activityIds = calculateAffectedActivities();
+		this.dateCodes = calculateAffectedDateCodes();
 		
-		this.activityIds = new HashSet<>(activities == null ? this.getAllValidatedAndLatestIds() : activities);
 		
-		this.activityIdsToRemove = new HashSet<>();
-		if (activitiesToRemove != null)
-			this.activityIdsToRemove.addAll(activitiesToRemove);
+		logger.info("running ETL on the following activities: " + 
+				(activityIds.size() > 20 ? String.format("[%d] activities", activityIds.size()) : activityIds.toString()));
 		
-		this.pledgesToRedo = new HashSet<>();
-		if (pledgesToRedo != null)
-			this.pledgesToRedo.addAll(pledgesToRedo);		
+		logger.info("running ETL on the following dates: " + (dateCodes == null ? "(all)" : dateCodes.toString()));
+		//this.pledgesToRedo = new HashSet<>();
+		//if (pledgesToRedo != null)
+		//	this.pledgesToRedo.addAll(pledgesToRedo);		
+	}
+	
+	private Set<Long> calculateAffectedActivities() {
+		if (previousEtlTime > 0 && !etlFromScratch) {
+			String affectedRawActivitiesQuery = "SELECT DISTINCT(entity_id) FROM amp_etl_changelog WHERE (event_date > " + previousEtlTime + ") AND entity_name='activity'";
+			Set<Long> res = new TreeSet<>(SQLUtils.<Long>fetchAsList(conn, affectedRawActivitiesQuery, 1));
+			return res;
+		}
+		else
+			return getAllValidatedAndLatestIds();
+	}
+	
+	private Set<Long> calculateAffectedDateCodes() {
+		if (previousEtlTime > 0 && !etlFromScratch) {
+			String affectedDatesQuery = "SELECT DISTINCT(entity_id) FROM amp_etl_changelog WHERE (event_date > " + previousEtlTime + ") AND entity_name='exchange_rate'";
+			Set<Long> res = new HashSet<>(SQLUtils.<Long>fetchAsList(conn, affectedDatesQuery, 1));
+			return res;
+		}
+		else
+			return null;
 	}
 	
 	protected Set<Long> getAllValidatedAndLatestIds() {
@@ -111,59 +153,68 @@ public class MondrianETL {
 		Set<Long> latestValidatedIds = new TreeSet<Long>(SQLUtils.<Long>fetchAsList(conn,
 				"SELECT aag.amp_activity_group_id, max(aav.amp_activity_id) FROM amp_activity_version aav, amp_activity_group aag WHERE aag.amp_activity_group_id = aav.amp_activity_group_id AND (aav.deleted IS NULL OR aav.deleted = false) AND aav.approval_status IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") GROUP BY aag.amp_activity_group_id", 2));
 		
-		logger.warn("last activity version ids: " + latestIds.toString());
-		logger.warn("last validated activity version ids: " + latestIds.toString());
+//		logger.warn("last activity version ids: " + latestIds.toString());
+//		logger.warn("last validated activity version ids: " + latestIds.toString());
 		Set<Long> res = new TreeSet<Long>();
 		res.addAll(latestIds);
 		res.addAll(latestValidatedIds);
 		return res;
 	}
 	
+	protected final static String MONDRIAN_ETL = "Mondrian-etl";
+	
 	/**
 	 * runs the ETL
 	 */
 	public void execute() {
 		
-		MONDRIAN_LOCK.runUnderWriteLock(new ExceptionRunnable() {
-			public void run() throws Exception {
-				List<EtlJob> jobs = new ArrayList<>();
+		MONDRIAN_LOCK.runUnderWriteLock(new ExceptionRunnable<Exception>() {
+			@Override public void run() throws Exception {
+			
+				StopWatch.reset(MONDRIAN_ETL);
 				
-				String mondrianEtl = "Mondrian-etl";
-			
-				StopWatch.reset(mondrianEtl);
-				StopWatch.next(mondrianEtl, true, "start");
-				checkFactTable();
-			
-				StopWatch.next(mondrianEtl, true, "checkFactTable");
-				deleteStaleFactTableEntries();
-			
-				StopWatch.next(mondrianEtl, true, "deleteStaleFactTableEntries");
-				generateActivitiesEntries();
-			
-				StopWatch.next(mondrianEtl, true, "generateActivitiesEntries");
-				generateExchangeRatesTable();
-			
-				StopWatch.next(mondrianEtl, true, "generateExchangeRatesTable");
-				new CalculateExchangeRatesEtlJob(null, monetConn).work();
+				StopWatch.next(MONDRIAN_ETL, true, "start");
 				
-				StopWatch.next(mondrianEtl, true, "generateExchangeRatesColumns");
-				generateStarTables();
+				if (shouldRecreateFactTable())
+					recreateFactTable();
+				StopWatch.next(MONDRIAN_ETL, true, "checkFactTable");
+				
+//				deleteStaleFactTableEntries();
+//				StopWatch.next(MONDRIAN_ETL, true, "deleteStaleFactTableEntries");
+				
+				generateActivitiesEntries();			
+				StopWatch.next(MONDRIAN_ETL, true, "generateActivitiesEntries");
+				
+				doExchangeRatesEtl();
+				generateStarTables(); // differential
 			
-				StopWatch.next(mondrianEtl, true, "generateStarTables");
+				StopWatch.next(MONDRIAN_ETL, true, "generateStarTables");
 				checkMondrianSanity();
 			
-				StopWatch.next(mondrianEtl, true, "checkMondrianSanity");
+				StopWatch.next(MONDRIAN_ETL, true, "checkMondrianSanity");
 				copyMiscTables();
 				
-				StopWatch.next(mondrianEtl, true, "copyMiscTables");
-				StopWatch.reset(mondrianEtl);
+				StopWatch.next(MONDRIAN_ETL, true, "copyMiscTables");
+				StopWatch.reset(MONDRIAN_ETL);
 			
+				ETL_TIME_FINGERPRINT.serializeFingerprint(monetConn, Long.toString(currentEtlTime));
+				
 				logger.error("done generating ETL");
 				SQLUtils.flush(conn);
 				SQLUtils.flush(monetConn.conn);
 				conn.close();
 			};
 		});
+	}
+	
+	protected void doExchangeRatesEtl() throws SQLException {
+		new CalculateExchangeRatesEtlJob(null, conn, monetConn, activityIds, dateCodes).work();
+//		Fingerprint fp = CalculateExchangeRatesEtlJob.getFingerprint();
+//		fp.runIfFingerprintChanged(conn, monetConn, stepSkipped, new ExceptionRunnable<SQLException>() {
+//			@Override public void run() throws SQLException {
+//				
+//			}});
+		StopWatch.next(MONDRIAN_ETL, true, "generateExchangeRatesColumns");
 	}
 	
 	protected void copyMiscTables() throws SQLException {
@@ -187,56 +238,19 @@ public class MondrianETL {
 		};		
 	}
 	
-	/**
-	 * generates exchange rate entries for the cartesian product (transaction date, currency)
-	 * to be called every time:
-	 * 1) an exchange rate changes
-	 * 2) a new currency is added
-	 * 3) a new transaction date appears in the database
-	 */
-	protected void generateExchangeRatesTable() throws SQLException {
-		logger.warn("generating exchange rates ETL...");		
-		monetConn.dropTable(MONDRIAN_EXCHANGE_RATES_TABLE);
-		monetConn.executeQuery("CREATE TABLE " + MONDRIAN_EXCHANGE_RATES_TABLE + "(" + 
-										"day_code integer NOT NULL," + 
-										"currency_id bigint NOT NULL," + 
-										"exchange_rate double)");
-		
-		monetConn.copyTableFromPostgres(this.conn, "amp_currency");
-		SortedSet<Long> allDates = new TreeSet<>(SQLUtils.fetchLongs(monetConn.conn, "select distinct(date_code) as day_code from mondrian_raw_donor_transactions"));
-		List<Long> allCurrencies = SQLUtils.fetchLongs(monetConn.conn, "SELECT amp_currency_id FROM amp_currency");
-		for (Long currency:allCurrencies) {
-			generateExchangeRateEntriesForCurrency(CurrencyUtil.getAmpcurrency(currency), allDates);
-		}		
-		logger.warn("... done generating exchange rates ETL...");
-		//monetConn.copyTableFromPostgres(this.conn, MONDRIAN_EXCHANGE_RATES_TABLE);
-	}
-	
-	/**
-	 * generates the exchange rates for the said currency for all the given dates
-	 * @param ampCurrencyId
-	 * @param allDates
-	 * @throws SQLException
-	 */
-	protected void generateExchangeRateEntriesForCurrency(AmpCurrency currency, SortedSet<Long> allDates) throws SQLException {
-		List<List<Object>> entries = new CurrencyETL(currency, conn).work(allDates);
-		monetConn.executeQuery("DELETE FROM " + MONDRIAN_EXCHANGE_RATES_TABLE + " WHERE currency_id = " + currency.getAmpCurrencyId());
-		SQLUtils.insert(monetConn.conn, MONDRIAN_EXCHANGE_RATES_TABLE, null, null, Arrays.asList("day_code", "currency_id", "exchange_rate"), entries);
-	}
-	
-	protected String buildMftQuery() throws SQLException {
-		ResultSet dayCodes = SQLUtils.rawRunQuery(monetConn.conn, "SELECT DISTINCT(date_code), transaction_date FROM mondrian_fact_table", null);
-		StringBuilder mftQuery = new StringBuilder("(SELECT mft.date_code, mft.transaction_date FROM (values");
-		boolean isFirst = true;
-		while (dayCodes.next()) {
-			if (!isFirst)
-				mftQuery.append(",");
-			mftQuery.append(String.format("(%d, '%s')", dayCodes.getLong(1), dayCodes.getString(2)));
-			isFirst = false;
-		}
-		mftQuery.append(") as mft(date_code, transaction_date)) mft");
-		return mftQuery.toString();
-	}
+//	protected String buildMftQuery() throws SQLException {
+//		ResultSet dayCodes = SQLUtils.rawRunQuery(monetConn.conn, "SELECT DISTINCT(date_code), transaction_date FROM mondrian_fact_table", null);
+//		StringBuilder mftQuery = new StringBuilder("(SELECT mft.date_code, mft.transaction_date FROM (values");
+//		boolean isFirst = true;
+//		while (dayCodes.next()) {
+//			if (!isFirst)
+//				mftQuery.append(",");
+//			mftQuery.append(String.format("(%d, '%s')", dayCodes.getLong(1), dayCodes.getString(2)));
+//			isFirst = false;
+//		}
+//		mftQuery.append(") as mft(date_code, transaction_date)) mft");
+//		return mftQuery.toString();
+//	}
 	
 	/**
 	 * callback for "hash equals, not redoing part of ETL"
@@ -265,23 +279,35 @@ public class MondrianETL {
 	}
 
 	protected void generateMondrianDateTable() throws SQLException {
-		Fingerprint fp = new Fingerprint(MONDRIAN_DATE_TABLE, Arrays.asList(
-				Fingerprint.buildTableHashingQuery("v_mondrian_raw_donor_transactions")));
-		
-		fp.runIfFingerprintChanged(conn, monetConn, stepSkipped, new ExceptionRunnable<SQLException>() {
-		
-			@Override public void run() throws SQLException {
-				String mftQuery = buildMftQuery();
-				//select mft.date_code FROM (values (1), (2), (3)) as mft(date_code)
-				generateStarTableWithQueryInPostgres(MONDRIAN_DATE_TABLE, "date_code",
-						"SELECT DISTINCT(mft.date_code) AS day_code, (CAST (mft.transaction_date as date)) AS full_date, date_part('year'::text, (CAST (mft.transaction_date as date)))::integer AS year_code, date_part('month'::text, (CAST (mft.transaction_date as date)))::integer AS month_code, to_char((CAST (mft.transaction_date as date)), 'TMMonth'::text) AS month_name, date_part('quarter'::text, (CAST (mft.transaction_date as date)))::integer AS quarter_code, ('Q'::text || date_part('quarter'::text, (CAST (mft.transaction_date as date)))) AS quarter_name " + 
-								"FROM " + mftQuery +  
-								" UNION ALL " + 
-								" SELECT 999999999, '9999-1-1', 9999, 99, 'Undefined', 99, 'Undefined' " + 
-								" ORDER BY day_code",
-								new ArrayList<String>());
-				monetConn.copyTableFromPostgres(conn, MONDRIAN_DATE_TABLE);
-			}});		
+		if (etlFromScratch || (!monetConn.tableExists(MONDRIAN_DATE_TABLE))) {
+			
+			generateStarTableWithQueryInPostgres(MONDRIAN_DATE_TABLE, "date_code", 
+				"SELECT to_char(transaction_date, 'J')::integer AS day_code, (CAST (transaction_date as date)) AS full_date, date_part('year'::text, (CAST (transaction_date as date)))::integer AS year_code, date_part('month'::text, (CAST (transaction_date as date)))::integer AS month_code, to_char((CAST (transaction_date as date)), 'TMMonth'::text) AS month_name, date_part('quarter'::text, (CAST (transaction_date as date)))::integer AS quarter_code, ('Q'::text || date_part('quarter'::text, (CAST (transaction_date as date)))) AS quarter_name " + 
+				" FROM generate_series('1970-1-1', '2050-1-1', interval '1 day') transaction_date " + 
+				" UNION ALL " + 
+				" SELECT 999999999, '9999-1-1', 9999, 99, 'Undefined', 99, 'Undefined' " + 
+				" ORDER BY day_code",
+				new ArrayList<String>());
+			monetConn.copyTableFromPostgres(conn, MONDRIAN_DATE_TABLE);
+
+		}
+//		Fingerprint fp = new Fingerprint(MONDRIAN_DATE_TABLE, Arrays.asList(
+//				Fingerprint.buildTableHashingQuery("v_mondrian_raw_donor_transactions")));
+//		
+//		fp.runIfFingerprintChanged(conn, monetConn, stepSkipped, new ExceptionRunnable<SQLException>() {
+//		
+//			@Override public void run() throws SQLException {
+//				String mftQuery = buildMftQuery();
+//				//select mft.date_code FROM (values (1), (2), (3)) as mft(date_code)
+//				generateStarTableWithQueryInPostgres(MONDRIAN_DATE_TABLE, "date_code",
+//						"SELECT DISTINCT(mft.date_code) AS day_code, (CAST (mft.transaction_date as date)) AS full_date, date_part('year'::text, (CAST (mft.transaction_date as date)))::integer AS year_code, date_part('month'::text, (CAST (mft.transaction_date as date)))::integer AS month_code, to_char((CAST (mft.transaction_date as date)), 'TMMonth'::text) AS month_name, date_part('quarter'::text, (CAST (mft.transaction_date as date)))::integer AS quarter_code, ('Q'::text || date_part('quarter'::text, (CAST (mft.transaction_date as date)))) AS quarter_name " + 
+//								"FROM " + mftQuery +  
+//								" UNION ALL " + 
+//								" SELECT 999999999, '9999-1-1', 9999, 99, 'Undefined', 99, 'Undefined' " + 
+//								" ORDER BY day_code",
+//								new ArrayList<String>());
+//				monetConn.copyTableFromPostgres(conn, MONDRIAN_DATE_TABLE);
+//			}});		
 	}
 
 	/**
@@ -368,28 +394,26 @@ public class MondrianETL {
 	}
 	
 	/**
-	 * when exiting this function,
-	 * 1. a fact table has been created, if needed
-	 * 2. the fact table has been sanity checked
+	 * checks that the fact table should be recreated
+	 * @return
 	 */
-	protected void checkFactTable() {
+	private boolean shouldRecreateFactTable() {
 		
 		// check that the fact table has a sane structure
 		// notice that this is also run if we had just recreated it - to make sure everything is ok (better safe than sorry)
+		boolean recreateFactTable = false;
 		Set<String> factTableColumnNames = monetConn.getTableColumns(FACT_TABLE.tableName);
-		for (String colName:factTableColumnNames) {
-			recreateFactTable |= !FACT_TABLE.columns.containsKey(colName);
+		for (String colName:FACT_TABLE.columns.keySet()) {
+			recreateFactTable |= !factTableColumnNames.contains(colName);
 		}
-
-		if (recreateFactTable) {
-			recreateFactTable();
-		}
+		return recreateFactTable;
 	}
-	
+
+	/**
+	 * drops preexisting fact table and creates an empty one
+	 */
 	protected void recreateFactTable() {
 		try {
-			//SQLUtils.flushSchemaChanges(conn);
-			// creates an empty fact table
 			logger.warn("RECREATING Mondrian Fact table");
 			monetConn.dropTable(FACT_TABLE.tableName);
 			FACT_TABLE.create(monetConn.conn, false);
@@ -417,7 +441,13 @@ public class MondrianETL {
 	protected void generateRawTransactionTables() throws SQLException {
 		logger.warn("materializing the raw transactions tables...");
 		for (MondrianTableDescription mondrianTable: MondrianTablesRepository.MONDRIAN_RAW_TRANSACTIONS_TABLES) {
-			monetConn.createTableFromQuery(this.conn, "SELECT * FROM v_" + mondrianTable.tableName, mondrianTable.tableName);
+			String query = "SELECT * FROM v_" + mondrianTable.tableName + " WHERE amp_activity_id IN (" + Util.toCSStringForIN(activityIds) + ")";
+			if (etlFromScratch || !monetConn.tableExists(mondrianTable.tableName)) {
+				monetConn.createTableFromQuery(this.conn, query, mondrianTable.tableName);
+			} else
+			{
+				monetConn.copyEntries(mondrianTable.tableName, SQLUtils.rawRunQuery(conn, query, null));
+			}
 		}
 	}
 	
@@ -427,7 +457,8 @@ public class MondrianETL {
 		//monetConn.dropTable(FACT_TABLE.tableName);
 		for(int i = 0; i < factTableQueries.size(); i++) {
 			logger.warn("\texecuting query #" + (i + 1) + "...");
-			monetConn.executeQuery(factTableQueries.get(i));
+			String query = factTableQueries.get(i);
+			monetConn.executeQuery(query);
 			logger.warn("\t...executing query #" + (i + 1) + " done");
 		}
 		logger.warn("...running the fact-table-generating cartesian done");
@@ -453,11 +484,14 @@ public class MondrianETL {
 	}
 	
 	protected void generateOrganisationsEtlTables() throws SQLException {
+		if (activityIds.isEmpty())
+			return;
 		logger.warn("generating orgs ETL tables...");
-		runEtlOnTable("select amp_activity_id, amp_org_id, percentage from v_executing_agency", "etl_executing_agencies");
-		runEtlOnTable("select amp_activity_id, amp_org_id, percentage from v_beneficiary_agency", "etl_beneficiary_agencies");
-		runEtlOnTable("select amp_activity_id, amp_org_id, percentage from v_implementing_agency", "etl_implementing_agencies");
-		runEtlOnTable("select amp_activity_id, amp_org_id, percentage from v_responsible_organisation", "etl_responsible_agencies");
+		String activitiesCondition = this.etlFromScratch ? "1=1" : "amp_activity_id IN (" + Util.toCSStringForIN(this.activityIds) + ")";
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_executing_agency WHERE (%s)", activitiesCondition), "etl_executing_agencies");
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_beneficiary_agency WHERE (%s)", activitiesCondition), "etl_beneficiary_agencies");
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_implementing_agency WHERE (%s)", activitiesCondition), "etl_implementing_agencies");
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_responsible_organisation WHERE (%s)", activitiesCondition), "etl_responsible_agencies");
 	}
 	
 	/**
@@ -465,6 +499,8 @@ public class MondrianETL {
 	 * @throws SQLException
 	 */
 	protected void generateSectorsEtlTables() throws SQLException {
+		if (activityIds.isEmpty())
+			return;
 		logger.warn("generating Sector ETL tables...");
 		generateSectorsEtlTables("Primary");
 		generateSectorsEtlTables("Secondary");
@@ -476,6 +512,8 @@ public class MondrianETL {
 	 * @throws SQLException
 	 */
 	protected void generateProgramsEtlTables() throws SQLException {
+		if (activityIds.isEmpty())
+			return;
 		logger.warn("generating Program ETL tables...");
 		generateProgramsEtlTables("National Plan Objective");
 		generateProgramsEtlTables("Primary Program");
@@ -488,17 +526,27 @@ public class MondrianETL {
 	 * @throws SQLException
 	 */
 	protected void generateLocationsEtlTables() throws SQLException {
+		if (activityIds.isEmpty())
+			return;
 		logger.warn("generating location ETL tables...");
-		runEtlOnTable("select aal.amp_activity_id, acvl.id, aal.location_percentage from amp_activity_location aal, amp_category_value_location acvl, amp_location al WHERE aal.amp_location_id = al.amp_location_id AND al.location_id = acvl.id", "etl_locations");
+		String activitiesCondition = this.etlFromScratch ? "1=1" : "aal.amp_activity_id IN (" + Util.toCSStringForIN(this.activityIds) + ")";
+		String query = String.format("select aal.amp_activity_id, acvl.id, aal.location_percentage from amp_activity_location aal, amp_category_value_location acvl, amp_location al WHERE (%s) AND (aal.amp_location_id = al.amp_location_id) AND (al.location_id = acvl.id)", activitiesCondition);
+		runEtlOnTable(query, "etl_locations");
 	}
 	
 	protected void generateProgramsEtlTables(String schemeName) throws SQLException {
-		String query = String.format("select aap.amp_activity_id, aap.amp_program_id, aap.program_percentage FROM amp_activity_program aap, v_mondrian_programs vmp WHERE aap.amp_program_id = vmp.amp_theme_id and vmp.program_setting_name = '%s'", schemeName);
+		if (activityIds.isEmpty())
+			return;
+		String activitiesCondition = this.etlFromScratch ? "1=1" : "aap.amp_activity_id IN (" + Util.toCSStringForIN(this.activityIds) + ")";
+		String query = String.format("select aap.amp_activity_id, aap.amp_program_id, aap.program_percentage FROM amp_activity_program aap, v_mondrian_programs vmp WHERE (%s) AND (aap.amp_program_id = vmp.amp_theme_id) AND (vmp.program_setting_name = '%s')", activitiesCondition, schemeName);
 		runEtlOnTable(query, "etl_activity_program_" + schemeName.replace(' ', '_').toLowerCase());
 	}
 	
 	protected void generateSectorsEtlTables(String schemeName) throws SQLException {
-		String query = String.format("select aas.amp_activity_id, aas.amp_sector_id, aas.sector_percentage from amp_activity_sector aas, v_mondrian_sectors vms WHERE aas.amp_Sector_id = vms.amp_sector_id AND vms.typename='%s'", schemeName);
+		if (activityIds.isEmpty())
+			return;
+		String activitiesCondition = this.etlFromScratch ? "1=1" : "aas.amp_activity_id IN (" + Util.toCSStringForIN(this.activityIds) + ")";
+		String query = String.format("select aas.amp_activity_id, aas.amp_sector_id, aas.sector_percentage from amp_activity_sector aas, v_mondrian_sectors vms WHERE (%s) AND (aas.amp_sector_id = vms.amp_sector_id) AND (vms.typename='%s')", activitiesCondition, schemeName);
 		runEtlOnTable(query, "etl_activity_sector_" + schemeName.toLowerCase());
 	}
 	
@@ -510,8 +558,15 @@ public class MondrianETL {
 	 * @throws SQLException
 	 */
 	protected void serializeETLTable(Map<Long, PercentagesDistribution> percs, String tableName, boolean createIndices) throws SQLException {
-		monetConn.dropTable(tableName);
-		monetConn.executeQuery("CREATE TABLE " + tableName + " (act_id integer, ent_id integer, percentage double)");
+		boolean createTable = this.etlFromScratch || !monetConn.tableExists(tableName);
+		if (createTable) {
+			monetConn.dropTable(tableName);
+			monetConn.executeQuery("CREATE TABLE " + tableName + " (act_id integer, ent_id integer, percentage double)");
+		} else {
+			monetConn.executeQuery("DELETE FROM " + tableName + " WHERE act_id IN (" + Util.toCSStringForIN(percs.keySet()) + ")");
+		}
+		createIndices &= createTable;
+		
 		List<List<Object>> entries = new ArrayList<>();
 		for (long actId:percs.keySet()) {
 			PercentagesDistribution pd = percs.get(actId);
@@ -529,19 +584,19 @@ public class MondrianETL {
 		monetConn.flush();
 	}
 	
-	/**
-	 * clears the fact table of the stale entries signaled by {@link #activityIdsToRemove} and {@link #pledgesToRedo}
-	 */
-	protected void deleteStaleFactTableEntries() {
-//		String deleteActivitiesQuery = String.format("DELETE FROM mondrian_fact_table WHERE entity_type = '%c' AND entity_id IN (%s)", ReportEntityType.ENTITY_TYPE_ACTIVITY.getAsChar(), Util.toCSStringForIN(activityIdsToRemove));
-		String deleteActivitiesQuery = String.format("DELETE FROM mondrian_fact_table WHERE entity_id IN (%s)", Util.toCSStringForIN(activityIdsToRemove));
-		Set<Long> pledgesToRedoChanged = new HashSet<>();
-		for(Long pledgeId:pledgesToRedo)
-			pledgesToRedoChanged.add(pledgeId + AmpReportGenerator.PLEDGES_IDS_START);
-		String deletePledgesQuery = String.format("DELETE FROM mondrian_fact_table WHERE entity_id IN (%s)", Util.toCSStringForIN(pledgesToRedoChanged));
-		monetConn.executeQuery(deleteActivitiesQuery);
-		monetConn.executeQuery(deletePledgesQuery);
-	}
+//	/**
+//	 * clears the fact table of the stale entries signaled by {@link #activityIdsToRemove} and {@link #pledgesToRedo}
+//	 */
+//	protected void deleteStaleFactTableEntries() {
+////		String deleteActivitiesQuery = String.format("DELETE FROM mondrian_fact_table WHERE entity_type = '%c' AND entity_id IN (%s)", ReportEntityType.ENTITY_TYPE_ACTIVITY.getAsChar(), Util.toCSStringForIN(activityIdsToRemove));
+//		String deleteActivitiesQuery = String.format("DELETE FROM mondrian_fact_table WHERE entity_id IN (%s)", Util.toCSStringForIN(activityIdsToRemove));
+//		Set<Long> pledgesToRedoChanged = new HashSet<>();
+//		for(Long pledgeId:pledgesToRedo)
+//			pledgesToRedoChanged.add(pledgeId + AmpReportGenerator.PLEDGES_IDS_START);
+//		String deletePledgesQuery = String.format("DELETE FROM mondrian_fact_table WHERE entity_id IN (%s)", Util.toCSStringForIN(pledgesToRedoChanged));
+//		monetConn.executeQuery(deleteActivitiesQuery);
+//		monetConn.executeQuery(deletePledgesQuery);
+//	}
 	
 	/**
 	 * reads from factTableQuery the list of queries
@@ -563,8 +618,12 @@ public class MondrianETL {
 			String str = builder.toString().trim();
 			StringTokenizer stok = new StringTokenizer(str, ";");
 			List<String> res = new ArrayList<>();
-			while (stok.hasMoreTokens())
-				res.add(stok.nextToken());
+			while (stok.hasMoreTokens()) {
+				String q = stok.nextToken();
+				if (q.indexOf("@@activityIdCondition@@") != 0 && activityIds.isEmpty())
+					continue; // query references activities, but these are empty -> it is useless
+				res.add(q.replace("@@activityIdCondition@@", " IN (" +Util.toCSStringForIN(activityIds) + ")"));
+			}
 			return res;
 		}
 		catch(Exception e) {
@@ -572,11 +631,11 @@ public class MondrianETL {
 		}
 	}
 	
-	public static double doFastAndDirtyETL() throws SQLException {
+	public static double runETL() throws SQLException {
 		long start = System.currentTimeMillis();
 		try(Connection conn = PersistenceManager.getJdbcConnection()) {
 			try(MonetConnection monetConn = MonetConnection.getConnection()) {
-				MondrianETL etl = new MondrianETL(conn, monetConn, null, null, null);
+				MondrianETL etl = new MondrianETL(conn, monetConn);
 				etl.execute();
 			}
 		}

@@ -28,14 +28,19 @@ public class Fingerprint {
 	
 	public final String keyName;
 	public final List<String> fingerprintQueries;
+	public final String defaultValue;
 	
 	protected static Logger logger = Logger.getLogger(Fingerprint.class);
 	
-	public Fingerprint(String keyName, List<String> fingerprintQueries) {
+	public Fingerprint(String keyName, List<String> fingerprintQueries, String defaultValue) {
 		this.keyName = keyName;
 		this.fingerprintQueries = Collections.unmodifiableList(new ArrayList<>(fingerprintQueries));
+		this.defaultValue = defaultValue;
 	}
 	
+	public Fingerprint(String keyName, List<String> fingerprintQueries) {
+		this(keyName, fingerprintQueries, null);
+	}
 	
 	/**
 	 * compares fingerprint stored in Monet with computed fingerprint
@@ -68,7 +73,7 @@ public class Fingerprint {
 	 * @throws SQLException
 	 */
 	public void saveFingerprint(Connection postgresConn, MonetConnection monetConn) throws SQLException {
-		readOrCreateDefaultFingerprint(monetConn);
+		readOrReturnDefaultFingerprint(monetConn);
 		serializeFingerprint(monetConn, computeFingerprint(postgresConn));
 	}
 	
@@ -76,7 +81,7 @@ public class Fingerprint {
 	 * <strong>assumes</b> that the fingerprints table exists
 	 * @param fp
 	 */
-	protected void serializeFingerprint(MonetConnection monetConn, String fp) {
+	public void serializeFingerprint(MonetConnection monetConn, String fp) {
 		monetConn.executeQuery(String.format("DELETE FROM %s where key='%s'", FINGERPRINT_TABLE, keyName));
 		monetConn.executeQuery(String.format("INSERT INTO %s(key,value) VALUES ('%s', '%s')", FINGERPRINT_TABLE, keyName, fp));		
 	}
@@ -87,26 +92,29 @@ public class Fingerprint {
 	 * @throws SQLException
 	 */
 	protected String readMonetFingerprint(MonetConnection monetConn) throws SQLException {
-		return readOrCreateDefaultFingerprint(monetConn);
+		return readOrReturnDefaultFingerprint(monetConn);
+	}
+	
+	public static void ensureFingerprintTableExists(MonetConnection monetConn) {
+		if (!monetConn.tableExists(FINGERPRINT_TABLE)) {
+			monetConn.executeQuery(String.format("CREATE TABLE %s (key %s, value %s)", FINGERPRINT_TABLE,
+					MonetConnection.getMapper().mapSqlTypeToName(java.sql.Types.VARCHAR), MonetConnection.getMapper().mapSqlTypeToName(java.sql.Types.LONGVARCHAR)));
+			monetConn.flush();
+		}
 	}
 	
 	/**
 	 * invariant: after function exit, the fingerprint table will exist in the db
 	 * @return
 	 */
-	protected String readOrCreateDefaultFingerprint(MonetConnection monetConn) {
-		if (!monetConn.tableExists(FINGERPRINT_TABLE)) {
-			monetConn.executeQuery(String.format("CREATE TABLE %s (key %s, value %s)", FINGERPRINT_TABLE,
-					MonetConnection.getMapper().mapSqlTypeToName(java.sql.Types.VARCHAR), MonetConnection.getMapper().mapSqlTypeToName(java.sql.Types.LONGVARCHAR)));
-			monetConn.flush();
-		}
+	public String readOrReturnDefaultFingerprint(MonetConnection monetConn) {
+		ensureFingerprintTableExists(monetConn);
 		
 		List<?> hashes = SQLUtils.fetchAsList(monetConn.conn, String.format("SELECT value FROM %s WHERE key='%s'", FINGERPRINT_TABLE, keyName), 1);
 		switch(hashes.size()) {
 			case 0: {
 				String defaultHash = String.format("defaultHash_%s_%d", keyName, System.currentTimeMillis());
-				//serializeFingerprint(defaultHash);
-				return defaultHash;
+				return defaultValue == null ? defaultHash : defaultValue;
 			}
 				
 			case 1: return nullOrString(hashes.get(0));

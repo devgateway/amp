@@ -42,7 +42,7 @@ SELECT
           
 	FROM amp_activity aa JOIN amp_funding f ON aa.amp_activity_id = f.amp_activity_id
 		JOIN amp_funding_detail fd ON f.amp_funding_id = fd.amp_funding_id
-	WHERE (transaction_date BETWEEN '1950-1-1' AND '2100-1-1')
+	WHERE (transaction_date BETWEEN '1970-1-1' AND '2050-1-1')
 	ORDER BY aa.amp_activity_id;
 			</lang>
 		</script>

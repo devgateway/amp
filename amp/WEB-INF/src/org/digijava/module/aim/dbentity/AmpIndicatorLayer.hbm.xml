@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpIndicatorLayer" table="AMP_INDICATOR_LAYER" lazy="false">
+		<cache usage="read-write" />
+		<id name="id" column="id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_INDICATOR_LAYER_seq</param>
+			</generator>
+		</id>
+		<property name="name" column="indicator_name" type="java.lang.String" />
+		<many-to-one name="admLevel" column="adm_level"
+			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" lazy="false" />
+		<property name="description" column="description" type="text" />
+		<property name="numberOfClasses" column="number_of_classes" type="java.lang.Long" />
+		<set name="colorRamp" cascade="all-delete-orphan" order-by="amp_indicator_color_id asc">
+			<cache usage="read-write" />
+			<key column="amp_indicator_layer_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpIndicatorColor" />
+		</set>
+	</class>
+</hibernate-mapping>

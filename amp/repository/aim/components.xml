@@ -147,7 +147,8 @@
         <page name="newLocationManager" title=" - Region Manager" />
     <page page="dynLocationManager/dynLocationManager" name="aim_dynLocationManager" title=" - Region Manager" />
 	<page name="addLocation" title=" - Region Manager" />
-        <page page="addNewRegion" name="addNewLocation" title=" - Region Manager" />
+    <page page="addNewRegion" name="addNewLocation" title=" - Region Manager" />
+	<page name="addNewIndicatorLayer" title=" - Add Indicator Layer" />
 	<page page="addOrgGroup" name="aim_addOrgGrpPopupLayout" title=" - Add Organization Group" />
 	<page page="viewOrgDetail" name="aim_viewOrgDetailPopupLayout" title=" - Organization Detail" />
 	<page page="viewComment" name="aim_viewCommentPopupLayout" title=" - Comment Detail" />
@@ -400,6 +401,7 @@
 	<page name="wicketAdminHeader" page="wicketAdminHeader"></page>
 	<page name="wicketFooter" page="wicketFooter"></page>
 	<page page="importRegions" name="importRegionLayout" title="Import Regions" />
+	<page page="importIndicatorValues" name="importIndicatorValuesLayout" title="Import Indicators" />
 	<page page="orgProfileReportGenerator" name="aim_orgProfileReportGenerator" title="Donor Report Generator" />
 	<page page="orgProfileReport" name="aim_orgProfileReport" title="Donor Report Generator" />
 </secondary-pages>

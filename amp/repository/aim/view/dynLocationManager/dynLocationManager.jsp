@@ -31,6 +31,13 @@
 		color: blue; 
 		font-size: 11px;
 	}
+	
+	.topAlign {
+	vertical-align: top;
+	}
+	.leftButton {
+	margin-left:-15px;
+	}
 
 </style>
 
@@ -42,6 +49,8 @@
 	</logic:empty>
 
 	treeObj					= null; 
+
+	
 	function initTree(){
 		treeObj = new DHTMLSuite.JSDragDropTree();
 		treeObj.setTreeId('dhtmlgoodies_tree');
@@ -198,6 +207,66 @@
 	        myForm.target="_blank";
 	        myForm.submit();
 	    }
+	 
+	 function addNewIndicatorLayer() {
+			openNewWindow(650, 380);
+			var myForm= document.getElementById("addNewIndicatorLayerForm");
+			myForm.target = popupPointer.name;
+			myForm.event.value 				= "new";
+			myForm.submit();
+		}
+	 
+	 var myPanelExport = new YAHOO.widget.Panel("export", {
+			width :"250px",
+			fixedcenter :true,
+			constraintoviewport :true,
+			underlay :"none",
+			close :true,
+			visible :false,
+			modal :true,
+			draggable :true
+		});
+	 function exportIndicatorLayerTable () {
+		var element = document.getElementById("exportIndicatorTableContent");
+		element.style.display = "inline";
+		myPanelExport.setBody(element);
+		myPanelExport.render();
+		myPanelExport.center();
+		
+		myPanelExport.show();
+	 }
+	
+	 function closeExportPanel () {
+		 myPanelExport.hide(); 
+	 }
+	 
+	 function exportIndicatorTable () {
+		 <digi:context name="exportUrl" property="context/module/moduleinstance/exportIndicatorLayerTable2XLS.do"/>;
+		  var myForm= document.getElementById("exportIndicatorTableForm");
+		  var selectedRadio = $('input[name=admLevel]:checked',"#exportIndicatorTableForm").val();
+		  if (selectedRadio == undefined) {
+			  var newErrorContent='<font color="red"><digi:trn jsFriendly="true">Please select the ADM level to export</digi:trn></font>';
+			  $(newErrorContent).appendTo($("#exportPanelErrors"));
+			  return;
+		  }
+		  myForm.action="${exportUrl}?admLevel="+selectedRadio;
+	      myForm.target="_blank";
+	      myForm.submit();  
+	 	  myPanelExport.hide(); 
+	 	
+	 }
+	 function importLocationIndicatorValues () {
+		 document.location.href ="/aim/importLocationIndicatorValuesXLS.do";
+		 
+	 }
+	 YAHOO.amptab.initPanels	= function () {
+			var msg='\n<digi:trn>Export Indicator Layer Table</digi:trn>';
+			myPanelExport.setHeader(msg);
+			myPanelExport.setBody("Example");
+			myPanelExport.render(document.body);
+		};
+	 
+	 YAHOO.util.Event.addListener(window, "load", YAHOO.amptab.initPanels) ;
 </script>
  <div style="margin:0 auto;width:1000px;">
 <bean:define id="myForm" toScope="request" name="aimDynLocationManagerForm" />
@@ -284,12 +353,30 @@
 						<button type="button" class="buton" onclick="submitTreeStructure()" ><digi:trn>Check Structure</digi:trn></button> &nbsp; &nbsp;
 <!--						<button type="button" class="buton" onclick=""><digi:trn>Save</digi:trn></button> -->
 					</td>
+					<td class="topAlign">
+						<button type="button" class="buton" onclick="javascript:exportIndicatorLayerTable();" ><digi:trn>Export Indicator Table</digi:trn></button> &nbsp; &nbsp;
+						<button type="button" class="buton" onclick="javascript:importLocationIndicatorValues();" ><digi:trn>Import Indicators</digi:trn></button> &nbsp; &nbsp;
+						<button type="button" class="buton" onclick="javascript:addNewIndicatorLayer();" ><digi:trn>Add New Indicator</digi:trn></button> &nbsp; &nbsp;
+					
+					<td>
 				</tr>
 				</c:if>
 			</table>
 		</td>
 	</tr>
 </table>
+
+<div id="exportIndicatorTableContent" style="display: none;">
+	<div id="exportPanelErrors"></div>
+	<form id="exportIndicatorTableForm" method="post" style="margin-left:80px;">
+		<c:forEach var="categoryValue" items="${aimDynLocationManagerForm.implementationLocation.possibleValues}">
+			 <input type="radio" name="admLevel" value="${categoryValue.id}">${categoryValue.value}<br>
+		</c:forEach>
+		<br>
+		<input type="button" value="Export" class="buttonx leftButton" onclick="exportIndicatorTable();"/>
+		<input type="button" value="Cancel" class="buttonx" onclick="closeExportPanel();"/>
+	</form>
+</div>
 
 <div style="display: none;">
 	<form id="addNewLocationForm"  method="post" action="/aim/addNewLocation.do">
@@ -307,4 +394,10 @@
 		<input type="hidden" name="deleteLocationId" />
 	</form>
 </div>
+<div style="display: none;">
+	<form id="addNewIndicatorLayerForm"  method="post" action="/aim/addNewIndicatorLayer.do">
+		<input type="hidden" name="event" />
+	</form> 
+</div>
+
 </div>

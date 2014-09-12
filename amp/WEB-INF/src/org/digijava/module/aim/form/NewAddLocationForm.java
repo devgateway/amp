@@ -4,9 +4,11 @@
  */
 package org.digijava.module.aim.form;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -33,6 +35,8 @@ public class NewAddLocationForm extends ActivityForm {
     private Long categoryIndex;
     private Long parentLocationId;
     private Long parentCatValId;
+    private Long locationId;
+    private Collection <AmpLocationIndicatorValue> locationIndicatorValues;
     
 
     public String getParentCatValName() {
@@ -175,5 +179,31 @@ public class NewAddLocationForm extends ActivityForm {
     public void setLocations(List<AmpCategoryValueLocations> locations) {
         this.locations = locations;
     }
+
+
+
+	public Collection<AmpLocationIndicatorValue> getLocationIndicatorValues() {
+		return locationIndicatorValues;
+	}
+
+
+
+	public void setLocationIndicatorValues(Collection<AmpLocationIndicatorValue> locationIndicatorValues) {
+		this.locationIndicatorValues = locationIndicatorValues;
+	}
+
+
+
+	public Long getLocationId() {
+		return locationId;
+	}
+
+
+
+	public void setLocationId(Long locationId) {
+		this.locationId = locationId;
+	}
+
+	
    
 }

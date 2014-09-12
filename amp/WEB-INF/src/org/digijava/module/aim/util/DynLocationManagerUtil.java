@@ -34,7 +34,9 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
+import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.exception.DynLocationStructuralException;
 import org.digijava.module.aim.exception.DynLocationStructureStringException;
@@ -1084,7 +1086,7 @@ public class DynLocationManagerUtil {
 	}
 	
 	public enum ErrorCode{
-		NUMBER_NOT_MATCH,NAME_NOT_MATCH,INCORRECT_CONTENT,CORRECT_CONTENT
+		NUMBER_NOT_MATCH,NAME_NOT_MATCH,INCORRECT_CONTENT,CORRECT_CONTENT,INEXISTANT_ADM_LEVEL
 	}
 
 	public static class NodeInfo {
@@ -1143,4 +1145,154 @@ public class DynLocationManagerUtil {
 		}
 
 	}
+	
+ public static List <AmpIndicatorLayer> getIndicatorByCategoryValueId (Long id) {
+		Session dbSession = PersistenceManager.getSession();
+		String queryString = "select ind from "
+				+ AmpIndicatorLayer.class.getName()
+				+ " ind where ind.admLevel.id=:id)";
+		Query qry = dbSession.createQuery(queryString);
+		qry.setCacheable(true);
+		qry.setLong("id", id);
+		return qry.list();
+	 
+ }
+ 
+ public static List <AmpLocationIndicatorValue> getLocationIndicatorValueByLocation (AmpCategoryValueLocations location) {
+	 Session dbSession = PersistenceManager.getSession();
+		String queryString = "select value from "
+				+ AmpLocationIndicatorValue.class.getName()
+				+ " value where value.location.id=:id)";
+		Query qry = dbSession.createQuery(queryString);
+		qry.setCacheable(true);
+		qry.setLong("id", location.getId());
+		return qry.list(); 
+ }
+ 
+ public static AmpLocationIndicatorValue getLocationIndicatorValue (Long indicator, Long location) {
+	 Session dbSession = PersistenceManager.getSession();
+		String queryString = "select value from "
+				+ AmpLocationIndicatorValue.class.getName()
+				+ " value where value.location.id=:locationId and value.indicator.id=:indicatorId)";
+		Query qry = dbSession.createQuery(queryString);
+		qry.setCacheable(true);
+		qry.setLong("locationId", location);
+		qry.setLong("indicatorId", indicator);
+		return (AmpLocationIndicatorValue)qry.uniqueResult(); 
+ }
+ 
+ 
+ public static ErrorCode importIndicatorTableExcelFile(InputStream inputStream, Option option) throws AimException {
+     POIFSFileSystem fsFileSystem = null;
+     try {
+         fsFileSystem = new POIFSFileSystem(inputStream);
+         HSSFWorkbook workBook = new HSSFWorkbook(fsFileSystem);
+
+         HSSFSheet hssfSheet = workBook.getSheetAt(0);
+         Row hssfRow = hssfSheet.getRow(0);
+         Cell admLevelCell = hssfRow.getCell(0);
+         String admLevel = "";
+         AmpCategoryValue selectedAdmLevel = null;
+         if (admLevelCell!= null) {
+        	 admLevel = admLevelCell.getStringCellValue();
+         }
+			List<AmpCategoryValue> implLocs = new ArrayList<AmpCategoryValue>(
+					CategoryManagerUtil
+							.getAmpCategoryValueCollectionByKey(CategoryConstants.IMPLEMENTATION_LOCATION_KEY));
+			for (AmpCategoryValue admLevelValue:implLocs) {
+        	 if (admLevel.equalsIgnoreCase(admLevelValue.getValue())) {
+        		 selectedAdmLevel = admLevelValue;
+        		 break;
+        	 }
+         }
+         if (selectedAdmLevel == null) {
+             return ErrorCode.INEXISTANT_ADM_LEVEL;
+         }
+
+         int physicalNumberOfCells = hssfRow.getPhysicalNumberOfCells();
+         List<AmpIndicatorLayer> indicatorLayers = DynLocationManagerUtil.getIndicatorByCategoryValueId(selectedAdmLevel.getId());
+ 		
+         int indicatorNumberOfCells=indicatorLayers.size();
+         if (indicatorNumberOfCells+2 < physicalNumberOfCells) {
+             return ErrorCode.NUMBER_NOT_MATCH;
+         }
+         List <AmpIndicatorLayer>  orderedIndicators = new ArrayList ();
+         for (int i=2;i<physicalNumberOfCells;i++) {
+        	 String cellValue = hssfRow.getCell(i).getStringCellValue();
+        	 boolean found = false;
+        	 for (AmpIndicatorLayer indicator:indicatorLayers) {
+        		 if (indicator.getName().equalsIgnoreCase(cellValue)) {
+        			 found = true;
+        			 orderedIndicators.add(indicator);
+        			 break;
+        		 }
+        	 }
+        	 if (!found) {
+        	     return ErrorCode.NAME_NOT_MATCH;
+        	 }
+         }
+         for (int j = 1; j < hssfSheet.getPhysicalNumberOfRows(); j++) {
+             hssfRow = hssfSheet.getRow(j);
+             if (hssfRow != null) {
+
+                 Cell locationCell = hssfRow.getCell(0);
+                 String location = locationCell.getStringCellValue();
+                 
+                 
+                 String geoId = null;
+                 Cell geoIdCell = hssfRow.getCell(1);
+                 if (geoIdCell != null) {
+                     geoId = getValue(geoIdCell);
+                 }
+                 if (geoId != null && geoId.contains(".0")) {
+                	 geoId = geoId.replace(".0", "");
+                 }
+               //TODO is not the db id
+                 AmpCategoryValueLocations locationObject = (AmpCategoryValueLocations) DbUtil.getObject(AmpCategoryValueLocations.class, Long.valueOf(geoId));
+                 
+                 int index = 2;
+                 for (AmpIndicatorLayer indicator:orderedIndicators) {
+                	 Cell cell = hssfRow.getCell(index++);
+                	 String value = getValue(cell);
+                	 AmpLocationIndicatorValue locationIndicatorValue = DynLocationManagerUtil.getLocationIndicatorValue (1l,indicator.getId());
+                	 if (locationIndicatorValue!=null && option.equals(Option.NEW)) {
+                		 continue;
+                	 }
+                	 else {
+                		 if (locationIndicatorValue!= null) {
+                			 locationIndicatorValue.setValue(Double.valueOf(value));
+                		 }
+                		 else {
+                			 locationIndicatorValue = new AmpLocationIndicatorValue();
+                        	 locationIndicatorValue.setValue(Double.valueOf(value));
+                        	 locationIndicatorValue.setIndicator(indicator);
+                        	 locationIndicatorValue.setLocation(locationObject); 
+                		 }
+                	 }
+                	 DbUtil.saveOrUpdateObject(locationIndicatorValue);
+                 }
+             }
+         }
+
+     }
+     catch (NullPointerException e) {
+         logger.error("file is not ok");
+         throw new AimException("Cannot import indicator values", e);
+     }
+     catch (IllegalStateException e) {
+         logger.error("file is not ok", e);
+         return ErrorCode.INCORRECT_CONTENT;
+     }
+     catch(IOException e){
+         logger.error("file is not ok", e);
+         return ErrorCode.INCORRECT_CONTENT;
+     }
+     catch (Exception e) {
+         logger.error(e);
+         throw new AimException("Cannot import indicator values", e);
+     }
+
+     return ErrorCode.CORRECT_CONTENT;
+ }
+
 }

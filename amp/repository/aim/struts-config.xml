@@ -30,6 +30,7 @@
     <form-bean name="aimQuickLinkForm" type="org.digijava.module.aim.form.QuickLinkForm" />
     <form-bean name="aimMyDesktopForm" type="org.digijava.module.aim.form.MyDesktopForm" />
     <form-bean name="aimNewAddLocationForm" type="org.digijava.module.aim.form.NewAddLocationForm" />
+    <form-bean name="aimNewIndicatorLayerForm" type="org.digijava.module.aim.form.AddIndicatorLayerForm" />
     <form-bean name="aimFiscalCalendarForm" type="org.digijava.module.aim.form.FiscalCalendarForm" />
     <form-bean name="aimAddFiscalCalForm" type="org.digijava.module.aim.form.AddFiscalCalendarForm" />
     <form-bean name="aimOrgManagerForm" type="org.digijava.module.aim.form.OrgManagerForm" />
@@ -565,11 +566,22 @@
 		<forward name="forward" path="/showLayout.do?layout=importRegionLayout" />
 		<forward name="success" path="/aim/dynLocationManager.do"  redirect="true"/>
 	</action>
-     <action name="aimNewAddLocationForm" path="/aim/addNewLocation" scope="session" type="org.digijava.module.aim.action.AddNewLocation" validate="false">
+	<action name="aimDynLocationManagerForm"
+		type="org.digijava.module.aim.action.ImportLocationIndicatorValuesXLS"
+		scope="request" path="/aim/importLocationIndicatorValuesXLS">
+		<forward name="forward" path="/showLayout.do?layout=importIndicatorValuesLayout" />
+		<forward name="success" path="/aim/dynLocationManager.do"  redirect="true"/>
+	</action>
+	<action name="aimDynLocationManagerForm" path="/aim/exportIndicatorLayerTable2XLS" scope="request" type="org.digijava.module.aim.action.ExportIndicatorLayerTable2XLS" validate="false"/>
+	<action name="aimNewAddLocationForm" path="/aim/addNewLocation" scope="session" type="org.digijava.module.aim.action.AddNewLocation" validate="false">
       <forward name="addEdit" path="/showLayout.do?layout=addNewLocation" />
     </action>
     <action input="/showLayout.do?layout=addNewLocation" name="aimNewAddLocationForm" path="/aim/addNewLocation" scope="session" type="org.digijava.module.aim.action.AddNewLocation" validate="true">
       <forward name="addEdit" path="/showLayout.do?layout=addNewLocation" />
+      <forward name="added" path="/aim/dynLocationManager.do" redirect="true" />
+    </action>
+    <action name="aimNewIndicatorLayerForm" path="/aim/addNewIndicatorLayer" scope="session" type="org.digijava.module.aim.action.AddIndicatorLayer" validate="false">
+      <forward name="addEdit" path="/showLayout.do?layout=addNewIndicatorLayer" />
       <forward name="added" path="/aim/dynLocationManager.do" redirect="true" />
     </action>
     <action name="aimFiscalCalendarForm" path="/aim/fiscalCalendarManager" scope="request" type="org.digijava.module.aim.action.FiscalCalendarManager" validate="false">

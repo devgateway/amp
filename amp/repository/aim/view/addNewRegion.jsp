@@ -235,19 +235,6 @@ function unload() {
 
 
 
-<digi:form action="/addNewLocation.do" method="post">
-
-  <html:hidden property="event" />
-   <html:hidden property="categoryIndex" />
-     <html:hidden property="categoryLevelCountry" />
-      <html:hidden property="parentLocationId" />
-       <html:hidden property="parentCatValId" />
-
-
-
- 
-    
-    
     <table cellPadding=5 cellspacing="0" width="600">
         
         <tr>
@@ -313,13 +300,13 @@ function unload() {
         <tr>
             
             <td noWrap width=600 vAlign="top">
-                
+			     
                 <table width=600 cellspacing="1" cellspacing="1">
                     
                     <tr><td noWrap width=600 vAlign="top">
-                            
+                  
                             <table bgColor=#ffffff cellpadding="0" cellspacing="0" class=box-border-nopadding width="100%">
-                                
+					                     
                                 <tr bgColor=#f4f4f2>
                                     
                                     <td vAlign="top" width="100%">
@@ -339,8 +326,15 @@ function unload() {
                                             <tr>
                                                 
                                                 <td bgColor=#ffffff class=box-border>
-                                                    
-                                                    <table border="0" cellpadding="1" cellspacing="1" class=box-border width="100%">
+                                                 <digi:form action="/addNewLocation.do" method="post">
+		
+												  <html:hidden property="event" />
+												   <html:hidden property="categoryIndex" />
+												     <html:hidden property="categoryLevelCountry" />
+												      <html:hidden property="parentLocationId" />
+												       <html:hidden property="parentCatValId" />
+    
+                                                    <table border="0" cellpadding="1" cellspacing="1" width="100%">
                                                         
                                                         <!-- Page Logic -->
 
@@ -495,7 +489,6 @@ function unload() {
                                                                                 <tr>
                                                                                     
                                                                                     <td width="45%" align="right">
-                                                                                        
                                                                                         <c:set var="translation">
                                                                                             <digi:trn key="btn:regionManagerSave">
                                                                                                 Save
@@ -541,13 +534,40 @@ function unload() {
                                                         <!-- end page logic -->
                                                         
                                                     </table>
+       							                     </digi:form>                
                                                     
                                                 </td>
                                                 
                                             </tr>
-                                            
+                                            <tr>
+                                            <td bgColor=#ffffff class="box-border" >
+                                                     <span class="subtitle-blue" style="margin-left:180px; ">
+														<digi:trn>Indicator Layers</digi:trn>
+													</span>
+													<digi:form action="/addNewLocation.do" method="post" name="aimLocationIndicatorValueForm">
+													<html:hidden property="editedId"/>
+													<html:hidden property="event" value="saveLocationValues"/>
+													<table style="margin-top:25px;">
+													<c:forEach var="value" items="${aimNewAddLocationForm.locationIndicatorValues}">
+														<tr>
+														
+														<td align="right" width="50%">${value.indicator.name}</td> 
+														<td  width="50%"><input type="text" name="indicator_${value.indicator.id}" value="${value.value}"/></td>
+														</tr>
+													</c:forEach>
+														<tr><td></td>
+														<td align="left">
+														 <html:submit ><digi:trn key="btn:regionManagerSave">Save</digi:trn></html:submit>                                                                                  
+														</td>
+														</tr>
+													
+													</table>
+													</digi:form>
+													
+                                
+                                            </td>
+                                            </tr>
                                         </table>
-                                        
                                     </td>
                                     
                                 </tr>
@@ -555,24 +575,27 @@ function unload() {
                                 <tr><td bgColor=#f4f4f2>
                                         
                                         &nbsp;
-                                        
-                                </td></tr>
+                               </td></tr>
                                 
                             </table>
-                            
+         
                         </td>
                         
                     </tr>
-                    
+                   
                 </table>
-                
-            </td>
+			   </td>
             
+        </tr>
+        <tr>
+        <td>
+        </td>
         </tr>
         
     </table>
     
-</digi:form>
+
+
 
 
 

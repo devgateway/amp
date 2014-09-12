@@ -1355,15 +1355,7 @@ public class DEImportBuilder {
 	
 	//get all Amp Classification Configuration
 	private List<AmpClassificationConfiguration> getAllClassificationConfiguration(){
-    	List<AmpClassificationConfiguration> configs = null;
-		try {
-			configs = SectorUtil.getAllClassificationConfigs();
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
-    	return configs;
+    	return SectorUtil.getAllClassificationConfigs();
 	}
 
 	

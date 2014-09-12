@@ -140,16 +140,11 @@ public class Filters {
 	@ApiMethod(ui=true,name="Sectors")
 	public List<SimpleJsonBean> getSectorsSchemas() {
 		List<SimpleJsonBean> schemalist = new ArrayList<SimpleJsonBean>();
-		try {
-			List<AmpClassificationConfiguration> schems = SectorUtil
-					.getAllClassificationConfigs();
-			for (AmpClassificationConfiguration ampClassificationConfiguration : schems) {
-				schemalist.add(new SimpleJsonBean(
-						ampClassificationConfiguration.getId(),
-						ampClassificationConfiguration.getName()));
-			}
-		} catch (DgException e) {
-			logger.error("cannot get Sectors List",e);
+		List<AmpClassificationConfiguration> schems = SectorUtil.getAllClassificationConfigs();
+		for (AmpClassificationConfiguration ampClassificationConfiguration : schems) {
+			schemalist.add(new SimpleJsonBean(
+					ampClassificationConfiguration.getId(),
+					ampClassificationConfiguration.getName()));
 		}
 		return schemalist;
 	}

@@ -2221,15 +2221,7 @@ public class IatiActivityWorker {
 
 	//get all Amp Classification Configuration
 	private List<AmpClassificationConfiguration> getAllClassificationConfiguration(){
-    	List<AmpClassificationConfiguration> configs = new ArrayList();
-		try {
-			configs = SectorUtil.getAllClassificationConfigs();
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	
-    	return configs;
+    	return SectorUtil.getAllClassificationConfigs();
 	}
 	
 	

@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
@@ -144,15 +145,12 @@ public class SectorUtil {
 		return SectorSkeleton.getParentSectors(secSchemeId);
 	}	
 	public static void linkChildrenToParents(Map<Long, SectorSkeleton> parents, Map<Long, SectorSkeleton> children) {
-		for (Map.Entry<Long, SectorSkeleton> entry : children.entrySet()) {
-		    Long childKey = entry.getKey();
-		    SectorSkeleton sec = entry.getValue();
+		for (SectorSkeleton sec: children.values()) {
 		    if (sec.getParentSectorId() != null) {
 		    	if (parents.get(sec.getParentSectorId()) != null) {
 		    		parents.get(sec.getParentSectorId()).addChild(sec);
 		    	}
-		    }
-		    if (sec.getParentSectorId() != null) {
+		    	
 		    	if (children.get(sec.getParentSectorId()) != null) {
 		    		children.get(sec.getParentSectorId()).addChild(sec);
 		    	}
@@ -531,7 +529,6 @@ public class SectorUtil {
 			String configurationName) {
 		List<AmpSector> ret = new ArrayList<AmpSector>();
 		Long id = null;
-		try {
 			Collection<AmpClassificationConfiguration> configs = SectorUtil
 					.getAllClassificationConfigs();
 			Iterator<AmpClassificationConfiguration> confIter = configs
@@ -576,43 +573,34 @@ public class SectorUtil {
 				}
 			}
 
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		return ret;
 	}
 
+	/**
+	 * TODO: this is poor man's recursion
+	 * it can certainly be rewritten
+	 * @param configurationName
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public static Collection<SectorSkeleton> getAmpSectorsAndSubSectorsHierarchyFaster(String configurationName) {
-		Collection<SectorSkeleton> ret = new HashSet<SectorSkeleton>();
 		Long id = null;
-		try {
-
-			Collection<AmpClassificationConfiguration> configs = SectorUtil.getAllClassificationConfigs();
-			Iterator<AmpClassificationConfiguration> confIter = configs.iterator();
-			while (confIter.hasNext()) {
-				AmpClassificationConfiguration conf = confIter.next();
+		Collection<AmpClassificationConfiguration> configs = SectorUtil.getAllClassificationConfigs();
+		for (AmpClassificationConfiguration conf:configs){
 				if (configurationName.equals(conf.getName())) {
 					if (conf.getClassification() != null)
 						id = conf.getClassification().getAmpSecSchemeId();
 				}
 			}
-			if (id != null) {
-				Map<Long, SectorSkeleton> parents = SectorUtil.getAllParentSectorsFaster(id);
-				Map<Long, SectorSkeleton> children = SectorUtil.getAllChildSectorsFaster(parents);
-				linkChildrenToParents(parents, children);
-				for (Map.Entry<Long, SectorSkeleton> entry : parents.entrySet()) {
-					ret.add(entry.getValue());
-				}
-				
-			}
-		} catch (DgException e) {
-			e.printStackTrace();
-		}
-		
-		return ret;
+		if (id == null)
+			return new HashSet<>(); // empty result
+
+		Map<Long, SectorSkeleton> parents = SectorUtil.getAllParentSectorsFaster(id);
+		Map<Long, SectorSkeleton> children = SectorUtil.getAllChildSectorsFaster(parents);
+		Map<Long, SectorSkeleton> subchildren = SectorUtil.getAllChildSectorsFaster(children);
+		linkChildrenToParents(children, subchildren);
+		linkChildrenToParents(parents, children);
+		return new TreeSet<>(parents.values());
 	}
 
 	
@@ -630,7 +618,7 @@ public class SectorUtil {
 		
 		List<AmpSector> ret = new ArrayList<AmpSector>();
 		Long id = null;
-		try {
+
 			Collection<AmpClassificationConfiguration> configs = SectorUtil
 					.getAllClassificationConfigs();
 			Iterator<AmpClassificationConfiguration> confIter = configs
@@ -667,10 +655,7 @@ public class SectorUtil {
 						}
 					}
 				}
-			}
-		} catch (DgException e) {
-			e.printStackTrace();
-		}
+			}		
 		AmpCaching.getInstance().sectorsCache.sectorsHierarchy.put(configurationName, ret);
 		return new ArrayList<AmpSector>(ret);
 	}
@@ -759,27 +744,9 @@ public class SectorUtil {
 	 * @throws DgException
 	 *             If exception occurred
 	 */
-	public static List<AmpClassificationConfiguration> getAllClassificationConfigs()
-			throws DgException {
-		String queryString = null;
-		Session session = null;
-		List<AmpClassificationConfiguration> configs = null;
-		Query qry = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			queryString = "select cls from "
-					+ AmpClassificationConfiguration.class.getName() + " cls ";
-			qry = session.createQuery(queryString);
-			configs = qry.list();
-		} catch (Exception ex) {
-			logger.error("Unable to get report names  from database "
-					+ ex.getMessage());
-			throw new DgException(ex);
-
-		}
-
-		return configs;
+	public static List<AmpClassificationConfiguration> getAllClassificationConfigs() {
+		String queryString = "select cls from " + AmpClassificationConfiguration.class.getName() + " cls ";
+		return PersistenceManager.getSession().createQuery(queryString).list();
 	}
 
 	/**

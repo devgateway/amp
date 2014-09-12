@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
@@ -14,7 +16,6 @@ import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-
 import org.hibernate.jdbc.Work;
 /*
  * skeleton class for amp_sector
@@ -35,7 +36,7 @@ public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyList
 		this.name = name;
 		this.parentSectorId = parentSectorId;
 		this.code = code;
-		this.childSectors = new HashSet<SectorSkeleton>();
+		this.childSectors = new TreeSet<SectorSkeleton>();
 	}
 
 
@@ -46,10 +47,10 @@ public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyList
     	}
     	else return val;
     }
+    
 	public void addChild(SectorSkeleton child) {
 		this.childSectors.add(child);
 	}
-
 	
     /**
      * 
@@ -91,7 +92,7 @@ public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyList
      * @return a list of all parent sectors
      */
 	public static Map<Long, SectorSkeleton> getParentSectors(final Long secSchemeId) {
-        final Map<Long, SectorSkeleton> sectors = new HashMap<Long, SectorSkeleton>();
+        final Map<Long, SectorSkeleton> sectors = new TreeMap<Long, SectorSkeleton>();
         PersistenceManager.getSession().doWork(new Work(){
 				public void execute(Connection conn) throws SQLException {
 					String condition = "where amp_sec_scheme_id = " + secSchemeId

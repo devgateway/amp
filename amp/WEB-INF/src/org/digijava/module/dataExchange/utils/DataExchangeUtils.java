@@ -1,3 +1,6 @@
+					false, PersistenceManager.getRequestDBSession(), false, false);
+		} catch (Exception e) {
+            e.printStackTrace();
 /**
  * 
  */

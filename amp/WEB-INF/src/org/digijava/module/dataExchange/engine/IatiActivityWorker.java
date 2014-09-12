@@ -20,6 +20,7 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 
+import org.apache.log4j.Logger;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
@@ -89,6 +90,9 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
  *
  */
 public class IatiActivityWorker {
+
+    private static Logger logger = Logger.getLogger(IatiActivityWorker.class);
+
     private boolean ignoreSameAsCheck = false;
     private boolean saveObjects = true;
     private boolean isLoad = false;
@@ -619,9 +623,22 @@ public class IatiActivityWorker {
 
         // if locations section is empty in the imported activity, then set the default one
         } else if (defaultLocation != null) {
-            Set locations = new HashSet<AmpActivityLocation>();
-            locations.add(defaultLocation);
-            a.setLocations(locations);
+            try {
+                Set<AmpActivityLocation> locations = new HashSet<>();
+                AmpLocation ampLocation = DynLocationManagerUtil.getAmpLocation(defaultLocation);
+
+                if (ampLocation != null) {
+                    AmpActivityLocation actLoc = new AmpActivityLocation();
+                    actLoc.setActivity(a);
+                    actLoc.setLocation(ampLocation);
+                    locations.add(actLoc);
+                    a.setLocations(locations);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                logger.error(e.getStackTrace());
+            }
+
         } else {
             a.setLocations(new HashSet<AmpActivityLocation>());
         }

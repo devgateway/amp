@@ -1484,6 +1484,7 @@ public class DataExchangeUtils {
 					ampActivity, translations, team.getTeamLead(),
 					false, PersistenceManager.getRequestDBSession(), false, false);
 		} catch (Exception e) {
+            e.printStackTrace();
 			logger.error(e.getMessage());
 		}
 		return ampActivity;

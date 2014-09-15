@@ -8,14 +8,33 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 
 /**
  * Reports pagination utility methods
  * @author Nadejda Mandrescu
  */
 public class ReportPaginationUtils {
+	
+	public static int getRecordsNumberPerPage() {
+		AmpApplicationSettings ampAppSettings = AmpARFilter.getEffectiveSettings();				
+		
+		int recordsPerPage = 100;
+		
+		if (ampAppSettings != null){
+			if (ampAppSettings.getDefaultRecordsPerPage() != 0) {
+				recordsPerPage = ampAppSettings.getDefaultRecordsPerPage();
+			}else{
+				recordsPerPage = Integer.MAX_VALUE;
+			}
+		}
+		
+		return recordsPerPage;
+	}
+	
 	
 	public static ReportAreaMultiLinked[] convert(ReportArea area) {
 		ReportAreaMultiLinked root = new ReportAreaMultiLinked(area, null, null);

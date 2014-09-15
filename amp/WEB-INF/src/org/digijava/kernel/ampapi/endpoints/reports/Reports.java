@@ -19,6 +19,8 @@ import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
+import org.dgfoundation.amp.reports.ReportPaginationCacher;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
@@ -87,36 +89,50 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON)
 	public final GeneratedReport getReportResult(@PathParam("report_id") Long reportId) {
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, true);
+		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, false);
 		try{
 			//TODO: for now we do not translate other types of reports than Donor Type reports (hide icons for non-donor-type reports?)
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
-			return generator.executeReport(spec);
+			GeneratedReport generatedReport = generator.executeReport(spec);
+			cacheReportAreas(reportId, generatedReport);
+			return generatedReport;
 		} catch (AMPException e) {
 			logger.error(e);
 		}
 		return null;
 	}
 	
+	/**
+	 * Gets the result for the specified reportId and a given page number
+	 * @param reportId - report ID
+	 * @param page - page number, starting from 1
+	 * @return ReportArea result for the requested page
+	 */
 	@GET
-	@Path("/report/{report_id}/result/{page}")
+	@Path("/report/{report_id}/result/pages/{page}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public final ReportArea getReportResult(@PathParam("report_id") Long reportId,
 			@PathParam("page") Integer page) {
-		//TODO: use caching 
-		GeneratedReport generatedReport = getReportResult(reportId);
-		if (generatedReport == null) return null;
-		int pageSize = 10; //TODO
-		int start = page * pageSize;
-		return ReportPaginationUtils.getReportArea(ReportPaginationUtils.convert(generatedReport.reportContents), start, pageSize);
+		int pageSize = ReportPaginationUtils.getRecordsNumberPerPage();
+		int start = (page - 1) * pageSize;
+		return ReportPaginationUtils.getReportArea(ReportPaginationCacher.getReportAreas(reportId), start, pageSize);
 	}
 	
 	@GET
 	@Path("/report/{report_id}/result/pages")
 	@Produces(MediaType.APPLICATION_JSON)
 	public final int getReportPagesCount(@PathParam("report_id") Long reportId) {
-		//dummy for now
-		return 10;
+		ReportAreaMultiLinked[] areas = ReportPaginationCacher.getReportAreas(reportId); 
+		int pageSize = ReportPaginationUtils.getRecordsNumberPerPage();
+		return areas == null ? 0 : (areas.length + pageSize - 1) / pageSize;
+	}
+	
+	private final ReportAreaMultiLinked[] cacheReportAreas(Long reportId, GeneratedReport generatedReport) {
+		if (generatedReport == null) return null;
+		//adding
+		ReportAreaMultiLinked[] res = ReportPaginationUtils.convert(generatedReport.reportContents);
+		ReportPaginationCacher.addReportAreas(reportId, res);
+		return res;
 	}
 	
 	@GET

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.dgfoundation.amp.reports.mondrian;
+package org.dgfoundation.amp.reports.mondrian.converters;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -26,17 +26,18 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
 
 /**
- * Translator for {@link AmpReport} to {@link ReportSpecification} 
+ * Converter for {@link AmpReport} to {@link ReportSpecification} 
  * @author Nadejda Mandrescu
  */
-public class AmpReportTranslator {
-	protected static final Logger logger = Logger.getLogger(AmpReportTranslator.class);
+public class AmpReportsToReportSpecification {
+	protected static final Logger logger = Logger.getLogger(AmpReportsToReportSpecification.class);
 	
 	private static final String TITLE = ArConstants.HIERARCHY_SORTER_TITLE;
 	private static final String ASC = "ascending";
@@ -47,21 +48,21 @@ public class AmpReportTranslator {
 	private ReportEntityType entityType;
 	private ReportSpecificationImpl spec;
 	
-	private AmpReportTranslator(AmpReports report) {
+	private AmpReportsToReportSpecification(AmpReports report) {
 		this.report = report;
 	}
 	
 	/**
-	 * Translation of {@link AmpReports} report to Reports API report structure 
+	 * Conversion of {@link AmpReports} report to Reports API report structure 
 	 * @param report - {@link AmpReports} 
 	 * @return {@link ReportSpecificationImpl}
 	 * @throws AMPException 
 	 */
-	public static ReportSpecificationImpl toReportSpecification(AmpReports report) throws AMPException {
-		return (new AmpReportTranslator(report)).toReportSpecification();
+	public static ReportSpecificationImpl convert(AmpReports report) throws AMPException {
+		return (new AmpReportsToReportSpecification(report)).convert();
 	}
 	
-	private ReportSpecificationImpl toReportSpecification() throws AMPException {
+	private ReportSpecificationImpl convert() throws AMPException {
 		//init data
 		entityType = MondrianReportUtils.getReportEntityType(report);
 		arFilter = FilterUtil.buildFilter(report, report.getAmpReportId());
@@ -73,7 +74,7 @@ public class AmpReportTranslator {
 		configureSorting();
 		
 		//configure filters & settings
-		AmpARFilterTranslator arFilterTranslator = new AmpARFilterTranslator(arFilter); 
+		AmpARFilterConverter arFilterTranslator = new AmpARFilterConverter(arFilter); 
 		spec.setFilters(arFilterTranslator.buildFilters());
 		spec.setSettings(arFilterTranslator.buildSettings());
 		

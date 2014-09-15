@@ -12,9 +12,9 @@ import java.util.Map;
  * @author Nadejda Mandrescu
  */
 public class ReportAreaImpl implements ReportArea {
-	private NamedTypedEntity owner;
-	private Map<ReportOutputColumn, ReportCell> contents;
-	private List<ReportArea> children;
+	protected NamedTypedEntity owner;
+	protected Map<ReportOutputColumn, ReportCell> contents;
+	protected List<ReportArea> children;
 	
 	public ReportAreaImpl() {
 	}

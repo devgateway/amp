@@ -20,6 +20,7 @@ import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportEntityType;
@@ -27,9 +28,11 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
-import org.dgfoundation.amp.reports.mondrian.AmpReportTranslator;
+import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
+import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
@@ -39,6 +42,9 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import clover.com.google.gson.Gson;
+import clover.com.google.gson.GsonBuilder;
 
 /**
  * Test Reports generation via Reports API provided by {@link org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator MondrianReportGenerator}
@@ -61,7 +67,8 @@ public class MondrianReportsTests extends AmpTestCase {
 		suite.addTest(new MondrianReportsTests("testSortingByTuplesTotals"));
 		suite.addTest(new MondrianReportsTests("testMultipleDateFilters")); */
 		//suite.addTest(new MondrianReportsTests("testAmpReportToReportSpecification"));
-		suite.addTest(new MondrianReportsTests("testGenerateReportAsSaikuCellDataSet"));
+		//suite.addTest(new MondrianReportsTests("testGenerateReportAsSaikuCellDataSet"));
+		suite.addTest(new MondrianReportsTests("testReportPagination"));
 		//suite.addTest(new MondrianReportsTests("testHeavyQuery"));
 		
 		return suite;
@@ -146,6 +153,17 @@ public class MondrianReportsTests extends AmpTestCase {
 		generateAndValidate(spec, true, true);
 	}
 	
+	public void testReportPagination() {
+		ReportSpecificationImpl spec = getReportSpecificatin("NadiaMondrianTest");
+		GeneratedReport report = generateAndValidate(spec, true, false);
+		ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
+		ReportArea page0_10 = ReportPaginationUtils.getReportArea(areasDFArray, 0, 10);
+		//doesn't work to print
+		Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().serializeSpecialFloatingPointValues().create();
+		String res = gson.toJson(page0_10);
+		System.out.println(res);
+	}
+	
 	private ReportSpecificationImpl getReportSpecificatin(String reportName) {
 		//AmpReports report = (AmpReports) PersistenceManager.getSession().get(AmpReports.class, 1018L);//id is from Moldova DB, TODO: update for tests db 
 		AmpReports report = ReportTestingUtils.loadReportByName(reportName);
@@ -157,7 +175,7 @@ public class MondrianReportsTests extends AmpTestCase {
 
 		ReportSpecificationImpl spec = null;
 		try {
-			spec = AmpReportTranslator.toReportSpecification(report);
+			spec = AmpReportsToReportSpecification.convert(report);
 		} catch (AMPException e) {
 			System.err.println(e.getMessage());
 		}
@@ -192,7 +210,7 @@ public class MondrianReportsTests extends AmpTestCase {
 		generateAndValidate(spec, print, false);
 	}
 	
-	private void generateAndValidate(ReportSpecification spec, boolean print, boolean asSaikuReport) {
+	private GeneratedReport generateAndValidate(ReportSpecification spec, boolean print, boolean asSaikuReport) {
 		String err = null;
 		MondrianReportGenerator generator = new MondrianReportGenerator(asSaikuReport ? SaikuReportArea.class : ReportAreaImpl.class, print);
 		GeneratedReport report = null;
@@ -211,5 +229,7 @@ public class MondrianReportsTests extends AmpTestCase {
 		assertNull(err);
 		assertNotNull(report);
 		assertNotNull(report.reportContents);
+		
+		return report;
 	}
 }

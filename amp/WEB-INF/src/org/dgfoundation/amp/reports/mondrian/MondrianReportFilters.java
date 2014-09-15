@@ -14,11 +14,12 @@ import org.dgfoundation.amp.newreports.NamedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportFilters;
+import org.dgfoundation.amp.reports.mondrian.converters.AmpARFilterConverter;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 
 /**
- * Mondrian Report Filters - can be used to populate it Manually, either via {@link AmpARFilterTranslator} support
+ * Mondrian Report Filters - can be used to populate it Manually, either via {@link AmpARFilterConverter} support
  * @author Nadejda Mandrescu
  */
 public class MondrianReportFilters implements ReportFilters {

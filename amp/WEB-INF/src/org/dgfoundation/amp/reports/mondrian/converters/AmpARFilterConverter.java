@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.dgfoundation.amp.reports.mondrian;
+package org.dgfoundation.amp.reports.mondrian.converters;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -18,6 +18,8 @@ import org.dgfoundation.amp.newreports.NamedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportEntityType;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -32,8 +34,8 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
  * Old AmpARFilter structure stores multiple information like the actual report filters, report settings, sorting info...  
  * @author Nadejda Mandrescu
  */
-public class AmpARFilterTranslator {
-	protected static final Logger logger = Logger.getLogger(AmpARFilterTranslator.class);
+public class AmpARFilterConverter {
+	protected static final Logger logger = Logger.getLogger(AmpARFilterConverter.class);
 	
 	//either transform filter by IDS, either by Names => if by IDS, then Level properties will be used
 	private MondrianReportFilters filterRules;
@@ -47,7 +49,7 @@ public class AmpARFilterTranslator {
 	 * Old AmpARFilter structure stores multiple information: the actual report filters, report settings, sorting info...
 	 * @param arFilter - old configuration of the reports filters {@link AmpARFilter}
 	 */
-	public AmpARFilterTranslator(AmpARFilter arFilter) {
+	public AmpARFilterConverter(AmpARFilter arFilter) {
 		this.setArFilter(arFilter);
 	}
 	

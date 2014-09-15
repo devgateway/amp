@@ -16,10 +16,12 @@ import javax.ws.rs.core.MediaType;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.mondrian.AmpReportTranslator;
+import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -60,7 +62,7 @@ public class Reports {
 		//TODO: for now we do not translate other types of reports than Donor Type reports (hide icons for non-donor-type reports?)
 		ReportSpecificationImpl spec = null;
 		try {
-			spec = AmpReportTranslator.toReportSpecification(ampReport);
+			spec = AmpReportsToReportSpecification.convert(ampReport);
 		} catch (AMPException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -85,17 +87,38 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON)
 	public final GeneratedReport getReportResult(@PathParam("report_id") Long reportId) {
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, false);
+		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, true);
 		try{
 			//TODO: for now we do not translate other types of reports than Donor Type reports (hide icons for non-donor-type reports?)
-			ReportSpecificationImpl spec = AmpReportTranslator.toReportSpecification(ampReport);
+			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
 			return generator.executeReport(spec);
 		} catch (AMPException e) {
 			logger.error(e);
 		}
 		return null;
 	}
-
+	
+	@GET
+	@Path("/report/{report_id}/result/{page}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public final ReportArea getReportResult(@PathParam("report_id") Long reportId,
+			@PathParam("page") Integer page) {
+		//TODO: use caching 
+		GeneratedReport generatedReport = getReportResult(reportId);
+		if (generatedReport == null) return null;
+		int pageSize = 10; //TODO
+		int start = page * pageSize;
+		return ReportPaginationUtils.getReportArea(ReportPaginationUtils.convert(generatedReport.reportContents), start, pageSize);
+	}
+	
+	@GET
+	@Path("/report/{report_id}/result/pages")
+	@Produces(MediaType.APPLICATION_JSON)
+	public final int getReportPagesCount(@PathParam("report_id") Long reportId) {
+		//dummy for now
+		return 10;
+	}
+	
 	@GET
 	@Path("/tabs")
 	@Produces(MediaType.APPLICATION_JSON)

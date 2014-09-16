@@ -119,11 +119,13 @@ public class MondrianTablesRepository {
 	public final static MondrianTableDescription MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE = 
 			new MondrianTableDescription("mondrian_raw_donor_transactions", "amp_fund_detail_id", Arrays.asList("amp_activity_id", "amp_fund_detail_id", "donor_id"));
 	
-	public final static List<MondrianTableDescription> MONDRIAN_TRANSLATED_TABLES = Arrays.asList(
+	public final static List<MondrianTableDescription> MONDRIAN_DIMENSION_TABLES = Arrays.asList(
 			MONDRIAN_LOCATIONS_DIMENSION_TABLE,
 			MONDRIAN_SECTORS_DIMENSION_TABLE,
 			MONDRIAN_PROGRAMS_DIMENSION_TABLE,
-			MONDRIAN_ORGANIZATIONS_DIMENSION_TABLE,
+			MONDRIAN_ORGANIZATIONS_DIMENSION_TABLE);
+	
+	public final static List<MondrianTableDescription> MONDRIAN_ACTIVITY_DIMENSIONS = Arrays.asList(
 			MONDRIAN_ACTIVITY_TEXTS);
 	
 	public final static List<MondrianTableDescription> MONDRIAN_RAW_TRANSACTIONS_TABLES = Arrays.asList(MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE);
@@ -181,6 +183,7 @@ public class MondrianTablesRepository {
 /**
  * to cleanup the mess:
  * 
+DROP TABLE etl_fingerprints;
 DROP TABLE IF EXISTS mondrian_raw_donor_transactions;
 DROP TABLE IF EXISTS mondrian_locations;
 DROP TABLE IF EXISTS mondrian_sectors;

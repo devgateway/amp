@@ -95,8 +95,10 @@ public class Fingerprint {
 		return readOrReturnDefaultFingerprint(monetConn);
 	}
 	
-	public static void ensureFingerprintTableExists(MonetConnection monetConn) {
-		if (!monetConn.tableExists(FINGERPRINT_TABLE)) {
+	public static void redoFingerprintTable(MonetConnection monetConn) {
+		monetConn.dropTable(FINGERPRINT_TABLE);
+//		if (!monetConn.tableExists(FINGERPRINT_TABLE)) 
+		{
 			monetConn.executeQuery(String.format("CREATE TABLE %s (key %s, value %s)", FINGERPRINT_TABLE,
 					MonetConnection.getMapper().mapSqlTypeToName(java.sql.Types.VARCHAR), MonetConnection.getMapper().mapSqlTypeToName(java.sql.Types.LONGVARCHAR)));
 			monetConn.flush();
@@ -108,7 +110,7 @@ public class Fingerprint {
 	 * @return
 	 */
 	public String readOrReturnDefaultFingerprint(MonetConnection monetConn) {
-		ensureFingerprintTableExists(monetConn);
+		//ensureFingerprintTableExists(monetConn);
 		
 		List<?> hashes = SQLUtils.fetchAsList(monetConn.conn, String.format("SELECT value FROM %s WHERE key='%s'", FINGERPRINT_TABLE, keyName), 1);
 		switch(hashes.size()) {
@@ -130,8 +132,8 @@ public class Fingerprint {
 		return obj.toString();		
 	}
 	
-	public void runIfFingerprintChanged(Connection postgresConn, MonetConnection monetConn, Predicate<Fingerprint> onNothingChanged, ExceptionRunnable<SQLException> r) throws SQLException {
-		if (changesDetected(postgresConn, monetConn)) {
+	public void runIfFingerprintChangedOr(Connection postgresConn, MonetConnection monetConn, boolean or, Predicate<Fingerprint> onNothingChanged, ExceptionRunnable<SQLException> r) throws SQLException {
+		if (or || changesDetected(postgresConn, monetConn)) {
 			r.run();
 			saveFingerprint(postgresConn, monetConn);
 			return;

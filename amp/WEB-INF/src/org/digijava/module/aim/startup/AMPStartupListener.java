@@ -210,7 +210,7 @@ public class AMPStartupListener extends HttpServlet implements
 
 	protected void doMonetETL() throws SQLException {
 		logger.error("running MonetETL - overwriting everything");
-		double elapsedSecs = MondrianETL.runETL();
+		double elapsedSecs = MondrianETL.runETL(false);
 		logger.error(String.format("ETL took %.2f seconds", elapsedSecs));
 	}
 	

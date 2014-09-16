@@ -118,7 +118,7 @@ public class XmlPatcherService extends AbstractServiceImpl {
 				if(!f.exists()) {
 					//mark file as deleted
 					log.appendToLog("Patch file deleted");
-					logger.info("Marking patch "+ampPatch.getPatchId()+" as deleted");
+					//logger.info("Marking patch "+ampPatch.getPatchId()+" as deleted");
 					XmlPatcherUtil.addLogToPatch(ampPatch, log);
 					ampPatch.setState(XmlPatcherConstants.PatchStates.DELETED);
 					DbUtil.update(ampPatch);

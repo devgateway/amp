@@ -96,22 +96,6 @@
 				<Table name="mondrian_locations@@locale@@" />
 				<Level name="Region Name" column="region_id" type="Integer" nameColumn="region_name" />
 			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Locations" name="LocationsDuplicate" uniqueKeyLevelName="Location" primaryKey="id">
-				<Table name="mondrian_locations@@locale@@" />
-				<Level name="Country Name" column="country_id" type="Integer" nameColumn="country_name" >
-					<Property name="default" column="id" type="Integer"/>
-					<Property name="countryId" column="country_id" type="Integer"/>
-					<Property name="regionId" column="region_id" type="Integer"/>
-					<Property name="zoneId" column="zone_id" type="Integer"/>
-					<Property name="districtId" column="district_id" type="Integer"/>
-					<Property name="locationId" column="id" type="Integer"/>
-				</Level>
-				<Level name="Region Name" column="region_id" type="Integer" nameColumn="region_name" />
-				<Level name="Zone Name" column="zone_id" type="Integer" nameColumn="zone_name" />
-				<Level name="District Name" column="district_id" type="Integer" nameColumn="district_name" />
-				<Level name="Location" column="id" type="Integer" nameColumn="location_name" >
-				</Level>
-			</Hierarchy>
 		</Dimension>
 
 		<Dimension name="Secondary Sector" foreignKey="secondary_sector_id">

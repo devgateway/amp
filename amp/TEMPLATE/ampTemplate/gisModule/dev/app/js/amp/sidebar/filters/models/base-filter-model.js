@@ -8,7 +8,7 @@ module.exports = Backbone.Model.extend({
     activeCount: 375
   },
 
-  initialize: function() {
+  initialize:function() {
 
   }
 

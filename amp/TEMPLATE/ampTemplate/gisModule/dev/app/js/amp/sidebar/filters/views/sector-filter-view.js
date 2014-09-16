@@ -19,7 +19,7 @@ module.exports = GenericFilterView.extend({
   className: GenericFilterView.prototype.className + ' filter-years',
   template: _.template(Template),
 
-  initialize: function(options) {
+  initialize:function(options) {
     var self = this;
     //intentinoally not GenericFilterView.prototype, we want to do it our way
     BaseFilterView.prototype.initialize.apply(this, [options]);
@@ -37,7 +37,7 @@ module.exports = GenericFilterView.extend({
   // 1. get all schemas
   // 2. create root JSON, with each schema as a child.
   // 3. when all done create tree
-  _createTree: function(url) {
+  _createTree:function(url) {
     var self = this;
     var deferred = $.Deferred();
     var deferreds = [];

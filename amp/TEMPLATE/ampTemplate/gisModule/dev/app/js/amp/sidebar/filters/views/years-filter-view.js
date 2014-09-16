@@ -12,7 +12,7 @@ module.exports = BaseFilterView.extend({
   className: BaseFilterView.prototype.className + ' filter-years',
   template: _.template(Template),
 
-  initialize: function(options) {
+  initialize:function(options) {
     var self = this;
     BaseFilterView.prototype.initialize.apply(this, [options]);
 
@@ -28,14 +28,17 @@ module.exports = BaseFilterView.extend({
   },
 
 
-  renderFilters: function() {
+  renderFilters:function() {
     var self = this;
     BaseFilterView.prototype.renderFilters.apply(this);
-    this.$('.filter-options').append(this.template());
+
+    this.$el.append(this.template(this.model.toJSON()));
+
+    // TODO: Year sldier only works fi DOM is on the page...
 
     // TODO: uses window.jQuery because that was the only way I had luck with browserify shim...
     // uses https://github.com/leongersen/noUiSlider
-    this.slider = window.jQuery('.year-slider').noUiSlider({
+    this.slider = window.jQuery(this.$('.year-slider')).noUiSlider({
       start: [self.model.get('selectedStart'), self.model.get('selectedEnd')],
       step: 1,
       connect: true,
@@ -66,16 +69,18 @@ module.exports = BaseFilterView.extend({
     this.slider.on('change', function() {
       self.model.set('selectedEnd',  parseInt(self.$('.end-year').text(), 10));
     });
+
+    return this;
   },
 
-  renderTitle: function() {
+  renderTitle:function() {
     BaseFilterView.prototype.renderTitle.apply(this);
     this._updateTitle();
 
     return this;
   },
 
-  _updateTitle: function() {
+  _updateTitle:function() {
     this.$('.filter-count').text(this.model.get('selectedStart') + ' - ' + this.model.get('selectedEnd'));
   }
 

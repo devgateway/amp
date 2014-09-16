@@ -21,7 +21,7 @@ module.exports = BaseControlView.extend({
 
   template: _.template(Template),
 
-  initialize: function(options) {
+  initialize:function(options) {
     this.app = options.app;
     var self = this;
     BaseControlView.prototype.initialize.apply(this, arguments);
@@ -33,7 +33,7 @@ module.exports = BaseControlView.extend({
   },
 
 
-  render: function() {
+  render:function() {
     BaseControlView.prototype.render.apply(this);
 
     // add content
@@ -50,7 +50,7 @@ module.exports = BaseControlView.extend({
     return this;
   },
 
-  _getFilterList: function() {
+  _getFilterList:function() {
     var self = this;
     var filterList = [];
     var deferred =  $.Deferred();
@@ -81,7 +81,7 @@ module.exports = BaseControlView.extend({
     return deferred;
   },
 
-  _createFilterView: function(APIFilter) {
+  _createFilterView:function(APIFilter) {
     // Assume all filters are genericView, but if we want, we can
     // use specific granular views for some filters: OrgFilterView
     // TODO: magic strings are dangerous, config somewhere...

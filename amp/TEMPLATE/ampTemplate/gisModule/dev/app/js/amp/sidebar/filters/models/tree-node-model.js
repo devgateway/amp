@@ -14,7 +14,7 @@ TreeNodeModel = Backbone.Model.extend({
     isSelectable: true // is this node itself selectable (ie. should it have an 'unkown' child)
   },
 
-  initialize: function(obj) {
+  initialize:function(obj) {
     var self = this;
     var childrenCollection = new TreeNodeCollection();
     this.set('children', childrenCollection);
@@ -42,7 +42,7 @@ TreeNodeModel = Backbone.Model.extend({
   },
 
 
-  _onSelectChange: function(model, argument, options) {
+  _onSelectChange:function(model, argument, options) {
     var self = this;
     var children = this.get('children');
 
@@ -63,7 +63,7 @@ TreeNodeModel = Backbone.Model.extend({
 
 
 
-  _addListenersToChildren: function() {
+  _addListenersToChildren:function() {
     var self = this;
     var children = this.get('children');
     children.each(function(child) {
@@ -74,7 +74,7 @@ TreeNodeModel = Backbone.Model.extend({
     });
   },
 
-  _updateCount: function() {
+  _updateCount:function() {
     var children = this.get('children');
     var countTotal = {
       selected: 0,
@@ -97,7 +97,7 @@ TreeNodeModel = Backbone.Model.extend({
     this.set('numPossible', countTotal.possible);
   },
 
-  _updateChildNodes: function() {
+  _updateChildNodes:function() {
     var self = this;
     var children = this.get('children');
 

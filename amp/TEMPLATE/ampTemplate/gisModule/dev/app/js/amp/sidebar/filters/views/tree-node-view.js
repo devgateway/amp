@@ -20,11 +20,11 @@ var TreeNodeView = Backbone.View.extend({
 
   template: _.template(Template),
 
-  initialize: function() {
+  initialize:function() {
   },
 
 
-  render: function(model) {
+  render:function(model) {
     this.model = model;
     this.$el.html(this.template(model.toJSON()));
     this.renderChildren();
@@ -32,7 +32,7 @@ var TreeNodeView = Backbone.View.extend({
     return this;
   },
 
-  renderChildren: function() {
+  renderChildren:function() {
     var ul = $('<ul>');
     this.$el.append(ul);
 
@@ -54,7 +54,7 @@ var TreeNodeView = Backbone.View.extend({
     this._updateExpanded(ul);
   },
 
-  _addModelListeners: function() {
+  _addModelListeners:function() {
     var self = this;
 
     //Add model listeneres
@@ -72,7 +72,7 @@ var TreeNodeView = Backbone.View.extend({
 
   },
 
-  _addUIListeners: function() {
+  _addUIListeners:function() {
     var self = this;
     this.$('> .node > .selectable').on('click', function() {
       self.clickBox();
@@ -83,11 +83,11 @@ var TreeNodeView = Backbone.View.extend({
     });
   },
 
-  _updateSelection: function() {
+  _updateSelection:function() {
     this._updateCheckboxFill();
   },
 
-  _updateCountUI: function() {
+  _updateCountUI:function() {
     if (!this.model.get('children').isEmpty()) {
       this.$('> .node > .toggle-nav > .count').text(
         '(' + this.model.get('numSelected') + '/' + this.model.get('numPossible') + ')');
@@ -96,7 +96,7 @@ var TreeNodeView = Backbone.View.extend({
   },
 
   // For updating non-leaf nodes
-  _updateCheckboxFill: function() {
+  _updateCheckboxFill:function() {
     if (!this.model.get('children').isEmpty()) {
       if (this.model.get('numSelected') > 0) {
         if (this.model.get('numSelected') < this.model.get('numPossible')) {
@@ -119,7 +119,7 @@ var TreeNodeView = Backbone.View.extend({
     }
   },
 
-  _updateExpanded: function(ul) {
+  _updateExpanded:function(ul) {
     var iElement = this.$('> .node > .toggle-nav > .expanded');
     if (this.model.get('expanded')) {
       this.expand();
@@ -137,12 +137,12 @@ var TreeNodeView = Backbone.View.extend({
   },
 
 
-  clickBox: function() {
+  clickBox:function() {
     this.model.set('selected', !this.model.get('selected'), {propagation: true});
   },
 
 
-  clickName: function() {
+  clickName:function() {
     // if we have children expand
     if (!this.model.get('children').isEmpty()) {
       this.model.set('expanded', !this.model.get('expanded'));
@@ -153,13 +153,13 @@ var TreeNodeView = Backbone.View.extend({
   },
 
 
-  collapse: function() {
+  collapse:function() {
     var children = this.$el.find(' > ul > li');
     children.hide('fast');
 
   },
 
-  expand: function() {
+  expand:function() {
     var children = this.$el.find(' > ul > li');
     children.show('fast');
   }

@@ -22,7 +22,7 @@ module.exports = GenericFilterView.extend({
   className: GenericFilterView.prototype.className,
   template: _.template(Template),
 
-  initialize: function(options) {
+  initialize:function(options) {
     var self = this;
     //intentinoally not GenericFilterView.prototype, we want to do it our way
     BaseFilterView.prototype.initialize.apply(this, [options]);
@@ -40,7 +40,7 @@ module.exports = GenericFilterView.extend({
   // 1. get all children
   // 2. create root JSON, with each child endpoint as 'children'.
   // 3. when all done create tree
-  _createTree: function(url) {
+  _createTree:function(url) {
     var self = this;
     var deferred = $.Deferred();
     var deferreds = [];
@@ -98,7 +98,7 @@ module.exports = GenericFilterView.extend({
     return deferred;
   },
 
-  _buildTreeFromRoot: function(rootNodeObj) {
+  _buildTreeFromRoot:function(rootNodeObj) {
     this.treeModel = new TreeNodeModel(rootNodeObj);
     this.treeView = new TreeNodeView();
   }

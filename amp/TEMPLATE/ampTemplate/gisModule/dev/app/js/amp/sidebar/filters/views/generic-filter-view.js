@@ -16,7 +16,7 @@ module.exports = BaseFilterView.extend({
   className: BaseFilterView.prototype.className + ' filter-generic',
   template: _.template(Template),
 
-  initialize: function(options) {
+  initialize:function(options) {
     var self = this;
     BaseFilterView.prototype.initialize.apply(this, [options]);
 
@@ -32,7 +32,7 @@ module.exports = BaseFilterView.extend({
     });
   },
 
-  _updateCountInMenu: function() {
+  _updateCountInMenu:function() {
     if (this.treeModel.get('numSelected') === this.treeModel.get('numPossible') ||
         this.treeModel.get('numSelected') === 0) {
       this.$('.filter-count').text('all');
@@ -43,10 +43,10 @@ module.exports = BaseFilterView.extend({
     }
   },
 
-  renderFilters: function() {
+  renderFilters:function() {
     var self = this;
     BaseFilterView.prototype.renderFilters.apply(this);
-    this.$('.filter-options').append(this.template(this.model.toJSON()));
+    this.$el.append(this.template(this.model.toJSON()));
     this.$('.tree-container').append(this.treeView.render(this.treeModel).$el);
     this.treeModel.set('selected', false);
     this.treeModel.set('expanded', true);
@@ -60,20 +60,20 @@ module.exports = BaseFilterView.extend({
     return this;
   },
 
-  _selectAll: function() {
+  _selectAll:function() {
     // force trigger even if already this state (important for half-fill ui
     this.treeModel.set('selected', true, {silent: true });
     this.treeModel.trigger('change:selected', this.treeModel, null, {propogation:false});
   },
 
-  _selectNone: function() {
+  _selectNone:function() {
     // force trigger even if already this state (important for half-fill ui)
     this.treeModel.set('selected', false, {silent: true });
     this.treeModel.trigger('change:selected', this.treeModel, null, {propogation:false});
   },
 
 
-  _createTree: function(url) {
+  _createTree:function(url) {
     var self = this;
 
     //TODO: should be a model so we get proper url api base prepended... from sync...

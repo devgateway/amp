@@ -22,7 +22,7 @@ module.exports = GenericFilterView.extend({
   className: GenericFilterView.prototype.className,
   template: _.template(Template),
 
-  initialize: function(options) {
+  initialize:function(options) {
     var self = this;
     //intentinoally not GenericFilterView.prototype, we want to do it our way
     BaseFilterView.prototype.initialize.apply(this, [options]);
@@ -37,7 +37,7 @@ module.exports = GenericFilterView.extend({
   },
 
 
-  _createTree: function() {
+  _createTree:function() {
     var self = this;
     var deferred = $.Deferred();
     var deferreds = [];

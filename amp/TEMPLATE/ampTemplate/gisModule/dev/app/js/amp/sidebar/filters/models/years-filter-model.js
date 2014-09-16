@@ -3,7 +3,7 @@ var BaseFilterModel = require('../models/base-filter-model');
 
 module.exports = BaseFilterModel.extend({
 
-  initialize: function() {
+  initialize:function() {
     BaseFilterModel.prototype.initialize.apply(this);
     this.set({
       title: 'Years',
@@ -14,7 +14,7 @@ module.exports = BaseFilterModel.extend({
       endYear: 2015
     });
   },
-  parse: function(data) {
+  parse:function(data) {
     if (!data.startYear || data.startYear === -1) {
       data.startYear = this.attributes.startYear;
     }

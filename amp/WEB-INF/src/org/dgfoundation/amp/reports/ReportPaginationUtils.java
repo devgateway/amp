@@ -54,7 +54,8 @@ public class ReportPaginationUtils {
 			for(ReportArea child : current.getChildren()) {
 				DFT((ReportAreaMultiLinked)child, dftList);
 			}
-		if (current.getContents() != null && current.getContents().size() > 0)
+		//based on Tabs, page records count includes only leaf entries, no totals => keep only leaf entries that determine the pagination
+		else if (current.getContents() != null && current.getContents().size() > 0)
 			dftList.add(current);
 	}
 	
@@ -77,35 +78,36 @@ public class ReportPaginationUtils {
 	}
 	
 	private static int convert(ReportAreaMultiLinked current, Deque<List<ReportArea>> stack, int size, boolean traverseChildren) {
-		if (size == 0 || current == null) return 0;
+		if (current == null) return 0;
 		
 		boolean hasChildren = current.getChildren() != null && current.getChildren().size() > 0;
 		
 		if (traverseChildren && hasChildren) {
 			stack.push(new ArrayList<ReportArea>());
-			for(ReportArea child : current.getChildren()) {
+			for(ReportArea child : current.getChildren()) 
 				size = convert((ReportAreaMultiLinked)child, stack, size, true); //all children can traverse their own children
-			}
 			if (size == 0) return 0;
 		}
 
 		if (current.getContents() != null && current.getContents().size() > 0) {
 			ReportAreaImpl newReportArea = new ReportAreaImpl();
 			newReportArea.setContents(current.getContents());
-			size --;
+			//based on Tabs, page records count includes only leaf entries, no totals
+			if (!hasChildren)
+				size --;
 			if (stack.peek() == null) {
 				stack.push(new ArrayList<ReportArea>());
 				stack.peek().add(newReportArea);
 			} else {
 				if (hasChildren) {
 					newReportArea.setChildren(stack.pop());
-					if (stack.peek() == null) {
+					if (stack.peek() == null)
 						stack.push(new ArrayList<ReportArea>());
-					}
 				}
 				stack.peek().add(newReportArea);
 			}
-			if (current.next != null)
+			//if we filled out all required entries (size == 0), then now we just have to add up the totals for the last sub-area
+			if (size > 0 && current.next != null)
 				//traverse children of siblings
 				size = convert(current.next, stack, size, true);
 			else if (current.parent != null)

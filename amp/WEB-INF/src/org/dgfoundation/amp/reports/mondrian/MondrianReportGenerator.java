@@ -20,6 +20,7 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.FilterRule.FilterType;
@@ -145,6 +146,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * @throws AMPException
 	 */
 	private CellDataSet generateReportAsSaikuCellDataSet(ReportSpecification spec) throws AMPException {
+		if (MondrianETL.runETL(false).cacheInvalidated) {
+			MondrianReportUtils.flushCache();
+		}
 		CellDataSet cellDataSet = null;
 		int totalTime = 0;
 		long startTime = System.currentTimeMillis();
@@ -178,6 +182,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		
 		return cellDataSet;
 	}
+	
 	
 	/**
 	 * Generates MDX Query string that can be passed to Saiku or any other MDX processor

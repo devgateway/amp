@@ -81,6 +81,10 @@ public class MondrianETL {
 	 * the postgres timestamp when the previous ETL was started
 	 */
 	protected long previousEtlTime;
+	
+	private boolean etlExecuted = false;
+	private boolean cacheInvalidated = false;
+	private long nrAffectedDates;
 		
 	/**
 	 * constructs an instance, does an initial assessment (scans for IDs). The {@link #execute()} method should be run as closely to the constructor as possible (to avoid race conditions)
@@ -182,6 +186,11 @@ public class MondrianETL {
 						checkMondrianSanity();
 						StopWatch.next(MONDRIAN_ETL, true, "checkMondrianSanity");
 					}
+					cacheInvalidated = etlConfig.fullEtl || 
+							!etlConfig.activityIds.isEmpty() || !etlConfig.pledgeIds.isEmpty() || 
+							etlConfig.dateCodes == null || !etlConfig.dateCodes.isEmpty();
+					
+					nrAffectedDates = etlConfig.dateCodes == null ? -1 : etlConfig.dateCodes.size();
 					StopWatch.reset(MONDRIAN_ETL);
 							
 					logger.error("done generating ETL");
@@ -192,6 +201,7 @@ public class MondrianETL {
 				//conn.close();
 			};
 		});
+		etlExecuted = true;
 	}
 			
 	/**
@@ -610,17 +620,33 @@ public class MondrianETL {
 		}
 	}
 	
-	public static double runETL(boolean forceFull) throws SQLException {
+	private EtlResult getEtlResult(double duration) {
+		if (!etlExecuted)
+			throw new RuntimeException("should only call getEtlResult after having run etl");
+		return new EtlResult(duration, this.cacheInvalidated, this.currentEtlTime, 
+				this.etlConfig.activityIds.size() + this.etlConfig.pledgeIds.size(), 
+				this.nrAffectedDates);
+	}
+	
+	public static EtlResult runETL(boolean forceFull) {
 		long start = System.currentTimeMillis();
-		try(Connection conn = PersistenceManager.getJdbcConnection()) {
-			try(MonetConnection monetConn = MonetConnection.getConnection()) {
-				MondrianETL etl = new MondrianETL(conn, monetConn, forceFull);
-				etl.execute();
+		MondrianETL etl = null;
+		try {
+			try(Connection conn = PersistenceManager.getJdbcConnection()) {
+				try(MonetConnection monetConn = MonetConnection.getConnection()) {
+					etl = new MondrianETL(conn, monetConn, forceFull);
+					etl.execute();
+				}
+				long end = System.currentTimeMillis();
+				double secs = (end - start) / 1000.0;
+				EtlResult res = etl.getEtlResult(secs);
+				logger.error("Mondrian ETL result: " + res);
+				return res;
 			}
 		}
-		long end = System.currentTimeMillis();
-		double secs = (end - start) / 1000.0;
-		return secs;
+		catch(Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
 

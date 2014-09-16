@@ -57,4 +57,19 @@ public class MondrianReportUtils {
 		}
 		return reportArea;
 	}
+	
+	/**
+	 * flushes Mondrian Cache
+	 */
+	public static void flushCache() {
+		new mondrian.rolap.CacheControlImpl(null).flushSchemaCache();
+//		try {
+//			RolapConnection rolapConn = olapConnection.unwrap(mondrian.rolap.RolapConnection.class);
+//			rolapConn.getCacheControl(null).flushSchema(rolapConn.getSchema());
+//		}
+//		catch (SQLException e) {
+//			throw new RuntimeException(e);
+//		}
+	}
+
 }

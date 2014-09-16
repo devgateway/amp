@@ -28,8 +28,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			}}
 		if (contents == null)
 			throw new RuntimeException("could not read schema");
-		if (needToFlushSchemaCache())
-			new mondrian.rolap.CacheControlImpl(null).flushSchemaCache();
 		return processContents(contents);
 	};
 	
@@ -53,9 +51,4 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	protected AmpCurrency getReportCurrency() {
 		return CurrencyUtil.getCurrencyByCode("EUR"); 
 	}
-	
-	protected boolean needToFlushSchemaCache() {
-		return true;
-	}
-	
 }

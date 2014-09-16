@@ -721,7 +721,7 @@ $(document).ready(function() {
 								                                    								</digi:link> 					                                        										
 					                                        									</c:when>
 					                                        									<c:otherwise>					                                        										
-	                              																	<a href="/TEMPLATE/ampTemplate/saikuui/index.html#report/${report.ampReportId}" style="	" onclick="return popup(this,'');" title="Click here to view the Report">
+	                              																	<a href="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}" style="	" onclick="return popup(this,'');" title="Click here to view the Report">
 								                                      									<img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku.png" vspace="2" border="0" align="absmiddle" style="padding-right: 5px;"/>
 								                                    								</a> 
 								                                    								<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
@@ -755,7 +755,7 @@ $(document).ready(function() {
 						    	                                    										<digi:trn key="aim:ClickEditReport">Click on this icon to edit report</digi:trn>&nbsp;
 						                                      											</c:if>
 					                                        										</c:set>
-	                              																	<a href="/TEMPLATE/ampTemplate/saikuui/index.html#report/${report.ampReportId}" style="	" onclick="return popup(this,'');" title="Click here to view the Report">
+	                              																	<a href="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}" style="	" onclick="return popup(this,'');" title="Click here to view the Report">
 								                                      									<img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku.png" vspace="2" border="0" align="absmiddle" style="padding-right: 5px;"/>
 								                                    								</a> 
 						                                    										<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">

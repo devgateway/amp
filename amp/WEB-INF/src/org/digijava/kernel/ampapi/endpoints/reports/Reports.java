@@ -26,6 +26,8 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
+import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
+import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -34,6 +36,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.saiku.web.rest.objects.resultset.QueryResult;
+import org.saiku.web.rest.util.RestUtil;
 
 /***
  * 
@@ -200,4 +204,31 @@ public class Reports {
 		List<JSONTab> tabs = new ArrayList<JSONTab>();
 		return tabs;
 	}
+
+	
+	/**
+	 * Gets the result for the specified reportId for Saiku UI
+	 * @param reportId - AMP report id
+	 * @return QueryResult result converted for Saiku for the requested page
+	 */
+	
+	@GET
+	@Path("/saikureport/{report_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public final QueryResult getSaikuReportResult(@PathParam("report_id") Long reportId) {
+		AmpReports ampReport = DbUtil.getAmpReport(reportId);
+		MondrianReportGenerator generator = new MondrianReportGenerator(SaikuReportArea.class, false);
+		SaikuGeneratedReport report = null;
+		try {
+			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
+			report = generator.generateReportForSaiku(spec);
+			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + report.generationTime + "(ms)");
+		} catch (Exception e) {
+			//TODO: Log this correctly
+			System.out.println("Error:" + e.getStackTrace());
+		}
+		return RestUtil.convert(report.cellDataSet);
+	}
+
 }
+

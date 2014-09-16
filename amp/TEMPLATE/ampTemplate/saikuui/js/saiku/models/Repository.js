@@ -68,7 +68,8 @@ var SavedQuery = Backbone.Model.extend({
         }
         var query = new Query({ 
             xml: file,
-            formatter: Settings.CELLSET_FORMATTER
+            formatter: Settings.CELLSET_FORMATTER,
+            report_id: model.get('report_id')
         },{
             name: filename
         });

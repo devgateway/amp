@@ -53,7 +53,8 @@ var Settings = {
     LOCALSTORAGE_EXPIRATION: 10 * 60 * 60 * 1000 /* 10 hours, in ms */,
     // custom settings to manage pagination
     PAGINATION: true,
-    RESULTS_PER_PAGE: 500
+    RESULTS_PER_PAGE: 500,
+    DEFER_TO_AMP: true
 };
 
 /**

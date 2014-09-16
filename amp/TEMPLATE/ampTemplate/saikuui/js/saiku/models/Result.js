@@ -53,6 +53,9 @@ var Result = Backbone.Model.extend({
     
     url: function() {
     	//Start Custom Code for Pagination
+    	if(Settings.DEFER_TO_AMP){
+    		return encodeURI("../../../rest/data/saikureport/" + this.query.get('report_id'));
+    	}
     	var result_type = "result";
     	if(Settings.PAGINATION) {
     		result_type = "paginatedresult";

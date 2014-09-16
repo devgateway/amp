@@ -357,7 +357,8 @@ public class MondrianETL {
 		String localizedTableName = mondrianTable.tableName + "_" + locale;
 		
 		List<List<Object>> vals = mondrianTable.readTranslatedTable(this.conn, locale, " WHERE " + etlConfig.activityIdsIn("amp_activity_id"));
-		monetConn.copyTableStructureFromPostgres(this.conn, mondrianTable.tableName, localizedTableName);
+//		monetConn.copyTableStructureFromPostgres(this.conn, mondrianTable.tableName, localizedTableName);
+		monetConn.executeQuery("DELETE FROM " + localizedTableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id"));
 		SQLUtils.insert(monetConn.conn, localizedTableName, null, null, monetConn.getTableColumns(localizedTableName), vals);
 		
 		// checking sanity

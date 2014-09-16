@@ -103,6 +103,78 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 		return ret;
 	}
 
+	function populateGrid(id, dynamicLayoutView, firstContent) {
+		$.ajax({
+			async : true,
+			url : '/rest/data/report/' + id + '/result/pages/1',
+			dataType : 'json'
+		}).done(function(data) {
+			// TODO: Move grid section elsewhere.
+			var TableSectionView = Marionette.ItemView.extend({
+				template : '#grid-template'
+			});
+			var tableSectionView = new TableSectionView();
+			dynamicLayoutView.results.show(tableSectionView);
+
+			// Define grid structure.
+			var tableStructure = extractMetadata(firstContent);
+			var grid = $("#main-dynamic-content-region_" + id + " #tab_grid");
+			$(grid).jqGrid({
+				caption : 'Caption',
+				datatype : 'local',
+				height : 250,
+				width : 900,
+				autowidth : true,
+				shrinkToFit : true,
+				viewrecords : false,
+				emptyrecords : 'No records to view',
+				colNames : createJQGridColumnNames(tableStructure),
+				colModel : createJQGridColumnModel(tableStructure)
+			});
+			console.log(data);
+
+			var rows = [];
+			getContent(data, rows);
+			console.log(rows);
+			$.each(rows, function(i, item) {
+				$(grid).jqGrid('addRowData', i + 1, item);
+			});
+
+		}).fail(function(data) {
+			console.error("error");
+		}).always(function() {
+			console.log("complete");
+		});
+		;
+	}
+
+	function matchColumns(key) {
+		var map = new Object();
+		map['[Project Title]'] = 'Project Title';
+		map['[Region Name]'] = 'Region';
+		map['[Total Measures][Actual Commitments]'] = 'Actual Commitments';
+
+		return map[key];
+	}
+
+	function getContent(obj, rows) {
+		if (obj.children == null || obj.children.length == 0) {
+			// console.log(obj.contents);
+			var row = {};
+			$.each(obj.contents, function(key, element) {
+				var colName = matchColumns(key);
+				if (colName != undefined && colName != null) {
+					row[colName] = element.displayedValue;
+				}
+			})
+			rows.push(row);
+		} else {
+			$(obj.children).each(function(i, item) {
+				getContent(item, rows);
+			});
+		}
+	}
+
 	function retrieveTabContent(selectedTabIndex) {
 		var id = app.TabsApp.tabItemsView.collection.models[selectedTabIndex].get('id');
 
@@ -157,25 +229,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			$("#main-dynamic-content-region_" + id + " .buttonify").button();
 
 			// --------------------------------------------------------------------------------------//
-			// TODO: Move grid section elsewhere.
-			var TableSectionView = Marionette.ItemView.extend({
-				template : '#grid-template'
-			});
-			var tableSectionView = new TableSectionView();
-			dynamicLayoutView.results.show(tableSectionView);
-					
-			// Define grid structure.
-			var tableStructure = extractMetadata(firstContent);
-			$("#main-dynamic-content-region_" + id + " #tab_grid").jqGrid({
-				caption : 'Caption',
-				datatype : 'local',
-				height : 250,
-				width: 800,
-				viewrecords: false,
-				emptyrecords : 'No records to view',
-				colNames : createJQGridColumnNames(tableStructure),
-				colModel : createJQGridColumnModel(tableStructure)
-			});
+			populateGrid(id, dynamicLayoutView, firstContent);
 
 		} else if (id == -1) {
 			// "More Tabs..." tab.

@@ -2,8 +2,8 @@
 /*https://github.com/icereval/backbone-documentmodel*/
 define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicContentView', 'text!views/html/filtersWrapperTemplate.html',
 		'text!views/html/filtersItemTemplate.html', 'models/filter', 'collections/filters', 'models/tab',
-		'text!views/html/invisibleTabLinkTemplate.html' ], function(Marionette, Contents, Content, DynamicContentView, filtersTemplate,
-		filtersItemTemplate, Filter, Filters, Tab, invisibleTabLinkTemplate) {
+		'text!views/html/invisibleTabLinkTemplate.html', 'jqgrid' ], function(Marionette, Contents, Content, DynamicContentView,
+		filtersTemplate, filtersItemTemplate, Filter, Filters, Tab, invisibleTabLinkTemplate, jqGrid) {
 
 	"use strict";
 
@@ -16,6 +16,22 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 	// Some private method.
 	function putAnimation() {
 		return '<span><img src="/TEMPLATE/ampTemplate/tabs/css/images/ajax-loader.gif"/></span>';
+	}
+
+	function extractMetadata(content) {
+		var Metadata = Backbone.DocumentModel.extend({
+			defausts : {
+				columns : [],
+				measures : [],
+				hierarchies : []
+			}
+		});
+		var metadata = new Metadata();
+		var metadataJson = content.get('reportMetadata').get('reportSpec');
+		metadata.columns = metadataJson.get('columns');
+		metadata.hierarchies = metadataJson.get('hierarchies');
+		metadata.measures = metadataJson.get('measures');
+		return metadata;
 	}
 
 	function extractFilters(content) {
@@ -51,6 +67,42 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 		return filters;
 	}
 
+	function createJQGridColumnNames(metadata) {
+		var ret = [];
+		$(metadata.columns.models).each(function(i, item) {
+			ret.push(item.get('columnName'));
+		});
+		$(metadata.hierarchies.models).each(function(i, item) {
+			ret.push(item.get('columnName'));
+		});
+		$(metadata.measures.models).each(function(i, item) {
+			ret.push(item.get('measureName'));
+		});
+		console.log(ret);
+		return ret;
+	}
+
+	function createJQGridColumnModel(metadata) {
+		var ret = [];
+		$(metadata.columns.models).each(function(i, item) {
+			ret.push({
+				name : item.get('columnName')
+			});
+		});
+		$(metadata.hierarchies.models).each(function(i, item) {
+			ret.push({
+				name : item.get('columnName')
+			});
+		});
+		$(metadata.measures.models).each(function(i, item) {
+			ret.push({
+				name : item.get('measureName')
+			});
+		});
+		console.log(ret);
+		return ret;
+	}
+
 	function retrieveTabContent(selectedTabIndex) {
 		var id = app.TabsApp.tabItemsView.collection.models[selectedTabIndex].get('id');
 
@@ -67,6 +119,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 				id : id
 			});
 
+			// TODO: Move filters section elsewhere.
 			// Create collection of Filters.
 			var filters = extractFilters(firstContent);
 
@@ -102,6 +155,28 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			});
 			// Create jQuery buttons.
 			$("#main-dynamic-content-region_" + id + " .buttonify").button();
+
+			// --------------------------------------------------------------------------------------//
+			// TODO: Move grid section elsewhere.
+			var TableSectionView = Marionette.ItemView.extend({
+				template : '#grid-template'
+			});
+			var tableSectionView = new TableSectionView();
+			dynamicLayoutView.results.show(tableSectionView);
+					
+			// Define grid structure.
+			var tableStructure = extractMetadata(firstContent);
+			$("#main-dynamic-content-region_" + id + " #tab_grid").jqGrid({
+				caption : 'Caption',
+				datatype : 'local',
+				height : 250,
+				width: 800,
+				viewrecords: false,
+				emptyrecords : 'No records to view',
+				colNames : createJQGridColumnNames(tableStructure),
+				colModel : createJQGridColumnModel(tableStructure)
+			});
+
 		} else if (id == -1) {
 			// "More Tabs..." tab.
 			var ItemView = Marionette.ItemView.extend({

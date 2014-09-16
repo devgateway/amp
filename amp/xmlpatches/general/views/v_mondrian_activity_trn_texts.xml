@@ -2,7 +2,7 @@
 <tns:patch closeOnSuccess="false" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-17836</jira>
+	<jira>AMP-18110</jira>
 	<keyword>Views</keyword>
 	<author>Constantin Dolghier</author>
 	<description>recreate view, this will always be the last version of the view</description>
@@ -19,11 +19,13 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_mondrian_activity_texts;
-				CREATE OR REPLACE VIEW v_mondrian_activity_texts AS
-					SELECT
-						aav.amp_activity_id, aav.name, aav.approval_status, aav.amp_id 
-					FROM amp_activity_version aav;
+				DROP VIEW IF EXISTS v_mondrian_activity_trn_texts;
+				CREATE OR REPLACE VIEW v_mondrian_activity_trn_texts AS
+					SELECT aav.amp_activity_id, 
+						COALESCE(status.name, 'Undefined') AS amp_status_name, COALESCE(status.amp_status_id, 999999999) AS amp_status_id
+						FROM 
+							amp_activity_version aav
+							LEFT JOIN v_status status ON aav.amp_activity_id = status.amp_activity_id;
 			</lang>
 		</script>
 	</apply>

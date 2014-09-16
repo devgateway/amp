@@ -72,6 +72,8 @@ public class MondrianETL {
 	
 	protected static Logger logger = Logger.getLogger(MondrianETL.class);
 	
+	protected LinkedHashSet<String> locales;
+	
 	/**
 	 * the Postgres timestamp when this ETL process started
 	 */
@@ -98,6 +100,7 @@ public class MondrianETL {
 		this.conn = postgresConn;
 		this.monetConn = monetConn;
 		this.forceFullEtl = forceFullEtl | !monetConn.tableExists(Fingerprint.FINGERPRINT_TABLE);
+		this.locales = new LinkedHashSet<>(TranslatorUtil.getLocaleCache(SiteUtils.getDefaultSite()));
 	}
 	
 	protected EtlConfiguration calculateEtlConfiguration() throws SQLException{
@@ -263,22 +266,27 @@ public class MondrianETL {
 			}
 		});
 		res.or(previousEtlTime <= 0);
+		
+		String fullEtlRequestedQuery = "SELECT count(*) FROM amp_etl_changelog WHERE (event_date > " + previousEtlTime + ") AND entity_name='full_etl_request'";
+		res.or(SQLUtils.<Long>fetchAsList(conn, fullEtlRequestedQuery, 1).get(0) > 0);			
+
+		pumpTableIfChanged(res, "amp_currency");
+		pumpTableIfChanged(res, "amp_category_class");
+		pumpTableIfChanged(res, "amp_category_value");
+
 		for (final MondrianTableDescription mondrianTable:MondrianTablesRepository.MONDRIAN_DIMENSION_TABLES)
-			mondrianTable.fingerprint.runIfFingerprintChangedOr(conn, monetConn, forceFullEtl, stepSkipped, new ExceptionRunnable<SQLException>() {
+			mondrianTable.fingerprint.runIfFingerprintChangedOr(conn, monetConn, res.value, stepSkipped, new ExceptionRunnable<SQLException>() {
 				@Override public void run() throws SQLException {
 					res.or(true);
 					generateStarTable(mondrianTable);
 				}});
-		pumpTableIfChanged(res, "amp_currency");
-		pumpTableIfChanged(res, "amp_category_class");
-		pumpTableIfChanged(res, "amp_category_value");
 
 		return res.value;
 	}
 
 	protected void pumpTableIfChanged(final BooleanWrapper needed, final String tableName) throws SQLException {
 		Fingerprint fingerprint = new Fingerprint("table_" + tableName, Arrays.asList(Fingerprint.buildTableHashingQuery(tableName)));
-		fingerprint.runIfFingerprintChangedOr(conn, monetConn, forceFullEtl, stepSkipped, new ExceptionRunnable<SQLException>() {
+		fingerprint.runIfFingerprintChangedOr(conn, monetConn, needed.value, stepSkipped, new ExceptionRunnable<SQLException>() {
 			@Override public void run() throws SQLException {
 				needed.or(true);
 				monetConn.copyTableFromPostgres(conn, tableName);
@@ -305,8 +313,7 @@ public class MondrianETL {
 		generateStarTableWithQueryInPostgres(mondrianTable.tableName, mondrianTable.primaryKeyColumnName, "SELECT * FROM v_" + mondrianTable.tableName, mondrianTable.indexedColumns);
 		monetConn.copyTableFromPostgres(conn, mondrianTable.tableName);
 		
-		// now, the base (non-multilingual) dimension table is ready, so we need to make multilingual clones of it
-		LinkedHashSet<String> locales = new LinkedHashSet<>(TranslatorUtil.getLocaleCache(SiteUtils.getDefaultSite()));
+		// now, the base (non-multilingual) dimension table is ready, so we need to make multilingual clones of it		
 		for (String locale:locales)
 			cloneMondrianTableForLocale(mondrianTable, locale);
 	}
@@ -318,13 +325,40 @@ public class MondrianETL {
 	 * @throws SQLException
 	 */
 	protected void cloneMondrianTableForLocale(MondrianTableDescription mondrianTable, String locale) throws SQLException {
+		if (MondrianTablesRepository.MONDRIAN_NON_TRANSLATED_DIMENSIONS.contains(mondrianTable))
+			return;
 		logger.warn("cloning table " + mondrianTable.tableName + " into locale " + locale);
 		String localizedTableName = mondrianTable.tableName + "_" + locale;
 		
-		List<List<Object>> vals = mondrianTable.readTranslatedTable(this.conn, locale);
+		List<List<Object>> vals = mondrianTable.readTranslatedTable(this.conn, locale, null);
 		monetConn.copyTableStructureFromPostgres(this.conn, mondrianTable.tableName, localizedTableName);
 		SQLUtils.insert(monetConn.conn, localizedTableName, null, null, monetConn.getTableColumns(localizedTableName), vals);
 
+		
+		// checking sanity
+		long initTableSz = SQLUtils.countRows(conn, mondrianTable.tableName);
+		long createdTableSz = SQLUtils.countRows(monetConn.conn, localizedTableName);
+		if (initTableSz != createdTableSz)
+			throw new RuntimeException(String.format("HUGE BUG: multilingual-cloned dimension table has a size of %d, while the original dimension table has a size of %d", createdTableSz, initTableSz));
+	}
+	
+	/**
+	 * makes a localized version of a Mondrian dimension table, using the i18n fetchers
+	 * @param mondrianTable
+	 * @param locale
+	 * @throws SQLException
+	 */
+	protected void incrementallyCloneMondrianTableForLocale(MondrianTableDescription mondrianTable, String locale) throws SQLException {
+		if (MondrianTablesRepository.MONDRIAN_NON_TRANSLATED_DIMENSIONS.contains(mondrianTable))
+			return;
+		if (etlConfig.activityIds.isEmpty())
+			return;
+		logger.warn("incrementally cloning table " + mondrianTable.tableName + " into locale " + locale);
+		String localizedTableName = mondrianTable.tableName + "_" + locale;
+		
+		List<List<Object>> vals = mondrianTable.readTranslatedTable(this.conn, locale, " WHERE " + etlConfig.activityIdsIn("amp_activity_id"));
+		monetConn.copyTableStructureFromPostgres(this.conn, mondrianTable.tableName, localizedTableName);
+		SQLUtils.insert(monetConn.conn, localizedTableName, null, null, monetConn.getTableColumns(localizedTableName), vals);
 		
 		// checking sanity
 		long initTableSz = SQLUtils.countRows(conn, mondrianTable.tableName);
@@ -428,12 +462,18 @@ public class MondrianETL {
 	 */
 	protected void generatePerActivityTables(MondrianTableDescription mondrianTable) throws SQLException {		
 		if (etlConfig.fullEtl) {
-			String query = "SELECT * FROM v_" + mondrianTable.tableName;
-			monetConn.createTableFromQuery(this.conn, query, mondrianTable.tableName);
+//			String query = "SELECT * FROM v_" + mondrianTable.tableName;
+//			monetConn.createTableFromQuery(this.conn, query, mondrianTable.tableName);
+			generateStarTableWithQueryInPostgres(mondrianTable.tableName, mondrianTable.primaryKeyColumnName, "SELECT * FROM v_" + mondrianTable.tableName, mondrianTable.indexedColumns);
+			monetConn.copyTableFromPostgres(conn, mondrianTable.tableName);
+			for (String locale:locales)
+				cloneMondrianTableForLocale(mondrianTable, locale);
 		} else {
 			monetConn.executeQuery("DELETE FROM " + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id"));
 			String query = "SELECT * FROM v_" + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id");
 			monetConn.copyEntries(mondrianTable.tableName, SQLUtils.rawRunQuery(conn, query, null));
+			for (String locale:locales)
+				incrementallyCloneMondrianTableForLocale(mondrianTable, locale);
 		}		
 	}
 	

@@ -1,9 +1,12 @@
 package org.dgfoundation.amp.mondrian;
 
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.Set;
 
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewColumnDescription;
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewDescription;
@@ -112,8 +115,20 @@ public class MondrianTablesRepository {
 				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
 					@Override public I18nViewDescription getObject() {
 						return new I18nViewDescription("mondrian_activity_texts")
-						.addColumnDef(new I18nViewColumnDescription("name", "amp_activity_id", AmpActivityVersion.class, "name"))
-						.addTrnColDef("amp_status_name", "amp_status_id");
+							.addColumnDef(new I18nViewColumnDescription("name", "amp_activity_id", AmpActivityVersion.class, "name"));
+					}});
+
+	public final static MondrianTableDescription MONDRIAN_ACTIVITY_FIXED_TEXTS = 
+			new MondrianTableDescription("mondrian_activity_fixed_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
+				.withFingerprintedJob(Arrays.asList(Fingerprint.buildTableHashingQuery("v_mondrian_activity_fixed_texts")));
+
+	public final static MondrianTableDescription MONDRIAN_ACTIVITY_TRN_TEXTS = 
+			new MondrianTableDescription("mondrian_activity_trn_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
+				.withFingerprintedJob(Arrays.asList(Fingerprint.buildTableHashingQuery("v_mondrian_activity_trn_texts")))
+				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
+					@Override public I18nViewDescription getObject() {
+						return new I18nViewDescription("mondrian_activity_trn_texts")
+								.addTrnColDef("amp_status_name", "amp_status_id");
 					}});
 	
 	public final static MondrianTableDescription MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE = 
@@ -126,9 +141,16 @@ public class MondrianTablesRepository {
 			MONDRIAN_ORGANIZATIONS_DIMENSION_TABLE);
 	
 	public final static List<MondrianTableDescription> MONDRIAN_ACTIVITY_DIMENSIONS = Arrays.asList(
-			MONDRIAN_ACTIVITY_TEXTS);
-	
+			MONDRIAN_ACTIVITY_TEXTS,
+			MONDRIAN_ACTIVITY_FIXED_TEXTS,
+			MONDRIAN_ACTIVITY_TRN_TEXTS);
+		
 	public final static List<MondrianTableDescription> MONDRIAN_RAW_TRANSACTIONS_TABLES = Arrays.asList(MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE);
+	
+	public final static Set<MondrianTableDescription> MONDRIAN_NON_TRANSLATED_DIMENSIONS = new HashSet<MondrianTableDescription>() {{
+		add(MONDRIAN_ACTIVITY_FIXED_TEXTS);
+		addAll(MONDRIAN_RAW_TRANSACTIONS_TABLES);
+	}};
 	
 	/**
 	 * not used for now

@@ -79,6 +79,71 @@
 			</Hierarchy>
 		</Dimension>
 
+		<Dimension name="Activity Status" foreignKey="entity_id">
+			<Hierarchy hasAll="true" allMemberName="All Activity Statuses" primaryKey="amp_activity_id" name="Activity Status">
+				<Table name="mondrian_activity_trn_texts@@locale@@" />
+				<Level name="Activity Status" column="amp_status_id" type="Integer" nameColumn="amp_status_name" uniqueMembers="true" /> <!-- not sure about uniqueMembers -->
+			</Hierarchy>
+		</Dimension>
+
+		<Dimension name="Activity Dates" foreignKey="entity_id">
+			<Hierarchy hasAll="true" allMemberName="All Original Completion Date" primaryKey="amp_activity_id" name="Original Completion Date">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Original Completion Date" column="amp_activity_id" type="Date" nameColumn="original_comp_date" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Final Date for Contracting" primaryKey="amp_activity_id" name="Final Date for Contracting">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Final Date for Contracting" column="amp_activity_id" type="Date" nameColumn="contracting_date" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Final Date for Disbursements" primaryKey="amp_activity_id" name="Final Date for Disbursements">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Final Date for Disbursements" column="amp_activity_id" type="Date" nameColumn="disbursments_date" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Proposed Start Date" primaryKey="amp_activity_id" name="Proposed Start Date">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Proposed Start Date" column="amp_activity_id" type="Date" nameColumn="proposed_start_date" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Actual Start Date" primaryKey="amp_activity_id" name="Actual Start Date">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Actual Start Date" column="amp_activity_id" type="Date" nameColumn="actual_start_date" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Proposed Approval Date" primaryKey="amp_activity_id" name="Proposed Approval Date">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Proposed Approval Date" column="amp_activity_id" type="Date" nameColumn="proposed_approval_date" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Actual Approval Date" primaryKey="amp_activity_id" name="Actual Approval Date">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Actual Approval Date" column="amp_activity_id" type="Date" nameColumn="actual_approval_date" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Actual Completion Date" primaryKey="amp_activity_id" name="Actual Completion Date">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Actual Completion Date" column="amp_activity_id" type="Date" nameColumn="actual_completion_date" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Proposed Completion Date" primaryKey="amp_activity_id" name="Proposed Completion Date">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Proposed Completion Date" column="amp_activity_id" type="Date" nameColumn="proposed_completion_date" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Activity Created On" primaryKey="amp_activity_id" name="Activity Created On">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Activity Created On" column="amp_activity_id" type="Date" nameColumn="date_created" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Activity Updated On" primaryKey="amp_activity_id" name="Activity Updated On">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Activity Updated On" column="amp_activity_id" type="Date" nameColumn="date_updated" />
+			</Hierarchy>
+
+		</Dimension>
+
 		<Dimension name="Location" foreignKey="location_id">
 			<Hierarchy hasAll="true" allMemberName="All Locations" name="Locations" uniqueKeyLevelName="Location" primaryKey="id">
 				<Table name="mondrian_locations@@locale@@" />

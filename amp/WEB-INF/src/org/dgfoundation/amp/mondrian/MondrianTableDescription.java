@@ -90,9 +90,9 @@ public class MondrianTableDescription {
 		return res;
 	}
 	
-	public List<List<Object>> readTranslatedTable(java.sql.Connection conn, String locale) throws SQLException {
+	public List<List<Object>> readTranslatedTable(java.sql.Connection conn, String locale, String condition) throws SQLException {
 		Map<PropertyDescription, ColumnValuesCacher> cachers = new HashMap<>();
-		I18nDatabaseViewFetcher fetcher = new I18nDatabaseViewFetcher(getI18nDescription(), null, locale, cachers, conn, "*");
+		I18nDatabaseViewFetcher fetcher = new I18nDatabaseViewFetcher(getI18nDescription(), condition, locale, cachers, conn, "*");
 		fetcher.indicesNotToTranslate.add(MONDRIAN_DUMMY_ID_FOR_ETL);
 		
 		LinkedHashSet<String> columns = SQLUtils.getTableColumns(tableName);

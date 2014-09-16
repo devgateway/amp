@@ -19,10 +19,11 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_mondrian_activity_texts;
-				CREATE OR REPLACE VIEW v_mondrian_activity_texts AS
+				DROP VIEW IF EXISTS v_mondrian_activity_fixed_texts;
+				CREATE OR REPLACE VIEW v_mondrian_activity_fixed_texts AS
 					SELECT
-						aav.amp_activity_id, aav.name, aav.approval_status, aav.amp_id 
+						aav.amp_activity_id, 
+						aav.original_comp_date, aav.contracting_date, aav.disbursments_date, aav.proposed_start_date, aav.actual_start_date, aav.proposed_approval_date, aav.actual_approval_date, aav.actual_completion_date,aav.proposed_completion_date, aav.date_created, aav.date_updated 
 					FROM amp_activity_version aav;
 			</lang>
 		</script>

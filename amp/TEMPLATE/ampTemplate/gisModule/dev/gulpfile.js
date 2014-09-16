@@ -53,8 +53,8 @@ var paths = {
     stylesheets: {
       all: './app/less/**/*.less',
       entry: './app/less/main.less',
-      libs: ['./node_modules/leaflet/dist/**/*.css', 
-            './node_modules/leaflet.markercluster/dist/**/*.css',  
+      libs: ['./node_modules/leaflet/dist/**/*.css',
+            './node_modules/leaflet.markercluster/dist/**/*.css',
             './app/js/libs/local/slider/**/*.css',
             './node_modules/nvd3/**/*.css' ],
       compiledDest: './app/compiled-css/',

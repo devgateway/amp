@@ -8,6 +8,7 @@ var App = require('./gis/views/gis-main');
 
 var state = require('./services/state');
 var translator = require('./services/translator');
+var WindowTitle = require('./services/title');
 
 
 // initialize everything that doesn't need to touch the DOM
@@ -21,6 +22,10 @@ app.data.load();
 // attach a ref to services
 app.state = state;
 app.translator = translator;
+
+// hook up the title
+var windowTitle = new WindowTitle('AMP GIS Module');
+windowTitle.listenTo(app.data.title, 'update', windowTitle.set);
 
 
 $(document).ready(function() {

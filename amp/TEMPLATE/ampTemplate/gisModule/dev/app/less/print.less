@@ -1,0 +1,54 @@
+@media only print {
+
+  body {
+    background: transparent;
+  }
+
+  #amp-menu {
+    display: none;
+  }
+
+  #sidebar {
+    display: none;
+  }
+
+  #map-header {
+    display: none;
+  }
+
+  #map-container {
+    overflow: visible;
+    top: 0;
+    left: 0;
+    height: 16cm;
+    width: 21cm;  // letter and a4 are both ~21cm, but printing scales it down a bit (?)
+  }
+
+  .leaflet-control-zoom {
+    display: none;
+  }
+
+  .legend {
+    right: auto;
+    bottom: auto;
+    padding-top: 2em;
+    background: transparent;
+    box-shadow: none;
+    &:not(.expanded) {
+      display: none;
+    }
+    .legend-header {
+      text-align: left;
+      & > a {
+        padding-left: 0;
+        font-size: 2em;
+        color: #000;
+      }
+    }
+    .legend-content {
+      border: none;
+      max-height: 1000em;
+      overflow-y: visible;
+    }
+  }
+}

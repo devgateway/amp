@@ -172,7 +172,9 @@ public class UpdateWorkspace extends Action {
 									"error.aim.updateWorkspace.noManagementChildSelected"));
 					//here we must reload the child workspaces
 					Workspace workspace = TeamUtil.getWorkspace(uwForm.getTeamId());
-					uwForm.setChildWorkspaces(workspace.getChildWorkspaces());					
+					if (workspace != null) {
+						uwForm.setChildWorkspaces(workspace.getChildWorkspaces());					
+					}
 					saveErrors(request, errors);
 					logger.debug("error.aim.updateWorkspace.noManagementChildSelected !!!!!");
 					return mapping.getInputForward();

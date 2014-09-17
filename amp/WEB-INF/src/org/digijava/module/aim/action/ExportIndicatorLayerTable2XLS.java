@@ -30,7 +30,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 
 public class ExportIndicatorLayerTable2XLS extends Action {
 	private static final String ADM_LEVEL_PARAM = "admLevel";
-	private static final String GEO_ID_TITLE = "GeoID";
+	private static final String GEO_ID_TITLE = "Code";
 	private static Logger logger = Logger.getLogger(ExportIndicatorLayerTable2XLS.class);
 
 	
@@ -103,8 +103,7 @@ public class ExportIndicatorLayerTable2XLS extends Action {
 			HSSFCell cell = row.createCell(cellIndex++);
 			cell.setCellValue(location.getName());
 			cell = row.createCell(cellIndex++);
-			//TODO have to set geoCode
-			cell.setCellValue(location.getId());
+			cell.setCellValue(location.getCode());
 			List <AmpLocationIndicatorValue> values = DynLocationManagerUtil.getLocationIndicatorValueByLocation(location);
 			for (AmpLocationIndicatorValue value:values) {
 				cell = row.createCell(cellIndex++);

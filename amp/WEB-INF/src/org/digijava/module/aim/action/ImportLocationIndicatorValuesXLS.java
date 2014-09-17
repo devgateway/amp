@@ -43,15 +43,19 @@ public class ImportLocationIndicatorValuesXLS extends Action {
 			case INCORRECT_CONTENT:errors.add(
 					ActionMessages.GLOBAL_MESSAGE,
 					new ActionMessage(
-							"error.aim.regionImportWrongContent")); break;
+							"error.aim.indImportWrongContent")); break;
+			case INEXISTANT_ADM_LEVEL:errors.add(
+					ActionMessages.GLOBAL_MESSAGE,
+					new ActionMessage(
+							"error.aim.indImportInexistantAdmLevel")); break;				
 			case NUMBER_NOT_MATCH:errors.add(
 					ActionMessages.GLOBAL_MESSAGE,
 					new ActionMessage(
-							"error.aim.regionImportImpsNumberMisMatch")); break;
+							"error.aim.indImportNumberMisMatch")); break;
 			case NAME_NOT_MATCH:errors.add(
 					ActionMessages.GLOBAL_MESSAGE,
 					new ActionMessage(
-							"error.aim.regionImportImpsNameMisMatch")); break;
+							"error.aim.indImportNameMisMatch")); break;
 			case CORRECT_CONTENT: return mapping.findForward("success"); 
 			}
 			saveErrors(request, errors);

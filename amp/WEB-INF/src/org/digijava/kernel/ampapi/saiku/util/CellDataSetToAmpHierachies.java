@@ -54,7 +54,7 @@ public class CellDataSetToAmpHierachies {
 		rowTotals = cellDataSet.getRowTotalsLists();
 		//the starting index of the column to concatenate all totals 
 		startColumnIndex = spec.getHierarchies() != null && spec.getHierarchies().size() > 0 ? spec.getHierarchies().size() : 1;
-		noOfColumnsToMerge = cellDataSet.getLeftOffset() - startColumnIndex;
+		noOfColumnsToMerge = spec.getColumns().size() - startColumnIndex;
 		
 		//list of merged column entries for the current group
 		sbList = new StringBuilder[noOfColumnsToMerge];
@@ -62,9 +62,12 @@ public class CellDataSetToAmpHierachies {
 			sbList[i] = new StringBuilder();
 		
 		//init measure column totals
-		if (cellDataSet.getColTotalsLists() != null && cellDataSet.getColTotalsLists().length > 0
+		if (spec.isCalculateColumnTotals() && 
+				cellDataSet.getColTotalsLists() != null && cellDataSet.getColTotalsLists().length > 0
 				&& cellDataSet.getColTotalsLists()[0] != null && cellDataSet.getColTotalsLists()[0].size() > 0)
 			colTotals = cellDataSet.getColTotalsLists()[0].get(0).getTotalGroups();
+		else
+			cellDataSet.setColTotalsLists(null);
 	}
 	
 	private void concatenate() {
@@ -168,19 +171,21 @@ public class CellDataSetToAmpHierachies {
 		AbstractBaseCell[][] newData = new AbstractBaseCell[rowsToKeepCount][cellDataSet.getCellSetBody()[0].length];
 		int newDataRowId = 0;
 		//get measures totals reference
-		TotalNode total = cellDataSet.getColTotalsLists()[0].get(0);
-		TotalAggregator[][] res = total.getTotalGroups();
+		TotalNode total = spec.isCalculateColumnTotals() ? cellDataSet.getColTotalsLists()[0].get(0) : null;
+		TotalAggregator[][] res = total == null ? null : total.getTotalGroups();
 		
 		for (IntRange range : rowsRangesToDelte) {
 			for (int i = start; i < range.getMinimumInteger(); i++, newDataRowId ++ ) {
 				newData[newDataRowId] = cellDataSet.getCellSetBody()[i].clone(); //to mark as free the data reference by
-				//update the measures totals
 				
-				int mPos = 0;
-				for (int a = total.getWidth() - spec.getMeasures().size(); a < total.getWidth(); a++, mPos++) {
-					String value = numberFormat.format(measuresTotalsToKeep.get(newDataRowId)[mPos]);
-					res[a][newDataRowId].setFormattedValue(value);
-				}		
+				//update the measures totals
+				if (total != null) {
+					int mPos = 0;
+					for (int a = total.getWidth() - spec.getMeasures().size(); a < total.getWidth(); a++, mPos++) {
+						String value = numberFormat.format(measuresTotalsToKeep.get(newDataRowId)[mPos]);
+						res[a][newDataRowId].setFormattedValue(value);
+					}
+				}
 			}
 			start = range.getMaximumInteger() + 1;
 		}

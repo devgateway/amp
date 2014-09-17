@@ -365,7 +365,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		
 		applyFilterSetting(spec, cellDataSet);
 		
-		//CellDataSetToAmpHierachies.concatenateNonHierarchicalColumns(spec, cellDataSet);
+		CellDataSetToAmpHierachies.concatenateNonHierarchicalColumns(spec, cellDataSet);
 		
 		return cellDataSet;
 	}

@@ -439,8 +439,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			
 			@Override
 			protected void onSubmit(final AjaxRequestTarget target, Form<?> form) {
-
 					processAndUpdateForm(true, am, form, target, this.getButton());
+            		OnePager op = this.findParent(OnePager.class);
+
 	                if(!form.hasError()){
 	                    HashMap<String, String> commitmentErrors = new HashMap<String, String>();
 	                    HashMap<String, String> expenditureErrors = new HashMap<String, String>();
@@ -458,12 +459,20 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	                        //show warning window
 	                        target.add(warningsWrapper);
 	                        target.appendJavaScript("showWarningPanel();");
+	                        //
+
+	                		//disable lock refresher
+	                		op.getEditLockRefresher().setEnabled(true);
+
 	                    }
 	                    else{
 	                        saveMethod(target, am, feedbackPanel, false, redirected,false);
 	                    }
 	                }
 					else{
+						op.getEditLockRefresher().setEnabled(true);
+						op.getTimer().restart(target);
+						
 						onError(target, form);
 					}
 					//we only remove disable on buttons tagged as submit ones
@@ -818,7 +827,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
 
     private void processAndUpdateForm(boolean notDraft, IModel<AmpActivityVersion> am, final Form<?> form, final AjaxRequestTarget target, IndicatingAjaxButton button) {
-        am.setObject(am.getObject());
+		OnePager op = this.findParent(OnePager.class);
+		//disable lock refresher
+		op.getEditLockRefresher().setEnabled(false);
+      
+    	am.setObject(am.getObject());
         toggleSemanticValidation(notDraft, form, target);
 
         form.process(button);
@@ -833,10 +846,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				}
 				
 			});
-        
-        System.out.println("has errors: " + form.hasError());
-        System.out.println("has error messages:" + form.hasErrorMessage());
-        
+
         form.visitChildren(AbstractTextComponent.class,
                 new IVisitor<Component, Object>() {
                     @Override
@@ -1067,10 +1077,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
                               IModel<AmpActivityVersion> am, FeedbackPanel feedbackPanel,
                               boolean draft, Model<Integer> redirected,boolean rejected) {
 		
-		OnePager op = this.findParent(OnePager.class);
-		//disable lock refresher
-//		op.getEditLockRefresher().setEnabled(false);
-		
 		AmpActivityModel a = (AmpActivityModel) am;
 		AmpActivityVersion activity=am.getObject();
 		Long oldId = activity.getAmpActivityId();
@@ -1268,6 +1274,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			target.add(saveAsDraft);
 			target.add(cancelSaveAsDraft);
 			onErrorSaveAsDraft(feedbackPanel, target, form);
+			OnePager op = this.findParent(OnePager.class);
+			//disable lock refresher
+			op.getEditLockRefresher().setEnabled(true);
+			op.getTimer().restart(target);
+
 		}
 		target.appendJavaScript("enableButtons2();");
 	}

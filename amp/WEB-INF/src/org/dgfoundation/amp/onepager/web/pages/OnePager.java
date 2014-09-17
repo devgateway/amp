@@ -109,11 +109,17 @@ public class OnePager extends AmpHeaderFooter {
     public static final AtomicBoolean savedSections = new AtomicBoolean(false);
     public static final List<OnepagerSection> sectionsList = Collections.synchronizedList(loadPositions());
 	protected AbstractReadOnlyModel<List<AmpComponentPanel>> listModel;
-//	private Component editLockRefresher;
+	private Component editLockRefresher;
+	private AbstractAjaxTimerBehavior timer;
+	public Component getEditLockRefresher() {
+		return editLockRefresher;
+	}
+	
 
-//	public Component getEditLockRefresher() {
-//		return editLockRefresher;
-//	}
+	public AbstractAjaxTimerBehavior getTimer() {
+		return timer;
+	}
+
 
 	public static OnepagerSection findByName(String name){
 		Iterator<OnepagerSection> it = sectionsList.iterator();
@@ -210,41 +216,47 @@ public class OnePager extends AmpHeaderFooter {
 			throw new RuntimeException(e);
 		}
 		
-//		if (DEBUG_ACTIVITY_LOCK)
-//			editLockRefresher = new Label("editLockRefresher", "Locked [" + am.getEditingKey() + "] at:" + System.currentTimeMillis());
-//		else
-//			editLockRefresher = new WebMarkupContainer("editLockRefresher");
-//		if (!newActivity){
-//			editLockRefresher.add(new AbstractAjaxTimerBehavior(ActivityGatekeeper.getRefreshInterval()){
-//				private static final long serialVersionUID = 1L;
-//
-//				@Override
-//				public boolean canCallListenerInterface(Component component,
-//						Method method) {
-//					return true;
-//				}
-//				
-//				@Override
-//				protected void onTimer(AjaxRequestTarget target) {
-//					long currentUserId = ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId();
-//					Integer refreshStatus = ActivityGatekeeper.refreshLock(String.valueOf(am.getId()), am.getEditingKey(), currentUserId);
-//					if (editLockRefresher.isEnabled() && refreshStatus.equals(ActivityGatekeeper.REFRESH_LOCK_LOCKED))
-//                        throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(am.getId()), currentUserId));
-//
-//					if (DEBUG_ACTIVITY_LOCK){
-//						if (refreshStatus.equals(ActivityGatekeeper.REFRESH_LOCK_LOCKED))
-//							editLockRefresher.setDefaultModelObject("FAILED to refresh lock!");
-//						else
-//							editLockRefresher.setDefaultModelObject("Locked [" + am.getEditingKey() + "] at:" + System.currentTimeMillis());
-//						target.add(editLockRefresher);
-//					}
-//				}
-//			});
-//		}
-//		else
-//			if (DEBUG_ACTIVITY_LOCK)
-//				editLockRefresher.setDefaultModelObject("");
-//		add(editLockRefresher);
+		if (DEBUG_ACTIVITY_LOCK)
+			editLockRefresher = new Label("editLockRefresher", "Locked [" + am.getEditingKey() + "] at:" + System.currentTimeMillis());
+		else
+			editLockRefresher = new WebMarkupContainer("editLockRefresher");
+		if (!newActivity){ 
+			timer = new AbstractAjaxTimerBehavior(ActivityGatekeeper.getRefreshInterval()){
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public boolean canCallListenerInterface(Component component,
+						Method method) {
+					return true;
+				}
+				
+				@Override
+				protected void onTimer(AjaxRequestTarget target) {
+					if(!editLockRefresher.isEnabled()){
+						this.stop(target);
+					}
+
+					long currentUserId = ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId();
+					Integer refreshStatus = ActivityGatekeeper.refreshLock(String.valueOf(am.getId()), am.getEditingKey(), currentUserId);
+					if (editLockRefresher.isEnabled() && refreshStatus.equals(ActivityGatekeeper.REFRESH_LOCK_LOCKED))
+                        throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(am.getId()), currentUserId));
+
+					if (DEBUG_ACTIVITY_LOCK){
+						if (refreshStatus.equals(ActivityGatekeeper.REFRESH_LOCK_LOCKED))
+							editLockRefresher.setDefaultModelObject("FAILED to refresh lock!");
+						else
+							editLockRefresher.setDefaultModelObject("Locked [" + am.getEditingKey() + "] at:" + System.currentTimeMillis());
+						target.add(editLockRefresher);
+					}
+					System.out.println("Timer started");
+				}
+			};
+			editLockRefresher.add(timer);
+		}
+		else
+			if (DEBUG_ACTIVITY_LOCK)
+				editLockRefresher.setDefaultModelObject("");
+		add(editLockRefresher);
 	}
 	
 	/**

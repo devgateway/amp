@@ -10,6 +10,8 @@
 		</id>
 
 		<property name="value" column="category_value" type="java.lang.String" index="value" />
+		<property name="deleted" column="deleted" type="java.lang.Boolean" />
+		
 		
 		<properties name="class_index_uniqueness" unique="true">
 			<many-to-one name="ampCategoryClass" column="amp_category_class_id" lazy="false"

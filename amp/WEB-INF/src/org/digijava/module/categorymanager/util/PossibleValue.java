@@ -13,6 +13,7 @@ public class PossibleValue {
 	private String value;
 	private boolean disable;
 	private List<LabelCategory> labelCategories;
+	private boolean deleted;
 
 	
 	public Long getId() {
@@ -23,6 +24,7 @@ public class PossibleValue {
 		this.id = id;
 	}
 
+	//whether the value has been marked for deletion in the form
 	public boolean isDisable() {
 		return disable;
 	}
@@ -45,6 +47,16 @@ public class PossibleValue {
 
 	public void setLabelCategories(List<LabelCategory> labelCategories) {
 		this.labelCategories = labelCategories;
+	}
+
+	
+	//whether the value is softdeleted from DB
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 	
 

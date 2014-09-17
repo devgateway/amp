@@ -210,7 +210,10 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 		}
 		for(AmpCategoryValue ampCategoryValue:values) {
 			if ( ampCategoryValue.getAmpCategoryClass().getKeyName().equals(categoryKey) ) {
-				ret.add(ampCategoryValue);
+//				if ((ampCategoryValue.getDeleted() == null) || (ampCategoryValue.getDeleted() == false)) 
+				{
+					ret.add(ampCategoryValue);
+				}
 			}
 		}
 		return ret;
@@ -862,12 +865,22 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	public static List<AmpCategoryValue> getAllAcceptableValuesForACVClass(String categoryKey, Collection<AmpCategoryValue> relatedCollection)
 	{
 		List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
-		collectionByKey.addAll(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey));
+//		collectionByKey.addAll(CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey));
+		Collection<AmpCategoryValue> collectionPrefiltered = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey);
+		for (AmpCategoryValue acv: collectionPrefiltered){
+			if (acv!= null && acv.isVisible())
+				collectionByKey.add(acv);
+		}
+		
+
+		
+		
+		
 		if (relatedCollection != null)
 		{
 			Set<AmpCategoryValue> relatedReunion = new TreeSet<AmpCategoryValue>();
 			for (AmpCategoryValue ampCategoryValue : relatedCollection)
-				if (ampCategoryValue != null)
+				if (ampCategoryValue != null && ampCategoryValue.isVisible())
 				{
 					relatedReunion.addAll(CategoryManagerUtil.getAmpCategoryValueFromDb(ampCategoryValue.getId(), true).getUsedByValues());
 				}

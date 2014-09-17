@@ -64,7 +64,7 @@ public class selectOrganizationComponent extends Action {
 	        PrintWriter out = new PrintWriter(outputStream, true);
 	        String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 	        xml += "<" + ROOT_TAG + ">";
-	        xml += "<" + "organizatoins amount=\"" + new Long(orgsSize).toString() + "\" />";
+	        xml += "<" + "organizations amount=\"" + new Long(orgsSize).toString() + "\" />";
 	        xml += "</" + ROOT_TAG + ">";
 	        out.println(xml);
 	        out.close();

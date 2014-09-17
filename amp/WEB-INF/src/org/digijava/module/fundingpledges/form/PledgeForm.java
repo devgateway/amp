@@ -386,7 +386,10 @@ public class PledgeForm extends ActionForm implements Serializable {
 	public List<IdWithValueShim> getShimsForCategoryClass(String categoryClassKey, Long selectedValue) {
 		List<IdWithValueShim> res = new ArrayList<>();
 		if (selectedValue == null) res.add(new IdWithValueShim(-1L, TranslatorWorker.translateText("Please select")));
-		for (AmpCategoryValue acv : CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryClassKey)) res.add(new IdWithValueShim(acv));
+		for (AmpCategoryValue acv : CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryClassKey)){
+			if (acv.isVisible())
+				res.add(new IdWithValueShim(acv));
+		}
 		return res;
 	}
 	

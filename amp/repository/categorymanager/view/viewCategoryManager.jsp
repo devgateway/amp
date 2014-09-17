@@ -101,8 +101,14 @@ function exportXSL(){
 								<ul>
 								<logic:iterate name="category" property="possibleValues" id="categoryValue" type="org.digijava.module.categorymanager.dbentity.AmpCategoryValue">
 								<logic:notEmpty name="categoryValue">
-								<% String keyForValue	= CategoryManagerUtil.getTranslationKeyForCategoryValue(categoryValue); %>
-									<li>
+								<%  String keyForValue	= CategoryManagerUtil.getTranslationKeyForCategoryValue(categoryValue);
+									String deletedStyle = "";
+									if (!categoryValue.isVisible())
+										deletedStyle = "color:darkgray; background-color:white; text-decoration: line-through;";
+									%>
+									<li style="<%=deletedStyle%>">
+									
+									
 										<digi:trn key='<%=keyForValue%>'>
 											<bean:write name="categoryValue" property="value" />
 										</digi:trn>

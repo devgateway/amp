@@ -24,6 +24,9 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 	private AmpCategoryClass ampCategoryClass;
 	private String value;
 	private Integer index;
+	private Boolean deleted = false;
+	
+	
 	private Set<AmpActivityVersion> activities;
 	//private Long fieldType;
 	
@@ -177,4 +180,19 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
     public String getAdditionalSearchString() {
         return this.value;
     }
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public boolean isVisible() {
+		return (deleted == null) || (!deleted);
+	}
+	
+	public void setDeleted(Boolean deleted) {
+		if (deleted == null)
+			this.deleted = false;
+		else
+			this.deleted = deleted;
+	}
 }

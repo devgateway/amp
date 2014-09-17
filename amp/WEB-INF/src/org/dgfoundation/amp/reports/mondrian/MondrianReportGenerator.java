@@ -146,10 +146,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * @throws AMPException
 	 */
 	private CellDataSet generateReportAsSaikuCellDataSet(ReportSpecification spec) throws AMPException {
-		if (!Connection.IS_TESTING)
-			if(MondrianETL.runETL(false).cacheInvalidated) {
-				MondrianReportUtils.flushCache();
-			}
+		init(spec);
+		
 		CellDataSet cellDataSet = null;
 		int totalTime = 0;
 		long startTime = System.currentTimeMillis();
@@ -184,6 +182,14 @@ public class MondrianReportGenerator implements ReportExecutor {
 		return cellDataSet;
 	}
 	
+	private void init(ReportSpecification spec) {
+		if (!Connection.IS_TESTING)
+			if(MondrianETL.runETL(false).cacheInvalidated) {
+				MondrianReportUtils.flushCache();
+			}
+		
+		MondrianReportUtils.configureDefaults(spec);
+	}
 	
 	/**
 	 * Generates MDX Query string that can be passed to Saiku or any other MDX processor

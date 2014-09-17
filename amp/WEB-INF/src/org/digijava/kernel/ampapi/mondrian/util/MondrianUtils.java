@@ -23,8 +23,6 @@ import org.olap4j.OlapException;
 import org.olap4j.layout.RectangularCellSetFormatter;
 import org.olap4j.mdx.parser.MdxParseException;
 import org.olap4j.metadata.Datatype;
-import org.saiku.olap.dto.resultset.AbstractBaseCell;
-import org.saiku.olap.dto.resultset.CellDataSet;
 
 /**
  * Mondrian utility class 

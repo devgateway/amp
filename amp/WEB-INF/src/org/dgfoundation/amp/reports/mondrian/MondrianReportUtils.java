@@ -3,14 +3,21 @@
  */
 package org.dgfoundation.amp.reports.mondrian;
 
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.Mappings;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportMeasure;
+import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 /**
  * Reports utility methods
@@ -71,5 +78,34 @@ public class MondrianReportUtils {
 //			throw new RuntimeException(e);
 //		}
 	}
-
+	
+	/**
+	 * @return default configuration for the current user settings
+	 */
+	public static MondrianReportSettings getCurrentUserDefaultSettings() {
+		MondrianReportSettings settings = new MondrianReportSettings();
+		settings.setCurrencyFormat(FormatHelper.getDefaultFormat());
+		AmpApplicationSettings ampAppSettings = AmpARFilter.getEffectiveSettings();
+		if (ampAppSettings == null)
+			settings.setCurrencyCode(CurrencyUtil.getDefaultCurrency().getCurrencyCode());
+		else 
+			settings.setCurrencyCode(ampAppSettings.getCurrency().getCurrencyCode());
+		//TODO: for calendar
+		return settings;
+	}
+	
+	/**
+	 * Configures default & mandatory behavior
+	 * @param spec - report specification
+	 */
+	public static void configureDefaults(ReportSpecification spec) {
+		if (spec instanceof ReportSpecificationImpl) {
+			ReportSpecificationImpl s = (ReportSpecificationImpl)spec;
+			if (s.getSettings() == null) {
+				s.setSettings(getCurrentUserDefaultSettings());
+			}
+			if (GroupingCriteria.GROUPING_TOTALS_ONLY.equals(s.getGroupingCriteria()))
+				s.setCalculateColumnTotals(false);
+		}
+	}
 }

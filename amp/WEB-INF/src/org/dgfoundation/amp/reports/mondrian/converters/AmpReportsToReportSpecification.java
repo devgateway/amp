@@ -110,7 +110,10 @@ public class AmpReportsToReportSpecification {
 		case "A": spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY); break;
 		case "Q": spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY); break;
 		case "M": spec.setGroupingCriteria(GroupingCriteria.GROUPING_MONTHLY); break;
-		default: spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY); break;
+		default: 
+			spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
+			spec.setCalculateColumnTotals(false);
+			break;
 		}
 	}
 	

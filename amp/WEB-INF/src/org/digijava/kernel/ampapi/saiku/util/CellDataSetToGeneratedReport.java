@@ -53,9 +53,10 @@ public class CellDataSetToGeneratedReport {
 		if (spec.getSettings() != null && spec.getSettings().getCurrencyFormat() != null )
 			this.numberFormat = spec.getSettings().getCurrencyFormat();
 		else 
-			this.numberFormat = (DecimalFormat)DecimalFormat.getCurrencyInstance();
+			this.numberFormat = MondrianReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat();
 		//init measure totals if they are available
-		if (cellDataSet.getColTotalsLists() != null && cellDataSet.getColTotalsLists().length > 0 
+		if (spec.isCalculateColumnTotals() && 
+				cellDataSet.getColTotalsLists() != null && cellDataSet.getColTotalsLists().length > 0 
 				&& cellDataSet.getColTotalsLists()[0] != null && cellDataSet.getColTotalsLists()[0].size() > 0) {
 			this.measureTotals = cellDataSet.getColTotalsLists()[0].get(0).getTotalGroups();
 			addTotalMeasures();
@@ -230,17 +231,19 @@ public class CellDataSetToGeneratedReport {
 			}
 			
 		//calculate total measures of the current area
-		double[] currentTotalMeasuresColumnTotals = new double[spec.getMeasures().size()];
-		for (ReportArea childArea : current.getChildren()) {
-			ReportCell[] childContent = childArea.getContents().values().toArray(new ReportCell[0]);
-			for (int a = headerPos; a < leafHeaders.size(); a ++) {
-				double value = (Double)((AmountCell)childContent[a]).value;
-				currentTotalMeasuresColumnTotals[a - headerPos] += value; 
+		if (spec.isCalculateColumnTotals()) {
+			double[] currentTotalMeasuresColumnTotals = new double[spec.getMeasures().size()];
+			for (ReportArea childArea : current.getChildren()) {
+				ReportCell[] childContent = childArea.getContents().values().toArray(new ReportCell[0]);
+				for (int a = headerPos; a < leafHeaders.size(); a ++) {
+					double value = (Double)((AmountCell)childContent[a]).value;
+					currentTotalMeasuresColumnTotals[a - headerPos] += value; 
+				}
 			}
+			//adding total measures
+			for (int b = 0; b < spec.getMeasures().size(); b++, headerPos++) 
+				contents.put(leafHeaders.get(headerPos), new AmountCell(currentTotalMeasuresColumnTotals[b], this.numberFormat));
 		}
-		//adding total measures
-		for (int b = 0; b < spec.getMeasures().size(); b++, headerPos++) 
-			contents.put(leafHeaders.get(headerPos), new AmountCell(currentTotalMeasuresColumnTotals[b], this.numberFormat));
 		
 		current.setContents(contents);
 	}

@@ -122,14 +122,24 @@ public class MondrianTablesRepository {
 			new MondrianTableDescription("mondrian_activity_fixed_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
 				.withFingerprintedJob(Arrays.asList(Fingerprint.buildTableHashingQuery("v_mondrian_activity_fixed_texts")));
 
-	public final static MondrianTableDescription MONDRIAN_ACTIVITY_TRN_TEXTS = 
-			new MondrianTableDescription("mondrian_activity_trn_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
-				.withFingerprintedJob(Arrays.asList(Fingerprint.buildTableHashingQuery("v_mondrian_activity_trn_texts")))
-				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
-					@Override public I18nViewDescription getObject() {
-						return new I18nViewDescription("mondrian_activity_trn_texts")
-								.addTrnColDef("amp_status_name", "amp_status_id");
-					}});
+//	public final static MondrianTableDescription MONDRIAN_ACTIVITY_TRN_TEXTS = 
+//			new MondrianTableDescription("mondrian_activity_trn_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
+//				.withFingerprintedJob(Arrays.asList(Fingerprint.buildTableHashingQuery("v_mondrian_activity_trn_texts")))
+//				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
+//					@Override public I18nViewDescription getObject() {
+//						return new I18nViewDescription("mondrian_activity_trn_texts")
+//								.addTrnColDef("amp_status_name", "amp_status_id");
+//					}});
+	
+	public final static MondrianTableDescription MONDRIAN_CATEGORY_VALUES = 
+			new MondrianTableDescription("mondrian_category_values", "acv_id", Arrays.asList("acv_id"))
+			.withFingerprintedJob(Arrays.asList(Fingerprint.buildTableHashingQuery("v_mondrian_category_values")))
+			.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
+				@Override public I18nViewDescription getObject() {
+					return new I18nViewDescription("mondrian_category_values")
+						.addTrnColDef("acv_name", "acv_id");
+				}
+			});
 	
 	public final static MondrianTableDescription MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE = 
 			new MondrianTableDescription("mondrian_raw_donor_transactions", "amp_fund_detail_id", Arrays.asList("amp_activity_id", "amp_fund_detail_id", "donor_id"));
@@ -138,12 +148,15 @@ public class MondrianTablesRepository {
 			MONDRIAN_LOCATIONS_DIMENSION_TABLE,
 			MONDRIAN_SECTORS_DIMENSION_TABLE,
 			MONDRIAN_PROGRAMS_DIMENSION_TABLE,
-			MONDRIAN_ORGANIZATIONS_DIMENSION_TABLE);
+			MONDRIAN_ORGANIZATIONS_DIMENSION_TABLE,
+			MONDRIAN_CATEGORY_VALUES);
+	
+	public final static List<MondrianTableDescription> TRN_BACKED_DIMENSIONS = Arrays.asList(MONDRIAN_CATEGORY_VALUES);
 	
 	public final static List<MondrianTableDescription> MONDRIAN_ACTIVITY_DIMENSIONS = Arrays.asList(
 			MONDRIAN_ACTIVITY_TEXTS,
-			MONDRIAN_ACTIVITY_FIXED_TEXTS,
-			MONDRIAN_ACTIVITY_TRN_TEXTS);
+			MONDRIAN_ACTIVITY_FIXED_TEXTS/*,
+			MONDRIAN_ACTIVITY_TRN_TEXTS*/);
 		
 	public final static List<MondrianTableDescription> MONDRIAN_RAW_TRANSACTIONS_TABLES = Arrays.asList(MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE);
 	
@@ -179,6 +192,13 @@ public class MondrianTablesRepository {
 				new DatabaseTableColumn("donor_id", "integer", true), // amp_org_id, might be null for example for pledges (which originate in donor groups)
 				new DatabaseTableColumn("financing_instrument_id", "integer", true), // ACV
 				new DatabaseTableColumn("terms_of_assistance_id", "integer", true),  // ACV
+				new DatabaseTableColumn("funding_status_id", "integer", true),  // ACV
+				new DatabaseTableColumn("mode_of_payment_id", "integer", true),  // ACV
+				new DatabaseTableColumn("status_id", "integer", true),  // ACV
+				new DatabaseTableColumn("modality_id", "integer", true),  // ACV
+				new DatabaseTableColumn("type_of_cooperation_id", "integer", true),  // ACV
+				new DatabaseTableColumn("type_of_implementation_id", "integer", true),  // ACV
+				new DatabaseTableColumn("procurement_system_id", "integer", true),  // ACV
 		
 				new DatabaseTableColumn("primary_sector_id", "integer NOT NULL", true),   // amp_sector_id, subject to Cartesian product
 				new DatabaseTableColumn("secondary_sector_id", "integer NOT NULL", true), // amp_sector_id, subject to Cartesian product

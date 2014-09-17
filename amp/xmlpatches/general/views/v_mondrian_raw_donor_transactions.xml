@@ -35,6 +35,14 @@ SELECT
 	f.amp_donor_org_id AS donor_id,
 	f.financing_instr_category_value AS financing_instrument_id,
 	f.type_of_assistance_category_va AS terms_of_assistance_id,
+	f.funding_status_category_va AS funding_status_id,
+	f.mode_of_payment_category_va AS mode_of_payment_id,
+	
+	(SELECT max(amp_status_id) FROM v_status vs WHERE vs.amp_activity_id = aa.amp_activity_id) status_id,
+	(SELECT max(level_code) FROM v_modalities vm WHERE vm.amp_activity_id = aa.amp_activity_id) modality_id,
+	(SELECT max(level_code) FROM v_type_of_cooperation vtoc WHERE vtoc.amp_activity_id = aa.amp_activity_id) type_of_cooperation_id,
+	(SELECT max(level_code) FROM v_type_of_implementation vtoi WHERE vtoi.amp_activity_id = aa.amp_activity_id) type_of_implementation_id,
+	(SELECT max(id) FROM v_procurement_system vps WHERE vps.amp_activity_id = aa.amp_activity_id) procurement_system_id,
      
 	cast (NULL as bigint) as src_role_id,
 	cast (NULL as bigint) as dest_role_id,

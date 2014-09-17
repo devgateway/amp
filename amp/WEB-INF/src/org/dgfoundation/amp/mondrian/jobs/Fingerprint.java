@@ -105,10 +105,6 @@ public class Fingerprint {
 		}
 	}
 	
-	/**
-	 * invariant: after function exit, the fingerprint table will exist in the db
-	 * @return
-	 */
 	public String readOrReturnDefaultFingerprint(MonetConnection monetConn) {
 		//ensureFingerprintTableExists(monetConn);
 		
@@ -121,8 +117,12 @@ public class Fingerprint {
 				
 			case 1: return nullOrString(hashes.get(0));
 				
-			default:
-				throw new RuntimeException("multiple values found for the hashkey " + keyName + " in the fingerprints storage");
+			default: {
+				logger.fatal("multiple values found for the hashkey " + keyName + " in the fingerprints storage, deleting & ignoring both");
+				monetConn.executeQuery("DELETE FROM " + FINGERPRINT_TABLE + " WHERE key='" + keyName + "'");
+				return readOrReturnDefaultFingerprint(monetConn);
+			}
+				//throw new RuntimeException();
 		}
 	}
 	

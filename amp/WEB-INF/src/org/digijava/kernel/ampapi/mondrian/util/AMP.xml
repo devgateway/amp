@@ -55,6 +55,13 @@
 		</Hierarchy>
 	</Dimension>
 
+	<Dimension name="Category Value">
+		<Hierarchy hasAll="true" allMemberName="All Values" primaryKey="acv_id" name="Category Name">
+			<Table name="mondrian_category_values@@locale@@" />
+			<Level name="Category Name" column="acv_id" type="Integer" nameColumn="acv_name"/>
+		</Hierarchy>
+	</Dimension>
+		
 	<Cube name="Donor Funding">
 		<Table name="mondrian_fact_table" />
 
@@ -79,12 +86,16 @@
 			</Hierarchy>
 		</Dimension>
 
-		<Dimension name="Activity Status" foreignKey="entity_id">
-			<Hierarchy hasAll="true" allMemberName="All Activity Statuses" primaryKey="amp_activity_id" name="Activity Status">
-				<Table name="mondrian_activity_trn_texts@@locale@@" />
-				<Level name="Activity Status" column="amp_status_id" type="Integer" nameColumn="amp_status_name" uniqueMembers="true" /> <!-- not sure about uniqueMembers -->
-			</Hierarchy>
-		</Dimension>
+		<DimensionUsage name="Activity Status" source="Category Value" caption="Activity Status" foreignKey="status_id" />
+		<DimensionUsage name="Modalities" source="Category Value" caption="Modalities" foreignKey="modality_id" />
+		<DimensionUsage name="Type of Cooperation" source="Category Value" caption="Type of Cooperation" foreignKey="type_of_cooperation_id" />
+		<DimensionUsage name="Type of Implementation" source="Category Value" caption="Type of Implementation" foreignKey="type_of_implementation_id" />
+		<DimensionUsage name="Procurement System" source="Category Value" caption="Procurement System" foreignKey="procurement_system_id" />
+		<DimensionUsage name="Funding Status" source="Category Value" caption="Funding Status" foreignKey="funding_status_id" />
+		<DimensionUsage name="Mode of Payment" source="Category Value" caption="Mode of Payment" foreignKey="mode_of_payment_id" />
+		<DimensionUsage name="Financing Instrument" source="Category Value" caption="Financing Instrument" foreignKey="financing_instrument_id" />
+		<DimensionUsage name="Type Of Assistance" source="Category Value" caption="Type Of Assistance" foreignKey="terms_of_assistance_id" />		
+
 
 		<Dimension name="Activity Dates" foreignKey="entity_id">
 			<Hierarchy hasAll="true" allMemberName="All Original Completion Date" primaryKey="amp_activity_id" name="Original Completion Date">

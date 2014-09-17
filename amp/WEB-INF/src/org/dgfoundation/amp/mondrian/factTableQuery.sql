@@ -1,7 +1,9 @@
 DELETE FROM mondrian_fact_table WHERE entity_id @@activityIdCondition@@;
 
 INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type, adjustment_type, transaction_date, date_code, transaction_amount, 
-  currency_id, donor_id, financing_instrument_id, terms_of_assistance_id, primary_sector_id, secondary_sector_id, tertiary_sector_id, location_id,
+  currency_id, donor_id, 
+  financing_instrument_id, terms_of_assistance_id, funding_status_id, mode_of_payment_id, status_id, modality_id, type_of_cooperation_id, type_of_implementation_id, procurement_system_id,
+  primary_sector_id, secondary_sector_id, tertiary_sector_id, location_id,
   primary_program_id, secondary_program_id, tertiary_program_id, national_objectives_program_id,
   ea_org_id, ba_org_id, ia_org_id, ro_org_id, src_role_id, dest_role_id, dest_org_id)
   SELECT 
@@ -29,8 +31,16 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
 
      rawdonation.currency_id AS currency_id,
 	 rawdonation.donor_id AS donor_id,
-     rawdonation.financing_instrument_id AS financing_instrument_id,
-     rawdonation.terms_of_assistance_id AS terms_of_assistance_id,
+     COALESCE(rawdonation.financing_instrument_id, 999999999) AS financing_instrument_id,
+     COALESCE(rawdonation.terms_of_assistance_id, 999999999) AS terms_of_assistance_id,
+     COALESCE(rawdonation.funding_status_id, 999999999) AS funding_status_id,
+     COALESCE(rawdonation.mode_of_payment_id, 999999999) AS mode_of_payment_id,
+     COALESCE(rawdonation.status_id, 999999999) AS status_id,
+     COALESCE(rawdonation.modality_id, 999999999) AS modality_id,
+     COALESCE(rawdonation.type_of_cooperation_id, 999999999) AS type_of_cooperation_id,
+     COALESCE(rawdonation.type_of_implementation_id, 999999999) AS type_of_implementation_id,
+     COALESCE(rawdonation.procurement_system_id, 999999999) AS procurement_system_id,
+     
 
      COALESCE(prim_sect.ent_id, 999999999) AS primary_sector_id,
      COALESCE(sec_sect.ent_id, 999999999) AS secondary_sector_id,

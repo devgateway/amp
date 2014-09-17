@@ -68,7 +68,7 @@ public class MondrianETL {
 	
 	protected final static Fingerprint ETL_TIME_FINGERPRINT = new Fingerprint("etl_time", new ArrayList<String>(), "-1");
 	protected final static Fingerprint CURRENCIES_FINGERPRINT = new Fingerprint("amp_currency", Arrays.asList(Fingerprint.buildTableHashingQuery("amp_currency")));
-	protected final static Fingerprint LOCALES_FINGERPRINT = new Fingerprint("locales", Arrays.asList("select code from DG_SITE_TRANS_LANG_MAP where site_id = 3 order by code"));	
+	protected final static Fingerprint LOCALES_FINGERPRINT = new Fingerprint("locales", Arrays.asList("select code from DG_SITE_TRANS_LANG_MAP where site_id = 3 order by code"));
 	
 	protected static Logger logger = Logger.getLogger(MondrianETL.class);
 	
@@ -166,17 +166,24 @@ public class MondrianETL {
 				
 				currentEtlTime = (Long) SQLUtils.fetchAsList(conn, "SELECT cast (extract(epoch from statement_timestamp()) as bigint)", 1).get(0);
 				previousEtlTime = Long.valueOf(ETL_TIME_FINGERPRINT.readOrReturnDefaultFingerprint(monetConn));
-
+				boolean redoTrnDimensions = SQLUtils.<Long>fetchAsList(conn, "SELECT count(*) FROM amp_etl_changelog WHERE entity_name='translation' AND event_date > " + previousEtlTime, 1).get(0) > 0;
+				
 				etlConfig = calculateEtlConfiguration();
 				
 				logger.info("running ETL, the configuration is: " + etlConfig.toString());
 				
-				boolean workToDo = etlConfig.fullEtl || !etlConfig.activityIds.isEmpty() || !etlConfig.dateCodes.isEmpty();
+				boolean workToDo = etlConfig.fullEtl || redoTrnDimensions || !etlConfig.activityIds.isEmpty() || !etlConfig.dateCodes.isEmpty();
 				if (workToDo) {
 					if (etlConfig.fullEtl) {
 						logger.info("doing full ETL, so recreating fact and date table");
 						recreateFactTable();
 						generateMondrianDateTable();
+					}
+					
+					if (redoTrnDimensions && !etlConfig.fullEtl) {
+						logger.info("redoing trn-backed dimensions, as some translations have changed and doing just an incremental ETL");
+						for(MondrianTableDescription table:MondrianTablesRepository.TRN_BACKED_DIMENSIONS)
+							generateStarTable(table);
 					}
 
 					generateActivitiesEntries();
@@ -189,9 +196,7 @@ public class MondrianETL {
 						checkMondrianSanity();
 						StopWatch.next(MONDRIAN_ETL, true, "checkMondrianSanity");
 					}
-					cacheInvalidated = etlConfig.fullEtl || 
-							!etlConfig.activityIds.isEmpty() || !etlConfig.pledgeIds.isEmpty() || 
-							etlConfig.dateCodes == null || !etlConfig.dateCodes.isEmpty();
+					cacheInvalidated = etlConfig.fullEtl || workToDo;
 					
 					nrAffectedDates = etlConfig.dateCodes == null ? -1 : etlConfig.dateCodes.size();
 					StopWatch.reset(MONDRIAN_ETL);

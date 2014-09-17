@@ -107,7 +107,7 @@ public class CellDataSetToGeneratedReport {
 	}
 	
 	//returns not null textual column id
-	private int addRowData(int rowId, Map<ReportOutputColumn, ReportCell> contents) {
+	private int addRowData(int rowId, Map<ReportOutputColumn, ReportCell> contents) throws AMPException {
 		int notNullColId = 0;
 		int rowLength = cellDataSet.getCellSetBody()[rowId].length;
 		
@@ -116,7 +116,7 @@ public class CellDataSetToGeneratedReport {
 			String value = cellDataSet.getCellSetBody()[rowId][colId].getFormattedValue();
 			ReportCell cellData = null;
 			//textual columns
-			if (colId < cellDataSet.getLeftOffset()) {
+			if (colId < spec.getColumns().size()) { 
 				cellData = new TextCell(value == null ? "" : value);
 				if (value == null)
 					notNullColId ++;
@@ -143,12 +143,15 @@ public class CellDataSetToGeneratedReport {
 		return notNullColId;
 	}
 	
-	private double parseValue(String value) {
+	private double parseValue(String value) throws AMPException {
 		Number iVal = 0;
 		try {
 			iVal = numberFormat.parse(value);
-		} catch (Exception e) {
+		} catch (ParseException e) {
 			//empty string
+		} catch (Exception e) {
+			//should not get here, only parse exception can happen for empty string. If null -> this is textual column, not amounts
+			throw new AMPException("Cannot parse value=" + value + ", error=" + e.getMessage());
 		}
 		return iVal.doubleValue();
 	}

@@ -146,7 +146,7 @@ public class CellDataSetToGeneratedReport {
 		Number iVal = 0;
 		try {
 			iVal = numberFormat.parse(value);
-		} catch (ParseException e) {
+		} catch (Exception e) {
 			//empty string
 		}
 		return iVal.doubleValue();

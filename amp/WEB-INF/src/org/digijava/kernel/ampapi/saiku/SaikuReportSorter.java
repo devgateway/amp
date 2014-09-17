@@ -34,7 +34,7 @@ public class SaikuReportSorter extends MondrianReportSorter {
 		super(report);
 		this.cellDataSet = report.cellDataSet;
 		this.measuresCount = spec.getMeasures() == null ? 0 : spec.getMeasures().size();
-		this.measureWidth = cellDataSet.getColTotalsLists()[0].get(0).getWidth();
+		this.measureWidth = cellDataSet.getColTotalsLists() == null ? 0 : cellDataSet.getColTotalsLists()[0].get(0).getWidth();
 	}
 	
 	/**

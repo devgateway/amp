@@ -60,6 +60,7 @@ public class MondrianReportSorter {
 		long startTime = System.currentTimeMillis();
 		//we need to sort by hierarchies titles only if any other sorting in post-processing phase breaks up the sorting done in MDX, in our case is the sorting by measures totals 
 		boolean wasSortedByMeasuresTotals = false;
+		boolean sorted = false;
 		
 		//lowest level sorting is done via MDX, now we need to sort by non-hierarchical columns that were merged and by totals
 		for(ListIterator<SortingInfo> iter = spec.getSorters().listIterator(spec.getSorters().size()); iter.hasPrevious(); ) {
@@ -68,26 +69,29 @@ public class MondrianReportSorter {
 			ReportElement first = sortingInfo.sortByTuple.keySet().iterator().next();
 			
 			if (sortingInfo.isTotals) {
-				if (ElementType.ENTITY.equals(first.type))
+				if (ElementType.ENTITY.equals(first.type)) {
 					if (ReportMeasure.class.isAssignableFrom(first.entity.getClass())) {
 						sortMeasureTotals(sortingInfo);
 						wasSortedByMeasuresTotals = true;
 					} else {
 						sortByHierarchy(sortingInfo, wasSortedByMeasuresTotals);
 					}
-				else
+					sorted = true;
+				} else
 					throw new AMPException("Not supported sorting configuration for isTotals = true and non entity");
 			} else {
 				if (ElementType.ENTITY.equals(first.type))
-					if(spec.getHierarchies().contains(first.entity)){
+					if(spec.getHierarchies().contains(first.entity)) {
 						sortByHierarchy(sortingInfo, wasSortedByMeasuresTotals);
+						sorted = true;
 					} else if(spec.getColumns().contains(first.entity)) {
 						sortByNonHierarchyColumn(sortingInfo);
+						sorted = true;
 					} //else -> this is a funding column sorting, which was already done in MDX and thus nothing to post-sort
 			} 
 		}
 		
-		return (int)(System.currentTimeMillis() - startTime);
+		return sorted ? (int)(System.currentTimeMillis() - startTime) : -1;
 	}
 	
 	private void sortMeasureTotals(SortingInfo sInfo) throws AMPException {

@@ -359,12 +359,13 @@ public class MondrianReportGenerator implements ReportExecutor {
 		
 		applyFilterSetting(spec, cellDataSet);
 		
-		CellDataSetToAmpHierachies.concatenateNonHierarchicalColumns(spec, cellDataSet);
+		//CellDataSetToAmpHierachies.concatenateNonHierarchicalColumns(spec, cellDataSet);
 		
 		return cellDataSet;
 	}
 	
 	private void applyFilterSetting(ReportSpecification spec, CellDataSet cellDataSet) throws AMPException {
+		if (spec.getSettings() == null || spec.getSettings().getFilterRules() == null) return;
 		for (Entry<ReportElement, List<FilterRule>> pair : spec.getSettings().getFilterRules().entrySet()) {
 			switch(pair.getKey().type) {
 			case YEAR: 

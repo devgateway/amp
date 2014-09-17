@@ -223,7 +223,13 @@ public class CategoryManager extends Action {
 				
 					value.setValue(ampCategoryValue.getValue());
 					value.setId(ampCategoryValue.getId());
-					value.setDisable(false);
+					
+					value.setDeleted(!ampCategoryValue.isVisible());
+//					boolean isDeleted = true;
+//					if ((ampCategoryValue.getDeleted() == null) || (ampCategoryValue.getDeleted().equals(false)))
+//						isDeleted = false;
+//					value.setDeleted(isDeleted);
+					value.setDisable(!ampCategoryValue.isVisible());
 					possibleVals.add(value);
 				}
 			}
@@ -425,18 +431,20 @@ public class CategoryManager extends Action {
 				PossibleValue pVal		= iter.next();
 				if ( pVal.isDisable() ) {
 					if ( pVal.getId() == null ) {
-						throw new Exception ("Received id paramter is null");
+						throw new Exception ("Received id paramater is null");
 					}
 					Iterator<AmpCategoryValue> iterCV	= dbCategory.getPossibleValues().iterator();
 					while ( iterCV.hasNext() ) {
 						AmpCategoryValue ampCategoryValue	= iterCV.next();
 						if ( pVal.getId().equals(ampCategoryValue.getId()) ) {
-							iterCV.remove();
+							
 							try{
+								ampCategoryValue.setDeleted(true);
 								dbSession.flush();
-								if ( CategoryManagerUtil.verifyDeletionProtectionForCategoryValue( dbCategory.getKeyName(), 
-																		ampCategoryValue.getValue()) )
-										throw new Exception("This value is in CategoryConstants.java and used by the system");
+								//removing it, since softdelete is only for limiting user input
+//								if ( CategoryManagerUtil.verifyDeletionProtectionForCategoryValue( dbCategory.getKeyName(), 
+//																		ampCategoryValue.getValue()) )
+//										throw new Exception("This value is in CategoryConstants.java and used by the system");
 							}
 							catch (Exception e) {
 								if (undeletableCategoryValues ==  null) 
@@ -446,6 +454,27 @@ public class CategoryManager extends Action {
 							}
 						}
 					}
+				}
+				//restore undeleted values
+				if (pVal.isDeleted() && !pVal.isDisable()) {
+					if ( pVal.getId() == null ) {
+						throw new Exception ("Received id paramater is null");
+					}
+					Collection <AmpCategoryValue> acvColl = dbCategory.getPossibleValues();
+					for (AmpCategoryValue acv: acvColl) {
+						if ( pVal.getId().equals(acv.getId()) ) {
+							try{
+								acv.setDeleted(false);
+								dbSession.flush();
+							}
+							catch (Exception e) {
+								//something went wrong, hz
+							}
+							
+						}
+					}
+
+					
 				}
 			}
 			

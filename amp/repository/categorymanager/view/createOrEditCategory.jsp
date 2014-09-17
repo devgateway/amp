@@ -132,6 +132,9 @@
     	}
     	return true;
     }
+    
+    
+    
 	function deleteField(id, deleteId, undoId,disabeledId) {
 		field							= document.getElementById(id) ;
 		if ( !field.readOnly || confirm("${translation7}") ) {

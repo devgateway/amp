@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.dgfoundation.amp.newreports;
+package org.dgfoundation.amp.reports.mondrian;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -11,7 +11,20 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.FilterRule;
+import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportArea;
+import org.dgfoundation.amp.newreports.ReportCell;
+import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportMeasure;
+import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
+import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
+import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 
 /**
  * Sorts {@link GeneratedReport} based on sorting information from {@link ReportSpecification}, 
@@ -20,12 +33,12 @@ import org.dgfoundation.amp.newreports.ReportElement.ElementType;
  * after totals are calculated and non-hierarchies columns are merged during post-processing phase.  
  * @author Nadejda Mandrescu
  */
-public class ReportSorter {
+public class MondrianReportSorter {
 	protected ReportArea rootArea;
 	protected ReportSpecification spec;
 	protected List<ReportOutputColumn> leafHeaders;
 	
-	protected ReportSorter(GeneratedReport report) {
+	protected MondrianReportSorter(GeneratedReport report) {
 		this.rootArea = report.reportContents;
 		this.spec = report.spec;
 		this.leafHeaders = report.leafHeaders;
@@ -33,13 +46,13 @@ public class ReportSorter {
 	
 	/**
 	 * Sorts {@link GeneratedReport} based on sorting information from {@link ReportSpecification}.
-	 * @see ReportSorter
+	 * @see MondrianReportSorter
 	 * @param report - {@link GeneratedReport} to sort
 	 * @return sorting duration or -1 if no sorting was performed
 	 * @throws AMPException 
 	 */
 	public static int sort(GeneratedReport report) throws AMPException {
-		return (new ReportSorter(report)).sort();
+		return (new MondrianReportSorter(report)).sort();
 	}
 	
 	protected int sort() throws AMPException {
@@ -110,22 +123,32 @@ public class ReportSorter {
 					
 			if (sInfo.isTotals && nextEntry.getKey().entity != null) {
 				//this is sorting by hierarchy total on Total Costs (Total Measures) column
-				ReportMeasure measure = (ReportMeasure)iter.next().getKey().entity;
+				ReportMeasure measure = (ReportMeasure)nextEntry.getKey().entity;
 				sortByMeasuresTotals(measure, level, sInfo.ascending);
 			} else {
 				//next entry is funding column sorting  
 				//build the expected leaf header name
-				String colName = "";
-				if (ElementType.QUARTER.equals(nextEntry.getKey().type) || ElementType.MONTH.equals(nextEntry.getKey().type) )
-					for (String path : nextEntry.getKey().hierarchyPath)
-						colName += "[" + path + "]";
-				colName += "[" + nextEntry.getValue().value + "]";
-				sortByColumn(rootArea, leafHeaders.indexOf(colName), level, sInfo.ascending);
+				ReportOutputColumn sortCol = null;
+				while(nextEntry.getKey().entity == null) {
+					sortCol = new ReportOutputColumn(nextEntry.getValue().value, sortCol);
+					if (iter.hasNext()) 
+						nextEntry = iter.next();
+				}
+				MDXMeasure mdxMeasure = null;
+				if (nextEntry.getKey().entity != null) 
+					mdxMeasure = (MDXMeasure)MondrianMapping.toMDXElement(nextEntry.getKey().entity);
+				if (mdxMeasure == null)
+					throw new AMPException("Invalid sorting info: " + sInfo);
+				sortCol = new ReportOutputColumn(mdxMeasure.getName(), sortCol);
+				int colId = leafHeaders.indexOf(sortCol);
+				if (colId == -1)
+					throw new AMPException("Cannot sort by inexistent leafcolumn: " + sortCol);
+				sortByColumn(rootArea, colId , level, sInfo.ascending);
 			}
 		} else if (doSortingByTitle) {
 			//this is the sorting by hierarchy title
 			//if the sorting by hierarchy was a sorting by title, then it was already sorted via MDX and nothing to do if not explicitly requested
-			sortByColumn(rootArea, level -1, level, sInfo.ascending);
+			sortByColumn(rootArea, level - 1, level, sInfo.ascending);
 		}
 	}
 	
@@ -166,7 +189,7 @@ public class ReportSorter {
 				//all children must have content, is abnormal to have a mix of children with content and without
 				hasContent = hasContent && prevFirstChild.getContents() != null && prevFirstChild.getContents().size() > 0;
 				if (hasContent) {
-					cellsToSort[childId] = findCell(prevFirstChild, colId);
+					cellsToSort[childId] = findCell(child, colId);
 					cellsToSort[childId].area = child; //remember the area we are sorting 
 					childId++;
 				}

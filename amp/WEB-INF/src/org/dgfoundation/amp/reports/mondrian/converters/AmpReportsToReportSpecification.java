@@ -197,9 +197,9 @@ public class AmpReportsToReportSpecification {
 					default: break; 
 					}
 					if (hierarchyColumn == null)
-						spec.addSorter(new SortingInfo(year, quarter, month, asc));
+						spec.addSorter(new SortingInfo(year, quarter, month, measureCol, asc));
 					else 
-						spec.addSorter(new SortingInfo(hierarchyColumn, year, quarter, month, asc));
+						spec.addSorter(new SortingInfo(hierarchyColumn, year, quarter, month, measureCol, asc));
 				} catch(Exception e) {
 					logger.error("Skipping the problemating sorting. Please check the cause: " + e.getMessage());
 				}

@@ -8,8 +8,8 @@ import java.util.List;
 
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportSorter;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportSorter;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.service.olap.totals.TotalNode;
@@ -25,7 +25,7 @@ import org.saiku.service.olap.totals.aggregators.TotalAggregator;
  * @author Nadejda Mandrescu
  *
  */
-public class SaikuReportSorter extends ReportSorter {
+public class SaikuReportSorter extends MondrianReportSorter {
 	protected CellDataSet cellDataSet;
 	private int measuresCount;
 	private int measureWidth;
@@ -39,7 +39,7 @@ public class SaikuReportSorter extends ReportSorter {
 	
 	/**
 	 * Sorts {@link SaikuReportSorter} based on sorting information from {@link ReportSpecification}.
-	 * @see ReportSorter
+	 * @see MondrianReportSorter
 	 * @param report - {@link SaikuReportSorter} to sort
 	 * @return sorting duration or -1 if no sorting was performed
 	 * @throws AMPException 

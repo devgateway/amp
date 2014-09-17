@@ -3,7 +3,6 @@
  */
 package org.dgfoundation.amp.newreports;
 
-import java.util.List;
 import java.util.Objects;
 
 
@@ -24,19 +23,13 @@ public class ReportElement {
 	public final ElementType type;
 	/** Report column or measure, if {@link #type} is ENTITY. Otherwise null. */
 	public final NamedTypedEntity entity;
-	/** Report element hierarchy */
-	public final List<String> hierarchyPath;
 	
 	/**
 	 * Constructs a report element as a NamedTypedEntity
 	 * @param entity
 	 */
 	public ReportElement(NamedTypedEntity entity) {
-		this(entity, ElementType.ENTITY, null);
-	}
-	
-	public ReportElement(NamedTypedEntity entity, List<String> hierarchyPath) {
-		this(entity, ElementType.ENTITY, hierarchyPath);
+		this(entity, ElementType.ENTITY);
 	}
 	
 	/**
@@ -44,22 +37,12 @@ public class ReportElement {
 	 * @param type - anything, except ENTITY
 	 */
 	public ReportElement(ElementType type) {
-		this(null, type, null);
+		this(null, type);
 	}
 	
-	/**
-	 * No entity report element, that is under the specified hierarchy path, e.g. quarter under ["2011"] hierarchy path 
-	 * @param type - anything, except ENTITY
-	 * @param hierarchyPath - a list of parent hierarchies the element is expected to be a part of
-	 */
-	public ReportElement(ElementType type, List<String> hierarchyPath) {
-		this(null, type, hierarchyPath);
-	}
-	
-	private ReportElement(NamedTypedEntity entity, ElementType type, List<String> hierarchyPath) {
+	private ReportElement(NamedTypedEntity entity, ElementType type) {
 		this.entity = entity;
 		this.type = type;
-		this.hierarchyPath = hierarchyPath;
 	}
 
 	@Override

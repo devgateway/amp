@@ -37,7 +37,6 @@ import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettings;
-import org.dgfoundation.amp.newreports.ReportSorter;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
@@ -49,6 +48,7 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXFilter;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
+import org.digijava.kernel.ampapi.mondrian.util.Connection;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
@@ -114,7 +114,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		CellDataSet cellDataSet = generateReportAsSaikuCellDataSet(spec);
 		
 		GeneratedReport report = toGeneratedReport(spec, cellDataSet, cellDataSet.runtime);
-		ReportSorter.sort(report);
+		MondrianReportSorter.sort(report);
 		
 		tearDown();
 		
@@ -146,9 +146,10 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * @throws AMPException
 	 */
 	private CellDataSet generateReportAsSaikuCellDataSet(ReportSpecification spec) throws AMPException {
-		if (MondrianETL.runETL(false).cacheInvalidated) {
-			MondrianReportUtils.flushCache();
-		}
+		if (!Connection.IS_TESTING)
+			if(MondrianETL.runETL(false).cacheInvalidated) {
+				MondrianReportUtils.flushCache();
+			}
 		CellDataSet cellDataSet = null;
 		int totalTime = 0;
 		long startTime = System.currentTimeMillis();

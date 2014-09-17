@@ -88,4 +88,15 @@ public class FilterRule {
 		this.values = values;
 		this.valuesInclusive = valuesInclusive;
 	}
+	
+	@Override
+	public String toString() {
+		switch(filterType) {
+		case RANGE: return "FilterRule=RANGE, " + (minInclusive ? "[" : "(") + min + " : " + max + (maxInclusive ? "]" : ")") + ", isIdFilter=" + isIdFilter;
+		case SINGLE_VALUE: return "FilterRule=SINGLE_VALUE, value=" + value + ", isIdFilter=" + isIdFilter;
+		case VALUES: return "FilterRule=VALUES, values=" + values + ", isIdFilter=" + isIdFilter;
+		default: return "FilterRule=N/A";
+		}
+		
+	}
 }

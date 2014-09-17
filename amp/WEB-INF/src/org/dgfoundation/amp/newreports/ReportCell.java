@@ -10,7 +10,7 @@ public abstract class ReportCell implements Comparable<ReportCell> {
 	public final String displayedValue;
 	transient public final Object formatter;
 	//to facilitate the sorting, we will store the parent area
-	transient protected ReportArea area;
+	transient public ReportArea area;
 	
 	public ReportCell(Comparable<?> value, Object formatter) {
 		this.value = value;

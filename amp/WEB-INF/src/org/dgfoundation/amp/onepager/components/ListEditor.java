@@ -13,7 +13,7 @@ import org.apache.wicket.model.IModel;
 
 public abstract class ListEditor<T> extends RepeatingView implements IFormModelUpdateListener{
 	private static final long serialVersionUID = 1L;
-	public List<T> items = new ArrayList<T>();
+	public transient List<T> items = new ArrayList<T>();
 	IModel<Set<T>> model;
 	private transient Comparator<T> comparator;
 

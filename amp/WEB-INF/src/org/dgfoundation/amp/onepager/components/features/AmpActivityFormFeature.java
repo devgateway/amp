@@ -1069,7 +1069,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		
 		OnePager op = this.findParent(OnePager.class);
 		//disable lock refresher
-		op.getEditLockRefresher().setEnabled(false);
+//		op.getEditLockRefresher().setEnabled(false);
 		
 		AmpActivityModel a = (AmpActivityModel) am;
 		AmpActivityVersion activity=am.getObject();

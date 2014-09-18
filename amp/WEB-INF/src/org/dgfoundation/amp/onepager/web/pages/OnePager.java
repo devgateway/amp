@@ -110,10 +110,16 @@ public class OnePager extends AmpHeaderFooter {
     public static final List<OnepagerSection> sectionsList = Collections.synchronizedList(loadPositions());
 	protected AbstractReadOnlyModel<List<AmpComponentPanel>> listModel;
 	private Component editLockRefresher;
-
+	private AbstractAjaxTimerBehavior timer;
 	public Component getEditLockRefresher() {
 		return editLockRefresher;
 	}
+	
+
+	public AbstractAjaxTimerBehavior getTimer() {
+		return timer;
+	}
+
 
 	public static OnepagerSection findByName(String name){
 		Iterator<OnepagerSection> it = sectionsList.iterator();
@@ -214,8 +220,8 @@ public class OnePager extends AmpHeaderFooter {
 			editLockRefresher = new Label("editLockRefresher", "Locked [" + am.getEditingKey() + "] at:" + System.currentTimeMillis());
 		else
 			editLockRefresher = new WebMarkupContainer("editLockRefresher");
-		if (!newActivity){
-			editLockRefresher.add(new AbstractAjaxTimerBehavior(ActivityGatekeeper.getRefreshInterval()){
+		if (!newActivity){ 
+			timer = new AbstractAjaxTimerBehavior(ActivityGatekeeper.getRefreshInterval()){
 				private static final long serialVersionUID = 1L;
 
 				@Override
@@ -226,6 +232,10 @@ public class OnePager extends AmpHeaderFooter {
 				
 				@Override
 				protected void onTimer(AjaxRequestTarget target) {
+					if(!editLockRefresher.isEnabled()){
+						this.stop(target);
+					}
+
 					long currentUserId = ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId();
 					Integer refreshStatus = ActivityGatekeeper.refreshLock(String.valueOf(am.getId()), am.getEditingKey(), currentUserId);
 					if (editLockRefresher.isEnabled() && refreshStatus.equals(ActivityGatekeeper.REFRESH_LOCK_LOCKED))
@@ -239,7 +249,8 @@ public class OnePager extends AmpHeaderFooter {
 						target.add(editLockRefresher);
 					}
 				}
-			});
+			};
+			editLockRefresher.add(timer);
 		}
 		else
 			if (DEBUG_ACTIVITY_LOCK)

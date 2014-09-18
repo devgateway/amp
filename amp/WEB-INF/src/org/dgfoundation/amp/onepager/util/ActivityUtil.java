@@ -49,6 +49,7 @@ import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureImg;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -90,6 +91,7 @@ public class ActivityUtil {
 	/**
 	 * Method used to save an Activity/ActivityVersion depending
 	 * on activation of versioning option
+	 * 
 	 * @param am
 	 */
 	public static void saveActivity(AmpActivityModel am, boolean draft,boolean rejected){
@@ -150,7 +152,16 @@ public class ActivityUtil {
 		a.setDraft(draft);
 
 		a.setDeleted(false);
-
+		//we will check what is comming in funding
+		Set<AmpFunding> af=
+		a.getFunding();
+		for (AmpFunding ampFunding : af) {
+			System.out.println("********************");
+			System.out.println(ampFunding.getAmpFundingId() +" " + ampFunding.getAmpDonorOrgId().getName());
+			System.out.println("********************");
+		}
+		
+		
         if (ContentTranslationUtil.multilingualIsEnabled())
             ContentTranslationUtil.cloneTranslations(a, translations);
 

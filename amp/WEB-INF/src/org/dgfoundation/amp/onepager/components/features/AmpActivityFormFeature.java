@@ -471,7 +471,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	                }
 					else{
 						op.getEditLockRefresher().setEnabled(true);
-						op.getTimer().restart(target);
+						if(op.getTimer()!=null){
+							op.getTimer().restart(target);
+						}
 						
 						onError(target, form);
 					}
@@ -716,6 +718,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				else {
 					formSubmitErrorHandle(activityForm, target, feedbackPanel);
 				}
+				op.getEditLockRefresher().setEnabled(true);
+				if(op.getTimer()!=null){
+					op.getTimer().restart(target);
+				}
+
 			}
 
 			// we disable the normal form processing, just like the save buttons
@@ -1277,7 +1284,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			OnePager op = this.findParent(OnePager.class);
 			//disable lock refresher
 			op.getEditLockRefresher().setEnabled(true);
-			op.getTimer().restart(target);
+			if(op.getTimer()!=null){
+				op.getTimer().restart(target);
+			}
 
 		}
 		target.appendJavaScript("enableButtons2();");

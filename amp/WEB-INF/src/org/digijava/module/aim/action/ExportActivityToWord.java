@@ -459,8 +459,8 @@ public class ExportActivityToWord extends Action {
 				
 				//AiddEffectiveness
 	            if(FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes")){
-	            	String aidEffectivenesToAdd = ActivityUtil.getAidEffectivenesForExport( activity);
-	            	if(aidEffectivenesToAdd!=null&&aidEffectivenesToAdd.length()>0){
+	            	java.util.List<String[]> aidEffectivenesToAdd = ActivityUtil.getAidEffectivenesForExport( activity);
+	            	if(aidEffectivenesToAdd!=null&&aidEffectivenesToAdd.size()>0){
 	            		addEffectivenessTable( doc,aidEffectivenesToAdd);
 	            	}
 	            }
@@ -558,7 +558,10 @@ public class ExportActivityToWord extends Action {
 	
 
 	
-	private void addEffectivenessTable(com.lowagie.text.Document doc,String aidEffectivenesToAdd) throws DocumentException {
+	private void addEffectivenessTable(com.lowagie.text.Document doc,List<String[]> aidEffectivenesToAdd) throws DocumentException {
+		if(aidEffectivenesToAdd==null || ! (aidEffectivenesToAdd.size()>0)){
+			return;
+		}
         Table addEffectiveness= new Table(1);
         addEffectiveness.setWidth(100);
         RtfCell aidTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Aid Effectivenes").toUpperCase(), HEADERFONT));
@@ -569,7 +572,12 @@ public class ExportActivityToWord extends Action {
 
         RtfCell cell = new RtfCell();
 		cell.setBorder(0);
-		cell.add(new Paragraph(aidEffectivenesToAdd,PLAINFONT));
+		for (String[] a : aidEffectivenesToAdd) {
+			cell.add(new Paragraph(a[0],PLAINFONT));
+			cell.add(new Paragraph(a[1],BOLDFONT));			
+		}
+
+
 		addEffectiveness.addCell(cell);
 		applyEmptyCell(addEffectiveness,1);
 		doc.add(addEffectiveness);
@@ -1521,7 +1529,7 @@ public class ExportActivityToWord extends Action {
             		.addRowData(String.valueOf(act.getFundingSourcesNumber())));
             }
 
-            double convertedAmount = act.getFunAmount();
+            double convertedAmount = act.getFunAmount()==null?0D:act.getFunAmount();
 
 	        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Cost", null, null,  true).
 	                                                addRowData(myForm.getFunding().getProProjCost().getFunAmount()).

@@ -97,6 +97,7 @@ import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPTableEvent;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.draw.LineSeparator;
+
 import org.digijava.module.aim.helper.GlobalSettings;
 
 /**
@@ -1049,8 +1050,8 @@ public class ExportActivityToPDF extends Action {
 			 */
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes")){
 				
-				String aidEffectivenesToAdd = ActivityUtil.getAidEffectivenesForExport( activity);
-				if(aidEffectivenesToAdd!=null && aidEffectivenesToAdd.length()>0){
+				java.util.List<String[]> aidEffectivenesToAdd = ActivityUtil.getAidEffectivenesForExport( activity);
+				if(aidEffectivenesToAdd!=null && aidEffectivenesToAdd.size()>0){
 					buildAidEffectivenessInformationPart(mainLayout,aidEffectivenesToAdd);
 				}
 			}			
@@ -1437,10 +1438,10 @@ public class ExportActivityToPDF extends Action {
 		return null;
 	}
 	
-	private void buildAidEffectivenessInformationPart(PdfPTable mainLayout, String aidEffectivenesToAdd) throws WorkerException {
+	private void buildAidEffectivenessInformationPart(PdfPTable mainLayout, List<String[]> aidEffectivenesToAdd) throws WorkerException {
 		String columnName="";		
 		columnName=TranslatorWorker.translateText("Aid Effectivenes");
-		createGeneralInfoRow(mainLayout,columnName,aidEffectivenesToAdd);
+		createGeneralInfoRowAid(mainLayout,columnName,aidEffectivenesToAdd);
 	}
 
 	/**
@@ -2923,6 +2924,32 @@ public class ExportActivityToPDF extends Action {
 		fundingTable.addCell(lineCell);
 	}
 		
+	private void createGeneralInfoRowAid(PdfPTable mainLayout,String columnName,List<String[]> values){
+		if (values == null || values.isEmpty())
+			return;
+		PdfPCell cell1=new PdfPCell();
+		Paragraph p2;
+		Paragraph p1=new Paragraph(postprocessText(columnName),titleFont);
+		p1.setAlignment(Element.ALIGN_RIGHT);
+		cell1.addElement(p1);
+		cell1.setBackgroundColor(new Color(244,244,242));
+		cell1.setBorder(0);
+		mainLayout.addCell(cell1);
+		PdfPCell cell2=new PdfPCell();
+
+		for (String[] value : values) {
+				
+			
+			p1=new Paragraph(postprocessText(value[0]), plainFont);
+			p2=new Paragraph(postprocessText(value[1]), titleFont);
+	
+			cell2.addElement(p1);
+			cell2.addElement(p2);
+
+		}
+		cell2.setBorder(0);
+		mainLayout.addCell(cell2);
+	}
 	/**
 	 * Used to create simple two columned row
 	 * @param mainLayout
@@ -2942,7 +2969,9 @@ public class ExportActivityToPDF extends Action {
 		
 		PdfPCell cell2=new PdfPCell();
 		p1=new Paragraph(postprocessText(value), plainFont);
+
 		cell2.addElement(p1);
+		
 		cell2.setBorder(0);
 		mainLayout.addCell(cell2);
 	}

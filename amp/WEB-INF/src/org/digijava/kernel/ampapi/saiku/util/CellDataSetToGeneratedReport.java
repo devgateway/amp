@@ -92,8 +92,9 @@ public class CellDataSetToGeneratedReport {
 			
 			if (areaEnd) {
 				//check if this is the end of the entire report, i.e. nextNotNullColId == -1
-				int depth = maxDepth - nextNotNullColId;
-				updateGroupData (stack, reportArea, rowId, maxDepth, depth, nextNotNullColId == -1 ? 0 : maxStackSize);
+				boolean reportEndNoHierarchies = nextNotNullColId == -1 && hSize == 0; 
+				int depth = reportEndNoHierarchies ? 1 : maxDepth - nextNotNullColId;
+				updateGroupData (stack, reportArea, rowId, reportEndNoHierarchies ? 0 : maxDepth, depth, nextNotNullColId == -1 ? 0 : maxStackSize);
 			} else { 
 				stack.peek().add(reportArea);
 			}

@@ -248,7 +248,6 @@ public class OnePager extends AmpHeaderFooter {
 							editLockRefresher.setDefaultModelObject("Locked [" + am.getEditingKey() + "] at:" + System.currentTimeMillis());
 						target.add(editLockRefresher);
 					}
-					System.out.println("Timer started");
 				}
 			};
 			editLockRefresher.add(timer);

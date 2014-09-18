@@ -28,6 +28,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Constants;
@@ -242,7 +243,9 @@ public class ExportToWord extends Action {
             String numberDonTrn = TranslatorWorker.translateText("Number of Organizations");
             String numberRegTrn = TranslatorWorker.translateText("Number of Regions");
             String avgPrjZSizeTrn = TranslatorWorker.translateText("Average Project Size");
-            String currName = vForm.getFilter().getCurrencyCode();
+            AmpCurrency currency = (AmpCurrency)org.digijava.module.aim.util.DbUtil.getObject(AmpCurrency.class,vForm.getFilter().getCurrencyId());
+            String currName = currency.getCurrencyName();
+          
             String fundTypeTrn = "";
             if (vForm.getFilter().getAdjustmentType().equals("Actual"))
             	fundTypeTrn = TranslatorWorker.translateText("Actual");
@@ -522,7 +525,7 @@ public class ExportToWord extends Action {
             
             cell = new RtfCell(new Paragraph(filtersAmountsInTrn));
             filtersTbl.addCell(cell);
-            cell = new RtfCell(new Paragraph(filtersCurrencyTypeTrn + ": " + vForm.getFilter().getCurrencyCode()));
+            cell = new RtfCell(new Paragraph(filtersCurrencyTypeTrn + ": " + currName));
             cell.setBackgroundColor(CELLCOLOR);
             filtersTbl.addCell(cell);
             cell = new RtfCell(new Paragraph(filtersStartYearTrn + ": " + vForm.getFilter().getStartYear()));

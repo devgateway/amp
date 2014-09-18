@@ -221,7 +221,7 @@ public class Reports {
 		SaikuGeneratedReport report = null;
 		try {
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
-			report = generator.generateReportForSaiku(spec);
+			report = (SaikuGeneratedReport)generator.executeReport(spec);
 			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + report.generationTime + "(ms)");
 		} catch (Exception e) {
 			//TODO: Log this correctly

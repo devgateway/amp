@@ -59,17 +59,18 @@ public class MondrianReportsTests extends AmpTestCase {
 	public static Test suite() {
 		TestSuite suite = new TestSuite(MondrianReportsTests.class.getName());
 		/* tests are failing so far, because we are moving out the totals calculation from MDX, 
-		 * to revise when GeneratedReport structure will be build based on CellDataSet  
-		suite.addTest(new MondrianReportsTests("testNoTotals"));
+		 * to revise when GeneratedReport structure will be build based on CellDataSet */  
+		//suite.addTest(new MondrianReportsTests("testNoTotals"));
 		suite.addTest(new MondrianReportsTests("testTotals"));
-		suite.addTest(new MondrianReportsTests("testColumnSortingNoTotals"));
-		suite.addTest(new MondrianReportsTests("testColumnMeasureSortingTotals"));
-		suite.addTest(new MondrianReportsTests("testSortingByTuplesTotals"));
-		suite.addTest(new MondrianReportsTests("testMultipleDateFilters")); */
+		//suite.addTest(new MondrianReportsTests("testColumnSortingNoTotals"));
+		//suite.addTest(new MondrianReportsTests("testColumnMeasureSortingTotals"));
+		//suite.addTest(new MondrianReportsTests("testSortingByTuplesTotals"));
+		//suite.addTest(new MondrianReportsTests("testMultipleDateFilters")); 
 		//suite.addTest(new MondrianReportsTests("testAmpReportToReportSpecification"));
 		//suite.addTest(new MondrianReportsTests("testGenerateReportAsSaikuCellDataSet"));
-		suite.addTest(new MondrianReportsTests("testReportPagination"));
+		//suite.addTest(new MondrianReportsTests("testReportPagination"));
 		//suite.addTest(new MondrianReportsTests("testHeavyQuery"));
+		//suite.addTest(new MondrianReportsTests("testSimpleReportByRegion"));
 		
 		return suite;
 	}
@@ -135,6 +136,14 @@ public class MondrianReportsTests extends AmpTestCase {
 		spec.setCalculateRowTotals(doTotals);
 		return spec;
 	}
+	
+	public void testSimpleReportByRegion() {
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals");
+		spec.addColumn(new ReportColumn(ColumnConstants.REGION, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
+		generateAndValidate(spec, true);
+	}
+	
 	public void testAmpReportToReportSpecification1() {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		ServletRequestAttributes attr = new ServletRequestAttributes(request);
@@ -144,7 +153,7 @@ public class MondrianReportsTests extends AmpTestCase {
 	}
 	
 	public void testAmpReportToReportSpecification() {
-		ReportSpecificationImpl spec = getReportSpecificatin("NadiaMondrianTest1");
+		ReportSpecificationImpl spec = getReportSpecificatin("NadiaMondrianTest");
 		generateAndValidate(spec, true);
 	}
 	
@@ -215,11 +224,7 @@ public class MondrianReportsTests extends AmpTestCase {
 		MondrianReportGenerator generator = new MondrianReportGenerator(asSaikuReport ? SaikuReportArea.class : ReportAreaImpl.class, print);
 		GeneratedReport report = null;
 		try {
-			if (asSaikuReport) {
-				report = generator.generateReportForSaiku(spec);
-			} else { 
-				report = generator.executeReport(spec);
-			}
+			report = generator.executeReport(spec);
 			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + report.generationTime + "(ms)");
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());

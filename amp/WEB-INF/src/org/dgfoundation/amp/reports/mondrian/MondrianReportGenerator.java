@@ -114,29 +114,19 @@ public class MondrianReportGenerator implements ReportExecutor {
 		CellDataSet cellDataSet = generateReportAsSaikuCellDataSet(spec);
 		
 		GeneratedReport report = toGeneratedReport(spec, cellDataSet, cellDataSet.runtime);
-		MondrianReportSorter.sort(report);
+		if (SaikuReportArea.class.isAssignableFrom(reportAreaType)) {
+			report = new SaikuGeneratedReport(
+					spec, report.generationTime, report.requestingUser,
+					(SaikuReportArea)report.reportContents, cellDataSet, report.rootHeaders, report.leafHeaders);
+			SaikuReportSorter.sort(report);
+			if (printMode)
+				SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST_SORT");
+		} else 
+			MondrianReportSorter.sort(report);
 		
 		tearDown();
 		
 		return report;
-	}
-	
-	public SaikuGeneratedReport generateReportForSaiku(ReportSpecification spec) throws AMPException {
-		if (!SaikuReportArea.class.isAssignableFrom(reportAreaType))
-			throw new AMPException("To generate Saiku report please configure with SaikuReportArea.");
-		
-		CellDataSet cellDataSet = generateReportAsSaikuCellDataSet(spec);
-		GeneratedReport report = toGeneratedReport(spec, cellDataSet, cellDataSet.runtime);
-		
-		SaikuGeneratedReport saikuReport = new SaikuGeneratedReport(
-				spec, report.generationTime, report.requestingUser,
-				(SaikuReportArea)report.reportContents, cellDataSet, report.rootHeaders, report.leafHeaders);
-		SaikuReportSorter.sort(saikuReport);
-		if (printMode)
-			SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST_SORT");
-				
-		tearDown();
-		return saikuReport;
 	}
 	
 	/**

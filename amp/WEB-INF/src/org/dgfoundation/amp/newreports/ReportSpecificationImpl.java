@@ -53,7 +53,8 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	}
 	
 	/**
-	 * Adds a column to the columns set.
+	 * Adds a column to the columns set. 
+	 * Order is important, i.e. first column added will be the first one displayed.
 	 * Refer to {@link #getColumns()} for more details
 	 * @param column - {@link ReportColumn}  
 	 */
@@ -80,6 +81,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	
 	/**
 	 * Adds a measure to the measure list.
+	 * Order is important, i.e. first measure added will be the first one displayed.
 	 * Refer to {@link #getMeasures()} for more details
 	 * @param measure - {@link ReportMeasure}
 	 */
@@ -95,6 +97,17 @@ public class ReportSpecificationImpl implements ReportSpecification {
 		return hierarchies;
 	}
 	
+	/**
+	 * Configures which columns are hierarchies to group data by.
+	 * Any data starting from the 2nd non-hierarchical column 
+	 * is merged up for the group associated to the 1st non-hierarchical column 
+	 * and are not displayed in a separate row (titles are concatenated in a single row). 
+	 * The hierarchies must be a set of first consecutive columns configured in the report 
+	 * (e.g. first 2 out of 4, i.e. column #1 and #2). 
+	 * If you want to display all columns as hierarchies, 
+	 * then you can simply .setHierarchies(spec.getColumns()).
+	 * @param hierarchies
+	 */
 	public void setHierarchies(Set<ReportColumn> hierarchies) {
 		this.hierarchies = hierarchies;
 	}
@@ -152,7 +165,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	}
 	
 	/**
-	 * Configures grouping criteria
+	 * Configures grouping criteria by year/quarter/month or no grouping (the default)
 	 * @param groupingCriteria
 	 */
 	public void setGroupingCriteria(GroupingCriteria groupingCriteria) {
@@ -172,7 +185,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	}
 
 	/**
-	 * Configures whether totals per each row must be calculated
+	 * Configures whether totals for each hierarchy group and grand row totals must be calculated
 	 * @param calculateRowTotals 
 	 */
 	public void setCalculateRowTotals(boolean calculateRowTotals) {
@@ -185,7 +198,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	}
 
 	/**
-	 * Configures whether totals per each measure column must be calculated
+	 * Configures whether totals per each measure column must be calculated when grouping by dates is configured.
 	 * @param calculateColumnTotals 
 	 */
 	public void setCalculateColumnTotals(boolean calculateColumnTotals) {

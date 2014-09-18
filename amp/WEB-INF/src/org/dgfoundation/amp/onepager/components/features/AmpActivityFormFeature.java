@@ -462,7 +462,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	                        //
 
 	                		//disable lock refresher
-	                		op.getEditLockRefresher().setEnabled(true);
+	                		op.getEditLockRefresher().setEnabled(false);
 
 	                    }
 	                    else{

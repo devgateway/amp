@@ -471,7 +471,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	                }
 					else{
 						op.getEditLockRefresher().setEnabled(true);
-						op.getTimer().restart(target);
+						if(op.getTimer()!=null){
+							op.getTimer().restart(target);
+						}
 						
 						onError(target, form);
 					}
@@ -721,7 +723,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					formSubmitErrorHandle(activityForm, target, feedbackPanel);
 				}
 				op.getEditLockRefresher().setEnabled(true);
-				op.getTimer().restart(target);
+				if(op.getTimer()!=null){
+					op.getTimer().restart(target);
+				}
 
 			}
 
@@ -1284,7 +1288,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			OnePager op = this.findParent(OnePager.class);
 			//disable lock refresher
 			op.getEditLockRefresher().setEnabled(true);
-			op.getTimer().restart(target);
+			if(op.getTimer()!=null){
+				op.getTimer().restart(target);
+			}
 
 		}
 		target.appendJavaScript("enableButtons2();");

@@ -1586,6 +1586,14 @@ public class ExportActivityToPDF extends Action {
 	}
 
 	private void buildCostingPart(HttpServletRequest request, Long actId,PdfPTable mainLayout,ServletContext ampContext) throws WorkerException, AimException {
+		int fmVisibleFieldsCounter=0;
+		String [] costingFmfields={"Costing Activity Name","Costing Total Cost","Costing Total Contribution"};
+		for(int i=0;i<costingFmfields.length;i++){
+			if(FeaturesUtil.isVisibleField(costingFmfields[i])){
+				fmVisibleFieldsCounter++;
+			}
+		}
+		if(fmVisibleFieldsCounter>0){
 		Paragraph p1;
 		HttpSession session=request.getSession();
 		PdfPCell costingCell1=new PdfPCell();
@@ -1596,16 +1604,11 @@ public class ExportActivityToPDF extends Action {
 		costingCell1.addElement(p1);			
 		mainLayout.addCell(costingCell1);
 		
-		int fmVisibleFieldsCounter=0;
-		String [] costingFmfields={"Costing Activity Name","Costing Total Cost","Costing Total Contribution"};
-		for(int i=0;i<costingFmfields.length;i++){
-			if(FeaturesUtil.isVisibleField(costingFmfields[i])){
-				fmVisibleFieldsCounter++;
-			}
-		}
+
 		PdfPCell costingCell2=new PdfPCell();		
 		costingCell2.setBorder(1);
 		costingCell2.setBorderColor(new Color(201,201,199));
+		
 		PdfPTable costingInnerTable=new PdfPTable(fmVisibleFieldsCounter); //table with 3 cells
 		BigDecimal grandCost = new BigDecimal(0);
 		BigDecimal grandContribution = new BigDecimal(0);
@@ -1772,6 +1775,7 @@ public class ExportActivityToPDF extends Action {
 		costingCell2.addElement(costingInnerTable);
 
 		mainLayout.addCell(costingCell2);
+		}
 	}
 	   
     public final static String getLatinLettersEquivalent(String src)// returns text without diacritics should be called with a Printable Equivalent

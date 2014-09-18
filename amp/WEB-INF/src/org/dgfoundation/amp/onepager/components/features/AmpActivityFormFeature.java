@@ -697,12 +697,16 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		autoSaveDiv.setOutputMarkupId(true);
 		// it implements an ajaxformsubmitbehavior, just like an AjaxButton, and
 		// hooked on the "click" event
+		final AmpActivityFormFeature self = this;
 		autoSaveDiv.add(new AjaxFormSubmitBehavior(activityForm, "click") {
 			// we do something very similar during Save Draft: disable semantic
 			// validation, and process the form
 			@Override
 			protected void onSubmit(AjaxRequestTarget target) {
-                am.setObject(am.getObject());
+				OnePager op = self.findParent(OnePager.class);
+				//disable lock refresher
+				op.getEditLockRefresher().setEnabled(false);
+			    am.setObject(am.getObject());
 				toggleSemanticValidation(false, activityForm, target);
 				// process the form for this request
 				activityForm.process(null);
@@ -716,6 +720,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				else {
 					formSubmitErrorHandle(activityForm, target, feedbackPanel);
 				}
+				op.getEditLockRefresher().setEnabled(true);
+				op.getTimer().restart(target);
+
 			}
 
 			// we disable the normal form processing, just like the save buttons

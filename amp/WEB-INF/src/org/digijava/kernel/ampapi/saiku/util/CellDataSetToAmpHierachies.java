@@ -6,10 +6,17 @@ package org.digijava.kernel.ampapi.saiku.util;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.apache.commons.lang.math.IntRange;
+import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.service.olap.totals.TotalNode;
@@ -24,17 +31,13 @@ public class CellDataSetToAmpHierachies {
 	private ReportSpecification spec;
 	private CellDataSet cellDataSet;
 
-	//TODO: for debug:
-	//final String sep = System.lineSeparator() + String.format("%" + (21 * startColumnIndex -1) + "s\t|", "");
-	//TODO: for production:
-	private final String sep = ", ";
 	private final NumberFormat numberFormat = NumberFormat.getNumberInstance();
 
 	private List<TotalNode>[] rowTotals;
 	private TotalAggregator[][] colTotals  = null;
 	private int startColumnIndex;
 	private int noOfColumnsToMerge;
-	private StringBuilder[] sbList;
+	private SortedSet<String>[] sbList;
 	
 	private CellDataSetToAmpHierachies(ReportSpecification spec, CellDataSet cellDataSet) {
 		this.spec = spec;
@@ -57,9 +60,7 @@ public class CellDataSetToAmpHierachies {
 		noOfColumnsToMerge = spec.getColumns().size() - startColumnIndex;
 		
 		//list of merged column entries for the current group
-		sbList = new StringBuilder[noOfColumnsToMerge];
-		for (int i = 0; i < noOfColumnsToMerge; i++)
-			sbList[i] = new StringBuilder();
+		initSortedSetsList();
 		
 		//init measure column totals
 		if (spec.isCalculateColumnTotals() && 
@@ -68,6 +69,32 @@ public class CellDataSetToAmpHierachies {
 			colTotals = cellDataSet.getColTotalsLists()[0].get(0).getTotalGroups();
 		else
 			cellDataSet.setColTotalsLists(null);
+	}
+	
+	private void initSortedSetsList() {
+		sbList = (SortedSet<String>[]) new TreeSet<?>[noOfColumnsToMerge];
+		Boolean[] sortOrder = new Boolean[noOfColumnsToMerge];
+		if (spec.getSorters() != null)
+			for(SortingInfo sInfo : spec.getSorters())
+				//a non-hierarchical sorting has 1 entry in the sorting tuple 
+				if (sInfo.sortByTuple.entrySet().size() == 1) {
+					ReportElement elem = sInfo.sortByTuple.entrySet().iterator().next().getKey();
+					//and is a report column, not a measure (i.e. total measure)
+					if (elem.entity != null && ReportColumn.class.isAssignableFrom(elem.entity.getClass())) {
+						int colId = MondrianReportUtils.getColumnId((ReportColumn)elem.entity, spec);
+						if(colId != -1) 
+							sortOrder[colId - startColumnIndex] = sInfo.ascending; 
+					}
+				}
+		for (int i = 0; i < noOfColumnsToMerge; i++) {
+			final boolean asc = sortOrder[i] == null ? true : sortOrder[i]; 
+			sbList[i] = new TreeSet<String>(new Comparator<String>() {
+				@Override
+				public int compare(String o1, String o2) {
+					return o1.compareTo(o2) * (asc ? 1 : -1);
+				}
+			});
+		}
 	}
 	
 	private void concatenate() {
@@ -103,8 +130,8 @@ public class CellDataSetToAmpHierachies {
 					
 					//a) update concatenated data
 					for (int j = startColumnIndex; j < cellDataSet.getLeftOffset(); j++) {
-						int subStrEnd = sbList[j - startColumnIndex].length() - sep.length();
-						cellDataSet.getCellSetBody()[groupStartRowId][j].setFormattedValue(sbList[j - startColumnIndex].substring(0, subStrEnd));
+						String mergedData = sbList[j - startColumnIndex].toString();
+						cellDataSet.getCellSetBody()[groupStartRowId][j].setFormattedValue(mergedData.substring(1, mergedData.length() - 1));
 					}
 					
 					TotalAggregator[][] totals = rowTotals[startColumnIndex].get(currentSubGroupIndex).getTotalGroups();
@@ -125,7 +152,7 @@ public class CellDataSetToAmpHierachies {
 				currentSubGroupIndex ++;
 				//reset string builders
 				for (int j = startColumnIndex; j < cellDataSet.getLeftOffset(); j++)
-					sbList[j - startColumnIndex].setLength(0);
+					sbList[j - startColumnIndex].clear();
 			}
 		}
 		
@@ -135,7 +162,7 @@ public class CellDataSetToAmpHierachies {
 	private void mergeNonHierarchicalText(int rowId) {
 		for (int colId = startColumnIndex; colId < cellDataSet.getLeftOffset(); colId++)
 			if (cellDataSet.getCellSetBody()[rowId][colId].getRawValue() != null) 
-				sbList[colId - startColumnIndex].append(cellDataSet.getCellSetBody()[rowId][colId].getFormattedValue()).append(sep);
+				sbList[colId - startColumnIndex].add(cellDataSet.getCellSetBody()[rowId][colId].getFormattedValue());
 	}
 	
 	private void mergeMeasureTotals(Double[] currentTotalMeasuresColumnTotals, int rowId) {
@@ -173,6 +200,9 @@ public class CellDataSetToAmpHierachies {
 		//get measures totals reference
 		TotalNode total = spec.isCalculateColumnTotals() ? cellDataSet.getColTotalsLists()[0].get(0) : null;
 		TotalAggregator[][] res = total == null ? null : total.getTotalGroups();
+		
+		//add dummy range to add since last range till the end of the data 
+		rowsRangesToDelte.add(new IntRange(cellDataSet.getCellSetBody().length, cellDataSet.getCellSetBody().length));
 		
 		for (IntRange range : rowsRangesToDelte) {
 			for (int i = start; i < range.getMinimumInteger(); i++, newDataRowId ++ ) {

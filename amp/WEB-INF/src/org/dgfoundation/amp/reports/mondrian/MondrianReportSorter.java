@@ -162,11 +162,7 @@ public class MondrianReportSorter {
 	}
 	
 	private int getColumnId(ReportColumn col) {
-		int colId = 0;
-		for (Iterator<ReportColumn> iter = spec.getColumns().iterator(); iter.hasNext(); colId++)
-			if (iter.next().equals(col))
-				break;
-		return colId; 
+		return MondrianReportUtils.getColumnId(col, spec);
 	}
 	
 	/**

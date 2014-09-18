@@ -3,6 +3,8 @@
  */
 package org.dgfoundation.amp.reports.mondrian;
 
+import java.util.Iterator;
+
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.error.AMPException;
@@ -107,5 +109,14 @@ public class MondrianReportUtils {
 			if (GroupingCriteria.GROUPING_TOTALS_ONLY.equals(s.getGroupingCriteria()))
 				s.setCalculateColumnTotals(false);
 		}
+	}
+	
+	public static int getColumnId(ReportColumn col, ReportSpecification spec) {
+		if (spec == null || spec.getColumns() == null) return -1;
+		int colId = 0;
+		for (Iterator<ReportColumn> iter = spec.getColumns().iterator(); iter.hasNext(); colId++)
+			if (iter.next().equals(col))
+				break;
+		return colId == spec.getColumns().size() ? -1 : colId; 
 	}
 }

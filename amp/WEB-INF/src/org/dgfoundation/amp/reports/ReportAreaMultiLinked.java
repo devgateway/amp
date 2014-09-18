@@ -3,10 +3,8 @@
  */
 package org.dgfoundation.amp.reports;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
@@ -39,18 +37,14 @@ public class ReportAreaMultiLinked extends ReportAreaImpl {
 		this.owner = area.getOwner();
 		this.contents = area.getContents();
 		if (area.getChildren() != null && area.getChildren().size() > 0) {
-			this.children = new ArrayList<ReportArea>(area.getChildren().size());
-			configureSibling(this, area.getChildren().iterator(), this.children);
-			Collections.reverse(children);
+			LinkedList<ReportArea> cList = new LinkedList<ReportArea>();
+			ListIterator<ReportArea> iter = area.getChildren().listIterator(area.getChildren().size());
+			ReportAreaMultiLinked prevSibling = null;
+			while (iter.hasPrevious()) {
+				prevSibling = new ReportAreaMultiLinked(iter.next(), parent, prevSibling);
+				cList.addFirst(prevSibling);
+			}
+			this.children = cList;
 		}
-	}
-	
-	private ReportAreaMultiLinked configureSibling(ReportAreaMultiLinked parent, Iterator<ReportArea> iter, List<ReportArea> siblingsList) {
-		if (iter.hasNext()) {
-			ReportAreaMultiLinked newArea = new ReportAreaMultiLinked(iter.next(), parent, configureSibling(parent, iter, siblingsList));
-			siblingsList.add(newArea);
-			return newArea;
-		}
-		return null;
 	}
 }

@@ -721,11 +721,12 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					}
 				else {
 					formSubmitErrorHandle(activityForm, target, feedbackPanel);
+					op.getEditLockRefresher().setEnabled(true);
+					if(op.getTimer()!=null){
+						op.getTimer().restart(target);
+					}
 				}
-				op.getEditLockRefresher().setEnabled(true);
-				if(op.getTimer()!=null){
-					op.getTimer().restart(target);
-				}
+				
 
 			}
 
@@ -1187,6 +1188,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				    p.set(0,OnePagerConst.ONEPAGER_URL_PARAMETER_SSC);
 				}
 				p.set(1,actId);
+				OnePager op = this.findParent(OnePager.class);
+				op.getEditLockRefresher().setEnabled(true);
+				if (op.getTimer() != null) {
+					op.getTimer().restart(target);
+				}
 				//The folllogin exception will provide a redirection 
 				throw new RestartResponseException(
 				        new PageProvider(

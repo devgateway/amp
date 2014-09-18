@@ -33,6 +33,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.helper.Constants;
@@ -243,7 +244,9 @@ public class ExportToExcel extends Action {
 	        numberDonTrn = TranslatorWorker.translateText("Number of Organizations");
 	        numberRegTrn = TranslatorWorker.translateText("Number of Regions");
 	        avgPrjZSizeTrn = TranslatorWorker.translateText("Average Project Size");
-	        currName = vForm.getFilter().getCurrencyCode();
+	        AmpCurrency currency = (AmpCurrency)org.digijava.module.aim.util.DbUtil.getObject(AmpCurrency.class,vForm.getFilter().getCurrencyId());
+            currName = currency.getCurrencyName();
+          
 	        fundTypeTrn = "";
 	        if (vForm.getFilter().getAdjustmentType().equals("Actual"))
             	fundTypeTrn = TranslatorWorker.translateText("Actual");
@@ -635,7 +638,7 @@ public class ExportToExcel extends Action {
           //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));
             row = sheet.createRow(rowNum++);
             cell = row.createCell(cellNum);
-            headerText = new HSSFRichTextString(data.filtersCurrencyTypeTrn + ": " + vForm.getFilter().getCurrencyCode());
+            headerText = new HSSFRichTextString(data.filtersCurrencyTypeTrn + ": " + data.currName);
             cell.setCellValue(headerText);
             cell.setCellStyle(data.cellStyleLeft);
             //sheet.addMergedRegion(new Region(rowNum-1,(short)0,rowNum-1,(short)5));

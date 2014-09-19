@@ -4,9 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Scanner;
+import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.startup.AMPStartupListener;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -14,6 +17,7 @@ import mondrian.olap.Util.PropertyList;
 import mondrian.spi.DynamicSchemaProcessor;
 
 public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
+	protected static final Logger logger = Logger.getLogger(AmpMondrianSchemaProcessor.class);
 
 	@Override
 	public String processSchema(String schemaURL, PropertyList connectInfo) throws Exception {
@@ -35,6 +39,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		contents = contents.replaceAll("@@actual@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase()));
 		contents = contents.replaceAll("@@planned@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getIdInDatabase()));
 		contents = contents.replaceAll("@@currency@@", Long.toString(getReportCurrency().getAmpCurrencyId()));
+		contents = contents.replaceAll("@@wsactivities@@", getWorkspaceActivitiesIds());
 		String locale = getReportLocale();
 		contents = contents.replaceAll("@@locale@@", locale);
 		int pos = contents.indexOf("@@");
@@ -50,5 +55,19 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	
 	protected AmpCurrency getReportCurrency() {
 		return CurrencyUtil.getCurrencyByCode("EUR"); 
+	}
+	
+	protected String getWorkspaceActivitiesIds() {
+		try {
+			Set<Long> ids = ActivityUtil.getAllLegalAmpActivityIds();
+			if (ids != null) {
+				String idsStr = ids.toString();
+				return idsStr.substring(1, idsStr.length() - 1);
+			}
+		} catch (Exception e) {
+			//TODO: on AMP startup it throws an exception 
+			logger.error(e.getMessage());
+		}
+		return "null";
 	}
 }

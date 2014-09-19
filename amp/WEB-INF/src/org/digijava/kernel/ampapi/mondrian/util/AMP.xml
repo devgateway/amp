@@ -63,7 +63,9 @@
 	</Dimension>
 		
 	<Cube name="Donor Funding">
-		<Table name="mondrian_fact_table" />
+		<Table name="mondrian_fact_table" >
+			<SQL dialect="generic"><![CDATA[mondrian_fact_table.entity_id IN (@@wsactivities@@)]]> </SQL>
+		</Table>
 
 		<Dimension name="Project Title" foreignKey="entity_id">
 			<Hierarchy hasAll="true" allMemberName="All Activities" primaryKey="amp_activity_id" name="Project Title">

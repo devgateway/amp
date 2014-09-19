@@ -155,6 +155,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 		
 		if (printMode) System.out.println("[" + spec.getReportName() + "] MDX query run time: " + (int)(System.currentTimeMillis() - startTime));
+		else
+			logger.info("[" + spec.getReportName() + "] MDX query run time: " + (int)(System.currentTimeMillis() - startTime));
 		
 		cellDataSet = postProcess(spec, cellSet);
 		totalTime = (int)(System.currentTimeMillis() - startTime);
@@ -342,11 +344,15 @@ public class MondrianReportGenerator implements ReportExecutor {
 		} else 
 			leafHeaders = null;
 		
+		logger.info("[" + spec.getReportName() + "]" +  "Starting conversion from Olap4J CellSet to Saiku CellDataSet via Saiku method...");
 		CellDataSet cellDataSet = OlapResultSetUtil.cellSet2Matrix(cellSet); // we can also pass a formater to cellSet2Matrix(cellSet, formatter)
+		logger.info("[" + spec.getReportName() + "]" +  "Conversion from Olap4J CellSet to Saiku CellDataSet ended.");
 		
 		if (spec.isCalculateColumnTotals() || spec.isCalculateRowTotals()) {
 			try {
+				logger.info("[" + spec.getReportName() + "]" +  "Starting totals calculation over the Saiku CellDataSet via Saiku method...");
 				SaikuUtils.doTotals(spec, cellDataSet, cellSet);
+				logger.info("[" + spec.getReportName() + "]" +  "Totals over the Saiku CellDataSet ended.");
 			} catch (Exception e) {
 				logger.error(e.getMessage());
 				throw new AMPException(e.getMessage());

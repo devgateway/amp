@@ -45,7 +45,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	
 	protected String getReportLocale() {
 		//return "_ro";
-		return "";
+		return "_en";
 	}
 	
 	protected AmpCurrency getReportCurrency() {

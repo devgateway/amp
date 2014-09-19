@@ -437,31 +437,32 @@ public class InternationalizedViewsRepository {
 				
 				// DG_EDITOR-backed translations start HERE
 				addViewDef(this, new I18nViewDescription("v_purposes").
-						addColumnDef(new I18nViewColumnDescription("ebody", "v_purposes", "locale")));
+						addDgEditorColumnDef("ebody", "locale"));
 
 				addViewDef(this, new I18nViewDescription("v_description").
-						addColumnDef(new I18nViewColumnDescription("ebody", "v_description", "locale")));
+						addDgEditorColumnDef("ebody", "locale"));
 				
 				addViewDef(this, new I18nViewDescription("v_objectives").
-						addColumnDef(new I18nViewColumnDescription("ebody", "v_objectives", "locale")));
+						addDgEditorColumnDef("ebody", "locale"));
 				
 				addViewDef(this, new I18nViewDescription("v_results").
-						addColumnDef(new I18nViewColumnDescription("ebody", "v_results", "locale")));
+						addDgEditorColumnDef("ebody", "locale"));
 
 				addViewDef(this, new I18nViewDescription("v_proj_impact").
-						addColumnDef(new I18nViewColumnDescription("ebody", "v_proj_impact", "locale")));
+						addDgEditorColumnDef("ebody", "locale"));
 
 				addViewDef(this, new I18nViewDescription("v_project_comments").
-						addColumnDef(new I18nViewColumnDescription("ebody", "v_project_comments", "locale")));
+						addDgEditorColumnDef("ebody", "locale"));
 				
 				addViewDef(this, new I18nViewDescription("v_equalopportunity").
-						addColumnDef(new I18nViewColumnDescription("ebody", "v_equalopportunity", "locale")));
+						addDgEditorColumnDef("ebody", "locale"));
 
 				addViewDef(this, new I18nViewDescription("v_environment").
-						addColumnDef(new I18nViewColumnDescription("ebody", "v_environment", "locale")));
+						addDgEditorColumnDef("ebody", "locale"));
 
 				addViewDef(this, new I18nViewDescription("v_minorities").
-						addColumnDef(new I18nViewColumnDescription("ebody", "v_minorities", "locale")));
+						addDgEditorColumnDef("ebody", "locale"));
+				
 				//REMOVED DUE TO ACTIVITY CLEAN UP
 //				addViewDef(this, new I18nViewDescription("v_contracting_arrangements").
 //						addColumnDef(new I18nViewColumnDescription("body", "v_contracting_arrangements", "locale")));

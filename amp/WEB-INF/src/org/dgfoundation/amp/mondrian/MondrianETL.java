@@ -343,7 +343,7 @@ public class MondrianETL {
 		// checking sanity
 		long initTableSz = SQLUtils.countRows(conn, mondrianTable.tableName);
 		long createdTableSz = SQLUtils.countRows(monetConn.conn, localizedTableName);
-		if (initTableSz != createdTableSz)
+		if (initTableSz != createdTableSz && !mondrianTable.isFiltering)
 			throw new RuntimeException(String.format("HUGE BUG: multilingual-cloned dimension table has a size of %d, while the original dimension table has a size of %d", createdTableSz, initTableSz));
 	}
 	
@@ -466,7 +466,7 @@ public class MondrianETL {
 	 * @param mondrianTable
 	 * @throws SQLException
 	 */
-	protected void generatePerActivityTables(MondrianTableDescription mondrianTable) throws SQLException {		
+	protected void generatePerActivityTables(MondrianTableDescription mondrianTable) throws SQLException {
 		if (etlConfig.fullEtl) {
 //			String query = "SELECT * FROM v_" + mondrianTable.tableName;
 //			monetConn.createTableFromQuery(this.conn, query, mondrianTable.tableName);

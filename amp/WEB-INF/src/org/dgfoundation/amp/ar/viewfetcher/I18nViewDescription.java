@@ -42,6 +42,14 @@ public class I18nViewDescription {
 		return addColumnDef(new I18nViewColumnDescription(columnName, viewName, idColumnName, new ColumnValueTranslator(columnName)));
 	}
 	
+	public I18nViewDescription addDgEditorColumnDef(String columnName, String languageColumnName) {
+		if (!viewColumns.contains(columnName))
+			throw new RuntimeException(String.format("cannot add dg_editor-backed translated column <%s> to view <%s>: column does not exist!", columnName, viewName));
+		if (!viewColumns.contains(languageColumnName))
+			throw new RuntimeException(String.format("cannot add dg_editor-backed translated column <%s> with language column %s to view <%s>: languageColumn does not exist!", columnName, languageColumnName, viewName));
+		return addColumnDef(new I18nViewColumnDescription(columnName, viewName, languageColumnName));
+	}
+	
 	/**
 	 * returns the view description or null, of none found
 	 * @param columnName
@@ -71,13 +79,13 @@ public class I18nViewDescription {
 	}
 	
 	/**
-	 * returns Map<indexColumnName, valueColumnName>
+	 * returns Map<valueColumnName, indexColumnName>
 	 * @return
 	 */
 	public Map<String, String> getMappedColumns() {
 		Map<String, String> res = new HashMap<>();
 		for (I18nViewColumnDescription ivcd:this.columns.values())
-			res.put(ivcd.indexColumnName, ivcd.columnName);
+			res.put(ivcd.columnName, ivcd.indexColumnName);
 		return res;
 	}
 }

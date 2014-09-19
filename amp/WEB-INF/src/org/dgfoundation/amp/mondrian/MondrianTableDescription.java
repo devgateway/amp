@@ -19,9 +19,8 @@ import org.dgfoundation.amp.ar.viewfetcher.I18nDatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewDescription;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.mondrian.jobs.EtlJob;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
-import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
+import org.dgfoundation.amp.mondrian.jobs.MondrianTableLogue;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
 
@@ -45,6 +44,9 @@ public class MondrianTableDescription {
 	public final Set<String> indexedColumns;
 	
 	public Fingerprint fingerprint;
+	public boolean isFiltering = false;
+	//public MondrianTableLogue prologue;
+	
 	//public final Set<String> idColumnNames; 
 			
 	protected ObjectSource<I18nViewDescription> translations;
@@ -76,7 +78,12 @@ public class MondrianTableDescription {
 			throw new RuntimeException("not allowed to respecify fingerprint");
 		this.fingerprint = new Fingerprint("v_" + this.tableName, hashQueries);
 		return this;
-	}	
+	}
+	
+//	public MondrianTableDescription withPrologue(MondrianTableLogue prologue) {
+//		this.prologue = prologue;
+//		return this;
+//	}
 	
 	/**
 	 * this one goes through a layer of indirection, because the tables might be unavailable at MTD construction time - but they will be available when needed at ETL time
@@ -98,17 +105,25 @@ public class MondrianTableDescription {
 		LinkedHashSet<String> columns = SQLUtils.getTableColumns(tableName);
 		try(ResultSet rs = fetcher.fetch(null)) {
 			List<List<Object>> vals = new ArrayList<>();
-			// direct: index-column to value-column
-			HashBiMap<String, String> indexColToValueCol = HashBiMap.create(getI18nDescription().getMappedColumns());
+			// Map<value-column-name, index-column-name>
+			Map<String, String> valueColToIndex = getI18nDescription().getMappedColumns();
+			Set<String> indexColumns = new HashSet<>(valueColToIndex.values());
 			String UNDEFINED_VALUE = "Undefined";
 			String translated_undefined = TranslatorWorker.translateText(UNDEFINED_VALUE, locale, SiteUtils.getDefaultSite());;
 			while (rs.next()) {
-				List<Object> row = readMondrianDimensionRow(indexColToValueCol, columns, UNDEFINED_VALUE, translated_undefined, rs);
+				if (!rowIsRelevant(rs, locale))
+					continue;
+				List<Object> row = readMondrianDimensionRow(valueColToIndex, indexColumns, columns, UNDEFINED_VALUE, translated_undefined, rs);
 				vals.add(row);
 			}
 			return vals;
 		}
 	}
+	
+	protected boolean rowIsRelevant(ResultSet rs, String locale) throws SQLException {
+		return true;
+	}
+	
 	
 	/**
 	 * 
@@ -118,15 +133,15 @@ public class MondrianTableDescription {
 	 * @return
 	 * @throws SQLException
 	 */
-	protected List<Object> readMondrianDimensionRow(HashBiMap<String, String> indexColToValueCol, Collection<String> columns, String undefined, String translated_undefined, ResultSet rs) throws SQLException {
+	protected List<Object> readMondrianDimensionRow(Map<String, String> valueColToIndex, Set<String> indexColumns, Collection<String> columns, String undefined, String translated_undefined, ResultSet rs) throws SQLException {
 		List<Object> row = new ArrayList<>();
 		String UNDEFINED_ID = MONDRIAN_DUMMY_ID_FOR_ETL.toString();	
 		for(String colName:columns) {
 			Object colValue = rs.getObject(colName);			
-			if (indexColToValueCol.containsKey(colName) && (colValue != null && colValue.toString().equals(UNDEFINED_ID))) {
+			if (indexColumns.contains(colName) && (colValue != null && colValue.toString().equals(UNDEFINED_ID))) {
 				colValue = MONDRIAN_DUMMY_ID_FOR_ETL;
 			}
-			if (indexColToValueCol.containsValue(colName) && (colValue == null || colValue.toString().isEmpty() || colValue.toString().equalsIgnoreCase(undefined))) {
+			if (valueColToIndex.containsKey(colName) && (colValue == null || colValue.toString().isEmpty() || colValue.toString().equalsIgnoreCase(undefined))) {
 				colValue = translated_undefined;
 			}
 			row.add(colValue);
@@ -136,6 +151,6 @@ public class MondrianTableDescription {
 	
 	@Override public String toString() {
 		return this.tableName;
-	}
+	}	
 
 }

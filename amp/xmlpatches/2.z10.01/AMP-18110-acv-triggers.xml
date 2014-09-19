@@ -10,7 +10,7 @@
 		<script>
 			<lang delimiter="@" type="postgres">
 
-CREATE FUNCTION trn_updated_proc() RETURNS trigger AS $BODY$
+CREATE OR REPLACE FUNCTION trn_updated_proc() RETURNS trigger AS $BODY$
     BEGIN
     	IF (OLD.message_key != NEW.message_key) OR (OLD.message_utf8 != NEW.message_utf8) THEN
         	INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('translation', NEW.message_key::bigint);
@@ -19,14 +19,14 @@ CREATE FUNCTION trn_updated_proc() RETURNS trigger AS $BODY$
     END;
 $BODY$ LANGUAGE plpgsql@@@
 
-CREATE FUNCTION trn_deleted_proc() RETURNS trigger AS $BODY$
+CREATE OR REPLACE FUNCTION trn_deleted_proc() RETURNS trigger AS $BODY$
     BEGIN
-        INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('translation', NEW.message_key::bigint);
-        RETURN NEW;
+        INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('translation', OLD.message_key::bigint);
+        RETURN OLD;
     END;
 $BODY$ LANGUAGE plpgsql@@@
 
-CREATE FUNCTION trn_added_proc() RETURNS trigger AS $BODY$
+CREATE OR REPLACE FUNCTION trn_added_proc() RETURNS trigger AS $BODY$
     BEGIN
         INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('translation', NEW.message_key::bigint);
         RETURN NEW;

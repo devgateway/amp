@@ -181,7 +181,7 @@ public class MonetConnection implements AutoCloseable {
 		return new DbColumnTypesMapper() {
 			
 			@Override
-			public String mapSqlTypeToName(int rsType) {
+			public String mapSqlTypeToName(int rsType, int maxWidth) {
 				switch(rsType) {
 				case java.sql.Types.TINYINT:
 				case java.sql.Types.SMALLINT:
@@ -198,8 +198,10 @@ public class MonetConnection implements AutoCloseable {
 					
 				case java.sql.Types.CHAR:
 				case java.sql.Types.VARCHAR:
-					return "varchar(255)";
+					if (maxWidth <= 255)
+						return "varchar(255)";
 					
+				// intentional fall-through
 				case java.sql.Types.LONGVARCHAR:
 					return "text";
 					

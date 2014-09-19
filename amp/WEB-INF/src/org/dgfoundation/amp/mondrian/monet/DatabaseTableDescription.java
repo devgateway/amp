@@ -44,8 +44,9 @@ public class DatabaseTableDescription {
 			List<DatabaseTableColumn> columns = new ArrayList<>();
 			for(int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
 				int columnType = rs.getMetaData().getColumnType(i); // java.sql.Types
+				int columnWidth = rs.getMetaData().getColumnDisplaySize(i);
 				String columnName = rs.getMetaData().getColumnLabel(i);
-				String columnTypeMonetName = columnTypesMapper.mapSqlTypeToName(columnType);
+				String columnTypeMonetName = columnTypesMapper.mapSqlTypeToName(columnType, columnWidth);
 				columns.add(new DatabaseTableColumn(columnName, columnTypeMonetName, false));
 			}
 			return new DatabaseTableDescription(tableName, columns);

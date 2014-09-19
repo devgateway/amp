@@ -155,6 +155,59 @@
 
 		</Dimension>
 
+		<Dimension name="Activity Long Texts" foreignKey="entity_id">
+			<Hierarchy hasAll="true" allMemberName="All Project Description" primaryKey="amp_activity_id" name="Project Description">
+				<Table name="mondrian_activity_long_texts@@locale@@" />
+				<Level name="Project Description" column="amp_activity_id" type="String" nameColumn="descr_body" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Objective" primaryKey="amp_activity_id" name="Objective">
+				<Table name="mondrian_activity_long_texts@@locale@@" />
+				<Level name="Objective" column="amp_activity_id" type="String" nameColumn="objectives_body" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Results" primaryKey="amp_activity_id" name="Results">
+				<Table name="mondrian_activity_long_texts@@locale@@" />
+				<Level name="Results" column="amp_activity_id" type="String" nameColumn="results_body" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Purpose" primaryKey="amp_activity_id" name="Purpose">
+				<Table name="mondrian_activity_long_texts@@locale@@" />
+				<Level name="Purpose" column="amp_activity_id" type="String" nameColumn="purpose_body" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Project Comments" primaryKey="amp_activity_id" name="Project Comments">
+				<Table name="mondrian_activity_long_texts@@locale@@" />
+				<Level name="Project Comments" column="amp_activity_id" type="String" nameColumn="projectcomments_body" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Project Impact" primaryKey="amp_activity_id" name="Project Impact">
+				<Table name="mondrian_activity_long_texts@@locale@@" />
+				<Level name="Project Impact" column="amp_activity_id" type="String" nameColumn="project_impact_body" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Equal Opportunity" primaryKey="amp_activity_id" name="Equal Opportunity">
+				<Table name="mondrian_activity_long_texts@@locale@@" />
+				<Level name="Equal Opportunity" column="amp_activity_id" type="String" nameColumn="equalopportunity_body" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Environment" primaryKey="amp_activity_id" name="Environment">
+				<Table name="mondrian_activity_long_texts@@locale@@" />
+				<Level name="Environment" column="amp_activity_id" type="String" nameColumn="environment_body" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Minorities" primaryKey="amp_activity_id" name="Minorities">
+				<Table name="mondrian_activity_long_texts@@locale@@" />
+				<Level name="Minorities" column="amp_activity_id" type="String" nameColumn="minorities_body" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Program Description" primaryKey="amp_activity_id" name="Program Description">
+				<Table name="mondrian_activity_long_texts@@locale@@" />
+				<Level name="Program Description" column="amp_activity_id" type="String" nameColumn="program_description_body" />
+			</Hierarchy>
+			
+		</Dimension>
+			
 		<Dimension name="Location" foreignKey="location_id">
 			<Hierarchy hasAll="true" allMemberName="All Locations" name="Locations" uniqueKeyLevelName="Location" primaryKey="id">
 				<Table name="mondrian_locations@@locale@@" />

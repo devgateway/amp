@@ -100,7 +100,7 @@ public class Fingerprint {
 //		if (!monetConn.tableExists(FINGERPRINT_TABLE)) 
 		{
 			monetConn.executeQuery(String.format("CREATE TABLE %s (key %s, value %s)", FINGERPRINT_TABLE,
-					MonetConnection.getMapper().mapSqlTypeToName(java.sql.Types.VARCHAR), MonetConnection.getMapper().mapSqlTypeToName(java.sql.Types.LONGVARCHAR)));
+					MonetConnection.getMapper().mapSqlTypeToName(java.sql.Types.VARCHAR, 255), MonetConnection.getMapper().mapSqlTypeToName(java.sql.Types.LONGVARCHAR, 999999)));
 			monetConn.flush();
 		}
 	}

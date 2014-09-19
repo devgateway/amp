@@ -1,5 +1,7 @@
 package org.dgfoundation.amp.mondrian;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
@@ -10,9 +12,14 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewColumnDescription;
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewDescription;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
+import org.dgfoundation.amp.mondrian.jobs.MondrianTableLogue;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableColumn;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableDescription;
+
+import com.google.common.base.Predicate;
+
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
@@ -141,6 +148,26 @@ public class MondrianTablesRepository {
 				}
 			});
 	
+	public final static MondrianTableDescription MONDRIAN_LONG_TEXTS = 
+			new MondrianTableDescription("mondrian_activity_long_texts", "amp_activity_id", Arrays.asList("amp_activity_id")) {
+				{
+					isFiltering = true;
+				}
+				@Override public boolean rowIsRelevant(java.sql.ResultSet rs, String locale) throws java.sql.SQLException {
+					return rs.getString("language").equals(locale);
+				}}
+			.withFingerprintedJob(Arrays.asList("SELECT 1"))
+			.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
+				@Override public I18nViewDescription getObject() {
+					I18nViewDescription res = new I18nViewDescription("mondrian_activity_long_texts");
+					for(String col:Arrays.asList("descr", "lessons_learned", "objectives", "results", "purpose", "projectcomments", "project_impact",
+							"activity_summary", "conditionality", "project_management", "equalopportunity", "environment", "minorities", "program_description")) {
+						res.addDgEditorColumnDef(col + "_body", "language");
+					}
+					return res;
+				}
+			});
+	
 	public final static MondrianTableDescription MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE = 
 			new MondrianTableDescription("mondrian_raw_donor_transactions", "amp_fund_detail_id", Arrays.asList("amp_activity_id", "amp_fund_detail_id", "donor_id"));
 	
@@ -155,8 +182,8 @@ public class MondrianTablesRepository {
 	
 	public final static List<MondrianTableDescription> MONDRIAN_ACTIVITY_DIMENSIONS = Arrays.asList(
 			MONDRIAN_ACTIVITY_TEXTS,
-			MONDRIAN_ACTIVITY_FIXED_TEXTS/*,
-			MONDRIAN_ACTIVITY_TRN_TEXTS*/);
+			MONDRIAN_ACTIVITY_FIXED_TEXTS,
+			MONDRIAN_LONG_TEXTS);
 		
 	public final static List<MondrianTableDescription> MONDRIAN_RAW_TRANSACTIONS_TABLES = Arrays.asList(MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE);
 	

@@ -1,7 +1,6 @@
 var fs = require('fs');
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
-var YearsFilterModel = require('../models/years-filter-model');
 
 require('../../../../libs/local/slider/jquery.nouislider.min.js');
 
@@ -11,19 +10,20 @@ module.exports = BaseFilterView.extend({
 
   className: BaseFilterView.prototype.className + ' filter-years',
   template: _.template(Template),
+  _loaded:null,
 
   initialize:function(options) {
     var self = this;
     BaseFilterView.prototype.initialize.apply(this, [options]);
 
-    this.model = new YearsFilterModel(options.modelValues);
-    this.model.url = options.url;
+    this.model = options.model;
 
-    this.model.fetch().then(function() {
+    this._loaded = this.model.fetch().then(function() {
       self.model.set('selectedStart', self.model.get('startYear'));
       self.model.set('selectedEnd', self.model.get('endYear'));
       self._updateTitle();
     });
+
     this.listenTo(this.model, 'change', this._updateTitle);
   },
 
@@ -32,9 +32,17 @@ module.exports = BaseFilterView.extend({
     var self = this;
     BaseFilterView.prototype.renderFilters.apply(this);
 
-    this.$el.append(this.template(this.model.toJSON()));
+    this._loaded.then(function() {
+      self._renderSlider();
+    });
 
-    // TODO: Year sldier only works fi DOM is on the page...
+    return this;
+  },
+
+  _renderSlider: function() {
+    var self = this;
+    this.$el.html(this.template(this.model.toJSON()));
+
 
     // TODO: uses window.jQuery because that was the only way I had luck with browserify shim...
     // uses https://github.com/leongersen/noUiSlider
@@ -69,8 +77,6 @@ module.exports = BaseFilterView.extend({
     this.slider.on('change', function() {
       self.model.set('selectedEnd',  parseInt(self.$('.end-year').text(), 10));
     });
-
-    return this;
   },
 
   renderTitle:function() {
@@ -80,8 +86,11 @@ module.exports = BaseFilterView.extend({
     return this;
   },
 
+  //TODO: do more in template.
   _updateTitle:function() {
-    this.$('.filter-count').text(this.model.get('selectedStart') + ' - ' + this.model.get('selectedEnd'));
+    this.$titleEl.find('.filter-count').text(this.model.get('selectedStart') +
+        ' - ' +
+      this.model.get('selectedEnd'));
   }
 
 });

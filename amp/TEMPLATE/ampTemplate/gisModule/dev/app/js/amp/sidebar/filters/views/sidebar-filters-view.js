@@ -5,7 +5,6 @@ var PopupFilterView = require('../views/popup-filters-view');
 var BaseControlView = require('../../base-control/base-control-view');
 var Template = fs.readFileSync(__dirname + '/../templates/filters-sidebar-template.html', 'utf8');
 
-
 module.exports = BaseControlView.extend({
   id: 'tool-filters',
   title: 'Filters',
@@ -28,9 +27,6 @@ module.exports = BaseControlView.extend({
   },
 
 
-  //==========================
-  // GIS sidebar specific code:
-  //==========================
   render:function() {
     var self = this;
     BaseControlView.prototype.render.apply(this);
@@ -39,7 +35,7 @@ module.exports = BaseControlView.extend({
     this.$('.content').html(this.template({title: this.title}));
 
     _.each(this.filterViewsInstances, function(filterView) {
-      self.$('.filter-list').append(filterView.renderTitle().el);
+      self.$('.filter-list').append(filterView.renderTitle().titleEl);
     });
 
     this.popupFilterView = new PopupFilterView({app:this.app, el:this.$('#filter-popup')});
@@ -47,11 +43,16 @@ module.exports = BaseControlView.extend({
     return this;
   },
 
-  //==========================
-  // Generic Filter code
-  //==========================
+
   newlaunchFilter:function() {
+    var self = this;
     this.popupFilterView.render();
+    this.popupFilterView.$el.show();
+
+    // need to do better, but must close accordion or get weird states from bootstrap and manual filter showing....
+    this.popupFilterView.on('close', function() {
+      self.$('.accordion-body').collapse('hide');
+    });
   }
 });
 

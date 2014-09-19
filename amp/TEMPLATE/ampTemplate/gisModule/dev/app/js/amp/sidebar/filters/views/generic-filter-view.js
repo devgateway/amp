@@ -1,10 +1,8 @@
 var fs = require('fs');
 var _ = require('underscore');
-var $ = require('jquery');
 
-var GenericFilterModel = require('../models/generic-filter-model');
-var TreeNodeModel = require('../models/tree-node-model');
-var TreeNodeView = require('../views/tree-node-view');
+// var GenericFilterModel = require('../models/generic-filter-model');
+var TreeNodeView = require('../tree/tree-node-view');
 var BaseFilterView = require('../views/base-filter-view');
 var Template = fs.readFileSync(__dirname + '/../templates/generic-filter-template.html', 'utf8');
 
@@ -15,30 +13,40 @@ module.exports = BaseFilterView.extend({
 
   className: BaseFilterView.prototype.className + ' filter-generic',
   template: _.template(Template),
+  _loaded:null,
+
+  events:{
+    'click  .select-all': '_selectAll',
+    'click  .select-none': '_selectNone'
+  },
 
   initialize:function(options) {
     var self = this;
     BaseFilterView.prototype.initialize.apply(this, [options]);
 
-    this.model = new GenericFilterModel(options.modelValues);
+    this.model = options.model;
 
     //TODO: modify to be on demand load style, so only done the first time the user wants that filter...
     // Create tree view
-    this._createTree(options.url).then(function() {
+    //TODO: make tree loading content responsibility of model, not view...
+    this._loaded = this._createTree(this.model.get('url')).then(function() {
       self._updateCountInMenu();
-      self.treeModel.on('change:numSelected', function() {
+      self.model.get('tree').on('change:numSelected', function() {
         self._updateCountInMenu();
       });
     });
   },
 
   _updateCountInMenu:function() {
-    if (this.treeModel.get('numSelected') === this.treeModel.get('numPossible') ||
-        this.treeModel.get('numSelected') === 0) {
-      this.$('.filter-count').text('all');
+    if (this.model.get('tree').get('numSelected') === this.model.get('tree').get('numPossible') ||
+        this.model.get('tree').get('numSelected') === 0) {
+      this.$titleEl.find('.filter-count').text('all');
       this.$el.removeClass('active');
     } else {
-      this.$('.filter-count').text(this.treeModel.get('numSelected') + '/' + this.treeModel.get('numPossible'));
+
+      this.$titleEl.find('.filter-count').text(this.model.get('tree').get('numSelected') +
+        '/' +
+        this.model.get('tree').get('numPossible'));
       this.$el.addClass('active');
     }
   },
@@ -46,73 +54,37 @@ module.exports = BaseFilterView.extend({
   renderFilters:function() {
     var self = this;
     BaseFilterView.prototype.renderFilters.apply(this);
-    this.$el.append(this.template(this.model.toJSON()));
-    this.$('.tree-container').append(this.treeView.render(this.treeModel).$el);
-    this.treeModel.set('selected', false);
-    this.treeModel.set('expanded', true);
 
-
-    // Add listeners, tried doing in 'events' but didn't work..i had issues before with
-    // inheritence and events object
-    this.$('.select-all').click(function() {self._selectAll();});
-    this.$('.select-none').click(function() {self._selectNone();});
+    this._loaded.then(function() {
+      self.$el.html(self.template(self.model.toJSON()));
+      self.$('.tree-container').append(self.treeView.render(self.model.get('tree')).$el);
+      self.model.get('tree').set('selected', false);
+      self.model.get('tree').set('expanded', true);
+    });
 
     return this;
   },
 
   _selectAll:function() {
     // force trigger even if already this state (important for half-fill ui
-    this.treeModel.set('selected', true, {silent: true });
-    this.treeModel.trigger('change:selected', this.treeModel, null, {propogation:false});
+    this.model.get('tree').set('selected', true, {silent: true });
+    this.model.get('tree').trigger('change:selected', this.model.get('tree'), null, {propogation:false});
   },
 
   _selectNone:function() {
     // force trigger even if already this state (important for half-fill ui)
-    this.treeModel.set('selected', false, {silent: true });
-    this.treeModel.trigger('change:selected', this.treeModel, null, {propogation:false});
+    this.model.get('tree').set('selected', false, {silent: true });
+    this.model.get('tree').trigger('change:selected', this.model.get('tree'), null, {propogation:false});
   },
 
 
-  _createTree:function(url) {
+  _createTree:function() {
     var self = this;
 
-    //TODO: should be a model so we get proper url api base prepended... from sync...
-    // ...should i use this.model or a new tmp model...think about it...
-    return $.get(url).then(function(data) {
-
-
-      //tmp hack solution, if it's an obj, jam it into an array first (needed for /filters/programs)
-      if (!_.isArray(data)) {
-        data = [data];
-      }
-
-
-      if (_.isArray(data) && data.length > 0) {
-
-        // builds tree of views from returned data
-        var rootNodeObj = {
-          id: -1,
-          code: '-1',
-          name: self.model.get('title'),
-          children: data,
-          selected: true,
-          expanded: false,
-          isSelectable: false
-        };
-
-        self.treeModel = new TreeNodeModel(rootNodeObj);
-        self.treeView = new TreeNodeView();
-      } else {
-        console.error(' _createTree got bad data', data);
-      }
-
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-      console.error('failed to get filter ', jqXHR, textStatus, errorThrown);
+    return this.model.getTree().then(function(tree) {
+      self.treeModel = tree;
+      self.treeView = new TreeNodeView();
     });
-
-
-
   }
 
 });

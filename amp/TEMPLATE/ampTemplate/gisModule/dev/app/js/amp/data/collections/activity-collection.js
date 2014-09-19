@@ -8,7 +8,6 @@ module.exports = Backbone.Collection
 .extend(LoadOnceMixin).extend({
 
   url: '/rest/gis/activities',
-
   model: Activity,
 
   //smart ID fetching, load locally, and only fetch if we don't have the activity.
@@ -21,7 +20,7 @@ module.exports = Backbone.Collection
       var index = _.indexOf(aryOfIDs, activity.id);
       if (index > -1) {
         matches.push(activity.toJSON());   // add activity to array
-        aryOfIDs.splice(index, 1);          // remove id from array
+        aryOfIDs.splice(index, 1);         // remove id from array
       }
     });
 

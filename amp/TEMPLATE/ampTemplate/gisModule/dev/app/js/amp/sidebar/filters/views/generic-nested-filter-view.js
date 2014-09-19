@@ -5,9 +5,8 @@ var Backbone = require('backbone');
 
 var BaseFilterView = require('../views/base-filter-view');
 var GenericFilterView = require('../views/generic-filter-view');
-var GenericFilterModel = require('../models/generic-filter-model');
-var TreeNodeModel = require('../models/tree-node-model');
-var TreeNodeView = require('../views/tree-node-view');
+var TreeNodeModel = require('../tree/tree-node-model');
+var TreeNodeView = require('../tree/tree-node-view');
 
 require('../../../../libs/local/slider/jquery.nouislider.min.js');
 
@@ -21,22 +20,24 @@ module.exports = GenericFilterView.extend({
 
   className: GenericFilterView.prototype.className,
   template: _.template(Template),
+  _loaded:null,
 
   initialize:function(options) {
     var self = this;
     //intentinoally not GenericFilterView.prototype, we want to do it our way
     BaseFilterView.prototype.initialize.apply(this, [options]);
 
-    this.model = new GenericFilterModel(options.modelValues);
+    this.model = options.model;
 
-    this._createTree(options.url).then(function() {
+    this._loaded = this._createTree(this.model.get('url')).then(function() {
       self._updateCountInMenu();
-      self.treeModel.on('change:numSelected', function() {
+      self.model.get('tree').on('change:numSelected', function() {
         self._updateCountInMenu();
       });
     });
   },
 
+  // TODO: move into model for generic-nested-filter-model...
   // 1. get all children
   // 2. create root JSON, with each child endpoint as 'children'.
   // 3. when all done create tree
@@ -70,7 +71,7 @@ module.exports = GenericFilterView.extend({
           isSelectable: false
         };
 
-        child.url = url + '/' + child.get('id'); //TODO: something smarter...mroe reliable.. id
+        child.url = url + '/' + child.get('id'); //TODO: something smarter...more reliable
         deferreds.push(
           child.fetch().done(function(data) {
             if (data.id) { //not an array. hack temp solution while Julian fixes API so all obj or all array
@@ -99,7 +100,7 @@ module.exports = GenericFilterView.extend({
   },
 
   _buildTreeFromRoot:function(rootNodeObj) {
-    this.treeModel = new TreeNodeModel(rootNodeObj);
+    this.model.set('tree', new TreeNodeModel(rootNodeObj));
     this.treeView = new TreeNodeView();
   }
 });

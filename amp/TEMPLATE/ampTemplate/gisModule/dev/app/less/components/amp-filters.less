@@ -5,7 +5,7 @@
 @import "amp-tree.less";
 
 .tree-container {
-  max-height: 330px;
+  max-height: 300px;
   min-width: 330px;
   overflow-y: auto;
 }
@@ -16,9 +16,24 @@
 	left:@amp_sidebar_width+10px;
 	z-index:1020;
 	position:fixed !important;
+  max-width:850px;
 }
 
-.filter-years .filter-options{
-	min-width:350px;
-	padding:15px;
+.year-slider{
+  margin:15px 45px;
+}
+
+.sub-filters-titles{
+  width: 220px;
+  border-right: 1px #ddd solid ;
+  float:left;
+  padding-top:5px;
+  padding-right:5px;
+}
+
+.sub-filters-content{
+  padding:15px;
+  width: 550px;
+  min-height: 120px;
+  float:right;
 }

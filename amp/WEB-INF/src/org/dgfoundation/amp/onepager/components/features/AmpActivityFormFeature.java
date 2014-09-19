@@ -1271,7 +1271,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			if(isReject){ //is is reject we send the message
 				try {
 					AmpAuthWebSession wicketSession = (AmpAuthWebSession) org.apache.wicket.Session.get();
-					sendRejectMessage("activity rejected",am.getObject().getActivityCreator(),wicketSession.getCurrentMember(),am.getObject());
+					sendRejectMessage(am.getObject().getRejectMessage(),am.getObject().getActivityCreator(),wicketSession.getCurrentMember(),am.getObject());
 				} catch (AimException e) {
 					logger.error("Cannot create reject message",e);
 				}
@@ -1305,7 +1305,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		User user;
 		activityId=(Long)linkedActivity.getIdentifier();
 		user=TeamMemberUtil.getAmpTeamMember(tmFrom.getMemberId()).getUser();
-		message.setName("Activity Rejected");
+		message.setName(TranslatorWorker.translateText("Activity Rejected"));
     	message.setSenderType(MessageConstants.SENDER_TYPE_USER);
     	message.setSenderId(tmFrom.getMemberId());
         

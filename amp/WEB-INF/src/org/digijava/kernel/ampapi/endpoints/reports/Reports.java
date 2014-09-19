@@ -98,7 +98,6 @@ public class Reports {
 			//TODO: for now we do not translate other types of reports than Donor Type reports (hide icons for non-donor-type reports?)
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
 			GeneratedReport generatedReport = generator.executeReport(spec);
-			cacheReportAreas(reportId, generatedReport);
 			return generatedReport;
 		} catch (AMPException e) {
 			logger.error(e);
@@ -109,34 +108,29 @@ public class Reports {
 	/**
 	 * Gets the result for the specified reportId and a given page number
 	 * @param reportId - report ID
-	 * @param page - page number, starting from 1
+	 * @param page - page number, starting from 1. Use 0 to retrieve only 
+	 * pagination information, without any records
+	 * @param regenerate - set to true for all first access and any changes 
+	 * and to false for consequent page navigation 
 	 * @return ReportArea result for the requested page
 	 */
 	@GET
-	@Path("/report/{report_id}/result/pages/{page}")
+	@Path("/report/{report_id}/result/pages/{page}/{regenerate}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public final ReportArea getReportResult(@PathParam("report_id") Long reportId,
-			@PathParam("page") Integer page) {
-		int pageSize = ReportPaginationUtils.getRecordsNumberPerPage();
-		int start = (page - 1) * pageSize;
-		return ReportPaginationUtils.getReportArea(ReportPaginationCacher.getReportAreas(reportId), start, pageSize);
-	}
-	
-	@GET
-	@Path("/report/{report_id}/result/pages")
-	@Produces(MediaType.APPLICATION_JSON)
-	public final int getReportPagesCount(@PathParam("report_id") Long reportId) {
-		ReportAreaMultiLinked[] areas = ReportPaginationCacher.getReportAreas(reportId); 
-		int pageSize = ReportPaginationUtils.getRecordsNumberPerPage();
-		return areas == null ? 0 : (areas.length + pageSize - 1) / pageSize;
-	}
-	
-	private final ReportAreaMultiLinked[] cacheReportAreas(Long reportId, GeneratedReport generatedReport) {
-		if (generatedReport == null) return null;
-		//adding
-		ReportAreaMultiLinked[] res = ReportPaginationUtils.convert(generatedReport.reportContents);
-		ReportPaginationCacher.addReportAreas(reportId, res);
-		return res;
+	public final JSONReportPage getReportResultByPage(@PathParam("report_id") Long reportId,
+			@PathParam("page") Integer page, 
+			@PathParam("regenerate") Boolean regenerate) {
+		int recordsPerPage = ReportPaginationUtils.getRecordsNumberPerPage();
+		int start = (page - 1) * recordsPerPage;
+		ReportAreaMultiLinked[] areas = null;
+		if (regenerate) {
+			GeneratedReport generatedReport = getReportResult(reportId);
+			areas = ReportPaginationUtils.cacheReportAreas(reportId, generatedReport);
+		} else 
+			areas = ReportPaginationCacher.getReportAreas(reportId);
+		ReportArea pageArea = ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
+		int totalPageCount = ReportPaginationUtils.getPageCount(areas, recordsPerPage);
+		return new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount);
 	}
 	
 	@GET

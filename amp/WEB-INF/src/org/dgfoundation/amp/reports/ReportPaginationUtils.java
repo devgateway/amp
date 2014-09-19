@@ -9,6 +9,7 @@ import java.util.Deque;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -19,6 +20,9 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
  */
 public class ReportPaginationUtils {
 	
+	/**
+	 * @return maximum records number per page, excluding rows that display sub-totals and totals
+	 */
 	public static int getRecordsNumberPerPage() {
 		AmpApplicationSettings ampAppSettings = AmpARFilter.getEffectiveSettings();				
 		
@@ -35,7 +39,34 @@ public class ReportPaginationUtils {
 		return recordsPerPage;
 	}
 	
+	/**
+	 * @param areas - list of records (leaf areas), without totals
+	 * @param recordsPerPage - maximum number of records per page
+	 * @return page count for the given list of leaf areas and number of records per page
+	 */
+	public static int getPageCount(ReportAreaMultiLinked[] areas, int recordsPerPage) {
+		return areas == null ? 0 : (areas.length + recordsPerPage - 1) / recordsPerPage;
+	}
 	
+	/**
+	 * Adds to the cache report result records
+	 * @param reportId - report id for the provided results  
+	 * @param generatedReport - report result
+	 * @return list of records, excluding totals
+	 */
+	public final static ReportAreaMultiLinked[] cacheReportAreas(Long reportId, GeneratedReport generatedReport) {
+		if (generatedReport == null) return null;
+		//adding
+		ReportAreaMultiLinked[] res = convert(generatedReport.reportContents);
+		ReportPaginationCacher.addReportAreas(reportId, res);
+		return res;
+	}
+	
+	/**
+	 * Converts a report area to its ordered list of records excluding totals 
+	 * @param area - report area to convert
+	 * @return list of records excluding totals
+	 */
 	public static ReportAreaMultiLinked[] convert(ReportArea area) {
 		ReportAreaMultiLinked root = new ReportAreaMultiLinked(area, null, null);
 		//transform 
@@ -59,8 +90,15 @@ public class ReportPaginationUtils {
 			dftList.add(current);
 	}
 	
+	/**
+	 * Generates a report area from the specified 'start' position for the given 'size' offset
+	 * @param root - the list of records, excluding totals 
+	 * @param start - the record index
+	 * @param size - offset size from the starting record to be included into the report area 
+	 * @return report area that starts from 'start' record with a maximum 'size' (limited by the end of records)  
+	 */
 	public static ReportArea getReportArea(ReportAreaMultiLinked[] root, int start, int size) {
-		if (root == null || root.length == 0 || start >= root.length || size == 0) return null;
+		if (root == null || root.length == 0 || start < 0 || start >= root.length || size == 0) return null;
 		ReportAreaMultiLinked startArea = root[start];
 		Deque<List<ReportArea>> stack = new ArrayDeque<List<ReportArea>>();
 		//first time we do not traverse children: either this is a leaf already, either this is an aggregate, i.e. leafs are behind in DFT order

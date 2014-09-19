@@ -6,7 +6,7 @@ var Template = fs.readFileSync(__dirname + '/../templates/layers-template.html',
 
 
 module.exports = BaseControlView.extend({
-  id: 'tool-layers',
+  id: 'tool-layers-sd',
   title: 'Statistical Data',
   iconClass: 'ampicon-layers',
   description: 'Country indicators.',

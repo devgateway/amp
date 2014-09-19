@@ -8,7 +8,7 @@
   z-index: @amp_map_layer;
   position: absolute;
   top: @amp_menu_height;
-  left: @amp_sidebar_width;
+  left: 0;
   right: 0;
   bottom: 5px;
   border-radius: 0 0 0 5px;
@@ -64,7 +64,7 @@
 .leaflet-top {
   top: @amp_map_header_height;
 }
-
+/* The sidebar additionally overrides leaflet-left according to expansion */
 
 // Map markers and icons
 .map-adm-icon {
@@ -115,7 +115,17 @@
   text-shadow: 0 0 3px black;
 }
 
-//Overide esri attribution img style
-.leaflet-control a > img{
+//Override esri attribution img style
+.leaflet-control a > img {
     left: 0px !important;
 }
+
+/*
+ * More leaflet-control .leaflet-left overrides are in amp-sidebar.less
+ *
+ */
+
+//.leaflet-container div.leaflet-control.leaflet-control-attribution a{
+//  left: 80px !important;
+//}
+

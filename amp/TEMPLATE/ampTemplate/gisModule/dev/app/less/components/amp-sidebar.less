@@ -12,7 +12,8 @@
 
 
 #sidebar {
-  position: absolute;
+  z-index: @amp_sidebar_layer;
+  position: fixed;
   top: @amp_menu_height;
   left: 0;
   bottom: 0;
@@ -33,6 +34,40 @@
   .glyphicon-info-sign {
     color: @amp_sidebar_help_icon;
   }
+
+  .sidebar-icons-only-button {
+    position:absolute;
+    left:266px;
+    top: 10px;
+  }
+
+
+}
+
+//Override the attribution .leaflet-control according to sidebar's current width
+.leaflet-left {
+  left: @amp_sidebar_width;
+}
+
+//Override the attribution according to sidebar's current width
+#map-container.sidebar-icons-only .leaflet-left {
+  left: @amp_sidebar_icons_only_width;
+}
+
+#sidebar.sidebar-icons-only {
+
+  width: @amp_sidebar_icons_only_width;
+  top: @amp_menu_height + 3px;
+
+  //hide labels of the accordion
+  .panel h3>span + span {
+    display:none;
+  }
+
+  .sidebar-icons-only-button {
+    left:54px;
+  }
+
 }
 
 
@@ -149,7 +184,6 @@
 }
 #quality-indicator {
   // Heads up: any margins or overflow below this will trigger a scrollbar.
-  width: @amp_sidebar_width;
   background: @amp_sidebar_header_bg;
   padding-top:5px;
 

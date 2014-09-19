@@ -13,6 +13,11 @@ module.exports = Backbone.View.extend({
 
   data: null,  // data attaches here
 
+  events: {
+    'click .sidebar-icons-only-button': 'toggleIconOnlySidebar',
+    'click .accordion-group': 'disableIconOnlySidebar'
+  },
+
   initialize: function(options) {
     this.data = options.data;
     this.display = options.display;
@@ -53,5 +58,30 @@ module.exports = Backbone.View.extend({
     $('#amp-menu').html(AmpNavTemplate);
     // TODO: If it's our responsibility...
     // render translation selector using: this.translator.getAvailableLanguages
+  },
+  toggleIconOnlySidebar: function(ev) {
+    if ($('#sidebar', this.el).hasClass('sidebar-icons-only') !== true) {
+      //Manually close all the uncollapsed (bootstrap accordion)
+      //First mark the header as unhighlighted
+      $('.accordion-group .panel .in', this.el).parent().find('.accordion-toggle').addClass('collapsed');
+      //then hide the children contents using Bootstrap js
+      $('.accordion-group .panel .in', this.el).collapse('hide');
+      //$(this.el).find('.accordion-box .in').collapse('hide');
+
+    }
+
+    $(this.el).find('#sidebar').toggleClass('sidebar-icons-only');
+    $(this.el).find('#map-container').toggleClass('sidebar-icons-only');
+
+    $(ev.target).toggleClass('glyphicon-chevron-right');
+    $(ev.target).toggleClass('glyphicon-chevron-left');
+
+  },
+  disableIconOnlySidebar: function() {
+    $(this.el).find('#sidebar').removeClass('sidebar-icons-only');
+    $(this.el).find('#map-container').removeClass('sidebar-icons-only');
+    $(this.el).find('#sidebar > a > span').removeClass('glyphicon-chevron-right');
+    $(this.el).find('#sidebar > a > span').addClass('glyphicon-chevron-left');
   }
+
 });

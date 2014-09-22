@@ -351,7 +351,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 		
 		if (rowAxis.getPositionCount() > 0 && columnAxis.getPositionCount() > 0 ) {
-			leafHeaders = getOrderedLeafColumnsList(rowAxis, columnAxis);
+			leafHeaders = getOrderedLeafColumnsList(spec, rowAxis, columnAxis);
 		} else 
 			leafHeaders = null;
 		
@@ -507,7 +507,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	
 	private GeneratedReport toGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, int duration) throws AMPException {
 		long start = System.currentTimeMillis();
-		CellDataSetToGeneratedReport translator = new CellDataSetToGeneratedReport(spec, cellDataSet, leafHeaders, environment);
+		CellDataSetToGeneratedReport translator = new CellDataSetToGeneratedReport(spec, cellDataSet, leafHeaders);
 		ReportAreaImpl root = translator.transformTo(reportAreaType);
 		GeneratedReport genRep = new GeneratedReport(spec, duration + (int)(System.currentTimeMillis() - start), null, root, getRootHeaders(leafHeaders), leafHeaders); 
 		return genRep;
@@ -573,7 +573,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		return genRep;
 	}
 	
-	private List<ReportOutputColumn> getOrderedLeafColumnsList(CellSetAxis rowAxis, CellSetAxis columnAxis) {
+	private List<ReportOutputColumn> getOrderedLeafColumnsList(ReportSpecification spec, CellSetAxis rowAxis, CellSetAxis columnAxis) {
 		//<fully qualified column name, ReportOutputColumn instance>, where fully qualified means with all parents name: /root/root-child/root-grandchild/...
 		Map<String, ReportOutputColumn> reportColumnsByFullName = new LinkedHashMap<String,ReportOutputColumn>();
 		List<ReportOutputColumn> reportColumns = new ArrayList<ReportOutputColumn>(); //leaf report columns list
@@ -599,7 +599,12 @@ public class MondrianReportGenerator implements ReportExecutor {
 				}
 			}
 		}
-		
+		//add measures total columns
+		if (spec.isCalculateColumnTotals() && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
+			ReportOutputColumn totalMeasuresColumn = new ReportOutputColumn(MoConstants.TOTAL_MEASURES, null, environment.locale);
+			for (ReportMeasure measure : spec.getMeasures())
+				leafHeaders.add(new ReportOutputColumn(measure.getMeasureName(), totalMeasuresColumn, environment.locale));
+		}
 		return reportColumns;
 	}
 	

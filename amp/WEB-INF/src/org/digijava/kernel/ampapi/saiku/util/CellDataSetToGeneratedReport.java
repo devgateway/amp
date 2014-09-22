@@ -42,13 +42,11 @@ public class CellDataSetToGeneratedReport {
 	TotalAggregator[][] measureTotals = null;
 	List<TotalNode>[] rowTotals = null;
 	int[] currentSubGroupIndex;
-	final ReportEnvironment environment;
 	
-	public CellDataSetToGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, List<ReportOutputColumn> leafHeaders, ReportEnvironment environment) {
+	public CellDataSetToGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, List<ReportOutputColumn> leafHeaders) {
 		this.spec = spec;
 		this.cellDataSet = cellDataSet;
 		this.leafHeaders = leafHeaders;
-		this.environment = environment;
 		init();
 	}
 	
@@ -62,7 +60,6 @@ public class CellDataSetToGeneratedReport {
 				cellDataSet.getColTotalsLists() != null && cellDataSet.getColTotalsLists().length > 0 
 				&& cellDataSet.getColTotalsLists()[0] != null && cellDataSet.getColTotalsLists()[0].size() > 0) {
 			this.measureTotals = cellDataSet.getColTotalsLists()[0].get(0).getTotalGroups();
-			addTotalMeasures();
 		}
 		this.rowTotals = cellDataSet.getRowTotalsLists();
 	}
@@ -286,13 +283,6 @@ public class CellDataSetToGeneratedReport {
 		if (notNullColId > 0 && cellDataSet.getCellSetBody()[rowId + 1][notNullColId - 1].getRawValue() != null)
 			return true;
 		return false;
-	}
-	
-	private void addTotalMeasures() {
-		ReportOutputColumn totalMeasuresColumn = new ReportOutputColumn("Total Measures", null, environment.locale);
-		for (ReportMeasure measure : spec.getMeasures()) {
-			leafHeaders.add(new ReportOutputColumn(measure.getMeasureName(), totalMeasuresColumn, environment.locale));
-		}
 	}
 	
 	private void refillStack(Deque<List<ReportArea>> stack, int maxSize) {

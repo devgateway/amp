@@ -148,6 +148,7 @@ import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.IatiActivity;
 
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
+import org.digijava.module.editor.util.Constants;
 import org.digijava.module.message.triggers.ActivitySaveTrigger;
 import org.digijava.module.message.triggers.NotApprovedActivityTrigger;
 import org.hibernate.HibernateException;
@@ -485,7 +486,7 @@ public class DEImportBuilder {
 	private void processDescription(AmpActivity activity, ActivityType actType) {
 		// TODO Auto-generated method stub
 		//description
-		if(actType.getDescription()!=null && actType.getDescription().size()>0 ){
+		if (actType.getDescription() != null && actType.getDescription().size() >0 ) {
 			activity.setDescription(setEditorFreeTextType(actType.getDescription(), activity, "aim-desc-00-"));
 		}
 	}
@@ -1487,7 +1488,7 @@ public class DEImportBuilder {
 		return null;
 	}
 
-	private Editor createEditor(Site site, String key, String language){
+	 static Editor createEditor(Site site, String key, String language) {
         Editor editor = new Editor();
         editor.setSiteId(site.getSiteId());
         editor.setSite(site);
@@ -1496,7 +1497,7 @@ public class DEImportBuilder {
         return editor;
     }
 
-	private Editor createEditor(String siteId, String key, String language){
+	static Editor createEditor(String siteId, String key, String language){
 		Editor editor = new Editor();
 		editor.setSiteId(siteId);
 		editor.setEditorKey(key);
@@ -2336,18 +2337,23 @@ public class DEImportBuilder {
 
         long curMillis = System.currentTimeMillis();
         Date curDate = new Date();
-        for (int idx = 0; idx < flds.length; idx ++) {
-            String getter = new StringBuilder("get").append(flds[idx]).toString();
+        for (String fld : flds) {
+            String getter = new StringBuilder("get").append(fld).toString();
 
             try {
                 Method method = clazz.getMethod(getter, noparams);
                 String val = (String) method.invoke(ampActivity, null);
 
                 if (val == null || val.trim().isEmpty()) {
-                    String key = new StringBuilder(prefix).append(flds[idx]).append("_").append(curMillis).toString();
-                    Editor ed = createEditor(site, key, "en");
+                    String key = new StringBuilder(prefix).append(fld).append("_").append(curMillis).toString();
+                    Editor ed = null;
+                    if (site != null && site.getId() != null) {
+                        ed = createEditor(site, key, "en");
+                    } else {
+                        ed = createEditor("amp", key, "en");
+                    }
                     ed.setLastModDate(curDate);
-                    ed.setGroupName(org.digijava.module.editor.util.Constants.GROUP_OTHER);
+                    ed.setGroupName(Constants.GROUP_OTHER);
                     ed.setBody("");
                     try {
                         org.digijava.module.editor.util.DbUtil.saveEditor(ed);
@@ -2357,7 +2363,7 @@ public class DEImportBuilder {
                     }
                     Class[] param = new Class[1];
                     param[0] = String.class;
-                    String setter = new StringBuilder("set").append(flds[idx]).toString();
+                    String setter = new StringBuilder("set").append(fld).toString();
                     Method set = clazz.getMethod(setter, param);
                     set.invoke(ampActivity, key);
                 }

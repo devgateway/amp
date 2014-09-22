@@ -153,13 +153,15 @@ public class ActivityUtil {
 
 		a.setDeleted(false);
 		//we will check what is comming in funding
-		Set<AmpFunding> af=
-		a.getFunding();
-		for (AmpFunding ampFunding : af) {
-			System.out.println("********************");
-			System.out.println(ampFunding.getAmpFundingId() +" " + ampFunding.getAmpDonorOrgId().getName());
-			System.out.println("********************");
-		}
+		Set<AmpFunding> af = a.getFunding();
+
+        if (af != null) {
+            for (AmpFunding ampFunding : af) {
+                System.out.println("********************");
+                System.out.println(ampFunding.getAmpFundingId() + " " + ampFunding.getAmpDonorOrgId().getName());
+                System.out.println("********************");
+            }
+        }
 		
 		
         if (ContentTranslationUtil.multilingualIsEnabled())

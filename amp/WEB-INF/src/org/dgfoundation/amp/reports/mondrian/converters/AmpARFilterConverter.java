@@ -5,22 +5,21 @@ package org.dgfoundation.amp.reports.mondrian.converters;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
-import org.dgfoundation.amp.newreports.NamedTypedEntity;
-import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.util.Identifiable;
@@ -28,6 +27,49 @@ import org.digijava.module.aim.util.Nameable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+
+/**********************
+The status for the Report Filters tab from: 
+https://docs.google.com/a/developmentgateway.org/spreadsheets/d/14k8GFwiacYZ6su_TOSdPxNj2StxlSeixFbXbhumu32c/edit#gid=128056684
+**********************
+* Mapped:
+* **********************
+Donor Type
+Donor Group
+Donor Agency
+Executing Agencies
+Implementing Agencies
+Responsible Agencies
+Contracting Agencies
+Primary Sectors
+Secondary Sectors
+Financing Instrument
+Type of Assistance
+Mode of Payment
+On/Off Budget
+Regions
+Status
+Workspace
+Actual Start Date
+Date Filter
+Beneficiary Agency 
+Contracting Agency Groups
+Primary Programs
+Secondary Programs
+**********************
+* pending schema / column constants clarifications:
+* **********************
+Archived
+**********************
+* need to detect where these filters are stored:
+* **********************
+Pledges Titles
+Approval Status
+Extension Date 2
+Planned Completion Date
+Date of Agreement
+Municipality
+* */
 
 /**
  * Translates report filters from ARFilters to a configuration that is applicable for Mondrian Reports API.
@@ -70,6 +112,8 @@ public class AmpARFilterConverter {
 	private void buildCurrentFilters() {
 		this.entityType = arFilter.isPledgeFilter() ? ReportEntityType.ENTITY_TYPE_PLEDGE : ReportEntityType.ENTITY_TYPE_ACTIVITY;
 
+		addProjectFilters();
+		
 		addOrganizationsFilters();
 		addSectorFilters();
 		addProgramAndNationalObjectivesFilters();
@@ -78,31 +122,58 @@ public class AmpARFilterConverter {
 		
 		//financing
 		addFinancingFilters();
-		
+		//dates
 		addFundingDatesFilters();
+		addActivityDatesFilters();
+	}
+	
+	private void addProjectFilters() {
+		if (arFilter.isPledgeFilter()) return;
+		addCategoryValueNamesFilter(arFilter.getStatuses(), ColumnConstants.STATUS, entityType);
+		addFilter(arFilter.getWorkspaces(), ColumnConstants.TEAM, entityType);
+		//TODO:
+		//filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.??, entityType), new FilterRule(arFilter.getApprovalStatusSelected(), true, false)); 
+		addBooleanFilter(arFilter.getGovernmentApprovalProcedures(), ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, entityType);
+		addBooleanFilter(arFilter.getJointCriteria(), ColumnConstants.JOINT_CRITERIA, entityType);
+		//TODO:
+		//addBooleanFilter(arFilter.getShowArchived(), ColumnConstants.??, entityType);
 	}
 	
 	private void addFundingDatesFilters() {
 		//if (!arFilter.hasDateFilter()) return;
 		try {
-		if (arFilter.getYearFrom() != null || arFilter.getYearTo() != null)
-			if (arFilter.getYearFrom() == arFilter.getYearTo())
-				filterRules.addSingleYearFilterRule(arFilter.getYearFrom(), true);
-			else
-				filterRules.addYearsRangeFilterRule(arFilter.getYearFrom(), arFilter.getYearTo());
-
-		if (arFilter.buildFromDateAsDate() != null || arFilter.buildToDateAsDate() != null)
-			if (arFilter.buildFromDateAsDate() != null && arFilter.buildFromDateAsDate().equals(arFilter.buildToDateAsDate()))
-				filterRules.addSingleDateFilterRule(arFilter.buildFromDateAsDate(), true);
-			else 
-				filterRules.addDateRangeFilterRule(arFilter.buildFromDateAsDate(), arFilter.buildToDateAsDate());
+			if (arFilter.getYearFrom() != null || arFilter.getYearTo() != null)
+				if (arFilter.getYearFrom() == arFilter.getYearTo())
+					filterRules.addSingleYearFilterRule(arFilter.getYearFrom(), true);
+				else
+					filterRules.addYearsRangeFilterRule(arFilter.getYearFrom(), arFilter.getYearTo());
+	
+			Date from = arFilter.buildFromDateAsDate();
+			Date to = arFilter.buildToDateAsDate();
+			if (from != null || to != null)
+				if (from != null && from.equals(to))
+					filterRules.addSingleDateFilterRule(from, true);
+				else 
+					filterRules.addDateRangeFilterRule(from, to);
 		} catch(AmpApiException ex) {
 			logger.error(ex.getMessage());
 		}
 	}
 	
-	private void addActivityDatesFilters(Map<ReportElement, FilterRule> filterRules) {
-		
+	private void addActivityDatesFilters() {
+		addActivityDateFilter(arFilter.buildFromAndToActivityStartDateAsDate(), ColumnConstants.ACTUAL_START_DATE);
+		addActivityDateFilter(arFilter.buildFromAndToProposedApprovalDateAsDate(), ColumnConstants.PROPOSED_APPROVAL_DATE);
+		addActivityDateFilter(arFilter.buildFromAndToActivityActualCompletionDateAsDate(), ColumnConstants.ACTUAL_COMPLETION_DATE);
+		addActivityDateFilter(arFilter.buildFromAndToActivityFinalContractingDateAsDate(), ColumnConstants.FINAL_DATE_FOR_CONTRACTING);
+	}
+	
+	private void addActivityDateFilter(Date[] fromTo, String columnName) {
+		if (fromTo == null || fromTo.length != 2 || (fromTo[0] == null && fromTo[1] == null)) return;
+		try {
+			filterRules.addDateRangeFilterRule(MondrianReportUtils.getColumn(columnName, entityType), fromTo[0], fromTo[1]);
+		} catch (AmpApiException ex) {
+			logger.error(ex.getMessage());
+		}
 	}
 	
 	private void addOrganizationsFilters() {
@@ -118,7 +189,8 @@ public class AmpARFilterConverter {
 		addFilter(arFilter.getBeneficiaryAgency(), ColumnConstants.BENEFICIARY_AGENCY, ReportEntityType.ENTITY_TYPE_ALL);
 		addFilter(arFilter.getImplementingAgency(), ColumnConstants.RESPONSIBLE_ORGANIZATION, ReportEntityType.ENTITY_TYPE_ALL);
 		addFilter(arFilter.getContractingAgency(), ColumnConstants.CONTRACTING_AGENCY, ReportEntityType.ENTITY_TYPE_ALL);
-		//TODO: Secondary Beneficiary Agency Group	
+		//related agencies groups
+		addFilter(arFilter.getContractingAgencyGroups(), ColumnConstants.CONTRACTING_AGENCY_GROUPS, ReportEntityType.ENTITY_TYPE_ALL);
 	}
 	
 	/** adds primary, secondary and tertiary sectors to the filters if specified */
@@ -220,17 +292,23 @@ public class AmpARFilterConverter {
 				values.add(identifiable.getName());
 			}
 		
-		addFilterRule(new ReportColumn(columnName, type), new FilterRule(values, true, USE_IDS));
+		addFilterRule(columnName, type, new FilterRule(values, true, USE_IDS));
 	}
 	
-	private void addFilterRule(NamedTypedEntity entity, FilterRule rule) {
-		filterRules.addFilterRule(entity, rule);
+	private void addBooleanFilter(Boolean flag, String columnName, ReportEntityType type) {
+		if(flag == null) return;
+		addFilterRule(columnName, type, new FilterRule(flag ? MoConstants.BOOLEAN_TRUE_KEY : MoConstants.BOOLEAN_FALSE_KEY, true, true));
+	}
+	
+	private void addFilterRule(String columnName, ReportEntityType type, FilterRule rule) {
+		filterRules.addFilterRule(MondrianReportUtils.getColumn(columnName, type), rule);
 	}
 	
 	private void addFinancingFilters() {
 		addCategoryValueNamesFilter(arFilter.getFinancingInstruments(), ColumnConstants.FINANCING_INSTRUMENT, ReportEntityType.ENTITY_TYPE_ALL);
 		addCategoryValueNamesFilter(arFilter.getAidModalities(), ColumnConstants.MODALITIES, ReportEntityType.ENTITY_TYPE_ACTIVITY);
 		addCategoryValueNamesFilter(arFilter.getTypeOfAssistance(), ColumnConstants.TYPE_OF_ASSISTANCE, ReportEntityType.ENTITY_TYPE_ACTIVITY);
+		addCategoryValueNamesFilter(arFilter.getModeOfPayment(), ColumnConstants.MODE_OF_PAYMENT, entityType);
 		//TODO capital vs Recurrent
 		//addCategoryValueNamesFilter(arFilter.get, ColumnConstants., ReportEntityType.ENTITY_TYPE_ACTIVITY);
 		addCategoryValueNamesFilter(arFilter.getBudget(), ColumnConstants.ON_OFF_TREASURY_BUDGET, ReportEntityType.ENTITY_TYPE_ACTIVITY);
@@ -243,7 +321,7 @@ public class AmpARFilterConverter {
 		for (AmpCategoryValue categValue: set) { 
 			names.add(categValue.getValue());
 		}
-		addFilterRule(new ReportColumn(columnName, type), new FilterRule(names, true, false));
+		addFilterRule(columnName, type, new FilterRule(names, true, false));
 	}
 	
 	public MondrianReportSettings buildSettings() {

@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.NamedTypedEntity;
+import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportFilters;
@@ -102,6 +103,19 @@ public class MondrianReportFilters implements ReportFilters {
 	 */
 	public void addDateRangeFilterRule(Date from, Date to) throws AmpApiException {
 		addFilterRule(new ReportElement(ElementType.DATE), MondrianUtils.getDateRangeFilterRule(from, to));
+	}
+	
+	/**
+	 * Adds a date range filter [from .. to] or [from .. infinite ) or (infinite .. to],
+	 * over the specified report column
+	 * @param column - the column to filter by (may not be present in the report)
+	 * @param from - the date to start from or null
+	 * @param to - the date to end with or null
+	 * @throws AmpApiException if range is invalid
+	 */
+	public void addDateRangeFilterRule(ReportColumn column, Date from, Date to) throws AmpApiException {
+		//TODO: update based on schema definition
+		addFilterRule(new ReportElement(column), MondrianUtils.getDateRangeFilterRule(from, to));
 	}
 	
 	/**

@@ -2579,6 +2579,25 @@ public class AmpARFilter extends PropertyListable {
 	public String getFromActivityStartDate() {
 		return fromActivityStartDate;
 	}
+	
+	/**
+	 * @return a ['from', 'to'] pair for ActivityStartDate range or [null, null] if none is configured
+	 */
+	public Date[] buildFromAndToActivityStartDateAsDate() {
+		boolean noFrom = fromActivityStartDate == null || fromActivityStartDate.length() == 0;
+		boolean noTo = toActivityStartDate == null || toActivityStartDate.length() == 0;
+		if (noFrom && noTo) {
+			Date[] dates = this.calculateDateFiltersAsDate(this.dynActivityStartFilterCurrentPeriod, this.dynActivityStartFilterAmount, this.dynActivityStartFilterOperator, this.dynActivityStartFilterXPeriod);
+			return dates;
+		}
+		try {
+			return new Date[]{(noFrom ? null : sdfIn.parse(fromActivityStartDate)), (noTo ? null : sdfIn.parse(toActivityStartDate))};
+		}
+		catch(ParseException e) {
+			logger.error("invalid date trickled into AmpARFilter::fromActivityStartDate!", e); // SHOULD NOT HAPPEN!
+			return null;
+		}
+	}
 
 	/**
 	 * @param fromActivityStartDate the fromActivityStartDate to set
@@ -2589,6 +2608,25 @@ public class AmpARFilter extends PropertyListable {
 
 	public String getFromProposedApprovalDate() {
 		return fromProposedApprovalDate;
+	}
+	
+	/**
+	 * @return a ['from', 'to'] pair for ProposedApprovalDate range or [null, null] if none is configured
+	 */
+	public Date[] buildFromAndToProposedApprovalDateAsDate() {
+		boolean noFrom = fromProposedApprovalDate == null || fromProposedApprovalDate.length() == 0;
+		boolean noTo = toProposedApprovalDate == null || toProposedApprovalDate.length() == 0;
+		if (noFrom && noTo) {
+			Date[] dates = this.calculateDateFiltersAsDate(this.dynProposedApprovalFilterCurrentPeriod, this.dynProposedApprovalFilterAmount, this.dynProposedApprovalFilterOperator, this.dynProposedApprovalFilterXPeriod);
+			return dates;
+		}
+		try {
+			return new Date[]{(noFrom ? null : sdfIn.parse(fromProposedApprovalDate)), (noTo ? null : sdfIn.parse(toProposedApprovalDate))};
+		}
+		catch(ParseException e) {
+			logger.error("invalid date trickled into AmpARFilter::fromProposedApprovalDate!", e); // SHOULD NOT HAPPEN!
+			return null;
+		}
 	}
 
 	public void setFromProposedApprovalDate(String fromProposedApprovalDate) {
@@ -2624,6 +2662,25 @@ public class AmpARFilter extends PropertyListable {
 	 */
 	public String getFromActivityActualCompletionDate() {
 		return fromActivityActualCompletionDate;
+	}
+	
+	/**
+	 * @return a ['from', 'to'] pair for ActivityActualCompletionDate range or [null, null] if none is configured
+	 */
+	public Date[] buildFromAndToActivityActualCompletionDateAsDate() {
+		boolean noFrom = fromActivityActualCompletionDate == null || fromActivityActualCompletionDate.length() == 0;
+		boolean noTo = toActivityActualCompletionDate == null || toActivityActualCompletionDate.length() == 0;
+		if (noFrom && noTo) {
+			Date[] dates = this.calculateDateFiltersAsDate(this.dynActivityActualCompletionFilterCurrentPeriod, this.dynActivityActualCompletionFilterAmount, this.dynActivityActualCompletionFilterOperator, this.dynActivityActualCompletionFilterXPeriod);
+			return dates;
+		}
+		try {
+			return new Date[]{(noFrom ? null : sdfIn.parse(fromActivityActualCompletionDate)), (noTo ? null : sdfIn.parse(toActivityActualCompletionDate))};
+		}
+		catch(ParseException e) {
+			logger.error("invalid date trickled into AmpARFilter::fromActivityActualCompletionDate!", e); // SHOULD NOT HAPPEN!
+			return null;
+		}
 	}
 
 	/**
@@ -2829,6 +2886,25 @@ public class AmpARFilter extends PropertyListable {
 	 */
 	public String getFromActivityFinalContractingDate() {
 		return fromActivityFinalContractingDate;
+	}
+	
+	/**
+	 * @return a ['from', 'to'] pair for ActivityFinalContractingDate range or [null, null] if none is configured
+	 */
+	public Date[] buildFromAndToActivityFinalContractingDateAsDate() {
+		boolean noFrom = fromActivityFinalContractingDate == null || fromActivityFinalContractingDate.length() == 0;
+		boolean noTo = toActivityFinalContractingDate == null || toActivityFinalContractingDate.length() == 0;
+		if (noFrom && noTo) {
+			Date[] dates = this.calculateDateFiltersAsDate(this.dynActivityFinalContractingFilterCurrentPeriod, this.dynActivityFinalContractingFilterAmount, this.dynActivityFinalContractingFilterOperator, this.dynActivityFinalContractingFilterXPeriod);
+			return dates;
+		}
+		try {
+			return new Date[]{(noFrom ? null : sdfIn.parse(fromActivityFinalContractingDate)), (noTo ? null : sdfIn.parse(toActivityFinalContractingDate))};
+		}
+		catch(ParseException e) {
+			logger.error("invalid date trickled into AmpARFilter::fromActivityFinalContractingDate!", e); // SHOULD NOT HAPPEN!
+			return null;
+		}
 	}
 
 	/**

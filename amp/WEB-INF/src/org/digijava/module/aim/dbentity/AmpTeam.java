@@ -22,11 +22,12 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 @TranslatableClass (displayName = "Team")
-public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versionable,*/ FilterDataSetInterface<AmpTeamFilterData> {
+public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versionable,*/ FilterDataSetInterface<AmpTeamFilterData>,  
+									NameableOrIdentifiable {
 	private static final Logger logger = Logger.getLogger(AmpTeam.class);
 	private Long ampTeamId;
 	@TranslatableField

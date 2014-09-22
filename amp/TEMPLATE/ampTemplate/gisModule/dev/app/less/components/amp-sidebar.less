@@ -22,39 +22,31 @@
   color: @amp_inverse;
   border-right: 2px solid  @amp_inverse_bg;
 
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  .vertical-expand {
-    // sticky-footer
-    min-height: 99%;
-    margin-bottom: -@amp_sidebar_quality_height;
-  }
-
   .glyphicon-info-sign {
     color: @amp_sidebar_help_icon;
   }
 
   .sidebar-icons-only-button {
-    position:absolute;
-    left:266px;
-    top: 10px;
+    background: none;
+    border: 0;
+    height: 44px;
+    position:relative;
+    text-align: right;
+    width:100%;
+
+  }
+
+  .sidebar-icons-only-button i {
+    font-size:16pt;
   }
 
 
 }
 
-//Override the attribution .leaflet-control according to sidebar's current width
-.leaflet-left {
-  left: @amp_sidebar_width;
-}
-
-//Override the attribution according to sidebar's current width
-#map-container.sidebar-icons-only .leaflet-left {
-  left: @amp_sidebar_icons_only_width;
-}
 
 #sidebar.sidebar-icons-only {
+
+/*SeeAlso amp-map.less for more .sidebar-icons-only styles on #map-container */
 
   width: @amp_sidebar_icons_only_width;
   top: @amp_menu_height + 3px;
@@ -65,7 +57,11 @@
   }
 
   .sidebar-icons-only-button {
-    left:54px;
+    background: none;
+    border: 0;
+    padding-left:0;
+    text-align: right;
+    width: 100%;
   }
 
 }
@@ -157,7 +153,7 @@
 .description {
   padding: 10px 10px;
   background: @amp_sidebar_description_bg;
-  
+
   color: @amp_emph;
   font-size: 0.9em;
   font-weight: 600;
@@ -176,25 +172,6 @@
   }
 }
 
-
-// stickyfooter crap for quality indicator
-.quality-push,
-#quality-indicator {
-  height: @amp_sidebar_quality_height;
-}
-#quality-indicator {
-  // Heads up: any margins or overflow below this will trigger a scrollbar.
-  background: @amp_sidebar_header_bg;
-  padding-top:5px;
-
-  p {
-    margin-bottom: 0;
-  }
-  .label {
-    font-weight: @light;
-  }
-}
-
 #tool-tools{
   .btn{
     min-width:48%;
@@ -204,5 +181,5 @@
 .available-maps ul{
   list-style: none;
   margin:0;
-  padding:0;  
+  padding:0;
 }

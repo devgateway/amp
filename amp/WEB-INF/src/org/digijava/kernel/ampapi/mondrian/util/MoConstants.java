@@ -43,9 +43,6 @@ public final class MoConstants {
 	public static final String FUNC_CAST = "Cast";
 
 	//Dimensions
-	public static final String PROJECT_TITLE = "Project Title"; //TODO: why cube def is split into separate dimensions for this info coming from same physical table
-	public static final String APPROVAL_STATUS = "Approval Status"; //TODO: why cube def is split into separate dimensions for this info coming from same physical table
-	public static final String AMP_ID = "AMP ID"; //TODO: why cube def is split into separate dimensions for this info coming from same physical table
 	public static final String ACTIVITY_STATUS = "Activity Status";
 	public static final String MODALITIES = "Modalities";
 	public static final String TYPE_OF_COOPERATION = "Type of Cooperation";
@@ -98,6 +95,15 @@ public final class MoConstants {
 	public static final String H_SECONDARY_SECTOR = "Level 1 Sector";
 	public static final String H_TETRIARY_SECTOR = "Level 2 Sector";
 	public static final String H_PROJECT_TITLE = "Project Title";
+	public static final String H_APPROVAL_STATUS = "Approval Status";
+	public static final String H_AMP_ID = "AMP ID";
+	public static final String H_TEAM = "Team";
+	public static final String H_ACTIVITY_CREATED_BY = "Activity Created By";
+	public static final String H_ACTIVITY_UPDATED_BY = "Activity Updated By";
+	public static final String H_ACTIVITY_APPROVED_BY ="Activity Approved By";
+	public static final String H_GOVERNMENT_APPROVAL_PROCEDURES = "Government Approval Procedures";
+	public static final String H_JOINT_CRITERIA = "Joint Criteria";
+	public static final String H_INDIRECT_ON_BUDGET = "Indirect On Budget";
 	private static final String H_CATEGORY_NAME = "Category Name";
 	public static final String H_ACTIVITY_STATUS = H_CATEGORY_NAME;
 	public static final String H_MODALITIES = H_CATEGORY_NAME;
@@ -118,11 +124,17 @@ public final class MoConstants {
 	public static final String H_ENVIRONMENT = "Environment";
 	public static final String H_MINORITIES = "Minorities";
 	public static final String H_PROGRAM_DESCRIPTION = "Program Description";
-	//public static final String H_LOCATIONS_DUPLICATE= "LocationsDuplicate";
 	//Attributes/Levels
 	public static final String ATTR_PROJECT_TITLE = "Project Title";
 	public static final String ATTR_APPROVAL_STATUS = "Approval Status";
 	public static final String ATTR_AMP_ID = "AMP ID";
+	public static final String ATTR_TEAM = "Team";
+	public static final String ATTR_ACTIVITY_CREATED_BY = "Activity Created By";
+	public static final String ATTR_ACTIVITY_UPDATED_BY = "Activity Updated By";
+	public static final String ATTR_ACTIVITY_APPROVED_BY ="Activity Approved By";
+	public static final String ATTR_GOVERNMENT_APPROVAL_PROCEDURES = "Government Approval Procedures";
+	public static final String ATTR_JOINT_CRITERIA = "Joint Criteria";
+	public static final String ATTR_INDIRECT_ON_BUDGET = "Indirect On Budget";
 	private static final String ATTR_CATEGORY_NAME = "Category Name";
 	public static final String ATTR_ACTIVITY_STATUS = ATTR_CATEGORY_NAME;
 	public static final String ATTR_MODALITIES = ATTR_CATEGORY_NAME;

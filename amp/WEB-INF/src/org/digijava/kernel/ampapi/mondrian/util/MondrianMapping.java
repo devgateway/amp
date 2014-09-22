@@ -107,9 +107,16 @@ public class MondrianMapping {
 	 */
 	private static final Map<NamedTypedEntity,MDXElement> entityMap = new HashMap<NamedTypedEntity, MDXElement>() {{
 			//Dimensions
-			put(new ReportColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.PROJECT_TITLE, MoConstants.ATTR_PROJECT_TITLE));
-			put(new ReportColumn(ColumnConstants.AMP_ID, ReportEntityType.ENTITY_TYPE_ALL), new MDXAttribute(MoConstants.AMP_ID, MoConstants.ATTR_AMP_ID));
-			//put(new ReportColumn(ColumnConstants.??, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.APPROVAL_STATUS, MoConstants.ATTR_APPROVAL_STATUS));
+			put(new ReportColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_PROJECT_TITLE, MoConstants.ATTR_PROJECT_TITLE));
+			put(new ReportColumn(ColumnConstants.AMP_ID, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_AMP_ID, MoConstants.ATTR_AMP_ID));
+			//put(new ReportColumn(ColumnConstants.??, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_APPROVAL_STATUS, MoConstants.ATTR_APPROVAL_STATUS));
+			put(new ReportColumn(ColumnConstants.TEAM, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_TEAM, MoConstants.ATTR_TEAM));
+			put(new ReportColumn(ColumnConstants.ACTIVITY_CREATED_BY, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_ACTIVITY_CREATED_BY, MoConstants.ATTR_ACTIVITY_CREATED_BY));
+			put(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_BY, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_ACTIVITY_UPDATED_BY, MoConstants.ATTR_ACTIVITY_UPDATED_BY));
+			//put(new ReportColumn(ColumnConstants.??, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_ACTIVITY_APPROVED_BY, MoConstants.ATTR_ACTIVITY_APPROVED_BY));
+			put(new ReportColumn(ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_GOVERNMENT_APPROVAL_PROCEDURES, MoConstants.ATTR_GOVERNMENT_APPROVAL_PROCEDURES));
+			put(new ReportColumn(ColumnConstants.JOINT_CRITERIA, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_JOINT_CRITERIA, MoConstants.ATTR_JOINT_CRITERIA));
+			//put(new ReportColumn(ColumnConstants.??, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_INDIRECT_ON_BUDGET, MoConstants.ATTR_INDIRECT_ON_BUDGET));
 			put(new ReportColumn(ColumnConstants.STATUS, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.ACTIVITY_STATUS, MoConstants.H_ACTIVITY_STATUS, MoConstants.ATTR_ACTIVITY_STATUS));
 			put(new ReportColumn(ColumnConstants.MODALITIES, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.MODALITIES, MoConstants.H_MODALITIES, MoConstants.ATTR_ACTIVITY_STATUS));
 			put(new ReportColumn(ColumnConstants.TYPE_OF_COOPERATION, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.TYPE_OF_COOPERATION, MoConstants.H_TYPE_OF_COOPERATION, MoConstants.ATTR_TYPE_OF_COOPERATION));

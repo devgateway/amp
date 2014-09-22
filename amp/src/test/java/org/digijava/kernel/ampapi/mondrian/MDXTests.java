@@ -182,7 +182,7 @@ public class MDXTests extends AmpTestCase {
 	public void testMultipleHierarchies() {
 		String expectedRes = null;
 		MDXConfig config = getDefaultConfig("testMultipleHierarchies", true);
-		config.getColumnAttributes().add(new MDXAttribute(MoConstants.APPROVAL_STATUS, MoConstants.ATTR_APPROVAL_STATUS));
+		config.getColumnAttributes().add(new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_APPROVAL_STATUS, MoConstants.ATTR_APPROVAL_STATUS));
 		config.getRowAttributes().add(0, new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
 		addSimpleFilter(config); //filter for easier testing
 		//on no cache: runs about 237 secs of filtering with filter on where vs 81.37 sec when filtering directly on axis 
@@ -196,7 +196,7 @@ public class MDXTests extends AmpTestCase {
 		config.addColumnMeasure(new MDXMeasure(MoConstants.ACTUAL_COMMITMENTS));
 		config.addColumnMeasure(new MDXMeasure(MoConstants.ACTUAL_DISBURSEMENTS));
 		config.addRowAttribute(new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.H_PRIMARY_SECTOR, MoConstants.ATTR_PRIMARY_SECTOR_NAME));
-		config.addRowAttribute(new MDXAttribute(MoConstants.PROJECT_TITLE, MoConstants.ATTR_PROJECT_TITLE));
+		config.addRowAttribute(new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_PROJECT_TITLE, MoConstants.ATTR_PROJECT_TITLE));
 		config.addRowAttribute(new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS, MoConstants.ATTR_REGION_NAME));
 		config.setAllowEmptyColumnsData(false);
 		config.setAllowEmptyRowsData(false);

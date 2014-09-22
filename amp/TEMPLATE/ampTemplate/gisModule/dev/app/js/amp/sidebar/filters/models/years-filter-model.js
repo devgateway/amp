@@ -29,7 +29,7 @@ module.exports = BaseFilterModel.extend({
     return data;
   },
 
-  serialize: function(){
+  serialize: function() {
     //TODO: return format filter API expects
     return {
       startYear: this.get('selectedStart'),

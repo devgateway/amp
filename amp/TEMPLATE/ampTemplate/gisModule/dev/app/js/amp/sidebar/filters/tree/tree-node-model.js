@@ -44,7 +44,7 @@ TreeNodeModel = Backbone.Model.extend({
 
 
   // TODO:in progress...
-  serialize: function(){
+  serialize: function() {
     var tmp = [];
     var children = this.get('children');
     children.each(function(child) {

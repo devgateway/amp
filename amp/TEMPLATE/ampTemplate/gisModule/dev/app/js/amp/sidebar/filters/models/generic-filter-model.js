@@ -28,11 +28,11 @@ module.exports = BaseFilterModel.extend({
     return deferred;
   },
 
-  serialize: function(){
+  serialize: function() {
     var tree = this.get('tree');
-    if(!tree){
+    if (!tree) {
       return {}; //no tree, nothing to serialize.
-    } else{
+    } else {
       var tmpAry = tree.serialize();
       //TODO: remove duplicates and any '-1'
       return tmpAry;

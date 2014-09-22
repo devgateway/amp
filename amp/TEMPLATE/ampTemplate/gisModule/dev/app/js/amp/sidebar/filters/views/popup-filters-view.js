@@ -235,8 +235,8 @@ module.exports = Backbone.View.extend({
 
     // trigger something that will serialize all....
     //TODO: move to app.data.filters, which should be turned into a special collection.
-    this.app.data.filters.each(function(filter){
-      console.log(filter.get('title') + ': ',filter.serialize());
+    this.app.data.filters.each(function(filter) {
+      console.log(filter.get('title') + ': ', filter.serialize());
     });
 
 

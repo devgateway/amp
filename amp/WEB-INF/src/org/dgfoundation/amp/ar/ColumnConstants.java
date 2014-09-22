@@ -5,7 +5,7 @@ package org.dgfoundation.amp.ar;
 
 /**
  * Constants for Column Names. <br>
- * Values are pulled from amp_columns.columnname
+ * Values are pulled from amp_columns.columnname and several are defined manually.
  * @author Nadejda Mandrescu
  *
  */
@@ -29,6 +29,8 @@ public class ColumnConstants {
 	public static final String AGREEMENT_SIGNATURE_DATE = "Agreement Signature Date";
 	public static final String AGREEMENT_TITLE_CODE = "Agreement Title + Code";
 	public static final String AMP_ID = "AMP ID";
+	public static final String APPROVAL_STATUS = "Approval Status";
+	public static final String ARCHIVED = "Archived";
 	public static final String AUDIT_SYSTEM = "Audit System";
 	public static final String AVERAGE_DISBURSEMENT_RATE = "Average Disbursement Rate";
 	public static final String AVERAGE_SIZE_OF_DISBURSEMENTS = "Average Size of Disbursements";

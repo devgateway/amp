@@ -67,24 +67,60 @@
 			<SQL dialect="generic"><![CDATA[mondrian_fact_table.entity_id IN (@@wsactivities@@)]]> </SQL>
 		</Table>
 
-		<Dimension name="Project Title" foreignKey="entity_id">
-			<Hierarchy hasAll="true" allMemberName="All Activities" primaryKey="amp_activity_id" name="Project Title">
+		<Dimension name="Activity Texts" foreignKey="entity_id">
+			<Hierarchy hasAll="true" allMemberName="All Project Title" primaryKey="amp_activity_id" name="Project Title">
 				<Table name="mondrian_activity_texts@@locale@@" />
 				<Level name="Project Title" column="amp_activity_id" type="Integer" nameColumn="name" />
 			</Hierarchy>
-		</Dimension>
 
-		<Dimension name="Approval Status" foreignKey="entity_id">
 			<Hierarchy hasAll="true" allMemberName="All Approval Statuses" primaryKey="amp_activity_id">
 				<Table name="mondrian_activity_texts@@locale@@" />
 				<Level name="Approval Status" column="approval_status" nameColumn="approval_status" />
 			</Hierarchy>
-		</Dimension>
 
-		<Dimension name="AMP ID" foreignKey="entity_id">
 			<Hierarchy hasAll="true" allMemberName="All AMP IDs" primaryKey="amp_activity_id" name="AMP ID">
 				<Table name="mondrian_activity_texts@@locale@@" />
-				<Level name="AMP ID" column="amp_activity_id" type="Integer" nameColumn="amp_id" uniqueMembers="true" /> <!-- not sure about uniqueMembers -->
+				<Level name="AMP ID" column="amp_activity_id" type="String" nameColumn="amp_id" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Team" primaryKey="amp_activity_id" name="Team">
+				<Table name="mondrian_activity_texts@@locale@@" />
+				<Level name="Team" column="team_id" type="String" nameColumn="team_name" /> 
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Activity Created By" primaryKey="amp_activity_id" name="Activity Created By">
+				<Table name="mondrian_activity_texts@@locale@@" />
+				<Level name="Activity Created By" column="creator_id" type="String" nameColumn="creator_name" /> 
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Activity Updated By" primaryKey="amp_activity_id" name="Activity Updated By">
+				<Table name="mondrian_activity_texts@@locale@@" />
+				<Level name="Activity Updated By" column="modifier_id" type="String" nameColumn="modifier_name" /> 
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Activity Approved By" primaryKey="amp_activity_id" name="Activity Approved By">
+				<Table name="mondrian_activity_texts@@locale@@" />
+				<Level name="Activity Approved By" column="approved_id" type="String" nameColumn="approver_name" /> 
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Status" primaryKey="amp_activity_id" name="Status">
+				<Table name="mondrian_activity_trn_texts@@locale@@" />
+				<Level name="Status" column="amp_status_id" type="String" nameColumn="amp_status_name" /> 
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Government Approval Procedures" primaryKey="amp_activity_id" name="Government Approval Procedures">
+				<Table name="mondrian_activity_trn_texts@@locale@@" />
+				<Level name="Government Approval Procedures" column="governmentapprovalprocedures_id" type="String" nameColumn="governmentapprovalprocedures_text" /> 
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Joint Criteria" primaryKey="amp_activity_id" name="Joint Criteria">
+				<Table name="mondrian_activity_trn_texts@@locale@@" />
+				<Level name="Joint Criteria" column="jointcriteria_id" type="String" nameColumn="jointcriteria_text" /> 
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Indirect On Budget" primaryKey="amp_activity_id" name="Indirect On Budget">
+				<Table name="mondrian_activity_trn_texts@@locale@@" />
+				<Level name="Indirect On Budget" column="iob_id" type="String" nameColumn="iob_text" /> 
 			</Hierarchy>
 		</Dimension>
 
@@ -155,6 +191,103 @@
 				<Level name="Activity Updated On" column="amp_activity_id" type="Date" nameColumn="date_updated" />
 			</Hierarchy>
 
+		</Dimension>
+
+		<Dimension name="Activity Fixed Texts" foreignKey="entity_id">
+			<Hierarchy hasAll="true" allMemberName="All Government Agreement Number" primaryKey="amp_activity_id" name="Government Agreement Number">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Government Agreement Number" column="amp_activity_id" type="String" nameColumn="gov_agreement_number" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Budget Code Project Id" primaryKey="amp_activity_id" name="Budget Code Project Id">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Budget Code Project Id" column="amp_activity_id" type="String" nameColumn="budget_code_project_id" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Draft" primaryKey="amp_activity_id" name="Draft">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Draft" column="amp_activity_id" type="Boolean" nameColumn="draft" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All FY" primaryKey="amp_activity_id" name="FY">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="FY" column="amp_activity_id" type="String" nameColumn="fy" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Vote" primaryKey="amp_activity_id" name="Vote">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Vote" column="amp_activity_id" type="String" nameColumn="vote" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Sub-Vote" primaryKey="amp_activity_id" name="Sub-Vote">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Sub-Vote" column="amp_activity_id" type="String" nameColumn="subvote" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Project Code" primaryKey="amp_activity_id" name="Project Code">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Project Code" column="amp_activity_id" type="String" nameColumn="project_code" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Ministry Code" primaryKey="amp_activity_id" name="Ministry Code">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Ministry Code" column="amp_activity_id" type="String" nameColumn="ministry_code" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Cris Number" primaryKey="amp_activity_id" name="Cris Number">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Cris Number" column="amp_activity_id" type="String" nameColumn="Cris Number" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Project Implementing Unit" primaryKey="amp_activity_id" name="Project Implementing Unit">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Project Implementing Unit" column="amp_activity_id" type="String" nameColumn="prj_implementation_unit" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Project has been approved by IMAC" primaryKey="amp_activity_id" name="Project has been approved by IMAC">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Project has been approved by IMAC" column="amp_activity_id" type="String" nameColumn="imac_approved" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Government is member of project steering committee" primaryKey="amp_activity_id" name="Government is member of project steering committee">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Government is member of project steering committee" column="amp_activity_id" type="String" nameColumn="national_oversight" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Project is on budget" primaryKey="amp_activity_id" name="Project is on budget">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Project is on budget" column="amp_activity_id" type="String" nameColumn="on_budget" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="Project is on parliament" primaryKey="amp_activity_id" name="Project is on parliament">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Project is on parliament" column="amp_activity_id" type="String" nameColumn="on_parliament" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="Project disburses directly into the Government single treasury account" primaryKey="amp_activity_id" name="Project disburses directly into the Government single treasury account">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Project disburses directly into the Government single treasury account" column="amp_activity_id" type="String" nameColumn="on_treasure" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="Project uses national financial management systems" primaryKey="amp_activity_id" name="Project uses national financial management systems">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Project uses national financial management systems" column="amp_activity_id" type="String" nameColumn="national_financial_management" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="Project uses national procurement systems" primaryKey="amp_activity_id" name="Project uses national procurement systems">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Project uses national procurement systems" column="amp_activity_id" type="String" nameColumn="national_procurement" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="Project uses national audit systems" primaryKey="amp_activity_id" name="Project uses national audit systems">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Project uses national audit systems" column="amp_activity_id" type="String" nameColumn="national_audit" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="Proposed Project Life" primaryKey="amp_activity_id" name="Proposed Project Life">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Proposed Project Life" column="amp_activity_id" type="Integer" nameColumn="proposed_project_life" />
+			</Hierarchy>
 		</Dimension>
 
 		<Dimension name="Activity Long Texts" foreignKey="entity_id">

@@ -29,6 +29,7 @@ import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
 
 /**
@@ -117,26 +118,31 @@ public class MondrianTablesRepository {
 			new MondrianTableDescription("mondrian_activity_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
 				.withFingerprintedJob(Arrays.asList(
 						Fingerprint.buildTableHashingQuery("v_mondrian_activity_texts"),
-						Fingerprint.buildTranslationHashingQuery(AmpActivityVersion.class)
+						Fingerprint.buildTranslationHashingQuery(AmpActivityVersion.class),
+						Fingerprint.buildTranslationHashingQuery(AmpTeam.class)
 						))
 				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
 					@Override public I18nViewDescription getObject() {
 						return new I18nViewDescription("mondrian_activity_texts")
-							.addColumnDef(new I18nViewColumnDescription("name", "amp_activity_id", AmpActivityVersion.class, "name"));
+							.addColumnDef(new I18nViewColumnDescription("name", "amp_activity_id", AmpActivityVersion.class, "name"))
+							.addColumnDef(new I18nViewColumnDescription("team_name", "team_id", AmpTeam.class, "name"));							
 					}});
 
 	public final static MondrianTableDescription MONDRIAN_ACTIVITY_FIXED_TEXTS = 
 			new MondrianTableDescription("mondrian_activity_fixed_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
-				.withFingerprintedJob(Arrays.asList(Fingerprint.buildTableHashingQuery("v_mondrian_activity_fixed_texts")));
+				.withFingerprintedJob(Arrays.asList("SELECT 1"));
 
-//	public final static MondrianTableDescription MONDRIAN_ACTIVITY_TRN_TEXTS = 
-//			new MondrianTableDescription("mondrian_activity_trn_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
-//				.withFingerprintedJob(Arrays.asList(Fingerprint.buildTableHashingQuery("v_mondrian_activity_trn_texts")))
-//				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
-//					@Override public I18nViewDescription getObject() {
-//						return new I18nViewDescription("mondrian_activity_trn_texts")
-//								.addTrnColDef("amp_status_name", "amp_status_id");
-//					}});
+	public final static MondrianTableDescription MONDRIAN_ACTIVITY_TRN_TEXTS = 
+			new MondrianTableDescription("mondrian_activity_trn_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
+				.withFingerprintedJob(Arrays.asList(Fingerprint.buildTableHashingQuery("v_mondrian_activity_trn_texts")))
+				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
+					@Override public I18nViewDescription getObject() {
+						return new I18nViewDescription("mondrian_activity_trn_texts")
+								.addTrnColDef("amp_status_name", "amp_status_id")
+								.addTrnColDef("governmentapprovalprocedures_text", "governmentapprovalprocedures_id")
+								.addTrnColDef("jointcriteria_text", "jointcriteria_id")
+								.addTrnColDef("iob_text", "iob_id");
+					}});
 	
 	public final static MondrianTableDescription MONDRIAN_CATEGORY_VALUES = 
 			new MondrianTableDescription("mondrian_category_values", "acv_id", Arrays.asList("acv_id"))

@@ -22,7 +22,17 @@
 				DROP VIEW IF EXISTS v_mondrian_activity_trn_texts;
 				CREATE OR REPLACE VIEW v_mondrian_activity_trn_texts AS
 					SELECT aav.amp_activity_id, 
-						COALESCE(status.name, 'Undefined') AS amp_status_name, COALESCE(status.amp_status_id, 999999999) AS amp_status_id
+						COALESCE(status.name, 'Undefined') AS amp_status_name, COALESCE(status.amp_status_id, 999999999) AS amp_status_id,
+						
+						CASE aav.governmentapprovalprocedures WHEN true THEN 2 WHEN false THEN 1 ELSE 0 END AS governmentapprovalprocedures_id,
+						CASE aav.governmentapprovalprocedures WHEN true THEN 'Yes' WHEN false THEN 'No' ELSE 'Undefined' END AS governmentapprovalprocedures_text,
+						
+						CASE aav.jointcriteria WHEN true THEN 2 WHEN false THEN 1 ELSE 0 END AS jointcriteria_id,
+						CASE aav.jointcriteria WHEN true THEN 'Yes' WHEN false THEN 'No' ELSE 'Undefined' END AS jointcriteria_text,
+						
+						CASE WHEN (aav.indirect_on_budget) THEN 'Indirect On Budget' ELSE '' END AS iob_text,
+			   			CASE WHEN (aav.indirect_on_budget) THEN 1 ELSE 0 END AS iob_id
+			   			
 						FROM 
 							amp_activity_version aav
 							LEFT JOIN v_status status ON aav.amp_activity_id = status.amp_activity_id;

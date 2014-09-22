@@ -189,7 +189,8 @@ public class MondrianTablesRepository {
 	public final static List<MondrianTableDescription> MONDRIAN_ACTIVITY_DIMENSIONS = Arrays.asList(
 			MONDRIAN_ACTIVITY_TEXTS,
 			MONDRIAN_ACTIVITY_FIXED_TEXTS,
-			MONDRIAN_LONG_TEXTS);
+			MONDRIAN_LONG_TEXTS, 
+			MONDRIAN_ACTIVITY_TRN_TEXTS);
 		
 	public final static List<MondrianTableDescription> MONDRIAN_RAW_TRANSACTIONS_TABLES = Arrays.asList(MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE);
 	

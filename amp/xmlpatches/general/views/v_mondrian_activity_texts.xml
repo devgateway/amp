@@ -25,8 +25,8 @@
 						aav.amp_activity_id, aav.name, aav.approval_status, aav.amp_id,
 						team.amp_team_id AS team_id, team.name AS team_name,
 						tm.amp_team_mem_id AS creator_id, usr.last_name || ' ' || usr.first_names AS creator_name,
-						mtm.amp_team_mem_id AS modifier_id, musr.last_name || ' ' musr.first_names AS modifier_name,
-						aptm.amp_team_mem_id AS approver_id, apusr.last_name || ' ' || apusr.first_names AS approver_name,
+						mtm.amp_team_mem_id AS modifier_id, musr.last_name || ' ' || musr.first_names AS modifier_name,
+						aptm.amp_team_mem_id AS approver_id, apusr.last_name || ' ' || apusr.first_names AS approver_name
 					FROM amp_activity_version aav 
 						LEFT JOIN amp_team team ON team.amp_team_id = aav.amp_team_id
 						LEFT JOIN amp_team_member tm ON aav.activity_creator = tm.amp_team_mem_id

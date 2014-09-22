@@ -24,7 +24,7 @@
 					SELECT
 						aav.amp_activity_id,
 						aav.gov_agreement_number, aav.budget_code_project_id, aav.draft, aav.fy, aav.vote, aav.subvote, aav.subprogram, aav.project_code, aav.ministry_code, aav.cris_number,
-						aav.prj_implementation_unit, aav.imac_approved, aav.national_oversight, aav.on_budget, aav.on_parliament, aav.on_treasure, aav.national_financial_management, aav.national_procurement, aav.national_audit, aav.proposed_project_life
+						aav.prj_implementation_unit, aav.imac_approved, aav.national_oversight, aav.on_budget, aav.on_parliament, aav.on_treasury, aav.national_financial_management, aav.national_procurement, aav.national_audit, aav.proposed_project_life, 
 						aav.original_comp_date, aav.contracting_date, aav.disbursments_date, aav.proposed_start_date, aav.actual_start_date, aav.proposed_approval_date, aav.actual_approval_date, aav.actual_completion_date,aav.proposed_completion_date, aav.date_created, aav.date_updated 
 					FROM amp_activity_version aav WHERE (aav.deleted IS NULL) OR (NOT aav.deleted);
 			</lang>

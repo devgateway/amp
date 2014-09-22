@@ -127,7 +127,9 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			// Define grid structure.
 			var tableStructure = extractMetadata(firstContent);
 			var grid = $("#tab_grid");
-			$(grid).attr("id", "#tab_grid_" + id);
+			$(grid).attr("id", "tab_grid_" + id);
+			var pager = $("#tab_grid_pager");
+			$(pager).attr("id", "tab_grid_pager_" + id);
 
 			var rows = [];
 			getContent(data.reportContents, rows);
@@ -146,13 +148,9 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 				loadtext : 'Loading...',
 				gridview : true,
 				rownumbers : true,
-				/*
-				 * rowNum : 10, rowList : [ 5, 10, 20 ],
-				 */
-				/*
-				 * pager : $("#main-dynamic-content-region_" + id + "
-				 * #tab_grid_pager"),
-				 */
+				rowNum : 5,
+				rowList : [ 5, 10, 20 ],
+				pager : "#tab_grid_pager_" + id,
 				emptyrecords : 'No records to view'
 			});
 		}).fail(function(data) {

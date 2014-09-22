@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
 
+import org.digijava.module.aim.helper.TeamMember;
+
 /**
  * this defines a report specification, e.g. the requested structure of a report. 
  * An instance of this class defines univoquely the kind of report to be generated: columns, hierarchies, filters, sorting
@@ -70,4 +72,5 @@ public interface ReportSpecification {
 	 * @return whether rows with no funding data should be displayed or not
 	 */
 	public boolean isDisplayEmptyFundingRows();
+	
 }

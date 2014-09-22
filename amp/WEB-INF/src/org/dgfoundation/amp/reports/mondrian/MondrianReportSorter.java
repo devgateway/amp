@@ -17,6 +17,7 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -36,12 +37,14 @@ import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 public class MondrianReportSorter {
 	protected ReportArea rootArea;
 	protected ReportSpecification spec;
+	protected ReportEnvironment environment;
 	protected List<ReportOutputColumn> leafHeaders;
 	
-	protected MondrianReportSorter(GeneratedReport report) {
+	protected MondrianReportSorter(GeneratedReport report, ReportEnvironment environment) {
 		this.rootArea = report.reportContents;
 		this.spec = report.spec;
 		this.leafHeaders = report.leafHeaders;
+		this.environment = environment;
 	}
 	
 	/**
@@ -51,8 +54,8 @@ public class MondrianReportSorter {
 	 * @return sorting duration or -1 if no sorting was performed
 	 * @throws AMPException 
 	 */
-	public static int sort(GeneratedReport report) throws AMPException {
-		return (new MondrianReportSorter(report)).sort();
+	public static int sort(GeneratedReport report, ReportEnvironment environment) throws AMPException {
+		return (new MondrianReportSorter(report, environment)).sort();
 	}
 	
 	protected int sort() throws AMPException {
@@ -134,7 +137,7 @@ public class MondrianReportSorter {
 				//build the expected leaf header name
 				ReportOutputColumn sortCol = null;
 				while(nextEntry.getKey().entity == null) {
-					sortCol = new ReportOutputColumn(nextEntry.getValue().value, sortCol);
+					sortCol = new ReportOutputColumn(nextEntry.getValue().value, sortCol, environment.locale);
 					if (iter.hasNext()) 
 						nextEntry = iter.next();
 				}
@@ -143,7 +146,7 @@ public class MondrianReportSorter {
 					mdxMeasure = (MDXMeasure)MondrianMapping.toMDXElement(nextEntry.getKey().entity);
 				if (mdxMeasure == null)
 					throw new AMPException("Invalid sorting info: " + sInfo);
-				sortCol = new ReportOutputColumn(mdxMeasure.getName(), sortCol);
+				sortCol = new ReportOutputColumn(mdxMeasure.getName(), sortCol, environment.locale);
 				int colId = leafHeaders.indexOf(sortCol);
 				if (colId == -1)
 					throw new AMPException("Cannot sort by inexistent leafcolumn: " + sortCol);

@@ -32,6 +32,7 @@ import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
+import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.newreports.ReportMeasure;
@@ -48,6 +49,7 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXFilter;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
+import org.digijava.kernel.ampapi.mondrian.util.AmpMondrianSchemaProcessor;
 import org.digijava.kernel.ampapi.mondrian.util.Connection;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
@@ -72,6 +74,8 @@ import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.olap.util.OlapResultSetUtil;
 import org.saiku.service.olap.totals.TotalNode;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
+import org.dgfoundation.amp.mondrian.ExceptionRunnable;
+import org.dgfoundation.amp.algo.ValueWrapper;
 
 /**
  * Generates a report via Mondrian
@@ -91,13 +95,16 @@ public class MondrianReportGenerator implements ReportExecutor {
 	
 	private List<ReportOutputColumn> leafHeaders = null; //leaf report columns list
 	
+	private final ReportEnvironment environment;
+	
 	/**
 	 * Mondrian Report Generator
 	 * @param reportAreaType - report area type to be used for output generation.
 	 * @param printMode - if set to true, then Olap4J CellSet will be printed to the standard output
 	 */
-	public MondrianReportGenerator(Class<? extends ReportAreaImpl> reportAreaType, boolean printMode) {
+	public MondrianReportGenerator(Class<? extends ReportAreaImpl> reportAreaType, ReportEnvironment environment, boolean printMode) {
 		this.reportAreaType = reportAreaType;
+		this.environment = environment;
 		this.printMode = printMode; 
 	}
 	
@@ -105,8 +112,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * Mondrian Report Generator
 	 * @param reportAreaType - report area type to be used for output generation.
 	 */
-	public MondrianReportGenerator(Class<? extends ReportAreaImpl> reportAreaType) {
-		this (reportAreaType, false);
+	public MondrianReportGenerator(Class<? extends ReportAreaImpl> reportAreaType, ReportEnvironment environment) {
+		this (reportAreaType, environment, false);
 	}
 	
 	@Override
@@ -118,11 +125,11 @@ public class MondrianReportGenerator implements ReportExecutor {
 			report = new SaikuGeneratedReport(
 					spec, report.generationTime, report.requestingUser,
 					(SaikuReportArea)report.reportContents, cellDataSet, report.rootHeaders, report.leafHeaders);
-			SaikuReportSorter.sort(report);
+			SaikuReportSorter.sort(report, environment);
 			if (printMode)
 				SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST_SORT");
 		} else 
-			MondrianReportSorter.sort(report);
+			MondrianReportSorter.sort(report, environment);
 		
 		tearDown();
 		
@@ -135,43 +142,47 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * @return {@link CellDataSet}
 	 * @throws AMPException
 	 */
-	private CellDataSet generateReportAsSaikuCellDataSet(ReportSpecification spec) throws AMPException {
+	private CellDataSet generateReportAsSaikuCellDataSet(final ReportSpecification spec) throws AMPException {
 		init(spec);
+		AmpMondrianSchemaProcessor.registerReport(spec, environment);
+		final ValueWrapper<CellDataSet> cellDataSet = new ValueWrapper<>(null);
+		MondrianETL.MONDRIAN_LOCK.runUnderReadLock(new ExceptionRunnable<AMPException>() {
+			@Override public void run() throws AMPException {
+				
+				int totalTime = 0;
+				long startTime = System.currentTimeMillis();
+				CellSet cellSet = null;
+				String mdxQuery = getMDXQuery(spec);
 		
-		CellDataSet cellDataSet = null;
-		int totalTime = 0;
-		long startTime = System.currentTimeMillis();
-		CellSet cellSet = null;
-		String mdxQuery = getMDXQuery(spec);
+				if (printMode) System.out.println("[" + spec.getReportName() + "] MDX query: " + mdxQuery);
 		
-		if (printMode) System.out.println("[" + spec.getReportName() + "] MDX query: " + mdxQuery);
+				try {
+					cellSet = generator.runQuery(mdxQuery);
+				} catch (Exception e) {
+					tearDown();
+					throw new AMPException("Cannot generate Mondrian Report '" + spec.getReportName() +"' : " 
+							+ e.getMessage() == null ? e.getClass().getName() : e.getMessage());
+				}
 		
-		try {
-			cellSet = generator.runQuery(mdxQuery);
-		} catch (Exception e) {
-			tearDown();
-			throw new AMPException("Cannot generate Mondrian Report '" + spec.getReportName() +"' : " 
-					+ e.getMessage() == null ? e.getClass().getName() : e.getMessage());
-		}
+				if (printMode)
+					System.out.println("[" + spec.getReportName() + "] MDX query run time: " + (int)(System.currentTimeMillis() - startTime));
+				else
+					logger.info("[" + spec.getReportName() + "] MDX query run time: " + (int)(System.currentTimeMillis() - startTime));
 		
-		if (printMode) System.out.println("[" + spec.getReportName() + "] MDX query run time: " + (int)(System.currentTimeMillis() - startTime));
-		else
-			logger.info("[" + spec.getReportName() + "] MDX query run time: " + (int)(System.currentTimeMillis() - startTime));
+				cellDataSet.value = postProcess(spec, cellSet);
+				totalTime = (int)(System.currentTimeMillis() - startTime);
 		
-		cellDataSet = postProcess(spec, cellSet);
-		totalTime = (int)(System.currentTimeMillis() - startTime);
+				cellDataSet.value.setRuntime(totalTime);
+				logger.info("CellSet for '" + spec.getReportName() + "' report generated within: " + totalTime + "ms");
 		
-		cellDataSet.setRuntime(totalTime);
-		logger.info("CellSet for '" + spec.getReportName() + "' report generated within: " + totalTime + "ms");
-		
-		if (printMode) {
-			if (cellSet != null)
-				MondrianUtils.print(cellSet, spec.getReportName());
-			if (cellDataSet != null)
-				SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST");
-		}
-		
-		return cellDataSet;
+				if (printMode) {
+					if (cellSet != null)
+						MondrianUtils.print(cellSet, spec.getReportName());
+					if (cellDataSet != null)
+						SaikuPrintUtils.print(cellDataSet.value, spec.getReportName() + "_POST");
+				}
+			}});		
+		return cellDataSet.value;
 	}
 	
 	private void init(ReportSpecification spec) {
@@ -496,7 +507,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	
 	private GeneratedReport toGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, int duration) throws AMPException {
 		long start = System.currentTimeMillis();
-		CellDataSetToGeneratedReport translator = new CellDataSetToGeneratedReport(spec, cellDataSet, leafHeaders);
+		CellDataSetToGeneratedReport translator = new CellDataSetToGeneratedReport(spec, cellDataSet, leafHeaders, environment);
 		ReportAreaImpl root = translator.transformTo(reportAreaType);
 		GeneratedReport genRep = new GeneratedReport(spec, duration + (int)(System.currentTimeMillis() - start), null, root, getRootHeaders(leafHeaders), leafHeaders); 
 		return genRep;
@@ -569,7 +580,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 
 		//build the list of available columns
 		for (Member textColumn : rowAxis.getPositions().get(0).getMembers()) {
-			ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getName(), null);
+			ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getName(), null, environment.locale);
 			reportColumns.add(reportColumn);
 		}
 		//int measuresLeafPos = columnAxis.getAxisMetaData().getHierarchies().size();
@@ -580,7 +591,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				fullColumnName += "/" +  measureColumn.getName();
 				ReportOutputColumn reportColumn = reportColumnsByFullName.get(fullColumnName);
 				if (reportColumn == null) {
-					reportColumn = new ReportOutputColumn(measureColumn.getName(), parent);
+					reportColumn = new ReportOutputColumn(measureColumn.getName(), parent, environment.locale);
 					reportColumnsByFullName.put(fullColumnName, reportColumn);
 				}
 				if (measureColumn.getDepth() == 0) { //lowest depth ==0 => this is leaf column

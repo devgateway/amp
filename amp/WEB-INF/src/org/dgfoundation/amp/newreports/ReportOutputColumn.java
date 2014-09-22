@@ -3,6 +3,8 @@ package org.dgfoundation.amp.newreports;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.digijava.kernel.translator.TranslatorWorker;
+
 /**
  * class holding metadata about a report-output-column. It also holds  A "column" in this context might be either a Measure or a Column - anything which sits on the X axis, actually
  * @author Dolghier Constantin
@@ -20,12 +22,19 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	 */
 	public final ReportOutputColumn parentColumn;
 	
+	
+	/**
+	 * the <strong> localized</strong> name of the column
+	 */
+	public final String translatedColumnName;
+	
 	//private List<ReportOutputColumn> children;
 	
-	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn) {
+	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn, String locale) {
 		this.columnName = columnName;
 		if (columnName == null || columnName.isEmpty())
 			throw new NullPointerException();
+		this.translatedColumnName = TranslatorWorker.translateText(this.columnName, locale, 3l);
 		this.parentColumn = parentColumn;
 		/*
 		if (this.parentColumn != null) {

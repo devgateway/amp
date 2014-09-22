@@ -7,16 +7,26 @@ import java.util.Scanner;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 import mondrian.olap.Util.PropertyList;
 import mondrian.spi.DynamicSchemaProcessor;
 
 public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
+	
+	private static ThreadLocal<ReportSpecification> currentReport = new ThreadLocal<>();
+	private static ThreadLocal<ReportEnvironment> currentEnvironment = new ThreadLocal<>();
+	
 	protected static final Logger logger = Logger.getLogger(AmpMondrianSchemaProcessor.class);
 
 	@Override
@@ -36,6 +46,10 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	};
 	
 	public String processContents(String contents) {
+		if (currentReport.get() == null || currentEnvironment.get() == null) {
+			logger.error("currentReport || currentEnvironment == null -> not processing schema!");
+			return contents;
+		}
 		contents = contents.replaceAll("@@actual@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase()));
 		contents = contents.replaceAll("@@planned@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getIdInDatabase()));
 		contents = contents.replaceAll("@@currency@@", Long.toString(getReportCurrency().getAmpCurrencyId()));
@@ -49,25 +63,25 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	}
 	
 	protected String getReportLocale() {
-		//return "_ro";
-		return "_en";
+		return "_" + currentEnvironment.get().locale;
 	}
 	
 	protected AmpCurrency getReportCurrency() {
-		return CurrencyUtil.getCurrencyByCode("EUR"); 
+		AmpCurrency res = CurrencyUtil.getCurrencyByCode(currentReport.get().getSettings().getCurrencyCode());
+		return res;
 	}
 	
 	protected String getWorkspaceActivitiesIds() {
-		try {
-			Set<Long> ids = ActivityUtil.getAllLegalAmpActivityIds();
-			if (ids != null) {
-				String idsStr = ids.toString();
-				return idsStr.substring(1, idsStr.length() - 1);
-			}
-		} catch (Exception e) {
-			//TODO: on AMP startup it throws an exception 
-			logger.error(e.getMessage());
-		}
-		return "null";
+		TeamMember tm = currentEnvironment.get().viewer;
+		return Util.toCSStringForIN(ActivityUtil.getAllAmpActivityIds(WorkspaceFilter.generateWorkspaceFilterQuery(tm)));
+	}
+	
+	/**
+	 * this should be called before each and every report run using Mondrian
+	 * @param spec
+	 */
+	public static void registerReport(ReportSpecification spec, ReportEnvironment environment) {
+		currentReport.set(spec);
+		currentEnvironment.set(environment);
 	}
 }

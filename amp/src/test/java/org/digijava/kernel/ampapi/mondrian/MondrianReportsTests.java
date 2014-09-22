@@ -24,6 +24,7 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportEntityType;
+import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -221,7 +222,7 @@ public class MondrianReportsTests extends AmpTestCase {
 	
 	private GeneratedReport generateAndValidate(ReportSpecification spec, boolean print, boolean asSaikuReport) {
 		String err = null;
-		MondrianReportGenerator generator = new MondrianReportGenerator(asSaikuReport ? SaikuReportArea.class : ReportAreaImpl.class, print);
+		MondrianReportGenerator generator = new MondrianReportGenerator(asSaikuReport ? SaikuReportArea.class : ReportAreaImpl.class, new ReportEnvironment("en", null), print);
 		GeneratedReport report = null;
 		try {
 			report = generator.executeReport(spec);

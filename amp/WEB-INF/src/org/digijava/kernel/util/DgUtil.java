@@ -223,7 +223,6 @@ public class DgUtil {
             if (user != null) {
 
                 org.hibernate.Session session = null;
-                Transaction tx = null;
                 try {
 
                     UserLangPreferences preferences;
@@ -257,25 +256,21 @@ public class DgUtil {
                 catch (Exception ex) {
 
                     logger.debug("Unable to switch Language ", ex);
-
-                    if (tx != null) {
-                        try {
-                            tx.rollback();
-                        }
-                        catch (HibernateException ex1) {
-                            logger.warn("rollback() failed ", ex1);
-                        }
-                    }
                     throw new RuntimeException("Unable to switch Language ", ex);
                 }
 
             }
-            request.setAttribute(Constants.NAVIGATION_LANGUAGE, language);
-            setLanguageCookie(language, request, response);
-
+            setSessionLanguage(request, response, language);
         }
     }
 
+    public static void setSessionLanguage(HttpServletRequest request, HttpServletResponse response, Locale language) {
+        request.setAttribute(Constants.NAVIGATION_LANGUAGE, language);
+        if (request.getSession() != null)
+        	request.getSession().setAttribute(Constants.NAVIGATION_LANGUAGE, language);
+        setLanguageCookie(language, request, response);
+    }
+    
     private static void setLanguageCookie(Locale language, HttpServletRequest request, HttpServletResponse response) {
         SiteDomain currDomain = RequestUtils.getSiteDomain(request);
         Cookie cookie = new Cookie("digi_language", language.getCode());
@@ -743,9 +738,7 @@ public class DgUtil {
         logger.debug("Navigation language, determined from request is: " +
                      language == null ? null : language.getCode());
 
-        // set in session
-        request.setAttribute(Constants.NAVIGATION_LANGUAGE, language);
-        DgUtil.setLanguageCookie(language, request, response);
+       setSessionLanguage(request, response, language);
 
         User user = RequestUtils.getUser(request);
         if (user != null && user.getUserLangPreferences() == null) {

@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.ReportArea;
+import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSorter;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
@@ -30,8 +31,8 @@ public class SaikuReportSorter extends MondrianReportSorter {
 	private int measuresCount;
 	private int measureWidth;
 	
-	private SaikuReportSorter(SaikuGeneratedReport report) {
-		super(report);
+	private SaikuReportSorter(SaikuGeneratedReport report, ReportEnvironment environment) {
+		super(report, environment);
 		this.cellDataSet = report.cellDataSet;
 		this.measuresCount = spec.getMeasures() == null ? 0 : spec.getMeasures().size();
 		this.measureWidth = cellDataSet.getColTotalsLists() == null ? 0 : cellDataSet.getColTotalsLists()[0].get(0).getWidth();
@@ -44,8 +45,8 @@ public class SaikuReportSorter extends MondrianReportSorter {
 	 * @return sorting duration or -1 if no sorting was performed
 	 * @throws AMPException 
 	 */
-	public static int sort(SaikuGeneratedReport report) throws AMPException {
-		return (new SaikuReportSorter(report)).sort();
+	public static int sort(SaikuGeneratedReport report, ReportEnvironment environment) throws AMPException {
+		return (new SaikuReportSorter(report, environment)).sort();
 	}
 	
 	@Override

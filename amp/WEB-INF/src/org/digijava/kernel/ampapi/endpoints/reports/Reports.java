@@ -18,6 +18,7 @@ import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
+import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
 import org.dgfoundation.amp.reports.ReportPaginationCacher;
@@ -93,7 +94,7 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON)
 	public final GeneratedReport getReportResult(@PathParam("report_id") Long reportId) {
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, false);
+		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(httpRequest), false);
 		try{
 			//TODO: for now we do not translate other types of reports than Donor Type reports (hide icons for non-donor-type reports?)
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
@@ -211,15 +212,15 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON)
 	public final QueryResult getSaikuReportResult(@PathParam("report_id") Long reportId) {
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
-		MondrianReportGenerator generator = new MondrianReportGenerator(SaikuReportArea.class, false);
+		MondrianReportGenerator generator = new MondrianReportGenerator(SaikuReportArea.class, ReportEnvironment.buildFor(httpRequest), false);
 		SaikuGeneratedReport report = null;
 		try {
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
 			report = (SaikuGeneratedReport)generator.executeReport(spec);
 			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + report.generationTime + "(ms)");
 		} catch (Exception e) {
-			//TODO: Log this correctly
-			System.out.println("Error:" + e.getStackTrace());
+			logger.error("error while trying to get a saiku report", e);
+			throw new RuntimeException(e);
 		}
 		return RestUtil.convert(report.cellDataSet);
 	}

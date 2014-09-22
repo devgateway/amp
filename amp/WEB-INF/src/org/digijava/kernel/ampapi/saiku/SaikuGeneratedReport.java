@@ -16,7 +16,7 @@ import org.saiku.olap.dto.resultset.CellDataSet;
  * @author Nadejda Mandrescu
  */
 public class SaikuGeneratedReport extends GeneratedReport{
-	/** Saiku CellDataSet result that can be passed to Saiku to redere the report */
+	/** Saiku CellDataSet result that can be passed to Saiku to render the report */
 	public final CellDataSet cellDataSet; 
 
 	public SaikuGeneratedReport(ReportSpecification spec, int generationTime,

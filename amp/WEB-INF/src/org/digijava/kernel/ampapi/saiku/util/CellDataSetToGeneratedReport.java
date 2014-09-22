@@ -18,6 +18,7 @@ import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
+import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -41,11 +42,13 @@ public class CellDataSetToGeneratedReport {
 	TotalAggregator[][] measureTotals = null;
 	List<TotalNode>[] rowTotals = null;
 	int[] currentSubGroupIndex;
+	final ReportEnvironment environment;
 	
-	public CellDataSetToGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, List<ReportOutputColumn> leafHeaders) {
+	public CellDataSetToGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, List<ReportOutputColumn> leafHeaders, ReportEnvironment environment) {
 		this.spec = spec;
 		this.cellDataSet = cellDataSet;
 		this.leafHeaders = leafHeaders;
+		this.environment = environment;
 		init();
 	}
 	
@@ -286,9 +289,9 @@ public class CellDataSetToGeneratedReport {
 	}
 	
 	private void addTotalMeasures() {
-		ReportOutputColumn totalMeasuresColumn = new ReportOutputColumn("Total Measures", null);
+		ReportOutputColumn totalMeasuresColumn = new ReportOutputColumn("Total Measures", null, environment.locale);
 		for (ReportMeasure measure : spec.getMeasures()) {
-			leafHeaders.add(new ReportOutputColumn(measure.getMeasureName(), totalMeasuresColumn));
+			leafHeaders.add(new ReportOutputColumn(measure.getMeasureName(), totalMeasuresColumn, environment.locale));
 		}
 	}
 	

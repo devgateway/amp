@@ -19,7 +19,7 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.view.xls.BooleanWrapper;
+import org.dgfoundation.amp.algo.BooleanWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
@@ -50,7 +50,7 @@ public class MondrianETL {
 	 */
 	public final static Long MONDRIAN_DUMMY_ID_FOR_ETL = 999999999l;
 	
-	private final static ReadWriteLockHolder MONDRIAN_LOCK = new ReadWriteLockHolder("Mondrian reports/etl lock");
+	public final static ReadWriteLockHolder MONDRIAN_LOCK = new ReadWriteLockHolder("Mondrian reports/etl lock");
 		
 	/**
 	 * the postgres connection

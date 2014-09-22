@@ -34,6 +34,8 @@ public class TLSUtils {
 			ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 			HttpServletRequest request = sra.getRequest();
 			Locale lang = (Locale) request.getAttribute(Constants.NAVIGATION_LANGUAGE);
+			if ((lang == null) && (request.getSession() != null))
+				lang = (Locale) request.getSession().getAttribute(Constants.NAVIGATION_LANGUAGE);
 			if (lang == null){
 				for (Cookie cookie: request.getCookies()){
 					if (cookie.getName().equals("digi_language")) {

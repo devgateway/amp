@@ -6,20 +6,21 @@
  */
 package org.dgfoundation.amp.ar.view.xls;
 
+import org.dgfoundation.amp.algo.ValueWrapper;
+
 /**
  * 
- * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
- * @since Aug 31, 2006
+ * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org. Modified by Constantin Dolghier
+ * @since Aug 31, 2006. Moved / Edited on 21 Aug 2014
  * 
  */
-public class IntWrapper {
+public class IntWrapper extends ValueWrapper<Integer> {
 	public static final int DEFAULT_VALUE = 0;
 
 	protected int value;
 
 	public IntWrapper() {
-		super();
-		value = DEFAULT_VALUE;
+		super(DEFAULT_VALUE);
 	}
 
 	public IntWrapper inc() {
@@ -52,15 +53,5 @@ public class IntWrapper {
 
 	public void reset() {
 		value = DEFAULT_VALUE;
-	}
-
-	public void set(int amount) {
-		value=amount;
-	}
-	
-	@Override
-	public String toString()
-	{
-		return Integer.toString(this.value);
 	}
 }

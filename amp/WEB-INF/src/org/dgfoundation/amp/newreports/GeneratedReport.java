@@ -48,6 +48,13 @@ public class GeneratedReport {
 		this.rootHeaders = rootHeaders;
 		this.leafHeaders = leafHeaders;
 	}
+	
+	private boolean translated = false;
+	public void translate(String locale) {
+		if (translated)
+			throw new RuntimeException("can only translate headers once!");
+		
+	}
 }
 
 	

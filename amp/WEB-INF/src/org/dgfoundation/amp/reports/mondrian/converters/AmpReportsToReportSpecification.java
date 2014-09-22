@@ -80,7 +80,6 @@ public class AmpReportsToReportSpecification {
 		
 		//TODO:
 		//report.getAlsoShowPledges()
-		//report.getHideActivities()
 		
 		//..
 		

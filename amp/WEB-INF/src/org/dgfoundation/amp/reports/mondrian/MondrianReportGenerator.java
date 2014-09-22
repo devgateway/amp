@@ -120,7 +120,10 @@ public class MondrianReportGenerator implements ReportExecutor {
 	public GeneratedReport executeReport(ReportSpecification spec) throws AMPException {
 		CellDataSet cellDataSet = generateReportAsSaikuCellDataSet(spec);
 		
+		logger.info("[" + spec.getReportName() + "]" +  "Converting CellDataSet to GeneratedReport...");
 		GeneratedReport report = toGeneratedReport(spec, cellDataSet, cellDataSet.runtime);
+		logger.info("[" + spec.getReportName() + "]" +  "CellDataSet converted to GeneratedReport.");
+		logger.info("[" + spec.getReportName() + "]" +  "Sorting report...");
 		if (SaikuReportArea.class.isAssignableFrom(reportAreaType)) {
 			report = new SaikuGeneratedReport(
 					spec, report.generationTime, report.requestingUser,
@@ -130,6 +133,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST_SORT");
 		} else 
 			MondrianReportSorter.sort(report, environment);
+		logger.info("[" + spec.getReportName() + "]" +  "Report sorted.");
 		
 		tearDown();
 		
@@ -147,8 +151,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 		AmpMondrianSchemaProcessor.registerReport(spec, environment);
 		final ValueWrapper<CellDataSet> cellDataSet = new ValueWrapper<>(null);
 		MondrianETL.MONDRIAN_LOCK.runUnderReadLock(new ExceptionRunnable<AMPException>() {
-			@Override public void run() throws AMPException {
-				
+			@Override 
+			public void run() throws AMPException {
 				int totalTime = 0;
 				long startTime = System.currentTimeMillis();
 				CellSet cellSet = null;
@@ -173,7 +177,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				totalTime = (int)(System.currentTimeMillis() - startTime);
 		
 				cellDataSet.value.setRuntime(totalTime);
-				logger.info("CellSet for '" + spec.getReportName() + "' report generated within: " + totalTime + "ms");
+				logger.info("CellDataSet for '" + spec.getReportName() + "' report generated within: " + totalTime + "ms");
 		
 				if (printMode) {
 					if (cellSet != null)
@@ -181,7 +185,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 					if (cellDataSet != null)
 						SaikuPrintUtils.print(cellDataSet.value, spec.getReportName() + "_POST");
 				}
-			}});		
+			}});
 		return cellDataSet.value;
 	}
 	
@@ -417,7 +421,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//detect the columns that are not in the years ranges or years set
 		SortedSet<Integer> leafColumnsNumberToRemove = new TreeSet<Integer>();
 		pos = spec.getColumns().size(); //re-init the starting position
-		while(iter.hasNext()) {
+		while(iter.hasNext() && pos < leafHeaders.size() - spec.getMeasures().size()) {
 			ReportOutputColumn column = iter.next();
 			//move to year level header
 			int currentLevel = level;
@@ -603,7 +607,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		if (spec.isCalculateColumnTotals() && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
 			ReportOutputColumn totalMeasuresColumn = new ReportOutputColumn(MoConstants.TOTAL_MEASURES, null, environment.locale);
 			for (ReportMeasure measure : spec.getMeasures())
-				leafHeaders.add(new ReportOutputColumn(measure.getMeasureName(), totalMeasuresColumn, environment.locale));
+				reportColumns.add(new ReportOutputColumn(measure.getMeasureName(), totalMeasuresColumn, environment.locale));
 		}
 		return reportColumns;
 	}

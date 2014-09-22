@@ -56,15 +56,15 @@ Beneficiary Agency
 Contracting Agency Groups
 Primary Programs
 Secondary Programs
+Approval Status
 **********************
 * pending schema / column constants clarifications:
 * **********************
+Pledges Titles
 Archived
 **********************
 * need to detect where these filters are stored:
 * **********************
-Pledges Titles
-Approval Status
 Extension Date 2
 Planned Completion Date
 Date of Agreement
@@ -131,12 +131,14 @@ public class AmpARFilterConverter {
 		if (arFilter.isPledgeFilter()) return;
 		addCategoryValueNamesFilter(arFilter.getStatuses(), ColumnConstants.STATUS, entityType);
 		addFilter(arFilter.getWorkspaces(), ColumnConstants.TEAM, entityType);
-		//TODO:
-		//filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.??, entityType), new FilterRule(arFilter.getApprovalStatusSelected(), true, false)); 
+		if (arFilter.getApprovalStatusSelected() != null && arFilter.getApprovalStatusSelected().size() > 0)
+			filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.APPROVAL_STATUS, entityType), 
+					new FilterRule(new ArrayList<String>(arFilter.getApprovalStatusSelected()), true, true)); 
 		addBooleanFilter(arFilter.getGovernmentApprovalProcedures(), ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, entityType);
 		addBooleanFilter(arFilter.getJointCriteria(), ColumnConstants.JOINT_CRITERIA, entityType);
-		//TODO:
-		//addBooleanFilter(arFilter.getShowArchived(), ColumnConstants.??, entityType);
+		addBooleanFilter(arFilter.getShowArchived(), ColumnConstants.ARCHIVED, entityType);
+		addCategoryValueNamesFilter(arFilter.getProjectImplementingUnits(), ColumnConstants.PROJECT_IMPLEMENTING_UNIT, entityType);
+		addCategoryValueNamesFilter(arFilter.getActivityPledgesTitle(), ColumnConstants.PLEDGES_TITLES, entityType);
 	}
 	
 	private void addFundingDatesFilters() {

@@ -885,23 +885,22 @@ public class ActivityUtil {
             }
         }
 
+        boolean newActivity = a.getAmpActivityId() == null;
         //add or edit activity contact and amp contact
         if(activityContacts != null && activityContacts.size() > 0) {
             for (AmpActivityContact activityContact : activityContacts) {
 
-                //we have to check if the contact is new, first we have to save it
-
                 // save the contact first
-                if (activityContact.getContact().getId() == null) {
-                    session.saveOrUpdate(activityContact.getContact());
-                }
-
-                // then the reference
-                if (activityContact.getId() == null) {
-                    session.saveOrUpdate(activityContact);
-                }
-                
-                //session.merge(activityContact.getContact());
+               if (newActivity || activityContact.getContact().getId() == null) {
+            	session.saveOrUpdate(activityContact.getContact());   
+               }
+            	if (activityContact.getId() == null) {
+            		session.saveOrUpdate(activityContact);
+                    if (!newActivity) {
+            			session.merge(activityContact.getContact());
+            		}
+            	}
+          
             }
         }
 

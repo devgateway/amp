@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
@@ -99,9 +100,8 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                     AmpActivityContact actContact=item.getModelObject();
                    
 
-                    IModel<AmpContact> contactModel = PersistentObjectModel.getModel(actContact.getContact());
-
-                    item.add(new Label("contactName", contactModel.getObject().getNameAndLastName()));
+                    AmpContact contactModel = actContact.getContact();
+                    item.add(new Label("contactName", contactModel.getNameAndLastName()));
 					final AjaxCheckBox primary = new AjaxCheckBox(
 							"primaryContact", new PropertyModel<Boolean>(
 									item.getModel(), "primaryContact")) {
@@ -150,7 +150,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                     item.add(contactTitle);
                     
                     
-                    AmpTextFieldPanel<String> name=new AmpTextFieldPanel<String>("name",new PropertyModel<String>(contactModel,"name"),"contact first name",false,true);
+                    AmpTextFieldPanel<String> name=new AmpTextFieldPanel<String>("name",new PropertyModel<String>(actContact.getContact(),"name"),"contact first name",false,true);
                     name.getTextContainer().setRequired(true);
                     name.getTextContainer().add(new AttributeModifier("size", "50"));
                     name.setTextContainerDefaultMaxSize();
@@ -161,7 +161,8 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                     lastname.setTextContainerDefaultMaxSize();
                     item.add(lastname);
                     
-                    AmpContactDetailFeaturePanel detailEmail=new AmpContactDetailFeaturePanel("addContactEmail", contactModel, "Add Contact Email",false,Constants.CONTACT_PROPERTY_NAME_EMAIL);
+                    IModel<AmpContact> contactPersistentModel = PersistentObjectModel.getModel(actContact.getContact());
+                    AmpContactDetailFeaturePanel detailEmail=new AmpContactDetailFeaturePanel("addContactEmail", contactPersistentModel, "Add Contact Email",false,Constants.CONTACT_PROPERTY_NAME_EMAIL);
                     item.add(detailEmail);
                     
                     AmpTextFieldPanel<String> function=new  AmpTextFieldPanel<String>("function",new PropertyModel<String>(contactModel,"function"),"contact function",false);
@@ -174,14 +175,14 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                     organisationName.getTextContainer().add(new AttributeModifier("size", "50"));
                     item.add(organisationName);
                     
-                    AmpContactOrganizationFeaturePanel contactOrganizations = new AmpContactOrganizationFeaturePanel("contactOrganizations",contactModel, "Contact Organizations", false);
+                    AmpContactOrganizationFeaturePanel contactOrganizations = new AmpContactOrganizationFeaturePanel("contactOrganizations",contactPersistentModel, "Contact Organizations", false);
                     contactOrganizations.setOutputMarkupId(true);
                     item.add(contactOrganizations);
                     
-                    AmpContactDetailFeaturePanel detailPhone=new AmpContactDetailFeaturePanel("addContactPhone", contactModel,"Add Contact Phone",false,Constants.CONTACT_PROPERTY_NAME_PHONE); 
+                    AmpContactDetailFeaturePanel detailPhone=new AmpContactDetailFeaturePanel("addContactPhone", contactPersistentModel,"Add Contact Phone",false,Constants.CONTACT_PROPERTY_NAME_PHONE); 
                     item.add(detailPhone);
 
-                    AmpContactDetailFeaturePanel detailFax=new AmpContactDetailFeaturePanel("addContactFax", contactModel,"Add Contact Fax",false,Constants.CONTACT_PROPERTY_NAME_FAX);  
+                    AmpContactDetailFeaturePanel detailFax=new AmpContactDetailFeaturePanel("addContactFax", contactPersistentModel,"Add Contact Fax",false,Constants.CONTACT_PROPERTY_NAME_FAX);  
                     item.add(detailFax);
 
                     item.add(new AmpTextAreaFieldPanel("officeaddress",new PropertyModel<String>(contactModel,"officeaddress"),"contact office address",false, false, true));

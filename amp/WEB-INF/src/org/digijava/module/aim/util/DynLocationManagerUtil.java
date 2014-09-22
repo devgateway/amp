@@ -487,6 +487,34 @@ public class DynLocationManagerUtil {
 		return null;
 	}
 
+	public static AmpCategoryValueLocations getLocationByName(
+			String locationName, AmpCategoryValue cvLocationLayer)
+			throws NullPointerException, NonUniqueResultException {
+		Session dbSession = null;
+
+		if (cvLocationLayer == null)
+			throw new NullPointerException(
+					"Value for Implementation Location cannot be null");
+		try {
+			dbSession = PersistenceManager.getSession();
+			String locationNameHql = AmpCategoryValueLocations.hqlStringForName("loc");
+			String queryString = "select loc from "
+					+ AmpCategoryValueLocations.class.getName()
+					+ " loc where (" + locationNameHql + "=:name) "
+					+ " AND (loc.parentCategoryValue=:cvId) ";
+			Query qry = dbSession.createQuery(queryString);
+			qry.setLong("cvId", cvLocationLayer.getId());
+			qry.setString("name", locationName);
+			Collection<AmpCategoryValueLocations> locations = qry.list();
+			if (locations != null && locations.size() > 0) {
+				return locations.toArray(new AmpCategoryValueLocations[0])[0];
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 	public static AmpCategoryValueLocations getLocationByIso(
 			String locationIso, HardCodedCategoryValue hcLocationLayer) {
 		return getLocationByIso(locationIso, hcLocationLayer, true);
@@ -1237,19 +1265,25 @@ public class DynLocationManagerUtil {
 
                  Cell locationCell = hssfRow.getCell(0);
                  String location = locationCell.getStringCellValue();
+                 AmpCategoryValueLocations locationObject = null;
                  
-                 
-                 String geoId = null;
-                 Cell geoIdCell = hssfRow.getCell(1);
-                 if (geoIdCell != null) {
-                     geoId = getValue(geoIdCell);
+                 String codeId = null;
+                 Cell codeIdCell = hssfRow.getCell(1);
+                 if (codeIdCell != null) {
+                	 codeId = getValue(codeIdCell);
+                	 if (codeId != null) {
+                		   locationObject = DynLocationManagerUtil.getLocationByCode(codeId, selectedAdmLevel);
+                     }
+                	 else {
+                         locationObject = DynLocationManagerUtil.getLocationByName(location, selectedAdmLevel);
+                     }
+                    
                  }
-                 if (geoId != null && geoId.contains(".0")) {
-                	 geoId = geoId.replace(".0", "");
-                 }
-               //TODO is not the db id
-                 AmpCategoryValueLocations locationObject = (AmpCategoryValueLocations) DbUtil.getObject(AmpCategoryValueLocations.class, Long.valueOf(geoId));
                  
+                 if (codeId != null && codeId.contains(".0")) {
+                	 codeId = codeId.replace(".0", "");
+                 }
+                
                  int index = 2;
                  for (AmpIndicatorLayer indicator:orderedIndicators) {
                 	 Cell cell = hssfRow.getCell(index++);

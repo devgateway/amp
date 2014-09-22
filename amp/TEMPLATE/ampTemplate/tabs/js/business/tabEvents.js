@@ -7,6 +7,12 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
 	"use strict";
 
+	var map = new Object();
+	map['[Project Title]'] = 'Project Title';
+	map['[Region Name]'] = 'Region';
+	map['[Total Measures][Actual Commitments]'] = 'Actual Commitments';
+	map['[AMP ID]'] = 'AMP ID';
+
 	function TabEvents() {
 		// Constructor
 		function TabEvents() {
@@ -106,9 +112,11 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 	function populateGrid(id, dynamicLayoutView, firstContent) {
 		$.ajax({
 			async : true,
-			url : '/rest/data/report/' + id + '/result/pages/1',
+			url : '/rest/data/report/' + id + '/result',
 			dataType : 'json'
 		}).done(function(data) {
+			console.log(data);
+
 			// TODO: Move grid section elsewhere.
 			var TableSectionView = Marionette.ItemView.extend({
 				template : '#grid-template'
@@ -118,53 +126,53 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
 			// Define grid structure.
 			var tableStructure = extractMetadata(firstContent);
-			var grid = $("#main-dynamic-content-region_" + id + " #tab_grid");
+			var grid = $("#tab_grid");
+			$(grid).attr("id", "#tab_grid_" + id);
+
+			var rows = [];
+			getContent(data.reportContents, rows);
+
 			$(grid).jqGrid({
 				caption : 'Caption',
 				datatype : 'local',
+				data : rows,
+				colNames : createJQGridColumnNames(tableStructure),
+				colModel : createJQGridColumnModel(tableStructure),
 				height : 250,
 				width : 900,
-				autowidth : true,
+				autowidth : '100%',
 				shrinkToFit : true,
-				viewrecords : false,
-				emptyrecords : 'No records to view',
-				colNames : createJQGridColumnNames(tableStructure),
-				colModel : createJQGridColumnModel(tableStructure)
+				viewrecords : true,
+				loadtext : 'Loading...',
+				gridview : true,
+				rownumbers : true,
+				/*
+				 * rowNum : 10, rowList : [ 5, 10, 20 ],
+				 */
+				/*
+				 * pager : $("#main-dynamic-content-region_" + id + "
+				 * #tab_grid_pager"),
+				 */
+				emptyrecords : 'No records to view'
 			});
-			console.log(data);
-
-			var rows = [];
-			getContent(data, rows);
-			console.log(rows);
-			$.each(rows, function(i, item) {
-				$(grid).jqGrid('addRowData', i + 1, item);
-			});
-
 		}).fail(function(data) {
 			console.error("error");
 		}).always(function() {
 			console.log("complete");
 		});
-		;
-	}
-
-	function matchColumns(key) {
-		var map = new Object();
-		map['[Project Title]'] = 'Project Title';
-		map['[Region Name]'] = 'Region';
-		map['[Total Measures][Actual Commitments]'] = 'Actual Commitments';
-
-		return map[key];
 	}
 
 	function getContent(obj, rows) {
 		if (obj.children == null || obj.children.length == 0) {
 			// console.log(obj.contents);
-			var row = {};
+			var row = {
+				id : 0
+			};
 			$.each(obj.contents, function(key, element) {
-				var colName = matchColumns(key);
+				var colName = map[key];
 				if (colName != undefined && colName != null) {
 					row[colName] = element.displayedValue;
+					row['id'] = Math.random();
 				}
 			})
 			rows.push(row);

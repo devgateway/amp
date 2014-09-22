@@ -9,7 +9,8 @@ require.config({
 		localStorage : 'lib/Backbone.localStorage-master/backbone.localStorage-min',
 		documentModel : 'lib/backbone-documentmodel-master/backbone-documentmodel',
 		documentCollection : 'lib/backbone-documentmodel-master/backbone-documentmodel',
-		jqgrid : 'lib/jqgrid-4.6.0/jquery.jqGrid.min'
+		jqgrid : [ 'lib/jqgrid-4.6.0/js2/jquery.jqGrid.src', 'lib/jqgrid-4.6.0/js2/i18n/grid.locale-es',
+				'lib/jqgrid-4.6.0/js2/i18n/grid.locale-en' ]
 	},
 	shim : {
 		jquery : {

@@ -59,6 +59,7 @@ public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyList
 	public static Map<Long, SectorSkeleton> getAllSectors(final Map<Long, SectorSkeleton> parents) {
         
         final Map<Long, SectorSkeleton> sectors = new HashMap<Long, SectorSkeleton>();
+        if(!parents.entrySet().isEmpty()){
         PersistenceManager.getSession().doWork(new Work(){
 				public void execute(Connection conn) throws SQLException {
 					
@@ -84,6 +85,7 @@ public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyList
 					
 				}
 			});
+        }
         return sectors;
     }
 	

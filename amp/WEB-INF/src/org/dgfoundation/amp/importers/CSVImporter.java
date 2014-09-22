@@ -45,11 +45,10 @@ public abstract class CSVImporter extends AmpImporter {
 		LineNumberReader lnr= (LineNumberReader) reader;
 		String line=lnr.readLine();
 		if(line==null) return null;
-		StringTokenizer st=new StringTokenizer(line,token);
 		int k=0;
 		Map<String,String> ret=new HashMap<String,String>(); 
-		while(st.hasMoreTokens()) {
-			String token=st.nextToken();
+		String [] parts = tokenizeLine (line);
+		for (String token:parts) {
 			if(token.trim().equals("")) ret.put(columnNames[k], null); else ret.put(columnNames[k], token);
 			k++;
 		}
@@ -61,6 +60,11 @@ public abstract class CSVImporter extends AmpImporter {
 	protected void initializeReader(Reader source) {
 		LineNumberReader lnr=new LineNumberReader(source);
 		reader=lnr;
+	}
+	
+	protected String [] tokenizeLine (String line) {
+		return line.split(token);
+		
 	}
 
 

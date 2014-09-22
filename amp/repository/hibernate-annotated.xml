@@ -2,4 +2,6 @@
 
 <hibernate-packages required="false">
 	<hibernate-package>org.digijava.kernel.entity.MailSpool</hibernate-package>
-</hibernate-package>
+	<hibernate-class>org.digijava.kernel.ampapi.postgis.entity.AmpLocator</hibernate-class>
+	
+</hibernate-packages>

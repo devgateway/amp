@@ -92,9 +92,9 @@ public final class MoConstants {
 	//public static final String H_ORG_DUPLICATE = "Organization Hierarchy Duplicate";
 	public static final String H_LOCATIONS = "Locations";
 	public static final String H_REGIONS = "Region Name";
-	public static final String H_PRIMARY_SECTOR = "Level 0 Sector";
-	public static final String H_SECONDARY_SECTOR = "Level 1 Sector";
-	public static final String H_TETRIARY_SECTOR = "Level 2 Sector";
+	public static final String H_LEVEL_0_SECTOR = "Level 0 Sector";
+	public static final String H_LEVEL_1_SECTOR = "Level 1 Sector";
+	public static final String H_LEVEL_2_SECTOR = "Level 2 Sector";
 	public static final String H_PROJECT_TITLE = "Project Title";
 	public static final String H_APPROVAL_STATUS = "Approval Status";
 	public static final String H_AMP_ID = "AMP ID";
@@ -178,15 +178,9 @@ public final class MoConstants {
 	public static final String ATTR_ZONE_NAME = "Zone Name";
 	public static final String ATTR_DISTRICT_NAME = "District Name";
 	public static final String ATTR_LOCATION_NAME = "Location";
-	public static final String ATTR_PRIMARY_SECTOR_NAME = "Level 0 Sector";
-	public static final String ATTR_PRIMARY_SECTOR_SUB_SECTOR_NAME = "Primary Sector Sub-sector";
-	public static final String ATTR_PRIMARY_SECTOR_SUB_SUB_SECTOR_NAME = "Primary Sector Sub-sub-sector";
-	public static final String ATTR_SECONDARY_SECTOR_NAME = "Level 1 Sector";
-	public static final String ATTR_SECONDARY_SUB_SECTOR_NAME = "Secondary Sector Sub-sector";
-	public static final String ATTR_SECONDARY_SUB_SUB_SECTOR_NAME = "Secondary Sector Sub-sub-sector";
-	public static final String ATTR_TETRIARY_SECTOR = "Level 2 Sector";
-	public static final String ATTR_TETRIARY_SUB_SECTOR = "Tertiary Sector Sub-sector";
-	public static final String ATTR_TETRIARY_SUB_SUB_SECTOR = "Tertiary Sector Sub-sub-sector";
+	public static final String ATTR_LEVEL_0_SECTOR_NAME = "Level 0 Sector";
+	public static final String ATTR_LEVEL_1_SECTOR_NAME = "Level 1 Sector";
+	public static final String ATTR_LEVEL_2_SECTOR_NAME = "Level 2 Sector";
 	public static final String ATTR_ORG_TYPE_NAME = "Organization Type Name";
 	public static final String ATTR_ORG_GROUP_NAME = "Organization Group Name";
 	public static final String ATTR_ORG_NAME = "Organization Name";
@@ -204,13 +198,16 @@ public final class MoConstants {
 	public static final String P_KEY = "Key";
 	
 	//Measures
-	public static String ACTUAL_COMMITMENTS = "Actual Commitments";
-	public static String ACTUAL_DISBURSEMENTS = "Actual Disbursements";
-	public static String ACTUAL_EXPENDITURES = "Actual Expenditures";
-	public static String PLANNED_COMMITMENTS = "Planned Commitments";
-	public static String PLANNED_DISBURSEMENTS = "Planned Disbursements";
-	public static String PLANNED_EXPENDITURES = "Planned Expenditures";
+	public static final String ACTUAL_COMMITMENTS = "Actual Commitments";
+	public static final String ACTUAL_DISBURSEMENTS = "Actual Disbursements";
+	public static final String ACTUAL_EXPENDITURES = "Actual Expenditures";
+	public static final String PLANNED_COMMITMENTS = "Planned Commitments";
+	public static final String PLANNED_DISBURSEMENTS = "Planned Disbursements";
+	public static final String PLANNED_EXPENDITURES = "Planned Expenditures";
 	
+	//Values
+	public static final String BOOLEAN_TRUE_KEY = "2";
+	public static final String BOOLEAN_FALSE_KEY = "1";
 	
 	//Pledges Constant
 	public static String PLEDGE_PLEDGES_COMMITMENTS = "Pledges Actual Commitments";

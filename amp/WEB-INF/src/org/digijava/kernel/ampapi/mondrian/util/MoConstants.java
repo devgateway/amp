@@ -52,7 +52,8 @@ public final class MoConstants {
 	public static final String MODE_OF_PAYMENT = "Mode of Payment";
 	public static final String FINANCING_INSTRUMENT = "Financing Instrument";
 	public static final String TYPE_OF_ASSISTANCE = "Type Of Assistance";
-	public static final String ACTIVITY_TEXTS = "Activity Long Texts";
+	public static final String ACTIVITY_LONG_TEXTS = "Activity Long Texts";
+	public static final String ACTIVITY_TEXTS = "Activity Texts";
 	public static final String DATES = "Dates";
 	public static final String ACTIVITY_DATES = "Activity Dates";
 	public static final String LOCATION = "Location"; 

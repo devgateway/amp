@@ -1,6 +1,7 @@
 package org.digijava.module.gpi.helper;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,8 +57,10 @@ public class GPIReport5a extends GPIAbstractReport {
 	}
 
 	@Override
-	public Collection<GPIReportAbstractRow> generateReport(Collection<AmpActivityVersion> commonData, GPIFilter filter) {
+	public Collection<GPIReportAbstractRow> generateReport(Collection commonData, GPIFilter filter) {
 
+		long time = Calendar.getInstance().getTimeInMillis();
+		
 		GPISetup setup = GPISetupUtil.getSetup();
 		Collection<GPIReportAbstractRow> list = new ArrayList<GPIReportAbstractRow>();
 		GPIReport5aRow auxRow = null;
@@ -67,7 +70,7 @@ public class GPIReport5a extends GPIAbstractReport {
 		double fromExchangeRate;
 		double toExchangeRate;
 
-		if(setup != null) {
+		if (setup != null) {
 			try {
 				// Setup year ranges according the selected calendar.
 				AmpFiscalCalendar fCalendar = FiscalCalendarUtil.getAmpFiscalCalendar(filter.getCalendar().getAmpFiscalCalId());
@@ -77,161 +80,131 @@ public class GPIReport5a extends GPIAbstractReport {
 						endDates[i] = FiscalCalendarUtil.getCalendarEndDate(filter.getCalendar().getAmpFiscalCalId(), filter.getStartYear() + i);
 					}
 				}
-	
-				// Iterate the filtered collection of AmpGPISurveys.
-				Iterator<AmpActivityVersion> iterCommonData = commonData.iterator();
-				while (iterCommonData.hasNext()) {
-					AmpActivityVersion auxActivity = iterCommonData.next();
-	
-					// Filter by sectors.
-					if (filter.getSectors() != null && !GPIUtils.containSectors(filter.getSectors(), auxActivity.getSectors())) {
-						// Ignore this AmpGPISurvey and continue with the next.
+
+				Iterator iter = commonData.iterator();
+				while (iter.hasNext()) {
+					Object[] data = (Object[]) iter.next();
+					Date transactionDate = (Date) data[3];
+
+					// Filter by years. Check if the funding detail date
+					// falls into one of the date ranges.
+					if (GPIUtils.getYear(transactionDate, startDates, endDates, filter.getStartYear(), filter.getEndYer()) == 0) {
+						// Ignore this project.
 						continue;
 					}
-	
-					// Filter by status.
-					if (filter.getStatuses() != null
-							&& !GPIUtils.containStatus(filter.getStatuses(), CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, auxActivity.getCategories()))) {
-						// Ignore this AmpGPISurvey and continue with the next.
-						continue;
+
+					Calendar calendar = Calendar.getInstance();
+					calendar.setTime(transactionDate);
+
+					auxRow = new GPIReport5aRow();
+
+					// Calculate exchange rates.
+					fromExchangeRate = Util.getExchange(data[9].toString(), new java.sql.Date(transactionDate.getTime()));
+					toExchangeRate = 0;
+					if (filter.getCurrency() != null) {
+						toExchangeRate = Util.getExchange(filter.getCurrency().getCurrencyCode(),
+								new java.sql.Date(transactionDate.getTime()));
 					}
-	
-					Iterator<AmpFunding> iFunding = auxActivity.getFunding().iterator();
-					while (iFunding.hasNext()) {
-						AmpFunding auxFunding = iFunding.next();
-						
-						// Filter by donor type.
-						if (filter.getDonorTypes() != null && !GPIUtils.containOrgTypes(filter.getDonorTypes(), auxFunding.getAmpDonorOrgId().getOrgGrpId().getOrgType())) {
-							// Ignore this AmpGPISurvey and continue with the next.
-							continue;
+					BigDecimal amount = new BigDecimal(CurrencyWorker.convert1((Double) data[7], fromExchangeRate, toExchangeRate));
+
+					// This is Actual or Planned for funding.
+					String auxCategoryValue = data[10].toString();
+					// Match the funding type with the config (2 different
+					// things, has to be hardcoded at some level).
+					int column = -1;
+					// To understand this part it reads this way: IF the
+					// Actual Disbursement (on indicator 5a) is the actual
+					// commitment (on fundings) then...
+					int transactionType = ((Integer) data[8]).intValue();
+					if (setup.getIndicator5aActualDisbursement().equals("ACTUAL_COMMITMENTS")) {
+						if (auxCategoryValue.equalsIgnoreCase("actual") && transactionType == Constants.COMMITMENT) {
+							column = 1;
 						}
-	
-						// Filter by organization.
-						if (filter.getDonors() != null && !GPIUtils.containOrganisations(filter.getDonors(), auxFunding.getAmpDonorOrgId())) {
-							// Ignore this AmpGPISurvey and continue with the next.
-							continue;
+					} else if (setup.getIndicator5aActualDisbursement().equals("ACTUAL_DISBURSEMENTS")) {
+						if (auxCategoryValue.equalsIgnoreCase("actual") && transactionType == Constants.DISBURSEMENT) {
+							column = 1;
 						}
-	
-						// Filter by organization group.
-						if (filter.getDonorGroups() != null && !GPIUtils.containOrgGrps(filter.getDonorGroups(), auxFunding.getAmpDonorOrgId().getOrgGrpId())) {
-							// Ignore this AmpGPISurvey and continue with the next.
-							continue;
+					} else if (setup.getIndicator5aActualDisbursement().equals("ACTUAL_EXPENDITURES")) {
+						if (auxCategoryValue.equalsIgnoreCase("actual") && transactionType == Constants.EXPENDITURE) {
+							column = 1;
 						}
-	
-						Iterator<AmpFundingDetail> iFD = auxFunding.getFundingDetails().iterator();
-						while (iFD.hasNext()) {
-							AmpFundingDetail auxFundingDetail = iFD.next();
-	
-							// Filter by years. Check if the funding detail date
-							// falls into one of the date ranges.
-							if (GPIUtils.getYear(auxFundingDetail.getTransactionDate(), startDates, endDates, filter.getStartYear(), filter.getEndYer()) == 0) {
-								// Ignore this project.
-								continue;
-							}
-	
-							Calendar calendar = Calendar.getInstance();
-							calendar.setTime(auxFundingDetail.getTransactionDate());
-	
-							auxRow = new GPIReport5aRow();
-	
-							// Calculate exchange rates.
-							fromExchangeRate = Util.getExchange(auxFundingDetail.getAmpCurrencyId().getCurrencyCode(), new java.sql.Date(auxFundingDetail.getTransactionDate().getTime()));
-							toExchangeRate = 0;
-							if (filter.getCurrency() != null) {
-								toExchangeRate = Util.getExchange(filter.getCurrency().getCurrencyCode(), new java.sql.Date(auxFundingDetail.getTransactionDate().getTime()));
-							}
-							BigDecimal amount = new BigDecimal(CurrencyWorker.convert1(auxFundingDetail.getTransactionAmount(), fromExchangeRate, toExchangeRate));
-	
-							// This is Actual or Planned for funding.
-							AmpCategoryValue auxCategoryValue = auxFundingDetail.getAdjustmentType();
-							// Match the funding type with the config (2 different
-							// things, has to be hardcoded at some level).
-							int column = -1;
-							// To understand this part it reads this way: IF the
-							// Actual Disbursement (on indicator 5a) is the actual
-							// commitment (on fundings) then...
-							if (setup.getIndicator5aActualDisbursement().equals("ACTUAL_COMMITMENTS")) {
-								if (auxCategoryValue.getValue().equalsIgnoreCase("actual") && auxFundingDetail.getTransactionType().intValue() == Constants.COMMITMENT) {
-									column = 1;
-								}
-							} else if (setup.getIndicator5aActualDisbursement().equals("ACTUAL_DISBURSEMENTS")) {
-								if (auxCategoryValue.getValue().equalsIgnoreCase("actual") && auxFundingDetail.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-									column = 1;
-								}
-							} else if (setup.getIndicator5aActualDisbursement().equals("ACTUAL_EXPENDITURES")) {
-								if (auxCategoryValue.getValue().equalsIgnoreCase("actual") && auxFundingDetail.getTransactionType().intValue() == Constants.EXPENDITURE) {
-									column = 1;
-								}
-							} else if (setup.getIndicator5aActualDisbursement().equals("PLANNED_COMMITMENTS")) {
-								if (auxCategoryValue.getValue().equalsIgnoreCase("planned") && auxFundingDetail.getTransactionType().intValue() == Constants.COMMITMENT) {
-									column = 1;
-								}
-							} else if (setup.getIndicator5aActualDisbursement().equals("PLANNED_DISBURSEMENTS")) {
-								if (auxCategoryValue.getValue().equalsIgnoreCase("planned") && auxFundingDetail.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-									column = 1;
-								}
-							} else if (setup.getIndicator5aActualDisbursement().equals("PLANNED_EXPENDITURES")) {
-								if (auxCategoryValue.getValue().equalsIgnoreCase("planned") && auxFundingDetail.getTransactionType().intValue() == Constants.EXPENDITURE) {
-									column = 1;
-								}
-							}
-	
-							if (setup.getIndicator5aPlannedDisbursement().equals("ACTUAL_COMMITMENTS")) {
-								if (auxCategoryValue.getValue().equalsIgnoreCase("actual") && auxFundingDetail.getTransactionType().intValue() == Constants.COMMITMENT) {
-									column = 2;
-								}
-							} else if (setup.getIndicator5aPlannedDisbursement().equals("ACTUAL_DISBURSEMENTS")) {
-								if (auxCategoryValue.getValue().equalsIgnoreCase("actual") && auxFundingDetail.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-									column = 2;
-								}
-							} else if (setup.getIndicator5aPlannedDisbursement().equals("ACTUAL_EXPENDITURES")) {
-								if (auxCategoryValue.getValue().equalsIgnoreCase("actual") && auxFundingDetail.getTransactionType().intValue() == Constants.EXPENDITURE) {
-									column = 2;
-								}
-							} else if (setup.getIndicator5aPlannedDisbursement().equals("PLANNED_COMMITMENTS")) {
-								if (auxCategoryValue.getValue().equalsIgnoreCase("planned") && auxFundingDetail.getTransactionType().intValue() == Constants.COMMITMENT) {
-									column = 2;
-								}
-							} else if (setup.getIndicator5aPlannedDisbursement().equals("PLANNED_DISBURSEMENTS")) {
-								if (auxCategoryValue.getValue().equalsIgnoreCase("planned") && auxFundingDetail.getTransactionType().intValue() == Constants.DISBURSEMENT) {
-									column = 2;
-								}
-							} else if (setup.getIndicator5aPlannedDisbursement().equals("PLANNED_EXPENDITURES")) {
-								if (auxCategoryValue.getValue().equalsIgnoreCase("planned") && auxFundingDetail.getTransactionType().intValue() == Constants.EXPENDITURE) {
-									column = 2;
-								}
-							}
-	
-							//AmpGPISurvey auxSurvey = (auxActivity.getGpiSurvey() != null && auxActivity.getGpiSurvey().size() != 0 ? auxActivity.getGpiSurvey().iterator().next() : null);
-							auxRow.setColumn1(null);
-							auxRow.setColumn2(null);
-							auxRow.setColumn3(-1);
-	
-							// Check if the survey has responses because the activityform saves the survey automatically even with no responses.
-							//if(auxSurvey != null && auxSurvey.getResponses() != null && auxSurvey.getResponses().size() > 0) {
-								switch (column) {
-									case 1:
-										auxRow.setColumn1(amount);									
-										break;
-									case 2:
-										auxRow.setColumn2(amount);
-										break;
-									}
-								auxRow.setColumn3(0);
-							//}
-							
-							auxRow.setDonorGroup(auxFunding.getAmpDonorOrgId().getOrgGrpId());
-							auxRow.setYear(calendar.get(Calendar.YEAR));
-							list.add(auxRow);
-							System.out.println(auxFunding.getAmpDonorOrgId().getName());
+					} else if (setup.getIndicator5aActualDisbursement().equals("PLANNED_COMMITMENTS")) {
+						if (auxCategoryValue.equalsIgnoreCase("planned") && transactionType == Constants.COMMITMENT) {
+							column = 1;
+						}
+					} else if (setup.getIndicator5aActualDisbursement().equals("PLANNED_DISBURSEMENTS")) {
+						if (auxCategoryValue.equalsIgnoreCase("planned") && transactionType == Constants.DISBURSEMENT) {
+							column = 1;
+						}
+					} else if (setup.getIndicator5aActualDisbursement().equals("PLANNED_EXPENDITURES")) {
+						if (auxCategoryValue.equalsIgnoreCase("planned") && transactionType == Constants.EXPENDITURE) {
+							column = 1;
 						}
 					}
+
+					if (setup.getIndicator5aPlannedDisbursement().equals("ACTUAL_COMMITMENTS")) {
+						if (auxCategoryValue.equalsIgnoreCase("actual") && transactionType == Constants.COMMITMENT) {
+							column = 2;
+						}
+					} else if (setup.getIndicator5aPlannedDisbursement().equals("ACTUAL_DISBURSEMENTS")) {
+						if (auxCategoryValue.equalsIgnoreCase("actual") && transactionType == Constants.DISBURSEMENT) {
+							column = 2;
+						}
+					} else if (setup.getIndicator5aPlannedDisbursement().equals("ACTUAL_EXPENDITURES")) {
+						if (auxCategoryValue.equalsIgnoreCase("actual") && transactionType == Constants.EXPENDITURE) {
+							column = 2;
+						}
+					} else if (setup.getIndicator5aPlannedDisbursement().equals("PLANNED_COMMITMENTS")) {
+						if (auxCategoryValue.equalsIgnoreCase("planned") && transactionType == Constants.COMMITMENT) {
+							column = 2;
+						}
+					} else if (setup.getIndicator5aPlannedDisbursement().equals("PLANNED_DISBURSEMENTS")) {
+						if (auxCategoryValue.equalsIgnoreCase("planned") && transactionType == Constants.DISBURSEMENT) {
+							column = 2;
+						}
+					} else if (setup.getIndicator5aPlannedDisbursement().equals("PLANNED_EXPENDITURES")) {
+						if (auxCategoryValue.equalsIgnoreCase("planned") && transactionType == Constants.EXPENDITURE) {
+							column = 2;
+						}
+					}
+
+					// AmpGPISurvey auxSurvey = (auxActivity.getGpiSurvey() !=
+					// null && auxActivity.getGpiSurvey().size() != 0 ?
+					// auxActivity.getGpiSurvey().iterator().next() : null);
+					auxRow.setColumn1(null);
+					auxRow.setColumn2(null);
+					auxRow.setColumn3(-1);
+
+					// Check if the survey has responses because the
+					// activityform saves the survey automatically even with no
+					// responses.
+					// if(auxSurvey != null && auxSurvey.getResponses() != null
+					// && auxSurvey.getResponses().size() > 0) {
+					switch (column) {
+					case 1:
+						auxRow.setColumn1(amount);
+						break;
+					case 2:
+						auxRow.setColumn2(amount);
+						break;
+					}
+					auxRow.setColumn3(0);
+					// }
+
+					AmpOrgGroup auxOrgGroup = new AmpOrgGroup();
+					auxOrgGroup.setAmpOrgGrpId(((BigInteger) data[4]).longValue());
+					auxOrgGroup.setOrgGrpName(data[5].toString());
+					auxRow.setDonorGroup(auxOrgGroup);
+
+					auxRow.setYear(calendar.get(Calendar.YEAR));
+					list.add(auxRow);
 				}
 			} catch (Exception e) {
 				logger.error(e);
 				e.printStackTrace();
 			}
 		}
+		logger.warn("generate report: " + ((Calendar.getInstance().getTimeInMillis() - time) / 1000) + "s");
 		return list;
 	}
 

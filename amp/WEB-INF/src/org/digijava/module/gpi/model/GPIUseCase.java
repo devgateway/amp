@@ -19,6 +19,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.UserUtils;
+import org.digijava.module.aim.action.GetSectors;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpGPISurvey;
@@ -62,6 +63,7 @@ import org.digijava.module.gpi.util.GPIConstants;
 import org.digijava.module.gpi.util.GPIUtils;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
@@ -310,7 +312,7 @@ public class GPIUseCase {
 		filter.setEndYer(form.getSelectedEndYear());
 
 		// Get all surveys.
-		Collection<AmpActivityVersion> commonData = getCommonSurveyData();
+		Collection<AmpActivityVersion> commonData = getCommonSurveyData(filter);
 
 		// Execute the logic for generating each report.
 		preMainReportRows = report.generateReport(commonData, filter);
@@ -324,49 +326,75 @@ public class GPIUseCase {
 	}
 
 	/*
-	 * Return the list of all surveys (not filtered by donor or donor group like
-	 * PI reports because GPI uses one survey per activity, thus sharing it to
-	 * all donors and its fundings).
+	 * Return a collection with all common columns needed later to generate each report.
 	 */
-	private Collection<AmpActivityVersion> getCommonSurveyData() {
-
+	private Collection getCommonSurveyData(GPIFilter filter) {
+		logger.warn("commonData");
+		long time = Calendar.getInstance().getTimeInMillis();
 		Collection<AmpActivityVersion> commonData = null;
 		Session session = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			//TODO: replace this query by a view that has both activities and fundings (to save time).
-			Criteria criteria = session.createCriteria(AmpActivity.class);
-			criteria.add(Restrictions.isNotNull("team"));
-			//criteria.setFetchMode("ampActivityId.funding", FetchMode.JOIN).setFetchMode("ampActivityId.funding.fundingDetails", FetchMode.JOIN);
-			//criteria.addOrder(Order.asc("ampGPISurveyId"));
+			String selectQueryString = new StringBuilder()
+					.append("SELECT aa.amp_activity_id, af.amp_funding_id, afd.amp_fund_detail_id, afd.transaction_date, aog.amp_org_grp_id, aog.org_grp_name, ")
+					.append( "(SELECT COUNT(*) FROM amp_gpi_survey ags WHERE ags.amp_activity_id = aa.amp_activity_id) AS surveys, afd.transaction_amount, afd.transaction_type, ac.currency_code, acv.category_value ")
+					.append(" FROM amp_activity aa JOIN amp_funding af ON aa.amp_activity_id = af.amp_activity_id")
+					.append(" JOIN amp_funding_detail afd ON af.amp_funding_id = afd.amp_funding_id")
+					.append(" JOIN amp_organisation ao ON af.amp_donor_org_id = ao.amp_org_id")
+					.append(" JOIN amp_currency ac ON afd.amp_currency_id = ac.amp_currency_id")
+					.append(" JOIN amp_category_value acv ON afd.adjustment_type = acv.id")
+					.append(" JOIN amp_org_group aog ON ao.org_grp_id = aog.amp_org_grp_id WHERE aa.amp_team_id IS NOT NULL ").toString();
+			String where = " ";
+			String endQueryString = " ORDER BY aa.amp_activity_id, af.amp_funding_id, afd.amp_fund_detail_id, afd.transaction_date, aog.amp_org_grp_id";
+			if (filter.getSectors() != null) {
+				String sectors = "";
+				Iterator<AmpSector> iSectors = filter.getSectors().iterator();
+				while (iSectors.hasNext()) {
+					sectors += iSectors.next().getAmpSectorId() + ",";
+				}
+				sectors = sectors.substring(0, sectors.length() - 1);
+				where += " AND aa.amp_activity_id IN (SELECT aas.amp_activity_id FROM amp_activity_sector aas WHERE aas.amp_sector_id IN ("
+						+ sectors + ")) ";
+			}
+			if (filter.getStatuses() != null) {
+				// TODO: implement this.
+			}
+			if (filter.getDonors() != null) {
+				String donors = "";
+				Iterator<AmpOrganisation> iDonors = filter.getDonors().iterator();
+				while (iDonors.hasNext()) {
+					donors += iDonors.next().getAmpOrgId() + ",";
+				}
+				donors = donors.substring(0, donors.length() - 1);
+				where += " AND af.amp_donor_org_id IN (" + donors + ") ";
+			}
+			if (filter.getDonorGroups() != null) {
+				String dg = "";
+				Iterator<AmpOrgGroup> iDG = filter.getDonorGroups().iterator();
+				while (iDG.hasNext()) {
+					dg += iDG.next().getAmpOrgGrpId() + ",";
+				}
+				dg = dg.substring(0, dg.length() - 1);
+				where += " AND aog.amp_org_grp_id IN (" + dg + ") ";
+			}
+			if (filter.getDonorTypes() != null) {
+				String dt = "";
+				Iterator<AmpOrgType> iDT = filter.getDonorTypes().iterator();
+				while (iDT.hasNext()) {
+					dt += iDT.next().getAmpOrgTypeId() + ",";
+				}
+				dt = dt.substring(0, dt.length() - 1);
+				where += " AND aog.org_type IN (" + dt + ") ";
+			}
 
-			// criteria.setMaxResults(500);
-
-			// Link to amp_activity view to use only the last version of an
-			// activity.
-			// criteria.createAlias("ampActivityId", "activityTable");
-
-			//DetachedCriteria liveActivityVersions = DetachedCriteria.forClass(AmpActivity.class).setProjection(Projections.property("ampActivityId"));
-			//criteria.add(Property.forName("ampActivityId").in(liveActivityVersions));
-
-			// TODO: we need Hibernate 4 to use Criteria Queries for this (needs
-			// nested subqueries with multiple params)
-			/*SQLQuery latestSurveysOnlySQL = session.createSQLQuery("SELECT s.amp_gpisurvey_id AS survey_ids FROM "
-					+ "(select max(survey_date) AS max_date,amp_activity_id from amp_gpi_survey group by amp_activity_id) AS r "
-					+ "INNER JOIN amp_gpi_survey s ON s.amp_activity_id=r.amp_activity_id AND s.survey_date=r.max_date" + " UNION "
-					+ "select amp_gpisurvey_id AS survey_ids from amp_gpi_survey where survey_date is null and amp_activity_id "
-					+ "not in (select amp_activity_id from amp_gpi_survey where survey_date is not null);");
-			latestSurveysOnlySQL.addScalar("survey_ids", LongType.INSTANCE);
-
-			List<Long> latestSurveysOnlyList = latestSurveysOnlySQL.list();
-
-			criteria.add(Property.forName("ampGPISurveyId").in(latestSurveysOnlyList));*/
-
-			commonData = criteria.list();
+			Query query = session.createSQLQuery(selectQueryString + where + endQueryString);
+			logger.warn(query.getQueryString());
+			commonData = query.list();
 		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();
 		}
+		logger.warn("commonData: " + ((Calendar.getInstance().getTimeInMillis() - time) / 1000) + "s");
 		return commonData;
 	}
 }

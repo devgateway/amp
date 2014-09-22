@@ -1514,8 +1514,8 @@ public class IatiActivityWorker {
 
 	private String setEditorDescription(Description obj , String key){
 			String value = printList(obj.getContent());
-			if(obj!=null && isValidString(value)){
-				Editor ed = createEditor("amp", key, obj.getLang()==null?this.getLang():obj.getLang()); //TODO: bugs source
+			if (isValidString(value)) {
+				Editor ed = DEImportBuilder.createEditor("amp", key, obj.getLang()==null?this.getLang():obj.getLang()); //TODO: bugs source
 				ed.setLastModDate(new Date());
 				ed.setGroupName(org.digijava.module.editor.util.Constants.GROUP_OTHER);
 				ed.setBody(value);
@@ -1529,14 +1529,7 @@ public class IatiActivityWorker {
 			
 		return null;
 	}
-	private Editor createEditor(String siteId, String key, String language){
-		Editor editor = new Editor();
-		editor.setSiteId(siteId);
-		editor.setEditorKey(key);
-		editor.setLanguage(language);
-		return editor;
-	}
-	
+
 	private boolean isValidLanguage(String lang){
 		//TODO: validate lang based on dg_locale code for languages
 		if(isValidString(lang) && lang.length() == 2 )

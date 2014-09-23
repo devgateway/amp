@@ -1,8 +1,5 @@
 package org.dgfoundation.amp.newreports;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang.math.NumberUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 

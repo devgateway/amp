@@ -4,6 +4,7 @@
 package org.dgfoundation.amp.reports.mondrian.converters;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -28,6 +29,7 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.module.aim.ar.util.FilterUtil;
+import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -83,10 +85,10 @@ public class AmpReportsToReportSpecification {
 	
 	private void configureReportData() {
 		if (!report.isSummaryReportNoHierachies())
-			for (AmpReportColumn column : report.getColumns()) {
+			for (AmpColumns column : getOrderedColumns()) {
 				//do not add activities column if it must be hidden
-				if (!(report.isHideActivities() && ColumnConstants.PROJECT_TITLE.equals(column.getColumn().getColumnName())))
-					spec.addColumn(MondrianReportUtils.getColumn(column.getColumn().getColumnName(), entityType));
+				if (!(report.isHideActivities() && ColumnConstants.PROJECT_TITLE.equals(column.getColumnName())))
+					spec.addColumn(MondrianReportUtils.getColumn(column.getColumnName(), entityType));
 			}
 		else
 			spec.setSummaryReport(true);
@@ -100,6 +102,7 @@ public class AmpReportsToReportSpecification {
 		spec.setCalculateColumnTotals(true);
 		spec.setCalculateRowTotals(true);
 		
+		//workaround for AMP-18257, issue #1
 		final String groupingOption = report.getDrilldownTab() ? "" : report.getOptions(); 
 		
 		switch(groupingOption) {
@@ -111,6 +114,29 @@ public class AmpReportsToReportSpecification {
 			spec.setCalculateColumnTotals(false);
 			break;
 		}
+	}
+	
+	private Set<AmpColumns> getOrderedColumns() {
+		//workaround for AMP-18257, issue #2
+		/* cannot simply use this, because it still doesn't bring the ordered list of columns :(
+		 * ARUtil.createOrderedColumns(getShowAblesColumns(), getHierarchies());
+		 */
+		AmpColumns[] registeredByOrderColumns = new AmpColumns[report.getColumns().size()];
+		Set<AmpColumns> columns = new HashSet<AmpColumns>(report.getColumns().size());
+		Set<AmpColumns> reallyOrderedColumns = new LinkedHashSet<AmpColumns>(report.getColumns().size());
+		for (AmpReportColumn col : report.getColumns()) {
+			registeredByOrderColumns[col.getOrderId().intValue() - 1] = col.getColumn();
+			columns.add(col.getColumn());
+		}
+		for (AmpReportHierarchy hierarchy : report.getHierarchies()) {
+			if(columns.contains(hierarchy.getColumn()))
+				reallyOrderedColumns.add(hierarchy.getColumn());
+		}
+		for (int i = 0; i < registeredByOrderColumns.length; i++)
+			if (!reallyOrderedColumns.contains(registeredByOrderColumns[i]))
+				reallyOrderedColumns.add(registeredByOrderColumns[i]);
+		
+		return reallyOrderedColumns;
 	}
 	
 	private void configureHierarchies() {

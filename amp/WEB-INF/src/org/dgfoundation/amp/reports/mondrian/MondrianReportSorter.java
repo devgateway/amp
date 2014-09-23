@@ -137,7 +137,7 @@ public class MondrianReportSorter {
 				//build the expected leaf header name
 				ReportOutputColumn sortCol = null;
 				while(nextEntry.getKey().entity == null) {
-					sortCol = new ReportOutputColumn(nextEntry.getValue().value, sortCol, environment.locale);
+					sortCol = new ReportOutputColumn(nextEntry.getValue().value, sortCol);
 					if (iter.hasNext()) 
 						nextEntry = iter.next();
 				}
@@ -146,7 +146,7 @@ public class MondrianReportSorter {
 					mdxMeasure = (MDXMeasure)MondrianMapping.toMDXElement(nextEntry.getKey().entity);
 				if (mdxMeasure == null)
 					throw new AMPException("Invalid sorting info: " + sInfo);
-				sortCol = new ReportOutputColumn(mdxMeasure.getName(), sortCol, environment.locale);
+				sortCol = new ReportOutputColumn(mdxMeasure.getName(), sortCol);
 				int colId = leafHeaders.indexOf(sortCol);
 				if (colId == -1)
 					throw new AMPException("Cannot sort by inexistent leafcolumn: " + sortCol);

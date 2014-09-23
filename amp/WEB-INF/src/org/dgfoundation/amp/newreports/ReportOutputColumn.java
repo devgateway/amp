@@ -22,19 +22,12 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	 */
 	public final ReportOutputColumn parentColumn;
 	
-	
-	/**
-	 * the <strong> localized</strong> name of the column
-	 */
-	public final String translatedColumnName;
-	
 	//private List<ReportOutputColumn> children;
 	
-	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn, String locale) {
+	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn) {
 		this.columnName = columnName;
 		if (columnName == null || columnName.isEmpty())
 			throw new NullPointerException();
-		this.translatedColumnName = TranslatorWorker.translateText(this.columnName, locale, 3l);
 		this.parentColumn = parentColumn;
 		/*
 		if (this.parentColumn != null) {

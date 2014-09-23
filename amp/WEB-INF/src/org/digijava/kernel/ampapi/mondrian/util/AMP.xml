@@ -62,6 +62,32 @@
 		</Hierarchy>
 	</Dimension>
 		
+	<Dimension name="AMP Date" type="TimeDimension">
+		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Dates">
+			<Table name="mondrian_dates" />
+			<Level name="Year" column="year_code" levelType="TimeYears" type="Integer" />
+			<Level name="Quarter" column="quarter_code" ordinalColumn="quarter_code" nameColumn="quarter_name" levelType="TimeQuarters" type="Integer"/>
+			<Level name="Month" column="month_code" ordinalColumn="month_code" nameColumn="month_name" levelType="TimeMonths" type="Integer" />
+			<!-- Level name="Day" column="day_of_month" ordinalColumn="day_of_month" nameColumn="day_of_month_name" levelType="TimeDays" type="Integer" /-->
+			<Level name="Date" column="day_code" ordinalColumn="day_code" nameColumn="full_date" type="Integer" levelType="TimeDays">
+				<Property name="year_code" column="year_code" type="Integer"/>
+				<Property name="date_code" column="day_code" type="Integer"/>
+			</Level>
+		</Hierarchy>
+		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Year">
+		  <Table name="mondrian_dates" />
+		  <Level name="Year" column="year_code" levelType="TimeYears" type="Integer" />
+		</Hierarchy>
+		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Quarter">
+		  <Table name="mondrian_dates" />
+		  <Level name="Quarter" column="quarter_code" ordinalColumn="quarter_code" nameColumn="quarter_name" levelType="TimeQuarters" type="Integer"/>
+		</Hierarchy>
+		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Month">
+		  <Table name="mondrian_dates" />
+		  <Level name="Month" column="month_code" ordinalColumn="month_code" nameColumn="month_name" levelType="TimeMonths" type="Integer" />
+		</Hierarchy>
+	</Dimension>
+		
 	<Cube name="Donor Funding">
 		<Table name="mondrian_fact_table" >
 			<SQL dialect="generic"><![CDATA[mondrian_fact_table.entity_id IN (@@wsactivities@@)]]> </SQL>
@@ -138,59 +164,59 @@
 		<Dimension name="Activity Dates" foreignKey="entity_id">
 			<Hierarchy hasAll="true" allMemberName="All Original Completion Date" primaryKey="amp_activity_id" name="Original Completion Date">
 				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Original Completion Date" column="amp_activity_id" type="Date" nameColumn="original_comp_date" />
+				<Level name="Original Completion Date" column="original_comp_date_code" type="Date" nameColumn="original_comp_date" />
 			</Hierarchy>
 			
 			<Hierarchy hasAll="true" allMemberName="All Final Date for Contracting" primaryKey="amp_activity_id" name="Final Date for Contracting">
 				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Final Date for Contracting" column="amp_activity_id" type="Date" nameColumn="contracting_date" />
+				<Level name="Final Date for Contracting" column="contracting_date_code" type="Date" nameColumn="contracting_date" />
 			</Hierarchy>
 			
 			<Hierarchy hasAll="true" allMemberName="All Final Date for Disbursements" primaryKey="amp_activity_id" name="Final Date for Disbursements">
 				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Final Date for Disbursements" column="amp_activity_id" type="Date" nameColumn="disbursments_date" />
+				<Level name="Final Date for Disbursements" column="disbursments_date_code" type="Date" nameColumn="disbursments_date" />
 			</Hierarchy>
 			
 			<Hierarchy hasAll="true" allMemberName="All Proposed Start Date" primaryKey="amp_activity_id" name="Proposed Start Date">
 				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Proposed Start Date" column="amp_activity_id" type="Date" nameColumn="proposed_start_date" />
+				<Level name="Proposed Start Date" column="proposed_start_date_code" type="Date" nameColumn="proposed_start_date" />
 			</Hierarchy>
 			
 			<Hierarchy hasAll="true" allMemberName="All Actual Start Date" primaryKey="amp_activity_id" name="Actual Start Date">
 				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Actual Start Date" column="amp_activity_id" type="Date" nameColumn="actual_start_date" />
+				<Level name="Actual Start Date" column="actual_start_date_code" type="Date" nameColumn="actual_start_date" />
 			</Hierarchy>
 			
 			<Hierarchy hasAll="true" allMemberName="All Proposed Approval Date" primaryKey="amp_activity_id" name="Proposed Approval Date">
 				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Proposed Approval Date" column="amp_activity_id" type="Date" nameColumn="proposed_approval_date" />
+				<Level name="Proposed Approval Date" column="proposed_approval_date_code" type="Date" nameColumn="proposed_approval_date" />
 			</Hierarchy>
 			
 			<Hierarchy hasAll="true" allMemberName="All Actual Approval Date" primaryKey="amp_activity_id" name="Actual Approval Date">
 				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Actual Approval Date" column="amp_activity_id" type="Date" nameColumn="actual_approval_date" />
+				<Level name="Actual Approval Date" column="actual_approval_date_code" type="Date" nameColumn="actual_approval_date" />
 			</Hierarchy>
 
 			<Hierarchy hasAll="true" allMemberName="All Actual Completion Date" primaryKey="amp_activity_id" name="Actual Completion Date">
 				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Actual Completion Date" column="amp_activity_id" type="Date" nameColumn="actual_completion_date" />
+				<Level name="Actual Completion Date" column="actual_completion_date_code" type="Date" nameColumn="actual_completion_date" />
 			</Hierarchy>
 
 			<Hierarchy hasAll="true" allMemberName="All Proposed Completion Date" primaryKey="amp_activity_id" name="Proposed Completion Date">
 				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Proposed Completion Date" column="amp_activity_id" type="Date" nameColumn="proposed_completion_date" />
+				<Level name="Proposed Completion Date" column="proposed_completion_date_code" type="Date" nameColumn="proposed_completion_date" />
 			</Hierarchy>
 			
 			<Hierarchy hasAll="true" allMemberName="All Activity Created On" primaryKey="amp_activity_id" name="Activity Created On">
 				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Activity Created On" column="amp_activity_id" type="Date" nameColumn="date_created" />
+				<Level name="Activity Created On" column="date_created_code" type="Date" nameColumn="date_created" />
 			</Hierarchy>
 
 			<Hierarchy hasAll="true" allMemberName="All Activity Updated On" primaryKey="amp_activity_id" name="Activity Updated On">
 				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Activity Updated On" column="amp_activity_id" type="Date" nameColumn="date_updated" />
+				<Level name="Activity Updated On" column="date_updated_code" type="Date" nameColumn="date_updated" />
 			</Hierarchy>
-
+			
 		</Dimension>
 
 		<Dimension name="Activity Fixed Texts" foreignKey="entity_id">
@@ -395,31 +421,7 @@
 		<DimensionUsage name="Secondary Sector" source="AMP Sector" caption="Secondary Sector" foreignKey="secondary_sector_id" />
 		<DimensionUsage name="Tertiary Sector"  source="AMP Sector" caption="Tertiary Sector" foreignKey="tertiary_sector_id" />
 		
-		<Dimension name="Dates" type="TimeDimension" foreignKey="date_code">
-			<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Dates">
-				<Table name="mondrian_dates" />
-				<Level name="Year" column="year_code" levelType="TimeYears" type="Integer" />
-				<Level name="Quarter" column="quarter_code" ordinalColumn="quarter_code" nameColumn="quarter_name" levelType="TimeQuarters" type="Integer"/>
-				<Level name="Month" column="month_code" ordinalColumn="month_code" nameColumn="month_name" levelType="TimeMonths" type="Integer" />
-				<!-- Level name="Day" column="day_of_month" ordinalColumn="day_of_month" nameColumn="day_of_month_name" levelType="TimeDays" type="Integer" /-->
-				<Level name="Date" column="day_code" ordinalColumn="day_code" nameColumn="full_date" type="Integer" levelType="TimeDays">
-					<Property name="year_code" column="year_code" type="Integer"/>
-					<Property name="date_code" column="day_code" type="Integer"/>
-				</Level>
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Year">
-			  <Table name="mondrian_dates" />
-			  <Level name="Year" column="year_code" levelType="TimeYears" type="Integer" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Quarter">
-			  <Table name="mondrian_dates" />
-			  <Level name="Quarter" column="quarter_code" ordinalColumn="quarter_code" nameColumn="quarter_name" levelType="TimeQuarters" type="Integer"/>
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Month">
-			  <Table name="mondrian_dates" />
-			  <Level name="Month" column="month_code" ordinalColumn="month_code" nameColumn="month_name" levelType="TimeMonths" type="Integer" />
-			</Hierarchy>
-		</Dimension>
+		<DimensionUsage name="Dates" source="AMP Date" caption="Transaction Date" foreignKey="date_code" />
 		
 		<Measure name="Actual Commitments" aggregator="sum">
 			<MeasureExpression>

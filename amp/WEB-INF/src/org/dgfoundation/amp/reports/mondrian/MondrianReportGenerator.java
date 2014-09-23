@@ -584,7 +584,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 
 		//build the list of available columns
 		for (Member textColumn : rowAxis.getPositions().get(0).getMembers()) {
-			ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getName(), null, environment.locale);
+			ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getName(), null);
 			reportColumns.add(reportColumn);
 		}
 		//int measuresLeafPos = columnAxis.getAxisMetaData().getHierarchies().size();
@@ -595,7 +595,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				fullColumnName += "/" +  measureColumn.getName();
 				ReportOutputColumn reportColumn = reportColumnsByFullName.get(fullColumnName);
 				if (reportColumn == null) {
-					reportColumn = new ReportOutputColumn(measureColumn.getName(), parent, environment.locale);
+					reportColumn = new ReportOutputColumn(measureColumn.getName(), parent);
 					reportColumnsByFullName.put(fullColumnName, reportColumn);
 				}
 				if (measureColumn.getDepth() == 0) { //lowest depth ==0 => this is leaf column
@@ -605,9 +605,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 		//add measures total columns
 		if (spec.isCalculateColumnTotals() && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
-			ReportOutputColumn totalMeasuresColumn = new ReportOutputColumn(MoConstants.TOTAL_MEASURES, null, environment.locale);
+			ReportOutputColumn totalMeasuresColumn = new ReportOutputColumn(MoConstants.TOTAL_MEASURES, null);
 			for (ReportMeasure measure : spec.getMeasures())
-				reportColumns.add(new ReportOutputColumn(measure.getMeasureName(), totalMeasuresColumn, environment.locale));
+				reportColumns.add(new ReportOutputColumn(measure.getMeasureName(), totalMeasuresColumn));
 		}
 		return reportColumns;
 	}

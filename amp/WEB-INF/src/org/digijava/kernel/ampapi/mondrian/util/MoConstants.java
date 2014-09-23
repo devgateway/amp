@@ -248,6 +248,7 @@ public final class MoConstants {
 	//Values
 	public static final String BOOLEAN_TRUE_KEY = "2";
 	public static final String BOOLEAN_FALSE_KEY = "1";
+	public static final Integer UNDEFINED_KEY = 999999999;
 	
 	//Pledges Constant
 	public static String PLEDGE_PLEDGES_COMMITMENTS = "Pledges Actual Commitments";

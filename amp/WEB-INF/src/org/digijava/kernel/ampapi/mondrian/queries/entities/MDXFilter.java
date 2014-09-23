@@ -83,7 +83,7 @@ public class MDXFilter {
 		this.isKey = isKey;
 		if (isKey && filteredValues != null && filteredValues.size() == 1) {
 			singleValue = filteredValues.get(0).toString(); 
-		} else if (endRangeInclusive && startRangeInclusive && startRange.equals(endRange)) {
+		} else if (endRangeInclusive && startRangeInclusive && startRange != null && startRange.equals(endRange)) {
 			singleValue = startRange; 
 			allowedFilteredValues = true;
 		}  

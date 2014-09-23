@@ -115,7 +115,7 @@ public class MondrianReportFilters implements ReportFilters {
 	 */
 	public void addDateRangeFilterRule(ReportColumn column, Date from, Date to) throws AmpApiException {
 		//TODO: update based on schema definition
-		addFilterRule(new ReportElement(column), MondrianUtils.getDateRangeFilterRule(from, to));
+		//addFilterRule(new ReportElement(column), MondrianUtils.getDateRangeFilterRule(from, to));
 	}
 	
 	/**

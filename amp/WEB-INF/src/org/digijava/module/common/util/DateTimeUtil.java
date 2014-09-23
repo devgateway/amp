@@ -138,7 +138,8 @@ public class DateTimeUtil {
 		return result;
 	}
 		
-		public static int toJulianDayNumber(Date date){
+		public static Integer toJulianDayNumber(Date date){
+			if (date == null) return null;
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(date);
 			int year = cal.get(Calendar.YEAR);

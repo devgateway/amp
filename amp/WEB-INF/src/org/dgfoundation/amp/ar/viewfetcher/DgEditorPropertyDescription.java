@@ -94,8 +94,10 @@ public class DgEditorPropertyDescription implements PropertyDescription
 	 */
 	public String generateGeneralizedQuery(Collection<Long> ids, String locale)
 	{
-		return String.format("SELECT amp_activity_id, %s FROM %s where %s = '%s' AND amp_activity_id IN (%s)",
-				textColumnName, viewName, languageColumnName, locale, ids.isEmpty() ? "-999" : SQLUtils.generateCSV(ids));
+		return String.format("SELECT amp_activity_id, %s FROM %s where %s = '%s' AND (%s IS NOT NULL AND %s != '') AND amp_activity_id IN (%s)",
+				textColumnName, viewName, languageColumnName, locale,
+				textColumnName, textColumnName,
+				ids.isEmpty() ? "-999" : SQLUtils.generateCSV(ids));
 	}
 	
 	/**
@@ -128,19 +130,24 @@ public class DgEditorPropertyDescription implements PropertyDescription
 		// import values in the requested locale
 		importValues(res, SQLUtils.rawRunQuery(connection, generateGeneralizedQuery(ids, locale), null));
 		
+		importBaseLanguageTranslations(connection, res, locale, ids);
+		
+		return res;
+	}
+	
+	protected void importBaseLanguageTranslations(java.sql.Connection connection, Map<Long, String> res, String locale, Collection<Long> ids) throws SQLException {
+
 		List<String> baseLanguages = SQLUtils.fetchAsList(connection, "SELECT default_language FROM dg_site WHERE site_id='amp' AND default_language IS NOT NULL", 1);
 		String baseLanguage = baseLanguages.isEmpty() ? "en" : baseLanguages.get(0);
 		
-		if (!locale.equals(baseLanguage)){
+		if (!locale.equals(baseLanguage)) {
 			// compute ids which have no translation in the requested language -> use English for those
 			java.util.HashSet<Long> remainingIds = new java.util.HashSet<Long>(ids);
 			remainingIds.removeAll(res.keySet());
-		
+	
 			// import values which have no locale-translation in English
-			importValues(res, SQLUtils.rawRunQuery(connection, generateGeneralizedQuery(remainingIds, baseLanguage), null));			
+			importValues(res, SQLUtils.rawRunQuery(connection, generateGeneralizedQuery(remainingIds, baseLanguage), null));
 		}
-		
-		return res;
 	}
 	
 	@Override

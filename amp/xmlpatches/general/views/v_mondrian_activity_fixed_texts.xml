@@ -59,7 +59,7 @@
 						aav.date_updated,
 						to_char(aav.date_updated, 'J')::integer AS date_updated_code
 						
-					FROM amp_activity_version aav WHERE (aav.deleted IS NULL) OR (NOT aav.deleted);
+					FROM amp_activity_version aav;
 			</lang>
 		</script>
 	</apply>

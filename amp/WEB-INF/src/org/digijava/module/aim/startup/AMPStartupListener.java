@@ -21,6 +21,7 @@ import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.mondrian.MondrianETL;
+import org.dgfoundation.amp.mondrian.MondrianUtils;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.job.chachedtables.PublicViewColumnsUtil;
 import org.digijava.kernel.lucene.LuceneModules;
@@ -315,6 +316,7 @@ public class AMPStartupListener extends HttpServlet implements
 				logger.info("\t... JackRabbit startup failed!");
 			
 			checkDatabaseSanity();
+			checkMondrianETLSanity();
 			doMonetETL();
 		} catch (Exception e) {
 			logger.error("Exception while initialising AMP :" + e.getMessage());
@@ -350,6 +352,18 @@ public class AMPStartupListener extends HttpServlet implements
 			CurrencyUtil.checkDatabaseSanity(session);
 		}catch(Exception e){
 			throw new Error("database does not conform to minimum sanity requirements, shutting down AMP", e);
+		}finally {
+			CloseExpiredActivitiesJob.cleanupSession(session);
+		}
+	}
+	
+	protected void checkMondrianETLSanity() {
+		Session session = null; 
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			MondrianUtils.checkMondrianViewsSanity(session);
+		}catch(Exception e){
+			throw new Error("database does not conform to minimum Mondrian ETL sanity requirements, shutting down AMP", e);
 		}finally {
 			CloseExpiredActivitiesJob.cleanupSession(session);
 		}

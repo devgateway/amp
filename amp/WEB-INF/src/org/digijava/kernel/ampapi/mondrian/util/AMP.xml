@@ -129,11 +129,6 @@
 				<Level name="Activity Approved By" column="approved_id" type="String" nameColumn="approver_name" /> 
 			</Hierarchy>
 
-			<Hierarchy hasAll="true" allMemberName="All Status" primaryKey="amp_activity_id" name="Status">
-				<Table name="mondrian_activity_trn_texts@@locale@@" />
-				<Level name="Status" column="amp_status_id" type="String" nameColumn="amp_status_name" /> 
-			</Hierarchy>
-
 			<Hierarchy hasAll="true" allMemberName="All Government Approval Procedures" primaryKey="amp_activity_id" name="Government Approval Procedures">
 				<Table name="mondrian_activity_trn_texts@@locale@@" />
 				<Level name="Government Approval Procedures" column="governmentapprovalprocedures_id" type="String" nameColumn="governmentapprovalprocedures_text" /> 

@@ -391,6 +391,12 @@ public class SQLUtils {
 		private static ThreadLocal<SimpleDateFormat> dbDateExportFormat = new ThreadLocal<>(); 
 		//private static SimpleDateFormat dbDateExportFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
+		private static String stringifyDate(Date obj) {
+			if (dbDateExportFormat.get() == null) 
+				dbDateExportFormat.set(new SimpleDateFormat("yyyy-MM-dd"));
+			return "'" + dbDateExportFormat.get().format(obj) + "'";
+		}
+		
 		/**
 		 * returns a ready-to-be-included-into-SQL-query representation of a var
 		 * @param obj
@@ -416,9 +422,7 @@ public class SQLUtils {
 			else if (obj == null)
 				return "NULL";
 			else if (obj instanceof Date) {
-				if (dbDateExportFormat.get() == null) 
-					dbDateExportFormat.set(new SimpleDateFormat("yyyy-MM-dd"));
-				return "'" + dbDateExportFormat.get().format((Date) obj) + "'";
+				return stringifyDate((Date) obj);
 			}
 			else
 			{

@@ -384,16 +384,16 @@ public class MondrianETL {
 		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + tableName);
 		SQLUtils.executeQuery(conn, "CREATE TABLE " + tableName + " AS " + tableCreationQuery);
 		SQLUtils.flush(conn);
-		//postprocessDimensionTable(tableName, primaryKey, columnsToIndex);
+		postprocessDimensionTable(tableName, primaryKey, columnsToIndex);
 	}
 
 	
-//	/**
-//	 * makes any needed postprocessing on a Mondrian Dimension table (indices, collations, etc)
-//	 * @param tableName
-//	 * @param columnsToIndex
-//	 */
-//	protected void postprocessDimensionTable(String tableName, String primaryKey, Collection<String> columnsToIndex) {
+	/**
+	 * makes any needed postprocessing on a Mondrian Dimension table (indices, collations, etc)
+	 * @param tableName
+	 * @param columnsToIndex
+	 */
+	protected void postprocessDimensionTable(String tableName, String primaryKey, Collection<String> columnsToIndex) {
 //		// change text column types' collation to C -> 7x faster GROUP BY / ORDER BY for stupid Mondrian
 //		Map<String, String> tableColumns = SQLUtils.getTableColumnsWithTypes(tableName, true);
 //		Set<String> textColumnTypes = new HashSet<>(Arrays.asList("text", "character varying", "varchar"));
@@ -404,18 +404,18 @@ public class MondrianETL {
 //				SQLUtils.executeQuery(conn, q);
 //			}
 //		}
-//		
-//		// create indices
-//		for (String columnToIndex:columnsToIndex) {
-//			String indexCreationQuery = String.format("CREATE INDEX %s_%s ON %s(%s)", tableName, columnToIndex, tableName, columnToIndex);
-//			SQLUtils.executeQuery(conn, indexCreationQuery);
-//		}
-//		
+		
+		// create indices
+		for (String columnToIndex:columnsToIndex) {
+			String indexCreationQuery = String.format("CREATE INDEX %s_%s ON %s(%s)", tableName, columnToIndex, tableName, columnToIndex);
+			SQLUtils.executeQuery(conn, indexCreationQuery);
+		}
+		
 //		// create primary key
 //		if (primaryKey != null) {
 //			SQLUtils.executeQuery(conn, String.format("ALTER TABLE %s ADD CONSTRAINT %s_PK PRIMARY KEY (%s)", tableName, tableName, primaryKey));
 //		}
-//	}
+	}
 
 	/**
 	 * drops preexisting fact table and creates an empty one
@@ -468,12 +468,22 @@ public class MondrianETL {
 	 */
 	protected void generatePerActivityTables(MondrianTableDescription mondrianTable) throws SQLException {
 		if (etlConfig.fullEtl) {
-//			String query = "SELECT * FROM v_" + mondrianTable.tableName;
-//			monetConn.createTableFromQuery(this.conn, query, mondrianTable.tableName);
-			generateStarTableWithQueryInPostgres(mondrianTable.tableName, mondrianTable.primaryKeyColumnName, "SELECT * FROM v_" + mondrianTable.tableName, mondrianTable.indexedColumns);
-			monetConn.copyTableFromPostgres(conn, mondrianTable.tableName);
+			long start = System.currentTimeMillis();
+			String query = "SELECT * FROM v_" + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id");
+			
+			if (MondrianTablesRepository.MONDRIAN_NON_TRANSLATED_DIMENSIONS.contains(mondrianTable)) {
+				monetConn.createTableFromQuery(this.conn, query, mondrianTable.tableName);				
+			} else {
+				generateStarTableWithQueryInPostgres(mondrianTable.tableName, mondrianTable.primaryKeyColumnName, query, mondrianTable.indexedColumns);
+				if (!mondrianTable.isFiltering)
+					monetConn.copyTableFromPostgres(conn, mondrianTable.tableName);
+			}
+			long baseDone = System.currentTimeMillis();
 			for (String locale:locales)
 				cloneMondrianTableForLocale(mondrianTable, locale);
+			long cloningDone = System.currentTimeMillis();
+			logger.info("full ETL on " + mondrianTable.tableName + ", base table took " + (baseDone - start) + " ms");
+			logger.info("\tfull ETL on " + mondrianTable.tableName + ", cloning took " + (cloningDone - baseDone) + " ms");
 		} else {
 			monetConn.executeQuery("DELETE FROM " + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id"));
 			String query = "SELECT * FROM v_" + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id");

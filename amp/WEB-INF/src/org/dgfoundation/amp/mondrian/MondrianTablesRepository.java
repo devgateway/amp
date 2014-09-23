@@ -138,7 +138,6 @@ public class MondrianTablesRepository {
 				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
 					@Override public I18nViewDescription getObject() {
 						return new I18nViewDescription("mondrian_activity_trn_texts")
-								.addTrnColDef("amp_status_name", "amp_status_id")
 								.addTrnColDef("governmentapprovalprocedures_text", "governmentapprovalprocedures_id")
 								.addTrnColDef("jointcriteria_text", "jointcriteria_id")
 								.addTrnColDef("iob_text", "iob_id");
@@ -155,7 +154,7 @@ public class MondrianTablesRepository {
 			});
 	
 	public final static MondrianTableDescription MONDRIAN_LONG_TEXTS = 
-			new MondrianTableDescription("mondrian_activity_long_texts", "amp_activity_id", Arrays.asList("amp_activity_id")) {
+			new MondrianTableDescription("mondrian_activity_long_texts", "amp_activity_id", Arrays.asList("amp_activity_id", "language")) {
 				{
 					isFiltering = true;
 				}

@@ -9,6 +9,7 @@ import java.util.Set;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.RadioChoice;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -18,6 +19,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
 import org.dgfoundation.amp.onepager.models.GPIYesNoAnswerModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
@@ -97,22 +99,44 @@ public class AmpGPIQuestionItemFeaturePanel extends AmpFeaturePanel<AmpGPISurvey
 				}				
 
 				// Create a label with a dynamic value (in this case a question from DB) that can be translatable and can have a tooltip.
-				AmpLabelFieldPanel indName = new AmpLabelFieldPanel("qtext", new Model<String>(""), 
+				/*AmpLabelFieldPanel indName = new AmpLabelFieldPanel("qtext", new Model<String>(""), 
 						new PropertyModel<String>(item.getModelObject(), "questionText").getObject(), false);
 
 				if (item.getModelObject().getParentQuestion() != null) {
 					indName.add(new AttributeModifier("style", "padding-left:4em;font-style:italic"));
 				}
 				item.add(indName);
+				indName.setVisible(false);*/
+				
+				IChoiceRenderer renderer = new IChoiceRenderer() {
+					public Object getDisplayValue(Object object) {
+						return object;
+					}
+					
+					public String getIdValue(Object object, int index) {
+						return object != null ? object.toString() : "";
+					}
+				};
+				final String[] elements = new String[] { "Yes", "No" };
+				AmpGroupFieldPanel<String> yesNoField = new AmpGroupFieldPanel<String>("answer", 
+						new GPIYesNoAnswerModel(new PropertyModel<String>(PersistentObjectModel.getModel(response), "response")), 
+						Arrays.asList(elements), 
+						new PropertyModel<String>(item.getModelObject(), "questionText").getObject(), 
+						false, 
+						false, 
+						renderer, 
+						null);
+				item.add(yesNoField);
 
 				IModel<AmpGPISurveyResponse> responseModel = PersistentObjectModel.getModel(response);
 				String qtype = item.getModelObject().getAmpTypeId().getName();
 				if (qtype.compareTo("yes-no") == 0) {
-					final String[] elements = new String[] { "Yes", "No" };
+					/*final String[] elements = new String[] { "Yes", "No" };
 					RadioChoice<String> answer = new RadioChoice<String>("answer", new GPIYesNoAnswerModel(new PropertyModel<String>(responseModel, "response")), Arrays.asList(elements));
 					answer.setSuffix(" ");
-					item.add(answer);
-
+					answer.setOutputMarkupId(true);
+					item.add(answer);*/										
+					
 					TextField hidden = new TextField("answerInput");
 					hidden.setVisible(false);
 					item.add(hidden);

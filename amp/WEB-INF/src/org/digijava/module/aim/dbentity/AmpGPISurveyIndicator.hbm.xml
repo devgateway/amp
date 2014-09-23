@@ -16,6 +16,7 @@
 		<property name="indicatorCode" column="indicator_code" type="java.lang.String" />
 		<property name="status" column="status" type="java.lang.String" />
 		<property name="description" column="description" type="text" />
+		<property name="showAsIndicator" column="show_as_indicator" type="java.lang.Boolean"/>
 
 		<set name="questions" table="AMP_GPISURVEY_QUESTION" inverse="true" lazy="true"
 			cascade="none">

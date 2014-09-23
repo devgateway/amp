@@ -244,6 +244,9 @@ public class GPIUseCase {
 			AmpGPISurveyIndicator aux = iter.next();
 			if (checkReportName(aux.getIndicatorCode()) == null) {
 				iter.remove();
+			} else if (!Boolean.TRUE.equals(aux.getShowAsIndicator())) {
+				// Dont show some indicators in the tab list.
+				iter.remove();
 			}
 		}
 		return list;

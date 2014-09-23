@@ -40,14 +40,16 @@
 		<h2><digi:trn>Indicator Descriptions</digi:trn></h2>
 		<table bgColor=#ffffff cellpadding="0" cellspacing="0" class="box-border-nopadding" style="width: 90%;">
 			<logic:iterate id="indicator" name="manageGPIForm" property="indicators" type="org.digijava.module.aim.dbentity.AmpGPISurveyIndicator">
-				<tr>
-					<td style="width: 30px;">
-						<p><digi:trn><%=indicator.getName()%>: </digi:trn></p>
-					</td>
-					<td style="width: 300px;">
-						<textarea name="indicator_<%=indicator.getAmpIndicatorId()%>" id="indicator_<%=indicator.getAmpIndicatorId()%>" rows="2" cols="50"><%= indicator.getDescription()%></textarea>
-					</td>
-				</tr>
+				<logic:equal value="true" property="showAsIndicator" name="indicator">
+					<tr>
+						<td style="width: 30px;">
+							<p><digi:trn><%=indicator.getName()%>: </digi:trn></p>
+						</td>
+						<td style="width: 300px;">
+							<textarea name="indicator_<%=indicator.getAmpIndicatorId()%>" id="indicator_<%=indicator.getAmpIndicatorId()%>" rows="2" cols="50"><%= indicator.getDescription()%></textarea>
+						</td>
+					</tr>
+				</logic:equal>
 			</logic:iterate>
 		</table>
 		<hr>

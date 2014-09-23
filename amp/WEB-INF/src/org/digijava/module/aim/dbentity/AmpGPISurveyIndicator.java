@@ -14,6 +14,7 @@ public class AmpGPISurveyIndicator implements Serializable {
 	private Set<AmpGPISurveyQuestion> questions;
 	private Set<AmpGPISurveyIndicatorCalcFormula> calcFormulas;
 	private String description;
+	private Boolean showAsIndicator;
 
 	public static class GPISurveyIndicatorComparator implements Comparator<AmpGPISurveyIndicator>, Serializable {
 
@@ -21,10 +22,16 @@ public class AmpGPISurveyIndicator implements Serializable {
 
 		@Override
 		public int compare(AmpGPISurveyIndicator arg0, AmpGPISurveyIndicator arg1) {
-			if (arg0.getIndicatorCode() != null && arg1.getIndicatorCode() != null) {
-				return arg0.getIndicatorCode().compareTo(arg1.getIndicatorCode());
+			if (Boolean.TRUE.equals(arg0.getShowAsIndicator()) && !Boolean.TRUE.equals(arg1.getShowAsIndicator())) {
+				return 1;
+			} else if (Boolean.TRUE.equals(arg1.getShowAsIndicator()) && !Boolean.TRUE.equals(arg0.getShowAsIndicator())) {
+				return -1;
+			} else {
+				if (arg0.getIndicatorCode() != null && arg1.getIndicatorCode() != null) {
+					return arg0.getIndicatorCode().compareTo(arg1.getIndicatorCode());
+				}
+				return arg0.hashCode() - arg1.hashCode();
 			}
-			return arg0.hashCode() - arg1.hashCode();
 		}
 	}
 
@@ -94,6 +101,14 @@ public class AmpGPISurveyIndicator implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Boolean getShowAsIndicator() {
+		return showAsIndicator;
+	}
+
+	public void setShowAsIndicator(Boolean showAsIndicator) {
+		this.showAsIndicator = showAsIndicator;
 	}
 
 }

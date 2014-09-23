@@ -4,6 +4,7 @@
 package org.dgfoundation.amp.reports.mondrian.converters;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -121,22 +122,23 @@ public class AmpReportsToReportSpecification {
 		/* cannot simply use this, because it still doesn't bring the ordered list of columns :(
 		 * ARUtil.createOrderedColumns(getShowAblesColumns(), getHierarchies());
 		 */
-		AmpColumns[] registeredByOrderColumns = new AmpColumns[report.getColumns().size()];
-		Set<AmpColumns> columns = new HashSet<AmpColumns>(report.getColumns().size());
-		Set<AmpColumns> reallyOrderedColumns = new LinkedHashSet<AmpColumns>(report.getColumns().size());
-		for (AmpReportColumn col : report.getColumns()) {
-			registeredByOrderColumns[col.getOrderId().intValue() - 1] = col.getColumn();
-			columns.add(col.getColumn());
-		}
-		for (AmpReportHierarchy hierarchy : report.getHierarchies()) {
-			if(columns.contains(hierarchy.getColumn()))
-				reallyOrderedColumns.add(hierarchy.getColumn());
-		}
-		for (int i = 0; i < registeredByOrderColumns.length; i++)
-			if (!reallyOrderedColumns.contains(registeredByOrderColumns[i]))
-				reallyOrderedColumns.add(registeredByOrderColumns[i]);
+		Set<AmpColumns> orderedColumns = new LinkedHashSet<AmpColumns>(report.getColumns().size());
 		
-		return reallyOrderedColumns;
+		TreeMap<Long, AmpColumns> columns = new TreeMap<Long, AmpColumns>();
+		for (AmpReportColumn col : report.getColumns())
+			columns.put(col.getOrderId(), col.getColumn());
+		Collection<AmpColumns> registeredOrderColumns = columns.values();
+		
+		for (AmpReportHierarchy hierarchy : report.getHierarchies()) {
+			if(registeredOrderColumns.contains(hierarchy.getColumn()))
+				orderedColumns.add(hierarchy.getColumn());
+		}
+		
+		for (AmpColumns col : registeredOrderColumns)
+			if (!orderedColumns.contains(col))
+				orderedColumns.add(col);
+		
+		return orderedColumns;
 	}
 	
 	private void configureHierarchies() {

@@ -2,9 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.gis;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.ws.rs.GET;
@@ -19,14 +17,15 @@ import javax.ws.rs.core.PathSegment;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
-import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
+import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
 import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.util.ReportsResultTotalsFormatter;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
@@ -34,14 +33,8 @@ import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
-import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.dbentity.AmpMapState;
 import org.digijava.module.esrigis.helpers.DbHelper;
@@ -283,5 +276,15 @@ public class GisEndPoints {
 		jMap.set("lastAccess", GisUtil.formatDate(map.getLastAccesedDate()));
 		return jMap;
 	}
-
+	
+	@GET
+	@Path("/locationstotals/{admlevel}/{type}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="locationstotals")
+	
+	public JsonBean getAdminLevelsTotals(@PathParam ("admlevel") String admlevel, @PathParam("type") String type ){
+		LocationService ls = new LocationService();
+	
+		return ( ReportsResultTotalsFormatter.ResultFormatter(ls.getTotals(admlevel, type)));
+	}
 }

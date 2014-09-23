@@ -127,7 +127,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		if (SaikuReportArea.class.isAssignableFrom(reportAreaType)) {
 			report = new SaikuGeneratedReport(
 					spec, report.generationTime, report.requestingUser,
-					(SaikuReportArea)report.reportContents, cellDataSet, report.rootHeaders, report.leafHeaders);
+					(SaikuReportArea)report.reportContents, cellDataSet, report.rootHeaders, report.leafHeaders, environment);
 			SaikuReportSorter.sort(report, environment);
 			if (printMode)
 				SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST_SORT");
@@ -584,7 +584,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 
 		//build the list of available columns
 		for (Member textColumn : rowAxis.getPositions().get(0).getMembers()) {
-			ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getName(), null);
+			ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getName(), null, environment.locale);
 			reportColumns.add(reportColumn);
 		}
 		//int measuresLeafPos = columnAxis.getAxisMetaData().getHierarchies().size();
@@ -595,7 +595,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				fullColumnName += "/" +  measureColumn.getName();
 				ReportOutputColumn reportColumn = reportColumnsByFullName.get(fullColumnName);
 				if (reportColumn == null) {
-					reportColumn = new ReportOutputColumn(measureColumn.getName(), parent);
+					reportColumn = new ReportOutputColumn(measureColumn.getName(), parent, environment.locale);
 					reportColumnsByFullName.put(fullColumnName, reportColumn);
 				}
 				if (measureColumn.getDepth() == 0) { //lowest depth ==0 => this is leaf column
@@ -605,9 +605,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 		//add measures total columns
 		if (spec.isCalculateColumnTotals() && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
-			ReportOutputColumn totalMeasuresColumn = new ReportOutputColumn(MoConstants.TOTAL_MEASURES, null);
+			ReportOutputColumn totalMeasuresColumn = new ReportOutputColumn(MoConstants.TOTAL_MEASURES, null, environment.locale);
 			for (ReportMeasure measure : spec.getMeasures())
-				reportColumns.add(new ReportOutputColumn(measure.getMeasureName(), totalMeasuresColumn));
+				reportColumns.add(new ReportOutputColumn(measure.getMeasureName(), totalMeasuresColumn, environment.locale));
 		}
 		return reportColumns;
 	}

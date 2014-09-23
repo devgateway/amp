@@ -82,7 +82,7 @@ public class AmpARFilterConverter {
 	//either transform filter by IDS, either by Names => if by IDS, then Level properties will be used
 	private MondrianReportFilters filterRules;
 	private MondrianReportSettings settings;
-	private static final boolean USE_IDS = false;
+	private static final boolean USE_IDS = true;
 	private AmpARFilter arFilter;
 	private ReportEntityType entityType;
 
@@ -318,12 +318,14 @@ public class AmpARFilterConverter {
 	
 	private void addCategoryValueNamesFilter(Set<AmpCategoryValue> set, String columnName, ReportEntityType type) {
 		if (set == null || set.size() == 0) return;
-		//TODO: can we filter by ids? no schema definition is available yet 
 		List<String> names = new ArrayList<String>(set.size());
-		for (AmpCategoryValue categValue: set) { 
-			names.add(categValue.getValue());
+		for (AmpCategoryValue categValue: set) {
+			if (USE_IDS)
+				names.add(String.valueOf(categValue.getId()));
+			else 
+				names.add(categValue.getValue());
 		}
-		addFilterRule(columnName, type, new FilterRule(names, true, false));
+		addFilterRule(columnName, type, new FilterRule(names, true, USE_IDS));
 	}
 	
 	public MondrianReportSettings buildSettings() {

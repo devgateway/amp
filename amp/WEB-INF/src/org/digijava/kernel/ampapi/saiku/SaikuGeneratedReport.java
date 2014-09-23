@@ -5,10 +5,14 @@ package org.digijava.kernel.ampapi.saiku;
 
 import java.util.List;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.TeamMember;
+import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
 
 /**
@@ -23,9 +27,23 @@ public class SaikuGeneratedReport extends GeneratedReport{
 			TeamMember requestingUser, SaikuReportArea reportContents,
 			CellDataSet cellDataSet,
 			List<ReportOutputColumn> rootHeaders,
-			List<ReportOutputColumn> leafHeaders) {
+			List<ReportOutputColumn> leafHeaders, ReportEnvironment environment) {
 		super(spec, generationTime, requestingUser, reportContents, rootHeaders,
 				leafHeaders);
 		this.cellDataSet = cellDataSet;
+		translateHeaders(environment);
 	}
+	
+	private void translateHeaders(ReportEnvironment environment) {
+		if (cellDataSet == null || cellDataSet.getCellSetHeaders() == null) return;
+		AbstractBaseCell[][] headers = cellDataSet.getCellSetHeaders();
+		for (int i = 0; i < headers.length; i++)
+			for (int j = 0; j< headers[i].length; j++) {
+				String formattedValue = headers[i][j].getFormattedValue();
+				if (!NumberUtils.isNumber(formattedValue))
+					headers[i][j].setFormattedValue(
+							TranslatorWorker.translateText(formattedValue, environment.locale, 3l));
+			}
+	}
+	
 }

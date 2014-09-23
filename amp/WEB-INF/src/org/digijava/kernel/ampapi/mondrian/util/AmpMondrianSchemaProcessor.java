@@ -1,26 +1,24 @@
 package org.digijava.kernel.ampapi.mondrian.util;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 import java.util.Set;
+
+import mondrian.olap.Util.PropertyList;
+import mondrian.spi.DynamicSchemaProcessor;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.reports.mondrian.MondrianDBUtils;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.startup.AMPStartupListener;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-
-import mondrian.olap.Util.PropertyList;
-import mondrian.spi.DynamicSchemaProcessor;
 
 public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	
@@ -53,7 +51,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		contents = contents.replaceAll("@@actual@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase()));
 		contents = contents.replaceAll("@@planned@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getIdInDatabase()));
 		contents = contents.replaceAll("@@currency@@", Long.toString(getReportCurrency().getAmpCurrencyId()));
-		contents = contents.replaceAll("@@wsactivities@@", getWorkspaceActivitiesIds());
+		contents = contents.replaceAll("@@filteredActivities@@", getAllowedActivitiesIds());
 		String locale = getReportLocale();
 		contents = contents.replaceAll("@@locale@@", locale);
 		int pos = contents.indexOf("@@");
@@ -71,9 +69,18 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		return res;
 	}
 	
-	protected String getWorkspaceActivitiesIds() {
+	protected String getAllowedActivitiesIds() {
 		TeamMember tm = currentEnvironment.get().viewer;
-		return Util.toCSStringForIN(ActivityUtil.getAllAmpActivityIds(WorkspaceFilter.generateWorkspaceFilterQuery(tm)));
+		Set<Long> allowedActivities = ActivityUtil.getAllAmpActivityIds(WorkspaceFilter.generateWorkspaceFilterQuery(tm));
+		if (allowedActivities.size() > 0) {
+			String dateFilters = MondrianDBUtils.generateDateColumnsFilterQuery(
+					allowedActivities,
+					((MondrianReportFilters)currentReport.get().getFilters()).getDateFilterRules());
+			if (dateFilters != null) {
+				allowedActivities = ActivityUtil.getAllAmpActivityIds(dateFilters);
+			}
+		}
+		return Util.toCSStringForIN(allowedActivities);
 	}
 	
 	/**

@@ -18,6 +18,7 @@ import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpARFilterConverter;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * Mondrian Report Filters - can be used to populate it Manually, either via {@link AmpARFilterConverter} support
@@ -25,6 +26,12 @@ import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
  */
 public class MondrianReportFilters implements ReportFilters {
 	private Map<ReportElement, List<FilterRule>> filterRules = new HashMap<ReportElement, List<FilterRule>>();
+	/**
+	 * Stores date filters to be applied over date columns.
+	 * Note: Due to slow execution via MDX with the existing schema config, 
+	 * we need to do a custom plain SQL filter for dates 
+	 */
+	private final Map<ReportColumn, List<FilterRule>> dateFilterRules = new HashMap<ReportColumn, List<FilterRule>>();
 	
 	/**
 	 * Initialized report filters with a map of elements to filter by a list of filters each
@@ -42,12 +49,20 @@ public class MondrianReportFilters implements ReportFilters {
 		return filterRules;
 	}
 	
+	public Map<ReportColumn, List<FilterRule>> getDateFilterRules() {
+		return dateFilterRules;
+	}
+	
 	/**
 	 * For internal use, because we need to force the use mdx properties filters for some dates 
 	 * @param elem
 	 * @param filterRule
 	 */
 	private void addFilterRule(ReportElement elem, FilterRule filterRule) {
+		addFilterRule(filterRules, elem, filterRule);
+	}
+	
+	private <T> void addFilterRule(Map<T, List<FilterRule>> filterRules, T elem, FilterRule filterRule) {
 		List<FilterRule> filtersList = filterRules.get(elem);
 		if (filtersList == null) {
 			filtersList = new ArrayList<FilterRule>();
@@ -114,8 +129,11 @@ public class MondrianReportFilters implements ReportFilters {
 	 * @throws AmpApiException if range is invalid
 	 */
 	public void addDateRangeFilterRule(ReportColumn column, Date from, Date to) throws AmpApiException {
-		//TODO: update based on schema definition
-		//addFilterRule(new ReportElement(column), MondrianUtils.getDateRangeFilterRule(from, to));
+		//validate
+		MondrianUtils.getDateRangeFilterRule(from, to);
+		final String fromStr = from == null ? null : DateTimeUtil.formatDate(from);  
+		final String toStr = to == null ? null : DateTimeUtil.formatDate(to);
+		addFilterRule(dateFilterRules, column, new FilterRule(fromStr, toStr, true, true, false));
 	}
 	
 	/**
@@ -198,4 +216,15 @@ public class MondrianReportFilters implements ReportFilters {
 		addFilterRule(new ReportElement(ElementType.MONTH), MondrianUtils.getSingleDateFilterRule(date, valueToInclude));
 	}
 	
+	/**
+	 * Adds a single date filter over a date column
+	 * @param column - the date column to filter 
+	 * @param date - date to be considered
+	 * @throws AmpApiException
+	 */
+	public void addSingleDateFilterRule(ReportColumn column, Date date) throws AmpApiException {
+		if (date == null)
+			throw new AmpApiException("Cannot add a filter to a null date");
+		addFilterRule(dateFilterRules, column, new FilterRule(DateTimeUtil.formatDate(date), true, false));
+	}
 }

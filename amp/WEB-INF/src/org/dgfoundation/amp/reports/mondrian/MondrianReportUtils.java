@@ -111,6 +111,12 @@ public class MondrianReportUtils {
 		}
 	}
 	
+	/**
+	 * Retrieves column index for the specified column from the given ReportSpecification
+	 * @param col
+	 * @param spec
+	 * @return
+	 */
 	public static int getColumnId(ReportColumn col, ReportSpecification spec) {
 		if (spec == null || spec.getColumns() == null) return -1;
 		int colId = 0;

@@ -78,11 +78,6 @@ public class AmpReportsToReportSpecification {
 		spec.setFilters(arFilterTranslator.buildFilters());
 		spec.setSettings(arFilterTranslator.buildSettings());
 		
-		//TODO:
-		//report.getAlsoShowPledges()
-		
-		//..
-		
 		return spec;
 	}
 	
@@ -105,7 +100,9 @@ public class AmpReportsToReportSpecification {
 		spec.setCalculateColumnTotals(true);
 		spec.setCalculateRowTotals(true);
 		
-		switch(report.getOptions()) {
+		final String groupingOption = report.getDrilldownTab() ? "" : report.getOptions(); 
+		
+		switch(groupingOption) {
 		case "A": spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY); break;
 		case "Q": spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY); break;
 		case "M": spec.setGroupingCriteria(GroupingCriteria.GROUPING_MONTHLY); break;

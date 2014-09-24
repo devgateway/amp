@@ -47,13 +47,13 @@ TreeNodeModel = Backbone.Model.extend({
   serialize: function() {
     var tmp = [];
     var children = this.get('children');
-    if(children.length > 0){
+    if (children.length > 0) {
       children.each(function(child) {
-        tmp = tmp.concat(child.serialize() );
+        tmp = tmp.concat(child.serialize());
       });
 
-    } else{
-      if(this.get('selected')){
+    } else {
+      if (this.get('selected')) {
         tmp.push(this.id);
       }
     }
@@ -61,17 +61,17 @@ TreeNodeModel = Backbone.Model.extend({
     return tmp;
   },
 
-  deserialize: function(listOfSelected){
+  deserialize: function(listOfSelected) {
     var children = this.get('children');
-    if(children.length > 0){
+    if (children.length > 0) {
       children.each(function(child) {
         child.deserialize(listOfSelected);
       });
     }
 
-    if( _(listOfSelected).indexOf(this.id) > -1){
+    if (_(listOfSelected).indexOf(this.id) > -1) {
       this.set('selected', true);
-    } else{
+    } else {
       this.set('selected', false);
     }
   },

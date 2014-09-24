@@ -35,7 +35,7 @@ module.exports = BaseFilterModel.extend({
       return {}; //no tree, nothing to serialize.
     } else {
       var tmpAry = tree.serialize();
-      tmpAry = _.without(tmpAry,-1);
+      tmpAry = _.without(tmpAry, -1);
       return tmpAry;
     }
   },

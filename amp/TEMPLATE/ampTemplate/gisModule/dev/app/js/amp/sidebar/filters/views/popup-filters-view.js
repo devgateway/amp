@@ -126,7 +126,7 @@ module.exports = Backbone.View.extend({
         _.each(data, function(APIFilter) {
           if (APIFilter.ui) {
             var tmpModel = self._createFilterModels(APIFilter);
-            if(tmpModel){
+            if (tmpModel) {
               self.app.data.filters.add(tmpModel);
             }
           }
@@ -218,7 +218,7 @@ module.exports = Backbone.View.extend({
           title:APIFilter.name
         });
         targetCollection.add(tmpModel);
-        if(tmpModel){
+        if (tmpModel) {
           self.app.data.filters.add(tmpModel);
         }
       });
@@ -248,7 +248,7 @@ module.exports = Backbone.View.extend({
   },
 
   //TODO: move to app.data.filters, which should be turned into a special collection.
-  serialize: function(){
+  serialize: function() {
     var serializedFilters = {};
     this.app.data.filters.each(function(filter) {
       serializedFilters[filter.get('title')] = filter.serialize();
@@ -257,11 +257,11 @@ module.exports = Backbone.View.extend({
   },
 
   //TODO: move to app.data.filters, which should be turned into a special collection.
-  deserialize: function(blob){
-    if(blob){
+  deserialize: function(blob) {
+    if (blob) {
       this.app.data.filters.each(function(filter) {
         filter.deserialize(blob[filter.get('title')]);
-      });      
+      });
     }
   },
 

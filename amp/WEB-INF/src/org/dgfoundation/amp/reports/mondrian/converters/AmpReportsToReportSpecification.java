@@ -34,6 +34,8 @@ import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * Converter for {@link AmpReport} to {@link ReportSpecification} 
@@ -73,6 +75,7 @@ public class AmpReportsToReportSpecification {
 		
 		//configure report
 		configureReportData();
+		configureNonEmpty();
 		configureHierarchies();
 		configureSorting();
 		
@@ -96,9 +99,6 @@ public class AmpReportsToReportSpecification {
 		for (String measureName: report.getMeasureNames()) {
 			spec.addMeasure(MondrianReportUtils.getMeasure(measureName, entityType));
 		}
-		//default expectations
-		spec.setDisplayEmptyFundingColumns(report.getAllowEmptyFundingColumns());
-		spec.setDisplayEmptyFundingRows(false); 
 		
 		spec.setCalculateColumnTotals(true);
 		spec.setCalculateRowTotals(true);
@@ -139,6 +139,21 @@ public class AmpReportsToReportSpecification {
 				orderedColumns.add(col);
 		
 		return orderedColumns;
+	}
+	
+	private void configureNonEmpty() {
+		//default expectations
+		spec.setDisplayEmptyFundingColumns(report.getAllowEmptyFundingColumns());
+		
+		//detect if we should display empty rows or not
+		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
+		if (dateFilterHidesProjects && !report.getDrilldownTab() && 
+				(arFilter.wasDateFilterUsed() || (report.getHierarchies().size() > 0))
+				)
+			spec.setDisplayEmptyFundingRows(false);
+		else 
+			spec.setDisplayEmptyFundingRows(true);
+		 
 	}
 	
 	private void configureHierarchies() {

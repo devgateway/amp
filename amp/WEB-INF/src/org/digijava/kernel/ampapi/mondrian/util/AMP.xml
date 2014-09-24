@@ -422,7 +422,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">
 					CASE WHEN mondrian_fact_table.transaction_type=0 AND mondrian_fact_table.adjustment_type=@@actual@@
-					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE 0 END
+					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
 				</SQL>
 			</MeasureExpression>
 		</Measure>
@@ -430,7 +430,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic">
 					CASE WHEN mondrian_fact_table.transaction_type=1 AND mondrian_fact_table.adjustment_type=@@actual@@
-					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE 0 END
+					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
 				</SQL>
 			</MeasureExpression>
 		</Measure>
@@ -438,7 +438,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic">
 					CASE WHEN mondrian_fact_table.transaction_type=2 AND mondrian_fact_table.adjustment_type=@@actual@@
-					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE 0 END
+					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
 				</SQL>
 			</MeasureExpression>
 		</Measure>		
@@ -446,7 +446,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">
 					CASE WHEN mondrian_fact_table.transaction_type=0 AND mondrian_fact_table.adjustment_type=@@planned@@
-					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE 0 END
+					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
 				</SQL>
 			</MeasureExpression>
 		</Measure>
@@ -454,7 +454,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic">
 					CASE WHEN mondrian_fact_table.transaction_type=1 AND mondrian_fact_table.adjustment_type=@@planned@@
-					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE 0 END
+					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
 				</SQL>
 			</MeasureExpression>
 		</Measure>
@@ -462,7 +462,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic">
 					CASE WHEN mondrian_fact_table.transaction_type=2 AND mondrian_fact_table.adjustment_type=@@planned@@
-					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE 0 END
+					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
 				</SQL>
 			</MeasureExpression>
 		</Measure>
@@ -470,7 +470,7 @@
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">
 					CASE WHEN mondrian_fact_table.transaction_type=999
-					THEN "mondrian_fact_table".transaction_amount ELSE 0 END
+					THEN "mondrian_fact_table".transaction_amount ELSE null END
 				</SQL>
 			</MeasureExpression>
 		</Measure>

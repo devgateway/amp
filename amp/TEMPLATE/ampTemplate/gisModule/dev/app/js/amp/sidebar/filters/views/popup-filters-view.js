@@ -1,11 +1,11 @@
 var fs = require('fs');
 var $ = require('jquery');
 var _ = require('underscore');
-
 var Backbone = require('backbone');
 
 var TopLevelFilterView = require('../views/top-level-filter-view');
 
+var state = require('../../../services/state');
 var Template = fs.readFileSync(__dirname + '/../templates/filters-content-template.html', 'utf8');
 var TitleTemplate = fs.readFileSync(__dirname + '/../templates/filter-title-template.html', 'utf8');
 var GenericFilterModel = require('../models/generic-filter-model');
@@ -20,7 +20,7 @@ module.exports = Backbone.View.extend({
   firstRender: true,
 
   events:{
-    'click .apply': 'apply',
+    'click .apply': 'applyFilters',
     'click .cancel': 'cancel'
   },
 
@@ -40,6 +40,12 @@ module.exports = Backbone.View.extend({
     this._createTopLevelFilterViews();
 
     this._getFilterList().done();
+
+    state.register(this, 'filters', {
+      get: function() { return this.serialize(); },
+      set: this.deserialize,
+      empty: null
+    });
   },
 
   _createTopLevelFilterViews: function() {
@@ -119,7 +125,10 @@ module.exports = Backbone.View.extend({
       .done(function(data) {
         _.each(data, function(APIFilter) {
           if (APIFilter.ui) {
-            self.app.data.filters.add(self._createFilterModels(APIFilter));
+            var tmpModel = self._createFilterModels(APIFilter);
+            if(tmpModel){
+              self.app.data.filters.add(tmpModel);
+            }
           }
         });
 
@@ -161,14 +170,12 @@ module.exports = Backbone.View.extend({
         this._goOneDeeper(this.filterViewsInstances.programs.filterCollection, APIFilter.endpoint);
         break;
       case 'Dates':
-        //TODO: create year model and add it to filterViewInstances..
-        //was choosing between colleciton of models or views
-        var yearModel = new YearsFilterModel({
+        tmpModel = new YearsFilterModel({
           title:APIFilter.name,
           app:this.app,
           url:APIFilter.endpoint
         });
-        this.filterViewsInstances.others.filterCollection.add(yearModel);
+        this.filterViewsInstances.others.filterCollection.add(tmpModel);
         break;
       case 'Sectors':
         this._goOneDeeper(this.filterViewsInstances.sectors.filterCollection, APIFilter.endpoint);
@@ -211,6 +218,9 @@ module.exports = Backbone.View.extend({
           title:APIFilter.name
         });
         targetCollection.add(tmpModel);
+        if(tmpModel){
+          self.app.data.filters.add(tmpModel);
+        }
       });
 
       deferred.resolve();
@@ -228,27 +238,36 @@ module.exports = Backbone.View.extend({
     return deferred;
   },
 
-  apply:function() {
-    // TODO: consider a different name to avoid collision with javascript function.apply
+  applyFilters:function() {
     // trigger common event for applying filters.
     // this.convertTreeToJSONFilter(); //implemented by child, and if not fallback to base.
 
-    // trigger something that will serialize all....
-    //TODO: move to app.data.filters, which should be turned into a special collection.
-    this.app.data.filters.each(function(filter) {
-      console.log(filter.get('title') + ': ', filter.serialize());
-    });
-
-
+    this.serialize();
     this.$el.hide();
-    this.trigger('close');
-    //TODO: collapse accordion, or will cause issues...
+    this.trigger('close');  // used to collapse accordion, or will cause issues
+  },
+
+  //TODO: move to app.data.filters, which should be turned into a special collection.
+  serialize: function(){
+    var serializedFilters = {};
+    this.app.data.filters.each(function(filter) {
+      serializedFilters[filter.get('title')] = filter.serialize();
+    });
+    return serializedFilters;
+  },
+
+  //TODO: move to app.data.filters, which should be turned into a special collection.
+  deserialize: function(blob){
+    if(blob){
+      this.app.data.filters.each(function(filter) {
+        filter.deserialize(blob[filter.get('title')]);
+      });      
+    }
   },
 
   cancel:function() {
     this.$el.hide();
-    this.trigger('close');
-    //TODO: collapse accordion, or will cause issues...
+    this.trigger('close'); // used to collapse accordion, or will cause issues
   }
 
 });

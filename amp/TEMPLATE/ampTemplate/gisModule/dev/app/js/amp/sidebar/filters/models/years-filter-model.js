@@ -30,10 +30,14 @@ module.exports = BaseFilterModel.extend({
   },
 
   serialize: function() {
-    //TODO: return format filter API expects
     return {
       startYear: this.get('selectedStart'),
       endYear: this.get('selectedEnd')
     };
+  },
+
+  deserialize: function(obj) {
+    this.set('selectedStart', obj.startYear);
+    this.set('selectedEnd', obj.endYear);
   }
 });

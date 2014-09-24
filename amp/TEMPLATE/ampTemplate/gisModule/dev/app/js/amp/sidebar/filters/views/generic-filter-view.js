@@ -13,7 +13,7 @@ module.exports = BaseFilterView.extend({
 
   className: BaseFilterView.prototype.className + ' filter-generic',
   template: _.template(Template),
-  _loaded:null,
+  _loaded: null,
 
   events:{
     'click  .select-all': '_selectAll',

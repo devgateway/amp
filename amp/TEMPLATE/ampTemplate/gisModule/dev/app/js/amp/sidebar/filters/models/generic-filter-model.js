@@ -31,12 +31,22 @@ module.exports = BaseFilterModel.extend({
   serialize: function() {
     var tree = this.get('tree');
     if (!tree) {
+      // ?Throw error?
       return {}; //no tree, nothing to serialize.
     } else {
       var tmpAry = tree.serialize();
-      //TODO: remove duplicates and any '-1'
+      tmpAry = _.without(tmpAry,-1);
       return tmpAry;
+    }
+  },
 
+  deserialize: function(listOfSelected) {
+    var tree = this.get('tree');
+    if (!tree) {
+      // ?Throw error?
+      return false; //no tree, nothing to serialize.
+    } else {
+      tree.deserialize(listOfSelected);
     }
   },
 

@@ -90,7 +90,7 @@ var TreeNodeView = Backbone.View.extend({
   _updateCountUI:function() {
     if (!this.model.get('children').isEmpty()) {
       this.$('> .node > .toggle-nav > .count').text(
-        '(' + this.model.get('numSelected') + '/' + this.model.get('numPossible') + ')');
+        '(' + this.model.get('numSelected') + ' / ' + this.model.get('numPossible') + ')');
       this._updateCheckboxFill();
     }
   },
@@ -124,6 +124,7 @@ var TreeNodeView = Backbone.View.extend({
     if (this.model.get('expanded')) {
       this.expand();
       iElement.text('-');
+      iElement.addClass('open').removeClass('closed');
     } else {
       this.collapse();
 
@@ -133,6 +134,7 @@ var TreeNodeView = Backbone.View.extend({
       }
 
       iElement.text('+');
+      iElement.addClass('closed').removeClass('open');
     }
   },
 

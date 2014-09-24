@@ -23,17 +23,59 @@
   margin:15px 45px;
 }
 
+.filter-options{
+  height:350px;
+  border: solid 1px  #ADD2F1;
+}
+
 .sub-filters-titles{
   width: 220px;
-  border-right: 1px #ddd solid ;
   float:left;
   padding-top:5px;
-  padding-right:5px;
 }
+
 
 .sub-filters-content{
   padding:15px;
   width: 550px;
-  min-height: 120px;
+  height:350px;
   float:right;
+  border-left: solid 1px  #ADD2F1;
+}
+
+
+// generic amp theme override for bootstrap pill.
+.nav-tabs > li > a{
+  color: #999;
+  background-color: #eee;
+  padding: 5px 10px;
+  min-width: 90px;
+  border-radius: 0;
+  font-weight: 600;
+  font-size: 0.9em;
+  &:hover{
+    color: #fff;
+    background-color: #428bca;
+  }
+}
+
+.nav-tabs > li.active > a{
+  &:hover{
+    color: #fff;
+    background-color: #428bca;
+  }
+}
+
+.nav-pills > li > a{
+  font-weight: 600;
+  font-size: 0.9em;
+  border-radius: 0;
+}
+
+.nav-pills > li.active > a{
+  &:hover, 
+  &:focus,{
+    color: #448;
+    background-color: #ddd;
+  }
 }

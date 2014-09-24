@@ -86,9 +86,16 @@
     border: 1px solid @selected_color;
     background: @selected_color;
   }
+
   .expanded {
     font-weight: 700;
-    color: @secondary_color;
+    &.open {
+      color: #d66;
+    }
+
+    &.closed {
+      color: @secondary_color;
+    }
   }
 
   .count {

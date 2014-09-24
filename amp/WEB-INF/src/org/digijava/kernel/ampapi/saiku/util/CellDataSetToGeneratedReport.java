@@ -4,6 +4,7 @@
 package org.digijava.kernel.ampapi.saiku.util;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -37,11 +38,12 @@ import org.saiku.service.olap.totals.aggregators.TotalAggregator;
 public class CellDataSetToGeneratedReport {
 	private ReportSpecification spec;
 	private CellDataSet cellDataSet;
-	List<ReportOutputColumn> leafHeaders;
-	DecimalFormat numberFormat;
-	TotalAggregator[][] measureTotals = null;
-	List<TotalNode>[] rowTotals = null;
-	int[] currentSubGroupIndex;
+	private List<ReportOutputColumn> leafHeaders;
+	private DecimalFormat numberFormat;
+	private NumberFormat readingNumberFormat;
+	private TotalAggregator[][] measureTotals = null;
+	private List<TotalNode>[] rowTotals = null;
+	private int[] currentSubGroupIndex;
 	
 	public CellDataSetToGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, List<ReportOutputColumn> leafHeaders) {
 		this.spec = spec;
@@ -55,6 +57,7 @@ public class CellDataSetToGeneratedReport {
 			this.numberFormat = spec.getSettings().getCurrencyFormat();
 		else 
 			this.numberFormat = MondrianReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat();
+		readingNumberFormat = NumberFormat.getInstance();
 		//init measure totals if they are available
 		if (spec.isCalculateColumnTotals() && 
 				cellDataSet.getColTotalsLists() != null && cellDataSet.getColTotalsLists().length > 0 
@@ -148,7 +151,7 @@ public class CellDataSetToGeneratedReport {
 	private double parseValue(String value) throws AMPException {
 		Number iVal = 0;
 		try {
-			iVal = numberFormat.parse(value);
+			iVal = readingNumberFormat.parse(value);
 		} catch (ParseException e) {
 			//empty string
 		} catch (Exception e) {

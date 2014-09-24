@@ -8,7 +8,7 @@ public interface GPIConstants {
 	public static final String GPI_REPORT_9b = "9b";
 
 	public static final String CURRENCY_USD = "USD";
-	public static final int NUMBER_OF_SURVEY_QUESTIONS = 6;
+	public static final int NUMBER_OF_SURVEY_QUESTIONS = 7;
 	public static final String ALL_DONORS = "All Donors";
 	public static final String MISSION = "Mission";
 	

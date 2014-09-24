@@ -14,6 +14,8 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpGPISurvey;
@@ -44,6 +46,8 @@ import org.digijava.module.gpi.model.GPIFilter;
 import org.digijava.module.gpi.util.GPIConstants;
 import org.digijava.module.gpi.util.GPIUtils;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.hibernate.Query;
+import org.hibernate.Session;
 
 import java.util.Collections;
 
@@ -51,6 +55,7 @@ public class GPIReport5a extends GPIAbstractReport {
 
 	private static Logger logger = Logger.getLogger(GPIReport5a.class);
 	private final String reportCode = GPIConstants.GPI_REPORT_5a;
+	private final Session session = PersistenceManager.getSession();
 
 	public String getReportCode() {
 		return this.reportCode;
@@ -168,36 +173,51 @@ public class GPIReport5a extends GPIAbstractReport {
 						}
 					}
 
-					// AmpGPISurvey auxSurvey = (auxActivity.getGpiSurvey() !=
-					// null && auxActivity.getGpiSurvey().size() != 0 ?
-					// auxActivity.getGpiSurvey().iterator().next() : null);
-					auxRow.setColumn1(null);
-					auxRow.setColumn2(null);
-					auxRow.setColumn3(-1);
-
-					// Check if the survey has responses because the
-					// activityform saves the survey automatically even with no
-					// responses.
-					// if(auxSurvey != null && auxSurvey.getResponses() != null
-					// && auxSurvey.getResponses().size() > 0) {
-					switch (column) {
-					case 1:
-						auxRow.setColumn1(amount);
-						break;
-					case 2:
-						auxRow.setColumn2(amount);
-						break;
+					// Check survey answers for this
+					// AmpGPISurvey.
+					AmpGPISurvey auxSurvey = null;
+					if (((BigInteger) data[6]).intValue() != 0) {
+						Query query = session.createQuery("SELECT a FROM " + AmpActivity.class.getName()
+								+ " a WHERE a.ampActivityId=:id");
+						query.setLong("id", Long.valueOf(data[0].toString()));
+						AmpActivity auxActivity = (AmpActivity) query.uniqueResult();
+						auxSurvey = (auxActivity.getGpiSurvey() != null && auxActivity.getGpiSurvey().size() != 0 ? auxActivity
+								.getGpiSurvey().iterator().next() : null);
 					}
-					auxRow.setColumn3(0);
-					// }
+					boolean[] answers = GPIUtils.getSurveyAnswers(GPIConstants.GPI_REPORT_5a, auxSurvey);
+					if (answers != null && answers[0]) {
+						auxRow.setColumn1(null);
+						auxRow.setColumn2(null);
+						auxRow.setColumn3(-1);
 
-					AmpOrgGroup auxOrgGroup = new AmpOrgGroup();
-					auxOrgGroup.setAmpOrgGrpId(((BigInteger) data[4]).longValue());
-					auxOrgGroup.setOrgGrpName(data[5].toString());
-					auxRow.setDonorGroup(auxOrgGroup);
+						switch (column) {
+						case 1:
+							auxRow.setColumn1(amount);
+							break;
+						case 2:
+							auxRow.setColumn2(amount);
+							break;
+						}
+						auxRow.setColumn3(0);
 
-					auxRow.setYear(calendar.get(Calendar.YEAR));
-					list.add(auxRow);
+						AmpOrgGroup auxOrgGroup = new AmpOrgGroup();
+						auxOrgGroup.setAmpOrgGrpId(((BigInteger) data[4]).longValue());
+						auxOrgGroup.setOrgGrpName(data[5].toString());
+						auxRow.setDonorGroup(auxOrgGroup);
+
+						auxRow.setYear(calendar.get(Calendar.YEAR));
+						list.add(auxRow);
+					} else {
+						auxRow.setColumn3(0);
+
+						AmpOrgGroup auxOrgGroup = new AmpOrgGroup();
+						auxOrgGroup.setAmpOrgGrpId(((BigInteger) data[4]).longValue());
+						auxOrgGroup.setOrgGrpName(data[5].toString());
+						auxRow.setDonorGroup(auxOrgGroup);
+
+						auxRow.setYear(calendar.get(Calendar.YEAR));
+						list.add(auxRow);
+					}
 				}
 			} catch (Exception e) {
 				logger.error(e);

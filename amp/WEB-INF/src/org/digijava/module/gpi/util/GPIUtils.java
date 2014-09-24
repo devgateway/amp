@@ -23,6 +23,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianCalendar;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -272,7 +273,9 @@ public class GPIUtils {
 			columns = new boolean[1];
 		} else if (GPIConstants.GPI_REPORT_9b.equals(reportCode)) {
 			columns = new boolean[4];
-		}
+		} else if (GPIConstants.GPI_REPORT_5a.equals(reportCode)) {
+			columns = new boolean[1];
+		} 
 
 		// Prepare an array with all the responses (no problem if its not
 		// sorted).
@@ -288,6 +291,16 @@ public class GPIUtils {
 				String auxString = (auxResponse.getResponse() == null) ? "" : auxResponse.getResponse();
 				answers[quesNum] = new String(auxString);
 			}
+			
+			// Check if the general question (AMP-18209) is visible.
+			boolean GM1Active = false;
+			boolean GM1Answer = false;
+			if (FeaturesUtil.isVisibleModule("/Activity Form/GPI/GPI Item/GPI Questions List/Has this project been formally agreed upon (i.e. memorandum of understanding, project agreement, etc.) with a Government entity?")) {
+				GM1Active = true;
+				if (("Yes".equalsIgnoreCase(answers[6]))) {
+					GM1Answer = true;
+				}
+			}
 	
 			// Evaluate the report.
 			// Remember: columns[0] is the first column :)
@@ -299,17 +312,29 @@ public class GPIUtils {
 				} else {
 					columns[0] = ("Yes".equalsIgnoreCase(answers[0]));
 				}
-			} else if (GPIConstants.GPI_REPORT_9b.equals(reportCode)) {
-				// In this case "columns" means "answers" :)
-				if((answers[2] == null || answers[2].trim().equals("")) && (answers[3] == null || answers[3].trim().equals(""))
-						&& (answers[4] == null || answers[4].trim().equals("")) && (answers[5] == null || answers[5].trim().equals(""))) {
-					// None of the 4 questions have been answeres (yes/no) so this funding is invalid.
+			} else if(GPIConstants.GPI_REPORT_5a.equals(reportCode)) {
+				if(GM1Active && !GM1Answer) {
+					// In this case the question is active in AF and the answer is not "yes".
 					columns = null;
 				} else {
-					columns[0] = ("Yes".equalsIgnoreCase(answers[2]));
-					columns[1] = ("Yes".equalsIgnoreCase(answers[3]));
-					columns[2] = ("Yes".equalsIgnoreCase(answers[4]));
-					columns[3] = ("Yes".equalsIgnoreCase(answers[5]));
+					// Indicator 5a doesnt evaluate any other question.
+					columns[0] = true;
+				}
+			} else if (GPIConstants.GPI_REPORT_9b.equals(reportCode)) {
+				if(GM1Active && !GM1Answer) {
+					// In this case the question is active in AF and the answer is not "yes".
+					columns = null;
+				} else {
+					if((answers[2] == null || answers[2].trim().equals("")) && (answers[3] == null || answers[3].trim().equals(""))
+							&& (answers[4] == null || answers[4].trim().equals("")) && (answers[5] == null || answers[5].trim().equals(""))) {
+						// None of the 4 questions have been answeres (yes/no) so this funding is invalid.
+						columns = null;
+					} else {
+						columns[0] = ("Yes".equalsIgnoreCase(answers[2]));
+						columns[1] = ("Yes".equalsIgnoreCase(answers[3]));
+						columns[2] = ("Yes".equalsIgnoreCase(answers[4]));
+						columns[3] = ("Yes".equalsIgnoreCase(answers[5]));
+					}
 				}
 			} else if (GPIConstants.GPI_REPORT_6.equals(reportCode)) {
 				// Check if the question has a valid answer (yes/no) because the activityform saves the survey automatically even with no responses.

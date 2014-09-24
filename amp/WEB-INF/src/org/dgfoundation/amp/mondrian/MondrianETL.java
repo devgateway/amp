@@ -330,7 +330,7 @@ public class MondrianETL {
 	 * @throws SQLException
 	 */
 	protected void cloneMondrianTableForLocale(MondrianTableDescription mondrianTable, String locale) throws SQLException {
-		if (MondrianTablesRepository.MONDRIAN_NON_TRANSLATED_DIMENSIONS.contains(mondrianTable))
+		if (!mondrianTable.isTranslated())
 			return;
 		logger.warn("cloning table " + mondrianTable.tableName + " into locale " + locale);
 		String localizedTableName = mondrianTable.tableName + "_" + locale;
@@ -354,7 +354,7 @@ public class MondrianETL {
 	 * @throws SQLException
 	 */
 	protected void incrementallyCloneMondrianTableForLocale(MondrianTableDescription mondrianTable, String locale) throws SQLException {
-		if (MondrianTablesRepository.MONDRIAN_NON_TRANSLATED_DIMENSIONS.contains(mondrianTable))
+		if (!mondrianTable.isTranslated())
 			return;
 		if (etlConfig.activityIds.isEmpty())
 			return;
@@ -471,7 +471,7 @@ public class MondrianETL {
 			long start = System.currentTimeMillis();
 			String query = "SELECT * FROM v_" + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id");
 			
-			if (MondrianTablesRepository.MONDRIAN_NON_TRANSLATED_DIMENSIONS.contains(mondrianTable)) {
+			if (!mondrianTable.isTranslated()) {
 				monetConn.createTableFromQuery(this.conn, query, mondrianTable.tableName);				
 			} else {
 				generateStarTableWithQueryInPostgres(mondrianTable.tableName, mondrianTable.primaryKeyColumnName, query, mondrianTable.indexedColumns);
@@ -485,7 +485,9 @@ public class MondrianETL {
 			logger.info("full ETL on " + mondrianTable.tableName + ", base table took " + (baseDone - start) + " ms");
 			logger.info("\tfull ETL on " + mondrianTable.tableName + ", cloning took " + (cloningDone - baseDone) + " ms");
 		} else {
-			monetConn.executeQuery("DELETE FROM " + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id"));
+			// relation exists in Monet IF (table is not translated) OR (isTranslated AND is not filtered)
+			if (!mondrianTable.isTranslated() || (mondrianTable.isTranslated() && !mondrianTable.isFiltering))
+				monetConn.executeQuery("DELETE FROM " + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id"));
 			String query = "SELECT * FROM v_" + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id");
 			monetConn.copyEntries(mondrianTable.tableName, SQLUtils.rawRunQuery(conn, query, null));
 			for (String locale:locales)

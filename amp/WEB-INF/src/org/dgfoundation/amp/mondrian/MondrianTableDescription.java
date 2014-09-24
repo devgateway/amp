@@ -149,6 +149,10 @@ public class MondrianTableDescription {
 		return row;
 	}
 	
+	public boolean isTranslated() {
+		return this.translations != null;
+	}
+	
 	@Override public String toString() {
 		return this.tableName;
 	}	

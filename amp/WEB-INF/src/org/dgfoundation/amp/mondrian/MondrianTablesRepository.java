@@ -193,10 +193,10 @@ public class MondrianTablesRepository {
 		
 	public final static List<MondrianTableDescription> MONDRIAN_RAW_TRANSACTIONS_TABLES = Arrays.asList(MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE);
 	
-	public final static Set<MondrianTableDescription> MONDRIAN_NON_TRANSLATED_DIMENSIONS = new HashSet<MondrianTableDescription>() {{
-		add(MONDRIAN_ACTIVITY_FIXED_TEXTS);
-		addAll(MONDRIAN_RAW_TRANSACTIONS_TABLES);
-	}};
+//	public final static Set<MondrianTableDescription> MONDRIAN_NON_TRANSLATED_DIMENSIONS = new HashSet<MondrianTableDescription>() {{
+//		add(MONDRIAN_ACTIVITY_FIXED_TEXTS);
+//		addAll(MONDRIAN_RAW_TRANSACTIONS_TABLES);
+//	}};
 	
 	/**
 	 * not used for now

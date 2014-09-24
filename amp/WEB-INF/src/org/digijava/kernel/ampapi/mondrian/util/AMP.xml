@@ -90,7 +90,7 @@
 		
 	<Cube name="Donor Funding">
 		<Table name="mondrian_fact_table" >
-			<SQL dialect="generic"><![CDATA[mondrian_fact_table.entity_id IN (@@filteredActivities@@)]]> </SQL>
+			<SQL dialect="generic"><![CDATA[@@filteredActivities@@]]> </SQL>
 		</Table>
 
 		<Dimension name="Activity Texts" foreignKey="entity_id">

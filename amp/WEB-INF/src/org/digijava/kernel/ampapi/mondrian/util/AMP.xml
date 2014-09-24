@@ -18,13 +18,6 @@
 	</Dimension>
 
 	<Dimension name="AMP Organization" >
-		<Hierarchy hasAll="true" allMemberName="All Orgs" primaryKey="amp_org_id" name="Organization Hierarchy">
-			<Table name="mondrian_organizations@@locale@@" />
-			<Level name="Organization Type Name" uniqueMembers="true" type="Integer" column="amp_org_type_id" nameColumn="org_type_name" />
-			<Level name="Organization Group Name" uniqueMembers="true" type="Integer" column="amp_org_grp_id" nameColumn="org_grp_name" />
-			<Level name="Organization Name" uniqueMembers="true" type="Integer" column="amp_org_id" nameColumn="org_name" />
-			<Level name="Organization Code" type="Integer" column="amp_org_id" nameColumn="org_code" />
-		</Hierarchy>
 		<Hierarchy hasAll="true" allMemberName="All Orgs" primaryKey="amp_org_id" name="Organization Name">
 			<Table name="mondrian_organizations@@locale@@" />
 			<Level name="Organization Name" uniqueMembers="true" type="Integer" column="amp_org_id" nameColumn="org_name" />
@@ -466,6 +459,14 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
+		<Measure name="MTEF Projections" aggregator="sum">
+			<MeasureExpression>
+				<SQL dialect="generic">
+					CASE WHEN mondrian_fact_table.transaction_type=3
+					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
+				</SQL>
+			</MeasureExpression>
+		</Measure>		
 		<Measure name="Always Present" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">

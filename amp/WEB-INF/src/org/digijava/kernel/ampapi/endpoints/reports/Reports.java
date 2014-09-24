@@ -10,6 +10,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -131,8 +132,26 @@ public class Reports {
 			areas = ReportPaginationCacher.getReportAreas(reportId);
 		ReportArea pageArea = ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
 		int totalPageCount = ReportPaginationUtils.getPageCount(areas, recordsPerPage);
-		return new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount);
+		return new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, areas.length);
 	}
+	
+	@GET
+	@Path("/report/{report_id}/result/jqGrid")
+	@Produces(MediaType.APPLICATION_JSON)
+	public final JSONReportPage getReportResultWithQueryParams(@PathParam("report_id") Long reportId,
+			@QueryParam("page") Integer page) {
+		int recordsPerPage = ReportPaginationUtils.getRecordsNumberPerPage();
+		int start = (page - 1) * recordsPerPage;
+		ReportAreaMultiLinked[] areas = null;
+		//if (regenerate) {
+			GeneratedReport generatedReport = getReportResult(reportId);
+			areas = ReportPaginationUtils.cacheReportAreas(reportId, generatedReport);
+		//} else 
+			//areas = ReportPaginationCacher.getReportAreas(reportId);
+		ReportArea pageArea = ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
+		int totalPageCount = ReportPaginationUtils.getPageCount(areas, recordsPerPage);
+		return new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, areas.length);
+	} 
 	
 	@GET
 	@Path("/tabs")

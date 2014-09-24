@@ -110,74 +110,82 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 	}
 
 	function populateGrid(id, dynamicLayoutView, firstContent) {
-		$.ajax({
-			async : true,
-			url : '/rest/data/report/' + id + '/result',
-			dataType : 'json'
-		}).done(function(data) {
-			console.log(data);
+		// TODO: Move grid section elsewhere.
+		var TableSectionView = Marionette.ItemView.extend({
+			template : '#grid-template'
+		});
+		var tableSectionView = new TableSectionView();
+		dynamicLayoutView.results.show(tableSectionView);
 
-			// TODO: Move grid section elsewhere.
-			var TableSectionView = Marionette.ItemView.extend({
-				template : '#grid-template'
-			});
-			var tableSectionView = new TableSectionView();
-			dynamicLayoutView.results.show(tableSectionView);
+		// Define grid structure.
+		var tableStructure = extractMetadata(firstContent);
+		var grid = $("#tab_grid");
+		$(grid).attr("id", "tab_grid_" + id);
+		var pager = $("#tab_grid_pager");
+		$(pager).attr("id", "tab_grid_pager_" + id);
 
-			// Define grid structure.
-			var tableStructure = extractMetadata(firstContent);
-			var grid = $("#tab_grid");
-			$(grid).attr("id", "tab_grid_" + id);
-			var pager = $("#tab_grid_pager");
-			$(pager).attr("id", "tab_grid_pager_" + id);
-
-			var rows = [];
-			getContent(data.reportContents, rows);
-
-			$(grid).jqGrid({
-				caption : 'Caption',
-				datatype : 'local',
-				data : rows,
-				colNames : createJQGridColumnNames(tableStructure),
-				colModel : createJQGridColumnModel(tableStructure),
-				height : 250,
-				width : 900,
-				autowidth : '100%',
-				shrinkToFit : true,
-				viewrecords : true,
-				loadtext : 'Loading...',
-				gridview : true,
-				rownumbers : true,
-				rowNum : 5,
-				rowList : [ 5, 10, 20 ],
-				pager : "#tab_grid_pager_" + id,
-				emptyrecords : 'No records to view'
-			});
-		}).fail(function(data) {
-			console.error("error");
-		}).always(function() {
-			console.log("complete");
+		$(grid).jqGrid({
+			caption : 'Caption',
+			url : '/rest/data/report/' + id + '/result/jqGrid',
+			datatype : 'json',
+			jsonReader : {
+				repeatitems : false,
+				root : function(obj) {
+					return transformData(obj);
+				},
+				page : function(obj) {
+					return obj.currentPageNumber;
+				},
+				total : function(obj) {
+					return obj.totalPageCount;
+				},
+				records : function(obj) {
+					return obj.totalRecords;
+				}
+			},
+			colNames : createJQGridColumnNames(tableStructure),
+			colModel : createJQGridColumnModel(tableStructure),
+			height : 250,
+			width : 900,
+			autowidth : '100%',
+			shrinkToFit : true,
+			viewrecords : true,
+			loadtext : 'Loading...',
+			gridview : true,
+			rownumbers : true,
+			rowNum : 100, /* TODO: get this parameter from global settings. */
+			pager : "#tab_grid_pager_" + id,
+			emptyrecords : 'No records to view'
 		});
 	}
 
-	function getContent(obj, rows) {
-		if (obj.children == null || obj.children.length == 0) {
-			// console.log(obj.contents);
-			var row = {
-				id : 0
-			};
-			$.each(obj.contents, function(key, element) {
-				var colName = map[key];
-				if (colName != undefined && colName != null) {
-					row[colName] = element.displayedValue;
-					row['id'] = Math.random();
-				}
-			})
-			rows.push(row);
-		} else {
-			$(obj.children).each(function(i, item) {
-				getContent(item, rows);
-			});
+	function transformData(data) {
+		// console.log(data);
+		var rows = [];
+		getContentRecursively(data.pageArea, rows);
+		return rows;
+	}
+
+	function getContentRecursively(obj, rows) {
+		if (obj != undefined && obj != null) {
+			if (obj.children == null || obj.children.length == 0) {
+				// console.log(obj.contents);
+				var row = {
+					id : 0
+				};
+				$.each(obj.contents, function(key, element) {
+					var colName = map[key];
+					if (colName != undefined && colName != null) {
+						row[colName] = element.displayedValue;
+						row['id'] = Math.random();
+					}
+				});
+				rows.push(row);
+			} else {
+				$(obj.children).each(function(i, item) {
+					getContentRecursively(item, rows);
+				});
+			}
 		}
 	}
 

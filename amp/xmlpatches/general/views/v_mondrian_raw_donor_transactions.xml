@@ -51,7 +51,39 @@ SELECT
 	FROM amp_activity aa JOIN amp_funding f ON aa.amp_activity_id = f.amp_activity_id
 		JOIN amp_funding_detail fd ON f.amp_funding_id = fd.amp_funding_id
 	WHERE (transaction_date BETWEEN '1970-1-1' AND '2050-1-1')
-	ORDER BY aa.amp_activity_id;
+UNION ALL
+SELECT 
+	aav.amp_activity_id AS amp_activity_id,
+	900000000 + aav.amp_activity_id AS amp_fund_detail_id,
+	999 AS transaction_type,
+	(SELECT acv.id FROM amp_category_value acv WHERE acv.category_value='Actual' AND acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'adjustment_type')) AS adjustment_type,
+	'2014-01-01' AS transaction_date,
+	to_char(to_date('2014-01-01', 'YYYY-MM-DD'), 'J')::integer AS date_code,
+
+	100 AS transaction_amount,
+
+	(SELECT amp_currency_id FROM amp_currency WHERE currency_code = (SELECT settingsvalue FROM amp_global_Settings WHERE settingsname = 'Base Currency')) AS currency_id,
+	(SELECT min(amp_org_id) FROM amp_organisation WHERE deleted IS NULL OR deleted = false) AS donor_id,
+	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'financing_instrument')) AS financing_instrument_id,
+	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'type_of_assistence')) AS terms_of_assistance_id,
+	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'funding_status')) AS funding_status_id,
+	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'mode_of_payment')) AS mode_of_payment_id,
+	
+	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'activity_status')) AS status_id,
+	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'modalities')) AS modality_id,
+	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'SSC_type_of_cooperation')) AS type_of_cooperation_id,
+	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'SSC_type_of_implementation')) AS type_of_implementation_id,
+	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'procurement_system')) AS  procurement_system_id,
+     
+	cast (NULL as bigint) as src_role_id,
+	cast (NULL as bigint) as dest_role_id,
+	cast (NULL as bigint) as dest_org_id
+          
+	FROM amp_activity_version aav
+
+ORDER BY amp_activity_id;
+
+
 			</lang>
 		</script>
 	</apply>

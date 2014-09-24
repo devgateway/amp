@@ -88,13 +88,16 @@ public class AmpReportsToReportSpecification {
 	}
 	
 	private void configureReportData() {
-		if (!report.isSummaryReportNoHierachies())
-			for (AmpColumns column : getOrderedColumns()) {
-				//do not add activities column if it must be hidden
-				if (!(report.isHideActivities() && ColumnConstants.PROJECT_TITLE.equals(column.getColumnName())))
+		if (!report.isSummaryReportNoHierachies()) {
+			if (report.getHideActivities()) {
+				//this is a summary report
+				for (AmpReportHierarchy hierarchy : report.getHierarchies())
+					spec.addColumn(MondrianReportUtils.getColumn(hierarchy.getColumn().getColumnName(), entityType));
+			} else {
+				for (AmpColumns column : getOrderedColumns()) 
 					spec.addColumn(MondrianReportUtils.getColumn(column.getColumnName(), entityType));
 			}
-		else
+		} else
 			spec.setSummaryReport(true);
 		for (String measureName: report.getMeasureNames()) {
 			spec.addMeasure(MondrianReportUtils.getMeasure(measureName, entityType));

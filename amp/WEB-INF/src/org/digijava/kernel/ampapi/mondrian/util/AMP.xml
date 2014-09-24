@@ -208,6 +208,11 @@
 		</Dimension>
 
 		<Dimension name="Activity Fixed Texts" foreignKey="entity_id">
+			<Hierarchy hasAll="true" allMemberName="All Activity Id" primaryKey="amp_activity_id" name="Activity Id">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Activity Id" column="amp_activity_id" type="Integer" nameColumn="amp_activity_id" />
+			</Hierarchy>
+			
 			<Hierarchy hasAll="true" allMemberName="All Government Agreement Number" primaryKey="amp_activity_id" name="Government Agreement Number">
 				<Table name="mondrian_activity_fixed_texts" />
 				<Level name="Government Agreement Number" column="amp_activity_id" type="String" nameColumn="gov_agreement_number" />

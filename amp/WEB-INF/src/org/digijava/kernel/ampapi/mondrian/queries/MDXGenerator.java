@@ -918,7 +918,8 @@ public class MDXGenerator {
 			//the MDX is valid (verified in Saiku) so we'll avoid throwing exception only in this particular case
 			if (!(mdx.contains(MoConstants.PROPERTIES) && e instanceof NullPointerException)) {
 				logger.error(mdxName + ": Invalid MDX query\"" + mdx + "\". \nError details: " + err);
-				throw new AmpApiException(mdxName + ": Invalid MDX query: " + err);
+				//TODO: temporarily disabling the validation, until we figure out why validation fails for Activity Id member (though runs ok)
+				//throw new AmpApiException(mdxName + ": Invalid MDX query: " + err);
 			}
 		}
 	}

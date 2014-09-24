@@ -82,6 +82,7 @@ public final class MoConstants {
 	public static final String H_PROPOSED_COMPLETION_DATE = "Proposed Completion Date";
 	public static final String H_ACTIVITY_CREATED_ON = "Activity Created On";
 	public static final String H_ACTIVITY_UPDATED_ON = "Activity Updated On";
+	public static final String H_ACTIVITY_ID = "Activity Id";
 	public static final String H_GOVERNMENT_AGREEMENT_NUMBER = "Government Agreement Number";
 	public static final String H_BUDGET_CODE_PROJECT_ID = "Budget Code Project Id";
 	public static final String H_DRAFT = "Draft";
@@ -186,6 +187,7 @@ public final class MoConstants {
 	public static final String ATTR_PROPOSED_COMPLETION_DATE = "Proposed Completion Date";
 	public static final String ATTR_ACTIVITY_CREATED_ON = "Activity Created On";
 	public static final String ATTR_ACTIVITY_UPDATED_ON = "Activity Updated On";
+	public static final String ATTR_ACTIVITY_ID = "Activity Id";
 	public static final String ATTR_GOVERNMENT_AGREEMENT_NUMBER = "Government Agreement Number";
 	public static final String ATTR_BUDGET_CODE_PROJECT_ID = "Budget Code Project Id";
 	public static final String ATTR_DRAFT = "Draft";

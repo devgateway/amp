@@ -147,6 +147,7 @@ public class MondrianMapping {
 			put(new ReportColumn(ColumnConstants.PROPOSED_COMPLETION_DATE, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.ACTIVITY_DATES, MoConstants.H_PROPOSED_COMPLETION_DATE, MoConstants.ATTR_PROPOSED_COMPLETION_DATE));
 			put(new ReportColumn(ColumnConstants.ACTIVITY_CREATED_ON, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.ACTIVITY_DATES, MoConstants.H_ACTIVITY_CREATED_ON, MoConstants.ATTR_ACTIVITY_CREATED_ON));
 			put(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.ACTIVITY_DATES, MoConstants.H_ACTIVITY_UPDATED_ON, MoConstants.ATTR_ACTIVITY_UPDATED_ON));
+			put(new ReportColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_ACTIVITY_ID, MoConstants.ATTR_ACTIVITY_ID));
 			put(new ReportColumn(ColumnConstants.GOVERNMENT_AGREEMENT_NUMBER, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_GOVERNMENT_AGREEMENT_NUMBER, MoConstants.ATTR_GOVERNMENT_AGREEMENT_NUMBER));
 			put(new ReportColumn(ColumnConstants.BUDGET_CODE_PROJECT_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_BUDGET_CODE_PROJECT_ID, MoConstants.ATTR_BUDGET_CODE_PROJECT_ID));
 			//put(new ReportColumn(ColumnConstants.??, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_DRAFT, MoConstants.ATTR_DRAFT));

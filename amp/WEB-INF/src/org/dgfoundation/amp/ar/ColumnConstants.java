@@ -15,6 +15,7 @@ public class ColumnConstants {
 	public static final String ACTIVITY_COUNT = "Activity Count";
 	public static final String ACTIVITY_CREATED_BY = "Activity Created By";
 	public static final String ACTIVITY_CREATED_ON = "Activity Created On";
+	public static final String ACTIVITY_ID = "Activity Id";
 	public static final String ACTIVITY_PLEDGES_TITLE = "Activity Pledges Title";
 	public static final String ACTIVITY_UPDATED_BY = "Activity Updated By";
 	public static final String ACTIVITY_UPDATED_ON = "Activity Updated On";

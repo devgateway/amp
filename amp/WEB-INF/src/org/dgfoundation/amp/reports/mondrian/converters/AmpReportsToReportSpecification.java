@@ -179,7 +179,7 @@ public class AmpReportsToReportSpecification {
 		//hierarchy sorting has a priority
 		//now check if we have hierarchies sorting
 		if (arFilter.getHierarchySorters() != null && arFilter.getHierarchySorters().size() > 0
-				&& spec.getHierarchies() != null && spec.getHierarchies().size() > 0) { 
+				&& spec.getHierarchies().size() > 0) { 
 			ReportColumn[] hierarchies = spec.getHierarchies().toArray(new ReportColumn[0]);
 			//start workaround for AMP-18205, issue #1 & #2
 			Map<Integer, String[]> validSortingRules = new TreeMap<Integer, String[]>();

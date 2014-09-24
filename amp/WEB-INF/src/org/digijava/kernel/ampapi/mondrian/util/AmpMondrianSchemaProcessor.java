@@ -72,7 +72,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	protected String getAllowedActivitiesIds() {
 		TeamMember tm = currentEnvironment.get().viewer;
 		Set<Long> allowedActivities = ActivityUtil.getAllAmpActivityIds(WorkspaceFilter.generateWorkspaceFilterQuery(tm));
-		if (allowedActivities.size() > 0) {
+		if (allowedActivities.size() > 0 && currentReport.get().getFilters() != null) {
 			String dateFilters = MondrianDBUtils.generateDateColumnsFilterQuery(
 					allowedActivities,
 					((MondrianReportFilters)currentReport.get().getFilters()).getDateFilterRules());

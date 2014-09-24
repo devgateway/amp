@@ -72,7 +72,7 @@ public class CellDataSetToGeneratedReport {
 		
 		Deque<List<ReportArea>> stack = new ArrayDeque<List<ReportArea>>();
 		//assumption that concatenation was done and totals are required starting for the 1st non-hierarchical column backwards
-		int hSize = spec.getHierarchies() == null ? 0 : spec.getHierarchies().size();
+		int hSize = spec.getHierarchies().size();
 		int maxDepth = spec.isCalculateRowTotals() ? Math.max(1, hSize) - (hSize / spec.getColumns().size()) : 0; 
 		int maxStackSize = 1 + maxDepth * 2; //* 2 for totals, where maxDepth != 0 
 		refillStack(stack, maxStackSize); //prepare the stack
@@ -277,7 +277,7 @@ public class CellDataSetToGeneratedReport {
 		if (nextNotNullColId == -1)
 			return true;
 		//check if next is coming a new hierarchy group of not last column
-		if (spec.getHierarchies() !=null && nextNotNullColId < spec.getHierarchies().size() && nextNotNullColId < spec.getColumns().size() - 1)
+		if (nextNotNullColId < spec.getHierarchies().size() && nextNotNullColId < spec.getColumns().size() - 1)
 			return true;
 		//check if this is 1 row group: if this is not the last column  
 		if (notNullColId + 1 < cellDataSet.getLeftOffset() && cellDataSet.getCellSetBody()[rowId + 1][notNullColId].getRawValue() != null)

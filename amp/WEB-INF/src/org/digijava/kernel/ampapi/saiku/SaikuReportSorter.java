@@ -72,7 +72,7 @@ public class SaikuReportSorter extends MondrianReportSorter {
 		AbstractBaseCell[][] newData = new AbstractBaseCell[cellDataSet.getCellSetBody().length][cellDataSet.getCellSetBody()[0].length];
 		//will keep the reordered list of row totals
 		List<TotalNode>[] newRowTotalsList = (List<TotalNode>[])new ArrayList[cellDataSet.getRowTotalsLists().length];
-		int[] rowTotalsIds = new int[1 + (spec.getHierarchies() == null ? 0 : spec.getHierarchies().size())];
+		int[] rowTotalsIds = new int[1 + spec.getHierarchies().size()];
 		initTotals(newRowTotalsList);
 		//will keep the reordered list of column totals
 		TotalAggregator[][] oldColTotals = cellDataSet.getColTotalsLists()[0].get(0).getTotalGroups();

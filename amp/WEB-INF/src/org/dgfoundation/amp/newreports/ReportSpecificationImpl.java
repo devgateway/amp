@@ -94,6 +94,8 @@ public class ReportSpecificationImpl implements ReportSpecification {
 
 	@Override
 	public Set<ReportColumn> getHierarchies() {
+		if (hierarchies == null)
+			hierarchies = new LinkedHashSet<ReportColumn>();
 		return hierarchies;
 	}
 	

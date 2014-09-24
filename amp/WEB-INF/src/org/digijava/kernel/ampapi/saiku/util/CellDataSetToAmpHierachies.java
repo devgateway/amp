@@ -56,8 +56,9 @@ public class CellDataSetToAmpHierachies {
 	private void init() {
 		rowTotals = cellDataSet.getRowTotalsLists();
 		//the starting index of the column to concatenate all totals 
-		startColumnIndex = spec.getHierarchies() != null && spec.getHierarchies().size() > 0 ? spec.getHierarchies().size() : 1;
+		startColumnIndex = spec.getHierarchies().size() + 1;
 		noOfColumnsToMerge = spec.getColumns().size() - startColumnIndex;
+		if (noOfColumnsToMerge <= 0) return;
 		
 		//list of merged column entries for the current group
 		initSortedSetsList();
@@ -100,7 +101,7 @@ public class CellDataSetToAmpHierachies {
 	private void concatenate() {
 		init();
 		//no totals or no data or all hierarchies => nothing to concatenate and replace
-		if (rowTotals == null || rowTotals.length == 0 || cellDataSet.getCellSetBody().length == 0 || noOfColumnsToMerge == 0) 
+		if (rowTotals == null || rowTotals.length == 0 || cellDataSet.getCellSetBody().length == 0 || noOfColumnsToMerge <= 0) 
 			return;
 		
 		Double[] currentTotalMeasuresColumnTotals = new Double[spec.getMeasures().size()];

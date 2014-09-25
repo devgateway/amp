@@ -10,6 +10,7 @@ import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.digijava.kernel.request.TLSUtils;
 
 /**
  * 
@@ -60,7 +61,7 @@ public class LocationService {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals");
 		spec.addColumn(new ReportColumn(admlevel, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addMeasure(new ReportMeasure(type, ReportEntityType.ENTITY_TYPE_ALL));
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, new ReportEnvironment("en", null),false);
+		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()),false);
 		GeneratedReport report = null;
 		try {
 			report = generator.executeReport(spec);

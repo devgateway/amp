@@ -16,11 +16,11 @@
 
 CREATE OR REPLACE FUNCTION dge_updated_proc() RETURNS trigger AS $BODY$
     BEGIN
-    	DELETE FROM dg_editor_filtered WHERE editor_key = OLD.editor_key;
-    	DELETE FROM dg_editor_filtered WHERE editor_key = NEW.editor_key;
+    	DELETE FROM dg_editor_filtered WHERE (editor_key = OLD.editor_key) AND (language = OLD.language) AND (site_id = OLD.site_id);
+    	DELETE FROM dg_editor_filtered WHERE (editor_key = NEW.editor_key) AND (language = NEW.language) AND (site_id = NEW.site_id);
     	
    		IF ((NEW.body IS NOT NULL) AND (btrim(NEW.body) != '')) THEN
-        	INSERT INTO dg_editor_filtered SELECT * from dg_editor WHERE editor_key = NEW.editor_key;
+        	INSERT INTO dg_editor_filtered SELECT * from dg_editor WHERE (editor_key = NEW.editor_key) AND (language = NEW.language) AND (site_id = NEW.site_id);
         END IF;
         RETURN NEW;
     END;
@@ -28,15 +28,16 @@ $BODY$ LANGUAGE plpgsql@@@
 
 CREATE OR REPLACE FUNCTION dge_deleted_proc() RETURNS trigger AS $BODY$
     BEGIN
-        DELETE FROM dg_editor_filtered WHERE editor_key = OLD.editor_key;
+        DELETE FROM dg_editor_filtered WHERE (editor_key = OLD.editor_key) AND (language = OLD.language) AND (site_id = OLD.site_id);
         RETURN OLD;
     END;
 $BODY$ LANGUAGE plpgsql@@@
 
 CREATE OR REPLACE FUNCTION dge_added_proc() RETURNS trigger AS $BODY$
     BEGIN
-  		IF ((NEW.body IS NOT NULL) AND (btrim(NEW.body) != '')) THEN
-       		INSERT INTO dg_editor_filtered SELECT * from dg_editor WHERE editor_key = NEW.editor_key;
+    	DELETE FROM dg_editor_filtered WHERE (editor_key = NEW.editor_key) AND (language = NEW.language) AND (site_id = NEW.site_id);
+  		IF ((NEW.body IS NOT NULL) AND (btrim(NEW.body) != '')) THEN  		
+       		INSERT INTO dg_editor_filtered SELECT * from dg_editor WHERE (editor_key = NEW.editor_key) AND (language = NEW.language) AND (site_id = NEW.site_id);
        	END IF;
        	RETURN NEW;
     END;

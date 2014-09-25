@@ -100,7 +100,7 @@ public class ImportActionNew extends DispatchAction {
     public static final int IATI_IMPORT_LANG_FILTERS = 4;
     public static final int IATI_IMPORT_PAGE_SESSIONS = 5;
 
-    private static String countryCodeNullVal = "N/A";
+    private static final String COUNTRY_CODE_NULL_VAL = "N/A";
     private static final Pattern LANG_PATTERN = Pattern.compile("xml:lang=\"[a-zA-Z]{2}\"");
 
     public ActionForward unspecified(ActionMapping mapping, ActionForm form,
@@ -214,10 +214,17 @@ public class ImportActionNew extends DispatchAction {
     }
 
     private Map <IatiActivity, Set<DEMappingFields>> getImportedItemMap(AmpDEUploadSession upSess, InputStream is, HttpServletRequest request, List<DELogPerItem> logItems, boolean ignoreSameAs) {
-        return getImportedItemMap(upSess, is, request, logItems, ignoreSameAs, null);
+        return getImportedItemMap(upSess, is, request, logItems, ignoreSameAs, null, null);
     }
 
-    private Map <IatiActivity, Set<DEMappingFields>> getImportedItemMap(AmpDEUploadSession upSess, InputStream is, HttpServletRequest request, List<DELogPerItem> logItems, boolean ignoreSameAs, String itemId) {
+    private Map <IatiActivity, Set<DEMappingFields>> getImportedItemMap
+            (AmpDEUploadSession upSess,
+             InputStream is,
+             HttpServletRequest request,
+             List<DELogPerItem> logItems,
+             boolean ignoreSameAs,
+             String itemId,
+             String selectedCountry) {
         Map <IatiActivity, Set<DEMappingFields>> items = null;
         DEImportBuilder deib = new DEImportBuilder();
         DEImportItem deii = new DEImportItem();
@@ -251,9 +258,9 @@ public class ImportActionNew extends DispatchAction {
 
         if (itemId == null) {
             deib.setIgnoreSameAsCheck(ignoreSameAs);
-            items = deib.processIATIFeedReturnItems(request, execLog, null, "check", null);
+            items = deib.processIATIFeedReturnItems(request, execLog, null, "check", null, null);
         } else {
-            items = deib.processIATIFeedReturnItems(request, execLog, null, "import", itemId);
+            items = deib.processIATIFeedReturnItems(request, execLog, null, "import", itemId, selectedCountry);
         }
 
         if (logItems != null) {
@@ -345,7 +352,7 @@ public class ImportActionNew extends DispatchAction {
                 retVal.add(rc.getCode());
             }
         }
-        if (retVal.isEmpty()) retVal.add(countryCodeNullVal);
+        if (retVal.isEmpty()) retVal.add(COUNTRY_CODE_NULL_VAL);
         return retVal;
     }
 
@@ -489,7 +496,18 @@ public class ImportActionNew extends DispatchAction {
         return mapping.findForward("forward");
     }
 
-    
+
+    private String getSelectedCountry(Set<String> selCountries) {
+        if (selCountries != null) {
+            for (String selCountry : selCountries) {
+                if (! COUNTRY_CODE_NULL_VAL.equalsIgnoreCase(selCountry)) {
+                    return selCountry;
+                }
+            }
+        }
+        return null;
+    }
+
     public ActionForward executeImportAll(ActionMapping mapping, ActionForm form,
             HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
     	 ImportFormNew myform = (ImportFormNew) form;
@@ -507,7 +525,11 @@ public class ImportActionNew extends DispatchAction {
 	         selLogItem = delog;
 	         List<DELogPerItem> logItems = new ArrayList<DELogPerItem>();
 	         InputStream is = new ByteArrayInputStream(sess.getFileSrc().getBytes("UTF-8"));
-	         Map <IatiActivity, Set<DEMappingFields>> importAndGetImportedItemMap = getImportedItemMap(sess, is, request, logItems, false, String.valueOf(selLogItem.getId()));
+
+             String selectedCountry = getSelectedCountry(sess.getSelCountries());
+
+	         Map <IatiActivity, Set<DEMappingFields>> importAndGetImportedItemMap
+                     = getImportedItemMap(sess, is, request, logItems, false, String.valueOf(selLogItem.getId()), selectedCountry);
 	
 	         //Update import date
 	         Date newDateTime = new Date();
@@ -552,7 +574,10 @@ public class ImportActionNew extends DispatchAction {
 
         InputStream is = new ByteArrayInputStream(sess.getFileSrc().getBytes("UTF-8"));
 
-        Map <IatiActivity, Set<DEMappingFields>> importAndGetImportedItemMap = getImportedItemMap(sess, is, request, logItems, false, String.valueOf(selLogItem.getId()));
+        String selectedCountry = getSelectedCountry(sess.getSelCountries());
+
+        Map <IatiActivity, Set<DEMappingFields>> importAndGetImportedItemMap
+                = getImportedItemMap(sess, is, request, logItems, false, String.valueOf(selLogItem.getId()), selectedCountry);
 
         //Update import date
         Date newDateTime = new Date();

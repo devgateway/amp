@@ -21,7 +21,6 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.namespace.QName;
 
 import org.apache.log4j.Logger;
-import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -61,25 +60,7 @@ import org.digijava.module.dataExchange.util.DataExchangeConstants;
 import org.digijava.module.dataExchange.utils.DEConstants;
 import org.digijava.module.dataExchange.utils.DataExchangeUtils;
 
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.ActivityDate;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.Budget;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.CodeReqType;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.CodeType;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.ContactInfo;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.CurrencyType;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.DateType;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.Description;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.IatiActivity;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.IatiIdentifier;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.Location;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.OtherIdentifier;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.ParticipatingOrg;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.PlainType;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.PlannedDisbursement;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.ReportingOrg;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.Sector;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.TextType;
-import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.Transaction;
+import org.digijava.module.dataExchangeIATI.iatiSchema.v1_03.jaxb.*;
 
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.exception.EditorException;
@@ -99,6 +80,14 @@ public class IatiActivityWorker {
     private Set<DEMappingFields> accumulate = new HashSet<DEMappingFields>();
 
     private IatiVersion iatiVersion;
+
+    // The selected country should be only one.
+    // Because the situation when we import activities that belong to country A into country B is not possible as of today
+    private String selectedCountry;
+
+    public void setSelectedCountry(String selectedCountry) {
+        this.selectedCountry = selectedCountry;
+    }
 
     public boolean isIgnoreSameAsCheck() {
         return ignoreSameAsCheck;
@@ -678,7 +667,21 @@ public class IatiActivityWorker {
 		}
 		//activity.getFunding().addAll(fundings);
 	}
-	
+
+    private double extractRecipientCountryPercentage(String selectedCountry) {
+        if (selectedCountry != null) {
+            for (Object element : this.getiActivity().getActivityWebsiteOrReportingOrgOrParticipatingOrg()) {
+                if (element instanceof RecipientCountry) {
+                    RecipientCountry rc = (RecipientCountry) element;
+                    if (selectedCountry.equalsIgnoreCase(rc.getCode()) && rc.getPercentage() != null) {
+                        return rc.getPercentage().doubleValue();
+                    }
+                }
+            }
+        }
+        return 100;
+    }
+
 
 	private void processFundingStep(AmpActivityVersion activity, ArrayList<Transaction> iatiTransactionList,ArrayList<PlannedDisbursement> iatiPlannedDisbList,ArrayList<JAXBElement<CodeReqType>> iatiDefaultFinanceType,
 			ArrayList<JAXBElement<CodeReqType>> iatiDefaultAidType, String iatiDefaultCurrency, 
@@ -919,7 +922,7 @@ public class IatiActivityWorker {
 		String description ="";
 		Date sDate = new Date();
 		Date eDate = new Date();
-		Double currencyValue = new Double(0);
+		Double currencyValue = 0.0;
 		String currencyName = iatiDefaultCurrency;
 
         for (Object contentItem : t.getPeriodStartOrPeriodEndOrValue()) {
@@ -1147,6 +1150,9 @@ public class IatiActivityWorker {
 		
 		Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
 
+        // https://jira.dgfoundation.org/browse/AMP-18207
+        currencyValue = currencyValue * extractRecipientCountryPercentage(selectedCountry) / 100;
+
         switch(transactionType) {
             case 'c':
                 populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
@@ -1289,26 +1295,23 @@ public class IatiActivityWorker {
 	}
 
 	private void populateFundingDetails(Double currencyValue, String currencyCode, Date tDate, Set<AmpFundingDetail> fundDetails, int transactionType, int adjustmentType) {
+        //senegal
+        if (currencyValue == 0) return;
 
+        AmpFundingDetail ampFundDet = new AmpFundingDetail();
+        ampFundDet.setIatiAdded(true);
+        ampFundDet.setTransactionType(transactionType);
+        ampFundDet.setTransactionDate(tDate);
+        ampFundDet.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ADJUSTMENT_TYPE_KEY,   new Long(adjustmentType)));
+        ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(currencyCode));
 
-			//senegal
-			if(currencyValue.doubleValue()==0) return;
-			
-			AmpFundingDetail ampFundDet = new AmpFundingDetail();
-            ampFundDet.setIatiAdded(true);
-			ampFundDet.setTransactionType(new Integer(transactionType));
-			ampFundDet.setTransactionDate(tDate);
-			ampFundDet.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ADJUSTMENT_TYPE_KEY,   new Long(adjustmentType)));
-			ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(currencyCode));
-			
-			//TODO how are the amounts? in thousands?
-			//if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
-				//ampFundDet.setTransactionAmount(new Double(fundDet.getAmount()*1000));
-			//else 
-			ampFundDet.setTransactionAmount(new Double(currencyValue.doubleValue()));
-			
-			fundDetails.add(ampFundDet);
-		
+        //TODO how are the amounts? in thousands?
+        //if("true".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)))
+            //ampFundDet.setTransactionAmount(new Double(fundDet.getAmount()*1000));
+        //else
+        ampFundDet.setTransactionAmount(currencyValue);
+
+        fundDetails.add(ampFundDet);
 	}
 	
 	private void processActInternalIdsStep(AmpActivityVersion a, ArrayList<OtherIdentifier> iatiOtherIdList, ArrayList<ReportingOrg> iatiRepOrgList) {
@@ -1515,7 +1518,7 @@ public class IatiActivityWorker {
 	private String setEditorDescription(Description obj , String key){
 			String value = printList(obj.getContent());
 			if (isValidString(value)) {
-				Editor ed = DEImportBuilder.createEditor("amp", key, obj.getLang()==null?this.getLang():obj.getLang()); //TODO: bugs source
+				Editor ed = DataExchangeUtils.createEditor("amp", key, obj.getLang()==null?this.getLang():obj.getLang()); //TODO: bugs source
 				ed.setLastModDate(new Date());
 				ed.setGroupName(org.digijava.module.editor.util.Constants.GROUP_OTHER);
 				ed.setBody(value);

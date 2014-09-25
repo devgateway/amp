@@ -1,7 +1,3 @@
-
-/**
- * 
- */
 package org.digijava.module.dataExchange.utils;
 
 import java.io.ByteArrayInputStream;
@@ -68,6 +64,7 @@ import org.digijava.module.dataExchange.jaxb.CodeValueType;
 import org.digijava.module.dataExchange.jaxb.ObjectFactory;
 import org.digijava.module.dataExchange.type.AmpColumnEntry;
 import org.digijava.module.dataExchange.util.DataExchangeConstants;
+import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
 import org.hibernate.Query;
@@ -985,6 +982,7 @@ public class DataExchangeUtils {
 					ampActivity, translations, team.getTeamLead(),
 					false, PersistenceManager.getRequestDBSession(), false, false);
 		} catch (Exception e) {
+            e.printStackTrace();
 			logger.error(e.getMessage());
 		}
 		return ampActivity;
@@ -1343,6 +1341,24 @@ public class DataExchangeUtils {
     	}
     	return path;
     }
+
+    public static Editor createEditor(Site site, String key, String language) {
+        Editor editor = new Editor();
+        editor.setSiteId(site.getSiteId());
+        editor.setSite(site);
+        editor.setEditorKey(key);
+        editor.setLanguage(language);
+        return editor;
+    }
+
+    public static Editor createEditor(String siteId, String key, String language) {
+        Editor editor = new Editor();
+        editor.setSiteId(siteId);
+        editor.setEditorKey(key);
+        editor.setLanguage(language);
+        return editor;
+    }
+
 }
 
 

@@ -174,6 +174,18 @@ public class DEImportBuilder {
     private boolean ignoreSameAsCheck = false;
     private String defaultLanguage = null;
 
+    // The selected country should be only one.
+    // Because the situation when we import activities that belong to country A into country B is not possible as of today
+    private String selectedCountry;
+
+    public String getSelectedCountry() {
+        return selectedCountry;
+    }
+
+    public void setSelectedCountry(String selectedCountry) {
+        this.selectedCountry = selectedCountry;
+    }
+
     public boolean isIgnoreSameAsCheck() {
         return ignoreSameAsCheck;
     }
@@ -261,7 +273,7 @@ public class DEImportBuilder {
 		String action=null;
 		String additionalDetails=null;
 		List<String> details=null;
-		if(update == false) {
+		if(!update) {
 			DataExchangeUtils.saveActivityNoLogger(activity);
 			new ActivitySaveTrigger(activity);
 			action="added";
@@ -469,7 +481,7 @@ public class DEImportBuilder {
 				}
 			}
 			//if the default language doesn;t not exist in the title imported, we put the first language
-			if( found==false && !titlesList.isEmpty()){
+			if(!found && !titlesList.isEmpty()){
 				String titleAct= ((FreeTextType)titlesList.iterator().next()).getValue();
 				if(isStringLengthLower(titleAct, 255))
 					activity.setName( titleAct );
@@ -505,17 +517,16 @@ public class DEImportBuilder {
 		if(actType.getId() != null && actType.getId().size() > 0){
 			Set internalIds = new HashSet();
 			ArrayList<Id> ids = (ArrayList<Id>) actType.getId();
-			for (Iterator it = ids.iterator(); it.hasNext();) {
-				Id id = (Id) it.next();
-				AmpActivityInternalId actInternalId = new AmpActivityInternalId();
-				if(isValidString(id.getUniqID()))
-					actInternalId.setInternalId(id.getUniqID());
-				actInternalId.setAmpActivity(activity);
-				AmpOrganisation org = (AmpOrganisation) getAmpObject(DEConstants.AMP_ORGANIZATION,id.getAssigningOrg());
-				if(org != null)
-					actInternalId.setOrganisation(org);
-				internalIds.add(actInternalId);
-			}
+            for (Id id : ids) {
+                AmpActivityInternalId actInternalId = new AmpActivityInternalId();
+                if (isValidString(id.getUniqID()))
+                    actInternalId.setInternalId(id.getUniqID());
+                actInternalId.setAmpActivity(activity);
+                AmpOrganisation org = (AmpOrganisation) getAmpObject(DEConstants.AMP_ORGANIZATION, id.getAssigningOrg());
+                if (org != null)
+                    actInternalId.setOrganisation(org);
+                internalIds.add(actInternalId);
+            }
 			if(activity.getInternalIds() == null)
 				activity.setInternalIds(new HashSet());
 			else activity.getInternalIds().clear();
@@ -587,7 +598,7 @@ public class DEImportBuilder {
 				activity.setCategories( new HashSet() );
 			}
 			
-			if(update == true){
+			if(update){
 				for (Iterator it = activity.getCategories().iterator(); it.hasNext();) {
 					AmpCategoryValue acv = (AmpCategoryValue) it.next();
 					if(DEConstants.CATEG_VALUE_ACTIVITY_STATUS.equals(acv.getAmpCategoryClass().getKeyName()))
@@ -620,44 +631,43 @@ public class DEImportBuilder {
 		if(actType.getSectors()!=null && actType.getSectors().size() > 0){
 			Set<AmpActivitySector> sectors = new HashSet<AmpActivitySector>();
 
-			for (Iterator iterator = actType.getSectors().iterator(); iterator.hasNext();) {
-				PercentageCodeValueType idmlSector = (PercentageCodeValueType) iterator.next();
-				CodeValueType sectorAux = new CodeValueType();
-				sectorAux.setCode(idmlSector.getCode());
-				
-				String sectorValue = "";
-				
-				sectorAux.setValue(idmlSector.getValue());
-				sectorAux.setValue(idmlSector.getCode()+". "+idmlSector.getValue());
-				//sectorValue= idmlSector.getValue();
-				//SENEGAL changes
+            for (PercentageCodeValueType idmlSector : actType.getSectors()) {
+                CodeValueType sectorAux = new CodeValueType();
+                sectorAux.setCode(idmlSector.getCode());
+
+                String sectorValue = "";
+
+                sectorAux.setValue(idmlSector.getValue());
+                sectorAux.setValue(idmlSector.getCode() + ". " + idmlSector.getValue());
+                //sectorValue= idmlSector.getValue();
+                //SENEGAL changes
 //			    sectorValue= idmlSector.getCode()+". "+idmlSector.getValue();
 //			    sectorAux.setValue(sectorValue);
-				
-				sectorAux.setValue(idmlSector.getCode()+". "+idmlSector.getValue());
-			    //get sector by name and code 
-				AmpSector ampSector = (AmpSector) getAmpObject(DEConstants.AMP_SECTOR,sectorAux);
-				
-				//this can not happen. if the sector is null it should throw an exception
-				if(ampSector == null || ampSector.getAmpSectorId() == null) continue;
-				
-				AmpActivitySector ampActSector = new AmpActivitySector();
-				ampActSector.setActivityId(activity);
-				sectorId = ampSector.getAmpSectorId();
-				if (sectorId != null && (!sectorId.equals(new Long(-1))))
-					ampActSector.setSectorId(ampSector);
-				ampActSector.setSectorPercentage(new Float(idmlSector.getPercentage()));
-				
-				AmpClassificationConfiguration primConf = null;
-				ArrayList<AmpClassificationConfiguration> allClassifConfigs = null;
-				//trying to find the classification
-				primConf = getConfiguration(ampSector,allClassifConfigs);
-				//if the classification doesn't exist we will put the sector under the primary classification!
-				if(primConf == null)	primConf = getPrimaryClassificationConfiguration(allClassifConfigs);
-				
-				ampActSector.setClassificationConfig(primConf);
+
+                sectorAux.setValue(idmlSector.getCode() + ". " + idmlSector.getValue());
+                //get sector by name and code
+                AmpSector ampSector = (AmpSector) getAmpObject(DEConstants.AMP_SECTOR, sectorAux);
+
+                //this can not happen. if the sector is null it should throw an exception
+                if (ampSector == null || ampSector.getAmpSectorId() == null) continue;
+
+                AmpActivitySector ampActSector = new AmpActivitySector();
+                ampActSector.setActivityId(activity);
+                sectorId = ampSector.getAmpSectorId();
+                if (sectorId != null && (!sectorId.equals(new Long(-1))))
+                    ampActSector.setSectorId(ampSector);
+                ampActSector.setSectorPercentage(new Float(idmlSector.getPercentage()));
+
+                AmpClassificationConfiguration primConf = null;
+                ArrayList<AmpClassificationConfiguration> allClassifConfigs = null;
+                //trying to find the classification
+                primConf = getConfiguration(ampSector, allClassifConfigs);
+                //if the classification doesn't exist we will put the sector under the primary classification!
+                if (primConf == null) primConf = getPrimaryClassificationConfiguration(allClassifConfigs);
+
+                ampActSector.setClassificationConfig(primConf);
                 sectors.add(ampActSector);
-			}
+            }
 			if (activity.getSectors() == null) {
 				activity.setSectors(new HashSet());
 			}
@@ -1471,7 +1481,7 @@ public class DEImportBuilder {
 			String key = preKey + System.currentTimeMillis();
 			FreeTextType obj = (FreeTextType) iterator.next();
 			if(obj!=null && isValidLanguage(obj.getLang()) && isValidString(obj.getValue())){
-				Editor ed = createEditor("amp", key, obj.getLang()); //TODO: bugs source
+				Editor ed = DataExchangeUtils.createEditor("amp", key, obj.getLang()); //TODO: bugs source
 				ed.setLastModDate(new Date());
 				ed.setGroupName(org.digijava.module.editor.util.Constants.GROUP_OTHER);
 				ed.setBody(obj.getValue());
@@ -1488,23 +1498,6 @@ public class DEImportBuilder {
 		return null;
 	}
 
-	 static Editor createEditor(Site site, String key, String language) {
-        Editor editor = new Editor();
-        editor.setSiteId(site.getSiteId());
-        editor.setSite(site);
-        editor.setEditorKey(key);
-        editor.setLanguage(language);
-        return editor;
-    }
-
-	static Editor createEditor(String siteId, String key, String language){
-		Editor editor = new Editor();
-		editor.setSiteId(siteId);
-		editor.setEditorKey(key);
-		editor.setLanguage(language);
-		return editor;
-	}
-	
 	private boolean isValidLanguage(String lang){
 		//TODO: validate lang based on dg_locale code for languages
 		if(isValidString(lang) && lang.length() == 2 )
@@ -2189,19 +2182,34 @@ public class DEImportBuilder {
 			processIATIFeed(request,execLog, iLog, "import", itemId);
 		
 	}
-	
-	public Map <IatiActivity, Set<DEMappingFields>> processIATIFeedReturnItems(HttpServletRequest request, DELogPerExecution log, SourceSettingDAO iLog, String actionType, String itemId) {
+
+    public Map <IatiActivity, Set<DEMappingFields>> processIATIFeedReturnItems(
+            HttpServletRequest request,
+            DELogPerExecution log,
+            SourceSettingDAO iLog,
+            String actionType,
+            String itemId,
+            String selectedCountry) {
+
         Map <IatiActivity, Set<DEMappingFields>> retVal = new HashMap<IatiActivity, Set<DEMappingFields>>();
-        processIATIFeed(request, log, iLog, actionType, itemId, retVal);
+        processIATIFeed(request, log, iLog, actionType, itemId, selectedCountry, retVal);
 
         return retVal;
     }
 
     private void processIATIFeed(HttpServletRequest request, DELogPerExecution log, SourceSettingDAO iLog, String actionType, String itemId) {
-        processIATIFeed(request, log, iLog, actionType, itemId, null);
+        processIATIFeed(request, log, iLog, actionType, itemId, null, null);
     }
 
-    private void processIATIFeed(HttpServletRequest request, DELogPerExecution log, SourceSettingDAO iLog, String actionType, String itemId, Map <IatiActivity, Set<DEMappingFields>> retVal) {
+    private void processIATIFeed(
+            HttpServletRequest request,
+            DELogPerExecution log,
+            SourceSettingDAO iLog,
+            String actionType,
+            String itemId,
+            String selectedCountry,
+            Map <IatiActivity, Set<DEMappingFields>> retVal) {
+
 		logger.info("SYSOUT: processing iati activities");
 
 		IatiActivities iatiActs = this.getAmpImportItem().getIatiActivities();
@@ -2210,7 +2218,7 @@ public class DEImportBuilder {
         for (Object obj : iatiActs.getIatiActivityOrAny()) {
             if (!(obj instanceof IatiActivity)) continue;
             IatiActivity iAct = (IatiActivity) obj;
-            if (iAct.getLang()==null) {
+            if (iAct.getLang() == null) {
             	iAct.setLang(defaultLanguage);
             }
             String logAct = "";
@@ -2222,6 +2230,7 @@ public class DEImportBuilder {
 
             IatiActivityWorker iWorker = new IatiActivityWorker(iAct, logAct, version);
             iWorker.setLang(defaultLanguage);
+            iWorker.setSelectedCountry(selectedCountry);
 
             //Only need to get structure
             if (retVal != null) {
@@ -2348,9 +2357,9 @@ public class DEImportBuilder {
                     String key = new StringBuilder(prefix).append(fld).append("_").append(curMillis).toString();
                     Editor ed = null;
                     if (site != null && site.getId() != null) {
-                        ed = createEditor(site, key, "en");
+                        ed = DataExchangeUtils.createEditor(site, key, "en");
                     } else {
-                        ed = createEditor("amp", key, "en");
+                        ed = DataExchangeUtils.createEditor("amp", key, "en");
                     }
                     ed.setLastModDate(curDate);
                     ed.setGroupName(Constants.GROUP_OTHER);

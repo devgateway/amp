@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
@@ -21,7 +22,7 @@ import org.hibernate.jdbc.Work;
  * skeleton class for amp_sector
  * 
  * */
-public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyListable {
+public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyListable, Identifiable {
 	private String name;
 	private Long id;
 	private Long parentSectorId;
@@ -59,20 +60,11 @@ public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyList
 	public static Map<Long, SectorSkeleton> getAllSectors(final Map<Long, SectorSkeleton> parents) {
         
         final Map<Long, SectorSkeleton> sectors = new HashMap<Long, SectorSkeleton>();
-        if(!parents.entrySet().isEmpty()){
+        if (true) {
         PersistenceManager.getSession().doWork(new Work(){
 				public void execute(Connection conn) throws SQLException {
-					
-					String parentIdsSubstring = "";
-					for (Map.Entry<Long, SectorSkeleton> par : parents.entrySet()) {
-						parentIdsSubstring += par.getValue().getId() + ", "; 
-					}
-					//remove the last ", "
-					parentIdsSubstring = parentIdsSubstring.substring(0, parentIdsSubstring.length() - 2);
-					
+					String parentIdsSubstring = Util.toCSStringForIN(parents.values());
 					String condition = "where (deleted is null or deleted = false) and (parent_sector_id in (" + parentIdsSubstring +  " ))";
-					
-					
 					ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_sector", 
 							condition, TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");		
 					ResultSet rs = v.fetch(null);
@@ -178,5 +170,13 @@ public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyList
 
 	public String getCode() {
 		return code;
+	}
+
+	@Override public String toString() {
+		return String.format("%s (id: %d)", this.getName(), this.id);
+	}
+
+	@Override public Object getIdentifier() {
+		return this.id;
 	}
 }

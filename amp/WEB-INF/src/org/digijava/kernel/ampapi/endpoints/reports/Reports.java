@@ -140,17 +140,8 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON)
 	public final JSONReportPage getReportResultWithQueryParams(@PathParam("report_id") Long reportId,
 			@QueryParam("page") Integer page) {
-		int recordsPerPage = ReportPaginationUtils.getRecordsNumberPerPage();
-		int start = (page - 1) * recordsPerPage;
-		ReportAreaMultiLinked[] areas = null;
-		//if (regenerate) {
-			GeneratedReport generatedReport = getReportResult(reportId);
-			areas = ReportPaginationUtils.cacheReportAreas(reportId, generatedReport);
-		//} else 
-			//areas = ReportPaginationCacher.getReportAreas(reportId);
-		ReportArea pageArea = ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
-		int totalPageCount = ReportPaginationUtils.getPageCount(areas, recordsPerPage);
-		return new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, areas.length);
+		
+		return getReportResultByPage(reportId, page, true);
 	} 
 	
 	@GET

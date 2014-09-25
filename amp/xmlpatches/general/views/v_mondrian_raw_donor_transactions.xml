@@ -29,12 +29,12 @@ SELECT
 	fd.transaction_date AS transaction_date,
 	to_char(fd.transaction_date, 'J')::integer AS date_code,
 
-	CASE 
-		WHEN fd.fixed_exchange_rate IS NOT NULL AND fd.fixed_exchange_rate > 0 THEN fd.transaction_amount / fd.fixed_exchange_rate 
+	CASE
+		WHEN (fd.amp_currency_id != (SELECT amp_currency_id FROM amp_currency WHERE currency_code = (SELECT settingsvalue FROM amp_global_settings WHERE settingsname = 'Base Currency'))) AND (fd.fixed_exchange_rate IS NOT NULL) AND (fd.fixed_exchange_rate > 0) THEN fd.transaction_amount / fd.fixed_exchange_rate 
 		ELSE fd.transaction_amount 
 	END as transaction_amount,
 	CASE 
-		WHEN fd.fixed_exchange_rate IS NOT NULL AND fd.fixed_exchange_rate > 0 THEN 
+		WHEN (fd.amp_currency_id != (SELECT amp_currency_id FROM amp_currency WHERE currency_code = (SELECT settingsvalue FROM amp_global_settings WHERE settingsname = 'Base Currency'))) AND (fd.fixed_exchange_rate IS NOT NULL) AND (fd.fixed_exchange_rate > 0) THEN 
 			(SELECT amp_currency_id FROM amp_currency WHERE currency_code = (SELECT settingsvalue FROM amp_global_Settings WHERE settingsname = 'Base Currency')) 
 		ELSE fd.amp_currency_id
 	END as currency_id,	

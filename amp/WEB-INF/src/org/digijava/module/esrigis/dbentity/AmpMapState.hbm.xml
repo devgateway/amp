@@ -11,7 +11,7 @@
 
 		<property name="title" column="title" type="java.lang.String" />
 		<property name="description" column="description" type="java.lang.String" />
-		<property name="stateBlob" column="stateBlob" type="java.lang.String" />
+		<property name="stateBlob" column="stateBlob" type="text" />
 		<property name="createdDate" column="date_created" type="java.util.Date" />
 		<property name="updatedDate" column="date_updated" type="java.util.Date" />
 		<property name="lastAccesedDate" column="last_access" type="java.util.Date" />

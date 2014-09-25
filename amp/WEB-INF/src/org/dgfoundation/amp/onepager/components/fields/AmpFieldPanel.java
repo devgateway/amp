@@ -384,7 +384,8 @@ public abstract class AmpFieldPanel<T> extends AmpComponentPanel<T> {
 					}
 				}
 				//when we configure the title we add the tooltip
-				if(!"".equals(titleTooltip.getDefaultModel().getObject().toString()) && titleTooltip.getDefaultModel().getObject().toString().trim().length()>0 ){
+				if(titleTooltip.getDefaultModel().getObject()!=null && !"".equals(titleTooltip.getDefaultModel().getObject().toString()) && titleTooltip.getDefaultModel().getObject().toString().trim().length()>0 ){
+
 					addTooltip();
 					
 				}

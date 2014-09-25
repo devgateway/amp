@@ -58,26 +58,22 @@ public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyList
      * @return a list of ALL sectors
      */
 	public static Map<Long, SectorSkeleton> getAllSectors(final Map<Long, SectorSkeleton> parents) {
-        
         final Map<Long, SectorSkeleton> sectors = new HashMap<Long, SectorSkeleton>();
-        if (true) {
         PersistenceManager.getSession().doWork(new Work(){
-				public void execute(Connection conn) throws SQLException {
-					String parentIdsSubstring = Util.toCSStringForIN(parents.values());
-					String condition = "where (deleted is null or deleted = false) and (parent_sector_id in (" + parentIdsSubstring +  " ))";
-					ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_sector", 
-							condition, TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");		
-					ResultSet rs = v.fetch(null);
-					while (rs.next()) {
-						sectors.put(rs.getLong("amp_sector_id"), new SectorSkeleton(rs.getLong("amp_sector_id"), 
-													 	rs.getString("name"), 
-													 	nullInsteadOfZero(rs.getLong("parent_sector_id")),
-													    rs.getString("sector_code")));
-					}
-					
+			public void execute(Connection conn) throws SQLException {
+				String parentIdsSubstring = Util.toCSStringForIN(parents.values());
+				String condition = "where (deleted is null or deleted = false) and (parent_sector_id in (" + parentIdsSubstring +  " ))";
+				ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_sector", 
+						condition, TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");		
+				ResultSet rs = v.fetch(null);
+				while (rs.next()) {
+					sectors.put(rs.getLong("amp_sector_id"), new SectorSkeleton(rs.getLong("amp_sector_id"), 
+							 	rs.getString("name"), 
+							 	nullInsteadOfZero(rs.getLong("parent_sector_id")),
+							 	rs.getString("sector_code")));
 				}
-			});
-        }
+			}
+		});
         return sectors;
     }
 	

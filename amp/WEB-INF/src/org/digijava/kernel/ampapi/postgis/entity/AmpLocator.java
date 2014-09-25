@@ -13,7 +13,9 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+
 import com.vividsolutions.jts.geom.Geometry;
+
 
 @Entity (name="amp_locator")
 public class AmpLocator implements Serializable{
@@ -103,6 +105,8 @@ public class AmpLocator implements Serializable{
 	
 	@Type(type="org.hibernate.spatial.GeometryType")
     private Geometry theGeometry;
+	
+	private transient int distance;
 
 	public Long getId() {
 		return id;
@@ -270,5 +274,13 @@ public class AmpLocator implements Serializable{
 
 	public void setTheGeometry(Geometry theGeometry) {
 		this.theGeometry = theGeometry;
+	}
+
+	public int getDistance() {
+		return distance;
+	}
+
+	public void setDistance(int distance) {
+		this.distance = distance;
 	}
 }

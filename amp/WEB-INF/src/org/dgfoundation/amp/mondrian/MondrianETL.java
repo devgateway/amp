@@ -486,10 +486,11 @@ public class MondrianETL {
 			logger.info("\tfull ETL on " + mondrianTable.tableName + ", cloning took " + (cloningDone - baseDone) + " ms");
 		} else {
 			// relation exists in Monet IF (table is not translated) OR (isTranslated AND is not filtered)
-			if (!mondrianTable.isTranslated() || (mondrianTable.isTranslated() && !mondrianTable.isFiltering))
+			if (!mondrianTable.isTranslated() || (mondrianTable.isTranslated() && !mondrianTable.isFiltering)) {
 				monetConn.executeQuery("DELETE FROM " + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id"));
-			String query = "SELECT * FROM v_" + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id");
-			monetConn.copyEntries(mondrianTable.tableName, SQLUtils.rawRunQuery(conn, query, null));
+				String query = "SELECT * FROM v_" + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id");
+				monetConn.copyEntries(mondrianTable.tableName, SQLUtils.rawRunQuery(conn, query, null));
+			}
 			for (String locale:locales)
 				incrementallyCloneMondrianTableForLocale(mondrianTable, locale);
 		}		

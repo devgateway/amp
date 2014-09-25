@@ -13,6 +13,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.FilterParam;
@@ -82,6 +84,20 @@ public class SQLUtils {
 		return res;
 	}
 	
+	public static Set<String> getTablesWithNameMatching(Connection conn, String query, String begin) {
+		Set<String> res = new TreeSet<>();
+		List<?> allTableNames = SQLUtils.fetchAsList(conn, query, 1);
+		for(Object obj:allTableNames) {
+			String tn = obj.toString();
+			if (tn.startsWith(begin)) res.add(tn);				
+		}
+		return res;
+	}
+	
+	public static Set<String> getTablesWithNameMatching(Connection conn, String begin) {
+		return getTablesWithNameMatching(conn, "select table_name from information_schema.tables WHERE table_schema='public'", begin);
+	}
+
 	/**
 	 * returns the rowcount in a table
 	 * @param conn

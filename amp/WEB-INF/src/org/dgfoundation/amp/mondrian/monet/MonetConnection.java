@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -67,6 +69,10 @@ public class MonetConnection implements AutoCloseable {
 	public LinkedHashMap<String, String> getTableColumnsWithTypes(final String tableName, boolean crashOnDuplicates){
 		String query = String.format("SELECT c.name, c.type FROM sys.columns c WHERE c.table_id = (SELECT t.id FROM sys.tables t WHERE t.name='%s') ORDER BY c.number", tableName.toLowerCase());
 		return SQLUtils.getTableColumnsWithTypes(this.conn, tableName, query, crashOnDuplicates);
+	}
+	
+	public Set<String> getTablesWithNameMatching(String begin) {
+		return SQLUtils.getTablesWithNameMatching(this.conn, "SELECT t.name FROM sys.tables t WHERE NOT t.system", begin);
 	}
 		
 	/**

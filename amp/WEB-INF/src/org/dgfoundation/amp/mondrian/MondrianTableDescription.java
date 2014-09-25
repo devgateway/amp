@@ -35,6 +35,8 @@ import static org.dgfoundation.amp.mondrian.MondrianETL.MONDRIAN_DUMMY_ID_FOR_ET
  */
 public class MondrianTableDescription {
 	
+	public final static Set<MondrianTableDescription> ALL_TABLES = new HashSet<>();
+	
 	public final String tableName;
 	public final String primaryKeyColumnName;
 	
@@ -63,6 +65,8 @@ public class MondrianTableDescription {
 		this.tableName = tableName;
 		this.primaryKeyColumnName = primaryKeyColumnName;
 		this.indexedColumns = Collections.unmodifiableSet(new LinkedHashSet<>(indexedColumns));
+		
+		ALL_TABLES.add(this);
 //		this.idColumnNames = idColumnNames == null ? 
 //								this.indexedColumns : // not specified
 //								Collections.unmodifiableSet(new LinkedHashSet<>(idColumnNames));
@@ -155,6 +159,14 @@ public class MondrianTableDescription {
 	
 	@Override public String toString() {
 		return this.tableName;
-	}	
+	}
+	
+	@Override public int hashCode() {
+		return toString().hashCode();
+	}
+	
+	@Override public boolean equals(Object obj) {
+		return toString().equals(obj);
+	}
 
 }

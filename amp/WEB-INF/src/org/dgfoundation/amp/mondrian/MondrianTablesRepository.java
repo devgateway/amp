@@ -41,7 +41,7 @@ public class MondrianTablesRepository {
 	public final static MondrianTableDescription MONDRIAN_LOCATIONS_DIMENSION_TABLE = 
 			new MondrianTableDescription("mondrian_locations", "id", Arrays.asList("id", "parent_location", "country_id", "region_id", "zone_id", "district_id"))
 				.withFingerprintedJob(Arrays.asList(
-							Fingerprint.buildTableHashingQuery("v_mondrian_locations"), 
+							Fingerprint.buildTableHashingQuery("v_mondrian_locations", "id"), 
 							Fingerprint.buildTranslationHashingQuery(AmpCategoryValueLocations.class)))
 				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
 					@Override public I18nViewDescription getObject() {
@@ -56,7 +56,7 @@ public class MondrianTablesRepository {
 	public final static MondrianTableDescription MONDRIAN_SECTORS_DIMENSION_TABLE = 
 			new MondrianTableDescription("mondrian_sectors", "amp_sector_id", Arrays.asList("amp_sector_id", "parent_sector_id", "level0_sector_id", "level1_sector_id", "level2_sector_id", "amp_sec_scheme_id"))
 				.withFingerprintedJob(Arrays.asList(
-						Fingerprint.buildTableHashingQuery("v_mondrian_sectors"),
+						Fingerprint.buildTableHashingQuery("v_mondrian_sectors", "amp_sector_id"),
 						//Fingerprint.buildTableHashingQuery("amp_sector_scheme"),
 						//Fingerprint.buildTableHashingQuery("amp_classification_config"),
 						Fingerprint.buildTranslationHashingQuery(AmpSector.class),
@@ -77,7 +77,7 @@ public class MondrianTablesRepository {
 			new MondrianTableDescription("mondrian_programs", "amp_theme_id",
 					Arrays.asList("amp_theme_id", "parent_theme_id", "program_setting_id", "program_setting_name", "id2", "id3", "id4", "id5", "id6", "id7", "id8"))
 				.withFingerprintedJob(Arrays.asList(
-						Fingerprint.buildTableHashingQuery("v_mondrian_programs"),
+						Fingerprint.buildTableHashingQuery("v_mondrian_programs", "amp_theme_id"),
 						Fingerprint.buildTranslationHashingQuery(AmpTheme.class),
 						Fingerprint.buildTranslationHashingQuery(AmpActivityProgramSettings.class)
 						))
@@ -100,7 +100,7 @@ public class MondrianTablesRepository {
 	public final static MondrianTableDescription MONDRIAN_ORGANIZATIONS_DIMENSION_TABLE = 
 			new MondrianTableDescription("mondrian_organizations", "amp_org_id", Arrays.asList("amp_org_id", "amp_org_grp_id", "amp_org_type_id"))
 				.withFingerprintedJob(Arrays.asList(
-						Fingerprint.buildTableHashingQuery("v_mondrian_organizations"),
+						Fingerprint.buildTableHashingQuery("v_mondrian_organizations", "amp_org_id"),
 						Fingerprint.buildTranslationHashingQuery(AmpOrganisation.class),
 						Fingerprint.buildTranslationHashingQuery(AmpOrgGroup.class),
 						Fingerprint.buildTranslationHashingQuery(AmpOrgType.class)
@@ -117,7 +117,7 @@ public class MondrianTablesRepository {
 	public final static MondrianTableDescription MONDRIAN_ACTIVITY_TEXTS = 
 			new MondrianTableDescription("mondrian_activity_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
 				.withFingerprintedJob(Arrays.asList(
-						Fingerprint.buildTableHashingQuery("v_mondrian_activity_texts"),
+						Fingerprint.buildTableHashingQuery("v_mondrian_activity_texts", "amp_activity_id"),
 						Fingerprint.buildTranslationHashingQuery(AmpActivityVersion.class),
 						Fingerprint.buildTranslationHashingQuery(AmpTeam.class)
 						))
@@ -134,7 +134,7 @@ public class MondrianTablesRepository {
 
 	public final static MondrianTableDescription MONDRIAN_ACTIVITY_TRN_TEXTS = 
 			new MondrianTableDescription("mondrian_activity_trn_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
-				.withFingerprintedJob(Arrays.asList(Fingerprint.buildTableHashingQuery("v_mondrian_activity_trn_texts")))
+				.withFingerprintedJob(Arrays.asList(Fingerprint.buildTableHashingQuery("v_mondrian_activity_trn_texts", "amp_activity_id")))
 				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
 					@Override public I18nViewDescription getObject() {
 						return new I18nViewDescription("mondrian_activity_trn_texts")
@@ -145,7 +145,7 @@ public class MondrianTablesRepository {
 	
 	public final static MondrianTableDescription MONDRIAN_CATEGORY_VALUES = 
 			new MondrianTableDescription("mondrian_category_values", "acv_id", Arrays.asList("acv_id"))
-			.withFingerprintedJob(Arrays.asList(Fingerprint.buildTableHashingQuery("v_mondrian_category_values")))
+			.withFingerprintedJob(Arrays.asList(Fingerprint.buildTableHashingQuery("v_mondrian_category_values", "acv_id")))
 			.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
 				@Override public I18nViewDescription getObject() {
 					return new I18nViewDescription("mondrian_category_values")

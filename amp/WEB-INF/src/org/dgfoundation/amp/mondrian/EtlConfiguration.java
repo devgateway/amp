@@ -33,7 +33,7 @@ public class EtlConfiguration {
 	
 	protected String activityIdsInQuery;
 	public String activityIdsIn(String prefix) {
-		if (fullEtl) return "1=1"; 
+		//if (fullEtl) return "1=1"; 
 		if (activityIdsInQuery == null)
 			activityIdsInQuery = " IN (" + Util.toCSStringForIN(activityIds) + ")";
 		return prefix + activityIdsInQuery;

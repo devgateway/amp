@@ -32,6 +32,8 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.util.time.StopWatch;
 
+import clover.com.google.common.base.Joiner;
+
 import com.google.common.base.Predicate;
 
 import static org.dgfoundation.amp.mondrian.MondrianTablesRepository.FACT_TABLE;
@@ -67,10 +69,10 @@ public class MondrianETL {
 	/**
 	 * only access it in steps BEFORE "calculateEtl" is available!
 	 */
-	protected final boolean forceFullEtl;
+	protected boolean forceFullEtl;
 	
 	protected final static Fingerprint ETL_TIME_FINGERPRINT = new Fingerprint("etl_event_id", new ArrayList<String>(), "-1");
-	protected final static Fingerprint CURRENCIES_FINGERPRINT = new Fingerprint("amp_currency", Arrays.asList(Fingerprint.buildTableHashingQuery("amp_currency")));
+	protected final static Fingerprint CURRENCIES_FINGERPRINT = new Fingerprint("amp_currency", Arrays.asList(Fingerprint.buildTableHashingQuery("amp_currency", "amp_currency_id")));
 	protected final static Fingerprint LOCALES_FINGERPRINT = new Fingerprint("locales", Arrays.asList("select code from DG_SITE_TRANS_LANG_MAP where site_id = 3 order by code"));
 	
 	protected static Logger logger = Logger.getLogger(MondrianETL.class);
@@ -95,6 +97,8 @@ public class MondrianETL {
 	private boolean cacheInvalidated = false;
 	private long nrAffectedDates;
 		
+	private List<String> reasonsForFull = new ArrayList<>();
+	
 	/**
 	 * constructs an instance, does an initial assessment (scans for IDs). The {@link #execute()} method should be run as closely to the constructor as possible (to avoid race conditions)
 	 * @param conn
@@ -157,6 +161,34 @@ public class MondrianETL {
 	protected final static String MONDRIAN_ETL = "Mondrian-etl";
 	
 	/**
+	 * cleanup for ease-of-debugging - normally not needed and not triggered
+	 */
+	protected void cleanupTables() {
+		logger.warn("Full etl requested, cleaning up preexisting tables");
+		for(MondrianTableDescription mtd:MondrianTableDescription.ALL_TABLES) {
+			List<String> suffixes = new ArrayList<String>(Arrays.asList(""));
+			for(String locale:locales)
+				suffixes.add("_" + locale);
+			for(String suffix:suffixes) {
+				String t = mtd.tableName + suffix;
+				logger.info("Full ETL: dropping table " + t);
+				monetConn.dropTable(t);
+				SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + t);
+			}
+		}
+		Set<String> etlTablesMonet = monetConn.getTablesWithNameMatching("etl_");
+		for(String t:etlTablesMonet) {
+			logger.info("Full ETL: dropping monet table " + t);
+			monetConn.dropTable(t);
+		}
+		Set<String> etlTablesPostgres = SQLUtils.getTablesWithNameMatching(conn, "etl_");
+		for(String t:etlTablesPostgres) {
+			logger.info("Full ETL: dropping pg table " + t);
+			SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + t);
+		}
+	}
+	
+	/**
 	 * runs the ETL
 	 */
 	private EtlResult execute() {
@@ -169,16 +201,29 @@ public class MondrianETL {
 				StopWatch.reset(MONDRIAN_ETL);
 				StopWatch.next(MONDRIAN_ETL, true, "start");
 				
-				if (forceFullEtl) {
-					Fingerprint.redoFingerprintTable(monetConn);
-				}
-				
+				previousEtlEventId = Long.valueOf(
+						monetConn.tableExists(Fingerprint.FINGERPRINT_TABLE) ? 
+								ETL_TIME_FINGERPRINT.readOrReturnDefaultFingerprint(monetConn) : ETL_TIME_FINGERPRINT.defaultValue
+						);
+
+				// log the ETL start and get its ids
 				SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_log (duration) VALUES (null)");
 				currentEtlId = SQLUtils.getLong(conn, "SELECT max(etl_id) FROM amp_etl_log");
 				SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('etl', " + currentEtlId + ")");
 				currentEtlEventId = SQLUtils.getLong(conn, "SELECT max(event_id) FROM amp_etl_changelog WHERE entity_name = 'etl'");
+
+				String fullEtlRequestedQuery = "SELECT count(*) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND entity_name='full_etl_request'";
+				boolean fullEtlRequestedDB = SQLUtils.getLong(conn, fullEtlRequestedQuery) > 0;
+				if (fullEtlRequestedDB) {
+					forceFullEtl |= fullEtlRequestedDB;
+					reasonsForFull.add("DB_requested");
+				}
 				
-				previousEtlEventId = Long.valueOf(ETL_TIME_FINGERPRINT.readOrReturnDefaultFingerprint(monetConn));
+				if (forceFullEtl) {
+					cleanupTables();
+					Fingerprint.redoFingerprintTable(monetConn);
+				}
+								
 				boolean redoTrnDimensions = SQLUtils.getLong(conn, "SELECT count(*) FROM amp_etl_changelog WHERE entity_name='translation' AND event_id > " + previousEtlEventId) > 0;
 				
 				etlConfig = calculateEtlConfiguration();
@@ -224,7 +269,7 @@ public class MondrianETL {
 				long end = System.currentTimeMillis();
 				double secs = (end - start) / 1000.0;
 				EtlResult res = new EtlResult(currentEtlEventId, secs, cacheInvalidated,  
-						etlConfig.activityIds.size() + etlConfig.pledgeIds.size(), nrAffectedDates);
+						etlConfig.activityIds.size() + etlConfig.pledgeIds.size(), nrAffectedDates, reasonsForFull);
 				serializeEtLResult(res);
 				ret.value = res;				
 				//conn.close();
@@ -235,8 +280,10 @@ public class MondrianETL {
 			
 	protected void serializeEtLResult(EtlResult res) {
 		SQLUtils.executeQuery(conn, 
-				String.format(Locale.US,"UPDATE amp_etl_log SET duration = %.2f, cache_invalidated=%b, nr_affected_entries=%d, nr_affected_dates=%d WHERE etl_id = %d",
-						res.duration, res.cacheInvalidated, res.nrAffectedEntities, res.nrAffectedDates, currentEtlId));
+			String.format(Locale.US, "UPDATE amp_etl_log SET duration = %.2f, cache_invalidated=%b, nr_affected_entries=%d, nr_affected_dates=%d, full_etl_reason=%s WHERE etl_id = %d",
+				res.duration, res.cacheInvalidated, res.nrAffectedEntities, res.nrAffectedDates,
+				SQLUtils.stringifyObject(Joiner.on(';').join(res.fullEtlReasons)),
+				currentEtlId));
 		SQLUtils.flush(conn);
 	}
 	
@@ -295,17 +342,20 @@ public class MondrianETL {
 		LOCALES_FINGERPRINT.runIfFingerprintChangedOr(conn, monetConn, false, stepSkipped, new ExceptionRunnable<SQLException>() {
 			@Override public void run() throws SQLException {
 				res.or(true);
-				logger.error("locales changed, forcing a full ETL");
+				if (LOCALES_FINGERPRINT.hasChangeBeenDetected()) {
+					reasonsForFull.add("locales_change");
+					logger.error("locales changed, forcing a full ETL");
+				}
 			}
 		});
-		res.or(previousEtlEventId <= 0);
+		if (previousEtlEventId <= 0) {
+			res.or(true);
+			reasonsForFull.add("previousETL_never");
+		}
 		
-		String fullEtlRequestedQuery = "SELECT count(*) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND entity_name='full_etl_request'";
-		res.or(SQLUtils.getLong(conn, fullEtlRequestedQuery) > 0);			
-
-		pumpTableIfChanged(res, "amp_currency");
-		pumpTableIfChanged(res, "amp_category_class");
-		pumpTableIfChanged(res, "amp_category_value");
+		pumpTableIfChanged(res, "amp_currency", "amp_currency_id");
+		pumpTableIfChanged(res, "amp_category_class", "id");
+		pumpTableIfChanged(res, "amp_category_value", "id");
 
 		for (final MondrianTableDescription mondrianTable:MondrianTablesRepository.MONDRIAN_DIMENSION_TABLES)
 			mondrianTable.fingerprint.runIfFingerprintChangedOr(conn, monetConn, res.value, stepSkipped, new ExceptionRunnable<SQLException>() {
@@ -317,15 +367,27 @@ public class MondrianETL {
 		return res.value;
 	}
 
-	protected void pumpTableIfChanged(final BooleanWrapper needed, final String tableName) throws SQLException {
-		Fingerprint fingerprint = new Fingerprint("table_" + tableName, Arrays.asList(Fingerprint.buildTableHashingQuery(tableName)));
+	/**
+	 * copies a table from PSQL to Monet, in case it changed from the last etl'ed copy
+	 * @param needed
+	 * @param tableName
+	 * @throws SQLException
+	 */
+	protected void pumpTableIfChanged(final BooleanWrapper needed, final String tableName, final String orderBy) throws SQLException {
+		final Fingerprint fingerprint = new Fingerprint("table_" + tableName, Arrays.asList(Fingerprint.buildTableHashingQuery(tableName, orderBy)));
 		fingerprint.runIfFingerprintChangedOr(conn, monetConn, needed.value, stepSkipped, new ExceptionRunnable<SQLException>() {
 			@Override public void run() throws SQLException {
 				needed.or(true);
 				monetConn.copyTableFromPostgres(conn, tableName);
+				if (fingerprint.hasChangeBeenDetected())
+					reasonsForFull.add("table_" + tableName + "_changed");
 			}});
 	}
 	
+	/**
+	 * generates the Mondrian Date Table into MonetDB. Since Monet lacks the needed features, the table construction is done in postgres and then pumped into monet
+	 * @throws SQLException
+	 */
 	protected void generateMondrianDateTable() throws SQLException {
 		generateStarTableWithQueryInPostgres(MONDRIAN_DATE_TABLE, "date_code", 
 			"SELECT to_char(transaction_date, 'J')::integer AS day_code, (CAST (transaction_date as date)) AS full_date, date_part('year'::text, (CAST (transaction_date as date)))::integer AS year_code, date_part('month'::text, (CAST (transaction_date as date)))::integer AS month_code, to_char((CAST (transaction_date as date)), 'TMMonth'::text) AS month_name, date_part('quarter'::text, (CAST (transaction_date as date)))::integer AS quarter_code, ('Q'::text || date_part('quarter'::text, (CAST (transaction_date as date)))) AS quarter_name " + 
@@ -343,12 +405,16 @@ public class MondrianETL {
 	 * @throws SQLException
 	 */
 	protected void generateStarTable(MondrianTableDescription mondrianTable) throws SQLException {
-		generateStarTableWithQueryInPostgres(mondrianTable.tableName, mondrianTable.primaryKeyColumnName, "SELECT * FROM v_" + mondrianTable.tableName, mondrianTable.indexedColumns);
-		monetConn.copyTableFromPostgres(conn, mondrianTable.tableName);
+		String query = "SELECT * FROM v_" + mondrianTable.tableName;
+		if (mondrianTable.isTranslated()) {
+			generateStarTableWithQueryInPostgres(mondrianTable.tableName, mondrianTable.primaryKeyColumnName, query, mondrianTable.indexedColumns);
 		
-		// now, the base (non-multilingual) dimension table is ready, so we need to make multilingual clones of it		
-		for (String locale:locales)
-			cloneMondrianTableForLocale(mondrianTable, locale);
+			// now, the base (non-multilingual) dimension table is ready, so we need to make multilingual clones of it		
+			for (String locale:locales)
+				cloneMondrianTableForLocale(mondrianTable, locale);
+		} else {
+			monetConn.createTableFromQuery(conn, query, mondrianTable.tableName);
+		}
 	}
 	
 	/**
@@ -397,8 +463,8 @@ public class MondrianETL {
 		// checking sanity
 		long initTableSz = SQLUtils.countRows(conn, mondrianTable.tableName);
 		long createdTableSz = SQLUtils.countRows(monetConn.conn, localizedTableName);
-		if (initTableSz != createdTableSz)
-			throw new RuntimeException(String.format("HUGE BUG: multilingual-cloned dimension table has a size of %d, while the original dimension table has a size of %d", createdTableSz, initTableSz));
+		if (initTableSz != createdTableSz && !mondrianTable.isFiltering)
+			throw new RuntimeException(String.format("HUGE BUG: multilingual-cloned dimension table %s has a size of %d, while the original dimension table has a size of %d", mondrianTable.tableName, createdTableSz, initTableSz));
 	}
 	
 	
@@ -495,16 +561,21 @@ public class MondrianETL {
 	 * @throws SQLException
 	 */
 	protected void generatePerActivityTables(MondrianTableDescription mondrianTable) throws SQLException {
+		String query = "SELECT * FROM v_" + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id");
+		
+		/**
+		 * table not translated -> original only exists in Monet
+		 * table translated and filtered: original only exists in postgres, translated only exist in Monet
+		 * table translated and not filtered: original only exists in postgres, translated only exist in Monet
+		 *  
+		 */
 		if (etlConfig.fullEtl) {
 			long start = System.currentTimeMillis();
-			String query = "SELECT * FROM v_" + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id");
 			
 			if (!mondrianTable.isTranslated()) {
 				monetConn.createTableFromQuery(this.conn, query, mondrianTable.tableName);				
 			} else {
 				generateStarTableWithQueryInPostgres(mondrianTable.tableName, mondrianTable.primaryKeyColumnName, query, mondrianTable.indexedColumns);
-				if (!mondrianTable.isFiltering)
-					monetConn.copyTableFromPostgres(conn, mondrianTable.tableName);
 			}
 			long baseDone = System.currentTimeMillis();
 			for (String locale:locales)
@@ -514,13 +585,15 @@ public class MondrianETL {
 			logger.info("\tfull ETL on " + mondrianTable.tableName + ", cloning took " + (cloningDone - baseDone) + " ms");
 		} else {
 			// relation exists in Monet IF (table is not translated) OR (isTranslated AND is not filtered)
-			if (!mondrianTable.isTranslated() || (mondrianTable.isTranslated() && !mondrianTable.isFiltering)) {
+			if (mondrianTable.isTranslated()) {
+				SQLUtils.executeQuery(conn, "DELETE FROM " + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id"));
+				SQLUtils.executeQuery(conn, "INSERT INTO " + mondrianTable.tableName + " " + query);
+				for (String locale:locales)
+					incrementallyCloneMondrianTableForLocale(mondrianTable, locale);
+			} else {
 				monetConn.executeQuery("DELETE FROM " + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id"));
-				String query = "SELECT * FROM v_" + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id");
 				monetConn.copyEntries(mondrianTable.tableName, SQLUtils.rawRunQuery(conn, query, null));
 			}
-			for (String locale:locales)
-				incrementallyCloneMondrianTableForLocale(mondrianTable, locale);
 		}		
 	}
 	

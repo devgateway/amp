@@ -9,13 +9,14 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-
+DROP TABLE IF EXISTS amp_etl_log;
 CREATE TABLE amp_etl_log (
 	etl_id SERIAL PRIMARY KEY,
 	duration double precision,
 	cache_invalidated boolean,
 	nr_affected_entries integer,
-	nr_affected_dates integer
+	nr_affected_dates integer,
+	full_etl_reason text
 );
 
 INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('full_etl_request', 999);

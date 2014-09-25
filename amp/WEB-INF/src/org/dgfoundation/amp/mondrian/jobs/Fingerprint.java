@@ -32,6 +32,8 @@ public class Fingerprint {
 	
 	protected static Logger logger = Logger.getLogger(Fingerprint.class);
 	
+	protected boolean changeDetected = false;
+	
 	public Fingerprint(String keyName, List<String> fingerprintQueries, String defaultValue) {
 		this.keyName = keyName;
 		this.fingerprintQueries = Collections.unmodifiableList(new ArrayList<>(fingerprintQueries));
@@ -133,7 +135,8 @@ public class Fingerprint {
 	}
 	
 	public void runIfFingerprintChangedOr(Connection postgresConn, MonetConnection monetConn, boolean or, Predicate<Fingerprint> onNothingChanged, ExceptionRunnable<SQLException> r) throws SQLException {
-		if (or || changesDetected(postgresConn, monetConn)) {
+		this.changeDetected = changesDetected(postgresConn, monetConn);
+		if (or || this.changeDetected) {
 			r.run();
 			saveFingerprint(postgresConn, monetConn);
 			return;
@@ -147,8 +150,12 @@ public class Fingerprint {
 		return this.keyName;
 	}
 	
-	public static String buildTableHashingQuery(String table) {
-		return String.format("select md5(cast((array_agg(%s)) AS text)) from %s", table, table);
+	public boolean hasChangeBeenDetected() {
+		return this.changeDetected;
+	}
+	
+	public static String buildTableHashingQuery(String table, String orderBy) {
+		return String.format("select md5(cast((array_agg(tbl)) AS text)) from (select * from %s order by %s) tbl", table, orderBy);
 	}
 	
 	public static String buildTranslationHashingQuery(Class<?> clazz) {

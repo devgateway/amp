@@ -1,5 +1,8 @@
 package org.dgfoundation.amp.mondrian;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EtlResult {
 	/**
 	 * etl duration in seconds
@@ -26,12 +29,15 @@ public class EtlResult {
 	 */
 	public final long eventId;
 	
-	public EtlResult(long eventId, double duration, boolean cacheInvalidated, long nrAffectedEntities, long nrAffectedDates) {
+	public final List<String> fullEtlReasons;
+	
+	public EtlResult(long eventId, double duration, boolean cacheInvalidated, long nrAffectedEntities, long nrAffectedDates, List<String> fullEtlReasons) {
 		this.eventId = eventId;
 		this.duration = duration;
 		this.cacheInvalidated = cacheInvalidated;
 		this.nrAffectedEntities = nrAffectedEntities;
 		this.nrAffectedDates = nrAffectedDates;
+		this.fullEtlReasons = new ArrayList<>(fullEtlReasons);
 	}
 	
 	@Override public String toString() {

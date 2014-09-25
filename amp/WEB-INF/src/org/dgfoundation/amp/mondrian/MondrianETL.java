@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
@@ -234,7 +235,7 @@ public class MondrianETL {
 			
 	protected void serializeEtLResult(EtlResult res) {
 		SQLUtils.executeQuery(conn, 
-				String.format("UPDATE amp_etl_log SET duration = %.2f, cache_invalidated=%b, nr_affected_entries=%d, nr_affected_dates=%d WHERE etl_id = %d",
+				String.format(Locale.US,"UPDATE amp_etl_log SET duration = %.2f, cache_invalidated=%b, nr_affected_entries=%d, nr_affected_dates=%d WHERE etl_id = %d",
 						res.duration, res.cacheInvalidated, res.nrAffectedEntities, res.nrAffectedDates, currentEtlId));
 		SQLUtils.flush(conn);
 	}

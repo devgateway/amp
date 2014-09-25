@@ -17,9 +17,11 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectWriter;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.algo.BooleanWrapper;
+import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
@@ -66,7 +68,7 @@ public class MondrianETL {
 	 */
 	protected final boolean forceFullEtl;
 	
-	protected final static Fingerprint ETL_TIME_FINGERPRINT = new Fingerprint("etl_time", new ArrayList<String>(), "-1");
+	protected final static Fingerprint ETL_TIME_FINGERPRINT = new Fingerprint("etl_event_id", new ArrayList<String>(), "-1");
 	protected final static Fingerprint CURRENCIES_FINGERPRINT = new Fingerprint("amp_currency", Arrays.asList(Fingerprint.buildTableHashingQuery("amp_currency")));
 	protected final static Fingerprint LOCALES_FINGERPRINT = new Fingerprint("locales", Arrays.asList("select code from DG_SITE_TRANS_LANG_MAP where site_id = 3 order by code"));
 	
@@ -77,14 +79,18 @@ public class MondrianETL {
 	/**
 	 * the Postgres timestamp when this ETL process started
 	 */
-	protected long currentEtlTime;
+	protected long currentEtlEventId;
 	
 	/**
-	 * the postgres timestamp when the previous ETL was started
+	 * amp_etl_log::etl_id of the currently-running ETL
 	 */
-	protected long previousEtlTime;
+	protected long currentEtlId;
 	
-	private boolean etlExecuted = false;
+	/**
+	 * the amp_etl_changelog::event_id when the previous ETL was started
+	 */
+	protected long previousEtlEventId;
+		
 	private boolean cacheInvalidated = false;
 	private long nrAffectedDates;
 		
@@ -116,7 +122,7 @@ public class MondrianETL {
 	
 	private Set<Long> calculateAffectedActivities(boolean etlFromScratch) {
 		if (!etlFromScratch) {
-			String affectedRawActivitiesQuery = "SELECT DISTINCT(entity_id) FROM amp_etl_changelog WHERE (event_date > " + previousEtlTime + ") AND entity_name='activity'";
+			String affectedRawActivitiesQuery = "SELECT DISTINCT(entity_id) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND entity_name='activity'";
 			Set<Long> res = new TreeSet<>(SQLUtils.<Long>fetchAsList(conn, affectedRawActivitiesQuery, 1));
 			return res;
 		}
@@ -126,7 +132,7 @@ public class MondrianETL {
 	
 	private Set<Long> calculateAffectedDateCodes(boolean etlFromScratch) {
 		if (!etlFromScratch) {
-			String affectedDatesQuery = "SELECT DISTINCT(entity_id) FROM amp_etl_changelog WHERE (event_date > " + previousEtlTime + ") AND entity_name='exchange_rate'";
+			String affectedDatesQuery = "SELECT DISTINCT(entity_id) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND entity_name='exchange_rate'";
 			Set<Long> res = new HashSet<>(SQLUtils.<Long>fetchAsList(conn, affectedDatesQuery, 1));
 			return res;
 		}
@@ -152,11 +158,13 @@ public class MondrianETL {
 	/**
 	 * runs the ETL
 	 */
-	public void execute() {
-		
+	private EtlResult execute() {
+		final ValueWrapper<EtlResult> ret = new ValueWrapper<>(null);
 		MONDRIAN_LOCK.runUnderWriteLock(new ExceptionRunnable<Exception>() {
 			@Override public void run() throws Exception {
-			
+				
+				long start = System.currentTimeMillis();
+
 				StopWatch.reset(MONDRIAN_ETL);
 				StopWatch.next(MONDRIAN_ETL, true, "start");
 				
@@ -164,9 +172,13 @@ public class MondrianETL {
 					Fingerprint.redoFingerprintTable(monetConn);
 				}
 				
-				currentEtlTime = (Long) SQLUtils.fetchAsList(conn, "SELECT cast (extract(epoch from statement_timestamp()) as bigint)", 1).get(0);
-				previousEtlTime = Long.valueOf(ETL_TIME_FINGERPRINT.readOrReturnDefaultFingerprint(monetConn));
-				boolean redoTrnDimensions = SQLUtils.<Long>fetchAsList(conn, "SELECT count(*) FROM amp_etl_changelog WHERE entity_name='translation' AND event_date > " + previousEtlTime, 1).get(0) > 0;
+				SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_log (duration) VALUES (null)");
+				currentEtlId = SQLUtils.getLong(conn, "SELECT max(etl_id) FROM amp_etl_log");
+				SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('etl', " + currentEtlId + ")");
+				currentEtlEventId = SQLUtils.getLong(conn, "SELECT max(event_id) FROM amp_etl_changelog WHERE entity_name = 'etl'");
+				
+				previousEtlEventId = Long.valueOf(ETL_TIME_FINGERPRINT.readOrReturnDefaultFingerprint(monetConn));
+				boolean redoTrnDimensions = SQLUtils.getLong(conn, "SELECT count(*) FROM amp_etl_changelog WHERE entity_name='translation' AND event_id > " + previousEtlEventId) > 0;
 				
 				etlConfig = calculateEtlConfiguration();
 				
@@ -203,15 +215,30 @@ public class MondrianETL {
 							
 					logger.error("done generating ETL");
 				}
-				ETL_TIME_FINGERPRINT.serializeFingerprint(monetConn, Long.toString(currentEtlTime));
+				ETL_TIME_FINGERPRINT.serializeFingerprint(monetConn, Long.toString(currentEtlEventId));
+
 				SQLUtils.flush(conn);
 				SQLUtils.flush(monetConn.conn);
+
+				long end = System.currentTimeMillis();
+				double secs = (end - start) / 1000.0;
+				EtlResult res = new EtlResult(currentEtlEventId, secs, cacheInvalidated,  
+						etlConfig.activityIds.size() + etlConfig.pledgeIds.size(), nrAffectedDates);
+				serializeEtLResult(res);
+				ret.value = res;				
 				//conn.close();
 			};
 		});
-		etlExecuted = true;
+		return ret.value;
 	}
 			
+	protected void serializeEtLResult(EtlResult res) {
+		SQLUtils.executeQuery(conn, 
+				String.format("UPDATE amp_etl_log SET duration = %.2f, cache_invalidated=%b, nr_affected_entries=%d, nr_affected_dates=%d WHERE etl_id = %d",
+						res.duration, res.cacheInvalidated, res.nrAffectedEntities, res.nrAffectedDates, currentEtlId));
+		SQLUtils.flush(conn);
+	}
+	
 	/**
 	 * quite expensive, so only run it in case of full etl (which is expensive anyway)
 	 */
@@ -270,10 +297,10 @@ public class MondrianETL {
 				logger.error("locales changed, forcing a full ETL");
 			}
 		});
-		res.or(previousEtlTime <= 0);
+		res.or(previousEtlEventId <= 0);
 		
-		String fullEtlRequestedQuery = "SELECT count(*) FROM amp_etl_changelog WHERE (event_date > " + previousEtlTime + ") AND entity_name='full_etl_request'";
-		res.or(SQLUtils.<Long>fetchAsList(conn, fullEtlRequestedQuery, 1).get(0) > 0);			
+		String fullEtlRequestedQuery = "SELECT count(*) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND entity_name='full_etl_request'";
+		res.or(SQLUtils.getLong(conn, fullEtlRequestedQuery) > 0);			
 
 		pumpTableIfChanged(res, "amp_currency");
 		pumpTableIfChanged(res, "amp_category_class");
@@ -679,31 +706,20 @@ public class MondrianETL {
 		}
 	}
 	
-	private EtlResult getEtlResult(double duration) {
-		if (!etlExecuted)
-			throw new RuntimeException("should only call getEtlResult after having run etl");
-		return new EtlResult(duration, this.cacheInvalidated, this.currentEtlTime, 
-				this.etlConfig.activityIds.size() + this.etlConfig.pledgeIds.size(), 
-				this.nrAffectedDates);
-	}
-	
 	public static EtlResult runETL(boolean forceFull) {
-		long start = System.currentTimeMillis();
-		MondrianETL etl = null;
 		try {
 			try(Connection conn = PersistenceManager.getJdbcConnection()) {
 				try(MonetConnection monetConn = MonetConnection.getConnection()) {
-					etl = new MondrianETL(conn, monetConn, forceFull);
-					etl.execute();
+					MondrianETL etl = new MondrianETL(conn, monetConn, forceFull);
+					EtlResult etlResult = etl.execute();
+					logger.error("Mondrian ETL result: " + etlResult);
+					return etlResult;
 				}
-				long end = System.currentTimeMillis();
-				double secs = (end - start) / 1000.0;
-				EtlResult res = etl.getEtlResult(secs);
-				logger.error("Mondrian ETL result: " + res);
-				return res;
 			}
 		}
 		catch(Exception e) {
+			if (e instanceof RuntimeException)
+				throw (RuntimeException) e;
 			throw new RuntimeException(e);
 		}
 	}

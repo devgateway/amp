@@ -10,12 +10,7 @@ public class EtlResult {
 	 * whether cache should be invalidated
 	 */
 	public final boolean cacheInvalidated;
-	
-	/**
-	 * UNIX timestamp of the moment the ETL started
-	 */
-	public final long startTime;
-	
+		
 	/**
 	 * number of activities / pledges affected by ETl
 	 */
@@ -26,15 +21,20 @@ public class EtlResult {
 	 */
 	public final long nrAffectedDates;
 	
-	public EtlResult(double duration, boolean cacheInvalidated, long startTime, long nrAffectedEntities, long nrAffectedDates) {
+	/**
+	 * amp_etl_changelog.event_id
+	 */
+	public final long eventId;
+	
+	public EtlResult(long eventId, double duration, boolean cacheInvalidated, long nrAffectedEntities, long nrAffectedDates) {
+		this.eventId = eventId;
 		this.duration = duration;
 		this.cacheInvalidated = cacheInvalidated;
-		this.startTime = startTime;
 		this.nrAffectedEntities = nrAffectedEntities;
 		this.nrAffectedDates = nrAffectedDates;
 	}
 	
 	@Override public String toString() {
-		return String.format("etl: started at %d, took %.2f, invalidated cache: %b, affected entities: %d, affected dates: %d", startTime, duration, cacheInvalidated, nrAffectedEntities, nrAffectedDates);
+		return String.format("etl: took %.2f, invalidated cache: %b, affected entities: %d, affected dates: %d", duration, cacheInvalidated, nrAffectedEntities, nrAffectedDates);
 	}
 }

@@ -193,6 +193,19 @@ public class SQLUtils {
 //		}
 	}
 	
+	/**
+	 * runs a query and fetches its only result as a Long
+	 * @param connection
+	 * @param query
+	 * @return
+	 */
+	public static Long getLong(Connection connection, String query) {
+		List<?> res = SQLUtils.fetchAsList(connection, query, 1);
+		if (res.size() != 1)
+			throw new RuntimeException("query should have returned exactly one result, but returned instead: " + res.size());
+		return PersistenceManager.getLong(res.get(0));
+	}
+	
 	public static <T> List<T> fetchAsList(ResultSet rs, int n, String errMsgAdd)
 	{
 		try

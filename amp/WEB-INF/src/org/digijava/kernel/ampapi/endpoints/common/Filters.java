@@ -7,9 +7,11 @@ import java.util.List;
 import java.util.Set;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
@@ -29,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.OrgTypeSkeleton;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
@@ -228,18 +231,24 @@ public class Filters {
 	}
 
 	/**
-	 * Return the sector filtered by the given sectorName
+	 * Return the organization filtered by the given role or by the given orgGroup
 	 * 
 	 * @return
 	 */
 	@GET
-	@Path("/organizations/{ampRoleId}")
+	@Path("/organizations")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="OrganizationsByRole")
+	@ApiMethod(ui=false,name="OrganizationsByRoleAndByGroupId")
 	public List<SimpleJsonBean> getOrganizations(
-			@PathParam("ampRoleId") Long orgRole) {
+			@QueryParam("ampRoleId") Long orgRole,@QueryParam("orgGroupId") List<Long> ampOrgGroupId) {
+		
 		List<SimpleJsonBean> organizations = new ArrayList<SimpleJsonBean>();
-		List<OrganizationSkeleton> s = QueryUtil.getOrganizations(orgRole);
+		List<OrganizationSkeleton> s=null;
+		if(orgRole!=null){
+		 s= QueryUtil.getOrganizations(orgRole);
+		}else{
+			s= QueryUtil.getOrganizations(ampOrgGroupId);
+		}
 		for (OrganizationSkeleton organizationSkeleton : s) {
 			organizations.add(new SimpleJsonBean(organizationSkeleton
 					.getAmpOrgId(), organizationSkeleton.getName()));
@@ -247,17 +256,29 @@ public class Filters {
 
 		return organizations;
 	}
-
 	/**
-	 * Return the organization type list
+	 * Return the organization  list
 	 * 
 	 * @return
 	 */
-	@GET
+	@POST
 	@Path("/organizations")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=true,name="Organizations")
-	public List<SimpleJsonBean> getOrganizations() {
+	public List<SimpleJsonBean> getOrganizations(final JsonBean filter) {
+		List<SimpleJsonBean> orgs = new ArrayList<SimpleJsonBean>();
+		return orgs;
+	}
+	/**
+	 * Return the organization role list
+	 * 
+	 * @return
+	 */
+	@POST
+	@Path("/organizationsRoles")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=true,name="organizationsRoles")
+	public List<SimpleJsonBean> getOrganizationsRoles(final JsonBean filter) {
 		List<SimpleJsonBean> orgs = new ArrayList<SimpleJsonBean>();
 		List<AmpRole> roles = OnePagerUtil.getOrgRoles();
 		for (AmpRole ampRole : roles) {
@@ -350,24 +371,52 @@ public class Filters {
 		return getCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY);
 	}
 
+	private List<SimpleJsonBean> getOrgGroup(Long orgTypeId) {
+		List<SimpleJsonBean>orgGroupReturn=new ArrayList<SimpleJsonBean>();
+		Collection<AmpOrgGroup> aogList;
+		if(orgTypeId==null){
+			aogList = DbUtil.getAllOrgGroups();
+		}else{
+			aogList =DbUtil.searchForOrganisationGroupByType(orgTypeId);
+		}
+		for (AmpOrgGroup ampOrgGroup : aogList) {
+			orgGroupReturn.add(new SimpleJsonBean(ampOrgGroup.getIdentifier(),ampOrgGroup.getName(),ampOrgGroup.getOrgGrpCode(),ampOrgGroup.getOrgType().getAmpOrgTypeId()));
+		}
+		return orgGroupReturn;
+	}
+	
+
+	/**
+	 * Return Organization Group filtered by orgTypeId 
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/organizationGroup")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui = true, name = "OrganizationGroupList")
+	public List<SimpleJsonBean> getorganizationGroupByOrgTypeId(@QueryParam("orgTypeId") Long orgTypeId) {
+		return getOrgGroup(orgTypeId);
+	}
+	
 	/**
 	 * Return Organization Group 
 	 * 
 	 * @return
 	 */
 	@GET
-	@Path("/organizationGroup/")
+	@Path("/organisationTypes/")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = true, name = "OrganizationGroupList")
-	public List<SimpleJsonBean> getorganizationGroup() {
-		List<SimpleJsonBean>orgGroupReturn=new ArrayList<SimpleJsonBean>();
-		List<AmpOrgGroup> aogList = DbUtil.getAllOrgGroups();
-		for (AmpOrgGroup ampOrgGroup : aogList) {
-			orgGroupReturn.add(new SimpleJsonBean(ampOrgGroup.getIdentifier(),ampOrgGroup.getName(),ampOrgGroup.getOrgGrpCode()));
+	@ApiMethod(ui = true, name = "OrgTypesList")
+	public List<SimpleJsonBean> getOrgTypes(){
+		List<SimpleJsonBean> orgTypes=new ArrayList<SimpleJsonBean>();
+		List<OrgTypeSkeleton> orgTypesSk= DbUtil.getAllOrgTypesFaster();
+		for (OrgTypeSkeleton orgTypeSkeleton : orgTypesSk) {
+			orgTypes.add(new SimpleJsonBean(orgTypeSkeleton.getOrgTypeId(),orgTypeSkeleton.getOrgTypeName(),orgTypeSkeleton.getOrgTypeCode()));
 		}
-		return orgGroupReturn;
+		
+		return orgTypes;
 	}
-	
 	
 	private List<SimpleJsonBean> getCategoryValue(String categoryKey) {
 		List<SimpleJsonBean> fi = new ArrayList<SimpleJsonBean>();

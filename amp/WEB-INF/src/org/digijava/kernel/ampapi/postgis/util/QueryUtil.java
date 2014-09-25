@@ -184,7 +184,7 @@ public class QueryUtil {
 	public static List<OrganizationSkeleton> getOrganizations(Long roleId) {
 		try {
 			AmpRole r = (AmpRole) PersistenceManager.getRequestDBSession().load(AmpRole.class, roleId);
-			return ReportsUtil.getAllOrgByRoleOfPortfolioFaster(r.getRoleCode());
+			return OrganizationSkeleton.populateOrganisationSkeletonList(r.getRoleCode());
 		} catch (DgException e) {
 			logger.error("cannot load orgs", e);
 			return null;
@@ -246,5 +246,18 @@ public class QueryUtil {
 		return ids;
 		
 	}
+
+	/**
+	 * Filter organization skelleton by orgGrpId
+	 * 
+	 * @param orgGrpId
+	 * @return
+	 */
+	public static List<OrganizationSkeleton> getOrganizations(
+			List<Long> orgGrpId) {
+		return OrganizationSkeleton
+				.populateOrganisationSkeletonListByOrgGrpIp(orgGrpId);
+	}
+
 }
 

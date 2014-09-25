@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
@@ -134,6 +136,30 @@ public class OrganizationSkeleton implements Comparable<OrganizationSkeleton>, H
     		return null;
     	}
     	else return val;
+    }
+    
+    
+    public static List<OrganizationSkeleton>  populateOrganisationSkeletonListByOrgGrpIp(final List<Long> orgGrpId) {
+        final List<OrganizationSkeleton> organizations = new ArrayList<OrganizationSkeleton>();
+        PersistenceManager.getSession().doWork(new Work(){
+				public void execute(Connection conn) throws SQLException {
+					
+		            
+					String condition = "where org_Grp_Id in("+ Util.toCSStringForIN(orgGrpId) +")";
+					ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_organisation", 
+							condition, TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");		
+					ResultSet rs = v.fetch(null);
+					while (rs.next()) {
+						organizations.add(new OrganizationSkeleton(nullInsteadOfZero(rs.getLong("amp_org_id")), 
+									rs.getString("name"),
+									rs.getString("acronym"), 
+									rs.getString("org_code"),
+									rs.getString("description"),
+									nullInsteadOfZero(rs.getLong("org_grp_id"))));
+					}
+				}
+			});
+        return organizations;
     }
     public static List<OrganizationSkeleton>  populateOrganisationSkeletonList(final String rolecode) {
         final List<OrganizationSkeleton> organizations = new ArrayList<OrganizationSkeleton>();

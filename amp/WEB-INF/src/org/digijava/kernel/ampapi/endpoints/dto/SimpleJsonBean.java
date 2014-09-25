@@ -13,10 +13,15 @@ public class SimpleJsonBean {
 	Object id;
     String code;
     String name;
+    String type;
     List<SimpleJsonBean> children;
 	public SimpleJsonBean(){
 		
 	}
+    public SimpleJsonBean(Object id,String name,String code,Long type) {
+    	this(id,name, code);
+    	this.type=type.toString();
+    }
     public SimpleJsonBean(Object id,String name,String code) {
     	this(id,name);
     	this.code=code;
@@ -52,7 +57,13 @@ public class SimpleJsonBean {
         this.name = name;
     }
 
-    public List<SimpleJsonBean> getChildren() {
+    public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public List<SimpleJsonBean> getChildren() {
         return children;
     }
 

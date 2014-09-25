@@ -1,35 +1,32 @@
 /*
  * The GIS Data Engine
- *
- * This module in intended to be:
- *   * Commanded: instructed to change state in a specific way
- *   * Requested: queried about properties and possibilities
- *   * Observed: its main job is to control and expose the data-level state
- *
- * It should probably be instantiated exactly once when running an application.
- *
  */
 
 var _ = require('underscore');
 var Backbone = require('backbone');
+
+var Title = require('./title');
+var SavedMaps = require('./collections/saved-maps-collection');
 var Activities = require('./collections/activity-collection');
 var Boundaries = require('./collections/boundary-collection');
 var Indicators = require('./collections/indicator-collection');
 var Structures = require('./collections/structures-project-sites-shell-collection');
 var ADMClusters = require('./collections/adm-cluster-collection');
 var StructuresAndClusters = require('./collections/clusters-and-project-sites');
-var Title = require('./title');
 
 
 var GISData = function() {
   this.initialize.apply(this, arguments);
 };
 
+
 _.extend(GISData.prototype, Backbone.Events, {
 
   layerEvents: ['show', 'hide', 'loaded', 'processed'],
 
   initialize: function() {
+    this.savedMaps = new SavedMaps();
+
     this.activities = new Activities();
     this.boundaries = new Boundaries();
     this.filters = new Backbone.Collection();

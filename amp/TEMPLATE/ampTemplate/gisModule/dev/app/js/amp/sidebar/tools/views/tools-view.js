@@ -1,40 +1,30 @@
 var fs = require('fs');
 var _ = require('underscore');
+
 var BaseControlView = require('../../base-control/base-control-view');
+var ShareMapToolView = require('./share-map-tool-view');
+var ExportMapToolView = require('./export-map-tool-view');
 
-var SavedMapModel = require('../models/saved-map-model');
-var SavedMaps = require('../collections/saved-map-collection');
 var Template = fs.readFileSync(__dirname + '/../templates/tools-template.html', 'utf8');
-var SavedMapsTemplate = fs.readFileSync(__dirname + '/../templates/saved-maps-template.html', 'utf-8');
-
-var state = require('../../../services/state');
 
 
 module.exports = BaseControlView.extend({
 
   id: 'tool-tools',
-  title:  'Share',
-  iconClass:  'ampicon-share',
-  description:  '',
+  title: 'Share',
+  iconClass: 'ampicon-share',
+  description: 'Download the data in this map or share a link to it',
 
   template:  _.template(Template),
-  savedMapsTemplate: _.template(SavedMapsTemplate),
 
   events: {
-    'click .gis-tool-save': 'showSave',
-    'click .gis-tool-save-save': 'reallySave',
-    'click .gis-tool-load': 'load',
-    'click .gis-tool-load-url': 'loadUrl',
-    'click .gis-state-link': 'loadLink',
     'click .gis-tool-export': 'exportOption',
     'click .gis-tool-share': 'share'
   },
 
   initialize: function() {
-    BaseControlView.prototype.initialize.apply(this, arguments);
-    this.savedMaps = new SavedMaps();
-    this.listenTo(this.savedMaps, 'add', this.renderSavedMapsList);
-    this.listenTo(this.savedMaps, 'remove', this.renderSavedMapsList);
+    BaseControlView.prototype.initialize.apply(this, arguments);  // attaches this.app, etc.
+    this.savedMaps = this.app.data.savedMaps;
   },
 
   render: function() {
@@ -43,60 +33,32 @@ module.exports = BaseControlView.extend({
     return this;
   },
 
-  renderSavedMapsList: function() {
-    var renderedList = this.savedMapsTemplate({maps: this.savedMaps});
-    this.$('.available-maps').html(renderedList);
-  },
-
-  showSave: function() {
-    this.$('.gis-tool-save-form').toggleClass('hidden');
-  },
-
-  getStateModel: function() {
-    return new SavedMapModel({
-      title: this.$('#save-title').val(),
-      description: this.$('#save-desc').val(),
-      stateBlob: state.freeze()
-    });
-  },
-
-  reallySave: function() {
-    var currentStateModel = this.getStateModel();
-    this.savedMaps.add(currentStateModel);
-    this.savedMaps.sync();
-  },
-
-  load: function() {
-    this.$('.gis-tool-load-form').toggleClass('hidden');
-    this.savedMaps.fetch();
-  },
-
-  loadUrl: function() {
-    var serializedState = this.$('#load-url').val().slice(1);  // trim #
-    this.loadSerialized(serializedState);
-  },
-
-  loadLink: function(e) {
-    var serializedState = e.currentTarget.hash.slice(1);  // trim the "#"
-    this.loadSerialized(serializedState);
-  },
-
   loadSerialized: function(serializedState) {
-    var stateBlob = SavedMapModel.deserialize(serializedState);
-    state.load(stateBlob);
+    var stateBlob = this.savedMaps.model.deserializese(serializedState);
+    this.app.state.load(stateBlob);
   },
 
   // can't call it export because that's a reserved word.
   exportOption: function() {
-    this.$('.gis-tool-export-form').toggleClass('hidden');
-    // ???
+    this.show(new ExportMapToolView(), '.gis-tool-export');
   },
 
   share: function() {
-    var currentStateModel = this.getStateModel();
-    this.$('#share-url').val('#' + currentStateModel.serialize());
-    this.$('.gis-tool-share-form').toggleClass('hidden');
-    // TODO: social share buttons? embeddable widgets for news/blogs?
+    var currentStateModel = this.savedMaps.create({  // create does POST
+      title: this.$('#save-title').val(),
+      description: this.$('#save-desc').val(),
+      stateBlob: this.app.state.freeze()
+    });
+    this.show(new ShareMapToolView({
+      app: this.app,
+      model: currentStateModel
+    }), '.gis-tool-share');
+  },
+
+  show: function(subView, toolClass) {
+    this.$('.gis-tool').removeClass('active');
+    this.$(toolClass).addClass('active');
+    this.$('.gis-tool-share-form').html(subView.render().el);
   }
 
 });

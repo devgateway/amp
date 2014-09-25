@@ -1,3 +1,5 @@
+// TODO: move this up a dir, and instantiate and attach to the app
+
 var fs = require('fs');
 var $ = require('jquery');
 var Backbone = require('backbone');

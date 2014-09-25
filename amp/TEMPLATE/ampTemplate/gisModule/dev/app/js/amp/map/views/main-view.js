@@ -15,8 +15,6 @@ var IndicatorLayersView = require('../views/indicator-layers-view');
 var Basemaps = require('../collections/basemap-collection');
 var Template = fs.readFileSync(__dirname + '/../templates/map-container-template.html', 'utf8');
 
-var state = require('../../services/state');
-
 
 module.exports = Backbone.View.extend({
 
@@ -29,13 +27,13 @@ module.exports = Backbone.View.extend({
     this.map.attributionControl.setPosition('bottomleft');
     this.map.zoomControl.setPosition('topright');
 
-    state.register(this, 'map', {
+    this.app.state.register(this, 'map', {
       get: this._getMapView,
       set: this._setMapView,
       empty: { center: [-3, 22], zoom: 6 }
     });
 
-    this.basemaps = new Basemaps();  // pre-loaded with hard-coded basemaps
+    this.basemaps = new Basemaps(null, { app: this.app });  // pre-loaded with hard-coded basemaps
 
     // init layers
     this.projectSitesLayersView = new ProjectSitesLayerView({map: this.map, app: this.app});

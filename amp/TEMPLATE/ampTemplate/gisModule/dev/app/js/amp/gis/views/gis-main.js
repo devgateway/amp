@@ -19,8 +19,10 @@ module.exports = Backbone.View.extend({
   },
 
   initialize: function(options) {
+    this.url = options.url;
     this.data = options.data;
-    this.display = options.display;
+    this.state = options.state;
+
     this.mapView = new MapView({app: this});
     this.dataQualityView = new DataQualityView({app: this});
     this.sidebarView = new SidebarView({app: this});

@@ -1,9 +1,8 @@
 var Backbone = require('backbone');
 var BasemapModel = require('../models/basemap-model');
 
-var state = require('../../services/state');
 
-var basemaps = [
+var BASEMAPS = [
   {
     id: 'Streets',
     source: 'esri',
@@ -72,10 +71,12 @@ module.exports = Backbone.Collection.extend({
 
   model: BasemapModel,
 
-  initialize: function() {
-    this.add(basemaps);
-    state.register(this, 'basemap', {
-      get: function() { return this.getBasemap().id; },
+  initialize: function(models, options) {
+    this.add(BASEMAPS);
+    options.app.state.register(this, 'basemap', {
+      get: function() {
+        return this.getBasemap().id;
+      },
       set: this.selectBasemap,
       empty: 'Gray'
     });

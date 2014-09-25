@@ -23,7 +23,6 @@ module.exports = Backbone.View.extend({
     }
 
     layer.loadAll().done(function() {
-      console.log('lalala');
       var layerType = layer.get('type');
       if (layerType === 'joinBoundaries') {  // geojson
         loadedLayer = self.getNewGeoJSONLayer(layer);

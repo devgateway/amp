@@ -1,43 +1,16 @@
 <div class="container-fluid">
+  <p>
+    <div class="form-group">
+      <button class="btn btn-sm btn-success gis-tool gis-tool-share">
+        <span class="glyphicon glyphicon-link"></span> Share
+      </button>
+    	<button class="btn btn-sm btn-primary gis-tool gis-tool-export">
+        <span class="glyphicon glyphicon-share-alt"></span> Export
+      </button>
+  	</div>
 
-  <div class="form-group">
-  	<button class="btn btn-sm btn-success gis-tool-save">
-      <span class="glyphicon glyphicon-floppy-save"></span> Save
-    </button>
-  	<button class="btn btn-sm btn-primary gis-tool-load">
-      <span class="glyphicon glyphicon-floppy-open"></span> Load
-    </button>
-  </div>
-
-  <div class="gis-tool-form gis-tool-save-form well hidden">
-    <input id="save-title" class="form-control" placeholder="Map Title" />
-    <input id="save-desc" class="form-control" placeholder="Map Description" />
-    <button class="btn btn-success gis-tool-save-save">Save Map</button>
-  </div>
-
-  <div class="gis-tool-form gis-tool-load-form well hidden">
-    <input id="load-url" class="form-control" placeholder="Paste Shared URL" />
-    <button class="gis-tool-load-url btn btn-primary btn-sm">Load URL</button>
-    <div class="available-maps">
-      <p><em>Loading saved maps...</em></p>
+    <div class="gis-tool-form gis-tool-share-form">
     </div>
-  </div>
 
-  <div class="form-group">
-  	<button class="btn btn-sm btn-info gis-tool-export">
-      <span class="glyphicon glyphicon-share-alt"></span> Export
-    </button>
-    <button class="btn btn-sm btn-info gis-tool-share">
-      <span class="glyphicon glyphicon-link"></span> Share
-    </button>
-	</div>
-
-  <div class="gis-tool-form gis-tool-export-form well hidden">
-    export data and images...
-  </div>
-
-  <div class="gis-tool-form gis-tool-share-form well hidden">
-    <input id="share-url" class="form-control" placeholder="http://blah" />
-  </div>
-
+  </p>
 </div>

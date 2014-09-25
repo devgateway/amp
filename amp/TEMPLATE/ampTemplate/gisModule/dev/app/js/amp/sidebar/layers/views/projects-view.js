@@ -1,6 +1,5 @@
 var fs = require('fs');
 var _ = require('underscore');
-var state = require('../../../services/state');
 
 var BaseControlView = require('../../base-control/base-control-view');
 var OptionView = require('./option-view');
@@ -21,11 +20,10 @@ module.exports = BaseControlView.extend({
   initialize: function() {
     var self = this;
     BaseControlView.prototype.initialize.apply(this, arguments);  // sets this.app
-
     this.projectLayerCollection = this.app.data.sitesAndClusters;
 
     // register state:
-    state.register(this, 'layers-view', {
+    this.app.state.register(this, 'layers-view', {
       get: function() {
         var tmp = self.projectLayerCollection.getSelected().first().value();
         if (tmp) {

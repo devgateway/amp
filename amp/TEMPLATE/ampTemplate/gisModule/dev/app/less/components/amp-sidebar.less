@@ -128,13 +128,13 @@
       &:hover,
       &.active{
         cursor:pointer;
-        background-color: @amp_content_highlight_bg;        
+        background-color: @amp_content_highlight_bg;
         color: @amp_emph;
       }
 
       label:hover{
         cursor:pointer;
-      }      
+      }
 
       label,
       h4 {
@@ -164,22 +164,29 @@
 
 // TODO: find better way.
 // needed the label to be near full width so all clicks are captured.
+// David: would something like `display:block` be possible?
 #tool-layers{
   .layer-heading-container {
     label{
-      width:90%;
+      width: 90%;
     }
   }
 }
 
+
+#sidebar .accordion-inner .content small {
+  font-style: italic;
+}
+
+
 #tool-tools{
   .btn{
-    min-width:48%;
+    min-width: 48%;
   }
 }
 
 .available-maps ul{
   list-style: none;
-  margin:0;
-  padding:0;
+  margin: 0;
+  padding: 0;
 }

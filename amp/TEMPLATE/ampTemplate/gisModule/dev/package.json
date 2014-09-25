@@ -92,6 +92,7 @@
     "underscore": "^1.6.0",
     "underscore-groups-by": "0.0.1",
     "vinyl-source-stream": "^0.1.1",
-    "watchify": "^0.10.2"
+    "watchify": "^0.10.2",
+    "zeroclipboard": "^2.1.6"
   }
 }

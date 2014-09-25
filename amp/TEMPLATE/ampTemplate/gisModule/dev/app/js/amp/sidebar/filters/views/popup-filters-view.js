@@ -5,7 +5,6 @@ var Backbone = require('backbone');
 
 var TopLevelFilterView = require('../views/top-level-filter-view');
 
-var state = require('../../../services/state');
 var Template = fs.readFileSync(__dirname + '/../templates/filters-content-template.html', 'utf8');
 var TitleTemplate = fs.readFileSync(__dirname + '/../templates/filter-title-template.html', 'utf8');
 var GenericFilterModel = require('../models/generic-filter-model');
@@ -41,7 +40,7 @@ module.exports = Backbone.View.extend({
 
     this._getFilterList().done();
 
-    state.register(this, 'filters', {
+    this.app.state.register(this, 'filters', {
       get: function() { return this.serialize(); },
       set: this.deserialize,
       empty: null

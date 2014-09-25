@@ -6,6 +6,11 @@ function Title() {
   if (!(this instanceof Title)) {
     throw new Error('Title needs to be created with the `new` keyword.');
   }
+  if (window._ampTitler) {
+    throw new Error('Another instance of URL is already managing window.location');
+  } else {
+    window._ampTitler = true;
+  }
   this.initialize.apply(this, arguments);
 }
 

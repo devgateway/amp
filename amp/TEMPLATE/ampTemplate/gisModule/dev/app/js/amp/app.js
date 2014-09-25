@@ -6,21 +6,27 @@ var $ = require('jquery');
 var GISData = require('./data/gis-data');
 var App = require('./gis/views/gis-main');
 
-var state = require('./services/state');
+var State = require('./services/state');
 var translator = require('./services/translator');
 var WindowTitle = require('./services/title');
+var URLService = require('./services/url');
 
+
+var data = new GISData();
+var url = new URLService();
+var state = new State({ data: data, url: url });
 
 // initialize everything that doesn't need to touch the DOM
 var app = new App({
-  data: new GISData()
+  url: url,
+  data: data,
+  state: state
 });
 
 app.data.load();
 
 
 // attach a ref to services
-app.state = state;
 app.translator = translator;
 
 // hook up the title

@@ -379,11 +379,11 @@ public class ExportIatiBuilderV1_03 extends ExportIatiBuilderVX {
 		if (categVal!=null) {
 			if (CategoryConstants.IMPLEMENTATION_LEVEL_INTERNATIONAL.getValueKey().equals(categVal.getValue())) {
 				if (ampAct.getLocations()!=null) {
-					for (Iterator iter = ampAct.getLocations().iterator(); iter.hasNext(); ) {
-						AmpActivityLocation location = (AmpActivityLocation) iter.next();
-						AmpCategoryValueLocations country = location.getLocation().getLocation();
-						iatiAct.getActivityWebsiteOrReportingOrgOrParticipatingOrg().add(getCountry(country, new BigDecimal(location.getLocationPercentage())));
-					}
+                    for (Object o : ampAct.getLocations()) {
+                        AmpActivityLocation location = (AmpActivityLocation) o;
+                        AmpCategoryValueLocations country = location.getLocation().getLocation();
+                        iatiAct.getActivityWebsiteOrReportingOrgOrParticipatingOrg().add(getCountry(country, new BigDecimal(location.getLocationPercentage())));
+                    }
 				}
 			} else {
 				AmpCategoryValueLocations defaultCountry = DynLocationManagerUtil.getDefaultCountry();

@@ -13,6 +13,7 @@ import java.util.Set;
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewColumnDescription;
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.mondrian.currencies.CurrencyAmountGroup;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.jobs.MondrianTableLogue;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableColumn;
@@ -128,10 +129,16 @@ public class MondrianTablesRepository {
 							.addColumnDef(new I18nViewColumnDescription("team_name", "team_id", AmpTeam.class, "name"));							
 					}});
 
+	
 	public final static MondrianTableDescription MONDRIAN_ACTIVITY_FIXED_TEXTS = 
 			new MondrianTableDescription("mondrian_activity_fixed_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
-				.withFingerprintedJob(Arrays.asList("SELECT 1"));
+				.withFingerprintedJob(Arrays.asList("SELECT 1"));	
 
+	
+	public final static MondrianTableDescription MONDRIAN_ACTIVITY_CURRENCY_NUMBERS = 
+			new MondrianTableDescription("mondrian_activity_currency_numbers", "amp_activity_id", Arrays.asList("amp_activity_id"))
+				.withFingerprintedJob(Arrays.asList("SELECT 1"));
+	
 	public final static MondrianTableDescription MONDRIAN_ACTIVITY_TRN_TEXTS = 
 			new MondrianTableDescription("mondrian_activity_trn_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
 				.withFingerprintedJob(Arrays.asList(Fingerprint.buildTableHashingQuery("v_mondrian_activity_trn_texts", "amp_activity_id")))
@@ -189,7 +196,8 @@ public class MondrianTablesRepository {
 			MONDRIAN_ACTIVITY_TEXTS,
 			MONDRIAN_ACTIVITY_FIXED_TEXTS,
 			MONDRIAN_LONG_TEXTS, 
-			MONDRIAN_ACTIVITY_TRN_TEXTS);
+			MONDRIAN_ACTIVITY_TRN_TEXTS,
+			MONDRIAN_ACTIVITY_CURRENCY_NUMBERS);
 		
 	public final static List<MondrianTableDescription> MONDRIAN_RAW_TRANSACTIONS_TABLES = Arrays.asList(MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE);
 	
@@ -253,6 +261,10 @@ public class MondrianTablesRepository {
 				new DatabaseTableColumn("dest_role_id", "integer", true), // amp_role_id
 				new DatabaseTableColumn("dest_org_id", "integer", true)   // amp_org_id
 		));
+	
+	public final static List<CurrencyAmountGroup> CURRENCY_GROUPS = Arrays.asList(
+			MONDRIAN_ACTIVITY_CURRENCY_NUMBERS.getCurrencyBlock("ppc_"),
+			new CurrencyAmountGroup(MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE.tableName, FACT_TABLE.tableName, MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE.primaryKeyColumnName, "entity_id", ""));
 }
 
 /**

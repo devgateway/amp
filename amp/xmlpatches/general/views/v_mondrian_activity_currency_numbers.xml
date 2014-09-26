@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-18110</jira>
+	<keyword>Views</keyword>
+	<author>Constantin Dolghier</author>
+	<description>recreate view, this will always be the last version of the view</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_mondrian_activity_currency_numbers;
+			    CREATE OR REPLACE VIEW v_mondrian_activity_currency_numbers AS 
+SELECT <!-- proposed project cost per project column -->
+	aav.amp_activity_id AS amp_activity_id,
+	CASE WHEN aav.proj_cost_date IS NOT NULL AND proj_currency.amp_currency_id IS NOT NULL THEN aav.proj_cost_date ELSE NULL END AS ppc_transaction_date,
+	CASE WHEN aav.proj_cost_date IS NOT NULL AND proj_currency.amp_currency_id IS NOT NULL THEN to_char(aav.proj_cost_date, 'J')::integer ELSE NULL END AS ppc_date_code,
+	CASE WHEN aav.proj_cost_date IS NOT NULL AND proj_currency.amp_currency_id IS NOT NULL THEN proj_currency.amp_currency_id ELSE NULL END AS ppc_currency_id,
+	CASE WHEN aav.proj_cost_date IS NOT NULL AND proj_currency.amp_currency_id IS NOT NULL THEN aav.proj_cost_amount ELSE NULL END AS ppc_transaction_amount
+	FROM amp_activity_version aav LEFT JOIN amp_currency proj_currency ON proj_currency.currency_code = aav.proj_cost_currcode
+
+ORDER BY amp_activity_id;
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

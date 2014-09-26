@@ -4,7 +4,7 @@ import org.digijava.module.aim.helper.Constants;
 
 /**
  * 
- * @author Diego Dimunzio
+ * @author Nadejda Mandrescu
  * @since July 2014 - Mondrian from-scratch reimplementation
  */
 public final class MoConstants {
@@ -55,6 +55,7 @@ public final class MoConstants {
 	public static final String ACTIVITY_LONG_TEXTS = "Activity Long Texts";
 	public static final String ACTIVITY_TEXTS = "Activity Texts";
 	public static final String ACTIVITY_FIXED_TEXTS = "Activity Fixed Texts";
+	public static final String ACTIVITY_CURRENCY_AMOUNTS = "Activity Currency Amounts";
 	public static final String DATES = "Dates";
 	public static final String ACTIVITY_DATES = "Activity Dates";
 	public static final String LOCATION = "Location"; 
@@ -234,6 +235,8 @@ public final class MoConstants {
 	public static final String ATTR_PROGRAM_LEVEL_6_NAME = "Program Level 6 Name";
 	public static final String ATTR_PROGRAM_LEVEL_7_NAME = "Program Level 7 Name";
 	public static final String ATTR_PROGRAM_LEVEL_8_NAME = "Program Level 8 Name";
+	public static final String ATTR_PROPOSED_PROJECT_AMOUNT = "Proposed Project Amount";
+
 	//properties
 	public static final String P_KEY = "Key";
 	

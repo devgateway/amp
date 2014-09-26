@@ -19,6 +19,7 @@ import org.dgfoundation.amp.ar.viewfetcher.I18nDatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewDescription;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.mondrian.currencies.CurrencyAmountGroup;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.jobs.MondrianTableLogue;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -43,7 +44,7 @@ public class MondrianTableDescription {
 	/**
 	 * list of columns which should have indices created on them. Will be iterated in the order given by the constructor
 	 */
-	public final Set<String> indexedColumns;
+	public final Set<String> indexedColumns;	
 	
 	public Fingerprint fingerprint;
 	public boolean isFiltering = false;
@@ -82,6 +83,10 @@ public class MondrianTableDescription {
 			throw new RuntimeException("not allowed to respecify fingerprint");
 		this.fingerprint = new Fingerprint("v_" + this.tableName, hashQueries);
 		return this;
+	}
+	
+	public CurrencyAmountGroup getCurrencyBlock(String prefix) {
+		return new CurrencyAmountGroup(this.tableName, this.tableName, primaryKeyColumnName, primaryKeyColumnName, prefix);
 	}
 	
 //	public MondrianTableDescription withPrologue(MondrianTableLogue prologue) {

@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.mondrian;
+package org.dgfoundation.amp.mondrian.currencies;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -12,7 +12,8 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
+import org.dgfoundation.amp.mondrian.EtlConfiguration;
+import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -25,28 +26,31 @@ public class CalculateExchangeRatesEtlJob {
 	protected final Connection conn;
 	protected final MonetConnection monetConn;
 	protected final List<Long> currencyIds;
+	protected final SortedSet<Long> usedDates;
 	
 	protected final EtlConfiguration etlConfig;	
 	
-	protected static Logger logger = Logger.getLogger(MondrianETL.class);
+	protected static Logger logger = Logger.getLogger(CalculateExchangeRatesEtlJob.class);
 	
 	public CalculateExchangeRatesEtlJob(List<Long> currencyIds, Connection conn, MonetConnection monetConn, EtlConfiguration etlConfig) {
 		this.conn = conn;
 		this.monetConn = monetConn;
 		this.currencyIds = Collections.unmodifiableList(currencyIds == null ? SQLUtils.fetchLongs(monetConn.conn, "SELECT amp_currency_id FROM amp_currency") : currencyIds);
 		this.etlConfig = etlConfig;
+		this.usedDates = getCurrencyDates();
 	}
 			
 	public void work() throws SQLException {
 		generateExchangeRatesTable();
-		generateExchangeRatesColumns();
+		for(CurrencyAmountGroup cag:MondrianTablesRepository.CURRENCY_GROUPS)
+			generateExchangeRatesColumns(cag);
 	}
 
-	public void generateExchangeRatesColumns() {
-		Set<String> factTableColumns = monetConn.getTableColumns(FACT_TABLE.tableName);
+	private void generateExchangeRatesColumns(CurrencyAmountGroup cag) {
+		Set<String> destTableColumns = monetConn.getTableColumns(cag.destinationTable);
 		for (long currId:currencyIds) {
-			if (!factTableColumns.contains(getColumnName(currId)))
-				monetConn.executeQuery(String.format("ALTER TABLE %s ADD %s DOUBLE", FACT_TABLE.tableName, getColumnName(currId)));
+			if (!destTableColumns.contains(cag.getColumnName(currId)))
+				monetConn.executeQuery(String.format("ALTER TABLE %s ADD %s DOUBLE", cag.destinationTable, cag.getColumnName(currId)));
 		}
 		
 		/**
@@ -56,36 +60,42 @@ public class CalculateExchangeRatesEtlJob {
 		 */
 
 		String condition = etlConfig.fullEtl ? "" : 
-			String.format(" WHERE (%s) OR (mondrian_fact_table.date_code IN (%s))", etlConfig.activityIdsIn("entity_id"), Util.toCSStringForIN(etlConfig.dateCodes));
+			String.format(" WHERE (%s) OR (%s.%sdate_code IN (%s))", etlConfig.activityIdsIn(cag.entityIdColumn), cag.destinationTable, cag.prefix, Util.toCSStringForIN(usedDates));
 				
 		if (currencyIds.size() > 2) {
 			// smart
-			if (!factTableColumns.contains("amount_base_currency")) {
-				monetConn.executeQuery(String.format("ALTER TABLE %s ADD %s DOUBLE", FACT_TABLE.tableName, "amount_base_currency"));
+			if (!destTableColumns.contains(cag.prefix + "amount_base_currency")) {
+				monetConn.executeQuery(String.format("ALTER TABLE %s ADD %s DOUBLE", cag.destinationTable, cag.prefix + "amount_base_currency"));
 			}
-			monetConn.executeQuery(String.format("UPDATE mondrian_fact_table SET amount_base_currency = transaction_amount * (select mer.exchange_rate from mondrian_exchange_rates mer WHERE mer.day_code = mondrian_fact_table.date_code AND mer.currency_id = mondrian_fact_table.currency_id) %s", condition));
+			monetConn.executeQuery(String.format("UPDATE %s SET %samount_base_currency = %stransaction_amount * (select mer.exchange_rate from mondrian_exchange_rates mer WHERE mer.day_code = %s.%sdate_code AND mer.currency_id = %s.%scurrency_id) %s", 
+					cag.destinationTable, cag.prefix, cag.prefix, cag.destinationTable, cag.prefix, cag.destinationTable, cag.prefix,
+					condition));
 			for (long currId:currencyIds) {
 				String query = String.format(
 						"UPDATE %s SET %s = " +  
-						"amount_base_currency / (select mer.exchange_rate from mondrian_exchange_rates mer WHERE mer.day_code = mondrian_fact_table.date_code AND mer.currency_id = %d) %s ",
-						FACT_TABLE.tableName, getColumnName(currId), currId, condition); 
+						"%samount_base_currency / (select mer.exchange_rate from mondrian_exchange_rates mer WHERE mer.day_code = %s.%sdate_code AND mer.currency_id = %d) %s ",
+						cag.destinationTable, cag.getColumnName(currId),
+						cag.prefix, cag.destinationTable, cag.prefix,
+						currId, condition); 
 				monetConn.executeQuery(query);
 			}
 		} else {
 			// stupid
 			for (long currId:currencyIds) {
 				String query = String.format(
-					"UPDATE %s SET %s = transaction_amount * (select mer.exchange_rate from %s mer WHERE mer.day_code = %s.date_code AND mer.currency_id = %s.currency_id) / (select mer2.exchange_rate from %s mer2 WHERE mer2.day_code = %s.date_code AND mer2.currency_id = %s) %s",
-					FACT_TABLE.tableName, getColumnName(currId), MONDRIAN_EXCHANGE_RATES_TABLE, FACT_TABLE.tableName, FACT_TABLE.tableName, MONDRIAN_EXCHANGE_RATES_TABLE, FACT_TABLE.tableName, currId, condition);
+					"UPDATE %s SET %s = %stransaction_amount * (select mer.exchange_rate from %s mer WHERE mer.day_code = %s.%sdate_code AND mer.currency_id = %s.%scurrency_id) / (select mer2.exchange_rate from %s mer2 WHERE mer2.day_code = %s.%sdate_code AND mer2.currency_id = %s) %s",
+					cag.destinationTable, cag.getColumnName(currId),
+					cag.prefix, MONDRIAN_EXCHANGE_RATES_TABLE, 
+					cag.destinationTable, cag.prefix, 
+					cag.destinationTable, cag.prefix,
+					MONDRIAN_EXCHANGE_RATES_TABLE, 
+					cag.destinationTable, cag.prefix,
+					currId, condition);
 				monetConn.executeQuery(query);
 			}
 			return;
 		}
-	}
-	
-	public String getColumnName(long currId) {
-		return "transaction_exch_" + currId;
-	}
+	}	
 	
 	/**
 	 * generates exchange rate entries for the cartesian product (transaction date, currency)
@@ -103,18 +113,34 @@ public class CalculateExchangeRatesEtlJob {
 										"currency_id bigint NOT NULL," + 
 										"exchange_rate double)");
 		}
-				
-		SortedSet<Long> usedDates = etlConfig.fullEtl ?
-				new TreeSet<>(SQLUtils.fetchLongs(monetConn.conn, "select distinct(date_code) as day_code from mondrian_raw_donor_transactions"))
-				: new TreeSet<>(etlConfig.dateCodes);
-		if ((!etlConfig.fullEtl) && usedDates.isEmpty())
-			return; // doing partial ETL and no dates to ETL
+		
+		if (usedDates.isEmpty())
+			return; // no dates to ETL
 		List<Long> allCurrencies = SQLUtils.fetchLongs(monetConn.conn, "SELECT amp_currency_id FROM amp_currency");
 		for (Long currency:allCurrencies) {
 			generateExchangeRateEntriesForCurrency(CurrencyUtil.getAmpcurrency(currency), usedDates);
 		}		
 		logger.warn("... done generating exchange rates ETL...");
 		//monetConn.copyTableFromPostgres(this.conn, MONDRIAN_EXCHANGE_RATES_TABLE);
+	}
+	
+	/**
+	 * calculates list of all dates for which one should calculate exchange rates
+	 * @return
+	 */
+	protected SortedSet<Long> getCurrencyDates() {
+		TreeSet<Long> res = new TreeSet<>();
+		
+		if (!etlConfig.fullEtl)
+			res.addAll(etlConfig.dateCodes);
+		
+		for (CurrencyAmountGroup cag:MondrianTablesRepository.CURRENCY_GROUPS) {
+			String where = etlConfig.fullEtl ? "" : ("WHERE " + etlConfig.activityIdsIn(cag.containingEntityIdColumn));
+			String query = String.format("select distinct(%sdate_code) as day_code from %s %s", cag.prefix, cag.containingTable, where);
+			res.addAll(SQLUtils.fetchLongs(monetConn.conn, query));
+		}
+		res.remove(0l);
+		return res;
 	}
 	
 	/**

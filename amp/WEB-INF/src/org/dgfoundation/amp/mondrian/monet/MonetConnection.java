@@ -148,16 +148,18 @@ public class MonetConnection implements AutoCloseable {
 	 * @param rs
 	 */
 	public void copyEntries(String destTableName, ResultSet rs) throws SQLException {
-		List<List<Object>> cols = new ArrayList<>();
+		List<List<Object>> rows = new ArrayList<>();
 		int nrColumns = rs.getMetaData().getColumnCount();
 		while (rs.next()) {
 			List<Object> line = new ArrayList<>();
 			for(int i = 1; i <= nrColumns; i++)
 				line.add(rs.getObject(i));
-			cols.add(line);
+			rows.add(line);
 		}
-		Collection<String> colNames = this.getTableColumns(destTableName);
-		SQLUtils.insert(this.conn, destTableName, null, null, colNames, cols);
+		if (rows.isEmpty())
+			return; // nothing to do
+		Collection<String> colNames = new ArrayList<String>(this.getTableColumns(destTableName)).subList(0, nrColumns);
+		SQLUtils.insert(this.conn, destTableName, null, null, colNames, rows);
 	}
 	
 	public void copyTableStructureFromPostgres(Connection srcConn, String srcTable, String destTable) throws SQLException {

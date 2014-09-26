@@ -213,6 +213,9 @@ public class MondrianMapping {
 			put(new ReportColumn(ColumnConstants.REGION, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.LOCATION, MoConstants.H_REGIONS,  MoConstants.ATTR_REGION_NAME));
 			put(new ReportColumn(ColumnConstants.ZONE, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS,  MoConstants.ATTR_ZONE_NAME));
 			put(new ReportColumn(ColumnConstants.DISTRICT, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS,  MoConstants.ATTR_DISTRICT_NAME));
+			
+			put(new ReportColumn(ColumnConstants.PROPOSED_PROJECT_AMOUNT, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT));
+
 			//put(new ReportColumn(ColumnConstants. location?, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS,  MoConstants.ATTR_LOCATION_NAME));
 			//put(new ReportColumn(ColumnConstants.ON_OFF_TREASURY_BUDGET, ReportEntityType.ENTITY_TYPE_ACTIVITY, new MDXAttribute(MoConstants., MoConstants.ATTR_));
 			

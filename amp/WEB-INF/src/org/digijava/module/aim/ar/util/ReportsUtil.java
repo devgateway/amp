@@ -178,6 +178,10 @@ public class ReportsUtil {
 		if (!res.isEmpty())
 			errMsg +="Duplicate measurenames are found in AMP_MEASURES tables: (" + Util.toCSString(res) + ")" + System.lineSeparator();
 
+		res = session.createSQLQuery("select currency_code from amp_currency ac where (select count(*) from amp_currency t where t.currency_code = ac.currency_code) != 1").list();
+		if (!res.isEmpty())
+			errMsg += "Duplicate currency codes are found in amp_currency: " + Util.toCSString(res) + System.lineSeparator();
+		
 		throwErrorIfNotEmpty(errMsg);
 		logger.debug("Database sanity check - PASS");
 	}

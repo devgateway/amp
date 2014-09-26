@@ -18,12 +18,12 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.ObjectWriter;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.algo.BooleanWrapper;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.mondrian.currencies.CalculateExchangeRatesEtlJob;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.dgfoundation.amp.newreports.ReportEntityType;
@@ -186,6 +186,8 @@ public class MondrianETL {
 			logger.info("Full ETL: dropping pg table " + t);
 			SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + t);
 		}
+		monetConn.dropTable(FACT_TABLE.tableName);
+		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + FACT_TABLE.tableName);
 	}
 	
 	/**
@@ -533,6 +535,7 @@ public class MondrianETL {
 		generateFactTable();
 		
 		generateActivitiesDimensionsTables();
+		monetConn.flush();
 	}
 
 	/**

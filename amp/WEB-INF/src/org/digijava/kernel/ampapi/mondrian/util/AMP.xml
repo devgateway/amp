@@ -399,6 +399,13 @@
 			</Hierarchy>
 		</Dimension>
 
+		<Dimension name="Activity Currency Amounts" foreignKey="entity_id">
+			<Hierarchy hasAll="true" allMemberName="All Proposed Project Amount" primaryKey="amp_activity_id" name="Proposed Project Amount">
+				<Table name="mondrian_activity_currency_numbers" />
+				<Level name="Proposed Project Amount" type="Numeric" column="ppc_transaction_exch_@@currency@@" />
+			</Hierarchy>
+		</Dimension>
+		
 		<DimensionUsage name="Donor Agency" source="AMP Organization" caption="Donor Agency" foreignKey="donor_id" />
 		<DimensionUsage name="Implementing Agency" source="AMP Organization" caption="Implementing Agency" foreignKey="ia_org_id" />
 		<DimensionUsage name="Executing Agency" source="AMP Organization" caption="Executing Agency" foreignKey="ea_org_id" />

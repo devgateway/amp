@@ -21,7 +21,7 @@
 			<lang delimiter=";" type="postgres">
 				DROP VIEW IF EXISTS v_mondrian_raw_donor_transactions;
 			    CREATE OR REPLACE VIEW v_mondrian_raw_donor_transactions AS 
-SELECT 
+SELECT  <!-- regular transactions -->
 	aa.amp_activity_id AS amp_activity_id,
 	fd.amp_fund_detail_id AS amp_fund_detail_id,
 	fd.transaction_type AS transaction_type,
@@ -59,7 +59,7 @@ SELECT
 		JOIN amp_funding_detail fd ON f.amp_funding_id = fd.amp_funding_id
 	WHERE (transaction_date BETWEEN '1970-1-1' AND '2050-1-1')
 UNION ALL
-SELECT 
+SELECT <!-- MTEFs -->
 	aa.amp_activity_id AS amp_activity_id,
 	mf.amp_fund_mtef_projection_id AS amp_fund_detail_id,
 	3 AS transaction_type,
@@ -89,7 +89,7 @@ SELECT
 		JOIN amp_funding_mtef_projection mf ON f.amp_funding_id = mf.amp_funding_id
 	WHERE (mf.projection_date BETWEEN '1970-1-1' AND '2050-1-1')
 UNION ALL
-SELECT 
+SELECT <!-- always present -->
 	aav.amp_activity_id AS amp_activity_id,
 	900000000 + aav.amp_activity_id AS amp_fund_detail_id,
 	999 AS transaction_type,
@@ -117,7 +117,6 @@ SELECT
 	cast (NULL as bigint) as dest_org_id
           
 	FROM amp_activity_version aav
-
 ORDER BY amp_activity_id;
 
 

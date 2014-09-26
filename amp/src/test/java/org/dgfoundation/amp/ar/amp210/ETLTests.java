@@ -1,32 +1,22 @@
 package org.dgfoundation.amp.ar.amp210;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.mondrian.CurrencyETL;
-import org.dgfoundation.amp.mondrian.DateRateInfo;
-import org.dgfoundation.amp.mondrian.ExchangeRates;
+import org.dgfoundation.amp.mondrian.currencies.CurrencyETL;
+import org.dgfoundation.amp.mondrian.currencies.DateRateInfo;
+import org.dgfoundation.amp.mondrian.currencies.ExchangeRates;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianTableDescription;
 import org.dgfoundation.amp.mondrian.PercentagesDistribution;
 import org.dgfoundation.amp.newreports.NumberedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.testutils.AmpTestCase;
-import org.dgfoundation.amp.visibility.AmpObjectVisibility;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
-import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
-import org.digijava.module.aim.dbentity.AmpModulesVisibility;
-import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

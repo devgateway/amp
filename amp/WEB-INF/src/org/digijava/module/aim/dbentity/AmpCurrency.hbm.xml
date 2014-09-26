@@ -9,7 +9,7 @@
 			</generator>
 		</id>
 
-		<property name="currencyCode" column="currency_code" type="java.lang.String" />
+		<property name="currencyCode" column="currency_code" type="java.lang.String" unique="true" />
 		<property name="currencyName" column="currency_name" type="java.lang.String" />
 		<property name="countryName" column="country_name" type="java.lang.String" /><!-- defunct -->
 		<property name="activeFlag" column="active_flag" type="java.lang.Integer" />

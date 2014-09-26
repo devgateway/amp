@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.mondrian;
+package org.dgfoundation.amp.mondrian.currencies;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

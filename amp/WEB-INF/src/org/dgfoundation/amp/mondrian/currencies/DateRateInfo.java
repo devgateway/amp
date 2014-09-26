@@ -1,4 +1,4 @@
-package org.dgfoundation.amp.mondrian;
+package org.dgfoundation.amp.mondrian.currencies;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;

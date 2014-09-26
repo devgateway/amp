@@ -17,6 +17,7 @@ import javax.ws.rs.core.PathSegment;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
+import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
@@ -239,6 +240,21 @@ public class GisEndPoints {
 		return ActivityService.getActivities(filter);
 	}
 
+	@POST
+	@Path("/activitiesNew/")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="ActivitiesNewLists")
+	public List<JsonBean> getActivitiesNew(JsonBean filter) {
+		return ActivityService.getActivitiesMondrian(filter);
+	}
+
+	@POST
+	@Path("/testReport/")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="ActivitiesNewLists")
+	public GeneratedReport getTestReport(JsonBean filter) {
+		return ActivityService.getActivitiesList(filter);
+	}
 	
 	
 	@GET

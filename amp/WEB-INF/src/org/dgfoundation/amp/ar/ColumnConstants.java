@@ -108,6 +108,7 @@ public class ColumnConstants {
 	public static final String IMPLEMENTING_EXECUTING_AGENCY_CONTACT_PHONE = "Implementing/Executing Agency Contact Phone";
 	public static final String IMPLEMENTING_EXECUTING_AGENCY_CONTACT_TITLE = "Implementing/Executing Agency Contact Title";
 	public static final String INSTITUTIONS = "Institutions";
+	public static final String INTERNAL_USE_ID = "Internal Use Id";
 	public static final String ISSUES = "Issues";
 	public static final String ISSUES___MEASURES___ACTORS = "Issues / Measures / Actors";
 	public static final String JOINT_CRITERIA = "Joint Criteria";
@@ -187,8 +188,11 @@ public class ColumnConstants {
 	public static final String PRIMARY_PROGRAM_LEVEL_7 = "Primary Program Level 7";
 	public static final String PRIMARY_PROGRAM_LEVEL_8 = "Primary Program Level 8";
 	public static final String PRIMARY_SECTOR = "Primary Sector";
+	public static final String PRIMARY_SECTOR_ID = "Primary Sector Id";
 	public static final String PRIMARY_SECTOR_SUB_SECTOR = "Primary Sector Sub-Sector";
+	public static final String PRIMARY_SECTOR_SUB_SECTOR_ID = "Primary Sector Sub-Sector Id";
 	public static final String PRIMARY_SECTOR_SUB_SUB_SECTOR = "Primary Sector Sub-Sub-Sector";
+	public static final String PRIMARY_SECTOR_SUB_SUB_SECTOR_ID = "Primary Sector Sub-Sub-Sector Id";
 	public static final String PROCUREMENT_SYSTEM = "Procurement System";
 	public static final String PROGRAM_DESCRIPTION = "Program Description";
 	public static final String PROJECT_AGE_RATIO = "Project Age Ratio";

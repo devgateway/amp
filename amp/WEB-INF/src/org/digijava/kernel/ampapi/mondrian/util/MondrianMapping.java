@@ -148,6 +148,7 @@ public class MondrianMapping {
 			put(new ReportColumn(ColumnConstants.ACTIVITY_CREATED_ON, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.ACTIVITY_DATES, MoConstants.H_ACTIVITY_CREATED_ON, MoConstants.ATTR_ACTIVITY_CREATED_ON));
 			put(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.ACTIVITY_DATES, MoConstants.H_ACTIVITY_UPDATED_ON, MoConstants.ATTR_ACTIVITY_UPDATED_ON));
 			put(new ReportColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_ACTIVITY_ID, MoConstants.ATTR_ACTIVITY_ID));
+			put(new ReportColumn(ColumnConstants.INTERNAL_USE_ID, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_INTERNAL_USE_ID, MoConstants.ATTR_INTERNAL_USE_ID));
 			put(new ReportColumn(ColumnConstants.GOVERNMENT_AGREEMENT_NUMBER, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_GOVERNMENT_AGREEMENT_NUMBER, MoConstants.ATTR_GOVERNMENT_AGREEMENT_NUMBER));
 			put(new ReportColumn(ColumnConstants.BUDGET_CODE_PROJECT_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_BUDGET_CODE_PROJECT_ID, MoConstants.ATTR_BUDGET_CODE_PROJECT_ID));
 			//put(new ReportColumn(ColumnConstants.??, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_DRAFT, MoConstants.ATTR_DRAFT));
@@ -188,6 +189,9 @@ public class MondrianMapping {
 			put(new ReportColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 			put(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.H_LEVEL_1_SECTOR, MoConstants.ATTR_LEVEL_1_SECTOR_NAME));
 			put(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.H_LEVEL_2_SECTOR, MoConstants.ATTR_LEVEL_2_SECTOR_NAME));
+			put(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_ID, MoConstants.ATTR_LEVEL_0_SECTOR_ID));
+			put(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.ATTR_LEVEL_1_SECTOR_ID, MoConstants.ATTR_LEVEL_1_SECTOR_ID));
+			put(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.ATTR_LEVEL_1_SECTOR_ID, MoConstants.ATTR_LEVEL_2_SECTOR_ID));
 			put(new ReportColumn(ColumnConstants.SECONDARY_SECTOR, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 			put(new ReportColumn(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.H_LEVEL_1_SECTOR, MoConstants.ATTR_LEVEL_1_SECTOR_NAME));
 			put(new ReportColumn(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.H_LEVEL_2_SECTOR, MoConstants.ATTR_LEVEL_2_SECTOR_NAME));

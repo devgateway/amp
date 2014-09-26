@@ -7,13 +7,26 @@
 			<Table name="mondrian_sectors@@locale@@" />
 			<Level name="Level 0 Sector" type="Integer" column="level0_sector_id" nameColumn="level0_sector_name" />
 		</Hierarchy>
+		<!-- adding temporarily support for ID sectors => need to revise if a better approach, like automatically generate ids instead of names based on a flag, can be done -->
+		<Hierarchy hasAll="true" allMemberName="All Level 0 Sectors" primaryKey="amp_sector_id" name="Level 0 Sector Id">
+			<Table name="mondrian_sectors@@locale@@" />
+			<Level name="Level 0 Sector Id" type="Integer" column="level0_sector_id"/>
+		</Hierarchy>
 		<Hierarchy hasAll="true" allMemberName="All Level 1 Sectors" primaryKey="amp_sector_id" name="Level 1 Sector">
 			<Table name="mondrian_sectors@@locale@@" />
 			<Level name="Level 1 Sector" type="Integer" column="level1_sector_id" nameColumn="level1_sector_name" />
 		</Hierarchy>
+		<Hierarchy hasAll="true" allMemberName="All Level 0 Sectors" primaryKey="amp_sector_id" name="Level 1 Sector Id">
+			<Table name="mondrian_sectors@@locale@@" />
+			<Level name="Level 1 Sector Id" type="Integer" column="level1_sector_id"/>
+		</Hierarchy>
 		<Hierarchy hasAll="true" allMemberName="All Level 2 Sectors" primaryKey="amp_sector_id" name="Level 2 Sector">
 			<Table name="mondrian_sectors@@locale@@" />
 			<Level name="Level 2 Sector" type="Integer" column="level2_sector_id" nameColumn="level2_sector_name" />
+		</Hierarchy>
+		<Hierarchy hasAll="true" allMemberName="All Level 0 Sectors" primaryKey="amp_sector_id" name="Level 2 Sector Id">
+			<Table name="mondrian_sectors@@locale@@" />
+			<Level name="Level 2 Sector Id" type="Integer" column="level2_sector_id"/>
 		</Hierarchy>
 	</Dimension>
 
@@ -210,7 +223,12 @@
 		<Dimension name="Activity Fixed Texts" foreignKey="entity_id">
 			<Hierarchy hasAll="true" allMemberName="All Activity Id" primaryKey="amp_activity_id" name="Activity Id">
 				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Activity Id" column="amp_activity_id" type="Integer" nameColumn="amp_activity_id" />
+				<Level name="Activity Id" column="amp_activity_id" type="Integer"/>
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Internal Use Id" primaryKey="amp_activity_id" name="Internal Use Id">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Internal Use Id" column="amp_activity_id" type="Integer"/>
 			</Hierarchy>
 			
 			<Hierarchy hasAll="true" allMemberName="All Government Agreement Number" primaryKey="amp_activity_id" name="Government Agreement Number">

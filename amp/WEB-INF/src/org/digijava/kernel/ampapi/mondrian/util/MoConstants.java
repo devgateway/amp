@@ -84,6 +84,7 @@ public final class MoConstants {
 	public static final String H_ACTIVITY_CREATED_ON = "Activity Created On";
 	public static final String H_ACTIVITY_UPDATED_ON = "Activity Updated On";
 	public static final String H_ACTIVITY_ID = "Activity Id";
+	public static final String H_INTERNAL_USE_ID = "Internal Use Id";
 	public static final String H_GOVERNMENT_AGREEMENT_NUMBER = "Government Agreement Number";
 	public static final String H_BUDGET_CODE_PROJECT_ID = "Budget Code Project Id";
 	public static final String H_DRAFT = "Draft";
@@ -189,6 +190,7 @@ public final class MoConstants {
 	public static final String ATTR_ACTIVITY_CREATED_ON = "Activity Created On";
 	public static final String ATTR_ACTIVITY_UPDATED_ON = "Activity Updated On";
 	public static final String ATTR_ACTIVITY_ID = "Activity Id";
+	public static final String ATTR_INTERNAL_USE_ID = "Internal Use Id";
 	public static final String ATTR_GOVERNMENT_AGREEMENT_NUMBER = "Government Agreement Number";
 	public static final String ATTR_BUDGET_CODE_PROJECT_ID = "Budget Code Project Id";
 	public static final String ATTR_DRAFT = "Draft";
@@ -220,8 +222,11 @@ public final class MoConstants {
 	public static final String ATTR_DISTRICT_NAME = "District Name";
 	public static final String ATTR_LOCATION_NAME = "Location";
 	public static final String ATTR_LEVEL_0_SECTOR_NAME = "Level 0 Sector";
+	public static final String ATTR_LEVEL_0_SECTOR_ID = "Level 0 Sector Id";
 	public static final String ATTR_LEVEL_1_SECTOR_NAME = "Level 1 Sector";
+	public static final String ATTR_LEVEL_1_SECTOR_ID = "Level 1 Sector Id";
 	public static final String ATTR_LEVEL_2_SECTOR_NAME = "Level 2 Sector";
+	public static final String ATTR_LEVEL_2_SECTOR_ID = "Level 2 Sector Id";
 	public static final String ATTR_ORG_TYPE_NAME = "Organization Type Name";
 	public static final String ATTR_ORG_GROUP_NAME = "Organization Group Name";
 	public static final String ATTR_ORG_NAME = "Organization Name";

@@ -205,10 +205,8 @@ public class SearchUtil {
 			SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("pledge_id", org.hibernate.type.StandardBasicTypes.LONG);
 			newQuery		  = newQuery.addScalar("title", org.hibernate.type.StandardBasicTypes.STRING);
 
-			Iterator iter = newQuery.list().iterator();
-			
-            while (iter.hasNext()) {
-                Object[] item = (Object[])iter.next();
+			List<Object[]> items = newQuery.list();
+			for (Object[] item:items) { 
                 Long ampId = (Long) item[0];
                 String name = (String) item[1];
                 AmpPledgeFake pledge = new AmpPledgeFake(name, ampId);
@@ -258,14 +256,18 @@ public class SearchUtil {
 			newQuery = newQuery.addScalar("draft",org.hibernate.type.StandardBasicTypes.BOOLEAN);
 			
 //			StopWatch.next("Search", true,"mycomment 2");
-			Iterator iter = newQuery.list().iterator();
-            while (iter.hasNext()) {
-                Object[] item = (Object[])iter.next();
+			//ignore the warning
+			List<Object[]> items = newQuery.list(); 
+			for (Object[] item:items) {
                 Long ampActivityId = (Long) item[0];
                 String ampId = (String) item[1];
                 String name = (String) item[2];
                 String status = (String) item[3];
-                boolean draft = (Boolean) item[4];
+                Boolean draft = (Boolean) item[4];
+                if (draft == null)
+                	draft = false;
+                if (status == null)
+                	status = "";
                 AmpActivityFake activity = new AmpActivityFake(name,ampId,ampActivityId);
                 activity.setDraft(draft);
                 activity.setStatus(status);

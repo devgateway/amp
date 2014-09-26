@@ -14,7 +14,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<buildVersion>2.10-SNAPSHOT</buildVersion>
  		<jersey.version>1.18</jersey.version>
-		<saiku.version>2.6.2-DG</saiku.version> 
+		<saiku.version>3.0-RC2</saiku.version> 
+		<saiku3.version>3.0-RC2-DG</saiku3.version> 
 	</properties>
 	<repositories>
 		<repository>
@@ -372,11 +373,6 @@
 			<groupId>jfree</groupId>
 			<artifactId>jcommon</artifactId>
 			<version>1.0.16</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.jcr</groupId>
-			<artifactId>jcr</artifactId>
-			<version>1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jdom</groupId>
@@ -878,6 +874,12 @@
 			<groupId>org.saiku</groupId>
 			<artifactId>saiku-service</artifactId>
 			<version>${saiku.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>hibernate-annotations</artifactId>
+					<groupId>org.hibernate</groupId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.saiku</groupId>

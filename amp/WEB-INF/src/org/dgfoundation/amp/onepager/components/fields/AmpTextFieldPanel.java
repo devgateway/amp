@@ -75,7 +75,9 @@ public class AmpTextFieldPanel<T> extends AmpFieldPanel<T> {
 			@SuppressWarnings("unchecked")
 			@Override
 			public final <T> IConverter<T> getConverter(Class<T> type){
-				if(getInternalConverter(type)!=null) return getInternalConverter(type);
+				IConverter ic = getInternalConverter(type);
+				if (ic != null) return ic;
+//				if(getInternalConverter(type)!=null) return getInternalConverter(type);
 				return super.getConverter(type);
 			}
 

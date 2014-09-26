@@ -287,4 +287,24 @@ public class GisEndPoints {
 	
 		return ( ReportsResultTotalsFormatter.ResultFormatter(ls.getTotals(admlevel, type)));
 	}
+	@POST
+	@Path("/export-map/")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="MapExport")
+	public List<JsonBean> getExportMap(JsonBean filter) {
+		List<JsonBean>mapExport=new ArrayList<JsonBean>();
+		JsonBean j=new JsonBean();
+		j.set("Type", "Region");
+		j.set("Latitude", 111);
+		j.set("Longitude", 111);
+		JsonBean q=new JsonBean();
+		q.set("Type", "Typology");
+		q.set("Latitude", 111);
+		q.set("Longitude", 111);
+
+		mapExport.add(j);
+		mapExport.add(q);
+		return mapExport;
+	}
+
 }

@@ -30,15 +30,15 @@ var DeleteRepositoryObject = Modal.extend({
         this.options.title = "Confirm deletion";
         this.query = args.query;
         this.success = args.success;
-        this.message = _.template("Are you sure you want to delete <%= name %>?")
-            ({ name: this.query.get('name') });
+        this.message = '<span class="i18n">Are you sure you want to delete </span>'+'<span>' + this.query.get('name') + '?</span>';
     },
     
     del: function() {
         this.query.id = _.uniqueId("query_");
-        this.query.url = this.query.url() + "?file=" + this.query.get('file');
+        this.query.url = this.query.url() + "?file=" + encodeURIComponent(this.query.get('file'));
         this.query.destroy({
             success: this.success,
+            dataType: "text",
             error: this.error
         });
         this.close();
@@ -46,6 +46,6 @@ var DeleteRepositoryObject = Modal.extend({
     
     error: function() {
         $(this.el).find('dialog_body')
-            .html("Could not delete repository object");
+            .html('<span class="i18n">Could not delete repository object</span>');
     }
 });

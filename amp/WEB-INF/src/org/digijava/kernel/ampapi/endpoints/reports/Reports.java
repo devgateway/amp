@@ -1,12 +1,16 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -14,8 +18,10 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
@@ -24,10 +30,12 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
 import org.dgfoundation.amp.reports.ReportPaginationCacher;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -38,6 +46,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.saiku.olap.dto.resultset.CellDataSet;
+import org.saiku.olap.query2.ThinQuery;
 import org.saiku.web.rest.objects.resultset.QueryResult;
 import org.saiku.web.rest.util.RestUtil;
 
@@ -51,7 +61,8 @@ import org.saiku.web.rest.util.RestUtil;
 public class Reports {
 
 	private static final String DEFAULT_CATALOG_NAME = "AMP";
-	private static final String DEFAULT_CUBE_NAME = "[Donor Funding]";
+	private static final String DEFAULT_CUBE_NAME = "Donor Funding";
+	private static final String DEFAULT_UNIQUE_NAME = "[amp].[AMP].[AMP].[Donor Funding]";
 	private static final String DEFAULT_QUERY_NAME = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
 	private static final String DEFAULT_CONNECTION_NAME = "amp";
 	private static final String DEFAULT_SCHEMA_NAME = "AMP";
@@ -72,8 +83,9 @@ public class Reports {
 		try {
 			spec = AmpReportsToReportSpecification.convert(ampReport);
 		} catch (AMPException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			JSONResult result = new JSONResult();
+			result.setErrorMessage(e1.getMessage());
+			return result;
 		}
 
 		JSONResult result = new JSONResult();
@@ -81,6 +93,7 @@ public class Reports {
 		metadata.setReportSpec(spec);
 		metadata.setCatalog(DEFAULT_CATALOG_NAME);
 		metadata.setCube(DEFAULT_CUBE_NAME);
+		metadata.setUniqueName(DEFAULT_UNIQUE_NAME);
 		metadata.setQueryName(DEFAULT_QUERY_NAME);
 		metadata.setName(ampReport.getName());
 		metadata.setConnection(DEFAULT_CONNECTION_NAME);
@@ -226,13 +239,27 @@ public class Reports {
 		SaikuGeneratedReport report = null;
 		try {
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
+			spec.setDisplayEmptyFundingRows(false);
+			MondrianReportFilters filters = new MondrianReportFilters();
+			filters.addYearsFilterRule(Arrays.asList(2013, 2014), true);
+			spec.setFilters(filters);
 			report = (SaikuGeneratedReport)generator.executeReport(spec);
 			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + report.generationTime + "(ms)");
 		} catch (Exception e) {
-			logger.error("error while trying to get a saiku report", e);
-			throw new RuntimeException(e);
+			logger.error("Cannot execute report (" + ampReport + ")",e);
+			String error = ExceptionUtils.getRootCauseMessage(e);
+			return new QueryResult(error);
 		}
 		return RestUtil.convert(report.cellDataSet);
+	}
+
+	@POST
+	@Path("/saikureport/{report_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public final QueryResult getSaiku3ReportResult(@PathParam("report_id") Long reportId) {
+		QueryResult result = getSaikuReportResult(reportId);
+		result.setQuery(new ThinQuery());
+		return result;
 	}
 
 }

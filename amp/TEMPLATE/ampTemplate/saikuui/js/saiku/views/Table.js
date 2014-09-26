@@ -18,8 +18,7 @@
  * Class which handles table rendering of resultsets
  */
 var Table = Backbone.View.extend({
-    tagName: "table",
-
+    className: 'table_wrapper',
     events: {
         'click th.row' : 'clicked_cell',
         'click th.col' : 'clicked_cell'
@@ -27,10 +26,13 @@ var Table = Backbone.View.extend({
 
     initialize: function(args) {
         this.workspace = args.workspace;
-        
+        this.renderer = new SaikuTableRenderer();
+
         // Bind table rendering to query result event
         _.bindAll(this, "render", "process_data");
         this.workspace.bind('query:result', this.render);
+        this.id = _.uniqueId("table_");
+        $(this.el).attr('id', this.id);
     },
     
     clicked_cell: function(event) {
@@ -39,20 +41,21 @@ var Table = Backbone.View.extend({
         if (this.workspace.query.get('type') != 'QM' || Settings.MODE == "table") {
             return false;
         }
+        if ($(this.workspace.el).find( ".workspace_results.ui-selectable" ).length > 0) {
+            $(this.workspace.el).find( ".workspace_results" ).selectable( "destroy" );
+        }
 
-        $target = ($(event.target).hasClass('row') || $(event.target).hasClass('col') ) ?
+        var $target = ($(event.target).hasClass('row') || $(event.target).hasClass('col') ) ?
             $(event.target).find('div') : $(event.target);
         
-    $body = $(document);
-    //$body.off('.contextMenu .contextMenuAutoHide');
-    //$('.context-menu-list').remove();
+    var $body = $(document);
     $.contextMenu('destroy', '.row, .col');
     $.contextMenu({
         appendTo: $target,
         selector: '.row, .col', 
         ignoreRightClick: true,
          build: function($trigger, e) {
-            $target = $(e.currentTarget).find('div');
+            var $target = $(e.currentTarget).find('div');
             var axis = $(e.currentTarget).hasClass('rows') ? "ROWS" : "COLUMNS"
             var pos = $target.attr('rel').split(':');
             var row = parseInt(pos[0])
@@ -68,6 +71,7 @@ var Table = Backbone.View.extend({
             var d = cell.properties.dimension;
             var h = cell.properties.hierarchy;
             var l = cell.properties.level;
+            var l_caption = "";
 
             var keep_payload = JSON.stringify(
                 {
@@ -89,10 +93,11 @@ var Table = Backbone.View.extend({
 
             var levels = [];
             var items = {};
-            var dimensions = Saiku.session.sessionworkspace.dimensions[cube].get('data');
-            if (typeof dimensions == "undefined") {
-                Saiku.session.sessionworkspace.dimensions[cube].fetch({async : false});
-                dimensions = Saiku.session.sessionworkspace.dimensions[cube].get('data');
+            var cubeModel = Saiku.session.sessionworkspace.cube[cube];
+            var dimensions = (cubeModel && cubeModel.has('data')) ? cubeModel.get('data').dimensions : null;
+            if (!dimensions) {
+                Saiku.session.sessionworkspace.cube[cube].fetch({async : false});
+                dimensions = Saiku.session.sessionworkspace.cube[cube].get('data').dimensions;
             }
             var dimsel = {};
             var used_levels = [];
@@ -137,6 +142,10 @@ var Table = Backbone.View.extend({
                                     };
                                     
                                 }
+                                if (level.uniqueName == l) {
+                                    l_caption = level.caption;
+                                    l_name = level.name;
+                                }
                                 items["keep-" + level.name] = items[level.name];
                                 items["include-" + level.name] = JSON.parse(JSON.stringify(items[level.name]));
                                 items["keep-" + level.name].payload = keep_payload + "," + items[level.name].payload;
@@ -145,8 +154,11 @@ var Table = Backbone.View.extend({
                     });
                 }
             });
-            items["keeponly"] = { payload: keep_payload }
-            items["getchildren"] = { payload: children_payload }
+            items["keeponly"] = { payload: keep_payload };
+            items["getchildren"] = { payload: children_payload };
+            if (items.hasOwnProperty("remove-" + l_name) && items.hasOwnProperty("include-" + l_name)) {
+                items["showall"] = { payload: items["remove-" + l_name].payload + ", " + items["include-" + l_name].payload};
+            }
             
 
             
@@ -165,28 +177,49 @@ var Table = Backbone.View.extend({
             var citems = {
                     "name" : {name: "<b>" + member + "</b>", disabled: true },
                     "sep1": "---------",
-                    "keeponly": {name: "Keep Only", payload: keep_payload }
+                    "keeponly": {name: "Keep Only", i18n: true, payload: keep_payload }
             };
             if (d != "Measures") {
-                citems["getchildren"] = {name: "Show Children", payload: children_payload }
+                citems["getchildren"] = {name: "Show Children", i18n: true, payload: children_payload }
                 citems["fold1key"] = {
-                        name: "Include Level",
+                        name: "Include Level", i18n: true, 
                         items: lvlitems("include-")
                     };
                 citems["fold2key"] = {
-                        name: "Keep and Include Level",
+                        name: "Keep and Include Level", i18n: true, 
                         items: lvlitems("keep-")
                     };
                 citems["fold3key"] = {
-                        name: "Remove Level",
+                        name: "Remove Level", i18n: true,
                         items: lvlitems("remove-")
                     };
+                citems["filterlevel"] = {
+                    name: "Filter Level", i18n: true
+                };
+                if (items["showall"]) {
+                    citems["showall"]  =  { name: "Remove Filters", i18n: true };
+                }
             }
+            $.each(citems, function(key, item){
+            	recursive_menu_translate(item, Saiku.i18n.po_file);
+            });
             return {
                 callback: function(key, options) {
+
                     var url = '/axis/' + axis + '/dimension/' + encodeURIComponent(d);
                     var children = false;
-                    if (key.indexOf("children") > 0) {
+                    if (key.indexOf("filterlevel") >= 0) {
+                        var key = encodeURIComponent(d) + "/hierarchy/" + encodeURIComponent(h) + "/" + encodeURIComponent(l);
+                        (new SelectionsModal({
+                            target: null,
+                            axis: axis,
+                            name: l_caption,
+                            key: key,
+                            workspace: self.workspace
+                        })).open();
+                        return;
+                    }
+                    if (key.indexOf("children") >= 0) {
                         url = '/axis/' + axis + '/dimension/' + encodeURIComponent(d) + "/children";
                         children = true;
                     }
@@ -194,6 +227,7 @@ var Table = Backbone.View.extend({
                         self.workspace.query.set({ 'formatter' : 'flat' });
                     }
                     self.workspace.query.action.put(url, { success: self.workspace.sync_query,
+                        dataType: "text",
                         data: children ?
                             {
                                 member: items[key].payload
@@ -226,163 +260,69 @@ var Table = Backbone.View.extend({
             return;
         }        
         // Check to see if there is data
-        if (args.data == null || (args.data.cellset && args.data.cellset.length === 0)) {
+        if (args.data == null || (args.data.height && args.data.height === 0)) {
             return;
         }
-
-        $(this.el).html('<tr><td>Rendering ' + args.data.width + ' columns and ' + args.data.height + ' rows...</td></tr>');
+        this.clearOut();
+        $(this.el).html('Rendering ' + args.data.width + ' columns and ' + args.data.height + ' rows...');
 
         // Render the table without blocking the UI thread
-        if (block === true) {
-            this.process_data(args.data.cellset);
-        } else {
-            _.delay(this.process_data, 0, args.data.cellset);
+        _.delay(this.process_data, 2, args.data);
+
+    },
+
+    clearOut: function() {
+        // Do some clearing in the renderer
+        this.renderer.clear();
+        $(this.workspace.el).find( ".workspace_results" ).unbind('scroll');
+        var element = document.getElementById(this.id);
+        var table = element.firstChild;
+        if (table) {
+            element.removeChild(table);
         }
 
     },
 
     process_data: function(data) {
-
-        var contents = "";
-        var table = data ? _.reject(data, function(v){return (v[0] == null);}) : [];
-        var data = _.toArray(table);
-        var colSpan;
-        var colValue;
-        var isHeaderLowestLvl;
-        var isBody = false;
-        var firstColumn;
-        var isLastColumn, isLastRow;
-        var nextHeader;
-        var processedRowHeader = false;
-        var lowestRowLvl = 0;
-        var rowGroups = [];
-
-        for (var row = 0; row < table.length; row++) {
-            colSpan = 1;
-            colValue = "";
-            isHeaderLowestLvl = false;
-            isLastColumn = false;
-            isLastRow = false;
-            headerStarted = false;
-
-            contents += "<tr>";
-
-            for (var col = 0; col < table[row].length; col++) {
-                var header = data[row][col];
-
-                // If the cell is a column header and is null (top left of table)
-                if (header.type === "COLUMN_HEADER" && header.value === "null" && (firstColumn == null || col < firstColumn)) {
-                    contents += '<th class="all_null"><div>&nbsp;</div></th>';
-                } // If the cell is a column header and isn't null (column header of table)
-                else if (header.type === "COLUMN_HEADER") {
-                    if (firstColumn == null) {
-                        firstColumn = col;
-                    }
-                    if (table[row].length == col+1)
-                        isLastColumn = true;
-                    else
-                        nextHeader = data[row][col+1];
-
-
-                    if (isLastColumn) {
-                        // Last column in a row....
-                        contents += '<th class="col" style="text-align: center;" colspan="' + colSpan + '" title="' + header.value + '"><div rel="' + row + ":" + col +'">' + header.value + '</div></th>';
-                    } else {
-                        // All the rest...
-                        var groupChange = (col > 1 && row > 1 && !isHeaderLowestLvl && col > firstColumn) ?
-                            data[row-1][col+1].value != data[row-1][col].value
-                            : false;
-                        var maxColspan = colSpan > 999 ? true : false;
-                        if (header.value != nextHeader.value || isHeaderLowestLvl || groupChange || maxColspan) {
-                            if (header.value == "null") {
-                                contents += '<th class="col_null" colspan="' + colSpan + '"><div>&nbsp;</div></th>';
-                            } else {
-                                contents += '<th class="col" style="text-align: center;" colspan="' + (colSpan == 0 ? 1 : colSpan) + '" title="' + header.value + '"><div rel="' + row + ":" + col +'">' + header.value + '</div></th>';
-                            }
-                            colSpan = 1;
-                        } else {
-                            colSpan++;
-                        }
-                    }
-                } // If the cell is a row header and is null (grouped row header)
-                else if (header.type === "ROW_HEADER" && header.value === "null") {
-                    contents += '<th class="row_null"><div>&nbsp;</div></th>';
-                } // If the cell is a row header and isn't null (last row header)
-                else if (header.type === "ROW_HEADER") {
-                    if (lowestRowLvl == col)
-                        isHeaderLowestLvl = true;
-                    else
-                        nextHeader = data[row][col+1];
-
-                    var previousRow = data[row - 1];
-
-                    var same = !isHeaderLowestLvl && (col == 0 || previousRow[col-1].value == data[row][col-1].value) && header.value === previousRow[col].value;
-                    var value = (same ? "<div>&nbsp;</div>" : '<div rel="' + row + ":" + col +'">' + header.value + '</div>');
-                    var cssclass = (same ? "row_null" : "row");
-                    var colspan = 0;
-
-                    if (!isHeaderLowestLvl && (typeof nextHeader == "undefined" || nextHeader.value === "null")) {
-                        colspan = 1;
-                        var group = header.properties.dimension;
-                        var level = header.properties.level;
-                        var groupWidth = (group in rowGroups ? rowGroups[group].length - rowGroups[group].indexOf(level) : 1);
-                        for (var k = col + 1; colspan < groupWidth && k <= (lowestRowLvl+1) && data[row][k] !== "null"; k++) {
-                            colspan = k - col;
-                        }
-                        col = col + colspan -1;
-                    }
-                    contents += '<th class="' + cssclass + '" ' + (colspan > 0 ? ' colspan="' + colspan + '"' : "") + '>' + value + '</th>';
-                }
-                else if (header.type === "ROW_HEADER_HEADER") {
-                    contents += '<th class="row_header"><div>' + header.value + '</div></th>';
-                    isHeaderLowestLvl = true;
-                    processedRowHeader = true;
-                    lowestRowLvl = col;
-                    if (header.properties.hasOwnProperty("dimension")) {
-                        var group = header.properties.dimension;
-                        if (!(group in rowGroups)) {
-                            rowGroups[group] = [];
-                        }
-                        rowGroups[group].push(header.properties.level);
-                    }
-                } // If the cell is a normal data cell
-                else if (header.type === "DATA_CELL") {
-                    var color = "";
-                    var val = header.value;
-                    var arrow = "";
-                    if (header.properties.hasOwnProperty('image')) {
-                        var img_height = header.properties.hasOwnProperty('image_height') ? " height='" + header.properties.image_height + "'" : "";
-                        var img_width = header.properties.hasOwnProperty('image_width') ? " width='" + header.properties.image_width + "'" : "";
-                        val = "<img " + img_height + " " + img_width + " style='padding-left: 5px' src='" + header.properties.image + "' border='0'>";
-                    }
-
-                    if (header.properties.hasOwnProperty('style')) {
-                        color = " style='background-color: " + header.properties.style + "' ";
-                    }
-                    if (header.properties.hasOwnProperty('link')) {
-                        val = "<a target='__blank' href='" + header.properties.link + "'>" + val + "</a>";
-                    }
-                    if (header.properties.hasOwnProperty('arrow')) {
-                        arrow = "<img height='10' width='10' style='padding-left: 5px' src='/images/arrow-" + header.properties.arrow + ".gif' border='0'>";
-                    }
-
-                    contents += '<td class="data" ' + color + '><div alt="' + header.properties.raw + '" rel="' + header.properties.position + '">' + val + arrow + '</div></td>';
-                }
-            }
-            contents += "</tr>";
-            
-        }
+        
         this.workspace.processing.hide();
         this.workspace.adjust();
         // Append the table
-        $(this.el).html(contents);
+        this.clearOut();
+        $(this.el).html('<table></table>');
+        var contents = this.renderer.render(data, { 
+            htmlObject:         $(this.el).find('table'),
+            batch:              Settings.TABLE_LAZY, 
+            batchSize:          Settings.TABLE_LAZY_SIZE, 
+            batchIntervalSize:  Settings.TABLE_LAZY_LOAD_ITEMS,
+            batchIntervalTime:  Settings.TABLE_LAZY_LOAD_TIME 
+        });
         this.post_process();
     },
 
     post_process: function() {
         if (this.workspace.query.get('type') == 'QM' && Settings.MODE != "view") {
-            $(this.el).find('th.row, th.col').addClass('headerhighlight');
+            $(this.el).addClass('headerhighlight');
+        } else {
+            $(this.el).removeClass('headerhighlight');
         }
+        /*
+        var tipOptions = {
+          delayIn: 200,
+          delayOut:80,
+          offset:  2,
+          html:    true,
+          gravity: "nw",
+          fade:    false,
+          followMouse: true,
+          corners: true,
+          arrow:   false,
+          opacity: 1
+    };
+
+        $(this.el).find('th.row, th.col').tipsy(tipOptions);
+        */
+        $(this.el).find(".i18n").i18n(Saiku.i18n.po_file);
         this.workspace.trigger('table:rendered', this);
     }
 });

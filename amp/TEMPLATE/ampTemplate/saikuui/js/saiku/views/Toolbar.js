@@ -21,11 +21,7 @@ var Toolbar = Backbone.View.extend({
     tagName: "div",
     
     events: {
-        'click #new_query': 'new_query',
-        'click #open_query': 'open_query',
-        'click #logout': 'logout',
-        'click #about': 'about',
-        'click #issue_tracker': 'issue_tracker'
+        'click a' : 'call'
     },
     
     template: function() {
@@ -33,7 +29,7 @@ var Toolbar = Backbone.View.extend({
     },
     
     initialize: function() {
-        //this.render();
+        this.render();
     },
     
     render: function() {
@@ -46,6 +42,14 @@ var Toolbar = Backbone.View.extend({
         return this;
     },
     
+    call: function(e) {
+        var target = $(e.target);
+        var callback = target.attr('href').replace('#', '');
+        if(this[callback]) {
+            this[callback](e);
+        }
+        e.preventDefault();
+    },
     /**
      * Add a new tab to the interface
      */
@@ -90,7 +94,7 @@ var Toolbar = Backbone.View.extend({
      * Go to the issue tracker
      */
     issue_tracker: function() {
-        window.open('https://github.com/OSBI/saiku/issues/new');
+        window.open('http://jira.meteorite.bi/');
         return false;
     }
 });

@@ -14,23 +14,6 @@
  *   limitations under the License.
  */
 
-var XmlTemplates = [];
-XmlTemplates['templateMDX'] = '<?xml version="1.0" encoding="UTF-8"?> \
-	<Query name="__NAME__" type="MDX" connection="__CONNECTION__" cube="__CUBE__" catalog="__CATALOG__" schema="__SCHEMA__"> \
-	  <MDX>__MDX__</MDX> \
-	  <Totals /> \
-	  <Properties> \
-	    <Property name="saiku.olap.query.nonempty" value="true" /> \
-	    <Property name="saiku.olap.query.nonempty.rows" value="true" /> \
-	    <Property name="org.saiku.query.explain" value="false" /> \
-	    <Property name="org.saiku.connection.scenario" value="false" /> \
-	    <Property name="saiku.ui.render.mode" value="table" /> \
-	    <Property name="saiku.olap.query.nonempty.columns" value="true" /> \
-	    <Property name="saiku.olap.query.drillthrough" value="true" /> \
-	    <Property name="saiku.olap.query.automatic_execution" value="true" /> \
-	  </Properties> \
-	</Query> '
- 
 /**
  * Router for opening query when session is initialized
  */
@@ -41,11 +24,60 @@ var QueryRouter = Backbone.Router.extend({
         'report/open/:report_id': 'open_report'
     },
     
-    open_report: function(report_id) {
+    open_query: function(query_name) {
+        Settings.ACTION = "OPEN_QUERY";
+        var options = {};
+        var dataType = "text";
+        if (!Settings.BIPLUGIN5 && Settings.BIPLUGIN) {
+            var file = (Settings.GET.SOLUTION ? (Settings.GET.SOLUTION + "/") : "")
+                        + (Settings.GET.PATH && Settings.GET.PATH != "/" ? (Settings.GET.PATH + "/") : "")
+                        + (Settings.GET.ACTION || "");
+            options = {
+                file: file
+            };
+        } else {
+            options = {
+                file: query_name
+            }
+        }
+
+        var params = _.extend({ 
+                file: options.file
+            }, Settings.PARAMS);
+
+        var dialog = {
+            populate: function(repository) {
+                if (repository && repository.length > 0) {
+                    var f = repository[0];
+                    var query = new Query(params,{ name: options.file });
+                    Saiku.tabs.add(new Workspace({ query: query, item: repository[0] }));
+
+                } else {
+                    Saiku.tabs.add(new Workspace());
+                }
+                Settings.INITIAL_QUERY = false;
+            }
+        };
+
+        var repositoryFile = new Repository({}, { dialog: dialog }).fetch({ async: false, data: { path: options.file }});
+
+        
+
+
+        
+
+    },
+    open_report_old: function(report_id) {
         $.getJSON(Settings.AMP_PATH + "/" + report_id, function( data ) {
+        	if(data.errorMessage)
+    		{
+        		//TODO: Replace with friendlier message
+        		alert("Error opening report: " + data.errorMessage);
+        		window.close();
+    		}
 			var query = new SavedQuery({file:'amp_source_file'});
 			var xmlTemplate = XmlTemplates.templateMDX;
-			xmlTemplate = xmlTemplate.replace("__MDX__", "Empty");
+			xmlTemplate = xmlTemplate.replace("__MDX__", "");
 			xmlTemplate = xmlTemplate.replace("__CUBE__", data.reportMetadata.cube);
 			xmlTemplate = xmlTemplate.replace("__NAME__", data.reportMetadata.queryName);
 			xmlTemplate = xmlTemplate.replace("__CONNECTION__", data.reportMetadata.connection);
@@ -65,32 +97,101 @@ var QueryRouter = Backbone.Router.extend({
         });
     	
     	
-    },
-    
-    open_query: function(query_name) {
-        Settings.ACTION = "OPEN_QUERY";
-        var options = {};
-        var dataType = "text";
-        if (Settings.BIPLUGIN) {
-            var file = (Settings.GET.SOLUTION ? (Settings.GET.SOLUTION + "/") : "")
-                        + (Settings.GET.PATH && Settings.GET.PATH != "/" ? (Settings.GET.PATH + "/") : "")
-                        + (Settings.GET.ACTION || "");
-            options = {
-                file: file
-            };
-        } else {
-            
-            options = {
-                file: query_name
-            }
-        }
-        var query = new SavedQuery(options);
-        query.fetch({ success: query.move_query_to_workspace, dataType: dataType});
-    },
+    },    
+    open_report: function(report_id) {
+        $.getJSON(Settings.AMP_PATH + "/" + report_id, function( data ) {
+        	if(data.errorMessage)
+    		{
+        		//TODO: Replace with friendlier message
+        		alert("Error opening report: " + data.errorMessage);
+        		window.close();
+    		}
+			var query = new SavedQuery({file:'amp_source_file'});
 
+        	templateQuery.name = data.reportMetadata.queryName;
+        	templateQuery.mdx = "WITH\r\nSET [~ROWS] AS\r\n     {[Activity Texts.AMP ID].[AMP ID].Members}\r\nSELECT\r\nNON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS,\r\nNON EMPTY [~ROWS] ON ROWS\r\nFROM [Donor Funding]";
+			templateQuery.cube.uniqueName = data.reportMetadata.uniqueName;
+			templateQuery.cube.name = data.reportMetadata.cube;
+			templateQuery.cube.connection = data.reportMetadata.connection;
+			templateQuery.cube.catalog = data.reportMetadata.catalog;
+			templateQuery.cube.schema = data.reportMetadata.schema;
+
+			var model = Backbone.Model.extend({
+				defaults: {
+					file: data.reportMetadata.name,
+					report_id: report_id
+				},
+				initialize: function(){
+					console.log("model created");
+				}
+			});
+			query.move_query_to_workspace_json(new model(), templateQuery);
+        });
+    	
+    	
+    },
     open_query_repository: function( ) {
         Toolbar.prototype.open_query( );
     }
 });
 
 Saiku.routers.push(new QueryRouter());
+
+
+
+var templateQuery = {
+   "queryModel":{
+
+   },
+   "cube":{
+      "uniqueName":"[amp].[AMP].[AMP].[Donor Funding]",
+      "name":"Donor Funding",
+      "connection":"amp",
+      "catalog":"AMP",
+      "schema":"AMP",
+      "caption":null,
+      "visible":false
+   },
+   "mdx":"WITH\r\nSET [~ROWS] AS\r\n     {[Activity Texts.AMP ID].[AMP ID].Members}\r\nSELECT\r\nNON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS,\r\nNON EMPTY [~ROWS] ON ROWS\r\nFROM [Donor Funding]",
+   "name":"39D9EDF2-EC0A-F127-BB94-278217742C5F",
+   "parameters":{
+
+   },
+   "plugins":{
+
+   },
+   "properties":{
+      "saiku.olap.query.automatic_execution":true,
+      "saiku.olap.query.nonempty":true,
+      "saiku.olap.query.nonempty.rows":true,
+      "saiku.olap.query.nonempty.columns":true,
+      "saiku.ui.render.mode":"table",
+      "saiku.olap.query.filter":true,
+      "saiku.olap.result.formatter":"flat",
+      "org.saiku.query.explain":true,
+      "org.saiku.connection.scenario":false,
+      "saiku.olap.query.drillthrough":true
+   },
+   "metadata":{
+
+   },
+   "queryType":"OLAP",
+   "type":"MDX"
+};
+
+var XmlTemplates = [];
+XmlTemplates['templateMDX'] = '<?xml version="1.0" encoding="UTF-8"?> \
+	<Query name="__NAME__" type="MDX" connection="__CONNECTION__" cube="__CUBE__" catalog="__CATALOG__" schema="__SCHEMA__"> \
+	  <MDX>__MDX__</MDX> \
+	  <Totals /> \
+	  <Properties> \
+	    <Property name="saiku.olap.query.nonempty" value="true" /> \
+	    <Property name="saiku.olap.query.nonempty.rows" value="true" /> \
+	    <Property name="org.saiku.query.explain" value="false" /> \
+	    <Property name="org.saiku.connection.scenario" value="false" /> \
+	    <Property name="saiku.ui.render.mode" value="table" /> \
+	    <Property name="saiku.olap.query.nonempty.columns" value="true" /> \
+	    <Property name="saiku.olap.query.drillthrough" value="true" /> \
+	    <Property name="saiku.olap.query.automatic_execution" value="true" /> \
+	  </Properties> \
+	</Query> ';

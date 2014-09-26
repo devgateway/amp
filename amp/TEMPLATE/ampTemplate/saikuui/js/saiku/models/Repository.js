@@ -17,25 +17,43 @@
 /**
  * Repository query
  */
+var RepositoryUrl = "api/repository";
+var repoPathUrl = function() {
+    /*
+    return (Settings.BIPLUGIN5 ? "/repository"
+                    : (Settings.BIPLUGIN ? "/pentahorepository2" : "/repository2"));
+    */
+    if (Settings.BIPLUGIN)
+        return "pentaho/repository";
+    
+    return  RepositoryUrl;
+}
+
+
 
 var RepositoryObject = Backbone.Model.extend( {
     url: function( ) {
-        var segment = Settings.BIPLUGIN ? 
-            "/pentahorepository2/resource" : "/repository2/resource";
-        return encodeURI(Saiku.session.username + segment);
+        var segment = repoPathUrl() + "/resource";
+        return segment;
     }
 } );
 
 var RepositoryAclObject = Backbone.Model.extend( {
     url: function( ) {
-        var segment = Settings.BIPLUGIN ? 
-            "/pentahorepository2/resource" : "/repository2/resource/acl";
-        return encodeURI(Saiku.session.username + segment);
+        var segment = repoPathUrl() + "/resource/acl";
+        return segment;
     },
     parse: function(response) {
         if (response != "OK") {
             _.extend(this.attributes, response);
         }
+    }
+} );
+
+var RepositoryZipExport = Backbone.Model.extend( {
+    url: function( ) {
+        var segment = repoPathUrl() + "/zip";
+        return segment;
     }
 } );
 
@@ -47,13 +65,12 @@ var SavedQuery = Backbone.Model.extend({
     },
     
     url: function() {
-        var u = Settings.BIPLUGIN ? 
-                encodeURI(Saiku.session.username + "/pentahorepository2/resource")  
-                    : encodeURI(Saiku.session.username + "/repository2/resource");
+        var u = repoPathUrl() + "/resource";
         return u;
+
     },
     
-    move_query_to_workspace: function(model, response, close_others) {
+    move_query_to_workspace: function(model, response) {
         var file = response;
         var filename = model.get('file');
         for (var key in Settings) {
@@ -68,21 +85,26 @@ var SavedQuery = Backbone.Model.extend({
         }
         var query = new Query({ 
             xml: file,
-            formatter: Settings.CELLSET_FORMATTER,
-            report_id: model.get('report_id')
+            formatter: Settings.CELLSET_FORMATTER
         },{
             name: filename
         });
         
         var tab = Saiku.tabs.add(new Workspace({ query: query }));
-        if(close_others) {
-            try {
-            	Saiku.tabs.close_others(tab);
-            }
-            catch(e) {
-            	console.log("Something went wrong");
-            }
-        }
+    },
+    move_query_to_workspace_json: function(model, response) {
+        var json = JSON.stringify(response);
+        var filename = model.get('file');
+
+        var query = new Query({ 
+            json: json,
+            formatter: Settings.CELLSET_FORMATTER,
+            report_id: model.get('report_id')
+        },{
+            name: filename
+        });
+        query.set('name', filename);
+        var tab = Saiku.tabs.add(new Workspace({ query: query }));
     }
 });
 
@@ -93,16 +115,19 @@ var Repository = Backbone.Collection.extend({
     model: SavedQuery,
     
     initialize: function(args, options) {
-        this.dialog = options.dialog;
+        if (options && options.dialog) {
+            this.dialog = options.dialog;
+        }
     },
     
     parse: function(response) {
-        this.dialog.populate(response);
+        if (this.dialog) {
+            this.dialog.populate(response);
+        }
     },
     
     url: function() {
-        var segment = Settings.BIPLUGIN ? 
-            "/pentahorepository2/?type=saiku" : "/repository2/?type=saiku";
-        return encodeURI(Saiku.session.username + segment);
+        var segment = repoPathUrl() + "?type=saiku";
+        return segment;
     }
 });

@@ -36,9 +36,9 @@ var AddFolderModal = Modal.extend({
         this.success = args.success;
         this.path = args.path;
         this.message = "<form id='add_folder'>" +
-            "<label for='name'>To add a new folder, " + 
-            "please type a name in the text box below:</label><br />" +
-            "<input type='text' class='newfolder' name='name'" +
+            "<label class='i18n' for='name'>To add a new folder, " + 
+            "please type a name in the text box below:</label>" +
+            "<input type='text' class='newfolder' name='name' />" +
             "</form>"
 
         _.extend(this.options, {
@@ -47,7 +47,7 @@ var AddFolderModal = Modal.extend({
 
         
         // fix event listening in IE < 9
-        if($.browser.msie && $.browser.version < 9) {
+        if(isIE && isIE < 9) {
             $(this.el).find('form').on('submit', this.save);    
         }
 

@@ -103,6 +103,10 @@ Backbone.sync = function(method, model, options) {
     };
 
     var failure = function(jqXHR, textStatus, errorThrown) {
+      if (!isIE && typeof console != "undefined" && console && console.error) {
+        console.error("Error performing " + type + " on " + url);
+        console.error(errorThrown);
+      }
       if (options.error) {
         options.error(jqXHR, textStatus, errorThrown);
       }
@@ -141,7 +145,8 @@ Backbone.sync = function(method, model, options) {
       success:      success,
       statusCode:   statuscode, 
       error:        failure,
-      async:        async
+      async:        async//,
+      //processData:  false
       /*
       beforeSend:   function(request) {
         if (!Settings.PLUGIN) {
@@ -153,9 +158,12 @@ Backbone.sync = function(method, model, options) {
       } */
     };
 
+    if(options.processData == false){
+        params.processData = false;
+    }
     // For older servers, emulate HTTP by mimicking the HTTP method with `_method`
     // And an `X-HTTP-Method-Override` header.
-    if (Settings.BIPLUGIN || Backbone.emulateHTTP) {
+    if ((Settings.BIPLUGIN && !Settings.BIPLUGIN5) || Backbone.emulateHTTP) {
       if (type === 'PUT' || type === 'DELETE') {
         if (Backbone.emulateHTTP) params.data._method = type;
         params.type = 'POST';

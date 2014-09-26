@@ -30,10 +30,14 @@ var SessionWorkspace = Backbone.Model.extend({
         this.first = true;
         // Check expiration on localStorage
         if (typeof localStorage !== "undefined" && localStorage) {
+            if (!Settings.LOCALSTORAGE_EXPIRATION || Settings.LOCALSTORAGE_EXPIRATION === 0) {
+                localStorage.clear();
+            }
             if (localStorage.getItem('expiration') && !(localStorage.getItem('expiration') > (new Date()).getTime())) {
                 localStorage.clear();
             } else if (!localStorage.getItem('saiku-version') || (localStorage.getItem('saiku-version') !== Settings.VERSION) ) {
                 localStorage.clear();
+                localStorage.setItem('saiku-version', Settings.VERSION);
             }
         }        
         Saiku.ui.block("Loading datasources....");
@@ -44,7 +48,7 @@ var SessionWorkspace = Backbone.Model.extend({
     refresh: function() {
         typeof localStorage !== "undefined" && localStorage && localStorage.clear();
         this.clear();
-        localStorage.setItem('saiku-version', Settings.VERSION);
+        typeof localStorage !== "undefined" && localStorage && localStorage.setItem('saiku-version', Settings.VERSION);
         this.fetch({success:this.process_datasources},{});
     },
         
@@ -57,6 +61,10 @@ var SessionWorkspace = Backbone.Model.extend({
         // Save session in localStorage for other tabs to use
         if (typeof localStorage !== "undefined" && localStorage && localStorage.getItem('session') === null) {
             localStorage.setItem('session', JSON.stringify(response));
+            
+            // Set expiration on localStorage to one day in the future
+            var expires = (new Date()).getTime() +  Settings.LOCALSTORAGE_EXPIRATION;
+            typeof localStorage !== "undefined" && localStorage && localStorage.setItem('expiration', expires);
         }
 
         // Generate cube navigation for reuse
@@ -66,8 +74,7 @@ var SessionWorkspace = Backbone.Model.extend({
         
         
         // Create cube objects
-        this.dimensions = {};
-        this.measures = {};
+        this.cube = {};
         this.connections = response;
         _.delay(this.prefetch_dimensions, 20);
         
@@ -78,53 +85,45 @@ var SessionWorkspace = Backbone.Model.extend({
             Saiku.ui.unblock();
             // Add initial tab
             Saiku.tabs.render();
-            if (! Settings.ACTION) {
-                Saiku.tabs.add(new Workspace());
+            //Saiku.splash.render();
+            if (!Settings.INITIAL_QUERY) {
+                Saiku.tabs.add(new SplashScreen(), false);
             }
+            //if (!Settings.INITIAL_QUERY) {
+            //    Saiku.tabs.add(new Workspace());
+            //}
             // Notify the rest of the application that login was successful
             Saiku.events.trigger('session:new', {
                 session: this
             });
         } else {
-            if (! Settings.ACTION) {
+            if (!Settings.INITIAL_QUERY) {
                 Saiku.tabs.add(new Workspace());
             }
 
         }
     },
     
-    prefetch_dimensions: function() {
-        if (! this.measures || ! this.dimensions) {
-            Log.log({
-                Message: "measures or dimensions not initialized",
-                Session: JSON.stringify(this)
-            });
-            return;
-        }
-        
-        for(var i = 0; i < this.connections.length; i++) {
+    prefetch_dimensions: function() {        
+        for(var i = 0, iLen = this.connections.length; i < iLen; i++) {
             var connection = this.connections[i];
-            for(var j = 0; j < connection.catalogs.length; j++) {
+            for(var j = 0, jLen = connection.catalogs.length; j < jLen; j++) {
                 var catalog = connection.catalogs[j];
-                for(var k = 0; k < catalog.schemas.length; k++) {
+                for(var k = 0, kLen = catalog.schemas.length; k < kLen; k++) {
                     var schema = catalog.schemas[k];
-                    for(var l = 0; l < schema.cubes.length; l++) {
+                    for(var l = 0, lLen = schema.cubes.length; l < lLen; l++) {
                         var cube = schema.cubes[l];
                         var key = connection.name + "/" + catalog.name + "/"
                             + ((schema.name == "" || schema.name == null) ? "null" : schema.name) 
                             + "/" + encodeURIComponent(cube.name);
 
                         if (typeof localStorage !== "undefined" && localStorage && 
-                            localStorage.getItem("dimension." + key) !== null &&
-                            localStorage.getItem("measure." + key) !== null) {
-                            this.dimensions[key] = new Dimension(JSON.parse(localStorage.getItem("dimension." + key)));
-                            this.measures[key] = new Measure(JSON.parse(localStorage.getItem("measure." + key)));
+                            localStorage.getItem("cube." + key) !== null) {
+                            this.cube[key] = new Cube(JSON.parse(localStorage.getItem("cube." + key)));
                         } else {
-                            this.dimensions[key] = new Dimension({ key: key });
-                            this.measures[key] = new Measure({ key: key });
+                            this.cube[key] = new Cube({ key: key });
                             if (Settings.DIMENSION_PREFETCH === true) {
-                                this.dimensions[key].fetch();
-                                this.measures[key].fetch();
+                                this.cube[key].fetch();
                             }
                         }
                     }
@@ -142,7 +141,7 @@ var SessionWorkspace = Backbone.Model.extend({
     url: function() {
         if (this.first) {
             this.first = false;
-            return encodeURI(Saiku.session.username + "/discover/");
+            return encodeURI(Saiku.session.username + "/discover");
         }
         else {
             return encodeURI(Saiku.session.username + "/discover/refresh");

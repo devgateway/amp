@@ -24,7 +24,7 @@ var FilterModal = Modal.extend({
 
     events: {
         'submit form': 'save',
-        'click .dialog_footer a:' : 'call'
+        'click .dialog_footer a' : 'call'
     },
 
     buttons: [
@@ -71,7 +71,7 @@ var FilterModal = Modal.extend({
 
         
         // fix event listening in IE < 9
-        if($.browser.msie && $.browser.version < 9) {
+        if(isIE && isIE < 9) {
             $(this.el).find('form').on('submit', this.save);    
         }
 

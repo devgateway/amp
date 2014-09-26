@@ -23,7 +23,7 @@ var SaveQuery = Modal.extend({
 
     events: {
         'click': 'select_root_folder', /* select root folder */
-        'click .dialog_footer a:' : 'call',
+        'click .dialog_footer a' : 'call',
         'submit form': 'save',
         'click .query': 'select_name',
         'click li.folder': 'toggle_folder',
@@ -55,13 +55,15 @@ var SaveQuery = Modal.extend({
             }
         }
         this.query = args.query;
-        this.message = _.template('<div style="height:25px; line-height:25px;"><b><span class="i18n">Search:</span></b> &nbsp;' +
-                ' <span class="search"><input type="text" class="search_file"></input><span class="cancel_search"></span></span></div>' +
+        this.message = _.template(
             "<form id='save_query_form'>" +
-            "<div class='RepositoryObjects'></div>" +
-            "<br /><label for='name' class='i18n'>File:</label>&nbsp;" +
+            "<label for='name' class='i18n'>File:</label>&nbsp;" +
             "<input type='text' name='name' value='<%= name %>' /> <span class='save sprite'></span>" +
-            "</form>")({ name: full_path });
+            "<div class='RepositoryObjects'><span class='i18n'>Loading...</span></div>" +
+            "<br />"+
+            "</form>"+
+            '<div style="height:25px; line-height:25px;"><b><span class="i18n">Search:</span></b> &nbsp;' +
+            ' <span class="search"><input type="text" class="search_file"></input><span class="cancel_search"></span></span></div>')({ name: full_path });
 
         _.extend(this.options, {
             title: "Save query"
@@ -85,7 +87,7 @@ var SaveQuery = Modal.extend({
         _.bindAll( this, "copy_to_repository", "close", "toggle_folder", "select_name", "populate", "set_name", "cancel_search" );
         
         // fix event listening in IE < 9
-        if($.browser.msie && $.browser.version < 9) {
+        if(isIE && isIE < 9) {
             $(this.el).find('form').on('submit', this.save);    
         }
 
@@ -207,9 +209,7 @@ var SaveQuery = Modal.extend({
         if (name != null && name.length > 0) {
             this.query.set({ name: name, folder: foldername });
             this.query.trigger('query:save');
-            this.query.action.get("/xml", {
-                success: this.copy_to_repository
-            });
+            this.copy_to_repository();
         } else {
             alert("You need to enter a name!");
         }
@@ -218,7 +218,7 @@ var SaveQuery = Modal.extend({
         return false;
     },
     
-    copy_to_repository: function(model, response) {
+    copy_to_repository: function() {
         var self = this;
         var folder = this.query.get('folder');
         var file = this.query.get('name');
@@ -236,7 +236,7 @@ var SaveQuery = Modal.extend({
         (new SavedQuery({
             name: this.query.get('name'),
             file: file,
-            content: response.xml
-        })).save({},{ success:  this.close, error: error  });
+            content: JSON.stringify(this.query.model)
+        })).save({},{ success:  this.close, error: error, dataType: 'text'  });
     }
 });

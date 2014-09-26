@@ -24,6 +24,8 @@ var Session = Backbone.Model.extend({
     username: null,
     password: null,
     sessionid: null,
+    upgradeTimeout: null,
+    isadmin: false,
         
     initialize: function(args, options) {
         // Attach a custom event bus to this model
@@ -33,7 +35,11 @@ var Session = Backbone.Model.extend({
         if (options && options.username && options.password) {
             this.username = options.username;
             this.password = options.password;
-            this.save({username:this.username, password:this.password},{success: this.check_session, error: this.check_session});
+            if (!Settings.DEMO) {
+                this.save({username:this.username, password:this.password},{success: this.check_session, error: this.check_session});
+            } else {
+                this.check_session();    
+            }
 
         } else {
             this.check_session();
@@ -58,11 +64,16 @@ var Session = Backbone.Model.extend({
         if ((response === null || response.sessionid == null)) {
             // Open form and retrieve credentials
             Saiku.ui.unblock();
-            this.form = new LoginForm({ session: this });
+            if (Settings.DEMO) {
+                this.form = new DemoLoginForm({ session: this });
+            } else {
+                this.form = new LoginForm({ session: this });
+            }
             this.form.render().open();
         } else {
             this.sessionid = response.sessionid;
             this.roles = response.roles;
+            this.isadmin = response.isadmin;
             this.username = encodeURIComponent(response.username);
             this.language = response.language;
             if (typeof this.language != "undefined" && this.language != Saiku.i18n.locale) {
@@ -80,15 +91,17 @@ var Session = Backbone.Model.extend({
     },
     
     login: function(username, password) {
-        // Set expiration on localStorage to one day in the future
-        var expires = (new Date()).getTime() + 
-            Settings.LOCALSTORAGE_EXPIRATION;
-        typeof localStorage !== "undefined" && localStorage && localStorage.setItem('expiration', expires);
-
-        this.save({username:username, password:password},{success: this.check_session, error: this.check_session});
+        var that = this;
+        this.save({username:username, password:password},{dataType: "text", success: this.check_session, error: function(model, response){
+            that.login_failed(response.responseText)
+        }});
         
     },
-    
+    login_failed: function(response){
+        this.form = new LoginForm({ session: this });
+        this.form.render().open();
+        this.form.setMessage(response);
+    },
     logout: function() {
         // FIXME - This is a hack (inherited from old UI)
         Saiku.ui.unblock();
@@ -103,9 +116,10 @@ var Session = Backbone.Model.extend({
         this.sessionid = null;
         this.username = null;
         this.password = null;
+        this.isadmin = false;
         this.destroy({async: false });
         //console.log("REFRESH!");
-        document.location.reload(false)
+        document.location.reload(false);
         delete this.id;
 
     },

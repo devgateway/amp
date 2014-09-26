@@ -6,6 +6,7 @@ public class ReportMetadata {
 	private String name = "";
 	private String connection = "";
 	private String cube = "";
+	private String uniqueName = "";
 	private String catalog = "";
 	private String schema = "";
 	private String queryName = "";
@@ -52,6 +53,12 @@ public class ReportMetadata {
 	}
 	public void setReportSpec(ReportSpecificationImpl report) {
 		this.reportSpec = report;
+	}
+	public String getUniqueName() {
+		return uniqueName;
+	}
+	public void setUniqueName(String uniqueName) {
+		this.uniqueName = uniqueName;
 	}
 	
 }

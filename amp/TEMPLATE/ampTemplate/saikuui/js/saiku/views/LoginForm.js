@@ -20,9 +20,9 @@
 var LoginForm = Modal.extend({
     type: "login",
     message: "<form id='login_form'>" +
-        "<label for='username'>Username</label><br />" +
-        "<input type='text' id='username' name='username' value='' /><br />" +
-        "<label for='password'>Password</label><br />" +
+        "<label for='username' class='i18n'>Username</label>" +
+        "<input type='text' id='username' name='username' value='' />" +
+        "<label for='password' class='i18n'>Password</label>" +
         "<input type='password' id='password' name='password' value='' />" +
         "</form>",
         
@@ -58,8 +58,12 @@ var LoginForm = Modal.extend({
         var l_username = $(this.el).find("#username").val();
         var l_password = $(this.el).find("#password").val();
         $(this.el).dialog('close');
-        this.session.login(l_username, l_password);
+        this.session.login(l_username, l_password, $(this.el));
 
         return true;
+    },
+
+    setMessage: function(message) {
+        $(this.el).find(".dialog_response").html(message);
     }
 });

@@ -12,8 +12,10 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianDBUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -45,9 +47,11 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	
 	public String processContents(String contents) {
 		if (currentReport.get() == null || currentEnvironment.get() == null) {
-			logger.error("currentReport || currentEnvironment == null -> not processing schema!");
-			return contents;
+			logger.warn("currentReport || currentEnvironment == null -> Initializing with default values.");
+			//TODO: Added a default initialization to allow usage for now the Saiku standalone. Return to previous state or implement better solution.
+			initDefault();
 		}
+		
 		contents = contents.replaceAll("@@actual@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase()));
 		contents = contents.replaceAll("@@planned@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getIdInDatabase()));
 		contents = contents.replaceAll("@@currency@@", Long.toString(getReportCurrency().getAmpCurrencyId()));
@@ -91,4 +95,13 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		currentReport.set(spec);
 		currentEnvironment.set(environment);
 	}
+
+	private void initDefault() {
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("default");
+		MondrianReportSettings settings = new MondrianReportSettings();
+		settings.setCurrencyCode("EUR");
+		spec.setSettings(settings);
+		registerReport(spec, new ReportEnvironment("en", null));
+	}
+
 }

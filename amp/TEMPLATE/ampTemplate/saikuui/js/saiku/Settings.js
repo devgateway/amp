@@ -17,44 +17,54 @@
 /**
  * Change settings here
  */
-
-var parser = document.createElement('a');
-parser.href = document.location;
 var Settings = {
-	    VERSION: "Saiku 2.5",
-	    BIPLUGIN: false,
-	    BASE_URL: "",
-	    TOMCAT_WEBAPP: "/saiku",
-	    REST_MOUNT_POINT: "/rest/saiku/",
-	    DIMENSION_PREFETCH: true,
-	    ERROR_LOGGING: false,
-	    // number of erroneous ajax calls in a row before UI cant recover
-	    ERROR_TOLERANCE: 3,
-	    AMP_PATH: '/rest/data/report',
+    VERSION: "Saiku 3.0-RC2",
+    BIPLUGIN: false,
+    BIPLUGIN5: false,
+    BASE_URL: "",
+    TOMCAT_WEBAPP: "/saiku",
+    REST_MOUNT_POINT: "/rest/saiku/",
+    DIMENSION_PREFETCH: true,
+    DIMENSION_SHOW_ALL: true,
+    DIMENSION_SHOW_REDUCED: false,
+    ERROR_LOGGING: false,
+    // number of erroneous ajax calls in a row before UI cant recover
+    ERROR_TOLERANCE: 3,
     QUERY_PROPERTIES: {
-        'saiku.olap.query.automatic_execution': 'true',
-        'saiku.olap.query.nonempty': 'true',
-        'saiku.olap.query.nonempty.rows': 'true',
-        'saiku.olap.query.nonempty.columns': 'true',
-        'saiku.ui.render.mode' : 'table'
+        'saiku.olap.query.automatic_execution': true,
+        'saiku.olap.query.nonempty': true,
+        'saiku.olap.query.nonempty.rows': true,
+        'saiku.olap.query.nonempty.columns': true,
+        'saiku.ui.render.mode' : 'table',
+        'saiku.olap.query.filter' : true,
+        'saiku.olap.result.formatter' : "flattened"
     },
+    TABLE_LAZY: true,          // Turn lazy loading off / on
+    TABLE_LAZY_SIZE: 1000,     // Initial number of items to be rendered
+    TABLE_LAZY_LOAD_ITEMS: 20,       // Additional item per scroll
+    TABLE_LAZY_LOAD_TIME: 20,  // throttling call of lazy loading items
     /* Valid values for CELLSET_FORMATTER:
-  
+     * 1) flattened
+     * 2) flat
      */
     CELLSET_FORMATTER: "flattened",
     // limits the number of rows in the result
     // 0 - no limit
     RESULT_LIMIT: 0,
     MEMBERS_FROM_RESULT: true,
+    MEMBERS_LIMIT: 3000,
+    MEMBERS_SEARCH_LIMIT: 75,
+    ALLOW_IMPORT_EXPORT: false,
+    ALLOW_PARAMETERS: false,
     PLUGINS: [
         "Chart"
     ],
+    DEFAULT_VIEW_STATE: 'view', // could be 'edit' as well
+    DEMO: false,
     TELEMETRY_SERVER: 'http://telemetry.analytical-labs.com:7000',
     LOCALSTORAGE_EXPIRATION: 10 * 60 * 60 * 1000 /* 10 hours, in ms */,
-    // custom settings to manage pagination
-    PAGINATION: true,
-    RESULTS_PER_PAGE: 500,
-    DEFER_TO_AMP: true
+    UPGRADE: false,    
+    AMP_PATH: '/rest/data/report'
 };
 
 /**
@@ -80,6 +90,16 @@ Settings.GET = function () {
 }();
 _.extend(Settings, Settings.GET);
 
+Settings.PARAMS = (function() {
+    var p = {};
+    for (var key in Settings) {
+        if (key.match("^PARAM")=="PARAM") {
+            p[key] = Settings[key];
+        }
+    }
+    return p;
+}());
+
 Settings.REST_URL = Settings.BASE_URL
     + Settings.TOMCAT_WEBAPP 
     + Settings.REST_MOUNT_POINT;
@@ -90,6 +110,17 @@ if (Settings.MODE == "table") {
     $('body, html').css('min-height',0);
     $('body, html').css('min-width',0);
 
+}
+if (Settings.BIPLUGIN5) {
+    Settings.BIPLUGIN = true;
+}
+
+Settings.INITIAL_QUERY = false;
+if (document.location.hash) {
+    var hash = document.location.hash;
+    if (hash.length > 11 && hash.substring(1, 11) == "query/open") {
+        Settings.INITIAL_QUERY = true;
+    }
 }
 
 
@@ -143,18 +174,15 @@ if ($.blockUI) {
 
 }
 
-if (window.location.hostname && (window.location.hostname == "dev.analytical-labs.com" || window.location.hostname == "demo.analytical-labs.com" )) {
-    Settings.USERNAME = "admin";
-    Settings.PASSWORD = "admin";
-}
-
 var isIE = (function(){
-    var undef, v = 3, div = document.createElement('div');
+    var undef, v = 3; 
+    
+    var dav = navigator.appVersion;
+    
+    if(dav.indexOf('MSIE') != -1) {
+        v  = parseFloat(dav.split('MSIE ')[1]);
+        return v> 4 ? v : false;
+    }
+    return false;
 
-    while (
-        div.innerHTML = '<!--[if gt IE '+(++v)+']><i></i><![endif]-->',
-        div.getElementsByTagName('i')[0]
-    );
-
-    return v> 4 ? v : false;
 }());

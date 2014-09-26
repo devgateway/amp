@@ -420,6 +420,10 @@
         	value = "<digi:trn>Show Image</digi:trn>";
             return value;
         }
+        if(text == "There are no structures around this area") {
+        	value = "<digi:trn>There are no structures around this area</digi:trn>";
+            return value;
+        }
         return text;
     	}
 	

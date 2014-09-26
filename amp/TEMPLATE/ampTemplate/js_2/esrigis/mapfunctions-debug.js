@@ -891,11 +891,15 @@ function showStInfoWindow() {
 		map.infoWindow.show(searchpoint.screenPoint, map
 				.getInfoWindowAnchor(searchpoint.screenPoint));
 	} else {
-		clearbuffer();
+		map.infoWindow.setContent("<b>"+translate("There are no structures around this area")+"</b>");
+		map.infoWindow.resize(200, 100);
+		map.infoWindow.show(searchpoint.screenPoint, map
+				.getInfoWindowAnchor(searchpoint.screenPoint));
 	}
 	dojo.connect(map.infoWindow, "onHide", clearbuffer);
 	hideLoading();
 }
+
 
 /**
  * 

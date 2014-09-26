@@ -31,7 +31,8 @@ map.infoWindow.setTitle("Structures");for(var int=0;int<foundstr.length;int+=2){
 content=content
 +"<tr><td colspan='3'>"
 +"<img hspace='2' onclick='ExportStructures()' vspace='2' style='cursor: pointer;' src='/TEMPLATE/ampTemplate/module/aim/images/xls_icon.jpg' border='0' alt='Export to Excel'"
-+"</td></tr></table>";if(foundstr.length>0){map.infoWindow.setContent(content);map.infoWindow.resize(600,200);map.infoWindow.show(searchpoint.screenPoint,map.getInfoWindowAnchor(searchpoint.screenPoint));}else{clearbuffer();}
++"</td></tr></table>";if(foundstr.length>0){map.infoWindow.setContent(content);map.infoWindow.resize(600,200);map.infoWindow.show(searchpoint.screenPoint,map.getInfoWindowAnchor(searchpoint.screenPoint));}else{map.infoWindow.setContent("<b>"+translate("There are no structures around this area")+"</b>");
+map.infoWindow.resize(200, 100);map.infoWindow.show(searchpoint.screenPoint, map.getInfoWindowAnchor(searchpoint.screenPoint));}
 dojo.connect(map.infoWindow,"onHide",clearbuffer);hideLoading();}
 function getSelectedFilter(){$("#sfilterid").html("");var xhrArgs={url:"/esrigis/datadispatcher.do?selectedfilter=true&rnd=" + new Date().getTime(),handleAs:"json",load:function(jsonData){$("#sfilterid").append("<i>"+translate('Currency')+"</i>: ");$("#sfilterid").append(jsonData[0].currency);$("#sfilterid").append(" <i>| "+translate('Fiscal Year Start')+"</i> : ");$("#sfilterid").append(jsonData[0].year);if(jsonData[0].projectstatus!=''){$("#sfilterid").append(" <i>| "+translate('Status')+"</i> : ");$("#sfilterid").append(jsonData[0].projectstatus);}
 if(jsonData[0].sector!=''){$("#sfilterid").append(" <i>| "+translate('Primary Sector')+"</i> : ");$("#sfilterid").append(jsonData[0].sector);}

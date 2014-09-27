@@ -11,7 +11,7 @@
             <lang  delimiter=";" type="postgres">
 				UPDATE amp_global_settings SET settingsname = 'Change activity status once the Actual End Date has passed' 
 					WHERE settingsname='Change activity status once the Planned End Date has passed';
-				UPDATE amp_global_settings SET description = 'Automatically change the status of activities which have passed their Planned End Date to a preset one (usually "Closed")' 
+				UPDATE amp_global_settings SET description = 'Automatically change the status of activities which have passed their Actual End Date to a preset one (usually "Closed")' 
 					WHERE settingsname='Change activity status once the Actual End Date has passed';
             </lang>
         </script>

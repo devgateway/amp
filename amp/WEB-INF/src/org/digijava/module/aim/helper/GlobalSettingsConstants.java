@@ -133,7 +133,7 @@ public class GlobalSettingsConstants {
     
     public static final String ACTIVITY_AUTO_SAVE_SECONDS = "Seconds to Auto-Save Activity";
     
-    public static final String AUTOMATICALLY_CLOSE_ACTIVITIES = "Change activity status once the Planned End Date has passed";
+    public static final String AUTOMATICALLY_CLOSE_ACTIVITIES = "Change activity status once the Actual End Date has passed";
     
     public static final String CLOSED_ACTIVITY_VALUE = "Closed activity status";
     

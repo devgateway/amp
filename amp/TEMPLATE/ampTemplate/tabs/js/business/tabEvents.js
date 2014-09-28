@@ -2,24 +2,10 @@
 /*https://github.com/icereval/backbone-documentmodel*/
 define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicContentView', 'text!views/html/filtersWrapperTemplate.html',
 		'text!views/html/filtersItemTemplate.html', 'models/filter', 'collections/filters', 'models/tab',
-		'text!views/html/invisibleTabLinkTemplate.html', 'jqgrid' ], function(Marionette, Contents, Content, DynamicContentView,
-		filtersTemplate, filtersItemTemplate, Filter, Filters, Tab, invisibleTabLinkTemplate, jqGrid) {
+		'text!views/html/invisibleTabLinkTemplate.html', 'jqgrid', 'util/columnsMapping' ], function(Marionette, Contents, Content,
+		DynamicContentView, filtersTemplate, filtersItemTemplate, Filter, Filters, Tab, invisibleTabLinkTemplate, jqGrid, columnsMapping) {
 
 	"use strict";
-
-	// TODO: We need to receive the same column name from both endpoints!!!
-	var map = new Object();
-	map['[Project Title]'] = 'Project Title';
-	map['[Region Name]'] = 'Region';
-	map['[Total Measures][Actual Commitments]'] = 'Actual Commitments';
-	map['[Actual Commitments]'] = 'Actual Commitments';
-	map['[Total Measures][Actual Disbursements]'] = 'Actual Disbursements';
-	map['[Actual Disbursements]'] = 'Actual Disbursements';
-	map['[AMP ID]'] = 'AMP ID';
-	map['[Level 0 Sector]'] = 'Primary Sector';
-	map['[Level 1 Sector]'] = 'Primary Sector Sub-Sector';
-	map['[Level 2 Sector]'] = 'Primary Sector Sub-Sub-Sector';
-	map['[Donor Agency]'] = 'Donor Agency';
 
 	function TabEvents() {
 		// Constructor
@@ -81,76 +67,6 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 		return filters;
 	}
 
-	function createJQGridColumnNames(metadata) {
-		var ret = [];
-		ret.push(''); // edit icon column.
-		$(metadata.columns.models).each(function(i, item) {
-			ret.push(item.get('columnName'));
-		});
-		/*
-		 * $(metadata.hierarchies.models).each(function(i, item) {
-		 * ret.push(item.get('columnName')); });
-		 */
-		$(metadata.measures.models).each(function(i, item) {
-			ret.push(item.get('measureName'));
-		});
-		console.log(ret);
-		return ret;
-	}
-
-	function createJQGridColumnModel(metadata) {
-		var ret = [];
-		ret.push({
-			name : 'editColumn',
-			width : 5,
-			sortable : false,
-			formatter : function() {
-				return "<img src='/TEMPLATE/ampTemplate/img_2/ico_edit.gif'/>";
-			}
-		});
-		$(metadata.columns.models).each(function(i, item) {
-			ret.push({
-				name : item.get('columnName')
-			});
-		});
-		/*
-		 * $(metadata.hierarchies.models).each(function(i, item) { ret.push({
-		 * name : item.get('columnName') }); });
-		 */
-		$(metadata.measures.models).each(function(i, item) {
-			ret.push({
-				name : item.get('measureName'),
-				width : 30
-			});
-		});
-		console.log(ret);
-		return ret;
-	}
-
-	function createJQGridGroupingModel(metadata, grouping) {
-		if (grouping) {
-			var ret = {};
-			var fields = [];
-			var hiddenFields = [];
-			var styleText = [];
-			// var summary = [];
-			$(metadata.hierarchies.models).each(function(i, item) {
-				fields.push(item.get('columnName'));
-				hiddenFields.push(false);
-				styleText.push('<b>{0} - ({1})</b>');
-				// summary.push(true);
-			});
-			ret.groupField = fields;
-			ret.groupColumnShow = hiddenFields;
-			ret.groupText = styleText;
-			// ret.groupSummary = summary;
-			console.log(ret);
-			return ret;
-		} else {
-			return {};
-		}
-	}
-
 	function populateGrid(id, dynamicLayoutView, firstContent) {
 		// TODO: Move grid section elsewhere.
 		var TableSectionView = Marionette.ItemView.extend({
@@ -187,11 +103,12 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 					return obj.totalRecords;
 				}
 			},
-			colNames : createJQGridColumnNames(tableStructure),
-			colModel : createJQGridColumnModel(tableStructure),
+			colNames : columnsMapping.createJQGridColumnNames(tableStructure, grouping),
+			colModel : columnsMapping.createJQGridColumnModel(tableStructure),
 			height : 250,
 			autowidth : true,
 			shrinkToFit : true,
+			forceFit : false,
 			viewrecords : true,
 			loadtext : 'Loading...',
 			headertitles : true,
@@ -201,7 +118,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			pager : "#tab_grid_pager_" + id,
 			emptyrecords : 'No records to view',
 			grouping : grouping,
-			groupingView : createJQGridGroupingModel(tableStructure, grouping),
+			groupingView : columnsMapping.createJQGridGroupingModel(tableStructure, grouping),
 			gridComplete : function() {
 			}
 		});
@@ -222,7 +139,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 					id : 0
 				};
 				$.each(obj.contents, function(key, element) {
-					var colName = map[key];
+					var colName = columnsMapping.getMap()[key];
 					if (colName != undefined && colName != null) {
 						if (element.displayedValue != null && element.displayedValue != "") {
 							row[colName] = element.displayedValue;

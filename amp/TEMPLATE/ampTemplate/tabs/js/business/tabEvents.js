@@ -270,6 +270,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 				id : id
 			});
 
+			// --------------------------------------------------------------------------------------//
 			// TODO: Move filters section elsewhere.
 			// Create collection of Filters.
 			var filters = extractFilters(firstContent);
@@ -306,6 +307,14 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			});
 			// Create jQuery buttons.
 			$("#main-dynamic-content-region_" + id + " .buttonify").button();
+
+			// --------------------------------------------------------------------------------------//
+			// TODO: make complex view for adding more info in this section.
+			var LegendView = Marionette.ItemView.extend({
+				template : '<p>' + firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode') + '</p>'
+			});
+			var legendView = new LegendView();
+			dynamicLayoutView.legends.show(legendView);
 
 			// --------------------------------------------------------------------------------------//
 			populateGrid(id, dynamicLayoutView, firstContent);

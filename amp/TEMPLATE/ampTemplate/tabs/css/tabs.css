@@ -55,6 +55,11 @@
 	padding: 5px;
 }
 
+#dynamic-legends-region {
+	padding: 5px;
+	text-align: right;
+}
+
 /* Overriding jQueryUI section */
 .ui-widget-header {
 	color: orange;

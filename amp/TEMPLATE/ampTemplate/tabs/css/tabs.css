@@ -52,7 +52,7 @@
 #dynamic-filters-region {
 	border: 2px solid rgb(56, 121, 146);
 	max-height: 500px;
-	padding: 5px;
+	/*padding: 5px;*/
 }
 
 #dynamic-legends-region {

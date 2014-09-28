@@ -83,7 +83,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
 	function createJQGridColumnNames(metadata) {
 		var ret = [];
-		ret.push('');
+		ret.push(''); // edit icon column.
 		$(metadata.columns.models).each(function(i, item) {
 			ret.push(item.get('columnName'));
 		});
@@ -103,7 +103,10 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 		ret.push({
 			name : 'editColumn',
 			width : 5,
-			sortable : false
+			sortable : false,
+			formatter : function() {
+				return "<img src='/TEMPLATE/ampTemplate/img_2/ico_edit.gif'/>";
+			}
 		});
 		$(metadata.columns.models).each(function(i, item) {
 			ret.push({
@@ -200,7 +203,6 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			grouping : grouping,
 			groupingView : createJQGridGroupingModel(tableStructure, grouping),
 			gridComplete : function() {
-				// alert('nada');
 			}
 		});
 	}
@@ -244,7 +246,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 						row['id'] = Math.random();
 					}
 				});
-				console.log(row);
+				// console.log(row);
 				rows.push(row);
 			} else {
 				$(obj.children).each(function(i, item) {
@@ -310,8 +312,10 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
 			// --------------------------------------------------------------------------------------//
 			// TODO: make complex view for adding more info in this section.
+			var legendsText = '<p>' + firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode')
+					+ '</p> - <a>Show Legends...</a>';
 			var LegendView = Marionette.ItemView.extend({
-				template : '<p>' + firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode') + '</p>'
+				template : legendsText
 			});
 			var legendView = new LegendView();
 			dynamicLayoutView.legends.show(legendView);

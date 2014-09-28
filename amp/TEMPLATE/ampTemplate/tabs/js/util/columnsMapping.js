@@ -36,7 +36,7 @@ define(function() {
 			var auxColName = "";
 			// If we are using grouping then change the title of the first
 			// non-grouped column.
-			if ((metadata.columns.models.length - 1) == i && isGrouped) {
+			if ((metadata.hierarchies.models.length) == i && isGrouped) {
 				$(metadata.hierarchies.models).each(function(j, item2) {
 					auxColName += item2.get('columnName') + ' / ';
 				});

@@ -7,11 +7,19 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
 	"use strict";
 
+	// TODO: We need to receive the same column name from both endpoints!!!
 	var map = new Object();
 	map['[Project Title]'] = 'Project Title';
 	map['[Region Name]'] = 'Region';
 	map['[Total Measures][Actual Commitments]'] = 'Actual Commitments';
+	map['[Actual Commitments]'] = 'Actual Commitments';
+	map['[Total Measures][Actual Disbursements]'] = 'Actual Disbursements';
+	map['[Actual Disbursements]'] = 'Actual Disbursements';
 	map['[AMP ID]'] = 'AMP ID';
+	map['[Level 0 Sector]'] = 'Primary Sector';
+	map['[Level 1 Sector]'] = 'Primary Sector Sub-Sector';
+	map['[Level 2 Sector]'] = 'Primary Sector Sub-Sub-Sector';
+	map['[Donor Agency]'] = 'Donor Agency';
 
 	function TabEvents() {
 		// Constructor
@@ -75,12 +83,14 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
 	function createJQGridColumnNames(metadata) {
 		var ret = [];
+		ret.push('');
 		$(metadata.columns.models).each(function(i, item) {
 			ret.push(item.get('columnName'));
 		});
-		$(metadata.hierarchies.models).each(function(i, item) {
-			ret.push(item.get('columnName'));
-		});
+		/*
+		 * $(metadata.hierarchies.models).each(function(i, item) {
+		 * ret.push(item.get('columnName')); });
+		 */
 		$(metadata.measures.models).each(function(i, item) {
 			ret.push(item.get('measureName'));
 		});
@@ -90,23 +100,52 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
 	function createJQGridColumnModel(metadata) {
 		var ret = [];
+		ret.push({
+			name : 'editColumn',
+			width : 5,
+			sortable : false
+		});
 		$(metadata.columns.models).each(function(i, item) {
 			ret.push({
 				name : item.get('columnName')
 			});
 		});
-		$(metadata.hierarchies.models).each(function(i, item) {
-			ret.push({
-				name : item.get('columnName')
-			});
-		});
+		/*
+		 * $(metadata.hierarchies.models).each(function(i, item) { ret.push({
+		 * name : item.get('columnName') }); });
+		 */
 		$(metadata.measures.models).each(function(i, item) {
 			ret.push({
-				name : item.get('measureName')
+				name : item.get('measureName'),
+				width : 30
 			});
 		});
 		console.log(ret);
 		return ret;
+	}
+
+	function createJQGridGroupingModel(metadata, grouping) {
+		if (grouping) {
+			var ret = {};
+			var fields = [];
+			var hiddenFields = [];
+			var styleText = [];
+			// var summary = [];
+			$(metadata.hierarchies.models).each(function(i, item) {
+				fields.push(item.get('columnName'));
+				hiddenFields.push(false);
+				styleText.push('<b>{0} - ({1})</b>');
+				// summary.push(true);
+			});
+			ret.groupField = fields;
+			ret.groupColumnShow = hiddenFields;
+			ret.groupText = styleText;
+			// ret.groupSummary = summary;
+			console.log(ret);
+			return ret;
+		} else {
+			return {};
+		}
 	}
 
 	function populateGrid(id, dynamicLayoutView, firstContent) {
@@ -119,14 +158,16 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
 		// Define grid structure.
 		var tableStructure = extractMetadata(firstContent);
+		var grouping = (tableStructure.hierarchies.length > 0) ? true : false;
 		var grid = $("#tab_grid");
 		$(grid).attr("id", "tab_grid_" + id);
 		var pager = $("#tab_grid_pager");
 		$(pager).attr("id", "tab_grid_pager_" + id);
 
 		$(grid).jqGrid({
-			caption : 'Caption',
-			url : '/rest/data/report/' + id + '/result/jqGrid',
+			caption : false,
+			url : '/rest/data/report/' + id + '/result/',
+			/* url : '/rest/data/report/' + id + '/result/jqGrid', */
 			datatype : 'json',
 			jsonReader : {
 				repeatitems : false,
@@ -146,27 +187,32 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			colNames : createJQGridColumnNames(tableStructure),
 			colModel : createJQGridColumnModel(tableStructure),
 			height : 250,
-			width : 900,
-			autowidth : '100%',
+			autowidth : true,
 			shrinkToFit : true,
 			viewrecords : true,
 			loadtext : 'Loading...',
+			headertitles : true,
 			gridview : true,
-			rownumbers : true,
+			rownumbers : false,
 			rowNum : 100, /* TODO: get this parameter from global settings. */
 			pager : "#tab_grid_pager_" + id,
-			emptyrecords : 'No records to view'
+			emptyrecords : 'No records to view',
+			grouping : grouping,
+			groupingView : createJQGridGroupingModel(tableStructure, grouping),
+			gridComplete : function() {
+				// alert('nada');
+			}
 		});
 	}
 
 	function transformData(data) {
 		// console.log(data);
 		var rows = [];
-		getContentRecursively(data.pageArea, rows);
+		getContentRecursively(data.reportContents /* data.pageArea */, rows, null);
 		return rows;
 	}
 
-	function getContentRecursively(obj, rows) {
+	function getContentRecursively(obj, rows, parent) {
 		if (obj != undefined && obj != null) {
 			if (obj.children == null || obj.children.length == 0) {
 				// console.log(obj.contents);
@@ -176,14 +222,33 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 				$.each(obj.contents, function(key, element) {
 					var colName = map[key];
 					if (colName != undefined && colName != null) {
-						row[colName] = element.displayedValue;
+						if (element.displayedValue != null && element.displayedValue != "") {
+							row[colName] = element.displayedValue;
+						} else {
+							// TODO: This section uses data from the parent node
+							// just because now some hierarchical reports
+							// come with empty columns after the 1st children
+							// node. Remove it when that problem is fixed.
+							if (parent != undefined) {
+								if (parent[key].displayedValue.indexOf(' Totals') > 0) {
+									row[colName] = parent[key].displayedValue.substring(0, parent[key].displayedValue.indexOf(' Totals'));
+								} else {
+									row[colName] = parent[key].displayedValue;
+								}
+							} else {
+								// TODO: If the data where ok this section wount
+								// be needed either.
+								row[colName] = 'Undefined';
+							}
+						}
 						row['id'] = Math.random();
 					}
 				});
+				console.log(row);
 				rows.push(row);
 			} else {
 				$(obj.children).each(function(i, item) {
-					getContentRecursively(item, rows);
+					getContentRecursively(item, rows, obj.contents);
 				});
 			}
 		}

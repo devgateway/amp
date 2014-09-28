@@ -32,6 +32,7 @@ import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
+import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportFilters;
@@ -39,6 +40,7 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -76,6 +78,7 @@ import org.saiku.service.olap.totals.TotalNode;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
 import org.dgfoundation.amp.mondrian.ExceptionRunnable;
 import org.dgfoundation.amp.algo.ValueWrapper;
+import org.dgfoundation.amp.ar.ColumnConstants;
 
 /**
  * Generates a report via Mondrian
@@ -196,6 +199,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			}
 		
 		MondrianReportUtils.configureDefaults(spec);
+		addDummyHierarchy(spec);
 	}
 	
 	/**
@@ -221,6 +225,29 @@ public class MondrianReportGenerator implements ReportExecutor {
 	public void tearDown() {
 		if (generator != null) 
 			generator.tearDown();
+	}
+	
+	/**
+	 *  Adds a dummy hierarchy by internal id (which is entity id) to group by non-hierarchical columns,
+	 *  but only if there are non-hierarchical columns
+	 */
+	private void addDummyHierarchy(ReportSpecification spec) {
+		//if we have more columns than hierarchies, then add the dummy hierarchy to group non-hierarchical columns by it
+		if (spec.getHierarchies().size() < spec.getColumns().size()) {
+			ReportColumn internalId = MondrianReportUtils.getColumn(ColumnConstants.INTERNAL_USE_ID, ReportEntityType.ENTITY_TYPE_ALL);
+			Set<ReportColumn> newColumns = new LinkedHashSet<ReportColumn>(spec.getColumns().size() + 1);
+			int pos = spec.getHierarchies().size();
+			for(Iterator<ReportColumn> iter = spec.getColumns().iterator(); iter.hasNext(); pos--) {
+				//check if we skiped all hierarchies 
+				if (pos == 0)
+					newColumns.add(internalId);
+				else 
+					newColumns.add(iter.next());
+			}
+			spec.getColumns().clear();
+			spec.getColumns().addAll(newColumns);
+			spec.getHierarchies().add(internalId);
+		}
 	}
 	
 	private MDXConfig toMDXConfig(ReportSpecification spec) throws AMPException {
@@ -376,7 +403,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		
 		applyFilterSetting(spec, cellDataSet);
 		
-		CellDataSetToAmpHierachies.concatenateNonHierarchicalColumns(spec, cellDataSet);
+		CellDataSetToAmpHierachies.concatenateNonHierarchicalColumns(spec, cellDataSet, leafHeaders);
 		
 		return cellDataSet;
 	}
@@ -421,7 +448,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//detect the columns that are not in the years ranges or years set
 		SortedSet<Integer> leafColumnsNumberToRemove = new TreeSet<Integer>();
 		pos = spec.getColumns().size(); //re-init the starting position
-		while(iter.hasNext() && pos < leafHeaders.size() - spec.getMeasures().size()) {
+		int end = leafHeaders.size() - spec.getMeasures().size();
+		while(iter.hasNext() && pos < end) {
 			ReportOutputColumn column = iter.next();
 			//move to year level header
 			int currentLevel = level;

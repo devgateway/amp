@@ -19,8 +19,6 @@ import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportEnvironment;
-import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.TextCell;
@@ -97,7 +95,8 @@ public class CellDataSetToGeneratedReport {
 				//check if this is the end of the entire report, i.e. nextNotNullColId == -1
 				boolean reportEndNoHierarchies = nextNotNullColId == -1 && hSize == 0; 
 				int depth = reportEndNoHierarchies ? 1 : maxDepth - nextNotNullColId;
-				updateGroupData (stack, reportArea, rowId, reportEndNoHierarchies ? 0 : maxDepth, depth, nextNotNullColId == -1 ? 0 : maxStackSize);
+				int totColId = reportEndNoHierarchies ? 0 : (hSize == 0 ? -1 : hSize);
+				updateGroupData (stack, reportArea, rowId,  totColId, depth, nextNotNullColId == -1 ? 0 : maxStackSize);
 			} else { 
 				stack.peek().add(reportArea);
 			}
@@ -180,19 +179,20 @@ public class CellDataSetToGeneratedReport {
 	 * @param maxStackSize - the maximum size of the stack
 	 * @throws AMPException
 	 */
-	private void updateGroupData(Deque<List<ReportArea>> stack, ReportAreaImpl current, int rowId, int totColId, int depth, int maxStackSize) throws AMPException {
+	private void updateGroupData(Deque<List<ReportArea>> stack, ReportAreaImpl current, int rowId, int totColId, 
+			int depth, int maxStackSize) throws AMPException {
 		while(depth > 0) {
 			stack.peek().add(current);
 			depth --;
-			if (spec.isCalculateRowTotals()) {
+			if (spec.isCalculateRowTotals() && totColId >=0) {
 				current = MondrianReportUtils.getNewReportArea(current.getClass());
 				current.setChildren(stack.pop());
 				if(current instanceof SaikuReportArea)
 					((SaikuReportArea)current).setOrigLeafId(getOrigLeafId((SaikuReportArea)current));
 				addCurentRowTotal(current, totColId);
-				totColId --;
 				if (depth == 0)
 					stack.peek().add(current);
+				totColId --;
 			} else if (depth > 0) {
 				current = MondrianReportUtils.getNewReportArea(current.getClass());
 				current.setChildren(stack.pop());

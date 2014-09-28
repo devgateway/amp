@@ -34,6 +34,7 @@ public class Mappings {
 		add(ColumnConstants.REGION);
 		add(ColumnConstants.ZONE);
 		add(ColumnConstants.DISTRICT);
+		add(ColumnConstants.INTERNAL_USE_ID);
 	}};
 	
 	public static final Set<String> ALL_ENTITIES_MEASURES = new HashSet<String>(){{

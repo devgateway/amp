@@ -15,8 +15,11 @@
 */
 package org.digijava.kernel.ampapi.saiku.util;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.SortedSet;
 
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
@@ -26,6 +29,7 @@ import org.olap4j.CellSetAxis;
 import org.olap4j.Position;
 import org.olap4j.metadata.Measure;
 import org.olap4j.metadata.Member;
+import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.service.olap.totals.AxisInfo;
 import org.saiku.service.olap.totals.TotalNode;
@@ -104,5 +108,50 @@ public class SaikuUtils {
 				retVal[i][j] = new Total(current.get(j));
 		}
 		return retVal;
+	}
+	
+	public static AbstractBaseCell[][] removeCollumns(AbstractBaseCell[][] cellMatrix, SortedSet<Integer> leafColumnsNumberToRemove) {
+		if (cellMatrix == null || cellMatrix.length == 0 || leafColumnsNumberToRemove.size() == 0) return cellMatrix; 
+		
+		AbstractBaseCell[][] newCellMatrix = new AbstractBaseCell[cellMatrix.length][cellMatrix[0].length - leafColumnsNumberToRemove.size()];
+		for (int i = 0; i < cellMatrix.length; i++) 
+			newCellMatrix[i] = removeCollumnsInArray(cellMatrix[i], leafColumnsNumberToRemove);
+		return newCellMatrix;
+	}
+	
+	public static <T> T[] removeCollumnsInArray(T[] cellArray, SortedSet<Integer> leafColumnsNumberToRemove) {
+		if (cellArray == null || cellArray.length == 0 || leafColumnsNumberToRemove.size() == 0) return cellArray;
+		
+		@SuppressWarnings("unchecked")
+		T[] newCellArra = (T[])Array.newInstance(cellArray.getClass().getComponentType(), cellArray.length - leafColumnsNumberToRemove.size());
+		Iterator<Integer> iter = leafColumnsNumberToRemove.iterator();
+		int start = 0;
+		int end = iter.next(); //non-inclusive end  
+		int nextEnd = iter.hasNext() ? iter.next() : cellArray.length; 
+		int pos = 0;
+		while (start < cellArray.length) { 
+			if (start < end) {
+				System.arraycopy(cellArray, start, newCellArra, pos, end - start);
+				pos += end - start;
+			} 
+			start = end + 1;
+			end = nextEnd;
+			nextEnd = iter.hasNext() ? iter.next() : cellArray.length;
+		}
+		return newCellArra;
+	}
+
+	private void removeRowTotalsColumns(CellDataSet cellDataSet, SortedSet<Integer> leafColumnsNumberToRemove) {
+		//navigate through the totals list and remember the totals only for the columns we display 
+		for(List<TotalNode> totalLists : cellDataSet.getRowTotalsLists()) {
+			for(TotalNode totalNode : totalLists) {
+				if (totalNode.getTotalGroups() != null && totalNode.getTotalGroups().length > 0) {
+					int offset = cellDataSet.getLeftOffset();
+					for (int i = 0; i < totalNode.getTotalGroups().length; i++) {
+						totalNode.getTotalGroups()[i] = removeCollumnsInArray(totalNode.getTotalGroups()[i], leafColumnsNumberToRemove);
+					}
+				}
+			}
+		}
 	}
 }

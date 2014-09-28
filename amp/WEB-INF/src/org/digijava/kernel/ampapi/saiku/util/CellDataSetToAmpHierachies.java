@@ -7,13 +7,17 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.commons.lang.math.IntRange;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
@@ -38,25 +42,28 @@ public class CellDataSetToAmpHierachies {
 	private int startColumnIndex;
 	private int noOfColumnsToMerge;
 	private SortedSet<String>[] sbList;
+	private List<ReportOutputColumn> leafHeaders;
 	
-	private CellDataSetToAmpHierachies(ReportSpecification spec, CellDataSet cellDataSet) {
+	private CellDataSetToAmpHierachies(ReportSpecification spec, CellDataSet cellDataSet, List<ReportOutputColumn> leafHeaders) {
 		this.spec = spec;
 		this.cellDataSet = cellDataSet;
+		this.leafHeaders = leafHeaders;
 	}
 
 	/**
 	 * Concatenates the non-hierarchical columns and updates the data of the cellDataSet
 	 * @param spec - report specification that provides hierarchies information
 	 * @param cellDataSet - the data set to update
+	 * @param leafHeaders 
 	 */
-	public static void concatenateNonHierarchicalColumns(ReportSpecification spec, CellDataSet cellDataSet) {
-		(new CellDataSetToAmpHierachies(spec, cellDataSet)).concatenate();
+	public static void concatenateNonHierarchicalColumns(ReportSpecification spec, CellDataSet cellDataSet, List<ReportOutputColumn> leafHeaders) {
+		(new CellDataSetToAmpHierachies(spec, cellDataSet, leafHeaders)).concatenate();
 	}
 	
 	private void init() {
 		rowTotals = cellDataSet.getRowTotalsLists();
 		//the starting index of the column to concatenate all totals 
-		startColumnIndex = spec.getHierarchies().size() + 1;
+		startColumnIndex = spec.getHierarchies().size();
 		noOfColumnsToMerge = spec.getColumns().size() - startColumnIndex;
 		if (noOfColumnsToMerge <= 0) return;
 		
@@ -171,8 +178,10 @@ public class CellDataSetToAmpHierachies {
 			//get final totals reference
 			int mPos = 0;
 			for (int a = colTotals.length - spec.getMeasures().size(); a < colTotals.length; a++, mPos++) {
-				Double value = colTotals[a][rowId].getValue();
-				currentTotalMeasuresColumnTotals[mPos] += value; 
+				//TODO: restore to the original back when fix is applied to mandatory have all measures even if non-empty is requested
+				//Double value = colTotals[a][rowId].getValue();
+				Double value = a < 0 ? 0 : colTotals[a][rowId].getValue();
+				currentTotalMeasuresColumnTotals[mPos] += value;
 			}
 		}
 	}
@@ -186,17 +195,24 @@ public class CellDataSetToAmpHierachies {
 	}
 	
 	private void setNewData(int rowsToKeepCount, List<IntRange> rowsRangesToDelte, ArrayList<Double[]> measuresTotalsToKeep) {
+		//remove the dummy hierarchy from headers
+		SortedSet<Integer> columnsToRemove = new TreeSet<Integer>();
+		columnsToRemove.add(spec.getHierarchies().size() - 1); //to remove the last dummy hierarchy
+		cellDataSet.setCellSetHeaders(SaikuUtils.removeCollumns(cellDataSet.getCellSetHeaders(), columnsToRemove));
+		
 		//update row totals to remove unneeded totals
-		@SuppressWarnings("unchecked")
-		List<TotalNode>[] newTotalLists = (List<TotalNode>[])new ArrayList[startColumnIndex + 1];
-		for (int i = 0; i < startColumnIndex + 1; i++) {
-			newTotalLists[i] = cellDataSet.getRowTotalsLists()[i];
+		if (spec.isCalculateRowTotals()) {
+			@SuppressWarnings("unchecked")
+			List<TotalNode>[] newTotalLists = (List<TotalNode>[])new ArrayList[startColumnIndex + 1];
+			for (int i = 0; i < startColumnIndex + 1; i++) {
+				newTotalLists[i] = cellDataSet.getRowTotalsLists()[i];
+			}
+			cellDataSet.setRowTotalsLists(newTotalLists);
 		}
-		cellDataSet.setRowTotalsLists(newTotalLists);
 		
 		int start = 0;
 		//create new data of rows
-		AbstractBaseCell[][] newData = new AbstractBaseCell[rowsToKeepCount][cellDataSet.getCellSetBody()[0].length];
+		AbstractBaseCell[][] newData = new AbstractBaseCell[rowsToKeepCount][cellDataSet.getCellSetBody()[0].length - 1]; // -1 because the size will be reduced by dummy hierarchy
 		int newDataRowId = 0;
 		//get measures totals reference
 		TotalNode total = spec.isCalculateColumnTotals() ? cellDataSet.getColTotalsLists()[0].get(0) : null;
@@ -207,7 +223,8 @@ public class CellDataSetToAmpHierachies {
 		
 		for (IntRange range : rowsRangesToDelte) {
 			for (int i = start; i < range.getMinimumInteger(); i++, newDataRowId ++ ) {
-				newData[newDataRowId] = cellDataSet.getCellSetBody()[i].clone(); //to mark as free the data reference by
+				//remove dummy hierarchy
+				newData[newDataRowId] = SaikuUtils.removeCollumnsInArray(cellDataSet.getCellSetBody()[i], columnsToRemove);
 				
 				//update the measures totals
 				if (total != null) {
@@ -221,5 +238,22 @@ public class CellDataSetToAmpHierachies {
 			start = range.getMaximumInteger() + 1;
 		}
 		cellDataSet.setCellSetBody(newData);
+		
+		removeDummyHierarchy();
+	}
+	
+	private void removeDummyHierarchy() {
+		cellDataSet.setLeftOffset(cellDataSet.getLeftOffset() - 1);
+		Set<ReportColumn> newColumns = new LinkedHashSet<ReportColumn>(spec.getColumns().size() - 1);
+		ReportColumn dummyHierarchy = null;
+		for (ReportColumn col : spec.getColumns()) 
+			if (!ColumnConstants.INTERNAL_USE_ID.equals(col.getColumnName()))
+				newColumns.add(col);
+			else 
+				dummyHierarchy = col;
+		spec.getColumns().clear();
+		spec.getColumns().addAll(newColumns);
+		leafHeaders.remove(spec.getHierarchies().size() - 1);
+		spec.getHierarchies().remove(dummyHierarchy);
 	}
 }

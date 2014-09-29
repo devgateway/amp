@@ -250,8 +250,8 @@ gulp.task('dev-server', g.serve({
 
 
 gulp.task('reload', ['dev-server', 'watch'], function() {
- g.livereload.listen();
- return gulp.watch([
+  g.livereload.listen();
+  return gulp.watch([
     paths.app.rootstuff,
     paths.app.stylesheets.compiled,
     paths.app.scripts.built,

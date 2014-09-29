@@ -47,6 +47,8 @@ public class MondrianDBUtils {
 		boolean areRealFilters = false;
 		final String or = " OR ";
 		final String and = " AND ";
+		//DO NOT REMOVE!!!
+		final String select = "SELECT amp_activity_id FROM amp_activity WHERE ";
 		
 		for (Iterator<Entry<ReportColumn, List<FilterRule>>> entryIter = filters.entrySet().iterator(); entryIter.hasNext(); ) {
 			Entry<ReportColumn, List<FilterRule>> entry = entryIter.next();
@@ -70,7 +72,7 @@ public class MondrianDBUtils {
 				filterStr.append(and);
 		}
 		if (areRealFilters)
-			return filterStr.toString();
+			return select + filterStr.toString();
 		return null;
 	}
 	

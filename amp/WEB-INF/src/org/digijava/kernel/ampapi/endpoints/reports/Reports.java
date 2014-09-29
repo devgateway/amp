@@ -236,7 +236,7 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON)
 	public final QueryResult getSaikuReportResult(@PathParam("report_id") Long reportId) {
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
-		MondrianUtils.PRINT_PATH = "/home/simple";
+		//MondrianUtils.PRINT_PATH = "/home/simple";
 		MondrianReportGenerator generator = new MondrianReportGenerator(SaikuReportArea.class, ReportEnvironment.buildFor(httpRequest), MondrianUtils.PRINT_PATH != null);
 		SaikuGeneratedReport report = null;
 		try {

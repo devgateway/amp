@@ -346,7 +346,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			}
 			if (mdxElem == null) {
 				reportError("Mapping not defined for report element = " + elem);
-				if (IS_DEV) break;
+				if (IS_DEV) continue;
 			}
 			
 			for (FilterRule filter : entry.getValue()) {

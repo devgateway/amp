@@ -70,7 +70,7 @@ public class AmpReportsToReportSpecification {
 	private ReportSpecificationImpl convert() throws AMPException {
 		//init data
 		entityType = MondrianReportUtils.getReportEntityType(report);
-		arFilter = FilterUtil.buildFilter(report, report.getAmpReportId());
+		arFilter = FilterUtil.buildFilterFromSource(report);
 		spec = new ReportSpecificationImpl(report.getName());
 		
 		//configure report

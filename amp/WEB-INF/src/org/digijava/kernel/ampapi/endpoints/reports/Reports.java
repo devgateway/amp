@@ -241,13 +241,6 @@ public class Reports {
 		SaikuGeneratedReport report = null;
 		try {
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
-			spec.setDisplayEmptyFundingRows(false);
-			MondrianReportFilters filters = new MondrianReportFilters();
-			List<Integer> years = new ArrayList<>();
-			for(int year = 2011; year <= 2014; year ++)
-				years.add(year);
-			//filters.addYearsFilterRule(years, true);
-			spec.setFilters(filters);
 			report = (SaikuGeneratedReport)generator.executeReport(spec);
 			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + report.generationTime + "(ms)");
 		} catch (Exception e) {

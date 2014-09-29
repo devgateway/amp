@@ -1,18 +1,12 @@
 package org.digijava.module.aim.ar.util;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
@@ -20,8 +14,6 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -77,6 +69,15 @@ public class FilterUtil {
 		if (source != null)
 			FilterUtil.populateFilter(source, arf);
 		/* The prepare function needs to have the filter (af) already populated */
+		arf.postprocess();
+		return arf;
+	}
+	
+	public static AmpARFilter buildFilterFromSource(FilterDataSetInterface source) {
+		AmpARFilter arf = new AmpARFilter();
+		arf.fillWithDefaultsSettings();
+		arf.fillWithDefaultsFilter(null);
+		FilterUtil.populateFilter(source, arf);
 		arf.postprocess();
 		return arf;
 	}

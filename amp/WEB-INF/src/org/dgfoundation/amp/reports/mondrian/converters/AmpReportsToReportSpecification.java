@@ -149,6 +149,9 @@ public class AmpReportsToReportSpecification {
 		spec.setDisplayEmptyFundingColumns(report.getAllowEmptyFundingColumns());
 		
 		//detect if we should display empty rows or not
+		/* disabling empty/non-empty rows config, due to mondrian issues when it runs on multiple columns 
+		 * => TODO: fix for empty 
+		 *
 		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
 		if (dateFilterHidesProjects && !report.getDrilldownTab() && 
 				(arFilter.wasDateFilterUsed() || (report.getHierarchies().size() > 0))
@@ -156,6 +159,7 @@ public class AmpReportsToReportSpecification {
 			spec.setDisplayEmptyFundingRows(false);
 		else 
 			spec.setDisplayEmptyFundingRows(true);
+		*/
 		 
 	}
 	

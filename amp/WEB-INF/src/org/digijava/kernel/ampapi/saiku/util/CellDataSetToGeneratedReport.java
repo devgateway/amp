@@ -137,10 +137,13 @@ public class CellDataSetToGeneratedReport {
 			int headerColId = rowLength;
 			for (int colId = measureTotals.length - spec.getMeasures().size(); colId < measureTotals.length; colId ++) {
 				//Unfortunately cannot use getValue() because during concatenation we override the value, but the only way to override is via formatted value
-				double value = parseValue(measureTotals[colId][rowId].getFormattedValue()); 
-				contents.put(leafHeaders.get(headerColId++), new AmountCell(value, this.numberFormat));
-				//also re-format, via MDX formatting works a bit differently
-				measureTotals[colId][rowId].setFormattedValue(this.numberFormat.format(value));
+				//TODO: remove this check workaround when we add the support to mandatory display all measures, even if non-empty column is request 
+				if (colId >= 0) {
+					double value = parseValue(measureTotals[colId][rowId].getFormattedValue()); 
+					contents.put(leafHeaders.get(headerColId++), new AmountCell(value, this.numberFormat));
+					//also re-format, via MDX formatting works a bit differently
+					measureTotals[colId][rowId].setFormattedValue(this.numberFormat.format(value));
+				}
 			}
 		}
 		
@@ -240,8 +243,11 @@ public class CellDataSetToGeneratedReport {
 			for (ReportArea childArea : current.getChildren()) {
 				ReportCell[] childContent = childArea.getContents().values().toArray(new ReportCell[0]);
 				for (int a = headerPos; a < leafHeaders.size(); a ++) {
-					double value = (Double)((AmountCell)childContent[a]).value;
-					currentTotalMeasuresColumnTotals[a - headerPos] += value; 
+					//TODO: remove this check workaround when we add the support to mandatory display all measures, even if non-empty column is request
+					if (a < childContent.length) {
+						double value = (Double)((AmountCell)childContent[a]).value;
+						currentTotalMeasuresColumnTotals[a - headerPos] += value;
+					}
 				}
 			}
 			//adding total measures

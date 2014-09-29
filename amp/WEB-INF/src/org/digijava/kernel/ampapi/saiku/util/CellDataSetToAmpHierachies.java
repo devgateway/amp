@@ -230,8 +230,11 @@ public class CellDataSetToAmpHierachies {
 				if (total != null) {
 					int mPos = 0;
 					for (int a = total.getWidth() - spec.getMeasures().size(); a < total.getWidth(); a++, mPos++) {
-						String value = numberFormat.format(measuresTotalsToKeep.get(newDataRowId)[mPos]);
-						res[a][newDataRowId].setFormattedValue(value);
+						//TODO: remove this check workaround when we add the support to mandatory display all measures, even if non-empty column is request 
+						if (a >= 0) {
+							String value = numberFormat.format(measuresTotalsToKeep.get(newDataRowId)[mPos]);
+							res[a][newDataRowId].setFormattedValue(value);
+						}
 					}
 				}
 			}

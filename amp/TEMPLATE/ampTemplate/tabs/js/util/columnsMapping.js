@@ -97,6 +97,7 @@ define(function() {
 			ret.groupField = fields;
 			ret.groupColumnShow = hiddenFields;
 			ret.groupText = styleText;
+			ret.groupCollapse = true;
 			// ret.groupSummary = summary;
 			console.log(ret);
 			return ret;

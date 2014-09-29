@@ -145,27 +145,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 								if (element.displayedValue != null && element.displayedValue != "") {
 									row[colName] = element.displayedValue;
 								} else {
-									// TODO: This section uses data from the
-									// parent node
-									// just because now some hierarchical
-									// reports
-									// come with empty columns after the 1st
-									// children
-									// node. Remove it when that problem is
-									// fixed.
-									if (parent != undefined) {
-										if (parent[key].displayedValue.indexOf(' Totals') > 0) {
-											row[colName] = parent[key].displayedValue.substring(0, parent[key].displayedValue
-													.indexOf(' Totals'));
-										} else {
-											row[colName] = parent[key].displayedValue;
-										}
-									} else {
-										// TODO: If the data where ok this
-										// section wount
-										// be needed either.
-										row[colName] = 'Undefined';
-									}
+									row[colName] = getParentContent(key, parent);
 								}
 								row['id'] = Math.random();
 							}
@@ -177,6 +157,22 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 							getContentRecursively(item, rows, obj.contents);
 						});
 					}
+				}
+			}
+
+			/*
+			 * The endpoint doesnt fill the hierarchical values after the 1st
+			 * node so we need to take some values from the parent by recursion.
+			 */
+			function getParentContent(key, parent) {
+				if (parent != undefined && parent != null) {
+					if (parent[key].displayedValue != null && parent[key].displayedValue.indexOf(' Totals') > 0) {
+						return parent[key].displayedValue.substring(0, parent[key].displayedValue.indexOf(' Totals'));
+					} else {
+						getParentContent(key, parent.parent);
+					}
+				} else {
+					return 'Undefined';
 				}
 			}
 

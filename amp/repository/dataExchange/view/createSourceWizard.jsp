@@ -168,7 +168,7 @@ function checkAOW(){
 }
 
 function cancelImportManager() {
-    <digi:context name="url" property="/aim/admin.do" />
+    <digi:context name="url" property="/dataExchange/manageSource.do" />
     window.location="<%= url %>";
 }
 

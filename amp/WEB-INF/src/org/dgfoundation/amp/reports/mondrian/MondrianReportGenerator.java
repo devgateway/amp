@@ -390,7 +390,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 		CellDataSet cellDataSet = OlapResultSetUtil.cellSet2Matrix(cellSet); // we can also pass a formater to cellSet2Matrix(cellSet, formatter)
 		logger.info("[" + spec.getReportName() + "]" +  "Conversion from Olap4J CellSet to Saiku CellDataSet ended.");
 		
-		if (spec.isCalculateColumnTotals() || spec.isCalculateRowTotals()) {
+		if (spec.isCalculateColumnTotals() || spec.isCalculateRowTotals()
+				//enable totals for non-hierarhical columns
+				|| spec.getHierarchies().size() < spec.getColumns().size()) {
 			try {
 				logger.info("[" + spec.getReportName() + "]" +  "Starting totals calculation over the Saiku CellDataSet via Saiku method...");
 				SaikuUtils.doTotals(spec, cellDataSet, cellSet);
@@ -404,6 +406,12 @@ public class MondrianReportGenerator implements ReportExecutor {
 		applyFilterSetting(spec, cellDataSet);
 		
 		CellDataSetToAmpHierachies.concatenateNonHierarchicalColumns(spec, cellDataSet, leafHeaders);
+		
+		//clear totals if were enabled for non-hierarchical merges
+		if (!spec.isCalculateColumnTotals())
+			cellDataSet.setColTotalsLists(null);
+		if (!spec.isCalculateRowTotals())
+			cellDataSet.setRowTotalsLists(null);
 		
 		return cellDataSet;
 	}

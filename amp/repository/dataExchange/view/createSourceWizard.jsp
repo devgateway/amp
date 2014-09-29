@@ -177,16 +177,25 @@ function trim1 (str) {
 }
 
  function importActivities(sourceId){
+	 $('#errorContainer').html('');
 	 var nameS = document.createSourceForm.name;
 	 var msg = '<digi:trn>Please insert name</digi:trn>';
 	 if(document.createSourceForm.fileUploaded == null){
 		 if(trim1(nameS.value).length==0){
-		 		alert(msg);
+				 $('#errorContainer').html ("<font color='red'>"+msg+"</span");
+				 $("html, body").animate({ scrollTop: 0 }, "fast");
 				return true;
 				}
 	 }else{
 		 nameS = document.createSourceForm.fileUploaded.value;
 		 document.createSourceForm.name.value = nameS;
+	 }
+	 selectedHierarchies = $('[name="selectedLanguages"]:checked');
+	 if (selectedHierarchies.length == 0) {
+		 var errorMsg = '<digi:trn>Please choose the projects\' hierarchy(s) to be imported</digi:trn>';
+		 $('#errorContainer').html ("<font color='red'>"+errorMsg+"</span");
+		 $("html, body").animate({ scrollTop: 0 }, "fast");
+		 return true;
 	 }
 	 var importCK = document.getElementsByName("moduleImport");
 	 var importCK1 = document.getElementsByName("moduleAOW");
@@ -255,6 +264,8 @@ function trim1 (str) {
 <c:if test='${createSourceForm.errorName == true}'>
 <font color="red"><digi:trn>There is already an Import Configuration with the same name</digi:trn></font>
 </c:if>
+<span id="errorContainer">
+</span>
 
 <body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <!-- MAIN CONTENT PART START -->

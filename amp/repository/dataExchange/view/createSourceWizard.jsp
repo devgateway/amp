@@ -181,7 +181,7 @@ function trim1 (str) {
 	 var msg = '<digi:trn>Please insert name</digi:trn>';
 	 if(document.createSourceForm.fileUploaded == null){
 		 if(trim1(nameS.value).length==0){
-				alert(msg);
+		 		alert(msg);
 				return true;
 				}
 	 }else{
@@ -252,6 +252,10 @@ function trim1 (str) {
 
 <digi:instance property="createSourceForm" />
 <html:hidden property="errorName" name="createSourceForm" styleId="errorName"/>
+<c:if test='${createSourceForm.errorName == true}'>
+<font color="red"><digi:trn>There is already an Import Configuration with the same name</digi:trn></font>
+</c:if>
+
 <body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <!-- MAIN CONTENT PART START -->
 <digi:form action="/createEditSource.do?action=saveSource" styleId="form" method="post" enctype="multipart/form-data">

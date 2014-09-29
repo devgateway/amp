@@ -42,13 +42,20 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			}}
 		if (contents == null)
 			throw new RuntimeException("could not read schema");
-		return processContents(contents);
+		try {
+			contents = processContents(contents);
+		}
+		catch (Exception e){
+			logger.warn("Error initializing AMP Schema: " + e.getMessage());
+		}
+		return contents;
 	};
 	
 	public String processContents(String contents) {
 		if (currentReport.get() == null || currentEnvironment.get() == null) {
 			logger.warn("currentReport || currentEnvironment == null -> Initializing with default values.");
 			//TODO: Added a default initialization to allow usage for now the Saiku standalone. Return to previous state or implement better solution.
+			//Added a try/catch to avoid startup errors. 
 			initDefault();
 		}
 		

@@ -10,6 +10,8 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+
 
 <digi:instance property="manageSourceForm" />
 
@@ -202,7 +204,7 @@ function page (page){
 		<logic:notEmpty name="manageSourceForm" property="pagedSources">
 			<logic:iterate id="source" name="manageSourceForm" property="pagedSources">
 				<tr>
-				    <td bgcolor="#FFFFFF" class="inside">${source.name}</td>
+				    <td bgcolor="#FFFFFF" class="inside">${fn:escapeXml(source.name)}</td>
 				    <%-- <td bgcolor="#FFFFFF" class="inside">${source.source}</td>
 				    <td bgcolor="#FFFFFF" class="inside">${source.importWorkspace.name }</td>
 				    <td bgcolor="#FFFFFF" class="inside" align="center" nowrap="nowrap">

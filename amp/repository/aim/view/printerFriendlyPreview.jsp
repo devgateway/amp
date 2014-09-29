@@ -2765,7 +2765,7 @@ body {background:none;}
 												      </tr>
 													  <tr bgcolor="#ffffff">
 														<td>
-															<digi:trn key="aim:proposedcompletiondate">Proposed Completion Date</digi:trn>  
+															<digi:trn>Date</digi:trn>  
 														</td>
                                                         <td bgcolor="#FFFFFF" align="left" width="150">
                                                           <c:if test="${aimEditActivityForm.funding.proProjCost.funDate!=null}">

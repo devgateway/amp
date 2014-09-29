@@ -154,6 +154,11 @@ public class MDXGenerator {
 			if (config.getSortingOrder().size() > 0) {
 				axisMdx = sorting(config.getSortingOrder(), axisMdx);
 			}
+			if (axisMdx.contains(MoConstants.FUNC_CROSS_JOIN) && !config.isAllowRowsEmptyData()) {
+				//using NonEmptyCrossJoin instead of NON EMPTY (cannot use NonEmpty - not working)
+				notEmptyRows = ""; 
+				axisMdx = axisMdx.replaceAll(MoConstants.FUNC_CROSS_JOIN, MoConstants.FUNC_NON_EMPTY_CROSS_JOIN);
+			}
 			rows  = notEmptyRows + axisMdx + rows;
 			columns += ", ";
 		}

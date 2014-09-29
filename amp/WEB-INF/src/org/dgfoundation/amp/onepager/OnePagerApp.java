@@ -224,7 +224,7 @@ public class OnePagerApp extends AuthenticatedWebApplication {
                     if (cycle.getRequest().getContainerRequest() instanceof HttpServletRequest){
                         HttpServletRequest containerRequest = (HttpServletRequest)cycle.getRequest().getContainerRequest();
                         DocumentManagerUtil.closeJCRSessions(containerRequest);
-
+                        TLSUtils.clean();
                     }                	
                 }
             }

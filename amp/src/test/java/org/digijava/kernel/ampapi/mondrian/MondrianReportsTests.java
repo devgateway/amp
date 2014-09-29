@@ -222,7 +222,7 @@ public class MondrianReportsTests extends AmpTestCase {
 	
 	private GeneratedReport generateAndValidate(ReportSpecification spec, boolean print, boolean asSaikuReport) {
 		String err = null;
-		MondrianReportGenerator generator = new MondrianReportGenerator(asSaikuReport ? SaikuReportArea.class : ReportAreaImpl.class, new ReportEnvironment("en", null), print);
+		MondrianReportGenerator generator = new MondrianReportGenerator(asSaikuReport ? SaikuReportArea.class : ReportAreaImpl.class, new ReportEnvironment("en", null, null), print);
 		GeneratedReport report = null;
 		try {
 			report = generator.executeReport(spec);

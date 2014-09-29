@@ -132,5 +132,10 @@ public class TLSUtils {
 		TLSUtils.getThreadLocalInstance().request = request;
         TLSUtils.getThreadLocalInstance().site = siteDomain == null ? null : siteDomain.getSite();
 	}
+	
+	public static void clean() {
+		TLSUtils.getThreadLocalInstance().request = null;
+		TLSUtils.getThreadLocalInstance().site = null;
+	}
 	 
 }

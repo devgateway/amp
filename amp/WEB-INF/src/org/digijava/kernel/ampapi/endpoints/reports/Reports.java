@@ -36,6 +36,7 @@ import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecif
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -235,13 +236,17 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON)
 	public final QueryResult getSaikuReportResult(@PathParam("report_id") Long reportId) {
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
-		MondrianReportGenerator generator = new MondrianReportGenerator(SaikuReportArea.class, ReportEnvironment.buildFor(httpRequest), false);
+		MondrianUtils.PRINT_PATH = "/home/simple";
+		MondrianReportGenerator generator = new MondrianReportGenerator(SaikuReportArea.class, ReportEnvironment.buildFor(httpRequest), MondrianUtils.PRINT_PATH != null);
 		SaikuGeneratedReport report = null;
 		try {
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
 			spec.setDisplayEmptyFundingRows(false);
 			MondrianReportFilters filters = new MondrianReportFilters();
-			filters.addYearsFilterRule(Arrays.asList(2013, 2014), true);
+			List<Integer> years = new ArrayList<>();
+			for(int year = 2011; year <= 2014; year ++)
+				years.add(year);
+			//filters.addYearsFilterRule(years, true);
 			spec.setFilters(filters);
 			report = (SaikuGeneratedReport)generator.executeReport(spec);
 			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + report.generationTime + "(ms)");

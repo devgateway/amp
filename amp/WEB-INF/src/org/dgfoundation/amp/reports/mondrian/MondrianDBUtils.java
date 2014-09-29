@@ -41,15 +41,12 @@ public class MondrianDBUtils {
 	 * @param filters - date columns filters map
 	 * @return query to retrieve the list of activities based on date column filters
 	 */
-	public static String generateDateColumnsFilterQuery(Set<Long> allowedActivities, Map<ReportColumn, List<FilterRule>> filters) {
+	public static String generateDateColumnsFilterQuery(Map<ReportColumn, List<FilterRule>> filters) {
 		if (filters == null || filters.size() == 0) return null;
 		StringBuilder filterStr = new StringBuilder();
 		boolean areRealFilters = false;
 		final String or = " OR ";
 		final String and = " AND ";
-		final String select = "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id IN (" 
-							+ Util.toCSStringForIN(allowedActivities)
-							+ ") AND ";
 		
 		for (Iterator<Entry<ReportColumn, List<FilterRule>>> entryIter = filters.entrySet().iterator(); entryIter.hasNext(); ) {
 			Entry<ReportColumn, List<FilterRule>> entry = entryIter.next();
@@ -73,7 +70,7 @@ public class MondrianDBUtils {
 				filterStr.append(and);
 		}
 		if (areRealFilters)
-			return select + filterStr.toString();
+			return filterStr.toString();
 		return null;
 	}
 	

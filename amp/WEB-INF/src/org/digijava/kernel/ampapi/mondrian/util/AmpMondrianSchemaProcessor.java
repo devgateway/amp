@@ -75,14 +75,15 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	
 	protected String getAllowedActivitiesIds() {
 		TeamMember tm = currentEnvironment.get().viewer;
-		Set<Long> allowedActivities = ActivityUtil.getAllAmpActivityIds(WorkspaceFilter.generateWorkspaceFilterQuery(tm));
-		if (allowedActivities.size() > 0 && currentReport.get().getFilters() != null) {
-			String dateFilters = MondrianDBUtils.generateDateColumnsFilterQuery(
-					allowedActivities,
-					((MondrianReportFilters)currentReport.get().getFilters()).getDateFilterRules());
-			if (dateFilters != null) {
-				allowedActivities = ActivityUtil.getAllAmpActivityIds(dateFilters);
-			}
+		Set<Long> allowedActivities = ActivityUtil.fetchLongs(WorkspaceFilter.generateWorkspaceFilterQuery(tm));
+		if (currentReport.get().getFilters() != null) {
+			String dateFiltersQuery = MondrianDBUtils.generateDateColumnsFilterQuery(((MondrianReportFilters)currentReport.get().getFilters()).getDateFilterRules());
+			if (dateFiltersQuery != null)
+				allowedActivities.retainAll(ActivityUtil.fetchLongs(dateFiltersQuery));
+		}
+		if (currentEnvironment.get().workspaceFilter != null) {
+			Set<Long> wfIds = ActivityUtil.fetchLongs(currentEnvironment.get().workspaceFilter.getGeneratedFilterQuery());
+			allowedActivities.addAll(wfIds);
 		}
 		return Util.toCSStringForIN(allowedActivities);
 	}
@@ -101,7 +102,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		MondrianReportSettings settings = new MondrianReportSettings();
 		settings.setCurrencyCode("EUR");
 		spec.setSettings(settings);
-		registerReport(spec, new ReportEnvironment("en", null));
+		registerReport(spec, new ReportEnvironment("en", null, null));
 	}
 
 }

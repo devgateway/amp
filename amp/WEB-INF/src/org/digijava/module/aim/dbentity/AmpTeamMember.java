@@ -241,19 +241,14 @@ public class AmpTeamMember implements Serializable/*, Versionable*/ {
 		
 		try(Connection conn = org.digijava.kernel.persistence.PersistenceManager.getJdbcConnection()){
 				
-				java.sql.Statement st = conn.createStatement();
-				ResultSet rs		= st.executeQuery(af.getGeneratedFilterQuery());
-				//if there would be many results, we would have a "while rs.next"
-				//but since the filter has been moved to SQL, it's only an if
-				if (rs.next()) {
-					return true;
-				}
-            }
-            catch(SQLException exc) {
-            	Logger.getLogger(GlobalSettings.class).info("exception here");
-
-            } 
-    	return false;
+			ResultSet rs = conn.createStatement().executeQuery(af.getGeneratedFilterQuery());
+			//if there would be many results, we would have a "while rs.next"
+			//but since the filter has been moved to SQL, it's only an if
+			return rs.next();
+		}
+		catch(SQLException exc) {
+			throw new RuntimeException("could not run workspace filter");
+		}
     }
     
 }

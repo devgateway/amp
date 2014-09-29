@@ -846,7 +846,7 @@ public class ActivityUtil {
      * returns a set of all ampActivityIds passed by the workspace filter
      * @param session
      */
-    public static Set<Long> getAllAmpActivityIds(String usedQuery)
+    public static Set<Long> fetchLongs(String usedQuery)
     {
    		Set<Long> ampActivityIds = new HashSet<Long>();
    		List<Object> res = PersistenceManager.getSession().createSQLQuery(usedQuery).list();
@@ -872,7 +872,7 @@ public class ActivityUtil {
         if (!inclideDrafts) {
             usedQuery += " and draft=false";
         }
-    	return getAllAmpActivityIds(usedQuery);
+    	return fetchLongs(usedQuery);
     }
     
   	public static List<AmpActivityFake> getLastUpdatedActivities() {

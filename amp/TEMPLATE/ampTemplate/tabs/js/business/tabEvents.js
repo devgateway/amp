@@ -92,7 +92,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 					jsonReader : {
 						repeatitems : false,
 						root : function(obj) {
-							return transformData(obj);
+							return transformData(obj, grouping, tableStructure.hierarchies);
 						},
 						page : function(obj) {
 							return obj.currentPageNumber;
@@ -106,7 +106,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 					},
 					colNames : columnsMapping.createJQGridColumnNames(tableStructure, grouping),
 					colModel : columnsMapping.createJQGridColumnModel(tableStructure),
-					height : 250,
+					height : 400,
 					autowidth : true,
 					shrinkToFit : true,
 					forceFit : false,
@@ -115,7 +115,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 					headertitles : true,
 					gridview : true,
 					rownumbers : false,
-					rowNum : 100,
+					rowNum : 1000,
 					pager : "#tab_grid_pager_" + id,
 					emptyrecords : 'No records to view',
 					grouping : grouping,
@@ -125,11 +125,34 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 				});
 			}
 
-			function transformData(data) {
-				// console.log(data);
+			/*
+			 * Before trying to render the data from server we need to make some
+			 * transformations and cleanups.
+			 */
+			function transformData(data, grouping, hierarchies) {
 				var rows = [];
 				getContentRecursively(data.reportContents /* data.pageArea */, rows, null);
+				if (grouping) {
+					postProcessHierarchies(rows, hierarchies);
+				}
 				return rows;
+			}
+
+			/*
+			 * The data from server uses a hierarchy format where not all values
+			 * are set in all subnodes (children), so we have to add them
+			 * manually before rendering.
+			 */
+			function postProcessHierarchies(rows, hierarchies) {
+				$.each(rows, function(i, row) {
+					$.each(hierarchies.models, function(j, hierarchy) {
+						if (row[hierarchy.get('columnName')] != undefined) {
+							hierarchy.set('lastValue', row[hierarchy.get('columnName')]);
+						} else {
+							row[hierarchy.get('columnName')] = hierarchy.get('lastValue');
+						}
+					});
+				});
 			}
 
 			function getContentRecursively(obj, rows, parent) {
@@ -172,7 +195,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 						getParentContent(key, parent.parent);
 					}
 				} else {
-					return 'Undefined';
+					return 'NULL';
 				}
 			}
 

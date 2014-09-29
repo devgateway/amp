@@ -60,6 +60,10 @@
 	text-align: right;
 }
 
+.legends-container {
+	float: right;
+}
+
 /* Overriding jQueryUI section */
 .ui-widget-header {
 	color: orange;

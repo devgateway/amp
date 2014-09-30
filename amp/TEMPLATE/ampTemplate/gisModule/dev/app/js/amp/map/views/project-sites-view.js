@@ -55,7 +55,7 @@ module.exports = Backbone.View.extend({
 
     self.markerCluster.clearLayers();
 
-    var model = self.app.data.projectSites.at(0);
+    var model = self.app.data.projectSites;
 
     // add new featureGroup
     self.featureGroup = L.geoJson(self.rawData, {
@@ -150,7 +150,7 @@ module.exports = Backbone.View.extend({
 
     this.layerLoadState = 'pending';  // 'loading', 'loaded'.
 
-    var model = self.app.data.projectSites.at(0);
+    var model = self.app.data.projectSites;
 
     //TODO: checkout prune cluster, supposedly way faster...
     // may also be worth doing manually since we don't want updates on zoom

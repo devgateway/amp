@@ -106,6 +106,9 @@ module.exports = Backbone.Model
     return data;
   },
 
+  getSelected: function() {
+    return _.chain(this.get('selected') ? [this] : []);
+  },
 
   updatePaletteSet: function() {
     var deferred = $.Deferred();

@@ -1,6 +1,8 @@
 var fs = require('fs');
 var _ = require('underscore');
 
+var RadioListCollection = require('../collections/radio-list-collection');
+
 var BaseControlView = require('../../base-control/base-control-view');
 var OptionView = require('./option-view');
 
@@ -20,7 +22,10 @@ module.exports = BaseControlView.extend({
   initialize: function() {
     var self = this;
     BaseControlView.prototype.initialize.apply(this, arguments);  // sets this.app
-    this.projectLayerCollection = this.app.data.sitesAndClusters;
+    this.projectLayerCollection = new RadioListCollection(_.union(
+      this.app.data.admClusters.models,
+      [this.app.data.projectSites]
+    ));
 
     // register state:
     this.app.state.register(this, 'layers-view', {
@@ -47,15 +52,11 @@ module.exports = BaseControlView.extend({
 
     // add content
     this.$('.content').html(this.template({title: this.title}));
-    this.renderProjectList();
+    this.$('.layer-selector').html(this.projectLayerCollection.map(function(cluster) {
+      return (new OptionView({ model: cluster })).render().el;
+    }));
 
     return this;
-  },
-
-  renderProjectList: function() {
-    this.$('.layer-selector').html(this.projectLayerCollection.map(function(indicator) {
-      var tmpView = new OptionView({ model: indicator });
-      return tmpView.render().el;
-    }));
   }
+
 });

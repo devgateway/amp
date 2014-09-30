@@ -5,7 +5,7 @@ var Backbone = require('backbone');
 var IndicatorJoin = require('../../data/models/indicator-join-model');
 var IndicatorWMS = require('../../data/models/indicator-wms-model');
 var IndicatorArcGIS = require('../../data/models/indicator-arcgis-model');
-var ProjectSites = require('../../data/models/structures-project-sites-shell-collection-model');
+var ProjectSites = require('../../data/models/structures-collection-model');
 var ADMClusters = require('../../data/models/adm-cluster-model');
 
 // model-specific item views

@@ -22,7 +22,7 @@ module.exports = Backbone.View.extend({
   },
 
   toggleSelect: function() {
-    this.model.collection.toggleSelect(this.model);
+    this.model.trigger('toggleSelect', this.model);
   }
 
 });

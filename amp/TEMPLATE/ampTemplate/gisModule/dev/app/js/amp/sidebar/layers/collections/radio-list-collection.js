@@ -1,6 +1,11 @@
+var Backbone = require('backbone');
 
+module.exports = Backbone.Collection.extend({
 
-module.exports = {
+  initialize: function() {
+    this.listenTo(this, 'toggleSelect', this.toggleSelect);
+  },
+
   select: function(model) {
     this.clearSelected();
     model.set('selected', true);
@@ -28,5 +33,5 @@ module.exports = {
   clearSelected: function() {
     this.getSelected().invoke('unset', 'selected');
   }
-};
 
+});

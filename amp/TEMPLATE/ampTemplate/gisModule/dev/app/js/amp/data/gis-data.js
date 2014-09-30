@@ -10,9 +10,8 @@ var SavedMaps = require('./collections/saved-maps-collection');
 var Activities = require('./collections/activity-collection');
 var Boundaries = require('./collections/boundary-collection');
 var Indicators = require('./collections/indicator-collection');
-var Structures = require('./collections/structures-project-sites-shell-collection');
+var ProjectSites = require('./models/structures-collection-model');
 var ADMClusters = require('./collections/adm-cluster-collection');
-var StructuresAndClusters = require('./collections/clusters-and-project-sites');
 
 
 var GISData = function() {
@@ -33,7 +32,7 @@ _.extend(GISData.prototype, Backbone.Events, {
 
     this.indicators = new Indicators([], { boundaries: this.boundaries });
 
-    this.projectSites = new Structures([
+    this.projectSites = new ProjectSites([
       {}  // just the one model, all defaults
     ], { activities: this.activities});
 
@@ -48,11 +47,6 @@ _.extend(GISData.prototype, Backbone.Events, {
         value: 'adm-2'
       }
     ], { boundaries: this.boundaries });
-
-    this.sitesAndClusters = new StructuresAndClusters({
-      sites: this.projectSites,
-      clusters: this.admClusters
-    });
 
     this.title = new Title({ data: this });
 
@@ -91,7 +85,8 @@ _.extend(GISData.prototype, Backbone.Events, {
   getAllVisibleLayers: function() {
     var layers = _.union(
       this.indicators.getSelected().value(),
-      this.sitesAndClusters.getSelected().value()
+      this.projectSites.getSelected().value(),
+      this.admClusters.getSelected().value()
     );
 
     return _.chain(layers);

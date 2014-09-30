@@ -1,31 +1,13 @@
 var _ = require('underscore');
 var Backbone = require('backbone');
-var RadioMixin = require('../../mixins/radio-mixin');
 var JoinIndicator = require('../models/indicator-join-model');
 var ArcGISIndicator = require('../models/indicator-arcgis-model');
 var WMSIndicator = require('../models/indicator-wms-model');
 
 
-module.exports = Backbone.Collection
-.extend(RadioMixin).extend({
+module.exports = Backbone.Collection.extend({
 
   url: '/rest/gis/indicator-layers',
-
-  parse: function(data) {
-    var parsedData = data;
-    parsedData = _.filter(data, function(layer) {
-      switch (layer.type) {
-        case 'joinBoundaries':
-        case 'wms':
-        case 'arcgis':
-          return true;
-        default:
-          return false;
-      }
-    });
-
-    return parsedData;
-  },
 
   model: function(attrs) {
     var typeName = attrs.type;
@@ -45,6 +27,27 @@ module.exports = Backbone.Collection
 
   initialize: function(models, options) {
     this.boundaries = options.boundaries;
+  },
+
+  parse: function(data) {
+    var parsedData = data;
+    parsedData = _.filter(data, function(layer) {
+      switch (layer.type) {
+        case 'joinBoundaries':
+        case 'wms':
+        case 'arcgis':
+          return true;
+        default:
+          return false;
+      }
+    });
+
+    return parsedData;
+  },
+
+  getSelected: function() {
+    return this.chain()
+      .filter(function(model) { return model.get('selected'); });
   }
 
 });

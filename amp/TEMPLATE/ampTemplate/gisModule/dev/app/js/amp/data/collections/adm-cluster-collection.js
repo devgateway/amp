@@ -15,6 +15,11 @@ module.exports = Backbone.Collection.extend({
   // parse geoJson response to pull out features as a collection.
   parse: function(response) {
     return response.features;
+  },
+
+  getSelected: function() {
+    return this.chain()
+      .filter(function(model) { return model.get('selected'); });
   }
 
 });

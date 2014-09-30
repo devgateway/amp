@@ -123,6 +123,12 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 						model : legend
 					});
 					dynamicLayoutView.legends.show(legendView);
+					$(document).tooltip({
+						items:'#show-legends-link',
+						content : function() {
+							return $('#show_legend_pop_box').html();
+						}
+					});
 
 					// --------------------------------------------------------------------------------------//
 					gridManager.populateGrid(id, dynamicLayoutView, firstContent);

@@ -29,7 +29,8 @@ define(function() {
 		name : 'Actual Disbursements'
 	};
 	map['[AMP ID]'] = {
-		name : 'AMP ID'
+		name : 'AMP ID',
+		width: 80
 	};
 	map['[Level 0 Sector]'] = {
 		name : 'Primary Sector'

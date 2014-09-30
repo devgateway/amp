@@ -9,7 +9,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				ALTER TABLE  amp_team DROP COLUMN type;
+				ALTER TABLE amp_team DROP COLUMN type_categoryvalue_id;
 				ALTER TABLE amp_team DROP COLUMN team_category;
 			</lang>
 		</script>

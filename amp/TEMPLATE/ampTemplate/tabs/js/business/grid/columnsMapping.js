@@ -5,22 +5,67 @@ define(function() {
 	// TODO: We need to receive the same column name from both endpoints!!!
 	// We can define here some properties like min-width, formats, etc.
 	var map = new Object();
-	map['[Project Title]'] = 'Project Title';
-	map['[Region Name]'] = 'Region';
-	map['[Total Measures][Actual Commitments]'] = 'Actual Commitments';
-	map['[Actual Commitments]'] = 'Actual Commitments';
-	map['[Planned Commitments]'] = 'Planned Commitments';
-	map['[Total Measures][Actual Disbursements]'] = 'Actual Disbursements';
-	map['[Actual Disbursements]'] = 'Actual Disbursements';
-	map['[AMP ID]'] = 'AMP ID';
-	map['[Level 0 Sector]'] = 'Primary Sector';
-	map['[Level 1 Sector]'] = 'Primary Sector Sub-Sector';
-	map['[Level 2 Sector]'] = 'Primary Sector Sub-Sub-Sector';
-	map['[Level 2 Sector]'] = 'Secondary Sector';
-	map['[Donor Agency]'] = 'Donor Agency';
-	map['[Organization Name]'] = 'Donor Agency';
-	map['[Category Name]'] = 'Status';
-	map['[Project Description]'] = 'Project Description';
+	map['[Project Title]'] = {
+		name : 'Project Title',
+		width : 550,
+		fixed : false
+	};
+	map['[Region Name]'] = {
+		name : 'Region'
+	};
+	map['[Total Measures][Actual Commitments]'] = {
+		name : 'Actual Commitments'
+	};
+	map['[Actual Commitments]'] = {
+		name : 'Actual Commitments'
+	};
+	map['[Planned Commitments]'] = {
+		name : 'Planned Commitments'
+	};
+	map['[Total Measures][Actual Disbursements]'] = {
+		name : 'Actual Disbursements'
+	};
+	map['[Actual Disbursements]'] = {
+		name : 'Actual Disbursements'
+	};
+	map['[AMP ID]'] = {
+		name : 'AMP ID'
+	};
+	map['[Level 0 Sector]'] = {
+		name : 'Primary Sector'
+	};
+	map['[Level 1 Sector]'] = {
+		name : 'Primary Sector Sub-Sector'
+	};
+	map['[Level 2 Sector]'] = {
+		name : 'Primary Sector Sub-Sub-Sector'
+	};
+	map['[Level 2 Sector]'] = {
+		name : 'Secondary Sector'
+	};
+	map['[Donor Agency]'] = {
+		name : 'Donor Agency'
+	};
+	map['[Organization Name]'] = {
+		name : 'Donor Agency'
+	};
+	map['[Category Name]'] = {
+		name : 'Status'
+	};
+	map['[Project Description]'] = {
+		name : 'Project Description'
+	};
+	map['[Activity Created On]'] = 'Activity Created On';
+
+	function findInMapByColumnName(name) {
+		var ret = undefined;
+		$.each(map, function(i, item) {
+			if (item.name == name) {
+				ret = item;
+			}
+		});
+		return ret;
+	}
 
 	function ColumnsMapping() {
 		if (!(this instanceof ColumnsMapping)) {
@@ -60,18 +105,24 @@ define(function() {
 		var ret = [];
 		ret.push({
 			name : 'editColumn',
-			width : 5,
+			width : 25,
 			sortable : false,
+			fixed : true,
 			formatter : function() {
 				return "<img src='/TEMPLATE/ampTemplate/img_2/ico_edit.gif'/>";
 			}
 		});
 		$(metadata.columns.models).each(function(i, item) {
-			ret.push({
+			var column = {
 				name : item.get('columnName'),
-				width : 25,
-				classes: 'wrap-cell'
-			});
+				classes : 'wrap-cell'
+			};
+			var mappedColumn = findInMapByColumnName(item.get('columnName'));
+			if (mappedColumn != undefined && mappedColumn.width != undefined) {
+				column.width = mappedColumn.width;
+				column.fixed = (mappedColumn.fixed != undefined) ? mappedColumn.fixed : false;
+			}
+			ret.push(column);
 		});
 		/*
 		 * $(metadata.hierarchies.models).each(function(i, item) { ret.push({
@@ -80,7 +131,8 @@ define(function() {
 		$(metadata.measures.models).each(function(i, item) {
 			ret.push({
 				name : item.get('measureName'),
-				width : 25
+				width : 135,
+				fixed : true
 			});
 		});
 		console.log(ret);
@@ -110,6 +162,17 @@ define(function() {
 		} else {
 			return {};
 		}
+	};
+
+	ColumnsMapping.recalculateColumnsWidth = function(grid, widthText) {
+		/*
+		 * var width = widthText.substring(0, widthText.length - 2); var columns =
+		 * $(grid).jqGrid('getGridParam', 'colModel'); // Recalculate 1st column
+		 * (edit icon), the desired width is 23px to // 25px. var newWidth =
+		 * $(grid).jqGrid('setColProp', 'editColumn', { widthOrg : newWidth });
+		 * var gw = $(grid).jqGrid('getGridParam', 'width');
+		 * $(grid).jqGrid('setGridWidth', gw);
+		 */
 	};
 
 	ColumnsMapping.prototype = {

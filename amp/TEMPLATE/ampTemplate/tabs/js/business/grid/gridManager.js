@@ -64,13 +64,8 @@ define([ 'business/grid/columnsMapping' ], function(columnsMapping) {
 			grouping : grouping,
 			groupingView : columnsMapping.createJQGridGroupingModel(tableStructure, grouping),
 			gridComplete : function() {
-				/*var cols = $(grid).jqGrid('getGridParam', 'colModel');
-				var totalWidth = 0;
-				$.each(cols, function(i, item) {
-					totalWidth += item.width;
-				});
-				console.log(totalWidth);*/
-				console.log($(grid).css("width"));
+				//console.log($(grid).css("width"));
+				//columnsMapping.recalculateColumnsWidth(grid, $(grid).css("width"));
 			}
 		});
 	};
@@ -129,7 +124,7 @@ define([ 'business/grid/columnsMapping' ], function(columnsMapping) {
 					id : 0
 				};
 				$.each(obj.contents, function(key, element) {
-					var colName = columnsMapping.getMap()[key];
+					var colName = columnsMapping.getMap()[key].name;
 					if (colName != undefined && colName != null) {
 						if (element.displayedValue != null && element.displayedValue != "") {
 							row[colName] = element.displayedValue;

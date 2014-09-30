@@ -64,6 +64,10 @@
 	float: right;
 }
 
+.wrap-cell {
+	white-space: normal !important;
+}
+
 /* Overriding jQueryUI section */
 .ui-widget-header {
 	color: orange;

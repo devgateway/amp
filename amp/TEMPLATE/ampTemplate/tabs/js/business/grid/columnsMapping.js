@@ -111,7 +111,7 @@ define(function() {
 		var ret = [];
 		ret.push({
 			name : 'editColumn',
-			width : 23,
+			width : 25,
 			sortable : false,
 			fixed : true,
 			formatter : function() {

@@ -95,3 +95,30 @@ th.ui-th-column div {
 	height: auto !important;
 	padding: 2px;
 }
+
+.ui-jqgrid tr.ui-row-ltr td {
+	border-color: lightgrey;
+	padding: 5px;
+}
+
+.myAltRowClassEven {
+	background: rgb(242, 242, 242);
+}
+
+.myAltRowClassOdd {
+	background: transparent;
+}
+
+.ui-state-hover.myAltRowClassEven {
+	color: inherit;
+	background: rgb(242, 242, 242);
+}
+
+.ui-state-hover.myAltRowClassOdd {
+	color: inherit;
+	background: transparent;
+}
+/*
+.ui-state-highlight.myAltRowClassEven { color: PaleGreen; }
+.ui-state-highlight.myAltRowClassOdd { color: Sienna; }
+*/

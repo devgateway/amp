@@ -66,6 +66,8 @@ define([ 'business/grid/columnsMapping' ], function(columnsMapping) {
 			gridComplete : function() {
 				//console.log($(grid).css("width"));
 				//columnsMapping.recalculateColumnsWidth(grid, $(grid).css("width"));
+				$(grid).find(">tbody>tr.jqgrow:odd").addClass("myAltRowClassEven");
+			    $(grid).find(">tbody>tr.jqgrow:even").addClass("myAltRowClassOdd");
 			}
 		});
 	};

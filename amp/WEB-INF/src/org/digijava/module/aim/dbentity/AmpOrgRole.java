@@ -116,7 +116,9 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 			for (AmpOrgRoleBudget budget :budgets) {
 			budgetCode.append(budget.getBudgetCode()+ ",");	
 			}
-			out.getOutputs().add(new Output(null, new String[] {"Budget Code"}, new Object[] {budgetCode.substring(0,budgetCode.length()-1)}));
+			if (budgetCode.length()>0) {
+				out.getOutputs().add(new Output(null, new String[] {"Budget Code"}, new Object[] {budgetCode.substring(0,budgetCode.length()-1)}));
+			}
 		}
 		return out;
 	}

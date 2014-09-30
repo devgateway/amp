@@ -2,7 +2,8 @@ var fs = require('fs');
 var _ = require('underscore');
 var BaseFilterView = require('../views/base-filter-view');
 
-require('../../../../libs/local/slider/jquery.nouislider.min.js');
+require('../../../libs/local/slider/jquery.nouislider.min.js');
+require('jquery-ui/datepicker');
 
 var Template = fs.readFileSync(__dirname + '/../templates/years-template.html', 'utf8');
 
@@ -10,7 +11,7 @@ module.exports = BaseFilterView.extend({
 
   className: BaseFilterView.prototype.className + ' filter-years',
   template: _.template(Template),
-  _loaded:null,
+  _loaded: null,
 
   initialize:function(options) {
     var self = this;
@@ -21,7 +22,6 @@ module.exports = BaseFilterView.extend({
     this._loaded = this.model.fetch().then(function() {
       self.model.set('selectedStart', self.model.get('startYear'));
       self.model.set('selectedEnd', self.model.get('endYear'));
-      self._updateTitle();
     });
 
     this.listenTo(this.model, 'change', this._updateTitle);
@@ -32,19 +32,64 @@ module.exports = BaseFilterView.extend({
     var self = this;
     BaseFilterView.prototype.renderFilters.apply(this);
 
+    this.$el.html(this.template(this.model.toJSON()));
+
     this._loaded.then(function() {
-      self._renderSlider();
+      //self._renderSlider();
+      self._renderDatePickers();
+      self._updateTitle();
     });
 
     return this;
   },
 
+  _renderDatePickers: function() {
+    var self = this;
+
+    // TODO: format absed on admin setting....maybe get from year api..
+    // TODO: abstract common properties from object inits below...
+    var commonObj = {};
+
+    this.$('#start-date').datepicker({
+      defaultDate: this.model.get('selectedStart'),
+      minDate: this.model.get('startYear'),
+      maxDate: this.model.get('endYear'),
+      dateFormat: 'dd/mm/yy',
+      changeMonth: true,
+      changeYear: true,
+      numberOfMonths: 1,
+      yearRange: 'c-60:c+60',
+      onClose: function(selectedDate) {
+        self.$('#end-date').datepicker('option', 'minDate', selectedDate);
+        self.model.set('selectedStart', selectedDate);
+        // self._updateTitle();
+      }
+    });
+
+    this.$('#end-date').datepicker({
+      defaultDate: this.model.get('selectedEnd'),
+      minDate: this.model.get('startYear'),
+      maxDate: this.model.get('endYear'),
+      dateFormat: 'dd/mm/yy',
+      changeMonth: true,
+      changeYear: true,
+      numberOfMonths: 1,
+      yearRange: 'c-60:c+60',
+      onClose: function(selectedDate) {
+        self.$('#start-date').datepicker('option', 'maxDate', selectedDate);
+        self.model.set('selectedEnd', selectedDate);
+        // self._updateTitle();
+      }
+    });
+
+    this.$('#start-date').val(this.model.get('selectedStart'));
+    this.$('#end-date').val(this.model.get('selectedEnd'));
+  },
+
   _renderSlider: function() {
     var self = this;
-    this.$el.html(this.template(this.model.toJSON()));
 
-
-    // TODO: uses window.jQuery because that was the only way I had luck with browserify shim...
+    // uses window.jQuery because that was the only way I had luck with browserify shim...
     // uses https://github.com/leongersen/noUiSlider
     this.slider = window.jQuery(this.$('.year-slider')).noUiSlider({
       start: [self.model.get('selectedStart'), self.model.get('selectedEnd')],
@@ -88,9 +133,13 @@ module.exports = BaseFilterView.extend({
 
   //TODO: do more in template.
   _updateTitle:function() {
+
     this.$titleEl.find('.filter-count').text(this.model.get('selectedStart') +
         ' - ' +
       this.model.get('selectedEnd'));
+
+    this.$('.start-year').text(this.model.get('selectedStart'));
+    this.$('.end-year').text(this.model.get('selectedEnd'));
   }
 
 });

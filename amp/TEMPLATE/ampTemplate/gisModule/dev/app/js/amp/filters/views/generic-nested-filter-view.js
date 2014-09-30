@@ -8,8 +8,6 @@ var GenericFilterView = require('../views/generic-filter-view');
 var TreeNodeModel = require('../tree/tree-node-model');
 var TreeNodeView = require('../tree/tree-node-view');
 
-require('../../../../libs/local/slider/jquery.nouislider.min.js');
-
 var Template = fs.readFileSync(__dirname + '/../templates/generic-filter-template.html', 'utf8');
 
 

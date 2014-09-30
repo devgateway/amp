@@ -1,9 +1,11 @@
 var fs = require('fs');
 var _ = require('underscore');
 
-var PopupFilterView = require('../views/popup-filters-view');
+var FiltersWidget = require('../../../filters/main');
 var BaseControlView = require('../../base-control/base-control-view');
 var Template = fs.readFileSync(__dirname + '/../templates/filters-sidebar-template.html', 'utf8');
+
+require('jquery-ui/draggable');
 
 module.exports = BaseControlView.extend({
   id: 'tool-filters',
@@ -16,14 +18,13 @@ module.exports = BaseControlView.extend({
     'click .accordion-heading': 'newlaunchFilter'
   },
 
-  // collection of child views..
-  filterViewsInstances:[],
 
   template: _.template(Template),
 
   initialize:function(options) {
     this.app = options.app;
     BaseControlView.prototype.initialize.apply(this, arguments);
+
   },
 
 
@@ -34,11 +35,18 @@ module.exports = BaseControlView.extend({
     // add content
     this.$('.content').html(this.template({title: this.title}));
 
-    _.each(this.filterViewsInstances, function(filterView) {
-      self.$('.filter-list').append(filterView.renderTitle().titleEl);
-    });
+    // Doesn't do anything for now, used to show filter titles / counts in sidebar.
+    // _.each(this.filtersWidget.filtersWidgetsInstances, function(filtersWidget) {
+    //   self.$('.filter-list').append(filtersWidget.renderTitle().titleEl);
+    // });
 
-    this.popupFilterView = new PopupFilterView({app:this.app, el:this.$('#filter-popup')});
+    this.filtersWidget = new FiltersWidget({el:this.$('#filter-popup'), draggable: true });
+
+    this.app.state.register(this, 'filters', {
+      get: function() { return this.filtersWidget.serialize(); },
+      set: function(state) { return this.filtersWidget.deserialize(state);},
+      empty: null
+    });
 
     return this;
   },
@@ -46,11 +54,15 @@ module.exports = BaseControlView.extend({
 
   newlaunchFilter:function() {
     var self = this;
-    this.popupFilterView.render();
-    this.popupFilterView.$el.show();
+    this.$('#filter-popup').show();
 
-    // need to do better, but must close accordion or get weird states from bootstrap and manual filter showing....
-    this.popupFilterView.on('close', function() {
+    // could do better, but must close accordion or get weird states from bootstrap and manual filter showing....
+    this.filtersWidget.on('cancel', function() {
+      self.$('.accordion-body').collapse('hide');
+    });
+
+    this.filtersWidget.on('apply', function() {
+      //TODO: ...trigger something wider....or atttach fitler widget to app.data....
       self.$('.accordion-body').collapse('hide');
     });
   }

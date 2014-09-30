@@ -21,7 +21,6 @@ module.exports = Backbone.View.extend({
   title: 'tbd',
 
   initialize:function(options) {
-    this.app = options.app;
     this.title = options.title;
     this.filterCollection = new Backbone.Collection();
   },
@@ -32,13 +31,11 @@ module.exports = Backbone.View.extend({
     var first = true;
     this.$el.attr('id', 'filter-pane-' + this.title);
     this.$el.html(this.contentTemplate());
-
     this.filterCollection.each(function(filter) {
       filter.url = filter.get('url');
 
       if (filter instanceof YearsFilterModel) {
         view = new YearsFilterView({
-          app:this.app,
           model:filter,
           el: self.$('.sub-filters-content')
         });
@@ -46,15 +43,14 @@ module.exports = Backbone.View.extend({
 
       } else if (filter.get('title') === 'Organizations') {
         view = new GenericNestedFilterView({
-          app:this.app,
           model:filter,
           el: self.$('.sub-filters-content')
         });
         self.viewList.push(view);
 
       } else {
+
         view = new GenericFilterView({
-          app:this.app,
           model:filter,
           el: self.$('.sub-filters-content')
         });

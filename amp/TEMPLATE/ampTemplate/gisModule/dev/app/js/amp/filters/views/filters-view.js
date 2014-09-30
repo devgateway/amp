@@ -4,6 +4,8 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 
 var TopLevelFilterView = require('../views/top-level-filter-view');
+var AllFilterCollection = require('../collections/all-filters-collection');
+
 
 var Template = fs.readFileSync(__dirname + '/../templates/filters-content-template.html', 'utf8');
 var TitleTemplate = fs.readFileSync(__dirname + '/../templates/filter-title-template.html', 'utf8');
@@ -30,21 +32,18 @@ module.exports = Backbone.View.extend({
   titleTemplate: _.template(TitleTemplate),
 
   initialize:function(options) {
-    this.app = options.app;
+    this.translator = options.translator;
 
-    // setup filter-panel
-    this.$el.draggable({ cancel: '.panel-body, .panel-footer', cursor: 'move'  });
+    if (options.draggable) {
+      this.$el.draggable({ cancel: '.panel-body, .panel-footer', cursor: 'move'  });
+    }
+
+    this.allFilters = new AllFilterCollection();
 
     // Create top level views
     this._createTopLevelFilterViews();
 
-    this._getFilterList().done();
-
-    this.app.state.register(this, 'filters', {
-      get: function() { return this.serialize(); },
-      set: this.deserialize,
-      empty: null
-    });
+    this.render();
   },
 
   _createTopLevelFilterViews: function() {
@@ -55,6 +54,7 @@ module.exports = Backbone.View.extend({
     this.filterViewsInstances.programs = new TopLevelFilterView({title:'Programs'});
     this.filterViewsInstances.activity = new TopLevelFilterView({title:'Activity'});
     this.filterViewsInstances.donors = new TopLevelFilterView({title:'Donor'});
+    this.filterViewsInstances.financials = new TopLevelFilterView({title:'Financial'});
     this.filterViewsInstances.others = new TopLevelFilterView({title:'Other'});
   },
 
@@ -75,8 +75,10 @@ module.exports = Backbone.View.extend({
       this.popovers = this.$('[data-toggle="popover"]');
       this.popovers.popover();
 
-      // Translate
-      this.app.translator.translateDOM(this.el);
+      // Translate if available.
+      if (this.translator) {
+        this.translator.translateDOM(this.el);
+      }
       this.firstRender = false;
     }
 
@@ -85,11 +87,11 @@ module.exports = Backbone.View.extend({
 
   //TODO: move to app data
   _setupOrgListener:function() {
-    //  var orgFilter = this.app.data.filters.findWhere({title: 'Organizations'});
-    var orgGroupFilter = this.app.data.filters.findWhere({title: 'OrganizationGroupList'});
-    orgGroupFilter.getTree().then(function() {
-      //TODO: setup 'Organizations' to listen to 'OrganizationGroups'
-    });
+    //  var orgFilter = this.allFilters.findWhere({title: 'Organizations'});
+    // var orgGroupFilter = this.allFilters.findWhere({title: 'OrganizationGroupList'});
+    // orgGroupFilter.getTree().then(function() {
+    //   //TODO: setup 'Organizations' to listen to 'OrganizationGroups'
+    // });
   },
 
   renderFilters:function() {
@@ -102,7 +104,7 @@ module.exports = Backbone.View.extend({
         var tmpFilterView = this.filterViewsInstances[filterView];
         this.$('.filter-titles').append(tmpFilterView.renderTitle().titleEl);
 
-        // maybe...render bodies on click, not all at once...doesn't seem critical right now...
+        //...render bodies on click, not all at once...doesn't seem critical right now...
         this.$('.filter-options').append(tmpFilterView.renderFilters().el);
       }
     }
@@ -111,8 +113,6 @@ module.exports = Backbone.View.extend({
   },
 
 
-
-  //TODO: move to app data
   _getFilterList:function() {
     var self = this;
     var deferred =  $.Deferred();
@@ -122,12 +122,11 @@ module.exports = Backbone.View.extend({
         url: this.apiURL
       })
       .done(function(data) {
+        var deferreds = [];
+
         _.each(data, function(APIFilter) {
           if (APIFilter.ui) {
-            var tmpModel = self._createFilterModels(APIFilter);
-            if (tmpModel) {
-              self.app.data.filters.add(tmpModel);
-            }
+            deferreds.push(self._createFilterModels(APIFilter));
           }
         });
 
@@ -135,7 +134,11 @@ module.exports = Backbone.View.extend({
           console.warn('Filters API returned empty', data);
         }
 
-        deferred.resolve();
+        // when all child calls are done resolve.
+        $.when.apply($, deferreds).then(function() {
+          deferred.resolve();
+        });
+
       })
       .fail(function(jqXHR, textStatus, errorThrown) {
         var errorMessage = 'Getting filters failed';
@@ -151,38 +154,44 @@ module.exports = Backbone.View.extend({
 
   _createFilterModels: function(APIFilter) {
     var tmpModel = null;
+    var deferred =  $.Deferred();
     // Assume all filters are genericView, but if we want, we can
     // use specific granular views for some filters: OrgFilterView
     // TODO: magic strings are dangerous, config somewhere...
     switch (APIFilter.name) {
-      case 'ActivityStatusList':
       case 'ActivityBudgetList':
+      case 'TypeOfAssistanceList':
+      case 'FinancingInstrumentsList':
+        tmpModel = new GenericFilterModel({
+          url:APIFilter.endpoint,
+          title:APIFilter.name
+        });
+        this.filterViewsInstances.financials.filterCollection.add(tmpModel);
+        break;
+      case 'ActivityStatusList':
       case 'ActivityApprovalStatus':
         tmpModel = new GenericFilterModel({
-          app:this.app,
           url:APIFilter.endpoint,
           title:APIFilter.name
         });
         this.filterViewsInstances.activity.filterCollection.add(tmpModel);
         break;
       case 'Programs':
-        this._goOneDeeper(this.filterViewsInstances.programs.filterCollection, APIFilter.endpoint);
+        deferred = this._goOneDeeper(this.filterViewsInstances.programs.filterCollection, APIFilter.endpoint);
         break;
       case 'Dates':
         tmpModel = new YearsFilterModel({
           title:APIFilter.name,
-          app:this.app,
           url:APIFilter.endpoint
         });
         this.filterViewsInstances.others.filterCollection.add(tmpModel);
         break;
       case 'Sectors':
-        this._goOneDeeper(this.filterViewsInstances.sectors.filterCollection, APIFilter.endpoint);
+        deferred = this._goOneDeeper(this.filterViewsInstances.sectors.filterCollection, APIFilter.endpoint);
         break;
       case 'Organizations':
       case 'OrganizationGroupList':
         tmpModel = new GenericFilterModel({
-          app:this.app,
           url:APIFilter.endpoint,
           title:APIFilter.name
         });
@@ -190,14 +199,19 @@ module.exports = Backbone.View.extend({
         break;
       default:
         tmpModel = new GenericFilterModel({
-          app:this.app,
           url:APIFilter.endpoint,
           title:APIFilter.name
         });
         this.filterViewsInstances.others.filterCollection.add(tmpModel);
     }
 
-    return tmpModel;
+    if (tmpModel) {
+      this.allFilters.add(tmpModel);
+      deferred.resolve(tmpModel);
+    }
+
+
+    return deferred;
   },
 
   // get endpoint's children and load them into targetCollection...
@@ -212,13 +226,12 @@ module.exports = Backbone.View.extend({
     .done(function(data) {
       _.each(data, function(APIFilter) {
         tmpModel = new GenericFilterModel({
-          app:self.app,
           url:url + '/' + APIFilter.id,
           title:APIFilter.name
         });
         targetCollection.add(tmpModel);
         if (tmpModel) {
-          self.app.data.filters.add(tmpModel);
+          self.allFilters.add(tmpModel);
         }
       });
 
@@ -238,36 +251,31 @@ module.exports = Backbone.View.extend({
   },
 
   applyFilters:function() {
-    // trigger common event for applying filters.
-    // this.convertTreeToJSONFilter(); //implemented by child, and if not fallback to base.
-
     this.serialize();
-    this.$el.hide();
-    this.trigger('close');  // used to collapse accordion, or will cause issues
+    this.trigger('apply');
   },
 
-  //TODO: move to app.data.filters, which should be turned into a special collection.
   serialize: function() {
     var serializedFilters = {};
-    this.app.data.filters.each(function(filter) {
+
+    this.allFilters.each(function(filter) {
       serializedFilters[filter.get('title')] = filter.serialize();
     });
+
     return serializedFilters;
   },
 
-  //TODO: move to app.data.filters, which should be turned into a special collection.
   deserialize: function(blob) {
     if (blob) {
-      this.app.data.filters.each(function(filter) {
+      this.allFilters.each(function(filter) {
         filter.deserialize(blob[filter.get('title')]);
       });
     }
   },
 
   cancel:function() {
-    this.$el.hide();
-    this.trigger('close'); // used to collapse accordion, or will cause issues
+    // TODO: revert filter state.
+    this.trigger('cancel');
   }
-
 });
 

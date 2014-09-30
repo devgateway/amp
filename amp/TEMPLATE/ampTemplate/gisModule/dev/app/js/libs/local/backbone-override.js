@@ -8,8 +8,13 @@ var originalSync = Backbone.sync;
 var _path = window.location.pathname,
     _CORS_API = 'http://66.207.103.134',
     _AMP_API = _path.substr(0, _path.indexOf('/TEMPLATE')),
-    _IS_LOCAL = (window.location.host === 'localhost:3000'),
-    API_BASE = _IS_LOCAL ? _CORS_API : _AMP_API;
+    _IS_NODE = (window.location.host === 'localhost:3000'),
+    API_BASE = _IS_NODE ? _CORS_API : _AMP_API;
+
+
+function isRelative(url) {
+  return !(new RegExp('^(?:[a-z]+:)?//', 'i')).test(url);
+}
 
 
 Backbone.sync = function(method, model, options) {
@@ -18,12 +23,14 @@ Backbone.sync = function(method, model, options) {
   }
   options = options || {};
 
-  // calculate and append baseURL.
-  var url = (typeof model.url === 'string') ? model.url : model.url(),
-      fixedUrl = API_BASE + url;
+  // calculate and prepend baseURL.
+  var url = (typeof model.url === 'string') ? model.url : model.url();
+  if (isRelative(url)) {
+    url = API_BASE + url;
+  }
 
   _.extend(options, {
-    url: fixedUrl,
+    url: url,
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'

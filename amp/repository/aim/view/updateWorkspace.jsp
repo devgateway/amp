@@ -421,26 +421,7 @@ function update(action) {
 								document.aimUpdateWorkspaceForm.relatedTeam.focus();
 								return false;
 							}
-							else {
-								if (lab5 == "<%= org.digijava.module.aim.helper.Constants.TEAM_TYPE_BILATERAL %>") {
-									if (bsize != 0) {
-										if (index3 > bsize) {
-											alert("<digi:trn key="aim:selectbilateralteam">Please select bilateral team</digi:trn>");
-											document.aimUpdateWorkspaceForm.relatedTeam.focus();
-											return false;
-										}
-									}
-								}
-								if (lab5 == "<%= org.digijava.module.aim.helper.Constants.TEAM_TYPE_MULTILATERAL %>") {
-									if (bsize != 0) {
-										if (index3 <= bsize) {
-											alert("<digi:trn key="aim:selectmultilateralteam">Please select multilateral team</digi:trn>");
-											document.aimUpdateWorkspaceForm.relatedTeam.focus();
-											return false;
-										}
-									}
-								}
-							}
+
 						}
 					}
 				}
@@ -832,56 +813,6 @@ function cancel()
 															</tr>
 														</c:if>
 													</c:if>
-													
-													<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'add'}">
-														<c:if test="${aimUpdateWorkspaceForm.category == 'DONOR' && aimUpdateWorkspaceForm.workspaceType == 'Donor'}">
-															<tr id="relTeamRow">
-																<td align="right" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
-																	<digi:trn key="aim:relatedTeam">Related Team</digi:trn>
-																</td>
-																<td align="left" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
-																	<c:choose>
-																		<c:when test="${aimUpdateWorkspaceForm.actionEvent == 'edit' && aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
-																			<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag == 'nil'}">
-																				<html:select property="relatedTeam" styleClass="inp-text">
-																					<html:option value="-1">No related team available</html:option>
-																				</html:select>
-																			</c:if>
-																			<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag == 'set'}">
-																				<html:select property="relatedTeam" styleClass="inp-text">
-																					<html:option value="-1">-- Select Team --</html:option>
-																					<logic:notEmpty name="aimUpdateWorkspaceForm" property="relatedTeamBilatColl" >
-																						<optgroup label="Bilateral" style="FONT-WEIGHT: bold;COLOR: #cc0000;">
-																						<%--<html:option value="-1" style="FONT-WEIGHT: bold;COLOR: #cc0000;">-- Bilateral --</html:option>--%>
-																						<html:optionsCollection name="aimUpdateWorkspaceForm" property="relatedTeamBilatColl"
-																												value="ampTeamId" label="name" styleClass="COLOR: #cc0000;" />
-																						</optgroup>
-																					</logic:notEmpty>
-																					<logic:notEmpty name="aimUpdateWorkspaceForm" property="relatedTeamMutilatColl" >
-																						<optgroup label="Multilateral" style="FONT-WEIGHT: bold;COLOR: #006600">
-																						<%--<html:option value="-1">-- Multilateral --</html:option>--%>
-																						<html:optionsCollection name="aimUpdateWorkspaceForm" property="relatedTeamMutilatColl"
-																												value="ampTeamId" label="name" styleClass="COLOR: #006600" />
-																						</optgroup>
-																					</logic:notEmpty>
-																				</html:select>
-																			</c:if>
-																		</c:when>
-																		<c:otherwise>
-																			<logic:notEmpty name="aimUpdateWorkspaceForm" property="relatedTeam" >
-																				<b><c:out value="${aimUpdateWorkspaceForm.relatedTeamName}" /></b>
-																			</logic:notEmpty>
-																			<logic:empty name="aimUpdateWorkspaceForm" property="relatedTeam" >
-																				<b><digi:trn key="aim:noRelatedTeam">No related team found</digi:trn></b>
-																			</logic:empty>
-																		</c:otherwise>
-																	</c:choose>
-																</td>
-															</tr>
-														</c:if>
-													</c:if>
-													
-													
 															
 											
 													

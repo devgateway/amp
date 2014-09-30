@@ -191,12 +191,7 @@ public class Constants
 	
 	public static final String ACTIVITY_NEEDS_APPROVAL_STATUS	= "'created', 'started', 'edited', 'rejected'";
 
-	/* Team types */
-	@Deprecated
-	public static final String TEAM_TYPE_MULTILATERAL			= "Multilateral";
-	@Deprecated
-	public static final String TEAM_TYPE_BILATERAL				= "Bilateral";
-	/* END - Team types */
+
 
 	//humbly added by Mihai
 	public static final Long DONOR_FUNDING = new Long(1);

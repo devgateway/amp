@@ -39,7 +39,7 @@ public class GetUnAssignedWorkspaces extends Action {
 			String dest = request.getParameter("dest");
 			String workspaceType = request.getParameter("wType");
 			//String teamCategory  = request.getParameter("tCategory");
-			String team = uwForm.getCategory();
+			
 			//workaround :(
 //			if (team!=null && team.toLowerCase().equals("mofed")){
 //				team="GOVERNMENT";
@@ -85,7 +85,7 @@ public class GetUnAssignedWorkspaces extends Action {
 				uwForm.setChildTeamTypeId(null);
 			}
 			
-			Collection col = TeamUtil.getUnassignedWorkspaces(workspaceType, team);
+			Collection col = TeamUtil.getUnassignedWorkspaces(workspaceType);
 			logger.debug("Unassigned workspaces retreived, size = " + col.size());
 			
 			uwForm.setAvailChildWorkspaces(col);

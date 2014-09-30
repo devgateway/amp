@@ -97,7 +97,7 @@ public class UpdateWorkspace extends Action {
             // See details in AMP-17132
             newTeam.setPermissionStrategy(PMUtil.PERM_FULL_ACCESS);
 			newTeam.setName(uwForm.getTeamName());
-			newTeam.setTeamCategory(uwForm.getCategory());
+			
 			newTeam.setAccessType(uwForm.getWorkspaceType());
 			newTeam.setAddActivity(uwForm.getAddActivity());
 			newTeam.setComputation(uwForm.getComputation());
@@ -140,7 +140,7 @@ public class UpdateWorkspace extends Action {
 		if (event != null && event.trim().equalsIgnoreCase("reset")) {
 			uwForm.setPopupReset(false);
 			uwForm.setTeamName("");
-			uwForm.setCategory("");
+//			uwForm.setCategory("");
 			uwForm.setTypeId(0L);
 			uwForm.setDescription("");
 			uwForm.setWorkspaceType("");

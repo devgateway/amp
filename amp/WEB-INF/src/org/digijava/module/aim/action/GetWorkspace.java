@@ -125,7 +125,7 @@ public class GetWorkspace extends Action {
 
                 uwForm.setTeamId(new Long(workspace.getId()));
                 uwForm.setTeamName(workspace.getName());
-                uwForm.setCategory(workspace.getTeamCategory());
+//                uwForm.setCategory(workspace.getTeamCategory());
                 uwForm.setTypeId(typeId);
                 uwForm.setWorkspaceType(workspace.getWorkspaceType());
                 uwForm.setDescription(workspace.getDescription());
@@ -159,31 +159,7 @@ public class GetWorkspace extends Action {
 
 
                 if (null == uwForm.getRelatedTeam()) {
-                    if ("DONOR".equalsIgnoreCase(uwForm.getCategory()) && "Donor".equalsIgnoreCase(uwForm.getWorkspaceType())) {
-                        //Collection col = TeamUtil.getAllRelatedTeamsByType(uwForm.getType());
-                        Collection col = TeamUtil.getAllRelatedTeams();
-                        if (col.size() < 1)
-                            uwForm.setRelatedTeamFlag("nil");
-                        else {
-                            //String uwtype = uwForm.getType();
-                            Iterator itr = col.iterator();
-                            while (itr.hasNext()) {
-                                AmpTeam team 		= (AmpTeam) itr.next();
-                                String typeValue	= null;
-                                if ( team.getType() != null ) {
-                                    typeValue		= team.getType().getValue();
-                                }
-							
-						        if ( Constants.TEAM_TYPE_BILATERAL.equals( typeValue ) )
-                                    uwForm.getRelatedTeamBilatColl().add(team);
-                                else if ( Constants.TEAM_TYPE_MULTILATERAL.equals( typeValue ) )
-                                    uwForm.getRelatedTeamMutilatColl().add(team);
-                            }
-                            uwForm.setRelatedTeamBilatCollSize(new Integer(uwForm.getRelatedTeamBilatColl().size()));
-                            uwForm.setRelatedTeamFlag("set");
-                        }
-                    }
-                    else{
+{
                         uwForm.setRelatedTeamFlag("nil");
                     }
                 }

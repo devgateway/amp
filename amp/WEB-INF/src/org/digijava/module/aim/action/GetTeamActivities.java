@@ -132,11 +132,11 @@ public class GetTeamActivities
 
                 if(taForm.getAllActivities() == null) {
                     Collection col = null;
-                    if(tm.getTeamType() == null) {
+                    if(true) {
                         if(ampTeam.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
                             col = TeamUtil.getManagementTeamActivities(id,taForm.getKeyword());
                             taForm.setDonorFlag(true);
-                        } else if(ampTeam.getTeamCategory() != null) {
+                        } else if(false) {
                             col = TeamUtil.getAllTeamActivities(id,true,taForm.getKeyword());
                             taForm.setDonorFlag(true);
                         } else {

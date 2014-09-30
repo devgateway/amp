@@ -23,8 +23,6 @@ public class TeamMember implements Comparable, Serializable{
 	private String roleName;
 	private Long teamId;
 	private String teamName;
-	@Deprecated
-	private String teamType; // indicates whether the team is a DONOR team or MOFED team
 	private String teamAccessType; // indicates whether MANAGEMENT or WORKING TEAM
 	private Boolean computation;
 	private Boolean useFilters;
@@ -96,10 +94,6 @@ public class TeamMember implements Comparable, Serializable{
 		if( t!=null ) {
 			this.teamId = (Long)t.getIdentifier();
 			this.teamName = t.getName();
-			if( t.getType()!=null ) 
-				this.teamType = t.getType().getValue();
-			else 
-				this.teamType = t.getTeamCategory();
 			this.teamAccessType = t.getAccessType();
 			this.computation = t.getComputation();
 			this.useFilters = t.getUseFilter();
@@ -229,13 +223,7 @@ public class TeamMember implements Comparable, Serializable{
 		this.activities = activities;
 	}
 
-	/**
-	 * @return Returns the teamType.
-	 */
-	@Deprecated
-	public String getTeamType() {
-		return teamType;
-	}
+
 
 	/**
 	 * @return Returns the teamAccessType.

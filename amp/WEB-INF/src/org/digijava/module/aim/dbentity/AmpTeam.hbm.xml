@@ -22,13 +22,9 @@
 		<many-to-one name="teamLead" column="team_lead_id"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 
-		<many-to-one name="type" column="type_categoryvalue_id"
-			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" />
 
 		<many-to-one name="parentTeamId" column="parent_team_id"
 			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />
-
-		<property name="teamCategory" column="team_category" type="java.lang.String" />
 
 		<many-to-one name="relatedTeamId" column="related_team_id"
 			class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none" />

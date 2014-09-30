@@ -2863,60 +2863,6 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 
   }
 
-  public static boolean canViewActivity(Long actId, TeamMember tm) {
-    boolean canView = false;
-    Session session = null;
-    try {
-      session = PersistenceManager.getSession();
-      if (tm.getTeamHead()) {
-        if (tm.getTeamType().equalsIgnoreCase("DONOR")) {
-          // DONOR team leader
-          AmpTeam team = (AmpTeam) session.load(AmpTeam.class, tm.getTeamId());
-          AmpActivityVersion act = new AmpActivityVersion();
-          act.setAmpActivityId(actId);
-          if (team.getActivityList().contains(act))
-            canView = true;
-        }
-        else {
-          // MOFED team leader
-          //logger.info("Mofed team leader");
-          //logger.info("loading activity " + actId);
-          AmpActivityVersion act = (AmpActivityVersion) session.load(AmpActivityVersion.class, actId);
-          if (act.getTeam().getAmpTeamId().equals(tm.getTeamId())) {
-            logger.debug("Can view " + actId + " , team " + tm.getTeamId());
-            canView = true;
-          }
-          else {
-
-          }
-        }
-      }
-      else {
-        AmpTeamMember ampTeamMem = (AmpTeamMember) session.load(AmpTeamMember.class,
-            tm.getMemberId());
-        AmpActivityVersion act = new AmpActivityVersion();
-        act.setAmpActivityId(actId);
-        if (ampTeamMem.getActivities().contains(act))
-          canView = true;
-      }
-    }
-    catch (Exception e) {
-      logger.error("Exception from canViewActivity()");
-      e.printStackTrace(System.out);
-    }
-    finally {
-      if (session != null) {
-        try {
-          PersistenceManager.releaseSession(session);
-        }
-        catch (Exception rsf) {
-          logger.error("Release session failed");
-        }
-      }
-    }
-    //logger.info("Canview =" + canView);
-    return canView;
-  }
 
     public static StringBuilder getDonorsForActivity(Long activityId) {
         StringBuilder donors = new StringBuilder();
@@ -4487,7 +4433,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                     session=PersistenceManager.getRequestDBSession();
                     
                 Set<String> activityStatus = new HashSet<String>();
-                String teamType=member.getTeamType();
+//                String teamType=member.getTeamType();
                 activityStatus.add(Constants.APPROVED_STATUS);
                 activityStatus.add(Constants.EDITED_STATUS);
                 Set relatedTeams=TeamUtil.getRelatedTeamsForMember(member);
@@ -4502,9 +4448,9 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                 {
                 	// not computed (e.g. team) workspace
                     queryString = "select " + activityNameString + ", a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ")    ";
-                    if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
-                    	queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
-                    }
+//                    if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
+//                    	queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
+//                    }
                     queryString += " order by " + activityNameString;
                 }	
     			  			
@@ -4543,7 +4489,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                     session=PersistenceManager.getRequestDBSession();
 
                 Set<String> activityStatus = new HashSet<String>();
-                String teamType=member.getTeamType();
+//                String teamType=member.getTeamType();
 		activityStatus.add(Constants.APPROVED_STATUS);
 		activityStatus.add(Constants.EDITED_STATUS);
                 Set relatedTeams=TeamUtil.getRelatedTeamsForMember(member);
@@ -4572,9 +4518,9 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                     } else {
                         // none computed workspace
                     	queryString +=" where gr.ampActivityLastVersion.team in  (" + Util.toCSStringForIN(relatedTeams) + ") ";                    	
-                        if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
-                            queryString += "  and gr.ampActivityLastVersion.approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
-                        }
+//                        if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
+//                            queryString += "  and gr.ampActivityLastVersion.approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
+//                        }
                         
                     }
                 queryString += "  and lower(" + activityName + ") like lower(:searchStr) group by gr.ampActivityLastVersion.ampActivityId," + activityName + " order by " + activityName;

@@ -37,6 +37,11 @@ module.exports = Backbone.Model
       return boundaryLoaded.promise();
     } else {
       console.error('No boundary found for ' + this.get('value'));
+
+      var failedBoundary = new jQuery.Deferred;
+      failedBoundary.reject();
+      return failedBoundary.promise();
+
     }
   },
 

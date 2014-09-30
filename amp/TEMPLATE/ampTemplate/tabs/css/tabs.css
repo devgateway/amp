@@ -72,3 +72,10 @@
 .ui-widget-header {
 	color: orange;
 }
+
+/* Overriding jqGrid section */
+th.ui-th-column div {
+	white-space: normal !important;
+	height: auto !important;
+	padding: 2px;
+}

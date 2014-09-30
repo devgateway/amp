@@ -55,7 +55,12 @@ define(function() {
 	map['[Project Description]'] = {
 		name : 'Project Description'
 	};
-	map['[Activity Created On]'] = 'Activity Created On';
+	map['[Activity Created On]'] = {
+		name : 'Activity Created On'
+	};
+	map['[Program Level 1 Name]'] = {
+		name : 'National Planning Objectives Level 1'
+	};
 
 	function findInMapByColumnName(name) {
 		var ret = undefined;
@@ -105,7 +110,7 @@ define(function() {
 		var ret = [];
 		ret.push({
 			name : 'editColumn',
-			width : 25,
+			width : 23,
 			sortable : false,
 			fixed : true,
 			formatter : function() {
@@ -131,7 +136,7 @@ define(function() {
 		$(metadata.measures.models).each(function(i, item) {
 			ret.push({
 				name : item.get('measureName'),
-				width : 135,
+				width : 105,
 				fixed : true
 			});
 		});

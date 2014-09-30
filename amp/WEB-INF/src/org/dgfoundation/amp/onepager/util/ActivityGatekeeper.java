@@ -17,7 +17,7 @@ public class ActivityGatekeeper {
 	private static HashMap<String, String> keycode = new HashMap<String, String>();
 	private static HashMap<String, Long> userEditing = new HashMap<String, Long>();
 	private static Boolean lock = false;
-	private static final long LOCK_TIMEOUT = 5000; //ms
+	private static final long LOCK_TIMEOUT = 15000; //ms
 	
 	public final static Integer REFRESH_LOCK_VALID = 0; //activity locked by current user
 	public final static Integer REFRESH_LOCK_LOCKED = 1; //activity locked by other user

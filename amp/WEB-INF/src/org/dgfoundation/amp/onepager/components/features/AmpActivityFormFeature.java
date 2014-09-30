@@ -462,9 +462,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	                        target.appendJavaScript("showWarningPanel();");
 	                        //
 
-	                		//disable lock refresher
-	                		op.getEditLockRefresher().setEnabled(false);
-
+	                		//enable trigger
+	                		op.getEditLockRefresher().setEnabled(true);
+	                		if (op.getTimer()!=null){
+	                			op.getTimer().restart(target);
+	                		}
 	                    }
 	                    else{
 	                        saveMethod(target, am, feedbackPanel, false, redirected,false);
@@ -708,7 +710,11 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			protected void onSubmit(AjaxRequestTarget target) {
 				OnePager op = self.findParent(OnePager.class);
 				//disable lock refresher
+				
 				op.getEditLockRefresher().setEnabled(false);
+				if(op.getTimer()!=null){
+					op.getTimer().stop(target);
+				}
 			    am.setObject(am.getObject());
 				toggleSemanticValidation(false, activityForm, target);
 				// process the form for this request
@@ -843,7 +849,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		OnePager op = this.findParent(OnePager.class);
 		//disable lock refresher
 		op.getEditLockRefresher().setEnabled(false);
-      
+		if(op.getTimer()!=null){
+			op.getTimer().stop(target);
+		}
     	am.setObject(am.getObject());
         toggleSemanticValidation(notDraft, form, target);
 
@@ -1189,12 +1197,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				    p.set(0,OnePagerConst.ONEPAGER_URL_PARAMETER_SSC);
 				}
 				p.set(1,actId);
-				OnePager op = this.findParent(OnePager.class);
-				op.getEditLockRefresher().setEnabled(true);
-				if (op.getTimer() != null) {
-					op.getTimer().restart(target);
-				}
-				//The folllogin exception will provide a redirection 
+				//The following  exception will provide a redirection 
 				throw new RestartResponseException(
 				        new PageProvider(
 				            OnePager.class,p),RedirectPolicy.ALWAYS_REDIRECT);

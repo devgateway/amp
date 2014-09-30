@@ -208,7 +208,6 @@ public class MondrianETL {
 	 * runs the ETL
 	 */
 private EtlResult execute() throws Exception {
-	ETL_LOCK.lock();
 	boolean fullEtlLockAcquired = false;
 	try {
 		long start = System.currentTimeMillis();
@@ -216,11 +215,13 @@ private EtlResult execute() throws Exception {
 		StopWatch.reset(MONDRIAN_ETL);
 		StopWatch.next(MONDRIAN_ETL, true, "start");
 				
+		if (!monetConn.tableExists(Fingerprint.FINGERPRINT_TABLE))
+			Fingerprint.redoFingerprintTable(monetConn);
+		
 		previousEtlEventId = Long.valueOf(
 				monetConn.tableExists(Fingerprint.FINGERPRINT_TABLE) ? 
-						ETL_TIME_FINGERPRINT.readOrReturnDefaultFingerprint(monetConn) : ETL_TIME_FINGERPRINT.defaultValue
-				);
-
+					ETL_TIME_FINGERPRINT.readOrReturnDefaultFingerprint(monetConn) : ETL_TIME_FINGERPRINT.defaultValue
+				);		
 		List<ExceptionRunnable<? extends Exception>> fullEtlJobs = new ArrayList<>();
 				
 		// log the ETL start and get its ids
@@ -256,6 +257,7 @@ private EtlResult execute() throws Exception {
 		if (workToDo) {
 			if (etlConfig.fullEtl) {
 				FULL_ETL_LOCK.writeLock();
+				//if (forceFullEtl) Thread.sleep(15000);
 				fullEtlLockAcquired = true;
 				logger.info("doing full ETL");
 				for(ExceptionRunnable<?> job:fullEtlJobs)
@@ -305,7 +307,6 @@ private EtlResult execute() throws Exception {
 	finally {
 		if (fullEtlLockAcquired)
 			FULL_ETL_LOCK.writeUnlock();
-		ETL_LOCK.unlock();
 	}
 }
 			
@@ -827,6 +828,7 @@ private EtlResult execute() throws Exception {
 	}
 	
 	public static EtlResult runETL(boolean forceFull) {
+		ETL_LOCK.lock();
 		try {
 			try(Connection conn = PersistenceManager.getJdbcConnection()) {
 				try(MonetConnection monetConn = MonetConnection.getConnection()) {
@@ -841,6 +843,9 @@ private EtlResult execute() throws Exception {
 			if (e instanceof RuntimeException)
 				throw (RuntimeException) e;
 			throw new RuntimeException(e);
+		}
+		finally {
+			ETL_LOCK.unlock();
 		}
 	}
 }

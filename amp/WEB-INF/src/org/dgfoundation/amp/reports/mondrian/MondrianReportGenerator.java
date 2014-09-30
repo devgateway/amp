@@ -125,6 +125,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	@Override
 	public GeneratedReport executeReport(ReportSpecification spec) throws AMPException {
 		try {
+			stats = new ReportGenerationStats();
 			CellDataSet cellDataSet = generateReportAsSaikuCellDataSet(spec);
 			long postprocStart = System.currentTimeMillis();
 			
@@ -183,7 +184,6 @@ public class MondrianReportGenerator implements ReportExecutor {
 		AmpMondrianSchemaProcessor.registerReport(spec, environment);
 		CellDataSet cellDataSet;
 		ValueWrapper<Boolean> forcedOut = new ValueWrapper<Boolean>(false);
-		stats = new ReportGenerationStats();
 		stats.lock_wait_time = MondrianETL.FULL_ETL_LOCK.readLockWithTimeout(7000, forcedOut);
 
 		try {

@@ -16,7 +16,11 @@ define(function() {
 	map['[Level 0 Sector]'] = 'Primary Sector';
 	map['[Level 1 Sector]'] = 'Primary Sector Sub-Sector';
 	map['[Level 2 Sector]'] = 'Primary Sector Sub-Sub-Sector';
+	map['[Level 2 Sector]'] = 'Secondary Sector';
 	map['[Donor Agency]'] = 'Donor Agency';
+	map['[Organization Name]'] = 'Donor Agency';
+	map['[Category Name]'] = 'Status';
+	map['[Project Description]'] = 'Project Description';
 
 	function ColumnsMapping() {
 		if (!(this instanceof ColumnsMapping)) {
@@ -64,7 +68,9 @@ define(function() {
 		});
 		$(metadata.columns.models).each(function(i, item) {
 			ret.push({
-				name : item.get('columnName')
+				name : item.get('columnName'),
+				width : 25,
+				classes: 'wrap-cell'
 			});
 		});
 		/*
@@ -74,7 +80,7 @@ define(function() {
 		$(metadata.measures.models).each(function(i, item) {
 			ret.push({
 				name : item.get('measureName'),
-				width : 32
+				width : 25
 			});
 		});
 		console.log(ret);

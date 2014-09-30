@@ -61,8 +61,7 @@ public class GetDesktopActivities extends Action {
 			ReportContextData.getFromRequest().setFilter(arf);			
 		}*/
 
-		if (Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) ||
-				"Donor".equalsIgnoreCase(tm.getTeamType())) {
+		if (Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType())) {
 			dForm.setShowAddActivityLink(false);
 		} else {
 			dForm.setShowAddActivityLink(true);

@@ -1332,7 +1332,6 @@ public class ActivityUtil {
                     session=PersistenceManager.getRequestDBSession();
                     
                 Set<String> activityStatus = new HashSet<String>();
-                String teamType=member.getTeamType();
                 activityStatus.add(Constants.APPROVED_STATUS);
                 activityStatus.add(Constants.EDITED_STATUS);
                 Set relatedTeams=TeamUtil.getRelatedTeamsForMember(member);
@@ -1347,9 +1346,9 @@ public class ActivityUtil {
                 {
                 	// not computed (e.g. team) workspace
                     queryString = "select " + activityNameString + ", a.ampActivityId from " + AmpActivity.class.getName() + " a  where  a.team in  (" + Util.toCSString(relatedTeams) + ")    ";
-                    if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
-                    	queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
-                    }
+//                    if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
+//                    	queryString += "  and approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
+//                    }
                     queryString += " order by " + activityNameString;
                 }	
     			  			
@@ -1388,7 +1387,6 @@ public class ActivityUtil {
                     session=PersistenceManager.getRequestDBSession();
 
                 Set<String> activityStatus = new HashSet<String>();
-                String teamType=member.getTeamType();
 		activityStatus.add(Constants.APPROVED_STATUS);
 		activityStatus.add(Constants.EDITED_STATUS);
                 Set relatedTeams=TeamUtil.getRelatedTeamsForMember(member);
@@ -1417,9 +1415,9 @@ public class ActivityUtil {
                     } else {
                         // none computed workspace
                     	queryString +=" where gr.ampActivityLastVersion.team in  (" + Util.toCSStringForIN(relatedTeams) + ") ";                    	
-                        if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
-                            queryString += "  and gr.ampActivityLastVersion.approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
-                        }
+//                        if (teamType!= null && teamType.equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
+//                            queryString += "  and gr.ampActivityLastVersion.approvalStatus in (" + Util.toCSString(activityStatus) + ")  ";
+//                        }
                         
                     }
                 queryString += "  and lower(" + activityName + ") like lower(:searchStr) group by gr.ampActivityLastVersion.ampActivityId," + activityName + " order by " + activityName;

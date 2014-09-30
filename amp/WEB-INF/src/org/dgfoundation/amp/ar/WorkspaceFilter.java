@@ -288,7 +288,7 @@ public class WorkspaceFilter
 		}
 		else
 		{
-			boolean hideDraft = Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) || "Donor".equalsIgnoreCase(tm.getTeamType());
+			boolean hideDraft = Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType());
 			boolean approved = hideDraft;
 			
 			/**

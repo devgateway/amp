@@ -85,7 +85,7 @@ public class TeamUtil {
      * @return The collection of all teams
      */
 
-    public static Collection getUnassignedWorkspaces(String workspaceType, String team) {
+    public static Collection getUnassignedWorkspaces(String workspaceType) {
 
         Session session = null;
         Collection col = new ArrayList();
@@ -428,8 +428,6 @@ public class TeamUtil {
                 workspace.setId(team.getAmpTeamId().toString());
                 workspace.setName(team.getName());
                 workspace.setChildOrgs(team.getOrganizations());
-                workspace.setTeamCategory(team.getTeamCategory());
-                workspace.setType(team.getType());
                 workspace.setWorkspaceType(team.getAccessType());
                 workspace.setAddActivity(team.getAddActivity());
                 workspace.setComputation(team.getComputation());
@@ -539,10 +537,8 @@ public class TeamUtil {
                 AmpTeam updTeam = (AmpTeam) tempItr.next();
                 updTeam.setName(team.getName());
                 updTeam.setDescription(team.getDescription());
-                updTeam.setTeamCategory(team.getTeamCategory());
                 updTeam.setAccessType(team.getAccessType());
                 updTeam.setComputation(team.getComputation());
-                updTeam.setType(team.getType());
                 updTeam.setRelatedTeamId(team.getRelatedTeamId());
                 updTeam.setOrganizations(team.getOrganizations());
                 updTeam.setAddActivity(team.getAddActivity());

@@ -44,7 +44,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 
 	//private String type; 			// Whether Bilateral or Multilateral
 	
-	private AmpCategoryValue type;  // Replaces the old "type" attribute (Bilateral, Multilateral)
+
 	
 
 	private AmpTeam parentTeamId;
@@ -53,9 +53,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 	
 	private String accessType;  	// Management or Team
 	
-	// added for donor-access
-	@Deprecated
-	private String teamCategory;	// Donor or Mofed team
+
 	private AmpTeam relatedTeamId;	// a donor team referring a mofed team
 	private Set<AmpActivityVersion> activityList;		// activities assigned to donor team
 	
@@ -248,20 +246,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 	public void setRelatedTeamId(AmpTeam relatedTeam) {
 		this.relatedTeamId = relatedTeam;
 	}
-	/**
-	 * @return Returns the teamCategory.
-	 */
-	@Deprecated
-	public String getTeamCategory() {
-		return teamCategory;
-	}
-	/**
-	 * @param teamCategory The teamCategory to set.
-	 */
-	@Deprecated
-	public void setTeamCategory(String teamCategory) {
-		this.teamCategory = teamCategory;
-	}
+
 
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
@@ -276,16 +261,6 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 
 	public Object getIdentifier() {
 		return this.getAmpTeamId();
-	}
-
-	public AmpCategoryValue getType() {
-		return type;
-	}
-
-	
-
-	public void setType(AmpCategoryValue type) {
-		this.type = type;
 	}
 
 	public Set getOrganizations() {

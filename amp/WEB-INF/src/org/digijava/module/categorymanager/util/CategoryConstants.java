@@ -160,10 +160,6 @@ public class CategoryConstants {
 	public static final HardCodedCategoryValue LOGFRAME_RESULTS	= 
 		new CategoryConstants.HardCodedCategoryValue("logframe","Results", true);
 	
-	public static final HardCodedCategoryValue TEAM_TYPE_MULTILATERAL	= 
-		new CategoryConstants.HardCodedCategoryValue("team_type","Multilateral", false);
-	public static final HardCodedCategoryValue TEAM_TYPE_BILATERAL	= 
-		new CategoryConstants.HardCodedCategoryValue("team_type","Bilateral", false);
 	
 	public static final HardCodedCategoryValue MTEF_PROJECTION_PROJECTION	= 
 		new CategoryConstants.HardCodedCategoryValue("mtef_projection","projection", true);

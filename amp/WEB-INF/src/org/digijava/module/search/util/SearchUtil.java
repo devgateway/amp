@@ -241,7 +241,7 @@ public class SearchUtil {
 				"FROM amp_activity", "FROM " + AmpActivity.class.getName());
 		hsqlQuery.replaceAll("FROM amp_team_activities", "FROM "
 				+ AmpActivity.class.getName());
-
+		//hsqlQuery isn't actually used anywhere
 		Session session = null;
 		List<AmpActivity> col = new ArrayList<AmpActivity>();
 		try {

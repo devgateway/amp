@@ -37,7 +37,6 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 	private Long teamId = null;
 	private String teamLead = null;
 	private String actionEvent = null;
-	private String category = null;				// 'DONOR' or 'MOFED', added for Donor-access
 	private Long relatedTeam = null;			// MOFED team mapped to DONOR team
 	private String relatedTeamName = null;
 	// Available bilateral mofed-teams for mapping with donor-team
@@ -79,7 +78,6 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 
 	// FOR SELECT ORGANIZATION POPUP
 	private Long ampOrgTypeId;
-	private String orgType;
 	private String keyword;
 	private int tempNumResults;
 	private Collection pagedCol;
@@ -177,18 +175,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 		this.actionEvent = actionEvent;
 	}
 
-	/**
-	 * @return Returns the category.
-	 */
-	public String getCategory() {
-		return category;
-	}
-	/**
-	 * @param category The category to set.
-	 */
-	public void setCategory(String category) {
-		this.category = category;
-	}
+
 	
 	/**
 	 * @return Returns the relatedTeam.
@@ -431,7 +418,6 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 			popupReset = true;
 			mainAction = null;
 			dest = null;
-			category = null;
 			relatedTeam = null;
 			relatedTeamName = null;
 			relatedTeamBilatColl = new ArrayList();
@@ -468,39 +454,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 		
 		if ("no".equals(relatedTeamFlag)) {
 			errors = super.validate(mapping, request);
-			if ("DONOR".equalsIgnoreCase(category) && "Donor".equalsIgnoreCase(workspaceType)) {
-				if ("edit".equalsIgnoreCase(actionEvent)) {
-					if (typeCategoryValue!=null && CategoryConstants.TEAM_TYPE_BILATERAL.equalsCategoryValue(typeCategoryValue) ) {
-						if (relatedTeamBilatColl.size() > 0 )
-							if (null == relatedTeam || "-1".equals(relatedTeam) || relatedTeam.toString().trim().length() < 1) {
-								ActionMessage error = new ActionMessage("error.aim.updateWorkspace.noRelatedTeam");
-								errors.add("relatedTeam", error);
-								relatedTeamFlag = "set";
-							}
-					}
-					if ( typeCategoryValue!=null && CategoryConstants.TEAM_TYPE_MULTILATERAL.equalsCategoryValue(typeCategoryValue) ) {
-						if (relatedTeamMutilatColl.size() > 0)
-							if (null == relatedTeam || "-1".equals(relatedTeam) || relatedTeam.toString().trim().length() < 1) {
-								ActionMessage error = new ActionMessage("error.aim.updateWorkspace.noRelatedTeam");
-								errors.add("relatedTeam", error);
-								relatedTeamFlag = "set";
-							}
-					}
-				}
-				else if ("add".equalsIgnoreCase(actionEvent)) {
-					if (relatedTeamBilatColl.size() > 0 && relatedTeamMutilatColl.size() > 0) {
-						if (null == typeCategoryValue) {
-							ActionMessage error = new ActionMessage("error.aim.updateWorkspace.noTeamType");
-							errors.add("type", error);
-						}
-						else if (null == relatedTeam || "-1".equals(relatedTeam) || relatedTeam.toString().trim().length() < 1) {
-							ActionMessage error = new ActionMessage("error.aim.updateWorkspace.noRelatedTeam");
-							errors.add("relatedTeam", error);
-						}
-						relatedTeamFlag = "set";
-					}
-				}
-			}
+
 		}
 		return errors;
 	}

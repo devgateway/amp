@@ -297,7 +297,7 @@ public class SimpleSQLPatcher {
 					"DROP TABLE IF EXISTS mondrian_fact_table",
 					"DROP TABLE IF EXISTS mondrian_exchange_rates"
 					));
-			add(new SimpleSQLPatch("009", "update amp_category_value SET deleted = false WHERE deleted IS NULL"));
+			
 	}};
 	DataSource dataSource;
 	

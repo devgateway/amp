@@ -727,7 +727,7 @@ public class AmpARFilter extends PropertyListable {
 		
 		AmpReports ampReport = ampReportId == null ? null : DbUtil.getAmpReport(ampReportId);
 		if (ampReport != null)
-		{			
+		{
 			this.budgetExport	= ampReport.getBudgetExporter()==null ? false:ampReport.getBudgetExporter();				
 			if (ampReport.getType() == ArConstants.PLEDGES_TYPE){
 					this.pledgeFilter = true;

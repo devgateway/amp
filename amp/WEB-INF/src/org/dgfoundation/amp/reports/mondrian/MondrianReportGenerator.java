@@ -20,6 +20,7 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.mondrian.LocksHolder;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.FilterRule;
@@ -63,6 +64,7 @@ import org.digijava.kernel.ampapi.saiku.util.CellDataSetToAmpHierachies;
 import org.digijava.kernel.ampapi.saiku.util.CellDataSetToGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.util.SaikuPrintUtils;
 import org.digijava.kernel.ampapi.saiku.util.SaikuUtils;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
@@ -79,6 +81,7 @@ import org.saiku.service.olap.totals.aggregators.TotalAggregator;
 import org.dgfoundation.amp.mondrian.ExceptionRunnable;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 
 /**
  * Generates a report via Mondrian
@@ -121,30 +124,56 @@ public class MondrianReportGenerator implements ReportExecutor {
 	
 	@Override
 	public GeneratedReport executeReport(ReportSpecification spec) throws AMPException {
-		CellDataSet cellDataSet = generateReportAsSaikuCellDataSet(spec);
-		
-		logger.info("[" + spec.getReportName() + "]" +  "Converting CellDataSet to GeneratedReport...");
-		GeneratedReport report = toGeneratedReport(spec, cellDataSet, cellDataSet.runtime);
-		logger.info("[" + spec.getReportName() + "]" +  "CellDataSet converted to GeneratedReport.");
-		logger.info("[" + spec.getReportName() + "]" +  "Sorting report...");
-		if (SaikuReportArea.class.isAssignableFrom(reportAreaType)) {
-			report = new SaikuGeneratedReport(
-					spec, report.generationTime, report.requestingUser,
-					(SaikuReportArea)report.reportContents, cellDataSet, report.rootHeaders, report.leafHeaders, environment);
-			SaikuReportSorter.sort(report, environment);
-			if (printMode)
-				SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST_SORT");
-		} else 
-			MondrianReportSorter.sort(report, environment);
-		logger.info("[" + spec.getReportName() + "]" +  "Report sorted.");
-		
-		tearDown();
-		
-		return report;
+		try {
+			CellDataSet cellDataSet = generateReportAsSaikuCellDataSet(spec);
+			long postprocStart = System.currentTimeMillis();
+			
+			logger.info("[" + spec.getReportName() + "]" +  "Converting CellDataSet to GeneratedReport...");
+			GeneratedReport report = toGeneratedReport(spec, cellDataSet, cellDataSet.runtime);
+			logger.info("[" + spec.getReportName() + "]" +  "CellDataSet converted to GeneratedReport.");
+			logger.info("[" + spec.getReportName() + "]" +  "Sorting report...");
+			if (SaikuReportArea.class.isAssignableFrom(reportAreaType)) {
+				report = new SaikuGeneratedReport(
+						spec, report.generationTime, report.requestingUser,
+						(SaikuReportArea)report.reportContents, cellDataSet, report.rootHeaders, report.leafHeaders, environment);
+				SaikuReportSorter.sort(report, environment);
+				if (printMode)
+					SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST_SORT");
+			} else 
+				MondrianReportSorter.sort(report, environment);
+			logger.info("[" + spec.getReportName() + "]" +  "Report sorted.");
+			stats.postproc_time = System.currentTimeMillis() - postprocStart;
+			stats.total_time += stats.postproc_time;
+			return report;
+		}
+		catch(Exception e) {
+			stats.crashed = true;
+			throw e;
+		}
+		finally {
+			writeStats();
+			tearDown();
+		}
 	}
+	
+	void writeStats() {
+		if (stats != null) {
+			PersistenceManager.getSession().createSQLQuery(
+					String.format("INSERT INTO amp_reports_runtime_log (lock_wait_time, mdx_time, total_time, mdx_query, width, height, postproc_time, crashed) VALUES (%d, %d, %d, %s, %d, %d, %d, %s)",
+							stats.lock_wait_time, stats.mdx_time, stats.total_time, SQLUtils.stringifyObject(stats.mdx_query),
+							stats.width, 
+							stats.height,
+							stats.postproc_time,
+							stats.crashed
+							)).executeUpdate();
+		}
+	}
+	
+	ReportGenerationStats stats;
 	
 	/**
 	 * Generates a report as a Saiku {@link CellDataSet}, without any translation into our Reports API structures
+	 * also sets {@link #stats} to a newly-created instance
 	 * @param spec - {@link ReportSpecification}
 	 * @return {@link CellDataSet}
 	 * @throws AMPException
@@ -152,44 +181,56 @@ public class MondrianReportGenerator implements ReportExecutor {
 	private CellDataSet generateReportAsSaikuCellDataSet(final ReportSpecification spec) throws AMPException {
 		init(spec);
 		AmpMondrianSchemaProcessor.registerReport(spec, environment);
-		final ValueWrapper<CellDataSet> cellDataSet = new ValueWrapper<>(null);
-		MondrianETL.MONDRIAN_LOCK.runUnderReadLock(new ExceptionRunnable<AMPException>() {
-			@Override 
-			public void run() throws AMPException {
-				int totalTime = 0;
-				long startTime = System.currentTimeMillis();
-				CellSet cellSet = null;
-				String mdxQuery = getMDXQuery(spec);
+		CellDataSet cellDataSet;
+		ValueWrapper<Boolean> forcedOut = new ValueWrapper<Boolean>(false);
+		stats = new ReportGenerationStats();
+		stats.lock_wait_time = MondrianETL.FULL_ETL_LOCK.readLockWithTimeout(7000, forcedOut);
+
+		try {
+			long startTime = System.currentTimeMillis();
+			//while (System.currentTimeMillis() < startTime + 15000) {};
+			//try {Thread.sleep(60000);}catch(Exception e){}
+			CellSet cellSet = null;
+			String mdxQuery = getMDXQuery(spec);
+			stats.mdx_query = mdxQuery;
+
+			if (printMode) System.out.println("[" + spec.getReportName() + "] MDX query: " + mdxQuery);
 		
-				if (printMode) System.out.println("[" + spec.getReportName() + "] MDX query: " + mdxQuery);
+			try {
+				cellSet = generator.runQuery(mdxQuery);
+			} catch (Exception e) {
+				tearDown();
+				stats.crashed = true;
+				throw new AMPException("Cannot generate Mondrian Report '" + spec.getReportName() +"' : " 
+						+ e.getMessage() == null ? e.getClass().getName() : e.getMessage());
+			}
 		
-				try {
-					cellSet = generator.runQuery(mdxQuery);
-				} catch (Exception e) {
-					tearDown();
-					throw new AMPException("Cannot generate Mondrian Report '" + spec.getReportName() +"' : " 
-							+ e.getMessage() == null ? e.getClass().getName() : e.getMessage());
-				}
+			stats.mdx_time = System.currentTimeMillis() - startTime;
+			if (printMode)
+				System.out.println("[" + spec.getReportName() + "] MDX query run time: " + stats.mdx_time);
+			else
+				logger.info("[" + spec.getReportName() + "] MDX query run time: " + stats.mdx_time);
 		
-				if (printMode)
-					System.out.println("[" + spec.getReportName() + "] MDX query run time: " + (int)(System.currentTimeMillis() - startTime));
-				else
-					logger.info("[" + spec.getReportName() + "] MDX query run time: " + (int)(System.currentTimeMillis() - startTime));
+			cellDataSet = postProcess(spec, cellSet);
+			stats.total_time = System.currentTimeMillis() - startTime;
 		
-				cellDataSet.value = postProcess(spec, cellSet);
-				totalTime = (int)(System.currentTimeMillis() - startTime);
-		
-				cellDataSet.value.setRuntime(totalTime);
-				logger.info("CellDataSet for '" + spec.getReportName() + "' report generated within: " + totalTime + "ms");
-		
-				if (printMode) {
-					if (cellSet != null)
-						MondrianUtils.print(cellSet, spec.getReportName());
-					if (cellDataSet != null)
-						SaikuPrintUtils.print(cellDataSet.value, spec.getReportName() + "_POST");
-				}
-			}});
-		return cellDataSet.value;
+			cellDataSet.setRuntime((int) stats.total_time);
+			logger.info("CellDataSet for '" + spec.getReportName() + "' report generated within: " + stats.total_time + "ms");
+					
+			stats.width = cellDataSet == null ? 0 : cellDataSet.getWidth();
+			stats.height = cellDataSet == null ? 0 : cellDataSet.getHeight();
+			
+			if (printMode) {
+				if (cellSet != null)
+					MondrianUtils.print(cellSet, spec.getReportName());
+				if (cellDataSet != null)
+					SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST");
+			}
+		}
+		finally {
+			MondrianETL.FULL_ETL_LOCK.unlockIfStillUsed(forcedOut);
+		}
+		return cellDataSet;
 	}
 	
 	private void init(ReportSpecification spec) {

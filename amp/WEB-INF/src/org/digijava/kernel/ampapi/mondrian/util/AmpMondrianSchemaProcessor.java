@@ -31,31 +31,22 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 
 	@Override
 	public String processSchema(String schemaURL, PropertyList connectInfo) throws Exception {
-		//String rootDir = AMPStartupListener.SERVLET_CONTEXT_ROOT_REAL_PATH;
-//		String url2 = schemaURL.replaceAll("res:\\.\\.", rootDir + File.separator + "WEB-INF");
-//		String url = schemaURL.replaceAll("res:\\.\\.", "WEB-INF");
 		String contents = null;
 		try(InputStreamReader isr = new InputStreamReader(this.getClass().getResourceAsStream("AMP.xml"), "utf-8")) { 
-		//try(InputStreamReader isr = new InputStreamReader(new FileInputStream(url2), "utf-8")) {
 			try(Scanner scanner = new Scanner(isr)) {
 				contents = scanner.useDelimiter("\\Z").next();
 			}}
 		if (contents == null)
 			throw new RuntimeException("could not read schema");
-		try {
-			contents = processContents(contents);
-		}
-		catch (Exception e){
-			logger.warn("Error initializing AMP Schema: " + e.getMessage());
-		}
-		return contents;
+		return processContents(contents);
 	};
 	
 	public String processContents(String contents) {
 		if (currentReport.get() == null || currentEnvironment.get() == null) {
 			logger.warn("currentReport || currentEnvironment == null -> Initializing with default values.");
 			//TODO: Added a default initialization to allow usage for now the Saiku standalone. Return to previous state or implement better solution.
-			//Added a try/catch to avoid startup errors. 
+			//Added a try/catch to avoid startup errors.
+			//the try/catch was effectively swallowing fatal errors which would appear in proper reports at production time. the correct way to treat them is to remove the source of the exception, not to ignore it
 			initDefault();
 		}
 		

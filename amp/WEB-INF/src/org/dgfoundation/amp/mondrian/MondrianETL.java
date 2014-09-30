@@ -16,6 +16,10 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.List;
 import java.util.TreeSet;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
@@ -55,7 +59,17 @@ public class MondrianETL {
 	 */
 	public final static Long MONDRIAN_DUMMY_ID_FOR_ETL = 999999999l;
 	
-	public final static ReadWriteLockHolder MONDRIAN_LOCK = new ReadWriteLockHolder("Mondrian reports/etl lock");
+	//public final static ReadWriteLockHolder MONDRIAN_LOCK = new ReadWriteLockHolder("Mondrian reports/etl lock");
+	
+	/**
+	 * ETL lock
+	 */
+	private final static ReentrantLock ETL_LOCK = new ReentrantLock();
+	
+	/**
+	 * FULL ETL lock, shared with reports
+	 */
+	public final static ReaderWriterLock FULL_ETL_LOCK = new ReaderWriterLock();
 		
 	/**
 	 * the postgres connection
@@ -114,8 +128,8 @@ public class MondrianETL {
 		this.locales = new LinkedHashSet<>(TranslatorUtil.getLocaleCache(SiteUtils.getDefaultSite()));
 	}
 	
-	protected EtlConfiguration calculateEtlConfiguration() throws SQLException{
-		boolean etlFromScratch = shouldMakeFullEtl();
+	protected EtlConfiguration calculateEtlConfiguration(List<ExceptionRunnable<? extends Exception>> fullEtlJobs) throws SQLException{
+		boolean etlFromScratch = shouldMakeFullEtl(fullEtlJobs);
 		Set<Long> activityIds = calculateAffectedActivities(etlFromScratch);
 		Set<Long> dateCodes = calculateAffectedDateCodes(etlFromScratch);
 		return new EtlConfiguration(activityIds, new HashSet<Long>(), dateCodes, etlFromScratch);
@@ -193,92 +207,107 @@ public class MondrianETL {
 	/**
 	 * runs the ETL
 	 */
-	private EtlResult execute() {
-		final ValueWrapper<EtlResult> ret = new ValueWrapper<>(null);
-		MONDRIAN_LOCK.runUnderWriteLock(new ExceptionRunnable<Exception>() {
-			@Override public void run() throws Exception {
-				
-				long start = System.currentTimeMillis();
+private EtlResult execute() throws Exception {
+	ETL_LOCK.lock();
+	boolean fullEtlLockAcquired = false;
+	try {
+		long start = System.currentTimeMillis();
 
-				StopWatch.reset(MONDRIAN_ETL);
-				StopWatch.next(MONDRIAN_ETL, true, "start");
+		StopWatch.reset(MONDRIAN_ETL);
+		StopWatch.next(MONDRIAN_ETL, true, "start");
 				
-				previousEtlEventId = Long.valueOf(
-						monetConn.tableExists(Fingerprint.FINGERPRINT_TABLE) ? 
-								ETL_TIME_FINGERPRINT.readOrReturnDefaultFingerprint(monetConn) : ETL_TIME_FINGERPRINT.defaultValue
-						);
+		previousEtlEventId = Long.valueOf(
+				monetConn.tableExists(Fingerprint.FINGERPRINT_TABLE) ? 
+						ETL_TIME_FINGERPRINT.readOrReturnDefaultFingerprint(monetConn) : ETL_TIME_FINGERPRINT.defaultValue
+				);
 
-				// log the ETL start and get its ids
-				SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_log (duration) VALUES (null)");
-				currentEtlId = SQLUtils.getLong(conn, "SELECT max(etl_id) FROM amp_etl_log");
-				SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('etl', " + currentEtlId + ")");
-				currentEtlEventId = SQLUtils.getLong(conn, "SELECT max(event_id) FROM amp_etl_changelog WHERE entity_name = 'etl'");
-
-				String fullEtlRequestedQuery = "SELECT count(*) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND entity_name='full_etl_request'";
-				boolean fullEtlRequestedDB = SQLUtils.getLong(conn, fullEtlRequestedQuery) > 0;
-				if (fullEtlRequestedDB) {
-					forceFullEtl |= fullEtlRequestedDB;
-					reasonsForFull.add("DB_requested");
-				}
+		List<ExceptionRunnable<? extends Exception>> fullEtlJobs = new ArrayList<>();
 				
-				if (forceFullEtl) {
+		// log the ETL start and get its ids
+		SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_log (duration) VALUES (null)");
+		currentEtlId = SQLUtils.getLong(conn, "SELECT max(etl_id) FROM amp_etl_log");
+		SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('etl', " + currentEtlId + ")");
+		currentEtlEventId = SQLUtils.getLong(conn, "SELECT max(event_id) FROM amp_etl_changelog WHERE entity_name = 'etl'");
+
+		String fullEtlRequestedQuery = "SELECT count(*) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND entity_name='full_etl_request'";
+		boolean fullEtlRequestedDB = SQLUtils.getLong(conn, fullEtlRequestedQuery) > 0;
+		if (fullEtlRequestedDB) {
+			forceFullEtl |= fullEtlRequestedDB;
+			reasonsForFull.add("DB_requested");
+		}
+				
+		if (forceFullEtl) {
+			fullEtlJobs.add(new ExceptionRunnable<Exception>(){
+				@Override public void run() throws Exception {
 					cleanupTables();
 					Fingerprint.redoFingerprintTable(monetConn);
 				}
-								
-				boolean redoTrnDimensions = SQLUtils.getLong(conn, "SELECT count(*) FROM amp_etl_changelog WHERE entity_name='translation' AND event_id > " + previousEtlEventId) > 0;
+			});
+		}
+												
+		etlConfig = calculateEtlConfiguration(fullEtlJobs);
 				
-				etlConfig = calculateEtlConfiguration();
+		logger.info("running ETL, the configuration is: " + etlConfig.toString());
+		boolean redoTrnDimensions = SQLUtils.getLong(conn, "SELECT count(*) FROM amp_etl_changelog WHERE entity_name='translation' AND event_id > " + previousEtlEventId) > 0;
 				
-				logger.info("running ETL, the configuration is: " + etlConfig.toString());
-				
-				boolean workToDo = etlConfig.fullEtl || redoTrnDimensions || !etlConfig.activityIds.isEmpty() || !etlConfig.dateCodes.isEmpty();
-				if (workToDo) {
-					if (etlConfig.fullEtl) {
-						logger.info("doing full ETL, so recreating fact and date table");
-						recreateFactTable();
-						generateMondrianDateTable();
-					}
+		boolean workToDo = etlConfig.fullEtl || redoTrnDimensions || !etlConfig.activityIds.isEmpty() || !etlConfig.dateCodes.isEmpty();
+		if ((!etlConfig.fullEtl) && (!fullEtlJobs.isEmpty()))
+			throw new RuntimeException("jss u r st00p33d");
+		if (workToDo) {
+			if (etlConfig.fullEtl) {
+				FULL_ETL_LOCK.writeLock();
+				fullEtlLockAcquired = true;
+				logger.info("doing full ETL");
+				for(ExceptionRunnable<?> job:fullEtlJobs)
+					job.run();
+				recreateFactTable();
+				generateMondrianDateTable();
+			}
 					
-					if (redoTrnDimensions && !etlConfig.fullEtl) {
-						logger.info("redoing trn-backed dimensions, as some translations have changed and doing just an incremental ETL");
-						for(MondrianTableDescription table:MondrianTablesRepository.TRN_BACKED_DIMENSIONS)
-							generateStarTable(table);
-					}
+			if (redoTrnDimensions && !etlConfig.fullEtl) {
+				FULL_ETL_LOCK.writeLock();
+				logger.info("redoing trn-backed dimensions, as some translations have changed and doing just an incremental ETL");
+				for(MondrianTableDescription table:MondrianTablesRepository.TRN_BACKED_DIMENSIONS)
+					generateStarTable(table);
+				FULL_ETL_LOCK.writeUnlock();
+			}
 
-					generateActivitiesEntries();
-					StopWatch.next(MONDRIAN_ETL, true, "generateActivitiesEntries");
-				
-					new CalculateExchangeRatesEtlJob(null, conn, monetConn, etlConfig).work();
-					StopWatch.next(MONDRIAN_ETL, true, "generateExchangeRates");
+			generateActivitiesEntries();
+			StopWatch.next(MONDRIAN_ETL, true, "generateActivitiesEntries");
+		
+			new CalculateExchangeRatesEtlJob(null, conn, monetConn, etlConfig).work();
+			StopWatch.next(MONDRIAN_ETL, true, "generateExchangeRates");
 					
-					if (etlConfig.fullEtl) {
-						checkMondrianSanity();
-						StopWatch.next(MONDRIAN_ETL, true, "checkMondrianSanity");
-					}
-					cacheInvalidated = etlConfig.fullEtl || workToDo;
+			if (etlConfig.fullEtl) {
+				checkMondrianSanity();
+				StopWatch.next(MONDRIAN_ETL, true, "checkMondrianSanity");
+			}
+			cacheInvalidated = etlConfig.fullEtl || workToDo;
 					
-					nrAffectedDates = etlConfig.dateCodes == null ? -1 : etlConfig.dateCodes.size();
-					StopWatch.reset(MONDRIAN_ETL);
+			nrAffectedDates = etlConfig.dateCodes == null ? -1 : etlConfig.dateCodes.size();
+			StopWatch.reset(MONDRIAN_ETL);
 							
-					logger.error("done generating ETL");
-				}
-				ETL_TIME_FINGERPRINT.serializeFingerprint(monetConn, Long.toString(currentEtlEventId));
+			logger.error("done generating ETL");
+		}
+				
+		ETL_TIME_FINGERPRINT.serializeFingerprint(monetConn, Long.toString(currentEtlEventId));
 
-				SQLUtils.flush(conn);
-				SQLUtils.flush(monetConn.conn);
+		SQLUtils.flush(conn);
+		SQLUtils.flush(monetConn.conn);
 
-				long end = System.currentTimeMillis();
-				double secs = (end - start) / 1000.0;
-				EtlResult res = new EtlResult(currentEtlEventId, secs, cacheInvalidated,  
+		long end = System.currentTimeMillis();
+		double secs = (end - start) / 1000.0;
+		EtlResult res = new EtlResult(currentEtlEventId, secs, cacheInvalidated,  
 						etlConfig.activityIds.size() + etlConfig.pledgeIds.size(), nrAffectedDates, reasonsForFull);
-				serializeEtLResult(res);
-				ret.value = res;				
-				//conn.close();
-			};
-		});
-		return ret.value;
+		serializeEtLResult(res);
+		return res;
 	}
+	finally {
+		if (fullEtlLockAcquired)
+			FULL_ETL_LOCK.writeUnlock();
+		ETL_LOCK.unlock();
+	}
+}
 			
 	protected void serializeEtLResult(EtlResult res) {
 		SQLUtils.executeQuery(conn, 
@@ -327,7 +356,7 @@ public class MondrianETL {
 	 */
 	protected Predicate<Fingerprint> stepSkipped = new Predicate<Fingerprint>() {
 		@Override public boolean apply(Fingerprint obj) {
-			logger.info(String.format("skipping calculating %s, as hash not changed", obj.keyName));
+			//logger.info(String.format("skipping calculating %s, as hash not changed", obj.keyName));
 			return true;
 		}
 	};
@@ -339,7 +368,7 @@ public class MondrianETL {
 	 * @return
 	 * @throws SQLException
 	 */
-	protected boolean shouldMakeFullEtl() throws SQLException {
+	protected boolean shouldMakeFullEtl(final List<ExceptionRunnable<? extends Exception>> fullEtlJobs) throws SQLException {
 		final BooleanWrapper res = new BooleanWrapper(forceFullEtl);
 		LOCALES_FINGERPRINT.runIfFingerprintChangedOr(conn, monetConn, false, stepSkipped, new ExceptionRunnable<SQLException>() {
 			@Override public void run() throws SQLException {
@@ -355,15 +384,22 @@ public class MondrianETL {
 			reasonsForFull.add("previousETL_never");
 		}
 		
-		pumpTableIfChanged(res, "amp_currency", "amp_currency_id");
-		pumpTableIfChanged(res, "amp_category_class", "id");
-		pumpTableIfChanged(res, "amp_category_value", "id");
+		pumpTableIfChanged(res, fullEtlJobs, "amp_currency", "amp_currency_id");
+		pumpTableIfChanged(res, fullEtlJobs, "amp_category_class", "id");
+		pumpTableIfChanged(res, fullEtlJobs, "amp_category_value", "id");
 
 		for (final MondrianTableDescription mondrianTable:MondrianTablesRepository.MONDRIAN_DIMENSION_TABLES)
 			mondrianTable.fingerprint.runIfFingerprintChangedOr(conn, monetConn, res.value, stepSkipped, new ExceptionRunnable<SQLException>() {
 				@Override public void run() throws SQLException {
 					res.or(true);
-					generateStarTable(mondrianTable);
+					fullEtlJobs.add(new ExceptionRunnable<SQLException>() {
+						@Override public void run() throws SQLException {
+							generateStarTable(mondrianTable);
+						}
+						@Override public String toString() {
+							return "generating star table " + mondrianTable;
+						}
+					});
 				}});
 
 		return res.value;
@@ -375,12 +411,19 @@ public class MondrianETL {
 	 * @param tableName
 	 * @throws SQLException
 	 */
-	protected void pumpTableIfChanged(final BooleanWrapper needed, final String tableName, final String orderBy) throws SQLException {
+	protected void pumpTableIfChanged(final BooleanWrapper needed, final List<ExceptionRunnable<? extends Exception>> fullEtlJobs, final String tableName, final String orderBy) throws SQLException {
 		final Fingerprint fingerprint = new Fingerprint("table_" + tableName, Arrays.asList(Fingerprint.buildTableHashingQuery(tableName, orderBy)));
 		fingerprint.runIfFingerprintChangedOr(conn, monetConn, needed.value, stepSkipped, new ExceptionRunnable<SQLException>() {
 			@Override public void run() throws SQLException {
 				needed.or(true);
-				monetConn.copyTableFromPostgres(conn, tableName);
+				fullEtlJobs.add(new ExceptionRunnable<SQLException>() {
+					@Override public void run() throws SQLException {
+						monetConn.copyTableFromPostgres(conn, tableName);
+					}
+					@Override public String toString() {
+						return "copying table " + tableName + " from PSQL to Monet";
+					}
+				});
 				if (fingerprint.hasChangeBeenDetected())
 					reasonsForFull.add("table_" + tableName + "_changed");
 			}});

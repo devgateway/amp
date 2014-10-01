@@ -7,7 +7,7 @@ var TreeNodeCollection = Backbone.Collection.extend({  model:TreeNodeModel });
 
 TreeNodeModel = Backbone.Model.extend({
   defaults:{
-    selected: false,    // default is selected. change to string / trinary, for off, semi, and on
+    selected: undefined,  // default is selected. change to string / trinary, for off, semi, and on
     expanded: false,
     numSelected: 0,
     numPossible: 0,
@@ -43,7 +43,6 @@ TreeNodeModel = Backbone.Model.extend({
   },
 
 
-  // TODO:in progress...
   serialize: function() {
     var tmp = [];
     var children = this.get('children');
@@ -70,9 +69,9 @@ TreeNodeModel = Backbone.Model.extend({
     }
 
     if (_(listOfSelected).indexOf(this.id) > -1) {
-      this.set('selected', true);
-    } else {
-      this.set('selected', false);
+      this.set('selected', true, {propagation: true});
+    } else if(children.length == 0) {
+      this.set('selected', false, {propagation: true});
     }
   },
 
@@ -80,6 +79,7 @@ TreeNodeModel = Backbone.Model.extend({
   _onSelectChange:function(model, argument, options) {
     var self = this;
     var children = this.get('children');
+
     if (this.get('selected')) {
       this.set('numSelected', this.get('numPossible'));
     } else {

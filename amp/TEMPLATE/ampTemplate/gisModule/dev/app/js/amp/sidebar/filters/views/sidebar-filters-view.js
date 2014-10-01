@@ -29,6 +29,7 @@ module.exports = BaseControlView.extend({
 
 
   render:function() {
+    var self = this;
     BaseControlView.prototype.render.apply(this);
 
     // add content
@@ -45,10 +46,12 @@ module.exports = BaseControlView.extend({
       translator: this.app.translator
     });
 
-    this.app.state.register(this, 'filters', {
-      get: function() { return this.app.filtersWidget.serialize();},
-      set: function(state) { return this.app.filtersWidget.deserialize(state);},
-      empty: null
+    this.app.filtersWidget.loaded.then(function(){
+      self.app.state.register(self, 'filters', {
+        get: function() { return self.app.filtersWidget.serialize();},
+        set: function(state) { return self.app.filtersWidget.deserialize(state);},
+        empty: null
+      });
     });
 
     return this;
@@ -57,7 +60,9 @@ module.exports = BaseControlView.extend({
 
   newlaunchFilter:function() {
     var self = this;
+    this.app.filtersWidget.showFilters(); // triggers stash of vars etc...
     this.$('#filter-popup').show();
+
 
     // could do better, but must close accordion or get weird states from bootstrap and manual filter showing....
     this.app.filtersWidget.on('cancel', function() {

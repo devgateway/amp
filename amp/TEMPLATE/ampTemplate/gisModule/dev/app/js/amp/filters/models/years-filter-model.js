@@ -1,4 +1,6 @@
+var $ = require('jquery');
 var BaseFilterModel = require('../models/base-filter-model');
+
 
 module.exports = BaseFilterModel.extend({
 
@@ -8,12 +10,13 @@ module.exports = BaseFilterModel.extend({
     BaseFilterModel.prototype.initialize.apply(this, [options]);
     this.set({
       title: 'Years',
-      selectedStart: '01/01/1990',
-      selectedEnd: '31/12/2015',
+      selectedStart: null,
+      selectedEnd: null,
       // range is provided by api, but will fallback to this if ot provided, or set to -1
       startYear: '01/01/1961',
       endYear: '31/12/2015'
     });
+    this.set('_loaded', $.Deferred());
   },
 
   parse:function(data) {
@@ -25,8 +28,6 @@ module.exports = BaseFilterModel.extend({
       data.endYear = this.attributes.endYear;
     }
 
-    data.selectedStart = data.startYear;
-    data.selectedEnd = data.endYear;
 
     this.get('_loaded').resolve();
     return data;

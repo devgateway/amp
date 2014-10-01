@@ -14,17 +14,15 @@ module.exports = BaseFilterModel.extend({
   // load tree if needed, else return what we already have..
   getTree: function() {
     var self = this;
-    var deferred = $.Deferred();
-    if (this.get('tree')) {
-      deferred.resolve(this.get('tree'));
-    } else {
-      this._createTree().then(function() {
-        self.get('_loaded').resolve();
-        deferred.resolve(self.get('tree'));
-      });
+    var loaded = this.get('_loaded');
+
+    if (! loaded) {
+      self.set('_loaded', this._createTree().then(function() {
+        return self.get('tree');
+      }));
     }
 
-    return deferred;
+    return this.get('_loaded');
   },
 
   serialize: function() {
@@ -40,19 +38,22 @@ module.exports = BaseFilterModel.extend({
   },
 
   deserialize: function(listOfSelected) {
-    var tree = this.get('tree');
-    if (!tree) {
-      // ?Throw error?
-      return false; //no tree, nothing to serialize.
-    } else {
-      tree.deserialize(listOfSelected);
-    }
+    var self = this;
+    this.getTree().then(function(tree){
+      //var tree = self.get('tree');
+      if (!tree) {
+        // ?Throw error?
+        console.warn('no tree' + self.get('title'), listOfSelected);
+        return false; //no tree, nothing to serialize.
+      } else {
+        tree.deserialize(listOfSelected);
+      }
+    });
   },
 
   _createTree:function() {
     var self = this;
-    var url = this.get('url'); //intentionall not fetch, since we want to build a tree as an atribute...
-
+    var url = this.get('url'); //intentionall not fetch, since we want to build a tree as an atribute.
     return $.get(url).then(function(data) {
       //tmp hack solution, if it's an obj, jam it into an array first (needed for /filters/programs)
       if (!_.isArray(data)) {
@@ -72,7 +73,7 @@ module.exports = BaseFilterModel.extend({
             code: '-1',
             name: self.get('title'),
             children: data,
-            selected: true,
+            selected: undefined,
             expanded: false,
             isSelectable: false
           };
@@ -81,7 +82,7 @@ module.exports = BaseFilterModel.extend({
         var treeModel = new TreeNodeModel(rootNodeObj);
         self.set('tree', treeModel);
       } else {
-        console.error(' _createTree got bad data', data);
+        console.error(' _createTree '+self.get('title')+'got bad/empty data', data);
       }
 
     })

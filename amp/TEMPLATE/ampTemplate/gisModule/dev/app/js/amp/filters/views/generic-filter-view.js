@@ -58,7 +58,6 @@ module.exports = BaseFilterView.extend({
     this._loaded.then(function() {
       self.$el.html(self.template(self.model.toJSON()));
       self.$('.tree-container').append(self.treeView.render(self.model.get('tree')).$el);
-      self.model.get('tree').set('selected', false);
       self.model.get('tree').set('expanded', true);
     });
 

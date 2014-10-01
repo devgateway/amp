@@ -50,7 +50,7 @@ module.exports = GenericFilterView.extend({
       code: '-1',
       name: self.model.get('title'),
       children: [],
-      selected: true,
+      selected: undefined,
       expanded: false,
       isSelectable: false
     };
@@ -64,7 +64,7 @@ module.exports = GenericFilterView.extend({
           id: child.get('id'),
           code: '-1',
           name: child.get('name'),
-          selected: true,
+          selected: undefined,
           expanded: false,
           isSelectable: false
         };

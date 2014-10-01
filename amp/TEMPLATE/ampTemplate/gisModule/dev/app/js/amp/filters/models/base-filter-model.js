@@ -7,7 +7,7 @@ module.exports = Backbone.Model.extend({
     title: 'Filter Name',
     totalCount: 375,
     activeCount: 375,
-    _loaded: $.Deferred()
+    _loaded: false
   },
 
   initialize:function(options) {

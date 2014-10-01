@@ -15,6 +15,9 @@ _.extend(Widget.prototype, Backbone.Events, {
     var self = this;
     this.view = new FilterView(options);
 
+    // loaded deferred to allow for other code to wait for filters to finish loading.
+    this.loaded = this.view._loaded;
+
     this.view.on('cancel', function() {
       self.trigger('cancel');
     });
@@ -22,6 +25,10 @@ _.extend(Widget.prototype, Backbone.Events, {
     this.view.on('apply', function() {
       self.trigger('apply');
     });
+  },
+
+  showFilters: function(){
+    this.view.showFilters();
   },
 
   serialize: function() {

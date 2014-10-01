@@ -20,8 +20,11 @@ module.exports = BaseFilterView.extend({
     this.model = options.model;
 
     this._loaded = this.model.fetch().then(function() {
-      self.model.set('selectedStart', self.model.get('startYear'));
-      self.model.set('selectedEnd', self.model.get('endYear'));
+      // only set if not set by deserialize
+      if(!self.model.get('selectedStart')){
+        self.model.set('selectedStart', self.model.get('startYear'));
+        self.model.set('selectedEnd', self.model.get('endYear')); 
+      }
     });
 
     this.listenTo(this.model, 'change', this._updateTitle);
@@ -86,6 +89,25 @@ module.exports = BaseFilterView.extend({
     this.$('#end-date').val(this.model.get('selectedEnd'));
   },
 
+  renderTitle:function() {
+    BaseFilterView.prototype.renderTitle.apply(this);
+    this._updateTitle();
+
+    return this;
+  },
+
+  //TODO: do more in template.
+  _updateTitle:function() {
+    this.$titleEl.find('.filter-count').text(this.model.get('selectedStart') +
+        ' - ' +
+      this.model.get('selectedEnd'));
+
+    this.$('.start-year').text(this.model.get('selectedStart'));
+    this.$('.end-year').text(this.model.get('selectedEnd'));
+  },
+
+
+
   _renderSlider: function() {
     var self = this;
 
@@ -122,24 +144,6 @@ module.exports = BaseFilterView.extend({
     this.slider.on('change', function() {
       self.model.set('selectedEnd',  parseInt(self.$('.end-year').text(), 10));
     });
-  },
-
-  renderTitle:function() {
-    BaseFilterView.prototype.renderTitle.apply(this);
-    this._updateTitle();
-
-    return this;
-  },
-
-  //TODO: do more in template.
-  _updateTitle:function() {
-
-    this.$titleEl.find('.filter-count').text(this.model.get('selectedStart') +
-        ' - ' +
-      this.model.get('selectedEnd'));
-
-    this.$('.start-year').text(this.model.get('selectedStart'));
-    this.$('.end-year').text(this.model.get('selectedEnd'));
   }
 
 });

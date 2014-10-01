@@ -33,6 +33,7 @@ module.exports = Backbone.View.extend({
 
   initialize:function(options) {
     this.translator = options.translator;
+    this._loaded =  $.Deferred();
 
     if (options.draggable) {
       this.$el.draggable({ cancel: '.panel-body, .panel-footer', cursor: 'move'  });
@@ -67,6 +68,7 @@ module.exports = Backbone.View.extend({
       this.$el.show();
 
       this._getFilterList().done(function() {
+        self._loaded.resolve();
         self._setupOrgListener();
         self.renderFilters();
       });
@@ -191,7 +193,7 @@ module.exports = Backbone.View.extend({
         break;
       case 'Organizations':
       case 'OrganizationGroupList':
-      case 'OrgTypesList':      
+      case 'OrgTypesList':
       case 'organizationsRoles':
         tmpModel = new GenericFilterModel({
           url:APIFilter.endpoint,
@@ -258,25 +260,31 @@ module.exports = Backbone.View.extend({
   },
 
   serialize: function() {
-    var serializedFilters = {};
+    var self = this;
+    this.serializedFilters = {};
 
     this.allFilters.each(function(filter) {
-      serializedFilters[filter.get('title')] = filter.serialize();
+      self.serializedFilters[filter.get('title')] = filter.serialize();
     });
-
-    return serializedFilters;
+    return this.serializedFilters;
   },
 
   deserialize: function(blob) {
     if (blob) {
+
       this.allFilters.each(function(filter) {
         filter.deserialize(blob[filter.get('title')]);
       });
     }
   },
 
+  showFilters:function() {
+    this.filterStash = this.serialize();
+
+  },
+
   cancel:function() {
-    // TODO: revert filter state.
+    this.deserialize(this.filterStash);
     this.trigger('cancel');
   }
 });

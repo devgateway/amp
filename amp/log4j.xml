@@ -95,7 +95,7 @@
    <!-- ======================= -->
 
    <root>
-      <priority value="DEBUG" />
+      <priority value="INFO" />
       <appender-ref ref="CONSOLE"/>
       <appender-ref ref="default.file"/>
    </root>

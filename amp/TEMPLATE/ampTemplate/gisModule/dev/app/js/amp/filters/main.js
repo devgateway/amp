@@ -25,11 +25,11 @@ _.extend(Widget.prototype, Backbone.Events, {
   },
 
   serialize: function() {
-    this.view.serialize();
+    return this.view.serialize();
   },
 
   deserialize: function(stateBlob) {
-    this.view.deserialize(stateBlob);
+    return this.view.deserialize(stateBlob);
   }
 });
 

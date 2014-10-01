@@ -191,6 +191,8 @@ module.exports = Backbone.View.extend({
         break;
       case 'Organizations':
       case 'OrganizationGroupList':
+      case 'OrgTypesList':      
+      case 'organizationsRoles':
         tmpModel = new GenericFilterModel({
           url:APIFilter.endpoint,
           title:APIFilter.name

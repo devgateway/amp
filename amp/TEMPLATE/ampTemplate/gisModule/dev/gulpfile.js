@@ -56,7 +56,8 @@ var paths = {
       libs: ['./node_modules/leaflet/dist/**/*.css',
             './node_modules/leaflet.markercluster/dist/**/*.css',
             './app/js/libs/local/slider/**/*.css',
-            './node_modules/nvd3/**/*.css' ],
+            './node_modules/nvd3/**/*.css',
+            './app/js/amp/filters/less/filters-styles.less'],
       compiledDest: './app/compiled-css/',
       compiled: './app/compiled-css/main.css'
     },
@@ -203,6 +204,8 @@ gulp.task('build-css', ['clean', 'less'], function() {
 
 gulp.task('copy-stuff', ['clean', 'build-index'], function() {
   gulp.src(paths.app.rootstuff).pipe(gulp.dest(paths.dist.root));
+  //libs.concat(paths.app.stylesheets.entry))
+//gulp.src(paths.app.stylesheets.libs.concat(paths.app.stylesheets.entry))
   gulp.src(paths.app.images).pipe(gulp.dest(paths.dist.images));
   gulp.src(paths.app.fonts).pipe(gulp.dest(paths.dist.fonts));
 });

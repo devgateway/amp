@@ -29,7 +29,6 @@ module.exports = BaseControlView.extend({
 
 
   render:function() {
-    var self = this;
     BaseControlView.prototype.render.apply(this);
 
     // add content
@@ -40,11 +39,15 @@ module.exports = BaseControlView.extend({
     //   self.$('.filter-list').append(filtersWidget.renderTitle().titleEl);
     // });
 
-    this.filtersWidget = new FiltersWidget({el:this.$('#filter-popup'), draggable: true });
+    this.app.filtersWidget = new FiltersWidget({
+      el:this.$('#filter-popup'),
+      draggable: true,
+      translator: this.app.translator
+    });
 
     this.app.state.register(this, 'filters', {
-      get: function() { return this.filtersWidget.serialize(); },
-      set: function(state) { return this.filtersWidget.deserialize(state);},
+      get: function() { return this.app.filtersWidget.serialize();},
+      set: function(state) { return this.app.filtersWidget.deserialize(state);},
       empty: null
     });
 
@@ -57,11 +60,11 @@ module.exports = BaseControlView.extend({
     this.$('#filter-popup').show();
 
     // could do better, but must close accordion or get weird states from bootstrap and manual filter showing....
-    this.filtersWidget.on('cancel', function() {
+    this.app.filtersWidget.on('cancel', function() {
       self.$('.accordion-body').collapse('hide');
     });
 
-    this.filtersWidget.on('apply', function() {
+    this.app.filtersWidget.on('apply', function() {
       //TODO: ...trigger something wider....or atttach fitler widget to app.data....
       self.$('.accordion-body').collapse('hide');
     });

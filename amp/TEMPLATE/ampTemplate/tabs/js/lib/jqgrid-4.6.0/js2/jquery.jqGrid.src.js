@@ -11505,9 +11505,9 @@ $.jgrid.extend({
 							if ($.isFunction(this.st)) {
 								this.v = this.st.call($t, this.v, this.nm, record);
 							} else {
-								this.v = $($t).jqGrid('groupingCalculations.handler',this.st, this.v, this.nm, this.sr, this.srt, record);
+								this.v = $($t).jqGrid('groupingCalculations.handler',this.st, this.v, this.nm, this.sr, this.srt, record, fieldName);
 								if(this.st.toLowerCase() === 'avg' && this.sd) {
-									this.vd = $($t).jqGrid('groupingCalculations.handler',this.st, this.vd, this.sd, this.sr, this.srt, record);
+									this.vd = $($t).jqGrid('groupingCalculations.handler',this.st, this.vd, this.sd, this.sr, this.srt, record, fieldName);
 								}
 							}
 						});
@@ -11523,9 +11523,9 @@ $.jgrid.extend({
 								if ($.isFunction(this.st)) {
 									this.v = this.st.call($t, this.v, this.nm, record);
 								} else {
-									this.v = $($t).jqGrid('groupingCalculations.handler',this.st, this.v, this.nm, this.sr, this.srt, record);
+									this.v = $($t).jqGrid('groupingCalculations.handler',this.st, this.v, this.nm, this.sr, this.srt, record, fieldName);
 									if(this.st.toLowerCase() === 'avg' && this.sd) {
-										this.vd = $($t).jqGrid('groupingCalculations.handler',this.st, this.vd, this.sd, this.sr, this.srt, record);
+										this.vd = $($t).jqGrid('groupingCalculations.handler',this.st, this.vd, this.sd, this.sr, this.srt, record, fieldName);
 									}
 								}
 							});
@@ -11540,9 +11540,9 @@ $.jgrid.extend({
 									if ($.isFunction(this.st)) {
 										this.v = this.st.call($t, this.v, this.nm, record);
 									} else {
-										this.v = $($t).jqGrid('groupingCalculations.handler',this.st, this.v, this.nm, this.sr, this.srt, record);
+										this.v = $($t).jqGrid('groupingCalculations.handler',this.st, this.v, this.nm, this.sr, this.srt, record, fieldName);
 										if(this.st.toLowerCase() === 'avg' && this.sd) {
-											this.vd = $($t).jqGrid('groupingCalculations.handler',this.st, this.vd, this.sd, this.sr, this.srt, record);
+											this.vd = $($t).jqGrid('groupingCalculations.handler',this.st, this.vd, this.sd, this.sr, this.srt, record, fieldName);
 										}
 									}
 								});
@@ -11554,9 +11554,9 @@ $.jgrid.extend({
 									if ($.isFunction(this.st)) {
 										this.v = this.st.call($t, this.v, this.nm, record);
 									} else {
-										this.v = $($t).jqGrid('groupingCalculations.handler',this.st, this.v, this.nm, this.sr, this.srt, record);
+										this.v = $($t).jqGrid('groupingCalculations.handler',this.st, this.v, this.nm, this.sr, this.srt, record, fieldName);
 										if(this.st.toLowerCase() === 'avg' && this.sd) {
-											this.vd = $($t).jqGrid('groupingCalculations.handler',this.st, this.vd, this.sd, this.sr, this.srt, record);
+											this.vd = $($t).jqGrid('groupingCalculations.handler',this.st, this.vd, this.sd, this.sr, this.srt, record, fieldName);
 										}
 									}
 								});
@@ -11865,7 +11865,7 @@ $.jgrid.extend({
 		});
 	},
 	groupingCalculations : {
-		handler: function(fn, v, field, round, roundType, rc) {
+		handler: function(fn, v, field, round, roundType, rc, groupingField) {
 			var funcs = {
 				sum: function() {
 					return parseFloat(v||0) + parseFloat((rc[field]||0));
@@ -11897,6 +11897,11 @@ $.jgrid.extend({
 					// the same as sum, but at end we divide it
 					// so use sum instead of duplicating the code (?)
 					return funcs.sum();
+				},
+				
+				/* Shows the current group name in the footer. */
+				groupName: function() {
+					return rc[groupingField];
 				}
 			};
 

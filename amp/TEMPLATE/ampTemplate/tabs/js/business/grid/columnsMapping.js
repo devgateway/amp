@@ -125,8 +125,8 @@ define(function() {
 			};
 			// TODO: show current group name (not natively supported by jqGrid).
 			if (i == (metadata.hierarchies.models.length)) {
-				column.summaryType = 'count';
-				column.summaryTpl = 'Total ({0})';
+				column.summaryType = 'groupName';
+				column.summaryTpl = 'TOTAL [{0}]';
 			}
 			var mappedColumn = findInMapByColumnName(item.get('columnName'));
 			if (mappedColumn != undefined && mappedColumn.width != undefined) {

@@ -64,10 +64,11 @@ define([ 'business/grid/columnsMapping' ], function(columnsMapping) {
 			grouping : grouping,
 			groupingView : columnsMapping.createJQGridGroupingModel(tableStructure, grouping),
 			gridComplete : function() {
-				//console.log($(grid).css("width"));
-				//columnsMapping.recalculateColumnsWidth(grid, $(grid).css("width"));
+				// console.log($(grid).css("width"));
+				// columnsMapping.recalculateColumnsWidth(grid,
+				// $(grid).css("width"));
 				$(grid).find(">tbody>tr.jqgrow:odd").addClass("myAltRowClassEven");
-			    $(grid).find(">tbody>tr.jqgrow:even").addClass("myAltRowClassOdd");
+				$(grid).find(">tbody>tr.jqgrow:even").addClass("myAltRowClassOdd");
 			}
 		});
 	};
@@ -98,6 +99,7 @@ define([ 'business/grid/columnsMapping' ], function(columnsMapping) {
 		if (grouping) {
 			postProcessHierarchies(rows, hierarchies);
 		}
+		console.log(rows);
 		return rows;
 	}
 
@@ -128,8 +130,8 @@ define([ 'business/grid/columnsMapping' ], function(columnsMapping) {
 				$.each(obj.contents, function(key, element) {
 					var colName = columnsMapping.getMap()[key].name;
 					if (colName != undefined && colName != null) {
-						if (element.displayedValue != null && element.displayedValue != "") {
-							row[colName] = element.displayedValue;
+						if (element.value != null && element.value != "") {
+							row[colName] = element.value;
 						} else {
 							row[colName] = getParentContent(key, parent);
 						}

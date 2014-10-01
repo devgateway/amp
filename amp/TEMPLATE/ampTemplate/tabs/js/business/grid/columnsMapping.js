@@ -30,7 +30,7 @@ define(function() {
 	};
 	map['[AMP ID]'] = {
 		name : 'AMP ID',
-		width: 80
+		width : 80
 	};
 	map['[Level 0 Sector]'] = {
 		name : 'Primary Sector'
@@ -119,9 +119,16 @@ define(function() {
 			}
 		});
 		$(metadata.columns.models).each(function(i, item) {
+			// TODO: set groupingOptions only for the 1st non hierarchical
+			// column (usually is project title).
+			var groupingOptions = {};
+			groupingOptions.summaryType = 'count';
+			groupingOptions.summaryTpl = 'Total ({0})'
 			var column = {
 				name : item.get('columnName'),
-				classes : 'wrap-cell'
+				classes : 'wrap-cell',
+				summaryType : groupingOptions.summaryType,
+				summaryTpl : groupingOptions.summaryTpl
 			};
 			var mappedColumn = findInMapByColumnName(item.get('columnName'));
 			if (mappedColumn != undefined && mappedColumn.width != undefined) {
@@ -138,7 +145,11 @@ define(function() {
 			ret.push({
 				name : item.get('measureName'),
 				width : 105,
-				fixed : true
+				fixed : true,
+				summaryType : 'sum',
+				align : "right",
+				sorttype : 'number',
+				formatter : 'number'
 			});
 		});
 		console.log(ret);
@@ -151,18 +162,20 @@ define(function() {
 			var fields = [];
 			var hiddenFields = [];
 			var styleText = [];
-			// var summary = [];
+			var summary = [];
 			$(metadata.hierarchies.models).each(function(i, item) {
 				fields.push(item.get('columnName'));
 				hiddenFields.push(false);
 				styleText.push('<b>{0} - ({1})</b>');
-				// summary.push(true);
+				summary.push(true);
 			});
 			ret.groupField = fields;
 			ret.groupColumnShow = hiddenFields;
 			ret.groupText = styleText;
 			ret.groupCollapse = true;
-			// ret.groupSummary = summary;
+
+			ret.showSummaryOnHide = false;
+			ret.groupSummary = summary;
 			console.log(ret);
 			return ret;
 		} else {

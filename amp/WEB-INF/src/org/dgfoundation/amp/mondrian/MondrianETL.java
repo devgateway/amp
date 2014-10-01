@@ -64,7 +64,7 @@ public class MondrianETL {
 	/**
 	 * ETL lock
 	 */
-	private final static ReentrantLock ETL_LOCK = new ReentrantLock();
+	private final static Object ETL_LOCK = new Object();
 	
 	/**
 	 * FULL ETL lock, shared with reports
@@ -828,8 +828,7 @@ private EtlResult execute() throws Exception {
 	}
 	
 	public static EtlResult runETL(boolean forceFull) {
-		ETL_LOCK.lock();
-		try {
+		synchronized(ETL_LOCK) {
 			try(Connection conn = PersistenceManager.getJdbcConnection()) {
 				try(MonetConnection monetConn = MonetConnection.getConnection()) {
 					MondrianETL etl = new MondrianETL(conn, monetConn, forceFull);
@@ -838,14 +837,11 @@ private EtlResult execute() throws Exception {
 					return etlResult;
 				}
 			}
-		}
-		catch(Exception e) {
-			if (e instanceof RuntimeException)
-				throw (RuntimeException) e;
-			throw new RuntimeException(e);
-		}
-		finally {
-			ETL_LOCK.unlock();
+			catch(Exception e) {
+				if (e instanceof RuntimeException)
+					throw (RuntimeException) e;
+				throw new RuntimeException(e);
+			}
 		}
 	}
 }

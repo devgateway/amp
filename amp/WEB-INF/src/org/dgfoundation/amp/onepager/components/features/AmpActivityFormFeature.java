@@ -758,9 +758,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 				@Override
 				protected void onTimer(AjaxRequestTarget target) {
 					OnePager op = AmpActivityFormFeature.this.findParent(OnePager.class);
-					op.getEditLockRefresher().setEnabled(true);
+					op.getEditLockRefresher().setEnabled(false);
 					if (op.getTimer() != null) {
-						op.getTimer().restart(target);
+						op.getTimer().stop(target);
 					}
 
 					// we send a javascript event to the autoSaveDiv

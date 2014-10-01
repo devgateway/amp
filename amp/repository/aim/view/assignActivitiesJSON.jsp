@@ -41,7 +41,7 @@
 							</tr>
 							<tr>
 								<td valign="top">
-									<table align=center cellPadding=0 cellSpacing=0 width="95%" border=0>	
+									<table align=center cellPadding=0 cellSpacing=0 width="95%" border=0 style="table-layout: fixed">	
 										<tr bgColor=#f4f4f2>
 											<td bgColor=#f4f4f2>
 												<table border="0" cellPadding=0 cellSpacing=0 width="100%">
@@ -68,12 +68,12 @@
 														<table width="100%" cellpadding=5 cellspacing=0 border=0>
 														<logic:iterate name="aimAssignActivityForm" property="activities" id="activities">
 															<tr>
-																<td align="right" width=3>
+																<td align="right" width="10%">
 																	<html:multibox property="selectedActivities" >
 																		<bean:write name="activities" property="ampActivityId" />
 																	</html:multibox>
 																</td>
-																<td align="left">
+																<td align="left" width="90%" style="word-wrap: break-word;">
 																	<bean:write name="activities" property="name" />
 																</td>
 															</tr>

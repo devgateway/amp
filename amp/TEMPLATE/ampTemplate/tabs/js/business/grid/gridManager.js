@@ -99,7 +99,7 @@ define([ 'business/grid/columnsMapping' ], function(columnsMapping) {
 		if (grouping) {
 			postProcessHierarchies(rows, hierarchies);
 		}
-		console.log(rows);
+		//console.log(rows);
 		return rows;
 	}
 

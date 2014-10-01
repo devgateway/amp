@@ -119,17 +119,15 @@ define(function() {
 			}
 		});
 		$(metadata.columns.models).each(function(i, item) {
-			// TODO: set groupingOptions only for the 1st non hierarchical
-			// column (usually is project title).
-			var groupingOptions = {};
-			groupingOptions.summaryType = 'count';
-			groupingOptions.summaryTpl = 'Total ({0})'
 			var column = {
 				name : item.get('columnName'),
-				classes : 'wrap-cell',
-				summaryType : groupingOptions.summaryType,
-				summaryTpl : groupingOptions.summaryTpl
+				classes : 'wrap-cell'
 			};
+			// TODO: show current group name (not natively supported by jqGrid).
+			if (i == (metadata.hierarchies.models.length)) {
+				column.summaryType = 'count';
+				column.summaryTpl = 'Total ({0})';
+			}
 			var mappedColumn = findInMapByColumnName(item.get('columnName'));
 			if (mappedColumn != undefined && mappedColumn.width != undefined) {
 				column.width = mappedColumn.width;

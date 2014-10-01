@@ -28,22 +28,22 @@ import org.digijava.module.aim.util.CurrencyUtil;
 public class MondrianReportUtils {
 	
 	public static ReportEntityType getColumnEntityType(String columnName, ReportEntityType currentEntityType) {
-		if (Mappings.ALL_ENTITIES_COLUMNS.contains(columnName))
+		//if (Mappings.ALL_ENTITIES_COLUMNS.contains(columnName))
 			return ReportEntityType.ENTITY_TYPE_ALL;
-		return currentEntityType;
+		//return currentEntityType;
 	}
 	
 	public static ReportEntityType getMeasuresEntityType(String measureName, ReportEntityType currentEntityType) {
-		if (Mappings.ALL_ENTITIES_MEASURES.contains(measureName))
+		//if (Mappings.ALL_ENTITIES_MEASURES.contains(measureName))
 			return ReportEntityType.ENTITY_TYPE_ALL;
-		return currentEntityType;
+		//return currentEntityType;
 	}
 	
 	public static ReportEntityType getReportEntityType(AmpReports report) throws AMPException {
 		switch (report.getType().intValue()) {
 		case ArConstants.DONOR_TYPE:
 			//the only supported type for now
-			return ReportEntityType.ENTITY_TYPE_ACTIVITY;
+			return ReportEntityType.ENTITY_TYPE_ALL;
 		default: 
 			throw new AMPException("Not supported report translation for report type: " + report.getType());
 		}

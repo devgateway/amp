@@ -62,4 +62,8 @@ public abstract class NamedTypedEntity {
 	public ReportEntityType getEntityType() {
 		return this.entityType;
 	}
+	
+	@Override public String toString() {
+		return String.format("name: %s, type: %s", this.getEntityName(), this.getEntityType());
+	}
 }

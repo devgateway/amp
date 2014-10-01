@@ -16,7 +16,7 @@
 			<Table name="mondrian_sectors@@locale@@" />
 			<Level name="Level 1 Sector" type="Integer" column="level1_sector_id" nameColumn="level1_sector_name" />
 		</Hierarchy>
-		<Hierarchy hasAll="true" allMemberName="All Level 0 Sectors" primaryKey="amp_sector_id" name="Level 1 Sector Id">
+		<Hierarchy hasAll="true" allMemberName="All Level 1 Sectors" primaryKey="amp_sector_id" name="Level 1 Sector Id">
 			<Table name="mondrian_sectors@@locale@@" />
 			<Level name="Level 1 Sector Id" type="Integer" column="level1_sector_id"/>
 		</Hierarchy>
@@ -24,7 +24,7 @@
 			<Table name="mondrian_sectors@@locale@@" />
 			<Level name="Level 2 Sector" type="Integer" column="level2_sector_id" nameColumn="level2_sector_name" />
 		</Hierarchy>
-		<Hierarchy hasAll="true" allMemberName="All Level 0 Sectors" primaryKey="amp_sector_id" name="Level 2 Sector Id">
+		<Hierarchy hasAll="true" allMemberName="All Level 2 Sectors" primaryKey="amp_sector_id" name="Level 2 Sector Id">
 			<Table name="mondrian_sectors@@locale@@" />
 			<Level name="Level 2 Sector Id" type="Integer" column="level2_sector_id"/>
 		</Hierarchy>

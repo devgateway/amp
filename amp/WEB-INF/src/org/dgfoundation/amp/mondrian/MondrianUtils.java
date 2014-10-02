@@ -31,9 +31,9 @@ public class MondrianUtils {
 	
 	private static void doTheCheck(Connection connection) throws SQLException {
 		long corNrRows = SQLUtils.countRows(connection, "amp_activity_version");
-		long nrLangs = SQLUtils.<Long>fetchAsList(connection, "select count(*) from dg_site_trans_lang_map langs where langs.site_id = 3", 1).get(0);
+		long nrLangs = SQLUtils.getLong(connection, "select count(*) from dg_site_trans_lang_map langs where langs.site_id = 3");
 		for(MondrianTableDescription table:MondrianTablesRepository.MONDRIAN_ACTIVITY_DIMENSIONS) {
-			if (table == MondrianTablesRepository.MONDRIAN_LONG_TEXTS)
+			if (corNrRows > 12000 && table == MondrianTablesRepository.MONDRIAN_LONG_TEXTS)
 				continue; // postgres sucks at joining on varchars
 			long nrRows = SQLUtils.countRows(connection, "v_" + table.tableName);			
 			long divider = table.isFiltering ? nrLangs : 1;

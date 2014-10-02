@@ -50,12 +50,16 @@ module.exports = Backbone.View.extend({
     return this.featureGroup;
   },
 
+  //TODO: this code runs every time layer is shown...should only do it when things change,
+  // otherwise should just hide and show.
   _renderFeatures: function() {
     var self = this;
 
     self.markerCluster.clearLayers();
 
     var model = self.app.data.projectSites;
+    self.maxClusterCount = 0;
+    self.customClusterMap = {};
 
     // add new featureGroup
     self.featureGroup = L.geoJson(self.rawData, {
@@ -84,7 +88,6 @@ module.exports = Backbone.View.extend({
         });
 
         self.markerCluster.addLayer(point);
-
 
         // DRS in progress custom own clustering. big efficiency gains.
         var latLngString = Math.round(latlng.lat * self.CLUSTER_PRECISION * 10) +
@@ -283,7 +286,6 @@ module.exports = Backbone.View.extend({
     }
 
     this.map.off('zoomend', this._updateZoom);
-
     this.map.removeLayer(this.markerCluster);
   }
 

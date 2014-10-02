@@ -28,6 +28,8 @@ _.extend(GISData.prototype, Backbone.Events, {
 
     this.activities = new Activities();
     this.boundaries = new Boundaries();
+
+
     this.filters = new Backbone.Collection();
 
     this.indicators = new Indicators([], { boundaries: this.boundaries });

@@ -62,6 +62,7 @@ module.exports = Backbone.View.extend({
     this.$el.append(this.legendView.render().el);
 
     this._renderCountryBoundary();
+    this.map.invalidateSize();
 
     return this;
   },
@@ -69,14 +70,15 @@ module.exports = Backbone.View.extend({
 
   _renderCountryBoundary: function() {
     var self = this;
-    // TODO: harcoded path is bad.
-    $.get('/rest/gis/boundaries/adm-0').then(function(geoJSON) {
-
-      self.countryBoundary = L.geoJson(geoJSON,
+    this.app.data.boundaries.load().then(function() {
+      var boundary0 = self.app.data.boundaries.findWhere({id:'adm-0'});
+      boundary0.fetch().then(function(geoJSON) {
+        self.countryBoundary = L.geoJson(geoJSON,
         {
           simplifyFactor: 0.9,
           style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '3'}
         }).addTo(self.map);
+      });
     });
   },
 

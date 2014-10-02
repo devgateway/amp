@@ -56,7 +56,6 @@ var paths = {
       libs: ['./node_modules/leaflet/dist/**/*.css',
             './node_modules/leaflet.markercluster/dist/**/*.css',
             './app/js/libs/local/slider/**/*.css',
-            './node_modules/nvd3/**/*.css',
             './app/js/amp/filters/less/filters-styles.less'],
       compiledDest: './app/compiled-css/',
       compiled: './app/compiled-css/main.css'

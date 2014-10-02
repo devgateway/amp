@@ -1,6 +1,9 @@
 package org.digijava.kernel.ampapi.mondrian.util;
 
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -12,12 +15,15 @@ import mondrian.spi.DynamicSchemaProcessor;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.dgfoundation.amp.newreports.NamedTypedEntity;
+import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianDBUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
+import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.TeamMember;
@@ -83,6 +89,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	protected String translateMeasuresAndColumns(String contents, String locale) {
 		Map<String, String> backMapping = MondrianMapping.fromFullNameToColumnName;
 		Set<String> wronglyMappedColumns = new TreeSet<>(backMapping.values());
+		Set<String> allLevels = new TreeSet<>();
 		
 		Document xmlSchema = XMLGlobals.createNewXML(contents);
 		
@@ -97,19 +104,24 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		for(int i = 0; i < columns.getLength(); i++) {
 			Element columnElem = (Element) columns.item(i);
 			String fullColumnName = buildColumnName(columnElem);
+			allLevels.add(fullColumnName);
 			String correspondingColumn = backMapping.get(fullColumnName);
 			if (correspondingColumn == null) {
 				logger.error("could not find a backmapping for " + fullColumnName + ", this one will not be translated!");
 				continue;
 			}
 			wronglyMappedColumns.remove(correspondingColumn);
+			if (columnElem.hasAttribute("translated") && columnElem.getAttribute("translated").toLowerCase().equals("false"))
+				continue;
 			columnElem.setAttribute("caption", TranslatorWorker.translateText(correspondingColumn, locale, 3l));
 		}
-		if (!wronglyMappedColumns.isEmpty())
+		if (!wronglyMappedColumns.isEmpty()) {
 			logger.fatal("the following columns are mapped in the MDX generator without a correspondence in the Schema: " + wronglyMappedColumns);
+			throw new RuntimeException("incorrectly-mapped column: " + wronglyMappedColumns.toString());
+		}
 		return XMLGlobals.saveToString(xmlSchema);
 	}
-	
+		
 	protected String buildColumnName(Element levelElem) {
 		Element hierElem = (Element) levelElem.getParentNode();
 		Element dimensionElem = (Element) hierElem.getParentNode();
@@ -139,7 +151,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 				String name = dimUsage.getAttribute("name");
 				String dim = dimUsage.getAttribute("source");
 				String foreignKey = dimUsage.getAttribute("foreignKey");
-				logger.warn(String.format("expanding DimensionUsage: name = %s,  dim = %s, key = %s\n", name, dim, foreignKey));
+				//logger.warn(String.format("expanding DimensionUsage: name = %s,  dim = %s, key = %s", name, dim, foreignKey));
 				
 				Node dimensionDefinition = XMLGlobals.selectNode(xmlSchema, "//Dimension[@name='" + dim + "']");
 				Element newDimensionDefinition = (Element) dimensionDefinition.cloneNode(true);

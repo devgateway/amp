@@ -106,13 +106,13 @@ public class MondrianMapping {
 	/**
 	 * Mappings between AMP Data and Mondrian Schema 
 	 */
-	private static final Map<NamedTypedEntity,MDXElement> entityMap = new HashMap<NamedTypedEntity, MDXElement>() {
+	public static final Map<NamedTypedEntity,MDXElement> entityMap = new HashMap<NamedTypedEntity, MDXElement>() {
 		
-		void addColumnDefinition(String columnName, MDXElement mdxLevel) {
+		void addColumnDefinition(String columnName, MDXLevel mdxLevel) {
 			addColumnDefinition(columnName, ReportEntityType.ENTITY_TYPE_ALL, mdxLevel);
 		}
 		
-		void addColumnDefinition(String columnName, ReportEntityType entityType, MDXElement mdxLevel) {
+		void addColumnDefinition(String columnName, ReportEntityType entityType, MDXLevel mdxLevel) {
 			ReportColumn rc = new ReportColumn(columnName, entityType);
 			if (this.containsKey(rc))
 				throw new RuntimeException(String.format("column %s defined at least twice: once as %s, and then as %s", rc, this.get(rc), mdxLevel));
@@ -216,7 +216,7 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.H_LEVEL_2_SECTOR, MoConstants.ATTR_LEVEL_2_SECTOR_NAME));
 			addColumnDefinition(ColumnConstants.PRIMARY_SECTOR_ID, new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_ID, MoConstants.ATTR_LEVEL_0_SECTOR_ID));
 			addColumnDefinition(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR_ID, new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.ATTR_LEVEL_1_SECTOR_ID, MoConstants.ATTR_LEVEL_1_SECTOR_ID));
-			addColumnDefinition(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR_ID, new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.ATTR_LEVEL_1_SECTOR_ID, MoConstants.ATTR_LEVEL_2_SECTOR_ID));
+			addColumnDefinition(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR_ID, new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.ATTR_LEVEL_2_SECTOR_ID, MoConstants.ATTR_LEVEL_2_SECTOR_ID));
 			addColumnDefinition(ColumnConstants.SECONDARY_SECTOR, new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 			addColumnDefinition(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.H_LEVEL_1_SECTOR, MoConstants.ATTR_LEVEL_1_SECTOR_NAME));
 			addColumnDefinition(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.H_LEVEL_2_SECTOR, MoConstants.ATTR_LEVEL_2_SECTOR_NAME));
@@ -227,26 +227,26 @@ public class MondrianMapping {
 //			addColumnDefinition(ColumnConstants.PLEDGES_SECONDARY_SECTORS, new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 //			addColumnDefinition(ColumnConstants.PLEDGES_TERTIARY_SECTORS, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 			
-			addColumnDefinition(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_0_NAME));
-			addColumnDefinition(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_1_NAME));
-			addColumnDefinition(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_2, new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_2_NAME));
-			addColumnDefinition(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_3, new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_3_NAME));
-			addColumnDefinition(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_4, new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_4_NAME));
-			addColumnDefinition(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_5, new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_5_NAME));
-			addColumnDefinition(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_6, new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_6_NAME));
-			addColumnDefinition(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_7, new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_7_NAME));
-			addColumnDefinition(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_8, new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_8_NAME));
+			addColumnDefinition(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, new MDXLevel(MoConstants.NATIONAL_OBJECTIVES, "Normal", "Level 1 Name"));
+			for(int i = 1; i <= 8; i++)
+				addColumnDefinition("National Planning Objectives Level " + i, new MDXLevel(MoConstants.NATIONAL_OBJECTIVES, "Level " + i, "Level " + i + " Name"));
 			
-			addColumnDefinition(ColumnConstants.PRIMARY_PROGRAM, new MDXAttribute(MoConstants.PRIMARY_PROGRAMS, MoConstants.ATTR_PROGRAM_LEVEL_1_NAME));
+			addColumnDefinition(ColumnConstants.PRIMARY_PROGRAM, new MDXLevel(MoConstants.PRIMARY_PROGRAMS, "Normal", "Level 1 Name"));
+			for(int i = 1; i <= 8; i++)
+				addColumnDefinition("Primary Program Level " + i, new MDXLevel(MoConstants.PRIMARY_PROGRAMS, "Level " + i, "Level " + i + " Name"));
+
+			addColumnDefinition(ColumnConstants.SECONDARY_PROGRAM, new MDXLevel(MoConstants.SECONDARY_PROGRAMS, "Normal", "Level 1 Name"));
+			for(int i = 1; i <= 8; i++)
+				addColumnDefinition("Secondary Program Level " + i, new MDXLevel(MoConstants.SECONDARY_PROGRAMS, "Level " + i, "Level " + i + " Name"));
+
+			addColumnDefinition(ColumnConstants.TERTIARY_PROGRAM, new MDXLevel(MoConstants.TERTIARY_PROGRAMS, "Normal", "Level 1 Name"));
+			for(int i = 1; i <= 8; i++)
+				addColumnDefinition("Tertiary Program Level " + i, new MDXLevel(MoConstants.TERTIARY_PROGRAMS, "Level " + i, "Level " + i + " Name"));
 			
-			addColumnDefinition(ColumnConstants.SECONDARY_PROGRAM, new MDXAttribute(MoConstants.SECONDARY_PROGRAMS, MoConstants.ATTR_PROGRAM_LEVEL_1_NAME));
-			
-			addColumnDefinition(ColumnConstants.TERTIARY_PROGRAM, new MDXAttribute(MoConstants.TERTIARY_PROGRAMS, MoConstants.ATTR_PROGRAM_LEVEL_1_NAME));
-			
-			addColumnDefinition(ColumnConstants.COUNTRY, new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS,  MoConstants.ATTR_COUNTRY_NAME));
+			addColumnDefinition(ColumnConstants.COUNTRY, new MDXLevel(MoConstants.LOCATION, MoConstants.H_COUNTRIES,  MoConstants.ATTR_COUNTRY_NAME));
 			addColumnDefinition(ColumnConstants.REGION, new MDXLevel(MoConstants.LOCATION, MoConstants.H_REGIONS,  MoConstants.ATTR_REGION_NAME));
-			addColumnDefinition(ColumnConstants.ZONE, new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS,  MoConstants.ATTR_ZONE_NAME));
-			addColumnDefinition(ColumnConstants.DISTRICT, new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS,  MoConstants.ATTR_DISTRICT_NAME));
+			addColumnDefinition(ColumnConstants.ZONE, new MDXLevel(MoConstants.LOCATION, MoConstants.H_ZONES, "Zone"));
+			addColumnDefinition(ColumnConstants.DISTRICT, new MDXLevel(MoConstants.LOCATION, MoConstants.H_DISTRICTS, "District"));
 			
 			addColumnDefinition(ColumnConstants.PROPOSED_PROJECT_AMOUNT, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT));
 

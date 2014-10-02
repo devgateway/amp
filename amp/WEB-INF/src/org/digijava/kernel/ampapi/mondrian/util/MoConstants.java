@@ -114,7 +114,10 @@ public final class MoConstants {
 	public static final String H_ORG_GROUP_NAME = "Organization Group Name";
 	public static final String H_ORG_NAME = "Organization Name";
 	public static final String H_LOCATIONS = "Locations";
-	public static final String H_REGIONS = "Region Name";
+	public static final String H_COUNTRIES = "Country";
+	public static final String H_REGIONS = "Region";
+	public static final String H_ZONES = "Zone";
+	public static final String H_DISTRICTS = "District";
 	public static final String H_LEVEL_0_SECTOR = "Level 0 Sector";
 	public static final String H_LEVEL_1_SECTOR = "Level 1 Sector";
 	public static final String H_LEVEL_2_SECTOR = "Level 2 Sector";
@@ -217,10 +220,10 @@ public final class MoConstants {
 	public static final String ATTR_DATE = "Date";
 	public static final String ATTR_DAY = "Day";
 	public static final String ATTR_ALL_DATES = "All Periods";
-	public static final String ATTR_COUNTRY_NAME = "Country Name";
-	public static final String ATTR_REGION_NAME = "Region Name";
-	public static final String ATTR_ZONE_NAME = "Zone Name";
-	public static final String ATTR_DISTRICT_NAME = "District Name";
+	public static final String ATTR_COUNTRY_NAME = "Country";
+	public static final String ATTR_REGION_NAME = "Region";
+	public static final String ATTR_ZONE_NAME = "Zone";
+	public static final String ATTR_DISTRICT_NAME = "District";
 	public static final String ATTR_LOCATION_NAME = "Location";
 	public static final String ATTR_LEVEL_0_SECTOR_NAME = "Level 0 Sector";
 	public static final String ATTR_LEVEL_0_SECTOR_ID = "Level 0 Sector Id";

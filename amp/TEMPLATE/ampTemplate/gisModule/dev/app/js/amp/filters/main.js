@@ -3,6 +3,8 @@ var _ = require('underscore');
 
 var FilterView = require('./views/filters-view');
 
+// TODO: refactor by pulling all filter model fetching into all-filters-collection
+// should be straight forward, but since fitlers are stable not bothering to do it right now.
 
 
 function Widget() {
@@ -27,7 +29,8 @@ _.extend(Widget.prototype, Backbone.Events, {
     });
   },
 
-  showFilters: function(){
+  // this will stash current filter state, so it can be restored on cancel.
+  showFilters: function() {
     this.view.showFilters();
   },
 

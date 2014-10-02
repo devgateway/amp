@@ -18,12 +18,11 @@ module.exports = BaseFilterView.extend({
     BaseFilterView.prototype.initialize.apply(this, [options]);
 
     this.model = options.model;
-
     this._loaded = this.model.fetch().then(function() {
       // only set if not set by deserialize
-      if(!self.model.get('selectedStart')){
+      if (!self.model.get('selectedStart')) {
         self.model.set('selectedStart', self.model.get('startYear'));
-        self.model.set('selectedEnd', self.model.get('endYear')); 
+        self.model.set('selectedEnd', self.model.get('endYear'));
       }
     });
 
@@ -51,7 +50,7 @@ module.exports = BaseFilterView.extend({
 
     // TODO: format absed on admin setting....maybe get from year api..
     // TODO: abstract common properties from object inits below...
-    var commonObj = {};
+    // var commonObj = {};
 
     this.$('#start-date').datepicker({
       defaultDate: this.model.get('selectedStart'),

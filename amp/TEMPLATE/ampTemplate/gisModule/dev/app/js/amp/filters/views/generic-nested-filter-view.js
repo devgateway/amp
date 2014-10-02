@@ -27,7 +27,7 @@ module.exports = GenericFilterView.extend({
 
     this.model = options.model;
 
-    this._loaded = this._createTree(this.model.get('url')).then(function() {
+    this._loaded = this._createTree().then(function() {
       self._updateCountInMenu();
       self.model.get('tree').on('change:numSelected', function() {
         self._updateCountInMenu();
@@ -39,7 +39,7 @@ module.exports = GenericFilterView.extend({
   // 1. get all children
   // 2. create root JSON, with each child endpoint as 'children'.
   // 3. when all done create tree
-  _createTree:function(url) {
+  _createTree:function() {
     var self = this;
     var deferred = $.Deferred();
     var deferreds = [];
@@ -57,7 +57,7 @@ module.exports = GenericFilterView.extend({
 
     //get available endpoint children
     this.childEndpoints = new Backbone.Collection();
-    this.childEndpoints.url = url;
+    this.childEndpoints.url = this.model.url;
     this.childEndpoints.fetch().done(function() {
       self.childEndpoints.each(function(child) {
         var tmpNode = {
@@ -69,7 +69,7 @@ module.exports = GenericFilterView.extend({
           isSelectable: false
         };
 
-        child.url = url + '/' + child.get('id'); //TODO: something smarter...more reliable
+        child.url = this.childEndpoints.url + '/' + child.get('id'); //TODO: something smarter...more reliable
         deferreds.push(
           child.fetch().done(function(data) {
             if (data.id) { //not an array. hack temp solution while Julian fixes API so all obj or all array

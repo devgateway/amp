@@ -70,7 +70,7 @@ TreeNodeModel = Backbone.Model.extend({
 
     if (_(listOfSelected).indexOf(this.id) > -1) {
       this.set('selected', true, {propagation: true});
-    } else if(children.length == 0) {
+    } else if (children.length === 0) {
       this.set('selected', false, {propagation: true});
     }
   },

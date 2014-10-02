@@ -8,6 +8,7 @@ module.exports = BaseFilterModel.extend({
 
   initialize:function(options) {
     BaseFilterModel.prototype.initialize.apply(this, [options]);
+    this.url = options.endpoint;
     this.set({
       title: 'Years',
       selectedStart: null,

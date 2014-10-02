@@ -29,7 +29,7 @@ module.exports = BaseFilterView.extend({
     //TODO: modify to be on demand load style, so only done the first time the user wants that filter...
     // Create tree view
     //TODO: make tree loading content responsibility of model, not view...
-    this._loaded = this._createTree(this.model.get('url')).then(function() {
+    this._loaded = this._createTree().then(function() {
       self._updateCountInMenu();
       self.model.get('tree').on('change:numSelected', function() {
         self._updateCountInMenu();

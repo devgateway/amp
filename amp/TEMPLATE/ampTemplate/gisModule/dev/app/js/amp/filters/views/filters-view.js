@@ -69,7 +69,7 @@ module.exports = Backbone.View.extend({
 
       this._getFilterList().done(function() {
         self._loaded.resolve();
-        self._setupOrgListener();
+        self.allFilters.setupOrgListener();
         self.renderFilters();
       });
 
@@ -87,14 +87,6 @@ module.exports = Backbone.View.extend({
     return this;
   },
 
-  //TODO: move to app data
-  _setupOrgListener:function() {
-    //  var orgFilter = this.allFilters.findWhere({title: 'Organizations'});
-    // var orgGroupFilter = this.allFilters.findWhere({title: 'OrganizationGroupList'});
-    // orgGroupFilter.getTree().then(function() {
-    //   //TODO: setup 'Organizations' to listen to 'OrganizationGroups'
-    // });
-  },
 
   renderFilters:function() {
     var self = this;
@@ -118,6 +110,7 @@ module.exports = Backbone.View.extend({
   _getFilterList:function() {
     var self = this;
     var deferred =  $.Deferred();
+
 
     if (this.filterViewsInstances.others.filterCollection.length <= 0) {
       $.ajax({
@@ -164,28 +157,19 @@ module.exports = Backbone.View.extend({
       case 'ActivityBudgetList':
       case 'TypeOfAssistanceList':
       case 'FinancingInstrumentsList':
-        tmpModel = new GenericFilterModel({
-          url:APIFilter.endpoint,
-          title:APIFilter.name
-        });
+        tmpModel = new GenericFilterModel(APIFilter);
         this.filterViewsInstances.financials.filterCollection.add(tmpModel);
         break;
       case 'ActivityStatusList':
       case 'ActivityApprovalStatus':
-        tmpModel = new GenericFilterModel({
-          url:APIFilter.endpoint,
-          title:APIFilter.name
-        });
+        tmpModel = new GenericFilterModel(APIFilter);
         this.filterViewsInstances.activity.filterCollection.add(tmpModel);
         break;
       case 'Programs':
         deferred = this._goOneDeeper(this.filterViewsInstances.programs.filterCollection, APIFilter.endpoint);
         break;
       case 'Dates':
-        tmpModel = new YearsFilterModel({
-          title:APIFilter.name,
-          url:APIFilter.endpoint
-        });
+        tmpModel = new YearsFilterModel(APIFilter);
         this.filterViewsInstances.others.filterCollection.add(tmpModel);
         break;
       case 'Sectors':
@@ -195,17 +179,11 @@ module.exports = Backbone.View.extend({
       case 'OrganizationGroupList':
       case 'OrgTypesList':
       case 'organizationsRoles':
-        tmpModel = new GenericFilterModel({
-          url:APIFilter.endpoint,
-          title:APIFilter.name
-        });
+        tmpModel = new GenericFilterModel(APIFilter);
         this.filterViewsInstances.donors.filterCollection.add(tmpModel);
         break;
       default:
-        tmpModel = new GenericFilterModel({
-          url:APIFilter.endpoint,
-          title:APIFilter.name
-        });
+        tmpModel = new GenericFilterModel(APIFilter);
         this.filterViewsInstances.others.filterCollection.add(tmpModel);
     }
 

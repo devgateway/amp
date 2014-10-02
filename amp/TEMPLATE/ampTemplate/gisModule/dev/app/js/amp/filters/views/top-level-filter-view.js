@@ -32,7 +32,6 @@ module.exports = Backbone.View.extend({
     this.$el.attr('id', 'filter-pane-' + this.title);
     this.$el.html(this.contentTemplate());
     this.filterCollection.each(function(filter) {
-      filter.url = filter.get('url');
 
       if (filter instanceof YearsFilterModel) {
         view = new YearsFilterView({

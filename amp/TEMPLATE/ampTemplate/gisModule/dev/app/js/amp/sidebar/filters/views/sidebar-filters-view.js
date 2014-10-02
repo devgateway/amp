@@ -46,7 +46,7 @@ module.exports = BaseControlView.extend({
       translator: this.app.translator
     });
 
-    this.app.filtersWidget.loaded.then(function(){
+    this.app.filtersWidget.loaded.then(function() {
       self.app.state.register(self, 'filters', {
         get: function() { return self.app.filtersWidget.serialize();},
         set: function(state) { return self.app.filtersWidget.deserialize(state);},

@@ -70,6 +70,9 @@ var TreeNodeView = Backbone.View.extend({
       self._updateCountUI();
     });
 
+    this.model.on('change:visible', function() {
+      self._updateVisibility();
+    });
   },
 
   _addUIListeners:function() {
@@ -94,6 +97,15 @@ var TreeNodeView = Backbone.View.extend({
       this._updateCheckboxFill();
     }
   },
+
+  _updateVisibility: function() {
+    if (this.model.get('visible')) {
+      this.$el.show();
+    } else {
+      this.$el.hide();
+    }
+  },
+
 
   // For updating non-leaf nodes
   _updateCheckboxFill:function() {

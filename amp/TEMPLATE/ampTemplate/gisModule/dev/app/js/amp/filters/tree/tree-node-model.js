@@ -8,7 +8,8 @@ var TreeNodeCollection = Backbone.Collection.extend({  model:TreeNodeModel });
 TreeNodeModel = Backbone.Model.extend({
   defaults:{
     selected: undefined,  // default is selected. change to string / trinary, for off, semi, and on
-    expanded: false,
+    expanded: true,
+    visible: true,
     numSelected: 0,
     numPossible: 0,
     children:null,     // type TreeNodeCollection
@@ -100,6 +101,14 @@ TreeNodeModel = Backbone.Model.extend({
     var self = this;
     var children = this.get('children');
     children.each(function(child) {
+      child.on('change:visible', function() {
+        // If no children are visible, then hide self.
+        if (!children.findWhere({visible: true})) {
+          self.set({visible: false});
+        } else {
+          self.set({visible: true});
+        }
+      });
       child.on('updateCount', function() {
         self._updateCount();
         self.trigger('updateCount');
@@ -138,6 +147,23 @@ TreeNodeModel = Backbone.Model.extend({
       children.each(function(child) {
         child.set('selected', self.get('selected'), {propagation: false});
       });
+    }
+  },
+
+  filterText: function(txt) {
+    var children = this.get('children');
+
+    if (!children.isEmpty()) {
+      children.each(function(child) {
+        child.filterText(txt);
+      });
+    } else {
+      console.log('this', this);
+      if (this.get('name').toLowerCase().indexOf(txt) > -1) {
+        this.set('visible', true);
+      } else {
+        this.set('visible', false);
+      }
     }
   }
 

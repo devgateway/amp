@@ -17,7 +17,8 @@ module.exports = BaseFilterView.extend({
 
   events:{
     'click  .select-all': '_selectAll',
-    'click  .select-none': '_selectNone'
+    'click  .select-none': '_selectNone',
+    'keyup input.search-text': 'searchKeyUp'
   },
 
   initialize:function(options) {
@@ -36,6 +37,17 @@ module.exports = BaseFilterView.extend({
       });
     });
   },
+
+  searchKeyUp: function(event) {
+
+    if (event.keyCode === 13 || // Pressed 'enter'
+      this.$('.search-text').val() === '' ||
+      this.$('.search-text').val().length > 1
+      ) {
+      this.model.get('tree').filterText(this.$('.search-text').val().toLowerCase());
+    }
+  },
+
 
   _updateCountInMenu:function() {
     if (this.model.get('tree').get('numSelected') === this.model.get('tree').get('numPossible') ||
@@ -59,7 +71,10 @@ module.exports = BaseFilterView.extend({
       self.$el.html(self.template(self.model.toJSON()));
       self.$('.tree-container').append(self.treeView.render(self.model.get('tree')).$el);
       self.model.get('tree').set('expanded', true);
+      self.model.get('tree').filterText('');//default no filter.
     });
+
+
 
     return this;
   },

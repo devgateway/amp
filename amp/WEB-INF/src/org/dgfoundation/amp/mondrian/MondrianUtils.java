@@ -33,7 +33,9 @@ public class MondrianUtils {
 		long corNrRows = SQLUtils.countRows(connection, "amp_activity_version");
 		long nrLangs = SQLUtils.<Long>fetchAsList(connection, "select count(*) from dg_site_trans_lang_map langs where langs.site_id = 3", 1).get(0);
 		for(MondrianTableDescription table:MondrianTablesRepository.MONDRIAN_ACTIVITY_DIMENSIONS) {
-			long nrRows = SQLUtils.countRows(connection, "v_" + table.tableName);
+			if (table == MondrianTablesRepository.MONDRIAN_LONG_TEXTS)
+				continue; // postgres sucks at joining on varchars
+			long nrRows = SQLUtils.countRows(connection, "v_" + table.tableName);			
 			long divider = table.isFiltering ? nrLangs : 1;
 			if (nrRows != corNrRows * divider)
 				throw new RuntimeException("the view corresponding to the Mondrian ETL table " + table.tableName + " has " + nrRows + " instead of " + corNrRows * divider);

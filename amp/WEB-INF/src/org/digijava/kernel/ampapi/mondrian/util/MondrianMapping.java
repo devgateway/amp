@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -112,7 +113,10 @@ public class MondrianMapping {
 		}
 		
 		void addColumnDefinition(String columnName, ReportEntityType entityType, MDXElement mdxLevel) {
-			put(new ReportColumn(columnName, entityType), mdxLevel);
+			ReportColumn rc = new ReportColumn(columnName, entityType);
+			if (this.containsKey(rc))
+				throw new RuntimeException(String.format("column %s defined at least twice: once as %s, and then as %s", rc, this.get(rc), mdxLevel));
+			put(rc, mdxLevel);
 		}
 		
 		void addMeasureDefinition(String measureName) {
@@ -120,7 +124,10 @@ public class MondrianMapping {
 		}
 		
 		void addMeasureDefinition(String measureName, String mondrianMeasureName) {
-			put(new ReportMeasure(measureName, ReportEntityType.ENTITY_TYPE_ALL), new MDXMeasure(mondrianMeasureName));
+			ReportMeasure rm = new ReportMeasure(measureName, ReportEntityType.ENTITY_TYPE_ALL);
+			if (this.containsKey(rm))
+				throw new RuntimeException(String.format("measure %s defined at least twice: once as %s, and then as %s", rm, this.get(rm).getName(), mondrianMeasureName));
+			put(rm, new MDXMeasure(mondrianMeasureName));
 		}
 		
 		{
@@ -216,9 +223,9 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.TERTIARY_SECTOR, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 			addColumnDefinition(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.H_LEVEL_1_SECTOR, MoConstants.ATTR_LEVEL_1_SECTOR_NAME));
 			addColumnDefinition(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.H_LEVEL_2_SECTOR, MoConstants.ATTR_LEVEL_2_SECTOR_NAME));
-			addColumnDefinition(ColumnConstants.PLEDGES_SECTORS, new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
-			addColumnDefinition(ColumnConstants.PLEDGES_SECONDARY_SECTORS, new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
-			addColumnDefinition(ColumnConstants.PLEDGES_TERTIARY_SECTORS, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
+//			addColumnDefinition(ColumnConstants.PLEDGES_SECTORS, new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
+//			addColumnDefinition(ColumnConstants.PLEDGES_SECONDARY_SECTORS, new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
+//			addColumnDefinition(ColumnConstants.PLEDGES_TERTIARY_SECTORS, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 			
 			addColumnDefinition(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_0_NAME));
 			addColumnDefinition(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES_LEVEL_1, new MDXAttribute(MoConstants.NATIONAL_OBJECTIVES, MoConstants.ATTR_PROGRAM_LEVEL_1_NAME));
@@ -272,4 +279,23 @@ public class MondrianMapping {
 			//TODO: review/complete mappings based on Mondrian Schema
 		}
 	};
+	
+	public final static Map<String, String> fromFullNameToColumnName = buildReverseForColumns();
+	
+	static Map<String, String> buildReverseForColumns() {
+		Map<String, String> res = new HashMap<>();
+		boolean shouldCrash = false;
+		for(NamedTypedEntity nte:entityMap.keySet())
+			if (nte instanceof ReportColumn) {
+				String fullName = entityMap.get(nte).getFullName();
+				if (res.containsKey(fullName)) {
+					shouldCrash = true;
+					Logger.getLogger(MondrianMapping.class).error("two columns map to the same Mondrian level: " + nte.getEntityName() + " and " + res.get(fullName));
+				}
+				res.put(fullName, nte.getEntityName());
+			}
+		if (shouldCrash)
+			throw new RuntimeException("crashing because of the above-mentioned doubly-linked Mondrian Level");
+		return res;
+	}
 }

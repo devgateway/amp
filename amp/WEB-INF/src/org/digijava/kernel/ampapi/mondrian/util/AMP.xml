@@ -47,7 +47,7 @@
 	</Dimension>
 
 	<Dimension name="AMP Program" >
-		<Hierarchy hasAll="true" allMemberName="All Programs" primaryKey="amp_theme_id">
+		<Hierarchy hasAll="true" allMemberName="All Programs" primaryKey="amp_theme_id" name="Program">
 			<Table name="mondrian_programs@@locale@@" />
 			<Level name="Program Level 0 Name" type="Integer" column="id0" nameColumn="name0" />
 			<Level name="Program Level 1 Name" type="Integer" column="id1" nameColumn="name1" />
@@ -105,7 +105,7 @@
 				<Level name="Project Title" column="amp_activity_id" type="Integer" nameColumn="name" />
 			</Hierarchy>
 
-			<Hierarchy hasAll="true" allMemberName="All Approval Statuses" primaryKey="amp_activity_id">
+			<Hierarchy hasAll="true" allMemberName="All Approval Statuses" primaryKey="amp_activity_id" name="Approval Status">
 				<Table name="mondrian_activity_texts@@locale@@" />
 				<Level name="Approval Status" column="approval_status" nameColumn="approval_status" />
 			</Hierarchy>
@@ -151,15 +151,15 @@
 			</Hierarchy>
 		</Dimension>
 
-		<DimensionUsage name="Activity Status" source="Category Value" caption="Activity Status" foreignKey="status_id" />
-		<DimensionUsage name="Modalities" source="Category Value" caption="Modalities" foreignKey="modality_id" />
-		<DimensionUsage name="Type of Cooperation" source="Category Value" caption="Type of Cooperation" foreignKey="type_of_cooperation_id" />
-		<DimensionUsage name="Type of Implementation" source="Category Value" caption="Type of Implementation" foreignKey="type_of_implementation_id" />
-		<DimensionUsage name="Procurement System" source="Category Value" caption="Procurement System" foreignKey="procurement_system_id" />
-		<DimensionUsage name="Funding Status" source="Category Value" caption="Funding Status" foreignKey="funding_status_id" />
-		<DimensionUsage name="Mode of Payment" source="Category Value" caption="Mode of Payment" foreignKey="mode_of_payment_id" />
-		<DimensionUsage name="Financing Instrument" source="Category Value" caption="Financing Instrument" foreignKey="financing_instrument_id" />
-		<DimensionUsage name="Type Of Assistance" source="Category Value" caption="Type Of Assistance" foreignKey="terms_of_assistance_id" />		
+		<DimensionUsage name="Activity Status" source="Category Value" foreignKey="status_id" />
+		<DimensionUsage name="Modalities" source="Category Value" foreignKey="modality_id" />
+		<DimensionUsage name="Type of Cooperation" source="Category Value" foreignKey="type_of_cooperation_id" />
+		<DimensionUsage name="Type of Implementation" source="Category Value" foreignKey="type_of_implementation_id" />
+		<DimensionUsage name="Procurement System" source="Category Value" foreignKey="procurement_system_id" />
+		<DimensionUsage name="Funding Status" source="Category Value" foreignKey="funding_status_id" />
+		<DimensionUsage name="Mode of Payment" source="Category Value" foreignKey="mode_of_payment_id" />
+		<DimensionUsage name="Financing Instrument" source="Category Value" foreignKey="financing_instrument_id" />
+		<DimensionUsage name="Type Of Assistance" source="Category Value" foreignKey="terms_of_assistance_id" />		
 
 
 		<Dimension name="Activity Dates" foreignKey="entity_id">
@@ -399,24 +399,6 @@
 			</Hierarchy>
 		</Dimension>
 
-		<Dimension name="Secondary Sector" foreignKey="secondary_sector_id">
-			<Hierarchy hasAll="true" allMemberName="All Secondary Sectors" primaryKey="amp_sector_id">
-				<Table name="mondrian_sectors@@locale@@" alias="secondary_sector_table" />
-				<Level name="Secondary Sector" type="Integer" column="level0_sector_id" nameColumn="level0_sector_name" />
-				<Level name="Secondary Sector Sub-sector" type="Integer" column="level1_sector_id" nameColumn="level1_sector_name" />
-				<Level name="Secondary Sector Sub-sub-sector" type="Integer" column="level2_sector_id" nameColumn="level2_sector_name" />
-			</Hierarchy>
-		</Dimension>
-
-		<Dimension name="Tertiary Sector" foreignKey="tertiary_sector_id">
-			<Hierarchy hasAll="true" allMemberName="All Tertiary Sectors" primaryKey="amp_sector_id">
-				<Table name="mondrian_sectors@@locale@@" alias="tertiary_sector_table" />
-				<Level name="Tertiary Sector" type="Integer" column="level0_sector_id" nameColumn="level0_sector_name" />
-				<Level name="Tertiary Sector Sub-sector" type="Integer" column="level1_sector_id" nameColumn="level1_sector_name" />
-				<Level name="Tertiary Sector Sub-sub-sector" type="Integer" column="level2_sector_id" nameColumn="level2_sector_name" />
-			</Hierarchy>
-		</Dimension>
-
 		<Dimension name="Activity Currency Amounts" foreignKey="entity_id">
 			<Hierarchy hasAll="true" allMemberName="All Proposed Project Amount" primaryKey="amp_activity_id" name="Proposed Project Amount">
 				<Table name="mondrian_activity_currency_numbers" />
@@ -424,22 +406,22 @@
 			</Hierarchy>
 		</Dimension>
 		
-		<DimensionUsage name="Donor Agency" source="AMP Organization" caption="Donor Agency" foreignKey="donor_id" />
-		<DimensionUsage name="Implementing Agency" source="AMP Organization" caption="Implementing Agency" foreignKey="ia_org_id" />
-		<DimensionUsage name="Executing Agency" source="AMP Organization" caption="Executing Agency" foreignKey="ea_org_id" />
-		<DimensionUsage name="Beneficiary Agency" source="AMP Organization" caption="Beneficiary Agency" foreignKey="ba_org_id" />
-		<DimensionUsage name="Responsible Organization" source="AMP Organization" caption="Responsible Agency" foreignKey="ro_org_id" />
+		<DimensionUsage name="Donor Agency" source="AMP Organization" foreignKey="donor_id" />
+		<DimensionUsage name="Implementing Agency" source="AMP Organization" foreignKey="ia_org_id" />
+		<DimensionUsage name="Executing Agency" source="AMP Organization" foreignKey="ea_org_id" />
+		<DimensionUsage name="Beneficiary Agency" source="AMP Organization" foreignKey="ba_org_id" />
+		<DimensionUsage name="Responsible Organization" source="AMP Organization" foreignKey="ro_org_id" />
 
-		<DimensionUsage name="Primary Program" source="AMP Program" caption="Primary Program" foreignKey="primary_program_id" />
-		<DimensionUsage name="Secondary Program" source="AMP Program" caption="Secondary Program" foreignKey="secondary_program_id" />
-		<DimensionUsage name="Tertiary Program" source="AMP Program" caption="Tertiary Program" foreignKey="tertiary_program_id" />
-		<DimensionUsage name="National Objectives" source="AMP Program" caption="National Objectives" foreignKey="national_objectives_program_id" />
+		<DimensionUsage name="Primary Program" source="AMP Program" foreignKey="primary_program_id" />
+		<DimensionUsage name="Secondary Program" source="AMP Program" foreignKey="secondary_program_id" />
+		<DimensionUsage name="Tertiary Program" source="AMP Program" foreignKey="tertiary_program_id" />
+		<DimensionUsage name="National Objectives" source="AMP Program" foreignKey="national_objectives_program_id" />
 
-		<DimensionUsage name="Primary Sector"   source="AMP Sector" caption="Primary Sector" foreignKey="primary_sector_id" />
-		<DimensionUsage name="Secondary Sector" source="AMP Sector" caption="Secondary Sector" foreignKey="secondary_sector_id" />
-		<DimensionUsage name="Tertiary Sector"  source="AMP Sector" caption="Tertiary Sector" foreignKey="tertiary_sector_id" />
+		<DimensionUsage name="Primary Sector"   source="AMP Sector" foreignKey="primary_sector_id" />
+		<DimensionUsage name="Secondary Sector" source="AMP Sector" foreignKey="secondary_sector_id" />
+		<DimensionUsage name="Tertiary Sector"  source="AMP Sector" foreignKey="tertiary_sector_id" />
 		
-		<DimensionUsage name="Dates" source="AMP Date" caption="Transaction Date" foreignKey="date_code" />
+		<DimensionUsage name="Dates" source="AMP Date" foreignKey="date_code" />
 		
 		<Measure name="Actual Commitments" aggregator="sum">
 			<MeasureExpression>

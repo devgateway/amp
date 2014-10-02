@@ -11,7 +11,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	
 	/**
-	 * the <strong>unlocalized</strong> name of the column
+	 * the <strong>localized</strong> name of the column
 	 */
 	public final String columnName;
 	
@@ -22,9 +22,9 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	
 	
 	/**
-	 * the <strong> localized</strong> name of the column
+	 * the <strong> unlocalized</strong> name of the column
 	 */
-	public final String translatedColumnName;
+	public final String originalColumnName;
 	
 	//private List<ReportOutputColumn> children;
 	
@@ -32,16 +32,8 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 		this.columnName = columnName;
 		if (columnName == null || columnName.isEmpty())
 			throw new NullPointerException();
-		if (NumberUtils.isNumber(columnName))
-			this.translatedColumnName = columnName;
-		else 
-			this.translatedColumnName = TranslatorWorker.translateText(this.columnName, locale, 3l);
 		this.parentColumn = parentColumn;
-		/*
-		if (this.parentColumn != null) {
-			this.parentColumn.addChild(this);
-		}
-		*/
+		this.originalColumnName = columnName;
 	}
 	
 	/**

@@ -6,18 +6,23 @@ var g = require('gulp-load-plugins')();
 
 
 var paths = {
-  app: {
-    root: './app',
-    rootStuff: './app/*.{png,jpg,ico,html,txt,xml}',
-    scripts: {
-      entry: './app/js/app.js',
-      compiled: './app/compiled-js/',
-      sources: ['./app/js/**/*.js', './gulpfile.js']
-    },
-    stylesheets: {
-      entry: './app/less/main.less',
-      compiled: './app/compiled-css/'
-    }
+  root: './app',
+  rootStuff: './app/*.{png,jpg,ico,html,txt,xml}',
+  scripts: {
+    entry: './app/js/app.js',
+    compiled: './app/compiled-js/',
+    sources: [
+      './app/js/**/*.js',
+      './gulpfile.js'
+    ]
+  },
+  stylesheets: {
+    entry: './app/less/main.less',
+    compiled: './app/compiled-css/',
+    sources: ['./app/less/**/*.less'],
+    libs: [
+      './bower_components/bootstrap/dist/css/bootstrap.css'
+    ]
   }
 };
 
@@ -29,9 +34,10 @@ function _browserifier(entry, destFolder, destName, options) {
     .transform('brfs');
 
   var bundle = function() {
-    g.util.log('bundling...');
+    g.util.log('bundle: start');
     return bundler.bundle()
-      .on('error', function(e) { g.util.log('bundling error: ', e); })
+      .on('end', function() { g.util.log('bundle: finished'); })
+      .on('error', function(e) { g.util.log('bundle: error: ', e); })
       .pipe(source(destName))
       .pipe(gulp.dest(destFolder));
   };
@@ -44,7 +50,7 @@ function _browserifier(entry, destFolder, destName, options) {
 
 
 gulp.task('lint', function() {
-  gulp.src(paths.app.scripts.sources)
+  gulp.src(paths.scripts.sources)
     .pipe(g.plumber())
     .pipe(g.jscs())
     .pipe(g.jshint())
@@ -54,8 +60,8 @@ gulp.task('lint', function() {
 
 gulp.task('watchify', function() {
   // recompile browserify modules
-  var stuff = _browserifier(paths.app.scripts.entry,
-    paths.app.scripts.compiled, 'app.js', {
+  var stuff = _browserifier(paths.scripts.entry,
+    paths.scripts.compiled, 'app.js', {
       // watchify options
       cache: {},
       packageCache: {},
@@ -63,37 +69,44 @@ gulp.task('watchify', function() {
       // browserify options
       debug: true
     });
-  var bundler = watchify((stuff.bundler));
+  var bundler = watchify(stuff.bundler);
   bundler.on('update', stuff.bundle);
   return stuff.bundle();
 });
 
 
 gulp.task('browserify', function() {
-  var stuff = _browserifier(paths.app.scripts.entry,
-    paths.app.scripts.compiled, 'app.js');
+  var stuff = _browserifier(paths.scripts.entry,
+    paths.scripts.compiled, 'app.js');
   return stuff.bundle();
 });
 
 
 gulp.task('less', function() {
-  return gulp.src(paths.app.stylesheets.entry)
+  return gulp.src(paths.stylesheets.entry)
     .pipe(g.plumber())
-    .pipe(g.less())
-      .on('error', g.util.log)
-      .on('error', g.util.beep)
-    .pipe(g.concat('main.css'))
-    .pipe(gulp.dest(paths.app.stylesheets.compiled));
+    .pipe(g.sourcemaps.init())
+      .pipe(g.less())
+        .on('error', g.util.log)
+        .on('error', g.util.beep)
+    .pipe(g.sourcemaps.write())
+    .pipe(g.addSrc(paths.stylesheets.libs))
+    .pipe(g.sourcemaps.init({ loadMaps: true }))
+      .pipe(g.autoprefixer({ browsers: 'ie >= 9' }))
+      .pipe(g.concat('main.css'))
+    .pipe(g.sourcemaps.write())
+    .pipe(gulp.dest(paths.stylesheets.compiled));
 });
 
 
-gulp.task('watch', ['watchify'], function() {
-  gulp.watch([paths.app.scripts.sources], ['lint']);
+gulp.task('watch', ['watchify', 'lint', 'less'], function() {
+  gulp.watch([paths.scripts.sources], ['lint']);
+  gulp.watch(paths.stylesheets.sources, ['less']);
 });
 
 
 gulp.task('serve', g.serve({
-  root: [paths.app.root],
+  root: [paths.root],
   port: 3000
 }));
 
@@ -101,9 +114,9 @@ gulp.task('serve', g.serve({
 gulp.task('reload', ['watch'], function() {
   g.livereload.listen();
   return gulp.watch([
-    paths.app.rootStuff,
-    paths.app.stylesheets.compiled + 'main.css',
-    paths.app.scripts.compiled + 'app.css'
+    paths.rootStuff,
+    paths.scripts.compiled + 'app.js',
+    paths.stylesheets.compiled + 'main.css'
   ]).on('change', g.livereload.changed);
 });
 

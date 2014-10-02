@@ -67,8 +67,7 @@ public class MDXGenerator {
 			this.olapConnection = Connection.getOlapConnectionByConnPath(Connection.getDefaultConnectionPath());
 		} catch (Exception e) {
 			logger.error("Cannot create OlapConnection using connectionPath = " + Connection.getConnectionBySchemaPath(MoConstants.SCHEMA_PATH));
-			throw new AmpApiException(AmpApiException.MONDRIAN_ERROR, false, e.getMessage() + 
-					(e.getCause() == null ? "" : ", Caused by: " + e.getCause().getMessage()) );
+			throw new RuntimeException(e);
 		}
 		this.parser = olapConnection.getParserFactory().createMdxParser(olapConnection);
 		this.validator = olapConnection.getParserFactory().createMdxValidator(olapConnection);

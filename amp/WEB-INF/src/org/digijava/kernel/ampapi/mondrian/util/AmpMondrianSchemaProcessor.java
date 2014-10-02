@@ -86,6 +86,12 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		return contents;
 	}
 	
+	/**
+	 * translates, using the current locale, the measure / column names
+	 * @param contents
+	 * @param locale
+	 * @return
+	 */
 	protected String translateMeasuresAndColumns(String contents, String locale) {
 		Map<String, String> backMapping = MondrianMapping.fromFullNameToColumnName;
 		Set<String> wronglyMappedColumns = new TreeSet<>(backMapping.values());
@@ -106,12 +112,14 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			String fullColumnName = buildColumnName(columnElem);
 			allLevels.add(fullColumnName);
 			String correspondingColumn = backMapping.get(fullColumnName);
+			boolean notToBeTranslated = columnElem.hasAttribute("translated") && columnElem.getAttribute("translated").toLowerCase().equals("false");
 			if (correspondingColumn == null) {
-				logger.error("could not find a backmapping for " + fullColumnName + ", this one will not be translated!");
+				if (!notToBeTranslated)
+					logger.error("could not find a backmapping for " + fullColumnName + ", this one will not be translated!");
 				continue;
 			}
 			wronglyMappedColumns.remove(correspondingColumn);
-			if (columnElem.hasAttribute("translated") && columnElem.getAttribute("translated").toLowerCase().equals("false"))
+			if (notToBeTranslated)
 				continue;
 			columnElem.setAttribute("caption", TranslatorWorker.translateText(correspondingColumn, locale, 3l));
 		}

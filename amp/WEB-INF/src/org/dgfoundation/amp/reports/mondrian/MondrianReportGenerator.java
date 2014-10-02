@@ -65,6 +65,7 @@ import org.digijava.kernel.ampapi.saiku.util.CellDataSetToGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.util.SaikuPrintUtils;
 import org.digijava.kernel.ampapi.saiku.util.SaikuUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
@@ -256,7 +257,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			return generator.getAdvancedOlapQuery(config);
 		} catch (AmpApiException e) {
 			tearDown();
-			throw new AMPException("Cannot generate Mondrian Report: " + e.getMessage());
+			throw new RuntimeException("Cannot generate Mondrian Report: ", e);
 		} 
 	}
 	
@@ -661,7 +662,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 
 		//build the list of available columns
 		for (Member textColumn : rowAxis.getPositions().get(0).getMembers()) {
-			ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getName(), null, environment.locale);
+			ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getCaption(), null, textColumn.getLevel().getName());
 			reportColumns.add(reportColumn);
 		}
 		//int measuresLeafPos = columnAxis.getAxisMetaData().getHierarchies().size();
@@ -672,7 +673,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				fullColumnName += "/" +  measureColumn.getName();
 				ReportOutputColumn reportColumn = reportColumnsByFullName.get(fullColumnName);
 				if (reportColumn == null) {
-					reportColumn = new ReportOutputColumn(measureColumn.getName(), parent, environment.locale);
+					reportColumn = new ReportOutputColumn(measureColumn.getCaption(), parent, measureColumn.getName());
 					reportColumnsByFullName.put(fullColumnName, reportColumn);
 				}
 				if (measureColumn.getDepth() == 0) { //lowest depth ==0 => this is leaf column
@@ -682,9 +683,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 		//add measures total columns
 		if (spec.isCalculateColumnTotals() && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
-			ReportOutputColumn totalMeasuresColumn = new ReportOutputColumn(MoConstants.TOTAL_MEASURES, null, environment.locale);
+			ReportOutputColumn totalMeasuresColumn = ReportOutputColumn.buildTranslated(MoConstants.TOTAL_MEASURES, environment.locale, null);
 			for (ReportMeasure measure : spec.getMeasures())
-				reportColumns.add(new ReportOutputColumn(measure.getMeasureName(), totalMeasuresColumn, environment.locale));
+				reportColumns.add(ReportOutputColumn.buildTranslated(measure.getMeasureName(), environment.locale, totalMeasuresColumn));
 		}
 		return reportColumns;
 	}

@@ -1,6 +1,5 @@
 package org.dgfoundation.amp.newreports;
 
-import org.apache.commons.lang.math.NumberUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
@@ -28,14 +27,17 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	
 	//private List<ReportOutputColumn> children;
 	
-	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn, String locale) {
+	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn, String originalColumnName) {
 		this.columnName = columnName;
 		if (columnName == null || columnName.isEmpty())
 			throw new NullPointerException();
 		this.parentColumn = parentColumn;
-		this.originalColumnName = columnName;
+		this.originalColumnName = originalColumnName;
 	}
 	
+	public static ReportOutputColumn buildTranslated(String originalColumnName, String locale, ReportOutputColumn parentColumn){
+		return new ReportOutputColumn(TranslatorWorker.translateText(originalColumnName, locale, 3l), parentColumn, originalColumnName);
+	}
 	/**
 	 * computes the full name of the column like, for example, [Funding][2007][Actual Commitments]
 	 * <strong>unlocalized</strong>

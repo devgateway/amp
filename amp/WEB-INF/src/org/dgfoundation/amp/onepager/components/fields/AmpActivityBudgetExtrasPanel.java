@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.components.fields;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -18,6 +19,7 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
  * @author aartimon@dginternational.org since Feb 4, 2011
@@ -46,8 +48,7 @@ implements AmpRequiredComponentContainer{
         add(indirectOnBudget);
 
         final AmpSelectFieldPanel fy = new AmpSelectFieldPanel<String>("fy", new ActivityFYModel(new PropertyModel<String>(model, "FY")), years, "FY", false, true, false);
-		fy.getChoiceContainer().setRequired(true);
-		requiredFormComponents.add(fy.getChoiceContainer());
+
         fy.getChoiceContainer().setOutputMarkupId(true);
 		fy.setOutputMarkupId(true);
 		fy.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange"){
@@ -58,6 +59,18 @@ implements AmpRequiredComponentContainer{
 	      });
 		// add(new AmpTextFieldPanel<String>("fy", new PropertyModel(model,
 		// "FY"), "FY", false, false));
+        add(new AmpComponentPanel("fyRequired", "Required Validator for fy" ) {
+            @Override
+            protected void onConfigure() {
+                super.onConfigure();
+                if (this.isVisible()){
+                	fy.getChoiceContainer().setRequired(true);
+                    requiredFormComponents.add(fy.getChoiceContainer());
+        			
+                }
+            }
+        });		
+		
 		add(fy);
 		final AmpTextFieldPanel<String> projectCode = new AmpTextFieldPanel<String>("projectCode", new PropertyModel<String>(model, "projectCode"), "Project Code", false, false,false,true);
 		projectCode.setTextContainerDefaultMaxSize();

@@ -52,11 +52,10 @@ var paths = {
     templates: './app/js/**/*.html',
     stylesheets: {
       all: './app/less/**/*.less',
-      entry: './app/less/main.less',
+      entry: ['./app/less/main.less','./app/js/amp/filters/less/amp-filters.less'],
       libs: ['./node_modules/leaflet/dist/**/*.css',
             './node_modules/leaflet.markercluster/dist/**/*.css',
-            './app/js/libs/local/slider/**/*.css',
-            './app/js/amp/filters/less/filters-styles.less'],
+            './app/js/libs/local/slider/**/*.css'],
       compiledDest: './app/compiled-css/',
       compiled: './app/compiled-css/main.css'
     },

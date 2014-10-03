@@ -9,8 +9,6 @@ var AllFilterCollection = require('../collections/all-filters-collection');
 
 var Template = fs.readFileSync(__dirname + '/../templates/filters-content-template.html', 'utf8');
 var TitleTemplate = fs.readFileSync(__dirname + '/../templates/filter-title-template.html', 'utf8');
-var GenericFilterModel = require('../models/generic-filter-model');
-var YearsFilterModel = require('../models/years-filter-model');
 
 module.exports = Backbone.View.extend({
   id: 'tool-filters',
@@ -55,6 +53,7 @@ module.exports = Backbone.View.extend({
     this.filterViewsInstances.programs = new TopLevelFilterView({title:'Programs'});
     this.filterViewsInstances.activity = new TopLevelFilterView({title:'Activity'});
     this.filterViewsInstances.donors = new TopLevelFilterView({title:'Donor'});
+    this.filterViewsInstances.allAgencies = new TopLevelFilterView({title:'AllAgencies'});
     this.filterViewsInstances.financials = new TopLevelFilterView({title:'Financial'});
     this.filterViewsInstances.others = new TopLevelFilterView({title:'Other'});
   },
@@ -71,16 +70,17 @@ module.exports = Backbone.View.extend({
         self._loaded.resolve();
         self.allFilters.setupOrgListener();
         self.renderFilters();
+
+        // setup any popovers as needed...
+        self.popovers = self.$('[data-toggle="popover"]');
+        self.popovers.popover();
+
+        // Translate if available.
+        if (self.translator) {
+          self.translator.translateDOM(self.el);
+        }
       });
 
-      // setup any popovers as needed...
-      this.popovers = this.$('[data-toggle="popover"]');
-      this.popovers.popover();
-
-      // Translate if available.
-      if (this.translator) {
-        this.translator.translateDOM(this.el);
-      }
       this.firstRender = false;
     }
 
@@ -109,128 +109,48 @@ module.exports = Backbone.View.extend({
 
   _getFilterList:function() {
     var self = this;
-    var deferred =  $.Deferred();
-
-
-    if (this.filterViewsInstances.others.filterCollection.length <= 0) {
-      $.ajax({
-        url: this.apiURL
-      })
-      .done(function(data) {
-        var deferreds = [];
-
-        _.each(data, function(APIFilter) {
-          if (APIFilter.ui) {
-            deferreds.push(self._createFilterModels(APIFilter));
-          }
-        });
-
-        if (_.isEmpty(data)) {
-          console.warn('Filters API returned empty', data);
-        }
-
-        // when all child calls are done resolve.
-        $.when.apply($, deferreds).then(function() {
-          deferred.resolve();
-        });
-
-      })
-      .fail(function(jqXHR, textStatus, errorThrown) {
-        var errorMessage = 'Getting filters failed';
-        console.error('Getting filters failed', jqXHR, textStatus, errorThrown);
-        deferred.reject(errorMessage);
+    return this.allFilters.load().then(function() {
+      self.allFilters.each(function(model) {
+        self._createFilterViews(model);
       });
-    } else {
-      deferred.resolve();
-    }
-
-    return deferred;
+      return this;
+    });
   },
 
-  _createFilterModels: function(APIFilter) {
-    var tmpModel = null;
-    var deferred =  $.Deferred();
-    // Assume all filters are genericView, but if we want, we can
-    // use specific granular views for some filters: OrgFilterView
+  _createFilterViews: function(tmpModel) {
+
     // TODO: magic strings are dangerous, config somewhere...
-    switch (APIFilter.name) {
+    switch (tmpModel.get('group')) {
       case 'ActivityBudgetList':
       case 'TypeOfAssistanceList':
       case 'FinancingInstrumentsList':
-        tmpModel = new GenericFilterModel(APIFilter);
         this.filterViewsInstances.financials.filterCollection.add(tmpModel);
         break;
       case 'ActivityStatusList':
       case 'ActivityApprovalStatus':
-        tmpModel = new GenericFilterModel(APIFilter);
         this.filterViewsInstances.activity.filterCollection.add(tmpModel);
         break;
       case 'Programs':
-        deferred = this._goOneDeeper(this.filterViewsInstances.programs.filterCollection, APIFilter.endpoint);
-        break;
-      case 'Dates':
-        tmpModel = new YearsFilterModel(APIFilter);
-        this.filterViewsInstances.others.filterCollection.add(tmpModel);
+        this.filterViewsInstances.programs.filterCollection.add(tmpModel);
         break;
       case 'Sectors':
-        deferred = this._goOneDeeper(this.filterViewsInstances.sectors.filterCollection, APIFilter.endpoint);
+        this.filterViewsInstances.sectors.filterCollection.add(tmpModel);
         break;
       case 'Organizations':
-      case 'OrganizationGroupList':
       case 'OrgTypesList':
-      case 'organizationsRoles':
-        tmpModel = new GenericFilterModel(APIFilter);
+      case 'OrganizationGroupList':
         this.filterViewsInstances.donors.filterCollection.add(tmpModel);
         break;
+      case 'organizationsRoles':
+      case 'organizationsRoles':
+        this.filterViewsInstances.allAgencies.filterCollection.add(tmpModel);
+        break;
       default:
-        tmpModel = new GenericFilterModel(APIFilter);
         this.filterViewsInstances.others.filterCollection.add(tmpModel);
     }
 
-    if (tmpModel) {
-      this.allFilters.add(tmpModel);
-      deferred.resolve(tmpModel);
-    }
-
-
-    return deferred;
   },
 
-  // get endpoint's children and load them into targetCollection...
-  _goOneDeeper: function(targetCollection, url) {
-    var self = this;
-    var deferred = $.Deferred();
-    var tmpModel = null;
-
-    $.ajax({
-      url: url
-    })
-    .done(function(data) {
-      _.each(data, function(APIFilter) {
-        tmpModel = new GenericFilterModel({
-          url:url + '/' + APIFilter.id,
-          title:APIFilter.name
-        });
-        targetCollection.add(tmpModel);
-        if (tmpModel) {
-          self.allFilters.add(tmpModel);
-        }
-      });
-
-      deferred.resolve();
-
-      if (_.isEmpty(data)) {
-        console.warn('Filters API returned empty', data);
-      }
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-      var errorMessage = 'Getting filters failed';
-      console.error('Getting filters failed', jqXHR, textStatus, errorThrown);
-      deferred.reject(errorMessage);
-    });
-
-    return deferred;
-  },
 
   applyFilters:function() {
     this.serialize();

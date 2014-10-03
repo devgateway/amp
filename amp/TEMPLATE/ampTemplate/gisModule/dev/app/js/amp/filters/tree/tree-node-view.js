@@ -26,8 +26,10 @@ var TreeNodeView = Backbone.View.extend({
 
   render:function(model) {
     this.model = model;
-    this.$el.html(this.template(model.toJSON()));
-    this.renderChildren();
+    if (model) {
+      this.$el.html(this.template(model.toJSON()));
+      this.renderChildren();
+    }
 
     return this;
   },

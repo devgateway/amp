@@ -41,8 +41,6 @@ module.exports = BaseFilterModel.extend({
     this.getTree().then(function(tree) {
       //var tree = self.get('tree');
       if (!tree) {
-        // ?Throw error?
-        console.warn('no tree: ' + self.get('title'), listOfSelected);
         return false; //no tree, nothing to serialize.
       } else {
         tree.deserialize(listOfSelected);
@@ -51,7 +49,6 @@ module.exports = BaseFilterModel.extend({
   },
 
   _createTree:function() {
-    //convert to fetch, build tree in parse...
     if (!this.url) {
       this.url = this.get('endpoint');
     }
@@ -94,8 +91,6 @@ module.exports = BaseFilterModel.extend({
 
       var treeModel = new TreeNodeModel(rootNodeObj);
       self.set('tree', treeModel);
-    } else {
-      console.error(' _createTree ' + self.get('title') + 'got bad/empty data', data);
     }
 
     return;

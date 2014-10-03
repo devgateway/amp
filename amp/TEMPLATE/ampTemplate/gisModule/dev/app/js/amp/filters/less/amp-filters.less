@@ -1,8 +1,10 @@
-//
-// AMP layout and bootstrap overrides
-// --------------------------------------------------
 
+@import "datepicker.less";
 @import "amp-tree.less";
+
+@widget_height: 350px;
+@popup_indent: 300px;
+
 
 .tree-container {
   max-height: 260px;
@@ -12,10 +14,10 @@
 
 
 #filter-popup{
-	top:20%;
-	left:@amp_sidebar_width+10px;
-	z-index:1020;
-	position:fixed !important;
+  top: 20%;
+  left: @popup_indent+10px;
+  z-index:1020;
+  position:fixed !important;
   max-width:850px;
 }
 
@@ -24,7 +26,7 @@
 }
 
 .filter-options{
-  height:350px;
+  height: @widget_height;
   border: solid 1px  #ADD2F1;
 }
 
@@ -32,13 +34,15 @@
   width: 220px;
   float:left;
   padding-top:5px;
+  overflow-y: auto;
+  max-height: @widget_height;
 }
 
 
 .sub-filters-content{
   padding:15px;
   width: 550px;
-  height:350px;
+  height: @widget_height;
   float:right;
   border-left: solid 1px  #ADD2F1;
 }
@@ -79,3 +83,4 @@
     background-color: #ddd;
   }
 }
+

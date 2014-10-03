@@ -31,10 +31,14 @@ module.exports = BaseFilterView.extend({
     // Create tree view
     //TODO: make tree loading content responsibility of model, not view...
     this._loaded = this._createTree().then(function() {
-      self._updateCountInMenu();
-      self.model.get('tree').on('change:numSelected', function() {
+      if (self.model.get('tree')) {
         self._updateCountInMenu();
-      });
+        self.model.get('tree').on('change:numSelected', function() {
+          self._updateCountInMenu();
+        });
+      } else {
+        console.warn('no tree for: ', self.model);
+      }
     });
   },
 
@@ -69,12 +73,12 @@ module.exports = BaseFilterView.extend({
 
     this._loaded.then(function() {
       self.$el.html(self.template(self.model.toJSON()));
-      self.$('.tree-container').append(self.treeView.render(self.model.get('tree')).$el);
-      self.model.get('tree').set('expanded', true);
-      self.model.get('tree').filterText('');//default no filter.
+      if (self.model.get('tree')) {
+        self.$('.tree-container').append(self.treeView.render(self.model.get('tree')).$el);
+        self.model.get('tree').set('expanded', true);
+        self.model.get('tree').filterText('');//default no filter.
+      }
     });
-
-
 
     return this;
   },

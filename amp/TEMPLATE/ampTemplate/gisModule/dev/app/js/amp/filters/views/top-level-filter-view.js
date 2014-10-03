@@ -6,7 +6,6 @@ var TitleTemplate = fs.readFileSync(__dirname + '/../templates/filter-title-temp
 var ContentTemplate = fs.readFileSync(__dirname + '/../templates/filters-top-level-template.html', 'utf8');
 
 var GenericFilterView = require('../views/generic-filter-view');
-var GenericNestedFilterView = require('../views/generic-nested-filter-view');
 var YearsFilterView = require('../views/years-filter-view');
 
 var YearsFilterModel = require('../models/years-filter-model');
@@ -40,15 +39,14 @@ module.exports = Backbone.View.extend({
         });
         self.viewList.push(view);
 
-      } else if (filter.get('title') === 'Organizations') {
-        view = new GenericNestedFilterView({
-          model:filter,
-          el: self.$('.sub-filters-content')
-        });
-        self.viewList.push(view);
+      // } else if (filter.get('title') === 'organizationsRoles') {
+      //   view = new GenericNestedFilterView({
+      //     model:filter,
+      //     el: self.$('.sub-filters-content')
+      //   });
+      //   self.viewList.push(view);
 
       } else {
-
         view = new GenericFilterView({
           model:filter,
           el: self.$('.sub-filters-content')

@@ -69,6 +69,7 @@ Installing a [livereload browser extension](http://feedback.livereload.com/knowl
 2.
 
 ```bash
+$ cd [amp-folder]/TEMPLATE/ampTemplate/gisModule/dev/
 $ gulp dev-no-mock
 ```
 

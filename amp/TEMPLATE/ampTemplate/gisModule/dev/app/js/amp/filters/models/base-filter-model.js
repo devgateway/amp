@@ -12,6 +12,7 @@ module.exports = Backbone.Model.extend({
 
   initialize:function(options) {
     this.set('title', options.title || options.name);
+    this.set('group', options.group || options.name);
     this.set('method', options.method);
     this.url =  options.url || options.endpoint;
   }

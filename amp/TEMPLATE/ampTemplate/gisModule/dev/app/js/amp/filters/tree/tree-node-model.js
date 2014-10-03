@@ -32,7 +32,7 @@ TreeNodeModel = Backbone.Model.extend({
     // if we have children, then add self as a leaf node, 'unkown'
     if (!childrenCollection.isEmpty() &&  this.get('isSelectable')) {
       var unkownNode = new TreeNodeModel(self.toJSON());
-      unkownNode.set('name', 'unkown');
+      unkownNode.set('name', 'unkown: ' + this.get('name'));
       childrenCollection.add(unkownNode);
     }
 
@@ -158,7 +158,6 @@ TreeNodeModel = Backbone.Model.extend({
         child.filterText(txt);
       });
     } else {
-      console.log('this', this);
       if (this.get('name').toLowerCase().indexOf(txt) > -1) {
         this.set('visible', true);
       } else {

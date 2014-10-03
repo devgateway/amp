@@ -185,7 +185,7 @@ public class MondrianETL {
 				suffixes.add("_" + locale);
 			for(String suffix:suffixes) {
 				String t = mtd.tableName + suffix;
-				logger.info("Full ETL: dropping table " + t);
+				//logger.info("Full ETL: dropping table " + t);
 				monetConn.dropTable(t);
 				SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + t);
 			}

@@ -19,6 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_primaryprogram_level_3;
 				CREATE OR REPLACE VIEW v_primaryprogram_level_3 AS
 					SELECT a.amp_activity_id, level.name AS name, level.amp_theme_id AS amp_program_id, SUM(a.program_percentage) as percentage
 						FROM amp_activity_program a	

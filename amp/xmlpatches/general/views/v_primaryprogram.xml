@@ -19,6 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+					DROP VIEW IF EXISTS v_primaryprogram;
 			    	CREATE OR REPLACE VIEW v_primaryprogram AS 
 			    	SELECT a.amp_activity_id, t.name, t.amp_theme_id, ap.program_percentage 
 			    		FROM amp_activity a 

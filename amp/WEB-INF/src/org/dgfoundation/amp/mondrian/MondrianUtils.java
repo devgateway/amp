@@ -33,8 +33,8 @@ public class MondrianUtils {
 		long corNrRows = SQLUtils.countRows(connection, "amp_activity_version");
 		long nrLangs = SQLUtils.getLong(connection, "select count(*) from dg_site_trans_lang_map langs where langs.site_id = 3");
 		for(MondrianTableDescription table:MondrianTablesRepository.MONDRIAN_ACTIVITY_DIMENSIONS) {
-			if (corNrRows > 12000 && table == MondrianTablesRepository.MONDRIAN_LONG_TEXTS)
-				continue; // postgres sucks at joining on varchars
+//			if (corNrRows > 12000 && table == MondrianTablesRepository.MONDRIAN_LONG_TEXTS)
+//				continue; // postgres sucks at joining on varchars
 			long nrRows = SQLUtils.countRows(connection, "v_" + table.tableName);			
 			long divider = table.isFiltering ? nrLangs : 1;
 			if (nrRows != corNrRows * divider)

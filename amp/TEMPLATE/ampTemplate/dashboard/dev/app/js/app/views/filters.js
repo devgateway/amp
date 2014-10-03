@@ -2,7 +2,7 @@ var fs = require('fs');
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 var template = _.template(fs.readFileSync(
-  __dirname + '/../templates/footer.html', 'UTF-8'));
+  __dirname + '/../templates/filters.html', 'UTF-8'));
 
 
 module.exports = BackboneDash.View.extend({

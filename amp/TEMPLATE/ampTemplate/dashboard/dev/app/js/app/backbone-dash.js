@@ -5,7 +5,6 @@ var Backbone = require('backbone');
 function InitError(instance) {
   this.instance = instance;
   this.toString = function() { return 'Module initialization error'; };
-  console.trace();
 }
 
 // mixed into all models, collections and views to ensure we have a convenient

@@ -46,3 +46,9 @@ TO BE IMPLEMENTED IN THE GULPFILE
 ```
 $ gulp build
 ```
+
+
+Notes
+-----
+
+[`bower.json`](bower.json) lists an exact version of d3 that is fairly old, becuase nvd3 does not work with the latest versions. When nvd3 is fixed for this, we should update d3 to the latest.

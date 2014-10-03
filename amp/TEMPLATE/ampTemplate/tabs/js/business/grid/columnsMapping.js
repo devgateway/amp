@@ -32,10 +32,10 @@ define(function() {
 		name : 'AMP ID',
 		width : 80
 	};
-	map['[Level 0 Sector]'] = {
+	map['[OECD/DAC Sectors]'] = {
 		name : 'Primary Sector'
 	};
-	map['[Level 1 Sector]'] = {
+	map['[OECD/DAC Sub-Sector]'] = {
 		name : 'Primary Sector Sub-Sector'
 	};
 	map['[Level 2 Sector]'] = {
@@ -44,6 +44,9 @@ define(function() {
 	map['[Level 2 Sector]'] = {
 		name : 'Secondary Sector'
 	};
+	map['[Government Budget Sectors]'] = {
+			name : 'Secondary Sector'
+		};	
 	map['[Donor Agency]'] = {
 		name : 'Donor Agency'
 	};

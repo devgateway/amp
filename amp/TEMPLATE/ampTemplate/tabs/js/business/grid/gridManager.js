@@ -99,7 +99,7 @@ define([ 'business/grid/columnsMapping' ], function(columnsMapping) {
 		if (grouping) {
 			postProcessHierarchies(rows, hierarchies);
 		}
-		//console.log(rows);
+		// console.log(rows);
 		return rows;
 	}
 
@@ -128,7 +128,10 @@ define([ 'business/grid/columnsMapping' ], function(columnsMapping) {
 					id : 0
 				};
 				$.each(obj.contents, function(key, element) {
-					var colName = columnsMapping.getMap()[key].name;
+					var colName = null;
+					if (columnsMapping.getMap()[key] != undefined) {
+						colName = columnsMapping.getMap()[key].name;
+					}
 					if (colName != undefined && colName != null) {
 						if (element.value != null && element.value != "") {
 							row[colName] = element.value;

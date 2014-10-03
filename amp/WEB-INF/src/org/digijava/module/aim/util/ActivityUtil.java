@@ -4804,8 +4804,16 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
             
             boolean isSearchByName = searchTerm != null && (!searchTerm.trim().isEmpty());
             String activityName = AmpActivityVersion.hqlStringForName("f");
-            String nameSearchQuery = isSearchByName ? " (f.ampActivityId IN (SELECT t.objectId FROM " + AmpContentTranslation.class.getName() + " t WHERE t.objectClass = '" + AmpActivityVersion.class.getName() + "' AND upper(t.translation) like upper(:searchTerm))) AND " :
-            	"";
+            /*
+            String nameSearchQueryOld = isSearchByName ? " (f.ampActivityId IN (SELECT t.objectId FROM " + AmpContentTranslation.class.getName() + " t WHERE t.objectClass = '" + AmpActivityVersion.class.getName() + "' AND upper(t.translation) like upper(:searchTerm))) AND " :
+            	"";*/
+            String nameSearchQuery;
+            if (isSearchByName) {
+            	nameSearchQuery = " (f.ampActivityId IN (SELECT t.objectId FROM " + AmpContentTranslation.class.getName() + " t WHERE t.objectClass = '" + AmpActivityVersion.class.getName() + "' AND upper(t.translation) like upper(:searchTerm)))" +
+            "OR f.ampActivityId IN (SELECT f2.ampActivityId from " + AmpActivity.class.getName() + " f2 WHERE upper(f2.name) LIKE upper(:searchTerm) ))" + " AND "; 
+            } else {
+            	nameSearchQuery = "";
+            }
             
             String queryString = "select f.ampActivityId, f.ampId, " + activityName + ", ampTeam , ampGroup FROM " + AmpActivity.class.getName() +  
             	" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup WHERE " + nameSearchQuery + " ((f.deleted = false) or (f.deleted is null))";
@@ -4820,6 +4828,12 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                 Object[] item = (Object[])iter.next();
                 Long ampActivityId = (Long) item[0];
                 String ampId = (String) item[1];
+                
+                if (ampId != null)
+                if (ampId.equals("112010353233")) {
+                	logger.error("here");
+                }
+                	
                 String name = (String) item[2];
                 AmpTeam team = (AmpTeam) item[3];
                 AmpActivityGroup ampActGroup = (AmpActivityGroup) item[4];

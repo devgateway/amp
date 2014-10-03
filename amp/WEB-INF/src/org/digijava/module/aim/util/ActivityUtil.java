@@ -4804,9 +4804,6 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
             
             boolean isSearchByName = searchTerm != null && (!searchTerm.trim().isEmpty());
             String activityName = AmpActivityVersion.hqlStringForName("f");
-            /*
-            String nameSearchQueryOld = isSearchByName ? " (f.ampActivityId IN (SELECT t.objectId FROM " + AmpContentTranslation.class.getName() + " t WHERE t.objectClass = '" + AmpActivityVersion.class.getName() + "' AND upper(t.translation) like upper(:searchTerm))) AND " :
-            	"";*/
             String nameSearchQuery;
             if (isSearchByName) {
             	nameSearchQuery = " (f.ampActivityId IN (SELECT t.objectId FROM " + AmpContentTranslation.class.getName() + " t WHERE t.objectClass = '" + AmpActivityVersion.class.getName() + "' AND upper(t.translation) like upper(:searchTerm)))" +
@@ -4828,12 +4825,6 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
                 Object[] item = (Object[])iter.next();
                 Long ampActivityId = (Long) item[0];
                 String ampId = (String) item[1];
-                
-                if (ampId != null)
-                if (ampId.equals("112010353233")) {
-                	logger.error("here");
-                }
-                	
                 String name = (String) item[2];
                 AmpTeam team = (AmpTeam) item[3];
                 AmpActivityGroup ampActGroup = (AmpActivityGroup) item[4];

@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.postgis.util;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +11,8 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
+import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
 import org.digijava.kernel.exception.DgException;
@@ -30,6 +33,7 @@ import org.digijava.module.esrigis.dbentity.AmpMapState;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 import org.hibernate.type.LongType;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -258,6 +262,35 @@ public class QueryUtil {
 		return OrganizationSkeleton
 				.populateOrganisationSkeletonListByOrgGrpIp(orgGrpId);
 	}
+public static List<JsonBean>getOrgTypes(){
+	final List<JsonBean> orgTypes=new ArrayList<JsonBean>();
+    PersistenceManager.getSession().doWork(new Work(){
+			public void execute(Connection conn) throws SQLException {
+				String query="select  aot.amp_org_type_id orgTypeId,aog.amp_org_grp_id orgGrpId "+ 
+							" ,aot.org_type orgTypeName, aot.org_type_code orgTypeCode "+
+							" from amp_org_group aog,amp_org_type aot "+
+							" where aot.amp_org_type_id=aog.org_type"+
+							" order by orgTypeId";
+				ResultSet rs=SQLUtils.rawRunQuery(conn, query, null);
+				Long lastOrgTypeId=0L;
+				List <Long>orgsGrpId=null;
+				while(rs.next()){
+				if(!lastOrgTypeId.equals(rs.getLong("orgTypeId"))){
+					lastOrgTypeId=rs.getLong("orgTypeId");
+					JsonBean orgType=new JsonBean();
+					orgsGrpId=new ArrayList<Long>();
+					orgType.set("id", rs.getLong("orgTypeId"));
+					orgType.set("name", rs.getString("orgTypeName"));
+					orgType.set("code", rs.getString("orgTypeCode"));
+					orgType.set("groupIds",orgsGrpId);
+					orgTypes.add(orgType);
+				}
+					orgsGrpId.add(rs.getLong("orgGrpId"));
+				}
 
+			}
+    });
+    return orgTypes;
+}
 }
 

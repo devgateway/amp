@@ -191,13 +191,17 @@ public class MondrianETL {
 			}
 		}
 		Set<String> etlTablesMonet = monetConn.getTablesWithNameMatching("etl_");
-		for(String t:etlTablesMonet) {
-			logger.info("Full ETL: dropping monet table " + t);
-			monetConn.dropTable(t);
+		logger.info("Full ETL: dropping monet tables " + etlTablesMonet);
+		for(String t:etlTablesMonet) 
+		 if (!t.equals(Fingerprint.FINGERPRINT_TABLE)){
+			 //logger.info("Full ETL: dropping monet table " + t);
+			 monetConn.dropTable(t);
 		}
+		
 		Set<String> etlTablesPostgres = SQLUtils.getTablesWithNameMatching(conn, "etl_");
+		logger.info("Full ETL: dropping pg tables " + etlTablesPostgres);
 		for(String t:etlTablesPostgres) {
-			logger.info("Full ETL: dropping pg table " + t);
+			//logger.info("Full ETL: dropping pg table " + t);
 			SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + t);
 		}
 		monetConn.dropTable(FACT_TABLE.tableName);
@@ -238,10 +242,10 @@ private EtlResult execute() throws Exception {
 		}
 				
 		if (forceFullEtl) {
+			Fingerprint.redoFingerprintTable(monetConn);
 			fullEtlJobs.add(new ExceptionRunnable<Exception>(){
 				@Override public void run() throws Exception {
 					cleanupTables();
-					Fingerprint.redoFingerprintTable(monetConn);
 				}
 			});
 		}
@@ -274,8 +278,7 @@ private EtlResult execute() throws Exception {
 				FULL_ETL_LOCK.writeUnlock();
 			}
 
-			generateActivitiesEntries();
-			StopWatch.next(MONDRIAN_ETL, true, "generateActivitiesEntries");
+			generateActivitiesEntries();			
 		
 			new CalculateExchangeRatesEtlJob(null, conn, monetConn, etlConfig).work();
 			StopWatch.next(MONDRIAN_ETL, true, "generateExchangeRates");
@@ -472,7 +475,7 @@ private EtlResult execute() throws Exception {
 	protected void cloneMondrianTableForLocale(MondrianTableDescription mondrianTable, String locale) throws SQLException {
 		if (!mondrianTable.isTranslated())
 			return;
-		logger.warn("cloning table " + mondrianTable.tableName + " into locale " + locale);
+		//logger.warn("cloning table " + mondrianTable.tableName + " into locale " + locale);
 		String localizedTableName = mondrianTable.tableName + "_" + locale;
 		
 		List<List<Object>> vals = mondrianTable.readTranslatedTable(this.conn, locale, null);
@@ -571,9 +574,16 @@ private EtlResult execute() throws Exception {
 	 */
 	protected void generateActivitiesEntries() throws SQLException {
 		generateSectorsEtlTables();
+		StopWatch.next(MONDRIAN_ETL, true, "generateSectorsEntries");
+		
 		generateProgramsEtlTables();
+		StopWatch.next(MONDRIAN_ETL, true, "generateProgramsEntries");
+		
 		generateLocationsEtlTables();
+		StopWatch.next(MONDRIAN_ETL, true, "generateLocationsEntries");
+		
 		generateOrganisationsEtlTables();
+		StopWatch.next(MONDRIAN_ETL, true, "generateOrganisationsEntries");
 		
 		generateRawTransactionTables();
 		generateFactTable();
@@ -590,6 +600,7 @@ private EtlResult execute() throws Exception {
 		logger.warn("building per-activity-value dimension tables...");
 		for (final MondrianTableDescription mondrianTable:MondrianTablesRepository.MONDRIAN_ACTIVITY_DIMENSIONS)
 			generatePerActivityTables(mondrianTable);
+		StopWatch.next(MONDRIAN_ETL, true, "generateActivityDimensionEntries");
 	}
 	
 	/**
@@ -629,7 +640,7 @@ private EtlResult execute() throws Exception {
 				cloneMondrianTableForLocale(mondrianTable, locale);
 			long cloningDone = System.currentTimeMillis();
 			logger.info("full ETL on " + mondrianTable.tableName + ", base table took " + (baseDone - start) + " ms");
-			logger.info("\tfull ETL on " + mondrianTable.tableName + ", cloning took " + (cloningDone - baseDone) + " ms");
+			logger.info("\tfull ETL on " + mondrianTable.tableName + ", cloning for locales " + locales + " took " + (cloningDone - baseDone) + " ms");
 		} else {
 			// relation exists in Monet IF (table is not translated) OR (isTranslated AND is not filtered)
 			if (mondrianTable.isTranslated()) {
@@ -683,7 +694,7 @@ private EtlResult execute() throws Exception {
 	protected void generateOrganisationsEtlTables() throws SQLException {
 		if (etlConfig.activityIds.isEmpty())
 			return;
-		logger.warn("generating orgs ETL tables...");
+		//logger.warn("generating orgs ETL tables...");
 		String activitiesCondition = etlConfig.activityIdsIn("amp_activity_id");
 		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_executing_agency WHERE (%s)", activitiesCondition), "etl_executing_agencies");
 		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_beneficiary_agency WHERE (%s)", activitiesCondition), "etl_beneficiary_agencies");
@@ -696,7 +707,7 @@ private EtlResult execute() throws Exception {
 	 * @throws SQLException
 	 */
 	protected void generateSectorsEtlTables() throws SQLException {
-		logger.warn("generating Sector ETL tables...");
+		//logger.warn("generating Sector ETL tables...");
 		generateSectorsEtlTables("Primary");
 		generateSectorsEtlTables("Secondary");
 		generateSectorsEtlTables("Tertiary");
@@ -707,7 +718,7 @@ private EtlResult execute() throws Exception {
 	 * @throws SQLException
 	 */
 	protected void generateProgramsEtlTables() throws SQLException {
-		logger.warn("generating Program ETL tables...");
+		//logger.warn("generating Program ETL tables...");
 		generateProgramsEtlTables("National Plan Objective");
 		generateProgramsEtlTables("Primary Program");
 		generateProgramsEtlTables("Secondary Program");
@@ -721,7 +732,7 @@ private EtlResult execute() throws Exception {
 	protected void generateLocationsEtlTables() throws SQLException {
 		if (etlConfig.activityIds.isEmpty())
 			return;
-		logger.warn("generating location ETL tables...");
+		//logger.warn("generating location ETL tables...");
 		String activitiesCondition = etlConfig.activityIdsIn("aal.amp_activity_id");
 		String query = String.format("select aal.amp_activity_id, acvl.id, aal.location_percentage from amp_activity_location aal, amp_category_value_location acvl, amp_location al WHERE (%s) AND (aal.amp_location_id = al.amp_location_id) AND (al.location_id = acvl.id)", activitiesCondition);
 		runEtlOnTable(query, "etl_locations");

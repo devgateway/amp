@@ -78,6 +78,7 @@ public class CalculateExchangeRatesEtlJob {
 						cag.prefix, cag.destinationTable, cag.prefix,
 						currId, condition); 
 				monetConn.executeQuery(query);
+				monetConn.flush();
 			}
 		} else {
 			// stupid
@@ -119,6 +120,7 @@ public class CalculateExchangeRatesEtlJob {
 		List<Long> allCurrencies = SQLUtils.fetchLongs(monetConn.conn, "SELECT amp_currency_id FROM amp_currency");
 		for (Long currency:allCurrencies) {
 			generateExchangeRateEntriesForCurrency(CurrencyUtil.getAmpcurrency(currency), usedDates);
+			monetConn.flush();
 		}		
 		logger.warn("... done generating exchange rates ETL...");
 		//monetConn.copyTableFromPostgres(this.conn, MONDRIAN_EXCHANGE_RATES_TABLE);

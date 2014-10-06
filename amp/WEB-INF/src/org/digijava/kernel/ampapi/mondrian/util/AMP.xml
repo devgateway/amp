@@ -158,7 +158,7 @@
 
 			<Hierarchy hasAll="true" allMemberName="All Approval Statuses" primaryKey="amp_activity_id" name="Approval Status">
 				<Table name="mondrian_activity_texts@@locale@@" />
-				<Level name="Approval Status" column="approval_status" nameColumn="approval_status" />
+				<Level name="Approval Status" column="approval_status" />
 			</Hierarchy>
 
 			<Hierarchy hasAll="true" allMemberName="All AMP IDs" primaryKey="amp_activity_id" name="AMP ID">

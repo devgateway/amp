@@ -14,7 +14,7 @@ public enum GroupingCriteria {
 	GROUPING_MONTHLY,
 	
 	/**
-	 * do not show totals at all
+	 * only show totals
 	 */
 	GROUPING_TOTALS_ONLY
 }

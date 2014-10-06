@@ -85,7 +85,8 @@ public class Fingerprint {
 	 */
 	public void serializeFingerprint(MonetConnection monetConn, String fp) {
 		monetConn.executeQuery(String.format("DELETE FROM %s where key='%s'", FINGERPRINT_TABLE, keyName));
-		monetConn.executeQuery(String.format("INSERT INTO %s(key,value) VALUES ('%s', '%s')", FINGERPRINT_TABLE, keyName, fp));		
+		monetConn.executeQuery(String.format("INSERT INTO %s(key,value) VALUES ('%s', '%s')", FINGERPRINT_TABLE, keyName, fp));
+		//logger.info(String.format("serializing fingerprint, key=%s, value=%s", keyName, fp));
 	}
 	
 	/**

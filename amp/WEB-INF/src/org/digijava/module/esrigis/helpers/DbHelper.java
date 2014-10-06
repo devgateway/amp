@@ -1509,5 +1509,17 @@ public class DbHelper {
 
         return retVal;
     }
+    
+    public static List <AmpIndicatorLayer> getIndicatorByCategoryValueId (Long id) {
+		Session dbSession = PersistenceManager.getSession();
+		String queryString = "select ind from "
+				+ AmpIndicatorLayer.class.getName()
+				+ " ind where ind.admLevel.id=:id)";
+		Query qry = dbSession.createQuery(queryString);
+		qry.setCacheable(true);
+		qry.setLong("id", id);
+		return qry.list();
+	 
+ }
 
 }

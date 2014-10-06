@@ -1,6 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.gis;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +37,8 @@ import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpIndicatorColor;
+import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.dbentity.AmpMapState;
@@ -321,6 +325,39 @@ public class GisEndPoints {
 		mapExport.add(j);
 		mapExport.add(q);
 		return mapExport;
+	}
+	
+	@GET
+	@Path("/indicator/{admlevel}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="IndicatorByAdmLevel")
+	public List<JsonBean> getIndicatorByAdmLevel(@PathParam ("admlevel") Long admLevel) {
+		List<AmpIndicatorLayer> indicators = DbHelper.getIndicatorByCategoryValueId(admLevel);
+		List<JsonBean> indicatorsJson = new ArrayList<JsonBean>();
+		for (AmpIndicatorLayer indicator : indicators) {
+			JsonBean json = new JsonBean();
+			json.set("name", indicator.getName());
+			json.set("classes", indicator.getNumberOfClasses());
+			json.set("id", indicator.getId());
+			json.set("description", indicator.getDescription());
+			List<JsonBean> colors = new ArrayList<JsonBean>();
+			List<AmpIndicatorColor> colorList = new ArrayList<AmpIndicatorColor>(indicator.getColorRamp());
+			Collections.sort(colorList, new Comparator<AmpIndicatorColor>() {
+				@Override
+				public int compare(AmpIndicatorColor o1, AmpIndicatorColor o2) {
+					return o1.getPayload().compareTo(o2.getPayload());
+				}
+			});
+			for (AmpIndicatorColor color : colorList) {
+				JsonBean colorJson = new JsonBean();
+				colorJson.set("color", color.getColor());
+				colorJson.set("order", color.getPayload());
+				colors.add(colorJson);
+			}
+			json.set("colorRamp", colors);
+			indicatorsJson.add(json);
+		}
+		return indicatorsJson;
 	}
 
 }

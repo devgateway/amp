@@ -327,5 +327,39 @@ public static List<JsonBean> getOrgGroups() {
     });
     return orgGroups;
 }
+
+	public static List<JsonBean> getOrgs() {
+		final List<JsonBean> orgs = new ArrayList<JsonBean>();
+		PersistenceManager.getSession().doWork(new Work() {
+			public void execute(Connection conn) throws SQLException {
+				
+				String query = " select  o.amp_org_id orgId, "+
+						" o.name ,  "+
+						" aor.role roleId , "+ 
+						" o.org_grp_id grpId  "+
+						" from amp_org_role aor,amp_organisation o "+
+						" where aor.organisation=o.amp_org_id  "+
+						" order by aor.amp_org_role_id";
+				ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
+				Long lastOrgId = 0L;
+				List<Long> rolesId = null;
+				while (rs.next()) {
+					if (!lastOrgId .equals(rs.getLong("orgId"))) {
+						lastOrgId  = rs.getLong("orgId");
+						JsonBean org = new JsonBean();
+						rolesId = new ArrayList<Long>();
+						org.set("id", lastOrgId);
+						org.set("name", rs.getString("name"));
+						org.set("groupId", rs.getLong("grpId"));	
+						org.set("rolesIds", rolesId);
+						orgs.add(org);
+					}
+					rolesId.add(rs.getLong("roleId"));
+				}
+
+			}
+		});
+		return orgs;
+	}
 }
 

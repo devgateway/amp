@@ -296,8 +296,8 @@ public class Filters {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=true,name="orgsList")
 	
-	public List<SimpleJsonBean> getOrgs() {
-		return null;
+	public List<JsonBean> getOrgs() { 
+		return QueryUtil.getOrgs();
 	}	
 
 	/**

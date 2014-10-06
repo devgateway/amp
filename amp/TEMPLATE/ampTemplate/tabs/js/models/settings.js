@@ -14,7 +14,6 @@ define([ 'underscore', 'backbone' ], function(_, Backbone) {
 				id : 'CUSTOM',
 				value : 'Custom'
 			} ],
-			selectedDecimalSeparator : ',',
 			decimalPlaces : [ {
 				id : '-1',
 				value : 'No Limit'
@@ -40,7 +39,47 @@ define([ 'underscore', 'backbone' ], function(_, Backbone) {
 				id : '-2',
 				value : 'Custom'
 			} ],
-			selectedDecimalPlaces : '2'
+			groupSeparators : [ {
+				id : ',',
+				value : ','
+			}, {
+				id : '.',
+				value : '.'
+			}, {
+				id : 'CUSTOM',
+				value : 'Custom'
+			} ],
+			amountUnits : [ {
+				id : 0,
+				value : 'Amounts in Units'
+			}, {
+				id : 1,
+				value : 'Amounts in Thousands (000)'
+			}, {
+				id : 2,
+				value : 'Amounts in Millions (000 000)'
+			} ],
+			currencies : [ {
+				id : 102,
+				value : 'Australlian Dollar'
+			}, {
+				id : 103,
+				value : 'Canadian Dollar'
+			}, {
+				id : 95,
+				value : 'Euro'
+			} ],
+			calendar : [ {
+				id : 4,
+				value : 'Gregorian Calendar'
+			} ],
+			selectedDecimalSeparator : null,
+			selectedDecimalPlaces : null,
+			selectedUseGroupingSeparator : null,
+			selectedGroupSeparator : null,
+			selectedAmountUnit : null,
+			selectedCurrency : null,
+			selectedCalendar : null
 		}
 	});
 

@@ -1,5 +1,8 @@
 package org.digijava.kernel.ampapi.endpoints.gis;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -7,16 +10,22 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.PathSegment;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -257,7 +266,7 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ActivitiesNewLists")
 	public GeneratedReport getTestReport(JsonBean filter) {
-		return ActivityService.getActivitiesList(filter);
+		return LocationService.getMapExport();
 	}
 	
 	
@@ -307,25 +316,6 @@ public class GisEndPoints {
 	
 		return ( ReportsResultTotalsFormatter.ResultFormatter(ls.getTotals(admlevel, type)));
 	}
-	@POST
-	@Path("/export-map/")
-	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="MapExport")
-	public List<JsonBean> getExportMap(JsonBean filter) {
-		List<JsonBean>mapExport=new ArrayList<JsonBean>();
-		JsonBean j=new JsonBean();
-		j.set("Type", "Region");
-		j.set("Latitude", 111);
-		j.set("Longitude", 111);
-		JsonBean q=new JsonBean();
-		q.set("Type", "Typology");
-		q.set("Latitude", 111);
-		q.set("Longitude", 111);
-
-		mapExport.add(j);
-		mapExport.add(q);
-		return mapExport;
-	}
 	
 	@GET
 	@Path("/indicator/{admlevel}")
@@ -359,5 +349,30 @@ public class GisEndPoints {
 		}
 		return indicatorsJson;
 	}
+	@GET
+	@Path("/export-map/")
+	@Produces("application/vnd.ms-excel")
+	@ApiMethod(ui=false,name="MapExport")
+//	public Response  getExportMap(JsonBean filter) {
+	 public StreamingOutput getExportMap(@Context HttpServletResponse webResponse)
+    {
+		final HSSFWorkbook wb=
+		LocationService.generateExcelExport();
+//		export-map.
+//		wb.wr
+//		Response.
+//		ResponseBuilder response = Response.ok( wb.getBytes());
+		webResponse.setHeader("Content-Disposition","attachment; filename=map-export.xls");
 
+        StreamingOutput streamOutput = new StreamingOutput(){
+            public void write(OutputStream output) throws IOException, WebApplicationException {
+                try {
+                	wb.write(output);
+                } catch (Exception e) {
+                    throw new WebApplicationException(e);
+                }
+            }
+        };
+        return streamOutput;
+      }
 }

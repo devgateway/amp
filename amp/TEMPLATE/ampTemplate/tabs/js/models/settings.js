@@ -4,16 +4,7 @@ define([ 'underscore', 'backbone' ], function(_, Backbone) {
 		defaults : {
 			formName : 'settingsForm',
 			action : '/aim/reportsFilterPicker.do',
-			decimalSeparators : [ {
-				id : ',',
-				value : ','
-			}, {
-				id : '.',
-				value : '.'
-			}, {
-				id : 'CUSTOM',
-				value : 'Custom'
-			} ],
+			decimalSeparators : [ ',', '.', 'Custom' ],
 			decimalPlaces : [ {
 				id : '-1',
 				value : 'No Limit'
@@ -39,16 +30,7 @@ define([ 'underscore', 'backbone' ], function(_, Backbone) {
 				id : '-2',
 				value : 'Custom'
 			} ],
-			groupSeparators : [ {
-				id : ',',
-				value : ','
-			}, {
-				id : '.',
-				value : '.'
-			}, {
-				id : 'CUSTOM',
-				value : 'Custom'
-			} ],
+			groupSeparators : [ ',', '.', 'Custom' ],
 			amountUnits : [ {
 				id : 0,
 				value : 'Amounts in Units'

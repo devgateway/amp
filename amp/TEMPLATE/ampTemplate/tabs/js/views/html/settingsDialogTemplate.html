@@ -14,11 +14,11 @@
 	                    <select name="customDecimalSymbol" onchange="initFormatPopup();" id="customDecimalSymbol" class="dropdwn_sm"> 
 	                    	<% for(var ds in decimalSeparators) { %>
 	                    		<% 	var selected = '';
-	                    			if(selectedDecimalSeparator != undefined && selectedDecimalSeparator != null && decimalSeparators[ds].id === selectedDecimalSeparator) {
+	                    			if(selectedDecimalSeparator != undefined && selectedDecimalSeparator != null && decimalSeparators[ds] == selectedDecimalSeparator) {
 	                    				selected = "selected = 'selected' ";
 	                    			}
 	                    		%>
-	                        	<option value="<%= decimalSeparators[ds].id%>" <%= selected %> ><%= decimalSeparators[ds].value%></option>
+	                        	<option value="<%= decimalSeparators[ds]%>" <%= selected %> ><%= decimalSeparators[ds]%></option>
 	                        <% } %>
 	                    </select> 
 						<input type="text" name="customDecimalSymbolTxt" maxlength="1" size="5" value="," onchange="initFormatPopup()" disabled="disabled" class="inputx">
@@ -30,7 +30,7 @@
                     	<select name="customDecimalPlaces" onchange="initFormatPopup();" id="customDecimalPlaces" class="dropdwn_sm"> 
 	                    	<% for(var dp in decimalPlaces) { %>
 	                    		<% 	var selected = '';
-	                    			if(selectedDecimalPlaces != undefined && selectedDecimalPlaces != null && decimalPlaces[dp].id === selectedDecimalPlaces) {
+	                    			if(selectedDecimalPlaces != undefined && selectedDecimalPlaces != null && decimalPlaces[dp].id == selectedDecimalPlaces) {
 	                    				selected = "selected = 'selected' ";
 	                    			}
 	                    		%>
@@ -53,11 +53,11 @@
                     	<select name="customGroupCharacter" onchange="initFormatPopup();" id="customGroupCharacter" class="dropdwn_sm"> 
 	                    	<% for(var gs in groupSeparators) { %>
 	                    		<% 	var selected = '';
-	                    			if(selectedGroupSeparator != undefined && selectedGroupSeparator != null && groupSeparators[gs].id === selectedGroupSeparator) {
+	                    			if(selectedGroupSeparator != undefined && selectedGroupSeparator != null && groupSeparators[gs] == selectedGroupSeparator) {
 	                    				selected = "selected = 'selected' ";
 	                    			}
 	                    		%>
-	                        	<option value="<%= groupSeparators[gs].id%>" <%= selected %> ><%= groupSeparators[gs].value%></option>
+	                        	<option value="<%= groupSeparators[gs]%>" <%= selected %> ><%= groupSeparators[gs]%></option>
 	                        <% } %>
 	                    </select>
                     	<input type="text" name="customGroupCharacterTxt" maxlength="1" size="5" value="" onchange="initFormatPopup()" disabled="disabled" class="inputx">
@@ -74,7 +74,7 @@
                     	<select name="amountinthousands" onchange="initFormatPopup();" id="customAmountinThousands" class="dropdwn_sm"> 
 	                    	<% for(var au in amountUnits) { %>
 	                    		<% 	var selected = '';
-	                    			if(selectedAmountUnit != undefined && selectedAmountUnit != null && amountUnits[au].id === selectedAmountUnit) {
+	                    			if(selectedAmountUnit != undefined && selectedAmountUnit != null && amountUnits[au].id == selectedAmountUnit) {
 	                    				selected = "selected = 'selected' ";
 	                    			}
 	                    		%>

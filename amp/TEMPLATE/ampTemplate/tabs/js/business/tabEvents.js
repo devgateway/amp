@@ -97,6 +97,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
 					// Render views.
 					var dynamicLayoutView = new DynamicContentView();
+					dynamicLayoutView.setId(id);
 					app.TabsApp.filtersRegion.show(dynamicLayoutView);
 					dynamicLayoutView.filters.show(compositeView);
 

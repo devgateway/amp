@@ -424,7 +424,7 @@ public class ReportsFilterPicker extends Action {
      * fills the dropdowns part of ReportsFilterPickerForm pertaining to "settings"
      * @param filterForm
      */
-    private static void fillSettingsFormDropdowns(ReportsFilterPickerForm filterForm)
+    public static void fillSettingsFormDropdowns(ReportsFilterPickerForm filterForm)
     {
         StopWatch.reset("Filters-Settings");
         StopWatch.next("Filters-Settings", true, "Settings part dropdowns START");

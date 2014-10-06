@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.reports;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -39,10 +41,13 @@ import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
+import org.digijava.module.aim.action.ReportsFilterPicker;
+import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
@@ -258,6 +263,28 @@ public class Reports {
 		QueryResult result = getSaikuReportResult(reportId);
 		result.setQuery(new ThinQuery());
 		return result;
+	}
+	
+	@GET
+	@Path("/report/{report_id}/settings/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public final Object getSettings(@PathParam("report_id") Long reportId) {
+		AmpARFilter arFilter = FilterUtil.buildFilter(null, reportId);
+		ReportsFilterPickerForm oldFilterForm = new ReportsFilterPickerForm();
+		FilterUtil.populateForm(oldFilterForm, arFilter, reportId);
+		ReportsFilterPicker.fillSettingsFormDropdowns(oldFilterForm);
+		Map<String, Object> settings = new HashMap<String, Object>();
+		settings.put("decimalSeparators", oldFilterForm.getAlldecimalSymbols());
+		settings.put("decimalSymbols", oldFilterForm.getAlldecimalSymbols());
+		settings.put("groupSeparators", oldFilterForm.getAllgroupingseparators());
+		settings.put("amountInThousands", oldFilterForm.getAmountinthousands());
+		settings.put("selectedDecimalPlaces", oldFilterForm.getCustomDecimalPlaces());
+		settings.put("selectedDecimalSeparator", oldFilterForm.getCustomDecimalSymbol());
+		settings.put("selectedGroupSeparator", oldFilterForm.getCustomGroupCharacter());
+		settings.put("selectedUseGroupingSeparator", oldFilterForm.getCustomUseGrouping());
+		//settings.put("calendars", oldFilterForm.getCalendars());
+		//settings.put("currencies", oldFilterForm.getCurrencies());
+		return settings;
 	}
 
 }

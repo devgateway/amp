@@ -235,10 +235,11 @@ public class Filters {
 	 * @return
 	 *	[
 	 *		{
-     * 		id: 0,
-     * 		name: “some org type”,
-     * 		groupIds: [:id, :id, :id]  //ids of child groups
-   	 *		},
+	 *			"id": 39,
+     *   		"groupIds": [43,67,46,33,49,66,21,64,41,63],
+     *   		"name": "Multilateral",
+     *   		"code": "MULTI"
+     *		},
 	 *	..
 	 *	]
 	 */
@@ -253,7 +254,7 @@ public class Filters {
 	}
 
 	/**
-	 * Return org types with its orgs groups
+	 * Return org grous with its orgs ids
 	 * 
 	 * @return
 	 *	[
@@ -271,8 +272,9 @@ public class Filters {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=true,name="orgGroupsList")
 	
-	public List<SimpleJsonBean> getOrgGroups() {
-		return null;
+	public List<JsonBean> getOrgGroups() {
+		return QueryUtil.getOrgGroups();
+		
 	}	
 
 	/**

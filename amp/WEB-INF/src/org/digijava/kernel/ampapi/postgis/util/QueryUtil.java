@@ -292,5 +292,40 @@ public static List<JsonBean>getOrgTypes(){
     });
     return orgTypes;
 }
+
+public static List<JsonBean> getOrgGroups() {
+	final List<JsonBean> orgGroups=new ArrayList<JsonBean>();
+    PersistenceManager.getSession().doWork(new Work(){
+			public void execute(Connection conn) throws SQLException {
+				String query=" select aog.amp_org_grp_id orgGrpId, "+
+							 " aog.org_grp_name grpName, "+
+							 " aog.org_grp_code orgCode, "+
+							 " aog.org_type  orgType, "+
+							 " o.amp_org_id orgId  "+
+							 " from amp_org_group aog "+ 
+							 " left outer join amp_organisation o on aog.amp_org_grp_id=o.org_grp_id "+
+							 " order by orgGrpId";
+				ResultSet rs=SQLUtils.rawRunQuery(conn, query, null);
+				Long lastOrgGrpId=0L;
+				List <Long>orgsId=null;
+				while(rs.next()){
+				if(!lastOrgGrpId.equals(rs.getLong("orgGrpId"))){
+					lastOrgGrpId=rs.getLong("orgGrpId");
+					JsonBean orgGrp=new JsonBean();
+					orgsId=new ArrayList<Long>();
+					orgGrp.set("id", rs.getLong("orgGrpId"));
+					orgGrp.set("name", rs.getString("grpName"));
+					orgGrp.set("code", rs.getString("orgCode"));
+					orgGrp.set("typeId", rs.getLong("orgType"));
+					orgGrp.set("orgIds",orgsId);
+					orgGroups.add(orgGrp);
+				}
+				orgsId.add(rs.getLong("orgId"));
+				}
+
+			}
+    });
+    return orgGroups;
+}
 }
 

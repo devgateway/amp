@@ -5,39 +5,34 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
+import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
+import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
+import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.ar.util.ReportsUtil;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.esrigis.dbentity.AmpMapState;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
-import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
-import org.hibernate.type.LongType;
 
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 
@@ -105,21 +100,16 @@ public class QueryUtil {
 		return new ArrayList<String>(Arrays.asList("Country", "Region", "Zone", "District"));
 	}
 
+	@SuppressWarnings("unchecked")
 	public static List<AmpStructure> getStructures() {
 		List<AmpStructure> al = null;
-		try {
-			Session s = PersistenceManager.getRequestDBSession();
-
-			String queryString = "select s from " + AmpStructure.class.getName() + " s inner join s.activities a where"
+		String queryString = "select s from " + AmpStructure.class.getName() + " s inner join s.activities a where"
 					+ " a.ampActivityId in (select aa from " + AmpActivity.class.getName() + " aa )";
 			Query q = PersistenceManager.getSession().createQuery(queryString);
 			q.setMaxResults(100);
 			al = q.list();
 
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		return al;
 
 	}
@@ -140,17 +130,10 @@ public class QueryUtil {
 		return getActivities(null);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static List<AmpActivity> getActivities(String ampActivityIds) {
 
 		List<AmpActivity> a = null;
-		try {
-			Session s = PersistenceManager.getRequestDBSession();
-			// //AmpActivityVersion(Long ampActivityId, String name, String
-			// ampid)
-			// this.ampActivityId=ampActivityId;
-			// this.name=name;
-			// this.ampId=ampid;
-			// }
 			// this HQL does a lot of sql queries, yet to be determined how we
 			// will optimized
 			String queryString = "select a from " + AmpActivity.class.getName()
@@ -167,9 +150,7 @@ public class QueryUtil {
 			q.setMaxResults(200);
 			a = q.list();
 
-		} catch (DgException e) {
-			logger.error("cannot get list of activities", e);
-		}
+		
 		return a;
 
 	}
@@ -180,6 +161,7 @@ public class QueryUtil {
 	 * @return
 	 * @throws DgException
 	 */
+	@SuppressWarnings("unchecked")
 	public static List<AmpMapState> getMapList() throws DgException {
 		Criteria mapsCriteria = PersistenceManager.getRequestDBSession().createCriteria(AmpMapState.class);
 		return mapsCriteria.list();
@@ -196,6 +178,7 @@ public class QueryUtil {
 
 	}
 
+	@SuppressWarnings("unchecked")
 	public static List<AmpLocator> getLocationsWithinDistance(Geometry point, long distance, List <Long> ommitedLocations) {
 		// true to use spheroid
 		String queryString = "select l from " + AmpLocator.class.getName()
@@ -266,6 +249,9 @@ public static List<JsonBean>getOrgTypes(){
 	final List<JsonBean> orgTypes=new ArrayList<JsonBean>();
     PersistenceManager.getSession().doWork(new Work(){
 			public void execute(Connection conn) throws SQLException {
+				
+				Map<Long, String> orgTypesName=QueryUtil.getTranslatedName(conn, "amp_org_type", "amp_org_type_id", "org_type");
+				
 				String query="select  aot.amp_org_type_id orgTypeId,aog.amp_org_grp_id orgGrpId "+ 
 							" ,aot.org_type orgTypeName, aot.org_type_code orgTypeCode "+
 							" from amp_org_group aog,amp_org_type aot "+
@@ -275,16 +261,20 @@ public static List<JsonBean>getOrgTypes(){
 				Long lastOrgTypeId=0L;
 				List <Long>orgsGrpId=null;
 				while(rs.next()){
-				if(!lastOrgTypeId.equals(rs.getLong("orgTypeId"))){
-					lastOrgTypeId=rs.getLong("orgTypeId");
-					JsonBean orgType=new JsonBean();
-					orgsGrpId=new ArrayList<Long>();
-					orgType.set("id", rs.getLong("orgTypeId"));
-					orgType.set("name", rs.getString("orgTypeName"));
-					orgType.set("code", rs.getString("orgTypeCode"));
-					orgType.set("groupIds",orgsGrpId);
-					orgTypes.add(orgType);
-				}
+					if(!lastOrgTypeId.equals(rs.getLong("orgTypeId"))){
+						lastOrgTypeId=rs.getLong("orgTypeId");
+						JsonBean orgType=new JsonBean();
+						orgsGrpId=new ArrayList<Long>();
+						orgType.set("id", rs.getLong("orgTypeId"));
+						if(orgTypesName!=null){
+							orgType.set("name", orgTypesName.get(lastOrgTypeId));
+	
+						}else{
+							orgType.set("name", rs.getString("orgTypeName"));
+						}
+						orgType.set("groupIds",orgsGrpId);
+						orgTypes.add(orgType);
+					}
 					orgsGrpId.add(rs.getLong("orgGrpId"));
 				}
 
@@ -297,6 +287,8 @@ public static List<JsonBean> getOrgGroups() {
 	final List<JsonBean> orgGroups=new ArrayList<JsonBean>();
     PersistenceManager.getSession().doWork(new Work(){
 			public void execute(Connection conn) throws SQLException {
+				
+				Map<Long,String>orgGroupsNames=QueryUtil.getTranslatedName(conn, "amp_org_group", "amp_org_id", "org_grp_name");
 				String query=" select aog.amp_org_grp_id orgGrpId, "+
 							 " aog.org_grp_name grpName, "+
 							 " aog.org_grp_code orgCode, "+
@@ -314,8 +306,11 @@ public static List<JsonBean> getOrgGroups() {
 					JsonBean orgGrp=new JsonBean();
 					orgsId=new ArrayList<Long>();
 					orgGrp.set("id", rs.getLong("orgGrpId"));
-					orgGrp.set("name", rs.getString("grpName"));
-					orgGrp.set("code", rs.getString("orgCode"));
+						if(orgGroupsNames!=null){
+							orgGrp.set("name", orgGroupsNames.get(lastOrgGrpId));	
+						}else{
+							orgGrp.set("name", rs.getString("grpName"));
+						}
 					orgGrp.set("typeId", rs.getLong("orgType"));
 					orgGrp.set("orgIds",orgsId);
 					orgGroups.add(orgGrp);
@@ -333,6 +328,10 @@ public static List<JsonBean> getOrgGroups() {
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
 				
+				
+				//go and fetch translated version of organisation name if multilingual is enabled
+				
+				Map<Long, String> organisationsNames = QueryUtil.getTranslatedName(conn,"amp_organisation","amp_org_id","name");
 				String query = " select  o.amp_org_id orgId, "+
 						" o.name ,  "+
 						" aor.role roleId , "+ 
@@ -349,7 +348,11 @@ public static List<JsonBean> getOrgGroups() {
 						JsonBean org = new JsonBean();
 						rolesId = new ArrayList<Long>();
 						org.set("id", lastOrgId);
-						org.set("name", rs.getString("name"));
+						if(ContentTranslationUtil.multilingualIsEnabled()){
+							org.set("name", organisationsNames.get(lastOrgId));
+						}else{
+							org.set("name", rs.getString("name"));
+						}
 						org.set("groupId", rs.getLong("grpId"));	
 						org.set("rolesIds", rolesId);
 						orgs.add(org);
@@ -358,8 +361,43 @@ public static List<JsonBean> getOrgGroups() {
 				}
 
 			}
+
+
 		});
 		return orgs;
+	}
+	private static Map<Long, String> getTranslatedName(Connection conn,String tableName,String id,String name)
+			throws SQLException {
+		Map<Long, String> names = null;
+		if (ContentTranslationUtil.multilingualIsEnabled()) {
+			names  = new HashMap<Long, String>();
+			ViewFetcher v = DatabaseViewFetcher.getFetcherForView(tableName,"",TLSUtils.getEffectiveLangCode(),
+					new HashMap<PropertyDescription, ColumnValuesCacher>(),conn, "*");
+			ResultSet rs = v.fetch(null);
+			while (rs.next()) {
+				names .put(rs.getLong(id),rs.getString(name));
+			}
+
+		}
+		return names;
+	}
+
+	public static List<SimpleJsonBean> getOrgRoles() {
+		// //yet not translatable but its ready when it is
+		final List<SimpleJsonBean> rogRoles = new ArrayList<SimpleJsonBean>();
+		PersistenceManager.getSession().doWork(new Work() {
+			public void execute(Connection conn) throws SQLException {
+				ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_role","",TLSUtils.getEffectiveLangCode(),
+						new HashMap<PropertyDescription, ColumnValuesCacher>(),conn, "*");
+				ResultSet rs = v.fetch(null);
+				
+				while (rs.next()) {
+					rogRoles.add(new SimpleJsonBean(rs.getLong("amp_role_id"),rs.getString("name")));
+				}
+
+			}
+		});
+		return rogRoles;
 	}
 }
 

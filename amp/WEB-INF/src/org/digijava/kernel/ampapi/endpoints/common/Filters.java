@@ -7,16 +7,13 @@ import java.util.List;
 import java.util.Set;
 
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
@@ -27,16 +24,11 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.OrgTypeSkeleton;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -45,7 +37,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.ObjectNotFoundException;
 
 /**
- * Class that holds method related to filtres for gis querys (available options,
+ * Class that holds method related to filters for gis query (available options,
  * available filters)
  * 
  * @author jdeanquin@developmentgateway.org
@@ -237,8 +229,7 @@ public class Filters {
 	 *		{
 	 *			"id": 39,
      *   		"groupIds": [43,67,46,33,49,66,21,64,41,63],
-     *   		"name": "Multilateral",
-     *   		"code": "MULTI"
+     *   		"name": "Multilateral"
      *		},
 	 *	..
 	 *	]
@@ -319,72 +310,10 @@ public class Filters {
 	@ApiMethod(ui=true,name="orgRolesList")
 	
 	public List<SimpleJsonBean> getorgRoles() {
-		return null;
+		return QueryUtil.getOrgRoles();
 	}	
 	
-////begin org old
-//	/**
-//	 * Return the organization filtered by the given role or by the given orgGroup
-//	 * 
-//	 * @return
-//	 */
-//	@GET
-//	@Path("/organizations")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@ApiMethod(ui=false,name="OrganizationsByRoleAndByGroupId")
-//	public List<SimpleJsonBean> getOrganizations(
-//			@QueryParam("ampRoleId") Long orgRole,@QueryParam("orgGroupId") List<Long> ampOrgGroupId) {
-//		
-//		List<SimpleJsonBean> organizations = new ArrayList<SimpleJsonBean>();
-//		List<OrganizationSkeleton> s=null;
-//		if(orgRole!=null){
-//		 s= QueryUtil.getOrganizations(orgRole);
-//		}else{
-//			s= QueryUtil.getOrganizations(ampOrgGroupId);
-//		}
-//		for (OrganizationSkeleton organizationSkeleton : s) {
-//			organizations.add(new SimpleJsonBean(organizationSkeleton
-//					.getAmpOrgId(), organizationSkeleton.getName()));
-//		}
-//
-//		return organizations;
-//	}
-//	/**
-//	 * Return the organization  list
-//	 * 
-//	 * @return
-//	 */
-//	@POST
-//	@Path("/organizations")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@ApiMethod(ui=true,name="Organizations")
-//	public List<SimpleJsonBean> getOrganizations(final JsonBean filter) {
-//		List<SimpleJsonBean> orgs = new ArrayList<SimpleJsonBean>();
-//		return orgs;
-//	}
-//	/**
-//	 * Return the organization role list
-//	 * 
-//	 * @return
-//	 */
-//	@POST
-//	@Path("/organizationsRoles")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@ApiMethod(ui=true,name="organizationsRoles")
-//	public List<SimpleJsonBean> getOrganizationsRoles(final JsonBean filter) {
-//		List<SimpleJsonBean> orgs = new ArrayList<SimpleJsonBean>();
-//		List<AmpRole> roles = OnePagerUtil.getOrgRoles();
-//		for (AmpRole ampRole : roles) {
-//			SimpleJsonBean o = new SimpleJsonBean();
-//			o.setId(ampRole.getAmpRoleId());
-//			o.setCode(ampRole.getRoleCode());
-//			o.setName(ampRole.getName());
-//			orgs.add(o);
-//		}
-//
-//		return orgs;
-//	}
-///end orgs old
+
 	/**
 	 * Return the programs filtered by the given sectorName
 	 * 
@@ -464,53 +393,7 @@ public class Filters {
 		return getCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY);
 	}
 
-	private List<SimpleJsonBean> getOrgGroup(Long orgTypeId) {
-		List<SimpleJsonBean>orgGroupReturn=new ArrayList<SimpleJsonBean>();
-		Collection<AmpOrgGroup> aogList;
-		if(orgTypeId==null){
-			aogList = DbUtil.getAllOrgGroups();
-		}else{
-			aogList =DbUtil.searchForOrganisationGroupByType(orgTypeId);
-		}
-		for (AmpOrgGroup ampOrgGroup : aogList) {
-			orgGroupReturn.add(new SimpleJsonBean(ampOrgGroup.getIdentifier(),ampOrgGroup.getName(),ampOrgGroup.getOrgGrpCode(),ampOrgGroup.getOrgType().getAmpOrgTypeId()));
-		}
-		return orgGroupReturn;
-	}
-	
 
-//	/**
-//	 * Return Organization Group filtered by orgTypeId 
-//	 * 
-//	 * @return
-//	 */
-//	@GET
-//	@Path("/organizationGroup")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@ApiMethod(ui = true, name = "OrganizationGroupList")
-//	public List<SimpleJsonBean> getorganizationGroupByOrgTypeId(@QueryParam("orgTypeId") Long orgTypeId) {
-//		return getOrgGroup(orgTypeId);
-//	}
-//	
-//	/**
-//	 * Return Organization Group 
-//	 * 
-//	 * @return
-//	 */
-//	@GET
-//	@Path("/organisationTypes/")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@ApiMethod(ui = true, name = "OrgTypesList")
-//	public List<SimpleJsonBean> getOrgTypes(){
-//		List<SimpleJsonBean> orgTypes=new ArrayList<SimpleJsonBean>();
-//		List<OrgTypeSkeleton> orgTypesSk= DbUtil.getAllOrgTypesFaster();
-//		for (OrgTypeSkeleton orgTypeSkeleton : orgTypesSk) {
-//			orgTypes.add(new SimpleJsonBean(orgTypeSkeleton.getOrgTypeId(),orgTypeSkeleton.getOrgTypeName(),orgTypeSkeleton.getOrgTypeCode()));
-//		}
-//		
-//		return orgTypes;
-//	}
-	
 	private List<SimpleJsonBean> getCategoryValue(String categoryKey) {
 		List<SimpleJsonBean> fi = new ArrayList<SimpleJsonBean>();
 		Collection<AmpCategoryValue> col = CategoryManagerUtil

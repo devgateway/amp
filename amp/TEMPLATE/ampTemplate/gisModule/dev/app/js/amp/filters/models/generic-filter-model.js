@@ -37,15 +37,22 @@ module.exports = BaseFilterModel.extend({
   },
 
   deserialize: function(listOfSelected) {
-    var self = this;
     this.getTree().then(function(tree) {
-      //var tree = self.get('tree');
       if (!tree) {
         return false; //no tree, nothing to serialize.
       } else {
         tree.deserialize(listOfSelected);
       }
     });
+  },
+
+  reset: function(){
+    var tree = this.get('tree');
+    if (tree) {
+      tree.set('selected', false);
+      // force trigger, because otherwise nodes that are 'half-filled' but false won't refresh.
+      tree.trigger('change:selected', tree, false, {propagation: true});
+    }
   },
 
   _createTree:function() {

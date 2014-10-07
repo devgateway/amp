@@ -44,5 +44,10 @@ module.exports = BaseFilterModel.extend({
   deserialize: function(obj) {
     this.set('selectedStart', obj.startYear);
     this.set('selectedEnd', obj.endYear);
+  },
+
+  reset: function() {
+    this.set('selectedStart', this.get('startYear'));
+    this.set('selectedEnd', this.get('endYear'));
   }
 });

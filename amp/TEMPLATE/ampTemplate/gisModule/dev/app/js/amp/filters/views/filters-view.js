@@ -20,7 +20,8 @@ module.exports = Backbone.View.extend({
 
   events:{
     'click .apply': 'applyFilters',
-    'click .cancel': 'cancel'
+    'click .cancel': 'cancel',
+    'click .reset': 'resetFilters'
   },
 
   // collection of top-level-filter views..
@@ -152,11 +153,6 @@ module.exports = Backbone.View.extend({
   },
 
 
-  applyFilters:function() {
-    this.serialize();
-    this.trigger('apply');
-  },
-
   serialize: function() {
     var self = this;
     this.serializedFilters = {};
@@ -179,6 +175,17 @@ module.exports = Backbone.View.extend({
   showFilters:function() {
     this.filterStash = this.serialize();
 
+  },
+
+  resetFilters:function() {
+    this.allFilters.each(function(filter) {
+      filter.reset();
+    });
+  },
+
+  applyFilters:function() {
+    this.serialize();
+    this.trigger('apply');
   },
 
   cancel:function() {

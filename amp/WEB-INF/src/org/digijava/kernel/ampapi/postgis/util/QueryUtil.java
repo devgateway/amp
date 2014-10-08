@@ -332,13 +332,13 @@ public static List<JsonBean> getOrgGroups() {
 				//go and fetch translated version of organisation name if multilingual is enabled
 				
 				Map<Long, String> organisationsNames = QueryUtil.getTranslatedName(conn,"amp_organisation","amp_org_id","name");
-				String query = " select  o.amp_org_id orgId, "+
+				String query = " select distinct o.amp_org_id orgId, "+
 						" o.name ,  "+
 						" aor.role roleId , "+ 
 						" o.org_grp_id grpId  "+
 						" from amp_org_role aor,amp_organisation o "+
 						" where aor.organisation=o.amp_org_id  "+
-						" order by aor.amp_org_role_id";
+						" order by o.amp_org_id";
 				ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
 				Long lastOrgId = 0L;
 				List<Long> rolesId = null;

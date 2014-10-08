@@ -1711,51 +1711,7 @@ public class AmpARFilter extends PropertyListable {
 	public StringGenerator getOverridingTeamFilter()
 	{
 		return overridingTeamFilter;
-	}
-	
-	protected void processTeamFilter(HttpServletRequest request, TeamMember loggedInTeamMember, boolean workspaceFilter)
-	{
-		if (overridingTeamFilter != null)
-		{
-			if (overridingTeamFilter.getString() != null)
-				queryAppend(overridingTeamFilter.getString());
-			return;
-		}
-		
-		boolean thisIsComputedWorkspaceWithFilters = workspaceFilter && (loggedInTeamMember != null) && 
-				(loggedInTeamMember.getComputation() != null) && (loggedInTeamMember.getComputation()) &&
-				(loggedInTeamMember.getUseFilters() != null) && (loggedInTeamMember.getUseFilters());
-
-		String TEAM_FILTER = WorkspaceFilter.generateWorkspaceFilterQuery(request.getSession(), teamMemberId);
-
-		if (needsTeamFilter)
-		{
-			/* needsTeamFilter can only be true in public view
-			 * public views cannot be shared from within a computed Workspace (THIS IS NOT SUPPORTED NOW)
-			 */
-			 queryAppend(TEAM_FILTER);
-		}
-		else
-		if (workspaceFilter)
-		{
-			if (thisIsComputedWorkspaceWithFilters)
-			{
-				/* do a somewhat ugly hack: the TEAM_FILTER will only contain the activities from within the workspace
-				 * here we run the filter part of the workspace and OR with the own activities returned in TEAM_FILTER
-				 */
-				String hideDraftSQL = TeamUtil.hideDraft(loggedInTeamMember)?"draft<> true AND ":"";
-				String allActivitiesInTheDatabaseQuery = "SELECT amp_activity_id from amp_activity WHERE "+hideDraftSQL+" approval_status IN (" + Util.toCSString(AmpARFilter.activityStatus) +")";				
-				queryAppend(allActivitiesInTheDatabaseQuery);
-				generatedFilterQuery += " OR amp_activity_id IN (" + TEAM_FILTER + ")";
-			}
-			else
-			{
-				// normal workspace filter, works hackless
-				queryAppend(TEAM_FILTER);
-			}
-		}
-	}
-	
+	}	
 
 	protected void processTeamFilter(TeamMember member, boolean workspaceFilter)
 	{
@@ -1787,10 +1743,11 @@ public class AmpARFilter extends PropertyListable {
 				/* do a somewhat ugly hack: the TEAM_FILTER will only contain the activities from within the workspace
 				 * here we run the filter part of the workspace and OR with the own activities returned in TEAM_FILTER
 				 */
-				String hideDraftSQL = TeamUtil.hideDraft(member)?"draft<> true AND ":"";
-				String allActivitiesInTheDatabaseQuery = "SELECT amp_activity_id from amp_activity WHERE "+hideDraftSQL+" approval_status IN (" + Util.toCSString(AmpARFilter.activityStatus) +")";				
-				queryAppend(allActivitiesInTheDatabaseQuery);
-				generatedFilterQuery += " OR amp_activity_id IN (" + TEAM_FILTER + ")";
+				String hideDraftSQL = TeamUtil.hideDraft(member)?"draft<>true":"1=1"; 
+				String allActivitiesInTheDatabaseQuery = "SELECT amp_activity_id from amp_activity WHERE "+hideDraftSQL;
+				String queryToAppend = allActivitiesInTheDatabaseQuery;
+				queryToAppend += " OR amp_activity_id IN (" + TEAM_FILTER + ")";
+				queryAppend("(" + queryToAppend + ")");
 			}
 			else
 			{

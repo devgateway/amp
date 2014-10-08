@@ -947,7 +947,8 @@
 	</dependencies>
 
 	<build>
-		<sourceDirectory>${project.basedir}/WEB-INF/src</sourceDirectory>
+		<sourceDirectory>${project.basedir}/WEB-INF/src , ${project.basedir}/src/db</sourceDirectory>
+		
 		<outputDirectory>${project.basedir}/WEB-INF/classes</outputDirectory>
 		<plugins>
 

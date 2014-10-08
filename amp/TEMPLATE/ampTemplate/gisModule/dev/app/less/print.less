@@ -2,6 +2,14 @@
 
   body {
     background: transparent;
+  	-webkit-print-color-adjust:exact;
+  }
+
+  // forces colouring of map-circles, won't work on IE.
+  .map-circle {
+			color:white !important;
+     background-color: #f99 !important;
+     -webkit-print-color-adjust: exact; 
   }
 
   #amp-menu {
@@ -20,8 +28,12 @@
     overflow: visible;
     top: 0;
     left: 0;
-    height: 16cm;
-    width: 21cm;  // letter and a4 are both ~21cm, but printing scales it down a bit (?)
+    height: 18cm;
+    width: 32cm;  // letter and a4 are both ~21cm, but printing scales it down a bit (?)
+  }
+
+  .leaflet-left {
+    left: 0px !important;
   }
 
   .leaflet-control-zoom {

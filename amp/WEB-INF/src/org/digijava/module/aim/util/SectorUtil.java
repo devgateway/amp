@@ -139,24 +139,6 @@ public class SectorUtil {
 			throw new RuntimeException(ex);
 		} 
 	}
-
-	@SuppressWarnings("unchecked")
-	public static Map<Long, SectorSkeleton> getAllParentSectorsFaster(Long secSchemeId){
-		return SectorSkeleton.getParentSectors(secSchemeId);
-	}	
-	public static void linkChildrenToParents(Map<Long, SectorSkeleton> parents, Map<Long, SectorSkeleton> children) {
-		for (SectorSkeleton sec: children.values()) {
-		    if (sec.getParentSectorId() != null) {
-		    	if (parents.get(sec.getParentSectorId()) != null) {
-		    		parents.get(sec.getParentSectorId()).addChild(sec);
-		    	}
-		    	
-		    	if (children.get(sec.getParentSectorId()) != null) {
-		    		children.get(sec.getParentSectorId()).addChild(sec);
-		    	}
-		    }
-		}					
-	}
 	
 	@SuppressWarnings("unchecked")
 	public static List<AmpSector> getAllParentSectors(Long secSchemeId){
@@ -217,12 +199,7 @@ public class SectorUtil {
 			}
 		}
 		return AmpCaching.getInstance().sectorsCache.getAllSectors();
-	}
-
-	public static Map<Long, SectorSkeleton> getAllChildSectorsFaster(Map <Long, SectorSkeleton> sectors) {
-			return SectorSkeleton.getAllSectors(sectors);
 	}	
-	
 	
 	public static Collection<AmpSector> getAllChildSectors(Long parSecId) {
 		if (AmpCaching.getInstance().sectorsCache == null)
@@ -595,11 +572,10 @@ public class SectorUtil {
 		if (id == null)
 			return new HashSet<>(); // empty result
 
-		Map<Long, SectorSkeleton> parents = SectorUtil.getAllParentSectorsFaster(id);
-		Map<Long, SectorSkeleton> children = SectorUtil.getAllChildSectorsFaster(parents);
-		Map<Long, SectorSkeleton> subchildren = SectorUtil.getAllChildSectorsFaster(children);
-		linkChildrenToParents(children, subchildren);
-		linkChildrenToParents(parents, children);
+		Map<Long, SectorSkeleton> parents = SectorSkeleton.getParentSectors(id);
+		Map<Long, SectorSkeleton> children = SectorSkeleton.getAllSectors(parents);
+		Map<Long, SectorSkeleton> subchildren = SectorSkeleton.getAllSectors(children);
+		SectorSkeleton.setParentChildRelationships(parents, children, subchildren);
 		return new TreeSet<>(parents.values());
 	}
 

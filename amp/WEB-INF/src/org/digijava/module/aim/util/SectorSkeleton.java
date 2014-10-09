@@ -19,62 +19,22 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.hibernate.jdbc.Work;
 /*
- * skeleton class for amp_sector
+ * skeleton class for AmpSector
  * 
  * */
-public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyListable, Identifiable {
-	private String name;
-	private Long id;
-	private Long parentSectorId;
-	private String code;
-	private Collection<SectorSkeleton> childSectors;
-	
-	boolean translatable;
-	
+public class SectorSkeleton extends HierEntitySkeleton<SectorSkeleton> {
 	
 	public SectorSkeleton(Long id, String name, Long parentSectorId, String code) {
-		this.id = id;
-		this.name = name;
-		this.parentSectorId = parentSectorId;
-		this.code = code;
-		this.childSectors = new TreeSet<SectorSkeleton>();
-	}
-
-
-	
-    private static Long nullInsteadOfZero(long val) {
-    	if (val == 0) {
-    		return null;
-    	}
-    	else return val;
-    }
-    
-	public void addChild(SectorSkeleton child) {
-		this.childSectors.add(child);
+		super(id, name, code, parentSectorId);
 	}
 	
     /**
      * 
-     * @return a list of ALL sectors
+     * @return a list of all sectors beneath a given list of parents
      */
 	public static Map<Long, SectorSkeleton> getAllSectors(final Map<Long, SectorSkeleton> parents) {
-        final Map<Long, SectorSkeleton> sectors = new HashMap<Long, SectorSkeleton>();
-        PersistenceManager.getSession().doWork(new Work(){
-			public void execute(Connection conn) throws SQLException {
-				String parentIdsSubstring = Util.toCSStringForIN(parents.values());
-				String condition = "where (deleted is null or deleted = false) and (parent_sector_id in (" + parentIdsSubstring +  " ))";
-				ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_sector", 
-						condition, TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");		
-				ResultSet rs = v.fetch(null);
-				while (rs.next()) {
-					sectors.put(rs.getLong("amp_sector_id"), new SectorSkeleton(rs.getLong("amp_sector_id"), 
-							 	rs.getString("name"), 
-							 	nullInsteadOfZero(rs.getLong("parent_sector_id")),
-							 	rs.getString("sector_code")));
-				}
-			}
-		});
-        return sectors;
+		final String parentIdsSubstring = Util.toCSStringForIN(parents.values());
+		return HierEntitySkeleton.fetchTree("amp_sector", "where (deleted is null or deleted = false) and (parent_sector_id in (" + parentIdsSubstring +  " ))", sectorsFetcher);
     }
 	
 	/**
@@ -82,97 +42,16 @@ public class SectorSkeleton implements Comparable<SectorSkeleton>, HierarchyList
      * @return a list of all parent sectors
      */
 	public static Map<Long, SectorSkeleton> getParentSectors(final Long secSchemeId) {
-        final Map<Long, SectorSkeleton> sectors = new TreeMap<Long, SectorSkeleton>();
-        PersistenceManager.getSession().doWork(new Work(){
-				public void execute(Connection conn) throws SQLException {
-					String condition = "where amp_sec_scheme_id = " + secSchemeId
-							+ " and parent_sector_id is null and (deleted is null or deleted = false)";
-					ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_sector", 
-							condition, TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");		
-					ResultSet rs = v.fetch(null);
-					while (rs.next()) {
-						sectors.put(rs.getLong("amp_sector_id"), new SectorSkeleton(rs.getLong("amp_sector_id"), 
-													 	rs.getString("name"), 
-													 	nullInsteadOfZero(rs.getLong("parent_sector_id")),
-													    rs.getString("sector_code")));
-					}
-					
-				}
-			});
-        return sectors;
+		final String where = "where amp_sec_scheme_id = " + secSchemeId + " and parent_sector_id is null and (deleted is null or deleted = false)";
+		return HierEntitySkeleton.fetchTree("amp_sector", where, sectorsFetcher);
     }
-
-	@Override
-	public String getLabel() {
-		return this.name;
-	}
-
-	@Override
-	public String getUniqueId() {
-		return String.valueOf(this.id);
-	}
-
-	@Override
-	public String getAdditionalSearchString() {
-		return this.getCode();
-	}
-
-	@Override
-	public boolean getTranslateable() {
-		return this.translatable;
-	}
-
-	@Override
-	public void setTranslateable(boolean translatable) {
-		this.translatable = translatable;
-		
-	}
-
-	@Override
-	public Collection<? extends HierarchyListable> getChildren() {
-		return this.childSectors;
-	}
-	public void setChildren(Collection<SectorSkeleton> sec) {
-		this.childSectors = sec;
-	}
-
-	@Override
-	public int getCountDescendants() {
-		if (this.childSectors.isEmpty())
-			return 0;
-		int count = 0;
-		for (SectorSkeleton sk : this.childSectors) {
-			count += 1 + sk.getCountDescendants();
-		}
-		return count;
-	}
-
-	@Override
-	public int compareTo(SectorSkeleton arg0) {
-		return this.id.compareTo(arg0.id);
-	}
-
-	public Long getParentSectorId() {
-		return parentSectorId;
-	}
-
-	public String getName() {
-		return this.name;
-	}
 	
-	public Long getId() {
-		return this.id;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	@Override public String toString() {
-		return String.format("%s (id: %d)", this.getName(), this.id);
-	}
-
-	@Override public Object getIdentifier() {
-		return this.id;
-	}
+	private static EntityFetcher<SectorSkeleton> sectorsFetcher = new EntityFetcher<SectorSkeleton>() {
+		public SectorSkeleton fetch(ResultSet rs) throws SQLException {
+			return new SectorSkeleton(rs.getLong("amp_sector_id"), 
+				 	rs.getString("name"), 
+				 	nullInsteadOfZero(rs.getLong("parent_sector_id")),
+				    rs.getString("sector_code"));
+		}
+	};
 }

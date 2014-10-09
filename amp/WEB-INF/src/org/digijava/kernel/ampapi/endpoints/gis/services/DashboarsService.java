@@ -49,7 +49,7 @@ public class DashboarsService {
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS,ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false));
 		spec.setCalculateColumnTotals(true);
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), true);
+		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
 		GeneratedReport report = null;
@@ -61,7 +61,10 @@ public class DashboarsService {
 		}
 		
 		//Format the report output return a simple list.
+		//TODO: check why generate totals is not working
 		retlist.set("Total","1523000");
+		
+		//TODO: Currencies for public user
 		if(tm!=null){
 			String currcode = CurrencyUtil.getCurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 			retlist.set("currency",currcode);
@@ -72,7 +75,7 @@ public class DashboarsService {
 			LinkedHashMap<ReportOutputColumn, ReportCell> content = (LinkedHashMap<ReportOutputColumn, ReportCell>) reportArea.getContents();
 			org.dgfoundation.amp.newreports.TextCell reportcolumn = (org.dgfoundation.amp.newreports.TextCell) content.values().toArray()[0];
 			ReportCell reportcell = (ReportCell) content.values().toArray()[1];
-			if(retlist.getSize()-3 <= n){
+			if(retlist.getSize()-2 <= n){
 				retlist.set(reportcolumn.displayedValue,reportcell.value);
 			}else{
 				break;

@@ -38,14 +38,6 @@ module.exports = Backbone.View.extend({
           el: self.$('.sub-filters-content')
         });
         self.viewList.push(view);
-
-      // } else if (filter.get('title') === 'organizationsRoles') {
-      //   view = new GenericNestedFilterView({
-      //     model:filter,
-      //     el: self.$('.sub-filters-content')
-      //   });
-      //   self.viewList.push(view);
-
       } else {
         view = new GenericFilterView({
           model:filter,

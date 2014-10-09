@@ -46,7 +46,7 @@ module.exports = BaseFilterModel.extend({
     });
   },
 
-  reset: function(){
+  reset: function() {
     var tree = this.get('tree');
     if (tree) {
       tree.set('selected', false);
@@ -92,7 +92,8 @@ module.exports = BaseFilterModel.extend({
           children: data,
           selected: undefined,
           expanded: false,
-          isSelectable: false
+          isSelectable: false,
+          createUnkowns: true
         };
       }
 

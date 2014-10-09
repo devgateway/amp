@@ -69,7 +69,6 @@ module.exports = Backbone.View.extend({
 
       this._getFilterList().done(function() {
         self._loaded.resolve();
-        self.allFilters.setupOrgListener();
         self.renderFilters();
 
         // setup any popovers as needed...
@@ -137,13 +136,10 @@ module.exports = Backbone.View.extend({
       case 'Sectors':
         this.filterViewsInstances.sectors.filterCollection.add(tmpModel);
         break;
-      case 'Organizations':
-      case 'OrgTypesList':
-      case 'OrganizationGroupList':
+      case 'Donor':
         this.filterViewsInstances.donors.filterCollection.add(tmpModel);
         break;
-      case 'organizationsRoles':
-      case 'organizationsRoles':
+      case 'Role':
         this.filterViewsInstances.allAgencies.filterCollection.add(tmpModel);
         break;
       default:

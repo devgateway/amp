@@ -38,7 +38,7 @@ module.exports = Backbone.Model
     } else {
       console.error('No boundary found for ' + this.get('value'));
 
-      var failedBoundary = new jQuery.Deferred;
+      var failedBoundary = new jQuery.Deferred();
       failedBoundary.reject();
       return failedBoundary.promise();
 

@@ -12,8 +12,8 @@ TreeNodeModel = Backbone.Model.extend({
     visible: true,
     numSelected: 0,
     numPossible: 0,
-    children:null,     // type TreeNodeCollection
-    isSelectable: true // is this node itself selectable (ie. should it have an 'unkown' child)
+    children: null,     // type TreeNodeCollection
+    isSelectable: true  // is this node itself selectable (ie. should it have an 'unkown' child)
   },
 
   initialize:function(obj) {
@@ -88,7 +88,7 @@ TreeNodeModel = Backbone.Model.extend({
     }
 
     if (!children.isEmpty()) {
-      self._updateChildNodes();
+      self._updateChildNodes(options.propagation);
     }
 
     if (options.propagation) {
@@ -139,13 +139,13 @@ TreeNodeModel = Backbone.Model.extend({
     this.set('numPossible', countTotal.possible);
   },
 
-  _updateChildNodes:function() {
+  _updateChildNodes:function(propagation) {
     var self = this;
     var children = this.get('children');
 
     if (!children.isEmpty()) {
       children.each(function(child) {
-        child.set('selected', self.get('selected'), {propagation: false});
+        child.set('selected', self.get('selected'), {propagation: propagation});
       });
     }
   },
@@ -157,6 +157,10 @@ TreeNodeModel = Backbone.Model.extend({
       children.each(function(child) {
         child.filterText(txt);
       });
+      // if the node itself matches, turn it on, even if no children are visible.
+      if (this.get('name').toLowerCase().indexOf(txt) > -1) {
+        this.set('visible', true);
+      }
     } else {
       if (this.get('name').toLowerCase().indexOf(txt) > -1) {
         this.set('visible', true);

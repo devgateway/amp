@@ -705,7 +705,11 @@ public class ReportsFilterPicker extends Action {
  	 	rootDonors.setChildren(donors);
  	 	GroupingElement<HierarchyListableImplementation> donorsElement  = new GroupingElement<HierarchyListableImplementation>("Donor Agencies", "filter_donor_agencies_div", rootDonors, "selectedDonnorAgency");
  	 	for (AmpOrganisation donor:donors) {
- 	 		rootDonors.getParentMapping().put(donor.getAmpOrgId(),donor.getOrgGrpId().getAmpOrgGrpId());
+ 	 		if (donor.getAmpOrgId() == null || donor.getOrgGrpId() == null || donor.getOrgGrpId().getAmpOrgGrpId() == null) {
+ 	 			logger.error("oopsie for " + donor);
+ 	 		} else {
+ 	 			rootDonors.getParentMapping().put(donor.getAmpOrgId(),donor.getOrgGrpId().getAmpOrgGrpId());
+ 	 		}
  	 	}
  	 	filterForm.getDonorElements().add(donorsElement);
  	 	

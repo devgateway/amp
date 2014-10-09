@@ -810,6 +810,7 @@ private EtlResult execute() throws Exception {
 	 */
 	protected List<String> generateFactTableQueries() {
 		try {
+			logger.info("The path for the factTabelQuery.sql is:" + this.getClass().getResource("").getPath());
 			BufferedReader reader = new BufferedReader(new InputStreamReader(this.getClass().getResourceAsStream("factTableQuery.sql"), "utf-8"));
 			StringBuilder builder = new StringBuilder();
 			while (true) {

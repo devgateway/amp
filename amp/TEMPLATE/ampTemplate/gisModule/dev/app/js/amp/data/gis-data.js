@@ -1,5 +1,6 @@
 /*
  * The GIS Data Engine
+ * attaches to app.data
  */
 
 var _ = require('underscore');
@@ -13,6 +14,7 @@ var Indicators = require('./collections/indicator-collection');
 var ProjectSites = require('./models/structures-collection-model'); /*a.k.a. structures */
 var ADMClusters = require('./collections/adm-cluster-collection');
 
+var ProjectSitesAlt = require('./collections/structures-collection'); /*a.k.a. structures */
 
 var GISData = function() {
   this.initialize.apply(this, arguments);
@@ -33,7 +35,10 @@ _.extend(GISData.prototype, Backbone.Events, {
       {}  // just the one model, all defaults
     ], { activities: this.activities});
 
-    this.filters = new Backbone.Collection();
+    this.projectAlt = new ProjectSitesAlt();
+
+    /* stub filled in by Filters service */
+    this.filters = null;
 
     this.indicators = new Indicators([], { boundaries: this.boundaries });
 

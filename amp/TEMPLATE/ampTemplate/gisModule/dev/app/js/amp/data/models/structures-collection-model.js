@@ -86,12 +86,12 @@ module.exports = Backbone.Model
     var allActivityIds = [];
 
     this.load().then(function() {
-      // join all activity ids
+      // concatenate all activity ids to one array
       self.get('sites').each(function(site) {
         allActivityIds = _(allActivityIds).union(allActivityIds, site.get('properties').activity);
       });
 
-      self.activities.getActivites(allActivityIds).then(function() {
+      self.activities.getActivities(allActivityIds).then(function() {
         deferred.resolve();
       });
     });

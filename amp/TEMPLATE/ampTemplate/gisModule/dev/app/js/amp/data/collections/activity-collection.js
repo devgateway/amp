@@ -9,6 +9,16 @@ module.exports = Backbone.Collection
 
   url: '/rest/gis/activities',
   model: Activity,
+  type: 'POST',
+
+  fetch: function(options) {
+    options = _.defaults((options || {}), {
+      type: 'POST',
+      data:'{}'
+    });
+    return Backbone.Model.prototype.fetch.call(this, options);
+  },
+
 
   //smart ID fetching, load locally, and only fetch if we don't have the activity.
   getActivites: function(aryOfIDs) {
@@ -24,22 +34,21 @@ module.exports = Backbone.Collection
       }
     });
 
-    // if there are activities we don't have locally.
     if (!_.isEmpty(aryOfIDs)) {
       // do an api request to get remaining ones
       this.url = '/rest/gis/activities/' + aryOfIDs.join(',');
-      this.fetch({remove: false}).then(function(newData) {
+      this.fetch({remove: false, type: 'GET', data:''}).then(function(newData) {
         matches = _.union(matches, newData);
-        this.url = '/rest/gis/activities';  // reset url
         deferred.resolve(matches);
       }).fail(function(err) {
         console.error('failed to get ' + this.url, err);
-        this.url = '/rest/gis/activities';  // reset url
         deferred.resolve(matches);
       });
     } else {
       deferred.resolve(matches);
     }
+
+    this.url = '/rest/gis/activities';  // reset url, inside deferred fails
 
     return deferred;
   }

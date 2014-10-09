@@ -74,10 +74,7 @@ import org.digijava.module.dataExchange.util.DataExchangeConstants;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.sdm.dbentity.Sdm;
 import org.digijava.module.sdm.dbentity.SdmItem;
-import org.hibernate.Hibernate;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.hibernate.*;
 import org.hibernate.type.NullableType;
 import org.springframework.util.FileCopyUtils;
 
@@ -357,8 +354,9 @@ public class DataExchangeUtils {
 	
 	public static Date XMLGregorianDateToDate(XMLGregorianCalendar importedDate){
 		
-		  Boolean dateToSet=new Boolean(false);
-		  if(importedDate == null ) return null;
+		  Boolean dateToSet = Boolean.FALSE;
+		  if (importedDate == null )
+              return null;
 		  String defaultFormat= "yyyy-MM-dd";
 		  SimpleDateFormat formater=new SimpleDateFormat(defaultFormat);
 		  GregorianCalendar result=new GregorianCalendar();
@@ -374,14 +372,16 @@ public class DataExchangeUtils {
 					}
 				  	
 			  }
-		  if(dateToSet==true) return result.getTime();
+		  if (dateToSet)
+              return result.getTime();
 		  else return null;
 	}
 
 	public static Date stringToDate(String importedDate){
 		
-		  Boolean dateToSet=new Boolean(false);
-		  if(importedDate == null ) return null;
+		  Boolean dateToSet = Boolean.FALSE;
+		  if (importedDate == null)
+              return null;
 		  String defaultFormat= "yyyy-MM-dd";
 		  SimpleDateFormat formater=new SimpleDateFormat(defaultFormat);
 		  GregorianCalendar result=new GregorianCalendar();
@@ -391,14 +391,15 @@ public class DataExchangeUtils {
 			  } catch (ParseException e) {
 				  e.printStackTrace();
 			  	}
-		  if(dateToSet==true) return result.getTime();
+		  if (dateToSet)
+              return result.getTime();
 		  else return null;
 	}
 	
 	public static Date intDateToDate(int importedDate){
 		
 		  // importedDate= actType.getProposedApprovalDate().getDate();
-		  boolean dateToSet=false;
+		  boolean dateToSet = false;
 		  if(!(importedDate > 1900) ) return null;
 		  String defaultFormat= "yyyy-MM-dd";
 		  SimpleDateFormat formater=new SimpleDateFormat(defaultFormat);
@@ -755,7 +756,7 @@ public class DataExchangeUtils {
 		try {
 			//session = PersistenceManager.getSession();
 			session = PersistenceManager.getRequestDBSession();
-			aag = (AmpActivityGroup) session.load(AmpActivityGroup.class, id);
+			aag = (AmpActivityGroup) session.load(AmpActivityGroup.class, id, LockOptions.NONE);
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -1478,7 +1479,7 @@ public class DataExchangeUtils {
 		return col;
 	}
 	
-	public static AmpActivityVersion saveActivity(HttpServletRequest request, Long grpId, AmpActivityVersion ampActivity, AmpTeam team,
+	public static AmpActivityVersion saveActivity(AmpActivityVersion ampActivity, AmpTeam team,
 			List<AmpContentTranslation> translations) {
 		try {
 			ampActivity = org.dgfoundation.amp.onepager.util.ActivityUtil.saveActivityNewVersion(

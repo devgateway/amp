@@ -77,5 +77,7 @@ public class DEConstants {
 	public static final Long AMP_ID_CREATE_NEW = -1l;
 	public static final Long AMP_ID_SAME_AS_MAPPING = -2l;
 	public static final Long AMP_ID_DO_NOT_IMPORT = -3l; 
-	
+
+    public static final int MODE_CREATE = 1;
+    public static final int MODE_UPDATE = 2;
 }

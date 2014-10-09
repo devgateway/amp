@@ -2297,11 +2297,16 @@ public class DEImportBuilder {
                     AmpActivityVersion ampActivity = null;
 
                     if (grpId > -0l) {
-                        prevVersion = DataExchangeUtils.getAmpActivityGroupById(grpId).getAmpActivityLastVersion();
+                        AmpActivityGroup currentGroup = DataExchangeUtils.getAmpActivityGroupById(grpId);
+                        prevVersion = currentGroup.getAmpActivityLastVersion();
                         AmpTeamMember modBy = prevVersion.getModifiedBy() == null ? prevVersion.getCreatedBy() : prevVersion.getModifiedBy();
                         try {
                             ampActivity = ActivityVersionUtil.cloneActivity(prevVersion, modBy);
-                            ampActivity.setAmpActivityId(null);
+                            ampActivity.setAmpActivityGroup(currentGroup);
+                            iWorker.setMode(DEConstants.MODE_UPDATE);
+                            // https://jira.dgfoundation.org/browse/AMP-18223
+                            // The line below was added by some reason
+                            /// ampActivity.setAmpActivityId(null);
                         } catch (CloneNotSupportedException e) {
                             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                         }
@@ -2309,12 +2314,20 @@ public class DEImportBuilder {
                         ampActivity = new AmpActivityVersion();
                     }
 
+                    // Ugly hack. Sorry do not know other way how to fix one. The problem is sharing budgets collection
+                    // between the sessions
+                    if (ampActivity.getOrgrole() != null) {
+                        for (AmpOrgRole role : ampActivity.getOrgrole()) {
+                            role.setBudgets(null);
+                        }
+                    }
+
                     List<AmpContentTranslation> translations = new ArrayList<AmpContentTranslation>();
                     activityLogs = iWorker.populateActivity(ampActivity, prevVersion, this.getDESourceSetting(), translations);
                     AmpTeam team = getAssignedWorkspace();
                     ampActivity.setApprovalStatus(getApprovalStatus());
                     fixEmptyEditorFields(ampActivity, request);
-                    ampActivity = DataExchangeUtils.saveActivity(request, grpId, ampActivity, team, translations);
+                    ampActivity = DataExchangeUtils.saveActivity(ampActivity, team, translations);
                     LuceneUtil.addUpdateActivity(request.getServletContext().getRealPath("/"), prevVersion!=null, 
                     		RequestUtils.getSite(request), Locale.forLanguageTag(defaultLanguage), ampActivity, prevVersion);
                     

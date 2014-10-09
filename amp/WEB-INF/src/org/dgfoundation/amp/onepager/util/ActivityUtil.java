@@ -227,7 +227,6 @@ public class ActivityUtil {
 		if (isActivityForm) {
 			setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity,rejected);
 			
-			saveContacts(a, session,(draft != draftChange));
 			saveIndicators(a, session);
 
 			saveResources(a); 
@@ -235,6 +234,8 @@ public class ActivityUtil {
 			saveComments(a, session,draft); 
 			saveAgreements(session);
 		}
+
+        saveContacts(a, session,(draft != draftChange));
 		
 		updateComponentFunding(a, session);
 		saveAnnualProjectBudgets(a, session);

@@ -33,7 +33,7 @@ public class Connection {
 	
 	public static String getConnection(String rootPath) {
 		connection = MoConstants.CONNECTION_DS + ";"
-				+ "Catalog=file:" + rootPath + "/saiku/saiku-repository/AMP.xml;";
+				+ "Catalog=file:" + rootPath + "/saiku/saiku-repository/AMP.xml;PoolNeeded=false";
 		return connection;
 
 	}

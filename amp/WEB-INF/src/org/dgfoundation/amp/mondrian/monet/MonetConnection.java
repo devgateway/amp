@@ -1,6 +1,7 @@
 package org.dgfoundation.amp.mondrian.monet;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -30,8 +31,19 @@ public class MonetConnection implements AutoCloseable {
 	private static DataSource dataSource = getMonetDataSource();
 	
 	private MonetConnection() throws SQLException {
-		this.conn = dataSource.getConnection();
+		//this.conn = dataSource.getConnection();
+		this.conn = getDirectConnection();
+		//this.conn = DriverManager.getConnection("jdbc:monetdb://localhost/amp_moldova_210", "monetdb", "monetdb");
 		this.conn.setAutoCommit(false);
+	}
+	
+	/**
+	 * fix for AMP-18357 and AMP-18352: MonetDB + Tomcat-DBCP = ( X )
+	 * @return
+	 */
+	private static Connection getDirectConnection() throws SQLException {
+		org.apache.tomcat.jdbc.pool.DataSource src = (org.apache.tomcat.jdbc.pool.DataSource) dataSource;
+		return DriverManager.getConnection(src.getUrl(), src.getUsername(), src.getUsername());
 	}
 	
 	public static MonetConnection getConnection() {

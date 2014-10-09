@@ -13,11 +13,12 @@ var paths = {
     compiled: './app/compiled-js/',
     sources: [
       './app/js/**/*.js',
+      '!./app/js/tests/run/**',  // skip compiled test stuff
       './gulpfile.js'
     ],
-    tests: [
-      './app/js/tests/test.js'
-    ]
+    test: './app/js/tests/test.js',
+    testLib: './bower_components/mocha/mocha.js',
+    testDest: './app/js/tests/run/'
   },
   stylesheets: {
     entry: './app/less/main.less',
@@ -27,8 +28,10 @@ var paths = {
       './bower_components/bootstrap/dist/css/bootstrap.css',
       './bower_components/nvd3/nv.d3.css',
       '../../node_modules/amp-filter/dist/amp-filter.css'
-    ]
-  }
+    ],
+    testStyles: './bower_components/mocha/mocha.css'
+  },
+  testPage: './app/js/tests/index.html'
 };
 
 
@@ -126,9 +129,25 @@ gulp.task('reload', ['watch'], function() {
 });
 
 
-gulp.task('test', function() {
-  return gulp.src(paths.scripts.tests)
-    .pipe(g.mocha({ reporter: 'nyan' }));
+gulp.task('build-test-js', function() {
+  var stuff = _browserifier(paths.scripts.test,
+    paths.scripts.testDest, 'test.js');
+  return stuff.bundle();
+});
+
+
+gulp.task('copy-test-resources', function() {
+  return gulp.src([
+    paths.scripts.testLib,
+    paths.stylesheets.testStyles,
+    paths.testPage
+  ]).pipe(gulp.dest(paths.scripts.testDest));
+});
+
+
+gulp.task('test', ['build-test-js', 'copy-test-resources'], function() {
+  return gulp.src('app/js/tests/run/index.html')
+    .pipe(g.mochaPhantomjs());
 });
 
 

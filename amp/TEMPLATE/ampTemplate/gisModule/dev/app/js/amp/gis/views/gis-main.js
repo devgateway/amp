@@ -61,6 +61,7 @@ module.exports = Backbone.View.extend({
     // TODO: If it's our responsibility...
     // render translation selector using: this.translator.getAvailableLanguages
   },
+
   toggleIconOnlySidebar: function(ev) {
     if ($('#sidebar', this.el).hasClass('sidebar-icons-only') !== true) {
       //Manually close all the uncollapsed (bootstrap accordion)
@@ -79,11 +80,12 @@ module.exports = Backbone.View.extend({
     $('i', ev.currentTarget).toggleClass('glyphicon-chevron-left');
 
   },
+
   disableIconOnlySidebar: function() {
     $(this.el).find('#sidebar').removeClass('sidebar-icons-only');
     $(this.el).find('#map-container').removeClass('sidebar-icons-only');
-    $(this.el).find('#sidebar > a > span').removeClass('glyphicon-chevron-right');
-    $(this.el).find('#sidebar > a > span').addClass('glyphicon-chevron-left');
+    $(this.el).find('#sidebar > button > i').removeClass('glyphicon-chevron-left');
+    $(this.el).find('#sidebar > button > i').addClass('glyphicon-chevron-right');
   }
 
 });

@@ -32,12 +32,14 @@
     height: 44px;
     position:relative;
     text-align: right;
+    display: inline-block;
+    letter-spacing: -4px;
     width:100%;
 
   }
 
   .sidebar-icons-only-button i {
-    font-size:16pt;
+    font-size:11pt;
   }
 
 
@@ -49,7 +51,7 @@
 /*SeeAlso amp-map.less for more .sidebar-icons-only styles on #map-container */
 
   width: @amp_sidebar_icons_only_width;
-  top: @amp_menu_height + 3px;
+  top: @amp_menu_height;
 
   //hide labels of the accordion
   .panel h3>span + span {
@@ -60,9 +62,11 @@
     background: none;
     border: 0;
     padding-left:0;
-    text-align: right;
+    text-align: center;
     width: 100%;
   }
+
+
 
 }
 

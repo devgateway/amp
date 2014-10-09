@@ -1,39 +1,7 @@
 var Backbone = require('backbone');
-var _ = require('underscore');
-var when = require('jquery').when;
-var ActivityModel = require('./activity-model');
-require('backbone-associations');
-
-var toActivity = function(idArray) {
-
-  /*TODO(thadk) handle multiple */
-  var id = idArray[0];
-
-  console.log('toActivity', this);
-
-  //if (id instanceof ActivityModel) { return id; }
-  //if (_.isObject(id)) { return id; }
-
-  when(window.app.data.relevantActivitesFetch)
-    .done(function() {
-      console.log(id, window.app.data.activities.get(id));
-      return window.app.data.activities.get(id).attributes;
-    })
-    .fail(function() {
-      console.log("failed toActivity");
-      return id;
-    });
-
-
-  //var activs = window.app.data.activities;
-  //var found = activs && activs.find(function(m) {
-    //return m.get(m.idAttribute) === id;
-  //});
-  //return found ? found : id;
-};
 
 /* Structure model aka ProjectSite model */
-module.exports = Backbone.AssociatedModel.extend({
+module.exports = Backbone.Model.extend({
   defaults: {
     geometryType: 'Point',
     lat: -180,
@@ -42,14 +10,16 @@ module.exports = Backbone.AssociatedModel.extend({
     activities: [],
     id: null
   },
-  relations: [
-    {
-      type: Backbone.Many,
-      key: 'activities',
-      relatedModel: ActivityModel,
-      map: toActivity
-    }
-  ],
+  /*
+   * relations: [
+   *  {
+   *    type: backbone.many,
+   *    key: 'activities',
+   *    collectiontype: activities
+   *  }
+   * ],
+   *
+   */
 
   /* Model Parse does not run for each model when a collection is fetched */
   parse: function(response) {

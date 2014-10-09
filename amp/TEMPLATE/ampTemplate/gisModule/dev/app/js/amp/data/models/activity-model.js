@@ -1,8 +1,6 @@
 var Backbone = require('backbone');
-require('backbone-associations');
 
-
-module.exports = Backbone.AssociatedModel.extend({
+module.exports = Backbone.Model.extend({
   defaults: {
     id: null,
     name: 'Untitled Activity',
@@ -19,11 +17,4 @@ module.exports = Backbone.AssociatedModel.extend({
       }
     }
   }
-  //relations: [
-    //{
-    //type: Backbone.Many,
-    //key: 'matchesFilters',
-    //collectionType:
-    //}
-  //]
 });

@@ -1,5 +1,6 @@
 var when = require('jquery').when;
 var _ = require('underscore');
+var $ = require('jquery');
 var Backbone = require('backbone');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 
@@ -38,7 +39,7 @@ module.exports = Backbone.Model
     } else {
       console.error('No boundary found for ' + this.get('value'));
 
-      var failedBoundary = new jQuery.Deferred();
+      var failedBoundary = new $.Deferred();
       failedBoundary.reject();
       return failedBoundary.promise();
 

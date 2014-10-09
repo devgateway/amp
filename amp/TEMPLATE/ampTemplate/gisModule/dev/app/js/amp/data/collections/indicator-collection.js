@@ -4,7 +4,7 @@ var JoinIndicator = require('../models/indicator-join-model');
 var ArcGISIndicator = require('../models/indicator-arcgis-model');
 var WMSIndicator = require('../models/indicator-wms-model');
 
-
+/* Backbone Collection IndicatorLayers (RENAME FILE) */
 module.exports = Backbone.Collection.extend({
 
   url: '/rest/gis/indicator-layers',

@@ -4,6 +4,7 @@ var Backbone = require('backbone');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var Activity = require('../models/activity-model');
 
+/*Backbone Collection Activities (TODO RENAME FILE)*/
 module.exports = Backbone.Collection
 .extend(LoadOnceMixin).extend({
 
@@ -21,7 +22,7 @@ module.exports = Backbone.Collection
 
 
   //smart ID fetching, load locally, and only fetch if we don't have the activity.
-  getActivites: function(aryOfIDs) {
+  getActivities: function(aryOfIDs) {
     var deferred = $.Deferred();
 
     // check which IDs we have locally.

@@ -42,7 +42,7 @@ module.exports = Backbone.View.extend({
 
       this._generateCharts();
       return this._generateProjectList(popup, this.cluster);
-    }else {
+    } else {
       console.error('no matching cluster: ', admLayer, popup._source._clusterId);
       this.popup.setContent('error finding cluster');
     }

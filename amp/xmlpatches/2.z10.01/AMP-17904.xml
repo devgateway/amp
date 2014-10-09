@@ -16,6 +16,7 @@
 		CREATE EXTENSION fuzzystrmatch;
 		-- Enable US Tiger Geocoder
 		CREATE EXTENSION postgis_tiger_geocoder;
+		SET search_path TO "$user", public, tiger;
       </lang>
     </script>
   </apply>

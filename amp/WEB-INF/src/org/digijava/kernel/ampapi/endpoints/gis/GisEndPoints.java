@@ -37,7 +37,7 @@ import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
 import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.endpoints.util.ReportsResultTotalsFormatter;
+import org.digijava.kernel.ampapi.endpoints.util.SimpleResultFormatter;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
@@ -314,7 +314,7 @@ public class GisEndPoints {
 	public JsonBean getAdminLevelsTotals(@PathParam ("admlevel") String admlevel, @PathParam("type") String type ){
 		LocationService ls = new LocationService();
 	
-		return ( ReportsResultTotalsFormatter.ResultFormatter(ls.getTotals(admlevel, type)));
+		return ( SimpleResultFormatter.ResultFormatter(ls.getTotals(admlevel, type)));
 	}
 	
 	@GET

@@ -1,18 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.Map;
 
-import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.digijava.kernel.request.RerouteAction;
 
 /**
  * 
@@ -20,7 +14,7 @@ import org.digijava.kernel.request.RerouteAction;
  * 
  */
 
-public class ReportsResultTotalsFormatter {
+public class SimpleResultFormatter {
 	/**
 	 * 
 	 * @param report
@@ -33,13 +27,17 @@ public class ReportsResultTotalsFormatter {
 	 */
 	public static JsonBean ResultFormatter(GeneratedReport report){
 		JsonBean retlist = new JsonBean();
-		ArrayList<ReportArea> reportchildrens =  (ArrayList<ReportArea>) report.reportContents.getChildren();
-		for (Iterator iterator = reportchildrens.iterator(); iterator.hasNext();) {
+		//ArrayList<ReportArea> reportchildrens =  (ArrayList<ReportArea>) report.reportContents.getChildren();
+		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
 			ReportAreaImpl reportArea =  (ReportAreaImpl) iterator.next();
 			LinkedHashMap<ReportOutputColumn, ReportCell> content = (LinkedHashMap<ReportOutputColumn, ReportCell>) reportArea.getContents();
 			org.dgfoundation.amp.newreports.TextCell reportcolumn = (org.dgfoundation.amp.newreports.TextCell) content.values().toArray()[0];
 			ReportCell reportcell = (ReportCell) content.values().toArray()[1];
-			retlist.set(reportcolumn.displayedValue,reportcell.value);
+			if(retlist.getSize()<5){
+				retlist.set(reportcolumn.displayedValue,reportcell.value);
+			}else{
+				break;
+			}
 		}
 		
 		return retlist;

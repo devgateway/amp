@@ -282,7 +282,7 @@ public class ProgramUtil {
         @SuppressWarnings("unchecked")
 		public static Map<Long, AmpThemeSkeleton> getAllThemesFaster(boolean includeSubThemes) throws DgException
 		{
-            Map<Long, AmpThemeSkeleton> themes = AmpThemeSkeleton.populateThemesSkeletonList(includeSubThemes);
+            Map<Long, AmpThemeSkeleton> themes = AmpThemeSkeleton.populateThemesTree(includeSubThemes);
             return themes;
         }
 		

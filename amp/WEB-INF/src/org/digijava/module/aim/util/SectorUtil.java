@@ -241,24 +241,7 @@ public class SectorUtil {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	public static Map<Long, SectorSkeleton> getAllParentSectorsFaster(Long secSchemeId){
-		return SectorSkeleton.getParentSectors(secSchemeId);
-//		try
-//		{ 
-//			String queryString = "select s from " + AmpSector.class.getName()
-//					+ " s " + "where amp_sec_scheme_id = " + secSchemeId
-//					+ " and parent_sector_id is null and (s.deleted is null or s.deleted = false)  " + "order by " + AmpSector.hqlStringForName("s");
-//			List<AmpSector> sectors = new ArrayList<>(PersistenceManager.getSession().createQuery(queryString).list());
-//			return sectors;
-//		} catch (Exception e) {
-//			throw new RuntimeException(e);
-//		}
-	}
-	
-	
+	}	
 	
 	public static List<AmpSector> getAllParentSectors() {
 		Session session = null;
@@ -331,26 +314,6 @@ public class SectorUtil {
 		}
 		return AmpCaching.getInstance().sectorsCache.getAllSectors();
 	}
-
-	
-	public static void linkChildrenToParents(Map<Long, SectorSkeleton> parents, Map<Long, SectorSkeleton> children) {
-		for (SectorSkeleton sec: children.values()) {
-		    if (sec.getParentSectorId() != null) {
-		    	if (parents.get(sec.getParentSectorId()) != null) {
-		    		parents.get(sec.getParentSectorId()).addChild(sec);
-		    	}
-		    	
-		    	if (children.get(sec.getParentSectorId()) != null) {
-		    		children.get(sec.getParentSectorId()).addChild(sec);
-		    	}
-		    }
-		}					
-	}
-	
-	
-	public static Map<Long, SectorSkeleton> getAllChildSectorsFaster(Map <Long, SectorSkeleton> sectors) {
-		return SectorSkeleton.getAllSectors(sectors);
-	}	
 	
 	public static Collection<AmpSector> getAllChildSectors(Long parSecId) {
 		if (AmpCaching.getInstance().sectorsCache == null)
@@ -1100,11 +1063,10 @@ public class SectorUtil {
 		if (id == null)
 			return new HashSet<>(); // empty result
 
-		Map<Long, SectorSkeleton> parents = SectorUtil.getAllParentSectorsFaster(id);
-		Map<Long, SectorSkeleton> children = SectorUtil.getAllChildSectorsFaster(parents);
-		Map<Long, SectorSkeleton> subchildren = SectorUtil.getAllChildSectorsFaster(children);
-		linkChildrenToParents(children, subchildren);
-		linkChildrenToParents(parents, children);
+		Map<Long, SectorSkeleton> parents = SectorSkeleton.getParentSectors(id);
+		Map<Long, SectorSkeleton> children = SectorSkeleton.getAllSectors(parents);
+		Map<Long, SectorSkeleton> subchildren = SectorSkeleton.getAllSectors(children);
+		SectorSkeleton.setParentChildRelationships(parents, children, subchildren);
 		return new TreeSet<>(parents.values());
 	}
 

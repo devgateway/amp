@@ -38,6 +38,18 @@ $ gulp dev
 ````
 
 
+Testing
+-------
+
+Tests run via a gulp tas:
+
+```bash
+$ gulp test
+```
+
+Gulp should return an appropriate code when running this task (zero for success, non-zero if any tests fail).
+
+
 Build for production
 --------------------
 

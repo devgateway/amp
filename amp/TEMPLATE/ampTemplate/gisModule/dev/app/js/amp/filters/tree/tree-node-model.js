@@ -154,13 +154,16 @@ TreeNodeModel = Backbone.Model.extend({
     var children = this.get('children');
 
     if (!children.isEmpty()) {
-      children.each(function(child) {
-        child.filterText(txt);
-      });
       // if the node itself matches, turn it on, even if no children are visible.
       if (this.get('name').toLowerCase().indexOf(txt) > -1) {
         this.set('visible', true);
       }
+
+      // FYI: putting inside an else above keeps children visible if parent matches.
+      children.each(function(child) {
+        child.filterText(txt);
+      });
+
     } else {
       if (this.get('name').toLowerCase().indexOf(txt) > -1) {
         this.set('visible', true);

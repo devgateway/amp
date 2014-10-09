@@ -13,6 +13,7 @@ var Boundaries = require('./collections/boundary-collection');
 var Indicators = require('./collections/indicator-collection');
 var ProjectSites = require('./models/structures-collection-model'); /*a.k.a. structures */
 var ADMClusters = require('./collections/adm-cluster-collection');
+var Settings = require('./collections/settings-collection');
 
 var ProjectSitesAlt = require('./collections/structures-collection'); /*a.k.a. structures */
 
@@ -30,7 +31,7 @@ _.extend(GISData.prototype, Backbone.Events, {
 
     this.activities = new Activities();
     this.boundaries = new Boundaries();
-
+    this.settings = new Settings();
     this.projectSites = new ProjectSites([
       {}  // just the one model, all defaults
     ], { activities: this.activities});

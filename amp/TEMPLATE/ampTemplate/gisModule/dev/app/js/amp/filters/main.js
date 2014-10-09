@@ -3,8 +3,7 @@ var _ = require('underscore');
 
 var FilterView = require('./views/filters-view');
 
-// TODO: refactor by pulling all filter model fetching into all-filters-collection
-// should be straight forward, but since fitlers are stable not bothering to do it right now.
+// see README.md for documentation on using widget.
 
 
 function Widget() {
@@ -34,10 +33,12 @@ _.extend(Widget.prototype, Backbone.Events, {
     this.view.showFilters();
   },
 
+  // return json blob of serialized filter state.
   serialize: function() {
     return this.view.serialize();
   },
 
+  // restores filter state given a json blob.
   deserialize: function(stateBlob) {
     return this.view.deserialize(stateBlob);
   }

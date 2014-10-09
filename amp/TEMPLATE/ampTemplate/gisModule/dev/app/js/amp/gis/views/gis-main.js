@@ -84,8 +84,8 @@ module.exports = Backbone.View.extend({
   disableIconOnlySidebar: function() {
     $(this.el).find('#sidebar').removeClass('sidebar-icons-only');
     $(this.el).find('#map-container').removeClass('sidebar-icons-only');
-    $(this.el).find('#sidebar > button > i').removeClass('glyphicon-chevron-left');
-    $(this.el).find('#sidebar > button > i').addClass('glyphicon-chevron-right');
+    $(this.el).find('#sidebar > button > i').removeClass('glyphicon-chevron-right');
+    $(this.el).find('#sidebar > button > i').addClass('glyphicon-chevron-left');
   }
 
 });

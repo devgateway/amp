@@ -1,4 +1,8 @@
+<% if(properties.activityid.length <= 9999) { %>
 <div class="map-circle">
+  <% } else { %>
+<div class="map-circle large">
+  <% } %>
   <%= properties.activityid.length %>
 </div>
 <div class="map-circle-label"><%= properties.admName %></div>

@@ -22,7 +22,8 @@ var paths = {
     sources: ['./app/less/**/*.less'],
     libs: [
       './bower_components/bootstrap/dist/css/bootstrap.css',
-      './bower_components/nvd3/nv.d3.css'
+      './bower_components/nvd3/nv.d3.css',
+      '../../node_modules/amp-filter/dist/amp-filter.css'
     ]
   }
 };

@@ -24,12 +24,22 @@ function enforceAppRef(Class) {
 }
 
 
-function syncOverride() {
-  return this.__super__.sync.apply(this, arguments);
+function syncOverride(method, model, options) {
+  var url = _.has(options, 'url') ? options.url : _.result(model, 'url');
+  _(options).extend({
+    url: 'http://66.207.103.134' + url,
+    headers: {
+      // jscs:disable disallowQuotedKeysInObjects
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+      // jscs:enable disallowQuotedKeysInObjects
+    }
+  });
+  return Backbone.sync.call(this, method, model, options);
 }
 
 
-module.exports = _(Backbone).extend({
+module.exports = _({}).extend(Backbone, {
   // errors
   InitError: InitError,
 

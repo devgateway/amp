@@ -14,6 +14,9 @@ var paths = {
     sources: [
       './app/js/**/*.js',
       './gulpfile.js'
+    ],
+    tests: [
+      './app/js/tests/test.js'
     ]
   },
   stylesheets: {
@@ -120,6 +123,12 @@ gulp.task('reload', ['watch'], function() {
     paths.scripts.compiled + 'app.js',
     paths.stylesheets.compiled + 'main.css'
   ]).on('change', g.livereload.changed);
+});
+
+
+gulp.task('test', function() {
+  return gulp.src(paths.scripts.tests)
+    .pipe(g.mocha({ reporter: 'nyan' }));
 });
 
 

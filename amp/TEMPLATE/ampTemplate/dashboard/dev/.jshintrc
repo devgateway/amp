@@ -19,7 +19,9 @@
     "__dirname": false,
     "exports": false,
     "module": false,
-    "require": false
+    "require": false,
+    "describe": false,
+    "it": false
   },
   "devel": true,
   "browser": true

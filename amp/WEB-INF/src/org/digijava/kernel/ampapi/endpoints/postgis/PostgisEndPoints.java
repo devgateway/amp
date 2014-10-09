@@ -64,8 +64,8 @@ public class PostgisEndPoints {
 	private FeatureGeoJSON getLocation(Double lat, Double lon, String name, double score) {
 		FeatureGeoJSON fgj = new FeatureGeoJSON();
 		PointGeoJSON pg = new PointGeoJSON();
-		pg.coordinates.add(lat);
 		pg.coordinates.add(lon);
+		pg.coordinates.add(lat);
 		fgj.properties.put("name", new TextNode(name));
 		fgj.properties.put("score", new DoubleNode(score));
 		fgj.geometry = pg;

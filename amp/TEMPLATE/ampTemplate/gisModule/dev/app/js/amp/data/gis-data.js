@@ -41,6 +41,10 @@ _.extend(GISData.prototype, Backbone.Events, {
     this.admClusters = new ADMClusters([
       // TODO get these from the api
       {
+        title: 'Projects Country-wide',
+        value: 'adm-0'
+      },
+      {
         title: 'Projects by Province',
         value: 'adm-1'
       },

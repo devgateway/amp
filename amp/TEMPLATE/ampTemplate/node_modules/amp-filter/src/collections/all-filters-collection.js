@@ -3,6 +3,7 @@ var _ = require('underscore');
 var $ = require('jquery');
 
 var GenericFilterModel = require('../models/generic-filter-model');
+var OrgRoleFilterModel = require('../models/org-role-filter-model');
 var YearsFilterModel = require('../models/years-filter-model');
 
 
@@ -11,6 +12,9 @@ module.exports = Backbone.Collection.extend({
   url: '/rest/filters',
   _loaded: null,
   _allDeferreds: [],
+  orgCollection: null,
+  orgGroupCollection: null,
+  orgTypeCollection: null,
 
   initialize: function() {
     this._loaded = new $.Deferred();
@@ -19,6 +23,9 @@ module.exports = Backbone.Collection.extend({
 
   load: function() {
     var self = this;
+
+    self._allDeferreds.push(this._createOrgFilters());
+
     this.fetch().then(function() {
       // when all child calls are done resolve.
       $.when.apply($, self._allDeferreds).then(function() {
@@ -37,6 +44,25 @@ module.exports = Backbone.Collection.extend({
     }
   },
 
+  //only keep filters with ui == true;
+  parse: function(data) {
+    //remove ui: false ones
+    data = _.filter(data, function(obj) {
+      return obj.ui;
+    });
+
+    //remove orgs, groups, and types, because they are not fitlers on their own.
+    data = _.filter(data, function(obj) {
+      return (obj.endpoint !== '/rest/filters/org-groups' &&
+        obj.endpoint !== '/rest/filters/org-types' &&
+        obj.endpoint !== '/rest/filters/org-roles' &&
+        obj.endpoint !== '/rest/filters/orgs');
+    });
+
+
+    return data;
+  },
+
 
   model: function(attrs, options) {
     var tmpModel = null;
@@ -53,11 +79,6 @@ module.exports = Backbone.Collection.extend({
         //tmp hack because we need to return something.
         tmpModel = new Backbone.Model({ui:false});
         break;
-      case 'organizationsRoles':
-        self._allDeferreds.push(self._goOneDeeperSpecialOrgRoles(self, attrs));
-        //tmp hack because we need to return something.
-        tmpModel = new Backbone.Model({ui:false});
-        break;
       case 'Dates':
         tmpModel = new YearsFilterModel(attrs);
         break;
@@ -66,9 +87,6 @@ module.exports = Backbone.Collection.extend({
       // case 'FinancingInstrumentsList':
       // case 'ActivityStatusList':
       // case 'ActivityApprovalStatus':
-      // case 'Organizations':
-      // case 'OrganizationGroupList':
-      // case 'OrgTypesList':
       default:
         tmpModel = new GenericFilterModel(attrs);
     }
@@ -76,8 +94,8 @@ module.exports = Backbone.Collection.extend({
     return tmpModel;
   },
 
-  // get endpoint's children and load them into targetCollection...
-  _goOneDeeper: function(targetCollection, attrs) {
+  // get endpoint's children and load them into self...
+  _goOneDeeper: function(self, attrs) {
     var url = attrs.endpoint;
     var deferred = $.Deferred();
 
@@ -91,7 +109,7 @@ module.exports = Backbone.Collection.extend({
           ui: true,
           group: attrs.name
         });
-        targetCollection.add(tmpModel);
+        self.add(tmpModel);
       });
 
       deferred.resolve();
@@ -104,72 +122,139 @@ module.exports = Backbone.Collection.extend({
     return deferred;
   },
 
-  // get endpoint's children and load them into targetCollection...
-  _goOneDeeperSpecialOrgRoles: function(targetCollection, attrs) {
-    var url = attrs.endpoint;
-    var deferred = $.Deferred();
-    var allOrgDeferreds = [];
-    var tmpCollection = new Backbone.Collection();
 
-    tmpCollection.url = url;
-    tmpCollection.fetch({type:'POST', data: '{}'})
-    .done(function(data) {
-      _.each(data, function(APIFilter) {
-        var tmpModel = new GenericFilterModel({
-          url:'/rest/filters/organizations/',
-          title: APIFilter.name,
-          ui: true,
-          group: attrs.name
-        });
 
-        allOrgDeferreds.push(tmpModel.fetch({data: {ampRoleId: APIFilter.id}}).then(function(data) {
-          if (data && data.length > 0) {
-            targetCollection.add(tmpModel);
-          }
-        }));
+  _createOrgFilters:function() {
+    var self = this;
 
+    // Create 'joins' for each type add ref to groups, and for each group add refs to orgs.
+    return this._fetchOrgCollections().then(function() {
+
+      // jsonify orgs and set them as children in groups.
+      self.makeTreeHelper(self.orgGroupCollection, self.orgCollection, 'orgIds', 'children');
+
+
+      // For each role create a filter with collection of just orgs that match.
+      self.orgRolesCollection.each(function(role) {
+
+        var tmpJSON = role.toJSON();
+
+        // treat donor differently...
+        if (role.get('name') === 'Donor') {
+          self.makeTreeHelper(self.orgTypeCollection, self.orgGroupCollection, 'groupIds', 'children');
+          // Create tree rootNode and raw JSON.
+          _.extend(tmpJSON,
+            {
+              ui: true,
+              group: (role.get('name') === 'Donor' ? 'Donor' : 'Role'),
+              data: self.orgTypeCollection.toJSON()
+            });
+
+          // filter orgs...
+          tmpJSON.data = self._filterDonorOrgs(tmpJSON.data, role.id);
+
+        } else {
+          // Create tree rootNode and raw JSON.
+          _.extend(tmpJSON,
+            {
+              ui: true,
+              group: (role.get('name') === 'Donor' ? 'Donor' : 'Role'),
+              data: self.orgGroupCollection.toJSON()
+            });
+          //remove all orgs that don't belong in this role
+          tmpJSON.data = self._filterOrgs(tmpJSON.data, role.id);
+        }
+
+
+        if (tmpJSON.data.length > 0) {
+          self.add(new OrgRoleFilterModel(tmpJSON));
+        }
       });
 
-      $.when.apply($, allOrgDeferreds).then(function() {
-        deferred.resolve();
-      });
+      //only needed for donor if we want to do special listening....:
+      // self.joinHelper(self.orgTypeCollection, self.orgGroupCollection, 'groupIds', 'groups');
+      // self.joinHelper(self.orgGroupCollection, self.orgCollection, 'orgIds', 'orgs');
 
-      if (_.isEmpty(data)) {
-        console.warn('Filters API returned empty', data);
-      }
-    })
-    .fail(function(jqXHR, textStatus, errorThrown) {
-      var errorMessage = 'Getting filters failed';
-      console.error('Getting filters failed', jqXHR, textStatus, errorThrown);
-      deferred.reject(errorMessage);
     });
+  },
 
-    return deferred;
+  // filter orgs tree to only orgs that appear as the given roleID
+  _filterOrgs: function(orgGroupsJSON, roleID) {
+    orgGroupsJSON = _.filter(orgGroupsJSON, function(group) {
+      group.children = _.filter(group.children, function(org) {
+        return (org.rolesIds.indexOf(roleID) > -1);
+      });
+
+      group.isSelectable = false; //stops tree from creating 'unkown' children.
+      return (group.children.length > 0);
+    });
+    return orgGroupsJSON;
   },
 
 
+  // special case for donor tree, since it has type
+  _filterDonorOrgs: function(orgTypesJSON, roleID) {
+    var self = this;
+    orgTypesJSON = _.filter(orgTypesJSON, function(type) {
+      type.children = self._filterOrgs(type.children, roleID);
+      type.isSelectable = false; //stops tree from creating 'unkown' children.
+      return (type.children.length > 0);
+    });
+    return orgTypesJSON;
+  },
 
-  //TODO: in progress...
-  setupOrgListener:function() {
-    // var orgFilter = this.findWhere({title: 'Organizations'});
-    var orgGroupFilter = this.findWhere({title: 'OrganizationGroupList'});
-    var orgTypeFilter = this.findWhere({title: 'OrgTypesList'});
+    // 1. get all orgs, groups, types, and roles
+  _fetchOrgCollections:function() {
+    var filterDeferreds = [];
 
-    orgTypeFilter.getTree().then(function(tree) {
-      // only listens to children...won't do nested types...
-      tree.get('children').on('change:numSelected', function(type) {
-        orgGroupFilter.getTree().then(function(groupTree) {
-          groupTree.get('children').each(function(group) {
-            //console.log('group', group);
-            if (group.TypeID === type.id) {
-              group.set('selected', true);
-            }
-          });
-        });
+    this.orgCollection = new Backbone.Collection();
+    this.orgCollection.url = '/rest/filters/orgs';
+    filterDeferreds.push(this.orgCollection.fetch());
 
+    this.orgGroupCollection = new Backbone.Collection();
+    this.orgGroupCollection.url = '/rest/filters/org-groups';
+    filterDeferreds.push(this.orgGroupCollection.fetch());
+
+    this.orgTypeCollection = new Backbone.Collection();
+    this.orgTypeCollection.url = '/rest/filters/org-types';
+    filterDeferreds.push(this.orgTypeCollection.fetch());
+
+    this.orgRolesCollection = new Backbone.Collection();
+    this.orgRolesCollection.url = '/rest/filters/org-roles';
+    filterDeferreds.push(this.orgRolesCollection.fetch({}));
+
+    return $.when.apply($, filterDeferreds);
+  },
+
+
+  // Adds references to collectionB into collectionA joining on given foreign key
+  // TODO: option to add bi-directional reference.
+  joinHelper: function(collectionA, collectionB, keyForForeignID, keyForCollectionDestination) {
+    collectionA.each(function(modelA) {
+      var idsToJoin = modelA.get(keyForForeignID);
+      var tempCollection = collectionB.filter(function(modelB) {
+        return _.indexOf(idsToJoin, modelB.get('id')) >= 0;
       });
 
-      //TODO: setup 'Organizations' to listen to 'OrganizationGroups'
+      modelA.set(keyForCollectionDestination, tempCollection);
+    });
+  },
+
+  makeTreeHelper: function(parentCollection, childCollection, keyForForeignID, keyForCollectionDestination) {
+    parentCollection.each(function(parent) {
+      var idsToJoin = parent.get(keyForForeignID);
+      var tempCollection = [];
+      _.each(idsToJoin, function(id) {
+        // id == 0 check should be redundent when Julian commits update.
+        if (id !== 0) {
+          if (childCollection.get({id: id})) {
+            tempCollection.push(childCollection.get({id: id}).toJSON());
+          // } else {
+          //   console.warn('missing id', childCollection, ' does not have an id of ', id);
+          }
+        }
+      });
+      parent.set(keyForCollectionDestination, tempCollection);
     });
   }
 });

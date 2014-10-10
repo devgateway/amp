@@ -16,9 +16,12 @@ module.exports = BaseFilterView.extend({
   _loaded: null,
 
   events:{
-    'click  .select-all': '_selectAll',
-    'click  .select-none': '_selectNone',
-    'keyup input.search-text': 'searchKeyUp'
+    // attach in filter render instead since these events are attached to the el object
+    // and then namespaced. this means that the way we re-use
+    // DOM elements will accidentally trigger multiple events.
+    // 'click  .select-all': '_selectAll',
+    // 'click  .select-none': '_selectNone',
+    //'keyup input.search-text': 'searchKeyUp'
   },
 
   initialize:function(options) {
@@ -43,7 +46,6 @@ module.exports = BaseFilterView.extend({
   },
 
   searchKeyUp: function(event) {
-
     if (event.keyCode === 13 || // Pressed 'enter'
       this.$('.search-text').val() === '' ||
       this.$('.search-text').val().length > 1
@@ -54,16 +56,18 @@ module.exports = BaseFilterView.extend({
 
 
   _updateCountInMenu:function() {
-    if (this.model.get('tree').get('numSelected') === this.model.get('tree').get('numPossible') ||
-        this.model.get('tree').get('numSelected') === 0) {
-      this.$titleEl.find('.filter-count').text('all');
-      this.$el.removeClass('active');
-    } else {
+    if (this.$titleEl) {
+      if (this.model.get('tree').get('numSelected') === this.model.get('tree').get('numPossible') ||
+          this.model.get('tree').get('numSelected') === 0) {
+        this.$titleEl.find('.filter-count').text('all');
+        this.$el.removeClass('active');
+      } else {
 
-      this.$titleEl.find('.filter-count').text(this.model.get('tree').get('numSelected') +
-        '/' +
-        this.model.get('tree').get('numPossible'));
-      this.$el.addClass('active');
+        this.$titleEl.find('.filter-count').text(this.model.get('tree').get('numSelected') +
+          '/' +
+          this.model.get('tree').get('numPossible'));
+        this.$el.addClass('active');
+      }
     }
   },
 
@@ -73,6 +77,12 @@ module.exports = BaseFilterView.extend({
 
     this._loaded.then(function() {
       self.$el.html(self.template(self.model.toJSON()));
+
+      // add event listeners
+      self.$('.select-none').on('click', function() {self._selectNone();});
+      self.$('.select-all').on('click', function() {self._selectAll();});
+      self.$('input.search-text').on('keyup', function(event) {self.searchKeyUp(event);});
+
       if (self.model.get('tree')) {
         self.$('.tree-container').append(self.treeView.render(self.model.get('tree')).$el);
         self.model.get('tree').set('expanded', true);
@@ -98,7 +108,6 @@ module.exports = BaseFilterView.extend({
 
   _createTree:function() {
     var self = this;
-
     return this.model.getTree().then(function(tree) {
       self.treeModel = tree;
       self.treeView = new TreeNodeView();

@@ -246,8 +246,11 @@ public class ColumnConstants {
 	public static final String SECONDARY_PROGRAM_LEVEL_7 = "Secondary Program Level 7";
 	public static final String SECONDARY_PROGRAM_LEVEL_8 = "Secondary Program Level 8";
 	public static final String SECONDARY_SECTOR = "Secondary Sector";
+	public static final String SECONDARY_SECTOR_ID = "Secondary Sector Id";
 	public static final String SECONDARY_SECTOR_SUB_SECTOR = "Secondary Sector Sub-Sector";
+	public static final String SECONDARY_SECTOR_SUB_SECTOR_ID = "Secondary Sector Sub-Sector Id";
 	public static final String SECONDARY_SECTOR_SUB_SUB_SECTOR = "Secondary Sector Sub-Sub-Sector";
+	public static final String SECONDARY_SECTOR_SUB_SUB_SECTOR_ID = "Secondary Sector Sub-Sub-Sector Id";
 	public static final String SECTOR_GROUP = "Sector Group";
 	public static final String SECTOR_GROUP_DEPARTMENT_DIVISION = "Sector Group Department/Division";
 	public static final String SECTOR_LOCATION = "Sector Location";
@@ -277,8 +280,11 @@ public class ColumnConstants {
 	public static final String TERTIARY_PROGRAM_LEVEL_7 = "Tertiary Program Level 7";
 	public static final String TERTIARY_PROGRAM_LEVEL_8 = "Tertiary Program Level 8";
 	public static final String TERTIARY_SECTOR = "Tertiary Sector";
+	public static final String TERTIARY_SECTOR_ID = "Tertiary Sector Id";
 	public static final String TERTIARY_SECTOR_SUB_SECTOR = "Tertiary Sector Sub-Sector";
+	public static final String TERTIARY_SECTOR_SUB_SECTOR_ID = "Tertiary Sector Sub-Sector Id";
 	public static final String TERTIARY_SECTOR_SUB_SUB_SECTOR = "Tertiary Sector Sub-Sub-Sector";
+	public static final String TERTIARY_SECTOR_SUB_SUB_SECTOR_ID = "Tertiary Sector Sub-Sub-Sector Id";
 	public static final String TYPE_OF_ASSISTANCE = "Type Of Assistance";
 	public static final String TYPE_OF_COOPERATION = "Type of Cooperation";
 	public static final String TYPE_OF_IMPLEMENTATION = "Type of Implementation";

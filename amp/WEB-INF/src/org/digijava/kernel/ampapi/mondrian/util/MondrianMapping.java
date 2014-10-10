@@ -220,9 +220,15 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.SECONDARY_SECTOR, new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 			addColumnDefinition(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR, new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.H_LEVEL_1_SECTOR, MoConstants.ATTR_LEVEL_1_SECTOR_NAME));
 			addColumnDefinition(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR, new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.H_LEVEL_2_SECTOR, MoConstants.ATTR_LEVEL_2_SECTOR_NAME));
+			addColumnDefinition(ColumnConstants.SECONDARY_SECTOR_ID, new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_ID, MoConstants.ATTR_LEVEL_0_SECTOR_ID));
+			addColumnDefinition(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR_ID, new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.ATTR_LEVEL_1_SECTOR_ID, MoConstants.ATTR_LEVEL_1_SECTOR_ID));
+			addColumnDefinition(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR_ID, new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.ATTR_LEVEL_2_SECTOR_ID, MoConstants.ATTR_LEVEL_2_SECTOR_ID));
 			addColumnDefinition(ColumnConstants.TERTIARY_SECTOR, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 			addColumnDefinition(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.H_LEVEL_1_SECTOR, MoConstants.ATTR_LEVEL_1_SECTOR_NAME));
 			addColumnDefinition(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.H_LEVEL_2_SECTOR, MoConstants.ATTR_LEVEL_2_SECTOR_NAME));
+			addColumnDefinition(ColumnConstants.TERTIARY_SECTOR_ID, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_ID, MoConstants.ATTR_LEVEL_0_SECTOR_ID));
+			addColumnDefinition(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR_ID, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.ATTR_LEVEL_1_SECTOR_ID, MoConstants.ATTR_LEVEL_1_SECTOR_ID));
+			addColumnDefinition(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR_ID, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.ATTR_LEVEL_2_SECTOR_ID, MoConstants.ATTR_LEVEL_2_SECTOR_ID));
 //			addColumnDefinition(ColumnConstants.PLEDGES_SECTORS, new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 //			addColumnDefinition(ColumnConstants.PLEDGES_SECONDARY_SECTORS, new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 //			addColumnDefinition(ColumnConstants.PLEDGES_TERTIARY_SECTORS, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));

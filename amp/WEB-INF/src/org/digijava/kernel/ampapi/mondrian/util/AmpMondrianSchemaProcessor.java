@@ -123,6 +123,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			if (notToBeTranslated)
 				continue;
 			columnElem.setAttribute("caption", TranslatorWorker.translateText(correspondingColumn, locale, 3l));
+			//columnElem.setAttribute("name", MondrianMapping.fromFullNameToColumnName.get(fullColumnName)); // NADIA: use for correct originalColumnName implementation
 		}
 		if (!wronglyMappedColumns.isEmpty()) {
 			logger.fatal("the following columns are mapped in the MDX generator without a correspondence in the Schema: " + wronglyMappedColumns);

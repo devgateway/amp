@@ -20,8 +20,12 @@ public class JsonBean {
 
 	protected LinkedHashMap<String, Object> param = new LinkedHashMap<String, Object>();
 
-	public Object get(String name) {
+	public Object get(String name) { 
+		System.out.println("test");
 		return param.get(name);
+	
+	
+	
 	}
 
 	@JsonAnyGetter

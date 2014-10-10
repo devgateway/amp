@@ -3,7 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.gis.services;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
@@ -18,7 +17,6 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -34,20 +32,49 @@ public class DashboarsService {
 	
 	/**
 	 * Return (n) Donors sorted by amount
-	 * @param limit
+	 * @param type (Donor, Regions, Primary Sector)
+	 * @param adjtype (Actual Commitments, Actual Disbursement)
+	 * @param n
 	 * @return
 	 */
-	public static JsonBean getTopDonors(Integer n) {
+	public static JsonBean getTops(String type,String adjtype, Integer n) {
 		String err = null;
+		String column = "";
+		String adjustmenttype = "";
 		JsonBean retlist = new JsonBean();
-		//Set default value for n to 5
-		if (n==null){
-			n=5;
+		
+		switch (type.toUpperCase()) {
+		case "DO":
+			column = MoConstants.DONOR_AGENCY;
+			break;
+		case "RE":
+			column = MoConstants.H_REGIONS;
+			break;
+		case "PS":
+			column = MoConstants.PRIMARY_SECTOR;
+			break;
+		default:
+			column = MoConstants.DONOR_AGENCY;
+			break;
 		}
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetTopDonors");
-		spec.addColumn(new ReportColumn(MoConstants.DONOR_AGENCY,ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS,ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false));
+		
+		switch (adjtype.toUpperCase()) {
+		case "AC":
+			adjustmenttype = MoConstants.ACTUAL_COMMITMENTS;
+			break;
+		case "AD":
+			adjustmenttype = MoConstants.ACTUAL_DISBURSEMENTS;
+			break;
+		default:
+			adjustmenttype = MoConstants.ACTUAL_COMMITMENTS;
+			break;
+		}
+		
+		
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetTops");
+		spec.addColumn(new ReportColumn(column,ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addMeasure(new ReportMeasure(adjustmenttype,ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addSorter(new SortingInfo(new ReportMeasure(adjustmenttype), false));
 		spec.setCalculateColumnTotals(true);
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
@@ -62,7 +89,7 @@ public class DashboarsService {
 		
 		//Format the report output return a simple list.
 		//TODO: check why generate totals is not working
-		retlist.set("Total","1523000");
+		retlist.set("Total","15000000");
 		
 		//TODO: Currencies for public user
 		if(tm!=null){

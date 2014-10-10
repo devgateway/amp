@@ -315,7 +315,9 @@ public static List<JsonBean> getOrgGroups() {
 					orgGrp.set("orgIds",orgsId);
 					orgGroups.add(orgGrp);
 				}
-				orgsId.add(rs.getLong("orgId"));
+					if(rs.getLong("orgId")!=0){
+						orgsId.add(rs.getLong("orgId"));
+					}
 				}
 
 			}

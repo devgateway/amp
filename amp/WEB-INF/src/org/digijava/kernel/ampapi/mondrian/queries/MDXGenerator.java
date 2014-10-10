@@ -941,21 +941,44 @@ public class MDXGenerator {
 	}
 	*/
 	
+	
+//	/**
+//	 * Executes MDX query string
+//	 * @param mdx MDX query string
+//	 * @return CellSet result of MDX query see {@link CellSet}
+//	 * @throws AmpApiException
+//	 */
+//	public CellSet runQuery(String mdx) throws AmpApiException {
+//		CellSet res = null;
+//		try {
+//			CellSet res = this.olapConnection.createStatement().executeOlapQuery(mdx);
+//			return res;
+//		} catch (OlapException e) {
+//			logger.error("Could not execute Olap Query \"" + mdx + "\", Error Details: " + MondrianUtils.getOlapExceptionMessage(e));
+//			throw new AmpApiException("Could not execute Olap Query");
+//		}
+//	}
+
 	/**
 	 * Executes MDX query string
 	 * @param mdx MDX query string
 	 * @return CellSet result of MDX query see {@link CellSet}
 	 * @throws AmpApiException
 	 */
-	public CellSet runQuery(String mdx) throws AmpApiException {
-		CellSet res = null;
-		try {
-			res = this.olapConnection.createStatement().executeOlapQuery(mdx);
-		} catch (OlapException e) {
-			logger.error("Could not execute Olap Query \"" + mdx + "\", Error Details: " + MondrianUtils.getOlapExceptionMessage(e));
-			throw new AmpApiException("Could not execute Olap Query");
+	public CellSet runQuery(String mdx) throws AmpApiException { // temporary hacky replacement until AMP-18369 and related tickets are resolved
+		int nrTries = 2;
+		for(int i = 1; i <= nrTries; i++) {
+			if (i > 1)
+				logger.error("RETRYING to execute MDX query");
+			try {
+				CellSet res = this.olapConnection.createStatement().executeOlapQuery(mdx);
+				return res;
+			}
+			catch(OlapException e){
+				logger.error("Could not execute Olap Query \"" + mdx + "\", Error Details: " + MondrianUtils.getOlapExceptionMessage(e));
+			}
 		}
-		return res; 
+		throw new AmpApiException("count not execute Olap Query after " + nrTries + " attempts, abandoning");
 	}
 	
 	/**

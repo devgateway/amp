@@ -31,6 +31,7 @@ import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.mondrian.MondrianETL;
+import org.dgfoundation.amp.mondrian.MonetLeak;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.dgfoundation.amp.utils.BoundedList;
 import org.digijava.kernel.entity.Locale;
@@ -83,6 +84,13 @@ public class ViewNewAdvancedReport extends Action {
 		if (request.getParameter("mondrian_etl") != null) {
 			double elapsedSecs = MondrianETL.runETL(request.getParameter("force_full") != null).duration;
 			ARUtil.writeResponse(response, String.format("ETL done in %.2f seconds", elapsedSecs));
+			return null;
+		}
+		
+		if (request.getParameter("monet_leak") != null) {
+			String[] args = null;
+			if (request.getParameter("steps") != null) args = new String[] {request.getParameter("steps")};
+			ARUtil.writeResponse(response, String.format("round duration: %.2f millies", MonetLeak.main(args)));
 			return null;
 		}
 		

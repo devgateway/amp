@@ -73,6 +73,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		contents = contents.replaceAll("@@locale@@", localeTag);
 		
 		contents = contents.replaceAll("@@filteredActivities@@", "mondrian_fact_table.entity_id IN (" + getAllowedActivitiesIds() + ")");
+		//contents = contents.replaceAll("@@filteredActivities@@", "mondrian_fact_table.entity_id > 0");
 		int pos = contents.indexOf("@@");
 		if (pos >= 0)
 			throw new RuntimeException("your schema contains unrecognized tag: " + contents.substring(pos, contents.indexOf("@@", pos + 2) + 2));
@@ -178,7 +179,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	}
 	
 	protected AmpCurrency getReportCurrency() {
-		AmpCurrency res = CurrencyUtil.getCurrencyByCode(currentReport.get().getSettings().getCurrencyCode());
+		AmpCurrency res = CurrencyUtil.getCurrencyByCode("EUR"/*currentReport.get().getSettings().getCurrencyCode()*/);
 		return res;
 	}
 	

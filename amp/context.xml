@@ -17,9 +17,10 @@ clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTld
   		useDisposableConnectionFacade="true"  
   		jdbcInterceptors="ConnectionState;StatementFinalizer;ResetAbandonedTimer;SlowQueryReport(threshold=60000)" />
   
-  <!-- MonetDB connection -->
+  <!-- MonetDB connection. IT IS A DUMMY, DO NOT USE IT (now only used to shut up Saiku during AMP startup - will be removed in the near future -->
+   
   <Resource factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" defaultTransactionIsolation="READ_COMMITTED" driverClassName="nl.cwi.monetdb.jdbc.MonetDriver" 
-  		maxActive="50" maxIdle="8" maxWait="500" jmxEnabled="true" name="monetDS" removeAbandoned="true" removeAbandonedTimeout="3600" suspectTimeout="1800" logAbandoned="true" 
+  		maxActive="10" maxIdle="8" maxWait="500" jmxEnabled="true" name="monetDS" removeAbandoned="true" removeAbandonedTimeout="3600" suspectTimeout="1800" logAbandoned="true" 
   		type="javax.sql.DataSource" 
   		monetUrl="" 
   		monetUsername="" monetPassword="" 

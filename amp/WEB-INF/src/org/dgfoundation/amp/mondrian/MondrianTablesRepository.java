@@ -190,7 +190,7 @@ public class MondrianTablesRepository {
 			MONDRIAN_ORGANIZATIONS_DIMENSION_TABLE,
 			MONDRIAN_CATEGORY_VALUES);
 	
-	public final static List<MondrianTableDescription> TRN_BACKED_DIMENSIONS = Arrays.asList(MONDRIAN_CATEGORY_VALUES);
+	public final static List<MondrianTableDescription> TRN_BACKED_DIMENSIONS = Arrays.asList(MONDRIAN_CATEGORY_VALUES, MONDRIAN_ACTIVITY_TRN_TEXTS);
 	
 	public final static List<MondrianTableDescription> MONDRIAN_ACTIVITY_DIMENSIONS = Arrays.asList(
 			MONDRIAN_ACTIVITY_TEXTS,

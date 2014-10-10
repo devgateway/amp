@@ -42,8 +42,20 @@ public class MonetConnection implements AutoCloseable {
 	 * @return
 	 */
 	private static Connection getDirectConnection() throws SQLException {
-		org.apache.tomcat.jdbc.pool.DataSource src = (org.apache.tomcat.jdbc.pool.DataSource) dataSource;
-		return DriverManager.getConnection(src.getUrl(), src.getUsername(), src.getUsername());
+		return DriverManager.getConnection(getJdbcUrl(), "monetdb", "monetdb");
+	}
+	
+	private static String url = null;
+	
+	public static String getJdbcUrl() {
+		if (url == null) {
+			try{Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");}catch(Exception e){throw new RuntimeException(e);}
+			org.apache.tomcat.jdbc.pool.DataSource src = (org.apache.tomcat.jdbc.pool.DataSource) dataSource;
+			String postgresUrl = src.getUrl().substring(0, src.getUrl().indexOf('?')); // jdbc:postgresql://localhost:5432/amp_moldova_210?useUnicode=true&characterEncoding=UTF-8&jdbcCompliantTruncation=false
+			String dbName = postgresUrl.substring(postgresUrl.lastIndexOf('/') + 1); 
+			url = String.format("jdbc:monetdb://localhost/%s", dbName);
+		}
+		return url;
 	}
 	
 	public static MonetConnection getConnection() {
@@ -187,7 +199,8 @@ public class MonetConnection implements AutoCloseable {
 	private static DataSource getMonetDataSource() {
 		try {
 			Context initialContext = new InitialContext();
-			DataSource res = (javax.sql.DataSource) initialContext.lookup(Constants.MONETDB_JNDI_ALIAS);
+			//DataSource res = (javax.sql.DataSource) initialContext.lookup(Constants.MONETDB_JNDI_ALIAS);
+			DataSource res = (javax.sql.DataSource) initialContext.lookup(Constants.UNIFIED_JNDI_ALIAS);
 			if (res == null)
 				throw new Error("could not find Monet data source!");
 			return res;

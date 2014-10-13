@@ -234,20 +234,28 @@ public class MondrianMapping {
 //			addColumnDefinition(ColumnConstants.PLEDGES_TERTIARY_SECTORS, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 			
 			addColumnDefinition(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, new MDXLevel(MoConstants.NATIONAL_OBJECTIVES, "Normal", "Level 1 Name"));
-			for(int i = 1; i <= 8; i++)
+			for(int i = 1; i <= 8; i++) {
 				addColumnDefinition("National Planning Objectives Level " + i, new MDXLevel(MoConstants.NATIONAL_OBJECTIVES, "Level " + i, "Level " + i + " Name"));
+				addColumnDefinition("National Planning Objectives Level " + i + " Id", new MDXLevel(MoConstants.NATIONAL_OBJECTIVES, "Level " + i, "Level " + i + " Id"));
+			}
 			
 			addColumnDefinition(ColumnConstants.PRIMARY_PROGRAM, new MDXLevel(MoConstants.PRIMARY_PROGRAMS, "Normal", "Level 1 Name"));
-			for(int i = 1; i <= 8; i++)
+			for(int i = 1; i <= 8; i++) {
 				addColumnDefinition("Primary Program Level " + i, new MDXLevel(MoConstants.PRIMARY_PROGRAMS, "Level " + i, "Level " + i + " Name"));
+				addColumnDefinition("Primary Program Level " + i + " Id", new MDXLevel(MoConstants.PRIMARY_PROGRAMS, "Level " + i, "Level " + i + " Id"));
+			}
 
 			addColumnDefinition(ColumnConstants.SECONDARY_PROGRAM, new MDXLevel(MoConstants.SECONDARY_PROGRAMS, "Normal", "Level 1 Name"));
-			for(int i = 1; i <= 8; i++)
+			for(int i = 1; i <= 8; i++) {
 				addColumnDefinition("Secondary Program Level " + i, new MDXLevel(MoConstants.SECONDARY_PROGRAMS, "Level " + i, "Level " + i + " Name"));
+				addColumnDefinition("Secondary Program Level " + i + " Id", new MDXLevel(MoConstants.SECONDARY_PROGRAMS, "Level " + i, "Level " + i + " Id"));
+			}
 
 			addColumnDefinition(ColumnConstants.TERTIARY_PROGRAM, new MDXLevel(MoConstants.TERTIARY_PROGRAMS, "Normal", "Level 1 Name"));
-			for(int i = 1; i <= 8; i++)
+			for(int i = 1; i <= 8; i++) {
 				addColumnDefinition("Tertiary Program Level " + i, new MDXLevel(MoConstants.TERTIARY_PROGRAMS, "Level " + i, "Level " + i + " Name"));
+				addColumnDefinition("Tertiary Program Level " + i + " Id", new MDXLevel(MoConstants.TERTIARY_PROGRAMS, "Level " + i, "Level " + i + " Id"));
+			}
 			
 			addColumnDefinition(ColumnConstants.COUNTRY, new MDXLevel(MoConstants.LOCATION, MoConstants.H_COUNTRIES,  MoConstants.ATTR_COUNTRY_NAME));
 			addColumnDefinition(ColumnConstants.REGION, new MDXLevel(MoConstants.LOCATION, MoConstants.H_REGIONS,  MoConstants.ATTR_REGION_NAME));

@@ -18,6 +18,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
@@ -62,11 +63,13 @@ public class MondrianReportsTests extends AmpTestCase {
 		/* tests are failing so far, because we are moving out the totals calculation from MDX, 
 		 * to revise when GeneratedReport structure will be build based on CellDataSet */  
 		//suite.addTest(new MondrianReportsTests("testNoTotals"));
-		suite.addTest(new MondrianReportsTests("testTotals"));
+		//suite.addTest(new MondrianReportsTests("testTotals"));
 		//suite.addTest(new MondrianReportsTests("testColumnSortingNoTotals"));
 		//suite.addTest(new MondrianReportsTests("testColumnMeasureSortingTotals"));
 		//suite.addTest(new MondrianReportsTests("testSortingByTuplesTotals"));
 		//suite.addTest(new MondrianReportsTests("testMultipleDateFilters")); 
+		//suite.addTest(new MondrianReportsTests("testActivityDateFilters"));
+		suite.addTest(new MondrianReportsTests("testSectorsIds"));
 		//suite.addTest(new MondrianReportsTests("testAmpReportToReportSpecification"));
 		//suite.addTest(new MondrianReportsTests("testGenerateReportAsSaikuCellDataSet"));
 		//suite.addTest(new MondrianReportsTests("testReportPagination"));
@@ -126,7 +129,46 @@ public class MondrianReportsTests extends AmpTestCase {
 		spec.setFilters(filters);
 		generateAndValidate(spec, true);
 	}
-
+	
+	public void testActivityDateFilters() {
+		ReportSpecificationImpl spec = getDefaultSpec("testActivityDateFilters", true);
+		MondrianReportFilters filters = new MondrianReportFilters();
+		ReportColumn activityCreatedOn = new ReportColumn(ColumnConstants.ACTIVITY_CREATED_ON, ReportEntityType.ENTITY_TYPE_ACTIVITY);
+		spec.addColumn(activityCreatedOn);
+		/*
+		SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
+		String err = null;
+		try {
+			//filters.addDateRangeFilterRule(activityCreatedOn, sdf.parse("2010-01-01"), sdf.parse("2011-09-15"));
+			filters.addFilterRule(activityCreatedOn, new FilterRule("2010-01-01", "2011-09-15", true, true, true));
+		} catch (Exception e) {
+			e.printStackTrace();
+			err = e.getMessage();
+		}
+		assertNull(err);
+		spec.setFilters(filters);*/
+		generateAndValidate(spec, true);
+	}
+	
+	public void testSectorsIds() {
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("testSectorsIds");
+		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL));
+		
+		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_5_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.setCalculateColumnTotals(true);
+		spec.setCalculateRowTotals(true);
+		spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
+		generateAndValidate(spec, true);
+	}
+	
 	private ReportSpecificationImpl getDefaultSpec(String name, boolean doTotals) {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(name);
 		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_TYPE, ReportEntityType.ENTITY_TYPE_ALL));

@@ -85,6 +85,9 @@ public class IatiActivityWorker {
     // Because the situation when we import activities that belong to country A into country B is not possible as of today
     private String selectedCountry;
 
+    // could be either update or create. Create by default
+    private int mode = DEConstants.MODE_CREATE;
+
     public void setSelectedCountry(String selectedCountry) {
         this.selectedCountry = selectedCountry;
     }
@@ -165,6 +168,11 @@ public class IatiActivityWorker {
 	public void setLang(String lang) {
 		this.lang = lang;
 	}
+
+    public void setMode(int mode) {
+        this.mode = mode;
+    }
+
 
 	private IatiActivityWorker(IatiActivity iActivity, String title, String iatiID, String log, String lang, IatiVersion version) {
 		this.iActivity = iActivity;
@@ -365,9 +373,8 @@ public class IatiActivityWorker {
 	public ArrayList<AmpMappedField> populateActivity(AmpActivityVersion a, AmpActivityVersion prevVer, DESourceSetting settings, 
 			List<AmpContentTranslation> translations){
 		ArrayList<AmpMappedField> logs = new ArrayList<AmpMappedField>();
-		boolean isCreate = prevVer == null;
 
-
+		boolean isCreate = DEConstants.MODE_CREATE == mode;
 
 		ArrayList<JAXBElement<TextType>> iatiTitleList = new ArrayList<JAXBElement<TextType>>();
 		ArrayList<JAXBElement<CodeType>> iatiStatusList = new ArrayList<JAXBElement<CodeType>>();
@@ -406,9 +413,11 @@ public class IatiActivityWorker {
 		
 		//seting the iati last update date
 		Date iatiUpdatedDate = DataExchangeUtils.XMLGregorianDateToDate(this.getiActivity().getLastUpdatedDatetime());
-		if(iatiUpdatedDate==null)
-			a.setIatiLastUpdatedDate(new Timestamp(System.currentTimeMillis()));
-		else a.setIatiLastUpdatedDate(iatiUpdatedDate);
+		if (iatiUpdatedDate == null) {
+            a.setIatiLastUpdatedDate(new Timestamp(System.currentTimeMillis()));
+        } else {
+            a.setIatiLastUpdatedDate(iatiUpdatedDate);
+        }
 		
 		//workspace settings + team lead owner
 		
@@ -422,6 +431,33 @@ public class IatiActivityWorker {
         	processTitle(a, iatiTitleList, translations);
         }
 
+        if (a.getFunding() == null) {
+            a.setFunding(new HashSet());
+        }
+        if (a.getSectors() == null) {
+            a.setSectors(new HashSet());
+        }
+        if (a.getOrgrole() == null) {
+            a.setOrgrole(new HashSet<AmpOrgRole>());
+        }
+        if (a.getLocations() == null) {
+            a.setLocations(new HashSet());
+        }
+        if (a.getActivityContacts() == null) {
+            a.setActivityContacts(new HashSet<AmpActivityContact>());
+        }
+
+
+        // clear the existing steps
+        if (DEConstants.MODE_UPDATE == mode) {
+            a.setDraft(false);
+            a.getFunding().clear();
+            a.getSectors().clear();
+            a.getOrgrole().clear();
+            a.getLocations().clear();
+            a.getActivityContacts().clear();
+        }
+
 
         processIdentificationStep(a,iatiStatusList,iatiImplementationLevelList,iatiDescriptionList,iatiID, isCreate, settings);
 
@@ -430,11 +466,12 @@ public class IatiActivityWorker {
         if ((isCreate && settings.importEnabled("Sector")) || (!isCreate && settings.updateEnabled("Sector"))) {
 		    processSectorsStep(a,iatiSectorList,allClassificationConfiguration);
         }
-	    processRelOrgsStep(a,iatiPartOrgList);
 
-		processActInternalIdsStep(a,iatiOtherIdList, iatiRepOrgList);
-		processBudgetStep(a,iatiBudgetList,iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency, isCreate, settings);
-		processFundingStep(a,iatiTransactionList,iatiPlannedDisbList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency,
+	    processRelOrgsStep(a, iatiPartOrgList);
+
+		processActInternalIdsStep(a, iatiOtherIdList, iatiRepOrgList);
+		processBudgetStep(a, iatiBudgetList, iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency, isCreate, settings);
+		processFundingStep(a, iatiTransactionList, iatiPlannedDisbList,iatiDefaultFinanceType,iatiDefaultAidType, iatiDefaultCurrency,
 				iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList, isCreate, settings, translations);
 
         if (settings.isRegionalFundings()) {
@@ -453,8 +490,9 @@ public class IatiActivityWorker {
         if ((isCreate && settings.importEnabled("Location")) || (!isCreate && settings.updateEnabled("Location"))) {
             processLocationStep(a, iatiLocationList, settings.getDefaultLocation());
         }
+
         if ((isCreate && settings.importEnabled("Contacts")) || (!isCreate && settings.updateEnabled("Contacts"))) {
-		    processContactsStep(a,iatiContactList);
+		    processContactsStep(a, iatiContactList);
         }
 		return logs;
 	}
@@ -486,23 +524,22 @@ public class IatiActivityWorker {
 
 	private void processContactsStep(AmpActivityVersion a, ArrayList<ContactInfo> iatiContactList) {
 		if (iatiContactList.isEmpty()) return;
-		Set<AmpActivityContact> activityContacts=new HashSet<AmpActivityContact>();
-		for (Iterator<ContactInfo> it = iatiContactList.iterator(); it.hasNext();) {
-			ContactInfo contactInfo = (ContactInfo) it.next();
-			AmpContact ampContact = new AmpContact();
-			setAmpContactDetails(contactInfo, ampContact);
-			try {
-				ContactInfoUtil.saveOrUpdateContact(ampContact);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			AmpActivityContact ampActContact = new AmpActivityContact();
-			ampActContact.setActivity(a);
-			ampActContact.setContact(ampContact);
-			ampActContact.setContactType(org.digijava.module.aim.helper.Constants.DONOR_CONTACT);
-			activityContacts.add(ampActContact);
-			
-		}
+		Set<AmpActivityContact> activityContacts = new HashSet<AmpActivityContact>();
+        for (ContactInfo contactInfo : iatiContactList) {
+            AmpContact ampContact = new AmpContact();
+            setAmpContactDetails(contactInfo, ampContact);
+            try {
+                ContactInfoUtil.saveOrUpdateContact(ampContact);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            AmpActivityContact ampActContact = new AmpActivityContact();
+            ampActContact.setActivity(a);
+            ampActContact.setContact(ampContact);
+            ampActContact.setContactType(Constants.DONOR_CONTACT);
+            activityContacts.add(ampActContact);
+
+        }
 		
 		a.setActivityContacts(activityContacts);
 	}
@@ -607,7 +644,7 @@ public class IatiActivityWorker {
                     locations.add(actLoc);
                 }
             }
-            a.setLocations(new HashSet<AmpActivityLocation>());
+
             a.getLocations().addAll(locations);
 
         // if locations section is empty in the imported activity, then set the default one
@@ -640,31 +677,36 @@ public class IatiActivityWorker {
 			ArrayList<JAXBElement<CodeReqType>> iatiDefaultFinanceType,
 			ArrayList<JAXBElement<CodeReqType>> iatiDefaultAidType, String iatiDefaultCurrency,
             boolean isCreate, DESourceSetting settings) {
-		// TODO Auto-generated method stub
-		if(iatiBudgetList.isEmpty()) return;
+
+		if (iatiBudgetList.isEmpty()) {
+            return;
+        }
+
 		JAXBElement<CodeReqType> iatiDefFinTypeLocal = null;
 		if(iatiDefaultFinanceType !=null && !iatiDefaultFinanceType.isEmpty())
 			iatiDefFinTypeLocal=iatiDefaultFinanceType.iterator().next();
 		JAXBElement<CodeReqType> iatiDefAidTypeLocal = null;
-		if(iatiDefaultAidType !=null && !iatiDefaultAidType.isEmpty())
-			iatiDefAidTypeLocal =iatiDefaultAidType.iterator().next();
+		if (iatiDefaultAidType != null && !iatiDefaultAidType.isEmpty()) {
+            iatiDefAidTypeLocal = iatiDefaultAidType.iterator().next();
+        }
 		AmpCategoryValue typeOfAssistance = getAmpCategoryValue(iatiDefFinTypeLocal, DataExchangeConstants.IATI_FINANCE_TYPE,
 				toIATIValues("financeTypeValue","financeTypeCode"),this.getLang(),null,CategoryConstants.TYPE_OF_ASSISTENCE_NAME,null,null,"active");
 		AmpCategoryValue financingInstrument = getAmpCategoryValue(iatiDefAidTypeLocal, DataExchangeConstants.IATI_AID_TYPE,
 				toIATIValues("aidTypeValue","aidTypeCode"),this.getLang(),null,CategoryConstants.FINANCING_INSTRUMENT_NAME,null,null,"active");
 		
-		if(activity.getFunding() == null) 
-			activity.setFunding(new HashSet());
+		if (activity.getFunding() == null) {
+            activity.setFunding(new HashSet());
+        }
+
 		Set<AmpFunding> fundings = activity.getFunding();
-		for (Iterator<Budget> it = iatiBudgetList.iterator(); it.hasNext();) {
-			Budget budget = (Budget) it.next();
-			AmpFunding f = getBudgetIATItoAMP(activity,budget,typeOfAssistance, financingInstrument, iatiDefaultCurrency,fundings,
-					iatiDefaultFundingOrgList, 
-					iatiExtendingOrgList,
-					iatiRepOrgList, isCreate, settings);
-			if(f!=null)
-				fundings.add(f);
-		}
+        for (Budget budget : iatiBudgetList) {
+            AmpFunding f = getBudgetIATItoAMP(activity, budget, typeOfAssistance, financingInstrument, iatiDefaultCurrency, fundings,
+                    iatiDefaultFundingOrgList,
+                    iatiExtendingOrgList,
+                    iatiRepOrgList, isCreate, settings);
+            if (f != null)
+                fundings.add(f);
+        }
 		//activity.getFunding().addAll(fundings);
 	}
 
@@ -706,9 +748,8 @@ public class IatiActivityWorker {
 //		Date proposedProjectCostDate 			= null;
 //		Double proposedProjectCostAmount 		= new Double(0);
 //		String proposedProjectCostCurrency 	= null;
-		DEProposedProjectCost proposedProjectCost	= new DEProposedProjectCost();
-		if(activity.getFunding() == null) 
-			activity.setFunding(new HashSet());
+		DEProposedProjectCost proposedProjectCost = new DEProposedProjectCost();
+
 		Set<AmpFunding> fundings = activity.getFunding();
 
         if (activity.getRegionalFundings() == null) {
@@ -717,34 +758,33 @@ public class IatiActivityWorker {
             activity.getRegionalFundings().clear();
         }
 
-        Set<AmpRegionalFunding> regionalFundings = activity.getRegionalFundings();
-		for (Iterator<Transaction> it = iatiTransactionList.iterator(); it.hasNext();) {
-			Transaction transaction = (Transaction) it.next();
-			AmpFunding f = getFundingIATItoAMP(activity,transaction,typeOfAssistance, financingInstrument, iatiDefaultCurrency,
-					iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,
-					proposedProjectCost, isCreate, settings, translations);
+        // Set<AmpRegionalFunding> regionalFundings = activity.getRegionalFundings();
+        for (Transaction transaction : iatiTransactionList) {
+            AmpFunding f = getFundingIATItoAMP(activity, transaction, typeOfAssistance, financingInstrument, iatiDefaultCurrency,
+                    iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,
+                    proposedProjectCost, isCreate, settings, translations);
 
-            if(f!=null) {
+            if (f != null) {
                 if (!settings.isRegionalFundings()) {
-				    fundings.add(f);
+                    fundings.add(f);
                 }/*else {
                     regionalFundings.addAll(getRegFundingsFromFunding(f, settings.getDefaultLocation(), activity));
                 }  */
             }
-		}
-		for (Iterator<PlannedDisbursement> it = iatiPlannedDisbList.iterator(); it.hasNext();) {
-			PlannedDisbursement plannedDisb = (PlannedDisbursement) it.next();
-			AmpFunding f = getFundingIATItoAMP(activity,plannedDisb,typeOfAssistance, financingInstrument, iatiDefaultCurrency,
-					iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,
-					proposedProjectCost, isCreate, settings);
-            if(f!=null) {
+        }
+
+        for (PlannedDisbursement plannedDisb : iatiPlannedDisbList) {
+            AmpFunding f = getFundingIATItoAMP(activity, plannedDisb, typeOfAssistance, financingInstrument, iatiDefaultCurrency,
+                    iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList,
+                    proposedProjectCost, isCreate, settings);
+            if (f != null) {
                 if (!settings.isRegionalFundings()) {
                     fundings.add(f);
                 } /*else {
                     regionalFundings.addAll(getRegFundingsFromFunding(f, settings.getDefaultLocation(), activity));
                 }   */
             }
-		}
+        }
 
         if ((isCreate && settings.importEnabled("Other Funding Items")) || (!isCreate && settings.updateEnabled("Other Funding Items"))) {
             if(isValidString(proposedProjectCost.getCurrency()) )
@@ -758,7 +798,7 @@ public class IatiActivityWorker {
             activity.setFunAmount(proposedProjectCost.getAmount());
         }
 
-		
+
 //		activity.getFunding().addAll(fundings);
 
 	}
@@ -1317,19 +1357,18 @@ public class IatiActivityWorker {
 	private void processActInternalIdsStep(AmpActivityVersion a, ArrayList<OtherIdentifier> iatiOtherIdList, ArrayList<ReportingOrg> iatiRepOrgList) {
 		Set<AmpActivityInternalId> internalIds = new HashSet<AmpActivityInternalId>();
 		if(iatiOtherIdList.isEmpty()) {
-			for (Iterator<OtherIdentifier> it = iatiOtherIdList.iterator(); it.hasNext();) {
-				OtherIdentifier otherIdentifier = (OtherIdentifier) it.next();
-				AmpActivityInternalId actInternalId = new AmpActivityInternalId();
-				actInternalId.setInternalId(otherIdentifier.getContent());
-				actInternalId.setAmpActivity(a);
-				
-				String orgName = otherIdentifier.getOwnerName();
-				String orgCode = otherIdentifier.getOwnerRef();
-				AmpOrganisation org = getAmpOrganization(orgName,lang,orgCode);
-				if(org != null)
-					actInternalId.setOrganisation(org);
-				internalIds.add(actInternalId);
-			}
+            for (OtherIdentifier otherIdentifier : iatiOtherIdList) {
+                AmpActivityInternalId actInternalId = new AmpActivityInternalId();
+                actInternalId.setInternalId(otherIdentifier.getContent());
+                actInternalId.setAmpActivity(a);
+
+                String orgName = otherIdentifier.getOwnerName();
+                String orgCode = otherIdentifier.getOwnerRef();
+                AmpOrganisation org = getAmpOrganization(orgName, lang, orgCode);
+                if (org != null)
+                    actInternalId.setOrganisation(org);
+                internalIds.add(actInternalId);
+            }
 		}
 		AmpOrganisation ampOrg = null;
 		ReportingOrg defaultReportingOrg = iatiRepOrgList.iterator().next();
@@ -1352,82 +1391,73 @@ public class IatiActivityWorker {
 	}
 
 	private void processRelOrgsStep(AmpActivityVersion a, ArrayList<ParticipatingOrg> iatiPartOrgList) {
-		// TODO Auto-generated method stub
-		if(iatiPartOrgList.isEmpty()) return;
+
+		if (iatiPartOrgList.isEmpty()) return;
 		Set<AmpOrgRole> orgRole = new HashSet<AmpOrgRole>();
-		for (Iterator<ParticipatingOrg> it = iatiPartOrgList.iterator(); it.hasNext();) {
-			ParticipatingOrg participatingOrg = (ParticipatingOrg) it.next();
-			
-			
-			AmpRole role = null;
-			if("extending".compareTo(participatingOrg.getRole().toLowerCase()) == 0)
-				role=DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.EXECUTING_AGENCY);
-			if("implementing".compareTo(participatingOrg.getRole().toLowerCase()) == 0)
-				role=DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.IMPLEMENTING_AGENCY);
-			if("accountable".compareTo(participatingOrg.getRole().toLowerCase()) == 0)
-					role=DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.RESPONSIBLE_ORGANISATION);
+        for (ParticipatingOrg participatingOrg : iatiPartOrgList) {
+            AmpRole role = null;
+            if ("extending".compareTo(participatingOrg.getRole().toLowerCase()) == 0)
+                role = DbUtil.getAmpRole(Constants.EXECUTING_AGENCY);
+            if ("implementing".compareTo(participatingOrg.getRole().toLowerCase()) == 0)
+                role = DbUtil.getAmpRole(Constants.IMPLEMENTING_AGENCY);
+            if ("accountable".compareTo(participatingOrg.getRole().toLowerCase()) == 0)
+                role = DbUtil.getAmpRole(Constants.RESPONSIBLE_ORGANISATION);
 
-			if(role !=null){
-				String orgName = printList(participatingOrg.getContent());
-				String orgCode = participatingOrg.getRef();
+            if (role != null) {
+                String orgName = printList(participatingOrg.getContent());
+                String orgCode = participatingOrg.getRef();
 
-				AmpOrganisation org = getAmpOrganization(orgName, lang, orgCode);
-				if(org!=null){
-					AmpOrgRole ampOrgRole = new AmpOrgRole();
-					ampOrgRole.setActivity(a);
-					ampOrgRole.setRole(role);
-					ampOrgRole.setOrganisation(org);
-					orgRole.add(ampOrgRole);
-				}
-			}
-			
-		}
-		
-		if (a.getOrgrole()==null) a.setOrgrole(orgRole);
-			else a.getOrgrole().addAll(orgRole);
-		
+                AmpOrganisation org = getAmpOrganization(orgName, lang, orgCode);
+                if (org != null) {
+                    AmpOrgRole ampOrgRole = new AmpOrgRole();
+                    ampOrgRole.setActivity(a);
+                    ampOrgRole.setRole(role);
+                    ampOrgRole.setOrganisation(org);
+                    orgRole.add(ampOrgRole);
+                }
+            }
+
+        }
+
+        a.getOrgrole().addAll(orgRole);
 	}
 
 	private void processSectorsStep(AmpActivityVersion a, ArrayList<Sector> iatiSectorList, ArrayList<AmpClassificationConfiguration> allClassificationConfiguration) {
 		if(iatiSectorList.isEmpty()) return;
+
 		Set<AmpActivitySector> sectors = new HashSet<AmpActivitySector>();
 		Long sectorId;
-		for (Iterator<Sector> it = iatiSectorList.iterator(); it.hasNext();) {
-			Sector sector = (Sector) it.next();
-			String sectorName = printList(sector.getContent());
-			String vocabulary = sector.getVocabulary()==null?"DAC":sector.getVocabulary();
-			DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_SECTOR,toIATIValues("vocabularyName","sectorName","sectorCode"),
-					toIATIValues(vocabulary,sectorName,sector.getCode()),this.getLang(),null,DataExchangeConstants.IATI_SECTOR,null,null,"active");
-			
-			if(checkMappedField==null || checkMappedField.getAmpId() == null) continue;
-			AmpSector ampSector = SectorUtil.getAmpSector(checkMappedField.getAmpId());
-			
-			AmpActivitySector ampActSector = new AmpActivitySector();
-			ampActSector.setActivityId(a);
-			sectorId = ampSector.getAmpSectorId();
-			if (sectorId != null && (!sectorId.equals(new Long(-1))))
-				ampActSector.setSectorId(ampSector);
-			
-			Float sectorPercentage = sector.getPercentage()==null?100:sector.getPercentage().floatValue();
-			
-			ampActSector.setSectorPercentage(sectorPercentage);
-			
-			AmpClassificationConfiguration primConf = null;
-			//trying to find the classification
-			primConf = getConfiguration(ampSector,allClassificationConfiguration);
-			//if the classification doesn't exist we will put the sector under the primary classification!
-			if(primConf == null)	primConf = getPrimaryClassificationConfiguration(allClassificationConfiguration);
-			
-			ampActSector.setClassificationConfig(primConf);
+        for (Sector sector : iatiSectorList) {
+            String sectorName = printList(sector.getContent());
+            String vocabulary = sector.getVocabulary() == null ? "DAC" : sector.getVocabulary();
+            DEMappingFields checkMappedField = checkMappedField(DataExchangeConstants.IATI_SECTOR, toIATIValues("vocabularyName", "sectorName", "sectorCode"),
+                    toIATIValues(vocabulary, sectorName, sector.getCode()), this.getLang(), null, DataExchangeConstants.IATI_SECTOR, null, null, "active");
+
+            if (checkMappedField == null || checkMappedField.getAmpId() == null) continue;
+            AmpSector ampSector = SectorUtil.getAmpSector(checkMappedField.getAmpId());
+
+            AmpActivitySector ampActSector = new AmpActivitySector();
+            ampActSector.setActivityId(a);
+            sectorId = ampSector.getAmpSectorId();
+            if (sectorId != null && (!sectorId.equals(new Long(-1))))
+                ampActSector.setSectorId(ampSector);
+
+            Float sectorPercentage = sector.getPercentage() == null ? 100 : sector.getPercentage().floatValue();
+
+            ampActSector.setSectorPercentage(sectorPercentage);
+
+            AmpClassificationConfiguration primConf = null;
+            //trying to find the classification
+            primConf = getConfiguration(ampSector, allClassificationConfiguration);
+            //if the classification doesn't exist we will put the sector under the primary classification!
+            if (primConf == null) primConf = getPrimaryClassificationConfiguration(allClassificationConfiguration);
+
+            ampActSector.setClassificationConfig(primConf);
             sectors.add(ampActSector);
 
-		}
-		if (a.getSectors() == null) {
-			a.setSectors(new HashSet());
-		}
-		else a.getSectors().clear();
-		a.getSectors().addAll(sectors);
+        }
 
+		a.getSectors().addAll(sectors);
 	}
 
 	private void processPlanningStep(AmpActivityVersion a, ArrayList<ActivityDate> iatiActDateList) {

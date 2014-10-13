@@ -13,6 +13,7 @@ public class ColumnConstants {
 	public static final String ACCESSION_INSTRUMENT = "Accession Instrument";
 	public static final String AC_CHAPTER = "A.C. Chapter";
 	public static final String ACTIVITY_COUNT = "Activity Count";
+	public static final String ACTIVITY_APPROVED_BY = "Activity Approved By";
 	public static final String ACTIVITY_CREATED_BY = "Activity Created By";
 	public static final String ACTIVITY_CREATED_ON = "Activity Created On";
 	public static final String ACTIVITY_ID = "Activity Id";
@@ -76,6 +77,7 @@ public class ColumnConstants {
 	public static final String DONOR_CONTACT_TITLE = "Donor Contact Title";
 	public static final String DONOR_GROUP = "Donor Group";
 	public static final String DONOR_TYPE = "Donor Type";
+	public static final String DRAFT = "Draft";
 	public static final String ENVIRONMENT = "Environment";
 	public static final String EQUAL_OPPORTUNITY = "Equal Opportunity";
 	public static final String EXECUTING_AGENCY = "Executing Agency";
@@ -111,6 +113,7 @@ public class ColumnConstants {
 	public static final String IMPLEMENTING_EXECUTING_AGENCY_CONTACT_ORGANIZATION = "Implementing/Executing Agency Contact Organization";
 	public static final String IMPLEMENTING_EXECUTING_AGENCY_CONTACT_PHONE = "Implementing/Executing Agency Contact Phone";
 	public static final String IMPLEMENTING_EXECUTING_AGENCY_CONTACT_TITLE = "Implementing/Executing Agency Contact Title";
+	public static final String INDIRECT_ON_BUDGET = "Indirect On Budget";
 	public static final String INSTITUTIONS = "Institutions";
 	public static final String INTERNAL_USE_ID = "Internal Use Id";
 	public static final String ISSUES = "Issues";

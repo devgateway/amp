@@ -136,12 +136,12 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.AMP_ID, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_AMP_ID, MoConstants.ATTR_AMP_ID));
 			addColumnDefinition(ColumnConstants.APPROVAL_STATUS, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_APPROVAL_STATUS, MoConstants.ATTR_APPROVAL_STATUS));
 			addColumnDefinition(ColumnConstants.TEAM, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_TEAM, MoConstants.ATTR_TEAM));
-			addColumnDefinition(ColumnConstants.ACTIVITY_CREATED_BY, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_ACTIVITY_CREATED_BY, MoConstants.ATTR_ACTIVITY_CREATED_BY));
-			addColumnDefinition(ColumnConstants.ACTIVITY_UPDATED_BY, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_ACTIVITY_UPDATED_BY, MoConstants.ATTR_ACTIVITY_UPDATED_BY));
-			//put(new ReportColumn(ColumnConstants.??, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_ACTIVITY_APPROVED_BY, MoConstants.ATTR_ACTIVITY_APPROVED_BY));
+			addColumnDefinition(ColumnConstants.ACTIVITY_CREATED_BY, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.ATTR_ACTIVITY_CREATED_BY, MoConstants.ATTR_ACTIVITY_CREATED_BY));
+			addColumnDefinition(ColumnConstants.ACTIVITY_UPDATED_BY, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.ATTR_ACTIVITY_UPDATED_BY, MoConstants.ATTR_ACTIVITY_UPDATED_BY));
+			addColumnDefinition(ColumnConstants.ACTIVITY_APPROVED_BY, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.ATTR_ACTIVITY_APPROVED_BY, MoConstants.ATTR_ACTIVITY_APPROVED_BY));
 			addColumnDefinition(ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_GOVERNMENT_APPROVAL_PROCEDURES, MoConstants.ATTR_GOVERNMENT_APPROVAL_PROCEDURES));
 			addColumnDefinition(ColumnConstants.JOINT_CRITERIA, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_JOINT_CRITERIA, MoConstants.ATTR_JOINT_CRITERIA));
-			//put(new ReportColumn(ColumnConstants.??, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_INDIRECT_ON_BUDGET, MoConstants.ATTR_INDIRECT_ON_BUDGET));
+			addColumnDefinition(ColumnConstants.INDIRECT_ON_BUDGET, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.ATTR_INDIRECT_ON_BUDGET, MoConstants.ATTR_INDIRECT_ON_BUDGET));
 			addColumnDefinition(ColumnConstants.STATUS, new MDXLevel(MoConstants.ACTIVITY_STATUS, MoConstants.H_ACTIVITY_STATUS, MoConstants.ATTR_ACTIVITY_STATUS));
 			addColumnDefinition(ColumnConstants.MODALITIES, new MDXLevel(MoConstants.MODALITIES, MoConstants.H_MODALITIES, MoConstants.ATTR_ACTIVITY_STATUS));
 			addColumnDefinition(ColumnConstants.TYPE_OF_COOPERATION, new MDXLevel(MoConstants.TYPE_OF_COOPERATION, MoConstants.H_TYPE_OF_COOPERATION, MoConstants.ATTR_TYPE_OF_COOPERATION));
@@ -176,7 +176,7 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.INTERNAL_USE_ID, new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_INTERNAL_USE_ID, MoConstants.ATTR_INTERNAL_USE_ID));
 			addColumnDefinition(ColumnConstants.GOVERNMENT_AGREEMENT_NUMBER, new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_GOVERNMENT_AGREEMENT_NUMBER, MoConstants.ATTR_GOVERNMENT_AGREEMENT_NUMBER));
 			addColumnDefinition(ColumnConstants.BUDGET_CODE_PROJECT_ID, new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_BUDGET_CODE_PROJECT_ID, MoConstants.ATTR_BUDGET_CODE_PROJECT_ID));
-			//put(new ReportColumn(ColumnConstants.??, ReportEntityType.ENTITY_TYPE_ACTIVITY), new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_DRAFT, MoConstants.ATTR_DRAFT));
+			addColumnDefinition(ColumnConstants.DRAFT, new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.ATTR_DRAFT, MoConstants.ATTR_DRAFT));
 			addColumnDefinition(ColumnConstants.FY, new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_FY, MoConstants.ATTR_FY));
 			addColumnDefinition(ColumnConstants.VOTE, new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_VOTE, MoConstants.ATTR_VOTE));
 			addColumnDefinition(ColumnConstants.SUB_VOTE, new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_SUB_VOTE, MoConstants.ATTR_SUB_VOTE));
@@ -195,6 +195,7 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.PROPOSED_PROJECT_LIFE, new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_PROPOSED_PROJECT_LIFE, MoConstants.ATTR_PROPOSED_PROJECT_LIFE));
 			addColumnDefinition(ColumnConstants.DONOR_TYPE, new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_TYPE_NAME, MoConstants.ATTR_ORG_TYPE_NAME));
 			addColumnDefinition(ColumnConstants.DONOR_GROUP, new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
+			addColumnDefinition(ColumnConstants.DONOR_AGENCY, new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.ATTR_ORG_NAME, MoConstants.ATTR_ORG_NAME));
 			addColumnDefinition(ColumnConstants.DONOR_ID, new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.ATTR_ORG_ID, MoConstants.ATTR_ORG_ID));
 			addColumnDefinition(ColumnConstants.EXECUTING_AGENCY_TYPE, new MDXLevel(MoConstants.EXECUTING_AGENCY, MoConstants.H_ORG_TYPE_NAME, MoConstants.ATTR_ORG_TYPE_NAME));
 			addColumnDefinition(ColumnConstants.EXECUTING_AGENCY_GROUPS, new MDXLevel(MoConstants.EXECUTING_AGENCY, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
@@ -238,28 +239,19 @@ public class MondrianMapping {
 //			addColumnDefinition(ColumnConstants.PLEDGES_SECONDARY_SECTORS, new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 //			addColumnDefinition(ColumnConstants.PLEDGES_TERTIARY_SECTORS, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 			
-			addColumnDefinition(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, new MDXLevel(MoConstants.NATIONAL_OBJECTIVES, "Normal", "Level 1 Name"));
-			for(int i = 1; i <= 8; i++) {
-				addColumnDefinition("National Planning Objectives Level " + i, new MDXLevel(MoConstants.NATIONAL_OBJECTIVES, "Level " + i, "Level " + i + " Name"));
-				addColumnDefinition("National Planning Objectives Level " + i + " Id", new MDXLevel(MoConstants.NATIONAL_OBJECTIVES, "Level " + i + " Id", "Level " + i + " Id"));
-			}
-			
-			addColumnDefinition(ColumnConstants.PRIMARY_PROGRAM, new MDXLevel(MoConstants.PRIMARY_PROGRAMS, "Normal", "Level 1 Name"));
-			for(int i = 1; i <= 8; i++) {
-				addColumnDefinition("Primary Program Level " + i, new MDXLevel(MoConstants.PRIMARY_PROGRAMS, "Level " + i, "Level " + i + " Name"));
-				addColumnDefinition("Primary Program Level " + i + " Id", new MDXLevel(MoConstants.PRIMARY_PROGRAMS, "Level " + i + " Id", "Level " + i + " Id"));
-			}
-
-			addColumnDefinition(ColumnConstants.SECONDARY_PROGRAM, new MDXLevel(MoConstants.SECONDARY_PROGRAMS, "Normal", "Level 1 Name"));
-			for(int i = 1; i <= 8; i++) {
-				addColumnDefinition("Secondary Program Level " + i, new MDXLevel(MoConstants.SECONDARY_PROGRAMS, "Level " + i, "Level " + i + " Name"));
-				addColumnDefinition("Secondary Program Level " + i + " Id", new MDXLevel(MoConstants.SECONDARY_PROGRAMS, "Level " + i + " Id", "Level " + i + " Id"));
-			}
-
-			addColumnDefinition(ColumnConstants.TERTIARY_PROGRAM, new MDXLevel(MoConstants.TERTIARY_PROGRAMS, "Normal", "Level 1 Name"));
-			for(int i = 1; i <= 8; i++) {
-				addColumnDefinition("Tertiary Program Level " + i, new MDXLevel(MoConstants.TERTIARY_PROGRAMS, "Level " + i, "Level " + i + " Name"));
-				addColumnDefinition("Tertiary Program Level " + i + " Id", new MDXLevel(MoConstants.TERTIARY_PROGRAMS, "Level " + i + " Id", "Level " + i + " Id"));
+			final String[][] programConstantsList = {
+					{ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, MoConstants.NATIONAL_OBJECTIVES, "National Planning Objectives Level "},
+					{ColumnConstants.PRIMARY_PROGRAM, MoConstants.PRIMARY_PROGRAMS, "Primary Program Level "},
+					{ColumnConstants.SECONDARY_PROGRAM, MoConstants.SECONDARY_PROGRAMS, "Secondary Program Level "},
+					{ColumnConstants.TERTIARY_PROGRAM, MoConstants.TERTIARY_PROGRAMS, "Tertiary Program Level "}
+					};
+			for (String[] programConstants : programConstantsList) {
+				addColumnDefinition(programConstants[0], new MDXLevel(programConstants[1], "Normal", "Level 1 Name"));
+				addColumnDefinition(programConstants[0] + " Id", new MDXLevel(programConstants[1], "Normal Id", "Level 1 Id"));
+				for(int i = 1; i <= 8; i++) {
+					addColumnDefinition(programConstants[2] + i, new MDXLevel(programConstants[1], "Level " + i, "Level " + i + " Name"));
+					addColumnDefinition(programConstants[2] + i + " Id", new MDXLevel(programConstants[1], "Level " + i + " Id", "Level " + i + " Id"));
+				}
 			}
 			
 			addColumnDefinition(ColumnConstants.COUNTRY, new MDXLevel(MoConstants.LOCATION, MoConstants.H_COUNTRIES,  MoConstants.ATTR_COUNTRY_NAME));

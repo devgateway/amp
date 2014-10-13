@@ -37,7 +37,7 @@
 		<Hierarchy hasAll="true" allMemberName="All Orgs" primaryKey="amp_org_id" name="Organization Name">
 			<Table name="mondrian_organizations@@locale@@" />
 			<Level name="Organization Name" uniqueMembers="true" type="Integer" column="amp_org_id" nameColumn="org_name" />
-			<Level name="Organization Code" type="Integer" column="amp_org_id" nameColumn="org_code" />
+			<Level name="Organization Code" type="Integer" column="amp_org_id" nameColumn="org_code" translated="false"/>
 		</Hierarchy>
 		
 		<Hierarchy hasAll="true" allMemberName="All Orgs" primaryKey="amp_org_id" name="Organization Id">
@@ -58,12 +58,12 @@
 	<Dimension name="AMP Program" >
 		<Hierarchy hasAll="true" allMemberName="All Level 0" primaryKey="amp_theme_id" name="Level 0">
 			<Table name="mondrian_programs@@locale@@" />
-			<Level name="Level 0 Name" type="Integer" column="id0" nameColumn="name0"/>
+			<Level name="Level 0 Name" type="Integer" column="id0" nameColumn="name0" translated="false"/>
 		</Hierarchy>
 		
 		<Hierarchy hasAll="true" allMemberName="All Level 0" primaryKey="amp_theme_id" name="Level 0 Id">
 			<Table name="mondrian_programs@@locale@@" />
-			<Level name="Level 0 Id" type="Integer" column="id0"/>
+			<Level name="Level 0 Id" type="Integer" column="id0" translated="false"/>
 		</Hierarchy>
 
 		<Hierarchy hasAll="true" allMemberName="All Normal" primaryKey="amp_theme_id" name="Normal">

@@ -90,7 +90,6 @@ public final class MoConstants {
 	public static final String H_INTERNAL_USE_ID = "Internal Use Id";
 	public static final String H_GOVERNMENT_AGREEMENT_NUMBER = "Government Agreement Number";
 	public static final String H_BUDGET_CODE_PROJECT_ID = "Budget Code Project Id";
-	public static final String H_DRAFT = "Draft";
 	public static final String H_FY = "FY";
 	public static final String H_VOTE = "Vote";
 	public static final String H_SUB_VOTE = "Sub-Vote";
@@ -127,12 +126,8 @@ public final class MoConstants {
 	public static final String H_APPROVAL_STATUS = "Approval Status";
 	public static final String H_AMP_ID = "AMP ID";
 	public static final String H_TEAM = "Team";
-	public static final String H_ACTIVITY_CREATED_BY = "Activity Created By";
-	public static final String H_ACTIVITY_UPDATED_BY = "Activity Updated By";
-	public static final String H_ACTIVITY_APPROVED_BY ="Activity Approved By";
 	public static final String H_GOVERNMENT_APPROVAL_PROCEDURES = "Government Approval Procedures";
 	public static final String H_JOINT_CRITERIA = "Joint Criteria";
-	public static final String H_INDIRECT_ON_BUDGET = "Indirect On Budget";
 	private static final String H_CATEGORY_NAME = "Category Name";
 	public static final String H_ACTIVITY_STATUS = H_CATEGORY_NAME;
 	public static final String H_MODALITIES = H_CATEGORY_NAME;

@@ -1190,9 +1190,6 @@ public class IatiActivityWorker {
 		
 		Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
 
-        // https://jira.dgfoundation.org/browse/AMP-18207
-        currencyValue = currencyValue * extractRecipientCountryPercentage(selectedCountry) / 100;
-
         switch(transactionType) {
             case 'c':
                 populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
@@ -1337,6 +1334,9 @@ public class IatiActivityWorker {
 	private void populateFundingDetails(Double currencyValue, String currencyCode, Date tDate, Set<AmpFundingDetail> fundDetails, int transactionType, int adjustmentType) {
         //senegal
         if (currencyValue == 0) return;
+
+        // https://jira.dgfoundation.org/browse/AMP-18207
+        currencyValue = currencyValue * extractRecipientCountryPercentage(selectedCountry) / 100;
 
         AmpFundingDetail ampFundDet = new AmpFundingDetail();
         ampFundDet.setIatiAdded(true);

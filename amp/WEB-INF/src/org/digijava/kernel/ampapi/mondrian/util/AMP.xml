@@ -39,6 +39,12 @@
 			<Level name="Organization Name" uniqueMembers="true" type="Integer" column="amp_org_id" nameColumn="org_name" />
 			<Level name="Organization Code" type="Integer" column="amp_org_id" nameColumn="org_code" />
 		</Hierarchy>
+		
+		<Hierarchy hasAll="true" allMemberName="All Orgs" primaryKey="amp_org_id" name="Organization Id">
+			<Table name="mondrian_organizations@@locale@@" />
+			<Level name="Organization Id" uniqueMembers="true" type="Integer" column="amp_org_id"/>
+		</Hierarchy>
+		
 		<Hierarchy hasAll="true" allMemberName="All Types" primaryKey="amp_org_id" name="Organization Type Name">
 			<Table name="mondrian_organizations@@locale@@" />
 			<Level name="Organization Type Name" uniqueMembers="true" type="Integer" column="amp_org_type_id" nameColumn="org_type_name" />

@@ -37,6 +37,7 @@ public class ColumnConstants {
 	public static final String AVERAGE_SIZE_OF_DISBURSEMENTS = "Average Size of Disbursements";
 	public static final String AVERAGE_SIZE_OF_PROJECTS = "Average Size of Projects";
 	public static final String BENEFICIARY_AGENCY = "Beneficiary Agency";
+	public static final String BENEFICIARY_AGENCY_ID = "Beneficiary Agency Id";
 	public static final String BENEFICIARY_AGENCY__DEPARTMENT_DIVISION = "Beneficiary Agency  Department/Division";
 	public static final String BENEFICIARY_AGENCY_GROUPS = "Beneficiary Agency Groups";
 	public static final String BUDGET_CODE_PROJECT_ID = "Budget Code Project Id";
@@ -65,6 +66,7 @@ public class ColumnConstants {
 	public static final String DESCRIPTION_OF_COMPONENT_FUNDING = "Description of Component Funding";
 	public static final String DISTRICT = "District";
 	public static final String DONOR_AGENCY = "Donor Agency";
+	public static final String DONOR_ID = "Donor Id";
 	public static final String DONOR_COMMITMENT_DATE = "Donor Commitment Date";
 	public static final String DONOR_CONTACT_EMAIL = "Donor Contact Email";
 	public static final String DONOR_CONTACT_FAX = "Donor Contact Fax";
@@ -77,6 +79,7 @@ public class ColumnConstants {
 	public static final String ENVIRONMENT = "Environment";
 	public static final String EQUAL_OPPORTUNITY = "Equal Opportunity";
 	public static final String EXECUTING_AGENCY = "Executing Agency";
+	public static final String EXECUTING_AGENCY_ID = "Executing Agency Id";
 	public static final String EXECUTING_AGENCY_DEPARTMENT_DIVISION = "Executing Agency Department/Division";
 	public static final String EXECUTING_AGENCY_GROUPS = "Executing Agency Groups";
 	public static final String EXECUTING_AGENCY_TYPE = "Executing Agency Type";
@@ -98,6 +101,7 @@ public class ColumnConstants {
 	public static final String GRAND_TOTAL_COST = "Grand Total Cost";
 	public static final String IMPLEMENTATION_LEVEL = "Implementation Level";
 	public static final String IMPLEMENTING_AGENCY = "Implementing Agency";
+	public static final String IMPLEMENTING_AGENCY_ID = "Implementing Agency Id";
 	public static final String IMPLEMENTING_AGENCY_DEPARTMENT_DIVISION = "Implementing Agency Department/Division";
 	public static final String IMPLEMENTING_AGENCY_GROUPS = "Implementing Agency Groups";
 	public static final String IMPLEMENTING_AGENCY_TYPE = "Implementing Agency Type";
@@ -248,6 +252,7 @@ public class ColumnConstants {
 	public static final String RELATED_PROJECTS = "Related Projects";
 	public static final String REPORTING_SYSTEM = "Reporting System";
 	public static final String RESPONSIBLE_ORGANIZATION = "Responsible Organization";
+	public static final String RESPONSIBLE_ORGANIZATION_ID = "Responsible Organization Id";
 	public static final String RESPONSIBLE_ORGANIZATION_DEPARTMENT_DIVISION = "Responsible Organization Department/Division";
 	public static final String RESPONSIBLE_ORGANIZATION_GROUPS = "Responsible Organization Groups";
 	public static final String RESULTS = "Results";

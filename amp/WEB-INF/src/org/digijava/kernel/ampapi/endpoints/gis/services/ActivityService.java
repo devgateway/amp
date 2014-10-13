@@ -7,10 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.core.PathSegment;
-
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.error.AMPException;
@@ -26,6 +23,8 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
+import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
+import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
@@ -38,17 +37,21 @@ import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
-import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.search.util.SearchUtil;
 
 public class ActivityService {
-	public static void getActivities(String keyword,HttpServletRequest request, TeamMember tm) {
-		Collection<LoggerIdentifiable> matchingActivityIds=SearchUtil.getActivities(keyword,request,tm);
-	}
+	protected static Logger logger = Logger.getLogger(ActivityService.class);
+	/**
+	 * 
+	 * @param filter
+	 * @return
+	 * @deprecated this will be removed once the implementation with mondrian is done
+	 */
+	
 	public static List<Activity> getActivities(JsonBean filter){
-		
+
 		List<Activity> activities = new ArrayList<Activity>();
 		String ids=null;
 		
@@ -81,7 +84,7 @@ public class ActivityService {
 
 		return activities;
 	}
-	
+	@Deprecated //will be deleted
 	public static List<Activity> getActivities(String activityIds) {
 		List<Activity> l=new ArrayList<Activity>();
 		List<AmpActivity>activities=QueryUtil.getActivities(activityIds);
@@ -99,24 +102,13 @@ public class ActivityService {
 	 * 
 	 * @param ampActivity
 	 * @return
-	 */
+	 */@Deprecated //will be deleted
 	private static Activity buildActivityDto(AmpActivity ampActivity,boolean addFunding) {
 		Activity a = new Activity();
 		a.setId(ampActivity.getAmpActivityId());
 		a.setName(ampActivity.getName());
 		String description = null;
-		//do not return description yet since they are stored 
-		//in dg_message table an would need to do a query for each
-		//row
-//		if (ampActivity.getDescription() != null) {
-//			if (ampActivity.getDescription().length() > 50) {
-//				description = StringUtils
-//						.left(ampActivity.getDescription(), 50) + "...";
-//			} else {
-//				description = ampActivity.getDescription();
-//			}
-//
-//		}
+
 		a.setDescription(description);
 		a.setAmpUrl(ActivityGatekeeper.buildPreviewUrl(String.valueOf(ampActivity
 				.getAmpActivityId())));
@@ -162,72 +154,123 @@ public class ActivityService {
 			fundingDigest.populateFromFundings(ampActivity.getFunding(), "US", null, false);
 			a.setTotalCommitments(fundingDigest.getTotalCommitments());
 			a.setTotalDisbursments(fundingDigest.getTotalDisbursements());
-			
-			//commented out since for now the details are not needed in case they are needed
-			//just uncoment both fors
-//			for(FundingDetail fd:fundingDigest.getCommitmentsDetails()){
-//				a.addCommitments(fd.getTransactionAmount(), fd.getTransactionDate());	
-//			}
-//			for(FundingDetail fd:fundingDigest.getDisbursementsDetails()){
-//				a.addDisbursment(fd.getTransactionAmount(), fd.getTransactionDate());	
-//			}		
 		}
 		return a;
 	}
-	public static List<JsonBean> getActivitiesMondrian(JsonBean filter) {
+	public static List<JsonBean> getActivitiesMondrian(JsonBean filter,List<String>activitIds, Integer page, Integer pageSize) {
+		boolean applyFilter=false;
 		List<JsonBean> activities=new ArrayList<JsonBean>();
-		GeneratedReport report = getActivitiesList( filter);
-
-		List<ReportArea> ll = report.reportContents.getChildren();
-		for (ReportArea reportArea : ll) {
-			JsonBean activity = new JsonBean();
-			Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
-			Set<ReportOutputColumn> col = row.keySet();
-			for (ReportOutputColumn reportOutputColumn : col) {
-				activity.set(reportOutputColumn.columnName,row.get(reportOutputColumn).value);
-				if (reportOutputColumn.columnName.equals("AMP ID")) {
-					System.out.println("* " + row.get(reportOutputColumn).value);
+		
+		//we check if we have filter by keyword
+		if (filter != null) {
+			if (filter.get("keyword") != null) {
+				Collection<LoggerIdentifiable> activitySearch = SearchUtil
+						.getActivities(filter.get("keyword").toString(),
+								TLSUtils.getRequest(), (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember"));
+				if (activitySearch != null && activitySearch.size() > 0) {
+					if(activitIds==null){
+						activitIds=new ArrayList<String>();
+					}
+					for (LoggerIdentifiable loggerIdentifiable : activitySearch) {
+						activitIds.add(loggerIdentifiable.getIdentifier().toString());
+					}
 				}
 			}
-			activities.add(activity);
 		}
-
-		return activities;
-	}
-	public static GeneratedReport getActivitiesList(JsonBean filter) {
+		
+		
 		String name= "ActivityList";
-		boolean doTotals=false;
-		ReportSpecificationImpl spec = new ReportSpecificationImpl(name);
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ACTIVITY));
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY));
-		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY));
+		boolean doTotals=true;
+ 		ReportSpecificationImpl spec = new ReportSpecificationImpl(name);
+
+		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL));
+
+		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ALL));
+
+		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
+
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.SECONDARY_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.TERTIARY_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PRIMARY_PROGRAM, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, ReportEntityType.ENTITY_TYPE_ALL));
 
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
 		
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
+ 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
 
-		spec.setCalculateColumnTotals(doTotals);
-		spec.setCalculateRowTotals(doTotals);
+ 		spec.setCalculateColumnTotals(doTotals);
 		
-		MondrianReportFilters
-		filterRules = new MondrianReportFilters();
-		List<String>mf=new ArrayList<String>();
-		mf.add("5530");
-		mf.add("5575");
-		mf.add("3256");
-		mf.add("5576");
-		filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY), 
-				new FilterRule(mf, true, true)); 
-		spec.setFilters(filterRules);
+ 		spec.setCalculateRowTotals(doTotals);
+		if(activitIds!=null && activitIds.size()>0){
+			MondrianReportFilters
+			filterRules = new MondrianReportFilters();
+			//following ids are added only for testing purposes Please dont commit
+//			activitIds.add("42193");
+//			activitIds.add("42188");
+//			activitIds.add("42179");
+//			activitIds.add("42178");
+//			activitIds.add("42176");
+//			activitIds.add("42175");
+//			activitIds.add("42196");
+	
+			filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY), 
+					new FilterRule(activitIds, true, true)); 
+			spec.setFilters(filterRules);
+		}
+		
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		GeneratedReport report = null;		
 		try {
 			report = generator.executeReport(spec);
 		}catch(AMPException e ){
-		
+		logger.error(e);
 		}
-		return report;
+		//if pagination is requested
+		List<ReportArea> ll=null;
+		if(page !=null && pageSize !=null && page>=0 && pageSize>0){
+			ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
+			ReportArea page0_10 = ReportPaginationUtils.getReportArea(areasDFArray, 0, 10);
+			ll=page0_10.getChildren();
+		}else{ 
+			ll = report.reportContents.getChildren();
+		}
+		for (ReportArea reportArea : ll) {
+			JsonBean activity = new JsonBean();
+			JsonBean filters = new JsonBean();
+			Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
+			Set<ReportOutputColumn> col = row.keySet();
+			for (ReportOutputColumn reportOutputColumn : col) {
+				//Filters should be grouped together. 
+				if (reportOutputColumn.columnName.equals(ColumnConstants.ACTIVITY_ID)
+					|| reportOutputColumn.columnName.equals(ColumnConstants.PROJECT_TITLE)
+							|| reportOutputColumn.columnName.equals(MeasureConstants.ACTUAL_COMMITMENTS)
+							|| reportOutputColumn.columnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)
+							)
+						 {
+					activity.set(reportOutputColumn.columnName,row.get(reportOutputColumn).value);
+					if(reportOutputColumn.columnName.equals(ColumnConstants.ACTIVITY_ID)){
+						activity.set("ampUrl",ActivityGatekeeper.buildPreviewUrl(String.valueOf(row.get(reportOutputColumn).value)));
+					}
+				}else{
+					//we exclude undefineds or value 999999999 for ids
+						//if(!"999999999".equals(row.get(reportOutputColumn).value) ){
+							filters.set(reportOutputColumn.columnName,row.get(reportOutputColumn).value);
+						//}
+				}
+			}
+			activity.set("filters",filters);
+			activities.add(activity);
+		}
+
+		return activities;
 	}
-
-
 }

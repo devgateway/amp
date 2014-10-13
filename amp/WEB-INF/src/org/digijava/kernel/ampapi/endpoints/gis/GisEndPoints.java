@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -16,6 +17,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -29,6 +31,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportArea;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
@@ -65,7 +68,7 @@ import org.hibernate.Session;
 @Path("gis")
 public class GisEndPoints {
 	private static final Logger logger = Logger.getLogger(GisEndPoints.class);
-	
+		
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<AvailableMethod> getAvailableFilters() {
@@ -254,30 +257,42 @@ public class GisEndPoints {
 	}
 
 	@POST
-	@Path("/activitiesNew/")
+	@Path("/activitiesNew/") //once ready remove the New
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ActivitiesNewLists")
-	public List<JsonBean> getActivitiesNew(JsonBean filter) {
-		return ActivityService.getActivitiesMondrian(filter);
+	public List<JsonBean> getActivitiesNew(JsonBean filter,@QueryParam("start") Integer page,@QueryParam("size") Integer pageSize) {
+		return ActivityService.getActivitiesMondrian(filter,null,page,pageSize);
 	}
 
-	@POST
-	@Path("/testReport/")
+	@GET
+	@Path("/activitiesNewTest/") //only for testing
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ActivitiesNewLists")
-	public GeneratedReport getTestReport(JsonBean filter) {
-		return LocationService.getMapExport();
+	public List<JsonBean> getActivitiesNew(@QueryParam("start") Integer page,@QueryParam("size") Integer pageSize) {
+
+		return ActivityService.getActivitiesMondrian(null,null,page,pageSize); 
 	}
-	
+
+
 	
 	@GET
 	@Path("/activities/{activityId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ActivitiesById")
-	public List<Activity> getActivities(@PathParam("activityId") PathSegment activityIds) {
+	@Deprecated //will be replaced by 	@Path("/activitiesNew/{activityId}")
+	public List<Activity> getActivitiesOld(@PathParam("activityId") PathSegment activityIds) {
 		return ActivityService.getActivities(activityIds.getPath());
 	}
 
+	@GET
+	@Path("/activitiesNew/{activityId}") //once its done remove the New
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="ActivitiesById")
+	public List<JsonBean> getActivities(@PathParam("activityId") PathSegment activityIds) {
+		return ActivityService.getActivitiesMondrian(null,Arrays.asList(activityIds.getPath().split("\\s*,\\s*")),null,null); 
+	}
+	
+	
 	private FeatureGeoJSON getPoint(Double lat, Double lon,
 			List<Long> activityid, String adm) {
 		FeatureGeoJSON fgj = new FeatureGeoJSON();
@@ -353,15 +368,11 @@ public class GisEndPoints {
 	@Path("/export-map/")
 	@Produces("application/vnd.ms-excel")
 	@ApiMethod(ui=false,name="MapExport")
-//	public Response  getExportMap(JsonBean filter) {
 	 public StreamingOutput getExportMap(@Context HttpServletResponse webResponse)
     {
 		final HSSFWorkbook wb=
 		LocationService.generateExcelExport();
-//		export-map.
-//		wb.wr
-//		Response.
-//		ResponseBuilder response = Response.ok( wb.getBytes());
+
 		webResponse.setHeader("Content-Disposition","attachment; filename=map-export.xls");
 
         StreamingOutput streamOutput = new StreamingOutput(){
@@ -375,4 +386,5 @@ public class GisEndPoints {
         };
         return streamOutput;
       }
+
 }

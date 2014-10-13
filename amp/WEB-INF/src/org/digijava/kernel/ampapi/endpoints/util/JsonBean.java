@@ -23,9 +23,6 @@ public class JsonBean {
 	public Object get(String name) { 
 		System.out.println("test");
 		return param.get(name);
-	
-	
-	
 	}
 
 	@JsonAnyGetter

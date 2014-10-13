@@ -42,6 +42,7 @@ public class DashboarsService {
 		String column = "";
 		String adjustmenttype = "";
 		JsonBean retlist = new JsonBean();
+		JsonBean values = new JsonBean();
 		
 		switch (type.toUpperCase()) {
 		case "DO":
@@ -97,18 +98,20 @@ public class DashboarsService {
 			retlist.set("currency",currcode);
 		}
 		retlist.set("Numberformat",numberformat);
+		
 		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
 			ReportAreaImpl reportArea =  (ReportAreaImpl) iterator.next();
 			LinkedHashMap<ReportOutputColumn, ReportCell> content = (LinkedHashMap<ReportOutputColumn, ReportCell>) reportArea.getContents();
 			org.dgfoundation.amp.newreports.TextCell reportcolumn = (org.dgfoundation.amp.newreports.TextCell) content.values().toArray()[0];
 			ReportCell reportcell = (ReportCell) content.values().toArray()[1];
-			if(retlist.getSize()-2 <= n){
-				retlist.set(reportcolumn.displayedValue,reportcell.value);
+			if(values.getSize()<= n-1){
+				values.set(reportcolumn.displayedValue,reportcell.value);
 			}else{
 				break;
 			}
 		}
 		
+		retlist.set("Vaues", values);
 		return retlist;
 	}
 }

@@ -392,6 +392,7 @@ public class GisEndPoints {
 	public List<GisSettingOptions> getSettings() {
 		List<GisSettingOptions> settings = new ArrayList<GisSettingOptions>();
 		settings.add(GisUtil.getCurrencySettings());
+		settings.add(GisUtil.getCalendarSettings());
 		return settings;
 	}
 }

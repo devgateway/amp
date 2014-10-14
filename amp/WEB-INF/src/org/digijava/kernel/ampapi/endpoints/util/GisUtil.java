@@ -11,7 +11,10 @@ import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.calendar.util.CalendarUtil;
 
 public class GisUtil {
 	private static final Logger logger = Logger.getLogger(GisUtil.class);
@@ -87,5 +90,19 @@ public class GisUtil {
 		String defaultId = CurrencyUtil.getDefaultCurrency().getCurrencyCode();
 		
 		return new GisSettingOptions(GisConstants.CURRENCY_ID, GisConstants.CURRENCY_NAME, defaultId, options);
+	}
+	
+	public static GisSettingOptions getCalendarSettings() {
+		//build calendar options
+		List<GisSettingOptions.Option> options = new ArrayList<GisSettingOptions.Option>();
+		for (AmpFiscalCalendar ampCalendar : DbUtil.getAllFisCalenders()) {
+			GisSettingOptions.Option calendarOption = new GisSettingOptions.Option(
+					String.valueOf(ampCalendar.getAmpFiscalCalId()), ampCalendar.getName());
+			options.add(calendarOption);
+		}
+		//identifies the default calendar 
+		String defaultId = String.valueOf(DbUtil.getBaseFiscalCalendar());
+		
+		return new GisSettingOptions(GisConstants.CALENDAR_TYPE_ID, GisConstants.CALENDAR_TYPE_NAME, defaultId, options);
 	}
 }

@@ -153,7 +153,10 @@ gulp.task('copy-test-resources', function() {
     paths.scripts.testLib,
     paths.stylesheets.testStyles,
     paths.testPage
-  ]).pipe(gulp.dest(paths.scripts.testDest));
+  ])
+    .pipe(gulp.dest(paths.scripts.testDest))
+    .pipe(gulp.src(paths.img.libs))
+    .pipe(gulp.dest(paths.scripts.testDest + 'img/'));
 });
 
 

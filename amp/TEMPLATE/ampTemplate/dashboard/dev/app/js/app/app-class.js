@@ -19,7 +19,7 @@ _.extend(App.prototype, BackboneDash.Events, {
     try {
       this.filter = new Filter({
         draggable: true,
-        sync: BackboneDash.sync
+        sync: options.sync || BackboneDash.sync
       });
       this.view = new MainView({ app: this, el: options.el });
     } catch (e) {

@@ -34,12 +34,12 @@
 
 #filters-collapsible-area {
 	float: right;
-	width: 675px;
+	width: 630px;
 }
 
 .filters-area-button {
 	float: left;
-	width: 230px;
+	width: 255px;
 	padding-top: 3px;
 }
 
@@ -53,7 +53,7 @@
 }
 
 .leftcol {
-	height: 40em;
+	height: 100%;
 }
 
 .tabs {

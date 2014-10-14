@@ -35,6 +35,9 @@ define(function() {
 	map['[OECD/DAC Sectors]'] = {
 		name : 'Primary Sector'
 	};
+	map['[Primary Sector]'] = {
+		name : 'Primary Sector'
+	};
 	map['[OECD/DAC Sub-Sector]'] = {
 		name : 'Primary Sector Sub-Sector'
 	};
@@ -45,8 +48,8 @@ define(function() {
 		name : 'Secondary Sector'
 	};
 	map['[Government Budget Sectors]'] = {
-			name : 'Secondary Sector'
-		};	
+		name : 'Secondary Sector'
+	};
 	map['[Donor Agency]'] = {
 		name : 'Donor Agency'
 	};
@@ -64,6 +67,15 @@ define(function() {
 	};
 	map['[Program Level 1 Name]'] = {
 		name : 'National Planning Objectives Level 1'
+	};
+	map['[Donor Group]'] = {
+		name : 'Donor Group'
+	};
+	map['[Donor Agency]'] = {
+		name : 'Organizations and Project ID'
+	};
+	map['[Financing Instrument]'] = {
+		name : 'Financing Instrument'
 	};
 
 	function findInMapByColumnName(name) {

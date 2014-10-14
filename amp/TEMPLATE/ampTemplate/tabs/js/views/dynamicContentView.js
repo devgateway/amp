@@ -1,6 +1,6 @@
 define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!views/html/settingsDialogTemplate.html', 'models/settings',
-		'business/settings/settingsManager' ], function(Marionette, dynamicContentTemplate, settingsDialogTemplate, Settings,
-		SettingsManager) {
+		'business/settings/settingsManager', 'filtersWidget', 'jquery', 'bootstrap' ], function(Marionette, dynamicContentTemplate,
+		settingsDialogTemplate, Settings, SettingsManager, FiltersWidget, jQuery) {
 
 	var reportId;
 
@@ -18,14 +18,36 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 		clickFiltersButton : function() {
 			console.log('clickFiltersButton');
 			var FilterDialogContainerView = Marionette.ItemView.extend({
-				template : "#filters-dialog-template"
+				template : "<b>nada</b>",
+				render : function(model) {
+					// alert(this.$el);
+					this.$el.append("<div id='filters-dialog-container'>nada4</div>");
+				}
 			});
 			var filterDialog = new FilterDialogContainerView();
 			filterDialog.render();
-			$(filterDialog.el).dialog({
+			jQuery(filterDialog.el).dialog({
 				modal : true,
-				title : 'Filters'
+				title : 'Filters',
+				width : '900',
+				height : '550'
 			});
+
+			app.TabsApp.filtersWidget = new FiltersWidget({
+				el : jQuery('#filters-dialog-container'),
+				draggable : true,
+				translator : null
+			});
+			app.TabsApp.filtersWidget.loaded.then(function() {
+				// debugger
+				var self = this;
+				/*
+				 * self.state.register(self, 'filters', { get : function() {
+				 * return self.serialize(); }, set : function(state) { return
+				 * self.deserialize(state); }, empty : null });
+				 */
+			});
+			app.TabsApp.filtersWidget.showFilters();
 		},
 		clickSettingsButton : function() {
 			console.log('clickSettingsButton');
@@ -40,11 +62,12 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 				model : settings
 			});
 			settingsDialog.render();
-			$(settingsDialog.el).dialog({
+			jQuery(settingsDialog.el).dialog({
 				modal : true,
 				title : 'Settings',
 				width : 500
 			});
+			jQuery(".buttonify").button();
 		},
 		setId : function(id) {
 			reportId = id;

@@ -1,4 +1,4 @@
-define(function() {
+define([ 'jquery', 'jqueryui' ], function(jQuery) {
 
 	"use strict";
 
@@ -10,10 +10,10 @@ define(function() {
 
 	TabUtils.hideInvisibleTabs = function(tabsCollection, animate) {
 		var duration = animate != undefined ? animate : 0;
-		var allTabs = $("#tabs-section ul li");
+		var allTabs = jQuery("#tabs-section ul li");
 		_.each(tabsCollection, function(val, i) {
 			if (val.get('visible') == false) {
-				$(allTabs[i]).hide(duration);
+				jQuery(allTabs[i]).hide(duration);
 			}
 		});
 	};
@@ -23,8 +23,8 @@ define(function() {
 		this.hideInvisibleTabs(app.TabsApp.tabsCollection.models, 250);
 		_.each(app.TabsApp.tabsCollection.models, function(item, i) {
 			if (item.get('id') == id) {
-				$($("#tabs-section ul li")[i]).show(duration);
-				$(app.TabsApp.tabContainer).tabs("option", "active", i);
+				jQuery(jQuery("#tabs-section ul li")[i]).show(duration);
+				jQuery(app.TabsApp.tabContainer).tabs("option", "active", i);
 			}
 		});
 	};

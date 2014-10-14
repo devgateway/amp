@@ -1,4 +1,4 @@
-define([ 'business/grid/columnsMapping' ], function(columnsMapping) {
+define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 
 	"use strict";
 
@@ -22,19 +22,21 @@ define([ 'business/grid/columnsMapping' ], function(columnsMapping) {
 		// Define grid structure.
 		var tableStructure = extractMetadata(firstContent);
 		var grouping = (tableStructure.hierarchies.length > 0) ? true : false;
-		var grid = $("#tab_grid");
-		$(grid).attr("id", "tab_grid_" + id);
-		var pager = $("#tab_grid_pager");
-		$(pager).attr("id", "tab_grid_pager_" + id);
+		var grid = jQuery("#tab_grid");
+		jQuery(grid).attr("id", "tab_grid_" + id);
+		var pager = jQuery("#tab_grid_pager");
+		jQuery(pager).attr("id", "tab_grid_pager_" + id);
 
-		$(grid).jqGrid({
+		var rowNum = 0;
+		jQuery(grid).jqGrid({
 			caption : false,
-			url : '/rest/data/report/' + id + '/result/',
-			/* url : '/rest/data/report/' + id + '/result/jqGrid', */
+			/* url : '/rest/data/report/' + id + '/result/', */
+			url : '/rest/data/report/' + id + '/result/jqGrid',
 			datatype : 'json',
 			jsonReader : {
 				repeatitems : false,
 				root : function(obj) {
+					rowNum = obj.recordsPerPage;
 					return transformData(obj, grouping, tableStructure.hierarchies);
 				},
 				page : function(obj) {
@@ -49,7 +51,7 @@ define([ 'business/grid/columnsMapping' ], function(columnsMapping) {
 			},
 			colNames : columnsMapping.createJQGridColumnNames(tableStructure, grouping),
 			colModel : columnsMapping.createJQGridColumnModel(tableStructure),
-			height : 400,
+			height : 200,
 			autowidth : true,
 			shrinkToFit : true,
 			forceFit : false,
@@ -58,17 +60,17 @@ define([ 'business/grid/columnsMapping' ], function(columnsMapping) {
 			headertitles : true,
 			gridview : true,
 			rownumbers : false,
-			rowNum : 10000,
+			rowNum : rowNum,
 			pager : "#tab_grid_pager_" + id,
 			emptyrecords : 'No records to view',
 			grouping : grouping,
 			groupingView : columnsMapping.createJQGridGroupingModel(tableStructure, grouping),
 			gridComplete : function() {
-				// console.log($(grid).css("width"));
+				// console.log(jQuery(grid).css("width"));
 				// columnsMapping.recalculateColumnsWidth(grid,
-				// $(grid).css("width"));
-				$(grid).find(">tbody>tr.jqgrow:odd").addClass("myAltRowClassEven");
-				$(grid).find(">tbody>tr.jqgrow:even").addClass("myAltRowClassOdd");
+				// jQuery(grid).css("width"));
+				jQuery(grid).find(">tbody>tr.jqgrow:odd").addClass("myAltRowClassEven");
+				jQuery(grid).find(">tbody>tr.jqgrow:even").addClass("myAltRowClassOdd");
 			}
 		});
 	};
@@ -95,7 +97,7 @@ define([ 'business/grid/columnsMapping' ], function(columnsMapping) {
 	 */
 	function transformData(data, grouping, hierarchies) {
 		var rows = [];
-		getContentRecursively(data.reportContents /* data.pageArea */, rows, null);
+		getContentRecursively(/* data.reportContents */data.pageArea, rows, null);
 		if (grouping) {
 			postProcessHierarchies(rows, hierarchies);
 		}
@@ -109,8 +111,8 @@ define([ 'business/grid/columnsMapping' ], function(columnsMapping) {
 	 * rendering.
 	 */
 	function postProcessHierarchies(rows, hierarchies) {
-		$.each(rows, function(i, row) {
-			$.each(hierarchies.models, function(j, hierarchy) {
+		jQuery.each(rows, function(i, row) {
+			jQuery.each(hierarchies.models, function(j, hierarchy) {
 				if (row[hierarchy.get('columnName')] != undefined) {
 					hierarchy.set('lastValue', row[hierarchy.get('columnName')]);
 				} else {
@@ -127,7 +129,7 @@ define([ 'business/grid/columnsMapping' ], function(columnsMapping) {
 				var row = {
 					id : 0
 				};
-				$.each(obj.contents, function(key, element) {
+				jQuery.each(obj.contents, function(key, element) {
 					var colName = null;
 					if (columnsMapping.getMap()[key] != undefined) {
 						colName = columnsMapping.getMap()[key].name;
@@ -144,7 +146,7 @@ define([ 'business/grid/columnsMapping' ], function(columnsMapping) {
 				// console.log(row);
 				rows.push(row);
 			} else {
-				$(obj.children).each(function(i, item) {
+				jQuery(obj.children).each(function(i, item) {
 					getContentRecursively(item, rows, obj.contents);
 				});
 			}

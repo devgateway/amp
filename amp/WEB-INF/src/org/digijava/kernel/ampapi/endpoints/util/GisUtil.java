@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 public class GisUtil {
 	private static final Logger logger = Logger.getLogger(GisUtil.class);
@@ -69,5 +71,21 @@ public class GisUtil {
 			return null;
 		}
 		return availableFilters;
-	}	
+	}
+	
+	/**
+	 * @return general currency settings
+	 */
+	public static GisSettingOptions getCurrencySettings() {
+		//build currency options
+		List<GisSettingOptions.Option> options = new ArrayList<GisSettingOptions.Option>();
+		for (AmpCurrency ampCurrency : CurrencyUtil.getActiveAmpCurrencyByName()) {
+			GisSettingOptions.Option currencyOption = new GisSettingOptions.Option(ampCurrency.getCurrencyCode(), ampCurrency.getCurrencyName());
+			options.add(currencyOption);
+		}
+		//identifies the base currency 
+		String defaultId = CurrencyUtil.getDefaultCurrency().getCurrencyCode();
+		
+		return new GisSettingOptions(GisConstants.CURRENCY_ID, GisConstants.CURRENCY_NAME, defaultId, options);
+	}
 }

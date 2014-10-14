@@ -1,6 +1,5 @@
 package org.digijava.kernel.ampapi.endpoints.gis;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -22,22 +22,20 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.PathSegment;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.StreamingOutput;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportArea;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
+import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
+import org.digijava.kernel.ampapi.endpoints.util.GisSettingOptions;
 import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.SimpleResultFormatter;
@@ -386,5 +384,14 @@ public class GisEndPoints {
         };
         return streamOutput;
       }
-
+	
+	@GET
+	@Path("/settings")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="Settings")
+	public List<GisSettingOptions> getSettings() {
+		List<GisSettingOptions> settings = new ArrayList<GisSettingOptions>();
+		settings.add(GisUtil.getCurrencySettings());
+		return settings;
+	}
 }

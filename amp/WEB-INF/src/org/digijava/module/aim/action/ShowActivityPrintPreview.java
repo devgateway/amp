@@ -1057,7 +1057,12 @@ public class ShowActivityPrintPreview
                 eaForm.getIdentification().setGbsSbs(activity.getGbsSbs());
                 eaForm.getIdentification().setGovernmentApprovalProcedures(activity.isGovernmentApprovalProcedures());
                 eaForm.getIdentification().setJointCriteria(activity.isJointCriteria());
-                eaForm.getIdentification().setHumanitarianAid(activity.isHumanitarianAid());
+                
+                
+                
+   				eaForm.getIdentification().setHumanitarianAid(activity.isHumanitarianAid());
+                
+                
                 
                 if(activity.getCrisNumber()!=null)
                 	eaForm.getIdentification().setCrisNumber(activity.getCrisNumber().trim());
@@ -1176,6 +1181,9 @@ public class ShowActivityPrintPreview
         return mapping.findForward("forward");
     }
 
+    
+
+    
 	private void getComponents(Collection componets, Long actId, EditActivityForm eaForm) {
 		List<Components<FundingDetail>> selectedComponents = new ArrayList<Components<FundingDetail>>();
 		Iterator compItr = componets.iterator();

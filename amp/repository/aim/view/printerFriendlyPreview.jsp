@@ -710,8 +710,9 @@ body {background:none;}
 									</tr>
 									</field:display>
 		</feature:display>
+	<module:display name="/Activity Form/Identification/Humanitarian Aid" parentModule="/Activity Form/Identification">
                                      
-
+ 
 										<field:display name="Humanitarian Aid" feature="Identification">
 											<tr>
 												<td width="30%" align="right" valign="top" nowrap="nowrap" ><b>
@@ -727,7 +728,7 @@ body {background:none;}
 	&nbsp;										</td>
 											</tr>
 										</field:display>
-									
+	</module:display>
 								
 									<field:display feature="Identification" name="Organizations and Project ID">
 											<tr>
@@ -860,6 +861,30 @@ body {background:none;}
 														<c:out value="${aimEditActivityForm.planning.currentCompDate}"/>													</td>
 												</tr>
 												</module:display>
+
+												<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
+													<feature:display name="Planning" module="Project ID and Planning">
+														<field:display name="Current Completion Date Comments" feature="Planning">
+															<tr>
+																<td>
+																	<digi:trn>Current Completion Date comments</digi:trn>:&nbsp;
+																	<ul>
+																		<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
+																				<logic:equal name="comments" property="key" value="current completion date">
+																					<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
+																						<li>
+																							<b><bean:write name="comment" property="comment" /></b>
+																							<br />
+																						</li>
+																					</logic:iterate>
+																				</logic:equal>
+																		</logic:iterate>
+																	</ul>
+																</td>	
+															</tr>	
+														</field:display>
+													</feature:display>
+												</module:display>		
 																																				
 												<module:display name="/Activity Form/Planning/Final Date for Contracting" parentModule="/Activity Form/Planning">
 												<tr>
@@ -879,6 +904,33 @@ body {background:none;}
 														<c:out value="${aimEditActivityForm.planning.disbursementsDate}"/>													</td>
 												</tr>
 												</module:display>
+												<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
+													<feature:display name="Planning" module="Project ID and Planning">
+														<field:display name="Final Date for Disbursements Comments" feature="Planning">
+															<tr>
+																<td> 																   
+																	<digi:trn>Final Date for Disbursements comments</digi:trn>:&nbsp;
+																	<ul>
+																		<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
+																				<logic:equal name="comments" property="key" value="Final Date for Disbursements">
+																					<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
+																						<li>
+																							<b><bean:write name="comment" property="comment" /></b>
+																							<br />
+																						</li>
+																					</logic:iterate>
+																				</logic:equal>
+																		</logic:iterate>
+																	</ul>
+																</td>
+															</tr>	
+														</field:display>
+													</feature:display>
+												</module:display>
+
+
+
+
 
 												<c:if test="${aimEditActivityForm.editAct}">
 												<c:if test="${!empty aimEditActivityForm.planning.activityCloseDates}">
@@ -1592,6 +1644,9 @@ body {background:none;}
 									</tr>
 									</module:display>
 								  </logic:present>  
+									<feature:display module="Aid Effectiveness" name="Aid Effectiveness">
+ 
+								  
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap">
 											<b><digi:trn>Aid Effectiveness</digi:trn></a></td>
@@ -1681,6 +1736,7 @@ body {background:none;}
 											</table>
 											
 											</td></tr>
+											</feature:display>
                                     <module:display name="/Activity Form/Regional Funding" parentModule="/Activity Form">
 									<tr>
 										<td width="30%" align="right" valign="top" nowrap="nowrap">
@@ -2257,6 +2313,71 @@ body {background:none;}
 									</feature:display>
                                  </module:display>   
                                      
+                                     
+                                 <module:display name="/Activity Form/Line Ministry Observations" parentModule="/Activity Form">
+                                 	<tr> 
+										<td width="27%" align="right" valign="top" nowrap="nowrap">
+											<b><digi:trn>Line Ministry Observations</digi:trn></b>
+                                     	</td>
+                                     	<td>
+											<c:if test="${not empty aimEditActivityForm.lineMinistryObservations.issues}">
+												<logic:iterate name="aimEditActivityForm" id="lineMinistryObs" property="lineMinistryObservations.issues">
+													<table style="width: 98%;">
+														<module:display name="/Activity Form/Line Ministry Observations/Observation" parentModule="/Activity Form/Line Ministry Observations">
+															<tr >
+																<td width="27%;">
+																	<b><digi:trn>Observation</digi:trn>:</b>
+																</td>
+																<td>
+																	<b><c:out value="${lineMinistryObs.name}"/></b>
+																</td>	
+															</tr>	
+														</module:display>
+														<module:display name="/Activity Form/Line Ministry Observations/Observation/Date" parentModule="/Activity Form/Line Ministry Observations/Observation">
+															<tr >
+																<td>
+																	<digi:trn>Observation Date</digi:trn>:
+																</td>
+																<td>
+																	<c:out value="${lineMinistryObs.issueDate}"/>
+																</td>
+															</tr>
+														</module:display>			
+														<logic:iterate name="lineMinistryObs" id="measure" property="measures">
+															<tr>
+																<td>
+																	<digi:trn>Measure</digi:trn>:
+																</td>
+																<td>	
+																	<c:out value="${measure.name}"/>
+																</td>
+															</tr>
+															<c:if test="${not empty measure.actors }">
+																<tr>
+																	<td>
+																		<digi:trn>Actors</digi:trn>
+																	</td>
+																	<td>
+																		<table style="border-collapse:collapse" cellpadding="0" cellspacing="0" widht="100%">
+																			<logic:iterate name="measure" id="actor" property="actors">
+																				<tr>
+																					<td>	
+																						<c:out value="${actor.name}"/>
+																					</td>
+																				</tr>
+																			</logic:iterate>
+																		</table>	
+																	</td>
+																</tr>
+															</c:if>	
+														</logic:iterate>
+													</table>		
+												</logic:iterate>
+											</c:if>
+										</td>
+									</tr>
+								</module:display>
+                                     
 								<module:display name="/Activity Form/Related Organizations" parentModule="/Activity Form">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" >
@@ -2813,7 +2934,8 @@ body {background:none;}
 									</tr>
 								  </module:display>
 								  
-								  <module:display name="/Activity Form/Funding/Proposed Project Cost" parentModule="/Activity Form/Funding">
+								  <module:display name="/Activity Form/Budget Structure/Budget Structure" parentModule="/Activity Form/Budget Structure">
+								  
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 											<b>

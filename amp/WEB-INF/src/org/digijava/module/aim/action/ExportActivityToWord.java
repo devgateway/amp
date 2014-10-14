@@ -74,6 +74,7 @@ import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Table;
+import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.table.RtfCell;
 
@@ -100,6 +101,7 @@ public class ExportActivityToWord extends Action {
     private org.digijava.module.aim.form.EditActivityForm.Location location = null;
     private Programs programs = null;
     org.digijava.module.aim.form.EditActivityForm.Sector sectors = null;
+	private Map<String, List<AmpComments>> allComments = null;
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat();
 
 	public boolean hasContent(Collection<?> col){
@@ -197,7 +199,9 @@ public class ExportActivityToWord extends Action {
 	            planningSubTable1.setWidths(new float[]{1f,2f});
 	            planningSubTable1.setWidth(100);
 	            
-	            processPlanningPart(request, ampContext, planningSubTable1);
+	            Map<String, List<AmpComments>> allComments = this.fetchAllComments(actId);
+	            
+	            processPlanningPart(request, ampContext, allComments, planningSubTable1);
 	            planningTblCell1.add(planningSubTable1);
 	            //planningTbl.addCell(planningTblCell1);
 	            doc.add(planningTbl);
@@ -1393,7 +1397,7 @@ public class ExportActivityToWord extends Action {
 	}
 
 
-	private void processPlanningPart(HttpServletRequest request, ServletContext ampContext, Table planningSubTable1)
+	private void processPlanningPart(HttpServletRequest request, ServletContext ampContext, Map<String, List<AmpComments>> allComments, Table planningSubTable1)
 			throws Exception {
 		HttpSession session=request.getSession();
 		String columnName;
@@ -1460,6 +1464,15 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(planningSubTable1,columnName,planning.getDisbursementsDate(),null);
 		}
 		
+		String commColumnName = "Final Date for Disbursements Comments";
+		if(FeaturesUtil.isVisibleField(commColumnName)){
+			this.buildCommentsPart("Final Date for Disbursements", commColumnName, allComments, planningSubTable1);
+		}
+		columnName = "Current Completion Date Comments";
+		if(FeaturesUtil.isVisibleField(columnName)){
+			this.buildCommentsPart("current completion date", commColumnName, allComments, planningSubTable1);
+		}			
+		
 		if(FeaturesUtil.isVisibleField("Duration of Project")){
 			columnName=TranslatorWorker.translateText("Duration of Project")+": ";
             columnVal = "";
@@ -1470,6 +1483,33 @@ public class ExportActivityToWord extends Action {
 		}
 	}
 	
+	
+	private void buildCommentsPart(String fieldName, String columnName, Map<String, List<AmpComments>> allComments, 
+			Table table) throws Exception {
+		List<String> outList = new ArrayList<String>();
+        for (Object commentKey : allComments.keySet()) {     	
+			String key=(String)commentKey;
+			List<AmpComments> values=(List<AmpComments>)allComments.get(key);
+			if(key.equalsIgnoreCase(fieldName)){
+				for (AmpComments value : values) {
+					outList.add(TranslatorWorker.translateText(value.getComment()));
+					
+				}					
+			}
+		}
+        for (int i = 0; i < outList.size(); i++) {
+        	
+	        Table objTable=new Table(1);
+	        objTable.getDefaultCell().setBorder(0);
+	        objTable.addCell(new Paragraph(outList.get(i),BOLDFONT));
+			generateOverAllTableRows(table, TranslatorWorker.translateText(columnName) + " " + (i+1), objTable,null);
+			
+        }
+        
+        
+        		
+	}
+
 	/*
      * Structures
      */
@@ -2620,16 +2660,10 @@ public class ExportActivityToWord extends Action {
         Collection ampFields = DbUtil.getAmpFields();
         
 
+        //if activityid is null, the method should have broken much earlier
+        Map<String, List<AmpComments>> allComments = this.fetchAllComments(new Long(request.getParameter("activityid")));
         
-		HashMap allComments = new HashMap();
-		Long actId=new Long(request.getParameter("activityid"));
-        if (ampFields!=null) {
-        	for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
-                AmpField field = (AmpField) itAux.next();
-                colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),actId);
-                allComments.put(field.getFieldName(), colAux);
-              }
-        }
+
 
 		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Objective Comments")) {
 			//objective comments            
@@ -3098,6 +3132,26 @@ public class ExportActivityToWord extends Action {
 			}
 			cell.add(new Paragraph(columnVal,BOLDFONT));
 			identificationSubTable1.addCell(cell);
+		}
+	}
+	//TODO: unify it with the one from ExportActivityToPDF (move to a common place)
+	//please fix me asap or humanity will reach deep space before it's done
+	private Map<String, List<AmpComments>> fetchAllComments(Long actId) {
+		if (this.allComments != null)
+			return this.allComments;
+		else {
+			//objective comments and comments 
+			Map<String, List<AmpComments>> allComments = new HashMap<String, List<AmpComments>>();
+			ArrayList<AmpComments> colAux	= null;
+	        Collection<AmpField> ampFields = DbUtil.getAmpFields();
+	        if (ampFields!=null) {
+	        	for (AmpField field: ampFields){
+	                colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),actId);
+	                allComments.put(field.getFieldName(), colAux);
+	              }
+	        }
+	        this.allComments = allComments;
+	        return allComments;
 		}
 	}
 

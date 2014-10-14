@@ -5582,10 +5582,10 @@ public class DbUtil {
 		return field;
 	}
 
-	public static Collection getAmpFields() {
+	public static Collection<AmpField> getAmpFields() {
 		Session session = null;
 		Query qry = null;
-		Collection colAux = new ArrayList();
+		Collection colAux = new ArrayList<AmpField>();
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
@@ -5605,10 +5605,10 @@ public class DbUtil {
 		return colAux;
 	}
 
-	public static ArrayList getAllCommentsByField(Long fid, Long aid) {
+	public static ArrayList<AmpComments> getAllCommentsByField(Long fid, Long aid) {
 		Session session = null;
 		Query qry = null;
-		ArrayList comments = new ArrayList();
+		ArrayList<AmpComments> comments = new ArrayList<AmpComments>();
 
 		try {
 			session = PersistenceManager.getRequestDBSession();

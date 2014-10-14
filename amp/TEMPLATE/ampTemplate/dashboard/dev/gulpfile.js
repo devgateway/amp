@@ -31,6 +31,12 @@ var paths = {
     ],
     testStyles: './bower_components/mocha/mocha.css'
   },
+  img: {
+    libs: [
+      '../../node_modules/amp-filter/dist/img/**'
+    ],
+    dest: './app/img/'
+  },
   testPage: './app/js/tests/index.html'
 };
 
@@ -107,7 +113,13 @@ gulp.task('less', function() {
 });
 
 
-gulp.task('watch', ['watchify', 'lint', 'less'], function() {
+gulp.task('images', function() {
+  return gulp.src(paths.img.libs)
+    .pipe(gulp.dest(paths.img.dest));
+});
+
+
+gulp.task('watch', ['watchify', 'lint', 'less', 'images'], function() {
   gulp.watch([paths.scripts.sources], ['lint']);
   gulp.watch(paths.stylesheets.sources, ['less']);
 });

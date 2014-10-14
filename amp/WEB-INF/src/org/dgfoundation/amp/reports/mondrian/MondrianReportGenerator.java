@@ -320,7 +320,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				config.addColumnMeasure(elem);
 		}
 		//add grouping columns for measure
-		config.getColumnAttributes().addAll(MondrianMapping.getDateElements(spec.getGroupingCriteria()));
+		config.getColumnAttributes().addAll(MondrianMapping.getDateElements(spec.getGroupingCriteria(), spec.getSettings().getCalendar()));
 		//add sorting
 		configureSortingRules(config, spec, doHierarchiesTotals);
 		

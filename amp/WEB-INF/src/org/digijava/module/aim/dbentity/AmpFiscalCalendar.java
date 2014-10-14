@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.digijava.module.aim.helper.donorReport.OrgProfileValue;
 import org.digijava.module.aim.helper.donorReport.ValueTranslatabePair;
 import org.digijava.module.aim.helper.fiscalcalendar.EthiopianBasedWorker;
@@ -116,6 +117,7 @@ public class AmpFiscalCalendar implements Serializable, Identifiable,OrgProfileV
 		return name;
 	}
 
+	@JsonIgnore
 	public ICalendarWorker getworker() {
 		if (this.getBaseCal().equalsIgnoreCase("GREG-CAL")) {
 			return new GregorianBasedWorker(this);

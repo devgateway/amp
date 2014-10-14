@@ -6,6 +6,7 @@ package org.dgfoundation.amp.reports.mondrian;
 import java.text.DecimalFormat;
 
 import org.dgfoundation.amp.newreports.ReportSettings;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 
 /**
  * Report Settings 
@@ -15,6 +16,7 @@ import org.dgfoundation.amp.newreports.ReportSettings;
 public class MondrianReportSettings extends MondrianReportFilters implements ReportSettings {
 	private String currencyCode = null;
 	private DecimalFormat currencyFormat = null;
+	transient private AmpFiscalCalendar calendar = null;
 	
 	@Override
 	public String getCurrencyCode() {
@@ -41,5 +43,17 @@ public class MondrianReportSettings extends MondrianReportFilters implements Rep
 	public void setCurrencyFormat(DecimalFormat currencyFormat) {
 		this.currencyFormat = currencyFormat;
 	}
+
+	@Override
+	public AmpFiscalCalendar getCalendar() {
+		return calendar;
+	}
 	
+	/**
+	 * Configures the calendar type
+	 * @param calendar
+	 */
+	public void setCalendar(AmpFiscalCalendar calendar) {
+		this.calendar = calendar;
+	}
 }

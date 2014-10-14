@@ -21,6 +21,7 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXLevel;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 
 /**
  * Provides the support for mapping from AMP tables & columns to Mondrian schema 
@@ -33,12 +34,19 @@ public class MondrianMapping {
 		return elem==null ? null : elem.clone();
 	}
 	
-	public static List<MDXAttribute> getDateElements(GroupingCriteria grouping) {
+	public static List<MDXAttribute> getDateElements(GroupingCriteria grouping, AmpFiscalCalendar calendar) {
 		List<MDXAttribute> dateTuple = new ArrayList<MDXAttribute>();
+		
+		String dateDimension = MoConstants.DATES;
+		String monthHierarchy = MoConstants.H_MONTH;
+		String quarterHierarchy = MoConstants.H_QUARTER;
+		String yearHierarchy = MoConstants.H_YEAR;
+		//TODO: detect calendar specific dimension/hierarchy to be used
+		
 		switch(grouping) {
-		case GROUPING_MONTHLY: dateTuple.add(new MDXLevel(MoConstants.DATES, MoConstants.H_MONTH, MoConstants.ATTR_MONTH));
-		case GROUPING_QUARTERLY: dateTuple.add(0, new MDXLevel(MoConstants.DATES, MoConstants.H_QUARTER, MoConstants.ATTR_QUARTER));
-		case GROUPING_YEARLY: dateTuple.add(0, new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR));
+		case GROUPING_MONTHLY: dateTuple.add(new MDXLevel(dateDimension, monthHierarchy, MoConstants.ATTR_MONTH));
+		case GROUPING_QUARTERLY: dateTuple.add(0, new MDXLevel(dateDimension, quarterHierarchy, MoConstants.ATTR_QUARTER));
+		case GROUPING_YEARLY: dateTuple.add(0, new MDXLevel(dateDimension, yearHierarchy, MoConstants.ATTR_YEAR));
 		default:
 			break;
 		}

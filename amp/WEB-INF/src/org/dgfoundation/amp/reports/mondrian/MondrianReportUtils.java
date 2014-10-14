@@ -20,6 +20,7 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
 
 /**
  * Reports utility methods
@@ -88,11 +89,13 @@ public class MondrianReportUtils {
 		MondrianReportSettings settings = new MondrianReportSettings();
 		settings.setCurrencyFormat(FormatHelper.getDefaultFormat());
 		AmpApplicationSettings ampAppSettings = AmpARFilter.getEffectiveSettings();
-		if (ampAppSettings == null)
+		if (ampAppSettings == null) {
 			settings.setCurrencyCode(CurrencyUtil.getDefaultCurrency().getCurrencyCode());
-		else 
+			settings.setCalendar(DbUtil.getAmpFiscalCalendar(DbUtil.getBaseFiscalCalendar()));
+		} else { 
 			settings.setCurrencyCode(ampAppSettings.getCurrency().getCurrencyCode());
-		//TODO: for calendar
+			settings.setCalendar(ampAppSettings.getFiscalCalendar());
+		}
 		return settings;
 	}
 	

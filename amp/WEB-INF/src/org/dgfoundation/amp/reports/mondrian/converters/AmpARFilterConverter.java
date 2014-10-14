@@ -360,7 +360,7 @@ public class AmpARFilterConverter {
 		} catch(AmpApiException ex) {
 			logger.error(ex.getMessage());
 		}
-		//TODO: calendar
+		settings.setCalendar(arFilter.getCalendarType());
 	}
 
 

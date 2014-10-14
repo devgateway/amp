@@ -1166,6 +1166,27 @@ function collapseAll() {
 			<b><c:out value="${aimEditActivityForm.planning.currentCompDate}"/></b>		
 		</module:display> 
 							
+		<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
+			<feature:display name="Planning" module="Project ID and Planning">
+				<field:display name="Current Completion Date Comments" feature="Planning">
+					<hr> 																   
+					<digi:trn>Current Completion Date comments</digi:trn>:&nbsp;
+					<ul>
+						<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
+								<logic:equal name="comments" property="key" value="current completion date">
+									<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
+										<li>
+											<b><bean:write name="comment" property="comment" /></b>
+											<br />
+										</li>
+									</logic:iterate>
+								</logic:equal>
+						</logic:iterate>
+					</ul>		
+				</field:display>
+			</feature:display>
+		</module:display>							
+							
 		<module:display name="/Activity Form/Planning/Final Date for Contracting" parentModule="/Activity Form/Planning">
 			<hr>
 			<digi:trn>Final Date for Contracting</digi:trn>:&nbsp;
@@ -1177,7 +1198,26 @@ function collapseAll() {
 			<digi:trn>Final Date for Disbursements</digi:trn>:&nbsp;
 			<b><c:out value="${aimEditActivityForm.planning.disbursementsDate}"/></b>
 		</module:display>
-		
+		<module:display name="Project ID and Planning" parentModule="PROJECT MANAGEMENT">
+			<feature:display name="Planning" module="Project ID and Planning">
+				<field:display name="Final Date for Disbursements Comments" feature="Planning">
+					<hr> 																   
+					<digi:trn>Final Date for Disbursements comments</digi:trn>:&nbsp;
+					<ul>
+						<logic:iterate name="aimEditActivityForm" id="comments" property="comments.allComments">
+								<logic:equal name="comments" property="key" value="Final Date for Disbursements">
+									<logic:iterate name="comments" id="comment" property="value" type="org.digijava.module.aim.dbentity.AmpComments">
+										<li>
+											<b><bean:write name="comment" property="comment" /></b>
+											<br />
+										</li>
+									</logic:iterate>
+								</logic:equal>
+						</logic:iterate>
+					</ul>		
+				</field:display>
+			</feature:display>
+		</module:display>
 		
 		<hr>
 		<field:display name="Duration of Project" feature="Planning"> 

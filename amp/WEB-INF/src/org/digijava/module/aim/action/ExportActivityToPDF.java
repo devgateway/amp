@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.derby.iapi.types.ConcatableDataValue;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -279,12 +280,12 @@ public class ExportActivityToPDF extends Action {
 			}
 
 			//objective comments
-			HashMap allComments = new HashMap();
+			Map<String, List<AmpComments>> allComments = new HashMap<String, List<AmpComments>>();
 			List<AmpComments> colAux	= null;
-            Collection ampFields = DbUtil.getAmpFields();
+            Collection<AmpField> ampFields = DbUtil.getAmpFields();
             
             if (ampFields!=null) {
-            	for (Iterator itAux = ampFields.iterator(); itAux.hasNext(); ) {
+            	for (Iterator<AmpField> itAux = ampFields.iterator(); itAux.hasNext(); ) {
                     AmpField field = (AmpField) itAux.next();
                     colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),actId);
                     allComments.put(field.getFieldName(), colAux);
@@ -820,7 +821,14 @@ public class ExportActivityToPDF extends Action {
                         outputValue += "\t: " + duration.toString() + " " + TranslatorWorker.translateText("Months") + "\n";
                     }
 				}
-				
+				String commColumnName = "Final Date for Disbursements Comments";
+				if(FeaturesUtil.isVisibleField(commColumnName)){
+					this.buildCommentsPart("Final Date for Disbursements", commColumnName, allComments, locale, siteId, mainLayout);
+				}
+				columnName = "Current Completion Date Comments";
+				if(FeaturesUtil.isVisibleField(columnName)){
+					this.buildCommentsPart("current completion date", commColumnName, allComments, locale, siteId, mainLayout);
+				}				
 				columnName=TranslatorWorker.translateText("Planning");
 				createGeneralInfoRow(mainLayout,columnName,outputValue);
 				
@@ -836,7 +844,15 @@ public class ExportActivityToPDF extends Action {
 				}
 				*/
 			}			
-			
+
+			String commColumnName = "Final Date for Disbursements Comments";
+			if(FeaturesUtil.isVisibleField(commColumnName)){
+				this.buildCommentsPart("Final Date for Disbursements", commColumnName, allComments, locale, siteId, mainLayout);
+			}
+			columnName = "Current Completion Date Comments";
+			if(FeaturesUtil.isVisibleField(columnName)){
+				this.buildCommentsPart("current completion date", commColumnName, allComments, locale, siteId, mainLayout);
+			}			
 			//References
 			if(FeaturesUtil.isVisibleModule("References")){
 				Collection<AmpCategoryValue> catValues=CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.REFERENCE_DOCS_KEY,false);
@@ -1437,6 +1453,24 @@ public class ExportActivityToPDF extends Action {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	private void buildCommentsPart(String fieldName, String columnName, Map<String, List<AmpComments>> allComments, 
+			String locale, Long siteId, PdfPTable mainLayout) throws WorkerException {
+        List<String> outList = new ArrayList<String>();
+        for (Object commentKey : allComments.keySet()) {            	
+			String key=(String)commentKey;
+			List<AmpComments> values=(List<AmpComments>)allComments.get(key);
+			if(key.equalsIgnoreCase(fieldName)){
+				for (AmpComments value : values) {
+					outList.add(postprocessText(TranslatorWorker.translateText(value.getComment(), locale, siteId)));
+				}
+			}
+		}
+        for (int i = 0; i < outList.size(); i++) {
+        	createGeneralInfoRow(mainLayout, postprocessText(TranslatorWorker.translateText(columnName,locale,siteId) + " " + (i+1)), outList.get(i));	
+        }
+	}
+	
 	
 	private void buildAidEffectivenessInformationPart(PdfPTable mainLayout, List<String[]> aidEffectivenesToAdd) throws WorkerException {
 		String columnName="";		

@@ -668,6 +668,7 @@
 <field:display name="Regional Group" feature="Regional Group"></field:display> 
 <field:display name="Regional Group Additional Info"  feature="Regional Group"></field:display>
 <field:display name="Regional Percentage" feature="Location"></field:display> 
+<field:display name="Display Map" feature="Location"></field:display> 
 <field:display name="Related Activity Dropdown" feature="Create Message Form"></field:display> 
 <field:display name="Remove Actors Button" feature="Issues"></field:display> 
 <field:display name="Remove Components Button" feature="Activity - Component Step"></field:display> 

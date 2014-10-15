@@ -90,7 +90,7 @@ public class CellDataSetToAmpHierachies {
 					//and is a report column, not a measure (i.e. total measure)
 					if (elem.entity != null && ReportColumn.class.isAssignableFrom(elem.entity.getClass())) {
 						int colId = MondrianReportUtils.getColumnId((ReportColumn)elem.entity, spec);
-						if(colId != -1) 
+						if(colId >= startColumnIndex) 
 							sortOrder[colId - startColumnIndex] = sInfo.ascending; 
 					}
 				}
@@ -178,9 +178,8 @@ public class CellDataSetToAmpHierachies {
 			//get final totals reference
 			int mPos = 0;
 			for (int a = colTotals.length - spec.getMeasures().size(); a < colTotals.length; a++, mPos++) {
-				//TODO: restore to the original back when fix is applied to mandatory have all measures even if non-empty is requested
-				//Double value = colTotals[a][rowId].getValue();
-				Double value = a < 0 ? 0 : colTotals[a][rowId].getValue();
+				Double value = colTotals[a][rowId].getValue();
+				//Double value = a < 0 ? 0 : colTotals[a][rowId].getValue();
 				currentTotalMeasuresColumnTotals[mPos] += value;
 			}
 		}
@@ -230,11 +229,8 @@ public class CellDataSetToAmpHierachies {
 				if (total != null) {
 					int mPos = 0;
 					for (int a = total.getWidth() - spec.getMeasures().size(); a < total.getWidth(); a++, mPos++) {
-						//TODO: remove this check workaround when we add the support to mandatory display all measures, even if non-empty column is request 
-						if (a >= 0) {
-							String value = numberFormat.format(measuresTotalsToKeep.get(newDataRowId)[mPos]);
-							res[a][newDataRowId].setFormattedValue(value);
-						}
+						String value = numberFormat.format(measuresTotalsToKeep.get(newDataRowId)[mPos]);
+						res[a][newDataRowId].setFormattedValue(value);
 					}
 				}
 			}

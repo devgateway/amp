@@ -19,8 +19,10 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.algo.ValueWrapper;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.error.AMPException;
-import org.dgfoundation.amp.mondrian.LocksHolder;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.FilterRule;
@@ -28,11 +30,11 @@ import org.dgfoundation.amp.newreports.FilterRule.FilterType;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
+import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
@@ -41,7 +43,6 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -65,7 +66,6 @@ import org.digijava.kernel.ampapi.saiku.util.CellDataSetToGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.util.SaikuPrintUtils;
 import org.digijava.kernel.ampapi.saiku.util.SaikuUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
@@ -79,10 +79,6 @@ import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.olap.util.OlapResultSetUtil;
 import org.saiku.service.olap.totals.TotalNode;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
-import org.dgfoundation.amp.mondrian.ExceptionRunnable;
-import org.dgfoundation.amp.algo.ValueWrapper;
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 
 /**
  * Generates a report via Mondrian
@@ -332,6 +328,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		
 		config.setAllowEmptyColumnsData(spec.isDisplayEmptyFundingColumns());
 		config.setAllowEmptyRowsData(spec.isDisplayEmptyFundingRows());
+		config.setForceColumnsMeasuresEmptyData(true);
 		
 		return config;
 	}

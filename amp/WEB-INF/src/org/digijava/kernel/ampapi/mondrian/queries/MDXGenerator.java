@@ -132,6 +132,10 @@ public class MDXGenerator {
 		/* COLUMNS */
 		//if column attributes are not configured, display only measures
 		axisMdx = getColumns(config, with);
+		if (axisMdx.contains(MoConstants.FUNC_CROSS_JOIN) && !config.isAllowColumnsEmptyData()) {
+			notEmptyColumns = ""; 
+			axisMdx = axisMdx.replaceAll(MoConstants.FUNC_CROSS_JOIN, MoConstants.FUNC_NON_EMPTY_CROSS_JOIN);
+		}
 		
 		columns  =  notEmptyColumns + axisMdx + columns;
 		
@@ -215,6 +219,7 @@ public class MDXGenerator {
 			axisMdx = getAxis(config, config.getColumnAttributes().listIterator(config.getColumnAttributes().size()), 
 					with, "COLSET", axisMdx, config.isDoColumnsTotals(), 
 					Math.min(config.getColsHierarchiesTotals(), config.getColumnAttributes().size()-1) , dataFilterSets);
+			//axisMdx = forceEmptyMeasures(config, axisMdx, measuresStr);
 			
 			//if there are data filters applied directly on columns, then we need to update total measures member definition
 			if (dataFilterSets.size() > 0) {
@@ -249,6 +254,33 @@ public class MDXGenerator {
 		
 		return axisMdx;
 	}
+	
+	
+	/*
+	 * Example:
+	 * Filter(CrossJoin([Dates.Year].[Year].Members, {Measures.[Actual Disbursements],Measures.[Actual Commitments]}),
+	 * NOT (([Dates.Year].[Year].CurrentMember, Measures.[Actual Disbursements]) IS EMPTY AND ([Dates.Year].[Year].CurrentMember,Measures.[Actual Commitments]) IS EMPTY ))  
+	 */
+	/*
+	private String forceEmptyMeasures(MDXConfig config, String axisMdx, String measuresStr) {
+		//if empty columns are already requested, or no forcing was requested, then nothing to do
+		if (config.isAllowColumnsEmptyData() || !config.isForceColumnsMeasuresEmptyData()
+				|| config.getColumnMeasures().size() < 2) //nothing to force if measures count is < 2 
+			return axisMdx;
+		StringBuilder filterEmptyPerGroup = new StringBuilder();
+		
+		filterEmptyPerGroup.append(MoConstants.FUNC_FILTER).append("(").append(axisMdx).append(", ").append(" NOT (");
+		for (Iterator<MDXMeasure> iter = config.getColumnMeasures().iterator(); iter.hasNext(); ) {
+			MDXMeasure colMeasure = iter.next();
+			filterEmptyPerGroup.append("(").append(axisMdx.replace(measuresStr, colMeasure.toString())).append(") IS EMPTY");
+			if (iter.hasNext())
+				filterEmptyPerGroup.append(" AND ");
+		}
+		filterEmptyPerGroup.append("))"); //1 from NOT and 1 from Filter
+		
+		return filterEmptyPerGroup.toString();
+	}
+	*/
 	
 	/**
 	 * Adds formated measure member definition

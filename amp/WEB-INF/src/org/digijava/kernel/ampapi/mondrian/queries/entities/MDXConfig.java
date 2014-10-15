@@ -28,6 +28,7 @@ public class MDXConfig {
 	private List<MDXAttribute> singleValueFilters = new ArrayList<MDXAttribute>();
 	private LinkedHashMap<MDXTuple, SortOrder> sortingOrder = new LinkedHashMap<MDXTuple, SortOrder>();
 	private boolean allowColumnsEmptyData = false;
+	private boolean forceColumnsMeasuresEmptyData = false;
 	private boolean allowRowsEmptyData = false;
 	private boolean doRowTotals = false;
 	private boolean doColumnsTotals = false;
@@ -229,6 +230,21 @@ public class MDXConfig {
 		return allowColumnsEmptyData;
 	}
 	
+	/**
+	 * @return true if empty measures columns must be displayed when non-empty is requested
+	 * and column measures are grouped by some criteria 
+	 */
+	public boolean isForceColumnsMeasuresEmptyData() {
+		return forceColumnsMeasuresEmptyData;
+	}
+	/**
+	 * @param forceColumnsMeasuresEmptyData - true if empty measures columns must be displayed when non-empty is requested
+	 * and column measures are grouped by some criteria
+	 */
+	public void setForceColumnsMeasuresEmptyData(
+			boolean forceColumnsMeasuresEmptyData) {
+		this.forceColumnsMeasuresEmptyData = forceColumnsMeasuresEmptyData;
+	}
 	public boolean isAllowRowsEmptyData() {
 		return allowRowsEmptyData;
 	}

@@ -155,14 +155,6 @@ public class ActivityUtil {
 		//we will check what is comming in funding
 		Set<AmpFunding> af = a.getFunding();
 
-        if (af != null) {
-            for (AmpFunding ampFunding : af) {
-                System.out.println("********************");
-                System.out.println(ampFunding.getAmpFundingId() + " " + ampFunding.getAmpDonorOrgId().getName());
-                System.out.println("********************");
-            }
-        }
-		
 		
         if (ContentTranslationUtil.multilingualIsEnabled())
             ContentTranslationUtil.cloneTranslations(a, translations);
@@ -554,7 +546,6 @@ public class ActivityUtil {
 				session.merge(agg);
 			}
 		}
-		session.flush();
 	}
 
 	private static void saveResources(AmpActivityVersion a) {

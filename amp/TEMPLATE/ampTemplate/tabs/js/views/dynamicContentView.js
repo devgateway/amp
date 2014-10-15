@@ -17,37 +17,24 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 		},
 		clickFiltersButton : function() {
 			console.log('clickFiltersButton');
+			jQuery("#filters-container").attr('id', 'filters-container-' + reportId);
 			var FilterDialogContainerView = Marionette.ItemView.extend({
-				template : "<b>nada</b>",
+				template : "<p></p>",
 				render : function(model) {
-					// alert(this.$el);
-					this.$el.append("<div id='filters-dialog-container'>nada4</div>");
+					var containerName = '#filters-container-' + reportId;
+					var filtersWidget = new FiltersWidget({
+						el : containerName,
+						draggable : true,
+						translator : null
+					});
+					filtersWidget.showFilters();
+					jQuery(containerName).show();
+					jQuery(containerName).css('position', 'absolute');
+					jQuery(containerName).css('top', 10);
 				}
 			});
 			var filterDialog = new FilterDialogContainerView();
 			filterDialog.render();
-			jQuery(filterDialog.el).dialog({
-				modal : true,
-				title : 'Filters',
-				width : '900',
-				height : '550'
-			});
-
-			app.TabsApp.filtersWidget = new FiltersWidget({
-				el : jQuery('#filters-dialog-container'),
-				draggable : true,
-				translator : null
-			});
-			app.TabsApp.filtersWidget.loaded.then(function() {
-				// debugger
-				var self = this;
-				/*
-				 * self.state.register(self, 'filters', { get : function() {
-				 * return self.serialize(); }, set : function(state) { return
-				 * self.deserialize(state); }, empty : null });
-				 */
-			});
-			app.TabsApp.filtersWidget.showFilters();
 		},
 		clickSettingsButton : function() {
 			console.log('clickSettingsButton');

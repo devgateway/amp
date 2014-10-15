@@ -135,7 +135,7 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 						colName = columnsMapping.getMap()[key].name;
 					}
 					if (colName != undefined && colName != null) {
-						if (element.value != null && element.value != "") {
+						if (element.value != null && element.value.toString().length > 0) {
 							row[colName] = element.value;
 						} else {
 							row[colName] = getParentContent(key, parent);

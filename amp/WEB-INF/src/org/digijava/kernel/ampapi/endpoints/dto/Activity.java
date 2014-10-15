@@ -16,14 +16,18 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 public class Activity {
 	private Long id;
 	private String name;
+	private String ampId;
 	private String description;
 	private String ampUrl;
+	private String donorAgency;
 	private String TotalCommitments;
 	private String totalDisbursments;
-	
+
+	private String structureName;
+	private String latitude;
+	private String longitude;
+	private String structureType;
 	private JsonBean matchesFilters;
-	private List<ActivityFunding> commitments;
-	private List<ActivityFunding> disbursments;
 
 	public Activity() {
 
@@ -78,33 +82,7 @@ public class Activity {
 		this.totalDisbursments = totalDisbursments;
 	}
 
-	public List<ActivityFunding> getCommitments() {
-		return commitments;
-	}
-
-	public void setCommitments(List<ActivityFunding> commitments) {
-		this.commitments = commitments;
-	}
-
-	public List<ActivityFunding> getDisbursments() {
-		return disbursments;
-	}
-
-	public void setDisbursments(List<ActivityFunding> disbursments) {
-		this.disbursments = disbursments;
-	}
-	public void addCommitments(String amount,String transactionDate){
-		if(commitments==null){
-			commitments=new ArrayList<Activity.ActivityFunding>();
-		}
-		this.commitments.add(new ActivityFunding(amount,transactionDate));
-	}
-	public void addDisbursment(String amount,String transactionDate){
-		if(disbursments==null){
-			disbursments=new ArrayList<Activity.ActivityFunding>();
-		}
-		this.disbursments.add(new ActivityFunding(amount,transactionDate));
-	}
+	
 	
 	
 	public JsonBean getMatchesFilters() {
@@ -116,34 +94,52 @@ public class Activity {
 	}
 
 
-	public class ActivityFunding {
-		private String amount;
-		private String transactionDate;
-
-		public ActivityFunding( String amount,String transactionDate) {
-			this.amount=amount;
-			this.transactionDate=transactionDate;
-		}
-		public ActivityFunding() {
-
-		}
-
-		public String getAmount() {
-			return amount;
-		}
-
-		public void setAmount(String amount) {
-			this.amount = amount;
-		}
-
-		public String getTransactionDate() {
-			return transactionDate;
-		}
-
-		public void setTransactionDate(String transactionDate) {
-			this.transactionDate = transactionDate;
-		}
-
+	public String getAmpId() {
+		return ampId;
 	}
 
+	public void setAmpId(String ampId) {
+		this.ampId = ampId;
+	}
+
+	public String getStructureName() {
+		return structureName;
+	}
+
+	public void setStructureName(String structureName) {
+		this.structureName = structureName;
+	}
+
+	public String getLatitude() {
+		return latitude;
+	}
+
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
+	}
+
+	public String getLongitude() {
+		return longitude;
+	}
+
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
+	}
+
+	public String getStructureType() {
+		return structureType;
+	}
+
+	public void setStructureType(String structureType) {
+		this.structureType = structureType;
+	}
+
+	public String getDonorAgency() {
+		return donorAgency;
+	}
+
+	public void setDonorAgency(String donorAgency) {
+		this.donorAgency = donorAgency;
+	}
+	
 }

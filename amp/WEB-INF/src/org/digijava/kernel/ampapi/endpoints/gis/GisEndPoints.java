@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -34,11 +33,11 @@ import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
-import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.GisSettingOptions;
 import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.SimpleResultFormatter;
+import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
@@ -259,20 +258,13 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ActivitiesNewLists")
 	public List<JsonBean> getActivitiesNew(JsonBean filter,@QueryParam("start") Integer page,@QueryParam("size") Integer pageSize) {
-		return ActivityService.getActivitiesMondrian(filter,null,page,pageSize);
+		try{
+			return ActivityService.getActivitiesMondrian(filter,null,page,pageSize);
+		}catch(AmpApiException ex){
+			throw new WebApplicationException(ex);
+		}
 	}
 
-	@GET
-	@Path("/activitiesNewTest/") //only for testing
-	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="ActivitiesNewLists")
-	public List<JsonBean> getActivitiesNew(@QueryParam("start") Integer page,@QueryParam("size") Integer pageSize) {
-
-		return ActivityService.getActivitiesMondrian(null,null,page,pageSize); 
-	}
-
-
-	
 	@GET
 	@Path("/activities/{activityId}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -287,7 +279,13 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ActivitiesById")
 	public List<JsonBean> getActivities(@PathParam("activityId") PathSegment activityIds) {
-		return ActivityService.getActivitiesMondrian(null,Arrays.asList(activityIds.getPath().split("\\s*,\\s*")),null,null); 
+		try {
+			return ActivityService.getActivitiesMondrian(null,
+					Arrays.asList(activityIds.getPath().split("\\s*,\\s*")),
+					null, null);
+		} catch (AmpApiException ex) {
+			throw new WebApplicationException(ex);
+		}
 	}
 	
 	

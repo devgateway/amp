@@ -30,6 +30,7 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -157,7 +158,7 @@ public class ActivityService {
 		}
 		return a;
 	}
-	public static List<JsonBean> getActivitiesMondrian(JsonBean filter,List<String>activitIds, Integer page, Integer pageSize) {
+	public static List<JsonBean> getActivitiesMondrian(JsonBean filter,List<String>activitIds, Integer page, Integer pageSize) throws AmpApiException {
 		boolean applyFilter=false;
 		List<JsonBean> activities=new ArrayList<JsonBean>();
 		
@@ -185,43 +186,33 @@ public class ActivityService {
 
 		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL));
-
-		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ALL));
-
-		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
-
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.SECONDARY_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
-		
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.TERTIARY_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
-		
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PRIMARY_PROGRAM, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		//for now we are going to return the donor_id as matchesfilters
+		//then we have to fetch all other matchesfilters outisde mondrian
 
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
-		
  		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
 
  		spec.setCalculateColumnTotals(doTotals);
 		
  		spec.setCalculateRowTotals(doTotals);
+		//following ids are added only for testing purposes Please dont commit
+
+		if(activitIds==null){
+			activitIds=new ArrayList<String>();
+			activitIds.add("42193");
+			activitIds.add("42188");
+			activitIds.add("42179");
+			activitIds.add("42178");
+			activitIds.add("42176");
+			activitIds.add("42175");
+			activitIds.add("42200");
+	
+		}
 		if(activitIds!=null && activitIds.size()>0){
 			MondrianReportFilters
 			filterRules = new MondrianReportFilters();
-			//following ids are added only for testing purposes Please dont commit
-//			activitIds.add("42193");
-//			activitIds.add("42188");
-//			activitIds.add("42179");
-//			activitIds.add("42178");
-//			activitIds.add("42176");
-//			activitIds.add("42175");
-//			activitIds.add("42196");
-	
+
 			filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY), 
 					new FilterRule(activitIds, true, true)); 
 			spec.setFilters(filterRules);
@@ -231,8 +222,9 @@ public class ActivityService {
 		GeneratedReport report = null;		
 		try {
 			report = generator.executeReport(spec);
-		}catch(AMPException e ){
-		logger.error(e);
+		} catch (AMPException e) {
+			logger.error("Cannot execute report", e);
+			throw new AmpApiException(e);
 		}
 		//if pagination is requested
 		List<ReportArea> ll=null;
@@ -267,7 +259,7 @@ public class ActivityService {
 						//}
 				}
 			}
-			activity.set("filters",filters);
+			activity.set("matchesFilters",filters);
 			activities.add(activity);
 		}
 

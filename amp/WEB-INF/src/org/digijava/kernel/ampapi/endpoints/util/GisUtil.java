@@ -9,18 +9,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.calendar.util.CalendarUtil;
 
 public class GisUtil {
 	private static final Logger logger = Logger.getLogger(GisUtil.class);
@@ -93,9 +87,7 @@ public class GisUtil {
 			options.add(currencyOption);
 		}
 		//identifies the base currency 
-		AmpApplicationSettings appSettings = getAppSettings();
-		String defaultId = appSettings != null ? appSettings.getCurrency().getCurrencyCode() :
-							CurrencyUtil.getDefaultCurrency().getCurrencyCode();
+		String defaultId = EndpointUtils.getDefaultCurrencyCode();
 		
 		return new GisSettingOptions(GisConstants.CURRENCY_ID, GisConstants.CURRENCY_NAME, defaultId, options);
 	}
@@ -112,23 +104,8 @@ public class GisUtil {
 			options.add(calendarOption);
 		}
 		//identifies the default calendar 
-		AmpApplicationSettings appSettings = getAppSettings();
-		String defaultId = String.valueOf(appSettings != null ? appSettings.getFiscalCalendar().getIdentifier() :
-							DbUtil.getBaseFiscalCalendar());
+		String defaultId = EndpointUtils.getDefaultCalendarId();
 		
 		return new GisSettingOptions(GisConstants.CALENDAR_TYPE_ID, GisConstants.CALENDAR_TYPE_NAME, defaultId, options);
-	}
-	
-	/**
-	 * @return current user application settings 
-	 */
-	public static AmpApplicationSettings getAppSettings() {
-		HttpServletRequest request = TLSUtils.getRequest();
-		if (request != null) {
-			TeamMember tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
-			if (tm != null)
-				return DbUtil.getTeamAppSettings(tm.getTeamId());
-		}
-		return null;
 	}
 }

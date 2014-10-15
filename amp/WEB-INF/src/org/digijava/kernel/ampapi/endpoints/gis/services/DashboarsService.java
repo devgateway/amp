@@ -14,12 +14,12 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
@@ -92,11 +92,9 @@ public class DashboarsService {
 		//TODO: check why generate totals is not working
 		retlist.set("Total","15000000");
 		
-		//TODO: Currencies for public user
-		if(tm!=null){
-			String currcode = CurrencyUtil.getCurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
-			retlist.set("currency",currcode);
-		}
+		String currcode = EndpointUtils.getDefaultCurrencyCode();
+		retlist.set("currency", currcode);
+		
 		retlist.set("Numberformat",numberformat);
 		
 		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {

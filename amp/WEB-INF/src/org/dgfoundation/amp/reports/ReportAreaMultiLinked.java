@@ -41,7 +41,7 @@ public class ReportAreaMultiLinked extends ReportAreaImpl {
 			ListIterator<ReportArea> iter = area.getChildren().listIterator(area.getChildren().size());
 			ReportAreaMultiLinked prevSibling = null;
 			while (iter.hasPrevious()) {
-				prevSibling = new ReportAreaMultiLinked(iter.previous(), parent, prevSibling);
+				prevSibling = new ReportAreaMultiLinked(iter.previous(), this, prevSibling);
 				cList.addFirst(prevSibling);
 			}
 			this.children = cList;

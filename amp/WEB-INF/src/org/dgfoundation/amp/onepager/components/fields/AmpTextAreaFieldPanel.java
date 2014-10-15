@@ -120,7 +120,7 @@ public class AmpTextAreaFieldPanel extends AmpFieldPanel<String> {
 	                    	"$('#"+ closeLink.getMarkupId() +"').click();"+
 	                    	"setTimeout(function(){showRichEditor();"+
 	                    	"$('#loadingEditorDiv').remove();"+
-	                    	"},2000);}" +
+	                    	"},3500);}" +
 					     "else {" +
 					     	"showRichEditor();}"+
 				     "};"

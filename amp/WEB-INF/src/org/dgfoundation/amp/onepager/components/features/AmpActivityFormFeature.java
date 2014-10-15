@@ -292,9 +292,6 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	            AmpIdentificationFormSectionFeature ifs, IVisit<Void> visit) {
 	        List <FormComponent<?>> requiredComponents = ifs.getRequiredRichTextFormComponents();
 	        for (FormComponent<?> component : requiredComponents) {
-				String js = String.format("$('#%s').blur();",
-						component.getMarkupId());
-				target.appendJavaScript(js);
 	            component.setRequired(enabled);
 	        }
 	        visit.stop();

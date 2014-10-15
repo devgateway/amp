@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.gis.services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 
@@ -29,6 +31,34 @@ import org.digijava.module.aim.util.FeaturesUtil;
  */
 
 public class DashboarsService {
+
+	/**
+	 * Utility method for creating the small objects for the list of tops
+	 * Note -- I (Phil) hacked this in... it could probably be done better
+	 * @param pathId the id to use in the path for the actual data
+	 * @param name the human-readable name for this top
+	 * @return
+	 */
+	private static JsonBean getTopsListBean(String pathId, String name) {
+		JsonBean obj = new JsonBean();
+		obj.set("id", pathId);
+		obj.set("name", name);
+		return obj;
+	}
+
+	/**
+	 * Return a list of the available top __ for the dashboard charts
+	 * Note -- I (Phil) hacked this in, so it probably could use a review
+	 * Also, I hard-coded the names ("Donor Agency" etc.) but they should be translated
+	 * @return
+	 */
+	public static List<JsonBean> getTopsList() {
+		List<JsonBean> tops = new ArrayList<JsonBean>();
+		tops.add(getTopsListBean("do", "Donor Agency"));
+		tops.add(getTopsListBean("re", "Region"));
+		tops.add(getTopsListBean("ps", "Primary Sector"));
+		return tops;
+	}
 	
 	/**
 	 * Return (n) Donors sorted by amount
@@ -42,7 +72,7 @@ public class DashboarsService {
 		String column = "";
 		String adjustmenttype = "";
 		JsonBean retlist = new JsonBean();
-		JsonBean values = new JsonBean();
+		List<JsonBean> values = new ArrayList<JsonBean>();
 		
 		switch (type.toUpperCase()) {
 		case "DO":
@@ -90,26 +120,28 @@ public class DashboarsService {
 		
 		//Format the report output return a simple list.
 		//TODO: check why generate totals is not working
-		retlist.set("Total","15000000");
-		
+		retlist.set("total","15000000");
+
 		String currcode = EndpointUtils.getDefaultCurrencyCode();
 		retlist.set("currency", currcode);
 		
 		retlist.set("Numberformat",numberformat);
 		
 		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
+			JsonBean amountObj = new JsonBean();
 			ReportAreaImpl reportArea =  (ReportAreaImpl) iterator.next();
 			LinkedHashMap<ReportOutputColumn, ReportCell> content = (LinkedHashMap<ReportOutputColumn, ReportCell>) reportArea.getContents();
 			org.dgfoundation.amp.newreports.TextCell reportcolumn = (org.dgfoundation.amp.newreports.TextCell) content.values().toArray()[0];
 			ReportCell reportcell = (ReportCell) content.values().toArray()[1];
-			if(values.getSize()<= n-1){
-				values.set(reportcolumn.displayedValue,reportcell.value);
-			}else{
+			amountObj.set("name", reportcolumn.displayedValue);
+			amountObj.set("amount", reportcell.value);
+			values.add(amountObj);
+			if (values.size() >= n) {
 				break;
 			}
 		}
 		
-		retlist.set("Vaues", values);
+		retlist.set("values", values);
 		return retlist;
 	}
 }

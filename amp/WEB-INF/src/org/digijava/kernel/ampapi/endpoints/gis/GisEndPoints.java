@@ -252,14 +252,26 @@ public class GisEndPoints {
 	public List<Activity> getActivities(JsonBean filter) {
 		return ActivityService.getActivities(filter);
 	}
-
+	/*
+	*Config sample
+	*{
+    * "filtres":{
+    *  "Activity Id":[1,2,3,4],
+    * "Tertiary Program Id":[1,7,8,9]
+	*  },
+    *  "settings":{
+    * "settings1":1,
+    *  "settings2":"second setting"
+    *             }
+    *  }
+	*/
 	@POST
 	@Path("/activitiesNew/") //once ready remove the New
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ActivitiesNewLists")
-	public List<JsonBean> getActivitiesNew(JsonBean filter, JsonBean settings, @QueryParam("start") Integer page,@QueryParam("size") Integer pageSize) {
+	public List<JsonBean> getActivitiesNew(JsonBean config, @QueryParam("start") Integer page,@QueryParam("size") Integer pageSize) {
 		try{
-			return ActivityService.getActivitiesMondrian(filter,null,page,pageSize);
+			return ActivityService.getActivitiesMondrian(config,null,page,pageSize);
 		}catch(AmpApiException ex){
 			throw new WebApplicationException(ex);
 		}

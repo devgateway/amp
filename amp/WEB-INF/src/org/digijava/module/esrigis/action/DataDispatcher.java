@@ -46,6 +46,7 @@ import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -448,7 +449,10 @@ public class DataDispatcher extends MultiAction {
 		ct.setExpenditures(calculations.getTotPlannedExp().toString());
 		ct.setMtef(calculations.getTotalMtef().toString());
 		ct.setSectors(SectorsToJson(activity));
-		ct.setCurrecycode(maphelperform.getFilter().getCurrencyCode());
+		String currencyCode = maphelperform.getFilter().getCurrencyCode();
+		ct.setCurrecycode(currencyCode);
+		AmpCurrency currency = CurrencyUtil.getCurrencyByCode (currencyCode);
+		ct.setCurrencyname(currency.getCurrencyName());
 		for (Iterator iterator = activity.getLocations().iterator(); iterator.hasNext();) {
 			AmpActivityLocation alocation = (AmpActivityLocation) iterator.next();
 			if (alocation.getLocation().getLocation().getName().equalsIgnoreCase(request.getParameter("name"))){

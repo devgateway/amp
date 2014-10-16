@@ -145,7 +145,7 @@ function init() {
 		url : "/esrigis/datadispatcher.do?getconfig=true",
 		handleAs : "json",
 		sync : true,
-		load : function(jsonData) {
+		load : function(jsonData) {  
 			dojo.forEach(jsonData, function(map) {
 				if (map.mapSubType == MapConstants.MapSubType.INDICATOR){
 					indicatorLayerArray.push(map);
@@ -2142,30 +2142,30 @@ function getContent(graphicAttributes, baseGraphic) {
 							+ primarysector + '</b>',
 					"Total commitments" : '<b>'
 							+ attr[0].commitments + ' '
-							+ attr[0].currecycode + '</b>',
+							+ attr[0].currencyname + '</b>',
 					"Total disbursements" : '<b>'
 							+ attr[0].disbursements + ' '
-							+ attr[0].currecycode + '</b>',
+							+ attr[0].currencyname + '</b>',
 					"Total MTEF Projections" : '<b>'
 								+ attr[0].mtef + ' '
-								+ attr[0].currecycode + '</b>',
+								+ attr[0].currencyname + '</b>',
 							
 					"Commitments for this location" : '<b>'
 							+ attr[0].commitmentsforlocation
 							//+ graphicAttributes["Commitments for this location"]+ ' '
 							+ ' '
-							+ attr[0].currecycode + '</b>',
+							+ attr[0].currencyname + '</b>',
 					"Disbursements for this location" : '<b>'
 							+ attr[0].disbursementsforlocation
 							//+ graphicAttributes["Disbursements for this location"]
 							+ ' '
-							+ attr[0].currecycode + '</b>',
+							+ attr[0].currencyname + '</b>',
 							
 					"MTEF Projections for this location" : '<b>'
 								+ attr[0].mtefforlocation
 								//+ graphicAttributes["Disbursements for this location"]
 								+ ' '
-								+ attr[0].currecycode + '</b>',
+								+ attr[0].currencyname + '</b>',
 							
 					"Code" : '' + donorCode 
 				});

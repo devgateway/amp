@@ -17,6 +17,7 @@ private static final long serialVersionUID = 1L;
 	private List<ActivitySector> sectors;
     private List<SimpleDonor> donors;
     private String currecycode; 
+    private String currencyname;
     private String id; 
 	private String commitmentsforlocation;
 	private String disbursementsforlocation;
@@ -149,5 +150,15 @@ private static final long serialVersionUID = 1L;
 		if ((input == null || input.isEmpty()))
 			return "0";
 		return input;
+	}
+
+
+	public String getCurrencyname() {
+		return currencyname;
+	}
+
+
+	public void setCurrencyname(String currencyname) {
+		this.currencyname = currencyname;
 	}
 }

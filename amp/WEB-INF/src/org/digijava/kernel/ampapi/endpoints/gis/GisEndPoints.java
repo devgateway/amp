@@ -228,7 +228,7 @@ public class GisEndPoints {
 	@GET
 	@Path("/indicator-layers")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="IndiactorLayers")
+	@ApiMethod(ui=false,name="IndicatorLayers")
 	public List<IndicatorLayers> getIndicatorLayers() {
 		List<IndicatorLayers> indicatorLayers = new ArrayList<IndicatorLayers>();
 		List<AmpMapConfig> mapsConfigs = DbHelper.getMaps();

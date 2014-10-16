@@ -5,8 +5,8 @@
     "selected": "cm",
     "options": [
        {"name": "Commitments", "id":"cm"},
-       {"name": "Dispersements", "id":"dp"},
-       {"name": "Commitments & Dispersements", "id":"cm,dp"}
+       {"name": "Disbursements", "id":"dp"},
+       {"name": "Commitments & Disbursements", "id":"cm,dp"}
     ]
   },
   {

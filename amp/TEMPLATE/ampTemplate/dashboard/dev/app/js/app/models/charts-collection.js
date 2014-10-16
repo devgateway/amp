@@ -4,6 +4,8 @@ var Chart = require('./chart');
 
 module.exports = BackboneDash.Collection.extend({
 
+  url: '/rest/dashboard/tops',
+
   model: Chart,
 
   initialize: function(options) {

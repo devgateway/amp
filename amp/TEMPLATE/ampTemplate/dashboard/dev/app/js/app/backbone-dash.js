@@ -1,3 +1,4 @@
+var jQuery = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -7,21 +8,10 @@ function InitError(instance) {
   this.toString = function() { return 'Module initialization error'; };
 }
 
-// mixed into all models, collections and views to ensure we have a convenient
-// reference to the app instance everywhere.
-function enforceAppRef(Class) {
-  return Class.extend({
 
-    constructor: function() {
-      var constructed = Class.apply(this, arguments);
-      if (!_(this).has('app')) {
-        throw new InitError(this);
-      }
-      return constructed;
-    }
-
-  });
-}
+// Unfortunately, we can't just override $ on our export...
+// various backbone methods get $ from Backbone directly.
+Backbone.$ = jQuery;
 
 
 function syncOverride(method, model, options) {
@@ -39,13 +29,32 @@ function syncOverride(method, model, options) {
 }
 
 
+// mixed into all models, collections and views to ensure we have a convenient
+// reference to the app instance everywhere.
+function mixDash(Class) {
+  return Class.extend({
+
+    constructor: function() {
+      var constructed = Class.apply(this, arguments);
+      if (!_(this).has('app')) {
+        throw new InitError(this);
+      }
+      return constructed;
+    },
+
+    sync: syncOverride
+
+  });
+}
+
+
 module.exports = _({}).extend(Backbone, {
   // errors
   InitError: InitError,
 
-  Model: enforceAppRef(Backbone.Model),
-  Collection: enforceAppRef(Backbone.Collection),
-  View: enforceAppRef(Backbone.View),
+  Model: mixDash(Backbone.Model),
+  Collection: mixDash(Backbone.Collection),
+  View: mixDash(Backbone.View),
 
   sync: syncOverride
 });

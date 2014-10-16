@@ -23,25 +23,32 @@ module.exports = BackboneDash.View.extend({
   },
 
   render: function() {
-    this.$el.html(template(this.model.toJSON()));
-    nv.addGraph(this.getChart);
+    this.$el.html(template({ chart: this.model, loading: true }));
+
+    this.app.tryAfter(this.model.fetch(), function() {
+      this.$el.html(template({ chart: this.model, loading: false }));
+      nv.addGraph(_(function() { return this.app.tryTo(this.getChart, this); }).bind(this));
+    }, this);
+
     return this;
   },
 
   getChart: function() {
+    var values = _.map(this.model.get('values'), function(d) { return {x: d.name, y: d.amount}; });
+
+    if (_.chain(values).pluck('x').uniq().value().length < values.length) {
+      this.app.report('Data Error',
+        ['The data for ' + this.model.get('name') + ' was inconsistent due to duplicate keys',
+         'The chart will be shown, but it may have errors or other issues as a result.']);
+    }
+
     var chart = nv.models.multiBarChart()
       .reduceXTicks(false);
 
     d3.select(this.el.querySelector('svg'))
       .datum([{
         key: 'Blah',
-        values: [
-          {x: 0, y: 7},
-          {x: 1, y: 5},
-          {x: 2, y: 5},
-          {x: 3, y: 3},
-          {x: 4, y: 2}
-        ]
+        values: values
       }])
       .transition().duration(1000)
       .call(chart);

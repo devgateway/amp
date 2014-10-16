@@ -1,11 +1,12 @@
 <div class="box">
   <header>
-    <span class="pull-right big-number"><%= total %></span>
-    <h2><%= name %></h2>
-    <h3><%= desc %></h3>
+    <span class="pull-right big-number"><%= chart.get('total') %> <%= chart.get('currency') %></span>
+    <h2><%= chart.get('name') %></h2>
+    <h3><%= chart.get('description') || 'description...' %></h3>
   </header>
 
   <div class="chart-container">
+    <% if (loading) { %><h3 class="loading text-center">Loading data...</h3><% } %>
     <svg></svg>
   </div>
 </div>

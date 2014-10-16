@@ -30,13 +30,30 @@ _.extend(App.prototype, BackboneDash.Events, {
   },
 
   render: function() {
+    this.tryTo(this.view.render, this.view);
+  },
+
+  viewFail: function(view, err) {
+    view.$el.html(new FailView({ app: this, err: err }).render().el);
+  },
+
+  tryTo: function(fn, view) {
     try {
-      this.view.render();
+      return fn.call(view);
     } catch (e) {
       _.defer(function() { throw e; });
-      new FailView({ app: this, el: this.view.el, err: e}).render();
-      this.err = e;
+      this.viewFail(view, e);
     }
+  },
+
+  tryAfter: function(promise, fn, view) {
+    promise.done(_(function() {
+      this.tryTo(fn, view);
+    }).bind(this)).fail(_(function() { this.viewFail(view, 'failed to load'); }).bind(this));
+  },
+
+  report: function(title, messages) {
+    this.view.report(title, messages);
   }
 
 });

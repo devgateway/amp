@@ -107,7 +107,7 @@ public class DashboarsService {
 		spec.getHierarchies().addAll(spec.getColumns());
 		spec.addMeasure(new ReportMeasure(adjustmenttype,ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addSorter(new SortingInfo(new ReportMeasure(adjustmenttype), false));
-		spec.setCalculateColumnTotals(true);
+		spec.setCalculateRowTotals(true);
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
@@ -120,8 +120,13 @@ public class DashboarsService {
 		}
 		
 		//Format the report output return a simple list.
-		//TODO: check why generate totals is not working
-		retlist.set("total","15000000");
+		//this is the report totals, which is not for the top N, but for ALL results 
+		if (report.reportContents != null && report.reportContents.getContents() != null && report.reportContents.getContents().size() > 0) {
+			ReportCell totals = (ReportCell)report.reportContents.getContents().values().toArray()[1];
+			retlist.set("total", totals.value);
+		} else {
+			retlist.set("total", 0);
+		}
 
 		String currcode = EndpointUtils.getDefaultCurrencyCode();
 		retlist.set("currency", currcode);

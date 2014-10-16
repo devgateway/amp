@@ -592,6 +592,8 @@ public class DataDispatcher extends DispatchAction {
 		children.add(rootSelSecProg);
 		
 		List list = null;
+		AmpCurrency currency = CurrencyUtil.getCurrencyByCode(visualizationForm.getFilter().getCurrencyCode());
+		
 		Map<AmpActivityVersion, BigDecimal> projectsList = visualizationForm.getRanksInformation().getTopProjects();
 		if (projectsList!=null) {
 			list = new LinkedList(projectsList.entrySet());
@@ -600,7 +602,7 @@ public class DataDispatcher extends DispatchAction {
 				AmpActivityVersion act = (AmpActivityVersion) entry.getKey();
 				child.put("name", act.getName());
 				child.put("id", act.getAmpActivityId());
-				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + currency.getCurrencyName());
 				topProjects.add(child);
 			}
 		}
@@ -614,7 +616,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + currency.getCurrencyName());
 				topSectors.add(child);
 			}
 		}
@@ -628,7 +630,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + currency.getCurrencyName());
 				topOrganizations.add(child);
 			}
 		}
@@ -642,7 +644,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + currency.getCurrencyName());
 				topRegions.add(child);
 			}
 		}
@@ -656,7 +658,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + currency.getCurrencyName());
 				topNPOs.add(child);
 			}
 		}
@@ -670,7 +672,7 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + currency.getCurrencyName());
 				topPrograms.add(child);
 			}
 		}
@@ -684,16 +686,13 @@ public class DataDispatcher extends DispatchAction {
 			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 				Map.Entry entry = (Map.Entry) iterator.next();
 				child.put("name", entry.getKey().toString());
-				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+				child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + currency.getCurrencyName());
 				topSecondaryPrograms.add(child);
 			}
 		}
 		rootSecondaryPrograms.put("type", "SecondaryProgramsList");
 		rootSecondaryPrograms.put("top", topSecondaryPrograms);
 		children.add(rootSecondaryPrograms);
-
-		
-		AmpCurrency currency = CurrencyUtil.getAmpcurrency(visualizationForm.getFilter().getCurrencyId());
 		rootTotComms.put("type", "TotalComms");
 		rootTotComms.put("value", FormatHelper.formatNumberNotRounded( visualizationForm.getSummaryInformation().getTotalCommitments().doubleValue()));
 		rootTotComms.put("curr", currency.getCurrencyName());
@@ -722,7 +721,7 @@ public class DataDispatcher extends DispatchAction {
 		
 		rootAvgProjs.put("type", "AvgProjSize");
 		rootAvgProjs.put("value", FormatHelper.formatNumberNotRounded( visualizationForm.getSummaryInformation().getAverageProjectSize().doubleValue()) );
-		rootAvgProjs.put("curr", visualizationForm.getFilter().getCurrencyCode());
+		rootAvgProjs.put("curr", currency.getCurrencyName());
 		children.add(rootAvgProjs);
 		
 		root.put("objectType", "lists");
@@ -1580,7 +1579,7 @@ public class DataDispatcher extends DispatchAction {
 
 		
 		String othersTitle = TranslatorWorker.translateText("Other");
-        
+		
 		BigDecimal organizationTotal = BigDecimal.ZERO;
 		String currCode = "USD";
         if (filter.getCurrencyId()!=null) {
@@ -2015,7 +2014,7 @@ public class DataDispatcher extends DispatchAction {
 
 		
 		String othersTitle = TranslatorWorker.translateText("Other");
-        
+		
 		BigDecimal organizationTotal = BigDecimal.ZERO;
 		String currCode = "USD";
         if (filter.getCurrencyId()!=null) {
@@ -2453,9 +2452,8 @@ public class DataDispatcher extends DispatchAction {
 			endYear = filter.getEndYear();
 		}
 
-		
 		String othersTitle = TranslatorWorker.translateText("Other");
-        
+		
 		BigDecimal organizationTotal = BigDecimal.ZERO;
 		String currCode = "USD";
         if (filter.getCurrencyId()!=null) {
@@ -5023,6 +5021,8 @@ public class DataDispatcher extends DispatchAction {
 		JSONObject child = new JSONObject();
 		JSONArray rankObjects = new JSONArray();
 		JSONObject rootObjects = new JSONObject();
+		AmpCurrency currency = CurrencyUtil.getAmpcurrency(visualizationForm.getFilter().getCurrencyId());
+		
 		if(objectType != null && objectType.equalsIgnoreCase("projects")){
 			Map<AmpActivityVersion, BigDecimal> projectsList = visualizationForm.getRanksInformation().getFullProjects();
 			List list = null;
@@ -5033,7 +5033,7 @@ public class DataDispatcher extends DispatchAction {
 					AmpActivityVersion act = (AmpActivityVersion) entry.getKey();
 					child.put("name", act.getName());
 					child.put("id", act.getAmpActivityId());
-					child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+					child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + currency.getCurrencyName());
 					rankObjects.add(child);
 				}
 			}
@@ -5048,7 +5048,7 @@ public class DataDispatcher extends DispatchAction {
 				for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 					Map.Entry entry = (Map.Entry) iterator.next();
 					child.put("name", entry.getKey().toString());
-					child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+					child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + currency.getCurrencyName());
 					rankObjects.add(child);
 				}
 			} 
@@ -5063,7 +5063,7 @@ public class DataDispatcher extends DispatchAction {
 				for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 					Map.Entry entry = (Map.Entry) iterator.next();
 					child.put("name", entry.getKey().toString());
-					child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+					child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + currency.getCurrencyName());
 					rankObjects.add(child);
 				}
 			}
@@ -5078,7 +5078,7 @@ public class DataDispatcher extends DispatchAction {
 				for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 					Map.Entry entry = (Map.Entry) iterator.next();
 					child.put("name", entry.getKey().toString());
-					child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+					child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + currency.getCurrencyName());
 					rankObjects.add(child);
 				}
 			}
@@ -5093,7 +5093,7 @@ public class DataDispatcher extends DispatchAction {
 				for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 					Map.Entry entry = (Map.Entry) iterator.next();
 					child.put("name", entry.getKey().toString());
-					child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+					child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + currency.getCurrencyName());
 					rankObjects.add(child);
 				}
 			}
@@ -5108,7 +5108,7 @@ public class DataDispatcher extends DispatchAction {
 				for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 					Map.Entry entry = (Map.Entry) iterator.next();
 					child.put("name", entry.getKey().toString());
-					child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+					child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + currency.getCurrencyName());
 					rankObjects.add(child);
 				}
 			}
@@ -5123,7 +5123,7 @@ public class DataDispatcher extends DispatchAction {
 				for (Iterator iterator = list.iterator(); iterator.hasNext();) {
 					Map.Entry entry = (Map.Entry) iterator.next();
 					child.put("name", entry.getKey().toString());
-					child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + visualizationForm.getFilter().getCurrencyCode());
+					child.put("value", FormatHelper.formatNumberNotRounded(((BigDecimal) entry.getValue()).doubleValue()) + " " + currency.getCurrencyName());
 					rankObjects.add(child);
 				}
 			}

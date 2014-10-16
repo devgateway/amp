@@ -63,14 +63,14 @@ if(donorname==null){donorname=donor.donorname;donorCode=donor.donorCode;}else{do
 +'</b>',"Primary Sector":'<b>'
 +primarysector+'</b>',"Total commitments":'<b>'
 +activity.commitments+' '
-+activity.currecycode+'</b>',"Total disbursements":'<b>'
++activity.currencyname+'</b>',"Total disbursements":'<b>'
 +activity.disbursements+' '
-+activity.currecycode+'</b>',"Commitments for this location":'<b>'
++activity.currencyname+'</b>',"Commitments for this location":'<b>'
 +location.commitments+' '
-+activity.currecycode+'</b>',"Disbursements for this location":'<b>'
++activity.currencyname+'</b>',"Disbursements for this location":'<b>'
 +location.disbursements
 +' '
-+activity.currecycode+'</b>',"Code":''+donorCode+''});location.isdisplayed=true;features.push(pgraphic);}});}
++activity.currencyname+'</b>',"Code":''+donorCode+''});location.isdisplayed=true;features.push(pgraphic);}});}
 function execute(searchText){findParams.searchText=searchText;findTask.execute(findParams,showResults);var t=setTimeout("drawpoints()",10000);timer_on=1;}
 function showResults(results){dojo.forEach(results,function(result){var graphic=result.feature;var point=graphic.geometry.getExtent().getCenter();var sms=new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE).setColor(new dojo.Color([255,0,0,0.5]));var attr={"Location":result.value};var infoTemplate=new esri.InfoTemplate("");var pgraphic=new esri.Graphic(point,sms,attr,infoTemplate);var exit=false;for(var int=0;int<activitiesarray.length;int++){var activity=activitiesarray[int];for(var int2=0;int2<activitiesarray[int].locations.length;int2++){var loc=activitiesarray[int].locations[int2];if(loc.name==result.value&&loc.isdisplayed!=true){pgraphic.setAttributes({"Activity":activity.activityname,"Location":loc.name});loc.isdisplayed=true;exit=true;}}
 if(exit==true){break;}}

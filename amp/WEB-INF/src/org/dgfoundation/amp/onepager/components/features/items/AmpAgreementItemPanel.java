@@ -170,7 +170,7 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
 					if ((agr.getCode() != null && agr.getCode().compareToIgnoreCase(ag.getCode()) == 0)
 							&& (ag.getId() == null || agr.getId().compareTo(ag.getId()) != 0)) {
 						error(TranslatorUtil
-								.getTranslation("Warning! The database already contains agreement with similar title"));
+								.getTranslation("Warning! The database already contains agreement with similar code"));
 						target.add(newAgreementForm.getParent());
 						return;
 					}

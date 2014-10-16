@@ -71,6 +71,8 @@ public class CellDataSetToGeneratedReport {
 		Deque<List<ReportArea>> stack = new ArrayDeque<List<ReportArea>>();
 		//assumption that concatenation was done and totals are required starting for the 1st non-hierarchical column backwards
 		int hSize = spec.getHierarchies().size();
+		if (spec.getColumns().size() == spec.getHierarchies().size())
+			hSize--;
 		int maxDepth = spec.isCalculateRowTotals() ? Math.max(1, hSize) - (hSize / spec.getColumns().size()) : 0; 
 		int maxStackSize = 1 + maxDepth * 2; //* 2 for totals, where maxDepth != 0 
 		refillStack(stack, maxStackSize); //prepare the stack

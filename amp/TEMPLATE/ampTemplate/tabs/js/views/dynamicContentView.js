@@ -3,6 +3,9 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 		settingsDialogTemplate, Settings, SettingsManager, FiltersWidget, jQuery) {
 
 	var reportId;
+	var reportFilters;
+	var containerName;
+	var filtersWidget;
 
 	var DynamicContentView = Marionette.LayoutView.extend({
 		template : _.template(dynamicContentTemplate),
@@ -15,19 +18,59 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 			'click #filters-button' : "clickFiltersButton",
 			'click #settings-button' : "clickSettingsButton"
 		},
+		initialize : function(data) {
+			reportId = data.id;
+			reportFilters = data.filters;
+		},
+		onShow : function() {
+			// Due to some incompatibilities with FilterWidget we need
+			// to use a DOM element thats already present. So here we
+			// change the id for this tabs' filter container.
+			containerName = '#filters-container-' + reportId;
+			jQuery("#filters-container").attr('id', 'filters-container-' + reportId);
+
+			// Create the FilterWidget instance and register the events
+			// for Apply and Cancel button.
+			filtersWidget = new FiltersWidget({
+				el : containerName,
+				draggable : true
+			});
+			// Register apply and cancel buttons.
+			this.listenTo(filtersWidget, 'cancel', function() {
+				console.log('filters cancel');
+				jQuery(containerName).hide();
+			});
+			this.listenTo(filtersWidget, 'apply', function(data) {
+				console.log('filters apply');
+				var filters = filtersWidget.view.serializedFilters;
+				// TODO: Call the endpoint with this new filters and
+				// redraw the grid.
+				console.log(filters);
+				jQuery(containerName).hide();
+			});
+			// Workaround for the problem of widget not being fully loaded with
+			// data when the 'loaded' event has been triggered :(
+			// So we call showFilters to load all data in the widget and
+			// immediately after we hide it.
+			filtersWidget.showFilters();
+			jQuery(containerName).hide();
+		},
 		clickFiltersButton : function() {
 			console.log('clickFiltersButton');
-			jQuery("#filters-container").attr('id', 'filters-container-' + reportId);
+
 			var FilterDialogContainerView = Marionette.ItemView.extend({
 				template : "<p></p>",
 				render : function(model) {
-					var containerName = '#filters-container-' + reportId;
-					var filtersWidget = new FiltersWidget({
-						el : containerName,
-						draggable : true,
-						translator : null
+					// Register a deferred to set the default tab's filters in
+					// the widget (it doesnt work ok).
+					filtersWidget.loaded.then(function() {
+						console.log('filter widget loaded');
+						// Convert report filters to filterwidget filters.
+						var blob = app.TabsApp.tabUtils.convertJavaFiltersToJS(reportFilters);
+						filtersWidget.deserialize(blob);
 					});
-					filtersWidget.showFilters();
+
+					// Show the dialog and fix the position.
 					jQuery(containerName).show();
 					jQuery(containerName).css('position', 'absolute');
 					jQuery(containerName).css('top', 10);
@@ -55,9 +98,6 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 				width : 500
 			});
 			jQuery(".buttonify").button();
-		},
-		setId : function(id) {
-			reportId = id;
 		}
 	});
 

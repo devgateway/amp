@@ -29,6 +29,33 @@ define([ 'jquery', 'jqueryui' ], function(jQuery) {
 		});
 	};
 
+	TabUtils.convertJavaFiltersToJS = function(data) {
+		// Define some basic defaults needed in the widget filter.
+		var blob = {
+			Years : {
+				startYear : 1998,
+				endYear : 2020
+			}
+		};
+		_.each(data.models, function(item, i) {
+			switch (item.get('name')) {
+			case 'Financing Instrument':
+				blob.FinancingInstrumentsList = _.map(item.get('values'), function(item) {
+					return parseInt(item);
+				});
+				break;
+			case 'Donor Group':
+				blob.Donor = _.map(item.get('values'), function(item) {
+					return parseInt(item);
+				});
+				break;
+			}
+		});
+
+		console.log(blob);
+		return blob;
+	};
+
 	TabUtils.prototype = {
 		constructor : TabUtils
 	};

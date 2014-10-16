@@ -95,12 +95,15 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			var compositeView = new CompositeItemView({
 				collection : filters
 			});
-			compositeView.render(); //Avoid bug with buttons not being found by $.
+			compositeView.render(); // Avoid bug with buttons not being found by
+									// $.
 
 			// Render views.
-			var dynamicLayoutView = new DynamicContentView();
-			dynamicLayoutView.setId(id);
-			app.TabsApp.filtersRegion.show(dynamicLayoutView);			
+			var dynamicLayoutView = new DynamicContentView({
+				id : id,
+				filters : filters
+			});
+			app.TabsApp.filtersRegion.show(dynamicLayoutView);
 			dynamicLayoutView.filters.show(compositeView);
 
 			// Create accordion for filters area.
@@ -108,7 +111,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 				collapsible : true,
 				active : false
 			});
-			// Create jQuery buttons.			
+			// Create jQuery buttons.
 			jQuery("#main-dynamic-content-region_" + id + " .buttonify").button();
 
 			// --------------------------------------------------------------------------------------//

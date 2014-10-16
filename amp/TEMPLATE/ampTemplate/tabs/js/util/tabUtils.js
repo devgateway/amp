@@ -35,7 +35,8 @@ define([ 'jquery', 'jqueryui' ], function(jQuery) {
 			Years : {
 				startYear : 1998,
 				endYear : 2020
-			}
+			},
+			Donor : []
 		};
 		_.each(data.models, function(item, i) {
 			switch (item.get('name')) {
@@ -44,10 +45,83 @@ define([ 'jquery', 'jqueryui' ], function(jQuery) {
 					return parseInt(item);
 				});
 				break;
-			case 'Donor Group':
-				blob.Donor = _.map(item.get('values'), function(item) {
+			case 'Contracting Agency':
+				blob['Contracting Agency'] = _.map(item.get('values'), function(item) {
 					return parseInt(item);
 				});
+				break;
+			case 'Executing Agency':
+				blob['Executing Agency'] = _.map(item.get('values'), function(item) {
+					return parseInt(item);
+				});
+				break;
+			case 'Implementing Agency':
+				blob['Implementing Agency'] = _.map(item.get('values'), function(item) {
+					return parseInt(item);
+				});
+				break;
+			case 'Beneficiary Agency':
+				blob['Beneficiary Agency'] = _.map(item.get('values'), function(item) {
+					return parseInt(item);
+				});
+				break;
+			case 'Responsible Organization':
+				blob['Responsible Organization'] = _.map(item.get('values'), function(item) {
+					return parseInt(item);
+				});
+				break;
+			case 'Type Of Assistance':
+				blob['TypeOfAssistanceList'] = _.map(item.get('values'), function(item) {
+					return parseInt(item);
+				});
+				break;
+			case 'Status':
+				blob['ActivityApprovalStatus'] = _.map(item.get('values'), function(item) {
+					return parseInt(item);
+				});
+				break;
+			case 'National Planning Objectives':
+				blob['National Plan Objective'] = _.map(item.get('values'), function(item) {
+					return parseInt(item);
+				});
+				break;
+			case 'Primary Program':
+				blob['Primary Program'] = _.map(item.get('values'), function(item) {
+					return parseInt(item);
+				});
+				break;
+			case 'Approval Status':
+				blob['ActivityStatusList'] = _.map(item.get('values'), function(item) {
+					return parseInt(item);
+				});
+				break;
+			case 'Secondary Program':
+				blob['Secondary Program'] = _.map(item.get('values'), function(item) {
+					return parseInt(item);
+				});
+				break;
+			case 'On/Off/Treasury Budget':
+				blob['ActivityBudgetList'] = _.map(item.get('values'), function(item) {
+					return parseInt(item);
+				});
+				break;
+			case 'Donor Type':
+				var auxDonorTypes = _.map(item.get('values'), function(item) {
+					return parseInt(item);
+				});
+				blob.Donor = _.union(blob.Donor, auxDonorTypes);
+				break;
+			case 'Donor Group':
+				var auxDonors = _.map(item.get('values'), function(item) {
+					return parseInt(item);
+				});
+				blob.Donor = _.union(blob.Donor, auxDonors);
+				break;
+			case 'Donor Agency':
+				var auxDonorAgencies = _.map(item.get('values'), function(item) {
+					return parseInt(item);
+				});
+				blob.Donor = _.union(blob.Donor, auxDonorAgencies);
 				break;
 			}
 		});

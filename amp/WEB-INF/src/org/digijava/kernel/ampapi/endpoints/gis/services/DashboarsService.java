@@ -104,6 +104,7 @@ public class DashboarsService {
 		
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetTops");
 		spec.addColumn(new ReportColumn(column,ReportEntityType.ENTITY_TYPE_ALL));
+		spec.getHierarchies().addAll(spec.getColumns());
 		spec.addMeasure(new ReportMeasure(adjustmenttype,ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addSorter(new SortingInfo(new ReportMeasure(adjustmenttype), false));
 		spec.setCalculateColumnTotals(true);

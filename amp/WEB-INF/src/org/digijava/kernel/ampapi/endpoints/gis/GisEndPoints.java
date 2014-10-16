@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -245,13 +246,6 @@ public class GisEndPoints {
 		return indicatorLayers;
 	}
 
-	@POST
-	@Path("/activities/")
-	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="ActivitiesLists")
-	public List<Activity> getActivities(JsonBean filter) {
-		return ActivityService.getActivities(filter);
-	}
 	/*
 	*Config sample
 	*{
@@ -266,7 +260,7 @@ public class GisEndPoints {
     *  }
 	*/
 	@POST
-	@Path("/activitiesNew/") //once ready remove the New
+	@Path("/activities")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ActivitiesNewLists")
 	public List<JsonBean> getActivitiesNew(JsonBean config, @QueryParam("start") Integer page,@QueryParam("size") Integer pageSize) {
@@ -274,20 +268,17 @@ public class GisEndPoints {
 			return ActivityService.getActivitiesMondrian(config,null,page,pageSize);
 		}catch(AmpApiException ex){
 			throw new WebApplicationException(ex);
-		}
+		}	
 	}
 
+/**
+ * return activity by id in the format /activities/12,15,16
+ * @param settings
+ * @param activityIds
+ * @return
+ */
 	@GET
-	@Path("/activities/{activityId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="ActivitiesById")
-	@Deprecated //will be replaced by 	@Path("/activitiesNew/{activityId}")
-	public List<Activity> getActivitiesOld(@PathParam("activityId") PathSegment activityIds) {
-		return ActivityService.getActivities(activityIds.getPath());
-	}
-
-	@GET
-	@Path("/activitiesNew/{activityId}") //once its done remove the New
+	@Path("/activities/{activityId}") //once its done remove the New
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ActivitiesById")
 	public List<JsonBean> getActivities(JsonBean settings, @PathParam("activityId") PathSegment activityIds) {
@@ -372,14 +363,37 @@ public class GisEndPoints {
 		}
 		return indicatorsJson;
 	}
+	
+	
+	@GET
+	@Path("/export-map-test/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Activity>testMapExport(){
+		return LocationService.getMapExportByStructure();
+	}
+	/**
+	 * Export map id from current filters
+	 * 
+	 * @param webResponse
+	 * @param mapId
+	 * @param exportType type 1 to export activity locations
+	 *                   type 2 to export activity Structures
+	 * @return
+	 */
 	@GET
 	@Path("/export-map/")
 	@Produces("application/vnd.ms-excel")
 	@ApiMethod(ui=false,name="MapExport")
-	 public StreamingOutput getExportMap(@Context HttpServletResponse webResponse)
+	 public StreamingOutput getExportMap(@Context HttpServletResponse webResponse,@QueryParam("mapId") Long mapId,@DefaultValue("1") @QueryParam("exportType") Long exportType)
     {
-		final HSSFWorkbook wb=
-		LocationService.generateExcelExport();
+		final HSSFWorkbook wb;
+		if(exportType==1){
+			wb=LocationService.generateExcelExportByStructure();	
+		}else{
+			wb=LocationService.generateExcelExportByLocation();
+		}
+				
+		
 
 		webResponse.setHeader("Content-Disposition","attachment; filename=map-export.xls");
 

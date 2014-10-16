@@ -117,31 +117,67 @@ public class LocationService {
 		
 		return report;
 	}
-	public static List<JsonBean>getExportMap(JsonBean filter){
-		List<JsonBean>mapExport=new ArrayList<JsonBean>();
-		JsonBean j=new JsonBean();
-		j.set("Type", "Region");
-		j.set("Latitude", 111);
-		j.set("Longitude", 111);
-		JsonBean q=new JsonBean();
-		q.set("Type", "Typology");
-		q.set("Latitude", 111);
-		q.set("Longitude", 111);
+	/**
+	 * Build an excel file export by structure
+	 * @return
+	 */
+	public static HSSFWorkbook generateExcelExportByStructure(){
+		List<String> columnNames = new ArrayList<String>();
+		columnNames.add(TranslatorWorker.translateText("Time Stamp"));
+		columnNames.add(TranslatorWorker.translateText("Activity Id"));
+		columnNames.add(TranslatorWorker.translateText("Project Title"));
+		columnNames.add(TranslatorWorker.translateText("Description"));
+//		columnNames.add(TranslatorWorker.translateText("Approval Date"));
+		columnNames.add(TranslatorWorker.translateText("Location Name"));
+		columnNames.add(TranslatorWorker.translateText("Latitude"));
+		columnNames.add(TranslatorWorker.translateText("Longitude"));
+		columnNames.add(TranslatorWorker.translateText("Project Site"));
+		columnNames.add(TranslatorWorker.translateText("Sectors"));
+		columnNames.add(TranslatorWorker.translateText("Donors"));
+		columnNames.add(TranslatorWorker.translateText("Total Project Commitments"));
+		columnNames.add(TranslatorWorker.translateText("Total Project Disbursements"));
+		
+		
+		List<Activity> report=getMapExportByStructure();
+		java.util.Date date = new java.util.Date();
+		
+		int i=1;
+		List<List>rowValues=new ArrayList<>();
 
-		mapExport.add(j);
-		mapExport.add(q);
+		for (Activity a : report) {
+			List<String>coloumnsValues=new ArrayList<String>();
+			coloumnsValues.add(date.toString());			
+			coloumnsValues.add(a.getAmpId());
+			coloumnsValues.add(a.getName());
+			coloumnsValues.add(a.getDescription());
+			coloumnsValues.add(a.getStructureName());
+			coloumnsValues.add(a.getLatitude());
+			coloumnsValues.add(a.getLongitude());
+			coloumnsValues.add(a.getImplementationLevel());
+			coloumnsValues.add(a.getPrimarySector());
+			coloumnsValues.add(a.getDonorAgency());
+			coloumnsValues.add(a.getTotalCommitments());
+			coloumnsValues.add(a.getTotalDisbursments());	
+			rowValues.add(coloumnsValues);
+		}
 		
 		
-		
-		
-		getMapExport();
-		return mapExport;
+		return generateExcelExport(columnNames,rowValues,"MapExport.xls");
 	}
-	public static HSSFWorkbook generateExcelExport(){
+	/**
+	 * Return a excel workbook 
+	 * @param columnNames arraylist of columnames 
+	 * @param rowValues arraylist of row values, should be in the same order as column names
+	 * @param fileName file for the excel file
+	 * @return
+	 */
+	
+	
+	public static HSSFWorkbook generateExcelExport(List<String> columnNames,List<List>rowValues,String fileName){
 		HSSFWorkbook wb = new HSSFWorkbook();
-		ArrayList<String> columnNames = new ArrayList<String>();
 
-		HSSFSheet sheet = wb.createSheet("MapExport.xls");
+
+		HSSFSheet sheet = wb.createSheet(fileName);
 
 		HSSFRow row = sheet.createRow((short) (0));
 		HSSFRichTextString str = null;
@@ -150,12 +186,6 @@ public class LocationService {
 		titlefont.setFontHeightInPoints((short) 10);
 		titlefont.setBoldweight(titlefont.BOLDWEIGHT_BOLD);
 		
-		Site site =TLSUtils.getSite(); 
-
-        String langCode =TLSUtils.getEffectiveLangCode();
-        
-		java.util.Date date = new java.util.Date();
-
 		HSSFFont font = wb.createFont();
 		font.setFontName("Arial");
 		font.setFontHeightInPoints((short) 8);
@@ -164,23 +194,7 @@ public class LocationService {
 		HSSFCellStyle tstyle = wb.createCellStyle();
 		tstyle.setFont(titlefont);
 		tstyle.setAlignment(style.ALIGN_CENTER);
-		columnNames.add(TranslatorWorker.translateText("Time Stamp"));
-		columnNames.add(TranslatorWorker.translateText("Activity Id"));
-		columnNames.add(TranslatorWorker.translateText("Project Title"));
-//		columnNames.add(TranslatorWorker.translateText("Description"));
-//		columnNames.add(TranslatorWorker.translateText("Approval Date"));
-//		columnNames.add(TranslatorWorker.translateText("GEOID"));
-		columnNames.add(TranslatorWorker.translateText("Name"));
-		columnNames.add(TranslatorWorker.translateText("Latitude"));
-		columnNames.add(TranslatorWorker.translateText("Longitude"));
-		columnNames.add(TranslatorWorker.translateText("Type"));
-
-//		columnNames.add(TranslatorWorker.translateText("Sectors"));
-		columnNames.add(TranslatorWorker.translateText("Donors"));
-		columnNames.add(TranslatorWorker.translateText("Actual Commitments"));
-		columnNames.add(TranslatorWorker.translateText("Actual Disbursement"));
-//		columnNames.add(TranslatorWorker.translateText("Total Actual Commitments"));
-//		columnNames.add(TranslatorWorker.translateText("Total Actual Disbursement"));
+		
 		int x = 0;
 		for (String columnName:columnNames) {
 			HSSFCell cell = row.createCell( x);
@@ -189,85 +203,45 @@ public class LocationService {
 			cell.setCellStyle(tstyle);
 			x++;
 		}
-		List<Activity> report=getMapExport();
-		//we iterate over the report
-//		List<ReportArea> ll = report.reportContents.getChildren();
 		int i=1;
-		//we iterate over each row
-		for (Activity a : report) {
-			JsonBean activity = new JsonBean();
-//			Map<ReportOutputColumn, ReportCell> rRow = reportArea.getContents();
-			
-//			Set<ReportOutputColumn> col = rRow.keySet();
+		for (List<String> list : rowValues) {
+			int j=0;
 			row = sheet.createRow((short) (i));
-
-			//we first add the date
-			HSSFCell cell = row.createCell(0);
-			str = new HSSFRichTextString(date.toString());
-			cell.setCellValue(str);
-			cell.setCellStyle(style);
-			//Activity Id
-			cell = row.createCell(1);
-			cell.setCellValue(new HSSFRichTextString(a.getAmpId()));
-			cell.setCellStyle(style);
-
-			//Project Title
-			cell = row.createCell(2);
-			cell.setCellValue(new HSSFRichTextString(a.getName()));
-			cell.setCellStyle(style);			
-			//Structure Name
-			cell = row.createCell(3);
-			cell.setCellValue(new HSSFRichTextString(a.getStructureName()));
-			cell.setCellStyle(style);			
-
-			//Latitude
-			cell = row.createCell(4);
-			cell.setCellValue(new HSSFRichTextString(a.getLatitude()));
-			cell.setCellStyle(style);
-			
-			//Longitued
-			cell = row.createCell(5);
-			cell.setCellValue(new HSSFRichTextString(a.getLongitude()));
-			cell.setCellStyle(style);			
-
-	
-			//Longitued
-			cell = row.createCell(6);
-			cell.setCellValue(new HSSFRichTextString(a.getStructureType()));
-			cell.setCellStyle(style);			
-			//DonorAgency
-			cell = row.createCell(7);
-			cell.setCellValue(new HSSFRichTextString(a.getDonorAgency()));
-			cell.setCellStyle(style);
-			
-			//Actual Commitments
-			cell = row.createCell(8);
-			cell.setCellValue(new HSSFRichTextString(a.getTotalCommitments()));
-			cell.setCellStyle(style);
-			
-			//Actual Disbursement
-			cell = row.createCell(9);
-			cell.setCellValue(new HSSFRichTextString(a.getTotalDisbursments()));
-			cell.setCellStyle(style);						
+			for (String colValue : list) {
+				HSSFCell cell = row.createCell(j);
+				cell.setCellValue(new HSSFRichTextString(colValue));
+				cell.setCellStyle(style);
+				j++;
+			}
 			i++;
 		}
 		return wb;
 	}
-	public static List<Activity> getMapExport() {
+	/**
+	 * Returs a list of activities for the mapexport. once we have the chance to as a report row its value
+	 * by report column name we can avoid all the iff and directly export the report to excel
+	 * also we can remove the query once the amp_structure table is in the mondrian schem
+	 * @return
+	 */
+	public static List<Activity> getMapExportByLocation() {
+		List<Activity>activities=new ArrayList<Activity>();
+		ReportSpecificationImpl spec = getCommonSpecForExport("MapExport");		
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.DISTRICT, ReportEntityType.ENTITY_TYPE_ACTIVITY));
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.REGION, ReportEntityType.ENTITY_TYPE_ACTIVITY));
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.REGION, ReportEntityType.ENTITY_TYPE_ACTIVITY));
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.ZONE, ReportEntityType.ENTITY_TYPE_ACTIVITY));
+		
+		return activities;
+	}
+	/**
+	 * Returs a list of activities for the mapexport. once we have the chance to as a report row its value
+	 * by report column name we can avoid all the iff and directly export the report to excel
+	 * also we can remove the query once the amp_structure table is in the mondrian schem
+	 * @return
+	 */
+	public static List<Activity> getMapExportByStructure() {
 
-		String name= "MapExport";
-		boolean doTotals=true;
-		ReportSpecificationImpl spec = new ReportSpecificationImpl(name);
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY));
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.AMP_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY));
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ACTIVITY));
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.DONOR_AGENCY, ReportEntityType.ENTITY_TYPE_ACTIVITY));
-
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
-
-		spec.setCalculateColumnTotals(doTotals);
-		spec.setCalculateRowTotals(doTotals);		
+		ReportSpecificationImpl spec = getCommonSpecForExport("MapExport");		
 
 		
 		
@@ -286,30 +260,9 @@ public class LocationService {
 			Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
 			Set<ReportOutputColumn> col = row.keySet();
 			for (ReportOutputColumn reportOutputColumn : col) {
-				if(reportOutputColumn.columnName.equals(ColumnConstants.ACTIVITY_ID)){
-					activityId=Long.parseLong(row.get(reportOutputColumn).value.toString());
-					activity.setId(activityId);
-				}else{ 
-					String columnValue=row.get(reportOutputColumn).displayedValue.toString();
-					if(reportOutputColumn.columnName.equals(ColumnConstants.AMP_ID)){
-						activity.setAmpId(columnValue);
-					}else{
-						if(reportOutputColumn.columnName.equals(ColumnConstants.PROJECT_TITLE)){
-							activity.setName(columnValue);
-						}else{
-							if(reportOutputColumn.columnName.equals(MeasureConstants.ACTUAL_COMMITMENTS)){
-								activity.setTotalCommitments(columnValue);
-							}
-								else{
-									if(reportOutputColumn.columnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)){
-										activity.setTotalDisbursments(columnValue);
-									}	else{
-										activity.setDonorAgency(columnValue);
-									}
-							}
-						}
-					}
-				}
+				
+				activityId = getActivityIdForReports(activityId, activity, row,
+						reportOutputColumn);
 			}
 			activities.put(activityId,activity);
 		}
@@ -322,13 +275,11 @@ public class LocationService {
 				
 				String query="select ast.amp_activity_id,s.title, "+
 						" s.latitude, "+
-						" s.longitude, "+
-						" st.name type_name  from amp_activity_structures ast , amp_structure s , amp_structure_type st " +
+						" s.longitude "+
+						"  from amp_activity_structures ast , amp_structure s  " +
 						" where ast.amp_structure_id=s.amp_structure_id "+
-						" and s.type = st.typeid "+
 						" and ast.amp_activity_id in("+ org.dgfoundation.amp.Util.toCSString(activities.keySet()) +")";
 	    		ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
-	    		System.out.println(query);
 	    		while (rs.next()){
 	    			Activity a= activities.get(rs.getLong("amp_activity_id"));
 	    			Activity newActivity=new Activity();
@@ -337,11 +288,15 @@ public class LocationService {
 	    			newActivity.setName(a.getName());
 	    			newActivity.setTotalCommitments(a.getTotalCommitments());
 	    			newActivity.setTotalDisbursments(a.getTotalDisbursments());
+	    			newActivity.setDonorAgency(a.getDonorAgency());
+	    			newActivity.setImplementationLevel(a.getImplementationLevel());
+	    			newActivity.setPrimarySector(a.getPrimarySector());
+
+	    			newActivity.setDescription(a.getDescription());
 	    			
 	    			newActivity.setStructureName(rs.getString("title"));
 	    			newActivity.setLatitude(rs.getString("latitude"));
 	    			newActivity.setLongitude(rs.getString("longitude"));
-	    			newActivity.setStructureType(rs.getString("type_name"));
 	    			
 	    			mapExportBean.add(newActivity);
 	    			
@@ -352,5 +307,68 @@ public class LocationService {
 		
 
 		return mapExportBean;
+	}
+	private static Long getActivityIdForReports(Long activityId,
+			Activity activity, Map<ReportOutputColumn, ReportCell> row,
+			ReportOutputColumn reportOutputColumn) {
+		if(reportOutputColumn.columnName.equals(ColumnConstants.ACTIVITY_ID)){
+			activityId=Long.parseLong(row.get(reportOutputColumn).value.toString());
+			activity.setId(activityId);
+		}else{ 
+			String columnValue=row.get(reportOutputColumn).displayedValue.toString();
+			if(reportOutputColumn.columnName.equals(ColumnConstants.AMP_ID)){
+				activity.setAmpId(columnValue);
+			}else{
+				if(reportOutputColumn.columnName.equals(ColumnConstants.PROJECT_TITLE)){
+					activity.setName(columnValue);
+				}else{
+					if(reportOutputColumn.columnName.equals(MeasureConstants.ACTUAL_COMMITMENTS)){
+						activity.setTotalCommitments(columnValue);
+					}
+						else{
+							if(reportOutputColumn.columnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)){
+								activity.setTotalDisbursments(columnValue);
+							}	else{ 
+								if(reportOutputColumn.columnName.equals(ColumnConstants.DONOR_AGENCY)){
+									activity.setDonorAgency(columnValue);
+								}else{
+									if(reportOutputColumn.columnName.equals(ColumnConstants.PRIMARY_SECTOR)){
+										activity.setPrimarySector(columnValue);
+									}
+									else{
+										if(reportOutputColumn.columnName.equals(ColumnConstants.PROJECT_DESCRIPTION)){
+											activity.setDescription(columnValue);
+										}
+									}
+								}
+							}
+					}
+				}
+			}
+		}
+		return activityId;
+	}
+	private static ReportSpecificationImpl getCommonSpecForExport(String name) {
+		boolean doTotals=true;
+		ReportSpecificationImpl spec = new ReportSpecificationImpl(name);
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY));
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.AMP_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY));
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ACTIVITY));
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.IMPLEMENTATION_LEVEL, ReportEntityType.ENTITY_TYPE_ACTIVITY));
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.DONOR_AGENCY, ReportEntityType.ENTITY_TYPE_ACTIVITY));
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ACTIVITY));
+
+		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PROJECT_DESCRIPTION, ReportEntityType.ENTITY_TYPE_ACTIVITY));
+
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
+
+		spec.setCalculateColumnTotals(doTotals);
+		spec.setCalculateRowTotals(doTotals);
+		return spec;
+	}
+	public static HSSFWorkbook generateExcelExportByLocation() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

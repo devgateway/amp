@@ -12,6 +12,10 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  * @author jdeanquin
  *
  */
+/**
+ * @author Fernando Ferreyra
+ *
+ */
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
 public class Activity {
 	private Long id;
@@ -20,13 +24,15 @@ public class Activity {
 	private String description;
 	private String ampUrl;
 	private String donorAgency;
+	private String implementationLevel;
 	private String TotalCommitments;
 	private String totalDisbursments;
 
 	private String structureName;
 	private String latitude;
 	private String longitude;
-	private String structureType;
+	private String primarySector;
+
 	private JsonBean matchesFilters;
 
 	public Activity() {
@@ -126,13 +132,7 @@ public class Activity {
 		this.longitude = longitude;
 	}
 
-	public String getStructureType() {
-		return structureType;
-	}
 
-	public void setStructureType(String structureType) {
-		this.structureType = structureType;
-	}
 
 	public String getDonorAgency() {
 		return donorAgency;
@@ -140,6 +140,22 @@ public class Activity {
 
 	public void setDonorAgency(String donorAgency) {
 		this.donorAgency = donorAgency;
+	}
+
+	public String getImplementationLevel() {
+		return implementationLevel;
+	}
+
+	public void setImplementationLevel(String implementationLevel) {
+		this.implementationLevel = implementationLevel;
+	}
+
+	public String getPrimarySector() {
+		return primarySector;
+	}
+
+	public void setPrimarySector(String primarySector) {
+		this.primarySector = primarySector;
 	}
 	
 }

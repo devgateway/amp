@@ -76,7 +76,7 @@ define([ 'jquery', 'jqueryui' ], function(jQuery) {
 				});
 				break;
 			case 'Status':
-				blob['ActivityApprovalStatus'] = _.map(item.get('values'), function(item) {
+				blob['ActivityStatusList'] = _.map(item.get('values'), function(item) {
 					return parseInt(item);
 				});
 				break;
@@ -91,7 +91,7 @@ define([ 'jquery', 'jqueryui' ], function(jQuery) {
 				});
 				break;
 			case 'Approval Status':
-				blob['ActivityStatusList'] = _.map(item.get('values'), function(item) {
+				blob['ActivityApprovalStatus'] = _.map(item.get('values'), function(item) {
 					return parseInt(item);
 				});
 				break;

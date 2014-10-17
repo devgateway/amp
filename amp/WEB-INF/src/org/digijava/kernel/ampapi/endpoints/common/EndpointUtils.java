@@ -5,6 +5,12 @@ package org.digijava.kernel.ampapi.endpoints.common;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportAreaImpl;
+import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
@@ -17,6 +23,7 @@ import org.digijava.module.aim.util.DbUtil;
  * @author Nadejda Mandrescu
  */
 public class EndpointUtils {
+	protected static final Logger logger = Logger.getLogger(EndpointUtils.class);
 
 	/**
 	 * @return current user application settings 
@@ -50,4 +57,21 @@ public class EndpointUtils {
 			return String.valueOf(appSettings.getFiscalCalendar().getIdentifier());
 		return String.valueOf(DbUtil.getBaseFiscalCalendar());
 	}
+	
+	/**
+	 * Generates a report based on a given specification
+	 * @param spec - report specification
+	 * @return GeneratedReport will info
+	 */
+	public static GeneratedReport runReport(ReportSpecification spec) {
+		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()));
+		GeneratedReport report = null;
+		try {
+			report = generator.executeReport(spec);
+		} catch (Exception e) {
+			logger.error(e);
+		}
+		return report;
+	}
+	
 }

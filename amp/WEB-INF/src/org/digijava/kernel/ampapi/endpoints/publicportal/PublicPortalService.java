@@ -57,7 +57,7 @@ public class PublicPortalService {
 	 */
 	public static JsonBean getTopProjects() {
 		JsonBean result = new JsonBean();
-		List<JsonBean> content = new ArrayList<JsonBean>();
+		List<String[]> content = new ArrayList<String[]>();
 		result.set("topprojects", content);
 		
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_GetTopProjects");
@@ -90,9 +90,10 @@ public class PublicPortalService {
 				Iterator<ReportArea> iter = report.reportContents.getChildren().iterator();
 				while (count > 0) {
 					ReportArea data = iter.next();
-					JsonBean jsonData = new JsonBean();
+					String[] jsonData = new String[headers.size()];
+					int pos = 0;
 					for (Entry<ReportOutputColumn, ReportCell> cell : data.getContents().entrySet()) {
-						jsonData.set(cell.getKey().columnName, cell.getValue().displayedValue);
+						jsonData[pos ++] = cell.getValue().displayedValue;
 					}
 					content.add(jsonData);
 					count --;

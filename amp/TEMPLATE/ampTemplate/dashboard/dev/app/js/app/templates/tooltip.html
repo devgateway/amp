@@ -1,0 +1,7 @@
+<div class="panel panel-default">
+  <div class="panel-heading"><%= y %></div>
+  <div class="panel-body">
+    <p><%= d3.format(',')(Math.round(raw.value)) %> <%= currency %></p>
+    <p><%= d3.format('%')(raw.value / total) %> of total</p>
+  </div>
+</div>

@@ -6,6 +6,8 @@ var BackboneDash = require('../backbone-dash');
 var util = require('../../ugly/util');
 var template = _.template(fs.readFileSync(
   __dirname + '/../templates/chart.html', 'UTF-8'));
+var tooltip = _.template(fs.readFileSync(
+  __dirname + '/../templates/tooltip.html', 'UTF-8'));
 
 
 module.exports = BackboneDash.View.extend({
@@ -55,13 +57,18 @@ module.exports = BackboneDash.View.extend({
       .showYAxis(false)
       // .showXAxis(false)
       .valueFormat(util.formatKMB(3))
+      .tooltipContent(_(function(a, y, b, raw) { return tooltip({
+        y: y,
+        raw: raw,
+        d3: d3,
+        currency: this.model.get('currency'),
+        total: this.model.get('total')
+      })}).bind(this))
       .margin({ top: 5, right: 20, bottom: 60, left: 20 })
       .transitionDuration(350);
 
     chart.xAxis
       .rotateLabels(15);  // because many labels are way too long
-
-    window.c = chart;
 
     d3.select(this.el.querySelector('svg'))
       .datum([data])

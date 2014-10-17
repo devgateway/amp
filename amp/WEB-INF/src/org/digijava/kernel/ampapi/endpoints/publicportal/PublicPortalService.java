@@ -23,6 +23,10 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
+
+import clover.org.apache.commons.lang.StringUtils;
 
 /**
  * Public Portal Service
@@ -35,6 +39,7 @@ public class PublicPortalService {
 	/** the number of top projects to be provided */
 	//shouldn't it be configurable?
 	private static final int TOP_COUNT = 20;
+	private static final int DEFAULT_PERIOD = 12; //months
 	
 	/**
 	 * Retrieves top 20 projects based on fixed requirements.
@@ -107,8 +112,8 @@ public class PublicPortalService {
 	 * @return period = number of months, the public portal data must be filtered by 
 	 */
 	public static final int getPublicPortalPeriodInMonths() {
-		//TODO: pending the period to be configured in the admin. Setting a fixed one to 12 months till then
-		int period = 12;
+		String months = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PUBLIC_VIEW_LAST_PERIOD);
+		int period = StringUtils.isNumeric(months) ? Integer.valueOf(months) : DEFAULT_PERIOD;
 		return period;	
 	}
 	

@@ -1,4 +1,4 @@
-// things that should probably have been "done right" but currently aren't
+// big mess of styles that should probably be organized
 
 body {
   background: #eee;
@@ -24,7 +24,8 @@ body {
       font-weight: 800;
       color: @c-title;
     }
-    h3 {
+    h3,
+    .adj-type label {
       margin-top: 0;
       font-size: 1em;
       color: #970101;
@@ -47,4 +48,37 @@ body {
   line-height: 1em;
   font-weight: 800;
   color: #666;
+}
+
+
+.dash-form {
+
+  label {
+    color: #333;
+  }
+
+  .radio-ui {
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+    position: absolute;
+    margin: 4px 0 0 -16px;
+    border-radius: 0.5em;
+    border: 2px solid #ddd;
+  }
+
+  input {
+    opacity: 0;
+    &:checked + .radio-ui {
+      border-color: #a1d367;
+      background: #a1d367;
+    }
+  }
+
+  .inline-text {
+    position: relative;
+    min-height: 20px;
+    vertical-align: middle;
+    color: #970101;
+  }
 }

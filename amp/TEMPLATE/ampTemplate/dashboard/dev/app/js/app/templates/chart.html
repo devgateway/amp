@@ -1,8 +1,27 @@
 <div class="box">
   <header>
-    <span class="pull-right big-number"><%= chart.get('total') %> <%= chart.get('currency') %></span>
-    <h2><%= chart.get('name') %></h2>
-    <h3><%= chart.get('description') || 'description...' %></h3>
+    <span class="pull-right big-number">
+      <%= chart.get('total') && util.formatKMB()(chart.get('total')) %>
+      <%= chart.get('currency') %>
+    </span>
+    <h2>Top <%= chart.get('name') %></h2>
+    <form class="form-inline dash-form dash-adj-type" role="form">
+      <span class="inline-text">Disbursements:</span>
+      <div class="radio">
+        <label>
+          <input type="radio" name="actual-planned" checked="checked">
+          <span class="radio-ui"></span>
+          Actual
+        </label>
+      </div>
+      <div class="radio">
+        <label>
+          <input type="radio" name="actual-planned">
+          <span class="radio-ui"></span>
+          Planned
+        </label>
+      </div>
+    </form>
   </header>
 
   <div class="chart-container">

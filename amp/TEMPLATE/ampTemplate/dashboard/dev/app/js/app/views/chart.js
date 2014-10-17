@@ -12,12 +12,15 @@ var tooltip = _.template(fs.readFileSync(
 
 module.exports = BackboneDash.View.extend({
 
-  className: function() {
-    return this.model.id === 'top-regions' ? 'col-xs-12' : 'col-xs-6';
+  className: 'col-xs-6',
+
+  events: {
+    'change .dash-adj-type input': 'changeType'
   },
 
   initialize: function(options) {
     this.app = options.app;
+    this.listenTo(this.model, 'change:adjType', this.render);
     _(this).bindAll('getChart');
   },
 
@@ -40,7 +43,7 @@ module.exports = BackboneDash.View.extend({
       name: 'Others',
       amount: this.model.get('total') -
         _.chain(data.values).pluck('amount').reduce(function(l, r) { return l + r; }, 0).value()
-    })
+    });
 
 
     if (_(_(data.values).pluck('name')).uniq().length < data.values.length) {
@@ -51,8 +54,8 @@ module.exports = BackboneDash.View.extend({
 
 
     var chart = nv.models.discreteBarChart()
-      .x(function(d) { return d.name })    //Specify the data accessors.
-      .y(function(d) { return d.amount })
+      .x(function(d) { return d.name; })    //Specify the data accessors.
+      .y(function(d) { return d.amount; })
       .showValues(true)
       .showYAxis(false)
       .valueFormat(util.formatKMB(3))
@@ -62,7 +65,7 @@ module.exports = BackboneDash.View.extend({
         d3: d3,
         currency: this.model.get('currency'),
         total: this.model.get('total')
-      })}).bind(this))
+      }); }).bind(this))
       .margin({ top: 5, right: 20, bottom: 60, left: 20 })
       .transitionDuration(350);
 
@@ -77,6 +80,11 @@ module.exports = BackboneDash.View.extend({
     nv.utils.windowResize(chart.update);
 
     return chart;
+  },
+
+  changeType: function(e) {
+    var newType = e.currentTarget.dataset.acad;
+    this.model.set('adjType', newType);
   }
 
 });

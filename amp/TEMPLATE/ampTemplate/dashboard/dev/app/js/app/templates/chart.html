@@ -6,19 +6,26 @@
     </span>
     <h2>Top <%= chart.get('name') %></h2>
     <form class="form-inline dash-form dash-adj-type" role="form">
-      <span class="inline-text">Disbursements:</span>
       <div class="radio">
         <label>
-          <input type="radio" name="actual-planned" checked="checked">
+          <input type="radio"
+            name="actual-planned"
+            id="ac-<%= chart.cid %>"
+            data-acad="ac"
+            <% if (chart.get('adjType') === 'ac') { %>checked="checked"<% } %>>
           <span class="radio-ui"></span>
-          Actual
+          Commitment
         </label>
       </div>
       <div class="radio">
         <label>
-          <input type="radio" name="actual-planned">
+          <input type="radio"
+            name="actual-planned"
+            id="ad-<%= chart.cid %>"
+            data-acad="ad"
+            <% if (chart.get('adjType') === 'ad') { %>checked="checked"<% } %>>
           <span class="radio-ui"></span>
-          Planned
+          Disbursement
         </label>
       </div>
     </form>

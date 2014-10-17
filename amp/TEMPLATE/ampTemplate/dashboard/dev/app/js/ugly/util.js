@@ -9,18 +9,18 @@ var formatKMB = function(precision) {
     return formatSI(value)
       .replace('G', 'B');  // now just need to convert G Gigia -> B Billion
   }
-}
+};
 
 
 var formatShortText = function(maxWidth) {
   var ellipseWidth = 1;
   return function(text) {
-    if(text.length - ellipseWidth > maxWidth) {
+    if (text.length - ellipseWidth > maxWidth) {
       text = text.slice(0, maxWidth - ellipseWidth) + '...';
     }
     return text;
-  }
-}
+  };
+};
 
 
 module.exports = {

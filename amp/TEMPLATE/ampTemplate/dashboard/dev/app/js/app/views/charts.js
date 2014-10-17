@@ -12,6 +12,7 @@ module.exports = BackboneDash.View.extend({
 
   initialize: function(options) {
     this.app = options.app;
+    this.listenTo(this, 'change:adjType', this.changeAdjType);
   },
 
   render: function() {

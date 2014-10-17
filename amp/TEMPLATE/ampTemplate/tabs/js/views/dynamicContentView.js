@@ -25,7 +25,9 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 
 			// We need to reset the widget because is shared between all
 			// tabs.
-			app.TabsApp.filtersWidget.view.resetFilters();
+			app.TabsApp.filtersWidget.reset({
+				silent : true
+			});
 
 			var containerName = '#filters-container';
 			var FilterDialogContainerView = Marionette.ItemView.extend({
@@ -34,7 +36,9 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 					console.log('filter widget loaded');
 					// Convert report filters to filterwidget filters.
 					var blob = FilterManager.convertJavaFiltersToJS(reportFilters);
-					app.TabsApp.filtersWidget.deserialize(blob);
+					app.TabsApp.filtersWidget.deserialize(blob, {
+						silent : true
+					});
 
 					// Show the dialog and fix the position.
 					jQuery(containerName).show();

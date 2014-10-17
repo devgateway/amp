@@ -906,7 +906,7 @@ public class IatiActivityWorker {
 
         populateFundingDetails(currencyValue, currencyName, dateToSet, ampFundDetails,
                 org.digijava.module.aim.helper.Constants.COMMITMENT,
-                org.digijava.module.aim.helper.Constants.PLANNED);
+                Constants.ACTUAL);
 
 		//ampFunding.setAmpDonorOrgId(ampOrg);
 		if (ampFunding == null) {
@@ -1017,7 +1017,9 @@ public class IatiActivityWorker {
         if (ampOrg == null) return null;
 
 		Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
-		populateFundingDetails(currencyValue, currencyName, sDate, ampFundDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.PLANNED);
+		populateFundingDetails(currencyValue, currencyName, sDate, ampFundDetails,
+                org.digijava.module.aim.helper.Constants.DISBURSEMENT,
+                org.digijava.module.aim.helper.Constants.PLANNED);
 		
 		Set<AmpFunding> ampFundings = a.getFunding();//fundings;
 		if(ampFundings == null) 
@@ -1194,7 +1196,9 @@ public class IatiActivityWorker {
 
         switch(transactionType) {
             case 'c':
-                populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
+                populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails,
+                        Constants.COMMITMENT,
+                        org.digijava.module.aim.helper.Constants.PLANNED);
                 if (!isValidString(ppc.getCurrency()))
                     ppc.setCurrency(currencyName);
                 if (ppc.getDate() == null)
@@ -1204,14 +1208,20 @@ public class IatiActivityWorker {
                 ppc.setAmount(amount);
                 break;
             case 'd':
-                populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
+                populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails,
+                        Constants.DISBURSEMENT,
+                        org.digijava.module.aim.helper.Constants.ACTUAL);
                 break;
             case 'e':
                 if (settings.isMergeDisbAndExp()) {
                     //DRC demand for DFID - merge disb with exp into disb
-                    populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
+                    populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails,
+                            Constants.DISBURSEMENT,
+                            org.digijava.module.aim.helper.Constants.ACTUAL);
                 } else {
-                    populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, Constants.EXPENDITURE, org.digijava.module.aim.helper.Constants.ACTUAL);
+                    populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails,
+                            Constants.EXPENDITURE,
+                            org.digijava.module.aim.helper.Constants.ACTUAL);
                 }
                 break;
             //the transaction is not C or D or E then it is not imported in AMP

@@ -55,6 +55,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
 	function retrieveTabContent(selectedTabIndex) {
 		var id = app.TabsApp.tabItemsView.collection.models[selectedTabIndex].get('id');
+		app.TabsApp.currentId = id;
 
 		// Create a region where the dynamic content will be rendered
 		// inside

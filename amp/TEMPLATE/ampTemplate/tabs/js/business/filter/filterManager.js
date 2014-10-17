@@ -1,4 +1,4 @@
-define([ 'filtersWidget', 'jquery', 'bootstrap' ], function(FiltersWidget, jQuery) {
+define([ 'filtersWidget', 'business/grid/gridManager', 'jquery', 'bootstrap' ], function(FiltersWidget, GridManager, jQuery) {
 
 	"use strict";
 
@@ -31,8 +31,7 @@ define([ 'filtersWidget', 'jquery', 'bootstrap' ], function(FiltersWidget, jQuer
 			console.log('filters apply');
 			var filters = app.TabsApp.filtersWidget.view.serializedFilters;
 
-			// TODO: Call the endpoint with this new filters and
-			// redraw the grid.
+			GridManager.filter(app.TabsApp.currentId, filters);
 
 			console.log(filters);
 			jQuery(container).hide();

@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -18,6 +20,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
@@ -154,14 +157,17 @@ public class Reports {
 		return new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, areas.length);
 	}
 	
-	@GET
+	@POST
 	@Path("/report/{report_id}/result/jqGrid")
+	@Consumes({ "application/x-www-form-urlencoded,text/plain,text/html" })
 	@Produces(MediaType.APPLICATION_JSON)
 	public final JSONReportPage getReportResultWithQueryParams(@PathParam("report_id") Long reportId,
-			@QueryParam("page") Integer page) {
-		
+			MultivaluedMap<String, String> formParams) {
+
+		//TODO: Parse filters parameter.
+		Integer page = new Integer(formParams.get("page").toArray()[0].toString());
 		return getReportResultByPage(reportId, page, true);
-	} 
+	}
 	
 	@GET
 	@Path("/tabs")

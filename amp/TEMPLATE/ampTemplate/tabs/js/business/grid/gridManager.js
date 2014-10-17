@@ -2,14 +2,43 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 
 	"use strict";
 
+	var gridBaseName = 'tab_grid_';
+	var gridPagerBaseName = 'tab_grid_pager_';
+
 	function GridManager() {
 		if (!(this instanceof GridManager)) {
 			throw new TypeError("GridManager constructor cannot be called as a function.");
 		}
 	}
 
+	function getURL(id) {
+		return '/rest/data/report/' + id + '/result/jqGrid';
+	}
+
 	GridManager.prototype = {
 		constructor : GridManager
+	};
+
+	/**
+	 * Apply filters and refresh the grid.
+	 */
+	GridManager.filter = function(id, jsonFilters) {
+		var grid = jQuery("#" + gridBaseName + id);
+		jQuery(grid).jqGrid('clearGridData');
+		jQuery(grid).jqGrid('setGridParam', {
+			url : getURL(id)
+		});
+		var data = {
+			page : 1,
+			filters : jsonFilters
+		};
+		jQuery(grid).jqGrid('setGridParam', {
+			postData : data
+		});
+		jQuery(grid).jqGrid().trigger('reloadGrid', [ {
+			page : 1
+		} ]);
+
 	};
 
 	GridManager.populateGrid = function(id, dynamicLayoutView, firstContent) {
@@ -23,16 +52,21 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 		var tableStructure = extractMetadata(firstContent);
 		var grouping = (tableStructure.hierarchies.length > 0) ? true : false;
 		var grid = jQuery("#tab_grid");
-		jQuery(grid).attr("id", "tab_grid_" + id);
+		jQuery(grid).attr("id", gridBaseName + id);
 		var pager = jQuery("#tab_grid_pager");
-		jQuery(pager).attr("id", "tab_grid_pager_" + id);
+		jQuery(pager).attr("id", gridPagerBaseName + id);
 
 		var rowNum = 0;
 		jQuery(grid).jqGrid({
 			caption : false,
 			/* url : '/rest/data/report/' + id + '/result/', */
-			url : '/rest/data/report/' + id + '/result/jqGrid',
+			url : getURL(id),
 			datatype : 'json',
+			mtype : 'POST',
+			postData : {
+				page : 1,
+				filters : null
+			},
 			jsonReader : {
 				repeatitems : false,
 				root : function(obj) {
@@ -61,7 +95,7 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 			gridview : true,
 			rownumbers : false,
 			rowNum : rowNum,
-			pager : "#tab_grid_pager_" + id,
+			pager : "#" + gridPagerBaseName + id,
 			emptyrecords : 'No records to view',
 			grouping : grouping,
 			groupingView : columnsMapping.createJQGridGroupingModel(tableStructure, grouping),

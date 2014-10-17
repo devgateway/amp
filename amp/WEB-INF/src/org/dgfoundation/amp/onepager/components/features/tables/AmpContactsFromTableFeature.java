@@ -28,6 +28,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpContactSearchModel;
+import org.dgfoundation.amp.onepager.models.AmpReadOnlyModel;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.dgfoundation.amp.onepager.yui.contacts.AmpContactAutocompleteFieldPanel;
@@ -161,8 +162,8 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                     lastname.setTextContainerDefaultMaxSize();
                     item.add(lastname);
                     
-                    IModel<AmpContact> contactPersistentModel = PersistentObjectModel.getModel(actContact.getContact());
-                    AmpContactDetailFeaturePanel detailEmail=new AmpContactDetailFeaturePanel("addContactEmail", contactPersistentModel, "Add Contact Email",false,Constants.CONTACT_PROPERTY_NAME_EMAIL);
+                    IModel<AmpContact> contactReadOnlyModel = new AmpReadOnlyModel(actContact.getContact());
+                    AmpContactDetailFeaturePanel detailEmail=new AmpContactDetailFeaturePanel("addContactEmail", contactReadOnlyModel, "Add Contact Email",false,Constants.CONTACT_PROPERTY_NAME_EMAIL);
                     item.add(detailEmail);
                     
                     AmpTextFieldPanel<String> function=new  AmpTextFieldPanel<String>("function",new PropertyModel<String>(contactModel,"function"),"contact function",false);
@@ -175,14 +176,14 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
                     organisationName.getTextContainer().add(new AttributeModifier("size", "50"));
                     item.add(organisationName);
                     
-                    AmpContactOrganizationFeaturePanel contactOrganizations = new AmpContactOrganizationFeaturePanel("contactOrganizations",contactPersistentModel, "Contact Organizations", false);
+                    AmpContactOrganizationFeaturePanel contactOrganizations = new AmpContactOrganizationFeaturePanel("contactOrganizations",contactReadOnlyModel, "Contact Organizations", false);
                     contactOrganizations.setOutputMarkupId(true);
                     item.add(contactOrganizations);
                     
-                    AmpContactDetailFeaturePanel detailPhone=new AmpContactDetailFeaturePanel("addContactPhone", contactPersistentModel,"Add Contact Phone",false,Constants.CONTACT_PROPERTY_NAME_PHONE); 
+                    AmpContactDetailFeaturePanel detailPhone=new AmpContactDetailFeaturePanel("addContactPhone", contactReadOnlyModel,"Add Contact Phone",false,Constants.CONTACT_PROPERTY_NAME_PHONE); 
                     item.add(detailPhone);
 
-                    AmpContactDetailFeaturePanel detailFax=new AmpContactDetailFeaturePanel("addContactFax", contactPersistentModel,"Add Contact Fax",false,Constants.CONTACT_PROPERTY_NAME_FAX);  
+                    AmpContactDetailFeaturePanel detailFax=new AmpContactDetailFeaturePanel("addContactFax", contactReadOnlyModel,"Add Contact Fax",false,Constants.CONTACT_PROPERTY_NAME_FAX);  
                     item.add(detailFax);
 
                     item.add(new AmpTextAreaFieldPanel("officeaddress",new PropertyModel<String>(contactModel,"officeaddress"),"contact office address",false, false, true));

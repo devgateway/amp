@@ -69,7 +69,7 @@ public class PublicPortalService {
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		
-		spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false));
+		spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false, true));
 		
 		spec.setFilters(getDefaultPublicFilter());
 		

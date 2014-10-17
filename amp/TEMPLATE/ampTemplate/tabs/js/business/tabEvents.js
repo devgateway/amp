@@ -96,7 +96,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 				collection : filters
 			});
 			compositeView.render(); // Avoid bug with buttons not being found by
-									// $.
+			// $.
 
 			// Render views.
 			var dynamicLayoutView = new DynamicContentView({
@@ -177,12 +177,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 				panel = ui.newPanel;
 				selectedTabIndex = ui.newTab.index();
 			}
-			// Put loading animation.
-			// jQuery(panel).html(putAnimation());
-			// Simulate time consuming content.
-			setTimeout(function() {
-				retrieveTabContent(selectedTabIndex);
-			}, 10);
+			retrieveTabContent(selectedTabIndex);
 		}
 	};
 

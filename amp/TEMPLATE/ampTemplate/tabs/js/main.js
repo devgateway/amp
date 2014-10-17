@@ -46,6 +46,7 @@ require.config({
 			exports : 'jqgrid'
 		},
 		filtersWidget : {
+			deps : [ 'backbone' ],
 			exports : 'filtersWidget'
 		},
 		bootstrap : {

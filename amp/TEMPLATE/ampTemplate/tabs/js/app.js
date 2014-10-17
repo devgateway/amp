@@ -4,8 +4,9 @@
 var app = app || {};
 
 define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'views/tabItemsView', 'views/tabBodyView',
-		'views/tabBodysView', 'text!views/html/regions.html', 'business/tabEvents', 'util/tabUtils', 'jquery', 'jqueryui' ], function(Marionette, Tabs, Tab,
-		TabItemView, TabItemsView, TabBodyView, TabBodysView, regionsHtml, TabEvents, TabUtils, jQuery) {
+		'views/tabBodysView', 'text!views/html/regions.html', 'business/tabEvents', 'util/tabUtils', 'business/filter/filterManager',
+		'jquery', 'jqueryui' ], function(Marionette, Tabs, Tab, TabItemView, TabItemsView, TabBodyView, TabBodysView, regionsHtml,
+		TabEvents, TabUtils, FilterManager, jQuery) {
 
 	// Load the regions html into the DOM.
 	var tabContainer = jQuery('#tabs-container');
@@ -93,9 +94,12 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 	// If we are grouping tabs under the last "more tabs..." tab then we need to
 	// hide the "invisible" tabs.
 	if (hasMoreTabs) {
-		TabUtils.hideInvisibleTabs(tabsCollection.models);		
+		TabUtils.hideInvisibleTabs(tabsCollection.models);
 	}
 
 	app.TabsApp.start();
+
+	// Use only one instance of filters for all tabs.
+	FilterManager.initializeFilterWidget();
 
 });

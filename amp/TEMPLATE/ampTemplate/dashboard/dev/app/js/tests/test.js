@@ -13,7 +13,7 @@ var testAppOptions = {
     d.resolve();
     return d.promise();
   }
-}
+};
 
 
 describe('Dashboards', function() {

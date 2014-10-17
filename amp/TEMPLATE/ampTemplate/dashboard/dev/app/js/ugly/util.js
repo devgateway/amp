@@ -8,7 +8,7 @@ var formatKMB = function(precision) {
   return function(value) {
     return formatSI(value)
       .replace('G', 'B');  // now just need to convert G Gigia -> B Billion
-  }
+  };
 };
 
 

@@ -55,7 +55,6 @@ module.exports = BackboneDash.View.extend({
       .y(function(d) { return d.amount })
       .showValues(true)
       .showYAxis(false)
-      // .showXAxis(false)
       .valueFormat(util.formatKMB(3))
       .tooltipContent(_(function(a, y, b, raw) { return tooltip({
         y: y,
@@ -68,6 +67,7 @@ module.exports = BackboneDash.View.extend({
       .transitionDuration(350);
 
     chart.xAxis
+      .tickFormat(util.formatShortText(19))
       .rotateLabels(15);  // because many labels are way too long
 
     d3.select(this.el.querySelector('svg'))

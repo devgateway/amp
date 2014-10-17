@@ -12,6 +12,18 @@ var formatKMB = function(precision) {
 }
 
 
+var formatShortText = function(maxWidth) {
+  var ellipseWidth = 1;
+  return function(text) {
+    if(text.length - ellipseWidth > maxWidth) {
+      text = text.slice(0, maxWidth - ellipseWidth) + '...';
+    }
+    return text;
+  }
+}
+
+
 module.exports = {
-  formatKMB: formatKMB
+  formatKMB: formatKMB,
+  formatShortText: formatShortText
 };

@@ -14,11 +14,13 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
 import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -133,15 +135,16 @@ public class Filters {
 	@Path("/sectors")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=true,name="Sectors")
-	public List<SimpleJsonBean> getSectorsSchemas() {
-		List<SimpleJsonBean> schemalist = new ArrayList<SimpleJsonBean>();
+	public List<JsonBean> getSectorsSchemas() throws AmpApiException{
+		List<JsonBean> schemaList = new ArrayList<JsonBean>();
 		List<AmpClassificationConfiguration> schems = SectorUtil.getAllClassificationConfigs();
 		for (AmpClassificationConfiguration ampClassificationConfiguration : schems) {
-			schemalist.add(new SimpleJsonBean(
-					ampClassificationConfiguration.getId(),
-					ampClassificationConfiguration.getName()));
+			JsonBean schema=new JsonBean();
+			schema.set("id", ampClassificationConfiguration.getId());
+			schema.set("name", ampClassificationConfiguration.getName());
+			schemaList.add(schema);
 		}
-		return schemalist;
+		return schemaList;
 	}
 
 	/**
@@ -168,7 +171,7 @@ public class Filters {
 			List<AmpSector> s = SectorUtil
 					.getAmpSectorsAndSubSectorsHierarchy(sectorConfigName);
 			for (AmpSector ampSector : s) {
-				ampSectorsList.add(getSectors(ampSector));
+				ampSectorsList.add(getSectors(ampSector,sectorConfigName,1));
 			}
 			sector.setChildren(ampSectorsList);
 		} catch (DgException e) {
@@ -427,19 +430,64 @@ public class Filters {
 	 * Get Sectors from AmpSector
 	 * 
 	 * @param as
+	 * @param sectorConfigName 
 	 * @return
 	 */
 
-	private SimpleJsonBean getSectors(AmpSector as) {
+	private SimpleJsonBean getSectors(AmpSector as, String sectorConfigName,Integer level) {
 		SimpleJsonBean s = new SimpleJsonBean();
 		s.setId(as.getAmpSectorId());
 		s.setCode(as.getSectorCodeOfficial());
 		s.setName(as.getName());
 		s.setChildren(new ArrayList<SimpleJsonBean>());
-		for (AmpSector ampSectorChild : as.getSectors()) {
-			s.getChildren().add(getSectors(ampSectorChild));
+		String columnName=null;
+		if(AmpClassificationConfiguration.PRIMARY_CLASSIFICATION_CONFIGURATION_NAME.equals(sectorConfigName)){
+			switch (level) {
+			case 1:
+				columnName=ColumnConstants.PRIMARY_SECTOR_ID;
+				break;
+			case 2:
+				columnName=ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR_ID;
+				break;
+			case 3:
+				columnName=ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR_ID;				
+				break;
+			}
+		}else{
+			if(AmpClassificationConfiguration.SECONDARY_CLASSIFICATION_CONFIGURATION_NAME.equals(sectorConfigName)){	
+				switch (level) {
+				case 1:
+					columnName=ColumnConstants.SECONDARY_SECTOR_ID;
+					break;
+				case 2:
+					columnName=ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR_ID;
+					break;
+				case 3:
+					columnName=ColumnConstants.SECONDARY_SECTOR_SUB_SUB_SECTOR_ID;				
+					break;
+				}
+			}else{
+				if (AmpClassificationConfiguration.TERTIARY_CLASSIFICATION_CONFIGURATION_NAME
+						.equals(sectorConfigName)) {
+					switch (level) {
+					case 1:
+						columnName = ColumnConstants.TERTIARY_SECTOR_ID;
+						break;
+					case 2:
+						columnName = ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR_ID;
+						break;
+					case 3:
+						columnName = ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR_ID;
+						break;
+					}
+				}
+			}
 		}
-
+		s.setFilterId(columnName);
+		level++;
+		for (AmpSector ampSectorChild : as.getSectors()) {
+			s.getChildren().add(getSectors(ampSectorChild,sectorConfigName,level));
+		}
 		return s;
 	}
 

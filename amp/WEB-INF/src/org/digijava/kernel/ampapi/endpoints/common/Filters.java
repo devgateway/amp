@@ -15,6 +15,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
@@ -212,8 +213,11 @@ public class Filters {
 			for (Object p : ProgramUtil.getAmpActivityProgramSettingsList()) {
 				
 				AmpActivityProgramSettings program=(AmpActivityProgramSettings)p;
-				programs.add( new SimpleJsonBean(program.getAmpProgramSettingsId(),
-						program.getName()) );
+				//only add if its enabled 
+				if(FeaturesUtil.isVisibleModule("/Activity Form/Program/" + program.getName())){
+					programs.add( new SimpleJsonBean(program.getAmpProgramSettingsId(),
+							program.getName()) );
+				}
 				
 			}
 			return programs;
@@ -329,8 +333,9 @@ public class Filters {
 	public SimpleJsonBean getPrograms(@PathParam("programId") Long programId) {
 		try {
 			AmpActivityProgramSettings npd = ProgramUtil.getAmpActivityProgramSettings(programId);
+			
 			if (npd != null && npd.getDefaultHierarchy() != null) {
-				return getPrograms(npd.getDefaultHierarchy());
+				return getPrograms(npd.getDefaultHierarchy(),npd.getName(),0);
 			} else {
 				return new SimpleJsonBean();
 			}
@@ -414,14 +419,33 @@ public class Filters {
 	 *            AmpThem to get the programFrom
 	 * @return
 	 */
-	private SimpleJsonBean getPrograms(AmpTheme t) {
+	private SimpleJsonBean getPrograms(AmpTheme t,String programName,Integer level) {
 		SimpleJsonBean p = new SimpleJsonBean();
 		p.setId(t.getAmpThemeId());
 		p.setName(t.getName());
 		p.setChildren(new ArrayList<SimpleJsonBean>());
-
+		String columnName=null;
+		if(level>0){
+			if(programName.equals(ProgramUtil.NATIONAL_PLAN_OBJECTIVE)){
+				columnName=ColumnConstants.NATIONAL_PLANNING_OBJECTIVES +" Level " +level+ " Id";
+			}else{
+				if(programName.equals(ProgramUtil.PRIMARY_PROGRAM)){
+					columnName=ColumnConstants.PRIMARY_PROGRAM +" Level " +level+ " Id";
+				}else{
+					if(programName.equals(ProgramUtil.SECONDARY_PROGRAM)){
+						columnName=ColumnConstants.SECONDARY_PROGRAM +" Level " +level+ " Id";
+					}else{
+						if(programName.equals(ProgramUtil.TERTIARY_PROGRAM)){
+							columnName=ColumnConstants.TERTIARY_PROGRAM +" Level " +level+ " Id";
+						}
+					}
+				}
+			}
+			p.setFilterId(columnName);
+		}
+		level++;
 		for (AmpTheme tt : t.getSiblings()) {
-			p.getChildren().add(getPrograms(tt));
+			p.getChildren().add(getPrograms(tt,programName,level));
 		}
 		return p;
 	}

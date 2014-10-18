@@ -12,10 +12,9 @@ var tooltip = _.template(fs.readFileSync(
 
 module.exports = BackboneDash.View.extend({
 
-  className: 'col-xs-6',
-
   events: {
-    'change .dash-adj-type input': 'changeType'
+    'change .dash-adj-type input': 'changeType',
+    'click .expand': 'embiggen'
   },
 
   initialize: function(options) {
@@ -25,10 +24,16 @@ module.exports = BackboneDash.View.extend({
   },
 
   render: function() {
-    this.$el.html(template({ chart: this.model, loading: true, util: util }));
+    var renderOptions = {
+      chart: this.model,
+      util: util,
+      loading: true
+    };
+
+    this.$el.html(template(renderOptions));
 
     this.app.tryAfter(this.model.fetch(), function() {
-      this.$el.html(template({ chart: this.model, loading: false, util: util }));
+      this.$el.html(template(_(renderOptions).extend({ loading: false })));
       nv.addGraph(_(function() { return this.app.tryTo(this.getChart, this); }).bind(this));
     }, this);
 
@@ -42,7 +47,8 @@ module.exports = BackboneDash.View.extend({
     data.values.push({
       name: 'Others',
       amount: this.model.get('total') -
-        _.chain(data.values).pluck('amount').reduce(function(l, r) { return l + r; }, 0).value()
+        _.chain(data.values).pluck('amount').reduce(function(l, r) { return l + r; }, 0).value(),
+      color: '#777'
     });
 
 
@@ -56,8 +62,10 @@ module.exports = BackboneDash.View.extend({
     var chart = nv.models.discreteBarChart()
       .x(function(d) { return d.name; })    //Specify the data accessors.
       .y(function(d) { return d.amount; })
+      .color(util.categoryColours(data.values.length))
       .showValues(true)
       .showYAxis(false)
+      .showXAxis(false)
       .valueFormat(util.formatKMB(3))
       .tooltipContent(_(function(a, y, b, raw) { return tooltip({
         y: y,
@@ -66,12 +74,8 @@ module.exports = BackboneDash.View.extend({
         currency: this.model.get('currency'),
         total: this.model.get('total')
       }); }).bind(this))
-      .margin({ top: 5, right: 20, bottom: 60, left: 20 })
-      .transitionDuration(350);
-
-    chart.xAxis
-      .tickFormat(util.formatShortText(19))
-      .rotateLabels(15);  // because many labels are way too long
+      .margin({ top: 5, right: 10, bottom: 10, left: 10 })
+      .transitionDuration(150);
 
     d3.select(this.el.querySelector('svg'))
       .datum([data])
@@ -85,6 +89,15 @@ module.exports = BackboneDash.View.extend({
   changeType: function(e) {
     var newType = e.currentTarget.dataset.acad;
     this.model.set('adjType', newType);
+  },
+
+  embiggen: function() {
+    this.model.set('embiggen', !this.model.get('embiggen'));
+    this.render();
+  },
+
+  setClear: function(shouldBreak) {
+    this.$el[shouldBreak ? 'addClass': 'removeClass']('clearfix');
   }
 
 });

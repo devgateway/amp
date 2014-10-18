@@ -1,7 +1,11 @@
-<div class="panel panel-default">
+<div class="panel panel-primary panel-popover">
   <div class="panel-heading"><%= raw.point.name %></div>
   <div class="panel-body">
-    <p><%= d3.format(',')(Math.round(raw.value)) %> <%= currency %></p>
-    <p><%= d3.format('%')(raw.value / total) %> of total</p>
+    <span class="dollaz">
+      <b><%= d3.format(',')(Math.round(raw.value)) %></b> <%= currency %>
+    </span>
+  </div>
+  <div class="panel-footer">
+    <b><%= d3.format('%')(raw.value / total) %></b> of total
   </div>
 </div>

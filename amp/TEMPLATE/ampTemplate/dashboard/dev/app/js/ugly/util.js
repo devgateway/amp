@@ -23,7 +23,18 @@ var formatShortText = function(maxWidth) {
 };
 
 
+var categoryColours = function(cats) {
+  // get an appropriate colour scale for the number of categories we are
+  // dealing with
+  var colours = d3.scale['category' + (cats > 10 ? '20' : '10')]().range();
+  return function(d, i) {
+    return d.color || colours[i % colours.length];
+  };
+};
+
+
 module.exports = {
   formatKMB: formatKMB,
-  formatShortText: formatShortText
+  formatShortText: formatShortText,
+  categoryColours: categoryColours
 };

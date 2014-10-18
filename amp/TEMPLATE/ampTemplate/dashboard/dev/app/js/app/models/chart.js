@@ -5,7 +5,8 @@ var BackboneDash = require('../backbone-dash');
 module.exports = BackboneDash.Model.extend({
 
   defaults: {
-    adjType: 'ac'
+    adjType: 'ac',
+    embiggen: false
   },
 
   initialize: function(options) {

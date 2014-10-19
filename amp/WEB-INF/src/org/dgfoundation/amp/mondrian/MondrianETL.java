@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Locale;
@@ -34,6 +35,9 @@ import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.time.StopWatch;
 
 import clover.com.google.common.base.Joiner;
@@ -88,6 +92,7 @@ public class MondrianETL {
 	protected final static Fingerprint ETL_TIME_FINGERPRINT = new Fingerprint("etl_event_id", new ArrayList<String>(), "-1");
 	protected final static Fingerprint CURRENCIES_FINGERPRINT = new Fingerprint("amp_currency", Arrays.asList(Fingerprint.buildTableHashingQuery("amp_currency", "amp_currency_id")));
 	protected final static Fingerprint LOCALES_FINGERPRINT = new Fingerprint("locales", Arrays.asList("select code from DG_SITE_TRANS_LANG_MAP where site_id = 3 order by code"));
+	protected final static Fingerprint CALENDARS_FINGERPRINT = new Fingerprint("calendars", Arrays.asList(Fingerprint.buildTableHashingQuery("amp_fiscal_calendar", "amp_fiscal_cal_id")));
 	
 	protected static Logger logger = Logger.getLogger(MondrianETL.class);
 	
@@ -392,6 +397,12 @@ private EtlResult execute() throws Exception {
 		pumpTableIfChanged(res, fullEtlJobs, "amp_category_class", "id");
 		pumpTableIfChanged(res, fullEtlJobs, "amp_category_value", "id");
 
+		CALENDARS_FINGERPRINT.runIfFingerprintChangedOr(conn, monetConn, false, stepSkipped, new ExceptionRunnable<SQLException>() {
+			@Override public void run() throws SQLException {
+				res.or(true);
+			}
+		});
+		
 		for (final MondrianTableDescription mondrianTable:MondrianTablesRepository.MONDRIAN_DIMENSION_TABLES)
 			mondrianTable.fingerprint.runIfFingerprintChangedOr(conn, monetConn, res.value, stepSkipped, new ExceptionRunnable<SQLException>() {
 				@Override public void run() throws SQLException {
@@ -439,13 +450,64 @@ private EtlResult execute() throws Exception {
 	 */
 	protected void generateMondrianDateTable() throws SQLException {
 		generateStarTableWithQueryInPostgres(MONDRIAN_DATE_TABLE, "date_code", 
-			"SELECT to_char(transaction_date, 'J')::integer AS day_code, (CAST (transaction_date as date)) AS full_date, date_part('year'::text, (CAST (transaction_date as date)))::integer AS year_code, date_part('month'::text, (CAST (transaction_date as date)))::integer AS month_code, to_char((CAST (transaction_date as date)), 'TMMonth'::text) AS month_name, date_part('quarter'::text, (CAST (transaction_date as date)))::integer AS quarter_code, ('Q'::text || date_part('quarter'::text, (CAST (transaction_date as date)))) AS quarter_name " + 
+			"SELECT to_char(transaction_date, 'J')::integer AS day_code, (CAST (transaction_date as date)) AS full_date, date_part('year'::text, (CAST (transaction_date as date)))::integer AS year_code, date_part('year'::text, (CAST (transaction_date as date)))::text AS year_name, date_part('month'::text, (CAST (transaction_date as date)))::integer AS month_code, to_char((CAST (transaction_date as date)), 'Month'::text) AS month_name, date_part('quarter'::text, (CAST (transaction_date as date)))::integer AS quarter_code, ('Q'::text || date_part('quarter'::text, (CAST (transaction_date as date)))) AS quarter_name " + 
 			" FROM generate_series('1970-1-1', '2050-1-1', interval '1 day') transaction_date " + 
 			" UNION ALL " + 
-			" SELECT 999999999, '9999-1-1', 9999, 99, 'Undefined', 99, 'Undefined' " + 
+			" SELECT 999999999, '9999-1-1', 9999, 'Undefined', 99, 'Undefined', 99, 'Undefined' " + 
 			" ORDER BY day_code",
 			new ArrayList<String>());
+		for (AmpFiscalCalendar calendar:DbUtil.getAllFisCalenders()) {
+			generateFiscalCalendarColumns(calendar);
+		}
 		monetConn.copyTableFromPostgres(conn, MONDRIAN_DATE_TABLE);
+	}
+	
+	protected void generateFiscalCalendarColumns(AmpFiscalCalendar calendar) throws SQLException {
+		ICalendarWorker worker = calendar.getworker();
+		SQLUtils.executeQuery(conn, "ALTER TABLE " + MONDRIAN_DATE_TABLE + " ADD year_code_" + calendar.getAmpFiscalCalId() + " bigint");
+		SQLUtils.executeQuery(conn, "ALTER TABLE " + MONDRIAN_DATE_TABLE + " ADD year_name_" + calendar.getAmpFiscalCalId() + " text");
+		//SQLUtils.executeQuery(conn, "ALTER TABLE " + MONDRIAN_DATE_TABLE + " ADD month_code_" + calendar.getAmpFiscalCalId() + " bigint");
+		SQLUtils.executeQuery(conn, "ALTER TABLE " + MONDRIAN_DATE_TABLE + " ADD month_name_" + calendar.getAmpFiscalCalId() + " text");
+		SQLUtils.executeQuery(conn, "ALTER TABLE " + MONDRIAN_DATE_TABLE + " ADD quarter_code_" + calendar.getAmpFiscalCalId() + " bigint");
+		SQLUtils.executeQuery(conn, "ALTER TABLE " + MONDRIAN_DATE_TABLE + " ADD quarter_name_" + calendar.getAmpFiscalCalId() + " text");
+		ResultSet rs = SQLUtils.rawRunQuery(conn, "SELECT day_code, full_date FROM " + MONDRIAN_DATE_TABLE, null);
+		List<List<Object>> wr = new ArrayList<>();
+		while (rs.next()) {
+			wr.add(buildDateRowForCalendar(rs, worker));
+		}
+		//'9999-1-1', 9999, 'Undefined', 99, 'Undefined', 99, 'Undefined'
+		//wr.add(Arrays.<Object>asList(999999999l, 9999l, "Undefined", "Undefined", 99l, "Undefined"));
+		String tableName = "mondrian_dates_temp_calendar_" + calendar.getAmpFiscalCalId();
+		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + tableName);
+		SQLUtils.executeQuery(conn, "CREATE TABLE " + tableName + " (dd bigint PRIMARY KEY, year_code bigint, year_name text, month_name text, quarter_code bigint, quarter_name text)");
+		SQLUtils.insert(conn, tableName, null, null,
+				Arrays.asList("dd", "year_code", "year_name",  "month_name", "quarter_code", "quarter_name"), wr);
+		String query = String.format("UPDATE " + MONDRIAN_DATE_TABLE + " AS mdt SET year_code_%d=c.year_code, year_name_%d=c.year_name, month_name_%d=c.month_name, quarter_code_%d=c.quarter_code, quarter_name_%d=c.quarter_name FROM " + tableName + " AS c WHERE c.dd = mdt.day_code", 
+				calendar.getAmpFiscalCalId(), calendar.getAmpFiscalCalId(), calendar.getAmpFiscalCalId(), calendar.getAmpFiscalCalId(), calendar.getAmpFiscalCalId());
+		SQLUtils.executeQuery(conn, query);
+		SQLUtils.executeQuery(conn, 
+				String.format("UPDATE " + MONDRIAN_DATE_TABLE + " SET year_code_%d=9999, year_name_%d='Undefined', month_name_%d='Undefined', quarter_code_%d=99,quarter_name_%d='Undefined' WHERE day_code=999999999",
+						calendar.getAmpFiscalCalId(),calendar.getAmpFiscalCalId(),calendar.getAmpFiscalCalId(),calendar.getAmpFiscalCalId(),calendar.getAmpFiscalCalId()));
+	}
+	
+	protected List<Object> buildDateRowForCalendar(ResultSet rs, ICalendarWorker worker) {
+		try {
+			Long key = rs.getLong(1);
+			Date date = rs.getDate(2);
+			worker.setTime(date);
+			List<Object> row = new ArrayList<>();
+			row.add(key);
+			row.add(worker.getYear());
+			row.add(worker.getFiscalYear());
+			//row.add(worker.getMonth());
+			row.add(worker.getFiscalMonth().toString());
+			row.add(worker.getQuarter());
+			row.add("Q" + worker.getQuarter());
+			return row;
+		}
+		catch(Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

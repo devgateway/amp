@@ -68,6 +68,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		contents = contents.replaceAll("@@actual@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase()));
 		contents = contents.replaceAll("@@planned@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getIdInDatabase()));
 		contents = contents.replaceAll("@@currency@@", Long.toString(getReportCurrency().getAmpCurrencyId()));
+		contents = contents.replaceAll("@@calendar@@", getReportCalendarTag());
 		
 		String localeTag = getReportLocale();
 		contents = contents.replaceAll("@@locale@@", localeTag);
@@ -85,6 +86,12 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		long delta = System.currentTimeMillis() - schemaProcessingStart;
 		logger.info("schema processing took " + delta + " ms");
 		return contents;
+	}
+	
+	protected String getReportCalendarTag() {
+		if (currentReport.get().getSettings().getCalendar() == null)
+			return "";
+		return "_" + currentReport.get().getSettings().getCalendar().getAmpFiscalCalId();
 	}
 	
 	/**

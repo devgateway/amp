@@ -167,26 +167,26 @@
 	<Dimension name="AMP Date" type="TimeDimension">
 		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Dates">
 			<Table name="mondrian_dates" />
-			<Level name="Year" column="year_code" levelType="TimeYears" type="Integer" translated="false" />
-			<Level name="Quarter" column="quarter_code" ordinalColumn="quarter_code" nameColumn="quarter_name" levelType="TimeQuarters" type="Integer" translated="false" />
-			<Level name="Month" column="month_code" ordinalColumn="month_code" nameColumn="month_name" levelType="TimeMonths" type="Integer"  translated="false" />
+			<Level name="Year" column="year_code@@calendar@@" nameColumn="year_name@@calendar@@" levelType="TimeYears" type="Integer" translated="false" />
+			<Level name="Quarter" column="quarter_code@@calendar@@" ordinalColumn="quarter_code@@calendar@@" nameColumn="quarter_name@@calendar@@" levelType="TimeQuarters" type="Integer" translated="false" />
+			<Level name="Month" column="month_code@@calendar@@" ordinalColumn="month_code@@calendar@@" nameColumn="month_name@@calendar@@" levelType="TimeMonths" type="Integer"  translated="false" />
 			<!-- Level name="Day" column="day_of_month" ordinalColumn="day_of_month" nameColumn="day_of_month_name" levelType="TimeDays" type="Integer" /-->
 			<Level name="Date" column="day_code" ordinalColumn="day_code" nameColumn="full_date" type="Integer" levelType="TimeDays" translated="false" >
-				<Property name="year_code" column="year_code" type="Integer"/>
+				<Property name="year_code@@calendar@@" column="year_code@@calendar@@" type="Integer"/>
 				<Property name="date_code" column="day_code" type="Integer"/>
 			</Level>
 		</Hierarchy>
 		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Year">
 		  <Table name="mondrian_dates" />
-		  <Level name="Year" column="year_code" levelType="TimeYears" type="Integer" translated="false" />
+		  <Level name="Year" column="year_code@@calendar@@" nameColumn="year_name@@calendar@@" levelType="TimeYears" type="Integer" translated="false" />
 		</Hierarchy>
 		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Quarter">
 		  <Table name="mondrian_dates" />
-		  <Level name="Quarter" column="quarter_code" ordinalColumn="quarter_code" nameColumn="quarter_name" levelType="TimeQuarters" type="Integer" translated="false" />
+		  <Level name="Quarter" column="quarter_code@@calendar@@" ordinalColumn="quarter_code@@calendar@@" nameColumn="quarter_name@@calendar@@" levelType="TimeQuarters" type="Integer" translated="false" />
 		</Hierarchy>
 		<Hierarchy hasAll="true" allMemberName="All Periods" primaryKey="day_code" name="Month">
 		  <Table name="mondrian_dates" />
-		  <Level name="Month" column="month_code" ordinalColumn="month_code" nameColumn="month_name" levelType="TimeMonths" type="Integer" translated="false" />
+		  <Level name="Month" column="month_code@@calendar@@" ordinalColumn="month_code@@calendar@@" nameColumn="month_name@@calendar@@" levelType="TimeMonths" type="Integer" translated="false" />
 		</Hierarchy>
 	</Dimension>
 		

@@ -505,8 +505,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 				currentLevel--; 
 			}
 			
-			if (column != null) { //must not be null actually
-				Integer year = Integer.parseInt(column.columnName);
+			if (false && column != null) { //must not be null actually
+				Integer year = Integer.parseInt(column.columnName); // Constantin:please change this to accommodate Fiscal Year calendars
 				boolean isAllowed = yearSet.contains(year); //first check if it is in the set
 				if (!isAllowed)
 					for (Integer[] range : yearRanges)

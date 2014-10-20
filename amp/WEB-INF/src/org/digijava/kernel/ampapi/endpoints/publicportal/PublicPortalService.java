@@ -2,11 +2,14 @@ package org.digijava.kernel.ampapi.endpoints.publicportal;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -26,7 +29,8 @@ import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
-import clover.org.apache.commons.lang.StringUtils;
+import clover.com.google.common.base.Strings;
+
 
 /**
  * Public Portal Service
@@ -36,13 +40,14 @@ import clover.org.apache.commons.lang.StringUtils;
 public class PublicPortalService {
 	protected static final Logger logger = Logger.getLogger(PublicPortalService.class);
 	
-	/** the number of top projects to be provided */
-	//shouldn't it be configurable?
-	private static final int TOP_COUNT = 20;
 	private static final int DEFAULT_PERIOD = 12; //months
 	
 	/**
-	 * Retrieves top 20 projects based on fixed requirements.
+	 * Retrieves top 'count' projects based on fixed requirements. <br>
+	 * NOTE: the requirement is fixed at the moment, however we may need to provide some flexibility
+	 * => JsonBean config can be used for that
+	 * @param config - report config
+	 * @param count - the maximum number of results to retrieve  
 	 * @return JsonBean object with results
 	 * Requirement:
 	 * Top 20 projects (by commitment size) during the selected time period. 
@@ -55,9 +60,9 @@ public class PublicPortalService {
 	 * Cumulative Commitments, 
 	 * Cumulative Disbursements.
 	 */
-	public static JsonBean getTopProjects() {
+	public static JsonBean getTopProjects(JsonBean config, Integer count, Integer months) {
 		JsonBean result = new JsonBean();
-		List<String[]> content = new ArrayList<String[]>();
+		List<JsonBean> content = new ArrayList<JsonBean>();
 		result.set("topprojects", content);
 		
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_GetTopProjects");
@@ -71,7 +76,7 @@ public class PublicPortalService {
 		
 		spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false, true));
 		
-		spec.setFilters(getDefaultPublicFilter());
+		spec.setFilters(getPeriodFilter(months));
 		
 		GeneratedReport report = EndpointUtils.runReport(spec);
 		if (report == null) {
@@ -79,21 +84,27 @@ public class PublicPortalService {
 		} else {
 			if (report.reportContents != null && report.reportContents.getChildren() != null) {
 				//provide header titles
-				List<String> headers = new ArrayList<String>(report.leafHeaders.size());
+				Map<String, String> headersToId = new HashMap<String, String>(report.leafHeaders.size());
+				Map<String, String> headers = new LinkedHashMap<String, String>(report.leafHeaders.size());
+				Iterator<ReportColumn> colIter = spec.getColumns().iterator();
 				for (ReportOutputColumn leafHeader : report.leafHeaders) {
-					headers.add(leafHeader.columnName);
+					final String columnName = colIter.hasNext() ? colIter.next().getColumnName() : leafHeader.originalColumnName;
+					final String id = StringUtils.replace(StringUtils.lowerCase(columnName), " ", "-");
+					headers.put(id, leafHeader.columnName);
+					headersToId.put(leafHeader.columnName, id);
 				}
 				result.set("headers", headers);
 				
 				//provide the top projects data
-				int count = Math.min(getPublicPortalTopCount(), report.reportContents.getChildren().size());
+				count = Math.min(count, report.reportContents.getChildren().size());
+				result.set("count", count);
+				
 				Iterator<ReportArea> iter = report.reportContents.getChildren().iterator();
 				while (count > 0) {
 					ReportArea data = iter.next();
-					String[] jsonData = new String[headers.size()];
-					int pos = 0;
+					JsonBean jsonData = new JsonBean();
 					for (Entry<ReportOutputColumn, ReportCell> cell : data.getContents().entrySet()) {
-						jsonData[pos ++] = cell.getValue().displayedValue;
+						jsonData.set(headersToId.get(cell.getKey().columnName), cell.getValue().displayedValue);
 					}
 					content.add(jsonData);
 					count --;
@@ -102,11 +113,6 @@ public class PublicPortalService {
 		}
 		
 		return result;
-	}
-	
-	public static final int getPublicPortalTopCount() {
-		//TODO: should be also configured in Admin?
-		return TOP_COUNT;
 	}
 	
 	/**
@@ -118,9 +124,11 @@ public class PublicPortalService {
 		return period;	
 	}
 	
-	public static final ReportFilters getDefaultPublicFilter() {
+	public static final ReportFilters getPeriodFilter(Integer months) {
+		if (months == null)
+			months = getPublicPortalPeriodInMonths();
 		Calendar cal = Calendar.getInstance();
-		cal.add(Calendar.MONTH, -getPublicPortalPeriodInMonths());
+		cal.add(Calendar.MONTH, -months);
 		MondrianReportFilters filters = new MondrianReportFilters();
 		try {
 			filters.addDateRangeFilterRule(cal.getTime(), null);
@@ -128,5 +136,9 @@ public class PublicPortalService {
 			logger.error(e);
 		}
 		return filters;
+	}
+	
+	public static final ReportFilters getDefaultPublicFilter() {
+		return getPeriodFilter(getPublicPortalPeriodInMonths());
 	}
 }

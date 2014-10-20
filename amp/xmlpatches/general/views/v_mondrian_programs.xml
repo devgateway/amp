@@ -22,16 +22,16 @@
 				DROP VIEW IF EXISTS v_mondrian_programs;
 			    CREATE OR REPLACE VIEW v_mondrian_programs AS 
 					SELECT th.amp_theme_id, th.parent_theme_id, th.theme_code, th.name,
-						line.program_setting_id AS program_setting_id, line.program_setting_name AS program_setting_name,
-						b0.amp_theme_id AS id0, b0.name AS name0,
-						b1.amp_theme_id AS id1, b1.name AS name1,
-						b2.amp_theme_id AS id2, b2.name AS name2,
-						b3.amp_theme_id AS id3, b3.name AS name3,
-						b4.amp_theme_id AS id4, b4.name AS name4,
-						b5.amp_theme_id AS id5, b5.name AS name5,
-						b6.amp_theme_id AS id6, b6.name AS name6,
-						b7.amp_theme_id AS id7, b7.name AS name7,
-						b8.amp_theme_id AS id8, b8.name AS name8
+						COALESCE(line.program_setting_id, 999999999) AS program_setting_id, COALESCE(line.program_setting_name, 'Undefined') AS program_setting_name,
+						COALESCE(b0.amp_theme_id, 999999999) AS id0, COALESCE(b0.name, 'Undefined') AS name0,
+						COALESCE(b1.amp_theme_id, 999999999) AS id1, COALESCE(b1.name, 'Undefined') AS name1,
+						COALESCE(b2.amp_theme_id, 999999999) AS id2, COALESCE(b2.name, 'Undefined') AS name2,
+						COALESCE(b3.amp_theme_id, 999999999) AS id3, COALESCE(b3.name, 'Undefined') AS name3,
+						COALESCE(b4.amp_theme_id, 999999999) AS id4, COALESCE(b4.name, 'Undefined') AS name4,
+						COALESCE(b5.amp_theme_id, 999999999) AS id5, COALESCE(b5.name, 'Undefined') AS name5,
+						COALESCE(b6.amp_theme_id, 999999999) AS id6, COALESCE(b6.name, 'Undefined') AS name6,
+						COALESCE(b7.amp_theme_id, 999999999) AS id7, COALESCE(b7.name, 'Undefined') AS name7,
+						COALESCE(b8.amp_theme_id, 999999999) AS id8, COALESCE(b8.name, 'Undefined') AS name8
 						FROM amp_theme th JOIN all_programs_with_levels line ON th.amp_theme_id = line.amp_theme_id
    							LEFT JOIN amp_theme b0 ON b0.amp_theme_id = line.id0
 							LEFT JOIN amp_theme b1 ON b1.amp_theme_id = line.id1

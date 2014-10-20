@@ -1,8 +1,0 @@
-name = "Locations Hierarchical Select"
-description = Allows Hierarchical Select to be used for a Locations hierarchy.
-package = "Form Elements"
-dependencies[] = "views"
-core = "7.x"
-;version = "7.x-1.0"
-datestamp = "1316201202"
-project = "hs_select_locations"

@@ -1,6 +1,0 @@
-<?php
-/**
- * @file
- */
-
-include_once('ampp_roles_and_permissions.custom.inc');

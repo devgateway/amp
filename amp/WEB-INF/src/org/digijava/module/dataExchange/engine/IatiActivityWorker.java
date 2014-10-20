@@ -831,41 +831,40 @@ public class IatiActivityWorker {
             return null;
         }
 
-		Double currencyValue = new Double(0);
+		Double currencyValue = 0.0;
 		String currencyName = iatiDefaultCurrency;
 		Date startDate = null;
 		Date endDate = null;
-		for (Iterator<Object> it = budget.getPeriodStartOrPeriodEndOrValue().iterator(); it.hasNext();) {
-			Object contentItem = (Object) it.next();
-			if(contentItem instanceof JAXBElement){
-				JAXBElement i = (JAXBElement)contentItem;
-				//value and currency
-				if(i.getName().equals(new QName("value"))){
-					CurrencyType item = (CurrencyType)i.getValue();
-					currencyValue = new Double(item.getValue().doubleValue());
-					if(isValidString(item.getCurrency()))
-						currencyName = item.getCurrency();
-				}
-				
-				if(i.getName().equals(new QName("period-start"))){
-					DateType item = (DateType)i.getValue();
-					XMLGregorianCalendar isoDate = item.getIsoDate();
-					
-					if(isoDate != null)
-						startDate = DataExchangeUtils.XMLGregorianDateToDate(isoDate);
-					//else dateToSet	=	DataExchangeUtils.stringToDate(item.get);
-				}
-				
-				//TODO check if this still to be added to AMP
-				if(i.getName().equals(new QName("period-end"))){
-					DateType item = (DateType)i.getValue();
-					XMLGregorianCalendar isoDate = item.getIsoDate();
-					
-					if(isoDate != null)
-						endDate = DataExchangeUtils.XMLGregorianDateToDate(isoDate);
-				}
-			}
-		}
+        for (Object contentItem : budget.getPeriodStartOrPeriodEndOrValue()) {
+            if (contentItem instanceof JAXBElement) {
+                JAXBElement i = (JAXBElement) contentItem;
+                //value and currency
+                if (i.getName().equals(new QName("value"))) {
+                    CurrencyType item = (CurrencyType) i.getValue();
+                    currencyValue = item.getValue().doubleValue();
+                    if (isValidString(item.getCurrency()))
+                        currencyName = item.getCurrency();
+                }
+
+                if (i.getName().equals(new QName("period-start"))) {
+                    DateType item = (DateType) i.getValue();
+                    XMLGregorianCalendar isoDate = item.getIsoDate();
+
+                    if (isoDate != null)
+                        startDate = DataExchangeUtils.XMLGregorianDateToDate(isoDate);
+                    //else dateToSet	=	DataExchangeUtils.stringToDate(item.get);
+                }
+
+                //TODO check if this still to be added to AMP
+                if (i.getName().equals(new QName("period-end"))) {
+                    DateType item = (DateType) i.getValue();
+                    XMLGregorianCalendar isoDate = item.getIsoDate();
+
+                    if (isoDate != null)
+                        endDate = DataExchangeUtils.XMLGregorianDateToDate(isoDate);
+                }
+            }
+        }
 		
 		AmpOrganisation ampOrg = null;
 		ampOrg = findFundingOrganization(iatiDefaultFundingOrgList, iatiExtendingOrgList, iatiRepOrgList);
@@ -878,30 +877,40 @@ public class IatiActivityWorker {
 		//the transaction has no source organization - donor
 		//if(ampOrg==null) return null;
 		
-		Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
-
 		Set<AmpFunding> ampFundings = fundings;
-		if(ampFundings == null) 
+		if (ampFundings == null)
 			ampFundings = new HashSet<AmpFunding>();
-		AmpFunding ampFunding = new AmpFunding();
-		boolean found = false;
+
+        AmpFunding ampFunding = null;
 		for (AmpFunding af : ampFundings) {
-			if(ampOrg.compareTo(af.getAmpDonorOrgId()) == 0){
-				ampFunding = af;
-                ampFunding.getFundingDetails().clear();
-				ampFundDetails = ampFunding.getFundingDetails();
-				found = true;
+			if (ampOrg.compareTo(af.getAmpDonorOrgId()) == 0) {
+                ampFunding = af;
 				break;
 			}
 		}
 		
-		//TODO: Evaluate if we need a more complex mapping here because IATI defines 4 organization roles (http://iatistandard.org/103/codelists/organisation_role/).
-		//		There is an example of that in the method 'processRelOrgsStep'.
+		// TODO: Evaluate if we need a more complex mapping here because IATI defines 4 organization roles (http://iatistandard.org/103/codelists/organisation_role/).
+		// There is an example of that in the method 'processRelOrgsStep'.
 		AmpRole role = DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
-		
-		ampFunding.setActive(true);
+
+        Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
+
+        Date dateToSet = null;
+        if (startDate != null) {
+            dateToSet = startDate;
+        } else if (endDate != null) {
+            dateToSet = endDate;
+        }
+        //if there is no date, the budget element should be skipped
+        else return null;
+
+        populateFundingDetails(currencyValue, currencyName, dateToSet, ampFundDetails,
+                org.digijava.module.aim.helper.Constants.COMMITMENT,
+                Constants.ACTUAL);
+
 		//ampFunding.setAmpDonorOrgId(ampOrg);
-		if(!found){
+		if (ampFunding == null) {
+            ampFunding = new AmpFunding();
 			ampFunding.setAmpDonorOrgId(ampOrg);
 			ampFunding.setGroupVersionedFunding(System.currentTimeMillis());
 			ampFunding.setFundingDetails(ampFundDetails);
@@ -909,15 +918,13 @@ public class IatiActivityWorker {
 			ampFunding.setFinancingInstrument(financingInstrument);
 			ampFunding.setModeOfPayment(null);
 			ampFunding.setSourceRole(role);
-		}
-		Date dateToSet = null;
-		if(startDate!=null)
-			dateToSet = startDate;
-		else if (endDate!=null)
-				dateToSet = endDate;
-			//if there is no date, the budget element should be skipped
-			else return null;
+		} else if (ampFunding.getFundingDetails() != null) {
+            ampFunding.getFundingDetails().addAll(ampFundDetails);
+        } else {
+            ampFunding.setFundingDetails(ampFundDetails);
+        }
 
+        ampFunding.setActive(true);
 
 	    populateFundingDetails(currencyValue, currencyName, dateToSet, ampFundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.PLANNED);
 
@@ -930,12 +937,17 @@ public class IatiActivityWorker {
 		ampOrgRole.setRole(role);
 		ampOrgRole.setOrganisation(ampOrg);
 		orgRole.add(ampOrgRole);
-		
-		if (activity.getOrgrole()==null){
-			activity.setOrgrole(orgRole);
-		}else{
-			activity.getOrgrole().addAll(orgRole);
-		}
+
+        if (activity != null) {
+            ampFunding.setAmpActivityId(activity);
+
+            if (activity.getOrgrole() == null) {
+                activity.setOrgrole(orgRole);
+            } else{
+                activity.getOrgrole().addAll(orgRole);
+            }
+        }
+
 		
 		return ampFunding;
 	}
@@ -955,10 +967,8 @@ public class IatiActivityWorker {
 		Set<AmpOrgRole> orgRole = new HashSet<AmpOrgRole>();
 		AmpRole role = DbUtil.getAmpRole(org.digijava.module.aim.helper.Constants.FUNDING_AGENCY);
 		AmpOrganisation ampOrg = null;
-		AmpCategoryValue typeOfAssistance = iatiDefaultFinanceType;
-		AmpCategoryValue modeOfPayment = null;
-		AmpCategoryValue financingInstrument = iatiDefaultAidType;
-		String transactionType = "";
+        AmpCategoryValue modeOfPayment = null;
+        String transactionType = "";
 		String description ="";
 		Date sDate = new Date();
 		Date eDate = new Date();
@@ -1012,7 +1022,9 @@ public class IatiActivityWorker {
         if (ampOrg == null) return null;
 
 		Set<AmpFundingDetail> ampFundDetails = new HashSet<AmpFundingDetail>();
-		populateFundingDetails(currencyValue, currencyName, sDate, ampFundDetails, org.digijava.module.aim.helper.Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.PLANNED);
+		populateFundingDetails(currencyValue, currencyName, sDate, ampFundDetails,
+                org.digijava.module.aim.helper.Constants.DISBURSEMENT,
+                org.digijava.module.aim.helper.Constants.PLANNED);
 		
 		Set<AmpFunding> ampFundings = a.getFunding();//fundings;
 		if(ampFundings == null) 
@@ -1041,37 +1053,34 @@ public class IatiActivityWorker {
 		}
 		
 		//AmpFunding ampFunding = new AmpFunding();
-				ampFunding.setActive(true);
-				//ampFunding.setAmpDonorOrgId(ampOrg);
-				if(found==false){
-					ampFunding.setAmpDonorOrgId(ampOrg);
-					ampFunding.setGroupVersionedFunding(System.currentTimeMillis());
-					ampFunding.setFundingDetails(ampFundDetails);
-					ampFunding.setTypeOfAssistance(typeOfAssistance);
-					ampFunding.setFinancingInstrument(financingInstrument);
-					ampFunding.setModeOfPayment(modeOfPayment);
-				}
-				
-				
-				if(a !=null ) 
-					ampFunding.setAmpActivityId(a);
-				
-				//TODO: the language - lang attribute
-				if(isValidString(description)) ampFunding.setConditions(description);
-				
-				AmpOrgRole ampOrgRole = new AmpOrgRole();
-				ampOrgRole.setActivity(a);
-				ampOrgRole.setRole(role);
-				ampOrgRole.setOrganisation(ampOrg);
-				orgRole.add(ampOrgRole);
-				
-				if (a.getOrgrole()==null){
-					a.setOrgrole(orgRole);
-				}else{
-					a.getOrgrole().addAll(orgRole);
-				}
-				
-				return ampFunding;
+        ampFunding.setActive(true);
+        //ampFunding.setAmpDonorOrgId(ampOrg);
+        if (!found) {
+            ampFunding.setAmpDonorOrgId(ampOrg);
+            ampFunding.setGroupVersionedFunding(System.currentTimeMillis());
+            ampFunding.setFundingDetails(ampFundDetails);
+            ampFunding.setTypeOfAssistance(iatiDefaultFinanceType);
+            ampFunding.setFinancingInstrument(iatiDefaultAidType);
+        }
+
+        ampFunding.setAmpActivityId(a);
+
+        //TODO: the language - lang attribute
+        if(isValidString(description)) ampFunding.setConditions(description);
+
+        AmpOrgRole ampOrgRole = new AmpOrgRole();
+        ampOrgRole.setActivity(a);
+        ampOrgRole.setRole(role);
+        ampOrgRole.setOrganisation(ampOrg);
+        orgRole.add(ampOrgRole);
+
+        if (a.getOrgrole() == null) {
+            a.setOrgrole(orgRole);
+        } else {
+            a.getOrgrole().addAll(orgRole);
+        }
+
+        return ampFunding;
 	}
 	
 	private AmpFunding getFundingIATItoAMP(AmpActivityVersion a, Transaction t,	AmpCategoryValue iatiDefaultFinanceType, AmpCategoryValue iatiDefaultAidType,
@@ -1192,7 +1201,9 @@ public class IatiActivityWorker {
 
         switch(transactionType) {
             case 'c':
-                populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
+                populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails,
+                        Constants.COMMITMENT,
+                        org.digijava.module.aim.helper.Constants.PLANNED);
                 if (!isValidString(ppc.getCurrency()))
                     ppc.setCurrency(currencyName);
                 if (ppc.getDate() == null)
@@ -1202,14 +1213,20 @@ public class IatiActivityWorker {
                 ppc.setAmount(amount);
                 break;
             case 'd':
-                populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
+                populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails,
+                        Constants.DISBURSEMENT,
+                        org.digijava.module.aim.helper.Constants.ACTUAL);
                 break;
             case 'e':
                 if (settings.isMergeDisbAndExp()) {
                     //DRC demand for DFID - merge disb with exp into disb
-                    populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, Constants.DISBURSEMENT, org.digijava.module.aim.helper.Constants.ACTUAL);
+                    populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails,
+                            Constants.DISBURSEMENT,
+                            org.digijava.module.aim.helper.Constants.ACTUAL);
                 } else {
-                    populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails, Constants.EXPENDITURE, org.digijava.module.aim.helper.Constants.ACTUAL);
+                    populateFundingDetails(currencyValue, currencyName, tDate, ampFundDetails,
+                            Constants.EXPENDITURE,
+                            org.digijava.module.aim.helper.Constants.ACTUAL);
                 }
                 break;
             //the transaction is not C or D or E then it is not imported in AMP
@@ -1342,7 +1359,7 @@ public class IatiActivityWorker {
         ampFundDet.setIatiAdded(true);
         ampFundDet.setTransactionType(transactionType);
         ampFundDet.setTransactionDate(tDate);
-        ampFundDet.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ADJUSTMENT_TYPE_KEY,   new Long(adjustmentType)));
+        ampFundDet.setAdjustmentType(CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.ADJUSTMENT_TYPE_KEY, (long) adjustmentType));
         ampFundDet.setAmpCurrencyId(CurrencyUtil.getCurrencyByCode(currencyCode));
 
         //TODO how are the amounts? in thousands?

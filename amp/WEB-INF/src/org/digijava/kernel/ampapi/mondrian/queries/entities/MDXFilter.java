@@ -5,6 +5,8 @@ package org.digijava.kernel.ampapi.mondrian.queries.entities;
 
 import java.util.List;
 
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+
 /**
  * Stores information about filter settings to be applied over attributes. <br>
  * E.g. filter Donor Types to display only 'Bilateral' and 'Multilateral' donor types
@@ -86,7 +88,9 @@ public class MDXFilter {
 		} else if (endRangeInclusive && startRangeInclusive && startRange != null && startRange.equals(endRange)) {
 			singleValue = startRange; 
 			allowedFilteredValues = true;
-		}  
+		} else if (isKey && startRange != null && endRange == null) {
+			endRange = String.valueOf(MoConstants.UNDEFINED_KEY - 1);
+		}
 		this.singleValue = singleValue;
 		this.allowedFilteredValues = allowedFilteredValues;
 	}

@@ -1510,14 +1510,14 @@ public class DbHelper {
         return retVal;
     }
     
-    public static List <AmpIndicatorLayer> getIndicatorByCategoryValueId (Long id) {
+    public static List <AmpIndicatorLayer> getIndicatorByCategoryValue (String value) {
 		Session dbSession = PersistenceManager.getSession();
 		String queryString = "select ind from "
 				+ AmpIndicatorLayer.class.getName()
-				+ " ind where ind.admLevel.id=:id)";
+				+ " ind where upper(ind.admLevel.value)=:value)";
 		Query qry = dbSession.createQuery(queryString);
 		qry.setCacheable(true);
-		qry.setLong("id", id);
+		qry.setString("value", value.toUpperCase());
 		return qry.list();
 	 
  }

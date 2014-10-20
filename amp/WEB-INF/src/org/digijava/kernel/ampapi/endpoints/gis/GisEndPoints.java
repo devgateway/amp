@@ -335,13 +335,14 @@ public class GisEndPoints {
 	@Path("/indicator/{admlevel}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="IndicatorByAdmLevel")
-	public List<JsonBean> getIndicatorByAdmLevel(@PathParam ("admlevel") Long admLevel) {
-		List<AmpIndicatorLayer> indicators = DbHelper.getIndicatorByCategoryValueId(admLevel);
+	public List<JsonBean> getIndicatorByAdmLevel(@PathParam ("admlevel") String admLevel) {
+		List<AmpIndicatorLayer> indicators = DbHelper.getIndicatorByCategoryValue(admLevel);
 		List<JsonBean> indicatorsJson = new ArrayList<JsonBean>();
 		for (AmpIndicatorLayer indicator : indicators) {
 			JsonBean json = new JsonBean();
 			json.set("name", indicator.getName());
 			json.set("classes", indicator.getNumberOfClasses());
+			json.set("admLevelNumber ", indicator.getAdmLevel().getId());
 			json.set("id", indicator.getId());
 			json.set("description", indicator.getDescription());
 			List<JsonBean> colors = new ArrayList<JsonBean>();
@@ -363,7 +364,7 @@ public class GisEndPoints {
 		}
 		return indicatorsJson;
 	}
-	
+		
 	
 //	@GET
 //	@Path("/export-map-test/")

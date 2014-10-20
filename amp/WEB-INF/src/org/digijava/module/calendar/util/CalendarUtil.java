@@ -29,29 +29,29 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import javax.servlet.http.HttpServletRequest;
-
+import org.dgfoundation.amp.error.AMPException;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.NoCategoryClassException;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.dbentity.AmpCalendarPK;
+import org.digijava.module.calendar.dbentity.Calendar.TBD;
 import org.digijava.module.calendar.dbentity.CalendarItem;
 import org.digijava.module.calendar.dbentity.RecurrCalEvent;
-import org.digijava.module.calendar.dbentity.Calendar.TBD;
 import org.digijava.module.calendar.entity.AmpEventType;
-import org.digijava.module.calendar.entity.EventsFilter;
 import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.calendar.form.CalendarItemForm;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.help.dbentity.HelpTopic;
-import org.digijava.module.help.helper.HelpTopicsTreeItem;
 
 /**
  * Class with static methods used for Data convertion and form population 
  */
 public class CalendarUtil {
+	protected static final String NUMBER_REGEX = "[0-9]+";
+	protected static final Pattern pattern = Pattern.compile(NUMBER_REGEX);
 	
 	/**
 	 * Converts java.util.Calendar to a String value considering TBD value.
@@ -312,5 +312,26 @@ public class CalendarUtil {
 		int minus = (end-start);
 		
 		return minus;
+	}
+	
+	/**
+	 * Parses the string representation of the year back to a number
+	 * @param calendar - calendar that generated the representation 
+	 * @param year - the string representation previously provided by this same calendar
+	 * @return year as a number
+	 * @throws AMPException 
+	 */
+	public static int parseYear(AmpFiscalCalendar calendar, String year) throws AMPException {
+		if (calendar.getIsFiscal()) {
+			//Performs a simple match of the 1st number. 
+			//If any calendar will do a very specific Fiscal Year representation, 
+			//then we'll need it to customize, e.g. via a parseYear() method of the calendar worker 
+			Matcher m = pattern.matcher(year);
+			if (m.find())
+				year = m.group();
+			else 
+				throw new AMPException(String.format("Invalid year format [%s] for the given Fiscal Calendar, id=%n", year, calendar.getAmpFiscalCalId()));
+		}
+		return Integer.parseInt(year);
 	}
 }

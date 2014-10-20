@@ -66,6 +66,7 @@ import org.digijava.kernel.ampapi.saiku.util.CellDataSetToGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.util.SaikuPrintUtils;
 import org.digijava.kernel.ampapi.saiku.util.SaikuUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.calendar.util.CalendarUtil;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
@@ -328,7 +329,6 @@ public class MondrianReportGenerator implements ReportExecutor {
 		
 		config.setAllowEmptyColumnsData(spec.isDisplayEmptyFundingColumns());
 		config.setAllowEmptyRowsData(spec.isDisplayEmptyFundingRows());
-		config.setForceColumnsMeasuresEmptyData(true);
 		
 		return config;
 	}
@@ -468,7 +468,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 	}
 	
-	private void applyYearRangeSetting(ReportSpecification spec, List<FilterRule> filters, CellDataSet cellDataSet) {
+	private void applyYearRangeSetting(ReportSpecification spec, List<FilterRule> filters, CellDataSet cellDataSet) throws AMPException {
 		if (leafHeaders == null || leafHeaders.size() == 0) return;
 
 		//detect the level where years are displayed
@@ -505,8 +505,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 				currentLevel--; 
 			}
 			
-			if (false && column != null) { //must not be null actually
-				Integer year = Integer.parseInt(column.columnName); // Constantin:please change this to accommodate Fiscal Year calendars
+			if (column != null) { //must not be null actually
+				int year = CalendarUtil.parseYear(spec.getSettings().getCalendar(), column.columnName); 
 				boolean isAllowed = yearSet.contains(year); //first check if it is in the set
 				if (!isAllowed)
 					for (Integer[] range : yearRanges)

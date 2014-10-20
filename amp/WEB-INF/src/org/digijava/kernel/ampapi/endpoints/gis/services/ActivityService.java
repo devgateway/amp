@@ -2,7 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.gis.services;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -28,16 +28,10 @@ import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
-import org.digijava.kernel.ampapi.endpoints.dto.Activity;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
-import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.search.util.SearchUtil;
@@ -46,15 +40,15 @@ public class ActivityService {
 	protected static Logger logger = Logger.getLogger(ActivityService.class);
 	
 	
-	public static List<JsonBean> getActivitiesMondrian(JsonBean filter,List<String>activitIds, Integer page, Integer pageSize) throws AmpApiException {
+	public static List<JsonBean> getActivitiesMondrian(JsonBean config,List<String>activitIds, Integer page, Integer pageSize) throws AmpApiException {
 		boolean applyFilter=false;
 		List<JsonBean> activities=new ArrayList<JsonBean>();
 		
 		//we check if we have filter by keyword
-		if (filter != null) {
-			if (filter.get("keyword") != null) {
+		if (config != null) {
+			if (config.get("keyword") != null) {
 				Collection<LoggerIdentifiable> activitySearch = SearchUtil
-						.getActivities(filter.get("keyword").toString(),
+						.getActivities(config.get("keyword").toString(),
 								TLSUtils.getRequest(), (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember"));
 				if (activitySearch != null && activitySearch.size() > 0) {
 					if(activitIds==null){
@@ -97,15 +91,25 @@ public class ActivityService {
 //			activitIds.add("42200");
 //	
 //		}
+ 		MondrianReportFilters filterRules = null;
+		Object filter=config.get("filters");
+		if(filter!=null){
+			filterRules = FilterUtils.getApiFilter((LinkedHashMap<String, Object>)config.get("filters"));	
+		}
+		
 		if(activitIds!=null && activitIds.size()>0){
-			MondrianReportFilters
-			filterRules = new MondrianReportFilters();
+			//if we have activityIds to add to the filter comming from the search by keyworkd
+			if(filterRules!=null){
+				filterRules = new MondrianReportFilters();
+			}
 
 			filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY), 
 					new FilterRule(activitIds, true, true)); 
+
+		}
+		if(filterRules!=null){
 			spec.setFilters(filterRules);
 		}
-		
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		GeneratedReport report = null;		
 		try {

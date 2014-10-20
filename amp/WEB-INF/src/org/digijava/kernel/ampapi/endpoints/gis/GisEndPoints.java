@@ -28,7 +28,6 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
-import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
@@ -265,6 +264,7 @@ public class GisEndPoints {
 	@ApiMethod(ui=false,name="ActivitiesNewLists")
 	public List<JsonBean> getActivitiesNew(JsonBean config, @QueryParam("start") Integer page,@QueryParam("size") Integer pageSize) {
 		try{
+			
 			return ActivityService.getActivitiesMondrian(config,null,page,pageSize);
 		}catch(AmpApiException ex){
 			throw new WebApplicationException(ex);
@@ -281,9 +281,9 @@ public class GisEndPoints {
 	@Path("/activities/{activityId}") //once its done remove the New
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ActivitiesById")
-	public List<JsonBean> getActivities(JsonBean settings, @PathParam("activityId") PathSegment activityIds) {
+	public List<JsonBean> getActivities(JsonBean config, @PathParam("activityId") PathSegment activityIds) {
 		try {
-			return ActivityService.getActivitiesMondrian(null,
+			return ActivityService.getActivitiesMondrian(config,
 					Arrays.asList(activityIds.getPath().split("\\s*,\\s*")),
 					null, null);
 		} catch (AmpApiException ex) {
@@ -365,12 +365,12 @@ public class GisEndPoints {
 	}
 	
 	
-	@GET
-	@Path("/export-map-test/")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Activity>testMapExport(){
-		return LocationService.getMapExportByStructure();
-	}
+//	@GET
+//	@Path("/export-map-test/")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public GeneratedReport testMapExport(){
+//		return LocationService.getMapExportByLocation();
+//	}
 	/**
 	 * Export map id from current filters
 	 * 

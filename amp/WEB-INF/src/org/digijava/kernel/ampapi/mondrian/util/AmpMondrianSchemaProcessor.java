@@ -82,7 +82,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 
 		//logger.info("BEFORE translation the schema is: " + contents);
 		contents = translateMeasuresAndColumns(contents, currentEnvironment.get().locale);
-		logger.info("AFTER translation the schema is: " + contents);
+		//logger.info("AFTER translation the schema is: " + contents);
 		
 		long delta = System.currentTimeMillis() - schemaProcessingStart;
 		logger.info("schema processing took " + delta + " ms");
@@ -180,21 +180,21 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			}
 			expandedSchema = XMLGlobals.saveToString(xmlSchema);
 		}
-		expandedSchema = expandedSchema.replace("@@activity_status_key@@", buildActivityStatusSQL());
+		//expandedSchema = expandedSchema.replace("@@activity_status_key@@", buildActivityStatusSQL());
 		return expandedSchema;
 	}
 	
-	protected String buildActivityStatusSQL() {
-		StringBuilder res = new StringBuilder("CASE");
-		//CASE WHEN approval_status='approved' THEN 1 WHEN approval_status='startedapproved' THEN 2 ELSE NULL END
-		//mondrian_activity_fixed_texts.approval_status
-		for(String status:AmpARFilter.activityStatusToNr.keySet()) {
-			int key = AmpARFilter.activityStatusToNr.get(status);
-			res.append(String.format(" WHEN mondrian_activity_texts.approval_status='%s' THEN %d", status, key));
-		}
-		res.append(" ELSE 999999999 END");
-		return res.toString();
-	}
+//	protected String buildActivityStatusSQL() {
+//		StringBuilder res = new StringBuilder("CASE");
+//		//CASE WHEN approval_status='approved' THEN 1 WHEN approval_status='startedapproved' THEN 2 ELSE NULL END
+//		//mondrian_activity_fixed_texts.approval_status
+//		for(String status:AmpARFilter.activityStatusToNr.keySet()) {
+//			int key = AmpARFilter.activityStatusToNr.get(status);
+//			res.append(String.format(" WHEN mondrian_activity_texts.approval_status='%s' THEN %d", status, key));
+//		}
+//		res.append(" ELSE 999999999 END");
+//		return res.toString();
+//	}
 	
 	protected String getReportLocale() {
 		return "_" + currentEnvironment.get().locale;

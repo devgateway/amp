@@ -714,8 +714,13 @@ private EtlResult execute() throws Exception {
 				monetConn.executeQuery("DELETE FROM " + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id"));
 				monetConn.copyEntries(mondrianTable.tableName, SQLUtils.rawRunQuery(conn, query, null));
 			}
-		}		
+		}
+		
+		//runLogue(mondrianTable.epilogue);
 	}
+	
+	//protected
+	
 	
 	/**
 	 * runs the monet-side Cartesian

@@ -111,6 +111,7 @@ public class AmpARFilter extends PropertyListable {
 	 */
 	public final static long DUMMY_SUPPLEMENTARY_PLEDGE_FETCHING_REPORT_ID = -996L;
 	
+	// change this together with v_mondrian_activity_fixed_texts.xml
 	public final static Map<String, Integer> activityStatusToNr = Collections.unmodifiableMap(new HashMap<String, Integer>(){{
 		this.put(Constants.APPROVED_STATUS, 1);
 		this.put(Constants.EDITED_STATUS, 2);

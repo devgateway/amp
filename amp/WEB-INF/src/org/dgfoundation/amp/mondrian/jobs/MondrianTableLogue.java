@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.dgfoundation.amp.mondrian.EtlConfiguration;
+import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 
 /**
  * a callback to be called as an prologue / epilogue to processing a Mondrian table
@@ -11,5 +12,5 @@ import org.dgfoundation.amp.mondrian.EtlConfiguration;
  *
  */
 public interface MondrianTableLogue {
-	public void run(EtlConfiguration etlConfiguration, Connection conn) throws SQLException;
+	public void run(EtlConfiguration etlConfiguration, Connection conn, MonetConnection monetConn) throws SQLException;
 }

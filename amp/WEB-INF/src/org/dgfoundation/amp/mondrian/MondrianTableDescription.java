@@ -48,7 +48,7 @@ public class MondrianTableDescription {
 	
 	public Fingerprint fingerprint;
 	public boolean isFiltering = false;
-	//public MondrianTableLogue prologue;
+	//public MondrianTableLogue epilogue;
 	
 	//public final Set<String> idColumnNames; 
 			

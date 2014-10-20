@@ -23,7 +23,17 @@
 				CREATE OR REPLACE VIEW v_mondrian_activity_fixed_texts AS
 					SELECT
 						aav.amp_activity_id,
-						aav.approval_status, 
+						aav.approval_status,
+						(CASE  <!-- change this together with AmpARFilter.activityStatusToNr -->
+							WHEN aav.approval_status='edited' THEN 2 
+							WHEN aav.approval_status='approved' THEN 1 
+							WHEN aav.approval_status='rejected' THEN 6 
+							WHEN aav.approval_status='startedapproved' THEN 3 
+							WHEN aav.approval_status='started' THEN 4 
+							WHEN aav.approval_status='not_approved' THEN 5 
+							ELSE 999999999 
+						END) as approval_status_key,
+						
 						aav.amp_id, 
 						aav.gov_agreement_number, aav.budget_code_project_id, aav.draft, aav.fy, aav.vote, aav.subvote, aav.subprogram, aav.project_code, aav.ministry_code, aav.cris_number,
 						aav.prj_implementation_unit, aav.imac_approved, aav.national_oversight, aav.on_budget, aav.on_parliament, aav.on_treasury, aav.national_financial_management, aav.national_procurement, aav.national_audit, aav.proposed_project_life, 

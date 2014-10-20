@@ -29,6 +29,27 @@ define([ 'jquery', 'jqueryui' ], function(jQuery) {
 		});
 	};
 
+	/**
+	 * This ugly method will solve the known problem of latest jqueryui tabs +
+	 * <base> tag by changing the <a href> when it points to a local "#"
+	 * address.
+	 * 
+	 * @param selector
+	 * @param options
+	 */
+	TabUtils.createTabs = function(selector, options) {
+		jQuery(selector).find("ul a").each(
+				function() {
+					var href = jQuery(this).attr("href");
+					var newHref = window.location.protocol + '//' + window.location.hostname + (location.port ? ':' + location.port : '')
+							+ window.location.pathname + href;
+					if (href.indexOf("#") == 0) {
+						jQuery(this).attr("href", newHref);
+					}
+				});
+		jQuery(selector).tabs(options);
+	};
+
 	TabUtils.prototype = {
 		constructor : TabUtils
 	};

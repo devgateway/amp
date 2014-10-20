@@ -3,7 +3,7 @@
 		<% if(!visible) { %>
 			<li class="invisible-tabs">
 				<!-- TODO: Define this event inside the view. -->
-				<a href="#" onclick="app.TabsApp.tabUtils.showInvisibleTab(<%=id%>, 250)"><%=name%></a>
+				<a onclick="app.TabsApp.tabUtils.showInvisibleTab(<%=id%>, 250)"><%=name%></a>
 			</li>
 		<% } %>
 	</script>

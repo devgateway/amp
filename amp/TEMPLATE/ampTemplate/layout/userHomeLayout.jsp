@@ -31,6 +31,24 @@
         
         <link type="text/css" href="css_2/tabs.css" rel="stylesheet" />
         
+        <!-- START LOADING NEW TABS NECESSARY FILES -->
+        <link rel="stylesheet" href="node_modules/amp-filter/dist/amp-filter.css">
+		<link rel="stylesheet" href="tabs/css/bootstrap.css">
+		<link rel="stylesheet" href="tabs/css/bootstrap-theme.css">
+		<link rel="stylesheet" href="tabs/css/jquery-ui.css">
+		<link rel="stylesheet" href="tabs/js/lib/jqgrid-4.6.0/css/ui.jqgrid.css">
+		<link rel="stylesheet" href="tabs/css/tabs.css">
+		<link rel="stylesheet" href="tabs/css/settings.css">
+		<script>
+		    // define waitSeconds above require script tag
+		    // to override the default, until main.js loads
+		    window.require = {
+		        waitSeconds: 0
+		    };
+		</script>		
+		<script data-main="tabs/js/main.js" src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js"></script>
+		<!-- END LOADING NEW TABS NECESSARY FILES -->
+        
 	</head>
      	
 	<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
@@ -128,7 +146,8 @@
 		<tbody>
 			<tr>
 				<td width="100%" valign="top" id="maintd">
-					<digi:insert attribute="body"/>
+					<div id="tabs-container"></div>
+<%-- 					<digi:insert attribute="body"/> --%>
 				</td>
 				<td width="20px" align="center" background="img_2/close_panel_bg.gif" valign="top">
 					<a style="cursor: pointer;">

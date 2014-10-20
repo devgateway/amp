@@ -1,4 +1,6 @@
 require.config({
+	'waitSeconds': 0,
+	baseUrl: '/TEMPLATE/ampTemplate/tabs/js',
 	paths : {
 		backbone : 'lib/backbone.marionette/backbone',
 		underscore : 'lib/backbone.marionette/underscore',

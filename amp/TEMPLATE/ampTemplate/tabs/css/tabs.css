@@ -63,6 +63,7 @@
 .invisible-tabs a {
 	color: blue;
 	font-size: 1em;
+	cursor: pointer;
 }
 
 #dynamic-filters-region {

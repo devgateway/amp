@@ -477,9 +477,9 @@ public class ShowActivityPrintPreview
                                                 .ConvertDecimalToText(
                                                     ampRegFund
                                                     .getTransactionAmount().doubleValue()));
-                        fd.setTransactionDate(DateConversion
-                                              .ConvertDateToString(ampRegFund
-                            .getTransactionDate()));
+                        fd.setTransactionDate(DateConversion.ConvertDateToString(ampRegFund.getTransactionDate()));
+        				fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampRegFund.getTransactionDate()));
+
                         fd.setTransactionType(ampRegFund.getTransactionType()
                                               .intValue());
 
@@ -1020,6 +1020,7 @@ public class ShowActivityPrintPreview
 				fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());
 				fd.setTransactionAmount(FormatHelper.formatNumber(ampCompFund.getTransactionAmount().doubleValue()));
 				fd.setTransactionDate(DateConversion.ConvertDateToString(ampCompFund.getTransactionDate()));
+				fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampCompFund.getTransactionDate()));
 				fd.setTransactionType(ampCompFund.getTransactionType().intValue());
 				fd.setComponentOrganisation(ampCompFund.getReportingOrganization());
 				fd.setComponentTransactionDescription(ampCompFund.getDescription());

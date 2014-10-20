@@ -2,6 +2,7 @@ package org.digijava.module.aim.helper ;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -39,6 +40,18 @@ public class DateConversion
 		}
 	};
 
+	public static String convertDateToFiscalYearString(Date inputDate ) {
+
+		String textDate = "";
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(inputDate);
+		int year = cal.get(Calendar.YEAR);
+		return String.valueOf(year + "/" + (year + 1)); 
+//		inputDate.
+		
+	}
+	
+	
 	public static String ConvertDateToString(Date mysqlDate )
 	{
 		String textDate ="";

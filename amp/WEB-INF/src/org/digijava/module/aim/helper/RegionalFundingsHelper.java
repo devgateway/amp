@@ -60,7 +60,8 @@ public class RegionalFundingsHelper {
 			
 			String tsDate = DateConversion.ConvertDateToString(regFund.getTransactionDate());
 			fd.setTransactionDate(tsDate);
-			
+			fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(regFund.getTransactionDate()));
+
 			
 			fd.setTransactionType(regFund.getTransactionType().intValue());
 

@@ -1878,7 +1878,8 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 
 				fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());
 				fd.setTransactionDate(DateConversion.ConvertDateToString(ampCompFund.getTransactionDate()));
-
+				fd.setFiscalYear(DateConversion.convertDateToFiscalYearString(ampCompFund.getTransactionDate()));
+				
 				fd.setTransactionType(ampCompFund.getTransactionType().intValue());
 				fd.setComponentOrganisation(ampCompFund.getReportingOrganization());
 				fd.setComponentTransactionDescription(ampCompFund.getDescription());

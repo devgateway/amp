@@ -113,6 +113,7 @@ public class FundingValidator {
 			newFd.setCurrencyCode(fd.getCurrencyCode());
 			newFd.setTransactionAmount(fd.getTransactionAmount());
 			newFd.setTransactionDate(fd.getTransactionDate());
+			
 			if (fd.getAdjustmentTypeName().equals(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey())) {
 				list1.add(newFd);
 			}

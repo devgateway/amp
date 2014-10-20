@@ -40,6 +40,7 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.Identification;
 import org.digijava.module.aim.form.EditActivityForm.Planning;
 import org.digijava.module.aim.form.EditActivityForm.Programs;
+import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
 import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
@@ -74,6 +75,7 @@ import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Table;
+import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.table.RtfCell;
@@ -2154,6 +2156,214 @@ public class ExportActivityToWord extends Action {
         return retVal;
     }
 
+    /**
+     *
+     * @param {String} fmURI - the Feature Manager link to the feature expected to be checked and added; can be null if not checking 
+     * @param {ExportSectionHelper} eshDonorInfo 
+     * @param {String} fieldName - the field name expected to appear in the table 
+     * @param {String} data - value to appear next to the field name 
+     * @param {boolean} checkCondition - true if checking the availability of this field in the FM, false if not
+     */
+    private void addFundingRowData(String fmURI, ExportSectionHelper eshDonorInfo, String fieldName, String data, boolean checkCondition) {
+        if((!checkCondition) ||  FeaturesUtil.isVisibleModule(fmURI)) {
+            eshDonorInfo.addRowData((new ExportSectionHelperRowData(fieldName, null, null, true)).addRowData(data));
+        }
+    }
+    
+    /**
+    *
+    * @param {String} fmURI - the Feature Manager link to the feature expected to be checked and added; can be null if not checking 
+    * @param {ExportSectionHelper} eshDonorInfo 
+    * @param {String} fieldName - the field name expected to appear in the table 
+    * @param {AmpCategoryValue} data - ACV to be translated and placed next to the field name, if it's != null   
+    * @param {boolean} checkCondition - true if checking the availability of this field in the FM, false if not
+    */    
+    private void addFundingRowData(String fmURI, ExportSectionHelper eshDonorInfo, String fieldName, AmpCategoryValue data, boolean checkCondition) {
+    	
+        if((!checkCondition) ||  FeaturesUtil.isVisibleModule(fmURI)) {
+    		String value = data== null ? null : TranslatorWorker.translateText(data.getValue());
+            eshDonorInfo.addRowData((new ExportSectionHelperRowData(fieldName, null, null, true)).addRowData(value));
+        }
+    }    
+    
+	/**
+	 * unfinished refactoring on AMP-18128. please don't delete
+	 */    
+//	private void buildFundingInfoInnerTable(
+//			PdfPTable infoTable, FundingDetail fd,
+//			String[] fmFields, PdfPTable fundingTable, ServletContext ampContext,HttpSession session) throws WorkerException {
+//		
+//		PdfPCell innerCell = new PdfPCell();
+//
+//		if (FeaturesUtil.isVisibleModule(fmFields[0])) {
+//			innerCell.setBorder(0);
+//			innerCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText(fd.getAdjustmentTypeName().getValue()), plainFont));
+//			innerCell.setBorder(0);
+//			infoTable.addCell(innerCell);
+//		} else {
+//			addEmptyCell(infoTable);
+//		}
+//
+//		if (FeaturesUtil.isVisibleModule(fmFields[1])){
+//			innerCell = new PdfPCell(new Paragraph(fd.getTransactionDate(), plainFont));
+//			innerCell.setBorder(0);
+//			infoTable.addCell(innerCell);
+//		} else {
+//			addEmptyCell(infoTable);
+//		}
+//
+//		if (FeaturesUtil.isVisibleModule(fmFields[2])) {
+//			String output="";
+//			if (fd.getTransactionAmount() != null && fd.getTransactionAmount().length() > 0) {
+//				output = fd.getTransactionAmount() + " " + fd.getCurrencyCode();
+//
+//                if (fd.getFormattedRate() != null && FeaturesUtil.isVisibleModule(fmFields[fmFields.length-1])) {
+//                    output += "\n" + TranslatorWorker.translateText("Exchange Rate: ") + fd.getFormattedRate();
+//                }
+//			}
+//
+//            innerCell = new PdfPCell(new Paragraph(output, plainFont));
+//            innerCell.setBorder(0);
+//            infoTable.addCell(innerCell);
+//		} else {
+//			addEmptyCell(infoTable);
+//		}		
+//		
+//		if (fd.getRecipientOrganisation() != null && fd.getRecipientOrganisationRole() != null) {
+//			String output=TranslatorWorker.translateText("Recipient:") + " ";
+//			output += fd.getRecipientOrganisation().getName() + "\n" + TranslatorWorker.translateText("as the") + " " + fd.getRecipientOrganisationRole().getName();
+//
+//            innerCell = new PdfPCell(new Paragraph(output, plainFont));
+//            innerCell.setBorder(0);
+//            infoTable.addCell(innerCell);
+//		} else {
+//			addEmptyCell(infoTable);
+//		}
+//		
+//		if (fd.getAttachedPledgeName() != null) {
+//			
+//			PdfPCell plCommCell1=new PdfPCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Source Pledge") + ": " + fd.getAttachedPledgeName()), titleFont));
+//			plCommCell1.setBorder(0);
+//			plCommCell1.setBackgroundColor(new Color(255,255,204));
+//			plCommCell1.setColspan(4);
+//			fundingTable.addCell(plCommCell1);
+//		}
+//	}	
+
+	
+	/**
+	 * unfinished refactoring on AMP-18128. please don't delete
+	 */
+	private void addFundingRegion(EditActivityForm myForm, ExportSectionHelperRowData rowData, Funding funding, String subtotal,
+			String fundingRegionName, int transactionType, String adjustmentType, String currencyCode, boolean visibleExchangeRate,
+			String[] fmTemplate,HttpSession session) throws WorkerException
+	{
+		Collection<FundingDetail> details = funding.filterFundings(transactionType, adjustmentType);
+		if (details.isEmpty())
+			return;
+		ServletContext ampContext = getServlet().getServletContext();
+		
+		String output = TranslatorWorker.translateText(fundingRegionName);
+		if(myForm.getFunding().isFixerate() && visibleExchangeRate){
+			output+=" \t"+ TranslatorWorker.translateText("Exchange Rate");
+		}
+        ExportSectionHelper mtefProjections = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+        ExportSectionHelperRowData sectionHelperRowData = new ExportSectionHelperRowData(output, null, null, true);
+		
+		
+//		for (FundingDetail fd : details)
+//		{
+//			buildFundingInfoInnerTable(fundingTable, fd, fmTemplate, fundingTable, ampContext,session);
+//		}
+//		createSubtotalRow(fundingTable, "SUBTOTAL " + fundingRegionName + ":", subtotal, currencyCode);
+	}
+    
+    
+    
+    
+	/**
+	 * unfinished refactoring on AMP-18128. please don't delete
+	 */    
+    private void buildFundingInformationPart(EditActivityForm myForm, com.lowagie.text.Document doc,
+    		HttpServletRequest request, ServletContext ampContext, HttpSession session) throws WorkerException, DocumentException {
+    	List<Table> retVal = new ArrayList<Table>();
+
+    	if(myForm.getFunding().getFundingOrganizations()!=null){
+			String currencyCode = myForm.getCurrCode() != null ? myForm.getCurrCode() : "";
+
+			boolean visibleModuleCommitments = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Commitments");
+			boolean visibleModuleDisbursements = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Disbursements");
+			boolean visibleModuleExpenditures = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Expenditures");
+			boolean visibleModuleRoF = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Release of Funds");
+			boolean visibleModuleEDD = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Estimated Disbursements");
+			boolean visibleModuleDisbOrders = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders");
+            boolean visibleModuleMTEFProjections = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections");
+
+			for (FundingOrganization fundingOrganisation : myForm.getFunding().getFundingOrganizations()) {
+				if(fundingOrganisation.getFundings()!=null){
+                    
+					for (Funding funding : (Collection<Funding>)fundingOrganisation.getFundings()) {
+						ExportSectionHelper eshDonorInfo = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+						//addFundingRowData:
+						addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Organization Id",
+								eshDonorInfo, "Funding Organization Id", funding.getOrgFundingId(), true);
+						addFundingRowData(null, eshDonorInfo, "Funding Organization Name", fundingOrganisation.getOrgName(), false);
+						addFundingRowData(null, eshDonorInfo, "Organization Role", TranslatorWorker.translateText(funding.getSourceRole()), false);
+						addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence",
+								eshDonorInfo, "Type of Assistance", funding.getTypeOfAssistance(), true);
+						addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Financing Instrument",
+								eshDonorInfo, "Financial Instrument", funding.getFinancingInstrument(), true);
+						addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status",
+								eshDonorInfo, "Funding Status", funding.getFundingStatus(), true);
+						addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment",
+								eshDonorInfo, "Mode of Payment", funding.getModeOfPayment(), true);
+						addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Donor Objective",
+								eshDonorInfo, "Donor Objective", funding.getDonorObjective(), true);
+						addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Conditions",
+								eshDonorInfo, "Conditions", funding.getConditions(), true);
+						addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement",
+								eshDonorInfo, "Agreement Title", funding.getTitle(), true);
+						addFundingRowData("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Agreement",
+								eshDonorInfo, "Agreement Title", funding.getCode(), true);
+						if (funding.getFundingClassificationDate() != null) {
+							addFundingRowData(null, eshDonorInfo, "Funding Classification Date",funding.getFundingClassificationDate(), false);
+						}
+						eshDonorInfo.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
+	                    retVal.add(createSectionTable(eshDonorInfo, request, ampContext));
+					
+	                    
+	                    
+	                    
+//	                    TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+//	                    String toCurrCode=null;
+//
+//	                    if (tm != null)
+//	                        toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
+//						if (visibleModuleCommitments)
+//						{
+//							boolean visibleCommitmentsExchRate = true;
+////							boolean visibleCommitmentsExchRate = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Commitments/Commitments Table/Exchange Rate", ampContext,session);
+////
+//							addFundingRegion(myForm, fundingTable, funding, funding.getSubtotalPlannedCommitments(), "PLANNED COMMITMENTS", Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey(), currencyCode, visibleCommitmentsExchRate, fundingCommitmentsFMfields,session);
+//							addFundingRegion(myForm, fundingTable, funding, funding.getSubtotalActualCommitments(), "ACTUAL COMMITMENTS", Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey(),  currencyCode, visibleCommitmentsExchRate, fundingCommitmentsFMfields,session);
+//							addFundingRegion(myForm, fundingTable, funding, funding.getSubtotalPipelineCommitments(), "PIPELINE COMMITMENTS", Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_PIPELINE.getValueKey(), currencyCode, visibleCommitmentsExchRate, fundingCommitmentsFMfields,session);
+//							
+//							// SSC: only commitments
+//							addFundingRegion(myForm, fundingTable, funding, funding.getSubtotalOfficialDevelopmentAidCommitments(), "Official Development Aid SSC", Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_ODA_SSC.getValueKey(), currencyCode, visibleCommitmentsExchRate, fundingCommitmentsFMfields,session);
+//							addFundingRegion(myForm, fundingTable, funding, funding.getSubtotalBilateralSscCommitments(), "Bilateral SSC", Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_BILATERAL_SSC.getValueKey(), currencyCode, visibleCommitmentsExchRate, fundingCommitmentsFMfields,session);
+//							addFundingRegion(myForm, fundingTable, funding, funding.getSubtotalTriangularSscCommitments(), "Triangular SSC", Constants.COMMITMENT, CategoryConstants.ADJUSTMENT_TYPE_TRIANGULAR_SSC.getValueKey(), currencyCode, visibleCommitmentsExchRate, fundingCommitmentsFMfields,session);					
+
+	                    
+	                    
+	                    
+						
+					}
+				}
+			}
+    	}
+    	
+    }
+					
     /*
      * Donor funding section
      */
@@ -2180,7 +2390,7 @@ public class ExportActivityToWord extends Action {
             boolean visibleModuleMTEFProjections = FeaturesUtil.isVisibleModule(
                     "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections");
         	
-        	
+        	boolean mtefExisting = false;//more spaghetti!
             if (act.getFunding() != null && !act.getFunding().isEmpty()) {
                 for (AmpFunding fnd : (Set<AmpFunding>)act.getFunding()) {
                     ExportSectionHelper eshDonorInfo = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
@@ -2256,6 +2466,7 @@ public class ExportActivityToWord extends Action {
                     if (structuredFundings.size() > 0) {
 	                    ExportSectionHelper eshDonorFundingDetails = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
 	                    for (String transTypeKey : structuredFundings.keySet()) {
+	                    	
 	                        Map<String, Set<AmpFundingDetail>> transTypeGroup = structuredFundings.get(transTypeKey);
 	                        for (String adjTypeKey : transTypeGroup.keySet()) {
 	                            eshDonorFundingDetails.addRowData(new ExportSectionHelperRowData(new StringBuilder(adjTypeKey).
@@ -2305,6 +2516,7 @@ public class ExportActivityToWord extends Action {
 
 	                            FundingCalculationsHelper calculationsSubtotal=new FundingCalculationsHelper();
 	                            calculationsSubtotal.doCalculations(structuredFndDets, toCurrCode, true);
+
 	                            String subTotal = "";
 	                            String subTotalValue = "";
 
@@ -2371,6 +2583,7 @@ public class ExportActivityToWord extends Action {
 
                         for (AmpFundingMTEFProjection projection : fnd.getMtefProjections()) {
 
+                        	mtefExisting = true;
                             String projectedType = "";
                             if (MTEFProjection.PROJECTION_ID == projection.getProjected().getId()) {
                                 projectedType = "Projection";
@@ -2381,18 +2594,27 @@ public class ExportActivityToWord extends Action {
                             }
 
                             sectionHelperRowData = new ExportSectionHelperRowData(TranslatorWorker.translateText(projectedType), null, null, true);
-                            sectionHelperRowData.addRowData(DateConversion.ConvertDateToString(projection.getProjectionDate()));
+                            sectionHelperRowData.addRowData(DateConversion.convertDateToFiscalYearString(projection.getProjectionDate()));
                             
                             sectionHelperRowData.addRowData(FormatHelper.formatNumber(projection.getAmount()) + " " + projection.getAmpCurrency().getCurrencyCode());
                             mtefProjections.addRowData(sectionHelperRowData);
                         }
+                        
+                		
+
+                		
+                        FundingCalculationsHelper calc = new FundingCalculationsHelper();
+                        calc.doCalculations(fnd, toCurrCode);
+                    	String subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("MTEF Projections");
+                    	String subTotalValue = FormatHelper.formatNumber(calc.getTotalMtef().doubleValue());
 
                         mtefProjections.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
+                        mtefProjections.addRowData(new ExportSectionHelperRowData(subTotal).addRowData(subTotalValue + " " + toCurrCode));
+                        mtefProjections.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
+                        
                         retVal.add(createSectionTable(mtefProjections, request, ampContext));
                     }
-
                 }
-
             }
 
 
@@ -2430,6 +2652,13 @@ public class ExportActivityToWord extends Action {
 						totalAmountType).addRowData(totalsOutput));
 			}
 
+			if (mtefExisting) {
+				// TOTAL MTEF PROJECTIONS
+				totalAmountType = TranslatorWorker.translateText("TOTAL MTEF PROJECTIONS").toUpperCase() + ":";
+				totalsOutput = myForm.getFunding().getTotalMtefProjections() + " " + currencyCode;
+				fundingTotalsDetails.addRowData(new ExportSectionHelperRowData(totalAmountType).addRowData(totalsOutput));
+			}
+			
 			if (visibleModuleDisbursement) {
 				// TOTAL PLANNED DISBURSEMENT
 				totalAmountType = TranslatorWorker.translateText(

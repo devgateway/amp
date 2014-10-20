@@ -367,6 +367,7 @@ function collapseAll() {
 			</span>		
 		</legend>
 		<div class="field_text_big">
+		
 			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 			<c:if test="${aimEditActivityForm.funding.showActual}">
@@ -403,7 +404,6 @@ function collapseAll() {
 		         <hr/>
 		         </c:if>
 		       </module:display>
-			
 			<module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
 			<c:if test="${aimEditActivityForm.funding.showActual}">
@@ -458,6 +458,7 @@ function collapseAll() {
 		         </c:if>
 			<hr/>
 			</c:if>
+			
 			<c:if test="${aimEditActivityForm.funding.showActual}">
 			<digi:trn>Unallocated Disbursements</digi:trn>:<br/>
 				<c:if test="${not empty aimEditActivityForm.funding.unDisbursementsBalance}">
@@ -491,6 +492,15 @@ function collapseAll() {
 			    <hr/>
 			</c:if>
 			</module:display>
+							<c:if test="${not empty aimEditActivityForm.funding.totalMtefProjections}">
+					<digi:trn>Total MTEF Projections</digi:trn>:<br/>
+					<b>
+		                 <bean:write name="aimEditActivityForm" property="funding.totalMtefProjections" /> 
+		                 ${aimEditActivityForm.currName}
+	            	</b>	
+	            				    <hr/>
+	         	</c:if>    
+			
 			<field:display name="Duration of Project" feature="Planning">
 				<img src="../ampTemplate/images/help.gif" title="<digi:trn>Actual Completion Date - Actual Start Date</digi:trn>" width="10" height=10 border="0">
 				<digi:trn>Duration of project</digi:trn>:

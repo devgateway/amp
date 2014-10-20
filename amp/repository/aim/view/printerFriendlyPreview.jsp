@@ -1425,6 +1425,18 @@ body {background:none;}
 	                        	</tr>
 							</logic:notEmpty>
                         </feature:display>
+                       	<logic:notEmpty name="aimEditActivityForm" property="funding.totalMtefProjections">
+                        	<tr>
+                            	<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase;">
+                            		<digi:trn key='aim:totalmtefprojections'> TOTAL MTEF PROJECTIONS</digi:trn>:
+                            	</td>
+                            	<td nowrap="nowrap" align="right" bgcolor="#eeeeee" style="border-top: 1px solid #000000">
+									<bean:write name="aimEditActivityForm" property="funding.totalMtefProjections" />
+									<bean:write name="aimEditActivityForm" property="currName" />
+	                            	 &nbsp;
+                        		</td>
+                        	</tr>
+						</logic:notEmpty>                        
                         	<logic:notEmpty name="aimEditActivityForm" property="funding.totalCommitments">
                         		<tr>
                             		<td bgcolor="#eeeeee" style="border-top: 1px solid #000000; text-transform: uppercase">

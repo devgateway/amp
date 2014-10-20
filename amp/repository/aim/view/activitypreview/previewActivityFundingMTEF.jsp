@@ -24,10 +24,12 @@
 			</c:if>
 		</td>        
     </tr>
-
+	
 	<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="3">
+			<c:set var="showFiscalYear" value="true" />
 			<%@include file="previewActivityFundingDetail.jspf" %>
+			<c:remove var="showFiscalYear"/> 
 		</logic:equal>
    	</logic:iterate>
 

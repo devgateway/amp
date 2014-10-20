@@ -337,6 +337,20 @@ public class GisEndPoints {
 	@ApiMethod(ui=false,name="IndicatorByAdmLevel")
 	public List<JsonBean> getIndicatorByAdmLevel(@PathParam ("admlevel") String admLevel) {
 		List<AmpIndicatorLayer> indicators = DbHelper.getIndicatorByCategoryValue(admLevel);
+		return generateIndicatorJson(indicators, false);
+	}
+		
+	
+	@GET
+	@Path("/indicators")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="IndicatorsList")
+	public List<JsonBean> getIndicators() {
+		List<AmpIndicatorLayer> indicators = DbHelper.getIndicatorLayers();
+		return generateIndicatorJson(indicators, true);
+	}
+	
+	private List<JsonBean> generateIndicatorJson (List<AmpIndicatorLayer> indicators,boolean includeAdmLevel) {
 		List<JsonBean> indicatorsJson = new ArrayList<JsonBean>();
 		for (AmpIndicatorLayer indicator : indicators) {
 			JsonBean json = new JsonBean();
@@ -344,6 +358,9 @@ public class GisEndPoints {
 			json.set("classes", indicator.getNumberOfClasses());
 			json.set("id", indicator.getId());
 			json.set("description", indicator.getDescription());
+			if (includeAdmLevel) {
+				json.set("admLevelId", indicator.getAdmLevel().getId());
+			}
 			List<JsonBean> colors = new ArrayList<JsonBean>();
 			List<AmpIndicatorColor> colorList = new ArrayList<AmpIndicatorColor>(indicator.getColorRamp());
 			Collections.sort(colorList, new Comparator<AmpIndicatorColor>() {
@@ -362,9 +379,8 @@ public class GisEndPoints {
 			indicatorsJson.add(json);
 		}
 		return indicatorsJson;
-	}
-		
 	
+	}
 //	@GET
 //	@Path("/export-map-test/")
 //	@Produces(MediaType.APPLICATION_JSON)

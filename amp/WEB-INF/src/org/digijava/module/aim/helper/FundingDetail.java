@@ -56,6 +56,10 @@ public class FundingDetail implements Serializable, Comparable
     private String componentTransactionDescription;
        
     private String attachedPledgeName;
+    
+    //instead of showing a specific date, this funding detail should show 
+    //the fiscal year, e.g. 2014/2015
+    private String fiscalYear;
 	
         /*
 	private Long regionId;
@@ -398,6 +402,14 @@ public class FundingDetail implements Serializable, Comparable
 
 	public void setContract(IPAContract contract) {
 		this.contract = contract;
+	}
+	
+	public String getFiscalYear() {
+		return fiscalYear;
+	}
+
+	public void setFiscalYear(String fiscalYear) {
+		this.fiscalYear = fiscalYear;
 	}
  
 }

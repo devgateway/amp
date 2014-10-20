@@ -19,8 +19,18 @@ other rows (if any): capital spending percent / classification / attached pledge
 	<td width="40%" align="right"  bgcolor="#FFFFFF">
 		<digi:trn><b><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></b></digi:trn>
 	</td>
-	<td height="18" align="right">								
-		<b><bean:write name="fundingDetail" property="transactionDate" /></b>
+	<td height="18" align="right">
+		<c:choose>
+			<c:when test="${showFiscalYear}">
+				<b><bean:write name="fundingDetail" property="fiscalYear" /></b>
+			</c:when>
+			<c:otherwise>
+				<b><bean:write name="fundingDetail" property="transactionDate" /></b>
+			</c:otherwise>
+		</c:choose>
+									
+	
+		
 	</td>
 	<c:choose>
 		<c:when test="${aimEditActivityForm.funding.fixerate}">

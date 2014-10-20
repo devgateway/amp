@@ -329,6 +329,23 @@
                         </tr>
                         </c:if>
                         </c:if>
+	                    <c:if test="${not empty aimEditActivityForm.funding.totalMtefProjections}">
+                        <tr>
+                            <td bgcolor="#eeeeee"
+                                style="border-top: 1px solid #BBBBBB; text-transform: uppercase"> <digi:trn
+                                key='aim:totalmtefprojections'>Total Mtef Projections</digi:trn> :
+                            </td>
+                            <td nowrap="nowrap" align="right" bgcolor="#eeeeee"
+                                style="border-top: 1px solid #BBBBBB">
+                                
+	                                <b>
+	                                <bean:write name="aimEditActivityForm" property="funding.totalMtefProjections"/> 
+	                                <bean:write name="aimEditActivityForm" property="currName"/>
+	                                </b>
+	                        	&nbsp;        
+	                        </td>
+                        </tr>
+                        </c:if>
                         <c:if test="${aimEditActivityForm.funding.showPipeline}">
                         <c:if test="${not empty aimEditActivityForm.funding.totalPipelineCommitments}">
 	                        <field:display name="Pipeline" feature="Commitments">

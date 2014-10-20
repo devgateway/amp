@@ -201,7 +201,11 @@ public class SearchUtil {
 
 			//not a very nice solution, but I kept the old code and idea and just added some speed
 //			String newQueryString = "SELECT f.id " + AmpActivity.sqlStringForName("f.id") + " AS name, FROM amp_funding_pledges f";
-			String newQueryString = "SELECT f.pledge_id, f.title FROM v_pledges_titles f WHERE lower(f.title) LIKE  lower('%" + keyword + "%')" ;
+			
+			//keyword.replaceAll is done for single-quote escaping; 
+			//normally,   extended by org.apache.commons.lang.StringEscapeUtils.escapeSql should be used,
+			//but it does exactly the same thing
+			String newQueryString = "SELECT f.pledge_id, f.title FROM v_pledges_titles f WHERE lower(f.title) LIKE  lower('%" + keyword.replaceAll("'", "''") + "%')" ;
 			SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("pledge_id", org.hibernate.type.StandardBasicTypes.LONG);
 			newQuery		  = newQuery.addScalar("title", org.hibernate.type.StandardBasicTypes.STRING);
 

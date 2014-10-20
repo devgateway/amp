@@ -342,7 +342,6 @@ public class GisEndPoints {
 			JsonBean json = new JsonBean();
 			json.set("name", indicator.getName());
 			json.set("classes", indicator.getNumberOfClasses());
-			json.set("admLevelNumber ", indicator.getAdmLevel().getId());
 			json.set("id", indicator.getId());
 			json.set("description", indicator.getDescription());
 			List<JsonBean> colors = new ArrayList<JsonBean>();

@@ -201,16 +201,6 @@
 				<Level name="Project Title" column="amp_activity_id" type="Integer" nameColumn="name" />
 			</Hierarchy>
 
-			<Hierarchy hasAll="true" allMemberName="All Approval Statuses" primaryKey="amp_activity_id" name="Approval Status">
-				<Table name="mondrian_activity_texts@@locale@@" />
-				<Level name="Approval Status" column="approval_status" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All AMP IDs" primaryKey="amp_activity_id" name="AMP ID">
-				<Table name="mondrian_activity_texts@@locale@@" />
-				<Level name="AMP ID" column="amp_activity_id" type="String" nameColumn="amp_id" />
-			</Hierarchy>
-
 			<Hierarchy hasAll="true" allMemberName="All Team" primaryKey="amp_activity_id" name="Team">
 				<Table name="mondrian_activity_texts@@locale@@" />
 				<Level name="Team" column="team_id" type="String" nameColumn="team_name" /> 
@@ -325,6 +315,20 @@
 			<Hierarchy hasAll="true" allMemberName="All Internal Use Id" primaryKey="amp_activity_id" name="Internal Use Id">
 				<Table name="mondrian_activity_fixed_texts" />
 				<Level name="Internal Use Id" column="amp_activity_id" type="Integer"/>
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Approval Statuses" primaryKey="amp_activity_id" name="Approval Status">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Approval Status" nameColumn="approval_status" type="String">
+					<KeyExpression>
+						<SQL dialect="generic">@@activity_status_key@@</SQL>
+					</KeyExpression>
+				</Level>
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All AMP IDs" primaryKey="amp_activity_id" name="AMP ID">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="AMP ID" column="amp_activity_id" type="String" nameColumn="amp_id" />
 			</Hierarchy>
 			
 			<Hierarchy hasAll="true" allMemberName="All Government Agreement Number" primaryKey="amp_activity_id" name="Government Agreement Number">

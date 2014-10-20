@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -109,17 +111,19 @@ public class AmpARFilter extends PropertyListable {
 	 */
 	public final static long DUMMY_SUPPLEMENTARY_PLEDGE_FETCHING_REPORT_ID = -996L;
 	
+	public final static Map<String, Integer> activityStatusToNr = Collections.unmodifiableMap(new HashMap<String, Integer>(){{
+		this.put(Constants.APPROVED_STATUS, 1);
+		this.put(Constants.EDITED_STATUS, 2);
+		this.put(Constants.STARTED_APPROVED_STATUS, 3);
+		this.put(Constants.STARTED_STATUS, 4);
+		this.put(Constants.NOT_APPRVED, 5);
+		this.put(Constants.REJECTED_STATUS, 6);		
+	}});
+	
 	/**
 	 * list of all legal values of AmpActivity::"approvalStatus". DO NOT CHANGE, make a different set with a subset of these if you need the subset only
 	 */
-	public final static Set<String> activityStatus = Collections.unmodifiableSet(new HashSet<String>() {{
-														this.add(Constants.APPROVED_STATUS);
-														this.add(Constants.EDITED_STATUS);
-														this.add(Constants.STARTED_APPROVED_STATUS);
-														this.add(Constants.STARTED_STATUS);
-														this.add(Constants.NOT_APPRVED);
-														this.add(Constants.REJECTED_STATUS);
-														}});
+	public final static Set<String> activityStatus = activityStatusToNr.keySet();
 	
 	public final static Set<String> validatedActivityStatus = Collections.unmodifiableSet(new HashSet<String>() {{
 														this.add(Constants.APPROVED_STATUS);

@@ -39,8 +39,8 @@ var Settings = {
         'saiku.olap.query.filter' : true,
         'saiku.olap.result.formatter' : "flattened"
     },
-    TABLE_LAZY: true,          // Turn lazy loading off / on
-    TABLE_LAZY_SIZE: 1000,     // Initial number of items to be rendered
+    TABLE_LAZY: false,          // Turn lazy loading off / on
+    TABLE_LAZY_SIZE: 100000,     // Initial number of items to be rendered
     TABLE_LAZY_LOAD_ITEMS: 20,       // Additional item per scroll
     TABLE_LAZY_LOAD_TIME: 20,  // throttling call of lazy loading items
     /* Valid values for CELLSET_FORMATTER:
@@ -64,7 +64,9 @@ var Settings = {
     TELEMETRY_SERVER: 'http://telemetry.analytical-labs.com:7000',
     LOCALSTORAGE_EXPIRATION: 10 * 60 * 60 * 1000 /* 10 hours, in ms */,
     UPGRADE: false,    
-    AMP_PATH: '/rest/data/report'
+    AMP_PATH: '/rest/data/report',
+    AMP_MODE: true,
+    AMP_SANITIZE_RESULTS: false
 };
 
 /**

@@ -77,11 +77,13 @@ public class SaikuUtils {
 		for (int index = 0; index < 2; index++) {
 			final int second = (index + 1) & 1;
 			TotalAggregator[] aggregators = new TotalAggregator[axisInfos[second].maxDepth + 1];
+			String totalFunctionName = "sum";//AMP change to configure the function to 'sum' manually instead of using query.getTotalFunction(axisInfos[second].uniqueLevelNames.get(i - 1));
+ 			if((!spec.isCalculateColumnTotals() && index == 0) || (!spec.isCalculateRowTotals() && index==1)) { // Mimic behavior of totalFunctionName from Saiku 
+				totalFunctionName = "not";
+			}
 			for (int i = 1; i < aggregators.length - 1; i++) {
-				String totalFunctionName = "sum";//AMP change to configure the function to 'sum' manually instead of using query.getTotalFunction(axisInfos[second].uniqueLevelNames.get(i - 1));
 				aggregators[i] = TotalAggregator.newInstanceByFunctionName(totalFunctionName);
 			}
-			String totalFunctionName = "sum";//AMP change to configure the function to 'sum' manually instead of usingquery.getTotalFunction(axisInfos[second].axis.getAxisOrdinal().name());
 			aggregators[0] = totalFunctionName != null ? TotalAggregator.newInstanceByFunctionName(totalFunctionName) : null;
 			builder = new TotalsListsBuilder(selectedMeasures, aggregators, cellSet, axisInfos[index], axisInfos[second]);
 			totals[index] = builder.buildTotalsLists();

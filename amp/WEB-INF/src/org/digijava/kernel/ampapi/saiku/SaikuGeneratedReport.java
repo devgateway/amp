@@ -40,9 +40,12 @@ public class SaikuGeneratedReport extends GeneratedReport{
 		for (int i = 0; i < headers.length; i++)
 			for (int j = 0; j< headers[i].length; j++) {
 				String formattedValue = headers[i][j].getFormattedValue();
-				if (!NumberUtils.isNumber(formattedValue))
-					headers[i][j].setFormattedValue(
-							TranslatorWorker.translateText(formattedValue, environment.locale, 3l));
+				if (!NumberUtils.isNumber(formattedValue)) {
+					if(formattedValue != null){
+						headers[i][j].setFormattedValue(
+								TranslatorWorker.translateText(formattedValue, environment.locale, 3l));
+					}
+				}
 			}
 	}
 	

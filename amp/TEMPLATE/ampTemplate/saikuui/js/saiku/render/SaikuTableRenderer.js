@@ -35,6 +35,9 @@ SaikuTableRenderer.prototype._render = function(data, options) {
 
                 var html =  self.internalRender(self._data, self._options);
                 $(self._options.htmlObject).html(html);
+                if(Settings.AMP_SANITIZE_RESULTS){
+                	checkTable(self._options.htmlObject);
+                }
                 _.defer(function(that) {
                     if (self._options.hasOwnProperty('batch') && self._options.hasBatchResult) {                        
                         var batchRow = 0;
@@ -77,7 +80,56 @@ SaikuTableRenderer.prototype._render = function(data, options) {
         }
         
 };
+var checkTable = function(table){
+	var rowList = table.find("TR");
+	var maxRowLength = 0;
+	_.each(rowList, function(row) {
+		var rowLength = getRowLength(row);
+		if(maxRowLength < rowLength){
+			maxRowLength = rowLength;
+		}
+	});
 
+	//Homogeneize (?) the table
+	_.each(rowList, function(row) {
+		var rowLength = getRowLength(row);
+		if(rowLength < maxRowLength){
+			var offset = maxRowLength - rowLength;
+			var isSubtotal = $(row).children().first().hasClass("row_total_corner");
+			var className = "";
+			if(isSubtotal){
+				$(row).children().first().removeClass("row_total_corner");
+				$(row).children().first().addClass("row_total");
+			}
+			else
+			{
+				$(row).children().first().removeClass("row");
+				$(row).children().first().addClass("row_total");
+			}
+
+			for(var idx = 0; idx < offset;idx++) {
+				if(idx == offset-1 && isSubtotal) //First cell needs corner
+					className = "row_total_corner";
+				else if (idx == offset-1 && !isSubtotal)
+					className = "row";
+				else if(isSubtotal)
+					className = "row_total";
+				else
+					className = "row_total";
+				$(row).prepend($("<th>").html($("<div>")).addClass(className));
+			}
+		}
+	})
+	
+	
+}
+var getRowLength = function(row) {
+	var rowLength = 0;
+	_.each($(row).children(), function(cell) {
+		rowLength += cell.colSpan;
+	});
+	return rowLength
+}
 SaikuTableRenderer.prototype.clear = function(data, options) {
     var self = this;
     if (this._options.htmlObject && this._options.hasOwnProperty('batch')) {
@@ -97,7 +149,8 @@ function genTotalDataCells(currentIndex, cellIndex, scanSums, scanIndexes, lists
 		if (currentIndex == scanSums[i]) {
 			var currentListNode = lists[i][scanIndexes[i]];
 			for (var m = 0; m < currentListNode.cells.length; m++)
-				contents += '<td class="data total">' + currentListNode.cells[m][cellIndex].value + '</td>';
+				contents += '<td class="data total">' + currentListNode.cells[m][cellIndex].value +'</td>';
+//			contents += '<td class="data total two" style="background:red;">' + currentListNode.cells[m][cellIndex].value + '|| scanSums[i]:' + scanSums[i] + ' || cell[' + m +  '][' + cellIndex + ']</td>';
 			scanIndexes[i]++;
 			if (scanIndexes[i] < lists[i].length)
 				scanSums[i] += lists[i][scanIndexes[i]].width;
@@ -147,7 +200,7 @@ function totalIntersectionCells(currentIndex, bottom, scanSums, scanIndexes, lis
 	for (var i = bottom; i >= 0; i--) {
 		if (currentIndex == scanSums[i]) {
 			var currentListNode = lists[i][scanIndexes[i]];
-			var cssClass = "data total";
+			var cssClass = "data total intersection";
 			for (var m = 0; m < currentListNode.cells.length; m++) {
 				var text = '&nbsp;';
 				contents += '<td class="' + cssClass + '">' + text + '</td>';
@@ -235,6 +288,32 @@ function topParentsDiffer(data, row, col) {
 	return false;
 }
 
+function sanitizeColumns(columnData) {
+	return columnData;
+}
+function sanitizeRows(rowData) {
+	//Grand Totals
+	var dupSize = rowData[0][0].captions.length;
+	var index = dupSize/2;
+	var indexOffset = index;
+	var newCells = [];
+	var newCaptions = [];
+	
+	for(var idx = 0; idx < index;idx++) {
+		newCells.push(rowData[idx][0].cells[idx+indexOffset]);
+		newCaptions.push(rowData[idx][0].captions[idx+indexOffset]);
+	}
+	rowData[0][0].cells = newCells;
+	rowData[0][0].captions = newCaptions;
+
+	for(var idx = 0; idx < rowData[1].length;idx++) {
+		rowData[1][idx].cells = [];
+		rowData[1][idx].captions = null;
+	}
+	
+	return rowData;
+}
+
 SaikuTableRenderer.prototype.internalRender = function(allData, options) {
     var tableContent = "";
     var rowContent = "";
@@ -258,8 +337,15 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
         batchSize = options.hasOwnProperty('batchSize') ? options.batchSize : null;
     }
     var totalsLists = {};
-    totalsLists[COLUMNS] = allData.rowTotalsLists;
-    totalsLists[ROWS] = allData.colTotalsLists;
+    if(Settings.AMP_SANITIZE_RESULTS) {
+        totalsLists[COLUMNS] = sanitizeColumns(allData.rowTotalsLists);
+        totalsLists[ROWS] = sanitizeRows(allData.colTotalsLists);
+    }
+    else
+	{
+        totalsLists[COLUMNS] = allData.rowTotalsLists;
+        totalsLists[ROWS] = allData.colTotalsLists;
+	}
     
     var scanSums = {};
     var scanIndexes = {};

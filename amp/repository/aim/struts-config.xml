@@ -30,7 +30,7 @@
     <form-bean name="aimQuickLinkForm" type="org.digijava.module.aim.form.QuickLinkForm" />
     <form-bean name="aimMyDesktopForm" type="org.digijava.module.aim.form.MyDesktopForm" />
     <form-bean name="aimNewAddLocationForm" type="org.digijava.module.aim.form.NewAddLocationForm" />
-    <form-bean name="aimNewIndicatorLayerForm" type="org.digijava.module.aim.form.AddIndicatorLayerForm" />
+    <form-bean name="aimIndicatorLayerManagerForm" type="org.digijava.module.aim.form.AddIndicatorLayerForm" />
     <form-bean name="aimFiscalCalendarForm" type="org.digijava.module.aim.form.FiscalCalendarForm" />
     <form-bean name="aimAddFiscalCalForm" type="org.digijava.module.aim.form.AddFiscalCalendarForm" />
     <form-bean name="aimOrgManagerForm" type="org.digijava.module.aim.form.OrgManagerForm" />
@@ -580,11 +580,12 @@
       <forward name="addEdit" path="/showLayout.do?layout=addNewLocation" />
       <forward name="added" path="/aim/dynLocationManager.do" redirect="true" />
     </action>
-    <action name="aimNewIndicatorLayerForm" path="/aim/addNewIndicatorLayer" scope="session" type="org.digijava.module.aim.action.AddIndicatorLayer" validate="false">
+    <action name="aimIndicatorLayerManagerForm" path="/aim/indicatorLayerManager" scope="session" type="org.digijava.module.aim.action.IndicatorLayerManager" validate="false">
       <forward name="addEdit" path="/showLayout.do?layout=addNewIndicatorLayer" />
-      <forward name="added" path="/aim/dynLocationManager.do" redirect="true" />
-    </action>
-    <action name="aimFiscalCalendarForm" path="/aim/fiscalCalendarManager" scope="request" type="org.digijava.module.aim.action.FiscalCalendarManager" validate="false">
+      <forward name="added" path="/showLayout.do?layout=aim_indicatorLayerManager"/>
+      <forward name="viewIndicatorLayerManager" path="/showLayout.do?layout=aim_indicatorLayerManager" />
+    </action> 
+   <action name="aimFiscalCalendarForm" path="/aim/fiscalCalendarManager" scope="request" type="org.digijava.module.aim.action.FiscalCalendarManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=fiscalCalendarManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>

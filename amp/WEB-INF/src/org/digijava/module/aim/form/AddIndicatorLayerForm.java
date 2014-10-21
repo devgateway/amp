@@ -1,11 +1,13 @@
 package org.digijava.module.aim.form;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 
 public class AddIndicatorLayerForm extends ActionForm  {
 	
@@ -18,6 +20,9 @@ public class AddIndicatorLayerForm extends ActionForm  {
 	private String event;
 	private Collection<AmpCategoryValue> admLevelList;
 	private Integer selectedColorRamp;
+	private  List <AmpIndicatorLayer> indicatorLayers;
+	private Long idOfIndicator = null;
+	private Integer selectedColorRampIndex;
 	
 	
 	public String getName() {
@@ -74,6 +79,24 @@ public class AddIndicatorLayerForm extends ActionForm  {
 	}
 	public void setSelectedColorRamp(Integer selectedColorRamp) {
 		this.selectedColorRamp = selectedColorRamp;
+	}
+	public List <AmpIndicatorLayer> getIndicatorLayers() {
+		return indicatorLayers;
+	}
+	public void setIndicatorLayers(List <AmpIndicatorLayer> indicatorLayers) {
+		this.indicatorLayers = indicatorLayers;
+	}
+	public Long getIdOfIndicator() {
+		return idOfIndicator;
+	}
+	public void setIdOfIndicator(Long idOfIndicator) {
+		this.idOfIndicator = idOfIndicator;
+	}
+	public Integer getSelectedColorRampIndex() {
+		return selectedColorRampIndex;
+	}
+	public void setSelectedColorRampIndex(Integer selectedColorRampIndex) {
+		this.selectedColorRampIndex = selectedColorRampIndex;
 	}
 	
 	

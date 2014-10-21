@@ -149,6 +149,7 @@
 	<page name="addLocation" title=" - Region Manager" />
     <page page="addNewRegion" name="addNewLocation" title=" - Region Manager" />
 	<page name="addNewIndicatorLayer" title=" - Add Indicator Layer" />
+	<page name="aim_indicatorLayerManager" page="indicatorLayerManager" title=" - Indicator Layer Manager" />
 	<page page="addOrgGroup" name="aim_addOrgGrpPopupLayout" title=" - Add Organization Group" />
 	<page page="viewOrgDetail" name="aim_viewOrgDetailPopupLayout" title=" - Organization Detail" />
 	<page page="viewComment" name="aim_viewCommentPopupLayout" title=" - Comment Detail" />

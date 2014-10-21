@@ -208,12 +208,12 @@
 	        myForm.submit();
 	    }
 	 
-	 function addNewIndicatorLayer() {
-			openNewWindow(650, 380);
-			var myForm= document.getElementById("addNewIndicatorLayerForm");
-			myForm.target = popupPointer.name;
-			myForm.event.value 				= "new";
+	 function indicatorLayerManager() {
+			var myForm= document.getElementById("indicatorLayerForm");
+			myForm.action = '/aim/indicatorLayerManager.do?event=manager';
 			myForm.submit();
+			
+			
 		}
 	 
 	 var myPanelExport = new YAHOO.widget.Panel("export", {
@@ -354,9 +354,9 @@
 <!--						<button type="button" class="buton" onclick=""><digi:trn>Save</digi:trn></button> -->
 					</td>
 					<td class="topAlign">
-						<button type="button" class="buton" onclick="javascript:exportIndicatorLayerTable();" ><digi:trn>Export Indicator Table</digi:trn></button> &nbsp; &nbsp;
-						<button type="button" class="buton" onclick="javascript:importLocationIndicatorValues();" ><digi:trn>Import Indicators</digi:trn></button> &nbsp; &nbsp;
-						<button type="button" class="buton" onclick="javascript:addNewIndicatorLayer();" ><digi:trn>Add New Indicator</digi:trn></button> &nbsp; &nbsp;
+						<button type="button" class="buttonx" onclick="javascript:indicatorLayerManager();" ><digi:trn>Indicator Manager</digi:trn></button> &nbsp; &nbsp;
+						<button type="button" class="buttonx" style="margin-bottom: 10px;" onclick="javascript:importLocationIndicatorValues();" ><digi:trn>Import Indicators</digi:trn></button> &nbsp; &nbsp;
+						<button type="button" class="buttonx" onclick="javascript:exportIndicatorLayerTable();" ><digi:trn>Export Indicator Table</digi:trn></button> &nbsp; &nbsp;
 					
 					<td>
 				</tr>
@@ -395,9 +395,8 @@
 	</form>
 </div>
 <div style="display: none;">
-	<form id="addNewIndicatorLayerForm"  method="post" action="/aim/addNewIndicatorLayer.do">
+	<form id="indicatorLayerForm"  method="post" action="/aim/indicatorLayerManager.do">
 		<input type="hidden" name="event" />
 	</form> 
 </div>
-
 </div>

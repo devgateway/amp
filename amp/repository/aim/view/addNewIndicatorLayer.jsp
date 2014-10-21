@@ -7,7 +7,7 @@
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
-<digi:instance property="aimNewIndicatorLayerForm" />
+<digi:instance property="aimIndicatorLayerManagerForm" />
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/jquery.ddslick.min.js"/>"></script>
@@ -26,12 +26,16 @@ var colorRamp = [
                  ["#e8cde1", "#e3b7db", "#dfa0d9", "#dc87db", "#d36fda", "#c857da", "#b348ce", "#9f39c3", "#8a2bb7", "#741eaa"]];
 $( document ).ready(function() {
 	var color = "";
-	 var select =	"<select id='colorRampSelect'>";
+	var select =	"<select id='colorRampSelect'>";
 	for (var i=0;i<colorRamp.length;i++) {
 	   for (var j=0;j<colorRamp[i].length;j++) {
-			color += "<span style='width:60px;background-color:"+colorRamp[i][j]+"'>&nbsp;&nbsp;&nbsp;</span>";
+		  color += "<span style='width:60px;background-color:"+colorRamp[i][j]+"'>&nbsp;&nbsp;&nbsp;</span>";
 		}
-	   select += "<option value='"+i+"'"+ 
+	   var selected = "";
+	   if (i == Number(${aimIndicatorLayerManagerForm.selectedColorRampIndex})) {
+	      selected ="selected = 'selected'";
+	    }
+	   select += "<option value='"+i+"'"+ selected +
        " data-description=\""+color+"\"</option>";
     	color = "";
 	
@@ -45,7 +49,7 @@ $( document ).ready(function() {
     }   
   });
   		
-	document.aimNewIndicatorLayerForm.name.focus();
+	document.aimIndicatorLayerManagerForm.name.focus();
 	
 });
 
@@ -83,8 +87,8 @@ function validateAndSave() {
 			
 	}
 	
-    document.aimNewIndicatorLayerForm.target = window.opener.name;
-    document.aimNewIndicatorLayerForm.submit();
+    document.aimIndicatorLayerManagerForm.target = window.opener.name;
+    document.aimIndicatorLayerManagerForm.submit();
     closePopup();
 }
 
@@ -92,8 +96,9 @@ function validateAndSave() {
 </script>
 
 
-<digi:form action="/addNewIndicatorLayer.do">
+<digi:form action="/indicatorLayerManager.do">
 <html:hidden property="event" value="save"/>
+<html:hidden property="idOfIndicator"/>
   <table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
     <tr>
       <td align=left valign="top">

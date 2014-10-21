@@ -1186,6 +1186,15 @@ public class DynLocationManagerUtil {
 	 
  }
  
+ public static List <AmpIndicatorLayer> getIndicatorLayers () {
+		Session dbSession = PersistenceManager.getSession();
+		String queryString = "select ind from "
+				+ AmpIndicatorLayer.class.getName() + " ind";
+		Query qry = dbSession.createQuery(queryString);
+		return qry.list();
+	 
+}
+ 
  public static List <AmpLocationIndicatorValue> getLocationIndicatorValueByLocation (AmpCategoryValueLocations location) {
 	 Session dbSession = PersistenceManager.getSession();
 		String queryString = "select value from "
@@ -1195,6 +1204,18 @@ public class DynLocationManagerUtil {
 		qry.setCacheable(true);
 		qry.setLong("id", location.getId());
 		return qry.list(); 
+ }
+ 
+ public static void deleteIndicatorLayer (AmpIndicatorLayer indLayer) {
+	 Session dbSession = PersistenceManager.getSession();
+	 String queryString = "delete from "
+				+ AmpLocationIndicatorValue.class.getName()
+				+ "  where indicator.id=:indicatorLayerId";
+	
+	 Query qry = dbSession.createQuery(queryString);
+   	 qry.setLong("indicatorLayerId", indLayer.getId());
+	 qry.executeUpdate();
+	 dbSession.delete(indLayer);
  }
  
  public static AmpLocationIndicatorValue getLocationIndicatorValue (Long indicator, Long location) {

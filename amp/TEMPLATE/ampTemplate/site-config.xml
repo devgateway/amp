@@ -768,6 +768,7 @@
 				<page>aim_updateTeamMembersJSON</page> 
 				<page>aim_filterPicker2</page>
 				<page>addNewIndicatorLayer</page>
+				<page>indicatorLayerManager</page>
             </module>
 			<module name="contentrepository">
 				<page>amp_selectDocumentDM</page>

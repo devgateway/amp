@@ -66,7 +66,7 @@ var Settings = {
     UPGRADE: false,    
     AMP_PATH: '/rest/data/report',
     AMP_MODE: true,
-    AMP_SANITIZE_RESULTS: false
+    AMP_REPORT_API_BRIDGE: false
 };
 
 /**
@@ -117,7 +117,7 @@ if (Settings.BIPLUGIN5) {
     Settings.BIPLUGIN = true;
 }
 
-Settings.INITIAL_QUERY = false;
+Settings.INITIAL_QUERY = true;
 if (document.location.hash) {
     var hash = document.location.hash;
     if (hash.length > 11 && hash.substring(1, 11) == "query/open") {

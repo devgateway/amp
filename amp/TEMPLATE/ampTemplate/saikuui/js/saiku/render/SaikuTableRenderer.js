@@ -35,7 +35,7 @@ SaikuTableRenderer.prototype._render = function(data, options) {
 
                 var html =  self.internalRender(self._data, self._options);
                 $(self._options.htmlObject).html(html);
-                if(Settings.AMP_SANITIZE_RESULTS){
+                if(Settings.AMP_REPORT_API_BRIDGE){
                 	checkTable(self._options.htmlObject);
                 }
                 _.defer(function(that) {
@@ -337,7 +337,7 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
         batchSize = options.hasOwnProperty('batchSize') ? options.batchSize : null;
     }
     var totalsLists = {};
-    if(Settings.AMP_SANITIZE_RESULTS) {
+    if(Settings.AMP_REPORT_API_BRIDGE) {
         totalsLists[COLUMNS] = sanitizeColumns(allData.rowTotalsLists);
         totalsLists[ROWS] = sanitizeRows(allData.colTotalsLists);
     }

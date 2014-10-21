@@ -104,7 +104,7 @@ var SavedQuery = Backbone.Model.extend({
             name: filename
         });
         if(model.get('report_id')) {
-        	Settings.AMP_SANITIZE_RESULTS = true;
+        	Settings.AMP_REPORT_API_BRIDGE = true;
         }
         query.set('name', filename);
         var tab = Saiku.tabs.add(new Workspace({ query: query }));

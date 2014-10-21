@@ -20,8 +20,12 @@
 var QueryRouter = Backbone.Router.extend({
     routes: {
         'query/open/*query_name': 'open_query',
+        'query/new_query': 'new_query',
         'query/open': 'open_query_repository',
         'report/open/:report_id': 'open_report'
+    },
+    new_query: function() {
+    	Saiku.tabs.add(new Workspace());
     },
     
     open_query: function(query_name) {

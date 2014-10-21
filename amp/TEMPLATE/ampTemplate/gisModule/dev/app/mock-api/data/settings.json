@@ -20,7 +20,7 @@
   },
   {
     "id": 2,
-    "name": "Calander Type",
+    "name": "Calendar Type",
     "selected": "grg",
     "options": [
        {"name": "Gregorian", "id":"grg"},

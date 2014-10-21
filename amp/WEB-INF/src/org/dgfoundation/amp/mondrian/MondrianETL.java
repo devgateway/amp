@@ -466,7 +466,7 @@ private EtlResult execute() throws Exception {
 		ICalendarWorker worker = calendar.getworker();
 		SQLUtils.executeQuery(conn, "ALTER TABLE " + MONDRIAN_DATE_TABLE + " ADD year_code_" + calendar.getAmpFiscalCalId() + " bigint");
 		SQLUtils.executeQuery(conn, "ALTER TABLE " + MONDRIAN_DATE_TABLE + " ADD year_name_" + calendar.getAmpFiscalCalId() + " text");
-		//SQLUtils.executeQuery(conn, "ALTER TABLE " + MONDRIAN_DATE_TABLE + " ADD month_code_" + calendar.getAmpFiscalCalId() + " bigint");
+		SQLUtils.executeQuery(conn, "ALTER TABLE " + MONDRIAN_DATE_TABLE + " ADD month_code_" + calendar.getAmpFiscalCalId() + " bigint");
 		SQLUtils.executeQuery(conn, "ALTER TABLE " + MONDRIAN_DATE_TABLE + " ADD month_name_" + calendar.getAmpFiscalCalId() + " text");
 		SQLUtils.executeQuery(conn, "ALTER TABLE " + MONDRIAN_DATE_TABLE + " ADD quarter_code_" + calendar.getAmpFiscalCalId() + " bigint");
 		SQLUtils.executeQuery(conn, "ALTER TABLE " + MONDRIAN_DATE_TABLE + " ADD quarter_name_" + calendar.getAmpFiscalCalId() + " text");
@@ -479,15 +479,15 @@ private EtlResult execute() throws Exception {
 		//wr.add(Arrays.<Object>asList(999999999l, 9999l, "Undefined", "Undefined", 99l, "Undefined"));
 		String tableName = "mondrian_dates_temp_calendar_" + calendar.getAmpFiscalCalId();
 		SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + tableName);
-		SQLUtils.executeQuery(conn, "CREATE TABLE " + tableName + " (dd bigint PRIMARY KEY, year_code bigint, year_name text, month_name text, quarter_code bigint, quarter_name text)");
+		SQLUtils.executeQuery(conn, "CREATE TABLE " + tableName + " (dd bigint PRIMARY KEY, year_code bigint, year_name text, month_code bigint, month_name text, quarter_code bigint, quarter_name text)");
 		SQLUtils.insert(conn, tableName, null, null,
-				Arrays.asList("dd", "year_code", "year_name",  "month_name", "quarter_code", "quarter_name"), wr);
-		String query = String.format("UPDATE " + MONDRIAN_DATE_TABLE + " AS mdt SET year_code_%d=c.year_code, year_name_%d=c.year_name, month_name_%d=c.month_name, quarter_code_%d=c.quarter_code, quarter_name_%d=c.quarter_name FROM " + tableName + " AS c WHERE c.dd = mdt.day_code", 
-				calendar.getAmpFiscalCalId(), calendar.getAmpFiscalCalId(), calendar.getAmpFiscalCalId(), calendar.getAmpFiscalCalId(), calendar.getAmpFiscalCalId());
+				Arrays.asList("dd", "year_code", "year_name",  "month_code", "month_name", "quarter_code", "quarter_name"), wr);
+		String query = String.format("UPDATE " + MONDRIAN_DATE_TABLE + " AS mdt SET year_code_%d=c.year_code, year_name_%d=c.year_name, month_code_%d=c.month_code, month_name_%d=c.month_name, quarter_code_%d=c.quarter_code, quarter_name_%d=c.quarter_name FROM " + tableName + " AS c WHERE c.dd = mdt.day_code", 
+				calendar.getAmpFiscalCalId(), calendar.getAmpFiscalCalId(), calendar.getAmpFiscalCalId(), calendar.getAmpFiscalCalId(), calendar.getAmpFiscalCalId(), calendar.getAmpFiscalCalId());
 		SQLUtils.executeQuery(conn, query);
 		SQLUtils.executeQuery(conn, 
-				String.format("UPDATE " + MONDRIAN_DATE_TABLE + " SET year_code_%d=9999, year_name_%d='Undefined', month_name_%d='Undefined', quarter_code_%d=99,quarter_name_%d='Undefined' WHERE day_code=999999999",
-						calendar.getAmpFiscalCalId(),calendar.getAmpFiscalCalId(),calendar.getAmpFiscalCalId(),calendar.getAmpFiscalCalId(),calendar.getAmpFiscalCalId()));
+				String.format("UPDATE " + MONDRIAN_DATE_TABLE + " SET year_code_%d=9999, year_name_%d='Undefined', month_code_%d=99, month_name_%d='Undefined', quarter_code_%d=99,quarter_name_%d='Undefined' WHERE day_code=999999999",
+						calendar.getAmpFiscalCalId(), calendar.getAmpFiscalCalId(), calendar.getAmpFiscalCalId(),calendar.getAmpFiscalCalId(), calendar.getAmpFiscalCalId(), calendar.getAmpFiscalCalId()));
 	}
 	
 	protected List<Object> buildDateRowForCalendar(ResultSet rs, ICalendarWorker worker) {
@@ -499,7 +499,7 @@ private EtlResult execute() throws Exception {
 			row.add(key);
 			row.add(worker.getYear());
 			row.add(worker.getFiscalYear());
-			//row.add(worker.getMonth());
+			row.add(worker.getFiscalMonth().getMonthId());
 			row.add(worker.getFiscalMonth().toString());
 			row.add(worker.getQuarter());
 			row.add("Q" + worker.getQuarter());

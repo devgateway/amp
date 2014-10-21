@@ -38,7 +38,7 @@ public class EthiopianFiscalBasedWorker implements ICalendarWorker {
 		return internalCalendar.getTime();
 	}
 
-	public Comparable getMonth() throws Exception {
+	public ComparableMonth getMonth() throws Exception {
 		checkSetTimeCalled();
 		int monthId = internalEthiopianCalendar.ethMonth;
 		ComparableMonth cm = monthCache.get(monthId);
@@ -87,7 +87,7 @@ public class EthiopianFiscalBasedWorker implements ICalendarWorker {
 	}
 
 	@Override
-	public Comparable getFiscalMonth() throws Exception {
+	public ComparableMonth getFiscalMonth() throws Exception {
 		return getMonth();
 	}
 

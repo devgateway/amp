@@ -72,9 +72,9 @@ public class NepaliBasedWorker implements ICalendarWorker {
 		return this.getYear().intValue() - worker.getYear().intValue();
 	}
 
-	public Comparable getMonth() throws Exception {
+	public ComparableMonth getMonth() throws Exception {
 		if (!this.fiscalCalendar.getIsFiscal()) {
-			return this.getMonthName(nepaliCalendar.getMonthOfYear());
+			return new ComparableMonth(nepaliCalendar.getMonthOfYear(), this.getMonthName(nepaliCalendar.getMonthOfYear()));
 		} else {
 			checkSetTimeCalled();
 			int monthId = nepaliCalendar.getMonthOfYear();
@@ -90,7 +90,7 @@ public class NepaliBasedWorker implements ICalendarWorker {
 	}
 	
 	@Override
-	public Comparable getFiscalMonth() throws Exception {
+	public ComparableMonth getFiscalMonth() throws Exception {
 		return getMonth();
 	}
 

@@ -229,12 +229,10 @@ public class GroupColumn extends Column<Column> {
                 	}
                 	
                 	yearMapping.put(minfo.getValue().toString(),minfo2.getValue() == null ? unspecified : minfo2.getValue().toString());
-                	
                }
         	    if (category.equalsIgnoreCase(ArConstants.MONTH)){
                 	MetaInfo minfo2 = element.getMetaData().getMetaInfo(ArConstants.FISCAL_M);
                 	monthMapping.put(minfo.getValue().toString(), minfo2.getValue() == null ? unspecified : minfo2.getValue().toString());
-                	
                }
             }
         }

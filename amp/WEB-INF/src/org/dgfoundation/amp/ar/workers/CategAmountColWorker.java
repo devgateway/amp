@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.fiscalcalendar.ComparableMonth;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -332,11 +333,11 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		}
 		
 		
-		String quarter=null;
-		Comparable month=null;		
-		Integer year=null;
-		String fiscalYear=null;
-		Comparable fiscalMonth=null;
+		String quarter = null;
+		ComparableMonth month = null;		
+		Integer year = null;
+		String fiscalYear = null;
+		ComparableMonth fiscalMonth = null;
 		
 		if (filter.getCalendarType() != null) {
 			try {

@@ -57,7 +57,7 @@ public class GregorianBasedWorker implements ICalendarWorker {
 		}
 	}
 
-	public Comparable getMonth() throws Exception {
+	public ComparableMonth getMonth() throws Exception {
 		checkSetTimeCalled();
 		int monthId = internalCalendar.get(Calendar.MONTH);
 		ComparableMonth cm = monthCache.get(monthId);
@@ -111,7 +111,7 @@ public class GregorianBasedWorker implements ICalendarWorker {
 		return this.getYear().intValue() - worker.getYear().intValue();
 	}
 
-	public Comparable getFiscalMonth() throws Exception {
+	public ComparableMonth getFiscalMonth() throws Exception {
 		checkSetTimeCalled();
 		if (!this.fiscalCalendar.getIsFiscal()) {
 			return getMonth();

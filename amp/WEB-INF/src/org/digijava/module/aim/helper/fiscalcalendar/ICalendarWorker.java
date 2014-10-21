@@ -30,7 +30,7 @@ public interface ICalendarWorker  {
 	 * @return Comparable
 	 * @throws Exception
 	 */
-	public Comparable getMonth() throws Exception;
+	public ComparableMonth getMonth() throws Exception;
 
 	/**
 	 * The the time, and apply the current fiscal calendar configuration
@@ -45,5 +45,5 @@ public interface ICalendarWorker  {
 	
 	public String getFiscalYear() throws Exception;
    
-	public Comparable getFiscalMonth() throws Exception;
+	public ComparableMonth getFiscalMonth() throws Exception;
 }

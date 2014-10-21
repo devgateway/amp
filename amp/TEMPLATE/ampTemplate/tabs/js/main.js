@@ -1,6 +1,6 @@
 require.config({
-	'waitSeconds': 0,
-	baseUrl: '/TEMPLATE/ampTemplate/tabs/js',
+	'waitSeconds' : 0,
+	baseUrl : '/TEMPLATE/ampTemplate/tabs/js',
 	paths : {
 		backbone : 'lib/backbone.marionette/backbone',
 		underscore : 'lib/backbone.marionette/underscore',
@@ -11,8 +11,11 @@ require.config({
 		localStorage : 'lib/Backbone.localStorage-master/backbone.localStorage-min',
 		documentModel : 'lib/backbone-documentmodel-master/backbone-documentmodel',
 		documentCollection : 'lib/backbone-documentmodel-master/backbone-documentmodel',
-		jqgrid_lang : [ 'lib/jqgrid-4.6.0/js2/i18n/grid.locale-es', 'lib/jqgrid-4.6.0/js2/i18n/grid.locale-en' ],
-		jqgrid : 'lib/jqgrid-4.6.0/js2/jquery.jqGrid.src',
+		/*
+		 * jqgrid_lang : 'lib/jqgrid-4.6.0/js2/i18n/grid.locale-en', jqgrid :
+		 * 'lib/jqgrid-4.6.0/js2/jquery.jqGrid.src',
+		 */
+		jqgrid : 'lib/one_place/jqgrid-all',
 		filtersWidget : '/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter',
 		bootstrap : 'lib/bootstrap-3.2.0-dist/bootstrap.min'
 	},
@@ -39,12 +42,12 @@ require.config({
 			deps : [ 'backbone' ],
 			exports : 'documentModel'
 		},
-		jqgrid_lang : {
-			deps : [ 'jquery', 'jqueryui' ],
-			exports : 'jqgrid_lang'
-		},
+		/*
+		 * jqgrid_lang : { deps : [ 'jquery', 'jqueryui' ], exports :
+		 * 'jqgrid_lang' },
+		 */
 		jqgrid : {
-			deps : [ 'jquery', 'jqueryui', 'jqgrid_lang' ],
+			deps : [ 'jquery', 'jqueryui'/* , 'jqgrid_lang' */],
 			exports : 'jqgrid'
 		},
 		filtersWidget : {

@@ -247,16 +247,32 @@ public class GisEndPoints {
 
 	/*
 	*Config sample
-	*{
-    * "filtres":{
-    *  "Activity Id":[1,2,3,4],
-    * "Tertiary Program Id":[1,7,8,9]
-	*  },
-    *  "settings":{
-    * "settings1":1,
-    *  "settings2":"second setting"
-    *             }
-    *  }
+	*{  
+    * "columnFilters":{  
+    *  "National Planning Objectives Level 1 Id":[  
+    *     1,
+    *     2,
+    *     3,
+    *     4
+    *  ],
+    *  "Primary Sector Sub-Sector Id":[  
+    *     11,
+    *     22,
+    *     32,
+    *     43
+    *  ]
+    *},
+    *"otherFilters":{  
+    *  "date":{  
+    *     "start":"01/01/1961",
+    *     "end":"31/12/2015"
+    *  },
+    *  "keyWord":"some activity"
+   *},
+   *"config":{  
+   *   "currency":"US"
+   *}
+   * }
 	*/
 	@POST
 	@Path("/activities")

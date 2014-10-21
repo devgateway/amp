@@ -45,10 +45,13 @@ public class ActivityService {
 		List<JsonBean> activities=new ArrayList<JsonBean>();
 		
 		//we check if we have filter by keyword
+		
 		if (config != null) {
-			if (config.get("keyword") != null) {
+			Object otherFilter=config.get("otherFilters");
+			if (otherFilter!=null && ((Map<String,Object>)otherFilter).get("keyword") != null) {
+				String keyword = ((Map<String,Object>)otherFilter).get("keyword").toString();
 				Collection<LoggerIdentifiable> activitySearch = SearchUtil
-						.getActivities(config.get("keyword").toString(),
+						.getActivities(keyword,
 								TLSUtils.getRequest(), (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember"));
 				if (activitySearch != null && activitySearch.size() > 0) {
 					if(activitIds==null){
@@ -92,14 +95,14 @@ public class ActivityService {
 //	
 //		}
  		MondrianReportFilters filterRules = null;
-		Object filter=config.get("filters");
+		Object filter=config.get("columnFilters");
 		if(filter!=null){
-			filterRules = FilterUtils.getApiFilter((LinkedHashMap<String, Object>)config.get("filters"));	
+			filterRules = FilterUtils.getApiFilter((LinkedHashMap<String, Object>)config.get("columnFilters"));	
 		}
 		
 		if(activitIds!=null && activitIds.size()>0){
 			//if we have activityIds to add to the filter comming from the search by keyworkd
-			if(filterRules!=null){
+			if(filterRules==null){
 				filterRules = new MondrianReportFilters();
 			}
 

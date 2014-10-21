@@ -72,44 +72,20 @@ public class Filters {
 	@Path("/activityapprovalStatus")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=true,name="ActivityApprovalStatus")
-	public List<SimpleJsonBean> getActivityApprovalStatus() {
+	public JsonBean getActivityApprovalStatus() {
+		JsonBean as=new JsonBean();
 
 		List<SimpleJsonBean> activityStatus = new ArrayList<SimpleJsonBean>();
-
-		Set<String> aprovedStatus = AmpARFilter.activityStatus;
-		for (String s : aprovedStatus) {
+		Set<String> keys=AmpARFilter.activityStatusToNr.keySet();
+		for (String key : keys) {
 			SimpleJsonBean sjb = new SimpleJsonBean();
-
-			switch (s) {
-			case Constants.APPROVED_STATUS:
-				sjb.setId(Constants.APPROVED_STATUS);
-				sjb.setName(TranslatorWorker.translateText("Edited and validated"));
-				break;
-			case Constants.EDITED_STATUS:
-				sjb.setId(Constants.EDITED_STATUS);
-				sjb.setName(TranslatorWorker.translateText("Edited but not validated"));
-				break;
-			case Constants.STARTED_APPROVED_STATUS:
-				sjb.setId(Constants.STARTED_APPROVED_STATUS);
-				sjb.setName(TranslatorWorker.translateText("New and validated"));
-				break;
-			case Constants.STARTED_STATUS:
-				sjb.setId(Constants.STARTED_STATUS);
-				sjb.setName(TranslatorWorker.translateText("New"));
-				break;
-			case Constants.NOT_APPRVED:
-				sjb.setId(Constants.NOT_APPRVED);
-				sjb.setName(TranslatorWorker.translateText("Not Approved"));
-				break;
-			case Constants.REJECTED_STATUS:
-				sjb.setId(Constants.REJECTED_STATUS);
-				sjb.setName(TranslatorWorker.translateText("Edited and rejected"));
-				break;
-			}
+			sjb.setId(AmpARFilter.activityStatusToNr.get(key));
+			sjb.setName(key);
 			activityStatus.add(sjb);
 		}
-
-		return activityStatus;
+		as.set("filterId", ColumnConstants.APPROVAL_STATUS);
+		as.set("values",activityStatus);
+		return as;
 	}
 
 	/**
@@ -358,8 +334,8 @@ public class Filters {
 	@Path("/typeOfAssistance/")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui = true, name = "TypeOfAssistanceList")
-	public List<SimpleJsonBean> getTypeOfAssistance() {
-		return getCategoryValue(CategoryConstants.TYPE_OF_ASSISTENCE_KEY);
+	public JsonBean getTypeOfAssistance() {
+		return getCategoryValue(CategoryConstants.TYPE_OF_ASSISTENCE_KEY,ColumnConstants.TYPE_OF_ASSISTANCE);
 	}
 	/**
 	 * Return Activitystatus 
@@ -370,8 +346,9 @@ public class Filters {
 	@Path("/activityStatus/")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui = true, name = "ActivityStatusList")
-	public List<SimpleJsonBean> getActivityStatus() {
-		return getCategoryValue(CategoryConstants.ACTIVITY_STATUS_KEY);
+	public JsonBean getActivityStatus() {
+		return getCategoryValue(CategoryConstants.ACTIVITY_STATUS_KEY,
+				ColumnConstants.STATUS);
 	}
 
 	/**
@@ -383,8 +360,8 @@ public class Filters {
 	@Path("/activityBudget/")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui = true, name = "ActivityBudgetList")
-	public List<SimpleJsonBean> getActivityBudget() {
-		return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY);
+	public JsonBean getActivityBudget() {
+		return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY,ColumnConstants.PROJECT_IS_ON_BUDGET);
 	}	
 	
 	
@@ -397,13 +374,13 @@ public class Filters {
 	@Path("/financingInstruments/")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui = true, name = "FinancingInstrumentsList")
-	public List<SimpleJsonBean> getFinancingInstruments() {
-		return getCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY);
+	public JsonBean getFinancingInstruments() {
+		return getCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY,ColumnConstants.FINANCING_INSTRUMENT);
 	}
-
 
 	private List<SimpleJsonBean> getCategoryValue(String categoryKey) {
 		List<SimpleJsonBean> fi = new ArrayList<SimpleJsonBean>();
+
 		Collection<AmpCategoryValue> col = CategoryManagerUtil
 				.getAmpCategoryValueCollectionByKey(categoryKey);
 		for (AmpCategoryValue ampCategoryValue : col) {
@@ -411,6 +388,20 @@ public class Filters {
 					ampCategoryValue.getLabel()));
 		}
 		return fi;
+		
+	}
+/**
+ * used to return AmpCategoryClass values wrapped to be provided to the filter widget
+ * @param categoryKey
+ * @param filterId
+ * @return
+ */
+	private JsonBean getCategoryValue(String categoryKey,String filterId) {
+		JsonBean js=new JsonBean();
+		js.set("filterId",filterId);
+		js.set("values",getCategoryValue(categoryKey));
+		return js;
+		
 	}
 	/**
 	 * Get JsonEnable object for programs

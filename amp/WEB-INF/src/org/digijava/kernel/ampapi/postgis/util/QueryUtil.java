@@ -23,6 +23,7 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.util.OrganizationSkeleton;
@@ -30,6 +31,7 @@ import org.digijava.module.esrigis.dbentity.AmpMapState;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -401,5 +403,26 @@ public static List<JsonBean> getOrgGroups() {
 		});
 		return rogRoles;
 	}
+	
+	public static List <AmpIndicatorLayer> getIndicatorLayers () {
+		Session dbSession = PersistenceManager.getSession();
+		String queryString = "select ind from "
+				+ AmpIndicatorLayer.class.getName() + " ind";
+		Query qry = dbSession.createQuery(queryString);
+		qry.setCacheable(true);
+		return qry.list();
+ }
+	
+	 public static List <AmpIndicatorLayer> getIndicatorByCategoryValue (String value) {
+			Session dbSession = PersistenceManager.getSession();
+			String queryString = "select ind from "
+					+ AmpIndicatorLayer.class.getName()
+					+ " ind where upper(ind.admLevel.value)=:value)";
+			Query qry = dbSession.createQuery(queryString);
+			qry.setCacheable(true);
+			qry.setString("value", value.toUpperCase());
+			return qry.list();
+		 
+	 }
 }
 

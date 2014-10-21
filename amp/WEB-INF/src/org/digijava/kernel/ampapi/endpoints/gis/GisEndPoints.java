@@ -336,7 +336,7 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="IndicatorByAdmLevel")
 	public List<JsonBean> getIndicatorByAdmLevel(@PathParam ("admlevel") String admLevel) {
-		List<AmpIndicatorLayer> indicators = DbHelper.getIndicatorByCategoryValue(admLevel);
+		List<AmpIndicatorLayer> indicators = QueryUtil.getIndicatorByCategoryValue(admLevel);
 		return generateIndicatorJson(indicators, false);
 	}
 		
@@ -346,7 +346,7 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="IndicatorsList")
 	public List<JsonBean> getIndicators() {
-		List<AmpIndicatorLayer> indicators = DbHelper.getIndicatorLayers();
+		List<AmpIndicatorLayer> indicators = QueryUtil.getIndicatorLayers();
 		return generateIndicatorJson(indicators, true);
 	}
 	

@@ -570,7 +570,7 @@ function openAdmin () {
 								</feature:display>
 								<!-- Add feature to the feature manager or reause the old one -->
 									<li class="yuiampmenuitem_drop" title='Saiku'>
-										<a class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/saikuui/index.html" target="_blank" onclick="return canExit()"> 
+										<a class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/saikuui/index.html#query/new_query" target="_blank" onclick="return canExit()"> 
 											<digi:trn>Saiku</digi:trn>
 										</a>
 									</li>

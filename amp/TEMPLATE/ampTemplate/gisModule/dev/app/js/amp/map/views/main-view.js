@@ -32,7 +32,7 @@ module.exports = Backbone.View.extend({
     this.app.state.register(this, 'map', {
       get: this._getMapView,
       set: this._setMapView,
-      empty: { center: [-3, 22], zoom: 6 }
+      empty: { center: [-8.795, 124.735], zoom: 8 }//{ center: [-3, 22], zoom: 6 }
     });
 
     this.basemaps = new Basemaps(null, { app: this.app });  // pre-loaded with hard-coded basemaps

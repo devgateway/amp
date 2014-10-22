@@ -123,7 +123,7 @@ module.exports = Backbone.View.extend({
                                            this.cluster.properties.activityid.length);
     }
 
-    return this.app.data.activities.getActivites(activityIDs).then(function(activityCollection) {
+    return this.app.data.activities.getActivities(activityIDs).then(function(activityCollection) {
       self.tempDOM.find('.project-list').append(
         self.projectListTemplate({activities: activityCollection})
         );

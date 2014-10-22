@@ -1,7 +1,8 @@
 var fs = require('fs');
 var _ = require('underscore');
 
-var FiltersWidget = require('../../../filters/main');
+var FiltersWidget = require('amp-filter');
+
 var BaseControlView = require('../../base-control/base-control-view');
 var Template = fs.readFileSync(__dirname + '/../templates/filters-sidebar-template.html', 'utf8');
 

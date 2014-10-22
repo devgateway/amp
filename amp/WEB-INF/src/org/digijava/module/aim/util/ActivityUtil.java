@@ -3429,6 +3429,8 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 	      	deleteActivityContent(ampAct,session);
 		}
       
+
+    
     ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil.getActivityPhysicalComponentReport(ampActId), session);
   	ActivityUtil.deleteActivityAmpReportCache(DbUtil.getActivityReportCache(ampActId), session);
   	ActivityUtil.deleteActivityReportLocation(DbUtil.getActivityReportLocation(ampActId), session);
@@ -3780,6 +3782,25 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
       return act;
   }
 
+//  DbUtil.getActivityPhysicalComponentReport(ampActId), session
+  
+  public static void deleteActivitySectors(Long ampActId, Session session) {
+		Collection col = null;
+		Query qry = null;
+		String queryString = "select amp_activity_id from "
+				+ AmpActivitySector.class.getName() + " actSector "
+				+ " where (actSector.ampActivityId=:ampActId)";
+		qry = session.createQuery(queryString);
+		qry.setParameter("ampActId", ampActId, Hibernate.LONG);
+		col = qry.list();
+
+		Iterator itr = col.iterator();
+		while (itr.hasNext()) {
+			AmpActivitySector actSector = (AmpActivitySector) itr.next();
+			session.delete(actSector);
+		}	  
+  }
+  
   public static void deleteActivityPhysicalComponentReport(Collection
       phyCompReport, Session session) throws Exception{
       if (phyCompReport != null) {
@@ -4858,6 +4879,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 		      					ampActivityVersion.setAmpActivityGroup(null);
 		      					session.update(ampActivityVersion);
 		      					deleteFullActivityContent(ampActivityVersion,session);
+		      				    
 		      					session.delete(ampActivityVersion);
 							}
 		      			}
@@ -4892,6 +4914,7 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
     public static void  deleteFullActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
     	ActivityUtil.deleteActivityContent(ampAct,session);
     	Long ampActId = ampAct.getAmpActivityId();
+    	ActivityUtil.deleteActivitySectors(ampActId, session);
     	ActivityUtil.deleteActivityPhysicalComponentReport(DbUtil.getActivityPhysicalComponentReport(ampActId), session);
 	  	ActivityUtil.deleteActivityAmpReportCache(DbUtil.getActivityReportCache(ampActId), session);
 	  	ActivityUtil.deleteActivityReportLocation(DbUtil.getActivityReportLocation(ampActId), session);

@@ -27,7 +27,6 @@ import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
-import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
 import org.dgfoundation.amp.reports.ReportPaginationCacher;
@@ -35,9 +34,9 @@ import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
-import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
@@ -137,10 +136,12 @@ public class Reports {
 	@Consumes({ "application/x-www-form-urlencoded,text/plain,text/html"})
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="reportresultgrid")
-	public final JSONReportPage getReportResultByPage( 
+	public final JsonBean getReportResultByPage( 
 			@PathParam("report_id") Long reportId,
 			MultivaluedMap<String, String> formParams
 			) {
+		JsonBean result = new JsonBean();
+		
 		int page = Integer.valueOf(EndpointUtils.getSingleValue(formParams, "page", "0"));
 		boolean regenerate = Boolean.valueOf(EndpointUtils.getSingleValue(formParams, "regenerate", "true"));
 		
@@ -157,12 +158,14 @@ public class Reports {
 			ReportsUtil.update(spec, formParams);
 			GeneratedReport generatedReport = EndpointUtils.runReport(spec);
 			areas = ReportPaginationUtils.cacheReportAreas(reportId, generatedReport);
+			result.set("headers", generatedReport.leafHeaders);
 		} else 
 			areas = ReportPaginationCacher.getReportAreas(reportId);
 		
 		ReportArea pageArea = ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
 		int totalPageCount = ReportPaginationUtils.getPageCount(areas, recordsPerPage);
-		return new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, areas.length);
+		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, areas.length));
+		return result;
 	}
 	
 	@GET

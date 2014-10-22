@@ -1,6 +1,7 @@
 var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
+var topojsonLibrary = require('topojson');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 
 var ADMTemplate = fs.readFileSync(__dirname + '/../templates/map-adm-template.html', 'utf8');
@@ -76,7 +77,16 @@ module.exports = Backbone.View.extend({
   },
 
   getNewBoundary: function(admLayer) {
-    var boundaries = admLayer.get('boundary');
+    /*jshint camelcase: false */
+    /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
+
+    var topoboundaries = admLayer.get('boundary');
+
+    /* retrieve the TopoJSON index key */
+    var topoJsonObjectsIndex = _.keys(topoboundaries.objects)[0];
+
+    var boundaries = topojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
+
     if (boundaries) {
       return new L.geoJson(boundaries, {
         style: {

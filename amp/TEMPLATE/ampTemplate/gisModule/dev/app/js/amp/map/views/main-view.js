@@ -2,6 +2,7 @@ var fs = require('fs');
 var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
+var topojsonLibrary = require('topojson');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 
 var MapHeaderView = require('../views/map-header-view');
@@ -70,19 +71,30 @@ module.exports = Backbone.View.extend({
   },
 
 
+        /*jshint camelcase: false */
+// jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+
   _renderCountryBoundary: function() {
     var self = this;
     this.app.data.boundaries.load().then(function() {
       var boundary0 = self.app.data.boundaries.findWhere({id:'adm-0'});
-      boundary0.fetch().then(function(geoJSON) {
-        self.countryBoundary = L.geoJson(geoJSON,
+
+      boundary0.fetch().then(function(topoJSON) {
+        var topoboundaries = topoJSON;
+
+        //retrieve the TopoJSON index key
+        var topoJsonObjectsIndex = _.keys(topoboundaries.objects)[0];
+
+        var boundary = topojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
+
+        self.countryBoundary = L.geoJson(boundary,
         {
-          simplifyFactor: 0.9,
-          style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '3'}
+          style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '1'}
         }).addTo(self.map);
       });
     });
   },
+  //jscs:enable
 
   _getMapView: function() {
     var center = this.map.getCenter();

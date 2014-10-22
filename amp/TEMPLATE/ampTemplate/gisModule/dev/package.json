@@ -94,5 +94,8 @@
     "vinyl-source-stream": "^0.1.1",
     "watchify": "^0.10.2",
     "zeroclipboard": "^2.1.6"
+  },
+  "dependencies": {
+    "topojson": "^1.6.18"
   }
 }

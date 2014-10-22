@@ -4,6 +4,7 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -74,4 +75,16 @@ public class EndpointUtils {
 		return report;
 	}
 	
+	/**
+	 * Retrieves first
+	 * @param formParams
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	public static String getSingleValue(MultivaluedMap<String, String> formParams, String key, String defaultValue) {
+		if (formParams.containsKey(key))
+			return formParams.getFirst(key);
+		return defaultValue;
+	}
 }

@@ -26,8 +26,8 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
 import org.dgfoundation.amp.reports.ReportPaginationCacher;
@@ -36,6 +36,8 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
@@ -113,24 +115,16 @@ public class Reports {
 	@Path("/report/{report_id}/result")
 	@Produces(MediaType.APPLICATION_JSON)
 	public final GeneratedReport getReportResult(@PathParam("report_id") Long reportId, MondrianReportFilters filters) {
-		AmpReports ampReport = DbUtil.getAmpReport(reportId);
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(httpRequest), false);
-		try{
-			//TODO: for now we do not translate other types of reports than Donor Type reports (hide icons for non-donor-type reports?)
-			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
-			if(filters != null) {
-				spec.setFilters(filters);
-			}
-			GeneratedReport generatedReport = generator.executeReport(spec);
-			return generatedReport;
-		} catch (AMPException e) {
-			logger.error(e);
+		//TODO: for now we do not translate other types of reports than Donor Type reports (hide icons for non-donor-type reports?)
+		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
+		if(filters != null) {
+			spec.setFilters(filters);
 		}
-		return null;
+		return EndpointUtils.runReport(spec);
 	}
 	
 	/**
-	 * Gets the result for the specified reportId and a given page number
+	 * Retrieves the result for the specified reportId and a given page number
 	 * @param reportId - report ID
 	 * @param page - page number, starting from 1. Use 0 to retrieve only 
 	 * pagination information, without any records
@@ -138,38 +132,37 @@ public class Reports {
 	 * and to false for consequent page navigation 
 	 * @return ReportArea result for the requested page
 	 */
-	@GET
-	@Path("/report/{report_id}/result/pages/{page}/{regenerate}")
+	@POST
+	@Path("/report/{report_id}/result/jqGrid")
+	@Consumes({ "application/x-www-form-urlencoded,text/plain,text/html"})
 	@Produces(MediaType.APPLICATION_JSON)
-	public final JSONReportPage getReportResultByPage(@PathParam("report_id") Long reportId,
-			@PathParam("page") Integer page, 
-			@PathParam("regenerate") Boolean regenerate, JsonBean filters) {
-		
-		MondrianReportFilters mondrianReportFilters = FilterUtils.getApiFilter(((LinkedHashMap<String, Object>) filters.any()));
+	@ApiMethod(ui=false,name="reportresultgrid")
+	public final JSONReportPage getReportResultByPage( 
+			@PathParam("report_id") Long reportId,
+			MultivaluedMap<String, String> formParams
+			) {
+		int page = Integer.valueOf(EndpointUtils.getSingleValue(formParams, "page", "0"));
+		boolean regenerate = Boolean.valueOf(EndpointUtils.getSingleValue(formParams, "regenerate", "true"));
 		
 		int recordsPerPage = ReportPaginationUtils.getRecordsNumberPerPage();
 		int start = (page - 1) * recordsPerPage;
 		ReportAreaMultiLinked[] areas = null;
+		//extract report areas for pagination
 		if (regenerate) {
-			GeneratedReport generatedReport = getReportResult(reportId, mondrianReportFilters);
+			ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
+			JsonBean filters = prepareParameters(formParams);
+			MondrianReportFilters mondrianReportFilters = FilterUtils.getApiFilter(((LinkedHashMap<String, Object>) filters.any()));
+			if (mondrianReportFilters != null)
+				spec.setFilters(mondrianReportFilters);
+			ReportsUtil.update(spec, formParams);
+			GeneratedReport generatedReport = EndpointUtils.runReport(spec);
 			areas = ReportPaginationUtils.cacheReportAreas(reportId, generatedReport);
 		} else 
 			areas = ReportPaginationCacher.getReportAreas(reportId);
+		
 		ReportArea pageArea = ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
 		int totalPageCount = ReportPaginationUtils.getPageCount(areas, recordsPerPage);
 		return new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, areas.length);
-	}
-	
-	@POST
-	@Path("/report/{report_id}/result/jqGrid")
-	@Consumes({ "application/x-www-form-urlencoded" })
-	@Produces(MediaType.APPLICATION_JSON)
-	public final JSONReportPage getReportResultWithQueryParams(@PathParam("report_id") Long reportId,
-			MultivaluedMap<String, String> formParams) {
-
-		JsonBean filters = prepareParameters(formParams);		
-		Integer page = new Integer(formParams.get("page").toArray()[0].toString());
-		return getReportResultByPage(reportId, page, true, filters);
 	}
 	
 	@GET
@@ -193,7 +186,7 @@ public class Reports {
 		AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(ampTeamMember.getAmpTeam().getAmpTeamId());
 		AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
 		if (defaultTeamReport != null) {
-			tabs.add(Util.convert(defaultTeamReport, true));
+			tabs.add(ReportsUtil.convert(defaultTeamReport, true));
 		}
 
 		// Get the visible tabs of the currently logged user

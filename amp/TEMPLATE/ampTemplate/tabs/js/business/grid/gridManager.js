@@ -5,6 +5,10 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 	var gridBaseName = 'tab_grid_';
 	var gridPagerBaseName = 'tab_grid_pager_';
 
+	// This variable will contain the mappings between different column names
+	// (tab structure vs report data).
+	var headers = [];
+
 	function GridManager() {
 		if (!(this instanceof GridManager)) {
 			throw new TypeError("GridManager constructor cannot be called as a function.");
@@ -130,8 +134,17 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 	 * transformations and cleanups.
 	 */
 	function transformData(data, grouping, hierarchies) {
+		// Process the headers for later usage.
+		jQuery.each(data.headers, function(i, item) {
+			headers.push({
+				columnName : item["columnName"],
+				originalColumnName : item["originalColumnName"],
+				hierarchicalName : item["hierarchicalName"]
+			});
+		});
+
 		var rows = [];
-		getContentRecursively(/* data.reportContents */data.pageArea, rows, null);
+		getContentRecursively(/* data.reportContents */data.page.pageArea, rows, null);
 		if (grouping) {
 			postProcessHierarchies(rows, hierarchies);
 		}
@@ -156,6 +169,16 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 		});
 	}
 
+	function findInMapByColumnName(name, property) {
+		var ret = undefined;
+		$.each(headers, function(i, item) {
+			if (item[property] == name) {
+				ret = item;
+			}
+		});
+		return ret;
+	}
+
 	function getContentRecursively(obj, rows, parent) {
 		if (obj != undefined && obj != null) {
 			if (obj.children == null || obj.children.length == 0) {
@@ -165,8 +188,8 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 				};
 				jQuery.each(obj.contents, function(key, element) {
 					var colName = null;
-					if (columnsMapping.getMap()[key] != undefined) {
-						colName = columnsMapping.getMap()[key].name;
+					if (findInMapByColumnName(key, 'hierarchicalName') != undefined) {
+						colName = findInMapByColumnName(key, 'hierarchicalName').columnName;
 					}
 					if (colName != undefined && colName != null) {
 						if (element.value != null && element.value.toString().length > 0) {

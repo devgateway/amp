@@ -2,80 +2,14 @@ define(function() {
 
 	"use strict";
 
-	// TODO: We need to receive the same column name from both endpoints!!!
 	// We can define here some properties like min-width, formats, etc.
 	var map = new Object();
-	map['[Project Title]'] = {
-		name : 'Project Title',
+	map['Project Title'] = {
 		width : 550,
 		fixed : false
 	};
-	map['[Region Name]'] = {
-		name : 'Region'
-	};
-	map['[Total Measures][Actual Commitments]'] = {
-		name : 'Actual Commitments'
-	};
-	map['[Actual Commitments]'] = {
-		name : 'Actual Commitments'
-	};
-	map['[Planned Commitments]'] = {
-		name : 'Planned Commitments'
-	};
-	map['[Total Measures][Actual Disbursements]'] = {
-		name : 'Actual Disbursements'
-	};
-	map['[Actual Disbursements]'] = {
-		name : 'Actual Disbursements'
-	};
-	map['[AMP ID]'] = {
-		name : 'AMP ID',
+	map['AMP ID'] = {
 		width : 80
-	};
-	map['[OECD/DAC Sectors]'] = {
-		name : 'Primary Sector'
-	};
-	map['[Primary Sector]'] = {
-		name : 'Primary Sector'
-	};
-	map['[OECD/DAC Sub-Sector]'] = {
-		name : 'Primary Sector Sub-Sector'
-	};
-	/*
-	 * map['[Level 2 Sector]'] = { name : 'Primary Sector Sub-Sub-Sector' };
-	 */
-	map['[Level 2 Sector]'] = {
-		name : 'Secondary Sector'
-	};
-	map['[Government Budget Sectors]'] = {
-		name : 'Secondary Sector'
-	};
-	map['[Donor Agency]'] = {
-		name : 'Donor Agency'
-	};
-	map['[Organization Name]'] = {
-		name : 'Donor Agency'
-	};
-	map['[Category Name]'] = {
-		name : 'Status'
-	};
-	map['[Project Description]'] = {
-		name : 'Project Description'
-	};
-	map['[Activity Created On]'] = {
-		name : 'Activity Created On'
-	};
-	map['[Program Level 1 Name]'] = {
-		name : 'National Planning Objectives Level 1'
-	};
-	map['[Donor Group]'] = {
-		name : 'Donor Group'
-	};
-	/*
-	 * map['[Donor Agency]'] = { name : 'Organizations and Project ID' };
-	 */
-	map['[Financing Instrument]'] = {
-		name : 'Financing Instrument'
 	};
 
 	function findInMapByColumnName(name) {

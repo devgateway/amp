@@ -3,6 +3,8 @@ package org.digijava.kernel.ampapi.endpoints.reports;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -30,9 +32,12 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
 import org.dgfoundation.amp.reports.ReportPaginationCacher;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
@@ -107,12 +112,15 @@ public class Reports {
 	@GET
 	@Path("/report/{report_id}/result")
 	@Produces(MediaType.APPLICATION_JSON)
-	public final GeneratedReport getReportResult(@PathParam("report_id") Long reportId) {
+	public final GeneratedReport getReportResult(@PathParam("report_id") Long reportId, MondrianReportFilters filters) {
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(httpRequest), false);
 		try{
 			//TODO: for now we do not translate other types of reports than Donor Type reports (hide icons for non-donor-type reports?)
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
+			if(filters != null) {
+				spec.setFilters(filters);
+			}
 			GeneratedReport generatedReport = generator.executeReport(spec);
 			return generatedReport;
 		} catch (AMPException e) {
@@ -135,12 +143,15 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON)
 	public final JSONReportPage getReportResultByPage(@PathParam("report_id") Long reportId,
 			@PathParam("page") Integer page, 
-			@PathParam("regenerate") Boolean regenerate) {
+			@PathParam("regenerate") Boolean regenerate, JsonBean filters) {
+		
+		MondrianReportFilters mondrianReportFilters = FilterUtils.getApiFilter(((LinkedHashMap<String, Object>) filters.any()));
+		
 		int recordsPerPage = ReportPaginationUtils.getRecordsNumberPerPage();
 		int start = (page - 1) * recordsPerPage;
 		ReportAreaMultiLinked[] areas = null;
 		if (regenerate) {
-			GeneratedReport generatedReport = getReportResult(reportId);
+			GeneratedReport generatedReport = getReportResult(reportId, mondrianReportFilters);
 			areas = ReportPaginationUtils.cacheReportAreas(reportId, generatedReport);
 		} else 
 			areas = ReportPaginationCacher.getReportAreas(reportId);
@@ -151,14 +162,14 @@ public class Reports {
 	
 	@POST
 	@Path("/report/{report_id}/result/jqGrid")
-	@Consumes({ "application/x-www-form-urlencoded,text/plain,text/html" })
+	@Consumes({ "application/x-www-form-urlencoded" })
 	@Produces(MediaType.APPLICATION_JSON)
 	public final JSONReportPage getReportResultWithQueryParams(@PathParam("report_id") Long reportId,
 			MultivaluedMap<String, String> formParams) {
 
-		//TODO: Parse filters parameter.
+		JsonBean filters = prepareParameters(formParams);		
 		Integer page = new Integer(formParams.get("page").toArray()[0].toString());
-		return getReportResultByPage(reportId, page, true);
+		return getReportResultByPage(reportId, page, true, filters);
 	}
 	
 	@GET
@@ -288,6 +299,31 @@ public class Reports {
 		//settings.put("currencies", oldFilterForm.getCurrencies());
 		return settings;
 	}
-
+	
+	private JsonBean prepareParameters(MultivaluedMap<String, String> queryParameters) {
+		JsonBean jsonBean = new JsonBean();
+		Iterator<String> it = queryParameters.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			//Ignore non filter parameters.
+			if(key.indexOf("filters[") == 0) {
+				String newKey = key.replace("filters[", "");
+				//Find collection for donors, activities, etc (not composed objects).
+				if(newKey.indexOf("[]") >= 0) {
+					newKey = newKey.replace("][]","");
+					List<Integer> values = new LinkedList<Integer>();
+					Iterator<String> iValues = queryParameters.get(key).iterator();
+					while(iValues.hasNext()) {
+						values.add(Integer.valueOf(iValues.next()));
+					}
+					jsonBean.set(newKey, values);
+				} else {
+					//TODO: Implement for filters[Years][endYear]
+				}				
+			}					
+		}				
+		return jsonBean;
+	}
+	
 }
 

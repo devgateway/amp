@@ -41,9 +41,9 @@ define(function() {
 	map['[OECD/DAC Sub-Sector]'] = {
 		name : 'Primary Sector Sub-Sector'
 	};
-	map['[Level 2 Sector]'] = {
-		name : 'Primary Sector Sub-Sub-Sector'
-	};
+	/*
+	 * map['[Level 2 Sector]'] = { name : 'Primary Sector Sub-Sub-Sector' };
+	 */
 	map['[Level 2 Sector]'] = {
 		name : 'Secondary Sector'
 	};
@@ -71,9 +71,9 @@ define(function() {
 	map['[Donor Group]'] = {
 		name : 'Donor Group'
 	};
-	map['[Donor Agency]'] = {
-		name : 'Organizations and Project ID'
-	};
+	/*
+	 * map['[Donor Agency]'] = { name : 'Organizations and Project ID' };
+	 */
 	map['[Financing Instrument]'] = {
 		name : 'Financing Instrument'
 	};
@@ -85,6 +85,11 @@ define(function() {
 				ret = item;
 			}
 		});
+		if (ret != undefined) {
+			console.log('Found column: ' + name);
+		} else {
+			console.warn('Not Found column: ' + name);
+		}
 		return ret;
 	}
 

@@ -96,6 +96,7 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.type.LongType;
+import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.StringType;
 
 public class ActivityUtil {
@@ -932,7 +933,23 @@ public class ActivityUtil {
       String queryString ="select group from "+ AmpActivityGroup.class.getName()+" group where group.ampActivityLastVersion.ampActivityId="+actId;
       return session.createQuery(queryString).list();
   }
-   
+  public static void deleteActivitySectors(Long ampActId, Session session) {
+  		Collection col = null;
+  		Query qry = null;
+  		String queryString = "select amp_activity_id from "
+  				+ AmpActivitySector.class.getName() + " actSector "
+  				+ " where (actSector.ampActivityId=:ampActId)";
+  		qry = session.createQuery(queryString);
+  		qry.setParameter("ampActId", ampActId, StandardBasicTypes.LONG);
+  		col = qry.list();
+  
+  		Iterator itr = col.iterator();
+  		while (itr.hasNext()) {
+  			AmpActivitySector actSector = (AmpActivitySector) itr.next();
+  			session.delete(actSector);
+  		}	  
+    }
+	    
     public static void deleteActivityContent(AmpActivityVersion ampAct, Session session) throws Exception{
 
         /* delete AMP activity Survey */
@@ -1566,6 +1583,7 @@ public class ActivityUtil {
 	    			  ampActivityVersion.setAmpActivityGroup(null);
 	    			  session.update(ampActivityVersion);
 	    			  deleteFullActivityContent(ampActivityVersion, session);
+	    			  
 	    			  session.delete(ampActivityVersion);
 	    		  }
 	    	  }
@@ -1582,6 +1600,7 @@ public class ActivityUtil {
     	ActivityUtil.deleteActivityContent(ampAct,session);
     	Long ampActId = ampAct.getAmpActivityId();
 	  	//This is not deleting AmpMEIndicators, just indicators, ME is deprecated.
+    	ActivityUtil.deleteActivitySectors(ampActId, session);
 	  	ActivityUtil.deleteActivityIndicators(DbUtil.getActivityMEIndValue(ampActId), ampAct, session);
     }
     

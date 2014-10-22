@@ -95,11 +95,12 @@ public class ActivityService {
 //	
 //		}
  		MondrianReportFilters filterRules = null;
-		Object filter=config.get("columnFilters");
-		if(filter!=null){
-			filterRules = FilterUtils.getApiFilter((LinkedHashMap<String, Object>)config.get("columnFilters"));	
-		}
-		
+ 		if(config!=null){
+			Object filter=config.get("columnFilters");
+			if(filter!=null){
+				filterRules = FilterUtils.getApiFilter((LinkedHashMap<String, Object>)config.get("columnFilters"));	
+			}
+ 		}
 		if(activitIds!=null && activitIds.size()>0){
 			//if we have activityIds to add to the filter comming from the search by keyworkd
 			if(filterRules==null){

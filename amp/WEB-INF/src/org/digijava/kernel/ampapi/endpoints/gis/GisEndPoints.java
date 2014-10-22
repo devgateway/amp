@@ -297,9 +297,9 @@ public class GisEndPoints {
 	@Path("/activities/{activityId}") //once its done remove the New
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ActivitiesById")
-	public List<JsonBean> getActivities(JsonBean config, @PathParam("activityId") PathSegment activityIds) {
+	public List<JsonBean> getActivities(@PathParam("activityId") PathSegment activityIds) {
 		try {
-			return ActivityService.getActivitiesMondrian(config,
+			return ActivityService.getActivitiesMondrian(null,
 					Arrays.asList(activityIds.getPath().split("\\s*,\\s*")),
 					null, null);
 		} catch (AmpApiException ex) {

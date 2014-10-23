@@ -304,7 +304,6 @@ body {background:none;}
 	                                        </td>
 										</tr>
 									</module:display>
-									</module:display>
 									<module:display name="/Activity Form/Identification/Conditionalities" parentModule="/Activity Form/Identification">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap" >

@@ -401,10 +401,10 @@ public class ActivityUtil {
         
   }
 
-  public static List<AmpTheme> getActivityPrograms(Long activityId) {
-	  String queryString = "select prog from " +
-	          AmpTheme.class.getName() +
-	          " prog where (prog.activityId=:actId) ";
+  @SuppressWarnings("unchecked")
+public static List<AmpTheme> getActivityPrograms(Long activityId) {
+	  String relName = AmpActivityProgram.class.getName();
+	  String queryString = "SELECT prog FROM " + relName + " prog WHERE prog.activity.ampActivityId=:actId";
 	  return PersistenceManager.getSession().createQuery(queryString).setParameter("actId", activityId, LongType.INSTANCE).list();
   }
 

@@ -189,7 +189,9 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 				jQuery.each(obj.contents, function(key, element) {
 					var colName = null;
 					if (findInMapByColumnName(key, 'hierarchicalName') != undefined) {
-						colName = findInMapByColumnName(key, 'hierarchicalName').columnName;
+						// TODO: compare the 3 options with the values from
+						// hierarchies to see if one matches and use that.
+						colName = findInMapByColumnName(key, 'hierarchicalName').originalColumnName;
 					}
 					if (colName != undefined && colName != null) {
 						if (element.value != null && element.value.toString().length > 0) {

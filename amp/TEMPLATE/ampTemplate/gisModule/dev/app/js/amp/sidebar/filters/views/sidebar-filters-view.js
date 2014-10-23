@@ -1,8 +1,6 @@
 var fs = require('fs');
 var _ = require('underscore');
 
-var FiltersWidget = require('amp-filter');
-
 var BaseControlView = require('../../base-control/base-control-view');
 var Template = fs.readFileSync(__dirname + '/../templates/filters-sidebar-template.html', 'utf8');
 
@@ -23,37 +21,27 @@ module.exports = BaseControlView.extend({
   template: _.template(Template),
 
   initialize:function(options) {
+    var self = this;
     this.app = options.app;
     BaseControlView.prototype.initialize.apply(this, arguments);
+
+    this.app.data.filter.loaded.then(function() {
+      self.app.state.register(self, 'filters', {
+        get: function() { return self.app.data.filter.serialize();},
+        set: function(state) { return self.app.data.filter.deserialize(state);},
+        empty: null
+      });
+    });
 
   },
 
 
   render:function() {
-    var self = this;
     BaseControlView.prototype.render.apply(this);
 
     // add content
     this.$('.content').html(this.template({title: this.title}));
-
-    // Doesn't do anything for now, used to show filter titles / counts in sidebar.
-    // _.each(this.filtersWidget.filtersWidgetsInstances, function(filtersWidget) {
-    //   self.$('.filter-list').append(filtersWidget.renderTitle().titleEl);
-    // });
-
-    this.app.filtersWidget = new FiltersWidget({
-      el:this.$('#filter-popup'),
-      draggable: true,
-      translator: this.app.translator
-    });
-
-    this.app.filtersWidget.loaded.then(function() {
-      self.app.state.register(self, 'filters', {
-        get: function() { return self.app.filtersWidget.serialize();},
-        set: function(state) { return self.app.filtersWidget.deserialize(state);},
-        empty: null
-      });
-    });
+    this.app.data.filter.setElement(this.el.querySelector('#filter-popup')); //self.$('#filter-popup'));
 
     return this;
   },
@@ -61,16 +49,16 @@ module.exports = BaseControlView.extend({
 
   newlaunchFilter:function() {
     var self = this;
-    this.app.filtersWidget.showFilters(); // triggers stash of vars etc...
+    this.app.data.filter.showFilters(); // triggers stash of vars etc...
     this.$('#filter-popup').show();
 
 
     // could do better, but must close accordion or get weird states from bootstrap and manual filter showing....
-    this.app.filtersWidget.on('cancel', function() {
+    this.app.data.filter.on('cancel', function() {
       self.$('.accordion-body').collapse('hide');
     });
 
-    this.app.filtersWidget.on('apply', function() {
+    this.app.data.filter.on('apply', function() {
       //TODO: ...trigger something wider....or atttach fitler widget to app.data....
       self.$('.accordion-body').collapse('hide');
     });

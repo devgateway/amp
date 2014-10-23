@@ -25,9 +25,10 @@ var app = new App({
 
 app.data.load();
 
-
 // attach a ref to services
 app.translator = translator;
+
+
 
 // hook up the title
 var windowTitle = new WindowTitle('AMP GIS Module');

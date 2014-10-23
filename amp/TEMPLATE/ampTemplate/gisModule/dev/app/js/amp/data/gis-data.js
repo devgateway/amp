@@ -6,6 +6,9 @@
 var _ = require('underscore');
 var Backbone = require('backbone');
 
+var Filter = require('amp-filter');
+var translator = require('../services/translator');
+
 var Title = require('./title');
 var SavedMaps = require('./collections/saved-maps-collection');
 var Activities = require('./collections/activity-collection');
@@ -27,6 +30,7 @@ _.extend(GISData.prototype, Backbone.Events, {
   layerEvents: ['show', 'hide', 'loaded', 'processed'],
 
   initialize: function() {
+    this.translator = translator;
     this.savedMaps = new SavedMaps();
 
     this.activities = new Activities();
@@ -39,13 +43,16 @@ _.extend(GISData.prototype, Backbone.Events, {
     this.projectAlt = new ProjectSitesAlt();
 
     /* stub filled in by Filters service */
-    this.filters = null;
+    this.filter = new Filter({
+      draggable: true,
+      translator: this.translator   // TODO: David make sure this is working.
+    });
+
 
     this.indicators = new Indicators([], { boundaries: this.boundaries });
 
-
+    // TODO get these from the api
     this.admClusters = new ADMClusters([
-      // TODO get these from the api
       {
         title: 'Projects Country-wide',
         value: 'adm-0'

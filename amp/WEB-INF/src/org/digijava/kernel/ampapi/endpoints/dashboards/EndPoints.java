@@ -10,9 +10,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import net.sf.json.JSONObject;
+
 import org.digijava.kernel.ampapi.endpoints.gis.services.DashboarsService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.endpoints.util.DashboardFilters;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * 
@@ -51,5 +56,18 @@ public class EndPoints {
 			@DefaultValue("ac") @QueryParam("adjtype") String adjtype,
 			@DefaultValue("5") @QueryParam("limit") Integer limit) {
 		return DashboarsService.getTops(type,adjtype,limit);
+	}
+	
+	@GET
+	@Path("/aidPredictability")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="aidPredictability")
+	/**
+	 * Get aid predictability values for dash boards chart
+	 * @param years (number of years to include)
+	 * @return
+	 */
+	public JSONObject getAidPredictability() {
+		return DashboarsService.getAidPredictability(null);
 	}
 }

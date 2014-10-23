@@ -12,7 +12,7 @@
     <div class="panel-body">
       <div class="chart-container">
         <% if (loading) { %><h3 class="loading text-center">Loading data...</h3><% } %>
-        <svg></svg>
+        <svg class="dash-chart"></svg>
       </div>
       <div class="legend">
         <% _(chart.get('values')).each(function(value, i, all) { %>
@@ -29,13 +29,13 @@
       <div class="pull-right">
 
         <div class="btn-group">
-          <button type="button" class="btn btn-sm btn-primary">
+          <button type="button" class="btn btn-sm btn-<%= chart.get('view') === 'bar' ? 'primary' : 'default' %> chart-view" data-view="bar">
             <span class="glyphicon glyphicon-signal"></span>
           </button>
-          <button type="button" class="btn btn-sm btn-default">
+          <button type="button" class="btn btn-sm btn-<%= chart.get('view') === 'pie' ? 'primary' : 'default' %> chart-view" data-view="pie">
             <span class="glyphicon glyphicon-adjust"></span>
           </button>
-          <button type="button" class="btn btn-sm btn-default">
+          <button type="button" class="btn btn-sm btn-<%= chart.get('view') === 'table' ? 'primary' : 'default' %> chart-view" data-view="table">
             <span class="glyphicon glyphicon-th-list"></span>
           </button>
         </div>
@@ -62,7 +62,7 @@
               name="actual-planned"
               id="ac-<%= chart.cid %>"
               data-acad="ac"
-              <% if (chart.get('adjType') === 'ac') { %>checked="checked"<% } %>>
+              <% if (chart.get('adjtype') === 'ac') { %>checked="checked"<% } %>>
             <span class="radio-ui"></span>
             Commitments
           </label>
@@ -73,7 +73,7 @@
               name="actual-planned"
               id="ad-<%= chart.cid %>"
               data-acad="ad"
-              <% if (chart.get('adjType') === 'ad') { %>checked="checked"<% } %>>
+              <% if (chart.get('adjtype') === 'ad') { %>checked="checked"<% } %>>
             <span class="radio-ui"></span>
             Disbursements
           </label>

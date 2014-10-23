@@ -33,7 +33,7 @@ module.exports = BackboneDash.View.extend({
   },
 
   injectBreaks: function() {
-    this.chartViews.reduce(function(breakAfter, thisView, i) {
+    this.chartViews.reduce(function(breakAfter, thisView) {
       thisView.setClear(breakAfter);
       if (!breakAfter) {
         return thisView.model.get('embiggen') ? false : true;

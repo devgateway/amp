@@ -20,9 +20,6 @@ require.config({
 		bootstrap : 'lib/bootstrap-3.2.0-dist/bootstrap.min'
 	},
 	shim : {
-		jquery : {
-			exports : 'jQuery'
-		},
 		underscore : {
 			exports : '_'
 		},
@@ -35,8 +32,7 @@ require.config({
 			exports : 'Marionette'
 		},
 		jqueryui : {
-			deps : [ 'jquery' ],
-			exports : 'jQueryUI'
+			deps : [ 'jquery' ]
 		},
 		documentModel : {
 			deps : [ 'backbone' ],
@@ -47,8 +43,8 @@ require.config({
 		 * 'jqgrid_lang' },
 		 */
 		jqgrid : {
-			deps : [ 'jquery', 'jqueryui'/* , 'jqgrid_lang' */],
-			exports : 'jqgrid'
+			deps : [ 'jquery', /* 'jqueryui' , 'jqgrid_lang' */],
+			exports: "jQuery.fn.jqGrid"
 		},
 		filtersWidget : {
 			deps : [ 'backbone' ],
@@ -61,4 +57,7 @@ require.config({
 	}
 });
 
-require([ 'app' ]);
+//require([ 'jqgrid' ], function() {
+//	alert("Hey look, I'm using jQuery with Require.js!");
+	require([ 'app' ]);
+//});

@@ -60,56 +60,58 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 		var pager = jQuery("#tab_grid_pager");
 		jQuery(pager).attr("id", gridPagerBaseName + id);
 
-		var rowNum = 0;
-		jQuery(grid).jqGrid({
-			caption : false,
-			/* url : '/rest/data/report/' + id + '/result/', */
-			url : getURL(id),
-			datatype : 'json',
-			mtype : 'POST',
-			postData : {
-				page : 1,
-				filters : null
-			},
-			jsonReader : {
-				repeatitems : false,
-				root : function(obj) {
-					rowNum = obj.recordsPerPage;
-					return transformData(obj, grouping, tableStructure.hierarchies);
+		$.getScript("/TEMPLATE/ampTemplate/tabs/js/lib/one_place/jqgrid-all.js", function(data, textStatus, jqxhr) {
+			var rowNum = 0;
+			jQuery(grid).jqGrid({
+				caption : false,
+				/* url : '/rest/data/report/' + id + '/result/', */
+				url : getURL(id),
+				datatype : 'json',
+				mtype : 'POST',
+				postData : {
+					page : 1,
+					filters : null
 				},
-				page : function(obj) {
-					return obj.currentPageNumber;
+				jsonReader : {
+					repeatitems : false,
+					root : function(obj) {
+						rowNum = obj.recordsPerPage;
+						return transformData(obj, grouping, tableStructure.hierarchies);
+					},
+					page : function(obj) {
+						return obj.currentPageNumber;
+					},
+					total : function(obj) {
+						return obj.totalPageCount;
+					},
+					records : function(obj) {
+						return obj.totalRecords;
+					}
 				},
-				total : function(obj) {
-					return obj.totalPageCount;
-				},
-				records : function(obj) {
-					return obj.totalRecords;
+				colNames : columnsMapping.createJQGridColumnNames(tableStructure, grouping),
+				colModel : columnsMapping.createJQGridColumnModel(tableStructure),
+				height : 200,
+				autowidth : true,
+				shrinkToFit : true,
+				forceFit : false,
+				viewrecords : true,
+				loadtext : 'Loading...',
+				headertitles : true,
+				gridview : true,
+				rownumbers : false,
+				rowNum : rowNum,
+				pager : "#" + gridPagerBaseName + id,
+				emptyrecords : 'No records to view',
+				grouping : grouping,
+				groupingView : columnsMapping.createJQGridGroupingModel(tableStructure, grouping),
+				gridComplete : function() {
+					// console.log(jQuery(grid).css("width"));
+					// columnsMapping.recalculateColumnsWidth(grid,
+					// jQuery(grid).css("width"));
+					jQuery(grid).find(">tbody>tr.jqgrow:odd").addClass("myAltRowClassEven");
+					jQuery(grid).find(">tbody>tr.jqgrow:even").addClass("myAltRowClassOdd");
 				}
-			},
-			colNames : columnsMapping.createJQGridColumnNames(tableStructure, grouping),
-			colModel : columnsMapping.createJQGridColumnModel(tableStructure),
-			height : 200,
-			autowidth : true,
-			shrinkToFit : true,
-			forceFit : false,
-			viewrecords : true,
-			loadtext : 'Loading...',
-			headertitles : true,
-			gridview : true,
-			rownumbers : false,
-			rowNum : rowNum,
-			pager : "#" + gridPagerBaseName + id,
-			emptyrecords : 'No records to view',
-			grouping : grouping,
-			groupingView : columnsMapping.createJQGridGroupingModel(tableStructure, grouping),
-			gridComplete : function() {
-				// console.log(jQuery(grid).css("width"));
-				// columnsMapping.recalculateColumnsWidth(grid,
-				// jQuery(grid).css("width"));
-				jQuery(grid).find(">tbody>tr.jqgrow:odd").addClass("myAltRowClassEven");
-				jQuery(grid).find(">tbody>tr.jqgrow:even").addClass("myAltRowClassOdd");
-			}
+			});
 		});
 	};
 

@@ -45,11 +45,12 @@ public class SaikuUtils {
 	
 	/**
 	 * Saiku mechanism to calculate the totals
-	 * @param spec
 	 * @param cellDataSet
+	 * @param onColumns - true for totals on columns
+	 * @param onRows - true for totals on rows
 	 * @throws Exception 
 	 */
-	public static void doTotals(ReportSpecification spec, CellDataSet result, CellSet cellSet) throws Exception {
+	public static void doTotals(CellDataSet result, CellSet cellSet, boolean onColumns, boolean onRows) throws Exception {
 		/* start of AMP custom part to detect the selectedMeasures list */ 
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 		List<Measure> measures = new ArrayList<Measure>(); 
@@ -78,7 +79,7 @@ public class SaikuUtils {
 			final int second = (index + 1) & 1;
 			TotalAggregator[] aggregators = new TotalAggregator[axisInfos[second].maxDepth + 1];
 			String totalFunctionName = "sum";//AMP change to configure the function to 'sum' manually instead of using query.getTotalFunction(axisInfos[second].uniqueLevelNames.get(i - 1));
- 			if((!spec.isCalculateColumnTotals() && index == 0) || (!spec.isCalculateRowTotals() && index==1)) { // Mimic behavior of totalFunctionName from Saiku 
+ 			if((!onColumns && index == 0) || (!onRows && index==1)) { // Mimic behavior of totalFunctionName from Saiku 
 				totalFunctionName = "not";
 			}
 			for (int i = 1; i < aggregators.length - 1; i++) {

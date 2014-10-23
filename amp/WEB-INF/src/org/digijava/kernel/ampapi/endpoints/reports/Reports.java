@@ -113,12 +113,9 @@ public class Reports {
 	@GET
 	@Path("/report/{report_id}/result")
 	@Produces(MediaType.APPLICATION_JSON)
-	public final GeneratedReport getReportResult(@PathParam("report_id") Long reportId, MondrianReportFilters filters) {
+	public final GeneratedReport getReportResult(@PathParam("report_id") Long reportId) {
 		//TODO: for now we do not translate other types of reports than Donor Type reports (hide icons for non-donor-type reports?)
 		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
-		if(filters != null) {
-			spec.setFilters(filters);
-		}
 		return EndpointUtils.runReport(spec);
 	}
 	

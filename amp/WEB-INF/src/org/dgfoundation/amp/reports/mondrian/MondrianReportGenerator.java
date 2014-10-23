@@ -180,7 +180,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	private CellDataSet generateReportAsSaikuCellDataSet(final ReportSpecification spec) throws AMPException {
 		init(spec);
 		AmpMondrianSchemaProcessor.registerReport(spec, environment);
-		CellDataSet cellDataSet;
+		CellDataSet cellDataSet = null;
 		ValueWrapper<Boolean> forcedOut = new ValueWrapper<Boolean>(false);
 		stats.lock_wait_time = MondrianETL.FULL_ETL_LOCK.readLockWithTimeout(7000, forcedOut);
 
@@ -209,20 +209,26 @@ public class MondrianReportGenerator implements ReportExecutor {
 			else
 				logger.info("[" + spec.getReportName() + "] MDX query run time: " + stats.mdx_time);
 		
-			cellDataSet = postProcess(spec, cellSet);
-			stats.total_time = System.currentTimeMillis() - startTime;
-		
-			cellDataSet.setRuntime((int) stats.total_time);
-			logger.info("CellDataSet for '" + spec.getReportName() + "' report generated within: " + stats.total_time + "ms");
-					
-			stats.width = cellDataSet == null ? 0 : cellDataSet.getWidth();
-			stats.height = cellDataSet == null ? 0 : cellDataSet.getHeight();
-			
-			if (printMode) {
-				if (cellSet != null)
-					MondrianUtils.print(cellSet, spec.getReportName());
-				if (cellDataSet != null)
-					SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST");
+			try {
+				cellDataSet = postProcess(spec, cellSet);
+				stats.total_time = System.currentTimeMillis() - startTime;
+				
+				cellDataSet.setRuntime((int) stats.total_time);
+				logger.info("CellDataSet for '" + spec.getReportName() + "' report generated within: " + stats.total_time + "ms");
+						
+				stats.width = cellDataSet == null ? 0 : cellDataSet.getWidth();
+				stats.height = cellDataSet == null ? 0 : cellDataSet.getHeight();
+			} catch (Exception e) {
+				stats.crashed = true;
+				throw new AMPException("Cannot generate Mondrian Report '" + spec.getReportName() +"' : " 
+						+ e.getMessage() == null ? e.getClass().getName() : e.getMessage());
+			} finally {
+				if (printMode) {
+					if (cellSet != null)
+						MondrianUtils.print(cellSet, spec.getReportName());
+					if (cellDataSet != null)
+						SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST");
+				}
 			}
 		}
 		finally {
@@ -429,12 +435,13 @@ public class MondrianReportGenerator implements ReportExecutor {
 		CellDataSet cellDataSet = OlapResultSetUtil.cellSet2Matrix(cellSet); // we can also pass a formater to cellSet2Matrix(cellSet, formatter)
 		logger.info("[" + spec.getReportName() + "]" +  "Conversion from Olap4J CellSet to Saiku CellDataSet ended.");
 		
-		if (spec.isCalculateColumnTotals() || spec.isCalculateRowTotals()
+		boolean calculateTotalsOnRows = spec.isCalculateRowTotals()
 				//enable totals for non-hierarhical columns
-				|| spec.getHierarchies().size() < spec.getColumns().size()) {
+				|| spec.getHierarchies().size() < spec.getColumns().size();
+		if (spec.isCalculateColumnTotals() || calculateTotalsOnRows) {
 			try {
 				logger.info("[" + spec.getReportName() + "]" +  "Starting totals calculation over the Saiku CellDataSet via Saiku method...");
-				SaikuUtils.doTotals(spec, cellDataSet, cellSet);
+				SaikuUtils.doTotals(cellDataSet, cellSet, spec.isCalculateColumnTotals(), calculateTotalsOnRows);
 				logger.info("[" + spec.getReportName() + "]" +  "Totals over the Saiku CellDataSet ended.");
 			} catch (Exception e) {
 				logger.error(e.getMessage());

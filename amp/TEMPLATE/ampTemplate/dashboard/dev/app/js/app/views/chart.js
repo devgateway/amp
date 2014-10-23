@@ -11,52 +11,69 @@ var tooltip = _.template(fs.readFileSync(
 
 
 var chartCommon = function(chart) {
+  // var el = document.createElement('svg');
+
   chart
     .x(function(d) { return d.name; })    //Specify the data accessors.
     .y(function(d) { return d.amount; })
-    .valueFormat(util.formatKMB(3))
+    .valueFormat(util.formatKMB(3));
+    // .elementClick(function() { console.log('elcl'); });
 
-  return function(el, model) {
-    // things we can only compute after we have data for the charts
-    chart
-      .color(util.categoryColours(model.get('values').length))
-      .tooltipContent(_(function(a, y, b, raw) {
-        return tooltip({
-          y: y,
-          raw: (typeof raw === 'function') ? b : raw,
-          d3: d3,
-          currency: model.get('currency'),
-          total: model.get('total')
-        });
-      }).bind(this))
+  return {
+    draw: function(container, model) {
+      // things we can only compute after we have data for the charts
+      chart
+        .color(util.categoryColours(model.get('values').length))
+        .tooltipContent(_(function(a, y, b, raw) {
+          return tooltip({
+            y: y,
+            raw: (typeof raw === 'function') ? b : raw,
+            d3: d3,
+            currency: model.get('currency'),
+            total: model.get('total')
+          });
+        }).bind(this));
 
-    d3.select(el)
-      .datum(model.get('view') === 'bar' ?
-        [model.get('processed')] :
-        model.get('processed').values)
-      .call(chart);
+      d3.select(container)
+        .datum(model.get('view') === 'bar' ?
+          [model.get('processed')] :
+          model.get('processed').values)
+        .call(chart);
 
-    nv.utils.windowResize(chart.update);
-    nv.addGraph(function() { return chart; });
+      nv.utils.windowResize(chart.update);
+      nv.addGraph(function() { return chart; });
+    }
   };
 };
 
 
 var charts = {
 
-  bar: chartCommon(
+  bar: function() { return chartCommon(
     nv.models.discreteBarChart()
       .showValues(true)
       .showYAxis(false)
       .showXAxis(false)
       .transitionDuration(150)
-      .margin({ top: 5, right: 10, bottom: 10, left: 10 }) ),
+      .margin({ top: 5, right: 10, bottom: 10, left: 10 }));
+  },
 
-  pie: chartCommon(
-    nv.models.pieChart()
+  pie: function() {
+    var chart = nv.models.pieChart()
       .labelType('percent')
       .donut(true)
-      .donutRatio(0.35) )
+      .donutRatio(0.35);
+    return chartCommon(chart);
+  },
+
+  table: function() {
+    return {
+      draw: function(container, model) {
+        // TODO: hide the SVG and throw in a bootstrap table
+      }
+    };
+  }
+
 };
 
 
@@ -77,24 +94,39 @@ module.exports = BackboneDash.View.extend({
     this.app = options.app;
     this.model.set(this.uiDefaults);
     // TODO: load any state we need
-    this.chart = charts.bar;  // bar, etc.
-    this.listenTo(this.model, 'change:adjtype', this.render);
+    this.chart = charts[this.model.get('view')]();  // bar, etc.
+    this.listenTo(this.model, 'change:adjtype', this.updateData);
   },
 
   render: function() {
     var renderOptions = {
-      chart: this.model,
-      util: util,
-      loading: true
+      model: this.model,
+      chart: this.chartEl,
+      util: util
     };
     this.$el.html(template(renderOptions));
-
-    this.app.tryAfter(this.model.fetch(), function() {
-      this.$el.html(template(_(renderOptions).extend({ loading: false })));
-      this.chart(this.el.querySelector('.dash-chart'), this.model);
-    }, this);
+    this.updateData();
 
     return this;
+  },
+
+  updateData: function() {
+    var loading = this.$('.dash-loading');
+    loading.fadeIn(100);
+    this.model.fetch()
+      .always(function() {
+        loading.stop().fadeOut(200);
+      })
+      .done(_(function() {
+        this.chart.draw(this.$('.dash-chart')[0], this.model);
+      }).bind(this))
+      .fail(_(function() {
+        console.error('failed loading chart :(', arguments);
+        this.app.report('Loading chart failed',
+          ['There was an issue with your connection to the database, ' +
+           'or the database may have crashed.']);
+        this.$('svg').hide();
+      }).bind(this));
   },
 
   changeAdjType: function(e) {
@@ -105,7 +137,7 @@ module.exports = BackboneDash.View.extend({
   changeChartView: function(e) {
     var view = e.currentTarget.dataset.view;
     this.model.set('view', view);
-    this.chart = charts[view];
+    this.chart = charts[view]();
     this.render();
   },
 

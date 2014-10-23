@@ -1,21 +1,21 @@
-<div class="col-xs-12 <% if (!chart.get('embiggen')) { %>col-md-6<% } else { %> big-chart<% } %>">
+<div class="col-xs-12 <% if (!model.get('embiggen')) { %>col-md-6<% } else { %> big-chart<% } %>">
 
   <div class="panel panel-chart">
     <div class="panel-heading">
       <span class="pull-right big-number">
-        <b><%= chart.get('total') && util.formatKMB()(chart.get('total')) %></b>
-        <%= chart.get('currency') %>
+        <b><%= model.get('total') && util.formatKMB()(model.get('total')) %></b>
+        <%= model.get('currency') %>
       </span>
-      <h2>Top <%= chart.get('name') %></h2>
+      <h2>Top <%= model.get('name') %></h2>
     </div>
 
     <div class="panel-body">
       <div class="chart-container">
-        <% if (loading) { %><h3 class="loading text-center">Loading data...</h3><% } %>
+        <h3 class="dash-loading text-center">Loading...</h3>
         <svg class="dash-chart"></svg>
       </div>
       <div class="legend">
-        <% _(chart.get('values')).each(function(value, i, all) { %>
+        <% _(model.get('values')).each(function(value, i, all) { %>
           <span class="legend-value">
             <span class="legend-key" style="background: <%= util.categoryColours(all.length)(value, i) %>"></span>
             <%= util.formatShortText(28)(value.name) %>
@@ -29,13 +29,13 @@
       <div class="pull-right">
 
         <div class="btn-group">
-          <button type="button" class="btn btn-sm btn-<%= chart.get('view') === 'bar' ? 'primary' : 'default' %> chart-view" data-view="bar">
+          <button type="button" class="btn btn-sm btn-<%= model.get('view') === 'bar' ? 'primary' : 'default' %> chart-view" data-view="bar">
             <span class="glyphicon glyphicon-signal"></span>
           </button>
-          <button type="button" class="btn btn-sm btn-<%= chart.get('view') === 'pie' ? 'primary' : 'default' %> chart-view" data-view="pie">
+          <button type="button" class="btn btn-sm btn-<%= model.get('view') === 'pie' ? 'primary' : 'default' %> chart-view" data-view="pie">
             <span class="glyphicon glyphicon-adjust"></span>
           </button>
-          <button type="button" class="btn btn-sm btn-<%= chart.get('view') === 'table' ? 'primary' : 'default' %> chart-view" data-view="table">
+          <button type="button" class="btn btn-sm btn-<%= model.get('view') === 'table' ? 'primary' : 'default' %> chart-view" data-view="table">
             <span class="glyphicon glyphicon-th-list"></span>
           </button>
         </div>
@@ -44,7 +44,7 @@
           <button type="button" class="btn btn-sm btn-default">
             <span class="glyphicon glyphicon-cloud-download"></span>
           </button>
-          <button type="button" class="btn btn-sm btn-<%= chart.get('embiggen') ? 'primary' : 'default' %> expand hidden-xs hidden-sm">
+          <button type="button" class="btn btn-sm btn-<%= model.get('embiggen') ? 'primary' : 'default' %> expand hidden-xs hidden-sm">
             <span class="glyphicon glyphicon-fullscreen"></span>
           </button>
           <button type="button" class="btn btn-sm btn-default">
@@ -60,9 +60,9 @@
           <label>
             <input type="radio"
               name="actual-planned"
-              id="ac-<%= chart.cid %>"
+              id="ac-<%= model.cid %>"
               data-acad="ac"
-              <% if (chart.get('adjtype') === 'ac') { %>checked="checked"<% } %>>
+              <% if (model.get('adjtype') === 'ac') { %>checked="checked"<% } %>>
             <span class="radio-ui"></span>
             Commitments
           </label>
@@ -71,9 +71,9 @@
           <label>
             <input type="radio"
               name="actual-planned"
-              id="ad-<%= chart.cid %>"
+              id="ad-<%= model.cid %>"
               data-acad="ad"
-              <% if (chart.get('adjtype') === 'ad') { %>checked="checked"<% } %>>
+              <% if (model.get('adjtype') === 'ad') { %>checked="checked"<% } %>>
             <span class="radio-ui"></span>
             Disbursements
           </label>

@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var Backbone = require('backbone');
 var JoinIndicator = require('../models/indicator-join-model');
-var ArcGISIndicator = require('../models/indicator-arcgis-model');
+var ArcGISDynamicLayerIndicator = require('../models/indicator-arcgis-dynamicLayer-model');
 var WMSIndicator = require('../models/indicator-wms-model');
 
 /* Backbone Collection IndicatorLayers (RENAME FILE) */
@@ -18,7 +18,8 @@ module.exports = Backbone.Collection.extend({
       case 'wms':
         return new WMSIndicator(attrs);
       case 'arcgis':
-        return new ArcGISIndicator(attrs);
+      case 'Indicator Layers':
+        return new ArcGISDynamicLayerIndicator(attrs);
       default:
         console.error('Unrecognized indicator type. Check parse function.: ' + attrs.type);
         return new Backbone.Model();
@@ -36,6 +37,7 @@ module.exports = Backbone.Collection.extend({
         case 'joinBoundaries':
         case 'wms':
         case 'arcgis':
+        case 'Indicator Layers':
           return true;
         default:
           return false;

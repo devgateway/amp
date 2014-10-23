@@ -1,0 +1,15 @@
+<h3><%= title %></h3>
+
+<% if (status === 'loading') { %>
+  <p><em>loading...</em></p>
+<% } else { %>
+  <%  _.each(esriLegend, function(legend) {
+      if (legend.label && legend.imageData) {
+    %>
+    <div>
+       <img src="data:<%=  legend.contentType %>;base64,<%=  legend.imageData %>" class="color-block legend-sample" />
+        <%= legend.label %>
+    </div>
+    <% }
+   }); %>
+<% } %>

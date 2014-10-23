@@ -28,7 +28,7 @@ module.exports = Backbone.View.extend({
         loadedLayer = self.getNewGeoJSONLayer(layer);
       } else if (layerType === 'wms') {
         loadedLayer = self.getNewWMSLayer(layer);
-      } else if (layerType === 'arcgis') {
+      } else if (layerType === 'arcgis' || layerType === 'Indicator Layers') {
         loadedLayer = self.getNewArcGISLayer(layer);
       } else {
         throw new Error('Map view for layer type not implemented. layer:', layer);

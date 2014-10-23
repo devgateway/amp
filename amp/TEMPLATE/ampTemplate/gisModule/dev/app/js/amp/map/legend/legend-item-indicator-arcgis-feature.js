@@ -1,7 +1,7 @@
 var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
-var Template = fs.readFileSync(__dirname + '/legend-item-indicator-arcgis.html', 'utf8');
+var Template = fs.readFileSync(__dirname + '/legend-item-indicator-arcgis-feature.html', 'utf8');
 
 
 module.exports = Backbone.View.extend({

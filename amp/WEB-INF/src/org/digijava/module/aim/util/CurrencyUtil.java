@@ -191,8 +191,8 @@ public class CurrencyUtil {
 	 * @param cRate The AmpCurrencyRate object
 	 */
 	public static void saveCurrencyRate(AmpCurrencyRate cRate, boolean calledFromQuartzJob) {
-		Session session = null;
-		Transaction tx = null;
+		//Session session = null;
+		//Transaction tx = null;
 		Query qry = null;
 		String qryStr = null;
 		if (!calledFromQuartzJob)
@@ -201,51 +201,34 @@ public class CurrencyUtil {
 		}
 
 		try {
-            session = PersistenceManager.getCurrentSession();
-            tx = session.beginTransaction();
+            //session = PersistenceManager.getCurrentSession();
+            //tx = session.beginTransaction();
 
 			qryStr = "select cRate from " + AmpCurrencyRate.class.getName() + " cRate " +
 					"where (cRate.toCurrencyCode=:code) and (cRate.fromCurrencyCode=:fromCode) and" +
 					"(cRate.exchangeRateDate=:date)";
-			qry = session.createQuery(qryStr);
+			qry = PersistenceManager.getSession().createQuery(qryStr);
 			qry.setString("code", cRate.getToCurrencyCode());
 			qry.setString("fromCode",cRate.getFromCurrencyCode());
 			qry.setDate("date",cRate.getExchangeRateDate());
 
-			Iterator itr = qry.list().iterator();
+			Iterator<AmpCurrencyRate> itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				// if the currency rate already exist update the rate
-				AmpCurrencyRate actRate = (AmpCurrencyRate) itr.next();
+				AmpCurrencyRate actRate = itr.next();
 				actRate.setExchangeRate(cRate.getExchangeRate());
-				session.update(actRate);
+				PersistenceManager.getSession().update(actRate);
 			} else {
 				// add the currency rate object if it does not exist
-				session.save(cRate);
+				PersistenceManager.getSession().save(cRate);
 			}
-
-			tx.commit();
-		} catch (Exception e) {
 			
-			if (tx != null) {
-				try {
-					tx.rollback();
-					//we throw a runtime exception when we cannot rolback
-					
-				} catch (Exception rbf) {
-					logger.error("Rollback failed");
-				}
-			}
+			//tx.commit();
+		} catch (Exception e) {
 			logger.error("Couldn't save Exchange Rates ",e);
 			throw new RuntimeException(e);
-		} finally {
-			if (session != null) {
-				try {
-                    if(session.isOpen()) session.close();
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
 		}
+		PersistenceManager.getSession().flush();
 	}
 
     public static Collection<AmpCurrency> getAllCurrencies(int active){

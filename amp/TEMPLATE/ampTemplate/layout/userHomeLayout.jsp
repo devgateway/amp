@@ -137,17 +137,14 @@
 			</div>
 		</div>
 	</div>	
-    <center>
-    
-			
-            </center>
+    <center></center>
 	<!-- BREADCRUMB END -->
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
 		<tbody>
 			<tr>
 				<td width="100%" valign="top" id="maintd">
-					<div id="tabs-container"></div>
-<%-- 					<digi:insert attribute="body"/> --%>
+					<!-- <div id="tabs-container"></div>-->
+ 					<digi:insert attribute="body"/>
 				</td>
 				<td width="20px" align="center" background="img_2/close_panel_bg.gif" valign="top">
 					<a style="cursor: pointer;">

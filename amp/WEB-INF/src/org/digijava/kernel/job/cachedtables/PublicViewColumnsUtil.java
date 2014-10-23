@@ -1,4 +1,4 @@
-package org.digijava.kernel.job.chachedtables;
+package org.digijava.kernel.job.cachedtables;
 
 import java.sql.SQLException;
 import java.util.*;

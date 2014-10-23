@@ -1,11 +1,12 @@
 /**
  * 
  */
-package org.digijava.kernel.job.chachedtables;
+package org.digijava.kernel.job.cachedtables;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -49,19 +50,19 @@ public class RefreshMondrianCacheJob implements StatefulJob {
 			PublicViewColumnsUtil.maintainPublicViewCaches(connection, true); // let Java do all the repetitive work
 			connection.setAutoCommit(false); // this will commit any unfinished transaction started by PublicViewColumnsUtil
 			
-			// handle special stuff in SQL - right now, create cached_v_m_donor_funding
-			ctx = (ServletContext) arg0.getScheduler().getContext().get(Constants.AMP_SERVLET_CONTEXT);
+//			// handle special stuff in SQL - right now, create cached_v_m_donor_funding
+//			ctx = (ServletContext) arg0.getScheduler().getContext().get(Constants.AMP_SERVLET_CONTEXT);
 			
-			String patchFile = ctx.getRealPath("/WEB-INF/src/org/digijava/kernel/job/chachedtables/refresh_mondrian_cache.sql");
-		
-			LineNumberReader bis = new LineNumberReader(new FileReader(patchFile));
-			StringBuffer sb = new StringBuffer();
-			String s = bis.readLine();
-			while (s != null) {
-				sb.append(s);
-				s = bis.readLine();
-			}		
+//			String patchFile = ctx.getRealPath("/WEB-INF/src/org/digijava/kernel/job/chachedtables/refresh_mondrian_cache.sql");
 
+			StringBuffer sb = new StringBuffer();
+			try(LineNumberReader bis = new LineNumberReader(new InputStreamReader(this.getClass().getResourceAsStream("refresh_mondrian_cache.sql")))) {
+				String s = bis.readLine();
+				while (s != null) {
+					sb.append(s);
+					s = bis.readLine();
+				}		
+			}
 			StringTokenizer stok = new StringTokenizer(sb.toString(),";");
 			
 			Statement st = connection.createStatement();
@@ -75,12 +76,7 @@ public class RefreshMondrianCacheJob implements StatefulJob {
 			}
 			st.executeBatch();
 			connection.commit();		
-		}
-		catch (SchedulerException e) {
-			logger.error(e);
-			e.printStackTrace();
-			return;
-		} catch (FileNotFoundException e) {
+		}catch (FileNotFoundException e) {
 			logger.error(e);
 			e.printStackTrace();
 			return;

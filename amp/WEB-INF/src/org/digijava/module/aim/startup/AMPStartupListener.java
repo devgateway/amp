@@ -23,7 +23,7 @@ import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianUtils;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
-import org.digijava.kernel.job.chachedtables.PublicViewColumnsUtil;
+import org.digijava.kernel.job.cachedtables.PublicViewColumnsUtil;
 import org.digijava.kernel.lucene.LuceneModules;
 import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.persistence.PersistenceManager;

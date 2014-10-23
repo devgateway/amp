@@ -659,7 +659,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 
 		//build the list of available columns
 		for (Member textColumn : rowAxis.getPositions().get(0).getMembers()) {
-			ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getCaption(), null, textColumn.getLevel().getName());
+			ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getCaption(), null, 
+					MondrianMapping.fromFullNameToColumnName.get(textColumn.getLevel().getUniqueName()));
 			reportColumns.add(reportColumn);
 		}
 		//int measuresLeafPos = columnAxis.getAxisMetaData().getHierarchies().size();

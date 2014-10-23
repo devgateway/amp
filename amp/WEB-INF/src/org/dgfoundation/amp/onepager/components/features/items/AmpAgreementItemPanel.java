@@ -198,6 +198,8 @@ public class AmpAgreementItemPanel extends AmpFieldPanel<AmpFunding>{
         AmpAjaxLinkField cancel = new AmpAjaxLinkField("cancel", "Cancel", "Cancel") {
             @Override
             protected void onClick(AjaxRequestTarget target) {
+                model.getObject().setAgreement(null);                
+
                 newAgreementForm.setVisibilityAllowed(false);
                 AmpAgreementItemPanel.this.isFormOpen=false;
                 target.add(newAgreementForm.getParent());

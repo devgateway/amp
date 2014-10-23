@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 
+import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.olap4j.Axis;
@@ -54,19 +55,29 @@ public class SaikuUtils {
 		/* start of AMP custom part to detect the selectedMeasures list */ 
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 		List<Measure> measures = new ArrayList<Measure>(); 
+		List<Measure> uniqueMeasures = new ArrayList<Measure>(); 
 		
 		for(Position colPosition : columnAxis.getPositions())
 			for (Member member :  colPosition.getMembers()) {
 				if (Member.Type.MEASURE.equals(member.getMemberType())) {
 					measures.add((Measure) member);
+					
+					if(!alreadyAdded(uniqueMeasures, member.getName())) {
+						uniqueMeasures.add((Measure) member);
+					}
 				} else if (MoConstants.MEASURES.equals(member.getDimension().getName())) {
 					measures.add((Measure) member);
+					if(!alreadyAdded(uniqueMeasures, member.getName())) {
+						uniqueMeasures.add((Measure) member);
+					}
 				}
 			}
 		Measure[] selectedMeasures = measures.toArray(new Measure[0]);
+		Measure[] uniqueSelectedMeasures = uniqueMeasures.toArray(new Measure[0]);
+		
 		/* end of AMP custom part to detect the selectedMeasures list */
 		/* start of Saiku approach to calculate the totals */
-		result.setSelectedMeasures(selectedMeasures);
+		result.setSelectedMeasures(uniqueSelectedMeasures);
 		int rowsIndex = 0;
 		if (!cellSet.getAxes().get(0).getAxisOrdinal().equals(Axis.ROWS)) {
 			rowsIndex = (rowsIndex + 1) & 1;
@@ -82,11 +93,13 @@ public class SaikuUtils {
  			if((!onColumns && index == 0) || (!onRows && index==1)) { // Mimic behavior of totalFunctionName from Saiku 
 				totalFunctionName = "not";
 			}
-			for (int i = 1; i < aggregators.length - 1; i++) {
-				aggregators[i] = TotalAggregator.newInstanceByFunctionName(totalFunctionName);
-			}
+ 			if(index == 1) {
+				for (int i = 1; i < aggregators.length - 1; i++) {
+					aggregators[i] = TotalAggregator.newInstanceByFunctionName(totalFunctionName);
+				}
+ 			}
 			aggregators[0] = totalFunctionName != null ? TotalAggregator.newInstanceByFunctionName(totalFunctionName) : null;
-			builder = new TotalsListsBuilder(selectedMeasures, aggregators, cellSet, axisInfos[index], axisInfos[second]);
+			builder = new TotalsListsBuilder(uniqueSelectedMeasures, aggregators, cellSet, axisInfos[index], axisInfos[second]);
 			totals[index] = builder.buildTotalsLists();
 		}
 		result.setLeftOffset(axisInfos[0].maxDepth);
@@ -95,6 +108,15 @@ public class SaikuUtils {
 		/* end of Saiku approach to calculate the totals */
 	}
 	
+	private static boolean alreadyAdded(List<Measure> measures, String name) {
+		for(Measure measure : measures) {
+			if(name.equals(measure.getName())) { 
+					return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Saiku method to convert totals
 	 * @param totalLists

@@ -291,26 +291,8 @@ function topParentsDiffer(data, row, col) {
 function sanitizeColumns(columnData) {
 	return columnData;
 }
-function sanitizeRows(rowData) {
-	//Grand Totals
-	var dupSize = rowData[0][0].captions.length;
-	var index = dupSize/2;
-	var indexOffset = index;
-	var newCells = [];
-	var newCaptions = [];
-	
-	for(var idx = 0; idx < index;idx++) {
-		newCells.push(rowData[idx][0].cells[idx+indexOffset]);
-		newCaptions.push(rowData[idx][0].captions[idx+indexOffset]);
-	}
-	rowData[0][0].cells = newCells;
-	rowData[0][0].captions = newCaptions;
 
-	for(var idx = 0; idx < rowData[1].length;idx++) {
-		rowData[1][idx].cells = [];
-		rowData[1][idx].captions = null;
-	}
-	
+function sanitizeRows(rowData) {
 	return rowData;
 }
 
@@ -336,6 +318,7 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
     if (options) {
         batchSize = options.hasOwnProperty('batchSize') ? options.batchSize : null;
     }
+
     var totalsLists = {};
     if(Settings.AMP_REPORT_API_BRIDGE) {
         totalsLists[COLUMNS] = sanitizeColumns(allData.rowTotalsLists);

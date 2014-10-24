@@ -25,7 +25,7 @@ module.exports = Backbone.View.extend({
     this.app = options.app;
     this.mapEl = $('<div id="map-canvas">');
     this.map = L.map(this.mapEl[0], {
-      maxZoom: 19
+      maxZoom: 19 /* TODO: greater than 14 mostly only useful for imagery, consider limiting by basemap */
     });
     this.map.attributionControl.setPosition('bottomleft');
     this.map.zoomControl.setPosition('topright');
@@ -33,7 +33,7 @@ module.exports = Backbone.View.extend({
     this.app.state.register(this, 'map', {
       get: this._getMapView,
       set: this._setMapView,
-      empty: { center: [-8.795, 124.735], zoom: 8 }//{ center: [-3, 22], zoom: 6 }
+      empty: { center: [0, 40], zoom: 2 }//{ center: [-3, 22], zoom: 6 }
     });
 
     this.basemaps = new Basemaps(null, { app: this.app });  // pre-loaded with hard-coded basemaps
@@ -87,10 +87,21 @@ module.exports = Backbone.View.extend({
 
         var boundary = topojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
 
-        self.countryBoundary = L.geoJson(boundary,
-        {
+        self.countryBoundary = L.geoJson(boundary, {
+          onEachFeature: function(feature) {
+
+            //For the AMP GIS app, use the sidebar width as padding */
+            var sidebarExpansionWidth = $('#sidebar').width();
+
+            var bounds = L.GeoJSON.geometryToLayer(feature.geometry).getBounds();
+            self.map.fitBounds(bounds, {
+              paddingTopLeft: new L.Point(sidebarExpansionWidth, 0)
+            });
+
+          },
           style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '1'}
         }).addTo(self.map);
+
       });
     });
   },

@@ -77,6 +77,9 @@ public class PublicPortalService {
 		spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false, true));
 		
 		spec.setFilters(getPeriodFilter(months));
+		/*TODO: tbd if we need to filter out null dates from results
+		MondrianReportUtils.filterOutNullDates(spec);
+		*/
 		
 		GeneratedReport report = EndpointUtils.runReport(spec);
 		if (report == null) {

@@ -3,19 +3,25 @@
  */
 package org.dgfoundation.amp.reports.mondrian;
 
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.Mappings;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.reports.DateColumns;
+import org.digijava.kernel.ampapi.exception.AmpApiException;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -27,6 +33,7 @@ import org.digijava.module.aim.util.DbUtil;
  * @author Nadejda Mandrescu
  */
 public class MondrianReportUtils {
+	protected static final Logger logger = Logger.getLogger(MondrianReportUtils.class);
 	
 	public static ReportEntityType getColumnEntityType(String columnName, ReportEntityType currentEntityType) {
 		//if (Mappings.ALL_ENTITIES_COLUMNS.contains(columnName))
@@ -127,5 +134,27 @@ public class MondrianReportUtils {
 			if (iter.next().equals(col))
 				break;
 		return colId == spec.getColumns().size() ? -1 : colId; 
+	}
+	
+	/**
+	 * Filters out null dates. 
+	 * The current solution is add an explicit upper limit to filter by if no filter is already configured for the date. 
+	 * @param spec
+	 */
+	public static void filterOutNullDates(ReportSpecificationImpl spec) {
+		MondrianReportFilters filters = spec.getFilters() == null ? new MondrianReportFilters() : (MondrianReportFilters)spec.getFilters();
+		Set<ReportColumn> existingFilters = new HashSet<ReportColumn>();
+		existingFilters.addAll(filters.getDateFilterRules().keySet());
+		for(ReportColumn column : spec.getColumns()) {
+			if (DateColumns.ACTIVITY_DATES.contains(column.getColumnName()) && !existingFilters.contains(column)) {
+				try {
+					filters.addDateRangeFilterRule(column, null, new Date(MoConstants.UNDEFINED_KEY -1));
+				} catch (AmpApiException e) {
+					logger.error(e);
+				}
+				existingFilters.add(column);
+			}	
+		}
+		spec.setFilters(filters);
 	}
 }

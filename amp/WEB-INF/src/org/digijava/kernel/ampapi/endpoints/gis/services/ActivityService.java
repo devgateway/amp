@@ -45,9 +45,9 @@ public class ActivityService {
 		List<JsonBean> activities=new ArrayList<JsonBean>();
 		
 		//we check if we have filter by keyword
-		
+		Object otherFilter=null;
 		if (config != null) {
-			Object otherFilter=config.get("otherFilters");
+			otherFilter=config.get("otherFilters");
 			if (otherFilter!=null && ((Map<String,Object>)otherFilter).get("keyword") != null) {
 				String keyword = ((Map<String,Object>)otherFilter).get("keyword").toString();
 				Collection<LoggerIdentifiable> activitySearch = SearchUtil
@@ -98,7 +98,10 @@ public class ActivityService {
  		if(config!=null){
 			Object filter=config.get("columnFilters");
 			if(filter!=null){
-				filterRules = FilterUtils.getApiFilter((LinkedHashMap<String, Object>)config.get("columnFilters"));	
+				filterRules = FilterUtils.getApiColumnFilter((LinkedHashMap<String, Object>)config.get("columnFilters"));	
+			}
+			if(otherFilter!=null){
+				filterRules = FilterUtils.getApiOtherFilters((Map<String,Object>)otherFilter, filterRules);
 			}
  		}
 		if(activitIds!=null && activitIds.size()>0){

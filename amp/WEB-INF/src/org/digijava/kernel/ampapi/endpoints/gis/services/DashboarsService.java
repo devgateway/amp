@@ -190,7 +190,7 @@ public class DashboarsService {
  		if(filter!=null){
 			Object columnFilters=filter.get("columnFilters");
 			if(columnFilters!=null){
-				filterRules = FilterUtils.getApiFilter((LinkedHashMap<String, Object>)filter.get("columnFilters"));	
+				filterRules = FilterUtils.getApiColumnFilter((LinkedHashMap<String, Object>)filter.get("columnFilters"));	
 				spec.setFilters (filterRules);
 			}
  		}

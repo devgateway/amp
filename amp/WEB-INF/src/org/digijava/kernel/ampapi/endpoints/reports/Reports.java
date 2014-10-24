@@ -149,7 +149,7 @@ public class Reports {
 		if (regenerate) {
 			ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
 			JsonBean filters = prepareParameters(formParams);
-			MondrianReportFilters mondrianReportFilters = FilterUtils.getApiFilter(((LinkedHashMap<String, Object>) filters.any()));
+			MondrianReportFilters mondrianReportFilters = FilterUtils.getApiColumnFilter(((LinkedHashMap<String, Object>) filters.any()));
 			if (mondrianReportFilters != null)
 				spec.setFilters(mondrianReportFilters);
 			ReportsUtil.update(spec, formParams);

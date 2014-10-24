@@ -57,7 +57,9 @@ require.config({
 	}
 });
 
-//require([ 'jqgrid' ], function() {
-//	alert("Hey look, I'm using jQuery with Require.js!");
+require([ 'jquery' ], function(jQuery) {
+	//Need to do this here because of some crazy FF errors.
+	jQuery('#tabs-container').append("<section id='tabs-section'></section><section id='tabs-body-section'></section><div id='filters-container' class='panel panel-primary' style='display: none;'></div>");
+	
 	require([ 'app' ]);
-//});
+});

@@ -58,7 +58,7 @@
 		</logic:notPresent>
 	</digi:secure>
 	<digi:secure authenticated="true">
-		<jsp:include page="headerTop_2.jsp"/>
+		<jsp:include page="headerForDesktopTabs.jsp"/>
 	</digi:secure><center>
 	<div class="main_menu" id="userHomeMenu" >
     	<table cellpadding="0"cellspacing="0" width="1000">
@@ -143,8 +143,8 @@
 		<tbody>
 			<tr>
 				<td width="100%" valign="top" id="maintd">
-					<!-- <div id="tabs-container"></div>-->
- 					<digi:insert attribute="body"/>
+					<div id="tabs-container"></div>
+ 					<%-- <digi:insert attribute="body"/> --%>
 				</td>
 				<td width="20px" align="center" background="img_2/close_panel_bg.gif" valign="top">
 					<a style="cursor: pointer;">
@@ -162,16 +162,16 @@
 						</feature:display>
 						<logic:present name="currentMember">
 							<digi:insert attribute="myLastVersions"/>
-							<digi:insert attribute="myReports"/>
-							<digi:insert attribute="myLinks" />
-							<digi:insert attribute="myMessages"/>
+							<%-- <digi:insert attribute="myReports"/> --%>
+							<%-- <digi:insert attribute="myLinks" /> --%>
+							<%-- <digi:insert attribute="myMessages"/> --%>
 						</logic:present>
 					</div>
 					</digi:secure>
 				</td>
 			</tr>
 			</tbody>
-		</table>
+		</table>		
 		<digi:insert attribute="footer" />		
 		
 		

@@ -4,13 +4,10 @@
 var app = app || {};
 
 define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'views/tabItemsView', 'views/tabBodyView',
-		'views/tabBodysView', 'text!views/html/regions.html', 'business/tabEvents', 'util/tabUtils', 'business/filter/filterManager',
-		'jquery', 'jqueryui' ], function(Marionette, Tabs, Tab, TabItemView, TabItemsView, TabBodyView, TabBodysView, regionsHtml,
-		TabEvents, TabUtils, FilterManager, jQuery) {
+		'views/tabBodysView', 'business/tabEvents', 'util/tabUtils', 'business/filter/filterManager', 'jquery', 'jqueryui' ], function(
+		Marionette, Tabs, Tab, TabItemView, TabItemsView, TabBodyView, TabBodysView, TabEvents, TabUtils, FilterManager, jQuery) {
 
-	// Load the regions html into the DOM.
 	var tabContainer = jQuery('#tabs-container');
-	tabContainer.append(regionsHtml);
 
 	// Create our Marionette app.
 	app.TabsApp = new Marionette.Application();
@@ -60,7 +57,8 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 		collection : tabsCollection
 	});
 	var tabBodysView = new TabBodysView({
-		// If we iterate tabs object again then TabContentsView will throw
+		// If we iterate tabs object again then TabContentsView will
+		// throw
 		// an error.
 		collection : tabsCollectionCopy
 	});
@@ -69,8 +67,16 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 	// Basically what we do is render each CollectionView using its
 	// template and
 	// into the region it belongs.
-	app.TabsApp.tabsRegion.show(tabItemsView);
-	app.TabsApp.tabsBodyRegion.show(tabBodysView);
+	try {
+		app.TabsApp.tabsRegion.show(tabItemsView, {
+			forceShow : true
+		});
+	} catch (e) {
+		alert(e);
+	}
+	app.TabsApp.tabsBodyRegion.show(tabBodysView, {
+		forceShow : true
+	});
 
 	// Save the tabs collection for later usage.
 	app.TabsApp.tabItemsView = tabItemsView;
@@ -81,7 +87,8 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 	// This class manages how to retrieve content and render each tab.
 	var tabEvents = new TabEvents();
 
-	// JQuery create the tabs and assign some events to our event manager class.
+	// JQuery create the tabs and assign some events to our event
+	// manager class.
 	TabUtils.createTabs(tabContainer, {
 		activate : function(event, ui) {
 			tabEvents.onActivateTab(event, ui);
@@ -91,7 +98,8 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 		}
 	});
 
-	// If we are grouping tabs under the last "more tabs..." tab then we need to
+	// If we are grouping tabs under the last "more tabs..." tab then we
+	// need to
 	// hide the "invisible" tabs.
 	if (hasMoreTabs) {
 		TabUtils.hideInvisibleTabs(tabsCollection.models);

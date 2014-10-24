@@ -11,13 +11,30 @@ module.exports = Backbone.Model
   initialize: function() {
     this.listenTo(this, 'change:selected', function(blah, show) {
       this.trigger(show ? 'show' : 'hide', this);
+
+      // TODO: ideally only fetch if fitlers have changed, but trust cacheing...
+      if (show) {
+        this.fetch();
+      }
     });
     this.listenTo(this, 'sync', this.updatePaletteRange);
+    this.listenTo(this.collection.filter, 'apply', this.applyFilters);
+  },
+
+  // if filters change update it.
+  applyFilters: function() {
+    if (this.get('selected')) {
+      this.fetch();
+    }
   },
 
   fetch: function(options) {
-    // TODO: admin clusters should get url endpoints, not query endpoints.
     var filter = {adminLevel: this._translateADMToMagicWord(this.get('value'))};
+
+    // get filters
+    if (this.collection.filter) {
+      _.extend(filter, this.collection.filter.serialize());
+    }
 
     options = _.defaults((options || {}), {
       type: 'POST',

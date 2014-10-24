@@ -10,6 +10,7 @@ module.exports = Backbone.Collection.extend({
   initialize: function(models, options) {
     // TODO: probably pass app or data here instead?
     this.boundaries = options.boundaries;
+    this.filter = options.filter;
   },
 
   // parse geoJson response to pull out features as a collection.

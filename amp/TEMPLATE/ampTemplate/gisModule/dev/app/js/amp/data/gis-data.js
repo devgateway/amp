@@ -33,6 +33,15 @@ _.extend(GISData.prototype, Backbone.Events, {
     this.translator = translator;
     this.savedMaps = new SavedMaps();
 
+    /* stub filled in by Filters service */
+    this.filter = new Filter({
+      draggable: true,
+      translator: this.translator   // TODO: David make sure this is working.
+    });
+    // forces filter to start loading list immediately. TODO: move to an option for filter init.
+    this.filter.view._getFilterList();
+
+
     this.activities = new Activities();
     this.boundaries = new Boundaries();
     this.settings = new Settings();
@@ -42,11 +51,6 @@ _.extend(GISData.prototype, Backbone.Events, {
 
     this.projectAlt = new ProjectSitesAlt();
 
-    /* stub filled in by Filters service */
-    this.filter = new Filter({
-      draggable: true,
-      translator: this.translator   // TODO: David make sure this is working.
-    });
 
 
     this.indicators = new Indicators([], { boundaries: this.boundaries });
@@ -65,7 +69,7 @@ _.extend(GISData.prototype, Backbone.Events, {
         title: 'Projects by District',
         value: 'adm-2'
       }
-    ], { boundaries: this.boundaries });
+    ], { boundaries: this.boundaries, filter: this.filter });
 
     this.title = new Title({ data: this });
 

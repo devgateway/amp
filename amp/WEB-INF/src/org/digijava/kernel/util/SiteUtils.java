@@ -24,6 +24,7 @@ package org.digijava.kernel.util;
 
 import java.security.Permission;
 import java.security.PermissionCollection;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -37,7 +38,6 @@ import java.util.TreeSet;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
@@ -232,6 +232,16 @@ public class SiteUtils {
         Collection<Locale> langs = SiteCache.getInstance().getUserLanguages(site);
         return langs == null ? null : new HashSet<Locale>(langs);
     }
+    
+    public static Collection<String> getUserLanguagesCodes(Site site) {
+    	Collection<String> codes = null;
+    	if (site != null) 
+    		codes = SiteCache.getInstance().getUserLanguagesCodes(site);
+    	if (codes == null)
+    		codes = new ArrayList<String>();
+    	return codes;
+    }
+        
 
     /**
      * Returns default language for specified site

@@ -61,15 +61,24 @@ public class SiteCache implements Runnable {
             this.translationLanguages = new ArrayList(site.getTranslationLanguages());
             this.setDefaultLanguage(site.getDefaultLanguage());
             this.sendAlertsToAdmin = site.getSendAlertsToAdmin();
+            initLanguageCodes();
 
             instances.addAll(site.getModuleInstances());
             Collections.sort(instances, moduleInstanceComparator);
+        }
+        
+        private void initLanguageCodes() {
+        	this.userLanguagesCodes = new ArrayList<String>(this.userLanguages.size());
+        	for (Locale locale : userLanguages) {
+        		userLanguagesCodes.add(locale.getCode());
+        	}
         }
 
         private Site site;
         private Site rootSite;
         private List instances;
         private Collection<Locale> userLanguages;
+        private Collection<String> userLanguagesCodes;
         private Collection translationLanguages;
         private Locale defaultLanguage;
         private Boolean sendAlertsToAdmin;
@@ -96,6 +105,14 @@ public class SiteCache implements Runnable {
 
         public void setUserLanguages(Collection<Locale> userLanguages) {
             this.userLanguages = new ArrayList<Locale>(userLanguages);
+        }
+        
+        public Collection<String> getUserLanguagesCodes() {
+            return userLanguagesCodes;
+        }
+
+        public void setUserLanguagesCodes(Collection<String> userLanguagesCodes) {
+            this.userLanguagesCodes = new ArrayList<String>(userLanguagesCodes);
         }
 
         public Collection getTranslationLanguages() {
@@ -397,6 +414,16 @@ public class SiteCache implements Runnable {
         CachedSite cachedSite = (CachedSite) getSites().get(site.getId());
         if (cachedSite != null) {
             return cachedSite.getUserLanguages();
+        } else {
+            logger.warn("Site #" + site.getId() + " was not found");
+            return null;
+        }
+    }
+    
+    public Collection<String> getUserLanguagesCodes(Site site) {
+        CachedSite cachedSite = (CachedSite) getSites().get(site.getId());
+        if (cachedSite != null) {
+            return cachedSite.getUserLanguagesCodes();
         } else {
             logger.warn("Site #" + site.getId() + " was not found");
             return null;

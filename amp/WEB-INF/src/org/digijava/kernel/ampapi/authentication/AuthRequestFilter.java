@@ -8,6 +8,7 @@ import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteCache;
+import org.digijava.kernel.util.SiteUtils;
 
 import com.sun.jersey.spi.container.ContainerRequest;
 import com.sun.jersey.spi.container.ContainerRequestFilter;
@@ -30,9 +31,12 @@ public class AuthRequestFilter implements ContainerRequestFilter {
         siteDomain = SiteCache.getInstance().getSiteDomain(httpRequest.getServerName(),mainPath);
         httpRequest.setAttribute(org.digijava.kernel.Constants.CURRENT_SITE,siteDomain);
         if (httpRequest.getParameter(EPConstants.LANGUAGE) != null) {
-        	Locale locale = new Locale();
-        	locale.setCode(httpRequest.getParameter(EPConstants.LANGUAGE));
-        	httpRequest.setAttribute(org.digijava.kernel.Constants.NAVIGATION_LANGUAGE, locale);
+        	String lang = httpRequest.getParameter(EPConstants.LANGUAGE).toLowerCase();
+        	if (SiteUtils.getUserLanguagesCodes(siteDomain.getSite()).contains(lang)) {
+	        	Locale locale = new Locale();
+	        	locale.setCode(lang);
+	        	httpRequest.setAttribute(org.digijava.kernel.Constants.NAVIGATION_LANGUAGE, locale);
+        	}
         }
 		TLSUtils.populate(httpRequest);
 		return arg0;

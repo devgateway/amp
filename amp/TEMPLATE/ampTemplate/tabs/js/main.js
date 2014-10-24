@@ -57,9 +57,9 @@ require.config({
 	}
 });
 
-require([ 'jquery' ], function(jQuery) {
+require([ 'jquery','text!views/html/regions.html' ], function(jQuery, regionsTemplate) {
 	//Need to do this here because of some crazy FF errors.
-	jQuery('#tabs-container').append("<section id='tabs-section'></section><section id='tabs-body-section'></section><div id='filters-container' class='panel panel-primary' style='display: none;'></div>");
+	jQuery('#tabs-container').append(regionsTemplate);
 	
 	require([ 'app' ]);
 });

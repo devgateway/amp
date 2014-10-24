@@ -151,7 +151,7 @@ public class DashboarsService {
 		String currcode = EndpointUtils.getDefaultCurrencyCode();
 		retlist.set("currency", currcode);
 
-		retlist.set("Numberformat", numberformat);
+		retlist.set("numberformat", numberformat);
 
 		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
 			JsonBean amountObj = new JsonBean();
@@ -168,8 +168,11 @@ public class DashboarsService {
 				break;
 			}
 		}
-
 		retlist.set("values", values);
+
+		// report the total number of tops available
+		retlist.set("maxLimit", report.reportContents.getChildren().size());
+
 		return retlist;
 	}
 
@@ -219,17 +222,17 @@ public class DashboarsService {
 					continue;
 				}
 				ReportOutputColumn outputColumnActual = iterator.next();
-				if (outputColumnPlanned.parentColumn.columnName.equals("Total Measures")) {
-					amountObj.put(outputColumnPlanned.columnName,
-							report.reportContents.getContents().get(outputColumnPlanned).displayedValue);
-					amountObj.put(outputColumnActual.columnName,
-							report.reportContents.getContents().get(outputColumnActual).displayedValue);
+				if (outputColumnPlanned.parentColumn.columnName.equals("totals")) {
+					amountObj.put("planned", //outputColumnPlanned.columnName,
+							report.reportContents.getContents().get(outputColumnPlanned).value);
+					amountObj.put("actual", //outputColumnActual.columnName,
+							report.reportContents.getContents().get(outputColumnActual).value);
 					retlist.put(outputColumnPlanned.parentColumn.columnName, amountObj);
 				} else {
-					amountObj.put(outputColumnPlanned.columnName,
-							report.reportContents.getContents().get(outputColumnPlanned).displayedValue);
-					amountObj.put(outputColumnActual.columnName,
-							report.reportContents.getContents().get(outputColumnActual).displayedValue);
+					amountObj.put("planned", //outputColumnPlanned.columnName,
+							report.reportContents.getContents().get(outputColumnPlanned).value);
+					amountObj.put("actual", //outputColumnActual.columnName,
+							report.reportContents.getContents().get(outputColumnActual).value);
 					amountObj.put("year", outputColumnPlanned.parentColumn.columnName);
 					array.add(amountObj);
 				}
@@ -237,13 +240,13 @@ public class DashboarsService {
 			retlist.put("years", array);
 
 		} else {
-			retlist.put("total", 0);
+			retlist.put("total", 0);  // Is this behaviour specified anywhere? When could this happen? --phil
 		}
 	
 		String currcode = EndpointUtils.getDefaultCurrencyCode();
 		retlist.put("currency", currcode);
 
-		retlist.put("Numberformat", numberformat);
+		retlist.put("numberformat", numberformat);
 		return retlist;
 	}
 

@@ -2,7 +2,7 @@ var fs = require('fs');
 var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
-var topojsonLibrary = require('topojson');
+var topojsonLibrary = require('../../../libs/local/topojson.js');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 
 var MapHeaderView = require('../views/map-header-view');
@@ -92,6 +92,8 @@ module.exports = Backbone.View.extend({
 
             //For the AMP GIS app, use the sidebar width as padding */
             var sidebarExpansionWidth = $('#sidebar').width();
+            /*TODO(thadk): consider using mapHeader height as well, shrinks DRC for me: */
+            /*var mapHeaderHeight = $('#map-header').height();*/
 
             var bounds = L.GeoJSON.geometryToLayer(feature.geometry).getBounds();
             self.map.fitBounds(bounds, {

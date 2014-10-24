@@ -95,7 +95,5 @@
     "watchify": "^0.10.2",
     "zeroclipboard": "^2.1.6"
   },
-  "dependencies": {
-    "topojson": "^1.6.18"
-  }
+  "dependencies": {}
 }

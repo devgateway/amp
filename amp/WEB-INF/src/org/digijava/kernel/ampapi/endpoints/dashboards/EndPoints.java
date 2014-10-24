@@ -14,10 +14,7 @@ import net.sf.json.JSONObject;
 
 import org.digijava.kernel.ampapi.endpoints.gis.services.DashboarsService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.DashboardFilters;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * 

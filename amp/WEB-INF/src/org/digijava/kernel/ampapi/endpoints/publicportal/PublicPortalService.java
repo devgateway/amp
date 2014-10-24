@@ -63,6 +63,7 @@ public class PublicPortalService {
 	public static JsonBean getTopProjects(JsonBean config, Integer count, Integer months) {
 		JsonBean result = new JsonBean();
 		List<JsonBean> content = new ArrayList<JsonBean>();
+		result.set("numberformat", FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT));
 		result.set("topprojects", content);
 		
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_GetTopProjects");
@@ -107,7 +108,7 @@ public class PublicPortalService {
 					ReportArea data = iter.next();
 					JsonBean jsonData = new JsonBean();
 					for (Entry<ReportOutputColumn, ReportCell> cell : data.getContents().entrySet()) {
-						jsonData.set(headersToId.get(cell.getKey().columnName), cell.getValue().displayedValue);
+						jsonData.set(headersToId.get(cell.getKey().columnName), cell.getValue().value);
 					}
 					content.add(jsonData);
 					count --;

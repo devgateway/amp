@@ -4,7 +4,7 @@ var Backbone = require('backbone');
 var ProjectsView = require('./layers/views/projects-view');
 var IndicatorLayersView = require('./layers/views/indicator-layers-view');
 var FiltersView = require('./filters/views/sidebar-filters-view');
-var SearchView = require('./search/views/search-view');
+//var SearchView = require('./search/views/search-view');
 var ToolsView = require('./tools/views/tools-view');
 var SettingsView = require('./settings/views/settings-view');
 
@@ -13,7 +13,7 @@ var controlViews = [
   ProjectsView,
   IndicatorLayersView,
   FiltersView,
-  SearchView,
+//  SearchView, //disabled for 2.10
   ToolsView,
   SettingsView
 ];

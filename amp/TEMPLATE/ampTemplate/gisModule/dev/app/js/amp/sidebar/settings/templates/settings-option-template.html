@@ -2,7 +2,9 @@
   <label class="control-label"><%= obj.name %></label>
   <select class="form-control" id="<%= obj.id %>">
   <% _.each(obj.options, function(option){ %>
-    <option value="<%= option.id %>"><%= option.name %></option>
+    <option value="<%= option.id %>"  <% if(obj.selected == option.id){ %> selected <% } %> >
+      <%= option.name %>
+    </option>
   <%}); %>
   </select>
 </div>

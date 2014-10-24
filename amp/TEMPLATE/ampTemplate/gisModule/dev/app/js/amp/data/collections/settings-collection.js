@@ -2,10 +2,11 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 
-
+// Note: doesn't have an explicit model.
+// We can add one for clarity, but not needed.
 module.exports = Backbone.Collection
 .extend(LoadOnceMixin).extend({
-  url: '/TEMPLATE/ampTemplate/gisModule/dev/app/mock-api/data/settings.json',
+  url: '/rest/gis/settings',
 
   serialize: function() {
     var tmpJSON = {};
@@ -16,8 +17,16 @@ module.exports = Backbone.Collection
   },
 
   deserialize: function(jsonBlob) {
-    // TODO
-    console.log('jsonBlob', jsonBlob);
+    var self = this;
+    if (jsonBlob) {
+      _.each(jsonBlob, function(v, k) {
+        self.get(k).set('selected', v.id);
+      });
+    } else {
+      this.each(function(setting) {
+        setting.set('selected', setting.get('defaultId'));
+      });
+    }
   }
 
 });

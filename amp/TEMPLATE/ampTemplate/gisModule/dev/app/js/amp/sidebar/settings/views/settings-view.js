@@ -19,8 +19,19 @@ module.exports = BaseControlView.extend({
     'change select': 'optionChanged'
   },
 
-  initialize: function() {
+  initialize: function(options) {
+    var self = this;
     BaseControlView.prototype.initialize.apply(this, arguments);
+    this.app = options.app;
+
+    this.app.data.settings.load().then(function() {
+      // register for state serialization
+      self.app.state.register(self, 'settings', {
+        get: function() { return self.app.data.settings.serialize();},
+        set: function(state) { return self.app.data.settings.deserialize(state);},
+        empty: null //todo use defaultId
+      });
+    });
   },
 
   render: function() {
@@ -28,7 +39,6 @@ module.exports = BaseControlView.extend({
     BaseControlView.prototype.render.apply(this);
 
     // TODO: make all/most api requests send the serialized settings...
-    // TODO: register for state serialization
 
     self.$('.content').html(this.template({title: this.title}));
 

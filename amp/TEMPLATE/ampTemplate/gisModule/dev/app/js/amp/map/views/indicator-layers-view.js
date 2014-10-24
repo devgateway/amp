@@ -47,6 +47,7 @@ module.exports = Backbone.View.extend({
     if (!leafletLayer) {
       throw new Error('cannot remove a layer that is not loaded????', layer);
     }
+
     this.map.removeLayer(leafletLayer);
   },
 

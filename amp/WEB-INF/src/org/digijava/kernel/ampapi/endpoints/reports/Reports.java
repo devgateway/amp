@@ -34,6 +34,7 @@ import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
@@ -74,8 +75,8 @@ public class Reports {
 	private static final String DEFAULT_CONNECTION_NAME = "amp";
 	private static final String DEFAULT_SCHEMA_NAME = "AMP";
 
-	protected static final Logger logger = Logger.getLogger(Reports.class); 
-	
+	protected static final Logger logger = Logger.getLogger(Reports.class);
+
 	@Context
 	private HttpServletRequest httpRequest;
 
@@ -85,7 +86,8 @@ public class Reports {
 	public final JSONResult getReport(@PathParam("report_id") Long reportId) {
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
 
-		//TODO: for now we do not translate other types of reports than Donor Type reports (hide icons for non-donor-type reports?)
+		// TODO: for now we do not translate other types of reports than Donor
+		// Type reports (hide icons for non-donor-type reports?)
 		ReportSpecificationImpl spec = null;
 		try {
 			spec = AmpReportsToReportSpecification.convert(ampReport);
@@ -109,62 +111,70 @@ public class Reports {
 		result.setReportMetadata(metadata);
 		return result;
 	}
-	
+
 	@GET
 	@Path("/report/{report_id}/result")
 	@Produces(MediaType.APPLICATION_JSON)
 	public final GeneratedReport getReportResult(@PathParam("report_id") Long reportId) {
-		//TODO: for now we do not translate other types of reports than Donor Type reports (hide icons for non-donor-type reports?)
+		// TODO: for now we do not translate other types of reports than Donor
+		// Type reports (hide icons for non-donor-type reports?)
 		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
 		return EndpointUtils.runReport(spec);
 	}
-	
+
 	/**
 	 * Retrieves the result for the specified reportId and a given page number
-	 * @param reportId - report ID
-	 * @param page - page number, starting from 1. Use 0 to retrieve only 
-	 * pagination information, without any records
-	 * @param regenerate - set to true for all first access and any changes 
-	 * and to false for consequent page navigation 
+	 * 
+	 * @param reportId
+	 *            - report ID
+	 * @param page
+	 *            - page number, starting from 1. Use 0 to retrieve only
+	 *            pagination information, without any records
+	 * @param regenerate
+	 *            - set to true for all first access and any changes and to
+	 *            false for consequent page navigation
 	 * @return ReportArea result for the requested page
 	 */
 	@POST
 	@Path("/report/{report_id}/result/jqGrid")
-	@Consumes({ "application/x-www-form-urlencoded,text/plain,text/html"})
+	@Consumes({ "application/x-www-form-urlencoded,text/plain,text/html" })
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="reportresultgrid")
-	public final JsonBean getReportResultByPage( 
-			@PathParam("report_id") Long reportId,
-			MultivaluedMap<String, String> formParams
-			) {
+	@ApiMethod(ui = false, name = "reportresultgrid")
+	public final JsonBean getReportResultByPage(@PathParam("report_id") Long reportId, MultivaluedMap<String, String> formParams) {
 		JsonBean result = new JsonBean();
-		
+
 		int page = Integer.valueOf(EndpointUtils.getSingleValue(formParams, "page", "0"));
 		boolean regenerate = Boolean.valueOf(EndpointUtils.getSingleValue(formParams, "regenerate", "true"));
-		
+
+		List extraColumns = new ArrayList<String>();
+		extraColumns.add("Activity Id");
+		extraColumns.add("Approval Status");
+		formParams.put("add_columns", extraColumns);
+
 		int recordsPerPage = ReportPaginationUtils.getRecordsNumberPerPage();
 		int start = (page - 1) * recordsPerPage;
 		ReportAreaMultiLinked[] areas = null;
-		//extract report areas for pagination
+		// extract report areas for pagination
 		if (regenerate) {
 			ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
 			JsonBean filters = prepareParameters(formParams);
 			MondrianReportFilters mondrianReportFilters = FilterUtils.getApiColumnFilter(((LinkedHashMap<String, Object>) filters.any()));
-			if (mondrianReportFilters != null)
+			if (mondrianReportFilters != null) {
 				spec.setFilters(mondrianReportFilters);
+			}
 			ReportsUtil.update(spec, formParams);
 			GeneratedReport generatedReport = EndpointUtils.runReport(spec);
 			areas = ReportPaginationUtils.cacheReportAreas(reportId, generatedReport);
 			result.set("headers", generatedReport.leafHeaders);
-		} else 
+		} else
 			areas = ReportPaginationCacher.getReportAreas(reportId);
-		
+
 		ReportArea pageArea = ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
 		int totalPageCount = ReportPaginationUtils.getPageCount(areas, recordsPerPage);
 		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, areas.length));
 		return result;
 	}
-	
+
 	@GET
 	@Path("/tabs")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -231,37 +241,40 @@ public class Reports {
 		return tabs;
 	}
 
-	
 	/**
 	 * Gets the result for the specified reportId for Saiku UI
-	 * @param reportId - AMP report id
+	 * 
+	 * @param reportId
+	 *            - AMP report id
 	 * @return QueryResult result converted for Saiku for the requested page
 	 */
-	
+
 	@GET
 	@Path("/saikureport/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public final QueryResult getSaikuReportResult(@PathParam("report_id") Long reportId) {
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
-		//MondrianUtils.PRINT_PATH = "/home/simple";
-		MondrianReportGenerator generator = new MondrianReportGenerator(SaikuReportArea.class, ReportEnvironment.buildFor(httpRequest), MondrianUtils.PRINT_PATH != null);
+		// MondrianUtils.PRINT_PATH = "/home/simple";
+		MondrianReportGenerator generator = new MondrianReportGenerator(SaikuReportArea.class, ReportEnvironment.buildFor(httpRequest),
+				MondrianUtils.PRINT_PATH != null);
 		SaikuGeneratedReport report = null;
 		try {
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
-			report = (SaikuGeneratedReport)generator.executeReport(spec);
+			report = (SaikuGeneratedReport) generator.executeReport(spec);
 			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + report.generationTime + "(ms)");
 		} catch (Exception e) {
-			logger.error("Cannot execute report (" + ampReport + ")",e);
+			logger.error("Cannot execute report (" + ampReport + ")", e);
 			String error = ExceptionUtils.getRootCauseMessage(e);
 			return new QueryResult(error);
 		}
-		
-		//Adjust width for temporary column
-		report.cellDataSet.setWidth(report.cellDataSet.getWidth()-1);
-		//report.cellDataSet.setLeftOffset(report.cellDataSet.getLeftOffset()-1);
+
+		// Adjust width for temporary column
+		report.cellDataSet.setWidth(report.cellDataSet.getWidth() - 1);
+		// report.cellDataSet.setLeftOffset(report.cellDataSet.getLeftOffset()-1);
 
 		return RestUtil.convert(report.cellDataSet);
 	}
+
 	@POST
 	@Path("/saikureport/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -270,7 +283,7 @@ public class Reports {
 		result.setQuery(new ThinQuery());
 		return result;
 	}
-	
+
 	@GET
 	@Path("/report/{report_id}/settings/")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -288,35 +301,35 @@ public class Reports {
 		settings.put("selectedDecimalSeparator", oldFilterForm.getCustomDecimalSymbol());
 		settings.put("selectedGroupSeparator", oldFilterForm.getCustomGroupCharacter());
 		settings.put("selectedUseGroupingSeparator", oldFilterForm.getCustomUseGrouping());
-		//settings.put("calendars", oldFilterForm.getCalendars());
-		//settings.put("currencies", oldFilterForm.getCurrencies());
+		// settings.put("calendars", oldFilterForm.getCalendars());
+		// settings.put("currencies", oldFilterForm.getCurrencies());
 		return settings;
 	}
-	
+
 	private JsonBean prepareParameters(MultivaluedMap<String, String> queryParameters) {
 		JsonBean jsonBean = new JsonBean();
 		Iterator<String> it = queryParameters.keySet().iterator();
 		while (it.hasNext()) {
 			String key = (String) it.next();
-			//Ignore non filter parameters.
-			if(key.indexOf("filters[") == 0) {
+			// Ignore non filter parameters.
+			if (key.indexOf("filters[") == 0) {
 				String newKey = key.replace("filters[", "");
-				//Find collection for donors, activities, etc (not composed objects).
-				if(newKey.indexOf("[]") >= 0) {
-					newKey = newKey.replace("][]","");
+				// Find collection for donors, activities, etc (not composed
+				// objects).
+				if (newKey.indexOf("[]") >= 0) {
+					newKey = newKey.replace("][]", "");
 					List<Integer> values = new LinkedList<Integer>();
 					Iterator<String> iValues = queryParameters.get(key).iterator();
-					while(iValues.hasNext()) {
+					while (iValues.hasNext()) {
 						values.add(Integer.valueOf(iValues.next()));
 					}
 					jsonBean.set(newKey, values);
 				} else {
-					//TODO: Implement for filters[Years][endYear]
-				}				
-			}					
-		}				
+					// TODO: Implement for filters[Years][endYear]
+				}
+			}
+		}
 		return jsonBean;
 	}
-	
-}
 
+}

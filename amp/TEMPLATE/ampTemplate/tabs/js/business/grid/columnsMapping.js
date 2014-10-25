@@ -40,6 +40,8 @@ define(function() {
 	ColumnsMapping.createJQGridColumnNames = function(metadata, isGrouped) {
 		var ret = [];
 		ret.push(''); // edit icon column.
+		ret.push(''); // activity id.
+		ret.push(''); // approval status.
 		$(metadata.columns.models).each(function(i, item) {
 			var colName = item.get('columnName');
 			var auxColName = "";
@@ -72,12 +74,23 @@ define(function() {
 				return "<img src='/TEMPLATE/ampTemplate/img_2/ico_edit.gif'/>";
 			}
 		});
+
+		ret.push({
+			name : 'Activity Id',
+			width : 0,
+			hidden : true
+		});
+		ret.push({
+			name : 'Approval Status',
+			hidden : true
+		});
+
 		$(metadata.columns.models).each(function(i, item) {
 			var column = {
 				name : item.get('columnName'),
 				classes : 'wrap-cell'
 			};
-			// TODO: show current group name (not natively supported by jqGrid).
+			// Show current group name (not natively supported by jqGrid).
 			if (i == (metadata.hierarchies.models.length)) {
 				column.summaryType = 'groupName';
 				column.summaryTpl = 'TOTAL [{0}]';

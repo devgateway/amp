@@ -105,11 +105,26 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 				grouping : grouping,
 				groupingView : columnsMapping.createJQGridGroupingModel(tableStructure, grouping),
 				gridComplete : function() {
-					// console.log(jQuery(grid).css("width"));
-					// columnsMapping.recalculateColumnsWidth(grid,
-					// jQuery(grid).css("width"));
 					jQuery(grid).find(">tbody>tr.jqgrow:odd").addClass("myAltRowClassEven");
 					jQuery(grid).find(">tbody>tr.jqgrow:even").addClass("myAltRowClassOdd");
+
+					// Change row color depending the status.
+					var iCol = 2;
+					var cRows = this.rows.length, iRow, row, className;
+					for (iRow = 0; iRow < cRows; iRow++) {
+						row = this.rows[iRow];
+						className = row.className;
+						if ($.inArray('jqgrow', className.split(' ')) > 0) {
+							var x = row.cells[iCol].textContent;
+							if (x == '1') {
+								row.className = className + ' status_1';
+							} else if (x == '2') {
+								row.className = className + ' status_2';
+							} else if (x == '3') {
+								row.className = className + ' status_3';
+							}
+						}
+					}
 				}
 			});
 		});

@@ -85,6 +85,18 @@
 	white-space: normal !important;
 }
 
+.status_1 {
+	color: blue;
+}
+
+.status_2 {
+	color: red;
+}
+
+.status_3 {
+	color: green;
+}
+
 /* Overriding jQueryUI section */
 .ui-widget-header {
 	color: orange;

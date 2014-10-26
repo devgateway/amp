@@ -131,6 +131,10 @@ th.ui-th-column div {
 	color: inherit;
 	background: transparent;
 }
+
+.ui-tabs .ui-tabs-panel {
+	height: 100%;
+}
 /*
 .ui-state-highlight.myAltRowClassEven { color: PaleGreen; }
 .ui-state-highlight.myAltRowClassOdd { color: Sienna; }

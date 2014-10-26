@@ -71,7 +71,7 @@ define(function() {
 			sortable : false,
 			fixed : true,
 			formatter : function() {
-				return "<img src='/TEMPLATE/ampTemplate/img_2/ico_edit.gif'/>";
+				return "";
 			}
 		});
 

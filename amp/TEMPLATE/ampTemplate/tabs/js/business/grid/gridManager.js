@@ -62,71 +62,79 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 
 		$.getScript("/TEMPLATE/ampTemplate/tabs/js/lib/one_place/jqgrid-all.js", function(data, textStatus, jqxhr) {
 			var rowNum = 0;
-			jQuery(grid).jqGrid({
-				caption : false,
-				/* url : '/rest/data/report/' + id + '/result/', */
-				url : getURL(id),
-				datatype : 'json',
-				mtype : 'POST',
-				postData : {
-					page : 1,
-					filters : null
-				},
-				jsonReader : {
-					repeatitems : false,
-					root : function(obj) {
-						rowNum = obj.recordsPerPage;
-						return transformData(obj, grouping, tableStructure.hierarchies);
-					},
-					page : function(obj) {
-						return obj.currentPageNumber;
-					},
-					total : function(obj) {
-						return obj.totalPageCount;
-					},
-					records : function(obj) {
-						return obj.totalRecords;
-					}
-				},
-				colNames : columnsMapping.createJQGridColumnNames(tableStructure, grouping),
-				colModel : columnsMapping.createJQGridColumnModel(tableStructure),
-				height : 200,
-				autowidth : true,
-				shrinkToFit : true,
-				forceFit : false,
-				viewrecords : true,
-				loadtext : 'Loading...',
-				headertitles : true,
-				gridview : true,
-				rownumbers : false,
-				rowNum : rowNum,
-				pager : "#" + gridPagerBaseName + id,
-				emptyrecords : 'No records to view',
-				grouping : grouping,
-				groupingView : columnsMapping.createJQGridGroupingModel(tableStructure, grouping),
-				gridComplete : function() {
-					jQuery(grid).find(">tbody>tr.jqgrow:odd").addClass("myAltRowClassEven");
-					jQuery(grid).find(">tbody>tr.jqgrow:even").addClass("myAltRowClassOdd");
+			jQuery(grid).jqGrid(
+					{
+						caption : false,
+						/* url : '/rest/data/report/' + id + '/result/', */
+						url : getURL(id),
+						datatype : 'json',
+						mtype : 'POST',
+						postData : {
+							page : 1,
+							filters : null
+						},
+						jsonReader : {
+							repeatitems : false,
+							root : function(obj) {
+								rowNum = obj.recordsPerPage;
+								return transformData(obj, grouping, tableStructure.hierarchies);
+							},
+							page : function(obj) {
+								return obj.currentPageNumber;
+							},
+							total : function(obj) {
+								return obj.totalPageCount;
+							},
+							records : function(obj) {
+								return obj.totalRecords;
+							}
+						},
+						colNames : columnsMapping.createJQGridColumnNames(tableStructure, grouping),
+						colModel : columnsMapping.createJQGridColumnModel(tableStructure),
+						height : 300,
+						autowidth : true,
+						shrinkToFit : true,
+						forceFit : false,
+						viewrecords : true,
+						loadtext : 'Loading...',
+						headertitles : true,
+						gridview : true,
+						rownumbers : false,
+						rowNum : rowNum,
+						pager : "#" + gridPagerBaseName + id,
+						emptyrecords : 'No records to view',
+						grouping : grouping,
+						groupingView : columnsMapping.createJQGridGroupingModel(tableStructure, grouping),
+						gridComplete : function() {
+							jQuery(grid).find(">tbody>tr.jqgrow:odd").addClass("myAltRowClassEven");
+							jQuery(grid).find(">tbody>tr.jqgrow:even").addClass("myAltRowClassOdd");
 
-					// Change row color depending the status.
-					var iCol = 2;
-					var cRows = this.rows.length, iRow, row, className;
-					for (iRow = 0; iRow < cRows; iRow++) {
-						row = this.rows[iRow];
-						className = row.className;
-						if ($.inArray('jqgrow', className.split(' ')) > 0) {
-							var x = row.cells[iCol].textContent;
-							if (x == '1') {
-								row.className = className + ' status_1';
-							} else if (x == '2') {
-								row.className = className + ' status_2';
-							} else if (x == '3') {
-								row.className = className + ' status_3';
+							// Change row color depending the status.
+							var cRows = this.rows.length, iRow, row, className;
+							for (iRow = 0; iRow < cRows; iRow++) {
+								row = this.rows[iRow];
+								className = row.className;
+								// Ignore grouped rows.
+								if ($.inArray('jqgrow', className.split(' ')) > 0) {
+									// Set font color according to status.
+									var x = row.cells[2].textContent;
+									if (x == '1') {
+										row.className = className + ' status_1';
+									} else if (x == '2') {
+										row.className = className + ' status_2';
+									} else if (x == '3') {
+										row.className = className + ' status_3';
+									}
+
+									// Create link to edit activity.
+									var id = row.cells[1].textContent;
+									jQuery(row.cells[0]).html(
+											"<a href='/wicket/onepager/activity/" + id
+													+ "' target='_blank'><img src='/TEMPLATE/ampTemplate/img_2/ico_edit.gif'/></a>");
+								}
 							}
 						}
-					}
-				}
-			});
+					});
 		});
 	};
 

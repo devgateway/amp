@@ -1,6 +1,6 @@
 define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!views/html/settingsDialogTemplate.html', 'models/settings',
-		'business/settings/settingsManager', 'filtersWidget', 'business/filter/filterManager', 'jquery', 'bootstrap' ], function(
-		Marionette, dynamicContentTemplate, settingsDialogTemplate, Settings, SettingsManager, FiltersWidget, FilterManager, jQuery) {
+		'business/settings/settingsManager', 'filtersWidget', 'business/filter/filterManager', 'jquery', 'jqueryui' ], function(Marionette,
+		dynamicContentTemplate, settingsDialogTemplate, Settings, SettingsManager, FiltersWidget, FilterManager, jQuery) {
 
 	var reportId;
 	var reportFilters;
@@ -68,6 +68,12 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 				width : 500
 			});
 			jQuery(".buttonify").button();
+		},
+		onShow : function(data) {
+			// Create jQuery buttons.
+			// alert(jQuery("#main-dynamic-content-region_" + reportId + "
+			// .buttonify"));
+			jQuery("#main-dynamic-content-region_" + reportId + " .buttonify").button();
 		}
 	});
 

@@ -4,8 +4,8 @@
 define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicContentView', 'text!views/html/filtersWrapperTemplate.html',
 		'text!views/html/filtersItemTemplate.html', 'models/filter', 'collections/filters', 'models/tab',
 		'text!views/html/invisibleTabLinkTemplate.html', 'text!views/html/legendsTemplate.html', 'business/grid/gridManager', 'jquery',
-		'jqueryui', 'bootstrap' ], function(Marionette, Contents, Content, DynamicContentView, filtersTemplate, filtersItemTemplate,
-		Filter, Filters, Tab, invisibleTabLinkTemplate, legendsTemplate, gridManager, jQuery) {
+		'jqueryui' ], function(Marionette, Contents, Content, DynamicContentView, filtersTemplate, filtersItemTemplate, Filter, Filters,
+		Tab, invisibleTabLinkTemplate, legendsTemplate, gridManager, jQuery) {
 
 	"use strict";
 
@@ -96,8 +96,6 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			var compositeView = new CompositeItemView({
 				collection : filters
 			});
-			compositeView.render(); // Avoid bug with buttons not being found by
-			// $.
 
 			// Render views.
 			var dynamicLayoutView = new DynamicContentView({
@@ -112,8 +110,6 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 				collapsible : true,
 				active : false
 			});
-			// Create jQuery buttons.
-			jQuery("#main-dynamic-content-region_" + id + " .buttonify").button();
 
 			// --------------------------------------------------------------------------------------//
 			// TODO: make complex view for adding more info in this
@@ -121,21 +117,24 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			var Legend = Backbone.Model.extend({});
 			var LegendView = Marionette.ItemView.extend({
 				template : _.template(legendsTemplate),
-				className : 'legends-container'
+				className : 'legends-container',
+				onShow : function() {
+					jQuery(document).tooltip({
+						items : ('#show-legends-link-' + id),
+						content : function() {
+							return jQuery('#show_legend_pop_box').html();
+						}
+					});
+				}
 			});
 			var legend = new Legend({
-				currencyCode : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode')
+				currencyCode : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode'),
+				id : id
 			});
 			var legendView = new LegendView({
 				model : legend
 			});
 			dynamicLayoutView.legends.show(legendView);
-			jQuery(document).tooltip({
-				items : '#show-legends-link',
-				content : function() {
-					return jQuery('#show_legend_pop_box').html();
-				}
-			});
 
 			// --------------------------------------------------------------------------------------//
 			gridManager.populateGrid(id, dynamicLayoutView, firstContent);

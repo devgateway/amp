@@ -16,8 +16,7 @@ require.config({
 		 * 'lib/jqgrid-4.6.0/js2/jquery.jqGrid.src',
 		 */
 		jqgrid : 'lib/one_place/jqgrid-all',
-		filtersWidget : '/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter',
-		bootstrap : 'lib/bootstrap-3.2.0-dist/bootstrap.min'
+		filtersWidget : '/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter'
 	},
 	shim : {
 		underscore : {
@@ -44,22 +43,22 @@ require.config({
 		 */
 		jqgrid : {
 			deps : [ 'jquery', /* 'jqueryui' , 'jqgrid_lang' */],
-			exports: "jQuery.fn.jqGrid"
+			exports : "jQuery.fn.jqGrid"
 		},
 		filtersWidget : {
 			deps : [ 'backbone' ],
 			exports : 'filtersWidget'
-		},
-		bootstrap : {
-			deps : [ 'jquery' ],
-			exports : 'bootstrap'
 		}
 	}
 });
 
-require([ 'jquery','text!views/html/regions.html' ], function(jQuery, regionsTemplate) {
-	//Need to do this here because of some crazy FF errors.
+require([ 'jquery', 'text!views/html/regions.html' ], function(jQuery, regionsTemplate) {
+	// Need to do this here because of some crazy FF errors.
 	jQuery('#tabs-container').append(regionsTemplate);
-	
+
+	// We need to make sure jqueryui is loaded BEFORE bootstrap because both
+	// define some functions with the same name like 'botton' and 'tooltip'
+	// which will mess with the tabs since we use jquery functions.
+	require([ 'jqueryui' ]);
 	require([ 'app' ]);
 });

@@ -1,4 +1,4 @@
-define([ 'filtersWidget', 'business/grid/gridManager', 'jquery', 'bootstrap' ], function(FiltersWidget, GridManager, jQuery) {
+define([ 'filtersWidget', 'business/grid/gridManager', 'jquery' ], function(FiltersWidget, GridManager, jQuery) {
 
 	"use strict";
 

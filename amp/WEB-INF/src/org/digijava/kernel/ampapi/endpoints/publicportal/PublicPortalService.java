@@ -81,40 +81,8 @@ public class PublicPortalService {
 		/*TODO: tbd if we need to filter out null dates from results
 		MondrianReportUtils.filterOutNullDates(spec);
 		*/
-		
-		GeneratedReport report = EndpointUtils.runReport(spec);
-		if (report == null) {
 			
-		} else {
-			if (report.reportContents != null && report.reportContents.getChildren() != null) {
-				//provide header titles
-				Map<String, String> headersToId = new HashMap<String, String>(report.leafHeaders.size());
-				Map<String, String> headers = new LinkedHashMap<String, String>(report.leafHeaders.size());
-				Iterator<ReportColumn> colIter = spec.getColumns().iterator();
-				for (ReportOutputColumn leafHeader : report.leafHeaders) {
-					final String columnName = colIter.hasNext() ? colIter.next().getColumnName() : leafHeader.originalColumnName;
-					final String id = StringUtils.replace(StringUtils.lowerCase(columnName), " ", "-");
-					headers.put(id, leafHeader.columnName);
-					headersToId.put(leafHeader.columnName, id);
-				}
-				result.set("headers", headers);
-				
-				//provide the top projects data
-				count = Math.min(count, report.reportContents.getChildren().size());
-				result.set("count", count);
-				
-				Iterator<ReportArea> iter = report.reportContents.getChildren().iterator();
-				while (count > 0) {
-					ReportArea data = iter.next();
-					JsonBean jsonData = new JsonBean();
-					for (Entry<ReportOutputColumn, ReportCell> cell : data.getContents().entrySet()) {
-						jsonData.set(headersToId.get(cell.getKey().columnName), cell.getValue().value);
-					}
-					content.add(jsonData);
-					count --;
-				}
-			}
-		}
+		getPublicReport(count, result, content, spec);
 		
 		return result;
 	}
@@ -145,4 +113,96 @@ public class PublicPortalService {
 	public static final ReportFilters getDefaultPublicFilter() {
 		return getPeriodFilter(getPublicPortalPeriodInMonths());
 	}
+/**
+ * 
+ * @param config
+ * @param count max amount of records
+ * @param months
+ * @param fundingType 1 for commitment 2 for disbursements
+ * @return
+ */
+	public static JsonBean getDonorFunding(JsonBean config, Integer count,
+			Integer months,Integer fundingType) {
+		// TODO Auto-generated method stub
+		JsonBean result = new JsonBean();
+		List<JsonBean> content = new ArrayList<JsonBean>();
+		result.set("numberformat", FeaturesUtil
+				.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT));
+		result.set("donorFunding", content);
+
+		ReportSpecificationImpl spec = new ReportSpecificationImpl(
+				"PublicPortal_GetDonorFunding");
+		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+
+		if(fundingType==1){
+			spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+			spec.addSorter(new SortingInfo(new ReportMeasure(
+					MeasureConstants.ACTUAL_COMMITMENTS), false, true));
+
+		}else{
+			if(fundingType==2){
+				spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
+				spec.addSorter(new SortingInfo(new ReportMeasure(
+						MeasureConstants.ACTUAL_DISBURSEMENTS), false, true));
+			}
+		}
+
+		spec.setFilters(getPeriodFilter(months));
+
+		getPublicReport(count, result, content, spec);
+		return result;
+
+	}
+
+private static void getPublicReport(Integer count, JsonBean result,
+		List<JsonBean> content, ReportSpecificationImpl spec) {
+	GeneratedReport report = EndpointUtils.runReport(spec);
+	if (report == null) {
+
+	} else {
+		if (report.reportContents != null
+				&& report.reportContents.getChildren() != null) {
+			// provide header titles
+			Map<String, String> headersToId = new HashMap<String, String>(
+					report.leafHeaders.size());
+			Map<String, String> headers = new LinkedHashMap<String, String>(
+					report.leafHeaders.size());
+			Iterator<ReportColumn> colIter = spec.getColumns().iterator();
+			for (ReportOutputColumn leafHeader : report.leafHeaders) {
+				final String columnName = colIter.hasNext() ? colIter
+						.next().getColumnName()
+						: leafHeader.originalColumnName;
+				final String id = StringUtils.replace(
+						StringUtils.lowerCase(columnName), " ", "-");
+				headers.put(id, leafHeader.columnName);
+				headersToId.put(leafHeader.columnName, id);
+			}
+			result.set("headers", headers);
+
+			// provide the top projects data
+			if(count!=null){
+				count = Math.min(count, report.reportContents.getChildren()
+						.size());
+			}
+			else{
+				count =report.reportContents.getChildren().size();
+			}
+			result.set("count", count);
+
+			Iterator<ReportArea> iter = report.reportContents.getChildren()
+					.iterator();
+			while (count > 0) {
+				ReportArea data = iter.next();
+				JsonBean jsonData = new JsonBean();
+				for (Entry<ReportOutputColumn, ReportCell> cell : data
+						.getContents().entrySet()) {
+					jsonData.set(headersToId.get(cell.getKey().columnName),
+							cell.getValue().value);
+				}
+				content.add(jsonData);
+				count--;
+			}
+		}
+	}
+}
 }

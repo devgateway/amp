@@ -39,4 +39,23 @@ public class PublicEndpoint {
 			@QueryParam("months") Integer months) {
 		return PublicPortalService.getTopProjects(config, count, months);
 	}
+	
+	/**
+	 * Get donor funding for the specific funding type 1 for commitnet 2 for disbursement default 1
+	 * count max amount of records, default is all
+	 * months the last x months default
+	 */
+	@POST
+	@Path("/donorFunding")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="donorFunding")
+	/**
+	 * Retrieves Donor Disbursements/Commitments List for the last X days
+	 * @return JsonBean object with results
+	 */
+	public JsonBean getDonorFunding(JsonBean config, 
+			 @QueryParam("count") Integer count, 
+			@QueryParam("months") Integer months,@DefaultValue("1") @QueryParam("fundingType") Integer fundingType) {
+		return PublicPortalService.getDonorFunding(config, count, months,fundingType);
+	}	
 }

@@ -272,7 +272,7 @@ public class GisEndPoints {
 	@Path("/activities")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ActivitiesNewLists")
-	public List<JsonBean> getActivitiesNew(JsonBean config, @QueryParam("start") Integer page,@QueryParam("size") Integer pageSize) {
+	public JsonBean getActivitiesNew(JsonBean config, @QueryParam("start") Integer page,@QueryParam("size") Integer pageSize) {
 		try{
 			
 			return ActivityService.getActivitiesMondrian(config,null,page,pageSize);
@@ -291,7 +291,7 @@ public class GisEndPoints {
 	@Path("/activities/{activityId}") //once its done remove the New
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ActivitiesById")
-	public List<JsonBean> getActivities(@PathParam("activityId") PathSegment activityIds) {
+	public JsonBean getActivities(@PathParam("activityId") PathSegment activityIds) {
 		try {
 			return ActivityService.getActivitiesMondrian(null,
 					Arrays.asList(activityIds.getPath().split("\\s*,\\s*")),

@@ -40,7 +40,7 @@ public class ActivityService {
 	protected static Logger logger = Logger.getLogger(ActivityService.class);
 	
 	
-	public static List<JsonBean> getActivitiesMondrian(JsonBean config,List<String>activitIds, Integer page, Integer pageSize) throws AmpApiException {
+	public static JsonBean getActivitiesMondrian(JsonBean config,List<String>activitIds, Integer page, Integer pageSize) throws AmpApiException {
 		boolean applyFilter=false;
 		List<JsonBean> activities=new ArrayList<JsonBean>();
 		
@@ -94,6 +94,8 @@ public class ActivityService {
 //			activitIds.add("42200");
 //	
 //		}
+	
+ 		
  		MondrianReportFilters filterRules = null;
  		if(config!=null){
 			Object filter=config.get("columnFilters");
@@ -134,6 +136,8 @@ public class ActivityService {
 		}else{ 
 			ll = report.reportContents.getChildren();
 		}
+ 		Integer count=report.reportContents.getChildren().size();
+
 		for (ReportArea reportArea : ll) {
 			JsonBean activity = new JsonBean();
 			JsonBean filters = new JsonBean();
@@ -162,7 +166,9 @@ public class ActivityService {
 			activity.set("matchesFilters",filters);
 			activities.add(activity);
 		}
-
-		return activities;
+		JsonBean list=new JsonBean();
+		list.set("count", count);
+		list.set("activities", activities);
+		return list;
 	}
 }

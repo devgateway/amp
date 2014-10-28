@@ -159,19 +159,21 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 	 * transformations and cleanups.
 	 */
 	function transformData(data, grouping, hierarchies) {
-		// Process the headers for later usage.
-		jQuery.each(data.headers, function(i, item) {
-			headers.push({
-				columnName : item["columnName"],
-				originalColumnName : item["originalColumnName"],
-				hierarchicalName : item["hierarchicalName"]
-			});
-		});
-
 		var rows = [];
-		getContentRecursively(/* data.reportContents */data.page.pageArea, rows, null);
-		if (grouping) {
-			postProcessHierarchies(rows, hierarchies);
+		// Process the headers for later usage.
+		if (data.headers != null) {
+			jQuery.each(data.headers, function(i, item) {
+				headers.push({
+					columnName : item["columnName"],
+					originalColumnName : item["originalColumnName"],
+					hierarchicalName : item["hierarchicalName"]
+				});
+			});
+
+			getContentRecursively(/* data.reportContents */data.page.pageArea, rows, null);
+			if (grouping) {
+				postProcessHierarchies(rows, hierarchies);
+			}
 		}
 		// console.log(rows);
 		return rows;

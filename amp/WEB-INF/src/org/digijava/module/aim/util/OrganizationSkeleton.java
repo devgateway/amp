@@ -139,13 +139,19 @@ public class OrganizationSkeleton implements Comparable<OrganizationSkeleton>, H
     }
     
     
-    public static List<OrganizationSkeleton>  populateOrganisationSkeletonListByOrgGrpIp(final List<Long> orgGrpId) {
+    public static List<OrganizationSkeleton>  populateOrganisationSkeletonListByOrgGrpIp(final List<Long> orgGrpId,
+    		final List<String> roleCodes) {
         final List<OrganizationSkeleton> organizations = new ArrayList<OrganizationSkeleton>();
         PersistenceManager.getSession().doWork(new Work(){
 				public void execute(Connection conn) throws SQLException {
+					String orgIdsSource = "SELECT DISTINCT(o.amp_org_id) "
+							+ "FROM amp_organisation o, amp_org_role aor "
+							+ "WHERE o.amp_org_id = aor.organisation and aor.role IN "
+							+ "(SELECT r.amp_role_id FROM amp_role r WHERE r.role_code IN (" 
+							+ Util.toCSStringForIN(roleCodes) + "))";
 					
-		            
-					String condition = "where org_Grp_Id in("+ Util.toCSStringForIN(orgGrpId) +")";
+					String condition = "where org_Grp_Id in ("+ Util.toCSStringForIN(orgGrpId) +")" +
+										" and amp_org_id in (" + orgIdsSource + ")";
 					ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_organisation", 
 							condition, TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");		
 					ResultSet rs = v.fetch(null);

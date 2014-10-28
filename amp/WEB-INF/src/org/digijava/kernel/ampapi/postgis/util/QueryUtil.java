@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
@@ -26,6 +27,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.util.OrganisationUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.esrigis.dbentity.AmpMapState;
 import org.digijava.module.translation.util.ContentTranslationUtil;
@@ -244,46 +246,47 @@ public class QueryUtil {
 	 */
 	public static List<OrganizationSkeleton> getOrganizations(
 			List<Long> orgGrpId) {
+		final List<String> roleCodes = OrganisationUtil.getVisibleRoles();
 		return OrganizationSkeleton
-				.populateOrganisationSkeletonListByOrgGrpIp(orgGrpId);
+				.populateOrganisationSkeletonListByOrgGrpIp(orgGrpId, roleCodes);
 	}
-public static List<JsonBean>getOrgTypes(){
-	final List<JsonBean> orgTypes=new ArrayList<JsonBean>();
-    PersistenceManager.getSession().doWork(new Work(){
-			public void execute(Connection conn) throws SQLException {
-				
-				Map<Long, String> orgTypesName=QueryUtil.getTranslatedName(conn, "amp_org_type", "amp_org_type_id", "org_type");
-				
-				String query="select  aot.amp_org_type_id orgTypeId,aog.amp_org_grp_id orgGrpId "+ 
-							" ,aot.org_type orgTypeName, aot.org_type_code orgTypeCode "+
-							" from amp_org_group aog,amp_org_type aot "+
-							" where aot.amp_org_type_id=aog.org_type"+
-							" order by orgTypeId";
-				ResultSet rs=SQLUtils.rawRunQuery(conn, query, null);
-				Long lastOrgTypeId=0L;
-				List <Long>orgsGrpId=null;
-				while(rs.next()){
-					if(!lastOrgTypeId.equals(rs.getLong("orgTypeId"))){
-						lastOrgTypeId=rs.getLong("orgTypeId");
-						JsonBean orgType=new JsonBean();
-						orgsGrpId=new ArrayList<Long>();
-						orgType.set("id", rs.getLong("orgTypeId"));
-						if(orgTypesName!=null){
-							orgType.set("name", orgTypesName.get(lastOrgTypeId));
 	
-						}else{
-							orgType.set("name", rs.getString("orgTypeName"));
+	public static List<JsonBean> getOrgTypes(){
+		final List<JsonBean> orgTypes=new ArrayList<JsonBean>();
+		PersistenceManager.getSession().doWork(new Work(){
+				public void execute(Connection conn) throws SQLException {
+					
+					Map<Long, String> orgTypesName=QueryUtil.getTranslatedName(conn, "amp_org_type", "amp_org_type_id", "org_type");
+					
+					String query="select  aot.amp_org_type_id orgTypeId,aog.amp_org_grp_id orgGrpId " + 
+								" ,aot.org_type orgTypeName, aot.org_type_code orgTypeCode " +
+								" from amp_org_group aog,amp_org_type aot " +
+								" where aot.amp_org_type_id=aog.org_type" +
+								" order by orgTypeId";
+					ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
+					Long lastOrgTypeId = 0L;
+					List<Long> orgsGrpId = null;
+					while (rs.next()) {
+						if (!lastOrgTypeId.equals(rs.getLong("orgTypeId"))) {
+							lastOrgTypeId = rs.getLong("orgTypeId");
+							JsonBean orgType = new JsonBean();
+							orgsGrpId = new ArrayList<Long>();
+							orgType.set("id", rs.getLong("orgTypeId"));
+							if (orgTypesName != null){
+								orgType.set("name", orgTypesName.get(lastOrgTypeId));
+							} else {
+								orgType.set("name", rs.getString("orgTypeName"));
+							}
+							orgType.set("groupIds", orgsGrpId);
+							orgTypes.add(orgType);
 						}
-						orgType.set("groupIds",orgsGrpId);
-						orgTypes.add(orgType);
+						orgsGrpId.add(rs.getLong("orgGrpId"));
 					}
-					orgsGrpId.add(rs.getLong("orgGrpId"));
+	
 				}
-
-			}
-    });
-    return orgTypes;
-}
+	    });
+	    return orgTypes;
+	}
 
 public static List<JsonBean> getOrgGroups() {
 	final List<JsonBean> orgGroups=new ArrayList<JsonBean>();
@@ -329,9 +332,9 @@ public static List<JsonBean> getOrgGroups() {
 
 	public static List<JsonBean> getOrgs() {
 		final List<JsonBean> orgs = new ArrayList<JsonBean>();
+		final List<String> roleCodes = OrganisationUtil.getVisibleRoles();
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
-				
 				
 				//go and fetch translated version of organisation name if multilingual is enabled
 				
@@ -341,7 +344,10 @@ public static List<JsonBean> getOrgGroups() {
 						" aor.role roleId , "+ 
 						" o.org_grp_id grpId  "+
 						" from amp_org_role aor,amp_organisation o "+
-						" where aor.organisation=o.amp_org_id  "+
+						" where aor.organisation=o.amp_org_id " +
+						" and aor.role IN " +
+							"(SELECT r.amp_role_id FROM amp_role r WHERE r.role_code IN (" + 
+							Util.toCSStringForIN(roleCodes) + "))" +
 						" order by o.amp_org_id";
 				ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
 				Long lastOrgId = 0L;

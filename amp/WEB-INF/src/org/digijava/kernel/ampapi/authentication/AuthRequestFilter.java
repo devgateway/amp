@@ -51,7 +51,9 @@ public class AuthRequestFilter implements ContainerRequestFilter {
 	}
 	
 	private void addDefaultTreeVisibility() {
-		if (httpRequest.getAttribute(Constants.TEAM_ID) == null) {
+		if (httpRequest.getAttribute(Constants.TEAM_ID) == null
+				&& httpRequest.getSession().getAttribute("ampTreeVisibility") == null) {
+			//old visibility tree will be refreshed later on, thus no need to always recrate it 
 			AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
             ampTreeVisibility.buildAmpTreeVisibility(FeaturesUtil.getCurrentTemplate());
             FeaturesUtil.setAmpTreeVisibility(httpRequest.getServletContext(), httpRequest.getSession(), ampTreeVisibility);

@@ -1,9 +1,6 @@
-var fs = require('fs');
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 var ChartView = require('./chart');
-var chartsLoading = _.template(fs.readFileSync(
-  __dirname + '/../templates/charts-loading.html', 'UTF-8'));
 
 
 module.exports = BackboneDash.View.extend({
@@ -12,23 +9,18 @@ module.exports = BackboneDash.View.extend({
 
   initialize: function(options) {
     this.app = options.app;
-    this.chartViews = _([]);
+    this.chartViews = _(this.collection.map(function(chart) {
+      return (new ChartView({ model: chart, app: this.app }));
+    }, this));
     this.listenTo(this.collection, 'change:embiggen', this.injectBreaks);
   },
 
   render: function() {
-    this.$el.html(chartsLoading());
+    this.$el.html(this.chartViews.map(_(function(view) {
+      return view.render().el;
+    }).bind(this)));
 
-    this.app.tryAfter(this.collection.fetch(), function() {
-      this.chartViews = _(this.collection.map(function(chart) {
-        return (new ChartView({ model: chart, app: this.app }));
-      }));
-      this.$el.html(this.chartViews.map(_(function(view) {
-        return view.render().el;
-      }).bind(this)));
-
-      this.injectBreaks();
-    }, this);
+    this.injectBreaks();
     return this;
   },
 

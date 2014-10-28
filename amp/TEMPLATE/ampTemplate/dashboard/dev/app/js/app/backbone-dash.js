@@ -36,7 +36,7 @@ function mixDash(Class) {
 
     constructor: function() {
       var constructed = Class.apply(this, arguments);
-      if (!_(this).has('app')) {
+      if (!this.app) {
         throw new InitError(this);
       }
       return constructed;

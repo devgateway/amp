@@ -1,87 +1,25 @@
 var fs = require('fs');
 var _ = require('underscore');
-var nv = window.nv;  // nvd3 is a pain
-var d3 = require('d3');
 var BackboneDash = require('../backbone-dash');
 var util = require('../../ugly/util');
+var charts = require('./chart-types');
+var Tops = require('../models/tops-chart');
+var Predictability = require('../models/predictability-chart');
 var template = _.template(fs.readFileSync(
   __dirname + '/../templates/chart.html', 'UTF-8'));
-var tooltip = _.template(fs.readFileSync(
-  __dirname + '/../templates/tooltip.html', 'UTF-8'));
-
-
-var chartCommon = function(chart) {
-  // var el = document.createElement('svg');
-
-  chart
-    .x(function(d) { return d.name; })    //Specify the data accessors.
-    .y(function(d) { return d.amount; })
-    .valueFormat(util.formatKMB(3));
-    // .elementClick(function() { console.log('elcl'); });
-
-  return {
-    draw: function(container, model) {
-      // things we can only compute after we have data for the charts
-      chart
-        .color(util.categoryColours(model.get('values').length))
-        .tooltipContent(_(function(a, y, b, raw) {
-          return tooltip({
-            y: y,
-            raw: (typeof raw === 'function') ? b : raw,
-            d3: d3,
-            currency: model.get('currency'),
-            total: model.get('total')
-          });
-        }).bind(this));
-
-      d3.select(container)
-        .datum(model.get('view') === 'bar' ?
-          [model.get('processed')] :
-          model.get('processed').values)
-        .call(chart);
-
-      nv.utils.windowResize(chart.update);
-      nv.addGraph(function() { return chart; });
-    }
-  };
-};
-
-
-var charts = {
-
-  bar: function() { return chartCommon(
-    nv.models.discreteBarChart()
-      .showValues(true)
-      .showYAxis(false)
-      .showXAxis(false)
-      .transitionDuration(150)
-      .margin({ top: 5, right: 10, bottom: 10, left: 10 }));
-  },
-
-  pie: function() {
-    var chart = nv.models.pieChart()
-      .labelType('percent')
-      .donut(true)
-      .donutRatio(0.35);
-    return chartCommon(chart);
-  },
-
-  table: function() {
-    return {
-      draw: function(container, model) {
-        // TODO: hide the SVG and throw in a bootstrap table
-      }
-    };
-  }
-
-};
 
 
 module.exports = BackboneDash.View.extend({
 
-  uiDefaults: {
-    embiggen: false,
-    view: 'bar'
+  uiDefaults: function() {
+    var defaults = {
+      embiggen: false,
+      view: this.model instanceof Tops ? 'bar'
+          : this.model instanceof Predictability ? 'multibar'
+          : null
+    };
+    if (!defaults.view) { console.error('unknown chart type for model', this.model); }
+    return defaults;
   },
 
   events: {
@@ -92,7 +30,7 @@ module.exports = BackboneDash.View.extend({
 
   initialize: function(options) {
     this.app = options.app;
-    this.model.set(this.uiDefaults);
+    this.model.set(this.uiDefaults());
     // TODO: load any state we need
     this.chart = charts[this.model.get('view')]();  // bar, etc.
     this.listenTo(this.model, 'change:adjtype', this.updateData);
@@ -119,14 +57,22 @@ module.exports = BackboneDash.View.extend({
       })
       .done(_(function() {
         this.chart.draw(this.$('.dash-chart')[0], this.model);
+        this.renderNumbers();
       }).bind(this))
       .fail(_(function() {
         console.error('failed loading chart :(', arguments);
         this.app.report('Loading chart failed',
           ['There was an issue with your connection to the database, ' +
-           'or the database may have crashed.']);
+          'or the database may have crashed.']);
         this.$('svg').hide();
       }).bind(this));
+  },
+
+  renderNumbers: function() {
+    if (this.model.get('total')) {
+      this.$('.chart-total').html(util.formatKMB()(this.model.get('total')));
+      this.$('.chart-currency').html(this.model.get('currency'));
+    }
   },
 
   changeAdjType: function(e) {

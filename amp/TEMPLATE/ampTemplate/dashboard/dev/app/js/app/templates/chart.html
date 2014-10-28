@@ -3,24 +3,16 @@
   <div class="panel panel-chart">
     <div class="panel-heading">
       <span class="pull-right big-number">
-        <b><%= model.get('total') && util.formatKMB()(model.get('total')) %></b>
-        <%= model.get('currency') %>
+        <b class="chart-total"></b>
+        <span class="chart-currency"></span>
       </span>
-      <h2>Top <%= model.get('name') %></h2>
+      <h2><%= model.get('name') %></h2>
     </div>
 
     <div class="panel-body">
       <div class="chart-container">
         <h3 class="dash-loading text-center">Loading...</h3>
         <svg class="dash-chart"></svg>
-      </div>
-      <div class="legend">
-        <% _(model.get('values')).each(function(value, i, all) { %>
-          <span class="legend-value">
-            <span class="legend-key" style="background: <%= util.categoryColours(all.length)(value, i) %>"></span>
-            <%= util.formatShortText(28)(value.name) %>
-          </span>
-        <% }) %>
       </div>
     </div>
 
@@ -29,10 +21,19 @@
       <div class="pull-right">
 
         <div class="btn-group">
-          <button type="button" class="btn btn-sm btn-<%= model.get('view') === 'bar' ? 'primary' : 'default' %> chart-view" data-view="bar">
+          <button
+            type="button"
+            class="btn btn-sm
+                   btn-<%= model.get('view') === (model.get('adjtype') ? 'bar' : 'multibar') ? 'primary' : 'default' %>
+                   chart-view" data-view="<%= (model.get('adjtype') ? 'bar' : 'multibar') %>">
             <span class="glyphicon glyphicon-signal"></span>
           </button>
-          <button type="button" class="btn btn-sm btn-<%= model.get('view') === 'pie' ? 'primary' : 'default' %> chart-view" data-view="pie">
+          <button
+            type="button"
+            class="<% if (!model.get('adjtype')) { %>hidden<% } %>
+                   btn btn-sm
+                   btn-<%= model.get('view') === 'pie' ? 'primary' : 'default' %>
+                   chart-view" data-view="pie">
             <span class="glyphicon glyphicon-adjust"></span>
           </button>
           <button type="button" class="btn btn-sm btn-<%= model.get('view') === 'table' ? 'primary' : 'default' %> chart-view" data-view="table">
@@ -54,31 +55,33 @@
 
       </div><!-- buttons in .pull-right -->
 
-      <form class="form-inline dash-form dash-adj-type" role="form">
-        <span class="cheat-lineheight"></span>
-        <div class="radio">
-          <label>
-            <input type="radio"
-              name="actual-planned"
-              id="ac-<%= model.cid %>"
-              data-acad="ac"
-              <% if (model.get('adjtype') === 'ac') { %>checked="checked"<% } %>>
-            <span class="radio-ui"></span>
-            Commitments
-          </label>
-        </div>
-        <div class="radio">
-          <label>
-            <input type="radio"
-              name="actual-planned"
-              id="ad-<%= model.cid %>"
-              data-acad="ad"
-              <% if (model.get('adjtype') === 'ad') { %>checked="checked"<% } %>>
-            <span class="radio-ui"></span>
-            Disbursements
-          </label>
-        </div>
-      </form>
+      <% if (model.get('adjtype')) { %>
+        <form class="form-inline dash-form dash-adj-type" role="form">
+          <span class="cheat-lineheight"></span>
+          <div class="radio">
+            <label>
+              <input type="radio"
+                name="actual-planned"
+                id="ac-<%= model.cid %>"
+                data-acad="ac"
+                <% if (model.get('adjtype') === 'ac') { %>checked="checked"<% } %>>
+              <span class="radio-ui"></span>
+              Commitments
+            </label>
+          </div>
+          <div class="radio">
+            <label>
+              <input type="radio"
+                name="actual-planned"
+                id="ad-<%= model.cid %>"
+                data-acad="ad"
+                <% if (model.get('adjtype') === 'ad') { %>checked="checked"<% } %>>
+              <span class="radio-ui"></span>
+              Disbursements
+            </label>
+          </div>
+        </form>
+      <% } %>
 
     </div>
   </div>

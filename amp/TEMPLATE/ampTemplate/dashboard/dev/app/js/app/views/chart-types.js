@@ -12,14 +12,14 @@ var predictabilityTooltip = _.template(fs.readFileSync(
 var BAR_MARGIN = { top: 5, right: 10, bottom: 10, left: 10 };
 
 
-var drawCommon = function(chart, model, data, categories, container) {
+var drawCommon = function(chart, data, categories, container, cb) {
   chart
-    .color(util.categoryColours(categories))
+    .color(util.categoryColours(categories));
   d3.select(container)
     .datum(data)
     .call(chart);
   nv.utils.windowResize(chart.update);
-  nv.addGraph(function() { return chart; });
+  nv.addGraph(function() { return chart; }, cb);
 };
 
 
@@ -39,7 +39,7 @@ module.exports = {
     return {
       draw: function(container, model) {
         var data = [model.get('processed')],
-            categories = data[0].values.length;
+            categories = data[0].values.length - 1;
         chart.tooltipContent(function(a, y, b, raw) {
           return topsTooltip({
             label: raw.point.name,
@@ -48,7 +48,13 @@ module.exports = {
             percent: d3.format('%')(raw.value / model.get('total'))
           });
         });
-        drawCommon(chart, model, data, categories, container);
+        drawCommon(chart, data, categories, container, function() {
+          d3.selectAll(container.querySelectorAll('g:last-child > .nv-bar'))
+            .on('click', function(d) {
+              // clicking on the "others" bar loads five more.
+              if (d.color === '#777') { model.set('limit', model.get('limit') + 5); }
+            });
+        });
       }
     };
   },
@@ -74,7 +80,7 @@ module.exports = {
             percent: d3.format('%')(raw.value / model.get('total'))
           });
         });
-        drawCommon(chart, model, data, categories, container);
+        drawCommon(chart, data, categories, container);
       }
     };
   },
@@ -103,7 +109,7 @@ module.exports = {
             currency: model.get('currency')
           });
         });
-        drawCommon(chart, model, data, categories, container);
+        drawCommon(chart, data, categories, container);
       }
     };
   },

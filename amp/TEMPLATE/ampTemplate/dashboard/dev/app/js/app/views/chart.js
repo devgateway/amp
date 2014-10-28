@@ -34,6 +34,7 @@ module.exports = BackboneDash.View.extend({
     // TODO: load any state we need
     this.chart = charts[this.model.get('view')]();  // bar, etc.
     this.listenTo(this.model, 'change:adjtype', this.updateData);
+    this.listenTo(this.model, 'change:limit', this.updateData);
   },
 
   render: function() {

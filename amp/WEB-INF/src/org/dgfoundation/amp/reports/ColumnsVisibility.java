@@ -120,6 +120,7 @@ public class ColumnsVisibility extends DataVisibility {
 	//Note: mappings are manually retrieved, because no certain way exists to map them 
 	@SuppressWarnings("serial")
 	protected static final Map<String, String> modulesToColumnsMap = new HashMap<String, String>() {{
+		put("Activity Approval Process", ColumnConstants.APPROVAL_STATUS);
 		put("/Activity Form/Aid Effectivenes/Government is meber of project steering committee", ColumnConstants.GOVERNMENT_IS_MEMBER_OF_PROJECT_STEERING_COMMITTEE);
 		put("/Activity Form/Aid Effectivenes/Project Implementation Mode", ColumnConstants.PROJECT_IMPLEMENTATION_MODE);
 		put("/Activity Form/Aid Effectivenes/Project disburses directly into the Goverment single treasury account", ColumnConstants.PROJECT_DISBURSES_DIRECTLY_INTO_THE_GOVERNMENT_SINGLE_TREASURY_ACCOUNT);
@@ -303,7 +304,6 @@ public class ColumnsVisibility extends DataVisibility {
 	@SuppressWarnings("serial")
 	protected static final Map<String, String> fieldsToColumnsMap = new HashMap<String, String>() {{
 		put("AMP ID", ColumnConstants.AMP_ID);
-		put("Activity Approval Process", ColumnConstants.APPROVAL_STATUS);
 		put("Activity Approved By", ColumnConstants.ACTIVITY_APPROVED_BY);
 		put("Activity Created By", ColumnConstants.ACTIVITY_CREATED_BY);
 		put("Activity Created On", ColumnConstants.ACTIVITY_CREATED_ON);

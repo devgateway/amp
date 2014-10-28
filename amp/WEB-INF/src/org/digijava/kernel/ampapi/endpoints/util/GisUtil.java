@@ -7,9 +7,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.reports.ColumnsVisibility;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -29,6 +32,7 @@ public class GisUtil {
 	public static List<AvailableMethod> getAvailableMethods(String className){
 		List<AvailableMethod> availableFilters=new ArrayList<AvailableMethod>(); 
 		try {
+			Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
 			Class<?> c = Class.forName(className);
 			javax.ws.rs.Path p=c.getAnnotation(javax.ws.rs.Path.class);
 			String path="/rest/"+p.value();
@@ -36,36 +40,38 @@ public class GisUtil {
 			for (Member mbr : mbrs) {
 				ApiMethod apiAnnotation=
 		    			((Method) mbr).getAnnotation(ApiMethod.class);
-				if(apiAnnotation!=null){
-					//then we have to add it to the filters list
-					javax.ws.rs.Path methodPath=((Method) mbr).getAnnotation(javax.ws.rs.Path.class);
-					AvailableMethod filter = new AvailableMethod();
-					filter.setName(apiAnnotation.name());
-					String endpoint="/rest/"+ p.value();
-					
-					if(methodPath!=null){
-						endpoint+=methodPath.value();
-					}
-					filter.setEndpoint(endpoint);
-					filter.setUi(apiAnnotation.ui());
-					//we check the method exposed
-					if(((Method) mbr).getAnnotation(javax.ws.rs.POST.class)!=null){
-						filter.setMethod("POST");
-					}else{
-						if(((Method) mbr).getAnnotation(javax.ws.rs.GET.class)!=null){
-							filter.setMethod("GET");
-						}else{
-							if(((Method) mbr).getAnnotation(javax.ws.rs.PUT.class)!=null){
-								filter.setMethod("PUT");
-							}else{
-								if(((Method) mbr).getAnnotation(javax.ws.rs.DELETE.class)!=null){
-									filter.setMethod("DELETE");
+				if (apiAnnotation != null) {
+					final String column = apiAnnotation.column();
+					if (EPConstants.NA.equals(column) || visibleColumns.contains(column)) {
+						//then we have to add it to the filters list
+						javax.ws.rs.Path methodPath = ((Method) mbr).getAnnotation(javax.ws.rs.Path.class);
+						AvailableMethod filter = new AvailableMethod();
+						filter.setName(apiAnnotation.name());
+						String endpoint = "/rest/" + p.value();
+						
+						if (methodPath != null){
+							endpoint += methodPath.value();
+						}
+						filter.setEndpoint(endpoint);
+						filter.setUi(apiAnnotation.ui());
+						//we check the method exposed
+						if (((Method) mbr).getAnnotation(javax.ws.rs.POST.class) != null){
+							filter.setMethod("POST");
+						} else {
+							if (((Method) mbr).getAnnotation(javax.ws.rs.GET.class) != null){
+								filter.setMethod("GET");
+							} else {
+								if (((Method) mbr).getAnnotation(javax.ws.rs.PUT.class) != null){
+									filter.setMethod("PUT");
+								} else {
+									if (((Method) mbr).getAnnotation(javax.ws.rs.DELETE.class) != null){
+										filter.setMethod("DELETE");
+									}
 								}
 							}
 						}
+						availableFilters.add(filter);
 					}
-					availableFilters.add(filter);
-
 				}
 			}
 		}

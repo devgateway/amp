@@ -1,7 +1,10 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.util.SectorUtil;
 
@@ -12,6 +15,13 @@ public class AmpClassificationConfiguration implements Serializable {
 	public static final String SECONDARY_CLASSIFICATION_CONFIGURATION_NAME	= "Secondary";
     public static final String TERTIARY_CLASSIFICATION_CONFIGURATION_NAME	= "Tertiary";
     public static final String TAG_CLASSIFICATION_CONFIGURATION_NAME	= "Tag";
+    
+    @SuppressWarnings("serial")
+	public static final Map<String, String> NAME_TO_COLUMN_MAP = new HashMap<String, String>() {{
+    	put(PRIMARY_CLASSIFICATION_CONFIGURATION_NAME, ColumnConstants.PRIMARY_SECTOR);
+    	put(SECONDARY_CLASSIFICATION_CONFIGURATION_NAME, ColumnConstants.SECONDARY_SECTOR);
+    	put(TERTIARY_CLASSIFICATION_CONFIGURATION_NAME, ColumnConstants.TERTIARY_SECTOR);
+    }};
 	
 	
 	private Long id;

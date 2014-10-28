@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.DatabaseWaver;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -52,7 +53,6 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.IndicatorsBean;
 import org.digijava.module.aim.helper.TreeItem;
 import org.hibernate.HibernateException;
-import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -61,22 +61,28 @@ import org.hibernate.type.StringType;
 
 
 public class ProgramUtil {
+	private static Logger logger = Logger.getLogger(ProgramUtil.class);
 
-		private static Logger logger = Logger.getLogger(ProgramUtil.class);
-        @Deprecated
-		public static final int YAERS_LIST_START = 2000;
-                public static final String NATIONAL_PLAN_OBJECTIVE ="National Plan Objective";
-                public static final String PRIMARY_PROGRAM = "Primary Program";
-                public static final String SECONDARY_PROGRAM = "Secondary Program";
-                public static final String TERTIARY_PROGRAM = "Tertiary Program";
-                public static final int NATIONAL_PLAN_OBJECTIVE_KEY = 1;
-                public static final int PRIMARY_PROGRAM_KEY = 2;
-                public static final int SECONDARY_PROGRAM_KEY = 3;
+	@Deprecated
+	public static final int YAERS_LIST_START = 2000;
+    public static final String NATIONAL_PLAN_OBJECTIVE ="National Plan Objective";
+    public static final String PRIMARY_PROGRAM = "Primary Program";
+    public static final String SECONDARY_PROGRAM = "Secondary Program";
+    public static final String TERTIARY_PROGRAM = "Tertiary Program";
+    public static final int NATIONAL_PLAN_OBJECTIVE_KEY = 1;
+    public static final int PRIMARY_PROGRAM_KEY = 2;
+    public static final int SECONDARY_PROGRAM_KEY = 3;
+                
+    @SuppressWarnings("serial")
+	public static final Map<String, String> NAME_TO_COLUMN_MAP = new HashMap<String, String>() {{
+    	put(NATIONAL_PLAN_OBJECTIVE, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
+    	put(PRIMARY_PROGRAM, ColumnConstants.PRIMARY_PROGRAM);
+    	put(SECONDARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM);
+    	put(TERTIARY_PROGRAM, ColumnConstants.TERTIARY_PROGRAM);
+    }};
+    
 
-
-
-
-		public static Collection getAllIndicatorsFromPrograms(Collection programs) throws AimException{
+    	public static Collection getAllIndicatorsFromPrograms(Collection programs) throws AimException{
 			try {
 				Collection result= null;
 				if (programs!= null && programs.size() >0){

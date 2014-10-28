@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.onepager.util.FMUtil;
+import org.dgfoundation.amp.reports.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
@@ -24,12 +24,10 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -51,9 +49,12 @@ public class Filters {
 	private static final Logger logger = Logger.getLogger(Filters.class);
 
 	AmpARFilter filters;
-
+	
+	private Set<String> visibleColumns = null; 
+	
 	public Filters() {
 		filters = new AmpARFilter();
+		visibleColumns = ColumnsVisibility.getVisibleColumns();
 	}
 
 	@GET
@@ -71,7 +72,7 @@ public class Filters {
 	@GET
 	@Path("/activityapprovalStatus")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=true,name="ActivityApprovalStatus")
+	@ApiMethod(ui = true, name = "ActivityApprovalStatus", column = ColumnConstants.APPROVAL_STATUS)
 	public JsonBean getActivityApprovalStatus() {
 		JsonBean as=new JsonBean();
 
@@ -116,10 +117,14 @@ public class Filters {
 		List<JsonBean> schemaList = new ArrayList<JsonBean>();
 		List<AmpClassificationConfiguration> schems = SectorUtil.getAllClassificationConfigs();
 		for (AmpClassificationConfiguration ampClassificationConfiguration : schems) {
-			JsonBean schema=new JsonBean();
-			schema.set("id", ampClassificationConfiguration.getId());
-			schema.set("name", ampClassificationConfiguration.getName());
-			schemaList.add(schema);
+			final String columnName = AmpClassificationConfiguration.NAME_TO_COLUMN_MAP
+					.get(ampClassificationConfiguration.getName()); 
+			if (visibleColumns.contains(columnName)) {
+				JsonBean schema=new JsonBean();
+				schema.set("id", ampClassificationConfiguration.getId());
+				schema.set("name", ampClassificationConfiguration.getName());
+				schemaList.add(schema);
+			}
 		}
 		return schemaList;
 	}
@@ -189,8 +194,10 @@ public class Filters {
 			for (Object p : ProgramUtil.getAmpActivityProgramSettingsList()) {
 				
 				AmpActivityProgramSettings program=(AmpActivityProgramSettings)p;
+				final String columnName = ProgramUtil.NAME_TO_COLUMN_MAP
+						.get(program.getName()); 
 				//only add if its enabled 
-				if(FeaturesUtil.isVisibleModule("/Activity Form/Program/" + program.getName())){
+				if (visibleColumns.contains(columnName)){
 					programs.add( new SimpleJsonBean(program.getAmpProgramSettingsId(),
 							program.getName()) );
 				}
@@ -333,7 +340,7 @@ public class Filters {
 	@GET
 	@Path("/typeOfAssistance/")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = true, name = "TypeOfAssistanceList")
+	@ApiMethod(ui = true, name = "TypeOfAssistanceList", column = ColumnConstants.TYPE_OF_ASSISTANCE)
 	public JsonBean getTypeOfAssistance() {
 		return getCategoryValue(CategoryConstants.TYPE_OF_ASSISTENCE_KEY,ColumnConstants.TYPE_OF_ASSISTANCE);
 	}
@@ -345,7 +352,7 @@ public class Filters {
 	@GET
 	@Path("/activityStatus/")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = true, name = "ActivityStatusList")
+	@ApiMethod(ui = true, name = "ActivityStatusList", column = ColumnConstants.STATUS)
 	public JsonBean getActivityStatus() {
 		return getCategoryValue(CategoryConstants.ACTIVITY_STATUS_KEY,
 				ColumnConstants.STATUS);
@@ -359,9 +366,9 @@ public class Filters {
 	@GET
 	@Path("/activityBudget/")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = true, name = "ActivityBudgetList")
+	@ApiMethod(ui = true, name = "ActivityBudgetList", column = ColumnConstants.PROJECT_IS_ON_BUDGET)
 	public JsonBean getActivityBudget() {
-		return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY,ColumnConstants.PROJECT_IS_ON_BUDGET);
+		return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY, ColumnConstants.PROJECT_IS_ON_BUDGET);
 	}	
 	
 	
@@ -373,9 +380,9 @@ public class Filters {
 	@GET
 	@Path("/financingInstruments/")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = true, name = "FinancingInstrumentsList")
+	@ApiMethod(ui = true, name = "FinancingInstrumentsList", column = ColumnConstants.FINANCING_INSTRUMENT)
 	public JsonBean getFinancingInstruments() {
-		return getCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY,ColumnConstants.FINANCING_INSTRUMENT);
+		return getCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY, ColumnConstants.FINANCING_INSTRUMENT);
 	}
 
 	private List<SimpleJsonBean> getCategoryValue(String categoryKey) {

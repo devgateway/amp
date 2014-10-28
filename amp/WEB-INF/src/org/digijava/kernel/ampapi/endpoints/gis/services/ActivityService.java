@@ -131,8 +131,8 @@ public class ActivityService {
 		List<ReportArea> ll=null;
 		if(page !=null && pageSize !=null && page>=0 && pageSize>0){
 			ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
-			ReportArea page0_10 = ReportPaginationUtils.getReportArea(areasDFArray, 0, 10);
-			ll=page0_10.getChildren();
+			ReportArea pagedReport = ReportPaginationUtils.getReportArea(areasDFArray, page, pageSize);
+			ll=pagedReport.getChildren();
 		}else{ 
 			ll = report.reportContents.getChildren();
 		}

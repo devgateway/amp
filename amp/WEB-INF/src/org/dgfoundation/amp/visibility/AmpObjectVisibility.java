@@ -206,4 +206,6 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
     		return this.getClass().hashCode();
     	return this.getId().hashCode();
     }
+    
+    abstract public boolean isVisibleTemplateObj(AmpTemplatesVisibility template);
 }

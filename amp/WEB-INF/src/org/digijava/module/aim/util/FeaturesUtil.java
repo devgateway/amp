@@ -26,7 +26,20 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpColumnsOrder;
+import org.digijava.module.aim.dbentity.AmpComponentType;
+import org.digijava.module.aim.dbentity.AmpFeature;
+import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
+import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.aim.dbentity.AmpHomeThumbnail;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpModulesVisibility;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSiteFlag;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.aim.dbentity.FeatureTemplates;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Flag;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -901,6 +914,109 @@ public class FeaturesUtil {
 			logger.error(ex);
 		}    
 		return col;
+	}
+	
+	/**
+	 * Returns the list of {@link AmpFieldsVisibility} with names in the specified list of fieldNames 
+	 * that are attached to the template with the given templateId 
+	 * @param fieldNames
+	 * @return a list of AmpFieldsVisibility
+	 */
+	public static List<AmpFieldsVisibility> getAmpFieldsVisibility(Collection<String> fieldNames, Long templateId) {
+		return getAmpObjectVisibility(AmpFieldsVisibility.class, fieldNames, templateId);
+	}
+	
+	/**
+	 * Returns the list of {@link AmpFeaturesVisibility} with names in the specified list of featuresNames 
+	 * that are attached to the template with the given templateId
+	 * @param featuresNames
+	 * @param templateId
+	 * @return a list of AmpFeaturesVisibility
+	 */
+	public static List<AmpFeaturesVisibility> getAmpFeaturesVisibility(Collection<String> featuresNames, Long templateId) {
+		return getAmpObjectVisibility(AmpFeaturesVisibility.class, featuresNames, templateId);
+	}
+	
+	/**
+	 * Returns the list of {@link AmpModulesVisibility} with names in the specified list of modulesNames 
+	 * that are attached to the template with the given templateId
+	 * @param modulesNames
+	 * @param templateId
+	 * @return a list of AmpModulesVisibility
+	 */
+	public static List<AmpModulesVisibility> getAmpModulesVisibility(Collection<String> modulesNames, Long templateId) {
+		return getAmpObjectVisibility(AmpModulesVisibility.class, modulesNames, templateId);
+	}
+	
+	private static <T extends AmpObjectVisibility> List<T> getAmpObjectVisibility(Class<T> clazz, 
+			Collection<String> names, Long templateId) {
+		Session session = null;
+		List<T> col = new ArrayList<T>();
+		String qryStr = null;
+		Query qry = null;
+		
+		String joinBy = "items";
+		if (clazz.isAssignableFrom(AmpFieldsVisibility.class))
+			joinBy = "fields";
+		else if (clazz.isAssignableFrom(AmpFeaturesVisibility.class))
+			joinBy = "features";
+
+		if (names != null && names.size() > 0) {
+			try {
+				session = PersistenceManager.getRequestDBSession();
+				qryStr = "select aov from " 
+						+ AmpTemplatesVisibility.class.getName() + " as templ"
+						+ " join templ." + joinBy + " aov"
+						+ " where templ.id=:templateId"
+						+ " and aov.name in (:names)"
+						+ " order by aov.name asc";
+				qry = session.createQuery(qryStr);
+				qry.setParameter("templateId", templateId);
+				qry.setParameterList("names", names);
+				col = qry.list();
+			}
+			catch (Exception ex) {
+				logger.error(ex);
+			}
+		}
+		return col;
+		
+	}
+	
+	/**
+	 * Verifies if specified AmpObjectVisibility object is visible or not
+	 * @param object - AmpObjectVisibility to check
+	 * @return true if it is visible
+	 */
+	public static <T extends AmpObjectVisibility> boolean isVisible(T object) {
+		AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(TLSUtils.getRequest().getServletContext(), TLSUtils.getRequest().getSession());
+		return object.isVisibleTemplateObj((AmpTemplatesVisibility)ampTreeVisibility.getRoot());
+	}
+	
+	/**
+	 * Detects current visibility template: used by the current workspace or default one if outside the workspace
+	 * @return AmpTemplatesVisibility
+	 */
+	public static AmpTemplatesVisibility getCurrentTemplate() {
+		AmpTemplatesVisibility currentTemplate = null;
+		//check if this is inside a workspace and retreive its template
+		Long teamId = (Long) TLSUtils.getRequest().getSession().getAttribute(Constants.TEAM_ID);
+		if (teamId != null) {
+			AmpTeam ampTeam = TeamUtil.getAmpTeam(teamId);
+			if (ampTeam != null)
+				currentTemplate = ampTeam.getFmTemplate();
+		}
+		//if outside the workspace, then provide the default one
+		if (currentTemplate == null) {
+			try {
+				currentTemplate = FeaturesUtil.getTemplateVisibility(
+				        FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),
+				        PersistenceManager.getRequestDBSession());
+			} catch (HibernateException | DgException e) {
+				logger.error(e);
+			} 
+        }
+		return currentTemplate;
 	}
 	
 	public static boolean existTemplateVisibility(String templateName,Long templateId) {

@@ -172,4 +172,10 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
     public void setUsedByTeamsNames(List<String> usedByTeamsNames) {
         this.usedByTeamsNames = usedByTeamsNames;
     }
+
+	@Override
+	public boolean isVisibleTemplateObj(AmpTemplatesVisibility template) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

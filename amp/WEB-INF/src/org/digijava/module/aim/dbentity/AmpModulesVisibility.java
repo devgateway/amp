@@ -58,7 +58,7 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
 	 * @param aObjVis
 	 * @return
 	 */
-	public boolean isVisibleTemplateObj(AmpObjectVisibility aObjVis) {
+	public boolean isVisibleTemplateObj(AmpTemplatesVisibility aObjVis) {
 		for (Iterator it = aObjVis.getItems().iterator(); it.hasNext();) {
 			AmpModulesVisibility x = (AmpModulesVisibility) it.next();
 			if (x.getId().compareTo(id) == 0)

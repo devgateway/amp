@@ -24,6 +24,7 @@ import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 public class ViewSelectActivityTabs extends Action {
@@ -105,7 +106,7 @@ public class ViewSelectActivityTabs extends Action {
 							.getModuleByNameFromRoot(name);
 					if (modulesVisibility != null) {
 						isVisible = modulesVisibility
-								.isVisibleTemplateObj(ampTreeVisibility
+								.isVisibleTemplateObj((AmpTemplatesVisibility)ampTreeVisibility
 										.getRoot());
 					}
 				}

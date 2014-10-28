@@ -342,7 +342,7 @@ public class GisEndPoints {
 	}
 	
 	@GET
-	@Path("/indicator/{admlevel}")
+	@Path("/indicators/{admlevel}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="IndicatorByAdmLevel")
 	public List<JsonBean> getIndicatorByAdmLevel(@PathParam ("admlevel") String admLevel) {
@@ -369,7 +369,7 @@ public class GisEndPoints {
 			json.set("id", indicator.getId());
 			json.set("description", indicator.getDescription());
 			if (includeAdmLevel) {
-				json.set("admLevelId", indicator.getAdmLevel().getId());
+				json.set("admLevelId", indicator.getAdmLevel().getLabel());
 			}
 			List<JsonBean> colors = new ArrayList<JsonBean>();
 			List<AmpIndicatorColor> colorList = new ArrayList<AmpIndicatorColor>(indicator.getColorRamp());

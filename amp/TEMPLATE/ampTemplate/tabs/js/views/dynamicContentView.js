@@ -1,6 +1,7 @@
 define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!views/html/settingsDialogTemplate.html', 'models/settings',
-		'business/settings/settingsManager', 'filtersWidget', 'business/filter/filterManager', 'jquery', 'jqueryui' ], function(Marionette,
-		dynamicContentTemplate, settingsDialogTemplate, Settings, SettingsManager, FiltersWidget, FilterManager, jQuery) {
+		'business/settings/settingsManager', 'filtersWidget', 'business/filter/filterManager', 'business/translations/translationManager',
+		'jquery', 'jqueryui' ], function(Marionette, dynamicContentTemplate, settingsDialogTemplate, Settings, SettingsManager,
+		FiltersWidget, FilterManager, TranslationManager, jQuery) {
 
 	var reportId;
 	var reportFilters;
@@ -33,12 +34,19 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 			var FilterDialogContainerView = Marionette.ItemView.extend({
 				template : "<p></p>",
 				render : function(model) {
-					console.log('filter widget loaded');
-					// Convert report filters to filterwidget filters.
-					var blob = FilterManager.convertJavaFiltersToJS(reportFilters);
-					app.TabsApp.filtersWidget.deserialize(blob, {
-						silent : true
-					});
+					if (!app.TabsApp.currentTabOpenedFilters) {
+						console.log('filter widget loaded');
+						// Convert report filters to filterwidget filters.
+						var blob = FilterManager.convertJavaFiltersToJS(reportFilters);
+						app.TabsApp.filtersWidget.deserialize(blob, {
+							silent : true
+						});
+						app.TabsApp.currentTabOpenedFilters = true;
+					} else {
+						app.TabsApp.filtersWidget.deserialize(app.TabsApp.serializedFilters, {
+							silent : true
+						});
+					}
 
 					// Show the dialog and fix the position.
 					jQuery(containerName).show();
@@ -64,16 +72,17 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 			settingsDialog.render();
 			jQuery(settingsDialog.el).dialog({
 				modal : true,
-				title : 'Settings',
+				title : "Settings",
 				width : 500
 			});
 			jQuery(".buttonify").button();
+			TranslationManager.searchAndTranslate();
 		},
 		onShow : function(data) {
 			// Create jQuery buttons.
 			// alert(jQuery("#main-dynamic-content-region_" + reportId + "
 			// .buttonify"));
-			jQuery("#main-dynamic-content-region_" + reportId + " .buttonify").button();
+			jQuery("#main-dynamic-content-region_" + reportId + " .buttonify").button();			
 		}
 	});
 

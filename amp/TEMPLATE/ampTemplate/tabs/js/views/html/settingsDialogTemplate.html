@@ -3,13 +3,13 @@
         <form name="<%= formName %>" method="post" action="<%= action %>" onsubmit="return validateFormat();">
             <input type="hidden" name="initialCal" id="initialCal" value="4">
             <center>
-                <b class="settings-section-title">Number Format</b>
+                <b class="settings-section-title" data-i18n="tabs.common:numberFormat">Number Format</b>
             </center>
             <hr>
             <table width="100%" border="0" align="center" cellpadding="2" cellspacing="0" style="font-size: 11px;">
                 <tbody>
                 <tr>
-                    <td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px">Decimal Separator&nbsp;</td>
+                    <td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px" data-i18n="tabs.common:decimalSeparator">Decimal Separator</td>
                     <td width="20%" height="18" nowrap="nowrap">
 	                    <select name="customDecimalSymbol" onchange="initFormatPopup();" id="customDecimalSymbol" class="dropdwn_sm"> 
 	                    	<% for(var ds in decimalSeparators) { %>
@@ -25,7 +25,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px">Maximum Fraction Digits &nbsp;</td>
+                    <td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px" data-i18n="tabs.common:maxFractionDigits">Maximum Fraction Digits</td>
                     <td width="60%">
                     	<select name="customDecimalPlaces" onchange="initFormatPopup();" id="customDecimalPlaces" class="dropdwn_sm"> 
 	                    	<% for(var dp in decimalPlaces) { %>
@@ -41,14 +41,14 @@
                     </td>
                 </tr>
                 <tr>
-                    <td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px">Use Grouping Separator&nbsp;</td>
+                    <td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px" data-i18n="tabs.common:useGroupingSeparator">Use Grouping Separator</td>
                     <td width="20%" height="18" nowrap="nowrap">
                     	<input type="checkbox" name="customUseGrouping" value="on" <% (selectedUseGroupingSeparator == true ? print("checked='checked'") : print('')) %> onchange="initFormatPopup();" id="customUseGrouping">
                     </td>
                     <td width="20%" height="18" align="left" nowrap="nowrap">&nbsp;</td>
                 </tr>
                 <tr>
-                    <td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px">Grouping Separator&nbsp;</td>
+                    <td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px" data-i18n="tabs.common:groupingSeparator">Grouping Separator</td>
                     <td width="20%" height="18" nowrap="nowrap" style="font-size: 11px">
                     	<select name="customGroupCharacter" onchange="initFormatPopup();" id="customGroupCharacter" class="dropdwn_sm"> 
 	                    	<% for(var gs in groupSeparators) { %>
@@ -64,12 +64,12 @@
                     </td>
                 </tr>
                 <tr>
-                    <td height="18" align="right" nowrap="nowrap" style="font-size: 11px">Group Size&nbsp;</td>
+                    <td height="18" align="right" nowrap="nowrap" style="font-size: 11px" data-i18n="tabs.common:groupSize">Group Size</td>
                     <td height="18" colspan="2" nowrap="nowrap">
                     	<input type="text" name="customGroupSize" maxlength="1" size="2" value="" onchange="initFormatPopup();" disabled="disabled" class="inputx"></td>
                 </tr>
                 <tr>
-                    <td height="18" align="right" nowrap="nowrap" style="font-size: 11px">Amounts units &nbsp;</td>
+                    <td height="18" align="right" nowrap="nowrap" style="font-size: 11px" data-i18n="tabs.common:amountUnits">Amounts units</td>
                     <td height="18" colspan="2" nowrap="nowrap">
                     	<select name="amountinthousands" onchange="initFormatPopup();" id="customAmountinThousands" class="dropdwn_sm"> 
 	                    	<% for(var au in amountUnits) { %>
@@ -84,7 +84,7 @@
 					</td>
                 </tr>
                 <tr>
-                    <td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px">Example&nbsp;</td>
+                    <td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px" data-i18n="tabs.common:example">Example</td>
                     <td height="18" colspan="2" nowrap="nowrap" style="font-weight: bold; font-size: 11px">
                         <div id="number" style="margin-left: 3px">123 456 789,93</div>
                     </td>
@@ -93,13 +93,13 @@
             </table>
             <br>
             <center>
-                <b style="font-size: 11px;"> Other Settings </b>
+                <b style="font-size: 11px;" data-i18n="tabs.common:otherSettings">Other Settings</b>
             </center>
             <hr>
             <table width="400" align="center" cellpadding="2" cellspacing="2" style="font-size: 11px;">
                 <tbody>
                 <tr>
-                    <td width="40%" style="text-align: right; font-size: 11px">Currency&nbsp;</td>
+                    <td width="40%" style="text-align: right; font-size: 11px" data-i18n="tabs.common:currency">Currency</td>
                     <td>
                     	<select name="currency" onchange="initFormatPopup();" id="currency" class="dropdwn_sm"> 
 	                    	<% for(var c in currencies) { %>
@@ -114,7 +114,7 @@
 	            	</td>
                 </tr>
                 <tr>
-                    <td width="40%" style="text-align: right; font-size: 11px">Calendar&nbsp;</td>
+                    <td width="40%" style="text-align: right; font-size: 11px" data-i18n="tabs.common:calendar">Calendar</td>
                     <td>
                     	<select name="calendar" onchange="initFormatPopup();" id="calendar" class="dropdwn_sm"> 
 	                    	<% for(var c in calendar) { %>
@@ -137,10 +137,10 @@
                     <input type="hidden" name="reportContextId" value="845"> 
                     <input type="hidden" name="defaultCurrency" value="96"> 
                     <input type="hidden" name="defaultCalendar" value="4"> 
-                    <button name="applyFormat" id="applyFormatBtn" class="buttonify">Apply Format</button> 
+                    <input type="button" name="applyFormat" id="applyFormatBtn" class="buttonify" data-i18n="tabs.common:applyFormat" value="Apply Format"/> 
                     <input type="hidden" name="apply" value="true"> 
                     <input type="hidden" name="resetFormat" value="false"> 
-                    <button name="applyFormat" onclick="ResetCustom(2);" class="buttonify">Reset</button>
+                    <input type="button" name="applyFormat" onclick="ResetCustom(2);" class="buttonify" data-i18n="tabs.common:reset" value="Reset"/>
                 </div>
             </div>
         </form>

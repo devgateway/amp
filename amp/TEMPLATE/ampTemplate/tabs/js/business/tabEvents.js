@@ -3,9 +3,10 @@
 
 define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicContentView', 'text!views/html/filtersWrapperTemplate.html',
 		'text!views/html/filtersItemTemplate.html', 'models/filter', 'collections/filters', 'models/tab',
-		'text!views/html/invisibleTabLinkTemplate.html', 'text!views/html/legendsTemplate.html', 'business/grid/gridManager', 'jquery',
-		'jqueryui' ], function(Marionette, Contents, Content, DynamicContentView, filtersTemplate, filtersItemTemplate, Filter, Filters,
-		Tab, invisibleTabLinkTemplate, legendsTemplate, gridManager, jQuery) {
+		'text!views/html/invisibleTabLinkTemplate.html', 'text!views/html/legendsTemplate.html', 'business/grid/gridManager',
+		'business/translations/translationManager', 'jquery', 'jqueryui' ], function(Marionette, Contents, Content, DynamicContentView,
+		filtersTemplate, filtersItemTemplate, Filter, Filters, Tab, invisibleTabLinkTemplate, legendsTemplate, gridManager,
+		TranslationManager, jQuery) {
 
 	"use strict";
 
@@ -163,9 +164,15 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 		onCreateTab : function(event, ui) {
 			console.log('create tab');
 			this.onActivateTab(event, ui);
+
+			TranslationManager.searchAndTranslate();
 		},
 		onActivateTab : function(event, ui) {
 			console.log('activate tab');
+
+			// This tab is refreshed so we reset the filter widget status.
+			app.TabsApp.currentTabOpenedFilters = false;
+			app.TabsApp.serializedFilters = null;
 
 			// TODO: move this logic elsewhere.
 			var panel = null;

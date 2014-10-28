@@ -25,6 +25,7 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'jquery' ], function(Filt
 		// Register apply and cancel buttons.
 		app.TabsApp.listenTo(app.TabsApp.filtersWidget, 'cancel', function() {
 			console.log('filters cancel');
+			app.TabsApp.serializedFilters = app.TabsApp.filtersWidget.serialize();
 			jQuery(container).hide();
 		});
 		app.TabsApp.listenTo(app.TabsApp.filtersWidget, 'apply', function(data) {

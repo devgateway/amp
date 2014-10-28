@@ -43,7 +43,7 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 	if (hasMoreTabs) {
 		var moreTabsTab = new Tab({
 			id : -1,
-			name : 'More Tabs...',
+			name : "<span data-i18n='tabs.common:moreTabs'>More Tabs...</span>",
 			visible : true
 		});
 		tabsCollection.push(moreTabsTab);

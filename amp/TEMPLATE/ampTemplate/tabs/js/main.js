@@ -16,7 +16,8 @@ require.config({
 		 * 'lib/jqgrid-4.6.0/js2/jquery.jqGrid.src',
 		 */
 		jqgrid : 'lib/one_place/jqgrid-all',
-		filtersWidget : '/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter'
+		filtersWidget : '/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter',
+		i18next : 'http://cdnjs.cloudflare.com/ajax/libs/i18next/1.6.3/i18next-1.6.3.min'
 	},
 	shim : {
 		underscore : {
@@ -48,6 +49,9 @@ require.config({
 		filtersWidget : {
 			deps : [ 'backbone' ],
 			exports : 'filtersWidget'
+		},
+		i18next : {
+			deps : [ 'jquery' ]
 		}
 	}
 });

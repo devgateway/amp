@@ -7,17 +7,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.newreports.ReportMeasure;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
 
 public class GisUtil {
 	private static final Logger logger = Logger.getLogger(GisUtil.class);
@@ -83,35 +82,27 @@ public class GisUtil {
 	}
 	
 	/**
-	 * @return general currency settings
+	 * @return list of GIS settings
 	 */
-	public static GisSettingOptions getCurrencySettings() {
-		//build currency options
-		List<GisSettingOptions.Option> options = new ArrayList<GisSettingOptions.Option>();
-		for (AmpCurrency ampCurrency : CurrencyUtil.getActiveAmpCurrencyByName()) {
-			GisSettingOptions.Option currencyOption = new GisSettingOptions.Option(ampCurrency.getCurrencyCode(), ampCurrency.getCurrencyName());
-			options.add(currencyOption);
-		}
-		//identifies the base currency 
-		String defaultId = EndpointUtils.getDefaultCurrencyCode();
-		
-		return new GisSettingOptions(GisConstants.CURRENCY_ID, GisConstants.CURRENCY_NAME, defaultId, options);
+	public static List<SettingOptions> getSettings() {
+		//retrieve common settings
+		List<SettingOptions> settings = EndpointUtils.getSettings();
+		//add GIS specific settings
+		settings.add(EndpointUtils.getFundingTypeSettings(GisConstants.MEASURE_TO_NAME_MAP));
+		return settings;
 	}
 	
-	/**
-	 * @return general calendar settings
-	 */
-	public static GisSettingOptions getCalendarSettings() {
-		//build calendar options
-		List<GisSettingOptions.Option> options = new ArrayList<GisSettingOptions.Option>();
-		for (AmpFiscalCalendar ampCalendar : DbUtil.getAllFisCalenders()) {
-			GisSettingOptions.Option calendarOption = new GisSettingOptions.Option(
-					String.valueOf(ampCalendar.getAmpFiscalCalId()), ampCalendar.getName());
-			options.add(calendarOption);
-		}
-		//identifies the default calendar 
-		String defaultId = EndpointUtils.getDefaultCalendarId();
+	public static void applySettings(ReportSpecificationImpl spec, JsonBean config) {
+		//apply first common settings, i.e. calendar and currency
+		EndpointUtils.applySettings(spec, config);
 		
-		return new GisSettingOptions(GisConstants.CALENDAR_TYPE_ID, GisConstants.CALENDAR_TYPE_NAME, defaultId, options);
+		//now apply GIS custom settings, i.e. selected measures
+		if (config.get(EPConstants.SETTINGS) != null) {
+			Map<Integer, Object> settings = (Map<Integer, Object>) config.get(EPConstants.SETTINGS);
+			List<String> measureOptions = (List<String>)settings.get(EPConstants.SETTINGS_FUNDING_TYPE_ID);
+			if (measureOptions != null)
+				for (String measure : measureOptions) 
+					spec.addMeasure(new ReportMeasure(measure));
+		}
 	}
 }

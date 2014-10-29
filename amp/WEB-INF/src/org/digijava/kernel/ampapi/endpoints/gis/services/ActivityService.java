@@ -28,6 +28,7 @@ import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -75,8 +76,16 @@ public class ActivityService {
 		//for now we are going to return the donor_id as matchesfilters
 		//then we have to fetch all other matchesfilters outisde mondrian
 
+		/*
+		 * Enabled this and remove explicit measures config 
+		 * when confirmed that the expected measures config is indeed coming from settings
+		GisUtil.applySettings(config);
+		 */
+		//TODO: remove this -- start --
+		EndpointUtils.applySettings(spec, config);
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
  		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
+ 		// remove this -- end --
 
  		spec.setCalculateColumnTotals(doTotals);
 		

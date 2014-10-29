@@ -11,7 +11,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
  * Stores a generic setting configuration  
  * @author Nadejda Mandrescu
  */
-public class GisSettingOptions {
+public class SettingOptions {
 	/**
 	 * A setting option
 	 */
@@ -24,13 +24,17 @@ public class GisSettingOptions {
 		 * @param name - option name
 		 */
 		public Option(String id, String name) {
+			this(id, name, false);
+		}
+		
+		public Option(String id, String name, boolean translate) {
 			this.id = id;
-			this.name = name;
+			this.name = translate ? TranslatorWorker.translateText(name) : name;
 		}
 	}
 	
 	/** Setting id */
-	public final Integer id;
+	public final String id;
 	/** Setting name */
 	public final String name;
 	/** Default setting option id */
@@ -45,7 +49,7 @@ public class GisSettingOptions {
 	 * @param defaultId - default setting option id
 	 * @param options - list of available setting options
 	 */
-	public GisSettingOptions(Integer id, String name, String defaultId, List<Option> options) {
+	public SettingOptions(String id, String name, String defaultId, List<Option> options) {
 		this.id = id;
 		this.name = TranslatorWorker.translateText(name);
 		this.defaultId = defaultId;

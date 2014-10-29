@@ -33,9 +33,9 @@ import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
-import org.digijava.kernel.ampapi.endpoints.util.GisSettingOptions;
 import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.util.SettingOptions;
 import org.digijava.kernel.ampapi.endpoints.util.SimpleResultFormatter;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
@@ -263,9 +263,11 @@ public class GisEndPoints {
     *  },
     *  "keyWord":"some activity"
    *},
-   *"config":{  
-   *   "currency":"US"
-   *}
+   * “settings” :  {
+   * 		"0" : [“Actual Commitments”, “Actual Disbursements”],
+   * 		"1" : “USD”,
+   * 		"2" : “123”
+   * 	}
    * }
 	*/
 	@POST
@@ -439,10 +441,7 @@ public class GisEndPoints {
 	@Path("/settings")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="Settings")
-	public List<GisSettingOptions> getSettings() {
-		List<GisSettingOptions> settings = new ArrayList<GisSettingOptions>();
-		settings.add(GisUtil.getCurrencySettings());
-		settings.add(GisUtil.getCalendarSettings());
-		return settings;
+	public List<SettingOptions> getSettings() {
+		return GisUtil.getSettings();
 	}
 }

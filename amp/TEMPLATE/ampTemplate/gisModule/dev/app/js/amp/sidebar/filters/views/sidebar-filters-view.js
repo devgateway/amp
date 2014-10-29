@@ -17,7 +17,6 @@ module.exports = BaseControlView.extend({
     'click .accordion-heading': 'newlaunchFilter'
   },
 
-
   template: _.template(Template),
 
   initialize:function(options) {
@@ -43,25 +42,31 @@ module.exports = BaseControlView.extend({
     this.$('.content').html(this.template({title: this.title}));
     this.app.data.filter.setElement(this.el.querySelector('#filter-popup')); //self.$('#filter-popup'));
 
+    this._attachListeners();
+
     return this;
   },
 
-
   newlaunchFilter:function() {
-    var self = this;
     this.app.data.filter.showFilters(); // triggers stash of vars etc...
     this.$('#filter-popup').show();
+  },
 
+  _attachListeners: function() {
+    var self = this;
 
     // could do better, but must close accordion or get weird states from bootstrap and manual filter showing....
     this.app.data.filter.on('cancel', function() {
       self.$('.accordion-body').collapse('hide');
     });
 
-    this.app.data.filter.on('apply', function() {
+    this.app.data.filter.on('apply', function(serialized) {
       //TODO: ...trigger something wider....or atttach fitler widget to app.data....
+      console.log('serialized', serialized);
+
       self.$('.accordion-body').collapse('hide');
     });
   }
+
 });
 

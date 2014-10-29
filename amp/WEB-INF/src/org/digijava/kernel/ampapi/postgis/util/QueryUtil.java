@@ -6,18 +6,37 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
+import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportArea;
+import org.dgfoundation.amp.newreports.ReportAreaImpl;
+import org.dgfoundation.amp.newreports.ReportCell;
+import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportEntityType;
+import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportMeasure;
+import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
 import org.digijava.kernel.exception.DgException;
@@ -43,9 +62,64 @@ import com.vividsolutions.jts.io.WKTReader;
 public class QueryUtil {
 	protected static Logger logger = Logger.getLogger(QueryUtil.class);
 
-	public static List<ClusteredPoints> getClusteredPoints(String adminLevel) {
+	public static List<ClusteredPoints> getClusteredPoints(JsonBean config) throws AmpApiException {
+		String adminLevel = "";
+
+		if (config != null) {
+			Object otherFilter = config.get("otherFilters");
+			if (otherFilter != null
+					&& ((Map<String, Object>) otherFilter).get("adminLevel") != null) {
+				adminLevel = ((Map<String, Object>) otherFilter).get(
+						"adminLevel").toString();
+			}
+		}
+		//fetch activities filtered by mondrian
+		
+		boolean doTotals=false;
+ 		ReportSpecificationImpl spec = new ReportSpecificationImpl("ActivityIds");
+
+		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
+ 		MondrianReportFilters filterRules = null;
+
+		if (config != null) {
+			Object filter = config.get("columnFilters");
+			if (filter != null) {
+				filterRules = FilterUtils
+						.getApiColumnFilter((LinkedHashMap<String, Object>) config
+								.get("columnFilters"));
+			}
+		}
+		if (filterRules != null) {
+			spec.setFilters(filterRules);
+		}
+		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
+		GeneratedReport report = null;		
+		try {
+			report = generator.executeReport(spec);
+		} catch (AMPException e) {
+			logger.error("Cannot execute report", e);
+			throw new AmpApiException(e);
+		}
+		List<Long>activitiesId=new ArrayList<Long>();
+		List<ReportArea> ll=null;
+		ll = report.reportContents.getChildren();
+		for (ReportArea reportArea : ll) {
+			Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
+			Set<ReportOutputColumn> col = row.keySet();
+			for (ReportOutputColumn reportOutputColumn : col) {
+				if(
+				reportOutputColumn.originalColumnName.equals(ColumnConstants.ACTIVITY_ID)){
+					activitiesId.add(new Long(row.get(reportOutputColumn).value.toString()));
+				}
+			}
+		}
+		
 		List<ClusteredPoints> l = new ArrayList<ClusteredPoints>();
+		
 		ClusteredPoints cp = null;
+		
+		
 		String qry = " WITH RECURSIVE rt_amp_category_value_location(id, parent_id, gs_lat, gs_long, acvl_parent_category_value, level, root_location_id,root_location_description) AS ( "
 				+ " select acvl.id, acvl.parent_location, acvl.gs_lat, acvl.gs_long, acvl.parent_category_value, 1, acvl.id,acvl.location_name  "
 				+ " from amp_category_value_location acvl  "
@@ -63,6 +137,7 @@ public class QueryUtil {
 				+ " FROM amp_activity_location al  "
 				+ " join amp_location loc on al.amp_location_id = loc.amp_location_id  "
 				+ " join rt_amp_category_value_location acvl on loc.location_id = acvl.id  "
+				+ " where al.amp_activity_id in(" + Util.toCSStringForIN(activitiesId) + " ) "
 				+ " order by acvl.root_location_id,al.amp_activity_id";
 		Connection conn = null;
 		try {
@@ -125,40 +200,7 @@ public class QueryUtil {
 			logger.error("cannot retrieve activity");
 			return null;
 		}
-		// eaForm.getFunding().populateFromFundings(activity.getFunding(),
-		// toCurrCode, tm, debug);
-
 	}
-
-	public static List<AmpActivity> getActivities() {
-		return getActivities(null);
-	}
-
-	@SuppressWarnings("unchecked")
-	public static List<AmpActivity> getActivities(String ampActivityIds) {
-
-		List<AmpActivity> a = null;
-			// this HQL does a lot of sql queries, yet to be determined how we
-			// will optimized
-			String queryString = "select a from " + AmpActivity.class.getName()
-					+ " as a  inner join fetch a.sectors as s"
-					+ " inner join fetch s.classificationConfig as cc inner join fetch s.sectorId as ss"
-					+ " inner join fetch a.orgrole as org " + " inner join fetch org.organisation as orga "
-					+ " inner join fetch a.actPrograms ap " + " inner join fetch ap.programSetting ps "
-					+ " inner join fetch ap.program p " + "";
-			if (ampActivityIds != null) {
-				queryString += " where a.ampActivityId in (" + ampActivityIds + ")";
-			}
-
-			Query q = PersistenceManager.getSession().createQuery(queryString);
-			q.setMaxResults(200);
-			a = q.list();
-
-		
-		return a;
-
-	}
-
 	/**
 	 * return a list of saved maps.
 	 * 

@@ -83,16 +83,16 @@ public class GisEndPoints {
 	 * 
 	 *            Available regions
 	 * @return
+	 * @throws AmpApiException 
 	 */
 	@POST
 	@Path("/cluster")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ClusterPointsByAdmin")
 	public final FeatureCollectionGeoJSON getClusteredPointsByAdm(
-			final JsonBean filter) {
+			final JsonBean config) throws AmpApiException {
 
-		List<ClusteredPoints> c = QueryUtil.getClusteredPoints(filter.get(
-				"adminLevel").toString());
+		List<ClusteredPoints> c = QueryUtil.getClusteredPoints(config);
 		FeatureCollectionGeoJSON result = new FeatureCollectionGeoJSON();
 		for (ClusteredPoints clusteredPoints : c) {
 			result.features.add(getPoint(new Double(clusteredPoints.getLon()),

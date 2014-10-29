@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -156,10 +158,8 @@ public class DashboarsService {
 		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
 			JsonBean amountObj = new JsonBean();
 			ReportAreaImpl reportArea = (ReportAreaImpl) iterator.next();
-			LinkedHashMap<ReportOutputColumn, ReportCell> content = (LinkedHashMap<ReportOutputColumn, ReportCell>) reportArea
-					.getContents();
-			org.dgfoundation.amp.newreports.TextCell reportcolumn = (org.dgfoundation.amp.newreports.TextCell) content
-					.values().toArray()[0];
+			LinkedHashMap<ReportOutputColumn, ReportCell> content = (LinkedHashMap<ReportOutputColumn, ReportCell>) reportArea.getContents();
+			org.dgfoundation.amp.newreports.TextCell reportcolumn = (org.dgfoundation.amp.newreports.TextCell) content.values().toArray()[0];
 			ReportCell reportcell = (ReportCell) content.values().toArray()[1];
 			amountObj.set("name", reportcolumn.displayedValue);
 			amountObj.set("amount", reportcell.value);
@@ -250,5 +250,95 @@ public class DashboarsService {
 		return retlist;
 	}
 
+	/**
+	 * 
+	 * @param adjtype
+	 * @param n
+	 * @return
+	 */
 	
+	public static JsonBean fundingtype(String adjtype) {
+		String adjustmenttype = "";
+		String err = null;
+		JsonBean retlist = new JsonBean();
+		
+		switch (adjtype.toUpperCase()) {
+		case "AC":
+			adjustmenttype = MoConstants.ACTUAL_COMMITMENTS;
+			break;
+		case "AD":
+			adjustmenttype = MoConstants.ACTUAL_DISBURSEMENTS;
+			break;
+		default:
+			adjustmenttype = MoConstants.ACTUAL_COMMITMENTS;
+			break;
+		}
+		
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("fundingtype");
+		spec.addColumn(new ReportColumn(ColumnConstants.FUNDING_YEAR,ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(MoConstants.TYPE_OF_ASSISTANCE,ReportEntityType.ENTITY_TYPE_ALL));
+		spec.getHierarchies().addAll(spec.getColumns());
+		spec.addMeasure(new ReportMeasure(adjustmenttype,ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addSorter(new SortingInfo(new ReportMeasure(adjustmenttype), false));
+		spec.setCalculateRowTotals(true);
+		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), true);
+		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
+		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
+		GeneratedReport report = null;
+		
+		try {
+			report = generator.executeReport(spec);
+		} catch (Exception e) {
+			System.err.println(e.getClass().getName() + ": " + e.getMessage());
+			err = e.getMessage();
+		}
+		
+		//Get total
+		if (report.reportContents != null && report.reportContents.getContents() != null && report.reportContents.getContents().size() > 0) {
+			ReportCell totals = (ReportCell)report.reportContents.getContents().values().toArray()[2];
+			retlist.set("total", totals.value);
+		} else {
+			retlist.set("total", 0);
+		}
+		String currcode = EndpointUtils.getDefaultCurrencyCode();
+		retlist.set("currency", currcode);
+		retlist.set("Numberformat",numberformat);
+		
+		List<JsonBean> values = new ArrayList<JsonBean>();
+		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
+			List<JsonBean> subvalues = new ArrayList<JsonBean>();
+			ReportAreaImpl reportArea = (ReportAreaImpl) iterator.next();
+			JsonBean year = new JsonBean();
+			for (int i = 0; i < reportArea.getChildren().size(); i++) {
+				Map<ReportOutputColumn, ReportCell> row = reportArea.getChildren().get(i).getContents();
+				JsonBean amountObj = new JsonBean();
+				for (Entry<ReportOutputColumn, ReportCell> entry : row.entrySet()) {
+					ReportOutputColumn key = entry.getKey();
+					ReportCell value = entry.getValue();
+					switch (key.originalColumnName) {
+					case ColumnConstants.FUNDING_YEAR:
+						if (!"".equals(value.value)) {
+							year.set("Year", value.value);
+						}
+						break;
+					case ColumnConstants.TYPE_OF_ASSISTANCE:
+						amountObj.set("type", value.displayedValue);
+						break;
+					case MoConstants.ACTUAL_COMMITMENTS:
+						amountObj.set("amount", value.value);
+					default:
+						break;
+					}
+					if (amountObj.getSize()==2){
+						subvalues.add(amountObj);
+					}
+				}
+			}
+			year.set("values", subvalues);
+			values.add(year);
+		}
+		retlist.set("values", values);
+		
+		return retlist;
+	}
 }

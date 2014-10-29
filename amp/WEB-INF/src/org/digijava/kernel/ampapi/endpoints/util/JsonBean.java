@@ -31,7 +31,7 @@ public class JsonBean {
 
 	@JsonAnySetter
 	public void set(String name, Object value) {
-		// we firs try to translate the text
+		// we first try to translate the text
 		param.put(name, value);
 	}
 	

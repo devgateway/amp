@@ -9,12 +9,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-
-import net.sf.json.JSONObject;
-
 import org.digijava.kernel.ampapi.endpoints.gis.services.DashboarsService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+
+import net.sf.json.JSONObject;
+
 
 /**
  * 
@@ -24,23 +24,19 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
 @Path("dashboard")
 public class EndPoints {
-
-	@GET
-	@Path("/tops")
-	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="topsList")
 	/**
 	 * Show a list of available top ___ things, with their names
 	 * @return
 	 */
+	
+	@GET
+	@Path("/tops")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="topsList")
 	public List<JsonBean> getAdminLevelsTotalslist() {
 		return DashboarsService.getTopsList();
 	}
 
-	@GET
-	@Path("/tops/{type}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="tops")
 	/**
 	 * Get top donors values for dash boards chart
 	 * @param type (Chart Type)
@@ -48,6 +44,11 @@ public class EndPoints {
 	 * @param limit (Result Limit)
 	 * @return
 	 */
+	
+	@GET
+	@Path("/tops/{type}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="tops")
 	public JsonBean getAdminLevelsTotals(
 			@PathParam("type") String type,
 			@DefaultValue("ac") @QueryParam("adjtype") String adjtype,
@@ -55,16 +56,33 @@ public class EndPoints {
 		return DashboarsService.getTops(type,adjtype,limit);
 	}
 	
-	@GET
-	@Path("/aidPredictability")
-	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="aidPredictability")
 	/**
 	 * Get aid predictability values for dash boards chart
 	 * @param years (number of years to include)
 	 * @return
 	 */
+	
+	@GET
+	@Path("/aidPredictability")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="aidPredictability")
 	public JSONObject getAidPredictability() {
 		return DashboarsService.getAidPredictability(null);
+	}
+	
+	/**
+	 * 
+	 * @param adjtype
+	 * @param limit
+	 * @return
+	 */
+	
+	@GET
+	@Path("/ftype")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui=false,name="ftype")
+	public JsonBean getfundingtype(
+			@DefaultValue("ac") @QueryParam("adjtype") String adjtype) {
+		return DashboarsService.fundingtype(adjtype);
 	}
 }

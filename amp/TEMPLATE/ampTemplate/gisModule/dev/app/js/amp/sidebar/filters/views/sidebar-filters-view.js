@@ -62,9 +62,12 @@ module.exports = BaseControlView.extend({
 
     this.app.data.filter.on('apply', function(serialized) {
       //TODO: ...trigger something wider....or atttach fitler widget to app.data....
-      console.log('serialized', serialized);
+      console.log('serialized', serialized.columnFilters);
 
-      self.$('.accordion-body').collapse('hide');
+      //only collapse ui if it's expanded...otherwise strange bootstrap behaviour.
+      if (self.$('.accordion-body.collapse.in').length > 0) {
+        self.$('.accordion-body').collapse('hide');
+      }
     });
   }
 

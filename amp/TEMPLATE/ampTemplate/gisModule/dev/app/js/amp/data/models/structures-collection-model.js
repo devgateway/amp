@@ -75,6 +75,7 @@ module.exports = Backbone.Model
     return Backbone.Model.prototype.fetch.call(this, options);
   },
 
+  //TODO: we don't want to do loadonce, because fitlers change....
   load: function() {
     return LoadOnceMixin.load.apply(this);
   },
@@ -99,6 +100,15 @@ module.exports = Backbone.Model
     return deferred;
   },
 
+  // does not do new web requests, unless it's never been done.
+  getSites: function(){
+    if (_.has(this, '_loaded')) {
+      return this._loaded;
+    } else{
+      return this.loadAll();
+    }
+  },
+
   parse: function(data) {
     // TODO: don't keep data.features around
     data.sites = new Structures(data.features);
@@ -115,7 +125,7 @@ module.exports = Backbone.Model
     var self = this;
 
     //load the necessary activities.
-    this.loadAll().done(_.bind(function() {
+    this.getSites().done(_.bind(function() {
       var activity;
 
       var orgSites = this.get('sites')

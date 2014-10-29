@@ -10,7 +10,7 @@ module.exports = BaseControlView.extend({
   id: 'tool-layers-sd',
   title: 'Statistical Data',
   iconClass: 'ampicon-layers',
-  description: 'Country indicators.',
+  description: 'View indicators on sub-national needs.',
 
   template: _.template(Template),
 

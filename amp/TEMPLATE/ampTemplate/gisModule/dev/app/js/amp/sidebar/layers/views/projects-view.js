@@ -14,7 +14,7 @@ module.exports = BaseControlView.extend({
   id: 'tool-layers',
   title: 'Project Data',
   iconClass: 'ampicon-projects',
-  description: 'Select Points or Indicators to visualize data on the main map.',
+  description: 'View where projects are being implemented throughout the country.',
 
   template: _.template(Template),
   radioOptionTemplate: _.template(RadioOptionTemplate),

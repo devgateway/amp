@@ -1,11 +1,14 @@
 {
-  "amp.gis:title-projectdata": "Project Data",
-  "amp.gis:title-statisticaldata": "Statistical Data",
-  "amp.gis:title-filters": "Filter",
-  "amp.gis:title-keywordsearch": "Keyword",
-  "amp.gis:title-share": "Share",
-  "amp.gis:title-settings": "Setting",
-
+  "amp.common:title": "DRC AMP",
   "amp.common:username": "Username",
-  "amp.common:title": "DRC AMP"
+  "amp.gis:title-projectdata": "Project Data",
+  "amp.gis:sub-title-projectdata": "View where projects are being implemented throughout the country.",
+  "amp.gis:title-statisticaldata": "Statistical Data",
+  "amp.gis:sub-title-statisticaldata": "View indicators on sub-national needs.",
+  "amp.gis:title-filters": "Filter",
+  "amp.gis:sub-title-filters": "Apply filters to the map.",
+  "amp.gis:title-share": "Share",
+  "amp.gis:sub-title-share": "Download the data in this map or share a link to it",
+  "amp.gis:title-settings": "Setting",
+  "amp.gis:sub-title-settings": ""
 }

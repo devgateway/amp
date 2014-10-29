@@ -380,11 +380,11 @@ public class MondrianReportGenerator implements ReportExecutor {
 		if (reportFilter == null) return;
 		for(Entry<ReportElement, List<FilterRule>> entry : reportFilter.getFilterRules().entrySet()) {
 			ReportElement elem = entry.getKey();
-			MDXAttribute mdxElem = null;
+			MDXElement mdxElem = null;
 			
 			switch (elem.type) {
 			case ENTITY : 
-				mdxElem = (MDXAttribute)MondrianMapping.toMDXElement(elem.entity);
+				mdxElem = MondrianMapping.toMDXElement(elem.entity);
 			break;
 			default: mdxElem = MondrianMapping.getElementByType(elem.type);
 			break; 
@@ -406,7 +406,10 @@ public class MondrianReportGenerator implements ReportExecutor {
 				break;
 				}
 				
-				config.addDataFilter(mdxElem, mdxFilter);
+				if (MDXAttribute.class.isAssignableFrom(mdxElem.getClass()))
+					config.addDataFilter((MDXAttribute)mdxElem, mdxFilter);
+				else
+					config.addAxisFilter(mdxElem, mdxFilter);
 			}
 		}
 	}

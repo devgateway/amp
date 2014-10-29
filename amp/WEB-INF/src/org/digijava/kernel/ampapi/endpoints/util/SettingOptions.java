@@ -35,6 +35,8 @@ public class SettingOptions {
 	
 	/** Setting id */
 	public final String id;
+	/** Specifies if multiple options can be selected */
+	public final Boolean multi;
 	/** Setting name */
 	public final String name;
 	/** Default setting option id */
@@ -49,8 +51,9 @@ public class SettingOptions {
 	 * @param defaultId - default setting option id
 	 * @param options - list of available setting options
 	 */
-	public SettingOptions(String id, String name, String defaultId, List<Option> options) {
+	public SettingOptions(String id, boolean multi, String name, String defaultId, List<Option> options) {
 		this.id = id;
+		this.multi = multi;
 		this.name = TranslatorWorker.translateText(name);
 		this.defaultId = defaultId;
 		this.options = options;

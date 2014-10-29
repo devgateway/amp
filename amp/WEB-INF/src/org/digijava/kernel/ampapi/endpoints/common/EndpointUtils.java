@@ -113,7 +113,7 @@ public class EndpointUtils {
 		//identifies the base currency 
 		String defaultId = EndpointUtils.getDefaultCurrencyCode();
 		
-		return new SettingOptions(EPConstants.SETTINGS_CURRENCY_ID, 
+		return new SettingOptions(EPConstants.SETTINGS_CURRENCY_ID, false,
 				EPConstants.SETTINGS_CURRENCY_NAME, defaultId, options);
 	}
 	
@@ -132,7 +132,7 @@ public class EndpointUtils {
 		//identifies the default calendar 
 		String defaultId = EndpointUtils.getDefaultCalendarId();
 		
-		return new SettingOptions(EPConstants.SETTINGS_CALENDAR_TYPE_ID, 
+		return new SettingOptions(EPConstants.SETTINGS_CALENDAR_TYPE_ID, false,
 				EPConstants.SETTINGS_CALENDAR_TYPE_NAME, defaultId, options);
 	}
 	
@@ -152,7 +152,7 @@ public class EndpointUtils {
 		//identifies the default funding type
 		String defaultId = EPConstants.SETTINGS_DEFAULT_FUNDING_TYPE_ID;
 		
-		return new SettingOptions(EPConstants.SETTINGS_FUNDING_TYPE_ID, 
+		return new SettingOptions(EPConstants.SETTINGS_FUNDING_TYPE_ID, true, 
 				EPConstants.SETTINGS_FUNDING_TYPE_NAME, defaultId, options);
 	}
 	

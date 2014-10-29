@@ -54,7 +54,9 @@ module.exports = Backbone.View.extend({
       self._createClusters(admLayer, leafletLayer);
 
       var boundaries = self.getNewBoundary(admLayer);
-      leafletLayer.addLayer(boundaries);
+      if (boundaries) {
+        leafletLayer.addLayer(boundaries);
+      }
 
     } else {
       this.showLayer(admLayer);
@@ -103,22 +105,24 @@ module.exports = Backbone.View.extend({
 
     var topoboundaries = admLayer.get('boundary');
 
-    /* retrieve the TopoJSON index key */
-    var topoJsonObjectsIndex = _.keys(topoboundaries.objects)[0];
+    if (topoboundaries) {
+      /* retrieve the TopoJSON index key */
+      var topoJsonObjectsIndex = _.keys(topoboundaries.objects)[0];
+      var boundaries = topojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
 
-    var boundaries = topojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
-
-    if (boundaries) {
-      return new L.geoJson(boundaries, {
-        style: {
-          weight: 1,
-          dashArray: '3',
-          fillColor: 'transparent'
-        }
-      });
-    } else {
-      console.error('no boundaries for admLayer?', admLayer);
+      if (boundaries) {
+        return new L.geoJson(boundaries, {
+          style: {
+            weight: 1,
+            dashArray: '3',
+            fillColor: 'transparent'
+          }
+        });
+      } else {
+        console.error('no boundaries for admLayer?', admLayer);
+      }
     }
+
   },
 
 

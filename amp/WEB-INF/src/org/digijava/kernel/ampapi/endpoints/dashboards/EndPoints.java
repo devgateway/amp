@@ -49,11 +49,12 @@ public class EndPoints {
 	@Path("/tops/{type}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="tops")
+	//TODO: Implement Filters
 	public JsonBean getAdminLevelsTotals(
 			@PathParam("type") String type,
 			@DefaultValue("ac") @QueryParam("adjtype") String adjtype,
 			@DefaultValue("5") @QueryParam("limit") Integer limit) {
-		return DashboarsService.getTops(type,adjtype,limit);
+		return DashboarsService.getTops(type,adjtype,limit,null);
 	}
 	
 	/**
@@ -66,12 +67,13 @@ public class EndPoints {
 	@Path("/aidPredictability")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="aidPredictability")
+	//TODO: Implement Filters
 	public JSONObject getAidPredictability() {
 		return DashboarsService.getAidPredictability(null);
 	}
 	
 	/**
-	 * 
+	 * Get funding types by year
 	 * @param adjtype
 	 * @param limit
 	 * @return
@@ -81,8 +83,9 @@ public class EndPoints {
 	@Path("/ftype")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ftype")
+	//TODO: Implement Filters
 	public JsonBean getfundingtype(
 			@DefaultValue("ac") @QueryParam("adjtype") String adjtype) {
-		return DashboarsService.fundingtype(adjtype);
+		return DashboarsService.fundingtype(adjtype,null);
 	}
 }

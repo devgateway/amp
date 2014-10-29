@@ -87,7 +87,7 @@ public class DashboarsService {
 	 * @param n
 	 * @return
 	 */
-	public static JsonBean getTops(String type, String adjtype, Integer n) {
+	public static JsonBean getTops(String type, String adjtype, Integer n, JsonBean filter) {
 		String err = null;
 		String column = "";
 		String adjustmenttype = "";
@@ -132,6 +132,16 @@ public class DashboarsService {
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
 		GeneratedReport report = null;
+		
+		MondrianReportFilters filterRules = null;
+ 		if(filter!=null){
+			Object columnFilters=filter.get("columnFilters");
+			if(columnFilters!=null){
+				filterRules = FilterUtils.getApiColumnFilter((LinkedHashMap<String, Object>)filter.get("columnFilters"));	
+				spec.setFilters (filterRules);
+			}
+ 		}
+ 		
 		try {
 			report = generator.executeReport(spec);
 		} catch (Exception e) {
@@ -175,7 +185,13 @@ public class DashboarsService {
 
 		return retlist;
 	}
-
+	
+	/**
+	 * 
+	 * @param filter
+	 * @return
+	 */
+	
 	public static JSONObject getAidPredictability(JsonBean filter) {
 
 		JSONObject retlist = new JSONObject();
@@ -251,13 +267,13 @@ public class DashboarsService {
 	}
 
 	/**
-	 * 
-	 * @param adjtype
-	 * @param n
+	 * Get a list of funding types by year.
+	 * @param adjtype - Measure Actual commitment, Actual Disbursement, Etc.
+	 * @param filter
 	 * @return
 	 */
 	
-	public static JsonBean fundingtype(String adjtype) {
+	public static JsonBean fundingtype(String adjtype, JsonBean filter) {
 		String adjustmenttype = "";
 		String err = null;
 		JsonBean retlist = new JsonBean();
@@ -274,6 +290,8 @@ public class DashboarsService {
 			break;
 		}
 		
+		
+		
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("fundingtype");
 		spec.addColumn(new ReportColumn(ColumnConstants.FUNDING_YEAR,ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addColumn(new ReportColumn(MoConstants.TYPE_OF_ASSISTANCE,ReportEntityType.ENTITY_TYPE_ALL));
@@ -285,6 +303,15 @@ public class DashboarsService {
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
 		GeneratedReport report = null;
+		
+		MondrianReportFilters filterRules = null;
+ 		if(filter!=null){
+			Object columnFilters=filter.get("columnFilters");
+			if(columnFilters!=null){
+				filterRules = FilterUtils.getApiColumnFilter((LinkedHashMap<String, Object>)filter.get("columnFilters"));	
+				spec.setFilters (filterRules);
+			}
+ 		}
 		
 		try {
 			report = generator.executeReport(spec);

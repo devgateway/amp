@@ -49,6 +49,7 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.dbentity.AmpMapState;
 import org.digijava.module.esrigis.helpers.DbHelper;
@@ -443,5 +444,22 @@ public class GisEndPoints {
 	@ApiMethod(ui=false,name="Settings")
 	public List<SettingOptions> getSettings() {
 		return GisUtil.getSettings();
+	}
+	
+	@GET
+	@Path("/clusters")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui = false, name = "ClusterLevels")
+	public List<JsonBean> getClusterLevels() {
+		List<AmpCategoryValue> values = QueryUtil.getClusterLevels();
+		List<JsonBean> levelsJson = new ArrayList<JsonBean>();
+		for (AmpCategoryValue value : values) {
+			JsonBean json = new JsonBean();
+			json.set("id", value.getId());
+			json.set("title", value.getLabel());
+			json.set("adminLevel", "adm-" + value.getIndex());
+			levelsJson.add(json);
+		}
+		return levelsJson;
 	}
 }

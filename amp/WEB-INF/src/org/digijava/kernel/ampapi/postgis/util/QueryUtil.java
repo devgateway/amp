@@ -43,11 +43,13 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.util.OrganisationUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.esrigis.dbentity.AmpMapState;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Criteria;
@@ -472,5 +474,16 @@ public static List<JsonBean> getOrgGroups() {
 			return qry.list();
 		 
 	 }
+	 
+	 @SuppressWarnings("unchecked")
+		public static List<AmpCategoryValue> getClusterLevels() {
+			List<AmpCategoryValue> al = null;
+			String queryString = "select distinct a.parentCategoryValue from " + AmpCategoryValueLocations.class.getName()+ " a";
+				Query q = PersistenceManager.getSession().createQuery(queryString);
+				q.setMaxResults(100);
+				al = q.list();
+			return al;
+
+		}
 }
 

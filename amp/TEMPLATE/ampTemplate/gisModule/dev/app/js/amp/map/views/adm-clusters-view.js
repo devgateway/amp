@@ -20,6 +20,7 @@ module.exports = Backbone.View.extend({
 
     this.listenTo(this.app.data.admClusters, 'show', this.showLayer);
     this.listenTo(this.app.data.admClusters, 'hide', this.hideLayer);
+    this.listenTo(this.app.data.admClusters, 'refresh', this.refreshLayer);
 
   },
 
@@ -34,12 +35,7 @@ module.exports = Backbone.View.extend({
     if (_.isUndefined(leafletLayer)) {
       leafletLayer = this.leafletLayerMap[admLayer.cid] = new L.layerGroup([]);
       admLayer.load().then(_.bind(function() {
-        var clusters = this.getNewADMLayer(admLayer);
-        leafletLayer.addLayer(clusters);
-        clusters.on('popupopen', function(e) {
-          var clusterPopupView = new ClusterPopupView({app: self.app}, e.popup, admLayer);
-          clusterPopupView.render();
-        });
+        self._createClusters(admLayer, leafletLayer);
       }, this));
       admLayer.loadAll().done(function() {
         var boundaries = self.getNewBoundary(admLayer);
@@ -50,6 +46,31 @@ module.exports = Backbone.View.extend({
     this.map.addLayer(leafletLayer);
   },
 
+  refreshLayer: function(admLayer) {
+    var self = this;
+    var leafletLayer = this.leafletLayerMap[admLayer.cid];
+    if (leafletLayer) {
+      leafletLayer.clearLayers();
+      self._createClusters(admLayer, leafletLayer);
+
+      var boundaries = self.getNewBoundary(admLayer);
+      leafletLayer.addLayer(boundaries);
+
+    } else {
+      this.showLayer(admLayer);
+    }
+
+  },
+
+  _createClusters: function(admLayer, leafletLayer) {
+    var self = this;
+    var clusters = this.getNewADMLayer(admLayer);
+    leafletLayer.addLayer(clusters);
+    clusters.on('popupopen', function(e) {
+      var clusterPopupView = new ClusterPopupView({app: self.app}, e.popup, admLayer);
+      clusterPopupView.render();
+    });
+  },
 
   hideLayer: function(admLayer) {
     var leafletLayer = this.leafletLayerMap[admLayer.cid];

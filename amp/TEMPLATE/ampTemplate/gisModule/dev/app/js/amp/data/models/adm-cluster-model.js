@@ -19,22 +19,29 @@ module.exports = Backbone.Model
     });
     this.listenTo(this, 'sync', this.updatePaletteRange);
     this.listenTo(this.collection.filter, 'apply', this.applyFilters);
+
+
   },
 
   // if filters change update it.
   applyFilters: function() {
+    var self = this;
     if (this.get('selected')) {
-      this.fetch();
+      this.fetch().then(function() {
+        self.trigger('refresh', self);
+      });
     }
   },
 
   fetch: function(options) {
-    var filter = {adminLevel: this._translateADMToMagicWord(this.get('value'))};
+    var filter = {otherFilters: {}};
 
     // get filters
     if (this.collection.filter) {
       _.extend(filter, this.collection.filter.serialize());
     }
+
+    filter.otherFilters.adminLevel = this._translateADMToMagicWord(this.get('value'));
 
     options = _.defaults((options || {}), {
       type: 'POST',

@@ -1,13 +1,14 @@
 var fs = require('fs');
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
-var TopsChart = require('../models/tops-chart');
-var PredictabilityChart = require('../models/predictability-chart');
 var template = _.template(fs.readFileSync(
   __dirname + '/../templates/main.html', 'UTF-8'));
 var modalTemplate = _.template(fs.readFileSync(
   __dirname + '/../templates/modal.html', 'UTF-8'));
 
+var TopsChart = require('../models/tops-chart');
+var PredictabilityChart = require('../models/predictability-chart');
+var FundingTypeChart = require('../models/ftype-chart');
 
 var Filters = require('../views/filters');
 var ChartsView = require('../views/charts');
@@ -37,7 +38,10 @@ module.exports = BackboneDash.View.extend({
           { app: this.app, url: '/rest/dashboard/tops/ps' }),
         new PredictabilityChart(
           { name: 'Aid Predictability' },
-          { app: this.app, url: '/rest/dashboard/aidPredictability' })
+          { app: this.app, url: '/rest/dashboard/aidPredictability' }),
+        new FundingTypeChart(
+          { name: 'Funding Type' },
+          { app: this.app, url: '/rest/dashboard/ftype' })
       ], { app: this.app })
     });
 

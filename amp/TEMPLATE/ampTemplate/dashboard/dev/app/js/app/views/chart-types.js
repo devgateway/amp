@@ -87,7 +87,6 @@ module.exports = {
 
   multibar: function() {
     var chart = nv.models.multiBarChart()
-      .showControls(false)  // disable grouped/stacked toggle
       .reduceXTicks(false)
       .margin(_(BAR_MARGIN).extend({ left: 40, bottom: 20 }))
       .transitionDuration(150);
@@ -98,18 +97,40 @@ module.exports = {
       draw: function(container, model) {
         var data = model.get('processed'),
             categories = data.length;
+        if (!model.get('typed')) {
+          chart.showControls(false);  // disable grouped/stacked toggle
+        }
         chart.tooltipContent(function(seriesName, year, fmtValue, raw) {
-          var otherSeries = model.get('processed')[1 - raw.seriesIndex];
+          var others;
+          if (!model.get('typed')) {
+            var o = model.get('processed')[1 - raw.seriesIndex];
+            others = { name: o.key, total: o.values[raw.pointIndex].y };
+          } else {
+            others = {
+              name: 'total',
+              total: _(model.get('processed')).reduce(function(t, s) {
+                return t + s.values[raw.pointIndex].y;
+              }, 0)
+            };
+          }
           return predictabilityTooltip({
             year: year,
             seriesName: seriesName,
             value: d3.format(',')(Math.round(raw.value)),
-            otherSeriesName: otherSeries.key,
-            percent: d3.format('%')(raw.value / otherSeries.values[raw.pointIndex].y),
+            otherSeriesName: others.name,
+            percent: d3.format('%')(raw.value / others.total),
             currency: model.get('currency')
           });
         });
-        drawCommon(chart, data, categories, container);
+        drawCommon(chart, data, categories, container, function() {
+          d3.selectAll(container.querySelectorAll('.nv-bar'))
+            .on('click', function(d) {
+              if (model.get('processed').length - 1 === d.series &&
+                  model.get('processed')[d.series].color === '#777') {
+                model.set('limit', model.get('limit') + 1);
+              }
+            });
+        });
       }
     };
   },

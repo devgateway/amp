@@ -5,6 +5,7 @@ var util = require('../../ugly/util');
 var charts = require('./chart-types');
 var Tops = require('../models/tops-chart');
 var Predictability = require('../models/predictability-chart');
+var FundingType = require('../models/ftype-chart');
 var template = _.template(fs.readFileSync(
   __dirname + '/../templates/chart.html', 'UTF-8'));
 
@@ -16,6 +17,7 @@ module.exports = BackboneDash.View.extend({
       embiggen: false,
       view: this.model instanceof Tops ? 'bar'
           : this.model instanceof Predictability ? 'multibar'
+          : this.model instanceof FundingType ? 'multibar'
           : null
     };
     if (!defaults.view) { console.error('unknown chart type for model', this.model); }

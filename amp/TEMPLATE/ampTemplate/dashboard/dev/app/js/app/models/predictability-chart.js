@@ -21,7 +21,8 @@ module.exports = BackboneDash.Model.extend({
     var endOffset = -2,  // totals are at the end grr
         initialOffset = -(6 - endOffset);  // 5 + 1 to match other charts
     data.processed = [
-      { key: 'Planned',
+      {
+        key: 'Planned',
         values: _(data.years).map(pick('planned')).slice(initialOffset, endOffset)
       },
       {

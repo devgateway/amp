@@ -26,7 +26,6 @@ module.exports = Backbone.Collection
      * had their own object on API, separate from settings, etc.
      * Currently all on the same data level.
      **/
-    debugger;
     /* get "columnFilters" if set (not applicable for getActivities) */
     if (this.filter) {
       _.extend(payload, this.filter.serialize());

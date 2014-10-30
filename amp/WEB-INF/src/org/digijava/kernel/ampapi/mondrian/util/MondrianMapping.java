@@ -284,7 +284,7 @@ public class MondrianMapping {
 			addMeasureDefinition(MeasureConstants.PLANNED_COMMITMENTS);
 			addMeasureDefinition(MeasureConstants.PLANNED_DISBURSEMENTS);
 			addMeasureDefinition(MeasureConstants.PLANNED_EXPENDITURES);
-
+			addMeasureDefinition(MeasureConstants.ALWAYS_PRESENT);
 			//put(new ReportMeasure(MeasureConstants.REAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL), new MDXMeasure(MoConstants.REAL_DISBURSEMENTS));
 			//put(new ReportMeasure(MeasureConstants.UNCOMMITTED_BALANCE, ReportEntityType.ENTITY_TYPE_ALL), new MDXMeasure(MoConstants.UNCOMMITTED_BALANCE));
 			//put(new ReportMeasure(MeasureConstants.TOTAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL), new MDXMeasure(MoConstants.TOTAL_COMMITMENTS));

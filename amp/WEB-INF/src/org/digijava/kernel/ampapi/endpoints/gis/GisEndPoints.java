@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.DefaultValue;
@@ -23,6 +24,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.StreamingOutput;
+
+import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -463,4 +466,33 @@ public class GisEndPoints {
 		}
 		return levelsJson;
 	}
+	
+	/**
+	 * Return the last updated activities
+	 * 
+	 * @param limit
+	 *             the number of activities to include
+	 * @param columns
+	 *            the name of extra columns to include on the report. The
+	 *            report already includes: project title, date of update and
+	 *            donor names
+	 * @return JSONObject, with the last updated activities
+	 */
+	@GET
+	@Path("/lastUpdated")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui = false, name = "LastUpdatedActivities")
+	public JSONObject getLastUpdated(@DefaultValue("10") @QueryParam("limit") Integer limit,
+			@QueryParam("columns") String columns) {
+		List<String> extraColumns = new ArrayList<String>();
+		if (columns != null) {
+			StringTokenizer tokenizer = new StringTokenizer(columns, ",");
+			while (tokenizer.hasMoreTokens()) {
+				extraColumns.add(tokenizer.nextToken());
+			}
+
+		}
+		return ActivityService.getLastUpdatedActivities(extraColumns, limit);
+	}
+		
 }

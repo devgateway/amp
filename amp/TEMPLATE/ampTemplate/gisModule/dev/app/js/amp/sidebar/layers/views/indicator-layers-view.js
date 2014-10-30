@@ -9,10 +9,7 @@ module.exports = Backbone.View.extend({
   id: 'tool-layers-sd-indicator',
   title: 'Country indicators',
   iconClass: 'ampicon-layers',
-<<<<<<< HEAD
   description: 'View indicators on sub-national needs.',
-=======
->>>>>>> AMP-17821 add subsection feature to radio-list based menu for statistical data, funding data
 
   template: _.template(Template),
 

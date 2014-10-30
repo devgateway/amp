@@ -15,7 +15,7 @@ module.exports = Backbone.Collection
   settings: null,
 
   initialize: function(models, options) {
-    this.filter =options.filter;
+    this.filter = options.filter;
     this.settings = options.settings;
   },
 
@@ -67,7 +67,7 @@ module.exports = Backbone.Collection
       this.url = '/rest/gis/activities/' + aryOfIDs.join(',');
       this.fetch({
         remove: false,
-        filter: undefined
+        filter: null
       })
       .then(function(newData) {
         var activities = newData.activities;

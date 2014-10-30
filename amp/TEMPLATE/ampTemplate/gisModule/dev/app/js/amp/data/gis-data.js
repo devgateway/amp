@@ -44,7 +44,7 @@ _.extend(GISData.prototype, Backbone.Events, {
 
     this.boundaries = new Boundaries();
     this.settings = new Settings();
-    this.activities = new Activities([],{
+    this.activities = new Activities([], {
       settings: this.settings,
       filter: this.filter
     });

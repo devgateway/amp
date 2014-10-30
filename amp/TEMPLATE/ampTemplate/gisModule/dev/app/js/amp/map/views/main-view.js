@@ -96,9 +96,20 @@ module.exports = Backbone.View.extend({
             /*var mapHeaderHeight = $('#map-header').height();*/
 
             var bounds = L.GeoJSON.geometryToLayer(feature.geometry).getBounds();
-            self.map.fitBounds(bounds, {
-              paddingTopLeft: new L.Point(sidebarExpansionWidth, 0)
-            });
+
+            /*
+             * If current viewport is already in
+             * the AMP country, then preserve the state rather that resetting.
+             *
+             * for the case where a state is saved which is exactly inside
+             * the country's boundary, we add 30% padding to all directions
+             *
+             **/
+            if (!bounds.pad(30).contains(self.map.getBounds())) {
+              self.map.fitBounds(bounds, {
+                paddingTopLeft: new L.Point(sidebarExpansionWidth, 0)
+              });
+            }
 
           },
           style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '1'}

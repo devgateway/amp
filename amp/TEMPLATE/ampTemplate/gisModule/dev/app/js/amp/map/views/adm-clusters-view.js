@@ -134,7 +134,9 @@ module.exports = Backbone.View.extend({
       // temp. will be template.
       layer.bindPopup(feature.properties.admName +
         ' has ' +  activities.length +
-        ' projects. <br><img src="img/loading-icon.gif" />');
+        ' projects. <br><img src="img/loading-icon.gif" />',
+        {maxWidth: 500}
+        );
     }
   }
 });

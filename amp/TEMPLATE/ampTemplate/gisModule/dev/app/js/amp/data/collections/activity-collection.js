@@ -44,6 +44,9 @@ module.exports = Backbone.Collection
     return Backbone.Collection.prototype.fetch.call(this, options);
   },
 
+  parse: function(data){
+    return data.activities;
+  },
 
   //smart ID fetching, load locally, and only fetch if we don't have the activity.
   getActivities: function(aryOfIDs) {
@@ -63,17 +66,18 @@ module.exports = Backbone.Collection
       // do an api request to get remaining ones
       this.url = '/rest/gis/activities/' + aryOfIDs.join(',');
       this.fetch({
-          remove: false,
-          filter: undefined
-        })
-        .then(function(newData) {
-          matches = _.union(matches, newData);
-          deferred.resolve(matches);
-        })
-        .fail(function(err) {
-          console.error('failed to get ' + this.url, err);
-          deferred.resolve(matches);
-        });
+        remove: false,
+        filter: undefined
+      })
+      .then(function(newData) {
+        var activities = newData.activities;
+        matches = _.union(matches, activities);
+        deferred.resolve(matches);
+      })
+      .fail(function(err) {
+        console.error('failed to get ' + this.url, err);
+        deferred.resolve(matches);
+      });
     } else {
       deferred.resolve(matches);
     }

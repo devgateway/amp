@@ -124,6 +124,7 @@ module.exports = Backbone.View.extend({
     }
 
     return this.app.data.activities.getActivities(activityIDs).then(function(activityCollection) {
+      console.log('activityCollection', activityCollection);
       self.tempDOM.find('.project-list').append(
         self.projectListTemplate({activities: activityCollection})
         );

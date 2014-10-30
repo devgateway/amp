@@ -35,6 +35,9 @@ module.exports = Backbone.View.extend({
       }
       self.leafletLayerMap[layer.cid] = loadedLayer;
       self.map.addLayer(loadedLayer);
+      if (loadedLayer.bringToBack) {
+        loadedLayer.bringToBack();
+      }
       self.trigger('addedToMap'); //TODO: Phil should i do this better?...
       // ...the main map view needs to know when layer is actually added to map.
     });

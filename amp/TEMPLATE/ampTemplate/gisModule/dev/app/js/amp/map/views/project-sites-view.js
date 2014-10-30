@@ -272,7 +272,7 @@ module.exports = Backbone.View.extend({
 
   },
 
-  refreshLayer: function(){
+  refreshLayer: function() {
     console.log('TODO: refresh project site layer.');
   },
 

@@ -6,7 +6,7 @@
 var _ = require('underscore');
 var Backbone = require('backbone');
 
-var Filter = require('amp-filter');
+var Filter = require('amp-filter/src/main');
 var translator = require('../services/translator');
 
 var Title = require('./title');

@@ -38,7 +38,19 @@ input[type="checkbox"]:checked + .styled-checkbox{
 // Override of Bootstrap for narrower amp nav
 #amp-menu{
   .navbar-nav > li > a { padding-top:5px ; padding-bottom:5px; }
-  .navbar { min-height:30px;border-left:0; border-bottom: 2px solid @amp_emph; border-radius: 0; }  
-  .navbar-brand {height:auto; padding-top:5px ; padding-bottom:5px; }
+  .navbar {
+    min-height:30px;
+    border-left:0;
+    border-bottom: 2px solid @amp_emph;
+    border-radius: 0;
+  }
+  .navbar-brand {
+    height:auto;
+    padding-top:5px ;
+    padding-bottom:5px;
+    & > img{
+      display: inline-block;
+    }
+  }
   border-bottom: 2px solid @amp_emph;
 }

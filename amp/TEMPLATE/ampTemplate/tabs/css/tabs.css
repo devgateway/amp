@@ -72,6 +72,9 @@
 	max-height: 300px;
 	min-height: 200px;
 	/*padding: 5px;*/
+	position: absolute;
+	z-index: 100;
+	width: inherit;
 }
 
 #dynamic-filters-region hr {
@@ -101,6 +104,17 @@
 
 .status_3 {
 	color: green;
+}
+
+.dynamic-content-table tr {
+	overflow: visible;
+}
+
+.dynamic-content-table td {
+	overflow: visible;
+	/*max-height:24px !important;
+    border: 1px solid #cccccc;
+    width:10px;*/
 }
 
 /* Overriding jQueryUI section */

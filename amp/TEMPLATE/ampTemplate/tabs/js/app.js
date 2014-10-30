@@ -73,7 +73,9 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 		});
 	} catch (e) {
 		// alert(e);
-		location.reload();
+		setTimeout(function() {
+			window.location.reload(1);
+		}, 2000);
 	}
 	app.TabsApp.tabsBodyRegion.show(tabBodysView, {
 		forceShow : true

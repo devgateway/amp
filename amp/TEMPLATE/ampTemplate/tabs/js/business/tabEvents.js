@@ -29,7 +29,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 		// the tab.
 		var regionsName = '#main-dynamic-content-region_' + id;
 		app.TabsApp.addRegions({
-			'filtersRegion' : regionsName
+			'dynamicContentRegion' : regionsName
 		});
 
 		if (id >= 0) {
@@ -42,12 +42,12 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			// --------------------------------------------------------------------------------------//
 			// TODO: Move filters section elsewhere.
 			// Create collection of Filters.
-			var filters = FilterUtils.extractFilters(firstContent);
+			app.TabsApp.filters = FilterUtils.extractFilters(firstContent);
 
 			// Define the views.
 			var FilterItemView = Marionette.ItemView.extend({
 				tagName : 'div',
-				className : 'round-filter',
+				/*className : 'round-filter',*/
 				template : jQuery(filtersItemTemplate, '#template-filters').html(),
 				events : {
 					'click' : "testclick"
@@ -61,15 +61,15 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 				childView : FilterItemView
 			});
 			var compositeView = new CompositeItemView({
-				collection : filters
+				collection : app.TabsApp.filters
 			});
 
 			// Render views.
 			var dynamicLayoutView = new DynamicContentView({
 				id : id,
-				filters : filters
+				filters : app.TabsApp.filters
 			});
-			app.TabsApp.filtersRegion.show(dynamicLayoutView);
+			app.TabsApp.dynamicContentRegion.show(dynamicLayoutView);
 			dynamicLayoutView.filters.show(compositeView);
 
 			// Create accordion for filters area.
@@ -118,7 +118,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 				tagName : 'ul'
 			});
 
-			app.TabsApp.filtersRegion.show(new InvisibleTabsCollectionView({
+			app.TabsApp.dynamicContentRegion.show(new InvisibleTabsCollectionView({
 				collection : app.TabsApp.tabsCollection
 			}));
 		}

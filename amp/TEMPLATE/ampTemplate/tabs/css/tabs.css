@@ -26,6 +26,7 @@
 	margin-right: 5px;
 	background: #ffffff;
 	margin-bottom: 3px;
+	float: left;
 }
 
 .pointer {
@@ -68,8 +69,13 @@
 
 #dynamic-filters-region {
 	border: 2px solid rgb(56, 121, 146);
-	max-height: 500px;
+	max-height: 300px;
+	min-height: 200px;
 	/*padding: 5px;*/
+}
+
+#dynamic-filters-region hr {
+	margin: 0px;
 }
 
 #dynamic-legends-region {

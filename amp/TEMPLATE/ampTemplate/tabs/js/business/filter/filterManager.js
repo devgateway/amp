@@ -1,4 +1,5 @@
-define([ 'filtersWidget', 'business/grid/gridManager', 'jquery' ], function(FiltersWidget, GridManager, jQuery) {
+define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUtils', 'jquery' ], function(FiltersWidget, GridManager,
+		FilterUtils, jQuery) {
 
 	"use strict";
 
@@ -33,11 +34,13 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'jquery' ], function(Filt
 			console.log('filters apply');
 			var filters = app.TabsApp.filtersWidget.serialize();
 			var readableFilters = app.TabsApp.filtersWidget.serializeToModels();
+			console.log(filters);
+			console.log(readableFilters);
 
 			GridManager.filter(app.TabsApp.currentId, filters);
 
-			console.log(filters);
-			console.log(readableFilters);
+			FilterUtils.updateFiltersRegion(readableFilters);
+
 			jQuery(container).hide();
 		});
 
@@ -66,73 +69,73 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'jquery' ], function(Filt
 		_.each(data.models, function(item, i) {
 			/*
 			 * var filterName = item.get('name'); blob.columnFilters[filterName] =
-			 * _.map(item.get('values'), function(item) { return parseInt(item);
-			 * });
+			 * _.map(item.get('values'), function(item.id) { return
+			 * parseInt(item.id); });
 			 */
 			switch (item.get('name')) {
 			case 'Financing Instrument':
 				blob.columnFilters["Financing Instrument"] = _.map(item.get('values'), function(item) {
-					return parseInt(item);
+					return parseInt(item.id);
 				});
 				break;
 			case 'Contracting Agency':
 				blob.columnFilters['Contracting Agency Id'] = _.map(item.get('values'), function(item) {
-					return parseInt(item);
+					return parseInt(item.id);
 				});
 				break;
 			case 'Executing Agency':
 				blob.columnFilters['Executing Agency Id'] = _.map(item.get('values'), function(item) {
-					return parseInt(item);
+					return parseInt(item.id);
 				});
 				break;
 			case 'Implementing Agency':
 				blob.columnFilters['Implementing Agency Id'] = _.map(item.get('values'), function(item) {
-					return parseInt(item);
+					return parseInt(item.id);
 				});
 				break;
 			case 'Beneficiary Agency':
 				blob.columnFilters['Beneficiary Agency Id'] = _.map(item.get('values'), function(item) {
-					return parseInt(item);
+					return parseInt(item.id);
 				});
 				break;
 			case 'Responsible Organization':
 				blob.columnFilters['Responsible Organization'] = _.map(item.get('values'), function(item) {
-					return parseInt(item);
+					return parseInt(item.id);
 				});
 				break;
 			case 'Type Of Assistance':
 				blob.columnFilters['Type Of Assistance'] = _.map(item.get('values'), function(item) {
-					return parseInt(item);
+					return parseInt(item.id);
 				});
 				break;
 			case 'Status':
 				blob.columnFilters['ActivityStatusList'] = _.map(item.get('values'), function(item) {
-					return parseInt(item);
+					return parseInt(item.id);
 				});
 				break;
 			case 'National Planning Objectives':
 				blob.columnFilters['National Planning Objectives Level 1 Id'] = _.map(item.get('values'), function(item) {
-					return parseInt(item);
+					return parseInt(item.id);
 				});
 				break;
 			case 'Primary Program':
 				blob.columnFilters['Primary'] = _.map(item.get('values'), function(item) {
-					return parseInt(item);
+					return parseInt(item.id);
 				});
 				break;
 			case 'Approval Status':
 				blob.columnFilters['Approval Status'] = _.map(item.get('values'), function(item) {
-					return parseInt(item);
+					return parseInt(item.id);
 				});
 				break;
 			case 'Secondary Program':
 				blob.columnFilters['Secondary'] = _.map(item.get('values'), function(item) {
-					return parseInt(item);
+					return parseInt(item.id);
 				});
 				break;
 			case 'On/Off/Treasury Budget':
 				blob.columnFilters['ActivityBudgetList'] = _.map(item.get('values'), function(item) {
-					return parseInt(item);
+					return parseInt(item.id);
 				});
 				break;
 			/*
@@ -149,13 +152,13 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'jquery' ], function(Filt
 			 */
 			case 'Donor Agency':
 				var auxDonorAgencies = _.map(item.get('values'), function(item) {
-					return parseInt(item);
+					return parseInt(item.id);
 				});
 				blob.columnFilters["Donor Id"] = _.union(blob["Donor Id"], auxDonorAgencies);
 				break;
 			case 'Primary Sector':
 				blob.columnFilters['Primary Sector Id'] = _.map(item.get('values'), function(item) {
-					return parseInt(item);
+					return parseInt(item.id);
 				});
 				break;
 			}

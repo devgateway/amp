@@ -95,18 +95,18 @@ module.exports = Backbone.View.extend({
             /*TODO(thadk): consider using mapHeader height as well, shrinks DRC for me: */
             /*var mapHeaderHeight = $('#map-header').height();*/
 
-            var bounds = L.GeoJSON.geometryToLayer(feature.geometry).getBounds();
+            var natlBounds = L.GeoJSON.geometryToLayer(feature.geometry).getBounds();
 
             /*
              * If current viewport is already in
              * the AMP country, then preserve the state rather that resetting.
              *
-             * for the case where a state is saved which is exactly inside
-             * the country's boundary, we add 30% padding to all directions
+             * for the case where a state is saved which is not quite exactly inside
+             * the AMP national boundary, we add 30% padding to all directions
              *
              **/
-            if (!bounds.pad(30).contains(self.map.getBounds())) {
-              self.map.fitBounds(bounds, {
+            if (!natlBounds.pad(30).contains(self.map.getBounds())) {
+              self.map.fitBounds(natlBounds, {
                 paddingTopLeft: new L.Point(sidebarExpansionWidth, 0)
               });
             }

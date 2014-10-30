@@ -6,9 +6,11 @@
 
  <div id="collapse-<%= titleID %>" class="accordion-body collapse">
    <div class="accordion-inner">
+     <% if (description) { %>
      <div>
        <p class="description " data-i18n="amp.gis:sub-title-<%= titleID %>"><%= description %></p>
      </div>
+     <% } %>
 
 
      <div class="content">

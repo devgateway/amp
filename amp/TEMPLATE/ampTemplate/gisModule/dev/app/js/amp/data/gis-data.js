@@ -70,6 +70,21 @@ _.extend(GISData.prototype, Backbone.Events, {
         value: 'adm-2'
       }
     ], { boundaries: this.boundaries, filter: this.filter });
+    // TODO get these from the api
+    this.admClustersTemp = new ADMClusters([
+      {
+        title: 'Funding of Projects Country-wide',
+        value: 'adm-0-funding'
+      },
+      {
+        title: 'Funding of Projects by Province',
+        value: 'adm-1-funding'
+      },
+      {
+        title: 'Funding of Projects by District',
+        value: 'adm-2-funding'
+      }
+    ], { boundaries: this.boundaries, filter: this.filter });
 
     this.title = new Title({ data: this });
 

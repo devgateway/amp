@@ -2,11 +2,10 @@
 /*https://github.com/icereval/backbone-documentmodel*/
 
 define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicContentView', 'text!views/html/filtersWrapperTemplate.html',
-		'text!views/html/filtersItemTemplate.html', 'models/filter', 'collections/filters', 'models/tab',
-		'text!views/html/invisibleTabLinkTemplate.html', 'text!views/html/legendsTemplate.html', 'business/grid/gridManager',
-		'business/translations/translationManager', 'jquery', 'jqueryui' ], function(Marionette, Contents, Content, DynamicContentView,
-		filtersTemplate, filtersItemTemplate, Filter, Filters, Tab, invisibleTabLinkTemplate, legendsTemplate, gridManager,
-		TranslationManager, jQuery) {
+		'text!views/html/filtersItemTemplate.html', 'models/tab', 'text!views/html/invisibleTabLinkTemplate.html',
+		'text!views/html/legendsTemplate.html', 'business/grid/gridManager', 'business/translations/translationManager',
+		'business/filter/filterUtils', 'jquery', 'jqueryui' ], function(Marionette, Contents, Content, DynamicContentView, filtersTemplate,
+		filtersItemTemplate, Tab, invisibleTabLinkTemplate, legendsTemplate, gridManager, TranslationManager, FilterUtils, jQuery) {
 
 	"use strict";
 
@@ -19,39 +18,6 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 	// Some private method.
 	function putAnimation() {
 		return '<span><img src="/TEMPLATE/ampTemplate/tabs/css/images/ajax-loader.gif"/></span>';
-	}
-
-	function extractFilters(content) {
-		var filters = new Filters();
-		var filtersJson = content.get('reportMetadata').get('reportSpec').get('filters').get('filterRules');
-		jQuery(filtersJson.keys()).each(function(i, item) {
-			var subElement = filtersJson.get(item);
-			if (subElement instanceof Backbone.Collection) {
-				if (item.indexOf('ElementType = ENTITY') > -1) {
-					var name = item.substring(item.indexOf('[') + 1, item.indexOf(']'));
-					var element = subElement.models[0];
-					var content = [];
-					if (element.get('value') != null) {
-						content = element.get('value');
-					} else if (element.get('values') != null) {
-						_.each(element.get('values').models, function(item, i) {
-							content.push(item.get('value'));
-						});
-					}
-
-					var auxFilter = new Filter({
-						name : name,
-						values : content
-					});
-					filters.add(auxFilter);
-				} else if (item.indexOf('ElementType = DATE') > -1) {
-
-				} else if (item.indexOf('ElementType = YEAR') > -1) {
-
-				}
-			}
-		});
-		return filters;
 	}
 
 	function retrieveTabContent(selectedTabIndex) {
@@ -76,7 +42,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			// --------------------------------------------------------------------------------------//
 			// TODO: Move filters section elsewhere.
 			// Create collection of Filters.
-			var filters = extractFilters(firstContent);
+			var filters = FilterUtils.extractFilters(firstContent);
 
 			// Define the views.
 			var FilterItemView = Marionette.ItemView.extend({

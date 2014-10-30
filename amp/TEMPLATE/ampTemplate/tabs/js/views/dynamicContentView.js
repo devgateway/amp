@@ -34,7 +34,7 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 			var FilterDialogContainerView = Marionette.ItemView.extend({
 				template : "<p></p>",
 				render : function(model) {
-					if (!app.TabsApp.currentTabOpenedFilters) {
+					//if (!app.TabsApp.currentTabOpenedFilters) {
 						console.log('filter widget loaded');
 						// Convert report filters to filterwidget filters.
 						var blob = FilterManager.convertJavaFiltersToJS(reportFilters);
@@ -42,11 +42,11 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 							silent : true
 						});
 						app.TabsApp.currentTabOpenedFilters = true;
-					} else {
+					/*} else {
 						app.TabsApp.filtersWidget.deserialize(app.TabsApp.serializedFilters, {
 							silent : true
 						});
-					}
+					}*/
 
 					// Show the dialog and fix the position.
 					jQuery(containerName).show();

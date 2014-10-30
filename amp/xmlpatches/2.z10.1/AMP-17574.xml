@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-17574</jira>
+	<keyword>Views</keyword>
+	<author>ddimunzio</author>
+	<description>Add needed fields for ETL</description>
+	<apply>
+		<script>
+			<lang delimiter=";;;" type="postgres">
+			
+				UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart';;;
+				
+				DROP VIEW IF EXISTS v_regions;;;
+				DROP VIEW IF EXISTS v_zones;;;
+				DROP VIEW IF EXISTS v_districts;;;
+				DROP VIEW IF EXISTS v_countries;;;
+				
+				DROP TABLE IF EXISTS amp_location_cache_regions;;;
+				DROP TABLE IF EXISTS amp_location_cache_zones;;;
+				DROP TABLE IF EXISTS amp_location_cache_districts;;;
+				DROP TABLE IF EXISTS amp_location_cache_countries;;;
+				
+				DROP TABLE IF EXISTS amp_location_cache CASCADE;;;
+				
+				CREATE TABLE amp_location_cache
+					(amp_location_id bigint,
+					acvl_id bigint NOT NULL PRIMARY KEY,
+					acvl_name character varying,
+					parent_location bigint,
+					geo_code character varying,
+					impl_level character varying,
+					impl_level_id integer,
+					region_id bigint,
+					region_name character varying,
+					zone_id bigint,
+					zone_name character varying, 
+					district_id bigint,
+					district_name character varying,
+					country_id bigint,
+					country_name character varying
+					);;;;
+				
+				CREATE INDEX amp_location_cache_loc_id_idx ON amp_location_cache(amp_location_id);;;
+				CREATE INDEX amp_location_cache_acvl_id_idx ON amp_location_cache(acvl_id);;;
+				CREATE INDEX amp_location_cache_reg_id_idx ON amp_location_cache(region_id);;;
+				CREATE INDEX amp_location_cache_zone_id_idx ON amp_location_cache(zone_id);;;
+				CREATE INDEX amp_location_cache_district_id_idx ON amp_location_cache(district_id);;;
+				CREATE INDEX amp_location_cache_country_id_idx ON amp_location_cache(country_id);;;
+				
+				DROP VIEW IF EXISTS v_amp_location_cache;;;
+				
+				CREATE OR REPLACE VIEW v_amp_location_cache AS 
+				SELECT l.amp_location_id, acvl.id AS acvl_id, acvl.location_name AS acvl_name, acvl.parent_location, acvl.geo_code,acv.category_value,acv.id, getlocationidbyimplloc(acvl.id, 'Region'::character varying) AS region_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Region'::character varying)) AS region_name, getlocationidbyimplloc(acvl.id, 'Zone'::character varying) AS zone_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Zone'::character varying)) AS zone_name, getlocationidbyimplloc(acvl.id, 'District'::character varying) AS district_id, getlocationname(getlocationidbyimplloc(acvl.id, 'District'::character varying)) AS district_name, getlocationidbyimplloc(acvl.id, 'Country'::character varying) AS country_id, getlocationname(getlocationidbyimplloc(acvl.id, 'Country'::character varying)) AS country_name
+   				FROM amp_category_value_location acvl
+   				LEFT JOIN amp_location l ON l.location_id = acvl.id
+   				JOIN amp_category_value acv ON acvl.parent_category_value = acv.id 
+  				ORDER BY acvl.id;;;
+				
+				TRUNCATE amp_location_cache;
+				INSERT INTO amp_location_cache
+				SELECT * FROM v_amp_location_cache;;;
+				
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -45,16 +46,16 @@ public class EndPoints {
 	 * @return
 	 */
 	
-	@GET
+	@POST 
 	@Path("/tops/{type}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="tops")
 	//TODO: Implement Filters
-	public JsonBean getAdminLevelsTotals(
+	public JsonBean getAdminLevelsTotals(JsonBean config,
 			@PathParam("type") String type,
 			@DefaultValue("ac") @QueryParam("adjtype") String adjtype,
 			@DefaultValue("5") @QueryParam("limit") Integer limit) {
-		return DashboarsService.getTops(type,adjtype,limit,null);
+		return DashboarsService.getTops(type,adjtype,limit,config);
 	}
 	
 	/**
@@ -63,13 +64,13 @@ public class EndPoints {
 	 * @return
 	 */
 	
-	@GET
+	@POST 
 	@Path("/aidPredictability")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="aidPredictability")
 	//TODO: Implement Filters
-	public JSONObject getAidPredictability() {
-		return DashboarsService.getAidPredictability(null);
+	public JSONObject getAidPredictability(JsonBean config) {
+		return DashboarsService.getAidPredictability(config);
 	}
 	
 	/**
@@ -79,13 +80,13 @@ public class EndPoints {
 	 * @return
 	 */
 	
-	@GET
+	@POST 
 	@Path("/ftype")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ftype")
 	//TODO: Implement Filters
-	public JsonBean getfundingtype(
+	public JsonBean getfundingtype(JsonBean config,
 			@DefaultValue("ac") @QueryParam("adjtype") String adjtype) {
-		return DashboarsService.fundingtype(adjtype,null);
+		return DashboarsService.fundingtype(adjtype,config);
 	}
 }

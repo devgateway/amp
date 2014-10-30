@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
@@ -29,12 +31,18 @@ import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.jdbc.Work;
 
 /**
@@ -51,8 +59,9 @@ public class LocationService {
 	 * @param type
 	 * @return
 	 */
-	public GeneratedReport getTotals(String admlevel, String type) {
+	public JsonBean getTotals(String admlevel, String type) {
 		String err = null;
+		JsonBean retlist = new JsonBean();
 		
 		switch (admlevel) {
 		case "adm0":
@@ -83,17 +92,19 @@ public class LocationService {
 			type = MeasureConstants.ACTUAL_COMMITMENTS;
 			break;
 		}
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals");
+		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
+ 		ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals");
 		spec.addColumn(new ReportColumn(admlevel, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.GEOCODE, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addMeasure(new ReportMeasure(type, ReportEntityType.ENTITY_TYPE_ALL));
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()),false);
+		spec.getHierarchies().addAll(spec.getColumns());
+		MondrianReportFilters filterRules=new MondrianReportFilters(); 
+		filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.IMPLEMENTATION_LEVEL, ReportEntityType.ENTITY_TYPE_ACTIVITY), 
+				new FilterRule(admlevel, true, false));
+		spec.setFilters(filterRules);
+		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()),true);
 		GeneratedReport report = null;
-		boolean doTotals=true;
-		spec.setCalculateColumnTotals(doTotals);
-		spec.setCalculateRowTotals(doTotals);
-		spec.setDisplayEmptyFundingColumns(true);
 		
-		spec.setSummaryReport(false);
 		try {
 			report = generator.executeReport(spec);
 		} catch (Exception e) {
@@ -101,7 +112,23 @@ public class LocationService {
 			err = e.getMessage();
 		}
 		
-		return report;
+		String currcode = EndpointUtils.getDefaultCurrencyCode();
+		retlist.set("currency", currcode);
+
+		retlist.set("numberformat", numberformat);
+		List<JsonBean> values = new ArrayList<JsonBean>();
+		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
+			JsonBean item = new JsonBean();
+			ReportAreaImpl reportArea =  (ReportAreaImpl) iterator.next();
+			LinkedHashMap<ReportOutputColumn, ReportCell> content = (LinkedHashMap<ReportOutputColumn, ReportCell>) reportArea.getContents();
+			org.dgfoundation.amp.newreports.TextCell reportcolumn = (org.dgfoundation.amp.newreports.TextCell) content.values().toArray()[1];
+			item.set("admID",reportcolumn.value);
+			ReportCell reportcell = (ReportCell) content.values().toArray()[2];
+			item.set("amount",reportcell.value);
+			values.add(item);
+		}
+		retlist.set("values", values);
+		return retlist;
 	}
 	/**
 	 * Build an excel file export by structure

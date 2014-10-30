@@ -201,6 +201,16 @@
 				<Level name="Project Title" column="amp_activity_id" type="Integer" nameColumn="name" />
 			</Hierarchy>
 
+			<Hierarchy hasAll="true" allMemberName="All Approval Statuses" primaryKey="amp_activity_id" name="Approval Status">
+				<Table name="mondrian_activity_texts@@locale@@" />
+				<Level name="Approval Status" column="approval_status" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All AMP IDs" primaryKey="amp_activity_id" name="AMP ID">
+				<Table name="mondrian_activity_texts@@locale@@" />
+				<Level name="AMP ID" column="amp_activity_id" type="String" nameColumn="amp_id" />
+			</Hierarchy>
+
 			<Hierarchy hasAll="true" allMemberName="All Team" primaryKey="amp_activity_id" name="Team">
 				<Table name="mondrian_activity_texts@@locale@@" />
 				<Level name="Team" column="team_id" type="String" nameColumn="team_name" /> 
@@ -492,6 +502,14 @@
 			<Hierarchy hasAll="true" allMemberName="All Locations" name="District" primaryKey="id">
 				<Table name="mondrian_locations@@locale@@" />
 				<Level name="District" column="district_id" type="Integer" nameColumn="district_name" />
+			</Hierarchy>
+				<Hierarchy hasAll="true" allMemberName="All Locations" name="GeoCode" primaryKey="id">
+				<Table name="mondrian_locations@@locale@@" />
+				<Level name="GeoId" column="id" type="String" nameColumn="geo_code" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Locations" name="Implementation Level" primaryKey="id">
+				<Table name="mondrian_locations@@locale@@" />
+				<Level name="Implementation Level" column="impl_level_id" type="String" nameColumn="impl_level" />
 			</Hierarchy>
 		</Dimension>
 

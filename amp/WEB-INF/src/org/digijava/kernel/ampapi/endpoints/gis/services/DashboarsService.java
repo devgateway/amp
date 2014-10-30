@@ -330,7 +330,6 @@ public class DashboarsService {
 		String currcode = EndpointUtils.getDefaultCurrencyCode();
 		retlist.set("currency", currcode);
 		retlist.set("Numberformat",numberformat);
-		
 		List<JsonBean> values = new ArrayList<JsonBean>();
 		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
 			List<JsonBean> subvalues = new ArrayList<JsonBean>();

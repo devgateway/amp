@@ -66,6 +66,7 @@ public class ColumnConstants {
 	public static final String CURRENT_COMPLETION_DATE_COMMENTS = "Current Completion Date Comments";
 	public static final String DESCRIPTION_OF_COMPONENT_FUNDING = "Description of Component Funding";
 	public static final String DISTRICT = "District";
+	public static final String GEOCODE = "GeoId";
 	public static final String DONOR_AGENCY = "Donor Agency";
 	public static final String DONOR_ID = "Donor Id";
 	public static final String DONOR_COMMITMENT_DATE = "Donor Commitment Date";

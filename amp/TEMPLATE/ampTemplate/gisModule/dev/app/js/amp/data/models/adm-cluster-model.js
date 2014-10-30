@@ -32,6 +32,10 @@ module.exports = Backbone.Model
 
   fetch: function(options) {
     var filter = {otherFilters: {}};
+    /* TODO nice to have: if otherFilters and columnFilters
+     * had their own object on API, separate from settings, etc.
+     * Currently all on the same data level.
+     **/
 
     // get filters
     if (this.collection.filter) {

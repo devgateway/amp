@@ -11,7 +11,7 @@ module.exports = Backbone.Collection
   serialize: function() {
     var tmpJSON = {};
     this.each(function(setting) {
-      tmpJSON[setting.id] = _.findWhere(setting.get('options'), {id: setting.get('selected')});
+      tmpJSON[setting.id] = _.findWhere(setting.get('options'), {id: setting.get('selected')}).id;
     });
     return tmpJSON;
   },

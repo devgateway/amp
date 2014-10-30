@@ -13,10 +13,26 @@ module.exports = Backbone.Collection.extend({
     this.filter = options.filter;
   },
 
-  // parse geoJson response to pull out features as a collection.
-  parse: function(response) {
-    return response.features;
-  },
+  /*
+   * API spec: [
+   *  {
+   *    "id": 1,
+   *    "title": "Country",
+   *    "adminLevel": "adm-0"
+   *  },
+   *  {
+   *    "id": 77,
+   *    "title": "Region",
+   *    "adminLevel": "adm-1"
+   *  },
+   *  {
+   *    "id": 133,
+   *    "title": "Zone",
+   *    "adminLevel": "adm-2"
+   *  }
+   *  ...
+   *]
+   */
 
   getSelected: function() {
     return this.chain()

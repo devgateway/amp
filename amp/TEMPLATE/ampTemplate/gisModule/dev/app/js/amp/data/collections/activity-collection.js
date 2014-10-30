@@ -13,11 +13,29 @@ module.exports = Backbone.Collection
   type: 'POST',
 
   fetch: function(options) {
+
+    var payload = {otherFilters: {}};
+    /* TODO nice to have: if otherFilters and columnFilters
+     * had their own object on API, separate from settings, etc.
+     * Currently all on the same data level.
+     **/
+
+    /* get "columnFilters" if set (not applicable for getActivities) */
+    if (options.filter) {
+      _.extend(payload, options.filter.serialize());
+    }
+
+    /* get "settings" */
+    if (options.settings) {
+      payload.settings = options.settings.serialize();
+    }
+
     options = _.defaults((options || {}), {
       type: 'POST',
-      data:'{}'
+      data: JSON.stringify(payload)
     });
-    return Backbone.Model.prototype.fetch.call(this, options);
+
+    return Backbone.Collection.prototype.fetch.call(this, options);
   },
 
 
@@ -38,7 +56,7 @@ module.exports = Backbone.Collection
     if (!_.isEmpty(aryOfIDs)) {
       // do an api request to get remaining ones
       this.url = '/rest/gis/activities/' + aryOfIDs.join(',');
-      this.fetch({remove: false, type: 'GET', data:''}).then(function(newData) {
+      this.fetch({remove: false}).then(function(newData) {
         matches = _.union(matches, newData);
         deferred.resolve(matches);
       }).fail(function(err) {

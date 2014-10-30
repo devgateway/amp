@@ -77,7 +77,7 @@ module.exports = Backbone.View.extend({
   _renderCountryBoundary: function() {
     var self = this;
     this.app.data.boundaries.load().then(function() {
-      var boundary0 = self.app.data.boundaries.findWhere({id:'adm-0'});
+      var boundary0 = self.app.data.boundaries.get('adm-0');
 
       boundary0.fetch().then(function(topoJSON) {
         var topoboundaries = topoJSON;

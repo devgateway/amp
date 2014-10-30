@@ -246,30 +246,30 @@ public class GisEndPoints {
 		return indicatorLayers;
 	}
 
-	/*
-	*Config sample
-	*{  
-    * "columnFilters":{  
-    *  "National Planning Objectives Level 1 Id":[  
-    *     1,2,3,4
-    *  ],
-    *  "Primary Sector Sub-Sector Id":[  
-    *     11,22,32,43
-    *  ]
-    *},
-    *"otherFilters":{  
-    *  "date":{  
-    *     "start":"1967-01-01",
-    *     "end":"2015-12-31"
-    *  },
-    *  "keyWord":"some activity"
-   *},
-   * “settings” :  {
-   * 		"0" : [“Actual Commitments”, “Actual Disbursements”],
-   * 		"1" : “USD”,
-   * 		"2" : “123”
-   * 	}
-   * }
+	/**
+	* Config sample <br/>
+	* {  												<br/>
+    *  "columnFilters":{ 								<br/>  
+    *   "National Planning Objectives Level 1 Id":[ 	<br/>  
+    *     1,2,3,4 										<br/>
+    *   ], 												<br/>
+    *  "Primary Sector Sub-Sector Id":[ 				<br/>  
+    *     11,22,32,43 									<br/>
+    *   ] 												<br/>
+    * }, 												<br/>
+    * "otherFilters":{  								<br/>
+    *   "date":{  										<br/>
+    *      "start":"1967-01-01",						<br/>
+    *      "end":"2015-12-31"							<br/>
+    *  },												<br/>
+    *  "keyWord":"some activity"						<br/>
+    * },												<br/>
+    * “settings” :  {									<br/>
+    * 		"0" : [“Actual Commitments”, “Actual Disbursements”],	<br/>
+    * 		"1" : “USD”,								<br/>
+    * 		"2" : “123”									<br/>
+    * 	}												<br/>
+    * }													<br/>
 	*/
 	@POST
 	@Path("/activities")
@@ -284,19 +284,20 @@ public class GisEndPoints {
 		}	
 	}
 
-/**
- * return activity by id in the format /activities/12,15,16
- * @param settings
- * @param activityIds
- * @return
- */
-	@GET
+	/**
+	 * return activity by id in the format /activities/12,15,16
+	 * @param config {@link #getActivitiesNew  Json config}
+	 * @param activityIds comma separated list of ids
+	 * @return
+	 * @see #getActivitiesNew
+	 */
+	@POST
 	@Path("/activities/{activityId}") //once its done remove the New
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="ActivitiesById")
-	public JsonBean getActivities(@PathParam("activityId") PathSegment activityIds) {
+	public JsonBean getActivities(JsonBean config, @PathParam("activityId") PathSegment activityIds) {
 		try {
-			return ActivityService.getActivitiesMondrian(null,
+			return ActivityService.getActivitiesMondrian(config,
 					Arrays.asList(activityIds.getPath().split("\\s*,\\s*")),
 					null, null);
 		} catch (AmpApiException ex) {

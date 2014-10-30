@@ -1,4 +1,4 @@
-/*
+/*/A
  * The GIS Data Engine
  * attaches to app.data
  */
@@ -42,9 +42,12 @@ _.extend(GISData.prototype, Backbone.Events, {
     this.filter.view._getFilterList();
 
 
-    this.activities = new Activities();
     this.boundaries = new Boundaries();
     this.settings = new Settings();
+    this.activities = new Activities([],{
+      settings: this.settings,
+      filter: this.filter
+    });
     this.projectSites = new ProjectSites([
       {}  // just the one model, all defaults
     ], { activities: this.activities, filter: this.filter});

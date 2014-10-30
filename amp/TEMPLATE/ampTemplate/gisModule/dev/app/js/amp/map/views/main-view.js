@@ -71,7 +71,7 @@ module.exports = Backbone.View.extend({
   },
 
 
-        /*jshint camelcase: false */
+      /*jshint camelcase: false */
 // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
 
   _renderCountryBoundary: function() {
@@ -102,7 +102,7 @@ module.exports = Backbone.View.extend({
              * the AMP country, then preserve the state rather that resetting.
              *
              * for the case where a state is saved which is not quite exactly inside
-             * the AMP national boundary, we add 30% padding to all directions
+             * the AMP national boundarybox, we add 30% padding to all directions
              *
              **/
             if (!natlBounds.pad(30).contains(self.map.getBounds())) {

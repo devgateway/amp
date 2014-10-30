@@ -11,6 +11,13 @@ module.exports = Backbone.Collection
   url: '/rest/gis/activities',
   model: Activity,
   type: 'POST',
+  filter: null,
+  settings: null,
+
+  initialize: function(models, options) {
+    this.filter =options.filter;
+    this.settings = options.settings;
+  },
 
   fetch: function(options) {
 
@@ -19,15 +26,15 @@ module.exports = Backbone.Collection
      * had their own object on API, separate from settings, etc.
      * Currently all on the same data level.
      **/
-
+    debugger;
     /* get "columnFilters" if set (not applicable for getActivities) */
-    if (options.filter) {
-      _.extend(payload, options.filter.serialize());
+    if (this.filter) {
+      _.extend(payload, this.filter.serialize());
     }
 
     /* get "settings" */
-    if (options.settings) {
-      payload.settings = options.settings.serialize();
+    if (this.settings) {
+      payload.settings = this.settings.serialize();
     }
 
     options = _.defaults((options || {}), {
@@ -56,13 +63,18 @@ module.exports = Backbone.Collection
     if (!_.isEmpty(aryOfIDs)) {
       // do an api request to get remaining ones
       this.url = '/rest/gis/activities/' + aryOfIDs.join(',');
-      this.fetch({remove: false}).then(function(newData) {
-        matches = _.union(matches, newData);
-        deferred.resolve(matches);
-      }).fail(function(err) {
-        console.error('failed to get ' + this.url, err);
-        deferred.resolve(matches);
-      });
+      this.fetch({
+          remove: false,
+          filter: undefined
+        })
+        .then(function(newData) {
+          matches = _.union(matches, newData);
+          deferred.resolve(matches);
+        })
+        .fail(function(err) {
+          console.error('failed to get ' + this.url, err);
+          deferred.resolve(matches);
+        });
     } else {
       deferred.resolve(matches);
     }

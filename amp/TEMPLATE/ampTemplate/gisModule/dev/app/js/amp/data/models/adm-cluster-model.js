@@ -23,13 +23,10 @@ module.exports = Backbone.Model
 
   },
 
-  // if filters change update it.
+  // if filters change and layer is selected update it.
   applyFilters: function() {
-    var self = this;
     if (this.get('selected')) {
-      this.fetch().then(function() {
-        self.trigger('refresh', self);
-      });
+      this.fetch();
     }
   },
 

@@ -20,7 +20,7 @@ module.exports = Backbone.View.extend({
 
     this.listenTo(this.app.data.admClusters, 'show', this.showLayer);
     this.listenTo(this.app.data.admClusters, 'hide', this.hideLayer);
-    this.listenTo(this.app.data.admClusters, 'refresh', this.refreshLayer);
+    this.listenTo(this.app.data.admClusters, 'sync', this.refreshLayer);
 
   },
 

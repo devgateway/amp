@@ -30,6 +30,7 @@ module.exports = Backbone.View.extend({
 
     this.listenTo(this.app.data.projectSites, 'show', this.showLayer);
     this.listenTo(this.app.data.projectSites, 'hide', this.hideLayer);
+    this.listenTo(this.app.data.projectSites, 'sync', this.refreshLayer); //TODO: implement refresh layer
 
     this.listenTo(this.markerCluster, 'clusterclick', this.clusterClick);
 
@@ -249,7 +250,6 @@ module.exports = Backbone.View.extend({
   // ==================
   // Layer management
   // ==================
-
   showLayer: function(projectSitesModel) {
     var self = this;
 
@@ -270,6 +270,10 @@ module.exports = Backbone.View.extend({
 
     this.map.on('zoomend', this._updateZoom, this);
 
+  },
+
+  refreshLayer: function(){
+    console.log('TODO: refresh project site layer.');
   },
 
   bringToFront: function() {

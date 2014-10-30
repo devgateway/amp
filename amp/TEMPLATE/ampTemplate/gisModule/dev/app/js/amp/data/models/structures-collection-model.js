@@ -59,24 +59,39 @@ module.exports = Backbone.Model
 
   initialize: function(things, options) {
     this.activities = options.activities;
+    this.filter = options.filter;
     this.palette = new Palette.FromSet();
 
     this.listenTo(this, 'change:selected', function(blah, show) {
       this.trigger(show ? 'show' : 'hide', this);
+      if (show) {
+        this.fetch();
+      }
     });
     this.listenTo(this, 'sync', this.updatePaletteSet);
+    this.listenTo(this.filter, 'apply', this.applyFilters);
+  },
+
+  applyFilters: function(serializedFitlers) {
+    if (this.get('selected')) {
+      this.fetch({data:JSON.stringify(serializedFitlers)});
+    }
   },
 
   fetch: function(options) {
+    var filter = this.filter.serialize();
+
     options = _.defaults((options || {}), {
       type: 'POST',
-      data:'{}'
+      data: JSON.stringify(filter)
     });
     return Backbone.Model.prototype.fetch.call(this, options);
   },
 
-  //TODO: we don't want to do loadonce, because fitlers change....
+  //TODO: we don't want to do loadonce, because fitlers change...so fetch instead,
   load: function() {
+    //return this.fetch();
+    //DRS temp try fetch for testing filtering..
     return LoadOnceMixin.load.apply(this);
   },
 
@@ -101,10 +116,10 @@ module.exports = Backbone.Model
   },
 
   // does not do new web requests, unless it's never been done.
-  getSites: function(){
+  getSites: function() {
     if (_.has(this, '_loaded')) {
       return this._loaded;
-    } else{
+    } else {
       return this.loadAll();
     }
   },

@@ -18,7 +18,6 @@ module.exports = Backbone.Collection.extend({
     options = _.defaults((options || {}), {
       type: 'POST',
       data:'{}'
-      /*TODO(thadk): app.filterWidget.serialize() as the data*/
     });
 
     /*TODO implement manual caching */

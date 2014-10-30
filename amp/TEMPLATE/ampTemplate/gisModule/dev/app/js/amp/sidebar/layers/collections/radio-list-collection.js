@@ -30,7 +30,6 @@ module.exports = Backbone.Collection.extend({
       child.clearSelected();
     });
     model.set('selected', true);
-    console.log(this.siblingGroupList);
   },
 
   unselect: function(model) {

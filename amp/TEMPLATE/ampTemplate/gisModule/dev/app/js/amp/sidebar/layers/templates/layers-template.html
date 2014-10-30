@@ -1,6 +1,9 @@
-     <div>
-       <p class="description"><%= title %></p>
-     </div>
+<% /* To handle menus with multiple sections */
+if (this.parentMultisectionControl) { %>
+<div>
+   <p class="description"><%= title %></p>
+ </div>
+ <% } %>
 <div  class="container-fluid layer-selector" ></div>
 <div class="loading-icon" style="display:none;"></div>
 

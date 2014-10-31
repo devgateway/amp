@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var $ = require('jquery');
 var Backbone = require('backbone');
 var ProjectSiteModel = require('../models/structure-model');
 //var ActivityCollection = require('../collections/activity-collection');
@@ -11,8 +12,16 @@ var ProjectSiteModel = require('../models/structure-model');
 module.exports = Backbone.Collection.extend({
 
   url: '/rest/gis/structures',
-
   model: ProjectSiteModel,
+  filter: null,
+  settings: null,
+  appData: null,
+
+  initialize: function (models, options) {
+    this.filter = options.filter;
+    this.settings = options.settings;
+    this.appData = options.appData;
+  },
 
   fetch: function(options) {
     options = _.defaults((options || {}), {
@@ -26,7 +35,7 @@ module.exports = Backbone.Collection.extend({
     return Backbone.Collection.prototype.fetch.call(this, options);
   },
 
-  parse: function(response, options) {
+  parse: function(response) {
     //fetch ALL activities
     //window.app.data.activities.fetch();
 
@@ -106,6 +115,7 @@ module.exports = Backbone.Collection.extend({
 
     return deferred;
   }
+
 
 
 });

@@ -47,13 +47,13 @@ _.extend(GISData.prototype, Backbone.Events, {
     this.activities = new Activities([], {
       settings: this.settings,
       filter: this.filter,
-      parentDataObj: this
+      appData: this
     });
     this.projectSites = new ProjectSites([
       {}  // just the one model, all defaults
     ], { activities: this.activities, filter: this.filter});
 
-    this.projectAlt = new ProjectSitesAlt({parentDataObj: this});
+    this.projectAlt = new ProjectSitesAlt({appData: this});
 
 
     this.indicators = new Indicators([], { boundaries: this.boundaries });

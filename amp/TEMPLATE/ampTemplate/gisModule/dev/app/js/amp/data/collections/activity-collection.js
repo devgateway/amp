@@ -13,10 +13,12 @@ module.exports = Backbone.Collection
   type: 'POST',
   filter: null,
   settings: null,
+  appData: null,
 
   initialize: function(models, options) {
     this.filter = options.filter;
     this.settings = options.settings;
+    this.appData = options.appData;
   },
 
   fetch: function(options) {
@@ -44,8 +46,8 @@ module.exports = Backbone.Collection
     return Backbone.Collection.prototype.fetch.call(this, options);
   },
 
-  parse: function(data){
-    return data.activities;
+  parse: function(apiData) {
+    return apiData.activities;
   },
 
   //smart ID fetching, load locally, and only fetch if we don't have the activity.

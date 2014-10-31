@@ -73,7 +73,7 @@
 	min-height: 200px;
 	/*padding: 5px;*/
 	position: absolute;
-	z-index: 100;
+	z-index: 2;
 	width: inherit;
 }
 

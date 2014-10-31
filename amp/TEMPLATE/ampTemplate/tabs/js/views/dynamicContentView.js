@@ -34,19 +34,22 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 			var FilterDialogContainerView = Marionette.ItemView.extend({
 				template : "<p></p>",
 				render : function(model) {
-					//if (!app.TabsApp.currentTabOpenedFilters) {
-						console.log('filter widget loaded');
-						// Convert report filters to filterwidget filters.
-						var blob = FilterManager.convertJavaFiltersToJS(reportFilters);
-						app.TabsApp.filtersWidget.deserialize(blob, {
-							silent : true
-						});
-						app.TabsApp.currentTabOpenedFilters = true;
-					/*} else {
-						app.TabsApp.filtersWidget.deserialize(app.TabsApp.serializedFilters, {
-							silent : true
-						});
-					}*/
+					// Close floating accordion if needed.
+					jQuery("#main-dynamic-content-region_" + reportId + " #filters-collapsible-area").accordion('option', 'active', false);
+
+					// if (!app.TabsApp.currentTabOpenedFilters) {
+					console.log('filter widget loaded');
+					// Convert report filters to filterwidget filters.
+					var blob = FilterManager.convertJavaFiltersToJS(reportFilters);
+					app.TabsApp.filtersWidget.deserialize(blob, {
+						silent : true
+					});
+					app.TabsApp.currentTabOpenedFilters = true;
+					/*
+					 * } else {
+					 * app.TabsApp.filtersWidget.deserialize(app.TabsApp.serializedFilters, {
+					 * silent : true }); }
+					 */
 
 					// Show the dialog and fix the position.
 					jQuery(containerName).show();
@@ -82,7 +85,7 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 			// Create jQuery buttons.
 			// alert(jQuery("#main-dynamic-content-region_" + reportId + "
 			// .buttonify"));
-			jQuery("#main-dynamic-content-region_" + reportId + " .buttonify").button();			
+			jQuery("#main-dynamic-content-region_" + reportId + " .buttonify").button();
 		}
 	});
 

@@ -274,7 +274,7 @@ public class MondrianUtils {
 	 * @throws AmpApiException
 	 */
 	public static FilterRule getSingleDateFilterRule(Date date, boolean valueToInclude) throws AmpApiException {
-		return getSingleDateFilterRule(ElementType.MONTH, DateTimeUtil.toJulianDayNumber(date), valueToInclude);
+		return getSingleDateFilterRule(ElementType.DATE, DateTimeUtil.toJulianDayNumber(date), valueToInclude);
 	}
 	
 	private static FilterRule getSingleDateFilterRule(ElementType elemType, Integer value, boolean valueToInclude) throws AmpApiException {

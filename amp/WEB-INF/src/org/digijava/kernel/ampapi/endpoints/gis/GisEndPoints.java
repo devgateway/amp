@@ -333,15 +333,14 @@ public class GisEndPoints {
 		return jMap;
 	}
 	
-	@GET
+	@POST
 	@Path("/locationstotals/{admlevel}/{type}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui=false,name="locationstotals")
 	
-	public JsonBean getAdminLevelsTotals(@PathParam ("admlevel") String admlevel, @PathParam("type") String type ){
+	public JsonBean getAdminLevelsTotals(JsonBean filters, @PathParam ("admlevel") String admlevel, @PathParam("type") String type ){
 		LocationService ls = new LocationService();
-	
-		return ls.getTotals(admlevel, type);
+		return ls.getTotals(admlevel, type, filters);
 	}
 	
 	@GET

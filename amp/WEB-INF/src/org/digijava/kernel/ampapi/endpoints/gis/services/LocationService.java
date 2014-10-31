@@ -31,12 +31,12 @@ import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -59,7 +59,7 @@ public class LocationService {
 	 * @param type
 	 * @return
 	 */
-	public JsonBean getTotals(String admlevel, String type) {
+	public JsonBean getTotals(String admlevel, String type, JsonBean filter) {
 		String err = null;
 		JsonBean retlist = new JsonBean();
 		
@@ -99,9 +99,19 @@ public class LocationService {
 		spec.addMeasure(new ReportMeasure(type, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.getHierarchies().addAll(spec.getColumns());
 		MondrianReportFilters filterRules=new MondrianReportFilters(); 
+		
+		if(filter!=null){
+			Object columnFilters=filter.get("columnFilters");
+			if(columnFilters!=null){
+				filterRules = FilterUtils.getApiColumnFilter((LinkedHashMap<String, Object>)filter.get("columnFilters"));	
+			}
+ 		}
 		filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.IMPLEMENTATION_LEVEL, ReportEntityType.ENTITY_TYPE_ACTIVITY), 
 				new FilterRule(admlevel, true, false));
 		spec.setFilters(filterRules);
+		
+		
+		
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()),true);
 		GeneratedReport report = null;
 		
@@ -255,9 +265,6 @@ public class LocationService {
 	public static List<Activity> getMapExportByStructure() {
 
 		ReportSpecificationImpl spec = getCommonSpecForExport("MapExport");		
-
-		
-		
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()),false);
 		GeneratedReport report = null;
 		try {

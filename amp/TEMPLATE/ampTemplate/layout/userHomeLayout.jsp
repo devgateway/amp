@@ -46,7 +46,6 @@
 		        waitSeconds: 0
 		    };
 		</script>		
-		<script data-main="tabs/js/main.js" src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js"></script>
 		<!-- END LOADING NEW TABS NECESSARY FILES -->
         
 	</head>
@@ -196,3 +195,4 @@
   		contentId.style.display == "block" ? contentId.style.display = "none" : contentId.style.display = "block"; 
 	}
 </script>
+<script data-main="tabs/js/main.js" src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js"></script>

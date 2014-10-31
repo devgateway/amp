@@ -156,11 +156,11 @@ module.exports = Backbone.Model
             if (!_.isEmpty(activity.get('matchesFilters').organizations['1'])) {
               return activity.get('matchesFilters').organizations['1'];
             } else {
-              console.warn('Activity is missing desired vertical');
+              console.warn('Palette generation: Activity is missing desired vertical');
               return -1;
             }
           } else {
-            console.warn('Structure is missing an activity');
+            console.warn('Palette generation: Structure is missing an activity');
             return -1;
           }
         })

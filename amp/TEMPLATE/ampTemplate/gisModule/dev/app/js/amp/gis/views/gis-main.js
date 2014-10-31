@@ -24,7 +24,7 @@ module.exports = Backbone.View.extend({
     this.state = options.state;
 
     this.mapView = new MapView({app: this});
-    this.dataQualityView = new DataQualityView({app: this});
+    /* this.dataQualityView = new DataQualityView({app: this}); */
     this.sidebarView = new SidebarView({app: this});
   },
 
@@ -33,7 +33,7 @@ module.exports = Backbone.View.extend({
     this.$el.html(ModuleTemplate);
 
     this.mapView.setElement(this.$('#map-container')).render();
-    this.dataQualityView.setElement(this.$('#quality-indicator')).render();
+    /* this.dataQualityView.setElement(this.$('#quality-indicator')).render();*/
     this.sidebarView.setElement(this.$('#sidebar-tools')).render();
 
     // just for testing...

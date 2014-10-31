@@ -46,13 +46,14 @@ _.extend(GISData.prototype, Backbone.Events, {
     this.settings = new Settings();
     this.activities = new Activities([], {
       settings: this.settings,
-      filter: this.filter
+      filter: this.filter,
+      parentDataObj: this
     });
     this.projectSites = new ProjectSites([
       {}  // just the one model, all defaults
     ], { activities: this.activities, filter: this.filter});
 
-    this.projectAlt = new ProjectSitesAlt();
+    this.projectAlt = new ProjectSitesAlt({parentDataObj: this});
 
 
     this.indicators = new Indicators([], { boundaries: this.boundaries });
@@ -70,6 +71,10 @@ _.extend(GISData.prototype, Backbone.Events, {
       {
         title: 'Projects by District',
         value: 'adm-2'
+      },
+      {
+        title: 'Projects by adm-3',
+        value: 'adm-3'
       }
     ], { boundaries: this.boundaries, filter: this.filter });
     // TODO get these from the api

@@ -8,10 +8,12 @@ var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/structure-p
 module.exports = Backbone.View.extend({
   // These will eventually move to a config.
   // They control when to resize points based on zoom
-  ZOOM_BREAKPOINT: 7,
-  SMALL_ICON_RADIUS: 2,
-  BIG_ICON_RADIUS: 7,
-  currentRadius: 2,
+  // Make larger for smaller, denser countries: DRC = 7, Timor = 11
+  ZOOM_BREAKPOINT: 11,
+  SMALL_ICON_RADIUS: 3,
+  BIG_ICON_RADIUS: 4,
+  //    Calculate based on: var boundary0 = self.app.data.boundaries.get('adm-0');
+  currentRadius: null,
   markerCluster: null,
 
   popup: null,
@@ -20,6 +22,7 @@ module.exports = Backbone.View.extend({
   customClusterMap: {},
   maxClusterCount: 0,
   CLUSTER_PRECISION: 8, //decimal places of lat, lng precision for clustering. (doesn't effect plugin.)
+
   MAX_CLUSTER_SIZE: 20,
 
   initialize: function(options) {
@@ -59,6 +62,7 @@ module.exports = Backbone.View.extend({
     self.markerCluster.clearLayers();
 
     var model = self.app.data.projectSites;
+
     self.maxClusterCount = 0;
     self.customClusterMap = {};
 
@@ -76,13 +80,19 @@ module.exports = Backbone.View.extend({
 
         // temp hack for if pallette part didn't work.
         if (colors.length === 0) {
-          colors[0] = {hex: function() { return '#fa5';}};
+          colors[0] = {hex: function() { return 'orange';}};
+        }
+
+        if (self.map.getZoom() < self.ZOOM_BREAKPOINT) {
+          self.currentRadius = self.SMALL_ICON_RADIUS;
+        } else {
+          self.currentRadius = self.BIG_ICON_RADIUS;
         }
 
         var point = new L.CircleMarker(latlng, {
           radius: self.currentRadius,
           fillColor: colors[0].hex(),
-          color: '#333',
+          color: null,
           weight: 1,
           opacity: 1,
           fillOpacity: 1
@@ -215,7 +225,9 @@ module.exports = Backbone.View.extend({
     //TODO: seems silly to bind on every click...
     // Once we have nailed down desired fuhnctionality it will be worth writing our own clusterer since it only
     // needs to run once on project site load and that is it. (not each zoom etc.)
-    a.layer.bindPopup(self.projectListTemplate({ projects: a.layer.getAllChildMarkers() }));
+    a.layer.bindPopup(
+      self.projectListTemplate({ projects: a.layer.getAllChildMarkers() }
+                              ), {offset: new L.Point(0, -6) });
     a.layer.openPopup(self.map);
   },
 
@@ -227,7 +239,8 @@ module.exports = Backbone.View.extend({
     if (feature.properties) {
       //TODO: template:
       layer.bindPopup('Project #: ' + (feature.properties.activity ? feature.properties.activity[0] : '') +
-        '<br />Site: ' + feature.properties.structureTitle);
+        '<br />Site: ' + feature.properties.title +
+        '<br />Description: ' + feature.properties.description);
     }
 
     layer.on('click', function(evt) {
@@ -252,9 +265,8 @@ module.exports = Backbone.View.extend({
   // ==================
   showLayer: function(projectSitesModel) {
     var self = this;
-
     if (this.layerLoadState === 'loading') {
-      console.warn('tried to show project sites while they are still loading');
+      console.warn('ProjectSites leaflet: tried to show project sites while they are still loading');
       return;
     } else if (this.layerLoadState === 'pending') {
       this.layerLoadState = 'loading';
@@ -286,7 +298,7 @@ module.exports = Backbone.View.extend({
     if (this.layerLoadState === 'pending') {
       throw new Error('Tried to remove project sites but they have not been added');
     } else if (this.layerLoadState === 'loading') {
-      console.warn('removing layers while they are loading is not yet supported');
+      console.warn('Project Sites: removing layers while they are loading is not yet supported');
     }
 
     this.map.off('zoomend', this._updateZoom);

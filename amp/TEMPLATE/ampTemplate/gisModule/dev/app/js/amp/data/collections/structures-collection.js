@@ -49,6 +49,63 @@ module.exports = Backbone.Collection.extend({
     window.app.data.relevantActivitesFetch = window.app.data.activities.getActivities(activeActivityList);
 
     return response.features;
+  },
+
+/*Migrated from Collection-Model */
+  getSelected: function() {
+    return _.chain(this.get('selected') ? [this] : []);
+  },
+
+/*Migrated from Collection-Model */
+  updatePaletteSet: function() {
+    var deferred = $.Deferred();
+    var self = this;
+
+    //load the necessary activities.
+    this.loadAll().done(_.bind(function() {
+      var activity;
+
+      var orgSites = this.get('sites')
+        .chain()
+        .groupsBy(function(site) {
+
+          if (!_.isEmpty(self.activities.get(site.get('properties').activity))) {
+            // doesn't handle multiple activities, which may be introduced in the future..
+            activity = self.activities.get(site.get('properties').activity[0]);
+
+            // TODO:  for now we want just organizations[1]  for donor.
+            // Choosing a vertical will need to be configurable from drop down..
+            if (!_.isEmpty(activity.get('matchesFilters').organizations['1'])) {
+              return activity.get('matchesFilters').organizations['1'];
+            } else {
+              console.warn('Activity is missing desired vertical');
+              return -1;
+            }
+          } else {
+            console.warn('Structure is missing an activity');
+            return -1;
+          }
+        })
+        .map(function(sites, orgId) {
+          return {
+            id: orgId,
+            name: ONAMES[orgId], // TODO: use filters for lookup once we have app.data.filters
+            sites: _(sites).map(function(site) { return site.get('id'); })
+          };
+        })
+        .sortBy(function(item) {
+          return item.sites.length;
+        })
+        .reverse()
+        .value();
+
+      this.palette.set('elements', orgSites);
+      deferred.resolve();
+
+    }, this));
+
+    return deferred;
   }
+
 
 });

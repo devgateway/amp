@@ -32,11 +32,13 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 		});
 		app.TabsApp.listenTo(app.TabsApp.filtersWidget, 'apply', function(data) {
 			console.log('filters apply');
-			var filters = app.TabsApp.filtersWidget.serialize();
+			var serializedFilters = app.TabsApp.filtersWidget.serialize();
 			var readableFilters = app.TabsApp.filtersWidget.serializeToModels();
-			console.log(filters);
+			console.log(serializedFilters);
 			console.log(readableFilters);
 
+			var filters = serializedFilters.columnFilters;
+			filters.date = serializedFilters.otherFilters.date;
 			GridManager.filter(app.TabsApp.currentId, filters);
 
 			FilterUtils.updateFiltersRegion(readableFilters);

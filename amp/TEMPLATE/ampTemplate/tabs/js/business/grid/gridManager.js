@@ -34,10 +34,11 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 		});
 		var data = {
 			page : 1,
+			regenerate : true,
 			filters : jsonFilters
 		};
 		jQuery(grid).jqGrid('setGridParam', {
-			postData : data
+			postData : JSON.stringify(data)
 		});
 		jQuery(grid).jqGrid().trigger('reloadGrid', [ {
 			page : 1
@@ -69,10 +70,14 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 						url : getURL(id),
 						datatype : 'json',
 						mtype : 'POST',
-						postData : {
-							page : 1,
-							filters : null
+						ajaxGridOptions : {
+							contentType : 'application/json; charset=utf-8'
 						},
+						postData : JSON.stringify({
+							page : 1,
+							regenerate : true,
+							filters : null
+						}),
 						jsonReader : {
 							repeatitems : false,
 							root : function(obj) {

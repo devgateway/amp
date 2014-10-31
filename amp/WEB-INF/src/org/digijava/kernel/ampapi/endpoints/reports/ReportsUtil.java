@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.reports;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -106,7 +107,7 @@ public class ReportsUtil {
 		ReportArea pageArea = ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
 		int totalPageCount = ReportPaginationUtils.getPageCount(areas, recordsPerPage);
 		
-		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, areas.length));
+		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, (areas != null ? areas.length : 0)));
 		
 		return result;
 	}
@@ -328,5 +329,27 @@ public class ReportsUtil {
 		}
 		// null to clear the reference
 		return null;
+	}
+	
+	public static JsonBean prepareParameters(LinkedHashMap queryParameters) {
+		JsonBean jsonBean = null;
+		if (queryParameters != null) {
+			jsonBean = new JsonBean();
+			Iterator<String> it = queryParameters.keySet().iterator();
+			while (it.hasNext()) {
+				String key = (String) it.next();
+				if (queryParameters.get(key) instanceof List) {
+					List<Integer> values = new LinkedList<Integer>();
+					Iterator<Integer> iValues = ((List) queryParameters.get(key)).iterator();
+					while (iValues.hasNext()) {
+						values.add(iValues.next());
+					}
+					jsonBean.set(key, values);
+				} else {
+					// TODO: Implement for filters[Years][endYear]
+				}
+			}
+		}
+		return jsonBean;
 	}
 }

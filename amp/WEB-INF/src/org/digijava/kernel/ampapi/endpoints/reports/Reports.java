@@ -3,6 +3,8 @@ package org.digijava.kernel.ampapi.endpoints.reports;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -15,6 +17,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
@@ -142,6 +145,8 @@ public class Reports {
 		extraColumns.add(ColumnConstants.APPROVAL_STATUS);
 		formParams.set(EPConstants.ADD_COLUMNS, extraColumns);
 		
+		JsonBean reformattedFilters = ReportsUtil.prepareParameters((LinkedHashMap) formParams.get("filters"));
+		formParams.set("filters", reformattedFilters);
 		return getReportResultByPage(formParams, reportId);
 	}
 	
@@ -274,32 +279,4 @@ public class Reports {
 		// settings.put("currencies", oldFilterForm.getCurrencies());
 		return settings;
 	}
-
-	/* check if this is still needed?
-	private JsonBean prepareParameters(JsonBean formParams) {
-		JsonBean jsonBean = new JsonBean();
-		Iterator<String> it = queryParameters.keySet().iterator();
-		while (it.hasNext()) {
-			String key = (String) it.next();
-			// Ignore non filter parameters.
-			if (key.indexOf("filters[") == 0) {
-				String newKey = key.replace("filters[", "");
-				// Find collection for donors, activities, etc (not composed
-				// objects).
-				if (newKey.indexOf("[]") >= 0) {
-					newKey = newKey.replace("][]", "");
-					List<Integer> values = new LinkedList<Integer>();
-					Iterator<String> iValues = queryParameters.get(key).iterator();
-					while (iValues.hasNext()) {
-						values.add(Integer.valueOf(iValues.next()));
-					}
-					jsonBean.set(newKey, values);
-				} else {
-					// TODO: Implement for filters[Years][endYear]
-				}
-			}
-		}
-		return jsonBean;
-	}
-	*/
 }

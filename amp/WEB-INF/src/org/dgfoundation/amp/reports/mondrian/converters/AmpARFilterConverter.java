@@ -133,7 +133,7 @@ public class AmpARFilterConverter {
 		addFilter(arFilter.getWorkspaces(), ColumnConstants.TEAM, entityType);
 		if (arFilter.getApprovalStatusSelected() != null && arFilter.getApprovalStatusSelected().size() > 0)
 			filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.APPROVAL_STATUS, entityType), 
-					new FilterRule(new ArrayList<String>(arFilter.getApprovalStatusSelected()), true, true)); 
+					new FilterRule(ColumnConstants.APPROVAL_STATUS, arFilter.getApprovalStatusSelectedStrings(), new ArrayList<String>(arFilter.getApprovalStatusSelected()), true, true)); 
 		addBooleanFilter(arFilter.getGovernmentApprovalProcedures(), ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, entityType);
 		addBooleanFilter(arFilter.getJointCriteria(), ColumnConstants.JOINT_CRITERIA, entityType);
 		addBooleanFilter(arFilter.getShowArchived(), ColumnConstants.ARCHIVED, entityType);
@@ -186,11 +186,11 @@ public class AmpARFilterConverter {
 		addFilter(arFilter.getDonnorgAgency(), ColumnConstants.DONOR_AGENCY, ReportEntityType.ENTITY_TYPE_ALL);
 		
 		//Related Agencies
-		addFilter(arFilter.getImplementingAgency(), ColumnConstants.IMPLEMENTING_AGENCY, ReportEntityType.ENTITY_TYPE_ALL);
-		addFilter(arFilter.getExecutingAgency(), ColumnConstants.EXECUTING_AGENCY, ReportEntityType.ENTITY_TYPE_ALL);
-		addFilter(arFilter.getBeneficiaryAgency(), ColumnConstants.BENEFICIARY_AGENCY, ReportEntityType.ENTITY_TYPE_ALL);
+		addFilter(arFilter.getImplementingAgency(), ColumnConstants.IMPLEMENTING_AGENCY_ID, ReportEntityType.ENTITY_TYPE_ALL);
+		addFilter(arFilter.getExecutingAgency(), ColumnConstants.EXECUTING_AGENCY_ID, ReportEntityType.ENTITY_TYPE_ALL);
+		addFilter(arFilter.getBeneficiaryAgency(), ColumnConstants.BENEFICIARY_AGENCY_ID, ReportEntityType.ENTITY_TYPE_ALL);
 		addFilter(arFilter.getImplementingAgency(), ColumnConstants.RESPONSIBLE_ORGANIZATION, ReportEntityType.ENTITY_TYPE_ALL);
-		addFilter(arFilter.getContractingAgency(), ColumnConstants.CONTRACTING_AGENCY, ReportEntityType.ENTITY_TYPE_ALL);
+		addFilter(arFilter.getContractingAgency(), ColumnConstants.CONTRACTING_AGENCY_ID, ReportEntityType.ENTITY_TYPE_ALL);
 		//related agencies groups
 		addFilter(arFilter.getContractingAgencyGroups(), ColumnConstants.CONTRACTING_AGENCY_GROUPS, ReportEntityType.ENTITY_TYPE_ALL);
 	}
@@ -285,16 +285,13 @@ public class AmpARFilterConverter {
 	private void addFilter(Collection<? extends NameableOrIdentifiable> set, String columnName, ReportEntityType type) {
 		if (set == null || set.size() == 0) return;
 		List<String> values = new ArrayList<String>(set.size());
-		if (USE_IDS)
-			for (Identifiable identifiable: set) { 
-				values.add(identifiable.getIdentifier().toString());
-			}
-		else
-			for (Nameable identifiable: set) { 
-				values.add(identifiable.getName());
-			}
+		List<String> names = new ArrayList<String>(set.size());
+		for (NameableOrIdentifiable identifiable: set) { 
+			names.add(identifiable.getName());
+			values.add(identifiable.getIdentifier().toString());
+		}
 		
-		addFilterRule(columnName, type, new FilterRule(values, true, USE_IDS));
+		addFilterRule(columnName, type, new FilterRule(columnName, names, values, true, USE_IDS));
 	}
 	
 	private void addBooleanFilter(Boolean flag, String columnName, ReportEntityType type) {
@@ -319,13 +316,12 @@ public class AmpARFilterConverter {
 	private void addCategoryValueNamesFilter(Set<AmpCategoryValue> set, String columnName, ReportEntityType type) {
 		if (set == null || set.size() == 0) return;
 		List<String> names = new ArrayList<String>(set.size());
+		List<String> values = new ArrayList<String>(set.size());
 		for (AmpCategoryValue categValue: set) {
-			if (USE_IDS)
-				names.add(String.valueOf(categValue.getId()));
-			else 
-				names.add(categValue.getValue());
+			values.add(String.valueOf(categValue.getId()));
+			names.add(categValue.getValue());
 		}
-		addFilterRule(columnName, type, new FilterRule(names, true, USE_IDS));
+		addFilterRule(columnName, type, new FilterRule(columnName, names, values, true, USE_IDS));
 	}
 	
 	public MondrianReportSettings buildSettings() {

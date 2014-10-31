@@ -2,45 +2,27 @@
 <div class="cluster-popup">
   <h5><%= projects.length %> projects are geocoded here</h5>
 
-  <ul class="nav nav-tabs" role="tablist">
-    <li><a href="#charts-pane-donor" role="tab" data-toggle="tab">Donors</a></li>
-    <li><a href="#charts-pane-sector" role="tab" data-toggle="tab">Sectors</a></li>
-    <li class="active"><a href="#projects-pane" role="tab" data-toggle="tab">Project List</a></li>
-  </ul>
+  <div class="scroll-container">
+    <table class="table table-striped table-condensed">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+      <tbody class="project-list">
+        <%   _.each(projects, function(project){  %>
+        <tr>
+          <td><!--= project.feature.properties.title --></td>
+          <td><!--= this.app.data.activities.get(project.feature.properties.activity[0]).get('totalCommitments') --></td>
+          <!--<td><= JSON.stringify(this.app.data.activities.get(project.feature.properties.activity[0])) </td-->
 
-  <!-- Tab panes -->
-  <div class="tab-content">
-    <div class="tab-pane" id="charts-pane-donor">
-      <div class="amp-chart"><svg></svg></div>
-    </div>
-    <div class="tab-pane" id="charts-pane-sector">
-      <div class="amp-chart"><svg></svg></div>
-    </div>
-    <div class="tab-pane active" id="projects-pane">
-      <!-- this template is for adm clusters -->
-      <div class="scroll-container">
-        <table class="table table-striped table-condensed">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Amount</th>
-            </tr>
-          </thead>
-          <tbody class="project-list">
-            <%   _.each(projects, function(project){  %>
-            <tr>
-              <td><!--= project.feature.properties.title --></td>
-              <td><!--= this.app.data.activities.get(project.feature.properties.activity[0]).get('totalCommitments') --></td>
-              <!--<td><= JSON.stringify(this.app.data.activities.get(project.feature.properties.activity[0])) </td-->
+          <!--<td><= project.feature.properties.activity[0] ></td>-->
 
-              <!--<td><= project.feature.properties.activity[0] ></td>-->
-
-            </tr>
-            <% });%>
-          </tbody>
-        </table>
-      </div>
-      <div class="btn btn-sm btn-info load-more">load more...</div>
-    </div>
+        </tr>
+        <% });%>
+      </tbody>
+    </table>
   </div>
+  <div class="btn btn-sm btn-info load-more">load more...</div>
 </div>

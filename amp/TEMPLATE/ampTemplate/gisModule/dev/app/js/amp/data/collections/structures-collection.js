@@ -13,14 +13,20 @@ module.exports = Backbone.Collection.extend({
 
   url: '/rest/gis/structures',
   model: ProjectSiteModel,
+  activities: null,
   filter: null,
   settings: null,
   appData: null,
 
-  initialize: function (models, options) {
-    this.filter = options.filter;
-    this.settings = options.settings;
-    this.appData = options.appData;
+  initialize: function(models, options) {
+    if (options) {
+      this.activities = options.activities;
+      this.filter = options.filter;
+      this.settings = options.settings;
+      this.appData = options.appData;
+    } else {
+      console.warn('Project Sites/Structures colln: no options were provided for context');
+    }
   },
 
   fetch: function(options) {

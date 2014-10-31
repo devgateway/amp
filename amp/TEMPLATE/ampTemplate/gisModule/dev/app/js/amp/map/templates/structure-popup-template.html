@@ -29,10 +29,11 @@
           <tbody class="project-list">
             <%   _.each(projects, function(project){  %>
             <tr>
-              <td><%= project.feature.properties.title %></td>
-              <td><%= this.app.data.activities.get(project.feature.properties.activity[0]).get('totalCommitments') %></td>
-              <!--<td><%= JSON.stringify(this.app.data.activities.get(project.feature.properties.activity[0])) %></td>-->
-              <!--<td><%= project.feature.properties.activity[0] %></td>-->
+              <td><!--= project.feature.properties.title --></td>
+              <td><!--= this.app.data.activities.get(project.feature.properties.activity[0]).get('totalCommitments') --></td>
+              <!--<td><= JSON.stringify(this.app.data.activities.get(project.feature.properties.activity[0])) </td-->
+
+              <!--<td><= project.feature.properties.activity[0] ></td>-->
 
             </tr>
             <% });%>

@@ -27,7 +27,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 public class ColumnsVisibility extends DataVisibility {
 	protected static final Logger logger = Logger.getLogger(ColumnsVisibility.class);
 	
-	private static final Map<String, String> columnsMap = getConstantsValueToNameMap(ColumnConstants.class);
+	private static final Set<String> columnsSet = ConstantsUtil.getConstantsSet(ColumnConstants.class);
 	
 	//TODO: store in a cache, that must be purged once FM config changes
 	private static ThreadLocal<ColumnsVisibility> currentColumnsVisibility = new ThreadLocal<ColumnsVisibility>();
@@ -50,10 +50,10 @@ public class ColumnsVisibility extends DataVisibility {
 	}
 	
 	private void detectVisibleColumns() {
-		sanityCheck();
+		// sanityCheck();
 		visibleColumns = new HashSet<String>(); 
 		visibleColumns.addAll(visibleByDefault);
-		Set<String> invisibleColumns = new HashSet<String>(columnsMap.keySet());
+		Set<String> invisibleColumns = new HashSet<String>(columnsSet);
 		
 		AmpTemplatesVisibility currentTemplate = FeaturesUtil.getCurrentTemplate();
 		
@@ -98,14 +98,14 @@ public class ColumnsVisibility extends DataVisibility {
 			}
 		}
 		
-		logger.info("Not visible: " + invisibleColumns);
+		//logger.info("Not visible: " + invisibleColumns);
 	}
 	
 	/**
 	 * checks if all columns are mapped
 	 */
 	private static void sanityCheck() {
-		Set<String> unmapped = new HashSet<String>(columnsMap.keySet());
+		Set<String> unmapped = new HashSet<String>(columnsSet);
 		unmapped.removeAll(modulesToColumnsMap.values());
 		unmapped.removeAll(featuresToColumnsMap.values());
 		unmapped.removeAll(fieldsToColumnsMap.values());

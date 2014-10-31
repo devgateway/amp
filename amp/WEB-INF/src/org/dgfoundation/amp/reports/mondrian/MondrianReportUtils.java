@@ -6,22 +6,29 @@ package org.dgfoundation.amp.reports.mondrian;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportEntityType;
+import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.DateColumns;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
+import org.digijava.kernel.ampapi.saiku.SaikuReportSorter;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -156,5 +163,34 @@ public class MondrianReportUtils {
 			}	
 		}
 		spec.setFilters(filters);
+	}
+	
+	/**
+	 * Applies sorting over generated report
+	 * @param report
+	 * @throws AMPException
+	 */
+	public static final void sort(GeneratedReport report) throws AMPException {
+		ReportEnvironment env = ReportEnvironment.buildFor(TLSUtils.getRequest());
+		if (SaikuGeneratedReport.class.isAssignableFrom(report.getClass()))
+			SaikuReportSorter.sort(report, env);
+		else 
+			MondrianReportSorter.sort(report, env);
+	}
+	
+	/**
+	 * Verifies if a list of 2 sorting lists are identical
+	 * @param sorting1
+	 * @param sorting2
+	 * @return true if they are equal
+	 */
+	public static boolean equals(List<SortingInfo> sorting1, List<SortingInfo> sorting2) {
+		boolean equals = false;
+		if ((sorting1 == null || sorting1.size() == 0) && (sorting2 == null || sorting2.size() == 0))
+			equals = true;
+		else if (sorting1 != null && sorting2 != null && sorting1.size() == sorting2.size()) {
+			equals = sorting1.equals(sorting2);
+		}
+		return equals;
 	}
 }

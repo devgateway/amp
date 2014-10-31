@@ -71,14 +71,11 @@ public class SortingInfo {
 		this.isTotals = hierarchy != null;
 		this.ascending = ascending;
 		this.sortByTuple = new LinkedHashMap<ReportElement, FilterRule>();
-		if (hierarchy != null)
-			this.sortByTuple.put(new ReportElement(hierarchy), null);
-		this.sortByTuple.put(new ReportElement(ElementType.YEAR), new FilterRule(year, true, false));
-		if (quarter !=null) 
-			this.sortByTuple.put(new ReportElement(ElementType.QUARTER), new FilterRule(quarter, true, false));
-		if (month !=null) 
-			this.sortByTuple.put(new ReportElement(ElementType.MONTH), new FilterRule(month, true, false));
-		this.sortByTuple.put(new ReportElement(measure), null);
+		addEntityToSorting(sortByTuple, hierarchy);
+		addYearToSorting(sortByTuple, year);
+		addQuarterToSorting(sortByTuple, quarter);
+		addMonthToSorting(sortByTuple, month);
+		addEntityToSorting(sortByTuple, measure);
 	}
 	
 	/**
@@ -90,14 +87,72 @@ public class SortingInfo {
 		this(sortByTuple, ascending, false);
 	}
 	
-	private SortingInfo(LinkedHashMap<ReportElement, FilterRule> sortByTuple, boolean ascending, boolean isTotals) {
+	/**
+	 * Please use with caution isTotals = true! You must be sure that you provide a valid sorting config for totals
+	 * 
+	 * @param sortByTuple
+	 * @param ascending
+	 * @param isTotals
+	 */
+	public SortingInfo(LinkedHashMap<ReportElement, FilterRule> sortByTuple, boolean ascending, boolean isTotals) {
 		this.sortByTuple = sortByTuple;
 		this.ascending = ascending;
 		this.isTotals = isTotals;
 	}
 	
 	@Override
+	public boolean equals(Object o) {
+		if (o instanceof SortingInfo && o != null)
+			return this.toString().equals(o.toString());
+		return false;
+	}
+	
+	@Override
 	public String toString() {
 		return "SortingInfo: " + (ascending ? "ASC" : "DESC") + " sortByTuple=" + sortByTuple + ", isTotals=" + isTotals; 
+	}
+	
+	/****************************************************************
+	 * 				Utility methods for sorting configuration
+	 ****************************************************************/
+	
+	/**
+	 * Adds a entity (column or measure) to the sorting tuple
+	 * @param sortingTuple
+	 * @param column
+	 */
+	public static void addEntityToSorting(LinkedHashMap<ReportElement, FilterRule> sortByTuple, NamedTypedEntity entity) {
+		if (entity != null)
+			sortByTuple.put(new ReportElement(entity), null);
+	}
+	
+	/**
+	 * Adds year to the sorting tuple
+	 * @param sortByTuple
+	 * @param year
+	 */
+	public static void addYearToSorting(LinkedHashMap<ReportElement, FilterRule> sortByTuple, String year) {
+		if (year != null)
+			sortByTuple.put(new ReportElement(ElementType.YEAR), new FilterRule(year, true, false));
+	}
+	
+	/**
+	 * Adds quarter to the sorting tuple
+	 * @param sortByTuple
+	 * @param quarter
+	 */
+	public static void addQuarterToSorting(LinkedHashMap<ReportElement, FilterRule> sortByTuple, String quarter) {
+		if (quarter != null)
+			sortByTuple.put(new ReportElement(ElementType.QUARTER), new FilterRule(quarter, true, false));
+	}
+	
+	/**
+	 * Adds month to the sorting tuple
+	 * @param sortByTuple
+	 * @param month
+	 */
+	public static void addMonthToSorting(LinkedHashMap<ReportElement, FilterRule> sortByTuple, String month) {
+		if (month != null)
+			sortByTuple.put(new ReportElement(ElementType.MONTH), new FilterRule(month, true, false));
 	}
 }

@@ -94,9 +94,9 @@ public class EndpointUtils {
 	 * @param defaultValue
 	 * @return
 	 */
-	public static String getSingleValue(MultivaluedMap<String, String> formParams, String key, String defaultValue) {
-		if (formParams.containsKey(key))
-			return formParams.getFirst(key);
+	public static <T> T getSingleValue(JsonBean formParams, String key, T defaultValue) {
+		if (formParams.get(key) != null)
+			return (T) formParams.get(key);
 		return defaultValue;
 	}
 	

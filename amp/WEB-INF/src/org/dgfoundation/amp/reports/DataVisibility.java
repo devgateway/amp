@@ -25,20 +25,6 @@ import org.digijava.module.aim.util.FeaturesUtil;
 public class DataVisibility {
 	protected static final Logger logger = Logger.getLogger(DataVisibility.class);
 	
-	public static Map<String, String> getConstantsValueToNameMap(Class clazz) {
-		Field[] fields = clazz.getFields();
-		Map<String, String> constants = new HashMap<String, String>();
-		for (Field field : fields) {
-			try {
-				String value = String.valueOf(field.get(ColumnConstants.class.getClass()));
-				constants.put(value, field.getName());
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				logger.error(e);
-			}
-		}
-		return constants;
-	}
-
 	protected <T extends AmpObjectVisibility> void  processVisbleObjects(List<T> visibilityList, 
 			Map<String, String> nameToColumnMap,
 			Set<String> visibleColumns, Set<String> invisibleColumns) {

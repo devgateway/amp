@@ -3,14 +3,11 @@ package org.digijava.kernel.ampapi.endpoints.reports;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -18,30 +15,22 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
-import org.dgfoundation.amp.reports.ReportPaginationCacher;
-import org.dgfoundation.amp.reports.ReportPaginationUtils;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
-import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
-import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.digijava.module.aim.action.ReportsFilterPicker;
@@ -111,70 +100,51 @@ public class Reports {
 		result.setReportMetadata(metadata);
 		return result;
 	}
-
+	
 	@GET
 	@Path("/report/{report_id}/result")
 	@Produces(MediaType.APPLICATION_JSON)
 	public final GeneratedReport getReportResult(@PathParam("report_id") Long reportId) {
-		// TODO: for now we do not translate other types of reports than Donor
-		// Type reports (hide icons for non-donor-type reports?)
+		// TODO: for now we do not translate other types of reports than 
+		// Donor Type reports (hide icons for non-donor-type reports?)
 		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
 		return EndpointUtils.runReport(spec);
 	}
-
+	
 	/**
-	 * Retrieves the result for the specified reportId and a given page number
-	 * 
-	 * @param reportId
-	 *            - report ID
-	 * @param page
-	 *            - page number, starting from 1. Use 0 to retrieve only
-	 *            pagination information, without any records
-	 * @param regenerate
-	 *            - set to true for all first access and any changes and to
-	 *            false for consequent page navigation
-	 * @return ReportArea result for the requested page
+	 * Retrieves report data for the specified reportId and a given page number
+	 *  
+	 * @param reportId    report Id
+	 * @param formParams  {@link ReportsUtil#getReportResultByPage form parameters}
+	 * @return JsonBean result for the requested page and pagination information
+	 * @see ReportsUtil#getReportResultByPage
 	 */
 	@POST
-	@Path("/report/{report_id}/result/jqGrid")
-	@Consumes({ "application/x-www-form-urlencoded,text/plain,text/html" })
+	@Path("/report/{report_id}/paginate")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = false, name = "reportresultgrid")
-	public final JsonBean getReportResultByPage(@PathParam("report_id") Long reportId, MultivaluedMap<String, String> formParams) {
-		JsonBean result = new JsonBean();
-
-		int page = Integer.valueOf(EndpointUtils.getSingleValue(formParams, "page", "0"));
-		boolean regenerate = Boolean.valueOf(EndpointUtils.getSingleValue(formParams, "regenerate", "true"));
-
-		List extraColumns = new ArrayList<String>();
-		extraColumns.add("Activity Id");
-		extraColumns.add("Approval Status");
-		formParams.put("add_columns", extraColumns);
-
-		int recordsPerPage = ReportPaginationUtils.getRecordsNumberPerPage();
-		int start = (page - 1) * recordsPerPage;
-		ReportAreaMultiLinked[] areas = null;
-		// extract report areas for pagination
-		if (regenerate) {
-			ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
-			JsonBean filters = prepareParameters(formParams);
-			MondrianReportFilters mondrianReportFilters = FilterUtils.getApiColumnFilter(((LinkedHashMap<String, Object>) filters.any()));
-			if (mondrianReportFilters != null) {
-				spec.setFilters(mondrianReportFilters);
-			}
-			ReportsUtil.update(spec, formParams);
-			GeneratedReport generatedReport = EndpointUtils.runReport(spec);
-			areas = ReportPaginationUtils.cacheReportAreas(reportId, generatedReport);
-			result.set("headers", generatedReport.leafHeaders);
-		} else
-			areas = ReportPaginationCacher.getReportAreas(reportId);
-
-		ReportArea pageArea = ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
-		int totalPageCount = ReportPaginationUtils.getPageCount(areas, recordsPerPage);
-		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, areas.length));
-		return result;
+	public final JsonBean getReportResultByPage(JsonBean formParams,
+			@PathParam("report_id") Long reportId) {
+		return ReportsUtil.getReportResultByPage(reportId, formParams);
 	}
-
+	
+	@POST
+	@Path("/report/{report_id}/result/jqGrid")
+	@Produces(MediaType.APPLICATION_JSON)
+	/**
+	 * Provides paginated result for tabs.  
+	 * @see {@link getReportResultByPage} for more details
+	 */
+	public final JsonBean getReportResultForTabGrid(JsonBean formParams, 
+			@PathParam("report_id") Long reportId) {
+		
+		List<String> extraColumns = new ArrayList<String>();
+		extraColumns.add(ColumnConstants.ACTIVITY_ID);
+		extraColumns.add(ColumnConstants.APPROVAL_STATUS);
+		formParams.set(EPConstants.ADD_COLUMNS, extraColumns);
+		
+		return getReportResultByPage(formParams, reportId);
+	}
+	
 	@GET
 	@Path("/tabs")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -255,8 +225,7 @@ public class Reports {
 	public final QueryResult getSaikuReportResult(@PathParam("report_id") Long reportId) {
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
 		// MondrianUtils.PRINT_PATH = "/home/simple";
-		MondrianReportGenerator generator = new MondrianReportGenerator(SaikuReportArea.class, ReportEnvironment.buildFor(httpRequest),
-				MondrianUtils.PRINT_PATH != null);
+		MondrianReportGenerator generator = new MondrianReportGenerator(SaikuReportArea.class, ReportEnvironment.buildFor(httpRequest));
 		SaikuGeneratedReport report = null;
 		try {
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
@@ -306,7 +275,8 @@ public class Reports {
 		return settings;
 	}
 
-	private JsonBean prepareParameters(MultivaluedMap<String, String> queryParameters) {
+	/* check if this is still needed?
+	private JsonBean prepareParameters(JsonBean formParams) {
 		JsonBean jsonBean = new JsonBean();
 		Iterator<String> it = queryParameters.keySet().iterator();
 		while (it.hasNext()) {
@@ -331,5 +301,5 @@ public class Reports {
 		}
 		return jsonBean;
 	}
-
+	*/
 }

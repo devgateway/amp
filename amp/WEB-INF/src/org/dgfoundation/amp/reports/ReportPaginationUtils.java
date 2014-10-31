@@ -54,12 +54,13 @@ public class ReportPaginationUtils {
 	 * @param generatedReport - report result
 	 * @return list of records, excluding totals
 	 */
-	public final static ReportAreaMultiLinked[] cacheReportAreas(Long reportId, GeneratedReport generatedReport) {
+	public final static CachedReportData cacheReportData(Long reportId, GeneratedReport generatedReport) {
 		if (generatedReport == null) return null;
 		//adding
 		ReportAreaMultiLinked[] res = convert(generatedReport.reportContents);
-		ReportPaginationCacher.addReportAreas(reportId, res);
-		return res;
+		CachedReportData crd = new CachedReportData(generatedReport, res);
+		ReportCacher.addReportData(reportId, crd);
+		return crd;
 	}
 	
 	/**

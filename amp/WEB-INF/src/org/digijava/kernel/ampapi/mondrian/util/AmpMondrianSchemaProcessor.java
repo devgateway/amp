@@ -201,7 +201,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	}
 	
 	protected AmpCurrency getReportCurrency() {
-		AmpCurrency res = CurrencyUtil.getCurrencyByCode("EUR"/*currentReport.get().getSettings().getCurrencyCode()*/);
+		AmpCurrency res = CurrencyUtil.getCurrencyByCode(currentReport.get().getSettings().getCurrencyCode());
 		return res;
 	}
 	

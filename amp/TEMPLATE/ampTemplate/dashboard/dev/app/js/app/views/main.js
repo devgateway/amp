@@ -1,20 +1,20 @@
 var fs = require('fs');
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
-var template = _.template(fs.readFileSync(
-  __dirname + '/../templates/main.html', 'UTF-8'));
-var modalTemplate = _.template(fs.readFileSync(
-  __dirname + '/../templates/modal.html', 'UTF-8'));
-
-var TopsChart = require('../models/tops-chart');
-var PredictabilityChart = require('../models/predictability-chart');
-var FundingTypeChart = require('../models/ftype-chart');
 
 var Filters = require('../views/filters');
 var ChartsView = require('../views/charts');
 var Charts = require('../models/charts-collection');
 var Footer = require('../views/footer');
 
+var TopsChart = require('../models/tops-chart');
+var PredictabilityChart = require('../models/predictability-chart');
+var FundingTypeChart = require('../models/ftype-chart');
+
+var template = _.template(fs.readFileSync(
+  __dirname + '/../templates/main.html', 'UTF-8'));
+var modalTemplate = _.template(fs.readFileSync(
+  __dirname + '/../templates/modal.html', 'UTF-8'));
 
 
 module.exports = BackboneDash.View.extend({

@@ -24,7 +24,7 @@ module.exports = BackboneDash.View.extend({
     return this;
   },
 
-  injectBreaks: function() {
+  injectBreaks: function(chartModel) {
     this.chartViews.reduce(function(breakAfter, thisView) {
       thisView.setClear(breakAfter);
       if (!breakAfter) {
@@ -33,6 +33,13 @@ module.exports = BackboneDash.View.extend({
         return false;
       }
     }, false);
+
+    if (chartModel) {
+      var chartView = this.chartViews.find(function(v) {
+        return v.model === chartModel;
+      });
+      if (chartView) { chartView.render(); }
+    }
   }
 
 });

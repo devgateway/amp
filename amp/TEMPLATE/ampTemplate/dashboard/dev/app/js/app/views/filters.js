@@ -17,6 +17,14 @@ module.exports = BackboneDash.View.extend({
     this.app = options.app;
     this.listenTo(this.app.filter, 'cancel', this.hideFilter);
     this.listenTo(this.app.filter, 'apply', this.applyFilter);
+
+    this.app.filter.loaded.then(_(function() {
+      this.app.state.register(this, 'filters', {
+        get: _(this.app.filter.serialize).bind(this.app.filter),
+        set: _(this.app.filter.deserialize).bind(this.app.filter),
+        empty: {}
+      });
+    }).bind(this));
   },
 
   render: function() {

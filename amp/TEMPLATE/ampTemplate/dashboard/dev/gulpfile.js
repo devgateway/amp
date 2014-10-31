@@ -43,9 +43,6 @@ var paths = {
 
 function _browserifier(entry, destFolder, destName, options) {
   var bundler = browserify(entry, options);
-  bundler
-    .transform('debowerify')
-    .transform('brfs');
 
   var bundle = function() {
     g.util.log('bundle: start');

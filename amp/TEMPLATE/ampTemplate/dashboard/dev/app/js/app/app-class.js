@@ -1,6 +1,10 @@
 var _ = require('underscore');
 var BackboneDash = require('./backbone-dash');
-var Filter = require('amp-filter');
+
+var URLService = require('amp-url');
+var State = require('amp-state');
+var Filter = require('amp-filter/src/main');
+
 var MainView = require('./views/main');
 var FailView = require('./views/fail');
 
@@ -17,10 +21,17 @@ _.extend(App.prototype, BackboneDash.Events, {
 
   initialize: function(options) {
     try {
+      // initialize app services
+      this.url = new URLService();
+      this.state = new State({
+        url: this.url
+      });
       this.filter = new Filter({
         draggable: true,
         sync: options.sync || BackboneDash.sync
       });
+
+      // initialize app components
       this.view = new MainView({ app: this, el: options.el });
     } catch (e) {
       _.defer(function() { throw e; });

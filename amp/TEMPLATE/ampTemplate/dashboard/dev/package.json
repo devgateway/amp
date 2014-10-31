@@ -36,5 +36,11 @@
     "underscore": "^1.7.0",
     "vinyl-source-stream": "^1.0.0",
     "watchify": "^1.0.6"
+  },
+  "browserify": {
+    "transform": [
+      "debowerify",
+      "brfs"
+    ]
   }
 }

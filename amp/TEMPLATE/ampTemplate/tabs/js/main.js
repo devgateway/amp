@@ -17,7 +17,7 @@ require.config({
 		 */
 		jqgrid : 'lib/one_place/jqgrid-all',
 		filtersWidget : '/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter',
-		i18next : 'http://cdnjs.cloudflare.com/ajax/libs/i18next/1.6.3/i18next-1.6.3.min'
+		i18next : '//cdnjs.cloudflare.com/ajax/libs/i18next/1.6.3/i18next-1.6.3.min'
 	},
 	shim : {
 		underscore : {

@@ -176,7 +176,7 @@
 		
     </body>
 </html>	
-<script data-main="tabs/js/main.js" src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js"></script>
+<script data-main="tabs/js/main.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js"></script>
 <script type="text/javascript">
 
 //TODO: Refactor all of this. Defer method added to wait for jQuery to be loaded before using it

@@ -53,7 +53,7 @@ _.extend(GISData.prototype, Backbone.Events, {
       {}  // just the one model, all defaults
     ], { activities: this.activities, filter: this.filter});
 
-    this.projectAlt = new ProjectSitesAlt({
+    this.projectAlt = new ProjectSitesAlt([], {
       settings: this.settings,
       filter: this.filter,
       appData: this

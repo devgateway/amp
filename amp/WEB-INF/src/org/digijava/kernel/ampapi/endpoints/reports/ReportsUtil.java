@@ -53,25 +53,26 @@ public class ReportsUtil {
 	 * Retrieves the page for the  result for the specified reportId and a given page number
 	 *  
 	 * @param reportId    report Id
-	 * @param formParams  form parameters, that must be in the following format: <br>
-	 * { <br>
-	 * 	"page"            : 1, <br>
-	 *  "regenerate"      : true, <br>
-	 *  "sorting"         : [ 
-	 *        {
-	 *          "columns" : ["Donor Agency", "Actual Commitments"],
-	 *          "asc"     : true
-	 *        },
-	 *        {
-	 *          "columns" : ["Project Title"],
-	 *          "asc"     : false
-	 *        }
-	 *       ] 
-	 *  
-	 *  "add_columns"     : ["Activity Id", "Approval Status"], <br>
-	 *  "add_hierarchies" : ["Approval Status"], <br>
-	 *  "add_measures"    : ["Custom Measure"] <br>
-	 * } <br>
+	 * @param formParams  form parameters, that must be in the following format: 	<br/>
+	 * { 																			<br/>
+	 * 	"page"            : 1, 														<br/>
+	 *  "regenerate"      : true, 													<br/>
+	 *  "filters"         : //see filters format defined in Gis, 					<br/>
+	 *  "sorting"         : [ 														<br/>
+	 *        {																		<br/>
+	 *          "columns" : ["Donor Agency", "Actual Commitments"],					<br/>
+	 *          "asc"     : true													<br/>
+	 *        },																	<br/>
+	 *        {																		<br/>
+	 *          "columns" : ["Project Title"],										<br/>
+	 *          "asc"     : false													<br/>
+	 *        }																		<br/>
+	 *       ] 																		<br/>
+	 *  																			<br/>
+	 *  "add_columns"     : ["Activity Id", "Approval Status"], 					<br/>
+	 *  "add_hierarchies" : ["Approval Status"], 									<br/>
+	 *  "add_measures"    : ["Custom Measure"] 										<br/>
+	 * } 																			<br/>
 	 * where:
 	 * <ul> 
 	 *   <li>page</li>        optional, page number, starting from 1. Use 0 to retrieve only <br>
@@ -233,11 +234,11 @@ public class ReportsUtil {
 	}
 	
 	private static void configureFilters(ReportSpecificationImpl spec, JsonBean formParams) {
-		JsonBean filters = (JsonBean) formParams.get("filters");
+		LinkedHashMap<String, Object> filters = (LinkedHashMap<String, Object>) formParams.get("filters");
 		MondrianReportFilters mondrianReportFilters = null;
 		if (filters != null) {
-			mondrianReportFilters = FilterUtils.getApiColumnFilter(
-				((LinkedHashMap<String, Object>) filters.any()));
+			mondrianReportFilters = FilterUtils.getApiColumnFilter(filters);
+			mondrianReportFilters = FilterUtils.getApiOtherFilters(filters, mondrianReportFilters);
 			// set filters even if they are empty, that means filters are cleared up
 			((ReportSpecificationImpl)spec).setFilters(mondrianReportFilters);
 		}
@@ -329,27 +330,5 @@ public class ReportsUtil {
 		}
 		// null to clear the reference
 		return null;
-	}
-	
-	public static JsonBean prepareParameters(LinkedHashMap queryParameters) {
-		JsonBean jsonBean = null;
-		if (queryParameters != null) {
-			jsonBean = new JsonBean();
-			Iterator<String> it = queryParameters.keySet().iterator();
-			while (it.hasNext()) {
-				String key = (String) it.next();
-				if (queryParameters.get(key) instanceof List) {
-					List<Integer> values = new LinkedList<Integer>();
-					Iterator<Integer> iValues = ((List) queryParameters.get(key)).iterator();
-					while (iValues.hasNext()) {
-						values.add(iValues.next());
-					}
-					jsonBean.set(key, values);
-				} else {
-					// TODO: Implement for filters[Years][endYear]
-				}
-			}
-		}
-		return jsonBean;
 	}
 }

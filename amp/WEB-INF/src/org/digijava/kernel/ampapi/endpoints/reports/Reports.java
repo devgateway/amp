@@ -145,8 +145,6 @@ public class Reports {
 		extraColumns.add(ColumnConstants.APPROVAL_STATUS);
 		formParams.set(EPConstants.ADD_COLUMNS, extraColumns);
 		
-		JsonBean reformattedFilters = ReportsUtil.prepareParameters((LinkedHashMap) formParams.get("filters"));
-		formParams.set("filters", reformattedFilters);
 		return getReportResultByPage(formParams, reportId);
 	}
 	

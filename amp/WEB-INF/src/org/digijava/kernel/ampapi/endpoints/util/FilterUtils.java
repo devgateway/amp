@@ -3,26 +3,23 @@ package org.digijava.kernel.ampapi.endpoints.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportEntityType;
+import org.dgfoundation.amp.reports.ConstantsUtil;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
-import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 
 public class FilterUtils {
 	protected static Logger logger = Logger.getLogger(FilterUtils.class);
-	
-	
 	
 	
 	public static MondrianReportFilters getApiOtherFilters(Map<String, Object> filter,
@@ -58,15 +55,20 @@ public class FilterUtils {
 			return null;
 		}
 		MondrianReportFilters filterRules = new MondrianReportFilters();
-		for (String filterName : filter.keySet()) {
-			//TODO need to check against ColumsUtils that the filtername is valid
-			List<String>ids=getStringFromIntegerArray((List<Integer>)filter.get(filterName));
-			filterRules.addFilterRule(MondrianReportUtils.getColumn(filterName, ReportEntityType.ENTITY_TYPE_ACTIVITY), 
-					new FilterRule(ids, true, true)); 
-			
+		Set<String> validColumns = ConstantsUtil.getConstantsSet(ColumnConstants.class);
+		for (Entry<String, Object> entry : filter.entrySet()) {
+			if (validColumns.contains(entry.getKey())) {
+				if (entry.getValue() instanceof List) {
+					List<String> ids = getStringFromIntegerArray((List<Integer>) filter.get(entry.getKey()));
+					filterRules.addFilterRule(new ReportColumn(entry.getKey()),
+							new FilterRule(ids, true, true)); 
+				} 
+			}
 		}
+		
 		return filterRules;
 	}
+	
 	private static List<String>getStringFromIntegerArray(List<Integer>theArray){
 		List<String>s=new ArrayList<String>();
 		for (Integer intObject : theArray) {
@@ -74,6 +76,4 @@ public class FilterUtils {
 		}
 		return s;
 	}
-
-	
 }

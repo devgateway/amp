@@ -2,7 +2,7 @@ var fs = require('fs');
 var $ = require('jquery');
 var Backbone = require('backbone');
 var MapView = require('../../map/views/main-view');
-var DataQualityView = require('../../dataquality/views/dataquality-view');
+//var DataQualityView = require('../../dataquality/views/dataquality-view');
 var SidebarView = require('../../sidebar/sidebar-view');
 
 var AmpNavTemplate = fs.readFileSync(__dirname + '/../templates/amp-nav-template.html', 'utf8');

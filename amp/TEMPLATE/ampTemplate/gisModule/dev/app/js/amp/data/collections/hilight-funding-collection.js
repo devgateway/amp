@@ -1,13 +1,13 @@
 var Backbone = require('backbone');
 var _ = require('underscore');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
-var ADMClusterModel = require('../models/adm-cluster-model');
+var HilightFundingModel = require('../models/hilight-funding-model');
 
 /* Backbone Collection ClusterPointsByAdmin aka cluster */
 module.exports = Backbone.Collection
 .extend(LoadOnceMixin).extend({
 
-  model:  ADMClusterModel,
+  model:  HilightFundingModel,
   url: '/rest/gis/clusters',
 
   initialize: function(models, options) {

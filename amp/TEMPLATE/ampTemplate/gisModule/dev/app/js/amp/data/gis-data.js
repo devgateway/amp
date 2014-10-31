@@ -16,6 +16,7 @@ var Boundaries = require('./collections/boundary-collection');
 var Indicators = require('./collections/indicator-collection');
 var ProjectSites = require('./models/structures-collection-model'); /*a.k.a. structures */
 var ADMClusters = require('./collections/adm-cluster-collection');
+var HilightFundingCollection = require('./collections/hilight-funding-collection');
 var Settings = require('./collections/settings-collection');
 
 var ProjectSitesAlt = require('./collections/structures-collection'); /*a.k.a. structures */
@@ -67,40 +68,11 @@ _.extend(GISData.prototype, Backbone.Events, {
 
     this.indicators = new Indicators([], { boundaries: this.boundaries });
 
+    this.admClusters = new ADMClusters([], { boundaries: this.boundaries, filter: this.filter });
+
     // TODO get these from the api
-    this.admClusters = new ADMClusters([
-      {
-        title: 'Projects Country-wide',
-        value: 'adm-0'
-      },
-      {
-        title: 'Projects by Province',
-        value: 'adm-1'
-      },
-      {
-        title: 'Projects by District',
-        value: 'adm-2'
-      },
-      {
-        title: 'Projects by adm-3',
-        value: 'adm-3'
-      }
-    ], { boundaries: this.boundaries, filter: this.filter });
-    // TODO get these from the api
-    this.admClustersTemp = new ADMClusters([
-      {
-        title: 'Funding of Projects Country-wide',
-        value: 'adm-0-funding'
-      },
-      {
-        title: 'Funding of Projects by Province',
-        value: 'adm-1-funding'
-      },
-      {
-        title: 'Funding of Projects by District',
-        value: 'adm-2-funding'
-      }
-    ], { boundaries: this.boundaries, filter: this.filter });
+    this.hilightFundingCollection = new HilightFundingCollection([],
+      { boundaries: this.boundaries, filter: this.filter });
 
     this.title = new Title({ data: this });
 
@@ -115,7 +87,8 @@ _.extend(GISData.prototype, Backbone.Events, {
     this.boundaries.fetch();
     this.indicators.fetch();
     // no need to fetch structures (they're special)
-    this.admClusters.fetch({ remove: false });  // also special for now
+    this.admClusters.load();  // also special for now
+    this.hilightFundingCollection.load();  // also special for now
   },
 
   bubbleLayerEvents: function(namespace) {

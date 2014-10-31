@@ -7,20 +7,26 @@ var LoadOnceMixin = require('../../mixins/load-once-mixin');
 
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
+  url: '/rest/gis/cluster',
 
   initialize: function() {
     this.listenTo(this, 'change:selected', function(blah, show) {
-      this.trigger(show ? 'show' : 'hide', this);
-
       // TODO: ideally only fetch if fitlers have changed, but trust cacheing...
+
+      // this is ugly, but necesesary to stop showLayers call to /load from triggering another fetch.
       if (show) {
-        this.fetch();
+        if (!this._loaded) {
+          this.load();
+        } else {
+          this.fetch();
+        }
       }
+
+      // important to trigger after fetch / load.
+      this.trigger(show ? 'show' : 'hide', this);
     });
     this.listenTo(this, 'sync', this.updatePaletteRange);
     this.listenTo(this.collection.filter, 'apply', this.applyFilters);
-
-
   },
 
   // if filters change and layer is selected update it.

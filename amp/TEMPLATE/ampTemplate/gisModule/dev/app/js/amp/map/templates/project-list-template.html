@@ -1,5 +1,5 @@
 
-	<% console.log('obj', obj);  _.each(obj.activities, function(activity){ %>
+	<% _.each(obj.activities, function(activity){ %>
 		<tr>
       <td><a href="<%= activity.ampUrl %>" title="<%= activity["Project Title"] %>"><%= (activity["Project Title"].length>27 ? activity["Project Title"].substring(0, 30)+'...': activity["Project Title"]) %></a></td>
       <td class="text-right">

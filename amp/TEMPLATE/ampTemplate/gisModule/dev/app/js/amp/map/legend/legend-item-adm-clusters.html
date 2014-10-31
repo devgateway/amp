@@ -2,14 +2,14 @@
 
 <div>
   <div class="map-adm-icon legend-sample">
-    <% if(features[0].properties.activityid.length <= 9999) { %>
+    <% if(obj.features[0] && features[0].properties.activityid.length <= 9999) { %>
     <div class="map-circle">
       <% } else { %>
     <div class="map-circle large">
       <% } %>
-      <%= features[0].properties.activityid.length %></div>
-    <div class="map-circle-label"><%= features[0].properties.admName %></div>
+      <%= (obj.features[0] ? features[0].properties.activityid.length : 4563) %></div>
+    <div class="map-circle-label"><%= (obj.features[0] ? features[0].properties.admName : '' )%></div>
   </div>
   <!-- TODO: use the human-friendly version, not ADM-N (from value) -->
-  Number of activities at this <%= value %>
+  Number of activities at this <%= obj.value %>
 </div>

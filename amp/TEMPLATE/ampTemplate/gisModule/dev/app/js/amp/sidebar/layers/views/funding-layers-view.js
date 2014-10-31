@@ -20,17 +20,17 @@ module.exports = Backbone.View.extend({
     /* For mutual exclusion, we use this reference to the parent */
     this.parentMultisectionControl = options.parent;
 
-    this.collection = new RadioListCollection(this.app.data.admClustersTemp.models, {
+    this.collection = new RadioListCollection(this.app.data.hilightFundingCollection.models, {
       siblingGroupList: this.parentMultisectionControl.radioButtonGroup
     });
 
-    this.listenTo(this.app.data.admClustersTemp, 'add', this.render);
+    this.listenTo(this.app.data.hilightFundingCollection, 'add', this.render);
   },
 
   render: function() {
     // TODO: find a better way to keep our proxy collection up to date
     // Thad do you know a good pattern for this?
-    this.collection.reset(this.app.data.admClustersTemp.models);
+    this.collection.reset(this.app.data.hilightFundingCollection.models);
 
     this.$el.html(this.template({title: this.title}));
 

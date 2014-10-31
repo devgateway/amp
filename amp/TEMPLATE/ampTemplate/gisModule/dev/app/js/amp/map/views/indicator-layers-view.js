@@ -10,6 +10,8 @@ module.exports = Backbone.View.extend({
     this.leafletLayerMap = {};
     this.listenTo(this.app.data.indicators, 'show', this.showLayer);
     this.listenTo(this.app.data.indicators, 'hide', this.hideLayer);
+    this.listenTo(this.app.data.hilightFundingCollection, 'show', this.showLayer);
+    this.listenTo(this.app.data.hilightFundingCollection, 'hide', this.hideLayer);
   },
 
   showLayer: function(layer) {
@@ -62,7 +64,7 @@ module.exports = Backbone.View.extend({
       style: function(feature) {
         featureValue = feature.properties.value;
         colour = layer.palette.colours.find(function(colour) {
-          return colour.get('test')(featureValue);
+          return colour.get('test').call(colour, featureValue);
         });
         if (!colour) {
           throw new Error('No colour matched for the value ' + featureValue);

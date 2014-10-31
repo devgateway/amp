@@ -1,7 +1,7 @@
 var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
-var topojsonLibrary = require('../../../libs/local/topojson.js');
+var TopojsonLibrary = require('../../../libs/local/topojson.js');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 
 var ADMTemplate = fs.readFileSync(__dirname + '/../templates/map-adm-template.html', 'utf8');
@@ -59,7 +59,10 @@ module.exports = Backbone.View.extend({
       }
 
     } else {
-      this.showLayer(admLayer);
+      // don't listen to event if admLayer is actually the entire collection.
+      if (!admLayer.models) {
+        this.showLayer(admLayer);
+      }
     }
 
   },
@@ -100,15 +103,15 @@ module.exports = Backbone.View.extend({
   },
 
   getNewBoundary: function(admLayer) {
-    /*jshint camelcase: false */
-    /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-
     var topoboundaries = admLayer.get('boundary');
 
     if (topoboundaries) {
       /* retrieve the TopoJSON index key */
-      var topoJsonObjectsIndex = _.keys(topoboundaries.objects)[0];
-      var boundaries = topojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
+      var topoJsonObjectsIndex = _.chain(topoboundaries.objects)
+                               .keys()
+                               .first()
+                               .value();
+      var boundaries = TopojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
 
       if (boundaries) {
         return new L.geoJson(boundaries, {
@@ -122,7 +125,6 @@ module.exports = Backbone.View.extend({
         console.error('no boundaries for admLayer?', admLayer);
       }
     }
-
   },
 
 

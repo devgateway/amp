@@ -21,41 +21,47 @@ module.exports = BaseControlView.extend({
 
   initialize: function() {
     var self = this;
-    BaseControlView.prototype.initialize.apply(this, arguments);  // sets this.app
-    this.projectLayerCollection = new RadioListCollection(_.union(
-      this.app.data.admClusters.models,
-      [this.app.data.projectSites]
-    ));
 
-    // register state:
-    this.app.state.register(this, 'layers-view', {
-      get: function() {
-        var tmp = self.projectLayerCollection.getSelected().first().value();
-        if (tmp) {
-          return tmp.toJSON().title; //TODO: should be an id....
-        } else {
-          return null;
-        }
-      },
-      set: function(id) {
-        if (id) {
-          var selectedModel = self.projectLayerCollection.findWhere({title: id}); //TODO: should be an id....
-          self.projectLayerCollection.select(selectedModel);
-        }
-      },
-      empty: null
+    BaseControlView.prototype.initialize.apply(this, arguments);  // sets this.app
+    this._loaded = this.app.data.admClusters.load().then(function() {
+      self.projectLayerCollection = new RadioListCollection(_.union(
+        self.app.data.admClusters.models,
+        [self.app.data.projectSites]
+      ));
+
+      // register state:
+      self.app.state.register(self, 'layers-view', {
+        get: function() {
+          var tmp = self.projectLayerCollection.getSelected().first().value();
+          if (tmp) {
+            return tmp.toJSON().title; //TODO: should be an id....
+          } else {
+            return null;
+          }
+        },
+        set: function(id) {
+          if (id) {
+            var selectedModel = self.projectLayerCollection.findWhere({title: id}); //TODO: should be an id....
+            self.projectLayerCollection.select(selectedModel);
+          }
+        },
+        empty: null
+      });
     });
+
   },
 
   render: function() {
+    var self = this;
     BaseControlView.prototype.render.apply(this);
 
     // add content
-    this.$('.content').html(this.template({title: this.title}));
-    this.$('.layer-selector').html(this.projectLayerCollection.map(function(cluster) {
-      return (new OptionView({ model: cluster })).render().el;
-    }));
-
+    this._loaded.then(function() {
+      self.$('.content').html(self.template({title: self.title}));
+      self.$('.layer-selector').html(self.projectLayerCollection.map(function(cluster) {
+        return (new OptionView({ model: cluster })).render().el;
+      }));
+    });
     return this;
   }
 

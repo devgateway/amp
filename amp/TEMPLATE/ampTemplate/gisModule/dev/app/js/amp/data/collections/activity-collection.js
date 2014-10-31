@@ -16,8 +16,6 @@ module.exports = Backbone.Collection
   appData: null,
 
   initialize: function(models, options) {
-    this.filter = options.filter;
-    this.settings = options.settings;
     this.appData = options.appData;
   },
 
@@ -28,14 +26,14 @@ module.exports = Backbone.Collection
      * had their own object on API, separate from settings, etc.
      * Currently all on the same data level.
      **/
-    /* get "columnFilters" if set (not applicable for getActivities) */
-    if (this.filter) {
-      _.extend(payload, this.filter.serialize());
+    /* get filters if set (not applicable for getActivities) */
+    if (this.appData.filter) {
+      _.extend(payload, this.appData.filter.serialize());
     }
 
     /* get "settings" */
-    if (this.settings) {
-      payload.settings = this.settings.serialize();
+    if (this.appData.settings) {
+      payload.settings = this.appData.settings.serialize();
     }
 
     options = _.defaults((options || {}), {

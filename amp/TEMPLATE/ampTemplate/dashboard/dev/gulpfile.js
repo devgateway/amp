@@ -1,13 +1,16 @@
+var runSequence = require('run-sequence');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var source = require('vinyl-source-stream');
 var gulp = require('gulp');
-var g = require('gulp-load-plugins')();
+var del = require('del');
+var $ = require('gulp-load-plugins')();
 
 
 var paths = {
   root: './app',
   rootStuff: './app/*.{png,jpg,ico,html,txt,xml}',
+  dist: '../build/',
   scripts: {
     entry: './app/js/app.js',
     compiled: './app/compiled-js/',
@@ -45,10 +48,10 @@ function _browserifier(entry, destFolder, destName, options) {
   var bundler = browserify(entry, options);
 
   var bundle = function() {
-    g.util.log('bundle: start');
+    $.util.log('bundle: start');
     return bundler.bundle()
-      .on('end', function() { g.util.log('bundle: finished'); })
-      .on('error', function(e) { g.util.log('bundle: error: ', e); })
+      .on('end', function() { $.util.log('bundle: finished'); })
+      .on('error', function(e) { $.util.log('bundle: error: ', e); })
       .pipe(source(destName))
       .pipe(gulp.dest(destFolder));
   };
@@ -62,10 +65,10 @@ function _browserifier(entry, destFolder, destName, options) {
 
 gulp.task('lint', function() {
   gulp.src(paths.scripts.sources)
-    .pipe(g.plumber())
-    .pipe(g.jscs())
-    .pipe(g.jshint())
-    .pipe(g.jshint.reporter('jshint-stylish'));
+    .pipe($.plumber())
+    .pipe($.jscs())
+    .pipe($.jshint())
+    .pipe($.jshint.reporter('jshint-stylish'));
 });
 
 
@@ -93,19 +96,55 @@ gulp.task('browserify', function() {
 });
 
 
+gulp.task('clean', function() {
+  return del(paths.dist, { force: true });
+});
+
+
+gulp.task('build-js', ['browserify'], function() {
+  return gulp.src(paths.scripts.compiled + 'app.js')
+    .pipe($.streamify($.uglify))
+    .pipe(gulp.dest(paths.dist + 'compiled-js/'));
+});
+
+
+gulp.task('build-css', ['less'], function() {
+  return gulp.src(paths.stylesheets.compiled + 'main.css')
+    .pipe($.csso())
+    .pipe(gulp.dest(paths.dist + 'compiled-css/'));
+});
+
+
+gulp.task('build-static', ['images'], function() {
+  return gulp.src('./app/{fonts,img}/**/*')
+    .pipe(gulp.dest(paths.dist));
+});
+
+gulp.task('build-rootstuff', function() {
+  return gulp.src(paths.rootStuff)
+    .pipe(gulp.dest(paths.dist));
+});
+
+
+gulp.task('build-html', function() {
+  return gulp.src('app/index.html')
+    .pipe(gulp.dest(paths.dist));
+});
+
+
 gulp.task('less', function() {
   return gulp.src(paths.stylesheets.entry)
-    .pipe(g.plumber())
-    .pipe(g.sourcemaps.init())
-      .pipe(g.less())
-        .on('error', g.util.log)
-        .on('error', g.util.beep)
-    .pipe(g.sourcemaps.write())
-    .pipe(g.addSrc(paths.stylesheets.libs))
-    .pipe(g.sourcemaps.init({ loadMaps: true }))
-      .pipe(g.autoprefixer({ browsers: 'ie >= 9' }))
-      .pipe(g.concat('main.css'))
-    .pipe(g.sourcemaps.write())
+    .pipe($.plumber())
+    .pipe($.sourcemaps.init())
+      .pipe($.less())
+        .on('error', $.util.log)
+        .on('error', $.util.beep)
+    .pipe($.sourcemaps.write())
+    .pipe($.addSrc(paths.stylesheets.libs))
+    .pipe($.sourcemaps.init({ loadMaps: true }))
+      .pipe($.autoprefixer({ browsers: 'ie >= 9' }))
+      .pipe($.concat('main.css'))
+    .pipe($.sourcemaps.write())
     .pipe(gulp.dest(paths.stylesheets.compiled));
 });
 
@@ -122,19 +161,19 @@ gulp.task('watch', ['watchify', 'lint', 'less', 'images'], function() {
 });
 
 
-gulp.task('serve', g.serve({
+gulp.task('serve', $.serve({
   root: [paths.root],
   port: 3000
 }));
 
 
 gulp.task('reload', ['watch'], function() {
-  g.livereload.listen();
+  $.livereload.listen();
   return gulp.watch([
     paths.rootStuff,
     paths.scripts.compiled + 'app.js',
     paths.stylesheets.compiled + 'main.css'
-  ]).on('change', g.livereload.changed);
+  ]).on('change', $.livereload.changed);
 });
 
 
@@ -159,8 +198,17 @@ gulp.task('copy-test-resources', function() {
 
 gulp.task('test', ['build-test-js', 'copy-test-resources'], function() {
   return gulp.src('app/js/tests/run/index.html')
-    .pipe(g.mochaPhantomjs());
+    .pipe($.mochaPhantomjs());
 });
 
 
 gulp.task('dev', ['watch', 'serve', 'reload']);
+
+
+gulp.task('build', function(cb) {
+  runSequence(
+    'clean',
+    ['build-js', 'build-css', 'build-static', 'build-rootstuff', 'build-html'],
+    cb
+  );
+});

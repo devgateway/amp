@@ -176,7 +176,18 @@
 		
     </body>
 </html>	
-<script language=javascript>
+<script data-main="tabs/js/main.js" src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js"></script>
+<script type="text/javascript">
+
+//TODO: Refactor all of this. Defer method added to wait for jQuery to be loaded before using it
+function defer(method) {
+    if (window.$)
+        method();
+    else
+        setTimeout(function() { defer(method) }, 1000);
+}
+
+var attachClosePanelEvent = function() {
 	$("#closepanel").click(function(){
 		$('#rightpanel').toggle('slow', function() {
 			if($("#closepanel").attr("src") == 'img_2/close_panel_notxt.gif') {
@@ -189,10 +200,15 @@
 	 	    }
 		});
     });
-	
+};
+
+YAHOO.util.Event.addListener(window, 'load', function(){
+	defer(attachClosePanelEvent);
+});
+
+
 	function showlegend() {
 		var contentId = document.getElementById("show_legend_pop_box");
   		contentId.style.display == "block" ? contentId.style.display = "none" : contentId.style.display = "block"; 
 	}
 </script>
-<script data-main="tabs/js/main.js" src="http://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.js"></script>

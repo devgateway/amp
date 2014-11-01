@@ -44,6 +44,19 @@ module.exports = Backbone.View.extend({
     return this;
   },
 
+  /* Adds references to collectionB into collectionA joining on given foreign key
+   * TODO: option to add bi-directional reference.
+   */
+   joinHelper: function(collectionA, collectionB, keyForForeignID, keyForCollectionDestination){
+      collectionA.each(function(modelA){
+       var idsToJoin = modelA.get(keyForForeignID);
+       var tempCollection = collectionB.filter(function(modelB){
+         return _.indexOf(idsToJoin, modelB.get('id')) >= 0;
+       });
+      modelA.set(keyForCollectionDestination, tempCollection);
+    });
+   },
+
   // ==================
   // Point / Feature Code
   // ==================
@@ -87,7 +100,7 @@ module.exports = Backbone.View.extend({
           self.currentRadius = self.SMALL_ICON_RADIUS;
         } else {
           self.currentRadius = self.BIG_ICON_RADIUS;
-        }
+           }
 
         var point = new L.CircleMarker(latlng, {
           radius: self.currentRadius,
@@ -223,11 +236,28 @@ module.exports = Backbone.View.extend({
   clusterClick: function(a) {
     var self = this;
     //TODO: seems silly to bind on every click...
-    // Once we have nailed down desired fuhnctionality it will be worth writing our own clusterer since it only
+    // Once we have nailed down desired functionality it will be worth writing our own clusterer since it only
     // needs to run once on project site load and that is it. (not each zoom etc.)
+    var parsedProjectSitesList = _.chain(a.layer.getAllChildMarkers())
+      .pluck('feature')
+      .map(this.app.data.projectAlt.model.prototype.parse)
+      .value();
+
+
+    /*
+     *var childMarkerFeatureList = _.chain(a.layer.getAllChildMarkers())
+     *   .pluck('feature')
+     *   .pluck('properties')
+     *   .value();
+     */
+
+    /* NB: Structures are a synonym of Project Sites. */
     a.layer.bindPopup(
-      self.projectListTemplate({ projects: a.layer.getAllChildMarkers() }
-                              ), {offset: new L.Point(0, -6) });
+      self.projectListTemplate({ structures: parsedProjectSitesList}),
+      {
+        offset: new L.Point(0, -6)
+      });
+
     a.layer.openPopup(self.map);
   },
 

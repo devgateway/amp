@@ -1,4 +1,6 @@
 var Backbone = require('backbone');
+var _ = require('underscore');
+
 
 /* Structure model aka ProjectSite model */
 module.exports = Backbone.Model.extend({
@@ -20,6 +22,22 @@ module.exports = Backbone.Model.extend({
    * ],
    *
    */
+  initialize: function(options) {
+    _.bindAll(this, "joinModelHelper");
+  },
+
+  /* Adds references to collectionB into collectionA joining on given foreign key
+  * TODO: option to add bi-directional reference.
+  */
+  joinModelHelper: function(modelA, collectionB, keyForForeignID, keyForCollectionDestination) {
+    var idsToJoin = modelA.get(keyForForeignID);
+
+    var tempCollection = collectionB.filter(function(modelB){
+      return _.indexOf(idsToJoin, modelB.get('id')) >= 0;
+    });
+    modelA.set(keyForCollectionDestination, tempCollection);
+  },
+
 
   /* Model Parse does not run for each model when a collection is fetched */
   parse: function(response) {
@@ -51,8 +69,14 @@ module.exports = Backbone.Model.extend({
       attributesFromGeoJson.lng = response.geometry.coordinates[0];
       attributesFromGeoJson.lat = response.geometry.coordinates[1];
 
+      if (response.properties) {
+        _.extend(attributesFromGeoJson, response.properties);
+      }
+
+
       if (response.properties.activity !== undefined) {
         attributesFromGeoJson.activities = response.properties.activity;
+        attributesFromGeoJson.activityZero = response.properties.activity[0];
       }
       if (response.properties.title !== undefined) {
         attributesFromGeoJson.title = response.properties.title;

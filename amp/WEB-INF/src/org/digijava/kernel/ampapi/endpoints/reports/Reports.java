@@ -151,7 +151,7 @@ public class Reports {
 			String[] auxColumns = formParams.get("sidx").toString().split(",");
 			for (int i = 0; i < auxColumns.length; i++) {
 				if (!auxColumns[i].trim().equals("")) {
-					Map<String, Object> sort = new HashMap<String, Object>();					
+					Map<String, Object> sort = new HashMap<String, Object>();
 					Boolean asc = true;
 					if (auxColumns[i].contains(" asc") || formParams.getString("sord").equals("asc")) {
 						asc = true;
@@ -160,11 +160,13 @@ public class Reports {
 						asc = false;
 						auxColumns[i] = auxColumns[i].replace(" desc", "");
 					}
-					List listOfColumns = new ArrayList();
-					listOfColumns.add(auxColumns[i]);
+					List<String> listOfColumns = new ArrayList<String>();
+					listOfColumns.add(auxColumns[i].trim());
 					sort.put("columns", listOfColumns);
 					sort.put("asc", asc);
-					sorting.add(sort);
+					/*
+					 * if(i == auxColumns.length -1) { sorting.add(sort); }
+					 */
 				}
 			}
 			formParams.set("sorting", sorting);

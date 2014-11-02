@@ -145,6 +145,31 @@ public class Reports {
 		extraColumns.add(ColumnConstants.APPROVAL_STATUS);
 		formParams.set(EPConstants.ADD_COLUMNS, extraColumns);
 		
+		// Convert jqgrid sorting params into ReportUtils sorting params.
+		if (formParams.getString("sidx") != null) {
+			List<Map<String, Object>> sorting = new ArrayList<Map<String, Object>>();
+			String[] auxColumns = formParams.get("sidx").toString().split(",");
+			for (int i = 0; i < auxColumns.length; i++) {
+				if (!auxColumns[i].trim().equals("")) {
+					Map<String, Object> sort = new HashMap<String, Object>();					
+					Boolean asc = true;
+					if (auxColumns[i].contains(" asc") || formParams.getString("sord").equals("asc")) {
+						asc = true;
+						auxColumns[i] = auxColumns[i].replace(" asc", "");
+					} else if (auxColumns[i].contains(" desc") || formParams.getString("sord").equals("desc")) {
+						asc = false;
+						auxColumns[i] = auxColumns[i].replace(" desc", "");
+					}
+					List listOfColumns = new ArrayList();
+					listOfColumns.add(auxColumns[i]);
+					sort.put("columns", listOfColumns);
+					sort.put("asc", asc);
+					sorting.add(sort);
+				}
+			}
+			formParams.set("sorting", sorting);
+		}
+		
 		return getReportResultByPage(formParams, reportId);
 	}
 	

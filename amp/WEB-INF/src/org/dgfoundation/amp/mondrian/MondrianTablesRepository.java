@@ -1,25 +1,14 @@
 package org.dgfoundation.amp.mondrian;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.IdentityHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.LinkedHashMap;
-import java.util.Set;
 
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewColumnDescription;
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewDescription;
-import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.currencies.CurrencyAmountGroup;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
-import org.dgfoundation.amp.mondrian.jobs.MondrianTableLogue;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableColumn;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableDescription;
-
-import com.google.common.base.Predicate;
 
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -51,7 +40,8 @@ public class MondrianTablesRepository {
 							.addColumnDef(new I18nViewColumnDescription("country_name", "country_id", AmpCategoryValueLocations.class, "name"))
 							.addColumnDef(new I18nViewColumnDescription("region_name", "region_id", AmpCategoryValueLocations.class, "name"))
 							.addColumnDef(new I18nViewColumnDescription("zone_name", "zone_id", AmpCategoryValueLocations.class, "name"))
-							.addColumnDef(new I18nViewColumnDescription("district_name", "district_id", AmpCategoryValueLocations.class, "name"));
+							.addColumnDef(new I18nViewColumnDescription("district_name", "district_id", AmpCategoryValueLocations.class, "name"))
+							.addTrnColDef("impl_level_name", "impl_level_id");
 					}});
 
 	public final static MondrianTableDescription MONDRIAN_SECTORS_DIMENSION_TABLE = 
@@ -190,7 +180,7 @@ public class MondrianTablesRepository {
 			MONDRIAN_ORGANIZATIONS_DIMENSION_TABLE,
 			MONDRIAN_CATEGORY_VALUES);
 	
-	public final static List<MondrianTableDescription> TRN_BACKED_DIMENSIONS = Arrays.asList(MONDRIAN_CATEGORY_VALUES, MONDRIAN_ACTIVITY_TRN_TEXTS);
+	public final static List<MondrianTableDescription> TRN_BACKED_DIMENSIONS = Arrays.asList(MONDRIAN_CATEGORY_VALUES, MONDRIAN_ACTIVITY_TRN_TEXTS, MONDRIAN_LOCATIONS_DIMENSION_TABLE);
 	
 	public final static List<MondrianTableDescription> MONDRIAN_ACTIVITY_DIMENSIONS = Arrays.asList(
 			MONDRIAN_ACTIVITY_TEXTS,

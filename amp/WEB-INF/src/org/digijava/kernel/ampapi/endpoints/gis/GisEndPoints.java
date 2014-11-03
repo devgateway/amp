@@ -7,7 +7,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +30,9 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
+import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportArea;
+import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
@@ -393,12 +398,13 @@ public class GisEndPoints {
 		return indicatorsJson;
 	
 	}
-//	@GET
-//	@Path("/export-map-test/")
-//	@Produces(MediaType.APPLICATION_JSON)
-//	public GeneratedReport testMapExport(){
-//		return LocationService.getMapExportByLocation();
-//	}
+	@GET
+	@Path("/export-map-test/")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Activity> testMapExport(){
+		final Map<String,Activity>geocodeInfo=new LinkedHashMap<String,Activity>();
+		return LocationService.getMapExportByLocation(geocodeInfo);
+	}
 	/**
 	 * Export map id from current filters
 	 * 
@@ -415,15 +421,15 @@ public class GisEndPoints {
 	 public StreamingOutput getExportMap(@Context HttpServletResponse webResponse,@QueryParam("mapId") Long mapId,@DefaultValue("1") @QueryParam("exportType") Long exportType)
     {
 		final HSSFWorkbook wb;
+		String name="";
 		if(exportType==1){
+			name="map-export-project-sites.xls";
 			wb=LocationService.generateExcelExportByStructure();	
 		}else{
+			name="map-export-administrative-Locations.xls";
 			wb=LocationService.generateExcelExportByLocation();
 		}
-				
-		
-
-		webResponse.setHeader("Content-Disposition","attachment; filename=map-export.xls");
+		webResponse.setHeader("Content-Disposition","attachment; filename=" + name);
 
         StreamingOutput streamOutput = new StreamingOutput(){
             public void write(OutputStream output) throws IOException, WebApplicationException {

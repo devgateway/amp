@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+
 /**
  * Class that holds the activitiy data to be serialized as a JsonObject we ignore an object if its null
  * 
@@ -16,7 +17,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  * @author Fernando Ferreyra
  *
  */
-@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)
+@JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class Activity {
 	private Long id;
 	private String name;
@@ -25,9 +26,12 @@ public class Activity {
 	private String ampUrl;
 	private String donorAgency;
 	private String implementationLevel;
-	private String TotalCommitments;
+	private String totalCommitments;
 	private String totalDisbursments;
-
+	private String totalCommitmentsForActivity;
+	private String totalDisbursmentsForActivity;
+	private String geoCode;
+	private String locationName;
 	private String structureName;
 	private String latitude;
 	private String longitude;
@@ -46,7 +50,6 @@ public class Activity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 
 	public String getName() {
 		return name;
@@ -73,11 +76,11 @@ public class Activity {
 	}
 
 	public String getTotalCommitments() {
-		return TotalCommitments;
+		return totalCommitments;
 	}
 
 	public void setTotalCommitments(String totalCommitments) {
-		TotalCommitments = totalCommitments;
+		this.totalCommitments = totalCommitments;
 	}
 
 	public String getTotalDisbursments() {
@@ -88,9 +91,24 @@ public class Activity {
 		this.totalDisbursments = totalDisbursments;
 	}
 
-	
-	
-	
+	public String getTotalCommitmentsForActivity() {
+		return totalCommitmentsForActivity;
+	}
+
+	public void setTotalCommitmentsForActivity(
+			String totalCommitmentsForActivity) {
+		this.totalCommitmentsForActivity = totalCommitmentsForActivity;
+	}
+
+	public String getTotalDisbursmentsForActivity() {
+		return totalDisbursmentsForActivity;
+	}
+
+	public void setTotalDisbursmentsForActivity(
+			String totalDisbursmentsForActivity) {
+		this.totalDisbursmentsForActivity = totalDisbursmentsForActivity;
+	}
+
 	public JsonBean getMatchesFilters() {
 		return matchesFilters;
 	}
@@ -98,7 +116,6 @@ public class Activity {
 	public void setMatchesFilters(JsonBean matchesFilters) {
 		this.matchesFilters = matchesFilters;
 	}
-
 
 	public String getAmpId() {
 		return ampId;
@@ -132,8 +149,6 @@ public class Activity {
 		this.longitude = longitude;
 	}
 
-
-
 	public String getDonorAgency() {
 		return donorAgency;
 	}
@@ -157,5 +172,21 @@ public class Activity {
 	public void setPrimarySector(String primarySector) {
 		this.primarySector = primarySector;
 	}
-	
+
+	public String getGeoCode() {
+		return geoCode;
+	}
+
+	public void setGeoCode(String geoCode) {
+		this.geoCode = geoCode;
+	}
+
+	public String getLocationName() {
+		return locationName;
+	}
+
+	public void setLocationName(String locationName) {
+		this.locationName = locationName;
+	}
+
 }

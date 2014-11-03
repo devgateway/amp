@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.mondrian.util;
 
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * 
@@ -277,6 +278,6 @@ public final class MoConstants {
 	public static final String Q3 = "Q3";
 	public static final String Q4 = "Q4";
 	
-	public static final String DATE_FORMAT = "yyyy-MM-dd";
+	public static final String DATE_FORMAT = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
 	public static final String HAS_AMP_PROPERTIES = "HAS_AMP_PROPERTIES";
 }

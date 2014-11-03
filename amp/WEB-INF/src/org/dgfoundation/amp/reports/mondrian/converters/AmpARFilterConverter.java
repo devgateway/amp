@@ -23,7 +23,6 @@ import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.util.Identifiable;
-import org.digijava.module.aim.util.Nameable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -131,14 +130,21 @@ public class AmpARFilterConverter {
 		if (arFilter.isPledgeFilter()) return;
 		addCategoryValueNamesFilter(arFilter.getStatuses(), ColumnConstants.STATUS, entityType);
 		addFilter(arFilter.getWorkspaces(), ColumnConstants.TEAM, entityType);
-		if (arFilter.getApprovalStatusSelected() != null && arFilter.getApprovalStatusSelected().size() > 0)
-			filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.APPROVAL_STATUS, entityType), 
-					new FilterRule(new ArrayList<String>(arFilter.getApprovalStatusSelected()), true, true)); 
+		addApprovalStatus();
 		addBooleanFilter(arFilter.getGovernmentApprovalProcedures(), ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, entityType);
 		addBooleanFilter(arFilter.getJointCriteria(), ColumnConstants.JOINT_CRITERIA, entityType);
 		addBooleanFilter(arFilter.getShowArchived(), ColumnConstants.ARCHIVED, entityType);
 		addCategoryValueNamesFilter(arFilter.getProjectImplementingUnits(), ColumnConstants.PROJECT_IMPLEMENTING_UNIT, entityType);
 		addCategoryValueNamesFilter(arFilter.getActivityPledgesTitle(), ColumnConstants.PLEDGES_TITLES, entityType);
+	}
+	
+	private void addApprovalStatus() {
+		if (arFilter.getApprovalStatusSelected() == null || arFilter.getApprovalStatusSelected().size() == 0) 
+			return;
+		List<String> values = USE_IDS ? new ArrayList<String>(arFilter.getApprovalStatusSelected()) :
+								arFilter.getApprovalStatusSelectedStrings();
+		filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.APPROVAL_STATUS, entityType), 
+					new FilterRule(arFilter.getApprovalStatusSelectedStrings(), values, true, USE_IDS));
 	}
 	
 	private void addFundingDatesFilters() {
@@ -157,7 +163,7 @@ public class AmpARFilterConverter {
 					filterRules.addSingleDateFilterRule(from, true);
 				else 
 					filterRules.addDateRangeFilterRule(from, to);
-		} catch(AmpApiException ex) {
+		} catch(Exception ex) {
 			logger.error(ex.getMessage());
 		}
 	}
@@ -285,21 +291,22 @@ public class AmpARFilterConverter {
 	private void addFilter(Collection<? extends NameableOrIdentifiable> set, String columnName, ReportEntityType type) {
 		if (set == null || set.size() == 0) return;
 		List<String> values = new ArrayList<String>(set.size());
-		if (USE_IDS)
-			for (Identifiable identifiable: set) { 
-				values.add(identifiable.getIdentifier().toString());
-			}
-		else
-			for (Nameable identifiable: set) { 
-				values.add(identifiable.getName());
-			}
+		List<String> names = new ArrayList<String>(set.size());
+		for (NameableOrIdentifiable identifiable: set) { 
+			names.add(identifiable.getName());
+			final String value = USE_IDS ? 
+					identifiable.getIdentifier().toString() : identifiable.getName();  
+			values.add(value);
+		}
 		
-		addFilterRule(columnName, type, new FilterRule(values, true, USE_IDS));
+		addFilterRule(columnName, type, new FilterRule(names, values, true, USE_IDS));
 	}
 	
 	private void addBooleanFilter(Boolean flag, String columnName, ReportEntityType type) {
 		if(flag == null) return;
-		addFilterRule(columnName, type, new FilterRule(flag ? MoConstants.BOOLEAN_TRUE_KEY : MoConstants.BOOLEAN_FALSE_KEY, true, true));
+		addFilterRule(columnName, type, 
+				new FilterRule(flag ? MoConstants.BOOLEAN_TRUE_KEY : MoConstants.BOOLEAN_FALSE_KEY, 
+						flag.toString(), true, true));
 	}
 	
 	private void addFilterRule(String columnName, ReportEntityType type, FilterRule rule) {
@@ -319,13 +326,14 @@ public class AmpARFilterConverter {
 	private void addCategoryValueNamesFilter(Set<AmpCategoryValue> set, String columnName, ReportEntityType type) {
 		if (set == null || set.size() == 0) return;
 		List<String> names = new ArrayList<String>(set.size());
+		List<String> values = new ArrayList<String>(set.size());
 		for (AmpCategoryValue categValue: set) {
-			if (USE_IDS)
-				names.add(String.valueOf(categValue.getId()));
-			else 
-				names.add(categValue.getValue());
+			names.add(categValue.getValue());
+			final String value = USE_IDS ? 
+					String.valueOf(categValue.getId()) : categValue.getValue();
+			values.add(value);
 		}
-		addFilterRule(columnName, type, new FilterRule(names, true, USE_IDS));
+		addFilterRule(columnName, type, new FilterRule(names, values, true, USE_IDS));
 	}
 	
 	public MondrianReportSettings buildSettings() {
@@ -348,6 +356,7 @@ public class AmpARFilterConverter {
 	 * Adds any display filter settings and calendar settings
 	 */
 	private void addDateSettings() {
+		settings.setCalendar(arFilter.getCalendarType());
 		try {
 			if ((arFilter.getRenderStartYear()!=null || arFilter.getRenderEndYear() != null)
 					//also check if this is not a both ends unlimited range (-1 in old filters means no limit...)
@@ -357,10 +366,9 @@ public class AmpARFilterConverter {
 						(arFilter.getRenderEndYear() == -1 ? null : arFilter.getRenderEndYear())
 						);
 			}
-		} catch(AmpApiException ex) {
+		} catch(Exception ex) {
 			logger.error(ex.getMessage());
 		}
-		settings.setCalendar(arFilter.getCalendarType());
 	}
 
 

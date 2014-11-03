@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -30,9 +31,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
@@ -40,6 +39,7 @@ import org.apache.lucene.search.Hits;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -135,7 +135,7 @@ public class AmpARFilter extends PropertyListable {
 		this.add(Constants.STARTED_STATUS);
 		this.add(Constants.EDITED_STATUS);
 		this.add(Constants.REJECTED_STATUS);
-}});
+	}});
 
 
 	/**
@@ -2901,6 +2901,38 @@ public class AmpARFilter extends PropertyListable {
 
 	public void setApprovalStatusSelected(Collection<String> approvalStatusSelected) {
 		this.approvalStatusSelected = approvalStatusSelected;
+	}
+
+	public List<String> getApprovalStatusSelectedStrings() {
+		ArrayList<String> approvalStatuses = new ArrayList<String>();
+		for (Iterator<String> iterator = approvalStatusSelected.iterator(); iterator.hasNext();) {
+			String status = iterator.next();
+			switch (Integer.parseInt(status)) {
+			case 1:
+				approvalStatuses.add(TranslatorWorker
+						.translateText("New Draft"));
+				break;
+			case 2:
+				approvalStatuses.add(TranslatorWorker
+						.translateText("New Unvalidated"));
+				break;
+			case 3:
+
+				approvalStatuses.add(TranslatorWorker
+						.translateText("Existing Draft"));
+				break;
+			case 4:
+
+				approvalStatuses.add(TranslatorWorker
+						.translateText("Validated Activities"));
+				break;
+			case 0:
+				approvalStatuses.add(TranslatorWorker
+						.translateText("Existing Unvalidated"));
+				break;
+			}
+		}
+		return approvalStatuses;
 	}
 
 	public Set<AmpOrganisation> getDonnorgAgency() {

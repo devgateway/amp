@@ -3,7 +3,10 @@
  */
 package org.dgfoundation.amp.newreports;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Filter rule that can be of one of {@link FilterType} type
@@ -37,6 +40,8 @@ public class FilterRule {
 	public final String max;
 	/** list of values/id or null */
 	public final List<String> values;
+	/** list of names for associated values */
+	public final Map<String, String> valueToName = new HashMap<String, String>();
 	/** true if 'min' must be an inclusive limit of the range */
 	public final boolean minInclusive;  
 	/** true if 'max' must be an inclusive limit of the range */
@@ -53,7 +58,12 @@ public class FilterRule {
 	 * @param isIdRange - whether (min,max) is a range of ids or a range of values
 	 */
 	public FilterRule(String min, String max, boolean minInclusive, boolean maxInclusive, boolean isIdRange) {
-		this(FilterType.RANGE, isIdRange, null, min, max, minInclusive, maxInclusive, null, false);
+		this(min, max, null, null, minInclusive, maxInclusive, isIdRange);
+	}
+	
+	public FilterRule(String min, String max, String minName, String maxName, 
+			boolean minInclusive, boolean maxInclusive, boolean isIdRange) {
+		this(FilterType.RANGE, isIdRange, null, null, min, max, minName, maxName, minInclusive, maxInclusive, null, null, false);
 	}
 
 	/**
@@ -63,7 +73,19 @@ public class FilterRule {
 	 * @param isIdList - true if this is a list of ids, false if this is a list of values
 	 */
 	public FilterRule(List<String> values, boolean valuesInclusive, boolean isIdList) {
-		this(FilterType.VALUES, isIdList, null, null, null, false, false, values, valuesInclusive);
+		this(values, null, valuesInclusive, isIdList);
+	}
+
+	/**
+	 * List filter rule, e.g. allowed years [2009, 2013, 2016]
+	 * @param filterName - Name of the field/column/dimension that the ids correspond to
+	 * @param values - list of values or ids to filter by
+	 * @param names - list of names corresponding to ids to filter by
+	 * @param valuesInclusive - true if only this values are allowed, flase if this values are not allowed
+	 * @param isIdList - true if this is a list of ids, false if this is a list of values
+	 */
+	public FilterRule(List<String> names, List<String> values, boolean valuesInclusive, boolean isIdList) {
+		this(FilterType.VALUES, isIdList, null, null, null, null, null, null, false, false, values, names, valuesInclusive);
 	}
 	
 	/**
@@ -73,11 +95,16 @@ public class FilterRule {
 	 * @param isId - true if this is an Id, false if this is a value
 	 */
 	public FilterRule(String value, boolean valueToInclude, boolean isId) {
-		this(FilterType.SINGLE_VALUE, isId, value, null, null, true, true, null, valueToInclude);
+		this(value, null, valueToInclude, isId);
+	}
+	
+	public FilterRule(String value, String name, boolean valueToInclude, boolean isId) {
+		this(FilterType.SINGLE_VALUE, isId, value, name, null, null, null, null, true, true, null, null, valueToInclude);
 	}
 
-	private FilterRule(FilterType filterType, boolean isIdFilter, String value, String min, String max, boolean minInclusive, boolean maxInclusive, 
-			List<String> values, boolean valuesInclusive) {
+	private FilterRule(FilterType filterType, boolean isIdFilter, String value, String name, 
+			String min, String max, String minName, String maxName, boolean minInclusive, boolean maxInclusive, 
+			List<String> values, List<String> names, boolean valuesInclusive) {
 		this.filterType = filterType;
 		this.isIdFilter = isIdFilter;
 		this.value = value;
@@ -87,6 +114,29 @@ public class FilterRule {
 		this.maxInclusive = maxInclusive;
 		this.values = values;
 		this.valuesInclusive = valuesInclusive;
+		configureValueToName(name, minName, maxName, names);
+	}
+	
+	private void configureValueToName(String name, String minName, String maxName, List<String> names) {
+		switch(filterType) {
+		case RANGE:
+			if (min != null)
+				valueToName.put(min, minName);
+			if (max != null)
+				valueToName.put(max, maxName);
+			break;
+		case SINGLE_VALUE:
+			valueToName.put(value, name);
+			break;
+		case VALUES:
+			if (values!= null && names != null) {
+				Iterator<String> valuesIter = values.iterator();
+				Iterator<String> namesIter = names.iterator();
+				while (valuesIter.hasNext() && namesIter.hasNext()) 
+					valueToName.put(valuesIter.next(), namesIter.next());
+			}
+			break;
+		}
 	}
 	
 	@Override

@@ -8,7 +8,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.NamedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportColumn;
@@ -18,6 +20,7 @@ import org.dgfoundation.amp.newreports.ReportFilters;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpARFilterConverter;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.common.util.DateTimeUtil;
 
 /**
@@ -34,23 +37,63 @@ public class MondrianReportFilters implements ReportFilters {
 	private final Map<ReportColumn, List<FilterRule>> dateFilterRules = new HashMap<ReportColumn, List<FilterRule>>();
 	
 	/**
+	 * The calendar to be used for retrieval of actual names for year, month, quarter
+	 */
+	protected AmpFiscalCalendar calendar = null;
+	
+	/**
 	 * Initialized report filters with a map of elements to filter by a list of filters each
 	 * @param filterRules
 	 */
 	public MondrianReportFilters(Map<ReportElement, List<FilterRule>> filterRules) {
-		this.filterRules = filterRules;
+		this(filterRules, null);
 	}
 	
 	public MondrianReportFilters() {
 	}
 	
+	public MondrianReportFilters(Map<ReportElement, List<FilterRule>> filterRules, AmpFiscalCalendar calendar) {
+		this.filterRules = filterRules;
+		this.calendar = calendar;
+	}
+	
+	public MondrianReportFilters(AmpFiscalCalendar calendar) {
+		this.calendar = calendar;
+	}
+	
 	@Override
+	@JsonIgnore
 	public Map<ReportElement, List<FilterRule>> getFilterRules() {
 		return filterRules;
 	}
 	
+	@JsonIgnore
 	public Map<ReportColumn, List<FilterRule>> getDateFilterRules() {
 		return dateFilterRules;
+	}
+	
+	public Map<String, List<FilterRule>> getColumnFilterRules() {
+		if (filterRules == null) return null; 
+		Map<String, List<FilterRule>> filters = new HashMap<String, List<FilterRule>>(filterRules.size());
+		for (Entry<ReportElement, List<FilterRule>> entry : filterRules.entrySet()) {
+			if (ElementType.ENTITY.equals(entry.getKey().type))
+				filters.put(entry.getKey().entity.getEntityName(), entry.getValue());
+			else 
+				filters.put(entry.getKey().type.toString(), entry.getValue());
+		}
+		return filters;
+	}
+	
+	/**
+	 * These are basically the activity dates filters
+	 */
+	public Map<String, List<FilterRule>> getColumnDateFilterRules() {
+		if (filterRules == null) return null; 
+		Map<String, List<FilterRule>> filters = new HashMap<String, List<FilterRule>>(dateFilterRules.size());
+		for (Entry<ReportColumn, List<FilterRule>> entry : dateFilterRules.entrySet()) {
+			filters.put(entry.getKey().getColumnName(), entry.getValue());
+		}
+		return filters;
 	}
 	
 	/**
@@ -84,30 +127,33 @@ public class MondrianReportFilters implements ReportFilters {
 	 * Adds a measures filter between [from .. to] or [from .. infinite) or (-infinite .. to] year ranges.
 	 * @param from - the year to start from or null
 	 * @param to - the year to end with or null
-	 * @throws AmpApiException if range is invalid
+	 * @throws Exception 
 	 */
-	public void addYearsRangeFilterRule(Integer from, Integer to) throws AmpApiException {
-		addFilterRule(new ReportElement(ElementType.YEAR), MondrianUtils.getYearsRangeFilter(from, to));
+	public void addYearsRangeFilterRule(Integer from, Integer to) throws Exception {
+		addFilterRule(new ReportElement(ElementType.YEAR), 
+				MondrianUtils.getYearsRangeFilter(from, to, calendar));
 	}
 	
 	/**
 	 * Adds a measures filter for specific  [from .. to] quarters, with no year limits
 	 * @param from - from quarter limit
 	 * @param to - to quarter limit
-	 * @throws AmpApiException if range is invalid
+	 * @throws Exception 
 	 */
-	public void addQuarterRangeFilterRule(Integer from, Integer to) throws AmpApiException {
-		addFilterRule(new ReportElement(ElementType.QUARTER), MondrianUtils.getQuarterRangeFilterRule(from, to));
+	public void addQuarterRangeFilterRule(Integer from, Integer to) throws Exception {
+		addFilterRule(new ReportElement(ElementType.QUARTER), 
+				MondrianUtils.getQuarterRangeFilterRule(from, to, calendar));
 	}
 	
 	/**
 	 * Adds a measures filter for specific months in all years. Month numbers between [1..12] 
 	 * @param from - first month number of the range
-	 * @param to - last month number of the range 
-	 * @throws AmpApiException if range is invalid
+	 * @param to - last month number of the range
+	 * @throws Exception 
 	 */
-	public void addMonthRangeFilterRule(Integer from, Integer to) throws AmpApiException {
-		addFilterRule(new ReportElement(ElementType.MONTH), MondrianUtils.getMonthRangeFilterRule(from, to));
+	public void addMonthRangeFilterRule(Integer from, Integer to) throws Exception {
+		addFilterRule(new ReportElement(ElementType.MONTH), 
+				MondrianUtils.getMonthRangeFilterRule(from, to, calendar));
 	}
 	
 	/**
@@ -140,30 +186,30 @@ public class MondrianReportFilters implements ReportFilters {
 	 * Adds a measures filter for list of years 
 	 * @param years - years to filter by
 	 * @param valuesToInclude - true if this years to be kept, false if this years must be excluded
-	 * @throws AmpApiException if list is invalid
+	 * @throws Exception 
 	 */
-	public void addYearsFilterRule(List<Integer> years, boolean valuesToInclude) throws AmpApiException {
-		addFilterRule(new ReportElement(ElementType.YEAR), MondrianUtils.getYearsFilterRule(years, valuesToInclude));
+	public void addYearsFilterRule(List<Integer> years, boolean valuesToInclude) throws Exception {
+		addFilterRule(new ReportElement(ElementType.YEAR), MondrianUtils.getYearsFilterRule(years, calendar, valuesToInclude));
 	}
 	
 	/**
 	 * Adds a measures filter for a list of quarters 
 	 * @param quarters - the list of quarters [1..4]
 	 * @param valuesToInclude - configures if this is a list of quarters to be kept (true) or to be excluded (false)
-	 * @throws AmpApiException if list is invalid
+	 * @throws Exception 
 	 */
-	public void addQuartersFilterRule(List<Integer> quarters, boolean valuesToInclude) throws AmpApiException {
-		addFilterRule(new ReportElement(ElementType.QUARTER), MondrianUtils.getQuarterFilterRule(quarters, valuesToInclude));
+	public void addQuartersFilterRule(List<Integer> quarters, boolean valuesToInclude) throws Exception {
+		addFilterRule(new ReportElement(ElementType.QUARTER), MondrianUtils.getQuarterFilterRule(quarters, calendar, valuesToInclude));
 	}
 	
 	/**
 	 * Adds a measures filter for specific months list in all years
 	 * @param months - month numbers between [1..12]
 	 * @param valuesToInclude - true if this months must be kept, false if they must be excluded
-	 * @throws AmpApiException if list is invalid
+	 * @throws Exception 
 	 */
-	public void addMonthsFilterRule(List<Integer> months, boolean valuesToInclude) throws AmpApiException {
-		addFilterRule(new ReportElement(ElementType.MONTH), MondrianUtils.getMonthsFilterRule(months, valuesToInclude));
+	public void addMonthsFilterRule(List<Integer> months, boolean valuesToInclude) throws Exception {
+		addFilterRule(new ReportElement(ElementType.MONTH), MondrianUtils.getMonthsFilterRule(months, calendar, valuesToInclude));
 	}
 	
 	/**
@@ -180,30 +226,30 @@ public class MondrianReportFilters implements ReportFilters {
 	 * Adds a single year filter over measures
 	 * @param year
 	 * @param valueToInclude
-	 * @throws AmpApiException
+	 * @throws Exception 
 	 */
-	public void addSingleYearFilterRule(Integer year, boolean valueToInclude) throws AmpApiException {
-		addFilterRule(new ReportElement(ElementType.YEAR), MondrianUtils.getSingleYearFilterRule(year, valueToInclude));
+	public void addSingleYearFilterRule(Integer year, boolean valueToInclude) throws Exception {
+		addFilterRule(new ReportElement(ElementType.YEAR), MondrianUtils.getSingleYearFilterRule(year, calendar, valueToInclude));
 	}
 	
 	/**
 	 * Adds a single quarter filter over measures (no years filter) 
 	 * @param quarter
 	 * @param valueToInclude
-	 * @throws AmpApiException
+	 * @throws Exception 
 	 */
-	public void addSingleQuarterFilterRule(Integer quarter, boolean valueToInclude) throws AmpApiException {
-		addFilterRule(new ReportElement(ElementType.QUARTER), MondrianUtils.getSingleQuarterFilterRule(quarter, valueToInclude));
+	public void addSingleQuarterFilterRule(Integer quarter, boolean valueToInclude) throws Exception {
+		addFilterRule(new ReportElement(ElementType.QUARTER), MondrianUtils.getSingleQuarterFilterRule(quarter, calendar, valueToInclude));
 	}
 	
 	/**
 	 * Adds a single month filter over measures (no years filter) 
-	 * @param quarter
+	 * @param month
 	 * @param valueToInclude
-	 * @throws AmpApiException
+	 * @throws Exception 
 	 */
-	public void addSingleMonthFilterRule(Integer month, boolean valueToInclude) throws AmpApiException {
-		addFilterRule(new ReportElement(ElementType.MONTH), MondrianUtils.getSingleMonthFilterRule(month, valueToInclude));
+	public void addSingleMonthFilterRule(Integer month, boolean valueToInclude) throws Exception {
+		addFilterRule(new ReportElement(ElementType.MONTH), MondrianUtils.getSingleMonthFilterRule(month, calendar, valueToInclude));
 	}
 	
 	/**
@@ -213,7 +259,7 @@ public class MondrianReportFilters implements ReportFilters {
 	 * @throws AmpApiException
 	 */
 	public void addSingleDateFilterRule(Date date, boolean valueToInclude) throws AmpApiException {
-		addFilterRule(new ReportElement(ElementType.MONTH), MondrianUtils.getSingleDateFilterRule(date, valueToInclude));
+		addFilterRule(new ReportElement(ElementType.DATE), MondrianUtils.getSingleDateFilterRule(date, valueToInclude));
 	}
 	
 	/**

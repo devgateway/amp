@@ -429,7 +429,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		CellSetAxis rowAxis = cellSet.getAxes().get(Axis.ROWS.axisOrdinal());
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 		
-		if (rowAxis.getPositionCount() > 0 && columnAxis.getPositionCount() > 0 ) {
+		if (rowAxis.getPositionCount() > 0 ) {
 			leafHeaders = getOrderedLeafColumnsList(spec, rowAxis, columnAxis);
 		} else 
 			leafHeaders = null;
@@ -674,6 +674,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			reportColumns.add(reportColumn);
 		}
 		//int measuresLeafPos = columnAxis.getAxisMetaData().getHierarchies().size();
+		if (columnAxis.getPositionCount() > 0)
 		for (Position position : columnAxis.getPositions()) {
 			String fullColumnName = "";
 			for (Member measureColumn : position.getMembers()) {

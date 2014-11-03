@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,8 @@ import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.common.util.DateTimeUtil;
 import org.olap4j.CellSet;
 import org.olap4j.OlapException;
@@ -136,30 +139,45 @@ public class MondrianUtils {
 	 * Builds a filter between [from .. to] or [from .. infinite) or (-infinite .. to] year ranges.
 	 * @param from - the year to start from or null
 	 * @param to - the year to end with or null
-	 * @throws AmpApiException if range is invalid
+	 * @param calendar - (optional) the calendar to use to store actual names
+	 * @throws Exception if range is invalid
 	 */
-	public static FilterRule getYearsRangeFilter(Integer from, Integer to) throws AmpApiException {
-		return getDatesRangeFilterRule(ElementType.YEAR, from, to, false);
+	public static FilterRule getYearsRangeFilter(Integer from, Integer to,
+			AmpFiscalCalendar calendar) throws Exception {
+		return getDatesRangeFilterRule(ElementType.YEAR, from, to, 
+				getFiscalYear(from, calendar), 
+				getFiscalYear(to, calendar),
+				false);
 	}
 	
 	/**
 	 * Builds a filter for specific  [from .. to] quarters, with no year limits
 	 * @param from - from quarter limit
 	 * @param to - to quarter limit
-	 * @throws AmpApiException if range is invalid
+	 * @param calendar - (optional) the calendar to use to store actual names
+	 * @throws Exception if range is invalid
 	 */
-	public static FilterRule getQuarterRangeFilterRule(Integer from, Integer to) throws AmpApiException {
-		return getDatesRangeFilterRule(ElementType.QUARTER, from, to, false);
+	public static FilterRule getQuarterRangeFilterRule(Integer from, Integer to, 
+			AmpFiscalCalendar calendar) throws Exception {
+		return getDatesRangeFilterRule(ElementType.QUARTER, from, to, 
+				getFiscalQuarter(from, calendar), 
+				getFiscalQuarter(to, calendar),
+				false);
 	}
 	
 	/**
 	 * Builds a filter for specific months in all years. Month numbers between [1..12] 
 	 * @param from - first month number of the range
 	 * @param to - last month number of the range 
-	 * @throws AmpApiException if range is invalid
+	 * @param calendar - (optional) the calendar to use to store actual names
+	 * @throws Exception if range is invalid
 	 */
-	public static FilterRule getMonthRangeFilterRule(Integer from, Integer to) throws AmpApiException {
-		return getDatesRangeFilterRule(ElementType.MONTH, from, to, true);
+	public static FilterRule getMonthRangeFilterRule(Integer from, Integer to, 
+			AmpFiscalCalendar calendar) throws Exception {
+		return getDatesRangeFilterRule(ElementType.MONTH, from, to, 
+				getFiscalMonth(from, calendar), 
+				getFiscalMonth(to, calendar),
+				true);
 	}
 	
 	/**
@@ -169,10 +187,13 @@ public class MondrianUtils {
 	 * @throws AmpApiException if range is invalid
 	 */
 	public static FilterRule getDateRangeFilterRule(Date from, Date to) throws AmpApiException {
-		return getDatesRangeFilterRule(ElementType.DATE,  DateTimeUtil.toJulianDayNumber(from), DateTimeUtil.toJulianDayNumber(to), false);
+		return getDatesRangeFilterRule(ElementType.DATE,  
+				DateTimeUtil.toJulianDayNumber(from), DateTimeUtil.toJulianDayNumber(to), 
+				DateTimeUtil.formatDate(from), DateTimeUtil.formatDate(to), false);
 	}
 	
-	private static FilterRule getDatesRangeFilterRule(ElementType elemType, Integer from, Integer to, boolean bothLimits) throws AmpApiException {
+	private static FilterRule getDatesRangeFilterRule(ElementType elemType, Integer from, Integer to, 
+			String fromName, String toName, boolean bothLimits) throws AmpApiException {
 		validate (elemType, from);
 		validate (elemType, to);
 		if (from == null && to == null)
@@ -181,37 +202,55 @@ public class MondrianUtils {
 			throw new AmpApiException("The lower limit 'from' must be smaller or equal to the upper limit 'to'. Failed request for from = " + from + ", to = " + to);
 		if (to == null)
 			to = MoConstants.UNDEFINED_KEY - 1; //to skip undefined dates
-		return new FilterRule(toStringOrNull(from), toStringOrNull(to), true, true, true);
+		return new FilterRule(toStringOrNull(from), toStringOrNull(to), fromName, toName, true, true, true);
 	}
 	
 	/**
 	 * Builds a filter for list of years 
 	 * @param years - years to filter by
+	 * @param calendar - (optional) the calendar to use to store actual names 
 	 * @param valuesToInclude - true if this years to be kept, false if this years must be excluded
-	 * @throws AmpApiException if list is invalid
+	 * @throws Exception if range is invalid
 	 */
-	public static FilterRule getYearsFilterRule(List<Integer> years, boolean valuesToInclude) throws AmpApiException {
-		return getDatesListFilterRule(ElementType.YEAR, years, valuesToInclude);
+	public static FilterRule getYearsFilterRule(List<Integer> years, AmpFiscalCalendar calendar, 
+			boolean valuesToInclude) throws Exception {
+		List<String> yearNames = calendar == null ? null : new ArrayList<String>(years.size());
+		if (calendar != null)
+			for (Integer year : years)
+				yearNames.add(getFiscalYear(year, calendar));
+		return getDatesListFilterRule(ElementType.YEAR, years, yearNames, valuesToInclude);
 	}
 	
 	/**
 	 * Builds a filter for a list of quarters 
 	 * @param quarters - the list of quarters [1..4]
+	 * @param calendar - (optional) the calendar to use to store actual names
 	 * @param valuesToInclude - configures if this is a list of quarters to be kept (true) or to be excluded (false)
-	 * @throws AmpApiException if list is invalid
+	 * @throws Exception if range is invalid
 	 */
-	public static FilterRule getQuarterFilterRule(List<Integer> quarters, boolean valuesToInclude) throws AmpApiException {
-		return getDatesListFilterRule(ElementType.QUARTER, quarters, valuesToInclude);
+	public static FilterRule getQuarterFilterRule(List<Integer> quarters, AmpFiscalCalendar calendar, 
+			boolean valuesToInclude) throws Exception {
+		List<String> quarterNames = calendar == null ? null : new ArrayList<String>(quarters.size());
+		if (calendar != null)
+			for (Integer quarter : quarters)
+				quarterNames.add(getFiscalQuarter(quarter, calendar));
+		return getDatesListFilterRule(ElementType.QUARTER, quarters, quarterNames, valuesToInclude);
 	}
 	
 	/**
 	 * Builds a filter for specific months list in all years
 	 * @param months - month numbers between [1..12]
+	 * @param calendar - (optional) the calendar to use to store actual names
 	 * @param valuesToInclude - true if this months must be kept, false if they must be excluded
-	 * @throws AmpApiException if list is invalid
+	 * @throws Exception if range is invalid
 	 */
-	public static FilterRule getMonthsFilterRule(List<Integer> months, boolean valuesToInclude) throws AmpApiException {
-		return getDatesListFilterRule(ElementType.MONTH, months, valuesToInclude);
+	public static FilterRule getMonthsFilterRule(List<Integer> months, AmpFiscalCalendar calendar, 
+			boolean valuesToInclude) throws Exception {
+		List<String> monthNames = calendar == null ? null : new ArrayList<String>(months.size());
+		if (calendar != null)
+			for (Integer month : months)
+				monthNames.add(getFiscalMonth(month, calendar));
+		return getDatesListFilterRule(ElementType.MONTH, months, monthNames, valuesToInclude);
 	}
 	
 	/**
@@ -222,49 +261,58 @@ public class MondrianUtils {
 	 */
 	public static FilterRule getDatesFilterRule(List<Date> dates, boolean valuesToInclude) throws AmpApiException {
 		List<Integer> julianDateNumbers = new ArrayList<Integer>(dates.size());
+		List<String> dateStrList = new ArrayList<String>(dates.size());
 		for (Date date : dates) {
 			julianDateNumbers.add(DateTimeUtil.toJulianDayNumber(date));
+			dateStrList.add(DateTimeUtil.formatDate(date));
 		}
-		return getDatesListFilterRule(ElementType.DATE, julianDateNumbers, valuesToInclude);
+		return getDatesListFilterRule(ElementType.DATE, julianDateNumbers, dateStrList, valuesToInclude);
 	}
 	
-	private static FilterRule getDatesListFilterRule(ElementType elemType, List<Integer> values, boolean valuesToInclude) throws AmpApiException {
+	private static FilterRule getDatesListFilterRule(ElementType elemType, List<Integer> values, 
+			List<String> names, boolean valuesToInclude) throws AmpApiException {
 		List<String> strValues = new ArrayList<String>(values.size());
 		for (Integer value : values) {
 			validate(elemType, value);
 			strValues.add(value == null ? null : value.toString());
 		}
-		return new FilterRule(strValues, valuesToInclude, true);
+		return new FilterRule(names, strValues, valuesToInclude, true);
 	}
 	
 	/**
 	 * Builds a single year filter 
 	 * @param year
+	 * @param calendar - (optional) the calendar to use to store actual names
 	 * @param valueToInclude
-	 * @throws AmpApiException
+	 * @throws Exception 
 	 */
-	public static FilterRule getSingleYearFilterRule(Integer year, boolean valueToInclude) throws AmpApiException {
-		return getSingleDateFilterRule(ElementType.YEAR, year, valueToInclude);
+	public static FilterRule getSingleYearFilterRule(Integer year, AmpFiscalCalendar calendar, 
+			boolean valueToInclude) throws Exception {
+		return getSingleDateFilterRule(ElementType.YEAR, year, getFiscalYear(year, calendar), valueToInclude);
 	}
 	
 	/**
 	 * Builds a single quarter filter, no years filter
 	 * @param quarter
+	 * @param calendar - (optional) the calendar to use to store actual names
 	 * @param valueToInclude
-	 * @throws AmpApiException
+	 * @throws Exception 
 	 */
-	public static FilterRule getSingleQuarterFilterRule(Integer quarter, boolean valueToInclude) throws AmpApiException {
-		return getSingleDateFilterRule(ElementType.QUARTER, quarter, valueToInclude);
+	public static FilterRule getSingleQuarterFilterRule(Integer quarter, AmpFiscalCalendar calendar,
+			boolean valueToInclude) throws Exception {
+		return getSingleDateFilterRule(ElementType.QUARTER, quarter, getFiscalQuarter(quarter, calendar), valueToInclude);
 	}
 	
 	/**
 	 * Builds a single month filter, no years filter
 	 * @param month
+	 * @param calendar - (optional) the calendar to use to store actual names
 	 * @param valueToInclude
-	 * @throws AmpApiException
+	 * @throws Exception 
 	 */
-	public static FilterRule getSingleMonthFilterRule(Integer month, boolean valueToInclude) throws AmpApiException {
-		return getSingleDateFilterRule(ElementType.MONTH, month, valueToInclude);
+	public static FilterRule getSingleMonthFilterRule(Integer month, AmpFiscalCalendar calendar,
+			boolean valueToInclude) throws Exception {
+		return getSingleDateFilterRule(ElementType.MONTH, month, getFiscalMonth(month, calendar), valueToInclude);
 	}
 	
 	/**
@@ -274,14 +322,16 @@ public class MondrianUtils {
 	 * @throws AmpApiException
 	 */
 	public static FilterRule getSingleDateFilterRule(Date date, boolean valueToInclude) throws AmpApiException {
-		return getSingleDateFilterRule(ElementType.DATE, DateTimeUtil.toJulianDayNumber(date), valueToInclude);
+		return getSingleDateFilterRule(ElementType.DATE, DateTimeUtil.toJulianDayNumber(date), 
+				DateTimeUtil.formatDate(date), valueToInclude);
 	}
 	
-	private static FilterRule getSingleDateFilterRule(ElementType elemType, Integer value, boolean valueToInclude) throws AmpApiException {
+	private static FilterRule getSingleDateFilterRule(ElementType elemType, Integer value, 
+			String name, boolean valueToInclude) throws AmpApiException {
 		validate (elemType, value);
 		if (value == null)
 			throw new AmpApiException("Single value filter must have a value specified. value = " + value);
-		return new FilterRule(value.toString(), valueToInclude, true);
+		return new FilterRule(value.toString(), name, valueToInclude, true);
 	}
 	
 	private static void validate(ElementType elemType, Integer value) throws AmpApiException {
@@ -301,5 +351,34 @@ public class MondrianUtils {
 	
 	private static String toStringOrNull(Object o) {
 		return o == null ? null : o.toString();
+	}
+	
+	public static String getFiscalYear(Integer year, AmpFiscalCalendar calendar) throws Exception {
+		if (calendar == null || year == null) 
+			return null;
+		
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.YEAR, year);
+		ICalendarWorker worker = calendar.getworker();
+		worker.setTime(cal.getTime());
+		return worker.getFiscalYear();
+	}
+	
+	public static String getFiscalQuarter(Integer quarter, AmpFiscalCalendar calendar) throws Exception {
+		if (calendar == null || quarter == null) 
+			return null;
+		// TODO: 
+		return "Q" + quarter;
+	}
+	
+	public static String getFiscalMonth(Integer month, AmpFiscalCalendar calendar) throws Exception {
+		if (calendar == null || month == null) 
+			return null;
+		
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.MONTH, month - 1);
+		ICalendarWorker worker = calendar.getworker();
+		worker.setTime(cal.getTime());
+		return worker.getFiscalMonth().toString();
 	}
 }

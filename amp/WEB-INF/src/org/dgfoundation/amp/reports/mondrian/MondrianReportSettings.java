@@ -16,7 +16,6 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 public class MondrianReportSettings extends MondrianReportFilters implements ReportSettings {
 	private String currencyCode = null;
 	private DecimalFormat currencyFormat = null;
-	transient private AmpFiscalCalendar calendar = null;
 	
 	@Override
 	public String getCurrencyCode() {

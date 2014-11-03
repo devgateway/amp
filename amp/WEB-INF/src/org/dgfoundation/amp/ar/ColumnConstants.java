@@ -54,6 +54,7 @@ public class ColumnConstants {
 	public static final String COMPONENT_NAME = "Component Name";
 	public static final String COMPONENT_TYPE = "Component Type";
 	public static final String CONTRACTING_AGENCY = "Contracting Agency";
+	public static final String CONTRACTING_AGENCY_ID = "Contracting Agency Id";
 	public static final String CONTRACTING_AGENCY_ACRONYM = "Contracting Agency Acronym";
 	public static final String CONTRACTING_AGENCY_DEPARTMENT_DIVISION = "Contracting Agency Department/Division";
 	public static final String CONTRACTING_AGENCY_GROUPS = "Contracting Agency Groups";

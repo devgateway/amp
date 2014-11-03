@@ -80,9 +80,9 @@ public class AmpReportsToReportSpecification {
 		configureSorting();
 		
 		//configure filters & settings
-		AmpARFilterConverter arFilterTranslator = new AmpARFilterConverter(arFilter); 
-		spec.setFilters(arFilterTranslator.buildFilters());
+		AmpARFilterConverter arFilterTranslator = new AmpARFilterConverter(arFilter);
 		spec.setSettings(arFilterTranslator.buildSettings());
+		spec.setFilters(arFilterTranslator.buildFilters());
 		
 		return spec;
 	}

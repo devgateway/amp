@@ -13,6 +13,8 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.AmountCell;
@@ -148,8 +150,33 @@ public class CellDataSetToGeneratedReport {
 		
 		return notNullColId;
 	}
+
+//	/**
+//	 * debug code - do not delete until the whole thing is stabilized
+//	 * @return
+//	 */
+//	public static String writeStats() {
+//		int sum = 0;
+//		for(int j:counts.values())
+//			sum += j;
+//		if (sum == 0) sum = 1;
+//		
+//		TreeSet<ComparableValue<Double>> values = new TreeSet<>();
+//		for(String cell:counts.keySet())
+//			values.add(new ComparableValue<Double>(cell, counts.get(cell) * 1.0 / sum));
+//
+//		return String.format("%d values: %s", values.size(), values.toString());
+//	}
 	
+	public static Map<String, Integer> counts = new TreeMap<String, Integer>();
 	private double parseValue(String value) throws AMPException {
+		if (value == null || value.isEmpty() || value.equals("0"))
+			return 0;
+		
+//		Integer oldCount = counts.get(value);
+//		if (oldCount == null) oldCount = 0;
+//		counts.put(value, oldCount + 1);
+		
 		Number iVal = 0;
 		try {
 			iVal = readingNumberFormat.parse(value);

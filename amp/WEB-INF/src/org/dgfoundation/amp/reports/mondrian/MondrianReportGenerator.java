@@ -123,6 +123,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	@Override
 	public GeneratedReport executeReport(ReportSpecification spec) throws AMPException {
 		try {
+			CellDataSetToGeneratedReport.counts.clear();
 			stats = new ReportGenerationStats();
 			CellDataSet cellDataSet = generateReportAsSaikuCellDataSet(spec);
 			long postprocStart = System.currentTimeMillis();
@@ -150,7 +151,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			throw e;
 		}
 		finally {
-			writeStats();
+			//logger.error("counts: " + CellDataSetToGeneratedReport.writeStats());
 			tearDown();
 		}
 	}

@@ -38,8 +38,6 @@ module.exports = BaseControlView.extend({
     var self = this;
     BaseControlView.prototype.render.apply(this);
 
-    // TODO: make all/most api requests send the serialized settings...
-
     self.$('.content').html(this.template({title: this.title}));
 
     // add content
@@ -57,6 +55,10 @@ module.exports = BaseControlView.extend({
   optionChanged: function(evt) {
     var settingID = $(evt.currentTarget).attr('id');
     var selectedID = $(evt.currentTarget).val();
+    this.updateSelected(settingID, selectedID);
+  },
+
+  updateSelected: function(settingID, selectedID) {
     var setting = this.app.data.settings.get(settingID);
     if (setting) {
       setting.set('selected', selectedID);
@@ -65,3 +67,4 @@ module.exports = BaseControlView.extend({
     }
   }
 });
+

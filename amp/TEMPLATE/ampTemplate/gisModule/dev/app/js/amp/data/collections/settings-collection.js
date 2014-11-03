@@ -20,7 +20,7 @@ module.exports = Backbone.Collection
     var self = this;
     if (jsonBlob) {
       _.each(jsonBlob, function(v, k) {
-        self.get(k).set('selected', v.id);
+        self.get(k).set('selected', v);
       });
     } else {
       this.each(function(setting) {

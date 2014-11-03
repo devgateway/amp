@@ -1,4 +1,5 @@
 var fs = require('fs');
+var $ = require('jquery');
 var _ = require('underscore');
 
 var BaseControlView = require('../../base-control/base-control-view');
@@ -18,18 +19,25 @@ module.exports = BaseControlView.extend({
   template:  _.template(Template),
 
   events: {
-    'click .gis-tool-export': 'exportOption',
     'click .gis-tool-share': 'share'
   },
 
   initialize: function() {
     BaseControlView.prototype.initialize.apply(this, arguments);  // attaches this.app, etc.
     this.savedMaps = this.app.data.savedMaps;
+
   },
 
   render: function() {
     BaseControlView.prototype.render.apply(this);
-    this.$('.content').html(this.template({title: this.title}));
+    var renderedTemplate = $(this.template({title: this.title}));
+
+    // needed to wait until 'el' exists before creating and rendering, or events break.
+    this.exportMapToolView = new ExportMapToolView({app: this.app, el:renderedTemplate.find('.form-group')});
+    this.exportMapToolView.render();
+
+    this.$('.content').html(renderedTemplate);
+
     return this;
   },
 
@@ -38,10 +46,6 @@ module.exports = BaseControlView.extend({
     this.app.state.load(stateBlob);
   },
 
-  // can't call it export because that's a reserved word.
-  exportOption: function() {
-    this.show(new ExportMapToolView(), '.gis-tool-export');
-  },
 
   share: function() {
     var currentStateModel = this.savedMaps.create({  // create does POST

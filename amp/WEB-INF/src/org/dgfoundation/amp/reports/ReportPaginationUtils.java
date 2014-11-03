@@ -116,6 +116,7 @@ public class ReportPaginationUtils {
 		return currentRoot;
 	}
 	
+	// TODO: change the recursive processing to semi/full iterative one
 	private static int convert(ReportAreaMultiLinked current, Deque<List<ReportArea>> stack, int size, boolean traverseChildren) {
 		if (current == null) return 0;
 		
@@ -123,9 +124,10 @@ public class ReportPaginationUtils {
 		
 		if (traverseChildren && hasChildren) {
 			stack.push(new ArrayList<ReportArea>());
-			for(ReportArea child : current.getChildren()) 
-				size = convert((ReportAreaMultiLinked)child, stack, size, true); //all children can traverse their own children
-			if (size == 0) return 0;
+			// start with 1st child only, then it will navigate to the next  
+			size = convert((ReportAreaMultiLinked)current.getChildren().get(0), stack, size, true); //all children can traverse their own children
+			// return now, because the navigation will continue via children 
+			return size;
 		}
 
 		if (current.getContents() != null && current.getContents().size() > 0) {

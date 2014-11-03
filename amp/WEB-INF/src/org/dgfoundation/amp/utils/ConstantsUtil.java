@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.dgfoundation.amp.reports;
+package org.dgfoundation.amp.utils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

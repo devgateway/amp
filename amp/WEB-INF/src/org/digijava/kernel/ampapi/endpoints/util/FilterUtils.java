@@ -13,8 +13,8 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.reports.ConstantsUtil;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
+import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 

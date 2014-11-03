@@ -153,8 +153,6 @@ public class CellDataSetToGeneratedReport {
 		Number iVal = 0;
 		try {
 			iVal = readingNumberFormat.parse(value);
-			//if (value.indexOf('a') < -2)
-			//	throw new ParseException("a", 1);
 		} catch (ParseException e) {
 			//empty string
 		} catch (Exception e) {

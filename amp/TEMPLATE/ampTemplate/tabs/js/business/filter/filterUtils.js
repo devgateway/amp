@@ -17,10 +17,10 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 				var element = subElement.models[0];
 				var content = [];
 				if (element.get('value') != null) {
-					var item = {};
-					item.id = element.get('value');
-					item.name = element.get('value');
-					content.push(item);
+					var auxItem = {};
+					auxItem.id = element.get('value');
+					auxItem.name = element.get('valueToName').attributes[element.get('value')];
+					content.push(auxItem);
 				} else if (element.get('valueToName') != null) {
 					// This should be .models but the way the endpoint returns
 					// the data breaks backbone.

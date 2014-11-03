@@ -255,6 +255,7 @@ module.exports = Backbone.View.extend({
     a.layer.bindPopup(
       self.projectListTemplate({ structures: parsedProjectSitesList}),
       {
+        maxWidth: 500,
         offset: new L.Point(0, -6)
       });
 
@@ -275,7 +276,11 @@ module.exports = Backbone.View.extend({
       //TODO: template:
       layer.bindPopup('Project #: ' + (feature.properties.activity ? feature.properties.activity[0] : '') +
         '<br />Site: ' + feature.properties.title +
-        '<br />Description: ' + feature.properties.description);
+        '<br />Description: ' + feature.properties.description,
+      {
+        maxWidth: 500,
+        offset: new L.Point(0, -2)
+      });
     }
 
     layer.on('click', function(evt) {

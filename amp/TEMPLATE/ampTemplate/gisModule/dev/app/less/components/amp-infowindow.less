@@ -1,5 +1,6 @@
 @amp_infowindow_height: 220px;
 @amp_infowindow_width: 420px;
+/* Width problems here should be fixed using leaflet bindPopup maxWidth: option */
 
 .cluster-popup{
   min-width: @amp_infowindow_width;
@@ -17,10 +18,6 @@
   .scroll-container{
     height: @amp_infowindow_height - 33px;
     overflow-y: auto;
-    width: 321px;
-    padding-right: 5px;
-    /*TODO(thadk) do not use a pixel value here,
-     * there was a excess width problem with scrollbars in structures clusters
-     */
+    /* Width problems here should be fixed using leaflet bindPopup maxWidth: option */
   }
 }

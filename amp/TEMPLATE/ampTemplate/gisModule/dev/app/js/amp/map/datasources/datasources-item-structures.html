@@ -1,0 +1,12 @@
+<h3><%= title %></h3>
+
+<% if (status === 'loading') { %>
+  <p><em>loading...</em></p>
+<% } else { %>
+  <% colourBuckets.each(function(bucket) { %>
+    <div>
+      <span style="background: <%= bucket.hex() %>" class="legend-sample color-circle"></span>
+      <%= bucket.get('value') %>
+    </div>
+  <% }) %>
+<% } %>

@@ -266,6 +266,11 @@ module.exports = Backbone.View.extend({
   _onEachFeature: function(feature, layer) {
     var self = this;
 
+    /* TODO(thadk) switch individual feature to this standard parsed model input*/
+    var parsedProjectSitesList = this.app.data.projectAlt.model.prototype.parse(feature);
+
+
+
     if (feature.properties) {
       //TODO: template:
       layer.bindPopup('Project #: ' + (feature.properties.activity ? feature.properties.activity[0] : '') +

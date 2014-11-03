@@ -38,8 +38,9 @@ module.exports = Backbone.View.extend({
         self._createClusters(admLayer, leafletLayer);
       }, this));
       admLayer.loadAll().done(function() {
-        var boundaries = self.getNewBoundary(admLayer);
-        leafletLayer.addLayer(boundaries);
+        self.boundary = self.getNewBoundary(admLayer);
+        leafletLayer.addLayer(self.boundary);
+        self.moveBoundaryBack();
       });
     }
 
@@ -53,9 +54,10 @@ module.exports = Backbone.View.extend({
       leafletLayer.clearLayers();
       self._createClusters(admLayer, leafletLayer);
 
-      var boundaries = self.getNewBoundary(admLayer);
-      if (boundaries) {
-        leafletLayer.addLayer(boundaries);
+      this.boundary = self.getNewBoundary(admLayer);
+      if (this.boundary) {
+        leafletLayer.addLayer(this.boundary);
+        this.moveBoundaryBack();
       }
 
     } else {
@@ -64,7 +66,12 @@ module.exports = Backbone.View.extend({
         this.showLayer(admLayer);
       }
     }
+  },
 
+  moveBoundaryBack: function() {
+    if (this.boundary) {
+      this.boundary.bringToBack();
+    }
   },
 
   _createClusters: function(admLayer, leafletLayer) {

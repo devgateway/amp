@@ -7,6 +7,7 @@ module.exports = Backbone.View.extend({
   initialize: function(options) {
     this.app = options.app;
     this.map = options.map;
+    this.admClustersLayersView = options.admClustersLayersView;
     this.leafletLayerMap = {};
     this.listenTo(this.app.data.indicators, 'show', this.showLayer);
     this.listenTo(this.app.data.indicators, 'hide', this.hideLayer);
@@ -39,6 +40,10 @@ module.exports = Backbone.View.extend({
       self.map.addLayer(loadedLayer);
       if (loadedLayer.bringToBack) {
         loadedLayer.bringToBack();
+
+        //TODO: drs, very dirty way of hiding boundaries so they don't hijack click events
+        // I need to pull out boundaries into own view.
+        self.admClustersLayersView.moveBoundaryBack();
       }
       self.trigger('addedToMap'); //TODO: Phil should i do this better?...
       // ...the main map view needs to know when layer is actually added to map.
@@ -63,11 +68,8 @@ module.exports = Backbone.View.extend({
     return new L.geoJson(layer.get('geoJSON'), {
       style: function(feature) {
         featureValue = feature.properties.value;
-
         // sets colour for each polygon
-        //console.log('layer.palette.colours', layer.palette.colours);
         colour = layer.palette.colours.find(function(colour) {
-          //console.log('colour', colour);
           return colour.get('test').call(colour, featureValue);
         });
         if (!colour) {
@@ -75,7 +77,7 @@ module.exports = Backbone.View.extend({
         }
         return {
           color: colour.hex(),
-          weight: 4,
+          weight: 2,
           opacity: 0.9,
           fillOpacity: 0.6
         };
@@ -87,19 +89,19 @@ module.exports = Backbone.View.extend({
   // used to hilight the geojson layer on click, show popup, and unhilight after.
   tmpFundingOnEachFeature: function(feature, layer) {
     // Add popup
-    if (feature) {
-      layer.bindPopup('DRS test feature popup');
+    if (feature && feature.properties) {
+      layer.bindPopup('Amount: $' + feature.properties.value);
     }
 
     // hilight and unhilight the area when a user clicks on them..
     layer.on('popupopen', function() {
       layer.setStyle({
-        fillColor: 'blue'
+        fillOpacity: 1.0
       });
     });
     layer.on('popupclose', function() {
       layer.setStyle({
-        fillColor: 'transparent'
+        fillOpacity: 0.6
       });
     });
   },

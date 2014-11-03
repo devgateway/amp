@@ -16,6 +16,7 @@ module.exports = Backbone.Model
 
     // TODO: do this later? Maybe set as a model attribute instead of directly
     // on the model? Should it sometimes be Discrete instead of FromRange?
+    // sets base colour
     this.palette = new Palette.FromRange({ seed: this.get('id') });
   },
 
@@ -67,7 +68,6 @@ module.exports = Backbone.Model
 
   _joinDataWithBoundaries: function(boundaryGeoJSON) {
     var indexedValues = _.indexBy(this.get('values'), 'admID');
-
     // copy boundary geoJSON, and inject data
     var geoJSON = _.extend({}, boundaryGeoJSON, {
       features: _.map(boundaryGeoJSON.features, function(feature) {

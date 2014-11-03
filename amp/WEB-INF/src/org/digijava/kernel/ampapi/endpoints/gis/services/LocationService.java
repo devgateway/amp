@@ -40,6 +40,7 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -148,7 +149,7 @@ public class LocationService {
 	 * Build an excel file export by structure
 	 * @return
 	 */
-	public static HSSFWorkbook generateExcelExportByStructure(){
+	public static HSSFWorkbook generateExcelExportByStructure(JsonBean filter){
 		List<String> columnNames = new ArrayList<String>();
 		columnNames.add(TranslatorWorker.translateText("Time Stamp"));//1
 		columnNames.add(TranslatorWorker.translateText("Activity Id"));//2
@@ -165,7 +166,7 @@ public class LocationService {
 		columnNames.add(TranslatorWorker.translateText("Total Project Disbursements"));//12
 		
 		
-		List<Activity> report=getMapExportByStructure();
+		List<Activity> report=getMapExportByStructure(filter);
 		java.util.Date date = new java.util.Date();
 		
 		int i=1;
@@ -250,76 +251,95 @@ public class LocationService {
 	 * also we can remove the query once the amp_structure table is in the mondrian schem
 	 * @return
 	 */
-	public static List<Activity> getMapExportByLocation(final Map<String,Activity>geocodeInfo) {
+	public static List<Activity> getMapExportByLocation(final Map<String,Activity>geocodeInfo,JsonBean config) {
 		List<Activity> activities = new ArrayList<Activity>();
-		final List<String>geoCodesId=new ArrayList<String >();
+		final List<String> geoCodesId = new ArrayList<String>();
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("MapExport");
 		Set<ReportColumn> hierarchies = new LinkedHashSet<ReportColumn>();
 		ReportColumn ampId = new ReportColumn(ColumnConstants.AMP_ID,
 				ReportEntityType.ENTITY_TYPE_ALL);
 
-		ReportColumn geoid=MondrianReportUtils.getColumn(
-				ColumnConstants.GEOCODE,
-				ReportEntityType.ENTITY_TYPE_ACTIVITY);
-		
-		ReportColumn impLevel=		MondrianReportUtils.getColumn(
+		ReportColumn geoid = MondrianReportUtils.getColumn(
+				ColumnConstants.GEOCODE, ReportEntityType.ENTITY_TYPE_ACTIVITY);
+
+		ReportColumn impLevel = MondrianReportUtils.getColumn(
 				ColumnConstants.IMPLEMENTATION_LEVEL,
 				ReportEntityType.ENTITY_TYPE_ACTIVITY);
 		spec.addColumn(geoid);
 
-		
-		spec.addColumn(ampId );
+		spec.addColumn(ampId);
 		spec.addColumn(impLevel);
 		spec.addColumn(geoid);
-		hierarchies.add(ampId );
+		hierarchies.add(ampId);
 		hierarchies.add(impLevel);
 		hierarchies.add(geoid);
-		
+
 		spec.setHierarchies(hierarchies);
-		
+
 		getCommonSpecForExport(spec);
 
 		MondrianReportGenerator generator = new MondrianReportGenerator(
 				ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils
 						.getRequest()), false);
 		GeneratedReport report = null;
+
+		applyFiltes(config, spec);
 		try {
 			report = generator.executeReport(spec);
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
 			e.printStackTrace();
-		} 
-		for (ReportArea reportArea : report.reportContents.getChildren()) {
-			getActivitiesById(reportArea,activities,geoCodesId);
 		}
-		//Go and fetch location specific information
-		
-		PersistenceManager.getSession().doWork(new Work() {
-			public void execute(Connection conn) throws SQLException {
+		if (report != null && report.reportContents != null
+				&& report.reportContents.getChildren() != null) {
+			for (ReportArea reportArea : report.reportContents.getChildren()) {
+				getActivitiesById(reportArea, activities, geoCodesId);
+			}
+			// Go and fetch location specific information
 
-				
-				String query="select geo_code,location_name,gs_lat,gs_long from "+ 
-						" amp_category_value_location   "+
-						"where  geo_code in ("+ org.dgfoundation.amp.Util.toCSString(geoCodesId) +")";
-	    		ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
-	    		while(rs.next()){
-	    			Activity a=new Activity();
-	    			String geoCode=rs.getString("geo_code");
-	    			a.setLocationName(rs.getString("location_name"));
-	    			a.setLatitude(rs.getString("gs_lat"));
-	    			a.setLongitude(rs.getString("gs_long"));
-	    			a.setGeoCode(geoCode);
-	    			geocodeInfo.put(geoCode, a);
-	    		}
-			}
-		});
-		Collections.sort(activities, new Comparator<Activity>() {
-			@Override
-			public int compare(Activity a, Activity b) {
-				return a.getAmpId().compareTo(b.getAmpId());
-			}
-		});
+			PersistenceManager.getSession().doWork(new Work() {
+				public void execute(Connection conn) throws SQLException {
+
+					String query = "select geo_code,location_name,gs_lat,gs_long from "
+							+ " amp_category_value_location   "
+							+ "where  geo_code in ("
+							+ org.dgfoundation.amp.Util.toCSString(geoCodesId)
+							+ ")";
+					ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
+					while (rs.next()) {
+						Activity a = new Activity();
+						String geoCode = rs.getString("geo_code");
+						a.setLocationName(rs.getString("location_name"));
+						a.setLatitude(rs.getString("gs_lat"));
+						a.setLongitude(rs.getString("gs_long"));
+						a.setGeoCode(geoCode);
+						geocodeInfo.put(geoCode, a);
+					}
+				}
+			});
+			Collections.sort(activities, new Comparator<Activity>() {
+				@Override
+				public int compare(Activity a, Activity b) {
+					return a.getAmpId().compareTo(b.getAmpId());
+				}
+			});
+		}
 		return activities;
+	}
+	private static void applyFiltes(JsonBean config,
+			ReportSpecificationImpl spec) {
+		List<String> activitIds=null;
+		Object otherFilter=null;
+		if (config != null) {
+			otherFilter=config.get("otherFilters");
+			activitIds = GisUtil.applyKeywordSearch( otherFilter);
+		}
+		
+ 		MondrianReportFilters filterRules = GisUtil.getFilterRules(config, activitIds,
+				otherFilter);
+		if(filterRules!=null){
+			spec.setFilters(filterRules);
+		}
 	}
 	
 	private static void getActivitiesById(ReportArea reportArea,
@@ -361,7 +381,8 @@ public class LocationService {
 	 * also we can remove the query once the amp_structure table is in the mondrian schem
 	 * @return
 	 */
-	public static List<Activity> getMapExportByStructure() {
+	public static List<Activity> getMapExportByStructure(JsonBean config) {
+		final List<Activity> mapExportBean = new ArrayList<Activity>();
 
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("MapExport");
 		//since amp_id will be added as a hiearchy onthe other report
@@ -371,6 +392,8 @@ public class LocationService {
 
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()),false);
 		GeneratedReport report = null;
+		applyFiltes(config, spec);
+
 		try {
 			report = generator.executeReport(spec);
 		} catch (Exception e) {
@@ -378,24 +401,32 @@ public class LocationService {
 			e.printStackTrace();
 		}
 		final Map<Long,Activity>activities=new LinkedHashMap<Long,Activity>();
-		for (ReportArea reportArea : report.reportContents.getChildren()) {
-			Long activityId=0L;
-			Activity activity = new Activity();
-			Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
-			Set<ReportOutputColumn> col = row.keySet();
-			for (ReportOutputColumn reportOutputColumn : col) {
-				if(reportOutputColumn.columnName.equals(ColumnConstants.ACTIVITY_ID)){
-					activityId=Long.parseLong(row.get(reportOutputColumn).value.toString());
-					activity.setId(activityId);
-				}else{ 
-					getActivityIdForReports(activity, row,reportOutputColumn);
+
+		if (report != null && report.reportContents != null
+				&& report.reportContents.getChildren() != null) {
+			for (ReportArea reportArea : report.reportContents.getChildren()) {
+				Long activityId = 0L;
+				Activity activity = new Activity();
+				Map<ReportOutputColumn, ReportCell> row = reportArea
+						.getContents();
+				Set<ReportOutputColumn> col = row.keySet();
+				for (ReportOutputColumn reportOutputColumn : col) {
+					if (reportOutputColumn.columnName
+							.equals(ColumnConstants.ACTIVITY_ID)) {
+						activityId = Long
+								.parseLong(row.get(reportOutputColumn).value
+										.toString());
+						activity.setId(activityId);
+					} else {
+						getActivityIdForReports(activity, row,
+								reportOutputColumn);
+					}
 				}
+				activities.put(activityId, activity);
 			}
-			activities.put(activityId,activity);
-		}
+
 		//once we have all activities we go and fetch structures associated to those activities
 		//since its not yet implemented on reports we fetch them separately 
-		final List<Activity> mapExportBean = new ArrayList<Activity>();
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
 
@@ -432,7 +463,7 @@ public class LocationService {
 			}
 			});
 		
-
+		}
 		return mapExportBean;
 	}
 	private static void  getActivityIdForReports(
@@ -490,7 +521,7 @@ public class LocationService {
 		spec.setCalculateColumnTotals(doTotals);
 		spec.setCalculateRowTotals(doTotals);
 	}
-	public static HSSFWorkbook generateExcelExportByLocation() {
+	public static HSSFWorkbook generateExcelExportByLocation(JsonBean filter) {
 
 		
 		
@@ -511,7 +542,7 @@ public class LocationService {
 
 		final Map<String,Activity>geocodeInfo=new LinkedHashMap<String,Activity>();
 		
-		List<Activity> report=getMapExportByLocation(geocodeInfo);
+		List<Activity> report=getMapExportByLocation(geocodeInfo,filter);
 		java.util.Date date = new java.util.Date();
 		
 		int i=1;

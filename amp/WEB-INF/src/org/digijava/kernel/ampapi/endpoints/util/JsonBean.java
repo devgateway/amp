@@ -1,11 +1,16 @@
 package org.digijava.kernel.ampapi.endpoints.util;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
+
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAnyGetter;
 import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.digijava.kernel.ampapi.endpoints.gis.GisEndPoints;
 
 /**
  * 
@@ -13,6 +18,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
  * 
  */
 public class JsonBean {
+	private static final Logger logger = Logger.getLogger(JsonBean.class);
 
 	public JsonBean() {
 
@@ -45,6 +51,23 @@ public class JsonBean {
 		if (o != null) {
 			return o.toString();
 		} else {
+			return null;
+		}
+	}
+
+	public static JsonBean getJsonBeanFromString(String jb) {
+		try {
+			ObjectMapper mapper11 = new ObjectMapper();
+			mapper11.configure(
+					org.codehaus.jackson.map.DeserializationConfig.Feature.UNWRAP_ROOT_VALUE,
+					false);
+			mapper11.configure(
+					org.codehaus.jackson.map.DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES,
+					false);
+
+			return mapper11.readValue(jb, JsonBean.class);
+		} catch (IOException e) {
+			logger.error("Cannot deserialize json bean", e);
 			return null;
 		}
 	}

@@ -46,6 +46,7 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.request.TLSUtils;
@@ -74,20 +75,7 @@ public class ActivityService {
 		Object otherFilter=null;
 		if (config != null) {
 			otherFilter=config.get("otherFilters");
-			if (otherFilter!=null && ((Map<String,Object>)otherFilter).get("keyword") != null) {
-				String keyword = ((Map<String,Object>)otherFilter).get("keyword").toString();
-				Collection<LoggerIdentifiable> activitySearch = SearchUtil
-						.getActivities(keyword,
-								TLSUtils.getRequest(), (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember"));
-				if (activitySearch != null && activitySearch.size() > 0) {
-					if(activitIds==null){
-						activitIds=new ArrayList<String>();
-					}
-					for (LoggerIdentifiable loggerIdentifiable : activitySearch) {
-						activitIds.add(loggerIdentifiable.getIdentifier().toString());
-					}
-				}
-			}
+			activitIds = GisUtil.applyKeywordSearch( otherFilter);
 		}
 		
 		
@@ -130,26 +118,8 @@ public class ActivityService {
 //		}
 	
  		
- 		MondrianReportFilters filterRules = null;
- 		if(config!=null){
-			Object filter=config.get("columnFilters");
-			if(filter!=null){
-				filterRules = FilterUtils.getApiColumnFilter((LinkedHashMap<String, Object>)config.get("columnFilters"));	
-			}
-			if(otherFilter!=null){
-				filterRules = FilterUtils.getApiOtherFilters((Map<String,Object>)otherFilter, filterRules);
-			}
- 		}
-		if(activitIds!=null && activitIds.size()>0){
-			//if we have activityIds to add to the filter comming from the search by keyworkd
-			if(filterRules==null){
-				filterRules = new MondrianReportFilters();
-			}
-
-			filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY), 
-					new FilterRule(activitIds, true, true)); 
-
-		}
+ 		MondrianReportFilters filterRules = GisUtil.getFilterRules(config, activitIds,
+				otherFilter);
 		if(filterRules!=null){
 			spec.setFilters(filterRules);
 		}
@@ -205,7 +175,12 @@ public class ActivityService {
 		list.set("activities", activities);
 		return list;
 	}
-	
+
+
+
+
+
+
 
 	public static JSONObject getLastUpdatedActivities(List<String> extraColumns, Integer pageSize) {
 		JSONObject responseJson = new JSONObject();

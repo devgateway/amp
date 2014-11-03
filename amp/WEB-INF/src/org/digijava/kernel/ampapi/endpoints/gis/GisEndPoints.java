@@ -30,6 +30,7 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
+import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
@@ -171,6 +172,7 @@ public class GisEndPoints {
 		map.setTitle(pMap.getString("title"));
 		map.setDescription(pMap.getString("description"));
 		map.setStateBlob(pMap.getString("stateBlob"));
+		System.out.println(pMap.getString("stateBlob"));
 		map.setCreatedDate(creationDate);
 		map.setUpdatedDate(creationDate);
 		map.setLastAccesedDate(creationDate);
@@ -194,20 +196,31 @@ public class GisEndPoints {
 	public JsonBean savedMaps(@PathParam("mapId") Long mapId) {
 		JsonBean jMap = null;
 		try {
-			Session s = PersistenceManager.getRequestDBSession();
-			AmpMapState map = (AmpMapState) s.load(AmpMapState.class, mapId);
+			AmpMapState map = getSavedMap(mapId);
 			jMap = getJsonBeanFromMapState(map, Boolean.TRUE);
-			map.setLastAccesedDate(new Date());
-			s.merge(map);
+
 
 		} catch (ObjectNotFoundException e) {
 			jMap = new JsonBean();
-		} catch (DgException e) {
+		} catch (AmpApiException e) {
 			logger.error("cannot get map by id " + mapId, e);
 			throw new WebApplicationException(e);
 		}
 		return jMap;
 
+	}
+
+	private AmpMapState getSavedMap(Long mapId) throws AmpApiException {
+		try {
+			Session s = PersistenceManager.getRequestDBSession();
+			AmpMapState map = (AmpMapState) s.load(AmpMapState.class, mapId);
+			map.setLastAccesedDate(new Date());
+			s.merge(map);
+			return map;
+		} catch (DgException ex) {
+			throw new AmpApiException(ex);
+		}
+		
 	}
 
 
@@ -403,7 +416,7 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Activity> testMapExport(){
 		final Map<String,Activity>geocodeInfo=new LinkedHashMap<String,Activity>();
-		return LocationService.getMapExportByLocation(geocodeInfo);
+		return LocationService.getMapExportByLocation(geocodeInfo,null);
 	}
 	/**
 	 * Export map id from current filters
@@ -413,21 +426,27 @@ public class GisEndPoints {
 	 * @param exportType type 1 to export activity locations
 	 *                   type 2 to export activity Structures
 	 * @return
+	 * @throws AmpApiException 
 	 */
 	@GET
 	@Path("/export-map/")
 	@Produces("application/vnd.ms-excel")
 	@ApiMethod(ui=false,name="MapExport")
-	 public StreamingOutput getExportMap(@Context HttpServletResponse webResponse,@QueryParam("mapId") Long mapId,@DefaultValue("1") @QueryParam("exportType") Long exportType)
+	 public StreamingOutput getExportMap(@Context HttpServletResponse webResponse,@QueryParam("mapId") Long mapId,@DefaultValue("1") @QueryParam("exportType") Long exportType) throws AmpApiException
     {
 		final HSSFWorkbook wb;
 		String name="";
+		JsonBean filter=null;
+		if(mapId!=null){
+			AmpMapState map = getSavedMap(mapId);
+			filter = JsonBean.getJsonBeanFromString(map.getStateBlob());
+		}
 		if(exportType==1){
 			name="map-export-project-sites.xls";
-			wb=LocationService.generateExcelExportByStructure();	
+			wb=LocationService.generateExcelExportByStructure(filter);	
 		}else{
 			name="map-export-administrative-Locations.xls";
-			wb=LocationService.generateExcelExportByLocation();
+			wb=LocationService.generateExcelExportByLocation(filter);
 		}
 		webResponse.setHeader("Content-Disposition","attachment; filename=" + name);
 

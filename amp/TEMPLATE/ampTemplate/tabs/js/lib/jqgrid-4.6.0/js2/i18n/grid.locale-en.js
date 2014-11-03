@@ -10,82 +10,82 @@
 $.jgrid = $.jgrid || {};
 $.extend($.jgrid,{
 	defaults : {
-		recordtext: "View {0} - {1} of {2}",
-		emptyrecords: "No records to view",
-		loadtext: "Loading...",
-		pgtext : "Page {0} of {1}"
+		recordtext: "<span data-i18n='tabs.common:view'>View</span> {0} - {1} <span data-i18n='tabs.common:of'>of</span> {2}",
+		emptyrecords: "<span data-i18n='tabs.common:noRecordsToView'>No records to view</span>",
+		loadtext: "<span data-i18n='tabs.common:loading'>Loading...</span>",
+		pgtext : "<span data-i18n='tabs.common:page'>Page</span> {0} <span data-i18n='tabs.common:of'>of</span> {1}"
 	},
 	search : {
-		caption: "Search...",
-		Find: "Find",
-		Reset: "Reset",
+		caption: "<span data-i18n='tabs.common:search'>Search...</span>",
+		Find: "<span data-i18n='tabs.common:find'>Find</span>",
+		Reset: "<span data-i18n='tabs.common:reset'>Reset</span>",
 		odata: [{ oper:'eq', text:'equal'},{ oper:'ne', text:'not equal'},{ oper:'lt', text:'less'},{ oper:'le', text:'less or equal'},{ oper:'gt', text:'greater'},{ oper:'ge', text:'greater or equal'},{ oper:'bw', text:'begins with'},{ oper:'bn', text:'does not begin with'},{ oper:'in', text:'is in'},{ oper:'ni', text:'is not in'},{ oper:'ew', text:'ends with'},{ oper:'en', text:'does not end with'},{ oper:'cn', text:'contains'},{ oper:'nc', text:'does not contain'},{ oper:'nu', text:'is null'},{ oper:'nn', text:'is not null'}],
 		groupOps: [{ op: "AND", text: "all" },{ op: "OR",  text: "any" }],
-		operandTitle : "Click to select search operation.",
-		resetTitle : "Reset Search Value"
+		operandTitle : "<span data-i18n='tabs.common:searchOp'>Click to select search operation.</span>",
+		resetTitle : "<span data-i18n='tabs.common:resetSearchValue'>Reset Search Value</span>"
 	},
 	edit : {
-		addCaption: "Add Record",
-		editCaption: "Edit Record",
-		bSubmit: "Submit",
-		bCancel: "Cancel",
-		bClose: "Close",
-		saveData: "Data has been changed! Save changes?",
-		bYes : "Yes",
-		bNo : "No",
-		bExit : "Cancel",
+		addCaption: "<span data-i18n='tabs.common:addRecord'>Add Record</span>",
+		editCaption: "<span data-i18n='tabs.common:editRecord'>Edit Record</span>",
+		bSubmit: "<span data-i18n='tabs.common:submit'>Submit</span>",
+		bCancel: "<span data-i18n='tabs.common:cancel'>Cancel</span>",
+		bClose: "<span data-i18n='tabs.common:close'>Close</span>",
+		saveData: "<span data-i18n='tabs.common:saveChangesQuestion'>Data has been changed! Save changes?</span>",
+		bYes : "<span data-i18n='tabs.common:yes'>Yes</span>",
+		bNo : "<span data-i18n='tabs.common:no'>No</span>",
+		bExit : "<span data-i18n='tabs.common:cancel'>Cancel</span>",
 		msg: {
-			required:"Field is required",
-			number:"Please, enter valid number",
-			minValue:"value must be greater than or equal to ",
-			maxValue:"value must be less than or equal to",
-			email: "is not a valid e-mail",
-			integer: "Please, enter valid integer value",
-			date: "Please, enter valid date value",
-			url: "is not a valid URL. Prefix required ('http://' or 'https://')",
-			nodefined : " is not defined!",
-			novalue : " return value is required!",
-			customarray : "Custom function should return array!",
-			customfcheck : "Custom function should be present in case of custom checking!"
+			required:"<span data-i18n='tabs.common:fieldRequired'>Field is required</span>",
+			number:"<span data-i18n='tabs.common:invalidNumber'>Please, enter valid number</span>",
+			minValue:"<span data-i18n='tabs.common:valGE'>value must be greater than or equal to </span>",
+			maxValue:"<span data-i18n='tabs.common:valLE'>value must be less than or equal to</span>",
+			email: "<span data-i18n='tabs.common:invalidEmail'>is not a valid e-mail</span>",
+			integer: "<span data-i18n='tabs.common:invalidInteger'>Please, enter valid integer value</span>",
+			date: "<span data-i18n='tabs.common:invalidDate'>Please, enter valid date value</span>",
+			url: "<span data-i18n='tabs.common:invalidURL'>is not a valid URL. Prefix required ('http://' or 'https://')</span>",
+			nodefined : " <span data-i18n='tabs.common:notDefined'>is not defined!</span>",
+			novalue : " <span data-i18n='tabs.common:requireReturnValue'>return value is required!</span>",
+			customarray : "<span data-i18n='tabs.common:notArray'>Custom function should return array!</span>",
+			customfcheck : "<span data-i18n='tabs.common:customCheck'>Custom function should be present in case of custom checking!</span>"
 			
 		}
 	},
 	view : {
-		caption: "View Record",
-		bClose: "Close"
+		caption: "<span data-i18n='tabs.common:viewRecord'>View Record</span>",
+		bClose: "<span data-i18n='tabs.common:close'>Close</span>"
 	},
 	del : {
-		caption: "Delete",
-		msg: "Delete selected record(s)?",
-		bSubmit: "Delete",
-		bCancel: "Cancel"
+		caption: "<span data-i18n='tabs.common:delete'>Delete</span>",
+		msg: "<span data-i18n='tabs.common:sureToDelete'>Delete selected record(s)?</span>",
+		bSubmit: "<span data-i18n='tabs.common:delete'>Delete</span>",
+		bCancel: "<span data-i18n='tabs.common:cancel'>Cancel</span>"
 	},
 	nav : {
 		edittext: "",
-		edittitle: "Edit selected row",
+		edittitle: "<span data-i18n='tabs.common:edit'>Edit selected row</span>",
 		addtext:"",
-		addtitle: "Add new row",
+		addtitle: "<span data-i18n='tabs.common:addRow'>Add new row</span>",
 		deltext: "",
-		deltitle: "Delete selected row",
+		deltitle: "<span data-i18n='tabs.common:deleteRow'>Delete selected row</span>",
 		searchtext: "",
-		searchtitle: "Find records",
+		searchtitle: "<span data-i18n='tabs.common:findRecord'>Find records</span>",
 		refreshtext: "",
-		refreshtitle: "Reload Grid",
-		alertcap: "Warning",
-		alerttext: "Please, select row",
+		refreshtitle: "<span data-i18n='tabs.common:reloadGrid'>Reload Grid</span>",
+		alertcap: "<span data-i18n='tabs.common:warning'>Warning</span>",
+		alerttext: "<span data-i18n='tabs.common:selectRow'>Please, select row</span>",
 		viewtext: "",
-		viewtitle: "View selected row"
+		viewtitle: "<span data-i18n='tabs.common:viewSelectedRow'>View selected row</span>"
 	},
 	col : {
-		caption: "Select columns",
-		bSubmit: "Ok",
-		bCancel: "Cancel"
+		caption: "<span data-i18n='tabs.common:selectColumns'>Select columns</span>",
+		bSubmit: "<span data-i18n='tabs.common:ok'>Ok</span>",
+		bCancel: "<span data-i18n='tabs.common:cancel'>Cancel</span>"
 	},
 	errors : {
-		errcap : "Error",
-		nourl : "No url is set",
-		norecords: "No records to process",
-		model : "Length of colNames <> colModel!"
+		errcap : "<span data-i18n='tabs.common:error'>Error</span>",
+		nourl : "<span data-i18n='tabs.common:noURL'>No url is set</span>",
+		norecords: "<span data-i18n='tabs.common:noRecords'>No records to process</span>",
+		model : "<span data-i18n='tabs.common:invalidColModel'>Length of colNames <> colModel!</span>"
 	},
 	formatter : {
 		integer : {thousandsSeparator: ",", defaultValue: '0'},
@@ -93,12 +93,12 @@ $.extend($.jgrid,{
 		currency : {decimalSeparator:".", thousandsSeparator: ",", decimalPlaces: 2, prefix: "", suffix:"", defaultValue: '0.00'},
 		date : {
 			dayNames:   [
-				"Sun", "Mon", "Tue", "Wed", "Thr", "Fri", "Sat",
-				"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+				"<span data-i18n='tabs.common:sun'>Sun", "<span data-i18n='tabs.common:mon'>Mon</span>", "<span data-i18n='tabs.common:tue'>Tue</span>", "<span data-i18n='tabs.common:wed'>Wed</span>", "<span data-i18n='tabs.common:thr'>Thr</span>", "<span data-i18n='tabs.common:fri'>Fri</span>", "<span data-i18n='tabs.common:sat'>Sat</span>",
+				"<span data-i18n='tabs.common:sunday'>Sunday</span>", "<span data-i18n='tabs.common:monday'>Monday</span>", "<span data-i18n='tabs.common:tuesday'>Tuesday</span>", "<span data-i18n='tabs.common:wednesday'>Wednesday</span>", "<span data-i18n='tabs.common:thursday'>Thursday</span>", "<span data-i18n='tabs.common:friday'>Friday</span>", "<span data-i18n='tabs.common:saturday'>Saturday</span>"
 			],
 			monthNames: [
 				"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
-				"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+				"<span data-i18n='tabs.common:january'>January</span>", "<span data-i18n='tabs.common:february'>February</span>", "<span data-i18n='tabs.common:march'>March</span>", "<span data-i18n='tabs.common:april'>April</span>", "<span data-i18n='tabs.common:may'>May</span>", "<span data-i18n='tabs.common:june'>June</span>", "<span data-i18n='tabs.common:july'>July</span>", "<span data-i18n='tabs.common:august'>August</span>", "<span data-i18n='tabs.common:september'>September</span>", "<span data-i18n='tabs.common:october'>October</span>", "<span data-i18n='tabs.common:november'>November</span>", "<span data-i18n='tabs.common:december'>December</span>"
 			],
 			AmPm : ["am","pm","AM","PM"],
 			S: function (j) {return j < 11 || j > 13 ? ['st', 'nd', 'rd', 'th'][Math.min((j - 1) % 10, 3)] : 'th';},

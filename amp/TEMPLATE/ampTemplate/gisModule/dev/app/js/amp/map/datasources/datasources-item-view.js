@@ -3,9 +3,11 @@ var Backbone = require('backbone');
 
 // classes for instanceof checks
 var ADMClusters = require('../../data/models/adm-cluster-model');
+var ProjectSites = require('../../data/models/structures-collection-model');
 
 // model-specific item views
-var ADMClustersView = require('./datasources-item-adm-clusters');
+var ADMClustersDSView = require('./datasources-item-adm-clusters');
+var ProjectSitesDSView = require('./datasources-item-structures');
 
 
 var Unknown = Backbone.View.extend({
@@ -23,7 +25,9 @@ var Unknown = Backbone.View.extend({
 
 module.exports = function(options) {
   if (options.model instanceof ADMClusters) {
-    return new ADMClustersView(options);
+    return new ADMClustersDSView(options);
+  } if (options.model instanceof ProjectSites) {
+    return new ProjectSitesDSView(options);
   } else {
     console.error('datasources for layer type not implemented: ', options.model);
     return new Unknown(options);

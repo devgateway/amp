@@ -1,8 +1,7 @@
-<h3><%= title %></h3>
-
+<h5><%= startIndex %> of <%= totalCount %> different activities are shown (page <%= currentPage %>)</h5>
 <div>
   <div class="">
-    <table class="table-4">
+    <table class="table table-4 table-striped table-condensed">
       <colgroup>
         <col span="1">
         <col span="1">
@@ -12,75 +11,28 @@
       <thead>
         <tr>
           <th>Project Title</th>
-          <th>Donor Org(s)</th>
+          <th>Donor(s)</th>
           <th>Sector(s)</th>
-          <th>Total Commitments</th>
-          <th>Total Disbursements</th>
+          <th>Commitments</th>
+          <th>Disbursements</th>
         </tr>
       </thead>
       <tbody>
+        <%   _.each(activities, function(activity){  %>
         <tr>
-          <td data-th="title">L'eau, levier du développement</td>
-          <td data-th="donors">All </td>
-          <td data-th="sectors">Gives </td>
-          <td data-th="commitments">Gives </td>
-          <td data-th="disbursements">Gives </td>
+          <td data-th="title"><a href="<%= activity.ampUrl%>"><%= activity["Project Title"] %></a>
+          </td>
+          <td data-th="donors"><%= activity.matchesFilters["Donor Id"] %></td>
+          <td data-th="sectors"><%= activity.matchesFilters["Sector Id"] %></td>
+          <td data-th="commitments"><%= activity["Actual Commitments"] %></td>
+          <td data-th="disbursements"><%= activity["Actual Disbursements"] %></td>
         </tr>
-        <tr>
-          <td data-th="title">Cellule appui coordination programme eau</td>
-          <td data-th="donors">All</td>
-          <td data-th="sectors">Gives the</td>
-          <td data-th="commitments">Gives the</td>
-          <td data-th="disbursements">Gives the</td>
-        </tr>
-        <tr>
-          <td data-th="title">L'eau, levier du développement</td>
-          <td data-th="donors">All </td>
-          <td data-th="sectors">Gives </td>
-          <td data-th="commitments">Gives </td>
-          <td data-th="disbursements">Gives </td>
-        </tr>
-        <tr>
-          <td data-th="title">Cellule appui coordination programme eau</td>
-          <td data-th="donors">All</td>
-          <td data-th="sectors">Gives the</td>
-          <td data-th="commitments">Gives the</td>
-          <td data-th="disbursements">Gives the</td>
-        </tr>
-        <tr>
-          <td data-th="title">L'eau, levier du développement</td>
-          <td data-th="donors">All </td>
-          <td data-th="sectors">Gives </td>
-          <td data-th="commitments">Gives </td>
-          <td data-th="disbursements">Gives </td>
-        </tr>
-        <tr>
-          <td data-th="title">Cellule appui coordination programme eau</td>
-          <td data-th="donors">All</td>
-          <td data-th="sectors">Gives the</td>
-          <td data-th="commitments">Gives the</td>
-          <td data-th="disbursements">Gives the</td>
-        </tr>
-        <tr>
-          <td data-th="title">L'eau, levier du développement</td>
-          <td data-th="donors">All </td>
-          <td data-th="sectors">Gives </td>
-          <td data-th="commitments">Gives </td>
-          <td data-th="disbursements">Gives </td>
-        </tr>
-        <tr>
-          <td data-th="title">Cellule appui coordination programme eau</td>
-          <td data-th="donors">All</td>
-          <td data-th="sectors">Gives the</td>
-          <td data-th="commitments">Gives the</td>
-          <td data-th="disbursements">Gives the</td>
-        </tr>
+        <% }); %>
       </tbody>
     </table>
-    <div class="btn btn-sm btn-info load-more pull-right">load more...</div>    
+    <div class="btn btn-sm btn-info load-more pull-right">load more...</div>
     <!--<div class="map-circle"><features[0].properties.activityid.length ></div>-->
     <!--<div class="map-cirlcle-label"><features[0].properties.admName ></div>-->
   </div>
   <!-- TODO: use the human-friendly version, not ADM-N (from value) -->
-  <!--Number of activities at this <%= value %>-->
 </div>

@@ -8,16 +8,27 @@ var Template = fs.readFileSync(__dirname + '/datasources-item-adm-clusters.html'
 module.exports = Backbone.View.extend({
   PAGE_SIZE: 15,
   _currentPage:0,
+  filteredIds: [],
+  pagedIds: [],
 
   template: _.template(Template),
   initialize: function(options) {
     this.app = options.app;
+    _.bindAll(this, 'render', '_loadMoreProjects', '_generateProjectList');
   },
 
   render: function() {
     var self = this;
     this.model.load().then(function() {
-      self.$el.html(self.template(self.model.toJSON()));
+      self.filteredIds = _.chain(self.model.get('features'))
+        .pluck('properties')
+        .pluck('activityid')
+        .flatten()
+        .unique()
+        .value();
+
+      self._generateProjectList();
+
     });
     //this.app.data.activities;
     return this;
@@ -26,13 +37,15 @@ module.exports = Backbone.View.extend({
   _generateProjectList: function() {
     var self = this;
     this._currentPage = 0;
+    var drawnDeferred = this._loadMoreProjects()
+      .then(function() {
+        self.$el.find('.load-more').click(function() {
+          self._currentPage++;
+          self._loadMoreProjects();
+        });
+      });
 
-    this.$el.find('.load-more').click(function() {
-      self._currentPage++;
-      self._loadMoreProjects();
-    });
-
-    return this._loadMoreProjects();
+    return drawnDeferred;
   },
 
 
@@ -40,20 +53,32 @@ module.exports = Backbone.View.extend({
   _loadMoreProjects: function() {
     var self = this;
     var startIndex = this._currentPage * this.PAGE_SIZE;
-    var activityIDs = this.cluster.properties.activityid.slice(startIndex, startIndex + this.PAGE_SIZE);
+    var activityIDs = this.filteredIds.slice(startIndex, startIndex + this.PAGE_SIZE);
 
-    // hide load more button if all activities loaded.
-    if (startIndex + this.PAGE_SIZE >= this.cluster.properties.activityid.length) {
-      this.tempDOM.find('.load-more').hide();
-    } else {
-      this.tempDOM.find('.load-more').text('load more ' + (startIndex + this.PAGE_SIZE) + '/' +
-                                           this.cluster.properties.activityid.length);
-    }
 
-    return this.app.data.activities.getActivites(activityIDs).then(function(activityCollection) {
-      self.tempDOM.find('.project-list').append(
-        self.projectListTemplate({activities: activityCollection})
-        );
+    return this.app.data.activities.getActivities(activityIDs).then(function(activityCollection) {
+      self.pagedIds = self.pagedIds.concat(activityCollection);
+      self.$el.html(self.template({
+          activities: self.pagedIds,
+          title: 'Project Data',
+          totalCount: self.filteredIds.length,
+          currentPage: self._currentPage,
+          startIndex: startIndex
+        }));
+
+      self.$el.find('.load-more').click(function() {
+          self._currentPage++;
+          self._loadMoreProjects();
+        });
+
+       // hide load more button if all activities loaded.
+      if (startIndex + self.PAGE_SIZE >= self.filteredIds.length) {
+        self.$el.find('.load-more').hide();
+      } else {
+        self.$el.find('.load-more').text('load more ' + (startIndex + self.PAGE_SIZE) + '/' +
+                                             self.filteredIds.length);
+      }
+
     });
   }
 

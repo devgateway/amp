@@ -153,6 +153,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 				selectedTabIndex = ui.newTab.index();
 			}
 			retrieveTabContent(selectedTabIndex);
+			TranslationManager.searchAndTranslate();
 		}
 	};
 

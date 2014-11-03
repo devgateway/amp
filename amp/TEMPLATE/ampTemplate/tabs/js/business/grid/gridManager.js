@@ -1,4 +1,5 @@
-define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
+define([ 'business/grid/columnsMapping', 'business/translations/translationManager', 'jqgrid' ], function(columnsMapping,
+		TranslationManager) {
 
 	"use strict";
 
@@ -108,13 +109,13 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 						shrinkToFit : true,
 						forceFit : false,
 						viewrecords : true,
-						loadtext : 'Loading...',
+						loadtext : "<span data-i18n='tabs.common:loading'>Loading...</span>",
 						headertitles : true,
 						gridview : true,
 						rownumbers : false,
 						rowNum : rowNum,
 						pager : "#" + gridPagerBaseName + id,
-						emptyrecords : 'No records to view',
+						emptyrecords : "<span data-i18n='tabs.common:noRecordsToView'>No records to view</span>",
 						grouping : grouping,
 						groupingView : columnsMapping.createJQGridGroupingModel(tableStructure, grouping),
 						gridComplete : function() {
@@ -145,6 +146,7 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 													+ "' target='_blank'><img src='/TEMPLATE/ampTemplate/img_2/ico_edit.gif'/></a>");
 								}
 							}
+							TranslationManager.searchAndTranslate();
 						}
 					});
 		});

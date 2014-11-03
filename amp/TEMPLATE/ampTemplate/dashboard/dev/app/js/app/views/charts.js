@@ -12,6 +12,7 @@ module.exports = BackboneDash.View.extend({
     this.chartViews = _(this.collection.map(function(chart) {
       return (new ChartView({ model: chart, app: this.app }));
     }, this));
+    this.listenTo(this.app.filter, 'apply', this.render);
     this.listenTo(this.collection, 'change:embiggen', this.injectBreaks);
   },
 

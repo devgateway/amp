@@ -1,3 +1,4 @@
+var param = require('jquery').param;
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
@@ -41,7 +42,7 @@ module.exports = BackboneDash.Model.extend({
   fetch: function(options) {
     options = _.defaults(
       options || {},
-      { data: this.pick('adjtype', 'limit') });
+      { url: this.url + '?' + param(this.pick('adjtype', 'limit')) });
     return BackboneDash.Model.prototype.fetch.call(this, options);
   }
 

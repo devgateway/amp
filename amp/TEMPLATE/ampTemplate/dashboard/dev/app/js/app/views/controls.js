@@ -1,4 +1,3 @@
-var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 var Filters = require('./filters');
 var Share = require('./share');

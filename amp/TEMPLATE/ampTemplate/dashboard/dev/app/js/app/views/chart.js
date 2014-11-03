@@ -72,8 +72,9 @@ module.exports = BackboneDash.View.extend({
     var message = this.$('.dash-chart-diagnostic');
     message.html('Loading...').fadeIn(100);
     var fetchOptions = {
-      type: 'POST'
-    }
+      type: 'POST',
+      data: JSON.stringify(this.app.filter.serialize())
+    };
     this.model.fetch(fetchOptions)
       .done(_(function() {
         this.chart.draw(this.$('.dash-chart')[0], this.model);
@@ -81,7 +82,9 @@ module.exports = BackboneDash.View.extend({
         message.stop().fadeOut(200);
       }).bind(this))
       .fail(_(function() {
-        message.html('Failed to load data <small>'+arguments[2]+' <button type="button" class="retry btn btn-warning btn-sm"><span class="glyphicon glyphicon-refresh"></span> Retry</button></small>').show();
+        message.html('Failed to load data <small>' + arguments[2] +
+          ' <button type="button" class="retry btn btn-warning btn-sm">' +
+          '<span class="glyphicon glyphicon-refresh"></span> Retry</button></small>').show();
         console.error('failed loading chart :(', arguments);
         this.$('svg').hide();
       }).bind(this));

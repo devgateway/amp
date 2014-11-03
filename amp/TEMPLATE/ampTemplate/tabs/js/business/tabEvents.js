@@ -42,12 +42,12 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			// --------------------------------------------------------------------------------------//
 			// TODO: Move filters section elsewhere.
 			// Create collection of Filters.
-			app.TabsApp.filters = FilterUtils.extractFilters(firstContent);
+			app.TabsApp.filters = FilterUtils.extractFilters(firstContent.get('reportMetadata').get('reportSpec').get('filters'));
 
 			// Define the views.
 			var FilterItemView = Marionette.ItemView.extend({
 				tagName : 'div',
-				/*className : 'round-filter',*/
+				/* className : 'round-filter', */
 				template : jQuery(filtersItemTemplate, '#template-filters').html(),
 				events : {
 					'click' : "testclick"

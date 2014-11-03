@@ -1,7 +1,7 @@
 define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!views/html/settingsDialogTemplate.html', 'models/settings',
-		'business/settings/settingsManager', 'filtersWidget', 'business/filter/filterManager', 'business/translations/translationManager',
+		'business/settings/settingsManager', 'filtersWidget', 'business/filter/filterUtils', 'business/translations/translationManager',
 		'jquery', 'jqueryui' ], function(Marionette, dynamicContentTemplate, settingsDialogTemplate, Settings, SettingsManager,
-		FiltersWidget, FilterManager, TranslationManager, jQuery) {
+		FiltersWidget, FilterUtils, TranslationManager, jQuery) {
 
 	var reportId;
 	var reportFilters;
@@ -40,7 +40,7 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 					// if (!app.TabsApp.currentTabOpenedFilters) {
 					console.log('filter widget loaded');
 					// Convert report filters to filterwidget filters.
-					var blob = FilterManager.convertJavaFiltersToJS(reportFilters);
+					var blob = FilterUtils.convertJavaFiltersToJS(reportFilters);
 					app.TabsApp.filtersWidget.deserialize(blob, {
 						silent : true
 					});

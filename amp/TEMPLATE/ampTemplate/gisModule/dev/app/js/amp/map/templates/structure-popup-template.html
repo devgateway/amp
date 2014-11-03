@@ -7,7 +7,6 @@
       <thead>
         <tr>
           <th>Title</th>
-          <th>Activity Ref</th>
           <th>Desc</th>
         </tr>
       </thead>
@@ -16,8 +15,14 @@
         <tr>
           <% if (structure.title) { %>
             <td>
+              <%
+                var activityIdLinkPortion= '';
+                if (structure.activityZero) {
+                var activityIdLinkPortion= ['/aim/viewActivityPreview.do~public=true~pageId=2~activityId=',structure.activityZero].join("");
+                }
+              %>
             <% if (structure.id) { %>
-            <a href="<%= ['#struc=',structure.id].join("") %>">
+            <a href="<%= [activityIdLinkPortion,'~struc=',structure.id].join("") %>">
             <% } %>
 
             <%= structure.title %>
@@ -26,10 +31,6 @@
               </a>
             <% } %>
           </td>
-          <% } %>
-
-          <% if (structure.activityZero) { %>
-          <td><%= structure.activityZero %></td>
           <% } %>
 
           <% if (structure.description) { %>

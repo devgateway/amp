@@ -705,6 +705,13 @@ function openAdmin () {
 									<digi:trn key="fm:gis">NEW GIS (BETA)</digi:trn>
 								</a>
 							</li>
+
+							<!-- New Dashboard Module-->
+							<li class="yuiampmenuitem_drop">
+								<a target="_blank" class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/dashboard/build/index.html" onclick="return canExit()"> 
+									<digi:trn key="fm:gis">NEW DASHBOARD (BETA)</digi:trn>
+								</a>
+							</li>
 							
 							<module:display name="Dashboard Generator" parentModule="Visualization Dashboards">
 								<li class="yuiampmenuitem_drop">

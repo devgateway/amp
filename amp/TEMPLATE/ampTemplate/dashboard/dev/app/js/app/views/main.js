@@ -2,10 +2,10 @@ var fs = require('fs');
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
-var Filters = require('../views/filters');
-var ChartsView = require('../views/charts');
+var Controls = require('./controls');
+var ChartsView = require('./charts');
 var Charts = require('../models/charts-collection');
-var Footer = require('../views/footer');
+var Footer = require('./footer');
 
 var TopsChart = require('../models/tops-chart');
 var PredictabilityChart = require('../models/predictability-chart');
@@ -22,7 +22,7 @@ module.exports = BackboneDash.View.extend({
   initialize: function(options) {
     this.app = options.app;
 
-    this.filters = new Filters({ app: this.app });
+    this.controls = new Controls({ app: this.app });
 
     this.charts = new ChartsView({
       app: this.app,
@@ -51,7 +51,7 @@ module.exports = BackboneDash.View.extend({
   render: function() {
     this.$el.html(template());
     this.$('.container').html([
-      this.filters.render().el,
+      this.controls.render().el,
       this.charts.render().el,
       this.footer.render().el
     ]);

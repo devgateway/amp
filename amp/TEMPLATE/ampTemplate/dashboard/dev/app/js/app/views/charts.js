@@ -16,11 +16,18 @@ module.exports = BackboneDash.View.extend({
   },
 
   render: function() {
-    this.$el.html(this.chartViews.map(_(function(view) {
-      return view.render().el;
-    }).bind(this)));
-
-    this.injectBreaks();
+    // TODO: get serialized state from the sharing stuff (don't wait for
+    // filters to finish loading)
+    if (this.app.filter.loaded.state() === 'pending') {
+      this.$el.html('<h3 class="text-center">Loading...</h3>');
+    }
+    this.app.filter.loaded
+      .always(_(function() {
+        this.$el.html(this.chartViews.map(_(function(view) {
+          return view.render().el;
+        }).bind(this)));
+        this.injectBreaks();
+      }).bind(this));
     return this;
   },
 

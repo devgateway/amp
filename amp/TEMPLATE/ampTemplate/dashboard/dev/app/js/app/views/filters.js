@@ -3,11 +3,11 @@ var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 var template = _.template(fs.readFileSync(
   __dirname + '/../templates/filters.html', 'UTF-8'));
+var summary_template = _.template(fs.readFileSync(
+  __dirname + '/../templates/filter-summary.html', 'UTF-8'));
 
 
 module.exports = BackboneDash.View.extend({
-
-  className: 'row',
 
   events: {
     'click .show-filters': 'showFilter'
@@ -31,7 +31,25 @@ module.exports = BackboneDash.View.extend({
     this.$el.html(template());
     this.app.filter.setElement(this.el.querySelector('#filter-popup'));
     this.hideFilter();
+    this.app.filter.loaded
+      .done(_(this.renderApplied).bind(this))
+      .fail(_(function(a1, a2, message) {
+        this.$('.applied-filters').html('<strong class="text-danger filters-err">Failed to load filters</strong> <a href="" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-refresh"></span> Refresh page</a>');
+        this.$('button').addClass('disabled');
+      }).bind(this));
     return this;
+  },
+
+  renderApplied: function() {
+    var filters = this.app.filter.serializeToModels();
+    var applied = _(filters.columnFilters).keys();
+    if (filters.otherFilters) {
+      // Currently assumes that any otherFilters just implies Date Range
+      // ... there is no obvious way to get nice strings out.
+      applied.push('Date range');
+    }
+    applied = applied.join(', ');
+    this.$('.applied-filters').html(summary_template({ applied: applied }));
   },
 
   showFilter: function() {
@@ -46,6 +64,7 @@ module.exports = BackboneDash.View.extend({
   applyFilter: function() {
     // todo: actually do an effect for changed filters...
     this.hideFilter();
+    this.renderApplied();
   }
 
 });

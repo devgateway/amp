@@ -27,7 +27,8 @@ module.exports = BackboneDash.View.extend({
   events: {
     'change .dash-adj-type input': 'changeAdjType',
     'click .chart-view': 'changeChartView',
-    'click .expand': 'embiggen'
+    'click .expand': 'embiggen',
+    'click .retry': 'render'
   },
 
   initialize: function(options) {
@@ -68,21 +69,20 @@ module.exports = BackboneDash.View.extend({
   },
 
   updateData: function() {
-    var loading = this.$('.dash-loading');
-    loading.fadeIn(100);
-    this.model.fetch()
-      .always(function() {
-        loading.stop().fadeOut(200);
-      })
+    var message = this.$('.dash-chart-diagnostic');
+    message.html('Loading...').fadeIn(100);
+    var fetchOptions = {
+      type: 'POST'
+    }
+    this.model.fetch(fetchOptions)
       .done(_(function() {
         this.chart.draw(this.$('.dash-chart')[0], this.model);
         this.renderNumbers();
+        message.stop().fadeOut(200);
       }).bind(this))
       .fail(_(function() {
+        message.html('Failed to load data <small>'+arguments[2]+' <button type="button" class="retry btn btn-warning btn-sm"><span class="glyphicon glyphicon-refresh"></span> Retry</button></small>').show();
         console.error('failed loading chart :(', arguments);
-        this.app.report('Loading chart failed',
-          ['There was an issue with your connection to the database, ' +
-          'or the database may have crashed.']);
         this.$('svg').hide();
       }).bind(this));
   },

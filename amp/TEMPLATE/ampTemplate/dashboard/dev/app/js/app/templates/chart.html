@@ -11,7 +11,7 @@
 
     <div class="panel-body">
       <div class="chart-container">
-        <h3 class="dash-loading text-center">Loading...</h3>
+        <h3 class="dash-chart-diagnostic text-center"></h3>
         <svg class="dash-chart"></svg>
       </div>
     </div>
@@ -47,9 +47,6 @@
           </button>
           <button type="button" class="btn btn-sm btn-<%= model.get('embiggen') ? 'primary' : 'default' %> expand hidden-xs hidden-sm">
             <span class="glyphicon glyphicon-fullscreen"></span>
-          </button>
-          <button type="button" class="btn btn-sm btn-default">
-            <span class="glyphicon glyphicon-cog"></span>
           </button>
         </div>
 

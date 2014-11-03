@@ -35,7 +35,7 @@ import org.olap4j.metadata.Datatype;
 public class MondrianUtils {
 	protected static final Logger logger = Logger.getLogger(MondrianUtils.class);
 	
-	public static String PRINT_PATH = "/home/nadia/Documents/AMP/work/Mondrian/reports";
+	public static String PRINT_PATH = null;
 	
 	/**
 	 * Gets full OlapException error details

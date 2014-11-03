@@ -23,7 +23,7 @@ module.exports = Backbone.View.extend({
     this.$el.html(this.template());
 
     var content = this.app.data.getAllVisibleLayers().map(function(layer) {
-      return (new DatasourcesItem({ model: layer })).render().el;
+      return (new DatasourcesItem({ model: layer, app: this.app })).render().el;
     }).value();
 
     if (!_.isEmpty(content)) {

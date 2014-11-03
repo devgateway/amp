@@ -137,7 +137,7 @@ module.exports = Backbone.View.extend({
       layer.bindPopup(feature.properties.admName +
         ' has ' +  activities.length +
         ' projects. <br><img src="img/loading-icon.gif" />',
-        {maxWidth: 500}
+        {maxWidth: 500, offset: new L.Point(0, -16)}
         );
     }
   }

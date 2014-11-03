@@ -63,7 +63,11 @@ module.exports = Backbone.View.extend({
     return new L.geoJson(layer.get('geoJSON'), {
       style: function(feature) {
         featureValue = feature.properties.value;
+
+        // sets colour for each polygon
+        //console.log('layer.palette.colours', layer.palette.colours);
         colour = layer.palette.colours.find(function(colour) {
+          //console.log('colour', colour);
           return colour.get('test').call(colour, featureValue);
         });
         if (!colour) {
@@ -75,7 +79,28 @@ module.exports = Backbone.View.extend({
           opacity: 0.9,
           fillOpacity: 0.6
         };
-      }
+      },
+      onEachFeature: this.tmpFundingOnEachFeature
+    });
+  },
+
+  // used to hilight the geojson layer on click, show popup, and unhilight after.
+  tmpFundingOnEachFeature: function(feature, layer) {
+    // Add popup
+    if (feature) {
+      layer.bindPopup('DRS test feature popup');
+    }
+
+    // hilight and unhilight the area when a user clicks on them..
+    layer.on('popupopen', function() {
+      layer.setStyle({
+        fillColor: 'blue'
+      });
+    });
+    layer.on('popupclose', function() {
+      layer.setStyle({
+        fillColor: 'transparent'
+      });
     });
   },
 

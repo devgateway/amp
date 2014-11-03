@@ -16,11 +16,10 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     var self = this;
-    debugger;
     this.model.load().then(function() {
       self.$el.html(self.template(self.model.toJSON()));
     });
-    this.app.data.activities;
+    //this.app.data.activities;
     return this;
   },
 

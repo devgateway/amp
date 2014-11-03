@@ -22,17 +22,17 @@ module.exports = Backbone.Model.extend({
    * ],
    *
    */
-  initialize: function(options) {
-    _.bindAll(this, "joinModelHelper");
+  initialize: function() {
+    _.bindAll(this, 'joinModelHelper');
   },
 
   /* Adds references to collectionB into collectionA joining on given foreign key
-  * TODO: option to add bi-directional reference.
+   * TODO: troubleshoot for model -> collection joining
   */
   joinModelHelper: function(modelA, collectionB, keyForForeignID, keyForCollectionDestination) {
     var idsToJoin = modelA.get(keyForForeignID);
 
-    var tempCollection = collectionB.filter(function(modelB){
+    var tempCollection = collectionB.filter(function(modelB) {
       return _.indexOf(idsToJoin, modelB.get('id')) >= 0;
     });
     modelA.set(keyForCollectionDestination, tempCollection);

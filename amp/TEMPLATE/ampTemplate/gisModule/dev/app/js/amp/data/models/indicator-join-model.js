@@ -39,7 +39,6 @@ module.exports = Backbone.Model
                                  .first()
                                  .value();
         var boundaries = TopojsonLibrary.feature(topoboundaries, topoboundaries.objects[topoJsonObjectsIndex]);
-        
         self.updatePaletteRange();
 
         self._joinDataWithBoundaries(boundaries);

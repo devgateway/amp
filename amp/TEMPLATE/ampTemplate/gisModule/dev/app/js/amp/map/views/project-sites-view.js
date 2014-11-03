@@ -47,15 +47,15 @@ module.exports = Backbone.View.extend({
   /* Adds references to collectionB into collectionA joining on given foreign key
    * TODO: option to add bi-directional reference.
    */
-   joinHelper: function(collectionA, collectionB, keyForForeignID, keyForCollectionDestination){
-      collectionA.each(function(modelA){
-       var idsToJoin = modelA.get(keyForForeignID);
-       var tempCollection = collectionB.filter(function(modelB){
-         return _.indexOf(idsToJoin, modelB.get('id')) >= 0;
-       });
+  joinHelper: function(collectionA, collectionB, keyForForeignID, keyForCollectionDestination) {
+    collectionA.each(function(modelA) {
+      var idsToJoin = modelA.get(keyForForeignID);
+      var tempCollection = collectionB.filter(function(modelB) {
+      return _.indexOf(idsToJoin, modelB.get('id')) >= 0;
+    });
       modelA.set(keyForCollectionDestination, tempCollection);
-    });
-   },
+    });
+  },
 
   // ==================
   // Point / Feature Code
@@ -100,7 +100,7 @@ module.exports = Backbone.View.extend({
           self.currentRadius = self.SMALL_ICON_RADIUS;
         } else {
           self.currentRadius = self.BIG_ICON_RADIUS;
-           }
+        }
 
         var point = new L.CircleMarker(latlng, {
           radius: self.currentRadius,
@@ -268,7 +268,7 @@ module.exports = Backbone.View.extend({
     var self = this;
 
     /* TODO(thadk) switch individual feature to this standard parsed model input*/
-    var parsedProjectSitesList = this.app.data.projectAlt.model.prototype.parse(feature);
+    /*var parsedProjectSitesList = this.app.data.projectAlt.model.prototype.parse(feature);*/
 
 
 

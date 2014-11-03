@@ -5,8 +5,10 @@ package org.digijava.kernel.ampapi.mondrian.util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -97,19 +99,9 @@ public class MondrianMapping {
 	/**
 	 * Mappings between actual hierarchies and their duplicates to be used on Filter axis
 	 */
-	/* candidate for removal
-	private static final Map<String, String> duplicateHierarchy = new HashMap<String, String>() {{
-		put(null, "Duplicate");
-		put(MoConstants.H_DATES, MoConstants.H_DATES_DUPLICATE);
-		put(MoConstants.H_YEAR, MoConstants.H_DATES_DUPLICATE);
-		put(MoConstants.H_QUARTER, MoConstants.H_DATES_DUPLICATE);
-		put(MoConstants.H_MONTH, MoConstants.H_DATES_DUPLICATE);
-		put(MoConstants.H_ORG_TYPE_NAME, MoConstants.H_ORG_DUPLICATE);
-		put(MoConstants.H_ORG_GROUP_NAME, MoConstants.H_ORG_DUPLICATE);
-		put(MoConstants.H_ORG_NAME, MoConstants.H_ORG_DUPLICATE);
-		put(MoConstants.H_LOCATIONS, MoConstants.H_LOCATIONS_DUPLICATE);
-	}};
-	*/
+	
+	public static final Set<String> definedColumns = new HashSet<String>();
+	public static final Set<String> definedMeasures = new HashSet<String>();
 	
 	/**
 	 * Mappings between AMP Data and Mondrian Schema 
@@ -117,6 +109,7 @@ public class MondrianMapping {
 	public static final Map<NamedTypedEntity,MDXElement> entityMap = new HashMap<NamedTypedEntity, MDXElement>() {
 		
 		void addColumnDefinition(String columnName, MDXLevel mdxLevel) {
+			definedColumns.add(columnName);
 			addColumnDefinition(columnName, ReportEntityType.ENTITY_TYPE_ALL, mdxLevel);
 		}
 		
@@ -128,6 +121,7 @@ public class MondrianMapping {
 		}
 		
 		void addMeasureDefinition(String measureName) {
+			definedMeasures.add(measureName);
 			addMeasureDefinition(measureName, measureName);
 		}
 		

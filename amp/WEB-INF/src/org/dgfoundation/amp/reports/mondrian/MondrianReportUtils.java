@@ -12,6 +12,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -23,9 +24,12 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.reports.ColumnsVisibility;
 import org.dgfoundation.amp.reports.DateColumns;
+import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.SaikuReportSorter;
 import org.digijava.kernel.request.TLSUtils;
@@ -192,5 +196,19 @@ public class MondrianReportUtils {
 			equals = sorting1.equals(sorting2);
 		}
 		return equals;
+	}
+	
+	public static Set<String> getConfigurableColumns() {
+		Set<String> configurableColumns = new HashSet<String>(ColumnsVisibility.getVisibleColumns());
+		configurableColumns.retainAll(MondrianMapping.definedColumns);
+		return configurableColumns;
+	}
+	
+	public static Set<String> getConfigurableMeasures() {
+		Set<String> configurableMeasures = new HashSet<String>(
+				// TODO: replace with call to MeasuresVisibility
+				ConstantsUtil.getConstantsSet(MeasureConstants.class));
+		configurableMeasures.retainAll(MondrianMapping.definedMeasures);
+		return configurableMeasures;
 	}
 }

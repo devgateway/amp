@@ -41,6 +41,9 @@ public class ReportSpecificationImpl implements ReportSpecification {
 
 	@Override
 	public Set<ReportColumn> getColumns() {
+		if (columns == null) {
+			columns = new LinkedHashSet<ReportColumn>();
+		}	
 		return columns;
 	}
 	
@@ -67,6 +70,9 @@ public class ReportSpecificationImpl implements ReportSpecification {
 
 	@Override
 	public List<ReportMeasure> getMeasures() {
+		if (measures == null) {
+			measures = new ArrayList<ReportMeasure>();
+		}
 		return measures;
 	}
 	

@@ -1,13 +1,14 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -56,6 +57,7 @@ public class ReportsUtil {
 	 * @param formParams  form parameters, that must be in the following format: 	<br/>
 	 * { 																			<br/>
 	 * 	"page"            : 1, 														<br/>
+	 *  "recordsPerPage"  : 10,														<br/>
 	 *  "regenerate"      : true, 													<br/>
 	 *  "filters"         : //see filters format defined in Gis, 					<br/>
 	 *  "sorting"         : [ 														<br/>
@@ -74,9 +76,12 @@ public class ReportsUtil {
 	 *  "add_measures"    : ["Custom Measure"] 										<br/>
 	 * } 																			<br/>
 	 * where:
-	 * <ul> 
+	 * <ul>
+	 * 	 <li>name</li>        mandatory to be provided for custom reports, otherwise is skipped <br>  
 	 *   <li>page</li>        optional, page number, starting from 1. Use 0 to retrieve only <br>
 	 *                        pagination information, without any records. Default to 0 <br>
+	 *   <li>recordsPerPage</li> optional, the number of records per page to return. Default
+	 *   					  will be set to the number configured in AMP.
 	 *   <li>sorting</li>     optional, a list of sorting maps. Each map has 'columns' list 
 	 *                        and 'asc' flag, that is true for sorting ascending. Hierarchical 
 	 *                        sorting will define a column list as a tuple to sort by.
@@ -95,7 +100,8 @@ public class ReportsUtil {
 		JsonBean result = new JsonBean();
 		
 		int page = (Integer) EndpointUtils.getSingleValue(formParams, "page", 0);
-		int recordsPerPage = ReportPaginationUtils.getRecordsNumberPerPage();
+		int recordsPerPage = EndpointUtils.getSingleValue(formParams, "recordsPerPage", 
+				ReportPaginationUtils.getRecordsNumberPerPage());
 		int start = (page - 1) * recordsPerPage;
 		
 		CachedReportData cachedReportData = getCachedReportData(reportId, formParams);
@@ -118,9 +124,19 @@ public class ReportsUtil {
 		boolean resort = formParams.get(EPConstants.SORTING) != null; 
 		CachedReportData cachedReportData = null;
 		
+		// check if we need to force the regeneration, due to session timeout
+		if (!regenerate && ReportCacher.getReportData(reportId) == null)
+			regenerate = true;
+		
 		// generate the report
 		if (regenerate) {
-			ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
+			ReportSpecificationImpl spec = null;
+			if (Boolean.TRUE.equals(formParams.get(EPConstants.IS_CUSTOM))) { 
+				String reportName = formParams.getString(EPConstants.REPORT_NAME);
+				spec = new ReportSpecificationImpl(reportName);
+			} else {
+				spec = ReportsUtil.getReport(reportId);
+			}
 			// add additional requests
 			update(spec, formParams);
 			// regenerate
@@ -329,6 +345,51 @@ public class ReportsUtil {
 			SortingInfo.addYearToSorting(sortByTuple, roc.columnName);
 		}
 		// null to clear the reference
+		return null;
+	}
+	
+	/**
+	 * Validates the report config data provide via formParams
+	 * 
+	 * @param formParams input parameters used 
+	 * @return a list of errors
+	 */
+	public static final List<String> validateReportConfig(JsonBean formParams,
+			boolean isCustom) {
+		List<String> errors = new ArrayList<String>();
+		// validate the name
+		if (isCustom && StringUtils.isBlank(formParams.getString(EPConstants.REPORT_NAME)))
+			errors.add("report name not specified");
+		
+		// validate the columns
+		String err = validateList("columns", (List<String>) formParams.get(EPConstants.ADD_COLUMNS),
+				MondrianReportUtils.getConfigurableColumns(), isCustom);
+		if (err != null) errors.add(err);
+		
+		// validate the measures
+		err = validateList("measures", (List<String>) formParams.get(EPConstants.ADD_MEASURES),
+				MondrianReportUtils.getConfigurableMeasures(), isCustom);
+		if (err != null) errors.add(err);
+		
+		// validate the hierarchies
+		err = validateList("hierarchies", (List<String>) formParams.get(EPConstants.ADD_HIERARCHIES),
+				(List<String>) formParams.get(EPConstants.ADD_COLUMNS), false);
+		if (err != null) errors.add(err);
+		
+		return errors;
+	}
+	
+	private static String validateList(String listName, List<String> values, 
+			Collection<String> allowedValues, boolean isCustom) {
+		if (values == null || values.size() == 0) {
+			if (isCustom)
+				return "no " + listName + " are specified";
+		} else {
+			List<String> copy = new ArrayList<String>(values);
+			copy.removeAll(allowedValues);
+			if (copy.size() > 0)
+				return "not allowed / invalid " + listName + " provided = " + copy.toString();
+		}
 		return null;
 	}
 }

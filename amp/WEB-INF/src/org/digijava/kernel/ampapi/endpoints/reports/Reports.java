@@ -3,10 +3,9 @@ package org.digijava.kernel.ampapi.endpoints.reports;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +16,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
@@ -28,6 +26,7 @@ import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -36,6 +35,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.action.ReportsFilterPicker;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
@@ -59,7 +59,7 @@ import org.saiku.web.rest.util.RestUtil;
 
 @Path("data")
 public class Reports {
-
+	
 	private static final String DEFAULT_CATALOG_NAME = "AMP";
 	private static final String DEFAULT_CUBE_NAME = "Donor Funding";
 	private static final String DEFAULT_UNIQUE_NAME = "[amp].[AMP].[AMP].[Donor Funding]";
@@ -112,6 +112,29 @@ public class Reports {
 		// Donor Type reports (hide icons for non-donor-type reports?)
 		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
 		return EndpointUtils.runReport(spec);
+	}
+	
+	@POST
+	@Path("/report/custom/paginate")
+	@Produces(MediaType.APPLICATION_JSON)
+	/**
+	 * Generates a custom report.  
+	 * 
+	 * @param formParams {@link ReportsUtil#getReportResultByPage form parameters}
+	 * @return JsonBean result for the requested page and pagination information
+	 * @see ReportsUtil#getReportResultByPage
+	 */
+	public final JsonBean getCustomReport(JsonBean formParams) {
+		List<String> errors = ReportsUtil.validateReportConfig(formParams, true);
+		if (errors.size() > 0) {
+			JsonBean result = new JsonBean();
+			result.set(EPConstants.ERROR, errors);
+			return result;
+		}
+		// we need reportId only to store the report result in cache
+		Long reportId = (long) formParams.getString(EPConstants.REPORT_NAME).hashCode();
+		formParams.set(EPConstants.IS_CUSTOM, true);
+		return getReportResultByPage(formParams, reportId);
 	}
 	
 	/**
@@ -303,5 +326,31 @@ public class Reports {
 		// settings.put("calendars", oldFilterForm.getCalendars());
 		// settings.put("currencies", oldFilterForm.getCurrencies());
 		return settings;
+	}
+	
+	@GET
+	@Path("/report/columns")
+	@Produces(MediaType.APPLICATION_JSON)
+	public final Map<String, String> getAllowedColumns() {
+		Map<String, String> columnToDisplayName = new HashMap<String, String>();
+		Set<String> configurableColumns = MondrianReportUtils.getConfigurableColumns();
+		for (String originalColumnName : configurableColumns) {
+			columnToDisplayName.put(originalColumnName, TranslatorWorker.translateText(originalColumnName));
+		}
+		
+		return columnToDisplayName;
+	}
+	
+	@GET
+	@Path("/report/measures")
+	@Produces(MediaType.APPLICATION_JSON)
+	public final Map<String, String> getAllowedMeasures() {
+		Map<String, String> measuresToDisplayName = new HashMap<String, String>();
+		Set<String> configurableMeasures = MondrianReportUtils.getConfigurableMeasures();
+		for (String originalMeasureName : configurableMeasures) {
+			measuresToDisplayName.put(originalMeasureName, TranslatorWorker.translateText(originalMeasureName));
+		}
+		
+		return measuresToDisplayName;
 	}
 }

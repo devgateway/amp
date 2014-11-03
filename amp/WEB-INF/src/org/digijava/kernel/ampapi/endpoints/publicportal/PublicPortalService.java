@@ -61,7 +61,7 @@ public class PublicPortalService {
 	public static JsonBean getTopProjects(JsonBean config, Integer count, Integer months) {
 		JsonBean result = new JsonBean();
 		List<JsonBean> content = new ArrayList<JsonBean>();
-		result.set("numberformat", FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT));
+		
 		result.set("topprojects", content);
 		
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_GetTopProjects");
@@ -125,8 +125,6 @@ public class PublicPortalService {
 		JsonBean result = new JsonBean();
 		String measureName=null;
 		List<JsonBean> content = new ArrayList<JsonBean>();
-		result.set("numberformat", FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT));
 		result.set("donorFunding", content);
 
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(
@@ -154,15 +152,17 @@ public class PublicPortalService {
 		return result;
 
 	}
+	
 	private static void getPublicReport(Integer count, JsonBean result,
 			List<JsonBean> content, ReportSpecificationImpl spec) {
-		 getPublicReport(count, result,content, spec,false,null);
+		 getPublicReport(count, result, content, spec, false, null);
 	}
+	
 	/**
-	 * 
-	 * @param count records to show
-	 * @param result
-	 * @param content
+	 * Generates the report and retrieves 'count' results
+	 * @param count the number of records to show
+	 * @param result the JsonBean that will store 
+	 * @param content 
 	 * @param spec
 	 * @param calculateSubTotal if we should calculate the subtotal for the measure
 	 * @param measureName Measure to use for subTotal -  we may need to receive an array of measures
@@ -170,24 +170,21 @@ public class PublicPortalService {
 	private static void getPublicReport(Integer count, JsonBean result,
 			List<JsonBean> content, ReportSpecificationImpl spec,
 			boolean calculateSubTotal, String measureName) {
-		GeneratedReport report = EndpointUtils.runReport(spec);
-		if (report == null) {
-
-		} else {
-			if (report.reportContents != null
-					&& report.reportContents.getChildren() != null) {
+		
+		GeneratedReport report = EndpointUtils.runReport(spec); 
+		
+		result.set("numberformat", FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT));
+		
+		if (report != null) {
+			if (report.reportContents != null && report.reportContents.getChildren() != null) {
 				// provide header titles
-				Map<String, String> headersToId = new HashMap<String, String>(
-						report.leafHeaders.size());
-				Map<String, String> headers = new LinkedHashMap<String, String>(
-						report.leafHeaders.size());
+				Map<String, String> headersToId = new HashMap<String, String>(report.leafHeaders.size());
+				Map<String, String> headers = new LinkedHashMap<String, String>(report.leafHeaders.size());
 				Iterator<ReportColumn> colIter = spec.getColumns().iterator();
 				for (ReportOutputColumn leafHeader : report.leafHeaders) {
-					final String columnName = colIter.hasNext() ? colIter
-							.next().getColumnName()
-							: leafHeader.originalColumnName;
-					final String id = StringUtils.replace(
-							StringUtils.lowerCase(columnName), " ", "-");
+					final String columnName = colIter.hasNext() ? 
+							colIter.next().getColumnName() : leafHeader.originalColumnName;
+					final String id = StringUtils.replace(StringUtils.lowerCase(columnName), " ", "-");
 					headers.put(id, leafHeader.columnName);
 					headersToId.put(leafHeader.columnName, id);
 				}
@@ -195,26 +192,23 @@ public class PublicPortalService {
 
 				// provide the top projects data
 				if (count != null) {
-					count = Math.min(count, report.reportContents.getChildren()
-							.size());
+					count = Math.min(count, 
+							report.reportContents.getChildren().size());
 				} else {
 					count = report.reportContents.getChildren().size();
 				}
-				result.set("count", count);
+				
 				Double total = 0D;
-				Iterator<ReportArea> iter = report.reportContents.getChildren()
-						.iterator();
+				Iterator<ReportArea> iter = 
+						report.reportContents.getChildren().iterator();
 				while (count > 0) {
 					ReportArea data = iter.next();
 					JsonBean jsonData = new JsonBean();
-					for (Entry<ReportOutputColumn, ReportCell> cell : data
-							.getContents().entrySet()) {
-						jsonData.set(headersToId.get(cell.getKey().columnName),
-								cell.getValue().value);
+					for (Entry<ReportOutputColumn, ReportCell> cell : data.getContents().entrySet()) {
+						jsonData.set(headersToId.get(cell.getKey().columnName), cell.getValue().value);
 						if (calculateSubTotal) {
 							if (cell.getKey().columnName.equals(measureName)) {
 								total += (Double) cell.getValue().value;
-
 							}
 						}
 					}
@@ -224,5 +218,6 @@ public class PublicPortalService {
 				result.set("Total " + measureName, total);
 			}
 		}
+		result.set("count", count == null ? 0 : count);
 	}
 }

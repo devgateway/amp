@@ -84,17 +84,21 @@ define([ 'business/grid/columnsMapping', 'jqgrid' ], function(columnsMapping) {
 						jsonReader : {
 							repeatitems : false,
 							root : function(obj) {
-								rowNum = obj.recordsPerPage;
+								// rowNum = obj.recordsPerPage;
+								jQuery(grid).jqGrid('setGridParam', {
+									rowNum : obj.page.recordsPerPage
+								});
 								return transformData(obj, grouping, tableStructure.hierarchies);
 							},
 							page : function(obj) {
-								return obj.currentPageNumber;
+								return obj.page.currentPageNumber;
 							},
 							total : function(obj) {
-								return obj.totalPageCount;
+								return obj.page.totalPageCount;
 							},
 							records : function(obj) {
-								return obj.totalRecords;
+								// console.log(obj);
+								return obj.page.totalRecords;
 							}
 						},
 						colNames : columnsMapping.createJQGridColumnNames(tableStructure, grouping),

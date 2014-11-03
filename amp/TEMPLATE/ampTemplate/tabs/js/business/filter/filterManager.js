@@ -32,15 +32,21 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 		});
 		app.TabsApp.listenTo(app.TabsApp.filtersWidget, 'apply', function(data) {
 			console.log('filters apply');
-			var serializedFilters = app.TabsApp.filtersWidget.serialize();
+			// Save just applied filters in case the user hits "reset" button.
+			app.TabsApp.serializedFilters = app.TabsApp.filtersWidget.serialize();
+			console.log(app.TabsApp.serializedFilters);
+			// Get list of human friendly applied filters we will use in the
+			// accordion.
 			var readableFilters = app.TabsApp.filtersWidget.serializeToModels();
-			console.log(serializedFilters);
 			console.log(readableFilters);
 
-			var filters = serializedFilters.columnFilters;
-			filters.date = serializedFilters.otherFilters.date;
-			GridManager.filter(app.TabsApp.currentId, filters);
+			// Change the format of the object before sending it to the endpoint
+			// for refiltering.
+			var auxFilters = app.TabsApp.serializedFilters.columnFilters;
+			auxFilters.date = app.TabsApp.serializedFilters.otherFilters.date;
+			GridManager.filter(app.TabsApp.currentId, auxFilters);
 
+			// Update the accordion with the newly applied filters.
 			FilterUtils.updateFiltersRegion(readableFilters);
 
 			jQuery(container).hide();

@@ -41,8 +41,10 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
 			// --------------------------------------------------------------------------------------//
 			// TODO: Move filters section elsewhere.
-			// Create collection of Filters.
+			// Create collection of Filters used for legends.
 			app.TabsApp.filters = FilterUtils.extractFilters(firstContent.get('reportMetadata').get('reportSpec').get('filters'));
+			// Variable to save the current serialized filters from widget.
+			app.TabsApp.serializedFilters = null;
 
 			// Define the views.
 			var FilterItemView = Marionette.ItemView.extend({

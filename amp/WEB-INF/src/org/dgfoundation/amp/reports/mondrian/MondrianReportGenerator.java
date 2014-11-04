@@ -151,7 +151,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			throw e;
 		}
 		finally {
-			//logger.error("counts: " + CellDataSetToGeneratedReport.writeStats());
+			writeStats();
 			tearDown();
 		}
 	}

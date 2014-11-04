@@ -18,6 +18,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -264,7 +265,7 @@ public class MondrianReportsTests extends AmpTestCase {
 	
 	private GeneratedReport generateAndValidate(ReportSpecification spec, boolean print, boolean asSaikuReport) {
 		String err = null;
-		MondrianReportGenerator generator = new MondrianReportGenerator(asSaikuReport ? SaikuReportArea.class : ReportAreaImpl.class, new ReportEnvironment("en", null, null), print);
+		MondrianReportGenerator generator = new MondrianReportGenerator(asSaikuReport ? SaikuReportArea.class : ReportAreaImpl.class, new ReportEnvironment("en", new CompleteWorkspaceFilter(null, null)), print);
 		GeneratedReport report = null;
 		try {
 			report = generator.executeReport(spec);

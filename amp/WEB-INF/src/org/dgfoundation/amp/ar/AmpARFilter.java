@@ -71,8 +71,6 @@ import org.digijava.module.aim.util.caching.AmpCaching;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 
-
-
 /**
  * Filtering bean. Holds info about filtering parameters and creates the
  * filtering query

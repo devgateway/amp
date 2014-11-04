@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
+import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.dgfoundation.amp.newreports.NamedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
@@ -206,13 +207,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	}
 	
 	protected String getAllowedActivitiesIds() {
-		TeamMember tm = currentEnvironment.get().viewer;
-		Set<Long> allowedActivities = ActivityUtil.fetchLongs(WorkspaceFilter.generateWorkspaceFilterQuery(tm));
-		if (currentEnvironment.get().workspaceFilter != null) {
-			Set<Long> wfIds = ActivityUtil.fetchLongs(currentEnvironment.get().workspaceFilter.getGeneratedFilterQuery());
-			allowedActivities.addAll(wfIds);
-		}
-		
+		Set<Long> allowedActivities = currentEnvironment.get().workspaceFilter.getIds();		
 		if (currentReport.get().getFilters() != null) {
 			String dateFiltersQuery = MondrianDBUtils.generateDateColumnsFilterQuery(((MondrianReportFilters)currentReport.get().getFilters()).getDateFilterRules());
 			if (dateFiltersQuery != null)
@@ -236,7 +231,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		MondrianReportSettings settings = new MondrianReportSettings();
 		settings.setCurrencyCode("EUR");
 		spec.setSettings(settings);
-		registerReport(spec, new ReportEnvironment("en", null, null));
+		registerReport(spec, new ReportEnvironment("en", new CompleteWorkspaceFilter(null, null)));
 	}
 
 }

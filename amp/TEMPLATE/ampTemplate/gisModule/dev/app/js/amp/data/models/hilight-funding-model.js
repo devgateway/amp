@@ -1,14 +1,27 @@
-var when = require('jquery').when;
 var _ = require('underscore');
-var $ = require('jquery');
 var Backbone = require('backbone');
 var IndicatorJoinModel = require('./indicator-join-model');
 
 
 module.exports = IndicatorJoinModel.extend({
   type: 'POST',
+
   url: function() {
-    return '/rest/gis/locationstotals/' + this.id.replace('-', '') + '/ac';
+    var settings = this.collection.settings.serialize();
+    var fundingType = 'ac';
+
+    // TODO: ask Diego or Nadia to use same format / terms as settings...
+    if (settings && settings[0]) {
+      if (settings[0] === 'Actual Commitments') {
+        fundingType = 'ac';
+      } else if (settings[0] === 'Actual Disbursements') {
+        fundingType = 'ad';
+      } else if (settings[0] === 'Actual Expenditures') {
+        fundingType = 'ae';
+      }
+    }
+
+    return '/rest/gis/locationstotals/' + this.id.replace('-', '') + '/' + fundingType;
   },
 
   initialize: function() {

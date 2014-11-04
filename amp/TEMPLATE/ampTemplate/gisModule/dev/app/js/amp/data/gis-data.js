@@ -72,7 +72,7 @@ _.extend(GISData.prototype, Backbone.Events, {
 
     // TODO get these from the api
     this.hilightFundingCollection = new HilightFundingCollection([],
-      { boundaries: this.boundaries, filter: this.filter });
+      { boundaries: this.boundaries, filter: this.filter, settings: this.settings });
 
     this.title = new Title({ data: this });
 

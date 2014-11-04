@@ -68,16 +68,19 @@ module.exports = Backbone.Model
 
   _joinDataWithBoundaries: function(boundaryGeoJSON) {
     var indexedValues = _.indexBy(this.get('values'), 'admID');
+    var admKey = this.id.replace('-', '').toUpperCase();
     // copy boundary geoJSON, and inject data
     var geoJSON = _.extend({}, boundaryGeoJSON, {
       features: _.map(boundaryGeoJSON.features, function(feature) {
         // replace boundary properties with {amount: value}
         // TODO... keep the existing properties and just add value?
         // replacing for now, to save weight
+        feature.id = feature.properties[admKey + '_CODE'];
+        feature.properties.name = feature.properties[admKey + '_NAME'];
         return _.extend(feature, {
-          properties: {
-            value: (indexedValues[feature.id] ? indexedValues[feature.id].amount : 0)
-          }
+          properties: _.extend(feature.properties, {
+            value: (indexedValues[feature.id] ? indexedValues[feature.id].amount : 50)
+          })
         });
       })
     });

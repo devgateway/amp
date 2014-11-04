@@ -61,7 +61,7 @@ module.exports = Backbone.Collection.extend({
 
     /* TODO(thadk): find a more encapsulated path to communicate this promise to model's map function */
     /* use options.app instead of window.app  -- also consider options.collection as this */
-    window.app.data.relevantActivitesFetch = window.app.data.activities.getActivities(activeActivityList);
+    /* window.app.data.relevantActivitesFetch = window.app.data.activities.getActivities(activeActivityList);*/
 
     return response.features;
   },

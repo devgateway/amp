@@ -107,9 +107,10 @@ module.exports = Backbone.Model
         allActivityIds = _(allActivityIds).union(allActivityIds, site.get('properties').activity);
       });
 
-      self.activities.getActivities(allActivityIds).then(function() {
-        deferred.resolve();
-      });
+      deferred.resolve();
+      /* for joined dependencies get related activities */
+      /*self.activities.getActivities(allActivityIds).then(function() {
+      });*/
     });
 
     return deferred;

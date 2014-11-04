@@ -184,7 +184,8 @@ gulp.task('clean', function(done) {
 //------------------------------------
 // build for dist
 //------------------------------------
-gulp.task('build', ['clean', 'build-js', 'build-css', 'revision', 'copy-stuff']);
+// TODO: fix revision for windows and re-enable
+gulp.task('build', ['clean', 'build-js', 'build-css'/*, 'revision'*/, 'copy-stuff']);
 
 
 gulp.task('build-js', ['clean', 'browserify'], function() {

@@ -169,7 +169,7 @@ public class MDXGenerator {
 		/* WHERE  (slice data, aka filters in Reports) */
 		where = getWhere(config);
 		
-		mdx = (with.length() > 0 ? "WITH " + with.toString() : "") + select + columns + rows + from + where;
+		mdx = (with.length() > 0 ? "WITH " + with.toString() + " " : "") + select + columns + rows + from + where;
 		
 		logger.info("[" + config.getMdxName() + "] MDX query: " + mdx);
 		validate(mdx, config.getMdxName());

@@ -73,7 +73,8 @@ public class ReportsUtil {
 	 *  																			<br/>
 	 *  "add_columns"     : ["Activity Id", "Approval Status"], 					<br/>
 	 *  "add_hierarchies" : ["Approval Status"], 									<br/>
-	 *  "add_measures"    : ["Custom Measure"] 										<br/>
+	 *  "add_measures"    : ["Custom Measure"], 									<br/>
+	 *  "rowTotals"       : true													<br/>
 	 * } 																			<br/>
 	 * where:
 	 * <ul>
@@ -93,6 +94,7 @@ public class ReportsUtil {
 	 *                             report configuration <br>
 	 *   <li>add_measures</li> optional, a list of measures to be added to the <br>
 	 *                         report configuration <br>
+	 *   <li>rowTotals</li>    optional, flag to request row totals to be build
 	 * </ol>
 	 * @return JsonBean result for the requested page and pagination information
 	 */
@@ -199,6 +201,9 @@ public class ReportsUtil {
 		//update report data presentation
 		configureFilters(specImpl, formParams);
 		configureSorting(specImpl, formParams);
+		
+		//update other settings
+		setOtherOptions(specImpl, formParams);
 		
 		return spec;
 	}
@@ -391,5 +396,11 @@ public class ReportsUtil {
 				return "not allowed / invalid " + listName + " provided = " + copy.toString();
 		}
 		return null;
+	}
+	
+	private static void setOtherOptions(ReportSpecificationImpl spec, JsonBean formParams) {
+		Boolean doRowTotals = (Boolean) formParams.get(EPConstants.DO_ROW_TOTALS);
+		if (doRowTotals != null)
+			spec.setCalculateRowTotals(doRowTotals);
 	}
 }

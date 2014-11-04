@@ -24,7 +24,7 @@ module.exports = BackboneDash.View.extend({
     return this;
   },
 
-  applyFilter: function(f) {
+  applyFilter: function() {
     this.$el.html(this.chartViews.map(_(function(view) {
       return view.render().el;
     }).bind(this)));

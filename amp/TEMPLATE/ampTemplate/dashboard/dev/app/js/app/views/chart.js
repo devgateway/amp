@@ -82,7 +82,7 @@ module.exports = BackboneDash.View.extend({
     };
     this.model.fetch(fetchOptions)
       .done(_(function() {
-        this.chart.draw(this.$('.dash-chart')[0], this.model);
+        this.chart(this.el.querySelector('.dash-chart-wrap'), this.model);
         this.renderNumbers();
         message.stop().fadeOut(200);
       }).bind(this))

@@ -76,21 +76,25 @@ public class MDXFilter {
 	
 	private MDXFilter(boolean isKey, String startRange, String endRange, boolean startRangeInclusive, boolean endRangeInclusive,
 			List<String>filteredValues, boolean allowedFilteredValues, String singleValue, MDXFilterType filterType) {
-		this.filterType = filterType;
-		this.startRange = startRange;
-		this.endRange = endRange;
-		this.startRangeInclusive = startRangeInclusive;
-		this.endRangeInclusive = endRangeInclusive;
-		this.filteredValues = filteredValues;
-		this.isKey = isKey;
 		if (isKey && filteredValues != null && filteredValues.size() == 1) {
-			singleValue = filteredValues.get(0).toString(); 
+			singleValue = filteredValues.get(0).toString();
+			filteredValues = null;
+			filterType = MDXFilterType.SINGLE_VALUE;
 		} else if (endRangeInclusive && startRangeInclusive && startRange != null && startRange.equals(endRange)) {
-			singleValue = startRange; 
+			singleValue = startRange;
+			startRange = null;
 			allowedFilteredValues = true;
+			filterType = MDXFilterType.SINGLE_VALUE;
 		} else if (isKey && startRange != null && endRange == null) {
 			endRange = String.valueOf(MoConstants.UNDEFINED_KEY - 1);
 		}
+		this.filterType = filterType;
+		this.startRange = startRange;
+		this.startRangeInclusive = startRangeInclusive;
+		this.endRange = endRange;
+		this.endRangeInclusive = endRangeInclusive;
+		this.isKey = isKey;
+		this.filteredValues = filteredValues;
 		this.singleValue = singleValue;
 		this.allowedFilteredValues = allowedFilteredValues;
 	}

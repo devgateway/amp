@@ -197,17 +197,17 @@ public class MondrianReportsTests extends AmpTestCase {
 	}
 	
 	public void testAmpReportToReportSpecification() {
-		ReportSpecificationImpl spec = getReportSpecificatin("NadiaMondrianTest");
+		ReportSpecificationImpl spec = getReportSpecification("NadiaMondrianTest");
 		generateAndValidate(spec, true);
 	}
 	
 	public void testGenerateReportAsSaikuCellDataSet() {
-		ReportSpecificationImpl spec = getReportSpecificatin("NadiaMondrianTest");
+		ReportSpecificationImpl spec = getReportSpecification("NadiaMondrianTest");
 		generateAndValidate(spec, true, true);
 	}
 	
 	public void testReportPagination() {
-		ReportSpecificationImpl spec = getReportSpecificatin("NadiaMondrianTest");
+		ReportSpecificationImpl spec = getReportSpecification("NadiaMondrianTest");
 		GeneratedReport report = generateAndValidate(spec, true, false);
 		ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
 		ReportArea page0_10 = ReportPaginationUtils.getReportArea(areasDFArray, 0, 10);
@@ -217,7 +217,7 @@ public class MondrianReportsTests extends AmpTestCase {
 		System.out.println(res);
 	}
 	
-	private ReportSpecificationImpl getReportSpecificatin(String reportName) {
+	private ReportSpecificationImpl getReportSpecification(String reportName) {
 		//AmpReports report = (AmpReports) PersistenceManager.getSession().get(AmpReports.class, 1018L);//id is from Moldova DB, TODO: update for tests db 
 		AmpReports report = ReportTestingUtils.loadReportByName(reportName);
 

@@ -45,5 +45,9 @@ public class ReportAreaImpl implements ReportArea {
 	public void setChildren(List<ReportArea> children) {
 		this.children = children;
 	}
+	
+	public String toString() {
+		return String.format("{contents: %s, children: %s}", contents, children);
+	}
 
 }

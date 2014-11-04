@@ -2901,6 +2901,7 @@ public class AmpARFilter extends PropertyListable {
 		this.approvalStatusSelected = approvalStatusSelected;
 	}
 
+	@PropertyListableIgnore
 	public List<String> getApprovalStatusSelectedStrings() {
 		ArrayList<String> approvalStatuses = new ArrayList<String>();
 		for (Iterator<String> iterator = approvalStatusSelected.iterator(); iterator.hasNext();) {

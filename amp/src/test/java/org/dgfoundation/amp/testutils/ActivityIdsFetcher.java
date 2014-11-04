@@ -16,15 +16,20 @@ import org.digijava.module.esrigis.helpers.DbHelper;
  */
 public class ActivityIdsFetcher implements IdsGeneratorSource {
 	
-	List<String> activityNames;
+	public final List<String> activityNames;
 	
-	public ActivityIdsFetcher(String...activityNames) {
-		this.activityNames = Arrays.asList(activityNames);
+	/**
+	 * 
+	 * @param activityNames if null, then "get all" 
+	 */
+	public ActivityIdsFetcher(List<String> activityNames) {
+		this.activityNames = activityNames;
 	}
 	
 	@Override public Set<Long> getIds() {
 		try {
-			String query = "SELECT amp_activity_id from amp_activity WHERE name IN (" + Util.toCSString(activityNames) + ")";
+			String whereQuery = activityNames == null ? "" : ("WHERE name IN (" + Util.toCSString(activityNames) + ")");
+			String query = "SELECT amp_activity_id from amp_activity " + whereQuery;
 			return new TreeSet<Long>(DbHelper.getInActivities(query));
 		}
 		catch(Exception e) {

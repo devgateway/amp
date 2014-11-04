@@ -1,8 +1,10 @@
 package org.dgfoundation.amp.ar;
 
 //import org.dgfoundation.amp.testutils.LiberiaFiller;
+import org.dgfoundation.amp.ar.amp210.BasicMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.ETLTests;
 import org.dgfoundation.amp.ar.amp210.SQLUtilsTests;
+import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -32,6 +34,7 @@ public class AllTests_amp210
 		TestSuite suite = new TestSuite(AllTests_amp210.class.getName());
 		suite.addTest(new JUnit4TestAdapter(ETLTests.class));
 		suite.addTest(SQLUtilsTests.suite());
+		suite.addTest(new JUnit4TestAdapter(BasicMondrianReportTests.class));
 		//$JUnit-BEGIN$
 
 		//$JUnit-END$
@@ -46,6 +49,7 @@ public class AllTests_amp210
 		try {
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
 			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_210";
+			MonetConnection.MONET_CFG_OVERRIDE_URL = "jdbc:monetdb://localhost/amp_tests_210";
 			//HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_moldova_27";
 			//HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost:15434/amp_moldova";
     	

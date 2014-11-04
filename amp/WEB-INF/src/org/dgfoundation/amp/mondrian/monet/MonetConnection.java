@@ -28,7 +28,9 @@ import org.digijava.module.aim.helper.Constants;
 public class MonetConnection implements AutoCloseable {
 	
 	public final Connection conn;
-	private static DataSource dataSource = getMonetDataSource();
+	public static String MONET_CFG_OVERRIDE_URL = null;
+	
+	//private static DataSource dataSource = null;
 	
 	private MonetConnection() throws SQLException {
 		//this.conn = dataSource.getConnection();
@@ -48,8 +50,12 @@ public class MonetConnection implements AutoCloseable {
 	private static String url = null;
 	
 	public static String getJdbcUrl() {
+		try{Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");}catch(Exception e){throw new RuntimeException(e);}
+		
+		if (MONET_CFG_OVERRIDE_URL != null)
+			return MONET_CFG_OVERRIDE_URL;
 		if (url == null) {
-			try{Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");}catch(Exception e){throw new RuntimeException(e);}
+			DataSource dataSource = getMonetDataSource();
 			org.apache.tomcat.jdbc.pool.DataSource src = (org.apache.tomcat.jdbc.pool.DataSource) dataSource;
 			String postgresUrl = src.getUrl().substring(0, src.getUrl().indexOf('?')); // jdbc:postgresql://localhost:5432/amp_moldova_210?useUnicode=true&characterEncoding=UTF-8&jdbcCompliantTruncation=false
 			String dbName = postgresUrl.substring(postgresUrl.lastIndexOf('/') + 1); 

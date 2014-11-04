@@ -34,7 +34,7 @@ public class EtlResult {
 	public EtlResult(long eventId, double duration, boolean cacheInvalidated, long nrAffectedEntities, long nrAffectedDates, List<String> fullEtlReasons) {
 		this.eventId = eventId;
 		this.duration = duration;
-		this.cacheInvalidated = true || cacheInvalidated;
+		this.cacheInvalidated = /*true || */ cacheInvalidated;
 		this.nrAffectedEntities = nrAffectedEntities;
 		this.nrAffectedDates = nrAffectedDates;
 		this.fullEtlReasons = new ArrayList<>(fullEtlReasons);

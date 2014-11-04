@@ -16,6 +16,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.models.EditorWrapperModel;
+import org.dgfoundation.amp.onepager.models.ResourceTranslationModel;
 import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
@@ -192,6 +193,9 @@ public class TranslationDecorator extends Panel {
                 if (field.getAnnotation(VersionableFieldTextEditor.class) != null)
                     return true;
             }
+        }
+        if (model instanceof ResourceTranslationModel) {
+        	return true;
         }
         return false;
     }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -88,6 +89,10 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 	private boolean hasAnyVersionPendingApproval; // if any version of the node needs to be approved by Tl to be visible for team-members
 	private String baseNodeUUID = null; //in case documentData is just a version of some node, this property holds that main node uuid
 	private String nodeVersionUUID = null; //in case documentData is just a version of some node, this property stores it's uuid(this case nodeVersionUUID.equals(uuid))
+	
+	private Map <String,String> translatedTitles = null;
+	private Map <String,String> translatedDescriptions = null;
+	private Map <String,String> translatedNotes = null;
 	
 	
 	public DocumentData()
@@ -576,5 +581,29 @@ public class DocumentData implements Comparable<DocumentData>, Serializable{
 	
 	@Override public String toString(){
 		return String.format("file name = '%s', size = %.2f MB, uuid = %s", this.getName(), this.getFileSize(), this.getUuid());
+	}
+
+	public Map<String, String> getTranslatedTitles() {
+		return translatedTitles;
+	}
+
+	public void setTranslatedTitles(Map<String, String> translatedTitles) {
+		this.translatedTitles = translatedTitles;
+	}
+
+	public Map<String, String> getTranslatedDescriptions() {
+		return translatedDescriptions;
+	}
+
+	public void setTranslatedDescriptions(Map<String, String> translatedDescriptions) {
+		this.translatedDescriptions = translatedDescriptions;
+	}
+
+	public Map<String, String> getTranslatedNotes() {
+		return translatedNotes;
+	}
+
+	public void setTranslatedNotes(Map<String, String> translatedNotes) {
+		this.translatedNotes = translatedNotes;
 	}
 }

@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.contentrepository.jcrentity.Label;
@@ -30,6 +31,11 @@ public class TemporaryDocument implements Serializable {
 	private String fileName;
 	private List<Label> labels;
 	private String contentType;
+	private List <ResourceTranslation> translatedTitleList;
+	private List <ResourceTranslation> translatedDescriptionList;
+	private List <ResourceTranslation> translatedNoteList;
+	private String newTemporaryDocumentId;
+	
 	
 	public TemporaryDocument() {
 		existing = false;
@@ -145,6 +151,38 @@ public class TemporaryDocument implements Serializable {
 
 	public String getContentType() {
 		return contentType;
+	}
+
+	public List<ResourceTranslation> getTranslatedTitleList() {
+		return translatedTitleList;
+	}
+
+	public void setTranslatedTitleList(List<ResourceTranslation> translatedTitleList) {
+		this.translatedTitleList = translatedTitleList;
+	}
+
+	public List<ResourceTranslation> getTranslatedDescriptionList() {
+		return translatedDescriptionList;
+	}
+
+	public void setTranslatedDescriptionList(List<ResourceTranslation> translatedDescriptionList) {
+		this.translatedDescriptionList = translatedDescriptionList;
+	}
+
+	public List<ResourceTranslation> getTranslatedNoteList() {
+		return translatedNoteList;
+	}
+
+	public void setTranslatedNoteList(List<ResourceTranslation> translatedNoteList) {
+		this.translatedNoteList = translatedNoteList;
+	}
+
+	public String getNewTemporaryDocumentId() {
+		return newTemporaryDocumentId;
+	}
+
+	public void setNewTemporaryDocumentId(String newTemporaryDocumentId) {
+		this.newTemporaryDocumentId = newTemporaryDocumentId;
 	}
 
 	

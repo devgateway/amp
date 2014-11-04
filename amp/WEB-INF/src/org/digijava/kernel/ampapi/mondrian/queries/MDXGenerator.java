@@ -133,7 +133,6 @@ public class MDXGenerator {
 		//if column attributes are not configured, display only measures
 		axisMdx = getColumns(config, with);
 		if (axisMdx.contains(MoConstants.FUNC_CROSS_JOIN) && !config.isAllowColumnsEmptyData()) {
-			notEmptyColumns = ""; 
 			axisMdx = axisMdx.replaceAll(MoConstants.FUNC_CROSS_JOIN, MoConstants.FUNC_NON_EMPTY_CROSS_JOIN);
 		}
 		
@@ -158,8 +157,7 @@ public class MDXGenerator {
 				axisMdx = sorting(config.getSortingOrder(), axisMdx);
 			}
 			if (axisMdx.contains(MoConstants.FUNC_CROSS_JOIN) && !config.isAllowRowsEmptyData()) {
-				//using NonEmptyCrossJoin instead of NON EMPTY (cannot use NonEmpty - not working)
-				notEmptyRows = ""; 
+				//using both NonEmptyCrossJoin and NON EMPTY (cannot use NonEmpty - not working)
 				axisMdx = axisMdx.replaceAll(MoConstants.FUNC_CROSS_JOIN, MoConstants.FUNC_NON_EMPTY_CROSS_JOIN);
 			}
 			rows  = notEmptyRows + axisMdx + rows;

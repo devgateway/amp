@@ -7,9 +7,18 @@ var topsTooltip = _.template(fs.readFileSync(
   __dirname + '/../templates/tooltip-tops.html', 'UTF-8'));
 var predictabilityTooltip = _.template(fs.readFileSync(
   __dirname + '/../templates/tooltip-predictability.html', 'UTF-8'));
+var tableTemplate = _.template(fs.readFileSync(
+  __dirname + '/../templates/table.html', 'UTF-8'));
 
 
 var BAR_MARGIN = { top: 5, right: 10, bottom: 10, left: 10 };
+
+
+function clearContainer(container) {
+  while (container.hasChildNodes()) {
+    container.removeChild(container.lastChild);
+  }
+}
 
 
 var drawCommon = function(chart, data, categories, container, cb) {
@@ -17,6 +26,7 @@ var drawCommon = function(chart, data, categories, container, cb) {
     .color(util.categoryColours(categories));
   var svg = container.querySelector('.dash-chart');
   if (!svg) {
+    clearContainer(container);
     svg = document.createElement('svg');
     svg.classList.add('dash-chart');
     container.appendChild(svg);
@@ -33,8 +43,6 @@ module.exports = {
 
   bar: function() {
     var chart = nv.models.discreteBarChart()
-      .x(function(d) { return d.name; })    //Specify the data accessors.
-      .y(function(d) { return d.amount; })
       .valueFormat(util.formatKMB(3))
       .showValues(true)
       .showYAxis(false)
@@ -46,11 +54,11 @@ module.exports = {
       if (!container) {
         console.error('missing container');
       }
-      var data = [model.get('processed')],
+      var data = model.get('processed'),
           categories = data[0].values.length - 1;
       chart.tooltipContent(function(a, y, b, raw) {
         return topsTooltip({
-          label: raw.point.name,
+          label: raw.point.x,
           value: d3.format(',')(Math.round(raw.value)),
           currency: model.get('currency'),
           percent: d3.format('%')(raw.value / model.get('total'))
@@ -68,19 +76,17 @@ module.exports = {
 
   pie: function() {
     var chart = nv.models.pieChart()
-      .x(function(d) { return d.name; })    //Specify the data accessors.
-      .y(function(d) { return d.amount; })
       .valueFormat(util.formatKMB(3))
       .labelType('percent')
       .donut(true)
       .donutRatio(0.35);
 
     return function(container, model) {
-      var data = model.get('processed').values,
+      var data = model.get('processed')[0].values,
           categories = data.length;
       chart.tooltipContent(function(a, y, raw) {
         return topsTooltip({
-          label: raw.point.name,
+          label: raw.point.x,
           value: d3.format(',')(Math.round(raw.value)),
           currency: model.get('currency'),
           percent: d3.format('%')(raw.value / model.get('total'))
@@ -139,8 +145,23 @@ module.exports = {
   },
 
   table: function() {
-    return function() {  // container, model) {
-      // TODO: hide the SVG and throw in a bootstrap table
+    return function(container, model) {
+      clearContainer(container);
+
+      var data = model.get('processed');
+      var keys = _(data).pluck('key');
+
+      var values = _(data)
+        .chain()
+        .map(function(datum) { return datum.values; })
+        .transpose()
+        .value();
+
+      container.innerHTML = tableTemplate({
+        keys: keys,
+        values: values,
+        moneyFormat: util.formatKMB(3)
+      });
     };
   }
 

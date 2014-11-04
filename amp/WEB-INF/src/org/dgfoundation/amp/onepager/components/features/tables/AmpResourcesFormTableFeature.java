@@ -41,7 +41,10 @@ import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.helper.DownloadResourceStream;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.models.PersistentObjectModel;
+import org.dgfoundation.amp.onepager.models.ResourceTranslationModel;
+import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.dgfoundation.amp.onepager.util.SessionUtil;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.Constants;
@@ -49,6 +52,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 
 /**
  * @author aartimon@dginternational.org
@@ -118,16 +122,12 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
                     td.setFileName(nw.getName());
                     td.setLabels(nw.getLabels());
                     td.setContentType(nw.getContentType());
-
-                    /*
                     TemporaryDocument titleHolder = new TemporaryDocument();
                     titleHolder.setTitle(td.getTitle());
                     titleHolder.setExistingDocument(d);
                     existingDocTitles.add(titleHolder);
-                    */
                     existingDocTitles.add(td);
-
-
+                
                     ret.add(td);
                 }
                 getSession().setMetaData(OnePagerConst.RESOURCES_EXISTING_ITEM_TITLES, existingDocTitles);
@@ -189,14 +189,28 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 					return;
 				}
 				
-//				item.add(new AmpLabelFieldPanel<String>("title", new PropertyModel<String>(item.getModel(), "title"), "Document Title", true));
-				//item.add(new AmpLabelFieldPanel<String>("resourceName", new PropertyModel<String>(item.getModel(), "fileName"), "Resource Name", true));
-				
-//				item.add(new Label("title", item.getModel().getObject().getTitle()));
-                AmpTextFieldPanel titleField = new AmpTextFieldPanel("title", new PropertyModel<String>(item.getModel(), "title"), "Title", true);
-                item.add(titleField);
+				TemporaryDocument document = (TemporaryDocument)item.getModelObject();
 
-
+				if (!ContentTranslationUtil.multilingualIsEnabled()){
+						item.add(new Label("title",item.getModel().getObject().getTitle()));
+				}
+				else {
+					String id;
+					if (document.getExistingDocument() != null) {
+						id = document.getExistingDocument().getUuid();
+					}
+					
+					else {
+						 id = document.getNewTemporaryDocumentId();
+					}
+					Model<String> newResourceIdModel = new Model <String> (id);
+					final ResourceTranslationModel titleModel = new ResourceTranslationModel(new PropertyModel<String>(item.getModel().getObject(), "title"),newResourceIdModel);
+					final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("title",titleModel , "Title",AmpFMTypes.MODULE,Boolean.TRUE);
+					name.setEnabled(false);
+					item.add (name);
+					
+					
+				}
 
 				if (item.getModel().getObject().getFileName()==null){
 					item.add(new Label("resourceName",item.getModel().getObject().getWebLink()));

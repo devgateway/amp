@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import javax.jcr.Node;
@@ -34,6 +35,7 @@ import org.apache.wicket.util.upload.FileItem;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
+import org.dgfoundation.amp.onepager.helper.ResourceTranslation;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.digijava.kernel.request.Site;
@@ -728,6 +730,24 @@ public class ActivityUtil {
 				tdd.setName(temp.getFileName());
 				tdd.setDescription(temp.getDescription());
 				tdd.setNotes(temp.getNote());
+				Map <String,String> translatedTitleMap = new HashMap<String,String>();
+				for (ResourceTranslation titleTranslation:temp.getTranslatedTitleList()) {
+					translatedTitleMap.put(titleTranslation.getLocale(), titleTranslation.getTranslation());
+				}
+				tdd.setTranslatedTitles(translatedTitleMap);
+			
+				Map <String,String> translatedDescMap = new HashMap<String,String>();
+				for (ResourceTranslation descTranslation:temp.getTranslatedDescriptionList()) {
+					translatedDescMap.put(descTranslation.getLocale(), descTranslation.getTranslation());
+				}
+				tdd.setTranslatedDescriptions(translatedDescMap);
+			
+				Map <String,String> translatedNoteMap = new HashMap<String,String>();
+				for (ResourceTranslation noteTranslation:temp.getTranslatedDescriptionList()) {
+					translatedNoteMap.put(noteTranslation.getLocale(), noteTranslation.getTranslation());
+				}
+				tdd.setTranslatedNotes(translatedNoteMap);
+				
 				if(temp.getType()!=null)
 					tdd.setCmDocTypeId(temp.getType().getId());
 				tdd.setDate(temp.getDate());
@@ -881,8 +901,7 @@ public class ActivityUtil {
         //add or edit activity contact and amp contact
         if(activityContacts != null && activityContacts.size() > 0) {
             for (AmpActivityContact activityContact : activityContacts) {
-
-                // save the contact first
+               // save the contact first
                if (newActivity || activityContact.getContact().getId() == null) {
             	session.saveOrUpdate(activityContact.getContact());   
                }

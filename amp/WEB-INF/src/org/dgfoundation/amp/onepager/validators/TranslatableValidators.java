@@ -7,6 +7,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
+import org.dgfoundation.amp.onepager.models.ResourceTranslationModel;
 import org.dgfoundation.amp.onepager.models.TranslationDecoratorModel;
 
 import java.util.List;
@@ -44,7 +45,8 @@ public class TranslatableValidators implements IValidator<String> {
     }
 
     public static void alter(IModel<String> origModel, FormComponent<String> component) {
-        if (component.getModel() instanceof TranslationDecoratorModel){
+        if (component.getModel() instanceof TranslationDecoratorModel
+        		|| component.getModel() instanceof ResourceTranslationModel){
             List<IValidator<? super String>> validators = component.getValidators();
             for (IValidator validator : validators){
                 component.remove(validator);

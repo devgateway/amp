@@ -7,8 +7,10 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -25,10 +27,13 @@ import javax.jcr.version.VersionIterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.jackrabbit.core.NodeImpl;
+import org.apache.jackrabbit.core.PropertyImpl;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.upload.FormFile;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
 import org.digijava.module.aim.helper.ActivityDocumentsUtil;
 import org.digijava.module.aim.helper.Constants;
@@ -364,7 +369,6 @@ public class NodeWrapper{
 			else{
 				newNode.setProperty(CrConstants.PROPERTY_VERSION_NUMBER, (double)1.0);
 			}
-			
 			String contentType			= null;
 			//HashMap errors = new HashMap();
 			if ( isAUrl ){
@@ -400,6 +404,7 @@ public class NodeWrapper{
 				populateNode(isANewVersion,newNode, tempDoc.getTitle(), tempDoc.getDescription(), tempDoc.getNotes(), 
 					contentType, tempDoc.getCmDocTypeId(), teamMember.getEmail(), teamMember.getTeamId(), yearofPublicationDate,
 					tempDoc.getIndex(), tempDoc.getCategory());
+				populateMultilingualNode(newNode,tempDoc.getTranslatedTitles(),tempDoc.getTranslatedDescriptions(),tempDoc.getTranslatedNotes());
 			} 
 			
 			this.node		= newNode;
@@ -418,6 +423,33 @@ public class NodeWrapper{
 		
 	}
 	
+	private void populateMultilingualNode (Node newNode,Map<String,String> translatedTitles,Map <String,String>translatedDesc,Map <String,String>translatedNotes) {
+		try {
+		if (translatedTitles !=null) {
+			Node titleNode = newNode.addNode(CrConstants.PROPERTY_TITLE);
+			for (String locale:translatedTitles.keySet()) {
+				titleNode.setProperty(locale, translatedTitles.get(locale));
+			}
+		}
+		if (translatedDesc !=null) {
+			Node titleNode = newNode.addNode(CrConstants.PROPERTY_DESCRIPTION);
+			for (String locale:translatedDesc.keySet()) {
+				titleNode.setProperty(locale, translatedDesc.get(locale));
+			}
+		}
+	
+		if (translatedNotes !=null) {
+			Node titleNode = newNode.addNode(CrConstants.PROPERTY_NOTES);
+			for (String locale:translatedNotes.keySet()) {
+				titleNode.setProperty(locale, translatedNotes.get(locale));
+			}
+		}
+		}catch (Exception e){
+			e.printStackTrace();
+			errorAppeared	= true;
+			
+		}
+	}
 	private void populateNode(boolean isANewVersion,Node newNode, String docTitle, String docDescr, String docNotes, String contentType, Long cmDocType, 
 			String user, Long teamId,Calendar yearOfPublication, String index, String category) {
 		try{
@@ -440,6 +472,7 @@ public class NodeWrapper{
 			newNode.setProperty(CrConstants.PROPERTY_CONTENT_TYPE, contentType );
 			newNode.setProperty(CrConstants.PROPERTY_INDEX, index);
 			newNode.setProperty(CrConstants.PROPERTY_CATEGORY, category);
+			
 			
 			Node labelContainerNode	= newNode.addNode( CrConstants.LABEL_CONTAINER_NODE_NAME );
 			labelContainerNode.addMixin("mix:versionable");
@@ -543,15 +576,19 @@ public class NodeWrapper{
 	
 	public String getTitle() 
 	{
-		return getStringProperty(CrConstants.PROPERTY_TITLE);
+		//old way of accessing. Now is a multilingual property
+		//return getStringProperty(CrConstants.PROPERTY_TITLE);
+		return getTranslatedTitleByLang(TLSUtils.getLangCode());
 	}
 	
 	public String getDescription() {
-		return getStringProperty(CrConstants.PROPERTY_DESCRIPTION);
+		//. Now is a multilingual property
+		return getTranslatedDescriptionByLang(TLSUtils.getLangCode());
 	}
 	
 	public String getNotes() {
-		return getStringProperty(CrConstants.PROPERTY_NOTES);
+		//Now is a multilingual property
+		return getTranslatedNoteByLang(TLSUtils.getLangCode());
 	}
 	
 	public String getDate() {
@@ -907,6 +944,76 @@ public class NodeWrapper{
 	 */
 	public String getFullName(){
 		return this.getTitle()+" ("+this.getUuid().hashCode()+")";
+	}
+	
+	public Map <String, String> getTranslatedTitle () {
+		return getTranslatedNode(CrConstants.PROPERTY_TITLE);
+	}
+	
+	public Map <String, String> getTranslatedNote () {
+		return getTranslatedNode(CrConstants.PROPERTY_NOTES);
+	}
+	
+	public Map <String, String> getTranslatedDescription () {
+		return getTranslatedNode(CrConstants.PROPERTY_DESCRIPTION);
+	}
+	
+	public String getTranslatedTitleByLang (String language) {
+		return getTranslatedProperty(CrConstants.PROPERTY_TITLE,language);
+	}
+	
+	public String getTranslatedNoteByLang (String language) {
+		return getTranslatedProperty(CrConstants.PROPERTY_NOTES,language);
+	}
+	
+	public String getTranslatedDescriptionByLang (String language) {
+		return getTranslatedProperty(CrConstants.PROPERTY_DESCRIPTION,language);
+	}
+	
+	
+	private String getTranslatedProperty (String fieldName,String language) {
+		String value = null;
+		try {
+			Node titleNode = node.getNode(fieldName);
+			if (titleNode != null) {
+				PropertyIterator  iterator = titleNode.getProperties();
+				while (iterator.hasNext()) {
+					PropertyImpl property = (PropertyImpl)iterator.next();
+					if (property.getName().equals(language)) {
+						value = property.getString();
+						break;
+					}
+						
+				}
+			}
+		}catch (PathNotFoundException ex) {
+		//Some fields were saved as properties before multilingual was enabled for them
+		//like: title,notes, description. Check if contains the value as a property
+			logger.warn("The field "+fieldName + " was not found as a property. Probably old config");
+			value = getStringProperty(fieldName);
+		}	
+		catch (RepositoryException e) {
+			logger.error("Exception accesing traslated titles in NodeWrapper",e);
+		}
+		return value;
+	}
+	
+	private Map <String,String> getTranslatedNode (String fieldName) {
+		Map <String, String> translatedField = new HashMap<String,String> ();
+		try {
+			Node titleNode = node.getNode(fieldName);
+			if (titleNode != null) {
+				PropertyIterator  iterator = titleNode.getProperties();
+				while (iterator.hasNext()) {
+					PropertyImpl property = (PropertyImpl)iterator.next();
+					translatedField.put(property.getName(),property.getString());
+						
+				}
+			}
+		} catch (RepositoryException e) {
+			logger.error("Exception accesing traslated titles in NodeWrapper",e);
+		}
+		return translatedField;
 	}
 	
 }

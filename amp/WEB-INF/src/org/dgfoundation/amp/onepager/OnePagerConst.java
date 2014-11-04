@@ -4,10 +4,15 @@
 */
 package org.dgfoundation.amp.onepager;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 import org.apache.wicket.MetaDataKey;
 import org.dgfoundation.amp.onepager.helper.EditorStore;
+import org.dgfoundation.amp.onepager.helper.ResourceTranslation;
+import org.dgfoundation.amp.onepager.helper.ResourceTranslationStore;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.digijava.kernel.startup.AmpSessionListener;
 import org.digijava.module.aim.dbentity.AmpActivityDocument;
@@ -33,8 +38,10 @@ public final class OnePagerConst {
 	public static final MetaDataKey<HashSet<TemporaryDocument>> RESOURCES_NEW_ITEMS = new MetaDataKey<HashSet<TemporaryDocument>>(){};
 	public static final MetaDataKey<HashSet<AmpActivityDocument>> RESOURCES_DELETED_ITEMS = new MetaDataKey<HashSet<AmpActivityDocument>>(){};
     public static final MetaDataKey<HashSet<TemporaryDocument>> RESOURCES_EXISTING_ITEM_TITLES = new MetaDataKey<HashSet<TemporaryDocument>>(){};
+    public static final MetaDataKey<HashMap<String,ResourceTranslationStore>> RESOURCES_TRANSLATIONS = new MetaDataKey<HashMap<String,ResourceTranslationStore>>(){};
 
-	public static final MetaDataKey<EditorStore> EDITOR_ITEMS = new MetaDataKey<EditorStore>(){};
+	
+    public static final MetaDataKey<EditorStore> EDITOR_ITEMS = new MetaDataKey<EditorStore>(){};
 	public static final MetaDataKey<HashSet<AmpAgreement>> AGREEMENT_ITEMS = new MetaDataKey<HashSet<AmpAgreement>>(){};
 
 	public static final MetaDataKey<HashSet<AmpComments>> COMMENTS_ITEMS = new MetaDataKey<HashSet<AmpComments>>(){};

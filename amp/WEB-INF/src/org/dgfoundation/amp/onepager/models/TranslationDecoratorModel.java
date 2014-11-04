@@ -37,6 +37,9 @@ public class TranslationDecoratorModel extends LocaleAwareProxyModel<String> {
                 if (model instanceof EditorWrapperModel){
                     return model.getObject();
                 }
+           else if (model instanceof ResourceTranslationModel) {
+                	return model.getObject();
+                }
                 else{
                     throw new AssertionError("Extend code to use other types of models");
                 }
@@ -57,6 +60,9 @@ public class TranslationDecoratorModel extends LocaleAwareProxyModel<String> {
             else
                 if (model instanceof EditorWrapperModel){
                     model.setObject(object);
+                }
+            else if (model instanceof ResourceTranslationModel) {
+                	model.setObject(object);
                 }
                 else{
                         throw new AssertionError("Extend code to use other types of models");
@@ -119,6 +125,8 @@ public class TranslationDecoratorModel extends LocaleAwareProxyModel<String> {
         super.setLangModel(langModel);
         if (model instanceof EditorWrapperModel) //we need to chain the call
             ((EditorWrapperModel)model).setLangModel(langModel);
+        else if (model instanceof ResourceTranslationModel) 
+            ((ResourceTranslationModel)model).setLangModel(langModel);
     }
 
     public void setAm(AmpActivityModel am) {

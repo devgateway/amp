@@ -1,8 +1,8 @@
 var _ = require('underscore');
 var BackboneDash = require('./backbone-dash');
 
-var URLService = require('amp-url');
-var State = require('amp-state');
+var URLService = require('amp-url/index');
+var State = require('amp-state/index');
 var Filter = require('amp-filter/src/main');
 
 var MainView = require('./views/main');

@@ -12,31 +12,30 @@ module.exports = BackboneDash.View.extend({
     this.chartViews = _(this.collection.map(function(chart) {
       return (new ChartView({ model: chart, app: this.app }));
     }, this));
-    this.listenTo(this.app.filter, 'apply', this.render);
-    this.listenTo(this.collection, 'change:embiggen', this.injectBreaks);
+    this.listenTo(this.app.filter, 'apply', this.applyFilter);
+    this.listenTo(this.collection, 'change:big', this.injectBreaks);
   },
 
   render: function() {
-    // TODO: get serialized state from the sharing stuff (don't wait for
-    // filters to finish loading)
     if (this.app.filter.loaded.state() === 'pending') {
       this.$el.html('<h3 class="text-center">Loading...</h3>');
     }
-    this.app.filter.loaded
-      .always(_(function() {
-        this.$el.html(this.chartViews.map(_(function(view) {
-          return view.render().el;
-        }).bind(this)));
-        this.injectBreaks();
-      }).bind(this));
+    this.app.filter.loaded.fail(_(this.applyFilter).bind(this));
     return this;
+  },
+
+  applyFilter: function(f) {
+    this.$el.html(this.chartViews.map(_(function(view) {
+      return view.render().el;
+    }).bind(this)));
+    this.injectBreaks();
   },
 
   injectBreaks: function(chartModel) {
     this.chartViews.reduce(function(breakAfter, thisView) {
       thisView.setClear(breakAfter);
       if (!breakAfter) {
-        return thisView.model.get('embiggen') ? false : true;
+        return thisView.model.get('big') ? false : true;
       } else {
         return false;
       }

@@ -14,7 +14,7 @@ module.exports = BackboneDash.View.extend({
 
   uiDefaults: function() {
     var defaults = {
-      embiggen: this.model instanceof FundingType,  // funding type is big by default
+      big: this.model instanceof FundingType,  // funding type is big by default
       view: this.model instanceof Tops ? 'bar'
           : this.model instanceof Predictability ? 'multibar'
           : this.model instanceof FundingType ? 'multibar'
@@ -27,7 +27,7 @@ module.exports = BackboneDash.View.extend({
   events: {
     'change .dash-adj-type input': 'changeAdjType',
     'click .chart-view': 'changeChartView',
-    'click .expand': 'embiggen',
+    'click .expand': 'big',
     'click .retry': 'render'
   },
 
@@ -52,7 +52,7 @@ module.exports = BackboneDash.View.extend({
       'limit',
       'adjtype',
       'view',
-      'embiggen'
+      'big'
     );
   },
 
@@ -108,9 +108,9 @@ module.exports = BackboneDash.View.extend({
     this.model.set('view', view);
   },
 
-  embiggen: function() {
+  big: function() {
     // toggle big/small charts on large screens
-    this.model.set('embiggen', !this.model.get('embiggen'));
+    this.model.set('big', !this.model.get('big'));
   },
 
   setClear: function(shouldBreak) {

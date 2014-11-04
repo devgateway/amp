@@ -10,6 +10,7 @@ import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
 
+import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -29,7 +30,7 @@ public class AllTests_amp210
 		
 //		LiberiaFiller.fillInDatabase();
 		TestSuite suite = new TestSuite(AllTests_amp210.class.getName());
-		suite.addTest(ETLTests.suite());
+		suite.addTest(new JUnit4TestAdapter(ETLTests.class));
 		suite.addTest(SQLUtilsTests.suite());
 		//$JUnit-BEGIN$
 

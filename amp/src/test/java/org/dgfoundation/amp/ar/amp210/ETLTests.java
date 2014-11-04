@@ -18,8 +18,7 @@ import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.Test;
 
 /**
  * ETL Testcases
@@ -29,27 +28,28 @@ import junit.framework.TestSuite;
 public class ETLTests extends AmpTestCase
 {
 	
-	private ETLTests(String name)
+	public ETLTests(String name)
 	{
 		super(name);
 	}
 	
-	public static Test suite()
-	{
-		TestSuite suite = new TestSuite(ETLTests.class.getName());
-		suite.addTest(new ETLTests("testPercentagesDistribution"));
-		suite.addTest(new ETLTests("testPercentagesDistributionWithNulls"));
-		
-		suite.addTest(new ETLTests("testDateRateInfo"));
-		suite.addTest(new ETLTests("testExchangeRates"));
-		suite.addTest(new ETLTests("testCurrencyETL"));
-		suite.addTest(new ETLTests("testCurrencyCombining"));
-		suite.addTest(new ETLTests("testSQLUtilsWriter"));
-		suite.addTest(new ETLTests("testSQLUtilsMultiLineWriter"));
-		suite.addTest(new ETLTests("testMondrianTableDescription"));
-		return suite;
-	}
-	
+//	public static Test suite()
+//	{
+//		TestSuite suite = new TestSuite(ETLTests.class.getName());
+//		suite.addTest(new ETLTests("testPercentagesDistribution"));
+//		suite.addTest(new ETLTests("testPercentagesDistributionWithNulls"));
+//		
+//		suite.addTest(new ETLTests("testDateRateInfo"));
+//		suite.addTest(new ETLTests("testExchangeRates"));
+//		suite.addTest(new ETLTests("testCurrencyETL"));
+//		suite.addTest(new ETLTests("testCurrencyCombining"));
+//		suite.addTest(new ETLTests("testSQLUtilsWriter"));
+//		suite.addTest(new ETLTests("testSQLUtilsMultiLineWriter"));
+//		suite.addTest(new ETLTests("testMondrianTableDescription"));
+//		return suite;
+//	}
+
+	@Test
 	public void testMondrianTableDescription() {
 		// test that idColumnNames = null means to it mirroring indexedColumns and is iterated in the right sequence
 		MondrianTableDescription mtd = new MondrianTableDescription("someTableName", null, Arrays.asList("1", "2", "3", "c", "5", "a"));
@@ -62,6 +62,7 @@ public class ETLTests extends AmpTestCase
 
 	}
 	
+	@Test
 	public void testSQLUtilsMultiLineWriter() {
 /*		Map<String, Object> row1 = new LinkedHashMap<String, Object>() {{
 			put("col1", 1l);
@@ -84,7 +85,7 @@ public class ETLTests extends AmpTestCase
 				); */
 	}
 	
-	
+	@Test
 	public void testSQLUtilsWriter() {
 		List<String> keys = Arrays.asList("col1", "col2", "col3");
 		List<Object> coords = Arrays.<Object>asList(1l, "Some String, man! A very long string indeed", 2.5);
@@ -98,7 +99,7 @@ public class ETLTests extends AmpTestCase
 		System.out.println(res);
 	}
 	
-	
+	@Test
 	protected void testPercentage(String cor, String errors, Long idToAddIfEmpty, Pair... entries) {
 		NumberedTypedEntity activity = new NumberedTypedEntity(1, ReportEntityType.ENTITY_TYPE_ACTIVITY);
 		PercentagesDistribution perc = new PercentagesDistribution(activity, "primary_sector_id");
@@ -117,6 +118,7 @@ public class ETLTests extends AmpTestCase
 	/**
 	 * tests distributing normal percentages (no nulls)
 	 */
+	@Test
 	public void testPercentagesDistribution() {
 		testPercentage("{2=100.0}", null, null, new Pair(2, 10.0));
 		testPercentage("{2=10.0, 3=90.0}", null, null, new Pair(2, 10.0), new Pair(3, 90.0));
@@ -129,6 +131,7 @@ public class ETLTests extends AmpTestCase
 	/**
 	 * tests distributing normal percentages, with nulls
 	 */
+	@Test
 	public void testPercentagesDistributionWithNulls() {
 		testPercentage("{2=100.0}", "[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of ENTITY_TYPE_ACTIVITY 1]", null,
 			new Pair(2, null));
@@ -149,6 +152,7 @@ public class ETLTests extends AmpTestCase
 			new Pair(3, 0.0));
 	}
 
+	@Test
 	public void testDateRateInfo() {
 		DateRateInfo dri = new DateRateInfo(10, 0, 5.5);
 		assertEquals(dri.requestedDate, 10);
@@ -166,6 +170,7 @@ public class ETLTests extends AmpTestCase
 		assertEquals(dri.rate, 5.5);
 	}
 	
+	@Test
 	public void testExchangeRates() {
 		ExchangeRates er = new ExchangeRates(1, 2);
 		assertNull(er.getRatesOnDate(555)); // no exchange rate at all
@@ -193,6 +198,7 @@ public class ETLTests extends AmpTestCase
 		assertEquals(new DateRateInfo(320, 200, 18.5), er.getRatesOnDate(320));
 	}
 	
+	@Test
 	public void testCurrencyETL() {
 		DateRateInfo rateA = new DateRateInfo(10, 0, 21.0);
 		DateRateInfo rateB = new DateRateInfo(12, 2, 31.0);
@@ -209,6 +215,7 @@ public class ETLTests extends AmpTestCase
 		assertEquals(8.333333, CurrencyETL.chooseBestRate(rateA, rateB), 0.0001); // should favour the opposite exchange rate, because it is closer
 	}
 	
+	@Test
 	public void testCurrencyCombining() {
 		ExchangeRates direct = new ExchangeRates(1, 2);
 		direct.importRate(70, 6.0);

@@ -906,7 +906,7 @@ public class TeamUtil {
         Transaction tx = null;
         try {
             session = PersistenceManager.getRequestDBSession();
-            tx = session.beginTransaction();
+            tx = session.getTransaction();
 
            	String qs = "update "+ AmpActivityVersion.class.getName()+" set amp_team_id = null where amp_activity_id in (:activity)";
         	Query query = session.createQuery(qs);

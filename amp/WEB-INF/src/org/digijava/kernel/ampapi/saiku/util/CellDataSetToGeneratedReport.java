@@ -170,7 +170,9 @@ public class CellDataSetToGeneratedReport {
 	
 	public static Map<String, Integer> counts = new TreeMap<String, Integer>();
 	private double parseValue(String value) throws AMPException {
-		if (value == null || value.isEmpty() || value.equals("0"))
+		if (value == null)
+			throw new AMPException("Textual column value sent for parsing - invalid request. Please fix");
+		if (value.isEmpty() || value.equals("0"))
 			return 0;
 		
 //		Integer oldCount = counts.get(value);
@@ -305,15 +307,19 @@ public class CellDataSetToGeneratedReport {
 		//check if this is last row in the entire result set
 		if (nextNotNullColId == -1)
 			return true;
-		//check if next is coming a new hierarchy group of not last column
+		//check if next is coming a new hierarchy group of not last column hierarchy
 		if (nextNotNullColId < spec.getHierarchies().size() && nextNotNullColId < spec.getColumns().size() - 1)
 			return true;
+		/* After some non-hierarchical changes, this part seems to be obsolete. 
+		 * Commenting out, but not removing until confirmed that is not causing issues.
+		 * This fixes the result grouping in the area. 
 		//check if this is 1 row group: if this is not the last column  
 		if (notNullColId + 1 < cellDataSet.getLeftOffset() && cellDataSet.getCellSetBody()[rowId + 1][notNullColId].getRawValue() != null)
 			return true;
 		//check if we are at not first level which is the last row of the current group
 		if (notNullColId > 0 && cellDataSet.getCellSetBody()[rowId + 1][notNullColId - 1].getRawValue() != null)
 			return true;
+		*/
 		return false;
 	}
 	

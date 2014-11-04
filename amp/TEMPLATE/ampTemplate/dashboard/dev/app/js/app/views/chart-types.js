@@ -38,6 +38,9 @@ module.exports = {
 
     return {
       draw: function(container, model) {
+        if (!container) {
+          console.error('missing container');
+        }
         var data = [model.get('processed')],
             categories = data[0].values.length - 1;
         chart.tooltipContent(function(a, y, b, raw) {

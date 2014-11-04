@@ -34,8 +34,7 @@ module.exports = BackboneDash.View.extend({
   initialize: function(options) {
     this.app = options.app;
     this.model.set(this.uiDefaults());
-    // TODO: load any state we need
-    this.chart = charts[this.model.get('view')]();  // bar, etc.
+    this.rendered = false;
     this.listenTo(this.model, 'change:adjtype', this.updateData);
     this.listenTo(this.model, 'change:limit', this.updateData);
     this.listenTo(this.model, 'change:view', this.render);
@@ -45,6 +44,8 @@ module.exports = BackboneDash.View.extend({
       set: _(this.model.set).bind(this.model),
       empty: null
     });
+
+    this.chart = charts[this.model.get('view')]();  // bar, etc.
   },
 
   _getState: function() {
@@ -57,6 +58,7 @@ module.exports = BackboneDash.View.extend({
   },
 
   render: function() {
+    this.rendered = true;
     var renderOptions = {
       model: this.model,
       chart: this.chartEl,
@@ -69,6 +71,9 @@ module.exports = BackboneDash.View.extend({
   },
 
   updateData: function() {
+    if (!this.rendered) {
+      return;
+    }
     var message = this.$('.dash-chart-diagnostic');
     message.html('Loading...').fadeIn(100);
     var fetchOptions = {

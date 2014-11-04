@@ -189,7 +189,7 @@ public class MondrianUtils {
 	public static FilterRule getDateRangeFilterRule(Date from, Date to) throws AmpApiException {
 		return getDatesRangeFilterRule(ElementType.DATE,  
 				DateTimeUtil.toJulianDayNumber(from), DateTimeUtil.toJulianDayNumber(to), 
-				DateTimeUtil.formatDate(from), DateTimeUtil.formatDate(to), false);
+				DateTimeUtil.fromatDateOrNull(from), DateTimeUtil.fromatDateOrNull(to), false);
 	}
 	
 	private static FilterRule getDatesRangeFilterRule(ElementType elemType, Integer from, Integer to, 
@@ -264,7 +264,7 @@ public class MondrianUtils {
 		List<String> dateStrList = new ArrayList<String>(dates.size());
 		for (Date date : dates) {
 			julianDateNumbers.add(DateTimeUtil.toJulianDayNumber(date));
-			dateStrList.add(DateTimeUtil.formatDate(date));
+			dateStrList.add(DateTimeUtil.fromatDateOrNull(date));
 		}
 		return getDatesListFilterRule(ElementType.DATE, julianDateNumbers, dateStrList, valuesToInclude);
 	}
@@ -323,7 +323,7 @@ public class MondrianUtils {
 	 */
 	public static FilterRule getSingleDateFilterRule(Date date, boolean valueToInclude) throws AmpApiException {
 		return getSingleDateFilterRule(ElementType.DATE, DateTimeUtil.toJulianDayNumber(date), 
-				DateTimeUtil.formatDate(date), valueToInclude);
+				DateTimeUtil.fromatDateOrNull(date), valueToInclude);
 	}
 	
 	private static FilterRule getSingleDateFilterRule(ElementType elemType, Integer value, 

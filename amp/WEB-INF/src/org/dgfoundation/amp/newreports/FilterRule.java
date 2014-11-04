@@ -73,7 +73,7 @@ public class FilterRule {
 	 * @param isIdList - true if this is a list of ids, false if this is a list of values
 	 */
 	public FilterRule(List<String> values, boolean valuesInclusive, boolean isIdList) {
-		this(values, null, valuesInclusive, isIdList);
+		this(null, values, valuesInclusive, isIdList);
 	}
 
 	/**

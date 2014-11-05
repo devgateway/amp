@@ -33,6 +33,12 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 		jQuery(grid).jqGrid('setGridParam', {
 			url : getURL(id)
 		});
+
+		// Do this or new filters will be merged with old postData.
+		jQuery(grid).jqGrid('setGridParam', {
+			postData : null
+		});
+
 		var data = {
 			page : 1,
 			regenerate : true,

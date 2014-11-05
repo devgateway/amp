@@ -255,11 +255,12 @@ public class ReportsUtil {
 	}
 	
 	private static void configureFilters(ReportSpecificationImpl spec, JsonBean formParams) {
-		LinkedHashMap<String, Object> filters = (LinkedHashMap<String, Object>) formParams.get("filters");
+		JsonBean filters = new JsonBean();
+		LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get("filters");
 		MondrianReportFilters mondrianReportFilters = null;
-		if (filters != null) {
-			mondrianReportFilters = FilterUtils.getApiColumnFilter(filters);
-			mondrianReportFilters = FilterUtils.getApiOtherFilters(filters, mondrianReportFilters);
+		if (requestFilters != null) {
+			filters.any().putAll(requestFilters);
+			mondrianReportFilters = FilterUtils.getFilters(filters);
 			// set filters even if they are empty, that means filters are cleared up
 			((ReportSpecificationImpl)spec).setFilters(mondrianReportFilters);
 		}

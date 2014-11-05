@@ -83,6 +83,7 @@ public class FilterUtils {
 		}
 		return s;
 	}
+	
 	public static List<String> applyKeywordSearch(LinkedHashMap<String, Object> otherFilter) {
 		List<String> activitIds=new ArrayList<String>();
 
@@ -99,6 +100,7 @@ public class FilterUtils {
 		}
 		return activitIds;
 	}
+	
 	public static MondrianReportFilters getFilterRules(LinkedHashMap<String, Object> columnFilter, LinkedHashMap<String, Object> otherFilter, List<String> activityIds) {
 		MondrianReportFilters filterRules = null;
 			if(columnFilter!=null){
@@ -118,5 +120,41 @@ public class FilterUtils {
 
 		}
 		return filterRules;
-	}		
+	}
+	
+	/**
+	 * Builds MondrianReportFilters based on the json filters request
+	 * @param filtersConfig
+	 * @return MondrianReportFilters
+	 * @see #getFilters(JsonBean, List)
+	 */
+	public static MondrianReportFilters getFilters(JsonBean filtersConfig) {
+		return getFilters(filtersConfig, null);
+	}
+	
+	/**
+	 * Builds MondrianReportFilters based on the json filters request and additional options
+	 * @param filtersConfig json filters config request
+	 * @param activitIds    the list of activities to filter by
+	 * @return MondrianReportFilters
+	 */
+	public static MondrianReportFilters getFilters(JsonBean filtersConfig, List<String> activitIds) {
+		MondrianReportFilters filters = null;
+		
+		//we check if we have filter by keyword
+		LinkedHashMap<String, Object> otherFilter=null;
+		if (filtersConfig != null) {
+			otherFilter = (LinkedHashMap<String, Object>) filtersConfig.get("otherFilters");
+			if(activitIds == null){
+				activitIds = new ArrayList<String>();
+			}
+			activitIds.addAll(FilterUtils.applyKeywordSearch( otherFilter));
+		}
+		
+		filters = FilterUtils.getFilterRules(
+				(LinkedHashMap<String, Object>) filtersConfig.get("columnFilters"),
+				otherFilter, activitIds);
+		
+		return filters;
+	}
 }

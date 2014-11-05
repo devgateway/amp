@@ -3,6 +3,10 @@ var _ = require('underscore');
 var Backbone = require('backbone');
 
 
+// TODO: ... ... ...
+var IS_PHILS_CORS = window && (window.location.host === 'localhost:3000');
+
+
 function InitError(instance) {
   this.instance = instance;
   this.toString = function() { return 'Module initialization error'; };
@@ -21,8 +25,10 @@ var bs = Backbone.sync;
 
 function syncOverride(method, model, options) {
   var url = _.has(options, 'url') ? options.url : _.result(model, 'url');
+
   _(options).extend({
-    url: 'http://66.207.103.134' + url,
+    // maybe use phil's DRC CORS dev server
+    url: (IS_PHILS_CORS ? 'http://66.207.103.134' : '') + url,
     headers: {
       // jscs:disable disallowQuotedKeysInObjects
       'Accept': 'application/json',
@@ -30,6 +36,7 @@ function syncOverride(method, model, options) {
       // jscs:enable disallowQuotedKeysInObjects
     }
   });
+
   return bs.call(this, method, model, options);
 }
 

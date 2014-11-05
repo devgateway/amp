@@ -286,6 +286,7 @@ public class Reports {
 			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + report.generationTime + "(ms)");
 		} catch (Exception e) {
 			logger.error("Cannot execute report (" + ampReport + ")", e);
+			//e.printStackTrace();
 			String error = ExceptionUtils.getRootCauseMessage(e);
 			return new QueryResult(error);
 		}

@@ -22,14 +22,6 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	
 	@Test
 	public void testProjectTitleLanguages() {
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("fundingtype");
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.setCalculateColumnTotals(true);
-		spec.setCalculateRowTotals(true);
-		
-		GeneratedReport rep = this.runReportOn(spec, "en", Arrays.asList("Eth Water", "SSC Project 1", "pledged 2"));
 		ReportAreaForTests correctReport = new ReportAreaForTests()
 	    .withContents("Project Title", "Report Totals", "Actual Commitments", "7 181 333", "Actual Disbursements", "1 665 111")
 	    .withChildren(
@@ -39,11 +31,15 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	          .withContents("Project Title", "SSC Project 1", "Actual Commitments", "111 333", "Actual Disbursements", "555 111"),
 	      new ReportAreaForTests()
 	          .withContents("Project Title", "pledged 2", "Actual Commitments", "7 070 000", "Actual Disbursements", "450 000"));
-		String delta = correctReport.getDifferenceAgainst(rep.reportContents); 
-		assertEquals(null, delta);
 		
-		GeneratedReport repRu = this.runReportOn(spec, "ru", Arrays.asList("Eth Water", "SSC Project 1", "pledged 2"));
-		System.out.println(describeReportOutputInCode(rep));
+		runMondrianTestCase(
+				Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+				"en", 
+				Arrays.asList("Eth Water", "SSC Project 1", "pledged 2"),
+				correctReport,
+				"testcase EN"); 
+				
 		ReportAreaForTests correctReportRu = new ReportAreaForTests()
 	    .withContents("Project Title", "Report Totals", "Actual Commitments", "7 181 333", "Actual Disbursements", "1 665 111")
 	    .withChildren(
@@ -53,9 +49,38 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	          .withContents("Project Title", "Проект КЮЮ 1", "Actual Commitments", "111 333", "Actual Disbursements", "555 111"),
 	      new ReportAreaForTests()
 	          .withContents("Project Title", "обещание 2", "Actual Commitments", "7 070 000", "Actual Disbursements", "450 000"));
-		delta = correctReportRu.getDifferenceAgainst(repRu.reportContents);
-		assertEquals(null, delta);
+		
+		runMondrianTestCase(
+				Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+				"ru", 
+				Arrays.asList("Eth Water", "SSC Project 1", "pledged 2"),
+				correctReportRu,
+				"testcase RU"); 
+
 		//System.out.println(describeReportOutputInCode(rep));
 		//System.out.println(rep.toString());
+	}
+	
+	@Test
+	public void test_AMP_18497() {
+		// for running manually: open http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/32 on the AMP 2.10 testcases database
+		
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Donor Group", "", "Actual Commitments", "999 888", "Actual Disbursements", "1 301 323")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "TAC_activity_2", "Donor Group", "American", "Actual Commitments", "999 888", "Actual Disbursements", "453 213"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "Test MTEF directed", "Donor Group", "American, National", "Actual Commitments", "0", "Actual Disbursements", "188 110"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "Eth Water", "Donor Group", "American, Default Group, European, International, National", "Actual Commitments", "0", "Actual Disbursements", "660 000"));
+
+		runMondrianTestCase(
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_GROUP),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+				"en", 
+				Arrays.asList("Eth Water", "Test MTEF directed", "TAC_activity_2"), 
+				cor, "AMP-18497");
 	}
 }

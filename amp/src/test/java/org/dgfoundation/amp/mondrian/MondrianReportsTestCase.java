@@ -1,15 +1,21 @@
 package org.dgfoundation.amp.mondrian;
 
+import java.util.Arrays;
 import java.util.List;
 
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
+import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.testutils.ActivityIdsFetcher;
 import org.dgfoundation.amp.testutils.AmpTestCase;
@@ -61,6 +67,23 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		catch(Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	protected void runMondrianTestCase(List<String> columns, List<String> measures, String locale, List<String> activities, ReportAreaForTests cor, String testName) {
+		ReportSpecificationImpl spec = new ReportSpecificationImpl(testName);
+		
+		for(String columnName:columns)
+			spec.addColumn(MondrianReportUtils.getColumn(columnName, ReportEntityType.ENTITY_TYPE_ALL));
+		
+		for(String measureName:measures)
+			spec.addMeasure(new ReportMeasure(measureName, ReportEntityType.ENTITY_TYPE_ALL));
+
+		spec.setCalculateColumnTotals(true);
+		spec.setCalculateRowTotals(true);
+		
+		GeneratedReport rep = this.runReportOn(spec, locale, activities);
+		String delta = cor.getDifferenceAgainst(rep.reportContents);
+		assertNull("test " + testName + " failed", delta);
 	}
 	
 	//protected void runRe

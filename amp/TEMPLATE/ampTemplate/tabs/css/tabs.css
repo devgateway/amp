@@ -1,3 +1,7 @@
+#tabs-container {
+	font-family: Open Sans;
+}
+
 .red {
 	color: #FF0000;
 }
@@ -92,10 +96,12 @@
 
 .wrap-cell {
 	white-space: normal !important;
+	font-size: 12px;
+	font-weight: normal;
 }
 
 .status_1 {
-	color: blue;
+	color: #00496B;
 }
 
 .status_2 {
@@ -123,6 +129,10 @@
 }
 
 /* Overriding jqGrid section */
+.ui-jqgrid-view {
+	font-family: Open Sans;
+}
+
 th.ui-th-column div {
 	white-space: normal !important;
 	height: auto !important;

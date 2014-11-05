@@ -32,6 +32,12 @@
         <link type="text/css" href="css_2/tabs.css" rel="stylesheet" />
         
         <!-- START LOADING NEW TABS NECESSARY FILES -->
+        
+        <!-- Open Sans -->
+		<link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400italic,600,700italic,400,700,800italic' rel='stylesheet' type='text/css'>
+		<!-- Icon Font - Font Awesome -->
+		<link href="http://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
         <link rel="stylesheet" href="node_modules/amp-filter/dist/amp-filter.css">
 		<link rel="stylesheet" href="tabs/css/bootstrap.css">
 		<link rel="stylesheet" href="tabs/css/bootstrap-theme.css">
@@ -46,6 +52,7 @@
 		        waitSeconds: 0
 		    };
 		</script>		
+		
 		<!-- END LOADING NEW TABS NECESSARY FILES -->
         
 	</head>

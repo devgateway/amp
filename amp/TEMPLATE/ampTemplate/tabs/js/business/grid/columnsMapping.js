@@ -88,7 +88,8 @@ define(function() {
 		$(metadata.columns.models).each(function(i, item) {
 			var column = {
 				name : item.get('columnName'),
-				classes : 'wrap-cell'
+				classes : 'wrap-cell',
+				sortable : true
 			};
 			// Show current group name (not natively supported by jqGrid).
 			if (i == (metadata.hierarchies.models.length)) {
@@ -100,6 +101,12 @@ define(function() {
 				column.width = mappedColumn.width;
 				column.fixed = (mappedColumn.fixed != undefined) ? mappedColumn.fixed : false;
 			}
+			/*column.sorttype = function(cellValue, obj) {
+				alert(cellValue + obj);
+				// return groupOrder[obj.groupId];
+				// return obj.groupOrder;
+				return "";
+			};*/
 			ret.push(column);
 		});
 		/*

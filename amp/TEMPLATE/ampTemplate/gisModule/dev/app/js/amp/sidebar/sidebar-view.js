@@ -27,6 +27,7 @@ module.exports = Backbone.View.extend({
 
   initialize: function(options) {
     this.app = options.app;
+    this.defaultOpenCollapsable = '#collapse-projectdata';
   },
 
   // Render entire geocoding view.
@@ -48,6 +49,9 @@ module.exports = Backbone.View.extend({
         $('[data-toggle=popover]').popover('hide');
       }
     });
+
+    // Open default:
+    this.$(this.defaultOpenCollapsable).collapse('show');
 
     return this;
   },

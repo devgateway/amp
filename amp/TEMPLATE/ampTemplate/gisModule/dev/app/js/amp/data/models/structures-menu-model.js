@@ -9,43 +9,6 @@ var Palette = require('../../colours/colour-palette');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var Structures = require('../collections/structures-collection');
 
-
-
-var ONAMES = {  // TODO: temp hack until filters have a proper data structure
-  3001153: 'Care Austria',
-  2: 'African Development Fund (AFDF)',
-  3: 'Asian Development Bank (ASDB)',
-  4: 'Asian Development Fund (ASDF)',
-  73: 'Joint United Nations Programme on HIV/AIDS (UNAIDS)',
-  74: 'UNICEF',
-  75: 'World Bank',
-  3267: 'Ministère du Plan',
-  3204:  'World Bank',
-  3253: 'Global Partnership for Education',
-  3351: 'CARE International UK',
-  3856:  'Icelandic International Development Agency (ICEIDA)',
-  4192: 'UNICEF',
-  4211: 'Canadian International Development Agency (CIDA)',
-  3570: 'African Development Fund (AFDF)',
-  105045712: 'Deutsche Gesellschaft fur Internationale Zusammenarbeit (GIZ)',
-  40279598: 'India EXIM Bank',
-  24: 'International Fund for Agricultural Development (IFAD)',
-  110592388: 'Canadian International Development Agency (CIDA)',
-  85180698: 'CARE International Nepal',
-  81831902: 'Centers for Disease Control and Prevention',
-  57927714: 'Australian Agency for International Development (AUSAID)',
-  57299431: 'Danish Church Aid',
-  40001642: 'Global Partnership for Education',
-  104929646: 'Danida - Danish International Development Agency',
-  51973501: 'CARE International UK',
-  110592567: 'Japan International Cooperation Agency (JICA)',
-  54295162: 'International Labour Organisation (ILO)',
-  64008061: 'International Organisation for Migration (IOM)',
-  52178366: 'Icelandic International Development Agency (ICEIDA)'
-};
-
-
-
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
 
@@ -65,43 +28,32 @@ module.exports = Backbone.Model
     this.palette = new Palette.FromSet();
     this.projectSitesCollection = this.appData.projectSites;
 
-    this.listenTo(this, 'change:selected', function(blah, show) {
+    this.listenTo(this, 'change:selected', function(other, show) {
       this.trigger(show ? 'show' : 'hide', this);
+      console.log('changes:', arguments);
       if (show) {
-        self.appData.projectSites.fetch();
+        self.projectSitesCollection.fetch();
       }
     });
-    this.listenTo(this, 'sync', this.updatePaletteSet);
+
+    this.listenTo(this.projectSitesCollection, 'sync', this.updatePaletteSet);
     this.listenTo(this.filter, 'apply', this.applyFilters);
   },
 
-  applyFilters: function(serializedFitlers) {
+  applyFilters: function(serializedFilters) {
     if (this.get('selected')) {
-      this.appData.projectSites.fetch();
+      this.projectSitesCollection.fetch();
     }
   },
 
 
-  //TODO: we don't want to do loadonce, because fitlers change...so fetch instead,
   load: function() {
-    //return this.fetch();
-    console.err("removeme");
-    return self.appData.projectSites.fetch();
-    //DRS temp try fetch for testing filtering..
+    return this.projectSitesCollection.load();
   },
 
-  // Loads structures and all their activitites.
+  // Loads structures and all their activities.
   loadAll: function() {
-    var self = this;
-    var deferred = $.Deferred();
-    var allActivityIds = [];
-
-    self.appData.projectSites.fetch().then(function() {
-      deferred.resolve();
-
-    });
-
-    return deferred;
+    return this.projectSitesCollection.loadAll();
   },
 
   // does not do new web requests, unless it's never been done.
@@ -111,13 +63,6 @@ module.exports = Backbone.Model
     } else {
       return this.loadAll();
     }
-  },
-
-  parse: function(data) {
-    // TODO: don't keep data.features around
-    data.sites = new Structures(data.features);
-
-    return data;
   },
 
   getSelected: function() {

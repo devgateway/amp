@@ -81,6 +81,7 @@ _.extend(GISData.prototype, Backbone.Events, {
 
     // bubble indicator events on the data object
     this.listenTo(this.indicators, 'all', this.bubbleLayerEvents('indicator'));
+    this.listenTo(this.projectSitesMenu, 'all', this.bubbleLayerEvents('structure'));
     this.listenTo(this.projectSites, 'all', this.bubbleLayerEvents('structure'));
     this.listenTo(this.admClusters, 'all', this.bubbleLayerEvents('adm-cluster'));
   },
@@ -115,7 +116,7 @@ _.extend(GISData.prototype, Backbone.Events, {
   getAllVisibleLayers: function() {
     var layers = _.union(
       this.indicators.getSelected().value(),
-      this.projectSites.getSelected().value(),
+      this.projectSitesMenu.getSelected().value(),
       this.admClusters.getSelected().value()
     );
 

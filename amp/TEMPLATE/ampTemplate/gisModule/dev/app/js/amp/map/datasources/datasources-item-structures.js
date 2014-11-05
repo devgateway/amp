@@ -2,7 +2,7 @@ var fs = require('fs');
 var _ = require('underscore');
 var $ = require('jquery');
 var Backbone = require('backbone');
-var Template = fs.readFileSync(__dirname + '/datasources-item-adm-clusters.html', 'utf8');
+var Template = fs.readFileSync(__dirname + '/datasources-item-structures.html', 'utf8');
 
 
 module.exports = Backbone.View.extend({

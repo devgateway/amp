@@ -33,7 +33,8 @@ module.exports = Backbone.View.extend({
 
     this.listenTo(this.app.data.projectSitesMenu, 'show', this.showLayer);
     this.listenTo(this.app.data.projectSitesMenu, 'hide', this.hideLayer);
-    this.listenTo(this.app.data.projectSitesMenu, 'sync', this.refreshLayer); //TODO: implement refresh layer
+
+    this.listenTo(this.app.data.projectSites, 'sync', this.refreshLayer); //TODO: implement refresh layer
 
     this.listenTo(this.markerCluster, 'clusterclick', this.clusterClick);
 

@@ -2,6 +2,7 @@ var _ = require('underscore');
 var $ = require('jquery');
 var Backbone = require('backbone');
 var ProjectSiteModel = require('../models/structure-model');
+var LoadOnceMixin = require('../../mixins/load-once-mixin');
 //var ActivityCollection = require('../collections/activity-collection');
 
 /* ProjectSites (a.k.a Structures) collection
@@ -9,7 +10,8 @@ var ProjectSiteModel = require('../models/structure-model');
  * activities (aka Projects) but are not a type of activity.
  *
  **/
-module.exports = Backbone.Collection.extend({
+module.exports = Backbone.Collection
+.extend(LoadOnceMixin).extend({
 
   url: '/rest/gis/structures',
   model: ProjectSiteModel,
@@ -27,12 +29,31 @@ module.exports = Backbone.Collection.extend({
     } else {
       console.warn('Project Sites/Structures colln: no options were provided for context');
     }
+
+    _.bindAll(this,'fetch','updatePaletteSet');
+
   },
 
   fetch: function(options) {
+
+    var payload = {otherFilters: {}};
+    /* TODO nice to have: if otherFilters and columnFilters
+     * had their own object on API, separate from settings, etc.
+     * Currently all on the same data level.
+     **/
+    /* get filters if set (not applicable for getActivities) */
+    if (this.appData.filter) {
+      _.extend(payload, this.appData.filter.serialize());
+    }
+
+    /* get "settings" */
+    /*if (this.appData.settings) {
+      payload.settings = this.appData.settings.serialize();
+    }*/
+
     options = _.defaults((options || {}), {
       type: 'POST',
-      data:'{}'
+      data: JSON.stringify(payload)
     });
 
     /*TODO implement manual caching */
@@ -81,11 +102,6 @@ module.exports = Backbone.Collection.extend({
       type: 'FeatureCollection',
       features: featureList
     };
-  },
-
-/*Migrated from Collection-Model */
-  getSelected: function() {
-    return _.chain(this.get('selected') ? [this] : []);
   },
 
 /*Migrated from Collection-Model */

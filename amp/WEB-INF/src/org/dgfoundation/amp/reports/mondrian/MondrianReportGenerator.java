@@ -430,10 +430,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		CellSetAxis rowAxis = cellSet.getAxes().get(Axis.ROWS.axisOrdinal());
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 		
-		if (rowAxis.getPositionCount() > 0 ) {
-			leafHeaders = getOrderedLeafColumnsList(spec, rowAxis, columnAxis);
-		} else 
-			leafHeaders = null;
+		leafHeaders = getOrderedLeafColumnsList(spec, rowAxis, columnAxis);
 		
 		logger.info("[" + spec.getReportName() + "]" +  "Starting conversion from Olap4J CellSet to Saiku CellDataSet via Saiku method...");
 		CellDataSet cellDataSet = OlapResultSetUtil.cellSet2Matrix(cellSet); // we can also pass a formater to cellSet2Matrix(cellSet, formatter)
@@ -669,28 +666,29 @@ public class MondrianReportGenerator implements ReportExecutor {
 		List<ReportOutputColumn> reportColumns = new ArrayList<ReportOutputColumn>(); //leaf report columns list
 
 		//build the list of available columns
-		for (Member textColumn : rowAxis.getPositions().get(0).getMembers()) {
-			ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getCaption(), null, 
-					MondrianMapping.fromFullNameToColumnName.get(textColumn.getLevel().getUniqueName()));
-			reportColumns.add(reportColumn);
-		}
+		if (rowAxis.getPositionCount() > 0 )
+			for (Member textColumn : rowAxis.getPositions().get(0).getMembers()) {
+				ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getCaption(), null, 
+						MondrianMapping.fromFullNameToColumnName.get(textColumn.getLevel().getUniqueName()));
+				reportColumns.add(reportColumn);
+			}
 		//int measuresLeafPos = columnAxis.getAxisMetaData().getHierarchies().size();
-		if (columnAxis.getPositionCount() > 0)
-		for (Position position : columnAxis.getPositions()) {
-			String fullColumnName = "";
-			for (Member measureColumn : position.getMembers()) {
-				ReportOutputColumn parent = reportColumnsByFullName.get(fullColumnName);
-				fullColumnName += "/" +  measureColumn.getName();
-				ReportOutputColumn reportColumn = reportColumnsByFullName.get(fullColumnName);
-				if (reportColumn == null) {
-					reportColumn = new ReportOutputColumn(measureColumn.getCaption(), parent, measureColumn.getName());
-					reportColumnsByFullName.put(fullColumnName, reportColumn);
-				}
-				if (measureColumn.getDepth() == 0) { //lowest depth ==0 => this is leaf column
-					reportColumns.add(reportColumn);
+		if (columnAxis.getPositions() != null)
+			for (Position position : columnAxis.getPositions()) {
+				String fullColumnName = "";
+				for (Member measureColumn : position.getMembers()) {
+					ReportOutputColumn parent = reportColumnsByFullName.get(fullColumnName);
+					fullColumnName += "/" +  measureColumn.getName();
+					ReportOutputColumn reportColumn = reportColumnsByFullName.get(fullColumnName);
+					if (reportColumn == null) {
+						reportColumn = new ReportOutputColumn(measureColumn.getCaption(), parent, measureColumn.getName());
+						reportColumnsByFullName.put(fullColumnName, reportColumn);
+					}
+					if (measureColumn.getDepth() == 0) { //lowest depth ==0 => this is leaf column
+						reportColumns.add(reportColumn);
+					}
 				}
 			}
-		}
 		//add measures total columns
 		if (spec.isCalculateColumnTotals() && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
 			ReportOutputColumn totalMeasuresColumn = ReportOutputColumn.buildTranslated(MoConstants.TOTAL_MEASURES, environment.locale, null);

@@ -58,7 +58,7 @@ module.exports = Backbone.Model
       data: JSON.stringify(filter)
     });
 
-
+//console.log('about to fetch...');
     this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, options);
     return this.lastFetchXhr;
   },

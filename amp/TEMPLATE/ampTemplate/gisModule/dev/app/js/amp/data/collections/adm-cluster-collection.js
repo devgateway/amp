@@ -9,7 +9,6 @@ module.exports = Backbone.Collection
 
   model:  ADMClusterModel,
   url: '/rest/gis/clusters',
-  defaultSelected: 'adm-1',   // if set, then the cluster will auto select this adm after sync.
 
   initialize: function(models, options) {
     // TODO: probably pass app or data here instead?
@@ -34,16 +33,6 @@ module.exports = Backbone.Collection
   getSelected: function() {
     return this.chain()
       .filter(function(model) { return model.get('selected'); });
-  },
-
-  _setDefault: function() {
-    if (this.defaultSelected) {
-      // default adm-1 Clusters to on.
-      var defaultCluster = this.findWhere({adminLevel: this.defaultSelected});
-      if (defaultCluster) {
-        defaultCluster.set('selected', true);
-      }
-    }
   }
 
 });

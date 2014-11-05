@@ -45,10 +45,9 @@ module.exports = BaseControlView.extend({
             self.projectLayerCollection.select(selectedModel);
           }
         },
-        empty: null
+        empty: 'Region'
       });
     });
-
   },
 
   render: function() {

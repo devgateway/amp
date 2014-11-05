@@ -3,7 +3,10 @@ package org.dgfoundation.amp.mondrian;
 import java.util.List;
 
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportArea;
+import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
@@ -66,8 +69,56 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 	}
 	
 	public static String describeReportOutputInCode(GeneratedReport gr) {
-		ReportAreaForTests rai = (ReportAreaForTests) gr.reportContents;
-		return rai.describeInCode(1);
+		return describeInCode(gr.reportContents, 1);
+	}
+	
+	public static String describeInCode(ReportArea area, int depth) {
+		if (area.getOwner() != null)
+			throw new RuntimeException("describing owned reports not implemented!");
+		
+		return String.format("%snew ReportAreaForTests()\n%s%s%s", prefixString(depth),
+				prefixString(depth), describeContents(area, depth),
+				describeChildren(area, depth));
+	}
+	
+	public static String describeContents(ReportArea area, int depth) {
+		if (area.getContents() == null) return "";
+		StringBuffer res = new StringBuffer(prefixString(depth) + ".withContents(");	
+		boolean first = true;
+		for (ReportOutputColumn colKey:area.getContents().keySet()) {
+			ReportCell colContents = area.getContents().get(colKey);
+			res.append(String.format("%s\"%s\", \"%s\"", first ? "" : ", ", colKey.originalColumnName, colContents.displayedValue));
+			first = false;
+		}
+		res.append(")");
+		return res.toString();
+	}
+	
+	public static String describeChildren(ReportArea area, int depth) {
+		if (area.getChildren() == null) return "";
+		StringBuffer res = new StringBuffer("\n" + prefixString(depth) + ".withChildren(");
+		for(int i = 0; i < area.getChildren().size(); i++) {
+			ReportArea child = area.getChildren().get(i);
+			res.append("\n");
+			res.append(describeInCode(child, depth + 1));
+			if (i != area.getChildren().size() - 1)
+				res.append(",");
+		}
+		res.append(prefixString(depth) + ")");
+		return res.toString();
+	}
+	
+	/**
+	 * returns the prefix of a string shifted right
+	 * @param depth
+	 * @return
+	 */
+	public static String prefixString(int depth)
+	{
+		String res = "";
+		for(int i = 0; i < depth; i++)
+			res = res + "  ";
+		return res;
 	}
 }
 

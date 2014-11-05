@@ -3,13 +3,8 @@
  */
 package org.dgfoundation.amp.newreports;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 /**
  * Holds report output content as map of columns and cells, or as a parent of {@link ReportArea} children.

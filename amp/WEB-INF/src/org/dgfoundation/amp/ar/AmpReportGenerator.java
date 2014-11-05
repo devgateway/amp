@@ -852,7 +852,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		}
 
 		/**
-		 * Iterare all measure and add a column for each computed measure
+		 * Iterate all measure and add a column for each computed measure
 		 */
 		Set<AmpReportMeasures> xmeasures = reportMetadata.getMeasures();
 		List<AmpReportMeasures> xmeasuresList = new ArrayList<AmpReportMeasures>(xmeasures);
@@ -958,7 +958,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	}
 	
 	/**
-	 *  if has Real Disbursements column AND has a hierarchy by one of ArConstants.COLUMN_ROLE_CODES.keys(), then remove all columns which are not "v temu" from:
+	 *  if has Real Disbursements column AND has a hierarchy by one of ArConstants.COLUMN_ROLE_CODES.keys(), then remove all irrelevant columns from:
 	 *	1) Funding -> YEAR -> Real Disbursements -> XYZ
 	 *	2) Total Costs -> Real Disbursements -> XYZ
 	 * @param fundingOrgHiers

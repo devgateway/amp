@@ -173,12 +173,12 @@ public class GroupReportDataXLS extends XLSExporter{
 	
 	public void createHeaderLogoAndStatement(HttpServletRequest request, AdvancedReportForm reportForm, String realPath) throws Exception {
 		
-//		HttpSession session 	=  request.getSession();
+
 		//for translation purposes
 		String locale = RequestUtils.getNavigationLanguage(request).getCode();
 		GroupReportData rd = (GroupReportData) item;
 		
-		HSSFCell cell			= row.createCell(colId.shortValue());
+		HSSFCell cell			= row.createCell(colId.intValue());
 		
 		if(reportForm != null && reportForm.getLogoOptions() != null)
 			if (reportForm.getLogoOptions().equals("0")) {//disabled
@@ -215,10 +215,10 @@ public class GroupReportDataXLS extends XLSExporter{
 					rowId.inc();
 					colId.reset();
 					row=sheet.createRow(rowId.shortValue());
-					cell=row.createCell(colId.shortValue());						
+					cell=row.createCell(colId.intValue());						
 				}
 				String stmt = "";
-				stmt = TranslatorWorker.translateText("This Report was created by AMP");
+				stmt = TranslatorWorker.translateText("This Report was created in AMP");
 				stmt += " " + FeaturesUtil.getCurrentCountryName();
 				if (reportForm.getDateOptions().equals("0")) {//disabled
 					// no date

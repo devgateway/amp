@@ -67,6 +67,7 @@ module.exports = Backbone.Model
   },
 
   _joinDataWithBoundaries: function(boundaryGeoJSON) {
+    var self = this;
     var indexedValues = _.indexBy(this.get('values'), 'admID');
     var admKey = this.id.replace('-', '').toUpperCase();
     // copy boundary geoJSON, and inject data
@@ -77,9 +78,15 @@ module.exports = Backbone.Model
         // replacing for now, to save weight
         feature.id = feature.properties[admKey + '_CODE'];
         feature.properties.name = feature.properties[admKey + '_NAME'];
+
+        if (!indexedValues[feature.id]) {
+          indexedValues[feature.id] = {amount: 0};
+          self.palette.set({min: 0});
+        }
+
         return _.extend(feature, {
           properties: _.extend(feature.properties, {
-            value: (indexedValues[feature.id] ? indexedValues[feature.id].amount : 50)
+            value: indexedValues[feature.id].amount
           })
         });
       })

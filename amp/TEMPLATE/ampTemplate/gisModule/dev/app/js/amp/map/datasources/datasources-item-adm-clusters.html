@@ -1,4 +1,4 @@
-<h5><%= startIndex %> of <%= totalCount %> different activities are shown (page <%= currentPage %>)</h5>
+<h5><%= obj.startIndex %> of <%= obj.totalCount %> different activities are shown (page <%= obj.currentPage %>)</h5>
 <div>
   <div class="">
     <table class="table table-4 table-striped table-condensed">
@@ -18,7 +18,7 @@
         </tr>
       </thead>
       <tbody>
-        <%   _.each(activities, function(activity){  %>
+        <%   _.each(obj.activities, function(activity){  %>
         <tr>
           <td data-th="title"><a href="<%= activity.ampUrl%>"><%= activity["Project Title"] %></a>
           </td>

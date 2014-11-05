@@ -76,10 +76,6 @@ module.exports = Backbone.View.extend({
     return this;
   },
 
-
-      /*jshint camelcase: false */
-// jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-
   _renderCountryBoundary: function() {
     var self = this;
     this.app.data.boundaries.load().then(function() {

@@ -37,16 +37,18 @@ module.exports = Backbone.View.extend({
         throw new Error('Map view for layer type not implemented. layer:', layer);
       }
       self.leafletLayerMap[layer.cid] = loadedLayer;
-      self.map.addLayer(loadedLayer);
-      if (loadedLayer.bringToBack) {
-        loadedLayer.bringToBack();
 
-        //TODO: drs, very dirty way of hiding boundaries so they don't hijack click events
-        // I need to pull out boundaries into own view.
-        self.admClustersLayersView.moveBoundaryBack();
+      // only add it to the map if is still selected.
+      if (layer.get('selected')) {
+        self.map.addLayer(loadedLayer);
+        if (loadedLayer.bringToBack) {
+          loadedLayer.bringToBack();
+          //TODO: drs, very dirty way of hiding boundaries so they don't hijack click events
+          // I need to pull out boundaries into own view.
+          self.admClustersLayersView.moveBoundaryBack();
+        }
+        self.trigger('addedToMap'); //TODO: better way. needed to let map bring projectSites to front.
       }
-      self.trigger('addedToMap'); //TODO: Phil should i do this better?...
-      // ...the main map view needs to know when layer is actually added to map.
     });
 
     layer.load();
@@ -90,7 +92,7 @@ module.exports = Backbone.View.extend({
   tmpFundingOnEachFeature: function(feature, layer) {
     // Add popup
     if (feature && feature.properties) {
-      layer.bindPopup('<strong>' + feature.properties.name+'</strong><br/>$' + feature.properties.value);
+      layer.bindPopup('<strong>' + feature.properties.name + '</strong><br/>$' + feature.properties.value);
     }
 
     // hilight and unhilight the area when a user clicks on them..

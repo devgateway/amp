@@ -1,6 +1,5 @@
 var fs = require('fs');
 var _ = require('underscore');
-var $ = require('jquery');
 var Backbone = require('backbone');
 var Template = fs.readFileSync(__dirname + '/datasources-item-adm-clusters.html', 'utf8');
 
@@ -36,7 +35,6 @@ module.exports = Backbone.View.extend({
   },
 
   _generateProjectList: function() {
-    var self = this;
     this._currentPage = 0;
     this.pagedIds = [];
 

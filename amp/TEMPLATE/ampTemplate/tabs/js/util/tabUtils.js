@@ -14,6 +14,7 @@ define([ 'jquery', 'jqueryui' ], function(jQuery) {
 		_.each(tabsCollection, function(val, i) {
 			if (val.get('visible') == false) {
 				jQuery(allTabs[i]).hide(duration);
+				app.TabsApp.tabsCollection.models[i].set('isOtherTabNowVisible', false);
 			}
 		});
 	};
@@ -25,6 +26,7 @@ define([ 'jquery', 'jqueryui' ], function(jQuery) {
 			if (item.get('id') == id) {
 				jQuery(jQuery("#tabs-section ul li")[i]).show(duration);
 				jQuery(app.TabsApp.tabContainer).tabs("option", "active", i);
+				app.TabsApp.tabsCollection.models[i].set('isOtherTabNowVisible', true);
 			}
 		});
 	};

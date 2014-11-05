@@ -1,12 +1,15 @@
-define([ 'underscore', 'backbone' ], function (_, Backbone) {
+define([ 'underscore', 'backbone' ], function(_, Backbone) {
 
-    // Tab Model
-    var Tab = Backbone.Model.extend({
-        defaults: {
-            name: '',
-            id: 0,
-            visible: false
-        }
-    });
-    return Tab;
+	// Tab Model
+	var Tab = Backbone.Model.extend({
+		defaults : {
+			name : '',
+			id : 0,
+			/* it means is one of the tabs always shown. */
+			visible : false,
+			/* it means is originally from the 'more tabs' and is visible now. */
+			isOtherTabNowVisible : false
+		}
+	});
+	return Tab;
 });

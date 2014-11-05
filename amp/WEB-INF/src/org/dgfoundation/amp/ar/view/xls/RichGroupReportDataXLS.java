@@ -110,69 +110,6 @@ public class RichGroupReportDataXLS extends GroupReportDataXLS {
 		element.invokeExporter(this, false, XLSExportType.RICH_XLS_EXPORT);
 	}
 	
-	@Override
-	public void createHeaderLogoAndStatement(HttpServletRequest request, AdvancedReportForm reportForm, String realPath) throws Exception {
-		// used to do nothing
-//		HttpSession session 	=  request.getSession();
-		//for translation purposes
-		String locale = RequestUtils.getNavigationLanguage(request).getCode();
-		GroupReportData rd = (GroupReportData) item;
-		
-		HSSFCell cell			= row.createCell(colId.intValue());
-		
-		if(reportForm != null && reportForm.getLogoOptions() != null)
-			if (reportForm.getLogoOptions().equals("0")) {//disabled
-				// do nothing 
-			} else if (reportForm.getLogoOptions().equals("1")) {//enabled																		 	                	                
-				if (reportForm.getLogoPositionOptions().equals("0")) {//header
-					//String path = getServlet().getServletContext().getRealPath("/");
-					InputStream is = new FileInputStream(realPath + "/TEMPLATE/ampTemplate/images/AMPLogo.png");
-					byte[] bytes = IOUtils.toByteArray(is);
-				    int idImg = wb.addPicture(bytes,  HSSFWorkbook.PICTURE_TYPE_PNG);
-				   
-				    // ajout de l'image sur l'ancre ( lig, col )  
-				    HSSFClientAnchor ancreImg = new HSSFClientAnchor();
-				    
-				    //Quick fix for the logo position 
-				    colId.reset();
-				    rowId.reset();
-				    ancreImg.setCol1(colId.shortValue());
-				    ancreImg.setRow1(rowId.shortValue());
-				    HSSFPicture Img = sheet.createDrawingPatriarch().createPicture( ancreImg,  idImg );			 
-				    // redim de l'image
-				    Img.resize();
-				} else if (reportForm.getLogoPositionOptions().equals("1")) {//footer
-					// see endPage function
-				}				
-			}
-		if(reportForm != null && reportForm.getStatementOptions() != null) 
-	        if (reportForm.getStatementOptions().equals("0")) {//disabled
-				// do nothing 
-			} else if (reportForm.getStatementOptions().equals("1")) {//enabled										
-				if ((reportForm.getLogoOptions().equals("1")) && (reportForm.getLogoPositionOptions().equals("0"))) { 
-					// creation d'une nouvelle cellule pour le statement	
-					this.makeColSpan(rd.getTotalDepth(),false);	
-					rowId.inc();
-					colId.reset();
-					row=sheet.createRow(rowId.shortValue());
-					cell=row.createCell(colId.intValue());						
-				}
-				String stmt = "";
-				stmt = TranslatorWorker.translateText("This Report was created in AMP");
-				stmt += " " + FeaturesUtil.getCurrentCountryName();
-				if (reportForm.getDateOptions().equals("0")) {//disabled
-					// no date
-				} else if (reportForm.getDateOptions().equals("1")) {//enable		
-					stmt += " " + TranslatorWorker.translateText("on")+ " " + DateFormat.getDateInstance(DateFormat.FULL, new java.util.Locale(locale)).format(new Date());
-				}				 	                	                
-				if (reportForm.getStatementPositionOptions().equals("0")) {//header		
-					cell.setCellValue(stmt);  
-				} else if (reportForm.getStatementPositionOptions().equals("1")) {//footer
-					// 
-				}				
-			}		
-	}
-	
 	/**
 	 * gets the bg-color to fill smth
 	 * @param grd

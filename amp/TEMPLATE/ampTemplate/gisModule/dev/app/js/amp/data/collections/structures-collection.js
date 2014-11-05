@@ -52,12 +52,12 @@ module.exports = Backbone.Collection.extend({
      */
 
     //get the list of unique activities for the structures
-    var activeActivityList = _.chain(response.features)
+    /*var activeActivityList = _.chain(response.features)
       .pluck('properties')
       .pluck('activity')
       .flatten()
       .unique()
-      .value();
+      .value();*/
 
     /* TODO(thadk): find a more encapsulated path to communicate this promise to model's map function */
     /* use options.app instead of window.app  -- also consider options.collection as this */

@@ -14,6 +14,7 @@ module.exports = Backbone.View.extend({
   template: _.template(Template),
   initialize: function(options) {
     this.app = options.app;
+
     _.bindAll(this, 'render', '_loadMoreProjects', '_generateProjectList');
   },
 
@@ -37,13 +38,9 @@ module.exports = Backbone.View.extend({
   _generateProjectList: function() {
     var self = this;
     this._currentPage = 0;
-    var drawnDeferred = this._loadMoreProjects()
-      .then(function() {
-        self.$el.find('.load-more').click(function() {
-          self._currentPage++;
-          self._loadMoreProjects();
-        });
-      });
+    this.pagedIds = [];
+
+    var drawnDeferred = this._loadMoreProjects();
 
     return drawnDeferred;
   },
@@ -62,20 +59,23 @@ module.exports = Backbone.View.extend({
           activities: self.pagedIds,
           title: 'Project Data',
           totalCount: self.filteredIds.length,
-          currentPage: self._currentPage,
-          startIndex: startIndex
+          currentPage: self._currentPage + 1,
+          startIndex: self.pagedIds.length
         }));
 
       self.$el.find('.load-more').click(function() {
+        if (!self.$el.find('.load-more').hasClass('disabled')) {
           self._currentPage++;
           self._loadMoreProjects();
-        });
+        }
+        self.$el.find('.load-more').text('loading...').addClass('disabled');
+      });
 
        // hide load more button if all activities loaded.
-      if (startIndex + self.PAGE_SIZE >= self.filteredIds.length) {
+      if (self.pagedIds.length >= self.filteredIds.length) {
         self.$el.find('.load-more').hide();
       } else {
-        self.$el.find('.load-more').text('load more ' + (startIndex + self.PAGE_SIZE) + '/' +
+        self.$el.find('.load-more').text('load more ' + (self.pagedIds.length + self.PAGE_SIZE) + '/' +
                                              self.filteredIds.length);
       }
 

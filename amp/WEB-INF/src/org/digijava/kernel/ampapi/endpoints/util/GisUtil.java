@@ -117,43 +117,5 @@ public class GisUtil {
 		}
 	}
 
-	public static List<String> applyKeywordSearch(Object otherFilter) {
-		List<String> activitIds=new ArrayList<String>();
 
-		if (otherFilter!=null && ((Map<String,Object>)otherFilter).get("keyword") != null) {
-			String keyword = ((Map<String,Object>)otherFilter).get("keyword").toString();
-			Collection<LoggerIdentifiable> activitySearch = SearchUtil
-					.getActivities(keyword,
-							TLSUtils.getRequest(), (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember"));
-			if (activitySearch != null && activitySearch.size() > 0) {
-				for (LoggerIdentifiable loggerIdentifiable : activitySearch) {
-					activitIds.add(loggerIdentifiable.getIdentifier().toString());
-				}
-			}
-		}
-		return activitIds;
-	}
-	public static MondrianReportFilters getFilterRules(JsonBean config,List<String> activitIds, Object otherFilter) {
-		MondrianReportFilters filterRules = null;
- 		if(config!=null){
-			Object filter=config.get("columnFilters");
-			if(filter!=null){
-				filterRules = FilterUtils.getApiColumnFilter((LinkedHashMap<String, Object>)config.get("columnFilters"));	
-			}
-			if(otherFilter!=null){
-				filterRules = FilterUtils.getApiOtherFilters((Map<String,Object>)otherFilter, filterRules);
-			}
- 		}
-		if(activitIds!=null && activitIds.size()>0){
-			//if we have activityIds to add to the filter comming from the search by keyworkd
-			if(filterRules==null){
-				filterRules = new MondrianReportFilters();
-			}
-
-			filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY), 
-					new FilterRule(activitIds, true, true)); 
-
-		}
-		return filterRules;
-	}	
 }

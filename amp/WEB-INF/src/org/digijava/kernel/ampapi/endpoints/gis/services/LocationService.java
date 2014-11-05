@@ -48,6 +48,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.hibernate.jdbc.Work;
 
 /**
@@ -67,22 +68,32 @@ public class LocationService {
 	public JsonBean getTotals(String admlevel, String type, JsonBean filter) {
 		String err = null;
 		JsonBean retlist = new JsonBean();
-		
+		String admLevelId=null;
 		switch (admlevel) {
 		case "adm0":
 			admlevel = ColumnConstants.COUNTRY; 
+			admLevelId = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY
+					.getIdInDatabase().toString();
 			break;
 		case "adm1":
-			admlevel = ColumnConstants.REGION; 
+			admlevel = ColumnConstants.REGION;
+			admLevelId = CategoryConstants.IMPLEMENTATION_LOCATION_REGION
+					.getIdInDatabase().toString();
 			break;
 		case "adm2":
 			admlevel = ColumnConstants.ZONE; 
+			admLevelId = CategoryConstants.IMPLEMENTATION_LOCATION_ZONE
+					.getIdInDatabase().toString();
 			break;
 		case "adm3":
 			admlevel = ColumnConstants.DISTRICT; 
+			admLevelId = CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT
+					.getIdInDatabase().toString();
 			break;
 		default:
 			admlevel = ColumnConstants.REGION; 
+			admLevelId = CategoryConstants.IMPLEMENTATION_LOCATION_REGION
+					.getIdInDatabase().toString();
 			break;
 		}
 		
@@ -112,7 +123,7 @@ public class LocationService {
 			}
  		}
 		filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.IMPLEMENTATION_LEVEL, ReportEntityType.ENTITY_TYPE_ACTIVITY), 
-				new FilterRule(admlevel, true, false));
+				new FilterRule(admLevelId, true, true));
 		spec.setFilters(filterRules);
 		
 		
@@ -283,7 +294,7 @@ public class LocationService {
 						.getRequest()), false);
 		GeneratedReport report = null;
 
-		applyFiltes(config, spec);
+		applyFilters(config, spec);
 		try {
 			report = generator.executeReport(spec);
 		} catch (Exception e) {
@@ -326,17 +337,16 @@ public class LocationService {
 		}
 		return activities;
 	}
-	private static void applyFiltes(JsonBean config,
+	private static void applyFilters(JsonBean config,
 			ReportSpecificationImpl spec) {
 		List<String> activitIds=null;
-		Object otherFilter=null;
+		LinkedHashMap<String, Object> otherFilter=null;
 		if (config != null) {
-			otherFilter=config.get("otherFilters");
-			activitIds = GisUtil.applyKeywordSearch( otherFilter);
+			activitIds = FilterUtils.applyKeywordSearch( (LinkedHashMap<String, Object>)config.get("otherFilters"));
 		}
 		
- 		MondrianReportFilters filterRules = GisUtil.getFilterRules(config, activitIds,
-				otherFilter);
+ 		MondrianReportFilters filterRules = FilterUtils.getFilterRules((LinkedHashMap<String, Object>)config.get("columnFilters"),
+				otherFilter, activitIds);
 		if(filterRules!=null){
 			spec.setFilters(filterRules);
 		}
@@ -392,7 +402,7 @@ public class LocationService {
 
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()),false);
 		GeneratedReport report = null;
-		applyFiltes(config, spec);
+		applyFilters(config, spec);
 
 		try {
 			report = generator.executeReport(spec);

@@ -72,13 +72,13 @@ public class ActivityService {
 		List<JsonBean> activities=new ArrayList<JsonBean>();
 		
 		//we check if we have filter by keyword
-		Object otherFilter=null;
+		LinkedHashMap<String, Object> otherFilter=null;
 		if (config != null) {
-			otherFilter=config.get("otherFilters");
+			otherFilter=(LinkedHashMap<String, Object>)config.get("otherFilters");
 			if(activitIds==null){
 				activitIds=new ArrayList<String>();
 			}
-			activitIds.addAll(GisUtil.applyKeywordSearch( otherFilter));
+			activitIds.addAll(FilterUtils.applyKeywordSearch( otherFilter));
 		}
 		
 		
@@ -121,9 +121,10 @@ public class ActivityService {
 //	
 //		}
 	
- 		
- 		MondrianReportFilters filterRules = GisUtil.getFilterRules(config, activitIds,
-				otherFilter);
+
+		MondrianReportFilters filterRules = FilterUtils.getFilterRules(
+				(LinkedHashMap<String, Object>) config.get("columnFilters"),
+				otherFilter, activitIds);
 		if(filterRules!=null){
 			spec.setFilters(filterRules);
 		}

@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +14,16 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.LoggerIdentifiable;
+import org.digijava.module.search.util.SearchUtil;
 
 public class FilterUtils {
 	protected static Logger logger = Logger.getLogger(FilterUtils.class);
@@ -76,4 +83,40 @@ public class FilterUtils {
 		}
 		return s;
 	}
+	public static List<String> applyKeywordSearch(LinkedHashMap<String, Object> otherFilter) {
+		List<String> activitIds=new ArrayList<String>();
+
+		if (otherFilter!=null && otherFilter.get("keyword") != null) {
+			String keyword = ((Map<String,Object>)otherFilter).get("keyword").toString();
+			Collection<LoggerIdentifiable> activitySearch = SearchUtil
+					.getActivities(keyword,
+							TLSUtils.getRequest(), (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember"));
+			if (activitySearch != null && activitySearch.size() > 0) {
+				for (LoggerIdentifiable loggerIdentifiable : activitySearch) {
+					activitIds.add(loggerIdentifiable.getIdentifier().toString());
+				}
+			}
+		}
+		return activitIds;
+	}
+	public static MondrianReportFilters getFilterRules(LinkedHashMap<String, Object> columnFilter, LinkedHashMap<String, Object> otherFilter, List<String> activityIds) {
+		MondrianReportFilters filterRules = null;
+			if(columnFilter!=null){
+				filterRules = FilterUtils.getApiColumnFilter(columnFilter);	
+			}
+			if(otherFilter!=null){
+				filterRules = FilterUtils.getApiOtherFilters(otherFilter, filterRules);
+			}
+		if(activityIds!=null && activityIds.size()>0){
+			//if we have activityIds to add to the filter comming from the search by keyworkd
+			if(filterRules==null){
+				filterRules = new MondrianReportFilters();
+			}
+
+			filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY), 
+					new FilterRule(activityIds, true, true)); 
+
+		}
+		return filterRules;
+	}		
 }

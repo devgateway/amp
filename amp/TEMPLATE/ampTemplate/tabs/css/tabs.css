@@ -169,3 +169,204 @@ th.ui-th-column div {
 .ui-state-highlight.myAltRowClassEven { color: PaleGreen; }
 .ui-state-highlight.myAltRowClassOdd { color: Sienna; }
 */
+
+/* Galina's new styles section */
+.ui-tabs {
+	position: relative;
+	/* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+	padding: 0;
+	border: none;
+	background: none;
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+}
+
+.ui-tabs .ui-tabs-nav {
+	margin: 0;
+	padding: 0;
+	background: none;
+	border: none;
+}
+
+.ui-tabs .ui-tabs-nav li {
+	list-style: none;
+	float: left;
+	position: relative;
+	top: 0;
+	margin: 0;
+	border-bottom-width: 0;
+	padding: 10px 0px 10px 0px;
+	white-space: normal;
+	font-size: 12px;
+	line-height: 12px;
+	font-weight: 700;
+	-webkit-border-top-left-radius: 0;
+	-webkit-border-top-right-radius: 0;
+	-moz-border-radius-topleft: 0;
+	-moz-border-radius-topright: 0;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+	border: 1px solid #d7d6d6;
+	background: #f0f0f0;
+	outline: none;
+}
+
+.ui-tabs .ui-tabs-nav li:first-child {
+	margin-left: 0;
+}
+
+.ui-tabs .ui-tabs-nav li a {
+	float: left;
+	padding: .5em .9em;
+	text-decoration: none;
+	outline: none;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected {
+	margin-bottom: 0;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a,.ui-tabs .ui-tabs-nav li.ui-state-disabled a,.ui-tabs .ui-tabs-nav li.ui-state-processing a
+	{
+	cursor: text;
+}
+
+.ui-tabs .ui-tabs-nav li a,.ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a
+	{
+	cursor: pointer;
+}
+/* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+.ui-tabs .ui-tabs-panel {
+	display: block;
+	border-width: 0;
+	padding: 22px;
+	background: #ffffff;
+	border: 1px solid #d0d0d0;
+}
+
+.ui-tabs .ui-tabs-hide {
+	display: none !important;
+}
+
+.ui-tabs .ui-tabs-nav li.last_tab {
+	border-right: 1px solid #D0D0D0;
+}
+
+.ui-tabs .ui-tabs-nav li:hover,.ui-tabs .ui-tabs-nav li.ui-tabs-active {
+	margin-bottom: -1px;
+	padding-bottom: 1px;
+	background: #ffffff;
+	border-top: 1px solid #d0d0d0;
+	border-right: 1px solid #d0d0d0;
+	border-left: 1px solid #d0d0d0;
+	border-bottom: 1px solid #ffffff !important;
+	color: #305a81;
+	outline: none;
+	padding: 10px 0px 10px 0px;
+}
+
+#tabs .ui-widget-header {
+	border: none;
+	padding: none;
+	margin: none;
+	border-bottom: solid 1px #D0D0D0;
+}
+
+#tabs .ui-corner-top {
+	
+}
+
+#tabs.ui-widget-content {
+	border: none;
+}
+
+#tabs .tab_link {
+	font-family: Arial;
+	font-size: 12px;
+	font-weight: none;
+}
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor,.ui-tabs .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor,.ui-tabs .ui-tabs-nav li.ui-tabs-loading .ui-tabs-anchor
+	{
+	cursor: text;
+	outline: none;
+}
+
+.ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+	float: left;
+	padding: 5px 5px;
+	text-decoration: none;
+}
+
+.ui-tabs .ui-tabs-nav li .ui-tabs-anchor {
+	color: #555555
+}
+
+.ui-tabs .ui-tabs-nav li .ui-tabs-anchor:hover,.ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor
+	{
+	color: #305a81
+}
+
+.ui-state-default a,.ui-state-default a:link,.ui-state-default a:visited
+	{
+	color: #555555
+}
+
+.ui-state-active a,.ui-state-active a:link,.ui-state-active a:visited {
+	color: #305a81;
+}
+
+/*sidebar*/
+.right_menu_header {
+	width: 162px;
+	height: 27px;
+	background: #438ccc !important;
+	color: #ffffff;
+	font-size: 12px;
+	font-weight: bold;
+	-webkit-border-top-left-radius: 4px;
+	-webkit-border-top-right-radius: 4px;
+	-moz-border-radius-topleft: 4px;
+	-moz-border-radius-topright: 4px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+
+.buttonx {
+	background: #65b457;
+	padding: 8px 10px;
+	color: #ffffff;
+	font-size: 12px;
+	text-align: center;
+	margin: 10px auto 30px auto;
+	width: 100px;
+	border: none;
+}
+
+/*buttons within tabs*/
+.ui-widget-content .ui-state-default {
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+	color: #2d5379;
+	background: #ededed;
+	border: 1px solid #ededed;
+	font-weight: normal;
+}
+
+.ui-widget-content .ui-state-hover,.ui-widget-content .ui-state-focus {
+	border: 1px solid #ededed;
+	background: #cccccc;
+	font-weight: normal;
+	color: #2290d3;
+}
+
+/*icons in table grid*/
+.ui-icon.ui-icon-circlesmall-plus {
+	background: url('images/new-admin-sprite.png') no-repeat;
+	background-position: 1px 0;
+	margin-right: 4px;
+}
+
+.ui-icon.ui-icon-circlesmall-minus {
+	background: url('images/new-admin-sprite.png') no-repeat;
+	background-position: -18px 0;
+	margin-right: 4px;
+}

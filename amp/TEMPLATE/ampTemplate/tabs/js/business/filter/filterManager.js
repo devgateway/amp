@@ -42,8 +42,7 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 
 			// Change the format of the object before sending it to the endpoint
 			// for refiltering.
-			var auxFilters = app.TabsApp.serializedFilters.columnFilters;
-			auxFilters.date = app.TabsApp.serializedFilters.otherFilters.date;
+			var auxFilters = app.TabsApp.serializedFilters;
 			GridManager.filter(app.TabsApp.currentId, auxFilters);
 
 			// Update the accordion with the newly applied filters.

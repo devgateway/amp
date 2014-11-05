@@ -83,4 +83,23 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 				Arrays.asList("Eth Water", "Test MTEF directed", "TAC_activity_2"), 
 				cor, "AMP-18497");
 	}
+	
+	@Test
+	public void test_AMP_18499() {
+		// for running manually: open http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=73 OR http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/73
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    	.withContents("Project Title", "Report Totals", "Actual Commitments", "666 777")
+	    	.withChildren(
+	    			new ReportAreaForTests().withContents("Project Title", "ptc activity 1", "Actual Commitments", "666 777"),
+	    			new ReportAreaForTests().withContents("Project Title", "Proposed Project Cost 1 - USD", "Actual Commitments", "0"),
+	    			new ReportAreaForTests().withContents("Project Title", "Project with documents", "Actual Commitments", "0")
+	    	);
+		
+		runMondrianTestCase(
+				Arrays.asList(ColumnConstants.PROJECT_TITLE),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+				"en",
+				Arrays.asList("Proposed Project Cost 1 - USD", "Project with documents", "ptc activity 1"),
+				cor, "AMP-18499");
+	}
 }

@@ -82,6 +82,7 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		spec.setCalculateRowTotals(true);
 		
 		GeneratedReport rep = this.runReportOn(spec, locale, activities);
+		System.err.println("this is output for test " + testName + describeInCode(rep.reportContents, 1));
 		String delta = cor.getDifferenceAgainst(rep.reportContents);
 		assertNull("test " + testName + " failed", delta);
 	}

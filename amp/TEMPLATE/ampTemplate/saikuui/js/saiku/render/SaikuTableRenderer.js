@@ -251,15 +251,20 @@ function genTotalHeaderRowCells(currentIndex, scanSums, scanIndexes, totalsLists
 				
 				var scanIndexes = {};
 				var scanSums = {};
-				for (var z = 0; z < totalsLists[ROWS].length; z++) {
-		        	scanIndexes[z] = 0;
-		        	scanSums[z] = totalsLists[ROWS][z][scanIndexes[z]].width;
-		        }
+				if (totalsLists[ROWS]) {
+					for (var z = 0; z < totalsLists[ROWS].length; z++) {
+						scanIndexes[z] = 0;
+						scanSums[z] = totalsLists[ROWS][z][scanIndexes[z]].width;
+					}
+				}
 				for (var k = 0; k < colLists[i][colScanIndexes[i]].cells[m].length; k++) {
 					contents += '<td class="data total">' + colLists[i][colScanIndexes[i]].cells[m][k].value + '</td>';
-					contents += totalIntersectionCells(k + 1, totalsLists[ROWS].length - 1, scanSums, scanIndexes, totalsLists[ROWS]);
+					if (totalsLists[ROWS]) {
+						contents += totalIntersectionCells(k + 1, totalsLists[ROWS].length - 1, scanSums, scanIndexes, totalsLists[ROWS]);
+					}
 				}
 				contents += '</tr>';
+				//}
 			}
 			colScanIndexes[i]++;
 			if (colScanIndexes[i] < colLists[i].length)

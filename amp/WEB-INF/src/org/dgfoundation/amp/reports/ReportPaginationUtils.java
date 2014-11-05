@@ -41,11 +41,15 @@ public class ReportPaginationUtils {
 	
 	/**
 	 * @param areas - list of records (leaf areas), without totals
-	 * @param recordsPerPage - maximum number of records per page
+	 * @param recordsPerPage - maximum number of records per page, or -1 if unlimited
 	 * @return page count for the given list of leaf areas and number of records per page
 	 */
 	public static int getPageCount(ReportAreaMultiLinked[] areas, int recordsPerPage) {
-		return areas == null ? 0 : (areas.length + recordsPerPage - 1) / recordsPerPage;
+		if (areas == null)
+			return 0;
+		if (recordsPerPage == -1)
+			return 1;
+		return (areas.length + recordsPerPage - 1) / recordsPerPage;
 	}
 	
 	/**

@@ -82,7 +82,8 @@ public class ReportsUtil {
 	 *   <li>page</li>        optional, page number, starting from 1. Use 0 to retrieve only <br>
 	 *                        pagination information, without any records. Default to 0 <br>
 	 *   <li>recordsPerPage</li> optional, the number of records per page to return. Default
-	 *   					  will be set to the number configured in AMP.
+	 *   					  will be set to the number configured in AMP. Set it to -1
+	 *                        to get the unlimited records, that will provide all records.
 	 *   <li>sorting</li>     optional, a list of sorting maps. Each map has 'columns' list 
 	 *                        and 'asc' flag, that is true for sorting ascending. Hierarchical 
 	 *                        sorting will define a column list as a tuple to sort by.
@@ -113,7 +114,8 @@ public class ReportsUtil {
 			result.set("headers", cachedReportData.report.leafHeaders);
 		}
 		
-		ReportArea pageArea = ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
+		ReportArea pageArea = recordsPerPage == -1 ? cachedReportData.report.reportContents :
+					ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
 		int totalPageCount = ReportPaginationUtils.getPageCount(areas, recordsPerPage);
 		
 		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, (areas != null ? areas.length : 0)));

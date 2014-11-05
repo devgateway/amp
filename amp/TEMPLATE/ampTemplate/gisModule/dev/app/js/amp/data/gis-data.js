@@ -67,8 +67,6 @@ _.extend(GISData.prototype, Backbone.Events, {
     });
 
 
-
-
     this.indicators = new Indicators([], { boundaries: this.boundaries });
 
     this.admClusters = new ADMClusters([], { boundaries: this.boundaries, filter: this.filter });
@@ -88,9 +86,10 @@ _.extend(GISData.prototype, Backbone.Events, {
 
   load: function() {
     // this.activities.fetch();
-    this.boundaries.fetch();
-    this.indicators.fetch();
-    // no need to fetch structures (they're special)
+    this.boundaries.load();
+    this.indicators.load();
+
+
     this.admClusters.load();  // also special for now
     this.hilightFundingCollection.load();  // also special for now
   },

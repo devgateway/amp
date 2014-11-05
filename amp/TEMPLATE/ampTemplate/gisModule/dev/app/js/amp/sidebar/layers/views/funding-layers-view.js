@@ -14,6 +14,7 @@ module.exports = Backbone.View.extend({
   template: _.template(Template),
 
   initialize: function(options) {
+    var self = this;
     /* Remember that this should be mutually exclusive to the other things in this multisection*/
     this.app = options.app;
 
@@ -22,6 +23,10 @@ module.exports = Backbone.View.extend({
 
     this.collection = new RadioListCollection(this.app.data.hilightFundingCollection.models, {
       siblingGroupList: this.parentMultisectionControl.radioButtonGroup
+    });
+
+    this.app.data.hilightFundingCollection.load().then(function() {
+      self._registerSerializer();
     });
 
     this.listenTo(this.app.data.hilightFundingCollection, 'add', this.render);
@@ -41,6 +46,28 @@ module.exports = Backbone.View.extend({
     }));
 
     return this;
+  },
+
+  _registerSerializer: function() {
+    var self = this;
+
+    self.app.state.register(self, self.id, {
+      get: function() {
+        var tmp = self.collection.getSelected().first().value();
+        if (tmp) {
+          return tmp.toJSON().id; //TODO: should be an id....
+        } else {
+          return null;
+        }
+      },
+      set: function(id) {
+        if (id) {
+          var selectedModel = self.collection.findWhere({id: id});
+          self.collection.select(selectedModel);
+        }
+      },
+      empty: null
+    });
   }
 
 });

@@ -66,7 +66,7 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 	}
 	
 	public static String describeReportOutputInCode(GeneratedReport gr) {
-		ReportAreaImpl rai = (ReportAreaImpl) gr.reportContents;
+		ReportAreaForTests rai = (ReportAreaForTests) gr.reportContents;
 		return rai.describeInCode(1);
 	}
 }

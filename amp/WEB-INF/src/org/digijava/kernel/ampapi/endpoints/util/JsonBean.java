@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAnyGetter;
 import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.digijava.kernel.ampapi.endpoints.gis.GisEndPoints;
 
@@ -71,4 +72,18 @@ public class JsonBean {
 			return null;
 		}
 	}
+
+	@Override
+	public String toString() {
+        ObjectMapper mapper = new ObjectMapper().configure(
+        		DeserializationConfig.Feature.UNWRAP_ROOT_VALUE, true);
+        String json=null;
+		try {
+			json = mapper.writer().writeValueAsString(this);
+		} catch (IOException e) {
+				
+		}
+		return "JsonBean [" + json  +"]";
+	}
+	
 }

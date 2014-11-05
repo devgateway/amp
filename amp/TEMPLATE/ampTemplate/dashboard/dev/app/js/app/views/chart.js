@@ -1,5 +1,6 @@
 var fs = require('fs');
 var _ = require('underscore');
+var canvg = require('../../ugly/lib-load-hacks').canvg;
 var BackboneDash = require('../backbone-dash');
 var util = require('../../ugly/util');
 var charts = require('./chart-types');
@@ -27,6 +28,7 @@ module.exports = BackboneDash.View.extend({
   events: {
     'change .dash-adj-type input': 'changeAdjType',
     'click .chart-view': 'changeChartView',
+    'click .download': 'download',
     'click .expand': 'big',
     'click .retry': 'render'
   },
@@ -111,6 +113,26 @@ module.exports = BackboneDash.View.extend({
     var view = e.currentTarget.dataset.view;
     this.chart = charts[view]();
     this.model.set('view', view);
+  },
+
+  download: function(e) {
+    var svg = this.el.querySelector('svg.dash-chart');
+    if (!svg) {
+      this.app.report('Chart export was unsuccessful',
+        ['Could not find chart svg to render.']);
+      return;
+    }
+    var canvas = document.createElement('canvas');
+    canvas.setAttribute('width', this.$(svg).width() + 'px');
+    canvas.setAttribute('height', this.$(svg).height() + 'px');
+
+    canvg(canvas, svg.outerHTML, {
+      log: true,
+      ignoreMouse: true,
+      ignoreAnimation: true
+    });
+    // canvg renders synchronously, despite having a callback option
+    e.currentTarget.href = canvas.toDataURL('image/png');
   },
 
   big: function() {

@@ -44,9 +44,12 @@
         </div>
 
         <div class="btn-group">
-          <button type="button" class="btn btn-sm btn-default">
+          <a
+            class="btn btn-sm btn-default download"
+            download="AMP <%= model.get('name') %> - <%= (new Date()).toISOString().split('T')[0] %>.png"
+            target="_blank">
             <span class="glyphicon glyphicon-cloud-download"></span>
-          </button>
+          </a>
           <button type="button" class="btn btn-sm btn-<%= model.get('big') ? 'primary' : 'default' %> expand hidden-xs hidden-sm">
             <span class="glyphicon glyphicon-fullscreen"></span>
           </button>

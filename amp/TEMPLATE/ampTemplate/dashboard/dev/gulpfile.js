@@ -17,6 +17,7 @@ var paths = {
     sources: [
       './app/js/**/*.js',
       '!./app/js/tests/run/**',  // skip compiled test stuff
+      '!./app/js/ugly/lib-src/**',  // skip hard-copied external sources
       './gulpfile.js'
     ],
     test: './app/js/tests/test.js',

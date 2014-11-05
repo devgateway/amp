@@ -38,10 +38,13 @@ module.exports = Backbone.Model
 
   fetch: function(options) {
     var filter = {otherFilters: {}};
-    /* TODO nice to have: if otherFilters and columnFilters
-     * had their own object on API, separate from settings, etc.
-     * Currently all on the same data level.
-     **/
+
+    // TODO: move lastFetchXhr code into a mixin or something...
+    //Stop last fetch before doing new one.
+    //request is between initialized(0) and complete(4).
+    if (this.lastFetchXhr && this.lastFetchXhr.readyState > 0 && this.lastFetchXhr.readyState < 4) {
+      this.lastFetchXhr.abort();
+    }
 
     // get filters
     if (this.collection.filter) {
@@ -55,7 +58,9 @@ module.exports = Backbone.Model
       data: JSON.stringify(filter)
     });
 
-    return Backbone.Model.prototype.fetch.call(this, options);
+
+    this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, options);
+    return this.lastFetchXhr;
   },
 
   loadBoundary: function() {

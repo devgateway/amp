@@ -13,7 +13,9 @@ module.exports = {
           self._loaded.resolveWith(self, [self]);
         })
         .fail(function(xhr, textStatus) {
-          console.warn('failed load:', textStatus, self, xhr);
+          if (textStatus !== 'abort') {
+            console.warn('failed load:', textStatus, self, xhr);
+          }
           self._loaded.rejectWith(self, [self, textStatus]);
           delete self._loaded;  // so that retries can happen
         });

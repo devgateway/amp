@@ -6,7 +6,7 @@ var IndicatorJoin = require('../../data/models/indicator-join-model');
 var IndicatorWMS = require('../../data/models/indicator-wms-model');
 var IndicatorArcGISDynamic = require('../../data/models/indicator-arcgis-dynamicLayer-model');
 var IndicatorArcGISFeature = require('../../data/models/indicator-arcgis-featureLayer-model');
-var ProjectSites = require('../../data/models/structures-collection-model');
+var ProjectSitesMenu = require('../../data/models/structures-menu-model');
 var ADMClusters = require('../../data/models/adm-cluster-model');
 
 // model-specific item views
@@ -40,7 +40,7 @@ module.exports = function(options) {
     return new IndicatorArcGISDynamicView(options);
   } else if (options.model instanceof IndicatorWMS) {
     return new IndicatorWMSView(options);
-  } else if (options.model instanceof ProjectSites) {
+  } else if (options.model instanceof ProjectSitesMenu) {
     return new ProjectSitesView(options);
   } else if (options.model instanceof ADMClusters) {
     return new ADMClustersView(options);

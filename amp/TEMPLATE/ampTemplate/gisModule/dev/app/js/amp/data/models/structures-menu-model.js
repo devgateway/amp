@@ -49,7 +49,6 @@ var ONAMES = {  // TODO: temp hack until filters have a proper data structure
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
 
-  url: '/rest/gis/structures',
 
   defaults: {
     title: 'Project Sites',
@@ -58,14 +57,18 @@ module.exports = Backbone.Model
   },
 
   initialize: function(things, options) {
+    var self = this;
+
     this.activities = options.activities;
+    this.appData = options.appData;
     this.filter = options.filter;
     this.palette = new Palette.FromSet();
+    this.projectSitesCollection = this.appData.projectSites;
 
     this.listenTo(this, 'change:selected', function(blah, show) {
       this.trigger(show ? 'show' : 'hide', this);
       if (show) {
-        this.fetch();
+        self.appData.projectSites.fetch();
       }
     });
     this.listenTo(this, 'sync', this.updatePaletteSet);
@@ -74,25 +77,17 @@ module.exports = Backbone.Model
 
   applyFilters: function(serializedFitlers) {
     if (this.get('selected')) {
-      this.fetch({data:JSON.stringify(serializedFitlers)});
+      this.appData.projectSites.fetch();
     }
   },
 
-  fetch: function(options) {
-    var filter = this.filter.serialize();
-
-    options = _.defaults((options || {}), {
-      type: 'POST',
-      data: JSON.stringify(filter)
-    });
-    return Backbone.Model.prototype.fetch.call(this, options);
-  },
 
   //TODO: we don't want to do loadonce, because fitlers change...so fetch instead,
   load: function() {
     //return this.fetch();
+    console.err("removeme");
+    return self.appData.projectSites.fetch();
     //DRS temp try fetch for testing filtering..
-    return LoadOnceMixin.load.apply(this);
   },
 
   // Loads structures and all their activitites.
@@ -101,16 +96,9 @@ module.exports = Backbone.Model
     var deferred = $.Deferred();
     var allActivityIds = [];
 
-    this.load().then(function() {
-      // concatenate all activity ids to one array
-      self.get('sites').each(function(site) {
-        allActivityIds = _(allActivityIds).union(allActivityIds, site.get('properties').activity);
-      });
-
+    self.appData.projectSites.fetch().then(function() {
       deferred.resolve();
-      /* for joined dependencies get related activities */
-      /*self.activities.getActivities(allActivityIds).then(function() {
-      });*/
+
     });
 
     return deferred;
@@ -140,30 +128,32 @@ module.exports = Backbone.Model
     var deferred = $.Deferred();
     var self = this;
 
+    /*
     //load the necessary activities.
     this.getSites().done(_.bind(function() {
       var activity;
 
-      var orgSites = this.get('sites')
+      var orgSites = self.projectSitesCollection
         .chain()
         .groupsBy(function(site) {
 
-          if (!_.isEmpty(self.activities.get(site.get('properties').activity))) {
-            // doesn't handle multiple activities, which may be introduced in the future..
-            activity = self.activities.get(site.get('properties').activity[0]);
+          //if (!_.isEmpty(self.activities.get(site.get('properties').activity))) {
 
-            // TODO:  for now we want just organizations[1]  for donor.
-            // Choosing a vertical will need to be configurable from drop down..
-            if (!_.isEmpty(activity.get('matchesFilters').organizations['1'])) {
-              return activity.get('matchesFilters').organizations['1'];
-            } else {
-              console.warn('Palette generation: Activity is missing desired vertical');
-              return -1;
-            }
-          } else {
-            console.warn('Palette generation: Structure is missing an activity');
-            return -1;
-          }
+            //// doesn't handle multiple activities, which may be introduced in the future..
+            //activity = self.activities.get(site.get('properties').activity[0]);
+
+            //// TODO:  for now we want just organizations[1]  for donor.
+            //// Choosing a vertical will need to be configurable from drop down..
+            //if (!_.isEmpty(activity.get('matchesFilters').organizations['1'])) {
+              //return activity.get('matchesFilters').organizations['1'];
+            //} else {
+              //console.warn('Palette generation: Activity is missing desired vertical');
+              //return -1;
+            //}
+          //} else {
+            //console.warn('Palette generation: Structure is missing an activity');
+            //return -1;
+          //}
         })
         .map(function(sites, orgId) {
           return {
@@ -182,6 +172,8 @@ module.exports = Backbone.Model
       deferred.resolve();
 
     }, this));
+   */
+      deferred.resolve();
 
     return deferred;
   }

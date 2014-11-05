@@ -31,9 +31,9 @@ module.exports = Backbone.View.extend({
 
     this.initCluster();
 
-    this.listenTo(this.app.data.projectSites, 'show', this.showLayer);
-    this.listenTo(this.app.data.projectSites, 'hide', this.hideLayer);
-    this.listenTo(this.app.data.projectSites, 'sync', this.refreshLayer); //TODO: implement refresh layer
+    this.listenTo(this.app.data.projectSitesMenu, 'show', this.showLayer);
+    this.listenTo(this.app.data.projectSitesMenu, 'hide', this.hideLayer);
+    this.listenTo(this.app.data.projectSitesMenu, 'sync', this.refreshLayer); //TODO: implement refresh layer
 
     this.listenTo(this.markerCluster, 'clusterclick', this.clusterClick);
 
@@ -60,9 +60,8 @@ module.exports = Backbone.View.extend({
   // ==================
   // Point / Feature Code
   // ==================
-  getNewProjectSitesLayer: function(projectSitesModel) {
-    this.features = projectSitesModel.get('features');
-    this.rawData = projectSitesModel.attributes;
+  getNewProjectSitesLayer: function(projectSitesMenuModel) {
+    this.rawData = projectSitesMenuModel.projectSitesCollection.toGeoJSON();
     this._renderFeatures();
     return this.featureGroup;
   },
@@ -82,19 +81,19 @@ module.exports = Backbone.View.extend({
     // add new featureGroup
     self.featureGroup = L.geoJson(self.rawData, {
       pointToLayer: function(feature, latlng) {
-        var colors = model.palette.colours.filter(function(colour) {
-          return colour.get('test').call(colour, feature.id);
-        });
-        if (colors.length > 2) {  // 2, because "other" is always true...
-          colors = [model.palette.colours.find(function(colour) {
-            return colour.get('multiple') === true;
-          })];
-        }
+     /*   var colors = model.palette.colors.filter(function(colour) {*/
+          //return colour.get('test').call(colour, feature.id);
+        //});
+        //if (colors.length > 2) {  // 2, because "other" is always true...
+          //colors = [model.palette.colors.find(function(colour) {
+            //return colour.get('multiple') === true;
+          //})];
+        //}
 
         // temp hack for if pallette part didn't work.
-        if (colors.length === 0) {
-          colors[0] = {hex: function() { return 'orange';}};
-        }
+        //if (colors.length === 0) {
+        var colors = [{hex: function() { return 'orange';}}];
+        //}
 
         if (self.map.getZoom() < self.ZOOM_BREAKPOINT) {
           self.currentRadius = self.SMALL_ICON_RADIUS;
@@ -205,28 +204,30 @@ module.exports = Backbone.View.extend({
       size += 2 + self.BIG_ICON_RADIUS;
     }
 
-    var colours = _(markers)
-      .chain()
-      .map(function(m) {
-        var colour = model.palette.colours.find(function(c) {
-          return c.get('test').call(c, m.feature.id);
-        });
-        return colour;
-      })
-      .uniq()
-      .value();
+    //var colors = _(markers)
+      //.chain()
+      //.map(function(m) {
+        //var colour = model.palette.colors.find(function(c) {
+          //return c.get('test').call(c, m.feature.id);
+        //});
+        //return colour;
+      //})
+      //.uniq()
+      //.value();
 
-    if (colours.length > 1) {
-      colours = [model.palette.colours.find(function(c) {
-        return c.get('multiple') === true;
-      })];
-    }
+    //if (colors.length > 1) {
+      //colors = [model.palette.colors.find(function(c) {
+        //return c.get('multiple') === true;
+      //})];
+    //}
+
+    var colors = [{hex: function() { return 'orange';}}];
 
     var marker = new L.circleDivIcon(size / 2, {
         className: 'marker-cluster' + (zoomedIn ? '' : ' marker-cluster-small'),
         html: (zoomedIn ? '<div class="text">' + markers.length + '</div>' : ''),
         color: '#444',
-        fillColor: (colours[0] && colours[0].hex()),
+        fillColor: (colors[0] && colors[0].hex()),
         weight: 1
       });
 
@@ -240,7 +241,7 @@ module.exports = Backbone.View.extend({
     // needs to run once on project site load and that is it. (not each zoom etc.)
     var parsedProjectSitesList = _.chain(a.layer.getAllChildMarkers())
       .pluck('feature')
-      .map(this.app.data.projectAlt.model.prototype.parse)
+      .map(this.app.data.projectSites.model.prototype.parse)
       .value();
 
 
@@ -268,7 +269,7 @@ module.exports = Backbone.View.extend({
     var self = this;
 
     /* TODO(thadk) switch individual feature to this standard parsed model input*/
-    /*var parsedProjectSitesList = this.app.data.projectAlt.model.prototype.parse(feature);*/
+    /*var parsedProjectSitesList = this.app.data.projectSites.model.prototype.parse(feature);*/
 
 
 
@@ -303,7 +304,7 @@ module.exports = Backbone.View.extend({
   // ==================
   // Layer management
   // ==================
-  showLayer: function(projectSitesModel) {
+  showLayer: function(projectSitesMenuModel) {
     var self = this;
     if (this.layerLoadState === 'loading') {
       console.warn('ProjectSites leaflet: tried to show project sites while they are still loading');
@@ -312,10 +313,10 @@ module.exports = Backbone.View.extend({
       this.layerLoadState = 'loading';
     }
 
-    projectSitesModel.loadAll().done(function() {
-      projectSitesModel.updatePaletteSet().done(function() {
+    projectSitesMenuModel.loadAll().done(function() {
+      projectSitesMenuModel.updatePaletteSet().done(function() {
         self.layerLoadState = 'loaded';
-        self.getNewProjectSitesLayer(projectSitesModel);
+        self.getNewProjectSitesLayer(projectSitesMenuModel);
         self.map.addLayer(self.markerCluster);
       });
     });

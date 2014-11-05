@@ -14,12 +14,12 @@ var SavedMaps = require('./collections/saved-maps-collection');
 var Activities = require('./collections/activity-collection');
 var Boundaries = require('./collections/boundary-collection');
 var Indicators = require('./collections/indicator-collection');
-var ProjectSites = require('./models/structures-collection-model'); /*a.k.a. structures */
+var ProjectSitesMenu = require('./models/structures-menu-model'); /*a.k.a. structures */
 var ADMClusters = require('./collections/adm-cluster-collection');
 var HilightFundingCollection = require('./collections/hilight-funding-collection');
 var Settings = require('./collections/settings-collection');
 
-var ProjectSitesAlt = require('./collections/structures-collection'); /*a.k.a. structures */
+var ProjectSites = require('./collections/structures-collection'); /*a.k.a. structures */
 
 var GISData = function() {
   this.initialize.apply(this, arguments);
@@ -50,7 +50,15 @@ _.extend(GISData.prototype, Backbone.Events, {
       filter: this.filter,
       appData: this
     });
-    this.projectSites = new ProjectSites([
+
+    this.projectSites = new ProjectSites([], {
+      activities: this.activities,
+      settings: this.settings,
+      filter: this.filter,
+      appData: this
+    });
+
+    this.projectSitesMenu = new ProjectSitesMenu([
       {}  // just the one model, all defaults
     ], {
       activities: this.activities,
@@ -58,12 +66,7 @@ _.extend(GISData.prototype, Backbone.Events, {
       appData: this
     });
 
-    this.projectAlt = new ProjectSitesAlt([], {
-      activities: this.activities,
-      settings: this.settings,
-      filter: this.filter,
-      appData: this
-    });
+
 
 
     this.indicators = new Indicators([], { boundaries: this.boundaries });

@@ -26,7 +26,7 @@ module.exports = BaseControlView.extend({
     this._loaded = this.app.data.admClusters.load().then(function() {
       self.projectLayerCollection = new RadioListCollection(_.union(
         self.app.data.admClusters.models,
-        [self.app.data.projectSites]
+        [self.app.data.projectSitesMenu]
       ));
 
       // register state:

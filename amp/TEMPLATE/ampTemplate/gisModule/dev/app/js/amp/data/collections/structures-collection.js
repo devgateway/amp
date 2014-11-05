@@ -46,7 +46,7 @@ module.exports = Backbone.Collection.extend({
     //window.app.data.activities.fetch();
 
     /* default: {
-     *  type: "FeatureCollection",
+     *  type: 'FeatureCollection',
      *  features: []
      * }
      */
@@ -65,6 +65,23 @@ module.exports = Backbone.Collection.extend({
 
     return response.features;
   },
+  toGeoJSON: function() {
+    var featureList = this.map(function(model) {
+      return {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [model.get('lng'), model.get('lat')]
+        },
+        properties: model.toJSON()
+      };
+      /*TODO(thadk): move to model and use return feature.toGeoJSON();*/
+    });
+    return {
+      type: 'FeatureCollection',
+      features: featureList
+    };
+  },
 
 /*Migrated from Collection-Model */
   getSelected: function() {
@@ -79,7 +96,7 @@ module.exports = Backbone.Collection.extend({
     //load the necessary activities.
     this.loadAll().done(_.bind(function() {
       var activity;
-
+/*
       var orgSites = this.get('sites')
         .chain()
         .groupsBy(function(site) {
@@ -115,6 +132,7 @@ module.exports = Backbone.Collection.extend({
         .value();
 
       this.palette.set('elements', orgSites);
+     */
       deferred.resolve();
 
     }, this));

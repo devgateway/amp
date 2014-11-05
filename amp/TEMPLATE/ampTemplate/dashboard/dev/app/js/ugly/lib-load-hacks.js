@@ -5,7 +5,7 @@ window.jQuery = jQuery;
 require('bootstrap/dist/js/bootstrap');
 
 // make backbone and d3 play nice
-window.d3 = require('d3');
+window.d3 = require('d3-browserify');
 require('nvd3');
 
 // load underscore mixins

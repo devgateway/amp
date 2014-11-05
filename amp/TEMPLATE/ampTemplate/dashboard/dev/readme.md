@@ -10,7 +10,6 @@ NodeJS
 
 Install the following, either with `sudo npm install -g` to use NPM directly, or with your operating system package manager:
 
- * `bower`
  * `gulp`
 
 If you use an IDE linter (like SublimeLiter), you will need these as well:
@@ -63,4 +62,4 @@ $ gulp build
 Notes
 -----
 
-[`bower.json`](bower.json) lists an exact version of d3 that is fairly old, becuase nvd3 does not work with the latest versions. When nvd3 is fixed for this, we should update d3 to the latest.
+[`package.json`](package.json) lists an exact version of d3 that is fairly old, because nvd3 does not work with the latest versions. When nvd3 is fixed for this (or, optimisitcally, when we remove nvd3), we should update d3 to the latest.

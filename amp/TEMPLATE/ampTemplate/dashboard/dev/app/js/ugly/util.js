@@ -1,6 +1,6 @@
 // hopefully not that ugly, but seemed as good a place as any for this stuff...
 
-var d3 = require('d3');
+var d3 = require('d3-browserify');
 
 
 var formatKMB = function(precision) {

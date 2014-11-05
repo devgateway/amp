@@ -29,8 +29,8 @@ var paths = {
     compiled: './app/compiled-css/',
     sources: ['./app/less/**/*.less'],
     libs: [
-      './bower_components/bootstrap/dist/css/bootstrap.css',
-      './bower_components/nvd3/nv.d3.css',
+      './node_modules/bootstrap/dist/css/bootstrap.css',
+      './node_modules/nvd3/nv.d3.css',
       '../../node_modules/amp-filter/dist/amp-filter.css'
     ],
     testStyles: './bower_components/mocha/mocha.css'

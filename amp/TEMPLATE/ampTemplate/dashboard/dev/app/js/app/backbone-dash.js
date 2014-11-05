@@ -14,6 +14,11 @@ function InitError(instance) {
 Backbone.$ = jQuery;
 
 
+// we have to alias the old backbone sync here.
+// otherwise things get messed up in filters init.
+var bs = Backbone.sync;
+
+
 function syncOverride(method, model, options) {
   var url = _.has(options, 'url') ? options.url : _.result(model, 'url');
   _(options).extend({
@@ -25,7 +30,7 @@ function syncOverride(method, model, options) {
       // jscs:enable disallowQuotedKeysInObjects
     }
   });
-  return Backbone.sync.call(this, method, model, options);
+  return bs.call(this, method, model, options);
 }
 
 

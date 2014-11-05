@@ -1,7 +1,7 @@
 var fs = require('fs');
 var _ = require('underscore');
 var nv = window.nv;  // nvd3 is a pain
-var d3 = require('d3');
+var d3 = require('d3-browserify');
 var util = require('../../ugly/util');
 var topsTooltip = _.template(fs.readFileSync(
   __dirname + '/../templates/tooltip-tops.html', 'UTF-8'));

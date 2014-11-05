@@ -64,5 +64,10 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 	public static String compareOutputs(GeneratedReport correct, GeneratedReport output) {
 		return null;
 	}
+	
+	public static String describeReportOutputInCode(GeneratedReport gr) {
+		ReportAreaImpl rai = (ReportAreaImpl) gr.reportContents;
+		return rai.describeInCode(1);
+	}
 }
 

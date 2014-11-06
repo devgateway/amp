@@ -336,8 +336,7 @@ public static List<JsonBean> getOrgGroups() {
 	final List<JsonBean> orgGroups=new ArrayList<JsonBean>();
     PersistenceManager.getSession().doWork(new Work(){
 			public void execute(Connection conn) throws SQLException {
-				
-				Map<Long,String>orgGroupsNames=QueryUtil.getTranslatedName(conn, "amp_org_group", "amp_org_id", "org_grp_name");
+				Map<Long,String>orgGroupsNames=QueryUtil.getTranslatedName(conn, "amp_org_group", "amp_org_grp_id", "org_grp_name");
 				String query=" select aog.amp_org_grp_id orgGrpId, "+
 							 " aog.org_grp_name grpName, "+
 							 " aog.org_grp_code orgCode, "+

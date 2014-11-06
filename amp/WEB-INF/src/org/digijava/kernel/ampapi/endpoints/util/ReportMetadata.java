@@ -1,6 +1,9 @@
 package org.digijava.kernel.ampapi.endpoints.util;
 
+import java.util.List;
+
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
 
 public class ReportMetadata {
 	private String name = "";
@@ -11,6 +14,7 @@ public class ReportMetadata {
 	private String schema = "";
 	private String queryName = "";
 	private ReportSpecificationImpl reportSpec;
+	private List<SettingField> settings;
 	
 	public String getName() {
 		return name;
@@ -59,6 +63,18 @@ public class ReportMetadata {
 	}
 	public void setUniqueName(String uniqueName) {
 		this.uniqueName = uniqueName;
+	}
+	/**
+	 * @return the settings
+	 */
+	public List<SettingField> getSettings() {
+		return settings;
+	}
+	/**
+	 * @param settings the settings to set
+	 */
+	public void setSettings(List<SettingField> settings) {
+		this.settings = settings;
 	}
 	
 }

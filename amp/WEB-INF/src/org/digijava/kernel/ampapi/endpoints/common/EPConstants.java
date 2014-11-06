@@ -3,7 +3,6 @@
  */
 package org.digijava.kernel.ampapi.endpoints.common;
 
-import org.dgfoundation.amp.ar.MeasureConstants;
 
 /**
  * Endpoint related constants
@@ -15,6 +14,7 @@ public class EPConstants {
 	//config update
 	public static final String REPORT_NAME = "name";
 	public static final String IS_CUSTOM = "custom";
+	public static final String REGENERATE = "regenerate";
 	public static final String ADD_COLUMNS = "add_columns";
 	public static final String ADD_HIERARCHIES = "add_hierarchies";
 	public static final String ADD_MEASURES = "add_measures";
@@ -26,14 +26,4 @@ public class EPConstants {
 	
 	//settings
 	public static final String SETTINGS = "settings";
-	
-	public static final String SETTINGS_FUNDING_TYPE_ID = "0"; 
-	public static final String SETTINGS_CURRENCY_ID = "1";
-	public static final String SETTINGS_CALENDAR_TYPE_ID = "2";
-	
-	public static final String SETTINGS_FUNDING_TYPE_NAME = "Funding Type";
-	public static final String SETTINGS_CURRENCY_NAME = "Currency";
-	public static final String SETTINGS_CALENDAR_TYPE_NAME = "Calendar Type";
-	
-	public static final String SETTINGS_DEFAULT_FUNDING_TYPE_ID = MeasureConstants.ACTUAL_COMMITMENTS;
 }

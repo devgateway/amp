@@ -17,6 +17,8 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingOptions;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
 
 public class GisUtil {
@@ -105,7 +107,7 @@ public class GisUtil {
 		//now apply GIS custom settings, i.e. selected measures
 		if (config.get(EPConstants.SETTINGS) != null) {
 			Map<Integer, Object> settings = (Map<Integer, Object>) config.get(EPConstants.SETTINGS);
-			List<String> measureOptions = (List<String>)settings.get(EPConstants.SETTINGS_FUNDING_TYPE_ID);
+			List<String> measureOptions = (List<String>)settings.get(SettingsConstants.FUNDING_TYPE_ID);
 			if (measureOptions != null)
 				for (String measure : measureOptions) 
 					spec.addMeasure(new ReportMeasure(measure));

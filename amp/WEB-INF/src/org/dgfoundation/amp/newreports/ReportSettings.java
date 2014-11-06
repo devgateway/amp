@@ -20,6 +20,9 @@ public interface ReportSettings extends ReportFilters {
 	/** returns a DecimalFormat for currency display format */ 
 	public DecimalFormat getCurrencyFormat();
 	
+	/** return units multiplier */ 
+	public double getUnitsMultiplier();
+	
 	/** returns the Calendar to be used for grouping by dates, filtering by dates, etc */ 
 	public AmpFiscalCalendar getCalendar();
 }

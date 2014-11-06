@@ -910,8 +910,14 @@ public class AmpARFilter extends PropertyListable {
 	 * builds the customFormat field based on the other fields in the instance
 	 * contains some copy-paste from {@link #fillWithDefaultGroupingSettings()}, but too tired to abstractize somehow away
 	 */
-	public void buildCustomFormat()
-	{
+	public void buildCustomFormat() {
+		DecimalFormat custom = buildCustomFormat(this.getDecimalseparator(), this.getGroupingseparator(), 
+				this.getMaximumFractionDigits(), this.getCustomusegroupings(), this.getGroupingsize());
+		this.setCurrentFormat(custom);
+	}
+	
+	public static DecimalFormat buildCustomFormat(String decimalSeparator, String groupingSeparator, 
+			Integer maximumFractionDigits, Boolean customUseGroupings, Integer groupingSize) {
 		DecimalFormat usedDecimalFormat = FormatHelper.getDecimalFormat();
 		
 		Character defaultDecimalSymbol	= usedDecimalFormat.getDecimalFormatSymbols().getDecimalSeparator();
@@ -922,27 +928,27 @@ public class AmpARFilter extends PropertyListable {
 		
 		DecimalFormat custom = new DecimalFormat();
 		DecimalFormatSymbols ds = new DecimalFormatSymbols();
-		if (this.getDecimalseparator() != null){
-			ds.setDecimalSeparator(getDecimalseparator().charAt(0));
+		if (decimalSeparator != null){
+			ds.setDecimalSeparator(decimalSeparator.charAt(0));
 		}else{
 			ds.setDecimalSeparator(defaultDecimalSymbol);
 		}
 		
-		if (this.getGroupingseparator() != null){
-			ds.setGroupingSeparator(this.getGroupingseparator().charAt(0));
+		if (groupingSeparator != null){
+			ds.setGroupingSeparator(groupingSeparator.charAt(0));
 		}else{
 			ds.setGroupingSeparator(defaultGroupSeparator);
 		}
 		
-		if (this.getMaximumFractionDigits() != null && this.getMaximumFractionDigits() > -1)
-			custom.setMaximumFractionDigits(this.getMaximumFractionDigits());
+		if (maximumFractionDigits != null && maximumFractionDigits > -1)
+			custom.setMaximumFractionDigits(maximumFractionDigits);
 		else
 			custom.setMaximumFractionDigits((defaultDecimalPlaces != -1) ? defaultDecimalPlaces : 99);
 		
-		custom.setGroupingUsed(this.getCustomusegroupings() == null ? defaultUseGrouping : this.getCustomusegroupings());
-		custom.setGroupingSize(this.getGroupingsize() == null ? defaultGroupSize : this.getGroupingsize());
+		custom.setGroupingUsed(customUseGroupings == null ? defaultUseGrouping : customUseGroupings);
+		custom.setGroupingSize(groupingSize == null ? defaultGroupSize : groupingSize);
 		custom.setDecimalFormatSymbols(ds);
-		this.setCurrentFormat(custom);
+		return custom;
 	}
 	
 	/**

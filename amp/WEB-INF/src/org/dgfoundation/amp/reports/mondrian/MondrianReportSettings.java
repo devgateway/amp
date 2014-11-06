@@ -16,6 +16,7 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 public class MondrianReportSettings extends MondrianReportFilters implements ReportSettings {
 	private String currencyCode = null;
 	private DecimalFormat currencyFormat = null;
+	private double unitsMultiplier = 1;
 	
 	@Override
 	public String getCurrencyCode() {
@@ -41,6 +42,18 @@ public class MondrianReportSettings extends MondrianReportFilters implements Rep
 	 */
 	public void setCurrencyFormat(DecimalFormat currencyFormat) {
 		this.currencyFormat = currencyFormat;
+	}
+
+	@Override
+	public double getUnitsMultiplier() {
+		return unitsMultiplier;
+	}
+
+	/**
+	 * @param unitsMultiplier the unitsMultiplier to set
+	 */
+	public void setUnitsMultiplier(double unitsMultiplier) {
+		this.unitsMultiplier = unitsMultiplier;
 	}
 
 	@Override

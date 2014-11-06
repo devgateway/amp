@@ -60,6 +60,7 @@ public class ReportsUtil {
 	 *  "recordsPerPage"  : 10,														<br/>
 	 *  "regenerate"      : true, 													<br/>
 	 *  "filters"         : //see filters format defined in Gis, 					<br/>
+	 *  "settings"        : //see {@link EndpointUtils#applySettings}                <br/>
 	 *  "sorting"         : [ 														<br/>
 	 *        {																		<br/>
 	 *          "columns" : ["Donor Agency", "Actual Commitments"],					<br/>
@@ -118,19 +119,18 @@ public class ReportsUtil {
 					ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
 		int totalPageCount = ReportPaginationUtils.getPageCount(areas, recordsPerPage);
 		
-		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, (areas != null ? areas.length : 0)));
+		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, 
+				(areas != null ? areas.length : 0)));
+		result.set(EPConstants.SETTINGS, cachedReportData != null ? 
+				EndpointUtils.getReportSettings(cachedReportData.report.spec) : null);
 		
 		return result;
 	}
 	
 	private static CachedReportData getCachedReportData(Long reportId, JsonBean formParams) {
-		boolean regenerate = (Boolean) EndpointUtils.getSingleValue(formParams, "regenerate", Boolean.TRUE);
+		boolean regenerate = mustRegenerate(reportId, formParams);
 		boolean resort = formParams.get(EPConstants.SORTING) != null; 
 		CachedReportData cachedReportData = null;
-		
-		// check if we need to force the regeneration, due to session timeout
-		if (!regenerate && ReportCacher.getReportData(reportId) == null)
-			regenerate = true;
 		
 		// generate the report
 		if (regenerate) {
@@ -203,6 +203,7 @@ public class ReportsUtil {
 		//update report data presentation
 		configureFilters(specImpl, formParams);
 		configureSorting(specImpl, formParams);
+		EndpointUtils.applySettings(specImpl, formParams);
 		
 		//update other settings
 		setOtherOptions(specImpl, formParams);
@@ -405,5 +406,24 @@ public class ReportsUtil {
 		Boolean doRowTotals = (Boolean) formParams.get(EPConstants.DO_ROW_TOTALS);
 		if (doRowTotals != null)
 			spec.setCalculateRowTotals(doRowTotals);
+	}
+	
+	/**
+	 * Verifies report must be (re)generated during pagination request
+	 * 
+	 * @param reportId     report Id
+	 * @param formParams   json request parameters
+	 * @return true if the report must be (re)generated 
+	 */
+	public static boolean mustRegenerate(Long reportId, JsonBean formParams) {
+		boolean regenerate = (Boolean) EndpointUtils.getSingleValue(formParams, EPConstants.REGENERATE, Boolean.TRUE);
+		
+		// check if we need to force the regeneration, due to session timeout
+		if (!regenerate && ReportCacher.getReportData(reportId) == null)
+				regenerate = true;
+		
+		// TODO: add here any other automatic detections for mandatory regenerate 
+		
+		return regenerate;
 	}
 }

@@ -95,6 +95,7 @@ public class Reports {
 		JSONResult result = new JSONResult();
 		ReportMetadata metadata = new ReportMetadata();
 		metadata.setReportSpec(spec);
+		metadata.setSettings(EndpointUtils.getReportSettings(spec));
 		metadata.setCatalog(DEFAULT_CATALOG_NAME);
 		metadata.setCube(DEFAULT_CUBE_NAME);
 		metadata.setUniqueName(DEFAULT_UNIQUE_NAME);
@@ -104,6 +105,7 @@ public class Reports {
 		metadata.setSchema(DEFAULT_SCHEMA_NAME);
 
 		result.setReportMetadata(metadata);
+		
 		return result;
 	}
 	

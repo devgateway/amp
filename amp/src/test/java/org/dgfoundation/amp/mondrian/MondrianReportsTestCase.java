@@ -87,7 +87,7 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		GeneratedReport rep = this.runReportOn(spec, locale, activities);
 		if (testName.equals("AMP-18509"))
 			System.err.println("this is output for test " + testName + describeInCode(rep.reportContents, 1));
-		Iterator<ReportOutputColumn> bla = rep.reportContents.getChildren().get(0).getContents().keySet().iterator();
+		//Iterator<ReportOutputColumn> bla = rep.reportContents.getChildren().get(0).getContents().keySet().iterator();
 		//ReportOutputColumn first = bla.next(), second = bla.next(), third = bla.next(), fourth = bla.next();
 		
 		String delta = cor.getDifferenceAgainst(rep.reportContents);
@@ -127,9 +127,10 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 	}
 	
 	public static String generateDisplayedName(ReportOutputColumn colKey) {
+		//return colKey.getHierarchicalName();
 		if (colKey.parentColumn == null)
 			return colKey.originalColumnName;
-		return String.format("[%s] %s", colKey.parentColumn.originalColumnName, colKey.originalColumnName);
+		return String.format("%s-%s", generateDisplayedName(colKey.parentColumn), colKey.originalColumnName);
 	}
 	
 	public static String describeChildren(ReportArea area, int depth) {

@@ -220,18 +220,40 @@ public class GroupReportData extends ReportData<ReportData> {
 		}
 		return dest;
 	}
-
 	/**
 	 * decides whether an AmountCell should be part of the current GRD's trailCells. If false is returned, then a null will be inserted  
-	 * @param caca
+	 * @param amc
 	 * @return
 	 */
-	protected boolean shouldDisplayTrailCell(AmountCell caca)
+	protected AmountCell getTrailCell(AmountCell amc)
 	{
-		if (caca == null)
+		if (amc == null)
+			return null;
+		
+		AmountCell newc = amc.newInstance();                        
+		newc.setColumn(amc.getColumn());
+		if (amc.getColumn().getName().equals("Percentage Of Total Disbursements")) {
+			newc.getMergedCells().clear();
+			newc.getAmount();
+			newc.setAmount(0);
+		}
+			
+			
+
+		return newc;
+	}
+	
+	/**
+	 * decides whether an AmountCell should be part of the current GRD's trailCells. If false is returned, then a null will be inserted  
+	 * @param amc
+	 * @return
+	 */
+	protected boolean shouldDisplayTrailCell(AmountCell amc)
+	{
+		if (amc == null)
 			return false;
 		
-		if (caca.getColumn().getName().equals("Percentage Of Total Disbursements")) // these columns have no trail cells for GroupReportData's
+		if (amc.getColumn().getName().equals("Percentage Of Total Disbursements")) // these columns have no trail cells for GroupReportData's
 			return false;
 		
 		return true;
@@ -245,8 +267,6 @@ public class GroupReportData extends ReportData<ReportData> {
 			element.postProcess();
 		}
 	
-//		if (this.getName().equals("AMP-16651"))
-//			System.out.println("BOZO REMOVE ME I AM JUST A BREAKPOINT");
 		
 		// create trail cells
 		try {			
@@ -254,16 +274,23 @@ public class GroupReportData extends ReportData<ReportData> {
 			// firstly create the array, containing the trail cells of the first child - we basically only care about the array size and cell types here
 			if (items.size() > 0){
 				ReportData<? extends Viewable> data = items.get(0);
-				for(AmountCell caca:data.getTrailCells())
+				for(AmountCell trailCell:data.getTrailCells())
 				{
-					if (shouldDisplayTrailCell(caca))
-					{
-						AmountCell newc = caca.newInstance();
-						newc.setColumn(caca.getColumn());
-						trailCells.add(newc);
-					}else{
-						trailCells.add(null);
-					}
+					trailCells.add(getTrailCell(trailCell));
+//					if (shouldDisplayTrailCell(trailCell))
+//					{
+//						AmountCell newc = trailCell.newInstance();
+//						newc.setColumn(trailCell.getColumn());
+//						trailCells.add(newc);
+//					}else{
+//						AmountCell newc = trailCell.newInstance();
+////						newc.setColumn(trailCell.getColumn());
+//						newc.setAmount(0.0);
+//
+//						trailCells.add(newc);
+//						
+////						trailCells.add(null);
+//					}
 				}
 					
 				//logger.debug("GroupTrail.size=" + trailCells.size());

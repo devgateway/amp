@@ -26,6 +26,12 @@ public class AMPException extends Exception implements AMPTaggedExceptions {
 		continuable = false;
 	}
 	
+	public AMPException(String message, Throwable cause) {
+		super(message, cause);
+		level = DEFAULT_ERROR_LEVEL;
+		continuable = false;
+	}
+	
 	public AMPException(int level, boolean continuable, String message) {
 		super(message);
 		this.level = level;

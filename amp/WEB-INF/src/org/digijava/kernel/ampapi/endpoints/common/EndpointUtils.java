@@ -82,7 +82,7 @@ public class EndpointUtils {
 		try {
 			report = generator.executeReport(spec);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("error running report", e);
 		}
 		return report;
 	}

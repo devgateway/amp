@@ -1037,19 +1037,23 @@ public class LuceneUtil implements Serializable {
 		}
     }
     
-    private static String getBudgetCodesForActivity(AmpActivityVersion newActivity) {
-    	StringBuffer sBuffer		= new StringBuffer();
-		if ( newActivity.getOrgrole() != null) {
-			for (AmpOrgRole role:newActivity.getOrgrole()) {
-				for (AmpOrgRoleBudget budget:role.getBudgets())
-				if (budget.getBudgetCode() != null) {
-					sBuffer.append(budget.getBudgetCode() + " ; ");
+	private static String getBudgetCodesForActivity(
+			AmpActivityVersion newActivity) {
+		StringBuffer sBuffer = new StringBuffer();
+		if (newActivity.getOrgrole() != null) {
+			for (AmpOrgRole role : newActivity.getOrgrole()) {
+				if (role.getBudgets() != null) {
+					for (AmpOrgRoleBudget budget : role.getBudgets()) {
+						if (budget.getBudgetCode() != null) {
+							sBuffer.append(budget.getBudgetCode() + " ; ");
+						}
+					}
 				}
 			}
 		}
-    	
+
 		return sBuffer.toString();
-    }
+	}
     
     
     /**

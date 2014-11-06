@@ -51,6 +51,9 @@ module.exports = Backbone.Model
       _.extend(filter, this.collection.filter.serialize());
     }
 
+    // TODO: verify settings works..
+    filter.settings = this.collection.settings.serialize();
+
     filter.otherFilters.adminLevel = this._translateADMToMagicWord(this.get('value'));
 
     options = _.defaults((options || {}), {
@@ -58,7 +61,6 @@ module.exports = Backbone.Model
       data: JSON.stringify(filter)
     });
 
-//console.log('about to fetch...');
     this.lastFetchXhr = Backbone.Model.prototype.fetch.call(this, options);
     return this.lastFetchXhr;
   },

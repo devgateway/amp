@@ -54,28 +54,55 @@ module.exports = Backbone.View.extend({
   },
 
   _generateSectorChart: function() {
+    var self = this;
+    this._getTops('ps').then(function(data) {
+      var exampleData = _.map(data.values, function(org) {
+        return {label: org.name, value: org.amount};
+      });
 
-    var exampleData = [
-      { label: 'Health', value: Math.round(Math.random() * this.cluster.properties.activityid.length / 5) },
-      { label: 'Agriculture', value: Math.round(Math.random() * this.cluster.properties.activityid.length / 5) },
-      { label: 'Science', value: Math.round(Math.random() * this.cluster.properties.activityid.length / 5) },
-      { label: 'Transport', value: Math.round(Math.random() * this.cluster.properties.activityid.length / 5)},
-      { label: 'Planning', value: Math.round(Math.random() * this.cluster.properties.activityid.length / 5)}
-    ];
-    this._generateBaseChart(exampleData, '#charts-pane-sector .amp-chart svg');
+      exampleData.push({ label: 'Other', value: data.total});
+      self._generateBaseChart(exampleData, '#charts-pane-sector .amp-chart svg');
+    });
   },
 
+
   _generateDonorChart: function() {
+    var self = this;
+    this._getTops('do').then(function(data) {
+      var exampleData = _.map(data.values, function(org) {
+        return {label: org.name, value: org.amount};
+      });
 
-    var exampleData = [
-      { label: 'U.N', value: Math.round(Math.random() * this.cluster.properties.activityid.length / 5) },
-      { label: 'World Bank', value: Math.round(Math.random() * this.cluster.properties.activityid.length / 5) },
-      { label: 'UNICEF', value: Math.round(Math.random() * this.cluster.properties.activityid.length / 5) },
-      { label: 'AfDB', value: Math.round(Math.random() * this.cluster.properties.activityid.length / 5)},
-      { label: 'DFID', value: Math.round(Math.random() * this.cluster.properties.activityid.length / 5)}
-    ];
+      exampleData.push({ label: 'Other', value: data.total});
+      self._generateBaseChart(exampleData, '#charts-pane-donor .amp-chart svg');
+    });
+  },
 
-    this._generateBaseChart(exampleData, '#charts-pane-donor .amp-chart svg');
+  _getTops: function(type) {
+    var tmpModel = new Backbone.Collection({});
+    tmpModel.url = '/rest/dashboard/tops/' + type;
+
+    var payload = { limit: 5, adjtype:'ac'};
+    _.extend(payload, this.app.data.filter.serialize());
+
+    // get funding type, ask for consistancy form API, and at least put this function inside settings collection..
+    var settings = this.app.data.settings.serialize();
+    if (settings && settings[0]) {
+      if (settings[0] === 'Actual Commitments') {
+        payload.adjtype = 'ac';
+      } else if (settings[0] === 'Actual Disbursements') {
+        payload.adjtype = 'ad';
+      } else if (settings[0] === 'Actual Expenditures') {
+        payload.adjtype = 'ae';
+      }
+    }
+
+    if (!payload.columnFilters) {
+      payload.columnFilters = {};
+    }
+    payload.columnFilters['Activity Id'] = this.cluster.properties.activityid;
+
+    return tmpModel.fetch({type:'POST', data:JSON.stringify(payload)});
   },
 
   _generateBaseChart: function(data, selector) {

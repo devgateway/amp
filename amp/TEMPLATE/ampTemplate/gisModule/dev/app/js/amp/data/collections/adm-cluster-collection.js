@@ -14,6 +14,7 @@ module.exports = Backbone.Collection
     // TODO: probably pass app or data here instead?
     this.boundaries = options.boundaries;
     this.filter = options.filter;
+    this.settings = options.settings;
 
     this.listenTo(this, 'sync', this._setDefault);
   },

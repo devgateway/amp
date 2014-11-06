@@ -222,7 +222,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			} catch (Exception e) {
 				stats.crashed = true;
 				throw new AMPException("Cannot generate Mondrian Report '" + spec.getReportName() +"' : " 
-						+ e.getMessage() == null ? e.getClass().getName() : e.getMessage());
+						+ e.getMessage() == null ? e.getClass().getName() : e.getMessage(), e);
 			} finally {
 				if (printMode) {
 					if (cellSet != null)

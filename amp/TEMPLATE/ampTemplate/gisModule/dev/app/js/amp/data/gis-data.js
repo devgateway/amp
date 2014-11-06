@@ -69,10 +69,10 @@ _.extend(GISData.prototype, Backbone.Events, {
 
     this.indicators = new Indicators([], { boundaries: this.boundaries });
 
-    this.admClusters = new ADMClusters([], { 
-    	boundaries: this.boundaries, 
-    	filter: this.filter, 
-    	settings: this.settings 
+    this.admClusters = new ADMClusters([], {
+      boundaries: this.boundaries,
+      filter: this.filter,
+      settings: this.settings
     });
 
     // TODO get these from the api

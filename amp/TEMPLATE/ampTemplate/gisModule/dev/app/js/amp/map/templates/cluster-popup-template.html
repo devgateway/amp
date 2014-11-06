@@ -2,18 +2,20 @@
   <h5><%= obj.properties.admName%> has <%= obj.properties.activityid.length %> projects </h5>
 
   <ul class="nav nav-tabs" role="tablist">
-    <li class="active"><a href="#charts-pane-donor" role="tab" data-toggle="tab">Donors</a></li>
-    <li><a href="#charts-pane-sector" role="tab" data-toggle="tab">Sectors</a></li>
+    <li class="active"><a href="#charts-pane-sector" role="tab" data-toggle="tab">Sectors</a></li>
+    <li><a href="#charts-pane-donor" role="tab" data-toggle="tab">Donors</a></li>
     <li><a href="#projects-pane" role="tab" data-toggle="tab">Project List</a></li>
   </ul>
 
   <!-- Tab panes -->
   <div class="tab-content">
-    <div class="tab-pane active" id="charts-pane-donor">
-    	<div class="amp-chart"><svg></svg></div>
+    <div class="tab-pane active" id="charts-pane-sector">
+      <div class="amp-chart">
+      <img class="loading" src="img/loading-icon.gif" /><svg></svg></div>
     </div>
-    <div class="tab-pane" id="charts-pane-sector">
-      <div class="amp-chart"><svg></svg></div>
+    <div class="tab-pane" id="charts-pane-donor">
+      <img class="loading" src="img/loading-icon.gif" />
+    	<div class="amp-chart"><svg class="dash-chart"></svg></div>
     </div>
     <div class="tab-pane" id="projects-pane">
       <!-- this template is for adm clusters -->

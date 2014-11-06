@@ -102,9 +102,8 @@ function Translator() {
       //cache if we know the lng. TODO: get api to always return the lng.
       if (lng) {
         self.translations.locales[lng] = data;
-      } else {
-        //TODO: console.warn('no lng set, can\'t cache', data);
       }
+      //else{ TODO: console.warn('no lng set, can\'t cache', data);}
 
       return data;
     });

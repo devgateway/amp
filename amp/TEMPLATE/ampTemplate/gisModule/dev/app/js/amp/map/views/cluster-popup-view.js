@@ -4,9 +4,12 @@ var $ = require('jquery');
 var Backbone = require('backbone');
 var d3 = require('d3-browserify');
 var nvd3 = window.nv;
+var util = require('../../../libs/local/chart-util');
 
 var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-list-template.html', 'utf8');
 var Template = fs.readFileSync(__dirname + '/../templates/cluster-popup-template.html', 'utf8');
+var topsTooltipTemplate = _.template(fs.readFileSync(__dirname + '/../templates/tooltip-tops.html', 'UTF-8'));
+
 
 // TODO: remove tempDOM and use this.$el
 module.exports = Backbone.View.extend({
@@ -56,26 +59,58 @@ module.exports = Backbone.View.extend({
   _generateSectorChart: function() {
     var self = this;
     this._getTops('ps').then(function(data) {
-      var exampleData = _.map(data.values, function(org) {
-        return {label: org.name, value: org.amount};
-      });
-
-      exampleData.push({ label: 'Other', value: data.total});
-      self._generateBaseChart(exampleData, '#charts-pane-sector .amp-chart svg');
+      self.tempDOM.find('#charts-pane-sector .loading').remove();
+      self._generateBaseChart(data, '#charts-pane-sector .amp-chart svg');
     });
   },
-
 
   _generateDonorChart: function() {
     var self = this;
     this._getTops('do').then(function(data) {
-      var exampleData = _.map(data.values, function(org) {
-        return {label: org.name, value: org.amount};
+      self.tempDOM.find('#charts-pane-donor .loading').remove();
+      self._generateBaseChart(data, '#charts-pane-donor .amp-chart svg');
+    });
+  },
+
+  _generateBaseChart: function(model, selector) {
+    var tmpTotal = 0;
+    var data = _.map(model.values, function(org) {
+      tmpTotal += org.amount;
+      return {label: org.name, value: org.amount};
+    });
+    if ((model.total - tmpTotal) > 1) {
+      data.push({ label: 'Other', value: (model.total - tmpTotal)});
+    }
+
+    nvd3.addGraph(function() {
+      var chart = nvd3.models.pieChart()
+          .valueFormat(util.formatKMB(3))
+          .labelType('percent')
+          .x(function(d) { return d.label; })
+          .y(function(d) { return d.value; })
+          .donut(true)
+          .donutRatio(0.35)
+          //.showLabels(true)
+          .showLegend(false);
+
+      chart.color(util.categoryColours(data.length));
+      chart.tooltipContent(function(a, y, raw) {
+        return topsTooltipTemplate({
+          label: raw.point.label,
+          value: d3.format(',')(Math.round(raw.value)),
+          currency: model.currency,
+          percent: d3.format('%')(raw.value / model.total)
+        });
       });
 
-      exampleData.push({ label: 'Other', value: data.total});
-      self._generateBaseChart(exampleData, '#charts-pane-donor .amp-chart svg');
+      d3.select(selector)
+          .datum(data)
+          .transition().duration(350)
+          .call(chart);
+
+      return chart;
     });
+
   },
 
   _getTops: function(type) {
@@ -104,25 +139,6 @@ module.exports = Backbone.View.extend({
 
     return tmpModel.fetch({type:'POST', data:JSON.stringify(payload)});
   },
-
-  _generateBaseChart: function(data, selector) {
-    nvd3.addGraph(function() {
-      var chart = nvd3.models.pieChart()
-          .x(function(d) { return d.label; })
-          .y(function(d) { return d.value; })
-          .showLabels(true)
-          .showLegend(false);
-
-      d3.select(selector)
-          .datum(data)
-          .transition().duration(350)
-          .call(chart);
-
-      return chart;
-    });
-
-  },
-
   _generateProjectList: function() {
     var self = this;
     this._currentPage = 0;

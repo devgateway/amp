@@ -9,7 +9,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <html>
-	<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=8" />
+	<meta http-equiv="X-UA-Compatible" content="chrome=1; IE=edge" />
 	<digi:base />
 	<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/EnterHitBinder.js'/>" >.</script>
 	<digi:context name="digiContext" property="context"/>

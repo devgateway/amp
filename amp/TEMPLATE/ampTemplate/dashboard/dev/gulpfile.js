@@ -9,6 +9,7 @@ var $ = require('gulp-load-plugins')();
 
 var paths = {
   root: './app',
+  ampRoot: '../../../../',
   rootStuff: './app/*.{png,jpg,ico,html,txt,xml}',
   dist: '../build/',
   scripts: {
@@ -47,6 +48,13 @@ var paths = {
 
 function _browserifier(entry, destFolder, destName, options) {
   var bundler = browserify(entry, options);
+  bundler.external([
+    'backbone',
+    // don't need bootstrap here, as it just registers jQ plugins
+    'd3-browserify',
+    'jquery',
+    'underscore'
+  ]);
 
   var bundle = function() {
     $.util.log('bundle: start');
@@ -163,7 +171,7 @@ gulp.task('watch', ['watchify', 'lint', 'less', 'images'], function() {
 
 
 gulp.task('serve', $.serve({
-  root: [paths.root],
+  root: [paths.ampRoot],
   port: 3000
 }));
 

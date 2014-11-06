@@ -1,4 +1,3 @@
-var jQuery = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 
@@ -11,11 +10,6 @@ function InitError(instance) {
   this.instance = instance;
   this.toString = function() { return 'Module initialization error'; };
 }
-
-
-// Unfortunately, we can't just override $ on our export...
-// various backbone methods get $ from Backbone directly.
-Backbone.$ = jQuery;
 
 
 // we have to alias the old backbone sync here.

@@ -1,11 +1,4 @@
-var jQuery = require('jquery');
-
-// boostrap looks for jquery in the global namespace, so put it there.
-window.jQuery = jQuery;
-require('bootstrap/dist/js/bootstrap');
-
-// make backbone and d3 play nice
-window.d3 = require('d3-browserify');
+// nvd3 goes global sigh... make sure d3 is already global
 require('nvd3');
 
 // load underscore mixins

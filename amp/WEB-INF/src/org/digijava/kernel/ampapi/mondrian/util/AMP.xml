@@ -501,6 +501,10 @@
 				<Table name="mondrian_locations@@locale@@" />
 				<Level name="Implementation Level" column="impl_level_id" type="String" nameColumn="impl_level_name" />
 			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Locations" name="Specified Location" primaryKey="id">
+				<Table name="mondrian_locations@@locale@@" />
+				<Level name="Specified Location" column="id" type="String" nameColumn="location_name" />			
+			</Hierarchy>
 		</Dimension>
 
 		<Dimension name="Activity Currency Amounts" foreignKey="entity_id">

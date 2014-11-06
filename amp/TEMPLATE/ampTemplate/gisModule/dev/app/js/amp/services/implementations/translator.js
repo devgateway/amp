@@ -103,7 +103,7 @@ function Translator() {
       if (lng) {
         self.translations.locales[lng] = data;
       } else {
-        console.warn('no lng set, can\'t cache', data);
+        //TODO: console.warn('no lng set, can\'t cache', data);
       }
 
       return data;

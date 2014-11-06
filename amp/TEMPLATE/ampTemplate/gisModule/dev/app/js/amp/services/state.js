@@ -65,7 +65,6 @@ _.extend(State.prototype, Backbone.Events, {
       var current = this._stateRegistry[id];
       if (_.isUndefined(current)) {
         this._unclaimed[id] = stateToSet;
-        console.warn('Saving state for unregistered id: ' + id);
       } else if (!_.isEqual(current.get(), stateToSet)) {
         current.set(stateToSet);
         changed = true;
@@ -121,7 +120,6 @@ _.extend(State.prototype, Backbone.Events, {
 
     // set to the currently loaded state, or its default empty state
     if (id in this._unclaimed) {
-      console.info('restoring state for previously unregistered id ', id);
       this._stateRegistry[id].set(this._unclaimed[id]);
       delete this._unclaimed[id];
     } else {

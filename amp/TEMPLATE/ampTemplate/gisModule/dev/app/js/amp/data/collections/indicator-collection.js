@@ -3,9 +3,11 @@ var Backbone = require('backbone');
 var JoinIndicator = require('../models/indicator-join-model');
 var ArcGISDynamicLayerIndicator = require('../models/indicator-arcgis-dynamicLayer-model');
 var WMSIndicator = require('../models/indicator-wms-model');
+var LoadOnceMixin = require('../../mixins/load-once-mixin');
 
 /* Backbone Collection IndicatorLayers (RENAME FILE) */
-module.exports = Backbone.Collection.extend({
+module.exports = Backbone.Collection
+.extend(LoadOnceMixin).extend({
 
   url: '/rest/gis/indicator-layers',
 

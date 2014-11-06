@@ -1,11 +1,13 @@
 package org.dgfoundation.amp.mondrian;
 
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportEntityType;
@@ -69,7 +71,7 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		}
 	}
 	
-	protected void runMondrianTestCase(List<String> columns, List<String> measures, String locale, List<String> activities, ReportAreaForTests cor, String testName) {
+	protected void runMondrianTestCase(List<String> columns, List<String> measures, String locale, List<String> activities, GroupingCriteria groupingCriteria, ReportAreaForTests cor, String testName) {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(testName);
 		
 		for(String columnName:columns)
@@ -80,11 +82,17 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 
 		spec.setCalculateColumnTotals(true);
 		spec.setCalculateRowTotals(true);
+		spec.setGroupingCriteria(groupingCriteria);
 		
 		GeneratedReport rep = this.runReportOn(spec, locale, activities);
-		System.err.println("this is output for test " + testName + describeInCode(rep.reportContents, 1));
+		if (testName.equals("AMP-18504"))
+			System.err.println("this is output for test " + testName + describeInCode(rep.reportContents, 1));
+		Iterator<ReportOutputColumn> bla = rep.reportContents.getChildren().get(0).getContents().keySet().iterator();
+		//ReportOutputColumn first = bla.next(), second = bla.next(), third = bla.next(), fourth = bla.next();
+		
 		String delta = cor.getDifferenceAgainst(rep.reportContents);
-		assertNull("test " + testName + " failed", delta);
+		if (delta != null)
+			fail("test " + testName + " failed: " + delta);
 	}
 	
 	//protected void runRe
@@ -111,11 +119,17 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		boolean first = true;
 		for (ReportOutputColumn colKey:area.getContents().keySet()) {
 			ReportCell colContents = area.getContents().get(colKey);
-			res.append(String.format("%s\"%s\", \"%s\"", first ? "" : ", ", colKey.originalColumnName, colContents.displayedValue));
+			res.append(String.format("%s\"%s\", \"%s\"", first ? "" : ", ", generateDisplayedName(colKey), colContents.displayedValue));
 			first = false;
 		}
 		res.append(")");
 		return res.toString();
+	}
+	
+	public static String generateDisplayedName(ReportOutputColumn colKey) {
+		if (colKey.parentColumn == null)
+			return colKey.originalColumnName;
+		return String.format("[%s] %s", colKey.parentColumn.originalColumnName, colKey.originalColumnName);
 	}
 	
 	public static String describeChildren(ReportArea area, int depth) {

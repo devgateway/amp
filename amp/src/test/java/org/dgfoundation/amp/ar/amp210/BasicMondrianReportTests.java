@@ -7,6 +7,7 @@ import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportMeasure;
@@ -37,6 +38,7 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
 				"en", 
 				Arrays.asList("Eth Water", "SSC Project 1", "pledged 2"),
+				GroupingCriteria.GROUPING_TOTALS_ONLY,
 				correctReport,
 				"testcase EN"); 
 				
@@ -55,6 +57,7 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
 				"ru", 
 				Arrays.asList("Eth Water", "SSC Project 1", "pledged 2"),
+				GroupingCriteria.GROUPING_TOTALS_ONLY,
 				correctReportRu,
 				"testcase RU"); 
 
@@ -79,8 +82,9 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 		runMondrianTestCase(
 				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_GROUP),
 				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
-				"en", 
-				Arrays.asList("Eth Water", "Test MTEF directed", "TAC_activity_2"), 
+				"en",
+				Arrays.asList("Eth Water", "Test MTEF directed", "TAC_activity_2"),
+				GroupingCriteria.GROUPING_TOTALS_ONLY,
 				cor, "AMP-18497");
 	}
 	
@@ -100,6 +104,39 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
 				"en",
 				Arrays.asList("Proposed Project Cost 1 - USD", "Project with documents", "ptc activity 1"),
+				GroupingCriteria.GROUPING_TOTALS_ONLY,
 				cor, "AMP-18499");
+	}
+	
+	@Test
+	public void test_AMP_18504() {
+		// for running manually: http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=24 or http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/24
+		
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Donor Agency", "", 
+	    		"[2009] Actual Commitments", "100 000", "[2009] Actual Disbursements", "0", 
+	    		"[2010] Actual Commitments", "0", "[2010] Actual Disbursements", "60 000", 
+	    		"[2012] Actual Commitments", "25 000", "[2012] Actual Disbursements", "12 000", 
+	    		"[Total Measures] Actual Commitments", "125 000", "[Total Measures] Actual Disbursements", "72 000")
+	    .withChildren(
+	      new ReportAreaForTests()
+	      		// line below incorrect - to be overwritten manually
+	          .withContents("Project Title", "date-filters-activity", "Donor Agency", "Ministry of Finance", 
+	        		  "[2009] Actual Commitments", "100 000", "[2009] Actual Disbursements", "0",
+	        		  "[2009] Actual Commitments", "0", "[2010] Actual Disbursements", "60 000",
+	        		  "[2012] Actual Commitments", "25 000", "[2012] Actual Disbursements", "12 000", 
+	        		  "[Total Measures] Actual Commitments", "125 000", "[Total Measures] Actual Disbursements", "72 000"),
+
+          new ReportAreaForTests()
+	      	// line below incorrect - to be overwritten manually
+	        .withContents("Project Title", "pledged 2", "Donor Agency", "USAID", "[2009] Actual Commitments", "0", "[2010] Actual Disbursements", "0", "[2012] Actual Commitments", "0", "[2012] Actual Disbursements", "0", "[2013] Actual Commitments", "2 670 000", "[2014] Actual Commitments", "4 400 000", "[2014] Actual Disbursements", "450 000", "[Total Measures] Actual Commitments", "7 070 000", "[Total Measures] Actual Disbursements", "450 000"));
+		
+		runMondrianTestCase(
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+				"en",
+				Arrays.asList("date-filters-activity", "pledged 2"),
+				GroupingCriteria.GROUPING_YEARLY,
+				cor, "AMP-18504");
 	}
 }

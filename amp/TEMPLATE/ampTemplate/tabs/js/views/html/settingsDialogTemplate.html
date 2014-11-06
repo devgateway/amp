@@ -1,148 +1,42 @@
-<div>
-    <div class="settings-container">
-        <form name="<%= formName %>" method="post" action="<%= action %>" onsubmit="return validateFormat();">
-            <input type="hidden" name="initialCal" id="initialCal" value="4">
-            <center>
-                <b class="settings-section-title" data-i18n="tabs.common:numberFormat">Number Format</b>
-            </center>
-            <hr>
-            <table width="100%" border="0" align="center" cellpadding="2" cellspacing="0" style="font-size: 11px;">
-                <tbody>
-                <tr>
-                    <td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px" data-i18n="tabs.common:decimalSeparator">Decimal Separator</td>
-                    <td width="20%" height="18" nowrap="nowrap">
-	                    <select name="customDecimalSymbol" onchange="initFormatPopup();" id="customDecimalSymbol" class="dropdwn_sm"> 
-	                    	<% for(var ds in decimalSeparators) { %>
-	                    		<% 	var selected = '';
-	                    			if(selectedDecimalSeparator != undefined && selectedDecimalSeparator != null && decimalSeparators[ds] == selectedDecimalSeparator) {
-	                    				selected = "selected = 'selected' ";
-	                    			}
-	                    		%>
-	                        	<option value="<%= decimalSeparators[ds]%>" <%= selected %> ><%= decimalSeparators[ds]%></option>
-	                        <% } %>
-	                    </select> 
-						<input type="text" name="customDecimalSymbolTxt" maxlength="1" size="5" value="," onchange="initFormatPopup()" disabled="disabled" class="inputx">
-                    </td>
-                </tr>
-                <tr>
-                    <td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px" data-i18n="tabs.common:maxFractionDigits">Maximum Fraction Digits</td>
-                    <td width="60%">
-                    	<select name="customDecimalPlaces" onchange="initFormatPopup();" id="customDecimalPlaces" class="dropdwn_sm"> 
-	                    	<% for(var dp in decimalPlaces) { %>
-	                    		<% 	var selected = '';
-	                    			if(selectedDecimalPlaces != undefined && selectedDecimalPlaces != null && decimalPlaces[dp].id == selectedDecimalPlaces) {
-	                    				selected = "selected = 'selected' ";
-	                    			}
-	                    		%>
-	                        	<option value="<%= decimalPlaces[dp].id%>" <%= selected %> ><%= decimalPlaces[dp].value%></option>
-	                        <% } %>
-	                    </select> 
-						<input type="text" name="customDecimalPlacesTxt" maxlength="2" size="5" value="" onchange="initFormatPopup()" disabled="disabled" class="inputx">                    	
-                    </td>
-                </tr>
-                <tr>
-                    <td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px" data-i18n="tabs.common:useGroupingSeparator">Use Grouping Separator</td>
-                    <td width="20%" height="18" nowrap="nowrap">
-                    	<input type="checkbox" name="customUseGrouping" value="on" <% (selectedUseGroupingSeparator == true ? print("checked='checked'") : print('')) %> onchange="initFormatPopup();" id="customUseGrouping">
-                    </td>
-                    <td width="20%" height="18" align="left" nowrap="nowrap">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px" data-i18n="tabs.common:groupingSeparator">Grouping Separator</td>
-                    <td width="20%" height="18" nowrap="nowrap" style="font-size: 11px">
-                    	<select name="customGroupCharacter" onchange="initFormatPopup();" id="customGroupCharacter" class="dropdwn_sm"> 
-	                    	<% for(var gs in groupSeparators) { %>
-	                    		<% 	var selected = '';
-	                    			if(selectedGroupSeparator != undefined && selectedGroupSeparator != null && groupSeparators[gs] == selectedGroupSeparator) {
-	                    				selected = "selected = 'selected' ";
-	                    			}
-	                    		%>
-	                        	<option value="<%= groupSeparators[gs]%>" <%= selected %> ><%= groupSeparators[gs]%></option>
-	                        <% } %>
-	                    </select>
-                    	<input type="text" name="customGroupCharacterTxt" maxlength="1" size="5" value="" onchange="initFormatPopup()" disabled="disabled" class="inputx">
-                    </td>
-                </tr>
-                <tr>
-                    <td height="18" align="right" nowrap="nowrap" style="font-size: 11px" data-i18n="tabs.common:groupSize">Group Size</td>
-                    <td height="18" colspan="2" nowrap="nowrap">
-                    	<input type="text" name="customGroupSize" maxlength="1" size="2" value="" onchange="initFormatPopup();" disabled="disabled" class="inputx"></td>
-                </tr>
-                <tr>
-                    <td height="18" align="right" nowrap="nowrap" style="font-size: 11px" data-i18n="tabs.common:amountUnits">Amounts units</td>
-                    <td height="18" colspan="2" nowrap="nowrap">
-                    	<select name="amountinthousands" onchange="initFormatPopup();" id="customAmountinThousands" class="dropdwn_sm"> 
-	                    	<% for(var au in amountUnits) { %>
-	                    		<% 	var selected = '';
-	                    			if(selectedAmountUnit != undefined && selectedAmountUnit != null && amountUnits[au].id == selectedAmountUnit) {
-	                    				selected = "selected = 'selected' ";
-	                    			}
-	                    		%>
-	                        	<option value="<%= amountUnits[au].id%>" <%= selected %> ><%= amountUnits[au].value%></option>
-	                        <% } %>
-	                    </select>
-					</td>
-                </tr>
-                <tr>
-                    <td width="40%" height="18" align="right" nowrap="nowrap" style="font-size: 11px" data-i18n="tabs.common:example">Example</td>
-                    <td height="18" colspan="2" nowrap="nowrap" style="font-weight: bold; font-size: 11px">
-                        <div id="number" style="margin-left: 3px">123 456 789,93</div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <br>
-            <center>
-                <b style="font-size: 11px;" data-i18n="tabs.common:otherSettings">Other Settings</b>
-            </center>
-            <hr>
-            <table width="400" align="center" cellpadding="2" cellspacing="2" style="font-size: 11px;">
-                <tbody>
-                <tr>
-                    <td width="40%" style="text-align: right; font-size: 11px" data-i18n="tabs.common:currency">Currency</td>
-                    <td>
-                    	<select name="currency" onchange="initFormatPopup();" id="currency" class="dropdwn_sm"> 
-	                    	<% for(var c in currencies) { %>
-	                    		<% 	var selected = '';
-	                    			if(selectedCurrency != undefined && selectedCurrency != null && currencies[c].id === selectedCurrency) {
-	                    				selected = "selected = 'selected' ";
-	                    			}
-	                    		%>
-	                        	<option value="<%= currencies[c].id%>" <%= selected %> ><%= currencies[c].value%></option>
-	                        <% } %>
-	                    </select>
-	            	</td>
-                </tr>
-                <tr>
-                    <td width="40%" style="text-align: right; font-size: 11px" data-i18n="tabs.common:calendar">Calendar</td>
-                    <td>
-                    	<select name="calendar" onchange="initFormatPopup();" id="calendar" class="dropdwn_sm"> 
-	                    	<% for(var c in calendar) { %>
-	                    		<% 	var selected = '';
-	                    			if(selectedCalendar != undefined && selectedCalendar != null && calendar[c].id === selectedCalendar) {
-	                    				selected = "selected = 'selected' ";
-	                    			}
-	                    		%>
-	                        	<option value="<%= calendar[c].id%>" <%= selected %> ><%= calendar[c].value%></option>
-	                        <% } %>
-	                    </select>
-	            	</td>
-                </tr>
-                </tbody>
-            </table>
-            <br>
-            <div>
-                <div style="margin-right: auto; margin-left: auto; text-align: center;">
-                    <input type="hidden" name="ampReportId" value="845"> 
-                    <input type="hidden" name="reportContextId" value="845"> 
-                    <input type="hidden" name="defaultCurrency" value="96"> 
-                    <input type="hidden" name="defaultCalendar" value="4"> 
-                    <input type="button" name="applyFormat" id="applyFormatBtn" class="buttonify" data-i18n="tabs.common:applyFormat" value="Apply Format"/> 
-                    <input type="hidden" name="apply" value="true"> 
-                    <input type="hidden" name="resetFormat" value="false"> 
-                    <input type="button" name="applyFormat" onclick="ResetCustom(2);" class="buttonify" data-i18n="tabs.common:reset" value="Reset"/>
-                </div>
-            </div>
-        </form>
-    </div>
+<div class="settings-container">
+	<table width="400" align="center">
+		<tbody>
+			<tr>
+				<td width="40%" data-i18n="tabs.common:currency">Currency</td>
+				<td>
+					<select name="currency" onchange="initFormatPopup();" id="currency" class="dropdwn_sm"> 
+						<% for(var c in currencies) { %> 
+							<% 
+							var selected = ''; 
+							if(selectedCurrency != undefined && selectedCurrency != null && currencies[c].id === selectedCurrency) { 
+								selected = "selected = 'selected' "; 
+							} 
+							%>
+							<option value="<%= currencies[c].id%>"<%= selected %>><%= currencies[c].name%></option> <% } %>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td width="40%" data-i18n="tabs.common:calendar">Calendar</td>
+				<td>
+					<select name="calendar" onchange="initFormatPopup();" id="calendar" class="dropdwn_sm"> 
+						<% for(var c in calendars) { %> 
+							<% 
+							var selected = ''; 
+							if(selectedCalendar != undefined && selectedCalendar != null && calendars[c].id === selectedCalendar) { 
+								selected = "selected = 'selected' "; 
+							} 
+							%>
+						<option value="<%= calendars[c].id%>"<%= selected %> ><%=calendars[c].name%></option> <% } %>
+					</select>
+				</td>
+			</tr>
+	</table>
+	<br>
+	<div>
+		<div style="margin-right: auto; margin-left: auto; text-align: center;">
+			<input type="button" name="applyFormat" id="applyFormatBtn" class="buttonify" data-i18n="tabs.common:applyFormat" value="Apply Format" /> 
+			<input type="button" name="applyFormat" onclick="ResetCustom(2);" class="buttonify" data-i18n="tabs.common:reset" value="Reset" />
+		</div>
+	</div>
 </div>

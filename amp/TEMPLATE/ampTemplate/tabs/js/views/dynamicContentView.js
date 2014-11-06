@@ -5,6 +5,8 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 
 	var reportId;
 	var reportFilters;
+	var currency;
+	var calendar;
 
 	var DynamicContentView = Marionette.LayoutView.extend({
 		template : _.template(dynamicContentTemplate),
@@ -20,6 +22,8 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 		initialize : function(data) {
 			reportId = data.id;
 			reportFilters = data.filters;
+			calendar = data.calendar;
+			currency = data.currency;
 		},
 		clickFiltersButton : function() {
 			console.log('clickFiltersButton');
@@ -64,7 +68,9 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 			// TODO: Replace some of the default values with the ones
 			// for this tab.
 			var settings = new Settings();
-			SettingsManager.setAvailableCategories(settings, reportId);
+			settings.set('selectedCurrency', currency);
+			settings.set('selectedCalendar', calendar);
+			// SettingsManager.setAvailableCategories(settings, reportId);
 			var settingsDialog = new SettingDialogContainerView({
 				model : settings
 			});
@@ -79,9 +85,21 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 		},
 		onShow : function(data) {
 			// Create jQuery buttons.
-			// alert(jQuery("#main-dynamic-content-region_" + reportId + "
-			// .buttonify"));
-			jQuery("#main-dynamic-content-region_" + reportId + " .buttonify").button();
+			jQuery("#main-dynamic-content-region_" + reportId + " #filters-button").button({
+				icons : {
+					primary : "ui-icon-search"
+				}
+			});
+			jQuery("#main-dynamic-content-region_" + reportId + " #save-button").button({
+				icons : {
+					primary : 'ui-icon-disk'
+				}
+			});
+			jQuery("#main-dynamic-content-region_" + reportId + " #settings-button").button({
+				icons : {
+					primary : 'ui-icon-gear'
+				}
+			});
 		}
 	});
 

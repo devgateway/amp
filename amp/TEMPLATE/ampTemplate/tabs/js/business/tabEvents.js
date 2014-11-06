@@ -69,7 +69,9 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			// Render views.
 			var dynamicLayoutView = new DynamicContentView({
 				id : id,
-				filters : app.TabsApp.filters
+				filters : app.TabsApp.filters,
+				currency : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode'),
+				calendar : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('ampFiscalCalId')
 			});
 			app.TabsApp.dynamicContentRegion.show(dynamicLayoutView);
 			dynamicLayoutView.filters.show(compositeView);
@@ -139,7 +141,6 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			console.log('activate tab');
 
 			// This tab is refreshed so we reset the filter widget status.
-			app.TabsApp.currentTabOpenedFilters = false;
 			app.TabsApp.serializedFilters = null;
 
 			// TODO: move this logic elsewhere.

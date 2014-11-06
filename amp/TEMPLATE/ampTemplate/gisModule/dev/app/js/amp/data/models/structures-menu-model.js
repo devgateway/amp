@@ -7,7 +7,6 @@ var Backbone = require('backbone');
 var $ = require('jquery');
 var Palette = require('../../colours/colour-palette');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
-var Structures = require('../collections/structures-collection');
 
 module.exports = Backbone.Model
 .extend(LoadOnceMixin).extend({
@@ -40,7 +39,7 @@ module.exports = Backbone.Model
     this.listenTo(this.filter, 'apply', this.applyFilters);
   },
 
-  applyFilters: function(serializedFilters) {
+  applyFilters: function() {
     if (this.get('selected')) {
       this.projectSitesCollection.fetch();
     }
@@ -71,9 +70,9 @@ module.exports = Backbone.Model
 
   updatePaletteSet: function() {
     var deferred = $.Deferred();
-    var self = this;
 
     /*
+    var self = this;
     //load the necessary activities.
     this.getSites().done(_.bind(function() {
       var activity;
@@ -118,7 +117,7 @@ module.exports = Backbone.Model
 
     }, this));
    */
-      deferred.resolve();
+    deferred.resolve();
 
     return deferred;
   }

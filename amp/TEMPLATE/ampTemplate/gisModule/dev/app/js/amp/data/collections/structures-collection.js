@@ -30,7 +30,7 @@ module.exports = Backbone.Collection
       console.warn('Project Sites/Structures colln: no options were provided for context');
     }
 
-    _.bindAll(this,'fetch','updatePaletteSet');
+    _.bindAll(this, 'fetch', 'updatePaletteSet');
 
   },
 
@@ -107,12 +107,12 @@ module.exports = Backbone.Collection
 /*Migrated from Collection-Model */
   updatePaletteSet: function() {
     var deferred = $.Deferred();
-    var self = this;
 
     //load the necessary activities.
     this.loadAll().done(_.bind(function() {
-      var activity;
 /*
+    var self = this;
+      var activity;
       var orgSites = this.get('sites')
         .chain()
         .groupsBy(function(site) {

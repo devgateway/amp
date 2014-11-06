@@ -74,7 +74,7 @@ module.exports = Backbone.View.extend({
 
     self.markerCluster.clearLayers();
 
-    var model = self.app.data.projectSites;
+    /*var model = self.app.data.projectSites;*/
 
     self.maxClusterCount = 0;
     self.customClusterMap = {};

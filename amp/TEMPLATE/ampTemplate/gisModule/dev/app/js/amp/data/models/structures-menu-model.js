@@ -29,7 +29,6 @@ module.exports = Backbone.Model
 
     this.listenTo(this, 'change:selected', function(other, show) {
       this.trigger(show ? 'show' : 'hide', this);
-      console.log('changes:', arguments);
       if (show) {
         self.projectSitesCollection.fetch();
       }

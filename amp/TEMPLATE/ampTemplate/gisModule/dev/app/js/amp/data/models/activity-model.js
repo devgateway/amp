@@ -1,11 +1,12 @@
 var Backbone = require('backbone');
 
 module.exports = Backbone.Model.extend({
+  idAttribute: 'Activity Id',
   defaults: {
-    id: null,
     name: 'Untitled Activity',
     ampUrl: '/aim/viewActivityPreview.do~public=true',
     matchesFilters: {
+      'Donor Id': '',
       programs: {
         1: [] /* x : [y..] */
       },

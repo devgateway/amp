@@ -52,6 +52,19 @@ define([ 'jquery', 'jqueryui' ], function(jQuery) {
 		jQuery(selector).tabs(options);
 	};
 
+	TabUtils.shortenTabNames = function(tabs) {
+		var maxChars = 25;
+		_.each(tabs, function(item, i) {
+			var name = item.get('name');
+			// Ignore "more tabs" tab.
+			if (name.length > maxChars && item.get('id') != -1) {
+				item.set('shortName', name.substring(0, maxChars) + '...');
+			} else {
+				item.set('shortName', name);
+			}
+		});
+	};
+
 	TabUtils.prototype = {
 		constructor : TabUtils
 	};

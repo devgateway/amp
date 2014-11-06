@@ -39,7 +39,7 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 		return val.get('visible') == false;
 	})) {
 		hasMoreTabs = true;
-	}
+	}	
 	if (hasMoreTabs) {
 		var moreTabsTab = new Tab({
 			id : -1,
@@ -48,6 +48,7 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 		});
 		tabsCollection.push(moreTabsTab);
 	}
+	TabUtils.shortenTabNames(tabsCollection.models);
 
 	// Instantiate both CollectionView containers with the data to
 	// create the

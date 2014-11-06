@@ -4,6 +4,7 @@ define([ 'underscore', 'backbone' ], function(_, Backbone) {
 	var Tab = Backbone.Model.extend({
 		defaults : {
 			name : '',
+			shortName: '',
 			id : 0,
 			/* it means is one of the tabs always shown. */
 			visible : false,

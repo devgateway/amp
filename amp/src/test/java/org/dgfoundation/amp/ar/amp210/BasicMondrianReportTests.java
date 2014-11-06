@@ -139,4 +139,47 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 				GroupingCriteria.GROUPING_YEARLY,
 				cor, "AMP-18504");
 	}
+	
+	@Test
+	public void test_AMP_18509() {
+		// http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/16
+		// test is now testing just that the thing is not crashing or outputting malformed output 
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Region", "", "AMP ID", "", "[Q1] Actual Commitments", "100 000", "[Q2] Actual Disbursements", "60 000", "[Q3] Actual Commitments", "25 000", "[Q4] Actual Disbursements", "12 000", "[Q4] Actual Commitments", "2 670 000", "[Q2] Actual Commitments", "4 400 000", "[Q2] Actual Disbursements", "450 000", "[Total Measures] Actual Commitments", "7 195 000", "[Total Measures] Actual Disbursements", "522 000")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents(
+	        		  "Project Title", "date-filters-activity", 
+	        		  "Region", "Undefined", // this is a bug, to be changed later to "" 
+	        		  "AMP ID", "872113null", 
+	        		  "[Q1] Actual Commitments", "100 000", 
+	        		  "[Q2] Actual Disbursements", "60 000", 
+	        		  "[Q3] Actual Commitments", "25 000", 
+	        		  "[Q4] Actual Disbursements", "12 000", 
+	        		  "[Q4] Actual Commitments", "0", 
+	        		  "[Q2] Actual Commitments", "0", 
+	        		  "[Q2] Actual Disbursements", "0", 
+	        		  "[Total Measures] Actual Commitments", "125 000", "[Total Measures] Actual Disbursements", "72 000"), // this is a bug - Actual Expenditures with zero should appear in the future
+	      new ReportAreaForTests()
+	          .withContents(
+	        		  "Project Title", "pledged 2", 
+	        		  "Region", "Cahul County", 
+	        		  "AMP ID", "87211347", 
+	        		  "[Q1] Actual Commitments", "0", 
+	        		  "[Q2] Actual Disbursements", "0", 
+	        		  "[Q3] Actual Commitments", "0", 
+	        		  "[Q4] Actual Disbursements", "0", 
+	        		  "[Q4] Actual Commitments", "2 670 000", 
+	        		  "[Q2] Actual Commitments", "4 400 000", 
+	        		  "[Q2] Actual Disbursements", "450 000", 
+	        		  "[Total Measures] Actual Commitments", "7 070 000", "[Total Measures] Actual Disbursements", "450 000")); // this is a bug - Actual Expenditures with zero should appear in the future
+		
+		runMondrianTestCase(
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.AMP_ID),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.ACTUAL_EXPENDITURES),
+				"en",
+				Arrays.asList("date-filters-activity", "pledged 2"),
+				GroupingCriteria.GROUPING_QUARTERLY,
+				cor, "AMP-18509");
+	}
 }

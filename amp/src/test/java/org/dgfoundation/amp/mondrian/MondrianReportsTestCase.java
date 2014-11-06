@@ -85,7 +85,7 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		spec.setGroupingCriteria(groupingCriteria);
 		
 		GeneratedReport rep = this.runReportOn(spec, locale, activities);
-		if (testName.equals("AMP-18504"))
+		if (testName.equals("AMP-18509"))
 			System.err.println("this is output for test " + testName + describeInCode(rep.reportContents, 1));
 		Iterator<ReportOutputColumn> bla = rep.reportContents.getChildren().get(0).getContents().keySet().iterator();
 		//ReportOutputColumn first = bla.next(), second = bla.next(), third = bla.next(), fourth = bla.next();

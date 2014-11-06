@@ -116,9 +116,8 @@ public class CellDataSetToAmpHierachies {
 		if (rowTotals == null || rowTotals.length == 0 || cellDataSet.getCellSetBody().length == 0 || noOfColumnsToMerge <= 0) 
 			return;
 		
-		Double[] currentTotalMeasuresColumnTotals = new Double[spec.getMeasures().size()];
-		Arrays.fill(currentTotalMeasuresColumnTotals, 0d);
-		ArrayList<Double[]> measuresTotalsToKeep = new ArrayList<Double[]>();
+		double[] currentTotalMeasuresColumnTotals = (colTotals == null ? null : new double[colTotals.length]);
+		ArrayList<double[]> measuresTotalsToKeep = new ArrayList<double[]>();
 		
 		//list of row index ranges to delete when all concatenations are done
 		List<IntRange> rowsRangesToDelte = new ArrayList<IntRange>();
@@ -178,12 +177,12 @@ public class CellDataSetToAmpHierachies {
 				sbList[colId - startColumnIndex].add(cellDataSet.getCellSetBody()[rowId][colId].getFormattedValue());
 	}
 	
-	private void mergeMeasureTotals(Double[] currentTotalMeasuresColumnTotals, int rowId) {
+	private void mergeMeasureTotals(double[] currentTotalMeasuresColumnTotals, int rowId) {
 		if (colTotals != null && colTotals.length > 0) {
 			//get final totals reference
 			int mPos = 0;
-			for (int a = colTotals.length - spec.getMeasures().size(); a < colTotals.length; a++, mPos++) {
-				Double value = colTotals[a][rowId].getValue();
+			for (int a = 0; a < colTotals.length; a++, mPos++) {
+				double value = colTotals[a][rowId].getValue();
 				//Double value = a < 0 ? 0 : colTotals[a][rowId].getValue();
 				currentTotalMeasuresColumnTotals[mPos] += value;
 			}
@@ -198,7 +197,7 @@ public class CellDataSetToAmpHierachies {
 		return false;
 	}
 	
-	private void setNewData(int rowsToKeepCount, List<IntRange> rowsRangesToDelte, ArrayList<Double[]> measuresTotalsToKeep) {
+	private void setNewData(int rowsToKeepCount, List<IntRange> rowsRangesToDelte, ArrayList<double[]> measuresTotalsToKeep) {
 		//remove the dummy hierarchy from headers
 		SortedSet<Integer> columnsToRemove = new TreeSet<Integer>();
 		columnsToRemove.add(spec.getHierarchies().size() - 1); //to remove the last dummy hierarchy
@@ -233,7 +232,7 @@ public class CellDataSetToAmpHierachies {
 				//update the measures totals
 				if (total != null) {
 					int mPos = 0;
-					for (int a = 0; a < spec.getMeasures().size(); a++, mPos++) {
+					for (int a = 0; a < measuresTotalsToKeep.get(newDataRowId).length; a++, mPos++) {
 						String value = numberFormat.format(measuresTotalsToKeep.get(newDataRowId)[mPos]);
 						res[a][newDataRowId].setFormattedValue(value);
 					}

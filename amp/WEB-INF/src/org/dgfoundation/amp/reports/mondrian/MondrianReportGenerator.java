@@ -429,13 +429,13 @@ public class MondrianReportGenerator implements ReportExecutor {
 	private CellDataSet postProcess(ReportSpecification spec, CellSet cellSet) throws AMPException {
 		CellSetAxis rowAxis = cellSet.getAxes().get(Axis.ROWS.axisOrdinal());
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
-		
-		leafHeaders = getOrderedLeafColumnsList(spec, rowAxis, columnAxis);
-		
+				
 		logger.info("[" + spec.getReportName() + "]" +  "Starting conversion from Olap4J CellSet to Saiku CellDataSet via Saiku method...");
 		CellDataSet cellDataSet = OlapResultSetUtil.cellSet2Matrix(cellSet); // we can also pass a formater to cellSet2Matrix(cellSet, formatter)
 		logger.info("[" + spec.getReportName() + "]" +  "Conversion from Olap4J CellSet to Saiku CellDataSet ended.");
 		
+		leafHeaders = getOrderedLeafColumnsList(spec, rowAxis, columnAxis);
+
 		boolean calculateTotalsOnRows = spec.isCalculateRowTotals()
 				//enable totals for non-hierarhical columns
 				|| spec.getHierarchies().size() < spec.getColumns().size();
@@ -666,12 +666,14 @@ public class MondrianReportGenerator implements ReportExecutor {
 		List<ReportOutputColumn> reportColumns = new ArrayList<ReportOutputColumn>(); //leaf report columns list
 
 		//build the list of available columns
-		if (rowAxis.getPositionCount() > 0 )
+		if (rowAxis.getPositionCount() > 0 ) {
 			for (Member textColumn : rowAxis.getPositions().get(0).getMembers()) {
 				ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getCaption(), null, 
 						MondrianMapping.fromFullNameToColumnName.get(textColumn.getLevel().getUniqueName()));
 				reportColumns.add(reportColumn);
 			}
+		}
+		LinkedHashSet<String> outputtedMeasures = new LinkedHashSet<>(); // the set of the measures for which saiku generated an output (and we are supposed to generate totals)
 		//int measuresLeafPos = columnAxis.getAxisMetaData().getHierarchies().size();
 		if (columnAxis.getPositions() != null)
 			for (Position position : columnAxis.getPositions()) {
@@ -685,6 +687,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 						reportColumnsByFullName.put(fullColumnName, reportColumn);
 					}
 					if (measureColumn.getDepth() == 0) { //lowest depth ==0 => this is leaf column
+						if (!outputtedMeasures.contains(measureColumn.getName()))
+							outputtedMeasures.add(measureColumn.getName());
 						reportColumns.add(reportColumn);
 					}
 				}
@@ -692,8 +696,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//add measures total columns
 		if (spec.isCalculateColumnTotals() && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {
 			ReportOutputColumn totalMeasuresColumn = ReportOutputColumn.buildTranslated(MoConstants.TOTAL_MEASURES, environment.locale, null);
-			for (ReportMeasure measure : spec.getMeasures())
-				reportColumns.add(ReportOutputColumn.buildTranslated(measure.getMeasureName(), environment.locale, totalMeasuresColumn));
+			for (String measureName : outputtedMeasures)
+				reportColumns.add(ReportOutputColumn.buildTranslated(measureName, environment.locale, totalMeasuresColumn));
 		}
 		return reportColumns;
 	}

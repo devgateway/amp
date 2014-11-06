@@ -139,7 +139,7 @@ public class CellDataSetToGeneratedReport {
 		//adds measure totals to the content
 		if (measureTotals != null) {
 			int headerColId = rowLength;
-			for (int colId = measureTotals.length - spec.getMeasures().size(); colId < measureTotals.length; colId ++) {
+			for (int colId = 0; colId < measureTotals.length; colId ++) {
 				//Unfortunately cannot use getValue() because during concatenation we override the value, but the only way to override is via formatted value
 				double value = parseValue(measureTotals[colId][rowId].getFormattedValue()); 
 				contents.put(leafHeaders.get(headerColId++), new AmountCell(value, this.numberFormat));
@@ -267,7 +267,7 @@ public class CellDataSetToGeneratedReport {
 			
 		//calculate total measures of the current area
 		if (spec.isCalculateColumnTotals()) {
-			double[] currentTotalMeasuresColumnTotals = new double[spec.getMeasures().size()];
+			double[] currentTotalMeasuresColumnTotals = new double[leafHeaders.size() - headerPos];
 			for (ReportArea childArea : current.getChildren()) {
 				ReportCell[] childContent = childArea.getContents().values().toArray(new ReportCell[0]);
 				for (int a = headerPos; a < leafHeaders.size(); a ++) {
@@ -276,7 +276,7 @@ public class CellDataSetToGeneratedReport {
 				}
 			}
 			//adding total measures
-			for (int b = 0; b < spec.getMeasures().size(); b++, headerPos++) 
+			for (int b = 0; b < currentTotalMeasuresColumnTotals.length; b++, headerPos++) 
 				contents.put(leafHeaders.get(headerPos), new AmountCell(currentTotalMeasuresColumnTotals[b], this.numberFormat));
 		}
 		

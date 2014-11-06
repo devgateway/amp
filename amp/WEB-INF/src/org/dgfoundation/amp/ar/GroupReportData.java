@@ -220,7 +220,26 @@ public class GroupReportData extends ReportData<ReportData> {
 		}
 		return dest;
 	}
-
+	/**
+	 * returns a trail cell with a special if for Percentage of Total Disbursements
+	 * AMP-18430  
+	 * @param amc
+	 * @return
+	 */
+	protected AmountCell getTrailCell(AmountCell amc)
+	{
+		if (amc == null)
+			return null;
+		
+		AmountCell newc = amc.newInstance();                        
+		newc.setColumn(amc.getColumn());
+		if (amc.getColumn().getName().equals("Percentage Of Total Disbursements")) {
+			newc.getMergedCells().clear();
+			newc.getAmount();
+			newc.setAmount(0);
+		}
+		return newc;
+	}
 	/**
 	 * decides whether an AmountCell should be part of the current GRD's trailCells. If false is returned, then a null will be inserted  
 	 * @param caca
@@ -254,16 +273,10 @@ public class GroupReportData extends ReportData<ReportData> {
 			// firstly create the array, containing the trail cells of the first child - we basically only care about the array size and cell types here
 			if (items.size() > 0){
 				ReportData<? extends Viewable> data = items.get(0);
-				for(AmountCell caca:data.getTrailCells())
+				for(AmountCell trailCell:data.getTrailCells())
 				{
-					if (shouldDisplayTrailCell(caca))
-					{
-						AmountCell newc = caca.newInstance();
-						newc.setColumn(caca.getColumn());
-						trailCells.add(newc);
-					}else{
-						trailCells.add(null);
-					}
+					trailCells.add(getTrailCell(trailCell));
+
 				}
 					
 				//logger.debug("GroupTrail.size=" + trailCells.size());

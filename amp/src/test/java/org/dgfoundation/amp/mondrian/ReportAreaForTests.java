@@ -12,7 +12,6 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.newreports.SimplifiedROCComparator;
 import org.dgfoundation.amp.newreports.TextCell;
 
 public class ReportAreaForTests extends ReportAreaImpl {

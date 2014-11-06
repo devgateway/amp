@@ -97,7 +97,7 @@ public class GisEndPoints {
 	@POST
 	@Path("/cluster")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="ClusterPointsByAdmin")
+	@ApiMethod(ui = false, id = "ClusterPointsByAdmin")
 	public final FeatureCollectionGeoJSON getClusteredPointsByAdm(
 			final JsonBean config) throws AmpApiException {
 
@@ -129,7 +129,7 @@ public class GisEndPoints {
 	@POST
 	@Path("/structures")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="Structures")
+	@ApiMethod(ui = false, id = "Structures")
 	public final FeatureCollectionGeoJSON getProjectSites(final JsonBean filter) {
 		FeatureCollectionGeoJSON f = new FeatureCollectionGeoJSON();
 
@@ -166,7 +166,7 @@ public class GisEndPoints {
 	@POST
 	@Path("/saved-maps")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="SaveMap")
+	@ApiMethod(ui = false, id = "SaveMap")
 	public JsonBean savedMaps(final JsonBean pMap) {
 		Date creationDate = new Date();
 		JsonBean mapId = new JsonBean();
@@ -195,7 +195,7 @@ public class GisEndPoints {
 	@GET
 	@Path("/saved-maps/{mapId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="MapById")
+	@ApiMethod(ui = false, id = "MapById")
 	public JsonBean savedMaps(@PathParam("mapId") Long mapId) {
 		JsonBean jMap = null;
 		try {
@@ -230,7 +230,7 @@ public class GisEndPoints {
 	@GET
 	@Path("/saved-maps")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="MapList")
+	@ApiMethod(ui = false, id = "MapList")
 	public List<JsonBean> savedMaps() {
 		List<JsonBean> maps = new ArrayList<JsonBean>();
 
@@ -249,7 +249,7 @@ public class GisEndPoints {
 	@GET
 	@Path("/indicator-layers")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="IndicatorLayers")
+	@ApiMethod(ui = false, id = "IndicatorLayers")
 	public List<IndicatorLayers> getIndicatorLayers() {
 		List<IndicatorLayers> indicatorLayers = new ArrayList<IndicatorLayers>();
 		List<AmpMapConfig> mapsConfigs = DbHelper.getMaps();
@@ -294,7 +294,7 @@ public class GisEndPoints {
 	@POST
 	@Path("/activities")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="ActivitiesNewLists")
+	@ApiMethod(ui = false, id = "ActivitiesNewLists")
 	public JsonBean getActivitiesNew(JsonBean config, @QueryParam("start") Integer page,@QueryParam("size") Integer pageSize) {
 		try{
 			
@@ -314,7 +314,7 @@ public class GisEndPoints {
 	@POST
 	@Path("/activities/{activityId}") //once its done remove the New
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="ActivitiesById")
+	@ApiMethod(ui = false, id = "ActivitiesById")
 	public JsonBean getActivities(JsonBean config, @PathParam("activityId") PathSegment activityIds) {
 		try {
 			return ActivityService.getActivitiesMondrian(config,
@@ -357,8 +357,7 @@ public class GisEndPoints {
 	@POST
 	@Path("/locationstotals/{admlevel}/{type}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="locationstotals")
-	
+	@ApiMethod(ui = false, id = "locationstotals")	
 	public JsonBean getAdminLevelsTotals(JsonBean filters, @PathParam ("admlevel") String admlevel, @PathParam("type") String type ){
 		LocationService ls = new LocationService();
 		return ls.getTotals(admlevel, type, filters);
@@ -367,7 +366,7 @@ public class GisEndPoints {
 	@GET
 	@Path("/indicators/{admlevel}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="IndicatorByAdmLevel")
+	@ApiMethod(ui = false, id = "IndicatorByAdmLevel")
 	public List<JsonBean> getIndicatorByAdmLevel(@PathParam ("admlevel") String admLevel) {
 		List<AmpIndicatorLayer> indicators = QueryUtil.getIndicatorByCategoryValue(admLevel);
 		return generateIndicatorJson(indicators, false);
@@ -377,7 +376,7 @@ public class GisEndPoints {
 	@GET
 	@Path("/indicators")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="IndicatorsList")
+	@ApiMethod(ui = false, id = "IndicatorsList")
 	public List<JsonBean> getIndicators() {
 		List<AmpIndicatorLayer> indicators = QueryUtil.getIndicatorLayers();
 		return generateIndicatorJson(indicators, true);
@@ -434,7 +433,7 @@ public class GisEndPoints {
 	@GET
 	@Path("/export-map/")
 	@Produces("application/vnd.ms-excel")
-	@ApiMethod(ui=false,name="MapExport")
+	@ApiMethod(ui = false, id = "MapExport")
 	 public StreamingOutput getExportMap(@Context HttpServletResponse webResponse,@QueryParam("mapId") Long mapId,@DefaultValue("1") @QueryParam("exportType") Long exportType) throws AmpApiException
     {
 		final HSSFWorkbook wb;
@@ -468,7 +467,7 @@ public class GisEndPoints {
 	@GET
 	@Path("/settings")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="Settings")
+	@ApiMethod(ui = false, id = "Settings")
 	public List<SettingOptions> getSettings() {
 		return GisUtil.getSettings();
 	}
@@ -476,7 +475,7 @@ public class GisEndPoints {
 	@GET
 	@Path("/clusters")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = false, name = "ClusterLevels")
+	@ApiMethod(ui = false, id = "ClusterLevels")
 	public List<JsonBean> getClusterLevels() {
 		List<AmpCategoryValue> values = QueryUtil.getClusterLevels();
 		List<JsonBean> levelsJson = new ArrayList<JsonBean>();
@@ -504,7 +503,7 @@ public class GisEndPoints {
 	@GET
 	@Path("/lastUpdated")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = false, name = "LastUpdatedActivities")
+	@ApiMethod(ui = false, id = "LastUpdatedActivities")
 	public JSONObject getLastUpdated(@DefaultValue("10") @QueryParam("limit") Integer limit,
 			@QueryParam("columns") String columns) {
 		List<String> extraColumns = new ArrayList<String>();

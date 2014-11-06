@@ -72,7 +72,7 @@ public class Filters {
 	@GET
 	@Path("/activityapprovalStatus")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = true, name = "ActivityApprovalStatus", column = ColumnConstants.APPROVAL_STATUS)
+	@ApiMethod(ui = true, id = "ActivityApprovalStatus", column = ColumnConstants.APPROVAL_STATUS,name="Approval Status")
 	public JsonBean getActivityApprovalStatus() {
 		JsonBean as=new JsonBean();
 
@@ -97,7 +97,7 @@ public class Filters {
 	@GET
 	@Path("/boundaries")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="Boundaries")
+	@ApiMethod(ui = false,  id = "Boundaries")
 	public List<String> getBoundaries() {
 		// This should never change should they return from database?
 		return new ArrayList<String>(Arrays.asList("Country", "Region", "Zone",
@@ -112,7 +112,7 @@ public class Filters {
 	@GET
 	@Path("/sectors")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=true,name="Sectors")
+	@ApiMethod(ui = true, name = "Sectors", id = "Sectors")
 	public List<JsonBean> getSectorsSchemas() throws AmpApiException{
 		List<JsonBean> schemaList = new ArrayList<JsonBean>();
 		List<AmpClassificationConfiguration> schems = SectorUtil.getAllClassificationConfigs();
@@ -137,7 +137,7 @@ public class Filters {
 	@GET
 	@Path("/sectors/{sectorId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = false, name = "SectorsById")
+	@ApiMethod(ui = false, id = "SectorsById")
 	public SimpleJsonBean getSectors(@PathParam("sectorId") Long sectorId) {
 
 		SimpleJsonBean sector = new SimpleJsonBean();
@@ -168,7 +168,7 @@ public class Filters {
 	@GET
 	@Path("/dates/")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=true,name="Dates")
+	@ApiMethod(ui = true, name = "Dates", id = "Dates")
 	public JsonBean getDates(){
 		JsonBean date=new JsonBean();
 		date.set("startYear", FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.GIS_DEFAUL_MIN_YEAR_RANGE));
@@ -185,7 +185,7 @@ public class Filters {
 	@GET
 	@Path("/programs")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=true,name="Programs")
+	@ApiMethod(ui = true, name = "Programs", id = "Programs")
 	
 	public List<SimpleJsonBean> getPrograms() {
 		List<SimpleJsonBean> programs = new ArrayList<SimpleJsonBean>();
@@ -227,7 +227,7 @@ public class Filters {
 	@GET
 	@Path("/org-types")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=true,name="organizationTypesList")
+	@ApiMethod(ui = true, name = "Types of Organizations", id = "organizationTypesList")
 	
 	public List<JsonBean> getOrgTypes() {
 
@@ -251,7 +251,7 @@ public class Filters {
 	@GET
 	@Path("/org-groups")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=true,name="orgGroupsList")
+	@ApiMethod(ui = true, name = "Organization Groups", id = "orgGroupsList")
 	
 	public List<JsonBean> getOrgGroups() {
 		return QueryUtil.getOrgGroups();
@@ -275,7 +275,7 @@ public class Filters {
 	@GET
 	@Path("/orgs")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=true,name="orgsList")
+	@ApiMethod(ui = true, id = "Organizations", name = "orgsList")
 	
 	public List<JsonBean> getOrgs() { 
 		return QueryUtil.getOrgs();
@@ -297,7 +297,7 @@ public class Filters {
 	@GET
 	@Path("/org-roles")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=true,name="orgRolesList")
+	@ApiMethod(ui = true, name = "Organization Roles", id = "orgRolesList")
 	
 	public List<SimpleJsonBean> getorgRoles() {
 		return QueryUtil.getOrgRoles();
@@ -312,7 +312,7 @@ public class Filters {
 	@GET
 	@Path("/programs/{programId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = false, name = "ProgramsByProgramName")
+	@ApiMethod(ui = false, id = "ProgramsByProgramName")
 	public SimpleJsonBean getPrograms(@PathParam("programId") Long programId) {
 		try {
 			AmpActivityProgramSettings npd = ProgramUtil.getAmpActivityProgramSettings(programId);
@@ -340,7 +340,7 @@ public class Filters {
 	@GET
 	@Path("/typeOfAssistance/")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = true, name = "TypeOfAssistanceList", column = ColumnConstants.TYPE_OF_ASSISTANCE)
+	@ApiMethod(ui = true, id = "TypeOfAssistanceList", column = ColumnConstants.TYPE_OF_ASSISTANCE,name="Type of Assistance")
 	public JsonBean getTypeOfAssistance() {
 		return getCategoryValue(CategoryConstants.TYPE_OF_ASSISTENCE_KEY,ColumnConstants.TYPE_OF_ASSISTANCE);
 	}
@@ -352,7 +352,7 @@ public class Filters {
 	@GET
 	@Path("/activityStatus/")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = true, name = "ActivityStatusList", column = ColumnConstants.STATUS)
+	@ApiMethod(ui = true, id = "ActivityStatusList", column = ColumnConstants.STATUS,name="Activity Status")
 	public JsonBean getActivityStatus() {
 		return getCategoryValue(CategoryConstants.ACTIVITY_STATUS_KEY,
 				ColumnConstants.STATUS);
@@ -366,7 +366,7 @@ public class Filters {
 	@GET
 	@Path("/activityBudget/")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = true, name = "ActivityBudgetList", column = ColumnConstants.PROJECT_IS_ON_BUDGET)
+	@ApiMethod(ui = true, id = "ActivityBudgetList", column = ColumnConstants.PROJECT_IS_ON_BUDGET,name="Activity Budget")
 	public JsonBean getActivityBudget() {
 		return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY, ColumnConstants.PROJECT_IS_ON_BUDGET);
 	}	
@@ -380,7 +380,7 @@ public class Filters {
 	@GET
 	@Path("/financingInstruments/")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = true, name = "FinancingInstrumentsList", column = ColumnConstants.FINANCING_INSTRUMENT)
+	@ApiMethod(ui = true, id = "FinancingInstrumentsList", column = ColumnConstants.FINANCING_INSTRUMENT,name="Financing Instruments")
 	public JsonBean getFinancingInstruments() {
 		return getCategoryValue(CategoryConstants.FINANCING_INSTRUMENT_KEY, ColumnConstants.FINANCING_INSTRUMENT);
 	}

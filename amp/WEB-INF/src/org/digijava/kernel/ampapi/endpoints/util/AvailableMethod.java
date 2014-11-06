@@ -9,6 +9,7 @@ public class AvailableMethod {
 	private Boolean ui;
 	private String endpoint;
 	private String method;
+	private String id;
 
 	public String getName() {
 		return name;
@@ -40,6 +41,14 @@ public class AvailableMethod {
 
 	public void setMethod(String method) {
 		this.method = method;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 

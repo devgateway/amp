@@ -56,7 +56,11 @@ public class GisUtil {
 						//then we have to add it to the filters list
 						javax.ws.rs.Path methodPath = ((Method) mbr).getAnnotation(javax.ws.rs.Path.class);
 						AvailableMethod filter = new AvailableMethod();
-						filter.setName(apiAnnotation.name());
+						//the name should be translatable
+						if(apiAnnotation.name()!=null && !apiAnnotation.name().equals("")){
+							filter.setName(TranslatorWorker.translateText(apiAnnotation.name()));
+						}
+						
 						String endpoint = "/rest/" + p.value();
 						
 						if (methodPath != null){
@@ -64,6 +68,7 @@ public class GisUtil {
 						}
 						filter.setEndpoint(endpoint);
 						filter.setUi(apiAnnotation.ui());
+						filter.setId(apiAnnotation.id());
 						//we check the method exposed
 						if (((Method) mbr).getAnnotation(javax.ws.rs.POST.class) != null){
 							filter.setMethod("POST");

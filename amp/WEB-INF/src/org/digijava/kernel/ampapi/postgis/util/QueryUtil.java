@@ -66,6 +66,7 @@ public class QueryUtil {
 
 	public static List<ClusteredPoints> getClusteredPoints(JsonBean config) throws AmpApiException {
 		String adminLevel = "";
+		List<ClusteredPoints> l = new ArrayList<ClusteredPoints>();
 
 		if (config != null) {
 			Object otherFilter = config.get("otherFilters");
@@ -77,12 +78,14 @@ public class QueryUtil {
 		}
 		//fetch activities filtered by mondrian
 		
-		boolean doTotals=false;
+		boolean doTotals=true;
  		ReportSpecificationImpl spec = new ReportSpecificationImpl("ActivityIds");
 
 		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
- 		MondrianReportFilters filterRules = null;
+		spec.setCalculateColumnTotals(doTotals);
+		spec.setCalculateRowTotals(doTotals);
+		MondrianReportFilters filterRules = null;
 
 		if (config != null) {
 			Object filter = config.get("columnFilters");
@@ -106,6 +109,7 @@ public class QueryUtil {
 		List<Long>activitiesId=new ArrayList<Long>();
 		List<ReportArea> ll=null;
 		ll = report.reportContents.getChildren();
+		if(ll!=null){
 		for (ReportArea reportArea : ll) {
 			Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
 			Set<ReportOutputColumn> col = row.keySet();
@@ -117,7 +121,6 @@ public class QueryUtil {
 			}
 		}
 		
-		List<ClusteredPoints> l = new ArrayList<ClusteredPoints>();
 		
 		ClusteredPoints cp = null;
 		
@@ -173,6 +176,7 @@ public class QueryUtil {
 			} catch (SQLException e) {
 				logger.debug("cannot close connection", e);
 			}
+		}
 		}
 		return l;
 	}

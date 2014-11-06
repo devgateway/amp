@@ -8,6 +8,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface  ApiMethod {
 	boolean ui();
-	String name();
+	String name() default "";
+	String id() ;
 	String column() default EPConstants.NA;
 }

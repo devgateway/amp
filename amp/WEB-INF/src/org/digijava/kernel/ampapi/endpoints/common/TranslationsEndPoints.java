@@ -41,7 +41,7 @@ public class TranslationsEndPoints {
 	@Path("/label-translations")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="Translations")
+	@ApiMethod(ui = false, id = "Translations")
 	public JsonBean getLangPack(	final JsonBean param){
 		
 		for (String key:param.any().keySet()) {
@@ -55,7 +55,7 @@ public class TranslationsEndPoints {
 
 	@GET
 	@Path("/languages/")
-	@ApiMethod(ui=false,name="languajes")
+	@ApiMethod(ui = false, id = "languajes")
 	public List<SimpleJsonBean> getLanguages(){
 		 List<SimpleJsonBean> languages=new  ArrayList<SimpleJsonBean>();
          try {
@@ -78,7 +78,7 @@ public class TranslationsEndPoints {
 	
 	@GET
 	@Path("/languages/{langCode}")
-	@ApiMethod(ui=false,name="LanguageSwitch")
+	@ApiMethod(ui = false, id = "LanguageSwitch")
 	public void switchLanguage(@PathParam("langCode") String langCode,@Context HttpServletResponse response){
 
         Locale locale = new Locale();

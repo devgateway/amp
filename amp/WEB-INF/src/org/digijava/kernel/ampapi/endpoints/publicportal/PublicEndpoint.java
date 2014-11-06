@@ -29,7 +29,7 @@ public class PublicEndpoint {
 	@POST
 	@Path("/topprojects")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="topprojects")
+	@ApiMethod(ui = false, id = "topprojects")
 	/**
 	 * Retrieves top 'count' projects based on fixed requirements.
 	 * @return JsonBean object with results
@@ -48,7 +48,7 @@ public class PublicEndpoint {
 	@POST
 	@Path("/donorFunding")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="donorFunding")
+	@ApiMethod(ui = false, id = "donorFunding")
 	/**
 	 * Retrieves Donor Disbursements/Commitments List for the last X days
 	 * @return JsonBean object with results

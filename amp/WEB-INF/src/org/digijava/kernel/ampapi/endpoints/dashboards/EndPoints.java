@@ -33,7 +33,7 @@ public class EndPoints {
 	@GET
 	@Path("/tops")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="topsList")
+	@ApiMethod(ui = false, id = "topsList")
 	public List<JsonBean> getAdminLevelsTotalslist() {
 		return DashboarsService.getTopsList();
 	}
@@ -49,7 +49,7 @@ public class EndPoints {
 	@POST 
 	@Path("/tops/{type}")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="tops")
+	@ApiMethod(ui = false, id = "tops")
 	//TODO: Implement Filters
 	public JsonBean getAdminLevelsTotals(JsonBean config,
 			@PathParam("type") String type,
@@ -67,7 +67,7 @@ public class EndPoints {
 	@POST 
 	@Path("/aidPredictability")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="aidPredictability")
+	@ApiMethod(ui = false, id = "aidPredictability")
 	//TODO: Implement Filters
 	public JSONObject getAidPredictability(JsonBean config) {
 		return DashboarsService.getAidPredictability(config);
@@ -83,7 +83,7 @@ public class EndPoints {
 	@POST 
 	@Path("/ftype")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui=false,name="ftype")
+	@ApiMethod(ui = false, id = "ftype")
 	//TODO: Implement Filters
 	public JsonBean getfundingtype(JsonBean config,
 			@DefaultValue("ac") @QueryParam("adjtype") String adjtype) {

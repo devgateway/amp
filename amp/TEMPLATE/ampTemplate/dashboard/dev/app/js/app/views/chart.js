@@ -37,6 +37,7 @@ module.exports = BackboneDash.View.extend({
     this.app = options.app;
     this.model.set(this.uiDefaults());
     this.rendered = false;
+    this.listenTo(this.app.filter, 'apply', this.updateData);
     this.listenTo(this.model, 'change:adjtype', this.updateData);
     this.listenTo(this.model, 'change:limit', this.updateData);
     this.listenTo(this.model, 'change:view', this.render);
@@ -68,7 +69,6 @@ module.exports = BackboneDash.View.extend({
     };
     this.$el.html(template(renderOptions));
     this.updateData();
-
     return this;
   },
 

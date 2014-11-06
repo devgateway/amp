@@ -115,7 +115,6 @@ public final class MoConstants {
 	public static final String H_ORG_TYPE_NAME = "Organization Type Name";
 	public static final String H_ORG_GROUP_NAME = "Organization Group Name";
 	public static final String H_ORG_NAME = "Organization Name";
-	public static final String H_LOCATIONS = "Locations";
 	public static final String H_COUNTRIES = "Country";
 	public static final String H_REGIONS = "Region";
 	public static final String H_ZONES = "Zone";
@@ -224,7 +223,7 @@ public final class MoConstants {
 	public static final String ATTR_REGION_NAME = "Region";
 	public static final String ATTR_ZONE_NAME = "Zone";
 	public static final String ATTR_DISTRICT_NAME = "District";
-	public static final String ATTR_LOCATION_NAME = "Location";
+	public static final String ATTR_LOCATION_NAME = "Specified Location";
 	public static final String ATTR_IMPLEMENTATION_LEVEL = "Implementation Level";
 	public static final String ATTR_GEO_ID = "GeoId";
 	public static final String ATTR_LEVEL_0_SECTOR_NAME = "Level 0 Sector";

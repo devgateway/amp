@@ -92,7 +92,7 @@ public class MDXTests extends AmpTestCase {
 	public void testDataSingleValueFilterByLocation() {
 		String expectedRes = null;
 		MDXConfig config = getDefaultConfig("testDataSingleValueFilterByLocation", true);
-		config.addSingleValueFilters(new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS, MoConstants.ATTR_COUNTRY_NAME, "Moldova"));
+		config.addSingleValueFilters(new MDXLevel(MoConstants.LOCATION, MoConstants.H_COUNTRIES, MoConstants.ATTR_COUNTRY_NAME, "Moldova"));
 		generateAndValidateMDX(config, expectedRes, false);
 	}
 	
@@ -163,7 +163,7 @@ public class MDXTests extends AmpTestCase {
 	public void testSinglePropertyFilter() {
 		String expectedRes = null;
 		MDXConfig config = getDefaultConfig("testSinglePropertyFilter", true);
-		MDXAttribute attrLocation = new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS, MoConstants.ATTR_LOCATION_NAME);
+		MDXAttribute attrLocation = new MDXLevel(MoConstants.LOCATION, MoConstants.ATTR_LOCATION_NAME, MoConstants.ATTR_LOCATION_NAME);
 		MDXFilter filter = new MDXFilter("8977", true, true);
 		config.addDataFilter(attrLocation, filter);
 		//runs 155sec if filtering on WHERE, vs 2sec when filtering directly on axis
@@ -173,7 +173,7 @@ public class MDXTests extends AmpTestCase {
 	public void testPropertiesListFilter() {
 		String expectedRes = null;
 		MDXConfig config = getDefaultConfig("testPropertiesListFilter", true);
-		MDXAttribute attrLocation = new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS, MoConstants.ATTR_COUNTRY_NAME);
+		MDXAttribute attrLocation = new MDXLevel(MoConstants.LOCATION, MoConstants.H_COUNTRIES, MoConstants.ATTR_COUNTRY_NAME);
 		MDXFilter filter = new MDXFilter(Arrays.asList("8977", "9015", "8857"), true, true);
 		config.addDataFilter(attrLocation, filter);
 		generateAndValidateMDX(config, expectedRes, true); //running the query because cannot validate when properties are used
@@ -197,7 +197,7 @@ public class MDXTests extends AmpTestCase {
 		config.addColumnMeasure(new MDXMeasure(MoConstants.ACTUAL_DISBURSEMENTS));
 		config.addRowAttribute(new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 		config.addRowAttribute(new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_PROJECT_TITLE, MoConstants.ATTR_PROJECT_TITLE));
-		config.addRowAttribute(new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS, MoConstants.ATTR_REGION_NAME));
+		config.addRowAttribute(new MDXLevel(MoConstants.LOCATION, MoConstants.H_REGIONS, MoConstants.ATTR_REGION_NAME));
 		config.setAllowEmptyColumnsData(false);
 		config.setAllowEmptyRowsData(false);
 		config.setColumnsHierarchiesTotals(0);
@@ -238,7 +238,7 @@ public class MDXTests extends AmpTestCase {
 		config.addColumnAttribute(new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR));
 		config.addColumnMeasure(new MDXMeasure(MoConstants.ACTUAL_COMMITMENTS));
 		config.addColumnMeasure(new MDXMeasure(MoConstants.ACTUAL_DISBURSEMENTS));
-		config.addRowAttribute(new MDXLevel(MoConstants.LOCATION, MoConstants.H_LOCATIONS, MoConstants.ATTR_COUNTRY_NAME));
+		config.addRowAttribute(new MDXLevel(MoConstants.LOCATION, MoConstants.H_COUNTRIES, MoConstants.ATTR_COUNTRY_NAME));
 		config.addRowAttribute(new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_TYPE_NAME, MoConstants.ATTR_ORG_TYPE_NAME));
 		config.setAllowEmptyColumnsData(false);
 		config.setAllowEmptyRowsData(false);

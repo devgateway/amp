@@ -184,6 +184,7 @@ public class ColumnsVisibility extends DataVisibility {
 		put("/Activity Form/Funding/Modalities", ColumnConstants.MODALITIES);
 		put("/Activity Form/Funding/Proposed Project Cost", ColumnConstants.PROPOSED_PROJECT_AMOUNT);
 		put("/Activity Form/Location/Implementation Level", ColumnConstants.IMPLEMENTATION_LEVEL);
+		put("/Activity Form/Location/Locations", ColumnConstants.LOCATION);
 		put("/Activity Form/Planning/Actual Approval Date", ColumnConstants.ACTUAL_APPROVAL_DATE);
 		put("/Activity Form/Planning/Actual Completion Date", ColumnConstants.ACTUAL_COMPLETION_DATE);
 		put("/Activity Form/Planning/Actual Start Date", ColumnConstants.ACTUAL_START_DATE);

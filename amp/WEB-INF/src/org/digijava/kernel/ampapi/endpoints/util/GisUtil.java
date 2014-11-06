@@ -5,29 +5,19 @@ import java.lang.reflect.Method;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.newreports.FilterRule;
-import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ColumnsVisibility;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.LoggerIdentifiable;
-import org.digijava.module.search.util.SearchUtil;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 public class GisUtil {
 	private static final Logger logger = Logger.getLogger(GisUtil.class);

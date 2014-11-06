@@ -68,7 +68,11 @@ var Query = Backbone.Model.extend({
         return this.model.properties[key];
     },
 
-    run: function(force, mdx) {
+    run_filters: function(filter) {
+    	this.run(null, null, filter, true);
+    },
+
+    run: function(force, mdx, filter, filterApplied) {
         var self = this;
         // Check for automatic execution
         Saiku.ui.unblock();
@@ -77,15 +81,31 @@ var Query = Backbone.Model.extend({
             return;
         }
         this.workspace.unblock();
+        
 
         $(this.workspace.el).find(".workspace_results_info").empty();
         this.workspace.trigger('query:run');
+        
         this.result.result = null;
         var validated = false;
         var errorMessage = "Query Validation failed!";
 
         var exModel = this.helper.model();
-        if (exModel.queryType == "OLAP") {
+
+        if(Settings.AMP_REPORT_API_BRIDGE) {
+        	validated = true;
+
+        	if(!this.workspace.currentQueryModel)
+            	this.workspace.currentQueryModel = exModel;
+        	if(filter) {
+        		this.set('filters', filter);
+        	}
+        	exModel = this.workspace.currentQueryModel;
+        	exModel.queryModel.filters = this.get('filters');
+        	exModel.queryModel.settings = this.get('settings');
+        	exModel.queryModel.filterApplied = filterApplied;
+        }
+        else if (exModel.queryType == "OLAP") {
             if (exModel.type == "QUERYMODEL") {
                 var columnsOk = Object.keys(exModel.queryModel.axes['COLUMNS'].hierarchies).length > 0;
                 var rowsOk = Object.keys(exModel.queryModel.axes['ROWS'].hierarchies).length > 0;

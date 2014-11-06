@@ -40,8 +40,9 @@
 	-->
 	<!-- <property name="path" value="file:///var/saiku/saiku-datasources/"/> -->
 
-	<bean id="sessionService" class="org.saiku.web.service.SessionService">
-		<property name="authenticationManager" ref="authenticationManager" />
+	<bean id="sessionService" class="org.saiku.service.AnonymousSessionService">
+<!-- 		<property name="authenticationManager" ref="authenticationManager" />
+		<property name="allowAnonymous" value="true" /> -->
 	</bean>
 
 	<bean id="connectionManager" class="org.saiku.web.impl.SecurityAwareConnectionManager"

@@ -89,6 +89,9 @@
   <http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />
   <http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />
 
+	<http pattern="/saiku/rest/**" security="none" />
+    <http pattern="/TEMPLATE/ampTemplate/saikuui/**" security="none" />
+
 	<!-- match images -->
 	<http pattern="[^ \t\r\n\v\f]+\.(gif|jpg|jpeg|tiff|png|js|css|swf)(\?)?.*$"
 		request-matcher="regex" security="none" />

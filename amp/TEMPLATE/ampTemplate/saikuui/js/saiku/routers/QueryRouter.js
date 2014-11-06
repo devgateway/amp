@@ -123,10 +123,12 @@ var QueryRouter = Backbone.Router.extend({
 			var model = Backbone.Model.extend({
 				defaults: {
 					file: data.reportMetadata.name,
-					report_id: report_id
+					report_id: report_id,
+					filters: data.reportMetadata.reportSpec.filters,
+					settings: data.reportMetadata.reportSpec.settings
 				},
 				initialize: function(){
-					console.log("model created");
+					//console.log("model created");
 				}
 			});
 			query.move_query_to_workspace_json(new model(), templateQuery);
@@ -180,7 +182,7 @@ var templateQuery = {
 
    },
    "queryType":"OLAP",
-   "type":"MDX"
+   "type":"QUERYMODEL"
 };
 
 var XmlTemplates = [];

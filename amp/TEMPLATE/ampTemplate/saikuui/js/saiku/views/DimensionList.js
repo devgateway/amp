@@ -109,6 +109,8 @@ var DimensionList = Backbone.View.extend({
                 left: 85
             }
         });
+        $(this.el).find('.level').parent('li').removeClass("hide");
+        $(this.el).find('.level').parent('li').addClass("hideClone");
     },
     
     select: function(event) {

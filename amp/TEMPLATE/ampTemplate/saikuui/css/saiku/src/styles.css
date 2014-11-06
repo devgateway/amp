@@ -66,6 +66,9 @@ textarea, select {
 .hide {
     display: none;
 }
+.hideClone {
+    display: none;
+}
 .calign {
     text-align: center;
 }
@@ -1019,6 +1022,10 @@ textarea, select {
     box-shadow: 2px 1px 3px rgba(0, 0, 0, 0.1)
     -moz-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.10);
     -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.10);
+	box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box;
+
 }
 a.disabled_toolbar {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
@@ -1059,6 +1066,9 @@ a.disabled_toolbar:hover {
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
     background-repeat:no-repeat;
+	box-sizing: content-box;
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box;
 }
 .workspace_toolbar a.button:hover {
     border: 1px solid #CCC;

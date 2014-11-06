@@ -48,6 +48,7 @@ var WorkspaceToolbar = Backbone.View.extend({
     
     activate_buttons: function(args) {
         if (args != null && args.data && args.data.cellset && args.data.cellset.length > 0 ) {
+        	
             $(args.workspace.toolbar.el).find('.button')
                 .removeClass('disabled_toolbar');       
 
@@ -62,6 +63,15 @@ var WorkspaceToolbar = Backbone.View.extend({
                 .find('.new, .open, .save, .edit, .run,.auto,.non_empty,.toggle_fields,.toggle_sidebar,.switch_to_mdx, .mdx')
                 .removeClass('disabled_toolbar');
         }
+        
+    	if(Settings.AMP_REPORT_API_BRIDGE) {
+            var arrButtons = $(args.workspace.toolbar.el)
+            .find('.new, .open, .save, .edit, .auto,.non_empty,.toggle_fields,.toggle_sidebar,.switch_to_mdx, .mdx, .group_parents, .drillthrough, .drillthrough_export');
+            _.each(arrButtons, function(button) {
+            	//Hide Parent
+            	$(button.parentElement).hide();
+            });
+    	}
 
         this.reflect_properties();
 
@@ -180,6 +190,7 @@ var WorkspaceToolbar = Backbone.View.extend({
 
     
     run_query: function(event) {
+    	debugger;
         this.workspace.query.run(true);
     },
     
@@ -465,7 +476,7 @@ var WorkspaceToolbar = Backbone.View.extend({
         $(this.el).find('.run').attr('href','#run_mdx');
         $(this.el).find('.run, .save, .open, .new, .edit').removeClass('disabled_toolbar');
 
-        if (Settings.MODE != "view" && Settings.MODE != "table" && !this.workspace.isReadOnly) {
+        if (!Settings.AMP_REPORT_API_BRIDGE && Settings.MODE != "view" && Settings.MODE != "table" && !this.workspace.isReadOnly) {
             $mdx_editor = $(this.workspace.el).find('.mdx_input');
             //$mdx_editor.width($(this.el).width()-5);
             $(this.workspace.el).find('.workspace_editor .mdx_input, .workspace_editor .editor_info, .workspace_editor').removeClass('hide').show();
@@ -639,6 +650,7 @@ var WorkspaceToolbar = Backbone.View.extend({
         if ($(this.workspace.el).find(".mdx_input").height() > 100) {
             $(this.workspace.el).find(".mdx_input").height(100);
         }
+        if(Settings.AMP_REPORT_API_BRIDGE) return;
         this.editor.resize();
         var mdx = this.editor.getValue();
         this.workspace.query.model.mdx = mdx;

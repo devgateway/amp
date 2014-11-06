@@ -65,7 +65,6 @@ var Settings = {
     LOCALSTORAGE_EXPIRATION: 10 * 60 * 60 * 1000 /* 10 hours, in ms */,
     UPGRADE: false,    
     AMP_PATH: '/rest/data/report',
-    AMP_MODE: true,
     AMP_REPORT_API_BRIDGE: false
 };
 

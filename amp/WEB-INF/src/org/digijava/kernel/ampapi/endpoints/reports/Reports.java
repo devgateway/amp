@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.reports;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -25,11 +26,13 @@ import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
@@ -269,19 +272,21 @@ public class Reports {
 	 * 
 	 * @param reportId
 	 *            - AMP report id
+	 * @param filterRules 
 	 * @return QueryResult result converted for Saiku for the requested page
 	 */
 
 	@GET
 	@Path("/saikureport/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public final QueryResult getSaikuReportResult(@PathParam("report_id") Long reportId) {
+	public final QueryResult getSaikuReportResult(@PathParam("report_id") Long reportId, MondrianReportFilters filterRules) {
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
 		// MondrianUtils.PRINT_PATH = "/home/simple";
 		MondrianReportGenerator generator = new MondrianReportGenerator(SaikuReportArea.class, ReportEnvironment.buildFor(httpRequest));
 		SaikuGeneratedReport report = null;
 		try {
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
+			if(filterRules != null) spec.setFilters(filterRules);
 			report = (SaikuGeneratedReport) generator.executeReport(spec);
 			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + report.generationTime + "(ms)");
 		} catch (Exception e) {
@@ -301,8 +306,16 @@ public class Reports {
 	@POST
 	@Path("/saikureport/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public final QueryResult getSaiku3ReportResult(@PathParam("report_id") Long reportId) {
-		QueryResult result = getSaikuReportResult(reportId);
+	public final QueryResult getSaiku3ReportResult(JsonBean queryObject, @PathParam("report_id") Long reportId) {
+		//Extract the filters
+		MondrianReportFilters filterRules = null;
+		LinkedHashMap<String, Object> queryModel = (LinkedHashMap<String, Object>) queryObject.get("queryModel");
+		if(queryModel.containsKey("filterApplied")) {
+			LinkedHashMap<String, Object> filters = (LinkedHashMap<String, Object>) queryModel.get("filters");
+			filterRules = FilterUtils.getFilterRules((LinkedHashMap<String, Object>)filters.get("columnFilters"), (LinkedHashMap<String, Object>)filters.get("otherFilters"), null);
+		}
+		
+		QueryResult result = getSaikuReportResult(reportId, filterRules);
 		result.setQuery(new ThinQuery());
 		return result;
 	}

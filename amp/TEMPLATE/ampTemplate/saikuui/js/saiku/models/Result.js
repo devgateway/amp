@@ -56,12 +56,6 @@ var Result = Backbone.Model.extend({
     	if(this.query.get('report_id')){
     		return encodeURI("../../../rest/data/saikureport/" + this.query.get('report_id'));
     	}
-//    	var result_type = "result";
-//        return encodeURI(this.query.url() + "/" + result_type + "/" + this.query.get('formatter'));
-
-        //return encodeURI(this.query.url() + "/result/" + this.query.getProperty('formatter'));
-    	//return "../../../rest/data/saikureport/2025";
-    	debugger;
         return "api/query/execute";
     }
 });

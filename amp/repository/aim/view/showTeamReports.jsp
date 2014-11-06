@@ -704,6 +704,9 @@ $(document).ready(function() {
 						                                								<c:set target="${urlParams}" property="rid">
 						                                  									<bean:write name="report" property="ampReportId" />
 						                                								</c:set>
+																						<a href="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}" onclick="return popup(this,'');" title="Click here to view the Report">
+																							<img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku.png" vspace="2" border="0" align="absmiddle" style="padding-right: 5px;"/>
+																						</a> 
 						                                								<c:set target="${urlParams}" property="event" value="edit" />
 						                                								<logic:equal name="teamLeadFlag" scope="session" value="true"> 
 					                                      									<c:set var="translation">
@@ -721,9 +724,6 @@ $(document).ready(function() {
 								                                    								</digi:link> 					                                        										
 					                                        									</c:when>
 					                                        									<c:otherwise>					                                        										
-	                              																	<a href="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}" style="	" onclick="return popup(this,'');" title="Click here to view the Report">
-								                                      									<img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku.png" vspace="2" border="0" align="absmiddle" style="padding-right: 5px;"/>
-								                                    								</a> 
 								                                    								<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
 								                                      									<img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
 								                                    								</digi:link> 
@@ -755,9 +755,6 @@ $(document).ready(function() {
 						    	                                    										<digi:trn key="aim:ClickEditReport">Click on this icon to edit report</digi:trn>&nbsp;
 						                                      											</c:if>
 					                                        										</c:set>
-	                              																	<a href="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}" style="	" onclick="return popup(this,'');" title="Click here to view the Report">
-								                                      									<img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku.png" vspace="2" border="0" align="absmiddle" style="padding-right: 5px;"/>
-								                                    								</a> 
 						                                    										<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
 						                                      											<img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
 						                                    										</digi:link>
@@ -776,7 +773,7 @@ $(document).ready(function() {
 							                                  										</digi:link>
 						                                    									</logic:equal>    
 						                                  									</logic:present>                                                                                                
-						                                								</logic:equal>                              
+						                                								</logic:equal>
 						                               	 							</p>
 					                              								</td>
 					                              							<% } %>   

@@ -147,6 +147,8 @@ var WorkspaceDropZone = Backbone.View.extend({
                     selection.appendTo($axis.find('ul.connectable'));
                 });
             }
+            if(!model.queryModel.details)
+            	return;
             var measures = model.queryModel.details.measures || [];
             _.each(measures, function (measure) {
                 var m = $(self.workspace.dimension_list.el).find('.measure_tree a.measure[measure="' + measure.name + '"]').parent();

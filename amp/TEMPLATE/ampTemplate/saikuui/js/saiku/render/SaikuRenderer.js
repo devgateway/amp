@@ -38,6 +38,7 @@ SaikuRenderer.prototype.render = function(data, options) {
     var r = null;
     if (Backbone) {
         this.trigger('render:start', this );
+        Saiku.events.trigger('render:start');
     }
 
     if (!this.hasProcessedData()) {
@@ -46,6 +47,7 @@ SaikuRenderer.prototype.render = function(data, options) {
     r = this._render(data, options);
     if (Backbone) {
         this.trigger('render:end', this );
+        Saiku.events.trigger('render:end');
     }
     return r;
 };

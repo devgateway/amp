@@ -21,6 +21,7 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.mondrian.MondrianETL;
@@ -95,6 +96,10 @@ public class MondrianReportGenerator implements ReportExecutor {
 	private static final boolean IS_DEV = true;
 	private final Class<? extends ReportAreaImpl> reportAreaType;
 	private final boolean printMode;
+	
+	// needed for AMP-18330 workaround
+	private static final ReportMeasure ALWAYS_PRESENT = new ReportMeasure(MeasureConstants.ALWAYS_PRESENT);
+	private SortedSet<Integer> dummyColumnsToRemove = new TreeSet<Integer>();
 	
 	private MDXGenerator generator = null;
 	
@@ -335,8 +340,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//add settings
 		addSettings(spec.getSettings(), config);
 		
-		config.setAllowEmptyColumnsData(spec.isDisplayEmptyFundingColumns());
-		config.setAllowEmptyRowsData(spec.isDisplayEmptyFundingRows());
+		//add empty rows and columns request configuration
+		addEmptyColRows(spec, config);
 		
 		return config;
 	}
@@ -427,6 +432,34 @@ public class MondrianReportGenerator implements ReportExecutor {
 		*/
 	}
 	
+	private void addEmptyColRows(ReportSpecification spec, MDXConfig config) {
+		config.setAllowEmptyColumnsData(spec.isDisplayEmptyFundingColumns());
+		/* fix for AMP-18330
+		 * we cannot disable "NON EMPTY" on MDX generation due to performance issue
+		config.setAllowEmptyRowsData(spec.isDisplayEmptyFundingRows());
+		=> we will use a sysnthetic measure "Always Present" as a workaround 
+		and we'll remove it's output during post-process
+		*/
+		if (spec.isDisplayEmptyFundingRows()) {
+			config.addColumnMeasure((MDXMeasure) MondrianMapping.toMDXElement(ALWAYS_PRESENT));
+			// add explicit filter to allow always present year if date filters are detected
+			if (spec.getFilters() != null && spec.getFilters().getFilterRules() != null) {
+				MondrianReportFilters reportFilters = (MondrianReportFilters) spec.getFilters(); 
+				for (ElementType type : ElementType.values()) {
+					if (!ElementType.ENTITY.equals(type)
+							&& reportFilters.getFilterRules().containsKey(new ReportElement(type))) {
+						try {
+							reportFilters.addSingleYearFilterRule(MoConstants.ALWAYS_PRESENT_YEAR, true);
+						} catch (Exception e) {
+							logger.error(e);
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
+	
 	private CellDataSet postProcess(ReportSpecification spec, CellSet cellSet) throws AMPException {
 		CellSetAxis rowAxis = cellSet.getAxes().get(Axis.ROWS.axisOrdinal());
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
@@ -436,6 +469,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 		logger.info("[" + spec.getReportName() + "]" +  "Conversion from Olap4J CellSet to Saiku CellDataSet ended.");
 		
 		leafHeaders = getOrderedLeafColumnsList(spec, rowAxis, columnAxis);
+		
+		// now cleanup dummy measures, identified during #getOrderedLeafColumnsList
+		SaikuUtils.removeColumns(cellDataSet, dummyColumnsToRemove);
 
 		boolean calculateTotalsOnRows = spec.isCalculateRowTotals()
 				//enable totals for non-hierarhical columns
@@ -447,7 +483,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				logger.info("[" + spec.getReportName() + "]" +  "Totals over the Saiku CellDataSet ended.");
 			} catch (Exception e) {
 				logger.error(e.getMessage());
-				throw new AMPException(e.getMessage());
+				throw new AMPException(e.getMessage(), e);
 			}
 		}
 		
@@ -700,6 +736,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 				reportColumns.add(reportColumn);
 			}
 		}
+		
+		int colIdx = reportColumns.size();
+		
 		LinkedHashSet<String> outputtedMeasures = new LinkedHashSet<>(); // the set of the measures for which saiku generated an output (and we are supposed to generate totals)
 		//int measuresLeafPos = columnAxis.getAxisMetaData().getHierarchies().size();
 		if (columnAxis.getPositions() != null)
@@ -714,11 +753,16 @@ public class MondrianReportGenerator implements ReportExecutor {
 						reportColumnsByFullName.put(fullColumnName, reportColumn);
 					}
 					if (measureColumn.getDepth() == 0) { //lowest depth ==0 => this is leaf column
-						if (!outputtedMeasures.contains(measureColumn.getName()))
-							outputtedMeasures.add(measureColumn.getName());
-						reportColumns.add(reportColumn);
+						if (MeasureConstants.ALWAYS_PRESENT.equals(reportColumn.originalColumnName)) {
+							dummyColumnsToRemove.add(colIdx);
+						} else {
+							if (!outputtedMeasures.contains(measureColumn.getName()))
+								outputtedMeasures.add(measureColumn.getName());
+							reportColumns.add(reportColumn);
+						}
 					}
 				}
+				colIdx ++;
 			}
 		//add measures total columns
 		if (spec.isCalculateColumnTotals() && !GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria())) {

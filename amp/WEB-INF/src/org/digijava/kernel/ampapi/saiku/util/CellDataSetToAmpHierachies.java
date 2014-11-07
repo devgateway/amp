@@ -210,7 +210,7 @@ public class CellDataSetToAmpHierachies {
 			for (int i = 0; i < startColumnIndex + 1; i++) {
 				newTotalLists[i] = cellDataSet.getRowTotalsLists()[i];
 			}
-			cellDataSet.setRowTotalsLists(recalculateWidths(newTotalLists));
+			cellDataSet.setRowTotalsLists(SaikuUtils.recalculateWidths(newTotalLists));
 		}
 		
 		int start = 0;
@@ -245,80 +245,6 @@ public class CellDataSetToAmpHierachies {
 		removeDummyHierarchy();
 	}
 	
-	private List<TotalNode>[] recalculateWidths(List<TotalNode>[] newTotalLists) {
-		//Create tree of relationship between hierarchies
-		List<List<List<Integer>>> topTree = new ArrayList<List<List<Integer>>>();
-		for(int idx = newTotalLists.length-1; idx >= 0; idx--) {
-			List<List<Integer>> tree = new ArrayList<List<Integer>>();
-			List<TotalNode> nodes = newTotalLists[idx];
-
-			if(idx != 0) {
-				Integer childIndex = 0;
-				for (Iterator<TotalNode> iterator = nodes.iterator(); iterator.hasNext();) {
-					int parentWidth;
-					List<TotalNode> parentNodes = newTotalLists[idx-1];
-					for (Iterator<TotalNode> iterator2 = parentNodes.iterator(); iterator2.hasNext();) {
-						List<Integer> leaf = new ArrayList<Integer>();
-						TotalNode parentNode = iterator2.next();
-						
-						parentWidth = parentNode.getWidth();
-						int totalWidth = 0;
-						while(iterator.hasNext() && totalWidth < parentWidth) {
-							TotalNode node = iterator.next();
-							int nodeWidth = node.getWidth();
-							totalWidth += nodeWidth;
-							leaf.add(childIndex++);
-						}
-						tree.add(leaf);
-					}
-				}
-			}
-			topTree.add(tree);
-		}
-		
-		//Use the tree to reassign widths and spans
-		//First assign to the bottom of the tree, the width 1/span 1
-		List<TotalNode> bottomList = newTotalLists[topTree.size()-1];
-		for (int i = 0; i < bottomList.size(); i++) {
-			TotalNode node = bottomList.get(i);
-			node.setWidth(1);
-			node.setSpan(1);
-		}
-		//Start from index 1, since 1 is already taken care of as bottom of the tree
-		for (int i = 1; i < topTree.size(); i++) {
-			List<List<Integer>> tree = topTree.get(i);
-			if(tree.size() == 0) // Parent of them all
-			{
-				int width = 0;
-				List<TotalNode> nodes = newTotalLists[topTree.size()-i];
-				for(TotalNode node : nodes) {
-					width += node.getWidth();
-				}
-				newTotalLists[topTree.size()-1-i].get(0).setWidth(width);
-				newTotalLists[topTree.size()-1-i].get(0).setSpan(1);
-				
-			}	
-			for (int j = 0; j < tree.size(); j++) {
-				List<Integer> indexes = tree.get(j);
-				for (int k = 0; k < indexes.size(); k++) {
-					Integer index = indexes.get(k);
-					List<Integer> children = topTree.get(i-1).get(k);
-					int width = 0;
-					for (int l = 0; l < children.size(); l++) {
-						Integer ints = children.get(l);
-						TotalNode node = newTotalLists[topTree.size()-i].get(ints);
-						width += node.getWidth();
-					}
-					TotalNode node = newTotalLists[topTree.size()-1-i].get(index);
-					node.setWidth(width);
-					node.setSpan(1);
-				}
-				
-			}
-		}
-		return newTotalLists;
-	}
-
 	private void removeDummyHierarchy() {
 		cellDataSet.setLeftOffset(cellDataSet.getLeftOffset() - 1);
 		Set<ReportColumn> newColumns = new LinkedHashSet<ReportColumn>(spec.getColumns().size() - 1);

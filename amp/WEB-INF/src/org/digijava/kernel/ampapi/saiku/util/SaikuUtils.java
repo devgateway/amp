@@ -20,9 +20,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
-import org.apache.commons.lang.StringUtils;
-import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.olap4j.Axis;
 import org.olap4j.CellSet;
@@ -54,25 +53,30 @@ public class SaikuUtils {
 	public static void doTotals(CellDataSet result, CellSet cellSet, boolean onColumns, boolean onRows) throws Exception {
 		/* start of AMP custom part to detect the selectedMeasures list */ 
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
-		List<Measure> measures = new ArrayList<Measure>(); 
-		List<Measure> uniqueMeasures = new ArrayList<Measure>(); 
+		List<Measure> uniqueMeasures = new ArrayList<Measure>();
+		// adjustments for AMP-18330 start
+		Member alwaysPresent = null;
+		SortedSet<Integer> totalRowsColumnsToRemove = new TreeSet<Integer>();
+		int colPos = 0;
+		// AMP-18330 end
 		
 		for(Position colPosition : columnAxis.getPositions())
 			for (Member member :  colPosition.getMembers()) {
-				if (Member.Type.MEASURE.equals(member.getMemberType())) {
-					measures.add((Measure) member);
-					
-					if(!alreadyAdded(uniqueMeasures, member.getName())) {
+				// check if this is a measure memeber
+				if (Member.Type.MEASURE.equals(member.getMemberType())
+						|| MoConstants.MEASURES.equals(member.getDimension().getName())) {
+					// avoid dummy always present added as a workaround for AMP-18330
+					if (MoConstants.ALWAYS_PRESENT.equals(member.getName())) {
+						totalRowsColumnsToRemove.add(colPos);
+						alwaysPresent = member;
+					} else if (!alreadyAdded(uniqueMeasures, member.getName())) {
+						// verify if not already added (to avoid intermediate totals that break Saiku display)
 						uniqueMeasures.add((Measure) member);
 					}
-				} else if (MoConstants.MEASURES.equals(member.getDimension().getName())) {
-					measures.add((Measure) member);
-					if(!alreadyAdded(uniqueMeasures, member.getName())) {
-						uniqueMeasures.add((Measure) member);
-					}
+					colPos ++;
 				}
 			}
-		Measure[] selectedMeasures = measures.toArray(new Measure[0]);
+		
 		Measure[] uniqueSelectedMeasures = uniqueMeasures.toArray(new Measure[0]);
 		
 		/* end of AMP custom part to detect the selectedMeasures list */
@@ -106,6 +110,10 @@ public class SaikuUtils {
 		result.setRowTotalsLists(totals[1]);
 		result.setColTotalsLists(totals[0]);
 		/* end of Saiku approach to calculate the totals */
+		if (alwaysPresent != null) {
+			removeTotalsColumns(result.getRowTotalsLists(), totalRowsColumnsToRemove);
+			recalculateWidths(result.getRowTotalsLists());
+		}
 	}
 	
 	private static boolean alreadyAdded(List<Measure> measures, String name) {
@@ -166,17 +174,102 @@ public class SaikuUtils {
 		return newCellArra;
 	}
 
-	private void removeRowTotalsColumns(CellDataSet cellDataSet, SortedSet<Integer> leafColumnsNumberToRemove) {
+	public static void removeTotalsColumns(List<TotalNode>[] totalListsArray, SortedSet<Integer> leafColumnsNumberToRemove) {
+		if (totalListsArray == null || totalListsArray.length == 0)
+			return;
+		
 		//navigate through the totals list and remember the totals only for the columns we display 
-		for(List<TotalNode> totalLists : cellDataSet.getRowTotalsLists()) {
+		for(List<TotalNode> totalLists : totalListsArray) {
 			for(TotalNode totalNode : totalLists) {
 				if (totalNode.getTotalGroups() != null && totalNode.getTotalGroups().length > 0) {
-					int offset = cellDataSet.getLeftOffset();
 					for (int i = 0; i < totalNode.getTotalGroups().length; i++) {
 						totalNode.getTotalGroups()[i] = removeCollumnsInArray(totalNode.getTotalGroups()[i], leafColumnsNumberToRemove);
 					}
 				}
 			}
 		}
+		
+		// update
+		SaikuUtils.recalculateWidths(totalListsArray);
+	}
+	
+	public static List<TotalNode>[] recalculateWidths(List<TotalNode>[] newTotalLists) {
+		//Create tree of relationship between hierarchies
+		List<List<List<Integer>>> topTree = new ArrayList<List<List<Integer>>>();
+		for(int idx = newTotalLists.length-1; idx >= 0; idx--) {
+			List<List<Integer>> tree = new ArrayList<List<Integer>>();
+			List<TotalNode> nodes = newTotalLists[idx];
+
+			if(idx != 0) {
+				Integer childIndex = 0;
+				for (Iterator<TotalNode> iterator = nodes.iterator(); iterator.hasNext();) {
+					int parentWidth;
+					List<TotalNode> parentNodes = newTotalLists[idx-1];
+					for (Iterator<TotalNode> iterator2 = parentNodes.iterator(); iterator2.hasNext();) {
+						List<Integer> leaf = new ArrayList<Integer>();
+						TotalNode parentNode = iterator2.next();
+						
+						parentWidth = parentNode.getWidth();
+						int totalWidth = 0;
+						while(iterator.hasNext() && totalWidth < parentWidth) {
+							TotalNode node = iterator.next();
+							int nodeWidth = node.getWidth();
+							totalWidth += nodeWidth;
+							leaf.add(childIndex++);
+						}
+						tree.add(leaf);
+					}
+				}
+			}
+			topTree.add(tree);
+		}
+		
+		//Use the tree to reassign widths and spans
+		//First assign to the bottom of the tree, the width 1/span 1
+		List<TotalNode> bottomList = newTotalLists[topTree.size()-1];
+		for (int i = 0; i < bottomList.size(); i++) {
+			TotalNode node = bottomList.get(i);
+			node.setWidth(1);
+			node.setSpan(1);
+		}
+		//Start from index 1, since 1 is already taken care of as bottom of the tree
+		for (int i = 1; i < topTree.size(); i++) {
+			List<List<Integer>> tree = topTree.get(i);
+			if(tree.size() == 0) // Parent of them all
+			{
+				int width = 0;
+				List<TotalNode> nodes = newTotalLists[topTree.size()-i];
+				for(TotalNode node : nodes) {
+					width += node.getWidth();
+				}
+				newTotalLists[topTree.size()-1-i].get(0).setWidth(width);
+				newTotalLists[topTree.size()-1-i].get(0).setSpan(1);
+				
+			}	
+			for (int j = 0; j < tree.size(); j++) {
+				List<Integer> indexes = tree.get(j);
+				for (int k = 0; k < indexes.size(); k++) {
+					Integer index = indexes.get(k);
+					List<Integer> children = topTree.get(i-1).get(k);
+					int width = 0;
+					for (int l = 0; l < children.size(); l++) {
+						Integer ints = children.get(l);
+						TotalNode node = newTotalLists[topTree.size()-i].get(ints);
+						width += node.getWidth();
+					}
+					TotalNode node = newTotalLists[topTree.size()-1-i].get(index);
+					node.setWidth(width);
+					node.setSpan(1);
+				}
+				
+			}
+		}
+		return newTotalLists;
+	}
+	
+	public static void removeColumns(CellDataSet cellDataSet, SortedSet<Integer> leafColumnsNumberToRemove) {
+		// update headers and body entries
+		cellDataSet.setCellSetHeaders(SaikuUtils.removeCollumns(cellDataSet.getCellSetHeaders(), leafColumnsNumberToRemove));
+		cellDataSet.setCellSetBody(SaikuUtils.removeCollumns(cellDataSet.getCellSetBody(), leafColumnsNumberToRemove));
 	}
 }

@@ -258,6 +258,7 @@ public final class MoConstants {
 	public static final String PLANNED_COMMITMENTS = "Planned Commitments";
 	public static final String PLANNED_DISBURSEMENTS = "Planned Disbursements";
 	public static final String PLANNED_EXPENDITURES = "Planned Expenditures";
+	public static final String ALWAYS_PRESENT = "Always Present";
 	
 	public static final String TOTAL_MEASURES = "Total Measures";
 	
@@ -265,6 +266,7 @@ public final class MoConstants {
 	public static final String BOOLEAN_TRUE_KEY = "2";
 	public static final String BOOLEAN_FALSE_KEY = "1";
 	public static final Integer UNDEFINED_KEY = 999999999;
+	public static final Integer ALWAYS_PRESENT_YEAR = 1970;
 	
 	//Pledges Constant
 	public static String PLEDGE_PLEDGES_COMMITMENTS = "Pledges Actual Commitments";

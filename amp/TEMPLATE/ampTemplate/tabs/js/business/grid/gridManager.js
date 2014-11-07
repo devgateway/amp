@@ -27,7 +27,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 	/**
 	 * Apply filters and refresh the grid.
 	 */
-	GridManager.filter = function(id, jsonFilters) {
+	GridManager.filter = function(id, jsonFilters, settings) {
 		var grid = jQuery("#" + gridBaseName + id);
 		jQuery(grid).jqGrid('clearGridData');
 		jQuery(grid).jqGrid('setGridParam', {
@@ -42,7 +42,8 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 		var data = {
 			page : 1,
 			regenerate : true,
-			filters : jsonFilters
+			filters : jsonFilters,
+			settings : settings
 		};
 		jQuery(grid).jqGrid('setGridParam', {
 			postData : data

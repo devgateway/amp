@@ -5,8 +5,6 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 
 	var reportId;
 	var reportFilters;
-	var currency;
-	var calendar;
 
 	var DynamicContentView = Marionette.LayoutView.extend({
 		template : _.template(dynamicContentTemplate),
@@ -22,8 +20,6 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 		initialize : function(data) {
 			reportId = data.id;
 			reportFilters = data.filters;
-			calendar = data.calendar;
-			currency = data.currency;
 		},
 		clickFiltersButton : function() {
 			console.log('clickFiltersButton');
@@ -62,26 +58,7 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 		},
 		clickSettingsButton : function() {
 			console.log('clickSettingsButton');
-			var SettingDialogContainerView = Marionette.ItemView.extend({
-				template : _.template(settingsDialogTemplate)
-			});
-			// TODO: Replace some of the default values with the ones
-			// for this tab.
-			var settings = new Settings();
-			settings.set('selectedCurrency', currency);
-			settings.set('selectedCalendar', calendar);
-			// SettingsManager.setAvailableCategories(settings, reportId);
-			var settingsDialog = new SettingDialogContainerView({
-				model : settings
-			});
-			settingsDialog.render();
-			jQuery(settingsDialog.el).dialog({
-				modal : true,
-				title : "Settings",
-				width : 500
-			});
-			jQuery(".buttonify").button();
-			TranslationManager.searchAndTranslate();
+			SettingsManager.openDialog();			
 		},
 		onShow : function(data) {
 			// Create jQuery buttons.

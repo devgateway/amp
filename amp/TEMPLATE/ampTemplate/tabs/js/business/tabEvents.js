@@ -1,11 +1,12 @@
 /*https://gist.github.com/jonnyreeves/2474026*/
 /*https://github.com/icereval/backbone-documentmodel*/
 
-define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicContentView', 'text!views/html/filtersWrapperTemplate.html',
-		'text!views/html/filtersItemTemplate.html', 'models/tab', 'text!views/html/invisibleTabLinkTemplate.html',
-		'text!views/html/legendsTemplate.html', 'business/grid/gridManager', 'business/translations/translationManager',
-		'business/filter/filterUtils', 'jquery', 'jqueryui' ], function(Marionette, Contents, Content, DynamicContentView, filtersTemplate,
-		filtersItemTemplate, Tab, invisibleTabLinkTemplate, legendsTemplate, gridManager, TranslationManager, FilterUtils, jQuery) {
+define([ 'marionette', 'collections/contents', 'models/content', 'models/legend', 'views/dynamicContentView',
+		'text!views/html/filtersWrapperTemplate.html', 'text!views/html/filtersItemTemplate.html', 'models/tab',
+		'text!views/html/invisibleTabLinkTemplate.html', 'text!views/html/legendsTemplate.html', 'business/grid/gridManager',
+		'business/translations/translationManager', 'business/filter/filterUtils', 'jquery', 'jqueryui' ], function(Marionette, Contents,
+		Content, Legend, DynamicContentView, filtersTemplate, filtersItemTemplate, Tab, invisibleTabLinkTemplate, legendsTemplate,
+		gridManager, TranslationManager, FilterUtils, jQuery) {
 
 	"use strict";
 
@@ -66,12 +67,17 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 				collection : app.TabsApp.filters
 			});
 
+			// TODO: I know, not the best member names but thats defined in the
+			// endpoint.
+			app.TabsApp.appliedSettings = {
+				"2" : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('ampFiscalCalId'),
+				"1" : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode')
+			};
+
 			// Render views.
 			var dynamicLayoutView = new DynamicContentView({
 				id : id,
-				filters : app.TabsApp.filters,
-				currency : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode'),
-				calendar : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('ampFiscalCalId')
+				filters : app.TabsApp.filters
 			});
 			app.TabsApp.dynamicContentRegion.show(dynamicLayoutView);
 			dynamicLayoutView.filters.show(compositeView);
@@ -85,7 +91,6 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 			// --------------------------------------------------------------------------------------//
 			// TODO: make complex view for adding more info in this
 			// section.
-			var Legend = Backbone.Model.extend({});
 			var LegendView = Marionette.ItemView.extend({
 				template : _.template(legendsTemplate),
 				className : 'legends-container',
@@ -142,6 +147,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'views/dynamicC
 
 			// This tab is refreshed so we reset the filter widget status.
 			app.TabsApp.serializedFilters = null;
+			app.TabsApp.appliedSettings = null;
 
 			// TODO: move this logic elsewhere.
 			var panel = null;

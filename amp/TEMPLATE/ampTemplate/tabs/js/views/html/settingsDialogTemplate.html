@@ -1,15 +1,31 @@
+<!-- TODO: move this logic inside the js files. -->
+<script type="text/javascript">
+	function resetSettings() {
+		jQuery('#calendar').removeAttr('selected');
+		jQuery('#currency').removeAttr('selected');
+		if (jQuery('#selectedCalendar').val() != "") {
+			jQuery('#calendar').val(jQuery('#selectedCalendar').val());
+		}
+		if (jQuery('#selectedCurrency').val() != "") {
+			jQuery('#currency').val(jQuery('#selectedCurrency').val());
+		}
+	}
+</script>
+
 <div class="settings-container">
+	<input type="hidden" id="selectedCurrency" value="<%=selectedCurrency%>"/>
+	<input type="hidden" id="selectedCalendar" value="<%=selectedCalendar%>"/>	
 	<table width="400" align="center">
 		<tbody>
 			<tr>
-				<td width="40%" data-i18n="tabs.common:currency">Currency</td>
+				<td data-i18n="tabs.common:currency">Currency</td>
 				<td>
-					<select name="currency" onchange="initFormatPopup();" id="currency" class="dropdwn_sm"> 
+					<select name="currency" id="currency" class="dropdwn_sm"> 
 						<% for(var c in currencies) { %> 
 							<% 
 							var selected = ''; 
 							if(selectedCurrency != undefined && selectedCurrency != null && currencies[c].id === selectedCurrency) { 
-								selected = "selected = 'selected' "; 
+								selected = "selected = 'selected' ";
 							} 
 							%>
 							<option value="<%= currencies[c].id%>"<%= selected %>><%= currencies[c].name%></option> <% } %>
@@ -17,9 +33,9 @@
 				</td>
 			</tr>
 			<tr>
-				<td width="40%" data-i18n="tabs.common:calendar">Calendar</td>
+				<td data-i18n="tabs.common:calendar">Calendar</td>
 				<td>
-					<select name="calendar" onchange="initFormatPopup();" id="calendar" class="dropdwn_sm"> 
+					<select name="calendar" id="calendar" class="dropdwn_sm"> 
 						<% for(var c in calendars) { %> 
 							<% 
 							var selected = ''; 
@@ -35,8 +51,8 @@
 	<br>
 	<div>
 		<div style="margin-right: auto; margin-left: auto; text-align: center;">
-			<input type="button" name="applyFormat" id="applyFormatBtn" class="buttonify" data-i18n="tabs.common:applyFormat" value="Apply Format" /> 
-			<input type="button" name="applyFormat" onclick="ResetCustom(2);" class="buttonify" data-i18n="tabs.common:reset" value="Reset" />
+			<input type="button" name="applyFormat" id="applySettingsBtn" class="buttonify" data-i18n="tabs.common:applyFormat" value="Apply Format" /> 
+			<input type="button" name="resetFormat" id="resetSettingsBtn" class="buttonify" data-i18n="tabs.common:reset" onclick="resetSettings()" value="Reset" />
 		</div>
 	</div>
 </div>

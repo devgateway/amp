@@ -1,38 +1,8 @@
-<h5><%= obj.startIndex %> of <%= obj.totalCount %> different activities are shown (page <%= obj.currentPage %>)</h5>
-<div>
-  <div class="">
-    <table class="table table-4 table-striped table-condensed">
-      <colgroup>
-        <col span="1">
-        <col span="1">
-        <col span="1">
-        <col span="1">
-      </colgroup>
-      <thead>
-        <tr>
-          <th>Project Title</th>
-          <th>Donor(s)</th>
-          <th>Sector(s)</th>
-          <th>Commitments</th>
-          <th>Disbursements</th>
-        </tr>
-      </thead>
-      <tbody>
-        <%   _.each(obj.activities, function(activity){  %>
-        <tr>
-          <td data-th="title"><a href="<%= activity.ampUrl%>"><%= activity["Project Title"] %></a>
-          </td>
-          <td data-th="donors"><%= activity.matchesFilters["Donor Id"] %></td>
-          <td data-th="sectors"><%= activity.matchesFilters["Sector Id"] %></td>
-          <td data-th="commitments"><%= activity["Actual Commitments"] %></td>
-          <td data-th="disbursements"><%= activity["Actual Disbursements"] %></td>
-        </tr>
-        <% }); %>
-      </tbody>
-    </table>
-    <div class="btn btn-sm btn-info load-more pull-right">load more...</div>
-    <!--<div class="map-circle"><features[0].properties.activityid.length ></div>-->
-    <!--<div class="map-cirlcle-label"><features[0].properties.admName ></div>-->
-  </div>
-  <!-- TODO: use the human-friendly version, not ADM-N (from value) -->
-</div>
+<tr>
+  <td data-th="title"><a target="_blank" href="<% if (activity) {%> <%= activity.ampUrl%><% } %>"><%= activity["Project Title"] %></a>
+  </td>
+  <td data-th="donors"><% if (activity.matchesFilters) { %> <%= activity.matchesFilters["Donor Id"] %> <% } %></td>
+  <td data-th="sectors"><%  if (activity.matchesFilters) { %> <%= activity.matchesFilters["Sector Id"] %> <% } %></td>
+  <td data-th="commitments"><%= activity["Actual Commitments"] %></td>
+  <td data-th="disbursements"><%= activity["Actual Disbursements"] %></td>
+</tr>

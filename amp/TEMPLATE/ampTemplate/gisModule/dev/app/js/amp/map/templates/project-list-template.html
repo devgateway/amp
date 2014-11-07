@@ -1,7 +1,7 @@
 
 	<% _.each(obj.activities, function(activity){ %>
 		<tr>
-      <td><a href="<%= activity.ampUrl %>" title="<%= activity["Project Title"] %>"><%= (activity["Project Title"].length>27 ? activity["Project Title"].substring(0, 30)+'...': activity["Project Title"]) %></a></td>
+      <td><a target="_blank" href="<%= activity.ampUrl %>" title="<%= activity["Project Title"] %>"><%= (activity["Project Title"].length>27 ? activity["Project Title"].substring(0, 30)+'...': activity["Project Title"]) %></a></td>
       <td class="text-right">
         <% if(activity["Actual Commitments"]){ %>
             <%= activity["Actual Commitments"] %>

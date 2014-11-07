@@ -22,13 +22,6 @@ var Unknown = Backbone.View.extend({
 
 
 module.exports = function(options) {
-  if (options.model instanceof ADMClusters) {
     return new ADMClustersDSView(options);
-  } if (options.model instanceof ProjectSitesMenu) {
-    return new ProjectSitesDSView(options);
-  } else {
-    console.warn('datasources for layer type not implemented: ', options.model);
-    return new Unknown(options);
-  }
 
 };

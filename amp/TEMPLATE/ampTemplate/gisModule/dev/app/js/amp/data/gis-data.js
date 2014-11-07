@@ -48,6 +48,7 @@ _.extend(GISData.prototype, Backbone.Events, {
     this.activities = new Activities([], {
       settings: this.settings,
       filter: this.filter,
+      pageSize: 15,
       appData: this
     });
 

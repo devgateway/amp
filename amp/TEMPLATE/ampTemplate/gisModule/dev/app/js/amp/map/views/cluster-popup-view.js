@@ -139,6 +139,8 @@ module.exports = Backbone.View.extend({
 
     return tmpModel.fetch({type:'POST', data:JSON.stringify(payload)});
   },
+
+
   _generateProjectList: function() {
     var self = this;
     this._currentPage = 0;

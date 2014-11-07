@@ -1,8 +1,8 @@
 <tr>
-  <td data-th="title"><a target="_blank" href="<% if (activity) {%> <%= activity.ampUrl%><% } %>"><%= activity["Project Title"] %></a>
+  <td data-th="title"><a target="_blank" href="<% if (activity) { %> <%= activity.ampUrl%><% } %>"><%= activity["Project Title"] %></a>
   </td>
-  <td data-th="donors"><% if (activity.matchesFilters) { %> <%= activity.matchesFilters["Donor Id"] %> <% } %></td>
-  <td data-th="sectors"><%  if (activity.matchesFilters) { %> <%= activity.matchesFilters["Sector Id"] %> <% } %></td>
+  <td data-th="donors"><%= activity.donorNames %> </td>
+  <td data-th="sectors"><%= activity.sectorNames %> </td>
   <td data-th="commitments"><%= activity["Actual Commitments"] %></td>
   <td data-th="disbursements"><%= activity["Actual Disbursements"] %></td>
 </tr>

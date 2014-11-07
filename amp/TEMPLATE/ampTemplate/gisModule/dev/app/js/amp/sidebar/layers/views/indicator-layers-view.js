@@ -60,7 +60,6 @@ module.exports = Backbone.View.extend({
       },
       set: function(id) {
         if (id) {
-          console.log('self.collection', self.collection.length, id);
           var selectedModel = self.collection.findWhere({id: id});
           if (selectedModel) {
             self.collection.select(selectedModel);

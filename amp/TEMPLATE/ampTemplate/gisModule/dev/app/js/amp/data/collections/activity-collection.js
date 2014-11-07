@@ -23,8 +23,9 @@ module.exports = Backbone.Collection
     this._pageSize = options.pageSize;
   },
 
+  //TODO: this assumes all fetch want to do paginated style, but that isn't true, for example activies/id,id,id style..
+  // also very long. any function over 20 lines is a red flag.
   fetch: function(options) {
-
     var self = this;
     var payload = {otherFilters: {}};
     var tempDeferred;
@@ -127,6 +128,7 @@ module.exports = Backbone.Collection
 
   //smart ID fetching, load locally, and only fetch if we don't have the activity.
   getActivities: function(aryOfIDs) {
+    var self = this;
     var deferred = $.Deferred();
 
     // check which IDs we have locally.
@@ -134,21 +136,35 @@ module.exports = Backbone.Collection
     this.each(function(activity) {
       var index = _.indexOf(aryOfIDs, activity.id);
       if (index > -1) {
-        matches.push(activity.toJSON());   // add activity to array
-        aryOfIDs.splice(index, 1);         // remove id from array
+        matches.push(activity);     // add activity to array
+        aryOfIDs.splice(index, 1);  // remove id from array
       }
     });
 
     if (!_.isEmpty(aryOfIDs)) {
       // do an api request to get remaining ones
       this.url = '/rest/gis/activities/' + aryOfIDs.join(',');
-      this.fetch({
+      var payload = {};
+      if (this.appData.filter) {
+        _.extend(payload, this.appData.filter.serialize());
+      }
+      if (this.appData.settings && !_.isEmpty(this.appData.settings.serialize())) {
+        payload.settings = this.appData.settings.serialize();
+      }
+
+      Backbone.Collection.prototype.fetch.call(this, {
         remove: false,
-        filter: null
+        data: JSON.stringify(payload),
+        type: 'POST'
       })
-      .then(function(newData) {
-        var activities = newData.activities;
-        matches = _.union(matches, activities);
+      .then(function() {
+        self.each(function(activity) {
+          var index = _.indexOf(aryOfIDs, parseInt(activity.id, 10));
+          if (index > -1) {
+            matches.push(activity);     // add activity to array
+            aryOfIDs.splice(index, 1);  // remove id from array
+          }
+        });
         deferred.resolve(matches);
       })
       .fail(function(err) {

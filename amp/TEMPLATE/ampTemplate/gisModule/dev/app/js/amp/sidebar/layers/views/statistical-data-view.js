@@ -33,6 +33,8 @@ module.exports = BaseControlView.extend({
     var self = this;
 
     _.each(this.subSections, function(SectionView) {
+      /* Note: This object will access the radioButtonGroup
+      * of this parent BaseControlView */
       var section = new SectionView({app: self.app, parent: self});
 
       /* For Mutual Exclusion: */
@@ -40,8 +42,6 @@ module.exports = BaseControlView.extend({
 
       self.$('.content', self).append(section.render().el);
     });
-
-
 
     return this;
   }

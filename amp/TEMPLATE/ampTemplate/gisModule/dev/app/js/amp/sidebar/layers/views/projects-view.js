@@ -41,7 +41,7 @@ module.exports = BaseControlView.extend({
         },
         set: function(id) {
           if (id) {
-            var selectedModel = self.projectLayerCollection.findWhere({title: id}); //TODO: should be an id....
+            var selectedModel = self.projectLayerCollection.findWhere({title: id});
             self.projectLayerCollection.select(selectedModel);
           }
         },

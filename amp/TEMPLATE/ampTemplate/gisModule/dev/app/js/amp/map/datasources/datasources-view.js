@@ -20,17 +20,16 @@ module.exports = Backbone.View.extend({
     this.collection = this.app.data.activities;
     this.listenTo(this.app.data.filter, 'apply', this.applyFilters);
     _.bindAll(this, 'render');
-    window.renA = this.collection;
-    window.renB = this.render;
   },
 
   // if filters change, fetch
   applyFilters: function() {
-      var self = this;
-      this.collection.fetch().then(function() {
-        self.render();
-      });
+    var self = this;
+    this.collection.fetch().then(function() {
+      self.render();
+    });
   },
+
   render: function() {
     var self = this;
     var content = new DatasourcesItem({
@@ -39,14 +38,12 @@ module.exports = Backbone.View.extend({
       }).render().el;
 
     this.collection.load().then(function() {
-      console.log(self.collection.getPageDetails());
       self.$el.html(self.template(
         self.collection.getPageDetails()
       ));
 
       if (!_.isEmpty(content)) {
-        /*self.$el.addClass('expanded');*/
-        self.$('.datasources-content table',self.$el).append(content);
+        self.$('.datasources-content table', self.$el).append(content);
       }
     });
 
@@ -64,7 +61,7 @@ module.exports = Backbone.View.extend({
     var self = this;
     if (!self.$el.find('.load-more').hasClass('disabled')) {
       this.collection.fetchMore().done(function() {
-        self.render();
+        self.render(); //TODO: (drs) just append the new ones...?
       });
     }
     self.$el.find('.load-more').text('loading...').addClass('disabled');

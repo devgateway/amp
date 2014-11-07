@@ -78,7 +78,7 @@ module.exports = Backbone.Collection.extend({
         return this.getBasemap().id;
       },
       set: this.selectBasemap,
-      empty: 'Gray'
+      empty: 'Open Street Map'
     });
   },
 

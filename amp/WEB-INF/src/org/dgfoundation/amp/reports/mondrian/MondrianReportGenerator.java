@@ -66,6 +66,7 @@ import org.digijava.kernel.ampapi.saiku.util.CellDataSetToGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.util.SaikuPrintUtils;
 import org.digijava.kernel.ampapi.saiku.util.SaikuUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.calendar.util.CalendarUtil;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
@@ -227,8 +228,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 				if (printMode) {
 					if (cellSet != null)
 						MondrianUtils.print(cellSet, spec.getReportName());
-					if (cellDataSet != null)
-						SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST");
+//					if (cellDataSet != null)
+//						SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST");
 				}
 			}
 		}
@@ -453,6 +454,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		applyFilterSetting(spec, cellDataSet);
 		
 		CellDataSetToAmpHierachies.concatenateNonHierarchicalColumns(spec, cellDataSet, leafHeaders);
+		postprocessUndefinedEntries(spec, cellDataSet);
 		
 		//clear totals if were enabled for non-hierarchical merges
 		if (!spec.isCalculateColumnTotals())
@@ -461,6 +463,31 @@ public class MondrianReportGenerator implements ReportExecutor {
 			cellDataSet.setRowTotalsLists(null);
 		
 		return cellDataSet;
+	}
+	
+	/**
+	 * replace Columns "Undefined" values by ""
+	 * Replace Hierarchies' "Undefined" values by <ColumnName>:<Undefined>
+	 * hacky, but doing it cleanly (via ETL + schema + MDX generator) would be a huge pain for little gain
+	 */
+	protected void postprocessUndefinedEntries(ReportSpecification spec, CellDataSet cellDataSet) {
+		String translatedUndefined = TranslatorWorker.translateText("Undefined", environment.locale, 3l);
+		for (int rowId = 0; rowId < cellDataSet.getCellSetBody().length; rowId++) {
+			AbstractBaseCell[] row = cellDataSet.getCellSetBody()[rowId];
+			if (row == null) continue; // who knows, let's be defensive
+			
+			for(int i = 0; i < row.length; i++) {
+				if (row[i] != null && translatedUndefined.equals(row[i].getFormattedValue())) {
+					boolean isHierarchy = i < spec.getHierarchies().size();
+					String newValue = isHierarchy ? 
+											String.format("%s: %s", leafHeaders.get(i).columnName, translatedUndefined) :
+											"";
+
+					row[i].setRawValue(newValue);
+					row[i].setFormattedValue(newValue);
+				}
+			}
+		}
 	}
 	
 	private void applyFilterSetting(ReportSpecification spec, CellDataSet cellDataSet) throws AMPException {

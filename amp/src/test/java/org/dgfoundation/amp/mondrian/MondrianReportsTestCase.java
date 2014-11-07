@@ -71,28 +71,41 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		}
 	}
 	
-	protected void runMondrianTestCase(List<String> columns, List<String> measures, String locale, List<String> activities, GroupingCriteria groupingCriteria, ReportAreaForTests cor, String testName) {
-		ReportSpecificationImpl spec = new ReportSpecificationImpl(testName);
+	public ReportSpecification buildSpecification(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
+		ReportSpecificationImpl spec = new ReportSpecificationImpl(reportName);
 		
 		for(String columnName:columns)
 			spec.addColumn(MondrianReportUtils.getColumn(columnName, ReportEntityType.ENTITY_TYPE_ALL));
 		
 		for(String measureName:measures)
 			spec.addMeasure(new ReportMeasure(measureName, ReportEntityType.ENTITY_TYPE_ALL));
+		
+		if (hierarchies != null) {
+			for(String hierarchyName:hierarchies) {
+				if (!columns.contains(hierarchyName))
+					throw new RuntimeException("hierarchy should be present in column list: " + hierarchyName);
+				spec.getHierarchies().add(MondrianReportUtils.getColumn(hierarchyName, ReportEntityType.ENTITY_TYPE_ALL));
+			}
+		}
 
 		spec.setCalculateColumnTotals(true);
 		spec.setCalculateRowTotals(true);
 		spec.setGroupingCriteria(groupingCriteria);
-		
+
+		return spec;
+	}
+	
+	protected void runMondrianTestCase(ReportSpecification spec, String locale, List<String> activities, ReportAreaForTests cor) {
 		GeneratedReport rep = this.runReportOn(spec, locale, activities);
-		if (testName.equals("AMP-18509"))
-			System.err.println("this is output for test " + testName + describeInCode(rep.reportContents, 1));
+		if (spec.getReportName().equals("AMP-18509") || cor == null)
+			System.err.println("this is output for test " + spec.getReportName() + describeInCode(rep.reportContents, 1));
 		//Iterator<ReportOutputColumn> bla = rep.reportContents.getChildren().get(0).getContents().keySet().iterator();
 		//ReportOutputColumn first = bla.next(), second = bla.next(), third = bla.next(), fourth = bla.next();
 		
+		if (cor == null) return;
 		String delta = cor.getDifferenceAgainst(rep.reportContents);
 		if (delta != null)
-			fail("test " + testName + " failed: " + delta);
+			fail("test " + spec.getReportName() + " failed: " + delta);
 	}
 	
 	//protected void runRe

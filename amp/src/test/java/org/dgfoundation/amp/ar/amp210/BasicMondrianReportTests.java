@@ -34,13 +34,13 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	          .withContents("Project Title", "pledged 2", "Actual Commitments", "7 070 000", "Actual Disbursements", "450 000"));
 		
 		runMondrianTestCase(
-				Arrays.asList(ColumnConstants.PROJECT_TITLE), 
-				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
-				"en", 
-				Arrays.asList("Eth Water", "SSC Project 1", "pledged 2"),
-				GroupingCriteria.GROUPING_TOTALS_ONLY,
-				correctReport,
-				"testcase EN"); 
+				this.buildSpecification("testcase EN", 
+						Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+						null, GroupingCriteria.GROUPING_TOTALS_ONLY),						
+						"en", 
+						Arrays.asList("Eth Water", "SSC Project 1", "pledged 2"),
+						correctReport); 
 				
 		ReportAreaForTests correctReportRu = new ReportAreaForTests()
 	    .withContents("Project Title", "Report Totals", "Actual Commitments", "7 181 333", "Actual Disbursements", "1 665 111")
@@ -53,13 +53,13 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	          .withContents("Project Title", "обещание 2", "Actual Commitments", "7 070 000", "Actual Disbursements", "450 000"));
 		
 		runMondrianTestCase(
-				Arrays.asList(ColumnConstants.PROJECT_TITLE), 
-				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+				buildSpecification("testcase RU", 
+						Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+						null, GroupingCriteria.GROUPING_TOTALS_ONLY),
 				"ru", 
 				Arrays.asList("Eth Water", "SSC Project 1", "pledged 2"),
-				GroupingCriteria.GROUPING_TOTALS_ONLY,
-				correctReportRu,
-				"testcase RU"); 
+				correctReportRu); 
 
 		//System.out.println(describeReportOutputInCode(rep));
 		//System.out.println(rep.toString());
@@ -80,12 +80,13 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	          .withContents("Project Title", "Eth Water", "Donor Group", "American, Default Group, European, International, National", "Actual Commitments", "0", "Actual Disbursements", "660 000"));
 
 		runMondrianTestCase(
-				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_GROUP),
-				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+				buildSpecification("AMP-18497", 
+						Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_GROUP), 
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+						null, GroupingCriteria.GROUPING_TOTALS_ONLY),
 				"en",
 				Arrays.asList("Eth Water", "Test MTEF directed", "TAC_activity_2"),
-				GroupingCriteria.GROUPING_TOTALS_ONLY,
-				cor, "AMP-18497");
+				cor);
 	}
 	
 	@Test
@@ -100,12 +101,10 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	    	);
 		
 		runMondrianTestCase(
-				Arrays.asList(ColumnConstants.PROJECT_TITLE),
-				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+				buildSpecification("AMP-18499", Arrays.asList(ColumnConstants.PROJECT_TITLE), Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS), null, GroupingCriteria.GROUPING_TOTALS_ONLY),
 				"en",
 				Arrays.asList("Proposed Project Cost 1 - USD", "Project with documents", "ptc activity 1"),
-				GroupingCriteria.GROUPING_TOTALS_ONLY,
-				cor, "AMP-18499");
+				cor);
 	}
 	
 	@Test
@@ -132,12 +131,13 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	        .withContents("Project Title", "pledged 2", "Donor Agency", "USAID", "[2009] Actual Commitments", "0", "[2010] Actual Disbursements", "0", "[2012] Actual Commitments", "0", "[2012] Actual Disbursements", "0", "[2013] Actual Commitments", "2 670 000", "[2014] Actual Commitments", "4 400 000", "[2014] Actual Disbursements", "450 000", "[Total Measures] Actual Commitments", "7 070 000", "[Total Measures] Actual Disbursements", "450 000"));
 		
 		runMondrianTestCase(
-				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY),
-				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+				buildSpecification("AMP-18504",
+						Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.DONOR_AGENCY),
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+						null, GroupingCriteria.GROUPING_YEARLY),
 				"en",
 				Arrays.asList("date-filters-activity", "pledged 2"),
-				GroupingCriteria.GROUPING_YEARLY,
-				cor, "AMP-18504");
+				cor);
 	}
 	
 	@Test
@@ -186,11 +186,44 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	    						"Total Measures-Actual Disbursements", "450 000"));
 		
 		runMondrianTestCase(
-				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.AMP_ID),
-				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.ACTUAL_EXPENDITURES),
+				buildSpecification("AMP-18509", 
+						Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION, ColumnConstants.AMP_ID),
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.ACTUAL_EXPENDITURES),
+						null,
+						GroupingCriteria.GROUPING_QUARTERLY),
 				"en",
 				Arrays.asList("date-filters-activity", "pledged 2"),
-				GroupingCriteria.GROUPING_QUARTERLY,
-				cor, "AMP-18509");
+				cor);
+	}
+	
+	@Test
+	public void test_AMP_18530_no_hier() {
+		// report with "Region" as a column, an activity without locations + one with locations
+		ReportAreaForTests cor = null;
+		runMondrianTestCase(
+				buildSpecification("AMP-18530-no-hier",						
+						Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+						null,
+						GroupingCriteria.GROUPING_YEARLY),
+				"en",
+				Arrays.asList("date-filters-activity", "crazy funding 1"),
+				cor);
+
+	}
+	
+	@Test
+	public void test_AMP_18530_hier() {
+		// report with "Region" as a column, an activity without locations + one with locations
+		ReportAreaForTests cor = null;
+		runMondrianTestCase(
+				buildSpecification("AMP-18530-hier", 
+						Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION), 
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+						Arrays.asList(ColumnConstants.REGION), 
+						GroupingCriteria.GROUPING_YEARLY),
+				"en",
+				Arrays.asList("date-filters-activity", "crazy funding 1"),
+				cor);
 	}
 }

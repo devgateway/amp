@@ -149,7 +149,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									var id = row.cells[1].textContent;
 									jQuery(row.cells[0]).html(
 											"<a href='/wicket/onepager/activity/" + id
-													+ "' target='_blank'><img src='/TEMPLATE/ampTemplate/img_2/ico_edit.gif'/></a>");
+													+ "'><img src='/TEMPLATE/ampTemplate/img_2/ico_edit.gif'/></a>");
 								}
 							}
 							TranslationManager.searchAndTranslate();

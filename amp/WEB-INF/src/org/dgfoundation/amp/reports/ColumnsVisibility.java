@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -22,7 +23,8 @@ import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * Detects which columns are visible in Activity Form and can be further used, 
- * e.g. in report generation & filtering 
+ * e.g. in report generation & filtering
+ * 
  * @author Nadejda Mandrescu
  */
 public class ColumnsVisibility extends DataVisibility {
@@ -30,13 +32,26 @@ public class ColumnsVisibility extends DataVisibility {
 	
 	private static final Set<String> columnsSet = ConstantsUtil.getConstantsSet(ColumnConstants.class);
 	
-	//TODO: store in a cache, that must be purged once FM config changes
-	private static ThreadLocal<ColumnsVisibility> currentColumnsVisibility = new ThreadLocal<ColumnsVisibility>();
+	/** keeps track of visibility changes */
+	private static AtomicBoolean atomicVisibilityChanged = new AtomicBoolean(false);
+
+	private static ColumnsVisibility currentColumnsVisibility = null;
 	
+	/**
+	 * @return the current set of visible columns
+	 */
+	synchronized
 	public static Set<String> getVisibleColumns() {
-		if (currentColumnsVisibility.get() == null)
-			currentColumnsVisibility.set(new ColumnsVisibility());
-		return currentColumnsVisibility.get().getCurrentVisibleColumns();
+		if (currentColumnsVisibility == null)
+			currentColumnsVisibility = new ColumnsVisibility();
+		return currentColumnsVisibility.getCurrentVisibleColumns();
+	}
+	
+	/**
+	 * Notifies that FM visibility changed
+	 */
+	public static void setVisibilityChanged() {
+		atomicVisibilityChanged.set(true);
 	}
 	
 	private Set<String> visibleColumns = null;
@@ -45,7 +60,7 @@ public class ColumnsVisibility extends DataVisibility {
 	}
 	
 	private Set<String> getCurrentVisibleColumns() {
-		if (visibleColumns == null)
+		if (atomicVisibilityChanged.compareAndSet(true, false) || visibleColumns == null) 
 			detectVisibleColumns();
 		return visibleColumns;
 	}

@@ -6,13 +6,16 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
+
 import javax.servlet.ServletContext;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.Application;
 import org.apache.wicket.Component;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.AmpFMConfigurable;
+import org.dgfoundation.amp.reports.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -468,6 +471,9 @@ public final class FMUtil {
 			
 			FeaturesUtil.setAmpTreeVisibility(context, sessionW.getHttpSession(), ampTreeVisibility);
 			logger.info("Changed FM visible status of "+fmc.getFMName()+ " to "+visible);
+			
+			// notifify aboyt visibility change
+			ColumnsVisibility.setVisibilityChanged();
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage()+" while changing FM visible status for "+fmc.getFMName());

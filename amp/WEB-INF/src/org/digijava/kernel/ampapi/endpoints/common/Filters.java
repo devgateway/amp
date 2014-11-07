@@ -50,11 +50,8 @@ public class Filters {
 
 	AmpARFilter filters;
 	
-	private Set<String> visibleColumns = null; 
-	
 	public Filters() {
 		filters = new AmpARFilter();
-		visibleColumns = ColumnsVisibility.getVisibleColumns();
 	}
 
 	@GET
@@ -116,6 +113,7 @@ public class Filters {
 	public List<JsonBean> getSectorsSchemas() throws AmpApiException{
 		List<JsonBean> schemaList = new ArrayList<JsonBean>();
 		List<AmpClassificationConfiguration> schems = SectorUtil.getAllClassificationConfigs();
+		Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
 		for (AmpClassificationConfiguration ampClassificationConfiguration : schems) {
 			final String columnName = AmpClassificationConfiguration.NAME_TO_COLUMN_MAP
 					.get(ampClassificationConfiguration.getName()); 
@@ -190,6 +188,7 @@ public class Filters {
 	public List<SimpleJsonBean> getPrograms() {
 		List<SimpleJsonBean> programs = new ArrayList<SimpleJsonBean>();
 		try {
+			Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
 			
 			for (Object p : ProgramUtil.getAmpActivityProgramSettingsList()) {
 				

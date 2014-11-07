@@ -23,6 +23,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.reports.ColumnsVisibility;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.dgfoundation.amp.visibility.feed.fm.schema.VisibilityTemplates;
@@ -446,6 +447,9 @@ public class VisibilityManager extends MultiAction {
 
 			ampContext=this.getServlet().getServletContext();
 			FeaturesUtil.setAmpTreeVisibility(ampContext, session, ampTreeVisibility);
+			
+			// notifify aboyt visibility change
+			ColumnsVisibility.setVisibilityChanged();
 		}
 
 		return modeEditTemplate(mapping,form,request,response);

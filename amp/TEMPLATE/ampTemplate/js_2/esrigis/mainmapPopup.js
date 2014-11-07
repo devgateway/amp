@@ -5,6 +5,8 @@ var searchLocationsLayer; // leaflet GEOJson object containing the locations ret
 var isDrawActive = false;
 var isMenuOpen = false;
 var selectedPointEvent;
+var circlePoint;
+
 
 $(document).ready(function() {
 	initMap();
@@ -31,16 +33,19 @@ function onMapClick (e) {
 	if (!isDrawActive) {
 		return;
 	}
-	var circle = L.circle([e.latlng.lat, e.latlng.lng], 8500, {
+	if (circlePoint) {
+		map.removeLayer (circlePoint);
+	}
+	circlePoint = L.circle([e.latlng.lat, e.latlng.lng], 8500, {
 	    color: 'red',
 	    fillColor: '#f03',
 	    fillOpacity: 0.5
 	}).addTo(map);
 	
-	circle.on('contextmenu', function(e) {
+	circlePoint.on('contextmenu', function(e) {
 		selectedPointEvent = e;
 		isMenuOpen = true;
-		showMenu (e.originalEvent.y,e.originalEvent.x);
+		showMenu (e.originalEvent.clientY,e.originalEvent.clientX);
 	});
 	
 }
@@ -198,7 +203,7 @@ function startContextMenu () {
 	    switch($(this).attr("data-action")) {
 	        // A case for each action
 	        case "select": 	selectLocationCallerShape (selectedPointEvent); break;
-	        case "remove": map.removeLayer(selectedPointEvent.target); break;
+	        case "remove": map.removeLayer(selectedPointEvent.target); circlePoint = null; break;
 	    }
 	  
 	    // Hide it AFTER the action was triggered

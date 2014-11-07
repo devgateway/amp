@@ -1576,7 +1576,7 @@ public class ExportActivityToWord extends Action {
 	        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Cost", null, null,  true).
 	                                                addRowData(myForm.getFunding().getProProjCost().getFunAmount()).
 	                                                addRowData(translatedCurrency));
-	        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Signature date", null, null,  true).
+	        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Date", null, null,  true).
                     addRowData(DateConversion.ConvertDateToString(act.getFunDate())));
 
 	        List <ProposedProjCost> proposedProjectCostList = myForm.getFunding().getProposedAnnualBudgets();

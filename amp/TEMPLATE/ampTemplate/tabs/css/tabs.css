@@ -238,7 +238,7 @@ th.ui-th-column div {
 .ui-tabs .ui-tabs-panel {
 	display: block;
 	border-width: 0;
-	padding: 22px;
+	padding: 10px;
 	background: #ffffff;
 	border: 1px solid #d0d0d0;
 }
@@ -349,24 +349,48 @@ th.ui-th-column div {
 	background: #ededed;
 	border: 1px solid #ededed;
 	font-weight: normal;
+	background: #ededed url('images/new-admin-sprite.png') no-repeat;
+	background-position: 0 -20px;
 }
 
 .ui-widget-content .ui-state-hover,.ui-widget-content .ui-state-focus {
 	border: 1px solid #ededed;
 	background: #cccccc;
 	font-weight: normal;
-	color: #2290d3;
+	/*color: #2290d3;*/
 }
 
 /*icons in table grid*/
 .ui-icon.ui-icon-circlesmall-plus {
 	background: url('images/new-admin-sprite.png') no-repeat;
 	background-position: 1px 0;
-	margin-right: 4px;
+	margin-right: 10px;
+	margin-left: 5px;
 }
 
 .ui-icon.ui-icon-circlesmall-minus {
 	background: url('images/new-admin-sprite.png') no-repeat;
 	background-position: -18px 0;
-	margin-right: 4px;
+	margin-right: 10px;
+	margin-left: 5px;
+}
+
+.ui-jqgrid tr.ui-row-ltr td {
+	padding: 10px 5px
+}
+
+.ui-jqgrid td {
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	/*color: #464646;*/
+}
+
+.ui-jqgrid td:hover {
+	/*color: #2290d3;*/
+	background: #ececec
+}
+
+.ui-state-highlight,.ui-widget-content .ui-state-highlight,.ui-widget-header .ui-state-highlight
+	{
+	background: #efefef
 }

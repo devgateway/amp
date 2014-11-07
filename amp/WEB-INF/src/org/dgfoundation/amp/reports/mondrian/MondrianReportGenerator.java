@@ -231,9 +231,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 						+ e.getMessage() == null ? e.getClass().getName() : e.getMessage(), e);
 			} finally {
 				if (printMode) {
-					if (cellSet != null)
-						MondrianUtils.print(cellSet, spec.getReportName());
-//					if (cellDataSet != null)
+//					if (cellSet != null) THIS CODE PRINTS DATA BEFORE postprocessing, so it is pretty useless now
+//						MondrianUtils.print(cellSet, spec.getReportName());
+//					if (cellDataSet != null) //THIS THING SOMETIMES CRASHES
 //						SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST");
 				}
 			}

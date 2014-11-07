@@ -90,7 +90,7 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	}
 	
 	@Test
-	public void test_AMP_18499() {
+	public void test_AMP_18499_should_fail_for_now() {
 		// for running manually: open http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=73 OR http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/73
 		ReportAreaForTests cor = new ReportAreaForTests()
 	    	.withContents("Project Title", "Report Totals", "Actual Commitments", "666 777")
@@ -108,7 +108,7 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	}
 	
 	@Test
-	public void test_AMP_18504() {
+	public void test_AMP_18504_should_fail_for_now() {
 		// for running manually: http://localhost:8080/aim/viewNewAdvancedReport.do~view=reset~widget=false~resetSettings=true~ampReportId=24 or http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/24
 		
 		ReportAreaForTests cor = new ReportAreaForTests()
@@ -160,7 +160,7 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	    	.withChildren(
 	    			new ReportAreaForTests()
 	    				.withContents("Project Title", "date-filters-activity", 
-	    						"Region", "Undefined",  // wrong - to be changed in the future to ""
+	    						"Region", "",
 	    						"AMP ID", "872113null", 
 	    						"2009-Q1-Actual Commitments", "100 000", 
 	    						"2010-Q2-Actual Disbursements", "60 000", 
@@ -199,7 +199,13 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	@Test
 	public void test_AMP_18530_no_hier() {
 		// report with "Region" as a column, an activity without locations + one with locations
-		ReportAreaForTests cor = null;
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Region", "", "2009-Actual Commitments", "100 000", "2010-Actual Disbursements", "60 000", "2012-Actual Commitments", "25 000", "2012-Actual Disbursements", "12 000", "2013-Actual Commitments", "333 333", "Total Measures-Actual Commitments", "458 333", "Total Measures-Actual Disbursements", "72 000")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "date-filters-activity", "Region", "", "2009-Actual Commitments", "100 000", "2010-Actual Disbursements", "60 000", "2012-Actual Commitments", "25 000", "2012-Actual Disbursements", "12 000", "2013-Actual Commitments", "0", "Total Measures-Actual Commitments", "125 000", "Total Measures-Actual Disbursements", "72 000"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "crazy funding 1", "Region", "Balti County", "2009-Actual Commitments", "0", "2010-Actual Disbursements", "0", "2012-Actual Commitments", "0", "2012-Actual Disbursements", "0", "2013-Actual Commitments", "333 333", "Total Measures-Actual Commitments", "333 333", "Total Measures-Actual Disbursements", "0"));
 		runMondrianTestCase(
 				buildSpecification("AMP-18530-no-hier",						
 						Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),
@@ -215,10 +221,23 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	@Test
 	public void test_AMP_18530_hier() {
 		// report with "Region" as a column, an activity without locations + one with locations
-		ReportAreaForTests cor = null;
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Region", "Report Totals", "Project Title", "", "2009-Actual Commitments", "100 000", "2010-Actual Disbursements", "60 000", "2012-Actual Commitments", "25 000", "2012-Actual Disbursements", "12 000", "2013-Actual Commitments", "333 333", "Total Measures-Actual Commitments", "458 333", "Total Measures-Actual Disbursements", "72 000")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Region", "Balti County Totals", "Project Title", "", "2009-Actual Commitments", "0", "2010-Actual Disbursements", "0", "2012-Actual Commitments", "0", "2012-Actual Disbursements", "0", "2013-Actual Commitments", "333 333", "Total Measures-Actual Commitments", "333 333", "Total Measures-Actual Disbursements", "0")
+	      .withChildren(
+	        new ReportAreaForTests()
+	              .withContents("Region", "Balti County", "Project Title", "crazy funding 1", "2009-Actual Commitments", "0", "2010-Actual Disbursements", "0", "2012-Actual Commitments", "0", "2012-Actual Disbursements", "0", "2013-Actual Commitments", "333 333", "Total Measures-Actual Commitments", "333 333", "Total Measures-Actual Disbursements", "0")    ),
+	      new ReportAreaForTests()
+	          .withContents("Region", "Region: Undefined Totals", "Project Title", "", "2009-Actual Commitments", "100 000", "2010-Actual Disbursements", "60 000", "2012-Actual Commitments", "25 000", "2012-Actual Disbursements", "12 000", "2013-Actual Commitments", "0", "Total Measures-Actual Commitments", "125 000", "Total Measures-Actual Disbursements", "72 000")
+	      .withChildren(
+	        new ReportAreaForTests()
+	              .withContents("Region", "Region: Undefined", "Project Title", "date-filters-activity", "2009-Actual Commitments", "100 000", "2010-Actual Disbursements", "60 000", "2012-Actual Commitments", "25 000", "2012-Actual Disbursements", "12 000", "2013-Actual Commitments", "0", "Total Measures-Actual Commitments", "125 000", "Total Measures-Actual Disbursements", "72 000")));
+		
 		runMondrianTestCase(
 				buildSpecification("AMP-18530-hier", 
-						Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION), 
+						Arrays.asList(ColumnConstants.REGION, ColumnConstants.PROJECT_TITLE), 
 						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
 						Arrays.asList(ColumnConstants.REGION), 
 						GroupingCriteria.GROUPING_YEARLY),

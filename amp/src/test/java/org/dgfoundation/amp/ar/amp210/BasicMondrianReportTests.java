@@ -245,4 +245,42 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 				Arrays.asList("date-filters-activity", "crazy funding 1"),
 				cor);
 	}
+	
+	@Test
+	public void test_AMP_18542_should_fail_for_now() {
+		// report with "Region" as a column, an activity without locations + one with locations
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Region", "Report Totals", "Project Title", "", "2009-Actual Commitments", "100 000", "2010-Actual Disbursements", "60 000", "2012-Actual Commitments", "25 000", "2012-Actual Disbursements", "12 000", "2013-Actual Commitments", "333 333", "Total Measures-Actual Commitments", "458 333", "Total Measures-Actual Disbursements", "72 000")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Region", "Balti County Totals", "Project Title", "", "2009-Actual Commitments", "0", "2010-Actual Disbursements", "0", "2012-Actual Commitments", "0", "2012-Actual Disbursements", "0", "2013-Actual Commitments", "333 333", "Total Measures-Actual Commitments", "333 333", "Total Measures-Actual Disbursements", "0")
+	      .withChildren(
+	        new ReportAreaForTests()
+	              .withContents("Region", "Balti County", "Project Title", "crazy funding 1", "2009-Actual Commitments", "0", "2010-Actual Disbursements", "0", "2012-Actual Commitments", "0", "2012-Actual Disbursements", "0", "2013-Actual Commitments", "333 333", "Total Measures-Actual Commitments", "333 333", "Total Measures-Actual Disbursements", "0")    ),
+	      new ReportAreaForTests()
+	          .withContents("Region", "Region: Undefined Totals", "Project Title", "", "2009-Actual Commitments", "100 000", "2010-Actual Disbursements", "60 000", "2012-Actual Commitments", "25 000", "2012-Actual Disbursements", "12 000", "2013-Actual Commitments", "0", "Total Measures-Actual Commitments", "125 000", "Total Measures-Actual Disbursements", "72 000")
+	      .withChildren(
+	        new ReportAreaForTests()
+	              .withContents("Region", "Region: Undefined", "Project Title", "date-filters-activity", "2009-Actual Commitments", "100 000", "2010-Actual Disbursements", "60 000", "2012-Actual Commitments", "25 000", "2012-Actual Disbursements", "12 000", "2013-Actual Commitments", "0", "Total Measures-Actual Commitments", "125 000", "Total Measures-Actual Disbursements", "72 000")));
+		
+		runMondrianTestCase(
+				buildSpecification("AMP-18542-ordered-columns", 
+						Arrays.asList(ColumnConstants.REGION, ColumnConstants.PROJECT_TITLE), 
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+						Arrays.asList(ColumnConstants.REGION), 
+						GroupingCriteria.GROUPING_YEARLY),
+				"en",
+				Arrays.asList("date-filters-activity", "crazy funding 1"),
+				cor);
+		
+		runMondrianTestCase(
+				buildSpecification("AMP-18542-unordered-columns", 
+						Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION), 
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+						Arrays.asList(ColumnConstants.REGION), 
+						GroupingCriteria.GROUPING_YEARLY),
+				"en",
+				Arrays.asList("date-filters-activity", "crazy funding 1"),
+				cor);
+	}
 }

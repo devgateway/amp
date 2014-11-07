@@ -101,7 +101,7 @@ public class GisEndPoints {
 	public final FeatureCollectionGeoJSON getClusteredPointsByAdm(
 			final JsonBean config) throws AmpApiException {
 
-		List<ClusteredPoints> c = QueryUtil.getClusteredPoints(config);
+		List<ClusteredPoints> c = LocationService.getClusteredPoints(config);
 		FeatureCollectionGeoJSON result = new FeatureCollectionGeoJSON();
 		for (ClusteredPoints clusteredPoints : c) {
 			result.features.add(getPoint(new Double(clusteredPoints.getLon()),
@@ -124,21 +124,22 @@ public class GisEndPoints {
 	 * 
 	 *            Available regions
 	 * @return
+	 * @throws AmpApiException 
 	 */
 	@SuppressWarnings("unchecked")
 	@POST
 	@Path("/structures")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui = false, id = "Structures")
-	public final FeatureCollectionGeoJSON getProjectSites(final JsonBean filter) {
+	public final FeatureCollectionGeoJSON getProjectSites(final JsonBean config) throws AmpApiException {
 		FeatureCollectionGeoJSON f = new FeatureCollectionGeoJSON();
 
-		List<AmpStructure> al = QueryUtil.getStructures();
+		List<AmpStructure> al = LocationService.getStructures( config);
 		for (AmpStructure structure : al) {
 			FeatureGeoJSON fgj = new FeatureGeoJSON();
 			PointGeoJSON pg = new PointGeoJSON();
-			pg.coordinates.add(Double.parseDouble(structure.getLongitude()));
-			pg.coordinates.add(Double.parseDouble(structure.getLatitude()));
+			pg.coordinates.add(Double.parseDouble(structure.getLongitude()==null?"0":structure.getLongitude()));
+			pg.coordinates.add(Double.parseDouble(structure.getLatitude()==null?"0":structure.getLatitude()));
 			fgj.id = structure.getAmpStructureId().toString();
 			fgj.properties.put("title",
 					new TextNode(structure.getTitle()));

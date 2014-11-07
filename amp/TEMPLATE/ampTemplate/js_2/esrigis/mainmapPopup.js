@@ -14,7 +14,7 @@ $(document).ready(function() {
 
 
 function initMap() {
-	map = L.map('map').setView([ 24, 84 ], 7);
+	map = L.map('map').setView([ -9.09, 125.10 ], 7);
 	basemapLayer = L.esri.basemapLayer("Streets").addTo(map);
 	//basemapLayer = L.esri.tiledMapLayer(basemapurl, {}).addTo(map);
 

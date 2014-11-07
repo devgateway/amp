@@ -7,8 +7,20 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 
+
+/**
+ * In order to import the file, copy the csv for the country you want to import locations
+ * (extracted from http://download.geonames.org/export/dump/) into the directory /doc
+ * and save with the name: gazeteer.csv When AMP is started the locations will be imported
+ * into the DB
+ * 
+ * @author Emanuel
+ *
+ */
 public class GazeteerCSVImporter extends CSVImporter {
 
 	private static Logger logger = Logger.getLogger(GazeteerCSVImporter.class);
@@ -63,6 +75,20 @@ public class GazeteerCSVImporter extends CSVImporter {
 			logger.warn("Error parsing date: " + o.get("lastModifed") + " when importing AmpLocator");
 		}
 		session.save(locator);
+
+	}
+
+	public boolean isTableEmpty() {
+		boolean isTableEmpty = false;
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "from " + AmpLocator.class.getName() + " loc ";
+			Query q = session.createQuery(queryString);
+			isTableEmpty = q.list().isEmpty();
+		} catch (HibernateException e) {
+			logger.error("Error checking if AmpLocator table is empty" + e);
+		}
+		return isTableEmpty;
 
 	}
 

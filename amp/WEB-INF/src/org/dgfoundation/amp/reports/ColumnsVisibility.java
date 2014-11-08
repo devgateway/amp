@@ -5,21 +5,14 @@ package org.dgfoundation.amp.reports;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.utils.ConstantsUtil;
-import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
-import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
-import org.digijava.module.aim.dbentity.AmpModulesVisibility;
-import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * Detects which columns are visible in Activity Form and can be further used, 
@@ -50,7 +43,7 @@ public class ColumnsVisibility extends DataVisibility {
 	/**
 	 * Notifies that FM visibility changed
 	 */
-	public static void setVisibilityChanged() {
+	protected static void setVisibilityChanged() {
 		atomicVisibilityChanged.set(true);
 	}
 	
@@ -60,77 +53,27 @@ public class ColumnsVisibility extends DataVisibility {
 	}
 	
 	private Set<String> getCurrentVisibleColumns() {
-		if (atomicVisibilityChanged.compareAndSet(true, false) || visibleColumns == null) 
-			detectVisibleColumns();
+		if (atomicVisibilityChanged.compareAndSet(true, false) || visibleColumns == null)
+			visibleColumns = detectVisibleData();
 		return visibleColumns;
 	}
 	
-	private void detectVisibleColumns() {
-		// sanityCheck();
-		visibleColumns = new HashSet<String>(); 
-		visibleColumns.addAll(visibleByDefault);
-		Set<String> invisibleColumns = new HashSet<String>(columnsSet);
-		
-		AmpTemplatesVisibility currentTemplate = FeaturesUtil.getCurrentTemplate();
-		
-		//check fields
-		List<AmpFieldsVisibility> fields = FeaturesUtil.getAmpFieldsVisibility(fieldsToColumnsMap.keySet(), currentTemplate.getId());
-		processVisbleObjects(fields, fieldsToColumnsMap, visibleColumns, invisibleColumns);
-		
-		//check features
-		List<AmpFeaturesVisibility> features = FeaturesUtil.getAmpFeaturesVisibility(fieldsToColumnsMap.keySet(), currentTemplate.getId());
-		processVisbleObjects(features, featuresToColumnsMap, visibleColumns, invisibleColumns);
-		
-		//check modules
-		List<AmpModulesVisibility> modules = FeaturesUtil.getAmpModulesVisibility(modulesToColumnsMap.keySet(), currentTemplate.getId());
-		processVisbleObjects(modules, modulesToColumnsMap, visibleColumns, invisibleColumns);
-		
-			/* old implementation of fields is not up, cannot rely on this approach as a general rule
-		for(AmpFieldsVisibility field : fields) {
-			String name = field.getName();
-		//for(String name : COLUMNS.keySet()) {
-			unmapped.remove(name);
-			boolean visibleField = FeaturesUtil.isVisibleField(name); 
-			boolean visibleFeature = FeaturesUtil.isVisibleFeature(field.getParent().getName());
-			boolean visibleModule = FeaturesUtil.isVisibleModule(field.getParent().getParent().getName());
-			logger.info(
-					String.format("Field = [%b][%s], "
-							+ "Feature = [%b][%s], "
-							+ "Module = [%b][%s]", 
-							visibleField, name, 
-							visibleFeature, field.getParent().getName(), 
-							visibleModule, field.getParent().getParent().getName()));
-			if (visibleField && visibleFeature && visibleModule)
-				visibleColumns.add(name);
-			else
-				notVisible.add(name);
-		}
-		*/
-		
-		for(Entry<String, String> entry : dependencyMap.entrySet()) {
-			if (visibleColumns.contains(entry.getValue())) {
-				visibleColumns.add(entry.getKey());
-				invisibleColumns.remove(entry.getKey());
-			}
-		}
-		
-		//logger.info("Not visible: " + invisibleColumns);
+	protected List<String> getVisibleByDefault() {
+		return visibleByDefault;
 	}
 	
-	/**
-	 * checks if all columns are mapped
-	 */
-	private static void sanityCheck() {
-		Set<String> unmapped = new HashSet<String>(columnsSet);
-		unmapped.removeAll(modulesToColumnsMap.values());
-		unmapped.removeAll(featuresToColumnsMap.values());
-		unmapped.removeAll(fieldsToColumnsMap.values());
-		unmapped.removeAll(dependencyMap.keySet());
-		unmapped.removeAll(visibleByDefault);
-		if (unmapped.size() > 0)
-			logger.warn("Unmapped columns for which by default visibility = false: " + unmapped);
-		else
-			logger.info("All columns are mapped and visibility can be detected.");
+	protected Set<String> getAllData() {
+		return columnsSet;
+	}
+	
+	protected Map<String, String> getDataMap(DataMapType dataMapType) {
+		switch(dataMapType) {
+		case MODULES: return modulesToColumnsMap; 
+		case FEATURES: return featuresToColumnsMap;
+		case FIELDS: return fieldsToColumnsMap;
+		case DEPENDECY: return dependencyMap;
+		default: return null; //shouldn't come here
+		}
 	}
 	
 	//Note: mappings are manually retrieved, because no certain way exists to map them 

@@ -23,6 +23,7 @@ function clearContainer(container) {
 
 var drawCommon = function(chart, data, categories, container, cb) {
   chart
+    .x(function(d) { return util.formatShortText(19)(d.x); })  // fix overflows in legends
     .color(util.categoryColours(categories));
   var svg = container.querySelector('.dash-chart');
   if (!svg) {

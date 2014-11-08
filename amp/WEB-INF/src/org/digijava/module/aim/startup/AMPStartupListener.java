@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Hashtable;
-import java.util.Properties;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -21,7 +20,6 @@ import org.dgfoundation.amp.ar.PledgesToActivitiesBridge;
 import org.dgfoundation.amp.ar.dimension.ARDimension;
 import org.dgfoundation.amp.ar.dyn.DynamicColumnsUtil;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
-import org.dgfoundation.amp.importers.GazeteerCSVImporter;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianUtils;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
@@ -241,8 +239,7 @@ public class AMPStartupListener extends HttpServlet implements
 			AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
 			// get the default amp template!!!
 			Session session = PersistenceManager.getSession();
-			importGazeteer ();
-			
+
 			AmpTemplatesVisibility currentTemplate = FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE), session);
 			ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 			FeaturesUtil.setAmpTreeVisibility(ampContext, null, ampTreeVisibility);
@@ -392,21 +389,6 @@ public class AMPStartupListener extends HttpServlet implements
 		finally
 		{
 			PersistenceManager.closeQuietly(connection);
-		}
-	}
-	
-	public void importGazeteer () {
-		Properties prop = new Properties();
-		prop.put("token", "\t");
-		String[] columnNames = { "geonameId", "name", "asciiName", "alternateNames", "latitude", "longitude", "featureClass",
-				"featureCode", "countryIso", "cc2", "admin1", "admin2", "admin3", "admin4", "population", "elevation",
-				"gtopo30", "timezone", "lastModified" };
-		
-		GazeteerCSVImporter importer = new GazeteerCSVImporter(SERVLET_CONTEXT_ROOT_REAL_PATH+"//doc//gazeteer.csv",columnNames,prop);
-		
-		
-		if (importer.isTableEmpty()) {
-			importer.performImport();
 		}
 	}
 }

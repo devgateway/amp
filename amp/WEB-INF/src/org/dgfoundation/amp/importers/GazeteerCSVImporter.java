@@ -1,11 +1,13 @@
 package org.dgfoundation.amp.importers;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Map;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.hibernate.HibernateException;
@@ -82,11 +84,21 @@ public class GazeteerCSVImporter extends CSVImporter {
 		boolean isTableEmpty = false;
 		try {
 			session = PersistenceManager.getSession();
-			String queryString = "from " + AmpLocator.class.getName() + " loc ";
-			Query q = session.createQuery(queryString);
-			isTableEmpty = q.list().isEmpty();
+			//first check if amp_locator table exists
+			String check=
+			"SELECT table_name FROM information_schema.tables " + 
+					" WHERE table_schema='public' and table_name='amp_locator'";
+			java.sql.ResultSet rs = SQLUtils.rawRunQuery(PersistenceManager.getJdbcConnection(), check, null);
+			if(rs.next()){
+				Query q = session.createQuery("from " + AmpLocator.class.getName() + " loc ");
+				isTableEmpty = q.list().isEmpty();
+			}
+			rs.close();
 		} catch (HibernateException e) {
-			logger.error("Error checking if AmpLocator table is empty" + e);
+			logger.error("Error checking if AmpLocator table is empty" , e);
+		}
+		catch(SQLException e){
+			logger.error("Cannot check if amp_locater exists" , e);
 		}
 		return isTableEmpty;
 

@@ -320,6 +320,7 @@ public class AMPStartupListener extends HttpServlet implements
 			checkDatabaseSanity();
 			checkMondrianETLSanity();
 			doMonetETL();
+			importGazeteer ();
 		} catch (Exception e) {
 			logger.error("Exception while initialising AMP :" + e.getMessage());
 			throw new Error(e);
@@ -402,7 +403,6 @@ public class AMPStartupListener extends HttpServlet implements
 					"gtopo30", "timezone", "lastModified" };
 			
 			GazeteerCSVImporter importer = new GazeteerCSVImporter(SERVLET_CONTEXT_ROOT_REAL_PATH+"//doc//gazeteer.csv",columnNames,prop);
-			
 			
 			if (importer.isTableEmpty()) {
 				importer.performImport();

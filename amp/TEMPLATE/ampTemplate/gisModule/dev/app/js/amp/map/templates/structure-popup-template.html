@@ -6,41 +6,28 @@
     <table class="table table-striped table-condensed">
       <thead>
         <tr>
-          <th>Title</th>
-          <th>Desc</th>
+          <th>Structure</th>
+          <th>Activity</th>
+          <th>Donor</th>
         </tr>
       </thead>
       <tbody class="structure-list">
         <%   _.each(structures, function(structure){  %>
         <tr>
-          <% if (structure.title) { %>
             <td>
-              <%
-                var activityIdLinkPortion= '';
-                if (structure.activityZero) {
-                var activityIdLinkPortion= ['/aim/viewActivityPreview.do~public=true~pageId=2~activityId=',structure.activityZero].join("");
-                }
-              %>
-            <% if (structure.id) { %>
-            <a href="<%= [activityIdLinkPortion,'~struc=',structure.id].join("") %>">
-            <% } %>
-
-            <%= structure.title %>
-
-            <% if (structure.id) { %>
-              </a>
-            <% } %>
+            <a href="<%= structure.activity.get('ampUrl')%>">
+              <%= structure.title %>
+            </a>
           </td>
-          <% } %>
-
-          <% if (structure.description) { %>
-            <td><%= structure.description %></td>
-          <% } %>
-          <td><!--= this.app.data.activities.get(structure.feature.properties.activity[0]).get('totalCommitments') --></td>
-          <!--<td><= JSON.stringify(this.app.data.activities.get(structure.feature.properties.activity[0])) </td-->
-
-          <!--<td><= structure.feature.properties.activity[0] ></td>-->
-
+            <td>
+            <%
+            if (structure.activity) { %>
+              <%= structure.activity.get('Project Title') %>
+            <% } %>
+            </td>
+          <td><% structure.activity.tempDirtyForceJoin().then(function(){ %>
+            <%= structure.activity._getDonorNames() %>
+          <%}); %></td>
         </tr>
         <% });%>
       </tbody>

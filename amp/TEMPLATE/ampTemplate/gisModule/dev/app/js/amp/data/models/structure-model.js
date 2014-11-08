@@ -12,31 +12,12 @@ module.exports = Backbone.Model.extend({
     activities: [],
     id: null
   },
-  /*
-   * relations: [
-   *  {
-   *    type: backbone.many,
-   *    key: 'activities',
-   *    collectiontype: activities
-   *  }
-   * ],
-   *
-   */
+
   initialize: function() {
-    _.bindAll(this, 'joinModelHelper');
+
+
   },
 
-  /* Adds references to collectionB into collectionA joining on given foreign key
-   * TODO: troubleshoot for model -> collection joining
-  */
-  joinModelHelper: function(modelA, collectionB, keyForForeignID, keyForCollectionDestination) {
-    var idsToJoin = modelA.get(keyForForeignID);
-
-    var tempCollection = collectionB.filter(function(modelB) {
-      return _.indexOf(idsToJoin, modelB.get('id')) >= 0;
-    });
-    modelA.set(keyForCollectionDestination, tempCollection);
-  },
 
 
   /* Model Parse does not run for each model when a collection is fetched */

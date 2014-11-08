@@ -13,7 +13,7 @@ module.exports = Backbone.View.extend({
     self.model.getSites().then(function() {
       self.$el.html(self.template(_.extend({}, self.model.toJSON(), {
         status: 'loaded',
-        colourBuckets: self.model.palette.colours
+        colourBuckets: self.model.structuresCollection.palette.colours
       })));
     });
 

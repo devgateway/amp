@@ -2,25 +2,25 @@ var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
+
 var Activity = require('../models/activity-model');
 
 /*Backbone Collection Activities (TODO RENAME FILE)*/
 module.exports = Backbone.Collection
 .extend(LoadOnceMixin).extend({
-
   url: '/rest/gis/activities',
   model: Activity,
   type: 'POST',
   filter: null,
   settings: null,
   appData: null,
-  totalCount: null,
-  _pageSize: 0,
-  _currentStartPosition:0,
 
   initialize: function(models, options) {
     this.appData = options.appData;
     this._pageSize = options.pageSize;
+    this.totalCount = null;
+    this._pageSize = 0;
+    this._currentStartPosition = 0;
   },
 
   //TODO: this assumes all fetch want to do paginated style, but that isn't true, for example activies/id,id,id style..
@@ -158,13 +158,19 @@ module.exports = Backbone.Collection
         type: 'POST'
       })
       .then(function() {
+        //var allDeferreds = []; // I tried waiting for all joins to finish, didn't help
         self.each(function(activity) {
           var index = _.indexOf(aryOfIDs, parseInt(activity.id, 10));
           if (index > -1) {
+            //allDeferreds.push(activity.getJoinedVersion());
             matches.push(activity);     // add activity to array
             aryOfIDs.splice(index, 1);  // remove id from array
           }
         });
+
+        // $.when(allDeferreds).done(function(){
+        //   deferred.resolve(matches);
+        // });
         deferred.resolve(matches);
       })
       .fail(function(err) {

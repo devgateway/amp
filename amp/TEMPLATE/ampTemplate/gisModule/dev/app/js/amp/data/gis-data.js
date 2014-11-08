@@ -53,7 +53,6 @@ _.extend(GISData.prototype, Backbone.Events, {
     });
 
     this.projectSites = new ProjectSites([], {
-      activities: this.activities,
       settings: this.settings,
       filter: this.filter,
       appData: this
@@ -62,7 +61,6 @@ _.extend(GISData.prototype, Backbone.Events, {
     this.projectSitesMenu = new ProjectSitesMenu([
       {}  // just the one model, all defaults
     ], {
-      activities: this.activities,
       filter: this.filter,
       appData: this
     });

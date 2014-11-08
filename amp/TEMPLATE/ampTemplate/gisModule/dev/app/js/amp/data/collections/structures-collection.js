@@ -1,8 +1,10 @@
 var _ = require('underscore');
 var $ = require('jquery');
 var Backbone = require('backbone');
+var Palette = require('../../colours/colour-palette');
 var ProjectSiteModel = require('../models/structure-model');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
+var Activities = require('../collections/activity-collection');
 //var ActivityCollection = require('../collections/activity-collection');
 
 /* ProjectSites (a.k.a Structures) collection
@@ -15,28 +17,38 @@ module.exports = Backbone.Collection
 
   url: '/rest/gis/structures',
   model: ProjectSiteModel,
-  activities: null,
   filter: null,
   settings: null,
   appData: null,
 
   initialize: function(models, options) {
     if (options) {
-      this.activities = options.activities;
       this.filter = options.filter;
       this.settings = options.settings;
       this.appData = options.appData;
+      this.activities = new Activities([], options);
+      this._joinedActivities = null;
+      this._lastFetch = null;
+
+      this.palette = new Palette.FromSet();
+
     } else {
       console.warn('Project Sites/Structures colln: no options were provided for context');
     }
 
-    _.bindAll(this, 'fetch', 'updatePaletteSet');
+    _.bindAll(this, 'fetch', 'updatePaletteSet', 'getStructuresWithActivities', '_getActivityIds');
 
   },
 
   fetch: function(options) {
-
+    var self = this;
     var payload = {otherFilters: {}};
+
+    //cancel last request if not complete.
+    if (this._lastFetch && this._lastFetch.readyState > 0 && this._lastFetch.readyState < 4) {
+      this._lastFetch.abort();
+    }
+
     /* TODO nice to have: if otherFilters and columnFilters
      * had their own object on API, separate from settings, etc.
      * Currently all on the same data level.
@@ -57,35 +69,56 @@ module.exports = Backbone.Collection
     });
 
     /*TODO implement manual caching */
+    this._lastFetch = Backbone.Collection.prototype.fetch.call(this, options).then(function() {
+      self._joinedActivities = self._joinActivities();
+      self.updatePaletteSet();
+    });
 
-    /* Be sure to be matching the Backbone.Collection or Backbone.Model prototype below */
-    return Backbone.Collection.prototype.fetch.call(this, options);
+    return this._lastFetch;
+  },
+
+  getStructuresWithActivities: function() {
+    return this._joinedActivities;
   },
 
   parse: function(response) {
-    //fetch ALL activities
-    //window.app.data.activities.fetch();
-
-    /* default: {
-     *  type: 'FeatureCollection',
-     *  features: []
-     * }
-     */
-
-    //get the list of unique activities for the structures
-    /*var activeActivityList = _.chain(response.features)
-      .pluck('properties')
-      .pluck('activity')
-      .flatten()
-      .unique()
-      .value();*/
-
-    /* TODO(thadk): find a more encapsulated path to communicate this promise to model's map function */
-    /* use options.app instead of window.app  -- also consider options.collection as this */
-    /* window.app.data.relevantActivitesFetch = window.app.data.activities.getActivities(activeActivityList);*/
-
     return response.features;
   },
+
+  //TODO force / wait for activities to finish joining with filters...
+  _joinActivities: function() {
+    var self = this;
+
+    return this.activities.getActivities(this._getActivityIds()).then(function() {
+
+      //Do actual join
+      self.each(function(structure) {
+        //dirty way of checking if already a model...
+        if (!(structure.get('activity') && structure.get('activity').attributes)) {
+          var match = self.activities.find(function(model) {
+            //intentionally double ==
+            return model.id ==  structure.get('activityZero'); //intentionally double ==
+          });
+
+          structure.set('activity', match);
+        } else {
+          console.log('no activity');
+        }
+      });
+    });
+  },
+
+  _getActivityIds: function() {
+    // reduces to a single unique list
+    return this.reduce(function(memo, structure) {
+      if (!memo) {
+        memo = [];
+      }
+      memo.push(structure.get('activityZero'));
+      return _.uniq(memo);
+    }, []);
+  },
+
   toGeoJSON: function() {
     var featureList = this.map(function(model) {
       return {
@@ -104,40 +137,34 @@ module.exports = Backbone.Collection
     };
   },
 
-/*Migrated from Collection-Model */
+// Migrated from Collection-Model
   updatePaletteSet: function() {
+    var self = this;
     var deferred = $.Deferred();
 
     //load the necessary activities.
-    this.loadAll().done(_.bind(function() {
-/*
-    var self = this;
-      var activity;
-      var orgSites = this.get('sites')
-        .chain()
-        .groupsBy(function(site) {
+    this.getStructuresWithActivities().done(function() {
+      var orgSites = self.chain()
+        .groupBy(function(site) {
+          var activity = site.get('activity');
 
-          if (!_.isEmpty(self.activities.get(site.get('properties').activity))) {
-            // doesn't handle multiple activities, which may be introduced in the future..
-            activity = self.activities.get(site.get('properties').activity[0]);
-
-            // TODO:  for now we want just organizations[1]  for donor.
-            // Choosing a vertical will need to be configurable from drop down..
-            if (!_.isEmpty(activity.get('matchesFilters').organizations['1'])) {
-              return activity.get('matchesFilters').organizations['1'];
+          // TODO:  for now we want just organizations[1]  for donor.
+          // Choosing a vertical will need to be configurable from drop down..
+          if (!_.isEmpty(activity.get('matchesFilters')['Donor Id'])) {
+            if (activity.get('matchesFilters')['Donor Id'].length > 1) {
+              return -1; //multiple
             } else {
-              console.warn('Activity is missing desired vertical');
-              return -1;
+              return activity.get('matchesFilters')['Donor Id'];
             }
           } else {
-            console.warn('Structure is missing an activity');
+            console.warn('Activity is missing desired vertical');
             return -1;
           }
         })
         .map(function(sites, orgId) {
           return {
             id: orgId,
-            name: ONAMES[orgId], // TODO: use filters for lookup once we have app.data.filters
+            name: orgId, //TODO: get org name from join/filters
             sites: _(sites).map(function(site) { return site.get('id'); })
           };
         })
@@ -147,11 +174,11 @@ module.exports = Backbone.Collection
         .reverse()
         .value();
 
-      this.palette.set('elements', orgSites);
-     */
+      self.palette.set('elements', orgSites);
+
       deferred.resolve();
 
-    }, this));
+    });
 
     return deferred;
   }

@@ -10,8 +10,8 @@ module.exports = Backbone.View.extend({
   // They control when to resize points based on zoom
   // Make larger for smaller, denser countries: DRC = 7, Timor = 11
   ZOOM_BREAKPOINT: 11,
-  SMALL_ICON_RADIUS: 3,
-  BIG_ICON_RADIUS: 4,
+  SMALL_ICON_RADIUS: 4,
+  BIG_ICON_RADIUS: 6,
   //    Calculate based on: var boundary0 = self.app.data.boundaries.get('adm-0');
   currentRadius: null,
   markerCluster: null,
@@ -23,16 +23,17 @@ module.exports = Backbone.View.extend({
   maxClusterCount: 0,
   CLUSTER_PRECISION: 8, //decimal places of lat, lng precision for clustering. (doesn't effect plugin.)
 
-  MAX_CLUSTER_SIZE: 20,
+  MAX_CLUSTER_SIZE: 30,
 
   initialize: function(options) {
     this.app = options.app;
     this.map = options.map;
+    this.structureMenuModel = this.app.data.projectSitesMenu;
 
     this.initCluster();
 
-    this.listenTo(this.app.data.projectSitesMenu, 'show', this.showLayer);
-    this.listenTo(this.app.data.projectSitesMenu, 'hide', this.hideLayer);
+    this.listenTo(this.structureMenuModel, 'show', this.showLayer);
+    this.listenTo(this.structureMenuModel, 'hide', this.hideLayer);
 
     this.listenTo(this.app.data.projectSites, 'sync', this.refreshLayer); //TODO: implement refresh layer
 
@@ -45,25 +46,18 @@ module.exports = Backbone.View.extend({
     return this;
   },
 
-  /* Adds references to collectionB into collectionA joining on given foreign key
-   * TODO: option to add bi-directional reference.
-   */
-  joinHelper: function(collectionA, collectionB, keyForForeignID, keyForCollectionDestination) {
-    collectionA.each(function(modelA) {
-      var idsToJoin = modelA.get(keyForForeignID);
-      var tempCollection = collectionB.filter(function(modelB) {
-      return _.indexOf(idsToJoin, modelB.get('id')) >= 0;
-    });
-      modelA.set(keyForCollectionDestination, tempCollection);
-    });
-  },
 
   // ==================
   // Point / Feature Code
   // ==================
-  getNewProjectSitesLayer: function(projectSitesMenuModel) {
-    this.rawData = projectSitesMenuModel.projectSitesCollection.toGeoJSON();
-    this._renderFeatures();
+  getNewProjectSitesLayer: function(structureMenuModel) {
+    var self = this;
+    // TODO: this approach will block structures drawing on join. Should draw dots as soon
+    // as structures load, then update when activitites join is done...
+    structureMenuModel.structuresCollection.getStructuresWithActivities().then(function() {
+      self.rawData = structureMenuModel.structuresCollection.toGeoJSON();
+      self._renderFeatures();
+    });
     return this.featureGroup;
   },
 
@@ -73,28 +67,30 @@ module.exports = Backbone.View.extend({
     var self = this;
 
     self.markerCluster.clearLayers();
-
-    /*var model = self.app.data.projectSites;*/
-
     self.maxClusterCount = 0;
     self.customClusterMap = {};
 
     // add new featureGroup
     self.featureGroup = L.geoJson(self.rawData, {
       pointToLayer: function(feature, latlng) {
-     /*   var colors = model.palette.colors.filter(function(colour) {*/
-          //return colour.get('test').call(colour, feature.id);
-        //});
-        //if (colors.length > 2) {  // 2, because "other" is always true...
-          //colors = [model.palette.colors.find(function(colour) {
-            //return colour.get('multiple') === true;
-          //})];
-        //}
+        var colors = self.structureMenuModel.structuresCollection.palette.colours.filter(function(colour) {
+          var donorId = -1;
+          if (feature.properties.activity.attributes.matchesFilters['Donor Id']) {
+            donorId = feature.properties.activity.attributes.matchesFilters['Donor Id'][0];
+          }
+
+          return colour.get('test').call(colour, feature.properties.id);
+        });
+        if (colors.length > 2) {  // 2, because "other" is always true...
+          colors = [self.structureMenuModel.structuresCollection.palette.colours.find(function(colour) {
+            return colour.get('multiple') === true;
+          })];
+        }
 
         // temp hack for if pallette part didn't work.
-        //if (colors.length === 0) {
-        var colors = [{hex: function() { return 'orange';}}];
-        //}
+        if (colors.length === 0) {
+          colors = [{hex: function() { return 'orange';}}];
+        }
 
         if (self.map.getZoom() < self.ZOOM_BREAKPOINT) {
           self.currentRadius = self.SMALL_ICON_RADIUS;
@@ -154,7 +150,7 @@ module.exports = Backbone.View.extend({
     this.featureGroup.eachLayer(function(layer) {
       var properties = layer.feature.properties;
       if (properties.projectId === projectId) {
-        layer.setStyle({fillColor: '#008'});
+        layer.setStyle({color: '#222'});
       }
     });
   },
@@ -163,7 +159,7 @@ module.exports = Backbone.View.extend({
     this.featureGroup.eachLayer(function(layer) {
       var properties = layer.feature.properties;
       if (properties.projectId === projectId) {
-        layer.setStyle({fillColor: '#f70'});
+        layer.setStyle({color: '#f70'});
       }
     });
   },
@@ -205,24 +201,25 @@ module.exports = Backbone.View.extend({
       size += 2 + self.BIG_ICON_RADIUS;
     }
 
-    //var colors = _(markers)
-      //.chain()
-      //.map(function(m) {
-        //var colour = model.palette.colors.find(function(c) {
-          //return c.get('test').call(c, m.feature.id);
-        //});
-        //return colour;
-      //})
-      //.uniq()
-      //.value();
+    var colors = _(markers)
+      .chain()
+      .map(function(m) {
+        //self.structureMenuModel.structuresCollection
+        var colour = model.palette.colours.find(function(c) {
+          return c.get('test').call(c, (m.feature ? m.feature.properties.id : -1));
+        });
+        return colour;
+      })
+      .uniq()
+      .value();
 
-    //if (colors.length > 1) {
-      //colors = [model.palette.colors.find(function(c) {
-        //return c.get('multiple') === true;
-      //})];
-    //}
+    if (colors.length > 1) {
+      colors = [model.palette.colours.find(function(c) {
+        return c.get('multiple') === true;
+      })];
+    }
 
-    var colors = [{hex: function() { return 'orange';}}];
+    //var colors = [{hex: function() { return 'orange';}}];
 
     var marker = new L.circleDivIcon(size / 2, {
         className: 'marker-cluster' + (zoomedIn ? '' : ' marker-cluster-small'),
@@ -272,8 +269,6 @@ module.exports = Backbone.View.extend({
     /* TODO(thadk) switch individual feature to this standard parsed model input*/
     /*var parsedProjectSitesList = this.app.data.projectSites.model.prototype.parse(feature);*/
 
-
-
     if (feature.properties) {
       //TODO: template:
       layer.bindPopup('Project #: ' + (feature.properties.activity ? feature.properties.activity[0] : '') +
@@ -315,11 +310,9 @@ module.exports = Backbone.View.extend({
     }
 
     projectSitesMenuModel.loadAll().done(function() {
-      projectSitesMenuModel.updatePaletteSet().done(function() {
-        self.layerLoadState = 'loaded';
-        self.getNewProjectSitesLayer(projectSitesMenuModel);
-        self.map.addLayer(self.markerCluster);
-      });
+      self.layerLoadState = 'loaded';
+      self.getNewProjectSitesLayer(projectSitesMenuModel);
+      self.map.addLayer(self.markerCluster);
     });
 
     this.map.on('zoomend', this._updateZoom, this);

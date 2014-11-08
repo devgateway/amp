@@ -44,7 +44,7 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'models/se
 		jQuery(settingsDialog.el).dialog({
 			modal : true,
 			title : "Settings",
-			width : 500
+			width : 300
 		});
 		jQuery(".buttonify").button();
 		TranslationManager.searchAndTranslate();

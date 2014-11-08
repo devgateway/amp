@@ -15,12 +15,12 @@
 <div class="settings-container">
 	<input type="hidden" id="selectedCurrency" value="<%=selectedCurrency%>"/>
 	<input type="hidden" id="selectedCalendar" value="<%=selectedCalendar%>"/>	
-	<table width="400" align="center">
+	<table width="100%" align="center">
 		<tbody>
 			<tr>
 				<td data-i18n="tabs.common:currency">Currency</td>
 				<td>
-					<select name="currency" id="currency" class="dropdwn_sm"> 
+					<select name="currency" id="currency"> 
 						<% for(var c in currencies) { %> 
 							<% 
 							var selected = ''; 
@@ -35,7 +35,7 @@
 			<tr>
 				<td data-i18n="tabs.common:calendar">Calendar</td>
 				<td>
-					<select name="calendar" id="calendar" class="dropdwn_sm"> 
+					<select name="calendar" id="calendar"> 
 						<% for(var c in calendars) { %> 
 							<% 
 							var selected = ''; 

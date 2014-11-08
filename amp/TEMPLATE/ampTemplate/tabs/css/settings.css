@@ -1,9 +1,7 @@
-.settings-container {
-	display: inline;
-	height: 372px;
-	width: auto;
+.settings-container table {
+	padding: 5px !important;
 }
 
-.settings-section-title {
-	font-size: 11px;
+.settings-container table tr td {
+	padding: 5px !important;
 }

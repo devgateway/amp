@@ -25,6 +25,8 @@ module.exports = BackboneDash.View.extend({
     return defaults;
   },
 
+  stateKeys: ['limit', 'adjtype', 'view', 'big'],
+
   events: {
     'change .dash-adj-type input': 'changeAdjType',
     'click .chart-view': 'changeChartView',
@@ -44,7 +46,7 @@ module.exports = BackboneDash.View.extend({
 
     this.app.state.register(this, 'chart:' + this.model.url, {
       get: this._getState,
-      set: _(this.model.set).bind(this.model),
+      set: this._setState,
       empty: null
     });
 
@@ -52,12 +54,26 @@ module.exports = BackboneDash.View.extend({
   },
 
   _getState: function() {
-    return this.model.pick(
-      'limit',
-      'adjtype',
-      'view',
-      'big'
-    );
+    var states =  _(this.stateKeys).map(function(k) {
+      var s = {},
+          uiDefaults = this.uiDefaults(),
+          modelState = this.model.get(k);
+      if (_(uiDefaults).has(k) && uiDefaults[k] !== modelState ||
+          _(this.model.defaults).has(k) && this.model.defaults[k] !== modelState) {
+        s[k] = modelState;
+      }
+      return s;
+    }, this);
+
+    return _.extend.apply(null, states);
+  },
+
+  _setState: function(states) {
+    this.model.set(_({}).extend(
+      _(this.uiDefaults()).pick(this.stateKeys),
+      _(this.model.defaults).pick(this.stateKeys),
+      states
+    ));
   },
 
   render: function() {

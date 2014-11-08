@@ -149,7 +149,7 @@ gulp.task('less', function() {
         .on('error', $.util.log)
         .on('error', $.util.beep)
     .pipe($.sourcemaps.write())
-    .pipe($.addSrc(paths.stylesheets.libs))
+    .pipe($.addSrc.prepend(paths.stylesheets.libs))
     .pipe($.sourcemaps.init({ loadMaps: true }))
       .pipe($.autoprefixer({ browsers: 'ie >= 9' }))
       .pipe($.concat('main.css'))

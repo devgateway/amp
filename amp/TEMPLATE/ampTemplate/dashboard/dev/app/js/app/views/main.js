@@ -2,6 +2,8 @@ var fs = require('fs');
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 
+var StateLoadError = require('amp-state/index').StateLoadError;
+
 var Controls = require('./controls');
 var ChartsView = require('./charts');
 var Charts = require('../models/charts-collection');
@@ -21,6 +23,19 @@ module.exports = BackboneDash.View.extend({
 
   initialize: function(options) {
     this.app = options.app;
+
+    // try to load an initial state from the url
+    try {
+      this.app.state.urlMaybeLoad();
+    } catch (e) {
+      if (e instanceof StateLoadError) {
+        this.app.report('Could not load saved dashboard',
+          ['If you are trying to load a shared link, please make sure the entire URL was copied']);
+        this.app.url.hash('');  // clear the bad saved-state hash
+      } else {
+        throw e;
+      }
+    }
 
     this.controls = new Controls({ app: this.app });
 
@@ -65,8 +80,8 @@ module.exports = BackboneDash.View.extend({
       messages: messages,
       id: _.uniqueId('report')
     };
-    this.$el.append(modalTemplate({details: details}));
-    this.$('#' + details.id).modal();
+    this.$el.parent().append(modalTemplate({details: details}));
+    this.$el.parent().find('#' + details.id).modal();
   }
 
 });

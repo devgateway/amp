@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var Deferred = require('jquery').Deferred;
 var BackboneDash = require('./backbone-dash');
 
 var URLService = require('amp-url/index');
@@ -20,6 +21,9 @@ function App() {
 _.extend(App.prototype, BackboneDash.Events, {
 
   initialize: function(options) {
+    var _initDefer = new Deferred();
+    this.initialized = _initDefer.promise();
+
     try {
       // initialize app services
       this.url = new URLService();
@@ -33,10 +37,13 @@ _.extend(App.prototype, BackboneDash.Events, {
 
       // initialize app components
       this.view = new MainView({ app: this, el: options.el });
+
+      _initDefer.resolve(this);
     } catch (e) {
       _.defer(function() { throw e; });
       this.view = new FailView({ app: this, el: options.el, err: e});
       this.err = e;
+      _initDefer.reject(this);
     }
   },
 
@@ -64,7 +71,13 @@ _.extend(App.prototype, BackboneDash.Events, {
   },
 
   report: function(title, messages) {
-    this.view.report(title, messages);
+    this.initialized
+      .done(function(app) {
+        app.view.report(title, messages);
+      })
+      .fail(function() {
+        console.warn('REPORT:', title, messages);
+      });
   }
 
 });

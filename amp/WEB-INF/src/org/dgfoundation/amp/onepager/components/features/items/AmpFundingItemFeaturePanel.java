@@ -12,6 +12,7 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
@@ -29,8 +30,13 @@ import org.dgfoundation.amp.onepager.components.features.subsections.AmpMTEFProj
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpReleaseOfFundsSubsectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCheckBoxFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpFundingSummaryPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
+import org.dgfoundation.amp.onepager.events.DonorFundingRolesEvent;
+import org.dgfoundation.amp.onepager.events.FundingSectionSummaryEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -41,6 +47,7 @@ import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
  * Represents visually one funding item {@link AmpFunding} The model here is
@@ -54,35 +61,50 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 
 	private AmpDonorFundingInfoSubsectionFeature fundingInfo;
 	private AmpDonorDisbursementsSubsectionFeature disbursements;
-
+	private Integer item;
 	public AmpFundingItemFeaturePanel(String id, String fmName,
-			final IModel<AmpFunding> fundingModel,final IModel<AmpActivityVersion> am, final AmpDonorFundingFormSectionFeature parent) throws Exception {
+			final IModel<AmpFunding> fundingModel,final IModel<AmpActivityVersion> am, final AmpDonorFundingFormSectionFeature parent,Integer item) throws Exception {
 		super(id, fundingModel, fmName, true);
-		
+		this.item=item;
 		if (fundingModel.getObject().getFundingDetails() == null)
 			fundingModel.getObject().setFundingDetails(new TreeSet<AmpFundingDetail>());
+		//this should be changed to a propertyModel
+		Label itemNumber=new Label("itemNumber", new Model(item+1));
+		add(itemNumber); 
+		AmpFundingSummaryPanel fundingSumary = new AmpFundingSummaryPanel(
+				"fundingSumary", "Funding Section Summary", fundingModel);
 		
+		fundingSumary.add(UpdateEventBehavior.of(FundingSectionSummaryEvent.class));
+		fundingSumary.setOutputMarkupId(true);
 		
-		Label orgLabel;
-        if ("true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_FUNDING_GROUP_ID)))
-            orgLabel = new Label("donorOrg", new PropertyModel<AmpOrganisation>(fundingModel, "groupVersionedFunding"));
-        else
-            orgLabel = new TrnLabel("donorOrg", "Funding Item");
-		orgLabel.setOutputMarkupId(true);
-		add(orgLabel);
-		
-		AmpLabelFieldPanel<AmpOrganisation> sourceOrg = new AmpLabelFieldPanel<AmpOrganisation>(
-				"sourceOrg", new PropertyModel<AmpOrganisation>(fundingModel, "ampDonorOrgId"), "Source Organisation", true);
-		sourceOrg.add(new AttributeModifier("style", "display:inline-block"));
-		
-		add(sourceOrg);
+//		fundingSumary.add(
+//		new AjaxFormComponentUpdatingBehavior("onchange") {        
+//			private static final long serialVersionUID = -6492252081340597543L;
+//			@Override
+//			protected void onUpdate(AjaxRequestTarget target) {
+//				System.out.println("");
+//			}
+//		});
+		add(fundingSumary);
 
+//		Label orgLabel;
+//        if ("true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_FUNDING_GROUP_ID)))
+//            orgLabel = new Label("donorOrg", new PropertyModel<AmpOrganisation>(fundingModel, "groupVersionedFunding"));
+//        else
+//            orgLabel = new TrnLabel("donorOrg", "Funding Item");
+//		orgLabel.setOutputMarkupId(true);
+//		add(orgLabel);
 		
+//		AmpLabelFieldPanel<AmpOrganisation> sourceOrg = new AmpLabelFieldPanel<AmpOrganisation>(
+//				"sourceOrg", new PropertyModel<AmpOrganisation>(fundingModel, "ampDonorOrgId"), "Source Organisation", true);
+//		sourceOrg.add(new AttributeModifier("style", "display:inline-block"));
+//		
+//		add(sourceOrg);
 
-		AmpLabelFieldPanel<AmpRole> sourceRoleLabel = new AmpLabelFieldPanel<AmpRole>(
-				"sourceRoleLabel", new PropertyModel<AmpRole>(fundingModel, "sourceRole"), "Source Role", true);
-		sourceRoleLabel.add(new AttributeModifier("style", "display:inline-block"));
-		add(sourceRoleLabel);
+//		AmpLabelFieldPanel<AmpRole> sourceRoleLabel = new AmpLabelFieldPanel<AmpRole>(
+//				"sourceRoleLabel", new PropertyModel<AmpRole>(fundingModel, "sourceRole"), "Source Role", true);
+//		sourceRoleLabel.add(new AttributeModifier("style", "display:inline-block"));
+//		add(sourceRoleLabel);
 
 		String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this funding item?");
 		
@@ -94,7 +116,9 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				AmpOrganisation org = fundingModel.getObject().getAmpDonorOrgId();
 				super.onClick(target);
 				parent.updateFundingGroups(org, target);
+				//AmpFundingItemFeaturePanel
 				target.add(parent);
+				target.appendJavaScript("switchTabs();");
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
 			}
 		});
@@ -105,6 +129,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
 				parent.getList().addItem(fundingModel.getObject().getAmpDonorOrgId());
+				
 				parent.getList().updateModel();
 				target.add(parent);
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
@@ -235,7 +260,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		add(delegatedPartner);
 
 		fundingInfo = new AmpDonorFundingInfoSubsectionFeature(
-				"fundingInfoSubsection", fundingModel,"Funding Classification");
+				"fundingInfoSubsection", fundingModel,"Funding Classification",fundingSumary);
 		add(fundingInfo);
 		
 		AmpMTEFProjectionSubsectionFeature mtefProjections = new AmpMTEFProjectionSubsectionFeature(

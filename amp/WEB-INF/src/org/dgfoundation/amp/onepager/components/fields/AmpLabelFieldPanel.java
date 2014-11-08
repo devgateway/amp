@@ -4,12 +4,15 @@
 */
 package org.dgfoundation.amp.onepager.components.fields;
 
+import org.apache.ecs.xhtml.label;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
 
 /**
  * Represents a simple amp label field (text) 
+ * This label is inmutable, if you need it to change 
+ * based on changes of the model you should use {@link#AmpLabelInformationFieldPanel}
  * @author mpostelnicu@dgateway.org
  * since Nov 3, 2010
  */
@@ -34,9 +37,13 @@ public class AmpLabelFieldPanel<T> extends AmpFieldPanel<T> {
 		add(valueLabel);
 	}
 	
-	public AmpLabelFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine) {
+	public AmpLabelFieldPanel(String id, IModel<T> model, String fmName,boolean hideLabel, boolean hideNewLine,boolean modelo) {
 		super(id, model, fmName,hideLabel,hideNewLine);
+		if(modelo){
+		valueLabel=new Label("valueLabel",model);
+		}else{
 		valueLabel=new TrnLabel("valueLabel",(model.getObject() != null ? model.getObject().toString() : " "));
+		}
 		add(valueLabel);
 	}
 

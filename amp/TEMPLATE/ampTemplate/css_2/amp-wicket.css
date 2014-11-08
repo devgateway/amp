@@ -491,3 +491,32 @@ tr.wicketFundingRowItem:nth-child(odd) {background: #FFFFFF}
 .tooltip-logo { height: 14px; width: 14px;}
 .tooltip-align{vertical-align:middle;}
 /* -- ONE PAGER END -- */
+
+.fundingSummary {
+    margin-left: 0;
+    padding-left: 0;
+    display: inline;
+    }
+.fundingSummary li:not(:empty) {
+    border-left: 1px solid #000;
+    padding: 0px 5px 0px;
+	}
+.fundingSummary li {
+	margin-left: 0;
+    margin-bottom: 0;
+    padding: 0;
+    list-style: none;
+    display: inline;
+    }
+    
+.fundingSummary li:first-child {
+	border-left: none;
+	list-style: none;
+	display: inline;
+}
+.fundingOverviewDiv{
+		padding:10px;
+	    border-left: 1px solid #ccc;
+	    border-right: 1px solid #ccc;
+	    border-bottom: 1px solid #ccc;
+}

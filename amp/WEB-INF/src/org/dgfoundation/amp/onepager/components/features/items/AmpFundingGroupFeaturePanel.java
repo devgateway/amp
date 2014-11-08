@@ -7,15 +7,18 @@ package org.dgfoundation.amp.onepager.components.features.items;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.fields.AmpLabelFieldPanel;
 import org.dgfoundation.amp.onepager.models.AbstractMixedSetModel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
@@ -61,6 +64,20 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
 		super(id, model, fmName, true);
 		fundingOrgModel = model;
 		add(new Label("donorOrg", model.getObject().getName()));
+		
+//		AmpLabelFieldPanel<AmpOrganisation> sourceOrg = new AmpLabelFieldPanel<AmpOrganisation>(
+//		"sourceOrg", new PropertyModel<AmpOrganisation>(fundsModel, "ampDonorOrgId"), "Source Organisation", true);
+//		sourceOrg.add(new AttributeModifier("style", "display:inline-block"));
+//		add(sourceOrg);
+//
+//		
+//		AmpLabelFieldPanel<AmpRole> sourceRoleLabel = new AmpLabelFieldPanel<AmpRole>(
+//				"sourceRoleLabel", new PropertyModel<AmpRole>(fundsModel, "sourceRole"), "Source Role", true);
+//		sourceRoleLabel.add(new AttributeModifier("style", "display:inline-block"));
+//		add(sourceRoleLabel);		
+//		
+//		
+		
         AbstractMixedSetModel<AmpFunding> setModel = new AbstractMixedSetModel<AmpFunding>(fundsModel) {
             @Override
             public boolean condition(AmpFunding item) {
@@ -74,9 +91,10 @@ public class AmpFundingGroupFeaturePanel extends AmpFeaturePanel<AmpOrganisation
 					org.dgfoundation.amp.onepager.components.ListItem<AmpFunding> item) {
 				AmpFundingItemFeaturePanel fundingItemFeature;
 				try {
+					
 					fundingItemFeature = new AmpFundingItemFeaturePanel(
 							"fundingItem", "Funding Item",
-							item.getModel(), am, parent);
+							item.getModel(), am, parent,item.getIndex());
 				} catch (Exception e) {
 					throw new RuntimeException(e);
 				}

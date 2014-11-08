@@ -1,14 +1,28 @@
+/*TODO: Eliminate redundant style namespaces, since #demo desktop shouldn't exist anymore*/
+
    .yui-content *{font-size:11px !important;}
-	#demo .yui-nav{
+	#demo .yui-nav, #fundingTabs .yui-nav{
 
 	}
-	#demo .yui-nav li {
+	#demo .yui-nav li, #fundingTabs .yui-nav li {
 		margin-right:0;
  	}
 
-	#demo .yui-content { border-top-width: 2px; border-top-style: solid; border-top-color: #006699;}
+#demo .yui-content {
+	border-top-width: 2px;
+	border-top-style: solid;
+	border-top-color: #006699;
+}
+#fundingTabs .yui-content {
+	border-top-width: 1px;
+	border-top-style: solid;
+	border-top-color: #ccc;
+}
+#fundingTabs .yui-nav li a {
+			padding: 2px 6px 2px 5px; 
+	}
 	
-	#demo .yui-nav li a { 
+	#demo .yui-nav li a, #fundingTabs .yui-nav li a {
 			border-top:1px solid #D0D0D0;
 			border-left:1px solid #D0D0D0;
 			border-right:1px solid #D0D0D0;
@@ -27,7 +41,7 @@
 			/* background:#3754A1 url(/TEMPLATE/ampTemplate/images/tableftcornerunsel.gif) no-repeat scroll left top; */
 	}
 	
-	#demo li.selected a{ 
+	#demo .yui-nav li a, #fundingTabs .yui-nav li a{ 
 			float:left;
 			cursor:pointer; 
 			text-decoration: none; 
@@ -37,7 +51,7 @@
 			color: #FF6000;
 			background-color: #FFFFFF;
 	}
-	#demo li a div{ 
+	#demo li a div, #fundingTabs li a div { 
 			/* background:url(/TEMPLATE/ampTemplate/images/tabrightcornerunsel.gif) no-repeat scroll right top; */
 			padding:  0.6em 1em;
 	}
@@ -53,8 +67,18 @@
 	#demo .yui-nav li a:hover div {
 	    /* background: url(/TEMPLATE/ampTemplate/images/tabrightcornerhover.gif) right top no-repeat;   */
 	}
-	#demo .yui-content {
+	#demo .yui-content, #demo .yui-content  {
 		border:1px solid #CCCCCC;
+	}
+	#fundingTabs .yui-nav li a {
+		color: #376091;
+		font-weight: bold;
+		background-color: #EBEBEB;
+	}
+	#fundingTabs .yui-nav li.selected a {
+		color: #FF6000;
+		font-weight: bold;
+		background-color: #ffffff;
 	}
 	
 .ins_header {color:#767676; font-size:12px; font-weight:bold;}

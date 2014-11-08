@@ -104,7 +104,7 @@ function rightMenuEnable(){
 	$('#rightMenu').css('top', mainContentTop + "px");
 	$('#rightMenu').css('left', mainContentLeft + "px");
 
-	//adjustQuickLinks();
+	adjustQuickLinks();
 	$('#rightMenu').css('display', 'block');
 	enableComputateVisibleSections = true;
 	if (onepagerMode)
@@ -136,12 +136,28 @@ function pageLeaveConfirmationEnabler(){
 		return oldAjaxCallProcessAjaxResponse.call(this, data, textStatus, jqXHR, context);
 	}
 }
-
+function switchTabs(activateLast){
+	
+	$('div[data-is_tab=true]').each(function( index ) {
+		$( this ).appendTo("#theContent");
+		});
+	var loader = new YAHOO.util.YUILoader(); 
+	loader.require("tabview");
+	loader.onSuccess = function(){
+		var myFundingTabs = new YAHOO.widget.TabView("fundingTabs");
+		if(activateLast){
+			var newIndex = myFundingTabs.get('tabs').length-1;
+			myFundingTabs.selectTab(myFundingTabs.get('tabs').length-1);
+		}
+	};
+	loader.insert(); 
+}
 $(document).ready(function(){
 	translationsEnable();
 	subSectionsSliderEnable();
 	rightMenuEnable();
 	pageLeaveConfirmationEnabler();
+	switchTabs();
 });
 
 $(window).resize(function() {

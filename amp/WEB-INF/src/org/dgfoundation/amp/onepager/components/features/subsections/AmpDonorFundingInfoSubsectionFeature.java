@@ -6,19 +6,26 @@ package org.dgfoundation.amp.onepager.components.features.subsections;
 
 import java.util.Date;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpAgreementItemPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpFundingSummaryPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.events.FundingSectionSummaryEvent;
 import org.dgfoundation.amp.onepager.models.ValueToSetModel;
 import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -51,8 +58,9 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 	 * @throws Exception
 	 */
 	public AmpDonorFundingInfoSubsectionFeature(String id,
-			final IModel<AmpFunding> model, String fmName) throws Exception {
+			final IModel<AmpFunding> model, String fmName,final AmpFundingSummaryPanel sp) throws Exception {
 		super(id, fmName, model, false, true);
+		
 		financingInstrument = new AmpCategorySelectFieldPanel(
 				"financingInstrument",
 				CategoryConstants.FINANCING_INSTRUMENT_KEY,
@@ -94,12 +102,14 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 				loanTerms.getTextAreaContainer().setVisible(isLoan);
         	    loanTerms.getTitleLabel().setVisible(isLoan);            	
             	target.add(loanTerms);
-
+            	AmpFundingSummaryPanel l=
+            	findParent(AmpFundingSummaryPanel.class);
+				send(getPage(), Broadcast.BREADTH,new FundingSectionSummaryEvent(target));	
             }
         });
+		//
 		
 		add(typeOfAssistance);
-
 		final AmpCategorySelectFieldPanel modeOfPayment;
 
         PropertyModel<AmpCategoryValue> fundingStatusModel = new PropertyModel<AmpCategoryValue>(model, "fundingStatus");
@@ -123,6 +133,7 @@ public class AmpDonorFundingInfoSubsectionFeature extends
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
                         target.add(modeOfPayment);
+                        send(getPage(), Broadcast.BREADTH,new FundingSectionSummaryEvent(target));
                     }
                 });
         } else {
@@ -130,8 +141,24 @@ public class AmpDonorFundingInfoSubsectionFeature extends
                     "modeOfPayment", CategoryConstants.MODE_OF_PAYMENT_KEY,
                     new PropertyModel<AmpCategoryValue>(model, "modeOfPayment"),
                     CategoryConstants.MODE_OF_PAYMENT_NAME, true, false);
+
+            fundingStatus.getChoiceContainer().add(
+                    new AjaxFormComponentUpdatingBehavior("onchange") {
+                        @Override
+                        protected void onUpdate(AjaxRequestTarget target) {
+                            send(getPage(), Broadcast.BREADTH,new FundingSectionSummaryEvent(target));
+                        }
+                    });
         }
         modeOfPayment.getChoiceContainer().setRequired(false);
+        
+        modeOfPayment.getChoiceContainer().add(
+                new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        send(getPage(), Broadcast.BREADTH,new FundingSectionSummaryEvent(target));
+                    }
+                });
         add(modeOfPayment);
 
 		AmpTextFieldPanel<String> financingId = new AmpTextFieldPanel<String>(
@@ -139,6 +166,17 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 				new PropertyModel<String>(model, "financingId"),
 				"Funding Organization Id");
 //		financingId.getNewLine().setVisible(false);
+		
+		financingId.getTextContainer().add(
+				new AjaxFormComponentUpdatingBehavior("onchange") {
+
+					@Override
+					protected void onUpdate(AjaxRequestTarget target) {
+						// TODO Auto-generated method stub
+//						target.add(sp.getFinancingIdInfo());
+						send(getPage(), Broadcast.BREADTH,new FundingSectionSummaryEvent(target));	
+					}
+				});
 		add(financingId);
 		
 		 final PropertyModel<Date> funClassificationDateModel = new PropertyModel<Date>(
@@ -155,6 +193,80 @@ public class AmpDonorFundingInfoSubsectionFeature extends
 			checkChoicesRequired(0);
 		
 		add(new AmpAgreementItemPanel("agreement", model, "Agreement"));
+		
+		
+		//info section configuration
+		AmpComponentPanel showTypeOfAssistance = new AmpComponentPanel(
+				"showTypeOfAssistance", "Show "
+						+ CategoryConstants.TYPE_OF_ASSISTENCE_NAME
+						+ " in summary") {
+
+			@Override
+			protected void onConfigure() {
+				// TODO Auto-generated method stub
+				super.onConfigure();
+				sp.getTypeOfAssistanceInfo().setVisible(this.isVisible());
+			}
+
+		};
+        add(showTypeOfAssistance);
+
+		AmpComponentPanel showFinancingInstrument = new AmpComponentPanel(
+				"showFinancingInstrument", "Show "
+						+ CategoryConstants.FINANCING_INSTRUMENT_NAME
+						+ " in summary") {
+
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				sp.getFinancingInstrumentInfo().setVisible(this.isVisible());
+			}
+
+		};
+        add(showFinancingInstrument);
+
+		AmpComponentPanel showFinancingId = new AmpComponentPanel(
+				"showFinancingId", "Show Financing id in summary") {
+
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				sp.getFinancingIdInfo().setVisible(this.isVisible());
+			}
+
+		};
+				
+		add(showFinancingId);
+
+		AmpComponentPanel showFundingStatus = new AmpComponentPanel(
+				"showFundingStatus", "Show "
+						+ CategoryConstants.FUNDING_STATUS_NAME
+						+ " in summary") {
+
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				sp.getFundingStatusInfo().setVisible(this.isVisible());
+			}
+
+		};
+		
+		add(showFundingStatus);
+		
+		AmpComponentPanel showModeOfPayment = new AmpComponentPanel(
+				"showModeOfPayment", "Show "
+						+ CategoryConstants.MODE_OF_PAYMENT_NAME
+						+ " in summary") {
+
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				sp.getModeOfPaymentInfo().setVisible(this.isVisible());
+			}
+
+		};
+		add(showModeOfPayment);
+		
 
 	}
 }

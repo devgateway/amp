@@ -10,6 +10,7 @@ import java.util.*;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -24,6 +25,8 @@ import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpRegionalFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.*;
+import org.dgfoundation.amp.onepager.events.FundingSectionSummaryEvent;
+import org.dgfoundation.amp.onepager.events.OverallFundingTotalsEvents;
 import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
@@ -40,6 +43,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 public class AmpFundingAmountComponent<T> extends Panel {
 
 	private AmpTextFieldPanel<Double> amount;
+	Boolean isMTEFProjection;
 	private AmpSelectFieldPanel<AmpCurrency> currency;
 	private Component date;
     private final IModel<List<KeyValue>> mtefYearsChoices = new AbstractReadOnlyModel<List<KeyValue>>() {
@@ -90,7 +94,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 
         boolean hideLabel = fundingComponentTableMode;
         boolean hideNewLine = fundingComponentTableMode;
-
+        this.isMTEFProjection=isMTEFProjection;
 		amount = new AmpTextFieldPanel<Double>("amount",
 				new PropertyModel<Double>(model, propertyAmount), fmAmount, hideLabel, hideNewLine) {
 			
@@ -109,6 +113,8 @@ public class AmpFundingAmountComponent<T> extends Panel {
 						visit.dontGoDeeper();
 					}
 				});
+				
+
 				onFundingDetailChanged(target);
 			}
 			
@@ -187,6 +193,26 @@ public class AmpFundingAmountComponent<T> extends Panel {
 	 * @param target
 	 */
 	protected void onFundingDetailChanged(AjaxRequestTarget target) {
+		// when any of the fields has change we check if the three are not null
+		// and if so
+		// we trigger the event
+		boolean dateValueNotNull = false;
+		if (!isMTEFProjection) {
+			dateValueNotNull = ((AmpDatePickerFieldPanel) date).getDate()
+					.getValue() != null;
+		} else {
+			dateValueNotNull = ((AmpSelectFieldPanel) date)
+					.getChoiceContainer().getValue() != null;
+		}
+		if (amount.getModel().getObject() != null
+				&& currency.getModel() != null && dateValueNotNull) {
+			// ((AmpDatePickerFieldPanel)date).getDate().getValue()
+			// date.
+			// getmo getDefaultModel().getObject()
+			send(getPage(), Broadcast.BREADTH, new OverallFundingTotalsEvents(
+					target));
+		}
+
 	}
 
 	public AmpTextFieldPanel<Double> getAmount() {
@@ -200,7 +226,9 @@ public class AmpFundingAmountComponent<T> extends Panel {
 	public Component getDate() {
 		return date;
 	}
-	
+	private void sendEvent(AjaxRequestTarget target){
+		
+	}
 	public void setAmountValidator(final AmpCollectionValidatorField validationHiddenField){
 		validationFields.add(validationHiddenField);
 		/*

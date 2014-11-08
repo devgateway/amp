@@ -1,16 +1,20 @@
 <wicket:extend>
 <span wicket:id="featureLabel"/>
-	<div style="height: 20px; width: 100%;">
+	<div style="height: 50px; width: 100%;">
 		<div style="float: left; width: 100%;">
 			<a href="#" onclick="$(this).parent().parent().siblings('div:first').slideToggle();return false;">
-			<b><span wicket:id="donorOrg"/></b>			
-			</a>
-			<wicket:trn>From</wicket:trn>&nbsp;<span wicket:id="sourceOrg"/>&nbsp;<wicket:trn>as the</wicket:trn>&nbsp; <b><span wicket:id="sourceRoleLabel"/></b>						
+			Funding Item <span wicket:id="itemNumber"/></a>
+			<div><span wicket:id="fundingSumary"/></div>
+			<!-- <span wicket:id="financingInstrument"/>-->
+<!-- 			<b><span wicket:id="donorOrg"/></b>			
+			
+			<wicket:trn>From</wicket:trn>&nbsp;<span wicket:id="sourceOrg"/>&nbsp;<wicket:trn>as the</wicket:trn>&nbsp; <b><span wicket:id="sourceRoleLabel"/></b>
+			 -->						
 		</div>
 
 		<div wicket:id="delFunding" style="float: right;position:relative;top:-15px;"/>
 	</div>
-	<div class="collapsable">
+	<div class="collapsable" style="display: none;"><!-- the display none should only be added if we are in tabs mode -->
 		<div style="clear:both; height:1px;">&nbsp;</div>
 		<table width="0" border="0" cellspacing="2" cellpadding="2">
 			<tr>
@@ -23,7 +27,7 @@
 				<td>
 					<span wicket:id="delegatedPartner"/>
 				</td>
-			</tr>
+			</tr> 	
 		</table>
 		<div style="margin-top: 15px" wicket:id="fundingInfoSubsection"/>
 		<div style="margin-top: 15px" wicket:id="mtefProjectionsSubsection"/>

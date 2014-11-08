@@ -14,13 +14,19 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.attributes.AjaxRequestAttributes;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -34,8 +40,10 @@ import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFeaturePanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpAddLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.dgfoundation.amp.onepager.events.DonorFundingRolesEvent;
@@ -46,9 +54,11 @@ import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
@@ -74,6 +84,9 @@ public class AmpDonorFundingFormSectionFeature extends
 	private static final long serialVersionUID = 1L;
 	private TreeMap<AmpOrganisation, AmpFundingGroupFeaturePanel> listItems = new TreeMap<AmpOrganisation, AmpFundingGroupFeaturePanel>();
 	protected ListEditor<AmpOrganisation> list;
+	
+	protected ListEditor<AmpOrganisation> tabsList;
+	
 	private IModel<Set<AmpOrganisation>> setModel;
 	private IModel<Set<AmpOrgRole>> roleModel;
 	private AbstractReadOnlyModel<List<AmpFunding>> listModel;
@@ -92,6 +105,10 @@ public class AmpDonorFundingFormSectionFeature extends
 
 	public ListEditor<AmpOrganisation> getList() {
 		return list;
+	}
+
+	public ListEditor<AmpOrganisation> getTabsList() {
+		return tabsList;
 	}
 
 	public IModel<Set<AmpOrganisation>> getSetModel() {
@@ -238,53 +255,15 @@ public class AmpDonorFundingFormSectionFeature extends
 		// group fields in FM under "Proposed Project Cost"
 		AmpProposedProjectCost propProjectCost = new AmpProposedProjectCost(
 				"propProjCost", "Proposed Project Cost", am);
+		propProjectCost.add(new AttributePrepender("data-is_tab", new Model<String>("true"), ""));
 		add(propProjectCost);
+		
 		getRequiredFormComponents().addAll(
 				propProjectCost.getRequiredFormComponents());
 
-		RangeValidator<Integer> rangeValidator = new RangeValidator<Integer>(1,
-				10);
-		AttributeModifier attributeModifier = new AttributeModifier("size",
-				new Model(1));
-		AmpTextFieldPanel<Integer> fundingSourcesNumberPanel = new AmpTextFieldPanel<Integer>(
-				"fundingSourcesNumber", new PropertyModel<Integer>(am,
-						"fundingSourcesNumber"),
-				CategoryConstants.FUNDING_SOURCES_NUMBER_NAME,
-				AmpFMTypes.MODULE);
-		fundingSourcesNumberPanel.getTextContainer().add(rangeValidator);
-		fundingSourcesNumberPanel.getTextContainer().add(attributeModifier);
-		add(fundingSourcesNumberPanel);
 
-		AmpCategorySelectFieldPanel typeOfCooperation = new AmpCategorySelectFieldPanel(
-				"typeOfCooperation", CategoryConstants.TYPE_OF_COOPERATION_KEY,
-				new AmpCategoryValueByKeyModel(
-						new PropertyModel<Set<AmpCategoryValue>>(am,
-								"categories"),
-						CategoryConstants.TYPE_OF_COOPERATION_KEY),
-				CategoryConstants.TYPE_OF_COOPERATION_NAME, true, false, null,
-				AmpFMTypes.MODULE);
-		add(typeOfCooperation);
 
-		AmpCategorySelectFieldPanel typeOfImplementation = new AmpCategorySelectFieldPanel(
-				"typeOfImplementation",
-				CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY,
-				new AmpCategoryValueByKeyModel(
-						new PropertyModel<Set<AmpCategoryValue>>(am,
-								"categories"),
-						CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY),
-				CategoryConstants.TYPE_OF_IMPLEMENTATION_NAME, true, false,
-				null, AmpFMTypes.MODULE);
-		add(typeOfImplementation);
 
-		AmpCategorySelectFieldPanel modalities = new AmpCategorySelectFieldPanel(
-				"modalities",
-				CategoryConstants.MODALITIES_KEY,
-				new AmpCategoryValueByKeyModel(
-						new PropertyModel<Set<AmpCategoryValue>>(am,
-								"categories"), CategoryConstants.MODALITIES_KEY),
-				CategoryConstants.MODALITIES_NAME, true, false, null,
-				AmpFMTypes.MODULE);
-		add(modalities);
 
 		fundingModel = new PropertyModel<Set<AmpFunding>>(am, "funding");
 		if (fundingModel.getObject() == null)
@@ -295,8 +274,86 @@ public class AmpDonorFundingFormSectionFeature extends
 
 		final WebMarkupContainer wmc = new WebMarkupContainer("container");
 		wmc.setOutputMarkupId(true);
+
+		//For tabs
+
+//		ExternalLink l = new ExternalLink("overviewLink", "#tab1", "Overview"){
+//			
+//		};
+		
+       
+
+//		wmc.add(new AjaxLink<Void>("overviewLink",new Model("Overview"))
+//	    	        {
+//	    	            @Override
+//	    	            public void onClick(AjaxRequestTarget target)
+//	    	            {
+//	    	                
+//	    	                target.appendJavaScript("alert('');");
+//	    	            }
+////	    	        });
+//		ExternalLink overviewLink = new ExternalLink("overviewLink", "#tab1" ,"Overview");
+//		overviewLink.add(new AttributePrepender("title", new Model<String>("Overview"),""));
+		
+//		wmc.add(overviewLink);
+		
+		ExternalLink link = new ExternalLink("overviewLink","#tab0","Overview"); 
+		
+		link.setOutputMarkupId(true);
+		
+//		link.add(new AjaxEventBehavior("onclick") {
+//			private static final long serialVersionUID = 1L;
+//
+//			@Override
+//			protected void onEvent(AjaxRequestTarget target) {
+//				// TODO Auto-generated method stub
+//				target.
+//			}
+//
+//		
+//		}
+//			);
+//		link.add(new AjaxEventBehavior("onclick") {
+//            protected void onEvent(AjaxRequestTarget target) {
+//                System.out.println("ajax here!");
+//            }
+//            @Override
+//            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
+//                super.updateAjaxAttributes(attributes);
+//                attributes.setAllowDefault(true);
+//            }
+//        });
+		wmc.setOutputMarkupId(true);
+		wmc.add(link);
+
 		add(wmc);
 
+		 tabsList = new ListEditor<AmpOrganisation>(
+				"donorItemsForTabs", setModel) {
+					private static final long serialVersionUID = -206108834217117807L;
+			@Override
+			protected void onPopulateItem(ListItem<AmpOrganisation> item) {
+				ExternalLink l = new ExternalLink("linkForTabs", "#tab"
+						+ (item.getIndex()+1), item.getModel().getObject()
+						.getAcronym() );
+				l.add(new AttributePrepender("title", new Model<String>(item.getModel().getObject().getName()), ""));
+
+				item.add(l);
+			}
+			public void addItem(AmpOrganisation org) {
+				
+//				ExternalLink l = new ExternalLink("linkForTabs", "#tab"
+//						+ (tabsList.items.size()+1), org.getAcronym() );
+//				l.add(new AttributePrepender("title", new Model<String>(org.getName()), ""));
+
+				tabsList.origAddItem(org);
+				tabsList.updateModel();
+			}
+
+		};
+		wmc.add(tabsList);
+				
+		
 		list = new ListEditor<AmpOrganisation>("listFunding", setModel) {
 			@Override
 			protected void onPopulateItem(ListItem<AmpOrganisation> item) {
@@ -304,6 +361,8 @@ public class AmpDonorFundingFormSectionFeature extends
 						"fundingItem", "Funding Group", fundingModel,
 						item.getModel(), am,
 						AmpDonorFundingFormSectionFeature.this);
+				//we decorete 
+					item.add(new AttributePrepender("data-is_tab", new Model<String>("true"), ""));
 				listItems.put(item.getModelObject(), fg);
 				item.add(fg);
 			}
@@ -338,13 +397,16 @@ public class AmpDonorFundingFormSectionFeature extends
 			public void onSelect(AjaxRequestTarget target,
 					AmpOrganisation choice) {
 				list.addItem(choice);
-
+				tabsList.addItem(choice);
 				target.appendJavaScript(OnePagerUtil
 						.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
 				send(getPage(), Broadcast.BREADTH,
 						new OrganisationUpdateEvent(target));
 								
-				target.add(wmc);
+//				target.add(wmc);
+				target.add(AmpDonorFundingFormSectionFeature.this);
+				//AmpDonorFundingFormSectionFeature
+				target.appendJavaScript("switchTabs(true);");
 			}
 
 			@Override

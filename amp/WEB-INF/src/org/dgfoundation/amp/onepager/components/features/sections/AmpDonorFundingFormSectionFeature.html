@@ -3,24 +3,25 @@
 		<a href="#" wicket:id="expandDonorItems" id="expandDonorItems" onclick="$(this).parents('div:eq(2)').find('.collapsable').show();$('#expandDonorItems').hide();$('#collapseDonorItems').show();"><wicket:trn>Expand all</wicket:trn></a>
 		<a  href="#" wicket:id="collapseDonorItems" id="collapseDonorItems"  style="display: none;"  onclick="$(this).parents('div:eq(2)').find('.collapsable').hide();$('#expandDonorItems').show();$('#collapseDonorItems').hide();"><wicket:trn>Collapse all</wicket:trn></a>
 	</div>
+	<tr><td colspan="2">
 	<div wicket:id="propProjCost" />
-
-    <tr>
-        <td>
-            <div wicket:id="fundingSourcesNumber" />
-        </td>
-    </tr>
-
-    <tr>
-        <td><div wicket:id="typeOfCooperation"/></td>
-        <td><div wicket:id="typeOfImplementation"/></td>
-    </tr>
-    <tr>
-        <td colspan="2"><div wicket:id="modalities"/></td>
-    </tr>
-    <tr><td colspan="2" align="left"><p/>
+	<!-- </td></tr>
+    <tr><td colspan="2" align="left">
+    -->
+    <p/>
         <div wicket:id="container">
-            <div wicket:id="listFunding" class="funding_group_feature_box">
+
+				<!-- for tabs -->
+				<div id="fundingTabs" class="yui-navset" >
+					<ul class="yui-nav">
+						<li class="selected"><a wicket:id="overviewLink"></a> </li>
+						<li wicket:id="donorItemsForTabs"><a wicket:id="linkForTabs">Label
+								goes here...</a></li>
+					</ul>
+					<div class="yui-content" id="theContent"></div>
+				</div>
+				<!-- END for tabs -->
+				<div wicket:id="listFunding" class="funding_group_feature_box">
                 <div wicket:id="fundingItem" />
             </div>
             <p/>
@@ -33,4 +34,22 @@
             <span wicket:id="orgRoleSelector"/>
             <span wicket:id="addNewFuding"/>     
 	</td></tr>
+	<!-- 
+	<tr><td colspan="2">
+	<div id="demo" class="yui-navset"> 
+	    <ul class="yui-nav"> 
+	        <li><a href="#tab1"><em>Ovrview</em></a></li> 
+	        <li class="selected"><a href="#tab2"><em>Hungary</em></a></li>
+	        <li ><a href="#tab3"><em>Advanced Engineering Associates International</em></a></li> 
+	        <li><a href="#tab4"><em>German Cooperation</em></a></li> 
+	    </ul>             
+	    <div class="yui-content"> 
+	        <div id="tab1"><p>OverView</p></div> 
+	        <div id="tab2"><p>Tab Two Content</p></div> 
+	        <div id="tab3"><p>Tab Three Content</p></div>
+	        <div id="tab3"><p>Tab Four Content</p></div> 
+	    </div> 
+	</div> 
+	</td></tr>
+	 -->
 </wicket:extend>

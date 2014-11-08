@@ -65,6 +65,17 @@ module.exports = {
           percent: d3.format('%')(raw.value / model.get('total'))
         });
       });
+      // http://stackoverflow.com/a/21273292/1299695
+      d3.select(container).select('.dash-chart .legend').remove();
+      d3.select(container.querySelector('.dash-chart'))
+        .datum(data)
+        .append('g')
+          .attr('class', 'legend')
+          .datum(data[0].values)
+          .call(nv.models.legend()
+            .key(function(d) { return util.formatShortText(12)(d.x); })
+            .color(util.categoryColours(categories)));
+      chart.margin({top: container.querySelector('.dash-chart .legend').getBBox().height + 15});
       drawCommon(chart, data, categories, container, function() {
         d3.selectAll(container.querySelectorAll('g:last-child > .nv-bar'))
           .on('click', function(d) {

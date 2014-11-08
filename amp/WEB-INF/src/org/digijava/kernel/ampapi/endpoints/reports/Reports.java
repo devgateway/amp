@@ -200,6 +200,11 @@ public class Reports {
 			formParams.set("sorting", sorting);
 		}
 		
+		// AMP-18516: Fix "page" parameter when is entered manually by user.
+		if (formParams.get("page") instanceof String) {
+			formParams.set("page", Integer.valueOf(formParams.get("page").toString()));
+		}
+		
 		return getReportResultByPage(formParams, reportId);
 	}
 	

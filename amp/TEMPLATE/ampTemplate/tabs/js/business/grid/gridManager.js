@@ -152,15 +152,16 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 											"<a href='/wicket/onepager/activity/" + id
 													+ "'><img src='/TEMPLATE/ampTemplate/img_2/ico_edit.gif'/></a>");
 
-									// Create link to preview activity on first not grouped column.
+									// Create link to preview activity on first
+									// not grouped column.
 									var colIndex = -1;
 									jQuery(jQuery(grid).jqGrid('getGridParam', 'colModel')).each(function(i, item) {
 										if (colIndex == -1 && item.hidden == false && i > 0) {
 											colIndex = i;
 										}
-									});									
-									// TODO: remove this long sentence and call a method like 'openPreviewPage(id)' or use <a> (not it breaks status colors).
-									var newContent = "<span style='cursor: pointer;' onclick = \x22window.location = \x27/aim/viewActivityPreview.do~public=true~pageId=2~activityId=" + id + "\x27\x22>" + jQuery(row.cells[colIndex]).html() + "</span>";									
+									});
+									var newContent = "<span style='cursor: pointer;' onclick = \x22openPreviewPage(" + id + ")\x22>"
+											+ jQuery(row.cells[colIndex]).html() + "</span>";
 									jQuery(row.cells[colIndex]).html(newContent);
 								}
 							}

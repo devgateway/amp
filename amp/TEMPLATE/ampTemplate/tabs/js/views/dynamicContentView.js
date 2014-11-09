@@ -58,7 +58,7 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 		},
 		clickSettingsButton : function() {
 			console.log('clickSettingsButton');
-			SettingsManager.openDialog();			
+			SettingsManager.openDialog();
 		},
 		onShow : function(data) {
 			// Create jQuery buttons.
@@ -67,11 +67,10 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 					primary : "ui-icon-search"
 				}
 			});
-			jQuery("#main-dynamic-content-region_" + reportId + " #save-button").button({
-				icons : {
-					primary : 'ui-icon-disk'
-				}
-			});
+			/*
+			 * jQuery("#main-dynamic-content-region_" + reportId + "
+			 * #save-button").button({ icons : { primary : 'ui-icon-disk' } });
+			 */
 			jQuery("#main-dynamic-content-region_" + reportId + " #settings-button").button({
 				icons : {
 					primary : 'ui-icon-gear'

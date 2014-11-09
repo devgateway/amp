@@ -68,11 +68,12 @@ var Query = Backbone.Model.extend({
         return this.model.properties[key];
     },
 
-    run_filters: function(filter) {
-    	this.run(null, null, filter, true);
+    run_query: function(filters, settings) {
+    	this.run(null, null, filters, settings);
     },
 
-    run: function(force, mdx, filter, filterApplied) {
+    run: function(force, mdx, filters, settings) {
+
         var self = this;
         // Check for automatic execution
         Saiku.ui.unblock();
@@ -97,13 +98,24 @@ var Query = Backbone.Model.extend({
 
         	if(!this.workspace.currentQueryModel)
             	this.workspace.currentQueryModel = exModel;
-        	if(filter) {
-        		this.set('filters', filter);
+
+        	var filtersApplied = false;
+        	if(filters) {
+        		this.set('filters', filters);
+        		filtersApplied = true;
         	}
+
+        	var settingsApplied = false;
+        	if(settings) {
+        		this.set('settings', settings);
+        		settingsApplied = true;
+        	}
+
         	exModel = this.workspace.currentQueryModel;
         	exModel.queryModel.filters = this.get('filters');
         	exModel.queryModel.settings = this.get('settings');
-        	exModel.queryModel.filterApplied = filterApplied;
+        	exModel.queryModel.filtersApplied = filtersApplied;
+        	exModel.queryModel.settingsApplied = settingsApplied;
         }
         else if (exModel.queryType == "OLAP") {
             if (exModel.type == "QUERYMODEL") {

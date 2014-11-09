@@ -2,30 +2,78 @@ var AMPSettings = Backbone.View.extend({
 			events : {
 				'click .edit_amp_settings' : 'add_amp_settings'
 			},
+			
+			SETTINGS : {
+				"currency": "1",
+				"calendar": "2"
+			},
 
 			initialize : function(args) {
 		    	if(!Settings.AMP_REPORT_API_BRIDGE) return; 
 
+				var self = this;
 				this.workspace = args.workspace;
+				this.initialized = false;
 
 				this.id = _.uniqueId("amp_settings_");
 				$(this.el).attr({
 					id : this.id
 				});
 
-				_.bindAll(this, "render", "show", "add_amp_settings");
+				_.bindAll(this, "render", "show", "add_amp_settings", "hideContainer", "applySettings");
 
 				this.add_button();
 				this.workspace.toolbar.amp_settings = this.show;
 
 				$(this.workspace.el).find('.workspace_results').prepend($(this.el).hide());
-				
-				//Find container for settings/show it/hide it/apply changes
-			},
+				//TODO: Move this to use the this.el correctly instead of a set html
+				//$("#settings-container").find(".panel-heading .close").on("click", this.hideContainer);
+				$("#settings-container").find(".cancel").on("click", this.hideContainer);
+				$("#settings-container").find(".apply").on("click", this.applySettings);
 
+				$.ajax({
+					url : '/rest/gis/settings',
+					async : false
+				}).done(function(data) {
+					self.populate_dropdowns(data);
+				});
+			},
+			
+			hideContainer: function() {
+				this.settings_button.removeClass('on');
+				$("#settings-container").hide();
+			},
+			
+			applySettings: function() {
+				var settings = {
+					"1": $('#amp_currency').val(),
+					"2": $('#amp_calendar').val()
+				};
+
+				this.workspace.query.run_query(null, settings);
+				this.settings_button.removeClass('on');
+				$("#settings-container").hide();
+			},
+			
+			populate_dropdowns: function(data) {
+				var currencyValues = _.findWhere(data, {"id": this.SETTINGS["currency"]});
+				$.each(currencyValues.options, function(index, object) {   
+				     $('#amp_currency')
+				         .append($("<option></option>")
+				         .attr("value", object.value)
+				         .text(object.name)); 
+				});
+				var calendarValues = _.findWhere(data, {"id": this.SETTINGS["calendar"]});
+				$.each(calendarValues.options, function(index, object) { 
+				     $('#amp_calendar')
+				         .append($("<option></option>")
+				         .attr("value", object.value)
+				         .text(object.name)); 
+				});
+			},
 			add_button : function() {
 
-				var $settings_button = $(
+				this.settings_button = $(
 						'<a href="#amp_settings" class="amp_settings button i18n" title="AMP Settings">Settings</a>')
 						.css(
 								{
@@ -33,19 +81,36 @@ var AMPSettings = Backbone.View.extend({
 								});
 
 				var $settings_li = $('<li></li>').append(
-						$settings_button);
+						this.settings_button);
 				$(this.workspace.toolbar.el).find("ul").prepend($settings_li);
 			},
 
 			show : function(event, ui) {
 				var self = this;
 				$(this.el).toggle();
+				var settings;
+				if(!this.initialized) {
+					var raw_settings = this.workspace.query.get('raw_settings');
+					settings = {
+							"1": raw_settings.currencyCode,
+							"2": raw_settings.calendar.ampFiscalCalId
+						};
+					this.initialized = true;
+				}
+				else
+				{
+					settings = this.workspace.query.get('settings');
+				}
+				window.currentSettings = settings;
+				$('#amp_currency').val(settings["1"]);
+				$('#amp_calendar').val(settings["2"]);
+
 				$(event.target).toggleClass('on');
 
 				if ($(event.target).hasClass('on')) {
-					alert("To be implemented");
+					$('#settings-container').show();
 				} else {
-					// Hide it
+					$('#settings-container').hide();
 				}
 
 			},
@@ -56,12 +121,12 @@ var AMPSettings = Backbone.View.extend({
 
 			add_amp_settings : function(event) {
 				var self = this;
-				alert("To be implemented");
+				alert("add_amp_settings: To be implemented");
 			},
 
 			save_amp_settings : function() {
 				var self = this;
-				alert("To be implemented");
+				alert("save_amp_settings: To be implemented");
 			},
 
 		});

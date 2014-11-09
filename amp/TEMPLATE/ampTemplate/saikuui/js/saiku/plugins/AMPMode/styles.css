@@ -29,3 +29,15 @@
 {
 	margin-top:0px!important;
 }
+
+#settings-container {
+	z-index: 1020;
+	position: fixed !important;
+	top: 20%;
+	left: 50%;
+	width: 810px;
+	margin-left: -405px;
+	font-size: 14px;
+	font-family: 'Open Sans';
+	line-height: 1.42857143;
+}

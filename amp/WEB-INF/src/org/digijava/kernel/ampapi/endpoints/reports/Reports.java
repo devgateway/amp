@@ -274,57 +274,47 @@ public class Reports {
 		return tabs;
 	}
 
-	/**
-	 * Gets the result for the specified reportId for Saiku UI
-	 * 
-	 * @param reportId
-	 *            - AMP report id
-	 * @param filterRules 
-	 * @return QueryResult result converted for Saiku for the requested page
-	 */
-
-	@GET
+	@POST
 	@Path("/saikureport/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public final QueryResult getSaikuReportResult(@PathParam("report_id") Long reportId, MondrianReportFilters filterRules) {
+	public final QueryResult getSaiku3ReportResult(JsonBean queryObject, @PathParam("report_id") Long reportId) {
+
+		MondrianReportFilters filterRules = null;
+		LinkedHashMap<String, Object> queryModel = (LinkedHashMap<String, Object>) queryObject.get("queryModel");
+		if(queryModel.containsKey("filterApplied") && "true".equals(queryModel.get("filtersApplied"))) {
+			LinkedHashMap<String, Object> filters = (LinkedHashMap<String, Object>) queryModel.get("filters");
+			filterRules = FilterUtils.getFilterRules((LinkedHashMap<String, Object>)filters.get("columnFilters"), (LinkedHashMap<String, Object>)filters.get("otherFilters"), null);
+		}
+		
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
-		// MondrianUtils.PRINT_PATH = "/home/simple";
+
 		MondrianReportGenerator generator = new MondrianReportGenerator(SaikuReportArea.class, ReportEnvironment.buildFor(httpRequest));
 		SaikuGeneratedReport report = null;
 		try {
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
 			if(filterRules != null) spec.setFilters(filterRules);
+			if(queryModel.containsKey("settingsApplied") && (Boolean)queryModel.get("settingsApplied")) {
+				EndpointUtils.applySettings(spec, extractSettings(queryModel));
+			}
 			report = (SaikuGeneratedReport) generator.executeReport(spec);
 			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + report.generationTime + "(ms)");
 		} catch (Exception e) {
 			logger.error("Cannot execute report (" + ampReport + ")", e);
-			//e.printStackTrace();
 			String error = ExceptionUtils.getRootCauseMessage(e);
 			return new QueryResult(error);
 		}
 
-		// Adjust width for temporary column
 		report.cellDataSet.setWidth(report.cellDataSet.getWidth() - 1);
-		// report.cellDataSet.setLeftOffset(report.cellDataSet.getLeftOffset()-1);
 
-		return RestUtil.convert(report.cellDataSet);
-	}
-
-	@POST
-	@Path("/saikureport/{report_id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public final QueryResult getSaiku3ReportResult(JsonBean queryObject, @PathParam("report_id") Long reportId) {
-		//Extract the filters
-		MondrianReportFilters filterRules = null;
-		LinkedHashMap<String, Object> queryModel = (LinkedHashMap<String, Object>) queryObject.get("queryModel");
-		if(queryModel.containsKey("filterApplied")) {
-			LinkedHashMap<String, Object> filters = (LinkedHashMap<String, Object>) queryModel.get("filters");
-			filterRules = FilterUtils.getFilterRules((LinkedHashMap<String, Object>)filters.get("columnFilters"), (LinkedHashMap<String, Object>)filters.get("otherFilters"), null);
-		}
-		
-		QueryResult result = getSaikuReportResult(reportId, filterRules);
+		QueryResult result =  RestUtil.convert(report.cellDataSet);
 		result.setQuery(new ThinQuery());
 		return result;
+	}
+
+	private JsonBean extractSettings(LinkedHashMap<String, Object> queryModel) {
+		JsonBean config = new JsonBean();
+		config.set("settings", queryModel.get("settings"));
+		return config;
 	}
 
 	@GET

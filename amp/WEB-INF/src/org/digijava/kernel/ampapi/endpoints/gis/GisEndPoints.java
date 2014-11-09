@@ -502,7 +502,7 @@ public class GisEndPoints {
 	 * @return JSONObject, with the last updated activities
 	 */
 	@GET
-	@Path("/lastUpdated")
+	@Path("/last-updated")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui = false, id = "LastUpdatedActivities")
 	public JSONObject getLastUpdated(@DefaultValue("10") @QueryParam("limit") Integer limit,

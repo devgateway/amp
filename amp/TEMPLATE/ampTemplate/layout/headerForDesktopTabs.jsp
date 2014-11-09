@@ -51,8 +51,7 @@
 		}
 	function adminHelp(){
 			 <digi:context name="admin" property="/help/admin/help.do~blankPage=true" />
-			openURLinWindow("<%=admin%>
-		", 1024, 768);
+			openURLinWindow("<%=admin%>", 1024, 768);
 		}
 
 		function canExit() {

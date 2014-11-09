@@ -123,6 +123,11 @@
     width:10px;*/
 }
 
+/* Overriding Filter Widget section */
+.input-group-btn {
+	font-size: 14px;
+}
+
 /* Overriding jQueryUI section */
 .ui-widget-header {
 	color: orange;

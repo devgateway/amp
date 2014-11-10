@@ -192,9 +192,12 @@ public class Reports {
 					listOfColumns.add(auxColumns[i].trim());
 					sort.put("columns", listOfColumns);
 					sort.put("asc", asc);
-					/*
-					 * if(i == auxColumns.length -1) { sorting.add(sort); }
-					 */
+					
+					// TODO: Testing what happens if we use only the last column
+					// coming from jqgrid (specially on hierarchical reports).
+					if (i == auxColumns.length - 1) {
+						sorting.add(sort);
+					}
 				}
 			}
 			formParams.set("sorting", sorting);

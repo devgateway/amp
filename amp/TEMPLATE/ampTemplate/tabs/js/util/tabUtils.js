@@ -77,7 +77,7 @@ define([ 'jquery', 'jqueryui', 'jqgrid' ], function(jQuery) {
 			var rightWidth = jQuery("#right-column").width();
 
 			newWidth = maxWidth - separatorWidth - rightWidth;
-			container.css("width", 1000);
+			container.css("width", maxWidth);
 			jQuery("#tabs-container").css("width", newWidth);
 			jQuery("#tabs-container .dynamic-content-table").css("width", newWidth - 20);
 			jQuery("#tab_grid_" + id).jqGrid().setGridWidth(newWidth - 20, true);

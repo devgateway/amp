@@ -83,22 +83,13 @@ public class GazeteerCSVImporter extends CSVImporter {
 	public boolean isTableEmpty() {
 		boolean isTableEmpty = false;
 		try {
-			session = PersistenceManager.getSession();
 			//first check if amp_locator table exists
-			String check=
-			"SELECT table_name FROM information_schema.tables " + 
-					" WHERE table_schema='public' and table_name='amp_locator'";
-			java.sql.ResultSet rs = SQLUtils.rawRunQuery(PersistenceManager.getJdbcConnection(), check, null);
-			if(rs.next()){
-				Query q = session.createQuery("from " + AmpLocator.class.getName() + " loc ");
-				isTableEmpty = q.list().isEmpty();
+			if (SQLUtils.tableExists("amp_locator")){
+				Query q = PersistenceManager.getSession().createQuery("select count(*) from " + AmpLocator.class.getName() + " loc ");
+				isTableEmpty = PersistenceManager.getInteger(q.uniqueResult()) == 0;
 			}
-			rs.close();
 		} catch (HibernateException e) {
 			logger.error("Error checking if AmpLocator table is empty" , e);
-		}
-		catch(SQLException e){
-			logger.error("Cannot check if amp_locater exists" , e);
 		}
 		return isTableEmpty;
 

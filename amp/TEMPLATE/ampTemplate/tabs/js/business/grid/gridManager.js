@@ -111,7 +111,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 						},
 						colNames : columnsMapping.createJQGridColumnNames(tableStructure, grouping),
 						colModel : columnsMapping.createJQGridColumnModel(tableStructure),
-						height : 300,
+						height : (jQuery(window).height() * 0.50),
 						autowidth : true,
 						shrinkToFit : true,
 						forceFit : false,

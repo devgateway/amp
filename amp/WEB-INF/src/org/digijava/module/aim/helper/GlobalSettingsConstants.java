@@ -175,5 +175,6 @@ public class GlobalSettingsConstants {
     
     public static final String COUNTRY_LONGITUDE ="Country Longitude";
     
+    public static final String DEFAULT_STRUCTURE_TYPE="Default Structure Type";
 
 }

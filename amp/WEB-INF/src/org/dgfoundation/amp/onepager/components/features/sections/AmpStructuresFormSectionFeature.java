@@ -25,9 +25,12 @@ import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.dbentity.AmpStructureType;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.StructuresUtil;
 
 public class AmpStructuresFormSectionFeature extends
@@ -67,23 +70,23 @@ public class AmpStructuresFormSectionFeature extends
 			protected void onPopulateItem(
 					org.dgfoundation.amp.onepager.components.ListItem<AmpStructure> item) {
 				IModel<AmpStructure> structureModel = item.getModel();
-				AmpSelectFieldPanel<AmpStructureType> structureTypes = new  AmpSelectFieldPanel<AmpStructureType>("structureTypes", new PropertyModel<AmpStructureType>(structureModel, "type"),
-						new LoadableDetachableModel<List<AmpStructureType>>() {
-							private static final long serialVersionUID = 1L;
-		
-							@Override
-							protected List<AmpStructureType> load() {
-								return new ArrayList<AmpStructureType>(AmpStructuresFormSectionFeature.this.structureTypes);
-							}		
-						}, 
-						"Structure Type",true, false,  new ChoiceRenderer<AmpStructureType>("name","typeId")) ;
+//				AmpSelectFieldPanel<AmpStructureType> structureTypes = new  AmpSelectFieldPanel<AmpStructureType>("structureTypes", new PropertyModel<AmpStructureType>(structureModel, "type"),
+//						new LoadableDetachableModel<List<AmpStructureType>>() {
+//							private static final long serialVersionUID = 1L;
+//		
+//							@Override
+//							protected List<AmpStructureType> load() {
+//								return new ArrayList<AmpStructureType>(AmpStructuresFormSectionFeature.this.structureTypes);
+//							}		
+//						}, 
+//						"Structure Type",true, false,  new ChoiceRenderer<AmpStructureType>("name","typeId")) ;
+//
+//				structureTypes.getChoiceContainer().setRequired(true);
+//				structureTypes.setOutputMarkupId(true);
+//                structureTypes.getChoiceContainer().add(new AttributeModifier("style", "max-width: 100px;margin-bottom:20px;"));
+//				item.add(structureTypes);
+//				
 
-				structureTypes.getChoiceContainer().setRequired(true);
-				structureTypes.setOutputMarkupId(true);
-                structureTypes.getChoiceContainer().add(new AttributeModifier("style", "max-width: 100px;margin-bottom:20px;"));
-				item.add(structureTypes);
-				
-				
 				
 				final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("name", new PropertyModel<String>(structureModel, "title"), "Structure Title",true, true);
 				name.setOutputMarkupId(true);
@@ -146,6 +149,12 @@ public class AmpStructuresFormSectionFeature extends
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				AmpStructure stru = new AmpStructure();
+				if(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_STRUCTURE_TYPE)!=-1){
+					AmpStructureType s=(AmpStructureType)PersistenceManager.getSession().load(AmpStructureType.class, 
+							FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.DEFAULT_STRUCTURE_TYPE));
+					stru.setType(s);	
+				}
+				
 				list.addItem(stru);
 				target.add(this.getParent());
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(this.getParent()));

@@ -6,17 +6,18 @@ var isDrawActive = false;
 var isMenuOpen = false;
 var selectedPointEvent;
 var circlePoint;
+var latitude;
+var longitude;
 
-
-$(document).ready(function() {
+function MapPopup (lat,long) {
+	latitude = lat;
+	longitude = long;
 	initMap();
-	startContextMenu();
-
-});
-
+	startContextMenu();	
+}
 
 function initMap() {
-	map = L.map('map').setView([ -9.09, 125.10 ], 7);
+	map = L.map('map').setView([ latitude, longitude ], 7);
 	basemapLayer = L.esri.basemapLayer("Streets").addTo(map);
 	//basemapLayer = L.esri.tiledMapLayer(basemapurl, {}).addTo(map);
 

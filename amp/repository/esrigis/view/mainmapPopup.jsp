@@ -1,3 +1,4 @@
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -6,6 +7,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
+
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -28,6 +31,11 @@
     <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
     <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/esrigis/mainmapPopup.js"/>"></script>
    	    
+   	 <script type="text/javascript">
+   	$(document).ready(function() {
+	new MapPopup (<%=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LATITUDE)%>,<%=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LONGITUDE)%>);
+   	});
+   	 </script> 
   </head>
   <body>
   	<img id="loadingImg" src="/TEMPLATE/ampTemplate/img_2/ajax-loader.gif" style="position:absolute;left:50%;top:50%; z-index:100;display: none;" />

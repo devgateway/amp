@@ -695,6 +695,13 @@ public class FeaturesUtil {
 		return new Long( -1);
 	}
 
+	public static Double getGlobalSettingDouble(String globalSettingName) {
+		String globalValue = getGlobalSettingValue(globalSettingName);
+		if (globalValue != null)
+			return new Double(Double.parseDouble(globalValue));
+		return new Double( -1);
+	}
+
 	public static String[] getGlobalSettingsStringArray(String key) {
 		String[] ret = null;
  	 	ret = getGlobalSettingValue(key).split(";");

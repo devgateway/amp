@@ -170,6 +170,10 @@ public class GlobalSettingsConstants {
     
     public static final String GIS_DEFAUL_MAX_YEAR_RANGE ="GIS Default Max Year Filter Range";
     public static final String GIS_DEFAUL_MIN_YEAR_RANGE ="GIS Default Min Year Filter Range";
-        
+   
+    public static final String COUNTRY_LATITUDE ="Country Latitude";
+    
+    public static final String COUNTRY_LONGITUDE ="Country Longitude";
+    
 
 }

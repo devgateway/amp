@@ -868,9 +868,8 @@ public class LuceneUtil implements Serializable {
             for (String field: regularFieldNames.keySet()) {
 
                 List<AmpContentTranslation> valueTranslationsList = ContentTranslationUtil.loadFieldTranslations(activityClassName, id, field);
-                // uncomment and remove 'false' in 2.10
-                // for now it works equally for both multilingual and non-multilingual activities
-                if (/*! valueTranslationsList.isEmpty()*/ false) {
+
+                if (valueTranslationsList.isEmpty()) {
                     for (AmpContentTranslation translation : valueTranslationsList) {
                         // Added try/catch because Field can throw an exception if any of the parameters is wrong and that would break the process.
                         try {

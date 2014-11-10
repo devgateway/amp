@@ -156,10 +156,8 @@ implements AmpRequiredComponentContainer{
                 ServletContext context = ((WebApplication) Application.get())
                         .getServletContext();
 
-                // change this NULL to langCode in 2.10
-                // for now it works equally for both multilingual and non-multilingual activities
                 List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(
-                        context.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, sTitle, /*langCode*/null, 2);
+                        context.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, sTitle, langCode, 2);
                 if (! list.isEmpty()) {
                     String ret = TranslatorUtil
                             .getTranslation("Warning! Potential duplicates! The database already contains project(s) with similar title(s):")+"\n";

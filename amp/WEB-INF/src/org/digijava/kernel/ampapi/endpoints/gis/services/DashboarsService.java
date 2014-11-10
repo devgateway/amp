@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -186,19 +187,27 @@ public class DashboarsService {
 		return retlist;
 	}
 	
+	protected static JSONObject buildEmptyJSon(String...keys) {
+		JSONObject obj = new JSONObject();
+		for(String key:keys)
+			obj.put(key, 0d);
+		return obj;
+	}
+	
 	/**
 	 * 
 	 * @param filter
 	 * @return
 	 */
 	
-	public static JSONObject getAidPredictability(JsonBean filter) {
+	public static JSONObject getAidPredictability(JsonBean filter) throws Exception {
 
 		JSONObject retlist = new JSONObject();
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetAidPredictability");
 		//spec.addColumn(new ReportColumn(ColumnConstants.SECTOR_GROUP, ReportEntityType.ENTITY_TYPE_ALL));
+		//spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL));
+		//spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addMeasure(new ReportMeasure(MoConstants.PLANNED_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addMeasure(new ReportMeasure(MoConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.setCalculateRowTotals(true);
@@ -218,46 +227,34 @@ public class DashboarsService {
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
 				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
-		GeneratedReport report = null;
-		try {
-			report = generator.executeReport(spec);
-		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		if (report.reportContents != null && report.reportContents.getContents() != null
-				&& report.reportContents.getContents().size() > 0) {
-			
-			Iterator <ReportOutputColumn> iterator = report.reportContents.getContents().keySet().iterator();
-			JSONArray array = new JSONArray ();
-			while (iterator.hasNext()) {
-				JSONObject amountObj = new JSONObject();
-				ReportOutputColumn outputColumnPlanned = iterator.next();
-				// it is 'Project Title' or 'Activity Id' column, we don't
-				// process them now
-				if (outputColumnPlanned.parentColumn == null) {
-					continue;
-				}
-				ReportOutputColumn outputColumnActual = iterator.next();
-				if (outputColumnPlanned.parentColumn.columnName.equals("totals")) {
-					amountObj.put("planned", //outputColumnPlanned.columnName,
-							report.reportContents.getContents().get(outputColumnPlanned).value);
-					amountObj.put("actual", //outputColumnActual.columnName,
-							report.reportContents.getContents().get(outputColumnActual).value);
-					retlist.put(outputColumnPlanned.parentColumn.columnName, amountObj);
-				} else {
-					amountObj.put("planned", //outputColumnPlanned.columnName,
-							report.reportContents.getContents().get(outputColumnPlanned).value);
-					amountObj.put("actual", //outputColumnActual.columnName,
-							report.reportContents.getContents().get(outputColumnActual).value);
-					amountObj.put("year", outputColumnPlanned.parentColumn.columnName);
-					array.add(amountObj);
-				}
+		GeneratedReport report = generator.executeReport(spec);
+		Map<Integer, JSONObject> results = new TreeMap<>(); // accumulator of per-year results
+				
+		for (ReportOutputColumn outputColumn:report.reportContents.getContents().keySet()) {
+			// ignore non-funding contents
+			if (outputColumn.parentColumn == null) {
+				continue;
 			}
-			retlist.put("years", array);
+				
+			boolean isPlannedColumn = outputColumn.originalColumnName.equals(MoConstants.PLANNED_DISBURSEMENTS);
+			boolean isTotalColumn = outputColumn.parentColumn != null && outputColumn.parentColumn.originalColumnName.equals("Total Measures");
+			String destination = isPlannedColumn ? "planned" : "actual";
+			
+			int yearNr = isTotalColumn ? 0 : Integer.parseInt(outputColumn.parentColumn.columnName);
+			if (!results.containsKey(yearNr))
+				results.put(yearNr, buildEmptyJSon("planned", "actual"));
+			JSONObject amountObj = results.get(yearNr);
 
-		} else {
-			retlist.put("total", 0);  // Is this behaviour specified anywhere? When could this happen? --phil
+			amountObj.put(destination, report.reportContents.getContents().get(outputColumn).value);
 		}
+		JSONArray yearsArray = new JSONArray ();
+		for(int yearNr:results.keySet())
+			if (yearNr > 0) {
+				results.get(yearNr).put("year", Integer.toString(yearNr));
+				yearsArray.add(results.get(yearNr));
+			}
+		retlist.put("years", yearsArray);
+		retlist.put("totals", results.get(0));		
 	
 		String currcode = EndpointUtils.getDefaultCurrencyCode();
 		retlist.put("currency", currcode);

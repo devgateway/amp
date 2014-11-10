@@ -281,7 +281,7 @@ public class Reports {
 
 		MondrianReportFilters filterRules = null;
 		LinkedHashMap<String, Object> queryModel = (LinkedHashMap<String, Object>) queryObject.get("queryModel");
-		if(queryModel.containsKey("filterApplied") && "true".equals(queryModel.get("filtersApplied"))) {
+		if(queryModel.containsKey("filtersApplied") && (Boolean)queryModel.get("filtersApplied")) {
 			LinkedHashMap<String, Object> filters = (LinkedHashMap<String, Object>) queryModel.get("filters");
 			filterRules = FilterUtils.getFilterRules((LinkedHashMap<String, Object>)filters.get("columnFilters"), (LinkedHashMap<String, Object>)filters.get("otherFilters"), null);
 		}

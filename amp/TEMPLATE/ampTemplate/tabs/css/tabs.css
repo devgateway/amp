@@ -94,12 +94,13 @@
 }
 
 #dynamic-legends-region {
-	padding: 5px;
+	padding: 1px;
 	text-align: right;
 }
 
 .legends-container {
 	float: right;
+	padding-bottom: 3px;
 }
 
 .wrap-cell {

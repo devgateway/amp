@@ -244,10 +244,20 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 				"en",
 				Arrays.asList("date-filters-activity", "crazy funding 1"),
 				cor);
+		
+		runMondrianTestCase(
+				buildSpecification("AMP-18541-columns-not-ordered", 
+						Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION), 
+						Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+						Arrays.asList(ColumnConstants.REGION), 
+						GroupingCriteria.GROUPING_YEARLY),
+				"en",
+				Arrays.asList("date-filters-activity", "crazy funding 1"),
+				cor);
 	}
 	
 	@Test
-	public void test_AMP_18542_should_fail_for_now() {
+	public void test_AMP_18542() {
 		// report with "Region" as a column, an activity without locations + one with locations
 		ReportAreaForTests cor = new ReportAreaForTests()
 	    .withContents("Region", "Report Totals", "Project Title", "", "2009-Actual Commitments", "100 000", "2010-Actual Disbursements", "60 000", "2012-Actual Commitments", "25 000", "2012-Actual Disbursements", "12 000", "2013-Actual Commitments", "333 333", "Total Measures-Actual Commitments", "458 333", "Total Measures-Actual Disbursements", "72 000")

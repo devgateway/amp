@@ -126,9 +126,32 @@ public class MondrianReportGenerator implements ReportExecutor {
 		this (reportAreaType, environment, false);
 	}
 	
+	/**
+	 * 1. checks that every column specified in "hierarchies" is also present in "columns"
+	 * 2. brings the columns specified as hierarchies to front
+	 * 
+	 * Somehow hacky, but faster to code than redoing the whole rest of the code to support input in any order. Sorry, Nadia :=)  
+	 */
+	protected void reorderColumnsByHierarchies(ReportSpecification spec) {
+		if (spec.getHierarchies() == null) return; // nothing to do
+		LinkedHashSet<ReportColumn> newCols = new LinkedHashSet<>();
+		for(ReportColumn hier:spec.getHierarchies()) {
+			if (!spec.getColumns().contains(hier))
+				throw new RuntimeException("column specified as hierarchy, but not as column: " + hier);
+			newCols.add(hier);
+		}
+		for(ReportColumn col:spec.getColumns()) {
+			if (!newCols.contains(col))
+				newCols.add(col);
+		}
+		spec.getColumns().clear();
+		spec.getColumns().addAll(newCols);
+	}
+	
 	@Override
 	public GeneratedReport executeReport(ReportSpecification spec) throws AMPException {
 		try {
+			reorderColumnsByHierarchies(spec);
 			CellDataSetToGeneratedReport.counts.clear();
 			stats = new ReportGenerationStats();
 			CellDataSet cellDataSet = generateReportAsSaikuCellDataSet(spec);
@@ -186,6 +209,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 */
 	private CellDataSet generateReportAsSaikuCellDataSet(final ReportSpecification spec) throws AMPException {
 		init(spec);
+		reorderColumnsByHierarchies(spec);
 		AmpMondrianSchemaProcessor.registerReport(spec, environment);
 		CellDataSet cellDataSet = null;
 		ValueWrapper<Boolean> forcedOut = new ValueWrapper<Boolean>(false);
@@ -287,17 +311,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//if we have more columns than hierarchies, then add the dummy hierarchy to group non-hierarchical columns by it
 		if (spec.getHierarchies().size() < spec.getColumns().size()) {
 			ReportColumn internalId = MondrianReportUtils.getColumn(ColumnConstants.INTERNAL_USE_ID, ReportEntityType.ENTITY_TYPE_ALL);
-			Set<ReportColumn> newColumns = new LinkedHashSet<ReportColumn>(spec.getColumns().size() + 1);
-			int pos = spec.getHierarchies().size();
-			for(Iterator<ReportColumn> iter = spec.getColumns().iterator(); iter.hasNext(); pos--) {
-				//check if we skiped all hierarchies 
-				if (pos == 0)
-					newColumns.add(internalId);
-				else 
-					newColumns.add(iter.next());
-			}
-			spec.getColumns().clear();
-			spec.getColumns().addAll(newColumns);
+			spec.getColumns().add(internalId);
 			spec.getHierarchies().add(internalId);
 		}
 	}

@@ -461,7 +461,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	}
 	
 	private CellDataSet postProcess(ReportSpecification spec, CellSet cellSet) throws AMPException {
-		CellSetAxis rowAxis = cellSet.getAxes().get(Axis.ROWS.axisOrdinal());
+		CellSetAxis rowAxis = cellSet.getAxes().size() == 2 ? cellSet.getAxes().get(Axis.ROWS.axisOrdinal()) : null;
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 				
 		logger.info("[" + spec.getReportName() + "]" +  "Starting conversion from Olap4J CellSet to Saiku CellDataSet via Saiku method...");
@@ -729,7 +729,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		List<ReportOutputColumn> reportColumns = new ArrayList<ReportOutputColumn>(); //leaf report columns list
 
 		//build the list of available columns
-		if (rowAxis.getPositionCount() > 0 ) {
+		if (rowAxis != null && rowAxis.getPositionCount() > 0 ) {
 			for (Member textColumn : rowAxis.getPositions().get(0).getMembers()) {
 				ReportOutputColumn reportColumn = new ReportOutputColumn(textColumn.getLevel().getCaption(), null, 
 						MondrianMapping.fromFullNameToColumnName.get(textColumn.getLevel().getUniqueName()));

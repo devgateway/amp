@@ -202,7 +202,10 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	}
 	
 	protected AmpCurrency getReportCurrency() {
-		AmpCurrency res = CurrencyUtil.getCurrencyByCode(currentReport.get().getSettings().getCurrencyCode());
+		String currencyCode = currentReport.get().getSettings().getCurrencyCode();
+		if (currencyCode == null)
+			currencyCode = currentEnvironment.get().defaultCurrencyCode;
+		AmpCurrency res = CurrencyUtil.getCurrencyByCode(currencyCode);
 		return res;
 	}
 	
@@ -229,9 +232,8 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	private void initDefault() {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("default");
 		MondrianReportSettings settings = new MondrianReportSettings();
-		settings.setCurrencyCode("EUR");
 		spec.setSettings(settings);
-		registerReport(spec, new ReportEnvironment("en", new CompleteWorkspaceFilter(null, null)));
+		registerReport(spec, new ReportEnvironment("en", new CompleteWorkspaceFilter(null, null), "EUR"));
 	}
 
 }

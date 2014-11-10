@@ -16,14 +16,20 @@ import org.digijava.module.aim.helper.TeamMember;
 public class ReportEnvironment {
 	
 	public final String locale;
-	public IdsGeneratorSource workspaceFilter;
+	public final IdsGeneratorSource workspaceFilter;
+	
+	/**
+	 * the currency code used for rendering the report IFF the report specification does not specify any
+	 */
+	public final String defaultCurrencyCode;
 	
 //	public final TeamMember viewer;
 //	public final IdsGeneratorSource workspaceFilter;
 	
-	public ReportEnvironment(String locale, IdsGeneratorSource workspaceFilter) {
+	public ReportEnvironment(String locale, IdsGeneratorSource workspaceFilter, String defaultCurrencyCode) {
 		this.locale = locale;
 		this.workspaceFilter = workspaceFilter;
+		this.defaultCurrencyCode = defaultCurrencyCode;
 	}
 	
 	public static ReportEnvironment buildFor(HttpServletRequest request) {
@@ -33,6 +39,7 @@ public class ReportEnvironment {
 				new CompleteWorkspaceFilter(
 						(TeamMember) request.getSession().getAttribute("currentMember"),
 						(AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER)
-						));
+						),
+				AmpARFilter.getDefaultCurrency().getCurrencyCode());
 	}	
 }

@@ -25,6 +25,8 @@ import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 
 public abstract class MondrianReportsTestCase extends AmpTestCase
@@ -61,7 +63,7 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 	
 	protected GeneratedReport runReportOn(ReportSpecification spec, String locale, List<String> activities) {
 		try {
-			ReportEnvironment env = new ReportEnvironment(locale, new ActivityIdsFetcher(activities));
+			ReportEnvironment env = new ReportEnvironment(locale, new ActivityIdsFetcher(activities), FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY));
 			MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, env);
 			GeneratedReport res = generator.executeReport(spec);
 			return res;

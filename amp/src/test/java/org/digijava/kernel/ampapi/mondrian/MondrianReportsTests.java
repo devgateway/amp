@@ -42,6 +42,8 @@ import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -265,7 +267,10 @@ public class MondrianReportsTests extends AmpTestCase {
 	
 	private GeneratedReport generateAndValidate(ReportSpecification spec, boolean print, boolean asSaikuReport) {
 		String err = null;
-		MondrianReportGenerator generator = new MondrianReportGenerator(asSaikuReport ? SaikuReportArea.class : ReportAreaImpl.class, new ReportEnvironment("en", new CompleteWorkspaceFilter(null, null)), print);
+		MondrianReportGenerator generator = new MondrianReportGenerator(
+				asSaikuReport ? SaikuReportArea.class : ReportAreaImpl.class, 
+				new ReportEnvironment("en", new CompleteWorkspaceFilter(null, null), FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY)), 
+				print);
 		GeneratedReport report = null;
 		try {
 			report = generator.executeReport(spec);

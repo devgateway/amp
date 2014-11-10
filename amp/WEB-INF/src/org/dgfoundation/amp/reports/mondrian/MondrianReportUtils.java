@@ -108,10 +108,8 @@ public class MondrianReportUtils {
 		settings.setCurrencyFormat(FormatHelper.getDefaultFormat());
 		AmpApplicationSettings ampAppSettings = AmpARFilter.getEffectiveSettings();
 		if (ampAppSettings == null) {
-			settings.setCurrencyCode(CurrencyUtil.getDefaultCurrency().getCurrencyCode());
 			settings.setCalendar(DbUtil.getAmpFiscalCalendar(DbUtil.getBaseFiscalCalendar()));
 		} else { 
-			settings.setCurrencyCode(ampAppSettings.getCurrency().getCurrencyCode());
 			settings.setCalendar(ampAppSettings.getFiscalCalendar());
 		}
 		return settings;

@@ -24,10 +24,10 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	@Test
 	public void testProjectTitleLanguages() {
 		ReportAreaForTests correctReport = new ReportAreaForTests()
-	    .withContents("Project Title", "Report Totals", "Actual Commitments", "7 181 333", "Actual Disbursements", "1 665 111")
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "7 181 333", "Actual Disbursements", "1 550 111")
 	    .withChildren(
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "Eth Water", "Actual Commitments", "0", "Actual Disbursements", "660 000"),
+	          .withContents("Project Title", "Eth Water", "Actual Commitments", "0", "Actual Disbursements", "545 000"),
 	      new ReportAreaForTests()
 	          .withContents("Project Title", "SSC Project 1", "Actual Commitments", "111 333", "Actual Disbursements", "555 111"),
 	      new ReportAreaForTests()
@@ -43,10 +43,10 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 						correctReport); 
 				
 		ReportAreaForTests correctReportRu = new ReportAreaForTests()
-	    .withContents("Project Title", "Report Totals", "Actual Commitments", "7 181 333", "Actual Disbursements", "1 665 111")
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "7 181 333", "Actual Disbursements", "1 550 111")
 	    .withChildren(
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "Вода Eth", "Actual Commitments", "0", "Actual Disbursements", "660 000"),
+	          .withContents("Project Title", "Вода Eth", "Actual Commitments", "0", "Actual Disbursements", "545 000"),
 	      new ReportAreaForTests()
 	          .withContents("Project Title", "Проект КЮЮ 1", "Actual Commitments", "111 333", "Actual Disbursements", "555 111"),
 	      new ReportAreaForTests()
@@ -70,14 +70,14 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 		// for running manually: open http://localhost:8080/TEMPLATE/ampTemplate/saikuui/index.html#report/open/32 on the AMP 2.10 testcases database
 		
 		ReportAreaForTests cor = new ReportAreaForTests()
-	    .withContents("Project Title", "Report Totals", "Donor Group", "", "Actual Commitments", "999 888", "Actual Disbursements", "1 301 323")
+	    .withContents("Project Title", "Report Totals", "Donor Group", "", "Actual Commitments", "999 888", "Actual Disbursements", "1 141 990")
 	    .withChildren(
 	      new ReportAreaForTests()
 	          .withContents("Project Title", "TAC_activity_2", "Donor Group", "American", "Actual Commitments", "999 888", "Actual Disbursements", "453 213"),
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "Test MTEF directed", "Donor Group", "American, National", "Actual Commitments", "0", "Actual Disbursements", "188 110"),
+	          .withContents("Project Title", "Test MTEF directed", "Donor Group", "National", "Actual Commitments", "0", "Actual Disbursements", "143 777"),
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "Eth Water", "Donor Group", "American, Default Group, European, International, National", "Actual Commitments", "0", "Actual Disbursements", "660 000"));
+	          .withContents("Project Title", "Eth Water", "Donor Group", "American, Default Group, European", "Actual Commitments", "0", "Actual Disbursements", "545 000"));
 
 		runMondrianTestCase(
 				buildSpecification("AMP-18497", 

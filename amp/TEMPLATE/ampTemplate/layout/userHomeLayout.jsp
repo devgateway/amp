@@ -195,16 +195,20 @@ function defer(method) {
 }
 
 var attachClosePanelEvent = function() {
+	var originalWidth = $("#maintd #tabs-body-section .dynamic-content-table").width();
+	console.log(originalWidth);
 	$("#closepanel").click(function(){
 		$('#rightpanel').toggle('slow', function() {
 			if($("#closepanel").attr("src") == 'img_2/close_panel_notxt.gif') {
 	    		$("#closepanel").attr('src','img_2/open_panel_notxt.gif');
+	    		app.TabsApp.resizePanel(originalWidth, true);
 	    		return false;    
 	 	    }
 			if($("#closepanel").attr("src") == 'img_2/open_panel_notxt.gif') {
 				$("#closepanel").attr('src','img_2/close_panel_notxt.gif');
+				app.TabsApp.resizePanel(originalWidth, false);
 				return false;    
-	 	    }
+	 	    }			
 		});
     });
 };

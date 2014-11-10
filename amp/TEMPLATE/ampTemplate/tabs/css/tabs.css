@@ -10,6 +10,10 @@
 	word-wrap: break-word;
 }
 
+.full-width {
+	width: 100%;
+}
+
 .red {
 	color: #FF0000;
 }

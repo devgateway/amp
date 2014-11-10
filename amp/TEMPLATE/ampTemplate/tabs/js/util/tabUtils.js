@@ -1,4 +1,4 @@
-define([ 'jquery', 'jqueryui' ], function(jQuery) {
+define([ 'jquery', 'jqueryui', 'jqgrid' ], function(jQuery) {
 
 	"use strict";
 
@@ -63,6 +63,28 @@ define([ 'jquery', 'jqueryui' ], function(jQuery) {
 				item.set('shortName', name);
 			}
 		});
+	};
+
+	/**
+	 * Resize the grid when the container grows/shrinks.
+	 * 
+	 * @param id
+	 * @param originalWidth
+	 * @param grow
+	 */
+	TabUtils.resizePanel = function(id, originalWidth, grow) {
+		try {
+			var newWidth = 0;
+			if (grow) {
+				newWidth = jQuery("#tabs-" + id).width();
+			} else {
+				newWidth = originalWidth;
+			}
+			console.log(newWidth);
+			jQuery("#tab_grid_" + id).jqGrid().setGridWidth(newWidth, true);
+		} catch (err) {
+			console.error(err);
+		}
 	};
 
 	TabUtils.prototype = {

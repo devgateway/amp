@@ -39,7 +39,7 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 		return val.get('visible') == false;
 	})) {
 		hasMoreTabs = true;
-	}	
+	}
 	if (hasMoreTabs) {
 		var moreTabsTab = new Tab({
 			id : -1,
@@ -108,6 +108,11 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 	if (hasMoreTabs) {
 		TabUtils.hideInvisibleTabs(tabsCollection.models);
 	}
+
+	// Define public function to resize the tab panel.
+	app.TabsApp.resizePanel = function(originalWidth, grow) {
+		TabUtils.resizePanel(app.TabsApp.currentId, originalWidth, grow);
+	};
 
 	app.TabsApp.start();
 

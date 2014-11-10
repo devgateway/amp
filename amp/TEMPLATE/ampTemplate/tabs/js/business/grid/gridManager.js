@@ -168,6 +168,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 							TranslationManager.searchAndTranslate();
 						}
 					});
+			app.TabsApp.currentGrid = jQuery(grid);
 		});
 	};
 

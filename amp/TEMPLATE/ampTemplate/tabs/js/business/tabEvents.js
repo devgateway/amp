@@ -145,9 +145,11 @@ define([ 'marionette', 'collections/contents', 'models/content', 'models/legend'
 		onActivateTab : function(event, ui) {
 			console.log('activate tab');
 
-			// This tab is refreshed so we reset the filter widget status.
+			// Restart app variables defined for the active tab.
 			app.TabsApp.serializedFilters = null;
 			app.TabsApp.appliedSettings = null;
+			app.TabsApp.currentGrid = null;
+			app.TabsApp.currentId = null;
 
 			// TODO: move this logic elsewhere.
 			var panel = null;

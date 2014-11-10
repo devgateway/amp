@@ -266,7 +266,7 @@
 			
 			<Hierarchy hasAll="true" allMemberName="All Proposed Start Date" primaryKey="amp_activity_id" name="Proposed Start Date">
 				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Proposed Start Date" column="proposed_start_date_code" type="Date" nameColumn="proposed_start_date" />
+				<Level name="Proposed Start Date" column="proposed_start_date_code" type="Integer" nameColumn="proposed_start_date" />
 			</Hierarchy>
 			
 			<Hierarchy hasAll="true" allMemberName="All Actual Start Date" primaryKey="amp_activity_id" name="Actual Start Date">

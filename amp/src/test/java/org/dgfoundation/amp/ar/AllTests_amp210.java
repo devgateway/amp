@@ -2,6 +2,7 @@ package org.dgfoundation.amp.ar;
 
 //import org.dgfoundation.amp.testutils.LiberiaFiller;
 import org.dgfoundation.amp.ar.amp210.BasicMondrianReportTests;
+import org.dgfoundation.amp.ar.amp210.DateColumnsMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.ETLTests;
 import org.dgfoundation.amp.ar.amp210.SQLUtilsTests;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
@@ -35,6 +36,7 @@ public class AllTests_amp210
 		suite.addTest(new JUnit4TestAdapter(ETLTests.class));
 		suite.addTest(SQLUtilsTests.suite());
 		suite.addTest(new JUnit4TestAdapter(BasicMondrianReportTests.class));
+		suite.addTest(new JUnit4TestAdapter(DateColumnsMondrianReportTests.class));
 		//$JUnit-BEGIN$
 
 		//$JUnit-END$

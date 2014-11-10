@@ -20,7 +20,7 @@
 }
 
 .blue_widget {
-	background: #EBEBEB !important;
+	background: #EBEBEB;
 }
 
 .round-filter {
@@ -134,6 +134,10 @@
 }
 
 /* Overriding jqGrid section */
+.jqgrid-loading-img {
+	padding-right: 2px;
+}
+
 .ui-jqgrid-view {
 	font-family: Open Sans;
 }

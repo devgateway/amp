@@ -150,7 +150,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									var id = row.cells[1].textContent;
 									jQuery(row.cells[0]).html(
 											"<a href='/wicket/onepager/activity/" + id
-													+ "'><img src='/TEMPLATE/ampTemplate/img_2/ico_edit.gif'/></a>");
+													+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/ico_edit.gif'/></a>");
 
 									// Create link to preview activity on first
 									// not grouped column.

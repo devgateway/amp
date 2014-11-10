@@ -83,7 +83,7 @@ implements AmpRequiredComponentContainer{
 			final AmpTextAreaFieldPanel title = new AmpTextAreaFieldPanel("title", m, "Project Title", false, false, false, true);
 
 			title.getTextAreaContainer().add(new StringRequiredValidator());
-			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am,"ampActivityGroup")));			
+			title.getTextAreaContainer().add(new AmpUniqueActivityTitleValidator(new PropertyModel<AmpActivityGroup>(am, "ampActivityGroup")));
 			title.getTextAreaContainer().add(StringValidator.maximumLength(255));
 			title.getTextAreaContainer().add(new AttributeModifier("style", "width: 710px; margin: 0px;"));
 			title.getTextAreaContainer().setRequired(true);
@@ -110,6 +110,7 @@ implements AmpRequiredComponentContainer{
 							// switching to other language.
 							// title.getTextAreaContainer().checkRequired()
 							// title.getTextAreaContainer().valid()
+             //               titleSimilarityWarning.getWarning().modelChanged();
 
 							TranslationDecorator titleDecorator = (TranslationDecorator) title
 									.get("trnContainer");
@@ -124,12 +125,13 @@ implements AmpRequiredComponentContainer{
 		}
 			title.getTextAreaContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
 			
-				
+
 				@Override
 				protected void onUpdate(AjaxRequestTarget target) {		
-					if(!titleSimilarityWarning.isVisible()) return;
+					//if(!titleSimilarityWarning.isVisible()) return;
 					titleSimilarityWarning.getWarning().modelChanged();
-					target.add(titleSimilarityWarning);					
+					//target.add(titleSimilarityWarning);
+                    target.add(titleSimilarityWarning.getWarning());
 				}
 				
 			});
@@ -145,11 +147,19 @@ implements AmpRequiredComponentContainer{
 					return null;
 
                 String sTitle = title.getTextAreaContainer().getModelObject();
+
+                String langCode = null;
+                if (ContentTranslationUtil.multilingualIsEnabled() && title.get("trnContainer") != null) {
+                    langCode = ((TranslationDecorator) title.get("trnContainer")).getLangModel().getObject();
+                }
+
                 ServletContext context = ((WebApplication) Application.get())
                         .getServletContext();
 
+                // change this NULL to langCode in 2.10
+                // for now it works equally for both multilingual and non-multilingual activities
                 List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(
-                        context.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, sTitle, 2);
+                        context.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, sTitle, /*langCode*/null, 2);
                 if (! list.isEmpty()) {
                     String ret = TranslatorUtil
                             .getTranslation("Warning! Potential duplicates! The database already contains project(s) with similar title(s):")+"\n";
@@ -184,8 +194,11 @@ implements AmpRequiredComponentContainer{
             }
         };
 			
-			titleSimilarityWarning=new AmpWarningComponentPanel<String>("titleSimilarityWarning", "Project Title Similarity Warning", warningModel);
-			titleSimilarityWarning.setOutputMarkupId(true);
+			titleSimilarityWarning = new AmpWarningComponentPanel<String>("titleSimilarityWarning", "Project Title Similarity Warning", warningModel);
+			//titleSimilarityWarning.setOutputMarkupId(true);
+            titleSimilarityWarning.getWarning().setOutputMarkupId(true);
+            titleSimilarityWarning.getWarning().setVisible(true);
+            titleSimilarityWarning.setVisible(true);
 			add(titleSimilarityWarning);
 			
 			 AmpCategorySelectFieldPanel status = new AmpCategorySelectFieldPanel(

@@ -839,52 +839,66 @@ public class LuceneUtil implements Serializable {
 			
 			doc.add(new Field("all", all, Field.Store.NO, Field.Index.ANALYZED));
 			return doc;
-		}    
-    
-    
+		}
+
+
     /**
-		 * Add an activity to the index
-		 * 
-		 * @param request is used to retrieve curent site and navigation language
-		 * @param act the activity that will be added
-		 */
-	    public static Document activity2Document(String actId, String projectId, String title, String description,
-				String objective, String purpose, String results, String numcont, String contractingArr, ArrayList<String> componentcodes,
-				String CRIS, String budgetNumber, String newBudgetNumber) {
-			Document doc = new Document();
-			String all = new String("");
-			if (actId != null){
-				doc.add(new Field(ID_FIELD, actId, Field.Store.YES, Field.Index.UN_TOKENIZED));
-				//all = all.concat(" " + actId);
-			}		
-	
-	        HashMap<String, String> regularFieldNames = new HashMap<String, String>();
-	        regularFieldNames.put("ampId", projectId);
-	        regularFieldNames.put("name", title);
-	
-	        Long id = Long.valueOf(actId);
-	
-	        for (String field: regularFieldNames.keySet())
-	        {
-	            String luceneValue = buildLuceneValueForField(id, field);
-	            if (luceneValue == null)
-	            	luceneValue = regularFieldNames.get(field);
-	
-	         // Added try/catch because Field can throw an exception if any of the parameters is wrong and that would break the process. 
-	            try {
-		            if ("name".equals(field)){
-		                doc.add(new Field(field, luceneValue, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
-		            } else {
-		                doc.add(new Field(field, luceneValue, Field.Store.NO, Field.Index.ANALYZED));
-		            }
-	            } catch (Exception e) {
-	            	logger.error("Error reindexing document - field:" + field + " - value:" + luceneValue);
-	            	logger.error(e);
-	            }
-	            all = all.concat(" " + luceneValue);
-	        }
-	
-	/*
+     * Add an activity to the index
+     *
+     * @param request is used to retrieve curent site and navigation language
+     * @param act the activity that will be added
+     */
+    public static Document activity2Document(String actId, String projectId, String title, String description,
+                                             String objective, String purpose, String results, String numcont, String contractingArr, ArrayList<String> componentcodes,
+                                             String CRIS, String budgetNumber, String newBudgetNumber) {
+        Document doc = new Document();
+        String all = "";
+        if (actId != null){
+            doc.add(new Field(ID_FIELD, actId, Field.Store.YES, Field.Index.UN_TOKENIZED));
+            //all = all.concat(" " + actId);
+        }
+
+        HashMap<String, String> regularFieldNames = new HashMap<String, String>();
+        regularFieldNames.put("ampId", projectId);
+        regularFieldNames.put("name", title);
+
+        Long id = Long.valueOf(actId);
+        // List<String> languages = TranslatorUtil.getLocaleCache(SiteUtils.getDefaultSite());
+
+        for (String field: regularFieldNames.keySet()) {
+
+            List<AmpContentTranslation> valueTranslationsList = ContentTranslationUtil.loadFieldTranslations(activityClassName, id, field);
+            // uncomment and remove 'false' in 2.10
+            // for now it works equally for both multilingual and non-multilingual activities
+            if (/*! valueTranslationsList.isEmpty()*/ false) {
+                for (AmpContentTranslation translation : valueTranslationsList) {
+                    // Added try/catch because Field can throw an exception if any of the parameters is wrong and that would break the process.
+                    try {
+                        if ("name".equals(field)){
+                            doc.add(new Field(field + "_" + translation.getLocale(),
+                                    translation.getTranslation(),
+                                    Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
+                        } else {
+                            doc.add(new Field(field + "_" + translation.getLocale(),
+                                    translation.getTranslation(),
+                                    Field.Store.NO, Field.Index.ANALYZED));
+                        }
+                    } catch (Exception e) {
+                        logger.error("Error reindexing document - field:" + field +
+                                " - value:" + translation.getTranslation() + " locale:" + translation.getLocale());
+                        logger.error(e);
+                    }
+                    all = all.concat(" " + translation.getTranslation());
+                }
+            } else {
+                // no translations in the DB: this is an old untranslated entity
+                doc.add(new Field(field,
+                        regularFieldNames.get(field),
+                        Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
+            }
+        }
+
+	        /*
 	        if (projectId != null){
 				doc.add(new Field("projectId", projectId, Field.Store.NO, Field.Index.ANALYZED));
 				all = all.concat(" " + projectId);
@@ -893,70 +907,68 @@ public class LuceneUtil implements Serializable {
 				doc.add(new Field("title", title, Field.Store.YES, Field.Index.ANALYZED,Field.TermVector.YES));
 				all = all.concat(" " + title);
 			}*/
-			if (description != null && description.length()>0){
-				doc.add(new Field("description", description, Field.Store.NO, Field.Index.ANALYZED));
-				all = all.concat(" " + description);
-			}
-			if (objective != null && objective.length()>0){
-				doc.add(new Field("objective", objective, Field.Store.NO, Field.Index.ANALYZED));
-				all = all.concat(" " + objective);
-			}
-			if (purpose != null && purpose.length()>0){
-				doc.add(new Field("purpose", purpose, Field.Store.NO, Field.Index.ANALYZED));
-				all = all.concat(" " + purpose);
-			}
-			if (results != null && results.length()>0){
-				doc.add(new Field("results", results, Field.Store.NO, Field.Index.ANALYZED));
-				all = all.concat(" " + results);
-			}
-			
-			//
-			if (numcont != null && numcont.length()>0){
-				doc.add(new Field("numcont", numcont, Field.Store.NO, Field.Index.ANALYZED));
-				all = all.concat(" " + numcont);
-			}
-			
-			if (CRIS != null && CRIS.length() > 0) {
-				doc.add(new Field("CRIS", CRIS, Field.Store.NO, Field.Index.ANALYZED));
-				all = all.concat(" " + CRIS);
-			}
-			if (budgetNumber != null && budgetNumber.length() > 0) {
-				doc.add(new Field("budgetNumber", budgetNumber, Field.Store.NO, Field.Index.ANALYZED));
-				all = all.concat(" " + budgetNumber);
-			}
-			if (newBudgetNumber != null && newBudgetNumber.length() > 0 ) {
-				doc.add(new Field("newBudgetNumber", newBudgetNumber, Field.Store.NO, Field.Index.ANALYZED));
-				all = all.concat(" " + newBudgetNumber);
-			}
-			
-	//		if (contractingArr != null && contractingArr.length() > 0 ) {
-	//			doc.add(new Field("contractingArr", contractingArr, Field.Store.NO, Field.Index.ANALYZED));
-	//			all = all.concat(" " + contractingArr);
-	//			
-	//		}
-			
-			int i =0;
-			if (componentcodes != null && componentcodes.size()>0){
-					
-	        		for (String value : componentcodes) {
-	        			if (value!=null){
-	        			doc.add(new Field("componentcode_"+String.valueOf(i), value, Field.Store.NO, Field.Index.ANALYZED));
-	        			all = all.concat(" " + value);
-	        			}
-	        			i++;
-	        		}
-				
-			
-			}
-			
-			if (all.length() == 0)
-				return null;
-			
-			doc.add(new Field("all", all, Field.Store.NO, Field.Index.ANALYZED));
-			return doc;
-		}
 
-		public static void addUpdatePledge(String rootRealPath, boolean update, AmpPledgeFake newfakePledge){
+        if (description != null && description.length() > 0) {
+            doc.add(new Field("description", description, Field.Store.NO, Field.Index.ANALYZED));
+            all = all.concat(" " + description);
+        }
+        if (objective != null && objective.length() > 0) {
+            doc.add(new Field("objective", objective, Field.Store.NO, Field.Index.ANALYZED));
+            all = all.concat(" " + objective);
+        }
+        if (purpose != null && purpose.length() > 0) {
+            doc.add(new Field("purpose", purpose, Field.Store.NO, Field.Index.ANALYZED));
+            all = all.concat(" " + purpose);
+        }
+        if (results != null && results.length() > 0) {
+            doc.add(new Field("results", results, Field.Store.NO, Field.Index.ANALYZED));
+            all = all.concat(" " + results);
+        }
+
+        //
+        if (numcont != null && numcont.length() > 0) {
+            doc.add(new Field("numcont", numcont, Field.Store.NO, Field.Index.ANALYZED));
+            all = all.concat(" " + numcont);
+        }
+
+        if (CRIS != null && CRIS.length() > 0) {
+            doc.add(new Field("CRIS", CRIS, Field.Store.NO, Field.Index.ANALYZED));
+            all = all.concat(" " + CRIS);
+        }
+        if (budgetNumber != null && budgetNumber.length() > 0) {
+            doc.add(new Field("budgetNumber", budgetNumber, Field.Store.NO, Field.Index.ANALYZED));
+            all = all.concat(" " + budgetNumber);
+        }
+        if (newBudgetNumber != null && newBudgetNumber.length() > 0 ) {
+            doc.add(new Field("newBudgetNumber", newBudgetNumber, Field.Store.NO, Field.Index.ANALYZED));
+            all = all.concat(" " + newBudgetNumber);
+        }
+
+        //		if (contractingArr != null && contractingArr.length() > 0 ) {
+        //			doc.add(new Field("contractingArr", contractingArr, Field.Store.NO, Field.Index.ANALYZED));
+        //			all = all.concat(" " + contractingArr);
+        //
+        //		}
+
+        int i = 0;
+        if (componentcodes != null && componentcodes.size() > 0) {
+            for (String value : componentcodes) {
+                if (value!=null){
+                    doc.add(new Field("componentcode_"+String.valueOf(i), value, Field.Store.NO, Field.Index.ANALYZED));
+                    all = all.concat(" " + value);
+                }
+                i++;
+            }
+        }
+
+        if (all.length() == 0)
+            return null;
+
+        doc.add(new Field("all", all, Field.Store.NO, Field.Index.ANALYZED));
+        return doc;
+    }
+
+    public static void addUpdatePledge(String rootRealPath, boolean update, AmpPledgeFake newfakePledge){
 	    	logger.info("Updating activity!");
 			try {
 				
@@ -1077,31 +1089,35 @@ public class LuceneUtil implements Serializable {
     public static Hits search(String index, String field, String searchString, String searchMode){
     	return LuceneUtil.search(index, field, searchString, MAX_LUCENE_RESULTS, true, searchMode);
     }
-    
 
-	/**
-	 * Searches for similar {@link AmpActivityVersion}S based on title
-	 * similarity<br/> 
-	 * The settings are tuned for short text strings (the title), so
-	 * if you adapt this to search on fields like
-	 * {@link AmpActivityFields#getDescription()} make sure to tune
-	 * {@link MoreLikeThis#setMinDocFreq(int)} and
-	 * {@link MoreLikeThis#setMinTermFreq(int)}
-	 * 
-	 * @param index
-	 *            the {@link LuceneUtil}{@link #ACTVITY_INDEX_DIRECTORY}
-	 * @param origSearchString
-	 *            the text searched as {@link AmpActivityFields#getName()} which in
-	 *            {@link LuceneUtil#activity2Document(String, String, String, String, String, String, String, String, String, ArrayList, String, String)}
-	 *            is indexed as "title"
-	 * @param maxLuceneResults
-	 *            the maximum number of results returned
-	 * @see MoreLikeThis
-	 * @return a list of similar {@link AmpActivityVersion} titles
-	 * 
-	 */
+
+    /**
+     * Searches for similar {@link AmpActivityVersion}S based on title
+     * similarity<br/>
+     * The settings are tuned for short text strings (the title), so
+     * if you adapt this to search on fields like
+     * {@link AmpActivityFields#getDescription()} make sure to tune
+     * {@link MoreLikeThis#setMinDocFreq(int)} and
+     * {@link MoreLikeThis#setMinTermFreq(int)}
+     *
+     * @param index
+     *            the {@link LuceneUtil}{@link #ACTVITY_INDEX_DIRECTORY}
+     * @param origSearchString
+     *            the text searched as {@link AmpActivityFields#getName()} which in
+     *            {@link LuceneUtil#activity2Document(String, String, String, String, String, String, String, String, String, ArrayList, String, String)}
+     *            is indexed as "title"
+     * @param langCode for multilingual activities is the lang code we are looking for
+     *        If activity is NOT multilingual, the language code is not used, even if the default language is not English
+     * @param maxLuceneResults
+     *            the maximum number of results returned
+     * @see MoreLikeThis
+     * @return a list of similar {@link AmpActivityVersion} titles
+     *
+     */
     public static List<AmpActivity> findActivitiesMoreLikeThis(String index,
-                                                               String origSearchString, int maxLuceneResults) {
+                                                               String origSearchString,
+                                                               String langCode,
+                                                               int maxLuceneResults) {
         Searcher indexSearcher = null;
         IndexReader ir = null;
 
@@ -1117,8 +1133,12 @@ public class LuceneUtil implements Serializable {
             mlt.setBoost(true);
             mlt.setMinTermFreq(1);
 
+            String fieldName = "name";
+            if (langCode != null) {
+                fieldName += langCode;
+            }
 
-            mlt.setFieldNames(new String[] { "name" });
+            mlt.setFieldNames(new String[] { fieldName });
             mlt.setAnalyzer(analyzer);
             //System.out.println("mlt.describeparams="+mlt.describeParams());
 
@@ -1145,7 +1165,7 @@ public class LuceneUtil implements Serializable {
                 AmpActivity activityWithIdAndTitle = new AmpActivity();
                 activityWithIdAndTitle.setAmpId(doc.get(ID_FIELD));
                 // Set the title of the activity
-                activityWithIdAndTitle.setName(doc.get("name"));
+                activityWithIdAndTitle.setName(doc.get(fieldName));
                 activityTitles.add(activityWithIdAndTitle);
             }
 
@@ -1171,11 +1191,10 @@ public class LuceneUtil implements Serializable {
                 e.printStackTrace();
             }
         }
-
         return null;
     }
-    
-	public static Hits search(String index, String field, String origSearchString, int maxLuceneResults, boolean retry, String searchMode){
+
+    public static Hits search(String index, String field, String origSearchString, int maxLuceneResults, boolean retry, String searchMode){
 		QueryParser parser = new QueryParser(field, analyzer);
 		if (LuceneUtil.SEARCH_MODE_AND.toString().equals(searchMode) ) 
 			parser.setDefaultOperator(QueryParser.AND_OPERATOR);

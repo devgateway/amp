@@ -207,4 +207,8 @@ public class TranslationDecorator extends Panel {
     public Component getCurrentLabel() {
         return currentLabel;
     }
+
+    public Model<String> getLangModel() {
+        return langModel;
+    }
 }

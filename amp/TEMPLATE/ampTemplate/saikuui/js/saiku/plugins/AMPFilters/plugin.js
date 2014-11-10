@@ -37,7 +37,7 @@ var AMPFilters = Backbone.View.extend({
 				Saiku.events.listenTo(window.currentFilter, 'apply', function(data) {
 					if(data.columnFilters || data.otherFilters) {
 						self.workspace.query.run_query(window.currentFilter.serialize(), null);
-						self.filters_button.removeClass('on');
+						//self.filters_button.removeClass('on');
 					}
 					$('#filters-container').hide();
 				});
@@ -99,6 +99,11 @@ Saiku.events.bind('session:new', function(session) {
 			args.workspace.amp_filters = new AMPFilters({
 				workspace : args.workspace
 			});
+            args.workspace.bind('query:result', function(args) {
+            	args.workspace.toolbar.$el.find(".amp_settings").removeClass("disabled_toolbar");
+            	args.workspace.toolbar.$el.find(".amp_filters").removeClass("disabled_toolbar")
+        	});
+
 		}
 	}
 

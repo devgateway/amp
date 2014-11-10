@@ -190,7 +190,6 @@ var WorkspaceToolbar = Backbone.View.extend({
 
     
     run_query: function(event) {
-    	debugger;
         this.workspace.query.run(true);
     },
     

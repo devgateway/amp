@@ -534,7 +534,7 @@
 		<Measure name="Actual Commitments" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">
-					CASE WHEN mondrian_fact_table.transaction_type=0 AND mondrian_fact_table.adjustment_type=@@actual@@
+					CASE WHEN mondrian_fact_table.transaction_type=0 AND mondrian_fact_table.adjustment_type=@@actual@@ AND src_role='DN'
 					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
 				</SQL>
 			</MeasureExpression>
@@ -542,7 +542,7 @@
 		<Measure name="Actual Disbursements" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic">
-					CASE WHEN mondrian_fact_table.transaction_type=1 AND mondrian_fact_table.adjustment_type=@@actual@@
+					CASE WHEN mondrian_fact_table.transaction_type=1 AND mondrian_fact_table.adjustment_type=@@actual@@ AND src_role='DN'
 					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
 				</SQL>
 			</MeasureExpression>
@@ -550,7 +550,7 @@
 		<Measure name="Actual Expenditures" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic">
-					CASE WHEN mondrian_fact_table.transaction_type=2 AND mondrian_fact_table.adjustment_type=@@actual@@
+					CASE WHEN mondrian_fact_table.transaction_type=2 AND mondrian_fact_table.adjustment_type=@@actual@@ AND src_role='DN'
 					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
 				</SQL>
 			</MeasureExpression>
@@ -558,7 +558,7 @@
 		<Measure name="Planned Commitments" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">
-					CASE WHEN mondrian_fact_table.transaction_type=0 AND mondrian_fact_table.adjustment_type=@@planned@@
+					CASE WHEN mondrian_fact_table.transaction_type=0 AND mondrian_fact_table.adjustment_type=@@planned@@ AND src_role='DN'
 					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
 				</SQL>
 			</MeasureExpression>
@@ -566,7 +566,7 @@
 		<Measure name="Planned Disbursements" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic">
-					CASE WHEN mondrian_fact_table.transaction_type=1 AND mondrian_fact_table.adjustment_type=@@planned@@
+					CASE WHEN mondrian_fact_table.transaction_type=1 AND mondrian_fact_table.adjustment_type=@@planned@@ AND src_role='DN'
 					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
 				</SQL>
 			</MeasureExpression>
@@ -574,7 +574,7 @@
 		<Measure name="Planned Expenditures" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic">
-					CASE WHEN mondrian_fact_table.transaction_type=2 AND mondrian_fact_table.adjustment_type=@@planned@@
+					CASE WHEN mondrian_fact_table.transaction_type=2 AND mondrian_fact_table.adjustment_type=@@planned@@ AND src_role='DN'
 					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
 				</SQL>
 			</MeasureExpression>
@@ -582,7 +582,7 @@
 		<Measure name="MTEF Projections" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic">
-					CASE WHEN mondrian_fact_table.transaction_type=3
+					CASE WHEN mondrian_fact_table.transaction_type=3 AND src_role='DN'
 					THEN "mondrian_fact_table".transaction_exch_@@currency@@ ELSE null END
 				</SQL>
 			</MeasureExpression>

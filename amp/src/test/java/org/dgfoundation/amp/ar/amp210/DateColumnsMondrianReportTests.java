@@ -18,7 +18,7 @@ import org.junit.Test;
 public class DateColumnsMondrianReportTests extends MondrianReportsTestCase {
 	
 	public DateColumnsMondrianReportTests() {
-		super("basic mondrian tests");
+		super("mondrian date columns tests");
 	}
 	
 	@Test

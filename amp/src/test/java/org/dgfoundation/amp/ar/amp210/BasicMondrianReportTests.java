@@ -293,4 +293,23 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 				Arrays.asList("date-filters-activity", "crazy funding 1"),
 				cor);
 	}
+	
+	@Test
+	public void test_AMP_18577_only_count_donor_transactions() {
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Region", "", "2010-Actual Disbursements", "143 777", "Total Measures-Actual Disbursements", "143 777")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "Test MTEF directed", "Region", "Anenii Noi County", "2010-Actual Disbursements", "143 777", "Total Measures-Actual Disbursements", "143 777"));
+		
+		runMondrianTestCase(
+				buildSpecification("AMP_18577_only_count_donor_transaction",
+				Arrays.asList("Project Title", "Region"),
+				Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
+				null,
+				GroupingCriteria.GROUPING_YEARLY),
+			"en",
+			Arrays.asList("Test MTEF directed"),
+			cor
+		);
+	}
 }

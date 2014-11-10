@@ -51,12 +51,15 @@ SELECT  <!-- regular transactions -->
 	(SELECT max(level_code) FROM v_type_of_implementation vtoi WHERE vtoi.amp_activity_id = aa.amp_activity_id) type_of_implementation_id,
 	(SELECT max(id) FROM v_procurement_system vps WHERE vps.amp_activity_id = aa.amp_activity_id) procurement_system_id,
      
-	cast (NULL as bigint) as src_role_id,
-	cast (NULL as bigint) as dest_role_id,
-	cast (NULL as bigint) as dest_org_id
+	src_role.role_code AS src_role,
+	dest_role.role_code AS dest_role,
+	fd.recipient_org_id AS dest_org_id
           
 	FROM amp_activity aa JOIN amp_funding f ON aa.amp_activity_id = f.amp_activity_id
 		JOIN amp_funding_detail fd ON f.amp_funding_id = fd.amp_funding_id
+		LEFT JOIN amp_role src_role ON src_role.amp_role_id = f.source_role_id
+		LEFT JOIN amp_role dest_role ON dest_role.amp_role_id = fd.recipient_role_id
+		
 	WHERE (transaction_date BETWEEN '1970-1-1' AND '2050-1-1')
 UNION ALL
 SELECT <!-- MTEFs -->
@@ -81,12 +84,13 @@ SELECT <!-- MTEFs -->
 	(SELECT max(level_code) FROM v_type_of_implementation vtoi WHERE vtoi.amp_activity_id = aa.amp_activity_id) type_of_implementation_id,
 	(SELECT max(id) FROM v_procurement_system vps WHERE vps.amp_activity_id = aa.amp_activity_id) procurement_system_id,
      
-	cast (NULL as bigint) as src_role_id,
-	cast (NULL as bigint) as dest_role_id,
+	src_role.role_code AS src_role,
+	cast (NULL as text) as dest_role,
 	cast (NULL as bigint) as dest_org_id
           
 	FROM amp_activity aa JOIN amp_funding f ON aa.amp_activity_id = f.amp_activity_id
 		JOIN amp_funding_mtef_projection mf ON f.amp_funding_id = mf.amp_funding_id
+		LEFT JOIN amp_role src_role ON src_role.amp_role_id = f.source_role_id
 	WHERE (mf.projection_date BETWEEN '1970-1-1' AND '2050-1-1')
 UNION ALL
 SELECT <!-- always present -->
@@ -112,8 +116,8 @@ SELECT <!-- always present -->
 	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'SSC_type_of_implementation')) AS type_of_implementation_id,
 	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'procurement_system')) AS  procurement_system_id,
      
-	cast (NULL as bigint) as src_role_id,
-	cast (NULL as bigint) as dest_role_id,
+	'DN' AS src_role,
+	cast (NULL as text) as dest_role,
 	cast (NULL as bigint) as dest_org_id
           
 	FROM amp_activity_version aav

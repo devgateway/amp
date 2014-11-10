@@ -43,17 +43,17 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 	 * @param correctResult - a model (sketch) of the expected result
 	 * @param modifier - the modifier (might be null) to postprocess AmpReports and AmpARFilter after being loaded from the DB
 	 */
-	protected void runReportTest(String testName, String reportName, List<String> activities, GeneratedReport correctResult, String locale) {
-		GeneratedReport report = runReportOn(reportName, locale, activities);
-		String error = compareOutputs(correctResult, report);
-		assertNull(String.format("test %s, report %s: %s", testName, reportName, error), error);
+	protected void runMondrianTestCase(String testName, String reportName, List<String> activities, ReportAreaForTests correctResult, String locale) {
+		AmpReports report = ReportTestingUtils.loadReportByName(reportName);
+		ReportSpecification spec = ReportsUtil.getReport(report.getAmpReportId());
+		runMondrianTestCase(spec, locale, activities, correctResult);
 	}
 	
-	protected void runReportTest(String testName, ReportSpecification reportSpec, List<String> activities, GeneratedReport correctResult, String locale) {
-		GeneratedReport report = runReportOn(reportSpec, locale, activities);
-		String error = compareOutputs(correctResult, report);
-		assertNull(String.format("test %s, report %s: %s", testName, reportSpec, error), error);
-	}
+//	protected void runReportTest(String testName, ReportSpecification reportSpec, List<String> activities, GeneratedReport correctResult, String locale) {
+//		GeneratedReport report = runReportOn(reportSpec, locale, activities);
+//		String error = compareOutputs(correctResult, report);
+//		assertNull(String.format("test %s, report %s: %s", testName, reportSpec, error), error);
+//	}
 	
 	protected GeneratedReport runReportOn(String reportName, String locale, List<String> activities) {
 		AmpReports report = ReportTestingUtils.loadReportByName(reportName);
@@ -108,11 +108,6 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		String delta = cor.getDifferenceAgainst(rep.reportContents);
 		if (delta != null)
 			fail("test " + spec.getReportName() + " failed: " + delta);
-	}
-	
-	//protected void runRe
-	public static String compareOutputs(GeneratedReport correct, GeneratedReport output) {
-		return null;
 	}
 	
 	public static String describeReportOutputInCode(GeneratedReport gr) {

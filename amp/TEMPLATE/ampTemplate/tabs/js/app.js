@@ -21,6 +21,12 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 
 	app.TabsApp.on('start', function() {
 		console.log('app started');
+
+		// Initialize some variables we will need in order to maintain the width
+		// of the app.
+		app.TabsApp.maxAppWidth = 1000;
+		app.TabsApp.mainTableContainer = "main-desktop-container";
+
 		Backbone.history.start();
 	});
 
@@ -111,7 +117,7 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 
 	// Define public function to resize the tab panel.
 	app.TabsApp.resizePanel = function(originalWidth, grow) {
-		TabUtils.resizePanel(app.TabsApp.currentId, originalWidth, grow);
+		TabUtils.resizePanel(app.TabsApp.currentId, app.TabsApp.maxAppWidth);
 	};
 
 	app.TabsApp.start();

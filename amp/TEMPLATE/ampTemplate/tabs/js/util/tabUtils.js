@@ -66,22 +66,21 @@ define([ 'jquery', 'jqueryui', 'jqgrid' ], function(jQuery) {
 	};
 
 	/**
-	 * Resize the grid when the container grows/shrinks.
-	 * 
-	 * @param id
-	 * @param originalWidth
-	 * @param grow
+	 * Resize the grid when the container grows/shrinks but maintaining the
+	 * desktop limit.
 	 */
-	TabUtils.resizePanel = function(id, originalWidth, grow) {
+	TabUtils.resizePanel = function(id, maxWidth) {
 		try {
 			var newWidth = 0;
-			if (grow) {
-				newWidth = jQuery("#tabs-" + id).width();
-			} else {
-				newWidth = originalWidth;
-			}
-			console.log(newWidth);
-			jQuery("#tab_grid_" + id).jqGrid().setGridWidth(newWidth, true);
+			var container = jQuery("#" + app.TabsApp.mainTableContainer);
+			var separatorWidth = jQuery("#center-column").width();
+			var rightWidth = jQuery("#right-column").width();
+
+			newWidth = maxWidth - separatorWidth - rightWidth;
+			container.css("width", 1000);
+			jQuery("#tabs-container").css("width", newWidth);
+			jQuery("#tabs-container .dynamic-content-table").css("width", newWidth - 20);
+			jQuery("#tab_grid_" + id).jqGrid().setGridWidth(newWidth - 20, true);
 		} catch (err) {
 			console.error(err);
 		}

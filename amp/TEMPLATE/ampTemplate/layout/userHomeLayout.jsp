@@ -145,14 +145,14 @@
 	</div>	
     <center></center>
 	<!-- BREADCRUMB END -->
-	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center" id="main-desktop-container">
 		<tbody>
 			<tr>
 				<td width="100%" valign="top" id="maintd">
 					<div id="tabs-container"></div>
  					<%-- <digi:insert attribute="body"/> --%>
 				</td>
-				<td width="20px" align="center" background="img_2/close_panel_bg.gif" valign="top">
+				<td width="20px" align="center" background="img_2/close_panel_bg.gif" valign="top" id="center-column">
 					<a style="cursor: pointer;">
 						<digi:secure authenticated="true">
 							<img src="img_2/close_panel_notxt.gif" width="9" height="96" border="0" id="closepanel" style="padding: 6px;-webkit-box-sizing:content-box;box-sizing:content-box;">
@@ -160,7 +160,7 @@
 					</a>
 					<img src="img_2/t.gif" width="20" height="1"> 
 				</td>
-				<td valign="top" width="1px">
+				<td valign="top" width="1px" id="right-column">
 					<digi:secure authenticated="true">
 					<div id="rightpanel">
 						<feature:display name="Desktop Search form" module="Tools">

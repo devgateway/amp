@@ -94,7 +94,7 @@ SELECT <!-- always present -->
 	900000000 + aav.amp_activity_id AS amp_fund_detail_id,
 	999 AS transaction_type,
 	(SELECT acv.id FROM amp_category_value acv WHERE acv.category_value='Actual' AND acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'adjustment_type')) AS adjustment_type,
-	'2014-01-01' AS transaction_date,
+	'1970-01-01' AS transaction_date,
 	to_char(to_date('2014-01-01', 'YYYY-MM-DD'), 'J')::integer AS date_code,
 
 	100 AS transaction_amount,

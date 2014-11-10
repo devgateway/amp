@@ -365,9 +365,9 @@ public class Filters {
 	@GET
 	@Path("/activityBudget/")
 	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = true, id = "ActivityBudgetList", column = ColumnConstants.PROJECT_IS_ON_BUDGET,name="Activity Budget")
+	@ApiMethod(ui = true, id = "ActivityBudgetList", column = ColumnConstants.ON_OFF_TREASURY_BUDGET, name="Activity Budget")
 	public JsonBean getActivityBudget() {
-		return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY, ColumnConstants.PROJECT_IS_ON_BUDGET);
+		return getCategoryValue(CategoryConstants.ACTIVITY_BUDGET_KEY, ColumnConstants.ON_OFF_TREASURY_BUDGET);
 	}	
 	
 	

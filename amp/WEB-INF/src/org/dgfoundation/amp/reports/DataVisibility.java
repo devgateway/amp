@@ -3,6 +3,7 @@
  */
 package org.dgfoundation.amp.reports;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -85,17 +86,45 @@ public abstract class DataVisibility {
 		}
 		*/
 		
-		for(Entry<String, String> entry : getDataMap(DataMapType.DEPENDECY).entrySet()) {
-			if (visibleData.contains(entry.getValue())) {
-				visibleData.add(entry.getKey());
-				invisibleData.remove(entry.getKey());
-			}
-		}
+		dependecyCheck(visibleData, invisibleData);
 		
 		logger.info("Not visible: " + invisibleData);
 		
 		// avoid any tentative to change it  
 		return Collections.unmodifiableSet(visibleData);
+	}
+	
+	/**
+	 * Detects if dependent elements are visible based on 'dependent by' element visibility.
+	 * Note: if overridden, then please make sure to update the invisibleData set accordingly.
+	 * 
+	 * @param visibleData currently detected visible data
+	 * @param invisibleData currently detected invisible data
+	 */
+	protected void dependecyCheck(Set<String> visibleData, Set<String> invisibleData) {
+		// check 1-1 dependency
+		Map<String, String> oneToOneDependecyMap = getDataMap(DataMapType.DEPENDECY);
+		if (oneToOneDependecyMap != null && oneToOneDependecyMap.size() > 0) {
+			for(Entry<String, String> entry : oneToOneDependecyMap.entrySet()) {
+				if (visibleData.contains(entry.getValue())) {
+					visibleData.add(entry.getKey());
+					invisibleData.remove(entry.getKey());
+				}
+			}
+		}
+		
+		// check 1 - any dependency
+		Map<String, Collection<String>> anyDependencyMap = getDependancyMapTypeAny();
+		if (anyDependencyMap != null && anyDependencyMap.size() > 0) {
+			for (Entry<String, Collection<String>> entry : anyDependencyMap.entrySet()) {
+				for (String dependecy : entry.getValue())
+					if (visibleData.contains(dependecy)) {
+						visibleData.add(entry.getKey());
+						invisibleData.remove(entry.getKey());
+						break;
+					}
+			}
+		}
 	}
 	
 	/**
@@ -159,4 +188,7 @@ public abstract class DataVisibility {
 	
 	/** provides the mapping for the specific type */
 	abstract protected Map<String, String> getDataMap(DataMapType dataMapType);
+	
+	/** provides the dependencies that can be considered visible if ANY dependent by element is visible */ 
+	abstract protected Map<String, Collection<String>> getDependancyMapTypeAny();
 }

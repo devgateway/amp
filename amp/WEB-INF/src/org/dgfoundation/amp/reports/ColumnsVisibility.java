@@ -4,9 +4,11 @@
 package org.dgfoundation.amp.reports;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -58,6 +60,10 @@ public class ColumnsVisibility extends DataVisibility {
 		return visibleColumns;
 	}
 	
+	protected Map<String, Collection<String>> getDependancyMapTypeAny() {
+		return anyDependencyMap;
+	}
+	
 	protected List<String> getVisibleByDefault() {
 		return visibleByDefault;
 	}
@@ -75,6 +81,12 @@ public class ColumnsVisibility extends DataVisibility {
 		default: return null; //shouldn't come here
 		}
 	}
+	
+	/****************
+	 * Visibility related constants
+	 ***************/
+	private static final String DONOR_ORAGNIZATION = "Donor Organization";
+	private static final String SEARCH_DONOR_ORAGNIZATION = "Search Donor Organization";
 	
 	//Note: mappings are manually retrieved, because no certain way exists to map them 
 	@SuppressWarnings("serial")
@@ -161,7 +173,8 @@ public class ColumnsVisibility extends DataVisibility {
 		put("/Activity Form/Regional Observations", ColumnConstants.REGIONAL_OBSERVATIONS);
 		put("/Activity Form/Organizations/Beneficiary Agency", ColumnConstants.BENEFICIARY_AGENCY);
 		put("/Activity Form/Organizations/Contracting Agency", ColumnConstants.CONTRACTING_AGENCY);
-		put("/Activity Form/Organizations/Donor Organization", ColumnConstants.DONOR_AGENCY);
+		put("/Activity Form/Organizations/Donor Organization", DONOR_ORAGNIZATION);
+		put("/Activity Form/Funding/Search Funding Organizations", SEARCH_DONOR_ORAGNIZATION);
 		put("/Activity Form/Organizations/Executing Agency", ColumnConstants.EXECUTING_AGENCY);
 		put("/Activity Form/Organizations/Implementing Agency", ColumnConstants.IMPLEMENTING_AGENCY);
 		put("/Activity Form/Organizations/Regional Group", ColumnConstants.REGIONAL_GROUP);
@@ -254,6 +267,11 @@ public class ColumnsVisibility extends DataVisibility {
 			for (String suffix : suffixList)
 				put(con[0] + " " + suffix, con[1]);
 		
+	}};
+	
+	@SuppressWarnings("serial")
+	protected static final Map<String, Collection<String>> anyDependencyMap= new HashMap<String, Collection<String>>() {{
+		put(ColumnConstants.DONOR_AGENCY, Arrays.asList(DONOR_ORAGNIZATION, SEARCH_DONOR_ORAGNIZATION));
 	}};
 	
 	@SuppressWarnings("serial")

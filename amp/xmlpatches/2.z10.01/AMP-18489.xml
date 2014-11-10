@@ -9,6 +9,7 @@
     <apply>
         <script>
             <lang delimiter=";" type="postgres">
+            <!--The default is set to be Ecuador, which is the center of the world  -->
                 INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section) 
                 VALUES (nextval('amp_global_settings_seq') , 'Country Latitude', '-0.18', 't_Double',
                     'The geographical latitude that points to the center of the country', 'general');

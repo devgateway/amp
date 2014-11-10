@@ -271,7 +271,10 @@ public class ColumnsVisibility extends DataVisibility {
 	
 	@SuppressWarnings("serial")
 	protected static final Map<String, Collection<String>> anyDependencyMap= new HashMap<String, Collection<String>>() {{
+		/* moving DONOR_AGENCY to always visible list per confirmation from Diego that there won't be any 
+		 * country that may not want donors to be listed and everything related to it to be disabled in FM 
 		put(ColumnConstants.DONOR_AGENCY, Arrays.asList(DONOR_ORAGNIZATION, SEARCH_DONOR_ORAGNIZATION));
+		*/
 	}};
 	
 	@SuppressWarnings("serial")
@@ -366,7 +369,8 @@ public class ColumnsVisibility extends DataVisibility {
 	protected static final List<String> visibleByDefault = Arrays.asList(
 			ColumnConstants.ACTIVITY_COUNT,
 			ColumnConstants.FUNDING_YEAR,
-			ColumnConstants.TEAM
+			ColumnConstants.TEAM,
+			ColumnConstants.DONOR_AGENCY
 	);
 	
 }

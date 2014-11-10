@@ -155,7 +155,7 @@
 				<td width="20px" align="center" background="img_2/close_panel_bg.gif" valign="top">
 					<a style="cursor: pointer;">
 						<digi:secure authenticated="true">
-							<img src="img_2/close_panel_notxt.gif" width="9" height="96" border="0" id="closepanel" style="padding: 6px">
+							<img src="img_2/close_panel_notxt.gif" width="9" height="96" border="0" id="closepanel" style="padding: 6px;-webkit-box-sizing:content-box;box-sizing:content-box;">
 						</digi:secure>
 					</a>
 					<img src="img_2/t.gif" width="20" height="1"> 

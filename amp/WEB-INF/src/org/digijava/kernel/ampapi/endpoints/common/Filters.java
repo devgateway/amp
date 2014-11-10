@@ -390,8 +390,9 @@ public class Filters {
 		Collection<AmpCategoryValue> col = CategoryManagerUtil
 				.getAmpCategoryValueCollectionByKey(categoryKey);
 		for (AmpCategoryValue ampCategoryValue : col) {
+			String translatedValue = CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue);
 			fi.add(new SimpleJsonBean(ampCategoryValue.getIdentifier(),
-					ampCategoryValue.getLabel()));
+					translatedValue));
 		}
 		return fi;
 		

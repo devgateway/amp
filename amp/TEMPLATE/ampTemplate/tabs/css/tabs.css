@@ -1,5 +1,5 @@
 #tabs-container {
-	font-family: Open Sans;
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
 }
 
 .tab-item {
@@ -105,6 +105,22 @@
 .legends-container {
 	float: right;
 	padding-bottom: 3px;
+	-webkit-transition: all 300ms ease-in;
+	-o-transition: all 300ms ease-in;
+	transition: all 300ms ease-in;
+}
+
+.legends-container .pointer {
+	
+}
+
+.legends-container .pointer :hover {
+	background: #ededed;
+	color: #2290d3;
+}
+
+#show_legend_pop_box {
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
 }
 
 .wrap-cell {
@@ -123,6 +139,17 @@
 
 .status_3 {
 	color: green;
+}
+
+table.dynamic-content-table {
+	
+}
+
+table.dynamic-content-table th,td {
+	/* border: 1px solid black;
+    overflow: visible;
+    width: 200px;*/;
+	
 }
 
 .dynamic-content-table tr {
@@ -147,12 +174,20 @@
 }
 
 /* Overriding jqGrid section */
+.ui-jqgrid-sortable {
+	font-weight: bolder;
+}
+
 .jqgrid-loading-img {
 	padding-right: 2px;
 }
 
 .ui-jqgrid-view {
-	font-family: Open Sans;
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+}
+
+.ui-jqgrid .ui-jqgrid-htable th div {
+	text-align: left;
 }
 
 th.ui-th-column div {
@@ -164,6 +199,8 @@ th.ui-th-column div {
 .ui-jqgrid tr.ui-row-ltr td {
 	border-color: lightgrey;
 	padding: 5px;
+	border-left: 1px solid #fff;
+	border-right: 1px solid #fff;
 }
 
 .myAltRowClassEven {
@@ -298,11 +335,11 @@ th.ui-th-column div {
 }
 
 #tabs.ui-widget-content {
-	border: none;
+	border: 1px solid #ffffff;
 }
 
 #tabs .tab_link {
-	font-family: Arial;
+	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	font-weight: none;
 }
@@ -320,17 +357,17 @@ th.ui-th-column div {
 }
 
 .ui-tabs .ui-tabs-nav li .ui-tabs-anchor {
-	color: #555555
+	color: #555555;
 }
 
 .ui-tabs .ui-tabs-nav li .ui-tabs-anchor:hover,.ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor
 	{
-	color: #305a81
+	color: #305a81;
 }
 
 .ui-state-default a,.ui-state-default a:link,.ui-state-default a:visited
 	{
-	color: #555555
+	color: #555555;
 }
 
 .ui-state-active a,.ui-state-active a:link,.ui-state-active a:visited {
@@ -398,7 +435,7 @@ th.ui-th-column div {
 }
 
 .ui-jqgrid tr.ui-row-ltr td {
-	padding: 10px 5px
+	padding: 5px 5px;
 }
 
 .ui-jqgrid td {
@@ -408,11 +445,16 @@ th.ui-th-column div {
 }
 
 .ui-jqgrid td:hover {
-	/*color: #2290d3;*/
-	background: #ececec
+	background: #ececec;
 }
 
-.ui-state-highlight,.ui-widget-content .ui-state-highlight,.ui-widget-header .ui-state-highlight
-	{
-	background: #efefef
+.ui-jqgrid tr.ui-row-ltr td a img {
+	opacity: 1;
+	-webkit-transition: all 100ms ease-in;
+	-o-transition: all 100ms ease-in;
+	transition: all 100ms ease-in;
+}
+
+.ui-jqgrid tr.ui-row-ltr td a img:hover {
+	opacity: 0.6;
 }

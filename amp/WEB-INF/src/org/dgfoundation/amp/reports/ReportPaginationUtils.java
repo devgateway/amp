@@ -112,8 +112,11 @@ public class ReportPaginationUtils {
 			ReportAreaImpl newArea = new ReportAreaImpl();
 			newArea.setChildren(stack.pop());
 			stack.peek().add(newArea);
-		}	
-		if (stack.peek().size() == 1)
+		}
+		// move up the report area level only if the inner structure is also a group of areas
+		if (stack.peek().size() == 1 
+				&& stack.peek().get(0).getChildren() != null 
+				&& stack.peek().get(0).getChildren().size() > 0)
 			return stack.pop().get(0);
 		ReportAreaImpl currentRoot = new ReportAreaImpl();
 		currentRoot.setChildren(stack.pop());

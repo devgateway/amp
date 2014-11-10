@@ -106,7 +106,10 @@ public class CellDataSetToGeneratedReport {
 			}
 		}
 		root.setChildren(stack.pop());
-		if (root.getChildren().size() == 1)
+		// move up the report area level only if the inner structure is also a group of areas 
+		if (root.getChildren().size() == 1 
+				&& root.getChildren().get(0).getChildren() != null 
+				&& root.getChildren().get(0).getChildren().size() > 0)
 			root = (ReportAreaImpl) root.getChildren().get(0);
 		else if(root instanceof SaikuReportArea)
 			((SaikuReportArea)root).setOrigLeafId(getOrigLeafId((SaikuReportArea)root));

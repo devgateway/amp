@@ -53,7 +53,7 @@ define([ 'jquery', 'jqueryui' ], function(jQuery) {
 	};
 
 	TabUtils.shortenTabNames = function(tabs) {
-		var maxChars = 25;
+		var maxChars = 20;
 		_.each(tabs, function(item, i) {
 			var name = item.get('name');
 			// Ignore "more tabs" tab.

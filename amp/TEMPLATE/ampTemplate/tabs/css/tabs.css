@@ -2,6 +2,14 @@
 	font-family: Open Sans;
 }
 
+.tab-item {
+	max-width: 190px;
+}
+
+.tab-li {
+	word-wrap: break-word;
+}
+
 .red {
 	color: #FF0000;
 }

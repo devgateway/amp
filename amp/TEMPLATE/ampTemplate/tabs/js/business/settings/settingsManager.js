@@ -43,7 +43,7 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'models/se
 		settingsDialog.render();
 		jQuery(settingsDialog.el).dialog({
 			modal : true,
-			title : "Settings",
+			title : TranslationManager.getTranslated("Settings"),
 			width : 300
 		});
 		jQuery(".buttonify").button();
@@ -62,7 +62,7 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'models/se
 				"1" : jQuery("#currency").val(),
 				"2" : jQuery("#calendar").val()
 			};
-			GridManager.filter(app.TabsApp.currentId, app.TabsApp.serializedFilters, app.TabsApp.appliedSettings);
+			GridManager.filter(app.TabsApp.currentTab.get('id'), app.TabsApp.serializedFilters, app.TabsApp.appliedSettings);
 
 			// Update the legend section.
 			var legend = new Legend({

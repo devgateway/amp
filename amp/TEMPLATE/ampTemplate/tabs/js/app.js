@@ -117,7 +117,7 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 
 	// Define public function to resize the tab panel.
 	app.TabsApp.resizePanel = function(originalWidth, grow) {
-		TabUtils.resizePanel(app.TabsApp.currentId, app.TabsApp.maxAppWidth);
+		TabUtils.resizePanel(app.TabsApp.currentTab.get('id'), app.TabsApp.maxAppWidth);
 	};
 
 	app.TabsApp.start();

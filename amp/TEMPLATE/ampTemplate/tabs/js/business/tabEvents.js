@@ -22,22 +22,22 @@ define([ 'marionette', 'collections/contents', 'models/content', 'models/legend'
 	}
 
 	function retrieveTabContent(selectedTabIndex) {
-		var id = app.TabsApp.tabItemsView.collection.models[selectedTabIndex].get('id');
-		app.TabsApp.currentId = id;
+		app.TabsApp.currentTab = app.TabsApp.tabItemsView.collection.models[selectedTabIndex];
+		app.TabsApp.currentId = app.TabsApp.currentTab.get('id');
 
 		// Create a region where the dynamic content will be rendered
 		// inside
 		// the tab.
-		var regionsName = '#main-dynamic-content-region_' + id;
+		var regionsName = '#main-dynamic-content-region_' + app.TabsApp.currentTab.get('id');
 		app.TabsApp.addRegions({
 			'dynamicContentRegion' : regionsName
 		});
 
-		if (id >= 0) {
+		if (app.TabsApp.currentTab.get('id') >= 0) {
 			// Get collection with data we will use to render the tab
 			// content.
 			var firstContent = new Content({
-				id : id
+				id : app.TabsApp.currentTab.get('id')
 			});
 
 			// --------------------------------------------------------------------------------------//
@@ -76,14 +76,14 @@ define([ 'marionette', 'collections/contents', 'models/content', 'models/legend'
 
 			// Render views.
 			var dynamicLayoutView = new DynamicContentView({
-				id : id,
+				id : app.TabsApp.currentTab.get('id'),
 				filters : app.TabsApp.filters
 			});
 			app.TabsApp.dynamicContentRegion.show(dynamicLayoutView);
 			dynamicLayoutView.filters.show(compositeView);
 
 			// Create accordion for filters area.
-			jQuery("#main-dynamic-content-region_" + id + " #filters-collapsible-area").accordion({
+			jQuery("#main-dynamic-content-region_" + app.TabsApp.currentTab.get('id') + " #filters-collapsible-area").accordion({
 				collapsible : true,
 				active : false
 			});
@@ -96,7 +96,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'models/legend'
 				className : 'legends-container',
 				onShow : function() {
 					jQuery(document).tooltip({
-						items : ('#show-legends-link-' + id),
+						items : ('#show-legends-link-' + app.TabsApp.currentTab.get('id')),
 						content : function() {
 							return jQuery('#show_legend_pop_box').html();
 						}
@@ -105,7 +105,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'models/legend'
 			});
 			var legend = new Legend({
 				currencyCode : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode'),
-				id : id
+				id : app.TabsApp.currentTab.get('id')
 			});
 			var legendView = new LegendView({
 				model : legend
@@ -113,9 +113,9 @@ define([ 'marionette', 'collections/contents', 'models/content', 'models/legend'
 			dynamicLayoutView.legends.show(legendView);
 
 			// --------------------------------------------------------------------------------------//
-			gridManager.populateGrid(id, dynamicLayoutView, firstContent);
+			gridManager.populateGrid(app.TabsApp.currentTab.get('id'), dynamicLayoutView, firstContent);
 
-		} else if (id == -1) {
+		} else if (app.TabsApp.currentTab.get('id') == -1) {
 			// "More Tabs..." tab.
 			var ItemView = Marionette.ItemView.extend({
 				model : Tab,
@@ -149,7 +149,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'models/legend'
 			app.TabsApp.serializedFilters = null;
 			app.TabsApp.appliedSettings = null;
 			app.TabsApp.currentGrid = null;
-			app.TabsApp.currentId = null;
+			app.TabsApp.currentTab = null;
 
 			// TODO: move this logic elsewhere.
 			var panel = null;

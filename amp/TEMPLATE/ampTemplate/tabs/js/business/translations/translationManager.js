@@ -26,6 +26,16 @@ define([ 'underscore', 'jquery', 'i18next' ], function(_, jQuery) {
 		});
 	};
 
+	TranslationManager.getTranslated = function(text) {
+		var textObject = {};
+		var key = Math.random().toString();
+		textObject[key] = text;
+		var response = (postJSON('/rest/translations/label-translations', textObject, function(data) {
+			console.log(data);
+		}));
+		return response.responseJSON[key];
+	};
+
 	function postJSON(url, data, callback) {
 		return jQuery.ajax({
 			headers : {
@@ -33,6 +43,7 @@ define([ 'underscore', 'jquery', 'i18next' ], function(_, jQuery) {
 				'Content-Type' : 'application/json'
 			},
 			'type' : 'POST',
+			'async' : false,
 			'url' : url,
 			'data' : JSON.stringify(data),
 			'dataType' : 'json',

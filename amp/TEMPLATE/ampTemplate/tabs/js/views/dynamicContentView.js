@@ -1,7 +1,7 @@
 define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!views/html/settingsDialogTemplate.html', 'models/settings',
 		'business/settings/settingsManager', 'filtersWidget', 'business/filter/filterUtils', 'business/translations/translationManager',
-		'jquery', 'jqueryui' ], function(Marionette, dynamicContentTemplate, settingsDialogTemplate, Settings, SettingsManager,
-		FiltersWidget, FilterUtils, TranslationManager, jQuery) {
+		'business/tabManager', 'jquery', 'jqueryui' ], function(Marionette, dynamicContentTemplate, settingsDialogTemplate, Settings,
+		SettingsManager, FiltersWidget, FilterUtils, TranslationManager, TabManager, jQuery) {
 
 	var reportId;
 	var reportFilters;
@@ -15,11 +15,15 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 		},
 		events : {
 			'click #filters-button' : "clickFiltersButton",
-			'click #settings-button' : "clickSettingsButton"
+			'click #settings-button' : "clickSettingsButton",
+			'click #save-button' : "clickSaveButton"
 		},
 		initialize : function(data) {
 			reportId = data.id;
 			reportFilters = data.filters;
+		},
+		clickSaveButton : function() {
+			TabManager.openSaveTabDialog();
 		},
 		clickFiltersButton : function() {
 			console.log('clickFiltersButton');
@@ -67,10 +71,11 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 					primary : "ui-icon-search"
 				}
 			});
-			/*
-			 * jQuery("#main-dynamic-content-region_" + reportId + "
-			 * #save-button").button({ icons : { primary : 'ui-icon-disk' } });
-			 */
+			jQuery("#main-dynamic-content-region_" + reportId + " #save-button").button({
+				icons : {
+					primary : 'ui-icon-disk'
+				}
+			});
 			jQuery("#main-dynamic-content-region_" + reportId + " #settings-button").button({
 				icons : {
 					primary : 'ui-icon-gear'

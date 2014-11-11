@@ -10,7 +10,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import org.digijava.kernel.ampapi.endpoints.gis.services.DashboarsService;
+import org.digijava.kernel.ampapi.endpoints.gis.services.DashboardsService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
@@ -35,7 +35,7 @@ public class EndPoints {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui = false, id = "topsList")
 	public List<JsonBean> getAdminLevelsTotalslist() {
-		return DashboarsService.getTopsList();
+		return DashboardsService.getTopsList();
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class EndPoints {
 			@PathParam("type") String type,
 			@DefaultValue("ac") @QueryParam("adjtype") String adjtype,
 			@DefaultValue("5") @QueryParam("limit") Integer limit) {
-		return DashboarsService.getTops(type,adjtype,limit,config);
+		return DashboardsService.getTops(type,adjtype,limit,config);
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class EndPoints {
 	@ApiMethod(ui = false, id = "aidPredictability")
 	//TODO: Implement Filters
 	public JSONObject getAidPredictability(JsonBean config) throws Exception {
-		return DashboarsService.getAidPredictability(config);
+		return DashboardsService.getAidPredictability(config);
 	}
 	
 	/**
@@ -87,6 +87,6 @@ public class EndPoints {
 	//TODO: Implement Filters
 	public JsonBean getfundingtype(JsonBean config,
 			@DefaultValue("ac") @QueryParam("adjtype") String adjtype) {
-		return DashboarsService.fundingtype(adjtype,config);
+		return DashboardsService.fundingtype(adjtype,config);
 	}
 }

@@ -1,12 +1,16 @@
 package org.dgfoundation.amp.ar;
 
 //import org.dgfoundation.amp.testutils.LiberiaFiller;
+import junit.framework.JUnit4TestAdapter;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 import org.dgfoundation.amp.ar.amp210.BasicMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.DateColumnsMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.ETLTests;
+import org.dgfoundation.amp.ar.amp210.FiltersMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.MondrianSummaryReportTests;
 import org.dgfoundation.amp.ar.amp210.SQLUtilsTests;
-import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -14,10 +18,6 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
-
-import junit.framework.JUnit4TestAdapter;
-import junit.framework.Test;
-import junit.framework.TestSuite;
 
 /**
  * entry point for AMP 2.8 tests. Initializes standalone AMP as part of the discovery process.
@@ -40,6 +40,7 @@ public class AllTests_amp210
 		suite.addTest(new JUnit4TestAdapter(BasicMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(DateColumnsMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(MondrianSummaryReportTests.class));
+		suite.addTest(new JUnit4TestAdapter(FiltersMondrianReportTests.class));
 		//$JUnit-BEGIN$
 
 		//$JUnit-END$

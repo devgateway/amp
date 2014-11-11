@@ -14,7 +14,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;

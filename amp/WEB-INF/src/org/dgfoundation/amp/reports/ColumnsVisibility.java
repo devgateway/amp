@@ -77,7 +77,7 @@ public class ColumnsVisibility extends DataVisibility {
 		case MODULES: return modulesToColumnsMap; 
 		case FEATURES: return featuresToColumnsMap;
 		case FIELDS: return fieldsToColumnsMap;
-		case DEPENDECY: return dependencyMap;
+		case DEPENDENCY: return dependencyMap;
 		default: return null; //shouldn't come here
 		}
 	}
@@ -372,5 +372,10 @@ public class ColumnsVisibility extends DataVisibility {
 			ColumnConstants.TEAM,
 			ColumnConstants.DONOR_AGENCY
 	);
+
+	@Override
+	protected Map<String, Collection<String>> getDependancyMapTypeAll() {
+		return null;
+	}
 	
 }

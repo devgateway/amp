@@ -31,7 +31,7 @@ public abstract class DataVisibility {
 		MODULES,
 		FEATURES,
 		FIELDS,
-		DEPENDECY
+		DEPENDENCY
 	};
 	
 	protected static final Logger logger = Logger.getLogger(DataVisibility.class);
@@ -41,6 +41,7 @@ public abstract class DataVisibility {
 	 */
 	public static void notifyVisibilityChanged() {
 		ColumnsVisibility.setVisibilityChanged();
+		MeasuresVisibility.setVisibilityChanged();
 	}
 	
 	protected Set<String> detectVisibleData() {
@@ -86,7 +87,7 @@ public abstract class DataVisibility {
 		}
 		*/
 		
-		dependecyCheck(visibleData, invisibleData);
+		dependencyCheck(visibleData, invisibleData);
 		
 		logger.info("Not visible: " + invisibleData);
 		
@@ -101,9 +102,9 @@ public abstract class DataVisibility {
 	 * @param visibleData currently detected visible data
 	 * @param invisibleData currently detected invisible data
 	 */
-	protected void dependecyCheck(Set<String> visibleData, Set<String> invisibleData) {
+	protected void dependencyCheck(Set<String> visibleData, Set<String> invisibleData) {
 		// check 1-1 dependency
-		Map<String, String> oneToOneDependecyMap = getDataMap(DataMapType.DEPENDECY);
+		Map<String, String> oneToOneDependecyMap = getDataMap(DataMapType.DEPENDENCY);
 		if (oneToOneDependecyMap != null && oneToOneDependecyMap.size() > 0) {
 			for(Entry<String, String> entry : oneToOneDependecyMap.entrySet()) {
 				if (visibleData.contains(entry.getValue())) {
@@ -125,17 +126,30 @@ public abstract class DataVisibility {
 					}
 			}
 		}
+		// check 1 - all dependency
+		Map<String, Collection<String>> allDependenciesMap = getDependancyMapTypeAll();
+		if (allDependenciesMap != null && allDependenciesMap.size() > 0) {
+			for (Entry<String, Collection<String>> entry : allDependenciesMap.entrySet()) {
+				if (visibleData.containsAll(entry.getValue())) {
+					visibleData.add(entry.getKey());
+					invisibleData.remove(entry.getKey());
+				}
+			}
+		}
+		
+		
+		
 	}
 	
 	/**
 	 * checks if all columns are mapped
 	 */
-	private void sanityCheck() {
+	protected void sanityCheck() {
 		Set<String> unmapped = new HashSet<String>(getAllData());
 		unmapped.removeAll(getDataMap(DataMapType.MODULES).values());
 		unmapped.removeAll(getDataMap(DataMapType.FEATURES).values());
 		unmapped.removeAll(getDataMap(DataMapType.FIELDS).values());
-		unmapped.removeAll(getDataMap(DataMapType.DEPENDECY).keySet());
+		unmapped.removeAll(getDataMap(DataMapType.DEPENDENCY).keySet());
 		unmapped.removeAll(getVisibleByDefault());
 		if (unmapped.size() > 0)
 			logger.warn("Unmapped columns for which by default visibility = false: " + unmapped);
@@ -191,4 +205,7 @@ public abstract class DataVisibility {
 	
 	/** provides the dependencies that can be considered visible if ANY dependent by element is visible */ 
 	abstract protected Map<String, Collection<String>> getDependancyMapTypeAny();
+	
+	/** provides the dependencies that can be considered visible if ANY dependent by element is visible */ 
+	abstract protected Map<String, Collection<String>> getDependancyMapTypeAll();	
 }

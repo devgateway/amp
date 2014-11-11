@@ -249,14 +249,14 @@ public class ReportWizardAction extends MultiAction {
 		request.getSession().setAttribute(ReportsFilterPicker.PLEDGE_REPORT_REQUEST_ATTRIBUTE, Boolean.toString(typereport == ArConstants.PLEDGES_TYPE)); //WARNING: When merging with 2.4, using ReportContextData attribute instead of storing in the session		
 		request.setAttribute(MULTILINGUAL_REPORT_PREFIX + "_title", new MultilingualInputFieldValues(AmpReports.class, myForm.getReportId(), "name", null, null));
 		
-		myForm.setAmpTreeColumns( this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnList(),typereport,request.getSession()));
+		myForm.setAmpTreeColumns( this.buildAmpTreeColumnSimple(AdvancedReportUtil.getColumnListFiltered(),typereport,request.getSession()));
 		if (typereport==ArConstants.PLEDGES_TYPE || myForm.getReportType().equalsIgnoreCase("pledge")){
-			myForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyType("P"));
+			myForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyTypeFiltered("P"));
 		} else if (myForm.getReportType().equalsIgnoreCase("donor")){
-			myForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyType("A") );
-			myForm.getAmpMeasures().addAll(AdvancedReportUtil.getMeasureListbyType("D") );
+			myForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyTypeFiltered("A") );
+			myForm.getAmpMeasures().addAll(AdvancedReportUtil.getMeasureListbyTypeFiltered("D") );
 		} else {
-			myForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyType("A") );
+			myForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyTypeFiltered("A") );
 		}
 		
 		if ( request.getParameter("desktopTab")!=null && "true".equals(request.getParameter("desktopTab")) ) {
@@ -289,10 +289,10 @@ public class ReportWizardAction extends MultiAction {
 	    JSONArray children = new JSONArray();
 
 	    if (repType.equalsIgnoreCase("donor")){
-	    	repForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyType("A") );
-	    	repForm.getAmpMeasures().addAll(AdvancedReportUtil.getMeasureListbyType("D") );
+	    	repForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyTypeFiltered("A") );
+	    	repForm.getAmpMeasures().addAll(AdvancedReportUtil.getMeasureListbyTypeFiltered("D") );
 		} else {
-			repForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyType("A") );
+			repForm.setAmpMeasures( AdvancedReportUtil.getMeasureListbyTypeFiltered("A") );
 		}
 	    
 	    for (AmpMeasures measure: repForm.getAmpMeasures())

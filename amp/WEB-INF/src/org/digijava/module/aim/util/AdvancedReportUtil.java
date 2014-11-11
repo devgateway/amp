@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -121,6 +122,21 @@ public final class AdvancedReportUtil {
     	return CACHED_COLUMNS_LIST;
     }
     
+    public static List<AmpColumns> getColumnListFiltered()
+    {
+    	List<AmpColumns> columnsOut = new ArrayList<AmpColumns>();
+//    	public static Set<String> getConfigurableColumns()
+    	Set<String> columnNames = MondrianReportUtils.getConfigurableColumns();
+    	for (AmpColumns col : CACHED_COLUMNS_LIST) {
+    		if (columnNames.contains(col.getColumnName()) || columnNames.contains(col.getAliasName()))
+    			columnsOut.add(col);
+    	}
+    	return columnsOut;
+    }
+    
+    
+    
+    
 	private static List<AmpColumns> buildColumnList()
 	{
 		List<AmpColumns> res = new ArrayList<AmpColumns>();
@@ -188,6 +204,18 @@ public final class AdvancedReportUtil {
 		{
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public static List<AmpMeasures> getMeasureListbyTypeFiltered(String type) {
+		List <AmpMeasures> am_in = getMeasureListbyType(type);
+		
+		List <AmpMeasures> am_out = new ArrayList<AmpMeasures>();
+		Set<String> visMesNames = MondrianReportUtils.getConfigurableMeasures();
+		for (AmpMeasures meas : am_in) {
+			if (visMesNames.contains(meas.getMeasureName()))
+				am_out.add(meas);
+		}
+		return am_out;
 	}
 	        
 	public static boolean checkDuplicateReportName(String reportTitle, Long ownerId, Long dbReportId, Boolean drilldownTab) throws Exception

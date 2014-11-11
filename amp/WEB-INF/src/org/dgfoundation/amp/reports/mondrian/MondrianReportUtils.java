@@ -26,6 +26,7 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.ColumnsVisibility;
 import org.dgfoundation.amp.reports.DateColumns;
+import org.dgfoundation.amp.reports.MeasuresVisibility;
 import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
@@ -204,8 +205,7 @@ public class MondrianReportUtils {
 	
 	public static Set<String> getConfigurableMeasures() {
 		Set<String> configurableMeasures = new HashSet<String>(
-				// TODO: replace with call to MeasuresVisibility
-				ConstantsUtil.getConstantsSet(MeasureConstants.class));
+				MeasuresVisibility.getVisibleMeasures());
 		configurableMeasures.retainAll(MondrianMapping.definedMeasures);
 		return configurableMeasures;
 	}

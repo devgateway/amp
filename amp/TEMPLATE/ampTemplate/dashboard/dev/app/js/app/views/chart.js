@@ -1,5 +1,6 @@
 var fs = require('fs');
 var _ = require('underscore');
+var baby = require('babyparse');
 var canvg = require('../../ugly/lib-load-hacks').canvg;
 var BackboneDash = require('../backbone-dash');
 var util = require('../../ugly/util');
@@ -131,14 +132,48 @@ module.exports = BackboneDash.View.extend({
     this.model.set('view', view);
   },
 
+  download: function(e) {
+    if (this.model.get('view') === 'table') {
+      this.downloadCSV(e);
+    } else {
+      this.downloadChart(e);
+    }
+  },
+
+  downloadCSV: function(e) {
+    var data = this.model.get('processed');
+    var csvTransformed = _(data)
+      .chain()
+      .pluck('values')
+      .transpose()
+      .map(function(row) {
+        return _(row).reduce(function(csvRow, cell) {
+          csvRow.push(cell.y);
+          return csvRow;
+        }, [row[0].x]);
+      })
+      .value();
+    if (data.length > 1) {  // multiseries; add a header
+      csvTransformed.unshift(_(data).pluck('key'));
+      csvTransformed[0].unshift('x');  // header for x axis values.
+    }
+
+    var downloadable = 'data:text/plain;charset=utf-y,' +
+      encodeURIComponent(baby.unparse(csvTransformed));
+
+    e.currentTarget.setAttribute('href', downloadable);
+    e.currentTarget.setAttribute('download',
+      this.model.get('name') + '.csv');
+  },
+
   drawChartTitle: function(canvas, title) {
     var ctx = canvas.getContext('2d');
     ctx.fillStyle = '#163f66';
     ctx.font = 'bold 22px "Open Sans"';
-    ctx.fillText(title.toUpperCase(), 10, 10+22);
+    ctx.fillText(title.toUpperCase(), 10, 10 + 22);
   },
 
-  download: function(e) {
+  downloadChart: function(e) {
     var svg = this.el.querySelector('svg.dash-chart');
     if (!svg) {
       this.app.report('Chart export was unsuccessful',
@@ -165,7 +200,9 @@ module.exports = BackboneDash.View.extend({
 
     this.drawChartTitle(canvas, this.model.get('name'));
 
-    e.currentTarget.href = canvas.toDataURL('image/png');
+    e.currentTarget.setAttribute('href', canvas.toDataURL('image/png'));
+    e.currentTarget.setAttribute('download',
+      this.model.get('name') + '.png');
   },
 
   big: function() {

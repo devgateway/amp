@@ -565,7 +565,14 @@ public class GroupReportData extends ReportData<ReportData> {
 				rowspan				+= rd.getRowSpan();
 			}
 		}
-		this.setRowSpan(rowspan +1);
+		int newRowspan = rowspan;
+		//we should only add 1 when the element is visible. AMP-18466 was occurring
+		//because a report with sector, sub-sector hierarchy was having a Sector (level 1 hierarchy)
+		//spanning over more than one page. For the non-visible sub-sectors, +1 shouldn't be added to rowspan  
+		if (numOfPreviousRows > startRow) {
+			newRowspan = rowspan + 1;
+		}
+		this.setRowSpan(newRowspan);
 	}
 
 	public void setTotalActualCommitments(BigDecimal total) {

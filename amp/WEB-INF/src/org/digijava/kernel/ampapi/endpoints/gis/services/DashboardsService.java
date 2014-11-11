@@ -42,9 +42,9 @@ import org.digijava.module.aim.util.FeaturesUtil;
  * 
  */
 
-public class DashboarsService {
+public class DashboardsService {
 
-	private static Logger logger = Logger.getLogger(DashboarsService.class);
+	private static Logger logger = Logger.getLogger(DashboardsService.class);
 
 	/**
 	 * Utility method for creating the small objects for the list of tops Note

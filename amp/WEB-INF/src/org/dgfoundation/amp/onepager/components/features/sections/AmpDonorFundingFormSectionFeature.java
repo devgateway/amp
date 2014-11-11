@@ -148,6 +148,31 @@ public class AmpDonorFundingFormSectionFeature extends
 				.getParent()));
 	}
 
+	public void deleteTab(AmpOrganisation missing, AjaxRequestTarget target) {
+		int idx = -1;
+		ListItem<AmpOrganisation> delItem = null;
+		for (int i = 0; i < tabsList.size(); i++) {
+			ListItem<AmpOrganisation> item = (ListItem<AmpOrganisation>) tabsList
+					.get(i);
+			AmpOrganisation org = item.getModelObject();
+			if (missing.getAmpOrgId().equals(org.getAmpOrgId())) {
+				idx = item.getIndex();
+				delItem = item;
+			}
+		}
+		if (idx > -1) {
+			for (int i = idx + 1; i < tabsList.size(); i++) {
+				ListItem<?> item = (ListItem<?>) tabsList.get(i);
+				item.setIndex(item.getIndex() - 1);
+			}
+
+			tabsList.items.remove(idx);
+			tabsList.updateModel();
+//			target.add(tabsList.getParent());
+			tabsList.remove(delItem);
+			//listItems.remove(missing);check if thiss needs to be done
+		}
+	}
 	public void updateFundingGroups(AmpOrganisation missing,
 			AjaxRequestTarget target) {
 		Iterator<AmpFunding> it = fundingModel.getObject().iterator();
@@ -162,6 +187,7 @@ public class AmpDonorFundingFormSectionFeature extends
 		}
 
 		if (!found) {
+			deleteTab(missing,target);
 			// remove the org group
 			int idx = -1;
 			ListItem<AmpOrganisation> delItem = null;

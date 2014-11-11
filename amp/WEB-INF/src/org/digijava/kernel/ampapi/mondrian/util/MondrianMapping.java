@@ -4,6 +4,7 @@
 package org.digijava.kernel.ampapi.mondrian.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportMeasure;
+import org.dgfoundation.amp.reports.mondrian.FiltersGroup;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXLevel;
@@ -103,6 +105,8 @@ public class MondrianMapping {
 	public static final Set<String> definedColumns = new HashSet<String>();
 	public static final Set<String> definedMeasures = new HashSet<String>();
 	
+	final static String[] idSuffixList = new String[] {"", " Id"};
+	
 	/**
 	 * Mappings between AMP Data and Mondrian Schema 
 	 */
@@ -130,6 +134,24 @@ public class MondrianMapping {
 			if (this.containsKey(rm))
 				throw new RuntimeException(String.format("measure %s defined at least twice: once as %s, and then as %s", rm, this.get(rm).getName(), mondrianMeasureName));
 			put(rm, new MDXMeasure(mondrianMeasureName));
+		}
+		
+		/**
+		 * Generates new mappings for the specified list of parent columns and their levels suffix list
+		 *  
+		 * @param parents list of parent columns
+		 * @param sufixList suffix list used to rebuild all levels associated to the given column
+		 * @param hierarchyBase hierarchy based for the given column
+		 */
+		void addGroups(List<String> parents, List<String> suffixList, String hierarchyBase) {
+			for (String parent : parents) 
+				for (String suffix : suffixList)
+					for (String idSuffix : idSuffixList) {
+						final String column = parent + suffix + idSuffix;
+						MDXLevel origLevel = (MDXLevel) get(new ReportColumn(column));
+						addColumnDefinition(column + FiltersGroup.SUFFIX,
+								new MDXLevel(origLevel.getDimension(), hierarchyBase + idSuffix + FiltersGroup.SUFFIX, origLevel.getLevel()));
+				}
 		}
 		
 		{
@@ -240,7 +262,7 @@ public class MondrianMapping {
 //			addColumnDefinition(ColumnConstants.PLEDGES_SECTORS, new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 //			addColumnDefinition(ColumnConstants.PLEDGES_SECONDARY_SECTORS, new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 //			addColumnDefinition(ColumnConstants.PLEDGES_TERTIARY_SECTORS, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
-			
+
 			final String[][] programConstantsList = {
 					{ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, MoConstants.NATIONAL_OBJECTIVES, "National Planning Objectives Level "},
 					{ColumnConstants.PRIMARY_PROGRAM, MoConstants.PRIMARY_PROGRAMS, "Primary Program Level "},
@@ -255,6 +277,18 @@ public class MondrianMapping {
 					addColumnDefinition(programConstants[2] + i + " Id", new MDXLevel(programConstants[1], "Level " + i + " Id", "Level " + i + " Id"));
 				}
 			}
+			
+			// adding grouped levels
+			addGroups(Arrays.asList(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.SECONDARY_SECTOR, ColumnConstants.TERTIARY_SECTOR),
+					Arrays.asList("", " Sub-Sector", " Sub-Sub-Sector"), MoConstants.H_LEVEL_0_SECTOR);
+			
+			List<String> programsSufix = new ArrayList<String>();
+			for (int idx = 1; idx < 9; idx++ )
+				programsSufix.add(" Level " + idx);
+			addGroups(Arrays.asList(ColumnConstants.PRIMARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM, 
+					ColumnConstants.TERTIARY_PROGRAM, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES),
+					programsSufix, "Levels");
+			
 			
 			addColumnDefinition(ColumnConstants.COUNTRY, new MDXLevel(MoConstants.LOCATION, MoConstants.H_COUNTRIES,  MoConstants.ATTR_COUNTRY_NAME));
 			addColumnDefinition(ColumnConstants.REGION, new MDXLevel(MoConstants.LOCATION, MoConstants.H_REGIONS,  MoConstants.ATTR_REGION_NAME));

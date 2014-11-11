@@ -36,6 +36,9 @@ public class MondrianReportFilters implements ReportFilters {
 	 */
 	private final Map<ReportColumn, List<FilterRule>> dateFilterRules = new HashMap<ReportColumn, List<FilterRule>>();
 	
+	/** stores  MondrianReportFilter that should be applied as same hierarchy filters */  
+	private Map<String, MondrianReportFilters> groupFilterRules = null; 
+	
 	/**
 	 * The calendar to be used for retrieval of actual names for year, month, quarter
 	 */
@@ -102,16 +105,41 @@ public class MondrianReportFilters implements ReportFilters {
 	 * @param filterRule
 	 */
 	private void addFilterRule(ReportElement elem, FilterRule filterRule) {
-		addFilterRule(filterRules, elem, filterRule);
+		// Check if this is a filter that must be in a group
+		if (ElementType.ENTITY.equals(elem.type) 
+				&& FiltersGroup.FILTER_GROUP.containsKey(elem.entity.getEntityName())) {
+			
+			final String filterGroup = FiltersGroup.FILTER_GROUP.get(elem.entity.getEntityName());
+			MondrianReportFilters mrf = getGroupFilters().get(filterGroup);
+			if (mrf == null) {
+				mrf = new MondrianReportFilters(calendar);
+				getGroupFilters().put(filterGroup, mrf);
+			}
+			mrf.addFilterRule(mrf.filterRules,
+					new ReportElement(new ReportColumn(elem.entity.getEntityName() + FiltersGroup.SUFFIX)), 
+					filterRule);
+		} else {
+			addFilterRule(filterRules, elem, filterRule);
+		}
 	}
 	
-	private <T> void addFilterRule(Map<T, List<FilterRule>> filterRules, T elem, FilterRule filterRule) {
+	protected <T> void addFilterRule(Map<T, List<FilterRule>> filterRules, T elem, FilterRule filterRule) {
 		List<FilterRule> filtersList = filterRules.get(elem);
 		if (filtersList == null) {
 			filtersList = new ArrayList<FilterRule>();
 			filterRules.put(elem, filtersList);
 		}
 		filtersList.add(filterRule);
+	}
+	
+	/**
+	 * The filter groups that are applicable together as part of the same hierarchy
+	 * @return group filter rules
+	 */
+	public Map<String, MondrianReportFilters> getGroupFilters() {
+		if (groupFilterRules == null)
+			groupFilterRules = new HashMap<String, MondrianReportFilters>();
+		return groupFilterRules;
 	}
 	
 	/**

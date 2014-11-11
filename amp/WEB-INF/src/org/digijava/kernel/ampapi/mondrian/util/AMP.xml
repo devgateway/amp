@@ -31,6 +31,20 @@
 			<Level name="Level 2 Sector Id" type="Integer" column="level2_sector_id"/>
 		</Hierarchy>
 		
+		<Hierarchy hasAll="true" allMemberName="All Level 0 Sectors _Group_" primaryKey="amp_sector_id" name="Level 0 Sector _Group_">
+			<Table name="mondrian_sectors@@locale@@" />
+			<Level name="Level 0 Sector" type="Integer" column="level0_sector_id" nameColumn="level0_sector_name"/>
+			<Level name="Level 1 Sector" type="Integer" column="level1_sector_id" nameColumn="level1_sector_name"/>
+			<Level name="Level 2 Sector" type="Integer" column="level2_sector_id" nameColumn="level2_sector_name"/>
+		</Hierarchy>
+		
+		<Hierarchy hasAll="true" allMemberName="All Level 0 Sectors Id _Group_" primaryKey="amp_sector_id" name="Level 0 Sector Id _Group_">
+			<Table name="mondrian_sectors@@locale@@" />
+			<Level name="Level 0 Sector Id" type="Integer" column="level0_sector_id"/>
+			<Level name="Level 1 Sector Id" type="Integer" column="level1_sector_id"/>
+			<Level name="Level 2 Sector Id" type="Integer" column="level2_sector_id"/>
+		</Hierarchy>
+		
 	</Dimension>
 
 	<Dimension name="AMP Organization" >
@@ -155,6 +169,33 @@
 			<Table name="mondrian_programs@@locale@@" />
 			<Level name="Level 8 Id" type="Integer" column="id8"/>
 		</Hierarchy>
+		
+		<Hierarchy hasAll="true" allMemberName="All Levels Group" primaryKey="amp_theme_id" name="Levels _Group_">
+			<Table name="mondrian_programs@@locale@@" />
+			<Level name="Level 0 Name" type="Integer" column="id0" nameColumn="name0" translated="false"/>
+			<Level name="Level 1 Name" type="Integer" column="id1" nameColumn="name1" />
+			<Level name="Level 2 Name" type="Integer" column="id2" nameColumn="name2" />
+			<Level name="Level 3 Name" type="Integer" column="id3" nameColumn="name3" />
+			<Level name="Level 4 Name" type="Integer" column="id4" nameColumn="name4" />
+			<Level name="Level 5 Name" type="Integer" column="id5" nameColumn="name5" />
+			<Level name="Level 6 Name" type="Integer" column="id6" nameColumn="name6" />
+			<Level name="Level 7 Name" type="Integer" column="id7" nameColumn="name7" />
+			<Level name="Level 8 Name" type="Integer" column="id8" nameColumn="name8" />
+		</Hierarchy>
+		
+		<Hierarchy hasAll="true" allMemberName="All Levels Id Group" primaryKey="amp_theme_id" name="Levels Id _Group_">
+			<Table name="mondrian_programs@@locale@@" />
+			<Level name="Level 0 Id" type="Integer" column="id0" translated="false"/>
+			<Level name="Level 1 Id" type="Integer" column="id1"/>
+			<Level name="Level 2 Id" type="Integer" column="id2"/>
+			<Level name="Level 3 Id" type="Integer" column="id3"/>
+			<Level name="Level 4 Id" type="Integer" column="id4"/>
+			<Level name="Level 5 Id" type="Integer" column="id5"/>
+			<Level name="Level 6 Id" type="Integer" column="id6"/>
+			<Level name="Level 7 Id" type="Integer" column="id7"/>
+			<Level name="Level 8 Id" type="Integer" column="id8"/>
+		</Hierarchy>
+		
 	</Dimension>
 
 	<Dimension name="Category Value">

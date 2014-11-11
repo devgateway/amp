@@ -52,6 +52,7 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXConfig;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXFilter;
+import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXGroupFilter;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
 import org.digijava.kernel.ampapi.mondrian.util.AmpMondrianSchemaProcessor;
@@ -399,6 +400,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 	
 	private void addFilters(ReportFilters reportFilter, MDXConfig config) throws AmpApiException {
 		if (reportFilter == null) return;
+		
+		// configures the main filter rules over different criteria type (different hierarchies)
 		for(Entry<ReportElement, List<FilterRule>> entry : reportFilter.getFilterRules().entrySet()) {
 			ReportElement elem = entry.getKey();
 			MDXElement mdxElem = null;
@@ -432,6 +435,24 @@ public class MondrianReportGenerator implements ReportExecutor {
 				else
 					config.addAxisFilter(mdxElem, mdxFilter);
 			}
+		}
+		
+		// configures filter rules over same hierarchy 
+		// like Sectors & Sub-sectors
+		MondrianReportFilters currentFilters = (MondrianReportFilters) reportFilter;
+		if (currentFilters.getGroupFilters().size() > 0) {
+			List<MDXGroupFilter> groupFilters = 
+					new ArrayList<MDXGroupFilter>(currentFilters.getGroupFilters().size());
+			for (MondrianReportFilters mondrianOrFilters : currentFilters.getGroupFilters().values()) {
+				MDXConfig dummyConfig = new MDXConfig();
+				addFilters(mondrianOrFilters, dummyConfig);
+				if (dummyConfig.getDataFilters().size() > 0) {
+					MDXGroupFilter mdxGroupFilter = new MDXGroupFilter();
+					mdxGroupFilter.setFilters(dummyConfig.getDataFilters());
+					groupFilters.add(mdxGroupFilter);
+				}
+			}
+			config.setHierarchyFilters(groupFilters);
 		}
 	}
 	

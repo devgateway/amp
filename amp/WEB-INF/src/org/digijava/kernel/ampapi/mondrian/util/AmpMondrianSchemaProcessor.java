@@ -1,9 +1,6 @@
 package org.digijava.kernel.ampapi.mondrian.util;
 
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -14,21 +11,16 @@ import mondrian.spi.DynamicSchemaProcessor;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
-import org.dgfoundation.amp.newreports.NamedTypedEntity;
-import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.reports.mondrian.FiltersGroup;
 import org.dgfoundation.amp.reports.mondrian.MondrianDBUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
-import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -131,6 +123,9 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			wronglyMappedColumns.remove(correspondingColumn);
 			if (notToBeTranslated)
 				continue;
+			// remove the suffix for dummy grouping column names generated before 
+			if (correspondingColumn.endsWith(FiltersGroup.SUFFIX))
+				correspondingColumn = correspondingColumn.substring(0, correspondingColumn.length() - FiltersGroup.SUFFIX.length());
 			columnElem.setAttribute("caption", TranslatorWorker.translateText(correspondingColumn, locale, 3l));
 			//columnElem.setAttribute("name", MondrianMapping.fromFullNameToColumnName.get(fullColumnName)); // NADIA: use for correct originalColumnName implementation
 		}
@@ -210,7 +205,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	}
 	
 	protected String getAllowedActivitiesIds() {
-		Set<Long> allowedActivities = currentEnvironment.get().workspaceFilter.getIds();		
+		Set<Long> allowedActivities = currentEnvironment.get().workspaceFilter.getIds();
 		if (currentReport.get().getFilters() != null) {
 			String dateFiltersQuery = MondrianDBUtils.generateDateColumnsFilterQuery(((MondrianReportFilters)currentReport.get().getFilters()).getDateFilterRules());
 			if (dateFiltersQuery != null)

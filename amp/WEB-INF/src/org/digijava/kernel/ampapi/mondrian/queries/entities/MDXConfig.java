@@ -25,6 +25,7 @@ public class MDXConfig {
 	private List<MDXAttribute> rowAttributes = new ArrayList<MDXAttribute>();
 	private Map<MDXElement, List<MDXFilter>> axisFilters = new HashMap<MDXElement, List<MDXFilter>>();
 	private Map<MDXAttribute, List<MDXFilter>> dataFilters = new HashMap<MDXAttribute, List<MDXFilter>>();
+	private List<MDXGroupFilter> hierarchyFilters = new ArrayList<MDXGroupFilter>();
 	private List<MDXAttribute> singleValueFilters = new ArrayList<MDXAttribute>();
 	private LinkedHashMap<MDXTuple, SortOrder> sortingOrder = new LinkedHashMap<MDXTuple, SortOrder>();
 	private boolean allowColumnsEmptyData = false;
@@ -204,11 +205,25 @@ public class MDXConfig {
 	}
 	
 	/**
+	 * @return the hierarchyFilters
+	 */
+	public List<MDXGroupFilter> getHierarchyFilters() {
+		return hierarchyFilters;
+	}
+	/**
+	 * @param hierarchyFilters the hierarchyFilters to set
+	 */
+	public void setHierarchyFilters(List<MDXGroupFilter> hierarchyFilters) {
+		this.hierarchyFilters = hierarchyFilters;
+	}
+	/**
 	 * @return the singleValueFilters
 	 */
 	public List<MDXAttribute> getLevelFilters() {
 		return singleValueFilters;
 	}
+	
+	
 	/**
 	 * Single value filter, e.g. to display only results for 2014
 	 * @param singleValueFilters the singleValueFilters to set
@@ -334,13 +349,17 @@ public class MDXConfig {
 	}
 	/**
 	 * @return the amountsFormat
+	 * @deprecated due to amounts formatting issue in Mondrian
 	 */
+	@Deprecated 
 	public String getAmountsFormat() {
 		return amountsFormat;
 	}
 	/**
 	 * @param amountsFormat the amountsFormat to set
+	 * @deprecated due to amounts formatting issue in Mondrian 
 	 */
+	@Deprecated
 	public void setAmountsFormat(String amountsFormat) {
 		this.amountsFormat = amountsFormat;
 	}

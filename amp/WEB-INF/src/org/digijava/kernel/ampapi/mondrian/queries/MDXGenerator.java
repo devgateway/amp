@@ -5,6 +5,7 @@ package org.digijava.kernel.ampapi.mondrian.queries;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,6 +27,8 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXConfig;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXFilter;
+import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXFilter.MDXFilterType;
+import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXGroupFilter;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXLevel;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
@@ -165,7 +168,7 @@ public class MDXGenerator {
 		}
 		
 		/* WHERE  (slice data, aka filters in Reports) */
-		where = getWhere(config);
+		where = getWhere(config, with);
 		
 		mdx = (with.length() > 0 ? "WITH " + with.toString() + " " : "") + select + columns + rows + from + where;
 		
@@ -442,8 +445,14 @@ public class MDXGenerator {
 		return null;
 	}
 	
-	private String getWhere(MDXConfig config) throws AmpApiException {
-		if (config.getLevelFilters().size() == 0 && config.getDataFilters().size() == 0) return "";
+	private String getWhere(MDXConfig config, StringBuilder with) throws AmpApiException {
+		if (config.getLevelFilters().size() == 0 && config.getDataFilters().size() == 0
+				&& config.getHierarchyFilters().size() == 0)
+			return "";
+		
+		// use NonEmptyCrossJoin if both column & row axis are requesting this
+		final String fCrossJoin = !config.isAllowRowsEmptyData() && !config.isAllowColumnsEmptyData() ?
+				MoConstants.FUNC_NON_EMPTY_CROSS_JOIN : MoConstants.FUNC_CROSS_JOIN; 
 		
 		final String sep = ", ";
 		//initialize with the number of commas ","  
@@ -476,11 +485,14 @@ public class MDXGenerator {
 			addToFilterMap(filtersMap, filter, mdxAttr);
 		}
 		
+		//build hierarchy group filters
+		buildGroupFilter(config, filtersMap, with);
+		
 		if (filtersMap.keySet().size() <= 1) //though cannot be 0
 			doCrossJoin = false;
 		else
 			size += filtersMap.keySet().size() * 2 //2 = {} to be added around each filter set, except if Filter func was used, so .size() is max number of {} 
-					+ (filtersMap.keySet().size() - 1) * (MoConstants.FUNC_CROSS_JOIN.length() + 2); //2 = ()
+					+ (filtersMap.keySet().size() - 1) * (fCrossJoin.length() + 2); //2 = ()
 		
 		final String where = " WHERE (";
 		StringBuilder whereFilter = new StringBuilder(size + where.length() + 1); //1 for closing )
@@ -501,7 +513,7 @@ public class MDXGenerator {
 			
 			if (doCrossJoin)
 				if (iter.hasNext())
-					whereFilter.append(MoConstants.FUNC_CROSS_JOIN).append("(").append(prefix);
+					whereFilter.append(fCrossJoin).append("(").append(prefix);
 				else
 					whereFilter.append(prefix);
 			else if (useUnion)
@@ -518,6 +530,105 @@ public class MDXGenerator {
 		whereFilter.append(")");
 		
 		return whereFilter.toString();
+	}
+	
+	private void buildGroupFilter(MDXConfig config, Map<String, List<String>> filtersMap, StringBuilder with) throws AmpApiException {
+		if (config.getHierarchyFilters() == null || config.getHierarchyFilters().size() == 0)
+			return;
+		
+		int setId = 1;
+		// for quicker impl, for now assumptions: we filter over a full valued dimensions, like Sectors & Programs
+		for (MDXGroupFilter mdxGroupFilter : config.getHierarchyFilters()) {
+			final String filterSet = "FILTER_SET" + setId ++;
+			/*
+			final String memberSet = "LOWEST_MEMBER" + setId;
+			*/
+			// keeps the list of allowed values
+			List<String> values = new ArrayList<String>();
+			// keeps the list of other filter filter types
+			List<String> otherFilters = new ArrayList<String>();
+			String dimHierarchy = null;
+			
+			for (Entry<MDXAttribute, List<MDXFilter>> entry : mdxGroupFilter.getFilters().entrySet()) {
+				MDXLevel mdxLevel = (MDXLevel) entry.getKey();
+				if (dimHierarchy == null)
+					dimHierarchy = mdxLevel.getDimensionAndHierarchy();
+				else if (!dimHierarchy.equals(mdxLevel.getDimensionAndHierarchy()))
+						throw new AmpApiException("Levels of the same filters group must be part of the same hierarchy: " 
+								+ dimHierarchy + mdxLevel.getDimensionAndHierarchy());
+				
+				boolean hasRanges = false;
+				for (MDXFilter mdxFilter : entry.getValue())
+					if (MDXFilterType.RANGE.equals(mdxFilter.filterType)) {
+						hasRanges = true;
+						break;
+					}
+				
+				if (hasRanges) {
+					String filter = toFilter(mdxLevel.toString(), mdxLevel.getCurrentMemberName(), mdxLevel, entry.getValue(), false);
+					filter = MoConstants.FUNC_GENERATE + "(" + filter + ", " 
+							+ MoConstants.FUNC_ASCENDANTS + "(" + mdxLevel.getCurrentMemberName() + "))";
+					otherFilters.add(filter);
+				} else {
+					// TODO: we should try to integrate this into toFilter(...) method, but due to upcoming release, 
+					// avoiding changes in that part
+					for (MDXFilter mdxFilter : entry.getValue()) {
+						List<String> filteredValues = mdxFilter.filteredValues;
+						switch(mdxFilter.filterType) {
+						case SINGLE_VALUE :
+							filteredValues = Arrays.asList(mdxFilter.singleValue);
+						case VALUES:
+							List<String> mdxFilteredValues = new ArrayList<String>(filteredValues.size());
+							for (String value : filteredValues) {
+								mdxFilteredValues.add(toMDX(mdxLevel, value, mdxFilter.isKey));
+							}
+							if (mdxFilter.allowedFilteredValues) {
+								values.addAll(mdxFilteredValues);
+							} else {
+								String filterList = mdxFilteredValues.toString();
+								String otherFiter = "Filter(" + mdxLevel.toString() + ", " 
+								+ mdxLevel.getCurrentMemberName() + " NOT IN {"
+								+ filterList.substring(1, filterList.length() - 1)
+								+ "}";
+								otherFilters.add(otherFiter);
+							}
+							break;
+						case RANGE:
+							// should not get here, but just in case the code changes
+							throw new AmpApiException("Range filters should have been already processed");
+						}
+					}
+				}
+			}
+			
+			String filerEntriesStr = values.toString();
+			String filter = filerEntriesStr.substring(1, filerEntriesStr.length() - 1);
+			if (otherFilters.size() > 0) {
+				String otherFiltersStr = filter;
+				for (String customFilter : otherFilters) {
+					otherFiltersStr = MoConstants.FUNC_UNION + "(" + otherFiltersStr + 
+					", " + customFilter + ")"; 
+				}
+				filter = otherFiltersStr;
+			}
+				
+			
+			with.append(" SET ").append(filterSet).append(" AS ").append("({").append(filter).append("})");
+			
+			/*
+			 * no need to create filter, can directly use the set 
+			with.append(" SET ").append(memberSet).append(" AS ").append(MoConstants.FUNC_TAIL).append("(")
+			.append(filterSet).append(")");
+			
+			
+			final String lowestLevel = memberSet + ".Item(0).Level"; 
+			final String whereFilter = MoConstants.FUNC_FILTER + "(" + lowestLevel + "." + MoConstants.MEMBERS
+					+ ", " + lowestLevel + "." + MoConstants.CURRENT_MEMBER  
+					+ " in " + MoConstants.FUNC_DESCENDANTS + "(" + filterSet + "))";
+			*/
+			
+			filtersMap.put(dimHierarchy, Arrays.asList(filterSet));
+		}
 	}
 	
 	private int addToFilterMap(Map<String, List<String>> filtersMap, String filter, MDXAttribute mdxAttr) {
@@ -542,12 +653,14 @@ public class MDXGenerator {
 	
 	private String toFilter(String toFilterSet, String filterBy, MDXElement ref, List<MDXFilter> filtersList, boolean orderDates) throws AmpApiException {
 		if (filtersList == null || filtersList.size() == 0 ) return "";
+		
 		final String or = " OR ";
 		String origFilterBy = filterBy;
 		String filter = "";
 		String allowedFilterList = "";
 		String notAllowedFilterList = "";
 		boolean addFilterFunc = false;
+		
 		for (MDXFilter mdxFilter : filtersList) {
 			boolean isMeasure = ref instanceof MDXMeasure;
 			addFilterFunc = addFilterFunc || isMeasure || mdxFilter.isKey;
@@ -695,11 +808,15 @@ public class MDXGenerator {
 	}
 	
 	private String toMDX(MDXElement elem, String value) {
+		return toMDX(elem, value, false);
+	}
+	
+	private String toMDX(MDXElement elem, String value, boolean isKey) {
 		if (!elem.hasFullName()) {
 			logger.error("MDXElement without fullname: " + elem.getFullName());
 			return "";
 		}
-		return elem.getFullName() + "." + MDXElement.quote(value);
+		return elem.getFullName() + "." + (isKey ? "&" : "") + MDXElement.quote(value);
 	}
 	
 	private String toFirstChild(MDXElement elem) {

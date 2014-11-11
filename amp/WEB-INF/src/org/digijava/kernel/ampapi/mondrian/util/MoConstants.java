@@ -45,6 +45,10 @@ public final class MoConstants {
 	public static final String FUNC_ORDER = "Order";
 	public static final String FUNC_FILTER = "Filter";
 	public static final String FUNC_CAST = "Cast";
+	public static final String FUNC_TAIL = "Tail";
+	public static final String FUNC_DESCENDANTS = "Descendants";
+	public static final String FUNC_ASCENDANTS = "Ascendants";
+	public static final String FUNC_GENERATE = "Generate";
 
 	//Dimensions
 	public static final String ACTIVITY_STATUS = "Activity Status";

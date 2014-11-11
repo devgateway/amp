@@ -605,9 +605,23 @@ public class LocationService {
 		//fetch activities filtered by mondrian
 		List<Long>activitiesId = getActivitiesForFiltering(config);
 		ClusteredPoints cp = null;
-		
-		
-		String qry = " WITH RECURSIVE rt_amp_category_value_location(id, parent_id, gs_lat, gs_long, acvl_parent_category_value, level, root_location_id,root_location_description) AS ( "
+		Double countryLatitude=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LATITUDE);
+		Double countryLongitude=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LONGITUDE);
+		String qry;
+		if(adminLevel.equals("Country")){
+					qry=" SELECT al.amp_activity_id, acvl.id root_location_id,acvl.location_name root_location_description,acvl.gs_lat, acvl.gs_long "+  
+					" FROM amp_activity_location al   "+
+					" join amp_location loc on al.amp_location_id = loc.amp_location_id  "+
+					" join amp_category_value_location acvl on loc.location_id = acvl.id  "+
+					" join amp_category_value amcv on acvl.parent_category_value =amcv.id "+  
+					" where amcv.category_value ='Country' "+
+					" and al.amp_activity_id in(" + Util.toCSStringForIN(activitiesId) + " ) " +
+					" and location_name=(select country_name "
+					+ " from DG_COUNTRIES where iso='"+ FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY) +"')";
+
+			
+		}else{
+		qry = " WITH RECURSIVE rt_amp_category_value_location(id, parent_id, gs_lat, gs_long, acvl_parent_category_value, level, root_location_id,root_location_description) AS ( "
 				+ " select acvl.id, acvl.parent_location, acvl.gs_lat, acvl.gs_long, acvl.parent_category_value, 1, acvl.id,acvl.location_name  "
 				+ " from amp_category_value_location acvl  "
 				+ " join amp_category_value amcv on acvl.parent_category_value =amcv.id  "
@@ -626,6 +640,7 @@ public class LocationService {
 				+ " join rt_amp_category_value_location acvl on loc.location_id = acvl.id  "
 				+ " where al.amp_activity_id in(" + Util.toCSStringForIN(activitiesId) + " ) "
 				+ " order by acvl.root_location_id,al.amp_activity_id";
+		}
 		Connection conn = null;
 		try {
 			conn = PersistenceManager.getJdbcConnection();
@@ -639,8 +654,13 @@ public class LocationService {
 					rootLocationId = rs.getLong("root_location_id");
 					cp = new ClusteredPoints();
 					cp.setAdmin(rs.getString("root_location_description"));
-					cp.setLat(rs.getString("gs_lat"));
-					cp.setLon(rs.getString("gs_long"));
+					if(adminLevel.equals("Country")){
+						cp.setLat(countryLatitude.toString());
+						cp.setLon(countryLongitude.toString());							
+					}else{
+						cp.setLat(rs.getString("gs_lat"));
+						cp.setLon(rs.getString("gs_long"));
+					}
 				}
 				cp.getActivityids().add(rs.getLong("amp_activity_id"));
 			}

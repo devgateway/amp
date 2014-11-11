@@ -52,6 +52,9 @@ public class SaikuUtils {
 	 */
 	public static void doTotals(CellDataSet result, CellSet cellSet, boolean onColumns, boolean onRows) throws Exception {
 		/* start of AMP custom part to detect the selectedMeasures list */ 
+		
+		if (cellSet.getAxes().size() < 2)
+			return; 
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 		List<Measure> uniqueMeasures = new ArrayList<Measure>();
 		// adjustments for AMP-18330 start
@@ -82,16 +85,19 @@ public class SaikuUtils {
 		/* end of AMP custom part to detect the selectedMeasures list */
 		/* start of Saiku approach to calculate the totals */
 		result.setSelectedMeasures(uniqueSelectedMeasures);
-		int rowsIndex = 0;
+		int rowsIndex = 0; // the following code will always keep the value to either (0) or (1)
 		if (!cellSet.getAxes().get(0).getAxisOrdinal().equals(Axis.ROWS)) {
-			rowsIndex = (rowsIndex + 1) & 1;
+			rowsIndex = 1 - rowsIndex;
 		}
+					
 		// TODO - refactor this using axis ordinals etc.
-		final AxisInfo[] axisInfos = new AxisInfo[]{new AxisInfo(cellSet.getAxes().get(rowsIndex)), new AxisInfo(cellSet.getAxes().get((rowsIndex + 1) & 1))};
+		final AxisInfo[] axisInfos = new AxisInfo[]{
+				new AxisInfo(cellSet.getAxes().get(rowsIndex)), 
+				new AxisInfo(cellSet.getAxes().get(1 - rowsIndex))};
 		List<TotalNode>[][] totals = new List[2][];
 		TotalsListsBuilder builder = null;
 		for (int index = 0; index < 2; index++) {
-			final int second = (index + 1) & 1;
+			final int second = 1 - index;
 			TotalAggregator[] aggregators = new TotalAggregator[axisInfos[second].maxDepth + 1];
 			String totalFunctionName = "sum";//AMP change to configure the function to 'sum' manually instead of using query.getTotalFunction(axisInfos[second].uniqueLevelNames.get(i - 1));
  			if((!onColumns && index == 0) || (!onRows && index==1)) { // Mimic behavior of totalFunctionName from Saiku 

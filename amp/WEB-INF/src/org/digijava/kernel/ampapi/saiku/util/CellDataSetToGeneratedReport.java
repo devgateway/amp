@@ -73,9 +73,11 @@ public class CellDataSetToGeneratedReport {
 		Deque<List<ReportArea>> stack = new ArrayDeque<List<ReportArea>>();
 		//assumption that concatenation was done and totals are required starting for the 1st non-hierarchical column backwards
 		int hSize = spec.getHierarchies().size();
-		if (spec.getColumns().size() == spec.getHierarchies().size())
+		if (spec.getColumns().size() == spec.getHierarchies().size() && !spec.getHierarchies().isEmpty())
 			hSize--;
-		int maxDepth = spec.isCalculateRowTotals() ? Math.max(1, hSize) - (hSize / spec.getColumns().size()) : 1; 
+		
+		int maxDepth = spec.getColumns().isEmpty() ? 1 :  
+				(spec.isCalculateRowTotals() ? Math.max(1, hSize) - (hSize / spec.getColumns().size()) : 1); 
 		int maxStackSize = 1 + maxDepth * 2; //* 2 for totals, where maxDepth != 0 
 		refillStack(stack, maxStackSize); //prepare the stack
 		currentSubGroupIndex = new int[maxDepth + 1];
@@ -115,6 +117,7 @@ public class CellDataSetToGeneratedReport {
 			((SaikuReportArea)root).setOrigLeafId(getOrigLeafId((SaikuReportArea)root));
 		
 		return root;
+		//return (ReportAreaImpl) root.getChildren().get(1);
 	}
 	
 	//returns not null textual column id

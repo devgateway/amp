@@ -99,15 +99,17 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 	
 	protected void runMondrianTestCase(ReportSpecification spec, String locale, List<String> activities, ReportAreaForTests cor) {
 		GeneratedReport rep = this.runReportOn(spec, locale, activities);
-		if (spec.getReportName().equals("AMP-18509") || cor == null)
-			System.err.println("this is output for test " + spec.getReportName() + describeInCode(rep.reportContents, 1));
 		//Iterator<ReportOutputColumn> bla = rep.reportContents.getChildren().get(0).getContents().keySet().iterator();
 		//ReportOutputColumn first = bla.next(), second = bla.next(), third = bla.next(), fourth = bla.next();
 		
-		if (cor == null) return;
-		String delta = cor.getDifferenceAgainst(rep.reportContents);
+		//if (cor == null) return;
+		String delta = cor == null ? null : cor.getDifferenceAgainst(rep.reportContents);
+		
+		if (cor == null || delta != null)
+			System.err.println("this is output for test " + spec.getReportName() + describeInCode(rep.reportContents, 1));
+		
 		if (delta != null)
-			fail("test " + spec.getReportName() + " failed: " + delta);
+			fail("test " + spec.getReportName() + " failed: " + delta);			
 	}
 	
 	public static String describeReportOutputInCode(GeneratedReport gr) {

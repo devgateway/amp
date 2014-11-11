@@ -23,6 +23,7 @@
 				CREATE OR REPLACE VIEW v_mondrian_activity_fixed_texts AS
 					SELECT
 						aav.amp_activity_id,
+						CAST('constant' as varchar(10)) as constant,
 						aav.approval_status,
 						(CASE  <!-- change this together with AmpARFilter.activityStatusToNr -->
 							WHEN aav.approval_status='edited' THEN 2 

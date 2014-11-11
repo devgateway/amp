@@ -1113,6 +1113,7 @@ public class MDXGenerator {
 	 */
 	public CellSet runQuery(String mdx) throws AmpApiException { // temporary hacky replacement until AMP-18369 and related tickets are resolved
 		int nrTries = 2;
+		Exception ex = null;
 		for(int i = 1; i <= nrTries; i++) {
 			if (i > 1)
 				logger.error("RETRYING to execute MDX query");
@@ -1121,10 +1122,11 @@ public class MDXGenerator {
 				return res;
 			}
 			catch(OlapException e){
+				ex = e;
 				logger.error("Could not execute Olap Query \"" + mdx + "\", Error Details: " + MondrianUtils.getOlapExceptionMessage(e));
 			}
 		}
-		throw new AmpApiException("count not execute Olap Query after " + nrTries + " attempts, abandoning");
+		throw new AmpApiException("count not execute Olap Query after " + nrTries + " attempts, abandoning", ex);
 	}
 	
 	/**

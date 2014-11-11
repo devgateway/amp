@@ -28,6 +28,10 @@ public class AmpApiException extends AMPException {
 		super(message);
 	}
 
+	public AmpApiException(String message, Throwable cause) {
+		super(message, cause);
+	}
+	
 	/**
 	 * @param level
 	 * @param continuable

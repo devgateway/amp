@@ -22,7 +22,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	private ReportSettings settings = null;
 	private List<SortingInfo> sorters = null;
 	private GroupingCriteria groupingCriteria = GroupingCriteria.GROUPING_TOTALS_ONLY;
-	private boolean summaryReport = false;
+	//private boolean summaryReport = false;
 	private boolean calculateRowTotals = false;
 	private boolean calculateColumnTotals = false;
 	private int rowsHierarchiesTotals = 0;
@@ -180,17 +180,17 @@ public class ReportSpecificationImpl implements ReportSpecification {
 		this.groupingCriteria = groupingCriteria;
 	}
 
-	@Override
-	public boolean isSummaryReport() {
-		return summaryReport;
-	}
-	
-	/**
-	 * @param summaryReport - true if this must be a summary report, i.e. show only sub-totals and totals
-	 */
-	public void setSummaryReport(boolean summaryReport) {
-		this.summaryReport = summaryReport;
-	}
+//	@Override
+//	public boolean isSummaryReport() {
+//		return summaryReport;
+//	}
+//	
+//	/**
+//	 * @param summaryReport - true if this must be a summary report, i.e. show only sub-totals and totals
+//	 */
+//	public void setSummaryReport(boolean summaryReport) {
+//		this.summaryReport = summaryReport;
+//	}
 
 	/**
 	 * Configures whether totals for each hierarchy group and grand row totals must be calculated
@@ -236,7 +236,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	 * @param displayEmptyFundingRows
 	 */
 	public void setDisplayEmptyFundingRows(boolean displayEmptyFundingRows) {
-		this.displayEmptyFundingRows = displayEmptyFundingRows;
+		//this.displayEmptyFundingRows = displayEmptyFundingRows;
 	}
 	
 	@Override

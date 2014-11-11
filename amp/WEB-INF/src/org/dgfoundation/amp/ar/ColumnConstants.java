@@ -31,6 +31,12 @@ public class ColumnConstants {
 	public static final String AGREEMENT_SIGNATURE_DATE = "Agreement Signature Date";
 	public static final String AGREEMENT_TITLE_CODE = "Agreement Title + Code";
 	public static final String AMP_ID = "AMP ID";
+	
+	/**
+	 * text column which will always have a constant value (currently "constant", but do not count on it)
+	 */
+	public static final String CONSTANT = "Constant";
+	
 	public static final String APPROVAL_STATUS = "Approval Status";
 	public static final String ARCHIVED = "Archived";
 	public static final String AUDIT_SYSTEM = "Audit System";

@@ -44,6 +44,7 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -147,6 +148,17 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 		spec.getColumns().clear();
 		spec.getColumns().addAll(newCols);
+		
+		/**
+		 * ugly workaround for AMP-18558 when the report has no hierarchies - a saiku bug which is easier to workaround than fix
+		 */
+		if (spec.getColumns().isEmpty() && spec.getHierarchies().isEmpty()) {
+			ReportColumn constantDummyColumn = new ReportColumn(ColumnConstants.CONSTANT);
+			spec.getColumns().add(constantDummyColumn);
+			spec.getHierarchies().add(constantDummyColumn);
+			((ReportSpecificationImpl) spec).setCalculateRowTotals(false);
+			((ReportSpecificationImpl) spec).setCalculateColumnTotals(true);
+		}
 	}
 	
 	@Override
@@ -209,7 +221,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * @throws AMPException
 	 */
 	private CellDataSet generateReportAsSaikuCellDataSet(final ReportSpecification spec) throws AMPException {
+		//reorderColumnsByHierarchies(spec);
 		init(spec);
+		addDummyHierarchy(spec);
 		reorderColumnsByHierarchies(spec);
 		AmpMondrianSchemaProcessor.registerReport(spec, environment);
 		CellDataSet cellDataSet = null;
@@ -232,7 +246,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				tearDown();
 				stats.crashed = true;
 				throw new AMPException("Cannot generate Mondrian Report '" + spec.getReportName() +"' : " 
-						+ e.getMessage() == null ? e.getClass().getName() : e.getMessage());
+						+ e.getMessage() == null ? e.getClass().getName() : e.getMessage(), e);
 			}
 		
 			stats.mdx_time = System.currentTimeMillis() - startTime;
@@ -255,8 +269,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 				throw new AMPException("Cannot generate Mondrian Report '" + spec.getReportName() +"' : " 
 						+ e.getMessage() == null ? e.getClass().getName() : e.getMessage(), e);
 			} finally {
-				if (printMode) {
-//					if (cellSet != null) THIS CODE PRINTS DATA BEFORE postprocessing, so it is pretty useless now
+				if (true || printMode) {
+//					if (cellSet != null) // THIS CODE PRINTS DATA BEFORE postprocessing, so it is pretty useless now
 //						MondrianUtils.print(cellSet, spec.getReportName());
 //					if (cellDataSet != null) //THIS THING SOMETIMES CRASHES
 //						SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST");
@@ -276,7 +290,6 @@ public class MondrianReportGenerator implements ReportExecutor {
 			}
 		
 		MondrianReportUtils.configureDefaults(spec);
-		addDummyHierarchy(spec);
 	}
 	
 	/**
@@ -328,7 +341,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		config.setColumnsHierarchiesTotals(0); //we are moving subtotals out of MDX.
 		config.setRowsHierarchiesTotals(0); //we are moving subtotals out of MDX.
 		//add requested columns
-		if (!spec.isSummaryReport())
+		//if (!spec.isSummaryReport())
 			for (ReportColumn col:spec.getColumns()) {
 				MDXAttribute elem = (MDXAttribute)MondrianMapping.toMDXElement(col);
 				if (elem == null) 
@@ -495,22 +508,23 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 	}
 	
-	private CellDataSet postProcess(ReportSpecification spec, CellSet cellSet) throws AMPException {
+	private CellDataSet postProcess(ReportSpecification spec, CellSet cellSet) throws AMPException {		
 		CellSetAxis rowAxis = cellSet.getAxes().size() == 2 ? cellSet.getAxes().get(Axis.ROWS.axisOrdinal()) : null;
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 				
 		logger.info("[" + spec.getReportName() + "]" +  "Starting conversion from Olap4J CellSet to Saiku CellDataSet via Saiku method...");
 		CellDataSet cellDataSet = OlapResultSetUtil.cellSet2Matrix(cellSet); // we can also pass a formater to cellSet2Matrix(cellSet, formatter)
 		logger.info("[" + spec.getReportName() + "]" +  "Conversion from Olap4J CellSet to Saiku CellDataSet ended.");
-		
-		leafHeaders = getOrderedLeafColumnsList(spec, rowAxis, columnAxis);
-		
+
+		leafHeaders = getOrderedLeafColumnsList(spec, rowAxis, columnAxis);		
+
 		// now cleanup dummy measures, identified during #getOrderedLeafColumnsList
 		SaikuUtils.removeColumns(cellDataSet, dummyColumnsToRemove);
-
+		
 		boolean calculateTotalsOnRows = spec.isCalculateRowTotals()
 				//enable totals for non-hierarhical columns
 				|| spec.getHierarchies().size() < spec.getColumns().size();
+		
 		if (spec.isCalculateColumnTotals() || calculateTotalsOnRows) {
 			try {
 				logger.info("[" + spec.getReportName() + "]" +  "Starting totals calculation over the Saiku CellDataSet via Saiku method...");
@@ -649,7 +663,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 	}
 	
 	private void removeYearsToHideCells(CellDataSet cellDataSet, SortedSet<Integer> leafColumnsNumberToRemove) {
-		//navigate through the totals list and remember the totals only for the columns we display 
+		//navigate through the totals list and remember the totals only for the columns we display
+		if (cellDataSet.getRowTotalsLists() == null)
+			return;
 		for(List<TotalNode> totalLists : cellDataSet.getRowTotalsLists()) {
 			for(TotalNode totalNode : totalLists) {
 				if (totalNode.getTotalGroups() != null && totalNode.getTotalGroups().length > 0) {

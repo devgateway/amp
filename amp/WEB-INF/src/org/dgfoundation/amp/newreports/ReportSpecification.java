@@ -47,11 +47,11 @@ public interface ReportSpecification {
 	
 	public GroupingCriteria getGroupingCriteria();
 	
-	/**
-	 * returns true iff the report must hide entities and only show (sub)totals
-	 * @return
-	 */
-	public boolean isSummaryReport();
+//	/**
+//	 * returns true iff the report must hide entities and only show (sub)totals
+//	 * @return
+//	 */
+//	public boolean isSummaryReport();
 	
 	/**
 	 * @return true if totals per each row must be calculated

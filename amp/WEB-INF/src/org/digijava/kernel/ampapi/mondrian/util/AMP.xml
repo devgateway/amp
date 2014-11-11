@@ -353,6 +353,11 @@
 				<Level name="Activity Id" column="amp_activity_id" type="Integer"/>
 			</Hierarchy>
 			
+			<Hierarchy hasAll="true" allMemberName="All Activity Id" primaryKey="amp_activity_id" name="Constant">
+				<Table name="mondrian_activity_fixed_texts" />
+				<Level name="Constant" column="constant" type="String"/>
+			</Hierarchy>
+			
 			<Hierarchy hasAll="true" allMemberName="All Internal Use Id" primaryKey="amp_activity_id" name="Internal Use Id">
 				<Table name="mondrian_activity_fixed_texts" />
 				<Level name="Internal Use Id" column="amp_activity_id" type="Integer"/>

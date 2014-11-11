@@ -1,7 +1,7 @@
 <% /* To handle menus with multiple sections */
 if (this.parentMultisectionControl) { %>
 <div>
-   <p class="description"><%= title %></p>
+   <p data-i18n="amp.gis:menu-title-<%= obj.title.replace(/ /g,'') %>" class="description"><%= obj.title %></p>
  </div>
  <% } %>
 <div  class="container-fluid layer-selector" ></div>

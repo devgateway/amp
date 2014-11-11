@@ -2,7 +2,7 @@
   <label>
     <input type="checkbox" name="<%= obj.group %>" value="<%= obj.id || obj.value %>" <% if(obj.selected){%> checked <%}%> >
     <span class="styled-checkbox"></span>
-    <%= obj.title %>
+    <span data-i18n="amp.gis:radio-title-<%= obj.title.replace(/ /g,'') %>"><%= obj.title %></span>
   </label>
   <% if (obj.helpText){ %>
     <a href="#layer-info" class="layer-info"

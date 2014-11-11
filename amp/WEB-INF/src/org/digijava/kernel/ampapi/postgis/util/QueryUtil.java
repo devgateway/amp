@@ -120,6 +120,7 @@ public class QueryUtil {
 		List <AmpLocator> locationList = new ArrayList <AmpLocator> ();
 		try {
 			int distance = ScoreCalculator.getMaxAllowedDistance(keyword);
+			keyword = keyword.toLowerCase();
 			String queryString = "select  id,name,latitude,longitude,levenshtein('"+keyword+"',lower (name),1,1,1) as distance,thegeometry from amp_locator where levenshtein('"+keyword+"',lower (name),1,1,1) <= "+distance+
 					 " or lower (name) like '%"+keyword+"%'";
 			java.sql.ResultSet rs = SQLUtils.rawRunQuery(PersistenceManager.getJdbcConnection(), queryString, null);

@@ -31,10 +31,12 @@ module.exports = Backbone.Collection
     var tempDeferred;
     var isFetchMore = false;
     var preserveURL = this.url;
+
     /* TODO nice to have: if otherFilters and columnFilters
      * had their own object on API, separate from settings, etc.
      * Currently all on the same data level.
      **/
+
     /* get filters if set (not applicable for getActivities) */
     if (this.appData.filter) {
       _.extend(payload, this.appData.filter.serialize());
@@ -43,10 +45,6 @@ module.exports = Backbone.Collection
     /* include "settings", only if there is something to send. DO NOT send blank settings. */
     if (this.appData.settings && !_.isEmpty(this.appData.settings.serialize())) {
       payload.settings = this.appData.settings.serialize();
-    }
-
-    if (this._pageSize > 0) {
-      payload.size = this._pageSize;
     }
 
     /*These will always need to be reset when you do a raw fetch
@@ -58,10 +56,15 @@ module.exports = Backbone.Collection
       this._currentStartPosition = 0;
     }
 
-
-
+    /* Only use pagination if _pageSize is positive */
     if (this._pageSize > 0) {
-      payload.start = this._currentStartPosition;
+      /* POST payload-specified size and start are currently ignored by API but
+       * they would be cleaner than modifing and restoring the URL
+       **/
+
+      /* payload.size = this._pageSize;
+      payload.start = this._currentStartPosition; */
+
       this.url = ['/rest/gis/activities?start=', this._currentStartPosition, '&size=', this._pageSize].join('');
     }
 
@@ -73,6 +76,7 @@ module.exports = Backbone.Collection
      //run fetch before reverting URL
     tempDeferred = Backbone.Collection.prototype.fetch.call(this, options);
 
+    /* Maintain the pagination state even on errors */
     tempDeferred.then(function() {
       if (self._pageSize > 0) {
         if (options && !options.isFetchMore) {
@@ -90,6 +94,7 @@ module.exports = Backbone.Collection
     return tempDeferred;
   },
 
+  /* Used for pagination */
   fetchMore: function(options) {
     options = _.defaults((options || {}), {
       isFetchMore:true,
@@ -99,6 +104,7 @@ module.exports = Backbone.Collection
 
   },
 
+  /* Used for pagination */
   getPageDetails: function() {
     var pageDetails =  {
       isPaging: this._pageSize > 0,

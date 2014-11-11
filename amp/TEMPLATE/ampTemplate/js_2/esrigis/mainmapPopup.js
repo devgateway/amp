@@ -8,6 +8,7 @@ var selectedPointEvent;
 var circlePoint;
 var latitude;
 var longitude;
+var pointRadious = [8500,8500,8500,8500,8500,8500,8500,7500,5500,3500,2000,1000,600,400,300,200];
 
 function MapPopup (lat,long) {
 	latitude = lat;
@@ -18,6 +19,7 @@ function MapPopup (lat,long) {
 
 function initMap() {
 	map = L.map('map').setView([ latitude, longitude ], 7);
+	currentZoom = map.getZoom();
 	basemapLayer = L.esri.basemapLayer("Streets").addTo(map);
 	//basemapLayer = L.esri.tiledMapLayer(basemapurl, {}).addTo(map);
 
@@ -27,6 +29,12 @@ function initMap() {
 		setBasemap(this.value);
 	});
 	map.on('click', onMapClick);
+	map.on( "zoomend", function( e ) {
+		if (circlePoint != null) {
+		circlePoint.setRadius (pointRadious[map.getZoom()+1]);
+	    console.log( "zoom level is " + map.getZoom() );
+		}
+	});
 }
 
 function onMapClick (e) {
@@ -37,7 +45,7 @@ function onMapClick (e) {
 	if (circlePoint) {
 		map.removeLayer (circlePoint);
 	}
-	circlePoint = L.circle([e.latlng.lat, e.latlng.lng], 8500, {
+	circlePoint = L.circle([e.latlng.lat, e.latlng.lng], pointRadious[map.getZoom()+1], {
 	    color: 'red',
 	    fillColor: '#f03',
 	    fillOpacity: 0.5

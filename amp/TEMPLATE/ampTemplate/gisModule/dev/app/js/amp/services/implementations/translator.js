@@ -13,7 +13,7 @@ function Translator() {
 
   // this is the object that has all  the key value pairs for the widget.
   this._defaultKeys = JSON.parse(fs.readFileSync(__dirname +
-    '/../../../../mock-api/data/label-translations/sample-en.json', 'utf8'));
+    '/initial-translation-request.json', 'utf8'));
   this.availableLanguages = null;// backbone collection
   this.translations = {
     locales:{

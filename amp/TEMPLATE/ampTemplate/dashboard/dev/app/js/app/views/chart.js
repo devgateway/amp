@@ -131,6 +131,13 @@ module.exports = BackboneDash.View.extend({
     this.model.set('view', view);
   },
 
+  drawChartTitle: function(canvas, title) {
+    var ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#163f66';
+    ctx.font = 'bold 22px "Open Sans"';
+    ctx.fillText(title.toUpperCase(), 10, 10+22);
+  },
+
   download: function(e) {
     var svg = this.el.querySelector('svg.dash-chart');
     if (!svg) {
@@ -138,16 +145,26 @@ module.exports = BackboneDash.View.extend({
         ['Could not find chart svg to render.']);
       return;
     }
+
     var canvas = document.createElement('canvas');
-    canvas.setAttribute('width', this.$(svg).width() + 'px');
-    canvas.setAttribute('height', this.$(svg).height() + 'px');
+    if (!canvas.getContext) {
+      this.app.report('Unsupported feature',
+        ['Chart export is not supported on this browser.']);
+      return;
+    }
+    canvas.setAttribute('width', this.$(svg).width());
+    canvas.setAttribute('height', this.$(svg).height() + 42);
 
     canvg(canvas, svg.outerHTML, {
-      log: true,
+      offsetY: 42,
+      // log: true,  // debug info
       ignoreMouse: true,
       ignoreAnimation: true
     });
     // canvg renders synchronously, despite having a callback option
+
+    this.drawChartTitle(canvas, this.model.get('name'));
+
     e.currentTarget.href = canvas.toDataURL('image/png');
   },
 

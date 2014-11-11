@@ -29,6 +29,7 @@ module.exports = BaseControlView.extend({
         [self.app.data.projectSitesMenu]
       ));
 
+
       // register state:
       self.app.state.register(self, 'layers-view', {
         get: function() {
@@ -56,9 +57,12 @@ module.exports = BaseControlView.extend({
 
     // add content
     this._loaded.then(function() {
-      self.$('.content').html(self.template({title: self.title}));
-      self.$('.layer-selector').html(self.projectLayerCollection.map(function(cluster) {
-        return (new OptionView({ model: cluster })).render().el;
+      self.$('.content', self.el).html(self.template({title: self.title}));
+      self.$('.layer-selector', self.el).html(self.projectLayerCollection.map(function(cluster) {
+        return (new OptionView({
+          model: cluster,
+          app: self.app
+         })).render().el;
       }));
     });
     return this;

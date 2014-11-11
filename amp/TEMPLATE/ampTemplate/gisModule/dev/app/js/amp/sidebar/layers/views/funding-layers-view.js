@@ -42,7 +42,10 @@ module.exports = Backbone.View.extend({
     //this.$(this.el,this).html(this.template({title: this.title}));
 
     this.$('.layer-selector', this).html(this.collection.map(function(indicator) {
-      return (new OptionView({ model: indicator })).render().el;
+      return (new OptionView({
+        model: indicator,
+        app: this.app
+      })).render().el;
     }));
 
     return this;

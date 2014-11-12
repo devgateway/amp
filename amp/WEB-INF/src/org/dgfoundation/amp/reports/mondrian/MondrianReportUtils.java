@@ -209,4 +209,23 @@ public class MondrianReportUtils {
 		configurableMeasures.retainAll(MondrianMapping.definedMeasures);
 		return configurableMeasures;
 	}
+	
+	/**
+	 * Decodes the amount units option id (units/thousands/millions) 
+	 * to the actual multiplier to be used
+	 * 
+	 * @param optionId amount units option id
+	 * @return number multiplier
+	 */
+	public static double getAmountMultiplier(int optionId) {
+		switch(optionId) {
+		case AmpARFilter.AMOUNT_OPTION_IN_UNITS:  
+			return 1;
+		case AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS:
+			return 0.001;
+		case AmpARFilter.AMOUNT_OPTION_IN_MILLIONS:
+			return 0.000001;
+		}
+		return 1;
+	}
 }

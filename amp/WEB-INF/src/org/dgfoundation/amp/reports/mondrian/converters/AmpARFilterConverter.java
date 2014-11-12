@@ -351,17 +351,8 @@ public class AmpARFilterConverter {
 		if (arFilter.getCurrentFormat() != null)
 			settings.setCurrencyFormat(arFilter.getCurrentFormat());
 		// cannot use DecimalFormat multiplier, which is int and cannot be fractional
-		switch (arFilter.computeEffectiveAmountInThousand()) {
-		case AmpARFilter.AMOUNT_OPTION_IN_UNITS:  
-			settings.setUnitsMultiplier(1);
-			break;
-		case AmpARFilter.AMOUNT_OPTION_IN_THOUSANDS:
-			settings.setUnitsMultiplier(0.001);
-			break;
-		case AmpARFilter.AMOUNT_OPTION_IN_MILLIONS:
-			settings.setUnitsMultiplier(0.000001);
-			break;
-		}
+		settings.setUnitsMultiplier(MondrianReportUtils.getAmountMultiplier(
+				arFilter.computeEffectiveAmountInThousand()));
 	}
 	
 	/**

@@ -15,11 +15,14 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ColumnsVisibility;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingOptions;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class GisUtil {
 	private static final Logger logger = Logger.getLogger(GisUtil.class);
@@ -97,6 +100,14 @@ public class GisUtil {
 		List<SettingOptions> settings = EndpointUtils.getSettings();
 		//add GIS specific settings
 		settings.add(EndpointUtils.getFundingTypeSettings(GisConstants.MEASURE_TO_NAME_MAP));
+		settings.add(new SettingOptions("number-format", false, 
+				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT), null, null));
+		int amountOptionId = Integer.valueOf(
+				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
+		
+		settings.add(new SettingOptions("number-multiplier", false, 
+				String.valueOf(MondrianReportUtils.getAmountMultiplier(amountOptionId))
+				, null, null));
 		return settings;
 	}
 	

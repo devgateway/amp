@@ -156,9 +156,21 @@ ${fn:replace(message,quote,escapedQuote)}
 															<digi:trn key="fm:gis">Advanced GIS</digi:trn>
 														</a>
 													</li>
+													<!-- New GIS Module-->
+													<li class="yuiampmenuitem_drop">
+														<a target="_blank" class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/gisModule/dist/index.html" onclick="return canExit()"> 
+															<digi:trn key="fm:gis">NEW GIS (BETA)</digi:trn>
+														</a>
+													</li>
 												</feature:display>
 											</module:display>
-											
+											<!-- New Dashboard Module-->
+												<li class="yuiampmenuitem_drop">
+													<a target="_blank" class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/dashboard/build/index.html" onclick="return canExit()"> 
+														<digi:trn key="fm:gis">NEW DASHBOARD (BETA)</digi:trn>
+													</a>
+												</li>
+												
 											<module:display name="GIS DASHBOARD">
 												<feature:display name="Show in public view" module="GIS DASHBOARD">
 													<li class="yuiampmenuitem_drop">

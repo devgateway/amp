@@ -16,11 +16,14 @@ module.exports = Backbone.View.extend({
   initialize: function(options) {
     this.app = options.app;
     this.listenTo(this.app.data.title, 'update', this.render);
+    this.listenTo(this.app.data.filter, 'apply', this.render);
   },
 
-  render: function(newTitle) {
-    var title = newTitle || this.app.data.title.current;
-    this.$el.html(this.template({title: title}));
+  render: function() {
+    var title = this.app.data.title.current;
+    var selectedFilters = this.app.data.filter.serializeToModels();
+
+    this.$el.html(this.template({title: title, filters: selectedFilters}));
     return this;
   }
 

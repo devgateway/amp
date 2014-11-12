@@ -132,6 +132,9 @@ module.exports = Backbone.View.extend({
       }
     }
 
+    //API wants these in the url, but other params go in post, strange but it's the way it is...
+    tmpModel.url += '?adjtype=' + payload.adjtype + '&limit=' + payload.limit;
+
     if (!payload.columnFilters) {
       payload.columnFilters = {};
     }

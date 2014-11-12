@@ -22,6 +22,7 @@ _.extend(Title.prototype, Backbone.Events, {
     var titles = this.data.getAllVisibleLayers().map(function(layer) {
       return layer.get('title');
     }).value();  // getLayers() returns a underscore chain()
+
     this.current = titles.join(', ');
     this.trigger('update', this.current);
   }

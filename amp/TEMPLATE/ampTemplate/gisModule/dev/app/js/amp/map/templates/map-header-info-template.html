@@ -1,1 +1,6 @@
-<span class="map-title pull-left"><%= title %></span> <!--<small class='pull-right'>1997-1999</small>-->
+<span class="map-title"><%= obj.title %></span>
+<span class="map-filter-summary small">
+<% if(obj.filters && obj.filters.otherFilters && obj.filters.otherFilters.date ){ %>
+ , <%= obj.filters.otherFilters.date.start %> - <%= obj.filters.otherFilters.date.end %>
+ <% }%></span>
+<!--<small class='pull-right'>1997-1999</small>-->

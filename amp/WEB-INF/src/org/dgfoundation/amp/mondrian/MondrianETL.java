@@ -141,7 +141,7 @@ public class MondrianETL {
 	
 	private Set<Long> calculateAffectedActivities(boolean etlFromScratch) {
 		if (!etlFromScratch) {
-			String affectedRawActivitiesQuery = "SELECT DISTINCT(entity_id) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND entity_name='activity'";
+			String affectedRawActivitiesQuery = "SELECT DISTINCT(entity_id) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND (event_id < " + currentEtlEventId + ") AND (entity_name='activity')";
 			Set<Long> res = new TreeSet<>(SQLUtils.<Long>fetchAsList(conn, affectedRawActivitiesQuery, 1));
 			return res;
 		}
@@ -151,7 +151,7 @@ public class MondrianETL {
 	
 	private Set<Long> calculateAffectedDateCodes(boolean etlFromScratch) {
 		if (!etlFromScratch) {
-			String affectedDatesQuery = "SELECT DISTINCT(entity_id) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND entity_name='exchange_rate'";
+			String affectedDatesQuery = "SELECT DISTINCT(entity_id) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND (event_id < " + currentEtlEventId + ") AND (entity_name='exchange_rate')";
 			Set<Long> res = new HashSet<>(SQLUtils.<Long>fetchAsList(conn, affectedDatesQuery, 1));
 			return res;
 		}
@@ -234,7 +234,7 @@ private EtlResult execute() throws Exception {
 		SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('etl', " + currentEtlId + ")");
 		currentEtlEventId = SQLUtils.getLong(conn, "SELECT max(event_id) FROM amp_etl_changelog WHERE entity_name = 'etl'");
 
-		String fullEtlRequestedQuery = "SELECT count(*) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND entity_name='full_etl_request'";
+		String fullEtlRequestedQuery = "SELECT count(*) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND (event_id < " + currentEtlEventId  + ") AND entity_name='full_etl_request'";
 		boolean fullEtlRequestedDB = SQLUtils.getLong(conn, fullEtlRequestedQuery) > 0;
 		if (fullEtlRequestedDB) {
 			forceFullEtl |= fullEtlRequestedDB;
@@ -253,7 +253,7 @@ private EtlResult execute() throws Exception {
 		etlConfig = calculateEtlConfiguration(fullEtlJobs);
 				
 		logger.info("running ETL, the configuration is: " + etlConfig.toString());
-		boolean redoTrnDimensions = SQLUtils.getLong(conn, "SELECT count(*) FROM amp_etl_changelog WHERE entity_name='translation' AND event_id > " + previousEtlEventId) > 0;
+		boolean redoTrnDimensions = SQLUtils.getLong(conn, "SELECT count(*) FROM amp_etl_changelog WHERE (entity_name='translation') AND (event_id > " + previousEtlEventId + ") AND (event_id < " + currentEtlEventId + ")") > 0;
 				
 		boolean workToDo = etlConfig.fullEtl || redoTrnDimensions || !etlConfig.activityIds.isEmpty() || !etlConfig.dateCodes.isEmpty();
 		if ((!etlConfig.fullEtl) && (!fullEtlJobs.isEmpty()))
@@ -540,11 +540,13 @@ private EtlResult execute() throws Exception {
 		SQLUtils.insert(monetConn.conn, localizedTableName, null, null, monetConn.getTableColumns(localizedTableName), vals);
 
 		
-		// checking sanity
+		// -> cannot check sanity because a write to the db might have just happened during the ETL, thus invalidating the cloning <-
+		
+/*		// checking sanity
 		long initTableSz = SQLUtils.countRows(conn, mondrianTable.tableName);
 		long createdTableSz = SQLUtils.countRows(monetConn.conn, localizedTableName);
 		if (initTableSz != createdTableSz && !mondrianTable.isFiltering)
-			throw new RuntimeException(String.format("HUGE BUG: multilingual-cloned dimension table has a size of %d, while the original dimension table has a size of %d", createdTableSz, initTableSz));
+			throw new RuntimeException(String.format("HUGE BUG: multilingual-cloned dimension table has a size of %d, while the original dimension table has a size of %d", createdTableSz, initTableSz));*/
 	}
 	
 	/**
@@ -566,11 +568,13 @@ private EtlResult execute() throws Exception {
 		monetConn.executeQuery("DELETE FROM " + localizedTableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id"));
 		SQLUtils.insert(monetConn.conn, localizedTableName, null, null, monetConn.getTableColumns(localizedTableName), vals);
 		
-		// checking sanity
+		// -> cannot check sanity because a write to the db might have just happened during the ETL, thus un-consistenting the cloning <-
+		
+/*		// checking sanity
 		long initTableSz = SQLUtils.countRows(conn, mondrianTable.tableName);
 		long createdTableSz = SQLUtils.countRows(monetConn.conn, localizedTableName);
 		if (initTableSz != createdTableSz && !mondrianTable.isFiltering)
-			throw new RuntimeException(String.format("HUGE BUG: multilingual-cloned dimension table %s has a size of %d, while the original dimension table has a size of %d", mondrianTable.tableName, createdTableSz, initTableSz));
+			throw new RuntimeException(String.format("HUGE BUG: multilingual-cloned dimension table %s has a size of %d, while the original dimension table has a size of %d", mondrianTable.tableName, createdTableSz, initTableSz)); */
 	}
 	
 	

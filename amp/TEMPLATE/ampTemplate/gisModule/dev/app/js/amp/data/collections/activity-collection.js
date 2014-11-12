@@ -19,7 +19,6 @@ module.exports = Backbone.Collection
     this.appData = options.appData;
     this._pageSize = options.pageSize;
     this.totalCount = null;
-    this._pageSize = 0;
     this._currentStartPosition = 0;
   },
 

@@ -31,18 +31,23 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     var self = this;
-    var tableContent = new DatasourcesItem({
-        collection: this.app.data.activities,
-        app: this.app
-      }).render().el;
 
     this.collection.load().then(function() {
+      // drs: moved to do this after collection load?
+      var tableContent = new DatasourcesItem({
+        collection: self.collection,
+        app: self.app
+      }).render().el;
+
       self.$el.html(self.template(
         self.collection.getPageDetails()
       ));
 
+      // drs: review, inconsistant behaviour between chrome and FF
       if (!_.isEmpty(tableContent)) {
         self.$('table', self.$el).append(tableContent);
+      } else { //drs added otherwise FF won't add...
+        self.$('table').append(tableContent);
       }
     });
 

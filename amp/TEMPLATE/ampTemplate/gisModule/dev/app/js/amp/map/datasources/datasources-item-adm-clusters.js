@@ -16,6 +16,7 @@ module.exports = Backbone.View.extend({
   },
 
   /* format for Kilo/Million/Billion quantities */
+  // drs: this is a duplicate of a function already in util
   formatKMB: function(precision) {
     var formatSI = d3.format('.' + (precision || 3) + 's');
     return function(value) {

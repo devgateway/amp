@@ -48,7 +48,7 @@
     "browserify-shim": "~3.6.0",
     "cheerio": "*",
     "d3-browserify": "~3.4.11",
-    "esri-leaflet": "https://github.com/Esri/esri-leaflet/archive/v1.0.0-rc.3.tar.gz",
+    "esri-leaflet": "https://github.com/Esri/esri-leaflet/archive/v1.0.0-rc.4.tar.gz",
     "gulp": "^3.7.0",
     "gulp-changed": "^0.4.0",
     "gulp-concat": "^2.3.0",

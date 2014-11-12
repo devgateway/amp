@@ -236,7 +236,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	 * @param displayEmptyFundingRows
 	 */
 	public void setDisplayEmptyFundingRows(boolean displayEmptyFundingRows) {
-		//this.displayEmptyFundingRows = displayEmptyFundingRows;
+		this.displayEmptyFundingRows = displayEmptyFundingRows;
 	}
 	
 	@Override

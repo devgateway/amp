@@ -5,7 +5,7 @@ var MapView = require('../../map/views/main-view');
 //var DataQualityView = require('../../dataquality/views/dataquality-view');
 var SidebarView = require('../../sidebar/sidebar-view');
 
-var AmpNavTemplate = fs.readFileSync(__dirname + '/../templates/amp-nav-template.html', 'utf8');
+var boilerplate = require('amp-boilerplate');
 var ModuleTemplate = fs.readFileSync(__dirname + '/../templates/module-template.html', 'utf8');
 
 
@@ -57,7 +57,7 @@ module.exports = Backbone.View.extend({
 
   // not a view, because it's static and just for testing.
   renderStaticAmpTemplate: function() {
-    $('#amp-menu').html(AmpNavTemplate);
+    $('#amp-menu').html(boilerplate.header);
     // TODO: If it's our responsibility...
     // render translation selector using: this.translator.getAvailableLanguages
   },

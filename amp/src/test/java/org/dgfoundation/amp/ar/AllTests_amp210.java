@@ -35,12 +35,12 @@ public class AllTests_amp210
 		
 //		LiberiaFiller.fillInDatabase();
 		TestSuite suite = new TestSuite(AllTests_amp210.class.getName());
+		suite.addTest(new JUnit4TestAdapter(FiltersMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(ETLTests.class));
 		suite.addTest(SQLUtilsTests.suite());
 		suite.addTest(new JUnit4TestAdapter(BasicMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(DateColumnsMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(MondrianSummaryReportTests.class));
-		suite.addTest(new JUnit4TestAdapter(FiltersMondrianReportTests.class));
 		//$JUnit-BEGIN$
 
 		//$JUnit-END$

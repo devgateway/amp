@@ -136,6 +136,10 @@ public class MDXGenerator {
 		//if column attributes are not configured, display only measures
 		axisMdx = getColumns(config, with);
 		if (axisMdx.contains(MoConstants.FUNC_CROSS_JOIN) && !config.isAllowColumnsEmptyData()) {
+			/* AMP-18504: if there is some grouping, then filter entirely empty groupings only
+			Note: possible side effect is to have headers without data, when no data found
+			*/
+			notEmptyColumns = "";
 			axisMdx = axisMdx.replaceAll(MoConstants.FUNC_CROSS_JOIN, MoConstants.FUNC_NON_EMPTY_CROSS_JOIN);
 		}
 		

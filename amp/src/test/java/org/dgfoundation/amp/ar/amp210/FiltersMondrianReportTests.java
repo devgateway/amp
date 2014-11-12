@@ -50,7 +50,7 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 		spec.setFilters(filters);
 		
 		runMondrianTestCase(
-				spec, 
+				spec,
 				"en",
 				Arrays.asList("activity with primary_program"),
 				cor

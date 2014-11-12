@@ -21,7 +21,6 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     this.$el.html(this.template());
-
     var content = this.app.data.getAllVisibleLayers().map(function(layer) {
       return (new LegendItem({ model: layer })).render().el;
     }).value();

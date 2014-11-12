@@ -55,6 +55,7 @@ module.exports = Backbone.Model
   updatePaletteRange: function() {
     var min = +Infinity,
         max = -Infinity;
+
     _.each(this.get('values'), function(value) {
       if (value.amount < min) {
         min = value.amount;
@@ -77,7 +78,7 @@ module.exports = Backbone.Model
         // TODO... keep the existing properties and just add value?
         // replacing for now, to save weight
         feature.id = feature.properties[admKey + '_CODE'];
-        feature.properties.name = feature.properties[admKey + '_NAME'];
+        feature.properties.name = feature.properties[admKey + '_NAME'] || '';
 
         if (!indexedValues[feature.id]) {
           indexedValues[feature.id] = {amount: 0};

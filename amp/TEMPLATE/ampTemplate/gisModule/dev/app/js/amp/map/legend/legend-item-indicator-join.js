@@ -11,11 +11,17 @@ module.exports = Backbone.View.extend({
   render: function() {
     var self = this;
     self.model.load().then(function() {
-      self.$el.html(self.template(_.extend({}, self.model.toJSON(), {
-        status: 'loaded',
-        colourBuckets: self.model.palette.colours,
-        unit: self.model.get('data').unit
-      })));
+
+      // TODO drs prettify numbers
+      if (self.model.palette) {
+        self.$el.html(self.template(_.extend({}, self.model.toJSON(), {
+          status: 'loaded',
+          colourBuckets: self.model.palette.colours,
+          unit:  self.model.get('currency') || self.model.get('data').unit
+        })));
+      } else {
+        console.warn('no pallete...');
+      }
     });
     return this;
   }

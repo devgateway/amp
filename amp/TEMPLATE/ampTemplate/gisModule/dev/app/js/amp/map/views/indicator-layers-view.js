@@ -75,7 +75,10 @@ module.exports = Backbone.View.extend({
           return colour.get('test').call(colour, featureValue);
         });
         if (!colour) {
-          throw new Error('No colour matched for the value ' + featureValue);
+
+          colour = {hex: function() {return '#354';}};
+          console.warn('No colour matched for the value ' + featureValue);
+          //throw new Error('No colour matched for the value ' + featureValue);
         }
         return {
           color: colour.hex(),
@@ -92,7 +95,8 @@ module.exports = Backbone.View.extend({
   tmpFundingOnEachFeature: function(feature, layer) {
     // Add popup
     if (feature && feature.properties) {
-      layer.bindPopup('<strong>' + feature.properties.name + '</strong><br/>$' + feature.properties.value);
+      layer.bindPopup('<strong>' + feature.properties.name + '</strong>' +
+                      '<br/>$' + feature.properties.value);
     }
 
     // hilight and unhilight the area when a user clicks on them..

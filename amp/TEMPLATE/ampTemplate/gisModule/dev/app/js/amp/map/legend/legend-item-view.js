@@ -3,6 +3,7 @@ var Backbone = require('backbone');
 
 // classes for instanceof checks
 var IndicatorJoin = require('../../data/models/indicator-join-model');
+var HilightFunding = require('../../data/models/hilight-funding-model');
 var IndicatorWMS = require('../../data/models/indicator-wms-model');
 var IndicatorArcGISDynamic = require('../../data/models/indicator-arcgis-dynamicLayer-model');
 var IndicatorArcGISFeature = require('../../data/models/indicator-arcgis-featureLayer-model');
@@ -32,7 +33,9 @@ var Unknown = Backbone.View.extend({
 
 
 module.exports = function(options) {
-  if (options.model instanceof IndicatorJoin) {
+  // drs: checking for 'FeatureCollection' because check for instanceof hilightfunding failed
+  if (options.model instanceof IndicatorJoin || options.model instanceof HilightFunding ||
+      options.model.attributes.type === 'FeatureCollection') {
     return new IndicatorJoinView(options);
   } else if (options.model instanceof IndicatorArcGISFeature) {
     return new IndicatorArcGISFeatureView(options);

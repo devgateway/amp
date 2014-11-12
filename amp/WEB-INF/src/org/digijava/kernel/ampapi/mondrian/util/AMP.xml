@@ -385,7 +385,7 @@
 
 			<Hierarchy hasAll="true" allMemberName="All Draft" primaryKey="amp_activity_id" name="Draft">
 				<Table name="mondrian_activity_fixed_texts" />
-				<Level name="Draft" column="amp_activity_id" type="Boolean" nameColumn="draft" />
+				<Level name="Draft" column="amp_activity_id" type="String" nameColumn="draft" />
 			</Hierarchy>
 
 			<Hierarchy hasAll="true" allMemberName="All FY" primaryKey="amp_activity_id" name="FY">

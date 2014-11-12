@@ -171,6 +171,7 @@ public class Reports {
 		List<String> extraColumns = new ArrayList<String>();
 		extraColumns.add(ColumnConstants.ACTIVITY_ID);
 		extraColumns.add(ColumnConstants.APPROVAL_STATUS);
+		extraColumns.add(ColumnConstants.DRAFT);
 		formParams.set(EPConstants.ADD_COLUMNS, extraColumns);
 		
 		// Convert jqgrid sorting params into ReportUtils sorting params.

@@ -137,12 +137,60 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								// Ignore grouped rows.
 								if ($.inArray('jqgrow', className.split(' ')) > 0) {
 									// Set font color according to status.
-									var x = row.cells[2].textContent;
-									if (x == '1') {
+									var draft = row.cells[3].textContent;
+									var approvalStatus = row.cells[2].textContent;
+									
+									//Status Mapping
+									var statusMapping = {
+											New_Draft : '0',
+											New_Unvalidated: '1',
+											Existing_Draft : '2',
+											Validated_Activities :'3',
+											Existing_Unvalidated : '4',
+											Approved : '5',
+											Rejected :6
+												
+									};
+									
+									//Calculated status based on draft and approval status.
+									var getApprovalStatus = function(draft, approvalStatus) {
+										if(draft=='true' ){
+											if (approvalStatus=='2'){
+												return statusMapping.Existing_Draft;
+											}else{
+												row.cells[4].textContent = '* ' + row.cells[4].textContent;
+												return statusMapping.New_Draft; 
+											}
+										}else{
+											switch (approvalStatus) {
+											case '1':
+												return statusMapping.Approved;
+												break;
+											case '2':
+												return statusMapping.Existing_Unvalidated;
+												break;
+											case '3':
+												row.cells[4].textContent = '* ' + row.cells[4].textContent;
+												return statusMapping.New_Unvalidated;
+												break;
+											case '4':
+												row.cells[4].textContent = '* ' + row.cells[4].textContent;
+												return statusMapping.New_Unvalidated;
+												break;
+											default:
+												break;
+											}
+										}
+									};
+									
+									//Assign colors for each row. 
+									//TODO: Missing colors for rejected and not approved.
+									var x = getApprovalStatus(draft, approvalStatus);
+									if (x == statusMapping.Approved) {
 										row.className = className + ' status_1';
-									} else if (x == '2') {
+									} else if (x == statusMapping.Existing_Draft || x == statusMapping.New_Draft) {
 										row.className = className + ' status_2';
-									} else if (x == '3') {
+									} else if (x == statusMapping.Existing_Unvalidated || x == statusMapping.New_Unvalidated ) {
 										row.className = className + ' status_3';
 									}
 

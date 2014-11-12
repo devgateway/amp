@@ -42,6 +42,7 @@ define(function() {
 		ret.push(''); // edit icon column.
 		ret.push(''); // activity id.
 		ret.push(''); // approval status.
+		ret.push(''); // Draft.
 		$(metadata.columns.models).each(function(i, item) {
 			var colName = item.get('columnName');
 			var auxColName = "";
@@ -84,7 +85,10 @@ define(function() {
 			name : 'Approval Status',
 			hidden : true
 		});
-
+		ret.push({
+			name : 'Draft',
+			hidden : true
+		});
 		$(metadata.columns.models).each(function(i, item) {
 			var column = {
 				name : item.get('columnName'),

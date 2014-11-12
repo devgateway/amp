@@ -36,7 +36,7 @@
 						END) as approval_status_key,
 						
 						aav.amp_id, 
-						aav.gov_agreement_number, aav.budget_code_project_id, aav.draft, aav.fy, aav.vote, aav.subvote, aav.subprogram, aav.project_code, aav.ministry_code, aav.cris_number,
+						aav.gov_agreement_number, aav.budget_code_project_id,CAST(aav.draft as varchar(5)) as draft, aav.fy, aav.vote, aav.subvote, aav.subprogram, aav.project_code, aav.ministry_code, aav.cris_number,
 						aav.prj_implementation_unit, aav.imac_approved, aav.national_oversight, aav.on_budget, aav.on_parliament, aav.on_treasury, aav.national_financial_management, aav.national_procurement, aav.national_audit, aav.proposed_project_life, 
 						
 						aav.original_comp_date,

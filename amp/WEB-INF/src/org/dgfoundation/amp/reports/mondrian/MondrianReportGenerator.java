@@ -270,9 +270,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 						+ e.getMessage() == null ? e.getClass().getName() : e.getMessage(), e);
 			} finally {
 				if (true || printMode) {
-//					if (cellSet != null) // THIS CODE PRINTS DATA BEFORE postprocessing, so it is pretty useless now
-//						MondrianUtils.print(cellSet, spec.getReportName());
-//					if (cellDataSet != null) //THIS THING SOMETIMES CRASHES
+					if (cellSet != null) // THIS CODE PRINTS DATA BEFORE postprocessing, very useful to see raw Mondrian output to compare against postprocessed data for debug
+						MondrianUtils.print(cellSet, spec.getReportName());
+//					if (cellDataSet != null) //THIS THING SOMETIMES CRASHES, is not up to dateT
 //						SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST");
 				}
 			}
@@ -546,6 +546,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 			cellDataSet.setColTotalsLists(null);
 		if (!spec.isCalculateRowTotals())
 			cellDataSet.setRowTotalsLists(null);
+		
+		// update coordintates after data reshufle
+		SaikuUtils.updateCoordinates(cellDataSet);
 		
 		return cellDataSet;
 	}

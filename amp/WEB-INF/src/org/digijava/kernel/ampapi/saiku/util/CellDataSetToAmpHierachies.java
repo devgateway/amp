@@ -247,6 +247,7 @@ public class CellDataSetToAmpHierachies {
 	
 	private void removeDummyHierarchy() {
 		cellDataSet.setLeftOffset(cellDataSet.getLeftOffset() - 1);
+		cellDataSet.setWidth(cellDataSet.getWidth() - 1);
 		Set<ReportColumn> newColumns = new LinkedHashSet<ReportColumn>(spec.getColumns().size() - 1);
 		ReportColumn dummyHierarchy = null;
 		for (ReportColumn col : spec.getColumns()) 

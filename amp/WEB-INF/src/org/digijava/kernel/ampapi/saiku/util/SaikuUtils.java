@@ -31,6 +31,7 @@ import org.olap4j.metadata.Measure;
 import org.olap4j.metadata.Member;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
+import org.saiku.olap.dto.resultset.DataCell;
 import org.saiku.service.olap.totals.AxisInfo;
 import org.saiku.service.olap.totals.TotalNode;
 import org.saiku.service.olap.totals.TotalsListsBuilder;
@@ -119,9 +120,66 @@ public class SaikuUtils {
 		if (alwaysPresent != null) {
 			removeTotalsColumns(result.getRowTotalsLists(), totalRowsColumnsToRemove);
 			recalculateWidths(result.getRowTotalsLists());
+			recalculateColumnWidths(result, totalRowsColumnsToRemove);
 		}
 	}
 	
+	public static void recalculateColumnWidths(CellDataSet result, SortedSet<Integer> columnsToRemove) {
+		if (result.getColTotalsLists() == null)
+			return;
+		
+		// update grand totals
+		List<TotalNode> grandColTotals = result.getColTotalsLists()[0];
+		int width = result.getWidth() - result.getLeftOffset();
+		for (TotalNode totalNode : grandColTotals) {
+			totalNode.setWidth(width);
+			totalNode.setSpan(width);
+		}
+		if (result.getColTotalsLists().length < 2)
+			return;
+		
+		// update leaf columns
+		List<TotalNode> leafColTotals = result.getColTotalsLists()[result.getColTotalsLists().length - 1];
+		Iterator<TotalNode> iter = leafColTotals.iterator(); 
+		for (int i = 0; i < leafColTotals.size() && iter.hasNext(); i++) {
+			TotalNode totalNode = iter.next();
+			if (columnsToRemove.contains(i))
+				iter.remove();
+			else {
+				int w = totalNode.getMemberCaptions() == null ? 0 : totalNode.getMemberCaptions().length;
+				if (w > 0 )
+					totalNode.setSpan(w);
+				totalNode.setWidth(w);
+			}
+		}
+		
+		// update intermidiate totals
+		for (int i = 1; i < result.getColTotalsLists().length - 1; i++) {
+			List<TotalNode> totals = result.getColTotalsLists()[i];
+			iter = totals.iterator();
+			TotalNode current = iter.next();
+			int start = 0;
+			int end = current.getWidth();
+			for (int colId : columnsToRemove) {
+				boolean nodeFound = false;
+				while (!nodeFound) {
+					if (start <= colId && colId < end) {
+						current.setWidth(current.getWidth() - 1);
+						current.setSpan(current.getSpan() - 1);
+						nodeFound = true;
+					} else {
+						if (iter.hasNext())
+							current = iter.next();
+						else
+							break;
+						start = end;
+						end += current.getWidth();
+					}
+				}
+			}
+		}
+	}
+
 	private static boolean alreadyAdded(List<Measure> measures, String name) {
 		for(Measure measure : measures) {
 			if(name.equals(measure.getName())) { 
@@ -273,9 +331,28 @@ public class SaikuUtils {
 		return newTotalLists;
 	}
 	
+	/**
+	 * Removes the specified set of columns ids from the cellDataSet header & body. 
+	 * No totals are processed (assumption no totals are generated yet - pls update if changes)
+	 * 
+	 * @param cellDataSet
+	 * @param leafColumnsNumberToRemove
+	 */
 	public static void removeColumns(CellDataSet cellDataSet, SortedSet<Integer> leafColumnsNumberToRemove) {
 		// update headers and body entries
 		cellDataSet.setCellSetHeaders(SaikuUtils.removeCollumns(cellDataSet.getCellSetHeaders(), leafColumnsNumberToRemove));
 		cellDataSet.setCellSetBody(SaikuUtils.removeCollumns(cellDataSet.getCellSetBody(), leafColumnsNumberToRemove));
+		cellDataSet.setWidth(cellDataSet.getWidth() - leafColumnsNumberToRemove.size());
+	}
+	
+	public static void updateCoordinates(CellDataSet cellDataSet) {
+		for (AbstractBaseCell[] newCellMatrix : cellDataSet.getCellSetBody())
+		for (int j = 0; j< newCellMatrix.length; j++)
+			if (newCellMatrix[j] instanceof DataCell) {
+				DataCell dataCell = (DataCell) newCellMatrix[j];
+				List<Integer> coordinates = dataCell.getCoordinates();
+				coordinates.set(0, j-1);
+				dataCell.setCoordinates(coordinates);
+			}
 	}
 }

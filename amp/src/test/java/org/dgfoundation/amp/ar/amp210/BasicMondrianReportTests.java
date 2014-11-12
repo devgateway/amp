@@ -7,6 +7,7 @@ import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.junit.Test;
 
 public class BasicMondrianReportTests extends MondrianReportsTestCase {
@@ -255,6 +256,30 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 				GroupingCriteria.GROUPING_YEARLY),
 			"en",
 			Arrays.asList("Test MTEF directed"),
+			cor
+		);
+	}
+	
+	@Test
+	public void test_AMP_18330_empty_rows_fail_for_now() {
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Region", "", "2010-Actual Disbursements", "143 777", "Total Measures-Actual Disbursements", "143 977")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "Test MTEF directed", "Region", "Anenii Noi County", "2010-Actual Disbursements", "143 777", "Total Measures-Actual Disbursements", "143 877"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "activity with primary_program", "Region", "", "2010-Actual Disbursements", "0", "Total Measures-Actual Disbursements", "100")  );
+		
+		ReportSpecificationImpl spec = (ReportSpecificationImpl) buildSpecification("test_AMP_18330_empty_rows",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),
+				Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
+				null,
+				GroupingCriteria.GROUPING_YEARLY);
+		
+		spec.setDisplayEmptyFundingRows(true);
+		
+		runMondrianTestCase(spec, "en",
+			Arrays.asList("Test MTEF directed", "activity with primary_program"),
 			cor
 		);
 	}

@@ -99,11 +99,25 @@ module.exports = BackboneDash.View.extend({
       type: 'POST',
       data: JSON.stringify(this.app.filter.serialize())
     };
+    var countValues = function(processed) {
+      return _(processed)
+        .chain()
+        .pluck('values')
+        .reduce(function(prev, values) {
+          return prev + values.length;
+        }, 0)
+        .value();
+    }
     this.model.fetch(fetchOptions)
       .done(_(function() {
-        this.chart(this.el.querySelector('.dash-chart-wrap'), this.model);
-        this.renderNumbers();
-        message.stop().fadeOut(200);
+        if (countValues(this.model.get('processed')) ===  0) {
+          message.html('No Data Available');
+          this.$('svg').empty();
+        } else {
+          this.chart(this.el.querySelector('.dash-chart-wrap'), this.model);
+          this.renderNumbers();
+          message.stop().fadeOut(200);
+        }
       }).bind(this))
       .fail(_(function() {
         message.html('Failed to load data <small>' + arguments[2] +

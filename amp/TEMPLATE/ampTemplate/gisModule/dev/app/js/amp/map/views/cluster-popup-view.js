@@ -154,7 +154,7 @@ module.exports = Backbone.View.extend({
   },
 
 
-  //TODO: should be done in data.adm cluster..then we can render full list on second or third click...
+  //TODO: should be done in data.adm cluster..then we can render full list if someone closes and reopens
   _loadMoreProjects: function() {
     var self = this;
     var startIndex = this._currentPage * this.PAGE_SIZE;
@@ -169,6 +169,8 @@ module.exports = Backbone.View.extend({
     }
 
     return this.app.data.activities.getActivities(activityIDs).then(function(activityCollection) {
+
+      self.tempDOM.find('#projects-pane .loading').remove();
       self.tempDOM.find('.project-list').append(
         self.projectListTemplate({activities: activityCollection})
         );

@@ -103,7 +103,7 @@ public class ExportIndicatorLayerTable2XLS extends Action {
 			HSSFCell cell = row.createCell(cellIndex++);
 			cell.setCellValue(location.getName());
 			cell = row.createCell(cellIndex++);
-			cell.setCellValue(location.getCode());
+			cell.setCellValue(location.getGeoCode());
 			List <AmpLocationIndicatorValue> values = DynLocationManagerUtil.getLocationIndicatorValueByLocation(location);
 			for (AmpLocationIndicatorValue value:values) {
 				cell = row.createCell(cellIndex++);

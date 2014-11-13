@@ -1288,21 +1288,17 @@ public class DynLocationManagerUtil {
                  String location = locationCell.getStringCellValue();
                  AmpCategoryValueLocations locationObject = null;
                  
-                 String codeId = null;
-                 Cell codeIdCell = hssfRow.getCell(1);
-                 if (codeIdCell != null) {
-                	 codeId = getValue(codeIdCell);
-                	 if (codeId != null) {
-                		   locationObject = DynLocationManagerUtil.getLocationByCode(codeId, selectedAdmLevel);
+                 String geoCodeId = null;
+                 Cell geoCodeIdCell = hssfRow.getCell(1);
+                 if (geoCodeIdCell != null) {
+                	 geoCodeId = getValue(geoCodeIdCell);
+                	 if (geoCodeId != null) {
+                		   locationObject = DynLocationManagerUtil.getLocationByGeoCode(geoCodeId, selectedAdmLevel);
                      }
                 	 else {
                          locationObject = DynLocationManagerUtil.getLocationByName(location, selectedAdmLevel);
                      }
                     
-                 }
-                 
-                 if (codeId != null && codeId.contains(".0")) {
-                	 codeId = codeId.replace(".0", "");
                  }
                 
                  int index = 2;
@@ -1349,5 +1345,41 @@ public class DynLocationManagerUtil {
 
      return ErrorCode.CORRECT_CONTENT;
  }
+ 
+	/**
+	 * 
+	 * @param geoCode
+	 * @param cvLocationLayer
+	 *            the AmpCategoryValue specifying the layer (level) of the
+	 *            location...like Country or Region
+	 * @return
+	 */
+	public static AmpCategoryValueLocations getLocationByGeoCode(
+			String geoCode, AmpCategoryValue cvLocationLayer) {
+		Session dbSession = null;
+
+		try {
+			dbSession = PersistenceManager.getSession();
+			String queryString = "select loc from "
+					+ AmpCategoryValueLocations.class.getName()
+					+ " loc where (loc.geoCode=:geoCode)";
+			if (cvLocationLayer != null) {
+				queryString += " AND (loc.parentCategoryValue=:cvId) ";
+			}
+			Query qry = dbSession.createQuery(queryString);
+			if (cvLocationLayer != null) {
+				qry.setLong("cvId", cvLocationLayer.getId());
+			}
+			qry.setString("geoCode", geoCode);
+			AmpCategoryValueLocations loc = (AmpCategoryValueLocations) qry
+					.uniqueResult();
+			return loc;
+		} catch (Exception e) {
+			logger.error("Exception getting AmpCategoryValueLocations by geoCode:",e);
+		}
+		return null;
+	}
+
+
 
 }

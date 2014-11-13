@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.fundingpledges.form.IdNamePercentage;
 
 import com.google.common.base.Function;
@@ -36,6 +37,13 @@ public class AmpCollections {
 		}
 		return res;
 	}
+	
+	public static final Function<Identifiable, Long> BY_ID_DISTRIBUTION = new Function<Identifiable, Long>(){
+		
+		public Long apply(Identifiable from) {
+			return (Long) from.getIdentifier();
+		}
+	};
 	
 	/**
 	 * 

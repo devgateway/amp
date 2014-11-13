@@ -18,10 +18,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
  */
 public class FiltersGroup {
 	private static final String[] idList = new String[]{"", " Id"};
-	
-	/** the suffix used to generate dummy columns for grouping mappings */
-	public static final String SUFFIX = " _Group_";
-	
+		
 	/** map of column key to filter group that it belongs */
 	public static final Map<String, String> FILTER_GROUP = buildFilterGroupMap();
 	

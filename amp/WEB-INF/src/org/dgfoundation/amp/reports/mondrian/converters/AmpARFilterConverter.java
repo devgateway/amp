@@ -3,16 +3,23 @@
  */
 package org.dgfoundation.amp.reports.mondrian.converters;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
@@ -20,12 +27,15 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.NameableOrIdentifiable;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.hibernate.jdbc.Work;
 
 /**********************
 The status for the Report Filters tab from: 
@@ -202,32 +212,32 @@ public class AmpARFilterConverter {
 	}
 	
 	/** adds primary, secondary and tertiary sectors to the filters if specified */
-	private void addSectorFilters() { 
-		addFilter(removeDescendents(arFilter.getSelectedSectors(), 0), 
-				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECTORS : ColumnConstants.PRIMARY_SECTOR), entityType);
-		addFilter(removeDescendents(arFilter.getSelectedSecondarySectors(), 1), 
-				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECONDARY_SECTORS : ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR), entityType);
-		addFilter(arFilter.getSelectedTertiarySectors(), 
-				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_SECTORS : ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR), entityType);
+	private void addSectorFilters() {
+		if (arFilter.getSelectedSectors() == null || arFilter.getSelectedSectors().isEmpty())
+			return;
+		Map<Long, AmpSector> sectorsByIds = new HashMap<>();
+		for(AmpSector sec:arFilter.getSelectedSectors())
+			sectorsByIds.put(sec.getAmpSectorId(), sec);
+		Map<String, List<NameableOrIdentifiable>> sectorsByScheme = distributeEntities(SectorUtil.distributeSectorsByScheme(arFilter.getSelectedSectors()), sectorsByIds);
+		addFilter(sectorsByScheme.get("Primary"), (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECTORS : ColumnConstants.PRIMARY_SECTOR), entityType);
+		addFilter(sectorsByScheme.get("Secondary"), (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECONDARY_SECTORS : ColumnConstants.SECONDARY_SECTOR), entityType);
+		addFilter(sectorsByScheme.get("Tertiary"), (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_SECTORS : ColumnConstants.TERTIARY_SECTOR), entityType);
 	}
 	
-	private Set<AmpSector> removeDescendents(Set<AmpSector> parentsAndChildren, int parentsCount) {
-		if (parentsAndChildren == null) return null;
-		//create a new set to not alter the original
-		//.getSelectedSecondarySectors() is null when getSelectedSectors() has secondary sectors, thus cannot just do sectors.removeAll(secondarySectors)
-		Set<AmpSector> onlyParents = new HashSet<AmpSector>();
-		for (AmpSector sector : parentsAndChildren) {
-			int currParentsCount = 0;
-			while (currParentsCount <= parentsCount && sector.getParentSectorId() != null) {
-				sector = sector.getParentSectorId();
-				currParentsCount ++;
+	protected Map<String, List<NameableOrIdentifiable>> distributeEntities(Map<String, List<Long>> distributedIds, Map<Long, ? extends NameableOrIdentifiable> input) {
+		Map<String, List<NameableOrIdentifiable>> res = new HashMap<>();
+		
+		for(String scheme:distributedIds.keySet()) {
+			res.put(scheme, new ArrayList<NameableOrIdentifiable>());
+			for(Long id:distributedIds.get(scheme)) {
+				NameableOrIdentifiable entity = input.get(id);
+				if (entity == null)
+					throw new RuntimeException("bug while restoring backmap for id: " + id + ", scheme: " + scheme);
+				res.get(scheme).add(entity);
 			}
-			if (currParentsCount == parentsCount) {
-				onlyParents.add(sector);
-			}
-		}
-		return onlyParents;
-	}
+		}			
+		return res;
+	};
 	
 	/** adds programs and national objectives filters */
 	private void addProgramAndNationalObjectivesFilters() {
@@ -235,6 +245,7 @@ public class AmpARFilterConverter {
 				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_PROGRAMS : ColumnConstants.PRIMARY_PROGRAM), entityType);
 		addFilter(arFilter.getSelectedSecondaryPrograms(), 
 				(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECONDARY_PROGRAMS : ColumnConstants.SECONDARY_PROGRAM), entityType);
+		
 		//TODO: how to detect tertiary programs
 		//addFilter(arFilter.get(), 
 		//		(arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_PROGRAMS : ColumnConstants.TERTIARY_PROGRAM), entityType);

@@ -20,7 +20,7 @@ import org.dgfoundation.amp.newreports.ReportColumn;
  * @author Nadejda Mandrescu
  *
  */
-public class MondrianDBUtils {
+public class MondrianDateFilters {
 	@SuppressWarnings("serial")
 	private static final Map<String, String> SQL_COLUMN_NAMES_MAP = new HashMap<String, String>() {{
 		put(ColumnConstants.ORIGINAL_COMPLETION_DATE, "original_comp_date");

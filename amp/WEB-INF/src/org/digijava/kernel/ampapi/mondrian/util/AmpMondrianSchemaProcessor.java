@@ -16,7 +16,7 @@ import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.FiltersGroup;
-import org.dgfoundation.amp.reports.mondrian.MondrianDBUtils;
+import org.dgfoundation.amp.reports.mondrian.MondrianDateFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -53,9 +53,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		long schemaProcessingStart = System.currentTimeMillis();
 		if (currentReport.get() == null || currentEnvironment.get() == null) {
 			logger.warn("currentReport || currentEnvironment == null -> Initializing with default values.");
-			//TODO: Added a default initialization to allow usage for now the Saiku standalone. Return to previous state or implement better solution.
-			//Added a try/catch to avoid startup errors.
-			//the try/catch was effectively swallowing fatal errors which would appear in proper reports at production time. the correct way to treat them is to remove the source of the exception, not to ignore it
+			// default initialization to allow usage for now the Saiku standalone. Return to previous state or implement better solution.
 			initDefault();
 		}
 		contents = expandSchema(contents);		
@@ -67,7 +65,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		String localeTag = getReportLocale();
 		contents = contents.replaceAll("@@locale@@", localeTag);
 		
-		contents = contents.replaceAll("@@filteredActivities@@", "mondrian_fact_table.entity_id IN (" + getAllowedActivitiesIds() + ")");
+		contents = contents.replaceAll("@@filteredActivities@@", buildFilteringSubquery());
 		//contents = contents.replaceAll("@@filteredActivities@@", "mondrian_fact_table.entity_id > 0");
 		int pos = contents.indexOf("@@");
 		if (pos >= 0)
@@ -123,9 +121,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			wronglyMappedColumns.remove(correspondingColumn);
 			if (notToBeTranslated)
 				continue;
-			// remove the suffix for dummy grouping column names generated before 
-			if (correspondingColumn.endsWith(FiltersGroup.SUFFIX))
-				correspondingColumn = correspondingColumn.substring(0, correspondingColumn.length() - FiltersGroup.SUFFIX.length());
 			columnElem.setAttribute("caption", TranslatorWorker.translateText(correspondingColumn, locale, 3l));
 			//columnElem.setAttribute("name", MondrianMapping.fromFullNameToColumnName.get(fullColumnName)); // NADIA: use for correct originalColumnName implementation
 		}
@@ -204,10 +199,20 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		return res;
 	}
 	
-	protected String getAllowedActivitiesIds() {
+	/**
+	 * computes the SQL subquery to be used for filtering purposes (workspace filter, report filter)
+	 * @return
+	 */
+	protected String buildFilteringSubquery() {
+		MondrianReportFilters mrf = (currentReport.get().getFilters() != null) ?
+				(MondrianReportFilters) currentReport.get().getFilters() : null;
+		return String.format("mondrian_fact_table.entity_id IN (%s) %s", getAllowedActivitiesIds(mrf), new FactTableFiltering(mrf).getQueryFragment());
+	}
+	
+	protected String getAllowedActivitiesIds(MondrianReportFilters mrf) {
 		Set<Long> allowedActivities = currentEnvironment.get().workspaceFilter.getIds();
-		if (currentReport.get().getFilters() != null) {
-			String dateFiltersQuery = MondrianDBUtils.generateDateColumnsFilterQuery(((MondrianReportFilters)currentReport.get().getFilters()).getDateFilterRules());
+		if (mrf != null) {
+			String dateFiltersQuery = MondrianDateFilters.generateDateColumnsFilterQuery(mrf.getDateFilterRules());
 			if (dateFiltersQuery != null)
 				allowedActivities.retainAll(ActivityUtil.fetchLongs(dateFiltersQuery));
 		}

@@ -450,8 +450,7 @@ public class MDXGenerator {
 	}
 	
 	private String getWhere(MDXConfig config, StringBuilder with) throws AmpApiException {
-		if (config.getLevelFilters().size() == 0 && config.getDataFilters().size() == 0
-				&& config.getHierarchyFilters().size() == 0)
+		if (config.getLevelFilters().size() == 0 && config.getDataFilters().size() == 0)
 			return "";
 		
 		// use NonEmptyCrossJoin if both column & row axis are requesting this
@@ -488,10 +487,7 @@ public class MDXGenerator {
 			size += filter.length();
 			addToFilterMap(filtersMap, filter, mdxAttr);
 		}
-		
-		//build hierarchy group filters
-		buildGroupFilter(config, filtersMap, with);
-		
+				
 		if (filtersMap.keySet().size() <= 1) //though cannot be 0
 			doCrossJoin = false;
 		else
@@ -534,105 +530,6 @@ public class MDXGenerator {
 		whereFilter.append(")");
 		
 		return whereFilter.toString();
-	}
-	
-	private void buildGroupFilter(MDXConfig config, Map<String, List<String>> filtersMap, StringBuilder with) throws AmpApiException {
-		if (config.getHierarchyFilters() == null || config.getHierarchyFilters().size() == 0)
-			return;
-		
-		int setId = 1;
-		// for quicker impl, for now assumptions: we filter over a full valued dimensions, like Sectors & Programs
-		for (MDXGroupFilter mdxGroupFilter : config.getHierarchyFilters()) {
-			final String filterSet = "FILTER_SET" + setId ++;
-			/*
-			final String memberSet = "LOWEST_MEMBER" + setId;
-			*/
-			// keeps the list of allowed values
-			List<String> values = new ArrayList<String>();
-			// keeps the list of other filter filter types
-			List<String> otherFilters = new ArrayList<String>();
-			String dimHierarchy = null;
-			
-			for (Entry<MDXAttribute, List<MDXFilter>> entry : mdxGroupFilter.getFilters().entrySet()) {
-				MDXLevel mdxLevel = (MDXLevel) entry.getKey();
-				if (dimHierarchy == null)
-					dimHierarchy = mdxLevel.getDimensionAndHierarchy();
-				else if (!dimHierarchy.equals(mdxLevel.getDimensionAndHierarchy()))
-						throw new AmpApiException("Levels of the same filters group must be part of the same hierarchy: " 
-								+ dimHierarchy + mdxLevel.getDimensionAndHierarchy());
-				
-				boolean hasRanges = false;
-				for (MDXFilter mdxFilter : entry.getValue())
-					if (MDXFilterType.RANGE.equals(mdxFilter.filterType)) {
-						hasRanges = true;
-						break;
-					}
-				
-				if (hasRanges) {
-					String filter = toFilter(mdxLevel.toString(), mdxLevel.getCurrentMemberName(), mdxLevel, entry.getValue(), false);
-					filter = MoConstants.FUNC_GENERATE + "(" + filter + ", " 
-							+ MoConstants.FUNC_ASCENDANTS + "(" + mdxLevel.getCurrentMemberName() + "))";
-					otherFilters.add(filter);
-				} else {
-					// TODO: we should try to integrate this into toFilter(...) method, but due to upcoming release, 
-					// avoiding changes in that part
-					for (MDXFilter mdxFilter : entry.getValue()) {
-						List<String> filteredValues = mdxFilter.filteredValues;
-						switch(mdxFilter.filterType) {
-						case SINGLE_VALUE :
-							filteredValues = Arrays.asList(mdxFilter.singleValue);
-						case VALUES:
-							List<String> mdxFilteredValues = new ArrayList<String>(filteredValues.size());
-							for (String value : filteredValues) {
-								mdxFilteredValues.add(toMDX(mdxLevel, value, mdxFilter.isKey));
-							}
-							if (mdxFilter.allowedFilteredValues) {
-								values.addAll(mdxFilteredValues);
-							} else {
-								String filterList = mdxFilteredValues.toString();
-								String otherFiter = "Filter(" + mdxLevel.toString() + ", " 
-								+ mdxLevel.getCurrentMemberName() + " NOT IN {"
-								+ filterList.substring(1, filterList.length() - 1)
-								+ "}";
-								otherFilters.add(otherFiter);
-							}
-							break;
-						case RANGE:
-							// should not get here, but just in case the code changes
-							throw new AmpApiException("Range filters should have been already processed");
-						}
-					}
-				}
-			}
-			
-			String filerEntriesStr = values.toString();
-			String filter = filerEntriesStr.substring(1, filerEntriesStr.length() - 1);
-			if (otherFilters.size() > 0) {
-				String otherFiltersStr = filter;
-				for (String customFilter : otherFilters) {
-					otherFiltersStr = MoConstants.FUNC_UNION + "(" + otherFiltersStr + 
-					", " + customFilter + ")"; 
-				}
-				filter = otherFiltersStr;
-			}
-				
-			
-			with.append(" SET ").append(filterSet).append(" AS ").append("({").append(filter).append("})");
-			
-			/*
-			 * no need to create filter, can directly use the set 
-			with.append(" SET ").append(memberSet).append(" AS ").append(MoConstants.FUNC_TAIL).append("(")
-			.append(filterSet).append(")");
-			
-			
-			final String lowestLevel = memberSet + ".Item(0).Level"; 
-			final String whereFilter = MoConstants.FUNC_FILTER + "(" + lowestLevel + "." + MoConstants.MEMBERS
-					+ ", " + lowestLevel + "." + MoConstants.CURRENT_MEMBER  
-					+ " in " + MoConstants.FUNC_DESCENDANTS + "(" + filterSet + "))";
-			*/
-			
-			filtersMap.put(dimHierarchy, Arrays.asList(filterSet));
-		}
 	}
 	
 	private int addToFilterMap(Map<String, List<String>> filtersMap, String filter, MDXAttribute mdxAttr) {

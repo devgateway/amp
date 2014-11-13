@@ -24,6 +24,7 @@ import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -44,6 +45,10 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 	 * @param modifier - the modifier (might be null) to postprocess AmpReports and AmpARFilter after being loaded from the DB
 	 */
 	protected void runMondrianTestCase(String testName, String reportName, List<String> activities, ReportAreaForTests correctResult, String locale) {
+		
+		org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
+		TLSUtils.populate(mockRequest);
+
 		AmpReports report = ReportTestingUtils.loadReportByName(reportName);
 		ReportSpecification spec = ReportsUtil.getReport(report.getAmpReportId());
 		runMondrianTestCase(spec, locale, activities, correctResult);

@@ -28,7 +28,7 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 	}
 
 	@Test
-	public void test_AMP_18514_Group_Filters() {
+	public void test_programmatic_sector_filters() {
 		ReportAreaForTests cor = new ReportAreaForTests()
 	    .withContents("Primary Sector", "Report Totals", "Project Title", "", "2014-Actual Commitments", "32 000", "Total Measures-Actual Commitments", "32 000")
 	    .withChildren(
@@ -44,16 +44,36 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 				Arrays.asList(ColumnConstants.PRIMARY_SECTOR),
 				GroupingCriteria.GROUPING_YEARLY);
 		
+		// test filtering by the value of the id field
 		MondrianReportFilters filters = new MondrianReportFilters();
 		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR_ID), new FilterRule("6237", true, false));
 		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR_ID), new FilterRule("6257", true, false));
 		spec.setFilters(filters);
 		
-		runMondrianTestCase(
-				spec,
-				"en",
-				Arrays.asList("activity with primary_program"),
-				cor
-		);
+		runMondrianTestCase(spec, "en", Arrays.asList("activity with primary_program"), cor);
+		
+		// test filtering by the id of the id field
+		filters = new MondrianReportFilters();
+		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR_ID), new FilterRule("6237", true, true));
+		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR_ID), new FilterRule("6257", true, true));
+		spec.setFilters(filters);
+		
+		runMondrianTestCase(spec, "en", Arrays.asList("activity with primary_program"), cor);
+
+		// test filtering by the id of the value field
+		filters = new MondrianReportFilters();
+		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR), new FilterRule("6237", true, true));
+		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR), new FilterRule("6257", true, true));
+		spec.setFilters(filters);
+		
+		runMondrianTestCase(spec, "en", Arrays.asList("activity with primary_program"), cor);
+	}
+	
+	@Test
+	public void test_converted_sector_filters() {
+		ReportAreaForTests correctResult = null;
+		runMondrianTestCase("AMP-18514 - programmatic report filter", "AMP-18514",
+				Arrays.asList("Activity With Zones and Percentages", "pledged education activity 1", "activity with primary_program"),
+				correctResult, "en");
 	}
 }

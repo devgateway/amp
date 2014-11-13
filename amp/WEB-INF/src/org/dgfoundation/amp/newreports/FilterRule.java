@@ -102,6 +102,40 @@ public class FilterRule {
 		this(FilterType.SINGLE_VALUE, isId, value, name, null, null, null, null, true, true, null, null, valueToInclude);
 	}
 
+	/**
+	 * clones the field, inverting the "id" field
+	 * @return
+	 */
+	public FilterRule invertClone() {
+		return new FilterRule(this.filterType, true, this.value, this.min, this.max, this.values, this.valueToName, this.minInclusive, this.maxInclusive, this.valuesInclusive);
+	}
+	
+	/**
+	 * 
+	 * @param filterType
+	 * @param isIdFilter
+	 * @param value
+	 * @param min
+	 * @param max
+	 * @param values
+	 * @param valueToName
+	 * @param minInclusive
+	 * @param maxInclusive
+	 * @param valuesInclusive
+	 */
+	private FilterRule(FilterType filterType, boolean isIdFilter, String value, String min, String max, List<String> values, Map<String, String> valueToName, boolean minInclusive, boolean maxInclusive, boolean valuesInclusive) {
+		this.filterType = filterType;
+		this.isIdFilter = isIdFilter;
+		this.value = value;
+		this.min = min;
+		this.max = max;
+		this.values = values;
+		this.valueToName.putAll(valueToName);
+		this.minInclusive = minInclusive;
+		this.maxInclusive = maxInclusive;
+		this.valuesInclusive = valuesInclusive;
+	}
+	
 	private FilterRule(FilterType filterType, boolean isIdFilter, String value, String name, 
 			String min, String max, String minName, String maxName, boolean minInclusive, boolean maxInclusive, 
 			List<String> values, List<String> names, boolean valuesInclusive) {
@@ -147,6 +181,9 @@ public class FilterRule {
 		case VALUES: return "FilterRule=VALUES, values=" + values + ", isIdFilter=" + isIdFilter;
 		default: return "FilterRule=N/A";
 		}
-		
+	}
+	
+	@Override public Object clone() {
+		try {return super.clone();}catch(Exception e){throw new RuntimeException(e);}
 	}
 }

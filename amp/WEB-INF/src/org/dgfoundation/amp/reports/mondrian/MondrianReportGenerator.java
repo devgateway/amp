@@ -269,7 +269,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				throw new AMPException("Cannot generate Mondrian Report '" + spec.getReportName() +"' : " 
 						+ e.getMessage() == null ? e.getClass().getName() : e.getMessage(), e);
 			} finally {
-				if (true || printMode) {
+				if (printMode) {
 					if (cellSet != null) // THIS CODE PRINTS DATA BEFORE postprocessing, very useful to see raw Mondrian output to compare against postprocessed data for debug
 						MondrianUtils.print(cellSet, spec.getReportName());
 //					if (cellDataSet != null) //THIS THING SOMETIMES CRASHES, is not up to dateT
@@ -448,24 +448,6 @@ public class MondrianReportGenerator implements ReportExecutor {
 				else
 					config.addAxisFilter(mdxElem, mdxFilter);
 			}
-		}
-		
-		// configures filter rules over same hierarchy 
-		// like Sectors & Sub-sectors
-		MondrianReportFilters currentFilters = (MondrianReportFilters) reportFilter;
-		if (currentFilters.getGroupFilters().size() > 0) {
-			List<MDXGroupFilter> groupFilters = 
-					new ArrayList<MDXGroupFilter>(currentFilters.getGroupFilters().size());
-			for (MondrianReportFilters mondrianOrFilters : currentFilters.getGroupFilters().values()) {
-				MDXConfig dummyConfig = new MDXConfig();
-				addFilters(mondrianOrFilters, dummyConfig);
-				if (dummyConfig.getDataFilters().size() > 0) {
-					MDXGroupFilter mdxGroupFilter = new MDXGroupFilter();
-					mdxGroupFilter.setFilters(dummyConfig.getDataFilters());
-					groupFilters.add(mdxGroupFilter);
-				}
-			}
-			config.setHierarchyFilters(groupFilters);
 		}
 	}
 	

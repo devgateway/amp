@@ -25,7 +25,6 @@ public class MDXConfig {
 	private List<MDXAttribute> rowAttributes = new ArrayList<MDXAttribute>();
 	private Map<MDXElement, List<MDXFilter>> axisFilters = new HashMap<MDXElement, List<MDXFilter>>();
 	private Map<MDXAttribute, List<MDXFilter>> dataFilters = new HashMap<MDXAttribute, List<MDXFilter>>();
-	private List<MDXGroupFilter> hierarchyFilters = new ArrayList<MDXGroupFilter>();
 	private List<MDXAttribute> singleValueFilters = new ArrayList<MDXAttribute>();
 	private LinkedHashMap<MDXTuple, SortOrder> sortingOrder = new LinkedHashMap<MDXTuple, SortOrder>();
 	private boolean allowColumnsEmptyData = false;
@@ -204,18 +203,6 @@ public class MDXConfig {
 		filtersList.addAll(dataFilter);
 	}
 	
-	/**
-	 * @return the hierarchyFilters
-	 */
-	public List<MDXGroupFilter> getHierarchyFilters() {
-		return hierarchyFilters;
-	}
-	/**
-	 * @param hierarchyFilters the hierarchyFilters to set
-	 */
-	public void setHierarchyFilters(List<MDXGroupFilter> hierarchyFilters) {
-		this.hierarchyFilters = hierarchyFilters;
-	}
 	/**
 	 * @return the singleValueFilters
 	 */

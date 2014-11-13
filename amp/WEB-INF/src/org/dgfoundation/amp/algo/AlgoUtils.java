@@ -90,6 +90,18 @@ public class AlgoUtils {
 	}
 
 	/**
+	 * returns a list containing the result of applying Long.parseLong() to the elements of a list
+	 * @param in
+	 * @return
+	 */
+	public static List<Long> collectLongs(Collection<String> in) {
+		ArrayList<Long> res = new ArrayList<>();
+		for(String s:in)
+			res.add(Long.parseLong(s));
+		return res;
+	}
+	
+	/**
 	 * builds an MD5-digester instance
 	 * @return
 	 */

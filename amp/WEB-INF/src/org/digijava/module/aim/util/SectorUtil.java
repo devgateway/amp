@@ -1,7 +1,10 @@
 package org.digijava.module.aim.util;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -10,8 +13,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.DatabaseWaver;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
@@ -33,6 +38,7 @@ import org.digijava.module.aim.util.caching.AmpCaching;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.jdbc.Work;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.LongType;
 
@@ -1122,6 +1128,36 @@ public class SectorUtil {
 				new DatabaseWaver("SELECT DISTINCT amp_sector_id FROM amp_sector WHERE (deleted is null or deleted = false) AND parent_sector_id IN ($)"));
 	}
 
+	/**
+	 * distributes a set of input sectors by the sector scheme they belong to
+	 * @param in
+	 * @return
+	 */
+	public static Map<String, List<Long>> distributeSectorsByScheme(final Collection<AmpSector> in) {
+		final Map<String, List<Long>> ret = new HashMap<>();
+		
+		if (in == null) 
+			return ret;
+		
+		PersistenceManager.getSession().doWork(new Work() {
+
+			@Override public void execute(Connection connection) throws SQLException {
+				String query = String.format("SELECT amp_sector_id, sector_config_name FROM all_sectors_with_levels WHERE amp_sector_id IN (%s)", Util.toCSStringForIN(in));
+				try(java.sql.ResultSet rs = SQLUtils.rawRunQuery(connection, query, null)) {
+					while (rs.next()) {
+						Long secId = rs.getLong(1);
+						String secScheme = rs.getString(2);
+					
+						if (!ret.containsKey(secScheme)) ret.put(secScheme, new ArrayList<Long>());
+						ret.get(secScheme).add(secId);
+					}
+				}
+			}
+			
+		});
+		return ret;
+	}
+	
 	public static List<AmpActivityVersion> getActivitiesForSector(Long id) {
 		Session session = null;
 		List<AmpActivityVersion> activities = null;

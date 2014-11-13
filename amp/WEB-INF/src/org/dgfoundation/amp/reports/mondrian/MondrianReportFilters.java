@@ -36,8 +36,15 @@ public class MondrianReportFilters implements ReportFilters {
 	 */
 	private final Map<ReportColumn, List<FilterRule>> dateFilterRules = new HashMap<ReportColumn, List<FilterRule>>();
 	
-	/** stores  MondrianReportFilter that should be applied as same hierarchy filters */  
-	private Map<String, MondrianReportFilters> groupFilterRules = null; 
+//	/** stores  MondrianReportFilter that should be applied as same hierarchy filters */  
+//	private Map<String, MondrianReportFilters> groupFilterRules = null; 
+	
+	/**
+	 * holds filter rules for the filtering which is done through SQL (in the schema processor)
+	 * <strong>elements which land in this map are not duplicated in the main {@link #filterRules} map</strong>
+	 * Map<[Column Group Name]>, List<[Rules related to it]>
+	 */
+	private Map<String, List<FilterRule>> sqlFilterRules = new HashMap<>();
 	
 	/**
 	 * The calendar to be used for retrieval of actual names for year, month, quarter
@@ -109,15 +116,16 @@ public class MondrianReportFilters implements ReportFilters {
 		if (ElementType.ENTITY.equals(elem.type) 
 				&& FiltersGroup.FILTER_GROUP.containsKey(elem.entity.getEntityName())) {
 			
-			final String filterGroup = FiltersGroup.FILTER_GROUP.get(elem.entity.getEntityName());
-			MondrianReportFilters mrf = getGroupFilters().get(filterGroup);
-			if (mrf == null) {
-				mrf = new MondrianReportFilters(calendar);
-				getGroupFilters().put(filterGroup, mrf);
+			String filterGroup = FiltersGroup.FILTER_GROUP.get(elem.entity.getEntityName());
+			if (filterGroup.endsWith(" Id")) {
+				// hack: do we really need to be able to filter by id fields instead of filtering by id the natural value field?
+				// idea of hack: filtering by "Primary Sector Id" (irrespective of whether by id or value) is the exact same thing as filtering by "Primary Sector" by id
+				filterGroup = filterGroup.substring(0, filterGroup.length() - 3); // Delete " Id"
+				filterRule = filterRule.invertClone();
 			}
-			mrf.addFilterRule(mrf.filterRules,
-					new ReportElement(new ReportColumn(elem.entity.getEntityName() + FiltersGroup.SUFFIX)), 
-					filterRule);
+			if (!this.sqlFilterRules.containsKey(filterGroup))
+				this.sqlFilterRules.put(filterGroup, new ArrayList<FilterRule>());
+			this.sqlFilterRules.get(filterGroup).add(filterRule);
 		} else {
 			addFilterRule(filterRules, elem, filterRule);
 		}
@@ -130,17 +138,7 @@ public class MondrianReportFilters implements ReportFilters {
 			filterRules.put(elem, filtersList);
 		}
 		filtersList.add(filterRule);
-	}
-	
-	/**
-	 * The filter groups that are applicable together as part of the same hierarchy
-	 * @return group filter rules
-	 */
-	public Map<String, MondrianReportFilters> getGroupFilters() {
-		if (groupFilterRules == null)
-			groupFilterRules = new HashMap<String, MondrianReportFilters>();
-		return groupFilterRules;
-	}
+	}	
 	
 	/**
 	 * Add a column/measure filter
@@ -300,5 +298,13 @@ public class MondrianReportFilters implements ReportFilters {
 		if (date == null)
 			throw new AmpApiException("Cannot add a filter to a null date");
 		addFilterRule(dateFilterRules, column, new FilterRule(DateTimeUtil.formatDate(date), true, false));
+	}
+
+	public Map<String, List<FilterRule>> getSqlFilterRules() {
+		return sqlFilterRules;
+	}
+
+	public void setSqlFilterRules(Map<String, List<FilterRule>> sqlFilterRules) {
+		this.sqlFilterRules = sqlFilterRules;
 	}
 }

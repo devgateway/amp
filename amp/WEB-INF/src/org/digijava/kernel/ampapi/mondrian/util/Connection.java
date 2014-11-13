@@ -8,7 +8,7 @@ import javax.servlet.ServletRequest;
 import org.digijava.kernel.request.TLSUtils;
 import org.olap4j.OlapConnection;
 
-//TODO: Add documentation to this calss;
+//TODO: Add documentation to this class;
 /***
  * 
  * 

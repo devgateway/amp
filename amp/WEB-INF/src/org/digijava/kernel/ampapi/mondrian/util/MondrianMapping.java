@@ -136,23 +136,6 @@ public class MondrianMapping {
 			put(rm, new MDXMeasure(mondrianMeasureName));
 		}
 		
-		/**
-		 * Generates new mappings for the specified list of parent columns and their levels suffix list
-		 *  
-		 * @param parents list of parent columns
-		 * @param sufixList suffix list used to rebuild all levels associated to the given column
-		 * @param hierarchyBase hierarchy based for the given column
-		 */
-		void addGroups(List<String> parents, List<String> suffixList, String hierarchyBase) {
-			for (String parent : parents) 
-				for (String suffix : suffixList)
-					for (String idSuffix : idSuffixList) {
-						final String column = parent + suffix + idSuffix;
-						MDXLevel origLevel = (MDXLevel) get(new ReportColumn(column));
-						addColumnDefinition(column + FiltersGroup.SUFFIX,
-								new MDXLevel(origLevel.getDimension(), hierarchyBase + idSuffix + FiltersGroup.SUFFIX, origLevel.getLevel()));
-				}
-		}
 		
 		{
 			//Dimensions
@@ -278,19 +261,7 @@ public class MondrianMapping {
 					addColumnDefinition(programConstants[2] + i + " Id", new MDXLevel(programConstants[1], "Level " + i + " Id", "Level " + i + " Id"));
 				}
 			}
-			
-			// adding grouped levels
-			addGroups(Arrays.asList(ColumnConstants.PRIMARY_SECTOR, ColumnConstants.SECONDARY_SECTOR, ColumnConstants.TERTIARY_SECTOR),
-					Arrays.asList("", " Sub-Sector", " Sub-Sub-Sector"), MoConstants.H_LEVEL_0_SECTOR);
-			
-			List<String> programsSufix = new ArrayList<String>();
-			for (int idx = 1; idx < 9; idx++ )
-				programsSufix.add(" Level " + idx);
-			addGroups(Arrays.asList(ColumnConstants.PRIMARY_PROGRAM, ColumnConstants.SECONDARY_PROGRAM, 
-					ColumnConstants.TERTIARY_PROGRAM, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES),
-					programsSufix, "Levels");
-			
-			
+								
 			addColumnDefinition(ColumnConstants.COUNTRY, new MDXLevel(MoConstants.LOCATION, MoConstants.H_COUNTRIES,  MoConstants.ATTR_COUNTRY_NAME));
 			addColumnDefinition(ColumnConstants.REGION, new MDXLevel(MoConstants.LOCATION, MoConstants.H_REGIONS,  MoConstants.ATTR_REGION_NAME));
 			addColumnDefinition(ColumnConstants.ZONE, new MDXLevel(MoConstants.LOCATION, MoConstants.H_ZONES, MoConstants.ATTR_ZONE_NAME));

@@ -126,7 +126,7 @@ public abstract class XLSExporter extends Exporter {
 	}
 
 	protected HSSFCell getCell(HSSFRow row, HSSFCellStyle style) {
-		HSSFCell cell = row.createCell((short)colId.intValue());
+		HSSFCell cell = row.createCell((int)colId.intValue());
 //		HSSFCellStyle cellstyle = wb.createCellStyle();
 //		cellstyle.cloneStyleFrom(style);
 		cell.setCellStyle(style);

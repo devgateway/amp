@@ -17,7 +17,7 @@ import org.dgfoundation.amp.algo.ValueWrapper;
 public class IntWrapper extends ValueWrapper<Integer> {
 	public static final int DEFAULT_VALUE = 0;
 
-	protected int value;
+//	protected int value;
 
 	public IntWrapper() {
 		super(DEFAULT_VALUE);
@@ -44,7 +44,7 @@ public class IntWrapper extends ValueWrapper<Integer> {
 	}
 
 	public short shortValue() {
-		return (short) value;
+		return value.shortValue();
 	}
 
 	public int intValue() {

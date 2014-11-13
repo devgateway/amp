@@ -207,7 +207,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 				maxRowSpan = columnReport.getMaxColumnDepth() - 1;
 			}
 			makeRowSpan(maxRowSpan,true);
-			sheet.setColumnWidth((short)colId.value, (short)5120);
+			sheet.setColumnWidth(colId.intValue(), 5120);
 		}
 		colId.inc();
 	}

@@ -1284,20 +1284,18 @@ public class DynLocationManagerUtil {
              hssfRow = hssfSheet.getRow(j);
              if (hssfRow != null) {
 
-                 Cell locationCell = hssfRow.getCell(0);
-                 String location = locationCell.getStringCellValue();
                  AmpCategoryValueLocations locationObject = null;
                  
                  String geoCodeId = null;
                  Cell geoCodeIdCell = hssfRow.getCell(1);
                  if (geoCodeIdCell != null) {
                 	 geoCodeId = getValue(geoCodeIdCell);
-                	 if (geoCodeId != null) {
+                	 if (geoCodeId != null && !geoCodeId.trim().equals("")) {
                 		   locationObject = DynLocationManagerUtil.getLocationByGeoCode(geoCodeId, selectedAdmLevel);
                      }
                 	 else {
-                         locationObject = DynLocationManagerUtil.getLocationByName(location, selectedAdmLevel);
-                     }
+                		 continue;
+                	 }
                     
                  }
                 
@@ -1375,7 +1373,7 @@ public class DynLocationManagerUtil {
 					.uniqueResult();
 			return loc;
 		} catch (Exception e) {
-			logger.error("Exception getting AmpCategoryValueLocations by geoCode:",e);
+			logger.error("Exception getting AmpCategoryValueLocations by geoCode:"+geoCode,e);
 		}
 		return null;
 	}

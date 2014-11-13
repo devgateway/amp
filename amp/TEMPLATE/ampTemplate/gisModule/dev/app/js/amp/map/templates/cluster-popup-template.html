@@ -2,9 +2,9 @@
   <h5><%= obj.properties.admName%> has <%= obj.properties.activityid.length %> projects </h5>
 
   <ul class="nav nav-tabs" role="tablist">
-    <li class="active"><a href="#charts-pane-sector" role="tab" data-toggle="tab">Sectors</a></li>
-    <li><a href="#charts-pane-donor" role="tab" data-toggle="tab">Donors</a></li>
-    <li><a href="#projects-pane" role="tab" data-toggle="tab">Project List</a></li>
+    <li class="active"><a href="#charts-pane-sector" role="tab" data-toggle="tab" data-i18n="amp.gis:activities-sectors">Sectors</a></li>
+    <li><a href="#charts-pane-donor" role="tab" data-toggle="tab" data-i18n="amp.gis:activities-donors">Funding Organizations</a></li>
+    <li><a href="#projects-pane" role="tab" data-toggle="tab" data-i18n="amp.gis:activities-projectlist">Project List</a></li>
   </ul>
 
   <!-- Tab panes -->
@@ -23,9 +23,9 @@
         <table class="table table-striped table-condensed">
           <thead>
             <tr>
-              <th>Title</th>
-              <th class="text-right">Actual Commitments</th>
-              <th class="text-right">Actual Disbursements</th>
+              <th data-i18n="amp.gis:activities-project-title">Title</th>
+              <th class="text-right" data-i18n="amp.gis:activities-commitments">Actual Commitments</th>
+              <th class="text-right" data-i18n="amp.gis:activities-disbursements">Actual Disbursements</th>
             </tr>
           </thead>
           <tbody class="project-list">
@@ -33,7 +33,7 @@
         </table>
         <img class="loading" src="img/loading-icon.gif" />
       </div>
-      <div class="btn btn-sm btn-info load-more">load more...</div>
+      <div class="btn btn-sm btn-info load-more"><span data-i18n="amp.gis:popup-loadmore">load more</span>...</div>
     </div>
   </div>
 </div>

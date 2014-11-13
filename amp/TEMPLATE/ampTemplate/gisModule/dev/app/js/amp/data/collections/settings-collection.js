@@ -13,9 +13,6 @@ module.exports = Backbone.Collection
     this.each(function(setting) {
       if (setting.get('options')) {
         tmpJSON[setting.id] = _.findWhere(setting.get('options'), {id: setting.get('selected')}).id;
-      } else {
-        /* Do not serialize settings that are immutable */
-        _.noop();
       }
     });
     return tmpJSON;

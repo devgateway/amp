@@ -11,8 +11,19 @@ module.exports = Backbone.View.extend({
     this.leafletLayerMap = {};
     this.listenTo(this.app.data.indicators, 'show', this.showLayer);
     this.listenTo(this.app.data.indicators, 'hide', this.hideLayer);
-    this.listenTo(this.app.data.hilightFundingCollection, 'show', this.showLayer);
+
     this.listenTo(this.app.data.hilightFundingCollection, 'hide', this.hideLayer);
+    this.listenTo(this.app.data.hilightFundingCollection, 'sync', this.refreshLayer);
+  },
+
+  // removes layer, then shows it. Important for layers whos content changes.
+  refreshLayer: function(layer) {
+    var loadedLayer = this.leafletLayerMap[layer.cid];
+
+    if (loadedLayer) {
+      this.map.removeLayer(loadedLayer);
+    }
+    this.showLayer(layer);
   },
 
   showLayer: function(layer) {
@@ -34,7 +45,7 @@ module.exports = Backbone.View.extend({
       } else if (layerType === 'arcgis' || layerType === 'Indicator Layers') {
         loadedLayer = self.getNewArcGISLayer(layer);
       } else {
-        throw new Error('Map view for layer type not implemented. layer:', layer);
+        console.warn('Map view for layer type not implemented. layer:', layer);
       }
       self.leafletLayerMap[layer.cid] = loadedLayer;
 
@@ -66,7 +77,7 @@ module.exports = Backbone.View.extend({
   getNewGeoJSONLayer: function(layer) {
     var featureValue,
         colour;
-
+console.log('make it new! getNewGeoJSONLayer');
     return new L.geoJson(layer.get('geoJSON'), {
       style: function(feature) {
         featureValue = feature.properties.value;
@@ -95,6 +106,7 @@ module.exports = Backbone.View.extend({
   tmpFundingOnEachFeature: function(feature, layer) {
     // Add popup
     if (feature && feature.properties) {
+      // TODO: drs append currency name and format value.
       layer.bindPopup('<strong>' + feature.properties.name + '</strong>' +
                       '<br/>$' + feature.properties.value);
     }

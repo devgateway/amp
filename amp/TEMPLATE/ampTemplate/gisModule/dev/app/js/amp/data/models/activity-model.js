@@ -37,7 +37,7 @@ module.exports = Backbone.Model.extend({
           if (allFilters.columnFilters[k]) {
             //iterate over ids.
             _.each(matchesFilters[k], function(id, index) {
-              var matched = _.find(allFilters.columnFilters[k], function(filter){return filter.id == id; });
+              var matched = _.find(allFilters.columnFilters[k], function(filter) {return filter.id == id; });
               if (matched) {
                 matchesFilters[k][index] = matched;
               }

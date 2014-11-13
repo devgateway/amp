@@ -15,7 +15,6 @@ module.exports = Backbone.View.extend({
     var self = this;
     self.model.load().then(function() {
 
-      // TODO drs prettify numbers
       if (self.model.palette) {
         self.$el.html(self.template(_.extend({}, self.model.toJSON(), {
           status: 'loaded',

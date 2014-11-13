@@ -364,23 +364,22 @@ public class GisEndPoints {
 		return ls.getTotals(admlevel, type, filters);
 	}
 	
-	@GET
-	@Path("/indicators/{admlevel}")
-	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = false, id = "IndicatorByAdmLevel")
-	public List<JsonBean> getIndicatorByAdmLevel(@PathParam ("admlevel") String admLevel) {
-		List<AmpIndicatorLayer> indicators = QueryUtil.getIndicatorByCategoryValue(admLevel);
-		return generateIndicatorJson(indicators, false);
-	}
-		
 	
 	@GET
 	@Path("/indicators")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui = false, id = "IndicatorsList")
-	public List<JsonBean> getIndicators() {
-		List<AmpIndicatorLayer> indicators = QueryUtil.getIndicatorLayers();
-		return generateIndicatorJson(indicators, true);
+	public List<JsonBean> getIndicators(@QueryParam("admLevel") String admLevel) {
+		List<AmpIndicatorLayer> indicators;
+		if (admLevel !=null) {
+			indicators = QueryUtil.getIndicatorByCategoryValue(admLevel);
+			return generateIndicatorJson(indicators, false);
+		}
+		else {
+			indicators = QueryUtil.getIndicatorLayers();
+			return generateIndicatorJson(indicators, true);
+
+		}
 	}
 	
 	private List<JsonBean> generateIndicatorJson (List<AmpIndicatorLayer> indicators,boolean includeAdmLevel) {

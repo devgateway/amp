@@ -19,11 +19,9 @@ module.exports = Backbone.View.extend({
         self.$el.html(self.template(_.extend({}, self.model.toJSON(), {
           status: 'loaded',
           colourBuckets: self.model.palette.colours,
-          unit:  self.model.get('currency') || self.model.get('data').unit,
+          unit:  self.model.get('unit'),
           util: chartUtils
         })));
-      } else {
-        console.warn('no pallete...');
       }
     });
     return this;

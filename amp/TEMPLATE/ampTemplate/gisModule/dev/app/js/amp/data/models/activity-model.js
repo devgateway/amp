@@ -1,4 +1,5 @@
 var Backbone = require('backbone');
+var $ = require('jquery');
 var _ = require('underscore');
 
 module.exports = Backbone.Model.extend({
@@ -28,8 +29,9 @@ module.exports = Backbone.Model.extend({
 
   _joinFilters: function() {
     var self = this;
+    var deferred = $.Deferred();
 
-    return this.collection.appData.filter.getAllFilters().then(function(allFilters) {
+    this.collection.appData.filter.getAllFilters().then(function(allFilters) {
       var matchesFilters = self.attributes.matchesFilters;
       if (allFilters && allFilters.columnFilters && matchesFilters) {
         _.each(matchesFilters, function(v, k) {
@@ -37,7 +39,9 @@ module.exports = Backbone.Model.extend({
           if (allFilters.columnFilters[k]) {
             //iterate over ids.
             _.each(matchesFilters[k], function(id, index) {
+              // jscs:disable
               var matched = _.find(allFilters.columnFilters[k], function(filter) {return filter.id == id; });
+              // jscs:enable
               if (matched) {
                 matchesFilters[k][index] = matched;
               }
@@ -45,10 +49,11 @@ module.exports = Backbone.Model.extend({
           }
         });
         self.set('matchesFilters', matchesFilters);
-      } else {
-        console.warn('drs I need make a deferred...');
       }
+      deferred.resolve();
     });
+
+    return deferred;
   },
 
   parse: function(data) {

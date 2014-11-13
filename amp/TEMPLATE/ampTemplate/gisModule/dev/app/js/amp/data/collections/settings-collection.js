@@ -12,7 +12,19 @@ module.exports = Backbone.Collection
     var tmpJSON = {};
     this.each(function(setting) {
       if (setting.get('options')) {
-        tmpJSON[setting.id] = _.findWhere(setting.get('options'), {id: setting.get('selected')}).id;
+
+        // if nothing selected yet, just take defaultId
+        if (!setting.get('selected')) {
+          setting.set('selected', setting.get('defaultId'));
+        }
+
+        // find the match.
+        var match = _.findWhere(setting.get('options'), {id: setting.get('selected')});
+        if (match) {
+          tmpJSON[setting.id] = match.id;
+        } else {
+          console.warn('no match', setting.get('options'), {id: setting.get('selected')});
+        }
       }
     });
     return tmpJSON;

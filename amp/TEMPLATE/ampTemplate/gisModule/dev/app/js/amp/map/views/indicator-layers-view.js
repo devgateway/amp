@@ -77,7 +77,7 @@ module.exports = Backbone.View.extend({
   getNewGeoJSONLayer: function(layer) {
     var featureValue,
         colour;
-console.log('make it new! getNewGeoJSONLayer');
+
     return new L.geoJson(layer.get('geoJSON'), {
       style: function(feature) {
         featureValue = feature.properties.value;
@@ -108,7 +108,7 @@ console.log('make it new! getNewGeoJSONLayer');
     if (feature && feature.properties) {
       // TODO: drs append currency name and format value.
       layer.bindPopup('<strong>' + feature.properties.name + '</strong>' +
-                      '<br/>$' + feature.properties.value);
+                      '<br/>' + feature.properties.value);
     }
 
     // hilight and unhilight the area when a user clicks on them..

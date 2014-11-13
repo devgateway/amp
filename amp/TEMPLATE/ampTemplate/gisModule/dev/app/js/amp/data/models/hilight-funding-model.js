@@ -68,6 +68,16 @@ module.exports = IndicatorJoinModel.extend({
         data.values[0].admID = 0;
       }
     }
+
+    data.unit = data.currency;
+
+    // convert 'amount' to 'value' in API so parse not needed. and can be conssistant in custom joins
+    _.each(data.values, function(value) {
+      value.value = value.amount;
+      value.geoId = value.admID;
+    });
+
+
     return data;
   },
 

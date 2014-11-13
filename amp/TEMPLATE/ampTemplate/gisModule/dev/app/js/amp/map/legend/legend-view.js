@@ -16,7 +16,7 @@ module.exports = Backbone.View.extend({
 
   initialize: function(options) {
     this.app = options.app;
-    this.listenTo(this.app.data, 'show hide', this.render);
+    this.listenTo(this.app.data, 'show hide sync', this.render);
   },
 
   render: function() {

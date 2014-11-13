@@ -35,7 +35,7 @@ module.exports = Backbone.View.extend({
     this.listenTo(this.structureMenuModel, 'show', this.showLayer);
     this.listenTo(this.structureMenuModel, 'hide', this.hideLayer);
 
-    this.listenTo(this.app.data.projectSites, 'sync', this.refreshLayer); //TODO: implement refresh layer
+    this.listenTo(this.app.data.projectSites, 'refresh', this.refreshLayer);
 
     this.listenTo(this.markerCluster, 'clusterclick', this.clusterClick);
 
@@ -50,12 +50,12 @@ module.exports = Backbone.View.extend({
   // ==================
   // Point / Feature Code
   // ==================
-  getNewProjectSitesLayer: function(structureMenuModel) {
+  getNewProjectSitesLayer: function() {
     var self = this;
     // TODO: this approach will block structures drawing on join. Should draw dots as soon
     // as structures load, then update when activitites join is done...
-    structureMenuModel.structuresCollection.getStructuresWithActivities().then(function() {
-      self.rawData = structureMenuModel.structuresCollection.toGeoJSON();
+    self.structureMenuModel.structuresCollection.getStructuresWithActivities().then(function() {
+      self.rawData = self.structureMenuModel.structuresCollection.toGeoJSON();
       self._renderFeatures();
     });
     return this.featureGroup;
@@ -75,8 +75,11 @@ module.exports = Backbone.View.extend({
       pointToLayer: function(feature, latlng) {
         var colors = self.structureMenuModel.structuresCollection.palette.colours.filter(function(colour) {
           var donorId = -1;
-          if (feature.properties.activity.attributes.matchesFilters['Donor Id']) {
+          if (feature.properties.activity.attributes &&
+              feature.properties.activity.attributes.matchesFilters['Donor Id']) {
             donorId = feature.properties.activity.attributes.matchesFilters['Donor Id'][0];
+          } else {
+            console.log('feature.properties.activity', feature.properties.activity);
           }
 
           return colour.get('test').call(colour, feature.properties.id);
@@ -301,7 +304,7 @@ module.exports = Backbone.View.extend({
   // ==================
   // Layer management
   // ==================
-  showLayer: function(projectSitesMenuModel) {
+  showLayer: function() {
     var self = this;
     if (this.layerLoadState === 'loading') {
       console.warn('ProjectSites leaflet: tried to show project sites while they are still loading');
@@ -310,9 +313,9 @@ module.exports = Backbone.View.extend({
       this.layerLoadState = 'loading';
     }
 
-    projectSitesMenuModel.loadAll().done(function() {
+    this.structureMenuModel.load().done(function() {
       self.layerLoadState = 'loaded';
-      self.getNewProjectSitesLayer(projectSitesMenuModel);
+      self.getNewProjectSitesLayer();
       self.map.addLayer(self.markerCluster);
     });
 
@@ -321,7 +324,8 @@ module.exports = Backbone.View.extend({
   },
 
   refreshLayer: function() {
-    console.log('TODO: refresh project site layer.');
+    this.hideLayer();
+    this.showLayer();
   },
 
   bringToFront: function() {

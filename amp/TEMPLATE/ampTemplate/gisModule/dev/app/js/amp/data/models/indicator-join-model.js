@@ -26,7 +26,7 @@ module.exports = Backbone.Model
     // var boundaryId = boundaryLink.split('gis/boundaries/')[1];  // for now, (for ever?,) they are all local
     // var boundary = this.collection.boundaries.find(function(boundary) { return boundary.id === boundaryId; });
 
-    var boundary = this.collection.boundaries.findWhere({id: this.get('value')});
+    var boundary = this.collection.boundaries.findWhere({id: this.get('adminLevel')});
     if (!boundary) {  // sanity check
       throw new Error('No boundary found for indicator layer:', this.get('title'));
     }
@@ -57,11 +57,11 @@ module.exports = Backbone.Model
         max = -Infinity;
 
     _.each(this.get('values'), function(value) {
-      if (value.amount < min) {
-        min = value.amount;
+      if (value.value < min) {
+        min = value.value;
       }
-      if (value.amount > max) {
-        max = value.amount;
+      if (value.value > max) {
+        max = value.value;
       }
     });
     this.palette.set({min: min, max: max});
@@ -69,25 +69,25 @@ module.exports = Backbone.Model
 
   _joinDataWithBoundaries: function(boundaryGeoJSON) {
     var self = this;
-    var indexedValues = _.indexBy(this.get('values'), 'admID');
-    var admKey = this.id.replace('-', '').toUpperCase();
+    var indexedValues = _.indexBy(this.get('values'), 'geoId');
+    var admKey = this.get('adminLevel').replace('-', '').toUpperCase();
     // copy boundary geoJSON, and inject data
     var geoJSON = _.extend({}, boundaryGeoJSON, {
       features: _.map(boundaryGeoJSON.features, function(feature) {
-        // replace boundary properties with {amount: value}
+        // replace boundary properties with {value: value}
         // TODO... keep the existing properties and just add value?
         // replacing for now, to save weight
         feature.id = feature.properties[admKey + '_CODE'];
         feature.properties.name = feature.properties[admKey + '_NAME'] || '';
 
         if (!indexedValues[feature.id]) {
-          indexedValues[feature.id] = {amount: 0};
+          indexedValues[feature.id] = {value: 0};
           self.palette.set({min: 0});
         }
 
         return _.extend(feature, {
           properties: _.extend(feature.properties, {
-            value: indexedValues[feature.id].amount
+            value: indexedValues[feature.id].value
           })
         });
       })

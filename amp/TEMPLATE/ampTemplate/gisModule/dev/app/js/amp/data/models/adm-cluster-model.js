@@ -26,11 +26,12 @@ module.exports = Backbone.Model
       this.trigger(show ? 'show' : 'hide', this);
     });
     this.listenTo(this, 'sync', this.updatePaletteRange);
-    this.listenTo(this.collection.filter, 'apply', this.applyFilters);
+    this.listenTo(this.collection.filter, 'apply', this.refreshModel);
+    this.listenTo(this.collection.settings, 'change:selected', this.refreshModel);
   },
 
   // if filters change and layer is selected update it.
-  applyFilters: function() {
+  refreshModel: function() {
     if (this.get('selected')) {
       this.fetch();
     }

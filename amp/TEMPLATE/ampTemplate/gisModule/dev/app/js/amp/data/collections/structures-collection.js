@@ -95,8 +95,9 @@ module.exports = Backbone.Collection
   //TODO force / wait for activities to finish joining with filters...
   _joinActivities: function() {
     var self = this;
+    var deferred = $.Deferred();
 
-    return this.activities.getActivities(this._getActivityIds()).then(function() {
+    this.activities.getActivities(this._getActivityIds()).then(function() {
 
       //Do actual join
       self.each(function(structure) {
@@ -112,7 +113,10 @@ module.exports = Backbone.Collection
           console.log('no activity');
         }
       });
+      deferred.resolve();
     });
+
+    return deferred;
   },
 
   _getActivityIds: function() {
@@ -184,6 +188,7 @@ module.exports = Backbone.Collection
       self.palette.set('elements', orgSites);
 
       deferred.resolve();
+      self.trigger('refresh', this);
 
     });
 

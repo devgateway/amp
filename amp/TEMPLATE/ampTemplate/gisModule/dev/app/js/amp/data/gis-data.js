@@ -28,7 +28,7 @@ var GISData = function() {
 
 _.extend(GISData.prototype, Backbone.Events, {
 
-  layerEvents: ['show', 'hide', 'loaded', 'processed'],
+  layerEvents: ['show', 'hide', 'loaded', 'processed', 'sync'],
 
   initialize: function() {
     this.translator = translator;
@@ -91,7 +91,7 @@ _.extend(GISData.prototype, Backbone.Events, {
   load: function() {
     // this.activities.fetch();
     this.boundaries.load();
-    this.indicators.load();
+    this.indicators.loadAll();
 
 
     this.admClusters.load();  // also special for now
@@ -108,9 +108,11 @@ _.extend(GISData.prototype, Backbone.Events, {
     var namespacer = _.template('<%= ev %> <%= ev %>:' + namespace);
 
     return function(eventName) {
+
       if (_.contains(this.layerEvents, eventName)) {
         var args = _.tail(arguments);  // everything after eventName
         args.unshift(namespacer({ ev: eventName }));  // prepend the events to triger
+
         this.trigger.apply(this, args);
       }
     };

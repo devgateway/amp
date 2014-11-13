@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var $ = require('jquery');
 var Backbone = require('backbone');
 var JoinIndicator = require('../models/indicator-join-model');
 var ArcGISDynamicLayerIndicator = require('../models/indicator-arcgis-dynamicLayer-model');
@@ -32,7 +33,22 @@ module.exports = Backbone.Collection
     this.boundaries = options.boundaries;
   },
 
+  loadAll: function() {
+    var self = this;
+    var deferred = $.Deferred();
+
+    this.load().then(function() {
+      self.url = '/rest/gis/indicators';
+      self.fetch({remove: false}).then(function() {
+        deferred.resolve();
+      });
+    });
+
+    return deferred;
+  },
+
   parse: function(data) {
+    var self = this;
     var parsedData = data;
     parsedData = _.filter(data, function(layer) {
       switch (layer.type) {
@@ -42,8 +58,18 @@ module.exports = Backbone.Collection
         case 'Indicator Layers':
           return true;
         default:
-          return false;
       }
+
+      // this is a custom one. API is a bit messy so we do fair bit of manual work.
+      if (layer.colorRamp) {
+        layer.title = layer.name;
+        layer.type = 'joinBoundaries';
+        layer.adminLevel = self._magicConversion(layer.admLevelId);
+        layer.unit = 'unit';
+        return true;
+      }
+
+      return false;
     });
 
     return parsedData;
@@ -52,6 +78,17 @@ module.exports = Backbone.Collection
   getSelected: function() {
     return this.chain()
       .filter(function(model) { return model.get('selected'); });
+  },
+
+  _magicConversion: function(textAdm) {
+    var magicWords = {
+      Country: 'adm-0',
+      Region: 'adm-1',
+      Zone: 'adm-2',
+      District: 'adm-3'
+    };
+
+    return magicWords[textAdm];
   }
 
 });

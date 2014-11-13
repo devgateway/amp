@@ -123,10 +123,9 @@ _.extend(FakeServer.prototype, {
     // 'POST /rest/gis/saved-maps/ ...
 
     // Translations
-     'POST /rest/translations/label-translations': fs.readFileSync(__dirname + '/data/label-translations/sample-en.json', 'utf8'),
-     'POST /rest/translations/label-translations/en': fs.readFileSync(__dirname + '/data/label-translations/sample-en.json', 'utf8'),
-     'POST /rest/translations/label-translations/fr': fs.readFileSync(__dirname + '/data/label-translations/sample-fr.json', 'utf8'),
-
+    'POST /rest/translations/label-translations': fs.readFileSync(__dirname + '../js/amp/services/implementations/initial-translation-request.json', 'utf8'),
+    'POST /rest/translations/label-translations/en': fs.readFileSync(__dirname + '../js/amp/services/implementations/initial-translation-request.json', 'utf8'),
+    'POST /rest/translations/label-translations/fr': fs.readFileSync(__dirname + '/data/label-translations/sample-fr.json', 'utf8'),
   },
 
   _addClusterPath: function() {

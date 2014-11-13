@@ -1,6 +1,6 @@
 var fs = require('fs');
 var _ = require('underscore');
-var d3 = require('d3-browserify');
+var chartUtils = require('../../../libs/local/chart-util');
 var Backbone = require('backbone');
 var Template = fs.readFileSync(__dirname + '/datasources-item-adm-clusters.html', 'utf8');
 
@@ -15,15 +15,6 @@ module.exports = Backbone.View.extend({
     _.bindAll(this, 'render');
   },
 
-  /* format for Kilo/Million/Billion quantities */
-  // drs: this is a duplicate of a function already in util
-  formatKMB: function(precision) {
-    var formatSI = d3.format('.' + (precision || 3) + 's');
-    return function(value) {
-      return formatSI(value)
-        .replace('G', 'B');  // now just need to convert G Gigia -> B Billion
-    };
-  },
 
   render: function() {
     var self = this;
@@ -37,8 +28,8 @@ module.exports = Backbone.View.extend({
         project.tempDirtyForceJoin().then(function() {
           self.$el.append(self.template({
             activity: project.toJSON(),
-            formattedCommitments: self.formatKMB()(project.toJSON()['Actual Commitments']),
-            formattedDisbursements: self.formatKMB()(project.toJSON()['Actual Disbursements'])
+            formattedCommitments: chartUtils.formatKMB()(project.toJSON()['Actual Commitments']),
+            formattedDisbursements: chartUtils.formatKMB()(project.toJSON()['Actual Disbursements'])
           }));
         });
       });

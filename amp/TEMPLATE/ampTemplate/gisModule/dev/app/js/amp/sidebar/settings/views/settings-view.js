@@ -23,6 +23,7 @@ module.exports = BaseControlView.extend({
     var self = this;
     BaseControlView.prototype.initialize.apply(this, arguments);
     this.app = options.app;
+    this.immutableFields = ['number-format', 'number-multiplier'];
 
     this.app.data.settings.load().then(function() {
       // register for state serialization
@@ -31,6 +32,7 @@ module.exports = BaseControlView.extend({
         set: function(state) { return self.app.data.settings.deserialize(state);},
         empty: null //todo use defaultId
       });
+
     });
   },
 
@@ -44,7 +46,10 @@ module.exports = BaseControlView.extend({
     this.app.data.settings.load().then(function() {
       self.$('.settings').html('');
       self.app.data.settings.each(function(setting) {
-        self.$('.settings').append(self.templateOption(setting.toJSON()));
+        /* Show only fields that are changable by the user */
+        if (!_.contains(self.immutableFields, setting.id)) {
+          self.$('.settings').append(self.templateOption(setting.toJSON()));
+        }
       });
     });
 

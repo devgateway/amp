@@ -7,6 +7,7 @@ var Template = fs.readFileSync(__dirname + '/legend-item-structures.html', 'utf8
 module.exports = Backbone.View.extend({
 
   template: _.template(Template),
+  className: 'legend-structure',
 
   render: function() {
     var self = this;

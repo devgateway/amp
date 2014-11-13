@@ -44,5 +44,22 @@
 "amp.gis:pane-subfilters-Dates": "Dates",
 "amp.gis:title-share": "Share",
 "amp.gis:sub-title-share": "Download the data in this map or share a link to it",
-"amp.gis:title-settings": "Setting"
+"amp.gis:title-datasources": "Data Sources",
+"amp.gis:legend-desc-adm-0": "Number of activities at this adm-0",
+"amp.gis:legend-desc-adm-1": "Number of activities at this adm-1",
+"amp.gis:legend-desc-adm-2": "Number of activities at this adm-2",
+"amp.gis:legend-desc-adm-3": "Number of activities at this adm-3",
+"amp.gis:legend-item-indicator-arcgisdynamic": "Indicators",
+"amp.gis:legend-item-indicator-arcgisfeature": "Indicators",
+"amp.gis:legend-item-indicator-join": "Indicators",
+"amp.gis:legend-item-indicator-wms": "Indicators",
+"amp.gis:legend-item-structures": "Project Sites",
+"amp.gis:legend-title": "Legend",
+"amp.gis:legend-no-item": "No layers loaded",
+"amp.gis:legend-no-symbols": "This space is used to explain symbols on the map when Indicator Layers or Point Layers are loaded.",
+"amp.gis:title-settings": "Settings",
+"amp.gis:popup-project-site": "Project Site",
+"amp.gis:popup-project-site-activity": "Project",
+"amp.gis:popup-project-site-donor": "Funding Organization",
+"amp.gis:popup-project-site-geocoded":"structures are geocoded here"
 }

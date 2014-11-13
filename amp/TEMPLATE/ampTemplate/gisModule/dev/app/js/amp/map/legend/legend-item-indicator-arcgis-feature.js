@@ -7,6 +7,7 @@ var Template = fs.readFileSync(__dirname + '/legend-item-indicator-arcgis-featur
 module.exports = Backbone.View.extend({
 
   template: _.template(Template),
+  className: 'legend-indicatorarcgisfeature',
 
   render: function() {
     var drawLegend = _.bind(function() {

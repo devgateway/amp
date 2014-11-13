@@ -7,6 +7,7 @@ var Template = fs.readFileSync(__dirname + '/legend-item-adm-clusters.html', 'ut
 module.exports = Backbone.View.extend({
 
   template: _.template(Template),
+  className: 'legend-admcluster',
 
   render: function() {
     var self = this;

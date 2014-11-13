@@ -1,4 +1,4 @@
-<h3><%= title %></h3>
+<h3 data-i18n="amp.gis:radio-title-<%= obj.title %>"><%= obj.title %></h3>
 
 <div>
   <div class="map-adm-icon legend-sample">
@@ -11,5 +11,5 @@
     <div class="map-circle-label"><%= (obj.features[0] ? features[0].properties.admName : '' )%></div>
   </div>
   <!-- TODO: use the human-friendly version, not ADM-N (from value) -->
-  Number of activities at this <%= obj.value %>
+  <span data-i18n="amp.gis:legend-desc-<%= obj.value %>">Number of activities at this <%= obj.value %></span>
 </div>

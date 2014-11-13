@@ -7,6 +7,7 @@ var Template = fs.readFileSync(__dirname + '/legend-item-indicator-join.html', '
 module.exports = Backbone.View.extend({
 
   template: _.template(Template),
+  className: 'legend-indicatorjoin',
 
   render: function() {
     var self = this;

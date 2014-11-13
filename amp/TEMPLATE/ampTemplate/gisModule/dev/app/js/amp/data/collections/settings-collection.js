@@ -11,7 +11,12 @@ module.exports = Backbone.Collection
   serialize: function() {
     var tmpJSON = {};
     this.each(function(setting) {
-      tmpJSON[setting.id] = _.findWhere(setting.get('options'), {id: setting.get('selected')}).id;
+      if (setting.get('options')) {
+        tmpJSON[setting.id] = _.findWhere(setting.get('options'), {id: setting.get('selected')}).id;
+      } else {
+        /* Do not serialize settings that are immutable */
+        _.noop();
+      }
     });
     return tmpJSON;
   },
@@ -26,6 +31,7 @@ module.exports = Backbone.Collection
       return tmpJSON;
     });
   },*/
+
 
   deserialize: function(jsonBlob) {
     var self = this;

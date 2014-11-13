@@ -8,6 +8,7 @@ module.exports = Backbone.View.extend({
 
   template: _.template(Template),
   _loaded: null,
+  className: 'legend-indicatorarcgisdynamic',
 
   render: function() {
     var self = this;

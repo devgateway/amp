@@ -68,9 +68,8 @@ public class EndPoints {
 	@Path("/aidPredictability")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui = false, id = "aid-predictability")
-	//TODO: Implement Filters
-	public JSONObject getAidPredictability(JsonBean config) throws Exception {
-		return DashboardsService.getAidPredictability(config);
+	public JSONObject getAidPredictability(JsonBean filter) throws Exception {
+		return DashboardsService.getAidPredictability(filter);
 	}
 	
 	/**

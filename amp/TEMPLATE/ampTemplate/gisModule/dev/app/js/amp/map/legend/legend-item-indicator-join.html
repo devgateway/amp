@@ -5,9 +5,11 @@
   <p><em>loading...</em></p>
 <% } else { %>
   <% colourBuckets.each(function(bucket) { %>
+    <% if(bucket.get('value')){ %>
     <div>
       <span style="background: <%= bucket.hex() %>" class="color-block legend-sample"></span>
       <%= util.formatKMB()(bucket.get('value')[0]) %>&mdash;<%= util.formatKMB()(bucket.get('value')[1]) %> <%= unit %>
     </div>
+    <% } %>
   <% }) %>
 <% } %>

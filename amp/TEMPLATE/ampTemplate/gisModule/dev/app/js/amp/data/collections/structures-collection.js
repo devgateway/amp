@@ -163,13 +163,13 @@ module.exports = Backbone.Collection
           // Choosing a vertical will need to be configurable from drop down..
           if (!_.isEmpty(activity.get('matchesFilters')['Donor Id'])) {
             if (activity.get('matchesFilters')['Donor Id'].length > 1) {
-              return -1; //multiple
+              return 'Multiple Donors';
             } else {
-              return activity.get('matchesFilters')['Donor Id'];
+              return activity.get('matchesFilters')['Donor Id'][0].get('name');
             }
           } else {
             console.warn('Activity is missing desired vertical');
-            return -1;
+            return 'n/a';
           }
         })
         .map(function(sites, orgId) {

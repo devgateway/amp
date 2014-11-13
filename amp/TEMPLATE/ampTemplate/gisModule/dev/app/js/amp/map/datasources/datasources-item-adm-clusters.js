@@ -24,7 +24,7 @@ module.exports = Backbone.View.extend({
       // then only append once.
       self.collection.each(function(project) {
         // it joins on activity init, but for some reason it was being overridden...
-        // temp dirty force rejoin for now.
+        // temp dirty force rejoin for now, otherwise use: getJoinedVersion
         project.tempDirtyForceJoin().then(function() {
           self.$el.append(self.template({
             activity: project.toJSON(),

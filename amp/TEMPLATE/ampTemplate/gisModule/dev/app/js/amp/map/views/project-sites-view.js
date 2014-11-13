@@ -152,8 +152,7 @@ module.exports = Backbone.View.extend({
 
   _hilightProject: function(projectId) {
     this.featureGroup.eachLayer(function(layer) {
-      var properties = layer.feature.properties;
-      if (properties.projectId === projectId) {
+      if (layer.feature.properties.activity.id === projectId) {
         layer.setStyle({color: '#222', stroke: true});
       }
     });
@@ -161,8 +160,7 @@ module.exports = Backbone.View.extend({
 
   _dehilightProject: function(projectId) {
     this.featureGroup.eachLayer(function(layer) {
-      var properties = layer.feature.properties;
-      if (properties.projectId === projectId) {
+      if (layer.feature.properties.activity.id === projectId) {
         layer.setStyle({stroke:false});
       }
     });
@@ -274,8 +272,8 @@ module.exports = Backbone.View.extend({
     /*var parsedProjectSitesList = this.app.data.projectSites.model.prototype.parse(feature);*/
 
     if (feature.properties) {
-      //TODO: template:
-      layer.bindPopup('Project #: ' + (feature.properties.activity ? feature.properties.activity[0] : '') +
+      //TODO: template, and add activity link:
+      layer.bindPopup('Project #: ' + (feature.properties.activity ? feature.properties.activity.get('Activity Id') : '') +
         '<br />Site: ' + feature.properties.title +
         '<br />Description: ' + feature.properties.description,
       {
@@ -287,7 +285,7 @@ module.exports = Backbone.View.extend({
     layer.on('click', function(evt) {
       var feature = evt.target.feature;
       if (feature) {
-        var projectId = feature.properties.projectId;
+        var projectId = feature.properties.activity.id;
         self._hilightProject(projectId);
       }
     });
@@ -295,7 +293,7 @@ module.exports = Backbone.View.extend({
     layer.on('popupclose', function(evt) {
       var feature = evt.target.feature;
       if (feature) {
-        var projectId = feature.properties.projectId;
+        var projectId = feature.properties.activity.id;
         self._dehilightProject(projectId);
       }
     });

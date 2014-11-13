@@ -61,5 +61,12 @@
 "amp.gis:popup-project-site": "Project Site",
 "amp.gis:popup-project-site-activity": "Project",
 "amp.gis:popup-project-site-donor": "Funding Organization",
-"amp.gis:popup-project-site-geocoded":"projects are geocoded here"
+"amp.gis:popup-project-site-geocoded":"projects are geocoded here",
+"amp.gis:activities-project-title": "Project Title",
+"amp.gis:activities-donors": "Funding Organizations",
+"amp.gis:activities-sectors": "Sectors",
+"amp.gis:activities-commitments": "Actual Commitments",
+"amp.gis:activities-disbursements": "Actual Disbursements",
+"amp.gis:admclusters-projectlist": "Project List",
+"amp.gis:popup-loadmore": "load more"
 }

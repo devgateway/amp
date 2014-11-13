@@ -167,7 +167,7 @@ module.exports = Backbone.View.extend({
     if (startIndex + this.PAGE_SIZE >= this.cluster.properties.activityid.length) {
       this.tempDOM.find('.load-more').hide();
     } else {
-      this.tempDOM.find('.load-more').text('load more ' + (startIndex + this.PAGE_SIZE) + '/' +
+      this.tempDOM.find('.load-more').html('<span data-i18n="amp.gis:popup-loadmore">load more</span> ' + (startIndex + this.PAGE_SIZE) + '/' +
                                            this.cluster.properties.activityid.length);
     }
 

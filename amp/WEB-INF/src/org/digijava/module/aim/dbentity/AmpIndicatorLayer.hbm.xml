@@ -18,5 +18,10 @@
 			<key column="amp_indicator_layer_id" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpIndicatorColor" />
 		</set>
+		
+		<set name="indicatorValues" table="AMP_LOCATION_INDICATOR_VALUE" lazy="true" cascade="none">
+			<key column="indicator_id" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpLocationIndicatorValue"/>
+		</set>
 	</class>
 </hibernate-mapping>

@@ -27,15 +27,13 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.PathSegment;
 import javax.ws.rs.core.StreamingOutput;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
-import org.dgfoundation.amp.error.AMPException;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportArea;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
@@ -56,7 +54,9 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
+import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.dbentity.AmpMapState;
@@ -382,6 +382,30 @@ public class GisEndPoints {
 		}
 	}
 	
+	@GET
+	@Path("/indicators/{indicatorId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui = false, id = "IndicatorById")	
+	public JSONObject getIndicatorsById(@PathParam ("indicatorId") Long indicatorId){
+		AmpIndicatorLayer indicator = (AmpIndicatorLayer)DbUtil.getObject(AmpIndicatorLayer.class, indicatorId);
+		JSONObject response = new JSONObject();
+		response.put("name", indicator.getName());
+		response.put("classes", indicator.getNumberOfClasses());
+		response.put("id", indicator.getId());
+		response.put("description", indicator.getDescription());
+		response.put("admLevelId", indicator.getAdmLevel().getLabel());
+		JSONArray values = new JSONArray();
+		for (AmpLocationIndicatorValue value:indicator.getIndicatorValues()) {
+			JSONObject object = new JSONObject();
+			object.put ("value",value.getValue());
+			object.put("geoId", value.getLocation().getGeoCode());
+			object.put("name", value.getLocation().getName());
+			
+			values.add(object);
+		}
+		response.put("values", values);
+		return response;
+	}
 	private List<JsonBean> generateIndicatorJson (List<AmpIndicatorLayer> indicators,boolean includeAdmLevel) {
 		List<JsonBean> indicatorsJson = new ArrayList<JsonBean>();
 		for (AmpIndicatorLayer indicator : indicators) {

@@ -14,6 +14,7 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 	private Set <AmpIndicatorColor> colorRamp;
 	private Long numberOfClasses;
 	private AmpCategoryValue admLevel;
+	private Set <AmpLocationIndicatorValue> indicatorValues;
 	
 	
 	
@@ -78,6 +79,16 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 
 	public void setColorRamp(Set<AmpIndicatorColor> colorRamp) {
 		this.colorRamp = colorRamp;
+	}
+
+
+	public Set<AmpLocationIndicatorValue> getIndicatorValues() {
+		return indicatorValues;
+	}
+
+
+	public void setIndicatorValues(Set<AmpLocationIndicatorValue> indicatorValues) {
+		this.indicatorValues = indicatorValues;
 	}
 
 	

@@ -56,7 +56,7 @@ module.exports = IndicatorJoinModel.extend({
     }
   },
 
-  parse: function(data){
+  parse: function(data) {
     if (data.values && data.values.length > 0 && data.values[0].admID) {
       if (data.values[0].admID === 'GeoId: Undefined') {
         data.values[0].admID = 0;

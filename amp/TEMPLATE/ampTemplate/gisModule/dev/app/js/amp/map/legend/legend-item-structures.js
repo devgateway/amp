@@ -11,7 +11,8 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     var self = this;
-    self.model.getSites().then(function() {
+    //getStructuresWithActivities was null...
+    self.model.structuresCollection.getStructuresWithActivities().then(function() {
       self.$el.html(self.template(_.extend({}, self.model.toJSON(), {
         status: 'loaded',
         colourBuckets: self.model.structuresCollection.palette.colours

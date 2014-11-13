@@ -6,7 +6,7 @@
   <% colourBuckets.each(function(bucket) { %>
     <div>
       <span style="background: <%= bucket.hex() %>" class="color-block legend-sample"></span>
-      <%= bucket.get('value')[0] %>&mdash;<%= bucket.get('value')[1] %><%= unit %>
+      <%= util.formatKMB()(bucket.get('value')[0]) %>&mdash;<%= util.formatKMB()(bucket.get('value')[1]) %> <%= unit %>
     </div>
   <% }) %>
 <% } %>

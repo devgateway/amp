@@ -90,6 +90,7 @@ module.exports = Backbone.View.extend({
         // temp hack for if pallette part didn't work.
         if (colors.length === 0) {
           colors = [{hex: function() { return 'orange';}}];
+          console.warn('colour not found');
         }
 
         if (self.map.getZoom() < self.ZOOM_BREAKPOINT) {
@@ -150,7 +151,7 @@ module.exports = Backbone.View.extend({
     this.featureGroup.eachLayer(function(layer) {
       var properties = layer.feature.properties;
       if (properties.projectId === projectId) {
-        layer.setStyle({color: '#222'});
+        layer.setStyle({color: '#222', stroke: true});
       }
     });
   },
@@ -159,7 +160,7 @@ module.exports = Backbone.View.extend({
     this.featureGroup.eachLayer(function(layer) {
       var properties = layer.feature.properties;
       if (properties.projectId === projectId) {
-        layer.setStyle({color: '#f70'});
+        layer.setStyle({stroke:false});
       }
     });
   },
@@ -179,7 +180,7 @@ module.exports = Backbone.View.extend({
     // may also be worth doing manually since we don't want updates on zoom
     // TODO: make sizing dynamic based on highest cluster... and put into own function...
     this.markerCluster = new L.markerClusterGroup({
-      maxClusterRadius: 0.5,
+      maxClusterRadius: 0.9,
       iconCreateFunction: function(cluster) {return self._createCluster(cluster, model);},
       zoomToBoundsOnClick: false,
       showCoverageOnHover: false,
@@ -198,7 +199,7 @@ module.exports = Backbone.View.extend({
     var zoomedIn = (self.map.getZoom() >= self.ZOOM_BREAKPOINT);
 
     if (zoomedIn) {
-      size += 2 + self.BIG_ICON_RADIUS;
+      size += self.BIG_ICON_RADIUS;
     }
 
     var colors = _(markers)
@@ -221,7 +222,7 @@ module.exports = Backbone.View.extend({
 
     //var colors = [{hex: function() { return 'orange';}}];
 
-    var marker = new L.circleDivIcon(size / 2, {
+    var marker = new L.circleDivIcon(size, {
         className: 'marker-cluster' + (zoomedIn ? '' : ' marker-cluster-small'),
         html: (zoomedIn ? '<div class="text">' + markers.length + '</div>' : ''),
         color: '#444',

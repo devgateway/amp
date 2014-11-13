@@ -78,7 +78,14 @@ module.exports = Backbone.Collection
   },
 
   getStructuresWithActivities: function() {
-    return this._joinedActivities;
+    var self = this;
+    if (this._joinedActivities) {
+      return this._joinedActivities;
+    } else {
+      var tmpDeferred = $.Deferred();
+      this.load().then(function() { self._joinedActivities.then(function() {tmpDeferred.resolve(); }); });
+      return tmpDeferred;
+    }
   },
 
   parse: function(response) {

@@ -4,7 +4,6 @@
 
 var _ = require('underscore');
 var Backbone = require('backbone');
-var $ = require('jquery');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 
 module.exports = Backbone.Model

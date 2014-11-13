@@ -10,6 +10,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.gis.services.DashboardsService;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -88,4 +90,30 @@ public class EndPoints {
 			@DefaultValue("ac") @QueryParam("adjtype") String adjtype) {
 		return DashboardsService.fundingtype(adjtype,config);
 	}
+
+	@POST
+	@Path("/saved-charts")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui = false, id = "SaveChart")
+	public JsonBean savedMaps(final JsonBean pChrat) {
+		return EndpointUtils.saveApiState(pChrat,"C");
+	}
+
+	@GET
+	@Path("/saved-charts/{chartId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui = false, id = "ChartById")
+	public JsonBean savedCharts(@PathParam("chartId") Long chartId) {
+		return EndpointUtils.getApiState(chartId);
+
+	}
+
+	@GET
+	@Path("/saved-charts")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui = false, id = "ChartList")
+	public List<JsonBean> savedCharts() {
+		String type="C";
+		return EndpointUtils.getApiStateList(type);
+	}	
 }

@@ -49,11 +49,13 @@ import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.util.OrganisationUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.esrigis.dbentity.AmpMapState;
+import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.jdbc.Work;
 
 import com.vividsolutions.jts.geom.Geometry;
@@ -86,8 +88,9 @@ public class QueryUtil {
 	 * @throws DgException
 	 */
 	@SuppressWarnings("unchecked")
-	public static List<AmpMapState> getMapList() throws DgException {
-		Criteria mapsCriteria = PersistenceManager.getRequestDBSession().createCriteria(AmpMapState.class);
+	public static List<AmpApiState> getMapList(String type) throws DgException {
+		Criteria mapsCriteria = PersistenceManager.getRequestDBSession().createCriteria(AmpApiState.class);
+		mapsCriteria.add(Restrictions.eq("type", type));
 		return mapsCriteria.list();
 	}
 

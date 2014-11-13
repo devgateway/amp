@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="org.digijava.module.esrigis.dbentity.AmpMapState"
-		table="AMP_MAP_STATE">
+	<class name="org.digijava.module.esrigis.dbentity.AmpApiState"
+		table="AMP_API_STATE">
 		<id name="id" column="id" type="java.lang.Long" unsaved-value="null">
 			<generator class="native">
 				<param name="sequence">amp_map_state_seq</param>
@@ -14,7 +14,10 @@
 		<property name="stateBlob" column="stateBlob" type="text" />
 		<property name="createdDate" column="date_created" type="java.util.Date" />
 		<property name="updatedDate" column="date_updated" type="java.util.Date" />
-		<property name="lastAccesedDate" column="last_access" type="java.util.Date" />
+		<property name="type" column="type" type="java.lang.String" />
+		
+
+		
 		
 	</class>
 </hibernate-mapping>

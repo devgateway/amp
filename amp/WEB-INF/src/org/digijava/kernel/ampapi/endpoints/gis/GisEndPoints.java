@@ -34,6 +34,8 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.dashboards.EndPoints;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
@@ -59,7 +61,7 @@ import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
-import org.digijava.module.esrigis.dbentity.AmpMapState;
+import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
 import org.hibernate.ObjectNotFoundException;
@@ -169,63 +171,21 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui = false, id = "SaveMap")
 	public JsonBean savedMaps(final JsonBean pMap) {
-		Date creationDate = new Date();
-		JsonBean mapId = new JsonBean();
-
-		AmpMapState map = new AmpMapState();
-		map.setTitle(pMap.getString("title"));
-		map.setDescription(pMap.getString("description"));
-		map.setStateBlob(pMap.getString("stateBlob"));
-		System.out.println(pMap.getString("stateBlob"));
-		map.setCreatedDate(creationDate);
-		map.setUpdatedDate(creationDate);
-		map.setLastAccesedDate(creationDate);
-
-		try {
-			Session s = PersistenceManager.getRequestDBSession();
-			s.save(map);
-			s.flush();
-			mapId.set("mapId", map.getId());
-		} catch (DgException e) {
-			logger.error("Cannot Save map", e);
-			throw new WebApplicationException(e);
-		}
-		return mapId;
+		return EndpointUtils.saveApiState(pMap,"G");
 	}
+
+
 
 	@GET
 	@Path("/saved-maps/{mapId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui = false, id = "MapById")
 	public JsonBean savedMaps(@PathParam("mapId") Long mapId) {
-		JsonBean jMap = null;
-		try {
-			AmpMapState map = getSavedMap(mapId);
-			jMap = getJsonBeanFromMapState(map, Boolean.TRUE);
-
-
-		} catch (ObjectNotFoundException e) {
-			jMap = new JsonBean();
-		} catch (AmpApiException e) {
-			logger.error("cannot get map by id " + mapId, e);
-			throw new WebApplicationException(e);
-		}
-		return jMap;
+		return EndpointUtils.getApiState(mapId);
 
 	}
 
-	private AmpMapState getSavedMap(Long mapId) throws AmpApiException {
-		try {
-			Session s = PersistenceManager.getRequestDBSession();
-			AmpMapState map = (AmpMapState) s.load(AmpMapState.class, mapId);
-			map.setLastAccesedDate(new Date());
-			s.merge(map);
-			return map;
-		} catch (DgException ex) {
-			throw new AmpApiException(ex);
-		}
-		
-	}
+
 
 
 	@GET
@@ -233,19 +193,11 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui = false, id = "MapList")
 	public List<JsonBean> savedMaps() {
-		List<JsonBean> maps = new ArrayList<JsonBean>();
-
-		try {
-			List<AmpMapState> l = QueryUtil.getMapList();
-			for (AmpMapState map : l) {
-				maps.add(getJsonBeanFromMapState(map, Boolean.FALSE));
-			}
-			return maps;
-		} catch (DgException e) {
-			logger.error("Cannot get maps list", e);
-			throw new WebApplicationException(e);
-		}
+		String type="G";
+		return EndpointUtils.getApiStateList(type);
 	}
+
+
 
 	@GET
 	@Path("/indicator-layers")
@@ -341,19 +293,7 @@ public class GisEndPoints {
 		return fgj;
 	}
 
-	private JsonBean getJsonBeanFromMapState(AmpMapState map, Boolean getBlob) {
-		JsonBean jMap = new JsonBean();
 
-		jMap.set("id", map.getId());
-		jMap.set("title", map.getTitle());
-		jMap.set("description", map.getDescription());
-		if (getBlob) {
-			jMap.set("stateBlob", map.getStateBlob());
-		}
-		jMap.set("created", GisUtil.formatDate(map.getCreatedDate()));
-		jMap.set("lastAccess", GisUtil.formatDate(map.getLastAccesedDate()));
-		return jMap;
-	}
 	
 	@POST
 	@Path("/locationstotals/{admlevel}/{type}")
@@ -464,7 +404,7 @@ public class GisEndPoints {
 		String name="";
 		JsonBean filter=null;
 		if(mapId!=null){
-			AmpMapState map = getSavedMap(mapId);
+			AmpApiState map = EndpointUtils.getSavedMap(mapId);
 			filter = JsonBean.getJsonBeanFromString(map.getStateBlob());
 		}
 		if(exportType==1){

@@ -6,16 +6,16 @@ import java.util.Date;
  * @author jdeanquin
  *
  */
-public class AmpMapState {
+public class AmpApiState {
 	private Long id;
 	private String title;
 	private String description;
-
+	private String type;
 	private String stateBlob;
 	private Date createdDate;
 	private Date updatedDate;
 	private Date lastAccesedDate;
-	public AmpMapState(){
+	public AmpApiState(){
 		
 	}
 	public Long getId() {
@@ -75,6 +75,7 @@ public class AmpMapState {
 		result = prime * result
 				+ ((stateBlob == null) ? 0 : stateBlob.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		result = prime * result
 				+ ((updatedDate == null) ? 0 : updatedDate.hashCode());
 		return result;
@@ -87,7 +88,7 @@ public class AmpMapState {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		AmpMapState other = (AmpMapState) obj;
+		AmpApiState other = (AmpApiState) obj;
 		if (createdDate == null) {
 			if (other.createdDate != null)
 				return false;
@@ -118,6 +119,11 @@ public class AmpMapState {
 				return false;
 		} else if (!title.equals(other.title))
 			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
+			return false;
 		if (updatedDate == null) {
 			if (other.updatedDate != null)
 				return false;
@@ -125,12 +131,19 @@ public class AmpMapState {
 			return false;
 		return true;
 	}
+
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	@Override
 	public String toString() {
-		return "AmpMapState [id=" + id + ", title=" + title + ", description="
-				+ description + ", stateBlob=" + stateBlob + ", createdDate="
-				+ createdDate + ", updatedDate=" + updatedDate
-				+ ", lastAccesedDate=" + lastAccesedDate + "]";
+		return "AmpApiState [id=" + id + ", title=" + title + ", description="
+				+ description + ", type=" + type + ", stateBlob=" + stateBlob
+				+ ", createdDate=" + createdDate + ", updatedDate="
+				+ updatedDate + ", lastAccesedDate=" + lastAccesedDate + "]";
 	}
 	
 	

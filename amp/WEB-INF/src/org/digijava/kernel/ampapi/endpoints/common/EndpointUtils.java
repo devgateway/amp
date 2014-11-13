@@ -5,12 +5,14 @@ package org.digijava.kernel.ampapi.endpoints.common;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.WebApplicationException;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -24,7 +26,12 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingOptions;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
+import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.exception.AmpApiException;
+import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
@@ -34,7 +41,10 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.h2.util.StringUtils;
+import org.hibernate.ObjectNotFoundException;
+import org.hibernate.Session;
 
 /**
  * Common utility methods for all endpoints
@@ -362,4 +372,85 @@ public class EndpointUtils {
 			}
 		}
 	}
+	public static List<JsonBean> getApiStateList(String type) {
+		List<JsonBean> maps = new ArrayList<JsonBean>();
+
+		try {
+			List<AmpApiState> l = QueryUtil.getMapList(type);
+			for (AmpApiState map : l) {
+				maps.add(getJsonBeanFromApiState(map, Boolean.FALSE));
+			}
+			return maps;
+		} catch (DgException e) {
+			logger.error("Cannot get maps list", e);
+			throw new WebApplicationException(e);
+		}
+	}
+	private static JsonBean getJsonBeanFromApiState(AmpApiState map, Boolean getBlob) {
+		JsonBean jMap = new JsonBean();
+
+		jMap.set("id", map.getId());
+		jMap.set("title", map.getTitle());
+		jMap.set("description", map.getDescription());
+		if (getBlob) {
+			jMap.set("stateBlob", map.getStateBlob());
+		}
+		jMap.set("created", GisUtil.formatDate(map.getCreatedDate()));
+		if(map.getLastAccesedDate()!=null){
+			jMap.set("lastAccess", GisUtil.formatDate(map.getLastAccesedDate()));
+		}
+		return jMap;
+	}	
+	
+	public static AmpApiState getSavedMap(Long mapId) throws AmpApiException {
+		try {
+			Session s = PersistenceManager.getRequestDBSession();
+			AmpApiState map = (AmpApiState) s.load(AmpApiState.class, mapId);
+			map.setLastAccesedDate(new Date());
+			s.merge(map);
+			return map;
+		} catch (DgException ex) {
+			throw new AmpApiException(ex);
+		}
+		
+	}
+
+	public static JsonBean getApiState(Long mapId) {
+		JsonBean jMap = null;
+		try {
+			AmpApiState map = getSavedMap(mapId);
+			jMap = getJsonBeanFromApiState(map, Boolean.TRUE);
+
+
+		} catch (ObjectNotFoundException e) {
+			jMap = new JsonBean();
+		} catch (AmpApiException e) {
+			logger.error("cannot get map by id " + mapId, e);
+			throw new WebApplicationException(e);
+		}
+		return jMap;
+	}	
+	public static JsonBean saveApiState(final JsonBean pMap,String type) {
+		Date creationDate = new Date();
+		JsonBean mapId = new JsonBean();
+
+		AmpApiState map = new AmpApiState();
+		map.setTitle(pMap.getString("title"));
+		map.setDescription(pMap.getString("description"));
+		map.setStateBlob(pMap.getString("stateBlob"));
+		map.setCreatedDate(creationDate);
+		map.setUpdatedDate(creationDate);
+		map.setLastAccesedDate(creationDate);
+		map.setType(type);
+		try {
+			Session s = PersistenceManager.getRequestDBSession();
+			s.save(map);
+			s.flush();
+			mapId.set("mapId", map.getId());
+		} catch (DgException e) {
+			logger.error("Cannot Save map", e);
+			throw new WebApplicationException(e);
+		}
+		return mapId;
+	}	
 }

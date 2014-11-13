@@ -70,7 +70,8 @@ public class AmpOverallFundingModel implements IModel {
 
 		for (AmpFunding funding : fundingModel.getObject()) {
 			for (AmpFundingDetail fundingDetail : funding.getFundingDetails()) {
-				if (fundingDetail.getAdjustmentType().getValue()
+				if (fundingDetail.getAdjustmentType()!=null && fundingDetail.getAdjustmentType().getValue()!=null 
+						&& fundingDetail.getAdjustmentType().getValue()
 						.equals(adjustmentType)
 						&& fundingDetail.getTransactionType().intValue() == transactionType) {
 

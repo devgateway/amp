@@ -288,14 +288,14 @@ public class WorkspaceFilter
 		}
 		else
 		{
-			boolean hideDraft = Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType());
+			boolean hideDraft = false;
 			boolean approved = hideDraft;
 			
 			/**
 			 * Checks if the team is a computed workspace and in case it is
 			 * it checks if it should hide the draft activities
 			 */
-			hideDraft=TeamUtil.hideDraft(tm);
+			hideDraft= TeamUtil.hideDraft(tm) || Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType());
 			String accessType = tm.getTeamAccessType();
 			return generateWorkspaceFilterQuery(tm.getMemberId(), accessType, approved, hideDraft);
 		}

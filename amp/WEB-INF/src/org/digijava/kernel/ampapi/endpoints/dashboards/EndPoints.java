@@ -67,7 +67,7 @@ public class EndPoints {
 	 */
 	
 	@POST 
-	@Path("/aid-predictability")
+	@Path("/aidPredictability")
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui = false, id = "aidPredictability")
 	public JSONObject getAidPredictability(JsonBean filter) throws Exception {

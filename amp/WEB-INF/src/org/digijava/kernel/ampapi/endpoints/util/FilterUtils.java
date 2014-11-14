@@ -21,6 +21,7 @@ import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 import org.digijava.module.search.util.SearchUtil;
@@ -157,4 +158,44 @@ public class FilterUtils {
 		
 		return filters;
 	}
+	
+	/**
+	 * 
+	 * @param status
+	 * @return
+	 */
+	public static String getApprovalStatusStrings(Integer status){
+		String result = "";
+		switch (status) {
+		case 1:
+			result = TranslatorWorker.translateText("Validated activities");
+			break;
+		case 2:
+			result = TranslatorWorker.translateText("Existing Unvalidated");
+			break;
+		case 3:
+			result = TranslatorWorker.translateText("New Unvalidated");
+			break;
+		case 5:
+			result = TranslatorWorker.translateText("Not Approved");
+			break;
+		case 6:
+			result = TranslatorWorker.translateText("Rejected");
+			break;
+		}
+		return result;
+	}
+	
+	/**
+	 * 
+	 * @param Settings
+	 * @param value
+	 * @return
+	 */
+	public static String getSettingbyName(LinkedHashMap<Integer, Object> Settings, String value){
+		Map<Integer, Object> settings = Settings;
+		String retval = (String) settings.get(value);
+		return retval;
+	}
+	
 }

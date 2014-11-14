@@ -40,8 +40,10 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -141,7 +143,7 @@ public class LocationService {
 				new FilterRule(admLevelId, true, true));
 		spec.setFilters(filterRules);
 		
-		
+		EndpointUtils.applySettings(spec, filter);
 		
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()),true);
 		GeneratedReport report = null;
@@ -153,7 +155,7 @@ public class LocationService {
 			err = e.getMessage();
 		}
 		
-		String currcode = EndpointUtils.getDefaultCurrencyCode();
+		String currcode = FilterUtils.getSettingbyName((LinkedHashMap<Integer, Object>) filter.get(EPConstants.SETTINGS),SettingsConstants.CURRENCY_ID);
 		retlist.set("currency", currcode);
 
 		retlist.set("numberformat", numberformat);

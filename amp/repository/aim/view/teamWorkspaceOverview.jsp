@@ -232,7 +232,6 @@ function trim(stringToTrim) {
 								</c:if>
 								<c:if test="${subtabId == 2 }">
 									<html:hidden name="aimUpdateWorkspaceForm" property="workspaceType"/>
-									<html:hidden name="aimUpdateWorkspaceForm" property="category"/>
 									<table  width="100%" cellpadding="0" cellspacing="0">
 											<tr>
 											<td colspan="2">

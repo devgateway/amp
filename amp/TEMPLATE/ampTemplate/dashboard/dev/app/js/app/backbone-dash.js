@@ -21,7 +21,7 @@ var syncOverride = (function(bs) {
   function _doSync(url, method, model, options) {
     _(options).extend({
       // maybe use phil's DRC CORS dev server
-      url: (IS_PHILS_CORS ? 'http://66.207.103.134' : '') + url,
+      url: (IS_PHILS_CORS ? 'http://localhost:8080' : '') + url,
       headers: {
         // jscs:disable disallowQuotedKeysInObjects
         'Accept': 'application/json',

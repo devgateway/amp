@@ -53,7 +53,7 @@ module.exports = BackboneDash.View.extend({
           { app: this.app, url: '/rest/dashboard/tops/ps' }),
         new PredictabilityChart(
           { name: 'Aid Predictability' },
-          { app: this.app, url: '/rest/dashboard/aidPredictability' }),
+          { app: this.app, url: '/rest/dashboard/aid-predictability' }),
         new FundingTypeChart(
           { name: 'Funding Type' },
           { app: this.app, url: '/rest/dashboard/ftype' })

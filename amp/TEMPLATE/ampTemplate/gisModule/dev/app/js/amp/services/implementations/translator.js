@@ -22,6 +22,8 @@ function Translator() {
   };
 
   this._promise = null;
+  this._currentLng = 'tmp';
+  this._firstGet = null;
 
   // TODO: add support for local storage with timestamp
   this.initTranslations = function get() {
@@ -81,16 +83,14 @@ function Translator() {
   };
 
 
-  // Look to local first, only use api if we don't already have translations for this language.
+  // Only do single request on launch.
   this.getTranslations = function() {
-    var deferred = $.Deferred();
-    if (this.translations.locales[this._currentLng]) {
-      deferred.resolve(this.translations.locales[this._currentLng]);
-    } else {
-      deferred = this._getTranslationsFromAPI(this._defaultKeys, this._currentLng);
+    // this way won't work with change languages mid way though.
+    if (!this._firstGet) {
+      this._firstGet = this._getTranslationsFromAPI(this._defaultKeys, this._currentLng);
     }
 
-    return deferred;
+    return this._firstGet;
   };
 
 
@@ -102,8 +102,11 @@ function Translator() {
       //cache if we know the lng. TODO: get api to always return the lng.
       if (lng) {
         self.translations.locales[lng] = data;
+      } else {
+        // temp hack to do caching if API doesn't return current lng
+        lng = this._currentLng;
+        self.translations.locales[lng] = data;
       }
-      //else{ TODO: console.warn('no lng set, can\'t cache', data);}
 
       return data;
     });

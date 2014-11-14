@@ -19,4 +19,5 @@ public abstract class IdsExpander {
 	public IdsExpander(String factTableColumn) {
 		this.factTableColumn = factTableColumn;
 	}
+	
 }

@@ -130,7 +130,7 @@ public class MondrianReportFilters implements ReportFilters {
 			addFilterRule(filterRules, elem, filterRule);
 		}
 	}
-	
+		
 	protected <T> void addFilterRule(Map<T, List<FilterRule>> filterRules, T elem, FilterRule filterRule) {
 		List<FilterRule> filtersList = filterRules.get(elem);
 		if (filtersList == null) {

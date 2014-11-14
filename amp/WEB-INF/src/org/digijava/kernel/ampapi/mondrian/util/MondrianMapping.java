@@ -254,6 +254,9 @@ public class MondrianMapping {
 					{ColumnConstants.TERTIARY_PROGRAM, MoConstants.TERTIARY_PROGRAMS, "Tertiary Program Level "}
 					};
 			for (String[] programConstants : programConstantsList) {
+				addColumnDefinition(programConstants[0] + " Detail", new MDXLevel(programConstants[1], "Detail", "Detail Name"));
+				addColumnDefinition(programConstants[0] + " Detail Id", new MDXLevel(programConstants[1], "Detail Id", "Detail Id"));
+				
 				addColumnDefinition(programConstants[0], new MDXLevel(programConstants[1], "Normal", "Level 1 Name"));
 				addColumnDefinition(programConstants[0] + " Id", new MDXLevel(programConstants[1], "Normal Id", "Level 1 Id"));
 				for(int i = 1; i <= 8; i++) {

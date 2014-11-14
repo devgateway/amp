@@ -37,20 +37,80 @@ public class FactTableFiltering {
 				subquery.append(fragment);
 			}
 		}
-		return subquery.toString().trim();
+		String ret = subquery.toString().trim();
+		if (ret != null && !ret.isEmpty())
+			System.err.println("filter query fragment: " + ret);
+		return ret;
 	}
 	
-	protected String buildQuerySubfragment(String mainColumnName, List<FilterRule> rules) {
+	/**
+	 * builds a subquery of the form AND (primary_sector_id IN (...))
+	 * @param mainColumnName
+	 * @param initRules
+	 * @return
+	 */
+	protected String buildQuerySubfragment(String mainColumnName, List<FilterRule> initRules) {
 		IdsExpander expander = MAIN_COLUMN_EXPANDERS.get(mainColumnName);
 		if (expander == null)
 			throw new RuntimeException("the following SQL mainColumn filter not implemented: " + mainColumnName);
-		StringBuilder ret = new StringBuilder();
+		
+		for(FilterRule rule:initRules)
+			if (!rule.isIdFilter)
+				throw new RuntimeException(String.format("filtering %s by values not implemented", mainColumnName));
+
+		List<FilterRule> rules = mergeRules(initRules);
+		List<String> statements = new ArrayList<>();
 		for(FilterRule rule:rules) {
 			if (!rule.isIdFilter)
 				throw new RuntimeException(String.format("filtering %s by values not implemented", mainColumnName));
-			ret.append(buildRuleStatement(rule, expander));
+			
+			String statement = buildRuleStatement(rule, expander);
+			if (statement != null && (!statement.isEmpty()))
+				statements.add(statement);
 		}
+		
+		if (statements.isEmpty())
+			return "";
+		if (statements.size() == 1)
+			return String.format(" AND (%s)", statements.get(0));
+					
+		StringBuilder ret = new StringBuilder(" AND (");
+		
+		for(int i = 0; i < statements.size(); i++) {
+			if (i > 0) {
+				ret.append(" OR ");
+			}
+			ret.append("(").append(statements.get(i)).append(")");
+		}
+		ret.append(" )");
 		return ret.toString();
+	}
+	
+	public static List<FilterRule> mergeRules(List<FilterRule> initRules) {
+		
+		if (initRules == null || initRules.isEmpty() || initRules.size() == 1)
+			return initRules;
+		
+		List<FilterRule> res = new ArrayList<>();
+		Set<String> mergedValues = new HashSet<>();
+		for(FilterRule rule:initRules) {
+			switch(rule.filterType) {
+			case RANGE:
+				res.add(rule);
+				break;
+				
+			case SINGLE_VALUE:
+				mergedValues.add(rule.value);
+				break;
+				
+			case VALUES:
+				mergedValues.addAll(rule.values);
+				break;
+			}
+		}
+		if (!mergedValues.isEmpty())
+			res.add(new FilterRule(new ArrayList<String>(mergedValues), true, true));
+		return res;
 	}
 	
 	protected String buildRuleStatement(FilterRule rule, IdsExpander expander) {
@@ -73,10 +133,9 @@ public class FactTableFiltering {
 				throw new RuntimeException("unimplemented type of sql filter type: " + rule.filterType);
 		}
 		
-		if (rule.values != null && rule.values.size() > 0) {
-			StringBuilder result = new StringBuilder(" AND (");
+		if (!ids.isEmpty()) {
+			StringBuilder result = new StringBuilder();
 			result.append(expander.factTableColumn).append(rule.valuesInclusive ? " IN " : " NOT IN ").append(" (").append(Util.toCSStringForIN(ids)).append(")");
-			result.append(")");
 			return result.toString();
 		}
 		return "";

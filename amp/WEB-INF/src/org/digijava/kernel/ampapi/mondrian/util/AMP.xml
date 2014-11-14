@@ -74,6 +74,16 @@
 			<Table name="mondrian_programs@@locale@@" />
 			<Level name="Level 1 Id" type="Integer" column="id1"/>
 		</Hierarchy>
+
+		<Hierarchy hasAll="true" allMemberName="All Detail" primaryKey="amp_theme_id" name="Detail">
+			<Table name="mondrian_programs@@locale@@" />
+			<Level name="Detail Name" type="Integer" column="amp_theme_id" nameColumn="name" />
+		</Hierarchy>
+
+		<Hierarchy hasAll="true" allMemberName="All Detail" primaryKey="amp_theme_id" name="Detail Id">
+			<Table name="mondrian_programs@@locale@@" />
+			<Level name="Detail Id" type="Integer" column="amp_theme_id"/>
+		</Hierarchy>
 		
 		<Hierarchy hasAll="true" allMemberName="All Level 1" primaryKey="amp_theme_id" name="Level 1">
 			<Table name="mondrian_programs@@locale@@" />

@@ -69,7 +69,7 @@ public class FilterRule {
 	/**
 	 * List filter rule, e.g. allowed years [2009, 2013, 2016]
 	 * @param values - list of values or ids to filter by
-	 * @param valuesInclusive - true if only this values are allowed, flase if this values are not allowed
+	 * @param valuesInclusive - true if only these values are allowed, false if these values are not allowed
 	 * @param isIdList - true if this is a list of ids, false if this is a list of values
 	 */
 	public FilterRule(List<String> values, boolean valuesInclusive, boolean isIdList) {

@@ -78,7 +78,7 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		}
 	}
 	
-	public ReportSpecification buildSpecification(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
+	public ReportSpecificationImpl buildSpecification(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(reportName);
 		
 		for(String columnName:columns)

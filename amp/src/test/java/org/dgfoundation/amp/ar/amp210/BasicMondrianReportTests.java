@@ -270,7 +270,7 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	      new ReportAreaForTests()
 	          .withContents("Project Title", "activity with primary_program", "Region", "", "2010-Actual Disbursements", "0", "Total Measures-Actual Disbursements", "100")  );
 		
-		ReportSpecificationImpl spec = (ReportSpecificationImpl) buildSpecification("test_AMP_18330_empty_rows",
+		ReportSpecificationImpl spec = buildSpecification("test_AMP_18330_empty_rows",
 				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),
 				Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
 				null,

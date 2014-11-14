@@ -82,7 +82,7 @@
     "leaflet": "^0.7.3",
     "leaflet-div-style-icon": "^0.1.0",
     "leaflet.markercluster": "~0.4.0",
-    "nice-buckets": "https://github.com/devgateway/nice-buckets/archive/master.tar.gz",
+    "nice-buckets": "^0.2.0",
     "node-qunit-phantomjs": "https://github.com/jonkemp/node-qunit-phantomjs/archive/master.tar.gz",
     "nvd3": "~1.1.15",
     "qunitjs": "^1.14.0",

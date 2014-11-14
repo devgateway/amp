@@ -17,10 +17,13 @@ module.exports = Backbone.Model
   },
 
   initialize: function(things, options) {
-    var self = this;
     this.appData = options.appData;
     this.filter = options.filter;
     this.structuresCollection = this.appData.projectSites;
+  },
+
+  attachListeners: function() {
+    var self = this;
 
     this.listenTo(this, 'change:selected', function(other, show) {
       this.trigger(show ? 'show' : 'hide', this);

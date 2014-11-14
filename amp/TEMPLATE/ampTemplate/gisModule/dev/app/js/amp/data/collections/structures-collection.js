@@ -165,7 +165,8 @@ module.exports = Backbone.Collection
             if (activity.get('matchesFilters')['Donor Id'].length > 1) {
               return 'Multiple Donors';
             } else {
-              return activity.get('matchesFilters')['Donor Id'][0].get('name');
+              var donorName = (activity.get('matchesFilters')['Donor Id'][0] ? activity.get('matchesFilters')['Donor Id'][0].get('name') : '');
+              return donorName;
             }
           } else {
             console.warn('Activity is missing desired vertical');

@@ -61,7 +61,7 @@ module.exports = BaseControlView.extend({
     });
 
     this.app.data.filter.on('apply', function(serialized) {
-      //TODO: ...trigger something wider....or atttach fitler widget to app.data....
+      //TODO: ...trigger something wider....or attach fitler widget to app.data....
       console.log('serialized', serialized.columnFilters);
 
       //only collapse ui if it's expanded...otherwise strange bootstrap behaviour.

@@ -78,8 +78,6 @@ module.exports = Backbone.View.extend({
           if (feature.properties.activity.attributes &&
               feature.properties.activity.attributes.matchesFilters['Donor Id']) {
             donorId = feature.properties.activity.attributes.matchesFilters['Donor Id'][0];
-          } else {
-            console.log('feature.properties.activity', feature.properties.activity);
           }
 
           return colour.get('test').call(colour, feature.properties.id);
@@ -302,8 +300,9 @@ module.exports = Backbone.View.extend({
   // ==================
   // Layer management
   // ==================
-  showLayer: function() {
+  showLayer: function(layer) {
     var self = this;
+
     if (this.layerLoadState === 'loading') {
       console.warn('ProjectSites leaflet: tried to show project sites while they are still loading');
       return;
@@ -312,9 +311,11 @@ module.exports = Backbone.View.extend({
     }
 
     this.structureMenuModel.load().done(function() {
-      self.layerLoadState = 'loaded';
-      self.getNewProjectSitesLayer();
-      self.map.addLayer(self.markerCluster);
+      if (layer.get('selected')) {
+        self.layerLoadState = 'loaded';
+        self.getNewProjectSitesLayer();
+        self.map.addLayer(self.markerCluster);
+      }
     });
 
     this.map.on('zoomend', this._updateZoom, this);
@@ -323,7 +324,7 @@ module.exports = Backbone.View.extend({
 
   refreshLayer: function() {
     this.hideLayer();
-    this.showLayer();
+    this.showLayer(this.structureMenuModel);
   },
 
   bringToFront: function() {
@@ -334,7 +335,7 @@ module.exports = Backbone.View.extend({
 
   hideLayer: function() {
     if (this.layerLoadState === 'pending') {
-      throw new Error('Tried to remove project sites but they have not been added');
+      console.warn('Tried to remove project sites but they have not been added');
     } else if (this.layerLoadState === 'loading') {
       console.warn('Project Sites: removing layers while they are loading is not yet supported');
     }

@@ -106,6 +106,7 @@ _.extend(GISData.prototype, Backbone.Events, {
     $.when(this.filter.loaded, this._stateWait).then(function() {
       self.boundaries.load();
       self.indicators.loadAll();
+      self.projectSitesMenu.attachListeners();
 
       self.admClusters.load();  // also special for now
       self.admClusters.attachListeners();

@@ -69,7 +69,7 @@ module.exports = Backbone.View.extend({
   },
 
   moveBoundaryBack: function() {
-    if (this.boundary) {
+    if (this.boundary && this.boundary._map) {
       this.boundary.bringToBack();
     }
   },
@@ -87,9 +87,10 @@ module.exports = Backbone.View.extend({
   hideLayer: function(admLayer) {
     var leafletLayer = this.leafletLayerMap[admLayer.cid];
     if (_.isUndefined(leafletLayer)) {
-      throw new Error('cannot remove a layer that is not loaded...', admLayer);
+      console.warn('cannot remove a layer that is not loaded...', admLayer);
+    } else {
+      this.map.removeLayer(leafletLayer);
     }
-    this.map.removeLayer(leafletLayer);
   },
 
   getNewADMLayer: function(admLayer) {

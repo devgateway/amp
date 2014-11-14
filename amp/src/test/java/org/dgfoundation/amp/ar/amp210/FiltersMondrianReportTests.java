@@ -4,6 +4,8 @@
 package org.dgfoundation.amp.ar.amp210;
 
 import java.util.Arrays;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -12,8 +14,12 @@ import org.dgfoundation.amp.mondrian.ReportAreaForTests;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
+import org.digijava.kernel.ampapi.exception.AmpApiException;
+import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.junit.Test;
 
 /**
@@ -248,12 +254,92 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 		Exception ex = null;
 		try {
 			runMondrianTestCase(spec, "en", 
-					Arrays.asList("Activity with primary_tertiary_program", "activity with primary_program", "activity with tertiary_program", "pledged 2"), 
-					correctResult2);
+				Arrays.asList("Activity with primary_tertiary_program", "activity with primary_program", "activity with tertiary_program", "pledged 2"), 
+				correctResult2);
 		}
 		catch(Exception e) {
 			ex = e;
 		}
 		assertNotNull(ex);
+	}
+	
+	@Test
+	public void testDateFiltersRange() throws Exception {
+		ReportAreaForTests correctResult = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "2009-Actual Commitments", "100 000", "Total Measures-Actual Commitments", "100 000")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "date-filters-activity", "2009-Actual Commitments", "100 000", "Total Measures-Actual Commitments", "100 000"));
+		
+		ReportSpecificationImpl spec = buildSpecification("testDateFilters",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+			null,
+			GroupingCriteria.GROUPING_YEARLY);
+		
+		MondrianReportFilters filters = new MondrianReportFilters();
+		filters.addDateRangeFilterRule(new GregorianCalendar(2009, 2 - 1, 2).getTime(), new GregorianCalendar(2009, 2 - 1, 2).getTime());				
+		spec.setFilters(filters);
+		
+		runMondrianTestCase(spec, "en", Arrays.asList("date-filters-activity"), correctResult);
+	}
+	
+	@Test
+	public void testDateFiltersValue() throws Exception {
+		ReportAreaForTests correctResult = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "2009-Actual Commitments", "100 000", "Total Measures-Actual Commitments", "100 000")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "date-filters-activity", "2009-Actual Commitments", "100 000", "Total Measures-Actual Commitments", "100 000"));
+		
+		ReportSpecificationImpl spec = buildSpecification("testDateFilters",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+			null,
+			GroupingCriteria.GROUPING_YEARLY);
+		
+		MondrianReportFilters filters = new MondrianReportFilters();
+		filters.addSingleDateFilterRule(new GregorianCalendar(2009, 2 - 1, 2).getTime(), true);
+		spec.setFilters(filters);
+		
+		runMondrianTestCase(spec, "en", Arrays.asList("date-filters-activity"), correctResult);
+	}
+	
+	@Test
+	public void testDateFiltersGreaterOrEqual() throws Exception {
+		ReportAreaForTests correctResult = new ReportAreaForTests()
+			.withContents("Project Title", "Report Totals", "2012-Actual Commitments", "25 000", "Total Measures-Actual Commitments", "25 000")
+			.withChildren(
+				new ReportAreaForTests().withContents("Project Title", "date-filters-activity", "2012-Actual Commitments", "25 000", "Total Measures-Actual Commitments", "25 000"));
+		
+		ReportSpecificationImpl spec = buildSpecification("testDateFilters",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+			null,
+			GroupingCriteria.GROUPING_YEARLY);
+		
+		MondrianReportFilters filters = new MondrianReportFilters();
+		filters.addDateRangeFilterRule(new GregorianCalendar(2012, 9 - 1, 12).getTime(), null);		
+		spec.setFilters(filters);
+		
+		runMondrianTestCase(spec, "en", Arrays.asList("date-filters-activity"), correctResult);
+	}
+	
+	@Test
+	public void testDateFiltersSmallerOrEqual() throws Exception {
+		ReportAreaForTests correctResult = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "2009-Actual Commitments", "100 000", "Total Measures-Actual Commitments", "100 000")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "date-filters-activity", "2009-Actual Commitments", "100 000", "Total Measures-Actual Commitments", "100 000"));
+		
+		ReportSpecificationImpl spec = buildSpecification("testDateFilters",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+			null,
+			GroupingCriteria.GROUPING_YEARLY);
+		
+		MondrianReportFilters filters = new MondrianReportFilters();
+		filters.addDateRangeFilterRule(null, new GregorianCalendar(2009, 2 - 1, 2).getTime());
+		spec.setFilters(filters);
+		
+		runMondrianTestCase(spec, "en", Arrays.asList("date-filters-activity"), correctResult);
 	}
 }

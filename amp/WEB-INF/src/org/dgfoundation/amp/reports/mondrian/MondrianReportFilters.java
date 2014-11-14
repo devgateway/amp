@@ -96,6 +96,7 @@ public class MondrianReportFilters implements ReportFilters {
 	
 	/**
 	 * These are basically the activity dates filters
+	 * called through reflection during json, DO NOT DELETE
 	 */
 	public Map<String, List<FilterRule>> getColumnDateFilterRules() {
 		if (filterRules == null) return null; 

@@ -85,7 +85,7 @@ public class MondrianDateFilters {
 			if (rule.min != null && rule.max != null)
 				result.append(" AND ");
 			if (rule.max != null)
-				result.append(sqlColumnName).append(rule.maxInclusive ? " >= " : " > ").append(toSQLDate(rule.max));
+				result.append(sqlColumnName).append(rule.maxInclusive ? " <= " : " < ").append(toSQLDate(rule.max));
 			break;
 		case SINGLE_VALUE:
 			result.append(sqlColumnName).append(" = ").append(toSQLDate(rule.value));

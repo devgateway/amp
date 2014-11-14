@@ -869,7 +869,7 @@ public class LuceneUtil implements Serializable {
 
                 List<AmpContentTranslation> valueTranslationsList = ContentTranslationUtil.loadFieldTranslations(activityClassName, id, field);
 
-                if (valueTranslationsList.isEmpty()) {
+                if (! valueTranslationsList.isEmpty()) {
                     for (AmpContentTranslation translation : valueTranslationsList) {
                         // Added try/catch because Field can throw an exception if any of the parameters is wrong and that would break the process.
                         try {

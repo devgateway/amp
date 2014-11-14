@@ -27,10 +27,9 @@ module.exports = BackboneDash.View.extend({
     return defaults;
   },
 
-  stateKeys: ['limit', 'adjtype', 'view', 'big'],
-
   events: {
     'change .dash-adj-type input': 'changeAdjType',
+    'click .reset': 'resetLimit',
     'click .chart-view': 'changeChartView',
     'click .download': 'download',
     'click .expand': 'big',
@@ -120,6 +119,10 @@ module.exports = BackboneDash.View.extend({
         } else {
           this.chart(this.el.querySelector('.dash-chart-wrap'), this.model);
           this.renderNumbers();
+          var limit = this.model.get('limit');
+          if (limit) {
+            this.$('.reset')[limit === this.model.defaults.limit ? 'hide' : 'show']();
+          }
           message.stop().fadeOut(200);
         }
       }).bind(this))
@@ -130,6 +133,10 @@ module.exports = BackboneDash.View.extend({
         console.error('failed loading chart :(', arguments);
         this.$('svg').hide();
       }).bind(this));
+  },
+
+  resetLimit: function() {
+    this.model.set('limit', this.model.defaults.limit);
   },
 
   renderNumbers: function() {

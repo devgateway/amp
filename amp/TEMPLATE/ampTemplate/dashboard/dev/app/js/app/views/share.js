@@ -21,8 +21,34 @@ module.exports = BackboneDash.View.extend({
   },
 
   share: function() {
-    this.app.state.freeze({ toURL: true });
-    this.$('#dash-share-url').val(this.app.url.full());
+    this.$('#dash-share-url')
+      .attr('disabled', 'disabled')
+      .val('Saving dashboard state, please wait...');
+
+    var stateBlob = this.app.state.freeze();
+
+    this.listenToOnce(this.app.savedDashes, 'request', function(model, xhr) {
+      // this has to be set up before .create, so we don't miss it
+      xhr
+        .done(_(function() {
+          var id = model.get('id');
+          console.log('th', this.app.state.toHash(id));
+          this.app.url.hash(this.app.state.toHash(id), { silent: true });
+          this.$('#dash-share-url')
+            .removeAttr('disabled')
+            .val(this.app.url.full());
+        }).bind(this))
+        .fail(_(function() {
+          this.$('#dash-share-url').val('Error: could not save dashboard for sharing.');
+        }).bind(this));
+    });
+
+    this.app.savedDashes.create({  // create does POST
+      title: 'Dashboard',
+      description: 'Saved dashboard',
+      stateBlob: stateBlob
+    }, { app: this.app });
+
     this.$('.dash-share-modal').modal();
   }
 

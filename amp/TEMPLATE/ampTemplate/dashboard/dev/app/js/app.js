@@ -6,7 +6,7 @@ var App = require('./app/app-class');
 var h = document.querySelector('#amp-header');
 if (h) {
   h.innerHTML = boilerplate.header;
-  jquery('.dropdown-toggle').dropdown()
+  jquery('.dropdown-toggle').dropdown();
 } else {
   console.error('no container for header');
 }

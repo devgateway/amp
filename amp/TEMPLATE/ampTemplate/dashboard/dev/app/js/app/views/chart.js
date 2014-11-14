@@ -1,4 +1,5 @@
 var fs = require('fs');
+var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var baby = require('babyparse');
 var canvg = require('../../ugly/lib-load-hacks').canvg;
@@ -40,60 +41,63 @@ module.exports = BackboneDash.View.extend({
     this.app = options.app;
     this.model.set(this.uiDefaults());
     this.rendered = false;
+    this._stateWait = new Deferred();
+
+    if (this.app.savedDashes.length) {
+      // a bit sketch....
+      this.app.state.loadPromise.always(this._stateWait.resolve);
+    } else {
+      this._stateWait.resolve();
+    }
+
     this.listenTo(this.app.filter, 'apply', this.updateData);
-    this.listenTo(this.model, 'change:adjtype', this.updateData);
+    this.listenTo(this.model, 'change:adjtype', this.render);
     this.listenTo(this.model, 'change:limit', this.updateData);
     this.listenTo(this.model, 'change:view', this.render);
 
     this.app.state.register(this, 'chart:' + this.model.url, {
       get: this._getState,
-      set: this._setState,
+      set: _(this.model.set).bind(this.model),
       empty: null
     });
 
-    this.chart = charts[this.model.get('view')]();  // bar, etc.
   },
 
   _getState: function() {
-    var states =  _(this.stateKeys).map(function(k) {
-      var s = {},
-          uiDefaults = this.uiDefaults(),
-          modelState = this.model.get(k);
-      if (_(uiDefaults).has(k) && uiDefaults[k] !== modelState ||
-          _(this.model.defaults).has(k) && this.model.defaults[k] !== modelState) {
-        s[k] = modelState;
-      }
-      return s;
-    }, this);
-
-    return _.extend.apply(null, states);
-  },
-
-  _setState: function(states) {
-    this.model.set(_({}).extend(
-      _(this.uiDefaults()).pick(this.stateKeys),
-      _(this.model.defaults).pick(this.stateKeys),
-      states
-    ));
+    return this.model.pick(
+      'limit',
+      'adjtype',
+      'view',
+      'big'
+    );
   },
 
   render: function() {
     this.rendered = true;
+    this.chart = charts[this.model.get('view')]();  // bar, etc.
     var renderOptions = {
       model: this.model,
       chart: this.chartEl,
       util: util
     };
     this.$el.html(template(renderOptions));
-    this.updateData();
+    if (this._stateWait.state() !== 'pending') {
+      this.updateData();
+    }
     return this;
   },
 
   updateData: function() {
-    if (!this.rendered) {
+    if (!this.rendered) { return; }  // cop-out on early filters apply event
+
+    var message = this.$('.dash-chart-diagnostic');
+
+    if (this._stateWait.state() === 'pending') {
+      // don't do anything until we have state
+      message.html('Loading saved settings...').fadeIn(100);
       return;
     }
-    var message = this.$('.dash-chart-diagnostic');
+
     message.html('Loading...').fadeIn(100);
     var fetchOptions = {
       type: 'POST',
@@ -107,7 +111,7 @@ module.exports = BackboneDash.View.extend({
           return prev + values.length;
         }, 0)
         .value();
-    }
+    };
     this.model.fetch(fetchOptions)
       .done(_(function() {
         if (countValues(this.model.get('processed')) ===  0) {
@@ -142,7 +146,6 @@ module.exports = BackboneDash.View.extend({
 
   changeChartView: function(e) {
     var view = e.currentTarget.dataset.view;
-    this.chart = charts[view]();
     this.model.set('view', view);
   },
 

@@ -5,6 +5,7 @@ var BackboneDash = require('./backbone-dash');
 var URLService = require('amp-url/index');
 var State = require('amp-state/index');
 var Filter = require('amp-filter/src/main');
+var SavedDashes = require('./models/saved-dashes-collection.js');
 
 var MainView = require('./views/main');
 var FailView = require('./views/fail');
@@ -27,8 +28,10 @@ _.extend(App.prototype, BackboneDash.Events, {
     try {
       // initialize app services
       this.url = new URLService();
+      this.savedDashes = new SavedDashes([], { app: this });
       this.state = new State({
-        url: this.url
+        url: this.url,
+        saved: this.savedDashes
       });
       this.filter = new Filter({
         draggable: true,

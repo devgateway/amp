@@ -52,8 +52,12 @@ var syncOverride = (function(bs) {
   }
 
   return function(method, model, options) {
-    var url = _.has(options, 'url') ? options.url : _.result(model, 'url'),
-        cacheable = _.some(CACHE, function(i) { return url.indexOf(i) === 0; });
+    var url = options.url || _(model).result('url') || Backbone.Model.prototype.url.call(model),
+        cacheable = false;
+    if (options.type === 'POST' &&
+      _.some(CACHE, function(i) { return url.indexOf(i) === 0; })) {
+      cacheable = true;
+    }
     return (cacheable ? _cacheSync : _doSync)(url, method, model, options);
   };
 })(Backbone.sync);

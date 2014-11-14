@@ -11,8 +11,8 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 
-				drop table AMP_MAP_STATE;
-				drop sequence amp_map_state_seq:
+				drop table IF EXISTS  AMP_MAP_STATE  ;
+				drop sequence IF EXISTS amp_map_state_seq  ;
 			</lang>
 		</script>
 	</apply>

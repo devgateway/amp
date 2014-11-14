@@ -37,6 +37,9 @@ public class FiltersGroup {
 		
 		// adding program groups
 		List<String> programSuffix = new ArrayList<String>();
+		programSuffix.add("");
+		programSuffix.add(" Detail");
+		programSuffix.add(" Normal");
 		for (int idx = 1; idx < 9; idx ++)
 			programSuffix.add(" Level " + idx);
 		addGroups(filterGroupMap, 

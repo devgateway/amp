@@ -5,6 +5,7 @@ package org.digijava.kernel.ampapi.endpoints.common;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,8 +17,11 @@ import javax.ws.rs.WebApplicationException;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
+import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -29,6 +33,7 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -41,6 +46,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.h2.util.StringUtils;
 import org.hibernate.ObjectNotFoundException;
@@ -84,6 +90,26 @@ public class EndpointUtils {
 		if(appSettings != null)
 			return String.valueOf(appSettings.getFiscalCalendar().getIdentifier());
 		return String.valueOf(DbUtil.getBaseFiscalCalendar());
+	}
+	
+	/**
+	 * @return report default START year selection
+	 */
+	public static String getDefaultReportStartYear() {
+		AmpApplicationSettings appSettings = getAppSettings();
+		if(appSettings != null && appSettings.getReportStartYear() > 0)
+			return String.valueOf(appSettings.getReportStartYear());
+		return FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
+	} 
+	
+	/**
+	 * @return report default END year selection
+	 */
+	public static String getDefaultReportEndYear() {
+		AmpApplicationSettings appSettings = getAppSettings();
+		if(appSettings != null && appSettings.getReportEndYear() > 0)
+			return String.valueOf(appSettings.getReportEndYear());
+		return FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
 	}
 	
 	/**
@@ -178,6 +204,12 @@ public class EndpointUtils {
 				defaultId, options);
 	}
 	
+	/**
+	 * Provides current report settings
+	 * 
+	 * @param spec report specification 
+	 * @return settings in a structure to be used in UI, with all options
+	 */
 	public static List<SettingField> getReportSettings(ReportSpecification spec) {
 		if (spec == null || spec.getSettings() == null)
 			return null;
@@ -187,7 +219,7 @@ public class EndpointUtils {
 		settings.add(getReportNumberFormat(spec));
 		settings.add(getReportCurrency(spec));
 		settings.add(getReportCalendar(spec));
-		//settings.add()
+		settings.add(getReportYearRange(spec));
 		
 		return settings;
 	}
@@ -208,6 +240,75 @@ public class EndpointUtils {
 		
 		return getSelectedOptions(selectedId, getCurrencySettings(), 
 				SettingsConstants.CURRENCY_ID);
+	}
+	
+	/**
+	 * Year range setting
+	 * 
+	 * @param spec
+	 * @return
+	 */
+	private static SettingField getReportYearRange(ReportSpecification spec) {
+		// build the list of years
+		SettingOptions yearsOptions = getReportYearsOptions();
+		String selectedStartYearId = null;
+		String selectedEndYearId = null;
+		
+		if (spec.getSettings() != null && spec.getSettings().getFilterRules() != null
+				&& spec.getSettings().getFilterRules() != null
+				&& spec.getSettings().getFilterRules().containsKey(new ReportElement(ElementType.YEAR))) {
+			// not sure if the plan to use multiple year range settings is still valid AMP-17715
+			for (FilterRule filter : spec.getSettings().getFilterRules().get(new ReportElement(ElementType.YEAR))) {
+				selectedStartYearId = getSelectedYearId(filter.min); 
+				selectedEndYearId = getSelectedYearId(filter.max);
+				// now 1 range
+				break;
+			}
+		} else {
+			selectedStartYearId = getDefaultReportStartYear();
+			selectedEndYearId = getDefaultReportEndYear();
+		}
+		
+		List<SettingField> range = Arrays.asList(
+				getSelectedOptions(selectedStartYearId, yearsOptions, SettingsConstants.YEAR_FROM),
+				getSelectedOptions(selectedEndYearId, yearsOptions, SettingsConstants.YEAR_TO));
+		
+		return new SettingField(SettingsConstants.YEAR_RANGE_ID, null, 
+				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.YEAR_RANGE_ID), range);
+	}
+	
+	private static String getSelectedYearId(String year) {
+		if (year == null || MoConstants.FILTER_UNDEFINED_MAX.equals(year))
+			return SettingsConstants.YEAR_ALL;
+		return year;
+	}
+	
+	/**
+	 * @return report default year list options
+	 */
+	private static SettingOptions getReportYearsOptions() {
+		// build year  options
+		List<SettingOptions.Option> options = new ArrayList<SettingOptions.Option>();
+		Long optionRangeStart = FeaturesUtil.getGlobalSettingValueLong(Constants.GlobalSettings.YEAR_RANGE_START);
+		Long optionRangeEnd = optionRangeStart +  
+				FeaturesUtil.getGlobalSettingValueLong(Constants.GlobalSettings.NUMBER_OF_YEARS_IN_RANGE);
+		
+		// add "All" option
+		SettingOptions.Option yearOption = new SettingOptions.Option(
+				SettingsConstants.YEAR_ALL, 
+				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.YEAR_ALL),
+				SettingsConstants.YEAR_MAP.get(SettingsConstants.YEAR_ALL),
+				true);
+		options.add(yearOption);
+		
+		// add actual years list to select from  
+		for (long year =  optionRangeStart; year <= optionRangeEnd; year++ ) {
+			final String yearStr = String.valueOf(year);
+			yearOption = new SettingOptions.Option(yearStr, yearStr);
+			options.add(yearOption);
+		}
+		
+		return new SettingOptions(null, false, null, null, options);
 	}
 	
 	private static SettingField getSelectedOptions(String selectedId, 
@@ -315,14 +416,18 @@ public class EndpointUtils {
      * 		"0" : [“Actual Commitments”, “Actual Disbursements”],
      * 		"1" : “USD”,
      * 		"2" : “123”
-     *      "3" : {
+     *      "amountFormat" : {
      *              decimalSymbol : ".", 
      *              maxFracDigits : 2,
      *              useGrouping   : true,
      *              groupSeparator: " ",
      *              groupSize     : 3,
      *              amountUnits   : 0.001
-     *             }
+     *             },
+     *       "yearRange" : {
+     *       		yearFrom : "all",
+     *       		yearTo   : "2014"
+     *       }
      * 	}
      * }
 	 * @param spec - report specification over which to apply the settings
@@ -369,6 +474,26 @@ public class EndpointUtils {
 				Double multiplier  = (Double) amountFormat.get(SettingsConstants.AMOUNT_UNITS);
 				if (multiplier != null)
 					reportSettings.setUnitsMultiplier(multiplier);
+			}
+			
+			// apply year range settings
+			Map<String, Object> yearRange = (Map<String, Object>)settings.get(SettingsConstants.YEAR_RANGE_ID);
+			if (yearRange != null) {
+				Integer start = Integer.valueOf((String)yearRange.get(SettingsConstants.YEAR_FROM));
+				Integer end = Integer.valueOf((String)yearRange.get(SettingsConstants.YEAR_TO));
+				// clear previous year settings
+				reportSettings.getFilterRules().remove(new ReportElement(ElementType.YEAR));
+				// TODO: update settings to store [ALL, ALL] range just to reflect the previous selection
+				if (!(start == -1 && end == -1)) {
+					try {
+						start = start == -1 ? null : start;
+						end = end == -1 ? null : end;
+						reportSettings.addYearsRangeFilterRule(start, end);
+					} catch (Exception e) {
+						logger.error(e.getMessage());
+					}
+				}
+				
 			}
 		}
 	}

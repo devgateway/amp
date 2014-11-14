@@ -45,9 +45,15 @@ public class ReportElement {
 		this.type = type;
 	}
 
+	
 	@Override
 	public boolean equals(Object o) {
-		return 	Objects.deepEquals(this, o);
+		return o != null && this.toString().equals(o.toString());
+	}
+	
+	@Override
+	public int hashCode() {
+		return this.toString().hashCode();
 	}
 	
 	@Override

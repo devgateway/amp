@@ -74,15 +74,16 @@ module.exports = Backbone.View.extend({
     this.map.removeLayer(leafletLayer);
   },
 
-  getNewGeoJSONLayer: function(layer) {
-    var featureValue,
-        colour;
+  getNewGeoJSONLayer: function(layerModel) {
+    var featureValue;
+    var colour;
+    var self = this;
 
-    return new L.geoJson(layer.get('geoJSON'), {
+    return new L.geoJson(layerModel.get('geoJSON'), {
       style: function(feature) {
         featureValue = feature.properties.value;
         // sets colour for each polygon
-        colour = layer.palette.colours.find(function(colour) {
+        colour = layerModel.palette.colours.find(function(colour) {
           return colour.get('test').call(colour, featureValue);
         });
         if (!colour) {
@@ -98,17 +99,18 @@ module.exports = Backbone.View.extend({
           fillOpacity: 0.6
         };
       },
-      onEachFeature: this.tmpFundingOnEachFeature
+      onEachFeature: function(feature, layer) {self.tmpFundingOnEachFeature(feature, layer, layerModel);}
     });
   },
 
   // used to hilight the geojson layer on click, show popup, and unhilight after.
-  tmpFundingOnEachFeature: function(feature, layer) {
+  tmpFundingOnEachFeature: function(feature, layer, layerModel) {
     // Add popup
     if (feature && feature.properties) {
-      // TODO: drs append currency name and format value.
+      // TODO: drs append  format value.
+      var unit = (layerModel.get('unit') ? layerModel.get('unit') :'' );
       layer.bindPopup('<strong>' + feature.properties.name + '</strong>' +
-                      '<br/>' + feature.properties.value);
+                      '<br/>' + feature.properties.value + ' ' + unit);
     }
 
     // hilight and unhilight the area when a user clicks on them..

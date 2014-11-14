@@ -1,6 +1,8 @@
 var when = require('jquery').when;
 var _ = require('underscore');
 var Backbone = require('backbone');
+var husl = require('husl');
+
 var TopojsonLibrary = require('../../../libs/local/topojson.js');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var Palette = require('../../colours/colour-palette');
@@ -14,10 +16,15 @@ module.exports = Backbone.Model
       this.trigger(show ? 'show' : 'hide', this);
     });
 
-    // TODO: do this later? Maybe set as a model attribute instead of directly
-    // on the model? Should it sometimes be Discrete instead of FromRange?
-    // sets base colour
-    this.palette = new Palette.FromRange({ seed: this.get('id') });
+    var numStops = this.get('classes') || 5;
+
+    this.palette = new Palette.FromRange({stops: numStops, seed: this.get('id') });
+
+    // set color based on ramp, if one is provided.
+    if (this.get('colorRamp')) {
+      var colorHex = this.get('colorRamp')[0].color; //choose last or first colour from ramp.
+      this.palette.set('rootHue', husl.fromHex(colorHex)[0]);//Math.floor(seedrandom(options.seed)() * 360));
+    }
   },
 
   loadBoundary: function() {
@@ -71,6 +78,7 @@ module.exports = Backbone.Model
     var self = this;
     var indexedValues = _.indexBy(this.get('values'), 'geoId');
     var admKey = this.get('adminLevel').replace('-', '').toUpperCase();
+
     // copy boundary geoJSON, and inject data
     var geoJSON = _.extend({}, boundaryGeoJSON, {
       features: _.map(boundaryGeoJSON.features, function(feature) {
@@ -92,6 +100,7 @@ module.exports = Backbone.Model
         });
       })
     });
+
     this.set('geoJSON', geoJSON);
   }
 

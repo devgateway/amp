@@ -65,7 +65,6 @@ module.exports = Backbone.Collection
         layer.title = layer.name;
         layer.type = 'joinBoundaries';
         layer.adminLevel = self._magicConversion(layer.admLevelId);
-        layer.unit = 'unit';
         return true;
       }
 

@@ -36,7 +36,7 @@ module.exports = Backbone.View.extend({
   },
 
   showLink: function() {
-    this.app.url.hash(this.app.state.prefix + this.model.id);
+    this.app.url.hash(this.app.state.toHash(this.model.id), {silent: true});
     var fullLink = this.app.url.full();
     this.$('.share-url')
       .val(fullLink)

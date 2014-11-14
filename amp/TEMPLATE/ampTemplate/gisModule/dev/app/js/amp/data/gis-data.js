@@ -4,6 +4,7 @@
  */
 
 var _ = require('underscore');
+var $ = require('jquery');
 var Backbone = require('backbone');
 
 var Filter = require('amp-filter/src/main');
@@ -32,7 +33,9 @@ _.extend(GISData.prototype, Backbone.Events, {
 
   initialize: function() {
     this.translator = translator;
-    this.savedMaps = new SavedMaps();
+
+    this.savedMaps = new SavedMaps([], {appData: this});
+
 
     /* stub filled in by Filters service */
     this.filter = new Filter({
@@ -88,14 +91,28 @@ _.extend(GISData.prototype, Backbone.Events, {
     this.listenTo(this.admClusters, 'all', this.bubbleLayerEvents('adm-cluster'));
   },
 
-  load: function() {
-    // this.activities.fetch();
-    this.boundaries.load();
-    this.indicators.loadAll();
+  load: function(options) {
+    var self = this;
+    this.state = options.state;
+
+    this._stateWait = new $.Deferred();
+    if (this.savedMaps.length) {
+      // a bit sketch....
+      this.state.loadPromise.always(this._stateWait.resolve);
+    } else {
+      this._stateWait.resolve();
+    }
+
+    // wait for state to laod:
+    this._stateWait.then(function() {
+      console.log('state Loaded');
+      self.boundaries.load();
+      self.indicators.loadAll();
 
 
-    this.admClusters.load();  // also special for now
-    this.hilightFundingCollection.load();  // also special for now
+      self.admClusters.load();  // also special for now
+      self.hilightFundingCollection.load();  // also special for now
+    });
   },
 
   bubbleLayerEvents: function(namespace) {

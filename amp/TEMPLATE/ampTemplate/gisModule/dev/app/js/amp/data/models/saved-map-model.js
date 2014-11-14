@@ -13,6 +13,10 @@ module.exports = Backbone.Model.extend({
     stateBlob: undefined
   },
 
+  initialize: function(attrs, options) {
+    this.appData = options.appData;
+  },
+
   serialize: function() {
     return window.JSON.stringify(this.get('stateBlob'));
   },
@@ -41,7 +45,7 @@ module.exports = Backbone.Model.extend({
     return window.JSON.parse(serialized);
   },
 
-  fromId: function(id) {
-    return new this({id: id});
+  fromId: function(id, options) {
+    return new this({id: id}, options);
   }
 });

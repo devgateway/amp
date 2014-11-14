@@ -998,6 +998,13 @@ public class LuceneUtil implements Serializable {
 	    
 	public static void addUpdateActivity(String rootRealPath, boolean update, Site site, java.util.Locale navigationLanguage, AmpActivityVersion newActivity, AmpActivityVersion previousActivity){
     	logger.info("Updating activity!");
+    	String projectid = newActivity.getAmpId();
+    	
+    	// In theory, it's not possible, but on practice it happens for some reason
+    	if (projectid == null || newActivity.getName() == null) {
+    		return;
+    	}
+    	
 		try {
 			if (update/* && false*/) {
 				int nrDeleted = deleteActivity(rootRealPath, previousActivity.getAmpActivityId());
@@ -1008,7 +1015,7 @@ public class LuceneUtil implements Serializable {
 			indexWriter = new IndexWriter(rootRealPath + ACTVITY_INDEX_DIRECTORY, LuceneUtil.analyzer, false);
 			// Util.getEditorBody(site,act.getDescription(),navigationLanguage);
 			Document doc = null;
-			String projectid = newActivity.getAmpId();
+			
 			ArrayList<String> componentsCode = new ArrayList<String>();
 			if(Hibernate.isInitialized(newActivity.getComponents())){
     			Collection<AmpComponent> componentsList = newActivity.getComponents();

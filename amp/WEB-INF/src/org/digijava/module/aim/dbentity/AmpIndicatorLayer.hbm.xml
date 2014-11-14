@@ -13,6 +13,8 @@
 			class="org.digijava.module.categorymanager.dbentity.AmpCategoryValue" cascade="none" not-null="true" lazy="false" />
 		<property name="description" column="description" type="text" />
 		<property name="numberOfClasses" column="number_of_classes" type="java.lang.Long" />
+		<property name="unit" column="unit" type="java.lang.String" />
+		
 		<set name="colorRamp" cascade="all-delete-orphan" order-by="amp_indicator_color_id asc">
 			<cache usage="read-write" />
 			<key column="amp_indicator_layer_id" />

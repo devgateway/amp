@@ -15,6 +15,7 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 	private Long numberOfClasses;
 	private AmpCategoryValue admLevel;
 	private Set <AmpLocationIndicatorValue> indicatorValues;
+	private String unit;
 	
 	
 	
@@ -89,6 +90,16 @@ public class AmpIndicatorLayer implements Serializable, Comparable <AmpIndicator
 
 	public void setIndicatorValues(Set<AmpLocationIndicatorValue> indicatorValues) {
 		this.indicatorValues = indicatorValues;
+	}
+
+
+	public String getUnit() {
+		return unit;
+	}
+
+
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 
 	

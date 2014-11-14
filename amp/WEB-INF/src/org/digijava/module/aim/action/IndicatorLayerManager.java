@@ -34,6 +34,7 @@ public class IndicatorLayerManager extends Action {
 			indicatorLayerForm.setAdmLevelId(null);
 			indicatorLayerForm.setColorRamp(new HashSet<AmpIndicatorColor>());
 			indicatorLayerForm.setName(null);
+			indicatorLayerForm.setUnit(null);
 			indicatorLayerForm.setDescription(null);
 			indicatorLayerForm.setIndicatorLayerId(null);
 			indicatorLayerForm.setNumberOfClasses(null);
@@ -53,6 +54,7 @@ public class IndicatorLayerManager extends Action {
 			indicatorLayerForm.setColorRamp(new HashSet<AmpIndicatorColor>());
 			indicatorLayerForm.setName(layerToEdit.getName());
 			indicatorLayerForm.setDescription(layerToEdit.getDescription());
+			indicatorLayerForm.setUnit(layerToEdit.getUnit());
 			indicatorLayerForm.setIndicatorLayerId(layerToEdit.getId());
 			indicatorLayerForm.setNumberOfClasses(layerToEdit.getNumberOfClasses());
 			indicatorLayerForm.setSelectedColorRampIndex(ColorRampUtil.getIndexByColors(layerToEdit.getColorRamp()));
@@ -81,6 +83,7 @@ public class IndicatorLayerManager extends Action {
 				colorRamp.add(color);
 			}
 			indLayer.setName(indicatorLayerForm.getName());
+			indLayer.setUnit(indicatorLayerForm.getUnit());
 			indLayer.setDescription(indicatorLayerForm.getDescription());
 			indLayer.setNumberOfClasses(indicatorLayerForm.getNumberOfClasses());
 			indLayer.setAdmLevel(CategoryManagerUtil.getAmpCategoryValueFromDb(Long.valueOf(indicatorLayerForm

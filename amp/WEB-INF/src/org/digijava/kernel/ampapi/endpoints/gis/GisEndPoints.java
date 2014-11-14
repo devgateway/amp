@@ -332,6 +332,7 @@ public class GisEndPoints {
 		response.put("name", indicator.getName());
 		response.put("classes", indicator.getNumberOfClasses());
 		response.put("id", indicator.getId());
+		response.put("unit", indicator.getUnit());
 		response.put("description", indicator.getDescription());
 		response.put("admLevelId", indicator.getAdmLevel().getLabel());
 		JSONArray values = new JSONArray();
@@ -353,6 +354,7 @@ public class GisEndPoints {
 			json.set("name", indicator.getName());
 			json.set("classes", indicator.getNumberOfClasses());
 			json.set("id", indicator.getId());
+			json.set("unit", indicator.getUnit());
 			json.set("description", indicator.getDescription());
 			if (includeAdmLevel) {
 				json.set("admLevelId", indicator.getAdmLevel().getLabel());

@@ -23,6 +23,7 @@ public class AddIndicatorLayerForm extends ActionForm  {
 	private  List <AmpIndicatorLayer> indicatorLayers;
 	private Long idOfIndicator = null;
 	private Integer selectedColorRampIndex;
+	private String unit;
 	
 	
 	public String getName() {
@@ -97,6 +98,12 @@ public class AddIndicatorLayerForm extends ActionForm  {
 	}
 	public void setSelectedColorRampIndex(Integer selectedColorRampIndex) {
 		this.selectedColorRampIndex = selectedColorRampIndex;
+	}
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
 	}
 	
 	

@@ -141,6 +141,14 @@ function validateAndSave() {
                         <html:textarea property="description" styleClass="inp-text" rows="4" cols="50"/>
                       </td>
                     </tr>
+                     <tr bgcolor="#f4f4f2">
+                      <td align="right" valign="middle" width="50%">
+                        <digi:trn>Unit</digi:trn>&nbsp;
+                      </td>
+                      <td align="left" valign="middle">
+                        <html:text property="unit" styleClass="inp-text" size="15"/>
+                      </td>
+                    </tr>
                     <tr bgcolor="#f4f4f2">
                       <td align="right" valign="middle" width="50%">
                         <FONT color=red>*</FONT>

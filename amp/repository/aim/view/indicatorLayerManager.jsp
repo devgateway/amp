@@ -70,7 +70,7 @@ function editIndicatorLayer (id) {
 								<b><digi:trn>Name</digi:trn></b>
 							</td>
 							<td bgcolor="#c7d4db" class="inside" align="center">
-								<b><digi:trn >Description</digi:trn></b>
+								<b><digi:trn >Unit</digi:trn></b>
 							</td>
 							<td bgcolor="#c7d4db" class="inside" align="center">
 								<b><digi:trn>Color Ramp</digi:trn></b>
@@ -90,7 +90,7 @@ function editIndicatorLayer (id) {
 									<bean:write name="indLayer" property="name" />
 							</td>
 							<td align="left" class="inside">
-									<bean:write name="indLayer" property="description" /> &nbsp;
+									<bean:write name="indLayer" property="unit" /> &nbsp;
 								&nbsp;
 							</td>
 							<td align="left" class="inside">

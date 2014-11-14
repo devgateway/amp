@@ -32,7 +32,6 @@ module.exports = BackboneDash.View.extend({
       xhr
         .done(_(function() {
           var id = model.get('id');
-          console.log('th', this.app.state.toHash(id));
           this.app.url.hash(this.app.state.toHash(id), { silent: true });
           this.$('#dash-share-url')
             .removeAttr('disabled')

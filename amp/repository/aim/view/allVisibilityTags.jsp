@@ -320,8 +320,6 @@
 <feature:display name="Save and Send button" module="Calendar"></feature:display>
 <feature:display name="Preview Event button" module="Calendar"></feature:display>
 <feature:display name="Event Approve" module="Calendar"></feature:display>
-<feature:display  name="Sector Table Widgets" module="WIDGETS"></feature:display>
-<feature:display  name="Paris Indicator Table Widgets" module="WIDGETS"></feature:display>
 <feature:display name="NGO Form" module="Organization Manager"></feature:display>
 <feature:display name="Organization Form" module="Organization Manager"></feature:display>
 <%-- 
@@ -334,11 +332,6 @@ pageContext.setAttribute("classConfigs",org.digijava.module.aim.util.SectorUtil.
 <logic:iterate id="ampMeasures"  name="list" scope="page" type="org.digijava.module.aim.dbentity.AmpMeasures">
 	<feature:display name="${ampMeasures.aliasName}" module="Measures"></feature:display>
 </logic:iterate>
- 
-
- 
-<feature:display  name="Sector Table Widgets" module="WIDGETS"></feature:display>
-<feature:display  name="Paris Indicator Table Widgets" module="WIDGETS"></feature:display>
  
 <field:display name="Regional Observations" feature="Regional Observations"></field:display> 
 <field:display name="Regional Observations Add Button" feature="Regional Observations"></field:display>

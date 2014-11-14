@@ -670,33 +670,7 @@
          </td>
      </tr>
     </feature:display>
-    <feature:display  name="Sector Table Widgets" module="WIDGETS">
-    <tr>
-    	<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-    	<td class="admin_box_label">
-        	<c:set var="translation">
-                <digi:trn invisibleLinks="true">Click here to view Sector Table Widgets Manager</digi:trn>
-            </c:set>
-            <digi:link module="widget" href="/sectorTableManager.do" title="${translation}">
-            	<digi:trn>Sector Table Widget</digi:trn>
-            </digi:link>
-        </td>
-    </tr>
-    </feature:display>
-    <feature:display  name="Paris Indicator Table Widgets" module="WIDGETS">
-  	<tr>
-    <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
-    <td class="admin_box_label">
-    	<c:set var="translation">
-			<digi:trn invisibleLinks="true">Click here to view Paris Indicator Table Table Widgets Manager</digi:trn>
-        </c:set>
-        <digi:link module="widget" href="/piTableWidgetManager.do" title="${translation}">
-        	<digi:trn> Paris Indicator Table Widget</digi:trn>
-        </digi:link>
-    </td>
-  </tr>
-  </feature:display>
-  <module:display name="Result Matrix Settings" parentModule="ADMINISTRATIVE SECTION">
+  	<module:display name="Result Matrix Settings" parentModule="ADMINISTRATIVE SECTION">
    <tr>
     <td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
     <td class="admin_box_label">

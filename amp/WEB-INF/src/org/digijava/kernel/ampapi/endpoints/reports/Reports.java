@@ -308,10 +308,6 @@ public class Reports {
 			return new QueryResult(error);
 		}
 
-		if(report.cellDataSet.getWidth() > 0) {
-			report.cellDataSet.setWidth(report.cellDataSet.getWidth() - 1);	
-		}
-
 		QueryResult result =  RestUtil.convert(report.cellDataSet);
 		result.setQuery(new ThinQuery());
 		return result;

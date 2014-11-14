@@ -119,7 +119,6 @@ public class SaikuUtils {
 		/* end of Saiku approach to calculate the totals */
 		if (alwaysPresent != null) {
 			removeTotalsColumns(result.getRowTotalsLists(), totalRowsColumnsToRemove);
-			recalculateWidths(result.getRowTotalsLists());
 			recalculateColumnWidths(result, totalRowsColumnsToRemove);
 		}
 	}
@@ -296,36 +295,18 @@ public class SaikuUtils {
 			node.setWidth(1);
 			node.setSpan(1);
 		}
-		//Start from index 1, since 1 is already taken care of as bottom of the tree
-		for (int i = 1; i < topTree.size(); i++) {
+		
+		for (int i = 0; i < topTree.size()-1; i++) {
 			List<List<Integer>> tree = topTree.get(i);
-			if(tree.size() == 0) // Parent of them all
-			{
-				int width = 0;
-				List<TotalNode> nodes = newTotalLists[topTree.size()-i];
-				for(TotalNode node : nodes) {
-					width += node.getWidth();
-				}
-				newTotalLists[topTree.size()-1-i].get(0).setWidth(width);
-				newTotalLists[topTree.size()-1-i].get(0).setSpan(1);
-				
-			}	
 			for (int j = 0; j < tree.size(); j++) {
-				List<Integer> indexes = tree.get(j);
-				for (int k = 0; k < indexes.size(); k++) {
-					Integer index = indexes.get(k);
-					List<Integer> children = topTree.get(i-1).get(k);
-					int width = 0;
-					for (int l = 0; l < children.size(); l++) {
-						Integer ints = children.get(l);
-						TotalNode node = newTotalLists[topTree.size()-i].get(ints);
-						width += node.getWidth();
-					}
-					TotalNode node = newTotalLists[topTree.size()-1-i].get(index);
-					node.setWidth(width);
-					node.setSpan(1);
+				List<Integer> list = tree.get(j);
+				int width = 0;
+				for(Integer k : list) {
+					width += newTotalLists[newTotalLists.length-1-i].get(k).getWidth();
 				}
-				
+				//TODO: Replace magic number
+				newTotalLists[newTotalLists.length-2-i].get(j).setWidth(width);
+				newTotalLists[newTotalLists.length-2-i].get(j).setSpan(1);
 			}
 		}
 		return newTotalLists;

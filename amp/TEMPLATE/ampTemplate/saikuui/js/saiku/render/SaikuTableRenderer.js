@@ -90,22 +90,17 @@ var checkTable = function(table){
 		}
 	});
 
+	var rowListTotals = table.find("TH.row_total_corner").parents("TR");
+	rowListTotals.push($("#grand_total"));
+
 	//Homogeneize (?) the table
-	_.each(rowList, function(row) {
+	_.each(rowListTotals, function(row) {
 		var rowLength = getRowLength(row);
 		if(rowLength < maxRowLength){
 			var offset = maxRowLength - rowLength;
-			var isSubtotal = $(row).children().first().hasClass("row_total_corner");
+			var isSubtotal = $(row).children().hasClass("row_total_corner");
+//			var position = $($(row).find(".row_total_corner")[0]).index();
 			var className = "";
-			if(isSubtotal){
-				$(row).children().first().removeClass("row_total_corner");
-				$(row).children().first().addClass("row_total");
-			}
-			else
-			{
-				$(row).children().first().removeClass("row");
-				$(row).children().first().addClass("row_total");
-			}
 
 			for(var idx = 0; idx < offset;idx++) {
 				if(idx == offset-1 && isSubtotal) //First cell needs corner
@@ -181,7 +176,7 @@ function genTotalHeaderCells(currentIndex, bottom, scanSums, scanIndexes, lists)
 					}
 					if (i == 0 && scanIndexes[i] == 0) {
 						if (currentListNode.captions)
-							text += "<span class='i18n'> Grand Total</span>";
+							text += "<span class='i18n'>Grand Total</span>";
 						else text = "<span class='i18n'>Grand Total</span>";
 					}
 				}
@@ -222,8 +217,18 @@ function genTotalHeaderRowCells(currentIndex, scanSums, scanIndexes, totalsLists
 	for (var i = bottom; i >= 0; i--) {
 		if (currentIndex == colScanSums[i]) {
 			for (var m = 0; m < colLists[i][colScanIndexes[i]].cells.length; m++) {
-				contents += '<tr>';
-				for (var j = 0; j <= bottom; j++) {
+				if (i == 0 && colScanIndexes[i] == 0) {
+					contents += '<tr id="grand_total">';
+				}
+				else
+				{
+					contents += '<tr>';
+				}
+				var bottomOffset = 0;
+				if(bottom == 1) {
+					bottomOffset = 0;
+				}
+				for (var j = 0; j <= bottom + bottomOffset; j++) {
 					var cssClass;
 					var text = '&nbsp;';
 					if (i == 0 && j == 0)
@@ -241,12 +246,16 @@ function genTotalHeaderRowCells(currentIndex, scanSums, scanIndexes, totalsLists
 							text = colLists[i][colScanIndexes[i]].captions[m];
 						}
 						if (i == 0 && colScanIndexes[i] == 0) {
-							if (colLists[i][colScanIndexes[i]].captions)
+							if (colLists[i][colScanIndexes[i]].captions){
 								text += "<span class='i18n'> Grand Total</span>";
-							else text = "<span class='i18n'>Grand Total</span>";
+							}
+							else {
+								text = "<span class='i18n' style='font-weight:bold;'>Report Totals</span>";
+							} 
 						}
 					}
 					contents += '<th class="' + cssClass + '"><div>' + text + '</div></th>';
+//					contents += '<th class="' + cssClass + '"><div>j:' + j + ",i:"+ i + ",currentIndex:" + currentIndex + " -"  + text + '</div></th>';
 				}
 				
 				var scanIndexes = {};
@@ -267,8 +276,9 @@ function genTotalHeaderRowCells(currentIndex, scanSums, scanIndexes, totalsLists
 				//}
 			}
 			colScanIndexes[i]++;
-			if (colScanIndexes[i] < colLists[i].length)
+			if (colScanIndexes[i] < colLists[i].length){
 				colScanSums[i] += colLists[i][colScanIndexes[i]].width;
+			}
 		}
 	}
 	return contents;
@@ -391,7 +401,7 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
                     } else {
                     	if (totalsLists[ROWS])
                     		colSpan = totalsLists[ROWS][row + 1][scanIndexes[ROWS][row + 1]].span;
-                        rowContent += '<th class="col" style="text-align: center;" colspan="' + colSpan + '" title="' + header.value + '"><div rel="' + row + ":" + col +'">' + header.value + '</div></th>';    
+                    	rowContent += '<th class="col" style="text-align: center;" colspan="' + colSpan + '" title="' + header.value + '"><div rel="' + row + ":" + col +'">' + header.value + '</div></th>';    
                     }
                     
                 } else {
@@ -501,6 +511,7 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
         if (totalsLists[COLUMNS] && rowShifted >= 0) {
             totals += genTotalHeaderRowCells(rowShifted + 1, scanSums, scanIndexes, totalsLists);
         }
+        
         if (batchStarted && batchSize) {
                 if (row <= batchSize) {
                     tableContent += rowContent;

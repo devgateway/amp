@@ -29,7 +29,8 @@
 }
 .workspace_results table th.col {
     border-top: 1px solid #d5d5d5;
-    background: #f9f9f9;
+    background: #B4C0C6;
+    font-weight: bold;
     text-align: left;
 }
 .workspace_results table th.col_total_corner {
@@ -48,8 +49,11 @@
 }
 
 .workspace_results table th.col_null {
-    background: #f9f9f9;
+    background: #B4C0C6;
+    font-weight:bold;
 }
+
+
 .workspace_results table th.row {
     border-top: 1px solid #d5d5d5;
     background: #f9f9f9;
@@ -81,7 +85,8 @@
 .workspace_results table th.row_header {
       border-top: 1px solid #d5d5d5;
       /*border-bottom: 1px solid #d5d5d5;*/
-      background: #ECECEC;
+      background: #B4C0C6;
+      font-weight: bold;
 }
 
 .workspace_results table th.row_null {
@@ -167,3 +172,7 @@ separated by commas, and have just one of these...*/
     font-size: 100%;
 }
 
+#grand_total th, #grand_total td {
+    background: #B4C0C6;
+    font-weight: bold;
+}

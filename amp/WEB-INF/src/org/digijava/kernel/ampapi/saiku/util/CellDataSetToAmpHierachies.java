@@ -210,7 +210,7 @@ public class CellDataSetToAmpHierachies {
 			for (int i = 0; i < startColumnIndex + 1; i++) {
 				newTotalLists[i] = cellDataSet.getRowTotalsLists()[i];
 			}
-			cellDataSet.setRowTotalsLists(SaikuUtils.recalculateWidths(newTotalLists));
+			cellDataSet.setRowTotalsLists(newTotalLists);
 		}
 		
 		int start = 0;

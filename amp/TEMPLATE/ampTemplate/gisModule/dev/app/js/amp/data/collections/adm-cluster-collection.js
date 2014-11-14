@@ -34,6 +34,12 @@ module.exports = Backbone.Collection
   getSelected: function() {
     return this.chain()
       .filter(function(model) { return model.get('selected'); });
+  },
+
+  attachListeners: function() {
+    this.each(function(clusterLevel) {
+      clusterLevel.attachListeners();
+    });
   }
 
 });

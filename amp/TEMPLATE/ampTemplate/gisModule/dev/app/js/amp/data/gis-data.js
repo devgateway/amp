@@ -40,7 +40,7 @@ _.extend(GISData.prototype, Backbone.Events, {
     /* stub filled in by Filters service */
     this.filter = new Filter({
       draggable: true,
-      translator: this.translator   // TODO: David make sure this is working.
+      translator: this.translator
     });
     // forces filter to start loading list immediately. TODO: move to an option for filter init.
     this.filter.view._getFilterList();
@@ -103,14 +103,12 @@ _.extend(GISData.prototype, Backbone.Events, {
       this._stateWait.resolve();
     }
 
-    // wait for state to laod:
-    this._stateWait.then(function() {
-      console.log('state Loaded');
+    $.when(this.filter.loaded, this._stateWait).then(function() {
       self.boundaries.load();
       self.indicators.loadAll();
 
-
       self.admClusters.load();  // also special for now
+      self.admClusters.attachListeners();
       self.hilightFundingCollection.load();  // also special for now
     });
   },

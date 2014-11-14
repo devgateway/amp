@@ -10,6 +10,10 @@ module.exports = Backbone.Model
   url: '/rest/gis/cluster',
 
   initialize: function() {
+
+  },
+
+  attachListeners: function() {
     this.listenTo(this, 'change:selected', function(blah, show) {
       // TODO: ideally only fetch if fitlers have changed, but trust cacheing...
 

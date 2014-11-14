@@ -21,9 +21,12 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.codehaus.jackson.map.ObjectWriter;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.FilterRule;
@@ -57,8 +60,11 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.jdbc.Work;
+
+import com.tonbeller.wcf.utils.ObjectFactory.ObjectHolder;
 
 /**
  * 
@@ -597,9 +603,10 @@ public class LocationService {
 		
 		return generateExcelExport(columnNames,rowValues,"map-export-administrative-Locations.xls");
 	}
+	
 	public static List<ClusteredPoints> getClusteredPoints(JsonBean config) throws AmpApiException {
 		String adminLevel = "";
-		List<ClusteredPoints> l = new ArrayList<ClusteredPoints>();
+		final List<ClusteredPoints> l = new ArrayList<ClusteredPoints>();
 
 		if (config != null) {
 			Object otherFilter = config.get("otherFilters");
@@ -609,14 +616,15 @@ public class LocationService {
 						"adminLevel").toString();
 			}
 		}
+		
+		final String usedAdminLevel = adminLevel;
 		//fetch activities filtered by mondrian
 		List<Long>activitiesId = getActivitiesForFiltering(config);
-		ClusteredPoints cp = null;
-		Double countryLatitude=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LATITUDE);
-		Double countryLongitude=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LONGITUDE);
-		String qry;
+		final Double countryLatitude=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LATITUDE);
+		final Double countryLongitude=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LONGITUDE);
+		final ValueWrapper<String> qry = new ValueWrapper<String>(null);
 		if(adminLevel.equals("Country")){
-					qry=" SELECT al.amp_activity_id, acvl.id root_location_id,acvl.location_name root_location_description,acvl.gs_lat, acvl.gs_long "+  
+					qry.value = " SELECT al.amp_activity_id, acvl.id root_location_id,acvl.location_name root_location_description,acvl.gs_lat, acvl.gs_long "+  
 					" FROM amp_activity_location al   "+
 					" join amp_location loc on al.amp_location_id = loc.amp_location_id  "+
 					" join amp_category_value_location acvl on loc.location_id = acvl.id  "+
@@ -628,7 +636,7 @@ public class LocationService {
 
 			
 		}else{
-		qry = " WITH RECURSIVE rt_amp_category_value_location(id, parent_id, gs_lat, gs_long, acvl_parent_category_value, level, root_location_id,root_location_description) AS ( "
+		qry.value = " WITH RECURSIVE rt_amp_category_value_location(id, parent_id, gs_lat, gs_long, acvl_parent_category_value, level, root_location_id,root_location_description) AS ( "
 				+ " select acvl.id, acvl.parent_location, acvl.gs_lat, acvl.gs_long, acvl.parent_category_value, 1, acvl.id,acvl.location_name  "
 				+ " from amp_category_value_location acvl  "
 				+ " join amp_category_value amcv on acvl.parent_category_value =amcv.id  "
@@ -648,43 +656,41 @@ public class LocationService {
 				+ " where al.amp_activity_id in(" + Util.toCSStringForIN(activitiesId) + " ) "
 				+ " order by acvl.root_location_id,al.amp_activity_id";
 		}
-		Connection conn = null;
+
 		try {
-			conn = PersistenceManager.getJdbcConnection();
-			java.sql.ResultSet rs = SQLUtils.rawRunQuery(PersistenceManager.getJdbcConnection(), qry, null);
-			Long rootLocationId = 0L;
-			while (rs.next()) {
-				if (!rootLocationId.equals(rs.getLong("root_location_id"))) {
-					if (cp != null) {
-						l.add(cp);
-					}
-					rootLocationId = rs.getLong("root_location_id");
-					cp = new ClusteredPoints();
-					cp.setAdmin(rs.getString("root_location_description"));
-					if(adminLevel.equals("Country")){
-						cp.setLat(countryLatitude.toString());
-						cp.setLon(countryLongitude.toString());							
-					}else{
-						cp.setLat(rs.getString("gs_lat"));
-						cp.setLon(rs.getString("gs_long"));
-					}
-				}
-				cp.getActivityids().add(rs.getLong("amp_activity_id"));
-			}
-			if (cp != null) {
-				l.add(cp);
-			}
-			rs.close();
+			PersistenceManager.getSession().doWork(new Work() {
 
-		} catch (SQLException e) {
-
-			e.printStackTrace();
-		} finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				logger.debug("cannot close connection", e);
-			}
+				@Override
+				public void execute(Connection connection) throws SQLException {
+					try(java.sql.ResultSet rs = SQLUtils.rawRunQuery(connection, qry.value, null)) {
+						ClusteredPoints cp = null;
+						Long rootLocationId = 0L;
+						while (rs.next()) {
+							if (!rootLocationId.equals(rs.getLong("root_location_id"))) {
+								if (cp != null) {
+									l.add(cp);
+								}
+								rootLocationId = rs.getLong("root_location_id");
+								cp = new ClusteredPoints();
+								cp.setAdmin(rs.getString("root_location_description"));
+								if (usedAdminLevel.equals("Country")){
+									cp.setLat(countryLatitude.toString());
+									cp.setLon(countryLongitude.toString());							
+								}else{
+									cp.setLat(rs.getString("gs_lat"));
+									cp.setLon(rs.getString("gs_long"));
+								}
+							}
+							cp.getActivityids().add(rs.getLong("amp_activity_id"));
+						}
+						if (cp != null) {
+							l.add(cp);
+						}
+					}
+				}});
+		}
+		catch(HibernateException e){
+			throw new RuntimeException(e);
 		}
 	
 		return l;

@@ -119,25 +119,33 @@ public class QueryUtil {
 	}
 
 	public static List<AmpLocator> getLocationsFromKeyword(String keyword) {
-		List <AmpLocator> locationList = new ArrayList <AmpLocator> ();
+		final List <AmpLocator> locationList = new ArrayList <AmpLocator> ();
 		try {
 			int distance = ScoreCalculator.getMaxAllowedDistance(keyword);
 			keyword = keyword.toLowerCase();
-			String queryString = "select  id,name,latitude,longitude,levenshtein('"+keyword+"',lower (name),1,1,1) as distance,thegeometry from amp_locator where levenshtein('"+keyword+"',lower (name),1,1,1) <= "+distance+
+			final String queryString = "select  id,name,latitude,longitude,levenshtein('"+keyword+"',lower (name),1,1,1) as distance,thegeometry from amp_locator where levenshtein('"+keyword+"',lower (name),1,1,1) <= "+distance+
 					 " or lower (name) like '%"+keyword+"%'";
-			java.sql.ResultSet rs = SQLUtils.rawRunQuery(PersistenceManager.getJdbcConnection(), queryString, null);
-			while (rs.next()) {
-				AmpLocator locator = new AmpLocator();
-				locator.setId(rs.getLong("id"));
-				locator.setName(rs.getString("name"));
-				locator.setLatitude(rs.getString("latitude"));
-				locator.setLongitude(rs.getString("longitude"));
-				locator.setDistance(rs.getInt("distance"));
-				locator.setTheGeometry(wktToGeometry ("POINT ("+locator.getLongitude()+" "+locator.getLatitude()+")"));
-				locationList.add(locator);
-			}
-		} catch (SQLException e) {
-		logger.error("Exception searching for location "+e);
+			
+			PersistenceManager.getSession().doWork(new Work() {
+
+				@Override
+				public void execute(Connection connection) throws SQLException {
+					try(java.sql.ResultSet rs = SQLUtils.rawRunQuery(connection, queryString, null)) {
+						while (rs.next()) {
+							AmpLocator locator = new AmpLocator();
+							locator.setId(rs.getLong("id"));
+							locator.setName(rs.getString("name"));
+							locator.setLatitude(rs.getString("latitude"));
+							locator.setLongitude(rs.getString("longitude"));
+							locator.setDistance(rs.getInt("distance"));
+							locator.setTheGeometry(wktToGeometry ("POINT ("+locator.getLongitude()+" "+locator.getLatitude()+")"));
+							locationList.add(locator);
+						}
+					}
+				}});
+		}
+		catch(Exception e) {
+			throw new RuntimeException(e);
 		}
 		return locationList;
 	}

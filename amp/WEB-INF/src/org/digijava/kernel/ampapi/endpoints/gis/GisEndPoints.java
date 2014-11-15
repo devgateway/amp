@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +34,6 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.dashboards.EndPoints;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
@@ -51,8 +49,6 @@ import org.digijava.kernel.ampapi.helpers.geojson.FeatureGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.PointGeoJSON;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpIndicatorColor;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
@@ -60,12 +56,10 @@ import org.digijava.module.aim.dbentity.AmpLocationIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpStructure;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
-import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
+import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.Session;
 
 /**
  * Class that holds entrypoing for GIS api methods

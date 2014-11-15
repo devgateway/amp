@@ -3,7 +3,6 @@ package org.digijava.kernel.ampapi.endpoints.util;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.annotate.JsonAnyGetter;
@@ -11,7 +10,6 @@ import org.codehaus.jackson.annotate.JsonAnySetter;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.digijava.kernel.ampapi.endpoints.gis.GisEndPoints;
 
 /**
  * 

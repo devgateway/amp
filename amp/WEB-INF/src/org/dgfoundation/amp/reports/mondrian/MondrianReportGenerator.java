@@ -420,15 +420,10 @@ public class MondrianReportGenerator implements ReportExecutor {
 			MDXElement mdxElem = null;
 			
 			if (elem.type != ElementType.ENTITY)
-			switch (elem.type) {
-			case ENTITY : 
-				mdxElem = MondrianMapping.toMDXElement(elem.entity);
-				break;
-			default: 
-				// ignore DATE filters, as those are now processed through the SQL filter
-				//processFundingDateFilter(elem, entry.getValue());
-				continue; 
-			}
+				continue; // ignore DATE filters, as those are now processed through the SQL filter
+			
+			mdxElem = MondrianMapping.toMDXElement(elem.entity);
+				
 			if (mdxElem == null) {
 				reportError("Mapping not defined for report element = " + elem);
 				if (IS_DEV) continue;

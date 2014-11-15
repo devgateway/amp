@@ -890,10 +890,12 @@ public class LuceneUtil implements Serializable {
                         all = all.concat(" " + translation.getTranslation());
                     }
                 } else {
-                    // no translations in the DB: this is an old untranslated entity
-                    doc.add(new Field(field,
+                	if (regularFieldNames.get(field) != null) {
+                		// no translations in the DB: this is an old untranslated entity
+                		doc.add(new Field(field,
                             regularFieldNames.get(field),
                             Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
+                	}
                 }
             }
 	

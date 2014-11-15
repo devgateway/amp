@@ -7,7 +7,7 @@
 	<packaging>war</packaging>
 	<name>Aid Management Platform</name>
 	<properties>
-		<wicketVersion>6.15.0</wicketVersion>
+		<wicketVersion>6.18.0</wicketVersion>
 		<tomcatVersion>7.0.54</tomcatVersion>
 		<springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
 		<springVersion>3.0.7.RELEASE</springVersion>

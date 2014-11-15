@@ -141,15 +141,18 @@ function switchTabs(activateLast){
 	$('div[data-is_tab=true]').each(function( index ) {
 		$( this ).appendTo("#theContent");
 		});
-	var loader = new YAHOO.util.YUILoader(); 
-	loader.require("tabview");
-	loader.onSuccess = function(){
-		var myFundingTabs = new YAHOO.widget.TabView("fundingTabs");
-		if(activateLast){
-			var newIndex = myFundingTabs.get('tabs').length-1;
-			myFundingTabs.selectTab(myFundingTabs.get('tabs').length-1);
-		}
-	};
+	
+	var loader = new YAHOO.util.YUILoader({ 
+        base: "//ajax.googleapis.com/ajax/libs/yui/2.9.0/build/", 
+        require: ["tabview"], 
+        onSuccess: function() { 
+    		var myFundingTabs = new YAHOO.widget.TabView("fundingTabs");
+    		if(activateLast){
+    			var newIndex = myFundingTabs.get('tabs').length-1;
+    			myFundingTabs.selectTab(myFundingTabs.get('tabs').length-1);
+    		}
+        } 
+    });
 	loader.insert(); 
 }
 $(document).ready(function(){

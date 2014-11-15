@@ -403,12 +403,15 @@ public class GisEndPoints {
 			AmpApiState map = EndpointUtils.getSavedMap(mapId);
 			filter = JsonBean.getJsonBeanFromString(map.getStateBlob());
 		}
+		//since it comes from a saved map and it has another structure we will use the linkedhash map thats inside
+		//the Json bean to filter
+		LinkedHashMap<String, Object> filters=(LinkedHashMap<String, Object>)filter.get("filters");
 		if(exportType==1){
 			name="map-export-project-sites.xls";
-			wb=LocationService.generateExcelExportByStructure(filter);	
+			wb=LocationService.generateExcelExportByStructure(filters);	
 		}else{
 			name="map-export-administrative-Locations.xls";
-			wb=LocationService.generateExcelExportByLocation(filter);
+			wb=LocationService.generateExcelExportByLocation(filters);
 		}
 		webResponse.setHeader("Content-Disposition","attachment; filename=" + name);
 

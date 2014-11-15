@@ -183,7 +183,7 @@ public class LocationService {
 	 * Build an excel file export by structure
 	 * @return
 	 */
-	public static HSSFWorkbook generateExcelExportByStructure(JsonBean filter){
+	public static HSSFWorkbook generateExcelExportByStructure(LinkedHashMap<String, Object> filters){
 		List<String> columnNames = new ArrayList<String>();
 		columnNames.add(TranslatorWorker.translateText("Time Stamp"));//1
 		columnNames.add(TranslatorWorker.translateText("Activity Id"));//2
@@ -200,7 +200,7 @@ public class LocationService {
 		columnNames.add(TranslatorWorker.translateText("Total Project Disbursements"));//12
 		
 		
-		List<Activity> report=getMapExportByStructure(filter);
+		List<Activity> report=getMapExportByStructure(filters);
 		java.util.Date date = new java.util.Date();
 		
 		int i=1;
@@ -285,7 +285,7 @@ public class LocationService {
 	 * also we can remove the query once the amp_structure table is in the mondrian schem
 	 * @return
 	 */
-	public static List<Activity> getMapExportByLocation(final Map<String,Activity>geocodeInfo,JsonBean config) {
+	public static List<Activity> getMapExportByLocation(final Map<String,Activity>geocodeInfo,LinkedHashMap<String, Object> filters) {
 		List<Activity> activities = new ArrayList<Activity>();
 		final List<String> geoCodesId = new ArrayList<String>();
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("MapExport");
@@ -316,8 +316,9 @@ public class LocationService {
 				ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils
 						.getRequest()), false);
 		GeneratedReport report = null;
-
-		applyFilters(config, spec);
+		
+		
+		applyFilters((LinkedHashMap<String, Object>)filters.get("otherFilters"),(LinkedHashMap<String, Object>)filters.get("columnFilters"), spec);
 		try {
 			report = generator.executeReport(spec);
 		} catch (Exception e) {
@@ -330,7 +331,9 @@ public class LocationService {
 				getActivitiesById(reportArea, activities, geoCodesId);
 			}
 			// Go and fetch location specific information
-
+			if(geoCodesId.size()==0){
+				return activities;
+			}
 			PersistenceManager.getSession().doWork(new Work() {
 				public void execute(Connection conn) throws SQLException {
 
@@ -360,15 +363,14 @@ public class LocationService {
 		}
 		return activities;
 	}
-	private static void applyFilters(JsonBean config,
+	private static void applyFilters(LinkedHashMap<String, Object> otherFilter,LinkedHashMap<String, Object>columnFilters,
 			ReportSpecificationImpl spec) {
 		List<String> activitIds=null;
-		LinkedHashMap<String, Object> otherFilter=null;
-		if (config != null) {
-			activitIds = FilterUtils.applyKeywordSearch( (LinkedHashMap<String, Object>)config.get("otherFilters"));
+		if (otherFilter != null) {
+			activitIds = FilterUtils.applyKeywordSearch( otherFilter);
 		}
 		
- 		MondrianReportFilters filterRules = FilterUtils.getFilterRules((LinkedHashMap<String, Object>)config.get("columnFilters"),
+ 		MondrianReportFilters filterRules = FilterUtils.getFilterRules(columnFilters,
 				otherFilter, activitIds);
 		if(filterRules!=null){
 			spec.setFilters(filterRules);
@@ -414,7 +416,7 @@ public class LocationService {
 	 * also we can remove the query once the amp_structure table is in the mondrian schem
 	 * @return
 	 */
-	public static List<Activity> getMapExportByStructure(JsonBean config) {
+	public static List<Activity> getMapExportByStructure(LinkedHashMap<String, Object> filters) {
 		final List<Activity> mapExportBean = new ArrayList<Activity>();
 
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("MapExport");
@@ -425,8 +427,7 @@ public class LocationService {
 
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()),false);
 		GeneratedReport report = null;
-		applyFilters(config, spec);
-
+		applyFilters((LinkedHashMap<String, Object>)filters.get("otherFilters"),(LinkedHashMap<String, Object>)filters.get("columnFilters"), spec);
 		try {
 			report = generator.executeReport(spec);
 		} catch (Exception e) {
@@ -457,12 +458,14 @@ public class LocationService {
 				}
 				activities.put(activityId, activity);
 			}
-
+			if(activities.size()==0){
+				return mapExportBean;
+			}
 		//once we have all activities we go and fetch structures associated to those activities
 		//since its not yet implemented on reports we fetch them separately 
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
-
+				
 				
 				String query="select ast.amp_activity_id,s.title, "+
 						" s.latitude, "+
@@ -554,7 +557,7 @@ public class LocationService {
 		spec.setCalculateColumnTotals(doTotals);
 		spec.setCalculateRowTotals(doTotals);
 	}
-	public static HSSFWorkbook generateExcelExportByLocation(JsonBean filter) {
+	public static HSSFWorkbook generateExcelExportByLocation(LinkedHashMap<String, Object> filters) {
 
 		
 		
@@ -575,7 +578,7 @@ public class LocationService {
 
 		final Map<String,Activity>geocodeInfo=new LinkedHashMap<String,Activity>();
 		
-		List<Activity> report=getMapExportByLocation(geocodeInfo,filter);
+		List<Activity> report=getMapExportByLocation(geocodeInfo,filters);
 		java.util.Date date = new java.util.Date();
 		
 		int i=1;

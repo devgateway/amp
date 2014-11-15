@@ -1,7 +1,7 @@
 var _ = require('underscore');
 var Backbone = require('backbone');
 var QUnit = require('qunitjs');
-var State = require('../../js/amp/services/state');
+var State = require('amp-state/index');
 
 
 QUnit.module('State Service');

@@ -139,7 +139,8 @@ module.exports = Backbone.Collection
     // check which IDs we have locally.
     var matches = [];
     this.each(function(activity) {
-      var index = _.indexOf(aryOfIDs, activity.id);
+      //intentional +sign to type coerse!
+      var index = _.indexOf(aryOfIDs, +activity.id);
       if (index > -1) {
         matches.push(activity);     // add activity to array
         aryOfIDs.splice(index, 1);  // remove id from array
@@ -163,19 +164,14 @@ module.exports = Backbone.Collection
         type: 'POST'
       })
       .then(function() {
-        //var allDeferreds = []; // I tried waiting for all joins to finish, didn't help
         self.each(function(activity) {
           var index = _.indexOf(aryOfIDs, parseInt(activity.id, 10));
           if (index > -1) {
-            //allDeferreds.push(activity.getJoinedVersion());
             matches.push(activity);     // add activity to array
             aryOfIDs.splice(index, 1);  // remove id from array
           }
         });
 
-        // $.when(allDeferreds).done(function(){
-        //   deferred.resolve(matches);
-        // });
         deferred.resolve(matches);
       })
       .fail(function(err) {

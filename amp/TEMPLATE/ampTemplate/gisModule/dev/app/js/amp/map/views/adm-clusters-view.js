@@ -28,6 +28,8 @@ module.exports = Backbone.View.extend({
     return this;
   },
 
+
+  //TODO: make sure still selected
   showLayer: function(admLayer) {
     var self = this;
     var leafletLayer = this.leafletLayerMap[admLayer.cid];
@@ -47,6 +49,7 @@ module.exports = Backbone.View.extend({
     this.map.addLayer(leafletLayer);
   },
 
+  //TODO: make sure still selected
   refreshLayer: function(admLayer) {
     var self = this;
     var leafletLayer = this.leafletLayerMap[admLayer.cid];

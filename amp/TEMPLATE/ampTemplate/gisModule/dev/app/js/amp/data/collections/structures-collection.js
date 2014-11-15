@@ -96,24 +96,32 @@ module.exports = Backbone.Collection
   _joinActivities: function() {
     var self = this;
     var deferred = $.Deferred();
+    var deferreds = [];
 
     this.activities.getActivities(this._getActivityIds()).then(function() {
 
       //Do actual join
       self.each(function(structure) {
         //dirty way of checking if already a model...
-        if (!(structure.get('activity') && structure.get('activity').attributes)) {
+        var activity = structure.get('activity');
+        //not joined yet
+        if (!(activity && activity.attributes)) {
           var match = self.activities.find(function(model) {
             //intentionally double ==
             return model.id ==  structure.get('activityZero'); //intentionally double ==
           });
 
           structure.set('activity', match);
+          deferreds.push(match.getJoinedVersion());
         } else {
-          console.log('no activity');
+          console.log('activity already joined or DNE');
         }
       });
-      deferred.resolve();
+
+      //all activites joined filters
+      $.when(deferreds).then(function() {
+        deferred.resolve();
+      });
     });
 
     return deferred;
@@ -165,7 +173,7 @@ module.exports = Backbone.Collection
             if (activity.get('matchesFilters')['Donor Id'].length > 1) {
               return 'Multiple Donors';
             } else {
-              var donorName = (activity.get('matchesFilters')['Donor Id'][0] ? activity.get('matchesFilters')['Donor Id'][0].get('name') : '');
+              var donorName = (activity.get('matchesFilters')['Donor Id'][0].get ? activity.get('matchesFilters')['Donor Id'][0].get('name') : '');
               return donorName;
             }
           } else {

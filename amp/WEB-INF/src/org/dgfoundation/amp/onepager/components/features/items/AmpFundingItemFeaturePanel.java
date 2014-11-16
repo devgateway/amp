@@ -71,11 +71,11 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		//this should be changed to a propertyModel
 		Label itemNumber=new Label("itemNumber", new Model(item+1));
 		add(itemNumber); 
-		AmpFundingSummaryPanel fundingSumary = new AmpFundingSummaryPanel(
+		AmpFundingSummaryPanel fundingSummary = new AmpFundingSummaryPanel(
 				"fundingSumary", "Funding Section Summary", fundingModel);
 		
-		fundingSumary.add(UpdateEventBehavior.of(FundingSectionSummaryEvent.class));
-		fundingSumary.setOutputMarkupId(true);
+		fundingSummary.add(UpdateEventBehavior.of(FundingSectionSummaryEvent.class));
+		fundingSummary.setOutputMarkupId(true);
 		
 //		fundingSumary.add(
 //		new AjaxFormComponentUpdatingBehavior("onchange") {        
@@ -85,7 +85,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 //				System.out.println("");
 //			}
 //		});
-		add(fundingSumary);
+		add(fundingSummary);
 
 //		Label orgLabel;
 //        if ("true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_FUNDING_GROUP_ID)))
@@ -261,7 +261,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		add(delegatedPartner);
 
 		fundingInfo = new AmpDonorFundingInfoSubsectionFeature(
-				"fundingInfoSubsection", fundingModel,"Funding Classification",fundingSumary);
+				"fundingInfoSubsection", fundingModel,"Funding Classification",fundingSummary);
 		add(fundingInfo);
 		
 		AmpMTEFProjectionSubsectionFeature mtefProjections = new AmpMTEFProjectionSubsectionFeature(

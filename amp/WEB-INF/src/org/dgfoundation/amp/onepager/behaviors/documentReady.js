@@ -136,7 +136,7 @@ function pageLeaveConfirmationEnabler(){
 		return oldAjaxCallProcessAjaxResponse.call(this, data, textStatus, jqXHR, context);
 	}
 }
-function switchTabs(activateLast){
+function switchTabs(lastIndex){
 	
 	$('div[data-is_tab=true]').each(function( index ) {
 		$( this ).appendTo("#theContent");
@@ -146,10 +146,15 @@ function switchTabs(activateLast){
         base: "//ajax.googleapis.com/ajax/libs/yui/2.9.0/build/", 
         require: ["tabview"], 
         onSuccess: function() { 
+        	debugger;
     		var myFundingTabs = new YAHOO.widget.TabView("fundingTabs");
-    		if(activateLast){
+    		if(lastIndex == -1){//if its -1 we go the the last one
     			var newIndex = myFundingTabs.get('tabs').length-1;
     			myFundingTabs.selectTab(myFundingTabs.get('tabs').length-1);
+    		}else{
+    			if(lastIndex >=0){ //if its grater or equals than 0 we focus on that tab
+    				myFundingTabs.selectTab(lastIndex);	
+    			}
     		}
         } 
     });

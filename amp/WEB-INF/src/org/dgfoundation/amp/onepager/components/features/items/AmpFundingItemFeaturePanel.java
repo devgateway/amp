@@ -133,6 +133,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				parent.getList().updateModel();
 				target.add(parent);
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
+				target.appendJavaScript("switchTabs();");
 			}
 		};
 		add(addNewFunding);

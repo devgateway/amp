@@ -29,6 +29,7 @@ import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.util.OrganisationUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Criteria;
@@ -351,5 +352,26 @@ public static List<JsonBean> getOrgGroups() {
 			return al;
 
 		}
+	 public static List<String>getImplementationLocationsInUse(){
+		 final List<String>list=new ArrayList<String>();
+		 
+		 
+		
+		PersistenceManager.getSession().doWork(new Work() {
+			public void execute(Connection conn) throws SQLException {
+				String query = "select * from amp_category_value cv,amp_category_class cc "
+						+ " where cv.amp_category_class_id =cc.id "
+						+ " and keyname ='"+ CategoryConstants.IMPLEMENTATION_LOCATION_KEY +"'  "
+						+ " and cv.id in(select distinct parent_category_value from amp_category_value_location )  "
+						+ " order by cv.index_column ";		
+				ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
+				while (rs.next()) {
+					list.add(rs.getString("category_value"));
+				}
+				rs.close();
+			}});
+				
+		return list;
+	}
 }
 

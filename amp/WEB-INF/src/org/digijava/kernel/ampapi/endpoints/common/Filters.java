@@ -96,9 +96,7 @@ public class Filters {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui = false,  id = "Boundaries")
 	public List<String> getBoundaries() {
-		// This should never change should they return from database?
-		return new ArrayList<String>(Arrays.asList("Country", "Region", "Zone",
-				"District"));
+		return QueryUtil.getImplementationLocationsInUse();
 	}
 
 	/**

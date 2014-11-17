@@ -72,6 +72,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 		$.getScript("/TEMPLATE/ampTemplate/tabs/js/lib/one_place/jqgrid-all.js", function(data, textStatus, jqxhr) {
 			var rowNum = 0;
 			var colModel = columnsMapping.createJQGridColumnModel(tableStructure);
+			var grandTotals = null;
 			jQuery(grid).jqGrid(
 					{
 						caption : false,
@@ -97,6 +98,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								jQuery(grid).jqGrid('setGridParam', {
 									rowNum : obj.page.recordsPerPage
 								});
+								grandTotals = extractGrandTotals(obj, colModel);
 								return transformData(obj, grouping, tableStructure.hierarchies);
 							},
 							page : function(obj) {
@@ -220,7 +222,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 							TranslationManager.searchAndTranslate();
 						},
 						loadComplete : function() {
-							// Calculate footer totals row.
+							// Calculate footer totals row for this page.
 							var colData = {};
 							var totalColumnIndex = colModel.length - 1;
 							jQuery.each(colModel, function(i, item) {
@@ -232,8 +234,25 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									totalColumnIndex--;
 								}
 							});
-							colData[colModel[totalColumnIndex].name] = TranslationManager.getTranslated('Total:');
+							colData[colModel[totalColumnIndex].name] = TranslationManager.getTranslated('Page Total:');
 							jQuery(grid).jqGrid('footerData', 'set', colData);
+
+							// Create an additional footer row for grand-totals
+							// (not natively supported by jqgrid).
+							jQuery("#grand_total_row_" + id).empty();
+							jQuery("#grand_total_row_" + id).remove();
+							var pageFooterRow = jQuery("#main-dynamic-content-region_" + id + " .ui-jqgrid-ftable .footrow-ltr");
+							var grandTotalFooterRow = jQuery(pageFooterRow).clone();
+							jQuery(grandTotalFooterRow).attr("id", "grand_total_row_" + id);
+							var grandTotalText = TranslationManager.getTranslated('Grand Total:');
+							jQuery(grandTotalFooterRow).find(
+									"[aria-describedby='tab_grid_" + id + "_" + colModel[totalColumnIndex].name + "']")
+									.text(grandTotalText).attr("title", grandTotalText);
+							jQuery.each(grandTotals, function(i, item) {
+								jQuery(grandTotalFooterRow).find("[aria-describedby='tab_grid_" + id + "_" + item.columnName + "']").text(
+										item.displayedValue).attr("title", item.displayedValue);
+							});
+							jQuery(grandTotalFooterRow).insertAfter(pageFooterRow);
 						}
 					});
 			app.TabsApp.currentGrid = jQuery(grid);
@@ -355,6 +374,23 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 		} else {
 			return 'NULL';
 		}
+	}
+
+	/*
+	 * Extract report grand totals (ignoring pagination) from the endpoint data.
+	 */
+	function extractGrandTotals(data, colModel) {
+		var ret = [];
+		jQuery.each(colModel, function(i, item) {
+			if (item.reportColumnType == 'MEASURE') {
+				var col = {};
+				col.columnName = item.name;
+				col.value = data.page.pageArea.contents["[" + item.name + "]"].value;
+				col.displayedValue = data.page.pageArea.contents["[" + item.name + "]"].displayedValue;
+				ret.push(col);
+			}
+		});
+		return ret;
 	}
 
 	return GridManager;

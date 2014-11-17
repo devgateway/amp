@@ -3,21 +3,17 @@
  */
 package org.dgfoundation.amp.reports;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.utils.ConstantsUtil;
-import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
 /**
  * Detects which columns are visible in Activity Form and can be further used, 
@@ -68,12 +64,7 @@ public class ColumnsVisibility extends DataVisibility {
 	}
 	
 	protected List<String> getVisibleByDefault() {
-		List<String> currentlyVisible = new ArrayList<String>(visibleByDefault);
-		for (Entry<String, HardCodedCategoryValue> entry : categoryValueDependency.entrySet()) {
-			if (entry.getValue().existsInDatabase())
-				currentlyVisible.add(entry.getKey());	
-		}
-		return currentlyVisible;
+		return visibleByDefault;
 	}
 	
 	protected Set<String> getAllData() {
@@ -90,20 +81,11 @@ public class ColumnsVisibility extends DataVisibility {
 		}
 	}
 	
-	@Override
-	protected Map<String, Collection<String>> getDependancyMapTypeAll() {
-		return dependencyTypeAll;
-	}
-	
 	/****************
 	 * Visibility related constants
 	 ***************/
 	private static final String DONOR_ORAGNIZATION = "Donor Organization";
 	private static final String SEARCH_DONOR_ORAGNIZATION = "Search Donor Organization";
-	private static final String IMPLEMENTATION_LOCATION_COUNTRY = "IMPLEMENTATION_LOCATION_COUNTRY";
-	private static final String IMPLEMENTATION_LOCATION_REGION = "IMPLEMENTATION_LOCATION_REGION";
-	private static final String IMPLEMENTATION_LOCATION_ZONE = "IMPLEMENTATION_LOCATION_ZONE";
-	private static final String IMPLEMENTATION_LOCATION_DISTRICT = "IMPLEMENTATION_LOCATION_DISTRICT";
 	
 	//Note: mappings are manually retrieved, because no certain way exists to map them 
 	@SuppressWarnings("serial")
@@ -265,7 +247,6 @@ public class ColumnsVisibility extends DataVisibility {
 		put(ColumnConstants.CONTRACTING_AGENCY_ACRONYM, ColumnConstants.CONTRACTING_AGENCY);
 		put(ColumnConstants.CONTRACTING_AGENCY_DEPARTMENT_DIVISION, ColumnConstants.CONTRACTING_AGENCY);
 		put(ColumnConstants.CONTRACTING_AGENCY_GROUPS, ColumnConstants.CONTRACTING_AGENCY);
-		put(ColumnConstants.CONTRACTING_AGENCY_ID, ColumnConstants.CONTRACTING_AGENCY);
 		put(ColumnConstants.SECTOR_GROUP_DEPARTMENT_DIVISION, ColumnConstants.SECTOR_GROUP);
 		put(ColumnConstants.REGIONAL_GROUP_DEPARTMENT_DIVISION, ColumnConstants.REGIONAL_GROUP);
 		
@@ -285,7 +266,10 @@ public class ColumnsVisibility extends DataVisibility {
 			for (String suffix : suffixList)
 				put(con[0] + " " + suffix, con[1]);
 		
-		put(ColumnConstants.GEOCODE, ColumnConstants.LOCATION);
+		put(ColumnConstants.COUNTRY, ColumnConstants.LOCATION);
+		put(ColumnConstants.REGION, ColumnConstants.LOCATION);
+		put(ColumnConstants.DISTRICT, ColumnConstants.LOCATION);
+		put(ColumnConstants.ZONE, ColumnConstants.LOCATION);
 	}};
 	
 	@SuppressWarnings("serial")
@@ -389,22 +373,9 @@ public class ColumnsVisibility extends DataVisibility {
 			ColumnConstants.DONOR_AGENCY
 	);
 
-	/**
-	 * Dependency map between column and category value 
-	 */
-	@SuppressWarnings("serial")
-	protected static final Map<String, HardCodedCategoryValue> categoryValueDependency = new HashMap<String, HardCodedCategoryValue>() {{
-		put(IMPLEMENTATION_LOCATION_COUNTRY, CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY);
-		put(IMPLEMENTATION_LOCATION_REGION, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
-		put(IMPLEMENTATION_LOCATION_ZONE, CategoryConstants.IMPLEMENTATION_LOCATION_ZONE);
-		put(IMPLEMENTATION_LOCATION_DISTRICT, CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT);
-	}};
+	@Override
+	protected Map<String, Collection<String>> getDependancyMapTypeAll() {
+		return null;
+	}
 	
-	
-	protected static final Map<String, Collection<String>> dependencyTypeAll = new HashMap<String, Collection<String>>() {{
-		put(ColumnConstants.COUNTRY, Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_COUNTRY));
-		put(ColumnConstants.REGION, Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_REGION));
-		put(ColumnConstants.DISTRICT, Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_ZONE));
-		put(ColumnConstants.ZONE, Arrays.asList(ColumnConstants.LOCATION, IMPLEMENTATION_LOCATION_DISTRICT));
-	}};
 }

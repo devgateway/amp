@@ -451,15 +451,29 @@ var WorkspaceToolbar = Backbone.View.extend({
             this.workspace.query.url() + "/export/xls/" + this.workspace.query.getProperty('saiku.olap.result.formatter');
     },
     
+    export_amp_xls: function(event) {
+    	$.postDownload("/rest/data/saikureport/export/xls/" + this.workspace.query.get('report_id'),
+    			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
+    },
+
     export_csv: function(event) {
         window.location = Settings.REST_URL +
             this.workspace.query.url() + "/export/csv";
     },
 
+    export_amp_csv: function(event) {
+    	$.postDownload("/rest/data/saikureport/export/csv/" + this.workspace.query.get('report_id'),
+    			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
+    },
 
     export_pdf: function(event) {
         window.location = Settings.REST_URL +
             this.workspace.query.url() + "/export/pdf/" + this.workspace.query.getProperty('saiku.olap.result.formatter');
+    },
+
+    export_amp_pdf: function(event) {
+    	$.postDownload("/rest/data/saikureport/export/pdf/" + this.workspace.query.get('report_id'),
+    			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
     },
 
     switch_to_mdx: function(event) {
@@ -696,3 +710,31 @@ var WorkspaceToolbar = Backbone.View.extend({
 
     }
 });
+
+
+$.postDownload = function (path, params, method) {
+    method = method || "post";
+
+    var form = document.getElementById("exportForm");
+    if(!form) {
+        form = document.createElement("form");
+        form.id = "exportForm";
+    }
+    form.setAttribute("method", method);
+    form.setAttribute("action", path);
+
+    for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+        	var query = document.getElementById("export_query");
+        	if(!query) {
+        		query = document.createElement("input");
+                form.appendChild(query);
+        	}
+        	query.setAttribute("type", "hidden");
+        	query.setAttribute("name", key);
+        	query.setAttribute("value", params[key]);
+         }
+    }
+    document.body.appendChild(form);
+    form.submit();
+}

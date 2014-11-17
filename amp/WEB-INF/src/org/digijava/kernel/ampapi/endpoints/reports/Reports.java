@@ -17,6 +17,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
@@ -38,6 +39,7 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
+import org.digijava.kernel.ampapi.saiku.util.SaikuUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.action.ReportsFilterPicker;
 import org.digijava.module.aim.ar.util.FilterUtil;
@@ -50,7 +52,12 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.saiku.olap.dto.resultset.CellDataSet;
+import org.saiku.olap.query2.ThinHierarchy;
 import org.saiku.olap.query2.ThinQuery;
+import org.saiku.service.util.export.excel.ExcelBuilderOptions;
+import org.saiku.service.util.export.excel.ExcelWorksheetBuilder;
+import org.saiku.web.export.PdfReport;
 import org.saiku.web.rest.objects.resultset.QueryResult;
 import org.saiku.web.rest.util.RestUtil;
 
@@ -277,12 +284,25 @@ public class Reports {
 		List<JSONTab> tabs = new ArrayList<JSONTab>();
 		return tabs;
 	}
-
+	
 	@POST
 	@Path("/saikureport/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public final QueryResult getSaiku3ReportResult(JsonBean queryObject, @PathParam("report_id") Long reportId) {
+	public final QueryResult getSaikuReport(JsonBean queryObject, @PathParam("report_id") Long reportId) {
+		QueryResult result;
+		try {
+			result = RestUtil.convert(getSaikuCellDataSet(queryObject, reportId));
+			result.setQuery(new ThinQuery());
+		} catch (Exception e) {
+			String error = ExceptionUtils.getRootCauseMessage(e);
+			return new QueryResult(error);
+		}
+		return result;
+	}	
 
+	public final CellDataSet getSaikuCellDataSet(JsonBean queryObject, Long reportId) throws Exception {
+
+		//TODO: Move this to util classes, check with Tabs to see how it's done there for uniformity
 		MondrianReportFilters filterRules = null;
 		LinkedHashMap<String, Object> queryModel = (LinkedHashMap<String, Object>) queryObject.get("queryModel");
 		if(queryModel.containsKey("filtersApplied") && (Boolean)queryModel.get("filtersApplied")) {
@@ -305,12 +325,79 @@ public class Reports {
 		} catch (Exception e) {
 			logger.error("Cannot execute report (" + ampReport + ")", e);
 			String error = ExceptionUtils.getRootCauseMessage(e);
-			return new QueryResult(error);
 		}
+		return report.cellDataSet;
+	}
+	@POST
+	@Path("/saikureport/export/xls/{report_id}")
+	@Produces({"application/vnd.ms-excel" })
+	public final Response exportXlsSaikuReport(String query, @PathParam("report_id") Long reportId) {
+		return exportSaikuReport(query, reportId, "xls");
+		
+	}
+	@POST
+	@Path("/saikureport/export/csv/{report_id}")
+	@Produces({"text/csv"})
+	public final Response exportCsvSaikuReport(String query, @PathParam("report_id") Long reportId) {
+		return exportSaikuReport(query, reportId, "csv");
+	}
 
-		QueryResult result =  RestUtil.convert(report.cellDataSet);
-		result.setQuery(new ThinQuery());
-		return result;
+	@POST
+	@Path("/saikureport/export/pdf/{report_id}")
+	@Produces({"application/pdf"})
+	public final Response exportPdfSaikuReport(String query, @PathParam("report_id") Long reportId) {
+		return exportSaikuReport(query, reportId, "pdf");
+	}
+
+	public final Response exportSaikuReport(String query, Long reportId, String type) {
+        CellDataSet result;
+		try {
+			String decodedQuery = java.net.URLDecoder.decode(query);
+			decodedQuery = decodedQuery.replace("query=", "");
+			JsonBean queryObject = JsonBean.getJsonBeanFromString(decodedQuery);
+			result = getSaikuCellDataSet(queryObject, reportId);
+
+			byte[] doc = null;
+			String filename = "";
+			
+			switch(type) {
+				case "xls": 
+					ExcelBuilderOptions options = new ExcelBuilderOptions();
+					options.repeatValues = true;
+			        ExcelWorksheetBuilder worksheetBuilder = new ExcelWorksheetBuilder(result, new ArrayList<ThinHierarchy>(), options);
+			        doc = worksheetBuilder.build();
+					filename = "export.xls";
+					break;
+				case "csv":
+					doc = SaikuUtils.getCsv(result, ",", "\"");
+					filename = "export.csv";
+					break;
+				case "pdf":
+		            PdfReport pdf = new PdfReport();
+		    		QueryResult qr = RestUtil.convert(result);
+		            doc  = pdf.pdf(qr, null);
+					filename = "export.pdf";
+					break;
+			}
+			
+			if(doc != null) {
+				return Response.ok(doc, MediaType.APPLICATION_OCTET_STREAM).header(
+		                "content-disposition",
+		                "attachment; filename = " + filename).header(
+		                "content-length",doc.length).build();
+			}
+			else
+			{
+				throw new Exception("Empty response while exporting.");
+			}
+			
+		} catch (Exception e) {
+			String error = ExceptionUtils.getRootCauseMessage(e);
+			logger.error(e.getMessage());
+			e.printStackTrace();
+			return Response.serverError().build();
+		}
+        
 	}
 
 	private JsonBean extractSettings(LinkedHashMap<String, Object> queryModel) {

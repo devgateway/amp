@@ -605,8 +605,7 @@
 		<Measure name="Always Present" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">
-					CASE WHEN mondrian_fact_table.transaction_type=999
-					THEN "mondrian_fact_table".transaction_amount ELSE null END
+					100
 				</SQL>
 			</MeasureExpression>
 		</Measure>

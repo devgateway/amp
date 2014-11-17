@@ -115,7 +115,7 @@ public class MondrianSummaryReportTests extends MondrianReportsTestCase {
 	@Test
 	public void testSummaryReportGauge() {
 		ReportAreaForTests correctReport = new ReportAreaForTests()
-	    .withContents("Project Title", "Report Totals", "Region", "", "Primary Sector", "", "2009-Actual Disbursements", "0", "2009-Actual Commitments", "100 000", "2010-Actual Disbursements", "513 213", "2010-Actual Commitments", "0", "2011-Actual Disbursements", "0", "2011-Actual Commitments", "999 888", "2012-Actual Disbursements", "12 000", "2012-Actual Commitments", "25 000", "2013-Actual Disbursements", "0", "2013-Actual Commitments", "333 333", "Total Measures-Actual Disbursements", "525 213", "Total Measures-Actual Commitments", "1 458 221")
+	    .withContents("Project Title", "Report Totals", "Region", "", "Primary Sector", "", "2009-Actual Disbursements", "0", "2009-Actual Commitments", "100 000", "2010-Actual Disbursements", "513 213", "2010-Actual Commitments", "0", "2011-Actual Disbursements", "0", "2011-Actual Commitments", "999 888", "2012-Actual Disbursements", "12 000", "2012-Actual Commitments", "25 000", "2013-Actual Disbursements", "0", "2013-Actual Commitments", "333 333", "Total Measures-Actual Disbursements", "525 213", "Total Measures-Actual Commitments", "1 459 021")
 	    .withChildren(
 	      new ReportAreaForTests()
 	          .withContents("Project Title", "TAC_activity_2", "Region", "Falesti County", "Primary Sector", "130 - POPULATION POLICIES/PROGRAMMES AND REPRODUCTIVE HEALTH", "2009-Actual Disbursements", "0", "2009-Actual Commitments", "0", "2010-Actual Disbursements", "453 213", "2010-Actual Commitments", "0", "2011-Actual Disbursements", "0", "2011-Actual Commitments", "999 888", "2012-Actual Disbursements", "0", "2012-Actual Commitments", "0", "2013-Actual Disbursements", "0", "2013-Actual Commitments", "0", "Total Measures-Actual Disbursements", "453 213", "Total Measures-Actual Commitments", "999 888"),
@@ -149,7 +149,7 @@ public class MondrianSummaryReportTests extends MondrianReportsTestCase {
 	public void testSummaryReportsNoHierYearly() {
 		ReportAreaForTests correctReport = new ReportAreaForTests()
 		  .withChildren(
-		    new ReportAreaForTests().withContents("Constant", "constant", "2009-Actual Disbursements", "0", "2009-Actual Commitments", "100 000", "2010-Actual Disbursements", "513 213", "2010-Actual Commitments", "0", "2011-Actual Disbursements", "0", "2011-Actual Commitments", "999 888", "2012-Actual Disbursements", "12 000", "2012-Actual Commitments", "25 000", "2013-Actual Disbursements", "0", "2013-Actual Commitments", "333 333", "Total Measures-Actual Disbursements", "525 213", "Total Measures-Actual Commitments", "1 458 221")  );
+		    new ReportAreaForTests().withContents("Constant", "constant", "2009-Actual Disbursements", "0", "2009-Actual Commitments", "100 000", "2010-Actual Disbursements", "513 213", "2010-Actual Commitments", "0", "2011-Actual Disbursements", "0", "2011-Actual Commitments", "999 888", "2012-Actual Disbursements", "12 000", "2012-Actual Commitments", "25 000", "2013-Actual Disbursements", "0", "2013-Actual Commitments", "333 333", "Total Measures-Actual Disbursements", "525 213", "Total Measures-Actual Commitments", "1 458 021")  );
 
 		runMondrianTestCase("AMP-18558-no-hier-yearly",
 				"AMP-18558-no-hier-yearly",

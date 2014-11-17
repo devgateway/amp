@@ -19,12 +19,29 @@ _.extend(Title.prototype, Backbone.Events, {
   updateTitle: function() {
     // currently this just joins all the titles of the layers on ", "
     // ... but it should probably be smarter.
+    var self = this;
     var titles = this.data.getAllVisibleLayers().map(function(layer) {
-      return layer.get('title');
+
+      var titleList = {};
+      var key = ['amp.gis:title-', layer.get('title').replace(/ /g, '')].join('');
+
+      titleList[key] = layer.get('title');
+      return titleList;
+
     }).value();  // getLayers() returns a underscore chain()
 
-    this.current = titles.join(', ');
-    this.trigger('update', this.current);
+    var localizedTitleList = window.app.translator.translateList(titles);
+
+    localizedTitleList.then(function(localTitles) {
+      /* return localized title */
+      self.current = _.values(localTitles).join(', ');
+      self.trigger('update', self.current);
+
+    }).fail(function() {
+      self.current = _.values(titles).join(', ');
+      self.trigger('update', self.current);
+    });
+
   }
 
 });

@@ -1,6 +1,7 @@
 // TODO: move this up a dir, and instantiate and attach to the app
 
 var fs = require('fs');
+var _ = require('underscore');
 var $ = require('jquery');
 var Backbone = require('backbone');
 
@@ -81,6 +82,37 @@ function Translator() {
       $(el).find('*[data-i18n="' + key + '"]').text(value);
     });
   };
+
+  /*
+   * Pass in a {"amp.gis:data-i18n-code": "base lang words", ...} object for
+   * translation e.g. page title
+   * */
+  this.translateList = function(list) {
+
+    // update translateable elements in this key-value set
+    var _updateList = function(list, i18nData) {
+      var simpleKeyVal;
+      if (!_.isEmpty(list)) {
+        simpleKeyVal = _.reduce(list, function(memo, num) { return _.extend(memo, num); });
+      } else {
+        simpleKeyVal = {};
+      }
+      return _.map(simpleKeyVal, function(value, key) {
+        if (i18nData[key]) {
+          return i18nData[key];
+        } else {
+          return key[value];
+        }
+      });
+    };
+
+    return this.getTranslations().then(function(i18nData) {
+      var outList = _updateList(list, i18nData);
+      return outList;
+    });
+  };
+
+
 
 
   // Only do single request on launch.

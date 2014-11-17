@@ -151,6 +151,8 @@ public abstract class DataVisibility {
 		unmapped.removeAll(getDataMap(DataMapType.FIELDS).values());
 		unmapped.removeAll(getDataMap(DataMapType.DEPENDENCY).keySet());
 		unmapped.removeAll(getVisibleByDefault());
+		unmapped.removeAll(getDependancyMapTypeAll().keySet());
+		unmapped.removeAll(getDependancyMapTypeAny().keySet());
 		if (unmapped.size() > 0)
 			logger.warn("Unmapped columns for which by default visibility = false: " + unmapped);
 		else

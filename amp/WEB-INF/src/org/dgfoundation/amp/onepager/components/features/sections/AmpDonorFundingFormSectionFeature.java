@@ -35,7 +35,7 @@ import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListItem;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFeaturePanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
+import org.dgfoundation.amp.onepager.components.fields.AmpOverviewSection;
 import org.dgfoundation.amp.onepager.events.DonorFundingRolesEvent;
 import org.dgfoundation.amp.onepager.events.OrganisationUpdateEvent;
 import org.dgfoundation.amp.onepager.models.AmpFundingGroupModel;
@@ -129,6 +129,9 @@ public class AmpDonorFundingFormSectionFeature extends
 			list.origAddItem(newOrg);
 			tabsList.addItem(newOrg);
 		}
+		//find the idex
+//		System.out.println("Switch orgs El indice es : "+
+//		list.items.indexOf(newOrg));
 
 		///target.add(list.getParent()); //this should be used in not tabs form
 		target.add(AmpDonorFundingFormSectionFeature.this);
@@ -268,13 +271,14 @@ public class AmpDonorFundingFormSectionFeature extends
        add(collapseAllLink);
        
 		// group fields in FM under "Proposed Project Cost"
-		AmpProposedProjectCost propProjectCost = new AmpProposedProjectCost(
-				"propProjCost", "Proposed Project Cost", am);
-		propProjectCost.add(new AttributePrepender("data-is_tab", new Model<String>("true"), ""));
-		add(propProjectCost);
+       
+       AmpOverviewSection overviewSection = new AmpOverviewSection(
+				"overviewSection", "Overview Section", am);
+        overviewSection.add(new AttributePrepender("data-is_tab", new Model<String>("true"), ""));
+		add(overviewSection);
 		
 		getRequiredFormComponents().addAll(
-				propProjectCost.getRequiredFormComponents());
+				overviewSection.getRequiredFormComponents());
 
 
 
@@ -422,6 +426,9 @@ public class AmpDonorFundingFormSectionFeature extends
 //				target.add(wmc);
 				target.add(AmpDonorFundingFormSectionFeature.this);
 				//AmpDonorFundingFormSectionFeature
+//				System.out.println("onSelect El indice es : "+
+//						list.items.indexOf(choice));
+
 				target.appendJavaScript("switchTabs(-1);");
 			}
 
@@ -523,12 +530,15 @@ public class AmpDonorFundingFormSectionFeature extends
 			AmpFundingGroupFeaturePanel fg = listItems.get(org);
 			fg.getList().addItem(funding);
 		} else {
-			if (fundingModel.getObject() == null){
+			if (fundingModel.getObject() == null) {
 				fundingModel.setObject(new LinkedHashSet<AmpFunding>());
-				//we only add the new tab if the org didnt exists
-				tabsList.addItem(org);
+				// we only add the new tab if the org didnt exists
 			}
+			tabsList.addItem(org);
 
+//			System.out
+//					.println("	public void addItemToList (AmpOrganisation org) { El indice es : "
+//							+ list.items.indexOf(org));
 			fundingModel.getObject().add(funding);
 			list.origAddItem(org);
 		}

@@ -25,8 +25,6 @@ import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpComponentAnnualBudgetSubsectionFeature;
-import org.dgfoundation.amp.onepager.components.features.tables.AmpOverallFundingTotalsTable;
-import org.dgfoundation.amp.onepager.events.OverallFundingTotalsEvents;
 import org.dgfoundation.amp.onepager.events.ProposedProjectCostUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
@@ -35,7 +33,6 @@ import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -225,11 +222,6 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 				AmpFMTypes.MODULE);
 		add(modalities);		
 		
-		AmpOverallFundingTotalsTable overallFunding = new AmpOverallFundingTotalsTable(
-				"overallFunding", "Overall Funding Totals", new PropertyModel<Set<AmpFunding>>(am, "funding"));
-		overallFunding.add(UpdateEventBehavior.of(OverallFundingTotalsEvents.class));
-
-		add(overallFunding);
 	}
 	 
 	/**

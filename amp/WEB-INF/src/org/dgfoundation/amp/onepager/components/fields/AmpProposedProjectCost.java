@@ -178,49 +178,7 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 		// add(amount);
 		add(date);
 		
-		RangeValidator<Integer> rangeValidator = new RangeValidator<Integer>(1,
-				10);
-		AttributeModifier attributeModifier = new AttributeModifier("size",
-				new Model(1));
-		AmpTextFieldPanel<Integer> fundingSourcesNumberPanel = new AmpTextFieldPanel<Integer>(
-				"fundingSourcesNumber", new PropertyModel<Integer>(am,
-						"fundingSourcesNumber"),
-				CategoryConstants.FUNDING_SOURCES_NUMBER_NAME,
-				AmpFMTypes.MODULE);
-		fundingSourcesNumberPanel.getTextContainer().add(rangeValidator);
-		fundingSourcesNumberPanel.getTextContainer().add(attributeModifier);
-		add(fundingSourcesNumberPanel);
-
-		AmpCategorySelectFieldPanel typeOfCooperation = new AmpCategorySelectFieldPanel(
-				"typeOfCooperation", CategoryConstants.TYPE_OF_COOPERATION_KEY,
-				new AmpCategoryValueByKeyModel(
-						new PropertyModel<Set<AmpCategoryValue>>(am,
-								"categories"),
-						CategoryConstants.TYPE_OF_COOPERATION_KEY),
-				CategoryConstants.TYPE_OF_COOPERATION_NAME, true, false, null,
-				AmpFMTypes.MODULE);
-		add(typeOfCooperation);
-
-		AmpCategorySelectFieldPanel typeOfImplementation = new AmpCategorySelectFieldPanel(
-				"typeOfImplementation",
-				CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY,
-				new AmpCategoryValueByKeyModel(
-						new PropertyModel<Set<AmpCategoryValue>>(am,
-								"categories"),
-						CategoryConstants.TYPE_OF_IMPLEMENTATION_KEY),
-				CategoryConstants.TYPE_OF_IMPLEMENTATION_NAME, true, false,
-				null, AmpFMTypes.MODULE);
-		add(typeOfImplementation);
-
-		AmpCategorySelectFieldPanel modalities = new AmpCategorySelectFieldPanel(
-				"modalities",
-				CategoryConstants.MODALITIES_KEY,
-				new AmpCategoryValueByKeyModel(
-						new PropertyModel<Set<AmpCategoryValue>>(am,
-								"categories"), CategoryConstants.MODALITIES_KEY),
-				CategoryConstants.MODALITIES_NAME, true, false, null,
-				AmpFMTypes.MODULE);
-		add(modalities);		
+	
 		
 	}
 	 

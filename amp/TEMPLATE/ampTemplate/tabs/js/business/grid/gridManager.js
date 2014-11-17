@@ -71,6 +71,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 
 		$.getScript("/TEMPLATE/ampTemplate/tabs/js/lib/one_place/jqgrid-all.js", function(data, textStatus, jqxhr) {
 			var rowNum = 0;
+			var colModel = columnsMapping.createJQGridColumnModel(tableStructure);
 			jQuery(grid).jqGrid(
 					{
 						caption : false,
@@ -110,7 +111,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 							}
 						},
 						colNames : columnsMapping.createJQGridColumnNames(tableStructure, grouping),
-						colModel : columnsMapping.createJQGridColumnModel(tableStructure),
+						colModel : colModel,
 						height : (jQuery(window).height() * 0.50),
 						autowidth : true,
 						shrinkToFit : true,
@@ -125,6 +126,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 						emptyrecords : "<span data-i18n='tabs.common:noRecordsToView'>No records to view</span>",
 						grouping : grouping,
 						groupingView : columnsMapping.createJQGridGroupingModel(tableStructure, grouping),
+						footerrow : true,
 						gridComplete : function() {
 							jQuery(grid).find(">tbody>tr.jqgrow:odd").addClass("myAltRowClassEven");
 							jQuery(grid).find(">tbody>tr.jqgrow:even").addClass("myAltRowClassOdd");
@@ -139,29 +141,30 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									// Set font color according to status.
 									var draft = row.cells[3].textContent;
 									var approvalStatus = row.cells[2].textContent;
-									
-									//Status Mapping
+
+									// Status Mapping
 									var statusMapping = {
-											New_Draft : '0',
-											New_Unvalidated: '1',
-											Existing_Draft : '2',
-											Validated_Activities :'3',
-											Existing_Unvalidated : '4',
-											Approved : '5',
-											Rejected :6
-												
+										New_Draft : '0',
+										New_Unvalidated : '1',
+										Existing_Draft : '2',
+										Validated_Activities : '3',
+										Existing_Unvalidated : '4',
+										Approved : '5',
+										Rejected : 6
+
 									};
-									
-									//Calculated status based on draft and approval status.
+
+									// Calculated status based on draft and
+									// approval status.
 									var getApprovalStatus = function(draft, approvalStatus) {
-										if(draft=='true' ){
-											if (approvalStatus=='2'){
+										if (draft == 'true') {
+											if (approvalStatus == '2') {
 												return statusMapping.Existing_Draft;
-											}else{
+											} else {
 												row.cells[4].textContent = '* ' + row.cells[4].textContent;
-												return statusMapping.New_Draft; 
+												return statusMapping.New_Draft;
 											}
-										}else{
+										} else {
 											switch (approvalStatus) {
 											case '1':
 												return statusMapping.Approved;
@@ -182,15 +185,16 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 											}
 										}
 									};
-									
-									//Assign colors for each row. 
-									//TODO: Missing colors for rejected and not approved.
+
+									// Assign colors for each row.
+									// TODO: Missing colors for rejected and not
+									// approved.
 									var x = getApprovalStatus(draft, approvalStatus);
 									if (x == statusMapping.Approved) {
 										row.className = className + ' status_1';
 									} else if (x == statusMapping.Existing_Draft || x == statusMapping.New_Draft) {
 										row.className = className + ' status_2';
-									} else if (x == statusMapping.Existing_Unvalidated || x == statusMapping.New_Unvalidated ) {
+									} else if (x == statusMapping.Existing_Unvalidated || x == statusMapping.New_Unvalidated) {
 										row.className = className + ' status_3';
 									}
 
@@ -214,6 +218,20 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								}
 							}
 							TranslationManager.searchAndTranslate();
+						},
+						loadComplete : function() {
+							// Calculate footer totals row.
+							var colData = {};
+							colData[colModel[4].name] = TranslationManager.getTranslated('Total:');
+							jQuery.each(colModel, function(i, item) {
+								if (item.reportColumnType == 'MEASURE') {
+									// TODO: Replace this js sum with data from
+									// the endpoint.
+									var sum = jQuery(grid).jqGrid('getCol', item.name, false, 'sum');
+									colData[item.name] = sum;
+								}
+							});
+							jQuery(grid).jqGrid('footerData', 'set', colData);
 						}
 					});
 			app.TabsApp.currentGrid = jQuery(grid);

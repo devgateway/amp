@@ -5,7 +5,7 @@ define(function() {
 	// We can define here some properties like min-width, formats, etc.
 	var map = new Object();
 	map['Project Title'] = {
-		width : 550,
+		width : 575,
 		fixed : false
 	};
 	map['AMP ID'] = {
@@ -75,7 +75,6 @@ define(function() {
 				return "";
 			}
 		});
-
 		ret.push({
 			name : 'Activity Id',
 			width : 0,
@@ -105,12 +104,11 @@ define(function() {
 				column.width = mappedColumn.width;
 				column.fixed = (mappedColumn.fixed != undefined) ? mappedColumn.fixed : false;
 			}
-			/*column.sorttype = function(cellValue, obj) {
-				alert(cellValue + obj);
-				// return groupOrder[obj.groupId];
-				// return obj.groupOrder;
-				return "";
-			};*/
+			/*
+			 * column.sorttype = function(cellValue, obj) { alert(cellValue +
+			 * obj); // return groupOrder[obj.groupId]; // return
+			 * obj.groupOrder; return ""; };
+			 */
 			ret.push(column);
 		});
 		/*
@@ -120,12 +118,13 @@ define(function() {
 		$(metadata.measures.models).each(function(i, item) {
 			ret.push({
 				name : item.get('measureName'),
-				width : 105,
+				width : 110,
 				fixed : true,
 				summaryType : 'sum',
 				align : "right",
 				sorttype : 'number',
-				formatter : 'number'
+				formatter : 'number',
+				reportColumnType : 'MEASURE'
 			});
 		});
 		console.log(ret);

@@ -22,8 +22,7 @@ module.exports = Backbone.Collection
     this._currentStartPosition = 0;
   },
 
-  //TODO: this assumes all fetch want to do paginated style, but that isn't true, for example activies/id,id,id style..
-  // also very long. any function over 20 lines is a red flag.
+  /* If _pageSize > 0 then use pagination and fetchMore, otherwise ignore pagination */
   fetch: function(options) {
     var self = this;
     var payload = {otherFilters: {}};
@@ -46,8 +45,9 @@ module.exports = Backbone.Collection
       payload.settings = this.appData.settings.serialize();
     }
 
-    /*These will always need to be reset when you do a raw fetch
-    * like for new filters or settings */
+    /* TODO: These will always need to be reset when you do a raw fetch
+     * like for new filters or settings
+     **/
     if (options && options.isFetchMore) {
       this._currentStartPosition += this._pageSize;
       isFetchMore = true;
@@ -72,23 +72,23 @@ module.exports = Backbone.Collection
       data: JSON.stringify(payload)
     });
 
-     //run fetch before reverting URL
     tempDeferred = Backbone.Collection.prototype.fetch.call(this, options);
 
-    /* Maintain the pagination state even on errors */
-    tempDeferred.then(function() {
-      if (self._pageSize > 0) {
-        if (options && !options.isFetchMore) {
-          self._currentStartPosition += self._pageSize;
+    /* If enabled, maintain the pagination state even on errors */
+    if (self._pageSize > 0) {
+      tempDeferred.then(function() {
+          /* On the very first page request, advance if succeeds */
+          if (options && !options.isFetchMore) {
+            self._currentStartPosition += self._pageSize;
+          }
+      }).fail (function() {
+        /* If a page request after the first fails, revert position*/
+        if (self.isFetchMore) {
+          self._currentStartPosition -= self._pageSize;
         }
-      }
-    }).fail (function() {
-      /* if fails, revert current position*/
-      if (self._pageSize > 0 && self.isFetchMore) {
-        self._currentStartPosition -= self._pageSize;
-      }
-    });
-    this.url = preserveURL;
+      });
+      this.url = preserveURL;
+    }
 
     return tempDeferred;
   },

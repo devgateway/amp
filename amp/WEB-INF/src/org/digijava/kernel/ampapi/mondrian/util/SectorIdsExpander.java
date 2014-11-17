@@ -15,7 +15,7 @@ public class SectorIdsExpander extends IdsExpander {
 	@Override public Set<Long> expandIds(List<Long> values) {
 		Set<Long> res = new HashSet<>();
 		res.addAll(SectorUtil.getRecursiveChildrenOfSectors(values));
-		res.addAll(SectorUtil.getRecursiveAscendantsOfSectors(values));
+		//res.addAll(SectorUtil.getRecursiveAscendantsOfSectors(values));
 		return res;
 	}
 }

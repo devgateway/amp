@@ -422,6 +422,10 @@ public class MondrianReportGenerator implements ReportExecutor {
 			if (elem.type != ElementType.ENTITY)
 				continue; // ignore DATE filters, as those are now processed through the SQL filter
 			
+			if (FiltersGroup.FILTER_GROUP.containsKey(elem.entity.getEntityName())) {
+				// processed through SQL
+				continue;
+			}
 			mdxElem = MondrianMapping.toMDXElement(elem.entity);
 				
 			if (mdxElem == null) {

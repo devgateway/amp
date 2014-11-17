@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.SectorUtil;
 
 public class ProgramIdsExpander extends IdsExpander {
 	
@@ -16,7 +15,7 @@ public class ProgramIdsExpander extends IdsExpander {
 	@Override public Set<Long> expandIds(List<Long> values) {
 		Set<Long> res = new HashSet<>();
 		res.addAll(ProgramUtil.getRecursiveChildrenOfPrograms(values));
-		res.addAll(ProgramUtil.getRecursiveAscendantsOfPrograms(values));
+		//res.addAll(ProgramUtil.getRecursiveAscendantsOfPrograms(values));
 		return res;
 	}
 }

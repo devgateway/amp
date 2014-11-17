@@ -127,9 +127,9 @@ public class MondrianReportFilters implements ReportFilters {
 			if (!this.sqlFilterRules.containsKey(filterGroup))
 				this.sqlFilterRules.put(filterGroup, new ArrayList<FilterRule>());
 			this.sqlFilterRules.get(filterGroup).add(filterRule);
-		} else {
-			addFilterRule(filterRules, elem, filterRule);
 		}
+		
+		addFilterRule(filterRules, elem, filterRule);
 	}
 		
 	protected <T> void addFilterRule(Map<T, List<FilterRule>> filterRules, T elem, FilterRule filterRule) {

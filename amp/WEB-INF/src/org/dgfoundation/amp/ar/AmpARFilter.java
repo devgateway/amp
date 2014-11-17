@@ -2910,8 +2910,9 @@ public class AmpARFilter extends PropertyListable {
 	@PropertyListableIgnore
 	public List<String> getApprovalStatusSelectedStrings() {
 		ArrayList<String> approvalStatuses = new ArrayList<String>();
-		for (Iterator<String> iterator = approvalStatusSelected.iterator(); iterator.hasNext();) {
-			String status = iterator.next();
+		if (approvalStatusSelected == null)
+			return approvalStatuses;
+		for (String status:approvalStatusSelected) {
 			switch (Integer.parseInt(status)) {
 			case 1:
 				approvalStatuses.add(TranslatorWorker

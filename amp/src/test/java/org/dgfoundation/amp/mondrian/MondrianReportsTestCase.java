@@ -54,6 +54,10 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		runMondrianTestCase(spec, locale, activities, correctResult);
 	}
 	
+	protected void runMondrianTestCase(String reportName, List<String> activities, ReportAreaForTests correctResult, String locale) {
+		runMondrianTestCase(reportName, reportName, activities, correctResult, locale);
+	}
+	
 //	protected void runReportTest(String testName, ReportSpecification reportSpec, List<String> activities, GeneratedReport correctResult, String locale) {
 //		GeneratedReport report = runReportOn(reportSpec, locale, activities);
 //		String error = compareOutputs(correctResult, report);

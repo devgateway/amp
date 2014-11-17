@@ -31,9 +31,14 @@ public class SaikuGeneratedReport extends GeneratedReport{
 		super(spec, generationTime, requestingUser, reportContents, rootHeaders,
 				leafHeaders);
 		this.cellDataSet = cellDataSet;
-		translateHeaders(environment);
+		//translateHeaders(environment);
 	}
 	
+	/**
+	 * no need to translate anything, since they come translated out of the reporting engine
+	 * @param environment
+	 */
+	@Deprecated
 	private void translateHeaders(ReportEnvironment environment) {
 		if (cellDataSet == null || cellDataSet.getCellSetHeaders() == null) return;
 		AbstractBaseCell[][] headers = cellDataSet.getCellSetHeaders();

@@ -10,6 +10,7 @@ import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.FilterRule.FilterType;
 import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.reports.mondrian.FiltersGroup;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 
 /**
@@ -30,6 +31,7 @@ public class FactTableFiltering {
 	 * @return an SQL fragment starting with AND, or alternatively an empty string
 	 */
 	public String getQueryFragment() {
+		long start = System.currentTimeMillis();
 		StringBuilder subquery = new StringBuilder();
 		if (mrf != null) {
 			
@@ -51,6 +53,8 @@ public class FactTableFiltering {
 		String ret = subquery.toString().trim();
 		if (ret != null && !ret.isEmpty())
 			System.err.println("filter query fragment: " + ret);
+		long end = System.currentTimeMillis() - start;
+		System.err.println("generating sql filter query took: " + end + " millies");
 		return ret;
 	}
 	
@@ -212,6 +216,27 @@ public class FactTableFiltering {
 			add(ColumnConstants.SECONDARY_PROGRAM, new ProgramIdsExpander("secondary_program_id"));
 			add(ColumnConstants.TERTIARY_PROGRAM, new ProgramIdsExpander("tertiary_program_id"));
 			add(ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, new ProgramIdsExpander("national_objectives_program_id"));
+			
+			add(FiltersGroup.LOCATION_FILTER, new LocationIdsExpander("location_id"));
+			
+			add(ColumnConstants.DONOR_AGENCY, new OrgIdsExpander("donor_id"));
+			add(ColumnConstants.DONOR_GROUP, new OrgGrpIdsExpander("donor_id"));
+			add(ColumnConstants.DONOR_TYPE, new OrgTypeIdsExpander("donor_id"));
+			
+			add(ColumnConstants.EXECUTING_AGENCY, new OrgIdsExpander("ea_org_id"));
+			add(ColumnConstants.EXECUTING_AGENCY_GROUPS, new OrgGrpIdsExpander("ea_org_id"));
+			add(ColumnConstants.EXECUTING_AGENCY_TYPE, new OrgTypeIdsExpander("ea_org_id"));
+			
+			add(ColumnConstants.BENEFICIARY_AGENCY, new OrgIdsExpander("ba_org_id"));
+			add(ColumnConstants.BENEFICIARY_AGENCY_GROUPS, new OrgGrpIdsExpander("ba_org_id"));
+			//add(ColumnConstants.BENEFICIARY_AGENCY_TYPE, new OrgTypeIdsExpander("ba_org_id"));
+			
+			add(ColumnConstants.IMPLEMENTING_AGENCY, new OrgIdsExpander("ia_org_id"));
+			add(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS, new OrgGrpIdsExpander("ia_org_id"));
+			add(ColumnConstants.IMPLEMENTING_AGENCY_TYPE, new OrgTypeIdsExpander("ia_org_id"));
+			
+			add(ColumnConstants.RESPONSIBLE_ORGANIZATION, new OrgIdsExpander("ro_org_id"));
+			add(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, new OrgGrpIdsExpander("ro_org_id"));
 		}
 		
 		void add(String mainColumn, IdsExpander expander) {

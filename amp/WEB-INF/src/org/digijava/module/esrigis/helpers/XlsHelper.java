@@ -362,8 +362,10 @@ public class XlsHelper {
 				values.add(sectorstr);
 					
 				values.add(donors);
-				values.add(QueryUtil.getPercentage(calculations.getTotActualComm().getValue(),new BigDecimal(ald.aalPercentage)));
-				values.add(QueryUtil.getPercentage(calculations.getTotActualDisb().getValue(),new BigDecimal(ald.aalPercentage)));
+				
+				Double locationPercentage = ald.aalPercentage !=null ? ald.aalPercentage:0d;
+				values.add(QueryUtil.getPercentage(calculations.getTotActualComm().getValue(),new BigDecimal(locationPercentage)));
+				values.add(QueryUtil.getPercentage(calculations.getTotActualDisb().getValue(),new BigDecimal(locationPercentage)));
 				values.add(calculations.getTotActualComm().toString());
 				values.add(calculations.getTotActualDisb().toString());
 				values.add(calculations.getTotalMtef().toString());

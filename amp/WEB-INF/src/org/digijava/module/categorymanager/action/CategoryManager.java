@@ -23,13 +23,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.dgfoundation.amp.reports.DataVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.dbentity.AmpLinkedCategoriesState;
 import org.digijava.module.categorymanager.form.CategoryManagerForm;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryLabelsUtil;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.categorymanager.util.PossibleValue;
@@ -129,6 +129,8 @@ public class CategoryManager extends Action {
 		}
 		if (request.getParameter("delete") != null ) {
 			this.deleteCategory(new Long( request.getParameter("delete") ));
+			// and also notify about changes the dependent modules
+			DataVisibility.notifyVisibilityChanged();
 		}
                 else{
 					/**
@@ -152,6 +154,8 @@ public class CategoryManager extends Action {
 						}else{
 							//if the save process went ok, we should delete from the cache the given category
 							CategoryManagerUtil.removeAmpCategryBykey(myForm.getKeyName());
+							// and also notify about changes the dependent modules
+							DataVisibility.notifyVisibilityChanged();
 						}
 					}
                 }

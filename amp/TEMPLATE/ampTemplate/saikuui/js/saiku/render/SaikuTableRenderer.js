@@ -176,8 +176,8 @@ function genTotalHeaderCells(currentIndex, bottom, scanSums, scanIndexes, lists)
 					}
 					if (i == 0 && scanIndexes[i] == 0) {
 						if (currentListNode.captions)
-							text += "<span class='i18n'>Grand Total</span>";
-						else text = "<span class='i18n'>Grand Total</span>";
+							text += "&nbsp;<span class='i18n'>Grand Total</span>";
+						else text = "&nbsp;<span class='i18n'>Grand Total</span>";
 					}
 				}
 				contents += '<th class="' + cssClass + '"><div>' + text + '</div></th>';
@@ -247,7 +247,7 @@ function genTotalHeaderRowCells(currentIndex, scanSums, scanIndexes, totalsLists
 						}
 						if (i == 0 && colScanIndexes[i] == 0) {
 							if (colLists[i][colScanIndexes[i]].captions){
-								text += "<span class='i18n'> Grand Total</span>";
+								text += "&nbsp;<span class='i18n'>Grand Total</span>";
 							}
 							else {
 								text = "<span class='i18n' style='font-weight:bold;'>Report Totals</span>";

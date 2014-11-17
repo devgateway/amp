@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -267,6 +266,10 @@ public class ColumnsVisibility extends DataVisibility {
 			for (String suffix : suffixList)
 				put(con[0] + " " + suffix, con[1]);
 		
+		put(ColumnConstants.COUNTRY, ColumnConstants.LOCATION);
+		put(ColumnConstants.REGION, ColumnConstants.LOCATION);
+		put(ColumnConstants.DISTRICT, ColumnConstants.LOCATION);
+		put(ColumnConstants.ZONE, ColumnConstants.LOCATION);
 	}};
 	
 	@SuppressWarnings("serial")
@@ -308,13 +311,11 @@ public class ColumnsVisibility extends DataVisibility {
 		put("Component Funding Organization", ColumnConstants.COMPONENT_FUNDING_ORGANIZATION);
 		put("Component Type", ColumnConstants.COMPONENT_TYPE);
 		put("Costing Total Contribution", ColumnConstants.COSTING_DONOR);
-		put("Country", ColumnConstants.COUNTRY);
 		put("Credit/Donation", ColumnConstants.CREDIT_DONATION);
 		put("Cumulative Commitment", ColumnConstants.CUMULATIVE_COMMITMENT);
 		put("Cumulative Disbursement", ColumnConstants.CUMULATIVE_DISBURSEMENT);
 		put("Current Completion Date Comments", ColumnConstants.CURRENT_COMPLETION_DATE_COMMENTS);
 		put("Description of Component Funding", ColumnConstants.DESCRIPTION_OF_COMPONENT_FUNDING);
-		put("District", ColumnConstants.DISTRICT);
 		put("Draft", ColumnConstants.DRAFT);
 		put("Execution Rate", ColumnConstants.EXECUTION_RATE);
 		put("Final Date for Disbursements Comments", ColumnConstants.FINAL_DATE_FOR_DISBURSEMENTS_COMMENTS);
@@ -355,7 +356,6 @@ public class ColumnsVisibility extends DataVisibility {
 		put("Project Age Ratio", ColumnConstants.PROJECT_AGE_RATIO);
 		put("Project Description", ColumnConstants.PROJECT_DESCRIPTION);
 		put("Project Period", ColumnConstants.PROJECT_PERIOD);
-		put("Regional Percentage", ColumnConstants.REGION);
 		put("Related Projects", ColumnConstants.RELATED_PROJECTS);
 		put("Sector Location", ColumnConstants.SECTOR_LOCATION);
 		put("Sector Tag", ColumnConstants.SECTOR_TAG);

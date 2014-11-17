@@ -895,6 +895,7 @@ public class LuceneUtil implements Serializable {
                 doc.add(new Field(field,
                         regularFieldNames.get(field),
                         Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
+                all = all.concat(" " + regularFieldNames.get(field));
             }
         }
 

@@ -222,15 +222,17 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 						loadComplete : function() {
 							// Calculate footer totals row.
 							var colData = {};
-							colData[colModel[4].name] = TranslationManager.getTranslated('Total:');
+							var totalColumnIndex = colModel.length - 1;
 							jQuery.each(colModel, function(i, item) {
 								if (item.reportColumnType == 'MEASURE') {
 									// TODO: Replace this js sum with data from
 									// the endpoint.
 									var sum = jQuery(grid).jqGrid('getCol', item.name, false, 'sum');
 									colData[item.name] = sum;
+									totalColumnIndex--;
 								}
 							});
+							colData[colModel[totalColumnIndex].name] = TranslationManager.getTranslated('Total:');
 							jQuery(grid).jqGrid('footerData', 'set', colData);
 						}
 					});

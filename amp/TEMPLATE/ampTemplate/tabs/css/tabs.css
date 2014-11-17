@@ -130,15 +130,15 @@
 }
 
 .status_1 {
-	color: #00496B;
+	color: #00496B !important;
 }
 
 .status_2 {
-	color: red;
+	color: red !important;
 }
 
 .status_3 {
-	color: green;
+	color: green !important;
 }
 
 table.dynamic-content-table {

@@ -1487,7 +1487,7 @@ function collapseAll() {
 <!-- FUNDING SECTION -->
 
 <!-- PROPOSED PROJECT COST -->
-<module:display name="/Activity Form/Funding/Proposed Project Cost" parentModule="/Activity Form/Funding">
+<module:display name="/Activity Form/Funding/Overview Section/Proposed Project Cost" parentModule="/Activity Form/Funding/Overview Section">
 <fieldset>
 	<legend>
 		<span class=legend_label id="proposedcostlink" style="cursor: pointer;">
@@ -1525,6 +1525,10 @@ function collapseAll() {
              </table>
 		</c:if>
 	</div>
+	<module:display name="/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost" 
+	parentModule="/Activity Form/Funding/Overview Section/Proposed Project Cost">
+	
+	
 	<c:if
 		test="${aimEditActivityForm.funding.proposedAnnualBudgets!=null 
 		&& aimEditActivityForm.funding.proposedAnnualBudgets.size()>0}">
@@ -1544,6 +1548,7 @@ function collapseAll() {
 			</c:forEach>
 		</table>
 	</c:if>
+	</module:display>
 						</fieldset>
 </module:display>
 <!-- END PROPOSED PROJECT COST -->

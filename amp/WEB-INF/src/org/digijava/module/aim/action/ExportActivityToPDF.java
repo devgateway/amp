@@ -266,7 +266,7 @@ public class ExportActivityToPDF extends Action {
 				createGeneralInfoRow(mainLayout,columnName,columnVal);
 			}
 
-			if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Modalities")){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Modalities")){
 				
 				columnName=TranslatorWorker.translateText("Modalities");
 				columnVal=identification.getSscModalitiesAsString("\n");
@@ -1227,7 +1227,7 @@ public class ExportActivityToPDF extends Action {
 			/**
 			 * Proposed Project Cost
 			 */
-			if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Proposed Project Cost")){
+			if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Proposed Project Cost")){
 				String costOutput="";
 				columnName=TranslatorWorker.translateText("Proposed Project Cost");
 				if(myForm.getFunding().getProProjCost()!=null){
@@ -1259,8 +1259,9 @@ public class ExportActivityToPDF extends Action {
 				}
 				createGeneralInfoRow(mainLayout,columnName,costOutput);
 			}
-			
-			buildAnnualProjectBudgetTable(myForm,request,mainLayout);
+			if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")) {
+				buildAnnualProjectBudgetTable(myForm,request,mainLayout);
+			}
 			/**
 			 * Costing
 			 */
@@ -2638,7 +2639,7 @@ public class ExportActivityToPDF extends Action {
 			boolean visibleModuleDisbOrders = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/Disbursement Orders");
             boolean visibleModuleMTEFProjections = FeaturesUtil.isVisibleModule("/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections");
 
-            if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Total Number of Funding Sources")) {
+            if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Total Number of Funding Sources")) {
                 PdfPCell foIdCell1 = new PdfPCell();
                 foIdCell1.setBackgroundColor(new Color(221,221,221));
                 foIdCell1.setBorder(0);

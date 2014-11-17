@@ -1549,7 +1549,7 @@ public class ExportActivityToWord extends Action {
     private List<Table> getProposedProjectCostTables (EditActivityForm myForm, HttpServletRequest request,	ServletContext ampContext, AmpActivityVersion act) throws BadElementException, WorkerException {
         List<Table> retVal = new ArrayList<Table>();
         HttpSession session=request.getSession();
-		if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Proposed Project Cost")) {
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Proposed Project Cost")) {
 	        ExportSectionHelper eshTitle = new ExportSectionHelper("Proposed Project Cost", true).setWidth(100f).setAlign("left");
 	        retVal.add(createSectionTable(eshTitle, request, ampContext));
 	        String currencyCode = null;
@@ -1564,6 +1564,7 @@ public class ExportActivityToWord extends Action {
 	//        FundingCalculationsHelper fch = new FundingCalculationsHelper();
 	//        fch.doCalculations(allComponents, currencyCode);
             ExportSectionHelper eshProjectCostTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
+            
             if (act.getFundingSourcesNumber() != null)
             {
             	eshProjectCostTable
@@ -1571,7 +1572,7 @@ public class ExportActivityToWord extends Action {
             		.addRowData(String.valueOf(act.getFundingSourcesNumber())));
             }
 
-            double convertedAmount = act.getFunAmount()==null?0D:act.getFunAmount();
+//            double convertedAmount = act.getFunAmount()==null?0D:act.getFunAmount();
 
 	        eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Cost", null, null,  true).
 	                                                addRowData(myForm.getFunding().getProProjCost().getFunAmount()).
@@ -1581,12 +1582,14 @@ public class ExportActivityToWord extends Action {
 
 	        List <ProposedProjCost> proposedProjectCostList = myForm.getFunding().getProposedAnnualBudgets();
 
-            for (ProposedProjCost ppc : proposedProjectCostList) {
-                eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
-                        ppc.getFunDate(), null, null, true).addRowData(
-                        FormatHelper.formatNumber(ppc.getFunAmountAsDouble()))
-                        .addRowData(ppc.getCurrencyCode()));
-            }
+			if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")) {
+	            for (ProposedProjCost ppc : proposedProjectCostList) {
+	                eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
+	                        ppc.getFunDate(), null, null, true).addRowData(
+	                        FormatHelper.formatNumber(ppc.getFunAmountAsDouble()))
+	                        .addRowData(ppc.getCurrencyCode()));
+	            }
+			}
 	        retVal.add(createSectionTable(eshProjectCostTable, request, ampContext));
 		}
         return retVal;
@@ -2852,9 +2855,8 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Modalities")){
+		if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Modalities")){
 			
-			columnName=TranslatorWorker.translateText("Modalities");
 			columnName=TranslatorWorker.translateText("Modalities");
 			//for AMP-17127 they are multiple modalities for activities of SSC
 			columnVal=identification.getSscModalitiesAsString("\n");

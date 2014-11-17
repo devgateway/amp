@@ -147,7 +147,7 @@ body {background:none;}
 								</tr>
 								</module:display>
 
-								<module:display name="/Activity Form/Identification/Type of Implementation" parentModule="/Activity Form/Identification">
+								<module:display name="/Activity Form/Funding/Overview Section/Type of Implementation" parentModule="/Activity Form/Funding/Overview Section">
 									<tr>
 									<td width="27%" align="right" valign="top" nowrap="nowrap">
 										<b><digi:trn>Type of Implementation</digi:trn></b>
@@ -156,7 +156,7 @@ body {background:none;}
 									<c:out value="${aimEditActivityForm.identification.ssc_typeOfImplementation}"/>
 									</tr>
 								</module:display>
-								<module:display name="/Activity Form/Funding/Modalities" parentModule="/Activity Form/Funding">
+								<module:display name="/Activity Form/Funding/Overview Section/Modalities" parentModule="/Activity Form/Funding/Overview Section">
 								<tr>
 									<td width="27%" align="right" valign="top" nowrap="nowrap">
 									<b><digi:trn>Modalities</digi:trn></b>
@@ -2768,7 +2768,7 @@ body {background:none;}
 								
                                     
                                     
-                              <module:display name="/Activity Form/Funding/Proposed Project Cost" parentModule="/Activity Form/Funding">
+                              <module:display name="/Activity Form/Funding/Overview Section/Proposed Project Cost" parentModule="/Activity Form/Funding/Overview Section">
 									<tr>
 										<td width="27%" align="right" valign="top" nowrap="nowrap">
 											<b>
@@ -2799,9 +2799,10 @@ body {background:none;}
                                                          </c:if>                                                        
                                                          </td>
                                                        </tr>
-                                                       	<c:if
-															test="${aimEditActivityForm.funding.proposedAnnualBudgets!=null
-															&& aimEditActivityForm.funding.proposedAnnualBudgets.size()>0}">
+                                                       <module:display name="/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost" parentModule="/Activity Form/Funding/Overview Section/Proposed Project Cost">
+	                                                       	<c:if
+																test="${aimEditActivityForm.funding.proposedAnnualBudgets!=null
+																&& aimEditActivityForm.funding.proposedAnnualBudgets.size()>0}">
 													   <tr>
                                                        <td bgcolor="#FFFFFF" align="left" colspan="2">
                                                          	<table cellspacing="1" cellPadding="3" bgcolor="#aaaaaa"
@@ -2822,6 +2823,7 @@ body {background:none;}
 													      </td>
                                                        </tr>
                                                     	</c:if>
+                                                    	</module:display>
                                                         <module:display name="/Activity Form/Funding/Total Number of Funding Sources" parentModule="/Activity Form/Funding">
 														 <tr bgcolor="#ffffff">
 														<td>

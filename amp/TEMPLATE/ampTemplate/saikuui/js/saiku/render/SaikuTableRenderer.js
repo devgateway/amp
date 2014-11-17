@@ -176,8 +176,8 @@ function genTotalHeaderCells(currentIndex, bottom, scanSums, scanIndexes, lists)
 					}
 					if (i == 0 && scanIndexes[i] == 0) {
 						if (currentListNode.captions)
-							text += "&nbsp;<span class='i18n'>Grand Total</span>";
-						else text = "&nbsp;<span class='i18n'>Grand Total</span>";
+							text += "<span class='i18n'> Grand Total</span>";
+						else text = "<span class='i18n'> Grand Total</span>";
 					}
 				}
 				contents += '<th class="' + cssClass + '"><div>' + text + '</div></th>';
@@ -307,7 +307,11 @@ function sanitizeColumns(columnData) {
 	return columnData;
 }
 
-function sanitizeRows(rowData) {
+function sanitizeRows(rowData, data) {
+	var totalWidth = data[0].length;
+	var excessCells = _.where(data[0], {value:"null"}).length;
+	rowData[0][0].span = totalWidth - excessCells;
+	rowData[0][0].width = totalWidth - excessCells;
 	return rowData;
 }
 
@@ -337,7 +341,7 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
     var totalsLists = {};
     if(Settings.AMP_REPORT_API_BRIDGE) {
         totalsLists[COLUMNS] = sanitizeColumns(allData.rowTotalsLists);
-        totalsLists[ROWS] = sanitizeRows(allData.colTotalsLists);
+        totalsLists[ROWS] = sanitizeRows(allData.colTotalsLists, data);
     }
     else
 	{

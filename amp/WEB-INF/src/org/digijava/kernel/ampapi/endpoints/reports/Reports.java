@@ -326,6 +326,10 @@ public class Reports {
 			logger.error("Cannot execute report (" + ampReport + ")", e);
 			String error = ExceptionUtils.getRootCauseMessage(e);
 		}
+		
+		//Adjust Width. Hackish correction until we can correctly determine why and how the totals are being miscalculated for columns
+		//This is also corrected in the client side (file SaikuTableRenderer, function sanitizeRows) 
+		report.cellDataSet.setWidth(report.cellDataSet.getCellSetHeaders()[0].length);
 		return report.cellDataSet;
 	}
 	@POST

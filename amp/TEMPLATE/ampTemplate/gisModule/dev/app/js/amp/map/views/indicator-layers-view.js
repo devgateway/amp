@@ -108,7 +108,7 @@ module.exports = Backbone.View.extend({
     // Add popup
     if (feature && feature.properties) {
       // TODO: drs append  format value.
-      var unit = (layerModel.get('unit') ? layerModel.get('unit') :'' );
+      var unit = (layerModel.get('unit') ? layerModel.get('unit') : '');
       layer.bindPopup('<strong>' + feature.properties.name + '</strong>' +
                       '<br/>' + feature.properties.value + ' ' + unit);
     }

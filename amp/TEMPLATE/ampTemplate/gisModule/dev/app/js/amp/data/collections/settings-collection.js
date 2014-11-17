@@ -30,17 +30,6 @@ module.exports = Backbone.Collection
     return tmpJSON;
   },
 
-/*TODO: verify functional */
-/*  serializeDeferred: function() {
-    return this.load().then(function() {
-      var tmpJSON = {};
-      this.each(function(setting) {
-        tmpJSON[setting.id] = _.findWhere(setting.get('options'), {id: setting.get('selected')}).id;
-      });
-      return tmpJSON;
-    });
-  },*/
-
 
   deserialize: function(jsonBlob) {
     var self = this;

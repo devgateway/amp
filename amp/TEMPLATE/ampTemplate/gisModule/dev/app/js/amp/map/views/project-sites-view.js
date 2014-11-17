@@ -271,7 +271,8 @@ module.exports = Backbone.View.extend({
 
     if (feature.properties) {
       //TODO: template, and add activity link:
-      layer.bindPopup('Project #: ' + (feature.properties.activity ? feature.properties.activity.get('Activity Id') : '') +
+      layer.bindPopup('Project #: ' +
+        (feature.properties.activity ? feature.properties.activity.get('Activity Id') : '') +
         '<br />Site: ' + feature.properties.title +
         '<br />Description: ' + feature.properties.description,
       {

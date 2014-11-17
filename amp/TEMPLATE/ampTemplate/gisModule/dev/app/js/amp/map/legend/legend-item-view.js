@@ -33,10 +33,8 @@ var Unknown = Backbone.View.extend({
 
 
 module.exports = function(options) {
-  // drs: checking for 'FeatureCollection' because check for instanceof hilightfunding failed
-  if (options.model instanceof IndicatorJoin || options.model instanceof HilightFunding ||
-      options.model.attributes.type === 'FeatureCollection') {
-    return new IndicatorJoinView(options);
+  if (options.model instanceof ADMClusters) {
+    return new ADMClustersView(options);
   } else if (options.model instanceof IndicatorArcGISFeature) {
     return new IndicatorArcGISFeatureView(options);
   } else if (options.model instanceof IndicatorArcGISDynamic) {
@@ -45,8 +43,11 @@ module.exports = function(options) {
     return new IndicatorWMSView(options);
   } else if (options.model instanceof ProjectSitesMenu) {
     return new ProjectSitesView(options);
-  } else if (options.model instanceof ADMClusters) {
-    return new ADMClustersView(options);
+  } else if (options.model instanceof IndicatorJoin || options.model instanceof HilightFunding ||
+      options.model.attributes.type === 'FeatureCollection') {
+    // drs: checking for 'FeatureCollection' because check for instanceof hilightfunding failed
+    // very dirty, try to fix.
+    return new IndicatorJoinView(options);
   } else {
     console.error('legend for layer type not implemented: ', options.model);
     return new Unknown(options);

@@ -14,7 +14,6 @@ module.exports = Backbone.View.extend({
   render: function() {
     var self = this;
     self.model.load().then(function() {
-
       if (self.model.palette) {
         self.$el.html(self.template(_.extend({}, self.model.toJSON(), {
           status: 'loaded',

@@ -44,21 +44,18 @@ module.exports = Backbone.Collection
     var self = this;
     var payload = {otherFilters: {}};
 
-    //cancel last request if not complete.
+    // cancel last request if not complete.
     if (this._lastFetch && this._lastFetch.readyState > 0 && this._lastFetch.readyState < 4) {
       this._lastFetch.abort();
     }
 
-    /* TODO nice to have: if otherFilters and columnFilters
-     * had their own object on API, separate from settings, etc.
-     * Currently all on the same data level.
-     **/
     /* get filters if set (not applicable for getActivities) */
     if (this.appData.filter) {
       _.extend(payload, this.appData.filter.serialize());
     }
 
     /* get "settings" */
+    // TODO: re-enable?? check for listener....?
     /*if (this.appData.settings) {
       payload.settings = this.appData.settings.serialize();
     }*/
@@ -70,61 +67,62 @@ module.exports = Backbone.Collection
 
     /*TODO implement manual caching */
     this._lastFetch = Backbone.Collection.prototype.fetch.call(this, options).then(function() {
-      self._joinedActivities = self._joinActivities();
-      self.updatePaletteSet();
+      self._joinActivities();
     });
 
     return this._lastFetch;
   },
 
+  //always does a fresh fetch on structures.
+  fetchStructuresWithActivities: function() {
+    this._joinedActivities = $.Deferred();
+    this.fetch();
+    return this._joinedActivities;
+  },
+
+  //doesn't encourage a fresh fetch
   getStructuresWithActivities: function() {
-    var self = this;
     if (this._joinedActivities) {
       return this._joinedActivities;
     } else {
-      var tmpDeferred = $.Deferred();
-      this.load().then(function() { self._joinedActivities.then(function() {tmpDeferred.resolve(); }); });
-      return tmpDeferred;
+      this._joinedActivities = $.Deferred();
+      this.load();
+      return this._joinedActivities;
     }
   },
 
-  parse: function(response) {
-    return response.features;
-  },
-
-  //TODO force / wait for activities to finish joining with filters...
+  // TODO force / wait for activities to finish joining with filters...
   _joinActivities: function() {
     var self = this;
-    var deferred = $.Deferred();
     var deferreds = [];
 
     this.activities.getActivities(this._getActivityIds()).then(function() {
 
-      //Do actual join
+      // Do actual join
       self.each(function(structure) {
-        //dirty way of checking if already a model...
+        // dirty way of checking if already a model...
         var activity = structure.get('activity');
-        //not joined yet
+        // not joined yet
         if (!(activity && activity.attributes)) {
           var match = self.activities.find(function(model) {
-            //intentionally double ==
-            return model.id ==  structure.get('activityZero'); //intentionally double ==
+            // intentionally double ==
+            return model.id ==  structure.get('activityZero'); // intentionally double ==
           });
 
-          structure.set('activity', match);
-          deferreds.push(match.getJoinedVersion());
-        } else {
-          console.log('activity already joined or DNE');
+          deferreds.push(match.tempDirtyForceJoin().then(function(){
+            structure.set('activity', match);
+          }));
         }
       });
 
-      //all activites joined filters
+      // all activites joined filters
       $.when(deferreds).then(function() {
-        deferred.resolve();
+        self.updatePaletteSet();
+        self._joinedActivities.resolve();
       });
     });
 
-    return deferred;
+    return self._joinedActivities;
   },
 
   _getActivityIds: function() {
@@ -161,7 +159,7 @@ module.exports = Backbone.Collection
     var self = this;
     var deferred = $.Deferred();
 
-    //load the necessary activities.
+    // load the necessary activities.
     this.getStructuresWithActivities().done(function() {
       var orgSites = self.chain()
         .groupBy(function(site) {
@@ -172,9 +170,12 @@ module.exports = Backbone.Collection
           if (!_.isEmpty(activity.get('matchesFilters')['Donor Id'])) {
             if (activity.get('matchesFilters')['Donor Id'].length > 1) {
               return 'Multiple Donors';
-            } else {
-              var donorName = (activity.get('matchesFilters')['Donor Id'][0].get ? activity.get('matchesFilters')['Donor Id'][0].get('name') : '');
+            } else if (activity.get('matchesFilters')['Donor Id'][0].get) {
+              var donorName = activity.get('matchesFilters')['Donor Id'][0].get('name');
               return donorName;
+            } else {
+              console.warn('matchFilters are not models.');
+              return '';
             }
           } else {
             console.warn('Activity is missing desired vertical');
@@ -202,6 +203,10 @@ module.exports = Backbone.Collection
     });
 
     return deferred;
+  },
+
+  parse: function(response) {
+    return response.features;
   }
 
 

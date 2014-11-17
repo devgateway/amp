@@ -28,7 +28,7 @@ module.exports = Backbone.Model
     this.listenTo(this, 'change:selected', function(other, show) {
       this.trigger(show ? 'show' : 'hide', this);
       if (!self.structuresCollection._lastFetch) {
-        self.structuresCollection.fetch();
+        self.structuresCollection.fetchStructuresWithActivities();
       }
     });
 
@@ -37,7 +37,7 @@ module.exports = Backbone.Model
 
   applyFilters: function() {
     if (this.get('selected')) {
-      this.structuresCollection.fetch();
+      this.structuresCollection.fetchStructuresWithActivities();
     }
   },
 

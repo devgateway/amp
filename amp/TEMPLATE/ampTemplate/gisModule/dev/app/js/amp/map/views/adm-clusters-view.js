@@ -89,9 +89,7 @@ module.exports = Backbone.View.extend({
 
   hideLayer: function(admLayer) {
     var leafletLayer = this.leafletLayerMap[admLayer.cid];
-    if (_.isUndefined(leafletLayer)) {
-      console.warn('cannot remove a layer that is not loaded...', admLayer);
-    } else {
+    if (leafletLayer) {
       this.map.removeLayer(leafletLayer);
     }
   },

@@ -30,7 +30,7 @@ module.exports = Backbone.View.extend({
     var self = this,
         loadedLayer = this.leafletLayerMap[layer.cid];
     if (loadedLayer === 'loading') {
-      console.warn('tried to show a layer that is currently loading (be patient :) )');
+      console.warn('tried to show a layer that is still loading, return');
       return;
     } else if (typeof loadedLayer === 'undefined') {
       this.leafletLayerMap[layer.cid] = 'loading';  // will be replaced in time...

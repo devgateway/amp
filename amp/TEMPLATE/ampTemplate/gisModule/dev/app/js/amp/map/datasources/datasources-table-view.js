@@ -17,12 +17,13 @@ module.exports = Backbone.View.extend({
   initialize: function(options) {
     this.app = options.app;
     this.collection = this.app.data.activities;
-    this.listenTo(this.app.data.filter, 'apply', this.applyFilters);
+    this.listenTo(this.app.data.filter, 'apply', this.refreshModel);
+    this.listenTo(this.app.data.settings, 'change:selected', this.refreshModel);
     _.bindAll(this, 'render');
   },
 
   // if filters change, fetch
-  applyFilters: function() {
+  refreshModel: function() {
     var self = this;
     this.collection.fetch().then(function() {
       self.render();

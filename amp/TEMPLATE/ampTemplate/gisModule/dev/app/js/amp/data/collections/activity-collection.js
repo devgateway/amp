@@ -26,7 +26,7 @@ module.exports = Backbone.Collection
   fetch: function(options) {
     var self = this;
     var payload = {otherFilters: {}};
-    var tempDeferred;
+    var activityFetch;
     var isFetchMore = false;
     var preserveURL = this.url;
 
@@ -45,7 +45,7 @@ module.exports = Backbone.Collection
       payload.settings = this.appData.settings.serialize();
     }
 
-    /* TODO: These will always need to be reset when you do a raw fetch
+    /* These will always need to be reset when you do a raw fetch
      * like for new filters or settings
      **/
     if (options && options.isFetchMore) {
@@ -57,12 +57,14 @@ module.exports = Backbone.Collection
 
     /* Only use pagination if _pageSize is positive */
     if (this._pageSize > 0) {
+
       /* POST payload-specified size and start are currently ignored by API but
        * they would be cleaner than modifing and restoring the URL
-       **/
-
-      /* payload.size = this._pageSize;
-      payload.start = this._currentStartPosition; */
+       */
+      /*
+       * payload.size = this._pageSize;
+       * payload.start = this._currentStartPosition;
+       */
 
       this.url = ['/rest/gis/activities?start=', this._currentStartPosition, '&size=', this._pageSize].join('');
     }
@@ -72,11 +74,12 @@ module.exports = Backbone.Collection
       data: JSON.stringify(payload)
     });
 
-    tempDeferred = Backbone.Collection.prototype.fetch.call(this, options);
+    activityFetch = Backbone.Collection.prototype.fetch.call(this, options);
 
     /* If enabled, maintain the pagination state even on errors */
     if (self._pageSize > 0) {
-      tempDeferred.then(function() {
+
+      activityFetch.then(function() {
           /* On the very first page request, advance if succeeds */
           if (options && !options.isFetchMore) {
             self._currentStartPosition += self._pageSize;
@@ -87,10 +90,11 @@ module.exports = Backbone.Collection
           self._currentStartPosition -= self._pageSize;
         }
       });
+
       this.url = preserveURL;
     }
 
-    return tempDeferred;
+    return activityFetch;
   },
 
   /* Used for pagination */

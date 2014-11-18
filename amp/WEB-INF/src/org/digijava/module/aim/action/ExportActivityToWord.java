@@ -1526,8 +1526,11 @@ public class ExportActivityToWord extends Action {
 							null, false).setWidth(100f).setAlign("left");
 					eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
 							"Name", null, null, true).addRowData(struc.getTitle()));
-					eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
-							"Type", null, null, true).addRowData(struc.getType().getName()));
+					String typeName = "";
+					if (struc.getType() != null) 
+						typeName = struc.getType().getName();	
+					eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Type", null, null, true).addRowData(typeName));
+					
 					eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
 							"Description", null, null, true).addRowData(struc
 							.getDescription()));

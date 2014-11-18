@@ -297,7 +297,13 @@ public class SimpleSQLPatcher {
 					"DROP TABLE IF EXISTS mondrian_fact_table",
 					"DROP TABLE IF EXISTS mondrian_exchange_rates"
 					));
+			//dropping the table so hibernate creates the sequence correctly
+			//this is a not yet implemented feature
 			
+			addPatch(new SimpleSQLPatch("009",
+					"DROP TABLE IF EXISTS amp_api_state",
+					"DROP SEQUENCE IF EXISTS amp_map_state_seq"
+					));
 	}};
 	DataSource dataSource;
 	

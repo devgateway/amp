@@ -1,4 +1,4 @@
-define([ 'jquery', 'jqueryui', 'jqgrid' ], function(jQuery) {
+define([ 'numeral', 'jquery', 'jqueryui', 'jqgrid' ], function(Numeral, jQuery) {
 
 	"use strict";
 
@@ -85,6 +85,127 @@ define([ 'jquery', 'jqueryui', 'jqgrid' ], function(jQuery) {
 			console.error(err);
 		}
 	};
+
+	/**
+	 * Convert a float number to its string representation with the format from
+	 * settings.
+	 */
+	TabUtils.numberToString = function(number, settings) {
+		var auxSettings = extractSettings(settings);
+		var format = "";
+		var stringNumber = null;
+
+		// Create the formatting string to be applied.
+		if (auxSettings.useGrouping) {
+			format = "0" + auxSettings.currentThousandSeparator + "0";
+		}
+		if (auxSettings.maxDecimalDigits > 0) {
+			format = format + auxSettings.currentDecimalSeparator + new Array(auxSettings.maxDecimalDigits + 1).join("0");
+		}
+		// Define a new "language" for Numeral where we can change the default
+		// delimiters.
+		Numeral.language('amp', createLanguage(auxSettings));
+		// Apply new language.
+		Numeral.language('amp');
+		// Apply the format.
+		Numeral.defaultFormat = format;
+		stringNumber = new Numeral(number).format();
+		return stringNumber;
+	};
+
+	TabUtils.stringToNumber = function(stringNumber, settings) {
+		var auxSettings = extractSettings(settings);
+		var format = "";
+		var number = null;
+
+		// Create the formatting string to be applied.
+		if (auxSettings.useGrouping) {
+			format = "0" + auxSettings.currentThousandSeparator + "0";
+		}
+		if (auxSettings.maxDecimalDigits > 0) {
+			format = format + auxSettings.currentDecimalSeparator + new Array(auxSettings.maxDecimalDigits + 1).join("0");
+		}
+		// Define a new "language" for Numeral where we can change the default
+		// delimiters.
+		Numeral.language('amp', createLanguage(auxSettings));
+		// Apply new language.
+		Numeral.language('amp');
+		// Apply the format.
+		Numeral.defaultFormat = format;
+		number = new Numeral().unformat(stringNumber);
+		return number;
+	};
+
+	function extractSettings(settings) {
+		var options = {
+			currentThousandSeparator : null,
+			currentDecimalSeparator : null,
+			useGrouping : false,
+			maxDecimalDigits : 0,
+			groupSize : 0
+		};
+		// Extract the values we need to format numbers from tab's settings.
+		_.each(settings, function(item, i) {
+			if (item.get('id') === "amountFormat") {
+				_.each(item.get('value').models, function(item2, j) {
+					switch (item2.get('id')) {
+					case "decimalSymbol":
+						var decimalSymbolName = item2.get('value').get('defaultId');
+						options.currentDecimalSeparator = _.find(item2.get('value').get('options').models, function(item3) {
+							return item3.get('id') === decimalSymbolName;
+						});
+						options.currentDecimalSeparator = options.currentDecimalSeparator.get('value');
+						break;
+					case "maxFracDigits":
+						var maxDecimalDigitsName = item2.get('value').get('defaultId');
+						options.maxDecimalDigits = _.find(item2.get('value').get('options').models, function(item3) {
+							return item3.get('id') === maxDecimalDigitsName;
+						});
+						options.maxDecimalDigits = parseInt(options.maxDecimalDigits.get('value'));
+						break;
+					case "useGrouping":
+						options.useGrouping = item2.get('value');
+						break;
+					case "groupSize":
+						options.groupSize = item2.get('value');
+						break;
+					case "groupSeparator":
+						var currentThousandSeparatorName = item2.get('value').get('defaultId');
+						options.currentThousandSeparator = _.find(item2.get('value').get('options').models, function(item3) {
+							return item3.get('id') === currentThousandSeparatorName;
+						});
+						options.currentThousandSeparator = options.currentThousandSeparator.get('value');
+						break;
+					}
+					;
+				});
+			}
+			;
+		});
+		return options;
+	}
+
+	function createLanguage(auxSettings) {
+		var ret = {
+			delimiters : {
+				thousands : auxSettings.currentThousandSeparator,
+				decimal : auxSettings.currentDecimalSeparator
+			},
+			abbreviations : {
+				thousand : 'k',
+				million : 'm',
+				billion : 'b',
+				trillion : 't'
+			},
+			ordinal : function(number) {
+				return number === 1 ? 'st' : 'rds';
+			},
+			currency : {
+				symbol : '$'
+			}
+		};
+		return ret;
+	}
 
 	TabUtils.prototype = {
 		constructor : TabUtils

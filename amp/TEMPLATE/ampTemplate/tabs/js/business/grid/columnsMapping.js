@@ -1,4 +1,4 @@
-define(function() {
+define([ 'util/tabUtils' ], function(TabUtils) {
 
 	"use strict";
 
@@ -120,10 +120,33 @@ define(function() {
 				name : item.get('measureName'),
 				width : 110,
 				fixed : true,
-				summaryType : 'sum',
+				summaryType : function(val, name, record) {
+					// This function is called only when the group summary is
+					// calculated.
+					// HOW IT WORKS: In order to display all numbers with the
+					// format used by the backend we use 'displayedValue' for
+					// the measures column, but that value is a string, so in
+					// order to calculate the SUM for each group we have to
+					// convert it back to its float representation, make the sum
+					// and convert it to string again (respecting the backend
+					// format).
+					var currentVal = -1;
+					if (val != undefined && val != null && typeof (val) === 'string' && val != "") {
+						val = TabUtils.stringToNumber(val, app.TabsApp.numericFormatOptions);
+					}
+					currentVal = record[name];
+					currentVal = TabUtils.stringToNumber(currentVal, app.TabsApp.numericFormatOptions);
+					currentVal = currentVal + val;
+					return TabUtils.numberToString(currentVal, app.TabsApp.numericFormatOptions);
+				},
 				align : "right",
 				sorttype : 'number',
-				formatter : 'number',
+				unformat : function(data) {
+					// This function is called automatically on 'getCol'. No
+					// need to implement the related function 'format' since we
+					// get the raw value formatted from the backend.
+					return TabUtils.stringToNumber(data, app.TabsApp.numericFormatOptions);
+				},
 				reportColumnType : 'MEASURE'
 			});
 		});

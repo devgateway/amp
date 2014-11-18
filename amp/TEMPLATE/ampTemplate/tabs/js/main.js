@@ -6,7 +6,7 @@ require.config({
 		underscore : 'lib/backbone.marionette/underscore',
 		jquery : 'lib/jquery_1.10.2',
 		jqueryui : 'lib/jquery-ui.min_1.11.0',
-		marionette : 'lib/backbone.marionette/backbone.marionette',
+		marionette : 'lib/backbone.marionette/backbone.marionette.min',
 		text : 'lib/text_2.0.12',
 		localStorage : 'lib/Backbone.localStorage-master/backbone.localStorage-min',
 		documentModel : 'lib/backbone-documentmodel-master/backbone-documentmodel',
@@ -17,7 +17,8 @@ require.config({
 		 */
 		jqgrid : 'lib/one_place/jqgrid-all',
 		filtersWidget : '/TEMPLATE/ampTemplate/node_modules/amp-filter/dist/amp-filter',
-		i18next : '//cdnjs.cloudflare.com/ajax/libs/i18next/1.6.3/i18next-1.6.3.min'
+		i18next : '//cdnjs.cloudflare.com/ajax/libs/i18next/1.6.3/i18next-1.6.3.min',
+		numeral : '//cdnjs.cloudflare.com/ajax/libs/numeral.js/1.4.5/numeral.min'
 	},
 	shim : {
 		underscore : {
@@ -52,6 +53,9 @@ require.config({
 		},
 		i18next : {
 			deps : [ 'jquery' ]
+		},
+		numeral : {
+			exports : 'numeral'
 		}
 	}
 });

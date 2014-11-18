@@ -1,5 +1,5 @@
-define([ 'business/grid/columnsMapping', 'business/translations/translationManager', 'jqgrid' ], function(columnsMapping,
-		TranslationManager) {
+define([ 'business/grid/columnsMapping', 'business/translations/translationManager', 'util/tabUtils' ], function(columnsMapping,
+		TranslationManager, TabUtils) {
 
 	"use strict";
 
@@ -69,6 +69,10 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 		var pager = jQuery("#tab_grid_pager");
 		jQuery(pager).attr("id", gridPagerBaseName + id);
 
+		// IMPORTANT NOTE: We need to call jqgrid this way because using the
+		// standar require way will generate side effects like grouping buttons
+		// stop working, the drawback is the client can not cache the jqgrid
+		// library.
 		$.getScript("/TEMPLATE/ampTemplate/tabs/js/lib/one_place/jqgrid-all.js", function(data, textStatus, jqxhr) {
 			var rowNum = 0;
 			var colModel = columnsMapping.createJQGridColumnModel(tableStructure);
@@ -230,7 +234,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									// TODO: Replace this js sum with data from
 									// the endpoint.
 									var sum = jQuery(grid).jqGrid('getCol', item.name, false, 'sum');
-									colData[item.name] = sum;
+									colData[item.name] = TabUtils.numberToString(sum, app.TabsApp.numericFormatOptions);
 									totalColumnIndex--;
 								}
 							});
@@ -342,8 +346,8 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 						colName = findInMapByColumnName(key, 'hierarchicalName').originalColumnName;
 					}
 					if (colName != undefined && colName != null) {
-						if (element.value != null && element.value.toString().length > 0) {
-							row[colName] = element.value;
+						if (element.displayedValue != null && element.displayedValue.toString().length > 0) {
+							row[colName] = element.displayedValue;
 						} else {
 							row[colName] = getParentContent(key, parent);
 						}

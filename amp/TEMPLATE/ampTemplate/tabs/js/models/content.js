@@ -19,13 +19,14 @@ define([ 'underscore', 'backbone', 'documentModel' ], function(_, Backbone, Docu
 		defaults : {
 			reportMetadata : {
 				name : '',
-				reportSpec : {					
+				reportSpec : {
 					filters : {
 						filterRules : {
-							
+
 						}
 					}
-				}
+				},
+				settings : []
 			}
 		}
 	});

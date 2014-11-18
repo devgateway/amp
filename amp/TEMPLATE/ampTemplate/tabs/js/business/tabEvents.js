@@ -1,12 +1,11 @@
 /*https://gist.github.com/jonnyreeves/2474026*/
 /*https://github.com/icereval/backbone-documentmodel*/
 
-define([ 'marionette', 'collections/contents', 'models/content', 'models/legend', 'views/dynamicContentView',
-		'text!views/html/filtersWrapperTemplate.html', 'text!views/html/filtersItemTemplate.html', 'models/tab',
-		'text!views/html/invisibleTabLinkTemplate.html', 'text!views/html/legendsTemplate.html', 'business/grid/gridManager',
-		'business/translations/translationManager', 'business/filter/filterUtils', 'jquery', 'jqueryui' ], function(Marionette, Contents,
-		Content, Legend, DynamicContentView, filtersTemplate, filtersItemTemplate, Tab, invisibleTabLinkTemplate, legendsTemplate,
-		gridManager, TranslationManager, FilterUtils, jQuery) {
+define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentView', 'text!views/html/filtersWrapperTemplate.html',
+		'text!views/html/filtersItemTemplate.html', 'models/tab', 'text!views/html/invisibleTabLinkTemplate.html',
+		'text!views/html/legendsTemplate.html', 'business/grid/gridManager', 'business/translations/translationManager',
+		'business/filter/filterUtils', 'jquery', 'jqueryui' ], function(Marionette, Content, Legend, DynamicContentView, filtersTemplate,
+		filtersItemTemplate, Tab, invisibleTabLinkTemplate, legendsTemplate, gridManager, TranslationManager, FilterUtils, jQuery) {
 
 	"use strict";
 
@@ -73,6 +72,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'models/legend'
 				"2" : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('ampFiscalCalId'),
 				"1" : firstContent.get('reportMetadata').get('reportSpec').get('settings').get('currencyCode')
 			};
+			app.TabsApp.numericFormatOptions = firstContent.get('reportMetadata').get('settings').models;
 
 			// Render views.
 			var dynamicLayoutView = new DynamicContentView({
@@ -150,6 +150,7 @@ define([ 'marionette', 'collections/contents', 'models/content', 'models/legend'
 			app.TabsApp.appliedSettings = null;
 			app.TabsApp.currentGrid = null;
 			app.TabsApp.currentTab = null;
+			app.TabsApp.numericFormatOptions = null;
 
 			// TODO: move this logic elsewhere.
 			var panel = null;

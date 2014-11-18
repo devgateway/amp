@@ -89,6 +89,10 @@
   <http pattern="/TEMPLATE/ampTemplate/gisModule/dev/**" security="none" />
   <http pattern="/TEMPLATE/ampTemplate/gisModule/**" security="none" />
 
+	<http pattern="/TEMPLATE/ampTemplate/dashboard/**" security="none" />
+	<http pattern="/TEMPLATE/ampTemplate/dashboard/build/**" security="none" />
+
+
 	<http pattern="/saiku/rest/**" security="none" />
     <http pattern="/TEMPLATE/ampTemplate/saikuui/**" security="none" />
 

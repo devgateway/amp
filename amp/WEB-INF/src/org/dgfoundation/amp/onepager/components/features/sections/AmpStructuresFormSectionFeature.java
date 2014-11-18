@@ -137,6 +137,14 @@ public class AmpStructuresFormSectionFeature extends
 				
 				ListEditorRemoveButton delbutton = new ListEditorRemoveButton("deleteStructure", "Delete Structure");
 				item.add(delbutton);
+				
+				final AmpAjaxLinkField openMapPopup = new AmpAjaxLinkField("openMapPopup", "Map", "Map") {
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						target.appendJavaScript("gisPopup($('#"+this.getMarkupId()+"')[0]); return false;");
+			  	}
+				};
+				item.add(openMapPopup);	
 			}
 		};
 		add(list);
@@ -162,6 +170,10 @@ public class AmpStructuresFormSectionFeature extends
 			}
 		};
 		add(addbutton);
+		
+		
 	}
+	
+	
 
 }

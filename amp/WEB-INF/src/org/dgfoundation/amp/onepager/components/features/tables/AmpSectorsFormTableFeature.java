@@ -179,7 +179,7 @@ public class AmpSectorsFormTableFeature extends
 					@Override
 					protected void onAjaxOnUpdate(
 							AjaxRequestTarget target) {
-						// TODO Auto-generated method stub
+						super.onAjaxOnUpdate(target);
 						target.add(totalLabel);
 					}
 				};

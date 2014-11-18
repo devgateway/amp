@@ -389,7 +389,7 @@ public class LocationService {
 						.toString();
 				if (reportOutputColumn.originalColumnName
 						.equals(ColumnConstants.GEOCODE)) {
-					if(columnValue==null || columnValue.equals("Undefined")|| columnValue.equals("")){
+					if(columnValue==null || columnValue.equals("Undefined")|| columnValue.equals("") || columnValue.equals("GeoId: Undefined")){
 						return;
 					}
 					geoCodesId.add(columnValue);

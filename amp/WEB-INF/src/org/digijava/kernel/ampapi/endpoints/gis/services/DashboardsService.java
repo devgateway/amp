@@ -231,22 +231,24 @@ public class DashboardsService {
 		GeneratedReport report = generator.executeReport(spec);
 		Map<Integer, JSONObject> results = new TreeMap<>(); // accumulator of per-year results
 				
-		for (ReportOutputColumn outputColumn:report.reportContents.getContents().keySet()) {
-			// ignore non-funding contents
-			if (outputColumn.parentColumn == null) {
-				continue;
-			}
+		if (report.reportContents.getContents()!=null) {
+			 for (ReportOutputColumn outputColumn:report.reportContents.getContents().keySet()) {
+				// ignore non-funding contents
+				if (outputColumn.parentColumn == null) {
+					continue;
+				}
+					
+				boolean isPlannedColumn = outputColumn.originalColumnName.equals(MoConstants.PLANNED_DISBURSEMENTS);
+				boolean isTotalColumn = outputColumn.parentColumn != null && outputColumn.parentColumn.originalColumnName.equals("Total Measures");
+				String destination = isPlannedColumn ? "planned" : "actual";
 				
-			boolean isPlannedColumn = outputColumn.originalColumnName.equals(MoConstants.PLANNED_DISBURSEMENTS);
-			boolean isTotalColumn = outputColumn.parentColumn != null && outputColumn.parentColumn.originalColumnName.equals("Total Measures");
-			String destination = isPlannedColumn ? "planned" : "actual";
-			
-			int yearNr = isTotalColumn ? 0 : Integer.parseInt(outputColumn.parentColumn.columnName);
-			if (!results.containsKey(yearNr))
-				results.put(yearNr, buildEmptyJSon("planned", "actual"));
-			JSONObject amountObj = results.get(yearNr);
-
-			amountObj.put(destination, report.reportContents.getContents().get(outputColumn).value);
+				int yearNr = isTotalColumn ? 0 : Integer.parseInt(outputColumn.parentColumn.columnName);
+				if (!results.containsKey(yearNr))
+					results.put(yearNr, buildEmptyJSon("planned", "actual"));
+				JSONObject amountObj = results.get(yearNr);
+	
+				amountObj.put(destination, report.reportContents.getContents().get(outputColumn).value);
+			}
 		}
 		JSONArray yearsArray = new JSONArray ();
 		for(int yearNr:results.keySet())

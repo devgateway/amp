@@ -8,6 +8,7 @@ import junit.framework.TestSuite;
 import org.dgfoundation.amp.ar.amp210.BasicMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.DateColumnsMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.ETLTests;
+import org.dgfoundation.amp.ar.amp210.EndpointsTests;
 import org.dgfoundation.amp.ar.amp210.FiltersMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.LocationMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.MondrianSummaryReportTests;
@@ -47,6 +48,8 @@ public class AllTests_amp210
 		suite.addTest(new JUnit4TestAdapter(LocationMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(OrganisationsMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(SqlFilterUtilsTests.class));
+		suite.addTest(new JUnit4TestAdapter(EndpointsTests.class));
+		
 		//$JUnit-BEGIN$
 
 		//$JUnit-END$

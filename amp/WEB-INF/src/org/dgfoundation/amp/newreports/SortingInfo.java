@@ -133,7 +133,7 @@ public class SortingInfo {
 	 */
 	public static void addYearToSorting(LinkedHashMap<ReportElement, FilterRule> sortByTuple, String year) {
 		if (year != null)
-			sortByTuple.put(new ReportElement(ElementType.YEAR), new FilterRule(year, true, false));
+			sortByTuple.put(new ReportElement(ElementType.YEAR), new FilterRule(year, true));
 	}
 	
 	/**
@@ -143,7 +143,7 @@ public class SortingInfo {
 	 */
 	public static void addQuarterToSorting(LinkedHashMap<ReportElement, FilterRule> sortByTuple, String quarter) {
 		if (quarter != null)
-			sortByTuple.put(new ReportElement(ElementType.QUARTER), new FilterRule(quarter, true, false));
+			sortByTuple.put(new ReportElement(ElementType.QUARTER), new FilterRule(quarter, true));
 	}
 	
 	/**
@@ -153,6 +153,6 @@ public class SortingInfo {
 	 */
 	public static void addMonthToSorting(LinkedHashMap<ReportElement, FilterRule> sortByTuple, String month) {
 		if (month != null)
-			sortByTuple.put(new ReportElement(ElementType.MONTH), new FilterRule(month, true, false));
+			sortByTuple.put(new ReportElement(ElementType.MONTH), new FilterRule(month, true));
 	}
 }

@@ -157,7 +157,7 @@ public class DateTimeUtil {
 		return String.valueOf(toJulianDayNumber(date));
 	}
 	
-	public static String fromatDateOrNull(Date date) {
+	public static String formatDateOrNull(Date date) {
 		if (date == null) return null;
 		return formatDate(date);
 	}

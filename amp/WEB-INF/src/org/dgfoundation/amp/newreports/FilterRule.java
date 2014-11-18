@@ -30,8 +30,6 @@ public class FilterRule {
 	};
 	/** filter rule type of {@link FilterType}, always not null */
 	public final FilterType filterType;
-	/** true if values configured in the filter are for ids or for actual values */
-	public final boolean isIdFilter;
 	/** single value/id filter or null */
 	public final String value;
 	/** min of the range or null */
@@ -57,13 +55,13 @@ public class FilterRule {
 	 * @param maxInclusive - if true and 'max' is specified, then 'max' is an inclusive limit of the range
 	 * @param isIdRange - whether (min,max) is a range of ids or a range of values
 	 */
-	public FilterRule(String min, String max, boolean minInclusive, boolean maxInclusive, boolean isIdRange) {
-		this(min, max, null, null, minInclusive, maxInclusive, isIdRange);
+	public FilterRule(String min, String max, boolean minInclusive, boolean maxInclusive) {
+		this(min, max, null, null, minInclusive, maxInclusive);
 	}
 	
 	public FilterRule(String min, String max, String minName, String maxName, 
-			boolean minInclusive, boolean maxInclusive, boolean isIdRange) {
-		this(FilterType.RANGE, isIdRange, null, null, min, max, minName, maxName, minInclusive, maxInclusive, null, null, false);
+			boolean minInclusive, boolean maxInclusive) {
+		this(FilterType.RANGE, null, null, min, max, minName, maxName, minInclusive, maxInclusive, null, null, false);
 	}
 
 	/**
@@ -72,8 +70,8 @@ public class FilterRule {
 	 * @param valuesInclusive - true if only these values are allowed, false if these values are not allowed
 	 * @param isIdList - true if this is a list of ids, false if this is a list of values
 	 */
-	public FilterRule(List<String> values, boolean valuesInclusive, boolean isIdList) {
-		this(null, values, valuesInclusive, isIdList);
+	public FilterRule(List<String> values, boolean valuesInclusive) {
+		this(null, values, valuesInclusive);
 	}
 
 	/**
@@ -84,8 +82,8 @@ public class FilterRule {
 	 * @param valuesInclusive - true if only this values are allowed, flase if this values are not allowed
 	 * @param isIdList - true if this is a list of ids, false if this is a list of values
 	 */
-	public FilterRule(List<String> names, List<String> values, boolean valuesInclusive, boolean isIdList) {
-		this(FilterType.VALUES, isIdList, null, null, null, null, null, null, false, false, values, names, valuesInclusive);
+	public FilterRule(List<String> names, List<String> values, boolean valuesInclusive) {
+		this(FilterType.VALUES, null, null, null, null, null, null, false, false, values, names, valuesInclusive);
 	}
 	
 	/**
@@ -94,53 +92,18 @@ public class FilterRule {
 	 * @param valueToInclude - true if this value must be kept, false if it must be excluded
 	 * @param isId - true if this is an Id, false if this is a value
 	 */
-	public FilterRule(String value, boolean valueToInclude, boolean isId) {
-		this(value, null, valueToInclude, isId);
+	public FilterRule(String value, boolean valueToInclude) {
+		this(value, null, valueToInclude);
 	}
 	
-	public FilterRule(String value, String name, boolean valueToInclude, boolean isId) {
-		this(FilterType.SINGLE_VALUE, isId, value, name, null, null, null, null, true, true, null, null, valueToInclude);
-	}
-
-	/**
-	 * clones the field, inverting the "id" field
-	 * @return
-	 */
-	public FilterRule invertClone() {
-		return new FilterRule(this.filterType, true, this.value, this.min, this.max, this.values, this.valueToName, this.minInclusive, this.maxInclusive, this.valuesInclusive);
+	public FilterRule(String value, String name, boolean valueToInclude) {
+		this(FilterType.SINGLE_VALUE, value, name, null, null, null, null, true, true, null, null, valueToInclude);
 	}
 	
-	/**
-	 * 
-	 * @param filterType
-	 * @param isIdFilter
-	 * @param value
-	 * @param min
-	 * @param max
-	 * @param values
-	 * @param valueToName
-	 * @param minInclusive
-	 * @param maxInclusive
-	 * @param valuesInclusive
-	 */
-	private FilterRule(FilterType filterType, boolean isIdFilter, String value, String min, String max, List<String> values, Map<String, String> valueToName, boolean minInclusive, boolean maxInclusive, boolean valuesInclusive) {
-		this.filterType = filterType;
-		this.isIdFilter = isIdFilter;
-		this.value = value;
-		this.min = min;
-		this.max = max;
-		this.values = values;
-		this.valueToName.putAll(valueToName);
-		this.minInclusive = minInclusive;
-		this.maxInclusive = maxInclusive;
-		this.valuesInclusive = valuesInclusive;
-	}
-	
-	private FilterRule(FilterType filterType, boolean isIdFilter, String value, String name, 
+	private FilterRule(FilterType filterType, String value, String name, 
 			String min, String max, String minName, String maxName, boolean minInclusive, boolean maxInclusive, 
 			List<String> values, List<String> names, boolean valuesInclusive) {
 		this.filterType = filterType;
-		this.isIdFilter = isIdFilter;
 		this.value = value;
 		this.min = min;
 		this.max = max;
@@ -176,9 +139,9 @@ public class FilterRule {
 	@Override
 	public String toString() {
 		switch(filterType) {
-		case RANGE: return "FilterRule=RANGE, " + (minInclusive ? "[" : "(") + min + " : " + max + (maxInclusive ? "]" : ")") + ", isIdFilter=" + isIdFilter;
-		case SINGLE_VALUE: return "FilterRule=SINGLE_VALUE, value=" + value + ", isIdFilter=" + isIdFilter;
-		case VALUES: return "FilterRule=VALUES, values=" + values + ", isIdFilter=" + isIdFilter;
+		case RANGE: return "FilterRule=RANGE, " + (minInclusive ? "[" : "(") + min + " : " + max + (maxInclusive ? "]" : ")");
+		case SINGLE_VALUE: return "FilterRule=SINGLE_VALUE, value=" + value;
+		case VALUES: return "FilterRule=VALUES, values=" + values;
 		default: return "FilterRule=N/A";
 		}
 	}

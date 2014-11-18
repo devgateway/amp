@@ -437,11 +437,11 @@ public class MondrianReportGenerator implements ReportExecutor {
 				MDXFilter mdxFilter = null;
 				
 				switch(filter.filterType) {
-				case RANGE: mdxFilter = new MDXFilter(filter.min, filter.minInclusive, filter.max, filter.maxInclusive, filter.isIdFilter); 
+				case RANGE: mdxFilter = new MDXFilter(filter.min, filter.minInclusive, filter.max, filter.maxInclusive); 
 				break;
-				case SINGLE_VALUE: mdxFilter = new MDXFilter(filter.value, filter.valuesInclusive, filter.isIdFilter);
+				case SINGLE_VALUE: mdxFilter = new MDXFilter(filter.value, filter.valuesInclusive);
 				break;
-				case VALUES: mdxFilter = new MDXFilter(filter.values, filter.valuesInclusive, filter.isIdFilter);
+				case VALUES: mdxFilter = new MDXFilter(filter.values, filter.valuesInclusive);
 				break;
 				}
 				

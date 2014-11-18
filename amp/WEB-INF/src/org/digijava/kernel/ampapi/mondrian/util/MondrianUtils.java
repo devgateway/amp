@@ -189,7 +189,7 @@ public class MondrianUtils {
 	public static FilterRule getDateRangeFilterRule(Date from, Date to) throws AmpApiException {
 		return getDatesRangeFilterRule(ElementType.DATE,  
 				DateTimeUtil.toJulianDayNumber(from), DateTimeUtil.toJulianDayNumber(to), 
-				DateTimeUtil.fromatDateOrNull(from), DateTimeUtil.fromatDateOrNull(to), false);
+				DateTimeUtil.formatDateOrNull(from), DateTimeUtil.formatDateOrNull(to), false);
 	}
 	
 	private static FilterRule getDatesRangeFilterRule(ElementType elemType, Integer from, Integer to, 
@@ -202,7 +202,7 @@ public class MondrianUtils {
 			throw new AmpApiException("The lower limit 'from' must be smaller or equal to the upper limit 'to'. Failed request for from = " + from + ", to = " + to);
 		if (to == null)
 			to = MoConstants.UNDEFINED_KEY - 1; //to skip undefined dates
-		return new FilterRule(toStringOrNull(from), toStringOrNull(to), fromName, toName, true, true, true);
+		return new FilterRule(toStringOrNull(from), toStringOrNull(to), fromName, toName, true, true);
 	}
 	
 	/**
@@ -264,7 +264,7 @@ public class MondrianUtils {
 		List<String> dateStrList = new ArrayList<String>(dates.size());
 		for (Date date : dates) {
 			julianDateNumbers.add(DateTimeUtil.toJulianDayNumber(date));
-			dateStrList.add(DateTimeUtil.fromatDateOrNull(date));
+			dateStrList.add(DateTimeUtil.formatDateOrNull(date));
 		}
 		return getDatesListFilterRule(ElementType.DATE, julianDateNumbers, dateStrList, valuesToInclude);
 	}
@@ -276,7 +276,7 @@ public class MondrianUtils {
 			validate(elemType, value);
 			strValues.add(value == null ? null : value.toString());
 		}
-		return new FilterRule(names, strValues, valuesToInclude, true);
+		return new FilterRule(names, strValues, valuesToInclude);
 	}
 	
 	/**
@@ -323,7 +323,7 @@ public class MondrianUtils {
 	 */
 	public static FilterRule getSingleDateFilterRule(Date date, boolean valueToInclude) throws AmpApiException {
 		return getSingleDateFilterRule(ElementType.DATE, DateTimeUtil.toJulianDayNumber(date), 
-				DateTimeUtil.fromatDateOrNull(date), valueToInclude);
+				DateTimeUtil.formatDateOrNull(date), valueToInclude);
 	}
 	
 	private static FilterRule getSingleDateFilterRule(ElementType elemType, Integer value, 
@@ -331,7 +331,7 @@ public class MondrianUtils {
 		validate (elemType, value);
 		if (value == null)
 			throw new AmpApiException("Single value filter must have a value specified. value = " + value);
-		return new FilterRule(value.toString(), name, valueToInclude, true);
+		return new FilterRule(value.toString(), name, valueToInclude);
 	}
 	
 	private static void validate(ElementType elemType, Integer value) throws AmpApiException {

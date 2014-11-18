@@ -69,7 +69,7 @@ public class FilterUtils {
 				if (entry.getValue() instanceof List) {
 					List<String> ids = getStringFromIntegerArray((List<Integer>) filter.get(entry.getKey()));
 					filterRules.addFilterRule(new ReportColumn(entry.getKey()),
-							new FilterRule(ids, true, true)); 
+							new FilterRule(ids, true)); 
 				} 
 			}
 		}
@@ -117,7 +117,7 @@ public class FilterUtils {
 			}
 
 			filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY), 
-					new FilterRule(activityIds, true, true)); 
+					new FilterRule(activityIds, true)); 
 
 		}
 		return filterRules;

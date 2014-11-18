@@ -139,14 +139,15 @@ public class LocationService {
 			}
  		}
 		AmpCategoryValueLocations country = DynLocationManagerUtil.getDefaultCountry();
-		
-		if(admlevel.equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey())){
-			filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.COUNTRY, ReportEntityType.ENTITY_TYPE_ACTIVITY), 
-					new FilterRule(country.getName(), true, false));
-		}
+
+		// code below disabled because filter-by-value not supported anymore; also this column will be redefined because of AMP-18736
+//		if(admlevel.equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey())){
+//			filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.COUNTRY, ReportEntityType.ENTITY_TYPE_ACTIVITY), 
+//					new FilterRule(country.getName(), true, false));
+//		}
 		
 		filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.IMPLEMENTATION_LEVEL, ReportEntityType.ENTITY_TYPE_ACTIVITY), 
-				new FilterRule(admLevelId, true, true));
+				new FilterRule(admLevelId, true));
 		spec.setFilters(filterRules);
 		
 		EndpointUtils.applySettings(spec, filter);

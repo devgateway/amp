@@ -85,7 +85,7 @@ public class MDXTests extends AmpTestCase {
 	public void testDataSingleValueFilter() {
 		String expectedRes = null;
 		MDXConfig config = getDefaultConfig("testDataSingleValueFilter", true);
-		config.addDataFilter(new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR), new MDXFilter("2014", true, true));
+		config.addDataFilter(new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR), new MDXFilter("2014", true));
 		generateAndValidateMDX(config, expectedRes, false);
 	}
 	
@@ -105,7 +105,7 @@ public class MDXTests extends AmpTestCase {
 	
 	private void addSimpleFilter(MDXConfig config) {
 		MDXAttribute attrYear = new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR);
-		MDXFilter filter = new MDXFilter(Arrays.asList("2010", "2012"), true, true);
+		MDXFilter filter = new MDXFilter(Arrays.asList("2010", "2012"), true);
 		config.addDataFilter(attrYear, filter);
 	}
 
@@ -113,7 +113,7 @@ public class MDXTests extends AmpTestCase {
 		String expectedRes = null;
 		MDXConfig config = getDefaultConfig("testRangeFilter", true);
 		MDXAttribute attrYear = new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR);
-		MDXFilter filter = new MDXFilter("2010", true, "2012", true, true);
+		MDXFilter filter = new MDXFilter("2010", true, "2012", true);
 		config.addDataFilter(attrYear, filter);
 		generateAndValidateMDX(config, expectedRes, false);
 	}
@@ -129,7 +129,7 @@ public class MDXTests extends AmpTestCase {
 		MDXAttribute attrDate = new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, MoConstants.ATTR_DATE);
 		String julianDateStart = DateTimeUtil.toJulianDayString(Date.valueOf("2009-01-01"));
 		String julianDateEnd = DateTimeUtil.toJulianDayString(Date.valueOf("2009-05-31")); //2009-05-31 doesn't exist in Moldova DB, but filter should work without date member
-		MDXFilter filter = new MDXFilter(julianDateStart, true, julianDateEnd, true, true); 
+		MDXFilter filter = new MDXFilter(julianDateStart, true, julianDateEnd, true); 
 		config.addDataFilter(attrDate, filter);
 	}
 
@@ -151,9 +151,9 @@ public class MDXTests extends AmpTestCase {
 	
 	private void addMultipleDatesFilters(MDXConfig config) {
 		MDXAttribute attrYear = new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR);
-		MDXFilter filter = new MDXFilter("2010", true, "2011", true, true);
+		MDXFilter filter = new MDXFilter("2010", true, "2011", true);
 		config.addDataFilter(attrYear, filter);
-		MDXFilter filter2 = new MDXFilter(Arrays.asList("2013","2014"), true, true);
+		MDXFilter filter2 = new MDXFilter(Arrays.asList("2013","2014"), true);
 		config.addDataFilter(attrYear, filter2);
 		MDXLevel attrDate = new MDXLevel(MoConstants.DATES, MoConstants.H_DATES, "2005", "Q2");
 		config.addSingleValueFilters(attrDate);
@@ -164,7 +164,7 @@ public class MDXTests extends AmpTestCase {
 		String expectedRes = null;
 		MDXConfig config = getDefaultConfig("testSinglePropertyFilter", true);
 		MDXAttribute attrLocation = new MDXLevel(MoConstants.LOCATION, MoConstants.ATTR_LOCATION_NAME, MoConstants.ATTR_LOCATION_NAME);
-		MDXFilter filter = new MDXFilter("8977", true, true);
+		MDXFilter filter = new MDXFilter("8977", true);
 		config.addDataFilter(attrLocation, filter);
 		//runs 155sec if filtering on WHERE, vs 2sec when filtering directly on axis
 		generateAndValidateMDX(config, expectedRes, true); //running the query because cannot validate when properties are used
@@ -174,7 +174,7 @@ public class MDXTests extends AmpTestCase {
 		String expectedRes = null;
 		MDXConfig config = getDefaultConfig("testPropertiesListFilter", true);
 		MDXAttribute attrLocation = new MDXLevel(MoConstants.LOCATION, MoConstants.H_COUNTRIES, MoConstants.ATTR_COUNTRY_NAME);
-		MDXFilter filter = new MDXFilter(Arrays.asList("8977", "9015", "8857"), true, true);
+		MDXFilter filter = new MDXFilter(Arrays.asList("8977", "9015", "8857"), true);
 		config.addDataFilter(attrLocation, filter);
 		generateAndValidateMDX(config, expectedRes, true); //running the query because cannot validate when properties are used
 	}

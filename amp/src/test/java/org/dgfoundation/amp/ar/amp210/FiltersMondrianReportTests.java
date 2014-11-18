@@ -52,24 +52,24 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 		
 		// test filtering by the value of the id field
 		MondrianReportFilters filters = new MondrianReportFilters();
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR_ID), new FilterRule("6237", true, false));
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR_ID), new FilterRule("6257", true, false));
+		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR_ID), new FilterRule("6237", true));
+		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR_ID), new FilterRule("6257", true));
 		spec.setFilters(filters);
 		
 		runMondrianTestCase(spec, "en", Arrays.asList("activity with primary_program"), cor);
 		
 		// test filtering by the id of the id field
 		filters = new MondrianReportFilters();
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR_ID), new FilterRule("6237", true, true));
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR_ID), new FilterRule("6257", true, true));
+		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR_ID), new FilterRule("6237", true));
+		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR_ID), new FilterRule("6257", true));
 		spec.setFilters(filters);
 		
 		runMondrianTestCase(spec, "en", Arrays.asList("activity with primary_program"), cor);
 
 		// test filtering by the id of the value field
 		filters = new MondrianReportFilters();
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR), new FilterRule("6237", true, true));
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR), new FilterRule("6257", true, true));
+		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR), new FilterRule("6237", true));
+		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR), new FilterRule("6257", true));
 		spec.setFilters(filters);
 		
 		runMondrianTestCase(spec, "en", Arrays.asList("activity with primary_program"), cor);
@@ -169,7 +169,7 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 		
 		// test filtering by the value of the id field
 		MondrianReportFilters filters = new MondrianReportFilters();
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM), new FilterRule("2", true, true));
+		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM), new FilterRule("2", true));
 		spec.setFilters(filters);
 		
 		runMondrianTestCase(spec, "en", 
@@ -178,7 +178,7 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 		
 		// test filtering by the value of the id field
 		filters = new MondrianReportFilters();
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM), new FilterRule(Arrays.asList("2", "1"), true, true));
+		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM), new FilterRule(Arrays.asList("2", "1"), true));
 		spec.setFilters(filters);
 		
 		runMondrianTestCase(spec, "en", 
@@ -192,7 +192,7 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 	          .withContents("Project Title", "Activity with primary_tertiary_program", "Primary Program", "Subprogram p1.b", "2014-Actual Commitments", "25 000", "Total Measures-Actual Commitments", "25 000"));
 		
 		filters = new MondrianReportFilters();
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1), new FilterRule("3", true, true));
+		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1), new FilterRule("3", true));
 		spec.setFilters(filters);
 		
 		runMondrianTestCase(spec, "en", 
@@ -200,7 +200,7 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 				correctResult3);
 
 		filters = new MondrianReportFilters();
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1), new FilterRule(Arrays.asList("3", "3"), true, true));
+		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1), new FilterRule(Arrays.asList("3", "3"), true));
 		spec.setFilters(filters);
 		
 		runMondrianTestCase(spec, "en", 
@@ -208,7 +208,7 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 				correctResult3);
 
 		filters = new MondrianReportFilters();
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1_ID), new FilterRule("3", true, true));
+		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1_ID), new FilterRule("3", true));
 		spec.setFilters(filters);
 		
 		runMondrianTestCase(spec, "en", 
@@ -216,7 +216,7 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 				correctResult3);
 
 		filters = new MondrianReportFilters();
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1_ID), new FilterRule("3", true, false));
+		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1_ID), new FilterRule("3", true));
 		spec.setFilters(filters);
 		
 		runMondrianTestCase(spec, "en", 
@@ -224,35 +224,35 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 				correctResult3);
 	}
 	
-	@Test(expected=RuntimeException.class)
-	public void testFilteringByValue() {
-		ReportAreaForTests correctResult2 = new ReportAreaForTests()
-    	.withContents("Project Title", "Report Totals", "Primary Program", "", "2013-Actual Commitments", "0", "2014-Actual Commitments", "25 000", "Total Measures-Actual Commitments", "25 000")
-    	.withChildren(
-    		new ReportAreaForTests().withContents("Project Title", "Activity with primary_tertiary_program", "Primary Program", "Subprogram p1", "2013-Actual Commitments", "0", "2014-Actual Commitments", "25 000", "Total Measures-Actual Commitments", "25 000"));
-	
-		ReportSpecificationImpl spec = buildSpecification("test-programmatic-program-filter",
-			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_PROGRAM),
-			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
-			null,
-			GroupingCriteria.GROUPING_YEARLY);
-	
-		// test filtering by the value of the id field
-		MondrianReportFilters filters = new MondrianReportFilters();
-		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM), new FilterRule("2", true, false));
-		spec.setFilters(filters);
-	
-		Exception ex = null;
-		try {
-			runMondrianTestCase(spec, "en", 
-				Arrays.asList("Activity with primary_tertiary_program", "activity with primary_program", "activity with tertiary_program", "pledged 2"), 
-				correctResult2);
-		}
-		catch(Exception e) {
-			ex = e;
-		}
-		assertNotNull(ex);
-	}
+//	@Test(expected=RuntimeException.class)
+//	public void testFilteringByValue() {
+//		ReportAreaForTests correctResult2 = new ReportAreaForTests()
+//    	.withContents("Project Title", "Report Totals", "Primary Program", "", "2013-Actual Commitments", "0", "2014-Actual Commitments", "25 000", "Total Measures-Actual Commitments", "25 000")
+//    	.withChildren(
+//    		new ReportAreaForTests().withContents("Project Title", "Activity with primary_tertiary_program", "Primary Program", "Subprogram p1", "2013-Actual Commitments", "0", "2014-Actual Commitments", "25 000", "Total Measures-Actual Commitments", "25 000"));
+//	
+//		ReportSpecificationImpl spec = buildSpecification("test-programmatic-program-filter",
+//			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.PRIMARY_PROGRAM),
+//			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS),
+//			null,
+//			GroupingCriteria.GROUPING_YEARLY);
+//	
+//		// test filtering by the value of the id field
+//		MondrianReportFilters filters = new MondrianReportFilters();
+//		filters.addFilterRule(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM), new FilterRule("2", true));
+//		spec.setFilters(filters);
+//	
+//		Exception ex = null;
+//		try {
+//			runMondrianTestCase(spec, "en", 
+//				Arrays.asList("Activity with primary_tertiary_program", "activity with primary_program", "activity with tertiary_program", "pledged 2"), 
+//				correctResult2);
+//		}
+//		catch(Exception e) {
+//			ex = e;
+//		}
+//		assertNotNull(ex);
+//	}
 	
 	@Test
 	public void testDateFiltersRange() throws Exception {

@@ -91,7 +91,6 @@ public class AmpARFilterConverter {
 	//either transform filter by IDS, either by Names => if by IDS, then Level properties will be used
 	private MondrianReportFilters filterRules;
 	private MondrianReportSettings settings;
-	private static final boolean USE_IDS = true;
 	private AmpARFilter arFilter;
 	private ReportEntityType entityType;
 
@@ -151,10 +150,9 @@ public class AmpARFilterConverter {
 	private void addApprovalStatus() {
 		if (arFilter.getApprovalStatusSelected() == null || arFilter.getApprovalStatusSelected().size() == 0) 
 			return;
-		List<String> values = USE_IDS ? new ArrayList<String>(arFilter.getApprovalStatusSelected()) :
-								arFilter.getApprovalStatusSelectedStrings();
+		List<String> values = new ArrayList<String>(arFilter.getApprovalStatusSelected());
 		filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.APPROVAL_STATUS, entityType), 
-					new FilterRule(arFilter.getApprovalStatusSelectedStrings(), values, true, USE_IDS));
+					new FilterRule(arFilter.getApprovalStatusSelectedStrings(), values, true));
 	}
 	
 	private void addFundingDatesFilters() {
@@ -305,19 +303,18 @@ public class AmpARFilterConverter {
 		List<String> names = new ArrayList<String>(set.size());
 		for (NameableOrIdentifiable identifiable: set) { 
 			names.add(identifiable.getName());
-			final String value = USE_IDS ? 
-					identifiable.getIdentifier().toString() : identifiable.getName();  
+			final String value = identifiable.getIdentifier().toString();  
 			values.add(value);
 		}
 		
-		addFilterRule(columnName, type, new FilterRule(names, values, true, USE_IDS));
+		addFilterRule(columnName, type, new FilterRule(names, values, true));
 	}
 	
 	private void addBooleanFilter(Boolean flag, String columnName, ReportEntityType type) {
 		if(flag == null) return;
 		addFilterRule(columnName, type, 
 				new FilterRule(flag ? MoConstants.BOOLEAN_TRUE_KEY : MoConstants.BOOLEAN_FALSE_KEY, 
-						flag.toString(), true, true));
+						flag.toString(), true));
 	}
 	
 	private void addFilterRule(String columnName, ReportEntityType type, FilterRule rule) {
@@ -340,11 +337,10 @@ public class AmpARFilterConverter {
 		List<String> values = new ArrayList<String>(set.size());
 		for (AmpCategoryValue categValue: set) {
 			names.add(categValue.getValue());
-			final String value = USE_IDS ? 
-					String.valueOf(categValue.getId()) : categValue.getValue();
+			final String value = String.valueOf(categValue.getId());
 			values.add(value);
 		}
-		addFilterRule(columnName, type, new FilterRule(names, values, true, USE_IDS));
+		addFilterRule(columnName, type, new FilterRule(names, values, true));
 	}
 	
 	public MondrianReportSettings buildSettings() {

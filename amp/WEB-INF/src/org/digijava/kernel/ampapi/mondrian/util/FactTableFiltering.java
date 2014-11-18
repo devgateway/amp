@@ -104,15 +104,9 @@ public class FactTableFiltering {
 		if (expander == null)
 			throw new RuntimeException("the following SQL mainColumn filter not implemented: " + mainColumnName);
 		
-		for(FilterRule rule:initRules)
-			if (!rule.isIdFilter)
-				throw new RuntimeException(String.format("filtering %s by values not implemented", mainColumnName));
-
 		List<FilterRule> rules = mergeRules(initRules);
 		List<String> statements = new ArrayList<>();
 		for(FilterRule rule:rules) {
-			if (!rule.isIdFilter)
-				throw new RuntimeException(String.format("filtering %s by values not implemented", mainColumnName));
 			
 			String statement = buildRuleStatement(rule, expander);
 			if (statement != null && (!statement.isEmpty()))
@@ -170,7 +164,7 @@ public class FactTableFiltering {
 			}
 		}
 		if (!mergedValues.isEmpty())
-			res.add(new FilterRule(new ArrayList<String>(mergedValues), true, true));
+			res.add(new FilterRule(new ArrayList<String>(mergedValues), true));
 		return res;
 	}
 	

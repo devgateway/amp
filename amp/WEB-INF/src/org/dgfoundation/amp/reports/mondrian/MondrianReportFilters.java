@@ -122,7 +122,6 @@ public class MondrianReportFilters implements ReportFilters {
 				// hack: do we really need to be able to filter by id fields instead of filtering by id the natural value field?
 				// idea of hack: filtering by "Primary Sector Id" (irrespective of whether by id or value) is the exact same thing as filtering by "Primary Sector" by id
 				filterGroup = filterGroup.substring(0, filterGroup.length() - 3); // Delete " Id"
-				filterRule = filterRule.invertClone();
 			}
 			if (!this.sqlFilterRules.containsKey(filterGroup))
 				this.sqlFilterRules.put(filterGroup, new ArrayList<FilterRule>());
@@ -204,9 +203,9 @@ public class MondrianReportFilters implements ReportFilters {
 	public void addDateRangeFilterRule(ReportColumn column, Date from, Date to) throws AmpApiException {
 		//validate
 		MondrianUtils.getDateRangeFilterRule(from, to);
-		final String fromStr = from == null ? null : DateTimeUtil.formatDate(from);  
-		final String toStr = to == null ? null : DateTimeUtil.formatDate(to);
-		addFilterRule(dateFilterRules, column, new FilterRule(fromStr, toStr, true, true, false));
+		final String fromStr = from == null ? null : DateTimeUtil.toJulianDayString(from);  
+		final String toStr = to == null ? null : DateTimeUtil.toJulianDayString(to);
+		addFilterRule(dateFilterRules, column, new FilterRule(fromStr, toStr, true));
 	}
 	
 	/**
@@ -289,17 +288,17 @@ public class MondrianReportFilters implements ReportFilters {
 		addFilterRule(new ReportElement(ElementType.DATE), MondrianUtils.getSingleDateFilterRule(date, valueToInclude));
 	}
 	
-	/**
-	 * Adds a single date filter over a date column
-	 * @param column - the date column to filter 
-	 * @param date - date to be considered
-	 * @throws AmpApiException
-	 */
-	public void addSingleDateFilterRule(ReportColumn column, Date date) throws AmpApiException {
-		if (date == null)
-			throw new AmpApiException("Cannot add a filter to a null date");
-		addFilterRule(dateFilterRules, column, new FilterRule(DateTimeUtil.formatDate(date), true, false));
-	}
+//	/**
+//	 * Adds a single date filter over a date column
+//	 * @param column - the date column to filter 
+//	 * @param date - date to be considered
+//	 * @throws AmpApiException
+//	 */
+//	public void addSingleDateFilterRule(ReportColumn column, Date date) throws AmpApiException {
+//		if (date == null)
+//			throw new AmpApiException("Cannot add a filter to a null date");
+//		addFilterRule(dateFilterRules, column, new FilterRule(DateTimeUtil.formatDate(date), true, false));
+//	}
 
 	public Map<String, List<FilterRule>> getSqlFilterRules() {
 		return sqlFilterRules;

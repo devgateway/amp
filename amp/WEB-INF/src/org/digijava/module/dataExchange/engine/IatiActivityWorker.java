@@ -926,11 +926,6 @@ public class IatiActivityWorker {
 
         ampFunding.setActive(true);
 
-	    populateFundingDetails(currencyValue, currencyName, dateToSet, ampFundDetails, org.digijava.module.aim.helper.Constants.COMMITMENT, org.digijava.module.aim.helper.Constants.PLANNED);
-
-        ampFunding.setFundingDetails(ampFundDetails);
-		if(activity !=null ) 
-			ampFunding.setAmpActivityId(activity);
 		Set<AmpOrgRole> orgRole = new HashSet<AmpOrgRole>();
 		AmpOrgRole ampOrgRole = new AmpOrgRole();
 		ampOrgRole.setActivity(activity);

@@ -73,7 +73,10 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 		// standar require way will generate side effects like grouping buttons
 		// stop working, the drawback is the client can not cache the jqgrid
 		// library.
-		$.getScript("/TEMPLATE/ampTemplate/tabs/js/lib/one_place/jqgrid-all.js", function(data, textStatus, jqxhr) {
+		jQuery.ajaxSetup({
+			cache : true
+		});
+		jQuery.getScript("/TEMPLATE/ampTemplate/tabs/js/lib/one_place/jqgrid-all.js", function(data, textStatus, jqxhr) {
 			var rowNum = 0;
 			var colModel = columnsMapping.createJQGridColumnModel(tableStructure);
 			var grandTotals = null;
@@ -133,7 +136,11 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 						grouping : grouping,
 						groupingView : columnsMapping.createJQGridGroupingModel(tableStructure, grouping),
 						footerrow : true,
+						loadBeforeSend : function(xhr, settings) {
+							
+						},
 						gridComplete : function() {
+							// background colors.
 							jQuery(grid).find(">tbody>tr.jqgrow:odd").addClass("myAltRowClassEven");
 							jQuery(grid).find(">tbody>tr.jqgrow:even").addClass("myAltRowClassOdd");
 
@@ -143,7 +150,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								row = this.rows[iRow];
 								className = row.className;
 								// Ignore grouped rows.
-								if ($.inArray('jqgrow', className.split(' ')) > 0) {
+								if (jQuery.inArray('jqgrow', className.split(' ')) > 0) {
 									// Set font color according to status.
 									var draft = row.cells[3].textContent;
 									var approvalStatus = row.cells[2].textContent;
@@ -295,7 +302,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 				});
 			});
 
-			getContentRecursively(/* data.reportContents */data.page.pageArea, rows, null);
+			getContentRecursively(data.page.pageArea, rows, null);
 			if (grouping) {
 				postProcessHierarchies(rows, hierarchies);
 			}
@@ -323,7 +330,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 
 	function findInMapByColumnName(name, property) {
 		var ret = undefined;
-		$.each(headers, function(i, item) {
+		jQuery.each(headers, function(i, item) {
 			if (item[property] == name) {
 				ret = item;
 			}

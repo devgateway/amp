@@ -13,7 +13,6 @@ var AMPSettings = Backbone.View.extend({
 
 				var self = this;
 				this.workspace = args.workspace;
-				this.initialized = false;
 
 				this.id = _.uniqueId("amp_settings_");
 				$(this.el).attr({
@@ -30,6 +29,13 @@ var AMPSettings = Backbone.View.extend({
 				//$("#settings-container").find(".panel-heading .close").on("click", this.hideContainer);
 				$("#settings-container").find(".cancel").on("click", this.hideContainer);
 				$("#settings-container").find(".apply").on("click", this.applySettings);
+
+				var raw_settings = this.workspace.query.get('raw_settings');
+				settings = {
+						"1": raw_settings.currencyCode,
+						"2": raw_settings.calendar.ampFiscalCalId
+					};
+				window.currentSettings = settings;
 
 				$.ajax({
 					url : '/rest/gis/settings',
@@ -49,7 +55,9 @@ var AMPSettings = Backbone.View.extend({
 					"1": $('#amp_currency').val(),
 					"2": $('#amp_calendar').val()
 				};
-
+				this.workspace.query.set('settings', settings);
+				window.currentSettings = settings;
+				
 				this.workspace.query.run_query(null, settings);
 				this.settings_button.removeClass('on');
 				$("#settings-container").hide();
@@ -89,19 +97,7 @@ var AMPSettings = Backbone.View.extend({
 				var self = this;
 				$(this.el).toggle();
 				var settings;
-				if(!this.initialized) {
-					var raw_settings = this.workspace.query.get('raw_settings');
-					settings = {
-							"1": raw_settings.currencyCode,
-							"2": raw_settings.calendar.ampFiscalCalId
-						};
-					this.initialized = true;
-				}
-				else
-				{
-					settings = this.workspace.query.get('settings');
-				}
-				window.currentSettings = settings;
+				settings = window.currentSettings;
 				$('#amp_currency').val(settings["1"]);
 				$('#amp_calendar').val(settings["2"]);
 

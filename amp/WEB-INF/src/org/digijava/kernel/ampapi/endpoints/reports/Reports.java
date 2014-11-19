@@ -113,6 +113,26 @@ public class Reports {
 
 		result.setReportMetadata(metadata);
 		
+		//Translate column names.
+		/*Set<ReportColumn> translatedColumns = new LinkedHashSet<ReportColumn>();  
+		Iterator<ReportColumn> iCols = metadata.getReportSpec().getColumns().iterator();
+		while(iCols.hasNext()) {
+			ReportColumn auxCol = iCols.next();
+			String translatedName = TranslatorWorker.translateText(auxCol.getEntityName());
+			auxCol = new ReportColumn(translatedName, auxCol.getEntityType());
+			translatedColumns.add(auxCol);			
+		}
+		metadata.getReportSpec().setColumns(translatedColumns);
+		
+		List<ReportMeasure> translatedMeasures = new ArrayList<ReportMeasure>(); 
+		Iterator<ReportMeasure> iMs = metadata.getReportSpec().getMeasures().iterator();
+		while(iMs.hasNext()) {
+			ReportMeasure auxMeasure = iMs.next();
+			String translatedName = TranslatorWorker.translateText(auxMeasure.getMeasureName());
+			auxMeasure = new ReportMeasure(translatedName, auxMeasure.getEntityType());
+			translatedMeasures.add(auxMeasure);
+		}
+		metadata.getReportSpec().setMeasures(translatedMeasures);*/
 		return result;
 	}
 	
@@ -251,7 +271,7 @@ public class Reports {
 
 			while (iter.hasNext()) {
 				AmpReports report = iter.next().getReport();
-				JSONTab tab = new JSONTab(report.getAmpReportId(), report.getName(), true);
+				JSONTab tab = new JSONTab(report.getAmpReportId(), TranslatorWorker.translateText(report.getName()), true);
 				tabs.add(tab);
 			}
 		}
@@ -263,7 +283,7 @@ public class Reports {
 
 		while (iter.hasNext()) {
 			AmpReports report = iter.next();
-			JSONTab tab = new JSONTab(report.getAmpReportId(), report.getName(), false);
+			JSONTab tab = new JSONTab(report.getAmpReportId(), TranslatorWorker.translateText(report.getName()), false);
 			boolean found = false;
 			Iterator<JSONTab> iTabs = tabs.iterator();
 			while (iTabs.hasNext() && !found) {
@@ -458,6 +478,30 @@ public class Reports {
 		
 		return measuresToDisplayName;
 	}
+	
+	
+	/*@POST
+	@Path("/report/saveTab/{report_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public final void saveTab(JsonBean formParams, @PathParam("report_id") Long reportId) {
+		// Open AmpReport.
+		AmpReports oldReport = DbUtil.getAmpReport(reportId);
+
+		// Convert json object back to the new format: MondrianReportFilters.
+		if (formParams.get("filters") != null) {
+			JsonBean filters = new JsonBean();
+			LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get("filters");
+			MondrianReportFilters mondrianReportFilters = null;
+			if (requestFilters != null) {
+				filters.any().putAll(requestFilters);
+				mondrianReportFilters = FilterUtils.getFilters(filters);
+				
+				// Transform back to legacy ARFilters.
+				MondrianReportFiltersConverter converter = new MondrianReportFiltersConverter(mondrianReportFilters);
+				AmpARFilter ampARFilters = converter.buildFilters();
+			}
+		}
+	}*/
 	
 	@POST
 	@Path("/report/export-to-map/{report_id}")

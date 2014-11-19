@@ -36,6 +36,7 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -45,7 +46,7 @@ public class ReportsUtil {
 	public static JSONTab convert(AmpReports report, Boolean visible) {
 		JSONTab tab = new JSONTab();
 		tab.setId(report.getAmpReportId());
-		tab.setName(report.getName());
+		tab.setName(TranslatorWorker.translateText(report.getName()));
 		tab.setVisible(visible);
 		return tab;
 	}

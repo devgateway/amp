@@ -96,7 +96,7 @@ public class ActivityService {
 		/*
 		 * Enabled this and remove explicit measures config 
 		 * when confirmed that the expected measures config is indeed coming from settings
-		GisUtil.applySettings(config);
+		EndpointUtils.applyGisSettings(config);
 		 */
 		//TODO: remove this -- start --
 		EndpointUtils.applySettings(spec, config);

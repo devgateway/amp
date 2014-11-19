@@ -1,12 +1,17 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -25,6 +30,7 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.CachedReportData;
+import org.dgfoundation.amp.reports.ColumnsVisibility;
 import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
 import org.dgfoundation.amp.reports.ReportCacher;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
@@ -34,8 +40,11 @@ import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecif
 import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
+import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.util.DbUtil;
@@ -77,7 +86,6 @@ public class ReportsUtil {
 	 *  "add_hierarchies" : ["Approval Status"], 									<br/>
 	 *  "add_measures"    : ["Custom Measure"], 									<br/>
 	 *  "rowTotals"       : true													<br/>
-	 *  "settings"		  :{"1":"USD","2":"4"}										<br/>
 	 * } 																			<br/>
 	 * where:
 	 * <ul>
@@ -99,7 +107,7 @@ public class ReportsUtil {
 	 *   <li>add_measures</li> optional, a list of measures to be added to the <br>
 	 *                         report configuration <br>
 	 *   <li>rowTotals</li>    optional, flag to request row totals to be build
-	 *   <li>settings</li>	   Report configuration	
+	 *   <li>settings</li>	   Report settings	
 	 * </ol>
 	 * @return JsonBean result for the requested page and pagination information
 	 */
@@ -438,34 +446,86 @@ public class ReportsUtil {
 	 * @param exportId
 	 * @return
 	 */
-	public static JsonBean exportToMap(final JsonBean config, final Long reportId) {
+	public static String exportToMap(final JsonBean config, final Long reportId) {
 		ReportSpecificationImpl spec = getReport(reportId);
 		if (spec == null)
 			return null;
 		
-		// detect layers view as a highest hierarchy ? 
+		// detect layers view as a highest hierarchy from location columns
 		String layersView = null;
-		for (Iterator<ReportColumn> iter = spec.getHierarchies().iterator(); iter.hasNext() && layersView == null;  ) {
-			String columnName = iter.next().getColumnName();
-			switch(columnName) {
-			case ColumnConstants.COUNTRY:
-			case ColumnConstants.REGION:
-			case ColumnConstants.ZONE:
-			case ColumnConstants.DISTRICT:
-			case ColumnConstants.LOCATION: 
-				layersView = columnName;
+		Set<String> orderedLocations = new LinkedHashSet<String>(
+				Arrays.asList(ColumnConstants.COUNTRY, ColumnConstants.REGION, ColumnConstants.ZONE, ColumnConstants.DISTRICT, ColumnConstants.LOCATION));
+		for (ReportColumn column : spec.getHierarchies()) {
+			if (orderedLocations.contains(column.getColumnName())) {
+				layersView = column.getColumnName();
 				break;
-				default: break;
+			}
+		}
+		
+		if (layersView == null) {
+			// configure the default, that is the 1st sub-national level, e.g. Region if it is visible
+			orderedLocations.remove(ColumnConstants.COUNTRY);
+			Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
+			for (String defaultOption : orderedLocations) {
+				if (visibleColumns.contains(defaultOption)) {
+					layersView = defaultOption;
+					break;
+				}
 			}
 		}
 		config.set(EPConstants.API_STATE_LAYERS_VIEW, layersView);
+		
+		// update the settings based on Measures
+		Map<String, String> settings = (Map<String, String>) config.get(EPConstants.SETTINGS);
+		// must be not null! but just in case something gets broken
+		if (settings == null) {
+			logger.error("No settings are provided - please fix!");
+			settings = new HashMap<String, String>();
+			config.set(EPConstants.SETTINGS, settings);
+		}
+		
+		String fundingType = null;
+		// get first measure that is defined in MEASURE_TO_NAME_MAP
+		// => first found has highest priority to consider as the default option
+		MEASURE_TEST: for (String measureName : GisConstants.MEASURE_TO_NAME_MAP.keySet()) {
+			for (ReportMeasure measure : spec.getMeasures()) {
+				if (measureName.equals(measure.getMeasureName())) {
+					fundingType = measureName;
+					break MEASURE_TEST;
+				}
+			}
+		}
+		// if none, then set to Commitments by default
+		if (fundingType == null)
+			fundingType = GisConstants.COMMITMENTS;
+		settings.put(SettingsConstants.FUNDING_TYPE_ID, fundingType);
+		
+		// we need to stringify the final config
+		JSONObject jObject = new JSONObject();
+		jObject.accumulateAll(config.any());
 		
 		// configure api state json 
 		JsonBean apiState = new JsonBean();
 		apiState.set(EPConstants.API_STATE_TITLE, spec.getReportName());
 		apiState.set(EPConstants.API_STATE_DESCRIPTION, EPConstants.API_STATE_REPORT_EXPORT_DESCRIPTION);
-		apiState.set(EPConstants.API_STATE_BLOB, config.toString());
+		apiState.set(EPConstants.API_STATE_BLOB, jObject.toString());
 		
-		return EndpointUtils.saveApiState(apiState, "G");
+		// Saving the export to the user session.
+		// Will there be any need to keep multiple states for the same report export?
+		TLSUtils.getRequest().getSession().setAttribute(EPConstants.API_STATE_REPORT_EXPORT + reportId, apiState);
+		
+		return reportId.toString();
+	}
+	
+	/**
+	 * Provides the saved api state for the given reportConfigId (at the moment = reportId)
+	 * 
+	 * @param reportConfigId
+	 * @return JsonBean with saved Api state
+	 */
+	public static JsonBean getApiState(String reportConfigId) {
+		// TODO: can we safely remove it from session afterwards? 
+		return (JsonBean) TLSUtils.getRequest().getSession()
+				.getAttribute(EPConstants.API_STATE_REPORT_EXPORT + reportConfigId);
 	}
 }

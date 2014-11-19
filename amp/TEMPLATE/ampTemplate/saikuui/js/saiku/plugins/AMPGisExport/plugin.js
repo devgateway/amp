@@ -20,20 +20,19 @@ var AMPGisExport = Backbone.View.extend({
 	},
 	
 	exportToMap : function() {
+		var reportId = + this.workspace.query.get('report_id');
 		$.ajax({
-			url : '/rest/data/report/export-to-map/' + this.workspace.query.get('report_id'),
+			url : '/rest/data/report/export-to-map/' + reportId,
 			dataType: 'json',
 			type: 'post',
 			contentType: 'application/json',
 			data : JSON.stringify({
 				filters : window.currentFilter.serialize(),
-				settings :  null // TODO window.currentSettings.serialize()
+				settings : window.currentSettings
 			})
-		}).done(function(data) {
-			if (data != null) {
-				var mapId = data.mapId;
-				var url = '/TEMPLATE/ampTemplate/gisModule/dist/index.html#saved/' + mapId;
-				// alert (url);
+		}).done(function(configId) {
+			if (configId != null) {
+				var url = '/TEMPLATE/ampTemplate/gisModule/dist/index.html#report/' + configId;
 				event.preventDefault();
            		event.stopPropagation();
            		var mapWindow = window.open(url);

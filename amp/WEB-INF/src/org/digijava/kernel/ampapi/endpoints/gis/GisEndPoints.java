@@ -38,6 +38,7 @@ import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
+import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingOptions;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
@@ -431,7 +432,7 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui = false, id = "Settings")
 	public List<SettingOptions> getSettings() {
-		return EndpointUtils.getFilterSettings();
+		return EndpointUtils.getGisSettings();
 	}
 	
 	@GET
@@ -477,6 +478,14 @@ public class GisEndPoints {
 
 		}
 		return ActivityService.getLastUpdatedActivities(extraColumns, limit,JsonBean.getJsonBeanFromString(config));
+	}
+	
+	@GET
+	@Path("/report/{report_config_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui = false, id = "reportExport")
+	public JsonBean getLastUpdated(@PathParam("report_config_id") String reportConfigId) {
+		return ReportsUtil.getApiState(reportConfigId);
 	}
 
 }

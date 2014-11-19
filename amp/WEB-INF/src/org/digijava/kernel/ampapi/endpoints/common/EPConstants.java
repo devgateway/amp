@@ -34,4 +34,5 @@ public class EPConstants {
 	public static final String API_STATE_BLOB = "stateBlob";
 	public static final String API_STATE_LAYERS_VIEW = "layers-view";
 	public static final String API_STATE_REPORT_EXPORT_DESCRIPTION = "Export to Map";
+	public static final String API_STATE_REPORT_EXPORT = "reportExportId=";
 }

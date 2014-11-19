@@ -511,10 +511,9 @@ public class Reports {
 	 * 
 	 * @param config current report configuration (settings, filters)
 	 * @param reportId report id
-	 * @return Json data to be used (like Json export Id, e.g. mapId) 
-	 * to be used to retrieve the API state of the report
+	 * @return Api state configuration id 
 	 */
-	public JsonBean exportToMap(JsonBean config, @PathParam("report_id") Long reportId) {
+	public String exportToMap(JsonBean config, @PathParam("report_id") Long reportId) {
 		return ReportsUtil.exportToMap(config, reportId);
 	}
 }

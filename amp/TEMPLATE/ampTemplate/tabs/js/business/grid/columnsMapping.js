@@ -43,22 +43,26 @@ define([ 'util/tabUtils' ], function(TabUtils) {
 		ret.push(''); // activity id.
 		ret.push(''); // approval status.
 		ret.push(''); // Draft.
-		$(metadata.columns.models).each(function(i, item) {
-			var colName = item.get('columnName');
-			var auxColName = "";
-			// If we are using grouping then change the title of the first
-			// non-grouped column.
-			if ((metadata.hierarchies.models.length) == i && isGrouped) {
-				$(metadata.hierarchies.models).each(function(j, item2) {
-					auxColName += item2.get('columnName') + ' / ';
+		$(metadata.columns.models).each(
+				function(i, item) {
+					var colName = item.get('columnName');
+					var auxColName = "";
+					// If we are using grouping then change the title of the
+					// first
+					// non-grouped column.
+					if ((metadata.hierarchies.models.length) == i && isGrouped) {
+						$(metadata.hierarchies.models).each(
+								function(j, item2) {
+									auxColName += "<span data-i18n='tabs.common:column" + item2.get('columnName') + "'>"
+											+ item2.get('columnName') + "</span>" + ' / ';
+								});
+						ret.push(auxColName + "<span data-i18n='tabs.common:column" + colName + "'>" + colName + "</span>");
+					} else {
+						ret.push("<span data-i18n='tabs.common:column" + colName + "'>" + colName + "</span>");
+					}
 				});
-				ret.push(auxColName + colName);
-			} else {
-				ret.push(colName);
-			}
-		});
 		$(metadata.measures.models).each(function(i, item) {
-			ret.push(item.get('measureName'));
+			ret.push("<span data-i18n='tabs.common:column" + item.get('measureName') + "'>" + item.get('measureName') + "</span>");
 		});
 		console.log(ret);
 		return ret;

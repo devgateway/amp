@@ -28,10 +28,15 @@ module.exports = Backbone.View.extend({
           // temp dirty force rejoin for now, otherwise use: getJoinedVersion
           var ampFormatter = new chartUtils.DecimalFormat(self.app.data.settings.get('number-format').get('name'));
           project.tempDirtyForceJoin().then(function() {
+
+            var formattedCommitments = ampFormatter.format(project.toJSON()['Actual Commitments']);
+            var formattedDisbursements = ampFormatter.format(project.toJSON()['Actual Disbursements']);
+            var currencyCode = self.app.data.settings.get('1').get('selected');
+
             self.$el.append(self.template({
               activity: project.toJSON(),
-              formattedCommitments: ampFormatter.format(project.toJSON()['Actual Commitments']),
-              formattedDisbursements: ampFormatter.format(project.toJSON()['Actual Disbursements'])
+              formattedCommitments: [formattedCommitments, ' ', currencyCode].join(''),
+              formattedDisbursements: [formattedDisbursements, ' ', currencyCode].join('')
             }));
           });
         });

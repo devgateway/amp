@@ -1,5 +1,6 @@
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
+var util = require('../../../libs/local/chart-util');
 
 
 module.exports = Backbone.View.extend({
@@ -105,12 +106,16 @@ module.exports = Backbone.View.extend({
 
   // used to hilight the geojson layer on click, show popup, and unhilight after.
   tmpFundingOnEachFeature: function(feature, layer, layerModel) {
+    var self = this;
     // Add popup
     if (feature && feature.properties) {
       // TODO: drs append  format value.
       var unit = (layerModel.get('unit') ? layerModel.get('unit') : '');
-      layer.bindPopup('<strong>' + feature.properties.name + '</strong>' +
-                      '<br/>' + feature.properties.value + ' ' + unit);
+      self.app.data.settings.load().then(function() {
+        var ampFormatter = new util.DecimalFormat(self.app.data.settings.get('number-format').get('name'));
+        layer.bindPopup('<strong>' + feature.properties.name + '</strong>' +
+                        '<br/>' + ampFormatter.format(feature.properties.value) + ' ' + unit);
+      });
     }
 
     // hilight and unhilight the area when a user clicks on them..

@@ -178,9 +178,15 @@ module.exports = Backbone.View.extend({
 
       /* Format the numerical columns */
         var ampFormatter = new util.DecimalFormat(self.app.data.settings.get('number-format').get('name'));
+        var currencyCode = self.app.data.settings.get('1').get('selected');
+
         var activityFormatted = _.map(activityCollection, function(activity) {
-          activity.set('formattedActualCommitments', ampFormatter.format(activity.get('Actual Commitments')));
-          activity.set('formattedActualDisbursements', ampFormatter.format(activity.get('Actual Disbursements')));
+
+          var formattedCommitments = ampFormatter.format(activity.get('Actual Commitments'));
+          var formattedDisbursements = ampFormatter.format(activity.get('Actual Disbursements'));
+
+          activity.set('formattedActualCommitments', [formattedCommitments, ' ', currencyCode].join(''));
+          activity.set('formattedActualDisbursements', [formattedDisbursements, ' ', currencyCode].join(''));
           return activity;
         });
 

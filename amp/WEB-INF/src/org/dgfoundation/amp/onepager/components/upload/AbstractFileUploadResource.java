@@ -49,6 +49,9 @@ public abstract class AbstractFileUploadResource extends AbstractResource
         try
         {
             MultipartServletWebRequest multiPartRequest = webRequest.newMultipartWebRequest(getMaxSize(), "ignored");
+           
+            //Since wicket version 8.18 we need to do this explicit call to parse the request and generate the files
+            multiPartRequest.parseFileParts();
             Map<String, List<FileItem>> files = multiPartRequest.getFiles();
             List<FileItem> fileItems = files.get(FileUploadBehavior.PARAM_NAME);
             saveFiles(fileItems);

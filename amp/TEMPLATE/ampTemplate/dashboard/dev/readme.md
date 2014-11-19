@@ -36,6 +36,10 @@ Build everything, run a development server with livereload, with one easy comman
 $ gulp dev
 ````
 
+You can access the dashboards now at
+
+[`localhost:3000/TEMPLATE/ampTemplate/dashboard/dev/app/index.html`](http://localhost:3000/TEMPLATE/ampTemplate/dashboard/dev/app/index.html)
+
 
 Testing
 -------

@@ -94,12 +94,12 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 	@Test
 	public void test_plain_program_details() {
 		ReportAreaForTests correctResult = new ReportAreaForTests()
-	    .withContents("Project Title", "Report Totals", "National Planning Objectives Detail", "", "Primary Program Detail", "", "Secondary Program Detail", "", "Tertiary Program Detail", "", "2013-Actual Commitments", "2 670 000", "2014-Actual Commitments", "4 497 000", "Total Measures-Actual Commitments", "7 167 800")
+	    .withContents("Project Title", "Report Totals", "National Planning Objectives Detail", "", "Primary Program Detail", "", "Secondary Program Detail", "", "Tertiary Program Detail", "", "2013-Actual Commitments", "2 670 000", "2014-Actual Commitments", "4 497 000", "Total Measures-Actual Commitments", "7 167 000")
 	    .withChildren(
-	      new ReportAreaForTests().withContents("Project Title", "Activity with primary_tertiary_program", "National Planning Objectives Detail", "", "Primary Program Detail", "Subprogram p1, Subprogram p1.b", "Secondary Program Detail", "", "Tertiary Program Detail", "OP111 name", "2013-Actual Commitments", "0", "2014-Actual Commitments", "50 000", "Total Measures-Actual Commitments", "50 200"),
-	      new ReportAreaForTests().withContents("Project Title", "activity with primary_program", "National Planning Objectives Detail", "", "Primary Program Detail", "Program #1", "Secondary Program Detail", "", "Tertiary Program Detail", "", "2013-Actual Commitments", "0", "2014-Actual Commitments", "32 000", "Total Measures-Actual Commitments", "32 100"),
-	      new ReportAreaForTests().withContents("Project Title", "activity with tertiary_program", "National Planning Objectives Detail", "", "Primary Program Detail", "", "Secondary Program Detail", "", "Tertiary Program Detail", "OP112 name", "2013-Actual Commitments", "0", "2014-Actual Commitments", "15 000", "Total Measures-Actual Commitments", "15 100"),
-	      new ReportAreaForTests().withContents("Project Title", "pledged 2", "National Planning Objectives Detail", "", "Primary Program Detail", "", "Secondary Program Detail", "", "Tertiary Program Detail", "", "2013-Actual Commitments", "2 670 000", "2014-Actual Commitments", "4 400 000", "Total Measures-Actual Commitments", "7 070 400"));
+	      new ReportAreaForTests().withContents("Project Title", "Activity with primary_tertiary_program", "National Planning Objectives Detail", "", "Primary Program Detail", "Subprogram p1, Subprogram p1.b", "Secondary Program Detail", "", "Tertiary Program Detail", "OP111 name", "2013-Actual Commitments", "0", "2014-Actual Commitments", "50 000", "Total Measures-Actual Commitments", "50 000"),
+	      new ReportAreaForTests().withContents("Project Title", "activity with primary_program", "National Planning Objectives Detail", "", "Primary Program Detail", "Program #1", "Secondary Program Detail", "", "Tertiary Program Detail", "", "2013-Actual Commitments", "0", "2014-Actual Commitments", "32 000", "Total Measures-Actual Commitments", "32 000"),
+	      new ReportAreaForTests().withContents("Project Title", "activity with tertiary_program", "National Planning Objectives Detail", "", "Primary Program Detail", "", "Secondary Program Detail", "", "Tertiary Program Detail", "OP112 name", "2013-Actual Commitments", "0", "2014-Actual Commitments", "15 000", "Total Measures-Actual Commitments", "15 000"),
+	      new ReportAreaForTests().withContents("Project Title", "pledged 2", "National Planning Objectives Detail", "", "Primary Program Detail", "", "Secondary Program Detail", "", "Tertiary Program Detail", "", "2013-Actual Commitments", "2 670 000", "2014-Actual Commitments", "4 400 000", "Total Measures-Actual Commitments", "7 070 000"));
 		
 		runMondrianTestCase("program details columns", "AMP-17190-all-details",
 				Arrays.asList("Activity with primary_tertiary_program", "activity with primary_program", "activity with tertiary_program", "pledged 2"),
@@ -138,9 +138,9 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 	@Test
 	public void test_primary_program_filter_converter() {
 		ReportAreaForTests correctResult = new ReportAreaForTests()
-	    .withContents("Project Title", "Report Totals", "National Planning Objectives", "", "Primary Program", "", "Secondary Program", "", "Tertiary Program", "", "2014-Actual Commitments", "50 000", "Total Measures-Actual Commitments", "50 200")
+	    .withContents("Project Title", "Report Totals", "National Planning Objectives", "", "Primary Program", "", "Secondary Program", "", "Tertiary Program", "", "2014-Actual Commitments", "50 000", "Total Measures-Actual Commitments", "50 000")
 	    .withChildren(
-	      new ReportAreaForTests().withContents("Project Title", "Activity with primary_tertiary_program", "National Planning Objectives", "", "Primary Program", "Subprogram p1, Subprogram p1.b", "Secondary Program", "", "Tertiary Program", "OP1 name", "2014-Actual Commitments", "50 000", "Total Measures-Actual Commitments", "50 200"));
+	      new ReportAreaForTests().withContents("Project Title", "Activity with primary_tertiary_program", "National Planning Objectives", "", "Primary Program", "Subprogram p1, Subprogram p1.b", "Secondary Program", "", "Tertiary Program", "OP1 name", "2014-Actual Commitments", "50 000", "Total Measures-Actual Commitments", "50 000"));
 		
 		runMondrianTestCase("program details columns", "AMP-17190-all-programs-no-hier-p1",
 				Arrays.asList("Activity with primary_tertiary_program", "activity with primary_program", "activity with tertiary_program", "pledged 2"),

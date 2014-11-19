@@ -605,7 +605,7 @@
 		<Measure name="Always Present" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic" aggregator="sum">
-					100
+					0
 				</SQL>
 			</MeasureExpression>
 		</Measure>

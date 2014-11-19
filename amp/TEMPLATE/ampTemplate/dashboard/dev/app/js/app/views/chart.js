@@ -190,8 +190,16 @@ module.exports = BackboneDash.View.extend({
       this.model.get('name') + '.csv');
   },
 
-  drawChartTitle: function(canvas, title) {
+  drawChartForDownload: function(canvas, title) {
     var ctx = canvas.getContext('2d');
+
+    // make the background opaque white
+    ctx.beginPath();
+    ctx.rect(0, 0, canvas.getAttribute('width'), canvas.getAttribute('height'));
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+
+    // Add the chart title
     ctx.fillStyle = '#163f66';
     ctx.font = 'bold 22px "Open Sans"';
     ctx.fillText(title.toUpperCase(), 10, 10 + 22);
@@ -206,6 +214,7 @@ module.exports = BackboneDash.View.extend({
     }
 
     var canvas = document.createElement('canvas');
+    document.body.appendChild(canvas);
     if (!canvas.getContext) {
       this.app.report('Unsupported feature',
         ['Chart export is not supported on this browser.']);
@@ -214,15 +223,16 @@ module.exports = BackboneDash.View.extend({
     canvas.setAttribute('width', this.$(svg).width());
     canvas.setAttribute('height', this.$(svg).height() + 42);
 
+    this.drawChartForDownload(canvas, this.model.get('name'));
+
     canvg(canvas, svg.outerHTML, {
       offsetY: 42,
+      ignoreClear: true,  // don't erase the title/bg!
       // log: true,  // debug info
       ignoreMouse: true,
       ignoreAnimation: true
     });
     // canvg renders synchronously, despite having a callback option
-
-    this.drawChartTitle(canvas, this.model.get('name'));
 
     e.currentTarget.setAttribute('href', canvas.toDataURL('image/png'));
     e.currentTarget.setAttribute('download',

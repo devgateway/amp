@@ -132,6 +132,7 @@ _.extend(GISData.prototype, Backbone.Events, {
     };
   },
 
+  /* Go into every menu-linked model to return the selected items in each */
   getAllVisibleLayers: function() {
     var layers = _.union(
       this.indicators.getSelected().value(),

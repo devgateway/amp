@@ -70,17 +70,31 @@ function Translator() {
   this.translateDOM = function(el) {
     var self = this;
 
+    var $newEl = $(el);
+    /* TODO(tdk): We identified a major bug here where root immediate child
+     *  template elements with translations are not being caught by this
+     *  selector.
+     *
+     *  To workaround, we should clone, wrap, run the selector and unwrap the DOM.
+     *
+     *  Remember this has to work for el's around the app that are bound
+     *  and not bound.
+     */
+
     return this.getTranslations().then(function(data) {
-      self._updateDom(el, data);
-      return el;
+      $.each(data, function(key, value) {
+        /*if ($('[data-i18n="' + key + '"]', $newEl).length > 0) {
+          console.log(key, '->', value,' $ found->', $newEl.find('[data-i18n="' + key + '"]').text());
+        }*/
+        $('[data-i18n="' + key + '"]', $newEl).text(value);
+      });
+      return $newEl;
     });
   };
 
   // update translateable elements in the dom
   this._updateDom = function(el, data) {
-    $.each(data, function(key, value) {
-      $(el).find('*[data-i18n="' + key + '"]').text(value);
-    });
+    console.log('exit _updateDom',el);
   };
 
   /*

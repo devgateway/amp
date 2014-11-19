@@ -26,6 +26,7 @@ _.extend(Title.prototype, Backbone.Events, {
       var key = ['amp.gis:title-', layer.get('title').replace(/ /g, '')].join('');
 
       titleList[key] = layer.get('title');
+      /* returns from map() like [{amp.gis:title-Region: 'Region'}, ... ] */
       return titleList;
 
     }).value();  // getLayers() returns a underscore chain()

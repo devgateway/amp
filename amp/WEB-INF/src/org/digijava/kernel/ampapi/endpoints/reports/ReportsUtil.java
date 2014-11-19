@@ -173,8 +173,9 @@ public class ReportsUtil {
 	public static ReportSpecificationImpl getReport(Long reportId) {
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
 		try {
-			return AmpReportsToReportSpecification.convert(ampReport);
-		} catch (AMPException e) {
+			if (ampReport != null)
+				return AmpReportsToReportSpecification.convert(ampReport);
+		} catch (Exception e) {
 			logger.error(e);
 		}
 		return null;
@@ -425,5 +426,43 @@ public class ReportsUtil {
 		// TODO: add here any other automatic detections for mandatory regenerate 
 		
 		return regenerate;
+	}
+	
+	/**
+	 * Exports current report configuration to the map
+	 * 
+	 * @param config
+	 * @param exportId
+	 * @return
+	 */
+	public static JsonBean exportToMap(final JsonBean config, final Long reportId) {
+		ReportSpecificationImpl spec = getReport(reportId);
+		if (spec == null)
+			return null;
+		
+		// detect layers view as a highest hierarchy ? 
+		String layersView = null;
+		for (Iterator<ReportColumn> iter = spec.getHierarchies().iterator(); iter.hasNext() && layersView == null;  ) {
+			String columnName = iter.next().getColumnName();
+			switch(columnName) {
+			case ColumnConstants.COUNTRY:
+			case ColumnConstants.REGION:
+			case ColumnConstants.ZONE:
+			case ColumnConstants.DISTRICT:
+			case ColumnConstants.LOCATION: 
+				layersView = columnName;
+				break;
+				default: break;
+			}
+		}
+		config.set(EPConstants.API_STATE_LAYERS_VIEW, layersView);
+		
+		// configure api state json 
+		JsonBean apiState = new JsonBean();
+		apiState.set(EPConstants.API_STATE_TITLE, spec.getReportName());
+		apiState.set(EPConstants.API_STATE_DESCRIPTION, EPConstants.API_STATE_REPORT_EXPORT_DESCRIPTION);
+		apiState.set(EPConstants.API_STATE_BLOB, config.toString());
+		
+		return EndpointUtils.saveApiState(apiState, "G");
 	}
 }

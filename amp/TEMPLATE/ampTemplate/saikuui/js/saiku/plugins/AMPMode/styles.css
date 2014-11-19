@@ -41,3 +41,8 @@
 	font-family: 'Open Sans';
 	line-height: 1.42857143;
 }
+
+#export-to-map {
+	padding-left: 15px;
+	cursor: pointer;
+}

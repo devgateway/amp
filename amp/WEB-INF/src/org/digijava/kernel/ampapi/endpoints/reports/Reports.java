@@ -457,4 +457,19 @@ public class Reports {
 		
 		return measuresToDisplayName;
 	}
+	
+	@POST
+	@Path("/report/export-to-map/{report_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	/**
+	 * Exports the report to Map
+	 * 
+	 * @param config current report configuration (settings, filters)
+	 * @param reportId report id
+	 * @return Json data to be used (like Json export Id, e.g. mapId) 
+	 * to be used to retrieve the API state of the report
+	 */
+	public JsonBean exportToMap(JsonBean config, @PathParam("report_id") Long reportId) {
+		return ReportsUtil.exportToMap(config, reportId);
+	}
 }

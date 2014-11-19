@@ -44,7 +44,7 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	 * @return
 	 */
 	public String getHierarchicalName() {
-		String res = String.format("[%s]", this.columnName);
+		String res = String.format("[%s]", this.originalColumnName);
 		if (parentColumn != null)
 			res = parentColumn.getHierarchicalName() + res;
 		return res;

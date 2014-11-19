@@ -589,48 +589,48 @@ public class EndpointUtils {
 		}
 		return mapId;
 	}
-
-/**
- * Gis settings that can be reused by modules that rely upon
- * Gis originated settings UI panel.
- *      
- * @return list of GIS settings
- */
-	public static List<SettingOptions> getGisSettings() {
-	// retrieve common settings
-	List<SettingOptions> settings = getSettings();
-	// add GIS specific settings
-	settings.add(getFundingTypeSettings(GisConstants.MEASURE_TO_NAME_MAP));
-	settings.add(new SettingOptions("number-format", false, 
-			FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT), null, null));
-	int amountOptionId = Integer.valueOf(
-			FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
-
-	settings.add(new SettingOptions("number-multiplier", false, 
-			String.valueOf(MondrianReportUtils.getAmountMultiplier(amountOptionId))
-			, null, null));
-	return settings;
-}
-	
-/**
- * Applies Gis specific settings
- * 
- * @param spec report specification 
- * @param config request configuration that stores the settings  
- */
-public static void applyGisSettings(ReportSpecificationImpl spec, JsonBean config) {
-	// apply first common settings, i.e. calendar and currency
-	EndpointUtils.applySettings(spec, config);
-
-	// now apply GIS custom settings, i.e. selected measures
-	if (config.get(EPConstants.SETTINGS) != null) {
-		Map<Integer, Object> settings = (Map<Integer, Object>) config.get(EPConstants.SETTINGS);
-		List<String> measureOptions = (List<String>) settings.get(SettingsConstants.FUNDING_TYPE_ID);
-		if (measureOptions != null)
-			for (String measure : measureOptions)
-				spec.addMeasure(new ReportMeasure(measure));
+		
+	/**
+	 * Gis settings that can be reused by modules that rely upon
+	 * Gis originated settings UI panel.
+	 *      
+	 * @return list of GIS settings
+	 */
+		public static List<SettingOptions> getGisSettings() {
+		// retrieve common settings
+		List<SettingOptions> settings = getSettings();
+		// add GIS specific settings
+		settings.add(getFundingTypeSettings(GisConstants.MEASURE_TO_NAME_MAP));
+		settings.add(new SettingOptions("number-format", false, 
+				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT), null, null));
+		int amountOptionId = Integer.valueOf(
+				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
+		
+		settings.add(new SettingOptions("number-multiplier", false, 
+				String.valueOf(MondrianReportUtils.getAmountMultiplier(amountOptionId))
+				, null, null));
+		return settings;
 	}
-}
+		
+	/**
+	 * Applies Gis specific settings
+	 * 
+	 * @param spec report specification 
+	 * @param config request configuration that stores the settings  
+	 */
+	public static void applyGisSettings(ReportSpecificationImpl spec, JsonBean config) {
+		// apply first common settings, i.e. calendar and currency
+		EndpointUtils.applySettings(spec, config);
+		
+		// now apply GIS custom settings, i.e. selected measures
+		if (config.get(EPConstants.SETTINGS) != null) {
+			Map<Integer, Object> settings = (Map<Integer, Object>) config.get(EPConstants.SETTINGS);
+			List<String> measureOptions = (List<String>) settings.get(SettingsConstants.FUNDING_TYPE_ID);
+			if (measureOptions != null)
+				for (String measure : measureOptions)
+					spec.addMeasure(new ReportMeasure(measure));
+		}
+	}
 
 	/**
 	 * 

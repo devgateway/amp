@@ -182,10 +182,8 @@ module.exports = BackboneDash.View.extend({
       csvTransformed[0].unshift('x');  // header for x axis values.
     }
 
-    var downloadable = 'data:text/plain;charset=utf-8,' +
-      encodeURIComponent(baby.unparse(csvTransformed));
-
-    e.currentTarget.setAttribute('href', downloadable);
+    e.currentTarget.setAttribute('href',
+      'data:text/plain;base64,' + btoa(baby.unparse(csvTransformed)));
     e.currentTarget.setAttribute('download',
       this.model.get('name') + '.csv');
   },

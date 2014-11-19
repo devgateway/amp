@@ -41,7 +41,6 @@ import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingOptions;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
-import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.helpers.geojson.FeatureCollectionGeoJSON;
@@ -74,7 +73,7 @@ public class GisEndPoints {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<AvailableMethod> getAvailableFilters() {
-		return GisUtil.getAvailableMethods(GisEndPoints.class.getName());
+		return EndpointUtils.getAvailableMethods(GisEndPoints.class.getName());
 	}	
 
 	/**
@@ -432,7 +431,7 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui = false, id = "Settings")
 	public List<SettingOptions> getSettings() {
-		return GisUtil.getSettings();
+		return EndpointUtils.getFilterSettings();
 	}
 	
 	@GET
@@ -468,7 +467,7 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON)
 	@ApiMethod(ui = false, id = "LastUpdatedActivities")
 	public JSONObject getLastUpdated(@DefaultValue("10") @QueryParam("limit") Integer limit,
-			@QueryParam("columns") String columns) {
+			@QueryParam("columns") String columns, @QueryParam("config") String config) {
 		List<String> extraColumns = new ArrayList<String>();
 		if (columns != null) {
 			StringTokenizer tokenizer = new StringTokenizer(columns, ",");
@@ -477,7 +476,7 @@ public class GisEndPoints {
 			}
 
 		}
-		return ActivityService.getLastUpdatedActivities(extraColumns, limit);
+		return ActivityService.getLastUpdatedActivities(extraColumns, limit,JsonBean.getJsonBeanFromString(config));
 	}
 
 }

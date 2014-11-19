@@ -24,6 +24,7 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -76,6 +77,7 @@ public class PublicPortalService {
 		spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false, true));
 		
 		spec.setFilters(getPeriodFilter(months));
+		EndpointUtils.applySettings(spec, config);
 		/*TODO: tbd if we need to filter out null dates from results
 		MondrianReportUtils.filterOutNullDates(spec);
 		*/
@@ -127,8 +129,7 @@ public class PublicPortalService {
 		List<JsonBean> content = new ArrayList<JsonBean>();
 		result.set("donorFunding", content);
 
-		ReportSpecificationImpl spec = new ReportSpecificationImpl(
-				"PublicPortal_GetDonorFunding");
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_GetDonorFunding");
 		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 		spec.setHierarchies(spec.getColumns());
 		if(fundingType==1){
@@ -147,7 +148,7 @@ public class PublicPortalService {
 		}
 
 		spec.setFilters(getPeriodFilter(months));
-
+		EndpointUtils.applySettings(spec, config);
 		getPublicReport(count, result, content, spec,true,measureName);
 		return result;
 
@@ -174,6 +175,7 @@ public class PublicPortalService {
 		GeneratedReport report = EndpointUtils.runReport(spec); 
 		
 		result.set("numberformat", FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT));
+		result.set("Currency", spec.getSettings().getCurrencyCode());
 		
 		if (report != null) {
 			if (report.reportContents != null && report.reportContents.getChildren() != null) {

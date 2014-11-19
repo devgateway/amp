@@ -58,11 +58,9 @@ public class JsonBean {
 		try {
 			ObjectMapper mapper11 = new ObjectMapper();
 			mapper11.configure(
-					org.codehaus.jackson.map.DeserializationConfig.Feature.UNWRAP_ROOT_VALUE,
-					false);
+					org.codehaus.jackson.map.DeserializationConfig.Feature.UNWRAP_ROOT_VALUE,false);
 			mapper11.configure(
-					org.codehaus.jackson.map.DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES,
-					false);
+					org.codehaus.jackson.map.DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES,false);
 
 			return mapper11.readValue(jb, JsonBean.class);
 		} catch (IOException e) {

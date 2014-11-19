@@ -19,7 +19,6 @@ import org.dgfoundation.amp.reports.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
-import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
@@ -57,7 +56,7 @@ public class Filters {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<AvailableMethod> getAvailableFilters() {
-		return GisUtil.getAvailableMethods(Filters.class.getName());
+		return EndpointUtils.getAvailableMethods(Filters.class.getName());
 	}
 
 	

@@ -3,6 +3,8 @@
  */
 package org.digijava.kernel.ampapi.endpoints.common;
 
+import java.lang.reflect.Member;
+import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
@@ -25,11 +28,16 @@ import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.reports.ColumnsVisibility;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingOptions;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
+import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
+import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
+import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -38,11 +46,13 @@ import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -577,5 +587,87 @@ public class EndpointUtils {
 			throw new WebApplicationException(e);
 		}
 		return mapId;
+	}
+
+	/**
+	 * @return list of GIS settings
+	 */
+	public static List<SettingOptions> getFilterSettings() {
+		//retrieve common settings
+		List<SettingOptions> settings = getSettings();
+		//add GIS specific settings
+		settings.add(getFundingTypeSettings(GisConstants.MEASURE_TO_NAME_MAP));
+		settings.add(new SettingOptions("number-format", false, 
+				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT), null, null));
+		int amountOptionId = Integer.valueOf(
+				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS));
+		
+		settings.add(new SettingOptions("number-multiplier", false, 
+				String.valueOf(MondrianReportUtils.getAmountMultiplier(amountOptionId))
+				, null, null));
+		return settings;
+	}
+	
+	/**
+	 * 
+	 * @param className
+	 * @return
+	 */
+	public static List<AvailableMethod> getAvailableMethods(String className){
+		List<AvailableMethod> availableFilters=new ArrayList<AvailableMethod>(); 
+		try {
+			Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
+			Class<?> c = Class.forName(className);
+			javax.ws.rs.Path p=c.getAnnotation(javax.ws.rs.Path.class);
+			String path="/rest/"+p.value();
+			Member[] mbrs=c.getMethods();
+			for (Member mbr : mbrs) {
+				ApiMethod apiAnnotation=
+		    			((Method) mbr).getAnnotation(ApiMethod.class);
+				if (apiAnnotation != null) {
+					final String column = apiAnnotation.column();
+					if (EPConstants.NA.equals(column) || visibleColumns.contains(column)) {
+						//then we have to add it to the filters list
+						javax.ws.rs.Path methodPath = ((Method) mbr).getAnnotation(javax.ws.rs.Path.class);
+						AvailableMethod filter = new AvailableMethod();
+						//the name should be translatable
+						if(apiAnnotation.name()!=null && !apiAnnotation.name().equals("")){
+							filter.setName(TranslatorWorker.translateText(apiAnnotation.name()));
+						}
+						
+						String endpoint = "/rest/" + p.value();
+						
+						if (methodPath != null){
+							endpoint += methodPath.value();
+						}
+						filter.setEndpoint(endpoint);
+						filter.setUi(apiAnnotation.ui());
+						filter.setId(apiAnnotation.id());
+						//we check the method exposed
+						if (((Method) mbr).getAnnotation(javax.ws.rs.POST.class) != null){
+							filter.setMethod("POST");
+						} else {
+							if (((Method) mbr).getAnnotation(javax.ws.rs.GET.class) != null){
+								filter.setMethod("GET");
+							} else {
+								if (((Method) mbr).getAnnotation(javax.ws.rs.PUT.class) != null){
+									filter.setMethod("PUT");
+								} else {
+									if (((Method) mbr).getAnnotation(javax.ws.rs.DELETE.class) != null){
+										filter.setMethod("DELETE");
+									}
+								}
+							}
+						}
+						availableFilters.add(filter);
+					}
+				}
+			}
+		}
+		 catch (ClassNotFoundException e) {
+			GisUtil.logger.error("cannot retrieve filters list",e);
+			return null;
+		}
+		return availableFilters;
 	}	
 }

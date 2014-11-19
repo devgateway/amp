@@ -17,7 +17,6 @@ import javax.ws.rs.core.MediaType;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
-import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.exception.DgException;
@@ -34,7 +33,7 @@ public class TranslationsEndPoints {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<AvailableMethod> getAvailableFilters() {
-		return GisUtil.getAvailableMethods(TranslationsEndPoints.class.getName());
+		return EndpointUtils.getAvailableMethods(TranslationsEndPoints.class.getName());
 	}	
 	
 	@POST

@@ -181,13 +181,15 @@ public class ActivityService {
 		return list;
 	}
 
-
-
-
-
-
-
-	public static JSONObject getLastUpdatedActivities(List<String> extraColumns, Integer pageSize) {
+	/**
+	 * 
+	 * @param extraColumns
+	 * @param pageSize
+	 * @param config
+	 * @return
+	 */
+	
+	public static JSONObject getLastUpdatedActivities(List<String> extraColumns, Integer pageSize, JsonBean config) {
 		JSONObject responseJson = new JSONObject();
 		if (pageSize == null) {
 			pageSize = new Integer(10);
@@ -207,6 +209,7 @@ public class ActivityService {
 
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ALWAYS_PRESENT, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
+		EndpointUtils.applySettings(spec, config);
 		GeneratedReport report = null;
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
 				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);

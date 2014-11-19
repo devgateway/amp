@@ -77,6 +77,7 @@ public class ReportsUtil {
 	 *  "add_hierarchies" : ["Approval Status"], 									<br/>
 	 *  "add_measures"    : ["Custom Measure"], 									<br/>
 	 *  "rowTotals"       : true													<br/>
+	 *  "settings"		  :{"1":"USD","2":"4"}										<br/>
 	 * } 																			<br/>
 	 * where:
 	 * <ul>
@@ -98,6 +99,7 @@ public class ReportsUtil {
 	 *   <li>add_measures</li> optional, a list of measures to be added to the <br>
 	 *                         report configuration <br>
 	 *   <li>rowTotals</li>    optional, flag to request row totals to be build
+	 *   <li>settings</li>	   Report configuration	
 	 * </ol>
 	 * @return JsonBean result for the requested page and pagination information
 	 */

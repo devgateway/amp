@@ -58,7 +58,7 @@ public class SaikuUtils {
 	public static void doTotals(CellDataSet result, CellSet cellSet, boolean onColumns, boolean onRows) throws Exception {
 		/* start of AMP custom part to detect the selectedMeasures list */ 
 		
-		if (cellSet.getAxes().size() < 2)
+		if (cellSet.getAxes().size() < 2 || result.getCellSetBody().length == 0 )
 			return; 
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 		List<Measure> uniqueMeasures = new ArrayList<Measure>();
@@ -339,6 +339,28 @@ public class SaikuUtils {
 				coordinates.set(0, j-1);
 				dataCell.setCoordinates(coordinates);
 			}
+	}
+
+	/**
+	 * Cleans up header traces when no data is available.
+	 * AMP-18748
+	 * 
+	 * Note: another approach to avoid traces is to use "NON EMPTY" in MDX ON ROWS
+	 * but at the moment it breaks the solution for AMP-18504.
+	 * Even if later we'll decide to use another solution for AMP-18504,
+	 * this part shall not do anything bad.
+	 *  
+	 * @param cellDataSet
+	 */
+	public static void cleanupTraceHeadersIfNoData(CellDataSet cellDataSet) {
+		// When no data is available, then for some reason Saiku CellDataSet has no headers,
+		// and trace headers are stored in the cellSetBody, that breaks things up.
+		// => removing this header traces from cellSetBody
+		if (cellDataSet.getCellSetHeaders().length == 0) {
+			cellDataSet.setCellSetBody(new AbstractBaseCell[0][0]);
+			cellDataSet.setHeight(0);
+			cellDataSet.setWidth(0);
+		}
 	}
 	
 	

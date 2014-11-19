@@ -53,7 +53,6 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXConfig;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXFilter;
-import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXGroupFilter;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
 import org.digijava.kernel.ampapi.mondrian.util.AmpMondrianSchemaProcessor;
@@ -500,6 +499,9 @@ public class MondrianReportGenerator implements ReportExecutor {
 		CellDataSet cellDataSet = OlapResultSetUtil.cellSet2Matrix(cellSet); // we can also pass a formater to cellSet2Matrix(cellSet, formatter)
 		logger.info("[" + spec.getReportName() + "]" +  "Conversion from Olap4J CellSet to Saiku CellDataSet ended.");
 
+		// AMP-18748
+		SaikuUtils.cleanupTraceHeadersIfNoData(cellDataSet);
+		
 		leafHeaders = getOrderedLeafColumnsList(spec, rowAxis, columnAxis);		
 
 		// now cleanup dummy measures, identified during #getOrderedLeafColumnsList

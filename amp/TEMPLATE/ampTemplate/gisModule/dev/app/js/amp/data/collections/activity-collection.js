@@ -81,9 +81,9 @@ module.exports = Backbone.Collection
 
       activityFetch.then(function() {
           /* On the very first page request, advance if succeeds */
-          if (options && !options.isFetchMore) {
-            self._currentStartPosition += self._pageSize;
-          }
+        if (options && !options.isFetchMore) {
+          self._currentStartPosition += self._pageSize;
+        }
       }).fail (function() {
         /* If a page request after the first fails, revert position*/
         if (self.isFetchMore) {

@@ -173,10 +173,21 @@ module.exports = Backbone.View.extend({
 
     return this.app.data.activities.getActivities(activityIDs).then(function(activityCollection) {
 
-      self.tempDOM.find('#projects-pane .loading').remove();
-      self.tempDOM.find('.project-list').append(
-        self.projectListTemplate({activities: activityCollection})
+      self.app.data.settings.load().then(function() {
+        self.tempDOM.find('#projects-pane .loading').remove();
+
+      /* Format the numerical columns */
+        var ampFormatter = new util.DecimalFormat(self.app.data.settings.get('number-format').get('name'));
+        var activityFormatted = _.map(activityCollection, function(activity) {
+          activity.set('formattedActualCommitments', ampFormatter.format(activity.get('Actual Commitments')));
+          activity.set('formattedActualDisbursements', ampFormatter.format(activity.get('Actual Disbursements')));
+          return activity;
+        });
+
+        self.tempDOM.find('.project-list').append(
+        self.projectListTemplate({activities: activityFormatted})
         );
+      });
     });
   }
 });

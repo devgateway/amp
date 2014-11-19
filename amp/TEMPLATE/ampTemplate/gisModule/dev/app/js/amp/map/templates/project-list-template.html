@@ -8,15 +8,15 @@
         </a>
       </td>
       <td class="text-right">
-        <% if(activityJSON["Actual Commitments"]){ %>
-            <%= activityJSON["Actual Commitments"] %>
+        <% if(activityJSON["formattedActualCommitments"]){ %>
+            <%= activityJSON["formattedActualDisbursements"] %>
         <% } else { %>
           -
         <% }%>
       </td>
       <td class="text-right">
-        <% if(activityJSON["Actual Disbursements"]){ %>
-            <%= activityJSON["Actual Disbursements"] %>
+        <% if(activityJSON["formattedActualCommitments"]){ %>
+            <%= activityJSON["formattedActualDisbursements"] %>
         <% } else { %>
           -
         <% }%>

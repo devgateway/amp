@@ -6,10 +6,10 @@
  */
 function DecimalFormat(formatStr)
 {
-     /**
-     * @fieldOf DecimalFormat
-     * @type String
-     */
+    /**
+    * @fieldOf DecimalFormat
+    * @type String
+    */
     this.prefix = '';
     /**
      * @fieldOf DecimalFormat
@@ -40,7 +40,7 @@ function DecimalFormat(formatStr)
      * @type String
      */
     this.maxFrac = 0;
-    
+
     // get prefix
     for (var i=0; i<formatStr.length; i++) {
         if (formatStr.charAt(i) == '#' || formatStr.charAt(i) == '0') {
@@ -49,13 +49,13 @@ function DecimalFormat(formatStr)
             break;
         }
     }
-    
+
     // get suffix
     this.suffix = formatStr.replace(/[#]|[0]|[,]|[.]/g , '');
 
     // get number as string
     var numberStr = formatStr.replace(/[^0#,.]/g , '');
-    
+
     var intStr = '';
     var fracStr = '';
     var point = numberStr.indexOf('.');
@@ -66,12 +66,12 @@ function DecimalFormat(formatStr)
     else {
         intStr = numberStr;
     }
-    
+
     var commaPos = intStr.lastIndexOf(',');
     if (commaPos != -1) {
         this.comma = intStr.length - 1 - commaPos;
     }
-    
+
     intStr = intStr.replace(/[,]/g , ''); // remove commas
 
     fracStr = fracStr.replace(/[,]|[.]+/g , '');
@@ -94,11 +94,11 @@ function DecimalFormat(formatStr)
 DecimalFormat.prototype.format = function(numStr) { // 1223.06 --> $1,223.06
     // remove prefix, suffix and commas
     var numberStr = this.formatBack(numStr).toLowerCase();
-    
+
     // do not format if not a number
     if (isNaN(numberStr) || numberStr.length == 0)
       return numStr;
-    
+
     //scientific numbers
     if (i = numberStr.indexOf("e") != -1) {
       var n = Number(numberStr);
@@ -128,7 +128,7 @@ DecimalFormat.prototype.format = function(numStr) { // 1223.06 --> $1,223.06
         intStr = numberStr;
     }
     fracStr = fracStr.replace(/[.]/ , ''); // remove other point characters
-    
+
     var isPercentage = this.suffix && this.suffix.charAt(0) === '%';
     // if percentage, number will be multiplied by 100.
     var minInt = this.minInt, minFrac = this.minFrac, maxFrac = this.maxFrac;
@@ -137,7 +137,7 @@ DecimalFormat.prototype.format = function(numStr) { // 1223.06 --> $1,223.06
       minFrac += 2;
       maxFrac += 2;
     }
-    
+
     if (fracStr.length > maxFrac) { // round
         //case 6143
         var num = new Number('0.' + fracStr);
@@ -166,19 +166,19 @@ DecimalFormat.prototype.format = function(numStr) { // 1223.06 --> $1,223.06
     while (fracStr.length > minFrac && fracStr.charAt(fracStr.length-1) == '0') { // if minInt=4 then 00034 --> 0034)
         fracStr = fracStr.substring(0,fracStr.length-1);
     }
-    
+
     for (var i=intStr.length; i<minInt; i++) { // if minInt=4 then 034 --> 0034
         intStr = '0' + intStr;
     }
     while (intStr.length > minInt && intStr.charAt(0) == '0') { // if minInt=4 then 00034 --> 0034)
         intStr = intStr.substring(1);
     }
-    
+
     if (isPercentage) { // multiply by 100
       intStr += fracStr.substring(0,2);
       fracStr = fracStr.substring(2);
     }
-    
+
     var j = 0;
     for(var i=intStr.length; i>0; i--) { // add commas
         if (j != 0 && j%this.comma == 0) {
@@ -193,11 +193,11 @@ DecimalFormat.prototype.format = function(numStr) { // 1223.06 --> $1,223.06
         formattedValue = this.prefix + intStr + '.' + fracStr + this.suffix;
     else
         formattedValue = this.prefix + intStr + this.suffix;
-        
+
     if (negative) {
         formattedValue = '-' + formattedValue;
     }
-    
+
     return formattedValue;
 }
 
@@ -259,4 +259,7 @@ DecimalFormat.prototype.getNumericString = function(str){
         return numStr;
     }
     return str;
-}
+};
+
+
+module.exports = DecimalFormat;

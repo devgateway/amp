@@ -105,11 +105,11 @@ module.exports = Backbone.Collection
         // not joined yet
         if (!(activity && activity.attributes)) {
           var match = self.activities.find(function(model) {
-            // intentionally double ==
+            // intentionally double == to coerce type
             return model.id ==  structure.get('activityZero'); // intentionally double ==
           });
 
-          deferreds.push(match.tempDirtyForceJoin().then(function(){
+          deferreds.push(match.tempDirtyForceJoin().then(function() {
             structure.set('activity', match);
           }));
         }

@@ -1,4 +1,5 @@
 var d3 = require('d3-browserify');
+var DecimalFormat = require('./DecimalFormat');
 
 
 var formatKMB = function(precision) {
@@ -34,5 +35,6 @@ var categoryColours = function(cats) {
 module.exports = {
   formatKMB: formatKMB,
   formatShortText: formatShortText,
-  categoryColours: categoryColours
+  categoryColours: categoryColours,
+  DecimalFormat: DecimalFormat
 };

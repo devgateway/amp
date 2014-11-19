@@ -20,18 +20,22 @@ module.exports = Backbone.View.extend({
     var self = this;
     this.collection.load().then(function() {
 
-      //TODO: inefficient to constantly redraw (if already on page), put in temp obj first.
-      // then only append once.
-      self.collection.each(function(project) {
-        // it joins on activity init, but for some reason it was being overridden...
-        // temp dirty force rejoin for now, otherwise use: getJoinedVersion
-        project.tempDirtyForceJoin().then(function() {
-          self.$el.append(self.template({
-            activity: project.toJSON(),
-            formattedCommitments: chartUtils.formatKMB()(project.toJSON()['Actual Commitments']),
-            formattedDisbursements: chartUtils.formatKMB()(project.toJSON()['Actual Disbursements'])
-          }));
+      self.app.data.settings.load().then(function() {
+        //TODO: inefficient to constantly redraw (if already on page), put in temp obj first.
+        // then only append once.
+        self.collection.each(function(project) {
+          // it joins on activity init, but for some reason it was being overridden...
+          // temp dirty force rejoin for now, otherwise use: getJoinedVersion
+          var ampFormatter = new chartUtils.DecimalFormat(self.app.data.settings.get('number-format').get('name'));
+          project.tempDirtyForceJoin().then(function() {
+            self.$el.append(self.template({
+              activity: project.toJSON(),
+              formattedCommitments: ampFormatter.format(project.toJSON()['Actual Commitments']),
+              formattedDisbursements: ampFormatter.format(project.toJSON()['Actual Disbursements'])
+            }));
+          });
         });
+
       });
 
     });

@@ -6,11 +6,8 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
-import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.junit.Test;
 
 public class BasicMondrianReportTests extends MondrianReportsTestCase {
@@ -297,12 +294,8 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 				null,
 				GroupingCriteria.GROUPING_YEARLY);
 		
-		MondrianReportFilters filters = new MondrianReportFilters();
-		// applying filters that will provide no data
-		filters.addFilterRule(new ReportColumn(ColumnConstants.REGION),new FilterRule("9086", true));
-		
 		runMondrianTestCase(spec, "en",
-				Arrays.asList("activity with primary_program"),
+				Arrays.asList("__hopefully____invalid________name____"),
 			cor
 		);
 	}

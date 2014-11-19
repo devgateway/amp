@@ -6,8 +6,11 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.junit.Test;
 
 public class BasicMondrianReportTests extends MondrianReportsTestCase {
@@ -280,6 +283,26 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 		
 		runMondrianTestCase(spec, "en",
 			Arrays.asList("Test MTEF directed", "activity with primary_program"),
+			cor
+		);
+	}
+	
+	@Test
+	public void test_AMP_18748_no_data() {
+		ReportAreaForTests cor = new ReportAreaForTests().withChildren(  );
+		
+		ReportSpecificationImpl spec = buildSpecification("test_AMP_18748_no_data",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),
+				Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
+				null,
+				GroupingCriteria.GROUPING_YEARLY);
+		
+		MondrianReportFilters filters = new MondrianReportFilters();
+		// applying filters that will provide no data
+		filters.addFilterRule(new ReportColumn(ColumnConstants.REGION),new FilterRule("9086", true));
+		
+		runMondrianTestCase(spec, "en",
+				Arrays.asList("activity with primary_program"),
 			cor
 		);
 	}

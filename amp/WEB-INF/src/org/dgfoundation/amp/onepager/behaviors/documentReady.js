@@ -1,6 +1,6 @@
 enableComputateVisibleSections = false;
 onepagerMode = ${onepagerMode};
-
+isTabView = ${isTabView};
 function isScrolledIntoView(docViewTop, docViewBottom, elem){
     var elemTop = $(elem).offset().top;
     var elemBottom = elemTop + $(elem).height();
@@ -165,7 +165,9 @@ $(document).ready(function(){
 	subSectionsSliderEnable();
 	rightMenuEnable();
 	pageLeaveConfirmationEnabler();
-	switchTabs();
+	if(isTabView){
+		switchTabs();
+	}
 });
 
 $(window).resize(function() {

@@ -520,3 +520,6 @@ tr.wicketFundingRowItem:nth-child(odd) {background: #FFFFFF}
 	    border-right: 1px solid #ccc;
 	    border-bottom: 1px solid #ccc;
 }
+.fundingOverviewDivNoTabs{
+		border-top: 1px solid #ccc;
+}

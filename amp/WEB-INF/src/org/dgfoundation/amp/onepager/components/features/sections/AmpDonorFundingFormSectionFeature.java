@@ -43,6 +43,7 @@ import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
+import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -53,7 +54,10 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.GlobalSettings;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -132,12 +136,15 @@ public class AmpDonorFundingFormSectionFeature extends
 		//find the idex
 //		System.out.println("Switch orgs El indice es : "+
 //		list.items.indexOf(newOrg));
-
-		///target.add(list.getParent()); //this should be used in not tabs form
-		target.add(AmpDonorFundingFormSectionFeature.this);
 		target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(list
 				.getParent()));
-		target.appendJavaScript("switchTabs();");
+
+		if( FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ACTIVITY_FORM_FUNDING_SECTION_DESIGN)){
+			target.add(AmpDonorFundingFormSectionFeature.this);
+			target.appendJavaScript("switchTabs();");
+		}else{
+			target.add(list.getParent());
+		}
 	}
 
 	public void deleteTab(AmpOrganisation missing, AjaxRequestTarget target) {
@@ -237,7 +244,9 @@ public class AmpDonorFundingFormSectionFeature extends
 	public AmpDonorFundingFormSectionFeature(String id, String fmName,
 			final IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
-
+		
+		final Boolean isTabsView = FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ACTIVITY_FORM_FUNDING_SECTION_DESIGN);
+		
 		 final String expandAllKey = TranslatorWorker.generateTrnKey("Expand all");
          final AjaxLink expandAllLink = new AjaxLink("expandDonorItems"){
         	
@@ -294,55 +303,14 @@ public class AmpDonorFundingFormSectionFeature extends
 		final WebMarkupContainer wmc = new WebMarkupContainer("container");
 		wmc.setOutputMarkupId(true);
 
-		//For tabs
-
-//		ExternalLink l = new ExternalLink("overviewLink", "#tab1", "Overview"){
-//			
-//		};
-		
-       
-
-//		wmc.add(new AjaxLink<Void>("overviewLink",new Model("Overview"))
-//	    	        {
-//	    	            @Override
-//	    	            public void onClick(AjaxRequestTarget target)
-//	    	            {
-//	    	                
-//	    	                target.appendJavaScript("alert('');");
-//	    	            }
-////	    	        });
-//		ExternalLink overviewLink = new ExternalLink("overviewLink", "#tab1" ,"Overview");
-//		overviewLink.add(new AttributePrepender("title", new Model<String>("Overview"),""));
-		
-//		wmc.add(overviewLink);
-		
 		ExternalLink link = new ExternalLink("overviewLink","#tab0","Overview"); 
 		
 		link.setOutputMarkupId(true);
 		
-//		link.add(new AjaxEventBehavior("onclick") {
-//			private static final long serialVersionUID = 1L;
-//
-//			@Override
-//			protected void onEvent(AjaxRequestTarget target) {
-//				// TODO Auto-generated method stub
-//				target.
-//			}
-//
-//		
-//		}
-//			);
-//		link.add(new AjaxEventBehavior("onclick") {
-//            protected void onEvent(AjaxRequestTarget target) {
-//                System.out.println("ajax here!");
-//            }
-//            @Override
-//            protected void updateAjaxAttributes(AjaxRequestAttributes attributes) {
-//                super.updateAjaxAttributes(attributes);
-//                attributes.setAllowDefault(true);
-//            }
-//        });
 		wmc.setOutputMarkupId(true);
+		
+		link.setVisible(isTabsView);
+		
 		wmc.add(link);
 
 		add(wmc);
@@ -360,16 +328,12 @@ public class AmpDonorFundingFormSectionFeature extends
 				item.add(l);
 			}
 			public void addItem(AmpOrganisation org) {
-				
-//				ExternalLink l = new ExternalLink("linkForTabs", "#tab"
-//						+ (tabsList.items.size()+1), org.getAcronym() );
-//				l.add(new AttributePrepender("title", new Model<String>(org.getName()), ""));
-
 				tabsList.origAddItem(org);
 				tabsList.updateModel();
 			}
 
 		};
+		tabsList.setVisibilityAllowed(isTabsView);
 		wmc.add(tabsList);
 				
 		
@@ -422,14 +386,24 @@ public class AmpDonorFundingFormSectionFeature extends
 						.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
 				send(getPage(), Broadcast.BREADTH,
 						new OrganisationUpdateEvent(target));
-								
-//				target.add(wmc);
-				target.add(AmpDonorFundingFormSectionFeature.this);
+				if(isTabsView){
+					//if in tabs view we should refresh the whole section so 
+					//tabs are inplace and recreated
+					target.add(AmpDonorFundingFormSectionFeature.this);
+					//the -1 is the tabs (last) it will focus. Have to check if we need to 
+					//focus on the middle ones
+					target.appendJavaScript("switchTabs(-1);");	
+					
+				}else{
+					target.add(wmc);	
+				}
+//				
+				
 				//AmpDonorFundingFormSectionFeature
 //				System.out.println("onSelect El indice es : "+
 //						list.items.indexOf(choice));
 
-				target.appendJavaScript("switchTabs(-1);");
+				
 			}
 
 			@Override

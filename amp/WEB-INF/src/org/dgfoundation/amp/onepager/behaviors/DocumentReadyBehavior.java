@@ -9,6 +9,7 @@ import org.apache.wicket.markup.head.StringHeaderItem;
 import org.apache.wicket.util.template.JavaScriptTemplate;
 import org.apache.wicket.util.template.PackageTextTemplate;
 import org.dgfoundation.amp.onepager.OnePagerConst;
+import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -29,7 +30,7 @@ public class DocumentReadyBehavior extends Behavior {
 		} catch (Exception ignored) {}
 		variables.put("onepagerMode", activityFormOnePager);
 		variables.put("onepagerPath", "/" + OnePagerConst.ONEPAGER_URL_PREFIX + "/" + OnePagerConst.ONEPAGER_URL_PARAMETER_ACTIVITY + "/");
-		
+		variables.put("isTabView",FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ACTIVITY_FORM_FUNDING_SECTION_DESIGN));
 		
 		PackageTextTemplate ptt = new PackageTextTemplate(DocumentReadyBehavior.class, JS_FILE_NAME);
 		ptt.interpolate(variables);

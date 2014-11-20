@@ -9,6 +9,7 @@ import java.util.TreeSet;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -39,6 +40,7 @@ import org.dgfoundation.amp.onepager.events.FundingSectionSummaryEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.translation.TrnLabel;
+import org.dgfoundation.amp.onepager.util.AttributePrepender;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -66,6 +68,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 			final IModel<AmpFunding> fundingModel,final IModel<AmpActivityVersion> am, final AmpDonorFundingFormSectionFeature parent,Integer item) throws Exception {
 		super(id, fundingModel, fmName, true);
 		this.item=item;
+		final Boolean isTabView=FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ACTIVITY_FORM_FUNDING_SECTION_DESIGN);
 		if (fundingModel.getObject().getFundingDetails() == null)
 			fundingModel.getObject().setFundingDetails(new TreeSet<AmpFundingDetail>());
 		//this should be changed to a propertyModel
@@ -77,6 +80,18 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 		fundingSummary.add(UpdateEventBehavior.of(FundingSectionSummaryEvent.class));
 		fundingSummary.setOutputMarkupId(true);
 		
+		
+		final WebMarkupContainer wmc = new WebMarkupContainer("fundingContainer");
+		wmc.setOutputMarkupId(true);
+		add(wmc);
+		
+		if (isTabView) {
+			wmc.add(new AttributePrepender("style", new Model<String>(
+					"display: none;"), ""));
+
+		} else {
+
+		}
 //		fundingSumary.add(
 //		new AjaxFormComponentUpdatingBehavior("onchange") {        
 //			private static final long serialVersionUID = -6492252081340597543L;
@@ -116,9 +131,10 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				AmpOrganisation org = fundingModel.getObject().getAmpDonorOrgId();
 				super.onClick(target);
 				parent.updateFundingGroups(org, target);
-				//AmpFundingItemFeaturePanel
 				target.add(parent);
-				target.appendJavaScript("switchTabs();");
+				if(isTabView){
+					target.appendJavaScript("switchTabs();");
+				}
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
 			}
 		});
@@ -131,18 +147,20 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				parent.getList().addItem(fundingModel.getObject().getAmpDonorOrgId());
 				
 				parent.getList().updateModel();
-				target.add(parent);
+					target.add(parent);
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
-				target.appendJavaScript("switchTabs();");
+				if(isTabView){
+					target.appendJavaScript("switchTabs();");
+				}
 			}
 		};
-		add(addNewFunding);
+		wmc.add(addNewFunding);
 		
 		AmpTextAreaFieldPanel donorObjective = new AmpTextAreaFieldPanel("donorObjective", new PropertyModel<String>(fundingModel,"donorObjective"), "Donor Objective", false);
-		add(donorObjective);
+		wmc.add(donorObjective);
         
         AmpTextAreaFieldPanel conditions = new AmpTextAreaFieldPanel("conditions", new PropertyModel<String>(fundingModel,"conditions"), "Conditions", false);
-        add(conditions);
+        wmc.add(conditions);
 		
 //		final AmpAutocompleteFieldPanel<AmpOrganisation> newOrgSelect=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete", "Search Organizations", true, AmpOrganisationSearchModel.class) {			
 //			private static final long serialVersionUID = 1L;
@@ -192,7 +210,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 	
 		
 		final AmpOrgRoleSelectorComponent orgRoleSelector = new AmpOrgRoleSelectorComponent("orgRoleSelector", am, parent.getRoleFilter());
-		add(orgRoleSelector);
+		wmc.add(orgRoleSelector);
 		
 		// button used to add funding based on the selected organization and
 		// role
@@ -216,7 +234,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 
 		// by default this button is disabled, when the form first loads
 		changeOrg.getButton().setEnabled(false);
-		add(changeOrg);
+		wmc.add(changeOrg);
 
 		
 		orgRoleSelector.getOrgSelect().getChoiceContainer().add(
@@ -246,54 +264,55 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 //		};
 //		add(changeFundingOrg);
 		
+
 		
 		AmpCheckBoxFieldPanel active = new AmpCheckBoxFieldPanel("active",
 				new PropertyModel<Boolean>(fundingModel, "active"), "Active");
-		add(active);
+		wmc.add(active);
 		AmpCheckBoxFieldPanel delegatedCooperation = new AmpCheckBoxFieldPanel(
 				"delegatedCooperation", new PropertyModel<Boolean>(
 						fundingModel, "delegatedCooperation"),
 				"Delegated Cooperation");
-		add(delegatedCooperation);
+		wmc.add(delegatedCooperation);
 		AmpCheckBoxFieldPanel delegatedPartner = new AmpCheckBoxFieldPanel(
 				"delegatedPartner", new PropertyModel<Boolean>(fundingModel,
 						"delegatedPartner"), "Delegated Partner");
-		add(delegatedPartner);
+		wmc.add(delegatedPartner);
 
 		fundingInfo = new AmpDonorFundingInfoSubsectionFeature(
 				"fundingInfoSubsection", fundingModel,"Funding Classification",fundingSummary);
-		add(fundingInfo);
+		wmc.add(fundingInfo);
 		
 		AmpMTEFProjectionSubsectionFeature mtefProjections = new AmpMTEFProjectionSubsectionFeature(
 				"mtefProjectionsSubsection", fundingModel,"MTEF Projections");
-		add(mtefProjections);
+		wmc.add(mtefProjections);
 		
 		AmpDonorCommitmentsSubsectionFeature commitments = new AmpDonorCommitmentsSubsectionFeature(
 				"commitments", fundingModel,"Commitments",Constants.COMMITMENT);
-		add(commitments);
+		wmc.add(commitments);
 		
 		
 		disbursements = new AmpDonorDisbursementsSubsectionFeature(
 				"disbursements", fundingModel,"Disbursements",Constants.DISBURSEMENT);
-		add(disbursements);
+		wmc.add(disbursements);
 		
 		AmpDonorDisbOrdersSubsectionFeature disbOrders = new AmpDonorDisbOrdersSubsectionFeature(
 				"disbOrders", fundingModel,"Disbursement Orders",Constants.DISBURSEMENT_ORDER);
 		disbOrders.setDisbursements(disbursements);
-		add(disbOrders);
+		wmc.add(disbOrders);
 		
 		AmpEstimatedDonorDisbursementsSubsectionFeature edd = new AmpEstimatedDonorDisbursementsSubsectionFeature(
 					"estimatedDisbursements", fundingModel,"Estimated Disbursements",Constants.ESTIMATED_DONOR_DISBURSEMENT);
-			add(edd);
+			wmc.add(edd);
 		
 		AmpReleaseOfFundsSubsectionFeature rof = new AmpReleaseOfFundsSubsectionFeature(
 					"releaseOfFunds", fundingModel,"Release of Funds",Constants.RELEASE_OF_FUNDS);
-			add(rof);
+			wmc.add(rof);
 		
 			
 		AmpDonorExpendituresSubsectionFeature expenditures = new AmpDonorExpendituresSubsectionFeature(
 				"expenditures", fundingModel,"Expenditures",Constants.EXPENDITURE);
-		add(expenditures);
+		wmc.add(expenditures);
 	}
 
 	public AmpDonorFundingInfoSubsectionFeature getFundingInfo() {

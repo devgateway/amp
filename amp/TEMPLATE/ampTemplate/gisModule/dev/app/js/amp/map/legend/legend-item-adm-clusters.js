@@ -19,7 +19,7 @@ module.exports = Backbone.View.extend({
     this.model.load().done(function() {
       self.app.translator.translateDOM(
        self.template(self.model.toJSON())).then(
-       function(newEl){
+       function(newEl) {
          self.$el.html(newEl);
        });
     });

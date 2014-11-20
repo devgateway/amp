@@ -5,7 +5,6 @@ package org.digijava.kernel.ampapi.mondrian.queries;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -17,8 +16,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
-import mondrian.rolap.RolapConnection;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.keeper.ErrorReportingPlugin;
@@ -27,8 +24,6 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXConfig;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXFilter;
-import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXFilter.MDXFilterType;
-import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXGroupFilter;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXLevel;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXTuple;
@@ -218,7 +213,11 @@ public class MDXGenerator {
 		
 		if (config.getColumnAttributes().size()==0) {
 			//aka simple summary totals report or can be used by dashboards/reports charts (e.g. pie chart)
-			axisMdx = "{" + MoConstants.FUNC_HIERARCHIZE + "(" + axisMdx + ")}"; //
+			/*
+			 * No need to wrap into Hierarchize function, which orders measures by their AMP.xml order. 
+			 * Leaving them by the configuration order. 
+			axisMdx = "{" + MoConstants.FUNC_HIERARCHIZE + "(" + axisMdx + ")}";
+			*/
 		} else {
 			List<String> dataFilterSets = new ArrayList<String>();
 			axisMdx = getAxis(config, config.getColumnAttributes().listIterator(config.getColumnAttributes().size()), 

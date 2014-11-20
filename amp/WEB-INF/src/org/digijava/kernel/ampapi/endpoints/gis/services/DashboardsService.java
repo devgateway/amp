@@ -85,9 +85,10 @@ public class DashboardsService {
 	 * @param adjtype
 	 *            (Actual Commitments, Actual Disbursement)
 	 * @param n
+	 * @param config request configuration that stores filters, settings and any other options
 	 * @return
 	 */
-	public static JsonBean getTops(String type, String adjtype, Integer n, JsonBean filter) {
+	public static JsonBean getTops(String type, String adjtype, Integer n, JsonBean config) {
 		String err = null;
 		String column = "";
 		String adjustmenttype = "";
@@ -134,13 +135,15 @@ public class DashboardsService {
 		GeneratedReport report = null;
 		
 		MondrianReportFilters filterRules = null;
- 		if(filter!=null){
-			Object columnFilters=filter.get("columnFilters");
-			if(columnFilters!=null){
-				filterRules = FilterUtils.getApiColumnFilter((LinkedHashMap<String, Object>)filter.get("columnFilters"));	
+ 		if(config != null){
+			Object columnFilters = config.get("columnFilters");
+			if(columnFilters != null){
+				filterRules = FilterUtils.getApiColumnFilter((LinkedHashMap<String, Object>) config.get("columnFilters"));	
 				spec.setFilters (filterRules);
 			}
  		}
+ 		
+ 		EndpointUtils.applySettings(spec, config);
  		
 		try {
 			report = generator.executeReport(spec);
@@ -161,6 +164,8 @@ public class DashboardsService {
 		}
 
 		String currcode = EndpointUtils.getDefaultCurrencyCode();
+		if (spec.getSettings() != null && spec.getSettings().getCurrencyCode() != null)
+			currcode = spec.getSettings().getCurrencyCode();
 		retlist.set("currency", currcode);
 
 		retlist.set("numberformat", numberformat);

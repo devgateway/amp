@@ -11,7 +11,6 @@ import java.util.List;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 
 /**
@@ -106,19 +105,21 @@ public class ReportPaginationUtils {
 		if (root == null || root.length == 0 || start < 0 || start >= root.length || size == 0) return null;
 		ReportAreaMultiLinked startArea = root[start];
 		Deque<List<ReportArea>> stack = new ArrayDeque<List<ReportArea>>();
-		//first time we do not traverse children: either this is a leaf already, either this is an aggregate, i.e. leafs are behind in DFT order
+		// first time we do not traverse children: either this is a leaf already, either this is an aggregate, i.e. leafs are behind in DFT order
 		convert(startArea, stack, size, false);
+		// this part seems to be safe to remove - START
 		while (stack.size() > 1) {
-			ReportAreaImpl newArea = new ReportAreaImpl();
+			PartialReportArea newArea = new PartialReportArea();
 			newArea.setChildren(stack.pop());
 			stack.peek().add(newArea);
 		}
+		// this part seems to be safe to remove - END
 		// move up the report area level only if the inner structure is also a group of areas
 		if (stack.peek().size() == 1 
 				&& stack.peek().get(0).getChildren() != null 
 				&& stack.peek().get(0).getChildren().size() > 0)
 			return stack.pop().get(0);
-		ReportAreaImpl currentRoot = new ReportAreaImpl();
+		PartialReportArea currentRoot = new PartialReportArea();
 		currentRoot.setChildren(stack.pop());
 		return currentRoot;
 	}
@@ -138,11 +139,13 @@ public class ReportPaginationUtils {
 		}
 
 		if (current.getContents() != null && current.getContents().size() > 0) {
-			ReportAreaImpl newReportArea = new ReportAreaImpl();
+			PartialReportArea newReportArea = new PartialReportArea();
 			newReportArea.setContents(current.getContents());
 			//based on Tabs, page records count includes only leaf entries, no totals
 			if (!hasChildren)
 				size --;
+			else
+				newReportArea.setTotalChildrenCount(current.getChildren().size());
 			if (stack.peek() == null) {
 				stack.push(new ArrayList<ReportArea>());
 				stack.peek().add(newReportArea);

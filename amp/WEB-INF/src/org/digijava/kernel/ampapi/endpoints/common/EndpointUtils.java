@@ -24,9 +24,9 @@ import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportElement;
-import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ColumnsVisibility;
@@ -125,11 +125,24 @@ public class EndpointUtils {
 	
 	/**
 	 * Generates a report based on a given specification
+	 * 
 	 * @param spec - report specification
-	 * @return GeneratedReport will info
+	 * @return GeneratedReport that stores all report info and report output
 	 */
 	public static GeneratedReport runReport(ReportSpecification spec) {
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, 
+		return runReport(spec, ReportAreaImpl.class);
+	}
+	
+	/**
+	 * Generates a report based on a given specification and wraps the output
+	 * into the specified class
+	 * 
+	 * @param spec report specification
+	 * @param clazz any class that extends {@link ReportAreaImpl}
+	 * @return GeneratedReport that stores all report info and report output
+	 */
+	public static GeneratedReport runReport(ReportSpecification spec, Class<? extends ReportAreaImpl> clazz) {
+		MondrianReportGenerator generator = new MondrianReportGenerator(clazz, 
 				ReportEnvironment.buildFor(TLSUtils.getRequest()));
 		GeneratedReport report = null;
 		try {

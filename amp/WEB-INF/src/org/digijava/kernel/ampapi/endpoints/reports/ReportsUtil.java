@@ -31,6 +31,7 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.CachedReportData;
 import org.dgfoundation.amp.reports.ColumnsVisibility;
+import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
 import org.dgfoundation.amp.reports.ReportCacher;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
@@ -155,7 +156,7 @@ public class ReportsUtil {
 			// add additional requests
 			update(spec, formParams);
 			// regenerate
-			GeneratedReport generatedReport = EndpointUtils.runReport(spec);
+			GeneratedReport generatedReport = EndpointUtils.runReport(spec, PartialReportArea.class);
 			cachedReportData = ReportPaginationUtils.cacheReportData(reportId, generatedReport);
 		} else {
 			cachedReportData = ReportCacher.getReportData(reportId);

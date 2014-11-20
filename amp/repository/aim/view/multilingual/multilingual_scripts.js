@@ -26,8 +26,9 @@ function multilingual_serialize(html_prefix)
 		seen_valid_values |= (elem.value.trim().length > 0);
 	};
 	if (!seen_valid_values){
-		var errmsg = 'please enter a value in at least one language';
-		throw errmsg;
+//		var errmsg = 'please enter a value in at least one language';
+	//	throw errmsg;
+		return null;
 	}		
 	return rs;
 

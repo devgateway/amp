@@ -47,7 +47,10 @@ function getReportTitle() {
  */
 function getReportTitles()
 {
-	return '&' + multilingual_serialize('AmpReports_name');
+	var ser =  multilingual_serialize('AmpReports_name');
+	if (ser == null)
+		return null;
+	return '&' + ser;
 }
 
 function getReportCategory() {
@@ -236,24 +239,26 @@ SaveReportEngine.prototype.saveAndOrOpenReport	= function (openReport) {
 	this.divEl.innerHTML			= this.savingMessage + 
 			"... <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>";
 	
-	var postString		= "reportTitle=dummy&reportDescription="+encodeURIComponent(getReportDescription()) + "&reportPeriod="+getReportPeriod() + 
-						"&reportType="+getReportType() + "&" + getSelectedFields("dest_col_ul", "selectedColumns") + 
-						"&reportCategory="+ getReportCategory()+
-						"&forceNameOverwrite=" + this.forceOverwrite+
-						"&desktopTab="+getDesktopTab() +
-						"&publicReport="+getPublicReport() +
-						"&workspaceLinked="+getWorkspaceLinked() +
-						"&alsoShowPledges="+getAlsoShowPledges() +
-						//"&onlyShowProjectsRelatedPledges=" + getOnlyShowProjectsRelatedPledges() + 
-						"&hideActivities="+getHideActivities() +
-						"&useFilters="+getUseFilters()+
-						"&openReport=" + openReport + 
-						getReportTitles() + 
-						//"&reportContextId="+getReportContextId()+
-						"&allowEmptyFundingColumns="+getAllowEmptyFundingColumns()+
-						"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ "&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies");
-	
-	//alert(postString);
-	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
-	
+	var reportTitles = getReportTitles();
+	if (reportTitles != null) {
+		var postString		= "reportTitle=dummy&reportDescription="+encodeURIComponent(getReportDescription()) + "&reportPeriod="+getReportPeriod() + 
+							"&reportType="+getReportType() + "&" + getSelectedFields("dest_col_ul", "selectedColumns") + 
+							"&reportCategory="+ getReportCategory()+
+							"&forceNameOverwrite=" + this.forceOverwrite+
+							"&desktopTab="+getDesktopTab() +
+							"&publicReport="+getPublicReport() +
+							"&workspaceLinked="+getWorkspaceLinked() +
+							"&alsoShowPledges="+getAlsoShowPledges() +
+							//"&onlyShowProjectsRelatedPledges=" + getOnlyShowProjectsRelatedPledges() + 
+							"&hideActivities="+getHideActivities() +
+							"&useFilters="+getUseFilters()+
+							"&openReport=" + openReport + 
+							getReportTitles() + 
+							//"&reportContextId="+getReportContextId()+
+							"&allowEmptyFundingColumns="+getAllowEmptyFundingColumns()+
+							"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ "&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies");
+		
+		//alert(postString);
+		YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
+	}
 };

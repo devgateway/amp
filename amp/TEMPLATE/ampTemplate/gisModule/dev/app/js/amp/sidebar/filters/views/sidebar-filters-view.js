@@ -27,7 +27,10 @@ module.exports = BaseControlView.extend({
     this.app.data.filter.loaded.then(function() {
       self.app.state.register(self, 'filters', {
         get: function() { return self.app.data.filter.serialize();},
-        set: function(state) { return self.app.data.filter.deserialize(state);},
+        set: function(state) {
+          self.app.data.filter.reset({silent: true});
+          return self.app.data.filter.deserialize(state);
+        },
         empty: null
       });
     });

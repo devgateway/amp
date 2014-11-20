@@ -457,6 +457,11 @@ public class ReportWizardAction extends MultiAction {
 		} else
 			ampReport = oldReport;
 		
+		String newName = MultilingualInputFieldValues.getDefaultName(AmpReports.class, "name", null, request);
+		if (otherReportsWithSameNameExist(ampReport, newName)) {
+			throw new DuplicateReportNameException("a different report with the same name exists");
+		}
+		
 		if (myForm.getPublicReport() != null && myForm.getPublicReport()){
 			boolean updatingPublishedDate = ampReport.getPublicReport() == null || (!ampReport.getPublicReport()); // report was NOT public but is public now
 			if (updatingPublishedDate){
@@ -465,7 +470,7 @@ public class ReportWizardAction extends MultiAction {
 		}
 		
 		ampReport.setUpdatedDate( new Date(System.currentTimeMillis()) );
-		ampReport.setName(MultilingualInputFieldValues.getDefaultName(AmpReports.class, "name", null, request)); // set the default
+		ampReport.setName(newName); // set the default
 		ampReport.setWorkspaceLinked(myForm.getWorkspaceLinked());
 		ampReport.setAlsoShowPledges(myForm.getAlsoShowPledges());
 		ampReport.setOwnerId(myForm.getAmpTeamMember() == null ? ampTeamMember : myForm.getAmpTeamMember());
@@ -554,9 +559,7 @@ public class ReportWizardAction extends MultiAction {
 				ampReport.getFilterDataSet().clear();
 				ampReport.getFilterDataSet().addAll(fdSet);
 			}			
-		}
-		if (otherReportsWithSameNameExist(ampReport))
-			throw new DuplicateReportNameException("a different report with the same name exists");
+		}		
 		
 		modeReset(mapping, form, request, response);
 		return serializeReportAndOpen(ampReport, teamMember, request, response);
@@ -567,16 +570,37 @@ public class ReportWizardAction extends MultiAction {
 	 * @param ampReport
 	 * @return
 	 */
-	public boolean otherReportsWithSameNameExist(AmpReports ampReport){
-		String queryStr = "select r FROM " + AmpReports.class.getName() + " r where " + AmpReports.hqlStringForName("r") + "=:reportName";
-		List<AmpReports> conflicts = PersistenceManager.getSession().createQuery(queryStr).setString("reportName", ampReport.getName()).list();
-		
-		long allowedOtherId = ampReport.getAmpReportId() == null ? -999 : ampReport.getAmpReportId(); // the sole report in the DB which is supposed to have the same name (because we are overwriting it) 
-		for(AmpReports oth:conflicts){
-			if (oth.getAmpReportId().longValue() != allowedOtherId)
-				return true;
+	public boolean otherReportsWithSameNameExist(AmpReports ampReport, String newName) {
+		// IMPORTANT NOTE (AMP-18515): Since in some countries (ie: Timor) the
+		// db has lots of duplicated report/tabs names then this method fails often even
+		// when the user is saving some changes without changing the report/tab
+		// name, for those cases is that we added first a check to see if the
+		// user didnt change the report/tab name, in that case we assume is all
+		// ok.
+		boolean nameChanged = true;
+		if (ampReport.getAmpReportId() != null) {
+			if (newName.equals(ampReport.getName())) {
+				nameChanged = false;
+			}
 		}
-		return false;
+
+		if (nameChanged) {
+			String queryStr = "select r FROM " + AmpReports.class.getName() + " r where " + AmpReports.hqlStringForName("r")
+					+ "=:reportName";
+			List<AmpReports> conflicts = PersistenceManager.getSession().createQuery(queryStr).setString("reportName", newName).list();
+
+			// the sole report in the DB which is supposed to have the same name
+			// (because we are overwriting it)
+			long allowedOtherId = ampReport.getAmpReportId() == null ? -999 : ampReport.getAmpReportId();
+			for (AmpReports oth : conflicts) {
+				if (oth.getAmpReportId().longValue() != allowedOtherId) {
+					return true;
+				}
+			}
+			return false;
+		} else {
+			return false;
+		}
 	}
 	
 	/**

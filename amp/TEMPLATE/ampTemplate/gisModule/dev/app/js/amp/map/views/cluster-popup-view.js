@@ -187,6 +187,7 @@ module.exports = Backbone.View.extend({
           var formattedCommitments = ampFormatter.format(activity.get('Actual Commitments'));
           var formattedDisbursements = ampFormatter.format(activity.get('Actual Disbursements'));
 
+          //TODO: should be done elsewhere, for example in toJSON or parse.
           activity.set('formattedActualCommitments', [formattedCommitments, ' ', currencyCode].join(''));
           activity.set('formattedActualDisbursements', [formattedDisbursements, ' ', currencyCode].join(''));
           return activity;

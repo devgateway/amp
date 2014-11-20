@@ -1,0 +1,21 @@
+<h5>
+  <a target="_blank" href="<%= activityJSON.ampUrl %>" title="<%= activityJSON["Project Title"] %>">
+    <%= activityJSON["Project Title"]%>
+  </a>
+</h5>
+<p>
+  <strong>Activity ID:</strong>
+  <%= (properties.activity ? properties.activity.get('Activity Id') : '') %><br/>
+  <strong data-i18n="amp.gis:activities-project-title">Site:</strong>
+  <%=  properties.title %><br/>
+  <strong data-i18n="amp.gis:activities-donors">Funding Organization:</strong>
+  <%= activityJSON["donorNames"] %><br/>
+  <strong data-i18n="amp.gis:activities-sectors">Sectors:</strong>
+  <%= activityJSON["sectorNames"] %><br/><br/>
+  <strong>Description:</strong>
+  <%= properties.description %><br/>
+</p>
+
+
+
+

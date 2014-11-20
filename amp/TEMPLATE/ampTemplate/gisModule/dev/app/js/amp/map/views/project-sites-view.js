@@ -4,6 +4,7 @@ var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 
 var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/structure-popup-template.html', 'utf8');
+var ProjectSiteTemplate = fs.readFileSync(__dirname + '/../templates/project-site-template.html', 'utf8');
 
 
 module.exports = Backbone.View.extend({
@@ -21,6 +22,7 @@ module.exports = Backbone.View.extend({
 
   popup: null,
   projectListTemplate: _.template(ProjectListTemplate),
+  structureTemplate: _.template(ProjectSiteTemplate),
 
   customClusterMap: {},
   maxClusterCount: 0,
@@ -100,7 +102,7 @@ module.exports = Backbone.View.extend({
           var pointIcon = L.icon({
             iconUrl: 'img/map-icons/' + self.structureMenuModel.iconMappings[sectorCode],
             iconSize:     [25, 25], // size of the icon
-            iconAnchor:   [0, 6], // point of the icon which will correspond to marker's location
+            iconAnchor:   [12, 25], // point of the icon which will correspond to marker's location
             popupAnchor:  [-3, -6] // point from which the popup should open relative to the iconAnchor
           });
           point = L.marker(latlng, {icon: pointIcon});
@@ -320,12 +322,11 @@ module.exports = Backbone.View.extend({
 
     if (feature.properties) {
       //TODO: template, and add activity link:
-      layer.bindPopup('Project #: ' +
-        (feature.properties.activity ? feature.properties.activity.get('Activity Id') : '') +
-        '<br />Site: ' + feature.properties.title +
-        '<br />Description: ' + feature.properties.description,
+      var activityJSON = feature.properties.activity.toJSON();
+
+      layer.bindPopup(self.structureTemplate({activityJSON: activityJSON, properties: feature.properties}),
       {
-        maxWidth: 500,
+        maxWidth: 450,
         offset: new L.Point(0, -2)
       });
     }

@@ -188,7 +188,7 @@ public class FactTableFiltering {
 				throw new RuntimeException("unimplemented type of sql filter type: " + rule.filterType);
 		}
 		
-		if (!ids.isEmpty()) {
+		if (ids != null) {
 			StringBuilder result = new StringBuilder();
 			result.append(expander.factTableColumn).append(rule.valuesInclusive ? " IN " : " NOT IN ").append(" (").append(Util.toCSStringForIN(ids)).append(")");
 			return result.toString();
@@ -213,26 +213,36 @@ public class FactTableFiltering {
 			
 			add(FiltersGroup.LOCATION_FILTER, new LocationIdsExpander("location_id"));
 			
-			add(ColumnConstants.DONOR_AGENCY, new OrgIdsExpander("donor_id"));
+			add(ColumnConstants.DONOR_AGENCY, new IdentityExpander("donor_id"));
 			add(ColumnConstants.DONOR_GROUP, new OrgGrpIdsExpander("donor_id"));
 			add(ColumnConstants.DONOR_TYPE, new OrgTypeIdsExpander("donor_id"));
 			
-			add(ColumnConstants.EXECUTING_AGENCY, new OrgIdsExpander("ea_org_id"));
+			add(ColumnConstants.EXECUTING_AGENCY, new IdentityExpander("ea_org_id"));
 			add(ColumnConstants.EXECUTING_AGENCY_GROUPS, new OrgGrpIdsExpander("ea_org_id"));
 			add(ColumnConstants.EXECUTING_AGENCY_TYPE, new OrgTypeIdsExpander("ea_org_id"));
 			
-			add(ColumnConstants.BENEFICIARY_AGENCY, new OrgIdsExpander("ba_org_id"));
+			add(ColumnConstants.BENEFICIARY_AGENCY, new IdentityExpander("ba_org_id"));
 			add(ColumnConstants.BENEFICIARY_AGENCY_GROUPS, new OrgGrpIdsExpander("ba_org_id"));
 			//add(ColumnConstants.BENEFICIARY_AGENCY_TYPE, new OrgTypeIdsExpander("ba_org_id"));
 			
-			add(ColumnConstants.IMPLEMENTING_AGENCY, new OrgIdsExpander("ia_org_id"));
+			add(ColumnConstants.IMPLEMENTING_AGENCY, new IdentityExpander("ia_org_id"));
 			add(ColumnConstants.IMPLEMENTING_AGENCY_GROUPS, new OrgGrpIdsExpander("ia_org_id"));
 			add(ColumnConstants.IMPLEMENTING_AGENCY_TYPE, new OrgTypeIdsExpander("ia_org_id"));
 			
-			add(ColumnConstants.RESPONSIBLE_ORGANIZATION, new OrgIdsExpander("ro_org_id"));
+			add(ColumnConstants.RESPONSIBLE_ORGANIZATION, new IdentityExpander("ro_org_id"));
 			add(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, new OrgGrpIdsExpander("ro_org_id"));
 			
 			add(ColumnConstants.IMPLEMENTATION_LEVEL, new ActACVIdsExpander("entity_id"));
+			
+			
+			//ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.TYPE_OF_COOPERATION, ColumnConstants.TYPE_OF_IMPLEMENTATION
+			add(ColumnConstants.FINANCING_INSTRUMENT, new IdentityExpander("financing_instrument_id"));
+			add(ColumnConstants.MODE_OF_PAYMENT, new IdentityExpander("mode_of_payment_id"));
+			add(ColumnConstants.TYPE_OF_ASSISTANCE, new IdentityExpander("terms_of_assistance_id"));
+			add(ColumnConstants.TYPE_OF_COOPERATION, new IdentityExpander("type_of_cooperation_id"));
+			add(ColumnConstants.TYPE_OF_IMPLEMENTATION, new IdentityExpander("type_of_implementation_id"));
+			add(ColumnConstants.FUNDING_STATUS, new IdentityExpander("funding_status_id"));
+			add(ColumnConstants.PROCUREMENT_SYSTEM, new IdentityExpander("procurement_system_id"));
 		}
 		
 		void add(String mainColumn, IdsExpander expander) {

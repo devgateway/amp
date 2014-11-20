@@ -23,7 +23,7 @@ public class OrgTypeIdsExpander extends IdsExpander {
 	}
 	
 	@Override public Set<Long> expandIds(final List<Long> values) {
-		final Set<Long> res = new HashSet<>(values);
+		final Set<Long> res = new HashSet<>();
 		PersistenceManager.getSession().doWork(new Work() {
 
 			@Override

@@ -16,21 +16,14 @@ import org.hibernate.jdbc.Work;
  * @author Constantin Dolghier
  *
  */
-public class ActACVIdsExpander extends IdsExpander {
+public class IdentityExpander extends IdsExpander {
 	
-	public ActACVIdsExpander(String factColumnName) {
+	public IdentityExpander(String factColumnName) {
 		super(factColumnName);
 	}
 	
 	@Override public Set<Long> expandIds(final List<Long> values) {
-		final Set<Long> res = new HashSet<>();
-		PersistenceManager.getSession().doWork(new Work() {
-
-			@Override
-			public void execute(Connection connection) throws SQLException {
-				res.addAll(SQLUtils.fetchLongs(connection, "SELECT amp_activity_id FROM amp_activities_categoryvalues WHERE amp_categoryvalue_id IN (" + Util.toCSStringForIN(values) + ")"));
-			}
-		});
+		final Set<Long> res = new HashSet<>(values);
 		return res;
 	}
 }

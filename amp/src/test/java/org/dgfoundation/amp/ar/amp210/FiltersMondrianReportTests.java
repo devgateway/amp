@@ -6,6 +6,7 @@ package org.dgfoundation.amp.ar.amp210;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
@@ -374,5 +375,55 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 		runMondrianTestCase(spec, "en", 
 			Arrays.asList("mtef activity 1", "mtef activity 2", "date-filters-activity", "pledged 2"), correctResult2);
 	}
+	
+	@Test
+	public void testACVFactTableColumns() {
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Financing Instrument", "", "Mode of Payment", "", "Type Of Assistance", "", "Type of Cooperation", "", "Type of Implementation", "", "2011-Actual Disbursements", "0", "2011-Actual Commitments", "0", "2013-Actual Disbursements", "545 000", "2013-Actual Commitments", "903 333", "2014-Actual Disbursements", "0", "2014-Actual Commitments", "0", "Total Measures-Actual Disbursements", "545 000", "Total Measures-Actual Commitments", "903 333")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "Project with documents", "Financing Instrument", "default financing instrument", "Mode of Payment", "Cash", "Type Of Assistance", "default type of assistance", "Type of Cooperation", "", "Type of Implementation", "", "2011-Actual Disbursements", "0", "2011-Actual Commitments", "0", "2013-Actual Disbursements", "0", "2013-Actual Commitments", "0", "2014-Actual Disbursements", "0", "2014-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0", "Total Measures-Actual Commitments", "0"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "Eth Water", "Financing Instrument", "default financing instrument, second financing instrument", "Mode of Payment", "Direct payment, Undefined", "Type Of Assistance", "default type of assistance, second type of assistance", "Type of Cooperation", "", "Type of Implementation", "", "2011-Actual Disbursements", "0", "2011-Actual Commitments", "0", "2013-Actual Disbursements", "545 000", "2013-Actual Commitments", "0", "2014-Actual Disbursements", "0", "2014-Actual Commitments", "0", "Total Measures-Actual Disbursements", "545 000", "Total Measures-Actual Commitments", "0"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "mtef activity 1", "Financing Instrument", "default financing instrument", "Mode of Payment", "", "Type Of Assistance", "default type of assistance", "Type of Cooperation", "", "Type of Implementation", "", "2011-Actual Disbursements", "0", "2011-Actual Commitments", "0", "2013-Actual Disbursements", "0", "2013-Actual Commitments", "0", "2014-Actual Disbursements", "0", "2014-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0", "Total Measures-Actual Commitments", "0"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "crazy funding 1", "Financing Instrument", "default financing instrument, second financing instrument", "Mode of Payment", "Cash, Direct payment", "Type Of Assistance", "default type of assistance, second type of assistance", "Type of Cooperation", "", "Type of Implementation", "", "2011-Actual Disbursements", "0", "2011-Actual Commitments", "0", "2013-Actual Disbursements", "0", "2013-Actual Commitments", "333 333", "2014-Actual Disbursements", "0", "2014-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0", "Total Measures-Actual Commitments", "333 333"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "Activity with Zones", "Financing Instrument", "default financing instrument", "Mode of Payment", "", "Type Of Assistance", "default type of assistance", "Type of Cooperation", "", "Type of Implementation", "", "2011-Actual Disbursements", "0", "2011-Actual Commitments", "0", "2013-Actual Disbursements", "0", "2013-Actual Commitments", "570 000", "2014-Actual Disbursements", "0", "2014-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0", "Total Measures-Actual Commitments", "570 000"));
+		
+		runMondrianTestCase("AMP-18593-acv-facttable-filters", 
+			Arrays.asList("Project with documents", "Eth Water", "mtef activity 1", "crazy funding 1", "Activity with Zones"),
+			cor, "en");
+		
+		
+		ReportSpecificationImpl spec = buildSpecification("AMP-18593-acv-facttable-filters-programmatic",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.TYPE_OF_COOPERATION, ColumnConstants.TYPE_OF_IMPLEMENTATION),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+				null,
+				GroupingCriteria.GROUPING_YEARLY);
+			spec.setDisplayEmptyFundingRows(true);
+		runMondrianTestCase(spec, "en", 
+			Arrays.asList("Project with documents", "Eth Water", "mtef activity 1", "crazy funding 1", "Activity with Zones"), 
+			cor);
+		
+		
+		MondrianReportFilters filters = new MondrianReportFilters();
+		filters.addFilterRule(new ReportColumn(ColumnConstants.FINANCING_INSTRUMENT), new FilterRule("2125", true)); // second financing instrument
+		spec.setFilters(filters);
+ 
+		ReportAreaForTests filteredCor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Financing Instrument", "", "Mode of Payment", "", "Type Of Assistance", "", "Type of Cooperation", "", "Type of Implementation", "", "2013-Actual Commitments", "222 222", "2013-Actual Disbursements", "0", "Total Measures-Actual Commitments", "222 222", "Total Measures-Actual Disbursements", "0")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "Eth Water", "Financing Instrument", "second financing instrument", "Mode of Payment", "Direct payment", "Type Of Assistance", "second type of assistance", "Type of Cooperation", "", "Type of Implementation", "", "2013-Actual Commitments", "0", "2013-Actual Disbursements", "0", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "crazy funding 1", "Financing Instrument", "second financing instrument", "Mode of Payment", "Direct payment", "Type Of Assistance", "second type of assistance", "Type of Cooperation", "", "Type of Implementation", "", "2013-Actual Commitments", "222 222", "2013-Actual Disbursements", "0", "Total Measures-Actual Commitments", "222 222", "Total Measures-Actual Disbursements", "0"));
+		
+		runMondrianTestCase(spec, "en", 
+			Arrays.asList("Project with documents", "Eth Water", "mtef activity 1", "crazy funding 1", "Activity with Zones"), 
+			filteredCor);
+	}
+
 	
 }

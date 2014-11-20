@@ -146,7 +146,6 @@ function switchTabs(lastIndex){
         base: "//ajax.googleapis.com/ajax/libs/yui/2.9.0/build/", 
         require: ["tabview"], 
         onSuccess: function() { 
-        	debugger;
     		var myFundingTabs = new YAHOO.widget.TabView("fundingTabs");
     		if(lastIndex == -1){//if its -1 we go the the last one
     			var newIndex = myFundingTabs.get('tabs').length-1;
@@ -154,6 +153,7 @@ function switchTabs(lastIndex){
     		}else{
     			if(lastIndex >=0){ //if its grater or equals than 0 we focus on that tab
     				myFundingTabs.selectTab(lastIndex);	
+    				$('div[data-is_tab=true]').find(".organization_box_content").last().find(".collapsable").first().show();
     			}
     		}
         } 

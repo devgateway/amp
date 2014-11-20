@@ -252,6 +252,7 @@ public static List<JsonBean> getOrgGroups() {
 				Map<Long, String> organisationsNames = QueryUtil.getTranslatedName(conn,"amp_organisation","amp_org_id","name");
 				String query = " select distinct o.amp_org_id orgId, "+
 						" o.name ,  "+
+						" o.acronym ,  "+
 						" aor.role roleId , "+ 
 						" o.org_grp_id grpId  "+
 						" from amp_org_role aor,amp_organisation o "+
@@ -274,6 +275,7 @@ public static List<JsonBean> getOrgGroups() {
 						}else{
 							org.set("name", rs.getString("name"));
 						}
+						org.set("acronym", rs.getString("acronym"));
 						org.set("groupId", rs.getLong("grpId"));	
 						org.set("rolesIds", rolesId);
 						orgs.add(org);

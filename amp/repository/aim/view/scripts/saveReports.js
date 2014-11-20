@@ -127,7 +127,10 @@ SaveReportEngine.prototype.failure		= function (o) {
  */
 function getReportTitles()
 {
-	return '&' + multilingual_serialize('AmpReports_name');
+	var ser =  multilingual_serialize('AmpReports_name');
+	if (ser == null)
+		return null;
+	return '&' + ser;
 }
 
 SaveReportEngine.prototype.saveReport		= function () {
@@ -149,16 +152,23 @@ SaveReportEngine.prototype.saveReport		= function () {
 	}
 
 	this.saveButton.disable();
-	this.panel.setFooter( SaveReportEngine.savingMessage + "...<br />  <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>" );
-	var postString		= "dynamicSaveReport=true" +
-						getReportTitles() + 
-						"&reportTitle=dummy" + 
-						"&desktopTab=" + this.isTab +
-						"&reportId="+this.getReportId() +
-						"&forceNameOverwrite=" + this.overwritingReport +
-						"&useFilters=true";
-	//alert (postString);
-	YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
+	var reportTitles = getReportTitles();
+	
+	if (reportTitles == null) {
+		this.panel.setFooter( SaveReportEngine.savingMessage + "...<br />  Error: please enter a value in at least one language " );		
+	}
+	else {
+		this.panel.setFooter( SaveReportEngine.savingMessage + "...<br />  <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>" );
+		var postString		= "dynamicSaveReport=true" +
+							reportTitles + 
+							"&reportTitle=dummy" + 
+							"&desktopTab=" + this.isTab +
+							"&reportId="+this.getReportId() +
+							"&forceNameOverwrite=" + this.overwritingReport +
+							"&useFilters=true";
+		//alert (postString);
+		YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
+	}
 };
 
 SaveReportEngine.enterPressed		= function (e) {

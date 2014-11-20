@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.MondrianETL;
@@ -55,7 +56,7 @@ public class SqlFilterUtilsTests extends AmpTestCase
 		assertEquals(1, out.size());
 		FilterRule outRule = out.get(0);
 		assertEquals(FilterType.VALUES, outRule.filterType);
-		assertEquals("[1, 2, 3, 4, 5, 6, 7, 8, 9]", outRule.values.toString());
+		assertEquals("[1, 2, 3, 4, 5, 6, 7, 8, 9]", new TreeSet<>(outRule.values).toString());
 	}
 	
 	@Test
@@ -68,7 +69,7 @@ public class SqlFilterUtilsTests extends AmpTestCase
 		assertEquals(1, out.size());
 		FilterRule outRule = out.get(0);
 		assertEquals(FilterType.VALUES, outRule.filterType);
-		assertEquals("[1, 2, 3, 4, 5, 6]", outRule.values.toString());	
+		assertEquals("[1, 2, 3, 4, 5, 6]", new TreeSet<>(outRule.values).toString());	
 	}	
 	
 	@Override

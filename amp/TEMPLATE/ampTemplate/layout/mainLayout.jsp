@@ -37,27 +37,8 @@
     }  	
 	-->  
     </script>
-	<%
-		String title=(String)((org.apache.struts.tiles.ComponentContext) request.getAttribute("org.apache.struts.taglib.tiles.CompContext")).getAttribute("title");
-		String key=(title.replaceAll(" ",""));
-	%>
-	<logic:present name="extraTitle" scope="request">
-		<bean:define id="extTitle" name="extraTitle" scope="request" type="java.lang.String" />
-		<title>
-			<c:set var="key">aim:pagetitle:<%=key%><%=extTitle%></c:set>
-			<digi:trn>Aid Management Platform </digi:trn> 
-			<digi:trn><%=title%></digi:trn> ${extTitle}
-		</title>
-	</logic:present>
-	<logic:notPresent name="extraTitle" scope="request">
-		<title>
-			<c:set var="key">aim:pagetitle:<%=key%></c:set>
-			<digi:trn>Aid Management Platform </digi:trn> 
-			<digi:trn key="${key}">
-				<%=title%>
-			</digi:trn>
-		</title>
-	</logic:notPresent>
+    
+	<%@include file="title.jsp"%>
 	
 	<!-- Scripts  -->
 	

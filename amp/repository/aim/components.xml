@@ -297,7 +297,7 @@
 <!--	<page name="AdvancedReportManagerStep5New" title=" - Report Generator Step 3 :  Select Rows/Hierarchies" />-->
 <!--	<page name="AdvancedReportManagerStep6" title=" - Report Generator Step 4 :  Select Measures" />-->
 <!--	<page name="viewAdvancedReport" title=" : Reports" />-->
-	<page name="viewNewAdvancedReport" title=" : Reports" />
+	<page name="viewNewAdvancedReport" title=" - Reports -" />
 <!--	<page name="viewAdvancedReportHierarchy1" title=" : Reports" />-->
 <!--	<page name="viewAdvancedReportHierarchy0" title=" : Reports" />-->
 

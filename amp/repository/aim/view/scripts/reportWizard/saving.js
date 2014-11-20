@@ -182,11 +182,20 @@ SaveReportEngine.prototype.failure			= function(o) {
 	this.divEl.innerHTML			= this.failureMessage;
 };
 
-SaveReportEngine.prototype.decideToShowTitlePanel	= function () // actually this is the "Save" button
+SaveReportEngine.prototype.saveNoOverwrite	= function () // actually this is the "Save" button
+{
+	this.forceOverwrite = false;
+	this.showTitlePanel();
+};
+
+
+SaveReportEngine.prototype.saveOverwrite	= function () // actually this is the "Save" button
 {
 	this.forceOverwrite = true;
 	this.showTitlePanel();
 };
+
+
 
 SaveReportEngine.prototype.showTitlePanel	= function () {
 	if ( this.titlePanel == null ) {

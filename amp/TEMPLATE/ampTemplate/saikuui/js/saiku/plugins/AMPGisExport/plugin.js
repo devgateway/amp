@@ -1,6 +1,6 @@
 var AMPGisExport = Backbone.View.extend({
 	events : {
-		'click #export-to-map' : 'exportToMap'
+		'click #export-to-map' : 'export_to_map'
 	},
 	
 	initialize : function(args) {
@@ -13,13 +13,23 @@ var AMPGisExport = Backbone.View.extend({
 			id : this.id
 		});
 
-		_.bindAll(this, "exportToMap");
-		
-		$("#export-to-map").on("click", this.exportToMap);
+		_.bindAll(this, "export_to_map");
+
+		this.add_button();
+		this.workspace.toolbar.export_to_map = this.export_to_map;
 		
 	},
 	
-	exportToMap : function() {
+	add_button : function() {
+		this.export_to_amp_button = $(
+				'<a href="#export_to_map" class="export_to_map button i18n" title="Export to Map"></a>');
+
+		var $export_to_map_li = $('<li class="seperator"></li>').append(
+				this.export_to_amp_button);
+		$(this.workspace.toolbar.el).find("ul").append($export_to_map_li);
+	},
+	
+	export_to_map : function() {
 		var reportId = + this.workspace.query.get('report_id');
 		$.ajax({
 			url : '/rest/data/report/export-to-map/' + reportId,
@@ -51,16 +61,16 @@ var AMPGisExport = Backbone.View.extend({
 
 Saiku.events.bind('session:new', function(session) {
 	function new_workspace(args) {
-		if (typeof args.workspace.amp_export == "undefined") {
-			args.workspace.amp_export = new AMPGisExport({
+		if (typeof args.workspace.export_to_map == "undefined") {
+			args.workspace.export_to_map = new AMPGisExport({
 				workspace : args.workspace
 			});
 		}
 	}
 
 	function clear_workspace(args) {
-		if (typeof args.workspace.amp_export != "undefined") {
-			$(args.workspace.amp_export.el).hide();
+		if (typeof args.workspace.export_to_map != "undefined") {
+			$(args.workspace.export_to_map.el).hide();
 		}
 	}
 	

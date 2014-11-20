@@ -42,7 +42,7 @@
 	line-height: 1.42857143;
 }
 
-#export-to-map {
-	padding-left: 15px;
-	cursor: pointer;
+.workspace_toolbar .export_to_map {
+	background-image: url('/TEMPLATE/ampTemplate/module/aim/images/globe-icon_2.png');
+	background-position: 7px 7px;
 }

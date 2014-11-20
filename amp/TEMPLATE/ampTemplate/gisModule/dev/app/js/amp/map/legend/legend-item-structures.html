@@ -12,11 +12,19 @@
 
 <% if (status === 'loading') { %>
   <p><em>loading...</em></p>
-<% } else { %>
+
+<% } else if (obj.imageBuckets) {
+  _.each(palletteElements ,function(element) {
+    if(element.code && element.name){ %>
+      <div><img src="img/map-icons/<%= obj.imageBuckets[element.code] %>" width="16px"> <%= element.name %></div>
+<% }
+ }); %>
+
+<% } else {  %>
   <% colourBuckets.each(function(bucket) { %>
     <div>
       <span style="background: <%= bucket.hex() %>" class="legend-sample color-circle"></span>
       <%= bucket.get('value') %>
     </div>
   <% }) %>
-<% } %>
+<% }%>

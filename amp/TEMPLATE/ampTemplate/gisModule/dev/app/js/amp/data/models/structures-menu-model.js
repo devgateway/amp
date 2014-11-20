@@ -68,6 +68,34 @@ module.exports = Backbone.Model
 
   getSelected: function() {
     return _.chain(this.get('selected') ? [this] : []);
+  },
+
+  iconMappings: {
+    100: 'Social.svg',
+    110: 'Education.svg',
+    120: 'Health.svg',
+    130: 'Population.svg',
+    140: 'Water.svg',
+    150: 'Gov.svg',
+    // 'ConflictPrevention.svg', //152 not primary...?
+    160: 'OtherSocial.svg',
+    210: 'Transport.svg',
+    220: 'Communication.svg',
+    230: 'Energy.svg',
+    240: 'Banking.svg',
+    250: 'Business.svg',
+    311: 'Agriculture.svg',
+    312: 'Forestry.svg',
+    313: 'Fishing.svg',
+    321: 'Industry.svg',
+    322: 'MineralResources.svg',
+    323: 'Construction.svg',
+    331: 'Trade.svg',
+    332: 'Tourism.svg',
+    400: 'Multisector.svg',
+    500: 'GeneralSupport.svg',
+    600: 'Debt.svg',
+    700: 'Humanitarian.svg'
   }
 
 });

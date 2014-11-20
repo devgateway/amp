@@ -5,11 +5,12 @@ var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js')
 
 var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/structure-popup-template.html', 'utf8');
 
+
 module.exports = Backbone.View.extend({
   // These will eventually move to a config.
   // They control when to resize points based on zoom
   // Make larger for smaller, denser countries: DRC = 7, Timor = 11
-  ZOOM_BREAKPOINT: 11,
+  ZOOM_BREAKPOINT: 2,
   SMALL_ICON_RADIUS: 4,
   BIG_ICON_RADIUS: 6,
   MAXCLUSTERRADIUS: 2,
@@ -85,35 +86,6 @@ module.exports = Backbone.View.extend({
           self.structureMenuModel.get('filterVertical') === 'Primary Sector Id') {
           // 1. SVG Icon: works well with agresive clustering: aprox 40 px range
           // or if < 400 icons. Best on FF
-          //?suport to NGO 920?
-          var iconNames = {
-            100: 'Social.svg',
-            110: 'Education.svg',
-            120: 'Health.svg',
-            130: 'Population.svg',
-            140: 'Water.svg',
-            150: 'Gov.svg',
-            // 'ConflictPrevention.svg', //152 not primary...?
-            160: 'OtherSocial.svg',
-            210: 'Transport.svg',
-            220: 'Communication.svg',
-            230: 'Energy.svg',
-            240: 'Banking.svg',
-            250: 'Business.svg',
-            311: 'Agriculture.svg',
-            312: 'Forestry.svg',
-            313: 'Fishing.svg',
-            321: 'Industry.svg',
-            322: 'MineralResources.svg',
-            323: 'Construction.svg',
-            331: 'Trade.svg',
-            332: 'Tourism.svg',
-            400: 'Multisector.svg',
-            500: 'GeneralSupport.svg',
-            600: 'Debt.svg',
-            700: 'Humanitarian.svg'
-          };
-
           var sectorCode = 400; // temp catchall...
           var filterVertical = self.structureMenuModel.get('filterVertical');
 
@@ -126,7 +98,7 @@ module.exports = Backbone.View.extend({
           }
 
           var pointIcon = L.icon({
-            iconUrl: 'img/map-icons/' + iconNames[sectorCode],
+            iconUrl: 'img/map-icons/' + self.structureMenuModel.iconMappings[sectorCode],
             iconSize:     [25, 25], // size of the icon
             iconAnchor:   [0, 6], // point of the icon which will correspond to marker's location
             popupAnchor:  [-3, -6] // point from which the popup should open relative to the iconAnchor
@@ -202,7 +174,6 @@ module.exports = Backbone.View.extend({
         this.featureGroup.eachLayer(function(layer) {
           if (layer.setRadius) {
             layer.setRadius(self.currentRadius);
-
           }
         });
       }
@@ -256,11 +227,9 @@ module.exports = Backbone.View.extend({
     size = Math.max(self.BIG_ICON_RADIUS, size);
 
     var zoomedIn = (self.map.getZoom() >= self.ZOOM_BREAKPOINT);
-
     if (zoomedIn) {
       size += self.BIG_ICON_RADIUS;
     }
-
     var colors = _(markers)
       .chain()
       .map(function(m) {
@@ -273,22 +242,42 @@ module.exports = Backbone.View.extend({
       .uniq()
       .value();
 
-    if (colors.length > 1) {
-      colors = [model.palette.colours.find(function(c) {
-        return c.get('multiple') === true;
-      })];
-    }
+    var marker = null;
 
-    //var colors = [{hex: function() { return 'orange';}}];
+    //Try and show icons if looking at sectors
+    if (self.structureMenuModel.get('filterVertical') === 'Primary Sector Id') {
 
-    var marker = new L.circleDivIcon(size, {
+      var filterVertical = self.structureMenuModel.get('filterVertical');
+      var sectorCode = 400; // TODO: temp replace with 'various sectors icon'
+
+      if (colors.length === 1) {
+        sectorCode = markers[0].feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
+      }
+
+      //icons need to be abit bigger than plain circles, so bump up by 2
+      marker = new L.circleDivIcon(Math.min(18, size + 2), {
+        className: 'marker-cluster' + (zoomedIn ? '' : ' marker-cluster-small'),
+        html: (zoomedIn ? '<img src="img/map-icons/' + self.structureMenuModel.iconMappings[sectorCode] + '"><div class="text">' + markers.length + '</div>' : ''),
+        color: '#444',
+        fillColor: '#fff',
+        weight: 0
+      });
+    } else {
+
+      if (colors.length > 1) {
+        colors = [model.palette.colours.find(function(c) {
+          return c.get('multiple') === true;
+        })];
+      }
+
+      marker = new L.circleDivIcon(size, {
         className: 'marker-cluster' + (zoomedIn ? '' : ' marker-cluster-small'),
         html: (zoomedIn ? '<div class="text">' + markers.length + '</div>' : ''),
         color: '#444',
         fillColor: (colors[0] && colors[0].hex()),
         weight: 1
       });
-
+    }
     return marker;
   },
 

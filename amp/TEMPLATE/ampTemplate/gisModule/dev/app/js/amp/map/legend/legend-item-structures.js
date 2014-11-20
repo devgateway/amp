@@ -15,14 +15,22 @@ module.exports = Backbone.View.extend({
     var self = this;
     //getStructuresWithActivities was null...
     self.model.structuresCollection.getStructuresWithActivities().then(function() {
-
-      //TODO render icons if it's icons...
-      // TODO: set 'selected' based on model..
-      self.$el.html(self.template(_.extend({}, self.model.toJSON(), {
+      var renderObject = {
         status: 'loaded',
         colourBuckets: self.model.structuresCollection.palette.colours,
         selectedVertical: self.model.get('filterVertical')
-      })));
+      };
+
+      // TODO render icons if it's icons...
+      // self.structureMenuModel.iconMappings
+      if (self.model.structuresCollection.length < 400 &&
+          self.model.get('filterVertical') === 'Primary Sector Id') {
+        renderObject.imageBuckets = self.model.iconMappings;
+        renderObject.palletteElements = self.model.structuresCollection.palette.get('elements');
+      }
+
+
+      self.$el.html(self.template(_.extend({}, self.model.toJSON(), renderObject)));
 
       // add listener to select. Didn't work when i used 'events'
       // probably because happens after view populated...or translate strips events..

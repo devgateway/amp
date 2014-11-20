@@ -171,8 +171,8 @@ module.exports = Backbone.Collection
             if (activity.get('matchesFilters')[filterVertical].length > 1) {
               return 'Multiple Sectors';//TODO fix hardcode 'sectors'
             } else if (activity.get('matchesFilters')[filterVertical][0].get) {
-              var donorName = activity.get('matchesFilters')[filterVertical][0].get('name');
-              return donorName;
+              var name = activity.get('matchesFilters')[filterVertical][0].get('name');
+              return name;
             } else {
               console.warn('matchFilters are not models.');
               return '';
@@ -183,9 +183,11 @@ module.exports = Backbone.Collection
           }
         })
         .map(function(sites, orgId) {
+          var code = sites[0].get('activity').get('matchesFilters')[filterVertical][0].get('code');
           return {
             id: orgId,
-            name: orgId, //TODO: get org name from join/filters
+            name: orgId,
+            code: code,
             sites: _(sites).map(function(site) { return site.get('id'); })
           };
         })

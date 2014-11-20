@@ -84,6 +84,8 @@ public class FiltersGroup {
 		addIdentityMapping(filterGroupMap, ColumnConstants.RESPONSIBLE_ORGANIZATION);
 		filterGroupMap.put(ColumnConstants.RESPONSIBLE_ORGANIZATION_ID, ColumnConstants.RESPONSIBLE_ORGANIZATION);
 		addIdentityMapping(filterGroupMap, ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS);
+		
+		addIdentityMapping(filterGroupMap, ColumnConstants.IMPLEMENTATION_LEVEL);
 
 		return filterGroupMap;
 	}

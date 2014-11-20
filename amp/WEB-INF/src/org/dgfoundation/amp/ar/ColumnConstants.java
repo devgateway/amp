@@ -112,6 +112,7 @@ public class ColumnConstants {
 	public static final String GOVERNMENT_IS_MEMBER_OF_PROJECT_STEERING_COMMITTEE = "Government is member of project steering committee";
 	public static final String GRAND_TOTAL_COST = "Grand Total Cost";
 	public static final String IMPLEMENTATION_LEVEL = "Implementation Level";
+	public static final String IMPLEMENTATION_LOCATION = "Implementation Location";
 	public static final String IMPLEMENTING_AGENCY = "Implementing Agency";
 	public static final String IMPLEMENTING_AGENCY_ID = "Implementing Agency Id";
 	public static final String IMPLEMENTING_AGENCY_DEPARTMENT_DIVISION = "Implementing Agency Department/Division";

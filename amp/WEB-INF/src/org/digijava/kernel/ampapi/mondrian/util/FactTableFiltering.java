@@ -231,6 +231,8 @@ public class FactTableFiltering {
 			
 			add(ColumnConstants.RESPONSIBLE_ORGANIZATION, new OrgIdsExpander("ro_org_id"));
 			add(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, new OrgGrpIdsExpander("ro_org_id"));
+			
+			add(ColumnConstants.IMPLEMENTATION_LEVEL, new ActACVIdsExpander("entity_id"));
 		}
 		
 		void add(String mainColumn, IdsExpander expander) {

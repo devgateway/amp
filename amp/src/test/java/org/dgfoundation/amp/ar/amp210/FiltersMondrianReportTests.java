@@ -334,4 +334,45 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 		runMondrianTestCase(spec, "en", Arrays.asList("date-filters-activity"), correctResult);
 	}
 	
+	@Test
+	public void testImplementationLevel() {
+		ReportAreaForTests correctResult = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Implementation Level", "", "2009-Actual Disbursements", "0", "2009-Actual Commitments", "100 000", "2010-Actual Disbursements", "60 000", "2010-Actual Commitments", "0", "2011-Actual Disbursements", "0", "2011-Actual Commitments", "0", "2012-Actual Disbursements", "12 000", "2012-Actual Commitments", "25 000", "2013-Actual Disbursements", "0", "2013-Actual Commitments", "2 670 000", "2014-Actual Disbursements", "450 000", "2014-Actual Commitments", "4 400 000", "Total Measures-Actual Disbursements", "522 000", "Total Measures-Actual Commitments", "7 195 000")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "mtef activity 1", "Implementation Level", "National", "2009-Actual Disbursements", "0", "2009-Actual Commitments", "0", "2010-Actual Disbursements", "0", "2010-Actual Commitments", "0", "2011-Actual Disbursements", "0", "2011-Actual Commitments", "0", "2012-Actual Disbursements", "0", "2012-Actual Commitments", "0", "2013-Actual Disbursements", "0", "2013-Actual Commitments", "0", "2014-Actual Disbursements", "0", "2014-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0", "Total Measures-Actual Commitments", "0"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "date-filters-activity", "Implementation Level", "National", "2009-Actual Disbursements", "0", "2009-Actual Commitments", "100 000", "2010-Actual Disbursements", "60 000", "2010-Actual Commitments", "0", "2011-Actual Disbursements", "0", "2011-Actual Commitments", "0", "2012-Actual Disbursements", "12 000", "2012-Actual Commitments", "25 000", "2013-Actual Disbursements", "0", "2013-Actual Commitments", "0", "2014-Actual Disbursements", "0", "2014-Actual Commitments", "0", "Total Measures-Actual Disbursements", "72 000", "Total Measures-Actual Commitments", "125 000"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "mtef activity 2", "Implementation Level", "Provincial", "2009-Actual Disbursements", "0", "2009-Actual Commitments", "0", "2010-Actual Disbursements", "0", "2010-Actual Commitments", "0", "2011-Actual Disbursements", "0", "2011-Actual Commitments", "0", "2012-Actual Disbursements", "0", "2012-Actual Commitments", "0", "2013-Actual Disbursements", "0", "2013-Actual Commitments", "0", "2014-Actual Disbursements", "0", "2014-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0", "Total Measures-Actual Commitments", "0"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "pledged 2", "Implementation Level", "Provincial", "2009-Actual Disbursements", "0", "2009-Actual Commitments", "0", "2010-Actual Disbursements", "0", "2010-Actual Commitments", "0", "2011-Actual Disbursements", "0", "2011-Actual Commitments", "0", "2012-Actual Disbursements", "0", "2012-Actual Commitments", "0", "2013-Actual Disbursements", "0", "2013-Actual Commitments", "2 670 000", "2014-Actual Disbursements", "450 000", "2014-Actual Commitments", "4 400 000", "Total Measures-Actual Disbursements", "450 000", "Total Measures-Actual Commitments", "7 070 000"));
+		
+		runMondrianTestCase("AMP-18736-impl-level-location", 
+			Arrays.asList("mtef activity 1", "mtef activity 2", "date-filters-activity", "pledged 2"),
+			correctResult, "en");
+		
+		ReportSpecificationImpl spec = buildSpecification("testImplementaionLevelFilteri",
+			Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.IMPLEMENTATION_LEVEL),
+			Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+			null,
+			GroupingCriteria.GROUPING_TOTALS_ONLY);
+		spec.setDisplayEmptyFundingRows(true);
+			
+		MondrianReportFilters filters = new MondrianReportFilters();
+		filters.addFilterRule(new ReportColumn(ColumnConstants.IMPLEMENTATION_LEVEL), new FilterRule("69", true));
+		spec.setFilters(filters);
+			
+		ReportAreaForTests correctResult2 = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Implementation Level", "", "Actual Commitments", "7 070 000", "Actual Disbursements", "450 000")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "mtef activity 2", "Implementation Level", "Provincial", "Actual Commitments", "0", "Actual Disbursements", "0"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "pledged 2", "Implementation Level", "Provincial", "Actual Commitments", "7 070 000", "Actual Disbursements", "450 000"));
+		
+		runMondrianTestCase(spec, "en", 
+			Arrays.asList("mtef activity 1", "mtef activity 2", "date-filters-activity", "pledged 2"), correctResult2);
+	}
+	
 }

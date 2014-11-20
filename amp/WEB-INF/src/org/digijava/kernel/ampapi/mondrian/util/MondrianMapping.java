@@ -147,6 +147,9 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.ACTIVITY_CREATED_BY, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.ATTR_ACTIVITY_CREATED_BY, MoConstants.ATTR_ACTIVITY_CREATED_BY));
 			addColumnDefinition(ColumnConstants.ACTIVITY_UPDATED_BY, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.ATTR_ACTIVITY_UPDATED_BY, MoConstants.ATTR_ACTIVITY_UPDATED_BY));
 			addColumnDefinition(ColumnConstants.ACTIVITY_APPROVED_BY, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.ATTR_ACTIVITY_APPROVED_BY, MoConstants.ATTR_ACTIVITY_APPROVED_BY));
+			addColumnDefinition(ColumnConstants.IMPLEMENTATION_LEVEL, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_IMPLEMENTATION_LEVEL, MoConstants.ATTR_IMPLEMENTATION_LEVEL));
+			addColumnDefinition(ColumnConstants.IMPLEMENTATION_LOCATION, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_IMPLEMENTATION_LOCATION, MoConstants.ATTR_IMPLEMENTATION_LOCATION));
+
 			addColumnDefinition(ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_GOVERNMENT_APPROVAL_PROCEDURES, MoConstants.ATTR_GOVERNMENT_APPROVAL_PROCEDURES));
 			addColumnDefinition(ColumnConstants.JOINT_CRITERIA, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_JOINT_CRITERIA, MoConstants.ATTR_JOINT_CRITERIA));
 			addColumnDefinition(ColumnConstants.INDIRECT_ON_BUDGET, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.ATTR_INDIRECT_ON_BUDGET, MoConstants.ATTR_INDIRECT_ON_BUDGET));
@@ -270,7 +273,6 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.ZONE, new MDXLevel(MoConstants.LOCATION, MoConstants.H_ZONES, MoConstants.ATTR_ZONE_NAME));
 			addColumnDefinition(ColumnConstants.DISTRICT, new MDXLevel(MoConstants.LOCATION, MoConstants.H_DISTRICTS, MoConstants.ATTR_DISTRICT_NAME));
 			addColumnDefinition(ColumnConstants.LOCATION, new MDXLevel(MoConstants.LOCATION, MoConstants.ATTR_LOCATION_NAME,  MoConstants.ATTR_LOCATION_NAME));
-			addColumnDefinition(ColumnConstants.IMPLEMENTATION_LEVEL, new MDXLevel(MoConstants.LOCATION, MoConstants.H_IMPLENETATION_LEVEL, MoConstants.ATTR_IMPLEMENTATION_LEVEL));
 			addColumnDefinition(ColumnConstants.GEOCODE, new MDXLevel(MoConstants.LOCATION, MoConstants.H_GEO_CODE, MoConstants.ATTR_GEO_ID));
 			
 			addColumnDefinition(ColumnConstants.PROPOSED_PROJECT_AMOUNT, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT));

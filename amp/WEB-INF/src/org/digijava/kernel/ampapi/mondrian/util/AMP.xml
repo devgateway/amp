@@ -245,6 +245,16 @@
 				<Table name="mondrian_activity_trn_texts@@locale@@" />
 				<Level name="Indirect On Budget" column="iob_id" type="String" nameColumn="iob_text" /> 
 			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Locations" name="Implementation Level" primaryKey="amp_activity_id">
+				<Table name="mondrian_activity_trn_texts@@locale@@" />
+				<Level name="Implementation Level" column="impl_level_id" type="String" nameColumn="impl_level_name" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Locations" name="Implementation Location" primaryKey="amp_activity_id">
+				<Table name="mondrian_activity_trn_texts@@locale@@" />
+				<Level name="Implementation Location" column="impl_location_id" type="String" nameColumn="impl_location_name" />
+			</Hierarchy>
 		</Dimension>
 
 		<DimensionUsage name="Activity Status" source="Category Value" foreignKey="status_id" />
@@ -511,10 +521,6 @@
 				<Hierarchy hasAll="true" allMemberName="All Locations" name="GeoCode" primaryKey="id">
 				<Table name="mondrian_locations@@locale@@" />
 				<Level name="GeoId" column="id" type="String" nameColumn="geo_code" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Locations" name="Implementation Level" primaryKey="id">
-				<Table name="mondrian_locations@@locale@@" />
-				<Level name="Implementation Level" column="impl_level_id" type="String" nameColumn="impl_level_name" />
 			</Hierarchy>
 			<Hierarchy hasAll="true" allMemberName="All Locations" name="Specified Location" primaryKey="id">
 				<Table name="mondrian_locations@@locale@@" />

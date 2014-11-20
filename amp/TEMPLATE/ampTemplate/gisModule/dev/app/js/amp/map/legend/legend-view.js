@@ -27,11 +27,10 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     var self = this;
-
     // Chained Translate: returns el
     this.app.translator.translateDOM(
      this.template()).then(
-     function(newEl){
+     function(newEl) {
        self.$el.html(newEl);
      });
 

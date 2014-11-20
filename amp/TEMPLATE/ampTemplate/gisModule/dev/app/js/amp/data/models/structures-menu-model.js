@@ -13,13 +13,19 @@ module.exports = Backbone.Model
   defaults: {
     title: 'Project Sites',
     value: '',
-    helpText: ''
+    helpText: '',
+    filterVertical: 'Primary Sector Id'
   },
 
   initialize: function(things, options) {
+    var self = this;
     this.appData = options.appData;
     this.filter = options.filter;
     this.structuresCollection = this.appData.projectSites;
+
+    this.listenTo(this, 'change:filterVertical', function() {
+      self.structuresCollection.updatePaletteSet();
+    });
   },
 
   attachListeners: function() {

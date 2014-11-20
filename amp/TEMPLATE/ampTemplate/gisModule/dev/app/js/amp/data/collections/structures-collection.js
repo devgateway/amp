@@ -158,6 +158,7 @@ module.exports = Backbone.Collection
   updatePaletteSet: function() {
     var self = this;
     var deferred = $.Deferred();
+    var filterVertical = self.appData.projectSitesMenu.get('filterVertical');
 
     // load the necessary activities.
     this.getStructuresWithActivities().done(function() {
@@ -165,13 +166,12 @@ module.exports = Backbone.Collection
         .groupBy(function(site) {
           var activity = site.get('activity');
 
-          // TODO:  for now we want just organizations[1]  for donor.
-          // Choosing a vertical will need to be configurable from drop down..
-          if (!_.isEmpty(activity.get('matchesFilters')['Donor Id'])) {
-            if (activity.get('matchesFilters')['Donor Id'].length > 1) {
-              return 'Multiple Donors';
-            } else if (activity.get('matchesFilters')['Donor Id'][0].get) {
-              var donorName = activity.get('matchesFilters')['Donor Id'][0].get('name');
+          // TODO: Choosing a vertical will need to be configurable from drop down..
+          if (!_.isEmpty(activity.get('matchesFilters')[filterVertical])) {
+            if (activity.get('matchesFilters')[filterVertical].length > 1) {
+              return 'Multiple Sectors';//TODO fix hardcode 'sectors'
+            } else if (activity.get('matchesFilters')[filterVertical][0].get) {
+              var donorName = activity.get('matchesFilters')[filterVertical][0].get('name');
               return donorName;
             } else {
               console.warn('matchFilters are not models.');

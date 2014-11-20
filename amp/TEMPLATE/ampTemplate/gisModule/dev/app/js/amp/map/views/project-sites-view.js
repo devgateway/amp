@@ -12,6 +12,8 @@ module.exports = Backbone.View.extend({
   ZOOM_BREAKPOINT: 11,
   SMALL_ICON_RADIUS: 4,
   BIG_ICON_RADIUS: 6,
+  MAXCLUSTERRADIUS: 2,
+
   //    Calculate based on: var boundary0 = self.app.data.boundaries.get('adm-0');
   currentRadius: null,
   markerCluster: null,
@@ -23,11 +25,12 @@ module.exports = Backbone.View.extend({
   maxClusterCount: 0,
   CLUSTER_PRECISION: 8, //decimal places of lat, lng precision for clustering. (doesn't effect plugin.)
 
-  MAX_CLUSTER_SIZE: 30,
+  MAX_CLUSTER_SIZE: 20,
 
   initialize: function(options) {
     this.app = options.app;
     this.map = options.map;
+
     this.structureMenuModel = this.app.data.projectSitesMenu;
 
     this.initCluster();
@@ -36,6 +39,8 @@ module.exports = Backbone.View.extend({
     this.listenTo(this.structureMenuModel, 'hide', this.hideLayer);
 
     this.listenTo(this.app.data.projectSites, 'refresh', this.refreshLayer);
+    //TODO: no need to send new request, just re-colour pallete..... maybe just try a hide and show...
+    this.listenTo(this.structureMenuModel, 'change:filterVertical', this.refreshLayer);
 
     this.listenTo(this.markerCluster, 'clusterclick', this.clusterClick);
 
@@ -61,8 +66,8 @@ module.exports = Backbone.View.extend({
     return this.featureGroup;
   },
 
-  //TODO: this code runs every time layer is shown...should only do it when things change,
-  // otherwise should just hide and show.
+
+
   _renderFeatures: function() {
     var self = this;
 
@@ -73,43 +78,95 @@ module.exports = Backbone.View.extend({
     // add new featureGroup
     self.featureGroup = L.geoJson(self.rawData, {
       pointToLayer: function(feature, latlng) {
-        var colors = self.structureMenuModel.structuresCollection.palette.colours.filter(function(colour) {
-          var donorId = -1;
+
+        var point = null;
+
+        if (self.rawData.features.length < 400 &&
+          self.structureMenuModel.get('filterVertical') === 'Primary Sector Id') {
+          // 1. SVG Icon: works well with agresive clustering: aprox 40 px range
+          // or if < 400 icons. Best on FF
+          //?suport to NGO 920?
+          var iconNames = {
+            100: 'Social.svg',
+            110: 'Education.svg',
+            120: 'Health.svg',
+            130: 'Population.svg',
+            140: 'Water.svg',
+            150: 'Gov.svg',
+            // 'ConflictPrevention.svg', //152 not primary...?
+            160: 'OtherSocial.svg',
+            210: 'Transport.svg',
+            220: 'Communication.svg',
+            230: 'Energy.svg',
+            240: 'Banking.svg',
+            250: 'Business.svg',
+            311: 'Agriculture.svg',
+            312: 'Forestry.svg',
+            313: 'Fishing.svg',
+            321: 'Industry.svg',
+            322: 'MineralResources.svg',
+            323: 'Construction.svg',
+            331: 'Trade.svg',
+            332: 'Tourism.svg',
+            400: 'Multisector.svg',
+            500: 'GeneralSupport.svg',
+            600: 'Debt.svg',
+            700: 'Humanitarian.svg'
+          };
+
+          var sectorCode = 400; // temp catchall...
+          var filterVertical = self.structureMenuModel.get('filterVertical');
+
           if (feature.properties.activity.attributes &&
-              feature.properties.activity.attributes.matchesFilters['Donor Id']) {
-            donorId = feature.properties.activity.attributes.matchesFilters['Donor Id'][0];
+              feature.properties.activity.attributes.matchesFilters[filterVertical]) {
+            if (feature.properties.activity.attributes.matchesFilters[filterVertical].length > 1) {
+              console.log('TODO: need custom vairous sectors icon...different from  multi-sector');
+            }
+            sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
           }
 
-          return colour.get('test').call(colour, feature.properties.id);
-        });
-        if (colors.length > 2) {  // 2, because "other" is always true...
-          colors = [self.structureMenuModel.structuresCollection.palette.colours.find(function(colour) {
-            return colour.get('multiple') === true;
-          })];
-        }
-
-        // temp hack for if pallette part didn't work.
-        if (colors.length === 0) {
-          colors = [{hex: function() { return 'orange';}}];
-          console.warn('colour not found');
-        }
-
-        if (self.map.getZoom() < self.ZOOM_BREAKPOINT) {
-          self.currentRadius = self.SMALL_ICON_RADIUS;
+          var pointIcon = L.icon({
+            iconUrl: 'img/map-icons/' + iconNames[sectorCode],
+            iconSize:     [25, 25], // size of the icon
+            iconAnchor:   [0, 6], // point of the icon which will correspond to marker's location
+            popupAnchor:  [-3, -6] // point from which the popup should open relative to the iconAnchor
+          });
+          point = L.marker(latlng, {icon: pointIcon});
         } else {
-          self.currentRadius = self.BIG_ICON_RADIUS;
-        }
+          var colors = self.structureMenuModel.structuresCollection.palette.colours.filter(function(colour) {
+            return colour.get('test').call(colour, feature.properties.id);
+          });
+          if (colors.length > 2) {  // 2, because "other" is always true...
+            colors = [self.structureMenuModel.structuresCollection.palette.colours.find(function(colour) {
+              return colour.get('multiple') === true;
+            })];
+          }
 
-        var point = new L.CircleMarker(latlng, {
-          radius: self.currentRadius,
-          fillColor: colors[0].hex(),
-          color: null,
-          weight: 1,
-          opacity: 1,
-          fillOpacity: 1
-        });
+          // temp hack for if pallette part didn't work.
+          if (colors.length === 0) {
+            colors = [{hex: function() { return 'orange';}}];
+            //console.warn('colour not found for feature ', feature.properties.activity.attributes.matchesFilters);
+          }
+
+          if (self.map.getZoom() < self.ZOOM_BREAKPOINT) {
+            self.currentRadius = self.SMALL_ICON_RADIUS;
+          } else {
+            self.currentRadius = self.BIG_ICON_RADIUS;
+          }
+
+          // 0. origninaly way circle marker, no icon
+          point = new L.CircleMarker(latlng, {
+            radius: self.currentRadius,
+            fillColor: colors[0].hex(),
+            color: null,
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 1
+          });
+        }
 
         self.markerCluster.addLayer(point);
+
 
         // DRS in progress custom own clustering. big efficiency gains.
         var latLngString = Math.round(latlng.lat * self.CLUSTER_PRECISION * 10) +
@@ -130,19 +187,23 @@ module.exports = Backbone.View.extend({
   // circles  shrink if we're zoomed out, get big if zoomed in
   _updateZoom: function() {
     var self = this;
-
     if (this.featureGroup) {
       var zoom = this.map.getZoom();
       // make small points
       if (zoom < this.ZOOM_BREAKPOINT && self.currentRadius !== self.SMALL_ICON_RADIUS) {
         self.currentRadius = self.SMALL_ICON_RADIUS;
         this.featureGroup.eachLayer(function(layer) {
-          layer.setRadius(self.currentRadius);
+          if (layer.setRadius) {
+            layer.setRadius(self.currentRadius);
+          }
         });
       } else if (zoom >= this.ZOOM_BREAKPOINT && self.currentRadius !== self.BIG_ICON_RADIUS) {
         self.currentRadius = self.BIG_ICON_RADIUS;
         this.featureGroup.eachLayer(function(layer) {
-          layer.setRadius(self.currentRadius);
+          if (layer.setRadius) {
+            layer.setRadius(self.currentRadius);
+
+          }
         });
       }
     }
@@ -150,7 +211,7 @@ module.exports = Backbone.View.extend({
 
   _hilightProject: function(projectId) {
     this.featureGroup.eachLayer(function(layer) {
-      if (layer.feature.properties.activity.id === projectId) {
+      if (layer.feature.properties.activity.id === projectId && layer.setStyle) {
         layer.setStyle({color: '#222', stroke: true});
       }
     });
@@ -158,7 +219,7 @@ module.exports = Backbone.View.extend({
 
   _dehilightProject: function(projectId) {
     this.featureGroup.eachLayer(function(layer) {
-      if (layer.feature.properties.activity.id === projectId) {
+      if (layer.feature.properties.activity.id === projectId && layer.setStyle) {
         layer.setStyle({stroke:false});
       }
     });
@@ -177,9 +238,8 @@ module.exports = Backbone.View.extend({
 
     //TODO: checkout prune cluster, supposedly way faster...
     // may also be worth doing manually since we don't want updates on zoom
-    // TODO: make sizing dynamic based on highest cluster... and put into own function...
     this.markerCluster = new L.markerClusterGroup({
-      maxClusterRadius: 0.9,
+      maxClusterRadius: this.MAXCLUSTERRADIUS,
       iconCreateFunction: function(cluster) {return self._createCluster(cluster, model);},
       zoomToBoundsOnClick: false,
       showCoverageOnHover: false,

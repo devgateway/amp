@@ -1,4 +1,14 @@
-<h3 data-i18n="amp.gis:legend-item-structures"><%= title %></h3>
+<h3 data-i18n="amp.gis:legend-item-structures">
+  <select class="form-control" >
+    <option value="Primary Sector Id" <%= (obj.selectedVertical == "Primary Sector Id"? 'selected': '') %>>
+      <%= title %> By Sector
+    </option>
+
+    <option value="Donor Id" <%= (obj.selectedVertical == "Donor Id"? 'selected': '') %>>
+     <%= title %> By Donor
+    </option>
+  </select>
+</h3>
 
 <% if (status === 'loading') { %>
   <p><em>loading...</em></p>

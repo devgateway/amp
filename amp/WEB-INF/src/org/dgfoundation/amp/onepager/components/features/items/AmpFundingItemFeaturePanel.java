@@ -150,7 +150,11 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 					target.add(parent);
 				target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(parent));
 				if(isTabView){
-					target.appendJavaScript("switchTabs();");
+					//when adding a new funding search for the correct index
+					//parent.getTabsList()
+					int index=
+					parent.calculateTabIndex(fundingModel.getObject().getAmpDonorOrgId());
+					target.appendJavaScript("switchTabs("+ index +");");
 				}
 			}
 		};

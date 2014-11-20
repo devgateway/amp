@@ -392,20 +392,8 @@ public class AmpDonorFundingFormSectionFeature extends
 					target.add(AmpDonorFundingFormSectionFeature.this);
 					//the -1 is the tabs (last) it will focus. Have to check if we need to 
 					//focus on the middle ones
-					int index=-1;
-					int newIndex=0;
-					Iterator<AmpOrganisation>tabs=tabsList.items.iterator();
-					while(tabs.hasNext()){
-						AmpOrganisation o=tabs.next();
-						if(o.getAmpOrgId().equals(choice.getAmpOrgId())){
-							index=newIndex;
-							break;
-						}
-						newIndex++;
-					}
-					if(index !=-1){
-						index ++; //oveview is the first tab
-					}
+					int index = calculateTabIndex(choice);
+
 					target.appendJavaScript("switchTabs("+ index +");");	
 					
 				}else{
@@ -583,4 +571,21 @@ public class AmpDonorFundingFormSectionFeature extends
 		 this.originalSearchOrganizationSelector = selector;
 	 }
 
+	 public int calculateTabIndex(AmpOrganisation choice) {
+		int index = -1;
+		int newIndex = 0;
+		Iterator<AmpOrganisation> tabs = tabsList.items.iterator();
+		while (tabs.hasNext()) {
+			AmpOrganisation o = tabs.next();
+			if (o.getAmpOrgId().equals(choice.getAmpOrgId())) {
+				index = newIndex;
+				break;
+			}
+			newIndex++;
+		}
+		if(index !=-1){
+			index ++; //oveview is the first tab
+		}
+		return index;
+	}
 }

@@ -873,6 +873,7 @@
 <module:display name="Dashboard Org. Info" parentModule="Visualization Dashboards"></module:display>
 <feature:display name="Background of organization" module="Dashboard Org. Info"></feature:display> 
 <feature:display name="Org. Description" module="Dashboard Org. Info"></feature:display> 
-<feature:display name="Key Areas of Focus" module="Dashboard Org. Info"></feature:display> 
+<feature:display name="Key Areas of Focus" module="Dashboard Org. Info"></feature:display>
+<feature:display name="Show Names As Acronyms" module="Dashboard Org. Info"></feature:display>
 <!-- preview activity -->
 <module:display name="/Activity Form/Related Organizations/Donor Organization" parentModule="/Activity Form/Related Organizations"></module:display>

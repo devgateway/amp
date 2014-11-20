@@ -97,7 +97,11 @@ public class DashboardsService {
 
 		switch (type.toUpperCase()) {
 		case "DO":
-			column = MoConstants.DONOR_AGENCY;
+			if (FeaturesUtil.isVisibleFeature("Show Names As Acronyms")){
+				column = MoConstants.ATTR_ORG_ACRONYM;
+			}else{
+				column = MoConstants.DONOR_AGENCY;
+			}
 			break;
 		case "RE":
 			column = MoConstants.H_REGIONS;

@@ -243,6 +243,7 @@ public final class MoConstants {
 	public static final String ATTR_ORG_NAME = "Organization Name";
 	public static final String ATTR_ORG_ID = "Organization Id";
 	public static final String ATTR_ORG_CODE = "Organization Code";
+	public static final String ATTR_ORG_ACRONYM = "Organization Acronym";
 	public static final String ATTR_PROGRAM_LEVEL_0_NAME = "Program Level 0 Name";
 	public static final String ATTR_PROGRAM_LEVEL_1_NAME = "Program Level 1 Name";
 	public static final String ATTR_PROGRAM_LEVEL_2_NAME = "Program Level 2 Name";

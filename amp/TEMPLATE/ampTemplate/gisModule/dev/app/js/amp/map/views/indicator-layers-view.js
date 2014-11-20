@@ -68,11 +68,9 @@ module.exports = Backbone.View.extend({
 
   hideLayer: function(layer) {
     var leafletLayer = this.leafletLayerMap[layer.cid];
-    if (!leafletLayer) {
-      throw new Error('cannot remove a layer that is not loaded????', layer);
+    if (leafletLayer) {
+      this.map.removeLayer(leafletLayer);
     }
-
-    this.map.removeLayer(leafletLayer);
   },
 
   getNewGeoJSONLayer: function(layerModel) {

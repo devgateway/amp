@@ -40,8 +40,7 @@ public class MondrianTablesRepository {
 							.addColumnDef(new I18nViewColumnDescription("country_name", "country_id", AmpCategoryValueLocations.class, "name"))
 							.addColumnDef(new I18nViewColumnDescription("region_name", "region_id", AmpCategoryValueLocations.class, "name"))
 							.addColumnDef(new I18nViewColumnDescription("zone_name", "zone_id", AmpCategoryValueLocations.class, "name"))
-							.addColumnDef(new I18nViewColumnDescription("district_name", "district_id", AmpCategoryValueLocations.class, "name"))
-							.addTrnColDef("impl_level_name", "impl_level_id");
+							.addColumnDef(new I18nViewColumnDescription("district_name", "district_id", AmpCategoryValueLocations.class, "name"));
 					}});
 
 	public final static MondrianTableDescription MONDRIAN_SECTORS_DIMENSION_TABLE = 
@@ -137,7 +136,9 @@ public class MondrianTablesRepository {
 						return new I18nViewDescription("mondrian_activity_trn_texts")
 								.addTrnColDef("governmentapprovalprocedures_text", "governmentapprovalprocedures_id")
 								.addTrnColDef("jointcriteria_text", "jointcriteria_id")
-								.addTrnColDef("iob_text", "iob_id");
+								.addTrnColDef("iob_text", "iob_id")
+								.addTrnColDef("impl_level_name", "impl_level_id")
+								.addTrnColDef("impl_loc_name", "impl_loc_id");
 					}});
 	
 	public final static MondrianTableDescription MONDRIAN_CATEGORY_VALUES = 

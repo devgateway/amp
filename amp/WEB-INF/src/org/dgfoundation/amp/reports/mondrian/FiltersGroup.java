@@ -86,6 +86,15 @@ public class FiltersGroup {
 		addIdentityMapping(filterGroupMap, ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS);
 		
 		addIdentityMapping(filterGroupMap, ColumnConstants.IMPLEMENTATION_LEVEL);
+		
+		//ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.TYPE_OF_COOPERATION, ColumnConstants.TYPE_OF_IMPLEMENTATION
+		addIdentityMapping(filterGroupMap, ColumnConstants.FINANCING_INSTRUMENT);
+		addIdentityMapping(filterGroupMap, ColumnConstants.MODE_OF_PAYMENT);
+		addIdentityMapping(filterGroupMap, ColumnConstants.TYPE_OF_ASSISTANCE);
+		addIdentityMapping(filterGroupMap, ColumnConstants.TYPE_OF_COOPERATION);
+		addIdentityMapping(filterGroupMap, ColumnConstants.TYPE_OF_IMPLEMENTATION);
+		addIdentityMapping(filterGroupMap, ColumnConstants.FUNDING_STATUS);
+		addIdentityMapping(filterGroupMap, ColumnConstants.PROCUREMENT_SYSTEM);
 
 		return filterGroupMap;
 	}

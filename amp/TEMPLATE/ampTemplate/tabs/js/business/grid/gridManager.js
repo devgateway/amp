@@ -137,7 +137,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 						groupingView : columnsMapping.createJQGridGroupingModel(tableStructure, grouping),
 						footerrow : true,
 						loadBeforeSend : function(xhr, settings) {
-							
+							TranslationManager.searchAndTranslate();
 						},
 						gridComplete : function() {
 							// background colors.
@@ -396,9 +396,15 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 			if (item.reportColumnType == 'MEASURE') {
 				var col = {};
 				col.columnName = item.name;
-				col.value = data.page.pageArea.contents["[" + item.name + "]"].value;
-				col.displayedValue = data.page.pageArea.contents["[" + item.name + "]"].displayedValue;
-				ret.push(col);
+				if (data.page != null && data.page.pageArea != null) {
+					try {
+						col.value = data.page.pageArea.contents["[" + item.name + "]"].value;
+						col.displayedValue = data.page.pageArea.contents["[" + item.name + "]"].displayedValue;
+						ret.push(col);
+					} catch (err) {
+						console.error(err + item.name);
+					}
+				}
 			}
 		});
 		return ret;

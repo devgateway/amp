@@ -19,7 +19,11 @@ module.exports = Backbone.Collection
         }
 
         // find the match.
-        var match = _.findWhere(setting.get('options'), {id: setting.get('selected')});
+        var match = _.find(setting.get('options'), function(option) {
+          /* jshint ignore:start */
+          return option.id == setting.get('selected');
+          /* jshint ignore:end */
+        });
         if (match) {
           tmpJSON[setting.id] = match.id;
         } else {

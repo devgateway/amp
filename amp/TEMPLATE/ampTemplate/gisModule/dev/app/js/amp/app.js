@@ -14,7 +14,7 @@ var URLService = require('./services/url');
 
 var data = new GISData();
 var url = new URLService();
-var state = new State({ url: url, saved: data.savedMaps, autoinit: true });
+var state = new State({ url: url, saved: data.savedMaps, autoinit: true, prefix: ['saved/', 'report/']});
 
 // initialize everything that doesn't need to touch the DOM
 var app = new App({

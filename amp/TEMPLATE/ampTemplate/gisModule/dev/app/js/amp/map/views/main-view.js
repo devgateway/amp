@@ -120,7 +120,6 @@ module.exports = Backbone.View.extend({
       });
     });
   },
-  //jscs:enable
 
   _getMapView: function() {
     var center = this.map.getCenter();

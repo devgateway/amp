@@ -262,7 +262,9 @@ module.exports = Backbone.View.extend({
       //icons need to be abit bigger than plain circles, so bump up by 2
       marker = new L.circleDivIcon(Math.min(18, size + 2), {
         className: 'marker-cluster' + (zoomedIn ? '' : ' marker-cluster-small'),
-        html: (zoomedIn ? '<img src="img/map-icons/' + self.structureMenuModel.iconMappings[sectorCode] + '"><div class="text">' + markers.length + '</div>' : ''),
+        html: (zoomedIn ? '<img src="img/map-icons/' +
+          self.structureMenuModel.iconMappings[sectorCode] +
+          '"><div class="text">' + markers.length + '</div>' : ''),
         color: '#444',
         fillColor: '#fff',
         weight: 0

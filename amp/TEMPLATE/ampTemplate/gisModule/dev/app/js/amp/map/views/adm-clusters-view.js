@@ -46,7 +46,10 @@ module.exports = Backbone.View.extend({
       });
     }
 
-    this.map.addLayer(leafletLayer);
+    // TODO: may need to move this check to inside a 'load'
+    if (admLayer.get('selected')) {
+      this.map.addLayer(leafletLayer);
+    }
   },
 
   //TODO: make sure still selected

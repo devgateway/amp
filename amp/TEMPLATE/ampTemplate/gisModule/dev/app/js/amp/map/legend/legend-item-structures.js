@@ -1,5 +1,4 @@
 var fs = require('fs');
-var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var Template = fs.readFileSync(__dirname + '/legend-item-structures.html', 'utf8');
@@ -34,7 +33,7 @@ module.exports = Backbone.View.extend({
 
       // add listener to select. Didn't work when i used 'events'
       // probably because happens after view populated...or translate strips events..
-      self.$('select').change(function(evt) {
+      self.$('select').change(function() {
         var verticalID = self.$('option:selected').val();
         self.model.set('filterVertical', verticalID);
       });

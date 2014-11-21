@@ -15,6 +15,7 @@ module.exports = Backbone.View.extend({
   SMALL_ICON_RADIUS: 4,
   BIG_ICON_RADIUS: 6,
   MAXCLUSTERRADIUS: 2,
+  MAX_NUM_FOR_ICONS: 400,
 
   //    Calculate based on: var boundary0 = self.app.data.boundaries.get('adm-0');
   currentRadius: null,
@@ -84,11 +85,11 @@ module.exports = Backbone.View.extend({
 
         var point = null;
 
-        if (self.rawData.features.length < 400 &&
+        if (self.rawData.features.length < self.MAX_NUM_FOR_ICONS &&
           self.structureMenuModel.get('filterVertical') === 'Primary Sector Id') {
           // 1. SVG Icon: works well with agresive clustering: aprox 40 px range
-          // or if < 400 icons. Best on FF
-          var sectorCode = 400; // temp catchall...
+          // or if < MAX_NUM_FOR_ICONS icons. Best on FF
+          var sectorCode = 0; // temp code for catchall...
           var filterVertical = self.structureMenuModel.get('filterVertical');
 
           if (feature.properties.activity.attributes &&
@@ -247,13 +248,15 @@ module.exports = Backbone.View.extend({
     var marker = null;
 
     //Try and show icons if looking at sectors
-    if (self.structureMenuModel.get('filterVertical') === 'Primary Sector Id') {
+    if (self.structureMenuModel.get('filterVertical') === 'Primary Sector Id' &&
+      self.rawData.features.length < self.MAX_NUM_FOR_ICONS) {
 
       var filterVertical = self.structureMenuModel.get('filterVertical');
-      var sectorCode = 400; // TODO: temp replace with 'various sectors icon'
+      var sectorCode = 0; // 0 is 'various sectors icon'
 
       if (colors.length === 1) {
-        sectorCode = markers[0].feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
+        var activity = markers[0].feature.properties.activity;
+        sectorCode = activity.attributes.matchesFilters[filterVertical][0].get('code');
       }
 
       //icons need to be abit bigger than plain circles, so bump up by 2
@@ -294,14 +297,6 @@ module.exports = Backbone.View.extend({
       .value();
 
 
-    /*
-     *var childMarkerFeatureList = _.chain(a.layer.getAllChildMarkers())
-     *   .pluck('feature')
-     *   .pluck('properties')
-     *   .value();
-     */
-
-    /* NB: Structures are a synonym of Project Sites. */
     a.layer.bindPopup(
       self.projectListTemplate({ structures: parsedProjectSitesList}),
       {
@@ -321,10 +316,11 @@ module.exports = Backbone.View.extend({
     /*var parsedProjectSitesList = this.app.data.projectSites.model.prototype.parse(feature);*/
 
     if (feature.properties) {
-      //TODO: template, and add activity link:
       var activityJSON = feature.properties.activity.toJSON();
-
-      layer.bindPopup(self.structureTemplate({activityJSON: activityJSON, properties: feature.properties}),
+      layer.bindPopup(self.structureTemplate({
+        activityJSON: activityJSON,
+        properties: feature.properties
+      }),
       {
         maxWidth: 450,
         offset: new L.Point(0, -2)

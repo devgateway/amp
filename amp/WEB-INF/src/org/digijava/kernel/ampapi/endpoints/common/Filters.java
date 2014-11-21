@@ -292,7 +292,7 @@ public class Filters {
 
 	@GET
 	@Path("/org-roles")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = true, name = "Organization Roles", id = "orgRolesList")
 	
 	public List<SimpleJsonBean> getorgRoles() {
@@ -402,8 +402,8 @@ public class Filters {
 	 */
 	@GET
 	@Path("/locations/")
-	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = false, id = "LocationList", column = ColumnConstants.LOCATION,name="Locations")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, id = "LocationList", column = ColumnConstants.LOCATION,name="Locations")
 	public JsonBean getLocations() {
 		return QueryUtil.getLocationsForFilter();
 	}

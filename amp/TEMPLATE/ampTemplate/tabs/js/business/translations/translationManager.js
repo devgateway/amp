@@ -83,7 +83,7 @@ define([ 'underscore', 'jquery', 'i18next' ], function(_, jQuery) {
 	function lookForTranslationByKey(key) {
 		var translation = app.TabsApp.globalTranslationCache[key];
 		if (translation) {
-			console.log('found translation: ' + key);
+			//console.log('found translation: ' + key);
 			return translation;
 		} else {
 			return null;

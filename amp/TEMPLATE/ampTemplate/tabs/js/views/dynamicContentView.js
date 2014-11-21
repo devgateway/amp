@@ -21,6 +21,11 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 		initialize : function(data) {
 			reportId = data.id;
 			reportFilters = data.filters;
+
+			// NOTE: Moved here from settingsManager.js in order to have this
+			// values ready for some checks in gridManager.js
+			var settings = new Settings();
+			app.TabsApp.settings = settings;
 		},
 		clickSaveButton : function() {
 			TabManager.openSaveTabDialog();

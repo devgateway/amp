@@ -1,5 +1,5 @@
-define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'models/settings', 'business/translations/translationManager',
-		'business/grid/gridManager', 'models/legend', 'jquery', 'jqueryui' ], function(Marionette, settingsDialogTemplate, Settings,
+define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'business/translations/translationManager',
+		'business/grid/gridManager', 'models/legend', 'jquery', 'jqueryui' ], function(Marionette, settingsDialogTemplate,
 		TranslationManager, GridManager, Legend, jQuery) {
 
 	"use strict";
@@ -27,9 +27,9 @@ define([ 'marionette', 'text!views/html/settingsDialogTemplate.html', 'models/se
 		var SettingDialogContainerView = Marionette.ItemView.extend({
 			template : _.template(settingsDialogTemplate)
 		});
+		var settings = app.TabsApp.settings;
 		// TODO: Replace some of the default values with the ones
 		// for this tab.
-		var settings = new Settings();
 		if (app.TabsApp.appliedSettings != null) {
 			settings.set('selectedCurrency', app.TabsApp.appliedSettings["1"]);
 		}

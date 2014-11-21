@@ -446,7 +446,7 @@ public class LocationService {
 						.getContents();
 				Set<ReportOutputColumn> col = row.keySet();
 				for (ReportOutputColumn reportOutputColumn : col) {
-					if (reportOutputColumn.columnName
+					if (reportOutputColumn.originalColumnName
 							.equals(ColumnConstants.ACTIVITY_ID)) {
 						activityId = Long
 								.parseLong(row.get(reportOutputColumn).value

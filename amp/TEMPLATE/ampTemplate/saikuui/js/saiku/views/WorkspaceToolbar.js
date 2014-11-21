@@ -60,18 +60,27 @@ var WorkspaceToolbar = Backbone.View.extend({
                 .addClass('disabled_toolbar').removeClass('on');
             $(args.workspace.el).find('.fields_list .disabled_toolbar').removeClass('disabled_toolbar');
             $(args.workspace.toolbar.el)
-                .find('.new, .open, .save, .edit, .run,.auto,.non_empty,.toggle_fields,.toggle_sidebar,.switch_to_mdx, .mdx')
+                .find('.new, .open, .save, .edit, .run,.auto, .non_empty,.toggle_fields,.toggle_sidebar,.switch_to_mdx, .mdx')
                 .removeClass('disabled_toolbar');
         }
         
-    	if(Settings.AMP_REPORT_API_BRIDGE) {
+    	if(Settings.AMP_REPORT_API_BRIDGE) { 
             var arrButtons = $(args.workspace.toolbar.el)
-            .find('.new, .open, .save, .edit, .auto,.non_empty,.toggle_fields,.toggle_sidebar,.switch_to_mdx, .mdx, .group_parents, .drillthrough, .drillthrough_export');
+            .find('.new, .open, .save, .run, .swap_axis, .zoom_mode, .query_scenario, .edit, .auto, .non_empty,.toggle_fields,.toggle_sidebar,.switch_to_mdx, .mdx, .group_parents, .drillthrough, .drillthrough_export');
             _.each(arrButtons, function(button) {
             	//Hide Parent
             	$(button.parentElement).hide();
             });
     	}
+    	else
+    		{
+            var arrButtons = $(args.workspace.toolbar.el)
+            .find('.zoom_mode, .query_scenario, .swap_axis, .toggle_fields, .switch_to_mdx, .mdx, .group_parents, .drillthrough, .drillthrough_export');
+            _.each(arrButtons, function(button) {
+            	//Hide Parent
+            	$(button.parentElement).hide();
+            });
+    		}
 
         this.reflect_properties();
 

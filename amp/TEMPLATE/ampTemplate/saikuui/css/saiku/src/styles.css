@@ -115,9 +115,9 @@ textarea, select {
 }
 .refresh_cubes_nav a.button {
     display: block;
-    height: 12px;
+    height: 24px;
     padding: 3px;
-    width: 12px;
+    width: 24px;
     border-radius: 3px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
@@ -464,6 +464,7 @@ textarea, select {
 .measure_caption a.button.addMeasure {
     float: right;
     font-weight: normal;
+    display:none !important;
 }
 
 .dimension_tree .hierarchy {
@@ -1031,6 +1032,7 @@ a.disabled_toolbar {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
     filter: alpha(opacity = 30);
     opacity: 0.3 !important;
+    display:none !important;
 }
 .disabled {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=30)";
@@ -1239,7 +1241,7 @@ a.disabled_toolbar:hover {
 }
 .query_toolbar a {
     display: block;
-    height: 16px;
+    height: 30px;
     padding: 8px;
     text-decoration: none;
     color: black;
@@ -1268,18 +1270,18 @@ a.disabled_toolbar:hover {
     background-image:   url('../../../js/saiku/plugins/CCC_Chart/chart.png');
     background-repeat:  no-repeat;
     background-position: 7px 7px;
-    width: 16px;
+    width: 30px;
 }
 .query_toolbar a.render_table {
     background-image: url('../../../images/src/table2.png');
     background-repeat:  no-repeat;
     background-position: 7px 7px;
-    width: 16px;
+    width: 30px;
 }
 
 .query_toolbar a.spark_line {
     background: url('../../../images/chart/gray/trendline.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 
 .query_toolbar a.spark_line:hover,
@@ -1295,99 +1297,99 @@ a.disabled_toolbar:hover {
 .query_toolbar a.spark_bar:hover,
 .query_toolbar a.spark_bar.on {
     background: url('../../../images/chart/trendbars.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 
 
 .query_toolbar a.bar {
     background: url('../../../images/chart/gray/bar.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.stackedBar100 {
     background: url('../../../images/chart/gray/100bar.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.stackedBar {
     background: url('../../../images/chart/gray/stackedbar.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.multiple {
     background: url('../../../images/chart/gray/multiple.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.pie {
     background: url('../../../images/chart/gray/pie.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.line {
     background: url('../../../images/chart/gray/line.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.waterfall {
     background: url('../../../images/chart/gray/waterfall.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.dot {
     background: url('../../../images/chart/gray/dot.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.heatgrid {
     background: url('../../../images/chart/gray/area2.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.area {
     background: url('../../../images/chart/gray/area.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.bar:hover,
 .query_toolbar a.bar.on {
     background: url('../../../images/chart/bar.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.stackedBar100:hover,
 .query_toolbar a.stackedBar100.on {
     background: url('../../../images/chart/100bar.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.stackedBar:hover,
 .query_toolbar a.stackedBar.on {
     background: url('../../../images/chart/stackedbar.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.multiple:hover,
 .query_toolbar a.multiple.on {
     background: url('../../../images/chart/multiple.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.pie:hover,
 .query_toolbar a.pie.on {
     background: url('../../../images/chart/pie.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.line:hover,
 .query_toolbar a.line.on {
     background: url('../../../images/chart/line.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.waterfall:hover,
 .query_toolbar a.waterfall.on {
     background: url('../../../images/chart/waterfall.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.dot:hover,
 .query_toolbar a.dot.on {
     background: url('../../../images/chart/dot.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.heatgrid:hover,
 .query_toolbar a.heatgrid.on {
     background: url('../../../images/chart/area2.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 .query_toolbar a.area:hover,
 .query_toolbar a.area.on {
     background: url('../../../images/chart/area.png') no-repeat 21px -1px;;
-    height: 16px;
+    height: 30px;
 }
 
 .form_button {

@@ -109,7 +109,10 @@ public class Funding implements Serializable {
 		if (fundingDetails != null) {
 			List<FundingDetail> retDetails = new ArrayList<FundingDetail>();
 			for (FundingDetail detail : fundingDetails) {
-				if (detail.getTransactionType() == transactionType && detail.getAdjustmentTypeName().getValue().equals(adjustmentType)) retDetails.add(detail);
+				
+				
+				if (detail.getTransactionType() == transactionType && (detail.getAdjustmentTypeName() != null) &&  
+						detail.getAdjustmentTypeName().getValue().equals(adjustmentType)) retDetails.add(detail);
 			}
 			return retDetails;
 		}

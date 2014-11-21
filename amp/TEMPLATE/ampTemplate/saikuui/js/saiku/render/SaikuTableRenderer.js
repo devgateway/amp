@@ -330,7 +330,9 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
     var totalsLists = {};
     if(Settings.AMP_REPORT_API_BRIDGE) {
         totalsLists[COLUMNS] = sanitizeColumns(allData.rowTotalsLists);
-        totalsLists[ROWS] = sanitizeRows(allData.colTotalsLists, data);
+    	totalsLists[ROWS] = allData.colTotalsLists;
+        // disabling until it works, because it breaks totals only reports rendering
+        // totalsLists[ROWS] = sanitizeRows(allData.colTotalsLists, data);
     }
     else
 	{

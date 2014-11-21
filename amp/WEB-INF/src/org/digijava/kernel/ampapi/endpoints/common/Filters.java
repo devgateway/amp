@@ -394,6 +394,19 @@ public class Filters {
 		return fi;
 		
 	}
+	
+	/**
+	 * Return financing instruments 
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/locations/")
+	@Produces(MediaType.APPLICATION_JSON)
+	@ApiMethod(ui = false, id = "LocationList", column = ColumnConstants.LOCATION,name="Locations")
+	public JsonBean getLocations() {
+		return QueryUtil.getLocationsForFilter();
+	}
 /**
  * used to return AmpCategoryClass values wrapped to be provided to the filter widget
  * @param categoryKey

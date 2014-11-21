@@ -11,6 +11,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
@@ -18,6 +19,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -26,6 +28,8 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
 import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.OrganisationUtil;
 import org.digijava.module.aim.util.OrganizationSkeleton;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
@@ -33,6 +37,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.esrigis.dbentity.AmpApiState;
 import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -375,5 +380,92 @@ public static List<JsonBean> getOrgGroups() {
 				
 		return list;
 	}
-}
 
+	public static JsonBean getLocationsForFilter() {
+		// check country id
+		final ValueWrapper<String> qry = new ValueWrapper<String>(null);
+		final JsonBean location = new JsonBean();
+		qry.value = "WITH recursive rt_amp_category_value_location(id, parent_id, location_name, gs_lat, gs_long, acvl_parent_category_value, "
+				+ " level, root_location_id, path) AS "
+				+ " (  "
+				+ "    SELECT acvl.id, "
+				+ "          acvl.parent_location, "
+				+ "      acvl.location_name, "
+				+ "    acvl.gs_lat,  "
+				+ "     acvl.gs_long,  "
+				+ "     acvl.parent_category_value, "
+				+ "     1,  "
+				+ "    acvl.id, "
+				+ "    ARRAY[id] "
+				+ "  FROM   amp_category_value_location acvl "
+				+ "    where  "
+				+ "   ( parent_location is null and location_name =( select country_name "
+				+ " from DG_COUNTRIES where iso= '"+ FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_COUNTRY) +"' ) ) " 
+				+ "    UNION ALL  " 
+				+ "    SELECT acvl.id, "
+				+ "         acvl.parent_location, "
+				+ "    acvl.location_name, "
+				+ "    rt.gs_lat,  "
+				+ "      rt.gs_long,  "
+				+ "     acvl.parent_category_value, "
+				+ "      rt.level + 1,  "
+				+ "      rt.root_location_id, "
+				+ " path || ARRAY[acvl.id] "
+				+ " FROM   rt_amp_category_value_location rt, "
+				+ " amp_category_value_location acvl  "
+				+ "      WHERE  acvl.parent_location =rt.id )  "
+				+ " select * from rt_amp_category_value_location "
+				+ " order by path";
+		try {
+			PersistenceManager.getSession().doWork(new Work() {
+
+				@Override
+				public void execute(Connection connection) throws SQLException {
+					try (java.sql.ResultSet rs = SQLUtils.rawRunQuery(
+							connection, qry.value, null)) {
+						if (rs.next()) {
+							location.set("id", rs.getLong("id"));
+							location.set("name", rs.getString("location_name"));
+							location.set("level", rs.getInt("level"));
+							location.set("children", new ArrayList<JsonBean>());
+							while (rs.next()) {
+								JsonBean l = new JsonBean();
+								l.set("id", rs.getLong("id"));
+								l.set("name", rs.getString("location_name"));
+								l.set("level", rs.getInt("level"));
+								addLocationToJsonBean(location,
+										rs.getLong("parent_id"), l);
+							}
+						}
+
+					}
+				}
+
+				private void addLocationToJsonBean(JsonBean loc, Long id,
+						JsonBean beanToAdd) {
+					if (loc.get("id").equals(id)) {
+						List<JsonBean> locList = (ArrayList<JsonBean>) loc
+								.get("children");
+						if (locList == null) {
+							locList = new ArrayList<JsonBean>();
+							loc.set("children", locList);
+						}
+						locList.add(beanToAdd);
+					} else {
+						List<JsonBean> children = (ArrayList<JsonBean>) loc
+								.get("children");
+						if (children != null) {
+							for (JsonBean child : children) {
+								addLocationToJsonBean(child, id, beanToAdd);
+							}
+						}
+					}
+				}
+			});
+		} catch (HibernateException e) {
+			throw new RuntimeException(e);
+		}
+
+		return location;
+	}
+}

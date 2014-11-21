@@ -21,6 +21,7 @@ public class SettingsConstants {
 	public static final String CURRENCY_ID = "1";
 	public static final String CALENDAR_TYPE_ID = "2";
 	public static final String AMOUNT_FORMAT_ID = "amountFormat";
+	public static final String AMOUNT_PATTERN_ID = "ammountPattern";
 	public static final String YEAR_RANGE_ID = "yearRange";
 	
 	public static final String DEFAULT_FUNDING_TYPE_ID = MeasureConstants.ACTUAL_COMMITMENTS;
@@ -47,6 +48,7 @@ public class SettingsConstants {
 		put(CURRENCY_ID, "Currency");
 		put(CALENDAR_TYPE_ID, "Calendar Type");
 		put(AMOUNT_FORMAT_ID, "Amount Format");
+		put(AMOUNT_PATTERN_ID, "Amount Pattern");
 		put(YEAR_RANGE_ID, "Year Range *");
 		put(CUSTOM, "Custom");
 		put(NO_LIMIT, "No Limit");

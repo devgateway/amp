@@ -240,7 +240,8 @@ public class EndpointUtils {
 		
 		List<SettingField> settings = new ArrayList<SettingField>();
 		
-		settings.add(getReportNumberFormat(spec));
+		settings.add(getReportAmountFormat(spec));
+		settings.add(getReportAmountPattern(spec));
 		settings.add(getReportCurrency(spec));
 		settings.add(getReportCalendar(spec));
 		settings.add(getReportYearRange(spec));
@@ -348,7 +349,7 @@ public class EndpointUtils {
 		return new SettingField(id, null, SettingsConstants.ID_NAME_MAP.get(id) , actualOptions);
 	}
 	
-	private static SettingField getReportNumberFormat(ReportSpecification spec) {
+	private static SettingField getReportAmountFormat(ReportSpecification spec) {
 		DecimalFormat format = null; 
 		if (spec.getSettings() != null && spec.getSettings().getCurrencyFormat() != null)
 			format = spec.getSettings().getCurrencyFormat();
@@ -390,6 +391,26 @@ public class EndpointUtils {
 		return new SettingField(SettingsConstants.AMOUNT_FORMAT_ID, null, 
 				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.AMOUNT_FORMAT_ID),
 				formatFields);
+	}
+	
+	private static SettingField getReportAmountPattern(ReportSpecification spec) {
+		if (spec.getSettings() != null && spec.getSettings().getCurrencyFormat() != null) {
+			return getAmountPatternSetting(
+					spec.getSettings().getCurrencyFormat().toPattern());
+		}
+		return getDefaultAmountPattern();
+		
+	}
+	
+	private static SettingField getDefaultAmountPattern() {
+		return getAmountPatternSetting(
+				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT));
+	}
+	
+	private static SettingField getAmountPatternSetting(String pattern) {
+		return new SettingField(SettingsConstants.AMOUNT_PATTERN_ID, null, 
+				SettingsConstants.ID_NAME_MAP.get(SettingsConstants.AMOUNT_PATTERN_ID),
+				pattern);
 	}
 	
 	private static SettingField getOptionValueSetting(final String settingId, final String groupId, 

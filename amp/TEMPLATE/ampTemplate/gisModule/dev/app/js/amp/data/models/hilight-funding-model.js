@@ -1,5 +1,6 @@
-var _ = require('underscore');
 var Backbone = require('backbone');
+var _ = require('underscore');
+var $ = require('jquery');
 var IndicatorJoinModel = require('./indicator-join-model');
 
 
@@ -82,7 +83,9 @@ module.exports = IndicatorJoinModel.extend({
   },
 
   fetch: function(options) {
+    var self = this;
     var payload = {otherFilters: {}};
+    var deferred = $.Deferred();
 
     // get filters
     if (this.collection.filter) {
@@ -90,16 +93,25 @@ module.exports = IndicatorJoinModel.extend({
     }
 
     //get settings
-    if (this.collection.settings && !_.isEmpty(this.collection.settings.serialize())) {
-      payload.settings = this.collection.settings.serialize();
+    if (this.collection.settings) {
+      this.collection.settings.serializeDeferred().then(function(serializedJSON) {
+        //add settings to payload
+        payload.settings = serializedJSON;
+        options = _.defaults((options || {}), {
+          type: 'POST',
+          data: JSON.stringify(payload)
+        });
+
+        // call normal fetch now
+        Backbone.Model.prototype.fetch.call(self, options).then(function() {
+          deferred.resolve();
+        });
+      });
+    } else {
+      console.warn('no settings fail hilight funding!');
+      deferred.resolve(null);
     }
 
-
-    options = _.defaults((options || {}), {
-      type: 'POST',
-      data: JSON.stringify(payload)
-    });
-
-    return Backbone.Model.prototype.fetch.call(this, options);
+    return deferred;
   }
 });

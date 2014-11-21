@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var $ = require('jquery');
 var Backbone = require('backbone');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 
@@ -34,6 +35,15 @@ module.exports = Backbone.Collection
     return tmpJSON;
   },
 
+  serializeDeferred: function() {
+    var self = this;
+    var deferred = $.Deferred();
+
+    this.load().then(function() {
+      deferred.resolve(self.serialize());
+    });
+    return deferred;
+  },
 
   deserialize: function(jsonBlob) {
     var self = this;

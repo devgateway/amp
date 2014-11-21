@@ -43,6 +43,7 @@ define([ 'util/tabUtils' ], function(TabUtils) {
 		ret.push(''); // activity id.
 		ret.push(''); // approval status.
 		ret.push(''); // Draft.
+		ret.push(''); // Team Id.
 		$(metadata.columns.models).each(
 				function(i, item) {
 					var colName = item.get('columnName');
@@ -90,6 +91,10 @@ define([ 'util/tabUtils' ], function(TabUtils) {
 		});
 		ret.push({
 			name : 'Draft',
+			hidden : true
+		});
+		ret.push({
+			name : 'Team Id',
 			hidden : true
 		});
 		$(metadata.columns.models).each(function(i, item) {

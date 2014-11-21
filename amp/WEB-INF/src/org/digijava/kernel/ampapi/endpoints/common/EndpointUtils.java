@@ -625,15 +625,19 @@ public class EndpointUtils {
 	}
 		
 	/**
-	 * Gis settings that can be reused by modules that rely upon
-	 * Gis originated settings UI panel.
+	 * Settings that can be reused by modules that rely upon
+	 * Originated settings UI panel.
 	 *      
 	 * @return list of GIS settings
 	 */
 		public static List<SettingOptions> getGisSettings() {
+		HttpServletRequest request = TLSUtils.getRequest();
+		TeamMember tm = null;
+		if (request != null) {
+			tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
+		}
 		// retrieve common settings
 		List<SettingOptions> settings = getSettings();
-		// add GIS specific settings
 		settings.add(getFundingTypeSettings(GisConstants.MEASURE_TO_NAME_MAP));
 		settings.add(new SettingOptions("number-format", false, 
 				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT), null, null));
@@ -643,6 +647,14 @@ public class EndpointUtils {
 		settings.add(new SettingOptions("number-multiplier", false, 
 				String.valueOf(MondrianReportUtils.getAmountMultiplier(amountOptionId))
 				, null, null));
+		//Workspace Settings
+		settings.add(new SettingOptions("team-id", false,getAppSettings().getTeam().getAmpTeamId().toString(), null, null));
+		settings.add(new SettingOptions("tean-lead", false, String.valueOf(tm.getTeamHead()), null, null));
+		settings.add(new SettingOptions("team-validator", false, String.valueOf(tm.isApprover()), null, null));
+		//Cross Team validation
+		settings.add(new SettingOptions("cross_team_validation", false, String.valueOf(getAppSettings().getTeam().getCrossteamvalidation())
+				, null, null));
+		
 		return settings;
 	}
 		
@@ -728,4 +740,5 @@ public class EndpointUtils {
 		}
 		return availableFilters;
 	}	
+	
 }

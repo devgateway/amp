@@ -427,14 +427,7 @@ public class GisEndPoints {
         return streamOutput;
       }
 	
-	@GET
-	@Path("/settings")
-	@Produces(MediaType.APPLICATION_JSON)
-	@ApiMethod(ui = false, id = "Settings")
-	public List<SettingOptions> getSettings() {
-		return EndpointUtils.getGisSettings();
-	}
-	
+
 	@GET
 	@Path("/clusters")
 	@Produces(MediaType.APPLICATION_JSON)

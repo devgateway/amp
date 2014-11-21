@@ -38,7 +38,7 @@ var AMPSettings = Backbone.View.extend({
 				window.currentSettings = settings;
 
 				$.ajax({
-					url : '/rest/gis/settings',
+					url : '/rest/amp/settings',
 					async : false
 				}).done(function(data) {
 					self.populate_dropdowns(data);

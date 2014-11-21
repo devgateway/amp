@@ -214,7 +214,8 @@
 
 			<Hierarchy hasAll="true" allMemberName="All Team" primaryKey="amp_activity_id" name="Team">
 				<Table name="mondrian_activity_texts@@locale@@" />
-				<Level name="Team" column="team_id" type="String" nameColumn="team_name" /> 
+				<Level name="Team Id" column="team_id" type="Integer" visible="false"/> 
+				<Level name="Team" column="team_id" type="String" nameColumn="team_name"/> 
 			</Hierarchy>
 
 			<Hierarchy hasAll="true" allMemberName="All Activity Created By" primaryKey="amp_activity_id" name="Activity Created By">

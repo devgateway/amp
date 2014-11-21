@@ -6,7 +6,7 @@ var LoadOnceMixin = require('../../mixins/load-once-mixin');
 // We can add one for clarity, but not needed.
 module.exports = Backbone.Collection
 .extend(LoadOnceMixin).extend({
-  url: '/rest/gis/settings',
+  url: '/rest/amp/settings',
 
   serialize: function() {
     var tmpJSON = {};

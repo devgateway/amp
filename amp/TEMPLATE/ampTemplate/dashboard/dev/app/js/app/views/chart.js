@@ -98,7 +98,10 @@ module.exports = BackboneDash.View.extend({
       return;
     }
 
-    message.html('Loading...').fadeIn(100);
+    message.html('<span data-i18n="amp.dashboard:loading">...</span>').fadeIn(100);
+    /* TODO: Do we really want to localize this and slow things?*/
+    //this.app.translator.translateDOM(this.el);
+
     var fetchOptions = {
       type: 'POST',
       data: JSON.stringify(this.app.filter.serialize())

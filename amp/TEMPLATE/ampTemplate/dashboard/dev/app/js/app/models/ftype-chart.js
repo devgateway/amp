@@ -12,9 +12,35 @@ module.exports = BackboneDash.Model.extend({
   initialize: function(attrs, options) {
     this.app = options.app;
     this.url = options.url;
+
+    this._prepareTranslations();
+  },
+
+  _prepareTranslations: function() {
+    var self = this;
+    var ftypeBaseLanguage = {};
+
+    /* Prepare the translations for the chart */
+    var chartName = ['amp.dashboard:chart-', this.get('name').replace(/ /g, ''), '-'].join('');
+
+    /*
+     * TODO: load all the localizations in this chart's namespace to this array
+     * from initial-translation-request.json -- For now just hardcode the two sorts.
+     */
+    if (this.get('name') === 'Funding Type') {
+      ftypeBaseLanguage[chartName + 'Grant'] = 'Grant';
+      ftypeBaseLanguage[chartName + 'Loan'] = 'Loan';
+      ftypeBaseLanguage[chartName + 'others'] = 'Others';
+    }
+
+    this.localizedFType = this.app.translator.translateList(ftypeBaseLanguage).then(
+      function(localizedKeyVal) {
+        self.localizedLookup = localizedKeyVal;
+      });
   },
 
   parse: function(data) {
+    var self = this;
 
     // TODO: use filters info to trim years (api-side?)
     var years = _(data.values)
@@ -25,6 +51,8 @@ module.exports = BackboneDash.Model.extend({
       .sortBy('Year')
       .value();
 
+    var chartName = ['amp.dashboard:chart-', this.get('name').replace(/ /g, ''), '-'].join('');
+
     // reformat the data for nvd3
     data.processed = _(years)
       .chain()
@@ -34,8 +62,13 @@ module.exports = BackboneDash.Model.extend({
       }, [])
       .uniq()
       .map(function(s) {
+        var cleanName = s.replace(/[ :.]/g, '');
+        var localizedName = s;
+        if (self.localizedLookup[chartName + cleanName]) {
+          localizedName = self.localizedLookup[chartName + cleanName];
+        }
         return {
-          key: s,
+          key: localizedName,
           values: _(years).map(function(y) {
             var yearValue = _(y.values).findWhere({type: s});
             return {

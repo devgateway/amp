@@ -13,12 +13,48 @@ module.exports = BackboneDash.Model.extend({
   initialize: function(attrs, options) {
     this.app = options.app;
     this.url = options.url;
+
+    this._prepareTranslations();
+  },
+
+  _prepareTranslations: function() {
+    var self = this;
+    var topBaseLanguage = {};
+
+    /* Prepare the translations for the chart */
+    var chartName = ['amp.dashboard:chart-', this.get('name').replace(/ /g, ''), '-'].join('');
+
+    /*
+     * TODO: load all the localizations in this chart's namespace to this array
+     * from initial-translation-request.json -- For now just hardcode the two sorts.
+     */
+    if (this.get('name') === 'Top Regions') {
+      topBaseLanguage[chartName + 'DistrictUndefined'] = 'Districts: Undefined';
+    }
+    topBaseLanguage[chartName + 'others'] = 'Others';
+
+    this.localizedTopChart = this.app.translator.translateList(topBaseLanguage).then(
+      function(localizedTopChartKeyVal) {
+        self.localizedLookup = localizedTopChartKeyVal;
+      });
   },
 
   parse: function(data) {
+    var self = this;
+
+    var chartName = ['amp.dashboard:chart-', this.get('name').replace(/ /g, ''), '-'].join('');
+    var localizedOthers = self.localizedLookup[chartName + 'others'];
+
     var values = _(data.values.slice()).map(function(v) {
+
+      var cleanName = v.name.replace(/[ :.]/g, '');
+      var localizedName = v.name;
+      if (self.localizedLookup[chartName + cleanName]) {
+        localizedName = self.localizedLookup[chartName + cleanName];
+      }
+
       return {
-        x: v.name,
+        x: localizedName,
         y: v.amount
       };
     });
@@ -32,7 +68,7 @@ module.exports = BackboneDash.Model.extend({
 
     if (data.maxLimit > values.length) {
       values.push({
-        x: 'Others',
+        x: localizedOthers,
         y: data.total -  // total minus the sum of what we have
           _.chain(values).pluck('y').reduce(function(l, r) { return l + r; }, 0).value(),
         color: '#777'

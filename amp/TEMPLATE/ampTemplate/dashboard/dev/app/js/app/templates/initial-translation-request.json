@@ -2,6 +2,7 @@
 "amp.common:title": "AMP Toolbar",
 "amp.common:username": "Username",
 "amp.common:filters-loading": "Loading...!!!",
+"amp.dashboard:loading": "Loading...!!!",
 "amp.dashboard:title-projectdata": "Project Data!",
 "amp.dashboard:sub-title-projectdata": "View where projects are being implemented throughout the country.!",
 "amp.dashboard:title-Country": "Country!",
@@ -29,6 +30,12 @@
 "amp.dashboard:chart-FundingType": "Funding Type!",
 "amp.dashboard:predictability-planned": "Planned!",
 "amp.dashboard:predictability-actual": "Actual!",
+"amp.dashboard:chart-FundingType-Grant": "Grant!",
+"amp.dashboard:chart-FundingType-Loan": "Loan!",
+"amp.dashboard:chart-TopRegions-DistrictUndefined": "District: U!",
+"amp.dashboard:chart-TopRegions-others": "Others!",
+"amp.dashboard:chart-TopSectors-others": "Others!",
+"amp.dashboard:chart-TopDonorAgencies-others": "Others!",
 "amp.dashboard:filters-edit":"edit filters!"
 
 }

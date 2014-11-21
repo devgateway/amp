@@ -19,11 +19,11 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
 import org.digijava.kernel.ampapi.postgis.entity.AmpLocator;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpIndicatorLayer;
@@ -315,12 +315,15 @@ public static List<JsonBean> getOrgGroups() {
 		final List<SimpleJsonBean> rogRoles = new ArrayList<SimpleJsonBean>();
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
-				ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_role","",TLSUtils.getEffectiveLangCode(),
-						new HashMap<PropertyDescription, ColumnValuesCacher>(),conn, "*");
-				ResultSet rs = v.fetch(null);
-				
-				while (rs.next()) {
-					rogRoles.add(new SimpleJsonBean(rs.getLong("amp_role_id"),rs.getString("name")));
+
+				try (java.sql.ResultSet rs = SQLUtils.rawRunQuery(conn,
+						"select amp_role_id,name from amp_role", null)) {
+
+					while (rs.next()) {
+						rogRoles.add(new SimpleJsonBean(rs.getLong("amp_role_id"), rs.getString("name"),
+								null, TranslatorWorker.translateText(rs
+										.getString("name"))));
+					}
 				}
 
 			}

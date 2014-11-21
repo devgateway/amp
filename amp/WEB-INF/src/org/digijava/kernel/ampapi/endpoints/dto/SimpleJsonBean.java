@@ -13,6 +13,8 @@ public class SimpleJsonBean {
 	Object id;
     String code;
     String name;
+    String displayName;
+
     String filterId;
     String type;
     List<SimpleJsonBean> children;
@@ -23,6 +25,11 @@ public class SimpleJsonBean {
     	this(id,name, code);
     	this.type=type.toString();
     }
+    public SimpleJsonBean(Object id,String name,String code,String displayName) {
+    	this(id,name,code);
+    	this.displayName=displayName;
+    }
+
     public SimpleJsonBean(Object id,String name,String code) {
     	this(id,name);
     	this.code=code;
@@ -76,6 +83,12 @@ public class SimpleJsonBean {
 	}
 	public void setFilterId(String filterId) {
 		this.filterId = filterId;
+	}
+	public String getDisplayName() {
+		return displayName;
+	}
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 
 }

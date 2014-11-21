@@ -2,13 +2,12 @@ var _ = require('underscore');
 var $ = require('jquery');
 var Backbone = require('backbone');
 var Palette = require('../../colours/colour-palette');
-var ProjectSiteModel = require('../models/structure-model');
+var StructureModel = require('../models/structure-model');
 var LoadOnceMixin = require('../../mixins/load-once-mixin');
 var Activities = require('../collections/activity-collection');
-//var ActivityCollection = require('../collections/activity-collection');
 
-/* ProjectSites (a.k.a Structures) collection
- * ProjectSites have longitude and latitude and belong to one or more
+/* Structures collection
+ * Structures have longitude and latitude and belong to one or more
  * activities (aka Projects) but are not a type of activity.
  *
  **/
@@ -16,7 +15,7 @@ module.exports = Backbone.Collection
 .extend(LoadOnceMixin).extend({
 
   url: '/rest/gis/structures',
-  model: ProjectSiteModel,
+  model: StructureModel,
   filter: null,
   settings: null,
   appData: null,
@@ -33,7 +32,7 @@ module.exports = Backbone.Collection
       this.palette = new Palette.FromSet();
 
     } else {
-      console.warn('Project Sites/Structures colln: no options were provided for context');
+      console.warn('Structures colln: no options were provided for context');
     }
 
     _.bindAll(this, 'fetch', 'updatePaletteSet', 'getStructuresWithActivities', '_getActivityIds');
@@ -158,7 +157,7 @@ module.exports = Backbone.Collection
   updatePaletteSet: function() {
     var self = this;
     var deferred = $.Deferred();
-    var filterVertical = self.appData.projectSitesMenu.get('filterVertical');
+    var filterVertical = self.appData.structuresMenu.get('filterVertical');
 
     // load the necessary activities.
     this.getStructuresWithActivities().done(function() {

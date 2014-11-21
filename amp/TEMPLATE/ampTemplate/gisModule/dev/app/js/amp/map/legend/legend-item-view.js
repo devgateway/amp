@@ -7,7 +7,7 @@ var HilightFunding = require('../../data/models/hilight-funding-model');
 var IndicatorWMS = require('../../data/models/indicator-wms-model');
 var IndicatorArcGISDynamic = require('../../data/models/indicator-arcgis-dynamicLayer-model');
 var IndicatorArcGISFeature = require('../../data/models/indicator-arcgis-featureLayer-model');
-var ProjectSitesMenu = require('../../data/models/structures-menu-model');
+var structuresMenu = require('../../data/models/structures-menu-model');
 var ADMClusters = require('../../data/models/adm-cluster-model');
 
 // model-specific item views
@@ -41,7 +41,7 @@ module.exports = function(options) {
     return new IndicatorArcGISDynamicView(options);
   } else if (options.model instanceof IndicatorWMS) {
     return new IndicatorWMSView(options);
-  } else if (options.model instanceof ProjectSitesMenu) {
+  } else if (options.model instanceof structuresMenu) {
     return new ProjectSitesView(options);
   } else if (options.model instanceof IndicatorJoin || options.model instanceof HilightFunding ||
       options.model.attributes.type === 'FeatureCollection') {

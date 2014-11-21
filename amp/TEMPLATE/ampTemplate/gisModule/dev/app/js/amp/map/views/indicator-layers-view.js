@@ -1,3 +1,4 @@
+var $ = require('jquery');
 var Backbone = require('backbone');
 var L = require('../../../../../node_modules/esri-leaflet/dist/esri-leaflet.js');
 var util = require('../../../libs/local/chart-util');
@@ -6,15 +7,19 @@ var util = require('../../../libs/local/chart-util');
 module.exports = Backbone.View.extend({
 
   initialize: function(options) {
+    var self = this;
     this.app = options.app;
     this.map = options.map;
     this.admClustersLayersView = options.admClustersLayersView;
     this.leafletLayerMap = {};
-    this.listenTo(this.app.data.indicators, 'show', this.showLayer);
-    this.listenTo(this.app.data.indicators, 'hide', this.hideLayer);
 
-    this.listenTo(this.app.data.hilightFundingCollection, 'hide', this.hideLayer);
-    this.listenTo(this.app.data.hilightFundingCollection, 'sync', this.refreshLayer);
+    $.when(this.app.data.filter.loaded, this.app.data._stateWait).then(function() {
+      self.listenTo(self.app.data.indicators, 'show', self.showLayer);
+      self.listenTo(self.app.data.indicators, 'hide', self.hideLayer);
+
+      self.listenTo(self.app.data.hilightFundingCollection, 'hide', self.hideLayer);
+      self.listenTo(self.app.data.hilightFundingCollection, 'sync', self.refreshLayer);
+    });
   },
 
   // removes layer, then shows it. Important for layers whos content changes.
@@ -59,7 +64,7 @@ module.exports = Backbone.View.extend({
           // I need to pull out boundaries into own view.
           self.admClustersLayersView.moveBoundaryBack();
         }
-        self.trigger('addedToMap'); //TODO: better way. needed to let map bring projectSites to front.
+        self.trigger('addedToMap'); //TODO: better way. needed to let map bring structures to front.
       }
     });
 

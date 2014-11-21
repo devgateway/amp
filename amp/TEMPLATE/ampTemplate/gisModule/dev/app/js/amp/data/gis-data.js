@@ -15,12 +15,12 @@ var SavedMaps = require('./collections/saved-maps-collection');
 var Activities = require('./collections/activity-collection');
 var Boundaries = require('./collections/boundary-collection');
 var Indicators = require('./collections/indicator-collection');
-var ProjectSitesMenu = require('./models/structures-menu-model'); /*a.k.a. structures */
+var StructuresMenu = require('./models/structures-menu-model'); /*a.k.a. structures */
 var ADMClusters = require('./collections/adm-cluster-collection');
 var HilightFundingCollection = require('./collections/hilight-funding-collection');
 var Settings = require('./collections/settings-collection');
 
-var ProjectSites = require('./collections/structures-collection'); /*a.k.a. structures */
+var Structures = require('./collections/structures-collection'); /*a.k.a. structures */
 
 var GISData = function() {
   this.initialize.apply(this, arguments);
@@ -55,13 +55,13 @@ _.extend(GISData.prototype, Backbone.Events, {
       appData: this
     });
 
-    this.projectSites = new ProjectSites([], {
+    this.structures = new Structures([], {
       settings: this.settings,
       filter: this.filter,
       appData: this
     });
 
-    this.projectSitesMenu = new ProjectSitesMenu([
+    this.structuresMenu = new StructuresMenu([
       {}  // just the one model, all defaults
     ], {
       filter: this.filter,
@@ -86,8 +86,8 @@ _.extend(GISData.prototype, Backbone.Events, {
     // bubble indicator events on the data object
     this.listenTo(this.indicators, 'all', this.bubbleLayerEvents('indicator'));
     this.listenTo(this.hilightFundingCollection, 'all', this.bubbleLayerEvents('highlightFunding'));
-    this.listenTo(this.projectSitesMenu, 'all', this.bubbleLayerEvents('structure'));
-    this.listenTo(this.projectSites, 'all', this.bubbleLayerEvents('structure'));
+    this.listenTo(this.structuresMenu, 'all', this.bubbleLayerEvents('structure'));
+    this.listenTo(this.structures, 'all', this.bubbleLayerEvents('structure'));
     this.listenTo(this.admClusters, 'all', this.bubbleLayerEvents('adm-cluster'));
   },
 
@@ -106,7 +106,10 @@ _.extend(GISData.prototype, Backbone.Events, {
     $.when(this.filter.loaded, this._stateWait).then(function() {
       self.boundaries.load();
       self.indicators.loadAll();
-      self.projectSitesMenu.attachListeners();
+
+      //drs attach indicotr listnerneros here
+
+      self.structuresMenu.attachListeners();
 
       self.admClusters.load();  // also special for now
       self.admClusters.attachListeners();
@@ -137,7 +140,7 @@ _.extend(GISData.prototype, Backbone.Events, {
     var layers = _.union(
       this.indicators.getSelected().value(),
       this.hilightFundingCollection.getSelected().value(),
-      this.projectSitesMenu.getSelected().value(),
+      this.structuresMenu.getSelected().value(),
       this.admClusters.getSelected().value()
     );
 

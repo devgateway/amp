@@ -20,9 +20,8 @@ module.exports = Backbone.View.extend({
         selectedVertical: self.model.get('filterVertical')
       };
 
-      // TODO render icons if it's icons...
-      // self.structureMenuModel.iconMappings
-      if (self.model.structuresCollection.length < 400 &&
+      // render icons if available
+      if (self.model.structuresCollection.length < 400 && //TODO: use MAX_NUM_FOR_ICONS instead...
           self.model.get('filterVertical') === 'Primary Sector Id') {
         renderObject.imageBuckets = self.model.iconMappings;
         renderObject.palletteElements = self.model.structuresCollection.palette.get('elements');

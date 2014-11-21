@@ -21,7 +21,7 @@ module.exports = Backbone.Model
     var self = this;
     this.appData = options.appData;
     this.filter = options.filter;
-    this.structuresCollection = this.appData.projectSites;
+    this.structuresCollection = this.appData.structures;
 
     this.listenTo(this, 'change:filterVertical', function() {
       self.structuresCollection.updatePaletteSet();
@@ -71,14 +71,13 @@ module.exports = Backbone.Model
   },
 
   iconMappings: {
-    0: 'Multisector.svg',  // used for 'various'
+    0: 'Multiple2.svg',  // used for 'various'
     100: 'Social.svg',
     110: 'Education.svg',
     120: 'Health.svg',
     130: 'Population.svg',
     140: 'Water.svg',
     150: 'Gov.svg',
-    // 'ConflictPrevention.svg', //152 not primary...?
     160: 'OtherSocial.svg',
     210: 'Transport.svg',
     220: 'Communication.svg',
@@ -96,7 +95,11 @@ module.exports = Backbone.Model
     400: 'Multisector.svg',
     500: 'GeneralSupport.svg',
     600: 'Debt.svg',
-    700: 'Humanitarian.svg'
+    700: 'Humanitarian.svg',
+    910: 'CostDonor.svg',
+    920: 'NGO_Support.svg',
+    930: 'Refugees.svg',
+    998: 'Unspecified.svg'
   }
 
 });

@@ -10,7 +10,7 @@ var BasemapGalleryView = require('../views/basemap-gallery-view');
 var LegendView = require('../legend/legend-view');
 var DataSourcesView = require('../datasources/datasources-view');
 
-var ProjectSitesLayerView = require('../views/project-sites-view');
+var ProjectSitesLayerView = require('../views/structures-view');
 var ADMClustersLayersView = require('../views/adm-clusters-view');
 var IndicatorLayersView = require('../views/indicator-layers-view');
 
@@ -40,7 +40,7 @@ module.exports = Backbone.View.extend({
     this.basemaps = new Basemaps(null, { app: this.app });  // pre-loaded with hard-coded basemaps
 
     // init layers
-    this.projectSitesLayersView = new ProjectSitesLayerView({map: this.map, app: this.app});
+    this.structuresLayersView = new ProjectSitesLayerView({map: this.map, app: this.app});
     this.admClustersLayersView = new ADMClustersLayersView({map: this.map, app: this.app});
     this.indicatorLayersView = new IndicatorLayersView({map: this.map,
       app: this.app,
@@ -139,6 +139,6 @@ module.exports = Backbone.View.extend({
   // when indicator is shown, bring project sites to the front...
   // should be able to do better once panes and leaflet v.08 are in
   _indicatorsShown: function() {
-    this.projectSitesLayersView.bringToFront();
+    this.structuresLayersView.bringToFront();
   }
 });

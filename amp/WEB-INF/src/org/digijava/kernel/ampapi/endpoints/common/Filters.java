@@ -403,7 +403,7 @@ public class Filters {
 	@GET
 	@Path("/locations/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "LocationList", column = ColumnConstants.LOCATION,name="Locations")
+	@ApiMethod(ui = false, id = "LocationList", column = ColumnConstants.LOCATION,name="Locations")
 	public JsonBean getLocations() {
 		return QueryUtil.getLocationsForFilter();
 	}

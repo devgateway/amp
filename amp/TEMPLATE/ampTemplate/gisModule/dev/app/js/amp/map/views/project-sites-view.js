@@ -254,9 +254,12 @@ module.exports = Backbone.View.extend({
       var filterVertical = self.structureMenuModel.get('filterVertical');
       var sectorCode = 0; // 0 is 'various sectors icon'
 
-      if (colors.length === 1) {
+      if (colors.length === 1 && markers[0].feature) {
         var activity = markers[0].feature.properties.activity;
         sectorCode = activity.attributes.matchesFilters[filterVertical][0].get('code');
+      } else if (!markers[0].feature) {
+        //TODO: this sometimes happen if loads are being strange / slow....
+        console.log('missing feature markers[0]', markers[0]);
       }
 
       //icons need to be abit bigger than plain circles, so bump up by 2

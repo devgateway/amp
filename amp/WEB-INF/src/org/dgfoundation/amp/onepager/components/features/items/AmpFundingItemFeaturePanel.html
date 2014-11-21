@@ -5,11 +5,10 @@
 			<a href="#" onclick="$(this).parent().parent().siblings('div:first').slideToggle();return false;">
 			Funding Item <span wicket:id="itemNumber"/></a>
 			<div><span wicket:id="fundingSumary"/></div>
-			<!-- <span wicket:id="financingInstrument"/>-->
-<!-- 			<b><span wicket:id="donorOrg"/></b>			
-			
+			<div wicket:id="labelContainer">
+			<span wicket:id="donorOrg"/>			
 			<wicket:trn>From</wicket:trn>&nbsp;<span wicket:id="sourceOrg"/>&nbsp;<wicket:trn>as the</wicket:trn>&nbsp; <b><span wicket:id="sourceRoleLabel"/></b>
-			 -->						
+			 </div>	
 		</div>
 
 		<div wicket:id="delFunding" style="float: right;position:relative;top:-15px;"/>

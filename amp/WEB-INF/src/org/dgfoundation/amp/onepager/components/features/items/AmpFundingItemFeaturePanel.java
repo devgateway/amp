@@ -89,38 +89,36 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 			wmc.add(new AttributePrepender("style", new Model<String>(
 					"display: none;"), ""));
 
-		} else {
+		} 
 
-		}
-//		fundingSumary.add(
-//		new AjaxFormComponentUpdatingBehavior("onchange") {        
-//			private static final long serialVersionUID = -6492252081340597543L;
-//			@Override
-//			protected void onUpdate(AjaxRequestTarget target) {
-//				System.out.println("");
-//			}
-//		});
 		add(fundingSummary);
 
-//		Label orgLabel;
-//        if ("true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_FUNDING_GROUP_ID)))
-//            orgLabel = new Label("donorOrg", new PropertyModel<AmpOrganisation>(fundingModel, "groupVersionedFunding"));
-//        else
-//            orgLabel = new TrnLabel("donorOrg", "Funding Item");
-//		orgLabel.setOutputMarkupId(true);
-//		add(orgLabel);
 		
-//		AmpLabelFieldPanel<AmpOrganisation> sourceOrg = new AmpLabelFieldPanel<AmpOrganisation>(
-//				"sourceOrg", new PropertyModel<AmpOrganisation>(fundingModel, "ampDonorOrgId"), "Source Organisation", true);
-//		sourceOrg.add(new AttributeModifier("style", "display:inline-block"));
-//		
-//		add(sourceOrg);
+		final WebMarkupContainer wmcLabelContainer = new WebMarkupContainer("labelContainer");
+		wmcLabelContainer.setOutputMarkupId(true);
+		
+		Label orgLabel = new Label("donorOrg", new PropertyModel<AmpOrganisation>(fundingModel, "groupVersionedFunding"));
+		orgLabel.add(new AttributePrepender("style", new Model<String>("font-weight: bold;"), ""));
+        orgLabel.setVisible("true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_FUNDING_GROUP_ID)));
+        	
+        
+            
+		orgLabel.setOutputMarkupId(true);
+		wmcLabelContainer.add(orgLabel);
+		
+		AmpLabelFieldPanel<AmpOrganisation> sourceOrg = new AmpLabelFieldPanel<AmpOrganisation>(
+				"sourceOrg", new PropertyModel<AmpOrganisation>(fundingModel, "ampDonorOrgId"), "Source Organisation", true);
+		sourceOrg.add(new AttributeModifier("style", "display:inline-block"));
+		
+		wmcLabelContainer.add(sourceOrg);
 
-//		AmpLabelFieldPanel<AmpRole> sourceRoleLabel = new AmpLabelFieldPanel<AmpRole>(
-//				"sourceRoleLabel", new PropertyModel<AmpRole>(fundingModel, "sourceRole"), "Source Role", true);
-//		sourceRoleLabel.add(new AttributeModifier("style", "display:inline-block"));
-//		add(sourceRoleLabel);
-
+		AmpLabelFieldPanel<AmpRole> sourceRoleLabel = new AmpLabelFieldPanel<AmpRole>(
+				"sourceRoleLabel", new PropertyModel<AmpRole>(fundingModel, "sourceRole"), "Source Role", true);
+		sourceRoleLabel.add(new AttributeModifier("style", "display:inline-block"));
+		wmcLabelContainer.add(sourceRoleLabel);
+		
+		wmcLabelContainer.setVisible(!isTabView);
+		add(wmcLabelContainer);
 		String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this funding item?");
 		
 		add(new ListEditorRemoveButton("delFunding", "Delete Funding Item", translatedMessage){

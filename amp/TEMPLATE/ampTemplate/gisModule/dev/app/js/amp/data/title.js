@@ -20,6 +20,7 @@ _.extend(Title.prototype, Backbone.Events, {
     // currently this just joins all the titles of the layers on ", "
     // ... but it should probably be smarter.
     var self = this;
+    var unwrappedTitles;
     var titles = this.data.getAllVisibleLayers().map(function(layer) {
 
       var titleList = {};
@@ -31,7 +32,15 @@ _.extend(Title.prototype, Backbone.Events, {
 
     }).value();  // getLayers() returns a underscore chain()
 
-    var localizedTitleList = window.app.translator.translateList(titles);
+    /* Convert from [{x:y},{z:a}] to {x:y,z:a} */
+    if (!_.isEmpty(titles)) {
+      unwrappedTitles = _.reduce(titles, function(memo, num) { return _.extend(memo, num); });
+    } else {
+      unwrappedTitles = {};
+    }
+
+    /*TODO remove window and use data, first pass data doesn't have translator? */
+    var localizedTitleList = window.app.translator.translateList(unwrappedTitles);
 
     localizedTitleList.then(function(localTitles) {
       /* return localized title */

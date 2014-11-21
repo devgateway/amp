@@ -83,6 +83,7 @@ module.exports = BackboneDash.View.extend({
     if (this._stateWait.state() !== 'pending') {
       this.updateData();
     }
+    this.app.translator.translateDOM(this.el);
     return this;
   },
 

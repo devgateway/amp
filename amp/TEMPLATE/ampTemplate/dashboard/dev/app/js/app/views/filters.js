@@ -52,6 +52,7 @@ module.exports = BackboneDash.View.extend({
     }
     applied = applied.join(', ');
     this.$('.applied-filters').html(summaryTemplate({ applied: applied }));
+    this.app.translator.translateDOM(this.el);
   },
 
   showFilter: function() {

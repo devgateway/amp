@@ -91,6 +91,8 @@ public class ActivityService {
 		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
 		//for now we are going to return the donor_id as matchesfilters
+		spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID, ReportEntityType.ENTITY_TYPE_ALL));
+
 		//then we have to fetch all other matchesfilters outisde mondrian
 
 		/*

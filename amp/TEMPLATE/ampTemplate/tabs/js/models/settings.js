@@ -26,6 +26,7 @@ define([ 'underscore', 'backbone' ], function(_, Backbone) {
 					_self.attributes.teamlead = collection.get('6');
 					_self.attributes.validator = collection.get('7');
 					_self.attributes.crossteamenable = collection.get('8');
+					_self.attributes.accestype = collection.get('9');
 				}
 			});
 		}

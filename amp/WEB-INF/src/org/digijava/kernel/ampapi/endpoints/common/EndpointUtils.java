@@ -633,7 +633,7 @@ public class EndpointUtils {
 		public static List<SettingOptions> getGisSettings() {
 		HttpServletRequest request = TLSUtils.getRequest();
 		TeamMember tm = null;
-		if (request != null) {
+		if (request != null && request.getSession() != null) {
 			tm = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
 		}
 		// retrieve common settings
@@ -654,7 +654,8 @@ public class EndpointUtils {
 		//Cross Team validation
 		settings.add(new SettingOptions("cross_team_validation", false, String.valueOf(getAppSettings().getTeam().getCrossteamvalidation())
 				, null, null));
-		
+		settings.add(new SettingOptions("workspace_type", false, String.valueOf(getAppSettings().getTeam().getAccessType())
+				, null, null));
 		return settings;
 	}
 		

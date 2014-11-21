@@ -4,6 +4,8 @@ var BackboneDash = require('./backbone-dash');
 
 var URLService = require('amp-url/index');
 var State = require('amp-state/index');
+var fs = require('fs');
+var Translator = require('amp-translate');
 var Filter = require('amp-filter/src/main');
 var SavedDashes = require('./models/saved-dashes-collection.js');
 
@@ -33,6 +35,11 @@ _.extend(App.prototype, BackboneDash.Events, {
         url: this.url,
         saved: this.savedDashes
       });
+
+      var dashboardTranslateKeys = JSON.parse(fs.readFileSync(__dirname +
+        '/templates/initial-translation-request.json', 'utf8'));
+      this.translator = new Translator({defaultKeys: dashboardTranslateKeys});
+
       this.filter = new Filter({
         draggable: true,
         sync: options.sync || BackboneDash.sync

@@ -108,7 +108,7 @@ public class EndpointUtils {
 	 */
 	public static String getDefaultReportStartYear() {
 		AmpApplicationSettings appSettings = getAppSettings();
-		if(appSettings != null && appSettings.getReportStartYear() > 0)
+		if(appSettings != null && appSettings.getReportStartYear()!=null && appSettings.getReportStartYear() > 0)
 			return String.valueOf(appSettings.getReportStartYear());
 		return FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.START_YEAR_DEFAULT_VALUE);
 	} 
@@ -118,7 +118,7 @@ public class EndpointUtils {
 	 */
 	public static String getDefaultReportEndYear() {
 		AmpApplicationSettings appSettings = getAppSettings();
-		if(appSettings != null && appSettings.getReportEndYear() > 0)
+		if(appSettings != null &&appSettings.getReportEndYear()!=null&& appSettings.getReportEndYear() > 0)
 			return String.valueOf(appSettings.getReportEndYear());
 		return FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
 	}

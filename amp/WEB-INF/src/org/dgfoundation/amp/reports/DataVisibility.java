@@ -159,6 +159,13 @@ public abstract class DataVisibility {
 			logger.info("All columns are mapped and visibility can be detected.");
 	}
 	
+	/**
+	 * adds to visibleColumns the list of items which are visible
+	 * @param visibilityList
+	 * @param nameToColumnMap
+	 * @param visibleColumns
+	 * @param invisibleColumns
+	 */
 	protected <T extends AmpObjectVisibility> void  processVisbleObjects(List<T> visibilityList, 
 			Map<String, String> nameToColumnMap,
 			Set<String> visibleColumns, Set<String> invisibleColumns) {

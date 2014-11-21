@@ -19,8 +19,12 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_type_of_cooperation AS SELECT aac.amp_activity_id, acv.category_value AS name, aac.amp_categoryvalue_id AS level_code FROM amp_category_value acv, amp_category_class acc, amp_activities_categoryvalues aac WHERE (((acv.id = aac.amp_categoryvalue_id) AND (acc.id = acv.amp_category_class_id)) AND ((acc.keyname)::text = 'SSC_type_of_cooperation'::text));;;
-        		</lang>
+				DROP VIEW IF EXISTS v_type_of_cooperation CASCADE;
+			    CREATE OR REPLACE VIEW v_type_of_cooperation AS 
+			    	SELECT aac.amp_activity_id, acv.category_value AS name, aac.amp_categoryvalue_id AS level_code 
+			    	FROM amp_category_value acv, amp_category_class acc, amp_activities_categoryvalues aac 
+			    	WHERE (((acv.id = aac.amp_categoryvalue_id) AND (acc.id = acv.amp_category_class_id)) AND ((acc.keyname)::text = 'SSC_type_of_cooperation'::text));;;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

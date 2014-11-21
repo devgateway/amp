@@ -11,6 +11,7 @@ import org.dgfoundation.amp.ar.amp210.ETLTests;
 import org.dgfoundation.amp.ar.amp210.EndpointsTests;
 import org.dgfoundation.amp.ar.amp210.FiltersMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.LocationMondrianReportTests;
+import org.dgfoundation.amp.ar.amp210.MondrianComputedMeasuresReportTests;
 import org.dgfoundation.amp.ar.amp210.MondrianSummaryReportTests;
 import org.dgfoundation.amp.ar.amp210.OrganisationsMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.SQLUtilsTests;
@@ -37,7 +38,6 @@ public class AllTests_amp210
 		setUp();
 		//new MoldovaTranslationsSplit().doMoldovaTranslations();
 		
-//		LiberiaFiller.fillInDatabase();
 		TestSuite suite = new TestSuite(AllTests_amp210.class.getName());
 		suite.addTest(new JUnit4TestAdapter(FiltersMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(ETLTests.class));
@@ -48,6 +48,7 @@ public class AllTests_amp210
 		suite.addTest(new JUnit4TestAdapter(LocationMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(OrganisationsMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(SqlFilterUtilsTests.class));
+		suite.addTest(new JUnit4TestAdapter(MondrianComputedMeasuresReportTests.class));
 		
 		//suite.addTest(new JUnit4TestAdapter(EndpointsTests.class)); report testcases are not compatible with AMP running; while the testcases in EndpointsTests require a running AMP. please move them to a different test suite, which does not contain reports tests
 		

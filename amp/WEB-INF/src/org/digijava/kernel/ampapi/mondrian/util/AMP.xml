@@ -601,6 +601,43 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
+		
+		<Measure name="Planned Disbursements - Capital" aggregator="sum">
+			<MeasureExpression>
+				<SQL dialect="generic"> 
+					CASE WHEN mondrian_fact_table.transaction_type=1 AND mondrian_fact_table.adjustment_type=@@planned@@ AND src_role='DN' AND capital_spend_percent IS NOT NULL
+					THEN "mondrian_fact_table".transaction_exch_@@currency@@ * capital_spend_percent / 100.0 ELSE null END
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+		
+		<Measure name="Planned Disbursements - Expenditure" aggregator="sum">
+			<MeasureExpression>
+				<SQL dialect="generic"> 
+					CASE WHEN mondrian_fact_table.transaction_type=1 AND mondrian_fact_table.adjustment_type=@@planned@@ AND src_role='DN' AND capital_spend_percent IS NOT NULL
+					THEN "mondrian_fact_table".transaction_exch_@@currency@@ * (100 - capital_spend_percent) / 100.0 ELSE null END
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+	
+		<Measure name="Actual Disbursements - Capital" aggregator="sum">
+			<MeasureExpression>
+				<SQL dialect="generic"> 
+					CASE WHEN mondrian_fact_table.transaction_type=1 AND mondrian_fact_table.adjustment_type=@@actual@@ AND src_role='DN' AND capital_spend_percent IS NOT NULL
+					THEN "mondrian_fact_table".transaction_exch_@@currency@@ * capital_spend_percent / 100.0 ELSE null END
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+		
+		<Measure name="Actual Disbursements - Recurrent" aggregator="sum">
+			<MeasureExpression>
+				<SQL dialect="generic">
+					CASE WHEN mondrian_fact_table.transaction_type=1 AND mondrian_fact_table.adjustment_type=@@actual@@ AND src_role='DN' AND capital_spend_percent IS NOT NULL
+					THEN "mondrian_fact_table".transaction_exch_@@currency@@ * (100 - capital_spend_percent) / 100.0 ELSE null END
+				</SQL>
+			</MeasureExpression>
+		</Measure>
+						
 		<Measure name="MTEF Projections" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic">

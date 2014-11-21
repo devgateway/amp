@@ -19,7 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_procurement_system;
+				DROP VIEW IF EXISTS v_procurement_system CASCADE;
 				CREATE OR REPLACE VIEW v_procurement_system AS
 					SELECT acc.amp_activity_id, acv.category_value AS name, acv.id AS id 
 					FROM amp_activities_categoryvalues acc, amp_category_value acv, amp_category_class ac 

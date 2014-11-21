@@ -19,8 +19,12 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_status AS SELECT aac.amp_activity_id, acv.category_value AS name, aac.amp_categoryvalue_id AS amp_status_id FROM amp_category_value acv, amp_category_class acc, amp_activities_categoryvalues aac WHERE (((acv.id = aac.amp_categoryvalue_id) AND (acc.id = acv.amp_category_class_id)) AND ((acc.keyname)::text = 'activity_status'::text));;;
-        		</lang>
+				DROP VIEW IF EXISTS v_status CASCADE;
+			    CREATE OR REPLACE VIEW v_status AS 
+			    	SELECT aac.amp_activity_id, acv.category_value AS name, aac.amp_categoryvalue_id AS amp_status_id 
+			    	FROM amp_category_value acv, amp_category_class acc, amp_activities_categoryvalues aac 
+			    	WHERE (((acv.id = aac.amp_categoryvalue_id) AND (acc.id = acv.amp_category_class_id)) AND ((acc.keyname)::text = 'activity_status'::text));;;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

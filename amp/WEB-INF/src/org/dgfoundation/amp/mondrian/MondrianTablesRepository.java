@@ -248,6 +248,8 @@ public class MondrianTablesRepository {
 				new DatabaseTableColumn("ia_org_id", "integer NOT NULL", true), // IMPL amp_org_id, subject to Cartesian product
 				new DatabaseTableColumn("ro_org_id", "integer NOT NULL", true), // RESP amp_org_id, subject to Cartesian product
 		
+				new DatabaseTableColumn("capital_spend_percent", "double", true),
+				
 				new DatabaseTableColumn("src_role", "text", true),  // amp_role.role_name
 				new DatabaseTableColumn("dest_role", "text", true), // amp_role.role_name
 				new DatabaseTableColumn("dest_org_id", "integer", true)   // amp_org_id

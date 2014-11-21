@@ -50,6 +50,7 @@ SELECT  <!-- regular transactions -->
 	(SELECT max(level_code) FROM v_type_of_cooperation vtoc WHERE vtoc.amp_activity_id = aa.amp_activity_id) type_of_cooperation_id,
 	(SELECT max(level_code) FROM v_type_of_implementation vtoi WHERE vtoi.amp_activity_id = aa.amp_activity_id) type_of_implementation_id,
 	(SELECT max(id) FROM v_procurement_system vps WHERE vps.amp_activity_id = aa.amp_activity_id) procurement_system_id,
+    fd.capital_spend_percent AS capital_spend_percent, 
      
 	src_role.role_code AS src_role,
 	dest_role.role_code AS dest_role,
@@ -84,6 +85,8 @@ SELECT <!-- MTEFs -->
 	(SELECT max(level_code) FROM v_type_of_implementation vtoi WHERE vtoi.amp_activity_id = aa.amp_activity_id) type_of_implementation_id,
 	(SELECT max(id) FROM v_procurement_system vps WHERE vps.amp_activity_id = aa.amp_activity_id) procurement_system_id,
      
+    null AS capital_spend_percent,
+    
 	src_role.role_code AS src_role,
 	cast (NULL as text) as dest_role,
 	cast (NULL as bigint) as dest_org_id
@@ -115,6 +118,8 @@ SELECT <!-- undefined donor -->
 	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'SSC_type_of_cooperation')) AS type_of_cooperation_id,
 	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'SSC_type_of_implementation')) AS type_of_implementation_id,
 	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'procurement_system')) AS  procurement_system_id,
+     
+    null AS capital_spend_percent,
      
 	'DN' AS src_role,
 	cast (NULL as text) as dest_role,

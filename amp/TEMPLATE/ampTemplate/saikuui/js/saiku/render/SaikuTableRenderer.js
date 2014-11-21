@@ -93,25 +93,14 @@ var checkTable = function(table){
 	var rowListTotals = table.find("TH.row_total_corner").parents("TR");
 	rowListTotals.push($("#grand_total"));
 
-	//Homogeneize (?) the table
 	_.each(rowListTotals, function(row) {
 		var rowLength = getRowLength(row);
 		if(rowLength < maxRowLength){
 			var offset = maxRowLength - rowLength;
-			var isSubtotal = $(row).children().hasClass("row_total_corner");
-//			var position = $($(row).find(".row_total_corner")[0]).index();
-			var className = "";
+			var insertionPosition = $(row).find(".row_total").last();
 
 			for(var idx = 0; idx < offset;idx++) {
-				if(idx == offset-1 && isSubtotal) //First cell needs corner
-					className = "row_total_corner";
-				else if (idx == offset-1 && !isSubtotal)
-					className = "row";
-				else if(isSubtotal)
-					className = "row_total";
-				else
-					className = "row_total";
-				$(row).prepend($("<th>").html($("<div>")).addClass(className));
+				insertionPosition.after($("<th>").html($("<div>")).addClass("row_total"));
 			}
 		}
 	})

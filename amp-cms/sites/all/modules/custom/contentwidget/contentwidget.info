@@ -1,0 +1,8 @@
+name = Custom ContentWidget
+description = A description of what your module does.
+core = 7.x
+package = Custom
+
+dependencies[] = entity
+dependencies[] = entity_translation
+dependencies[] = restclient

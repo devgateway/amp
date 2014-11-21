@@ -1,0 +1,163 @@
+/**
+ * @file
+ * Contains theme CSS declarations.
+ */
+
+html {
+  // Always show page scrollbar to prevent side-movement when hovering over
+  // items that are extending their height.
+  overflow-y: scroll;
+
+  // Set the base font style.
+  color: @clnormal;
+  font-family: @fstack_default;
+}
+
+.main-content {
+  margin-bottom: 1em;
+}
+
+/**
+ * Set the base style for anchor tags.
+ */
+a {
+  .link-color(@clanchor, @clanchor__active, @clanchor__visited, @clanchor__hover);
+
+  text-decoration: none;
+  &:focus,
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+h1, h2, h3 {
+  color: @clanchor;
+  font-weight: normal;
+}
+
+/**
+ * Define border style.
+ *
+ * @TODO: Cleanup
+ */
+hr {
+  border: none;
+  border-top: 1px solid @clnormal;
+  clear: both;
+  height: 1px;
+  margin-bottom: 1em;
+  margin-top: 1em;
+  width: 100%;
+  &.dashed {
+    border-style: dashed;
+  }
+}
+
+/**
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    contenteditable attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that are clearfixed.
+ * 2. The use of 'table' rather than 'block' is only necessary if using
+ *    ':before' to contain the top-margins of child elements.
+ *
+ * @see http://www.paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither
+ * @see http://nicolasgallagher.com/micro-clearfix-hack
+ * @see http://www.satzansatz.de/cssd/onhavinglayout.html
+ * @see http://quirksmode.org/css/css2/display.html
+ */
+.clearfix {
+  &:before,
+  &:after {
+    clear: both;
+    content: " "; // 1.
+    display: table; // 2.
+  }
+}
+
+/**
+ * Style the accessibility "Skip to main content" link.
+ */
+#skip-link {
+  @block_width: 20em;
+
+  // Center the block.
+  left: 50%;
+  margin-left: -1 * @block_width / 2;
+  position: absolute;
+  text-align: center;
+  width: @block_width;
+  z-index: 10;
+
+  a {
+    background: @cldetail;
+    color: @clmain;
+    display: block;
+    padding: 1em;
+    text-decoration: none;
+
+    &:link,
+    &:visited {
+      color: @clmain;
+    }
+  }
+}
+
+/**
+ * Style the browser warning messages.
+ */
+.browser-warnings-wrapper {
+  text-align: center;
+  position: relative;
+  p {
+    background: @clerror__light;
+    border: 1px solid @clerror__faded;
+    color: @clerror__dark;
+    margin-bottom: 1em;
+    margin-top: 0em;
+    padding: 1em 2em;
+  }
+  .ignore-link {
+    cursor: pointer;
+    padding: 0.5em;
+    position: absolute;
+    right: 0em;
+    top: 0em;
+    .no-js & {
+      display: none;
+    }
+  }
+}
+
+/**
+ * Set the style for a 2 column CSS Media Object, first column is optional.
+ */
+.mobject {
+  position: relative;
+  .group-side {
+    display: block;
+    float: left;
+    margin-right: 0.5em;
+  }
+  .group-main {
+    display: table-cell;
+    width: 500em;
+  }
+}
+.xSmallOnly() {
+  .mobject {
+    .group-side {
+      float: none;
+      margin-right: 0;
+      text-align: center;
+    }
+    .group-main {
+      display: block;
+      width: auto;
+    }
+  }
+}
+
+@import './lib/custom-responsive.less';
+@import './lib/helpers.less';

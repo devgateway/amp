@@ -1,0 +1,86 @@
+
+/**
+ * @file
+ * This file exposes responsive design mixins.
+ *
+ *@TODO: Allow nesting media queries in other blocks. For 'inline' object responsive behavior.
+ */
+
+/**
+ * Initialize placeholder mixins.
+ */
+
+// 'Smartphone' layout style rules.
+.xSmallOnly() {}
+
+// 'Smartphone' and 'Tablet' layout style rules.
+.xMediumAndDown() {}
+
+// 'Tablet' layout style rules.
+.xMediumOnly() {}
+
+// 'Tablet' and 'Normal Desktop' and 'Large Desktop' layout style rules.
+.xMediumAndUp() {}
+
+// 'Normal Desktop' and 'Large Desktop' layout style rules.
+.xNormalAndUp() {}
+
+// 'Normal Desktop' layout style rules.
+.xNormalOnly() {}
+
+// 'Smartphone' and 'Tablet' and 'Normal Desktop' layout style rules.
+.xNormalAndDown() {}
+
+// 'Large Desktop' layout style rules.
+.xLargeUp() {}
+
+
+// Define breakpoints. Increased by 1em to account for browsers that include borders in viewport size.
+@small: ((@gen_column_width + @gen_gutter_width) * 8) + 1em;
+@medium: ((@gen_column_width + @gen_gutter_width) * 12) + 1em;
+@large: ((@gen_column_width + @gen_gutter_width) * 16) + 1em;
+
+
+/**
+ * Render/print the mixins for the current file. The current file is the file in
+ * which these responsive behavior mixins are included.
+ */
+// 'Smartphone' layout style rules.
+@media (max-width: @small) {
+  .xSmallOnly;
+}
+
+// 'Tablet' and 'Normal Desktop' and 'Large Desktop' layout style rules.
+@media (min-width: @small) {
+  .xMediumAndUp;
+}
+
+// 'Tablet' layout style rules.
+@media (min-width: @small) and (max-width: @medium) {
+  .xMediumOnly;
+}
+
+// 'Smartphone' and 'Tablet' layout style rules.
+@media (max-width: @medium) {
+  .xMediumAndDown;
+}
+
+// 'Normal Desktop' and 'Large Desktop' layout style rules.
+@media (min-width: @medium) {
+  .xNormalAndUp;
+}
+
+// 'Normal Desktop' layout style rules.
+@media (min-width: @medium) and (max-width: @large) {
+  .xNormalOnly;
+}
+
+// 'Smartphone' and 'Tablet' and 'Normal Desktop' layout style rules.
+@media (max-width: @large) {
+  .xNormalAndDown;
+}
+
+// 'Large Desktop' layout style rules.
+@media (min-width: @large) {
+  .xLargeUp;
+}

@@ -1,0 +1,14 @@
+diff --git a/sites/all/modules/contrib/entityqueue/entityqueue.module b/sites/all/modules/contrib/entityqueue/entityqueue.module
+index a941f0e..bc535be 100644
+--- a/sites/all/modules/contrib/entityqueue/entityqueue.module
++++ b/sites/all/modules/contrib/entityqueue/entityqueue.module
+@@ -890,7 +890,8 @@ function entityqueue_field_widget_form(&$form, &$form_state, $field, $instance,
+         $label = l($label, $uri['path']);
+       }
+       else {
+-        $label = t('Missing @type', array('@type' => $target_type));
++        continue;
++        // $label = t('Missing @type', array('@type' => $target_type));
+       }
+ 
+       $actions[] = array(

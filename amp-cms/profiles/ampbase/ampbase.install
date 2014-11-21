@@ -1,0 +1,70 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the minimal installation profile.
+ */
+
+/**
+ * Implements hook_install().
+ *
+ * Performs actions to set up the site for this profile.
+ *
+ * @see system_install()
+ */
+function ampbase_install() {
+  // Enable some standard blocks.
+  $default_theme = variable_get('theme_default', 'seven');
+  $values = array(
+    array(
+      'module' => 'system',
+      'delta' => 'main',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'content',
+      'pages' => '',
+      'cache' => -1,
+    ),
+    array(
+      'module' => 'system',
+      'delta' => 'help',
+      'theme' => $default_theme,
+      'status' => 1,
+      'weight' => 0,
+      'region' => 'help',
+      'pages' => '',
+      'cache' => -1,
+    ),
+  );
+  $query = db_insert('block')->fields(array('module', 'delta', 'theme', 'status', 'weight', 'region', 'pages', 'cache'));
+  foreach ($values as $record) {
+    $query->values($record);
+  }
+  $query->execute();
+
+  // Only allow administrators to register accounts.
+  variable_set('user_register', USER_REGISTER_ADMINISTRATORS_ONLY);
+
+  // Enable default permissions for system roles.
+  user_role_grant_permissions(DRUPAL_ANONYMOUS_RID, array('access content'));
+  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, array('access content'));
+
+  // Create some default users.
+  $accounts = array(
+    '2' => 'admin_user',
+    '3' => 'editor_user',
+    '100' => 'system_user',
+  );
+  foreach ($accounts as $account_id => $account_name) {
+    db_insert('users')
+      ->fields(array(
+        'uid' => $account_id,
+        'name' => $account_name,
+        'mail' => $account_name . '@example.org',
+        'created' => REQUEST_TIME,
+        'status' => ($account_id == 100) ? 0 : 1,
+        'data' => NULL,
+      ))
+      ->execute();
+  }
+}

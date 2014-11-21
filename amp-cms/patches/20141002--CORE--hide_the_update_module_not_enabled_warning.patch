@@ -1,0 +1,13 @@
+diff --git a/modules/system/system.install b/modules/system/system.install
+index 43c7383..0ab7af1 100644
+--- a/modules/system/system.install
++++ b/modules/system/system.install
+@@ -489,7 +489,7 @@ function system_requirements($phase) {
+ 
+   if ($phase == 'runtime') {
+     // Check for update status module.
+-    if (!module_exists('update')) {
++    if (FALSE && !module_exists('update')) {
+       $requirements['update status'] = array(
+         'value' => $t('Not enabled'),
+         'severity' => REQUIREMENT_WARNING,

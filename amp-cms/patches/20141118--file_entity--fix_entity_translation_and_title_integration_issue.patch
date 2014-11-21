@@ -1,0 +1,37 @@
+diff --git a/sites/all/modules/contrib/file_entity/file_entity.pages.inc b/sites/all/modules/contrib/file_entity/file_entity.pages.inc
+index bf4b719..d7857df 100644
+--- a/sites/all/modules/contrib/file_entity/file_entity.pages.inc
++++ b/sites/all/modules/contrib/file_entity/file_entity.pages.inc
+@@ -220,8 +220,16 @@ function file_entity_add_upload_step_fields($form, &$form_state, array $options
+     '#weight' => -10,
+   );
+ 
++  // @HACK: Fix title<>entity_translation issue.
++  // @see entity_translation_entity_info_alter()
++  // @see title_entity_language()
++  $langcode = function_exists('entity_language') ? entity_language('file', $file) : NULL;
++  if (empty($langcode)) {
++    $langcode = LANGUAGE_NONE;
++  }
++
+   // Add fields.
+-  field_attach_form('file', $file, $form, $form_state);
++  field_attach_form('file', $file, $form, $form_state, $langcode);
+ 
+   $form['actions'] = array('#type' => 'actions');
+   $form['actions']['previous'] = array(
+@@ -753,7 +761,14 @@ function file_entity_edit($form, &$form_state, $file) {
+     '#weight' => 15,
+   );
+ 
++  // @HACK: Fix title<>entity_translation issue.
++  // @see entity_translation_entity_info_alter()
++  // @see title_entity_language()
+   $langcode = function_exists('entity_language') ? entity_language('file', $file) : NULL;
++  if (empty($langcode)) {
++    $langcode = LANGUAGE_NONE;
++  }
++
+   field_attach_form('file', $file, $form, $form_state, $langcode);
+ 
+   return $form;

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the AMP Internationalization feature.
+ */
+
+include_once 'ampi18n.features.inc';

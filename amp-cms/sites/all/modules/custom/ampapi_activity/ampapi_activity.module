@@ -1,0 +1,175 @@
+<?php
+
+/**
+ * Define administrative URLs.
+ */
+define('AMPACTIVITY_UI_PATH', 'activity');
+define('AMPACTIVITY_ADMIN_UI_PATH', 'admin/content/activity');
+define('AMPACTIVITY_BUNDLE_ADMIN_UI_PATH', 'admin/structure/activity');
+
+
+interface activityMapperAutocompleteInterface {
+  public function autocomplete($plugin, $string);
+  public function getAutocompleteValue($plugin, $data, $type);
+}
+
+/**
+ * Implements hook_entity_info().
+ */
+function ampapi_activity_entity_info() {
+  $entity_info = array();
+
+  $entity_info['activity'] = array(
+    'label' => t('Activity'),
+    'plural label' => t('Activities'),
+    'description' => t('A survey activity.'),
+
+    // We don't have a base table, entities are stored in AMP.
+    'base table' => NULL,
+    'api resource path' => 'data/report/custom/paginate',
+    'module' => 'ampapi_activity',
+
+    'entity class' => 'ActivityEntity',
+    'controller class' => 'ActivityEntityController',
+    // 'extra fields controller class' => 'ampAPIExtraFieldsController',
+    'metadata controller class' => 'ampAPIMetadataController',
+    // 'i18n controller class' => 'EntityDefaultI18nStringController',
+
+    'entity cache' => FALSE,
+    'field cache' => FALSE,
+    'static cache' => TRUE,
+
+    'fieldable' => FALSE,
+
+    'access callback' => 'ampapi_activity_access',
+    'uri callback' => 'entity_class_uri',
+    // 'load hook' => 'ampapi_load',
+
+    'entity keys' => array(
+      'id' => 'id',
+      // 'revision' => 'vid',
+      // 'bundle' => 'type',
+      'label' => 'title',
+    ),
+
+    'bundles' => array(),
+    'bundle keys' => array(
+      // 'bundle' => 'type',
+    ),
+    // 'bundles callback' => 'ampapi_activity_get_types',
+
+    // 'admin ui' => array(
+    //   'path' => AMPACTIVITY_ADMIN_UI_PATH,
+    //   'entity path' => AMPACTIVITY_UI_PATH,
+    //   'bundle path' => AMPACTIVITY_BUNDLE_ADMIN_UI_PATH,
+    //   'controller class' => 'EntityContentUIController',
+    //   'file' => 'ampapi_activity.admin.inc',
+    // ),
+
+    // 'view modes' => array(
+    //   'full' => array(
+    //     'label' => t('Full content'),
+    //     'custom settings' => FALSE,
+    //   ),
+    // ),
+  );
+
+  // foreach ($entity_info['activity']['bundles callback'] as $type => $bundle_info) {
+  //   $entity_info['activity']['bundles'][$type] = array(
+  //     'label' => $bundle_info['label'],
+  //     'admin' => array(
+  //       'path' => AMPACTIVITY_BUNDLE_ADMIN_UI_PATH . '/manage/' . $type,
+  //     ),
+  //   );
+  // }
+
+  return $entity_info;
+}
+
+/**
+ * Implements hook_entity_query_alter().
+ */
+function ampapi_activity_entity_query_alter($query) {
+  if (isset($query->entityConditions['entity_type'])) {
+    $entity_type = $query->entityConditions['entity_type']['value'];
+    if ($entity_type == 'activity') {
+      // Use custom EntityFieldQuery executeCallback for entities loaded from the AMP API.
+      $query->executeCallback = 'ampapi_execute_query';
+    }
+  }
+}
+
+/**
+ *  Implements hook_ctools_plugin_directory().
+ */
+function ampapi_activity_ctools_plugin_directory($owner, $plugin_type) {
+  if ($owner == 'ctools' && $plugin_type == 'content_types') {
+    return 'plugins/content_types';
+  }
+  if ($owner == 'ampapi' && $plugin_type == 'mapper') {
+    return 'plugins/mappers';
+  }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function ampapi_activity_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'ampapi_activity') . '/views',
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function ampapi_activity_menu() {
+  $items = array();
+
+
+  $mappers = ampapi_get_mappers();
+  foreach ($mappers as $key => $plugin) {
+    if (empty($plugin['property name'])) {
+      continue;
+    }
+
+    $items['ampapi/autocomplete/' . $plugin['property name']] = array(
+      'title' => $plugin['title'] . ' Autocomplete',
+      'page callback' => 'ampapi_activity_autocomplete',
+      'page arguments' => array(2),
+      'access callback' => TRUE,
+      'type' => MENU_CALLBACK,
+      'file' => 'ampapi_activity.pages.inc',
+    );
+  }
+
+  return $items;
+}
+
+function ampapi_activity_homepage_search_form($form, &$form_state) {
+  $search_page_url = 'activities';
+  $form = array(
+    '#action' => $search_page_url,
+    '#method' => 'GET',
+  );
+
+  $form['search'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Enter search terms'),
+    '#default_value' => '',
+  );
+
+  $form['actions'] = array('#tree' => FALSE, '#type' => 'actions');
+  $form['actions']['more'] = array(
+    '#type' => 'link',
+    '#title' => t('More filters'),
+    '#href' => $search_page_url,
+  );
+  $form['actions']['explore'] = array(
+    '#type' => 'submit',
+    '#value' => t('Explore'),
+  );
+
+  return $form;
+}

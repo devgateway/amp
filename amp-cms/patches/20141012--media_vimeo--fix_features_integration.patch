@@ -1,0 +1,17 @@
+diff --git a/sites/all/modules/contrib/media_vimeo/media_vimeo.module b/sites/all/modules/contrib/media_vimeo/media_vimeo.module
+index 21d25cb..c0b9b6c 100644
+--- a/sites/all/modules/contrib/media_vimeo/media_vimeo.module
++++ b/sites/all/modules/contrib/media_vimeo/media_vimeo.module
+@@ -66,12 +66,3 @@ function media_vimeo_media_parse($embed_code) {
+ function media_vimeo_file_mimetype_mapping_alter(&$mapping) {
+   $mapping['mimetypes'][] = 'video/vimeo';
+ }
+-
+-/**
+- * Implements hook_ctools_plugin_api().
+- */
+-function media_vimeo_ctools_plugin_api($module, $api) {
+-  if ($module == 'file_entity' && $api == 'file_default_displays') {
+-    return array('version' => 1);
+-  }
+-}

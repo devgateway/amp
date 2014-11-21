@@ -1,0 +1,116 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the contentblock module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function contentblock_schema() {
+  $schema['contentblock'] = array(
+    'description' => 'The base table for contentblocks.',
+    'fields' => array(
+      'cbid' => array(
+        'description' => 'The contentblock primary identifier.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'title' => array(
+        'description' => 'The contentblock title.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'machine_name' => array(
+        'type' => 'varchar',
+        'length' => 128,
+        'default' => '',
+        'description' => 'The contentblock machine name, used only by "Hidden" contentblocks.',
+      ),
+      'type' => array(
+        'description' => 'The contentblock type.',
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'language' => array(
+        'description' => 'The contentblock {languages}.language.',
+        'type' => 'varchar',
+        'length' => 12,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'uid' => array(
+        'description' => 'The {users}.uid that owns this contentblock; initially, this is the user that created it.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'status' => array(
+        'description' => 'Boolean indicating whether the contentblock is published (visible to non-administrators).',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'created' => array(
+        'description' => 'The Unix timestamp when the contentblock was created.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'changed' => array(
+        'description' => 'The Unix timestamp when the contentblock was most recently saved.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+    ),
+    'indexes' => array(
+      'entity_status'    => array('status', 'cbid'),
+      'entity_status_type'    => array('status', 'type', 'cbid'),
+      'entity_machine_name'    => array('machine_name'),
+    ),
+    'foreign keys' => array(
+      'entity_author' => array(
+        'table' => 'users',
+        'columns' => array('uid' => 'uid'),
+      ),
+    ),
+    'primary key' => array('cbid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Add 'machine_name' column to the {contentblock} table.
+ */
+function contentblock_update_7001() {
+  // Create a machine_name column.
+  db_add_field('contentblock', 'machine_name', array(
+    'type' => 'varchar',
+    'length' => 128,
+    'default' => '',
+    'description' => 'The contentblock machine name, used only by "Hidden" contentblocks.',
+  ));
+  db_add_index('contentblock', 'entity_machine_name', array('machine_name'));
+}
+
+/**
+ * Add 'language' column to the {contentblock} table.
+ */
+function contentblock_update_7002() {
+  // Create a language column.
+  db_add_field('contentblock', 'language', array(
+    'description' => 'The contentblock {languages}.language.',
+    'type' => 'varchar',
+    'length' => 12,
+    'not null' => TRUE,
+    'default' => '',
+  ));
+}

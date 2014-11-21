@@ -1,0 +1,274 @@
+<?php
+
+/**
+ * @file
+ * Primarily Drupal hooks and global API functions to manipulate Update Scripts.
+ */
+
+/**
+ * Constants used on admin pages.
+ */
+define('UPDATE_SCRIPTS_FORM_PREFIX', 'update_scripts_');
+define('UPDATE_SCRIPTS_MENU_BASE_PATH', 'admin/config/development/update-scripts');
+
+/**
+ * Gets the phase_id using a named subpattern.
+ * @see http://www.php.net/manual/de/regexp.reference.subpatterns.php
+ */
+define('UPDATE_SCRIPTS_PHASES_PATTERN', '/(?P<phase_id>[0-9\.]+[a-z]?)$/');
+
+/**
+ * Regex patterns for searching files.
+ */
+define('UPDATE_SCRIPTS_ENVIRONMENT_PATTERN', '/setup\.[a-z]+\.php/');
+define('UPDATE_SCRIPTS_HELPER_PATTERN', '*.inc');
+define('UPDATE_SCRIPTS_SCRIPT_PATTERN', 'update.[0-9][0-9][0-9][0-9].php');
+define('UPDATE_SCRIPTS_TASKS_PATTERN', '/[a-z]+\.[a-z\.]+\.php/');
+define('UPDATE_SCRIPTS_TEMPORARY_PATTERN', '/\d{8}\.\d+\.\d{2}.php/');
+
+/**
+ * Script start and end strings.
+ */
+define('UPDATE_SCRIPTS_SCRIPT_START', '<?php');
+define('UPDATE_SCRIPTS_SCRIPT_END', '?>');
+
+/**
+ * Update script status messages.
+ * @see update_scripts_get_script_status()
+ */
+define('UPDATE_SCRIPTS_STATUS_NEW', 0);
+define('UPDATE_SCRIPTS_STATUS_CLEAN', 1);
+define('UPDATE_SCRIPTS_STATUS_DIRTY', 2);
+define('UPDATE_SCRIPTS_STATUS_FATAL', 3);
+
+/**
+ * Implements hook_menu().
+ */
+function update_scripts_menu() {
+  $items = array();
+
+  $items[UPDATE_SCRIPTS_MENU_BASE_PATH] = array(
+    'title' => 'Update Scripts',
+    'description' => 'A collection of scripts used for continuous integration, environment setup and various tasks.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('update_scripts_run_form'),
+    'access arguments' => array('update scripts manage'),
+    'file' => 'update_scripts.admin.inc',
+  );
+
+  $items[UPDATE_SCRIPTS_MENU_BASE_PATH . '/run'] = array(
+    'title' => 'Run',
+    'description' => 'Run update scripts.',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => -50,
+  );
+
+  $items[UPDATE_SCRIPTS_MENU_BASE_PATH . '/run/%'] = array(
+    'title' => 'Run update script',
+    'description' => 'Run a single update script, which was already ran.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('update_scripts_run_single', 5),
+    'access arguments' => array('update scripts manage'),
+    'file' => 'update_scripts.admin.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items[UPDATE_SCRIPTS_MENU_BASE_PATH . '/setup/%'] = array(
+    'title' => 'Setup',
+    'description' => 'Setup Update Scripts functions.',
+    'page callback' => 'update_scripts_setup',
+    'access arguments' => array('update scripts manage'),
+    'file' => 'update_scripts.admin.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items[UPDATE_SCRIPTS_MENU_BASE_PATH . '/logs'] = array(
+    'title' => 'Logs',
+    'description' => 'Update Scripts execution logs',
+    'page callback' => 'update_scripts_view_logs',
+    'access arguments' => array('update scripts manage'),
+    'file' => 'update_scripts.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  $items[UPDATE_SCRIPTS_MENU_BASE_PATH . '/logs/%'] = array(
+    'title' => 'Single log entry',
+    'page callback' => 'update_scripts_view_log',
+    'page arguments' => array(5),
+    'access arguments' => array('update scripts manage'),
+    'file' => 'update_scripts.admin.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items[UPDATE_SCRIPTS_MENU_BASE_PATH . '/settings'] = array(
+    'title' => 'Settings',
+    'description' => 'Settings for the Update Scripts module',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('update_scripts_settings_form'),
+    'access arguments' => array('update scripts manage'),
+    'file' => 'update_scripts.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 50,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function update_scripts_permission() {
+  $permissions = array();
+
+  $permissions['update scripts manage'] = array(
+    'title' => t('Manage update scripts'),
+    'description' => t('Allows a user to configure, run and view logs for update scripts.'),
+    'restrict access' => TRUE,
+  );
+
+  $permissions['update scripts run task scripts'] = array(
+    'title' => t('Access log pages and run task scripts only'),
+    'description' => t('Allows a user to run task scripts. Note that environment specific scripts are not included.'),
+    'restrict access' => TRUE,
+  );
+
+  return $permissions;
+}
+
+/**
+ * Determines if the current user is allowed to access run task scripts.
+ */
+function update_scripts_access() {
+  if (user_access('update scripts manage')) {
+    return TRUE;
+  }
+
+  if (user_access('update scripts run task scripts')) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function update_scripts_theme() {
+  $items = array(
+    'script_log_entry' => array(
+      'template' => 'script-log-entry',
+      'arguments' => array(
+        'general_information' => NULL,
+        'queries' => NULL,
+        'errors' => NULL,
+      ),
+    ),
+  );
+  return $items;
+}
+
+/**
+ * Get update scripts directory.
+ */
+function update_scripts_get_directory() {
+  $directory = variable_get('update_scripts_directory', conf_path() . DIRECTORY_SEPARATOR . 'update_scripts');
+  return $directory;
+}
+
+/**
+ * Check if update scripts directory exists and try to create one if it doesn't.
+ */
+function update_scripts_check_directory($directory, $create = FALSE) {
+  if (is_dir($directory)) {
+    return TRUE;
+  }
+  elseif ($create) {
+    if (!is_dir($directory) && !drupal_mkdir($directory, NULL, TRUE)) {
+      drupal_set_message(t('The directory %directory does not exist and could not be created.', array('%directory' => $directory)), 'error');
+      return FALSE;
+    }
+    else {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Check update scripts directory and .htaccess file status.
+ *
+ * @see update_scripts_setup()
+ */
+function update_scripts_directory_status($directory = NULL) {
+  if (is_null($directory)) {
+    $directory = update_scripts_get_directory();
+  }
+  $directory_status = array();
+
+  if (is_dir($directory)) {
+    if (is_file($directory . DIRECTORY_SEPARATOR . '.htaccess')) {
+      $args = array(
+        '%directory' => $directory,
+        '%htaccess' => '.htaccess',
+      );
+      $directory_status['description'] = t('%directory directory and %htaccess file exist.', $args);
+      $directory_status['markup'] = '<div class="status ok">' . t('OK') . '</div>';
+    }
+    elseif (!is_writable($directory) && !drupal_chmod($directory)) {
+      $args = array(
+        '%directory' => $directory,
+      );
+      $directory_status['description'] = t('%directory directory exists but is not writable and permissions could not be changed.', $args);
+      $args = array(
+        '%filename' => '.htaccess',
+      );
+      $directory_status['markup'] = '<div class="status error">' . t('%filename file can not be created.', $args) . '</div>';
+    }
+    else {
+      $args = array(
+        '%directory' => $directory,
+        '%htaccess' => '.htaccess',
+      );
+      $directory_status['description'] = t('%directory directory exists but %htaccess file is missing.', $args);
+      $args = array(
+        '!here' => l(t('here'),
+        UPDATE_SCRIPTS_MENU_BASE_PATH . '/setup/htaccess'),
+        '%htaccess' => '.htaccess',
+      );
+      $directory_status['markup'] = '<div class="status warning">' . t('Click !here to create %htaccess file.', $args) . '</div>';
+    }
+  }
+  else {
+    $args = array('%directory' => $directory, '%htaccess' => '.htaccess');
+    $directory_status['description'] = t('%directory directory and %htaccess file missing.', $args);
+    $args = array(
+      '!here' => l(t('here'),
+        UPDATE_SCRIPTS_MENU_BASE_PATH . '/setup/directory'),
+      '%directory' => $directory,
+      '%htaccess' => '.htaccess',
+    );
+    $directory_status['markup'] = '<div class="status warning">' . t('Click !here to create %directory directory and %htaccess file.', $args) . '</div>';
+  }
+
+  return $directory_status;
+}
+
+/**
+ * Array sorting callback; Sorts elements by 'path' key.
+ */
+function _update_scripts_sort_path($a, $b) {
+  if (!isset($b['path'])) {
+    return -1;
+  }
+  if (!isset($a['path'])) {
+    return 1;
+  }
+  return strcasecmp($a['path'], $b['path']);
+}
+
+/**
+ * Array sorting callback; Sorts elements by 'path' key in reversed order.
+ */
+function _update_scripts_sort_path_reversed($a, $b) {
+  return _update_scripts_sort_path($a, $b) * -1;
+}

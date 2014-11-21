@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the ampcontentblock module.
+ */
+
+/**
+ * Delete old field_cbwidget from the predefined contentblock entities..
+ */
+function ampcontentblock_update_7001() {
+  // Replace old field_cbwidget of type 'list_text' with a custom field type 'contentblock_widget'.
+  $instance = field_read_instance('contentblock', 'field_cbwidget', 'predefined', array('include_inactive' => TRUE, 'include_deleted' => TRUE));
+  field_delete_instance($instance);
+}

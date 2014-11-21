@@ -1,0 +1,15 @@
+diff --git a/sites/all/modules/contrib/ctools/includes/content.inc b/sites/all/modules/contrib/ctools/includes/content.inc
+index e0e5534..e6634e8 100644
+--- a/sites/all/modules/contrib/ctools/includes/content.inc
++++ b/sites/all/modules/contrib/ctools/includes/content.inc
+@@ -308,7 +308,9 @@ function ctools_content_render($type, $subtype, $conf, $keywords = array(), $arg
+       }
+ 
+       // Sterilize the title
+-      $content->title = filter_xss_admin($content->title);
++      if (empty($content->title_is_xss_free)) {
++        $content->title = filter_xss_admin($content->title);
++      }
+ 
+       // If a link is specified, populate.
+       if (!empty($content->title_link)) {

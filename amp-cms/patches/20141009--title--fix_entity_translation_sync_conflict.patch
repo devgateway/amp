@@ -1,0 +1,15 @@
+diff --git a/sites/all/modules/contrib/title/title.core.inc b/sites/all/modules/contrib/title/title.core.inc
+index 2af63f9..5d42590 100644
+--- a/sites/all/modules/contrib/title/title.core.inc
++++ b/sites/all/modules/contrib/title/title.core.inc
+@@ -134,7 +134,9 @@ function title_field_text_sync_get($entity_type, $entity, $legacy_field, $info,
+  * Sync back callback for the text field type.
+  */
+ function title_field_text_sync_set($entity_type, $entity, $legacy_field, $info, $langcode) {
+-  $entity->{$info['field']['field_name']}[$langcode][0]['value'] = $entity->{$legacy_field};
++  if (!module_exists('entity_translation')) {
++    $entity->{$info['field']['field_name']}[$langcode][0]['value'] = $entity->{$legacy_field};
++  }
+ }
+ 
+ /**

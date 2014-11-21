@@ -1,0 +1,52 @@
+<?php
+
+/**
+ * @file
+ * Tests for restclient module
+ */
+
+class RESTClientTestCase extends DrupalWebTestCase {
+  protected $admin;
+  protected $user;
+  
+  public static function getInfo() {
+    return array(
+      'name' => t('RESTClient tests'),
+      'description' => t('Test the REST client API methods.'),
+      'group' => t('RESTClient'),
+    );
+  }
+
+  function setUp() {
+    parent::setUp('restclient');
+    $this->admin = $this->drupalCreateUser(array('administer restclient'));
+    $this->user = $this->drupalCreateUser();
+  }
+
+  function testRequests() {
+    // Check administrative page permissions
+    
+    // Regular user
+    $this->drupalLogin($this->user);
+    $this->drupalGet('admin/config/services/restclient');
+    $this->assertResponse('403', t('User blocked from accessing administrative pages'));
+    $this->drupalLogout();
+    
+    // Admin user
+    $this->drupalLogin($this->admin);
+    $this->drupalGet('admin/config/services/restclient');
+    $this->assertResponse('200', t('Admin access administrative pages'));
+    $this->drupalLogout();
+    
+    // Test GET request
+    $response = restclient_get('/', array('endpoint' => 'http://localhost'));
+    $this->assertEqual(200, $response->code, t('GET request completed successfully'), 'REST API');
+    
+    // Test parameter insertion
+    $expected_request = 'GET /node';
+    $response = restclient_get('/%node', array('endpoint' => 'http://localhost', 'parameters' => array('%node' => 'node')));
+    $this->assertTrue(FALSE !== strpos($response->request, $expected_request), t('HTTP Request matches expected value.'), 'REST API');
+    $this->assertEqual(200, $response->code, t('GET request with parameters completed successfully'), 'REST API');
+  }
+  
+}

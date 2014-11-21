@@ -1,0 +1,9 @@
+name = HelperViews
+description = Custom views helper moule.
+core = 7.x
+package = "Custom"
+
+dependencies[] = views
+
+; Handlers
+files[] = plugins/views_plugin_pager_featured.inc

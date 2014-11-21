@@ -1,0 +1,17 @@
+diff --git a/sites/all/modules/contrib/i18n/i18n_menu/i18n_menu.module b/sites/all/modules/contrib/i18n/i18n_menu/i18n_menu.module
+index ab85792..4cc21e7 100644
+--- a/sites/all/modules/contrib/i18n/i18n_menu/i18n_menu.module
++++ b/sites/all/modules/contrib/i18n/i18n_menu/i18n_menu.module
+@@ -530,9 +530,9 @@ function _i18n_menu_link_process(&$link) {
+       }
+     }
+     // Skip if administering this menu item through the node edit form.
+-    elseif (arg(0) == 'node' && arg(2) == 'edit') {
+-      return FALSE;
+-    }
++    // elseif (arg(0) == 'node' && arg(2) == 'edit') {
++    //   return FALSE;
++    // }
+     return TRUE;
+   }
+   else {

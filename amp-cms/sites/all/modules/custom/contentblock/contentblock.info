@@ -1,0 +1,13 @@
+name = Custom ContentBlock
+description = Exposes Custom Content Blocks.
+core = 7.x
+package = Custom
+
+dependencies[] = entity
+
+; Entity handlers.
+files[] = includes/ContentBlockEntity.inc
+files[] = includes/ContentBlockEntityController.inc
+files[] = includes/ContentBlockEntityUIController.inc
+files[] = includes/ContentBlockInlineEntityFormController.inc
+files[] = includes/EntityTranslationContentBlockHandler.inc

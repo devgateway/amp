@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the HelperGeneric module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function helpergeneric_install() {
+  db_update('system')
+    ->fields(array('weight' => 20))
+    ->condition('name', 'helpergeneric')
+    ->execute();
+}

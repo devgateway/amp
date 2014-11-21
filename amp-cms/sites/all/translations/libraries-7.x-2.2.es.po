@@ -1,0 +1,18 @@
+# Spanish translation of Libraries API (7.x-2.2)
+# Copyright (c) 2014 by the Spanish translation team
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Libraries API (7.x-2.2)\n"
+"POT-Creation-Date: 2014-02-09 18:01+0000\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Language-Team: Spanish\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+msgid "Libraries"
+msgstr "Bibliotecas"
+msgid "Allows version-dependent and shared usage of external libraries."
+msgstr "Permite versión dependiente y uso compartido de librerías externas."

@@ -1,0 +1,613 @@
+<?php
+/**
+ * @file
+ * Exposes Custom Content Blocks.
+ */
+
+// Include formatter specific code.
+module_load_include('inc', 'contentblock', 'contentblock.admin_cbreference');
+
+/**
+ * Define administrative URLs.
+ */
+define('CONTENTBLOCK_UI_PATH', 'contentblock');
+define('CONTENTBLOCK_ADMIN_UI_PATH', 'admin/content/contentblock');
+define('CONTENTBLOCK_BUNDLE_ADMIN_UI_PATH', 'admin/structure/contentblock');
+
+/**
+ * Implements hook_entity_info().
+ */
+function contentblock_entity_info() {
+  $entity_info = array();
+
+  $menu_wildcard = '%contentblock';
+  $entity_info['contentblock'] = array(
+    'label' => t('Content Block'),
+    'plural label' => t('Content Blocks'),
+    'description' => t('A custom content block.'),
+
+    'base table' => 'contentblock',
+    'module' => 'contentblock',
+
+    'entity class' => 'ContentBlockEntity',
+    'controller class' => 'ContentBlockEntityController',
+    // 'extra fields controller class' => 'ContentBlockExtraFieldsController',
+    // 'metadata controller class' => 'ContentBlockMetadataController',
+    // 'i18n controller class' => 'EntityDefaultI18nStringController',
+    'inline entity form' => array(
+      'controller' => 'ContentBlockInlineEntityFormController',
+    ),
+
+    // 'entity cache' => FALSE,
+    // 'field cache' => FALSE,
+    'static cache' => TRUE,
+
+    'fieldable' => TRUE,
+
+    'access callback' => 'contentblock_access',
+    'uri callback' => 'entity_class_uri',
+
+    'entity keys' => array(
+      'id' => 'cbid',
+      // 'revision' => 'vid',
+      'bundle' => 'type',
+      'label' => 'title',
+      'language' => 'language',
+    ),
+
+    'field replacement' => array(
+      'title' => array(
+        'field' => array(
+          'type' => 'text',
+          'cardinality' => 1,
+          'translatable' => TRUE,
+        ),
+        'instance' => array(
+          'label' => t('Title'),
+          'description' => '',
+          'required' => TRUE,
+          'settings' => array(
+            'text_processing' => 0,
+          ),
+          'widget' => array(
+            'weight' => -5,
+          ),
+          'display' => array(
+            'default' => array(
+              'type' => 'hidden',
+            ),
+          ),
+        ),
+      ),
+    ),
+
+    'bundles' => array(),
+    'bundle keys' => array(
+      'bundle' => 'type',
+    ),
+    'bundles callback' => 'contentblock_get_types',
+
+    'admin ui' => array(
+      'path' => CONTENTBLOCK_ADMIN_UI_PATH,
+      'entity path' => CONTENTBLOCK_UI_PATH,
+      'bundle path' => CONTENTBLOCK_BUNDLE_ADMIN_UI_PATH,
+      'controller class' => 'ContentBlockEntityUIController',
+      'menu wildcard' => $menu_wildcard,
+      'file' => 'contentblock.admin.inc',
+    ),
+
+    'view modes' => array(
+      // 'full' => array(
+      //   'label' => t('Full content block'),
+      //   'custom settings' => FALSE,
+      // ),
+    ),
+
+    'translation' => array(
+      'locale' => TRUE,
+      'entity_translation' => array(
+        'base path' => CONTENTBLOCK_UI_PATH . '/' . $menu_wildcard,
+        'class' => 'EntityTranslationContentBlockHandler',
+        'access callback' => 'entity_translation_tab_access',
+        'access arguments' => array('contentblock', 1),
+        'admin theme' => variable_get('node_admin_theme'),
+        'default settings' => array(
+          'default_language' => LANGUAGE_NONE,
+          'hide_language_selector' => FALSE,
+        ),
+      ),
+    ),
+  );
+
+  foreach ($entity_info['contentblock']['bundles callback']() as $type => $bundle_info) {
+    $entity_info['contentblock']['bundles'][$type] = array(
+      'label' => $bundle_info['label'],
+      'admin' => array(
+        'path' => CONTENTBLOCK_BUNDLE_ADMIN_UI_PATH . '/manage/' . $type,
+      ),
+    );
+  }
+
+  return $entity_info;
+}
+
+/**
+ * Returns a list of question types.
+ */
+function contentblock_get_types() {
+  $items = array();
+
+  $items['hidden'] = array(
+    'label' => t('Hidden'),
+    'description' => t('Hidden content blocks are regular blocks to be used by developers.'),
+  );
+
+  $items['predefined'] = array(
+    'label' => t('Predefined Widget'),
+    'description' => t('Can be used to create blocks of predefined widgets that can be added in various places.'),
+  );
+
+  $items['text'] = array(
+    'label' => t('Text'),
+    'description' => t('Use text for static blocks of content to be used on various places.'),
+  );
+
+  return $items;
+}
+
+/**
+ * Returns a list of question types.
+ */
+function contentblock_get_hidden_types($type = NULL) {
+  $items = array();
+
+  $items['linkedmap'] = array(
+    'title' => t('Linked Map Block'),
+    'description' => t('The linked map block is displayed on the homepage and on the blog sidebar.'),
+    'action label' => t('Configure'),
+    'available_fields' => array(
+      'title_field',
+      'field_cbimage',
+      'field_cblinks',
+    ),
+  );
+
+  $items['welcome'] = array(
+    'title' => t('Home Welcome Block'),
+    'description' => t('The home welcome block is displayed on the top of the homepage next to the projects search form.'),
+    'action label' => t('Configure'),
+    'available_fields' => array(
+      'title_field',
+      'field_cbimage',
+      'field_cblinks',
+      'field_cbbody',
+    ),
+  );
+
+  // $items['projectsform'] = array(
+  //   'title' => t('Projects Search Form'),
+  //   'description' => t('The projects search form is displayed on the top of the homepage next to the welcome block.'),
+  //   'action label' => t('Edit'),
+  //   'available_fields' => array(
+  //   ),
+  // );
+
+  $items['blogsidebar'] = array(
+    'title' => t('Blog Sidebar Section'),
+    'description' => t('The blog sidebar is a section of configurable content on the blog pages sidebar.'),
+    'action label' => t('Configure'),
+    'is section' => TRUE,
+    'available_fields' => array(
+      'field_cbblocks',
+    ),
+  );
+
+  $items['footer'] = array(
+    'title' => t('Footer'),
+    'description' => t('The footer is a section of free text in the page footer.'),
+    'action label' => t('Configure'),
+    'is section' => TRUE,
+    'available_fields' => array(
+      'field_cbbody',
+    ),
+  );
+
+  $items['homewidgets'] = array(
+    'title' => t('Home Widgets Section'),
+    'description' => t('The home widgets is a section of configurable content on the homepage.'),
+    'action label' => t('Configure'),
+    'is section' => TRUE,
+    'available_fields' => array(
+      'field_cbblocks',
+    ),
+  );
+
+  if (!isset($type)) {
+    return $items;
+  }
+
+  if (isset($items[$type])) {
+    return $items[$type];
+  }
+
+  return array();
+}
+
+/**
+ * Returns the entity type name.
+ */
+function contentblock_type_get_name($bundle) {
+  $bundles = contentblock_get_types();
+  return (isset($bundles[$bundle]['label'])) ? $bundles[$bundle]['label'] : FALSE;
+}
+
+/**
+ * Access callback for custom contentblock entities.
+ */
+function contentblock_access($op, $entity = NULL, $account = NULL) {
+  $rights = &drupal_static(__FUNCTION__, array());
+
+  $operations = array('administer', 'access overview', 'create', 'view', 'edit', 'delete');
+  if (!in_array($op, $operations, TRUE)) {
+    // If the $op was not one of the supported ones, we return access denied.
+    return FALSE;
+  }
+
+  // If no user object is supplied, the access check is for the current user.
+  if (empty($account)) {
+    $account = $GLOBALS['user'];
+  }
+
+  $cid = is_object($entity) ? 'contentblock:' . $entity->identifier() : FALSE;
+
+  // If we've already checked access for this node, user and op, return from cache.
+  if ($cid && isset($rights[$account->uid][$cid][$op])) {
+    return $rights[$account->uid][$cid][$op];
+  }
+
+  if ($op == 'view') {
+    if (empty($cid)) {
+      return FALSE;
+    }
+
+    $allow = FALSE;
+    if (user_access("contentblock entity administer") || user_access("contentblock entity access overview")) {
+      $allow = TRUE;
+    }
+    else if (user_access("contentblock entity $op")) {
+      // For now we ignore the status field.
+      $allow = TRUE;
+    }
+
+    $rights[$account->uid][$cid][$op] = $allow;
+    return $allow;
+  }
+
+  // Only allow UID1 to delete 'hidden' contentblocks using the normal UI.
+  $bundle = is_object($entity) ? $entity->bundle() : NULL;
+  $restriected_operations = array('delete');
+  if ($account->uid != 1 && $bundle == 'hidden' && in_array($op, $restriected_operations)) {
+    if ($cid) {
+      $rights[$account->uid][$cid][$op] = FALSE;
+    }
+    return FALSE;
+  }
+
+  if (user_access("contentblock entity $op")) {
+    if ($cid) {
+      $rights[$account->uid][$cid][$op] = TRUE;
+    }
+    return TRUE;
+  }
+
+  if ($cid) {
+    $rights[$account->uid][$cid][$op] = FALSE;
+  }
+  return FALSE;
+}
+
+/**
+ * Access callback for hidden contentblock entities create page.
+ */
+function contentblock_create_hidden_access($op, $entity = NULL, $account = NULL) {
+  $rights = &drupal_static(__FUNCTION__, array());
+
+  if (isset($rights['permission'])) {
+    return $rights['permission'];
+  }
+
+  if (empty($_GET['machine_name']) || !preg_match('/^[a-z0-9_]+$/', $_GET['machine_name'])) {
+    if (arg(2) == 'hidden') {
+      drupal_set_message('Valid name required!', 'warning');
+    }
+    $rights['permission'] = FALSE;
+    return FALSE;
+  }
+
+  $info = contentblock_get_hidden_types($_GET['machine_name']);
+  if (empty($info)) {
+    if (arg(2) == 'hidden') {
+      drupal_set_message('Invalid name provided!', 'warning');
+    }
+    $rights['permission'] = FALSE;
+    return FALSE;
+  }
+
+  $entities = entity_load('contentblock', array(), array('machine_name' => $_GET['machine_name']));
+  if (!empty($entities)) {
+    if (arg(2) == 'hidden') {
+      drupal_set_message('Content block already exists!', 'warning');
+    }
+    $rights['permission'] = FALSE;
+    return FALSE;
+  }
+
+  $rights['permission'] = user_access('contentblock entity create');
+  return $rights['permission'];
+}
+
+/**
+ * Menu loader function: load a contentblock from its path.
+ *
+ * @see entity_object_load()
+ */
+function contentblock_load($entity_id, $entity_type) {
+  return entity_object_load($entity_id, $entity_type);
+}
+
+/**
+ * Implements hook_permission().
+ */
+function contentblock_permission() {
+  $perms = array();
+
+  $entity_type = 'contentblock';
+  $entity_info = entity_get_info($entity_type);
+
+  $operations = array('administer', 'access overview', 'create', 'view', 'edit', 'delete');
+  foreach ($operations as $op) {
+    $permision_string = "$entity_type entity $op";
+    $action = ucfirst($op);
+    $t_args = array('%entity' => $entity_info['plural label']);
+    $perms[$permision_string] = array(
+      'title' => t("$action %entity", $t_args),
+    );
+
+    if ($op == 'administer') {
+      $perms[$permision_string]['restrict access'] = TRUE;
+    }
+
+    if ($op == 'access overview') {
+      $perms[$permision_string]['title'] = t('Access the %entity overview page', $t_args);
+      $perms[$permision_string]['description'] = t('Get an overview of all %entity.', $t_args);
+    }
+  }
+
+  return $perms;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function contentblock_menu() {
+  $items = array();
+
+  $items['admin/settings/content-sections'] = array(
+    'title' => 'Content Sections',
+    'description' => 'Administer content sections for the homepage and other pages.',
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('helpergeneric administer settings'),
+    'position' => 'right',
+    'weight' => 30,
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+
+  $weight = 0;
+  foreach (contentblock_get_hidden_types() as $machine_name => $info) {
+    $items['admin/settings/content-sections/' . $machine_name] = array(
+      'title' => $info['title'],
+      'description' => $info['description'],
+      'page callback' => 'contentblock_drupal_goto_form',
+      'page arguments' => array($machine_name),
+      'access arguments' => array('helpergeneric administer settings'),
+      'weight' => $weight,
+    );
+    $items['admin/settings/content-sections/' . $machine_name . '/configure'] = array(
+      'title' => $info['action label'],
+      'weight' => -10,
+      'type' => MENU_DEFAULT_LOCAL_TASK,
+      'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+    );
+
+    $weight++;
+  }
+
+  return $items;
+}
+
+/**
+ * Menu callback for hidden ContentBlock entities admin pages.
+ */
+function contentblock_drupal_goto_form($machine_name) {
+  $options = array();
+
+  if (isset($_GET['destination'])) {
+    $options['query'] = drupal_get_destination();
+    unset($_GET['destination']);
+  }
+
+  $entity_type = 'contentblock';
+  $entities = entity_load($entity_type, array(), array('machine_name' => $machine_name));
+  $entity = reset($entities);
+
+  if (!empty($entity)) {
+    $path = 'contentblock/' . $entity->identifier() . '/edit';
+  }
+  else {
+    $path = 'contentblock/add/hidden';
+    $options['query']['machine_name'] = $machine_name;
+  }
+
+  drupal_goto($path, $options);
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function contentblock_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  // Add action link to 'contentblock/add' on 'admin/content/contentblock' page.
+  if ($root_path == CONTENTBLOCK_ADMIN_UI_PATH) {
+    $item = menu_get_item(CONTENTBLOCK_UI_PATH . '/add');
+    if ($item['access']) {
+      $data['actions']['output'][] = array(
+        '#theme' => 'menu_local_action',
+        '#link' => $item,
+      );
+    }
+  }
+}
+
+/**
+ * Gets the page title for the passed operation.
+ * @see entity_ui_get_page_title()
+ */
+function contentblock_entity_ui_get_page_title($op, $entity_type, $entity = NULL) {
+  module_load_include('inc', 'entity', 'includes/entity.ui');
+
+  $label = entity_label($entity_type, $entity);
+
+  // Get the entity information.
+  $entity_info = entity_get_info($entity_type);
+  $t_args = array(
+    '@entity_type_label' => drupal_strtolower($entity_info['label']),
+    '%label' => $label,
+  );
+
+  switch ($op) {
+    case 'view':
+      return $label;
+    case 'edit':
+      return t('Edit @entity_type_label %label', $t_args);
+    case 'clone':
+      return t('Clone @entity_type_label %label', $t_args);
+    case 'revert':
+      return t('Revert @entity_type_label %label', $t_args);
+    case 'delete':
+      return t('Delete @entity_type_label %label', $t_args);
+    case 'export':
+      return t('Export @entity_type_label %label', $t_args);
+  }
+  if (isset($entity)) {
+    list(, , $bundle) = entity_extract_ids($entity_type, $entity);
+  }
+  else {
+    $bundle = NULL;
+  }
+  return entity_ui_get_action_title($op, $entity_type, $bundle);
+}
+
+/**
+ * Implements hook_field_extra_fields().
+ */
+function contentblock_field_extra_fields() {
+  $extra = array();
+
+  foreach (contentblock_get_types() as $bundle_type => $bundle_info) {
+    $extra['contentblock'][$bundle_type]['form'] = array(
+      'title' => array(
+        'label' => t('Title'),
+        'description' => t('Title for @label', array('@label' => $bundle_info['label'])),
+        'weight' => -5,
+      ),
+    );
+  }
+
+  return $extra;
+}
+
+/**
+ * Implements hook_ds_field_settings_form().
+ */
+function contentblock_ds_field_settings_form($field) {
+  $form = array();
+  $form += ds_ds_field_settings_form($field);
+  return $form;
+}
+
+/**
+ * Implements hook_ds_field_format_summary().
+ */
+function contentblock_ds_field_format_summary($field) {
+  return ds_ds_field_format_summary($field);
+}
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function contentblock_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'panels' && $plugin == 'styles') {
+    return 'plugins/' . $plugin;
+  }
+  if ($module == 'ctools' && $plugin == 'content_types') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
+ * Implements hook_entity_view_alter().
+ */
+function contentblock_entity_view_alter(&$build, $entity_type) {
+  if ($entity_type != 'contentblock') {
+    return;
+  }
+
+  // Add contextual links for this node, except when the node is already being
+  // displayed on its own page. Modules may alter this behavior (for example,
+  // to restrict contextual links to certain view modes) by implementing
+  // hook_node_view_alter().
+  if (!empty($build['#entity']->cbid)) {
+    $build['#contextual_links']['contentblock'] = array('contentblock', array($build['#entity']->cbid));
+  }
+}
+
+/**
+ * Implements hook_field_display_ENTITY_TYPE_alter().
+ * @see hook_field_display_alter()
+ */
+function contentblock_field_display_contentblock_alter(&$display, $context) {
+  if (isset($context['entity']->machine_name)) {
+    module_load_include('inc', 'contentblock', 'contentblock.cbreference');
+    contentblock_field_display_contentblock_alter__generic($display, $context);
+
+    $info = contentblock_get_hidden_types($context['entity']->machine_name);
+    if (!empty($info['is section'])) {
+      contentblock_field_display_contentblock_alter__section($display, $context);
+    }
+
+    $function = 'contentblock_field_display_contentblock_alter__' . $context['entity']->machine_name;
+    if (function_exists($function)) {
+      $function($display, $context);
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for contentblock_form().
+ */
+function contentblock_form_contentblock_form_alter(&$form, &$form_state, $form_id) {
+  // Do not allow redirects to be created from the entity edit forms.
+  $form['redirect']['#access'] = FALSE;
+
+  if ($form_id == 'contentblock_edit_hidden_form') {
+    if ($form_state['op'] == 'add' && !empty($_GET['machine_name'])) {
+      $form['#entity']->machine_name = $_GET['machine_name'];
+    }
+
+    // By now the machine_name has already been validated.
+    $info = contentblock_get_hidden_types($form['#entity']->machine_name);
+    if (!empty($info)) {
+      _contentblock_form_contentblock_form_alter($form, $form_state, $form_id);
+    }
+  }
+}

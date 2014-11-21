@@ -1,0 +1,25 @@
+<?php
+/**
+ * @file
+ * Define views plugins.
+ */
+
+/**
+ * Implements hook_views_plugins().
+ */
+function helperviews_views_plugins() {
+  $plugins = array(
+    'pager' => array(
+      'featured' => array(
+        'title' => t('Paged output, with a featured item'),
+        'short title' => t('Featured'),
+        'help' => t('Paged output, full Drupal style with different number of items on the first page.'),
+        'handler' => 'views_plugin_pager_featured',
+        // 'help topic' => 'pager-featured',
+        'uses options' => TRUE,
+      ),
+    ),
+  );
+
+  return $plugins;
+}

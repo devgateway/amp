@@ -1,0 +1,6 @@
+name = HelperGeneric
+description = Custom helper moule.
+core = 7.x
+package = "Custom"
+
+dependencies[] = elements

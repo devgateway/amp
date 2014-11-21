@@ -1,0 +1,51 @@
+/**
+ * @file
+ * Contains CSS used only for admin pages.
+ */
+
+// We don't have access to less processed variables in PHP, so we need add the colors here.
+#loopMixin {
+  .each(@names, @prefix, @action) {
+    @count: length(@names);
+
+    .next(@index, @type) when (@type = background) and (@index > 0) {
+      @colorname: extract(@names, @index);
+
+      // Print specific CSS for the curent selector.
+      // We don't want to add an extra nexted call.
+      @{prefix}@{colorname} {
+        background-color: @@colorname;
+
+        // DEBUG.
+        // &:before {content: ~"'i@{index}'";}
+      }
+
+      // Call the next iteration.
+      .next(@index - 1, @type);
+    }
+    .next(@index, @type) when (@type = content) and (@index > 0) {
+      @colorname: extract(@names, @index);
+
+      // Print specific CSS for the curent selector.
+      // We don't want to add an extra nexted call.
+      @{prefix}@{colorname}.display-processed-value::after {
+        content: ~"' procesed: @{@{colorname}} '";
+        display: block;
+      }
+
+      // Call the next iteration.
+      .next(@index - 1, @type);
+    }
+    .next(@index) when (@index = 0) {}
+
+    // Start...
+    .next(@count, @action);
+  }
+}
+
+// Print ".helpertheme-color-palette-wrapper .colorblock-NAME" declaration for each color.
+// Using ~"" will not include the quotes in the variable value.
+#loopMixin > .each(@colorblock_list, ~".helpertheme-color-palette-wrapper .colorblock-", background);
+
+// Print ".helpertheme-color .colorvalue-NAME" declaration for each color.
+#loopMixin > .each(@colorblock_list, ~".helpertheme-color .colorvalue-", content);

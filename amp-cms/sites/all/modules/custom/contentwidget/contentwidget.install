@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the contentwidget module.
+ */
+
+/**
+ * Implements hook_field_schema().
+ */
+function contentwidget_field_schema($field) {
+  switch ($field['type']) {
+    case 'contentwidget':
+      $columns = array(
+        'widget' => array(
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => FALSE,
+        ),
+        'settings' => array(
+          'type' => 'blob',
+          'not null' => FALSE,
+          'size' => 'big',
+          'serialize' => TRUE,
+          'description' => 'A serialized array of widget settings for the widget.',
+        ),
+      );
+      break;
+  }
+  return array(
+    'columns' => $columns,
+    'indexes' => array(
+      'widget' => array('widget'),
+    ),
+  );
+}

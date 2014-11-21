@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the AMP Activities Search feature.
+ */
+
+include_once 'ampactivities.features.inc';

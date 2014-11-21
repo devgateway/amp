@@ -1,0 +1,18 @@
+
+/**
+ * @file
+ * Basic styling for the Entityqueue module.
+ */
+
+/**
+ * @todo Rewrite for the new UI provided by Ctools.
+ */
+#entityqueue-overview-form td.operations {
+  background-color: inherit;
+  padding-top: 18px;
+  vertical-align: top;
+}
+
+#entityqueue-overview-form td.operations .ctools-dropbutton {
+  position: absolute;
+}

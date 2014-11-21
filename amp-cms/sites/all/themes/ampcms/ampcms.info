@@ -1,0 +1,50 @@
+name = AMP CMS
+core = 7.x
+engine = phptemplate
+
+; Don't use default favicon.
+settings[toggle_favicon] = 0
+
+; Regions
+regions[help] = Help
+regions[content] = Content
+
+; Libraries and basic styles.
+; @NOTE: If two .less files have the same name only the last one is visible,
+; even from different folders.
+stylesheets[all][] = styles/lib/normalize.css
+stylesheets[all][] = styles/base.css.less
+stylesheets[all][] = styles/drupal.css.less
+stylesheets[all][] = styles/drupal/actions.css.less
+stylesheets[all][] = styles/drupal/contextual.css.less
+stylesheets[all][] = styles/drupal/forms.css.less
+stylesheets[all][] = styles/drupal/messages.css.less
+stylesheets[all][] = styles/drupal/generic.css.less
+stylesheets[all][] = styles/reset.css.less
+
+; Stylesheets.
+stylesheets[all][] = styles/main.css.less
+stylesheets[all][] = styles/menu.css.less
+stylesheets[all][] = styles/other.css.less
+stylesheets[all][] = styles/listings.css.less
+stylesheets[all][] = styles/layout.css.less
+
+stylesheets[print][] = styles/print.css.less
+
+; Variables defined here will automatically be available inside stylesheets.
+; Variables are lazy evaluated, so they don't have to be defined in order.
+
+; Grid Settings.
+less[vars][@gen_total_columns] = 12
+less[vars][@gen_column_width] = 4em
+less[vars][@gen_gutter_width] = 1em
+less[vars][@to_em] = 16
+
+less[vars][@sidebar_grid_count] = 3
+less[vars][@content_grid_count] = 9
+
+less[vars][@border_width] = 1px
+
+; Font stacks
+less[vars][fstack_default] = "Open Sans", "sans-serif"
+less[vars][fstack_alt] = "Arial", "Helvetica", "sans-serif"

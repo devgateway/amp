@@ -1,0 +1,12 @@
+name = EFQ Views Backend Test
+description = EFQ Views Backend Test
+core = 7.x
+package = Views
+dependencies[] = efq_views
+
+; Information added by Drupal.org packaging script on 2014-06-11
+version = "7.x-1.0-alpha4"
+core = "7.x"
+project = "efq_views"
+datestamp = "1402517028"
+

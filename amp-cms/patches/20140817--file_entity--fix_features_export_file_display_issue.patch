@@ -1,0 +1,14 @@
+diff --git a/sites/all/modules/contrib/file_entity/file_entity.file_default_displays.inc b/sites/all/modules/contrib/file_entity/file_entity.file_default_displays.inc
+index c96f6a1..cae3e10 100644
+--- a/sites/all/modules/contrib/file_entity/file_entity.file_default_displays.inc
++++ b/sites/all/modules/contrib/file_entity/file_entity.file_default_displays.inc
+@@ -9,6 +9,9 @@
+  * Implements hook_file_default_displays().
+  */
+ function file_entity_file_default_displays() {
++  // @HACK: Temporary change: there is no need for default file displays if they are set up properly.
++  return;
++
+   $file_displays = array();
+ 
+   $file_display = new stdClass();

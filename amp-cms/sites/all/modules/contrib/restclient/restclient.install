@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * Install file for restclient
+ */
+
+
+/**
+ * Implements hook_install().
+ */
+function restclient_install() {
+  variable_set('restclient_caching', FALSE);
+  variable_set('restclient_hostname', 'http://localhost:80/rest');
+  variable_set('restclient_testing', FALSE);
+  variable_set('restclient_filepath', 'private://restclient_testing');
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function restclient_uninstall() {
+  variable_del('restclient_caching');
+  variable_del('restclient_hostname');
+  variable_del('restclient_additional_headers');
+  variable_del('restclient_testing');
+  variable_del('restclient_filepath');
+}
+
+/**
+ * Implements hook_schema().
+ */
+function restclient_schema() {
+  $t = get_t();
+
+  $schema = array();
+  
+  // Create a cache table
+  $schema['cache_restclient'] = drupal_get_schema_unprocessed('system', 'cache');
+  $schema['cache_restclient']['description'] = t('Cache table for rest calls');
+  
+  return $schema;
+}

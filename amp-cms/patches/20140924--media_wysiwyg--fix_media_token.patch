@@ -1,0 +1,13 @@
+diff --git a/sites/all/modules/contrib/media/modules/media_wysiwyg/js/media_wysiwyg.filter.js b/sites/all/modules/contrib/media/modules/media_wysiwyg/js/media_wysiwyg.filter.js
+index 5ac10ec..b6d7061 100644
+--- a/sites/all/modules/contrib/media/modules/media_wysiwyg/js/media_wysiwyg.filter.js
++++ b/sites/all/modules/contrib/media/modules/media_wysiwyg/js/media_wysiwyg.filter.js
+@@ -28,7 +28,7 @@
+           // compatibility with existing media and is moderately more efficient
+           // than re-building the element.
+           var media = Drupal.settings.tagmap[match];
+-          var media_json = match.replace('[[', '').replace(']]', '');
++          var media_json = match.replace(/^\[\[/, '').replace(/\]\]$/, '');
+ 
+           // Ensure that the media JSON is valid.
+           try {

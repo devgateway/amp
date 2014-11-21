@@ -1,0 +1,134 @@
+/**
+ * @file
+ * Style for call to action items or visual notification items.
+ */
+
+ /**
+  * Style local tasks.
+  */
+ .tabs-wrapper {
+   font-family: @fstack_alt;
+   margin-bottom: 1em;
+   text-align: right;
+   a {
+     display: inline-block;
+     padding: 0.2em 0.6em;
+     text-decoration: none;
+   }
+
+   .primary {
+     // .clearfix-mixin();
+     margin: 0;
+     padding: 0;
+     white-space: nowrap;
+     li {
+       display: inline-block;
+       margin: 0;
+       margin-left: 0.5em;
+     }
+     a {
+       background-color: @clmain;
+       border-radius: 0.5em;
+       border: @border_width solid @cldetail__separator;
+       line-height: 1.5;
+       text-shadow: 0 @border_width 0 white;
+     }
+     a:hover,
+     li.active a {
+       background-color: white;
+     }
+   }
+
+   .secondary {
+     // .clearfix-mixin();
+     background-color: white;
+     border: @border_width solid @cldetail__separator;
+     border-radius: 0.5em;
+     float: right;
+     font-size: 0.9em;
+     margin: 0.5em 0;
+     padding: 0;
+
+     li {
+       display: inline-block;
+       margin: 0;
+       padding: 0.2em;
+       &:last-child {
+         padding-left: 0;
+       }
+     }
+
+     a {
+       border-radius: 0.2em;
+       padding: 0.1em 0.5em;
+       &.active {
+         background-color: @clmain;
+       }
+     }
+   }
+ }
+
+ /**
+  * Style local basic pagers.
+  */
+ .item-list {
+   .pager {
+     clear: both;
+     text-align: center;
+     padding: 0;
+   }
+   .pager li {
+     background-image: none;
+     display: inline;
+     list-style-type: none;
+     padding: 0.5em;
+   }
+   .pager-current {
+     font-weight: bold;
+   }
+ }
+
+/**
+ * Progress behavior.
+ *
+ * @see progress.js
+ */
+/* Bar */
+.progress {
+  .bar {
+    background: #CCCCCC;
+    border-radius: 0.2em;
+    border: @border_width solid #666666;
+    margin: 0 0.2em;
+  }
+  .filled {
+    background: #0072B9 url(~"@{base_path}misc/progress.gif");
+    height: 1.5em;
+    width: 0.3em;
+  }
+  .percentage {
+    float: right; /* LTR */
+  }
+}
+/* Throbber */
+.ajax-progress {
+  display: inline-block;
+  line-height: normal;
+  .throbber {
+    background: transparent url(~"@{base_path}misc/throbber.gif") no-repeat 0px -18px;
+    float: left; /* LTR */
+    height: 15px;
+    width: 15px;
+  }
+  .message {
+    padding-left: 20px;
+  }
+}
+tr .ajax-progress .throbber {
+  margin: 0 2px;
+}
+.ajax-progress-bar {
+  width: 16em;
+}
+
+@import '../lib/helpers.less';

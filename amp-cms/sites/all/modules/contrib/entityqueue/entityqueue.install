@@ -1,0 +1,279 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Entityqueue module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function entityqueue_schema() {
+  $schema['entityqueue_queue'] = array(
+    'description' => 'Stores global information for each queue.',
+    // CTools exportability.
+    'export' => array(
+      'key' => 'name',
+      'identifier' => 'queue',
+      'primary key' => 'name',
+      'object' => 'EntityQueue',
+      'admin_title' => 'label',
+      'default hook' => 'entityqueue_default_queues',
+      'api' => array(
+        'owner' => 'entityqueue',
+        'api' => 'entityqueue_default',
+        'minimum_version' => 1,
+        'current_version' => 1,
+      ),
+      'create callback' => 'entityqueue_queue_create',
+      'load callback' => 'entityqueue_queue_load',
+      'load multiple callback' => 'entityqueue_queue_load_multiple',
+      'save callback' => 'entityqueue_queue_save',
+      'delete callback' => 'entityqueue_queue_delete',
+    ),
+    'fields' => array(
+      'name' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The machine-readable name of this queue.',
+      ),
+      'label' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The human-readable name of this queue.',
+      ),
+      'language' => array(
+        'description' => 'The {languages}.language of this queue.',
+        'type' => 'varchar',
+        'length' => 12,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'handler' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The handler plugin that manages this queue.',
+      ),
+      'target_type' => array(
+        'type' => 'varchar',
+        'length' => 32,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The target entity type of this queue.',
+      ),
+      'settings' => array(
+        'type' => 'blob',
+        'size' => 'big',
+        'not null' => TRUE,
+        'serialize' => TRUE,
+        'description' => 'Serialized settings containing the queue properties that do not warrant a dedicated column.',
+      ),
+    ),
+    'primary key' => array('name'),
+  );
+
+  $schema['entityqueue_subqueue'] = array(
+    'description' => 'Stores global information for each subqueue.',
+    'fields' => array(
+      'subqueue_id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique subqueue ID.',
+      ),
+      'queue' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The queue (bundle) of this subqueue.',
+      ),
+      'name' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The machine-readable name of this subqueue.',
+      ),
+      'label' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'The human-readable name of this subqueue.',
+      ),
+      'language' => array(
+        'description' => 'The {languages}.language of this subqueue.',
+        'type' => 'varchar',
+        'length' => 12,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'module' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'The name of the module that created this subqueue.',
+      ),
+      'uid' => array(
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => FALSE,
+        'default' => NULL,
+        'description' => 'The {users}.uid who created this subqueue.',
+      ),
+      'data' => array(
+        'type' => 'blob',
+        'size' => 'big',
+        'not null' => TRUE,
+        'serialize' => TRUE,
+        'description' => 'Serialized data containing the subqueue properties that do not warrant a dedicated column.',
+      ),
+    ),
+    'primary key' => array('subqueue_id'),
+    'unique keys' => array(
+      'name' => array('name'),
+    ),
+    'indexes' => array(
+      'queue' => array('queue'),
+      'module' => array('module'),
+      'uid' => array('uid'),
+    ),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function entityqueue_install() {
+  // Add entityreference fields for queues that are defined in code.
+  $install = &drupal_static(__FUNCTION__);
+  $install = TRUE;
+
+  $queues = ctools_export_crud_load_all('entityqueue_queue');
+  foreach ($queues as $name => $queue) {
+    if (!empty($queue->in_code_only)) {
+      _entityqueue_queue_ensure_instance($queue);
+    }
+  }
+
+  $install = FALSE;
+  entity_info_cache_clear();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function entityqueue_uninstall() {
+  // Delete entityqueue's field instances.
+  $queues = variable_get('entityqueue_queue_names', array());
+  foreach ($queues as $name) {
+    field_attach_delete_bundle('entityqueue_subqueue', $name);
+  }
+
+  // Build an array of entityreference field names created by entityqueue.
+  $eq_fields = variable_get('entityqueue_field_names', array());
+  $eq_fields = array_unique($eq_fields);
+
+  // Remove fields attached to entity queues (bundles).
+  foreach ($eq_fields as $field_name) {
+    field_delete_field($field_name);
+  }
+
+  variable_del('entityqueue_queue_names');
+  variable_del('entityqueue_field_names');
+}
+
+/**
+ * Add "language" column to all entityqueue tables.
+ */
+function entityqueue_update_7000() {
+  // Update the existing entities, with the default language.
+  $langcode = language_default()->language;
+
+  // Add column to main queue table and update existing queues.
+  $column = array(
+    'description' => 'The {languages}.language of this queue.',
+    'type' => 'varchar',
+    'length' => 12,
+    'not null' => TRUE,
+    'default' => '',
+  );
+  db_add_field('entityqueue_queue', 'language', $column);
+  db_update('entityqueue_queue')
+    ->fields(array(
+      'language' => $langcode,
+    ))
+    ->execute();
+
+  // Add column to subqueue table and update existing subqueues.
+  $column = array(
+    'description' => 'The {languages}.language of this subqueue.',
+    'type' => 'varchar',
+    'length' => 12,
+    'not null' => TRUE,
+    'default' => '',
+  );
+  db_add_field('entityqueue_subqueue', 'language', $column);
+  db_update('entityqueue_subqueue')
+    ->fields(array(
+      'language' => $langcode,
+    ))
+    ->execute();
+}
+
+/**
+ * Sets variables for keeping track of field names and queue names.
+ */
+function entityqueue_update_7001() {
+  module_load_include('module', 'entityqueue');
+  ctools_include('export');
+  ctools_include('entityqueue_queue.class', 'entityqueue');
+
+  // Retrieve all queues (from database + default queues).
+  $db_queues = db_query("SELECT name, target_type FROM {entityqueue_queue}")->fetchAllKeyed();
+  $entityqueue_schema = entityqueue_schema();
+  $default_queues = _ctools_export_get_defaults('entityqueue_queue', $entityqueue_schema['entityqueue_queue']['export']);
+
+  $queue_names = array_merge(array_keys($db_queues), array_keys($default_queues));
+  variable_set('entityqueue_queue_names', $queue_names);
+
+  $target_types = array_unique(array_values($db_queues));
+  foreach ($default_queues as $queue) {
+    if (!in_array($queue->target_type, $target_types)) {
+      $target_types[] = $queue->target_type;
+    }
+  }
+  $field_names = array();
+  foreach ($target_types as $target_type) {
+    $field_names[] = _entityqueue_get_target_field_name($target_type);
+  }
+  variable_set('entityqueue_field_names', $field_names);
+
+  // Mark the update as no longer broken.
+  variable_set('entityqueue_broken_update_7001', FALSE);
+}
+
+/**
+ * Re-runs the fixed version of entityqueue_update_7001().
+ *
+ * @see http://www.drupal.org/node/2297599
+ */
+function entityqueue_update_7002() {
+  $ret = '';
+  if (variable_get('entityqueue_broken_update_7001', TRUE)) {
+    $ret = t('Ran fixed version of entityqueue_update_7001.');
+    entityqueue_update_7001(); // Run the update again.
+  }
+  // Now that the update is complete, we can remove our variable, since this
+  // update won't run again.
+  variable_del('entityqueue_broken_update_7001');
+  return $ret;
+}

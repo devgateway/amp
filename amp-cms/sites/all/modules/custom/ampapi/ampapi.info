@@ -1,0 +1,14 @@
+
+name = AMP API Integration
+description = Provides an EFQ handler pointing to the AMP API.
+core = 7.x
+package = Custom
+
+dependencies[] = efq_views
+dependencies[] = restclient
+dependencies[] = views
+
+; Entity handlers.
+files[] = includes/ampAPIEntityController.inc
+files[] = includes/ampAPIEntityQueryHelper.inc
+files[] = includes/ampAPIMetadataController.inc

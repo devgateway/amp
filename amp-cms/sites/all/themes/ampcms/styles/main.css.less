@@ -1,0 +1,79 @@
+
+html {
+  background-color: @clmain;
+}
+
+.site-name {
+  margin-bottom: 0;
+  margin-top: 0;
+  .link {
+    .link-color(@clnormal);
+    text-transform: uppercase;
+    &:focus,
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}
+.xMediumAndDown() {
+  .site-name {
+    font-size: 1em;
+  }
+}
+
+// Style local actions.
+.action-links {
+  padding: 0;
+  margin: 0;
+
+  li {
+    margin-left: 0.5em;
+    display: inline-block;
+  }
+}
+.entity-action.has-icon {
+  .link-color(@clpassive);
+  text-decoration: none;
+  vertical-align: super;
+  svg {
+    fill: @clpassive;
+    vertical-align: middle;
+  }
+  &:hover {
+    svg {
+      fill: @clanchor;
+    }
+  }
+}
+.custom-doublelayout {
+  .entity-action.has-icon {
+    .mdzr-inlinesvg & {
+      .title {
+        display: none;
+      }
+    }
+  }
+}
+
+.maintenance-page {
+  .main-header {
+    position: relative;
+  }
+  .main-content {
+    float: none;
+    margin-left: 0;
+    margin: 1em 0;
+    padding: 0 1em 1em;
+    min-height: 10em;
+    width: auto;
+  }
+}
+
+.node-blog.view-mode-full {
+  .field-name-field-blog-image {
+    text-align: center;
+  }
+}
+
+@import './lib/custom-responsive.less';
+@import './lib/helpers.less';

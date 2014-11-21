@@ -1,0 +1,96 @@
+/**
+ * @file
+ * Contains CSS used only for admin pages.
+ */
+
+.helpertheme-color-palette-wrapper {
+  fieldset {
+    box-sizing: border-box;
+    margin: 1em auto;
+    width: 60em;
+  }
+
+  .fieldset-wrapper {
+    padding: 1em;
+  }
+
+  .colorvariants {
+    @blocksize: 3em;
+    margin-left: 1em;
+
+    .colorblock {
+      clear: both;
+      height: @blocksize;
+      width: @blocksize;
+    }
+    .colorinfo {
+
+      margin-left: @blocksize + 0.5em;
+      min-height: @blocksize;
+    }
+  }
+}
+
+.palette-overview-item {
+  border-radius: 50%;
+  box-shadow: 0 0 0.1em #999999;
+  display: inline-block;
+  height: 0;
+  margin: 0.4em;
+  overflow: hidden;
+  padding-top: 3em;
+  width: 3em;
+
+  &:hover {
+    box-shadow: 0 0 0.2em #333333;
+  }
+
+  &.is-variant {
+    padding-top: 2em;
+    width: 2em;
+  }
+}
+
+.helpertheme-color {
+  @blocksize: 5em;
+  margin-bottom: 2em;
+
+  .colorblock {
+    border-radius: 50%;
+    box-shadow: 0 0 0.2em #999999;
+    display: block;
+    float: left;
+    height: @blocksize;
+    width: @blocksize;
+
+    &:hover {
+      box-shadow: 0 0 0.4em #333333;
+    }
+  }
+
+  .colorinfo {
+    margin-left: @blocksize + 0.5em;
+    min-height: @blocksize;
+  }
+
+  .colorname span {
+    color: #545454;
+  }
+
+  .colorvalue span {
+    font-family: monospace, serif;
+    font-size: 1em;
+    font-weight: bold;
+  }
+
+  .colordesc {
+    color: #006621;
+  }
+}
+
+.variants-hidden {
+  .is-variant,
+  .colorvariants {
+    display: none;
+  }
+}

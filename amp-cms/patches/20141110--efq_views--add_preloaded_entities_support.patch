@@ -1,0 +1,26 @@
+diff --git a/sites/all/modules/contrib/efq_views/efq_views_plugin_query.inc b/sites/all/modules/contrib/efq_views/efq_views_plugin_query.inc
+index a58cb4c..5a73b8b 100644
+--- a/sites/all/modules/contrib/efq_views/efq_views_plugin_query.inc
++++ b/sites/all/modules/contrib/efq_views/efq_views_plugin_query.inc
+@@ -240,10 +240,20 @@ class efq_views_plugin_query extends views_plugin_query {
+         // Execute the local query.
+         $results = $query->execute();
+ 
++        // Check if the entities are already loaded.
++        $entities_preloaded = empty($query->metaData['entities_preloaded']) ? FALSE : TRUE;
++
+         // Load each entity, give it its ID, and then add to the result array.
+         foreach ($results as $entity_type => $ids) {
++          if ($entities_preloaded) {
++            $loaded_entities = array_values($ids);
++          }
++          else {
++            $loaded_entities = entity_load($entity_type, array_keys($ids));
++          }
++
+           // This is later used for field rendering
+-          foreach (entity_load($entity_type, array_keys($ids)) as $entity_id => $entity) {
++          foreach ($loaded_entities as $entity_id => $entity) {
+             $entity->entity_id = $entity_id;
+             $entity->entity_type = $entity_type;
+             $view->result[] = $entity;

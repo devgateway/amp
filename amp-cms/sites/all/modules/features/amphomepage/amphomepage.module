@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the AMP Homepage feature.
+ */
+
+include_once 'amphomepage.features.inc';

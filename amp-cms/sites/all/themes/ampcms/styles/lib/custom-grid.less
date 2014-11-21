@@ -1,0 +1,108 @@
+
+/**
+ * @file
+ * This file contains grid system helper mixins.
+ *
+ * @TODO:
+ *   - Add documentations and cleanup.
+ */
+
+.row-wrapper(@count: @gen_total_columns) {
+  margin: 0 auto;
+  width: (@gen_column_width + @gen_gutter_width) * @count;
+}
+
+.column(@count) {
+  display: inline;
+  float: left;
+  margin-left: @gen_gutter_width / 2;
+  margin-right: @gen_gutter_width / 2;
+  position: relative;
+  width: (@gen_column_width + @gen_gutter_width) * @count - @gen_gutter_width;
+}
+
+.column-full(@count) {
+  display: inline;
+  float: left;
+  position: relative;
+  width: (@gen_column_width + @gen_gutter_width) * @count;
+}
+
+.column-compacted(@count) {
+  display: inline;
+  float: left;
+  position: relative;
+  width: (@gen_column_width + @gen_gutter_width) * @count - @gen_gutter_width;
+}
+
+.column-single(@count) {
+  display: block;
+  margin-left: @gen_gutter_width / 2;
+  margin-right: @gen_gutter_width / 2;
+  position: relative;
+  width: (@gen_column_width + @gen_gutter_width) * @count - @gen_gutter_width;
+}
+
+.column-cell(@count) {
+  display: table-cell;
+  padding-left: @gen_gutter_width / 2;
+  padding-right: @gen_gutter_width / 2;
+  vertical-align: top;
+  width: (@gen_column_width + @gen_gutter_width) * @count - @gen_gutter_width;
+}
+
+// Style for nested columns.
+.first-child-column() {
+  margin-left: 0;
+}
+
+.last-child-column() {
+  margin-right: 0;
+}
+
+.row-separator() {
+  margin-bottom: @gen_gutter_width;
+}
+
+// Can be used instead of .column(1) for a fluid layout.
+.single-fluid-column(@type:margin) when (@type = margin) {
+  margin-left: @gen_gutter_width / 2;
+  margin-right: @gen_gutter_width / 2;
+}
+.single-fluid-column(@type:margin) when (@type = padding) {
+  padding-left: @gen_gutter_width / 2;
+  padding-right: @gen_gutter_width / 2;
+}
+
+.push(@offset:1) {
+  position: relative;
+  left: (@gen_gutter_width + @gen_column_width) * @offset;
+}
+
+.pull(@offset:1) {
+  position: relative;
+  right: (@gen_gutter_width + @gen_column_width) * @offset;
+}
+
+.prefix(@offset:1) {
+  margin-left: (@gen_gutter_width + @gen_column_width) * @offset;
+}
+
+.suffix(@offset:1) {
+  margin-right: (@gen_gutter_width + @gen_column_width) * @offset;
+}
+
+.column-tall(@count, @side:left, @position:absolute) when not (@side = none) {
+  bottom: 0;
+  @{side}: 0;
+  position: @position;
+  top: 0;
+  width: (@gen_column_width + @gen_gutter_width) * @count;
+}
+
+.column-tall(@count, @side:left, @position:absolute) when (@side = none) {
+  bottom: 0;
+  position: @position;
+  top: 0;
+  width: (@gen_column_width + @gen_gutter_width) * @count;
+}

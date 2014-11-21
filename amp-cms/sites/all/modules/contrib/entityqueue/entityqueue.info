@@ -1,0 +1,24 @@
+name = Entityqueue
+description = Allows users to collect entities in arbitrarily ordered lists.
+package = Entityqueue
+core = 7.x
+;configure = admin/structure/entityqueue/settings
+
+dependencies[] = system (>7.11)
+dependencies[] = ctools
+dependencies[] = entity
+dependencies[] = entityreference
+
+; EntityQueue and EntitySubqueue classes.
+files[] = includes/entityqueue_queue.class.inc
+files[] = includes/entityqueue_subqueue.class.inc
+
+; Handler plugin interface and base implementation.
+files[] = plugins/entityqueue/handler/base.inc
+
+; Entity API controller.
+files[] = includes/entityqueue.controller.inc
+
+; Views handlers.
+files[] = includes/views/entityqueue_handler_relationship_entityqueue.inc
+files[] = includes/views/entityqueue_handler_sort_position.inc

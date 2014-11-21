@@ -1,0 +1,19 @@
+name = AMP API Activity
+description = Exposes Activities stored in AMP as Drupal entities.
+core = 7.x
+package = Custom
+
+dependencies[] = ampapi
+dependencies[] = entity
+
+; Entity handlers.
+files[] = includes/ActivityEntity.inc
+files[] = includes/ActivityEntityController.inc
+
+; Views handlers.
+files[] = views/ampapi_activity_views_handler_field_uri.inc
+files[] = views/ampapi_activity_views_handler_filter_in_operator.inc
+
+; Custom handlers.
+files[] = includes/activityMapper.inc
+files[] = includes/activityMapperAutocomplete.inc

@@ -1,0 +1,201 @@
+/**
+ * @file
+ * Contains layout specific CSS.
+ *
+ * @TODO: Cleanup and convert to LESS.
+ */
+
+// Limit the minimum size of the body in order to prevent issues on smaller devices.
+.xSmallOnly() {
+  body {
+    min-width: 20rem; // 20*16px = 320px
+  }
+}
+
+// Add some spacing around main wrapper elements.
+.main-header,
+.main-navigation,
+.main-content {
+  .single-fluid-column();
+}
+
+.xMediumAndDown() {
+  .homepage-form-block {
+    padding-left: 1em;
+  }
+}
+
+.xMediumOnly() {
+  // Restrict the width of the content on medium sized displays.
+  .page-wrapper {
+    .row-wrapper(8);
+    position: relative;
+  }
+}
+
+.site-name {
+  // font-size: 1em;
+  // display: block;
+  .link {
+    display: table-row;
+  }
+  .text {
+    display: table-cell;
+    height: 60px;
+    vertical-align: middle;
+  }
+  img {
+    display: table-cell;
+    max-width: initial;
+  }
+}
+
+// @TODO: Define styles for large displays.
+.xNormalOnly() {
+// .xNormalAndUp() {
+  .page-wrapper {
+    .row-wrapper();
+    position: relative;
+  }
+  .main-header {
+    .site-name-wrapper {
+      width: 50%;
+      float: left;
+    }
+    .site-name {
+      font-size: 1em;
+      display: block;
+    }
+    .header-items {
+      width: 50%;
+      float: right;
+      text-align: right;
+    }
+  }
+
+  .layout-right-sidebar {
+    .group-left {
+      .column(8);
+      .first-child-column();
+    }
+    .group-right {
+      .column(4);
+      .last-child-column();
+    }
+  }
+
+  .homepage-welcome-block {
+    .column(8);
+    .first-child-column();
+  }
+  .homepage-form-block {
+    .column(4);
+    .last-child-column();
+  }
+}
+
+.xNormalAndUp() {
+  .cbreference-linkedmap {
+    &.cbreference-view-mode-wide {
+      .pane-content {
+        .clearfix-mixin();
+      }
+      .title-wrapper {
+        .first-child-column();
+        margin-left: -1px; // Deal with the border.
+        a {
+          font-size: 1.25em;
+          line-height: 5.6em;
+          white-space: nowrap; // @TODO: Fix l10n + font-size issues.
+        }
+      }
+      .field-name-field-cbimage {
+        .last-child-column();
+        margin-right: -1px; // Deal with the border.
+
+        // Hide overflowing image.
+        overflow: hidden;
+        img {
+          max-width: initial;
+        }
+      }
+    }
+    &.cbreference-view-mode-normal {
+      .title-wrapper a {
+        line-height: 4em;
+        padding-left: 1em;
+      }
+    }
+  }
+}
+.xNormalOnly() {
+  .cbreference-linkedmap {
+    &.cbreference-view-mode-wide {
+      .title-wrapper {
+        .column-compacted(5);
+      }
+      .field-name-field-cbimage {
+        .column-full(7);
+      }
+    }
+  }
+}
+.xLargeUp() {
+  .cbreference-linkedmap {
+    &.cbreference-view-mode-wide {
+      .title-wrapper {
+        .column-compacted(6);
+      }
+      .field-name-field-cbimage {
+        .column-full(10);
+      }
+    }
+  }
+}
+
+// @TODO: Define styles for large displays.
+.xLargeUp() {
+  .page-wrapper {
+    .row-wrapper(16);
+    position: relative;
+  }
+
+  .main-header {
+    .site-name-wrapper {
+      width: 50%;
+      float: left;
+    }
+    .site-name {
+      font-size: 1em;
+    }
+    .header-items {
+      width: 50%;
+      float: right;
+      text-align: right;
+    }
+  }
+
+  .layout-right-sidebar {
+    .group-left {
+      .column(12);
+      .first-child-column();
+    }
+    .group-right {
+      .column(4);
+      .last-child-column();
+    }
+  }
+
+  .homepage-welcome-block {
+    .column(8);
+    .first-child-column();
+  }
+  .homepage-form-block {
+    .column(8);
+    .last-child-column();
+  }
+}
+
+@import './lib/custom-grid.less';
+@import './lib/custom-responsive.less';
+@import './lib/helpers.less';

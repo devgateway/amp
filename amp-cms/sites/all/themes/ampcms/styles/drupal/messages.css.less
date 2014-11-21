@@ -1,0 +1,109 @@
+/**
+ * @file
+ * Style for system messages.
+ *
+ * Used Modernizr tests:
+ *   .mdzr-boxshadow
+ *   .mdzr-svg
+ */
+
+.messages {
+  background: no-repeat 0.5em 50%;  /* LTR */
+  border: @border_width solid transparent;
+  border-radius: @border_width * 2;
+  margin-bottom: 1em;
+  padding: 1em;
+  padding-left: 2.5em; /* LTR */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+
+  & > ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .mdzr-box-shadow & {
+    border-left-width: 0;  /* LTR */
+  }
+
+  pre {
+    margin: 0;
+  }
+  li + li {
+    margin-top: 0.5em;
+  }
+  a {
+    .link-color(@clanchor, @clanchor__active, @clanchor__visited, @clanchor__hover);
+  }
+}
+
+.messages.status {
+  background-image: url(~"@{theme_path}images/icons/check.svg");
+  border-color: @clstatus__faded;
+
+  .mdzr-boxshadow & {
+    box-shadow: -0.5em 0 0 @clstatus__alt; /* LTR */
+    margin-left: 0.5em; /* LTR */
+  }
+  .mdzr-no-boxshadow & {
+    border-left-width: 0.5em; /* LTR */
+  }
+  .mdzr-no-svg & {
+    background-image: url(~"@{theme_path}images/icons/check.png");
+  }
+}
+.messages.status,
+.ok {
+  color: @clstatus__dark;
+}
+.messages.status {
+  background-color: @clstatus__light;
+}
+
+.messages.warning {
+  background-image: url(~"@{theme_path}images/icons/warning.svg");
+  border-color: @clwarning__faded;
+
+  .mdzr-boxshadow & {
+    box-shadow: -0.5em 0 0 @clwarning__alt; /* LTR */
+    margin-left: 0.5em; /* LTR */
+  }
+  .mdzr-no-boxshadow & {
+    border-left-width: 0.5em; /* LTR */
+  }
+  .mdzr-no-svg & {
+    background-image: url(~"@{theme_path}images/icons/warning.png");
+  }
+}
+.messages.warning,
+.warning {
+  color: @clwarning__dark;
+}
+.messages.warning {
+  background-color: @clwarning__light;
+}
+
+.messages.error {
+  background-image: url(~"@{theme_path}images/icons/error.svg");
+  border-color: @clerror__faded;
+
+  .mdzr-boxshadow & {
+    box-shadow: -0.5em 0 0 @clerror; /* LTR */
+    margin-left: 0.5em; /* LTR */
+  }
+  .mdzr-no-boxshadow & {
+    border-left-width: 0.5em; /* LTR */
+  }
+  .mdzr-no-svg & {
+    background-image: url(~"@{theme_path}images/icons/error.png");
+  }
+}
+.messages.error,
+.error {
+  color: @clerror__dark;
+}
+.messages.error {
+  background-color: @clerror__light;
+}
+
+@import '../lib/helpers.less';

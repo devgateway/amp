@@ -1,0 +1,123 @@
+<?php
+
+/**
+ * Implements hook_menu().
+ */
+function less_demo_menu() {
+  $items = array();
+
+  $items['admin/config/development/less/demo'] = array(
+    'title' => 'LESS Demo',
+    'description' => 'Demonstration for less features',
+    'page callback' => '_less_demo_page',
+    'access arguments' => array(LESS_PERMISSION),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_admin_paths().
+ */
+function less_demo_admin_paths() {
+  return array(
+    'admin/config/development/less/demo' => FALSE,
+  );
+}
+
+/**
+ * Implements hook_less_variables().
+ */
+function less_demo_less_variables() {
+  return array(
+    '@test' => '#ccc',
+  );
+}
+
+/**
+ * Implements hook_less_variables_alter().
+ */
+function less_demo_less_variables_alter(&$less_variables, $system_name) {
+  if ($system_name == 'less_demo') {
+    
+  }
+}
+
+/**
+ * Implements hook_less_variables_SYSTEM_NAME_alter().
+ */
+function less_demo_less_variables_less_demo_alter(&$less_variables) {
+  
+}
+
+/**
+ * Implements hook_less_functions().
+ */
+function less_demo_less_functions() {
+  return array(
+    'swap' => '_less_demo_reverse',
+  );
+}
+
+/**
+ * Implements hook_less_functions_alter().
+ */
+function less_demo_less_functions_alter(&$less_functions, $system_name) {
+  if ($system_name == 'less_demo') {
+    
+  }
+}
+
+/**
+ * Implements hook_less_functions_SYSTEM_NAME_alter().
+ */
+function less_demo_less_functions_less_demo_alter(&$less_functions) {
+  
+}
+
+/**
+ * LESS function that takes a series of arguments and reverses their order.
+ */
+function _less_demo_reverse($arg) {
+  list($type, $delimeter, $value) = $arg;
+  
+  if ($type == 'list') {
+    $arg = array($type, $delimeter, array_reverse($value));
+  }
+  
+  return $arg;
+}
+
+/**
+ * Callback that provides styleable content for demonstration purposes. 
+ */
+function _less_demo_page() {
+  global $theme;
+  
+  $file_less_settings = array(
+    'variables' => array(
+      '@gradient_end' => '#bada55',
+    ),
+  );
+  
+  drupal_add_css(drupal_get_path('module', 'less_demo') . '/styles/less_demo.drupal_add_css.css.less', array('less' => $file_less_settings));
+  
+  $output = array(
+    '#prefix' => '<div id="less_demo_gradient">',
+    '#suffix' => '</div>'
+  );
+  
+  $output['less_demo_logo'] = array(
+    '#type' => 'markup',
+    '#markup' => '<div class="less_demo_logo"></div>',
+  );
+  
+  $output['less_demo_theme_link'] = array(
+    '#type' => 'markup',
+    '#markup' => '<p>' . l('Configure current theme', 'admin/appearance/settings/' . $theme) . '</p>',
+  );
+  
+  return $output;
+}

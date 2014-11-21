@@ -1,0 +1,796 @@
+<?php
+
+/**
+ * @file
+ * Defines a standard REST interface to RESTful services
+ */
+
+
+// List of possible libraries to use with the RESTClient
+// Default is 'curl', but you can also use 'drupal' as an option to use
+// drupal_http_request instead (some features are unavailable when 'drupal'
+// is set)
+define('RESTCLIENT_LIBRARY_CURL', 'curl');
+define('RESTCLIENT_LIBRARY_DRUPAL', 'drupal');
+define('RESTCLIENT_FILES_SYSTEM', 'file');
+
+// Response code classes
+define('RESTCLIENT_RESPONSE_INFORMATIONAL', '1');
+define('RESTCLIENT_RESPONSE_SUCCESS', '2');
+define('RESTCLIENT_RESPONSE_REDIRECTION', '3');
+define('RESTCLIENT_RESPONSE_CLIENT_ERROR', '4');
+define('RESTCLIENT_RESPONSE_SERVER_ERROR', '5');
+
+// Store the desired library to use with the RESTClient functions
+define('RESTCLIENT_ACTIVE_LIBRARY', variable_get('restclient_active_library', RESTCLIENT_LIBRARY_DRUPAL));
+
+/**
+ * Implements hook_permission().
+ */
+function restclient_permission() {
+  return array(
+    'administer restclient' =>  array(
+      'title' => t('Administer REST Client'),
+      'description' => t('Perform administration tasks for REST Client.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_flush_caches().
+ */
+function restclient_flush_caches() {
+  return array('cache_restclient');
+}
+
+/**
+ * Implements hook_menu().
+ */
+function restclient_menu() {
+  $items = array();
+
+  // Administrative links
+  $items['admin/config/services/restclient'] = array(
+    'description' => 'Configure a location to make REST calls',
+    'title' => 'REST Client',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('restclient_admin_settings'),
+    'access arguments' => array('administer restclient'),
+    'file' => 'restclient.admin.inc',
+  );
+  return $items;
+}
+
+/**
+ * Analyze the response code from a request
+ *
+ * @param object $response [reference]
+ *  Response object
+ * @return string
+ *  Returns the class of response code, FALSE otherwise.
+ */
+function restclient_response_code(&$response) {
+  // Classify the response code
+  if (isset($response->code)) {
+    if (intval($response->code) >= 100) {
+      switch (intval(floor(intval($response->code) / 100))) {
+        case 1:
+          return RESTCLIENT_RESPONSE_INFORMATIONAL;
+        case 2:
+          return RESTCLIENT_RESPONSE_SUCCESS;
+        case 3:
+          return RESTCLIENT_RESPONSE_REDIRECTION;
+        case 4:
+          return RESTCLIENT_RESPONSE_CLIENT_ERROR;
+        case 5:
+          return RESTCLIENT_RESPONSE_SERVER_ERROR;
+        default:
+          return FALSE;
+      }
+    }
+  }
+
+  return FALSE;
+}
+
+/**
+ * Implements hook_wsconfig_connector_info().
+ */
+function restclient_wsconfig_connector_info() {
+  return array(
+    'restclient' => array(
+      'name' => 'REST Client',
+      'class' => 'restclient_wsconnector',
+    ),
+  );
+}
+
+/**
+ * Make a GET request
+ *
+ * @param string resource_path
+ *   The path to the REST method.
+ *
+ *  You can include wildcards in the string
+ *  which will be filled in by the $parameters array.
+ *  Ex: /Courses/%session
+ *
+ * @param array $variables
+ *  An array of variables with the following keys:
+ *
+ * endpoint [optional] : URL or hostname to the REST root. Specify a value to override the default
+ * configuration
+ *
+ * parameters [optional] : Key/value pairs of parameters to inject into the resource path to replace dynamic values
+ * Ex: array('%session' => 20111)
+ *
+ * query [optional] : Key/value pairs of query string parameters
+ * Ex: array('personid' => 2896263)
+ *
+ * headers [optional] : Key/value pairs of extra header data to include in the request
+ *
+ * retry [optional] : Number of retries. Defaults to 3
+ *
+ * timeout [optional] : Timeout in seconds. Defaults to 30
+ *
+ * reset [optional] : Boolean flag to reset the cache. Defaults to FALSE.
+ *
+ * @return object
+ *  Returns an object containing the response data, FALSE otherwise.
+ */
+function restclient_get($resource_path, $variables = array()) {
+  return _restclient_request($resource_path, $variables, 'GET');
+}
+
+/**
+ * Make a POST request
+ *
+ * @param string resource_path
+ *   The path to the REST method.
+ *
+ *  You can include wildcards in the string
+ *  which will be filled in by the $parameters array.
+ *  Ex: /Courses/%session
+ *
+ * @param array $variables
+ *  An array of variables with the following keys:
+ *
+ * endpoint [optional] : URL or hostname to the REST root. Specify a value to override the default
+ *  configuration
+ *
+ *  parameters [optional] : Key/value pairs of parameters to inject into the resource path
+ *  Ex: array('%session' => 20111)
+ *
+ * headers [optional] : Key/value pairs of extra header data to include in the request
+ *
+ * data [optional] : Key/value pairs of data to include in the request body of the request
+ *
+ * body [optional] : Raw body data to include in the post body. This will be sent as is.
+ *
+ * multipart [optional] : Whether to treat your data as a multipart request
+ *  If TRUE, your data should be formatted as follows
+ *  'data' => array('fid' => $fid, 'some text', 'some more text')
+ *
+ *  The $fid value is a Drupal file id. A key of 'file' is required to denote
+ *  file data so the API can treat it as a file accordingly.
+ *
+ * retry [optional] : Number of retries. Defaults to 3
+ *
+ * timeout [optional] : Timeout in seconds. Defaults to 30
+ *
+ * reset [optional] : Boolean flag to reset the cache. Defaults to FALSE.
+ *
+ * @return object
+ *  Returns an object containing the response data, FALSE otherwise.
+ *
+ * @see http://en.wikipedia.org/wiki/POST_%28HTTP%29
+ * @see http://api.drupal.org/api/drupal/includes--common.inc/function/drupal_http_request
+ */
+function restclient_post($resource_path, $variables = array()) {
+  return _restclient_request_with_body($resource_path, $variables, 'POST');
+}
+
+/**
+ * Make a PUT request
+ *
+ * @param string resource_path
+ *   The path to the REST method.
+ *
+ *  You can include wildcards in the string
+ *  which will be filled in by the $parameters array.
+ *  Ex: /Courses/%session
+ *
+ * @param array $variables
+ *  An array of variables with the following keys:
+ *
+ * endpoint [optional] : URL or hostname to the REST root. Specify a value to override the default
+ *  configuration
+ *
+ *  parameters [optional] : Key/value pairs of parameters to inject into the resource path
+ *  Ex: array('%session' => 20111)
+ *
+ * headers [optional] : Key/value pairs of extra header data to include in the request
+ *
+ * data [optional] : Key/value pairs of data to include in the request body of the request
+ *
+ * body [optional] : Raw body data to include in the post body. This will be sent as is.
+ *
+ * multipart [optional] : Whether to treat your data as a multipart request
+ *  If TRUE, your data should be formatted as follows
+ *  'data' => array('fid' => $fid, 'some text', 'some more text')
+ *
+ *  The $fid value is a Drupal file id. A key of 'file' is required to denote
+ *  file data so the API can treat it as a file accordingly.
+ *
+ * retry [optional] : Number of retries. Defaults to 3
+ *
+ * timeout [optional] : Timeout in seconds. Defaults to 30
+ *
+ * reset [optional] : Boolean flag to reset the cache. Defaults to FALSE.
+ *
+ * @return object
+ *  Returns an object containing the response data, FALSE otherwise.
+ *
+ * @see http://en.wikipedia.org/wiki/POST_%28HTTP%29
+ * @see http://api.drupal.org/api/drupal/includes--common.inc/function/drupal_http_request
+ */
+function restclient_put($resource_path, $variables = array()) {
+  return _restclient_request_with_body($resource_path, $variables, 'PUT');
+}
+
+/**
+ * Make a DELETE request
+ *
+ * @param string resource_path
+ *   The path to the REST method.
+ *
+ *  You can include wildcards in the string
+ *  which will be filled in by the $parameters array.
+ *  Ex: /Courses/%session
+ *
+ * @param array $variables
+ *  An array of variables with the following keys:
+ *
+ * endpoint [optional] : URL or hostname to the REST root. Specify a value to override the default
+ * configuration
+ *
+ * parameters [optional] : Key/value pairs of parameters to inject into the resource path to replace dynamic values
+ * Ex: array('%session' => 20111)
+ *
+ * query [optional] : Key/value pairs of query string parameters
+ * Ex: array('personid' => 2896263)
+ *
+ * headers [optional] : Key/value pairs of extra header data to include in the request
+ *
+ * retry [optional] : Number of retries. Defaults to 3
+ *
+ * timeout [optional] : Timeout in seconds. Defaults to 30
+ *
+ * reset [optional] : Boolean flag to reset the cache. Defaults to FALSE.
+ *
+ * @return object
+ *  Returns an object containing the response data, FALSE otherwise.
+ */
+function restclient_delete($resource_path, $variables = array()) {
+  return _restclient_request($resource_path, $variables, 'DELETE');
+}
+
+/**
+ * Basic request with no body data.
+ *
+ * Compatible with GET, DELETE, OPTION, and TRACE requests.
+ */
+function _restclient_request(&$resource_path, &$variables = array(), $type = 'GET') {
+  // List of cacheable requests
+  $cacheable = array('GET', 'OPTION');
+
+  // Map variables
+  _restclient_map_variables($variables);
+
+  // Cache reset
+  $reset = $variables['reset'];
+
+  // Set the method
+  $variables['method'] = $type;
+
+  // Prepare the URL parameters
+  if (!empty($variables['parameters'])) {
+    _restclient_prepare_url_parameters($resource_path, $variables);
+  }
+
+  // Build the URL
+  $url = _restclient_build_resource_path($resource_path, $variables);
+
+  // We only cache certain requests
+  if (in_array($type, $cacheable)) {
+    // Generate the cache id
+    $cid = _restclient_generate_cid($type, $url, $variables['headers']);
+
+    // Check the cache
+    if (!$reset) {
+      $data = cache_get($cid, 'cache_restclient');
+      if (!empty($data) and REQUEST_TIME < $data->expire) {
+        return $data->data;
+      }
+    }
+  }
+
+  // Make the HTTP request
+  switch (RESTCLIENT_ACTIVE_LIBRARY) {
+    case RESTCLIENT_FILES_SYSTEM:
+      module_load_include('inc', 'restclient', 'restclient.filemode');
+      $response = restclient_filemode_fetch_response($url, $variables);
+    break;
+    case RESTCLIENT_LIBRARY_CURL:
+      $response = chr_curl_http_request($url, $variables);
+    break;
+    case RESTCLIENT_LIBRARY_DRUPAL:
+    default;
+      $response = drupal_http_request($url, $variables);
+  }
+
+  if (variable_get("restclient_debug", FALSE)) {
+    // Temporarily add the response to the variables for display
+    $variables['response'] = $response;
+    $variables['resource_path'] = $resource_path;
+    _restclient_debug($variables);
+
+    // Cleanup
+    unset($variables['response']);
+    unset($variables['resource_path']);
+  }
+
+  if (variable_get("restclient_testing", FALSE)) {
+    if (RESTCLIENT_ACTIVE_LIBRARY != RESTCLIENT_FILES_SYSTEM) {
+      module_load_include('inc', 'restclient', 'restclient.filemode');
+      restclient_filemode_save_response($response, $url, $variables);
+    }
+  }
+
+
+  // Check the response
+  if (!isset($response->error)) {
+    if (in_array($type, $cacheable)) {
+
+      // Add default overrides if not set
+      if (!isset($variables['cache_default_time'])) {
+        $variables['cache_default_time'] = 0;
+      }
+
+      if (!isset($variables['cache_default_override'])) {
+        $variables['cache_default_override'] = FALSE;
+      }
+
+      // Cache the response
+      if (!empty($response->headers['expires']) and !$variables['cache_default_override']) {
+        $expires = strtotime($response->headers['expires']);
+        if (time() < $expires) {
+          $response->expires = $expires;
+          cache_set($cid, $response, 'cache_restclient', $expires);
+        }
+      } elseif ($variables['cache_default_time'] > 0) {
+        $response->expires = time() + $variables['cache_default_time'];
+        cache_set($cid, $response, 'cache_restclient', time() + $variables['cache_default_time']);
+      }
+    }
+    // No error occured, return the response
+    return $response;
+  }
+
+  // Log the error
+  if (variable_get('restclient_watchdog', TRUE)) {
+    _restclient_watchdog($type, $response->code,  $response->error, $url);
+  }
+
+  // If error handling is set, return the response anyway, otherwise return FALSE
+  if (isset($variables['error_handling']) and $variables['error_handling']) {
+    return $response;
+  }
+  return FALSE;
+}
+
+/**
+ * Requests with body data.
+ *
+ * Compatible with POST and PUT
+ */
+function _restclient_request_with_body(&$resource_path, &$variables = array(), $type = 'POST') {
+
+  // Map variables
+  _restclient_map_variables($variables);
+
+  // Prepare any URL parameters
+  if (!empty($variables['parameters'])) {
+    _restclient_prepare_url_parameters($resource_path, $variables);
+  }
+
+  // Set the method
+  $variables['method'] = $type;
+
+  // Append raw body data
+  if (!empty($variables['body'])) {
+    $variables['data'] = $variables['body'];
+  }
+  else {
+    // Prepare any data variables
+    _restclient_prepare_post_data($variables);
+  }
+
+  // Build the URL
+  $url = _restclient_build_resource_path($resource_path, $variables);
+
+  switch (RESTCLIENT_ACTIVE_LIBRARY) {
+    case RESTCLIENT_LIBRARY_CURL:
+      $response = chr_curl_http_request($url, $variables);
+    break;
+    case RESTCLIENT_LIBRARY_DRUPAL:
+    default;
+      $response = drupal_http_request($url, $variables);
+  }
+
+  if (variable_get("restclient_debug", FALSE)) {
+    // Temporarily add the response to the variables for display
+    $variables['response'] = $response;
+    $variables['resource_path'] = $resource_path;
+    _restclient_debug($variables);
+
+    // Cleanup
+    unset($variables['response']);
+    unset($variables['resource_path']);
+  }
+
+  if (!isset($response->error) || (isset($response->errno) and $response->errno == 0)) {
+    // No error occured, return the response
+    return $response;
+  }
+  // Log the error
+  _restclient_watchdog($type, $response->code,  $response->error, $url, $response);
+
+  // If error handling is set, return the response anyway, otherwise return FALSE
+  if (isset($variables['error_handling']) and $variables['error_handling']) {
+    return $response;
+  }
+  return FALSE;
+}
+
+/**
+ * Encodes and appends any URL parameters to the resource path
+ *
+ * @param string $resource_path [reference]
+ *  Resource path
+ * @param array $parameters [reference]
+ *  Array of URL parameters
+ *
+ */
+function _restclient_prepare_url_parameters(&$resource_path, &$variables) {
+  // URL Encode all parameters
+  foreach ($variables['parameters'] as $key => $param) {
+    $variables['parameters'][$key] = urlencode($param);
+  }
+
+  // Add the parameters to the resource path
+  if (!empty($variables['parameters'])) {
+    $resource_path = strtr($resource_path, $variables['parameters']);
+  }
+}
+
+/**
+ * Prepare put body data
+ *
+ * @see _restclient_prepare_post_data().
+ */
+function _restclient_prepare_put_data(&$variables) {
+  _restclient_prepare_post_data($variables);
+}
+
+/**
+ * Encodes and sanitizes and body data
+ *
+ * @param array $variables [reference]
+ * $variables['headers']
+ *  Current set of headers
+ * $variables['data']
+ *  Data to include in the POST request
+ * $variables['multipart'] [optional]
+ *  Treat the data as a multipart request
+ */
+function _restclient_prepare_post_data(&$variables) {
+
+  if (!isset($variables['data'])) {
+    $variables['data'] = array();
+  }
+
+  // Detect content type
+  if (empty($variables['headers']['Content-Type'])) {
+    $variables['headers']['Content-Type'] = 'application/x-www-form-urlencoded';
+  }
+  else {
+    // @todo detect which content type is set in the headers
+    // Encode based on that. If we don't know what it is, default to 'Content-Type' => 'application/x-www-form-urlencoded'
+    // If the body is preset, leave the text as is.
+  }
+
+  // Check the library in use. If curl is set, let curl handle the post
+  // data automatically. Otherwise, parse the data for drupal_http_request
+  $body = '';
+  if (RESTCLIENT_LIBRARY_DRUPAL == RESTCLIENT_ACTIVE_LIBRARY) {
+    if (!empty($variables['multipart']) && FALSE !== $variables['multipart']) {
+      // Build the boundary
+      $boundary = uniqid();
+
+      // Set the new header data
+      $variables['headers']['Content-Type'] = "multipart/form-data; boundary=$boundary";
+
+      // Build the multipart data
+      _restclient_multipart_encode($variables['data'], $boundary);
+    }
+    else {
+      // Build the body string
+      foreach ($variables['data'] as $param => $value) {
+        $body .= urlencode($param) . '=' . urlencode($value) . '&';
+      }
+
+      // Set the value of data to the new string
+      $variables['data'] = $body;
+    }
+  }
+  elseif (RESTCLIENT_LIBRARY_CURL == RESTCLIENT_ACTIVE_LIBRARY) {
+    // Build the body string
+    foreach ($variables['data'] as $param => $value) {
+      $body .= urlencode($param) . '=' . urlencode($value) . '&';
+    }
+
+    // Check for a file upload and add the '@' sign accordingly
+    // @see http://php.net/function.curl-setopt.php
+    if (isset($variables['data']['fid'])) {
+      $file = file_load($variables['data']['fid']);
+
+      // @todo check the user's access to this file
+
+      if (isset($file->fid) && isset($file->status) && $file->status == 1) {
+        // Load the file
+        $file_content = file_get_contents(drupal_realpath($file->uri));
+        $variables['data']['fid'] = '@' . drupal_realpath($file->uri);
+      }
+    }
+
+    // Set the value of data to the new string
+    $variables['data'] = $body;
+  }
+}
+
+/**
+ * Build the multipart encoded header data
+ *
+ * @param array $data [reference]
+ *  Array of parameters to encode. Also the return data.
+ * @param string $boundary [optional]
+ *  Boundary string
+ *
+ *  If not value is specified, a string will be generated
+ */
+function _restclient_multipart_encode(&$data, $boundary = NULL) {
+
+  // Copy the current parameters into a new variables
+  // We use the $data reference to store the result. We use a reference to
+  // avoid creating copies of large variables in memory. The file encode
+  // function loads a complete file into memory as a string. We have to be
+  // careful to avoid hitting memory limits.
+  $params = $data;
+
+  // Reset the data container
+  $data = '';
+
+  // Check the boundary text
+  if (is_null($boundary)) {
+    $boundary = uniqid("", TRUE);
+  }
+
+  foreach ($params as $key => $value) {
+    // Check the type of data to be encoded
+    if ($key == 'fid') {
+      // @todo add support for an array of fids
+      $file_encode = _restclient_multipart_encode_file($value);
+      // Check the encoding
+      if (FALSE !== $file_encode) {
+        // Build the data
+        $data .= "--$boundary\r\n";
+        $data .= $file_encode;
+        $data .="\r\n--$boundary--";
+
+        // Clean up some memory
+        unset($file_encode);
+      }
+    }
+    // Treat the data as text
+    else {
+      $text_encode = _restclient_multipart_encode_text($key, $value);
+      // Check the encoding
+      if (FALSE !== $text_encode) {
+        // Build the data
+        $data .= "--$boundary\r\n";
+        $data .= $text_encode;
+
+        // Clean up some memory
+        unset($text_encode);
+      }
+    }
+  }
+
+  // Check that the data isn't empty and mark the last boundary
+  if (!empty($data)) {
+    $data .="--$boundary--";
+  }
+}
+
+/**
+ * Multipart encode the given text
+ *
+ * @param string $name
+ *  Name of the text
+ * @param string $text
+ *  Text string
+ * @return string
+ *  Returns the header string.
+ */
+function _restclient_multipart_encode_text($name, $text) {
+  return "Content-Disposition: form-data; name=\"$name\"\r\n\r\n$text\r\n";
+}
+
+/**
+ * Debug function
+ */
+function _restclient_debug($options = array()) {
+  // @todo add watchdog logging on top of dpm output
+  if (module_exists('devel')) {
+    dpm($options);
+  }
+  else {
+    debug($options, 'RESTClient Debug', TRUE);
+  }
+ // @todo add debug output to use with SimpleTest
+}
+
+/**
+ * Generate the cache id for a given request
+ *
+ * @param array $variables
+ *  Request variables
+ * @return string|boolean
+ *  Returns a unique string to be used as a cache id, FALSE otherwise.
+ */
+function _restclient_generate_cid($method, $url, $headers) {
+  $cid = '';
+  if (empty($headers)) {
+    $cid = $method . ':' . $url;
+  }
+  else {
+    $cid = $method . ':' . $url . ':' . serialize($headers);
+  }
+
+  // Do not use drupal_strlen() here.
+  if (strlen($cid) > 255) {
+    $cid = $method . ':' . hash('sha512', $cid);
+  }
+
+  return $cid;
+}
+
+/**
+ * Map the variable values and defaults
+ *
+ * @param array $variables [reference]
+ */
+function _restclient_map_variables(&$variables) {
+  // Map variables
+
+  // Endpoint
+  if (!empty($variables['endpoint'])) {
+    // Do nothing
+  }
+  else {
+    $variables['endpoint'] = variable_get('restclient_hostname', 'http://localhost:80/rest');
+  }
+
+  // Retry
+  if (isset($variables['retry']) && is_numeric($variables['retry']) && intval($variables['retry']) >= 0) {
+    // Do nothing
+  }
+  else {
+    $variables['retry'] = 3;
+  }
+
+  // Timeout
+  if (isset($variables['timeout']) && is_numeric($variables['timeout']) && intval($variables['timeout']) >= 0) {
+    // Do nothing
+  }
+  else {
+    $variables['timeout'] = 30;
+  }
+
+  // Cache reset
+  $variables['reset'] = isset($variables['reset']) ? $variables['reset'] : FALSE;
+
+  // Headers
+  if (isset($variables['headers']) and is_array($variables['headers'])) {
+    // Do nothing
+  }
+  else {
+    $variables['headers'] = array();
+  }
+
+  // Additional headers
+  $additional_headers = variable_get('restclient_additional_headers', FALSE);
+  if ($additional_headers and is_array($additional_headers)) {
+    $variables['headers'] = array_merge($additional_headers, $variables['headers']);
+  }
+}
+
+/**
+ * Build the URL to connect to
+ *
+ * @param string $resource_path
+ *  Base path
+ * @param array $variables
+ *  Configuration variables
+ * @return string
+ *  Returns a full URL
+ */
+function _restclient_build_resource_path(&$resource_path, &$variables) {
+  if (!empty($resource_path)) {
+    $url = $variables['endpoint'] . '/' . $resource_path;
+  }
+  else {
+    $url = $variables['endpoint'];
+  }
+
+  // Set the options to be used by url()
+  $options = array(
+    'query' => isset($variables['query']) ? $variables['query'] : '',
+    // 'fragment' => $variables['fragment'], @todo add fragment support
+    'absolute' => TRUE,
+    'alias' => TRUE,
+    'external' => TRUE,
+  );
+
+  // @todo find a way to skip hook_url_outbound or migrate url() function
+  // to internal function
+  $url = url($url, $options);
+
+  return $url;
+}
+
+function _restclient_watchdog($method, $code, $error, $url, $extra = array()) {
+  $debug = "";
+  if (!empty($extra)) {
+    $debug .= "\n" . print_r($extra, TRUE);
+  }
+
+  // @todo add support for devel watchdog functions
+
+  watchdog(
+    'restclient',
+    'Error making @method request (@code @message): @url @debug',
+    array(
+      '@method' => $method,
+      '@code' => $code,
+      '@message' => $error,
+      '@url' => $url,
+      '@debug' => $debug,
+    ),
+    WATCHDOG_ERROR
+  );
+}
+
+/**
+ * hook to define the list of elements to include in in the file signature.
+ *
+ * @return array
+ *  Return an array of elements to be used for the file signature.
+ */
+function restclient_filemode_signature_alter() {
+  return array(
+    'headers',
+    'method',
+  );
+}

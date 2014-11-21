@@ -1,0 +1,218 @@
+<?php
+/**
+ * @file
+ * Provides an EFQ handler pointing to the AMP API.
+ */
+
+/**
+ * Executes an EntityFieldQuery onto an AMP API endpoint.
+ *
+ * @see EntityFieldQuery::executeCallback()
+ *
+ * @param EntityFieldQuery $query
+ *
+ * @return array
+ */
+function ampapi_execute_query(EntityFieldQuery $query) {
+  if (empty($query->entityConditions['entity_type']['value'])) {
+    throw new ampAPIEntityQueryHelperException(t('An entity type must be specified.'));
+  }
+  $entity_type = $query->entityConditions['entity_type']['value'];
+
+  $api_query_helper = new ampAPIEntityQueryHelper($entity_type);
+  return $api_query_helper->executeQuery($query);
+}
+
+/**
+ *  Implements hook_ctools_plugin_type().
+ */
+function ampapi_ctools_plugin_type() {
+  $plugins['mapper'] = array(
+    'cache' => TRUE,
+  );
+
+  return $plugins;
+}
+
+/**
+ * Fetch metadata on a specific mapper plugin.
+ *
+ * @param $mapper
+ *   Name of an activity filter.
+ *
+ * @return
+ *   An array with information about the requested activity filter.
+ */
+function ampapi_get_mapper($mapper) {
+  ctools_include('context');
+  ctools_include('plugins');
+  return ctools_get_plugins('ampapi', 'mapper', $mapper);
+}
+
+/**
+ * Fetch mapper plugin metadata for a specific property.
+ *
+ * @param $mapper
+ *   Name of an activity filter.
+ *
+ * @return
+ *   An array with information about the requested activity filter.
+ */
+function ampapi_get_mapper_by_property_name($property_name) {
+  if ($property_name == 'entity_id') {
+    $property_name = 'id';
+  }
+
+  $mappers = ampapi_get_mappers();
+  foreach ($mappers as $key => $plugin) {
+    if (empty($plugin['property name'])) {
+      continue;
+    }
+
+    if ($plugin['property name'] == $property_name) {
+      return $plugin;
+    }
+  }
+}
+
+/**
+ * Fetch metadata for all mapper plugins.
+ *
+ * @return
+ *   An array of arrays with information about all available activity filters.
+ */
+function ampapi_get_mappers() {
+  ctools_include('context');
+  ctools_include('plugins');
+  return ctools_get_plugins('ampapi', 'mapper');
+}
+
+/**
+ * Renturs a list information about AMP document fields.
+ */
+function ampapi_get_schema_info($entity_type) {
+  $info = entity_get_info($entity_type);
+  if (in_array('ampAPISchemaInterface', class_implements($info['controller class']))) {
+    // Manually call static public method.
+    return call_user_func_array(array($info['controller class'], 'schemaInfo'), array());
+  }
+
+  return array();
+}
+
+/**
+ * Access callback for custom AMP entities.
+ */
+function ampapi_entity_access($op, $entity = NULL, $account = NULL, $entity_type) {
+  $rights = &drupal_static(__FUNCTION__, array());
+
+  $operations = array('administer', 'access overview', 'create', 'view', 'edit', 'delete');
+  if (!in_array($op, $operations, TRUE)) {
+    // If the $op was not one of the supported ones, we return access denied.
+    return FALSE;
+  }
+
+  // If no user object is supplied, the access check is for the current user.
+  if (empty($account)) {
+    $account = $GLOBALS['user'];
+  }
+
+  $cid = is_object($entity) ? $entity_type . ':' . $entity->identifier() : FALSE;
+
+  // If we've already checked access for this node, user and op, return from cache.
+  if ($cid && isset($rights[$account->uid][$cid][$op])) {
+    return $rights[$account->uid][$cid][$op];
+  }
+
+  if ($op == 'view') {
+    if (empty($cid)) {
+      return FALSE;
+    }
+
+    $allow = FALSE;
+    $property_info = entity_get_property_info($entity_type);
+
+    if (!array_key_exists('status', $property_info['properties'])) {
+      // Always allow access to entities that don't have a status field.
+      // @see fbcentity_question_access().
+      $allow = TRUE;
+    }
+    else if (user_access("$entity_type entity administer") || user_access("$entity_type entity access overview")) {
+      $allow = TRUE;
+    }
+    else if ($entity->status && user_access("$entity_type entity $op")) {
+      $allow = TRUE;
+    }
+
+    $rights[$account->uid][$cid][$op] = $allow;
+    return $allow;
+  }
+
+  if (user_access("$entity_type entity $op")) {
+    if ($cid) {
+      $rights[$account->uid][$cid][$op] = TRUE;
+    }
+    return TRUE;
+  }
+
+  if ($cid) {
+    $rights[$account->uid][$cid][$op] = FALSE;
+  }
+  return FALSE;
+}
+
+
+function ampapi_request($type, $endpoint, $options = array()) {
+  global $language_content;
+  $langcode = $language_content->language;
+
+  $options += array('reset' => TRUE, 'error_handling' => TRUE);
+
+  $parameters = array();
+  if (!empty($langcode) && $langcode != LANGUAGE_NONE) {
+    $parameters['language'] = $langcode;
+  }
+
+  if ($type == 'get') {
+    $url = $endpoint . '?' . drupal_http_build_query($parameters);
+    $response = restclient_get($endpoint . '?' . drupal_http_build_query($parameters), $options);
+  }
+  else if ($type == 'post') {
+    $response = restclient_post($endpoint . '?' . drupal_http_build_query($parameters), $options);
+  }
+
+  if (empty($response)) {
+    drupal_set_message(t('The API returned an empty response, please try again later.'), 'error');
+    return array();
+  }
+
+  // @TODO: Add support for more 200 class response codes.
+  if (restclient_response_code($response) != RESTCLIENT_RESPONSE_SUCCESS) {
+    $t_args = array();
+    if (!empty($response->error)) {
+      $t_args['%message'] = $response->error;
+    }
+    else if (!empty($response->status_message)) {
+      $t_args['%message'] = $response->status_message;
+    }
+    drupal_set_message(t('The API returned the following status message: %message', $t_args), 'error');
+    return array();
+  }
+  if (empty($response) || empty($response->data)) {
+    drupal_set_message(t('The API returned an empty response, please try again later.'), 'error');
+    return array();
+  }
+
+  $response_data = json_decode($response->data);
+  if (!empty($response_data->error)) {
+    foreach ($response_data->error as $error_message) {
+      $t_args = array(
+        '%message' => check_plain($error_message),
+      );
+      drupal_set_message(t('The API returned the following error message: %message', $t_args), 'error');
+    }
+    return array();
+  }
+
+  return $response_data;
+}

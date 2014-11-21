@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the AMP Entity Type Blog entry feature.
+ */
+
+include_once 'ampet_blog.features.inc';

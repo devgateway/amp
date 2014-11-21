@@ -1,0 +1,20 @@
+diff --git a/entityqueue.module b/entityqueue.module
+index a37773e..a941f0e 100644
+--- a/entityqueue.module
++++ b/entityqueue.module
+@@ -959,6 +959,15 @@ function entityqueue_field_widget_form(&$form, &$form_state, $field, $instance,
+       ),
+     );
+ 
++    if (!empty($instance['description'])) {
++      $subform['description'] = array(
++        '#markup' => t(field_filter_xss($instance['description'])),
++        '#prefix' => '<div class="description">',
++        '#suffix' => '</div>',
++        '#weight' => 11,
++      );
++    }
++
+     $subform['#element_validate'] = array('entityqueue_widget_dragtable_element_validate');
+     return $subform;
+   }

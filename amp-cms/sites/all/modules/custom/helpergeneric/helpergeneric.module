@@ -1,0 +1,720 @@
+<?php
+/**
+ * @file
+ * Define generic settings.
+ */
+
+module_load_include('inc', 'helpergeneric', 'helpergeneric.field');
+module_load_include('inc', 'helpergeneric', 'helpergeneric.forms');
+
+/**
+ * Implements hook_menu().
+ */
+function helpergeneric_menu() {
+  $items = array();
+
+  $items['admin/info'] = array(
+    'title' => 'Information',
+    'description' => 'Information for editors and admins.',
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('helpergeneric access info'),
+    'weight' => 30,
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+
+  $items['admin/settings'] = array(
+    'title' => 'Settings',
+    'description' => 'Administer Project settings.',
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('helpergeneric administer settings'),
+    'weight' => 30,
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+
+  $items['admin/settings/ui'] = array(
+    'title' => 'UI Settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('helpergeneric_ui_settings_form'),
+    'access arguments' => array('helpergeneric administer settings'),
+    'file' => 'helpergeneric.admin.inc',
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['admin/settings/api'] = array(
+    'title' => 'API Settings',
+    'description' => 'AMP API settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('helpergeneric_api_settings_form'),
+    'access arguments' => array('helpergeneric administer settings'),
+    'file' => 'helpergeneric.admin.inc',
+  );
+
+  $items['admin/settings/generic'] = array(
+    'title' => 'Generic settings',
+    'description' => 'Project generic settings.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('helpergeneric_settings_form'),
+    'access arguments' => array('helpergeneric administer settings'),
+    'file' => 'helpergeneric.admin.inc',
+    'weight' => -32,
+  );
+  // @TODO: Remove!!! It's required for contextual links.
+  $items['admin/settings/generic/edit'] = array(
+    'title' => 'Configure',
+    'weight' => -10,
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+  );
+
+  $items['admin/settings/language'] = array(
+    'title' => 'Language settings',
+    'description' => 'Configure languages for content and the user interface.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('helpergeneric_language_settings_form'),
+    'access arguments' => array('helpergeneric administer settings'),
+    'file' => 'helpergeneric.admin.inc',
+    'weight' => -40,
+  );
+
+  $items['admin/settings/main-menu'] = array(
+    'title' => 'Edit Main menu',
+    'description' => 'Edit the main menu links.',
+    'page callback' => 'drupal_goto',
+    'page arguments' => array('admin/structure/menu/manage/main-menu'),
+    'access arguments' => array('administer menu'),
+    'weight' => -19,
+  );
+
+  $items['admin/settings/translate'] = array(
+    'title' => 'Translate interface',
+    'description' => 'Translate the built in interface and other text like language independent menu items.',
+    'page callback' => 'drupal_goto',
+    'page arguments' => array('admin/config/regional/translate/translate'),
+    'access arguments' => array('administer menu'),
+    'weight' => -18,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_menu_alter().
+ */
+function helpergeneric_menu_alter(&$items) {
+  // Change access argument in order to provide more granular permissions.
+  $items['admin/structure/menu']['access arguments'] = array('helpergeneric administer menus');
+  $items['admin/structure/menu/add']['access arguments'] = array('helpergeneric administer menus');
+  $items['admin/structure/menu/manage/%menu/edit']['access arguments'] = array('helpergeneric administer menus');
+  $items['admin/structure/menu/manage/%menu/delete']['access arguments'] = array('helpergeneric administer menus');
+  $items['admin/structure/menu/settings']['access arguments'] = array('helpergeneric administer menus');
+  $items['admin/structure/taxonomy']['access arguments'] = array('helpergeneric access taxonomy');
+  $items['admin/structure/taxonomy/%taxonomy_vocabulary_machine_name']['access arguments'] = array('helpergeneric access taxonomy');
+
+  // Limit access on UID1 pages.
+  $items['user/%user']['access callback'] = 'helpergeneric_user_view_access';
+  $items['user/%user/cancel']['access callback'] = 'helpergeneric_user_cancel_access';
+  $items['user/%user/cancel/confirm/%/%']['access callback'] = 'helpergeneric_user_cancel_access';
+  $items['user/%user/edit']['access callback'] = 'helpergeneric_user_edit_access';
+
+  // Limit access on user field and display settings.
+  $items['admin/config/people/accounts/fields']['access arguments'] = array('helpergeneric user fields');
+  $items['admin/config/people/accounts/display']['access arguments'] = array('helpergeneric user fields');
+}
+
+/**
+ * Implements hook_admin_paths_alter().
+ */
+function helpergeneric_admin_paths_alter(&$paths) {
+  $paths['admin/info*'] = FALSE;
+  $paths['admin/settings*'] = FALSE;
+}
+
+/**
+ * User view access callback.
+ *
+ * @see user_view_access()
+ */
+function helpergeneric_user_view_access($account) {
+  $uid = is_object($account) ? $account->uid : (int) $account;
+
+  // Only allow UID1 to view his account.
+  if ($uid == 1 && $GLOBALS['user']->uid !== $uid) {
+    return FALSE;
+  }
+
+  return user_view_access($account);
+}
+
+/**
+ * Menu access callback; limit access to account cancellation pages.
+ *
+ * @see user_cancel_access()
+ */
+function helpergeneric_user_cancel_access($account) {
+  $uid = is_object($account) ? $account->uid : (int) $account;
+
+  // Only allow UID1 to view his account.
+  if ($uid == 1 && $GLOBALS['user']->uid !== $uid) {
+    return FALSE;
+  }
+
+  return user_cancel_access($account);
+}
+
+/**
+ * Access callback for user account editing.
+ *
+ * @see user_edit_access()
+ */
+function helpergeneric_user_edit_access($account) {
+  $uid = is_object($account) ? $account->uid : (int) $account;
+
+  // Only allow UID1 to view his account.
+  if ($uid == 1 && $GLOBALS['user']->uid !== $uid) {
+    return FALSE;
+  }
+
+  return user_edit_access($account);
+}
+
+/**
+ * Implements hook_permission().
+ */
+function helpergeneric_permission() {
+  return array(
+    'helpergeneric access info' => array(
+      'title' => t('Access Information Area'),
+      'description' => t('Allow users to access the information for editors and admins.'),
+    ),
+    'helpergeneric administer settings' => array(
+      'title' => t('Administer project settings'),
+      'description' => t('Allow users to change project specific settings.'),
+    ),
+    'helpergeneric administer menus' => array(
+      'title' => t('Administer menus only.'),
+      'description' => t('Allow users to change the menus. This overrides the "administer menu" permission to remove menu editing permission.'),
+    ),
+    'helpergeneric access taxonomy' => array(
+      'title' => t('Access vocabularies only.'),
+      'description' => t('Allow users to access the vocabularies.'),
+    ),
+    'helpergeneric user fields' => array(
+      'title' => t('Administer user fields'),
+      'restrict access' => TRUE,
+      'description' => t('Allow users to access the vocabularies.'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_htmlpurifier_info()
+ *
+ * @see: http://htmlpurifier.org/live/configdoc/plain.html
+ */
+function helpergeneric_htmlpurifier_info() {
+  $info = array();
+
+  $info['htmlpurifier_custom'] = array(
+    'name' => 'HTML Purifier Custom Settings',
+    'description' => 'Provides some default configuration. Turn off the following Drupal filters: "Convert URLs into links", "Convert line breaks into HTML".',
+    'allowed' => array(
+      'Cache.DefinitionImpl',
+      'Cache.SerializerPath',
+
+      'Attr.EnableID',
+      'AutoFormat.AutoParagraph',
+      'AutoFormat.Linkify',
+      'Cache.DefinitionImpl',
+      'Core.AggressivelyFixLt',
+      'HTML.FlashAllowFullScreen',
+      'HTML.ForbiddenElements',
+      'HTML.SafeEmbed',
+      'HTML.SafeObject',
+      'HTML.SafeIframe',
+      'URI.SafeIframeRegexp',
+      'URI.DisableExternalResources',
+    ),
+    'settings' => array(
+      // List of allowed link frame targets.
+      'Attr.AllowedFrameTargets' => array('_self', '_blank'),
+
+      // Allows the ID attribute in HTML.
+      'Attr.EnableID' => FALSE,
+
+      // This directive turns on auto-paragraphing, where double newlines are
+      // converted in to paragraphs whenever possible.
+      // The same as "Convert line breaks into HTML" Drupal filter.
+      'AutoFormat.AutoParagraph' => TRUE,
+
+      // This directive turns on linkification, auto-linking http, ftp and
+      // https URLs.
+      // The same as "Convert URLs into links" Drupal filter.
+      'AutoFormat.Linkify' => TRUE,
+
+      // This directive defines which method to use when caching definitions,
+      // the complex data-type that makes HTML Purifier tick
+      'Cache.DefinitionImpl' => 'Drupal',
+
+      // If your users make very well-formed HTML, you can set this directive false.
+      'Core.AggressivelyFixLt' => TRUE,
+
+      // Allows flash applications to be viewed in full screen.
+      'HTML.FlashAllowFullScreen' => TRUE,
+
+      // A list of tags to strip out from documents. User notification is recommended.
+      // @see helpergeneric_element_info_alter()
+      'HTML.ForbiddenElements' => array('img'),
+
+      // Whether or not to permit embed tags in documents, with a number of
+      // extra security features added to prevent script execution.
+      'HTML.SafeEmbed' => TRUE,
+
+      // Whether or not to permit object tags in documents, with a number of
+      // extra security features added to prevent script execution.
+      'HTML.SafeObject' => TRUE,
+
+      // Whether or not to permit iframe tags in untrusted documents.
+      // This directive must be accompanied by a whitelist of permitted
+      // iframes, such as %URI.SafeIframeRegexp.
+      'HTML.SafeIframe' => TRUE,
+
+      // A regex that will be matched against an iframe URI.
+      // This directive only has an effect if %HTML.SafeIframe is enabled.
+      'URI.SafeIframeRegexp' => '%^http://(www.youtube.com/embed/|/player.vimeo.com/video/)%',
+
+      // Disables the embedding of external resources.
+      'URI.DisableExternalResources' => TRUE,
+    ),
+
+    'weight' => -20,
+  );
+
+  return $info;
+}
+
+/**
+ * Implements hook_element_info_alter()
+ */
+function helpergeneric_element_info_alter(&$type) {
+  if (isset($type['textarea'])) {
+    $type['textarea']['#element_validate'][] = 'helpergeneric_textarea_validate';
+  }
+}
+
+/**
+ * Validation callback for all 'textarea' form elements.
+ */
+function helpergeneric_textarea_validate($element, &$form_state, $form) {
+  if (!empty($element['#format']) && $element['#format'] == 'filtered_html') {
+    if (strpos($element['#value'], '<img') !== FALSE) {
+      // form_set_error($element['#field_name'], 'Image tags are not allowed. Please use the media WYSIWYG button to add inline multimedia.');
+      drupal_set_message(t('Looks like you tried to use image tags. For security reasons those will be removed. Please use the media WYSIWYG button for images.'), 'warning');
+    }
+  }
+}
+
+/**
+ * Determines if we should cleanup the UI in a way that developers can disable.
+ *
+ * NOTE: This is NOT for security, you should still set proper access settings.
+ */
+function helpergeneric_cleanup_ui() {
+  // Allow anyone with the cookie to force ui cleanup settings.
+  if (isset($_COOKIE['helpergeneric_cleanup_ui_force'])) {
+    return (bool) $_COOKIE['helpergeneric_cleanup_ui_force'];
+  }
+
+  // If variable is set, force ui cleanup settings only for UID1.
+  $forced_value = variable_get('helpergeneric_cleanup_ui_force', NULL);
+  if ($GLOBALS['user']->uid == 1 && isset($forced_value)) {
+    return (bool) $forced_value;
+  }
+
+  return TRUE;
+}
+
+/**
+ * Implements hook_menu_local_tasks_alter().
+ */
+function helpergeneric_menu_local_tasks_alter(&$data, $router_item, $root_path) {
+  global $theme;
+
+  // Attach icon "Add" links to content overview pages.
+  $pages = array(
+    'admin/content' => array(
+      'title' => 'Content Overview',
+      'url' => 'node/add',
+    ),
+    'admin/content/contentblock' => array(
+      'title' => 'Content: Content Blocks Overview',
+      'url' => 'contentblock/add',
+    ),
+    'admin/content/file' => array(
+      'title' => 'Content: Files Overview',
+      'url' => 'file/add',
+    ),
+    'admin/content/file/thumbnails' => array(
+      'title' => 'Content: Files Thumbnails',
+      'url' => 'file/add',
+    ),
+    'admin/people' => array(
+      'title' => 'People Overview',
+      'url' => 'admin/people/create',
+    ),
+  );
+  foreach ($pages as $page_root_url => $info) {
+    if ($root_path == $page_root_url && isset($data['actions']['output'][0]['#link']['path'])) {
+      if ($theme != 'seven' && $data['actions']['output'][0]['#link']['path'] == $info['url']) {
+        $data['actions']['output'][0]['#link']['localized_options']['theme extra'] = array(
+          'entity action' => TRUE,
+          'icon' => 'add',
+        );
+
+        if (!empty($info['title'])) {
+          drupal_set_title($info['title']);
+        }
+      }
+    }
+  }
+
+  // Attach "Edit" link to the user page.
+  if ($router_item['path'] == 'user/%') {
+    if (count($router_item['original_map']) == 2) {
+      // Load the edit menu router item.
+      $action_router_path = implode('/', $router_item['original_map']) . '/edit';
+      $action_router_item = menu_get_item($action_router_path);
+
+      if ($action_router_item['access']) {
+        $action_router_item['localized_options']['theme extra'] = array(
+          'entity action' => TRUE,
+          'icon' => 'edit',
+        );
+
+        $data['actions']['output'][] = array(
+          '#theme' => 'menu_local_action',
+          '#link' => $action_router_item,
+          '#weight' => -50,
+        );
+      }
+    }
+  }
+
+  // Attach "Cancel" link to the user edit page.
+  if ($router_item['path'] == 'user/%/edit') {
+    // Load the view menu router item.
+    $action_router_path = implode('/', array_slice($router_item['original_map'], 0, -1));
+    $action_router_item = menu_get_item($action_router_path);
+
+    if ($action_router_item['access']) {
+      $action_router_item['localized_options']['theme extra'] = array(
+        'entity action' => TRUE,
+        'title' => 'Cancel',
+        'prefix' => '(',
+        'suffix' => ')',
+      );
+
+      $data['actions']['output'][] = array(
+        '#theme' => 'menu_local_action',
+        '#link' => $action_router_item,
+        '#weight' => 50,
+      );
+    }
+  }
+
+  // Attach action links to node and contentblock entities.
+  $position = 1;
+  $attach_entity_actions = TRUE;
+  if (empty($router_item['load_functions'][$position]) || empty($router_item['map'][$position])) {
+    $attach_entity_actions = FALSE;
+  }
+  else {
+    if (!in_array($router_item['load_functions'][$position], array('contentblock_load', 'node_load'))) {
+      $attach_entity_actions = FALSE;
+    }
+  }
+
+  if ($attach_entity_actions) {
+    // Attach "Edit" link to the entity view page title.
+    if (count($router_item['original_map']) == 2) {
+      // Load the edit menu router item.
+      $action_router_path = implode('/', $router_item['original_map']) . '/edit';
+      $action_router_item = menu_get_item($action_router_path);
+
+      if ($action_router_item['access']) {
+        $action_router_item['localized_options']['theme extra'] = array(
+          'entity action' => TRUE,
+          'icon' => 'edit',
+        );
+
+        $data['actions']['output'][] = array(
+          '#theme' => 'menu_local_action',
+          '#link' => $action_router_item,
+          '#weight' => -50,
+        );
+      }
+    }
+
+    // Attach "Translate" link to the entity view page title.
+    if (drupal_multilingual() && count($router_item['original_map']) == 2) {
+      // Load the translate menu router item.
+      $action_router_path = implode('/', $router_item['original_map']) . '/translate';
+      $action_router_item = menu_get_item($action_router_path);
+
+      if ($action_router_item['access']) {
+        $action_router_item['localized_options']['theme extra'] = array(
+          'entity action' => TRUE,
+          'icon' => 'translate',
+        );
+
+        $data['actions']['output'][] = array(
+          '#theme' => 'menu_local_action',
+          '#link' => $action_router_item,
+          '#weight' => 50,
+        );
+      }
+    }
+
+    // Attach "Delete" link to the entity view page title.
+    if (count($router_item['original_map']) == 2) {
+      // Load the edit menu router item.
+      $action_router_path = implode('/', $router_item['original_map']) . '/delete';
+      $action_router_item = menu_get_item($action_router_path);
+
+      if ($action_router_item['access']) {
+        $action_router_item['localized_options']['theme extra'] = array(
+          'entity action' => TRUE,
+          'icon' => 'delete',
+        );
+
+        $data['actions']['output'][] = array(
+          '#theme' => 'menu_local_action',
+          '#link' => $action_router_item,
+          '#weight' => -49,
+        );
+      }
+    }
+
+    // Attach "Cancel" link to the entity edit and translate page title.
+    if (count($router_item['original_map']) >= 3 && in_array($router_item['original_map'][2], array('edit', 'translate'))) {
+      $alt_path= NULL;
+      if (!empty($_GET['destination'])) {
+        $url_options = drupal_parse_url($_GET['destination']);
+        unset($_GET['destination']);
+        if (!empty($url_options['path'])) {
+          $alt_path = $url_options['path'];
+        }
+      }
+
+      if ($alt_path) {
+        $link_item = array(
+          'title' => 'Cancel', // This is not used if we provide 'theme extra' settings.
+          'href' => $alt_path,
+          'localized_options' => $url_options,
+        );
+        $link_item['localized_options']['theme extra'] = array(
+          'entity action' => TRUE,
+          'title' => 'Cancel',
+          'prefix' => '(',
+          'suffix' => ')',
+        );
+
+        $data['actions']['output'][] = array(
+          '#theme' => 'menu_local_action',
+
+          '#link' => $link_item,
+          '#weight' => 50,
+        );
+      }
+      else {
+        // Load the view menu router item.
+        $action_router_path = implode('/', array_slice($router_item['original_map'], 0, -1));
+        $action_router_item = menu_get_item($action_router_path);
+
+        if ($action_router_item['access']) {
+          $action_router_item['localized_options']['theme extra'] = array(
+            'entity action' => TRUE,
+            'title' => 'Cancel',
+            'prefix' => '(',
+            'suffix' => ')',
+          );
+
+          $data['actions']['output'][] = array(
+            '#theme' => 'menu_local_action',
+            '#link' => $action_router_item,
+            '#weight' => 50,
+          );
+        }
+      }
+    }
+  }
+
+  // Attach "Add blog entry" link to "Blog" listing page title.
+  if ($root_path == 'blog') {
+    $action_router_item = menu_get_item('node/add/blog');
+
+    if ($action_router_item['access']) {
+      $action_router_item['localized_options']['attributes']['target'] = '_blank';
+      $action_router_item['localized_options']['theme extra'] = array(
+        'entity action' => TRUE,
+        'icon' => 'add',
+      );
+
+      $data['actions']['output'][] = array(
+        '#theme' => 'menu_local_action',
+        '#link' => $action_router_item,
+        '#weight' => 40,
+      );
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_load().
+ */
+function helpergeneric_entity_load($entities, $entity_type) {
+  if ($entity_type != 'node') {
+    return;
+  }
+
+  // @TODO: Optimize!
+  foreach ($entities as $id => $entity) {
+    $local_actions = menu_local_actions();
+    if (!empty($local_actions)) {
+      $entity->action_links = drupal_render($local_actions);
+    }
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function helpergeneric_theme() {
+  return array(
+    'helpergeneric_language_settings_form' => array(
+      'render element' => 'form',
+    ),
+  );
+}
+
+/**
+ * Implements hook_locale_default_languages_alter().
+ *
+ * This is used to controle the enabled languages. By default in code all
+ * languages should be enabled.
+ */
+function helpergeneric_locale_default_languages_alter(&$languages) {
+  $default_langcode = language_default('language');
+  $disabled_languages = variable_get('helpergeneric_disabled_languages', array());
+
+  $enabled_count = 0;
+  foreach ($languages as $langcode => &$language) {
+    if ($langcode != $default_langcode && in_array($langcode, $disabled_languages)) {
+      $language['enabled'] = 0;
+    }
+    else {
+      $language['enabled'] = 1;
+      $enabled_count++;
+    }
+
+    // Always remove prefix for the default language.
+    // This will cause features.module to go crazy :D
+    if (PROJECT_ENVIRONMENT != 'local') {
+      if ($langcode == $default_langcode) {
+        $language['prefix'] = '';
+      }
+    }
+  }
+
+  // Manually update the language_count variable, features will take care of
+  // the language settings.
+  variable_set('language_count', $enabled_count);
+}
+
+/**
+ * Tries to detect the AMP base URL using the PHP $_SERVER variables.
+ * @see drupal_detect_baseurl()
+ */
+function helpergeneric_detect_amp_baseurl() {
+  static $url = NULL;
+  if (isset($url)) {
+    return $url;
+  }
+
+  $restclient_hostname = variable_get('restclient_hostname', NULL);
+  if (!empty($restclient_hostname)) {
+    $restclient_hostname_parts = parse_url($restclient_hostname);
+    unset($restclient_hostname_parts['path']);
+    $url = helpergeneric_unparse_url($restclient_hostname_parts);
+  }
+  else {
+    $proto = isset($_SERVER['HTTPS']) ? 'https://' : 'http://';
+    $host = $_SERVER['SERVER_NAME'];
+    $port = ($_SERVER['SERVER_PORT'] == 80 ? '' : ':' . $_SERVER['SERVER_PORT']);
+    $dir = base_path();
+
+    // Trim the trailing slash.
+    $url = rtrim("$proto$host$port$dir", '/');
+  }
+
+  return $url;
+}
+
+/**
+ * The reverse of parse_url()
+ */
+function helpergeneric_unparse_url($parsed_url) {
+  $scheme   = isset($parsed_url['scheme']) ? $parsed_url['scheme'] . '://' : '';
+  $host     = isset($parsed_url['host']) ? $parsed_url['host'] : '';
+  $port     = isset($parsed_url['port']) ? ':' . $parsed_url['port'] : '';
+  $user     = isset($parsed_url['user']) ? $parsed_url['user'] : '';
+  $pass     = isset($parsed_url['pass']) ? ':' . $parsed_url['pass']  : '';
+  $pass     = ($user || $pass) ? "$pass@" : '';
+  $path     = isset($parsed_url['path']) ? $parsed_url['path'] : '';
+  $query    = isset($parsed_url['query']) ? '?' . $parsed_url['query'] : '';
+  $fragment = isset($parsed_url['fragment']) ? '#' . $parsed_url['fragment'] : '';
+  return "$scheme$user$pass$host$port$path$query$fragment";
+}
+
+/**
+ * Tries to determine if the API is online or not.
+ */
+function helpergeneric_check_api_status($link = TRUE) {
+  static $status;
+
+  if (isset($status)) {
+    return $status;
+  }
+
+  $status = array(
+    'online' => FALSE,
+    'message' => '',
+  );
+
+  $response = restclient_get('test', array('reset' => TRUE, 'error_handling' => TRUE));
+  if (empty($response)) {
+    $status['online'] = FALSE;
+    $status['message'] = t('The API server seems to be offline.');
+    if ($link) {
+      $t_args = array('!settings' => l(t('API Settings'), 'admin/settings/api'));
+      $status['message'] .= ' ' . t('Please check the !settings page.', $t_args);
+    }
+    return $status;
+  }
+
+  // @TODO: Add support for more response codes.
+  if (restclient_response_code($response) == RESTCLIENT_RESPONSE_SUCCESS) {
+    $status['online'] = TRUE;
+  }
+  else {
+    if (!empty($response->error)) {
+      $status['message'] = t('The API returned the following status message: %message', array('%message' => $response->error));
+    }
+    else if (!empty($response->status_message)) {
+      $status['message'] = t('The API returned the following status message: %message', array('%message' => $response->status_message));
+    }
+  }
+
+  return $status;
+}

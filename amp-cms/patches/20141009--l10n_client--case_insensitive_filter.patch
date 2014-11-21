@@ -1,0 +1,25 @@
+diff --git a/sites/all/modules/contrib/l10n_client/l10n_client.js b/sites/all/modules/contrib/l10n_client/l10n_client.js
+index ecdf737..32a0192 100644
+--- a/sites/all/modules/contrib/l10n_client/l10n_client.js
++++ b/sites/all/modules/contrib/l10n_client/l10n_client.js
+@@ -1,6 +1,10 @@
+ (function ($, Drupal, undefined) {
++  // Add case insensitive contains expression for the current jQuery object.
++  $.expr[':'].icontains = function(a, i, m) {
++    return $(a).text().toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
++  };
+ 
+-// Store all l10n_client related data + methods in its own object
++  // Store all l10n_client related data + methods in its own object
+   Drupal.l10nClient = {
+     // Set "selected" string to unselected, i.e. -1
+     selected: -1,
+@@ -79,7 +83,7 @@
+         $stringSelect.show();
+         $stringSearch.val('').focus();
+       } else if (search.length > 0) {
+-        $stringSelect.show().not(':contains(' + search + ')').hide();
++        $stringSelect.show().not(':icontains(' + search + ')').hide();
+       }
+     }
+   };

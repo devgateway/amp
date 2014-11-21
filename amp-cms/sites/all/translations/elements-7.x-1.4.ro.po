@@ -1,0 +1,22 @@
+# Romanian translation of Elements (7.x-1.4)
+# Copyright (c) 2014 by the Romanian translation team
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Elements (7.x-1.4)\n"
+"POT-Creation-Date: 2014-05-28 12:22+0000\n"
+"PO-Revision-Date: YYYY-mm-DD HH:MM+ZZZZ\n"
+"Language-Team: Romanian\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=((n==1)?(0):(((n==0)||(((n%100)>0)&&((n%100)<20)))?(1):2));\n"
+
+msgid "No items selected."
+msgstr "Nu sunt elemente selectate."
+msgid "The e-mail address %mail is not valid."
+msgstr "Adresa de e-mail %mail nu este validă."
+msgid "%name must be a number."
+msgstr "%name trebuie să fie un număr."
+msgid "Elements"
+msgstr "Elemente"

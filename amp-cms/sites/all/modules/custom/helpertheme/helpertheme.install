@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the HelperTheme module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function helpertheme_install() {
+  db_update('system')
+    ->fields(array('weight' => 20))
+    ->condition('name', 'helpertheme')
+    ->execute();
+}

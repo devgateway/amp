@@ -1,0 +1,450 @@
+
+.item-list .views-row {
+  margin: 0 1em;
+}
+
+.view-empty {
+  margin: 1em 0;
+}
+
+.label-inline {
+  display: inline;
+}
+
+.container-inline {
+  div, label {
+    display: inline;
+  }
+  .fieldset-wrapper {
+    display: block;
+    padding: 1em;
+  }
+}
+
+ul.tips, div.description, .form-item div.description {
+  color: #666;
+  font-size: 0.923em;
+  line-height: 1.231em;
+  margin: 5px 0;
+}
+
+.field {
+  margin: 1em 0;
+  &.field-name-blog-sidebar,
+  &.field-name-field-cbblocks {
+    margin: 0;
+  }
+}
+
+.media-browser-launch-processed {
+  margin: 1em 0;
+}
+
+.xMediumAndDown() {
+  .homepage-welcome-block {
+    .field-name-field-cbimage {
+      display: none;
+    }
+    .welcome-content-wrapper {
+      padding: 0;
+      margin: 1em;
+    }
+    a.more-link {
+      display: block;
+      margin: 1em 0;
+      position: static;
+      text-align: right;
+    }
+  }
+}
+.xNormalAndUp() {
+  .homepage-welcome-block {
+    .pane-content {
+      .clearfix-mixin();
+    }
+    .field-name-field-cbimage {
+      float: right;
+      margin: 0;
+      margin-left: 1em;
+    }
+  }
+}
+
+.layout-block {
+  .box-sizing(border-box);
+  background-color: @clcontent;
+  border: @border_width solid @clcontent__separator;
+  padding-left: 1em;
+  padding-right: 1em;
+  position: relative;
+  .contentblock-title,
+  .pane-title {
+    border-bottom: @border_width solid @clcontent__separator;
+    font-weight: bold;
+    padding-bottom: 1em;
+    margin-bottom: 0;
+    text-transform: uppercase;
+  }
+  .more-link {
+    position: absolute;
+    right: 1.5em;
+    top: 2em;
+  }
+}
+
+.layout-inline {
+  display: inline-block;
+}
+
+.layout-separator {
+  margin-bottom: 1em;
+}
+
+.more-link {
+  font-size: 0.75em;
+  font-weight: bold;
+  margin-bottom: 1em;
+  text-align: right;
+  a {
+    .link-color(@cldetail__alt);
+  }
+}
+
+.cbreference-linkedmap {
+  border: @border_width solid @clcontent__separator;
+  margin-bottom: 1em;
+
+  .title-wrapper {
+    color: @clactive;
+    font-weight: bold;
+    margin: 0;
+    text-transform: uppercase;
+    a {
+      color: @clactive;
+      display: block;
+      text-decoration: none;
+    }
+    svg {
+      fill: @clactive;
+      margin-right: 0.5em;
+    }
+  }
+  .field-name-field-cbimage {
+    margin: 0;
+  }
+
+  &.cbreference-view-mode-wide {
+    background-color: @clmain__alt;
+    .title-wrapper {
+      a {
+        padding-left: 1em;
+      }
+    }
+  }
+  &.cbreference-view-mode-normal {
+    background-color: @clcontent;
+    .title-wrapper a {
+      padding-left: 1em;
+      svg {
+        fill: @clactive;
+      }
+    }
+  }
+}
+.xMediumAndDown() {
+  .cbreference-linkedmap {
+    .title-wrapper {
+      svg {
+        width: 1.5em !important;
+        height: 1.5em !important;
+      }
+    }
+    &.cbreference-view-mode-wide {
+      .title-wrapper a {
+        padding: 0.5em;
+      }
+    }
+    &.cbreference-view-mode-normal {
+      .title-wrapper a {
+        line-height: 3em;
+      }
+    }
+    .field-name-field-cbimage {
+      // text-align: center;
+      display: none;
+    }
+  }
+}
+
+// @TODO: Cleanup!
+.featured-dark-block {
+  background-color: @cldetail;
+  color: @clcontent;
+
+  a {
+    .link-color(@cldetail__highlight);
+  }
+  .contentblock-title {
+    color: @cldetail__highlight;
+  }
+}
+.xNormalAndUp() {
+  .featured-dark-block {
+    .contentblock-title {
+      margin: 0;
+    }
+  }
+}
+
+.homepage-welcome-block {
+  .welcome-content-wrapper {
+    padding: 1em;
+  }
+
+  // Style the read more link and related elements.
+  position: relative;
+  .more-link {
+    bottom: 1em;
+    left: 1em;
+    margin-bottom: 0;
+    position: absolute;
+
+    .mdzr-inlinesvg & {
+      .text {
+        display: none;
+      }
+    }
+  }
+  svg {
+    fill: @cldetail__highlight;
+  }
+  .field-name-field-cbbody {
+    max-height: 1.25em * 7;
+    overflow: hidden;
+  }
+  p {
+    line-height: 1.25em;
+    margin-top: 0;
+  }
+}
+.xMediumAndDown() {
+  .homepage-welcome-block {
+    .field-name-field-cbbody {
+      max-height: none;
+      overflow: auto;
+    }
+  }
+}
+
+
+.link-field-column {
+  float: left;
+  width: 48%;
+
+  .form-text {
+    width: 95%;
+  }
+}
+
+.cbreference-footer {
+  .field-name-field-cborgs {
+    text-align: center;
+  }
+}
+
+.xMediumAndDown() {
+  .page-title {
+    margin-bottom: 0;
+  }
+
+  // Fix wysiwyg image table align hack on mobile browsers.
+  table[align="left"],
+  table[align="right"] {
+    float: none;
+    text-align: center;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 1em;
+    width: 100% !important;
+    td {
+      padding: 0;
+    }
+  }
+}
+
+// @HACK: Hide buggy real selector form element.
+.helpergeneric-settings-form {
+  #edit-variable-realm-selector-language {
+    display: none !important;
+  }
+}
+
+.activity-search-info {
+  text-align: right;
+}
+
+
+
+
+
+/* Example tokeninput style #2: Facebook style */
+.token-input-list-ampcms {
+  overflow: hidden;
+  min-width: 200px;
+  border: 1px solid #ccc;
+  border-top-color: #999;
+  cursor: text;
+  font-size: 12px;
+  font-family: Verdana, sans-serif;
+  min-height: 1px;
+  z-index: 999;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  list-style-type: none;
+  clear: left;
+  li {
+    vertical-align: middle;
+  }
+  input {
+    border: 1px solid transparent;
+    border-top-width: 2px;
+    width: 100px;
+    padding: 0.3em 0.5em;
+    background-color: white;
+    margin: 2px 0;
+    -webkit-appearance: caret;
+  }
+}
+
+.token-input-token-ampcms {
+  overflow: hidden;
+  height: auto !important;
+  height: 15px;
+  margin: 3px;
+  padding: 0.3em 0.5em;
+
+  background-color: #ebf5fd;
+  color: #000;
+  cursor: default;
+  border: 1px solid #ccc;
+  border-bottom-color: #aaa;
+  display: inline-block;
+  font-size: 11px;
+  border-radius: 5px;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  p {
+    display: inline;
+    padding: 0;
+    margin: 0;
+  }
+  span {
+    color: #a6b3cf;
+    margin-left: 5px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
+.token-input-selected-token-ampcms {
+  background-color: #5670a6;
+  border: 1px solid #3b5998;
+  color: #fff;
+}
+.token-input-input-token-ampcms {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.token-input-dropdown-ampcms {
+  position: absolute;
+  width: 400px;
+  background-color: #fff;
+  overflow: hidden;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  cursor: default;
+  font-size: 11px;
+  font-family: Verdana, sans-serif;
+  z-index: 1;
+  p {
+    margin: 0;
+    padding: 5px;
+    font-weight: bold;
+    color: #777;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  ul li {
+    background-color: #fff;
+    padding: 3px;
+    margin: 0;
+    list-style-type: none;
+  }
+
+  ul .token-input-dropdown-item-ampcms {
+    background-color: #fff;
+  }
+
+  ul .token-input-dropdown-item2-ampcms {
+    background-color: #fff;
+  }
+
+  ul li em {
+    font-weight: bold;
+    font-style: normal;
+  }
+
+  ul .token-input-selected-dropdown-item-ampcms {
+    background-color: #3b5998;
+    color: #fff;
+  }
+}
+
+
+
+
+
+
+// @TODO: Cleanup this mess!!!
+.homepage-form-block {
+  .views-exposed-form-activities-search-page {
+    margin-right: 1em;
+  }
+
+  .form-item {
+    margin-top: 0;
+    margin-bottom: 0.2em;
+  }
+  .form-text {
+    .box-sizing(border-box);
+    width: 100%;
+  }
+  .form-actions {
+    text-align: right;
+  }
+  input.form-submit, a.button {
+    margin-right: 0;
+    margin-left: 0.6em;
+  }
+}
+
+.homepage-featured-block {
+  background-color: @clcontent__featured;
+}
+
+
+
+
+
+
+
+@import './lib/custom-responsive.less';
+@import './lib/helpers.less';

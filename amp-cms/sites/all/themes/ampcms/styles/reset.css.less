@@ -1,0 +1,56 @@
+
+img {
+  // Make sure images fit inside the container.
+  max-width: 100%;
+  height: auto;
+}
+
+img,
+svg {
+  // Reset the line-height.
+  line-height: 1;
+}
+
+img,
+svg,
+iframe {
+  // Make sure elements are vertically aligned. Solves some vertical alignment and spacing issues.
+  vertical-align: middle;
+}
+
+/**
+ * Make the element resizable but keep the aspect ratio using a box-model feature.
+ * We use 33em instead of .xSmallOnly() media query for a smoth transition between
+ * the normal state and the 'resiazable' state.
+ *   480/16 = 30em for video size.
+ *   0.5*2 + 1*2 = 3em layout spacig.
+ *   we ignore the 2px border.
+ *
+ * @see http://www.w3.org/TR/CSS2/box.html#padding-properties
+ */
+// .xSmallOnly() {}
+@media (max-width: 33em) {
+  .media-resizable-wrapper {
+    @aspect_ratio: (9 / 16) * 100%;
+    display: block; // We need a block element for this to work.
+    height: 0;
+    padding-top: @aspect_ratio;
+    position: relative;
+
+    .media-resizable-element {
+      height: 100%;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 100%;
+    }
+
+    &.aspect-3-4 {
+      @aspect_ratio: (3 / 4) * 100%;
+      padding-top: @aspect_ratio;
+    }
+  }
+}
+
+@import './lib/custom-responsive.less';
+@import './lib/helpers.less';

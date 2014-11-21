@@ -1,0 +1,8 @@
+<?php
+/**
+ * @file
+ * Code for the AMP Permissions feature.
+ */
+
+include_once 'amppermissions.custom.inc';
+include_once 'amppermissions.features.inc';

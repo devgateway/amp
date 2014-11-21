@@ -1,0 +1,24 @@
+diff --git a/sites/all/modules/contrib/entityreference/entityreference.module b/sites/all/modules/contrib/entityreference/entityreference.module
+index bdcb562..54ed95f 100644
+--- a/sites/all/modules/contrib/entityreference/entityreference.module
++++ b/sites/all/modules/contrib/entityreference/entityreference.module
+@@ -1263,9 +1263,16 @@ function entityreference_field_formatter_view($entity_type, $entity, $field, $in
+           throw new EntityReferenceRecursiveRenderingException(t('Recursive rendering detected when rendering entity @entity_type(@entity_id). Aborting rendering.', array('@entity_type' => $entity_type, '@entity_id' => $item['target_id'])));
+         }
+ 
+-        $entity = clone $item['entity'];
+-        unset($entity->content);
+-        $result[$delta] = entity_view($field['settings']['target_type'], array($item['target_id'] => $entity), $settings['view_mode'], $langcode, FALSE);
++        $target_entity = clone $item['entity'];
++        unset($target_entity->content);
++
++        // Determine the target entity language.
++        $target_langcode = $langcode;
++        if (module_exists('entity_translation')) {
++          $target_langcode = entity_translation_get_existing_language($field['settings']['target_type'], $target_entity);
++        }
++
++        $result[$delta] = entity_view($field['settings']['target_type'], array($item['target_id'] => $target_entity), $settings['view_mode'], $target_langcode, FALSE);
+ 
+         if (empty($settings['links']) && isset($result[$delta][$field['settings']['target_type']][$item['target_id']]['links'])) {
+           $result[$delta][$field['settings']['target_type']][$item['target_id']]['links']['#access'] = FALSE;

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the AMP ContentBlock feature.
+ */
+
+include_once 'ampcontentblock.features.inc';

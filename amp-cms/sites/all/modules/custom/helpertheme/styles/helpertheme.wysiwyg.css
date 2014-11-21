@@ -1,0 +1,28 @@
+
+/**
+ * This file should contain CSS that is loaded inside the WYSIWYG editor iframe
+ * and on the final product.
+ */
+
+/**
+ * Align table styles.
+ */
+table[align="left"],
+table[align="right"] {
+  border: 0px none transparent;
+  margin-top: 0 !important;
+  width: auto !important;
+}
+
+table[align="left"] {
+  margin-right: 0.5em;
+}
+table[align="right"] {
+  margin-left: 0.5em;
+}
+
+table[align="left"] td,
+table[align="right"] td {
+  border: 0px none transparent;
+  padding: 0;
+}

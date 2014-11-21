@@ -1,0 +1,8 @@
+
+/**
+ * This file should contain CSS that is loaded on the Drupal admin theme.
+ */
+
+/*iframe*/.media-modal-frame {
+  padding: 0 !important;
+}

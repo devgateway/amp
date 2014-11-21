@@ -1,0 +1,1084 @@
+<?php
+
+/**
+ * @file
+ * Allows users to collect entities in arbitrarily ordered lists.
+ */
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function entityqueue_ctools_plugin_directory($module, $plugin) {
+  return 'plugins/' . $module . '/' . $plugin;
+}
+
+/**
+ * Returns the hook to use in order to determine if modules support the
+ * entityqueue API.
+ *
+ * @return string
+ */
+function entityqueue_ctools_plugin_api_hook_name() {
+  return 'entityqueue_api';
+}
+
+/**
+ * Implements hook_ctools_plugin_type().
+ */
+function entityqueue_ctools_plugin_type() {
+  $plugins['handler'] = array(
+    'classes' => array('class'),
+    // The default behavior of handler plugins is to have multiple subqueues per
+    // queue.
+    'defaults' => array('queue type' => 'multiple'),
+  );
+  return $plugins;
+}
+
+/**
+ * Gets the handler for a given queue.
+ *
+ * @param EntityQueue $queue
+ *   An EntityQueue object.
+ *
+ * @return EntityQueueHandlerInterface
+ */
+function entityqueue_get_handler(EntityQueue $queue) {
+  $object_cache = &drupal_static(__FUNCTION__);
+
+  if (!isset($object_cache[$queue->name])) {
+    ctools_include('plugins');
+    $class = ctools_plugin_load_class('entityqueue', 'handler', $queue->handler, 'class');
+
+    if (class_exists($class)) {
+      $object_cache[$queue->name] = call_user_func(array($class, 'getInstance'), $queue);
+    }
+    else {
+      $object_cache[$queue->name] = BrokenEntityQueueHandler::getInstance($queue);
+    }
+  }
+
+  return $object_cache[$queue->name];
+}
+
+/**
+ * Implements hook_permission().
+ */
+function entityqueue_permission() {
+  $permissions = array(
+    'administer entityqueue' => array(
+      'title' => t('Administer entityqueue'),
+      'description' => t('Administer entityqueue configuration and create, update and delete all queues.'),
+      'restrict access' => TRUE,
+    ),
+    'manipulate entityqueues' => array(
+      'title' => t('Manipulate queues'),
+      'description' => t('Access the entityqueues list.')
+    ),
+    'manipulate all entityqueues' => array(
+      'title' => t('Manipulate all queues'),
+      'description' => t('Access to update all queues.'),
+    ),
+  );
+
+  $queues = entityqueue_queue_load_multiple(array(), TRUE);
+  $handlers = ctools_get_plugins('entityqueue', 'handler');
+  foreach ($queues as $name => $queue) {
+    if ($handlers[$queue->handler]['queue type'] == 'multiple') {
+      $permissions["create $name entityqueue"] = array(
+        'title' => t('Add %queue subqueues', array('%queue' => $queue->label())),
+        'description' => t('Access to create new subqueue to the %queue queue.', array('%queue' => $queue->label())),
+      );
+      $permissions["delete $name entityqueue"] = array(
+        'title' => t('Delete %queue subqueues', array('%queue' => $queue->label())),
+        'description' => t('Access to delete subqueues of the %queue queue.', array('%queue' => $queue->label())),
+      );
+    }
+    $permissions["update $name entityqueue"] = array(
+      'title' => t('Manipulate %queue queue', array('%queue' => $queue->label())),
+      'description' => t('Access to update the %queue queue.', array('%queue' => $queue->label())),
+    );
+  }
+  return $permissions;
+}
+
+/**
+ * Implements hook_menu().
+ */
+function entityqueue_menu() {
+  $items = array();
+
+  return $items;
+}
+
+/**
+ * Constructs a new EntityQueue object, without saving it to the database.
+ *
+ * @param array $values
+ *   An array of queue properties. Defaults to an empty array.
+ *
+ * @return EntityQueue|false
+ *   An EntityQueue object, or FALSE if creation fails.
+ *
+ * @see EntityQueue
+ */
+function entityqueue_queue_create($values = array()) {
+  $values = (array) $values;
+  // Add default properties if they are not set.
+  $values += array(
+    'is_new' => TRUE,
+    'language' => language_default()->language,
+  );
+
+  $queue = new EntityQueue($values);
+
+  // Invoke the queue handler in order to allow it to alter the created queue.
+  entityqueue_get_handler($queue)->create();
+
+  return $queue;
+}
+
+/**
+ * Saves a queue.
+ *
+ * @param EntityQueue $queue
+ *   EntityQueue object with queue properties. See entityqueue_queue_create().
+ * @param bool $rebuild_menu
+ *   Boolean indicating whether the the database tables used by various menu
+ *   functions should be rebuilt. Setting this to FALSE is useful if multiple
+ *   queues are being created programmatically. Defaults to TRUE.
+ *
+ * @return int|bool
+ *   If the queue insert or update failed, returns FALSE. If it succeeded,
+ *   returns SAVED_NEW or SAVED_UPDATED, depending on the operation performed.
+ */
+function entityqueue_queue_save(EntityQueue $queue, $rebuild_menu = TRUE) {
+  // Make sure all keys are populated.
+  $queue = entityqueue_queue_create($queue);
+
+  if ($queue->export_type & EXPORT_IN_DATABASE) {
+    // Existing queue.
+    $write_record_keys = array('name');
+    $queue->is_new = FALSE;
+  }
+  else {
+    // New queue.
+    $write_record_keys = array();
+    $queue->export_type = EXPORT_IN_DATABASE;
+    $queue->is_new = TRUE;
+  }
+
+  entityqueue_get_handler($queue)->preSave();
+
+  $transaction = db_transaction();
+  try {
+    $return = drupal_write_record('entityqueue_queue', $queue, $write_record_keys);
+    _entityqueue_queue_ensure_instance($queue);
+  }
+  catch (Exception $e) {
+    $transaction->rollback();
+    watchdog_exception('Entityqueue', $e);
+    throw $e;
+  }
+
+  if ($queue->is_new) {
+    entityqueue_get_handler($queue)->insert();
+  }
+  else {
+    entityqueue_get_handler($queue)->update();
+  }
+
+  if ($rebuild_menu) {
+    menu_rebuild();
+  }
+
+  return $return;
+}
+
+/**
+ * Loads a queue.
+ *
+ * @param string $name
+ *   The machine name of the queue (bundle) to be loaded.
+ *
+ * @return EntityQueue|false
+ *   A EntityQueue object in the same format as expected by
+ *   entityqueue_queue_save(), or FALSE if the queue doesn't exist.
+ */
+function entityqueue_queue_load($name) {
+  $queues = entityqueue_queue_load_multiple(array($name));
+  return isset($queues[$name]) ? $queues[$name] : FALSE;
+}
+
+/**
+ * Loads multiple queues.
+ *
+ * @param array $names
+ *   An array of machine names of the queues to be loaded. If $names is empty,
+ *   load all queues.
+ *
+ * @return EntityQueue[]
+ *   An array of EntityQueue objects, keyed by queue name.
+ */
+function entityqueue_queue_load_multiple($names = array(), $reset = FALSE) {
+  ctools_include('export');
+  $queues = !empty($names) ? ctools_export_load_object('entityqueue_queue', 'names', $names) : ctools_export_crud_load_all('entityqueue_queue', $reset);
+
+  // Bail out early if we haven't found any queues.
+  if (empty($queues)) {
+    return array();
+  }
+
+  static $recursion = FALSE;
+  if (!$recursion && !drupal_static('entityqueue_install')) {
+    $recursion = TRUE;
+    foreach ($queues as $name => $queue) {
+      if (!empty($queue->in_code_only)) {
+        _entityqueue_queue_ensure_instance($queue);
+
+        // Invoke a special queue handler method for queues that are stored only
+        // in code (e.g. a hook_entityqueue_default_queues() implementation).
+        entityqueue_get_handler($queue)->loadFromCode();
+      }
+
+      entityqueue_get_handler($queue)->load();
+    }
+  }
+  $recursion = FALSE;
+
+  return $queues;
+}
+
+/**
+ * Loads multiple queues with a specific target type.
+ *
+ * @param string $target_type
+ *   An entity type (e.g. 'node', 'comment', 'user').
+ *
+ * @return array
+ *   An array of EntityQueue objects, keyed by queue name.
+ */
+function entityqueue_queue_load_by_target_type($target_type) {
+  ctools_include('export');
+  return ctools_export_load_object('entityqueue_queue', 'conditions', array('target_type' => $target_type));
+}
+
+/**
+ * Deletes a queue.
+ *
+ * @param EntityQueue|string $queue
+ *   An EntityQueue object or the machine name of a queue.
+ */
+function entityqueue_queue_delete($queue) {
+  // If the argument is not an EntityQueue object, load it now.
+  if (!is_object($queue)) {
+    $queue = entityqueue_queue_load($queue);
+  }
+
+  entityqueue_get_handler($queue)->preDelete();
+
+  // Delete this queue's subqueues first.
+  $query = new EntityFieldQuery();
+  $query
+    ->entityCondition('entity_type', 'entityqueue_subqueue')
+    ->entityCondition('bundle', $queue->name);
+  $result = $query->execute();
+  if (!empty($result['entityqueue_subqueue'])) {
+    if ($queue->export_type == EXPORT_IN_CODE + EXPORT_IN_DATABASE) {
+      db_delete('entityqueue_queue')
+        ->condition('name', $queue->name)
+        ->execute();
+
+      return;
+    }
+    entity_delete_multiple('entityqueue_subqueue', array_keys($result['entityqueue_subqueue']));
+  }
+
+  // Delete the entity reference field instance that was created for this queue.
+  $field_name = _entityqueue_get_target_field_name($queue->target_type);
+  $entityreference_field = field_read_instance('entityqueue_subqueue', $field_name, $queue->name);
+  field_delete_instance($entityreference_field, FALSE);
+  field_attach_delete_bundle('entityqueue_subqueue', $queue->name);
+
+  // And finally we can delete the queue.
+  db_delete('entityqueue_queue')->condition('name', $queue->name)->execute();
+
+  entityqueue_get_handler($queue)->postDelete();
+}
+
+/**
+ * Implements hook_entity_info().
+ */
+function entityqueue_entity_info() {
+  $return = array(
+    'entityqueue_subqueue' => array(
+      'label' => t('Subqueue'),
+      'plural label' => t('Subqueues'),
+      'entity class' => 'EntitySubqueue',
+      'controller class' => 'EntitySubqueueEntityController',
+      'module' => 'entityqueue',
+      'base table' => 'entityqueue_subqueue',
+      'load hook' => 'entityqueue_subqueue_load',
+      'uri callback' => 'entityqueue_subqueue_uri',
+      'label callback' => 'entityqueue_subqueue_label',
+      'access callback' => 'entityqueue_access',
+      'fieldable' => TRUE,
+      'entity keys' => array(
+        'id' => 'subqueue_id',
+        'bundle' => 'queue',
+        'label' => 'label',
+      ),
+      'bundles' => array(),
+      'bundle keys' => array(
+        'bundle' => 'name',
+      ),
+      'view modes' => array(
+        'full' => array(
+          'label' => t('queue'),
+          'custom settings' => FALSE,
+        ),
+      ),
+      'metadata controller class' => '',
+    ),
+  );
+
+  foreach (entityqueue_queue_load_multiple() as $name => $queue) {
+    $return['entityqueue_subqueue']['bundles'][$name] = array(
+      'label' => $queue->label,
+      'admin' => array(
+        'path' => 'admin/structure/entityqueue/list/%entityqueue_queue',
+        'real path' => 'admin/structure/entityqueue/list/' . $name,
+        'bundle argument' => 4,
+        'access callback' => 'entityqueue_queue_access',
+        'access arguments' => array('view', 4),
+      ),
+    );
+  }
+
+  // Support the Entity cache module.
+//  if (module_exists('entitycache')) {
+//    $return['entityqueue']['field cache'] = FALSE;
+//    $return['entityqueue']['entity cache'] = TRUE;
+//  }
+
+  return $return;
+}
+
+/**
+ * Implements hook_entity_property_info().
+ *
+ * @todo Do it :)
+ */
+//function entityqueue_entity_property_info() {
+//  $info = array();
+//
+//  $properties = &$info['entityqueue_subqueue']['properties'];
+//
+//  return $info;
+//}
+
+/**
+ * Access callback for the entity API.
+ * @see entity_access()
+ *
+ * @param $op
+ *   The operation being performed. One of 'view', 'update', 'create' or
+ *   'delete'.
+ * @param $entity
+ *   Optionally an entity to check access for. If no entity is given, it will be
+ *   determined whether access is allowed for all entities of the given type.
+ * @param $account
+ *   The user to check for. Leave it to NULL to check for the global user.
+ * @param $entity_type
+ *   The entity type of the entity to check for.
+ *
+ * @return bool
+ *   TRUE if the user has permission for $op, FALSE otherwise.
+ */
+function entityqueue_access($op, $entity = NULL, $account = NULL, $entity_type = NULL) {
+  if (empty($account)) {
+    global $user;
+    $account = $user;
+  }
+
+  $administer = user_access('administer entityqueue', $account);
+  if ($administer || user_access('manipulate all entityqueues', $account)) {
+    return TRUE;
+  }
+
+  if ($op == 'view' && user_access('manipulate entityqueues', $account)) {
+    return TRUE;
+  }
+
+  if (!(isset($entity) && is_object($entity))) {
+    return FALSE;
+  }
+
+  if (!isset($entity->queue)) {
+    watchdog('entityqueue', 'Missing queue property of entity object in entityqueue_access().', NULL, WATCHDOG_DEBUG);
+    return FALSE;
+  }
+
+  // For view, if they don't have the 'manipulate entityqueues' permission,
+  // check all other operations.
+  if ($op == 'view') {
+    foreach (array('update', 'create', 'delete') as $subop) {
+      if (user_access("$subop {$entity->queue} entityqueue", $account)) {
+        return TRUE;
+      }
+    }
+  }
+
+  return user_access("$op {$entity->queue} entityqueue", $account);
+}
+
+/**
+ * Menu access callback.
+ */
+function entityqueue_queue_access($op, $queue) {
+  if (is_object($queue) && ($queue instanceof EntityQueue)) {
+    $queue_name = $queue->name;
+  }
+  elseif (is_string($queue)) {
+    $queue_name = $queue;
+  }
+  else {
+    return;
+  }
+  $stub = (object) array(
+    'queue' => $queue_name,
+  );
+  return entity_access($op, 'entityqueue_subqueue', $stub);
+}
+
+/**
+ * Constructs a new EntitySubqueue object, without saving it to the database.
+ *
+ * @param array $values
+ *   An array of values to set, keyed by property name.
+ *
+ * @return EntitySubqueue
+ *   A new EntitySubqueue object.
+ */
+function entityqueue_subqueue_create($values = array()) {
+  return entity_get_controller('entityqueue_subqueue')->create($values);
+}
+
+/**
+ * Saves a subqueue.
+ *
+ * @param EntitySubqueue $subqueue
+ *   The full EntitySubqueue object to save.
+ *
+ * @return int
+ *   SAVED_NEW or SAVED_UPDATED depending on the operation performed.
+ */
+function entityqueue_subqueue_save(EntitySubqueue $subqueue) {
+  return entity_get_controller('entityqueue_subqueue')->save($subqueue);
+}
+
+/**
+ * Loads a subqueue by name or by ID.
+ *
+ * @param string|int $name
+ *   The subqueue_id or machine name of a EntitySubqueue.
+ *
+ * @return EntitySubqueue|false
+ *   An EntitySubqueue object.
+ */
+function entityqueue_subqueue_load($name) {
+  $subqueues = entityqueue_subqueue_load_multiple(array($name));
+  return $subqueues ? reset($subqueues) : FALSE;
+}
+
+/**
+ * Loads multiple subqueues by ID, name or based on a set of matching conditions.
+ *
+ * @param array $names
+ *   An array of queue names or IDs.
+ * @param array $conditions
+ *   An array of conditions on the {entityqueue_subqueue} table in the form
+ *     'field' => $value.
+ * @param bool $reset
+ *   Whether to reset the internal queue loading cache.
+ *
+ * @return array
+ *   An array of EntitySubqueue objects, keyed by subuque_id. When no results
+ *   are found, an empty array is returned.
+ */
+function entityqueue_subqueue_load_multiple($names = FALSE, $conditions = array(), $reset = FALSE) {
+  if (!empty($names) && !is_numeric(reset($names))) {
+    $conditions += array('name' => $names);
+    $names = FALSE;
+  }
+
+  $queues = entity_load('entityqueue_subqueue', $names, $conditions, $reset);
+  return !empty($queues) ? $queues : array();
+}
+
+/**
+ * Loads multiple subqueues with a specific target type.
+ *
+ * @param string $target_type
+ *   An entity type (e.g. 'node', 'comment', 'user').
+ *
+ * @return array
+ *   An array of EntitySubqueue objects, keyed by subqueue_id.
+ */
+function entityqueue_subqueue_load_by_target_type($target_type) {
+  $queues = entityqueue_queue_load_by_target_type($target_type);
+  return entity_load('entityqueue_subqueue', FALSE, array('queue' => array_keys($queues)));
+}
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function entityqueue_block_view_alter(&$data, $block) {
+  if ($data == NULL || !isset($data['content']) || !is_array($data['content'])) {
+    return;
+  }
+  // Add contextual links for blocks provided by Views that have a Entityqueue
+  // relationship.
+  $content = &$data['content'];
+  if ($block->module == 'views' && !empty($content['#contextual_links']['views_ui'])) {
+    $view_name = $content['#views_contextual_links_info']['views_ui']['view_name'];
+    $view_display_id = $content['#views_contextual_links_info']['views_ui']['view_display_id'];
+
+    // Get the view object from views contextual info or initialize it manually.
+    if (!empty($content['#views_contextual_links_info']['views_ui']['view'])) {
+      $view = $content['#views_contextual_links_info']['views_ui']['view'];
+    }
+    else {
+      $view = views_get_view($view_name);
+    }
+    $view->init_display();
+
+    // Get view display relationships.
+    $relationships = $view->display[$view_display_id]->handler->get_option('relationships');
+    foreach ($relationships as $relationship) {
+      if ($relationship['field'] == 'entityqueue_relationship') {
+        $referenced_subqueues = array_keys(array_filter($relationship['queues']));
+        if (!empty($referenced_subqueues)) {
+          // Contextual links can handle only one set of links coming from a module,
+          // so we'll have to settle for the first referenced queue.
+          $subqueue = entityqueue_subqueue_load(reset($referenced_subqueues));
+
+          if ($subqueue) {
+            $link = array('entityqueue' => array('admin/structure/entityqueue/list', array($subqueue->queue, 'subqueues', $subqueue->name, 'edit')));
+            $content['#contextual_links'] = array_merge($link, $content['#contextual_links']);
+            $content['#entityqueue_contextual_links_info'] = array(
+              'subqueue' => $subqueue,
+            );
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function entityqueue_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'entityqueue') . '/includes/views',
+  );
+}
+
+/**
+ * Implements hook_theme().
+ */
+function entityqueue_theme() {
+  return array(
+    'entityqueue_overview_item' => array(
+      'variables' => array('label' => NULL, 'name' => FALSE, 'status' => FALSE),
+      'file' => 'includes/entityqueue.theme.inc',
+    ),
+    'entityqueue_status' => array(
+      'variables' => array('status' => NULL, 'html' => TRUE),
+      'file' => 'includes/entityqueue.theme.inc',
+    ),
+    'entityqueue_dragtable' => array(
+      'render element' => 'form',
+      'file' => 'includes/entityqueue.theme.inc',
+    ),
+  );
+}
+
+/**
+ * Returns all queues or subqueues in a way which can be used on form options.
+ *
+ * @param array $objects
+ *   (optional) An array of fully loaded objects to display.
+ * @param string $object_type
+ *   (optional) A string representing what needs to be loaded, queues or
+ *   subqueues. Defaults to 'subqueue';
+ *
+ * @return array
+ *   An array of EntityQueue or EntitySubqueue objects, keyed by name.
+ */
+function entityqueue_get_options($objects = array(), $object_type = 'subqueue') {
+  if (empty($objects)) {
+    switch ($object_type) {
+      case 'subqueue':
+        $objects = entityqueue_subqueue_load_multiple();
+        break;
+      case 'queue':
+      default:
+      $objects = entityqueue_queue_load_multiple();
+        break;
+    }
+  }
+  $options = array();
+  foreach ($objects as $object) {
+    $options[$object->name] = $object->label;
+  }
+
+  return $options;
+}
+
+/**
+ * Helper function for getting the name of a entityreference field.
+ *
+ * @param string $entity_type
+ *   A Drupal entity type.
+ *
+ * @return string
+ *   The name of the entityreference field for the given entity type.
+ */
+function _entityqueue_get_target_field_name($entity_type) {
+  if (drupal_strlen($entity_type) <= 29) {
+    return 'eq_' . $entity_type;
+  }
+  else {
+    // Field names cannot be longer than 32 characters, so have to use a hashing
+    // trick in order to get a human-readable field name for long entity types.
+    return 'eq_' . substr($entity_type, 0, 20) . '_' . substr(md5($entity_type), 0, 8);
+  }
+}
+
+/**
+ * Makes sure that a entityreference field instance exists for a queue.
+ *
+ * @param EntityQueue $queue
+ *   An EntityQueue object.
+ */
+function _entityqueue_queue_ensure_instance(EntityQueue $queue) {
+  $all_queue_names = variable_get('entityqueue_queue_names', array());
+  if (!in_array($queue->name, $all_queue_names)) {
+    $all_queue_names[] = $queue->name;
+    variable_set('entityqueue_queue_names', $all_queue_names);
+  }
+
+  $field_name = _entityqueue_get_target_field_name($queue->target_type);
+  $all_eq_fields = variable_get('entityqueue_field_names', array());
+  if (!in_array($field_name, $all_eq_fields)) {
+    $all_eq_fields[] = $field_name;
+    variable_set('entityqueue_field_names', $all_eq_fields);
+  }
+  $handler_settings = array(
+    'behaviors' => array(
+      'entityqueue' => array(
+        'status' => 1,
+      ),
+    ),
+  );
+  if (!field_info_instance('entityqueue_subqueue', $field_name, $queue->name)) {
+    _entityqueue_create_entityreference_field($queue, $field_name, 'entityqueue_subqueue', $queue->name, t('Queue items'), 0, array(), $handler_settings);
+  }
+}
+
+/**
+ * Creates a locked instance of a entityreference field on the specified bundle.
+ *
+ * @param EntityQueue $queue
+ *   An EntityQueue object.
+ * @param string $field_name
+ *   The name of the field; if it already exists, a new instance of the existing
+ *   field will be created.
+ * @param string $entity_type
+ *   The type of entity the field instance will be attached to.
+ * @param string $bundle
+ *   The bundle name of the entity the field instance will be attached to.
+ * @param string $label
+ *   The label of the field instance.
+ * @param int $weight
+ *   The default weight of the field instance widget and display.
+ * @param array $display
+ *   An array of default display data used for the entity's current view modes.
+ * @param array $handler_settings
+ *   An array of Entityrefence field handler settings.
+ */
+function _entityqueue_create_entityreference_field($queue, $field_name, $entity_type, $bundle, $label, $weight = 0, $display = array(), $handler_settings = array()) {
+  // If a field type we know should exist isn't found, clear the Field cache.
+  if (!field_info_field_types('entityreference')) {
+    field_cache_clear();
+  }
+
+  // Look for or add the specified entityreference field to the requested entity
+  // bundle.
+  $field = field_read_field($field_name);
+  $instance = field_read_instance($entity_type, $field_name, $bundle);
+
+  if (empty($field)) {
+    $field = array(
+      'field_name' => $field_name,
+      'type' => 'entityreference',
+      'cardinality' => FIELD_CARDINALITY_UNLIMITED,
+      'entity_types' => array($entity_type),
+      'translatable' => FALSE,
+      'locked' => TRUE,
+      'settings' => array(
+        'target_type' => $queue->target_type,
+        'handler' => 'entityqueue',
+        'handler_settings' => $handler_settings,
+      ),
+    );
+    field_create_field($field);
+  }
+
+  if (empty($instance)) {
+    $instance = array(
+      'field_name' => $field_name,
+      'entity_type' => $entity_type,
+      'bundle' => $bundle,
+
+      'label' => $label,
+      'required' => FALSE,
+      'settings' => array(),
+
+      'widget' => array(
+        'type' => 'entityqueue_dragtable',
+        'weight' => $weight,
+        'settings' => array(),
+      ),
+
+      'display' => $display,
+    );
+    field_create_instance($instance);
+  }
+}
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function entityqueue_field_widget_info() {
+  return array(
+    'entityqueue_dragtable' => array(
+      'label' => t('Draggable table'),
+      'field types' => array('entityreference'),
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'size' => 60,
+      ),
+      'behaviors' => array(
+        'multiple values' => FIELD_BEHAVIOR_CUSTOM,
+      ),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_settings_form().
+ */
+function entityqueue_field_widget_settings_form($field, $instance) {
+  $widget = $instance['widget'];
+  $settings = $widget['settings'] + field_info_widget_settings($widget['type']);
+
+  $form = array();
+
+  if ($widget['type'] == 'entityqueue_dragtable') {
+    $target_type = $field['settings']['target_type'];
+    $info = entity_get_info($target_type);
+    $target_label = isset($info['plural label']) ? $info['plural label'] : $info['label'];
+    $form['match_operator'] = array(
+      '#type' => 'select',
+      '#title' => t('Autocomplete matching'),
+      '#default_value' => $settings['match_operator'],
+      '#options' => array(
+        'STARTS_WITH' => t('Starts with'),
+        'CONTAINS' => t('Contains'),
+      ),
+      '#description' => t('Select the method used to collect autocomplete suggestions. Note that <em>Contains</em> can cause performance issues on sites with thousands of @entities.', array(
+        '@entities' => $target_label,
+      )),
+    );
+    $form['size'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Size of textfield'),
+      '#default_value' => $settings['size'],
+      '#element_validate' => array('_element_validate_integer_positive'),
+      '#required' => TRUE,
+    );
+  }
+
+  return $form;
+}
+
+/**
+ * Implements hook_field_widget_form().
+ */
+function entityqueue_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  if ($instance['widget']['type'] == 'entityqueue_dragtable') {
+    $subform = array();
+    $entity_type = $element['#entity_type'];
+    $field_name = $element['#field_name'];
+    $target_type = $field['settings']['target_type']; // The referenced entity_type
+    $entity = isset($element['#entity']) ? $element['#entity'] : FALSE;
+    // Abort early if we don't have a reference to the parent entity.
+    if (!$entity) {
+      return $element;
+    }
+
+    list($entity_id) = entity_extract_ids($entity_type, $entity);
+    $value_key = key($field['columns']);
+    $subform['#value_key'] = $value_key;
+    // We don't use drupal_html_id() here because our ajax callback needs
+    // to be able to know what the table id is. We should never have
+    // the same form field multiple times on a page anyway.
+    $table_id = drupal_clean_css_identifier('entityqueue-dragtable-' . $field_name);
+    $table_classes = array(
+      'entityqueue-dragtable',
+      'entityqueue-dragtable-field-' . $field_name,
+      'entityqueue-dragtable-entity-type-' . $entity_type,
+    );
+    drupal_add_tabledrag($table_id, 'order', 'sibling', 'item-weight');
+    $subform['items'] = array(
+      '#theme' => 'entityqueue_dragtable',
+      '#attributes' => array(
+        'id' => $table_id,
+        'class' => $table_classes,
+      ),
+      '#attached' => array(
+        'js' => array(
+          drupal_get_path('module', 'entityqueue') . '/js/entityqueue.widget.js' => array('type' => 'file'),
+        ),
+      ),
+    );
+
+    $rows = array();
+    $values = isset($form_state['values'][$field_name][$langcode]) ? $form_state['values'][$field_name][$langcode] : $items;
+    if (!empty($values)) {
+      $entity_ids = array();
+      foreach ($values as $key => $item) {
+        $entity_ids[] = $item[$value_key];
+      }
+      $entities = entity_load($target_type, $entity_ids);
+    }
+    $count = count($values);
+
+    // When ajax element is clicked, don't lose the destination.
+    if (current_path() == 'system/ajax') {
+      if (isset($form_state['destination'])) {
+        $destination = $form_state['destination'];
+      }
+    }
+    else  {
+      $destination = drupal_get_destination();
+      $form_state['destination'] = $destination;
+    }
+
+    $j = 0; // Keeps track of existing items index
+    foreach ($values as $key => $item) {
+      $target_id = $item[$value_key];
+      $actions = array();
+
+      if (isset($entities[$target_id])) {
+        $label = entity_label($target_type, $entities[$target_id]);
+        $uri = entity_uri($target_type, $entities[$target_id]);
+        $label = l($label, $uri['path']);
+      }
+      else {
+        continue;
+        // $label = t('Missing @type', array('@type' => $target_type));
+      }
+
+      $actions[] = array(
+        '#type' => 'button',
+        '#value' => t('Remove'),
+        '#name' => $field_name . '_remove_' . $key,
+        '#ajax' => array(
+          'callback' => 'entityqueue_field_widget_ajax_callback',
+          'wrapper' => $table_id,
+        ),
+      );
+
+      $subform['items'][$key] = array(
+        'label' => array(
+          '#type' => 'markup',
+          '#markup' => $label,
+        ),
+        $value_key => array(
+          '#type' => 'value',
+          '#value' => $target_id,
+        ),
+        'actions' => array(
+          '#type' => 'container',
+          $actions,
+        ),
+        'weight' => array(
+          '#type' => 'weight',
+          '#delta' => $count,
+          '#default_value' => $key,
+          '#title' => '',
+          '#attributes' => array('class' => array('item-weight')),
+        ),
+      );
+    }
+    // This is stolen from entityreference_field_widget_form() and trimmed down
+    // for our purposes.
+    $autocomplete_path = 'entityreference/autocomplete/single/';
+    $autocomplete_path .= $field_name . '/' . $entity_type . '/' . $instance['bundle'] . '/';
+    $id = 'NULL';
+    if ($entity_id) {
+      $id = $entity_id;
+    }
+    $autocomplete_path .= $id;
+    $subform['add'] = array(
+      '#type' => 'container',
+      '#attributes' => array('class' => array('container-inline')),
+      '#weight' => 10,
+      'entity' => array(
+        '#type' => 'textfield',
+        '#maxlength' => 1024,
+        '#default_value' => '',
+        '#autocomplete_path' => $autocomplete_path,
+        '#size' => $instance['widget']['settings']['size'],
+        '#element_validate' => array('_entityreference_autocomplete_validate'),
+        '#attributes' => array(
+          'id' => $table_id . '-add',
+        ),
+      ),
+      'submit' => array(
+        '#type' => 'submit',
+        '#value' => t('Add item'),
+        '#ajax' => array(
+          'callback' => 'entityqueue_field_widget_ajax_callback',
+          'wrapper' => $table_id,
+        ),
+      ),
+    );
+
+    if (!empty($instance['description'])) {
+      $subform['description'] = array(
+        '#markup' => t(field_filter_xss($instance['description'])),
+        '#prefix' => '<div class="description">',
+        '#suffix' => '</div>',
+        '#weight' => 11,
+      );
+    }
+
+    $subform['#element_validate'] = array('entityqueue_widget_dragtable_element_validate');
+    return $subform;
+  }
+}
+
+/**
+ * Element validate callback.
+ * @see entityqueue_field_widget_form()
+ */
+function entityqueue_widget_dragtable_element_validate($element, &$form_state) {
+  $items = array();
+  $value_key = $element['#value_key'];
+  $field_name = $element['#field_name'];
+  $lang = $element['#language'];
+  if (isset($form_state['values'][$field_name][$lang]['items'])) {
+    $existing_values = $form_state['values'][$field_name][$lang]['items'];
+  }
+  else {
+    $existing_values = array();
+  }
+  // If the trigger was a remove button.
+  $triggering_element = $form_state['triggering_element'];
+  $offset = drupal_strlen($field_name) + 8;
+  if (drupal_substr($triggering_element['#name'], 0, $offset) == $field_name . '_remove_') {
+    $remove_key = drupal_substr($triggering_element['#name'], $offset);
+    unset($existing_values[$remove_key]);
+  }
+  $values = array();
+  $weights = array();
+  foreach ($existing_values as $key => $row) {
+    $values[] = $row[$value_key];
+    $weights[] = $row['weight'];
+  }
+  array_multisort($weights, SORT_ASC, $existing_values);
+  foreach ($existing_values as $key => $row) {
+    $items[] = array(
+      $value_key => $row[$value_key],
+    );
+  }
+  $new_value = $form_state['values'][$field_name][$lang]['add'];
+  if (!empty($new_value['entity'])) {
+    $items[] = array(
+      $value_key => $new_value['entity'],
+    );
+  }
+  form_set_value($element, $items, $form_state);
+  // Rebuild form if ajax callback button was clicked.
+  if (current_path() == 'system/ajax') {
+    $form_state['rebuild'] = TRUE;
+  }
+}
+
+/**
+ * Ajax form callback.
+ */
+function entityqueue_field_widget_ajax_callback($form, $form_state) {
+  $field_name = $form_state['triggering_element']['#parents'][0];
+  $lang = $form[$field_name]['#language'];
+  $form_state['rebuild'] = TRUE;
+  $form[$field_name][$lang]['add']['#value'] = '';
+  $markup = drupal_render($form[$field_name]);
+
+  $commands[] = ajax_command_replace('.' . drupal_clean_css_identifier('field-name-' . $field_name) , $markup);
+
+
+  $add_id = drupal_clean_css_identifier('entityqueue-dragtable-' . $field_name . '-add');
+  $commands[] = ajax_command_invoke('#' . $add_id, 'val', array(''));
+  $settings = array(
+    drupal_clean_css_identifier('entityqueue-dragtable-' . $field_name) => true,
+  );
+  drupal_add_js(array('entityqueue_changed' => $settings), 'setting');
+  return array(
+    '#type' => 'ajax',
+    '#commands' => $commands,
+  );
+}
+
+/**
+ * Ajax form callback.
+ */
+function entityqueue_subqueue_ajax_callback($form, $form_state) {
+  $settings = array(
+    drupal_clean_css_identifier('entityqueue-dragtable-' . $form_state['field_name']) => true,
+  );
+  drupal_add_js(array('entityqueue_changed' => $settings), 'setting');
+
+  $markup = drupal_render($form);
+  $commands[] = ajax_command_replace('#' . $form_state['form_wrapper_id'] , $markup);
+
+  return array(
+    '#type' => 'ajax',
+    '#commands' => $commands,
+  );
+}
+
+/**
+ * Workaround for missing breadcrumbs on callback and action paths.
+ *
+ * Shamelessly stolen from http://drupal.org/project/xmlsitemap
+ *
+ * @todo Remove when http://drupal.org/node/576290 is fixed.
+ */
+function _entityqueue_set_breadcrumb($path = 'admin/structure/entityqueue') {
+  $breadcrumb = array();
+  $path = explode('/', $path);
+  do {
+    $menu_path = implode('/', $path);
+    $menu_item = menu_get_item($menu_path);
+    array_unshift($breadcrumb, l($menu_item['title'], $menu_path));
+  } while (array_pop($path) && !empty($path));
+  array_unshift($breadcrumb, l(t('Home'), NULL));
+  drupal_set_breadcrumb($breadcrumb);
+}

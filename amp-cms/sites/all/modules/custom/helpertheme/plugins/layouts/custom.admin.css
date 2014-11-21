@@ -1,0 +1,53 @@
+/* $Id: custom.admin.css,v 1.4 2012/06/28 09:54:45 wschneider Exp $ */
+
+/**
+ * @file
+ * Custom CSS for administration pages.
+ */
+
+.custom-layout .cl-row {
+	padding: 0px 0px 20px;
+}
+
+.custom-doublelayout .group,
+.custom-layout .col {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  float: left;
+}
+
+.custom-layout .cols-1 .col {
+	padding: 0 0.5%;
+  width: 100%;
+}
+
+.custom-doublelayout .group,
+.custom-layout .cols-2 .col {
+  padding: 0 0.5%;
+  width: 50%;
+}
+
+.custom-layout .cols-3 .col {
+  padding: 0 0.5%;
+  width: 33.333%;
+}
+
+.custom-layout .cols-4 .col {
+  padding: 0 0.5%;
+  width: 25%;
+}
+
+.object-wrapper {
+  padding: 0px 10px 20px;
+}
+
+.object-info,
+.object-details {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  float: left;
+  padding: 0 0.5%;
+  width: 50%;
+}

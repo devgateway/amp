@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Tests for chr
+ */
+
+class ChrTestCase extends DrupalWebTestCase {
+  public static function getInfo() {
+    return array(
+      'name' => t('Chr tests'),
+      'description' => t('One or more complete sentences explaining the test.'),
+      'group' => t('Chr'),
+    );
+  }
+
+  function setUp() {
+    parent::setUp('chr');
+  }
+
+  // @todo
+}

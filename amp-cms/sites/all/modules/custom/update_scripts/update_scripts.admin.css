@@ -1,0 +1,29 @@
+/**
+ * @file
+ * This is the style for the update scripts admin interface.
+ *
+ * NOTE: High specificity required to override default styles!
+ */
+
+#update-scripts-settings-form #edit-directory-status .status {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  line-height: 24px; /* match the icon height */
+  padding-left: 30px; /* 24px icon size + 6px spacing */
+}
+
+#update-scripts-run-form fieldset .fieldset-wrapper {
+  padding-bottom: 0;
+}
+
+.update-scripts-run td {
+  line-height: 24px; /* match the icon height */
+  padding: 6px;
+  vertical-align: middle;
+}
+
+.update-scripts-run .script-name {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  padding-left: 30px; /* 24px icon size + 6px spacing */
+}

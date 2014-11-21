@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the AMP File Entity feature.
+ */
+
+include_once 'ampfileentity.features.inc';

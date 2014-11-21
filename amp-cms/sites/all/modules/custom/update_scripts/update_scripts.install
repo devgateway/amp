@@ -1,0 +1,111 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Update Scripts module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function update_scripts_schema() {
+  $schema = array();
+
+  $schema['update_scripts'] = array(
+    'description' => 'Stores which script was run and when it was ran.',
+    'fields' => array(
+      'lid' => array(
+        'description' => 'ID of the log entry.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'path' => array(
+        'description' => 'Path to the script that was executed.',
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+      ),
+      'started' => array(
+        'description' => 'The UNIX timestamp when the script started to run.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'finished' => array(
+        'description' => 'The UNIX timestamp when the script ended its running.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'with_errors' => array(
+        'description' => 'Whether or not there were any errors while running the update script.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'queries' => array(
+        'description' => 'The queries ran during this script\'s execution. Serialized array.',
+        'type' => 'text',
+        'size' => 'big',
+        'serialize' => TRUE,
+        'not null' => FALSE,
+      ),
+      'errors' => array(
+        'description' => 'The outcome of this script. Serialized array.',
+        'type' => 'text',
+        'size' => 'big',
+        'serialize' => TRUE,
+        'not null' => FALSE,
+      ),
+    ),
+    'primary key' => array('lid'),
+    'indexes' => array(
+      'update_scripts_path' => array('path'),
+      'update_scripts_started' => array('started'),
+      'update_scripts_finished' => array('finished'),
+    ),
+  );
+
+  return $schema;
+}
+
+/**
+ * Implements hook_install().
+ */
+function update_scripts_install() {
+  return;
+
+  $scripts_directory = update_scripts_get_directory();
+  if (update_scripts_check_directory($scripts_directory, TRUE)) {
+    $t = get_t();
+    $args = array(
+      '@url' => url(UPDATE_SCRIPTS_MENU_BASE_PATH),
+    );
+    drupal_set_message($t('Update Scripts module has been installed, go to <a href="@url">configuration page</a> to properly setup the module.', $args), 'warning');
+    variable_set('update_scripts_directory', $scripts_directory);
+  }
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function update_scripts_uninstall() {
+  variable_del('update_scripts_clear_cache');
+  variable_del('update_scripts_directory');
+  variable_del('update_scripts_maintenance_mode');
+  variable_del('update_scripts_maintenance_previous_status');
+  variable_del('update_scripts_closed_phases');
+  variable_del('update_scripts_revert_features');
+}
+
+/**
+ * Force the creation or update of the .htaccess file for update scripts.
+ */
+function update_scripts_update_7001() {
+  // Get update scripts directory.
+  $path = update_scripts_get_directory();
+
+  $htaccess_path = $path . DIRECTORY_SEPARATOR . '.htaccess';
+  file_create_htaccess($path, TRUE, TRUE);
+}

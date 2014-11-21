@@ -1,0 +1,75 @@
+diff --git a/sites/all/modules/contrib/media/modules/media_wysiwyg/includes/media_wysiwyg.filter.inc b/sites/all/modules/contrib/media/modules/media_wysiwyg/includes/media_wysiwyg.filter.inc
+index 44360b3..8e6ac61 100644
+--- a/sites/all/modules/contrib/media/modules/media_wysiwyg/includes/media_wysiwyg.filter.inc
++++ b/sites/all/modules/contrib/media/modules/media_wysiwyg/includes/media_wysiwyg.filter.inc
+@@ -165,7 +165,7 @@ function media_wysiwyg_token_to_markup($match, $wysiwyg = FALSE) {
+ 
+   if ($wysiwyg) {
+     $settings['wysiwyg'] = $wysiwyg;
+-    // If sending markup to a WYSIWYG, we need to pass the file infomation so
++    // If sending markup to a WYSIWYG, we need to pass the file information so
+     // that an inline macro can be generated when the WYSIWYG is detached.
+     // The WYSIWYG plugin is expecting this information in the
+     // Drupal.settings.mediaDataMap variable.
+@@ -178,6 +178,9 @@ function media_wysiwyg_token_to_markup($match, $wysiwyg = FALSE) {
+     );
+     drupal_add_js(array('mediaDataMap' => array($file->fid => $data)), 'setting');
+     $element['#attributes']['data-fid'] = $file->fid;
++    $element['#attributes']['data-media-view-mode'] = $tag_info['view_mode'];
++
++    // Don't break existing elements style.
+     $element['#attributes']['class'][] = 'media-element';
+   }
+   else {
+diff --git a/sites/all/modules/contrib/media/modules/media_wysiwyg/js/media_wysiwyg.filter.js b/sites/all/modules/contrib/media/modules/media_wysiwyg/js/media_wysiwyg.filter.js
+index 5ac10ec..eb7e93a 100644
+--- a/sites/all/modules/contrib/media/modules/media_wysiwyg/js/media_wysiwyg.filter.js
++++ b/sites/all/modules/contrib/media/modules/media_wysiwyg/js/media_wysiwyg.filter.js
+@@ -74,7 +74,7 @@
+ 
+       // Wrap the content to be able to use replaceWith() and html().
+       content = $('<div>').append(content);
+-      var media = $('.media-element', content);
++      var media = $('[data-media-view-mode]', content);
+ 
+       if (media.length) {
+         // Replace all media elements with their respective macros.
+@@ -142,9 +142,10 @@
+       // Store the fid in the DOM to retrieve the data from the info map.
+       element.attr('data-fid', info.fid);
+ 
+-      // Add media-element class so we can find markup element later.
+-      var classes = ['media-element'];
++      // Add data-media-view-mode attribute so we can find the markup element later.
++      element.attr('data-media-view-mode', info.view_mode)
+ 
++      var classes = ['media-element'];
+       if (info.view_mode) {
+         classes.push('file-' + info.view_mode.replace(/_/g, '-'));
+       }
+diff --git a/sites/all/modules/contrib/media/modules/media_wysiwyg/js/wysiwyg-media.js b/sites/all/modules/contrib/media/modules/media_wysiwyg/js/wysiwyg-media.js
+index af99097..29560c0 100644
+--- a/sites/all/modules/contrib/media/modules/media_wysiwyg/js/wysiwyg-media.js
++++ b/sites/all/modules/contrib/media/modules/media_wysiwyg/js/wysiwyg-media.js
+@@ -20,7 +20,7 @@ Drupal.wysiwyg.plugins.media = {
+    *   A DOM element
+    */
+   isNode: function(node) {
+-    return $(node).is('img.media-element');
++    return $(node).is('img[data-media-view-mode]');
+   },
+ 
+   /**
+diff --git a/sites/all/modules/contrib/media/modules/media_wysiwyg/wysiwyg_plugins/media_ckeditor/library.js b/sites/all/modules/contrib/media/modules/media_wysiwyg/wysiwyg_plugins/media_ckeditor/library.js
+index a1f3337..18c2ac0 100644
+--- a/sites/all/modules/contrib/media/modules/media_wysiwyg/wysiwyg_plugins/media_ckeditor/library.js
++++ b/sites/all/modules/contrib/media/modules/media_wysiwyg/wysiwyg_plugins/media_ckeditor/library.js
+@@ -13,7 +13,7 @@
+      */
+     invoke: function (data, settings, instanceId) {
+       if (data.format == 'html') {
+-        if (jQuery(data.node).is('.media-element')) {
++        if (jQuery(data.node).is('[data-media-view-mode]')) {
+           // Change the view mode for already-inserted media.
+           var mediaFile = Drupal.media.filter.extract_file_info(jQuery(data.node));
+           Drupal.media.popups.mediaStyleSelector(mediaFile, function (mediaFiles) {

@@ -1,0 +1,144 @@
+
+/**
+ * @file
+ * Misc helpers and shortcuts
+ */
+
+// #################### Shortcuts ####################
+
+/*
+ * Border radius.
+ *
+ * @see: http://border-radius.com
+ * @see: http://caniuse.com/border-radius
+ * @see: http://www.w3.org/TR/css3-background/#corners
+ */
+.border-radius(@radius) {
+  -khtml-border-radius: @radius;
+  -moz-border-radius: @radius;
+  -webkit-border-radius: @radius;
+  border-radius: @radius;
+}
+
+/*
+ * Box sizing.
+ *
+ * @see: http://caniuse.com/css3-boxsizing
+ * @see: http://www.w3.org/TR/css3-ui/#box-sizing
+ * @see: http://www.w3.org/TR/css3-ui/#box-sizing
+ */
+.box-sizing(@type: border-box) {
+  -moz-box-sizing: @type;
+  -webkit-box-sizing: @type;
+  box-sizing: @type;
+}
+
+// #################### Helpers ####################
+
+/*
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    contenteditable attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that are clearfixed.
+ * 2. The use of 'table' rather than 'block' is only necessary if using
+ *    ':before' to contain the top-margins of child elements.
+ *
+ * @see: http://www.paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither
+ * @see: http://nicolasgallagher.com/micro-clearfix-hack
+ * @see: http://www.satzansatz.de/cssd/onhavinglayout.html
+ * @see: http://quirksmode.org/css/css2/display.html
+ */
+.clearfix-mixin() {
+  &:before,
+  &:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+/*
+ * Generates text-removing properties for use in image replacement. Does not
+ * specify the background image (or it's positioning) itself - this needs to be
+ * specified manually (or use one of the sprite mixins, if appropriate):
+ *
+ * 1. Opera requires some special treatment (!important) in order for the color to be overridden.
+ * 2. Webkit seems not to respect width:0 on submit buttons, but font:0 does the trick.
+ *
+ * @TODO: Needs work!!!
+ *
+ * @see: http://css-tricks.com/examples/ImageReplacement
+ * @see: http://www.ampsoft.net/webdesign-l/image-button.html
+ * @see: https://github.com/h5bp/html5-boilerplate/issues/1108
+ * @see: https://github.com/h5bp/html5-boilerplate/blob/master/css/main.css
+ */
+.image-replacement() {
+  background-color: transparent;
+  border: 0;
+  color: transparent !important; /* 1 */
+  // font: ~"0/0";  /* 2 */
+  text-shadow: none;
+}
+
+
+/*
+ * Hide elements visually, but keep them available for screen-readers.
+ *
+ * Used for information required for screen-reader users to understand and use
+ * the site where visual display is undesirable. Information provided in this
+ * manner should be kept concise, to avoid unnecessary burden on the user.
+ *
+ * @see: DRUPAL .element-invisible {}
+ */
+.visually-hidden() {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  &.focusable:active,
+  &.focusable:focus {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto;
+  }
+}
+
+/*
+ * Apply single color to anchor tags.
+ */
+// .link-color(@normalcolor, @actcolor, @viscolor, @hovcolor) when not (iscolor(@actcolor)) and not (iscolor(@viscolor)) and not (iscolor(@hovcolor))) {
+.link-color(
+  @normalcolor,
+  @actcolor: darken(@normalcolor, 10%),
+  @viscolor: lighten(@normalcolor, 10%),
+  @hovcolor: darken(@normalcolor, 15%),
+) {
+  // Style links that have not been visited.
+  &:link {
+    color: @normalcolor;
+  }
+  // Style links that are active.
+  &.active,
+  &:active {
+    color: @actcolor;
+  }
+  // Style links that have been visited.
+  &:visited {
+    color: @viscolor;
+  }
+  // Style link hover and focus states.
+  &:focus,
+  &:hover {
+    color: @hovcolor;
+  }
+}

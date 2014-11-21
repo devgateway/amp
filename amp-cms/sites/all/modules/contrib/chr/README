@@ -1,0 +1,57 @@
+cURL HTTP Request
+=================
+
+cURL HTTP Request is a module intended for developers, as it provides just one API to call: chr_curl_http_request().
+
+The function chr_curl_http_request() is an alternative implementation of Drupal core function drupal_http_request() using
+cURL. The function intends to be backwards compatible with drupal_http_request(), by accepting the same parameters
+in the same form and by returning the response in the same format.
+
+Override default http request function (Drupal 7.21 or higher)
+--------------------------------------------------------------
+
+You can set Drupal to use this function as the default request method by setting the following in your settings.php file
+
+````
+$conf['drupal_http_request_function'] = 'chr_curl_http_request'];
+````
+Or through the admin UI
+
+admin/config/services/chr
+
+The latter will automatically revert settings back to their previous values if you disable/uninstall this module.
+
+Proxy support
+-------------
+cURL HTTP request does provide some extra features, though: it allows for requests to be sent via proxy, whether they
+are HTTP or HTTPS request. It can even support different proxies for HTTP and HTTPS. Basic proxy authentication via
+username and password is also supported as well as an exception list of hostnames not to be contacted via proxy.
+
+### Sample proxy settings
+
+An example of the proxy configuration that you must add to your settings.php in order to have proxy support in your
+request via curl_http_request():
+
+````
+/**
+ * External access proxy settings:
+ *
+ * If your site must access the Internet via a web proxy then you can enter
+ * the proxy settings here. Currently only basic authentication is supported
+ * by using the username and password variables. The 'exceptions' variable
+ * is an array of host names to be accessed directly, not via proxy.
+ */
+$conf['http_proxy'] = array(
+  'server' => 'your.proxy.com',
+  'port' => '8080',
+  'username' => 'user',
+  'password' => 'pass',
+  'exceptions' => array('localhost'),
+);
+
+$conf['https_proxy'] = $conf['http_proxy'];
+````
+
+These system-wide proxy settings can be overriden on a per call basis by setting either the 'http_proxy' or the
+'https_proxy' key in the $options array when calling curl_http_request(). Needless to say, those keys must be set to
+arrays the same the ones used for the system-wide settings.

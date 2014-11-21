@@ -1,0 +1,22 @@
+diff --git a/sites/all/modules/contrib/media/modules/media_wysiwyg/includes/media_wysiwyg.pages.inc b/sites/all/modules/contrib/media/modules/media_wysiwyg/includes/media_wysiwyg.pages.inc
+index ab1a845..6662b8e 100644
+--- a/sites/all/modules/contrib/media/modules/media_wysiwyg/includes/media_wysiwyg.pages.inc
++++ b/sites/all/modules/contrib/media/modules/media_wysiwyg/includes/media_wysiwyg.pages.inc
+@@ -88,7 +88,16 @@ function media_wysiwyg_format_form($form, &$form_state, $file) {
+   foreach ($fields as $field_name => $field_value) {
+     $file->{$field_name} = $field_value;
+   }
+-  field_attach_form('file', $file, $form['options']['fields'], $form_state);
++
++  // @HACK: Fix title<>entity_translation issue.
++  // @see entity_translation_entity_info_alter()
++  // @see title_entity_language()
++  $langcode = function_exists('entity_language') ? entity_language('file', $file) : NULL;
++  if (empty($langcode)) {
++    $langcode = LANGUAGE_NONE;
++  }
++
++  field_attach_form('file', $file, $form['options']['fields'], $form_state, $langcode);
+   $instance = field_info_instances('file', $file->type);
+   foreach ($instance as $field_name => $field_value) {
+     if (isset($instance[$field_name]['settings']) && isset($instance[$field_name]['settings']['wysiwyg_override']) && !$instance[$field_name]['settings']['wysiwyg_override']) {

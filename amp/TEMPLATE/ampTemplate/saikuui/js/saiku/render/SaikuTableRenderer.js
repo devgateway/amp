@@ -297,10 +297,12 @@ function sanitizeColumns(columnData) {
 }
 
 function sanitizeRows(rowData, data) {
-	var totalWidth = data[0].length;
-	var excessCells = _.where(data[0], {value:"null"}).length;
-	rowData[0][0].span = totalWidth - excessCells;
-	rowData[0][0].width = totalWidth - excessCells;
+	if(rowData) {
+		var totalWidth = data[0].length;
+		var excessCells = _.where(data[0], {value:"null"}).length;
+		rowData[0][0].span = totalWidth - excessCells;
+		rowData[0][0].width = totalWidth - excessCells;
+	}
 	return rowData;
 }
 
@@ -330,9 +332,7 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
     var totalsLists = {};
     if(Settings.AMP_REPORT_API_BRIDGE) {
         totalsLists[COLUMNS] = sanitizeColumns(allData.rowTotalsLists);
-    	totalsLists[ROWS] = allData.colTotalsLists;
-        // disabling until it works, because it breaks totals only reports rendering
-        // totalsLists[ROWS] = sanitizeRows(allData.colTotalsLists, data);
+        totalsLists[ROWS] = sanitizeRows(allData.colTotalsLists, data);
     }
     else
 	{

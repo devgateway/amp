@@ -1,3 +1,5 @@
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@ page import="org.digijava.module.aim.form.ReportsForm"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
@@ -342,10 +344,17 @@ function submitForm(action){
 																				<td class="report_inside" style="font-size: 11px;"
 																					bgcolor="${color}">
 																					<div class="t_sm" title="${report.name}">
-																						<digi:link
-																							href="/viewNewAdvancedReport.do?view=reset&widget=false"
-																							paramName="report" paramId="ampReportId"
-																							paramProperty="ampReportId"
+																						<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}"/>
+	 																					<%
+																							if (report.getType()!=null && report.getType().equals(new Long(1)) && 
+																							FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS)) {
+																							%>
+																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}"/>
+	 																						
+																							<%}%>
+																					    
+																						<a
+																							href="${reportLink}"
 																							onclick="return popup(this,'');"
 																							title="${nameTooltip}">
 																							<b> 
@@ -358,7 +367,7 @@ function submitForm(action){
 																									</c:otherwise>
 																								</c:choose>
 																							</b>
-																						</digi:link>
+																						</a>
 																						<br>
 																						<logic:present name="report" property="reportDescription">
 																							<c:choose>
@@ -493,17 +502,15 @@ function submitForm(action){
                          																	<c:set var="translation">
 																								<digi:trn>Get report in printer friendly version</digi:trn>&nbsp;
 																							</c:set>
-																							<digi:link
-																								href="/viewNewAdvancedReport.do?viewFormat=print&widget=false"
-																								paramName="report" paramId="ampReportId"
-																								paramProperty="ampReportId"
+																							<a
+																								href="${reportLink}"
 																								onclick="return popup(this,'');"
 																								title="${translation}">
 																								<digi:img hspace="0" vspace="0" height="16"
 																									width="16"
 																									src="/TEMPLATE/ampTemplate/img_2/ico-print.png"
 																									border="0" />
-																							</digi:link>
+																							</a>
 																						</feature:display>
 																					</p></td>
 																			</tr>

@@ -1,3 +1,5 @@
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@ page pageEncoding="UTF-8" %>
 <%@page trimDirectiveWhitespaces="true"%>
 <%@ page import="org.digijava.module.aim.form.ReportsForm"%>
@@ -497,21 +499,32 @@ $(document).ready(function() {
 					                              								</td>
 					                              								<td class="inside" style="padding-right: 15px; padding-left: 15px;" bgcolor="<%=color%>">
 					                              									<c:if test="${!aimTeamReportsForm.showTabs}">
-	                              <digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false&resetSettings=true"  paramName="report"  paramId="ampReportId" paramProperty="ampReportId" styleClass="h-box" onclick="return popup(this,'');" title="Click here to view the Report">
-							                              									<b>
-							                              										<p style="max-width: 400px;white-space: normal" title='<c:out value="${report.name}"/>'>
-																									<c:choose>
-																										<c:when test="${fn:length(report.name) > 25}">
-																											<c:out value="${fn:substring(report.name, 0, 25)}" />...
-																										</c:when>
-																										<c:otherwise>
-																											<c:out value="${report.name}"/>
-																										</c:otherwise>
-																									</c:choose>
-							                     	         									</p>  
-							                              									</b>
-																						</digi:link>
-						                          									</c:if>
+	 																						<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}"/>
+	 																						<%
+																							if (report.getType()!=null && report.getType().equals(new Long(1)) && 
+																							FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS)) {
+																							%>
+																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}"/>
+	 																						
+																							<%}%>
+																					    	
+	 																					  	<a href="${reportLink}" styleClass="h-box" onclick="return popup(this,'');" title="Click here to view the Report">
+																						  	<b>
+								                              										<p style="max-width: 400px;white-space: normal" title='<c:out value="${report.name}"/>'>
+																										<c:choose>
+																											<c:when test="${fn:length(report.name) > 25}">
+																												<c:out value="${fn:substring(report.name, 0, 25)}" />...
+																											</c:when>
+																											<c:otherwise>
+																												<c:out value="${report.name}"/>
+																											</c:otherwise>
+																										</c:choose>
+								                     	         									</p>  
+								                              									</b>
+	 																				    	</a>
+																						  	
+																					    
+																					</c:if>
 						                          									<c:if test="${aimTeamReportsForm.showTabs}">
 						                          										<b>
 																                            <p style="max-width: 400px;white-space: normal" title='<c:out value="${report.name}"/>'>

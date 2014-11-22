@@ -70,7 +70,7 @@ public class SaikuUtils {
 		
 		for(Position colPosition : columnAxis.getPositions())
 			for (Member member :  colPosition.getMembers()) {
-				// check if this is a measure memeber
+				// check if this is a measure member
 				if (Member.Type.MEASURE.equals(member.getMemberType())
 						|| MoConstants.MEASURES.equals(member.getDimension().getName())) {
 					// avoid dummy always present added as a workaround for AMP-18330
@@ -260,7 +260,7 @@ public class SaikuUtils {
 		SaikuUtils.recalculateWidths(totalListsArray);
 	}
 	
-	public static List<TotalNode>[] recalculateWidths(List<TotalNode>[] newTotalLists) {
+	public static void recalculateWidths(List<TotalNode>[] newTotalLists) {
 		//Create tree of relationship between hierarchies
 		List<List<List<Integer>>> topTree = new ArrayList<List<List<Integer>>>();
 		for(int idx = newTotalLists.length-1; idx >= 0; idx--) {
@@ -309,11 +309,13 @@ public class SaikuUtils {
 					width += newTotalLists[newTotalLists.length-1-i].get(k).getWidth();
 				}
 				//TODO: Replace magic number
-				newTotalLists[newTotalLists.length-2-i].get(j).setWidth(width);
-				newTotalLists[newTotalLists.length-2-i].get(j).setSpan(1);
+				int previousIndex = newTotalLists.length-2-i;
+				if(previousIndex > 0 && newTotalLists[previousIndex].size()-1 > j) {
+					newTotalLists[previousIndex].get(j).setWidth(width);
+					newTotalLists[previousIndex].get(j).setSpan(1);
+				}
 			}
 		}
-		return newTotalLists;
 	}
 	
 	/**

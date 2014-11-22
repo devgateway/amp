@@ -211,6 +211,7 @@ public class CellDataSetToAmpHierachies {
 				newTotalLists[i] = cellDataSet.getRowTotalsLists()[i];
 			}
 			cellDataSet.setRowTotalsLists(newTotalLists);
+			SaikuUtils.recalculateWidths(newTotalLists);
 		}
 		
 		int start = 0;

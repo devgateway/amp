@@ -613,20 +613,25 @@ public class MondrianReportGenerator implements ReportExecutor {
 				column = column.parentColumn;
 				currentLevel--; 
 			}
-			
 			if (column != null) { //must not be null actually
-				int year = CalendarUtil.parseYear(spec.getSettings().getCalendar(), column.columnName); 
-				boolean isAllowed = yearSet.contains(year); //first check if it is in the set
-				if (!isAllowed)
-					for (Integer[] range : yearRanges)
-						if (range[0] <= year && year <= range[1]) { //check if the year is within any [min, max] allowed range from the list of configured ranges
-							isAllowed = true;
-							break;
-						}
-				
-				if (!isAllowed) {
-					leafColumnsNumberToRemove.add(pos);
-					iter.remove();//remove also the leaf header
+				try {
+					int year = CalendarUtil.parseYear(spec.getSettings().getCalendar(), column.columnName); 
+					boolean isAllowed = yearSet.contains(year); //first check if it is in the set
+					if (!isAllowed)
+						for (Integer[] range : yearRanges)
+							if (range[0] <= year && year <= range[1]) { //check if the year is within any [min, max] allowed range from the list of configured ranges
+								isAllowed = true;
+								break;
+							}
+					
+					if (!isAllowed) {
+						leafColumnsNumberToRemove.add(pos);
+						iter.remove();//remove also the leaf header
+					}
+				}
+				catch(Exception e) {
+					//TODO: Added Exception when value comes "Undefined" it gives an exception. Happens in reports that have "Allow empty funding columns for year, quarter and month" activated
+					logger.error("Year couldn't be parsed. Column Name: " + column.columnName);
 				}
 			}
 			pos ++;

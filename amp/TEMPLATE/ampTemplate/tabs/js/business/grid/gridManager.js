@@ -179,7 +179,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									// approval status.
 									var getApprovalStatus = function(draft, approvalStatus) {
 										if (draft == 'true') {
-											if (approvalStatus == '2') {
+											if (approvalStatus == '2' || approvalStatus == '1') {
 												return statusMapping.Existing_Draft;
 											} else {
 												row.cells[4].textContent = '* ' + row.cells[4].textContent;
@@ -190,12 +190,12 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 											case '1':
 												return statusMapping.Approved;
 												break;
-											case '2':
+											case '2': case '5': case '6':
 												return statusMapping.Existing_Unvalidated;
 												break;
 											case '3':
 												row.cells[4].textContent = '* ' + row.cells[4].textContent;
-												return statusMapping.New_Unvalidated;
+												return statusMapping.Approved;
 												break;
 											case '4':
 												row.cells[4].textContent = '* ' + row.cells[4].textContent;
@@ -231,8 +231,12 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									} else if (x == statusMapping.Existing_Unvalidated || x == statusMapping.New_Unvalidated) {
 										row.className = className + ' status_3';
 										//Cross team enable team lead and validators able to validate show icon.
-										if (crossteamvalidation && (teamlead || validator)){										
-											jQuery(row.cells[0]).html(link + iconvalidated);
+										if (crossteamvalidation && (teamlead || validator)){
+											if (teamtype != "Management"){
+												jQuery(row.cells[0]).html(link + iconvalidated);
+											}else{
+												jQuery(row.cells[0]).html(link);
+											}
 										//Cross team disable team lead and validators able to validate only if the activity belongs to the workspace.	
 										}else if (!crossteamvalidation && activityteamid ==  teamid &&(teamlead || validator)){
 											jQuery(row.cells[0]).html(link + iconvalidated);

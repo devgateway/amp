@@ -42,7 +42,7 @@
 		<a href="/budgetexport/addEditDeleteProject.do?action=edit&id=<bean:write name="project" property="id"/>"><digi:trn>Edit</digi:trn></a> | 
 		<a class="delete_confirm" href="/budgetexport/addEditDeleteProject.do?action=delete&id=<bean:write name="project" property="id"/>"><digi:trn>Delete</digi:trn></a> | 
 		<a href="/budgetexport/showMapingRuleList.do?id=<bean:write name="project" property="id"/>"><digi:trn>Mapping Rules</digi:trn></a> | 
-		<a target="_blank" href="/budgetexport/reportsWrapper.do?ampReportId=${project.ampReportId}&projectId=${project.id}"><digi:trn>Show Report</digi:trn></a>
+		<a target="_blank" href="/budgetexport/showBudgetReport.do?ampReportId=${project.ampReportId}&projectId=${project.id}"><digi:trn>Show Report</digi:trn></a>
 	</td>
 </tr>
 

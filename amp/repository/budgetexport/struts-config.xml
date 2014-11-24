@@ -15,7 +15,7 @@
 						type="org.digijava.module.budgetexport.action.BudgetExportAction" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=viewBudgetExportManager" />
 		</action>
-		<action name="beReportsWrapperForm" path="/budgetexport/reportsWrapper" scope="request" 
+		<action name="beReportsWrapperForm" path="/budgetexport/showBudgetReport" scope="request" 
 						type="org.digijava.module.budgetexport.action.ReportsWrapperAction" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=reportWrapper" />
 		</action>

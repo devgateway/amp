@@ -89,7 +89,7 @@
 											</tr>
 											<tr>
                       	<td><img width="15" height="10" src="images/arrow-014E86.gif" />
-                      		<a target="_blank" href="/budgetexport/reportsWrapper.do?ampReportId=${beMapingForm.ampReportId}&projectId=${beMapingForm.id}">
+                      		<a target="_blank" href="/budgetexport/showBudgetReport.do?ampReportId=${beMapingForm.ampReportId}&projectId=${beMapingForm.id}">
 														<digi:trn><digi:trn>Show Report</digi:trn></digi:trn>
 													</a>
                       	</td>

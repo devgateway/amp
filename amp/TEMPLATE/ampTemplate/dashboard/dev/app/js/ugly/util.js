@@ -33,8 +33,32 @@ var categoryColours = function(cats) {
 };
 
 
+var u16le64 = function(str) {
+  // base64-encode a string as UTF-16-LE (for MS Excel, probably). It will only
+  // work for 2-byte-wide utf-16 characters, and will break at the first hint
+  // of any 4-byte char. Two bytes covers the Basic Multiningual Plane, so we
+  // should be good.
+  var u16num,
+      asciiBytePairString = String.fromCharCode(0xFF) + String.fromCharCode(0xFE);
+  asciiBytePairString += Array.prototype.reduce.call(str, function(acc, chr) {
+    u16num = chr.charCodeAt(0);
+    /* jshint bitwise:false */
+    return acc + String.fromCharCode(u16num & 0xFF) + String.fromCharCode(u16num >> 8);
+    /* jshint bitwise:true */
+  }, '');
+  return btoa(asciiBytePairString);
+};
+
+
+var textAsDataURL = function(str) {
+  return 'data:text/plain;base64,' + u16le64(str);
+};
+
+
 module.exports = {
   formatKMB: formatKMB,
   formatShortText: formatShortText,
-  categoryColours: categoryColours
+  categoryColours: categoryColours,
+  u16le64: u16le64,
+  textAsDataURL: textAsDataURL
 };

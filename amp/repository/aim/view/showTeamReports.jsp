@@ -717,9 +717,17 @@ $(document).ready(function() {
 						                                								<c:set target="${urlParams}" property="rid">
 						                                  									<bean:write name="report" property="ampReportId" />
 						                                								</c:set>
+																						<%
+																						if (report.getType()!=null && report.getType().equals(new Long(1))
+																						&& 	FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS)) {
+																						%>
+																					
 																						<a href="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}" onclick="return popup(this,'');" title="Click here to view the Report">
 																							<img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku.png" vspace="2" border="0" align="absmiddle" style="padding-right: 5px;"/>
 																						</a> 
+						                                								<%
+																							}
+																						%>
 						                                								<c:set target="${urlParams}" property="event" value="edit" />
 						                                								<logic:equal name="teamLeadFlag" scope="session" value="true"> 
 					                                      									<c:set var="translation">

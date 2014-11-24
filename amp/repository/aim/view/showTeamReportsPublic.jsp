@@ -467,11 +467,17 @@ function submitForm(action){
 																						</c:set>
 																						<c:set target="${urlParams}" property="event"
 																							value="edit" />
+																						<%
+																						if (report.getType()!=null && report.getType().equals(new Long(1))
+																						&& 	FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS)) {
+																						%>
 																						<a
 																							href="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}"
 																							title="Saiku" onclick="return popup(this,'');" title="Click here to view the Report">
 																							<img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku.png" vspace="2" border="0" align="absmiddle" style="padding-right: 5px;padding-bottom: 10px;"/>
 																						</a>
+																						<%
+																						}%>
 																						<c:set var="translation">
 																							<digi:trn>Get report in Excel format</digi:trn>&nbsp;
 																						</c:set>

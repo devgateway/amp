@@ -56,6 +56,10 @@ public class JsonBean {
 
 	public static JsonBean getJsonBeanFromString(String jb) {
 		try {
+			if (jb == null)
+			{
+				return null;
+			}
 			ObjectMapper mapper11 = new ObjectMapper();
 			mapper11.configure(
 					org.codehaus.jackson.map.DeserializationConfig.Feature.UNWRAP_ROOT_VALUE,false);

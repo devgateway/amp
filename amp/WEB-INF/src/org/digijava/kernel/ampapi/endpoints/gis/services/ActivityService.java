@@ -1,22 +1,12 @@
 package org.digijava.kernel.ampapi.endpoints.gis.services;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.PathSegment;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -25,7 +15,6 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.error.AMPException;
-import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
@@ -44,17 +33,11 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
-import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
-import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.LoggerIdentifiable;
-import org.digijava.module.search.util.SearchUtil;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 public class ActivityService {
 	protected static Logger logger = Logger.getLogger(ActivityService.class);
@@ -63,7 +46,7 @@ public class ActivityService {
 	    {
 		 columnHeaders = new HashMap<String, String>();
 		 columnHeaders.put(ColumnConstants.PROJECT_TITLE,"Title" );
-		 columnHeaders.put(ColumnConstants.DONOR_AGENCY, "Donor");
+		 columnHeaders.put(ColumnConstants.DONOR_AGENCY, "Donor Agency");
 		 columnHeaders.put(ColumnConstants.ACTIVITY_UPDATED_ON, "Date");
 	    }
 	
@@ -211,7 +194,9 @@ public class ActivityService {
 
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ALWAYS_PRESENT, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
-		EndpointUtils.applySettings(spec, config);
+		if (config !=null) {
+			EndpointUtils.applySettings(spec, config);
+		}
 		GeneratedReport report = null;
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
 				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
@@ -233,7 +218,6 @@ public class ActivityService {
 
 			Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
 			Set<ReportOutputColumn> col = row.keySet();
-			int columnIndex = 0;
 			for (ReportOutputColumn reportOutputColumn : col) {
 				if (!reportOutputColumn.originalColumnName.equals(MeasureConstants.ALWAYS_PRESENT)) {
 
@@ -242,8 +226,8 @@ public class ActivityService {
 					if (displayName == null) {
 						displayName = reportOutputColumn.originalColumnName;
 					}
-					header.put("HEADER_" + columnIndex, displayName);
-					columnIndex++;
+					displayName = TranslatorWorker.translateText(displayName);
+					header.put(reportOutputColumn.originalColumnName, displayName);
 				}
 
 			}

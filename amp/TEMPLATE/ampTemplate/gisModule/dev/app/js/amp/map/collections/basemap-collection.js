@@ -47,6 +47,13 @@ var BASEMAPS = [
     thumb: 'img/basemaps/templight_gray_canvas_with_labels__ne_usa.png'
   },
   {
+    id: 'DarkGrayLabels',
+    source: 'esri',
+    esriId: 'DarkGray',
+    label: true,
+    thumb: 'img/basemaps/darkgray.jpg'
+  },
+  {
     id: 'National Geographic',
     source: 'esri',
     esriId: 'NationalGeographic',

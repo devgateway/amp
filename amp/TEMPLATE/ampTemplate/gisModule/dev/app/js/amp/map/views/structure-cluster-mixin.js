@@ -69,17 +69,16 @@ module.exports = {
       }
 
       //icons need to be abit bigger than plain circles, so bump up by 2
-      marker = new L.circleDivIcon(Math.min(18, size + 2), {
-        className: 'marker-cluster' + (zoomedIn ? '' : ' marker-cluster-small'),
-        html: (zoomedIn ? '<img src="img/map-icons/' +
+      marker = new L.circleDivIcon(Math.max(18, size + 2), {
+        className: 'marker-cluster ',
+        html: '<img src="img/map-icons/' +
           self.structureMenuModel.iconMappings[sectorCode] +
-          '"><div class="text">' + markers.length + '</div>' : ''),
+          '"><div class="text">' + markers.length + '</div>',
         color: '#444',
         fillColor: '#fff',
         weight: 0
       });
-    } else {
-
+    } else {  // no Icon normal circle
       if (colors.length > 1) {
         colors = [model.palette.colours.find(function(c) {
           return c.get('multiple') === true;

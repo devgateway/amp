@@ -12,7 +12,7 @@ module.exports = Backbone.View
   // These will eventually move to a config.
   // They control when to resize points based on zoom
   // Make larger for smaller, denser countries: DRC = 7, Timor = 11
-  ZOOM_BREAKPOINT: 2,
+  ZOOM_BREAKPOINT: 11, //11 is real # for zoom resize
   SMALL_ICON_RADIUS: 4,
   BIG_ICON_RADIUS: 6,
   MAXCLUSTERRADIUS: 2,

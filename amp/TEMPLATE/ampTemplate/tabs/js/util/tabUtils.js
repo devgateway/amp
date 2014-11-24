@@ -88,7 +88,8 @@ define([ 'numeral', 'jquery', 'jqueryui', 'jqgrid' ], function(Numeral, jQuery) 
 
 	/**
 	 * Convert a float number to its string representation with the format from
-	 * settings.
+	 * settings (notice the definition of our current format is in the
+	 * 'language')
 	 */
 	TabUtils.numberToString = function(number, settings) {
 		var auxSettings = extractSettings(settings);
@@ -97,10 +98,10 @@ define([ 'numeral', 'jquery', 'jqueryui', 'jqgrid' ], function(Numeral, jQuery) 
 
 		// Create the formatting string to be applied.
 		if (auxSettings.useGrouping) {
-			format = "0" + auxSettings.currentThousandSeparator + "0";
+			format = "0,0";
 		}
 		if (auxSettings.maxDecimalDigits > 0) {
-			format = format + auxSettings.currentDecimalSeparator + new Array(auxSettings.maxDecimalDigits + 1).join("0");
+			format = format + "." + new Array(auxSettings.maxDecimalDigits + 1).join("0");
 		}
 		// Define a new "language" for Numeral where we can change the default
 		// delimiters.
@@ -108,8 +109,7 @@ define([ 'numeral', 'jquery', 'jqueryui', 'jqgrid' ], function(Numeral, jQuery) 
 		// Apply new language.
 		Numeral.language('amp');
 		// Apply the format.
-		Numeral.defaultFormat = format;
-		stringNumber = new Numeral(number).format();
+		stringNumber = new Numeral(number).format(format);
 		return stringNumber;
 	};
 

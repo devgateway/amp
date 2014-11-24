@@ -5,6 +5,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 
 	var gridBaseName = 'tab_grid_';
 	var gridPagerBaseName = 'tab_grid_pager_';
+	var partialTotals = null;
 
 	// This variable will contain the mappings between different column names
 	// (tab structure vs report data).
@@ -146,13 +147,13 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 
 							// Change row color depending the status.
 							var cRows = this.rows.length, iRow, row, className;
-							
+
 							var teamid = app.TabsApp.settings.attributes.teamid.name;
-							var crossteamvalidation = (app.TabsApp.settings.attributes.crossteamenable.name === 'true');
-							var teamlead = (app.TabsApp.settings.attributes.teamlead.name  === 'true');
+							var crossTeamValidation = (app.TabsApp.settings.attributes.crossteamenable.name === 'true');
+							var teamlead = (app.TabsApp.settings.attributes.teamlead.name === 'true');
 							var validator = (app.TabsApp.settings.attributes.validator.name === 'true');
 							var teamtype = app.TabsApp.settings.attributes.accestype.name;
-							
+
 							for (iRow = 0; iRow < cRows; iRow++) {
 								row = this.rows[iRow];
 								className = row.className;
@@ -162,7 +163,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									var draft = row.cells[3].textContent;
 									var approvalStatus = row.cells[2].textContent;
 									var activityteamid = row.cells[4].textContent;
-								
+
 									// Status Mapping
 									var statusMapping = {
 										New_Draft : '0',
@@ -190,7 +191,9 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 											case '1':
 												return statusMapping.Approved;
 												break;
-											case '2': case '5': case '6':
+											case '2':
+											case '5':
+											case '6':
 												return statusMapping.Existing_Unvalidated;
 												break;
 											case '3':
@@ -208,44 +211,49 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									};
 
 									// Assign colors for each row.
-									// TODO: Missing colors for rejected and not approved.
+									// TODO: Missing colors for rejected and not
+									// approved.
 									// TODO: Check this public view id needed.
 									var x = getApprovalStatus(draft, approvalStatus);
 									var iconedit = "<img src='/TEMPLATE/ampTemplate/tabs/css/images/ico_edit.gif'/></a>";
 									var iconvalidated = "<img src='/TEMPLATE/ampTemplate/tabs/css/images/validate.png'/></a>";
 									var link = "<a href='/wicket/onepager/activity/" + id + "'>";
-									
-									if (x == statusMapping.Approved ) {
+
+									if (x == statusMapping.Approved) {
 										row.className = className + ' status_1';
 										// Create link to edit activity.
-										if (teamtype != "Management"){
-											jQuery(row.cells[0]).html(iconedit+link);
-										}else{
+										if (teamtype != "Management") {
+											jQuery(row.cells[0]).html(iconedit + link);
+										} else {
 											jQuery(row.cells[0]).html(link);
 										}
-										
+
 									} else if (x == statusMapping.Existing_Draft || x == statusMapping.New_Draft) {
 										row.className = className + ' status_2';
 										jQuery(row.cells[0]).html(iconedit + link);
 
 									} else if (x == statusMapping.Existing_Unvalidated || x == statusMapping.New_Unvalidated) {
 										row.className = className + ' status_3';
-										//Cross team enable team lead and validators able to validate show icon.
-										if (crossteamvalidation && (teamlead || validator)){
-											if (teamtype != "Management"){
+										// Cross team enable team lead and
+										// validators able to validate show
+										// icon.
+										if (crossTeamValidation && (teamlead || validator)) {
+											if (teamtype != "Management") {
 												jQuery(row.cells[0]).html(link + iconvalidated);
-											}else{
+											} else {
 												jQuery(row.cells[0]).html(link);
 											}
-										//Cross team disable team lead and validators able to validate only if the activity belongs to the workspace.	
-										}else if (!crossteamvalidation && activityteamid ==  teamid &&(teamlead || validator)){
+											// Cross team disable team lead and
+											// validators able to validate only
+											// if the activity belongs to the
+											// workspace.
+										} else if (!crossTeamValidation && activityteamid == teamid && (teamlead || validator)) {
 											jQuery(row.cells[0]).html(link + iconvalidated);
-										}else{
+										} else {
 											jQuery(row.cells[0]).html(iconedit + link);
-										}	
+										}
 									}
 
-									
 									var id = row.cells[1].textContent;
 
 									// Create link to preview activity on first
@@ -295,6 +303,20 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 										item.displayedValue).attr("title", item.displayedValue);
 							});
 							jQuery(grandTotalFooterRow).insertAfter(pageFooterRow);
+
+							// Add extra info to each grop row created by
+							// jqgrid, this info comes from the endpoint.
+							var numberOfMeasures = tableStructure.measures.models.length;
+							var groupRows = jQuery("tr[id*='tab_grid_" + id + "ghead']");
+							jQuery.each(groupRows, function(i, item) {
+								jQuery(item.firstChild).attr("colspan", numberOfMeasures);
+								jQuery.each(tableStructure.measures.models, function(j, measure) {
+									var auxTD = jQuery(item.firstChild).clone().html("").attr("colspan", 0).css("text-align", "right");
+									var content = partialTotals[i].contents["[" + measure.get('measureName') + "]"].displayedValue;
+									jQuery(auxTD).html("<span><b>" + content + "</b></span>");
+									jQuery(item).append(auxTD);
+								});
+							});
 						}
 					});
 			app.TabsApp.currentGrid = jQuery(grid);
@@ -323,6 +345,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 	 */
 	function transformData(data, grouping, hierarchies) {
 		var rows = [];
+		partialTotals = [];
 		// Process the headers for later usage.
 		if (data.headers != null) {
 			jQuery.each(data.headers, function(i, item) {
@@ -333,12 +356,13 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 				});
 			});
 
-			getContentRecursively(data.page.pageArea, rows, null);
+			getContentRecursively(data.page.pageArea, rows, null, partialTotals, -1);
 			if (grouping) {
 				postProcessHierarchies(rows, hierarchies);
 			}
 		}
 		// console.log(rows);
+		// console.warn(partialTotals);
 		return rows;
 	}
 
@@ -369,8 +393,9 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 		return ret;
 	}
 
-	function getContentRecursively(obj, rows, parent) {
+	function getContentRecursively(obj, rows, parent, partialTotals, level) {
 		if (obj != undefined && obj != null) {
+			level++;
 			if (obj.children == null || obj.children.length == 0) {
 				// console.log(obj.contents);
 				var row = {
@@ -395,10 +420,23 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 				// console.log(row);
 				rows.push(row);
 			} else {
+				// Save all the 'Totals' rows from the endpoint for later
+				// replacing the content of jqgrid automatically created grouped
+				// rows (yes, it sounds scary).
+				if (level > 0) {
+					// Ignore top level because is 'Report Totals'.
+					partialTotals.push({
+						contents : obj.contents,
+						totalChildrenCount : obj.totalChildrenCount,
+						level : level
+					});
+				}
 				jQuery(obj.children).each(function(i, item) {
-					getContentRecursively(item, rows, obj.contents);
+					getContentRecursively(item, rows, obj.contents, partialTotals, level);
 				});
 			}
+		} else {
+			level--;
 		}
 	}
 

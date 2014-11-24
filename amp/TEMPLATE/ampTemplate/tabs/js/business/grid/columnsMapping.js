@@ -103,51 +103,46 @@ define([ 'util/tabUtils' ], function(TabUtils) {
 				classes : 'wrap-cell',
 				sortable : true
 			};
-			// Show current group name (not natively supported by jqGrid).
-			if (i == (metadata.hierarchies.models.length)) {
-				column.summaryType = 'groupName';
-				column.summaryTpl = 'TOTAL [{0}]';
-			}
+			// No need to show a "summary row" if we want to match old tabs
+			// style.
+			/*
+			 * // Show current group name (not natively supported by jqGrid). if
+			 * (i == (metadata.hierarchies.models.length)) { column.summaryType =
+			 * 'groupName'; column.summaryTpl = 'TOTAL [{0}]'; }
+			 */
 			var mappedColumn = findInMapByColumnName(item.get('columnName'));
 			if (mappedColumn != undefined && mappedColumn.width != undefined) {
 				column.width = mappedColumn.width;
 				column.fixed = (mappedColumn.fixed != undefined) ? mappedColumn.fixed : false;
 			}
-			/*
-			 * column.sorttype = function(cellValue, obj) { alert(cellValue +
-			 * obj); // return groupOrder[obj.groupId]; // return
-			 * obj.groupOrder; return ""; };
-			 */
 			ret.push(column);
 		});
-		/*
-		 * $(metadata.hierarchies.models).each(function(i, item) { ret.push({
-		 * name : item.get('columnName') }); });
-		 */
 		$(metadata.measures.models).each(function(i, item) {
 			ret.push({
 				name : item.get('measureName'),
 				width : 110,
 				fixed : true,
-				summaryType : function(val, name, record) {
-					// This function is called only when the group summary is
-					// calculated.
-					// HOW IT WORKS: In order to display all numbers with the
-					// format used by the backend we use 'displayedValue' for
-					// the measures column, but that value is a string, so in
-					// order to calculate the SUM for each group we have to
-					// convert it back to its float representation, make the sum
-					// and convert it to string again (respecting the backend
-					// format).
-					var currentVal = -1;
-					if (val != undefined && val != null && typeof (val) === 'string' && val != "") {
-						val = TabUtils.stringToNumber(val, app.TabsApp.numericFormatOptions);
-					}
-					currentVal = record[name];
-					currentVal = TabUtils.stringToNumber(currentVal, app.TabsApp.numericFormatOptions);
-					currentVal = currentVal + val;
-					return TabUtils.numberToString(currentVal, app.TabsApp.numericFormatOptions);
-				},
+				// No need to show a "summary row" if we want to match old tabs
+				// style.
+				/*
+				 * summaryType : function(val, name, record) { // This function
+				 * is called only when the group summary is // calculated. //
+				 * HOW IT WORKS: In order to display all numbers with the //
+				 * format used by the backend we use 'displayedValue' for // the
+				 * measures column, but that value is a string, so in // order
+				 * to calculate the SUM for each group we have to // convert it
+				 * back to its float representation, make the sum // and convert
+				 * it to string again (respecting the backend // format). var
+				 * currentVal = -1; if (val != undefined && val != null &&
+				 * typeof (val) === 'string' && val != "") { val =
+				 * TabUtils.stringToNumber(val,
+				 * app.TabsApp.numericFormatOptions); } currentVal =
+				 * record[name]; currentVal =
+				 * TabUtils.stringToNumber(currentVal,
+				 * app.TabsApp.numericFormatOptions); currentVal = currentVal +
+				 * val; return TabUtils.numberToString(currentVal,
+				 * app.TabsApp.numericFormatOptions); },
+				 */
 				align : "right",
 				sorttype : 'number',
 				unformat : function(data) {
@@ -182,7 +177,11 @@ define([ 'util/tabUtils' ], function(TabUtils) {
 			ret.groupCollapse = true;
 
 			ret.showSummaryOnHide = false;
-			ret.groupSummary = summary;
+
+			// No need to show a "summary row" if we want to match old tabs
+			// style.
+			/* ret.groupSummary = summary; */
+
 			console.log(ret);
 			return ret;
 		} else {

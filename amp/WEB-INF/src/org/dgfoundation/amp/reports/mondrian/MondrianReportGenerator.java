@@ -551,7 +551,10 @@ public class MondrianReportGenerator implements ReportExecutor {
 			if (row == null) continue; // who knows, let's be defensive
 			
 			for(int i = 0; i < row.length; i++) {
-				if (row[i] != null && translatedUndefined.equals(row[i].getFormattedValue())) {
+				if (row[i] != null && 
+						(translatedUndefined.equals(row[i].getFormattedValue()))
+						|| ("#null").equals(row[i].getFormattedValue()) // this is for nontranslateable columns
+						) {
 					boolean isHierarchy = i < spec.getHierarchies().size();
 					String newValue = isHierarchy ? 
 											String.format("%s: %s", leafHeaders.get(i).columnName, translatedUndefined) :

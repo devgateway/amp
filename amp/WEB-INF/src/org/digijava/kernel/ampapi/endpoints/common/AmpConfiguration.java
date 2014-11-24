@@ -20,7 +20,7 @@ import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 public class AmpConfiguration {
 	@GET
 	@Path("/settings")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "Settings")
 	public List<SettingOptions> getSettings() {
 		return EndpointUtils.getGisSettings();

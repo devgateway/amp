@@ -72,7 +72,7 @@ public class GisEndPoints {
 	private static final Logger logger = Logger.getLogger(GisEndPoints.class);
 		
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public List<AvailableMethod> getAvailableFilters() {
 		return EndpointUtils.getAvailableMethods(GisEndPoints.class.getName());
 	}	
@@ -92,7 +92,7 @@ public class GisEndPoints {
 	 */
 	@POST
 	@Path("/cluster")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "ClusterPointsByAdmin")
 	public final FeatureCollectionGeoJSON getClusteredPointsByAdm(
 			final JsonBean config) throws AmpApiException {
@@ -125,7 +125,7 @@ public class GisEndPoints {
 	@SuppressWarnings("unchecked")
 	@POST
 	@Path("/structures")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "Structures")
 	public final FeatureCollectionGeoJSON getProjectSites(final JsonBean config) throws AmpApiException {
 		FeatureCollectionGeoJSON f = new FeatureCollectionGeoJSON();
@@ -162,7 +162,7 @@ public class GisEndPoints {
 
 	@POST
 	@Path("/saved-maps")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "SaveMap")
 	public JsonBean savedMaps(final JsonBean pMap) {
 		return EndpointUtils.saveApiState(pMap,"G");
@@ -172,7 +172,7 @@ public class GisEndPoints {
 
 	@GET
 	@Path("/saved-maps/{mapId}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "MapById")
 	public JsonBean savedMaps(@PathParam("mapId") Long mapId) {
 		return EndpointUtils.getApiState(mapId);
@@ -184,7 +184,7 @@ public class GisEndPoints {
 
 	@GET
 	@Path("/saved-maps")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "MapList")
 	public List<JsonBean> savedMaps() {
 		String type="G";
@@ -195,7 +195,7 @@ public class GisEndPoints {
 
 	@GET
 	@Path("/indicator-layers")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "IndicatorLayers")
 	public List<IndicatorLayers> getIndicatorLayers() {
 		List<IndicatorLayers> indicatorLayers = new ArrayList<IndicatorLayers>();
@@ -240,7 +240,7 @@ public class GisEndPoints {
 	*/
 	@POST
 	@Path("/activities")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "ActivitiesNewLists")
 	public JsonBean getActivitiesNew(JsonBean config, @QueryParam("start") Integer page,@QueryParam("size") Integer pageSize) {
 		try{
@@ -260,7 +260,7 @@ public class GisEndPoints {
 	 */
 	@POST
 	@Path("/activities/{activityId}") //once its done remove the New
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "ActivitiesById")
 	public JsonBean getActivities(JsonBean config, @PathParam("activityId") PathSegment activityIds) {
 		try {
@@ -291,7 +291,7 @@ public class GisEndPoints {
 	
 	@POST
 	@Path("/locationstotals/{admlevel}/{type}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "locationstotals")	
 	public JsonBean getAdminLevelsTotals(JsonBean filters, @PathParam ("admlevel") String admlevel, @PathParam("type") String type ){
 		LocationService ls = new LocationService();
@@ -301,7 +301,7 @@ public class GisEndPoints {
 	
 	@GET
 	@Path("/indicators")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "IndicatorsList")
 	public List<JsonBean> getIndicators(@QueryParam("admLevel") String admLevel) {
 		List<AmpIndicatorLayer> indicators;
@@ -318,7 +318,7 @@ public class GisEndPoints {
 	
 	@GET
 	@Path("/indicators/{indicatorId}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "IndicatorById")	
 	public JSONObject getIndicatorsById(@PathParam ("indicatorId") Long indicatorId){
 		AmpIndicatorLayer indicator = (AmpIndicatorLayer)DbUtil.getObject(AmpIndicatorLayer.class, indicatorId);
@@ -375,7 +375,7 @@ public class GisEndPoints {
 	}
 	@GET
 	@Path("/export-map-test/")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public List<Activity> testMapExport(){
 		final Map<String,Activity>geocodeInfo=new LinkedHashMap<String,Activity>();
 		return LocationService.getMapExportByLocation(geocodeInfo,null);
@@ -430,7 +430,7 @@ public class GisEndPoints {
 
 	@GET
 	@Path("/clusters")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "ClusterLevels")
 	public List<JsonBean> getClusterLevels() {
 		List<AmpCategoryValue> values = QueryUtil.getClusterLevels();
@@ -458,7 +458,7 @@ public class GisEndPoints {
 	 */
 	@GET
 	@Path("/last-updated")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "LastUpdatedActivities")
 	public JSONObject getLastUpdated(@DefaultValue("10") @QueryParam("limit") Integer limit,
 			@QueryParam("columns") String columns, @QueryParam("config") String config) {
@@ -475,7 +475,7 @@ public class GisEndPoints {
 	
 	@GET
 	@Path("/report/{report_config_id}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "reportExport")
 	public JsonBean getLastUpdated(@PathParam("report_config_id") String reportConfigId) {
 		return ReportsUtil.getApiState(reportConfigId);

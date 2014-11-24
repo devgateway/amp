@@ -31,15 +31,15 @@ import org.digijava.module.translation.util.TranslationManager;
 public class TranslationsEndPoints {
 	
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public List<AvailableMethod> getAvailableFilters() {
 		return EndpointUtils.getAvailableMethods(TranslationsEndPoints.class.getName());
 	}	
 	
 	@POST
 	@Path("/label-translations")
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "Translations")
 	public JsonBean getLangPack(	final JsonBean param){
 		

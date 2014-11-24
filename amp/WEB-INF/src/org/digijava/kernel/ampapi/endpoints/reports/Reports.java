@@ -84,7 +84,7 @@ public class Reports {
 
 	@GET
 	@Path("/report/{report_id}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JSONResult getReport(@PathParam("report_id") Long reportId) {
 		AmpReports ampReport = DbUtil.getAmpReport(reportId);
 
@@ -138,7 +138,7 @@ public class Reports {
 	
 	@GET
 	@Path("/report/{report_id}/result")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final GeneratedReport getReportResult(@PathParam("report_id") Long reportId) {
 		// TODO: for now we do not translate other types of reports than 
 		// Donor Type reports (hide icons for non-donor-type reports?)
@@ -148,7 +148,7 @@ public class Reports {
 	
 	@POST
 	@Path("/report/custom/paginate")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	/**
 	 * Generates a custom report.  
 	 * 
@@ -179,7 +179,7 @@ public class Reports {
 	 */
 	@POST
 	@Path("/report/{report_id}/paginate")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JsonBean getReportResultByPage(JsonBean formParams,
 			@PathParam("report_id") Long reportId) {
 		return ReportsUtil.getReportResultByPage(reportId, formParams);
@@ -187,7 +187,7 @@ public class Reports {
 	
 	@POST
 	@Path("/report/{report_id}/result/jqGrid")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	/**
 	 * Provides paginated result for tabs.  
 	 * @see {@link getReportResultByPage} for more details
@@ -242,7 +242,7 @@ public class Reports {
 	
 	@GET
 	@Path("/tabs")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final List<JSONTab> getTabs() {
 
 		TeamMember tm = (TeamMember) httpRequest.getSession().getAttribute(Constants.CURRENT_MEMBER);
@@ -308,7 +308,7 @@ public class Reports {
 	
 	@POST
 	@Path("/saikureport/{report_id}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final QueryResult getSaikuReport(JsonBean queryObject, @PathParam("report_id") Long reportId) {
 		QueryResult result;
 		try {
@@ -434,7 +434,7 @@ public class Reports {
 
 	@GET
 	@Path("/report/{report_id}/settings/")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final Object getSettings(@PathParam("report_id") Long reportId) {
 		AmpARFilter arFilter = FilterUtil.buildFilter(null, reportId);
 		ReportsFilterPickerForm oldFilterForm = new ReportsFilterPickerForm();
@@ -456,7 +456,7 @@ public class Reports {
 	
 	@GET
 	@Path("/report/columns")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final Map<String, String> getAllowedColumns() {
 		Map<String, String> columnToDisplayName = new HashMap<String, String>();
 		Set<String> configurableColumns = MondrianReportUtils.getConfigurableColumns();
@@ -469,7 +469,7 @@ public class Reports {
 	
 	@GET
 	@Path("/report/measures")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final Map<String, String> getAllowedMeasures() {
 		Map<String, String> measuresToDisplayName = new HashMap<String, String>();
 		Set<String> configurableMeasures = MondrianReportUtils.getConfigurableMeasures();
@@ -506,7 +506,7 @@ public class Reports {
 	
 	@POST
 	@Path("/report/export-to-map/{report_id}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	/**
 	 * Exports the report to Map
 	 * 

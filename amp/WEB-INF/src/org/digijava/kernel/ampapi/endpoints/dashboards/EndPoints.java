@@ -34,7 +34,7 @@ public class EndPoints {
 	
 	@GET
 	@Path("/tops")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "topsList")
 	public List<JsonBean> getAdminLevelsTotalslist() {
 		return DashboardsService.getTopsList();
@@ -50,7 +50,7 @@ public class EndPoints {
 	
 	@POST 
 	@Path("/tops/{type}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "tops")
 	//TODO: Implement Filters
 	public JsonBean getAdminLevelsTotals(JsonBean config,
@@ -68,7 +68,7 @@ public class EndPoints {
 	
 	@POST 
 	@Path("/aid-predictability")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "aidPredictability")
 	public JSONObject getAidPredictability(JsonBean filter) throws Exception {
 		return DashboardsService.getAidPredictability(filter);
@@ -83,7 +83,7 @@ public class EndPoints {
 	
 	@POST 
 	@Path("/ftype")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "ftype")
 	//TODO: Implement Filters
 	public JsonBean getfundingtype(JsonBean config,
@@ -93,7 +93,7 @@ public class EndPoints {
 
 	@POST
 	@Path("/saved-charts")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "SaveChart")
 	public JsonBean savedMaps(final JsonBean pChrat) {
 		return EndpointUtils.saveApiState(pChrat,"C");
@@ -101,7 +101,7 @@ public class EndPoints {
 
 	@GET
 	@Path("/saved-charts/{chartId}")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "ChartById")
 	public JsonBean savedCharts(@PathParam("chartId") Long chartId) {
 		return EndpointUtils.getApiState(chartId);
@@ -110,7 +110,7 @@ public class EndPoints {
 
 	@GET
 	@Path("/saved-charts")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "ChartList")
 	public List<JsonBean> savedCharts() {
 		String type="C";

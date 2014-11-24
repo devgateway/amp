@@ -28,7 +28,7 @@ public class PublicEndpoint {
 	 */
 	@POST
 	@Path("/topprojects")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "topprojects")
 	/**
 	 * Retrieves top 'count' projects based on fixed requirements.
@@ -47,7 +47,7 @@ public class PublicEndpoint {
 	 */
 	@POST
 	@Path("/donorFunding")
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "donorFunding")
 	/**
 	 * Retrieves Donor Disbursements/Commitments List for the last X days

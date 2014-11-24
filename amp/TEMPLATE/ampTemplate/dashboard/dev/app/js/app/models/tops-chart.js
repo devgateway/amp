@@ -18,7 +18,6 @@ module.exports = BackboneDash.Model.extend({
   },
 
   _prepareTranslations: function() {
-    var self = this;
     var topBaseLanguage = {};
 
     /* Prepare the translations for the chart */
@@ -33,31 +32,35 @@ module.exports = BackboneDash.Model.extend({
     }
     topBaseLanguage[chartName + 'others'] = 'Others';
 
-    this.localizedTopChart = this.app.translator.translateList(topBaseLanguage).then(
-      function(localizedTopChartKeyVal) {
-        self.localizedLookup = localizedTopChartKeyVal;
-      });
+    this.localizedTopChart = this.app.translator.translateList(topBaseLanguage)
+      .done(_(function(localizedTopChartKeyVal) {
+        this.localizedLookup = localizedTopChartKeyVal;
+      }).bind(this));
   },
 
   parse: function(data) {
-    var self = this;
+    if (!this.localizedLookup) {
+      // we can't procede if we don't have translations yet :(
+      // TODO: fix the race!!!
+      this.app.report('Loading error', [
+      'Translations for the application were not loaded before rendering']);
+    }
 
     var chartName = ['amp.dashboard:chart-', this.get('name').replace(/ /g, ''), '-'].join('');
-    var localizedOthers = self.localizedLookup[chartName + 'others'];
+    var localizedOthers = this.localizedLookup[chartName + 'others'];
 
     var values = _(data.values.slice()).map(function(v) {
-
       var cleanName = v.name.replace(/[ :.]/g, '');
       var localizedName = v.name;
-      if (self.localizedLookup[chartName + cleanName]) {
-        localizedName = self.localizedLookup[chartName + cleanName];
+      if (this.localizedLookup[chartName + cleanName]) {
+        localizedName = this.localizedLookup[chartName + cleanName];
       }
 
       return {
         x: localizedName,
         y: v.amount
       };
-    });
+    }, this);
 
     // make sure we don't have any duplicate keys... nvd3 pukes on those
     if (_(_(values).pluck('x')).uniq().length < values.length) {

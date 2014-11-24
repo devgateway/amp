@@ -53,7 +53,6 @@ module.exports = BackboneDash.Model.extend({
 
     var chartName = ['amp.dashboard:chart-', this.get('name').replace(/ /g, ''), '-'].join('');
     var localizedOthers = self.localizedLookup[chartName + 'others'];
-    console.log(chartName,'others',localizedOthers,self.localizedLookup);
 
     // reformat the data for nvd3
     data.processed = _(years)

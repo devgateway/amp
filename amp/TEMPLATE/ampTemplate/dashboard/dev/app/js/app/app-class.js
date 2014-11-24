@@ -38,7 +38,10 @@ _.extend(App.prototype, BackboneDash.Events, {
 
       var dashboardTranslateKeys = JSON.parse(fs.readFileSync(__dirname +
         '/templates/initial-translation-request.json', 'utf8'));
-      this.translator = new Translator({defaultKeys: dashboardTranslateKeys});
+      this.translator = new Translator({
+        defaultKeys: dashboardTranslateKeys,
+        ajax: BackboneDash.wrappedAjax
+      });
 
       this.filter = new Filter({
         draggable: true,
@@ -58,9 +61,13 @@ _.extend(App.prototype, BackboneDash.Events, {
   },
 
   render: function() {
-    this.tryTo(this.view.render, this.view);
+    // TODO: fix some parts of the app so we can load translations async
+    this.tryAfter(this.translator.promise, this.view.render, this.view);
+    // this.tryTo(this.view.render, this.view);
 
     /* ensure entire page--header and footer, not just this view is translated */
+    // TODO: if possible, move this out of app-class
+    // or at least make it more targeted than document
     this.translator.translateDOM(document);
   },
 
@@ -78,9 +85,13 @@ _.extend(App.prototype, BackboneDash.Events, {
   },
 
   tryAfter: function(promise, fn, view) {
-    promise.done(_(function() {
-      this.tryTo(fn, view);
-    }).bind(this)).fail(_(function() { this.viewFail(view, 'failed to load'); }).bind(this));
+    promise
+      .done(_(function() {
+        this.tryTo(fn, view);
+      }).bind(this))
+      .fail(_(function() {
+        this.viewFail(view, 'failed to load');
+      }).bind(this));
   },
 
   report: function(title, messages) {

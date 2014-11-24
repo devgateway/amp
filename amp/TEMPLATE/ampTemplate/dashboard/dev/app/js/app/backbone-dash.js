@@ -15,20 +15,27 @@ function InitError(instance) {
 }
 
 
+var ajaxOptionWrap = function(options) {
+  options = _({}).extend(options, {
+    // maybe use phil's DRC CORS dev server
+    url: (IS_PHILS_CORS ? 'http://localhost:8080' : '') + options.url,
+    headers: {
+      // jscs:disable disallowQuotedKeysInObjects
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+      // jscs:enable disallowQuotedKeysInObjects
+    }
+  });
+  return options;
+};
+
+
 var syncOverride = (function(bs) {
   var cache = {};
 
   function _doSync(url, method, model, options) {
-    _(options).extend({
-      // maybe use phil's DRC CORS dev server
-      url: (IS_PHILS_CORS ? 'http://localhost:8080' : '') + url,
-      headers: {
-        // jscs:disable disallowQuotedKeysInObjects
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-        // jscs:enable disallowQuotedKeysInObjects
-      }
-    });
+    options = _({}).extend(options, { url: url });
+    options = ajaxOptionWrap(options);
     return bs.call(this, method, model, options);
   }
 
@@ -90,5 +97,6 @@ module.exports = _({}).extend(Backbone, {
   Collection: mixDash(Backbone.Collection),
   View: mixDash(Backbone.View),
 
-  sync: syncOverride
+  sync: syncOverride,
+  wrappedAjax: function(o) { return Backbone.ajax(ajaxOptionWrap(o)); }
 });

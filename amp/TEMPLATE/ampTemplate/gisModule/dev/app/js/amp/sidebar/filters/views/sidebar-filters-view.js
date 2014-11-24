@@ -1,4 +1,5 @@
 var fs = require('fs');
+var $ = require('jquery');
 var _ = require('underscore');
 
 var BaseControlView = require('../../base-control/base-control-view');
@@ -69,6 +70,7 @@ module.exports = BaseControlView.extend({
       //only collapse ui if it's expanded...otherwise strange bootstrap behaviour.
       if (self.$('.accordion-body.collapse.in').length > 0) {
         self.$('.accordion-body').collapse('hide');
+        $('#map-loading').show();
       }
     });
   }

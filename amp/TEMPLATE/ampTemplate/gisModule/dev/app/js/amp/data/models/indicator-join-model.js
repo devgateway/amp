@@ -1,3 +1,4 @@
+var $ = require('jquery');
 var when = require('jquery').when;
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -56,7 +57,9 @@ module.exports = Backbone.Model
   },
 
   loadAll: function() {
-    return when(this.load(), this.loadBoundary()).promise();
+    return when(this.load(), this.loadBoundary()).promise().done(function() {
+      $('#map-loading').hide();
+    });
   },
 
   updatePaletteRange: function() {

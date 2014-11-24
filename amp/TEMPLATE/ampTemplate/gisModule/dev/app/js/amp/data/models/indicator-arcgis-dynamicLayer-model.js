@@ -24,6 +24,12 @@ module.exports = Backbone.Model
       });
       this._esriLoaded.resolveWith(this, [this, this.esriLayer]);
     }
+
+    // hide loading icon after layer loads.
+    this.listenTo(this.esriLayer, 'load', function() {
+      $('#map-loading').hide();
+    });
+
     return this._esriLoaded.promise();
   },
 

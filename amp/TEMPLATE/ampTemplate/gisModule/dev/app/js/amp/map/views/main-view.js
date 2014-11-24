@@ -34,7 +34,7 @@ module.exports = Backbone.View.extend({
     this.app.state.register(this, 'map', {
       get: this._getMapView,
       set: this._setMapView,
-      empty: { center: [0, 40], zoom: 2 }//{ center: [-3, 22], zoom: 6 }
+      empty: { center: [0, 40], zoom: 2 }
     });
 
     this.basemaps = new Basemaps(null, { app: this.app });  // pre-loaded with hard-coded basemaps
@@ -69,6 +69,9 @@ module.exports = Backbone.View.extend({
 
     this.$el.append(this.legendView.render().el);
     this.$el.append(this.datasourcesView.render().el);
+
+    this.$el.append('<div id="map-loading" style="position: absolute;left: 50%;top: 50%;">' +
+      '<img src="img/loading-icon.gif"></div>');
 
     this._renderCountryBoundary();
     this.map.invalidateSize();

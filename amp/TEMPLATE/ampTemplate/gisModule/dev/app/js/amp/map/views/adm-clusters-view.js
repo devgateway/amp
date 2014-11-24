@@ -1,4 +1,5 @@
 var fs = require('fs');
+var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var TopojsonLibrary = require('../../../libs/local/topojson.js');
@@ -29,7 +30,6 @@ module.exports = Backbone.View.extend({
   },
 
 
-  //TODO: make sure still selected
   showLayer: function(admLayer) {
     var self = this;
     var leafletLayer = this.leafletLayerMap[admLayer.cid];
@@ -43,6 +43,7 @@ module.exports = Backbone.View.extend({
         self.boundary = self.getNewBoundary(admLayer);
         leafletLayer.addLayer(self.boundary);
         self.moveBoundaryBack();
+        $('#map-loading').hide();
       });
     }
 
@@ -64,6 +65,7 @@ module.exports = Backbone.View.extend({
       if (this.boundary) {
         leafletLayer.addLayer(this.boundary);
         this.moveBoundaryBack();
+        $('#map-loading').hide();
       }
 
     } else {

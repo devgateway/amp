@@ -1,3 +1,4 @@
+var $ = require('jquery');
 var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -66,7 +67,9 @@ module.exports = Backbone.View
     self.structureMenuModel.structuresCollection.getStructuresWithActivities().then(function() {
       self.rawData = self.structureMenuModel.structuresCollection.toGeoJSON();
       self._renderFeatures();
+      $('#map-loading').hide();
     });
+
     return this.featureGroup;
   },
 

@@ -1,3 +1,4 @@
+var $ = require('jquery');
 var Backbone = require('backbone');
 var _ = require('underscore');
 
@@ -29,6 +30,8 @@ module.exports = Backbone.Collection.extend({
     _.each(this.siblingGroupList, function(child) {
       child.clearSelected();
     });
+
+    $('#map-loading').show();
     model.set('selected', true);
   },
 

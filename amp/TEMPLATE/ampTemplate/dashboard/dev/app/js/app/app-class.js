@@ -59,7 +59,9 @@ _.extend(App.prototype, BackboneDash.Events, {
 
   render: function() {
     this.tryTo(this.view.render, this.view);
-    this.translator.translateDOM(this.view.el);
+
+    /* ensure entire page--header and footer, not just this view is translated */
+    this.translator.translateDOM(document);
   },
 
   viewFail: function(view, err) {

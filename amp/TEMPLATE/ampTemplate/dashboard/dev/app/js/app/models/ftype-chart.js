@@ -52,6 +52,8 @@ module.exports = BackboneDash.Model.extend({
       .value();
 
     var chartName = ['amp.dashboard:chart-', this.get('name').replace(/ /g, ''), '-'].join('');
+    var localizedOthers = self.localizedLookup[chartName + 'others'];
+    console.log(chartName,'others',localizedOthers,self.localizedLookup);
 
     // reformat the data for nvd3
     data.processed = _(years)
@@ -97,7 +99,7 @@ module.exports = BackboneDash.Model.extend({
         .value();
 
       var othersSeries = {
-        key: 'Others',
+        key: localizedOthers,
         color: '#777',
         values: _(data.processed)
           .chain()

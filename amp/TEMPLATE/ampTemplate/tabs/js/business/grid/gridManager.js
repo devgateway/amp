@@ -306,22 +306,24 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 
 							// Add extra info to each grop row created by
 							// jqgrid, this info comes from the endpoint.
-							var numberOfMeasures = tableStructure.measures.models.length;
-							var groupRows = jQuery("tr[id*='tab_grid_" + id + "ghead']");
-							jQuery.each(groupRows, function(i, item) {
-								jQuery(item.firstChild).attr("colspan", numberOfMeasures);
-								jQuery.each(tableStructure.measures.models, function(j, measure) {
-									var auxTD = jQuery(item.firstChild).clone().html("").attr("colspan", 0).css("text-align", "right");
-									var content = partialTotals[i].contents["[" + measure.get('measureName') + "]"].displayedValue;
-									jQuery(auxTD).html("<span><b>" + content + "</b></span>");
-									jQuery(item).append(auxTD);
+							if (tableStructure.hierarchies.models.length > 0) {
+								var numberOfColumns = tableStructure.columns.models.length - tableStructure.hierarchies.models.length + 1;
+								var groupRows = jQuery("tr[id*='tab_grid_" + id + "ghead']");
+								jQuery.each(groupRows, function(i, item) {
+									jQuery(item.firstChild).attr("colspan", numberOfColumns);
+									jQuery.each(tableStructure.measures.models, function(j, measure) {
+										var auxTD = jQuery(item.firstChild).clone().html("").attr("colspan", 0).css("text-align", "right");
+										var content = partialTotals[i].contents["[" + measure.get('measureName') + "]"].displayedValue;
+										jQuery(auxTD).html("<span><b>" + content + "</b></span>");
+										jQuery(item).append(auxTD);
 
-									var firstColumnHtml = jQuery(item.firstChild).html();
-									firstColumnHtml = firstColumnHtml
-											.replace("@@totalChildrenCount@@", partialTotals[i].totalChildrenCount);
-									jQuery(item.firstChild).html(firstColumnHtml);
+										var firstColumnHtml = jQuery(item.firstChild).html();
+										firstColumnHtml = firstColumnHtml.replace("@@totalChildrenCount@@",
+												partialTotals[i].totalChildrenCount);
+										jQuery(item.firstChild).html(firstColumnHtml);
+									});
 								});
-							});
+							}
 						}
 					});
 			app.TabsApp.currentGrid = jQuery(grid);

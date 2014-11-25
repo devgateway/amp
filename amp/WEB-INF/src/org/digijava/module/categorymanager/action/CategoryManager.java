@@ -284,6 +284,7 @@ public class CategoryManager extends Action {
 			
 			returnCollection	= qry.list();
 			
+			
 			Iterator<AmpCategoryClass> iter	= returnCollection.iterator();
 			while ( iter.hasNext() ) {
 				iter.next().getUsedCategories().size();
@@ -406,6 +407,8 @@ public class CategoryManager extends Action {
 			/**
 			 * Add new values
 			 */
+			String unaddableCategoryValues = null;
+
 			for ( int i=0; i<possibleVals.size(); i++ ) {
 				PossibleValue pVal		= possibleVals.get(i);
 				if ( !pVal.isDisable() && 
@@ -413,9 +416,28 @@ public class CategoryManager extends Action {
 					AmpCategoryValue newVal			= new AmpCategoryValue();
 					newVal.setValue( pVal.getValue() );
 					newVal.setAmpCategoryClass( dbCategory );
+					newVal.setIndex(i);
 					dbCategory.getPossibleValues().add(i, newVal);
+					
+					try{
+						//trying to add 
+						dbSession.flush();
+					}
+					catch (Exception e) {
+						if (unaddableCategoryValues ==  null) 
+							unaddableCategoryValues = new String() + newVal.getValue();
+						else
+							unaddableCategoryValues += ", " + newVal.getValue(); 
+					}			
+					
+					
 				}
+
+
 			}
+			
+			
+			
 			/**
 			 * Save modifications to existing values only if we are in advanced mode
 			 */
@@ -435,22 +457,30 @@ public class CategoryManager extends Action {
 					}
 					Iterator<AmpCategoryValue> iterCV	= dbCategory.getPossibleValues().iterator();
 					while ( iterCV.hasNext() ) {
+						
 						AmpCategoryValue ampCategoryValue	= iterCV.next();
+						
+						//LLK HACK
+						if (ampCategoryValue == null)
+							continue;
 						if ( pVal.getId().equals(ampCategoryValue.getId()) ) {
+							if (!pVal.isDeleted()) {
+								
 							
-							try{
-								ampCategoryValue.setDeleted(true);
-								dbSession.flush();
-								//removing it, since softdelete is only for limiting user input
-//								if ( CategoryManagerUtil.verifyDeletionProtectionForCategoryValue( dbCategory.getKeyName(), 
-//																		ampCategoryValue.getValue()) )
-//										throw new Exception("This value is in CategoryConstants.java and used by the system");
-							}
-							catch (Exception e) {
-								if (undeletableCategoryValues ==  null) 
-									undeletableCategoryValues = new String() + ampCategoryValue.getValue();
-								else
-									undeletableCategoryValues += ", " + ampCategoryValue.getValue(); 
+								try{
+									ampCategoryValue.setDeleted(true);
+									dbSession.flush();
+									//removing it, since softdelete is only for limiting user input
+	//								if ( CategoryManagerUtil.verifyDeletionProtectionForCategoryValue( dbCategory.getKeyName(), 
+	//																		ampCategoryValue.getValue()) )
+	//										throw new Exception("This value is in CategoryConstants.java and used by the system");
+								}
+								catch (Exception e) {
+									if (undeletableCategoryValues ==  null) 
+										undeletableCategoryValues = new String() + ampCategoryValue.getValue();
+									else
+										undeletableCategoryValues += ", " + ampCategoryValue.getValue(); 
+								}
 							}
 						}
 					}
@@ -462,6 +492,8 @@ public class CategoryManager extends Action {
 					}
 					Collection <AmpCategoryValue> acvColl = dbCategory.getPossibleValues();
 					for (AmpCategoryValue acv: acvColl) {
+						if (acv == null)
+							continue;
 						if ( pVal.getId().equals(acv.getId()) ) {
 							try{
 								acv.setDeleted(false);
@@ -544,18 +576,29 @@ public class CategoryManager extends Action {
 	
 	private void reindexAmpCategoryValueList( List<AmpCategoryValue> values ) {
 		for (int i=0; i<values.size(); i++) 
-			values.get(i).setIndex(i);
+			if (values.get(i) != null)
+				values.get(i).setIndex(i);
 	}
 	
 	public static String checkDuplicateValues( List<AmpCategoryValue>  values) {
 		HashSet<String> set					= new HashSet<String>( values.size() );
-		Iterator<AmpCategoryValue> iter		= values.iterator();
 		
-		while ( iter.hasNext() ) {
-			String value					= iter.next().getValue(); 
-			if ( !set.add( value ) )
-				return value;
+		
+		for (AmpCategoryValue val: values) {
+			if (val != null) {
+				String value					= val.getValue(); 
+				if ( !set.add( value ) )
+					return value;
+			}
 		}
+//		Iterator<AmpCategoryValue> iter		= values.iterator();
+//		
+//		while ( iter.hasNext() ) {
+//			
+//			String value					= iter.next().getValue(); 
+//			if ( !set.add( value ) )
+//				return value;
+//		}
 		return null;
 	}
 	

@@ -70,7 +70,7 @@ public class AmpCategoryValue implements Serializable, Identifiable, Comparable<
 		this.ampCategoryClass = ampCategoryClass;
 	}
 
-	public int getIndex()
+	public Integer getIndex()
 	{
 		return index;
 	}

@@ -31,13 +31,30 @@ h3 {
 .inline-heading {
   display: inline-block;
   margin: 0 20px 0 0;
-  vertical-align: bottom;
+  // vertical-align: bottom;
 }
 
 .applied-filters {
   display: inline-block;
   margin: 0 20px 0 0;
-  vertical-align: bottom;
+  vertical-align: top;
+
+  h5 {
+    color: @c-title;
+    font-weight: 800;
+  }
+  li {
+    list-style-type: none;
+    &:before {
+      content: "";
+      display: inline-block;
+      height: 1em;
+      width: 1em;
+      margin: 3px 5px 0 -22px;
+      border-radius: 0.5em;
+      background: #a1d367;
+    }
+  }
 }
 
 .dash-form {

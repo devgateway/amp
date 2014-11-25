@@ -5,12 +5,16 @@ var template = _.template(fs.readFileSync(
   __dirname + '/../templates/filters.html', 'UTF-8'));
 var summaryTemplate = _.template(fs.readFileSync(
   __dirname + '/../templates/filter-summary.html', 'UTF-8'));
+var detailsTemplate = _.template(fs.readFileSync(
+  __dirname + '/../templates/filter-details.html', 'UTF-8'));
 
 
 module.exports = BackboneDash.View.extend({
 
   events: {
-    'click .show-filters': 'showFilter'
+    'click .show-filters': 'showFilter',
+    'click .show-filter-details': 'showFilterDetails',
+    'click .hide-filter-details': 'hideFilterDetails'
   },
 
   initialize: function(options) {
@@ -20,9 +24,11 @@ module.exports = BackboneDash.View.extend({
 
     this.app.filter.loaded.done(_(function() {
       this.app.state.register(this, 'filters', {
-        get: _(this.app.filter.serialize).bind(this.app.filter),
-        set: _(this.app.filter.deserialize).bind(this.app.filter),
-        empty: {}
+        // namespace serialized filters so we can hook in extra state to store
+        // later if desired (anything dashboards-ui related, for example)
+        get: _(function() { return {filter: this.app.filter.serialize() }; }).bind(this),
+        set: _(function(state) { this.app.filter.deserialize(state.filter); }).bind(this),
+        empty: {filter: {}}
       });
     }).bind(this));
   },
@@ -44,14 +50,9 @@ module.exports = BackboneDash.View.extend({
 
   renderApplied: function() {
     var filters = this.app.filter.serializeToModels();
-    var applied = _(filters.columnFilters).keys();
-    if (filters.otherFilters) {
-      // Currently assumes that any otherFilters just implies Date Range
-      // ... there is no obvious way to get nice strings out.
-      applied.push('Date range');
-    }
-    applied = applied.join(', ');
-    this.$('.applied-filters').html(summaryTemplate({ applied: applied }));
+    var countApplied = _(filters.columnFilters).keys().length;
+    countApplied += !!filters.otherFilters;
+    this.$('.applied-filters').html(summaryTemplate({ countApplied: countApplied }));
     this.app.translator.translateDOM(this.el);
   },
 
@@ -67,6 +68,33 @@ module.exports = BackboneDash.View.extend({
   applyFilter: function() {
     // todo: actually do an effect for changed filters...
     this.hideFilter();
+    this.renderApplied();
+  },
+
+  showFilterDetails: function() {
+    var filters = this.app.filter.serializeToModels();
+    console.log('f', filters);
+    var applied = _(filters.columnFilters).map(function(filter, key) {
+      return {
+        name: key,
+        detail: _(filter).map(function(value) {
+          return value.get('name');
+        })
+      };
+    });
+    if (filters.otherFilters) {
+      // Currently assumes that any otherFilters just implies Date Range
+      // ... there is no obvious way to get nice strings out.
+      var dateRange = filters.otherFilters.date;
+      applied.push({
+        name: 'Date Range',
+        detail: [dateRange.start + '&mdash;' + dateRange.end]
+      });
+    }
+    this.$('.applied-filters').html(detailsTemplate({ applied: applied }));
+  },
+
+  hideFilterDetails: function() {
     this.renderApplied();
   }
 

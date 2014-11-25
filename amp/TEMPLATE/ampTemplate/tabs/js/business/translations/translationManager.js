@@ -26,16 +26,22 @@ define([ 'underscore', 'jquery', 'i18next' ], function(_, jQuery) {
 				postit[key] = value;
 			}
 		});
-		// TODO: do not call endpoint when there is nothing to translate to save
-		// some extra ms.
-		postJSON('/rest/translations/label-translations', postit, function(data) {
-			$.each(data, function(key, value) {
-				putTranslationValueInCache(key, value);
+		// Do not call endpoint when there is nothing to translate to save some
+		// extra ms (500ms in Timor!).
+		if (!jQuery.isEmptyObject(postit)) {
+			postJSON('/rest/translations/label-translations', postit, function(data) {
+				$.each(data, function(key, value) {
+					putTranslationValueInCache(key, value);
+				});
+				$.each(app.TabsApp.globalTranslationCache, function(key, value) {
+					$("*[data-i18n='" + key + "']").text(value);
+				});
 			});
+		} else {
 			$.each(app.TabsApp.globalTranslationCache, function(key, value) {
 				$("*[data-i18n='" + key + "']").text(value);
 			});
-		});
+		}
 	};
 
 	TranslationManager.getTranslated = function(text) {
@@ -83,7 +89,7 @@ define([ 'underscore', 'jquery', 'i18next' ], function(_, jQuery) {
 	function lookForTranslationByKey(key) {
 		var translation = app.TabsApp.globalTranslationCache[key];
 		if (translation) {
-			//console.log('found translation: ' + key);
+			// console.log('found translation: ' + key);
 			return translation;
 		} else {
 			return null;

@@ -98,9 +98,11 @@ public class MondrianReportGenerator implements ReportExecutor {
 	private final Class<? extends ReportAreaImpl> reportAreaType;
 	private final boolean printMode;
 	
+	/*
 	// needed for AMP-18330 workaround
 	private static final ReportMeasure ALWAYS_PRESENT = new ReportMeasure(MeasureConstants.ALWAYS_PRESENT);
 	private SortedSet<Integer> dummyColumnsToRemove = new TreeSet<Integer>();
+	*/
 	
 	private MDXGenerator generator = null;
 	
@@ -472,6 +474,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 		and we'll remove it's output during post-process
 		*/
 		if (spec.isDisplayEmptyFundingRows()) {
+			config.setAllowEmptyRowsData(true);
+			/*
 			config.addColumnMeasure((MDXMeasure) MondrianMapping.toMDXElement(ALWAYS_PRESENT));
 			// add explicit filter to allow always present year if date filters are detected
 			if (spec.getFilters() != null && spec.getFilters().getFilterRules() != null) {
@@ -488,6 +492,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 					}
 				}
 			}
+			*/
 		}
 	}
 	
@@ -505,7 +510,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		leafHeaders = getOrderedLeafColumnsList(spec, rowAxis, columnAxis);		
 
 		// now cleanup dummy measures, identified during #getOrderedLeafColumnsList
-		SaikuUtils.removeColumns(cellDataSet, dummyColumnsToRemove);
+		//SaikuUtils.removeColumns(cellDataSet, dummyColumnsToRemove);
 		
 		boolean calculateTotalsOnRows = spec.isCalculateRowTotals()
 				//enable totals for non-hierarhical columns
@@ -801,13 +806,15 @@ public class MondrianReportGenerator implements ReportExecutor {
 						reportColumnsByFullName.put(fullColumnName, reportColumn);
 					}
 					if (measureColumn.getDepth() == 0) { //lowest depth ==0 => this is leaf column
+						/*
 						if (MeasureConstants.ALWAYS_PRESENT.equals(reportColumn.originalColumnName)) {
 							dummyColumnsToRemove.add(colIdx);
 						} else {
+						*/
 							if (!outputtedMeasures.contains(measureColumn.getName()))
 								outputtedMeasures.add(measureColumn.getName());
 							reportColumns.add(reportColumn);
-						}
+						//}
 					}
 				}
 				colIdx ++;

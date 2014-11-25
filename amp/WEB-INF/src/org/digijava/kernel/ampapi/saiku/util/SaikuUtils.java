@@ -62,26 +62,31 @@ public class SaikuUtils {
 			return; 
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 		List<Measure> uniqueMeasures = new ArrayList<Measure>();
+		/*
 		// adjustments for AMP-18330 start
 		Member alwaysPresent = null;
 		SortedSet<Integer> totalRowsColumnsToRemove = new TreeSet<Integer>();
 		int colPos = 0;
 		// AMP-18330 end
+		 */
 		
 		for(Position colPosition : columnAxis.getPositions())
 			for (Member member :  colPosition.getMembers()) {
 				// check if this is a measure member
 				if (Member.Type.MEASURE.equals(member.getMemberType())
 						|| MoConstants.MEASURES.equals(member.getDimension().getName())) {
+					/*
 					// avoid dummy always present added as a workaround for AMP-18330
 					if (MoConstants.ALWAYS_PRESENT.equals(member.getName())) {
 						totalRowsColumnsToRemove.add(colPos);
 						alwaysPresent = member;
-					} else if (!alreadyAdded(uniqueMeasures, member.getName())) {
+					} else
+					*/ 
+					if (!alreadyAdded(uniqueMeasures, member.getName())) {
 						// verify if not already added (to avoid intermediate totals that break Saiku display)
 						uniqueMeasures.add((Measure) member);
 					}
-					colPos ++;
+					//colPos ++;
 				}
 			}
 		
@@ -121,10 +126,12 @@ public class SaikuUtils {
 		result.setRowTotalsLists(totals[1]);
 		result.setColTotalsLists(totals[0]);
 		/* end of Saiku approach to calculate the totals */
+		/*
 		if (alwaysPresent != null) {
 			removeTotalsColumns(result.getRowTotalsLists(), totalRowsColumnsToRemove);
 			recalculateColumnWidths(result, totalRowsColumnsToRemove);
 		}
+		*/
 	}
 	
 	public static void recalculateColumnWidths(CellDataSet result, SortedSet<Integer> columnsToRemove) {

@@ -117,12 +117,9 @@ public class MDXGenerator {
 		String rows = " ON ROWS ";
 		String where = "";
 		String mdx = "";
-		String notEmptyColumns = config.isAllowColumnsEmptyData() ? "" : "NON EMPTY ";
+		String notEmptyColumns = ""; // provide always all group of measures //config.isAllowColumnsEmptyData() ? "" : "NON EMPTY ";
 		String notEmptyRows = config.isAllowRowsEmptyData() ? "" : "NON EMPTY ";
 		
-		//TODO: candiate for removal - no needed anymore with latest solution
-		//adjustDuplicateElementsOnDifferentAxis(config);
-		//adjustPropertyFilters(config);
 		adjustDateFilters(config);
 
 		String axisMdx = null;
@@ -130,13 +127,6 @@ public class MDXGenerator {
 		/* COLUMNS */
 		//if column attributes are not configured, display only measures
 		axisMdx = getColumns(config, with);
-		if (axisMdx.contains(MoConstants.FUNC_CROSS_JOIN) && !config.isAllowColumnsEmptyData()) {
-			/* AMP-18504: if there is some grouping, then filter entirely empty groupings only
-			Note: possible side effect is to have headers without data, when no data found
-			*/
-			notEmptyColumns = "";
-			axisMdx = axisMdx.replaceAll(MoConstants.FUNC_CROSS_JOIN, MoConstants.FUNC_NON_EMPTY_CROSS_JOIN);
-		}
 		
 		columns  =  notEmptyColumns + axisMdx + columns;
 		
@@ -158,10 +148,7 @@ public class MDXGenerator {
 			if (config.getSortingOrder().size() > 0) {
 				axisMdx = sorting(config.getSortingOrder(), axisMdx);
 			}
-			if (axisMdx.contains(MoConstants.FUNC_CROSS_JOIN) && !config.isAllowRowsEmptyData()) {
-				//using both NonEmptyCrossJoin and NON EMPTY (cannot use NonEmpty - not working)
-				axisMdx = axisMdx.replaceAll(MoConstants.FUNC_CROSS_JOIN, MoConstants.FUNC_NON_EMPTY_CROSS_JOIN);
-			}
+			
 			rows  = notEmptyRows + axisMdx + rows;
 			columns += ", ";
 		}
@@ -232,7 +219,7 @@ public class MDXGenerator {
 				//TODO: TBD if for all measures SUM function is applicable
 				formulae.append("Sum(");
 				for (String dataFilterName : dataFilterSets) {
-					formulae.append(MoConstants.FUNC_CROSS_JOIN).append("(").append(dataFilterName).append(",");
+					formulae.append(MoConstants.FUNC_NON_EMPTY_CROSS_JOIN).append("(").append(dataFilterName).append(",");
 				}
 				formulae.append("%s").append(")"); // ) enclosing from sum
 				for (int i = 0; i < dataFilterSets.size(); i++)
@@ -341,10 +328,10 @@ public class MDXGenerator {
 				if (attrAll != null) prevAttrAll = attrAll;
 			} else {
 				//for query with no totals, it is enough to do cross join 
-				crossJoin = String.format(MoConstants.FUNC_CROSS_JOIN_FORMAT, attrNode, crossJoin);
+				crossJoin = String.format(MoConstants.FUNC_NON_EMPTY_CROSS_JOIN_FORMAT, attrNode, crossJoin);
 				//for query with totals, we need to cross join 'all' members and make a union with standard members cross join
 				if (doTotals) {
-					prevAttrAll = String.format(MoConstants.FUNC_CROSS_JOIN_FORMAT, attrAll, prevAttrAll);
+					prevAttrAll = String.format(MoConstants.FUNC_NON_EMPTY_CROSS_JOIN_FORMAT, attrAll, prevAttrAll);
 				}
 				if (numSubTotals > 0 || !iter.hasPrevious() && doTotals) {
 					crossJoin = String.format(MoConstants.FUNC_UNION_FORMAT, crossJoin, prevAttrAll); //totals are displayed after level's members

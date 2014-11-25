@@ -37,6 +37,7 @@ public final class MoConstants {
 	public static final String MEMBER_NAME = "name";
 	public static final String FUNC_CROSS_JOIN = "CrossJoin";
 	public static final String FUNC_CROSS_JOIN_FORMAT = "CrossJoin(%s, %s)";
+	public static final String FUNC_NON_EMPTY_CROSS_JOIN_FORMAT = "NonEmptyCrossJoin(%s, %s)";
 	public static final String FUNC_NON_EMPTY_CROSS_JOIN = "NonEmptyCrossJoin";
 	public static final String FUNC_HIERARCHIZE = "Hierarchize";
 	public static final String FUNC_INTERSECT = "Intersect";

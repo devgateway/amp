@@ -97,7 +97,7 @@ public class AmpReportsToReportSpecification {
 				spec.addColumn(MondrianReportUtils.getColumn(column.getColumnName(), entityType));
 		}
 		
-		for (String measureName: report.getMeasureNames()) {
+		for (String measureName: report.getOrderedMeasureNames()) {
 			spec.addMeasure(MondrianReportUtils.getMeasure(measureName, entityType));
 		}
 		

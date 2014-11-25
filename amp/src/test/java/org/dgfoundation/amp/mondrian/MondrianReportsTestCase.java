@@ -114,8 +114,19 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		//if (cor == null) return;
 		String delta = cor == null ? null : cor.getDifferenceAgainst(rep.reportContents);
 		
-		if (cor == null || delta != null)
+		if (cor == null || delta != null) {
+			System.err.println("\n------------------------------------------------------------------------------------------");
+			StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+			for (int i = 0; i < stackTrace.length; i++) {
+				StackTraceElement stackTraceEl = stackTrace[i];
+				if (stackTraceEl.getClassName().startsWith("org.dgfoundation.amp")
+						&& !stackTraceEl.getClassName().contains(MondrianReportsTestCase.class.getName())) {
+					System.err.println(stackTraceEl.toString() + ":");
+					break;
+				}
+			}
 			System.err.println("this is output for test " + spec.getReportName() + describeInCode(rep.reportContents, 1));
+		}
 		
 		if (delta != null)
 			fail("test " + spec.getReportName() + " failed: " + delta);			

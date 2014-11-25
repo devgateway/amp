@@ -261,14 +261,14 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 	}
 	
 	@Test
-	public void test_AMP_18330_empty_rows_fail_for_now() {
+	public void test_AMP_18330_empty_rows() {
 		ReportAreaForTests cor = new ReportAreaForTests()
-	    .withContents("Project Title", "Report Totals", "Region", "", "2010-Actual Disbursements", "143 777", "Total Measures-Actual Disbursements", "143 977")
+	    .withContents("Project Title", "Report Totals", "Region", "", "2010-Actual Disbursements", "143 777", "Total Measures-Actual Disbursements", "143 777")
 	    .withChildren(
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "Test MTEF directed", "Region", "Anenii Noi County", "2010-Actual Disbursements", "143 777", "Total Measures-Actual Disbursements", "143 877"),
+	          .withContents("Project Title", "Test MTEF directed", "Region", "Anenii Noi County", "2010-Actual Disbursements", "143 777", "Total Measures-Actual Disbursements", "143 777"),
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "activity with primary_program", "Region", "", "2010-Actual Disbursements", "0", "Total Measures-Actual Disbursements", "100")  );
+	          .withContents("Project Title", "activity with primary_program", "Region", "", "2010-Actual Disbursements", "0", "Total Measures-Actual Disbursements", "0")  );
 		
 		ReportSpecificationImpl spec = buildSpecification("test_AMP_18330_empty_rows",
 				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.REGION),

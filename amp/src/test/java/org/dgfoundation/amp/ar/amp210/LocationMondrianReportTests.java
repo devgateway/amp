@@ -19,18 +19,18 @@ public class LocationMondrianReportTests extends MondrianReportsTestCase {
 	@Test
 	public void testRawColumns() {
 		ReportAreaForTests correctReport = new ReportAreaForTests()
-	    .withContents("Project Title", "Report Totals", "Region", "", "Zone", "", "2011-Actual Commitments", "0", "2011-Actual Disbursements", "0", "2013-Actual Commitments", "2 138 754", "2013-Actual Disbursements", "686 956", "Total Measures-Actual Commitments", "2 138 754", "Total Measures-Actual Disbursements", "686 956")
+	    .withContents("Project Title", "Report Totals", "Region", "", "Zone", "", "2013-Actual Commitments", "2 138 754", "2013-Actual Disbursements", "686 956", "Total Measures-Actual Commitments", "2 138 754", "Total Measures-Actual Disbursements", "686 956")
 	    .withChildren(
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "mtef activity 1", "Region", "", "Zone", "", "2011-Actual Commitments", "0", "2011-Actual Disbursements", "0", "2013-Actual Commitments", "0", "2013-Actual Disbursements", "0", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0"),
+	    .withContents("Project Title", "mtef activity 1", "Region", "", "Zone", "", "2013-Actual Commitments", "0", "2013-Actual Disbursements", "0", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0"),
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "SSC Project 1", "Region", "Anenii Noi County", "Zone", "", "2011-Actual Commitments", "0", "2011-Actual Disbursements", "0", "2013-Actual Commitments", "111 333", "2013-Actual Disbursements", "555 111", "Total Measures-Actual Commitments", "111 333", "Total Measures-Actual Disbursements", "555 111"),
+	    .withContents("Project Title", "SSC Project 1", "Region", "Anenii Noi County", "Zone", "", "2013-Actual Commitments", "111 333", "2013-Actual Disbursements", "555 111", "Total Measures-Actual Commitments", "111 333", "Total Measures-Actual Disbursements", "555 111"),
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "SSC Project 2", "Region", "Edinet County", "Zone", "", "2011-Actual Commitments", "0", "2011-Actual Disbursements", "0", "2013-Actual Commitments", "567 421", "2013-Actual Disbursements", "131 845", "Total Measures-Actual Commitments", "567 421", "Total Measures-Actual Disbursements", "131 845"),
+	    .withContents("Project Title", "SSC Project 2", "Region", "Edinet County", "Zone", "", "2013-Actual Commitments", "567 421", "2013-Actual Disbursements", "131 845", "Total Measures-Actual Commitments", "567 421", "Total Measures-Actual Disbursements", "131 845"),
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "Activity with Zones", "Region", "Anenii Noi County, Balti County", "Zone", "Bulboaca, Glodeni", "2011-Actual Commitments", "0", "2011-Actual Disbursements", "0", "2013-Actual Commitments", "570 000", "2013-Actual Disbursements", "0", "Total Measures-Actual Commitments", "570 000", "Total Measures-Actual Disbursements", "0"),
+	    .withContents("Project Title", "Activity with Zones", "Region", "Anenii Noi County, Balti County", "Zone", "Bulboaca, Glodeni", "2013-Actual Commitments", "570 000", "2013-Actual Disbursements", "0", "Total Measures-Actual Commitments", "570 000", "Total Measures-Actual Disbursements", "0"),
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "Activity With Zones and Percentages", "Region", "Anenii Noi County, Balti County", "Zone", "Dolboaca, Glodeni", "2011-Actual Commitments", "0", "2011-Actual Disbursements", "0", "2013-Actual Commitments", "890 000", "2013-Actual Disbursements", "0", "Total Measures-Actual Commitments", "890 000", "Total Measures-Actual Disbursements", "0"));
+	    .withContents("Project Title", "Activity With Zones and Percentages", "Region", "Anenii Noi County, Balti County", "Zone", "Dolboaca, Glodeni", "2013-Actual Commitments", "890 000", "2013-Actual Disbursements", "0", "Total Measures-Actual Commitments", "890 000", "Total Measures-Actual Disbursements", "0")  );
 
 		runMondrianTestCase(
 				"testing-locations-raw-data",						

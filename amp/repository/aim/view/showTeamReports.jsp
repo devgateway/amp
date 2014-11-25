@@ -719,7 +719,7 @@ $(document).ready(function() {
 						                                								</c:set>
 																						<%
 																						if (report.getType()!=null && report.getType().equals(new Long(1))
-																						&& 	FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS)) {
+																						&& 	!FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS)) {
 																						%>
 																					
 																						<a href="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}" onclick="return popup(this,'');" title="Click here to view the Report">

@@ -469,7 +469,7 @@ function submitForm(action){
 																							value="edit" />
 																						<%
 																						if (report.getType()!=null && report.getType().equals(new Long(1))
-																						&& 	FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS)) {
+																						&& 	!FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS)) {
 																						%>
 																						<a
 																							href="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}"

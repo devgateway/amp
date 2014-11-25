@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var param = require('jquery').param;
 var BackboneDash = require('../backbone-dash');
 
 
@@ -6,6 +7,7 @@ module.exports = BackboneDash.Model.extend({
 
   defaults: {
     typed: true,
+    adjtype: 'ac',
     limit: 3
   },
 
@@ -118,6 +120,13 @@ module.exports = BackboneDash.Model.extend({
     }
 
     return data;
+  },
+
+  fetch: function(options) {
+    options = _.defaults(
+      options || {},
+      { url: this.url + '?' + param(this.pick('adjtype')) });
+    return BackboneDash.Model.prototype.fetch.call(this, options);
   }
 
 });

@@ -81,6 +81,10 @@ module.exports = {
           .on('click', function(d) {
             // clicking on the "others" bar loads five more.
             if (d.color === '#777') { model.set('limit', model.get('limit') + 5); }
+            // also make the chart bigger if too many are shown.
+            if (model.get('limit') >= 12) {
+              model.set('big', true);
+            }
           });
       });
     };

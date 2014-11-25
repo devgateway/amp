@@ -191,19 +191,35 @@ module.exports = BackboneDash.View.extend({
       this.model.get('name') + '.csv');
   },
 
-  drawChartForDownload: function(canvas, title) {
-    var ctx = canvas.getContext('2d');
+  drawChartForDownload: function(canvas, options) {
+    var ctx = canvas.getContext('2d'),
+        w = canvas.getAttribute('width'),
+        h = canvas.getAttribute('height');
+
+    var moneyContext = options.currency;
+    if (options.adjtype) {
+      var key = options.adjtype === 'ac' ?
+        ['amp.dashboard:chart-radioui-commitments', 'Commitments'] :
+        ['amp.dashboard:chart-radioui-disbursements', 'Disbursements'];
+      moneyContext = this.app.translator.translateSync(key[0], key[1]) +
+        ' (' + moneyContext + ')';
+    }
 
     // make the background opaque white
     ctx.beginPath();
-    ctx.rect(0, 0, canvas.getAttribute('width'), canvas.getAttribute('height'));
+    ctx.rect(0, 0, w, h);
     ctx.fillStyle = '#fff';
     ctx.fill();
 
     // Add the chart title
     ctx.fillStyle = '#163f66';
     ctx.font = 'bold 22px "Open Sans"';
-    ctx.fillText(title.toUpperCase(), 10, 10 + 22);
+    ctx.fillText(options.title.toUpperCase(), 10, 10 + 22);
+    // what money are we talking about?
+    ctx.fillStyle = '#333';
+    ctx.textAlign = 'right';
+    ctx.fillText(moneyContext, w - 10, 10 + 22);
+    ctx.textAlign = 'left';  // reset it
   },
 
   downloadChart: function(e) {
@@ -224,7 +240,11 @@ module.exports = BackboneDash.View.extend({
     canvas.setAttribute('width', this.$(svg).width());
     canvas.setAttribute('height', this.$(svg).height() + 42);
 
-    this.drawChartForDownload(canvas, this.model.get('name'));
+    this.drawChartForDownload(canvas, {
+      title: this.model.get('name'),
+      currency: this.model.get('currency'),
+      adjtype: this.model.get('adjtype')
+    });
 
     canvg(canvas, svg.outerHTML, {
       offsetY: 42,

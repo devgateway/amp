@@ -9,6 +9,13 @@ import java.util.List;
  * @author medea
  */
 public class PossibleValue {
+	@Override
+	public String toString() {
+		return "PossibleValue [id=" + id + ", value=" + value + ", disable="
+				+ disable + ", labelCategories=" + labelCategories
+				+ ", deleted=" + deleted + "]";
+	}
+
 	private Long id;
 	private String value;
 	private boolean disable;

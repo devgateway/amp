@@ -168,7 +168,10 @@ define([ 'util/tabUtils' ], function(TabUtils) {
 			$(metadata.hierarchies.models).each(function(i, item) {
 				fields.push(item.get('columnName'));
 				hiddenFields.push(false);
-				styleText.push('<b>{0} - ({1})</b>');
+				// styleText.push("<b>{0} - ({1} </b>" + "<b
+				// data-i18n='tabs.common:outOf'>out of</b>" +
+				// "<b>@@totalChildrenCount@@)</b>");
+				styleText.push("<b>{0} - ({1}/@@totalChildrenCount@@)</b>");
 				summary.push(true);
 			});
 			ret.groupField = fields;

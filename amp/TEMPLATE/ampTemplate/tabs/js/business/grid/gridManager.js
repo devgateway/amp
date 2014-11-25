@@ -315,6 +315,11 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									var content = partialTotals[i].contents["[" + measure.get('measureName') + "]"].displayedValue;
 									jQuery(auxTD).html("<span><b>" + content + "</b></span>");
 									jQuery(item).append(auxTD);
+
+									var firstColumnHtml = jQuery(item.firstChild).html();
+									firstColumnHtml = firstColumnHtml
+											.replace("@@totalChildrenCount@@", partialTotals[i].totalChildrenCount);
+									jQuery(item.firstChild).html(firstColumnHtml);
 								});
 							});
 						}

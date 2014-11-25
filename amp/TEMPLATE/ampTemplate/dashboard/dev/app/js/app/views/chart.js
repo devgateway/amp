@@ -231,7 +231,6 @@ module.exports = BackboneDash.View.extend({
     }
 
     var canvas = document.createElement('canvas');
-    document.body.appendChild(canvas);
     if (!canvas.getContext) {
       this.app.report('Unsupported feature',
         ['Chart export is not supported on this browser.']);

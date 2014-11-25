@@ -141,6 +141,7 @@ module.exports = {
           value: d3.format(',')(Math.round(raw.value)),
           otherSeriesName: others.name,
           percent: d3.format('%')(raw.value / others.total),
+          other: others.total,
           currency: model.get('currency')
         });
       });

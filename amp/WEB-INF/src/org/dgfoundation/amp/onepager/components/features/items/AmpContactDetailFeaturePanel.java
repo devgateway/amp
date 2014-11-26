@@ -10,6 +10,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -28,6 +30,8 @@ import org.dgfoundation.amp.onepager.components.fields.AmpAddLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
+import org.dgfoundation.amp.onepager.events.ContactChangedEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.validators.ContactEmailValidator;
 import org.digijava.module.aim.dbentity.AmpContact;
@@ -95,8 +99,9 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 	}
 
 	public AmpContactDetailFeaturePanel(String id,final IModel<AmpContact> model,final String fmName, boolean hideLabel,final String contactProperty) throws Exception {
+	      
 		super(id, model, fmName, hideLabel);
-		final IModel<Set<AmpContactProperty>> setModel=new PropertyModel<Set<AmpContactProperty>>(model,"properties");
+	   final IModel<Set<AmpContactProperty>> setModel=new PropertyModel<Set<AmpContactProperty>>(model,"properties");
 		if (setModel.getObject() == null)
 			setModel.setObject(new TreeSet<AmpContactProperty>());
 		
@@ -163,14 +168,24 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                             	detailFeedbackContainer.setVisible(false);
         						target.add(detailFeedbackContainer);
                             }                            
-                            target.add(resultcontainer);
+                    		send(getPage(), Broadcast.BREADTH,
+        							new ContactChangedEvent(target));
+        			        target.add(resultcontainer);
                         }
                     };
                     
                     if (!item.getModelObject().getName().equals(Constants.CONTACT_PROPERTY_NAME_PHONE)) {
                         IModel<String> value = new PropertyModel<String>(item.getModel(), "value");
                         Fragment frg1 = new Fragment("detailPanel", "frag1",this);
-                        AmpTextFieldPanel<String> detailField=new AmpTextFieldPanel<String>("detail", value, fmName, true,true);
+                        final AmpTextFieldPanel<String> detailField=new AmpTextFieldPanel<String>("detail", value, fmName, true,true);
+                        detailField.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+    						@Override
+    						protected void onUpdate(AjaxRequestTarget target) {
+    							send(getPage(), Broadcast.BREADTH,
+    									new ContactChangedEvent(target));
+    						}
+    					});
+                  
                         if(item.getModelObject().getName().equals(Constants.CONTACT_PROPERTY_NAME_EMAIL)){
                         	TextField<String> detailTextField=detailField.getTextContainer();
                         	detailTextField.add(new AttributeModifier("size", "20"));
@@ -193,17 +208,44 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
                             IModel<String> extensionValueModel = new PropertyModel<String>(item.getModel(),"extensionValue");
                             IModel<AmpCategoryValue> catValueModel = new PropertyModel<AmpCategoryValue>(item.getModel(), "categoryValue");
                             Fragment frg2 = new Fragment("detailPanel", "frag2",this);
-                            AmpTextFieldPanel<String> phn = new AmpTextFieldPanel<String>("phone", valueModel, fmName, true,true);
+                            final AmpTextFieldPanel<String> phn = new AmpTextFieldPanel<String>("phone", valueModel, fmName, true,true);
+                            phn.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        						@Override
+        						protected void onUpdate(AjaxRequestTarget target) {
+        							send(getPage(), Broadcast.BREADTH,
+        									new ContactChangedEvent(target));
+        						}
+        					});
+                            
+                      
                             TextField<String> detailTextField=phn.getTextContainer();
                         	detailTextField.setRequired(true);
                         	detailTextField.add(new PatternValidator(EXPRESSION));
                         	detailTextField.add(new AttributeModifier("size", "20"));
-                        	AmpTextFieldPanel<String> phnExt = new AmpTextFieldPanel<String>("phoneExt", extensionValueModel, fmName, true,true);
-                            TextField<String> detailTextFieldExt=phnExt.getTextContainer();
+                        	final AmpTextFieldPanel<String> phnExt = new AmpTextFieldPanel<String>("phoneExt", extensionValueModel, fmName, true,true);
+                        	phnExt.getTextContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        						@Override
+        						protected void onUpdate(AjaxRequestTarget target) {
+        							send(getPage(), Broadcast.BREADTH,
+        									new ContactChangedEvent(target));
+        	        				
+        						}
+        					});
+                      
+                        	TextField<String> detailTextFieldExt=phnExt.getTextContainer();
                         	detailTextFieldExt.setRequired(false);
                         	detailTextFieldExt.add(new PatternValidator(EXPRESSION));
                         	detailTextFieldExt.add(new AttributeModifier("size", "5"));
-                            AmpCategorySelectFieldPanel phoneTitle = new AmpCategorySelectFieldPanel("categoryValue", CategoryConstants.CONTACT_PHONE_TYPE_KEY, catValueModel, CategoryConstants.CONTACT_PHONE_TYPE_NAME, true, true, true,null,true);
+                            final AmpCategorySelectFieldPanel phoneTitle = new AmpCategorySelectFieldPanel("categoryValue", CategoryConstants.CONTACT_PHONE_TYPE_KEY, catValueModel, CategoryConstants.CONTACT_PHONE_TYPE_NAME, true, true, true,null,true);
+                            phoneTitle.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+        						@Override
+        						protected void onUpdate(AjaxRequestTarget target) {
+        							send(getPage(), Broadcast.BREADTH,
+        									new ContactChangedEvent(target));
+        	        				
+        						}
+        					});
+                      
                             AbstractChoice<?, AmpCategoryValue> choiceContainer = phoneTitle.getChoiceContainer();
                         	List<AmpCategoryValue> collectionByKey = new ArrayList<AmpCategoryValue>();
                         	collectionByKey.addAll(CategoryManagerUtil
@@ -243,6 +285,8 @@ public class AmpContactDetailFeaturePanel extends AmpFeaturePanel<AmpContact> {
 					}
 					detailFeedbackContainer.setVisible(true);
 					target.add(detailFeedbackContainer);
+					send(getPage(), Broadcast.BREADTH,
+							new ContactChangedEvent(target));
 					return;
 				}
 					

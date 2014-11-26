@@ -62,6 +62,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	public static final String BOLD_DELIMITER_STOP = "</b> ";
 	
 	private final AjaxIndicatorAppender indicatorAppender = new AjaxIndicatorAppender();
+	protected boolean reuseObjects; 
 
 	/**
 	 * The model to retrieve the list of options
@@ -558,6 +559,14 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 					+ ".dataSource.responseArray = " + jsonResult + ";");
 		}
 
+	}
+
+	public boolean isReuseObjects() {
+		return reuseObjects;
+	}
+
+	public void setReuseObjects(boolean reuseObjects) {
+		this.reuseObjects = reuseObjects;
 	}
 
 }

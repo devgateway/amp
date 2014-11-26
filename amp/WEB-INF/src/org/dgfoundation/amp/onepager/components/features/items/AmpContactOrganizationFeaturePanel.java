@@ -3,17 +3,17 @@
  */
 package org.dgfoundation.amp.onepager.components.features.items;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.HiddenField;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -23,12 +23,10 @@ import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpSearchOrganizationComponent;
 import org.dgfoundation.amp.onepager.components.features.AmpFeaturePanel;
-import org.dgfoundation.amp.onepager.components.fields.AbstractAmpAutoCompleteTextField;
-import org.dgfoundation.amp.onepager.components.fields.AmpComboboxFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.events.ContactChangedEvent;
 import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
@@ -41,7 +39,8 @@ import org.digijava.module.aim.util.DbUtil;
 public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpContact>{
 
 	protected ListView<AmpOrganisationContact> idsList;
-	
+	private static final Map <Long,AmpOrganisation>  reusableObjects = new HashMap <Long,AmpOrganisation> ();
+
 	/**
 	 * @param id
 	 * @param fmName
@@ -80,7 +79,6 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
         }
 		
 		AbstractReadOnlyModel<List<AmpOrganisationContact>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel);
-
 		idsList = new ListView<AmpOrganisationContact>("listOrgs", listModel) {
 			private static final long serialVersionUID = 1L;
 
@@ -90,13 +88,14 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 				final MarkupContainer listParent=this.getParent();
 				
 				item.add(new Label("orgNameLabel", item.getModelObject().getOrganisation().getAcronymAndName()));			
-				
 				AmpDeleteLinkField delOrgId = new AmpDeleteLinkField("delOrgId", "Delete Internal Id") {
 					@Override
 					public void onClick(AjaxRequestTarget target) {
 						setModel.getObject().remove(item.getModelObject());
 						target.add(listParent);
 						idsList.removeAll();
+						send(AmpContactOrganizationFeaturePanel.this, Broadcast.BREADTH,
+								new ContactChangedEvent(target));
 					}
 				};
 				item.add(delOrgId);
@@ -106,9 +105,22 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 		add(idsList);
 
 		
-		AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Organizations",true,AmpOrganisationSearchModel.class) {			
+		  AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Organizations",true,AmpOrganisationSearchModel.class) {			
 			
 			@Override
+			protected AmpOrganisation getSelectedChoice(Long objId) {
+		    AmpOrganisation selectedOrganisation = null;
+			if (reuseObjects) {
+				selectedOrganisation = reusableObjects.get(objId);
+			}
+			if (selectedOrganisation == null) {
+				selectedOrganisation = super.getSelectedChoice(objId);
+				reusableObjects.put(objId, selectedOrganisation);
+			}
+		    return selectedOrganisation;
+			}
+			  
+		    @Override
 			protected String getChoiceValue(AmpOrganisation choice) {
 				return DbUtil.filter(choice.getName());
 			}
@@ -138,6 +150,8 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 					ampOrgCont.setOrganisation(choice);
 					ampOrgCont.setContact(model.getObject());					
 					set.add(ampOrgCont);
+					send(getPage(), Broadcast.BREADTH,
+							new ContactChangedEvent(target));
 				}
 				
 				target.add(idsList.getParent());
@@ -149,6 +163,7 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 				return null;
 			}
 		};
+		searchOrgs.setReuseObjects(true);
 
 		AmpSearchOrganizationComponent searchOrganization = new AmpSearchOrganizationComponent("searchOrgs", new Model<String>(),
 				"Search Organizations", searchOrgs, null, false);

@@ -8,7 +8,8 @@
         <tr>
           <th data-i18n="amp.gis:popup-project-site-activity">Project</th>
           <th data-i18n="amp.gis:popup-project-site">Project Site</th>
-          <th data-i18n="amp.gis:popup-project-site-donor">Funding Organization</th>
+          <th data-i18n="amp.gis:activities-donors">Funding Organization</th>
+          <!-- <th data-i18n="amp.gis:activities-sectors">Sectors</th> -->
         </tr>
       </thead>
       <tbody class="structure-list">
@@ -29,6 +30,11 @@
               <%= structure.activity._getDonorNames() %>
             <%}); %>
           </td>
+<!--           <td>
+            <% structure.activity.tempDirtyForceJoin().then(function(){ %>
+              <%= structure.activity._getSectorNames() %>
+            <%}); %>
+          </td> -->
         </tr>
         <% });%>
       </tbody>

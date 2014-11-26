@@ -44,7 +44,6 @@ module.exports = Backbone.View
     this.listenTo(this.structureMenuModel, 'hide', this.hideLayer);
 
     this.listenTo(this.app.data.structures, 'refresh', this.refreshLayer);
-    //TODO: no need to send new request, just re-colour pallete..... maybe just try a hide and show...
     this.listenTo(this.structureMenuModel, 'change:filterVertical', this.refreshLayer);
 
     this.listenTo(this.markerCluster, 'clusterclick', this.clusterClick);
@@ -67,6 +66,7 @@ module.exports = Backbone.View
     self.structureMenuModel.structuresCollection.getStructuresWithActivities().then(function() {
       self.rawData = self.structureMenuModel.structuresCollection.toGeoJSON();
       self._renderFeatures();
+      self.map.addLayer(self.markerCluster);
       $('#map-loading').hide();
     });
 
@@ -133,7 +133,7 @@ module.exports = Backbone.View
       iconUrl: 'img/map-icons/' + this.structureMenuModel.iconMappings[sectorCode],
       iconSize:     [25, 25], // size of the icon
       iconAnchor:   [12, 25], // point of the icon which will correspond to marker's location
-      popupAnchor:  [-3, -6] // point from which the popup should open relative to the iconAnchor
+      popupAnchor:  [-3, -6]  // point from which the popup should open relative to the iconAnchor
     });
 
     return L.marker(latlng, {icon: pointIcon});
@@ -233,7 +233,6 @@ module.exports = Backbone.View
       if (layer.get('selected')) {
         self.layerLoadState = 'loaded';
         self.getNewProjectSitesLayer();
-        self.map.addLayer(self.markerCluster);
       }
     });
 

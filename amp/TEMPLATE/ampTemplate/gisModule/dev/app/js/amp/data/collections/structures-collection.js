@@ -168,7 +168,8 @@ module.exports = Backbone.Collection
           // TODO: Choosing a vertical will need to be configurable from drop down..
           if (!_.isEmpty(activity.get('matchesFilters')[filterVertical])) {
             if (activity.get('matchesFilters')[filterVertical].length > 1) {
-              return 'Multiple Sectors';//TODO fix hardcode 'sectors'
+              return 'Multiple ' +
+                (filterVertical === 'Primary Sector Id' ? 'Sectors' : 'Donors');
             } else if (activity.get('matchesFilters')[filterVertical][0].get) {
               var name = activity.get('matchesFilters')[filterVertical][0].get('name');
               return name;

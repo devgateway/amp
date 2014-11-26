@@ -38,17 +38,6 @@ module.exports = {
     if (zoomedIn) {
       size += self.BIG_ICON_RADIUS;
     }
-    var colors = _(markers)
-      .chain()
-      .map(function(m) {
-        //self.structureMenuModel.structuresCollection
-        var colour = model.palette.colours.find(function(c) {
-          return c.get('test').call(c, (m.feature ? m.feature.properties.id : -1));
-        });
-        return colour;
-      })
-      .uniq()
-      .value();
 
     var marker = null;
 
@@ -59,13 +48,13 @@ module.exports = {
       var filterVertical = self.structureMenuModel.get('filterVertical');
       var sectorCode = 0; // 0 is 'various sectors icon'
 
-      if (colors.length === 1 && markers[0].feature) {
+      if (markers[0].feature) {
         var activity = markers[0].feature.properties.activity;
         sectorCode = activity.attributes.matchesFilters[filterVertical][0].get('code');
       } else if (!markers[0].feature) {
         //TODO: this sometimes happen if loads are being strange / slow....
         //  gives cluster wrong colour / icon on first load / initial zoom level.
-        //console.log('markers not done loading :(, missing feature markers[0]', markers[0]);
+        console.log('markers not done loading :(, missing feature markers[0]', markers[0]);
       }
 
       //icons need to be abit bigger than plain circles, so bump up by 2
@@ -79,10 +68,27 @@ module.exports = {
         weight: 0
       });
     } else {  // no Icon normal circle
+
+      var colors = _(markers)
+        .chain()
+        .map(function(m) {
+          //self.structureMenuModel.structuresCollection
+          var colour = model.palette.colours.find(function(c) {
+            return c.get('test').call(c, (m.feature ? m.feature.properties.id : -1));
+          });
+          return colour;
+        })
+        .uniq()
+        .value();
+
       if (colors.length > 1) {
         colors = [model.palette.colours.find(function(c) {
           return c.get('multiple') === true;
         })];
+      } else if (!markers[0].feature) {
+        //TODO: this sometimes happen if loads are being strange / slow....
+        //  gives cluster wrong colour / icon on first load / initial zoom level.
+        console.log('markers not done loading :(, missing feature markers[0]', markers[0]);
       }
 
       marker = new L.circleDivIcon(size, {

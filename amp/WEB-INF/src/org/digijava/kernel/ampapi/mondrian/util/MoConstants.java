@@ -80,6 +80,10 @@ public final class MoConstants {
 	public static final String EXECUTING_AGENCY = "Executing Agency";
 	public static final String BENEFICIARY_AGENCY = "Beneficiary Agency";
 	public static final String RESPONSIBLE_AGENCY = "Responsible Organization";
+	public static final String CONTRACTING_AGENCY = "Contracting Agency";
+	public static final String REGIONAL_GROUP = "Regional Group";
+	public static final String SECTOR_GROUP = "Sector Group";
+	
 	//Hierarchies
 	public static final String H_ORIG_COMPLETION_DATE = "Original Completion Date";
 	public static final String H_FINAL_DATE_FOR_CONTRACTING = "Final Date for Contracting";

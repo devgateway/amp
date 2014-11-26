@@ -262,6 +262,9 @@ public class ColumnConstants {
 	public static final String PURPOSE = "Purpose";
 	public static final String REGION = "Region";
 	public static final String REGIONAL_GROUP = "Regional Group";
+	public static final String REGIONAL_GROUP_ID = "Regional Group Id";
+	public static final String REGIONAL_GROUP_GROUP = "Regional Group Group";	
+	
 	public static final String REGIONAL_GROUP_DEPARTMENT_DIVISION = "Regional Group Department/Division";
 	public static final String REGIONAL_OBSERVATIONS = "Regional Observations";
 	public static final String RELATED_PROJECTS = "Related Projects";
@@ -296,6 +299,8 @@ public class ColumnConstants {
 	public static final String SECONDARY_SECTOR_SUB_SUB_SECTOR = "Secondary Sector Sub-Sub-Sector";
 	public static final String SECONDARY_SECTOR_SUB_SUB_SECTOR_ID = "Secondary Sector Sub-Sub-Sector Id";
 	public static final String SECTOR_GROUP = "Sector Group";
+	public static final String SECTOR_GROUP_ID = "Sector Group Id";
+	public static final String SECTOR_GROUP_GROUP = "Sector Group Group";
 	public static final String SECTOR_GROUP_DEPARTMENT_DIVISION = "Sector Group Department/Division";
 	public static final String SECTOR_LOCATION = "Sector Location";
 	public static final String SECTOR_MINISTRY_CONTACT_EMAIL = "Sector Ministry Contact Email";

@@ -542,6 +542,9 @@
 		<DimensionUsage name="Executing Agency" source="AMP Organization" foreignKey="ea_org_id" />
 		<DimensionUsage name="Beneficiary Agency" source="AMP Organization" foreignKey="ba_org_id" />
 		<DimensionUsage name="Responsible Organization" source="AMP Organization" foreignKey="ro_org_id" />
+		<DimensionUsage name="Contracting Agency" source="AMP Organization" foreignKey="ca_org_id" />
+		<DimensionUsage name="Regional Group" source="AMP Organization" foreignKey="rg_org_id" />
+		<DimensionUsage name="Sector Group" source="AMP Organization" foreignKey="sg_org_id" />
 
 		<DimensionUsage name="Primary Program" source="AMP Program" foreignKey="primary_program_id" />
 		<DimensionUsage name="Secondary Program" source="AMP Program" foreignKey="secondary_program_id" />

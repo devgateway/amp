@@ -232,6 +232,15 @@ public class FactTableFiltering {
 			add(ColumnConstants.RESPONSIBLE_ORGANIZATION, new IdentityExpander("ro_org_id"));
 			add(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, new OrgGrpIdsExpander("ro_org_id"));
 			
+			add(ColumnConstants.CONTRACTING_AGENCY, new IdentityExpander("ca_org_id"));
+			add(ColumnConstants.CONTRACTING_AGENCY_GROUPS, new OrgGrpIdsExpander("ca_org_id"));
+			
+			add(ColumnConstants.SECTOR_GROUP, new IdentityExpander("sg_org_id"));
+			add(ColumnConstants.SECTOR_GROUP_GROUP, new OrgGrpIdsExpander("sg_org_id"));
+			
+			add(ColumnConstants.REGIONAL_GROUP, new IdentityExpander("rg_org_id"));
+			add(ColumnConstants.REGIONAL_GROUP_GROUP, new OrgGrpIdsExpander("rg_org_id"));
+			
 			add(ColumnConstants.IMPLEMENTATION_LEVEL, new ActACVIdsExpander("entity_id"));
 			
 			

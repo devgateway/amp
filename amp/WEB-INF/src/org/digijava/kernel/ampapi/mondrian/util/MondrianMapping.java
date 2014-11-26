@@ -225,6 +225,19 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.RESPONSIBLE_ORGANIZATION_GROUPS, new MDXLevel(MoConstants.RESPONSIBLE_AGENCY, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
 			addColumnDefinition(ColumnConstants.RESPONSIBLE_ORGANIZATION, new MDXLevel(MoConstants.RESPONSIBLE_AGENCY, MoConstants.H_ORG_NAME, MoConstants.ATTR_ORG_NAME));
 			addColumnDefinition(ColumnConstants.RESPONSIBLE_ORGANIZATION_ID, new MDXLevel(MoConstants.RESPONSIBLE_AGENCY, MoConstants.ATTR_ORG_ID, MoConstants.ATTR_ORG_ID));
+			
+			addColumnDefinition(ColumnConstants.CONTRACTING_AGENCY, new MDXLevel(MoConstants.CONTRACTING_AGENCY, MoConstants.H_ORG_NAME, MoConstants.ATTR_ORG_NAME));
+			addColumnDefinition(ColumnConstants.CONTRACTING_AGENCY_ID, new MDXLevel(MoConstants.CONTRACTING_AGENCY, MoConstants.ATTR_ORG_ID, MoConstants.ATTR_ORG_ID));
+			addColumnDefinition(ColumnConstants.CONTRACTING_AGENCY_GROUPS, new MDXLevel(MoConstants.CONTRACTING_AGENCY, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
+			
+			addColumnDefinition(ColumnConstants.REGIONAL_GROUP, new MDXLevel(MoConstants.REGIONAL_GROUP, MoConstants.H_ORG_NAME, MoConstants.ATTR_ORG_NAME));
+			addColumnDefinition(ColumnConstants.REGIONAL_GROUP_ID, new MDXLevel(MoConstants.REGIONAL_GROUP, MoConstants.ATTR_ORG_ID, MoConstants.ATTR_ORG_ID));
+			addColumnDefinition(ColumnConstants.REGIONAL_GROUP_GROUP, new MDXLevel(MoConstants.REGIONAL_GROUP, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
+
+			addColumnDefinition(ColumnConstants.SECTOR_GROUP, new MDXLevel(MoConstants.SECTOR_GROUP, MoConstants.H_ORG_NAME, MoConstants.ATTR_ORG_NAME));
+			addColumnDefinition(ColumnConstants.SECTOR_GROUP_ID, new MDXLevel(MoConstants.SECTOR_GROUP, MoConstants.ATTR_ORG_ID, MoConstants.ATTR_ORG_ID));
+			addColumnDefinition(ColumnConstants.SECTOR_GROUP_GROUP, new MDXLevel(MoConstants.SECTOR_GROUP, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
+
 			//put(new ReportColumn(ColumnConstants.CONTRACTING_AGENCY_DEPARTMENT_DIVISION, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.??, MoConstants.H_ORG_TYPE_NAME, MoConstants.ATTR_ORG_TYPE_NAME));
 			//put(new ReportColumn(ColumnConstants.CONTRACTING_AGENCY_GROUPS, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.??, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
 			//put(new ReportColumn(ColumnConstants.CONTRACTING_AGENCY, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.??, MoConstants.H_ORG_NAME, MoConstants.ATTR_ORG_NAME));

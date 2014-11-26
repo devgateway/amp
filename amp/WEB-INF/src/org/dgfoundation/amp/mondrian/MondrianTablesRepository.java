@@ -247,6 +247,9 @@ public class MondrianTablesRepository {
 				new DatabaseTableColumn("ba_org_id", "integer NOT NULL", true), // BENF amp_org_id, subject to Cartesian product
 				new DatabaseTableColumn("ia_org_id", "integer NOT NULL", true), // IMPL amp_org_id, subject to Cartesian product
 				new DatabaseTableColumn("ro_org_id", "integer NOT NULL", true), // RESP amp_org_id, subject to Cartesian product
+				new DatabaseTableColumn("ca_org_id", "integer NOT NULL", true), // contracting agency, subject to Cartesian product
+				new DatabaseTableColumn("rg_org_id", "integer NOT NULL", true), // regional group amp_org_id, subject to Cartesian product
+				new DatabaseTableColumn("sg_org_id", "integer NOT NULL", true), // sector group amp_org_id, subject to Cartesian product
 		
 				new DatabaseTableColumn("capital_spend_percent", "double", true),
 				

@@ -95,6 +95,23 @@ public class FiltersGroup {
 		addIdentityMapping(filterGroupMap, ColumnConstants.TYPE_OF_IMPLEMENTATION);
 		addIdentityMapping(filterGroupMap, ColumnConstants.FUNDING_STATUS);
 		addIdentityMapping(filterGroupMap, ColumnConstants.PROCUREMENT_SYSTEM);
+		
+		addIdentityMapping(filterGroupMap, ColumnConstants.CONTRACTING_AGENCY);
+		filterGroupMap.put(ColumnConstants.CONTRACTING_AGENCY_ID, ColumnConstants.CONTRACTING_AGENCY);
+		addIdentityMapping(filterGroupMap, ColumnConstants.CONTRACTING_AGENCY_GROUPS);
+		
+		
+		addIdentityMapping(filterGroupMap, ColumnConstants.CONTRACTING_AGENCY);
+		filterGroupMap.put(ColumnConstants.CONTRACTING_AGENCY_ID, ColumnConstants.CONTRACTING_AGENCY);
+		addIdentityMapping(filterGroupMap, ColumnConstants.CONTRACTING_AGENCY_GROUPS);
+		
+		addIdentityMapping(filterGroupMap, ColumnConstants.SECTOR_GROUP);
+		filterGroupMap.put(ColumnConstants.SECTOR_GROUP_ID, ColumnConstants.SECTOR_GROUP);
+		addIdentityMapping(filterGroupMap, ColumnConstants.SECTOR_GROUP_GROUP);
+
+		addIdentityMapping(filterGroupMap, ColumnConstants.REGIONAL_GROUP);
+		filterGroupMap.put(ColumnConstants.REGIONAL_GROUP_ID, ColumnConstants.REGIONAL_GROUP);
+		addIdentityMapping(filterGroupMap, ColumnConstants.REGIONAL_GROUP_GROUP);
 
 		return filterGroupMap;
 	}

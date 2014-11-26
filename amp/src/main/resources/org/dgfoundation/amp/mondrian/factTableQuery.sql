@@ -5,7 +5,8 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
   financing_instrument_id, terms_of_assistance_id, funding_status_id, mode_of_payment_id, status_id, modality_id, type_of_cooperation_id, type_of_implementation_id, procurement_system_id,
   primary_sector_id, secondary_sector_id, tertiary_sector_id, location_id,
   primary_program_id, secondary_program_id, tertiary_program_id, national_objectives_program_id,
-  ea_org_id, ba_org_id, ia_org_id, ro_org_id, capital_spend_percent, src_role, dest_role, dest_org_id)
+  ea_org_id, ba_org_id, ia_org_id, ro_org_id, ca_org_id, rg_org_id, sg_org_id,
+  capital_spend_percent, src_role, dest_role, dest_org_id)
   SELECT 
 	rawdonation.amp_activity_id AS entity_id,
 	rawdonation.amp_fund_detail_id AS entity_internal_id,
@@ -26,7 +27,10 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
          COALESCE(ra.percentage, 1) *
          COALESCE(ba.percentage, 1) *
          COALESCE(ia.percentage, 1) *
-         COALESCE(ea.percentage, 1)
+         COALESCE(ea.percentage, 1) *
+         COALESCE(ca.percentage, 1) *
+         COALESCE(rg.percentage, 1) *
+         COALESCE(sg.percentage, 1)
          ) AS transaction_amount,
 
      rawdonation.currency_id AS currency_id,
@@ -57,6 +61,9 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
      COALESCE(ba.ent_id, 999999999) AS ba_org_id,
      COALESCE(ia.ent_id, 999999999) AS ia_org_id,
      COALESCE(ra.ent_id, 999999999) AS ro_org_id,
+     COALESCE(ca.ent_id, 999999999) AS ca_org_id,
+     COALESCE(rg.ent_id, 999999999) AS rg_org_id,
+     COALESCE(sg.ent_id, 999999999) AS sg_org_id,
      
      capital_spend_percent AS capital_spend_percent,
      
@@ -80,6 +87,9 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
     LEFT JOIN etl_beneficiary_agencies ba ON ba.act_id = rawdonation.amp_activity_id
     LEFT JOIN etl_implementing_agencies ia ON ia.act_id = rawdonation.amp_activity_id
     LEFT JOIN etl_responsible_agencies ra ON ra.act_id = rawdonation.amp_activity_id
+    LEFT JOIN etl_contracting_agencies ca ON ca.act_id = rawdonation.amp_activity_id
+    LEFT JOIN etl_regional_groups rg ON rg.act_id = rawdonation.amp_activity_id
+    LEFT JOIN etl_sector_groups sg ON sg.act_id = rawdonation.amp_activity_id
 
     WHERE rawdonation.amp_activity_id @@activityIdCondition@@
     

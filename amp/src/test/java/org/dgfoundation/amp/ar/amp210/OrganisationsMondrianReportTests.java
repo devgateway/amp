@@ -250,4 +250,29 @@ public class OrganisationsMondrianReportTests extends MondrianReportsTestCase {
 		spec.setFilters(filters);
 		runMondrianTestCase(spec, "en", activities, new ReportAreaForTests().withChildren()); //empty output
 	}
+	
+	@Test
+	public void testMiscAgencies() {
+		ReportSpecificationImpl spec = buildSpecification("AMP-18829", 
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.CONTRACTING_AGENCY, ColumnConstants.REGIONAL_GROUP, ColumnConstants.SECTOR_GROUP), 
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), null, GroupingCriteria.GROUPING_TOTALS_ONLY);
+		spec.setDisplayEmptyFundingRows(true);
+		ReportAreaForTests correct = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Contracting Agency", "", "Regional Group", "", "Sector Group", "", "Actual Commitments", "7 178 840,58", "Actual Disbursements", "500 000")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "pledged 2", "Contracting Agency", "", "Regional Group", "", "Sector Group", "", "Actual Commitments", "7 070 000", "Actual Disbursements", "450 000"),
+	      new ReportAreaForTests().withContents("Project Title", "activity with contracting agency", "Contracting Agency", "Water Foundation", "Regional Group", "UNDP", "Sector Group", "World Bank", "Actual Commitments", "96 840,58", "Actual Disbursements", "50 000"),
+	      new ReportAreaForTests().withContents("Project Title", "new activity with contracting", "Contracting Agency", "Norway", "Regional Group", "UNDP", "Sector Group", "", "Actual Commitments", "12 000", "Actual Disbursements", "0"));
+		List<String> activities = Arrays.asList("pledged 2", "activity with contracting agency", "new activity with contracting");
+		runMondrianTestCase(spec, "en", activities, correct);
+		
+		MondrianReportFilters filters = new MondrianReportFilters();
+		filters.addFilterRule(new ReportColumn(ColumnConstants.CONTRACTING_AGENCY), new FilterRule("21702", true));
+		spec.setFilters(filters);
+		ReportAreaForTests filteredCorrect = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Contracting Agency", "", "Regional Group", "", "Sector Group", "", "Actual Commitments", "96 840,58", "Actual Disbursements", "50 000")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "activity with contracting agency", "Contracting Agency", "Water Foundation", "Regional Group", "UNDP", "Sector Group", "World Bank", "Actual Commitments", "96 840,58", "Actual Disbursements", "50 000"));
+		runMondrianTestCase(spec, "en", activities, filteredCorrect);
+	}
 }

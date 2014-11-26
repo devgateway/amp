@@ -116,7 +116,7 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 				"sourceRoleLabel", new PropertyModel<AmpRole>(fundingModel, "sourceRole"), "Source Role", true);
 		sourceRoleLabel.add(new AttributeModifier("style", "display:inline-block"));
 		wmcLabelContainer.add(sourceRoleLabel);
-		
+		//this will be moved
 		wmcLabelContainer.setVisible(!isTabView);
 		add(wmcLabelContainer);
 		String translatedMessage = TranslatorUtil.getTranslation("Do you really want to delete this funding item?");

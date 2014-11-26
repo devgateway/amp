@@ -107,6 +107,11 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
             	donorFundingSection.setOriginalSearchOrganizationSelector(searchOrganization);
             }
             target.appendJavaScript(OnePagerUtil.getToggleChildrenJS(donorFundingSection));
+            //If we are in tabView
+    		if( FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ACTIVITY_FORM_FUNDING_SECTION_DESIGN)){
+    			target.appendJavaScript("switchTabs();");
+    		}
+
             target.add(donorFundingSection);
         }
     }

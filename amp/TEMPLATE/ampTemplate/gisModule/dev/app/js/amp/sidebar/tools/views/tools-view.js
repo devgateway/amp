@@ -48,6 +48,7 @@ module.exports = BaseControlView.extend({
 
 
   share: function() {
+    $('#map-loading').show();
     var currentStateModel = this.savedMaps.create({  // create does POST
       title: this.$('#save-title').val(),
       description: this.$('#save-desc').val(),

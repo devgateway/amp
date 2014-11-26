@@ -1,4 +1,5 @@
 var fs = require('fs');
+var $ = require('jquery');
 var _ = require('underscore');
 var Backbone = require('backbone');
 var ZeroClipboard = require('zeroclipboard');
@@ -41,6 +42,7 @@ module.exports = Backbone.View.extend({
     this.$('.share-url')
       .val(fullLink)
       .attr('data-clipboard-text', fullLink);
+    $('#map-loading').hide();
   },
 
   selectLink: function(e) {

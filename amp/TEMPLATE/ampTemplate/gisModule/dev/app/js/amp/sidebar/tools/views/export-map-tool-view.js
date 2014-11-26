@@ -28,6 +28,7 @@ module.exports = Backbone.View.extend({
 
   // can't call it export because that's a reserved word.
   exportOption: function(e) {
+    $('#map-loading').show();
     var currentTarget = e.currentTarget;
     var exportType = $(currentTarget).data('type');
 
@@ -39,6 +40,7 @@ module.exports = Backbone.View.extend({
 
     this.listenTo(currentStateModel, 'sync',
       function(model) {
+        $('#map-loading').hide();
         this._getExport(model, exportType);
       });
   },

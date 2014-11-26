@@ -144,8 +144,10 @@ public class ReportPaginationUtils {
 			//based on Tabs, page records count includes only leaf entries, no totals
 			if (!hasChildren)
 				size --;
-			else
-				newReportArea.setTotalChildrenCount(current.getChildren().size());
+			else {
+				newReportArea.setTotalChildrenCount(current.getTotalChildrenCount());
+				newReportArea.setTotalLeafChildrenCount(current.getTotalLeafChildrenCount());
+			}
 			if (stack.peek() == null) {
 				stack.push(new ArrayList<ReportArea>());
 				stack.peek().add(newReportArea);

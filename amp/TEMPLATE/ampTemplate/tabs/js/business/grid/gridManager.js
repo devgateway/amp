@@ -434,7 +434,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 					// Ignore top level because is 'Report Totals'.
 					partialTotals.push({
 						contents : obj.contents,
-						totalChildrenCount : obj.totalChildrenCount,
+						totalChildrenCount : obj.totalLeafChildrenCount,
 						level : level
 					});
 				}

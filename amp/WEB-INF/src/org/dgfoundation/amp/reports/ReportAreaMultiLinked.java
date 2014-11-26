@@ -16,7 +16,7 @@ import org.dgfoundation.amp.newreports.ReportAreaImpl;
  * @author Nadejda Mandrescu
  *
  */
-public class ReportAreaMultiLinked extends ReportAreaImpl {
+public class ReportAreaMultiLinked extends PartialReportArea {
 	/** parent area, null for root area */
 	public final ReportAreaMultiLinked parent;
 	/** next sibling area, null for last child */

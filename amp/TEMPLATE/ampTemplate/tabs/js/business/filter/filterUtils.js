@@ -97,43 +97,27 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 				 * function(item.id) { return parseInt(item_.id); });
 				 */
 				switch (item.get('name')) {
-				case 'Financing Instrument':
-					blob.columnFilters["Financing Instrument"] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					break;
-				case 'Contracting Agency':
-					blob.columnFilters['Contracting Agency Id'] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					break;
-				case 'Executing Agency':
-					blob.columnFilters['Executing Agency Id'] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					break;
-				case 'Implementing Agency':
-					blob.columnFilters['Implementing Agency Id'] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					break;
-				case 'Beneficiary Agency':
-					blob.columnFilters['Beneficiary Agency Id'] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					break;
+
+				// cases where columnFilter matches item name
 				case 'Responsible Organization':
-					blob.columnFilters['Responsible Organization'] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					break;
 				case 'Type Of Assistance':
-					blob.columnFilters['Type Of Assistance'] = _.map(item.get('values'), function(item_) {
+				case 'Financing Instrument':
+				case 'Status':
+				case 'Approval Status':
+			  case 'Donor Group':
+			  case 'Donor Type':
+					blob.columnFilters[ item.get('name') ] = _.map(item.get('values'), function(item_) {
 						return parseInt(item_.id);
 					});
 					break;
-				case 'Status':
-					blob.columnFilters['ActivityStatusList'] = _.map(item.get('values'), function(item_) {
+
+				// cases where columnFilter matches item name + ' Id'
+				case 'Contracting Agency':
+				case 'Executing Agency':
+				case 'Implementing Agency':
+				case 'Beneficiary Agency':
+				case 'Primary Sector':
+					blob.columnFilters[item.get('name') + ' Id'] = _.map(item.get('values'), function(item_) {
 						return parseInt(item_.id);
 					});
 					break;
@@ -147,11 +131,6 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 						return parseInt(item_.id);
 					});
 					break;
-				case 'Approval Status':
-					blob.columnFilters['Approval Status'] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					break;
 				case 'Secondary Program':
 					blob.columnFilters['Secondary'] = _.map(item.get('values'), function(item_) {
 						return parseInt(item_.id);
@@ -162,27 +141,8 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 						return parseInt(item_.id);
 					});
 					break;
-				/*
-				 * case 'Donor Type': var auxDonorTypes =
-				 * _.map(item.get('values'), function(item_) { return
-				 * parseInt(item); }); blob.columnFilters["Donor Id"] =
-				 * _.union(blob.columnFilters["Donor Id"], auxDonorTypes);
-				 * break;
-				 */
-				/*
-				 * case 'Donor Group': var auxDonors = _.map(item.get('values'),
-				 * function(item_) { return parseInt(item); });
-				 * blob.columnFilters["Donor Id"] =
-				 * _.union(blob.columnFilters["Donor Id"], auxDonors); break;
-				 */
 				case 'Donor Agency':
-					var auxDonorAgencies = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					blob.columnFilters["Donor Id"] = _.union(blob.columnFilters["Donor Id"], auxDonorAgencies);
-					break;
-				case 'Primary Sector':
-					blob.columnFilters['Primary Sector Id'] = _.map(item.get('values'), function(item_) {
+					blob.columnFilters['Donor Id'] = _.map(item.get('values'), function(item_) {
 						return parseInt(item_.id);
 					});
 					break;

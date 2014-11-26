@@ -71,6 +71,27 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 				app.TabsApp.filters.models.push(filter);
 			}
 		}
+		if (filtersFromWidgetWithNames.otherFilters != undefined) {
+			var dateContent = filtersFromWidgetWithNames.otherFilters["date"];
+			if (dateContent != undefined) {
+				var filter = new Filter({
+					name : "Start Date",
+					values : [ {
+						id : dateContent.start,
+						name : dateContent.start
+					} ]
+				});
+				app.TabsApp.filters.models.push(filter);
+				var filter = new Filter({
+					name : "End Date",
+					values : [ {
+						id : dateContent.end,
+						name : dateContent.end
+					} ]
+				});
+				app.TabsApp.filters.models.push(filter);
+			}
+		}
 		app.TabsApp.dynamicContentRegion.currentView.filters.currentView.render();
 	};
 
@@ -104,9 +125,9 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 				case 'Financing Instrument':
 				case 'Status':
 				case 'Approval Status':
-			  case 'Donor Group':
-			  case 'Donor Type':
-					blob.columnFilters[ item.get('name') ] = _.map(item.get('values'), function(item_) {
+				case 'Donor Group':
+				case 'Donor Type':
+					blob.columnFilters[item.get('name')] = _.map(item.get('values'), function(item_) {
 						return parseInt(item_.id);
 					});
 					break;

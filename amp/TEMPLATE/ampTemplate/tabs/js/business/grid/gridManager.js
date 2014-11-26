@@ -173,7 +173,6 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 										Existing_Unvalidated : '4',
 										Approved : '5',
 										Rejected : 6
-
 									};
 
 									// Calculated status based on draft and

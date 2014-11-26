@@ -2,6 +2,10 @@
 	font-family: 'Open Sans', Arial, Helvetica, sans-serif;
 }
 
+#filters-container {
+	z-index: 10000;
+}
+
 .noTabsMessage {
 	font-weight: bolder;
 }
@@ -31,8 +35,7 @@
 }
 
 .right_text {
-	/*text-align: right;*/
-	
+	text-align: right;
 }
 
 .blue_widget {
@@ -433,6 +436,7 @@ th.ui-th-column div {
 	background-position: 1px 0;
 	margin-right: 10px;
 	margin-left: 5px;
+	height: 18px;
 }
 
 .ui-icon.ui-icon-circlesmall-minus {
@@ -440,6 +444,7 @@ th.ui-th-column div {
 	background-position: -18px 0;
 	margin-right: 10px;
 	margin-left: 5px;
+	height: 18px;
 }
 
 .ui-jqgrid tr.ui-row-ltr td {

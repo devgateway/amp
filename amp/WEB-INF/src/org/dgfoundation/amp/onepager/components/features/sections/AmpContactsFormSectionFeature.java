@@ -7,6 +7,9 @@ import org.apache.wicket.model.IModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.dgfoundation.amp.onepager.components.features.tables.AmpContactsFromTableFeature;
+import org.dgfoundation.amp.onepager.events.ContactChangedEvent;
+import org.dgfoundation.amp.onepager.events.OrganisationUpdateEvent;
+import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 
 /**
  * @author dan
@@ -28,7 +31,8 @@ public class AmpContactsFormSectionFeature extends AmpFormSectionFeaturePanel {
 		add(new AmpContactsFromTableFeature("projectCoordinatorContactInformation", "Project Coordinator Contact Information", am, org.digijava.module.aim.helper.Constants.PROJECT_COORDINATOR_CONTACT));
 		add(new AmpContactsFromTableFeature("sectorMinistryContactInformation", "Sector Ministry Contact Information", am, org.digijava.module.aim.helper.Constants.SECTOR_MINISTRY_CONTACT));
 		add(new AmpContactsFromTableFeature("implExecAgencyContactInformation", "Implementing/Executing Agency Contact Information", am, org.digijava.module.aim.helper.Constants.IMPLEMENTING_EXECUTING_AGENCY_CONTACT));
- 
+		this.add(UpdateEventBehavior.of(ContactChangedEvent.class));
+		
 				
 	}
 	

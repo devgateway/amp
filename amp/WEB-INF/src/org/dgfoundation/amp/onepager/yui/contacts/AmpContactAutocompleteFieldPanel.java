@@ -3,20 +3,27 @@ package org.dgfoundation.amp.onepager.yui.contacts;
 import org.dgfoundation.amp.onepager.models.AbstractAmpAutoCompleteModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
+import org.hibernate.Session;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class AmpContactAutocompleteFieldPanel extends
 		AmpAutocompleteFieldPanel<AmpContact> {
 	private static final long serialVersionUID = 1L;
+	private static Map <Long,AmpContact>  reusableObjects = new HashMap <Long,AmpContact> ();
+
 
 	public AmpContactAutocompleteFieldPanel(
 			String id,
@@ -54,7 +61,7 @@ public abstract class AmpContactAutocompleteFieldPanel extends
      */
     @Override
     protected AmpContact getSelectedChoice(Long objId) {
-        if (objId.equals(-1L)){
+    	if (objId.equals(-1L)){
             AmpContact newContact = new AmpContact();
             //newContact.setName(TranslatorUtil.getTranslation("Change Name"));
             //newContact.setLastname(TranslatorUtil.getTranslation("Change Lastname"));
@@ -62,7 +69,15 @@ public abstract class AmpContactAutocompleteFieldPanel extends
 
             return newContact;
         }
-        return super.getSelectedChoice(objId);
+    	AmpContact selectedContact = null;
+		if (reuseObjects) {
+			selectedContact = reusableObjects.get(objId);
+		}
+		if (selectedContact == null) {
+			selectedContact = super.getSelectedChoice(objId);
+			reusableObjects.put(objId, selectedContact);
+		}
+	    return selectedContact;
     }
 
 	@Override
@@ -155,5 +170,6 @@ public abstract class AmpContactAutocompleteFieldPanel extends
 		details.append("<br/>");
 		return DbUtil.filter(details.toString(), true);
 	}
+
 
 }

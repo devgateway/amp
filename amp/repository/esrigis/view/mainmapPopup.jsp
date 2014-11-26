@@ -48,8 +48,9 @@
 	</span>
 	<div id="basemaps-wrapper" class="leaflet-bar">
 	  <select name="basemaps" id="basemaps">
+	    <option value="None" selected="selected"><digi:trn>Default</digi:trn><options>
 	    <option value="Topographic"><digi:trn>Topographic</digi:trn><options>
-	    <option value="Streets" selected="selected"><digi:trn>Streets</digi:trn></option>
+	    <option value="Streets"><digi:trn>Streets</digi:trn></option>
 	    <option value="NationalGeographic"><digi:trn>National Geographic</digi:trn><options>
 	    <option value="Oceans"><digi:trn>Oceans</digi:trn><options>
 	    <option value="Gray"><digi:trn>Gray</digi:trn><options>

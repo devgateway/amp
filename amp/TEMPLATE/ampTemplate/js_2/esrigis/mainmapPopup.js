@@ -8,7 +8,7 @@ var selectedPointEvent;
 var circlePoint;
 var latitude;
 var longitude;
-var pointRadious = [8500,8500,8500,8500,8500,8500,8500,7500,5500,3500,2000,1000,600,400,300,200];
+var pointRadious = [8500,8500,8500,8500,8500,8500,8500,7500,5500,3500,2000,1000,600,400,300,200,200,170,150];
 
 function MapPopup (lat,long) {
 	latitude = lat;
@@ -19,10 +19,16 @@ function MapPopup (lat,long) {
 
 function initMap() {
 	map = L.map('map').setView([ latitude, longitude ], 7);
+	// create the tile layer with correct attribution
+	//var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+	var osmUrl = 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png';
+	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+	var osm = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 16, attribution: osmAttrib,
+			 subdomains: ['otile1','otile2','otile3','otile4']});	
+	map.addLayer(osm);
+	
 	currentZoom = map.getZoom();
-	basemapLayer = L.esri.basemapLayer("Streets").addTo(map);
-	//basemapLayer = L.esri.tiledMapLayer(basemapurl, {}).addTo(map);
-
+	
 	// attach listener to basemap select to change the map's basemaps
 	var basemaps = $('#basemaps');
 	basemaps.on('change', function() {
@@ -140,16 +146,18 @@ function setBasemap(basemap) {
 	if (basemapLayer) {
 		map.removeLayer(basemapLayer);
 	}
-	basemapLayer = L.esri.basemapLayer(basemap);
-	map.addLayer(basemapLayer);
-	if (basemapLabel) {
-		map.removeLayer(basemapLabel);
-	}
-	if (basemap === 'ShadedRelief' || basemap === 'Oceans'
-			|| basemap === 'Gray' || basemap === 'DarkGray'
-			|| basemap === 'Imagery' || basemap === 'Terrain') {
-		basemapLabel = L.esri.basemapLayer(basemap + 'Labels');
-		map.addLayer(basemapLabel);
+	if (basemap!= 'None') {
+		basemapLayer = L.esri.basemapLayer(basemap);
+		map.addLayer(basemapLayer);
+		if (basemapLabel) {
+			map.removeLayer(basemapLabel);
+		}
+		if (basemap === 'ShadedRelief' || basemap === 'Oceans'
+				|| basemap === 'Gray' || basemap === 'DarkGray'
+				|| basemap === 'Imagery' || basemap === 'Terrain') {
+			basemapLabel = L.esri.basemapLayer(basemap + 'Labels');
+			map.addLayer(basemapLabel);
+		}
 	}
 }
 

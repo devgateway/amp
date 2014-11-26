@@ -307,7 +307,7 @@ public class DashboardsService {
 		spec.addMeasure(new ReportMeasure(adjustmenttype,ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addSorter(new SortingInfo(new ReportMeasure(adjustmenttype), false));
 		spec.setCalculateRowTotals(true);
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), true);
+		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
 		GeneratedReport report = null;

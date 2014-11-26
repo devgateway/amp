@@ -153,7 +153,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 							var teamlead = (app.TabsApp.settings.attributes.teamlead.name === 'true');
 							var validator = (app.TabsApp.settings.attributes.validator.name === 'true');
 							var teamtype = app.TabsApp.settings.attributes.accestype.name;
-
+							
 							for (iRow = 0; iRow < cRows; iRow++) {
 								row = this.rows[iRow];
 								className = row.className;
@@ -163,7 +163,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									var draft = row.cells[3].textContent;
 									var approvalStatus = row.cells[2].textContent;
 									var activityteamid = row.cells[4].textContent;
-
+									var id = row.cells[1].textContent;
 									// Status Mapping
 									var statusMapping = {
 										New_Draft : '0',
@@ -214,9 +214,12 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 									// TODO: Missing colors for rejected and not
 									// approved.
 									// TODO: Check this public view id needed.
+									
 									var x = getApprovalStatus(draft, approvalStatus);
-									var iconedit = "<img src='/TEMPLATE/ampTemplate/tabs/css/images/ico_edit.gif'/></a>";
-									var iconvalidated = "<img src='/TEMPLATE/ampTemplate/tabs/css/images/validate.png'/></a>";
+									var iconedit = "<a href='/wicket/onepager/activity/" + id
+												+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/ico_edit.gif'/></a>";
+									var iconvalidated = "<a href='/wicket/onepager/activity/" + id
+												+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/validate.png'/></a>";
 									var link = "<a href='/wicket/onepager/activity/" + id + "'>";
 
 									if (x == statusMapping.Approved) {
@@ -230,27 +233,23 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 
 									} else if (x == statusMapping.Existing_Draft || x == statusMapping.New_Draft) {
 										row.className = className + ' status_2';
-										jQuery(row.cells[0]).html(iconedit + link);
+										jQuery(row.cells[0]).html(iconedit);
 
 									} else if (x == statusMapping.Existing_Unvalidated || x == statusMapping.New_Unvalidated) {
 										row.className = className + ' status_3';
-										// Cross team enable team lead and
-										// validators able to validate show
-										// icon.
+										// Cross team enable team lead and validators able to validate show icon.
 										if (crossTeamValidation && (teamlead || validator)) {
 											if (teamtype != "Management") {
-												jQuery(row.cells[0]).html(link + iconvalidated);
+												jQuery(row.cells[0]).html(iconvalidated);
 											} else {
 												jQuery(row.cells[0]).html(link);
 											}
-											// Cross team disable team lead and
-											// validators able to validate only
-											// if the activity belongs to the
+											// Cross team disable team lead and validators able to validate only if the activity belongs to the
 											// workspace.
 										} else if (!crossTeamValidation && activityteamid == teamid && (teamlead || validator)) {
-											jQuery(row.cells[0]).html(link + iconvalidated);
+											jQuery(row.cells[0]).html(iconvalidated);
 										} else {
-											jQuery(row.cells[0]).html(iconedit + link);
+											jQuery(row.cells[0]).html(iconedit);
 										}
 									}
 

@@ -154,6 +154,11 @@ function switchTabs(lastIndex){
     			if(lastIndex >=0){ //if its grater or equals than 0 we focus on that tab
     				myFundingTabs.selectTab(lastIndex);	
     				$('div[data-is_tab=true]').find(".organization_box_content").last().find(".collapsable").first().show();
+    			}else{
+    				//if no index is provided we focuse on the first tab
+    				if(myFundingTabs.get('tabs').length>0){
+    					myFundingTabs.selectTab(0);
+    				}
     			}
     		}
         } 

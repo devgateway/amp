@@ -4,7 +4,6 @@
 		<a  href="#" wicket:id="collapseDonorItems" id="collapseDonorItems"  style="display: none;"  onclick="$(this).parents('div:eq(2)').find('.collapsable').hide();$('#expandDonorItems').show();$('#collapseDonorItems').hide();"><wicket:trn>Collapse all</wicket:trn></a>
 	</div>
 	<tr><td colspan="2">
-	<!-- aca va overviewSection -->
 	<div wicket:id="overviewSection" />
 
     <p/>
@@ -13,9 +12,8 @@
 				<!-- for tabs -->
 				<div id="fundingTabs" class="yui-navset" >
 					<ul class="yui-nav">
-						<li class="selected"><a wicket:id="overviewLink"></a> </li>
-						<li wicket:id="donorItemsForTabs"><a wicket:id="linkForTabs">Label
-								goes here...</a></li>
+						<li class="selected" wicket:id="overviewLinkContainer"><a wicket:id="overviewLink"></a> </li>
+						<li wicket:id="donorItemsForTabs"><a wicket:id="linkForTabs">...</a></li>
 					</ul>
 					<div class="yui-content" id="theContent"></div>
 				</div>

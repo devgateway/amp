@@ -26,6 +26,7 @@ import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
@@ -43,7 +44,6 @@ import org.dgfoundation.amp.onepager.models.AmpOrganisationSearchModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.ActivityUtil;
 import org.dgfoundation.amp.onepager.util.AttributePrepender;
-import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.yui.AmpAutocompleteFieldPanel;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -54,7 +54,6 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -92,7 +91,7 @@ public class AmpDonorFundingFormSectionFeature extends
 	public final static String[] DISBURSEMENTS_ROLE_FILTER = new String[] {
 			Constants.IMPLEMENTING_AGENCY, Constants.EXECUTING_AGENCY,
 			Constants.BENEFICIARY_AGENCY };
-
+	private final ValueWrapper<Boolean> isOverviewVisible=new ValueWrapper<Boolean>(false);
 	public ListEditor<AmpOrganisation> getList() {
 		return list;
 	}
@@ -281,16 +280,6 @@ public class AmpDonorFundingFormSectionFeature extends
        
 		// group fields in FM under "Proposed Project Cost"
        
-       AmpOverviewSection overviewSection = new AmpOverviewSection(
-				"overviewSection", "Overview Section", am);
-        overviewSection.add(new AttributePrepender("data-is_tab", new Model<String>("true"), ""));
-		add(overviewSection);
-		
-		getRequiredFormComponents().addAll(
-				overviewSection.getRequiredFormComponents());
-
-
-
 
 
 		fundingModel = new PropertyModel<Set<AmpFunding>>(am, "funding");
@@ -303,15 +292,18 @@ public class AmpDonorFundingFormSectionFeature extends
 		final WebMarkupContainer wmc = new WebMarkupContainer("container");
 		wmc.setOutputMarkupId(true);
 
-		ExternalLink link = new ExternalLink("overviewLink","#tab0","Overview"); 
+		final WebMarkupContainer overviewLinkContainer = new WebMarkupContainer("overviewLinkContainer");
+		overviewLinkContainer.setOutputMarkupId(true);
+
+		final ExternalLink overviewTab = new ExternalLink("overviewLink","#tab0","Overview"); 
 		
-		link.setOutputMarkupId(true);
+		overviewTab.setOutputMarkupId(true);
 		
 		wmc.setOutputMarkupId(true);
 		
-		link.setVisible(isTabsView);
 		
-		wmc.add(link);
+		overviewLinkContainer.add(overviewTab);
+		wmc.add(overviewLinkContainer);
 
 		add(wmc);
 
@@ -335,7 +327,27 @@ public class AmpDonorFundingFormSectionFeature extends
 		};
 		tabsList.setVisibilityAllowed(isTabsView);
 		wmc.add(tabsList);
-				
+
+		
+		
+		AmpOverviewSection overviewSection = new AmpOverviewSection("overviewSection", "Overview Section", am) {
+			@Override
+			protected void onConfigure() {
+				super.onConfigure();
+				//we only show the overview tab if we are in tabView and if the overview section is visible
+				isOverviewVisible.value=this.isVisible();
+				overviewLinkContainer.setVisible(isTabsView && this.isVisible());
+			}
+		};
+        overviewSection.add(new AttributePrepender("data-is_tab", new Model<String>("true"), ""));
+		add(overviewSection);
+		
+		getRequiredFormComponents().addAll(
+				overviewSection.getRequiredFormComponents());
+
+
+
+		
 		
 		list = new ListEditor<AmpOrganisation>("listFunding", setModel) {
 			@Override
@@ -583,7 +595,8 @@ public class AmpDonorFundingFormSectionFeature extends
 			}
 			newIndex++;
 		}
-		if(index !=-1){
+		//we only increment one if the overview tab is visible
+		if(index !=-1 && isOverviewVisible.value){
 			index ++; //oveview is the first tab
 		}
 		return index;

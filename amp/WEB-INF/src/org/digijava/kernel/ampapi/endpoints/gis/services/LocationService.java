@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -21,15 +22,12 @@ import org.apache.poi.hssf.usermodel.HSSFRichTextString;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.codehaus.jackson.map.ObjectWriter;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.error.AMPException;
-import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
@@ -60,11 +58,10 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.jdbc.Work;
-
-import com.tonbeller.wcf.utils.ObjectFactory.ObjectHolder;
 
 /**
  * 
@@ -82,34 +79,28 @@ public class LocationService {
 	 * @return
 	 */
 	public JsonBean getTotals(String admlevel, String type, JsonBean filter) {
-		String err = null;
 		JsonBean retlist = new JsonBean();
-		String admLevelId=null;
+		HardCodedCategoryValue admLevelCV = null;
 		switch (admlevel) {
 		case "adm0":
 			admlevel = ColumnConstants.COUNTRY; 
-			admLevelId = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY
-					.getIdInDatabase().toString();
+			admLevelCV = CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY;
 			break;
 		case "adm1":
 			admlevel = ColumnConstants.REGION;
-			admLevelId = CategoryConstants.IMPLEMENTATION_LOCATION_REGION
-					.getIdInDatabase().toString();
+			admLevelCV = CategoryConstants.IMPLEMENTATION_LOCATION_REGION;
 			break;
 		case "adm2":
 			admlevel = ColumnConstants.ZONE; 
-			admLevelId = CategoryConstants.IMPLEMENTATION_LOCATION_ZONE
-					.getIdInDatabase().toString();
+			admLevelCV = CategoryConstants.IMPLEMENTATION_LOCATION_ZONE;
 			break;
 		case "adm3":
 			admlevel = ColumnConstants.DISTRICT; 
-			admLevelId = CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT
-					.getIdInDatabase().toString();
+			admLevelCV = CategoryConstants.IMPLEMENTATION_LOCATION_DISTRICT;
 			break;
 		default:
 			admlevel = ColumnConstants.REGION; 
-			admLevelId = CategoryConstants.IMPLEMENTATION_LOCATION_REGION
-					.getIdInDatabase().toString();
+			admLevelCV = CategoryConstants.IMPLEMENTATION_LOCATION_REGION;
 			break;
 		}
 		
@@ -124,13 +115,13 @@ public class LocationService {
 			type = MeasureConstants.ACTUAL_COMMITMENTS;
 			break;
 		}
+		
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
- 		ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals");
-		spec.addColumn(new ReportColumn(admlevel, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(new ReportColumn(ColumnConstants.GEOCODE, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addMeasure(new ReportMeasure(type, ReportEntityType.ENTITY_TYPE_ALL));
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals");
+		spec.addColumn(new ReportColumn(admlevel));
+		spec.addMeasure(new ReportMeasure(type));
 		spec.getHierarchies().addAll(spec.getColumns());
-		MondrianReportFilters filterRules=new MondrianReportFilters(); 
+		MondrianReportFilters filterRules = new MondrianReportFilters(); 
 		
 		if(filter!=null){
 			Object columnFilters=filter.get("columnFilters");
@@ -138,6 +129,7 @@ public class LocationService {
 				filterRules = FilterUtils.getApiColumnFilter((LinkedHashMap<String, Object>)filter.get("columnFilters"));	
 			}
  		}
+		
 		AmpCategoryValueLocations country = DynLocationManagerUtil.getDefaultCountry();
 
 		// code below disabled because filter-by-value not supported anymore; also this column will be redefined because of AMP-18736
@@ -146,40 +138,52 @@ public class LocationService {
 //					new FilterRule(country.getName(), true, false));
 //		}
 		
-		filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.IMPLEMENTATION_LEVEL, ReportEntityType.ENTITY_TYPE_ACTIVITY), 
-				new FilterRule(admLevelId, true));
 		spec.setFilters(filterRules);
 		
 		EndpointUtils.applySettings(spec, filter);
 		
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()),true);
-		GeneratedReport report = null;
-		
-		try {
-			report = generator.executeReport(spec);
-		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-			err = e.getMessage();
-		}
-		
 		String currcode = FilterUtils.getSettingbyName((LinkedHashMap<Integer, Object>) filter.get(EPConstants.SETTINGS),SettingsConstants.CURRENCY_ID);
 		retlist.set("currency", currcode);
-
 		retlist.set("numberformat", numberformat);
+
+		GeneratedReport report = EndpointUtils.runReport(spec);
 		List<JsonBean> values = new ArrayList<JsonBean>();
-		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
-			JsonBean item = new JsonBean();
-			ReportAreaImpl reportArea =  (ReportAreaImpl) iterator.next();
-			LinkedHashMap<ReportOutputColumn, ReportCell> content = (LinkedHashMap<ReportOutputColumn, ReportCell>) reportArea.getContents();
-			org.dgfoundation.amp.newreports.TextCell reportcolumn = (org.dgfoundation.amp.newreports.TextCell) content.values().toArray()[1];
-			item.set("admID",reportcolumn.value);
-			ReportCell reportcell = (ReportCell) content.values().toArray()[2];
-			item.set("amount",reportcell.value);
-			values.add(item);
+		
+		if (report != null && report.reportContents != null && report.reportContents.getChildren() != null) {
+			// find the admID (geocode) for each implementation location name
+			Map<String, String> admLevelToGeoCode = getAdmLevelGeoCodeMap(admlevel, admLevelCV);
+			
+			
+			for (ReportArea reportArea : report.reportContents.getChildren()) {
+				JsonBean item = new JsonBean();
+				Iterator<ReportCell> iter = reportArea.getContents().values().iterator();
+				item.set("admID", admLevelToGeoCode.get(iter.next().displayedValue));
+				ReportCell reportcell = (ReportCell) iter.next();
+				item.set("amount", reportcell.value);
+				values.add(item);
+			}
 		}
 		retlist.set("values", values);
 		return retlist;
 	}
+	
+	/**
+	 * Provides admLevel name to geo code map
+	 * @param admLevel
+	 * @param admLevelCV
+	 * @return
+	 */
+	public Map<String, String> getAdmLevelGeoCodeMap(String admLevel, HardCodedCategoryValue admLevelCV) {
+		Set<AmpCategoryValueLocations> acvlData = DynLocationManagerUtil.getLocationsByLayer(admLevelCV);
+		Map<String, String> levelToGeoCodeMap = new HashMap<String, String>();
+		if (acvlData != null) {
+			for (AmpCategoryValueLocations acvl : acvlData) {
+				levelToGeoCodeMap.put(acvl.getName(), acvl.getGeoCode());
+			}
+		}
+		return levelToGeoCodeMap;
+	}
+	
 	/**
 	 * Build an excel file export by structure
 	 * @return

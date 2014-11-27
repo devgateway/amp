@@ -266,7 +266,7 @@ public class DbUtil {
             }
         }
         catch (Exception ex) {
-            logger.debug("Unable to get editor item from database ", ex);
+            logger.error("Unable to get editor item from database ", ex);
             item = null;
         }
         return item;

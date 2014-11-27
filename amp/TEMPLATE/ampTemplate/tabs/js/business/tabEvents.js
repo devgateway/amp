@@ -4,8 +4,9 @@
 define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentView', 'text!views/html/filtersWrapperTemplate.html',
 		'text!views/html/filtersItemTemplate.html', 'models/tab', 'text!views/html/invisibleTabLinkTemplate.html',
 		'text!views/html/legendsTemplate.html', 'business/grid/gridManager', 'business/translations/translationManager',
-		'business/filter/filterUtils', 'jquery', 'jqueryui' ], function(Marionette, Content, Legend, DynamicContentView, filtersTemplate,
-		filtersItemTemplate, Tab, invisibleTabLinkTemplate, legendsTemplate, gridManager, TranslationManager, FilterUtils, jQuery) {
+		'business/filter/filterUtils', 'util/tabUtils', 'jquery', 'jqueryui' ], function(Marionette, Content, Legend, DynamicContentView,
+		filtersTemplate, filtersItemTemplate, Tab, invisibleTabLinkTemplate, legendsTemplate, gridManager, TranslationManager, FilterUtils,
+		TabUtils, jQuery) {
 
 	"use strict";
 
@@ -112,6 +113,8 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 			});
 			dynamicLayoutView.legends.show(legendView);
 
+			TranslationManager.searchAndTranslate();
+
 			// --------------------------------------------------------------------------------------//
 			gridManager.populateGrid(app.TabsApp.currentTab.get('id'), dynamicLayoutView, firstContent);
 
@@ -138,6 +141,11 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 		constructor : TabEvents,
 		onCreateTab : function(event, ui) {
 			console.log('create tab');
+
+			var existDefaultTab = jQuery("#tabs-container").attr("data-tab-id");
+			if (existDefaultTab != "null" && existDefaultTab != "" && existDefaultTab != undefined) {
+				TabUtils.activateTabById(Number(existDefaultTab));
+			}
 			this.onActivateTab(event, ui);
 
 			TranslationManager.searchAndTranslate();

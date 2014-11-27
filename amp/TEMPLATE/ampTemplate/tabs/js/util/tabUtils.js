@@ -44,7 +44,7 @@ define([ 'numeral', 'jquery', 'jqueryui', 'jqgrid' ], function(Numeral, jQuery) 
 				function() {
 					var href = jQuery(this).attr("href");
 					var newHref = window.location.protocol + '//' + window.location.hostname + (location.port ? ':' + location.port : '')
-							+ window.location.pathname + href;
+							+ window.location.pathname + window.location.search + href;
 					if (href.indexOf("#") == 0) {
 						jQuery(this).attr("href", newHref);
 					}
@@ -134,6 +134,27 @@ define([ 'numeral', 'jquery', 'jqueryui', 'jqgrid' ], function(Numeral, jQuery) 
 		Numeral.defaultFormat = format;
 		number = new Numeral().unformat(stringNumber);
 		return number;
+	};
+
+	/**
+	 * Called on initialization of tabs only if we want to activate a tab other
+	 * than the first one.
+	 * 
+	 * @param id
+	 */
+	TabUtils.activateTabById = function(id) {
+		_.each(app.TabsApp.tabsCollection.models, function(item, i) {
+			if (item.get('id') === id) {
+				if (item.get('visible') == false) {
+					// TODO: Bind an event to changes on "visible" field so this
+					// process is triggered automatically.
+					item.set('visible', true);
+					TabUtils.showInvisibleTab(id);
+				}
+				// Set this tab active with JQuery.
+				jQuery("#tabs-container").tabs("option", "active", i);
+			}
+		});
 	};
 
 	function extractSettings(settings) {

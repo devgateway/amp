@@ -149,7 +149,7 @@
 		<tbody>
 			<tr>
 				<td width="100%" valign="top" id="maintd">
-					<div id="tabs-container"></div>
+					<div id="tabs-container" data-tab-id="<%=request.getParameter("ampReportId")%>"></div>
  					<%-- <digi:insert attribute="body"/> --%>
 				</td>
 				<td width="20px" align="center" background="img_2/close_panel_bg.gif" valign="top" id="center-column">

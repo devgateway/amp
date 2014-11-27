@@ -60,8 +60,7 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 		TabUtils.shortenTabNames(tabsCollection.models);
 
 		// Instantiate both CollectionView containers with the data to
-		// create the
-		// tabs.
+		// create the tabs.
 		var tabsCollectionCopy = tabsCollection;
 		var tabItemsView = new TabItemsView({
 			collection : tabsCollection
@@ -74,9 +73,8 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 		});
 
 		// Render both CollectionView containers, each one on a region.
-		// Basically what we do is render each CollectionView using its
-		// template and
-		// into the region it belongs.
+		// Basically what we do is render each CollectionView using its template
+		// and into the region it belongs.
 		try {
 			app.TabsApp.tabsRegion.show(tabItemsView, {
 				forceShow : true
@@ -97,8 +95,7 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 		app.TabsApp.tabsCollection = tabsCollection;
 		app.TabsApp.tabUtils = TabUtils;
 
-		// This class manages how to retrieve content and render each
-		// tab.
+		// This class manages how to retrieve content and render each tab.
 		var tabEvents = new TabEvents();
 
 		// JQuery create the tabs and assign some events to our event
@@ -112,10 +109,8 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 			}
 		});
 
-		// If we are grouping tabs under the last "more tabs..." tab
-		// then we
-		// need to
-		// hide the "invisible" tabs.
+		// If we are grouping tabs under the last "more tabs..." tab then we
+		// need to hide the "invisible" tabs.
 		if (hasMoreTabs) {
 			TabUtils.hideInvisibleTabs(tabsCollection.models);
 		}
@@ -124,7 +119,7 @@ define([ 'marionette', 'collections/tabs', 'models/tab', 'views/tabItemView', 'v
 		app.TabsApp.resizePanel = function(originalWidth, grow) {
 			TabUtils.resizePanel(app.TabsApp.currentTab.get('id'), app.TabsApp.maxAppWidth);
 		};
-
+		
 		// Use only one instance of filters for all tabs.
 		FilterManager.initializeFilterWidget();
 	} else {

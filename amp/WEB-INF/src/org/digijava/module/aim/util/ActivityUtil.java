@@ -1613,29 +1613,26 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
     
 	public static void archiveAmpActivityWithVersions(Long ampActId) {
 		logger.error("archiving activity and all of its versions: " + ampActId);
-		Transaction tx = null;
-		try{
+		try {
 			Session session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
 			List<AmpActivityGroup> groups = getActivityGroups(session, ampActId);
 			logger.error("\tactivity groups linked with this ampActId: " + Util.toCSString(groups));
-			if(groups != null && groups.size() > 0){
+			if(groups != null && groups.size() > 0) {
 				for (AmpActivityGroup ampActivityGroup : groups) {
-					logger.error("\tprocessing AmpActivityGroup with id = " + ampActivityGroup.getAmpActivityGroupId());
+					logger.info("\tprocessing AmpActivityGroup with id = " + ampActivityGroup.getAmpActivityGroupId());
 					for(AmpActivityVersion ampActivityVersion: ampActivityGroup.getActivities()){
-						logger.error("\t\tmarking AmpActivityVersion as deleted, id = " + ampActivityVersion.getAmpActivityId());
-						session.createQuery("UPDATE " + AmpActivityVersion.class.getName() + " aav SET aav.deleted = true WHERE aav.ampActivityId = " + ampActivityVersion.getAmpActivityId()).executeUpdate();
+						logger.info("\t\tmarking AmpActivityVersion as deleted, id = " + ampActivityVersion.getAmpActivityId());
+						String query = "UPDATE " + AmpActivityVersion.class.getName() + " aav SET aav.deleted = true WHERE aav.ampActivityId = " + ampActivityVersion.getAmpActivityId(); 
+						session.createQuery(query).executeUpdate();
 					}
 				}
 			}		      
-//			logger.error("\tnow marking the ampActId per se as deleted: " + ampActId);
-//			session.createQuery("UPDATE " + AmpActivityVersion.class.getName() + " aav SET aav.deleted = true WHERE aav.ampActivityId = " + ampActId).executeUpdate();	     
-			logger.error("\tnow committing transaction");
-			tx.commit();
-		}
-		catch (Exception e) {
+
+		} catch (Exception e) {
 			logger.error("error while marking activity as deleted: ", e);
-			tx.rollback();
+			if (PersistenceManager.getSession().getTransaction() != null) {
+				PersistenceManager.getSession().getTransaction().rollback();
+			}
 		}
 	}
 	

@@ -103,6 +103,8 @@ public class SelectTeam extends Action {
                 }
             session.setAttribute("teamLeadFlag", String.valueOf(tm.getTeamHead()));
             
+            session.setMaxInactiveInterval(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.MAX_INACTIVE_SESSION_INTERVAL).intValue());
+            
             AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(member.getAmpTeam().getAmpTeamId());
             ApplicationSettings appSettings = new ApplicationSettings(ampAppSettings);
             session.setAttribute(Constants.TEAM_ID, tm.getTeamId());
@@ -111,7 +113,6 @@ public class SelectTeam extends Action {
             session.setAttribute(Constants.CURRENT_MEMBER, tm);
             AmpTeam.initializeTeamFiltersSession(member, request, session);
             PermissionUtil.putInScope(session, GatePermConst.ScopeKeys.CURRENT_MEMBER, tm);
-            session.setMaxInactiveInterval(-1);
             lForm.setLogin(true);
 
             //AMP-4256 - Removing all settings that might come from the other workspace

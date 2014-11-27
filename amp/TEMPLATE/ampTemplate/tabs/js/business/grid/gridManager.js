@@ -147,130 +147,149 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 
 							// Change row color depending the status.
 							var cRows = this.rows.length, iRow, row, className;
-
-							var teamid = app.TabsApp.settings.attributes.teamid.name;
-							var crossTeamValidation = (app.TabsApp.settings.attributes.crossteamenable.name === 'true');
-							var teamlead = (app.TabsApp.settings.attributes.teamlead.name === 'true');
-							var validator = (app.TabsApp.settings.attributes.validator.name === 'true');
-							var teamtype = app.TabsApp.settings.attributes.accestype.name;
+							
+							var teamid;
+							var crossTeamValidation;
+							var teamlead;
+							var validator;
+							var teamtype;
+							
+							if(app.TabsApp.settings.attributes.teamid){
+								teamid = app.TabsApp.settings.attributes.teamid.name;
+								crossTeamValidation = (app.TabsApp.settings.attributes.crossteamenable.name === 'true');
+								teamlead = (app.TabsApp.settings.attributes.teamlead.name === 'true');
+								validator = (app.TabsApp.settings.attributes.validator.name === 'true');
+								teamtype = app.TabsApp.settings.attributes.accestype.name;
+							}
 
 							for (iRow = 0; iRow < cRows; iRow++) {
 								row = this.rows[iRow];
 								className = row.className;
+								
 								// Ignore grouped rows.
-								if (jQuery.inArray('jqgrow', className.split(' ')) > 0) {
-									// Set font color according to status.
-									var draft = row.cells[3].textContent;
-									var approvalStatus = row.cells[2].textContent;
-									var activityteamid = row.cells[4].textContent;
-									var id = row.cells[1].textContent;
-									// Status Mapping
-									var statusMapping = {
-										New_Draft : '0',
-										New_Unvalidated : '1',
-										Existing_Draft : '2',
-										Validated_Activities : '3',
-										Existing_Unvalidated : '4',
-										Approved : '5',
-										Rejected : 6
-									};
+								if (!(jQuery.inArray('jqgrow', className.split(' ')) > 0)) {
+									continue;
+								}
+								//set default color and link for rows
+								row = this.rows[iRow];
+								className = row.className;
+								var id = row.cells[1].textContent;
+								
+								var iconedit = "<a href='/wicket/onepager/activity/" + id
+									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/ico_edit.gif'/></a>";
+								var iconvalidated = "<a href='/wicket/onepager/activity/" + id
+									+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/validate.png'/></a>";
+								var link = "<a href='/wicket/onepager/activity/" + id + "'>";
+								
+								
+								row.className = className + ' status_1';
+								jQuery(row.cells[0]).html(link);
+								
+								//check public view - no team present
+								if(!teamid) continue;
+								
+								teamid = app.TabsApp.settings.attributes.teamid.name;
+								crossTeamValidation = (app.TabsApp.settings.attributes.crossteamenable.name === 'true');
+								teamlead = (app.TabsApp.settings.attributes.teamlead.name === 'true');
+								validator = (app.TabsApp.settings.attributes.validator.name === 'true');
+								teamtype = app.TabsApp.settings.attributes.accestype.name;
+								
+								// Set font color according to status.
+								var draft = row.cells[3].textContent;
+								var approvalStatus = row.cells[2].textContent;
+								var activityteamid = row.cells[4].textContent;
+								
+								
+								// Status Mapping
+								var statusMapping = {
+									New_Draft : '0',
+									New_Unvalidated : '1',
+									Existing_Draft : '2',
+									Validated_Activities : '3',
+									Existing_Unvalidated : '4',
+									Approved : '5',
+									Rejected : 6
+								};
 
-									// Calculated status based on draft and
-									// approval status.
-									var getApprovalStatus = function(draft, approvalStatus) {
-										if (draft == 'true') {
-											if (approvalStatus == '2' || approvalStatus == '1') {
-												return statusMapping.Existing_Draft;
-											} else {
-												row.cells[4].textContent = '* ' + row.cells[4].textContent;
-												return statusMapping.New_Draft;
-											}
+								// Calculated status based on draft and
+								// approval status.
+								var getApprovalStatus = function(draft, approvalStatus) {
+									if (draft == 'true') {
+										if (approvalStatus == '2' || approvalStatus == '1') {
+											return statusMapping.Existing_Draft;
 										} else {
-											switch (approvalStatus) {
-											case '1':
-												return statusMapping.Approved;
-												break;
-											case '2':
-											case '5':
-											case '6':
-												return statusMapping.Existing_Unvalidated;
-												break;
-											case '3':
-												row.cells[4].textContent = '* ' + row.cells[4].textContent;
-												return statusMapping.Approved;
-												break;
-											case '4':
-												row.cells[4].textContent = '* ' + row.cells[4].textContent;
-												return statusMapping.New_Unvalidated;
-												break;
-											default:
-												break;
-											}
+											row.cells[4].textContent = '* ' + row.cells[4].textContent;
+											return statusMapping.New_Draft;
 										}
-									};
+									} else {
+										switch (approvalStatus) {
+										case '1':
+											return statusMapping.Approved;
+											break;
+										case '2':
+										case '5':
+										case '6':
+											return statusMapping.Existing_Unvalidated;
+											break;
+										case '3':
+											row.cells[4].textContent = '* ' + row.cells[4].textContent;
+											return statusMapping.Approved;
+											break;
+										case '4':
+											row.cells[4].textContent = '* ' + row.cells[4].textContent;
+											return statusMapping.New_Unvalidated;
+											break;
+										default:
+											break;
+										}
+									}
+								};
 
-									// Assign colors for each row.
-									// TODO: Missing colors for rejected and not
-									// approved.
-									// TODO: Check this public view id needed.
+								// Assign colors for each row for loggued users.
+								var x = getApprovalStatus(draft, approvalStatus);
+								if (x == statusMapping.Approved) {
+									row.className = className + ' status_1';
+									// Create link to edit activity.
+									if (teamtype != "Management") {
+										jQuery(row.cells[0]).html(iconedit + link);
+									} else {
+										jQuery(row.cells[0]).html(link);
+									}
 
-									var x = getApprovalStatus(draft, approvalStatus);
-									var iconedit = "<a href='/wicket/onepager/activity/" + id
-											+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/ico_edit.gif'/></a>";
-									var iconvalidated = "<a href='/wicket/onepager/activity/" + id
-											+ "'><img src='/TEMPLATE/ampTemplate/tabs/css/images/validate.png'/></a>";
-									var link = "<a href='/wicket/onepager/activity/" + id + "'>";
+								} else if (x == statusMapping.Existing_Draft || x == statusMapping.New_Draft) {
+									row.className = className + ' status_2';
+									jQuery(row.cells[0]).html(iconedit);
 
-									if (x == statusMapping.Approved) {
-										row.className = className + ' status_1';
-										// Create link to edit activity.
+								} else if (x == statusMapping.Existing_Unvalidated || x == statusMapping.New_Unvalidated) {
+									row.className = className + ' status_3';
+									// Cross team enable team lead and validators able to validate show icon.
+									if (crossTeamValidation && (teamlead || validator)) {
 										if (teamtype != "Management") {
-											jQuery(row.cells[0]).html(iconedit + link);
+											jQuery(row.cells[0]).html(iconvalidated);
 										} else {
 											jQuery(row.cells[0]).html(link);
 										}
-
-									} else if (x == statusMapping.Existing_Draft || x == statusMapping.New_Draft) {
-										row.className = className + ' status_2';
+										// Cross team disable team lead and validators able to validate only
+										// if the activity belongs to the workspace.
+									} else if (!crossTeamValidation && activityteamid == teamid && (teamlead || validator)) {
+										jQuery(row.cells[0]).html(iconvalidated);
+									} else {
 										jQuery(row.cells[0]).html(iconedit);
-
-									} else if (x == statusMapping.Existing_Unvalidated || x == statusMapping.New_Unvalidated) {
-										row.className = className + ' status_3';
-										// Cross team enable team lead and
-										// validators able to validate show
-										// icon.
-										if (crossTeamValidation && (teamlead || validator)) {
-											if (teamtype != "Management") {
-												jQuery(row.cells[0]).html(iconvalidated);
-											} else {
-												jQuery(row.cells[0]).html(link);
-											}
-											// Cross team disable team lead and
-											// validators able to validate only
-											// if the activity belongs to the
-											// workspace.
-										} else if (!crossTeamValidation && activityteamid == teamid && (teamlead || validator)) {
-											jQuery(row.cells[0]).html(iconvalidated);
-										} else {
-											jQuery(row.cells[0]).html(iconedit);
-										}
 									}
-
-									var id = row.cells[1].textContent;
-
-									// Create link to preview activity on first
-									// not grouped column.
-									var colIndex = -1;
-									jQuery(jQuery(grid).jqGrid('getGridParam', 'colModel')).each(function(i, item) {
-										if (colIndex == -1 && item.hidden == false && i > 0) {
-											colIndex = i;
-										}
-									});
-									var newContent = "<span style='cursor: pointer;' onclick = \x22openPreviewPage(" + id + ")\x22>"
-											+ jQuery(row.cells[colIndex]).html() + "</span>";
-									jQuery(row.cells[colIndex]).html(newContent);
 								}
+
+								// Create link to preview activity on first not grouped column.
+								var colIndex = -1;
+								jQuery(jQuery(grid).jqGrid('getGridParam', 'colModel')).each(function(i, item) {
+									if (colIndex == -1 && item.hidden == false && i > 0) {
+										colIndex = i;
+									}
+								});
+								var newContent = "<span style='cursor: pointer;' onclick = \x22openPreviewPage(" + id + ")\x22>"
+										+ jQuery(row.cells[colIndex]).html() + "</span>";
+								jQuery(row.cells[colIndex]).html(newContent);
 							}
+							
 							TranslationManager.searchAndTranslate();
 						},
 						loadComplete : function() {

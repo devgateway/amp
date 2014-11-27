@@ -545,9 +545,9 @@ public class MDXGenerator {
 		String allowedFilterList = "";
 		String notAllowedFilterList = "";
 		boolean addFilterFunc = false;
+		boolean isMeasure = ref instanceof MDXMeasure;
 		
 		for (MDXFilter mdxFilter : filtersList) {
-			boolean isMeasure = ref instanceof MDXMeasure;
 			addFilterFunc = addFilterFunc || isMeasure || true; //mdxFilter.isKey;
 			filterBy = origFilterBy; //reset if changed by properties
 			
@@ -557,12 +557,9 @@ public class MDXGenerator {
 					throw new AmpApiException("Not supported. Keys are applicable to MDX Attributes only.");
 				
 				MDXAttribute propLevel =  (MDXAttribute) ref;
-				String propertyType = "Integer";//levelPropertyType.get(mdxFilter.property);
-				String property = MoConstants.P_KEY; //mdxFilter.property
 				
 				//replace filter by to be filter by key
-				filterBy = MoConstants.FUNC_CAST + "(" + propLevel.getCurrentMemberName() + "." 
-						+ MoConstants.PROPERTIES + "('" + property + "') AS " +  propertyType + ")";
+				filterBy = getKeyCast(propLevel, "Integer");
 				toFilterSet = propLevel.toString();
 //			} 
 			
@@ -632,9 +629,13 @@ public class MDXGenerator {
 		if (filter.startsWith(or))
 			filter = filter.substring(or.length()); //remove first OR 
 		
-		if (addFilterFunc && !"".equals(filter))
+		if (addFilterFunc && !"".equals(filter)) {
+			if (!isMeasure) {
+				filter = MoConstants.FUNC_IIF + "(" + getKeyCast((MDXAttribute)ref, "String") + " <> '#null', " 
+					+ filter + ", NULL)";
+			}
 			filter = MoConstants.FUNC_FILTER + "(" + toFilterSet + ", " +filter + ")";
-		else if (ref.getFullName().contains(MoConstants.DATES) && orderDates)
+		} else if (ref.getFullName().contains(MoConstants.DATES) && orderDates)
 			//the only ordering by default is for dates sets
 			filter = order(filter, ref, SortOrder.ASC);
 		//should not be this
@@ -672,6 +673,11 @@ public class MDXGenerator {
 			}
 		}
 		return filterRange;
+	}
+	
+	private String getKeyCast(MDXAttribute mdxAttr, String propertyType) {
+		return MoConstants.FUNC_CAST + "(" + mdxAttr.getCurrentMemberName() + "." 
+				+ MoConstants.PROPERTIES + "('" + MoConstants.P_KEY + "') AS " +  propertyType + ")";
 	}
 	
 	private String order(String set, MDXElement mdxAttr, SortOrder order) {

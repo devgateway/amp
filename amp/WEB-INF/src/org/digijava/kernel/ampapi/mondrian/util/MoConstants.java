@@ -45,6 +45,7 @@ public final class MoConstants {
 	public static final String FUNC_UNION_FORMAT = "Union(%s, %s)";
 	public static final String FUNC_ORDER = "Order";
 	public static final String FUNC_FILTER = "Filter";
+	public static final String FUNC_IIF = "IIf";
 	public static final String FUNC_CAST = "Cast";
 	public static final String FUNC_TAIL = "Tail";
 	public static final String FUNC_DESCENDANTS = "Descendants";

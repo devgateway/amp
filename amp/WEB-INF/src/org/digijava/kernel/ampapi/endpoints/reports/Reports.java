@@ -1,6 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.reports;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -27,6 +28,7 @@ import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
@@ -52,6 +54,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.olap.query2.ThinHierarchy;
 import org.saiku.olap.query2.ThinQuery;
@@ -103,11 +106,14 @@ public class Reports {
 		ReportMetadata metadata = new ReportMetadata();
 		metadata.setReportSpec(spec);
 		metadata.setSettings(EndpointUtils.getReportSettings(spec));
+		metadata.setName(ampReport.getName());
+		metadata.setRecordsPerPage(ReportPaginationUtils.getRecordsNumberPerPage());
+		
+		//Properties that make a Saiku Query. Might be removed later
 		metadata.setCatalog(DEFAULT_CATALOG_NAME);
 		metadata.setCube(DEFAULT_CUBE_NAME);
 		metadata.setUniqueName(DEFAULT_UNIQUE_NAME);
 		metadata.setQueryName(DEFAULT_QUERY_NAME);
-		metadata.setName(ampReport.getName());
 		metadata.setConnection(DEFAULT_CONNECTION_NAME);
 		metadata.setSchema(DEFAULT_SCHEMA_NAME);
 
@@ -316,6 +322,7 @@ public class Reports {
 			result.setQuery(new ThinQuery());
 		} catch (Exception e) {
 			String error = ExceptionUtils.getRootCauseMessage(e);
+			e.printStackTrace();
 			return new QueryResult(error);
 		}
 		return result;
@@ -352,7 +359,49 @@ public class Reports {
 		//This is also corrected in the client side (file SaikuTableRenderer, function sanitizeRows) 
 		if (report.cellDataSet.getCellSetHeaders().length > 0 )
 			report.cellDataSet.setWidth(report.cellDataSet.getCellSetHeaders()[0].length);
-		return report.cellDataSet;
+		if (report.cellDataSet.getCellSetBody().length > 0 ){
+			report.cellDataSet.setHeight(report.cellDataSet.getCellSetHeaders().length + report.cellDataSet.getCellSetBody().length);
+		}
+
+		return getPage(report.cellDataSet, queryModel.get("page"));
+//		return report.cellDataSet;
+	}
+	
+	private CellDataSet getPage(CellDataSet cellDataSet, Object pageParam) {
+		//Assuming page is zero indexed
+		if(pageParam != null) {
+			AbstractBaseCell[][] result = cellDataSet.getCellSetBody();
+			int start = 0, end = 0, page = 0;
+			page = (int)pageParam;
+			int rpp = ReportPaginationUtils.getRecordsNumberPerPage();
+			start = rpp*page;
+			end = (rpp*page+rpp);
+			if(end > result.length) 
+				end = result.length;
+			AbstractBaseCell[][] pageResults = Arrays.copyOfRange(result, start, end);
+			//Check hierarchical results that need the data
+			//Take first row and check if there are null columns
+			AbstractBaseCell[] firstRow = pageResults[0];
+			
+			for (int i = 0; i < firstRow.length; i++) {
+				AbstractBaseCell cell = firstRow[i];
+				if(cell.getFormattedValue() == null) {
+					//If it's null, get the formatted value from a previous row at the same level
+					//from my current row index back
+					for(int j = start; j >= 0; j--){
+						AbstractBaseCell parentCell = result[j][i];
+						if(parentCell.getFormattedValue() != null) {
+							cell.setFormattedValue(parentCell.getFormattedValue());
+							break;
+						}
+					}
+				}
+			}
+			
+			cellDataSet.setCellSetBody(pageResults);
+		}
+		
+		return cellDataSet;
 	}
 	@POST
 	@Path("/saikureport/export/xls/{report_id}")
@@ -381,6 +430,8 @@ public class Reports {
 			String decodedQuery = java.net.URLDecoder.decode(query);
 			decodedQuery = decodedQuery.replace("query=", "");
 			JsonBean queryObject = JsonBean.getJsonBeanFromString(decodedQuery);
+			LinkedHashMap<String, Object> queryModel = (LinkedHashMap<String, Object>) queryObject.get("queryModel");
+			queryModel.remove("page");
 			result = getSaikuCellDataSet(queryObject, reportId);
 
 			byte[] doc = null;

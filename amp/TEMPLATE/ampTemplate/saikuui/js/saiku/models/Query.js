@@ -47,6 +47,10 @@ var Query = Backbone.Model.extend({
         this.action = new QueryAction({}, { query: this });
         this.result = new Result({ limit: Settings.RESULT_LIMIT }, { query: this });
         this.scenario = new QueryScenario({}, { query: this });
+        //Start Custom Code for Pagination
+        this.set({page:0}) ;
+        window.currentQuery = this;
+        //End Custom Code for Pagination
     },
     
     parse: function(response) {
@@ -71,7 +75,26 @@ var Query = Backbone.Model.extend({
     run_query: function(filters, settings) {
     	this.run(null, null, filters, settings);
     },
-
+	//Start Custom Code for Pagination    
+    first_page: function() {
+    	this.set({page: 0});
+    	this.run(true);
+    },
+    prev_page: function() {
+    	var prev_page = this.get('page') == 0 ? 0 : (this.get('page')-1);
+    	this.set({page: prev_page});
+    	this.run(true);
+    },
+    next_page: function() {
+    	this.set({page: (this.get('page')+1)});
+    	this.run(true);
+    },
+    last_page: function() {
+    	var last_page = this.get('total_rows')/Settings.RESULTS_PER_PAGE;
+    	this.set({page: Math.floor(last_page)});
+    	this.run(true);
+    },
+    //End Custom Code for Pagination
     run: function(force, mdx, filters, settings) {
 
         var self = this;
@@ -116,6 +139,9 @@ var Query = Backbone.Model.extend({
         	exModel.queryModel.settings = this.get('settings');
         	exModel.queryModel.filtersApplied = filtersApplied;
         	exModel.queryModel.settingsApplied = settingsApplied;
+        	if(Settings.PAGINATION) {
+        		exModel.queryModel.page = this.get('page');
+        	}
         }
         else if (exModel.queryType == "OLAP") {
             if (exModel.type == "QUERYMODEL") {

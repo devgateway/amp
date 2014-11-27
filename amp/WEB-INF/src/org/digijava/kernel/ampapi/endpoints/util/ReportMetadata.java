@@ -7,14 +7,16 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingField;
 
 public class ReportMetadata {
 	private String name = "";
+	private ReportSpecificationImpl reportSpec;
+	private List<SettingField> settings;
+	private int recordsPerPage;
+	
 	private String connection = "";
 	private String cube = "";
 	private String uniqueName = "";
 	private String catalog = "";
 	private String schema = "";
 	private String queryName = "";
-	private ReportSpecificationImpl reportSpec;
-	private List<SettingField> settings;
 	
 	public String getName() {
 		return name;
@@ -75,6 +77,12 @@ public class ReportMetadata {
 	 */
 	public void setSettings(List<SettingField> settings) {
 		this.settings = settings;
+	}
+	public int getRecordsPerPage() {
+		return recordsPerPage;
+	}
+	public void setRecordsPerPage(int recordsPerPage) {
+		this.recordsPerPage = recordsPerPage;
 	}
 	
 }

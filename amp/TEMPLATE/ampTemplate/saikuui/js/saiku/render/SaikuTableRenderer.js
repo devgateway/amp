@@ -98,6 +98,9 @@ var checkTable = function(table){
 		if(rowLength < maxRowLength){
 			var offset = maxRowLength - rowLength;
 			var insertionPosition = $(row).find(".row_total").last();
+			if(row.attr("id") === "grand_total") {
+				insertionPosition =  $(".report_totals").parents("TH");
+			}
 
 			for(var idx = 0; idx < offset;idx++) {
 				insertionPosition.after($("<th>").html($("<div>")).addClass("row_total"));
@@ -127,7 +130,11 @@ SaikuTableRenderer.prototype._processData = function(data, options) {
 };
 
 function genTotalDataCells(currentIndex, cellIndex, scanSums, scanIndexes, lists) {
-	var contents = '';
+    if(Settings.AMP_REPORT_API_BRIDGE) {
+		var rowOffset = this.currentQuery.get('page')*Settings.RESULTS_PER_PAGE;
+		cellIndex += rowOffset;
+    }
+    var contents = '';
 	var lists = lists[ROWS];
 	for (var i = scanSums.length - 1; i >= 0; i--) {
 		if (currentIndex == scanSums[i]) {
@@ -198,6 +205,10 @@ function totalIntersectionCells(currentIndex, bottom, scanSums, scanIndexes, lis
 }
 
 function genTotalHeaderRowCells(currentIndex, scanSums, scanIndexes, totalsLists) {
+    if(Settings.AMP_REPORT_API_BRIDGE) {
+		var rowOffset = this.currentQuery.get('page')*Settings.RESULTS_PER_PAGE;
+		currentIndex += rowOffset;
+    }
 	var colLists = totalsLists[COLUMNS];
 	var colScanSums = scanSums[COLUMNS];
 	var colScanIndexes = scanIndexes[COLUMNS];
@@ -239,7 +250,7 @@ function genTotalHeaderRowCells(currentIndex, scanSums, scanIndexes, totalsLists
 								text += "&nbsp;<span class='i18n'>Grand Total</span>";
 							}
 							else {
-								text = "<span class='i18n' style='font-weight:bold;'>Report Totals</span>";
+								text = "<span class='i18n report_totals' style='font-weight:bold;'>Report Totals</span>";
 							} 
 						}
 					}

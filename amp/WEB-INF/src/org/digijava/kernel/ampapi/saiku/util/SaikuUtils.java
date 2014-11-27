@@ -306,7 +306,7 @@ public class SaikuUtils {
 			node.setWidth(1);
 			node.setSpan(1);
 		}
-		
+		int arrayOffset = 2;
 		for (int i = 0; i < topTree.size()-1; i++) {
 			List<List<Integer>> tree = topTree.get(i);
 			for (int j = 0; j < tree.size(); j++) {
@@ -315,9 +315,8 @@ public class SaikuUtils {
 				for(Integer k : list) {
 					width += newTotalLists[newTotalLists.length-1-i].get(k).getWidth();
 				}
-				//TODO: Replace magic number
-				int previousIndex = newTotalLists.length-2-i;
-				if(previousIndex > 0 && newTotalLists[previousIndex].size()-1 > j) {
+				int previousIndex = newTotalLists.length-arrayOffset-i;
+				if(previousIndex >= 0 && newTotalLists[previousIndex].size()-1 >= j) {
 					newTotalLists[previousIndex].get(j).setWidth(width);
 					newTotalLists[previousIndex].get(j).setSpan(1);
 				}

@@ -36,6 +36,9 @@ var Result = Backbone.Model.extend({
             this.query.model = _.extend({}, response.query);
         }
         this.firstRun = true;
+		//Start Custom Code for Pagination
+        this.query.set({'total_rows': response.height});
+        //End Custom Code for Pagination
 
         this.query.workspace.trigger('query:result', {
             workspace: this.query.workspace,
@@ -54,6 +57,16 @@ var Result = Backbone.Model.extend({
     
     url: function() {
     	if(this.query.get('report_id')){
+	    	//Start Custom Code for Pagination
+	    	var result_type = "result";
+	    	if(Settings.PAGINATION) {
+	    		result_type = "paginatedresult";
+	        	var start = this.query.get('page')*Settings.RESULTS_PER_PAGE;
+	        	var end = start  + Settings.RESULTS_PER_PAGE;
+	        	this.set({'start': start});
+	        	this.set({'end': end});
+	    	}
+    		
     		return encodeURI("../../../rest/data/saikureport/" + this.query.get('report_id'));
     	}
         return "api/query/execute";

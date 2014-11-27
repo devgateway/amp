@@ -30,6 +30,9 @@
 	<!-- Start of changes for AMP Filters -->
     <link rel="stylesheet" href="js/saiku/plugins/AMPMode/styles.css" type="text/css">
 	<!-- End of changes for AMP Filters -->
+	<!-- Start Custom Code for Pagination -->
+	<link rel="stylesheet" href="js/saiku/plugins/Pagination/pagination.css" type="text/css">
+	<!-- End Custom Code for Pagination -->
     <!-- Saiku CSS -->
     <link rel="stylesheet" href="css/saiku/src/styles.css" type="text/css">
     <link rel="stylesheet" href="css/saiku/src/saiku.table.css" type="text/css">
@@ -513,6 +516,24 @@
             <li><a href="#automatic_execution"
                 class="i18n auto button disabled_toolbar sprite"
                 title="Automatic execution"></a></li>
+<!-- Start Custom Code for Pagination -->
+            <li class="seperator"><a href="#first_page" 
+                class="i18n first_page button disabled_toolbar pagination_sprite" 
+                title="First Page"></a></li>
+            <li><a href="#prev_page" 
+                class="i18n prev_page button disabled_toolbar pagination_sprite" 
+                title="Prev Page"></a></li>
+			<li>
+				<input type="text" class="pagination_info" disabled style="display:none"></input>
+			</li>
+            <li><a href="#next_page" 
+                class="i18n next_page button disabled_toolbar pagination_sprite" 
+                title="Next Page"></a></li>
+            <li><a href="#last_page" 
+                class="i18n last_page button disabled_toolbar pagination_sprite" 
+                title="Last Page"></a></li>
+<!-- End Custom Code for Pagination -->
+
 <!--
             <li><a href="#toggle_fields"
                 class="i18n toggle_fields button sprite"

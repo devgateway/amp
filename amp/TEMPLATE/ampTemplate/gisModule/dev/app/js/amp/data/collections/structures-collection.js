@@ -174,7 +174,7 @@ module.exports = Backbone.Collection
               var name = activity.get('matchesFilters')[filterVertical][0].get('name');
               return name;
             } else {
-              console.warn('matchFilters are not models.');
+              console.warn('matchFilters are not models.', activity.get('matchesFilters'));
               return '';
             }
           } else {
@@ -183,7 +183,11 @@ module.exports = Backbone.Collection
           }
         })
         .map(function(sites, orgId) {
-          var code = sites[0].get('activity').get('matchesFilters')[filterVertical][0].get('code');
+          var code = -1;
+          if (sites[0].get('activity').get('matchesFilters')[filterVertical][0].get) {
+            code = sites[0].get('activity').get('matchesFilters')[filterVertical][0].get('code');
+          }
+
           return {
             id: orgId,
             name: orgId,

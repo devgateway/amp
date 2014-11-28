@@ -65,7 +65,7 @@ var paths = {
       compiledDest:'./app/compiled-js/',
       compiled:'./app/compiled-js/mock-api.js'
     },
-    images: './app/img/**/*.{png,jpg,gif}',
+    images: './app/img/**/*.{png,jpg,jpeg,gif,svg}',
     fonts: './app/fonts/**/*.{eot,svg,ttf,woff}'
   },
   dist: {

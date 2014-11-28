@@ -91,9 +91,14 @@ _.extend(GISData.prototype, Backbone.Events, {
     this.listenTo(this.admClusters, 'all', this.bubbleLayerEvents('adm-cluster'));
   },
 
-  load: function(options) {
+  addState: function(state) {
+    this.state = state;
+    //TODO emit event instead of manually calling children
+    this.structuresMenu.addedState();
+  },
+
+  load: function() {
     var self = this;
-    this.state = options.state;
 
     this._stateWait = new $.Deferred();
     if (this.savedMaps.length) {

@@ -18,13 +18,22 @@ module.exports = Backbone.Model
   },
 
   initialize: function(things, options) {
-    var self = this;
     this.appData = options.appData;
     this.filter = options.filter;
     this.structuresCollection = this.appData.structures;
+  },
 
-    this.listenTo(this, 'change:filterVertical', function() {
-      self.structuresCollection.updatePaletteSet();
+  addedState: function() {
+    var self = this;
+
+    this.appData.state.register(this, 'structuresMenu', {
+      get: function() { return {filterVertical: self.get('filterVertical')}; },
+      set: function(stateBlob) {
+        if (stateBlob) {
+          self.set('filterVertical', stateBlob.filterVertical, {silent:true});
+        }
+      },
+      empty: null
     });
   },
 
@@ -39,6 +48,10 @@ module.exports = Backbone.Model
     });
 
     this.listenTo(this.filter, 'apply', this.applyFilters);
+
+    this.listenTo(this, 'change:filterVertical', function() {
+      self.structuresCollection.updatePaletteSet();
+    });
   },
 
   applyFilters: function() {

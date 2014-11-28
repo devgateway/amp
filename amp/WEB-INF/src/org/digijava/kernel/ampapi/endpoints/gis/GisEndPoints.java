@@ -461,7 +461,7 @@ public class GisEndPoints {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "LastUpdatedActivities")
 	public JSONObject getLastUpdated(@DefaultValue("10") @QueryParam("limit") Integer limit,
-			@QueryParam("columns") String columns, @QueryParam("config") String config) {
+			@QueryParam("columns") String columns, JsonBean config) {
 		List<String> extraColumns = new ArrayList<String>();
 		if (columns != null) {
 			StringTokenizer tokenizer = new StringTokenizer(columns, ",");
@@ -470,7 +470,7 @@ public class GisEndPoints {
 			}
 
 		}
-		return ActivityService.getLastUpdatedActivities(extraColumns, limit,JsonBean.getJsonBeanFromString(config));
+		return ActivityService.getLastUpdatedActivities(extraColumns, limit,config);
 	}
 	
 	@GET

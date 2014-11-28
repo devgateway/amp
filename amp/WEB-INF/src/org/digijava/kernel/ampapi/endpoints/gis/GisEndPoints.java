@@ -456,7 +456,7 @@ public class GisEndPoints {
 	 *            donor names
 	 * @return JSONObject, with the last updated activities
 	 */
-	@GET
+	@POST
 	@Path("/last-updated")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "LastUpdatedActivities")

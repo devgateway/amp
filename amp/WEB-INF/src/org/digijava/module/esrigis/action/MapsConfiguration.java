@@ -1,14 +1,9 @@
 package org.digijava.module.esrigis.action;
 
 import java.awt.image.BufferedImage;
-import org.apache.commons.validator.UrlValidator;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -16,23 +11,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.validator.UrlValidator;
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.actions.DispatchAction;
-import org.apache.struts.upload.FormFile;
-import org.digijava.module.aim.dbentity.AmpStructureType;
-import org.digijava.module.content.dbentity.AmpContentItem;
-import org.digijava.module.content.dbentity.AmpContentItemThumbnail;
-import org.digijava.module.content.form.ContentForm;
-import org.digijava.module.content.util.DbUtil;
 import org.digijava.module.esrigis.dbentity.AmpMapConfig;
 import org.digijava.module.esrigis.form.MapsConfigurationForm;
-import org.digijava.module.esrigis.form.StructureTypeForm;
 import org.digijava.module.esrigis.helpers.DbHelper;
 import org.digijava.module.esrigis.helpers.MapConstants;
 
@@ -110,11 +98,14 @@ public class MapsConfiguration extends DispatchAction {
 		ActionMessages errors = new ActionMessages();
 		String[] schemes = {"http","https"};
 		UrlValidator urlValidator = new UrlValidator(schemes);
-    	
+		
+		//Open street maps url use parameters in the form of {x}. For example http://{s}.tile.openstreetmap.org/{x}/{y}/{z}.png
+		//we need to allow this as a valid url http://wiki.openstreetmap.org/wiki/Slippy_map_tilenames#Tile_servers
+		String cleanedUrl = mapForm.getUrl().replaceAll("\\{[a-z]{1}\\}","XX");
 		if(checkEmptyFields(mapForm)){
 			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.mapConfiguration.emptyFields"));
     	}
-		else if (!urlValidator.isValid(mapForm.getUrl())) {
+		else if (!urlValidator.isValid(cleanedUrl)) {
 			errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.mapConfiguration.badUrl"));
 		}	
 		

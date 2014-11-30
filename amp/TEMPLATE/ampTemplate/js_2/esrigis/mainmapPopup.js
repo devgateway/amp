@@ -9,6 +9,18 @@ var circlePoint;
 var latitude;
 var longitude;
 var pointRadious = [8500,8500,8500,8500,8500,8500,8500,7500,5500,3500,2000,1000,600,400,300,200,200,170,150];
+var MapConstants = {
+		   "MapType": {
+				"BASE_MAP" : 1
+			},
+		   "MapSubType": {
+			   "BASE" : 1,
+			   "INDICATOR" : 2,
+			   "OSM" : 3
+		   }
+		};
+var basemapUrl;
+var isOsm = false;
 
 function MapPopup (lat,long) {
 	latitude = lat;
@@ -18,15 +30,47 @@ function MapPopup (lat,long) {
 }
 
 function initMap() {
+	$.getJSON( "/esrigis/datadispatcher.do?getconfig=true", function() {
+		  console.log( "Success retrieving Gazeteer map config" );
+		})
+		  .done(function(jsonData) {
+			  $.each( jsonData, function(key,map) {
+			   		switch (map.mapType) {
+					case MapConstants.MapType.BASE_MAP:
+						basemapurl = map.mapUrl;
+						if (map.mapSubType == MapConstants.MapSubType.OSM){
+							isOsm = true;
+						}
+						break;
+					default:
+						break;
+					}
+			   	  });
+			  loadBaseMap();
+		  })
+		  .fail(function() {
+		    console.log( "Error retrieving map configuration" );
+		  });
+
+}
+
+function loadBaseMap() {
 	map = L.map('map').setView([ latitude, longitude ], 7);
 	// create the tile layer with correct attribution
 	//var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-	var osmUrl = 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png';
-	var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-	var osm = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 16, attribution: osmAttrib,
-			 subdomains: ['otile1','otile2','otile3','otile4']});	
-	map.addLayer(osm);
-	
+	//var osmUrl = 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png';
+	var tileLayer;
+	if (isOsm) {
+		var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+		tileLayer = new L.TileLayer(basemapurl, {minZoom: 0, maxZoom: 16, attribution: osmAttrib,
+				 subdomains: ['otile1','otile2','otile3','otile4']});	
+	}
+	else {
+		tileLayer = new L.TileLayer(basemapurl, {minZoom: 0, maxZoom: 16});	
+
+	}
+	map.addLayer(tileLayer);
+
 	currentZoom = map.getZoom();
 	
 	// attach listener to basemap select to change the map's basemaps
@@ -41,6 +85,7 @@ function initMap() {
 	    console.log( "zoom level is " + map.getZoom() );
 		}
 	});
+	
 }
 
 function onMapClick (e) {

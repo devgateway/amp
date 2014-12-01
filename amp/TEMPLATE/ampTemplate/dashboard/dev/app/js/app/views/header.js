@@ -1,8 +1,8 @@
 var fs = require('fs');
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
-var footerTemplate = _.template(fs.readFileSync(
-  __dirname + '/../templates/footer.html', 'UTF-8'));
+var headerTemplate = _.template(fs.readFileSync(
+  __dirname + '/../templates/header.html', 'UTF-8'));
 
 
 module.exports = BackboneDash.View.extend({
@@ -14,7 +14,7 @@ module.exports = BackboneDash.View.extend({
   },
 
   render: function() {
-    this.$el.html(footerTemplate());
+    this.$el.html(headerTemplate());
     return this;
   }
 

@@ -183,7 +183,7 @@ module.exports = BackboneDash.View.extend({
       .value();
     if (data.length > 1) {  // multiseries; add a header
       csvTransformed.unshift(_(data).pluck('key'));
-      csvTransformed[0].unshift('x');  // header for x axis values.
+      csvTransformed[0].unshift('');  // no header for x axis values.
     }
 
     e.currentTarget.setAttribute('href', util.textAsDataURL(baby.unparse(csvTransformed)));

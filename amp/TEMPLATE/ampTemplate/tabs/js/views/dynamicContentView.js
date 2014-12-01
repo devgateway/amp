@@ -60,6 +60,7 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 					jQuery(containerName).show();
 					jQuery(containerName).css('position', 'absolute');
 					jQuery(containerName).css('top', 10);
+					jQuery(containerName).css("min-width", jQuery(containerName + " .panel-heading").width() + 32);
 				}
 			});
 			var filterDialog = new FilterDialogContainerView();

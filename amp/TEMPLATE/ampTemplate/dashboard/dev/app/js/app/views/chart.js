@@ -120,6 +120,7 @@ module.exports = BackboneDash.View.extend({
         if (countValues(this.model.get('processed')) ===  0) {
           message.html('No Data Available');
           this.$('svg').empty();
+          this.resetNumbers();
         } else {
           this.chart(this.el.querySelector('.dash-chart-wrap'), this.model);
           this.renderNumbers();
@@ -141,6 +142,11 @@ module.exports = BackboneDash.View.extend({
 
   resetLimit: function() {
     this.model.set('limit', this.model.defaults.limit);
+  },
+
+  resetNumbers: function() {
+    this.$('.chart-total').html('');
+    this.$('.chart-currency').html('');
   },
 
   renderNumbers: function() {

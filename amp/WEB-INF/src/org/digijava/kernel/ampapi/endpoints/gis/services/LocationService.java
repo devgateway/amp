@@ -657,7 +657,7 @@ public class LocationService {
 				+ " FROM rt_amp_category_value_location rt, amp_category_value_location acvl  "
 				+ " WHERE acvl.parent_location =rt.id  "
 				+ " )  "
-				+ " SELECT al.amp_activity_id, acvl.root_location_id, acvl.root_location_description, acvl.gs_lat, acvl.gs_long  "
+				+ " SELECT distinct al.amp_activity_id, acvl.root_location_id, acvl.root_location_description, acvl.gs_lat, acvl.gs_long  "
 				+ " FROM amp_activity_location al  "
 				+ " join amp_location loc on al.amp_location_id = loc.amp_location_id  "
 				+ " join rt_amp_category_value_location acvl on loc.location_id = acvl.id  "

@@ -101,7 +101,7 @@ public class LuceneUtil implements Serializable {
 	 * saved on the disk, if versions mismatch then we need to increment
 	 * the index
 	 */
-	private static final long serialVersionUID = 13L;
+	private static final long serialVersionUID = 14L;
 												
 	private static Logger logger = Logger.getLogger(LuceneUtil.class);
     /**

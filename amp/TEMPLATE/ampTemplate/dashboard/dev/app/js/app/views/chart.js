@@ -169,7 +169,10 @@ module.exports = BackboneDash.View.extend({
   },
 
   downloadCSV: function(e) {
-    var data = this.model.get('processed');
+    var data = this.model.get('processed'),
+        currency = this.model.get('currency'),
+        adjtype = this.model.get('adjtype') || null;
+    // table of all the data
     var csvTransformed = _(data)
       .chain()
       .pluck('values')
@@ -180,11 +183,19 @@ module.exports = BackboneDash.View.extend({
           return csvRow;
         }, [row[0].x]);
       })
+      .map(function(row) {
+        row.push(currency);
+        if (adjtype) { row.push(adjtype); }
+        return row;
+      })
       .value();
-    if (data.length > 1) {  // multiseries; add a header
-      csvTransformed.unshift(_(data).pluck('key'));
-      csvTransformed[0].unshift('');  // no header for x axis values.
-    }
+    // prepend a header row
+    var headerRow = [''];  // no header value for x-axis
+    headerRow = headerRow.concat(_(data).pluck('key'));  // data headers
+    headerRow.push('Currency');
+    if (adjtype) { headerRow.push('Type'); }
+
+    csvTransformed.unshift(headerRow);
 
     e.currentTarget.setAttribute('href', util.textAsDataURL(baby.unparse(csvTransformed)));
     e.currentTarget.setAttribute('download',

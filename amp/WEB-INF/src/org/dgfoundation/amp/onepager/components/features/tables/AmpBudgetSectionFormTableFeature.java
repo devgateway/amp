@@ -43,6 +43,7 @@ import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.AmpAutoCompleteDisplayable;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.categorymanager.action.CategoryManager;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
@@ -70,13 +71,16 @@ public class AmpBudgetSectionFormTableFeature extends AmpFormTableFeaturePanel <
 		if (setModel.getObject() == null)
 			setModel.setObject(new HashSet<AmpActivityBudgetStructure>());
 		
+		//CategoryManagerUtil.getAmpCategoryValuesFromListByKey("budgetStructure")
 		Collection<AmpCategoryValue> posVal =  CategoryManagerUtil.getAmpCategoryValueCollectionByKey("budgetStructure");
+		
 		Iterator<AmpCategoryValue> it = posVal.iterator();
 		while(it.hasNext()){
 			AmpCategoryValue acv = it.next();
+
 			AmpActivityBudgetStructure abs = new AmpActivityBudgetStructure();
 			abs.setActivity(am.getObject());
-			abs.setBudgetStructureName(acv.getValue());
+			abs.setBudgetStructureName(TranslatorUtil.getTranslatedText(acv.getValue()));
 			abs.setBudgetStructurePercentage(new Float(0));
 			if(!setModel.getObject().contains(abs))
 				setModel.getObject().add(abs);

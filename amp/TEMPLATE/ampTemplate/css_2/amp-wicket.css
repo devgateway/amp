@@ -523,3 +523,10 @@ tr.wicketFundingRowItem:nth-child(odd) {background: #FFFFFF}
 .fundingOverviewDivNoTabs{
 		border-top: 1px solid #ccc;
 }
+	.subscript_role {
+		position:relative;
+		top: 5px;
+		padding-left: 3px;
+		font-size: smaller;
+		color: #486577;
+	}

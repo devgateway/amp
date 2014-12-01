@@ -20,6 +20,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.AbstractReadOnlyModel;
@@ -312,11 +313,28 @@ public class AmpDonorFundingFormSectionFeature extends
 					private static final long serialVersionUID = -206108834217117807L;
 			@Override
 			protected void onPopulateItem(ListItem<AmpOrganisation> item) {
+//				ExternalLink l = new ExternalLink("linkForTabs", "#tab"
+//						+ (item.getIndex()+1), item.getModel().getObject()
+//						.getAcronym() );
 				ExternalLink l = new ExternalLink("linkForTabs", "#tab"
-						+ (item.getIndex()+1), item.getModel().getObject()
-						.getAcronym() );
+						+ (item.getIndex()+1));
 				l.add(new AttributePrepender("title", new Model<String>(item.getModel().getObject().getName()), ""));
 
+				
+				String sourceRole="";
+				for (AmpFunding f:fundingModel.getObject()){ 
+					if(f.getAmpDonorOrgId().getAmpOrgId().equals(item.getModel().getObject().getAmpOrgId())){
+						sourceRole=f.getSourceRole().getRoleCode();
+					}
+					
+				}
+				Label label=new Label("tabsLabel", new Model<String>(item.getModel().getObject().getAcronym()));
+
+				Label subScript=new Label("tabsOrgRole", new Model<String>(sourceRole));
+				subScript.add(new AttributePrepender("class", new Model<String>("subscript_role"), ""));
+				l.add(label);
+				l.add(subScript);
+				
 				item.add(l);
 			}
 			public void addItem(AmpOrganisation org) {
@@ -402,8 +420,6 @@ public class AmpDonorFundingFormSectionFeature extends
 					//if in tabs view we should refresh the whole section so 
 					//tabs are inplace and recreated
 					target.add(AmpDonorFundingFormSectionFeature.this);
-					//the -1 is the tabs (last) it will focus. Have to check if we need to 
-					//focus on the middle ones
 					int index = calculateTabIndex(choice);
 
 					target.appendJavaScript("switchTabs("+ index +");");	
@@ -411,12 +427,6 @@ public class AmpDonorFundingFormSectionFeature extends
 				}else{
 					target.add(wmc);	
 				}
-//				
-				
-				//AmpDonorFundingFormSectionFeature
-//				System.out.println("onSelect El indice es : "+
-//						list.items.indexOf(choice));
-
 				
 			}
 
@@ -522,12 +532,9 @@ public class AmpDonorFundingFormSectionFeature extends
 				fundingModel.setObject(new LinkedHashSet<AmpFunding>());
 				// we only add the new tab if the org didnt exists
 			}
+			fundingModel.getObject().add(funding);
 			tabsList.addItem(org);
 
-//			System.out
-//					.println("	public void addItemToList (AmpOrganisation org) { El indice es : "
-//							+ list.items.indexOf(org));
-			fundingModel.getObject().add(funding);
 			list.origAddItem(org);
 		}
 	}

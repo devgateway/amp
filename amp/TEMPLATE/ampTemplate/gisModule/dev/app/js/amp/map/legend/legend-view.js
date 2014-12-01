@@ -49,6 +49,7 @@ module.exports = Backbone.View.extend({
 
   toggleLegend: function() {
     this.$el.toggleClass('expanded');
+    return false; // stops it updating the url.
   }
 
 });

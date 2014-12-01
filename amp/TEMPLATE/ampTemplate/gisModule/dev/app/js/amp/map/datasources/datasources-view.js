@@ -34,6 +34,7 @@ module.exports = Backbone.View.extend({
 
   toggleDatasources: function() {
     this.$el.toggleClass('expanded');
+    return false; // stops it updating the url.
   }
 
 

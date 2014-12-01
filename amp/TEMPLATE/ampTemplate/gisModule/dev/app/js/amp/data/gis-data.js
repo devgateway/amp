@@ -116,9 +116,12 @@ _.extend(GISData.prototype, Backbone.Events, {
 
       self.structuresMenu.attachListeners();
 
-      self.admClusters.load();  // also special for now
+      self.admClusters.load();
       self.admClusters.attachListeners();
-      self.hilightFundingCollection.load();  // also special for now
+      self.hilightFundingCollection.load();
+
+      // explicitly call update title because we may have missed encessary events on startup.
+      self.title.updateTitle();
     });
   },
 

@@ -30,6 +30,8 @@ module.exports = Backbone.View.extend({
 
       self.$el.html(self.template(_.extend({}, self.model.toJSON(), renderObject)));
 
+      self.$('[data-toggle="popover"]').popover();
+
       // add listener to select. Didn't work when i used 'events'
       // probably because happens after view populated...or translate strips events..
       self.$('select').change(function() {

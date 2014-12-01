@@ -1,14 +1,27 @@
-<h3 data-i18n="amp.gis:legend-item-structures">
+<h3 data-i18n="amp.gis:legend-item-structures"><%= title %>
   <select class="form-control" >
     <option value="Primary Sector Id" <%= (obj.selectedVertical == "Primary Sector Id"? 'selected': '') %>>
-      <%= title %> By Sector
+       By Sector
     </option>
 
     <option value="Donor Id" <%= (obj.selectedVertical == "Donor Id"? 'selected': '') %>>
-     <%= title %> By Donor
+      By Donor
     </option>
   </select>
+
+<% if (obj.selectedVertical == "Primary Sector Id"){ %>
+  <button class="info-icon"
+    data-toggle="popover"
+    data-container="body"
+    data-placement="left"
+    data-trigger="focus"
+    data-content="If there are less than 400 points the map shows icons otherwise it will show coloured circles.">
+    <span class="glyphicon glyphicon-info-sign"></span>
+  </button>
+<% } %>
+
 </h3>
+
 
 <% if (status === 'loading') { %>
   <p><em>loading...</em></p>

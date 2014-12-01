@@ -72,6 +72,11 @@ module.exports = IndicatorJoinModel.extend({
 
     data.unit = data.currency;
 
+    // Removes all entries where geoId is null
+    data.values = _.filter(data.values, function(value) {
+      return value.admID;
+    });
+
     // convert 'amount' to 'value' in API so parse not needed. and can be conssistant in custom joins
     _.each(data.values, function(value) {
       value.value = value.amount;

@@ -17,7 +17,7 @@
         <tr>
           <td>
             <% if (structure.activity) { %>
-              <a href="<%= structure.activity.get('ampUrl')%>">
+              <a target="_blank"  href="<%= structure.activity.get('ampUrl')%>">
                 <%= structure.activity.get('Project Title') %> (<%= structure.activity.get('matchesFilters')['AMP ID'] %>)
               </a>
             <% } %>

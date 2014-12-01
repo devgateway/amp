@@ -202,7 +202,7 @@ module.exports = Backbone.View
   _hilightProject: function(projectId) {
     this.featureGroup.eachLayer(function(layer) {
       if (layer.feature.properties.activity.id === projectId && layer.setStyle) {
-        layer.setStyle({color: '#222', stroke: true});
+        layer.setStyle({color: '#222', stroke: true, weight:2});
       }
     });
   },

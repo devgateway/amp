@@ -193,7 +193,7 @@ public class LocationService {
 		columnNames.add(TranslatorWorker.translateText("Time Stamp"));//1
 		columnNames.add(TranslatorWorker.translateText("Activity Id"));//2
 		columnNames.add(TranslatorWorker.translateText("Project Title"));//3
-		columnNames.add(TranslatorWorker.translateText("Description"));//4
+		columnNames.add(TranslatorWorker.translateText("Project Site Description"));//4
 //		columnNames.add(TranslatorWorker.translateText("Approval Date"));
 		columnNames.add(TranslatorWorker.translateText("Project Site"));//5
 		columnNames.add(TranslatorWorker.translateText("Latitude"));//6
@@ -474,7 +474,8 @@ public class LocationService {
 				
 				String query="select ast.amp_activity_id,s.title, "+
 						" s.latitude, "+
-						" s.longitude "+
+						" s.longitude ,"
+						+ " s.description"+
 						"  from amp_activity_structures ast , amp_structure s  " +
 						" where ast.amp_structure_id=s.amp_structure_id "+
 						" and ast.amp_activity_id in("+ org.dgfoundation.amp.Util.toCSString(activities.keySet()) +")";
@@ -491,11 +492,10 @@ public class LocationService {
 	    			newActivity.setImplementationLevel(a.getImplementationLevel());
 	    			newActivity.setPrimarySector(a.getPrimarySector());
 
-	    			newActivity.setDescription(a.getDescription());
-	    			
 	    			newActivity.setStructureName(rs.getString("title"));
 	    			newActivity.setLatitude(rs.getString("latitude"));
 	    			newActivity.setLongitude(rs.getString("longitude"));
+	    			newActivity.setDescription(rs.getString("description"));
 	    			
 	    			mapExportBean.add(newActivity);
 	    			

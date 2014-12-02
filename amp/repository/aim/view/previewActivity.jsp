@@ -54,8 +54,6 @@
 	}
 %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<link rel="stylesheet" type="text/css" href="<c:out value="${aimEditActivityForm.esriapiurl}"/>/jsapi/arcgis/2.2/js/dojo/dijit/themes/claro/claro.css">
-<script type="text/javascript" src="<c:out value="${aimEditActivityForm.esriapiurl}"/>/jsapi/arcgis/?v=2.2"></script>
 <link rel="stylesheet" type="text/css" href="<digi:file src= 'module/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.css'/>">
 
 
@@ -1319,9 +1317,7 @@ function collapseAll() {
 								coordinates.push('<c:out value="${selectedLocs.lat}"/>;<c:out value="${selectedLocs.lon}"/>;<c:out value="${selectedLocs.locationName}"/>');
 							</c:forEach>
 							</script>
-							<jsp:include page="previewmap.jsp">
-								<jsp:param name="esriapiurl" value="${aimEditActivityForm.esriapiurl}" />
-							</jsp:include>
+							<jsp:include page="previewmap.jsp"/>
 						</td>
 					</tr>
 					</table>
@@ -3211,8 +3207,9 @@ function collapseAll() {
   </tr>
 </table>
 </c:if>
-
-
+<field:display name="Show Map In Activity Preview" feature="Map Options">
+ <div id="locationPopupMap" style="visibility:hidden;width:400px; height:350px;position:relative;"></div>
+</field:display>
 
 <!-- MAIN CONTENT PART END -->
 </digi:form>

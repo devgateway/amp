@@ -1,172 +1,145 @@
+<%@page import="org.digijava.module.aim.helper.GlobalSettingsConstants"%>
+<%@page import="org.digijava.module.aim.util.FeaturesUtil"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
-	<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=7,IE=9" />
-    <!--The viewport meta tag is used to improve the presentation and behavior of the samples on iOS devices-->
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
-    <style type="text/css"> a { color: blue; }
-    .user {
-    background-color:white;
-    }
-    
-     </style>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=7,IE=9" />
+<!--The viewport meta tag is used to improve the presentation and behavior of the samples on iOS devices-->
+<meta name="viewport"
+	content="initial-scale=1, maximum-scale=1,user-scalable=no" />
+<style type="text/css">
+a {
+	color: blue;
+}
+</style>
+<digi:ref
+	href="/TEMPLATE/ampTemplate/gisModule/dev/node_modules/leaflet/dist/leaflet.css"
+	type="text/css" rel="stylesheet" />
+<script type="text/javascript"
+	src="<digi:file src="/TEMPLATE/ampTemplate/gisModule/dev/node_modules/leaflet/dist/leaflet.js"/>"></script>
+<script type="text/javascript"
+	src="<digi:file src="/TEMPLATE/ampTemplate/gisModule/dev/node_modules/esri-leaflet/dist/esri-leaflet.js"/>"></script>
 
-<script type="text/javascript" src="<c:out value="${paramValues.esriapiurl[0]}"/>/jsapi/arcgis/?v=2.2"></script>
-
-    
 <script type="text/javascript">
-    if( typeof dojo != 'undefined' )
-    	{
-    	  dojo.require("esri.map");
-          dojo.require("dijit.Dialog");
-          dojo.require("dijit.TooltipDialog");
-    	
-    	}
-    
+	var MapConstants = {
+		   "MapType": {
+				"BASE_MAP" : 1
+			},
+		   "MapSubType": {
+			   "BASE" : 1,
+			   "INDICATOR" : 2,
+			   "OSM" : 3
+		   }
+		};
       
       var dialogBox, tooltipDialog;
       var map;
     
-      /****************
-       * TooltipDialog
-       ****************/
+     var myPanelMap = new YAHOO.widget.Panel("mapPanel", {
+			width :"407px",
+			height:"380px",
+			fixedcenter :true,
+			constraintoviewport :true,
+			underlay :"none",
+			close :true,
+			visible :false,
+			modal :true,
+			draggable :true
+		});
+	 function openPopup () {
+		 myPanelMap.hideEvent.subscribe(function(o) {
+			    $('#locationPopupMap').css("visibility", 'hidden');
+			    $('#ashowmap').html('<digi:trn>Show Map</digi:trn>')
+			});
+		var element = document.getElementById("locationPopupMap");
+		$('#locationPopupMap').css("visibility", 'visible');
+		myPanelMap.setBody(element);
+		myPanelMap.render();
+		myPanelMap.center();
+		
+		myPanelMap.show();
+	 }
       
-      function showMapInTooltipDialog(node,hide) {
-        if (!tooltipDialog && !hide) {
-          var htmlFragment = '<div id="map" style="width:400px; height:350px; border: 1px solid #A8A8A8;"></div>';
-
-          // CREATE TOOLTIP DIALOG
-          tooltipDialog = new dijit.TooltipDialog({
-            content: htmlFragment,
-            autofocus: !dojo.isIE, // NOTE: turning focus ON in IE causes errors when reopening the dialog
-            refocus: !dojo.isIE
-          });
-          
-          // DISPLAY TOOLTIP DIALOG AROUND THE CLICKED ELEMENT
-          dijit.popup.open({ popup: tooltipDialog, around: node });
-          tooltipDialog.opened_ = true;
-          node.innerHTML = '<digi:trn>Hide Map</digi:trn>';
-
-          // CREATE MAP
-          createMap();
-        }
-        else {
-          if (tooltipDialog && tooltipDialog.opened_) {
-            dijit.popup.close(tooltipDialog);
-            tooltipDialog.opened_ = false;
-            node.innerHTML = '<digi:trn>Show Map</digi:trn>';
-          }
-          else if(tooltipDialog && !hide) {
-            dijit.popup.open({ popup: tooltipDialog, around: node });
-            tooltipDialog.opened_ = true;
-            node.innerHTML = '<digi:trn>Hide Map</digi:trn>';
-          }else{
-        	  node.innerHTML = '<digi:trn>Show Map</digi:trn>'; 
-          }
-        }
+      function showMapInPopup(node) {
+         node.innerHTML = '<digi:trn>Hide Map</digi:trn>';
+		 openPopup();
       }
       
       function createMap() {
-		// ADD LAYERS
-        var basemapUrl;
-    	var mapurl;
+        var basemapurl = null;
     	
-    	
-    	var xhrArgs = {
-    			url : "/esrigis/datadispatcher.do?getconfig=true",
-    			handleAs : "json",
-    			sync:true,
-    			load: function(jsonData) {
-    				   dojo.forEach(jsonData,function(map) {
-    			        	switch (map.mapType) {
-    						case 1:
-    							basemapUrl = map.mapUrl;
-    							break;
-    						case 2:
-    							mapurl = map.mapUrl;
-    						default:
-    							break;
-    						}
-    			        });
-    				},
-    			error : function(error) {
-    				console.log(error);
-    			}
-    		}
-    		// Call the asynchronous xhrGet
-    		var deferred = dojo.xhrGet(xhrArgs);
-    	
-    	var basemap = new esri.layers.ArcGISTiledMapServiceLayer(basemapUrl, {id:'base'}); // Levels at which this layer will be visible);
-    	countrymap = new esri.layers.ArcGISDynamicMapServiceLayer(mapurl, {opacity : 0.90,id:'liberia'});
+    	$.getJSON( "/esrigis/datadispatcher.do?getconfig=true", function() {
+  		  console.log( "Success retrieving map config" );
+  		})
+  		  .done(function(jsonData) {
+  			  $.each( jsonData, function(key,map) {
+  			   		switch (map.mapType) {
+  					case MapConstants.MapType.BASE_MAP:
+  						basemapurl = map.mapUrl;
+  						if (map.mapSubType == MapConstants.MapSubType.OSM){
+  							isOsm = true;
+  						}
+  						break;
+  					default:
+  						break;
+  					}
+  			   	  });
+  			  loadBaseMap(basemapurl);
+  		  })
+  		  .fail(function() {
+  		    console.log( "Error retrieving map configuration" );
+  		  });
 
-
-    	var layerLoadCount = 0;
-		if (basemap.loaded) {
-			layerLoadCount += 1;
-			if (layerLoadCount === 2) {
-				createMapAddLayers(basemap, countrymap);
-			}
-		} else {
-			dojo.connect(basemap, "onLoad", function(service) {
-				layerLoadCount += 1;
-				if (layerLoadCount === 2) {
-					createMapAddLayers(basemap, countrymap);
-				}
-			});
-		}
-		if (countrymap.loaded) {
-			layerLoadCount += 1;
-			if (layerLoadCount === 2) {
-				createMapAddLayers(basemap, countrymap);
-			}
-		} else {
-			dojo.connect(countrymap, "onLoad", function(service) {
-				layerLoadCount += 1;
-				if (layerLoadCount === 2) {
-					createMapAddLayers(basemap, countrymap);
-				}
-			});
-		}
 	 }
 
-	function createMapAddLayers(myService1, myService2) {
-    		// create map
-    		// convert the extent to Web Mercator
-    		map = new esri.Map("map", {
-    			extent : esri.geometry.geographicToWebMercator(myService2.fullExtent)
-    		});
+	function loadBaseMap(basemapurl) {
+		map = L.map('locationPopupMap').setView([<%=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LATITUDE)%>,<%=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LONGITUDE)%> ], 7);
+		var tileLayer;
+		if (isOsm) {
+			var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
+			tileLayer = new L.TileLayer(basemapurl, {minZoom: 0, maxZoom: 16, attribution: osmAttrib,
+					 subdomains: ['otile1','otile2','otile3','otile4']});	
+		}
+		else {
+			tileLayer = new L.TileLayer(basemapurl, {minZoom: 0, maxZoom: 16});	
 
-    		dojo.connect(map, 'onLoad', function(map) {
-    			for ( var i = 0; i < coordinates.length; i++) {
+		}
+		map.addLayer(tileLayer);
+    	for ( var i = 0; i < coordinates.length; i++) {
     		 		coord = coordinates[i].split(";");
-    		 		addPoints(coord[1],coord[0],coord[2]);
-    			 }
-    			 map.infoWindow.resize(200, 100);
-        	});	
-    		map.addLayer(myService1);
-    		map.addLayer(myService2);
+    		 		console.log (coord);
+    		 		var circle =L.circleMarker([coord[0], coord[1]], 500, {
+    		 		    color: 'red',
+    		 		    fillColor: 'red',
+    		 		    fillOpacity: 0.5
+    		 		}).addTo(map);
+    		 		circle.bindPopup("<b>Location Information</b>:<br>Location: "+coord[2]);
+    
     	}
-    		
-  	
-      // ADD LOCATIONS TO THE MAP
-     function addPoints(xloc,yloc,loc){
-    	 var pt = new esri.geometry.Point(xloc,yloc,new esri.SpatialReference({"wkid":4326}));
-    	 var sms = new esri.symbol.SimpleMarkerSymbol().setStyle(esri.symbol.SimpleMarkerSymbol.STYLE_CIRCLE).setColor(new dojo.Color([255,0,0,0.5]));
-    	 var attr = {"Location":loc};
-      	 var infoTemplate = new esri.InfoTemplate("<b>Location Information</b>");   
-     	 var transpt = esri.geometry.geographicToWebMercator(pt);
-     	 var graphic = new esri.Graphic(transpt,sms,attr,infoTemplate);
-     	 map.graphics.add(graphic);
- 	 }
+         
+	}
+	
+	YAHOO.amptab.initPanels	= function () {
+		createMap ();
+		var msg='\n<digi:trn>Location Map</digi:trn>';
+		myPanelMap.setHeader(msg);
+		myPanelMap.setBody("Example");
+		myPanelMap.render(document.body);
+		$('#locationPopupMap').css("visibility", 'hidden');
+
+	};
+ 
+ YAHOO.util.Event.addListener(window, "load", YAHOO.amptab.initPanels) ;
      
  </script>
 </head>
-  
-  <body>
-   	<a id="ashowmap" onclick="showMapInTooltipDialog(this,false);" style="cursor: pointer;"><digi:trn>Show Map</digi:trn></a>
-  </body>
+
+<body>
+	<a id="ashowmap" onclick="showMapInPopup(this);"
+		style="cursor: pointer;"><digi:trn>Show Map</digi:trn></a>
+</body>
 </html>

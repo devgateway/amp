@@ -142,7 +142,11 @@ public class ShowActivityPrintPreview
                 	pg.setFunAmountAsDouble(activity.getFunAmount());
                 }                  
                 pg.setCurrencyCode(activity.getCurrencyCode());
-                pg.setCurrencyName(CurrencyUtil.getCurrencyByCode(activity.getCurrencyCode()).getCurrencyName());
+            	if (activity.getCurrencyCode() != null) {
+        			AmpCurrency currency = CurrencyUtil.getCurrencyByCode(activity.getCurrencyCode());
+        			if (currency != null) 
+        				pg.setCurrencyName(currency.getCurrencyName());
+            	}
                 pg.setFunDate(FormatHelper.formatDate(activity.getFunDate()));
                 eaForm.getFunding().setProProjCost(pg);
 

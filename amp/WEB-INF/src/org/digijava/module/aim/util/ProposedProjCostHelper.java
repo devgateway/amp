@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import org.dgfoundation.amp.Util;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -33,9 +34,10 @@ public static ProposedProjCost getProposedProjCost(ProposedProjCost ppc,String c
     	
     	ProposedProjCost propProjCost = new ProposedProjCost();
     	propProjCost.setCurrencyCode(ppc.getCurrencyCode());
-    	if (propProjCost.getCurrencyCode() != null)
-    	{
-    		propProjCost.setCurrencyName(CurrencyUtil.getCurrencyByCode(propProjCost.getCurrencyCode()).getCurrencyName());
+    	if (propProjCost.getCurrencyCode() != null) {
+    			AmpCurrency currency = CurrencyUtil.getCurrencyByCode(propProjCost.getCurrencyCode());
+    			if (currency != null) 
+    				propProjCost.setCurrencyName(currency.getCurrencyName());
     	}
     	propProjCost.setFunAmount(ppc.getFunAmount());
     	propProjCost.setFunDate(ppc.getFunDate());

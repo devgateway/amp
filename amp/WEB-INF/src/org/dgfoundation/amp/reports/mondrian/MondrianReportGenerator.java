@@ -773,11 +773,31 @@ public class MondrianReportGenerator implements ReportExecutor {
 		return genRep;
 	}
 	
+	/**
+	 * See https://jira.dgfoundation.org/browse/AMP-18656 for the details
+	 * If the report query returns empty response the list of column headers is populated from the request
+	 * 
+	 * @param reportColumns - target 
+	 * @param spec - the report specification
+	 */
+	private void addStaticColumnHeaders(List<ReportOutputColumn> reportColumns, ReportSpecification spec) {
+		if (reportColumns != null && spec.getColumns() != null) {
+			for (ReportColumn reportColumn : spec.getColumns()) {
+				String originalColumnName = reportColumn.getColumnName();
+				ReportOutputColumn reportOutputColumn = ReportOutputColumn.buildTranslated(originalColumnName, environment.locale, null);
+				reportColumns.add(reportOutputColumn);
+			}
+		}
+	}
+	
 	private List<ReportOutputColumn> getOrderedLeafColumnsList(ReportSpecification spec, CellSetAxis rowAxis, CellSetAxis columnAxis) {
 		//<fully qualified column name, ReportOutputColumn instance>, where fully qualified means with all parents name: /root/root-child/root-grandchild/...
 		Map<String, ReportOutputColumn> reportColumnsByFullName = new LinkedHashMap<String,ReportOutputColumn>();
 		List<ReportOutputColumn> reportColumns = new ArrayList<ReportOutputColumn>(); //leaf report columns list
 
+		// add this flag to the settings, if will be required
+		boolean populateReportHeadersIfEmpty = false;
+		
 		//build the list of available columns
 		if (rowAxis != null && rowAxis.getPositionCount() > 0 ) {
 			for (Member textColumn : rowAxis.getPositions().get(0).getMembers()) {
@@ -785,6 +805,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 						MondrianMapping.fromFullNameToColumnName.get(textColumn.getLevel().getUniqueName()));
 				reportColumns.add(reportColumn);
 			}
+		} else if (populateReportHeadersIfEmpty) {
+			addStaticColumnHeaders(reportColumns, spec);
 		}
 		
 		int colIdx = reportColumns.size();

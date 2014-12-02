@@ -369,6 +369,12 @@ var Workspace = Backbone.View.extend({
             $(this.el).find('.workspace_editor .editor_info').addClass('hide');
             $(this.toolbar.el).find('.auto, .toggle_fields, .query_scenario, .buckets, .non_empty, .swap_axis, .mdx, .switch_to_mdx, .zoom_mode').parent().show();
             $(this.el).find('.run').attr('href','#run_query');
+    		//Start Custom Code for Pagination
+            $(this.el).find('.first_page').attr('href','#first_page');
+            $(this.el).find('.prev_page').attr('href','#prev_page');
+            $(this.el).find('.next_page').attr('href','#next_page');
+            $(this.el).find('.last_page').attr('href','#last_page');
+		    //End Custom Code for Pagination
         }
         this.adjust();
         this.switch_view_state(this.viewState, true);

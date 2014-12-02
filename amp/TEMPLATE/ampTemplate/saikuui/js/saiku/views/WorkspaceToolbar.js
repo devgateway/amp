@@ -75,7 +75,7 @@ var WorkspaceToolbar = Backbone.View.extend({
     	else
     		{
             var arrButtons = $(args.workspace.toolbar.el)
-            .find('.zoom_mode, .query_scenario, .swap_axis, .toggle_fields, .switch_to_mdx, .mdx, .group_parents, .drillthrough, .drillthrough_export');
+            .find('.zoom_mode, .query_scenario, .swap_axis, .toggle_fields, .switch_to_mdx, .mdx, .group_parents, .drillthrough, .drillthrough_export, .first_page, .prev_page, .pagination_info, .next_page, .last_page ');
             _.each(arrButtons, function(button) {
             	//Hide Parent
             	$(button.parentElement).hide();
@@ -201,7 +201,26 @@ var WorkspaceToolbar = Backbone.View.extend({
     run_query: function(event) {
         this.workspace.query.run(true);
     },
-    
+
+    //Start Custom Code for Pagination
+    first_page: function(event) {
+        this.workspace.query.first_page();
+    },
+
+    prev_page: function(event) {
+        this.workspace.query.prev_page();
+    },
+
+    next_page: function(event) {
+        this.workspace.query.next_page();
+    },
+
+    last_page: function(event) {
+        this.workspace.query.last_page();
+    },
+
+    //End Custom Code for Pagination
+         
     automatic_execution: function(event) {
         // Change property
         var newState = !this.workspace.query.getProperty('saiku.olap.query.automatic_execution');
@@ -530,7 +549,7 @@ var WorkspaceToolbar = Backbone.View.extend({
                 var newHeight =
                           (screen_length + 1)
                           * self.editor.renderer.lineHeight
-                          + self.editor.renderer.scrollBar.getWidth();
+                       self.editor.renderer.scrollBar.getWidth();
 
                 $mdx_editor.height(newHeight.toString() + "px");
                 self.editor.resize();
@@ -696,9 +715,9 @@ var WorkspaceToolbar = Backbone.View.extend({
             Saiku.ui.unblock();
             var html =  explainPlan;
             var html = '<div id="fancy_results" class="workspace_results" style="overflow:visible"><table>' 
-                    + "<tr><th clas='row_header'>Explain Plan</th></tr>"
-                    + "<tr><td>" + explainPlan + "</td></tr>"
-                    + '</table></div>';
+                 "<tr><th clas='row_header'>Explain Plan</th></tr>"
+                 "<tr><td>" + explainPlan + "</td></tr>"
+                 '</table></div>';
 
             $.fancybox(html
                 ,

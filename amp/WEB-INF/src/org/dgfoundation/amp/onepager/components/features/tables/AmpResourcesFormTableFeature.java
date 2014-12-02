@@ -201,6 +201,7 @@ public class AmpResourcesFormTableFeature extends AmpFormTableFeaturePanel<AmpAc
 					final ResourceTranslationModel titleModel = new ResourceTranslationModel(new PropertyModel<String>(item.getModel().getObject(), "title"),newResourceIdModel);
 					final AmpTextFieldPanel<String> name = new AmpTextFieldPanel<String>("title",titleModel , "Title",AmpFMTypes.MODULE,Boolean.TRUE);
 					name.setEnabled(false);
+					name.getTextContainer().setRequired(true);
 					item.add (name);
 					
 					

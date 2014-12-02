@@ -32,7 +32,7 @@ public class ApplicationSettings {
 	private final Long appSettingsId;
 	private final Integer defRecsPerPage;
 	private final Integer numberOfPagesToDisplay;
-	private final String language;
+	private String language;
 	private final Long currencyId;
 	private final Long fisCalId;
 	private final Integer reportStartYear;
@@ -92,5 +92,13 @@ public class ApplicationSettings {
 
 	public boolean isCrossTeamValidationEnabled() {
 		return getCrossteamvalidation() != null ? getCrossteamvalidation() : false;
+	}
+	
+	/**
+	 * hack - to be removed once the language-setting mess is sorted out
+	 * @param language
+	 */
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 }

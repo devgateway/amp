@@ -187,17 +187,20 @@ public class ReportsUtil {
 	 * @param report
 	 */
 	private static void postProcessForHierarchicalReports(GeneratedReport report) {
-		if (report.spec.getHierarchies() != null && report.spec.getHierarchies().size() > 0) {
-			ReportColumn column = (ReportColumn) report.spec.getColumns().toArray()[report.spec.getHierarchies().size()];
-			if (column.getEntityName().equals(MoConstants.EXECUTING_AGENCY)
-					|| column.getEntityName().equals(MoConstants.BENEFICIARY_AGENCY)
-					|| column.getEntityName().equals(MoConstants.CONTRACTING_AGENCY)
-					|| column.getEntityName().equals(MoConstants.IMPLEMENTING_AGENCY)) {
-				// Iterate the tree structure looking for the last level (the row) and check is not empty the cell for
-				// this column.
-				if (report.reportContents != null) {
-					lookForRowRecursively(report.reportContents, column);
-					logger.info(report.reportContents);
+		if (report != null && report.spec != null) {
+			if (report.spec.getHierarchies() != null && report.spec.getHierarchies().size() > 0) {
+				ReportColumn column = (ReportColumn) report.spec.getColumns().toArray()[report.spec.getHierarchies().size()];
+				if (column.getEntityName().equals(MoConstants.EXECUTING_AGENCY)
+						|| column.getEntityName().equals(MoConstants.BENEFICIARY_AGENCY)
+						|| column.getEntityName().equals(MoConstants.CONTRACTING_AGENCY)
+						|| column.getEntityName().equals(MoConstants.IMPLEMENTING_AGENCY)) {
+					// Iterate the tree structure looking for the last level (the row) and check is not empty the cell
+					// for
+					// this column.
+					if (report.reportContents != null) {
+						lookForRowRecursively(report.reportContents, column);
+						logger.info(report.reportContents);
+					}
 				}
 			}
 		}

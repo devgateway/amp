@@ -1536,11 +1536,13 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 
             String nameSearchQuery;
             if (isSearchByName) {
+            	//this query is stupid and should be rewritten!
             	nameSearchQuery = " (f.ampActivityId IN (SELECT t.objectId FROM " + AmpContentTranslation.class.getName() + " t WHERE t.objectClass = '" + AmpActivityVersion.class.getName() + "' AND upper(t.translation) like upper(:searchTerm)))" +
-            "OR f.ampActivityId IN (SELECT f2.ampActivityId from " + AmpActivity.class.getName() + " f2 WHERE upper(f2.name) LIKE upper(:searchTerm) ))" + " AND "; 
+            "OR f.ampActivityId IN (SELECT f2.ampActivityId from " + AmpActivity.class.getName() + " f2 WHERE upper(f2.name) LIKE upper(:searchTerm) OR upper(f2.ampId) LIKE upper(:searchTerm) ) )" + 
+            " AND "; 
             } else {
             	nameSearchQuery = "";
-            }            
+            }   
             String queryString = "select f.ampActivityId, f.ampId, " + activityName + ", ampTeam , ampGroup FROM " + AmpActivity.class.getName() +  
             	" as f left join f.team as ampTeam left join f.ampActivityGroup as ampGroup WHERE " + nameSearchQuery + " ((f.deleted = false) or (f.deleted is null))";
             

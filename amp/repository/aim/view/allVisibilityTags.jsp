@@ -1146,6 +1146,9 @@ deleted 6 fields, do not reinsert
 <!-- AMP-9437 -->
 <module:display name="Public Site" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Public Documents" parentModule="PUBLIC VIEW"></module:display>
+
+<module:display name="Public GIS" parentModule="PUBLIC VIEW"></module:display>
+
 <module:display name="Public Reports" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Public Calendar" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Home Page Menu Entry" parentModule="PUBLIC VIEW"></module:display>

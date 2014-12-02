@@ -156,13 +156,17 @@ ${fn:replace(message,quote,escapedQuote)}
 															<digi:trn key="fm:gis">Advanced GIS</digi:trn>
 														</a>
 													</li>
+												</feature:display>
+											</module:display>
 													<!-- New GIS Module-->
+											<module:display name="PUBLIC VIEW">
+												<module:display name="Public GIS" parentModule="PUBLIC VIEW">
 													<li class="yuiampmenuitem_drop">
 														<a target="_blank" class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/gisModule/dist/index.html" onclick="return canExit()"> 
-															<digi:trn key="fm:gis">NEW GIS (BETA)</digi:trn>
+															<digi:trn key="fm:gis">NEW GIS</digi:trn>
 														</a>
 													</li>
-												</feature:display>
+												</module:display>
 											</module:display>
 											<!-- New Dashboard Module-->
 												<li class="yuiampmenuitem_drop">

@@ -866,7 +866,8 @@
 <field:display name="Measure Disbursement" feature="GIS DASHBOARD"></field:display>
 <field:display name="Measure Expenditure" feature="GIS DASHBOARD"></field:display>
 
-
+<!-- new gis -->
+<module:display name="Public GIS" parentModule="PUBLIC VIEW"></module:display>
 <!--  -->
 <module:display name="Visualization Dashboards"></module:display>
 

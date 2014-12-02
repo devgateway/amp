@@ -56,10 +56,13 @@ a {
 			    $('#ashowmap').html('<digi:trn>Show Map</digi:trn>')
 			});
 		var element = document.getElementById("locationPopupMap");
-		$('#locationPopupMap').css("visibility", 'visible');
 		myPanelMap.setBody(element);
 		myPanelMap.render();
 		myPanelMap.center();
+		$('#locationPopupMap').css("visibility", 'visible');
+		$('#locationPopupMap').width(400);
+		$('#locationPopupMap').height(350);
+		map._onResize();
 		
 		myPanelMap.show();
 	 }

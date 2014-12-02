@@ -3208,7 +3208,7 @@ function collapseAll() {
 </table>
 </c:if>
 <field:display name="Show Map In Activity Preview" feature="Map Options">
- <div id="locationPopupMap" style="visibility:hidden;width:400px; height:350px;position:relative;"></div>
+ <div id="locationPopupMap" style="visibility:hidden;width:4px; height:3px;position:relative;"></div>
 </field:display>
 
 <!-- MAIN CONTENT PART END -->

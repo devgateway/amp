@@ -5,7 +5,7 @@
 <% } else { %>
   <% colourBuckets.each(function(bucket) { %>
     <div>
-      <span style="background: <%= bucket.hex() %>" class="color-block legend-sample"></span>
+      <span style="background: <%= bucket.hex() %> !important" class="color-block legend-sample"></span>
       <%= bucket.get('value')[0] %>&mdash;<%= bucket.get('value')[1] %>
     </div>
   <% }) %>

@@ -36,7 +36,7 @@
 <% } else {  %>
   <% colourBuckets.each(function(bucket) { %>
     <div>
-      <span style="background: <%= bucket.hex() %>" class="legend-sample color-circle"></span>
+      <span style="background: <%= bucket.hex() %> !important" class="legend-sample color-circle"></span>
       <%= bucket.get('value') %>
     </div>
   <% }) %>

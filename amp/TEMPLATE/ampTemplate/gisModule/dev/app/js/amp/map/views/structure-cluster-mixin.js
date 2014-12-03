@@ -96,8 +96,10 @@ module.exports = {
         html: (zoomedIn ? '<div class="text">' + markers.length + '</div>' : ''),
         color: '#444',
         fillColor: (colors[0] && colors[0].hex()),
-        weight: 1
+        weight: 1,
+        importantFill: true
       });
+
     }
     return marker;
   },

@@ -7,15 +7,16 @@ Setup
 
 ### Initial install
 
-A node runtime with npm is required.
+Install NodeJS and npm. http://nodejs.org/
 
-First, install `gulp` globally:
+
+Install `gulp` globally:
 
 ```bash
 $ sudo npm install -g gulp
 ```
 
-Finally, install all of the library dependencies locally:
+Install all of the package.json dependencies locally. Run this command from inside this folder.
 
 ```bash
 $ npm install
@@ -30,7 +31,7 @@ Call `npm install` after each pull to make sure latest build plugins are there.
 $ npm install
 ```
 
-When installing new dev/build dependencies, use the `--save-dev` option for npm so that they are added to [`package.json`](package.json), so that other developers can keep up to date. Make sure to commit the updated `package.json` to version control when you commit.
+When adding new dev/build dependencies, use the `--save-dev` option for npm so that they are added to [`package.json`](package.json), so that other developers can keep up to date. Make sure to commit the updated `package.json` to version control when you commit.
 
 ```bash
 $ npm install jshint --save-dev
@@ -70,7 +71,7 @@ Installing a [livereload browser extension](http://feedback.livereload.com/knowl
 
 ```bash
 $ cd [amp-folder]/TEMPLATE/ampTemplate/gisModule/dev/
-$ gulp dev-no-mock
+$ gulp dev
 ```
 
 3. http://localhost:8080/TEMPLATE/ampTemplate/gisModule/dev/app/index.html

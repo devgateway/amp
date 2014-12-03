@@ -6,10 +6,10 @@
  * $ gulp
  * or
  * $ gulp dev
- *    Unoptimized build of js/css, runs a dev server on :3000 with livereload
+ *    Unoptimized build of js/css, runs watchify and livereload, needs AMP server running.
 
- * $ gulp dev-no-mock
- *    Unoptimized build of js/css, with livereload, but no mock-file. Good for dev with AMP running in eclipse.
+ * $ gulp dev-mock
+ *    Unoptimized build of js/css, with livereload, with mock-files.
  *
  * $ gulp test
  *    Run unit tests from command line
@@ -242,8 +242,8 @@ gulp.task('preview', ['build'], g.serve({
 // dev
 //------------------------------------
 gulp.task('default', ['dev']);
-gulp.task('dev', ['lint', 'less', 'dev-server', 'watch', 'reload', 'dev-index']);
-gulp.task('dev-no-mock', ['lint', 'less', 'dev-server', 'watch', 'reload', 'dev-index-no-mock']);
+gulp.task('dev', ['lint', 'less', 'dev-server', 'watch', 'reload', 'dev-index-no-mock']);
+gulp.task('dev-mock', ['lint', 'less', 'dev-server', 'watch', 'reload', 'dev-index']);
 
 
 gulp.task('dev-server', g.serve({

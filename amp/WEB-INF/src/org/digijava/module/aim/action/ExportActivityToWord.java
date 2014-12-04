@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -25,8 +24,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.util.ServletContextWriter;
-import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
@@ -40,15 +37,12 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.Identification;
 import org.digijava.module.aim.form.EditActivityForm.Planning;
 import org.digijava.module.aim.form.EditActivityForm.Programs;
-import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
 import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.ExportActivityToPdfUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
@@ -75,8 +69,6 @@ import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Table;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.table.RtfCell;
 
@@ -303,11 +295,11 @@ public class ExportActivityToWord extends Action {
 	            /**
 	             * Sectors Part
 	             */	            
-	            if(FeaturesUtil.isVisibleModule("/Activity Form/Sectors")){
-	            	 Table sectorsTbl = null;
+	            if (FeaturesUtil.isVisibleModule("/Activity Form/Sectors")) {
+	            	Table sectorsTbl = null;
 	 	            sectorsTbl = new Table(1);
 	 	            sectorsTbl.setWidth(100);
-	 	            RtfCell sectTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Sector").toUpperCase(), HEADERFONT));
+	 	            RtfCell sectTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Sectors").toUpperCase(), HEADERFONT));
 	 	            sectTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
 	 	            sectTitleCell.setBackgroundColor(CELLCOLORGRAY);
 	 	            sectorsTbl.addCell(sectTitleCell);
@@ -318,31 +310,31 @@ public class ExportActivityToWord extends Action {
 	 	            			boolean hasSectors=false;
 	 	            			if (sectors.getActivitySectors() != null) {
 		 	            			for (ActivitySector actSect : sectors.getActivitySectors()) {
-										if(actSect.getConfigId().equals(config.getId())){
-											hasSectors=true;
+										if (actSect.getConfigId().equals(config.getId())) {
+											hasSectors = true;
 										}									
 									}
 	 	            			}
-	 	            			if(hasSectors){
+	 	            			if (hasSectors) {
 									cell = new RtfCell();
 									cell.setBorder(0);
 									cell.add(new Paragraph(TranslatorWorker.translateText(config.getName()+" Sector").toUpperCase(), PLAINFONT));						
 									sectorsTbl.addCell(cell);
 									sectorsTbl.addCell(new RtfCell());
 								}
-								if(sectors.getActivitySectors() != null){
+								if (sectors.getActivitySectors() != null) {
 									for (ActivitySector actSect : sectors.getActivitySectors()) {
-										if(actSect.getConfigId().equals(config.getId())){
+										if (actSect.getConfigId().equals(config.getId())) {
 											cell = new RtfCell();
 											cell.setBorder(0);
 											columnVal = actSect.getSectorScheme();
-											if(actSect.getSectorName() !=null){
+											if(actSect.getSectorName() !=null) {
 												columnVal += " - " +actSect.getSectorName(); 
 											}
-											if(actSect.getSubsectorLevel1Name() !=null){
+											if(actSect.getSubsectorLevel1Name() != null) {
 												columnVal += " - "+actSect.getSubsectorLevel1Name();
 											}
-											if(actSect.getSubsectorLevel2Name() !=null){
+											if(actSect.getSubsectorLevel2Name() != null) {
 												columnVal += " - "+actSect.getSubsectorLevel2Name();
 											}
 											columnVal += " "+actSect.getSectorPercentage() +" %";
@@ -1514,34 +1506,35 @@ public class ExportActivityToWord extends Action {
         HttpSession session=request.getSession();
 		if (FeaturesUtil.isVisibleModule("/Activity Form/Structures")) {
 
-	        ExportSectionHelper eshTitle = new ExportSectionHelper("Structures", true).setWidth(100f).setAlign("left");
+	        ExportSectionHelper eshTitle = new ExportSectionHelper(TranslatorWorker.translateText("Structures"),
+                true).setWidth(100f).setAlign("left");
 	
-				retVal.add(createSectionTable(eshTitle, request, ampContext));
-				
-				Set<AmpStructure> structures = act.getStructures();
-   
-				ArrayList<AmpStructure> res = new ArrayList<AmpStructure>();
-				for (AmpStructure struc : structures) {
-					ExportSectionHelper eshProjectCostTable = new ExportSectionHelper(
-							null, false).setWidth(100f).setAlign("left");
-					eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
-							"Name", null, null, true).addRowData(struc.getTitle()));
-					String typeName = "";
-					if (struc.getType() != null) 
-						typeName = struc.getType().getName();	
-					eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Type", null, null, true).addRowData(typeName));
-					
-					eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
-							"Description", null, null, true).addRowData(struc
-							.getDescription()));
-					eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
-							"Latitude", null, null, true).addRowData(struc
-							.getLatitude()));
-					eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
-							"Longitude", null, null, true).addRowData(struc
-							.getLongitude()));
-					retVal.add(createSectionTable(eshProjectCostTable, request, ampContext));
-				}
+            retVal.add(createSectionTable(eshTitle, request, ampContext));
+
+            Set<AmpStructure> structures = act.getStructures();
+
+            ArrayList<AmpStructure> res = new ArrayList<AmpStructure>();
+            for (AmpStructure struc : structures) {
+                ExportSectionHelper eshProjectCostTable = new ExportSectionHelper(
+                        null, false).setWidth(100f).setAlign("left");
+                eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
+                        "Name", null, null, true).addRowData(struc.getTitle()));
+                String typeName = "";
+                if (struc.getType() != null)
+                    typeName = struc.getType().getName();
+                eshProjectCostTable.addRowData(new ExportSectionHelperRowData("Type", null, null, true).addRowData(typeName));
+
+                eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
+                        "Description", null, null, true).addRowData(struc
+                        .getDescription()));
+                eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
+                        "Latitude", null, null, true).addRowData(struc
+                        .getLatitude()));
+                eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
+                        "Longitude", null, null, true).addRowData(struc
+                        .getLongitude()));
+                retVal.add(createSectionTable(eshProjectCostTable, request, ampContext));
+            }
 			
 		}
         return retVal;
@@ -3315,19 +3308,19 @@ public class ExportActivityToWord extends Action {
 			identificationSubTable1.addCell(cell);
 		}
 		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Humanitarian Aid")){
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Humanitarian Aid")) {
 			cell = new RtfCell();
 			cell.setColspan(2);
 			cell.setBorder(0);
 			cell.add(new Paragraph(TranslatorWorker.translateText("Humanitarian Aid")+": ",PLAINFONT));
 			
 			columnVal="";
-			if(identification.getHumanitarianAid()!=null && identification.getHumanitarianAid()){
-				columnVal="Yes";
-			}else if(identification.getHumanitarianAid()!=null && ! identification.getHumanitarianAid()){
-				columnVal="No";
+			if (identification.getHumanitarianAid()!=null && identification.getHumanitarianAid()){
+				columnVal = "Yes";
+			} else if (identification.getHumanitarianAid()!=null && ! identification.getHumanitarianAid()) {
+				columnVal = "No";
 			}
-			cell.add(new Paragraph(columnVal,BOLDFONT));
+			cell.add(new Paragraph(columnVal, BOLDFONT));
 			identificationSubTable1.addCell(cell);
 		}
 	}

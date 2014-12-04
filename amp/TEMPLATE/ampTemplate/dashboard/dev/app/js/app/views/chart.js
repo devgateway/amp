@@ -237,6 +237,9 @@ module.exports = BackboneDash.View.extend({
     ctx.textAlign = 'right';
     ctx.fillText(moneyContext, w - 10, 10 + 22);
     ctx.textAlign = 'left';  // reset it
+
+    // reset font to something normal (nvd3 uses css ugh...)
+    ctx.font = 'normal 13px "sans-serif"';
   },
 
   downloadChart: function(e) {

@@ -34,8 +34,8 @@
 
   #map-container {
     overflow: visible;
-    top: 0;
-    left: 0;
+    top: 0px;
+    left: 0px;
     height: 18cm;
     width: 32cm;  // letter and a4 are both ~21cm, but printing scales it down a bit (?)
   }
@@ -47,9 +47,9 @@
   .leaflet-control-zoom {
     display: none;
   }
-
-  .legend {
-    right: auto;
+  
+   .legend {
+  	right: auto;
     bottom: auto;
     padding-top: 2em;
     background: transparent;
@@ -57,7 +57,7 @@
     &:not(.expanded) {
       display: none;
     }
-    .legend-header {
+    .legend-header{
       text-align: left;
       & > a {
         padding-left: 0;
@@ -69,6 +69,18 @@
       border: none;
       max-height: 1000em;
       overflow-y: visible;
+      width:800px;
+      
     }
+    
   }
+
+  .datasources {
+  display: none;
+  }
+ 
+ .legend-indicatorarcgisdynamic {
+ float:left;
+ margin-right:60px;
+ }
 }

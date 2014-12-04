@@ -6,9 +6,9 @@ var Template = fs.readFileSync(__dirname + '/../templates/dataquality-template.h
 
 
 module.exports = Backbone.View.extend({
-  minGoodScore: 66,
-  minWarningScore: 33,
-  currentScore: -1, // Should be between 0 and 100 for 'real' values
+  minGoodScore: 66,     // Break point for good score
+  minWarningScore: 33,  // Break point for warning score
+  currentScore: -1,     // Should be between 0 and 100 for 'real' values
 
   template: _.template(Template),
 
@@ -25,7 +25,8 @@ module.exports = Backbone.View.extend({
   },
 
 
-  // TODO make sure updateScore is triggered by map filter changes.
+  // TODO make sure updateScore is triggered on map changes.
+  // Colours the icon according the current score.
   updateScore: function() {
     this.currentScore = this.model.getScore();
     var styleClass = 'info';

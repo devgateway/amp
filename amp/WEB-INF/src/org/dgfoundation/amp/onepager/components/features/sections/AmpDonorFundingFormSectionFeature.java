@@ -472,11 +472,21 @@ public class AmpDonorFundingFormSectionFeature extends
 
 			@Override
 			protected void onClick(AjaxRequestTarget target) {
-				list.addItem((AmpOrganisation) orgRoleSelector.getOrgSelect()
-						.getChoiceContainer().getModelObject());
+				AmpOrganisation choice=(AmpOrganisation) orgRoleSelector.getOrgSelect()
+						.getChoiceContainer().getModelObject();
+				list.addItem(choice);
 				target.appendJavaScript(OnePagerUtil
 						.getToggleChildrenJS(AmpDonorFundingFormSectionFeature.this));
-				target.add(wmc);
+				
+				if (FeaturesUtil
+						.getGlobalSettingValueBoolean(GlobalSettingsConstants.ACTIVITY_FORM_FUNDING_SECTION_DESIGN)) {
+					target.add(AmpDonorFundingFormSectionFeature.this);
+					int index = calculateTabIndex(choice);
+
+					target.appendJavaScript("switchTabs(" + index + ");");
+				} else {
+					target.add(wmc);
+				}
 			}
 		};
 

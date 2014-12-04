@@ -2818,21 +2818,28 @@ public class ExportActivityToWord extends Action {
 			columnName=TranslatorWorker.translateText("AMP ID");
 			generateOverAllTableRows(identificationSubTable1,columnName,identification.getAmpId(),null);					
 		}
-		
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Reason")){
-			columnName=TranslatorWorker.translateText("Status");
-			columnVal="";
-			catVal = null;
-			if(identification.getStatusId()!=null && identification.getStatusId()!=0){
-				catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(identification.getStatusId());
-			}					
-			if(catVal!=null){
-				columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal);
-			}
-			if(identification.getStatusReason() != null){
+
+
+        if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Status")) {
+            columnName = TranslatorWorker.translateText("Status");
+            columnVal = "";
+            catVal = null;
+            if (identification.getStatusId() != null && identification.getStatusId() != 0) {
+                catVal = CategoryManagerUtil.getAmpCategoryValueFromDb(identification.getStatusId());
+            }
+            if (catVal != null) {
+                columnVal = CategoryManagerUtil.translateAmpCategoryValue(catVal);
+                generateOverAllTableRows(identificationSubTable1, columnName, columnVal, null);
+            }
+        }
+
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Reason")) {
+			columnName = TranslatorWorker.translateText("Status Reason");
+			columnVal = "";
+			if (identification.getStatusReason() != null) {
 				columnVal += processHtml(request, identification.getStatusReason());
+                generateOverAllTableRows(identificationSubTable1, columnName, columnVal, null);
 			}
-			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 		
 		

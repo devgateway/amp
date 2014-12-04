@@ -227,21 +227,29 @@ public class ExportActivityToPDF extends Action {
 			}
 
 			Identification identification = myForm.getIdentification();
-			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Reason")){
-				columnName=TranslatorWorker.translateText("Status");
-				columnVal="";
-				catVal = null;
-				Long statusId = identification.getStatusId();
-				if(statusId!=null && statusId!=0){
-					catVal=CategoryManagerUtil.getAmpCategoryValueFromDb(statusId);
-				}					
-				if(catVal!=null){
-					columnVal	= CategoryManagerUtil.translateAmpCategoryValue(catVal);
+
+            if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Activity Status")) {
+                columnName=TranslatorWorker.translateText("Status");
+                columnVal = "";
+                catVal = null;
+                Long statusId = identification.getStatusId();
+
+                if (statusId != null && statusId != 0) {
+                    catVal = CategoryManagerUtil.getAmpCategoryValueFromDb(statusId);
+                }
+                if (catVal != null) {
+                    columnVal = processHtml(request, CategoryManagerUtil.translateAmpCategoryValue(catVal));
+                    createGeneralInfoRow(mainLayout, columnName, columnVal);
+                }
+            }
+
+			if (FeaturesUtil.isVisibleModule("/Activity Form/Identification/Status Reason")) {
+				columnName = TranslatorWorker.translateText("Status Reason");
+				columnVal = "";
+				if (identification.getStatusReason() != null) {
+					columnVal += processHtml(request, identification.getStatusReason());
+                    createGeneralInfoRow(mainLayout, columnName, columnVal);
 				}
-				if(identification.getStatusReason() != null){
-					columnVal += processHtml(request, identification.getStatusReason()); 
-				}
-				createGeneralInfoRow(mainLayout,columnName,columnVal);
 			}
 			
 			if(FeaturesUtil.isVisibleModule("/Activity Form/Identification/Type of Cooperation")){

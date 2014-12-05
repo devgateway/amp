@@ -65,7 +65,8 @@ function looksLikeEmail(email) {
 function looksLikePhoneNumber(input)
 {
 	var nr = input.replace('+', '').replace('-', '').replace(' ', '');
-	var isnum = /^\d*$/.test(nr);
+	//var isnum = /^\d*$/.test(nr);
+	var isnum = true;//AMP-18125: accepting all characters
 	return isnum && nr.length < 20;
 }
 

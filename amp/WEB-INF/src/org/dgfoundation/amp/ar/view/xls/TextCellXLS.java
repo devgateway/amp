@@ -57,7 +57,8 @@ public class TextCellXLS extends XLSExporter {
 	private boolean columnNeedsHTMLStripping(String columnName){
 		String s = columnName.toLowerCase();
 		if ("objective".compareTo(s) == 0 ||
-			"description".compareTo(s) == 0
+		    "description".compareTo(s) == 0 ||
+			"results".compareTo(s) == 0
 			){
 			return true;
 		}

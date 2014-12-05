@@ -6,6 +6,7 @@ package org.dgfoundation.amp.onepager.web.pages;
 
 import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
+import org.apache.wicket.extensions.yui.YuiLib;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebPage;
@@ -23,6 +24,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -85,6 +87,7 @@ public class AmpHeaderFooter extends WebPage {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
+		YuiLib.load(response);
 		response.render(JavaScriptHeaderItem.forUrl("/ckeditor_4.4.6/ckeditor.js"));
 		response.render(JavaScriptHeaderItem.forUrl("/TEMPLATE/ampTemplate/js_2/opentip/opentip-jquery2-4-6.js"));
 		response.render(JavaScriptHeaderItem.forReference(new PackageResourceReference(AmpStructuresFormSectionFeature.class, "gisPopup.js")));

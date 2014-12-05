@@ -527,7 +527,7 @@ public class Filters {
 	
 	
 	/**
-	 * Return all the workspaces
+	 * Return all workspaces to be used for filtering
 	 * 
 	 * @return
 	 */

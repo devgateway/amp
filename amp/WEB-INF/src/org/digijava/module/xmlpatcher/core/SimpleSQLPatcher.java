@@ -304,6 +304,11 @@ public class SimpleSQLPatcher {
 					"DROP TABLE IF EXISTS amp_api_state",
 					"DROP SEQUENCE IF EXISTS amp_map_state_seq"
 					));
+			
+			// update new locations for old patches that were moved to a different place and looks like no longer are mentained, but polute the output
+			addPatch(new SimpleSQLPatch("010",
+					XMLPatchesWrongPaths.SQL_PATCH
+					));
 	}};
 	DataSource dataSource;
 	

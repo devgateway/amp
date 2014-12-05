@@ -9,13 +9,13 @@
       <lang delimiter=";" type="postgres">
         --POST gis needs to be installed first!! http://postgis.net/install/
 		-- Enable PostGIS (includes raster)
-		CREATE EXTENSION postgis;
+		CREATE EXTENSION IF NOT EXISTS postgis;
 		-- Enable Topology
-		CREATE EXTENSION postgis_topology;
+		CREATE EXTENSION IF NOT EXISTS postgis_topology;
 		-- fuzzy matching needed for Tiger
-		CREATE EXTENSION fuzzystrmatch;
+		CREATE EXTENSION IF NOT EXISTS fuzzystrmatch;
 		-- Enable US Tiger Geocoder
-		CREATE EXTENSION postgis_tiger_geocoder;
+		CREATE EXTENSION IF NOT EXISTS postgis_tiger_geocoder;
 		SET search_path TO "$user", public, tiger;
       </lang>
     </script>

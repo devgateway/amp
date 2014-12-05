@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<tns:patch closeOnSuccess="true" retryOnFail="true"
+<!-- setting to not retry if it was executed before "AMP-18110-logging-structures-and-triggers.xml"
+which means many other redo etl request will fllow -->
+<tns:patch closeOnSuccess="true" retryOnFail="false"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
 	<jira>AMP-18110</jira>

@@ -223,15 +223,14 @@ public class DgUtil {
     
     protected static void saveWorkspaceLanguagePreferences(HttpServletRequest request, Locale language) {
     	TeamMember tm = (TeamMember) request.getSession(true).getAttribute("currentMember");
-    	if (tm == null) return;
+    	if (tm == null || tm.getAppSettings() == null || tm.getMemberId() == null)
+    		return;
     	if (language.getCode().equals(tm.getAppSettings().getLanguage()))
     		return;
     	tm.getAppSettings().setLanguage(language.getCode());
-    	if (tm.getMemberId() != null) {
-    		AmpTeamMember atm = (AmpTeamMember) PersistenceManager.getSession().get(AmpTeamMember.class, tm.getMemberId());
-    		AmpTeam team = atm.getAmpTeam();
-    		PersistenceManager.getSession().createQuery("update " + AmpApplicationSettings.class.getName() + " aas SET language='" + language.getCode() + "' where aas.team.ampTeamId = " + team.getAmpTeamId()).executeUpdate();
-    	}
+    	AmpTeamMember atm = (AmpTeamMember) PersistenceManager.getSession().get(AmpTeamMember.class, tm.getMemberId());
+    	AmpTeam team = atm.getAmpTeam();
+    	PersistenceManager.getSession().createQuery("update " + AmpApplicationSettings.class.getName() + " aas SET language='" + language.getCode() + "' where aas.team.ampTeamId = " + team.getAmpTeamId()).executeUpdate();
     }
     
     /**

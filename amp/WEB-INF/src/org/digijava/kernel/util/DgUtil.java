@@ -74,6 +74,10 @@ import org.digijava.kernel.service.ServiceManager;
 import org.digijava.kernel.text.regex.RegexBatch;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.user.UserInfo;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.TeamMember;
 
 public class DgUtil {
 	
@@ -192,6 +196,42 @@ public class DgUtil {
         return language;
     }
 
+    protected static void saveUserLanguagePreferences(HttpServletRequest request, Locale language) {
+        User user = RequestUtils.getUser(request);
+        if (user == null)
+        	return;
+    	 org.hibernate.Session session = PersistenceManager.getSession();
+    	 Site rootSite = getRootSite(RequestUtils.getSite(request));
+         UserLangPreferences preferences;
+
+         try {
+             UserPreferencesPK key = new UserPreferencesPK(user, rootSite);
+             preferences = (UserLangPreferences) session.load(UserLangPreferences.class, key);
+
+             logger.debug("Updating user language preferences");
+             preferences.setNavigationLanguage(language);
+             session.update(preferences);
+          }
+          catch (ObjectNotFoundException ex2) {
+             preferences = createDefaultLangPreferences(language, rootSite, user);
+             session.save(preferences);
+          }
+         // put preferences back
+         user.setUserLangPreferences(preferences);
+    }
+    
+    protected static void saveWorkspaceLanguagePreferences(HttpServletRequest request, Locale language) {
+    	TeamMember tm = (TeamMember) request.getSession(true).getAttribute("currentMember");
+    	if (tm == null || tm.getAppSettings() == null || tm.getMemberId() == null)
+    		return;
+    	if (language.getCode().equals(tm.getAppSettings().getLanguage()))
+    		return;
+    	tm.getAppSettings().setLanguage(language.getCode());
+    	AmpTeamMember atm = (AmpTeamMember) PersistenceManager.getSession().get(AmpTeamMember.class, tm.getMemberId());
+    	AmpTeam team = atm.getAmpTeam();
+    	PersistenceManager.getSession().createQuery("update " + AmpApplicationSettings.class.getName() + " aas SET language='" + language.getCode() + "' where aas.team.ampTeamId = " + team.getAmpTeamId()).executeUpdate();
+    }
+    
     /**
      *
      * @param language
@@ -208,8 +248,7 @@ public class DgUtil {
         }
 
         Site currentSite = RequestUtils.getSite(request);
-        if (currentSite != null) {
-            Site rootSite = getRootSite(currentSite);
+        if (currentSite != null) {            
             if (getSupportedLanguage(language.getCode(), currentSite,
                                      isLocalTranslatorForSite(request)) == null) {
                 // Language is not supported
@@ -218,52 +257,14 @@ public class DgUtil {
                 DgUtil.setUserLanguage(request, response);
                 return;
             }
-            User user = RequestUtils.getUser(request);
-
-            if (user != null) {
-
-                org.hibernate.Session session = null;
-                try {
-
-                    UserLangPreferences preferences;
-
-                    session = PersistenceManager.getSession();
-//beginTransaction();
-
-                    UserPreferencesPK key = new UserPreferencesPK(user,
-                        rootSite);
-                    try {
-                        preferences = (UserLangPreferences) session.load(
-                            UserLangPreferences.class, key);
-
-                        logger.debug("Updating user language preferences");
-                        preferences.setNavigationLanguage(language);
-                        session.update(preferences);
-                    }
-                    catch (ObjectNotFoundException ex2) {
-                        logger.debug(
-                            "User language preference record was not found. Creating new one");
-                        preferences = createDefaultLangPreferences(language,
-                            rootSite, user);
-
-                        session.save(preferences);
-                    }
-                    //tx.commit();
-
-                    // put preferences back
-                    user.setUserLangPreferences(preferences);
-                }
-                catch (Exception ex) {
-
-                    logger.debug("Unable to switch Language ", ex);
-                    throw new RuntimeException("Unable to switch Language ", ex);
-                }
-
-            }
-            setSessionLanguage(request, response, language);
+           
+          	saveUserLanguagePreferences(request, language);
+            saveWorkspaceLanguagePreferences(request, language);
+            request.setAttribute(Constants.NAVIGATION_LANGUAGE, language);
+            setLanguageCookie(language, request, response);
         }
     }
-
+    
     public static void setSessionLanguage(HttpServletRequest request, HttpServletResponse response, Locale language) {
         request.setAttribute(Constants.NAVIGATION_LANGUAGE, language);
         if (request.getSession() != null)

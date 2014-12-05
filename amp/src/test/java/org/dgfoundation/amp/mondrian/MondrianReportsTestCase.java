@@ -1,34 +1,18 @@
 package org.dgfoundation.amp.mondrian;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportCell;
-import org.dgfoundation.amp.newreports.ReportEntityType;
-import org.dgfoundation.amp.newreports.ReportEnvironment;
-import org.dgfoundation.amp.newreports.ReportMeasure;
-import org.dgfoundation.amp.newreports.ReportOutputColumn;
-import org.dgfoundation.amp.newreports.ReportSpecification;
-import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
-import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.testutils.ActivityIdsFetcher;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
 
 public abstract class MondrianReportsTestCase extends AmpTestCase
 {
@@ -127,10 +111,37 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 			}
 			System.err.println("this is output for test " + spec.getReportName() + describeInCode(rep.reportContents, 1));
 		}
-		
-		if (delta != null)
-			fail("test " + spec.getReportName() + " failed: " + delta);			
+
+        checkReportHeaders(rep, spec);
+
+		if (delta != null) {
+            fail("test " + spec.getReportName() + " failed: " + delta);
+        }
 	}
+
+    /**
+     * Checks that all headers present in the generated report
+     * @param rep
+     * @param spec
+     */
+    public static void checkReportHeaders(GeneratedReport rep, ReportSpecification spec) {
+        if (spec.getColumns() == null) {
+            return;
+        }
+
+        assertFalse("Report headers cannot be empty", rep.leafHeaders == null || rep.leafHeaders.isEmpty());
+
+        // convert leafHeaders to Map for easier access
+        Map<String, ReportOutputColumn> leafHeadersMap = new HashMap<String, ReportOutputColumn>();
+        for (ReportOutputColumn roc : rep.leafHeaders) {
+            leafHeadersMap.put(roc.originalColumnName, roc);
+        }
+
+        for (ReportColumn rc : spec.getColumns()) {
+            ReportOutputColumn outputColumn = leafHeadersMap.get(rc.getColumnName());
+            assertNotNull("Column '" + outputColumn + "' Does not exist in the headers", rep);
+        }
+    }
 	
 	public static String describeReportOutputInCode(GeneratedReport gr) {
 		return describeInCode(gr.reportContents, 1);

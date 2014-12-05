@@ -796,7 +796,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		List<ReportOutputColumn> reportColumns = new ArrayList<ReportOutputColumn>(); //leaf report columns list
 
 		// add this flag to the settings, if will be required
-		boolean populateReportHeadersIfEmpty = false;
+		boolean populateReportHeadersIfEmpty = true;
 		
 		//build the list of available columns
 		if (rowAxis != null && rowAxis.getPositionCount() > 0 ) {

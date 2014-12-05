@@ -26,11 +26,13 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
@@ -522,7 +524,29 @@ public class Filters {
 		}
 		return s;
 	}
+	
+	
+	/**
+	 * Return all the workspaces
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/workspaces")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, name = "Workspaces", id = "Workspaces")
+	public List<SimpleJsonBean> getWorkspaces() {
+		List<SimpleJsonBean> teamsListJson = new ArrayList<SimpleJsonBean>();
+		Collection<AmpTeam> ampTeamList = TeamUtil.getAllRelatedTeams();
+		for (AmpTeam ampTeam : ampTeamList) {
+			SimpleJsonBean ampTeamJson = new SimpleJsonBean();
+			ampTeamJson.setId(ampTeam.getIdentifier());
+			ampTeamJson.setName(ampTeam.getName());
+			teamsListJson.add(ampTeamJson);
+		}
+		return teamsListJson;
 
+	}
 	
 
 }

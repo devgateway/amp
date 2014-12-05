@@ -127,6 +127,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 				case 'Approval Status':
 				case 'Donor Group':
 				case 'Donor Type':
+				case 'On/Off/Treasury Budget':
 					blob.columnFilters[item.get('name')] = _.map(item.get('values'), function(item_) {
 						return parseInt(item_.id);
 					});
@@ -138,6 +139,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 				case 'Implementing Agency':
 				case 'Beneficiary Agency':
 				case 'Primary Sector':
+				case 'Secondary Sector':
 					blob.columnFilters[item.get('name') + ' Id'] = _.map(item.get('values'), function(item_) {
 						return parseInt(item_.id);
 					});
@@ -148,22 +150,22 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 					});
 					break;
 				case 'Primary Program':
-					blob.columnFilters['Primary'] = _.map(item.get('values'), function(item_) {
+					blob.columnFilters['Primary Program Level 1 Id'] = _.map(item.get('values'), function(item_) {
 						return parseInt(item_.id);
 					});
 					break;
 				case 'Secondary Program':
-					blob.columnFilters['Secondary'] = _.map(item.get('values'), function(item_) {
-						return parseInt(item_.id);
-					});
-					break;
-				case 'On/Off/Treasury Budget':
-					blob.columnFilters['ActivityBudgetList'] = _.map(item.get('values'), function(item_) {
+					blob.columnFilters['Secondary Program Level 3 Id'] = _.map(item.get('values'), function(item_) {
 						return parseInt(item_.id);
 					});
 					break;
 				case 'Donor Agency':
 					blob.columnFilters['Donor Id'] = _.map(item.get('values'), function(item_) {
+						return parseInt(item_.id);
+					});
+					break;
+				case 'Contracting Agency Groups':
+					blob.columnFilters['Contracting Agency Id'] = _.map(item.get('values'), function(item_) {
 						return parseInt(item_.id);
 					});
 					break;

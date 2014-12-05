@@ -197,13 +197,15 @@ public abstract class ColumnWorker {
 
 			rs.close();
 
-		} catch (SQLException e) {
-			logger.error(String.format("Unable to complete extraction for column %s. Master query was run on view %s, condition was", columnName, viewName, queryCondition));
-			logger.error(e);
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("Error parsing date filters");
+		} /*catch (SQLException e) {
+		logger.error(String.format("Unable to complete extraction for column %s. Master query was run on view %s, condition was", columnName, viewName, queryCondition));
+		logger.error(e);
+		e.printStackTrace();
+		}*/ 
+		catch (Exception e) {
+		//e.printStackTrace();
+			throw new RuntimeException("error fetching column " + columnName + " from view " + viewName, e);
+		//logger.error("Error fetching column", e);
 		} 
 		return cc;
 	}

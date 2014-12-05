@@ -278,6 +278,8 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		//put toExchangeRate
 		acc.setToExchangeRate(1);
 		
+		if (adj_type == null)
+			return null; // no transaction to fetch
         MetaInfo adjMs = this.getCachedMetaInfo(ArConstants.ADJUSTMENT_TYPE, adj_type);
 		String trStr = null;
 

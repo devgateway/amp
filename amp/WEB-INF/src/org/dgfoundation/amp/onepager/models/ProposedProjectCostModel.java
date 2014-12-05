@@ -23,7 +23,8 @@ public class ProposedProjectCostModel implements IModel{
         public Double getObject() {
                 Double result = new Double(0);
                 if (setModel == null || setModel.getObject() == null || setModel.getObject().size() == 0)
-                        return totalsModel.getObject();
+                		//if the set is empty we should return 0
+                        return null;
                 else{
                         Set<AmpAnnualProjectBudget> set = setModel.getObject();
                         for (AmpAnnualProjectBudget b: set){

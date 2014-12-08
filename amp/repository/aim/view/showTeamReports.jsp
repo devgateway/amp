@@ -491,22 +491,22 @@ $(document).ready(function() {
 					                              							    <%if(idx.intValue()%2!=1) color = "#ffffff"; %>
 					                              								<td align="center" class="inside" style="padding-right: 10px; padding-left: 10px;" bgcolor="<%=color%>">
 						                              								<logic:notEmpty name="report" property="filterDataSet">
-						                                  								<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" vspace="2" border="0" align="middle" />
+						                                  								<img src= "/TEMPLATE/ampTemplate/images/bullet_green_sq.gif" border="0" align="middle" />
 						                              								</logic:notEmpty>
 						                              								<logic:empty name="report" property="filterDataSet">
-						                                   								<img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" vspace="2" border="0" align="middle" />
+						                                   								<img src= "/TEMPLATE/ampTemplate/images/bullet_grey_sq.gif" border="0" align="middle" />
 						                              								</logic:empty>
 					                              								</td>
+					                              								
+					                              								<%
+																					boolean onlySaikuButton = Long.valueOf(1).equals(report.getType()) && FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS) && report.hasAvailableMeasures();
+																				%>
 					                              								<td class="inside" style="padding-right: 15px; padding-left: 15px;" bgcolor="<%=color%>">
 					                              									<c:if test="${!aimTeamReportsForm.showTabs}">
-	 																						<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}"/>
-	 																						<%
-																							if (report.getType()!=null && report.getType().equals(new Long(1)) && 
-																							FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS)) {
-																							%>
-																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}"/>
-	 																						
-																							<%}%>
+	 																					<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}" />
+	 																					<% if (onlySaikuButton) { %>
+																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}" />
+																						<% } %>
 																					    	
 	 																					  	<a href="${reportLink}" styleClass="h-box" onclick="return popup(this,'');" title="Click here to view the Report">
 																						  	<b>
@@ -718,23 +718,11 @@ $(document).ready(function() {
 						                                  									<bean:write name="report" property="ampReportId" />
 						                                								</c:set>
 																						<%
-																						if (report.getType()!=null && report.getType().equals(new Long(1))
-																						&& 	!FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS)) {
+																							if (Long.valueOf(1l).equals(report.getType()) && !onlySaikuButton) {
 																						%>
-																						<%
-																						if (report.hasAvailableMeasures()) {
+																							<%@ include file="saiku_button.jspf" %> 
+																						<% } %>
 																						
-																						%>
-																						<a href="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}" onclick="return popup(this,'');" title="Click here to view the Report">
-																							<img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku.png" vspace="2" border="0" align="absmiddle" style="padding-right: 5px;"/>
-																						</a> 
-																						<%}else{ %>
-																						<a href="javascript: void(0)" title="The requested report includes unavailable measures">
-																							<img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku_disabled.png"  vspace="2" border="0" align="absmiddle" style="padding-right: 5px;"/>
-																						</a> 
-																						<%
-																							}}
-																						%>
 						                                								<c:set target="${urlParams}" property="event" value="edit" />
 						                                								<logic:equal name="teamLeadFlag" scope="session" value="true"> 
 					                                      									<c:set var="translation">
@@ -748,12 +736,12 @@ $(document).ready(function() {
 					                                        								<c:choose>
 					                                        									<c:when test="${report.budgetExporter}">
 								                                    								<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}&budgetExporter=true" title="${translation}">
-								                                      									<img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
+								                                      									<img src= "/repository/message/view/images/edit.gif" border="0" />
 								                                    								</digi:link> 					                                        										
 					                                        									</c:when>
 					                                        									<c:otherwise>					                                        										
 								                                    								<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
-								                                      									<img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
+								                                      									<img src= "/repository/message/view/images/edit.gif" border="0" />
 								                                    								</digi:link> 
 					                                        									</c:otherwise>
 					                                        								</c:choose>	
@@ -769,7 +757,7 @@ $(document).ready(function() {
 					                                      										</c:if>
 					                                       									</c:set>
 					                                      									<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-																								<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
+																								<img src= "/repository/message/view/images/trash_12.gif" border="0" />
 						                                  									</digi:link>
 						                                								</logic:equal>                            
 						                                								<logic:equal name="teamLeadFlag" scope="session" value="false">
@@ -784,7 +772,7 @@ $(document).ready(function() {
 						                                      											</c:if>
 					                                        										</c:set>
 						                                    										<digi:link href="/reportWizard.do?editReportId=${report.ampReportId}" title="${translation}">
-						                                      											<img src= "/repository/message/view/images/edit.gif" vspace="2" border="0" align="absmiddle" />
+						                                      											<img src= "/repository/message/view/images/edit.gif" border="0" />
 						                                    										</digi:link>
 							                                    									<c:set var="translation">
 						                                      											<c:if test="${aimTeamReportsForm.showTabs}">
@@ -797,7 +785,7 @@ $(document).ready(function() {
 						                                      											</c:if>
 						                                       										</c:set>
 						                                       										<digi:link href="/deleteAllReports.do" name="urlParams" onclick="return confirmFunc()" title="${translation}">
-																										<img src= "/repository/message/view/images/trash_12.gif" vspace="2" border="0" align="absmiddle" />
+																										<img src= "/repository/message/view/images/trash_12.gif" border="0" />
 							                                  										</digi:link>
 						                                    									</logic:equal>    
 						                                  									</logic:present>                                                                                                

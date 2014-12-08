@@ -345,13 +345,14 @@ function submitForm(action){
 																					bgcolor="${color}">
 																					<div class="t_sm" title="${report.name}">
 																						<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}"/>
-	 																					<%
-																							if (report.getType()!=null && report.getType().equals(new Long(1)) && 
-																							FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS)) {
-																							%>
-																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}"/>
-	 																						
-																							<%}%>
+																						
+																						<%
+																							boolean onlySaikuButton = Long.valueOf(1).equals(report.getType()) && FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS) && report.hasAvailableMeasures();
+																						%>
+																						
+	 																					<% if (onlySaikuButton) { %>
+																							<c:set var="reportLink" value="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}" />
+																						<% } %>
 																					    
 																						<a
 																							href="${reportLink}"
@@ -465,19 +466,12 @@ function submitForm(action){
 																						<c:set target="${urlParams}" property="rid">
 																							<bean:write name="report" property="ampReportId" />
 																						</c:set>
-																						<c:set target="${urlParams}" property="event"
-																							value="edit" />
+																						<c:set target="${urlParams}" property="event" value="edit" />
 																						<%
-																						if (report.getType()!=null && report.getType().equals(new Long(1))
-																						&& 	!FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS)) {
+																							if (Long.valueOf(1l).equals(report.getType()) && !onlySaikuButton) {
 																						%>
-																						<a
-																							href="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}"
-																							title="Saiku" onclick="return popup(this,'');" title="Click here to view the Report">
-																							<img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku.png" vspace="2" border="0" align="absmiddle" style="padding-right: 5px;padding-bottom: 10px;"/>
-																						</a>
-																						<%
-																						}%>
+																							<%@ include file="saiku_button.jspf" %> 
+																						<% } %>
 																						<c:set var="translation">
 																							<digi:trn>Get report in Excel format</digi:trn>&nbsp;
 																						</c:set>

@@ -26,6 +26,7 @@ import org.dgfoundation.amp.onepager.components.features.subsections.AmpComponen
 import org.dgfoundation.amp.onepager.events.ProposedProjectCostUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
+import org.dgfoundation.amp.onepager.models.AmpCurrencyCodeStringListReadOnlyModel;
 import org.dgfoundation.amp.onepager.models.ProposedProjectCostModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;

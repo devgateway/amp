@@ -64,7 +64,7 @@ public class AmpComponentFormTableAnnualBudget
 		if (setModel.getObject() == null)
 			setModel.setObject(new TreeSet<AmpAnnualProjectBudget>());
 		setTitleHeaderColSpan(5);
-		list = new ListEditor<AmpAnnualProjectBudget>("listAnnualBudget", setModel, new AmpAnnualProjectBudget.AmpAnnualProjectBudgerComparator()) {
+		list = new ListEditor<AmpAnnualProjectBudget>("listAnnualBudget", setModel) {
 			@Override
 			protected void onPopulateItem(
 					final org.dgfoundation.amp.onepager.components.ListItem<AmpAnnualProjectBudget> item) {

@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.ObjectUtils;
@@ -23,6 +24,7 @@ import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.dgfoundation.amp.reports.MeasuresVisibility;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -617,6 +619,16 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 			res.add(measure.getMeasure().getMeasureName());
 		return res;
 	}
+	
+	
+	public boolean hasAvailableMeasures() {
+		Set<String> reportMeasures = getMeasureNames();
+		Set<String> availableMeasures = MeasuresVisibility.getVisibleMeasures();
+		//the number of measures is quite small, so n*n is ok
+		reportMeasures.retainAll(availableMeasures);
+		return !reportMeasures.isEmpty();
+	}
+	
 	
 	public String[] getOrderedMeasureNames() {
 		String[] res = new String[getMeasures().size()];

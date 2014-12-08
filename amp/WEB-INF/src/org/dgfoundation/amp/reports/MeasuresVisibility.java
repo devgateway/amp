@@ -47,8 +47,16 @@ public class MeasuresVisibility extends DataVisibility {
 	
 	@SuppressWarnings("serial")
 	private static final Set<String> allPossibleValuesSet = new HashSet<String>() {{
-		Collection<AmpCategoryValue> adjTypes = CategoryManagerUtil.getAmpCategoryValueCollectionByKey("adjustment_type");		
-		for (AmpCategoryValue adj: adjTypes) {
+	
+		Collection<AmpCategoryValue> adjustmentTypes = new ArrayList<AmpCategoryValue>(); 
+		
+		
+		for (AmpCategoryValue adjType: CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ADJUSTMENT_TYPE_KEY))
+			if (adjType.isVisible())
+				adjustmentTypes.add(adjType);
+		
+		
+		for (AmpCategoryValue adj: adjustmentTypes) {
 			for (String trans: modulesToMeasuresMap.values()) {
 				add(adj.getLabel() + " " + trans);
 			}
@@ -129,7 +137,14 @@ public class MeasuresVisibility extends DataVisibility {
 	
 	@SuppressWarnings("serial")
 	public static final Map<String, Collection<String>> dependencyMapTypeAll = new HashMap<String, Collection<String>>() {{
-		for(AmpCategoryValue adj:CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
+		Collection<AmpCategoryValue> adjustmentTypes = new ArrayList<AmpCategoryValue>(); 
+		
+		
+		for (AmpCategoryValue adjType: CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ADJUSTMENT_TYPE_KEY))
+			if (adjType.isVisible())
+				adjustmentTypes.add(adjType);
+		
+		for(AmpCategoryValue adj:adjustmentTypes) {
 			for (final String trType: TRANSACTION_TYPES) {
 				put(adj.getValue() + " " + trType, new ArrayList<String>() {{  add(trType);}});
 			}
@@ -149,7 +164,14 @@ public class MeasuresVisibility extends DataVisibility {
 	@Override
 	protected List<String> getVisibleByDefault() {
 		List<String> currentlyVisible = new ArrayList<>();
-		for(AmpCategoryValue acv:CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
+		
+		Collection<AmpCategoryValue> adjustmentTypes = new ArrayList<AmpCategoryValue>(); 
+				
+				
+		for (AmpCategoryValue adjType: CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ADJUSTMENT_TYPE_KEY))
+			if (adjType.isVisible())
+				adjustmentTypes.add(adjType);
+		for(AmpCategoryValue acv:adjustmentTypes) {
 			if (acv != null && acv.isVisible())
 				currentlyVisible.add(ADJUSTMENT_PREFIX + acv.getValue());
 		}

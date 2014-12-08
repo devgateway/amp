@@ -216,7 +216,7 @@ public class WorkspaceFilter
 	private static String generateWorkspaceFilterQuery(HttpSession session)
 	{
 		 // (approval_status='approved' and draft<>true)
-		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+//		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		return generateWorkspaceFilterQuery(session, null);
 	}
 

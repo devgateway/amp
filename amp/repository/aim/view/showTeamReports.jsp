@@ -721,12 +721,19 @@ $(document).ready(function() {
 																						if (report.getType()!=null && report.getType().equals(new Long(1))
 																						&& 	!FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS)) {
 																						%>
-																					
+																						<%
+																						if (report.hasAvailableMeasures()) {
+																						
+																						%>
 																						<a href="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}" onclick="return popup(this,'');" title="Click here to view the Report">
 																							<img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku.png" vspace="2" border="0" align="absmiddle" style="padding-right: 5px;"/>
 																						</a> 
-						                                								<%
-																							}
+																						<%}else{ %>
+																						<a href="javascript: void(0)" title="The requested report includes unavailable measures">
+																							<img src= "/TEMPLATE/ampTemplate/saikuui/images/saiku_disabled.png"  vspace="2" border="0" align="absmiddle" style="padding-right: 5px;"/>
+																						</a> 
+																						<%
+																							}}
 																						%>
 						                                								<c:set target="${urlParams}" property="event" value="edit" />
 						                                								<logic:equal name="teamLeadFlag" scope="session" value="true"> 

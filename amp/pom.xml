@@ -26,23 +26,6 @@
 			<name>amp</name>
 			<url>http://artifactory.ampdev.net/artifactory/amp</url>
 		</repository>
-		<repository>
-			<id>Hibernate Spatial repo</id>
-			<url>http://www.hibernatespatial.org/repository</url>
-		</repository>
-		 <repository>
-   			<id>Analytical Labs Repo</id>
-   			<name>Analytical Labs Repo-releases</name>
-   			<url>http://repo.analytical-labs.com/alabs-release-local</url>
-  		</repository>
-  		<repository>
-            <id>EU-DEVFIN Central</id>
-            <name>DG EU-DEVFIN Central Repo</name>
-            <url>http://artifactory.ampdev.net/artifactory/eudevfin/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
@@ -902,9 +885,24 @@
 			<version>${saiku.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.olap4j</groupId>
+            <artifactId>olap4j</artifactId>
+            <version>1.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.olap4j</groupId>
+            <artifactId>olap4j-xmla</artifactId>
+            <version>1.2.0</version>
+		</dependency>
+		<!-- 
+		If the Saiku version is upgraded and a new version of this file is required, 
+		if the file is still SNAPSHOT, deploy the artifact to our artifactory appending "-DG" (like the current one) and update the version number.
+		If the dependency is not SNAPSHOT anymore, then just put the correct version (which will now be cached by our artifactory 
+		-->
+		<dependency>
 			<groupId>org.saiku</groupId>
 			<artifactId>saiku-query</artifactId>
-			<version>0.1-SNAPSHOT</version>
+			<version>0.1-SNAPSHOT-DG</version>
 		</dependency>
 		<dependency>
     		<groupId>nl.cwi</groupId>

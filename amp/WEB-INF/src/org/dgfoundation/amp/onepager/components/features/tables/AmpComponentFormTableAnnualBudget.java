@@ -28,6 +28,11 @@ public class AmpComponentFormTableAnnualBudget
 		AmpFundingFormTableFeaturePanel<AmpActivityVersion, AmpAnnualProjectBudget> {
 
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 732018195505777380L;
+
+	/**
 	 * @param id
 	 * @param fmName
 	 * @param model
@@ -45,7 +50,7 @@ public class AmpComponentFormTableAnnualBudget
 		if (setModel.getObject() == null)
 			setModel.setObject(new TreeSet<AmpAnnualProjectBudget>());
 		setTitleHeaderColSpan(5);
-		list = new ListEditor<AmpAnnualProjectBudget>("listMTEF", setModel, new AmpAnnualProjectBudget.AmpAnnualProjectBudgerComparator()) {
+		list = new ListEditor<AmpAnnualProjectBudget>("listAnnualBudget", setModel, new AmpAnnualProjectBudget.AmpAnnualProjectBudgerComparator()) {
 			@Override
 			protected void onPopulateItem(
 					final org.dgfoundation.amp.onepager.components.ListItem<AmpAnnualProjectBudget> item) {
@@ -67,7 +72,6 @@ public class AmpComponentFormTableAnnualBudget
 						NumberFormat formatter = FormatHelper
 								.getDecimalFormat(true);
 
-						// formatter.setMinimumFractionDigits(0);
 						converter.setNumberFormat(getLocale(), formatter);
 						return converter;
 					}
@@ -90,7 +94,7 @@ public class AmpComponentFormTableAnnualBudget
 
 				item.add(date);
 
-				AmpDeleteLinkField delOrgId = new AmpDeleteLinkField("delMtef",
+				AmpDeleteLinkField delAnnualBudget = new AmpDeleteLinkField("delAnnualBudget",
 						"Delete Internal Id") {
 					@Override
 					public void onClick(AjaxRequestTarget target) {
@@ -113,7 +117,7 @@ public class AmpComponentFormTableAnnualBudget
 						//list.updateModel();
 					}
 				};
-				item.add(delOrgId);
+				item.add(delAnnualBudget);
 
 			}
 		};

@@ -47,16 +47,7 @@ public class MeasuresVisibility extends DataVisibility {
 	
 	@SuppressWarnings("serial")
 	private static final Set<String> allPossibleValuesSet = new HashSet<String>() {{
-	
-		Collection<AmpCategoryValue> adjustmentTypes = new ArrayList<AmpCategoryValue>(); 
-		
-		
-		for (AmpCategoryValue adjType: CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ADJUSTMENT_TYPE_KEY))
-			if (adjType.isVisible())
-				adjustmentTypes.add(adjType);
-		
-		
-		for (AmpCategoryValue adj: adjustmentTypes) {
+		for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
 			for (String trans: modulesToMeasuresMap.values()) {
 				add(adj.getLabel() + " " + trans);
 			}
@@ -74,16 +65,10 @@ public class MeasuresVisibility extends DataVisibility {
 		sanityCheck();
 		Set<String> visiblePrecursors = new HashSet<String>(); 
 		Set<String> invisiblePrecursors = new HashSet<String>(getAllPrecursors());
-
-		
 		Set<String> visibleData = new HashSet<String>(); 
 		//visibleData.addAll(getVisibleByDefault());
 		Set<String> invisibleData = new HashSet<String>(getAllData());
 		//invisibleData.removeAll(getVisibleByDefault());
-
-		
-		
-		
 		AmpTemplatesVisibility currentTemplate = FeaturesUtil.getCurrentTemplate();
 
 		//check modules
@@ -138,13 +123,7 @@ public class MeasuresVisibility extends DataVisibility {
 	@SuppressWarnings("serial")
 	public static final Map<String, Collection<String>> dependencyMapTypeAll = new HashMap<String, Collection<String>>() {{
 		Collection<AmpCategoryValue> adjustmentTypes = new ArrayList<AmpCategoryValue>(); 
-		
-		
-		for (AmpCategoryValue adjType: CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ADJUSTMENT_TYPE_KEY))
-			if (adjType.isVisible())
-				adjustmentTypes.add(adjType);
-		
-		for(AmpCategoryValue adj:adjustmentTypes) {
+		for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
 			for (final String trType: TRANSACTION_TYPES) {
 				put(adj.getValue() + " " + trType, new ArrayList<String>() {{  add(trType);}});
 			}
@@ -165,15 +144,8 @@ public class MeasuresVisibility extends DataVisibility {
 	protected List<String> getVisibleByDefault() {
 		List<String> currentlyVisible = new ArrayList<>();
 		
-		Collection<AmpCategoryValue> adjustmentTypes = new ArrayList<AmpCategoryValue>(); 
-				
-				
-		for (AmpCategoryValue adjType: CategoryManagerUtil.getAmpCategoryValueCollectionByKey(CategoryConstants.ADJUSTMENT_TYPE_KEY))
-			if (adjType.isVisible())
-				adjustmentTypes.add(adjType);
-		for(AmpCategoryValue acv:adjustmentTypes) {
-			if (acv != null && acv.isVisible())
-				currentlyVisible.add(ADJUSTMENT_PREFIX + acv.getValue());
+		for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
+				currentlyVisible.add(ADJUSTMENT_PREFIX + adj.getValue());
 		}
 		return currentlyVisible;
 	}

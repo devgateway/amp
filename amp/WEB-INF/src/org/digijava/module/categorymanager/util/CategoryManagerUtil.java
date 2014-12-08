@@ -484,6 +484,23 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	public static Collection<AmpCategoryValue> getAmpCategoryValueCollectionByKey(String categoryKey){
 		return getAmpCategoryValueCollectionByKey(categoryKey, false);		
 	}
+
+	/**
+	 * gets all ACV that are not also deleted 
+	 * The function is called with ordered = false
+	 * @param categoryKey
+	 * @return 
+	 */
+	public static Collection<AmpCategoryValue> getAmpCategoryValueCollectionByKeyExcludeDeleted(String categoryKey){
+		Collection<AmpCategoryValue> visibleValues = new ArrayList<AmpCategoryValue>(); 
+		for (AmpCategoryValue acvalue: CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey)) {
+			if (acvalue.isVisible()) {
+				visibleValues.add(acvalue);
+			}
+		}
+		return visibleValues;		
+	}	
+	
 	
 	/**
 	 * because the amp_categories table does not change during the runtime of AMP, we can safely cache them

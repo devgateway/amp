@@ -624,7 +624,6 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	public boolean hasAvailableMeasures() {
 		Set<String> reportMeasures = getMeasureNames();
 		Set<String> availableMeasures = MeasuresVisibility.getVisibleMeasures();
-		//the number of measures is quite small, so n*n is ok
 		reportMeasures.retainAll(availableMeasures);
 		return !reportMeasures.isEmpty();
 	}

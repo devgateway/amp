@@ -8,6 +8,9 @@ package org.dgfoundation.amp.ar.view.xls;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -50,19 +53,15 @@ public class TextCellXLS extends XLSExporter {
 		super(wb, sheet, row, rowId, colId, ownerId, item);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public final static Set<String> DG_EDITOR_COLUMNS = new HashSet<>(Arrays.asList("Objective", "Results", "Purpose", "Project Description", 
+			"Project Impact", "Project Comments", "Equal Opportunity", "Environment", "Minorities"));
 
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.Exporter#generate()
 	 */
 	private boolean columnNeedsHTMLStripping(String columnName){
-		String s = columnName.toLowerCase();
-		if ("objective".compareTo(s) == 0 ||
-			"description".compareTo(s) == 0 ||
-			"results".compareTo(s) == 0
-			){
-			return true;
-		}
-		return false;
+		return DG_EDITOR_COLUMNS.contains(columnName);
 	}
 	
 	@Override

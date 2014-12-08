@@ -52,7 +52,7 @@
 
 	</bean>
 
-	<bean id="datasourceServiceBean" class="org.saiku.service.datasource.DatasourceService">
+	<bean id="datasourceServiceBean" class="org.dgfoundation.amp.reports.saiku.AMPDatasourceService">
 		<property name="connectionManager" ref="connectionManager" />
 	</bean>
 

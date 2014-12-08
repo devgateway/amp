@@ -191,6 +191,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 		catch(Exception e) {
 			stats.crashed = true;
+			e.printStackTrace();
 			throw e;
 		}
 		finally {

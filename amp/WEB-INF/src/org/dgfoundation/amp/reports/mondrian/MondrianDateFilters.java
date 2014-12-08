@@ -48,7 +48,7 @@ public class MondrianDateFilters {
 		final String or = " OR ";
 		final String and = " AND ";
 		//DO NOT REMOVE!!!
-		final String select = "SELECT amp_activity_id FROM amp_activity WHERE ";
+		final String select = "SELECT amp_activity_id FROM amp_activity_version WHERE ";
 		
 		for (Iterator<Entry<ReportColumn, List<FilterRule>>> entryIter = filters.entrySet().iterator(); entryIter.hasNext(); ) {
 			Entry<ReportColumn, List<FilterRule>> entry = entryIter.next();
@@ -71,42 +71,49 @@ public class MondrianDateFilters {
 			if (entryIter.hasNext())
 				filterStr.append(and);
 		}
+		
 		if (areRealFilters)
 			return select + filterStr.toString();
+		
 		return null;
 	}
 	
-	private static final String buildDatesFilter(String sqlColumnName, FilterRule rule) {
+	private static String buildDatesFilter(String columnName, FilterRule rule) {
 		StringBuilder result = new StringBuilder();
+		String sqlColumnName = getJulianCodeSql(columnName);
+		
 		switch(rule.filterType) {
-		case RANGE:
-			if (rule.min != null)
-				result.append(sqlColumnName).append(rule.minInclusive ? " >= " : " > ").append(toSQLDate(rule.min));
-			if (rule.min != null && rule.max != null)
-				result.append(" AND ");
-			if (rule.max != null)
-				result.append(sqlColumnName).append(rule.maxInclusive ? " <= " : " < ").append(toSQLDate(rule.max));
-			break;
-		case SINGLE_VALUE:
-			result.append(sqlColumnName).append(" = ").append(toSQLDate(rule.value));
-			break;
-		case VALUES:
-			if (rule.values != null && rule.values.size() > 0) {
-				final String sep = ", ";
-				result.append(sqlColumnName).append(rule.valuesInclusive ? " IN " : " NOT IN ").append(" (");
-				for (Iterator<String> iter = rule.values.iterator(); iter.hasNext(); ) {
-					result.append(toSQLDate(iter.next()));
-					if (iter.hasNext())
-						result.append(sep);
+			case RANGE:
+				if (rule.min != null)
+					result.append(sqlColumnName).append(rule.minInclusive ? " >= " : " > ").append(rule.min);
+				if (rule.min != null && rule.max != null)
+					result.append(" AND ");
+				if (rule.max != null)
+					result.append(sqlColumnName).append(rule.maxInclusive ? " <= " : " < ").append(rule.max);
+				break;
+				
+			case SINGLE_VALUE:
+				result.append(sqlColumnName).append(" = ").append(rule.value);
+				break;
+				
+			case VALUES:
+				if (rule.values != null && rule.values.size() > 0) {
+					final String sep = ", ";
+					result.append(sqlColumnName).append(rule.valuesInclusive ? " IN " : " NOT IN ").append(" (");
+					for (Iterator<String> iter = rule.values.iterator(); iter.hasNext(); ) {
+						result.append(iter.next());
+						if (iter.hasNext())
+							result.append(sep);
+					}
+					result.append(")");
 				}
-				result.append(")");
-			}
-			break;
+				break;
 		}
 		return result.length() == 0 ? null : result.toString();
 	}
 	
-	private static final String toSQLDate(String date) {
-		return "DATE '" + date + "'";
+	private static String getJulianCodeSql(String columnName) {
+		return String.format("to_char(%s, 'J')::integer", columnName);
 	}
+
 }

@@ -127,7 +127,6 @@ public class MDXGenerator {
 		/* COLUMNS */
 		//if column attributes are not configured, display only measures
 		axisMdx = getColumns(config, with);
-		
 		columns  =  notEmptyColumns + axisMdx + columns;
 		
 		/* ROWS */

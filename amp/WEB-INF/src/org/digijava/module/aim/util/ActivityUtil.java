@@ -7,6 +7,7 @@ package org.digijava.module.aim.util;
 
 import java.math.BigInteger;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -95,6 +96,7 @@ import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.engine.spi.SessionImplementor;
+import org.hibernate.jdbc.ReturningWork;
 import org.hibernate.type.LongType;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.type.StringType;
@@ -846,10 +848,21 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
      * returns a set of all ampActivityIds passed by the workspace filter
      * @param session
      */
-    public static Set<Long> fetchLongs(String usedQuery)
+    public static Set<Long> fetchLongs(final String usedQuery)
     {
    		Set<Long> ampActivityIds = new HashSet<Long>();
-   		List<Object> res = PersistenceManager.getSession().createSQLQuery(usedQuery).list();
+   		List<Object> res;
+   		
+   		if (usedQuery.contains(":")) {
+   			// slower but always works
+   			res = PersistenceManager.getSession().doReturningWork(new ReturningWork<List<Object>>() {
+   					@Override public List<Object> execute(Connection connection) throws SQLException {
+   						return (List) SQLUtils.fetchLongs(connection, usedQuery);
+   					}});
+   		}
+   		else {
+   			res = PersistenceManager.getSession().createSQLQuery(usedQuery).list();
+   		}
    		for(Object aaa:res)
 		{
 			Long ampActivityId = PersistenceManager.getLong(aaa);

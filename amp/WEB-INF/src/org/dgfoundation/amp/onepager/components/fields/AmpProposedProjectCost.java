@@ -6,7 +6,6 @@ package org.dgfoundation.amp.onepager.components.fields;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -15,7 +14,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -32,7 +30,6 @@ import org.dgfoundation.amp.onepager.models.ProposedProjectCostModel;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -121,20 +118,7 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 			add(amount);
 		}
 
-		AbstractReadOnlyModel<List<String>> currencyList = new AbstractReadOnlyModel<List<String>>() {
-			@Override
-			public List<String> getObject() {
-				List<AmpCurrency> tmp = (List<AmpCurrency>) CurrencyUtil.getActiveAmpCurrencyByCode();
-				ArrayList<String> ret = new ArrayList<String>();
-
-				Iterator<AmpCurrency> it = tmp.iterator();
-				while (it.hasNext()) {
-					AmpCurrency c = (AmpCurrency) it.next();
-					ret.add(c.getCurrencyCode());
-				}
-				return ret;
-			}
-		};
+		AmpCurrencyCodeStringListReadOnlyModel currencyList = new AmpCurrencyCodeStringListReadOnlyModel();
 
 		PropertyModel<String> currencyModel = new PropertyModel<String>(am, "currencyCode");
 

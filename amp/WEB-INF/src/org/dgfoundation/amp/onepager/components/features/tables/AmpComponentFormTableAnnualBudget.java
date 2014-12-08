@@ -2,6 +2,7 @@ package org.dgfoundation.amp.onepager.components.features.tables;
 
 import java.text.NumberFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -10,6 +11,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -18,10 +20,13 @@ import org.apache.wicket.util.convert.converter.DoubleConverter;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
+import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 public class AmpComponentFormTableAnnualBudget
 		extends
@@ -44,7 +49,15 @@ public class AmpComponentFormTableAnnualBudget
 		super(id, model, fmName);
 
 		getTableId().add(new AttributeModifier("width", "620"));
+		
+		final AbstractReadOnlyModel<List<AmpCurrency>> currencyList = new AbstractReadOnlyModel<List<AmpCurrency>>() {
+			@Override
+			public List<AmpCurrency> getObject() {
+				return (List<AmpCurrency>) CurrencyUtil.getActiveAmpCurrencyByCode();
+			}
+		};
 
+		
 		final IModel<Set<AmpAnnualProjectBudget>> setModel = new PropertyModel<Set<AmpAnnualProjectBudget>>(
 				model, "annualProjectBudgets");
 		if (setModel.getObject() == null)
@@ -94,6 +107,21 @@ public class AmpComponentFormTableAnnualBudget
 
 				item.add(date);
 
+				
+				AmpSelectFieldPanel currency = new AmpSelectFieldPanel<AmpCurrency>("currencyAnnualBudget",
+						new PropertyModel<AmpCurrency>(item.getModel(), "ampCurrencyId"),
+						currencyList, "Currency", false, false, null, false) {
+							private static final long serialVersionUID = -7416247154386264496L;
+
+					@Override
+					protected void onAjaxOnUpdate(AjaxRequestTarget target) {
+						onFundingDetailChanged(target);
+					}
+				};
+				currency.getChoiceContainer().setRequired(true);
+				item.add(currency);
+
+				
 				AmpDeleteLinkField delAnnualBudget = new AmpDeleteLinkField("delAnnualBudget",
 						"Delete Internal Id") {
 					@Override
@@ -113,8 +141,7 @@ public class AmpComponentFormTableAnnualBudget
 						list.items.remove(item.getIndex());
 						list.remove(item);
 						onFundingDetailChanged(target);
-						
-						//list.updateModel();
+
 					}
 				};
 				item.add(delAnnualBudget);

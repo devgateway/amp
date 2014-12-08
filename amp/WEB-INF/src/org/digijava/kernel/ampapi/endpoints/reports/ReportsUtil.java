@@ -159,7 +159,6 @@ public class ReportsUtil {
 			update(spec, formParams);
 			// regenerate
 			GeneratedReport generatedReport = EndpointUtils.runReport(spec, PartialReportArea.class);
-			postProcessForHierarchicalReports(generatedReport);
 			cachedReportData = ReportPaginationUtils.cacheReportData(reportId, generatedReport);
 		} else {
 			cachedReportData = ReportCacher.getReportData(reportId);
@@ -177,65 +176,6 @@ public class ReportsUtil {
 			}
 		}
 		return cachedReportData;
-	}
-	
-	/**
-	 * Some hierarchical reports need a postprocess before is rendered to the client, if the 1st column after the
-	 * hierarchical columns is an "agency" we need to check that the row has values, if not it has to be deleted
-	 * from the report (like in old reports/tabs).
-	 * 
-	 * @param report
-	 */
-	private static void postProcessForHierarchicalReports(GeneratedReport report) {
-		if (report != null && report.spec != null) {
-			if (report.spec.getHierarchies() != null && report.spec.getHierarchies().size() > 0) {
-				ReportColumn column = (ReportColumn) report.spec.getColumns().toArray()[report.spec.getHierarchies().size()];
-				if (column.getEntityName().equals(MoConstants.EXECUTING_AGENCY)
-						|| column.getEntityName().equals(MoConstants.BENEFICIARY_AGENCY)
-						|| column.getEntityName().equals(MoConstants.CONTRACTING_AGENCY)
-						|| column.getEntityName().equals(MoConstants.IMPLEMENTING_AGENCY)) {
-					// Iterate the tree structure looking for the last level (the row) and check is not empty the cell
-					// for
-					// this column.
-					if (report.reportContents != null) {
-						lookForRowRecursively(report.reportContents, column);
-						logger.info(report.reportContents);
-					}
-				}
-			}
-		}
-	}
-	
-	private static boolean lookForRowRecursively(ReportArea reportArea, ReportColumn hierarchicalColumn) {
-		if (reportArea.getChildren() == null || reportArea.getChildren().size() == 0) {
-			boolean found = false;
-			Iterator<Map.Entry<ReportOutputColumn, ReportCell>> itColumns = reportArea.getContents().entrySet().iterator();
-			while (itColumns.hasNext()) {
-				Map.Entry<ReportOutputColumn, ReportCell> column = itColumns.next();
-				if (column.getKey().originalColumnName.equals(hierarchicalColumn.getColumnName())) {
-					if (!column.getValue().displayedValue.trim().equals("")) {
-						found = true;
-					}
-				}
-			}
-			if (!found) {
-				logger.warn("Removing row:" + reportArea.getContents().toString());
-			}
-			return found;
-		} else {
-			boolean hasChildren = false;
-			Iterator<ReportArea> itChildren = reportArea.getChildren().iterator();
-			while (itChildren.hasNext()) {
-				ReportArea child = itChildren.next();
-				boolean found = lookForRowRecursively(child, hierarchicalColumn);
-				if (!found) {
-					itChildren.remove();
-				} else {
-					hasChildren = true;
-				}
-			}
-			return hasChildren;
-		}
 	}
 	
 	/**

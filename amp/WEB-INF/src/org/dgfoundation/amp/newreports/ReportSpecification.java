@@ -73,4 +73,10 @@ public interface ReportSpecification {
 	 */
 	public boolean isDisplayEmptyFundingRows();
 	
+	
+	/** 
+	 * @return whether textual cells with no data should display "" (if true) or "[columnName] unspecified" (if false) 
+	 */
+	public boolean isEmptyOutputForUnspecifiedData();
+	
 }

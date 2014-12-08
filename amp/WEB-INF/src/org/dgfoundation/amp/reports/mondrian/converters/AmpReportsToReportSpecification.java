@@ -79,6 +79,8 @@ public class AmpReportsToReportSpecification {
 		configureHierarchies();
 		configureSorting();
 		
+		spec.setEmptyOutputForUnspecifiedData(report.getDrilldownTab() == null || !report.getDrilldownTab());
+		
 		//configure filters & settings
 		AmpARFilterConverter arFilterTranslator = new AmpARFilterConverter(arFilter);
 		spec.setSettings(arFilterTranslator.buildSettings());

@@ -29,6 +29,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	private int colsHierarchyTotals = 0;
 	private boolean displayEmptyFundingColumns = false;
 	private boolean displayEmptyFundingRows = false;
+	private boolean emptyOutputForUnspecifiedData = true;
 	
 	public ReportSpecificationImpl(String reportName) {
 		this.reportName = reportName;
@@ -272,4 +273,12 @@ public class ReportSpecificationImpl implements ReportSpecification {
 		this.colsHierarchyTotals = colsHierarchyTotals;
 	}
 
+	@Override
+	public boolean isEmptyOutputForUnspecifiedData() {
+		return emptyOutputForUnspecifiedData;
+	}
+	
+	public void setEmptyOutputForUnspecifiedData(boolean val) {
+		this.emptyOutputForUnspecifiedData = val;
+	}
 }

@@ -551,6 +551,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 */
 	protected void postprocessUndefinedEntries(ReportSpecification spec, CellDataSet cellDataSet) {
 		String translatedUndefined = TranslatorWorker.translateText("Undefined", environment.locale, 3l);
+		String translatedUnspecified = TranslatorWorker.translateText("Unspecified", environment.locale, 3l);
+		
 		for (int rowId = 0; rowId < cellDataSet.getCellSetBody().length; rowId++) {
 			AbstractBaseCell[] row = cellDataSet.getCellSetBody()[rowId];
 			if (row == null) continue; // who knows, let's be defensive
@@ -563,7 +565,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 					boolean isHierarchy = i < spec.getHierarchies().size();
 					String newValue = isHierarchy ? 
 											String.format("%s: %s", leafHeaders.get(i).columnName, translatedUndefined) :
-											"";
+											spec.isEmptyOutputForUnspecifiedData() ? "" : 
+											"(" + leafHeaders.get(i).columnName + " " + translatedUnspecified + ")";
 
 					row[i].setRawValue(newValue);
 					row[i].setFormattedValue(newValue);

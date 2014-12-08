@@ -53,8 +53,9 @@ public class FactTableFiltering {
 		String ret = subquery.toString().trim();
 		if (ret != null && !ret.isEmpty())
 			System.out.println("filter query fragment: " + ret);
-		long end = System.currentTimeMillis() - start;
-		System.out.println("generating sql filter query took: " + end + " millies");
+		long delta = System.currentTimeMillis() - start;
+		if (delta > 20)
+			System.out.println("generating sql filter query took: " + delta + " millies");
 		return ret;
 	}
 	

@@ -300,4 +300,29 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 		);
 	}
 	
+	@Test
+	public void test_AMP_18587_empty_cells_in_tabs() {
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Executing Agency", "", "2010-Actual Disbursements", "60 000", "2012-Actual Disbursements", "12 000", "Total Measures-Actual Disbursements", "72 000")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "date-filters-activity", "Executing Agency", "UNDP", "2010-Actual Disbursements", "60 000", "2012-Actual Disbursements", "12 000", "Total Measures-Actual Disbursements", "72 000"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "crazy funding 1", "Executing Agency", "(Executing Agency Unspecified)", "2010-Actual Disbursements", "0", "2012-Actual Disbursements", "0", "Total Measures-Actual Disbursements", "0"));
+
+		
+		ReportSpecificationImpl spec = buildSpecification("test_AMP_18587",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.EXECUTING_AGENCY),
+				Arrays.asList(MeasureConstants.ACTUAL_DISBURSEMENTS),
+				null,
+				GroupingCriteria.GROUPING_YEARLY);
+		
+		spec.setEmptyOutputForUnspecifiedData(false);
+		spec.setDisplayEmptyFundingRows(true);
+		
+		runMondrianTestCase(spec, "en",
+				Arrays.asList("date-filters-activity", "crazy funding 1"),
+				cor);
+	}
+	
 }

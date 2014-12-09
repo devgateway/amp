@@ -2,11 +2,11 @@ package org.digijava.kernel.ampapi.mondrian.util;
 
 import javax.xml.parsers.*;
 import javax.xml.xpath.*;
-
 import javax.xml.transform.*;
 import javax.xml.transform.stream.*;
 import javax.xml.transform.dom.*;
 
+import org.w3c.css.sac.InputSource;
 import org.w3c.dom.*;
 
 import java.io.*;
@@ -45,6 +45,10 @@ public final class XMLGlobals
 		catch(Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+	
+	public static Element createNewNode(String value) {
+		return createNewXML(value).getDocumentElement();
 	}
 	
 	/**
@@ -93,8 +97,8 @@ public final class XMLGlobals
 		return attrExpected.equals(attrValue);
 	}
 
-	private static void saveToStreamResult(Document document, StreamResult streamResult) throws Exception {
-		DOMSource domSource = new DOMSource(document);
+	private static void saveToStreamResult(Node node, StreamResult streamResult) throws Exception {
+		DOMSource domSource = new DOMSource(node);
 		TransformerFactory tf = TransformerFactory.newInstance();
 		Transformer serializer = tf.newTransformer();
 		serializer.setOutputProperty(OutputKeys.ENCODING,"utf-8");
@@ -108,11 +112,11 @@ public final class XMLGlobals
 	 * @param document
 	 * @return the String, if successful. Null if an error occured
 	 */
-	public static String saveToString(Document document) {
+	public static String saveToString(Node node) {
 		try {
 			StringWriter writer = new StringWriter();
 			StreamResult streamResult = new StreamResult(writer);
-			saveToStreamResult(document, streamResult);
+			saveToStreamResult(node, streamResult);
 			return writer.toString();
 		}
 		catch(Exception e) {

@@ -32,16 +32,12 @@ import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCateg
  * @author Alexandru Cartaleanu
  */
 public class MeasuresVisibility extends DataVisibility {
-	protected static final Logger logger = Logger.getLogger(MeasuresVisibility.class);
-	
-	public static final List<String> TRANSACTION_TYPES = Arrays.asList(ArConstants.COMMITMENT, ArConstants.DISBURSEMENT, ArConstants.EXPENDITURE);
-	
+	protected static final Logger logger = Logger.getLogger(MeasuresVisibility.class);	
 
 	@SuppressWarnings("serial")
 	protected static final Map<String, String> modulesToMeasuresMap = new HashMap<String, String>() {{
-		put("/Activity Form/Funding/Funding Group/Funding Item/Commitments", ArConstants.COMMITMENT);
-		put("/Activity Form/Funding/Funding Group/Funding Item/Disbursements", ArConstants.DISBURSEMENT);
-		put("/Activity Form/Funding/Funding Group/Funding Item/Expenditures", ArConstants.EXPENDITURE);
+		for(String transactionName:ArConstants.TRANSACTION_TYPE_NAME_TO_ID.keySet())
+			put("/Activity Form/Funding/Funding Group/Funding Item/" + transactionName, transactionName);
 		put("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Capital Spending Percentage", "Capital");
 	}};
 	
@@ -124,14 +120,14 @@ public class MeasuresVisibility extends DataVisibility {
 	public static final Map<String, Collection<String>> dependencyMapTypeAll = new HashMap<String, Collection<String>>() {{
 		//Collection<AmpCategoryValue> adjustmentTypes = new ArrayList<AmpCategoryValue>(); 
 		for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
-			for (final String trType: TRANSACTION_TYPES) {
+			for (final String trType: ArConstants.TRANSACTION_TYPE_NAME_TO_ID.keySet()) {
 				put(adj.getValue() + " " + trType, new ArrayList<String>() {{  add(trType);}});
 			}
 		}
-		put(MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL, new ArrayList<String>() {{add("Disbursements"); add("Capital"); add(ADJUSTMENT_PREFIX + "Actual"); }});
-		put(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT, new ArrayList<String>() {{add("Disbursements"); add("Capital"); add(ADJUSTMENT_PREFIX + "Actual"); }});
-		put(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL, new ArrayList<String>() {{add("Disbursements"); add("Capital"); add(ADJUSTMENT_PREFIX + "Planned"); }});
-		put(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE, new ArrayList<String>() {{add("Disbursements"); add("Capital"); add(ADJUSTMENT_PREFIX + "Planned"); }});
+		put(MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL, new ArrayList<String>() {{     add(ArConstants.DISBURSEMENT); add("Capital"); add(ADJUSTMENT_PREFIX + "Actual"); }});
+		put(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT, new ArrayList<String>() {{   add(ArConstants.DISBURSEMENT); add("Capital"); add(ADJUSTMENT_PREFIX + "Actual"); }});
+		put(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL, new ArrayList<String>() {{    add(ArConstants.DISBURSEMENT); add("Capital"); add(ADJUSTMENT_PREFIX + "Planned"); }});
+		put(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE, new ArrayList<String>(){{ add(ArConstants.DISBURSEMENT); add("Capital"); add(ADJUSTMENT_PREFIX + "Planned"); }});
 		
 	}};
 	

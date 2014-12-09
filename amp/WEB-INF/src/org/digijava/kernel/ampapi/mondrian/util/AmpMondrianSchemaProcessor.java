@@ -11,6 +11,7 @@ import mondrian.spi.DynamicSchemaProcessor;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -23,7 +24,9 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -56,7 +59,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			// default initialization to allow usage for now the Saiku standalone. Return to previous state or implement better solution.
 			initDefault();
 		}
-		contents = expandSchema(contents);		
+		contents = expandSchema(contents);
 		contents = contents.replaceAll("@@actual@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getIdInDatabase()));
 		contents = contents.replaceAll("@@planned@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getIdInDatabase()));
 		contents = contents.replaceAll("@@currency@@", Long.toString(getReportCurrency().getAmpCurrencyId()));
@@ -151,6 +154,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		if (expandedSchema == null) {
 			logger.warn("expanding AMP schema...");
 			Document xmlSchema = XMLGlobals.createNewXML(contents);
+			
 			//Node dimensionsParentNode = XMLGlobals.selectNode(xmlSchema, "/Schema/Cube");
 			while(true) {
 				NodeList dimUsages = XMLGlobals.selectNodes(xmlSchema, "//DimensionUsage");
@@ -169,11 +173,46 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 				
 				dimUsage.getParentNode().replaceChild(newDimensionDefinition, dimUsage);
 			}
-			expandedSchema = XMLGlobals.saveToString(xmlSchema);
+			insertCommonMeasuresDefinitions(xmlSchema);
+			contents = XMLGlobals.saveToString(xmlSchema);
+			expandedSchema = contents;
+			// System.err.println("the expanded schema is: " + expandedSchema);
 		}
+		//System.err.println("the expanded schema is: " + expandedSchema);
 		//expandedSchema = expandedSchema.replace("@@activity_status_key@@", buildActivityStatusSQL());
 		return expandedSchema;
 	}
+	
+	
+	protected void insertCommonMeasuresDefinitions(Document xmlSchema) {
+		Node trivialMeasureDefinitionNode = XMLGlobals.selectNode(xmlSchema, "//Measure[@name='@@trivial_measure@@']");
+		//String trivialMeasureString = XMLGlobals.saveToString(trivialMeasureDefinitionNode);
+		for (String transactionType:ArConstants.TRANSACTION_TYPE_NAME_TO_ID.keySet()) {
+			Integer trTypeId = ArConstants.TRANSACTION_TYPE_NAME_TO_ID.get(transactionType);
+			for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
+				String measureName = adj.getValue() + " " + transactionType;
+//				String newMeasureString = trivialMeasureString
+//						.replace("@@trivial_measure@@", measureName)
+//						.replace("@@trivial_measure_adjustment_type@@", adj.getId().toString());
+				
+//				Node newMeasureNode = xmlSchema.createElement("Measure");
+//				xmlSchema.createElement("someElement").
+//				newMeasureNode.setTextContent(newMeasureString);
+				
+				Element newMeasureNode = (Element) trivialMeasureDefinitionNode.cloneNode(true);
+				newMeasureNode.setAttribute("name", measureName);
+				Node sqlNode = XMLGlobals.selectNode(newMeasureNode, "//SQL");
+				String newNodeText = sqlNode.getTextContent().replace("@@trivial_measure_adjustment_type@@", adj.getId().toString()).replace("@@trivial_measure_transaction_type@@", trTypeId.toString());
+				sqlNode.setTextContent(newNodeText);
+				trivialMeasureDefinitionNode.getParentNode().appendChild(newMeasureNode);
+				
+//				String elementSql = newMeasureDefinition.getTextContent();
+//				@@trivial_measure_transaction_type@@
+			}
+		}
+		trivialMeasureDefinitionNode.getParentNode().removeChild(trivialMeasureDefinitionNode);
+	}
+	
 	
 //	protected String buildActivityStatusSQL() {
 //		StringBuilder res = new StringBuilder("CASE");

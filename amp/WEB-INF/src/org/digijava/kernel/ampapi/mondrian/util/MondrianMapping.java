@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -24,6 +25,9 @@ import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXLevel;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXMeasure;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
+import org.digijava.module.categorymanager.util.CategoryConstants;
+import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 
 /**
  * Provides the support for mapping from AMP tables & columns to Mondrian schema 
@@ -298,14 +302,13 @@ public class MondrianMapping {
 			//TODO: review/complete mappings based on Mondrian Schema
 			
 			//Measures - Entity type - All
-			addMeasureDefinition(MeasureConstants.ACTUAL_COMMITMENTS);
-			addMeasureDefinition(MeasureConstants.ACTUAL_DISBURSEMENTS);
-			addMeasureDefinition(MeasureConstants.ACTUAL_EXPENDITURES);
-
-			addMeasureDefinition(MeasureConstants.PLANNED_COMMITMENTS);
-			addMeasureDefinition(MeasureConstants.PLANNED_DISBURSEMENTS);
-			addMeasureDefinition(MeasureConstants.PLANNED_EXPENDITURES);
 			
+			for (String transactionType:ArConstants.TRANSACTION_TYPE_NAME_TO_ID.keySet())
+				for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
+					String measureName = adj.getValue() + " " + transactionType;
+					addMeasureDefinition(measureName);
+				}
+					
 			addMeasureDefinition(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL);
 			addMeasureDefinition(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE);
 			addMeasureDefinition(MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL);

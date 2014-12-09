@@ -8,6 +8,7 @@ package org.dgfoundation.amp.ar;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -127,6 +128,15 @@ public final class ArConstants {
 	public final static String PLEDGE="Pledge";
 	public final static String FUNDING_TYPE_COMMITMENT_GAP = "Commitment Gap";
 	public final static String PLEDGES_METADATA_NAME="Pledges ";
+	
+	public final static Map<String, Integer> TRANSACTION_TYPE_NAME_TO_ID = new LinkedHashMap<String, Integer>() {{
+		put(COMMITMENT, Constants.COMMITMENT);
+		put(DISBURSEMENT, Constants.DISBURSEMENT);
+		put(EXPENDITURE, Constants.EXPENDITURE);
+		put(RELEASE_OF_FUNDS, Constants.RELEASE_OF_FUNDS);
+		put(ESTIMATED_DISBURSEMENTS, Constants.ESTIMATED_DONOR_DISBURSEMENT);		
+	}};
+	
 	//public final static String PLEDGES_TOTAL_PLEDGED="Total Pledged";
 	public final static java.sql.Date PLEDGE_FAKE_YEAR = new java.sql.Date(0);
     

@@ -122,7 +122,7 @@ public class MeasuresVisibility extends DataVisibility {
 	
 	@SuppressWarnings("serial")
 	public static final Map<String, Collection<String>> dependencyMapTypeAll = new HashMap<String, Collection<String>>() {{
-		Collection<AmpCategoryValue> adjustmentTypes = new ArrayList<AmpCategoryValue>(); 
+		//Collection<AmpCategoryValue> adjustmentTypes = new ArrayList<AmpCategoryValue>(); 
 		for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
 			for (final String trType: TRANSACTION_TYPES) {
 				put(adj.getValue() + " " + trType, new ArrayList<String>() {{  add(trType);}});

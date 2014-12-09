@@ -169,11 +169,13 @@ public abstract class DataVisibility {
 	protected <T extends AmpObjectVisibility> void  processVisbleObjects(List<T> visibilityList, 
 			Map<String, String> nameToColumnMap,
 			Set<String> visibleColumns, Set<String> invisibleColumns) {
-		Set<AmpObjectVisibility> visibleParents = new HashSet<AmpObjectVisibility>();
-		Set<AmpObjectVisibility> invisibleParents = new HashSet<AmpObjectVisibility>();
+//		Set<AmpObjectVisibility> visibleParents = new HashSet<AmpObjectVisibility>();
+//		Set<AmpObjectVisibility> invisibleParents = new HashSet<AmpObjectVisibility>();
 		
-		for (ListIterator<T> iter = visibilityList.listIterator(); iter.hasNext(); ) {
-			AmpObjectVisibility o = iter.next();
+		for (AmpObjectVisibility o: visibilityList) {
+			
+			// no need to check that parents are visible (actually, I think it is a bug - on Tanzania prod, for example, you can have a visible child of invisible parent (Funding Item) and the AF interprets it as Commitments being visible
+/*			AmpObjectVisibility o = iter.next();
 			
 			//check if all ancestors are visible
 			AmpObjectVisibility parent = o.getParent();
@@ -182,24 +184,25 @@ public abstract class DataVisibility {
 				if (invisibleParents.contains(parent))
 					visible = false;
 				else if (!visibleParents.contains(parent)) {
-					visible = FeaturesUtil.isVisible(parent);
+					visible = true || FeaturesUtil.isVisible(parent);
 					if (visible)
 						visibleParents.add(parent);
 				}
 				parent = parent.getParent();
 			}
 			
-			if (visible) {
+			if (visible) */ 
+			{
 				String columnName = nameToColumnMap.get(o.getName());
 				invisibleColumns.remove(columnName);
 				visibleColumns.add(columnName);
-			} else {
+			} /*else {
 				//if current parent is invisible, then place all children to invisible
 				while (o != null && (parent == null || !o.equals(parent))) {
 					invisibleParents.add(o);
 					o = o.getParent();
 				}
-			}
+			}*/
 		}
 	}
 	

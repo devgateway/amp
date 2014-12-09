@@ -15,6 +15,7 @@ public class AmpAnnualProjectBudget implements Serializable, Versionable, Clonea
 	private Double amount;
 	private Date year;
 	private AmpActivityVersion activity;
+	protected AmpCurrency ampCurrencyId;
 
 	public Long getAmpAnnualProjectBudgetId() {
 		return ampAnnualProjectBudgetId;
@@ -114,6 +115,14 @@ public class AmpAnnualProjectBudget implements Serializable, Versionable, Clonea
 				return 1;
 			return o1.getYear().compareTo(o2.getYear());
 		}
+	}
+
+	public AmpCurrency getAmpCurrencyId() {
+		return ampCurrencyId;
+	}
+
+	public void setAmpCurrencyId(AmpCurrency ampCurrencyId) {
+		this.ampCurrencyId = ampCurrencyId;
 	}
 
 }

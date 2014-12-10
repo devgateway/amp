@@ -276,9 +276,11 @@ var Table = Backbone.View.extend({
         this.renderer.clear();
         $(this.workspace.el).find( ".workspace_results" ).unbind('scroll');
         var element = document.getElementById(this.id);
-        var table = element.firstChild;
-        if (table) {
-            element.removeChild(table);
+        if(element) {
+            var table = element.firstChild;
+            if (table) {
+                element.removeChild(table);
+            }
         }
 
     },

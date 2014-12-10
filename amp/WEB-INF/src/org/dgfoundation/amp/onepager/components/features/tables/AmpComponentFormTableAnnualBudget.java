@@ -1,31 +1,22 @@
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.text.NumberFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.util.convert.IConverter;
-import org.apache.wicket.util.convert.converter.DoubleConverter;
+import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
-import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpDeleteLinkField;
-import org.dgfoundation.amp.onepager.components.fields.AmpSelectFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextFieldPanel;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 
 public class AmpComponentFormTableAnnualBudget
@@ -69,57 +60,70 @@ public class AmpComponentFormTableAnnualBudget
 					final org.dgfoundation.amp.onepager.components.ListItem<AmpAnnualProjectBudget> item) {
 				final MarkupContainer listParent = this.getParent();
 
-				final AmpTextFieldPanel<Double> amount = new AmpTextFieldPanel<Double>(
-						"amountAnnualBudget", new PropertyModel<Double>(item.getModel(),
-								"amount"), "Amount", false, false) {
-
-					@Override
-					protected void onAjaxOnUpdate(final AjaxRequestTarget target) {
-
-						onFundingDetailChanged(target);
-					}
-
-					public IConverter getInternalConverter(
-							java.lang.Class<?> type) {
-						DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
-						NumberFormat formatter = FormatHelper
-								.getDecimalFormat(true);
-
-						converter.setNumberFormat(getLocale(), formatter);
-						return converter;
-					}
-				};
-				amount.getTextContainer().setRequired(true);
-				amount.setOutputMarkupId(true);
-				amount.getTextContainer().add(
-						new AttributeModifier("size", new Model<String>("9")));
-
-				item.add(amount);
-
-				AmpDatePickerFieldPanel datetmp = new AmpDatePickerFieldPanel(
-						"dateAnnualBudget",
-						new PropertyModel<Date>(item.getModel(), "year"),
-						"Projection Date", null, false, false);
-				datetmp.getDate().setRequired(true);
-				datetmp.getDate().add(
-						new AttributeModifier("class", "inputx_date"));
-				Component date = datetmp;
-
-				item.add(date);
-
 				
-				AmpSelectFieldPanel currency = new AmpSelectFieldPanel<AmpCurrency>("currencyAnnualBudget",
-						new PropertyModel<AmpCurrency>(item.getModel(), "ampCurrencyId"),
-						currencyList, "Currency", false, false, null, false) {
-							private static final long serialVersionUID = -7416247154386264496L;
+				AmpFundingAmountComponent<AmpAnnualProjectBudget> fundingAmount = new AmpFundingAmountComponent<AmpAnnualProjectBudget>(
+						"fundingAmountAnnualBudget", item.getModel(), "Amount", "amount", "Currency", "ampCurrencyId",
+						"Projection Date", "year", true) {
+//					@Override
+//					protected void onFundingDetailChanged(AjaxRequestTarget target) {
+//						super.onFundingDetailChanged(target);
+//						AmpComponentFormTableAnnualBudget.this.onFundingDetailChanged(target);
+//					}
 
-					@Override
-					protected void onAjaxOnUpdate(AjaxRequestTarget target) {
-						onFundingDetailChanged(target);
-					}
 				};
-				currency.getChoiceContainer().setRequired(true);
-				item.add(currency);
+				//fundingAmount.setOutputMarkupId(true);
+				item.add(fundingAmount);
+//				final AmpTextFieldPanel<Double> amount = new AmpTextFieldPanel<Double>(
+//						"amountAnnualBudget", new PropertyModel<Double>(item.getModel(),
+//								"amount"), "Amount", false, false) {
+//
+//					@Override
+//					protected void onAjaxOnUpdate(final AjaxRequestTarget target) {
+//
+//						onFundingDetailChanged(target);
+//					}
+//
+//					public IConverter getInternalConverter(
+//							java.lang.Class<?> type) {
+//						DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
+//						NumberFormat formatter = FormatHelper
+//								.getDecimalFormat(true);
+//
+//						converter.setNumberFormat(getLocale(), formatter);
+//						return converter;
+//					}
+//				};
+//				amount.getTextContainer().setRequired(true);
+//				amount.setOutputMarkupId(true);
+//				amount.getTextContainer().add(
+//						new AttributeModifier("size", new Model<String>("9")));
+//
+//				item.add(amount);
+//
+//				AmpDatePickerFieldPanel datetmp = new AmpDatePickerFieldPanel(
+//						"dateAnnualBudget",
+//						new PropertyModel<Date>(item.getModel(), "year"),
+//						"Projection Date", null, false, false);
+//				datetmp.getDate().setRequired(true);
+//				datetmp.getDate().add(
+//						new AttributeModifier("class", "inputx_date"));
+//				Component date = datetmp;
+//
+//				item.add(date);
+//
+//				
+//				AmpSelectFieldPanel currency = new AmpSelectFieldPanel<AmpCurrency>("currencyAnnualBudget",
+//						new PropertyModel<AmpCurrency>(item.getModel(), "ampCurrencyId"),
+//						currencyList, "Currency", false, false, null, false) {
+//							private static final long serialVersionUID = -7416247154386264496L;
+//
+//					@Override
+//					protected void onAjaxOnUpdate(AjaxRequestTarget target) {
+//						onFundingDetailChanged(target);
+//					}
+//				};
+//				currency.getChoiceContainer().setRequired(true);
+//				item.add(currency);
 
 				
 				AmpDeleteLinkField delAnnualBudget = new AmpDeleteLinkField("delAnnualBudget",

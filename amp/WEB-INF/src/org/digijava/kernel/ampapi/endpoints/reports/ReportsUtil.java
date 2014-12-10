@@ -487,12 +487,17 @@ public class ReportsUtil {
 			config.set(EPConstants.SETTINGS, settings);
 		}
 		
+		// set default funding type
 		String fundingType = SettingsConstants.DEFAULT_FUNDING_TYPE_ID;
+		
 		/*
-		 * This requirements is not valid anymore: 
-		// get first measure that is defined in MEASURE_TO_NAME_MAP
+		 * NOTE: Requirement is still undefined clearly if any priority and which priority to be used,
+		 * so configuring meanwhile the definition list priority from FUNDING_TYPES,
+		 * because it seems some export mapping is still desired, though not clarified yet which one
+		 */
+		// get first measure that is defined in FUNDING_TYPES
 		// => first found has highest priority to consider as the default option
-		MEASURE_TEST: for (String measureName : GisConstants.MEASURE_TO_NAME_MAP.keySet()) {
+		MEASURE_TEST: for (String measureName : GisConstants.FUNDING_TYPES) {
 			for (ReportMeasure measure : spec.getMeasures()) {
 				if (measureName.equals(measure.getMeasureName())) {
 					fundingType = measureName;
@@ -500,10 +505,7 @@ public class ReportsUtil {
 				}
 			}
 		}
-		// if none, then set to Commitments by default
-		if (fundingType == null)
-			fundingType = GisConstants.COMMITMENTS;
-		*/
+		
 		settings.put(SettingsConstants.FUNDING_TYPE_ID, fundingType);
 		
 		// we need to stringify the final config

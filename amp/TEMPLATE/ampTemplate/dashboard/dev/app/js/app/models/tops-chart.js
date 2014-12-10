@@ -84,7 +84,7 @@ module.exports = BackboneDash.Model.extend({
   fetch: function(options) {
     options = _.defaults(
       options || {},
-      { url: this.url });
+      { url: this.url + '?' + param(this.pick('limit')) });
     return BackboneDash.Model.prototype.fetch.call(this, options);
   }
 

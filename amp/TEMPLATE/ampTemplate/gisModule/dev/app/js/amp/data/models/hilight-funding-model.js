@@ -9,20 +9,8 @@ module.exports = IndicatorJoinModel.extend({
 
   url: function() {
     var settings = this.collection.settings.serialize();
-    var fundingType = 'ac';
-
-    // TODO: ask Diego or Nadia to use same format / terms as settings...
-    if (settings && settings[0]) {
-      if (settings[0] === 'Actual Commitments') {
-        fundingType = 'ac';
-      } else if (settings[0] === 'Actual Disbursements') {
-        fundingType = 'ad';
-      } else if (settings[0] === 'Actual Expenditures') {
-        fundingType = 'ae';
-      }
-    }
-
-    return '/rest/gis/locationstotals/' + this.id.replace('-', '') + '/' + fundingType;
+    
+    return '/rest/gis/locationstotals/' + this.id.replace('-', '');
   },
 
   initialize: function() {

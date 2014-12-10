@@ -55,9 +55,8 @@ public class EndPoints {
 	//TODO: Implement Filters
 	public JsonBean getAdminLevelsTotals(JsonBean config,
 			@PathParam("type") String type,
-			@DefaultValue("ac") @QueryParam("adjtype") String adjtype,
 			@DefaultValue("5") @QueryParam("limit") Integer limit) {
-		return DashboardsService.getTops(type,adjtype,limit,config);
+		return DashboardsService.getTops(type, limit, config);
 	}
 	
 	/**

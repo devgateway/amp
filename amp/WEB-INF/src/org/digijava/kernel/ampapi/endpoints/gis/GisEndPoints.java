@@ -294,12 +294,12 @@ public class GisEndPoints {
 
 	
 	@POST
-	@Path("/locationstotals/{admlevel}/{type}")
+	@Path("/locationstotals/{admlevel}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "locationstotals")	
-	public JsonBean getAdminLevelsTotals(JsonBean filters, @PathParam ("admlevel") String admlevel, @PathParam("type") String type ){
+	public JsonBean getAdminLevelsTotals(JsonBean filters, @PathParam ("admlevel") String admlevel){
 		LocationService ls = new LocationService();
-		return ls.getTotals(admlevel, type, filters);
+		return ls.getTotals(admlevel, filters);
 	}
 	
 	

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -212,12 +213,12 @@ public class EndpointUtils {
 	 * @param measureToDisplayName
 	 * @return
 	 */
-	public static SettingOptions getFundingTypeSettings(Map<String, String> measureToDisplayName) {
+	public static SettingOptions getFundingTypeSettings(Set<String> measures) {
 		//build funding type options
 		List<SettingOptions.Option> options = new ArrayList<SettingOptions.Option>();
-		for (Entry<String, String> entry : measureToDisplayName.entrySet()) {
+		for (String measure : measures) {
 			SettingOptions.Option fundingTypeOption = new SettingOptions.Option(
-					entry.getKey(), entry.getValue(), true);
+					measure, measure, true);
 			options.add(fundingTypeOption);
 		}
 		//identifies the default funding type
@@ -484,7 +485,7 @@ public class EndpointUtils {
 			return;
 		}
 		
-		Map<Integer, Object> settings = (Map<Integer, Object>) config.get(EPConstants.SETTINGS);
+		Map<String, Object> settings = (Map<String, Object>) config.get(EPConstants.SETTINGS);
 		if (settings != null) {
 			MondrianReportSettings reportSettings = (MondrianReportSettings)spec.getSettings();
 			if (reportSettings == null) {
@@ -625,12 +626,11 @@ public class EndpointUtils {
 	}
 		
 	/**
-	 * Settings that can be reused by modules that rely upon
-	 * Originated settings UI panel.
+	 * Settings that can be reused by modules that rely upon Gis Originated settings UI panel.
 	 *      
-	 * @return list of settings
+	 * @return list of GIS settings
 	 */
-		public static List<SettingOptions> getGisSettings() {
+	public static List<SettingOptions> getGisSettings() {
 		HttpServletRequest request = TLSUtils.getRequest();
 		TeamMember tm = null;
 		if (request != null && request.getSession() != null) {
@@ -638,7 +638,11 @@ public class EndpointUtils {
 		}
 		// retrieve common settings
 		List<SettingOptions> settings = getSettings();
-		settings.add(getFundingTypeSettings(GisConstants.MEASURE_TO_NAME_MAP));
+		// add GIS specific settings
+		Set<String> measures = new LinkedHashSet<String>(GisConstants.FUNDING_TYPES);
+		measures.retainAll(MondrianReportUtils.getConfigurableMeasures());
+		settings.add(getFundingTypeSettings(measures));
+		
 		settings.add(new SettingOptions("number-format", false, 
 				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT), null, null));
 		int amountOptionId = Integer.valueOf(
@@ -647,12 +651,12 @@ public class EndpointUtils {
 		settings.add(new SettingOptions("number-multiplier", false, 
 				String.valueOf(MondrianReportUtils.getAmountMultiplier(amountOptionId))
 				, null, null));
-		//Workspace Settings
+		// Workspace Settings
 		if (tm != null){ 
 			settings.add(new SettingOptions("team-id", false,getAppSettings().getTeam().getAmpTeamId().toString(), null, null));
 			settings.add(new SettingOptions("tean-lead", false, String.valueOf(tm.getTeamHead()), null, null));
 			settings.add(new SettingOptions("team-validator", false, String.valueOf(tm.isApprover()), null, null));
-			//Cross Team validation
+			// Cross Team validation
 			settings.add(new SettingOptions("cross_team_validation", false, String.valueOf(getAppSettings().getTeam().getCrossteamvalidation())
 					, null, null));
 			settings.add(new SettingOptions("workspace_type", false, String.valueOf(getAppSettings().getTeam().getAccessType())
@@ -674,10 +678,22 @@ public class EndpointUtils {
 		// now apply GIS custom settings, i.e. selected measures
 		if (config.get(EPConstants.SETTINGS) != null) {
 			Map<Integer, Object> settings = (Map<Integer, Object>) config.get(EPConstants.SETTINGS);
-			List<String> measureOptions = (List<String>) settings.get(SettingsConstants.FUNDING_TYPE_ID);
-			if (measureOptions != null)
+			List<String> measureOptions = new ArrayList<String>();
+			Object fundingTypes = settings.get(SettingsConstants.FUNDING_TYPE_ID);
+			if (fundingTypes != null) {
+				if (fundingTypes instanceof String)
+					measureOptions.add((String)fundingTypes);
+				// initial requirements was to use multiple funding type options => keeping it just in case it will be needed
+				// remove if it will be confirmed over time that is not required
+				else if (fundingTypes instanceof List)
+					measureOptions.addAll((List<String>)fundingTypes);
+			}		
+			if (measureOptions.size() > 0) {
 				for (String measure : measureOptions)
 					spec.addMeasure(new ReportMeasure(measure));
+			} else {
+				spec.addMeasure(new ReportMeasure(SettingsConstants.DEFAULT_FUNDING_TYPE_ID));
+			}
 		}
 	}
 

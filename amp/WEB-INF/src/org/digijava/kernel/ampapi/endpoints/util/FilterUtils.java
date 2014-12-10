@@ -18,6 +18,7 @@ import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.utils.ConstantsUtil;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.request.TLSUtils;
@@ -188,13 +189,13 @@ public class FilterUtils {
 	
 	/**
 	 * 
-	 * @param Settings
+	 * @param JsonBean 
 	 * @param value
 	 * @return
 	 */
-	public static String getSettingbyName(LinkedHashMap<Integer, Object> Settings, String value){
-		Map<Integer, Object> settings = Settings;
-		String retval = (String) settings.get(value);
+	public static String getSettingbyName(JsonBean config, String value){
+		Map<String, Object> settings = config == null ? null : (Map<String, Object>) config.get(EPConstants.SETTINGS);
+		String retval = settings == null ? null : (String) settings.get(value);
 		return retval;
 	}
 	

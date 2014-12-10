@@ -88,7 +88,7 @@ public class DashboardsService {
 	 * @param config request configuration that stores filters, settings and any other options
 	 * @return
 	 */
-	public static JsonBean getTops(String type, String adjtype, Integer n, JsonBean config) {
+	public static JsonBean getTops(String type, Integer n, JsonBean config) {
 		String err = null;
 		String column = "";
 		String adjustmenttype = "";
@@ -114,23 +114,12 @@ public class DashboardsService {
 			break;
 		}
 
-		switch (adjtype.toUpperCase()) {
-		case "AC":
-			adjustmenttype = MoConstants.ACTUAL_COMMITMENTS;
-			break;
-		case "AD":
-			adjustmenttype = MoConstants.ACTUAL_DISBURSEMENTS;
-			break;
-		default:
-			adjustmenttype = MoConstants.ACTUAL_COMMITMENTS;
-			break;
-		}
-
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetTops");
 		spec.addColumn(new ReportColumn(column, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.getHierarchies().addAll(spec.getColumns());
-		spec.addMeasure(new ReportMeasure(adjustmenttype, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addSorter(new SortingInfo(new ReportMeasure(adjustmenttype), false));
+		// applies settings, including funding type as a measure
+		EndpointUtils.applyGisSettings(spec, config);
+		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
 		spec.setCalculateRowTotals(true);
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
 				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
@@ -147,9 +136,7 @@ public class DashboardsService {
 			}
  		}
  		
- 		EndpointUtils.applySettings(spec, config);
- 		
-		try {
+ 		try {
 			report = generator.executeReport(spec);
 		} catch (Exception e) {
 			System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -167,9 +154,11 @@ public class DashboardsService {
 			retlist.set("total", 0);
 		}
 
-		String currcode = EndpointUtils.getDefaultCurrencyCode();
+		String currcode = null;
 		if (spec.getSettings() != null && spec.getSettings().getCurrencyCode() != null)
 			currcode = spec.getSettings().getCurrencyCode();
+		else
+			currcode = EndpointUtils.getDefaultCurrencyCode();
 		retlist.set("currency", currcode);
 
 		retlist.set("numberformat", numberformat);

@@ -32,7 +32,9 @@ import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -78,17 +80,11 @@ public class ActivityService {
 
 		//then we have to fetch all other matchesfilters outisde mondrian
 
-		/*
-		 * Enabled this and remove explicit measures config 
-		 * when confirmed that the expected measures config is indeed coming from settings
-		EndpointUtils.applyGisSettings(config);
-		 */
-		//TODO: remove this -- start --
+		// apply default settings
 		EndpointUtils.applySettings(spec, config);
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
- 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
- 		// remove this -- end --
-
+		// apply custom settings
+		configureMeasures(spec, config);
+		
  		spec.setCalculateColumnTotals(doTotals);
 		
  		spec.setCalculateRowTotals(doTotals);
@@ -164,6 +160,31 @@ public class ActivityService {
 		list.set("count", count);
 		list.set("activities", activities);
 		return list;
+	}
+	
+	/**
+	 * Adds measures to the report specification based on AMP-18874:
+	 * a) needs to have 'planned commitments' and  'planned disbursements'  if any planned setting is selected.
+	 * b) needs to have 'actual commitments' and  'actual disbursements'  if any actual setting is selected.
+	 * 
+	 * @param spec
+	 * @param config
+	 */
+	private static void configureMeasures(ReportSpecificationImpl spec, JsonBean config) {
+		if (spec != null && config != null) {
+			Map<String, Object> settings = (Map<String, Object>) config.get(EPConstants.SETTINGS);
+			String fundingType = (String) (settings == null ? null : settings.get(SettingsConstants.FUNDING_TYPE_ID));
+			if (fundingType == null)
+				fundingType = SettingsConstants.DEFAULT_FUNDING_TYPE_ID;
+			if (fundingType.startsWith("Actual")) {
+				spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+				spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
+			}
+			if (fundingType.startsWith("Planned")) {
+				spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_COMMITMENTS));
+				spec.addMeasure(new ReportMeasure(MeasureConstants.PLANNED_DISBURSEMENTS));
+			}
+		}
 	}
 
 	/**

@@ -117,25 +117,16 @@ module.exports = Backbone.View.extend({
     var tmpModel = new Backbone.Collection({});
     tmpModel.url = '/rest/dashboard/tops/' + type;
 
-    var payload = { limit: 5, adjtype:'ac'};
+    var payload = { limit: 5};
     _.extend(payload, this.app.data.filter.serialize());
 
     // get funding type, ask for consistancy form API, and at least put this function inside settings collection..
     var settings = this.app.data.settings.serialize();
-    if (settings && settings[0]) {
-      if (settings[0] === 'Actual Commitments') {
-        payload.adjtype = 'ac';
-      } else if (settings[0] === 'Actual Disbursements') {
-        payload.adjtype = 'ad';
-      } else if (settings[0] === 'Actual Expenditures') {
-        payload.adjtype = 'ae';
-      }
-    }
 
     _.extend(payload, {settings: settings});
 
     //API wants these in the url, but other params go in post, strange but it's the way it is...
-    tmpModel.url += '?adjtype=' + payload.adjtype + '&limit=' + payload.limit;
+    tmpModel.url += '?limit=' + payload.limit;
 
     if (!payload.columnFilters) {
       payload.columnFilters = {};

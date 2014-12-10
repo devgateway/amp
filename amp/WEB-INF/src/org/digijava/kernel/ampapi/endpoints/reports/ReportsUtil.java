@@ -487,7 +487,9 @@ public class ReportsUtil {
 			config.set(EPConstants.SETTINGS, settings);
 		}
 		
-		String fundingType = null;
+		String fundingType = SettingsConstants.DEFAULT_FUNDING_TYPE_ID;
+		/*
+		 * This requirements is not valid anymore: 
 		// get first measure that is defined in MEASURE_TO_NAME_MAP
 		// => first found has highest priority to consider as the default option
 		MEASURE_TEST: for (String measureName : GisConstants.MEASURE_TO_NAME_MAP.keySet()) {
@@ -501,6 +503,7 @@ public class ReportsUtil {
 		// if none, then set to Commitments by default
 		if (fundingType == null)
 			fundingType = GisConstants.COMMITMENTS;
+		*/
 		settings.put(SettingsConstants.FUNDING_TYPE_ID, fundingType);
 		
 		// we need to stringify the final config

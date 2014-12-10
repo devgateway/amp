@@ -75,10 +75,10 @@ public class LocationService {
 	/**
 	 * Get totals (actual commitments/ actual disbursements) by administrative level
 	 * @param admlevel
-	 * @param type
+	 * @param config json configuration
 	 * @return
 	 */
-	public JsonBean getTotals(String admlevel, String type, JsonBean filter) {
+	public JsonBean getTotals(String admlevel, JsonBean config) {
 		JsonBean retlist = new JsonBean();
 		HardCodedCategoryValue admLevelCV = null;
 		switch (admlevel) {
@@ -104,29 +104,19 @@ public class LocationService {
 			break;
 		}
 		
-		switch (type) {
-		case "ac":
-			type = MeasureConstants.ACTUAL_COMMITMENTS; 
-			break;
-		case "ad":
-			type = MeasureConstants.ACTUAL_DISBURSEMENTS; 
-			break;
-		default:
-			type = MeasureConstants.ACTUAL_COMMITMENTS;
-			break;
-		}
-		
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals");
 		spec.addColumn(new ReportColumn(admlevel));
-		spec.addMeasure(new ReportMeasure(type));
 		spec.getHierarchies().addAll(spec.getColumns());
+		// also configures the measure(s) from funding type settings request
+		EndpointUtils.applyGisSettings(spec, config);
+		
 		MondrianReportFilters filterRules = new MondrianReportFilters(); 
 		
-		if(filter!=null){
-			Object columnFilters=filter.get("columnFilters");
+		if(config != null){
+			Object columnFilters = config.get("columnFilters");
 			if(columnFilters!=null){
-				filterRules = FilterUtils.getApiColumnFilter((LinkedHashMap<String, Object>)filter.get("columnFilters"));	
+				filterRules = FilterUtils.getApiColumnFilter((LinkedHashMap<String, Object>) config.get("columnFilters"));	
 			}
  		}
 		
@@ -140,9 +130,7 @@ public class LocationService {
 		
 		spec.setFilters(filterRules);
 		
-		EndpointUtils.applySettings(spec, filter);
-		
-		String currcode = FilterUtils.getSettingbyName((LinkedHashMap<Integer, Object>) filter.get(EPConstants.SETTINGS),SettingsConstants.CURRENCY_ID);
+		String currcode = FilterUtils.getSettingbyName(config, SettingsConstants.CURRENCY_ID);
 		retlist.set("currency", currcode);
 		retlist.set("numberformat", numberformat);
 

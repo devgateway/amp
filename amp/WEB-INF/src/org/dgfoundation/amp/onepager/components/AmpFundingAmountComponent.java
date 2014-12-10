@@ -24,6 +24,7 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.items.AmpRegionalFundingItemFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.tables.AmpComponentFormTableAnnualBudget;
 import org.dgfoundation.amp.onepager.components.fields.*;
 import org.dgfoundation.amp.onepager.events.FundingSectionSummaryEvent;
 import org.dgfoundation.amp.onepager.events.OverallFundingTotalsEvents;
@@ -105,6 +106,8 @@ public class AmpFundingAmountComponent<T> extends Panel {
 					parentPanel = findParent(AmpComponentField.class);				
 				if(parentPanel ==null)
 					parentPanel = findParent(AmpRegionalFundingItemFeaturePanel.class);
+				if(parentPanel==null)
+					parentPanel = findParent(AmpComponentFormTableAnnualBudget.class);				
 				parentPanel.visitChildren(AmpCollectionValidatorField.class, new IVisitor<AmpCollectionValidatorField, Void>() {
 					@Override
 					public void component(AmpCollectionValidatorField component,

@@ -53,6 +53,8 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 		super(id, fmName);
 
 		final AmpTextFieldPanel<Double> amount;
+		PropertyModel<String> currencyModel = new PropertyModel<String>(am, "currencyCode");
+
 		if (!FeaturesUtil.isVisibleModule("/Activity Form/Funding/Proposed Project Cost/Annual Proposed Project Cost")) {
 			amount = new AmpTextFieldPanel<Double>("proposedAmount", new PropertyModel<Double>(am,
 					CategoryConstants.PROPOSE_PRJC_AMOUNT_KEY), CategoryConstants.PROPOSE_PRJC_AMOUNT_NAME, false) {
@@ -84,7 +86,7 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 			amount.getTextContainer().add(new AttributeModifier("size", new Model<String>("12")));
 			add(amount);
 		} else {
-			amount = new AmpTextFieldPanel<Double>("proposedAmount", new ProposedProjectCostModel(
+			amount = new AmpTextFieldPanel<Double>("proposedAmount", new ProposedProjectCostModel(new PropertyModel<String>(am, "currencyCode"),
 					new PropertyModel<Double>(am, "funAmount"), new PropertyModel<Set<AmpAnnualProjectBudget>>(am,
 							"annualProjectBudgets")), "Amount", false) {
 				public IConverter getInternalConverter(java.lang.Class<?> type) {
@@ -120,8 +122,6 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 		}
 
 		AmpCurrencyCodeStringListReadOnlyModel currencyList = new AmpCurrencyCodeStringListReadOnlyModel();
-
-		PropertyModel<String> currencyModel = new PropertyModel<String>(am, "currencyCode");
 
 		if (currencyModel.getObject() == null) {
 			currencyModel.setObject(CurrencyUtil.getWicketWorkspaceCurrency().getCurrencyCode());

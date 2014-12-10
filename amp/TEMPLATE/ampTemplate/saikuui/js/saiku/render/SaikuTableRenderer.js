@@ -98,7 +98,7 @@ var checkTable = function(table){
 		if(rowLength < maxRowLength){
 			var offset = maxRowLength - rowLength;
 			var insertionPosition = $(row).find(".row_total").last();
-			if(row.attr("id") === "grand_total") {
+			if(row && $(row).attr("id") && $(row).attr("id") === "grand_total") {
 				insertionPosition =  $(".report_totals").parents("TH");
 			}
 

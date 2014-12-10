@@ -132,30 +132,34 @@ public class GisEndPoints {
 
 		List<AmpStructure> al = LocationService.getStructures( config);
 		for (AmpStructure structure : al) {
-			FeatureGeoJSON fgj = new FeatureGeoJSON();
-			PointGeoJSON pg = new PointGeoJSON();
-			pg.coordinates.add(Double.parseDouble(structure.getLongitude()==null?"0":structure.getLongitude()));
-			pg.coordinates.add(Double.parseDouble(structure.getLatitude()==null?"0":structure.getLatitude()));
-			fgj.id = structure.getAmpStructureId().toString();
-			fgj.properties.put("title",
-					new TextNode(structure.getTitle()));
-			if (structure.getDescription() != null
-					&& !structure.getDescription().trim().equals("")) {
-				fgj.properties.put("description", new TextNode(
-						structure.getDescription()));
+			try {
+				FeatureGeoJSON fgj = new FeatureGeoJSON();
+				PointGeoJSON pg = new PointGeoJSON();
+				pg.coordinates
+						.add(Double.parseDouble(structure.getLongitude() == null ? "0" : structure.getLongitude()));
+				pg.coordinates.add(Double.parseDouble(structure.getLatitude() == null ? "0" : structure.getLatitude()));
+				fgj.id = structure.getAmpStructureId().toString();
+				fgj.properties.put("title", new TextNode(structure.getTitle()));
+				if (structure.getDescription() != null && !structure.getDescription().trim().equals("")) {
+					fgj.properties.put("description", new TextNode(structure.getDescription()));
+				}
+				Set<AmpActivityVersion> av = structure.getActivities();
+				List<Long> actIds = new ArrayList<Long>();
+
+				for (AmpActivityVersion ampActivity : av) {
+					actIds.add(ampActivity.getAmpActivityId());
+				}
+
+				fgj.properties.put("activity", new POJONode(actIds));
+				// fgj.properties.put("admId", new LongNode(23));
+				fgj.geometry = pg;
+
+				f.features.add(fgj);
+			} catch (NumberFormatException e) {
+				logger.warn("Couldn't get parse latitude/longitude for structure with latitude: "
+						+ structure.getLatitude() + " longitude: " + structure.getLongitude() + " and title: "
+						+ structure.getTitle());
 			}
-			Set<AmpActivityVersion> av = structure.getActivities();
-			List<Long> actIds = new ArrayList<Long>();
-
-			for (AmpActivityVersion ampActivity : av) {
-				actIds.add(ampActivity.getAmpActivityId());
-			}
-
-			fgj.properties.put("activity", new POJONode(actIds));
-			// fgj.properties.put("admId", new LongNode(23));
-			fgj.geometry = pg;
-
-			f.features.add(fgj);
 		}
 		return f;
 	}

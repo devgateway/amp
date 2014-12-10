@@ -203,7 +203,8 @@ function theme_cbstyle_style_render_pane($vars) {
 
   if (!empty($vars['content']->title)) {
     // Add the section content.
-    $elements['pane_content']['#attributes']['class'][] = drupal_html_class('contentblock-content-' . $vars['content']->title);
+    $class = strip_tags($vars['content']->title);
+    $elements['pane_content']['#attributes']['class'][] = drupal_html_class('contentblock-content-' . $class);
   }
 
   return drupal_render($elements);

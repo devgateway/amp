@@ -1,6 +1,6 @@
 name = AMP CMS
 description = Minimal AMP CMS with only a few modules enabled.
-version = 2.10.07
+version = 2.10.10
 core = 7.x
 dependencies[] = block
 dependencies[] = dblog

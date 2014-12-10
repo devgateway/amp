@@ -14,7 +14,7 @@ function helpergeneric_field_formatter_info() {
     'title_with_actions' => array(
       'label' => t('Linked with Actions'),
       'field types' => array('text'),
-      'settings' => array('title_style' => '', 'title_link' => '', 'title_class' => '', 'show_actions' => FALSE),
+      'settings' => array('title_style' => '', 'title_link' => '', 'title_class' => '', 'show_action' => FALSE, 'show_social' => FALSE),
     ),
   );
 }
@@ -63,11 +63,16 @@ function helpergeneric_field_formatter_settings_form($field, $instance, $view_mo
     '#element_validate' => array('_helpergeneric_validate_class'),
   );
 
-  $element['show_actions'] = array(
-    '#title' => t('Show Actions'),
+  $element['show_action'] = array(
+    '#title' => t('Show Action Links'),
     '#type' => 'checkbox',
-    '#default_value' => $settings['show_actions'],
-    '#empty_option' => t('No Actions'),
+    '#default_value' => $settings['show_action'],
+  );
+
+  $element['show_social'] = array(
+    '#title' => t('Show Social Links'),
+    '#type' => 'checkbox',
+    '#default_value' => $settings['show_social'],
   );
 
   return $element;
@@ -96,13 +101,23 @@ function helpergeneric_field_formatter_settings_summary($field, $instance, $view
     $summary[] = t('Wrap tag classes: @classes', array('@classes' => $settings['title_class']));
   }
 
-  // Display this actions visibility.
-  if (isset($settings['show_actions'])) {
-    if (empty($settings['show_actions'])) {
-      $summary[] = t('Actions: not visible');
+  // Display this action links visibility.
+  if (isset($settings['show_action'])) {
+    if (empty($settings['show_action'])) {
+      $summary[] = t('Action Links: not visible');
     }
     else {
-      $summary[] = t('Actions: visible');
+      $summary[] = t('Action Links: visible');
+    }
+  }
+
+  // Display this social links visibility.
+  if (isset($settings['show_social'])) {
+    if (empty($settings['show_social'])) {
+      $summary[] = t('Social Links: not visible');
+    }
+    else {
+      $summary[] = t('Social Links: visible');
     }
   }
 
@@ -144,16 +159,39 @@ function helpergeneric_field_formatter_view($entity_type, $entity, $field, $inst
       '#markup' => $output,
     );
 
-    if (!empty($settings['show_actions'])) {
-      $actions = array(
-        '#prefix' => '<ul class="action-links">',
+    $action_links = array();
+    if (!empty($settings['show_action'])) {
+      $action_links = array(
+        '#prefix' => '<ul class="title-links action-links">',
         '#suffix' => '</ul>',
       ) + menu_local_actions();
     }
 
+    $social_links = array();
+    if (!empty($settings['show_social'])) {
+      $social_links = array(
+        '#prefix' => '<ul class="title-links social-links">',
+        '#suffix' => '</ul>',
+      );
+
+      $query_parameters = drupal_get_query_parameters();
+      $query_parameters = array_filter($query_parameters);
+      $current_url = url($_GET['q'], array('query' => $query_parameters, 'absolute' => TRUE));
+
+      $page_title = strip_tags($output);
+      foreach (_helpergeneric_get_social_links($current_url, $page_title) as $key => $value) {
+        $social_links[$key] = array(
+          '#prefix' => '<li>',
+          '#suffix' => '</li>',
+          '#markup' => $value,
+        );
+      }
+    }
+
     $element[] = array(
+      $action_links,
       $title,
-      $actions,
+      $social_links,
     );
   }
   return $element;

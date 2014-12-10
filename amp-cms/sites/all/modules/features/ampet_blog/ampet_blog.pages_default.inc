@@ -200,7 +200,7 @@ function ampet_blog_default_page_manager_pages() {
     );
     $pane->configuration = array(
       'arguments' => array(
-        'field_blog_entry_type_value' => 'news+events',
+        'field_blog_entry_type_value' => 'news+event',
       ),
       'override_title' => 0,
       'override_title_text' => '',

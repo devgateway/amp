@@ -42,3 +42,51 @@ function ampapi_activity_autocomplete($property_name, $string = '') {
 
   drupal_json_output($matches);
 }
+
+function ampapi_activity_search_export() {
+  $output = array();
+
+  $view_name = 'activities';
+  $display_id = 'export_page';
+  $view = views_get_view($view_name);
+
+  // @TODO: Move validation to menu access callback.
+  if (!$view || !$view->access($display_id)) {
+    $output['error'] = 'Export failed.';
+    drupal_json_output($output);
+    exit;
+  }
+
+  $view->set_display($display_id);
+
+  $exposed_input = $_GET;
+  unset($exposed_input['q']);
+  $exposed_input = array_filter($exposed_input);
+  $view->set_exposed_input($exposed_input);
+
+  $data = $view->render($display_id);
+
+  // Prepare the destination directory.
+  $directory = 'public://temp-downloads';
+  if (!file_prepare_directory($directory, FILE_CREATE_DIRECTORY)) {
+    $output['error'] = 'Failed to create directory. Please try again later or contact site administrator.';
+  }
+
+  // file_unmanaged_save_data() deals with file name collisions.
+  $uri = $directory . '/activities-' . REQUEST_TIME . '.csv';
+
+  // @see drupal_delete_file_if_stale()
+  if ($path = file_unmanaged_save_data($data, $uri, $replace = FILE_EXISTS_RENAME)) {
+    $output['file_path'] = $path;
+
+    $output['file_url'] = file_create_url($path);
+
+    $output['file_size'] = _ampapi_human_filesize($path);
+    $output['markup'] = l(t('Download CSV'), $output['file_url']) . ' <em>(' . t('size: !size', array('!size' => $output['file_size'])) . ')</em>';
+  }
+  else {
+    $output['error'] = 'Failed to create file. Please try again later or contact site administrator.';
+  }
+
+  drupal_json_output($output);
+}

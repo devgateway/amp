@@ -718,3 +718,71 @@ function helpergeneric_check_api_status($link = TRUE) {
 
   return $status;
 }
+
+function _helpergeneric_get_social_links($current_url, $page_title = NULL) {
+  $links = array();
+
+  $facebook_args = array(
+    'attributes' => array(
+      '_target' => 'blank',
+      'class' => array(
+        'share-link',
+        'share-facebook',
+      ),
+      'title' => t('Share on Facebook'),
+    ),
+    'query' => array(
+      'u' => $current_url,
+    ),
+    'html' => TRUE,
+  );
+  $svgicon = helpertheme_get_svg_icons('facebook', array('width' => '0.8em', 'height' => '0.8em'));
+  $title = $svgicon . '<span class="text">' . t('Share on Facebook') . '</span>';
+  $links[] = l($title, 'https://www.facebook.com/sharer/sharer.php', $facebook_args);
+
+  $twitter_args = array(
+    'attributes' => array(
+      '_target' => 'blank',
+      'class' => array(
+        'share-link',
+        'share-twitter',
+      ),
+      'title' => t('Tweet'),
+    ),
+    'query' => array(
+      'url' => $current_url,
+    ),
+    'html' => TRUE,
+  );
+  $twitter_handle = variable_get('ampcms_twitter_handle', NULL);
+  if (!empty($twitter_handle)) {
+    $twitter_args['query']['via'] = $twitter_handle;
+  }
+  if (!empty($page_title)) {
+    $twitter_args['query']['text'] = $page_title;
+  }
+
+  $svgicon = helpertheme_get_svg_icons('twitter', array('width' => '0.8em', 'height' => '0.8em'));
+  $title = $svgicon . '<span class="text">' . t('Tweet') . '</span>';
+  $links[] = l($title, 'https://twitter.com/intent/tweet', $twitter_args);
+
+  // $google_args = array(
+  //   'attributes' => array(
+  //     '_target' => 'blank',
+  //     'class' => array(
+  //       'share-link',
+  //       'share-google',
+  //     ),
+  //    'title' => t('Plus on Google+'),
+  //   ),
+  //   'query' => array(
+  //     'url' => $current_url,
+  //   ),
+  //   'html' => TRUE,
+  // );
+  // $svgicon = helpertheme_get_svg_icons('google', array('width' => '0.8em', 'height' => '0.8em'));
+  // $title = $svgicon . '<span class="text">' . t('Plus on Google+') . '</span>';
+  // $links[] = l($title, 'https://plus.google.com/share', $google_args);
+
+  return $links;
+}

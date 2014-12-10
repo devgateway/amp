@@ -88,6 +88,26 @@ function ampcms_preprocess_page(&$variables) {
   if ($style_main_content) {
     $variables['main_content_classes'] = ' layout-block';
   }
+
+  if (arg(0) == 'activities') {
+    $query_parameters = drupal_get_query_parameters();
+    $query_parameters = array_filter($query_parameters);
+    $current_url = url($_GET['q'], array('query' => $query_parameters, 'absolute' => TRUE));
+
+    $social_links = array(
+      '#prefix' => '<ul class="title-links social-links">',
+      '#suffix' => '</ul>',
+    );
+    foreach (_helpergeneric_get_social_links($current_url, t('Search Activities')) as $key => $value) {
+      $social_links[$key] = array(
+        '#prefix' => '<li>',
+        '#suffix' => '</li>',
+        '#markup' => $value,
+      );
+    }
+
+    $variables['title_suffix'] = drupal_render($social_links);
+  }
 }
 
 /**

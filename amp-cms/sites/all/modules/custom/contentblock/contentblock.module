@@ -184,13 +184,13 @@ function contentblock_get_hidden_types($type = NULL) {
     ),
   );
 
-  // $items['projectsform'] = array(
-  //   'title' => t('Projects Search Form'),
-  //   'description' => t('The projects search form is displayed on the top of the homepage next to the welcome block.'),
-  //   'action label' => t('Edit'),
-  //   'available_fields' => array(
-  //   ),
-  // );
+  $items['totalactivities'] = array(
+    'title' => t('Total Activities'),
+    'description' => t('Will display the total commitments, disbursements and the total number of activities in system.'),
+    'action label' => t('Edit'),
+    'available_fields' => array(
+    ),
+  );
 
   $items['blogsidebar'] = array(
     'title' => t('Blog Sidebar Section'),

@@ -159,9 +159,16 @@ function drush_views_data_export($view_name, $display_id, $output_file) {
   // We execute the view normally, and take advantage
   // of an alter function to interject later and batch it ourselves
 
-  $options = array (
-    'output_file' => realpath(drush_get_context('DRUSH_OLDCWD', getcwd())) . '/' . $output_file,
-  );
+  $options = array();
+  // Let's see if the given $output_file is a absolute path.
+  if (strpos($output_file, '/') === 0) {
+    $options['output_file'] = $output_file;
+  }
+  else {
+    $options['output_file'] = realpath(drush_get_context('DRUSH_OLDCWD', getcwd())) . '/' . $output_file;
+  }
+
+
   if ($view->display_handler->is_batched()) {
     // This is a batched export, and needs to be handled as such.
     _drush_views_data_export_override_batch($view_name, $display_id, $options);

@@ -19,12 +19,6 @@
   .single-fluid-column();
 }
 
-.xMediumAndDown() {
-  .homepage-form-block {
-    padding-left: 1em;
-  }
-}
-
 .xMediumOnly() {
   // Restrict the width of the content on medium sized displays.
   .page-wrapper {
@@ -46,7 +40,7 @@
   }
   img {
     display: table-cell;
-    max-width: initial;
+    max-width: none;
   }
 }
 
@@ -83,74 +77,6 @@
       .last-child-column();
     }
   }
-
-  .homepage-welcome-block {
-    .column(8);
-    .first-child-column();
-  }
-  .homepage-form-block {
-    .column(4);
-    .last-child-column();
-  }
-}
-
-.xNormalAndUp() {
-  .cbreference-linkedmap {
-    &.cbreference-view-mode-wide {
-      .pane-content {
-        .clearfix-mixin();
-      }
-      .title-wrapper {
-        .first-child-column();
-        margin-left: -1px; // Deal with the border.
-        a {
-          font-size: 1.25em;
-          line-height: 5.6em;
-          white-space: nowrap; // @TODO: Fix l10n + font-size issues.
-        }
-      }
-      .field-name-field-cbimage {
-        .last-child-column();
-        margin-right: -1px; // Deal with the border.
-
-        // Hide overflowing image.
-        overflow: hidden;
-        img {
-          max-width: initial;
-        }
-      }
-    }
-    &.cbreference-view-mode-normal {
-      .title-wrapper a {
-        line-height: 4em;
-        padding-left: 1em;
-      }
-    }
-  }
-}
-.xNormalOnly() {
-  .cbreference-linkedmap {
-    &.cbreference-view-mode-wide {
-      .title-wrapper {
-        .column-compacted(5);
-      }
-      .field-name-field-cbimage {
-        .column-full(7);
-      }
-    }
-  }
-}
-.xLargeUp() {
-  .cbreference-linkedmap {
-    &.cbreference-view-mode-wide {
-      .title-wrapper {
-        .column-compacted(6);
-      }
-      .field-name-field-cbimage {
-        .column-full(10);
-      }
-    }
-  }
 }
 
 // @TODO: Define styles for large displays.
@@ -185,14 +111,180 @@
       .last-child-column();
     }
   }
+}
 
+// @TODO: Reduce selector specificity.
+.xNormalOnly() {
+  .homepage-linkedmap-block {
+    .title-wrapper {
+      .column-compacted(5);
+    }
+    .field-name-field-cbimage {
+      .column-full(7);
+    }
+  }
+}
+.xNormalAndUp() {
+  .homepage-linkedmap-block {
+    .homepage-linkedmap-block {
+      .clearfix-mixin();
+    }
+    .title-wrapper {
+      .first-child-column();
+      margin-right: -1px; // Deal with the border.
+    }
+    .field-name-field-cbimage {
+      .last-child-column();
+      margin-left: -1px; // Deal with the border.
+
+      // Hide overflowing image.
+      overflow: hidden;
+      img {
+        max-width: none;
+      }
+    }
+  }
+  .cbreference-linkedmap {
+    &.cbreference-view-mode-normal {
+      .title-wrapper a {
+        line-height: 4em;
+        padding-left: 1em;
+      }
+    }
+  }
+}
+.xLargeUp() {
+  .homepage-linkedmap-block {
+    .title-wrapper {
+      .column-compacted(5);
+    }
+    .field-name-field-cbimage {
+      .column-full(11);
+      img {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.xNormalOnly() {
+  .homepage-form-block {
+    // Pane title needs to be 1em in order for the layout to work
+    .pane-title {
+      .column-compacted(5);
+      margin-right: -1px; // Deal with the border.
+    }
+    .contentblock-pane-content {
+      .column-full(7);
+      margin-left: -1px; // Deal with the border.
+    }
+    .views-widgets-wrapper {
+      .column(5);
+      .first-child-column();
+    }
+    .views-actions {
+      .column(2);
+      width: 10em; // deal with the extra width of the parent column.
+      .last-child-column();
+    }
+  }
+}
+.xLargeUp() {
+  .homepage-form-block {
+    // Pane title needs to be 1em in order for the layout to work
+    .pane-title {
+      .column-compacted(5);
+      margin-right: -1px; // Deal with the border.
+    }
+    .contentblock-pane-content {
+      .column-full(11);
+      margin-left: -1px; // Deal with the border.
+    }
+    .views-widgets-wrapper {
+      .column(8);
+      .first-child-column();
+    }
+    .views-actions {
+      .column(3);
+      width: 15em; // deal with the extra width of the parent column.
+      // .last-child-column();
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+}
+
+.xMediumAndDown() {
   .homepage-welcome-block {
-    .column(8);
+    .field-name-field-cbimage {
+      display: none;
+    }
+  }
+}
+
+
+.xNormalOnly() {
+  .homepage-welcome-block {
+    .pane-content {
+      .clearfix-mixin();
+    }
+    .field-name-field-cbimage {
+      float: right;
+      margin: 0;
+      margin-left: 1em;
+      max-width: 50%;
+    }
+  }
+
+  .homepage-totalactivities-block {
+    margin-top: 1px;
+
+    .pane-content {
+      .clearfix-mixin();
+    }
+
+    .infoblock {
+      .box-sizing();
+      float: left;
+      width: 38%;
+
+      margin: 0;
+      padding: 1.5em;
+
+      &.activities-count {
+        width: 24%;
+      }
+    }
+  }
+}
+
+.xNormalAndUp() {
+  .homepage-welcome-block {
+    .pane-content {
+      .clearfix-mixin();
+    }
+    .field-name-field-cbimage {
+      float: right;
+      margin: 0;
+      margin-left: 1em;
+      max-width: 50%;
+    }
+  }
+}
+
+.xLargeUp() {
+  .homepage-welcome-block {
+    .column-compacted(12);
     .first-child-column();
   }
-  .homepage-form-block {
-    .column(8);
+  .homepage-totalactivities-block {
+    .column-full(4);
     .last-child-column();
+    .info {
+      white-space: nowrap;
+      overflow-x: hidden;
+      text-overflow: ellipsis;
+    }
   }
 }
 

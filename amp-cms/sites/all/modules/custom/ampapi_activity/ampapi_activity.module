@@ -144,32 +144,27 @@ function ampapi_activity_menu() {
     );
   }
 
+  // @TODO: Add session token to prevent users abusing the system.
+  $items['activities/export'] = array(
+    'title' => 'Activity search export',
+    'page callback' => 'ampapi_activity_search_export',
+    'page arguments' => array(2),
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+    'file' => 'ampapi_activity.pages.inc',
+  );
+
   return $items;
 }
 
-function ampapi_activity_homepage_search_form($form, &$form_state) {
-  $search_page_url = 'activities';
-  $form = array(
-    '#action' => $search_page_url,
-    '#method' => 'GET',
-  );
+/**
+ * Returns the size of a file.
+ */
+function _ampapi_human_filesize($path, $decimals = 2) {
+  $bytes = filesize($path);
 
-  $form['search'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Enter search terms'),
-    '#default_value' => '',
-  );
+  $factor = floor((strlen($bytes) - 1) / 3);
 
-  $form['actions'] = array('#tree' => FALSE, '#type' => 'actions');
-  $form['actions']['more'] = array(
-    '#type' => 'link',
-    '#title' => t('More filters'),
-    '#href' => $search_page_url,
-  );
-  $form['actions']['explore'] = array(
-    '#type' => 'submit',
-    '#value' => t('Explore'),
-  );
-
-  return $form;
+  $sz = 'BKMGTP';
+  return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor] . 'b';
 }

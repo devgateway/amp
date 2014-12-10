@@ -13,6 +13,7 @@ function theme_svg_sprite($elements) {
   if (empty($elements['symbol'])) {
     return NULL;
   }
+  $elements['#attributes']['class'] = 'symbol ' . drupal_clean_css_identifier('symbol-' . $elements['symbol']);
 
   // Fallback SVG sprite.
   if (empty($elements['path'])) {
@@ -296,9 +297,10 @@ function theme_footer_items() {
  * Returns HTML containing information about the report.
  */
 function theme_amp_report_info($variables) {
-  $elements = array();
-  $elements['#prefix'] = '<div class="activity-search-info">';
-  $elements['#suffix'] = '</div>';
+  $elements = array(
+    '#prefix' => '<div class="activity-search-info">',
+    '#suffix' => '</div>',
+  );
 
   // Display number of pages if necessary.
   if ($variables['total_items'] > $variables['items_per_page']) {
@@ -323,7 +325,52 @@ function theme_amp_report_info($variables) {
 
   $elements['totals'] = array(
     '#markup' => $summary_markup,
+    '#prefix' => '<span class="activity-search-summary">',
+    '#suffix' => '</span>',
   );
+
+  $elements['actions'] = array(
+    '#prefix' => '<div class="activity-search-actions">',
+    '#suffix' => '</div>',
+  );
+
+  $actions = array();
+
+  $svgicon = helpertheme_get_svg_icons('export', array('width' => '1.2em', 'height' => '1.2em'));
+  $l_args = array(
+    'html' => TRUE,
+    'external' => TRUE,
+    'fragment' => 'export',
+    'attributes' => array(
+      'class' => array('action-link', 'action-export'),
+    ),
+  );
+  $actions[] = l($svgicon . t('Export'), '', $l_args);
+
+  $svgicon = helpertheme_get_svg_icons('link', array('width' => '1.2em', 'height' => '1.2em'));
+  $l_args = array(
+    'html' => TRUE,
+    'external' => TRUE,
+    'fragment' => 'permalink',
+    'attributes' => array(
+      'class' => array('action-link', 'action-permalink'),
+    ),
+  );
+  $actions[] = l($svgicon . t('Permalink'), '', $l_args);
+
+  $elements['actions']['list'] = array(
+    '#markup' => implode('', $actions),
+  );
+
+  $elements['actions']['extra'] = array(
+    '#prefix' => '<div class="activity-search-actions-extra">',
+    '#suffix' => '</div>',
+  );
+
+  // @TODO: Use libraries API.
+  $module_path = drupal_get_path('module', 'helpertheme');
+  drupal_add_js($module_path . '/scripts/helpertheme.searchactions.js');
+  drupal_add_library('system', 'drupal.progress');
 
   return drupal_render($elements);
 }

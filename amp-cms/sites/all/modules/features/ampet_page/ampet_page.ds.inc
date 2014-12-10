@@ -93,11 +93,13 @@ function ampet_page_ds_layout_settings_info() {
   $ds_layout->settings = array(
     'regions' => array(
       'main' => array(
-        0 => 'title_field',
-        1 => 'body',
+        0 => 'group_title_wrapper',
+        1 => 'title_field',
+        2 => 'body',
       ),
     ),
     'fields' => array(
+      'group_title_wrapper' => 'main',
       'title_field' => 'main',
       'body' => 'main',
     ),

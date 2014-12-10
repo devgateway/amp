@@ -30,8 +30,8 @@
           <?php print render($title_prefix); ?>
           <h1 class="page-title"><?php print $title; ?></h1>
           <?php print render($title_suffix); ?>
-          <?php if ($action_links): ?><ul class="action-links"><?php print render($action_links); ?></ul><?php endif; ?>
         </div>
+        <?php if ($action_links): ?><ul class="title-links action-links"><?php print render($action_links); ?></ul><?php endif; ?>
       <?php endif; ?>
 
       <?php if ($breadcrumb && $display_breadcrumb): ?>

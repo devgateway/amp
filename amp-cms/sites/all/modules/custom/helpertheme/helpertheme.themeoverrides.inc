@@ -247,39 +247,25 @@ function helpertheme_media_wysiwyg_token_to_markup_alter(&$element, $tag_info, $
  *
  * @see template_preprocess_views_exposed_form()
  */
-function helpertheme_preprocess_views_exposed_form(&$vars) {
-  return;
+function helpertheme_preprocess_views_exposed_form(&$variables) {
+  if (drupal_is_front_page()) {
+    $variables['theme_hook_suggestions'][] = 'views_exposed_form__homepage_search';
 
-  $form = &$vars['form'];
-  $vars['widgets'] = array();
-  foreach ($form['#info'] as $id => $info) {
-    // Set aside checkboxes.
-    if (isset($form[$info['value']]['#type']) && $form[$info['value']]['#type'] == 'checkbox') {
-      $checkboxes .= drupal_render($form[$info['value']]);
-      continue;
-    }
-    $widget = new stdClass;
-    // set up defaults so that there's always something there.
-    $widget->label = $widget->operator = $widget->widget = $widget->description = NULL;
-
-    $widget->id = isset($form[$info['value']]['#id']) ? $form[$info['value']]['#id'] : '';
-
-    if (!empty($info['label'])) {
-      $widget->label = check_plain($info['label']);
-    }
-    if (!empty($info['operator'])) {
-      $widget->operator = drupal_render($form[$info['operator']]);
+    if (isset($variables['widgets']['filter-title'])) {
+      $variables['basewidget'] = clone $variables['widgets']['filter-title'];
+      unset($variables['widgets']['filter-title']);
     }
 
-    dpm($form[$info['value']], '$form[$info[value]]');
-    $widget->widget = drupal_render($form[$info['value']]);
+    $extra_widgets_toggle = '<input type="checkbox" name="vew" id="extra-widgets-toggle" class="extra-widgets-toggle" />';
 
-    if (!empty($info['description'])) {
-      $widget->description = check_plain($info['description']);
-    }
+    $extra_widgets_toggle .= '<label for="extra-widgets-toggle" class="extra-widgets-toggle-label">';
+    $svgicon = helpertheme_get_svg_icons('arrow', array('width' => '1.2em', 'height' => '1.2em'));
+    $extra_widgets_toggle .= '<span class="more">' . $svgicon . t('more') . '</span>';
 
-    $vars['widgets'][$id] = $widget;
+    $svgicon = helpertheme_get_svg_icons('arrow-up', array('width' => '1.2em', 'height' => '1.2em'));
+    $extra_widgets_toggle .= '<span class="less">' . $svgicon . t('less') . '</span>';
+    $extra_widgets_toggle .= '</label>';
+
+    $variables['extra_widgets_toggle'] = $extra_widgets_toggle;
   }
-
-
 }

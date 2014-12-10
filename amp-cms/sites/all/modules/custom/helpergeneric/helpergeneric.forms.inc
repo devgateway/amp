@@ -640,16 +640,4 @@ function _helpergeneric_alter_vertical_tabs(&$form) {
  * Implement hook_form_alter() for views_exposed_form.
  */
 function helpergeneric_form_views_exposed_form_alter(&$form, &$form_state) {
-  return;
-  dpm($form, 'helpergeneric $form');
-  foreach ($form['#info'] as $id => $info) {
-    $key = $info['value'];
-    if (isset($form[$key]['#type']) && $form[$key]['#type'] != 'textfield') {
-      continue;
-    }
-
-    $form[$key]['#attributes']['placeholder'] = t($info['label']);
-    $form[$key]['#title_display'] = 'invisible';
-    // $form[$key]['#title_display'] = 'attribute';
-  }
 }

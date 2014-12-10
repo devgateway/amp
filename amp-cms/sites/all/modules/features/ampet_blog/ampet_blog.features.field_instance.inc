@@ -31,7 +31,7 @@ function ampet_blog_field_default_field_instances() {
         'module' => 'text',
         'settings' => array(),
         'type' => 'text_default',
-        'weight' => 2,
+        'weight' => 3,
       ),
       'teaser' => array(
         'label' => 'hidden',
@@ -101,7 +101,7 @@ function ampet_blog_field_default_field_instances() {
         'label' => 'above',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 14,
       ),
       'teaser_featured' => array(
         'label' => 'above',
@@ -157,7 +157,7 @@ function ampet_blog_field_default_field_instances() {
           'multiple_to' => '',
         ),
         'type' => 'date_default',
-        'weight' => 1,
+        'weight' => 2,
       ),
       'teaser_featured' => array(
         'label' => 'above',
@@ -217,7 +217,7 @@ function ampet_blog_field_default_field_instances() {
         'label' => 'hidden',
         'settings' => array(),
         'type' => 'hidden',
-        'weight' => 0,
+        'weight' => 15,
       ),
       'teaser_featured' => array(
         'label' => 'hidden',
@@ -326,13 +326,14 @@ function ampet_blog_field_default_field_instances() {
         'label' => 'hidden',
         'module' => 'helpergeneric',
         'settings' => array(
-          'show_actions' => 1,
+          'show_action' => 1,
+          'show_social' => 1,
           'title_class' => 'page-title',
           'title_link' => '',
           'title_style' => 'h1',
         ),
         'type' => 'title_with_actions',
-        'weight' => 0,
+        'weight' => 1,
       ),
       'teaser_featured' => array(
         'label' => 'hidden',
@@ -387,6 +388,7 @@ function ampet_blog_field_default_field_instances() {
   t('Event Date');
   t('Image');
   t('Marking a blog entry as "News" or "Event" will make them show up in "News" or "Event" specific sections. Marking a blog entry as an event will also expose an extra "Event Date" field.');
+  t('The image is displayed in some listings where this content is visible.');
   t('Title');
 
   return $field_instances;

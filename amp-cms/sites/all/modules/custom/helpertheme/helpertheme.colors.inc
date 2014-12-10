@@ -93,6 +93,10 @@ function helpertheme_color_pallete() {
     '#value' => '#4fa600',
     '#desc' => 'highlighted items',
     '#variants' => array(
+      'clactive__alt' => array(
+        '#value' => '#f69c00',
+        '#desc' => 'alternative color',
+      ),
     ),
   );
 

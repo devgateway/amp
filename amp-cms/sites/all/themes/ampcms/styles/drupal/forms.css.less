@@ -94,7 +94,7 @@ a.button {
   border-right-color: #d2d2d2;
   color: #3a3a3a;
   cursor: pointer;
-  font-size: 0.929em;
+  font-size: 0.875em;
   font-weight: normal;
   text-align: center;
   margin-right: 0.6em; /* LTR */
@@ -114,6 +114,25 @@ a.button:active {
     margin-bottom: 1em;
   }
 }
+
+
+.views-exposed-form-activities-search-page {
+  margin-top: 1em;
+
+  input.form-submit {
+    .border-radius(0);
+    background-color: @cldetail;
+    background-image: none;
+
+    border: 1px solid @cldetail;
+    color: @cldetail__highlight;
+  }
+
+  .form-item {
+    margin-top: 0;
+  }
+}
+
 
 /**
  * Disabled form elements.

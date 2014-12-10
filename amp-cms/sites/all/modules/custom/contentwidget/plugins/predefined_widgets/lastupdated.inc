@@ -52,18 +52,18 @@ function contentwidget_lastupdated_widget_retrieve_data($widget_settings, $langc
     }
 
     $variables = array();
-    // $variables['headers'] = array(
-    //   'Accept' => 'application/json',
-    //   'Content-Type' => 'application/json',
-    // );
-    // // Required, even though we pass the parameters in the URL like for GET requests.
-    // $variables['body'] = '{}';
+    $variables['headers'] = array(
+      'Accept' => 'application/json',
+      'Content-Type' => 'application/json',
+    );
+    // Required, even though we pass the parameters in the URL like for GET requests.
+    $variables['body'] = '{}';
 
     // Set the API Resource Endpoint.
     $resource_path = 'gis/last-updated';
 
-    // Make a GET request.
-    $response = restclient_get($resource_path . '?' . drupal_http_build_query($parameters), $variables);
+    // Make a POST request.
+    $response = restclient_post($resource_path . '?' . drupal_http_build_query($parameters), $variables);
   }
 
   // @TODO: Add support for more response codes.

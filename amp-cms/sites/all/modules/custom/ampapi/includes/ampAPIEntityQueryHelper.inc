@@ -154,15 +154,15 @@ class ampAPIEntityQueryHelper {
     if (!empty($query->range)) {
       $request_body['recordsPerPage'] = $query->range['length'];
       $request_body['page'] = $query->range['start'] / $query->range['length'] + 1; // It's not 0 based.
+
+      // Only calculate totals when we request a single page.
+      if (!empty($query->metaData['view'])) {
+        $request_body['rowTotals'] = TRUE;
+      }
     }
     else {
-      $request_body['page'] = 1;
-      $request_body['recordsPerPage'] = 10;
-    }
-
-    // Tell efq_views that the entities are already loaded.
-    if (!empty($query->metaData['view'])) {
-      $request_body['rowTotals'] = TRUE;
+      // Request all entries if no pager settings are available.
+      $request_body['recordsPerPage'] = -1;
     }
 
     // @TODO: Deal with multiple sorts and maping of special properties.

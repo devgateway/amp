@@ -30,10 +30,22 @@ function contentwidget_ctools_plugin_type() {
  * @return
  *   An array of arrays with information about all available predefined widget types.
  */
-function contentwidget_get_predefined_widgets() {
+function contentwidget_get_predefined_widgets($include_hidden = FALSE) {
   ctools_include('context');
   ctools_include('plugins');
-  return ctools_get_plugins('contentwidget', 'predefined_widgets');
+
+  if (!empty($include_hidden)) {
+    return ctools_get_plugins('contentwidget', 'predefined_widgets');
+  }
+
+  $plugins = ctools_get_plugins('contentwidget', 'predefined_widgets');
+  foreach ($plugins as $key => $plugin_info) {
+    if (!empty($plugin_info['hidden'])) {
+      unset($plugins[$key]);
+    }
+  }
+
+  return $plugins;
 }
 
 /**

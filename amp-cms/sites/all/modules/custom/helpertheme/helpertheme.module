@@ -435,12 +435,21 @@ function helpertheme_get_svg_icons($icon = NULL, $options = array()) {
     'organization',
     'reports',
     'sector',
+
+    'search',
+    'export',
+    'link',
   );
 
   // These can only be used in the code.
   $extra_icons = array(
     'arrow',
+    'arrow-up',
     'gear',
+
+    'facebook',
+    // 'google',
+    'twitter',
 
     'add',
     'delete',

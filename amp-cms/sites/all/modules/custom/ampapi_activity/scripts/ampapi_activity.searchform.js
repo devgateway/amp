@@ -17,19 +17,23 @@ Drupal.behaviors.projectsSearchFormModalDialog = {
 
       $(this).tokenInput(endpoint, {
         theme: 'ampcms',
-        // theme: 'facebook',
         method: 'get',
-        minChars: '2',
         queryParam: 'string',
         prePopulate: settings.viewsTokeninput[field_name]['values'],
+        hintText: Drupal.t('Type in a search term'),
+        noResultsText: Drupal.t('No results'),
+        searchingText: Drupal.t('Searching...'),
 
         // Update the search form info when the values have changed.
-        // onAdd: function() {
-        //   Drupal.ampp.updateSearchFormInfo(Drupal.ampp.delay);
-        // },
-        // onDelete: function() {
-        //   Drupal.ampp.updateSearchFormInfo(Drupal.ampp.delay);
-        // },
+        onAdd: function (item) {
+          $(this).closest('.views-accordion-widget-wrapper').addClass('has-values');
+        },
+        onDelete: function(item) {
+          var saved_tokens = this.tokenInput('get');
+          if (saved_tokens.length == 0) {
+            $(this).closest('.views-accordion-widget-wrapper').removeClass('has-values');
+          }
+        },
       });
     });
   }

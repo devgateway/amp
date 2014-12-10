@@ -149,32 +149,33 @@ class views_data_export_plugin_style_export extends views_plugin_style {
    * feed image link.
    */
   function attach_to($display_id, $path, $title) {
-
-    $type = $this->definition['export feed type'];
-    $theme_pattern = array(
-      'views_data_export_feed_icon__' . $this->view->name . '__' . $display_id . '__' . $type,
-      'views_data_export_feed_icon__' . $this->view->name . '__' . $display_id,
-      'views_data_export_feed_icon__' . $this->view->name . '__' . $type,
-      'views_data_export_feed_icon__' . $display_id . '__' . $type,
-      'views_data_export_feed_icon__' . $display_id,
-      'views_data_export_feed_icon__' . $type,
-      'views_data_export_feed_icon',
-    );
-    $query = $this->view->get_exposed_input();
-    // Stash the display id we're coming form in the url so we can hijack it later.
-    if ($this->options['parent_sort']) {
-      $query['attach'] = $display_id;
+    if ($this->display->handler->access()) {
+      $type = $this->definition['export feed type'];
+      $theme_pattern = array(
+        'views_data_export_feed_icon__' . $this->view->name . '__' . $display_id . '__' . $type,
+        'views_data_export_feed_icon__' . $this->view->name . '__' . $display_id,
+        'views_data_export_feed_icon__' . $this->view->name . '__' . $type,
+        'views_data_export_feed_icon__' . $display_id . '__' . $type,
+        'views_data_export_feed_icon__' . $display_id,
+        'views_data_export_feed_icon__' . $type,
+        'views_data_export_feed_icon',
+      );
+      $query = $this->view->get_exposed_input();
+      // Stash the display id we're coming form in the url so we can hijack it later.
+      if ($this->options['parent_sort']) {
+        $query['attach'] = $display_id;
+      }
+      if (!isset($this->view->feed_icon)) {
+        $this->view->feed_icon = '';
+      }
+      $this->view->feed_icon .= theme($theme_pattern, array(
+          'image_path' => $this->definition['export feed icon'],
+          'url' => $this->view->get_url(NULL, $path),
+          'query' => $query,
+          'text' => $this->options['attach_text'],
+        )
+      );
     }
-    if (!isset($this->view->feed_icon)) {
-      $this->view->feed_icon = '';
-    }
-    $this->view->feed_icon .= theme($theme_pattern, array(
-        'image_path' => $this->definition['export feed icon'],
-        'url' => $this->view->get_url(NULL, $path),
-        'query' => $query,
-        'text' => $this->options['attach_text'],
-      )
-    );
   }
 
   function build_sort() {
@@ -329,7 +330,7 @@ class views_data_export_plugin_style_export extends views_plugin_style {
       $count = 0;
       foreach ($view->display_handler->get_handlers('argument') as $arg => $handler) {
         $token = '%' . ++$count;
-        $tokens[$token . '-title'] = check_plain($handler->title());
+        $tokens[$token . '-title'] = $handler->get_title();
         $tokens[$token . '-value'] = isset($view->args[$count - 1]) ? check_plain($view->args[$count - 1]) : '';
       }
 

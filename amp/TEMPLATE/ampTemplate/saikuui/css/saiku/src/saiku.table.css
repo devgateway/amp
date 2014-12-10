@@ -62,7 +62,7 @@
 .workspace_results table th.row_total {
 	border-left: 1px none #d5d5d5;
 	border-top: 1px solid #d5d5d5;
-    background: #f9f9f9;
+    background: #C7C7C7;
     text-align: left;
 }
 
@@ -78,7 +78,7 @@
     border-top: 1px none #d5d5d5;
     border-right: 1px none #d5d5d5;
     border-bottom: 1px none #d5d5d5;
-    background: #f9f9f9;
+    background: #C7C7C7;
     text-align: left;
 }
 
@@ -100,7 +100,7 @@
 }
 
 .workspace_results table td.total {
-	background: #fbfbfb;
+	background: #C7C7C7;
 	font-weight: bold;
 }
 

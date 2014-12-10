@@ -369,8 +369,8 @@ public class Reports {
 	
 	private CellDataSet getPage(CellDataSet cellDataSet, Object pageParam) {
 		//Assuming page is zero indexed
-		if(pageParam != null) {
-			AbstractBaseCell[][] result = cellDataSet.getCellSetBody();
+		AbstractBaseCell[][] result = cellDataSet.getCellSetBody();
+		if(pageParam != null && result.length > 0) {
 			int start = 0, end = 0, page = 0;
 			page = (int)pageParam;
 			int rpp = ReportPaginationUtils.getRecordsNumberPerPage();

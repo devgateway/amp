@@ -676,9 +676,9 @@ public class EndpointUtils {
 		EndpointUtils.applySettings(spec, config);
 		
 		// now apply GIS custom settings, i.e. selected measures
+		List<String> measureOptions = new ArrayList<String>();
 		if (config.get(EPConstants.SETTINGS) != null) {
 			Map<Integer, Object> settings = (Map<Integer, Object>) config.get(EPConstants.SETTINGS);
-			List<String> measureOptions = new ArrayList<String>();
 			Object fundingTypes = settings.get(SettingsConstants.FUNDING_TYPE_ID);
 			if (fundingTypes != null) {
 				if (fundingTypes instanceof String)
@@ -687,13 +687,13 @@ public class EndpointUtils {
 				// remove if it will be confirmed over time that is not required
 				else if (fundingTypes instanceof List)
 					measureOptions.addAll((List<String>)fundingTypes);
-			}		
-			if (measureOptions.size() > 0) {
-				for (String measure : measureOptions)
-					spec.addMeasure(new ReportMeasure(measure));
-			} else {
-				spec.addMeasure(new ReportMeasure(SettingsConstants.DEFAULT_FUNDING_TYPE_ID));
 			}
+		}
+		if (measureOptions.size() > 0) {
+			for (String measure : measureOptions)
+				spec.addMeasure(new ReportMeasure(measure));
+		} else {
+			spec.addMeasure(new ReportMeasure(SettingsConstants.DEFAULT_FUNDING_TYPE_ID));
 		}
 	}
 

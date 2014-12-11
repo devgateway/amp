@@ -226,7 +226,8 @@ public class DashboardsService {
 				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
 		GeneratedReport report = generator.executeReport(spec);
-		Map<Integer, JSONObject> results = new TreeMap<>(); // accumulator of per-year results
+		//Not only years, we can have values like 'Fiscal calendar 2010-2011', so the Map should be <String,JSONObject>
+		Map<String, JSONObject> results = new TreeMap<>(); // accumulator of per-year results
 				
 		if (report.reportContents.getContents()!=null) {
 			 for (ReportOutputColumn outputColumn:report.reportContents.getContents().keySet()) {
@@ -239,22 +240,22 @@ public class DashboardsService {
 				boolean isTotalColumn = outputColumn.parentColumn != null && outputColumn.parentColumn.originalColumnName.equals("Total Measures");
 				String destination = isPlannedColumn ? "planned" : "actual";
 				
-				int yearNr = isTotalColumn ? 0 : Integer.parseInt(outputColumn.parentColumn.columnName);
-				if (!results.containsKey(yearNr))
-					results.put(yearNr, buildEmptyJSon("planned", "actual"));
-				JSONObject amountObj = results.get(yearNr);
+				String yearValue = isTotalColumn ? "totals" : outputColumn.parentColumn.columnName;
+				if (!results.containsKey(yearValue))
+					results.put(yearValue, buildEmptyJSon("planned", "actual"));
+				JSONObject amountObj = results.get(yearValue);
 	
 				amountObj.put(destination, report.reportContents.getContents().get(outputColumn).value);
 			}
 		}
 		JSONArray yearsArray = new JSONArray ();
-		for(int yearNr:results.keySet())
-			if (yearNr > 0) {
-				results.get(yearNr).put("year", Integer.toString(yearNr));
-				yearsArray.add(results.get(yearNr));
+		for(String yearValue:results.keySet())
+			if (!yearValue.equals("totals")) {
+				results.get(yearValue).put("year", yearValue);
+				yearsArray.add(results.get(yearValue));
 			}
 		retlist.put("years", yearsArray);
-		retlist.put("totals", results.get(0));		
+		retlist.put("totals", results.get("totals"));		
 	
 		String currcode = EndpointUtils.getDefaultCurrencyCode();
 		retlist.put("currency", currcode);

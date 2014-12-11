@@ -42,14 +42,7 @@ import org.apache.lucene.index.IndexWriter.MaxFieldLength;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.queryParser.ParseException;
 import org.apache.lucene.queryParser.QueryParser;
-import org.apache.lucene.search.BooleanClause;
-import org.apache.lucene.search.BooleanQuery;
-import org.apache.lucene.search.Hits;
-import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.Query;
-import org.apache.lucene.search.ScoreDoc;
-import org.apache.lucene.search.Searcher;
-import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.*;
 import org.apache.lucene.search.highlight.Fragmenter;
 import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.QueryScorer;
@@ -1085,11 +1078,11 @@ public class LuceneUtil implements Serializable {
 	}
 	
     
-    public static Hits search(String index, String field, String searchString){
+    public static Document[] search(String index, String field, String searchString){
     	return LuceneUtil.search(index, field, searchString, MAX_LUCENE_RESULTS, true, "0");
     }
     
-    public static Hits search(String index, String field, String searchString, String searchMode){
+    public static Document[] search(String index, String field, String searchString, String searchMode){
     	return LuceneUtil.search(index, field, searchString, MAX_LUCENE_RESULTS, true, searchMode);
     }
 
@@ -1197,20 +1190,26 @@ public class LuceneUtil implements Serializable {
         return null;
     }
     
-	public static Hits search(String index, String field, String origSearchString, int maxLuceneResults, boolean retry, String searchMode){
+	public static Document[] search(String index, String field, String origSearchString, int maxLuceneResults, boolean retry, String searchMode){
 		QueryParser parser = new QueryParser(field, analyzer);
-		if (LuceneUtil.SEARCH_MODE_AND.toString().equals(searchMode) ) 
-			parser.setDefaultOperator(QueryParser.AND_OPERATOR);
+		if (LuceneUtil.SEARCH_MODE_AND.toString().equals(searchMode)) {
+            parser.setDefaultOperator(QueryParser.AND_OPERATOR);
+        } else {
+            parser.setDefaultOperator(QueryParser.OR_OPERATOR);
+        }
+
 		Query query = null;
-		Hits hits = null;
-		
+        Document[] resultDocuments = null;
+
+
 		Searcher indexSearcher = null;
 		try {
 			indexSearcher = new IndexSearcher(index);
 
 			String searchString = origSearchString.trim();
-			if (searchString.charAt(0) == '*')
-				searchString = searchString.substring(1);
+			if (searchString.charAt(0) == '*') {
+                searchString = searchString.substring(1);
+            }
 			//AMP-3806
 			searchString = searchString.replace("+","\\+");
 			searchString = searchString.replace("-","\\-");
@@ -1226,26 +1225,30 @@ public class LuceneUtil implements Serializable {
 			searchString = searchString.replaceAll("\\s\\w{1,2}$", " ");
 			
 			query = parser.parse(searchString.trim());
-			BooleanQuery bol = new BooleanQuery();
-			bol.add(query,BooleanClause.Occur.MUST);
-			bol.setMaxClauseCount(maxLuceneResults);
-			hits = indexSearcher.search(bol);
+            TopDocs topDocs = indexSearcher.search(query, maxLuceneResults);
+            resultDocuments = new Document[topDocs.totalHits];
+
+            for (int i = 0; i < topDocs.totalHits; i++) {
+                resultDocuments[i] = indexSearcher.doc(topDocs.scoreDocs[i].doc);
+            }
 			
 		} catch (BooleanQuery.TooManyClauses e1) {
 			//TODO Make lucene search only through the activities from the current workspace
 			String msg	= "Too many clauses found. More than " + maxLuceneResults + ".";
-			if (retry)
-				msg		+= "Will retry with " + maxLuceneResults*10;
-			logger.warn ( msg  );
-			if ( retry )
-				return LuceneUtil.search(index, field, origSearchString, maxLuceneResults*10, false, searchMode);
-			else
-				e1.printStackTrace();
+			if (retry) {
+                msg += "Will retry with " + maxLuceneResults * 10;
+            }
+			logger.warn (msg);
+			if (retry) {
+                return LuceneUtil.search(index, field, origSearchString, maxLuceneResults * 10, false, searchMode);
+            } else {
+                e1.printStackTrace();
+            }
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		return hits;
+		return resultDocuments;
 	}
          
         

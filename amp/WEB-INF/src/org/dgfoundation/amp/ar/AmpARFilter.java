@@ -1520,49 +1520,44 @@ public class AmpARFilter extends PropertyListable {
 		 * toYear); queryAppend(MONTH_YEAR_FILTER);
 		 */
 		if (text != null) {
-			if ("".equals(text.trim()) == false) {
+			if (! "".equals(text.trim())) {
 				String TEXT_FILTER = "SELECT a.amp_activity_id from amp_activity a WHERE a.amp_id="
 						+ text;
 				queryAppend(TEXT_FILTER);
 			}
 		}
-		
-		if (indexText != null)
+
+        if (indexText != null && ! "".equals(indexText.trim())) {
 			//shouldn't enter here if not using an httprequest!
-			if ("".equals(indexText.trim()) == false) {
-				String LUCENE_ID_LIST = "";
-//				HttpSession session = request.getSession();
-//				ServletContext ampContext = session.getServletContext();
-//				Directory idx = (Directory) ampContext
-//						.getAttribute(Constants.LUCENE_INDEX);
-				if(params.getLuceneSearchModeParam() != null)
-					searchMode = params.getLuceneSearchModeParam();
-				Hits hits = LuceneUtil.search(params.getLuceneRealPath() + LuceneUtil.ACTVITY_INDEX_DIRECTORY, "all", indexText, searchMode);
-				logger.info("New lucene search !");
-				if(hits!=null)
-				for (int i = 0; i < hits.length(); i++) {
-					Document doc;
-					try {
-						doc = hits.doc(i);
-						if (LUCENE_ID_LIST == "")
-							LUCENE_ID_LIST = doc.get("id");
-						else
-							LUCENE_ID_LIST = LUCENE_ID_LIST + ","
-									+ doc.get("id");
-						// AmpActivity act =
-						// ActivityUtil.getAmpActivity(Long.parseLong(doc.get("id")));
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				logger.info("Lucene ID List:" + LUCENE_ID_LIST);
-				if (LUCENE_ID_LIST.length() < 1) {
-					logger.info("Not found!");
-					LUCENE_ID_LIST = "-1";
-				}
-				queryAppend(LUCENE_ID_LIST);
-			}
+
+            String LUCENE_ID_LIST = "";
+//			HttpSession session = request.getSession();
+//			ServletContext ampContext = session.getServletContext();
+//			Directory idx = (Directory) ampContext
+//				.getAttribute(Constants.LUCENE_INDEX);
+
+            searchMode = params.getLuceneSearchModeParam();
+
+            Document[] docs = LuceneUtil.search(params.getLuceneRealPath() + LuceneUtil.ACTVITY_INDEX_DIRECTORY, "all", indexText, searchMode);
+            logger.info("New lucene search !");
+
+            for (Document doc : docs) {
+                if (LUCENE_ID_LIST.equals("")) {
+                    LUCENE_ID_LIST = doc.get("id");
+                } else {
+                    LUCENE_ID_LIST = LUCENE_ID_LIST + "," + doc.get("id");
+                }
+                // AmpActivity act =
+                // ActivityUtil.getAmpActivity(Long.parseLong(doc.get("id")));
+            }
+
+            logger.info("Lucene ID List:" + LUCENE_ID_LIST);
+            if (LUCENE_ID_LIST.length() < 1) {
+                logger.info("Not found!");
+                LUCENE_ID_LIST = "-1";
+            }
+            queryAppend(LUCENE_ID_LIST);
+		}
 
 		String RISK_FILTER = "SELECT v.activity_id from AMP_ME_INDICATOR_VALUE v, AMP_INDICATOR_RISK_RATINGS r where v.risk=r.amp_ind_risk_ratings_id and r.amp_ind_risk_ratings_id in ("
 				+ Util.toCSString(risks) + ")";

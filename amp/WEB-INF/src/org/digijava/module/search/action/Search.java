@@ -2,8 +2,7 @@ package org.digijava.module.search.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
@@ -12,7 +11,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.ReportContextData;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
@@ -154,7 +152,7 @@ public class Search extends Action {
 					
 				}
 	
-				if (searchForm.getKeyword() != "") {
+				if (! searchForm.getKeyword().equals("")) {
 					resultList.addAll(resultActivities);
 					resultList.addAll(resultPledges);
 					resultList.addAll(resultReports);

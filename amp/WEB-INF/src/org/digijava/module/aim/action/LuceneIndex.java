@@ -71,23 +71,19 @@ public class LuceneIndex extends Action {
 				  String field = request.getParameter("field");
 				  String search = request.getParameter("search");
 
-				  Hits hits = LuceneUtil.search(LuceneUtil.ACTVITY_INDEX_DIRECTORY, field, search);
-				  for(int i = 0; i < hits.length(); i++) {
-					   Document doc = hits.doc(i);
-					   AmpActivityVersion act = ActivityUtil.loadActivity(Long.parseLong(doc.get("id")));
-					   logger.info(doc.get("id") + "[" + act.getAmpId() + "] " + act.getName());
-				  }
+                  Document[] docs = LuceneUtil.search(LuceneUtil.ACTVITY_INDEX_DIRECTORY, field, search);
+                  for (Document doc : docs) {
+                      AmpActivityVersion act = ActivityUtil.loadActivity(Long.parseLong(doc.get("id")));
+                      logger.info(doc.get("id") + "[" + act.getAmpId() + "] " + act.getName());
+                  }
 				  
-			  }
-			  else
-				  if ("delete".compareTo(action) == 0){
+			  } else if ("delete".compareTo(action) == 0) {
 					  logger.info("DELETE!");
 					  String field = request.getParameter("field");
 					  String search = request.getParameter("search");
 
 					  LuceneUtil.deleteEntry(request.getSession().getServletContext().getRealPath("/") + "/" + LuceneUtil.ACTVITY_INDEX_DIRECTORY, field, search);
-				  }
-				  else{
+				  } else {
 					  if ("checked".compareTo(action) == 0){
 						  //first occurence of the error ... get's wrapped
 						  AMPException ae = new AMPException(Constants.AMP_ERROR_LEVEL_ERROR, false, new Exception("simulated save activity error"));

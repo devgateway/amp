@@ -137,7 +137,6 @@ public class ReportsUtil {
 				(areas != null ? areas.length : 0)));
 		result.set(EPConstants.SETTINGS, cachedReportData != null ? 
 				EndpointUtils.getReportSettings(cachedReportData.report.spec) : null);
-		
 		return result;
 	}
 	

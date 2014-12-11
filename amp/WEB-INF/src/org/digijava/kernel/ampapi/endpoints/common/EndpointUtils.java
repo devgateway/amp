@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -486,8 +487,9 @@ public class EndpointUtils {
 		}
 		
 		Map<String, Object> settings = (Map<String, Object>) config.get(EPConstants.SETTINGS);
+		MondrianReportSettings reportSettings = new MondrianReportSettings();
 		if (settings != null) {
-			MondrianReportSettings reportSettings = (MondrianReportSettings)spec.getSettings();
+			reportSettings = (MondrianReportSettings) spec.getSettings();
 			if (reportSettings == null) {
 				reportSettings = new MondrianReportSettings();
 				spec.setSettings(reportSettings);
@@ -515,32 +517,25 @@ public class EndpointUtils {
 				
 				DecimalFormat format = AmpARFilter.buildCustomFormat(decimalSymbol, groupingSeparator, 
 						maxFractDigitsNum, useGrouping, groupingSize);
-				reportSettings.setCurrencyFormat(format);
+				reportSettings.setCurrencyFormat((DecimalFormat) format.getInstance(new Locale("en", "US")));
 				
 				Double multiplier  = (Double) amountFormat.get(SettingsConstants.AMOUNT_UNITS);
 				if (multiplier != null)
 					reportSettings.setUnitsMultiplier(multiplier);
+			}else{
+				
+				reportSettings.setCurrencyFormat(getCurrencySymbols());
+				spec.setSettings(reportSettings);
+				ApplyYearRange(reportSettings, settings);
 			}
 			
 			// apply year range settings
-			Map<String, Object> yearRange = (Map<String, Object>)settings.get(SettingsConstants.YEAR_RANGE_ID);
-			if (yearRange != null) {
-				Integer start = Integer.valueOf((String)yearRange.get(SettingsConstants.YEAR_FROM));
-				Integer end = Integer.valueOf((String)yearRange.get(SettingsConstants.YEAR_TO));
-				// clear previous year settings
-				reportSettings.getFilterRules().remove(new ReportElement(ElementType.YEAR));
-				// TODO: update settings to store [ALL, ALL] range just to reflect the previous selection
-				if (!(start == -1 && end == -1)) {
-					try {
-						start = start == -1 ? null : start;
-						end = end == -1 ? null : end;
-						reportSettings.addYearsRangeFilterRule(start, end);
-					} catch (Exception e) {
-						logger.error(e.getMessage());
-					}
-				}
-				
-			}
+			ApplyYearRange(reportSettings, settings);
+			
+		} else {
+			//Here we should set default setting for request without parameters.
+			reportSettings.setCurrencyFormat(getCurrencySymbols());
+			ApplyYearRange(reportSettings, settings);
 		}
 	}
 	public static List<JsonBean> getApiStateList(String type) {
@@ -666,12 +661,12 @@ public class EndpointUtils {
 	}
 		
 	/**
-	 * Applies Gis specific settings
+	 * Applies specific settings
 	 * 
 	 * @param spec report specification 
 	 * @param config request configuration that stores the settings  
 	 */
-	public static void applyGisSettings(ReportSpecificationImpl spec, JsonBean config) {
+	public static void applyGeneralSettings(ReportSpecificationImpl spec, JsonBean config) {
 		// apply first common settings, i.e. calendar and currency
 		EndpointUtils.applySettings(spec, config);
 		
@@ -758,6 +753,53 @@ public class EndpointUtils {
 			return null;
 		}
 		return availableFilters;
-	}	
+	}
 	
+	
+	/**
+	 * Set locale to US in order to avoid number formating issues
+	 * @return
+	 */
+	
+	public static DecimalFormat getCurrencySymbols(){
+		Locale locale  = new Locale("en", "US");
+		String pattern = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
+		FormatHelper.getDecimalFormat();
+		DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getInstance(locale);
+		decimalFormat.applyPattern(pattern);
+		return decimalFormat;
+	}
+	
+	/**
+	 * 
+	 * @param reportSettings
+	 * @param settings
+	 */
+	public static void ApplyYearRange(MondrianReportSettings reportSettings, Map<String, Object> settings) {
+		// apply year range settings
+		Integer start = 0;
+		Integer end = 0;
+		if (settings!= null && settings.get(SettingsConstants.YEAR_RANGE_ID) != null) {
+			Map<String, Object> yearRange = (Map<String, Object>) settings.get(SettingsConstants.YEAR_RANGE_ID);
+			start = Integer.valueOf((String) yearRange.get(SettingsConstants.YEAR_FROM));
+			end = Integer.valueOf((String) yearRange.get(SettingsConstants.YEAR_TO));
+		} else {
+			start = new Integer(getDefaultReportStartYear());
+			end = new Integer(getDefaultReportEndYear());
+		}
+			// clear previous year settings
+			reportSettings.getFilterRules().remove(new ReportElement(ElementType.YEAR));
+			// TODO: update settings to store [ALL, ALL] range just to reflect
+			// the previous selection
+			if (!(start == -1 && end == -1)) {
+				try {
+					start = start == -1 ? null : start;
+					end = end == -1 ? null : end;
+					reportSettings.addYearsRangeFilterRule(start, end);
+				} catch (Exception e) {
+					logger.error(e.getMessage());
+				}
+			}
+		
+	}
 }

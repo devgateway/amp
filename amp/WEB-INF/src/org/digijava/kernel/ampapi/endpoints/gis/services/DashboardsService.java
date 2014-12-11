@@ -118,7 +118,7 @@ public class DashboardsService {
 		spec.addColumn(new ReportColumn(column, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.getHierarchies().addAll(spec.getColumns());
 		// applies settings, including funding type as a measure
-		EndpointUtils.applyGisSettings(spec, config);
+		EndpointUtils.applyGeneralSettings(spec, config);
 		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
 		spec.setCalculateRowTotals(true);
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
@@ -155,10 +155,7 @@ public class DashboardsService {
 		}
 
 		String currcode = null;
-		if (spec.getSettings() != null && spec.getSettings().getCurrencyCode() != null)
-			currcode = spec.getSettings().getCurrencyCode();
-		else
-			currcode = EndpointUtils.getDefaultCurrencyCode();
+		currcode = spec.getSettings().getCurrencyCode();
 		retlist.set("currency", currcode);
 
 		retlist.set("numberformat", numberformat);
@@ -201,11 +198,8 @@ public class DashboardsService {
 
 		JSONObject retlist = new JSONObject();
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetAidPredictability");
-		//spec.addColumn(new ReportColumn(ColumnConstants.SECTOR_GROUP, ReportEntityType.ENTITY_TYPE_ALL));
-		//spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addColumn(new ReportColumn(ColumnConstants.COUNTRY, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.getHierarchies().add(new ReportColumn(ColumnConstants.COUNTRY, ReportEntityType.ENTITY_TYPE_ALL));
-		//spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addMeasure(new ReportMeasure(MoConstants.PLANNED_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.addMeasure(new ReportMeasure(MoConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
 		spec.setCalculateRowTotals(true);

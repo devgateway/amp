@@ -109,7 +109,7 @@ public class LocationService {
 		spec.addColumn(new ReportColumn(admlevel));
 		spec.getHierarchies().addAll(spec.getColumns());
 		// also configures the measure(s) from funding type settings request
-		EndpointUtils.applyGisSettings(spec, config);
+		EndpointUtils.applyGeneralSettings(spec, config);
 		
 		MondrianReportFilters filterRules = new MondrianReportFilters(); 
 		

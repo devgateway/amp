@@ -12,6 +12,7 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -57,7 +58,10 @@ public class CellDataSetToGeneratedReport {
 			this.numberFormat = spec.getSettings().getCurrencyFormat();
 		else 
 			this.numberFormat = MondrianReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat();
-		readingNumberFormat = NumberFormat.getInstance();
+		// This is a bit ugly it will fix end points and tabs with number formating issues 
+		// Ensure Locale is always US
+		Locale locale  = new Locale("en", "US");
+		readingNumberFormat = NumberFormat.getInstance(locale);
 		//init measure totals if they are available
 		if (spec.isCalculateColumnTotals() && 
 				cellDataSet.getColTotalsLists() != null && cellDataSet.getColTotalsLists().length > 0 

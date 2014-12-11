@@ -211,15 +211,36 @@ public class AmpARFilterConverter {
 	
 	/** adds primary, secondary and tertiary sectors to the filters if specified */
 	private void addSectorFilters() {
-		if (arFilter.getSelectedSectors() == null || arFilter.getSelectedSectors().isEmpty())
-			return;
-		Map<Long, AmpSector> sectorsByIds = new HashMap<>();
-		for(AmpSector sec:arFilter.getSelectedSectors())
-			sectorsByIds.put(sec.getAmpSectorId(), sec);
-		Map<String, List<NameableOrIdentifiable>> sectorsByScheme = distributeEntities(SectorUtil.distributeSectorsByScheme(arFilter.getSelectedSectors()), sectorsByIds);
-		addFilter(sectorsByScheme.get("Primary"), (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECTORS : ColumnConstants.PRIMARY_SECTOR), entityType);
-		addFilter(sectorsByScheme.get("Secondary"), (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECONDARY_SECTORS : ColumnConstants.SECONDARY_SECTOR), entityType);
-		addFilter(sectorsByScheme.get("Tertiary"), (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_SECTORS : ColumnConstants.TERTIARY_SECTOR), entityType);
+		if (arFilter.getSelectedSectors() != null && !arFilter.getSelectedSectors().isEmpty()) {
+			Map<Long, AmpSector> sectorsByIds = new HashMap<>();
+			for (AmpSector sec : arFilter.getSelectedSectors()) {
+				sectorsByIds.put(sec.getAmpSectorId(), sec);
+			}
+			Map<String, List<NameableOrIdentifiable>> sectorsByScheme = distributeEntities(
+					SectorUtil.distributeSectorsByScheme(arFilter.getSelectedSectors()), sectorsByIds);
+			addFilter(sectorsByScheme.get("Primary"), (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECTORS
+					: ColumnConstants.PRIMARY_SECTOR), entityType);
+		}
+		if (arFilter.getSelectedSecondarySectors() != null && !arFilter.getSelectedSecondarySectors().isEmpty()) {
+			Map<Long, AmpSector> sectorsByIds = new HashMap<>();
+			for (AmpSector sec : arFilter.getSelectedSecondarySectors()) {
+				sectorsByIds.put(sec.getAmpSectorId(), sec);
+			}
+			Map<String, List<NameableOrIdentifiable>> sectorsByScheme = distributeEntities(
+					SectorUtil.distributeSectorsByScheme(arFilter.getSelectedSecondarySectors()), sectorsByIds);
+			addFilter(sectorsByScheme.get("Secondary"), (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_SECONDARY_SECTORS
+					: ColumnConstants.SECONDARY_SECTOR), entityType);
+		}
+		if (arFilter.getSelectedTertiarySectors() != null && !arFilter.getSelectedTertiarySectors().isEmpty()) {
+			Map<Long, AmpSector> sectorsByIds = new HashMap<>();
+			for (AmpSector sec : arFilter.getSelectedTertiarySectors()) {
+				sectorsByIds.put(sec.getAmpSectorId(), sec);
+			}
+			Map<String, List<NameableOrIdentifiable>> sectorsByScheme = distributeEntities(
+					SectorUtil.distributeSectorsByScheme(arFilter.getSelectedTertiarySectors()), sectorsByIds);
+			addFilter(sectorsByScheme.get("Tertiary"), (arFilter.isPledgeFilter() ? ColumnConstants.PLEDGES_TERTIARY_SECTORS
+					: ColumnConstants.TERTIARY_SECTOR), entityType);
+		}
 	}
 	
 	protected Map<String, List<NameableOrIdentifiable>> distributeEntities(Map<String, List<Long>> distributedIds, Map<Long, ? extends NameableOrIdentifiable> input) {

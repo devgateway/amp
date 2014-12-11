@@ -112,11 +112,6 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 				}
 			};
 			_.each(data.models, function(item, i) {
-				/*
-				 * var filterName = item.get('name');
-				 * blob.columnFilters[filterName] = _.map(item.get('values'),
-				 * function(item.id) { return parseInt(item_.id); });
-				 */
 				switch (item.get('name')) {
 
 				// cases where columnFilter matches item name
@@ -138,14 +133,13 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 				case 'Executing Agency':
 				case 'Implementing Agency':
 				case 'Beneficiary Agency':
-				case 'Primary Sector':
-				case 'Secondary Sector':
 					blob.columnFilters[item.get('name') + ' Id'] = _.map(item.get('values'), function(item_) {
 						return parseInt(item_.id);
 					});
 					break;
 				case 'National Planning Objectives':
-					blob.columnFilters['National Planning Objectives Level 1 Id'] = _.map(item.get('values'), function(item_) {
+					blob.columnFilters['National Planning Objectives Level 1 Id'] = _.map(item.get('values'), function(
+							item_) {
 						return parseInt(item_.id);
 					});
 					break;
@@ -169,6 +163,27 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 						return parseInt(item_.id);
 					});
 					break;
+				case 'Primary Sector':
+					// NOTE: Since the filter widget (arbitrarily) uses 3 different fields for Primary Sectors we
+					// triplicate the values coming from the endpoint.
+					blob.columnFilters['Primary Sector Id'] = _.map(item.get('values'), function(item_) {
+						return parseInt(item_.id);
+					});
+					blob.columnFilters['Primary Sector Sub-Sector Id'] = blob.columnFilters['Primary Sector Id'];
+					blob.columnFilters['Primary Sector Sub-Sub-Sector Id'] = blob.columnFilters['Primary Sector Id'];
+					break;
+				case 'Secondary Sector':
+					// NOTE: Since the filter widget (arbitrarily) uses 3 different fields for Secondary Sectors we
+					// triplicate the values coming from the endpoint.
+					blob.columnFilters['Secondary Sector Id'] = _.map(item.get('values'), function(item_) {
+						return parseInt(item_.id);
+					});
+					blob.columnFilters['Secondary Sector Sub-Sector Id'] = blob.columnFilters['Secondary Sector Id'];
+					blob.columnFilters['Secondary Sector Sub-Sub-Sector Id'] = blob.columnFilters['Secondary Sector Id'];
+					break;
+				default:
+					console.error(item);
+					break;
 				}
 			});
 			console.log("use blob");
@@ -179,6 +194,20 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 			console.log(app.TabsApp.serializedFilters);
 			return app.TabsApp.serializedFilters;
 		}
+	};
+
+	FilterUtils.widgetFiltersToJavaFilters = function(originalFilters) {
+		/*
+		 * if (originalFilters != null && originalFilters.columnFilters != undefined) { if
+		 * (originalFilters.columnFilters["Primary Sector Id"] != undefined || originalFilters.columnFilters["Primary
+		 * Sector Sub-Sector Id"] != undefined || originalFilters.columnFilters["Primary Sector Sub-Sub-Sector Id"] !=
+		 * undefined) { if (originalFilters.columnFilters["Primary Sector Id"] == undefined) {
+		 * originalFilters.columnFilters["Primary Sector Id"] = []; } originalFilters.columnFilters["Primary Sector Id"] =
+		 * originalFilters.columnFilters["Primary Sector Id"] .concat(originalFilters.columnFilters["Primary Sector
+		 * Sub-Sector Id"]); originalFilters.columnFilters["Primary Sector Id"] = originalFilters.columnFilters["Primary
+		 * Sector Id"] .concat(originalFilters.columnFilters["Primary Sector Sub-Sub-Sector Id"]); } }
+		 */
+		return originalFilters;
 	};
 
 	FilterUtils.prototype = {

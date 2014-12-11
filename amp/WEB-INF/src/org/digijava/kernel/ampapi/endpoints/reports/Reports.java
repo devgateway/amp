@@ -24,6 +24,7 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
@@ -33,6 +34,7 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
+import org.dgfoundation.amp.reports.mondrian.converters.MondrianReportFiltersConverter;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
@@ -42,6 +44,7 @@ import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.digijava.kernel.ampapi.saiku.util.SaikuUtils;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.action.ReportsFilterPicker;
 import org.digijava.module.aim.ar.util.FilterUtil;
@@ -52,8 +55,10 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.hibernate.Session;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.olap.query2.ThinHierarchy;
@@ -532,12 +537,14 @@ public class Reports {
 	}
 	
 	
-	/*@POST
+	@POST
 	@Path("/report/saveTab/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public final void saveTab(JsonBean formParams, @PathParam("report_id") Long reportId) {
+	public void saveTab(JsonBean formParams, @PathParam("report_id") Long reportId) {
 		// Open AmpReport.
-		AmpReports oldReport = DbUtil.getAmpReport(reportId);
+		AmpReports report = DbUtil.getAmpReport(reportId);
+		AmpARFilter oldFilters = FilterUtil.buildFilter(null, reportId);
+		AmpARFilter newFilters = null;
 
 		// Convert json object back to the new format: MondrianReportFilters.
 		if (formParams.get("filters") != null) {
@@ -547,13 +554,30 @@ public class Reports {
 			if (requestFilters != null) {
 				filters.any().putAll(requestFilters);
 				mondrianReportFilters = FilterUtils.getFilters(filters);
-				
-				// Transform back to legacy ARFilters.
+
+				// Transform back to legacy AmpARFilters.
 				MondrianReportFiltersConverter converter = new MondrianReportFiltersConverter(mondrianReportFilters);
-				AmpARFilter ampARFilters = converter.buildFilters();
+				newFilters = converter.buildFilters();
+				// converter.mergeWithOldFilters(oldFilters);
+				logger.info(newFilters);
+
+				// Code borrowed from ReportWizardAction.
+				report.setName(formParams.get("reportName").toString());
+				Set<AmpFilterData> fdSet = AmpFilterData.createFilterDataSet(report, newFilters);
+				if (report.getFilterDataSet() == null)
+					report.setFilterDataSet(fdSet);
+				else {
+					report.getFilterDataSet().clear();
+					report.getFilterDataSet().addAll(fdSet);
+				}
+				Session session = null;
+				session = PersistenceManager.getSession();
+				// session.saveOrUpdate(fdSet);
+				logger.info(report);
+				session.saveOrUpdate(report);
 			}
 		}
-	}*/
+	}
 	
 	@POST
 	@Path("/report/export-to-map/{report_id}")

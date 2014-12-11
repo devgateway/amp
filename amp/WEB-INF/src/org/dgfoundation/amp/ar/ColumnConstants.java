@@ -350,4 +350,5 @@ public class ColumnConstants {
 	public static final String VARIANCE_OF_DISBURSEMENTS = "Variance Of Disbursements";
 	public static final String VOTE = "Vote";
 	public static final String ZONE = "Zone";
+	public static final String WORKSPACES = "Workspaces";
 }

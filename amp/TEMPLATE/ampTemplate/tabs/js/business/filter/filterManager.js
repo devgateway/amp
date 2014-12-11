@@ -1,5 +1,5 @@
-define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUtils', 'jquery' ], function(FiltersWidget, GridManager,
-		FilterUtils, jQuery) {
+define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUtils', 'jquery' ], function(
+		FiltersWidget, GridManager, FilterUtils, jQuery) {
 
 	"use strict";
 
@@ -58,6 +58,24 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 		app.TabsApp.filtersWidget.showFilters();
 		jQuery(container).hide();
 
+	};
+
+	FilterManager.saveTab = function(dialogView) {
+		var transformedFilters = FilterUtils.widgetFiltersToJavaFilters(app.TabsApp.serializedFilters);
+		var data = JSON.stringify({
+			filters : transformedFilters,
+			reportName : jQuery('#newTabNameInput').val()
+		});
+		jQuery.ajax({
+			url : "/rest/data/report/saveTab/" + app.TabsApp.currentTab.get('id'),
+			dataType : 'text',
+			method : 'post',
+			contentType : 'application/json; charset=utf-8',
+			data : data
+		}).done(function(data) {
+			console.log(data);
+			jQuery(dialogView.el).dialog('close');
+		});
 	};
 
 	return FilterManager;

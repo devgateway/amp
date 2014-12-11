@@ -1,5 +1,6 @@
-define([ 'marionette', 'text!views/html/saveTabDialogTemplate.html', 'models/tab', 'business/translations/translationManager', 'jquery',
-		'jqueryui' ], function(Marionette, saveTabDialogTemplate, Tab, TranslationManager, jQuery) {
+define([ 'marionette', 'text!views/html/saveTabDialogTemplate.html', 'models/tab',
+		'business/translations/translationManager', 'business/filter/filterManager', 'jquery', 'jqueryui' ], function(
+		Marionette, saveTabDialogTemplate, Tab, TranslationManager, FilterManager, jQuery) {
 
 	"use strict";
 
@@ -32,8 +33,8 @@ define([ 'marionette', 'text!views/html/saveTabDialogTemplate.html', 'models/tab
 		jQuery(".buttonify").button();
 		TranslationManager.searchAndTranslate();
 
-		jQuery(".settings-container #saveTabsBtn").on("click", function() {
-			// TODO: Implement saving code here.
+		jQuery(".save-tab-container #saveTabsBtn").on("click", function() {
+			FilterManager.saveTab(dialogView);
 		});
 	};
 

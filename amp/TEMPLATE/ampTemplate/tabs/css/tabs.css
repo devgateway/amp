@@ -198,7 +198,7 @@ table.dynamic-content-table th,td {
 }
 
 .ui-jqgrid .ui-jqgrid-htable th div {
-	text-align: left;
+	text-align: center;
 }
 
 th.ui-th-column div {

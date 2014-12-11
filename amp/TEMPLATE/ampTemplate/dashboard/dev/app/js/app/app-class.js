@@ -1,6 +1,7 @@
 var _ = require('underscore');
 var Deferred = require('jquery').Deferred;
 var BackboneDash = require('./backbone-dash');
+var supportCheck = require('./check-support');
 
 var URLService = require('amp-url/index');
 var State = require('amp-state/index');
@@ -24,10 +25,38 @@ function App() {
 _.extend(App.prototype, BackboneDash.Events, {
 
   initialize: function(options) {
-    var _initDefer = new Deferred();
+    var _initDefer = new Deferred(),
+        missingFeatures;
     this.initialized = _initDefer.promise();
 
     try {
+
+      // check our support level
+      this.browerIssues = supportCheck();
+      _(this.browerIssues).chain()
+        .groupBy('severity')
+        .each(function(severityGroup, severity) {
+          missingFeatures = _(severityGroup).pluck('feature').join(', ');
+          if (severity === 'critical') {
+            throw {
+              name: 'Incompatible Web Browser',
+              message: 'Dashboards cannot work without these features, which are ' +
+                       'not supported by your web browser: ' + missingFeatures + '. ' +
+                       'Any <a href="http://browsehappy.com/">modern browser</a> will work.',
+              toString: function() { return this.name + ': ' + this.message; }
+            };
+          } else if (severity === 'major') {
+            this.report('Limited support for old web browsers', [
+              'Your browser does not provide some features used by Dashboards: ' +
+              missingFeatures + '.',
+              'Some features may not work correctly, however Any ' +
+              '<a href="http://browsehappy.com/">modern browser</a> will provide ' +
+              'a better experience.']);
+          } else if (severity === 'minor') {
+            console.warn('This browser is missing support for', missingFeatures);
+          }
+        });
+
       // initialize app services
       this.url = new URLService();
       this.savedDashes = new SavedDashes([], { app: this });
@@ -97,11 +126,26 @@ _.extend(App.prototype, BackboneDash.Events, {
   report: function(title, messages) {
     this.initialized
       .done(function(app) {
-        app.view.report(title, messages);
+        app.modal(title, {messages: messages, tone: 'warning'});
       })
       .fail(function() {
         console.warn('REPORT:', title, messages);
       });
+  },
+
+  modal: function(title, options) {
+    options = _({}).extend(options, {tone: 'primary'});
+    var modalReady = new Deferred();
+    this.initialized
+      .done(function(app) {
+        var modalEl = app.view.modal(title, options);
+        modalReady.resolve(modalEl);
+      })
+      .fail(function() {
+        console.warn('failed to show modal because the app views did not initialize', title);
+        modalReady.reject('app views did not init');
+      });
+    return modalReady.promise();
   }
 
 });

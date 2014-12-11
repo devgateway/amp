@@ -26,6 +26,16 @@ module.exports = BackboneDash.Model.extend({
       });
   },
 
+  hasData: function() {
+    return _(this.get('processed'))
+      .chain()
+      .pluck('values')
+      .reduce(function(result, values) {
+        return values.length && true || result;
+      }, false)
+      .value();
+  },
+
   parse: function(data) {
     function pick(which) {
       return function(d) {

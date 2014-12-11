@@ -28,7 +28,7 @@ var categoryColours = function(cats) {
   // dealing with
   var colours = d3.scale['category' + (cats > 10 ? '20' : '10')]().range();
   return function(d, i) {
-    return d.color || colours[i % colours.length];
+    return d.color || (d.data && d.data.color) || colours[i % colours.length];
   };
 };
 
@@ -55,10 +55,36 @@ var textAsDataURL = function(str) {
 };
 
 
+function transformArgs(transformer, wrapped) {
+  return function(/* arguments */) {
+    var transformedArgs = transformer.apply(null, arguments);
+    return wrapped.apply(null, transformedArgs);
+  };
+}
+
+
+function toDashed(name) {
+  // transform namesLikeThis to names-like-this
+  return name.replace(/([A-Z])/g, function(u) {
+    return '-' + u.toLowerCase();
+  });
+}
+
+
+function data(el, name, newValue) {
+  if (newValue === void 0) {
+    return el.getAttribute('data-' + toDashed(name));
+  }
+  el.setAttribute('data-' + toDashed(name), newValue);
+}
+
+
 module.exports = {
   formatKMB: formatKMB,
   formatShortText: formatShortText,
   categoryColours: categoryColours,
   u16le64: u16le64,
-  textAsDataURL: textAsDataURL
+  textAsDataURL: textAsDataURL,
+  transformArgs: transformArgs,
+  data: data
 };

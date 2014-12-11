@@ -1,6 +1,13 @@
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
-var ChartView = require('./chart');
+
+var Tops = require('../models/chart-tops');
+var Predictability = require('../models/chart-aid-predictability');
+var FundingType = require('../models/chart-funding-type');
+
+var TopsChartView = require('./chart-tops');
+var PredictabilityChartView = require('./chart-aid-predictability');
+var FundingTypeChartView = require('./chart-funding-type');
 
 
 module.exports = BackboneDash.View.extend({
@@ -10,6 +17,10 @@ module.exports = BackboneDash.View.extend({
   initialize: function(options) {
     this.app = options.app;
     this.chartViews = this.collection.map(function(chart) {
+      var ChartView = chart instanceof Tops ? TopsChartView
+                    : chart instanceof Predictability ? PredictabilityChartView
+                    : chart instanceof FundingType ? FundingTypeChartView
+                    : null;
       return new ChartView({ model: chart, app: this.app });
     }, this);
     this.listenToOnce(this.app.filter, 'apply', this.applyFilter);

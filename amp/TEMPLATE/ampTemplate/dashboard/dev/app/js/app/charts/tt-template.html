@@ -1,0 +1,24 @@
+<div class="panel panel-primary panel-popover">
+  <% if (tt.heading) { %>
+    <div class="panel-heading"><%= tt.heading %></div>
+  <% } %>
+  <div class="panel-body">
+    <span class="dollaz">
+      <% if (tt.bodyText) { %>
+        <%= tt.bodyText %>
+      <% } %>
+      <% if (tt.bodyList) { %>
+        <ul class="list-unstyled">
+          <% _(tt.bodyList).each(function(item) { %>
+            <li><b><%= item.k %></b> <%= item.v %></li>
+          <% }) %>
+        </ul>
+      <% } %>
+    </span>
+  </div>
+  <% if (tt.footerText) { %>
+    <div class="panel-footer">
+      <%= tt.footerText %>
+    </div>
+  <% } %>
+</div>

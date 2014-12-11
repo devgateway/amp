@@ -1,31 +1,13 @@
-var fs = require('fs');
 var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var baby = require('babyparse');
 var canvg = require('../../ugly/lib-load-hacks').canvg;
 var BackboneDash = require('../backbone-dash');
 var util = require('../../ugly/util');
-var charts = require('./chart-types');
-var Tops = require('../models/tops-chart');
-var Predictability = require('../models/predictability-chart');
-var FundingType = require('../models/ftype-chart');
-var template = _.template(fs.readFileSync(
-  __dirname + '/../templates/chart.html', 'UTF-8'));
 
 
 module.exports = BackboneDash.View.extend({
 
-  uiDefaults: function() {
-    var defaults = {
-      big: this.model instanceof FundingType,  // funding type is big by default
-      view: this.model instanceof Tops ? 'bar'
-          : this.model instanceof Predictability ? 'multibar'
-          : this.model instanceof FundingType ? 'multibar'
-          : null
-    };
-    if (!defaults.view) { console.error('unknown chart type for model', this.model); }
-    return defaults;
-  },
 
   events: {
     'change .dash-adj-type input': 'changeAdjType',
@@ -62,99 +44,10 @@ module.exports = BackboneDash.View.extend({
 
   },
 
-  _getState: function() {
-    return this.model.pick(
-      'limit',
-      'adjtype',
-      'view',
-      'big'
-    );
-  },
-
-  render: function() {
-    this.rendered = true;
-    this.chart = charts[this.model.get('view')]();  // bar, etc.
-    var renderOptions = {
-      model: this.model,
-      chart: this.chartEl,
-      util: util
-    };
-    this.$el.html(template(renderOptions));
-    if (this._stateWait.state() !== 'pending') {
-      this.updateData();
-    }
-    this.app.translator.translateDOM(this.el);
-    return this;
-  },
-
-  updateData: function() {
-    if (!this.rendered) { return; }  // cop-out on early filters apply event
-
-    var message = this.$('.dash-chart-diagnostic');
-
-    if (this._stateWait.state() === 'pending') {
-      // don't do anything until we have state
-      message.html('Loading saved settings...').fadeIn(100);
-      return;
-    }
-
-    message.html('<span data-i18n="amp.dashboard:loading">...</span>').fadeIn(100);
-    /* TODO: Do we really want to localize this and slow things?*/
-    //this.app.translator.translateDOM(this.el);
-
-    var fetchOptions = {
-      type: 'POST',
-      data: JSON.stringify(this.app.filter.serialize())
-    };
-    var countValues = function(processed) {
-      return _(processed)
-        .chain()
-        .pluck('values')
-        .reduce(function(prev, values) {
-          return prev + values.length;
-        }, 0)
-        .value();
-    };
-    this.model.fetch(fetchOptions)
-      .done(_(function() {
-        if (countValues(this.model.get('processed')) ===  0) {
-          message.html('No Data Available');
-          this.$('svg').empty();
-          this.resetNumbers();
-        } else {
-          this.chart(this.el.querySelector('.dash-chart-wrap'), this.model);
-          this.renderNumbers();
-          var limit = this.model.get('limit');
-          if (limit) {
-            this.$('.reset')[limit === this.model.defaults.limit ? 'hide' : 'show']();
-          }
-          message.stop().fadeOut(200);
-        }
-      }).bind(this))
-      .fail(_(function() {
-        message.html('Failed to load data <small>' + arguments[2] +
-          ' <button type="button" class="retry btn btn-warning btn-sm">' +
-          '<span class="glyphicon glyphicon-refresh"></span> Retry</button></small>').show();
-        console.error('failed loading chart :(', arguments);
-        this.$('svg').hide();
-      }).bind(this));
-  },
-
   resetLimit: function() {
     this.model.set('limit', this.model.defaults.limit);
   },
 
-  resetNumbers: function() {
-    this.$('.chart-total').html('');
-    this.$('.chart-currency').html('');
-  },
-
-  renderNumbers: function() {
-    if (this.model.get('total')) {
-      this.$('.chart-total').html(util.formatKMB()(this.model.get('total')));
-      this.$('.chart-currency').html(this.model.get('currency'));
-    }
-  },
 
   changeAdjType: function(e) {
     var newType = e.currentTarget.dataset.acad;
@@ -243,21 +136,28 @@ module.exports = BackboneDash.View.extend({
   },
 
   downloadChart: function(e) {
-    var svg = this.el.querySelector('svg.dash-chart');
-    if (!svg) {
-      this.app.report('Chart export was unsuccessful',
-        ['Could not find chart svg to render.']);
-      return;
-    }
+    this.app.modal('Chart Download', 'suuuuuuup');
+    var wrapper = document.createElement('div'),
+        svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    document.body.appendChild(wrapper);
+    wrapper.appendChild(svg);
+    wrapper.setAttribute('style', 'height: 640px; width: 1200px;');
+    // svg.setAttribute('style', 'height: 100%; width: 100%;');
+    svg.classList.add('dash-chart');
+
+    this.chart(wrapper, this.model, true);
+
 
     var canvas = document.createElement('canvas');
     if (!canvas.getContext) {
       this.app.report('Unsupported feature',
-        ['Chart export is not supported on this browser.']);
+        ['Chart export is not supported on this browser.',
+         'Please upgrade to a modern browser to export charts.']);
       return;
     }
-    canvas.setAttribute('width', this.$(svg).width());
-    canvas.setAttribute('height', this.$(svg).height() + 42);
+    canvas.setAttribute('width', svg.offsetWidth);
+    canvas.setAttribute('height', svg.offsetHeight + 42);
+    console.log(canvas);
 
     this.drawChartForDownload(canvas, {
       title: this.model.get('name'),
@@ -265,13 +165,17 @@ module.exports = BackboneDash.View.extend({
       adjtype: this.model.get('adjtype')
     });
 
-    canvg(canvas, svg.outerHTML, {
-      offsetY: 42,
-      ignoreClear: true,  // don't erase the title/bg!
-      // log: true,  // debug info
-      ignoreMouse: true,
-      ignoreAnimation: true
-    });
+    setTimeout(function() {
+      canvg(canvas, svg.outerHTML, {
+        offsetY: 42,
+        ignoreClear: true,  // don't erase the title/bg!
+        // log: true,  // debug info
+        ignoreMouse: true,
+        ignoreAnimation: true,
+        ignoreDimensions: true
+      });
+      document.body.appendChild(canvas);
+    }, 2000);
     // canvg renders synchronously, despite having a callback option
 
     e.currentTarget.setAttribute('href', canvas.toDataURL('image/png'));

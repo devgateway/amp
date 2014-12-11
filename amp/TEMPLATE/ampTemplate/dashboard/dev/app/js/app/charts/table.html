@@ -1,0 +1,33 @@
+<div class="table-responsive">
+  <table class="table table-striped table-condensed">
+
+    <% if (_(keys).some()) { %>
+      <thead>
+        <tr>
+          <td></td>
+          <% _(keys).each(function(key, colIndex) { %>
+            <th data-series-index="<%= colIndex %>">
+              <%= key %>
+            </th>
+          <% }); %>
+        </tr>
+      </thead>
+    <% } %>
+
+    <tbody>
+      <% _(values).each(function(row, rowIndex) { %>
+        <tr>
+          <th data-x-index="<%= rowIndex %>">
+            <%= row[0].x %>
+          </th>
+          <% _(row).each(function(datum, colIndex) { %>
+            <td data-x-index="<%= rowIndex %>" data-series-index="<%= colIndex %>">
+              <%= moneyFormat(datum.y) %>
+            </td>
+          <% }) %>
+        </tr>
+      <% }) %>
+    </tbody>
+
+  </table>
+</div>

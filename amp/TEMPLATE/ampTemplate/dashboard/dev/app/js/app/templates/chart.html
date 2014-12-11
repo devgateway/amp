@@ -13,9 +13,8 @@
       <div class="chart-container">
         <h3 class="dash-chart-diagnostic text-center"></h3>
         <div class="dash-chart-wrap">
-          <svg class="dash-chart"></svg>
-          <button type="button" class="btn btn-link btn-xs pull-right reset" style="display:none" data-i18n="amp.dashboard:chart-reset">reset others</button>
         </div>
+        <button type="button" class="btn btn-link btn-xs pull-right reset" style="display:none" data-i18n="amp.dashboard:chart-reset">reset others</button>
       </div>
     </div>
 
@@ -24,24 +23,17 @@
       <div class="pull-right">
 
         <div class="btn-group">
-          <button
-            type="button"
-            class="btn btn-sm
-                   btn-<%= model.get('view') === (model.get('adjtype') ? 'bar' : 'multibar') ? 'primary' : 'default' %>
-                   chart-view" data-view="<%= (model.get('adjtype') ? 'bar' : 'multibar') %>">
-            <span class="glyphicon glyphicon-signal"></span>
-          </button>
-          <button
-            type="button"
-            class="<% if (!model.get('adjtype')) { %>hidden<% } %>
-                   btn btn-sm
-                   btn-<%= model.get('view') === 'pie' ? 'primary' : 'default' %>
-                   chart-view" data-view="pie">
-            <span class="glyphicon glyphicon-adjust"></span>
-          </button>
-          <button type="button" class="btn btn-sm btn-<%= model.get('view') === 'table' ? 'primary' : 'default' %> chart-view" data-view="table">
-            <span class="glyphicon glyphicon-th-list"></span>
-          </button>
+          <% _(views).each(function(view) { %>
+            <button type="button" data-view="<%= view %>"
+                class="chart-view btn btn-sm btn-<%= (view === model.get('view')) ? 'primary' : 'default' %>">
+              <span class="glyphicon glyphicon-<%= {
+                bar: 'signal',
+                multibar: 'signal',
+                pie: 'adjust',
+                table: 'th-list'
+              }[view] %>"></span>
+            </button>
+          <% }) %>
         </div>
 
         <div class="btn-group">
@@ -89,4 +81,6 @@
     </div>
   </div>
 
+  <div class="export-modal"></div>
 </div>
+

@@ -10,9 +10,9 @@ var ChartsView = require('./charts');
 var Charts = require('../models/charts-collection');
 var Footer = require('./footer');
 
-var TopsChart = require('../models/tops-chart');
-var PredictabilityChart = require('../models/predictability-chart');
-var FundingTypeChart = require('../models/ftype-chart');
+var TopsChart = require('../models/chart-tops');
+var PredictabilityChart = require('../models/chart-aid-predictability');
+var FundingTypeChart = require('../models/chart-funding-type');
 
 var template = _.template(fs.readFileSync(
   __dirname + '/../templates/main.html', 'UTF-8'));
@@ -76,15 +76,16 @@ module.exports = BackboneDash.View.extend({
     return this;
   },
 
-  report: function(title, messages) {
-    console.warn(title + ':', messages);
-    var details = {
+  modal: function(title, options) {
+    options = _({
       title: title,
-      messages: messages,
-      id: _.uniqueId('report')
-    };
-    this.$el.parent().append(modalTemplate({details: details}));
-    this.$el.parent().find('#' + details.id).modal();
+      id: _.uniqueId('modal')
+    }).extend(options);
+    this.$el.parent().append(modalTemplate({m: options}));
+    var thisModal = this.$el.parent().find('#' + options.id);
+    if (options.bodyEl) { thisModal.find('.modal-body').html(options.bodyEl); }
+    thisModal.modal();
+    return thisModal[0];  // the actual DOM element
   }
 
 });

@@ -37,6 +37,16 @@ module.exports = BackboneDash.Model.extend({
       }).bind(this));
   },
 
+  hasData: function() {
+    return _(this.get('processed'))
+      .chain()
+      .pluck('values')
+      .reduce(function(result, values) {
+        return values.length && true || result;
+      }, false)
+      .value();
+  },
+
   parse: function(data) {
     if (!this.localizedLookup) {
       // we can't procede if we don't have translations yet :(

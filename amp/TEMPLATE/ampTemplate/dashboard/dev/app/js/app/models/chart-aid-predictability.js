@@ -45,8 +45,9 @@ module.exports = BackboneDash.Model.extend({
         };
       };
     }
-    var endOffset = -2,  // totals are at the end grr
-        initialOffset = -(6 - endOffset);  // 5 + 1 to match other charts
+    //we show only 6 years
+    var endOffset = 6,  
+        initialOffset = 0;  
     /* returns from map() like [{amp.gis:title-Region: 'Region'}, ... ]*/
 
     data.processed = [

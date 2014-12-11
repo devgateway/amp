@@ -317,7 +317,7 @@ public class AmpDonorFundingFormSectionFeature extends
 		wmc.add(list);
 
 		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs = new AmpAutocompleteFieldPanel<AmpOrganisation>(
-				"searchAutocomplete", "Search Organizations", true,
+				"searchAutocomplete", "Search Organizations", true,true,
 				AmpOrganisationSearchModel.class) {
 			@Override
 			protected String getChoiceValue(AmpOrganisation choice) {

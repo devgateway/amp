@@ -115,7 +115,7 @@ public class AmpContractOrganizationsSubsectionFeature extends
 		
 		
 		
-		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Funding Organizations",true,AmpOrganisationSearchModel.class) {			
+		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Funding Organizations",true,true,AmpOrganisationSearchModel.class) {			
 			private static final long serialVersionUID = 1227775244079125152L;
 
 			@Override

@@ -46,8 +46,8 @@ module.exports = BackboneDash.Model.extend({
       };
     }
     //we show only 6 years
-    var endOffset = 6,  
-        initialOffset = 0;  
+    var endOffset = 6,
+        initialOffset = 0;
     /* returns from map() like [{amp.gis:title-Region: 'Region'}, ... ]*/
 
     data.processed = [

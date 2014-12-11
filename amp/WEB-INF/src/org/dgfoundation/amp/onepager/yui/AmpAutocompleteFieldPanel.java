@@ -193,7 +193,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			String id,
 			String fmName,String aditionalTooltipKey,
 			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
-		this(id, fmName,aditionalTooltipKey, false, objectListModelClass);
+		this(id, fmName,aditionalTooltipKey, false, objectListModelClass,false);
 	}
 	
 	/**
@@ -209,7 +209,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			String fmName,
 			boolean hideLabel,
 			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, boolean useCache) {
-		this(id,fmName,hideLabel,objectListModelClass);
+		this(id,fmName,hideLabel,false,objectListModelClass);
 		this.useCache=useCache;
 	}
 	
@@ -235,7 +235,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			boolean hideLabel,
 			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass,
 			final Class<? extends AmpAutocompleteFieldPanel> clazz, final String jsName,final String autoCompeleteVar) {
-		this(id,fmName,"",hideLabel,objectListModelClass,clazz, jsName,autoCompeleteVar);		
+		this(id,fmName,"",hideLabel,objectListModelClass,clazz, jsName,autoCompeleteVar,false);		
 	}
 
 	public AmpAutocompleteFieldPanel(
@@ -243,9 +243,9 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			String fmName,String aditionalTooltipKey,
 			boolean hideLabel,
 			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass,
-			final Class<? extends AmpAutocompleteFieldPanel> clazz, final String jsName,final String autoCompeleteVar) {
+			final Class<? extends AmpAutocompleteFieldPanel> clazz, final String jsName,final String autoCompeleteVar,boolean showTooltipIfLabelHidden) {
 		//super(id, null, fmName, hideLabel );
-		super(id, null,false,aditionalTooltipKey, fmName,hideLabel,"",false);
+		super(id, null,showTooltipIfLabelHidden,aditionalTooltipKey, fmName,hideLabel,"",false);
 		this.modelParams = new HashMap<AmpAutoCompleteModelParam, Object>();
 		this.objectListModelClass = objectListModelClass;
 		toggleButton = new WebMarkupContainer("toggleButton");
@@ -341,9 +341,9 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 	public AmpAutocompleteFieldPanel(
 			String id,
 			String fmName,
-			boolean hideLabel,
+			boolean hideLabel,boolean showTooltipIfLabelHidden,
 			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
-		this(id,fmName,"",hideLabel,objectListModelClass);
+		this(id,fmName,"",hideLabel,objectListModelClass,showTooltipIfLabelHidden);
 		
 	}
 	/**
@@ -357,8 +357,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			String id,
 			String fmName,String aditionalTooltipKey,
 			boolean hideLabel,
-			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
-		this(id, fmName,aditionalTooltipKey, hideLabel, objectListModelClass, AmpAutocompleteFieldPanel.class, "AmpAutocompleteFieldPanel.js","WicketAutoComplete");
+			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass,boolean showTooltipIfLabelHidden) {
+		this(id, fmName,aditionalTooltipKey, hideLabel, objectListModelClass, AmpAutocompleteFieldPanel.class, "AmpAutocompleteFieldPanel.js","WicketAutoComplete",showTooltipIfLabelHidden);
 	}
 
     /**

@@ -386,24 +386,26 @@ public class Reports {
 			AbstractBaseCell[][] pageResults = Arrays.copyOfRange(result, start, end);
 			//Check hierarchical results that need the data
 			//Take first row and check if there are null columns
-			AbstractBaseCell[] firstRow = pageResults[0];
-			
-			for (int i = 0; i < firstRow.length; i++) {
-				AbstractBaseCell cell = firstRow[i];
-				if(cell.getFormattedValue() == null) {
-					//If it's null, get the formatted value from a previous row at the same level
-					//from my current row index back
-					for(int j = start; j >= 0; j--){
-						AbstractBaseCell parentCell = result[j][i];
-						if(parentCell.getFormattedValue() != null) {
-							cell.setFormattedValue(parentCell.getFormattedValue());
-							break;
+			if (pageResults.length > 0) {
+				AbstractBaseCell[] firstRow = pageResults[0];
+				
+				for (int i = 0; i < firstRow.length; i++) {
+					AbstractBaseCell cell = firstRow[i];
+					if(cell.getFormattedValue() == null) {
+						//If it's null, get the formatted value from a previous row at the same level
+						//from my current row index back
+						for(int j = start; j >= 0; j--){
+							AbstractBaseCell parentCell = result[j][i];
+							if(parentCell.getFormattedValue() != null) {
+								cell.setFormattedValue(parentCell.getFormattedValue());
+								break;
+							}
 						}
 					}
 				}
+				
+				cellDataSet.setCellSetBody(pageResults);
 			}
-			
-			cellDataSet.setCellSetBody(pageResults);
 		}
 		
 		return cellDataSet;

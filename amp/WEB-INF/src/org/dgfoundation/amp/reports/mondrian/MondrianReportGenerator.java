@@ -355,7 +355,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		for (ReportMeasure measure: spec.getMeasures()) {
 			MDXMeasure elem = (MDXMeasure)MondrianMapping.toMDXElement(measure);
 			if (elem == null) 
-				reportError("No mapping found for column name = " + (measure==null ? null : measure.getMeasureName()) + ", entity type = " + (measure == null ? null : measure.getEntityName()));
+				reportError("No mapping found for measure name = " + (measure==null ? null : measure.getMeasureName()) + ", entity type = " + (measure == null ? null : measure.getEntityName()));
 			else
 				config.addColumnMeasure(elem);
 		}

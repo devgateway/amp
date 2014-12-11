@@ -28,7 +28,7 @@ module.exports = BackboneDash.View.extend({
     this.$el.html(template());
 
     if (this.model.get('view') === 'table') {
-      this.renderCSV(this.$('preview-area .table-wrap').removeClass('hidden'));
+      this.renderCSV(this.$('.preview-area .table-wrap').removeClass('hidden'));
     } else {
       this.renderChart(
         this.$('.preview-area .svg-wrap').removeClass('hidden'),
@@ -56,11 +56,7 @@ module.exports = BackboneDash.View.extend({
       var img = new Image();
       img.src = canvas.toDataURL('image/png');
       canvasContainer.html(img);
-      this.$('.download-chart')
-        .removeClass('disabled')
-        .attr('href', img.src)
-        .attr('download', this.model.get('name') + '.png')
-        .find('.word').text('Download chart');
+      this.makeDownloadable(img.src, 'chart', '.png');
     });
 
   },
@@ -116,48 +112,59 @@ module.exports = BackboneDash.View.extend({
         });
       }, this);
     }.bind(this), 1500);  // we have to wait for stupid nvd3...
+  },
+
+  renderCSV: function(csvContainer) {
+    var data = this.model.get('processed'),
+        currency = this.model.get('currency'),
+        adjtype = this.model.get('adjtype') || false,
+        csvTransformed,
+        headerRow,
+        textContent,
+        preview;
+
+    // table of all the data
+    csvTransformed = _(data)
+      .chain()
+      .pluck('values')
+      .transpose()
+      .map(function(row) {
+        return _(row).reduce(function(csvRow, cell) {
+          csvRow.push(cell.y);
+          return csvRow;
+        }, [row[0].x]);
+      })
+      .map(function(row) {
+        row.push(currency);
+        if (adjtype) { row.push(adjtype); }
+        return row;
+      })
+      .value();
+
+    // prepend a header row
+    headerRow = [''];  // no header value for x-axis
+    headerRow = headerRow.concat(_(data).pluck('key'));  // data headers
+    headerRow.push('Currency');
+    if (adjtype) { headerRow.push('Type'); }
+
+    csvTransformed.unshift(headerRow);
+
+    textContent = baby.unparse(csvTransformed);
+
+    preview = document.createElement('textarea');
+    preview.setAttribute('class', 'csv-preview');
+    preview.value = textContent;
+    csvContainer.html(preview);
+
+    this.makeDownloadable(util.textAsDataURL(textContent), 'data', '.csv');
+  },
+
+  makeDownloadable: function(stuff, what, ext) {
+    this.$('.download-chart')
+      .removeClass('disabled')
+      .attr('href', stuff)
+      .attr('download', this.model.get('name') + ext)
+      .find('.word').text('Download ' + what);
   }
+
 });
-
-
-
-//     e.currentTarget.setAttribute('href', canvas.toDataURL('image/png'));
-//     e.currentTarget.setAttribute('download',
-//       this.model.get('name') + '.png');
-//   },
-
-//   downloadCSV: function(e) {
-//     var data = this.model.get('processed'),
-//         currency = this.model.get('currency'),
-//         adjtype = this.model.get('adjtype') || null;
-//     // table of all the data
-//     var csvTransformed = _(data)
-//       .chain()
-//       .pluck('values')
-//       .transpose()
-//       .map(function(row) {
-//         return _(row).reduce(function(csvRow, cell) {
-//           csvRow.push(cell.y);
-//           return csvRow;
-//         }, [row[0].x]);
-//       })
-//       .map(function(row) {
-//         row.push(currency);
-//         if (adjtype) { row.push(adjtype); }
-//         return row;
-//       })
-//       .value();
-//     // prepend a header row
-//     var headerRow = [''];  // no header value for x-axis
-//     headerRow = headerRow.concat(_(data).pluck('key'));  // data headers
-//     headerRow.push('Currency');
-//     if (adjtype) { headerRow.push('Type'); }
-
-//     csvTransformed.unshift(headerRow);
-
-//     e.currentTarget.setAttribute('href', util.textAsDataURL(baby.unparse(csvTransformed)));
-//     e.currentTarget.setAttribute('download',
-//       this.model.get('name') + '.csv');
-//   },
-
-// };

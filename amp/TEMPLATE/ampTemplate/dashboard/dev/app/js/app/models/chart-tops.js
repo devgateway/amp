@@ -1,19 +1,12 @@
 var param = require('jquery').param;
 var _ = require('underscore');
-var BackboneDash = require('../backbone-dash');
+var ChartModel = require('./chart-model-base');
 
 
-module.exports = BackboneDash.Model.extend({
+module.exports = ChartModel.extend({
 
   defaults: {
     limit: 5
-  },
-
-  initialize: function(attrs, options) {
-    this.app = options.app;
-    this.url = options.url;
-
-    this._prepareTranslations();
   },
 
   _prepareTranslations: function() {
@@ -35,16 +28,6 @@ module.exports = BackboneDash.Model.extend({
       .done(_(function(localizedTopChartKeyVal) {
         this.localizedLookup = localizedTopChartKeyVal;
       }).bind(this));
-  },
-
-  hasData: function() {
-    return _(this.get('processed'))
-      .chain()
-      .pluck('values')
-      .reduce(function(result, values) {
-        return values.length && true || result;
-      }, false)
-      .value();
   },
 
   parse: function(data) {
@@ -95,7 +78,7 @@ module.exports = BackboneDash.Model.extend({
     options = _.defaults(
       options || {},
       { url: this.url + '?' + param(this.pick('limit')) });
-    return BackboneDash.Model.prototype.fetch.call(this, options);
+    return ChartModel.prototype.fetch.call(this, options);
   }
 
 });

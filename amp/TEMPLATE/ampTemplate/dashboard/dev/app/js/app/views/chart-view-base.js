@@ -16,7 +16,7 @@ module.exports = BackboneDash.View.extend({
   },
 
   events: {
-    'change .dash-adj-type input': 'changeAdjType',
+    'change .dash-adj-type select': 'changeAdjType',
     'click .reset': 'resetLimit',
     'click .chart-view': 'changeChartView',
     'click .download': 'download',
@@ -156,7 +156,7 @@ module.exports = BackboneDash.View.extend({
   },
 
   changeAdjType: function(e) {
-    var newType = util.data(e.currentTarget, 'acad');
+    var newType = e.currentTarget.value;
     this.model.set('adjtype', newType);
   },
 

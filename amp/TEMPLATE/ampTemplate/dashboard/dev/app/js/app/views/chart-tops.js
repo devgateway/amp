@@ -6,6 +6,7 @@ module.exports = ChartViewBase.extend({
 
   uiDefaults: {
     big: false,
+    adjtype: 'ac',
     view: 'bar'
   },
 

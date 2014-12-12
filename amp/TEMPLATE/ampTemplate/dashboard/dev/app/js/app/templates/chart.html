@@ -52,29 +52,19 @@
 
       <% if (model.get('adjtype')) { %>
         <form class="form-inline dash-form dash-adj-type" role="form">
+          <select class="form-control like-btn-sm">
+            <% _({
+              ac: 'Actual Commitments',
+              ad: 'Actual Disbursements',
+              pc: 'Planned Commitments',
+              pd: 'Planned Disbursements',
+            }).each(function(name, key) { %>
+              <option value="<%= key %>" <%= model.get('adjtype') === key ? 'selected="selected"' : '' %>>
+                <%= name %>
+              </option>
+            <% }) %>
+          </select>
           <span class="cheat-lineheight"></span>
-          <div class="radio">
-            <label>
-              <input type="radio"
-                name="actual-planned"
-                id="ac-<%= model.cid %>"
-                data-acad="ac"
-                <% if (model.get('adjtype') === 'ac') { %>checked="checked"<% } %>>
-              <span class="radio-ui"></span>
-              <span data-i18n="amp.dashboard:chart-radioui-commitments">Commitments</span>
-            </label>
-          </div>
-          <div class="radio">
-            <label>
-              <input type="radio"
-                name="actual-planned"
-                id="ad-<%= model.cid %>"
-                data-acad="ad"
-                <% if (model.get('adjtype') === 'ad') { %>checked="checked"<% } %>>
-              <span class="radio-ui"></span>
-              <span data-i18n="amp.dashboard:chart-radioui-disbursements">Disbursements</span>
-            </label>
-          </div>
         </form>
       <% } %>
 

@@ -1,16 +1,8 @@
 var _ = require('underscore');
-var BackboneDash = require('../backbone-dash');
+var ChartModel = require('./chart-model-base');
 
 
-module.exports = BackboneDash.Model.extend({
-
-  initialize: function(attrs, options) {
-    this.app = options.app;
-    this.url = options.url;
-
-    this._prepareTranslations();
-
-  },
+module.exports = ChartModel.extend({
 
   _prepareTranslations: function() {
     var self = this;
@@ -24,16 +16,6 @@ module.exports = BackboneDash.Model.extend({
       function(localizedPredictabilityList) {
         self.localizedPredictabilityList = localizedPredictabilityList;
       });
-  },
-
-  hasData: function() {
-    return _(this.get('processed'))
-      .chain()
-      .pluck('values')
-      .reduce(function(result, values) {
-        return values.length && true || result;
-      }, false)
-      .value();
   },
 
   parse: function(data) {

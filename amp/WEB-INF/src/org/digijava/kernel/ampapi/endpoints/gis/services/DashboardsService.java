@@ -127,12 +127,15 @@ public class DashboardsService {
 		GeneratedReport report = null;
 		
 		MondrianReportFilters filterRules = null;
- 		if(config != null){
-			Object columnFilters = config.get("columnFilters");
-			if(columnFilters != null){
-				filterRules = FilterUtils.getApiColumnFilter((LinkedHashMap<String, Object>) config.get("columnFilters"));	
-				spec.setFilters (filterRules);
-			}
+ 		if(config!=null){
+ 			LinkedHashMap<String, Object> columnFilters=(LinkedHashMap<String, Object>)config.get("columnFilters");
+ 			LinkedHashMap<String, Object> otherFilter=(LinkedHashMap<String, Object>)config.get("otherFilters");
+			filterRules = FilterUtils.getFilterRules(columnFilters,
+ 					otherFilter, null);
+ 			if(filterRules!=null){
+ 				spec.setFilters(filterRules);
+ 			}
+ 		
  		}
  		
  		try {
@@ -207,13 +210,16 @@ public class DashboardsService {
 		
 		MondrianReportFilters filterRules = null;
  		if(filter!=null){
-			Object columnFilters=filter.get("columnFilters");
-			if(columnFilters!=null){
-				filterRules = FilterUtils.getApiColumnFilter((LinkedHashMap<String, Object>)filter.get("columnFilters"));	
-				spec.setFilters (filterRules);
-			}
+ 			LinkedHashMap<String, Object> columnFilters=(LinkedHashMap<String, Object>)filter.get("columnFilters");
+ 			LinkedHashMap<String, Object> otherFilter=(LinkedHashMap<String, Object>)filter.get("otherFilters");
+			filterRules = FilterUtils.getFilterRules(columnFilters,
+ 					otherFilter, null);
+ 			if(filterRules!=null){
+ 				spec.setFilters(filterRules);
+ 			}
+ 		
  		}
-	
+ 	
 
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
 				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
@@ -302,11 +308,14 @@ public class DashboardsService {
 		
 		MondrianReportFilters filterRules = null;
  		if(filter!=null){
-			Object columnFilters=filter.get("columnFilters");
-			if(columnFilters!=null){
-				filterRules = FilterUtils.getApiColumnFilter((LinkedHashMap<String, Object>)filter.get("columnFilters"));	
-				spec.setFilters (filterRules);
-			}
+ 			LinkedHashMap<String, Object> columnFilters=(LinkedHashMap<String, Object>)filter.get("columnFilters");
+ 			LinkedHashMap<String, Object> otherFilter=(LinkedHashMap<String, Object>)filter.get("otherFilters");
+			filterRules = FilterUtils.getFilterRules(columnFilters,
+ 					otherFilter, null);
+ 			if(filterRules!=null){
+ 				spec.setFilters(filterRules);
+ 			}
+ 		
  		}
 		
 		try {

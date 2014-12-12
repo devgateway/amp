@@ -58,6 +58,6 @@ public class ReportElement {
 	
 	@Override
 	public String toString() {
-		return "ElementType = " + type + ", NamedTypedEntity =[" + (entity == null ? "null]" : entity.getEntityName() + "] of type " + entity.getEntityType());  
+		return "ElementType = " + type + ", NamedTypedEntity =[" + (entity == null ? "null]" : entity.getEntityName());  
 	}
 }

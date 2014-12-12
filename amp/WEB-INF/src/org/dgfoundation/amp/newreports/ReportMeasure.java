@@ -9,21 +9,12 @@ public class ReportMeasure extends NamedTypedEntity {
 	
 	/**
 	 * 
-	 * @param columnName - the name of the column
-	 * @param columnType - the type of entity to which the column pertains, like Pledge / Activity 
-	 */
-	public ReportMeasure(String measureName, ReportEntityType columnType) {
-		super(measureName, columnType);
-	}
-	
-	/**
-	 * equivalent to calling {@link #ReportColumn(String, ENTITY_TYPE_ALL) )}
-	 * @param columnName - the name of the column
+	 * @param measureName - the name of the measure
 	 */
 	public ReportMeasure(String measureName) {
-		this(measureName, ReportEntityType.ENTITY_TYPE_ALL);
+		super(measureName);
 	}
-	
+		
 	public String getMeasureName() {
 		return this.entityName;
 	}

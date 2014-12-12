@@ -14,7 +14,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.newreports.NumberedTypedEntity;
-import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportRenderWarning;
 import org.dgfoundation.amp.newreports.ReportRenderWarningType;
 
@@ -49,7 +48,7 @@ public class PercentagesDistribution {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static Map<Long, PercentagesDistribution> readInput(ReportEntityType baseEntity, ResultSet rs) throws SQLException {
+	public static Map<Long, PercentagesDistribution> readInput(ResultSet rs) throws SQLException {
 		Map<Long, PercentagesDistribution> res = new TreeMap<>();
 		String columnName = rs.getMetaData().getColumnLabel(2);		
 		while (rs.next()) { 
@@ -61,7 +60,7 @@ public class PercentagesDistribution {
 			if (percentage != null && percentage.doubleValue() < 0.001)
 				continue; // ignore zero-values
 			
-			NumberedTypedEntity entity = new NumberedTypedEntity(activityId, baseEntity);
+			NumberedTypedEntity entity = new NumberedTypedEntity(activityId);
 			if (!res.containsKey(activityId))
 				res.put(activityId, new PercentagesDistribution(entity, columnName));
 			res.get(activityId).add(fieldId, percentage);

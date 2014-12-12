@@ -36,7 +36,6 @@ import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportExecutor;
 import org.dgfoundation.amp.newreports.ReportFilters;
@@ -326,7 +325,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	private void addDummyHierarchy(ReportSpecification spec) {
 		//if we have more columns than hierarchies, then add the dummy hierarchy to group non-hierarchical columns by it
 		if (spec.getHierarchies().size() < spec.getColumns().size()) {
-			ReportColumn internalId = MondrianReportUtils.getColumn(ColumnConstants.INTERNAL_USE_ID, ReportEntityType.ENTITY_TYPE_ALL);
+			ReportColumn internalId = new ReportColumn(ColumnConstants.INTERNAL_USE_ID);
 			spec.getColumns().add(internalId);
 			spec.getHierarchies().add(internalId);
 		}
@@ -347,7 +346,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			for (ReportColumn col:spec.getColumns()) {
 				MDXAttribute elem = (MDXAttribute)MondrianMapping.toMDXElement(col);
 				if (elem == null) 
-					reportError("No mapping found for column name = " + (col==null ? null : col.getColumnName()) + ", entity type = " + (col == null ? null : col.getEntityType()));
+					reportError("No mapping found for column name = " + (col==null ? null : col.getColumnName()));
 				else 
 					config.addRowAttribute(elem);
 			}

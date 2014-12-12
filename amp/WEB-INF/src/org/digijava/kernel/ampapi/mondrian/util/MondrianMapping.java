@@ -18,7 +18,6 @@ import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.NamedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement.ElementType;
-import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXElement;
@@ -113,14 +112,9 @@ public class MondrianMapping {
 	 * Mappings between AMP Data and Mondrian Schema 
 	 */
 	public static final Map<NamedTypedEntity,MDXElement> entityMap = new HashMap<NamedTypedEntity, MDXElement>() {
-		
+				
 		void addColumnDefinition(String columnName, MDXLevel mdxLevel) {
-			definedColumns.add(columnName);
-			addColumnDefinition(columnName, ReportEntityType.ENTITY_TYPE_ALL, mdxLevel);
-		}
-		
-		void addColumnDefinition(String columnName, ReportEntityType entityType, MDXLevel mdxLevel) {
-			ReportColumn rc = new ReportColumn(columnName, entityType);
+			ReportColumn rc = new ReportColumn(columnName);
 			if (this.containsKey(rc))
 				throw new RuntimeException(String.format("column %s defined at least twice: once as %s, and then as %s", rc, this.get(rc), mdxLevel));
 			put(rc, mdxLevel);
@@ -132,7 +126,7 @@ public class MondrianMapping {
 		}
 		
 		void addMeasureDefinition(String measureName, String mondrianMeasureName) {
-			ReportMeasure rm = new ReportMeasure(measureName, ReportEntityType.ENTITY_TYPE_ALL);
+			ReportMeasure rm = new ReportMeasure(measureName);
 			if (this.containsKey(rm))
 				throw new RuntimeException(String.format("measure %s defined at least twice: once as %s, and then as %s", rm, this.get(rm).getName(), mondrianMeasureName));
 			put(rm, new MDXMeasure(mondrianMeasureName));

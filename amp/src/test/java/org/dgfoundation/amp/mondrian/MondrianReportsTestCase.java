@@ -70,16 +70,16 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(reportName);
 		
 		for(String columnName:columns)
-			spec.addColumn(MondrianReportUtils.getColumn(columnName, ReportEntityType.ENTITY_TYPE_ALL));
+			spec.addColumn(new ReportColumn(columnName));
 		
 		for(String measureName:measures)
-			spec.addMeasure(new ReportMeasure(measureName, ReportEntityType.ENTITY_TYPE_ALL));
+			spec.addMeasure(new ReportMeasure(measureName));
 		
 		if (hierarchies != null) {
 			for(String hierarchyName:hierarchies) {
 				if (!columns.contains(hierarchyName))
 					throw new RuntimeException("hierarchy should be present in column list: " + hierarchyName);
-				spec.getHierarchies().add(MondrianReportUtils.getColumn(hierarchyName, ReportEntityType.ENTITY_TYPE_ALL));
+				spec.getHierarchies().add(new ReportColumn(hierarchyName));
 			}
 		}
 

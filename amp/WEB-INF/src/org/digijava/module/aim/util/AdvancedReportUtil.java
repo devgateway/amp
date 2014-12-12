@@ -128,7 +128,7 @@ public final class AdvancedReportUtil {
 //    	public static Set<String> getConfigurableColumns()
     	Set<String> columnNames = MondrianReportUtils.getConfigurableColumns();
     	for (AmpColumns col : CACHED_COLUMNS_LIST) {
-    		if (columnNames.contains(col.getColumnName()) || columnNames.contains(col.getAliasName()))
+    		//if (columnNames.contains(col.getColumnName()) || columnNames.contains(col.getAliasName()))
     			columnsOut.add(col);
     	}
     	return columnsOut;
@@ -212,7 +212,7 @@ public final class AdvancedReportUtil {
 		List <AmpMeasures> am_out = new ArrayList<AmpMeasures>();
 		Set<String> visMesNames = MondrianReportUtils.getConfigurableMeasures();
 		for (AmpMeasures meas : am_in) {
-			if (visMesNames.contains(meas.getMeasureName()))
+			//if (visMesNames.contains(meas.getMeasureName()))
 				am_out.add(meas);
 		}
 		return am_out;

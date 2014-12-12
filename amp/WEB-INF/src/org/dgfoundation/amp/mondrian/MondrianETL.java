@@ -26,7 +26,6 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.currencies.CalculateExchangeRatesEtlJob;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
-import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.SiteUtils;
@@ -752,7 +751,7 @@ private EtlResult execute() throws Exception {
 	protected void runEtlOnTable(String query, String tableName) throws SQLException {
 		try (ResultSet rs = SQLUtils.rawRunQuery(conn, query, null)) {
 			// Map<activityId, percentages_on_sector_scheme
-			Map<Long, PercentagesDistribution> secs = PercentagesDistribution.readInput(ReportEntityType.ENTITY_TYPE_ACTIVITY, rs);
+			Map<Long, PercentagesDistribution> secs = PercentagesDistribution.readInput(rs);
 			serializeETLTable(secs, tableName, false);
 		}
 	}

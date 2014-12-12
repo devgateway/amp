@@ -5,23 +5,14 @@ package org.dgfoundation.amp.newreports;
  * @author Dolghier Constantin
  *
  */
-public class ReportColumn extends NamedTypedEntity {
-	
-	/**
-	 * 
-	 * @param columnName - the name of the column
-	 * @param columnType - the type of entity to which the column pertains, like Pledge / Activity 
-	 */
-	public ReportColumn(String columnName, ReportEntityType columnType) {
-		super(columnName, columnType);
-	}
+public class ReportColumn extends NamedTypedEntity {	
 	
 	/**
 	 * equivalent to calling {@link #ReportColumn(String, ENTITY_TYPE_ALL) )}
 	 * @param columnName - the name of the column
 	 */
 	public ReportColumn(String columnName) {
-		this(columnName, ReportEntityType.ENTITY_TYPE_ALL);
+		super(columnName);
 	}
 	
 	public String getColumnName() {

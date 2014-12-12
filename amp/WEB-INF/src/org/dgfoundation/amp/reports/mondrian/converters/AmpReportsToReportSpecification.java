@@ -23,7 +23,6 @@ import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
-import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
@@ -50,7 +49,6 @@ public class AmpReportsToReportSpecification {
 
 	private AmpReports report;
 	private AmpARFilter arFilter;
-	private ReportEntityType entityType;
 	private ReportSpecificationImpl spec;
 	
 	private AmpReportsToReportSpecification(AmpReports report) {
@@ -69,7 +67,6 @@ public class AmpReportsToReportSpecification {
 	
 	private ReportSpecificationImpl convert() throws AMPException {
 		//init data
-		entityType = MondrianReportUtils.getReportEntityType(report);
 		arFilter = FilterUtil.buildFilterFromSource(report);
 		spec = new ReportSpecificationImpl(report.getName());
 		
@@ -93,14 +90,14 @@ public class AmpReportsToReportSpecification {
 		if (report.getHideActivities()) {
 			//this is a summary report
 			for (AmpReportHierarchy hierarchy : report.getHierarchies())
-				spec.addColumn(MondrianReportUtils.getColumn(hierarchy.getColumn().getColumnName(), entityType));
+				spec.addColumn(new ReportColumn(hierarchy.getColumn().getColumnName()));
 		} else {
 			for (AmpColumns column : getOrderedColumns()) 
-				spec.addColumn(MondrianReportUtils.getColumn(column.getColumnName(), entityType));
+				spec.addColumn(new ReportColumn(column.getColumnName()));
 		}
 		
 		for (String measureName: report.getOrderedMeasureNames()) {
-			spec.addMeasure(MondrianReportUtils.getMeasure(measureName, entityType));
+			spec.addMeasure(new ReportMeasure((measureName)));
 		}
 		
 		spec.setCalculateColumnTotals(true);
@@ -165,8 +162,7 @@ public class AmpReportsToReportSpecification {
 
 		Set<ReportColumn> hierarchies = new LinkedHashSet<ReportColumn>(report.getHierarchies().size());
 		for (AmpReportHierarchy column : report.getHierarchies()) {
-			hierarchies.add(new ReportColumn(column.getColumn().getColumnName(), 
-					MondrianReportUtils.getColumnEntityType(column.getColumn().getColumnName(), entityType)));
+			hierarchies.add(new ReportColumn(column.getColumn().getColumnName()));
 		}
 		spec.setHierarchies(hierarchies);
 	}
@@ -215,7 +211,7 @@ public class AmpReportsToReportSpecification {
 			//3) sorting by totals: /Total Costs/Actual Commitments
 			String[] sorting = arFilter.getSortBy().substring(1).split("/");
 			if (sorting.length == 1){ //use case 1) non-hierarchical column
-				ReportColumn rCol = MondrianReportUtils.getColumn(sorting[0], entityType);
+				ReportColumn rCol = new ReportColumn(sorting[0]);
 				if (!spec.getHierarchies().contains(rCol)) //workaround for AMP-18205, issue #4 if column changes from non-hierarchy to hierarchy
 					spec.addSorter(new SortingInfo(rCol, arFilter.getSortByAsc()));
 			} else //use case 2) or 3) 
@@ -225,7 +221,7 @@ public class AmpReportsToReportSpecification {
 	
 	private void addFundingSorting(String[] fundingColumns, boolean asc, ReportColumn hierarchyColumn) {
 		String measureName = fundingColumns[fundingColumns.length - 1];
-		ReportMeasure measureCol = MondrianReportUtils.getMeasure(measureName, entityType);
+		ReportMeasure measureCol = new ReportMeasure(measureName);
 		
 		if (ArConstants.COLUMN_FUNDING.equals(fundingColumns[0])) {
 			//this is a funding column grouped by year/quarter/month, not the total costs

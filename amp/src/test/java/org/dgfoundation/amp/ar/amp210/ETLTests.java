@@ -14,7 +14,6 @@ import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MondrianTableDescription;
 import org.dgfoundation.amp.mondrian.PercentagesDistribution;
 import org.dgfoundation.amp.newreports.NumberedTypedEntity;
-import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 
 
@@ -101,7 +100,7 @@ public class ETLTests extends AmpTestCase
 	
 	@Test
 	protected void testPercentage(String cor, String errors, Long idToAddIfEmpty, Pair... entries) {
-		NumberedTypedEntity activity = new NumberedTypedEntity(1, ReportEntityType.ENTITY_TYPE_ACTIVITY);
+		NumberedTypedEntity activity = new NumberedTypedEntity(1);
 		PercentagesDistribution perc = new PercentagesDistribution(activity, "primary_sector_id");
 		for(Pair entry:entries) {
 			perc.add(entry.id, entry.perc);
@@ -132,22 +131,22 @@ public class ETLTests extends AmpTestCase
 	 * tests distributing normal percentages, with nulls
 	 */
 	@Test
-	public void testPercentagesDistributionWithNulls() {
-		testPercentage("{2=100.0}", "[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of ENTITY_TYPE_ACTIVITY 1]", null,
+	public void testPercentagesDistributionWithNulls() { //[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of entity_id 1]
+		testPercentage("{2=100.0}", "[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of entity_id 1]", null,
 			new Pair(2, null));
-		testPercentage("{2=50.0, 3=50.0}", "[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of ENTITY_TYPE_ACTIVITY 1, WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 3) of ENTITY_TYPE_ACTIVITY 1]", null,
+		testPercentage("{2=50.0, 3=50.0}", "[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of entity_id 1, WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 3) of entity_id 1]", null,
 			new Pair(2, null), new Pair(3, null));
 		
-		testPercentage("{2=50.0, 3=50.0}", "[WARNING_TYPE_ENTRY_MIXES_NULL_AND_NOT_NULL on (primary_sector_id, -1) of ENTITY_TYPE_ACTIVITY 1, WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 3) of ENTITY_TYPE_ACTIVITY 1]", null,
+		testPercentage("{2=50.0, 3=50.0}", "[WARNING_TYPE_ENTRY_MIXES_NULL_AND_NOT_NULL on (primary_sector_id, -1) of entity_id 1, WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 3) of entity_id 1]", null,
 			new Pair(2, 15.0), new Pair(3, null));
 		
-		testPercentage("{2=12.5, 3=37.5, 4=50.0}", "[WARNING_TYPE_ENTRY_MIXES_NULL_AND_NOT_NULL on (primary_sector_id, -1) of ENTITY_TYPE_ACTIVITY 1, WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 4) of ENTITY_TYPE_ACTIVITY 1]", null,
+		testPercentage("{2=12.5, 3=37.5, 4=50.0}", "[WARNING_TYPE_ENTRY_MIXES_NULL_AND_NOT_NULL on (primary_sector_id, -1) of entity_id 1, WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 4) of entity_id 1]", null,
 			new Pair(2, 15.0), new Pair(3, 45.0), new Pair(4, null));
 		
-		testPercentage("{2=100.0}", "[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of ENTITY_TYPE_ACTIVITY 1]", MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL, 
+		testPercentage("{2=100.0}", "[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of entity_id 1]", MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL, 
 			new Pair(2, null)); // test that a single null is not completed by the dummy id
 		
-		testPercentage("{2=100.0}", "[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of ENTITY_TYPE_ACTIVITY 1]", MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL,
+		testPercentage("{2=100.0}", "[WARNING_TYPE_ENTRY_WITH_NULL on (primary_sector_id, 2) of entity_id 1]", MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL,
 			new Pair(2, null),
 			new Pair(3, 0.0));
 	}

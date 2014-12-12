@@ -16,7 +16,6 @@ import org.dgfoundation.amp.mondrian.PercentagesDistribution;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.FilterRule.FilterType;
 import org.dgfoundation.amp.newreports.NumberedTypedEntity;
-import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.digijava.kernel.ampapi.mondrian.util.FactTableFiltering;

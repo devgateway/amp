@@ -12,7 +12,6 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.PercentagesDistribution;
 import org.dgfoundation.amp.newreports.NumberedTypedEntity;
-import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.digijava.kernel.request.TLSUtils;

@@ -18,7 +18,6 @@ import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
@@ -115,7 +114,7 @@ public class DashboardsService {
 		}
 
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetTops");
-		spec.addColumn(new ReportColumn(column, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(column));
 		spec.getHierarchies().addAll(spec.getColumns());
 		// applies settings, including funding type as a measure
 		EndpointUtils.applyGeneralSettings(spec, config);
@@ -198,10 +197,10 @@ public class DashboardsService {
 
 		JSONObject retlist = new JSONObject();
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetAidPredictability");
-		spec.addColumn(new ReportColumn(ColumnConstants.COUNTRY, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.getHierarchies().add(new ReportColumn(ColumnConstants.COUNTRY, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addMeasure(new ReportMeasure(MoConstants.PLANNED_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addMeasure(new ReportMeasure(MoConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.COUNTRY));
+		spec.getHierarchies().add(new ReportColumn(ColumnConstants.COUNTRY));
+		spec.addMeasure(new ReportMeasure(MoConstants.PLANNED_DISBURSEMENTS));
+		spec.addMeasure(new ReportMeasure(MoConstants.ACTUAL_DISBURSEMENTS));
 		spec.setCalculateRowTotals(true);
 		spec.setCalculateColumnTotals(true);
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
@@ -285,10 +284,10 @@ public class DashboardsService {
 		
 		
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("fundingtype");
-		spec.addColumn(new ReportColumn(ColumnConstants.FUNDING_YEAR,ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(new ReportColumn(MoConstants.TYPE_OF_ASSISTANCE,ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.FUNDING_YEAR));
+		spec.addColumn(new ReportColumn(MoConstants.TYPE_OF_ASSISTANCE));
 		spec.getHierarchies().addAll(spec.getColumns());
-		spec.addMeasure(new ReportMeasure(adjustmenttype,ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addMeasure(new ReportMeasure(adjustmenttype));
 		spec.addSorter(new SortingInfo(new ReportMeasure(adjustmenttype), false));
 		spec.setCalculateRowTotals(true);
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);

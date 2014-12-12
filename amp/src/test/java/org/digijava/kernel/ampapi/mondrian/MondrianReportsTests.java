@@ -25,7 +25,6 @@ import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -84,7 +83,7 @@ public class MondrianReportsTests extends AmpTestCase {
 	
 	public void testNoTotals() {
 		ReportSpecificationImpl spec = getDefaultSpec("testNoTotals", false);
-		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 		generateAndValidate(spec, true);
 	}
 	
@@ -95,23 +94,23 @@ public class MondrianReportsTests extends AmpTestCase {
 	
 	public void testColumnSortingNoTotals() {
 		ReportSpecificationImpl spec = getDefaultSpec("testColumnSortingNoTotals", false);
-		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.DONOR_TYPE, ReportEntityType.ENTITY_TYPE_ALL), true)); //ascending
-		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ACTIVITY), false)); //descending
+		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.DONOR_TYPE), true)); //ascending
+		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.PRIMARY_SECTOR), false)); //descending
 		generateAndValidate(spec, true);
 	}
 	
 	public void testColumnMeasureSortingTotals() {
 		ReportSpecificationImpl spec = getDefaultSpec("testColumnMeasureSortingTotals", true);
-		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.DONOR_TYPE, ReportEntityType.ENTITY_TYPE_ALL), true)); //ascending
-		spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL), false)); //descending
+		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.DONOR_TYPE), true)); //ascending
+		spec.addSorter(new SortingInfo(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false)); //descending
 		generateAndValidate(spec, true);
 	}
 
 	public void testSortingByTuplesTotals() {
 		ReportSpecificationImpl spec = getDefaultSpec("testSortingByTuplesTotals", true);
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_QUARTERLY);
-		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.DONOR_TYPE, ReportEntityType.ENTITY_TYPE_ALL), true)); //ascending
-		spec.addSorter(new SortingInfo("2013", "Q2", new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL), false)); //descending
+		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.DONOR_TYPE), true)); //ascending
+		spec.addSorter(new SortingInfo("2013", "Q2", new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS), false)); //descending
 		generateAndValidate(spec, true);
 	}
 	
@@ -136,7 +135,7 @@ public class MondrianReportsTests extends AmpTestCase {
 	public void testActivityDateFilters() {
 		ReportSpecificationImpl spec = getDefaultSpec("testActivityDateFilters", true);
 		MondrianReportFilters filters = new MondrianReportFilters();
-		ReportColumn activityCreatedOn = new ReportColumn(ColumnConstants.ACTIVITY_CREATED_ON, ReportEntityType.ENTITY_TYPE_ACTIVITY);
+		ReportColumn activityCreatedOn = new ReportColumn(ColumnConstants.ACTIVITY_CREATED_ON);
 		spec.addColumn(activityCreatedOn);
 		/*
 		SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
@@ -155,17 +154,17 @@ public class MondrianReportsTests extends AmpTestCase {
 	
 	public void testSectorsIds() {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("testSectorsIds");
-		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 		
-		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(new ReportColumn(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1_ID, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_5_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_ID));
+		spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_SECTOR_ID));
+		spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_SECTOR_SUB_SECTOR_ID));
+		spec.addColumn(new ReportColumn(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR_ID));
+		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_PROGRAM_LEVEL_1_ID));
+		spec.addColumn(new ReportColumn(ColumnConstants.SECONDARY_PROGRAM_LEVEL_5_ID));
 		
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		spec.setCalculateColumnTotals(true);
 		spec.setCalculateRowTotals(true);
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_TOTALS_ONLY);
@@ -174,10 +173,10 @@ public class MondrianReportsTests extends AmpTestCase {
 	
 	private ReportSpecificationImpl getDefaultSpec(String name, boolean doTotals) {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(name);
-		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_TYPE, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ACTIVITY));
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_TYPE));
+		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		spec.setCalculateColumnTotals(doTotals);
 		spec.setCalculateRowTotals(doTotals);
 		return spec;
@@ -185,8 +184,8 @@ public class MondrianReportsTests extends AmpTestCase {
 	
 	public void testSimpleReportByRegion() {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals");
-		spec.addColumn(new ReportColumn(ColumnConstants.REGION, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.REGION));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 		generateAndValidate(spec, true);
 	}
 	
@@ -250,11 +249,11 @@ public class MondrianReportsTests extends AmpTestCase {
 	public void testHeavyQuery() {
 		long start = System.currentTimeMillis();
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("testHeavyQuery");
-		spec.addColumn(new ReportColumn(ColumnConstants.REGION, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ACTIVITY));
-		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.REGION));
+		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
+		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
 		generateAndValidate(spec, true);
 		long end = System.currentTimeMillis();

@@ -33,7 +33,6 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
@@ -283,15 +282,11 @@ public class LocationService {
 		final List<String> geoCodesId = new ArrayList<String>();
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("MapExport");
 		Set<ReportColumn> hierarchies = new LinkedHashSet<ReportColumn>();
-		ReportColumn ampId = new ReportColumn(ColumnConstants.AMP_ID,
-				ReportEntityType.ENTITY_TYPE_ALL);
+		ReportColumn ampId = new ReportColumn(ColumnConstants.AMP_ID);
 
-		ReportColumn geoid = MondrianReportUtils.getColumn(
-				ColumnConstants.GEOCODE, ReportEntityType.ENTITY_TYPE_ACTIVITY);
+		ReportColumn geoid = new ReportColumn(ColumnConstants.GEOCODE);
 
-		ReportColumn impLevel = MondrianReportUtils.getColumn(
-				ColumnConstants.IMPLEMENTATION_LEVEL,
-				ReportEntityType.ENTITY_TYPE_ACTIVITY);
+		ReportColumn impLevel = new ReportColumn(ColumnConstants.IMPLEMENTATION_LEVEL);
 		spec.addColumn(geoid);
 
 		spec.addColumn(ampId);
@@ -414,8 +409,8 @@ public class LocationService {
 
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("MapExport");
 		//since amp_id will be added as a hiearchy onthe other report
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY));
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.AMP_ID, ReportEntityType.ENTITY_TYPE_ACTIVITY));
+		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
+		spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
 		getCommonSpecForExport(spec);
 
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()),false);
@@ -539,13 +534,13 @@ public class LocationService {
 //		Set<ReportColumn> hierarchies=new LinkedHashSet<ReportColumn>();
 //		hierarchies.add(c);
 //		spec.setHierarchies(hierarchies);
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PRIMARY_SECTOR, ReportEntityType.ENTITY_TYPE_ACTIVITY));
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ACTIVITY));
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.DONOR_AGENCY, ReportEntityType.ENTITY_TYPE_ACTIVITY));
+		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
+		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 //		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PROJECT_DESCRIPTION, ReportEntityType.ENTITY_TYPE_ACTIVITY));
 
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
 
 		spec.setCalculateColumnTotals(doTotals);
 		spec.setCalculateRowTotals(doTotals);
@@ -699,10 +694,8 @@ public class LocationService {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl(
 				"ActivityIds");
 
-		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID,
-				ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS,
-				ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 		spec.setCalculateColumnTotals(doTotals);
 		spec.setCalculateRowTotals(doTotals);
 		MondrianReportFilters filterRules = FilterUtils.getFilters(config);

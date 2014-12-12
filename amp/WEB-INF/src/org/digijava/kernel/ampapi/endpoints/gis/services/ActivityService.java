@@ -20,7 +20,6 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
-import org.dgfoundation.amp.newreports.ReportEntityType;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
@@ -71,12 +70,12 @@ public class ActivityService {
 		boolean doTotals=true;
  		ReportSpecificationImpl spec = new ReportSpecificationImpl(name);
 
-		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
+		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_ID));
+		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_ID));
 		//for now we are going to return the donor_id as matchesfilters
-		spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
 
 		//then we have to fetch all other matchesfilters outisde mondrian
 
@@ -202,8 +201,8 @@ public class ActivityService {
 		}
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("LastUpdated");
 		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
-		spec.addColumn(MondrianReportUtils.getColumn(ColumnConstants.PROJECT_TITLE, ReportEntityType.ENTITY_TYPE_ALL));
-		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 		for (String columnName : extraColumns) {
 			if (!columnName.equals(ColumnConstants.ACTIVITY_UPDATED_ON)
 					&& !columnName.equals(ColumnConstants.DONOR_AGENCY)
@@ -213,7 +212,7 @@ public class ActivityService {
 			}
 		}
 
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ALWAYS_PRESENT, ReportEntityType.ENTITY_TYPE_ALL));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ALWAYS_PRESENT));
 		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
 		if (config !=null) {
 			EndpointUtils.applySettings(spec, config);

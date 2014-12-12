@@ -525,8 +525,9 @@ public class EndpointUtils {
 			}else{
 				
 				reportSettings.setCurrencyFormat(getCurrencySymbols());
-				spec.setSettings(reportSettings);
+				reportSettings.setCurrencyCode(reportSettings.getCurrencyFormat().getCurrency().getCurrencyCode());
 				ApplyYearRange(reportSettings, settings);
+				spec.setSettings(reportSettings);
 			}
 			
 			// apply year range settings
@@ -535,7 +536,9 @@ public class EndpointUtils {
 		} else {
 			//Here we should set default setting for request without parameters.
 			reportSettings.setCurrencyFormat(getCurrencySymbols());
+			reportSettings.setCurrencyCode(reportSettings.getCurrencyFormat().getCurrency().getCurrencyCode());
 			ApplyYearRange(reportSettings, settings);
+			spec.setSettings(reportSettings);
 		}
 	}
 	public static List<JsonBean> getApiStateList(String type) {

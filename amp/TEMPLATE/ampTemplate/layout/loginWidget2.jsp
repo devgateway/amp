@@ -6,16 +6,17 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
-
-<logic:present name="isUserLogged" scope="session">
-<div title='<digi:trn key="aim:clickToLogoutTheSystem">Click here to logout from the system</digi:trn>'>
-<c:set var="quote">'</c:set>
-<c:set var="escapedQuote">\'</c:set>
-<c:set var="msg">
-${fn:replace(message,quote,escapedQuote)} 	
-</c:set>
-    <digi:link styleClass="loginWidget" href="/j_spring_logout" module="aim">
-        <digi:trn key="aim:logout">Logout</digi:trn>
-    </digi:link>
-</div>
-</logic:present>
+<digi:secure authenticated="true">
+    <logic:present name="isUserLogged" scope="session">
+        <div title='<digi:trn key="aim:clickToLogoutTheSystem">Click here to logout from the system</digi:trn>'>
+        <c:set var="quote">'</c:set>
+        <c:set var="escapedQuote">\'</c:set>
+        <c:set var="msg">
+        ${fn:replace(message,quote,escapedQuote)}
+        </c:set>
+            <digi:link styleClass="loginWidget" href="/j_spring_logout" module="aim">
+                <digi:trn key="aim:logout">Logout</digi:trn>
+            </digi:link>
+        </div>
+    </logic:present>
+</digi:secure>

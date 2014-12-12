@@ -526,6 +526,7 @@ public class EndpointUtils {
 				
 				reportSettings.setCurrencyFormat(getCurrencySymbols());
 				reportSettings.setCurrencyCode(reportSettings.getCurrencyFormat().getCurrency().getCurrencyCode());
+				reportSettings.setCalendar(DbUtil.getAmpFiscalCalendar(Long.valueOf(getDefaultCalendarId())));
 				ApplyYearRange(reportSettings, settings);
 				spec.setSettings(reportSettings);
 			}
@@ -538,6 +539,7 @@ public class EndpointUtils {
 			reportSettings.setCurrencyFormat(getCurrencySymbols());
 			reportSettings.setCurrencyCode(reportSettings.getCurrencyFormat().getCurrency().getCurrencyCode());
 			ApplyYearRange(reportSettings, settings);
+			reportSettings.setCalendar(DbUtil.getAmpFiscalCalendar(Long.valueOf(getDefaultCalendarId())));
 			spec.setSettings(reportSettings);
 		}
 	}

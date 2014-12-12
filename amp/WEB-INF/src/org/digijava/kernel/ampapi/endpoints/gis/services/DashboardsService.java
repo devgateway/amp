@@ -204,7 +204,7 @@ public class DashboardsService {
 		spec.setCalculateRowTotals(true);
 		spec.setCalculateColumnTotals(true);
 		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
-
+		
 		MondrianReportFilters filterRules = null;
  		if(filter!=null){
 			Object columnFilters=filter.get("columnFilters");
@@ -218,6 +218,9 @@ public class DashboardsService {
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
 				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
+		
+		EndpointUtils.applySettings(spec, filter);
+		
 		GeneratedReport report = generator.executeReport(spec);
 		//Not only years, we can have values like 'Fiscal calendar 2010-2011', so the Map should be <String,JSONObject>
 		Map<String, JSONObject> results = new TreeMap<>(); // accumulator of per-year results
@@ -250,9 +253,10 @@ public class DashboardsService {
 		retlist.put("years", yearsArray);
 		retlist.put("totals", results.get("totals"));		
 	
-		String currcode = EndpointUtils.getDefaultCurrencyCode();
+		String currcode = null;
+		currcode = spec.getSettings().getCurrencyCode();
 		retlist.put("currency", currcode);
-
+		
 		retlist.put("numberformat", numberformat);
 		return retlist;
 	}
@@ -290,6 +294,7 @@ public class DashboardsService {
 		spec.addMeasure(new ReportMeasure(adjustmenttype));
 		spec.addSorter(new SortingInfo(new ReportMeasure(adjustmenttype), false));
 		spec.setCalculateRowTotals(true);
+		EndpointUtils.applyGeneralSettings(spec, filter);
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
@@ -318,8 +323,11 @@ public class DashboardsService {
 		} else {
 			retlist.set("total", 0);
 		}
-		String currcode = EndpointUtils.getDefaultCurrencyCode();
+		
+		String currcode = null;
+		currcode = spec.getSettings().getCurrencyCode();
 		retlist.set("currency", currcode);
+		
 		retlist.set("Numberformat",numberformat);
 		List<JsonBean> values = new ArrayList<JsonBean>();
 		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {

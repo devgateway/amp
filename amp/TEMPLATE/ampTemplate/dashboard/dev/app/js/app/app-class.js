@@ -32,8 +32,8 @@ _.extend(App.prototype, BackboneDash.Events, {
     try {
 
       // check our support level
-      this.browerIssues = supportCheck();
-      _(this.browerIssues).chain()
+      this.browserIssues = supportCheck();
+      _(this.browserIssues).chain()
         .groupBy('severity')
         .each(function(severityGroup, severity) {
           missingFeatures = _(severityGroup).pluck('feature').join(', ');
@@ -49,13 +49,23 @@ _.extend(App.prototype, BackboneDash.Events, {
             this.report('Limited support for old web browsers', [
               'Your browser does not provide some features used by Dashboards: ' +
               missingFeatures + '.',
-              'Some features may not work correctly, however Any ' +
+              'Some features may not work correctly, however any ' +
               '<a href="http://browsehappy.com/">modern browser</a> will provide ' +
               'a better experience.']);
           } else if (severity === 'minor') {
             console.warn('This browser is missing support for', missingFeatures);
           }
-        });
+        }, this);
+
+      // inject downloadify if we have no download but have flash (IE)
+      if (this.hasIssue('download') && !this.hasIssue('flash')) {
+        var swfObj = document.createElement('script'),
+            downloadify = document.createElement('script');
+        swfObj.src = '/TEMPLATE/ampTemplate/commonJs/swfobject-2.2.js';
+        downloadify.src = '/TEMPLATE/ampTemplate/commonJs/downloadify-0.2.js';
+        document.body.appendChild(swfObj);
+        document.body.appendChild(downloadify);
+      }
 
       // initialize app services
       this.url = new URLService();
@@ -98,6 +108,10 @@ _.extend(App.prototype, BackboneDash.Events, {
     // TODO: if possible, move this out of app-class
     // or at least make it more targeted than document
     this.translator.translateDOM(document);
+  },
+
+  hasIssue: function(featureName) {
+    return !!_(this.browserIssues).findWhere({feature: featureName});
   },
 
   viewFail: function(view, err) {

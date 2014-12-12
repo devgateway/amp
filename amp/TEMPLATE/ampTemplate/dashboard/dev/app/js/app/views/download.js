@@ -135,7 +135,7 @@ module.exports = BackboneDash.View.extend({
         }, [row[0].x]);
       })
       .map(function(row) {
-        row.push(currency);
+        row.push(currency || '');
         if (adjtype) { row.push(adjtype); }
         return row;
       })
@@ -143,7 +143,9 @@ module.exports = BackboneDash.View.extend({
 
     // prepend a header row
     headerRow = [''];  // no header value for x-axis
-    headerRow = headerRow.concat(_(data).pluck('key'));  // data headers
+    headerRow = headerRow.concat(_(data).map(function(col) {
+      return col.key || '';  // data headers
+    }));
     headerRow.push('Currency');
     if (adjtype) { headerRow.push('Type'); }
 
@@ -156,15 +158,52 @@ module.exports = BackboneDash.View.extend({
     preview.value = textContent;
     csvContainer.html(preview);
 
-    this.makeDownloadable(util.textAsDataURL(textContent), 'data', '.csv');
+    if (!this.app.hasIssue('download')) {
+      textContent = util.textAsDataURL(textContent);
+    }
+
+    window.setTimeout(_(function() {  // stupid bootstrap modals...
+      // this setTimeout is needed for the flash fallback :(
+      this.makeDownloadable(textContent, 'data', '.csv');
+    }).bind(this), 100);
   },
 
   makeDownloadable: function(stuff, what, ext) {
-    this.$('.download-chart')
-      .removeClass('disabled')
-      .attr('href', stuff)
-      .attr('download', this.model.get('name') + ext)
-      .find('.word').text('Download ' + what);
+    var fileName = this.model.get('name') + ext,
+        dlButton = this.$('.download-chart').removeClass('disabled');
+    dlButton.find('.word').text('Download ' + what);
+
+    if (this.app.hasIssue('download')) {
+      if (this.app.hasIssue('flash')) {
+        this.app.report('Your browser is missing features to initiate the download', [
+          'You might be able to save this chart manually by right-clicking the ' +
+          'preview and selecting "Save Picture As...']);
+      } else {
+        // bad browser, but has flash! fallback to downloadify
+        this.app.tryTo(function() {
+          window.Downloadify.create(dlButton[0], {
+            swf: '/TEMPLATE/ampTemplate/commonMedia/downloadify.swf',
+            downloadImage: '/TEMPLATE/ampTemplate/commonMedia/download-button-states.png?rev=4',
+            transparent: true,
+            width: 176,
+            height: 34,
+            filename: fileName,
+            data: stuff
+              .replace('data:text/plain;base64,//', '')
+              .replace('data:image/png;base64,', ''),
+            dataType: ext === '.csv' ? 'string' : 'base64',
+            append: true,
+            onError: function() {
+              this.app.report('Could not download the file.')
+            }
+          });
+        }, this);
+      }
+    } else {
+      this.$('.download-chart')
+        .attr('href', stuff)
+        .attr('download', fileName);
+    }
   }
 
 });

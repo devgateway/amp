@@ -28,7 +28,7 @@ module.exports = Backbone.View
 
   customClusterMap: {},
   maxClusterCount: 0,
-  CLUSTER_PRECISION: 8, //decimal places of lat, lng precision for clustering. (doesn't effect plugin.)
+  CLUSTER_PRECISION: 2, //decimal places of lat, lng precision for clustering. (doesn't effect plugin.)
 
   MAX_CLUSTER_SIZE: 20,
 
@@ -100,8 +100,8 @@ module.exports = Backbone.View
 
 
         // DRS in progress custom own clustering. big efficiency gains.
-        var latLngString = Math.round(latlng.lat * self.CLUSTER_PRECISION * 10) +
-          ',' + Math.round(latlng.lng * self.CLUSTER_PRECISION * 10);
+        var latLngString = Math.round(latlng.lat * Math.pow(10, self.CLUSTER_PRECISION)) +
+          ',' + Math.round(latlng.lng * Math.pow(10, self.CLUSTER_PRECISION));
         if (self.customClusterMap[latLngString]) {
           self.customClusterMap[latLngString].push(marker); //TODO: should push marker or feature?
           self.maxClusterCount = Math.max(self.maxClusterCount, self.customClusterMap[latLngString].length);

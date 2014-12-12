@@ -45,19 +45,16 @@ module.exports = BackboneDash.Model.extend({
         };
       };
     }
-    //we show only 6 years
-    var endOffset = 6,
-        initialOffset = 0;
     /* returns from map() like [{amp.gis:title-Region: 'Region'}, ... ]*/
 
     data.processed = [
       {
         key: this.localizedPredictabilityList['amp.dashboard:predictability-planned'],
-        values: _(data.years).map(pick('planned')).slice(initialOffset, endOffset)
+        values: _(data.years).map(pick('planned'))
       },
       {
         key: this.localizedPredictabilityList['amp.dashboard:predictability-actual'],
-        values: _(data.years).map(pick('actual')).slice(initialOffset, endOffset)
+        values: _(data.years).map(pick('actual'))
       }
     ];
     return data;

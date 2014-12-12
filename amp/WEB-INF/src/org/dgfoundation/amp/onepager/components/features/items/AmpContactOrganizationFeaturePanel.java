@@ -105,7 +105,7 @@ public class AmpContactOrganizationFeaturePanel extends AmpFeaturePanel<AmpConta
 		add(idsList);
 
 		
-		  AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Organizations",true,true,AmpOrganisationSearchModel.class) {			
+		  AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Organizations",true,true,AmpOrganisationSearchModel.class,id) {			
 			
 			@Override
 			protected AmpOrganisation getSelectedChoice(Long objId) {

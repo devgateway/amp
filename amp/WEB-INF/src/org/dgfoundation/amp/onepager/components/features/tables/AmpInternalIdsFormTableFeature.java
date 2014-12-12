@@ -82,7 +82,7 @@ public class AmpInternalIdsFormTableFeature extends AmpFormTableFeaturePanel {
 		idsList.setReuseItems(true);
 		add(idsList);
 		
-		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete", "Search Organizations", true,true, AmpOrganisationSearchModel.class) {			
+		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs=new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete", "Search Organizations", true,true, AmpOrganisationSearchModel.class,id) {			
 			@Override
 			protected void onSelect(AjaxRequestTarget target, AmpOrganisation choice) {
 				AmpActivityInternalId activityInternalId = new AmpActivityInternalId();

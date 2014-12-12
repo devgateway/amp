@@ -30,11 +30,11 @@ public abstract class AmpContactAutocompleteFieldPanel extends
 			String fmName,
 			boolean hideLabel,
 			Class<? extends AbstractAmpAutoCompleteModel<AmpContact>> objectListModelClass,
-			boolean useCache, boolean applyLocalFilter) {
+			String aditionalTooltipKey, boolean showTooltipIfLabelHidden) {
 		super(id, fmName, hideLabel, objectListModelClass,
 				AmpContactAutocompleteFieldPanel.class,
 				"AmpContactAutocompleteFieldPanel.js",
-				"WicketContactAutoComplete");
+				"WicketContactAutoComplete",aditionalTooltipKey,showTooltipIfLabelHidden);
 	}
 
 	@Override

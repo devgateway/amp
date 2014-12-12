@@ -40,7 +40,7 @@ module.exports = BackboneDash.Model.extend({
     function pick(which) {
       return function(d) {
         return {
-          x: parseInt(d.year, 10),
+          x: d.year,
           y: d[which]
         };
       };

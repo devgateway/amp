@@ -259,7 +259,7 @@ public class AmpRelatedOrganizationsBaseTableFeature extends AmpFormTableFeature
 
 		});
 
-		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs = new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Organizations",true,true,AmpOrganisationSearchModel.class) {
+		final AmpAutocompleteFieldPanel<AmpOrganisation> searchOrgs = new AmpAutocompleteFieldPanel<AmpOrganisation>("searchAutocomplete","Search Organizations",true,true,AmpOrganisationSearchModel.class,id) {
 			private static final long serialVersionUID = 1L;
 
 			@Override

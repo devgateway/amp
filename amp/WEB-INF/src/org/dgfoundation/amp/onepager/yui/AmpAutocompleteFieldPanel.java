@@ -209,7 +209,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			String fmName,
 			boolean hideLabel,
 			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass, boolean useCache) {
-		this(id,fmName,hideLabel,false,objectListModelClass);
+		this(id,fmName,hideLabel,false,objectListModelClass,"");
 		this.useCache=useCache;
 	}
 	
@@ -234,8 +234,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			String fmName,
 			boolean hideLabel,
 			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass,
-			final Class<? extends AmpAutocompleteFieldPanel> clazz, final String jsName,final String autoCompeleteVar) {
-		this(id,fmName,"",hideLabel,objectListModelClass,clazz, jsName,autoCompeleteVar,false);		
+			final Class<? extends AmpAutocompleteFieldPanel> clazz, final String jsName,final String autoCompeleteVar,String aditionalTooltipKey,boolean showTooltipIfLabelHidden) {
+		this(id,fmName,aditionalTooltipKey,hideLabel,objectListModelClass,clazz, jsName,autoCompeleteVar,showTooltipIfLabelHidden);		
 	}
 
 	public AmpAutocompleteFieldPanel(
@@ -342,8 +342,8 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
 			String id,
 			String fmName,
 			boolean hideLabel,boolean showTooltipIfLabelHidden,
-			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass) {
-		this(id,fmName,"",hideLabel,objectListModelClass,showTooltipIfLabelHidden);
+			Class<? extends AbstractAmpAutoCompleteModel<CHOICE>> objectListModelClass,String additionalTooltipKey) {
+		this(id,fmName,additionalTooltipKey,hideLabel,objectListModelClass,showTooltipIfLabelHidden);
 		
 	}
 	/**

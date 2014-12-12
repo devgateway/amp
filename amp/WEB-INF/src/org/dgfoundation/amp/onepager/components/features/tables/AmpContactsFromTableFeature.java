@@ -246,7 +246,7 @@ public class AmpContactsFromTableFeature extends AmpFormTableFeaturePanel<AmpAct
         add(list);
 
 
-        final AmpAutocompleteFieldPanel<AmpContact> searchContacts = new AmpContactAutocompleteFieldPanel("searchContact", "Search Contact",false, AmpContactSearchModel.class,false,false) {
+        final AmpAutocompleteFieldPanel<AmpContact> searchContacts = new AmpContactAutocompleteFieldPanel("searchContact", "Search Contact",false, AmpContactSearchModel.class,id,true) {
 
 			private static final long serialVersionUID = 1L;
 

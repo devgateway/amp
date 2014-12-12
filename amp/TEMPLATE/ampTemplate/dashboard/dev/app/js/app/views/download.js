@@ -4,7 +4,6 @@ var canvg = require('../../ugly/lib-load-hacks').canvg;
 var util = require('../../ugly/util');
 
 var fs = require('fs');
-var Deferred = require('jquery').Deferred;
 var _ = require('underscore');
 var BackboneDash = require('../backbone-dash');
 var getChart = require('../charts/chart');
@@ -194,7 +193,7 @@ module.exports = BackboneDash.View.extend({
             dataType: ext === '.csv' ? 'string' : 'base64',
             append: true,
             onError: function() {
-              this.app.report('Could not download the file.')
+              this.app.report('Could not download the file.');
             }
           });
         }, this);

@@ -1,5 +1,4 @@
 var _ = require('underscore');
-var param = require('jquery').param;
 var BackboneDash = require('../backbone-dash');
 
 

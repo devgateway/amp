@@ -114,6 +114,7 @@ public class MondrianMapping {
 	public static final Map<NamedTypedEntity,MDXElement> entityMap = new HashMap<NamedTypedEntity, MDXElement>() {
 				
 		void addColumnDefinition(String columnName, MDXLevel mdxLevel) {
+			definedColumns.add(columnName);
 			ReportColumn rc = new ReportColumn(columnName);
 			if (this.containsKey(rc))
 				throw new RuntimeException(String.format("column %s defined at least twice: once as %s, and then as %s", rc, this.get(rc), mdxLevel));

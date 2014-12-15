@@ -63,10 +63,15 @@ var AMPFilters = Backbone.View.extend({
 				$(event.target).toggleClass('on');
 
 				if ($(event.target).hasClass('on')) {
-					var blob = FilterUtils.convertJavaFiltersToJS(this.workspace.query.get('filters'));
-					window.currentFilter.deserialize(blob, {
-						silent : true
-					});
+					// AMP-18921: workaround to the filters until they will be properly initialized, 
+					// that should be done as part of filters widget improvement as a whole
+					if (!window.currentFilter.converted) {
+						var blob = FilterUtils.convertJavaFiltersToJS(this.workspace.query.get('filters'));
+						window.currentFilter.deserialize(blob, {
+							silent : true
+						});
+						window.currentFilter.converted = true;
+					}
 					$('#filters-container').show();
 				} else {
 					$('#filters-container').hide();
@@ -103,7 +108,6 @@ Saiku.events.bind('session:new', function(session) {
             	args.workspace.toolbar.$el.find(".amp_settings").removeClass("disabled_toolbar");
             	args.workspace.toolbar.$el.find(".amp_filters").removeClass("disabled_toolbar")
         	});
-
 		}
 	}
 

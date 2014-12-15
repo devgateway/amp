@@ -33,6 +33,18 @@ var AMPGisExport = Backbone.View.extend({
 	
 	export_to_map : function() {
 		var reportId = + this.workspace.query.get('report_id');
+		
+		// AMP-18921: workaround to the filters until they will be properly initialized, 
+		// that should be done as part of filters widget improvement as a whole 
+		if (!window.currentFilter.converted) {
+			window.currentFilter.converted = true;
+			var blob = FilterUtils.convertJavaFiltersToJS(this.workspace.query.get('filters'));
+			window.currentFilter.deserialize(blob, {
+				silent : true
+			});
+		}
+		
+		// export to map
 		$.ajax({
 			url : '/rest/data/report/export-to-map/' + reportId,
 			dataType: 'json',

@@ -119,14 +119,6 @@ public class LocationService {
 			}
  		}
 		
-		AmpCategoryValueLocations country = DynLocationManagerUtil.getDefaultCountry();
-
-		// code below disabled because filter-by-value not supported anymore; also this column will be redefined because of AMP-18736
-//		if(admlevel.equalsIgnoreCase(CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.getValueKey())){
-//			filterRules.addFilterRule(MondrianReportUtils.getColumn(ColumnConstants.COUNTRY, ReportEntityType.ENTITY_TYPE_ACTIVITY), 
-//					new FilterRule(country.getName(), true, false));
-//		}
-		
 		spec.setFilters(filterRules);
 		
 		String currcode = FilterUtils.getSettingbyName(config, SettingsConstants.CURRENCY_ID);
@@ -144,10 +136,13 @@ public class LocationService {
 			for (ReportArea reportArea : report.reportContents.getChildren()) {
 				JsonBean item = new JsonBean();
 				Iterator<ReportCell> iter = reportArea.getContents().values().iterator();
-				item.set("admID", admLevelToGeoCode.get(iter.next().displayedValue));
+				String admid = admLevelToGeoCode.get(iter.next().displayedValue);
+				item.set("admID", admid);
 				ReportCell reportcell = (ReportCell) iter.next();
 				item.set("amount", reportcell.value);
-				values.add(item);
+				if (admid!=null){
+					values.add(item);
+				}
 			}
 		}
 		retlist.set("values", values);

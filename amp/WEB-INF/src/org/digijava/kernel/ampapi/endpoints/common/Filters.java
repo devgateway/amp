@@ -23,12 +23,15 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -538,13 +541,34 @@ public class Filters {
 	public List<SimpleJsonBean> getWorkspaces() {
 		List<SimpleJsonBean> teamsListJson = new ArrayList<SimpleJsonBean>();
 		Collection<AmpTeam> ampTeamList = TeamUtil.getAllRelatedTeams();
-		for (AmpTeam ampTeam : ampTeamList) {
-			SimpleJsonBean ampTeamJson = new SimpleJsonBean();
-			ampTeamJson.setId(ampTeam.getIdentifier());
-			ampTeamJson.setName(ampTeam.getName());
-			teamsListJson.add(ampTeamJson);
+		if (hasToShowWorkspaceFilter()) {
+			for (AmpTeam ampTeam : ampTeamList) {
+				SimpleJsonBean ampTeamJson = new SimpleJsonBean();
+				ampTeamJson.setId(ampTeam.getIdentifier());
+				ampTeamJson.setName(ampTeam.getName());
+				teamsListJson.add(ampTeamJson);
+			}
 		}
 		return teamsListJson;
+
+	}
+	
+	private boolean hasToShowWorkspaceFilter () {
+		boolean showWorkspaceFilter = true;
+		boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil
+				.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
+		TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(
+				org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+		AmpTeam ampTeam = null;
+		if (teamMember != null) {
+			ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
+		}
+
+		if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM)
+				&& ampTeam.getComputation() == false && !showWorkspaceFilterInTeamWorkspace) {
+			showWorkspaceFilter = false;
+		}
+		return showWorkspaceFilter;
 
 	}
 	

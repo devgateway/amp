@@ -19,6 +19,10 @@
 		<div  class="invisible-item">duplicateName</div>
 		<digi:trn key="aim:reportwizard:duplicateName">There is already a report with the same name. Please choose a different one. </digi:trn>
 	</c:when>
+	<c:when test="${aimReportWizardForm.noReportNameSupplied == true}">
+		<div  class="invisible-item">noReportNameSupplied</div>
+		<digi:trn key="aim:reportwizard:duplicateName">Please enter a report name. </digi:trn>
+	</c:when>	
 	<c:when test="${aimReportWizardForm.overwritingForeignReport == true}">
 		<div  class="invisible-item">overwritingForeignReport</div>
 		<digi:trn key="aim:reportwizard:overwritingForeignReport">There is already a report with the same name belonging to a different user. Please choose a different name </digi:trn>

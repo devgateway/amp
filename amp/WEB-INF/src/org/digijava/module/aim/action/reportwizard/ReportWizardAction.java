@@ -47,6 +47,7 @@ import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.reportwizard.DuplicateReportNameException;
+import org.digijava.module.aim.exception.reportwizard.NoReportNameSuppliedException;
 import org.digijava.module.aim.form.reportwizard.ReportWizardForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -83,6 +84,7 @@ public class ReportWizardAction extends MultiAction {
 		ReportWizardForm myForm		= (ReportWizardForm) form;
 		
 		myForm.setDuplicateName(false);
+		myForm.setnoReportNameSupplied(false);
 		
 		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
 		PermissionUtil.putInScope(request.getSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, teamMember);
@@ -166,6 +168,12 @@ public class ReportWizardAction extends MultiAction {
 				myForm.setDuplicateName(true);
 				return mapping.findForward("save");
 			}
+			catch(NoReportNameSuppliedException e) {
+				logger.info( e.getMessage() );
+				myForm.setnoReportNameSupplied(true);
+				return mapping.findForward("save");
+			}
+			
 			catch (RuntimeException e) {
 				logger.error( e.getMessage() );
 				e.printStackTrace();
@@ -205,6 +213,7 @@ public class ReportWizardAction extends MultiAction {
 		myForm.setAmpTeamMember( null );
 		myForm.setDesktopTab( false );
 		myForm.setDuplicateName(false);
+		myForm.setDuplicateName(true);
 		myForm.setPublicReport(false);
 		myForm.setWorkspaceLinked(false);
 		myForm.setAllowEmptyFundingColumns(false);
@@ -426,14 +435,18 @@ public class ReportWizardAction extends MultiAction {
 			HttpServletRequest request, HttpServletResponse response, boolean saveACopy) throws java.lang.Exception {
 
 		ReportWizardForm myForm		= (ReportWizardForm) form;
+		
 		boolean dynamicSaveReport = Boolean.valueOf( request.getParameter("dynamicSaveReport") );
+		boolean noReportNameSupplied = Boolean.valueOf( request.getParameter("noReportNameSupplied") );
+		if (noReportNameSupplied)
+		{
+			throw new NoReportNameSuppliedException("No report name supplied");
+		}
         myForm.setWorkspaceLinked(Boolean.valueOf(request.getParameter("workspaceLinked"))); //Struts for some reason ignores this field and I am tired of it
         myForm.setAlsoShowPledges(Boolean.valueOf(request.getParameter("alsoShowPledges")));
 		
 		TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
 		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
-
-			
 		Collection<AmpColumns> availableCols	= AdvancedReportUtil.getColumnList();
 		Collection<AmpMeasures> availableMeas	= AdvancedReportUtil.getMeasureList();
 		

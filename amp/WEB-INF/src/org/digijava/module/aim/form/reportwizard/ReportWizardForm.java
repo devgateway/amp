@@ -34,6 +34,7 @@ public class ReportWizardForm extends ActionForm {
 	private Long[] selectedHierarchies = null;
 	private Long[] selectedMeasures = null;
 	private Boolean duplicateName = false;
+	private Boolean noReportNameSupplied = false;
 	private Boolean overwritingForeignReport = false;
 	private Boolean publicReport = false;
 	private Boolean workspaceLinked = false;
@@ -128,7 +129,10 @@ public class ReportWizardForm extends ActionForm {
 	public Boolean getDuplicateName() {
 		return this.duplicateName;
 	}
-	
+	@java.lang.SuppressWarnings("all")
+	public Boolean getnoReportNameSupplied() {
+		return this.noReportNameSupplied;
+	}	
 	@java.lang.SuppressWarnings("all")
 	public Boolean getOverwritingForeignReport() {
 		return this.overwritingForeignReport;
@@ -247,6 +251,11 @@ public class ReportWizardForm extends ActionForm {
 	@java.lang.SuppressWarnings("all")
 	public void setDuplicateName(final Boolean duplicateName) {
 		this.duplicateName = duplicateName;
+	}
+	
+	@java.lang.SuppressWarnings("all")
+	public void setnoReportNameSupplied(final Boolean noReportNameSupplied) {
+		this.noReportNameSupplied = noReportNameSupplied;
 	}
 	
 	@java.lang.SuppressWarnings("all")

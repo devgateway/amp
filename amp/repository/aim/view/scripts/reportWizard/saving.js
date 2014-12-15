@@ -240,6 +240,11 @@ SaveReportEngine.prototype.saveAndOrOpenReport	= function (openReport) {
 			"... <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>";
 	
 	var reportTitles = getReportTitles();
+	var noReportNameSupplied = "";
+	if (reportTitles == null) {
+		reportTitles = "";
+		noReportNameSupplied = "&noReportNameSupplied=true";
+	}
 	if (reportTitles != null) {
 		var postString		= "reportTitle=dummy&reportDescription="+encodeURIComponent(getReportDescription()) + "&reportPeriod="+getReportPeriod() + 
 							"&reportType="+getReportType() + "&" + getSelectedFields("dest_col_ul", "selectedColumns") + 
@@ -253,12 +258,16 @@ SaveReportEngine.prototype.saveAndOrOpenReport	= function (openReport) {
 							"&hideActivities="+getHideActivities() +
 							"&useFilters="+getUseFilters()+
 							"&openReport=" + openReport + 
-							getReportTitles() + 
+							reportTitles +
+							noReportNameSupplied + 
 							//"&reportContextId="+getReportContextId()+
 							"&allowEmptyFundingColumns="+getAllowEmptyFundingColumns()+
 							"&" + getSelectedFields ("dest_measures_ul","selectedMeasures")+ "&" + getSelectedFields("dest_hierarchies_ul","selectedHierarchies");
 		
 		//alert(postString);
 		YAHOO.util.Connect.asyncRequest("POST", "/aim/reportWizard.do", this, postString);
+	}
+	else {
+		
 	}
 };

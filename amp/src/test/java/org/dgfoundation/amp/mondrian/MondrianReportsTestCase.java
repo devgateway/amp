@@ -121,16 +121,16 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 	}
 
     /**
-     * Checks that all headers present in the generated report
+     * if the report specification asks for headers to be generated regardless of the report being empty, checks that all of the columns specified in the spec are present in the output headers
      * @param rep
      * @param spec
      */
     public static void checkReportHeaders(GeneratedReport rep, ReportSpecification spec) {
-        if (spec.getColumns() == null) {
+        if (spec.getColumns() == null || !spec.isPopulateReportHeadersIfEmpty()) {
             return;
         }
 
-        assertFalse("Report headers cannot be empty", rep.leafHeaders == null || rep.leafHeaders.isEmpty());
+       	assertFalse("Report headers cannot be empty", rep.leafHeaders == null || rep.leafHeaders.isEmpty());
 
         // convert leafHeaders to Map for easier access
         Map<String, ReportOutputColumn> leafHeadersMap = new HashMap<String, ReportOutputColumn>();

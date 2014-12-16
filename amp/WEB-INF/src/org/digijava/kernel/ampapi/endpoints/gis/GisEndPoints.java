@@ -39,7 +39,6 @@ import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;
 import org.digijava.kernel.ampapi.endpoints.gis.services.ActivityService;
 import org.digijava.kernel.ampapi.endpoints.gis.services.LocationService;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
-import org.digijava.kernel.ampapi.endpoints.settings.SettingOptions;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -127,12 +126,22 @@ public class GisEndPoints {
 	@Path("/structures")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "Structures")
-	public final FeatureCollectionGeoJSON getProjectSites(final JsonBean config) throws AmpApiException {
+	public final FeatureCollectionGeoJSON getProjectSites(final JsonBean config,@QueryParam("startFrom") Integer startFrom,
+			@QueryParam("size")Integer size) throws AmpApiException {
 		FeatureCollectionGeoJSON f = new FeatureCollectionGeoJSON();
-
 		List<AmpStructure> al = LocationService.getStructures( config);
-		for (AmpStructure structure : al) {
-			try {
+		int start = 0;
+		int end = al.size() -1;
+		if (startFrom!=null && size!=null && startFrom < al.size()) {
+			start = startFrom.intValue();
+			if (al.size()>(startFrom + size)) {
+				end = startFrom + size;
+			}
+		}
+  		
+      for (;start <= end;start++) {
+    	AmpStructure structure = al.get(start);
+		  try {
 				FeatureGeoJSON fgj = new FeatureGeoJSON();
 				PointGeoJSON pg = new PointGeoJSON();
 				pg.coordinates
@@ -151,7 +160,6 @@ public class GisEndPoints {
 				}
 
 				fgj.properties.put("activity", new POJONode(actIds));
-				// fgj.properties.put("admId", new LongNode(23));
 				fgj.geometry = pg;
 
 				f.features.add(fgj);

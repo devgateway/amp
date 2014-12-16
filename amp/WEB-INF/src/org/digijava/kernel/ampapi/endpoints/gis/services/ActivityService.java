@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.endpoints.gis.services;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -44,12 +45,21 @@ import org.digijava.kernel.translator.TranslatorWorker;
 public class ActivityService {
 	protected static Logger logger = Logger.getLogger(ActivityService.class);
 	private static final Map<String, String> columnHeaders;
+	private static final Set<String> columnsToProvide;
 	 static
 	    {
 		 columnHeaders = new HashMap<String, String>();
 		 columnHeaders.put(ColumnConstants.PROJECT_TITLE,"Title" );
 		 columnHeaders.put(ColumnConstants.DONOR_AGENCY, "Donor Agency");
 		 columnHeaders.put(ColumnConstants.ACTIVITY_UPDATED_ON, "Date");
+		 
+		 columnsToProvide = new HashSet<String>();
+		 columnsToProvide.add(ColumnConstants.ACTIVITY_ID);
+		 columnsToProvide.add(ColumnConstants.PROJECT_TITLE);
+		 columnsToProvide.add(MeasureConstants.ACTUAL_COMMITMENTS);
+		 columnsToProvide.add(MeasureConstants.ACTUAL_DISBURSEMENTS);
+		 columnsToProvide.add(MeasureConstants.PLANNED_COMMITMENTS);
+		 columnsToProvide.add(MeasureConstants.PLANNED_DISBURSEMENTS);
 	    }
 	
 	public static JsonBean getActivitiesMondrian(JsonBean config,List<String>activitIds, Integer page, Integer pageSize) throws AmpApiException {
@@ -136,12 +146,7 @@ public class ActivityService {
 			for (ReportOutputColumn reportOutputColumn : col) {
 				//Filters should be grouped together.
 				
-				if (reportOutputColumn.originalColumnName.equals(ColumnConstants.ACTIVITY_ID)
-					|| reportOutputColumn.originalColumnName.equals(ColumnConstants.PROJECT_TITLE)
-							|| reportOutputColumn.originalColumnName.equals(MeasureConstants.ACTUAL_COMMITMENTS)
-							|| reportOutputColumn.originalColumnName.equals(MeasureConstants.ACTUAL_DISBURSEMENTS)
-							)
-						 {
+				if (columnsToProvide.contains(reportOutputColumn.originalColumnName)) {
 					activity.set(reportOutputColumn.originalColumnName,row.get(reportOutputColumn).value);
 					if(reportOutputColumn.originalColumnName.equals(ColumnConstants.ACTIVITY_ID)){
 						activity.set("ampUrl",ActivityGatekeeper.buildPreviewUrl(String.valueOf(row.get(reportOutputColumn).value)));

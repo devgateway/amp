@@ -168,9 +168,17 @@
 						</feature:display>
 						<logic:present name="currentMember">
 							<digi:insert attribute="myLastVersions"/>
-							<%-- <digi:insert attribute="myReports"/> --%>
+							<digi:insert attribute="myReports"/>
+							
 							<%-- <digi:insert attribute="myLinks" /> --%>
-							<%-- <digi:insert attribute="myMessages"/> --%>
+							<c:set var="translation">
+								<digi:trn key="aim:clickToViewMoreResources">Click here to view more resources</digi:trn>
+							</c:set>
+							<module:display name="Content Repository" parentModule="Resources">
+								<div id='resources-widget-container'></div>
+							</module:display>							
+							
+							<digi:insert attribute="myMessages"/>																		
 						</logic:present>
 					</div>
 					</digi:secure>

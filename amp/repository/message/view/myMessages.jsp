@@ -224,9 +224,9 @@ var clickToViewMsg='<digi:trn key="message:clickToEditAlert" jsFriendly="true">C
     </feature:display>
   </digi:form>
   <script type="text/javascript">
-    $(document).ready(function(){
+    //jQuery(document).ready(function(){
       initMsgDiv();
       checkForNewMessages();
-    });
+    //});
   </script>
 </module:display>

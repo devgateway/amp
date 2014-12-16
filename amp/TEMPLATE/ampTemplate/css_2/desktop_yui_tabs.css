@@ -1,5 +1,3 @@
-/*TODO: Eliminate redundant style namespaces, since #demo desktop shouldn't exist anymore*/
-
    .yui-content *{font-size:11px !important;}
 	#demo .yui-nav, #fundingTabs .yui-nav{
 
@@ -70,12 +68,12 @@
 	#demo .yui-content, #demo .yui-content  {
 		border:1px solid #CCCCCC;
 	}
-	#fundingTabs .yui-nav li a {
+	#fundingTabs .yui-nav li a,#demo .yui-nav li a {
 		color: #376091;
 		font-weight: bold;
 		background-color: #EBEBEB;
 	}
-	#fundingTabs .yui-nav li.selected a {
+	#fundingTabs .yui-nav li.selected a, #demo .yui-nav li.selected a{
 		color: #FF6000;
 		font-weight: bold;
 		background-color: #ffffff;

@@ -81,7 +81,7 @@ public class AmpComponentFormTableAnnualBudget
 
 				};
 				
-				
+				item.add(fundingAmount);
 				AmpDeleteLinkField delAnnualBudget = new AmpDeleteLinkField("delAnnualBudget",
 						"Delete Internal Id") {
 					@Override

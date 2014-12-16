@@ -39,6 +39,11 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	
 	protected static final Logger logger = Logger.getLogger(AmpMondrianSchemaProcessor.class);
 	protected static String expandedSchema;
+	
+	/**
+	 * whether this is the first, e.g. expanding, run of the processor
+	 */
+	protected boolean expandingRun;
 
 	@Override
 	public String processSchema(String schemaURL, PropertyList connectInfo) throws Exception {
@@ -117,7 +122,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			String correspondingColumn = backMapping.get(fullColumnName);
 			boolean notToBeTranslated = columnElem.hasAttribute("translated") && columnElem.getAttribute("translated").toLowerCase().equals("false");
 			if (correspondingColumn == null) {
-				if (!notToBeTranslated)
+				if (expandingRun && !notToBeTranslated)
 					logger.error("could not find a backmapping for " + fullColumnName + ", this one will not be translated!");
 				continue;
 			}
@@ -153,6 +158,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	protected String expandSchema(String contents) {
 		if (expandedSchema == null) {
 			logger.warn("expanding AMP schema...");
+			expandingRun = true;
 			Document xmlSchema = XMLGlobals.createNewXML(contents);
 			
 			//Node dimensionsParentNode = XMLGlobals.selectNode(xmlSchema, "/Schema/Cube");
@@ -243,9 +249,25 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	 * @return
 	 */
 	protected String buildFilteringSubquery() {
-		MondrianReportFilters mrf = (currentReport.get().getFilters() != null) ?
-				(MondrianReportFilters) currentReport.get().getFilters() : null;
-		return String.format("mondrian_fact_table.entity_id IN (%s) %s", getAllowedActivitiesIds(mrf), new FactTableFiltering(mrf).getQueryFragment());
+		MondrianReportFilters mrf = (currentReport.get().getFilters() != null) ? (MondrianReportFilters) currentReport
+				.get().getFilters() : null;
+		return String.format("(%s) AND (mondrian_fact_table.entity_id IN (%s)) %s",
+				getFilterByReportType(), getAllowedActivitiesIds(mrf), new FactTableFiltering(mrf).getQueryFragment());
+	}
+
+	protected String getFilterByReportType() {
+		int reportType = currentReport.get().getReportType();
+		switch (reportType) {
+		
+			case ArConstants.DONOR_TYPE:
+				return "component_id IS NULL OR component_id = 999999999";
+
+			case ArConstants.COMPONENT_TYPE:
+				return "component_id IS NOT NULL AND component_id <> 999999999";
+
+			default:
+				throw new RuntimeException("report type not implemented yet: " + reportType);
+		}
 	}
 	
 	protected String getAllowedActivitiesIds(MondrianReportFilters mrf) {
@@ -269,7 +291,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	}
 
 	private void initDefault() {
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("default");
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("default", ArConstants.DONOR_TYPE);
 		MondrianReportSettings settings = new MondrianReportSettings();
 		spec.setSettings(settings);
 		registerReport(spec, new ReportEnvironment("en", new CompleteWorkspaceFilter(null, null), "EUR"));

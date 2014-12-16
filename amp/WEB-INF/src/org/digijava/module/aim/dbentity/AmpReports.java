@@ -621,11 +621,23 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	}
 	
 	
+	/**
+	 * returns true if at least one of the measures of this report is implemented in Mondrian
+	 * @return
+	 */
 	public boolean hasAvailableMeasures() {
 		Set<String> reportMeasures = getMeasureNames();
 		Set<String> availableMeasures = MeasuresVisibility.getVisibleMeasures();
 		reportMeasures.retainAll(availableMeasures);
 		return !reportMeasures.isEmpty();
+	}
+	
+	/**
+	 * returns true iff this report can be opened in Mondrian
+	 * @return
+	 */
+	public boolean isImplementedInMondrian() {
+		return (this.getType().intValue() == ArConstants.DONOR_TYPE || this.getType().intValue() == ArConstants.COMPONENT_TYPE && hasAvailableMeasures());
 	}
 	
 	

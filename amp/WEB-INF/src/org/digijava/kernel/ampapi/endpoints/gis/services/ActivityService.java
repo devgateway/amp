@@ -12,6 +12,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.error.AMPException;
@@ -68,7 +69,7 @@ public class ActivityService {
 		
 		String name= "ActivityList";
 		boolean doTotals=true;
- 		ReportSpecificationImpl spec = new ReportSpecificationImpl(name);
+ 		ReportSpecificationImpl spec = new ReportSpecificationImpl(name, ArConstants.DONOR_TYPE);
 
 		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
 		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
@@ -199,7 +200,7 @@ public class ActivityService {
 		if (pageSize == null) {
 			pageSize = new Integer(10);
 		}
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("LastUpdated");
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("LastUpdated", ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
 		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));

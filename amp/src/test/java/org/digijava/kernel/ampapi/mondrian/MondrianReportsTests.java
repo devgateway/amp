@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
@@ -153,7 +154,7 @@ public class MondrianReportsTests extends AmpTestCase {
 	}
 	
 	public void testSectorsIds() {
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("testSectorsIds");
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("testSectorsIds", ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
 		
 		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR_ID));
@@ -172,7 +173,7 @@ public class MondrianReportsTests extends AmpTestCase {
 	}
 	
 	private ReportSpecificationImpl getDefaultSpec(String name, boolean doTotals) {
-		ReportSpecificationImpl spec = new ReportSpecificationImpl(name);
+		ReportSpecificationImpl spec = new ReportSpecificationImpl(name, ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_TYPE));
 		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
@@ -183,7 +184,7 @@ public class MondrianReportsTests extends AmpTestCase {
 	}
 	
 	public void testSimpleReportByRegion() {
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals");
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals", ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(ColumnConstants.REGION));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
 		generateAndValidate(spec, true);
@@ -248,7 +249,7 @@ public class MondrianReportsTests extends AmpTestCase {
 	
 	public void testHeavyQuery() {
 		long start = System.currentTimeMillis();
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("testHeavyQuery");
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("testHeavyQuery", ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(ColumnConstants.REGION));
 		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
 		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));

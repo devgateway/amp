@@ -15,6 +15,7 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.error.AMPException;
@@ -152,7 +153,7 @@ public class ReportsUtil {
 			ReportSpecificationImpl spec = null;
 			if (Boolean.TRUE.equals(formParams.get(EPConstants.IS_CUSTOM))) { 
 				String reportName = formParams.getString(EPConstants.REPORT_NAME);
-				spec = new ReportSpecificationImpl(reportName);
+				spec = new ReportSpecificationImpl(reportName, ArConstants.DONOR_TYPE);
 			} else {
 				spec = ReportsUtil.getReport(reportId);
 			}

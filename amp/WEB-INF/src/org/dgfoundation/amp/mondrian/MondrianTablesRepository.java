@@ -9,11 +9,12 @@ import org.dgfoundation.amp.mondrian.currencies.CurrencyAmountGroup;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableColumn;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableDescription;
-
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentType;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -118,6 +119,21 @@ public class MondrianTablesRepository {
 							.addColumnDef(new I18nViewColumnDescription("team_name", "team_id", AmpTeam.class, "name"));							
 					}});
 
+	public final static MondrianTableDescription MONDRIAN_COMPONENTS =
+			new MondrianTableDescription("mondrian_components", "amp_component_id", Arrays.asList("amp_component_id", "component_type_id"))
+				.withFingerprintedJob(Arrays.asList(
+						Fingerprint.buildTableHashingQuery("v_mondrian_components", "amp_component_id"),
+						Fingerprint.buildTranslationHashingQuery(AmpComponent.class),
+						Fingerprint.buildTranslationHashingQuery(AmpComponentType.class)
+					))
+				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
+					@Override public I18nViewDescription getObject() {
+						return new I18nViewDescription("mondrian_components")
+							.addColumnDef(new I18nViewColumnDescription("component_name", "amp_component_id", AmpComponent.class, "title"))
+							.addColumnDef(new I18nViewColumnDescription("component_description", "amp_component_id", AmpComponent.class, "description"))
+							.addColumnDef(new I18nViewColumnDescription("component_type_name", "component_type_id", AmpComponentType.class, "name"));
+				}});
+						
 	
 	public final static MondrianTableDescription MONDRIAN_ACTIVITY_FIXED_TEXTS = 
 			new MondrianTableDescription("mondrian_activity_fixed_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
@@ -174,6 +190,9 @@ public class MondrianTablesRepository {
 	public final static MondrianTableDescription MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE = 
 			new MondrianTableDescription("mondrian_raw_donor_transactions", "amp_fund_detail_id", Arrays.asList("amp_activity_id", "amp_fund_detail_id", "donor_id"));
 	
+//	public final static MondrianTableDescription MONDRIAN_RAW_COMPONENT_TRANSACTIONS_TABLE = 
+//			new MondrianTableDescription("mondrian_component_transactions", "amp_component_funding_id", Arrays.asList("amp_activity_id", "amp_component_id", "component_organisation_id"));
+	
 	public final static List<MondrianTableDescription> MONDRIAN_DIMENSION_TABLES = Arrays.asList(
 			MONDRIAN_LOCATIONS_DIMENSION_TABLE,
 			MONDRIAN_SECTORS_DIMENSION_TABLE,
@@ -190,7 +209,9 @@ public class MondrianTablesRepository {
 			MONDRIAN_ACTIVITY_TRN_TEXTS,
 			MONDRIAN_ACTIVITY_CURRENCY_NUMBERS);
 		
-	public final static List<MondrianTableDescription> MONDRIAN_RAW_TRANSACTIONS_TABLES = Arrays.asList(MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE);
+	public final static List<MondrianTableDescription> MONDRIAN_ACTIVITY_DEPENDENT_DIMENSIONS = Arrays.asList(MONDRIAN_COMPONENTS);
+	
+	public final static List<MondrianTableDescription> MONDRIAN_RAW_TRANSACTIONS_TABLES = Arrays.asList(MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE/*, MONDRIAN_RAW_COMPONENT_TRANSACTIONS_TABLE*/);
 	
 //	public final static Set<MondrianTableDescription> MONDRIAN_NON_TRANSLATED_DIMENSIONS = new HashSet<MondrianTableDescription>() {{
 //		add(MONDRIAN_ACTIVITY_FIXED_TEXTS);
@@ -250,6 +271,8 @@ public class MondrianTablesRepository {
 				new DatabaseTableColumn("ca_org_id", "integer NOT NULL", true), // contracting agency, subject to Cartesian product
 				new DatabaseTableColumn("rg_org_id", "integer NOT NULL", true), // regional group amp_org_id, subject to Cartesian product
 				new DatabaseTableColumn("sg_org_id", "integer NOT NULL", true), // sector group amp_org_id, subject to Cartesian product
+				
+				new DatabaseTableColumn("component_id", "integer NOT NULL", true), // amp_component_id
 		
 				new DatabaseTableColumn("capital_spend_percent", "double", true),
 				

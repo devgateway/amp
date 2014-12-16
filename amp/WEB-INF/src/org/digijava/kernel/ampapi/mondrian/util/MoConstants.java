@@ -69,6 +69,8 @@ public final class MoConstants {
 	public static final String DATES = "Dates";
 	public static final String ACTIVITY_DATES = "Activity Dates";
 	public static final String LOCATION = "Location"; 
+	public static final String COMPONENT = "Component";
+	public static final String COMPONENT_FUNDING_ORGANIZATION = "Component Funding Organization";
 	public static final String PRIMARY_SECTOR = "Primary Sector";
 	public static final String SECONDARY_SECTOR = "Secondary Sector";
 	public static final String TERTIARY_SECTOR = "Tertiary Sector";
@@ -132,6 +134,9 @@ public final class MoConstants {
 	public static final String H_IMPLEMENTATION_LOCATION = "Implementation Location";
 	public static final String H_GEO_CODE = "GeoCode";
 	public static final String H_DISTRICTS = "District";
+	public static final String H_COMPONENT_NAME = "Component Name";
+	public static final String H_COMPONENT_DESCRIPTION = "Component Description";
+	public static final String H_COMPONENT_TYPE = "Component Type Name";
 	public static final String H_LEVEL_0_SECTOR = "Level 0 Sector";
 	public static final String H_LEVEL_1_SECTOR = "Level 1 Sector";
 	public static final String H_LEVEL_2_SECTOR = "Level 2 Sector";
@@ -238,6 +243,9 @@ public final class MoConstants {
 	public static final String ATTR_LOCATION_NAME = "Specified Location";
 	public static final String ATTR_IMPLEMENTATION_LEVEL = "Implementation Level";
 	public static final String ATTR_IMPLEMENTATION_LOCATION = "Implementation Location";
+	public static final String ATTR_COMPONENT_NAME = "Component Name";
+	public static final String ATTR_COMPONENT_DESCRIPTION = "Component Description";
+	public static final String ATTR_COMPONENT_TYPE = "Component Type Name";
 	public static final String ATTR_GEO_ID = "GeoId";
 	public static final String ATTR_LEVEL_0_SECTOR_NAME = "Level 0 Sector";
 	public static final String ATTR_LEVEL_0_SECTOR_ID = "Level 0 Sector Id";

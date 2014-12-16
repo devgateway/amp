@@ -8,12 +8,15 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.dgfoundation.amp.ar.ArConstants;
+
 /**
  * Stores a report configuration by implementing {@link ReportSpecification} and defines all data required to generate a report. 
  * @author Nadejda Mandrescu
  *
  */
 public class ReportSpecificationImpl implements ReportSpecification {
+	private int reportType;	
 	private String reportName = null;
 	private Set<ReportColumn> columns = null;
 	private Set<ReportColumn> hierarchies = null;
@@ -37,8 +40,11 @@ public class ReportSpecificationImpl implements ReportSpecification {
      */
     private boolean populateReportHeadersIfEmpty = false;
 	
-	public ReportSpecificationImpl(String reportName) {
+	public ReportSpecificationImpl(String reportName, int reportType) {
+		if (!ArConstants.LEGAL_REPORT_TYPES.contains(reportType))
+			throw new RuntimeException("report type unknown: " + reportType);
 		this.reportName = reportName;
+		this.reportType = reportType;
 	}
 
 	@Override
@@ -287,8 +293,13 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	public void setEmptyOutputForUnspecifiedData(boolean val) {
 		this.emptyOutputForUnspecifiedData = val;
 	}
+	
+	@Override public int getReportType() {
+		return reportType;
+	}
 
-    public boolean isPopulateReportHeadersIfEmpty() {
+	
+	public boolean isPopulateReportHeadersIfEmpty(){
         return populateReportHeadersIfEmpty;
     }
 

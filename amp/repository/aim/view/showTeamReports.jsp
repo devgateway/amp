@@ -499,7 +499,7 @@ $(document).ready(function() {
 					                              								</td>
 					                              								
 					                              								<%
-																					boolean onlySaikuButton = Long.valueOf(1).equals(report.getType()) && FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS) && report.hasAvailableMeasures();
+																					boolean onlySaikuButton = report.isImplementedInMondrian() && FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS);
 																				%>
 					                              								<td class="inside" style="padding-right: 15px; padding-left: 15px;" bgcolor="<%=color%>">
 					                              									<c:if test="${!aimTeamReportsForm.showTabs}">
@@ -718,7 +718,7 @@ $(document).ready(function() {
 						                                  									<bean:write name="report" property="ampReportId" />
 						                                								</c:set>
 																						<%
-																							if (Long.valueOf(1l).equals(report.getType()) && !onlySaikuButton) {
+																							if (report.isImplementedInMondrian() && !onlySaikuButton) {
 																						%>
 																							<%@ include file="saiku_button.jspf" %> 
 																						<% } %>

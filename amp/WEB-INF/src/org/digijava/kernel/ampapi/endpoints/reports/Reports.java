@@ -151,8 +151,6 @@ public class Reports {
 	@Path("/report/{report_id}/result")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final GeneratedReport getReportResult(@PathParam("report_id") Long reportId) {
-		// TODO: for now we do not translate other types of reports than 
-		// Donor Type reports (hide icons for non-donor-type reports?)
 		ReportSpecificationImpl spec = ReportsUtil.getReport(reportId);
 		return EndpointUtils.runReport(spec);
 	}

@@ -19,7 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				DROP VIEW IF EXISTS v_mondrian_raw_donor_transactions;
+				DROP VIEW IF EXISTS v_mondrian_raw_donor_transactions CASCADE;
 			    CREATE OR REPLACE VIEW v_mondrian_raw_donor_transactions AS 
 SELECT  <!-- regular transactions -->
 	aa.amp_activity_id AS amp_activity_id,
@@ -50,6 +50,8 @@ SELECT  <!-- regular transactions -->
 	(SELECT max(level_code) FROM v_type_of_cooperation vtoc WHERE vtoc.amp_activity_id = aa.amp_activity_id) type_of_cooperation_id,
 	(SELECT max(level_code) FROM v_type_of_implementation vtoi WHERE vtoi.amp_activity_id = aa.amp_activity_id) type_of_implementation_id,
 	(SELECT max(id) FROM v_procurement_system vps WHERE vps.amp_activity_id = aa.amp_activity_id) procurement_system_id,
+	
+	CAST(NULL as bigint) AS component_id,
     fd.capital_spend_percent AS capital_spend_percent, 
      
 	src_role.role_code AS src_role,
@@ -85,7 +87,8 @@ SELECT <!-- MTEFs -->
 	(SELECT max(level_code) FROM v_type_of_implementation vtoi WHERE vtoi.amp_activity_id = aa.amp_activity_id) type_of_implementation_id,
 	(SELECT max(id) FROM v_procurement_system vps WHERE vps.amp_activity_id = aa.amp_activity_id) procurement_system_id,
      
-    null AS capital_spend_percent,
+	CAST(NULL as bigint) AS component_id,
+	NULL AS capital_spend_percent,
     
 	src_role.role_code AS src_role,
 	cast (NULL as text) as dest_role,
@@ -102,7 +105,7 @@ SELECT <!-- undefined donor -->
 	999 AS transaction_type,
 	(SELECT acv.id FROM amp_category_value acv WHERE acv.category_value='Actual' AND acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'adjustment_type')) AS adjustment_type,
 	'1970-01-01' AS transaction_date,
-	to_char(to_date('2014-01-01', 'YYYY-MM-DD'), 'J')::integer AS date_code,
+	to_char(to_date('1970-01-01', 'YYYY-MM-DD'), 'J')::integer AS date_code,
 
 	100 AS transaction_amount,
 
@@ -119,7 +122,8 @@ SELECT <!-- undefined donor -->
 	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'SSC_type_of_implementation')) AS type_of_implementation_id,
 	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'procurement_system')) AS  procurement_system_id,
      
-    null AS capital_spend_percent,
+	CAST(NULL as bigint) AS component_id,
+	NULL AS capital_spend_percent,
      
 	'DN' AS src_role,
 	cast (NULL as text) as dest_role,
@@ -135,8 +139,38 @@ SELECT <!-- undefined donor -->
 		(NOT EXISTS (
 			select * from amp_funding_mtef_projection mf 
 				JOIN amp_funding af ON mf.amp_funding_id = af.amp_funding_id AND af.amp_activity_id = aav.amp_activity_id
-				JOIN amp_role src_role ON src_role.amp_role_id = af.source_role_id AND src_role.role_code='DN' ));
+				JOIN amp_role src_role ON src_role.amp_role_id = af.source_role_id AND src_role.role_code='DN' ))
+UNION ALL
+SELECT <!-- component funding -->
+	ct.amp_activity_id AS amp_activity_id,
+	ct.amp_component_funding_id AS amp_fund_detail_id,
+	ct.transaction_type AS transaction_type,
+	ct.adjustment_type AS adjustment_type,
+	ct.transaction_date AS transaction_date,
+	ct.date_code AS date_code,
+	ct.transaction_amount AS transaction_amount,
+	ct.currency_id AS currency_id,	
+	
+	ct.component_organisation_id AS donor_id,
+	999999999 AS financing_instrument_id,
+	999999999 AS terms_of_assistance_id,
+	999999999 AS funding_status_id,
+	999999999 AS mode_of_payment_id,
+	
+	(SELECT max(amp_status_id) FROM v_status vs WHERE vs.amp_activity_id = ct.amp_activity_id) status_id,
+	(SELECT max(level_code) FROM v_modalities vm WHERE vm.amp_activity_id = ct.amp_activity_id) modality_id,
+	(SELECT max(level_code) FROM v_type_of_cooperation vtoc WHERE vtoc.amp_activity_id = ct.amp_activity_id) type_of_cooperation_id,
+	(SELECT max(level_code) FROM v_type_of_implementation vtoi WHERE vtoi.amp_activity_id = ct.amp_activity_id) type_of_implementation_id,
+	(SELECT max(id) FROM v_procurement_system vps WHERE vps.amp_activity_id = ct.amp_activity_id) procurement_system_id,
+     
+	ct.amp_component_id AS component_id,
+	NULL AS capital_spend_percent,
+    
+	cast ('DN' as text) as src_role,
+	cast (NULL as text) as dest_role,
+	cast (NULL as bigint) as dest_org_id
 
+FROM v_mondrian_component_transactions ct WHERE (ct.transaction_date BETWEEN '1970-1-1' AND '2050-1-1');
 			</lang>
 		</script>
 	</apply>

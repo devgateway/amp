@@ -347,7 +347,7 @@ function submitForm(action){
 																						<c:set var="reportLink" value="/aim/viewNewAdvancedReport.do~view=reset&widget=false&resetSettings=true~ampReportId=${report.ampReportId}"/>
 																						
 																						<%
-																							boolean onlySaikuButton = Long.valueOf(1).equals(report.getType()) && FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS) && report.hasAvailableMeasures();
+																							boolean onlySaikuButton = report.isImplementedInMondrian() && FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS);
 																						%>
 																						
 	 																					<% if (onlySaikuButton) { %>
@@ -468,7 +468,7 @@ function submitForm(action){
 																						</c:set>
 																						<c:set target="${urlParams}" property="event" value="edit" />
 																						<%
-																							if (Long.valueOf(1l).equals(report.getType()) && !onlySaikuButton) {
+																							if (report.isImplementedInMondrian() && !onlySaikuButton) {
 																						%>
 																							<%@ include file="saiku_button.jspf" %> 
 																						<% } %>

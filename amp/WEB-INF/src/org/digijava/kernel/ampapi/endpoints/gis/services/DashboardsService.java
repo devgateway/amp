@@ -12,6 +12,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -113,7 +114,7 @@ public class DashboardsService {
 			break;
 		}
 
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetTops");
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetTops", ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(column));
 		spec.getHierarchies().addAll(spec.getColumns());
 		// applies settings, including funding type as a measure
@@ -199,7 +200,7 @@ public class DashboardsService {
 	public static JSONObject getAidPredictability(JsonBean filter) throws Exception {
 
 		JSONObject retlist = new JSONObject();
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetAidPredictability");
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("GetAidPredictability", ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(ColumnConstants.COUNTRY));
 		spec.getHierarchies().add(new ReportColumn(ColumnConstants.COUNTRY));
 		spec.addMeasure(new ReportMeasure(MoConstants.PLANNED_DISBURSEMENTS));
@@ -291,9 +292,7 @@ public class DashboardsService {
 			break;
 		}
 		
-		
-		
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("fundingtype");
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("fundingtype", ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(ColumnConstants.FUNDING_YEAR));
 		spec.addColumn(new ReportColumn(MoConstants.TYPE_OF_ASSISTANCE));
 		spec.getHierarchies().addAll(spec.getColumns());

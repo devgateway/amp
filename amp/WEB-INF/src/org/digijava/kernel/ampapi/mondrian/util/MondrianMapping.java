@@ -288,6 +288,10 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.LOCATION, new MDXLevel(MoConstants.LOCATION, MoConstants.ATTR_LOCATION_NAME,  MoConstants.ATTR_LOCATION_NAME));
 			addColumnDefinition(ColumnConstants.GEOCODE, new MDXLevel(MoConstants.LOCATION, MoConstants.H_GEO_CODE, MoConstants.ATTR_GEO_ID));
 			
+			addColumnDefinition(ColumnConstants.COMPONENT_NAME, new MDXLevel(MoConstants.COMPONENT, MoConstants.H_COMPONENT_NAME, MoConstants.ATTR_COMPONENT_NAME));
+			addColumnDefinition(ColumnConstants.COMPONENT_DESCRIPTION, new MDXLevel(MoConstants.COMPONENT, MoConstants.H_COMPONENT_DESCRIPTION, MoConstants.ATTR_COMPONENT_DESCRIPTION));
+			addColumnDefinition(ColumnConstants.COMPONENT_TYPE, new MDXLevel(MoConstants.COMPONENT, MoConstants.H_COMPONENT_TYPE, MoConstants.ATTR_COMPONENT_TYPE));
+			addColumnDefinition(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, new MDXLevel(MoConstants.COMPONENT_FUNDING_ORGANIZATION, MoConstants.H_ORG_NAME, MoConstants.ATTR_ORG_NAME));
 			addColumnDefinition(ColumnConstants.PROPOSED_PROJECT_AMOUNT, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT));
 
 			//put(new ReportColumn(ColumnConstants.ON_OFF_TREASURY_BUDGET, ReportEntityType.ENTITY_TYPE_ACTIVITY, new MDXAttribute(MoConstants., MoConstants.ATTR_));

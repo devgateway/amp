@@ -6,6 +6,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.dgfoundation.amp.ar.amp210.BasicMondrianReportTests;
+import org.dgfoundation.amp.ar.amp210.ComponentReportsTests;
 import org.dgfoundation.amp.ar.amp210.DateColumnsMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.ETLTests;
 import org.dgfoundation.amp.ar.amp210.EndpointsTests;
@@ -49,6 +50,7 @@ public class AllTests_amp210
 		suite.addTest(new JUnit4TestAdapter(OrganisationsMondrianReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(SqlFilterUtilsTests.class));
 		suite.addTest(new JUnit4TestAdapter(MondrianComputedMeasuresReportTests.class));
+		suite.addTest(new JUnit4TestAdapter(ComponentReportsTests.class));
 		
 		//suite.addTest(new JUnit4TestAdapter(EndpointsTests.class)); report testcases are not compatible with AMP running; while the testcases in EndpointsTests require a running AMP. please move them to a different test suite, which does not contain reports tests
 		

@@ -16,6 +16,12 @@ import org.digijava.module.aim.helper.TeamMember;
 public interface ReportSpecification {
 	
 	/**
+	 * one of the ArConstants.LEGAL_REPORT_TYPES constants 
+	 * @return
+	 */
+	public int getReportType();
+	
+	/**
 	 * the name of the report <strong>localized<strong>
 	 * @return
 	 */

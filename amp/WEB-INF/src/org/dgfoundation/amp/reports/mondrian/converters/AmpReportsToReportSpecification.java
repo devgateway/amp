@@ -68,7 +68,7 @@ public class AmpReportsToReportSpecification {
 	private ReportSpecificationImpl convert() throws AMPException {
 		//init data
 		arFilter = FilterUtil.buildFilterFromSource(report);
-		spec = new ReportSpecificationImpl(report.getName());
+		spec = new ReportSpecificationImpl(report.getName(), report.getType().intValue());
 		
 		//configure report
 		configureReportData();

@@ -2,6 +2,7 @@ package org.dgfoundation.amp.mondrian;
 
 import java.util.*;
 
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.newreports.*;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
@@ -67,7 +68,7 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 	}
 	
 	public ReportSpecificationImpl buildSpecification(String reportName, List<String> columns, List<String> measures, List<String> hierarchies, GroupingCriteria groupingCriteria) {
-		ReportSpecificationImpl spec = new ReportSpecificationImpl(reportName);
+		ReportSpecificationImpl spec = new ReportSpecificationImpl(reportName, ArConstants.DONOR_TYPE);
 		
 		for(String columnName:columns)
 			spec.addColumn(new ReportColumn(columnName));

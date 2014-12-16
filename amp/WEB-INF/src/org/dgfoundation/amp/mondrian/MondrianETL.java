@@ -134,14 +134,21 @@ public class MondrianETL {
 		return new EtlConfiguration(activityIds, new HashSet<Long>(), dateCodes, etlFromScratch);
 		//this.pledgesToRedo = new HashSet<>();
 		//if (pledgesToRedo != null)
-		//	this.pledgesToRedo.addAll(pledgesToRedo);		
-		
+		//	this.pledgesToRedo.addAll(pledgesToRedo);
 	}
 	
 	private Set<Long> calculateAffectedActivities(boolean etlFromScratch) {
 		if (!etlFromScratch) {
 			String affectedRawActivitiesQuery = "SELECT DISTINCT(entity_id) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND (event_id < " + currentEtlEventId + ") AND (entity_name='activity')";
 			Set<Long> res = new TreeSet<>(SQLUtils.<Long>fetchAsList(conn, affectedRawActivitiesQuery, 1));
+			
+			String affectedComponentsQuery = "SELECT DISTINCT(entity_id) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND (event_id < " + currentEtlEventId + ") AND (entity_name='component')";
+			Set<Long> affectedComponents = new TreeSet<>(SQLUtils.<Long>fetchAsList(conn, affectedComponentsQuery, 1));
+			
+			String componentIdCondition = "amp_component_id IN (" + Util.toCSStringForIN(affectedComponents) + ")";
+			res.addAll(SQLUtils.fetchLongs(conn, "SELECT DISTINCT(activity_id) FROM amp_component_funding WHERE " + componentIdCondition));
+			res.addAll(SQLUtils.fetchLongs(conn, "SELECT DISTINCT(amp_activity_id) FROM amp_activity_components WHERE " + componentIdCondition));
+			
 			return res;
 		}
 		else
@@ -265,6 +272,16 @@ private EtlResult execute() throws Exception {
 				logger.info("doing full ETL");
 				for(ExceptionRunnable<?> job:fullEtlJobs)
 					job.run();
+				
+				for (final MondrianTableDescription mtd:MondrianTablesRepository.MONDRIAN_ACTIVITY_DEPENDENT_DIMENSIONS) {
+					boolean tableExists = monetConn.tableExists(mtd.tableName);
+					mtd.fingerprint.runIfFingerprintChangedOr(conn, monetConn, !tableExists, stepSkipped, new ExceptionRunnable<SQLException>() {
+						@Override public void run() throws SQLException {
+							generateStarTable(mtd);
+						}
+					});
+				}
+			
 				recreateFactTable();
 				generateMondrianDateTable();
 			}

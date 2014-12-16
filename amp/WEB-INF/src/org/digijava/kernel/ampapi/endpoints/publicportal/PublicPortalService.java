@@ -11,6 +11,7 @@ import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
@@ -65,7 +66,7 @@ public class PublicPortalService {
 		
 		result.set("topprojects", content);
 		
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_GetTopProjects");
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_GetTopProjects", ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(ColumnConstants.ACTUAL_START_DATE));
 		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 		spec.addColumn(new ReportColumn(ColumnConstants.PRIMARY_SECTOR));
@@ -129,7 +130,7 @@ public class PublicPortalService {
 		List<JsonBean> content = new ArrayList<JsonBean>();
 		result.set("donorFunding", content);
 
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_GetDonorFunding");
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("PublicPortal_GetDonorFunding", ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
 		spec.setHierarchies(spec.getColumns());
 		if(fundingType==1){

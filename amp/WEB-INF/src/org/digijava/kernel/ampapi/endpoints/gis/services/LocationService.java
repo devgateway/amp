@@ -24,6 +24,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.ValueWrapper;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
@@ -104,7 +105,7 @@ public class LocationService {
 		}
 		
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals");
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("LocationsTotals", ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(admlevel));
 		spec.getHierarchies().addAll(spec.getColumns());
 		// also configures the measure(s) from funding type settings request
@@ -275,7 +276,7 @@ public class LocationService {
 	public static List<Activity> getMapExportByLocation(final Map<String,Activity>geocodeInfo,LinkedHashMap<String, Object> filters) {
 		List<Activity> activities = new ArrayList<Activity>();
 		final List<String> geoCodesId = new ArrayList<String>();
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("MapExport");
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("MapExport", ArConstants.DONOR_TYPE);
 		Set<ReportColumn> hierarchies = new LinkedHashSet<ReportColumn>();
 		ReportColumn ampId = new ReportColumn(ColumnConstants.AMP_ID);
 
@@ -402,7 +403,7 @@ public class LocationService {
 	public static List<Activity> getMapExportByStructure(LinkedHashMap<String, Object> filters) {
 		final List<Activity> mapExportBean = new ArrayList<Activity>();
 
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("MapExport");
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("MapExport", ArConstants.DONOR_TYPE);
 		//since amp_id will be added as a hiearchy onthe other report
 		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
 		spec.addColumn(new ReportColumn(ColumnConstants.AMP_ID));
@@ -686,8 +687,7 @@ public class LocationService {
 			throws AmpApiException {
 		List<Long> activitiesId = new ArrayList<Long>();
 		boolean doTotals = true;
-		ReportSpecificationImpl spec = new ReportSpecificationImpl(
-				"ActivityIds");
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("ActivityIds", ArConstants.DONOR_TYPE);
 
 		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));

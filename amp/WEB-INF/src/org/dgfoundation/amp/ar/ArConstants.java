@@ -7,6 +7,7 @@
 package org.dgfoundation.amp.ar;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -111,11 +112,14 @@ public final class ArConstants {
 	public final static String UNALLOCATED="Unallocated";
 	
 	//report type
-	public final static int DONOR_TYPE=1;
-	public final static int COMPONENT_TYPE=2;
-	public final static int REGIONAL_TYPE=3;
-	public final static int CONTRIBUTION_TYPE=4;
-	public final static int PLEDGES_TYPE=5;
+	public final static int DONOR_TYPE = 1;
+	public final static int COMPONENT_TYPE = 2;
+	public final static int REGIONAL_TYPE = 3;
+	public final static int CONTRIBUTION_TYPE = 4;
+	public final static int PLEDGES_TYPE = 5;
+	public final static Set<Integer> LEGAL_REPORT_TYPES = Collections.unmodifiableSet(new HashSet<Integer>(Arrays.asList(
+			DONOR_TYPE, COMPONENT_TYPE, REGIONAL_TYPE, CONTRIBUTION_TYPE, PLEDGES_TYPE
+			)));
 	
 	//metainfo values:
 	public final static String COMMITMENT="Commitments";

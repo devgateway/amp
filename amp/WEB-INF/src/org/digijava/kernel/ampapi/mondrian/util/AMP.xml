@@ -530,6 +530,28 @@
 				<Level name="Specified Location" column="id" type="String" nameColumn="location_name" />			
 			</Hierarchy>
 		</Dimension>
+		
+		<Dimension name="Component" foreignKey="component_id">
+			<Hierarchy hasAll="true" allMemberName="All Component Names" name="Component Name" primaryKey="amp_component_id">
+				<Table name="mondrian_components@@locale@@" />
+				<Level name="Component Name" column="amp_component_id" type="Integer" nameColumn="component_name" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Component Descriptions" name="Component Description" primaryKey="amp_component_id">
+				<Table name="mondrian_components@@locale@@" />
+				<Level name="Component Description" column="amp_component_id" type="Integer" nameColumn="component_description" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Component Type Names" name="Component Type Name" primaryKey="amp_component_id">
+				<Table name="mondrian_components@@locale@@" />
+				<Level name="Component Type Name" column="component_type_id" type="Integer" nameColumn="component_type_name" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Component Type Codes" name="Component Type Code" primaryKey="amp_component_id">
+				<Table name="mondrian_components@@locale@@" />
+				<Level name="Component Type Code" column="component_type_id" type="Integer" nameColumn="component_type_code" />
+			</Hierarchy>
+		</Dimension>
 
 		<Dimension name="Activity Currency Amounts" foreignKey="entity_id">
 			<Hierarchy hasAll="true" allMemberName="All Proposed Project Amount" primaryKey="amp_activity_id" name="Proposed Project Amount">
@@ -539,6 +561,8 @@
 		</Dimension>
 		
 		<DimensionUsage name="Donor Agency" source="AMP Organization" foreignKey="donor_id" />
+		<DimensionUsage name="Component Funding Organization" source="AMP Organization" foreignKey="donor_id" />
+		
 		<DimensionUsage name="Implementing Agency" source="AMP Organization" foreignKey="ia_org_id" />
 		<DimensionUsage name="Executing Agency" source="AMP Organization" foreignKey="ea_org_id" />
 		<DimensionUsage name="Beneficiary Agency" source="AMP Organization" foreignKey="ba_org_id" />

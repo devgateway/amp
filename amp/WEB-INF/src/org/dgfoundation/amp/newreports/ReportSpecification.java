@@ -78,5 +78,17 @@ public interface ReportSpecification {
 	 * @return whether textual cells with no data should display "" (if true) or "[columnName] unspecified" (if false) 
 	 */
 	public boolean isEmptyOutputForUnspecifiedData();
+
+    /**
+     * If the report query returns empty response the list of column headers is populated from the request
+     * @return
+     */
+    public boolean isPopulateReportHeadersIfEmpty();
+
+    /**
+     * Sets the flag, if the report query returns empty response the list of column headers is populated from the request
+     * @param populateReportHeadersIfEmpty
+     */
+    public void setPopulateReportHeadersIfEmpty(boolean populateReportHeadersIfEmpty);
 	
 }

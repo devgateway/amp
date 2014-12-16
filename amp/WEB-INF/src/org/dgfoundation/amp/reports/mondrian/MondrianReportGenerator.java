@@ -798,9 +798,6 @@ public class MondrianReportGenerator implements ReportExecutor {
 		Map<String, ReportOutputColumn> reportColumnsByFullName = new LinkedHashMap<String,ReportOutputColumn>();
 		List<ReportOutputColumn> reportColumns = new ArrayList<ReportOutputColumn>(); //leaf report columns list
 
-		// add this flag to the settings, if will be required
-		boolean populateReportHeadersIfEmpty = true;
-		
 		//build the list of available columns
 		if (rowAxis != null && rowAxis.getPositionCount() > 0 ) {
 			for (Member textColumn : rowAxis.getPositions().get(0).getMembers()) {
@@ -808,7 +805,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 						MondrianMapping.fromFullNameToColumnName.get(textColumn.getLevel().getUniqueName()));
 				reportColumns.add(reportColumn);
 			}
-		} else if (populateReportHeadersIfEmpty) {
+		} else if (spec.isPopulateReportHeadersIfEmpty()) {
 			addStaticColumnHeaders(reportColumns, spec);
 		}
 		

@@ -110,6 +110,8 @@ public class ReportsUtil {
 	 *   <li>add_measures</li> optional, a list of measures to be added to the <br>
 	 *                         report configuration <br>
 	 *   <li>rowTotals</li>    optional, flag to request row totals to be build
+     *   <li>forceHeaders</li>    optional, flag, if the report query returns empty response
+     *                    the list of column headers is populated from the request. Default is false
 	 *   <li>settings</li>	   Report settings	
 	 * </ol>
 	 * @return JsonBean result for the requested page and pagination information
@@ -418,8 +420,14 @@ public class ReportsUtil {
 	
 	private static void setOtherOptions(ReportSpecificationImpl spec, JsonBean formParams) {
 		Boolean doRowTotals = (Boolean) formParams.get(EPConstants.DO_ROW_TOTALS);
-		if (doRowTotals != null)
-			spec.setCalculateRowTotals(doRowTotals);
+		if (doRowTotals != null) {
+            spec.setCalculateRowTotals(doRowTotals);
+        }
+
+        Boolean forceHeaders = (Boolean) formParams.get(EPConstants.FORCE_HEADERS);
+        if (forceHeaders != null) {
+            spec.setPopulateReportHeadersIfEmpty(forceHeaders);
+        }
 	}
 	
 	/**

@@ -30,6 +30,12 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	private boolean displayEmptyFundingColumns = false;
 	private boolean displayEmptyFundingRows = false;
 	private boolean emptyOutputForUnspecifiedData = true;
+
+    /**
+     * If the report query results in empty data
+     * Should the headers be populated
+     */
+    private boolean populateReportHeadersIfEmpty = false;
 	
 	public ReportSpecificationImpl(String reportName) {
 		this.reportName = reportName;
@@ -281,4 +287,12 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	public void setEmptyOutputForUnspecifiedData(boolean val) {
 		this.emptyOutputForUnspecifiedData = val;
 	}
+
+    public boolean isPopulateReportHeadersIfEmpty() {
+        return populateReportHeadersIfEmpty;
+    }
+
+    public void setPopulateReportHeadersIfEmpty(boolean populateReportHeadersIfEmpty) {
+        this.populateReportHeadersIfEmpty = populateReportHeadersIfEmpty;
+    }
 }

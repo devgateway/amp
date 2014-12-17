@@ -373,6 +373,7 @@ public class AmpDonorFundingFormSectionFeature extends
 						"fundingItem", "Funding Group", fundingModel,
 						item.getModel(), am,
 						AmpDonorFundingFormSectionFeature.this);
+				fg.setTabIndex(item.getIndex());
 				//we decorete 
 					item.add(new AttributePrepender("data-is_tab", new Model<String>("true"), ""));
 				listItems.put(item.getModelObject(), fg);

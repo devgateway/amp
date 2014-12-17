@@ -78,7 +78,10 @@
 		font-weight: bold;
 		background-color: #ffffff;
 	}
-	
+
+	#fundingTabs .yui-nav li.error a {
+		border: 1px solid red;
+	}	
 .ins_header {color:#767676; font-size:12px; font-weight:bold;}
 hr {border: 0; color: #E5E5E5; background-color: #E5E5E5; height: 1px; width: 100%; text-align: left;}
 	

@@ -62,6 +62,7 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.ValidatorAdapter;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
@@ -69,6 +70,7 @@ import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.ErrorLevelsFeedbackMessageFilter;
 import org.dgfoundation.amp.onepager.components.features.items.AmpAgreementItemPanel;
+import org.dgfoundation.amp.onepager.components.features.items.AmpFundingGroupFeaturePanel;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpAidEffectivenessFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.features.sections.AmpIdentificationFormSectionFeature;
@@ -78,6 +80,7 @@ import org.dgfoundation.amp.onepager.components.fields.AmpAjaxLinkField;
 import org.dgfoundation.amp.onepager.components.fields.AmpButtonField;
 import org.dgfoundation.amp.onepager.components.fields.AmpCollectionValidatorField;
 import org.dgfoundation.amp.onepager.components.fields.AmpDatePickerFieldPanel;
+import org.dgfoundation.amp.onepager.components.fields.AmpOverviewSection;
 import org.dgfoundation.amp.onepager.components.fields.AmpPercentageTextField;
 import org.dgfoundation.amp.onepager.components.fields.AmpProposedProjectCost;
 import org.dgfoundation.amp.onepager.components.fields.AmpSemanticValidatorField;
@@ -1058,7 +1061,14 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 
 	
 	protected void formSubmitErrorHandle(Form<?> form, final AjaxRequestTarget target, FeedbackPanel feedbackPanel) {
+		//once an error has happened if in tabsview we process the funding section to
+		//highlight the tabs with errors
+		if (FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ACTIVITY_FORM_FUNDING_SECTION_DESIGN)) {
+			showFundingTabsErrors(form, target);
+		}
 		// visit form children and add to the ajax request the invalid ones
+		
+		
 		form.visitChildren(FormComponent.class,
 				new IVisitor<FormComponent, Void>() {
 					@Override
@@ -1361,5 +1371,65 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		AmpMessageUtil.saveOrUpdateMessage(message);
 
 	}
-	
+
+	public void showFundingTabsErrors(Form<?> form, final AjaxRequestTarget target) {
+		System.out.println(form.hasError());
+
+		form.visitChildren(AmpOverviewSection.class, new IVisitor<AmpOverviewSection, Void>() {
+			final ValueWrapper<Boolean> hasError = new ValueWrapper<Boolean>(false);
+
+			@Override
+			public void component(AmpOverviewSection os, IVisit<Void> visit) {
+				// TODO Auto-generated method stub
+				os.visitChildren(Component.class, new IVisitor<Component, Void>() {
+
+					@Override
+					public void component(Component component, IVisit<Void> visit) {
+						if (component.hasErrorMessage()) {
+							hasError.value = true;
+							visit.stop();
+						}
+					}
+
+				});
+
+				String js = "$('a[href=#tab0]').parent()";
+				if (hasError.value) {
+					js += ".addClass('error');";
+				} else {
+					js += ".removeClass('error');";
+				}
+				target.appendJavaScript(js);
+			}
+		});
+
+		// visit all funding groups for validation erros
+		form.visitChildren(AmpFundingGroupFeaturePanel.class, new IVisitor<AmpFundingGroupFeaturePanel, Void>() {
+
+			@Override
+			public void component(AmpFundingGroupFeaturePanel fg, IVisit<Void> visit) {
+				final ValueWrapper<Boolean> hasError = new ValueWrapper<>(false);
+
+				fg.visitChildren(Component.class, new IVisitor<Component, Void>() {
+
+					@Override
+					public void component(Component component, IVisit<Void> visit) {
+
+						if (component.hasErrorMessage()) {
+							hasError.value = true;
+							visit.stop();
+						}
+					}
+
+				});
+				String js = String.format("$('a[href=#tab%s]').parent()", fg.getTabIndex() + 1);
+				if (hasError.value) {
+					js += ".addClass('error');";
+				} else {
+					js += ".removeClass('error');";
+				}
+				target.appendJavaScript(js);
+			}
+		});
+	}
 }

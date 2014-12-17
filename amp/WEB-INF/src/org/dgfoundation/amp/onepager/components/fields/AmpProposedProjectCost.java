@@ -55,7 +55,7 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 		final AmpTextFieldPanel<Double> amount;
 		PropertyModel<String> currencyModel = new PropertyModel<String>(am, "currencyCode");
 
-		if (!FeaturesUtil.isVisibleModule("/Activity Form/Funding/Proposed Project Cost/Annual Proposed Project Cost")) {
+		if (!FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")) {
 			amount = new AmpTextFieldPanel<Double>("proposedAmount", new PropertyModel<Double>(am,
 					CategoryConstants.PROPOSE_PRJC_AMOUNT_KEY), CategoryConstants.PROPOSE_PRJC_AMOUNT_NAME, false) {
 				public IConverter getInternalConverter(java.lang.Class<?> type) {

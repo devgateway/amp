@@ -23,6 +23,7 @@ public class SettingsConstants {
 	public static final String AMOUNT_FORMAT_ID = "amountFormat";
 	public static final String AMOUNT_PATTERN_ID = "ammountPattern";
 	public static final String YEAR_RANGE_ID = "yearRange";
+	public static final String ADJUSTMENT_TYPE_ID = "adjtype";
 	
 	public static final String DEFAULT_FUNDING_TYPE_ID = MeasureConstants.ACTUAL_COMMITMENTS;
 	

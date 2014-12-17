@@ -693,7 +693,30 @@ public class EndpointUtils {
 			for (String measure : measureOptions)
 				spec.addMeasure(new ReportMeasure(measure));
 		} else {
-			spec.addMeasure(new ReportMeasure(SettingsConstants.DEFAULT_FUNDING_TYPE_ID));
+			// apply adjustment type selection
+			Map<String, Object> settings = (Map<String, Object>) config.get(EPConstants.SETTINGS);
+			String adjType = (String) settings.get(SettingsConstants.ADJUSTMENT_TYPE_ID);
+			if (adjType != null && !adjType.equals("")) {
+				switch (adjType.toUpperCase()) {
+				case "AC":
+					spec.addMeasure(new ReportMeasure(MoConstants.ACTUAL_COMMITMENTS));
+					break;
+				case "AD":
+					spec.addMeasure(new ReportMeasure(MoConstants.ACTUAL_DISBURSEMENTS));
+					break;
+				case "PC":
+					spec.addMeasure(new ReportMeasure(MoConstants.PLANNED_COMMITMENTS));
+					break;
+				case "PD":
+					spec.addMeasure(new ReportMeasure(MoConstants.PLANNED_DISBURSEMENTS));
+					break;
+				default:
+					spec.addMeasure(new ReportMeasure(MoConstants.ACTUAL_COMMITMENTS));
+					break;
+				}
+			} else {
+				spec.addMeasure(new ReportMeasure(SettingsConstants.DEFAULT_FUNDING_TYPE_ID));
+			}			
 		}
 	}
 

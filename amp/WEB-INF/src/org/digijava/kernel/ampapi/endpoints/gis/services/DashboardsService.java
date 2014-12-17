@@ -26,7 +26,9 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
@@ -284,12 +286,26 @@ public class DashboardsService {
 		String err = null;
 		JsonBean retlist = new JsonBean();
 		
+		// In order to calculate the current adjustment type we need to check if that parameter comes in the settings, in
+		// that case it overrides the default setting (that can be present or not in the endpoint call).
+		Map<String, Object> settings = (Map<String, Object>) filter.get(EPConstants.SETTINGS);
+		String adjTypeFromSettings = (String) settings.get(SettingsConstants.ADJUSTMENT_TYPE_ID);
+		if (adjTypeFromSettings != null && !adjTypeFromSettings.equals("")) {
+			adjtype = adjTypeFromSettings;
+		}
+		
 		switch (adjtype.toUpperCase()) {
 		case "AC":
 			adjustmenttype = MoConstants.ACTUAL_COMMITMENTS;
 			break;
 		case "AD":
 			adjustmenttype = MoConstants.ACTUAL_DISBURSEMENTS;
+			break;
+		case "PC":
+			adjustmenttype = MoConstants.PLANNED_COMMITMENTS;
+			break;
+		case "PD":
+			adjustmenttype = MoConstants.PLANNED_DISBURSEMENTS;
 			break;
 		default:
 			adjustmenttype = MoConstants.ACTUAL_COMMITMENTS;

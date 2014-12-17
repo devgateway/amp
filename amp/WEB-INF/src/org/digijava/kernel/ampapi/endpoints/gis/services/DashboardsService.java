@@ -91,7 +91,6 @@ public class DashboardsService {
 	public static JsonBean getTops(String type, Integer n, JsonBean config) {
 		String err = null;
 		String column = "";
-		String adjustmenttype = "";
 		JsonBean retlist = new JsonBean();
 		List<JsonBean> values = new ArrayList<JsonBean>();
 
@@ -169,9 +168,14 @@ public class DashboardsService {
 			LinkedHashMap<ReportOutputColumn, ReportCell> content = (LinkedHashMap<ReportOutputColumn, ReportCell>) reportArea.getContents();
 			org.dgfoundation.amp.newreports.TextCell reportcolumn = (org.dgfoundation.amp.newreports.TextCell) content.values().toArray()[0];
 			ReportCell reportcell = (ReportCell) content.values().toArray()[1];
-			amountObj.set("name", reportcolumn.displayedValue);
-			amountObj.set("amount", reportcell.value);
-			values.add(amountObj);
+			String dvalue = reportcolumn.displayedValue;
+			//Remove undefined from region's chart AMP-18632
+			if(!dvalue.equalsIgnoreCase(MoConstants.REGION_UNDEFINED)){
+				amountObj.set("name", dvalue);
+				amountObj.set("amount", reportcell.value);
+				values.add(amountObj);
+			}
+			
 			if (values.size() >= n) {
 				break;
 			}

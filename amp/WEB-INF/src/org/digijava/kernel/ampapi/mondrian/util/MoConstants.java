@@ -287,6 +287,7 @@ public final class MoConstants {
 	//Values
 	public static final String BOOLEAN_TRUE_KEY = "2";
 	public static final String BOOLEAN_FALSE_KEY = "1";
+	public static final String REGION_UNDEFINED = "Region: Undefined";
 	public static final Integer UNDEFINED_KEY = 999999999;
 	public static final String FILTER_UNDEFINED_MAX = String.valueOf(UNDEFINED_KEY - 1);
 	public static final Integer ALWAYS_PRESENT_YEAR = 1970;

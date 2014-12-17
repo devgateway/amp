@@ -35,6 +35,7 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.reports.mondrian.converters.MondrianReportFiltersConverter;
+import org.dgfoundation.amp.reports.saiku.export.AMPPdfExport;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
@@ -455,7 +456,7 @@ public class Reports {
 					filename = "export.csv";
 					break;
 				case "pdf":
-		            PdfReport pdf = new PdfReport();
+		            PdfReport pdf = new AMPPdfExport();
 		    		QueryResult qr = RestUtil.convert(result);
 		            doc  = pdf.pdf(qr, null);
 					filename = "export.pdf";

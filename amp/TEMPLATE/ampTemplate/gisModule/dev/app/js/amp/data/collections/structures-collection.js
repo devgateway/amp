@@ -185,7 +185,12 @@ module.exports = Backbone.Collection
         .map(function(sites, orgId) {
           var code = -1;
           if (sites[0].get('activity').get('matchesFilters')[filterVertical][0].get) {
-            code = sites[0].get('activity').get('matchesFilters')[filterVertical][0].get('code');
+        	 if (sites[0].get('activity').get('matchesFilters')[filterVertical].length > 1) {
+        		 code = "0";
+        	 }  
+        	 else {
+        		 code = sites[0].get('activity').get('matchesFilters')[filterVertical][0].get('code');
+        	 }
           }
 
           return {

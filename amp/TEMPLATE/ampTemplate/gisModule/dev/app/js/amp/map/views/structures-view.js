@@ -124,10 +124,12 @@ module.exports = Backbone.View
     if (feature.properties.activity.attributes &&
         feature.properties.activity.attributes.matchesFilters[filterVertical]) {
       if (feature.properties.activity.attributes.matchesFilters[filterVertical].length > 1) {
-        console.log('TODO: need custom vairous sectors icon...different from  multi-sector');
+        sectorCode = "0"; 
       }
+      else {
       sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
-    }
+      }
+     }
 
     var pointIcon = L.icon({
       iconUrl: 'img/map-icons/' + this.structureMenuModel.iconMappings[sectorCode],

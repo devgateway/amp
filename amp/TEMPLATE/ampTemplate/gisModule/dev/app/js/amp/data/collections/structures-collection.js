@@ -143,7 +143,7 @@ module.exports = Backbone.Collection
           type: 'Point',
           coordinates: [model.get('lng'), model.get('lat')]
         },
-        properties: model.toJSON()
+        properties: model.attributes  // not toJSON() for performance
       };
       /*TODO(thadk): move to model and use return feature.toGeoJSON();*/
     });

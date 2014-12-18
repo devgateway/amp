@@ -44,7 +44,6 @@ module.exports = Backbone.View
     this.listenTo(this.structureMenuModel, 'hide', this.hideLayer);
 
     this.listenTo(this.app.data.structures, 'refresh', this.refreshLayer);
-    this.listenTo(this.structureMenuModel, 'change:filterVertical', this.refreshLayer);
 
     this.listenTo(this.markerCluster, 'clusterclick', this.clusterClick);
 

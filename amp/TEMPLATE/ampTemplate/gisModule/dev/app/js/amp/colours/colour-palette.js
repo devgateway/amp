@@ -127,12 +127,17 @@ var Palette = Backbone.Model.extend({
         maxNamed = DEFAULT.SET.length - 2;  // leave two for "multple" and "other"
 
     var topN = _(elements.slice(0, maxNamed)).map(function(el, idx) {
+      function toTrueKey(o, k) {
+        o[k] = true;
+        return o;
+      }
       return _({
         ids: [el.id],  // org id
         value: el.name,  // org name
         sites: el.sites,  // project sites
+        sitesMap: _(el.sites).reduce(toTrueKey, {}),  // efficient lookup for test
         test: function(siteId) {
-          return _(this.get('sites')).contains(siteId);
+          return !!this.get('sitesMap')[siteId];
         }
       }).extend(DEFAULT.SET[idx]);
     }, this);

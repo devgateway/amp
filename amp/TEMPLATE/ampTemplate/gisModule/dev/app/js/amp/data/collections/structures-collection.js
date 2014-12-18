@@ -126,13 +126,14 @@ module.exports = Backbone.Collection
 
   _getActivityIds: function() {
     // reduces to a single unique list
-    return this.reduce(function(memo, structure) {
-      if (!memo) {
-        memo = [];
-      }
-      memo.push(structure.get('activityZero'));
-      return _.uniq(memo);
-    }, []);
+    return this
+      .chain()
+      .reduce(function(memo, structure) {
+        memo.push(structure.get('activityZero'));
+        return memo;
+      }, [])
+      .uniq()
+      .value();
   },
 
   toGeoJSON: function() {

@@ -40,11 +40,7 @@ module.exports = Backbone.Model.extend({
             //iterate over ids.
             _.each(matchesFilters[k], function(id, index) {
 
-              var matched = _.find(allFilters.columnFilters[k], function(filter) {
-                /* jshint ignore:start */
-                return filter.id == id;
-                /* jshint ignore:end */
-              });
+              var matched = _(allFilters.columnFilters[k]).findWhere({id: id});
               if (matched) {
                 matchesFilters[k][index] = matched;
               }
@@ -63,7 +59,9 @@ module.exports = Backbone.Model.extend({
     // split matchesFilters
     if (data.matchesFilters) {
       _.each(data.matchesFilters, function(v, k) {
-        data.matchesFilters[k] = data.matchesFilters[k].split(',');
+        data.matchesFilters[k] = _(v.split(',')).map(function(v) {
+          return parseInt(v, 10);
+        });
       });
     }
     return data;

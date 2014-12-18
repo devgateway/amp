@@ -76,13 +76,14 @@ module.exports = Backbone.View
     // as structures load, then update when activitites join is done...
     // Phil note: I'm not sure if the extra complexity will be worth it. We can make joins fast,
     //   it's the clustering and just drawing dots on the map that is hard to optimize.
-    self.structureMenuModel.structuresCollection.getStructuresWithActivities().then(function() {  // 160ms on Phil's computer
-      self.rawData = self.structureMenuModel.structuresCollection.toGeoJSON();
-      self._renderFeatures()
-        .then(function() {
-          self.map.addLayer(self.markerCluster);  // maybe TODO: chunk (takes 271ms on Phil's computer)
-        });
-    });
+    self.structureMenuModel.structuresCollection.getStructuresWithActivities()
+      .then(function() {  // 160ms on Phil's computer
+        self.rawData = self.structureMenuModel.structuresCollection.toGeoJSON();
+        self._renderFeatures()
+          .then(function() {
+            self.map.addLayer(self.markerCluster);  // maybe TODO: chunk (takes 271ms on Phil's computer)
+          });
+      });
 
     return this.featureGroup;
   },

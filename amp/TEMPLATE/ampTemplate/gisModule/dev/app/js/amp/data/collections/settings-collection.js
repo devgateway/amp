@@ -21,9 +21,8 @@ module.exports = Backbone.Collection
 
         // find the match.
         var match = _.find(setting.get('options'), function(option) {
-          /* jshint ignore:start */
-          return option.id == setting.get('selected');
-          /* jshint ignore:end */
+          // make sure everything is strings... (compatibility with former == use, maybe remove cast)
+          return ('' + option.id) === ('' + setting.get('selected'));
         });
         if (match) {
           tmpJSON[setting.id] = match.id;

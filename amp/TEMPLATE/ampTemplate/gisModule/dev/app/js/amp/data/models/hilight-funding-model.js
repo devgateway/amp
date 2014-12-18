@@ -8,8 +8,7 @@ module.exports = IndicatorJoinModel.extend({
   type: 'POST',
 
   url: function() {
-    var settings = this.collection.settings.serialize();
-    
+    // var settings = this.collection.settings.serialize();
     return '/rest/gis/locationstotals/' + this.id.replace('-', '');
   },
 

@@ -34,15 +34,13 @@ module.exports = ChartModel.extend({
 
   parse: function(data) {
     var self = this;
-
-    // TODO: use filters info to trim years (api-side?)
-    var years = _(data.values)
-      .chain()
-      .filter(function(y) {
-        return parseInt(y.Year, 10) >= 2009 && parseInt(y.Year, 10) <= 2014;
-      })
-      .sortBy('Year')
-      .value();
+    var years;
+    if (data.values.length > 0 && !isNaN(parseInt((data.values)[0].Year,10))) {
+    	years =_.sortBy(data.values, function(obj){ return parseInt(obj.Year,10); });
+    }
+    else {
+    	years = _(data.values).sortBy("Year");
+    }
 
     var chartName = ['amp.dashboard:chart-', this.get('name').replace(/ /g, ''), '-'].join('');
     var localizedOthers = self.localizedLookup[chartName + 'others'];
@@ -66,7 +64,7 @@ module.exports = ChartModel.extend({
           values: _(years).map(function(y) {
             var yearValue = _(y.values).findWhere({type: s});
             return {
-              x: parseInt(y.Year, 10),
+              x: y.Year,
               y: yearValue && yearValue.amount || 0
             };
           })

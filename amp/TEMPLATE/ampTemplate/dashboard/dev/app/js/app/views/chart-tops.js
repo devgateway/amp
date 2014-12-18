@@ -25,7 +25,7 @@ module.exports = ChartViewBase.extend({
 
   chartClickHandler: function(context) {
     // clicking on the "others" bar loads five more.
-    if (context.x.raw === 'Others' &&  // risk of multilingual bug???
+    if (context.x.raw === this.model.localizedOthers &&
         context.x.index === context.series.values.length - 1) {
       this.model.set('limit', this.model.get('limit') + 5);
       if (this.model.get('limit') > 10) {  // also make the chart bigger if lots of bars are shown

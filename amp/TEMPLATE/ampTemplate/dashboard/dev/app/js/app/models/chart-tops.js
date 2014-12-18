@@ -39,7 +39,7 @@ module.exports = ChartModel.extend({
     }
 
     var chartName = ['amp.dashboard:chart-', this.get('name').replace(/ /g, ''), '-'].join('');
-    var localizedOthers = this.localizedLookup[chartName + 'others'];
+    this.localizedOthers = this.localizedLookup[chartName + 'others'];
 
     var values = _(data.values.slice()).map(function(v) {
       var cleanName = v.name.replace(/[ :.]/g, '');
@@ -63,7 +63,7 @@ module.exports = ChartModel.extend({
 
     if (data.maxLimit > values.length) {
       values.push({
-        x: localizedOthers,
+        x: this.localizedOthers,
         y: data.total -  // total minus the sum of what we have
           _.chain(values).pluck('y').reduce(function(l, r) { return l + r; }, 0).value(),
         color: '#777'

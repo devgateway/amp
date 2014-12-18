@@ -93,7 +93,6 @@ module.exports = Backbone.Collection
   // TODO force / wait for activities to finish joining with filters...
   _joinActivities: function() {
     var self = this;
-    var deferreds = [];
 
     this.activities.getActivities(this._getActivityIds()).then(function() {
 
@@ -104,21 +103,15 @@ module.exports = Backbone.Collection
         // not joined yet
         if (!(activity && activity.attributes)) {
           var match = self.activities.find(function(model) {
-            // intentionally double == to coerce type
-            return model.id ==  structure.get('activityZero'); // intentionally double ==
+            return model.id === structure.get('activityZero');
           });
-
-          deferreds.push(match.tempDirtyForceJoin().then(function() {
-            structure.set('activity', match);
-          }));
+          structure.set('activity', match);
         }
       });
 
       // all activites joined filters
-      $.when(deferreds).then(function() {
-        self.updatePaletteSet();
-        self._joinedActivities.resolve();
-      });
+      self.updatePaletteSet();
+      self._joinedActivities.resolve();
     });
 
     return self._joinedActivities;

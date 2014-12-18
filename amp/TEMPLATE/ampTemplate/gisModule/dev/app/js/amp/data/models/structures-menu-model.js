@@ -41,8 +41,9 @@ module.exports = Backbone.Model
     var self = this;
 
     this.listenTo(this, 'change:selected', function(other, show) {
-      this.trigger(show ? 'show' : 'hide', this);
-      if (!self.structuresCollection._lastFetch) {
+      if (self.structuresCollection._lastFetch) {  // what does this do?
+        this.trigger(show ? 'show' : 'hide', this);
+      } else {
         self.structuresCollection.fetchStructuresWithActivities();
       }
     });

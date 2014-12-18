@@ -56,6 +56,8 @@ module.exports = Backbone.Model.extend({
   },
 
   parse: function(data) {
+    // make our id an int
+    data['Activity Id'] = parseInt(data['Activity Id'], 10);
     // split matchesFilters
     if (data.matchesFilters) {
       _.each(data.matchesFilters, function(v, k) {

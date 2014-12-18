@@ -140,7 +140,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 	protected Form<AmpActivityVersion> activityForm;
 	private static final Integer GO_TO_DESKTOP=1;
 	private static final Integer STAY_ON_PAGE=2;
-
+	private AbstractAjaxTimerBehavior autoSaveTimer;
 	public Form<AmpActivityVersion> getActivityForm() {
 		return activityForm;
 	}
@@ -466,6 +466,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 						if (op.getTimer() != null) {
 							op.getTimer().restart(target);
 						}
+						//we restart the autosave timer, if enabled
+						if(autoSaveTimer!=null && autoSaveTimer.isStopped()){
+							autoSaveTimer.restart(target);
+						}
 
 	                    }
 	                    else{
@@ -477,7 +481,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 						if(op.getTimer()!=null){
 							op.getTimer().restart(target);
 						}
-						
+						if(autoSaveTimer!=null && autoSaveTimer.isStopped()){
+							autoSaveTimer.restart(target);
+						}
 						onError(target, form);
 					}
 					//we only remove disable on buttons tagged as submit ones
@@ -732,6 +738,9 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					if(op.getTimer()!=null){
 						op.getTimer().restart(target);
 					}
+					if(autoSaveTimer!=null && autoSaveTimer.isStopped()){
+						autoSaveTimer.restart(target);
+					}
 				}
 				
 
@@ -751,7 +760,7 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		int autoSaveSeconds = Integer.parseInt(FeaturesUtil
 		.getGlobalSettingValue(GlobalSettingsConstants.ACTIVITY_AUTO_SAVE_SECONDS));
 		
-		AbstractAjaxTimerBehavior autoSaveTimer = null;
+		 autoSaveTimer = null;
 		if (autoSaveSeconds != 0) {
 			autoSaveTimer = new AbstractAjaxTimerBehavior(
 					Duration.seconds(autoSaveSeconds)) {
@@ -764,6 +773,8 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 					if (op.getTimer() != null) {
 						op.getTimer().stop(target);
 					}						
+					//we disable the stop timer so it doesn't get called after its being processed 
+					this.stop(target);
 					target.appendJavaScript(String.format("$('#%s').click()",
 							autoSaveDiv.getMarkupId()));
 					target.add(autoSaveDiv);
@@ -857,6 +868,10 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 		op.getEditLockRefresher().setEnabled(false);
 		if (op.getTimer() != null) {
 			op.getTimer().stop(target);
+		}
+		//we stop the autoSaveTimer if its enabled
+		if (autoSaveTimer != null) {
+			autoSaveTimer.stop(target);
 		}
     	am.setObject(am.getObject());
         toggleSemanticValidation(notDraft, form, target);
@@ -1310,12 +1325,13 @@ public class AmpActivityFormFeature extends AmpFeaturePanel<AmpActivityVersion> 
 			target.add(cancelSaveAsDraft);
 			onErrorSaveAsDraft(feedbackPanel, target, form);
 			OnePager op = this.findParent(OnePager.class);
-			//disable lock refresher
 			op.getEditLockRefresher().setEnabled(true);
 			if(op.getTimer()!=null){
 				op.getTimer().restart(target);
 			}
-
+			if(autoSaveTimer!=null && autoSaveTimer.isStopped()){
+				autoSaveTimer.restart(target);
+			}
 		}
 		target.appendJavaScript("enableButtons2();");
 	}

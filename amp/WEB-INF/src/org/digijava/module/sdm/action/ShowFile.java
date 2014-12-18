@@ -88,8 +88,7 @@ public class ShowFile
           byte[] file = sdmItem.getContent();
 
           if (file != null) {
-            ResponseUtil.writeFile(response, sdmItem.getContentType(),sdmItem.getContentText(), file);
-
+               ResponseUtil.writeFile(request, response, sdmItem.getContentType(),sdmItem.getContentText(), file);
           }
         }
       }

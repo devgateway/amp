@@ -101,7 +101,7 @@ public class ShowImage
                 }
             }
             if (picture != null) {
-                ResponseUtil.writeFile(response, contentType, null, picture);
+                ResponseUtil.writeFile(request, response, contentType, null, picture);
             }
 
         }

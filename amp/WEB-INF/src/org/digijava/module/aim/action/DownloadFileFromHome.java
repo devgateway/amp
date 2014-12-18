@@ -14,6 +14,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.util.ResponseUtil;
 import org.digijava.module.aim.dbentity.AmpHomeThumbnail;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
@@ -41,8 +42,7 @@ public class DownloadFileFromHome extends Action {
 						OutputStream outServlet = response.getOutputStream();
 			            response.setContentType(thumbnail.getOptionalFileContentType());
 			            response.setHeader("Content-disposition",
-		                        "attachment; filename=" +
-		                        thumbnail.getOptionalFileName());             
+                                ResponseUtil.encodeContentDispositionForDownload(request, thumbnail.getOptionalFileName()));
 				        outServlet.write(file);
 				        outServlet.close();
 					}

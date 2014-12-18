@@ -20,6 +20,7 @@ import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 import org.apache.struts.action.ActionServlet;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.ResponseUtil;
 import org.digijava.module.parisindicator.helper.*;
 import org.digijava.module.parisindicator.helper.export.*;
 import org.digijava.module.parisindicator.helper.row.PIReportAbstractRow;
@@ -94,12 +95,12 @@ public class PIExportUseCase {
 			jasperPrint = JasperFillManager.fillReport(jasperFile, export.getParameters(endYear), dataSource);
 			JRAbstractExporter exporter = null;
 			if (type.equalsIgnoreCase("PDF")) {
-				response.setHeader("Content-Disposition", "attachment; filename=ParisIndicator" + reportCode + ".pdf");
+				response.setHeader("Content-Disposition", ResponseUtil.encodeContentDispositionForDownload(request, "ParisIndicator" + reportCode + ".pdf"));
 				response.setContentType("application/pdf");
 				exporter = new JRPdfExporter();
 			}
 			if (type.equalsIgnoreCase("XLS")) {
-				response.setHeader("Content-Disposition", "attachment; filename=ParisIndicator" + reportCode + ".xls");
+				response.setHeader("Content-Disposition", ResponseUtil.encodeContentDispositionForDownload(request, "ParisIndicator" + reportCode + ".xls"));
 				response.setContentType("application/vnd.ms-excel");
 				exporter = new JRXlsExporter();
 			}

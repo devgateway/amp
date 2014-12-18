@@ -8,6 +8,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.util.ResponseUtil;
 import org.digijava.module.content.dbentity.AmpContentItem;
 import org.digijava.module.content.dbentity.AmpContentItemThumbnail;
 import org.digijava.module.content.util.DbUtil;
@@ -44,8 +45,7 @@ public class DownloadFile extends Action {
 						OutputStream outServlet = response.getOutputStream();
 			            response.setContentType(thumbnail.getOptionalFileContentType());
 			            response.setHeader("Content-disposition",
-		                        "attachment; filename=" +
-		                        thumbnail.getOptionalFileName());             
+                                ResponseUtil.encodeContentDispositionForDownload(request, thumbnail.getOptionalFileName()));
 				        outServlet.write(file);
 				        outServlet.close();
 					}

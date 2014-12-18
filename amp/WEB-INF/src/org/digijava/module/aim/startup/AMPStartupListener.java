@@ -218,6 +218,7 @@ public class AMPStartupListener extends HttpServlet implements
 	}
 	
 	public void contextInitialized(ServletContextEvent sce) {
+        logger.error("I am running with a new code!!!!");
 		ServletContext ampContext = null;
 
 		try {

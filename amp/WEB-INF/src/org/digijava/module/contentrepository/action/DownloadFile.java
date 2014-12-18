@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.utils.BoundedList;
+import org.digijava.kernel.util.ResponseUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.DocumentData;
@@ -60,7 +61,7 @@ public class DownloadFile extends Action {
 			recentUUIDs.add(documentData);
 			
 			if ( contentType != null && name != null && data != null) {
-				writeFile(response, contentType.getString(), name.getString(), data.getStream());
+				ResponseUtil.writeFile(request, response, contentType.getString(), name.getString(), data.getStream());
 			}
 		}
 
@@ -68,26 +69,5 @@ public class DownloadFile extends Action {
 		return null;
 	}
 	
-	public static void writeFile(HttpServletResponse response,
-			String contentType, String fileName, InputStream istream) throws
-			IOException {
-		
-		if (response == null) {
-			throw new IllegalArgumentException(
-			"response parameter must be not-null");
-		}
-		
-		if (istream == null) {
-			throw new IllegalArgumentException(
-			"data parameter must be not-null");
-		}
-		
-		ServletOutputStream output = response.getOutputStream();
-		if (contentType != null && contentType.length() > 0)
-			response.setContentType(contentType);
-		if (fileName != null && fileName.length() > 0)
-			response.setHeader("Content-Disposition",
-					"attachment; filename=\"" + fileName + "\"");
-		FileCopyUtils.copy(istream, output);
-	}
+
 }

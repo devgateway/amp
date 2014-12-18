@@ -40,6 +40,7 @@ import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.ResponseUtil;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
@@ -99,8 +100,7 @@ public class PDFExportAction extends Action implements PdfPageEvent
 		return widths;
 	}
 	
-	public void doPdfExport(HttpServletResponse response) throws Exception
-	{
+	public void doPdfExport(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// This a temporary fix to avoid stack overflow error in large reports AMP-5324
 		// temporary my a$$
 		Rectangle page = new Rectangle(new Float("1500"), new Float("1500"));
@@ -108,7 +108,7 @@ public class PDFExportAction extends Action implements PdfPageEvent
 			
 		//
 		response.setContentType("application/pdf");
-		response.setHeader("Content-Disposition","attachment; filename=" + report.getName().replaceAll("[ ,;]","_") + ".pdf");
+		response.setHeader("Content-Disposition", ResponseUtil.encodeContentDispositionForDownload(request, report.getName() + ".pdf"));
         //
 		PdfWriter writer = PdfWriter.getInstance(document,response.getOutputStream());		
 		//
@@ -207,7 +207,7 @@ public class PDFExportAction extends Action implements PdfPageEvent
 		{
 			try
 			{
-				doPdfExport(response);
+				doPdfExport(request, response);
 			}
 			catch(Exception e)
 			{

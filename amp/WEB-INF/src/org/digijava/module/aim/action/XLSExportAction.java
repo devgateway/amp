@@ -58,6 +58,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.ResponseUtil;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
@@ -116,12 +117,12 @@ public class XLSExportAction extends Action {
 		ARUtil.cleanReportOfHtmlCodes(rd);
 		
 		rd.setCurrentView(GenericViews.XLS);
-		
-		String exportFileName = rd.getName().replace(" ", "_") + "_" + exportType + ".xls";
-		
-		if (session.getAttribute("currentMember")!=null ||  rd.getReportMetadata().getPublicReport()){
-	     response.setContentType("application/msexcel");
-	     	response.setHeader("Content-Disposition","attachment; filename=" + exportFileName);
+
+		String exportFileName = rd.getName() + "_" + exportType + ".xls";
+
+		if (session.getAttribute("currentMember") != null || rd.getReportMetadata().getPublicReport()) {
+	        response.setContentType("application/msexcel");
+	     	response.setHeader("Content-Disposition", ResponseUtil.encodeContentDispositionForDownload(request, exportFileName));
 	        AdvancedReportForm reportForm = (AdvancedReportForm) form;
 	        //
 			AmpReports r = ReportContextData.getFromRequest().getReportMeta();

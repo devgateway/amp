@@ -11,6 +11,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.util.ResponseUtil;
 import org.digijava.module.digifeed.core.FeedControl;
 
 /**
@@ -41,8 +42,7 @@ public class DigifeedExportAction extends Action	 {
 		
 		
 		response.setContentType(contentType);
-		response.setHeader("Content-Disposition",
-        "inline; filename="+fileName);
+		response.setHeader("Content-Disposition", ResponseUtil.encodeContentDispositionForDownload(request, fileName, true));
 		
 		
 		

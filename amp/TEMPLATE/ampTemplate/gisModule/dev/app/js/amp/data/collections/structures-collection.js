@@ -40,6 +40,7 @@ module.exports = Backbone.Collection
   },
 
   fetch: function(options) {
+    // TODO: this is running twice on structures load... is that ok??
     var self = this;
     var payload = {otherFilters: {}};
 
@@ -94,10 +95,11 @@ module.exports = Backbone.Collection
   _joinActivities: function() {
     var self = this;
 
+    // watch it: this next call is _expensive_.
     this.activities.getActivities(this._getActivityIds()).then(function() {
 
       // Do actual join
-      self.each(function(structure) {
+      self.each(function(structure) {  // TODO: this is currently expensive, and can be optimized.
         // dirty way of checking if already a model...
         var activity = structure.get('activity');
         // not joined yet
@@ -155,6 +157,7 @@ module.exports = Backbone.Collection
 
     // load the necessary activities.
     this.getStructuresWithActivities().done(function() {
+      // TODO: this is running twice on structures load?!?
       var orgSites = self.chain()
         .groupBy(function(site) {
           var activity = site.get('activity');

@@ -8,6 +8,18 @@ var StructureClusterMixin = require('./structure-cluster-mixin');
 var ProjectSiteTemplate = fs.readFileSync(__dirname + '/../templates/structure-template.html', 'utf8');
 
 
+function breathAfter(func, context) {
+  return function(/* arguments */) {
+    var finished = new $.Deferred(),
+        result = func.apply(context, arguments);
+    window.setTimeout(function() {
+      finished.resolve(result);
+    }, 50);
+    return finished.promise();
+  };
+}
+
+
 module.exports = Backbone.View
 .extend(StructureClusterMixin).extend({
   // These will eventually move to a config.
@@ -62,11 +74,14 @@ module.exports = Backbone.View
     var self = this;
     // TODO: this approach will block structures drawing on join. Should draw dots as soon
     // as structures load, then update when activitites join is done...
-    self.structureMenuModel.structuresCollection.getStructuresWithActivities().then(function() {
+    // Phil note: I'm not sure if the extra complexity will be worth it. We can make joins fast,
+    //   it's the clustering and just drawing dots on the map that is hard to optimize.
+    self.structureMenuModel.structuresCollection.getStructuresWithActivities().then(function() {  // 160ms on Phil's computer
       self.rawData = self.structureMenuModel.structuresCollection.toGeoJSON();
-      self._renderFeatures();
-      self.map.addLayer(self.markerCluster);
-      $('#map-loading').hide();
+      self._renderFeatures()
+        .then(function() {
+          self.map.addLayer(self.markerCluster);  // maybe TODO: chunk (takes 271ms on Phil's computer)
+        });
     });
 
     return this.featureGroup;
@@ -76,42 +91,58 @@ module.exports = Backbone.View
 
   _renderFeatures: function() {
     var self = this;
-
     self.markerCluster.clearLayers();
     self.maxClusterCount = 0;
     self.customClusterMap = {};
 
     // add new featureGroup
-    self.featureGroup = L.geoJson(self.rawData, {
-      pointToLayer: function(feature, latlng) {
-        var marker = null;
+    self.featureGroup = L.layerGroup();
 
-        if (self.rawData.features.length < self.MAX_NUM_FOR_ICONS &&
-          self.structureMenuModel.get('filterVertical') === 'Primary Sector Id') {
-          // create icon
-          marker = self._createSectorMarker(latlng, feature);
-        } else {
-          // coloured circle marker, no icon
-          marker = self._createPlainMarker(latlng, feature);
-        }
+    return $.Deferred().resolve()  // kick things off, so we can async this sequence with breathAfter
+      .then(breathAfter(function() {  // wait 50ms, then:
+        return _(self.rawData.features)
+          .map(_(self._featureToMarker).bind(self));
+      }))
+      .then(function(markers) {
+        self.markerCluster.addLayers(markers);
+        _(markers).each(function(marker) {
+          self.featureGroup.addLayer(marker);
+        });
+      });
+  },
 
-        self.markerCluster.addLayer(marker);
 
+  _featureToMarker: function(feature) {  // 152ms on Phil's computer
+    var self = this,
+        marker,
+        latlng = L.latLng(feature.geometry.coordinates[1],
+                          feature.geometry.coordinates[0]);
 
-        // DRS in progress custom own clustering. big efficiency gains.
-        var latLngString = Math.round(latlng.lat * Math.pow(10, self.CLUSTER_PRECISION)) +
-          ',' + Math.round(latlng.lng * Math.pow(10, self.CLUSTER_PRECISION));
-        if (self.customClusterMap[latLngString]) {
-          self.customClusterMap[latLngString].push(marker); //TODO: should push marker or feature?
-          self.maxClusterCount = Math.max(self.maxClusterCount, self.customClusterMap[latLngString].length);
-        } else {
-          self.customClusterMap[latLngString] = [marker];
-        }
+    if (self.rawData.features.length < self.MAX_NUM_FOR_ICONS &&
+      self.structureMenuModel.get('filterVertical') === 'Primary Sector Id') {
+      // create icon
+      marker = self._createSectorMarker(latlng, feature);
+    } else {
+      // coloured circle marker, no icon
+      marker = self._createPlainMarker(latlng, feature);
+    }
 
-        return marker;
-      },
-      onEachFeature: self._onEachFeature
-    });
+    marker.feature = feature;  // L.geoJSON would do this implicitely
+                               // so add it manually to keep the same API
+
+    // self.markerCluster.addLayer(marker);
+
+    // DRS in progress custom own clustering. big efficiency gains.
+    var latLngString = Math.round(latlng.lat * Math.pow(10, self.CLUSTER_PRECISION)) +
+      ',' + Math.round(latlng.lng * Math.pow(10, self.CLUSTER_PRECISION));
+    if (self.customClusterMap[latLngString]) {
+      self.customClusterMap[latLngString].push(marker); //TODO: should push marker or feature?
+      self.maxClusterCount = Math.max(self.maxClusterCount, self.customClusterMap[latLngString].length);
+    } else {
+      self.customClusterMap[latLngString] = [marker];
+    }
+
+    return marker;
   },
 
   // 1. SVG Icon: works well with agresive clustering: aprox 40 px range
@@ -123,12 +154,12 @@ module.exports = Backbone.View
     if (feature.properties.activity.attributes &&
         feature.properties.activity.attributes.matchesFilters[filterVertical]) {
       if (feature.properties.activity.attributes.matchesFilters[filterVertical].length > 1) {
-        sectorCode = "0"; 
+        sectorCode = '0';
+        console.warn('TODO: need custom vairous sectors icon...different from  multi-sector');
+      } else {
+        sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
       }
-      else {
-      sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
-      }
-     }
+    }
 
     var pointIcon = L.icon({
       iconUrl: 'img/map-icons/' + this.structureMenuModel.iconMappings[sectorCode],
@@ -141,7 +172,7 @@ module.exports = Backbone.View
   },
 
   // 0. origninaly way circle marker, no icon
-  _createPlainMarker: function(latlng, feature) {
+  _createPlainMarker: function(latlng, feature) {  // 122ms on Phil's computer
 
     var colors = this.structureMenuModel.structuresCollection.palette.colours.filter(function(colour) {
       return colour.get('test').call(colour, feature.properties.id);
@@ -242,6 +273,7 @@ module.exports = Backbone.View
   },
 
   refreshLayer: function() {
+    // TODO: this is getting called twice when showing sturctures
     this.hideLayer();
     this.showLayer(this.structureMenuModel);
   },

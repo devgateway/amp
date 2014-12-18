@@ -81,7 +81,7 @@
     "jshint-stylish": "^0.2.0",
     "leaflet": "^0.7.3",
     "leaflet-div-style-icon": "^0.1.0",
-    "leaflet.markercluster": "~0.4.0",
+    "leaflet.markercluster": "git://github.com/Leaflet/Leaflet.markercluster#c0b5778dbcb08578ca8b51c715cf64ab1da0622b",
     "nice-buckets": "^0.2.0",
     "node-qunit-phantomjs": "https://github.com/jonkemp/node-qunit-phantomjs/archive/master.tar.gz",
     "nvd3": "~1.1.15",

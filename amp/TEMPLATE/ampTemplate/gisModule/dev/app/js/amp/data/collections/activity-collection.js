@@ -167,7 +167,7 @@ module.exports = Backbone.Collection
         data: JSON.stringify(payload),
         type: 'POST'
       })
-      .then(function() {
+      .then(function() { // TODO: optimize this! currently eating 230ms on Phil's computer
         self.each(function(activity) {
           var index = _.indexOf(aryOfIDs, parseInt(activity.id, 10));
           if (index > -1) {

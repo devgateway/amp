@@ -28,11 +28,10 @@ module.exports = Backbone.View.extend({
   render: function() {
     var self = this;
     // Chained Translate: returns el
-    this.app.translator.translateDOM(
-     this.template()).then(
-     function(newEl) {
-       self.$el.html(newEl);
-     });
+    this.app.translator.translateDOM(this.template())
+      .then(function(newEl) {
+        self.$el.html(newEl);
+      });
 
     var content = this.app.data.getAllVisibleLayers().map(function(layer) {
       return (new LegendItem({ model: layer, app: this.app })).render().el;

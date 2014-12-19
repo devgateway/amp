@@ -35,11 +35,10 @@ module.exports = ChartModel.extend({
   parse: function(data) {
     var self = this;
     var years;
-    if (data.values.length > 0 && !isNaN(parseInt((data.values)[0].Year,10))) {
-    	years =_.sortBy(data.values, function(obj){ return parseInt(obj.Year,10); });
-    }
-    else {
-    	years = _(data.values).sortBy("Year");
+    if (data.values.length > 0 && !isNaN(parseInt((data.values)[0].Year, 10))) {
+      years = _.sortBy(data.values, function(obj) { return parseInt(obj.Year, 10); });
+    } else {
+      years = _(data.values).sortBy('Year');
     }
 
     var chartName = ['amp.dashboard:chart-', this.get('name').replace(/ /g, ''), '-'].join('');

@@ -1,0 +1,18 @@
+<div class="tab-content filter-options">
+  <div class="tab-pane active">
+    <ul class="sub-filters-titles nav nav-pills nav-stacked">
+      <% settings.each(function(setting) { %>
+        <li <%= setting.id === current.id ? 'class="active"' : '' %>>
+          <a class="setting-select" href="#<%= setting.id %>"><span><%= setting.get('name') %></span></a>
+        </li>
+      <% }) %>
+    </ul>
+    <div class="sub-filters-content">
+      <select class="form-control setting-value">
+        <% _(current.get('options')).each(function(option) { %>
+          <option value="<%= option.value %>" <%= option.selected ? 'selected="selected"' : '' %>><%= option.name %></option>
+        <% }) %>
+      </select>
+    </div>
+  </div>
+</div>

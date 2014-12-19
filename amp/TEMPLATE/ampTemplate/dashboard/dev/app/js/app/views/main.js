@@ -40,6 +40,8 @@ module.exports = BackboneDash.View.extend({
 
     this.header = new Header({ app: this.app });
     this.controls = new Controls({ app: this.app });
+    this.app.settings.load();  // maybe should go in render or something
+                               // but we already do other fetches on init so...
 
     this.charts = new ChartsView({
       app: this.app,

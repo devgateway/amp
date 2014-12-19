@@ -11,14 +11,14 @@ module.exports = BackboneDash.View.extend({
   initialize: function(options) {
     this.app = options.app;
     this.filters = new Filters({ app: this.app });
-    // this.settings = new Settings({ app: this.app });
+    this.settings = new Settings({ app: this.app });
     this.share = new Share({ app: this.app });
   },
 
   render: function() {
     this.$el.html([
       this.filters.render().el,
-      // this.settings.render().el,
+      this.settings.render().el,
       this.share.render().el
     ]);
     return this;

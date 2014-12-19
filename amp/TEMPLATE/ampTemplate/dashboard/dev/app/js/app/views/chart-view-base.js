@@ -45,6 +45,7 @@ module.exports = BackboneDash.View.extend({
     }
 
     this.listenTo(this.app.filter, 'apply', this.updateData);
+    this.listenTo(this.app.settings, 'change', this.updateData);
     this.listenTo(this.model, 'change:adjtype', this.render);
     this.listenTo(this.model, 'change:limit', this.updateData);
     this.listenTo(this.model, 'change:view', this.render);

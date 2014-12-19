@@ -23,11 +23,14 @@ module.exports = BackboneDash.Model.extend({
   },
 
   fetch: function(options) {
+    var data = JSON.parse(options.data);
+    data.settings = this.app.settings.toAPI();
+
     if (this.get('adjtype')) {
-      var data = JSON.parse(options.data);
-      _(data.settings || (data.settings = {})).extend({adjtype: this.get('adjtype')});
-      options.data = JSON.stringify(data);
+      data.settings = _({}).extend(data.settings, {adjtype: this.get('adjtype')});
     }
+
+    options.data = JSON.stringify(data);
     return BackboneDash.Model.prototype.fetch.call(this, options);
   }
 

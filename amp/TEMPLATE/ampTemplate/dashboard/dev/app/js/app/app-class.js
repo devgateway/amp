@@ -8,6 +8,7 @@ var State = require('amp-state/index');
 var fs = require('fs');
 var Translator = require('amp-translate');
 var Filter = require('amp-filter/src/main');
+var Settings = require('./models/settings-collection');
 var SavedDashes = require('./models/saved-dashes-collection.js');
 
 var MainView = require('./views/main');
@@ -69,6 +70,7 @@ _.extend(App.prototype, BackboneDash.Events, {
 
       // initialize app services
       this.url = new URLService();
+      this.settings = new Settings([], { app: this });
       this.savedDashes = new SavedDashes([], { app: this });
       this.state = new State({
         url: this.url,

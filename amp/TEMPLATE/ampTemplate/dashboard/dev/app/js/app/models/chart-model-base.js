@@ -27,7 +27,8 @@ module.exports = BackboneDash.Model.extend({
     data.settings = this.app.settings.toAPI();
 
     if (this.get('adjtype')) {
-      data.settings = _({}).extend(data.settings, {adjtype: this.get('adjtype')});
+      // TODO adjtype hard-coding key for now, should get from settings...
+      data.settings = _({}).extend(data.settings, {0: this.get('adjtype')});
     }
 
     options.data = JSON.stringify(data);

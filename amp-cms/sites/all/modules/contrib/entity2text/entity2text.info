@@ -1,0 +1,12 @@
+name = Entity to Text
+description = Provides API and Tokens for Rendering Entities to plain text
+core = 7.x
+dependencies[] = entity
+dependencies[] = entity_token
+package = Other
+; Information added by Drupal.org packaging script on 2013-12-17
+version = "7.x-1.0-alpha2"
+core = "7.x"
+project = "entity2text"
+datestamp = "1387302523"
+

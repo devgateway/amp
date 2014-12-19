@@ -296,13 +296,13 @@ function ampcontentblock_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'title',
+        'module' => 'contentblock',
         'settings' => array(
           'title_class' => 'contentblock-title',
           'title_link' => '',
           'title_style' => 'h3',
         ),
-        'type' => 'title_linked',
+        'type' => 'title_with_icon',
         'weight' => 0,
       ),
     ),
@@ -374,13 +374,13 @@ function ampcontentblock_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'hidden',
-        'module' => 'title',
+        'module' => 'contentblock',
         'settings' => array(
           'title_class' => 'contentblock-title',
           'title_link' => '',
           'title_style' => 'h3',
         ),
-        'type' => 'title_linked',
+        'type' => 'title_with_icon',
         'weight' => 0,
       ),
     ),

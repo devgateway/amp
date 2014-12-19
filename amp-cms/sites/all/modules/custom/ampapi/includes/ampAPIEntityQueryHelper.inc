@@ -86,6 +86,12 @@ class ampAPIEntityQueryHelper {
     $plugin = ampapi_get_mapper_by_property_name('id');
     $request_body['add_columns'][] = $plugin['report field key'];
 
+    // Get a list of enabled columns and measures.
+    // GET /rest/data/report/columns
+    $columns_data = ampapi_request('get', 'data/report/columns', TRUE);
+    // GET /rest/data/report/measures
+    $measures_data = ampapi_request('get', 'data/report/measures', TRUE);
+
     // Add a list of fields to load.
     // @TODO: Add a settings page.
     if (!empty($query->metaData['view']->field)) {
@@ -97,11 +103,17 @@ class ampAPIEntityQueryHelper {
 
         switch ($plugin['report field group']) {
           case 'columns':
+            if (empty($columns_data->{$plugin['report field key']})) {
+              continue;
+            }
             if (!in_array($plugin['report field key'], $request_body['add_columns'])) {
               $request_body['add_columns'][] = $plugin['report field key'];
             }
             break;
           case 'measures':
+            if (empty($measures_data->{$plugin['report field key']})) {
+              continue;
+            }
             if (!in_array($plugin['report field key'], $request_body['add_measures'])) {
               $request_body['add_measures'][] = $plugin['report field key'];
             }

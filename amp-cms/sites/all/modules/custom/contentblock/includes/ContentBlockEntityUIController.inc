@@ -237,6 +237,13 @@ class ContentBlockEntityUIController extends EntityBundleableUIController {
         'sort' => 'desc',
       ),
       array(
+        'data' => t('Status'),
+        'type' => 'property',
+        'specifier' => 'changed',
+        'class' => array('contentblock-ui-changed'),
+        'sort' => 'desc',
+      ),
+      array(
         'data' => t('Operations'),
         'class' => array('contentblock-ui-operations'),
         'colspan' => $this->operationCount(),
@@ -300,6 +307,8 @@ class ContentBlockEntityUIController extends EntityBundleableUIController {
 
     // If i18n integration is enabled, add a link to the translate tab.
     $i18n = !empty($this->entityInfo['i18n controller class']);
+
+    $row[] = $entity->status ? t('published') : t('not published');
 
     // Add operations.
     $row[] = l(t('edit'), $this->entity_path . "/$id/edit");

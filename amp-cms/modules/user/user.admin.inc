@@ -172,6 +172,7 @@ function user_admin_account() {
   );
 
   $query = db_select('users', 'u');
+  $query->condition('u.uid', 0, '<>');
 
   // Hide system users from the users listing.
   $db_and = db_and();

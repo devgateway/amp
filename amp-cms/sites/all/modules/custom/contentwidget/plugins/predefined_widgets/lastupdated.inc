@@ -135,9 +135,6 @@ function contentwidget_lastupdated_widget_render($plugin, $widget_settings, $ent
     '#suffix' => '</div>',
   );
 
-  // @TODO: Point to the projects listing page when one exits.
-  $build['more']['#markup'] = '<div class="more-link">' . l(t('see all'), 'projects') . '</div>';
-
   return array('#markup' => drupal_render($build));
 }
 

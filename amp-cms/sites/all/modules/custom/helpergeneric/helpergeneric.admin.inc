@@ -57,10 +57,6 @@ function helpergeneric_toggle_cleanup_ui_force_submit($form, &$form_state) {
  * Page callback for 'admin/settings/api'.
  */
 function helpergeneric_api_settings_form($form, &$form_state) {
-  $settings = variable_get('helpergeneric_api_settings', array(
-    'restclient_hostname' => 'http://localhost:80/rest',
-  ));
-
   $api_status = helpergeneric_check_api_status(FALSE);
   if (!$api_status['online']) {
     drupal_set_message($api_status['message'], 'warning');
@@ -74,19 +70,55 @@ function helpergeneric_api_settings_form($form, &$form_state) {
     '#collapsed' => FALSE,
   );
 
-  $example_url = helpergeneric_detect_amp_baseurl() . ':80/rest';
+  $example_url = helpergeneric_detect_amp_baseurl();
   $form['location']['restclient_hostname'] = array(
     '#type' => 'textfield',
     '#title' => t('Hostname'),
-    '#description' => t('The hostname for the server with no trailing slash. Ex: ') . $example_url,
+    '#description' => t('The hostname for the server with no trailing slash. Ex: ') . $example_url . '/rest',
     '#size' => 40,
-    '#maxlength' => 255,
     '#default_value' => variable_get('restclient_hostname', 'http://localhost:80/rest'),
   );
 
+  // Provide an alternative link for links to AMP.
+  $amp_hostname = variable_get('helpergeneric_amp_hostname', NULL);
+  $form['location']['alternative_hostname'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use alternative hostname for Activity view links'),
+    '#default_value' => !empty($amp_hostname),
+    '#description' => t('If you are using localhost to access the API check here to use an alternative hostname for the Activity view links.'),
+  );
+
+  $form['location']['wrapper'] = array(
+    '#type' => 'container',
+    '#states' => array(
+      'visible' => array(
+        ":input[name=\"alternative_hostname\"]" => array('checked' => TRUE),
+      ),
+    ),
+  );
+
+  $form['location']['wrapper']['helpergeneric_amp_hostname'] = array(
+    '#type' => 'textfield',
+    '#title' => t('AMP Hostname'),
+    '#description' => t('The hostname for the AMP environment, without a trailing slash. Ex: ') . $example_url,
+    '#size' => 40,
+    '#default_value' => $amp_hostname,
+  );
+
+  $form['#validate'][] = 'helpergeneric_api_settings_form_validate';
   $form['#submit'][] = 'helpergeneric_api_settings_form_submit';
 
   return system_settings_form($form);
+}
+
+/**
+ * Validation callback for helpergeneric_api_settings_form().
+ */
+function helpergeneric_api_settings_form_validate($form, &$form_state) {
+  if (empty($form_state['values']['alternative_hostname'])) {
+    $form_state['values']['helpergeneric_amp_hostname'] = NULL;
+  }
+  unset($form_state['values']['alternative_hostname']);
 }
 
 /**
@@ -127,9 +159,72 @@ function helpergeneric_settings_form($form, &$form_state) {
     '#required' => TRUE,
   );
 
-  $form['#validate'][] = 'helpergeneric_settings_form_validate';
+  // Logo settings
+  $form['theme_settings'] = array(
+    '#tree' => TRUE,
+  );
+  $form['theme_settings']['logo'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Logo image settings'),
+    '#description' => t("Your logo is displayed in the top left of the website header."),
+  );
+  $form['theme_settings']['logo']['default_logo'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use the default logo'),
+    '#default_value' => theme_get_setting('default_logo'),
+    '#description' => t('Check here if you want the theme to use the default logo.'),
+  );
+  $form['theme_settings']['logo']['settings'] = array(
+    '#type' => 'container',
+    '#states' => array(
+      // Hide the logo settings when using the default logo.
+      'invisible' => array(
+        'input[name="theme_settings[logo][default_logo]"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+  $form['theme_settings']['logo']['settings']['logo_upload'] = array(
+    '#type' => 'file',
+    '#title' => t('Upload new logo image'),
+    '#maxlength' => 40,
+      '#description' => t("Use this field to upload your logo. It should be uploaded at the exact size you want it displayed."),
+    '#tree' => FALSE,
+  );
 
-  return system_settings_form($form);
+  $form['theme_settings']['favicon'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Shortcut icon settings'),
+    '#description' => t("Your shortcut icon, or 'favicon', is displayed in the address bar and bookmarks of most browsers.") . ' <strong>Not implemented yet!</strong>',
+  );
+  $form['theme_settings']['favicon']['default_favicon'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Use the default shortcut icon.'),
+    '#default_value' => theme_get_setting('default_favicon'),
+    '#description' => t('Check here if you want the theme to use the default shortcut icon.'),
+  );
+  $form['theme_settings']['favicon']['settings'] = array(
+    '#type' => 'container',
+    '#states' => array(
+      // Hide the favicon settings when using the default favicon.
+      'invisible' => array(
+        'input[name="theme_settings[favicon][default_favicon]"]' => array('checked' => TRUE),
+      ),
+    ),
+  );
+  $form['theme_settings']['favicon']['settings']['favicon_upload'] = array(
+    '#type' => 'file',
+    '#title' => t('Upload new icon image'),
+    '#description' => t("Use this field to upload your shortcut icon."),
+    '#tree' => FALSE,
+  );
+
+  $form['#validate'][] = 'helpergeneric_settings_form_validate';
+  $form['#submit'][] = 'helpergeneric_settings_form_submit';
+
+  $form['actions']['#type'] = 'actions';
+  $form['actions']['submit'] = array('#type' => 'submit', '#value' => t('Save configuration'));
+
+  return $form;
 }
 
 /**
@@ -140,6 +235,106 @@ function helpergeneric_settings_form_validate($form, &$form_state) {
   if ($error = user_validate_mail($form_state['values']['site_mail'])) {
     form_set_error('site_mail', $error);
   }
+
+  // Check for a new uploaded logo.
+  $validators = array(
+    'file_validate_extensions' => array('png svg'),
+    'file_validate_image_resolution' => array('240x60'),
+  );
+  $file = file_save_upload('logo_upload', $validators);
+  if (isset($file)) {
+    // File upload was attempted.
+    if ($file) {
+      // Put the temporary file in form_values so we can save it on submit.
+      $form_state['values']['theme_settings']['logo_upload'] = $file;
+    }
+    else {
+      // File upload failed.
+      form_set_error('logo_upload', t('The logo could not be uploaded.'));
+    }
+  }
+
+  // Check for a new uploaded favicon.
+  $validators = array(
+    'file_validate_extensions' => array('ico png svg'),
+  );
+  $file = file_save_upload('favicon_upload', $validators);
+  if (isset($file)) {
+    // File upload was attempted.
+    if ($file) {
+      // Put the temporary file in form_values so we can save it on submit.
+      $form_state['values']['theme_settings']['favicon_upload'] = $file;
+    }
+    else {
+      // File upload failed.
+      form_set_error('favicon_upload', t('The favicon could not be uploaded.'));
+    }
+  }
+}
+
+/**
+ * Saves the submitted site-information.
+ */
+function helpergeneric_settings_form_submit($form, &$form_state) {
+  global $theme;
+
+  foreach (array('site_name', 'site_mail') as $var) {
+    if (isset($form_state['values'][$var]))
+    variable_set($var, $form_state['values'][$var]);
+  }
+
+  // @TODO: Cleanup!
+  $values = $form_state['values']['theme_settings'];
+  foreach (array('logo', 'favicon') as $setting) {
+    if (isset($values[$setting]['settings'])) {
+      $setting_values = $values[$setting]['settings'];
+      unset($values[$setting]['settings']);
+      $values = array_merge($values, $setting_values);
+    }
+    if (!empty($values[$setting])) {
+      $setting_values = $values[$setting];
+      unset($values[$setting]);
+      $values = array_merge($values, $setting_values);
+    }
+  }
+
+  // Always display logo and favicon.
+  $values['toggle_logo'] = 1;
+  $values['toggle_favicon'] = 1;
+
+  // If the user uploaded a new logo or favicon, save it to a permanent location
+  // and use it in place of the default theme-provided file.
+  if (!empty($values['default_logo'])) {
+    $values['default_logo'] = 1;
+    $values['logo_path'] = '';
+  }
+  else if (isset($values['logo_upload']) && $file = $values['logo_upload']) {
+    unset($values['logo_upload']);
+    $filename = file_unmanaged_copy($file->uri);
+    $values['default_logo'] = 0;
+    $values['logo_path'] = $filename;
+  }
+  else {
+    $values['default_logo'] = 0;
+    $values['logo_path'] = theme_get_setting('logo_path', $theme);
+  }
+  if (!empty($values['default_favicon'])) {
+    $values['default_favicon'] = 1;
+    $values['favicon_path'] = '';
+  }
+  else if (isset($values['favicon_upload']) && $file = $values['favicon_upload']) {
+    unset($values['favicon_upload']);
+    $filename = file_unmanaged_copy($file->uri);
+    $values['default_favicon'] = 0;
+    $values['favicon_path'] = $filename;
+  }
+  else {
+    $values['default_favicon'] = 0;
+    $values['favicon_path'] = theme_get_setting('favicon_path', $theme);
+  }
+
+  $var = 'theme_' . $theme . '_settings';
+  variable_set($var, $values);
 }
 
 /**

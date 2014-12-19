@@ -256,6 +256,10 @@ function helpergeneric_features_component_export_alter(&$component_export, $comp
         'media_wysiwyg_view_mode_video_wysiwyg_restricted_view_modes',
         'media_wysiwyg_view_mode_video_wysiwyg_restricted_view_modes_status',
 
+        // Hide recaptcha.module variables.
+        'recaptcha_private_key',
+        'recaptcha_public_key',
+
         // Hide restclient.module variables.
         'restclient_caching',
         'restclient_filepath',

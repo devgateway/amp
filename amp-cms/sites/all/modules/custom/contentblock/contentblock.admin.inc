@@ -24,27 +24,77 @@ function contentblock_form($form, &$form_state, $entity) {
   // );
 
   // Entity options for administrators
-  // $form['options'] = array(
-  //   '#type' => 'fieldset',
-  //   '#access' => user_access("survey {$entity_type} administer"),
-  //   '#title' => t('Publishing options'),
-  //   '#collapsible' => TRUE,
-  //   '#collapsed' => TRUE,
-  //   '#group' => 'additional_settings',
-  //   '#attributes' => array(
-  //     'class' => array("{$entity_type}-form-options"),
-  //   ),
-  //   '#weight' => 95,
-  // );
-
-  $form['title'] = array(
-    '#type' => 'textfield',
-    '#title' => t('Title'),
-    '#default_value' => $entity->title,
+  $form['options'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Publishing options'),
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+    '#group' => 'additional_settings',
+    '#attributes' => array(
+      'class' => array("{$entity_type}-form-options"),
+    ),
+    '#weight' => 95,
   );
 
+  // Allow uses to configure the style and title icon for all content blocks except hidden ones.
+  // @see contentblock_get_hidden_types()
+  if ($entity->type != 'hidden') {
+    $form['title'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Title'),
+      '#default_value' => $entity->title,
+    );
+
+    $form['style_settings'] = array(
+      '#type' => 'fieldset',
+      '#title' => t('Style Settings'),
+      '#collapsible' => TRUE,
+      '#collapsed' => TRUE,
+      '#weight' => 49,
+    );
+
+    $options = array(
+      '' => t('Default'),
+      'one' => t('One: orange header'),
+      'two' => t('Two: red header'),
+      'three' => t('Three: green header'),
+    );
+    $form['style_settings']['style'] = array(
+      '#type' => 'select',
+      '#title' => t('Style'),
+      '#options' => $options,
+      '#default_value' => $entity->style,
+    );
+
+    $icons = helpertheme_get_svg_icons();
+    $options = array('' => t('No Icon'));
+    $options += drupal_map_assoc(array_keys($icons));
+    $form['style_settings']['icon'] = array(
+      '#type' => 'radioicons',
+      '#title' => t('Icon'),
+      '#options' => $options,
+      '#icons' => $icons,
+      '#default_value' => $entity->icon,
+    );
+  }
+
+  $form['options']['status'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Published'),
+    '#default_value' => $entity->status,
+    '#weight' => 98,
+  );
+  if ($entity->machine_name) {
+    $info = contentblock_get_hidden_types($entity->machine_name);
+    if (!empty($info['is section'])) {
+      $form['options']['status']['#default_value'] = TRUE;
+      $form['options']['status']['#description'] = t('Content sections are always published.');
+      $form['options']['status']['#disabled'] = 'disabled';
+    }
+  }
+
   // Add the buttons.
-  $form['actions'] = array('#type' => 'actions');
+  $form['actions'] = array('#type' => 'actions', '#weight' => 99);
   $form['actions']['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save'),

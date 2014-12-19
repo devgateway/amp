@@ -23,7 +23,7 @@ class ActivityEntity extends Entity {
     }
 
     return array(
-      'path' => helpergeneric_detect_amp_baseurl() . $this->external_url,
+      'path' => $this->external_url,
     );
   }
 }

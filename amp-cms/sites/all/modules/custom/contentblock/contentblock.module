@@ -6,6 +6,7 @@
 
 // Include formatter specific code.
 module_load_include('inc', 'contentblock', 'contentblock.admin_cbreference');
+module_load_include('inc', 'contentblock', 'contentblock.field');
 
 /**
  * Define administrative URLs.
@@ -274,7 +275,7 @@ function contentblock_access($op, $entity = NULL, $account = NULL) {
     if (user_access("contentblock entity administer") || user_access("contentblock entity access overview")) {
       $allow = TRUE;
     }
-    else if (user_access("contentblock entity $op")) {
+    else if ($entity->status && user_access("contentblock entity $op")) {
       // For now we ignore the status field.
       $allow = TRUE;
     }
@@ -568,6 +569,23 @@ function contentblock_entity_view_alter(&$build, $entity_type) {
   // hook_node_view_alter().
   if (!empty($build['#entity']->cbid)) {
     $build['#contextual_links']['contentblock'] = array('contentblock', array($build['#entity']->cbid));
+  }
+}
+
+/**
+ * Preprocess variables for contentblock
+ */
+function contentblock_preprocess_entity(&$variables, $hook) {
+  if ($variables['entity_type'] != 'contentblock') {
+    return;
+  }
+
+  if (empty($variables['contentblock']->status)) {
+    $variables['classes_array'][] = 'contentblock-unpublished';
+  }
+
+  if (!empty($variables['contentblock']->style)) {
+    $variables['classes_array'][] = drupal_clean_css_identifier('contentwidget-style--' . $variables['contentblock']->style);
   }
 }
 

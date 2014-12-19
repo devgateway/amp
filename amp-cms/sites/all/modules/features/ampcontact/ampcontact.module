@@ -1,0 +1,8 @@
+<?php
+/**
+ * @file
+ * Code for the AMP Contact feature.
+ */
+
+include_once 'ampcontact.custom.inc';
+include_once 'ampcontact.features.inc';

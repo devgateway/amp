@@ -1,0 +1,118 @@
+<?php
+/**
+ * Implements hook_token_info_alter().
+ *
+ * Provide a token for each View Mode for each Entity Type.
+ */
+function entity2text_token_info_alter(&$data) {
+
+  $entity_infos = entity_get_info();
+  foreach ($entity_infos as $enity_type => $entity_info) {
+    if (isset($data['tokens'][$enity_type])) {
+      foreach ($entity_info['view modes'] as $view_name => $view_mode) {
+        $data['tokens'][$enity_type]['textexport-' . $view_name] = array(
+            'name' => 'Text Export: ' . $view_mode['label'],
+            'description' => "Exports the enity text using View Mode " . $view_mode['label'],
+            'type' => 'text',
+        );
+      }
+    }
+  }
+}
+/**
+ * Implements hook_module_implements_alter().
+ *
+ * Make sure this runs after entity_token_token_info_alter so that entity info is already given.
+ * @see entity_token_token_info_alter()
+ */
+function entity2text_module_implements_alter(&$implementations, $hook) {
+  if ($hook === "token_info_alter") {
+    $temp = $implementations['entity2text'];
+    // Removing the mymodule key/value
+    unset($implementations['entity2text']);
+    // Adding the mymodule key value as the last member in the list
+    $implementations['entity2text'] = $temp;
+  }
+}
+/**
+ * Implements hook_tokens().
+ *
+ * Replace tokens created by this module with Entity rendered as text for the View Mode
+ */
+function entity2text_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+  $entity_types = array_keys(entity_get_info());
+  if (in_array($type, $entity_types)) {
+
+    foreach ($tokens as $token_key => $value) {
+      $token_parts = explode('-', $token_key);
+      if ($token_parts[0] == 'textexport') {
+        //created by this module
+
+        $view_mode = $token_parts[1];
+        $entity_type = $type;
+        $entity = $data[$type];
+        $rendered_text = entity2text_render_entity_to_text($entity_type, $entity, $view_mode);
+        $replacements[$value] = $rendered_text;
+      }
+    }
+  }
+  return $replacements;
+}
+/*
+ * Return rendered text for Entity
+ */
+function entity2text_render_entity_to_text($entity_type, $entity, $view_mode) {
+  $rendered_entity = entity_view($entity_type, array($entity), $view_mode);
+  $text = entity2text_renderarray_to_text($rendered_entity);
+  return $text;
+}
+/*
+ * Return the text output for a Drupal Renderable Array
+ * @todo Improve Conversion to text.
+ * @todo Handle files - links
+ * @todo Allow selection of different functions to use for rendering to text.
+ */
+function entity2text_renderarray_to_text($render_array, $print_empty_title = FALSE, $indent_text = '') {
+  $tab_text = "   ";
+  $output = '';
+  $markup = '';
+  $title = '';
+  if (!empty($render_array['#markup'])) {
+    $markup .= "$indent_text$tab_text" . htmlspecialchars_decode(strip_tags($render_array['#markup']));
+    $markup = trim($markup);
+  }
+  if (isset($render_array['#title'])) {
+    $title .=  htmlspecialchars_decode($render_array['#title']) . ":";
+    $title = trim($title);
+  }
+
+  if (!empty($markup) && empty($title)) {
+    $output .= "\n" . $indent_text . $markup . "\n";
+  }
+  elseif (!empty($markup) && !empty($title)) {
+    $output .= "\n" . $indent_text . $title . "\n" . $indent_text . $tab_text . $markup;
+  }
+  elseif (empty($markup) && !empty($title)) {
+    $output .= "\n" . $indent_text . $title;
+  }
+
+  if (!empty($output)) {
+    $indent_text .= $tab_text;
+  }
+  foreach (element_children($render_array) as $child) {
+    $child_text  = entity2text_renderarray_to_text($render_array[$child], $print_empty_title, $indent_text);
+    if (isset($render_array[$child]['#weight'])) {
+      $child_array[$render_array[$child]['#weight']] = $child_text;
+    }
+    else {
+      $child_array[] = $child_text;
+    }
+
+  }
+  if (!empty($child_array)) {
+    ksort($child_array);
+    $output .= implode('', $child_array);
+  }
+  return $output;
+}

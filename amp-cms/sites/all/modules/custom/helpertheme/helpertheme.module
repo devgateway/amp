@@ -411,8 +411,10 @@ function helpertheme_html_head_alter(&$head_elements) {
   );
 
   // Add favicon related header tags.
-  module_load_include('inc', 'helpertheme', 'helpertheme.favicons');
-  // $head_elements['favicons'] = _helpertheme_favicons();
+  if (!theme_get_setting('favicon_path')) {
+    module_load_include('inc', 'helpertheme', 'helpertheme.favicons');
+    $head_elements['favicons'] = _helpertheme_favicons();
+  }
 }
 
 /**

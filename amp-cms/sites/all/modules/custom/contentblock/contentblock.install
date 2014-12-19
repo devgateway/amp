@@ -69,6 +69,18 @@ function contentblock_schema() {
         'not null' => TRUE,
         'default' => 0,
       ),
+      'style' => array(
+        'description' => 'The contentblock style.',
+        'type' => 'varchar',
+        'length' => 32,
+        'default' => '',
+      ),
+      'icon' => array(
+        'description' => 'The contentblock icon.',
+        'type' => 'varchar',
+        'length' => 32,
+        'default' => '',
+      ),
     ),
     'indexes' => array(
       'entity_status'    => array('status', 'cbid'),
@@ -111,6 +123,27 @@ function contentblock_update_7002() {
     'type' => 'varchar',
     'length' => 12,
     'not null' => TRUE,
+    'default' => '',
+  ));
+}
+
+/**
+ * Add 'style' and 'icon' columns to the {contentblock} table.
+ */
+function contentblock_update_7003() {
+  // Create a style column.
+  db_add_field('contentblock', 'style', array(
+    'description' => 'The contentblock style.',
+    'type' => 'varchar',
+    'length' => 32,
+    'default' => '',
+  ));
+
+  // Create a icon column.
+  db_add_field('contentblock', 'icon', array(
+    'description' => 'The contentblock icon.',
+    'type' => 'varchar',
+    'length' => 32,
     'default' => '',
   ));
 }

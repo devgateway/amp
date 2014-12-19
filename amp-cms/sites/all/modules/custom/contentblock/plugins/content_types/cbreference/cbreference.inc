@@ -68,7 +68,15 @@ function contentblock_cbreference_content_type_render($subtype, $conf, $panel_ar
           '!here' => l(t('here'), 'admin/settings/content-sections/' . $conf['machine_name']),
         ));
 
-        $block->content['#prefix'] = '<div class="welcome-content-wrapper clearfix">';
+        $block->content['#prefix'] = '<div class="empty-contentblock clearfix">';
+        $block->content['#suffix'] = '</div>';
+      }
+      elseif ($block->delta == 'totalactivities') {
+        $message = t('You have not configured this block. Click !here to go to the block settings page to edit content.', array(
+          '!here' => l(t('here'), 'admin/settings/content-sections/' . $conf['machine_name']),
+        ));
+
+        $block->content['#prefix'] = '<div class="empty-contentblock clearfix">';
         $block->content['#suffix'] = '</div>';
       }
       else {

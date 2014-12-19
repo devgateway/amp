@@ -43,10 +43,10 @@ function ampapi_ctools_plugin_type() {
  * @return
  *   An array with information about the requested activity filter.
  */
-function ampapi_get_mapper($mapper) {
+function ampapi_get_mapper($mapper_name) {
   ctools_include('context');
   ctools_include('plugins');
-  return ctools_get_plugins('ampapi', 'mapper', $mapper);
+  return ctools_get_plugins('ampapi', 'mapper', $mapper_name);
 }
 
 /**
@@ -59,6 +59,11 @@ function ampapi_get_mapper($mapper) {
  *   An array with information about the requested activity filter.
  */
 function ampapi_get_mapper_by_property_name($property_name) {
+  $mapping = &drupal_static(__FUNCTION__, array());
+  if (isset($mapping[$property_name])) {
+    return $mapping[$property_name];
+  }
+
   if ($property_name == 'entity_id') {
     $property_name = 'id';
   }
@@ -70,6 +75,7 @@ function ampapi_get_mapper_by_property_name($property_name) {
     }
 
     if ($plugin['property name'] == $property_name) {
+      $mapping[$property_name] = $plugin;
       return $plugin;
     }
   }
@@ -161,10 +167,18 @@ function ampapi_entity_access($op, $entity = NULL, $account = NULL, $entity_type
   return FALSE;
 }
 
-
-function ampapi_request($type, $endpoint, $options = array()) {
+/**
+ * Helper function fore rest requests that also caches results.
+ */
+function ampapi_request($type, $endpoint, $use_cache = FALSE, $options = array()) {
   global $language_content;
   $langcode = $language_content->language;
+
+  $cache_id = "ampapi_request:{$langcode}:{$type}:{$endpoint}:" . md5(serialize($options));
+  // Try to get the response from cache.
+  if ($use_cache && $cached = cache_get($cache_id, 'cache')) {
+    return $cached->data;
+  }
 
   $options += array('reset' => TRUE, 'error_handling' => TRUE);
 
@@ -212,6 +226,12 @@ function ampapi_request($type, $endpoint, $options = array()) {
       drupal_set_message(t('The API returned the following error message: %message', $t_args), 'error');
     }
     return array();
+  }
+
+  if ($use_cache) {
+    // 1 hours cache life time for requests should be plenty for now.
+    $expire = 3600;
+    cache_set($cache_id, $response_data, 'cache', REQUEST_TIME + $expire);
   }
 
   return $response_data;

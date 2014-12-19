@@ -152,9 +152,6 @@ function contentwidget_topdonors_widget_render($plugin, $widget_settings, $entit
     '#suffix' => '</div>',
   );
 
-  // @TODO: Point to the donors listing page when one exits.
-  $build['more']['#markup'] = '<div class="more-link">' . l(t('see all'), 'donors') . '</div>';
-
   return array('#markup' => drupal_render($build));
 }
 

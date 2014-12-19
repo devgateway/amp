@@ -168,3 +168,56 @@ function _ampapi_human_filesize($path, $decimals = 2) {
   $sz = 'BKMGTP';
   return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)) . @$sz[$factor] . 'b';
 }
+
+/**
+ * Implements hook_views_pre_build()
+ *
+ * Update all displays of the Activities view and remove disabled fields and filters.
+ */
+function ampapi_activity_views_pre_build(&$view) {
+  if ($view->name != 'activities') {
+    return;
+  }
+
+  // Get a list of enabled columns and measures.
+  $columns_data = ampapi_request('get', 'data/report/columns', TRUE);
+  $measures_data = ampapi_request('get', 'data/report/measures', TRUE);
+
+  foreach ($view->field as $field_name => $field_handler) {
+    $plugin = ampapi_get_mapper_by_property_name($field_handler->real_field);
+
+    switch ($plugin['report field group']) {
+      case 'columns':
+        if (empty($columns_data->{$plugin['report field key']})) {
+          unset($view->field[$field_name]);
+          unset($view->display_handler->handlers['field'][$field_name]);
+        }
+        break;
+      case 'measures':
+        if (empty($measures_data->{$plugin['report field key']})) {
+          unset($view->field[$field_name]);
+          unset($view->display_handler->handlers['field'][$field_name]);
+        }
+        break;
+    }
+  }
+
+  foreach ($view->filter as $filter_name => $filter_handler) {
+    $plugin = ampapi_get_mapper_by_property_name($filter_handler->real_field);
+
+    switch ($plugin['report field group']) {
+      case 'columns':
+        if (empty($columns_data->{$plugin['report field key']})) {
+          unset($view->filter[$filter_name]);
+          unset($view->display_handler->handlers['filter'][$filter_name]);
+        }
+        break;
+      case 'measures':
+        if (empty($measures_data->{$plugin['report field key']})) {
+          unset($view->filter[$filter_name]);
+          unset($view->display_handler->handlers['filter'][$filter_name]);
+        }
+        break;
+    }
+  }
+}

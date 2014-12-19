@@ -16,9 +16,11 @@ class ContentBlockEntity extends Entity {
   public $type = '';
   public $machine_name = NULL;
   public $uid = NULL;
-  public $status = FALSE;
+  public $status = TRUE;
   public $created = NULL;
   public $changed = NULL;
+  public $style = '';
+  public $icon = '';
 
   /**
    * URI method for entity_class_uri().

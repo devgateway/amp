@@ -36,6 +36,7 @@
   .text {
     display: table-cell;
     height: 60px;
+    padding-left: 0.5em;
     vertical-align: middle;
   }
   img {
@@ -235,6 +236,20 @@
       max-width: 50%;
     }
   }
+}
+
+.xNormalAndUp() {
+  .homepage-welcome-block {
+    .pane-content {
+      .clearfix-mixin();
+    }
+    .field-name-field-cbimage {
+      float: right;
+      margin: 0;
+      margin-left: 1em;
+      max-width: 50%;
+    }
+  }
 
   .homepage-totalactivities-block {
     margin-top: 1px;
@@ -254,36 +269,6 @@
       &.activities-count {
         width: 24%;
       }
-    }
-  }
-}
-
-.xNormalAndUp() {
-  .homepage-welcome-block {
-    .pane-content {
-      .clearfix-mixin();
-    }
-    .field-name-field-cbimage {
-      float: right;
-      margin: 0;
-      margin-left: 1em;
-      max-width: 50%;
-    }
-  }
-}
-
-.xLargeUp() {
-  .homepage-welcome-block {
-    .column-compacted(12);
-    .first-child-column();
-  }
-  .homepage-totalactivities-block {
-    .column-full(4);
-    .last-child-column();
-    .info {
-      white-space: nowrap;
-      overflow-x: hidden;
-      text-overflow: ellipsis;
     }
   }
 }

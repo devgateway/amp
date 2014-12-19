@@ -91,24 +91,44 @@ function theme_header_logo() {
     '#suffix' => "</a>",
   );
 
-  // Replace the PNG logo with a SVG one.
-  $items['header']['logo_markup']['svg'] = array(
-    '#theme' => 'image',
-    '#path' => url(drupal_get_path('theme', $theme) . '/logo.svg'),
-    '#alt' => '',
-    '#attributes' => array(
-      'role' => 'presentation',
-    ),
-    '#prefix' => "<!--[if (gte IE 9)|!(IE)]><!-->",
-    '#suffix' => "<!--<![endif]-->",
-  );
-  $items['header']['logo_markup']['png'] = array(
-    '#theme' => 'image',
-    '#path' => url(drupal_get_path('theme', $theme) . '/logo.png'),
-    '#alt' => '',
-    '#prefix' => "<!--[if lt IE 9 ]>",
-    '#suffix' => "<![endif]-->",
-  );
+  // Get the logo paths if it has been changed.
+  $logo_path = theme_get_setting('logo_path', $theme);
+
+  $file_path = drupal_realpath($logo_path);
+  if (file_exists($file_path)) {
+    $items['header']['logo_markup']['png'] = array(
+      '#theme' => 'image',
+      // '#path' => url($logo_path),
+      '#path' => file_create_url($logo_path),
+      '#alt' => '',
+      '#attributes' => array(
+        'role' => 'presentation',
+      ),
+    );
+  }
+  else {
+    $items['header']['logo_markup']['svg'] = array(
+      '#theme' => 'image',
+      '#path' => url(drupal_get_path('theme', $theme) . '/logo.svg'),
+      '#alt' => '',
+      '#attributes' => array(
+        'role' => 'presentation',
+      ),
+      '#prefix' => "<!--[if (gte IE 9)|!(IE)]><!-->",
+      '#suffix' => "<!--<![endif]-->",
+    );
+    $items['header']['logo_markup']['png'] = array(
+      '#theme' => 'image',
+      '#path' => url(drupal_get_path('theme', $theme) . '/logo.png'),
+      '#alt' => '',
+      '#attributes' => array(
+        'role' => 'presentation',
+      ),
+      '#prefix' => "<!--[if lt IE 9 ]>",
+      '#suffix' => "<![endif]-->",
+    );
+  }
+
 
   $items['header']['logo_markup']['site_name'] = array(
     '#markup' => $site_name,

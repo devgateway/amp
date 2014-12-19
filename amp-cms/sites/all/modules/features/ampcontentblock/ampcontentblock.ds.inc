@@ -41,14 +41,14 @@ function ampcontentblock_ds_field_settings_info() {
   $ds_fieldsetting->bundle = 'predefined';
   $ds_fieldsetting->view_mode = 'default';
   $ds_fieldsetting->settings = array(
-    'title_field' => array(
+    'field_cbwidget' => array(
       'formatter_settings' => array(
         'ft' => array(
           'func' => 'theme_ds_field_reset',
         ),
       ),
     ),
-    'field_cbwidget' => array(
+    'title_field' => array(
       'formatter_settings' => array(
         'ft' => array(
           'func' => 'theme_ds_field_reset',

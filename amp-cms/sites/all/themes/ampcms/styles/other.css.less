@@ -82,6 +82,7 @@ ul.tips, div.description, .form-item div.description {
 
 .cbreference-linkedmap {
   border: @border_width solid @clcontent__separator;
+  margin-top: 0;
 
   .title-wrapper {
     color: @clactive;
@@ -93,6 +94,7 @@ ul.tips, div.description, .form-item div.description {
       display: block;
       text-decoration: none;
     }
+    // @TODO: use contentblock-style--* classes.
     svg {
       fill: @clactive;
       margin-right: 0.5em;
@@ -163,11 +165,18 @@ ul.tips, div.description, .form-item div.description {
   }
 }
 
+.empty-contentblock {
+  padding: 1em;
+  p,
+  .contentblock-title {
+    margin: 0;
+  }
+}
+
 .homepage-welcome-block {
   .welcome-content-wrapper {
     padding: 1em;
   }
-
   // Style the read more link and related elements.
   position: relative;
   .more-link {
@@ -387,21 +396,29 @@ ul.tips, div.description, .form-item div.description {
   }
 }
 
-
-
-
-
-
-// @TODO: Cleanup this MESS!!!!!!!!!
-.contentwidget-topdonors,
-.contentwidget-lastupdated {
-  .contentblock-title {
-    color: #f8aa33;
+.contentblock-title {
+  svg {
+    margin-right: 0.5em;
+    fill: #2e5983; // Default color for headers.
   }
-}
-.contentwidget-newsevents {
-  .contentblock-title {
+
+  .contentwidget-style--one & {
+    color: #f8aa33;
+    svg {
+      fill: #f8aa33;
+    }
+  }
+  .contentwidget-style--two & {
     color: #990000;
+    svg {
+      fill: #990000;
+    }
+  }
+  .contentwidget-style--three & {
+    color: #4fa600;
+    svg {
+      fill: #4fa600;
+    }
   }
 }
 
@@ -424,7 +441,8 @@ ul.tips, div.description, .form-item div.description {
   }
 }
 .xLargeUp() {
-  .homepage-featured-block {
+  .homepage-welcome-block,
+  .homepage-totalactivities-block {
     background-color: @cldetail;
     color: @clmain;
 
@@ -486,6 +504,7 @@ ul.tips, div.description, .form-item div.description {
     margin: 0;
   }
 
+  // @TODO: use contentblock-style--* classes.
   .title {
     color: @clactive__alt;
     font-size: 1em;
@@ -757,6 +776,19 @@ ul.tips, div.description, .form-item div.description {
   }
 }
 
+.contact-entityform-edit-form {
+  .form-select,
+  .form-text {
+    .box-sizing(border-box);
+    min-width: 12em;
+    width: 24em;
+    max-width: 100%;
+  }
+}
+
+.contentblock-unpublished {
+  outline: 2px solid @clwarning;
+}
 
 @import './lib/custom-responsive.less';
 @import './lib/helpers.less';

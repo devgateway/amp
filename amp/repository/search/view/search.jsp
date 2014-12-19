@@ -258,10 +258,12 @@
 									class="button_green default_cursor">${fn:length(resultReports)}</span> ${resultFound} <span class="button_green default_cursor"><digi:trn>Reports</digi:trn></span> 
 									<ul>
 										<c:forEach items="${resultReports}" var="report">
-											<li><a
-												title="<digi:trn>Click here to view the report</digi:trn>"
-												onclick="return popup(this,'');"
-												href="/search/search.do?ampReportId=${report.ampReportId}">${report.objectFilteredName}</a>
+											<li><a title="<digi:trn>Click here to view the report</digi:trn>"
+                                                    onclick="return popup(this,'');"
+                                                    href="/TEMPLATE/ampTemplate/saikuui/index.html#report/open/${report.ampReportId}">
+                                                    ${report.objectFilteredName}
+												</a>
+											</li>
 										</c:forEach>
 									</ul>
 								</div>

@@ -29,6 +29,7 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
@@ -119,7 +120,7 @@ public class DashboardsService {
 		spec.addColumn(new ReportColumn(column));
 		spec.getHierarchies().addAll(spec.getColumns());
 		// applies settings, including funding type as a measure
-		EndpointUtils.applyGeneralSettings(spec, config);
+		SettingsUtils.applyExtendedSettings(spec, config);
 		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
 		spec.setCalculateRowTotals(true);
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
@@ -232,7 +233,7 @@ public class DashboardsService {
 				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);
 		
-		EndpointUtils.applySettings(spec, filter);
+		SettingsUtils.applySettings(spec, filter);
 		
 		GeneratedReport report = generator.executeReport(spec);
 		//Not only years, we can have values like 'Fiscal calendar 2010-2011', so the Map should be <String,JSONObject>
@@ -286,40 +287,17 @@ public class DashboardsService {
 		String err = null;
 		JsonBean retlist = new JsonBean();
 		
-		// In order to calculate the current adjustment type we need to check if that parameter comes in the settings, in
-		// that case it overrides the default setting (that can be present or not in the endpoint call).
-		Map<String, Object> settings = (Map<String, Object>) filter.get(EPConstants.SETTINGS);
-		String adjTypeFromSettings = (String) settings.get(SettingsConstants.ADJUSTMENT_TYPE_ID);
-		if (adjTypeFromSettings != null && !adjTypeFromSettings.equals("")) {
-			adjtype = adjTypeFromSettings;
-		}
-		
-		switch (adjtype.toUpperCase()) {
-		case "AC":
-			adjustmenttype = MoConstants.ACTUAL_COMMITMENTS;
-			break;
-		case "AD":
-			adjustmenttype = MoConstants.ACTUAL_DISBURSEMENTS;
-			break;
-		case "PC":
-			adjustmenttype = MoConstants.PLANNED_COMMITMENTS;
-			break;
-		case "PD":
-			adjustmenttype = MoConstants.PLANNED_DISBURSEMENTS;
-			break;
-		default:
-			adjustmenttype = MoConstants.ACTUAL_COMMITMENTS;
-			break;
-		}
-		
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("fundingtype", ArConstants.DONOR_TYPE);
 		spec.addColumn(new ReportColumn(ColumnConstants.FUNDING_YEAR));
 		spec.addColumn(new ReportColumn(MoConstants.TYPE_OF_ASSISTANCE));
 		spec.getHierarchies().addAll(spec.getColumns());
-		spec.addMeasure(new ReportMeasure(adjustmenttype));
-		spec.addSorter(new SortingInfo(new ReportMeasure(adjustmenttype), false));
 		spec.setCalculateRowTotals(true);
-		EndpointUtils.applyGeneralSettings(spec, filter);
+		
+		// also configures funding type
+		SettingsUtils.applyExtendedSettings(spec, filter);
+		
+		spec.addSorter(new SortingInfo(spec.getMeasures().get(0), false));
+		
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute("currentMember");
 		String numberformat = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT);

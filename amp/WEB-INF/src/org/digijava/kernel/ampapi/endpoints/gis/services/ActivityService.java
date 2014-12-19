@@ -32,10 +32,9 @@ import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -91,7 +90,7 @@ public class ActivityService {
 		//then we have to fetch all other matchesfilters outisde mondrian
 
 		// apply default settings
-		EndpointUtils.applySettings(spec, config);
+		SettingsUtils.applySettings(spec, config);
 		// apply custom settings
 		configureMeasures(spec, config);
 		
@@ -221,7 +220,7 @@ public class ActivityService {
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ALWAYS_PRESENT));
 		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
 		if (config !=null) {
-			EndpointUtils.applySettings(spec, config);
+			SettingsUtils.applySettings(spec, config);
 		}
 		GeneratedReport report = null;
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,

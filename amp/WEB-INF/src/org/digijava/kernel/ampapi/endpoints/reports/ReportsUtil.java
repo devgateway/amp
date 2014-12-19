@@ -23,7 +23,6 @@ import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
-import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportMeasure;
@@ -44,10 +43,10 @@ import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
-import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -139,7 +138,7 @@ public class ReportsUtil {
 		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, 
 				(areas != null ? areas.length : 0)));
 		result.set(EPConstants.SETTINGS, cachedReportData != null ? 
-				EndpointUtils.getReportSettings(cachedReportData.report.spec) : null);
+				SettingsUtils.getReportSettings(cachedReportData.report.spec) : null);
 		return result;
 	}
 	
@@ -220,7 +219,7 @@ public class ReportsUtil {
 		//update report data presentation
 		configureFilters(specImpl, formParams);
 		configureSorting(specImpl, formParams);
-		EndpointUtils.applySettings(specImpl, formParams);
+		SettingsUtils.applySettings(specImpl, formParams);
 		
 		//update other settings
 		setOtherOptions(specImpl, formParams);

@@ -40,11 +40,10 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
-import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -109,7 +108,7 @@ public class LocationService {
 		spec.addColumn(new ReportColumn(admlevel));
 		spec.getHierarchies().addAll(spec.getColumns());
 		// also configures the measure(s) from funding type settings request
-		EndpointUtils.applyGeneralSettings(spec, config);
+		SettingsUtils.applyExtendedSettings(spec, config);
 		
 		MondrianReportFilters filterRules = new MondrianReportFilters(); 
 		

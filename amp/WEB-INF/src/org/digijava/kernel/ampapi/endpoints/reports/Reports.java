@@ -38,6 +38,7 @@ import org.dgfoundation.amp.reports.mondrian.converters.MondrianReportFiltersCon
 import org.dgfoundation.amp.reports.saiku.export.AMPPdfExport;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -56,7 +57,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.hibernate.Session;
@@ -111,7 +111,7 @@ public class Reports {
 		JSONResult result = new JSONResult();
 		ReportMetadata metadata = new ReportMetadata();
 		metadata.setReportSpec(spec);
-		metadata.setSettings(EndpointUtils.getReportSettings(spec));
+		metadata.setSettings(SettingsUtils.getReportSettings(spec));
 		metadata.setName(ampReport.getName());
 		metadata.setRecordsPerPage(ReportPaginationUtils.getRecordsNumberPerPage());
 		
@@ -350,7 +350,7 @@ public class Reports {
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
 			if(filterRules != null) spec.setFilters(filterRules);
 			if(queryModel.containsKey("settingsApplied") && (Boolean)queryModel.get("settingsApplied")) {
-				EndpointUtils.applySettings(spec, extractSettings(queryModel));
+				SettingsUtils.applySettings(spec, extractSettings(queryModel));
 			}
 			report = (SaikuGeneratedReport) generator.executeReport(spec);
 			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + report.generationTime + "(ms)");

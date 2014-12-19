@@ -8,6 +8,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.digijava.kernel.ampapi.endpoints.settings.SettingOptions;
+import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 
 /**
@@ -23,6 +24,6 @@ public class AmpConfiguration {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "Settings")
 	public List<SettingOptions> getSettings() {
-		return EndpointUtils.getGisSettings();
+		return SettingsUtils.getGisSettings();
 	}
 }

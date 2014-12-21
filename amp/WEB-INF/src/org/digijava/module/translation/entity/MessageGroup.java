@@ -1,14 +1,7 @@
 package org.digijava.module.translation.entity;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.xml.datatype.DatatypeFactory;
 
@@ -255,31 +248,31 @@ public class MessageGroup {
 		return retValue;
 	}
 	
-	public Trn createTrn() throws Exception{
-		ObjectFactory of=new ObjectFactory();
-		Trn trn=of.createTrn();
+	public Trn createTrn() throws Exception {
+		ObjectFactory of = new ObjectFactory();
+		Trn trn = of.createTrn();
 		trn.setKey(this.getKey());
-		for(Map.Entry<String ,Message> entry : messages.entrySet()){
-			Message msg=entry.getValue();
-			if(trn.getKeywords()==null){
+		for (Map.Entry<String ,Message> entry : messages.entrySet()) {
+			Message msg = entry.getValue();
+			if (trn.getKeywords() == null) {
 				trn.setKeywords(msg.getKeyWords());
 			}
-			if(trn.getSiteId()==null){
+			if (trn.getSiteId() == null) {
 				trn.setSiteId(msg.getSiteId());
 			}
 			//creating Language
-			Language lang=of.createLanguage();
+			Language lang = of.createLanguage();
 			lang.setCode(msg.getLocale());
 			lang.setValue(msg.getMessage());
 			//created
-			Calendar cal_u = Calendar.getInstance();
-			cal_u.setTime(msg.getCreated());
-			lang.setUpdated(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar(cal_u.get(Calendar.YEAR),cal_u.get(Calendar.MONTH),cal_u.get(Calendar.DAY_OF_MONTH),cal_u.get(Calendar.HOUR),cal_u.get(Calendar.MINUTE),cal_u.get(Calendar.SECOND))));
-			//last accessed			
-			if(msg.getLastAccessed()!=null){
-				Calendar lastAccessed = Calendar.getInstance();
-				lastAccessed.setTime(msg.getLastAccessed());						
-				lang.setLastAccessed(DatatypeFactory.newInstance().newXMLGregorianCalendar(new GregorianCalendar(lastAccessed.get(Calendar.YEAR),lastAccessed.get(Calendar.MONTH),lastAccessed.get(Calendar.DAY_OF_MONTH),lastAccessed.get(Calendar.HOUR),lastAccessed.get(Calendar.MINUTE),lastAccessed.get(Calendar.SECOND))));						
+            GregorianCalendar calUpdated = new GregorianCalendar();
+            calUpdated.setTime(msg.getCreated() == null ? new Date() : msg.getCreated());
+			lang.setUpdated(DatatypeFactory.newInstance().newXMLGregorianCalendar(calUpdated));
+			//last accessed
+			if (msg.getLastAccessed() != null) {
+                GregorianCalendar lastAccessed = new GregorianCalendar();
+				lastAccessed.setTime(msg.getLastAccessed());
+				lang.setLastAccessed(DatatypeFactory.newInstance().newXMLGregorianCalendar(lastAccessed));
 			}
 			trn.getLang().add(lang);
 		}

@@ -294,14 +294,7 @@ gulp.task('dev-index-no-mock', function(){
 gulp.task('webtest', ['build-tests', 'serve-tests', 'reload-tests']);
 
 gulp.task('test', ['build-tests'], function() {
-  var q = qunit('./app/test/index.html?noglobals=true', {}, function(code) {
-    if (code !== 0) {
-      g.util.log('Tests failed with code', code);
-      process.exit(code);
-    } else {
-      g.util.log('Tests passed :)');
-    }
-  });
+  g.util.log('TODO: write GIS tests in mocha');
 });
 
 gulp.task('build-tests', function() {

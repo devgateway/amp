@@ -302,7 +302,9 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 							jQuery.each(colModel, function(i, item) {								
 								if (item.reportColumnType == 'MEASURE') {									
 									var sum = null;
-									if(numberOfPages > 1) {
+									if(numberOfPages == 0) {
+										colData[item.name] = "";
+									} else if(numberOfPages > 1) {
 										// TODO: Replace this js sum with data from the endpoint.
 										sum = jQuery(grid).jqGrid('getCol', item.name, false, 'sum');
 										colData[item.name] = TabUtils.numberToString(sum, app.TabsApp.numericFormatOptions);
@@ -326,6 +328,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 							jQuery("#grand_total_row_" + id).remove();
 							var pageFooterRow = jQuery("#main-dynamic-content-region_" + id + " .ui-jqgrid-ftable .footrow-ltr");
 							var grandTotalFooterRow = jQuery(pageFooterRow).clone();
+							jQuery(grandTotalFooterRow).find("[aria-describedby^='tab_grid_" + id + "']").text("").attr("title", "");
 							jQuery(grandTotalFooterRow).attr("id", "grand_total_row_" + id);
 							var grandTotalText = TranslationManager.getTranslated('Grand Total:');
 							jQuery(grandTotalFooterRow).find(

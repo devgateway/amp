@@ -1,7 +1,6 @@
 
-	<% _.each(obj.activities, function(activity){ var activityJSON = activity.toJSON();%>
-
-		<tr>
+  <% _.each(obj.activities, function(activity){ var activityJSON = activity.toJSON();%>
+    <tr>
       <td>
         <a target="_blank" href="<%= activityJSON.ampUrl %>" title="<%= activityJSON["Project Title"] %>">
           <%= (activityJSON["Project Title"].length > 35 ? activityJSON["Project Title"].substring(0, 33)+'...': activityJSON["Project Title"]) %>
@@ -9,13 +8,13 @@
       </td>
       <td class="text-right">
         <% if(activityJSON["formattedActualCommitments"]){ %>
-            <%= activityJSON["formattedActualDisbursements"] %>
+            <%= activityJSON["formattedActualCommitments"] %>
         <% } else { %>
           -
         <% }%>
       </td>
       <td class="text-right">
-        <% if(activityJSON["formattedActualCommitments"]){ %>
+        <% if(activityJSON["formattedActualDisbursements"]){ %>
             <%= activityJSON["formattedActualDisbursements"] %>
         <% } else { %>
           -

@@ -209,7 +209,9 @@ public class MDXGenerator {
 			axisMdx = getAxis(config, config.getColumnAttributes().listIterator(config.getColumnAttributes().size()), 
 					with, "COLSET", axisMdx, config.isDoColumnsTotals(), 
 					Math.min(config.getColsHierarchiesTotals(), config.getColumnAttributes().size()-1) , dataFilterSets);
-			//axisMdx = forceEmptyMeasures(config, axisMdx, measuresStr);
+			if (config.isAllowColumnsEmptyData()) {
+				axisMdx = customEmptyQuorterAndMonth(config, with, axisMdx, measuresStr);
+			}
 			
 			//if there are data filters applied directly on columns, then we need to update total measures member definition
 			if (dataFilterSets.size() > 0) {
@@ -233,7 +235,7 @@ public class MDXGenerator {
 		}
 		
 		if (config.isDoColumnsTotals()) {
-			//replace last occurance of measures set tot total measures
+			//replace last occurrence of measures set tot total measures
 			int lastMeasuresPos = axisMdx.lastIndexOf(measuresStr); 
 			axisMdx = axisMdx.substring(0, lastMeasuresPos) + totalMeasures + axisMdx.substring(lastMeasuresPos + measuresStr.length());
 			
@@ -245,32 +247,47 @@ public class MDXGenerator {
 		return axisMdx;
 	}
 	
-	
-	/*
-	 * Example:
-	 * Filter(CrossJoin([Dates.Year].[Year].Members, {Measures.[Actual Disbursements],Measures.[Actual Commitments]}),
-	 * NOT (([Dates.Year].[Year].CurrentMember, Measures.[Actual Disbursements]) IS EMPTY AND ([Dates.Year].[Year].CurrentMember,Measures.[Actual Commitments]) IS EMPTY ))  
+	/**
+	 * This is a custom approach to enable empty columns for quarters or months
+	 * @param config
+	 * @param with
+	 * @param axisMdx
+	 * @param measures
+	 * @return
 	 */
-	/*
-	private String forceEmptyMeasures(MDXConfig config, String axisMdx, String measuresStr) {
-		//if empty columns are already requested, or no forcing was requested, then nothing to do
-		if (config.isAllowColumnsEmptyData() || !config.isForceColumnsMeasuresEmptyData()
-				|| config.getColumnMeasures().size() < 2) //nothing to force if measures count is < 2 
+	private String customEmptyQuorterAndMonth(MDXConfig config, StringBuilder with, String axisMdx, String measures) {
+		/*
+		 * This is a custom approach.
+		 * Assumption: we request empty columns only for quarters and months.
+		 * Empty measures columns are always provided.
+		 * Empty years are never provided.
+		 * 
+		 * The requirement is custom, thus there is no generic rule here
+		 */
+		
+		// assumption that the columns group starts with year column - checking it
+		if (config.getColumnAttributes() == null || config.getColumnAttributes().size() == 0 
+				|| !config.getColumnAttributes().iterator().next().getName().equals(MoConstants.ATTR_YEAR)) {
+			logger.error("Invalid MDXConfig: isAllowColumnsEmptyData = " + config.isAllowColumnsEmptyData() 
+					+ " and column attributes: " + config.getColumnAttributes()); 
 			return axisMdx;
-		StringBuilder filterEmptyPerGroup = new StringBuilder();
-		
-		filterEmptyPerGroup.append(MoConstants.FUNC_FILTER).append("(").append(axisMdx).append(", ").append(" NOT (");
-		for (Iterator<MDXMeasure> iter = config.getColumnMeasures().iterator(); iter.hasNext(); ) {
-			MDXMeasure colMeasure = iter.next();
-			filterEmptyPerGroup.append("(").append(axisMdx.replace(measuresStr, colMeasure.toString())).append(") IS EMPTY");
-			if (iter.hasNext())
-				filterEmptyPerGroup.append(" AND ");
 		}
-		filterEmptyPerGroup.append("))"); //1 from NOT and 1 from Filter
 		
-		return filterEmptyPerGroup.toString();
+		axisMdx = axisMdx.replaceAll(MoConstants.FUNC_NON_EMPTY_CROSS_JOIN, MoConstants.FUNC_CROSS_JOIN);
+		
+		MDXAttribute yearAttr = config.getColumnAttributes().iterator().next();
+		
+		// get 1st cross join element (it can be either years column, either years filter)
+		String years = axisMdx.substring(axisMdx.indexOf('(') + 1, axisMdx.indexOf(',')).trim();
+		String yearsSet = "CUSTOM_YEARS_SET";
+		with.append("SET ").append(yearsSet).append(" AS ").append(MoConstants.FUNC_EXTRACT).append("(")
+		.append(MoConstants.FUNC_NON_EMPTY_CROSS_JOIN).append("(").append(years).append(", ")
+		.append(measures).append("), ").append(yearAttr.getDimensionAndHierarchy()).append(")");
+		
+		axisMdx = axisMdx.replace(years, yearsSet);
+		
+		return axisMdx;
 	}
-	*/
 	
 	/**
 	 * Adds formated measure member definition

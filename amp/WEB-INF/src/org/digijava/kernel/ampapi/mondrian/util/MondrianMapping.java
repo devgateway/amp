@@ -46,12 +46,17 @@ public class MondrianMapping {
 		String monthHierarchy = MoConstants.H_MONTH;
 		String quarterHierarchy = MoConstants.H_QUARTER;
 		String yearHierarchy = MoConstants.H_YEAR;
-		//TODO: detect calendar specific dimension/hierarchy to be used
+		boolean addQuarter = true;
 		
 		switch(grouping) {
-		case GROUPING_MONTHLY: dateTuple.add(new MDXLevel(dateDimension, monthHierarchy, MoConstants.ATTR_MONTH));
-		case GROUPING_QUARTERLY: dateTuple.add(0, new MDXLevel(dateDimension, quarterHierarchy, MoConstants.ATTR_QUARTER));
-		case GROUPING_YEARLY: dateTuple.add(0, new MDXLevel(dateDimension, yearHierarchy, MoConstants.ATTR_YEAR));
+		case GROUPING_MONTHLY: 
+			dateTuple.add(new MDXLevel(dateDimension, monthHierarchy, MoConstants.ATTR_MONTH));
+			addQuarter = false;
+		case GROUPING_QUARTERLY:
+			if (addQuarter)
+				dateTuple.add(0, new MDXLevel(dateDimension, quarterHierarchy, MoConstants.ATTR_QUARTER));
+		case GROUPING_YEARLY: 
+			dateTuple.add(0, new MDXLevel(dateDimension, yearHierarchy, MoConstants.ATTR_YEAR));
 		default:
 			break;
 		}
@@ -68,20 +73,6 @@ public class MondrianMapping {
 		}
 	}
 	
-	/* candidate for removal
-	public static String getPropertyName(ReportElement elem) {
-		switch(elem.type) {
-		case ENTITY: return getPropertyName(elem.entity);
-		case DATE: return MoConstants.P_DATE;
-		default: return null;
-		}
-	}
-		
-	private static String getPropertyName(NamedTypedEntity entity) {
-		return idProperty.get(entity);
-	}
-	*/
-	
 	public static String getAll(MDXAttribute mdxAttr) {
 		if (mdxAttr.getDimension().equals(MoConstants.DATES)) {
 			String hierarchy = mdxAttr instanceof MDXLevel ? ((MDXLevel)mdxAttr).getHierarchy() : MoConstants.H_DATES; 
@@ -89,15 +80,6 @@ public class MondrianMapping {
 		}
 		return null;
 	}
-	
-	/* candidate for removal
-	public static String getDuplicateHierarchy(String hierarchy) {
-		String dupHierarchy = duplicateHierarchy.get(hierarchy);
-		if (dupHierarchy == null)
-			dupHierarchy = hierarchy;
-		return dupHierarchy;
-	}
-	*/
 	
 	/**
 	 * Mappings between actual hierarchies and their duplicates to be used on Filter axis
@@ -206,7 +188,6 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.DONOR_GROUP, new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
 			addColumnDefinition(ColumnConstants.DONOR_AGENCY, new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.ATTR_ORG_NAME, MoConstants.ATTR_ORG_NAME));
 			addColumnDefinition(ColumnConstants.DONOR_ACRONYM, new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_NAME, MoConstants.ATTR_ORG_ACRONYM));
-			
 			addColumnDefinition(ColumnConstants.DONOR_ID, new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.ATTR_ORG_ID, MoConstants.ATTR_ORG_ID));
 			addColumnDefinition(ColumnConstants.EXECUTING_AGENCY_TYPE, new MDXLevel(MoConstants.EXECUTING_AGENCY, MoConstants.H_ORG_TYPE_NAME, MoConstants.ATTR_ORG_TYPE_NAME));
 			addColumnDefinition(ColumnConstants.EXECUTING_AGENCY_GROUPS, new MDXLevel(MoConstants.EXECUTING_AGENCY, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
@@ -238,9 +219,6 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.SECTOR_GROUP_GROUP, new MDXLevel(MoConstants.SECTOR_GROUP, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
 
 			//put(new ReportColumn(ColumnConstants.CONTRACTING_AGENCY_DEPARTMENT_DIVISION, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.??, MoConstants.H_ORG_TYPE_NAME, MoConstants.ATTR_ORG_TYPE_NAME));
-			//put(new ReportColumn(ColumnConstants.CONTRACTING_AGENCY_GROUPS, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.??, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
-			//put(new ReportColumn(ColumnConstants.CONTRACTING_AGENCY, ReportEntityType.ENTITY_TYPE_ALL), new MDXLevel(MoConstants.??, MoConstants.H_ORG_NAME, MoConstants.ATTR_ORG_NAME));
-			//addColumnDefinition(ColumnConstants.CONTRACTING_AGENCY_ID, new MDXLevel(MoConstants.RESPONSIBLE_AGENCY, MoConstants.ATTR_ORG_ID, MoConstants.ATTR_ORG_ID));
 			addColumnDefinition(ColumnConstants.PRIMARY_SECTOR,  new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 			addColumnDefinition(ColumnConstants.PRIMARY_SECTOR_SUB_SECTOR, new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.H_LEVEL_1_SECTOR, MoConstants.ATTR_LEVEL_1_SECTOR_NAME));
 			addColumnDefinition(ColumnConstants.PRIMARY_SECTOR_SUB_SUB_SECTOR, new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.H_LEVEL_2_SECTOR, MoConstants.ATTR_LEVEL_2_SECTOR_NAME));

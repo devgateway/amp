@@ -133,6 +133,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * 2. brings the columns specified as hierarchies to front
 	 * 
 	 * Somehow hacky, but faster to code than redoing the whole rest of the code to support input in any order. Sorry, Nadia :=)  
+	 * 
+	 * Nadia's note: I'm glad that you made up your mind to not change the rest of the code :P
 	 */
 	protected void reorderColumnsByHierarchies(ReportSpecification spec) {
 		if (spec.getHierarchies() == null) return; // nothing to do
@@ -363,14 +365,14 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//add sorting
 		configureSortingRules(config, spec, doHierarchiesTotals);
 		
+		// add empty rows and columns request configuration
+		addEmptyColRows(spec, config);
+		
 		//add filters
 		addFilters(spec.getFilters(), config);
 		
 		//add settings
 		addSettings(spec.getSettings(), config);
-		
-		//add empty rows and columns request configuration
-		addEmptyColRows(spec, config);
 		
 		return config;
 	}
@@ -420,14 +422,20 @@ public class MondrianReportGenerator implements ReportExecutor {
 			ReportElement elem = entry.getKey();
 			MDXElement mdxElem = null;
 			
-			if (elem.type != ElementType.ENTITY)
+			// at the moment only dates are filtered out, but years, quarters and months are not :(
+			if (elem.type == ElementType.DATE)
 				continue; // ignore DATE filters, as those are now processed through the SQL filter
 			
-			if (FiltersGroup.FILTER_GROUP.containsKey(elem.entity.getEntityName())) {
-				// processed through SQL
-				continue;
+			if (elem.type == ElementType.ENTITY) {
+				if (FiltersGroup.FILTER_GROUP.containsKey(elem.entity.getEntityName())) {
+					// processed through SQL
+					continue;
+				} else {
+					mdxElem = MondrianMapping.toMDXElement(elem.entity);
+				}
+			} else {
+				mdxElem = MondrianMapping.getElementByType(elem.type);
 			}
-			mdxElem = MondrianMapping.toMDXElement(elem.entity);
 				
 			if (mdxElem == null) {
 				reportError("Mapping not defined for report element = " + elem);
@@ -467,33 +475,32 @@ public class MondrianReportGenerator implements ReportExecutor {
 	
 	private void addEmptyColRows(ReportSpecification spec, MDXConfig config) {
 		config.setAllowEmptyColumnsData(spec.isDisplayEmptyFundingColumns());
-		/* fix for AMP-18330
-		 * we cannot disable "NON EMPTY" on MDX generation due to performance issue
-		config.setAllowEmptyRowsData(spec.isDisplayEmptyFundingRows());
-		=> we will use a sysnthetic measure "Always Present" as a workaround 
-		and we'll remove it's output during post-process
-		*/
-		if (spec.isDisplayEmptyFundingRows()) {
-			config.setAllowEmptyRowsData(true);
-			/*
-			config.addColumnMeasure((MDXMeasure) MondrianMapping.toMDXElement(ALWAYS_PRESENT));
-			// add explicit filter to allow always present year if date filters are detected
-			if (spec.getFilters() != null && spec.getFilters().getFilterRules() != null) {
-				MondrianReportFilters reportFilters = (MondrianReportFilters) spec.getFilters(); 
-				for (ElementType type : ElementType.values()) {
-					if (!ElementType.ENTITY.equals(type)
-							&& reportFilters.getFilterRules().containsKey(new ReportElement(type))) {
-						try {
-							reportFilters.addSingleYearFilterRule(MoConstants.ALWAYS_PRESENT_YEAR, true);
-						} catch (Exception e) {
-							logger.error(e);
-						}
-						break;
-					}
+		
+		if (spec.isDisplayEmptyFundingColumns() && ReportSpecificationImpl.class.isAssignableFrom(spec.getClass())) {
+			ReportSpecificationImpl specImpl = (ReportSpecificationImpl) spec;
+			// filter out undefined quarters & months
+			try {
+				MondrianReportFilters filters = (MondrianReportFilters) spec.getFilters();
+				if (filters == null) {
+					filters = new MondrianReportFilters();
+					specImpl.setFilters(filters);
 				}
+					
+				switch (spec.getGroupingCriteria()) {
+				case GROUPING_QUARTERLY:
+					filters.addSingleQuarterFilterRule(MoConstants.UNDEFINED_QUARTER_KEY, false);
+					break;
+				case GROUPING_MONTHLY:
+					filters.addSingleMonthFilterRule(MoConstants.UNDEFINED_MONTH_KEY, false);
+					break;
+				default:
+					break;
+				}
+			} catch (Exception e) {
+				logger.error(e);
 			}
-			*/
 		}
+		config.setAllowEmptyRowsData(spec.isDisplayEmptyFundingRows());
 	}
 	
 	private CellDataSet postProcess(ReportSpecification spec, CellSet cellSet) throws AMPException {		

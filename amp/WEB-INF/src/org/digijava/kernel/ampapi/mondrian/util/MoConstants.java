@@ -48,6 +48,7 @@ public final class MoConstants {
 	public static final String FUNC_IIF = "IIf";
 	public static final String FUNC_CAST = "Cast";
 	public static final String FUNC_TAIL = "Tail";
+	public static final String FUNC_EXTRACT = "Extract";
 	public static final String FUNC_DESCENDANTS = "Descendants";
 	public static final String FUNC_ASCENDANTS = "Ascendants";
 	public static final String FUNC_GENERATE = "Generate";
@@ -289,6 +290,9 @@ public final class MoConstants {
 	public static final String BOOLEAN_FALSE_KEY = "1";
 	public static final String REGION_UNDEFINED = "Region: Undefined";
 	public static final Integer UNDEFINED_KEY = 999999999;
+	public static final Integer UNDEFINED_YEAR_KEY = 9999;
+	public static final Integer UNDEFINED_QUARTER_KEY = 99;
+	public static final Integer UNDEFINED_MONTH_KEY = 99;
 	public static final String FILTER_UNDEFINED_MAX = String.valueOf(UNDEFINED_KEY - 1);
 	public static final Integer ALWAYS_PRESENT_YEAR = 1970;
 	

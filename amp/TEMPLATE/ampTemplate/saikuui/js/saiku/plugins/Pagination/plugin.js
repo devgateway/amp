@@ -10,7 +10,7 @@ Saiku.events.bind('session:new', function(session) {
 	        		$(".pagination_sprite").show();
 	        		$(".pagination_info").show();
 		        	var current_page = this.query.get('page')+1;
-		        	var total_pages = Math.floor(this.query.get('total_rows')/Settings.RESULTS_PER_PAGE)+1;
+		        	var total_pages = this.query.get('max_page_no') + 1;
 		        	$(this.el).find(".pagination_info").val(current_page + "/" + total_pages);
 	        	}
 	        	else

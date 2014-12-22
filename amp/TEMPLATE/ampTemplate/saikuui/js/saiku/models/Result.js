@@ -38,6 +38,7 @@ var Result = Backbone.Model.extend({
         this.firstRun = true;
 		//Start Custom Code for Pagination
         this.query.set({'total_rows': response.height});
+        this.updatePagination();
         //End Custom Code for Pagination
 
         this.query.workspace.trigger('query:result', {
@@ -57,18 +58,30 @@ var Result = Backbone.Model.extend({
     
     url: function() {
     	if(this.query.get('report_id')){
-	    	//Start Custom Code for Pagination
-	    	var result_type = "result";
-	    	if(Settings.PAGINATION) {
-	    		result_type = "paginatedresult";
-	        	var start = this.query.get('page')*Settings.RESULTS_PER_PAGE;
-	        	var end = start  + Settings.RESULTS_PER_PAGE;
-	        	this.set({'start': start});
-	        	this.set({'end': end});
-	    	}
-    		
-    		return encodeURI("../../../rest/data/saikureport/" + this.query.get('report_id'));
+	    	return encodeURI("../../../rest/data/saikureport/" + this.query.get('report_id'));
     	}
         return "api/query/execute";
+    },
+
+    updatePagination: function() {
+    	//Start Custom Code for Pagination
+    	if(Settings.PAGINATION) {
+    		result_type = "paginatedresult";
+    		var totalRows =  this.query.get('total_rows');
+    		var page = this.query.get('page');
+    		var maxPageNo = 0;
+    		if (Settings.RESULTS_PER_PAGE > 0) {
+    			maxPageNo = (((totalRows + Settings.RESULTS_PER_PAGE - 1) / Settings.RESULTS_PER_PAGE) >> 0) - 1;
+    		}
+    		this.query.set({'max_page_no': maxPageNo});
+    		if (maxPageNo < page) {
+    			page = maxPageNo;
+    			this.query.set('page', page);
+    		}
+        	var start = page * Settings.RESULTS_PER_PAGE;
+        	var end = start  + Settings.RESULTS_PER_PAGE;
+        	this.set({'start': start});
+        	this.set({'end': end});
+    	}
     }
 });

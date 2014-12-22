@@ -378,6 +378,8 @@ public class Reports {
 			int start = 0, end = 0, page = 0;
 			page = (int)pageParam;
 			int rpp = ReportPaginationUtils.getRecordsNumberPerPage();
+			int pageLimit = rpp == 0 ? 0 : ((result.length + rpp - 1) / rpp - 1);
+			page = Math.min(page,  pageLimit);
 			start = rpp*page;
 			end = (rpp*page+rpp);
 			if(end > result.length) 

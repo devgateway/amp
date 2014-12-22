@@ -86,12 +86,12 @@ var Query = Backbone.Model.extend({
     	this.run(true);
     },
     next_page: function() {
-    	this.set({page: (this.get('page')+1)});
+    	this.set({page: Math.min(this.get('page')+1, this.get('max_page_no'))});
     	this.run(true);
     },
     last_page: function() {
-    	var last_page = this.get('total_rows')/Settings.RESULTS_PER_PAGE;
-    	this.set({page: Math.floor(last_page)});
+    	var last_page = this.get('max_page_no');
+    	this.set({page: last_page});
     	this.run(true);
     },
     //End Custom Code for Pagination

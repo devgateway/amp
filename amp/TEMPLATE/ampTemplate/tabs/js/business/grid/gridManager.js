@@ -81,6 +81,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 			var rowNum = 0;
 			var colModel = columnsMapping.createJQGridColumnModel(tableStructure);
 			var grandTotals = null;
+			var numberOfPages = null;
 			jQuery(grid).jqGrid(
 					{
 						caption : false,
@@ -113,6 +114,7 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 								return obj.page.currentPageNumber;
 							},
 							total : function(obj) {
+								numberOfPages = obj.page.totalPageCount;
 								return obj.page.totalPageCount;
 							},
 							records : function(obj) {
@@ -296,14 +298,24 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 							// Calculate footer totals row for this page.
 							var colData = {};
 							var totalColumnIndex = colModel.length - 1;
-							jQuery.each(colModel, function(i, item) {
-								if (item.reportColumnType == 'MEASURE') {
-									// TODO: Replace this js sum with data from
-									// the endpoint.
-									var sum = jQuery(grid).jqGrid('getCol', item.name, false, 'sum');
-									colData[item.name] = TabUtils.numberToString(sum, app.TabsApp.numericFormatOptions);
+							var auxI = 0;
+							jQuery.each(colModel, function(i, item) {								
+								if (item.reportColumnType == 'MEASURE') {									
+									var sum = null;
+									if(numberOfPages > 1) {
+										// TODO: Replace this js sum with data from the endpoint.
+										sum = jQuery(grid).jqGrid('getCol', item.name, false, 'sum');
+										colData[item.name] = TabUtils.numberToString(sum, app.TabsApp.numericFormatOptions);
+									} else {
+										// Save extra time calculating the sum of elements.
+										if(grandTotals[auxI] != undefined) {
+											sum = grandTotals[auxI].displayedValue;
+											colData[item.name] = sum;
+										}
+										auxI++;
+									}									
 									totalColumnIndex--;
-								}
+								}							
 							});
 							colData[colModel[totalColumnIndex].name] = TranslationManager.getTranslated('Page Total:');
 							jQuery(grid).jqGrid('footerData', 'set', colData);

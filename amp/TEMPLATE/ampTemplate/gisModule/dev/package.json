@@ -33,6 +33,11 @@
         "./node_modules/jquery/dist/jquery.min.js:jQuery"
       ]
     },
+    "./node_modules/bootstrap/dist/js/bootstrap.js": {
+      "depends": [
+        "jquery:jquery"
+      ]
+    },
     "nvd3": {
       "exports": "nvd3",
       "depends": [
@@ -41,7 +46,7 @@
     }
   },
   "devDependencies": {
-    "backbone": "^1.1.2",
+    "backbone": "1.1.2",
     "bootstrap": "3.3.0",
     "brfs": "^1.1.2",
     "browserify": "^4.2.0",
@@ -76,8 +81,8 @@
     "gulp-watch": "^0.6.5",
     "husl": "^4.0.2",
     "i18next": "~1.7.4",
-    "jquery": "^2.1.1",
-    "jquery-ui": "^1.10.5",
+    "jquery": "2.1.1",
+    "jquery-ui": "1.10.5",
     "jshint-stylish": "^0.2.0",
     "leaflet": "^0.7.3",
     "leaflet-div-style-icon": "^0.1.0",

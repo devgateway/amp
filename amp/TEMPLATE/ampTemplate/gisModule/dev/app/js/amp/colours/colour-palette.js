@@ -137,7 +137,7 @@ var Palette = Backbone.Model.extend({
         sites: el.sites,  // project sites
         sitesMap: _(el.sites).reduce(toTrueKey, {}),  // efficient lookup for test
         test: function(siteId) {
-          return !!this.get('sitesMap')[siteId];
+          return !!this.get('sitesMap')[siteId]; //double !! casts to boolean
         }
       }).extend(DEFAULT.SET[idx]);
     }, this);

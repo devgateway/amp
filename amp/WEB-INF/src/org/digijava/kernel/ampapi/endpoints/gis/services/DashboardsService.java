@@ -121,7 +121,7 @@ public class DashboardsService {
 		spec.getHierarchies().addAll(spec.getColumns());
 		// applies settings, including funding type as a measure
 		SettingsUtils.applyExtendedSettings(spec, config);
-		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false));
+		spec.addSorter(new SortingInfo(spec.getMeasures().iterator().next(), false, true));
 		spec.setCalculateRowTotals(true);
 		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
 				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);

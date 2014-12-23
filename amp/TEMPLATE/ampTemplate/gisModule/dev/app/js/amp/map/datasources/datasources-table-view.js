@@ -44,11 +44,11 @@ module.exports = Backbone.View.extend({
         self.collection.getPageDetails()
       ));
 
-     self.app.translator.translateDOM(
-    	        self.template( self.collection.getPageDetails())).then(//self.model.toJSON()
-    		     function(newEl) {
-    		       self.$el.html(newEl);
-        	   });
+      self.app.translator.translateDOM(
+        self.template(self.collection.getPageDetails())).then(
+        function(newEl) {
+          self.$el.html(newEl);
+        });
       // drs: review, inconsistant behaviour between chrome and FF
       if (!_.isEmpty(tableContent)) {
         self.$('table', self.$el).append(tableContent);

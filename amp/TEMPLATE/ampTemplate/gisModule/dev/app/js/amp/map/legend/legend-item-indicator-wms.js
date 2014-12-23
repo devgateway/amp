@@ -7,7 +7,7 @@ var Template = fs.readFileSync(__dirname + '/legend-item-indicator-wms.html', 'u
 module.exports = Backbone.View.extend({
 
   template: _.template(Template),
-  className: 'indicatorwms-legend', //TODO: rename to legend-indicator-wms consistant with others, 
+  className: 'indicatorwms-legend', //TODO: rename to legend-indicator-wms consistant with others,
 
   render: function() {
     var base = this.model.get('link');

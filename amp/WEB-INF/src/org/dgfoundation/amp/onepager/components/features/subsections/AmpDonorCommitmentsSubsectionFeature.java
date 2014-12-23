@@ -24,8 +24,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
  * @author mpostelnicu@dgateway.org
  * since Nov 8, 2010
  */
-public class AmpDonorCommitmentsSubsectionFeature extends
-		AmpSubsectionFeaturePanel<AmpFunding> {
+public class AmpDonorCommitmentsSubsectionFeature extends AmpSubsectionFeatureFundingPanel<AmpFunding> {
 
 	protected AmpDonorCommitmentsFormTableFeature commitsTableFeature;
 	
@@ -38,7 +37,7 @@ public class AmpDonorCommitmentsSubsectionFeature extends
 	 */
 	public AmpDonorCommitmentsSubsectionFeature(String id,
 			final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
-		super(id, fmName, model);
+		super(id, fmName, model,Constants.COMMITMENT);
 		commitsTableFeature = new AmpDonorCommitmentsFormTableFeature("commitsTableFeature", model, "Commitments Table", transactionType);
 		add(commitsTableFeature);
 		

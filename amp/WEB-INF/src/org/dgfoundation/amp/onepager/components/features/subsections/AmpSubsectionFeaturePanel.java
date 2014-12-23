@@ -45,9 +45,11 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
     public AmpSubsectionFeaturePanel(String id, String fmName, IModel<T> model, boolean hideLabel){
         this(id, fmName, model , hideLabel, false);
     }
-
 	public AmpSubsectionFeaturePanel(String id, String fmName, IModel<T> model, boolean hideLabel, boolean hideAmountsInThousandsWarning) {
-		// TODO Auto-generated constructor stub
+		this(id, fmName,  model, hideLabel, hideAmountsInThousandsWarning,true);
+	}
+
+	public AmpSubsectionFeaturePanel(String id, String fmName, IModel<T> model, boolean hideLabel, boolean hideAmountsInThousandsWarning,boolean showSummary) {
 		super(id, model,fmName, hideLabel);
         Model<String> labelText = new Model<String>();
         Label amountsInThousandsLabel = new Label("amountsInThousands", labelText);
@@ -73,8 +75,10 @@ public abstract class AmpSubsectionFeaturePanel<T> extends AmpFeaturePanel<T> {
 		slider = new TransparentWebMarkupContainer("slider");
 		slider.setOutputMarkupId(true);
 		add(slider);
-//		Label test=new Label("featureCaptionLabel",new Model("hola"));
-//		add(test);
+		if (showSummary) {
+			TransparentWebMarkupContainer summary = new TransparentWebMarkupContainer("featureSummary");
+			add(summary);
+		}
 	}
 	
 	public TransparentWebMarkupContainer getSlider() {

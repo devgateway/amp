@@ -30,7 +30,7 @@ import org.digijava.module.gateperm.util.PermissionUtil;
  * since Nov 8, 2010
  */
 public class AmpDonorDisbursementsSubsectionFeature extends
-		AmpSubsectionFeaturePanel<AmpFunding> {
+		AmpSubsectionFeatureFundingPanel<AmpFunding> {
 
 	private IModel<AmpOrganisation> fundingOrgModel; 
 	
@@ -66,8 +66,7 @@ public class AmpDonorDisbursementsSubsectionFeature extends
 	 */
 	public AmpDonorDisbursementsSubsectionFeature(String id,
 			final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
-		super(id, fmName, model);
-		
+		super(id, fmName, model,Constants.DISBURSEMENT);
 		disbursementsTableFeature = new AmpDonorDisbursementsFormTableFeature("disbursementsTableFeature", model, "Disbursements Table", transactionType);
 		add(disbursementsTableFeature);
 		fundingOrgModel = new PropertyModel<AmpOrganisation>(model,"ampDonorOrgId");

@@ -19,7 +19,10 @@ public class AmpLabelInformationFieldPanel<T> extends AmpFieldPanel<T> {
 	}
 	public AmpLabelInformationFieldPanel(String id, IModel<T> model, String fmName) {
 		super(id, model, fmName,false,true);
-		valueLabel=new Label("valueLabel",model);
+		if(model!=null){
+			valueLabel=new Label("valueLabel",model);
+		}
+		
 		add(valueLabel);
 		this.setOutputMarkupId(true);
 	}

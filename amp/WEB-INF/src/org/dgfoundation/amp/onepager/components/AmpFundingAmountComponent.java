@@ -209,9 +209,7 @@ public class AmpFundingAmountComponent<T> extends Panel {
 		}
 		if (amount.getModel().getObject() != null
 				&& currency.getModel() != null && dateValueNotNull) {
-			// ((AmpDatePickerFieldPanel)date).getDate().getValue()
-			// date.
-			// getmo getDefaultModel().getObject()
+
 			send(getPage(), Broadcast.BREADTH, new OverallFundingTotalsEvents(
 					target));
 		}

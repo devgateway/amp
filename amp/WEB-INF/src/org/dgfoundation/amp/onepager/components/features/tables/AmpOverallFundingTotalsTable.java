@@ -27,24 +27,24 @@ public class AmpOverallFundingTotalsTable extends AmpComponentPanel<Void> {
 	 //   AmpLabelFieldPanel<T>
 		
         @SuppressWarnings({ "rawtypes", "unchecked" })
-        AmpLabelInformationFieldPanel totalActualCommitments=new AmpLabelInformationFieldPanel("totalActualCommitments",new AmpOverallFundingModel(funding,Constants.COMMITMENT,CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()),"Total Actual Commitments");
+        AmpLabelInformationFieldPanel totalActualCommitments=new AmpLabelInformationFieldPanel("totalActualCommitments",new AmpOverallFundingModel(funding,null,Constants.COMMITMENT,CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()),"Total Actual Commitments");
 		add(totalActualCommitments);
 		
-		AmpLabelInformationFieldPanel totalActualDisbursements=new AmpLabelInformationFieldPanel("totalActualDisbursements",new AmpOverallFundingModel(funding,Constants.DISBURSEMENT,CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()),"Total Actual Disbursement");
+		AmpLabelInformationFieldPanel totalActualDisbursements=new AmpLabelInformationFieldPanel("totalActualDisbursements",new AmpOverallFundingModel(funding,null,Constants.DISBURSEMENT,CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()),"Total Actual Disbursement");
 		add(totalActualDisbursements);
 
 
-		AmpLabelInformationFieldPanel totalActualExpenditures=new AmpLabelInformationFieldPanel("totalActualExpenditures",new AmpOverallFundingModel(funding,Constants.EXPENDITURE,CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()),"Total Actual Expenditure");
+		AmpLabelInformationFieldPanel totalActualExpenditures=new AmpLabelInformationFieldPanel("totalActualExpenditures",new AmpOverallFundingModel(funding,null,Constants.EXPENDITURE,CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getValueKey()),"Total Actual Expenditure");
 		add(totalActualExpenditures);		
 
-        AmpLabelInformationFieldPanel totalPlannedCommitments=new AmpLabelInformationFieldPanel("totalPlannedCommitments",new AmpOverallFundingModel(funding,Constants.COMMITMENT,CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()),"Total Planned Commitments");
+        AmpLabelInformationFieldPanel totalPlannedCommitments=new AmpLabelInformationFieldPanel("totalPlannedCommitments",new AmpOverallFundingModel(funding,null,Constants.COMMITMENT,CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()),"Total Planned Commitments");
 		add(totalPlannedCommitments);
 		
-		AmpLabelInformationFieldPanel totalPlannedDisbursements=new AmpLabelInformationFieldPanel("totalPlannedDisbursements",new AmpOverallFundingModel(funding,Constants.DISBURSEMENT,CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()),"Total Planned Disbursement");
+		AmpLabelInformationFieldPanel totalPlannedDisbursements=new AmpLabelInformationFieldPanel("totalPlannedDisbursements",new AmpOverallFundingModel(funding,null,Constants.DISBURSEMENT,CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()),"Total Planned Disbursement");
 		add(totalPlannedDisbursements);
 
 
-		AmpLabelInformationFieldPanel totalPlannedExpenditures=new AmpLabelInformationFieldPanel("totalPlannedExpenditures",new AmpOverallFundingModel(funding,Constants.EXPENDITURE,CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()),"Total Planned Expenditure");
+		AmpLabelInformationFieldPanel totalPlannedExpenditures=new AmpLabelInformationFieldPanel("totalPlannedExpenditures",new AmpOverallFundingModel(funding,null,Constants.EXPENDITURE,CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getValueKey()),"Total Planned Expenditure");
 		add(totalPlannedExpenditures);		
 		
 	}

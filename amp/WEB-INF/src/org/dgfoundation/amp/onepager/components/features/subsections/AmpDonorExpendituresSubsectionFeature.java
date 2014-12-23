@@ -28,7 +28,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
  * since Nov 8, 2010
  */
 public class AmpDonorExpendituresSubsectionFeature extends
-		AmpSubsectionFeaturePanel<AmpFunding> {
+		AmpSubsectionFeatureFundingPanel<AmpFunding> {
 
 	protected AmpDonorExpendituresFormTableFeature expTableFeature;
 	
@@ -40,7 +40,7 @@ public class AmpDonorExpendituresSubsectionFeature extends
 	 */
 	public AmpDonorExpendituresSubsectionFeature(String id,
 			final IModel<AmpFunding> model, String fmName, int transactionType) throws Exception {
-		super(id, fmName, model);
+		super(id, fmName, model,Constants.EXPENDITURE);
 		expTableFeature = new AmpDonorExpendituresFormTableFeature("expTableFeature", model, "Expenditures Table", transactionType);
 		add(expTableFeature);
 		
@@ -49,10 +49,7 @@ public class AmpDonorExpendituresSubsectionFeature extends
 			public void onClick(AjaxRequestTarget target) {
 				AmpFundingDetail fd= new AmpFundingDetail();
 				fd.setAmpFundingId(model.getObject());
-				//fd.setTransactionAmount(0d);
 				fd.setReportingDate(new Date(System.currentTimeMillis()));
-			//	fd.setAdjustmentType(Constants.ACTUAL);
-				///fd.setTransactionDate(new Date(System.currentTimeMillis()));
 				fd.setTransactionType(Constants.EXPENDITURE);
 				fd.setAmpCurrencyId(CurrencyUtil.getWicketWorkspaceCurrency());
 				expTableFeature.getEditorList().addItem(fd);

@@ -18,7 +18,8 @@ function countCategories(data) {
 
 
 function chart(options) {
-  var _chart = nv.models.multiBarChart()
+  var maxValue = 10;
+  var _chart = nv.models.multiBarChart().forceY([0,maxValue]) //forceY will only enforce maxValue when there is no data
     .reduceXTicks(false)
     .margin({ top: 5, right: 10, bottom: 20, left: 50 });
 

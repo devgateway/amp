@@ -38,6 +38,7 @@ SaikuTableRenderer.prototype._render = function(data, options) {
                 if(Settings.AMP_REPORT_API_BRIDGE){
                 	checkTable(self._options.htmlObject);
                 }
+                $(".tooltipped").tipsy();
                 _.defer(function(that) {
                     if (self._options.hasOwnProperty('batch') && self._options.hasBatchResult) {                        
                         var batchRow = 0;
@@ -446,7 +447,20 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
 
                 var same = !headerSame && !isHeaderLowestLvl && (col == 0 || !topParentsDiffer(data, row, col)) && header.value === previousRow[col].value;
                 headerSame = !same;
-                var value = (same ? "<div>&nbsp;</div>" : '<div rel="' + row + ":" + col +'">' + header.value + '</div>');
+
+                var cleanText = header.value.replace(/<(?:.|\n)*?>/gm, '');
+                var tipsyText = "";
+                var cellText = "";
+                if(cleanText.length > 60) {
+                	tipsyText = ' class="tooltipped" original-title="' + cleanText + '" ';
+                	cellText = cleanText.substring(0, 60) + "...";
+                }
+                else
+                {
+                	tipsyText = "";
+                	cellText = cleanText;
+                }
+                var value = (same ? "<div>&nbsp;</div>" : '<div rel="' + row + ":" + col +'" ' + tipsyText + '>' + cellText + '</div>');
                 var tipsy = "";
                 /* var tipsy = ' original-title="';
                 if (!same && header.metaproperties) {

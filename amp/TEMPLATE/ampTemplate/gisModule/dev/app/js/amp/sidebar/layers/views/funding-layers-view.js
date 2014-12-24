@@ -38,7 +38,7 @@ module.exports = Backbone.View.extend({
     this.collection.reset(this.app.data.hilightFundingCollection.models);
 
     this.$el.html(this.template({title: this.title}));
-
+    this.app.translator.translateDOM(this.el); /* After to catch disabled */
     //this.$(this.el,this).html(this.template({title: this.title}));
 
     this.$('.layer-selector', this).html(this.collection.map(function(indicator) {

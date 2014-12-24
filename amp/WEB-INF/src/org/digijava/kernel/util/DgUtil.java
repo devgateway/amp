@@ -45,11 +45,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.hibernate.HibernateException;
+import org.digijava.module.aim.util.DbUtil;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.struts.tiles.ComponentContext;
@@ -77,7 +76,6 @@ import org.digijava.kernel.user.UserInfo;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.TeamMember;
 
 public class DgUtil {
@@ -198,31 +196,39 @@ public class DgUtil {
     }
 
     protected static void saveUserLanguagePreferences(HttpServletRequest request, Locale language) {
-        User user = RequestUtils.getUser(request);
-        if (user == null)
-        	return;
-    	 org.hibernate.Session session = PersistenceManager.getSession();
-    	 Site rootSite = getRootSite(RequestUtils.getSite(request));
-         UserLangPreferences preferences;
-
-         try {
-             UserPreferencesPK key = new UserPreferencesPK(user, rootSite);
-             preferences = (UserLangPreferences) session.load(UserLangPreferences.class, key);
-
-             logger.debug("Updating user language preferences");
-             preferences.setNavigationLanguage(language);
-             session.update(preferences);
-          }
-          catch (ObjectNotFoundException ex2) {
-             preferences = createDefaultLangPreferences(language, rootSite, user);
-             session.save(preferences);
-          }
-         // put preferences back
-         user.setUserLangPreferences(preferences);
+        saveUserLanguagePreferences(null, request, language);
     }
-    
+
+    public static void saveUserLanguagePreferences(User user, HttpServletRequest request, Locale language) {
+        if (user == null) {
+            user = RequestUtils.getUser(request);
+        }
+        if (user == null) {
+            return;
+        }
+    	org.hibernate.Session session = PersistenceManager.getSession();
+    	Site rootSite = getRootSite(RequestUtils.getSite(request));
+        UserLangPreferences preferences;
+
+        try {
+            UserPreferencesPK key = new UserPreferencesPK(user, rootSite);
+            preferences = (UserLangPreferences) session.load(UserLangPreferences.class, key);
+
+            logger.debug("Updating user language preferences");
+            preferences.setNavigationLanguage(language);
+            session.update(preferences);
+        }
+        catch (ObjectNotFoundException ex2) {
+            preferences = createDefaultLangPreferences(language, rootSite, user);
+            session.save(preferences);
+        }
+        // put preferences back
+        user.setUserLangPreferences(preferences);
+    }
+
+
     protected static void saveWorkspaceLanguagePreferences(HttpServletRequest request, Locale language) {
-    	TeamMember tm = (TeamMember) request.getSession(true).getAttribute("currentMember");
+        TeamMember tm = (TeamMember) request.getSession(true).getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
     	if (tm == null || tm.getAppSettings() == null || tm.getMemberId() == null)
     		return;
     	if (language.getCode().equals(tm.getAppSettings().getLanguage()))
@@ -231,6 +237,19 @@ public class DgUtil {
     	AmpTeamMember atm = (AmpTeamMember) PersistenceManager.getSession().get(AmpTeamMember.class, tm.getMemberId());
     	AmpTeam team = atm.getAmpTeam();
     	PersistenceManager.getSession().createQuery("update " + AmpApplicationSettings.class.getName() + " aas SET language='" + language.getCode() + "' where aas.team.ampTeamId = " + team.getAmpTeamId()).executeUpdate();
+    }
+
+    public static void saveWorkspaceLanguagePreferences(HttpServletRequest request, AmpTeam ampTeam, User user) {
+        AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(ampTeam.getAmpTeamId());
+
+        UserPreferencesPK key = new UserPreferencesPK(user, RequestUtils.getSite(request));
+        org.hibernate.Session session = PersistenceManager.getSession();
+        UserLangPreferences preferences = (UserLangPreferences) session.load(UserLangPreferences.class, key);
+
+        if (preferences.getNavigationLanguage() != null) {
+            ampAppSettings.setLanguage(preferences.getNavigationLanguage().getCode());
+        }
+        session.saveOrUpdate(ampAppSettings);
     }
     
     /**

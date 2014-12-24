@@ -36,7 +36,6 @@
 
 var rimraf = require('rimraf');
 var source = require('vinyl-source-stream');
-var qunit = require('node-qunit-phantomjs');
 var browserify = require('browserify');
 var watchify = require('watchify');
 var gulp = require('gulp');

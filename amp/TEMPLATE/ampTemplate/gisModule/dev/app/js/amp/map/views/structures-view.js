@@ -59,7 +59,6 @@ module.exports = Backbone.View
 
     this.listenTo(this.markerCluster, 'clusterclick', this.clusterClick);
 
-    _.bindAll(this, '_onEachFeature');
   },
 
   render: function() {
@@ -143,7 +142,47 @@ module.exports = Backbone.View
       self.customClusterMap[latLngString] = [marker];
     }
 
+    self._bindPopup(marker);
+
     return marker;
+  },
+
+
+  // Create pop-ups
+  _bindPopup: function(marker) {
+    var self = this,
+        feature = marker.feature;
+
+    /* TODO(thadk) switch individual feature to this standard parsed model input*/
+    /*var parsedProjectSitesList = this.app.data.structures.model.prototype.parse(feature);*/
+
+    if (feature.properties) {
+      var activityJSON = feature.properties.activity.toJSON();
+      marker.bindPopup(self.structureTemplate({
+        activityJSON: activityJSON,
+        properties: feature.properties
+      }),
+      {
+        maxWidth: 450,
+        offset: new L.Point(0, -2)
+      });
+    }
+
+    marker.on('click', function(evt) {
+      var feature = evt.target.feature;
+      if (feature) {
+        var projectId = feature.properties.activity.id;
+        self._hilightProject(projectId);
+      }
+    });
+
+    marker.on('popupclose', function(evt) {
+      var feature = evt.target.feature;
+      if (feature) {
+        var projectId = feature.properties.activity.id;
+        self._dehilightProject(projectId);
+      }
+    });
   },
 
   // 1. SVG Icon: works well with agresive clustering: aprox 40 px range

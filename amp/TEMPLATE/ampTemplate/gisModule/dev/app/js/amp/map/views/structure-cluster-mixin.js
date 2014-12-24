@@ -146,42 +146,5 @@ module.exports = {
       });
 
     a.layer.openPopup(self.map);
-  },
-
-
-  // Create pop-ups
-  _onEachFeature: function(feature, layer) {
-    var self = this;
-
-    /* TODO(thadk) switch individual feature to this standard parsed model input*/
-    /*var parsedProjectSitesList = this.app.data.structures.model.prototype.parse(feature);*/
-
-    if (feature.properties) {
-      var activityJSON = feature.properties.activity.toJSON();
-      layer.bindPopup(self.structureTemplate({
-        activityJSON: activityJSON,
-        properties: feature.properties
-      }),
-      {
-        maxWidth: 450,
-        offset: new L.Point(0, -2)
-      });
-    }
-
-    layer.on('click', function(evt) {
-      var feature = evt.target.feature;
-      if (feature) {
-        var projectId = feature.properties.activity.id;
-        self._hilightProject(projectId);
-      }
-    });
-
-    layer.on('popupclose', function(evt) {
-      var feature = evt.target.feature;
-      if (feature) {
-        var projectId = feature.properties.activity.id;
-        self._dehilightProject(projectId);
-      }
-    });
   }
 };

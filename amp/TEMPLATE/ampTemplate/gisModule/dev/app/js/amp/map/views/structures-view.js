@@ -31,7 +31,7 @@ module.exports = Backbone.View
   MAXCLUSTERRADIUS: 2,
   MAX_NUM_FOR_ICONS: 400,
 
-  //    Calculate based on: var boundary0 = self.app.data.boundaries.get('adm-0');
+  // Calculate based on: var boundary0 = self.app.data.boundaries.get('adm-0');
   currentRadius: null,
   markerCluster: null,
 
@@ -39,7 +39,7 @@ module.exports = Backbone.View
   structureTemplate: _.template(ProjectSiteTemplate),
 
   customClusterMap: {},
-  maxClusterCount: 0,
+  maxClusterCount: 4, //start it at 4 instead of 0, otherwise clusters of '2' can be way too big.
   CLUSTER_PRECISION: 2, //decimal places of lat, lng precision for clustering. (doesn't effect plugin.)
 
   MAX_CLUSTER_SIZE: 20,
@@ -92,7 +92,7 @@ module.exports = Backbone.View
   _renderFeatures: function() {
     var self = this;
     self.markerCluster.clearLayers();
-    self.maxClusterCount = 0;
+    self.maxClusterCount = 4; //start it at 4 instead of 0, otherwise clusters of 2 or 3 can be way too big.
     self.customClusterMap = {};
 
     // add new featureGroup
@@ -147,43 +147,6 @@ module.exports = Backbone.View
     return marker;
   },
 
-
-  // Create pop-ups
-  _bindPopup: function(marker) {
-    var self = this,
-        feature = marker.feature;
-
-    /* TODO(thadk) switch individual feature to this standard parsed model input*/
-    /*var parsedProjectSitesList = this.app.data.structures.model.prototype.parse(feature);*/
-
-    if (feature.properties) {
-      var activityJSON = feature.properties.activity.toJSON();
-      marker.bindPopup(self.structureTemplate({
-        activityJSON: activityJSON,
-        properties: feature.properties
-      }),
-      {
-        maxWidth: 450,
-        offset: new L.Point(0, -2)
-      });
-    }
-
-    marker.on('click', function(evt) {
-      var feature = evt.target.feature;
-      if (feature) {
-        var projectId = feature.properties.activity.id;
-        self._hilightProject(projectId);
-      }
-    });
-
-    marker.on('popupclose', function(evt) {
-      var feature = evt.target.feature;
-      if (feature) {
-        var projectId = feature.properties.activity.id;
-        self._dehilightProject(projectId);
-      }
-    });
-  },
 
   // 1. SVG Icon: works well with agresive clustering: aprox 40 px range
   // or if < MAX_NUM_FOR_ICONS icons. Best on FF
@@ -269,6 +232,43 @@ module.exports = Backbone.View
         });
       }
     }
+  },
+
+  // Create pop-ups
+  _bindPopup: function(marker) {
+    var self = this,
+        feature = marker.feature;
+
+    /* TODO(thadk) switch individual feature to this standard parsed model input*/
+    /*var parsedProjectSitesList = this.app.data.structures.model.prototype.parse(feature);*/
+
+    if (feature.properties) {
+      var activityJSON = feature.properties.activity.toJSON();
+      marker.bindPopup(self.structureTemplate({
+        activityJSON: activityJSON,
+        properties: feature.properties
+      }),
+      {
+        maxWidth: 450,
+        offset: new L.Point(0, -2)
+      });
+    }
+
+    marker.on('click', function(evt) {
+      var feature = evt.target.feature;
+      if (feature) {
+        var projectId = feature.properties.activity.id;
+        self._hilightProject(projectId);
+      }
+    });
+
+    marker.on('popupclose', function(evt) {
+      var feature = evt.target.feature;
+      if (feature) {
+        var projectId = feature.properties.activity.id;
+        self._dehilightProject(projectId);
+      }
+    });
   },
 
   _hilightProject: function(projectId) {

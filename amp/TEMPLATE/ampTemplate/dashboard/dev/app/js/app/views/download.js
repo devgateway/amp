@@ -63,15 +63,11 @@ module.exports = BackboneDash.View.extend({
   prepareCanvas: function(canvas, h, w) {
     var ctx = canvas.getContext('2d'),
         moneyContext = this.model.get('currency'),
-        adjType = this.model.get('adjtype'),
-        key;
+        adjType = this.model.get('adjtype');
 
     if (adjType) {
-      key = {
-        ac: ['amp.dashboard:chart-radioui-commitments', 'Commitments'],
-        ad: ['amp.dashboard:chart-radioui-disbursements', 'Disbursements']
-      }[adjType];
-      moneyContext = this.app.translator.translateSync(key[0], key[1]) + ' (' + moneyContext + ')';
+      // TODO: localize adjtype? is that necessary?
+      moneyContext = adjType + ' (' + moneyContext + ')';
     }
 
     // size the canvas

@@ -90,6 +90,7 @@ module.exports = ChartModel.extend({
       var othersSeries = {
         key: localizedOthers,
         color: '#777',
+        special: 'others',
         values: _(data.processed)
           .chain()
           .filter(function(series) { return _(othersNames).contains(series.key); })

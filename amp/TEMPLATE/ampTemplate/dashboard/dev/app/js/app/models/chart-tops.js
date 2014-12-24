@@ -66,7 +66,8 @@ module.exports = ChartModel.extend({
         x: this.localizedOthers,
         y: data.total -  // total minus the sum of what we have
           _.chain(values).pluck('y').reduce(function(l, r) { return l + r; }, 0).value(),
-        color: '#777'
+        color: '#777',
+        special: 'others'
       });
     }
 

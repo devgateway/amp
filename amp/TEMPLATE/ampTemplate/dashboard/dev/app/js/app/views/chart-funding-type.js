@@ -30,8 +30,7 @@ module.exports = ChartViewBase.extend({
 
   chartClickHandler: function(context) {
     // clicking on the "others" bar loads five more.
-    if (context.series.key === 'Others' &&  // risk of multilingual bug???
-        context.series.index === context.data.length - 1) {
+    if (context.data[context.series.index].special === 'others') {
       this.model.set('limit', this.model.get('limit') + 1);
     }
   }

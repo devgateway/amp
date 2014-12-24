@@ -49,11 +49,4 @@ class ContentBlockInlineEntityFormController extends EntityInlineEntityFormContr
 
     return $entity_form;
   }
-
-  /**
-   * Overrides EntityInlineEntityFormController::entityFormSubmit().
-   */
-  public function entityFormSubmit(&$entity_form, &$form_state) {
-    parent::entityFormSubmit($entity_form, $form_state);
-  }
 }

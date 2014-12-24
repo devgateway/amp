@@ -1,2 +1,2 @@
 min-amp-version: 2.10.11
-cms-release: 2.10.11
+cms-release: 2.10.12

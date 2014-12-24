@@ -15,7 +15,7 @@ function ampcontentblock_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'entity_translation_settings_contentblock__hidden';
   $strongarm->value = array(
-    'default_language' => 'xx-et-default',
+    'default_language' => 'und',
     'hide_language_selector' => 0,
     'exclude_language_none' => 0,
     'lock_language' => 1,
@@ -28,7 +28,7 @@ function ampcontentblock_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'entity_translation_settings_contentblock__predefined';
   $strongarm->value = array(
-    'default_language' => 'xx-et-default',
+    'default_language' => 'und',
     'hide_language_selector' => 0,
     'exclude_language_none' => 0,
     'lock_language' => 1,
@@ -41,7 +41,7 @@ function ampcontentblock_strongarm() {
   $strongarm->api_version = 1;
   $strongarm->name = 'entity_translation_settings_contentblock__text';
   $strongarm->value = array(
-    'default_language' => 'xx-et-default',
+    'default_language' => 'und',
     'hide_language_selector' => 0,
     'exclude_language_none' => 0,
     'lock_language' => 1,

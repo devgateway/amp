@@ -234,7 +234,7 @@ class EntityTranslationTestCase extends DrupalWebTestCase {
     $this->drupalGet('node/' . $node->nid . '/edit/add/' . $source_langcode . '/' . $langcode);
 
     $body_key = "body[$langcode][0][value]";
-    $this->assertFieldByXPath("//textarea[@name='$body_key']", $node->body[$node->language][0]['value'], 'Original body value correctly populated.');
+    $this->assertFieldByXPath("//textarea[@name='$body_key']", $node->body[$source_langcode][0]['value'], 'Original body value correctly populated.');
     $this->assertFieldById('edit-body-' . $langcode . '-add-more', t('Add another item'), t('Add another item button found.'));
 
     $edit = array();

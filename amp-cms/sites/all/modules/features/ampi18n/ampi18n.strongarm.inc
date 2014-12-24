@@ -17,6 +17,7 @@ function ampi18n_strongarm() {
   $strongarm->value = array(
     'node' => 'node',
     'contentblock' => 'contentblock',
+    'entityform' => 0,
     'file' => 0,
     'user' => 0,
   );

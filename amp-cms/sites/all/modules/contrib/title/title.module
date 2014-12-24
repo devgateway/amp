@@ -218,6 +218,9 @@ function title_field_attach_load($entity_type, $entities, $age, $options) {
  * replaced fields.
  */
 function title_entity_load($entities, $type) {
+  // Load entity translations otherwise field language will not be computed
+  // correctly.
+  module_invoke('entity_translation', 'entity_load', $entities, $type);
   foreach ($entities as &$entity) {
     // Synchronize values from the regular field unless we are intializing it.
     title_entity_sync($type, $entity, NULL, !empty($GLOBALS['title_field_replacement_init']));
@@ -487,8 +490,14 @@ function title_field_sync_get($entity_type, $entity, $legacy_field, $info, $lang
     $langcode = field_language($entity_type, $entity, $info['field']['field_name'], $langcode);
     $values = $info['callbacks']['sync_get']($entity_type, $entity, $legacy_field, $info, $langcode);
     foreach ($values as $name => $value) {
-      $entity->{$name} = $value;
+      if ($value !== NULL) {
+        $entity->{$name} = $value;
+      }
     }
+    // Ensure we do not pollute field language static cache.
+    $cache = &drupal_static('field_language');
+    list($id, ,) = entity_extract_ids($entity_type, $entity);
+    unset($cache[$entity_type][$id]);
   }
 }
 

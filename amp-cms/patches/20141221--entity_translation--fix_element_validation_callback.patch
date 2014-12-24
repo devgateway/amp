@@ -1,0 +1,13 @@
+diff --git a/sites/all/modules/contrib/entity_translation/entity_translation.module b/sites/all/modules/contrib/entity_translation/entity_translation.module
+index 57ad96c..623ea14 100644
+--- a/sites/all/modules/contrib/entity_translation/entity_translation.module
++++ b/sites/all/modules/contrib/entity_translation/entity_translation.module
+@@ -1508,7 +1508,7 @@ function entity_translation_entity_form_validate($form, &$form_state) {
+ /**
+  * Validation handler for the entity language widget.
+  */
+-function entity_translation_entity_form_language_update($form, &$form_state) {
++function entity_translation_entity_form_language_update($element, &$form_state, $form) {
+   $handler = entity_translation_entity_form_get_handler($form, $form_state);
+   // Ensure the handler form language match the actual one. This is mainly
+   // needed when responding to an AJAX request where the languages cannot be set

@@ -49,39 +49,44 @@ class EntityTranslationContentBlockHandler extends EntityTranslationDefaultHandl
     }
   }
 
-  // /**
-  //  * @see EntityTranslationDefaultHandler::entityFormLanguageWidgetSubmit()
-  //  */
-  // function entityFormLanguageWidgetSubmit($form, &$form_state) {
-  //   $this->updateFormLanguage($form_state);
-  // }
-
-  // /**
-  //  * @see EntityTranslationDefaultHandler::entityFormSubmit()
-  //  */
-  // public function entityFormSubmit($form, &$form_state) {
-  //   if (!isset($form_state['values']['translation'])) {
-  //     // Always publish the original values when we have no translations.
-  //     $form_state['values']['translation'] = array('status' => TRUE);
-  //   }
-  //   $values = &$form_state['values']['translation'];
-
-  //   if (!$this->isTranslationForm()) {
-  //     // Inherit entity authoring information for the original values.
-  //     $values['name'] = $form_state['values']['name'];
-  //     if (!empty($form_state['values']['date'])) {
-  //       $values['created'] = $form_state['values']['date'];
-  //     }
-  //   }
-
-  //   parent::entityFormSubmit($form, $form_state);
-  // }
-
   /**
-   * @see EntityTranslationDefaultHandler::getStatus()
+   * @see EntityTranslationDefaultHandler::entityFormLanguageWidgetSubmit()
    */
-  protected function getStatus() {
-    // return (boolean) $this->entity->status;
-    return TRUE;
+  function entityFormLanguageWidgetSubmit($form, &$form_state) {
+    $this->updateFormLanguage($form_state);
+
+    $is_translation = $this->isTranslationForm();
+    if ($is_translation) {
+      return;
+    }
+    $form_langcode = $this->getFormLanguage();
+
+    foreach (field_info_instances($this->entityType, $this->bundle) as $instance) {
+      $field_name = $instance['field_name'];
+      if (!isset($form[$field_name]['#language'])) {
+        continue;
+      }
+
+      $field = field_info_field($field_name);
+      if (!$field['translatable']) {
+        continue;
+      }
+
+      $previous_langcode = $form[$field_name]['#language'];
+      if ($previous_langcode == $form_langcode) {
+        continue;
+      }
+
+      // Handle a possible language change: new language values are inserted,
+      // previous ones are deleted.
+      if (isset($form_state['values'][$field_name][$previous_langcode])) {
+        $form_state['values'][$field_name][$form_langcode] = $form_state['values'][$field_name][$previous_langcode];
+        $form_state['values'][$field_name][$previous_langcode] = array();
+      }
+      if (isset($form_state['input'][$field_name][$previous_langcode])) {
+        $form_state['input'][$field_name][$form_langcode] = $form_state['input'][$field_name][$previous_langcode];
+        $form_state['input'][$field_name][$previous_langcode] = array();
+      }
+    }
   }
 }

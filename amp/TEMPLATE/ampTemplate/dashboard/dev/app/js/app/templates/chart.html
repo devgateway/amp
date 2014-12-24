@@ -52,19 +52,9 @@
 
       <% if (model.get('adjtype')) { %>
         <form class="form-inline dash-form dash-adj-type" role="form">
-          <select class="form-control like-btn-sm">
-            <% _({
-              "Actual Commitments": 'Actual Commitments',
-              "Actual Disbursements": 'Actual Disbursements',
-              "Actual Expenditures": 'Actual Expenditures',
-              "Planned Commitments": 'Planned Commitments',
-              "Planned Disbursements": 'Planned Disbursements',
-              "Planned Expenditures": 'Planned Expenditures'
-            }).each(function(name, key) { %>
-              <option value="<%= key %>" <%= model.get('adjtype') === key ? 'selected="selected"' : '' %>>
-                <%= name %>
-              </option>
-            <% }) %>
+          <select class="form-control like-btn-sm ftype-options">
+            <option>...</option>
+            <!-- gets populated after settings load -->
           </select>
           <span class="cheat-lineheight"></span>
         </form>

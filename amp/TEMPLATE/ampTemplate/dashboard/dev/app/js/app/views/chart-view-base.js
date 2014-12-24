@@ -8,6 +8,11 @@ var DownloadView = require('./download');
 var template = _.template(fs.readFileSync(
   __dirname + '/../templates/chart.html', 'UTF-8'));
 
+
+var adjOptTemplate = _.template('<option value="<%=opt.id%>" ' +
+  '<%= current ? selected="selected" : \'\' %>><%=opt.name%></option>');
+
+
 module.exports = BackboneDash.View.extend({
 
   uiDefaults: {
@@ -63,7 +68,6 @@ module.exports = BackboneDash.View.extend({
 
   render: function() {
     this.rendered = true;
-    // this.chart = charts[this.model.get('view')]();  // bar, etc.
     var renderOptions = {
       views: this.chartViews,
       model: this.model,
@@ -73,6 +77,22 @@ module.exports = BackboneDash.View.extend({
     this.$el.html(template(renderOptions));
     this.message = this.$('.dash-chart-diagnostic');
     this.chartContainer = this.$('.dash-chart-wrap');
+
+    if (this.model.get('adjtype') !== void 0) {  // this chart has adj settings
+      this.app.settings.load().done(_(function() {
+        var adjSettings = this.app.settings.get('0');  // id for Funding Type
+        if (!adjSettings) { this.app.report('Could not find Funding Type settings'); }
+
+        this.$('.ftype-options').html(
+          _(adjSettings.get('options')).map(function(opt) {
+            return adjOptTemplate({
+              opt: opt,
+              current: (opt.id === this.model.get('adjtype'))
+            });
+          }, this)
+        );
+      }).bind(this));
+    }
 
     if (this._stateWait.state() !== 'pending') {
       this.updateData();

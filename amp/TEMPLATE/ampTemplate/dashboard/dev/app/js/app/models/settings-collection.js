@@ -20,8 +20,7 @@ module.exports = BackboneDash.Collection.extend({
 
   parse: function(settings) {
     var goodSettings = _(settings).filter(function(setting) {
-      return !isNaN(parseInt(setting.id, 10)) &&  // some settings are weird... take em out for now
-      setting.id !== '0';  // leave funding type to the charts
+      return !isNaN(parseInt(setting.id, 10));  // some settings are weird... take em out for now
     }).map(function(setting) {  // mark defaults as selected
       return _(setting).extend({
         options: _(setting.options).map(function(option) {

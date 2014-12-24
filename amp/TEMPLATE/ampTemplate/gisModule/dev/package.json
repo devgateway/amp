@@ -88,9 +88,7 @@
     "leaflet-div-style-icon": "^0.1.0",
     "leaflet.markercluster": "https://github.com/Leaflet/Leaflet.markercluster/archive/c0b5778dbcb08578ca8b51c715cf64ab1da0622b.tar.gz",
     "nice-buckets": "^0.2.0",
-    "node-qunit-phantomjs": "https://github.com/jonkemp/node-qunit-phantomjs/archive/master.tar.gz",
     "nvd3": "~1.1.15",
-    "qunitjs": "^1.14.0",
     "rimraf": "^2.2.8",
     "seedrandom": "^2.3.6",
     "through2": "*",
@@ -98,6 +96,7 @@
     "underscore-groups-by": "0.0.1",
     "vinyl-source-stream": "^0.1.1",
     "watchify": "^0.10.2",
-    "zeroclipboard": "^2.1.6"
+    "zeroclipboard": "^2.1.6",
+    "gulp-mocha": "~2.0.0"
   }
 }

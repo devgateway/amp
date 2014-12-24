@@ -5,6 +5,9 @@
  *
  * $ gulp
  * or
+ * $ gulp dev-ci
+ *    Unoptimized build of js/css, runs watchify and livereload, runs tests on every change, needs AMP server running.
+
  * $ gulp dev
  *    Unoptimized build of js/css, runs watchify and livereload, needs AMP server running.
 
@@ -16,6 +19,9 @@
  *
  * $ gulp webtest
  *    Serve unit tests in browser
+ *
+ * $ gulp watch-and-test
+ *    Runs tests, and re-runes tests when any of them changes. Good to run while writing tests.
 
  * $ gulp lint
  *    Lint javascript and css -- currently only js
@@ -241,10 +247,10 @@ gulp.task('preview', ['build'], g.serve({
 //------------------------------------
 // dev
 //------------------------------------
-gulp.task('default', ['dev']);
+gulp.task('default', ['dev-ci']);
 gulp.task('dev', ['lint', 'less', 'dev-server', 'watch', 'reload', 'dev-index-no-mock']);
 gulp.task('dev-mock', ['lint', 'less', 'dev-server', 'watch', 'reload', 'dev-index']);
-
+gulp.task('dev-ci',['dev','watch-and-test']);
 
 gulp.task('dev-server', g.serve({
   root: [paths.app.root],
@@ -293,8 +299,17 @@ gulp.task('dev-index-no-mock', function(){
 
 gulp.task('webtest', ['build-tests', 'serve-tests', 'reload-tests']);
 
+
+gulp.task('watch-and-test', ['test'], function() {
+  // TODO: for some reason the watch on `paths.tests.scripts` doesn't work
+  // when called from 'dev-ci' I think a different watch is overiding it....
+  return gulp.watch([paths.tests.scripts, paths.app.scripts.top, paths.app.scripts.amp], ['test']);
+});
+
+
 gulp.task('test', ['build-tests'], function() {
-  g.util.log('TODO: write GIS tests in mocha');
+  return gulp.src(paths.tests.entry, {read: false})
+        .pipe(g.mocha());
 });
 
 gulp.task('build-tests', function() {

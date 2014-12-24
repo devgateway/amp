@@ -9,19 +9,16 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.um.form.AddUserForm;
 import org.digijava.module.um.util.UmUtil;
 
-public class addWorkSpaceUser extends Action{
+public class addWorkSpaceUser extends Action {
 	private static Logger logger = Logger.getLogger(addWorkSpaceUser.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -39,18 +36,16 @@ public class addWorkSpaceUser extends Action{
             Long selMembers[] = new Long[1];
             Long id = upMemForm.getTeamMemberId();
             selMembers[0] = id;
-            Site site = RequestUtils.getSite(request);
             TeamMemberUtil.removeTeamMembers(selMembers);
             Collection asWS = upMemForm.getAssignedWorkspaces();
-            for(java.util.Iterator it = asWS.iterator(); it.hasNext(); ){
-            	AmpTeamMember newMember = (AmpTeamMember)it.next();
-            	if(newMember.getAmpTeamMemId().compareTo(id)==0){
-            		asWS.remove(newMember);
-            		break;
-            	}
+            for (Object asW : asWS) {
+                AmpTeamMember newMember = (AmpTeamMember) asW;
+                if (newMember.getAmpTeamMemId().compareTo(id) == 0) {
+                    asWS.remove(newMember);
+                    break;
+                }
             }
-		}
-		else{
+		} else {
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(upMemForm.getTeamId());
 			User user = org.digijava.module.aim.util.DbUtil.getUser(upMemForm.getEmail());
 
@@ -100,12 +95,12 @@ public class addWorkSpaceUser extends Action{
 			}
 			
 			addWorkSpace(UmUtil.assignWorkspaceToUser(request, upMemForm.getRole(), user, ampTeam), upMemForm);
-			
+            DgUtil.saveWorkspaceLanguagePreferences(request, ampTeam, user);
 		}
 		return mapping.findForward("forward");
 	}
 
-	private void addWorkSpace(AmpTeamMember newMember, AddUserForm upMemForm) {
+    private void addWorkSpace(AmpTeamMember newMember, AddUserForm upMemForm) {
 		Collection assignedWS = upMemForm.getAssignedWorkspaces();
 		if(assignedWS==null){
 			ArrayList assWS = new ArrayList();

@@ -28,13 +28,13 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpUserExtension;
 import org.digijava.module.aim.dbentity.AmpUserExtensionPK;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.um.form.AddUserForm;
 import org.digijava.module.um.util.AmpUserUtil;
 import org.digijava.module.um.util.DbUtil;
 
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.persistence.WorkerException;
 
 public class RegisterUser extends Action {
 
@@ -122,7 +122,7 @@ public class RegisterUser extends Action {
 			userLangPreferences.setNavigationLanguage(language);
 			user.setUserLangPreferences(userLangPreferences);
 
-			// ===== start user extension setup =====
+            // ===== start user extension setup =====
 			AmpUserExtension userExt=new AmpUserExtension();
 			// org type
 			AmpOrgType orgType=org.digijava.module.aim.util.DbUtil.getAmpOrgType(userRegisterForm.getSelectedOrgType());
@@ -164,7 +164,8 @@ public class RegisterUser extends Action {
 				String pti = ""+'\n'+'\n'+ pti1;
 				
 				DbUtil.registerUser(user);
-				
+                DgUtil.saveUserLanguagePreferences(user, request, language);
+
 	            if (isMailAvtive){
 	                if(userRegisterForm.isSendEmail()){
 	        		    

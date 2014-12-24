@@ -19,8 +19,10 @@ function countCategories(data) {
 
 function chart(options) {
   var maxValue = 10;
-  var _chart = nv.models.multiBarChart().forceY([0,maxValue]) //forceY will only enforce maxValue when there is no data
-    .reduceXTicks(false)
+  //forceY will ensure that on your yAxis you are always showing at least 0 and 10,but won't 
+  //restrict the domain (meaning if the are values falling outside the range it will show then).
+  var _chart = nv.models.multiBarChart().forceY([0,maxValue])
+  .reduceXTicks(false)
     .margin({ top: 5, right: 10, bottom: 20, left: 50 });
 
   if (!options.nvControls) {

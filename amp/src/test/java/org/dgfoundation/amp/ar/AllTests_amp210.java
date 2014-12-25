@@ -15,6 +15,7 @@ import org.dgfoundation.amp.ar.amp210.LocationMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.MondrianComputedMeasuresReportTests;
 import org.dgfoundation.amp.ar.amp210.MondrianSummaryReportTests;
 import org.dgfoundation.amp.ar.amp210.OrganisationsMondrianReportTests;
+import org.dgfoundation.amp.ar.amp210.PledgeReportsTests;
 import org.dgfoundation.amp.ar.amp210.SQLUtilsTests;
 import org.dgfoundation.amp.ar.amp210.SqlFilterUtilsTests;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
@@ -51,6 +52,7 @@ public class AllTests_amp210
 		suite.addTest(new JUnit4TestAdapter(SqlFilterUtilsTests.class));
 		suite.addTest(new JUnit4TestAdapter(MondrianComputedMeasuresReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(ComponentReportsTests.class));
+		suite.addTest(new JUnit4TestAdapter(org.dgfoundation.amp.ar.amp210.PledgeReportsTests.class));
 		
 		//suite.addTest(new JUnit4TestAdapter(EndpointsTests.class)); report testcases are not compatible with AMP running; while the testcases in EndpointsTests require a running AMP. please move them to a different test suite, which does not contain reports tests
 		

@@ -203,6 +203,7 @@ public class ColumnConstants {
 	public static final String PLEDGES_TITLES = "Pledges Titles";
 	public static final String PLEDGES_TYPE_OF_ASSISTANCE = "Pledges Type Of Assistance";
 	public static final String PLEDGES_ZONES = "Pledges Zones";
+	public static final String RELATED_PROJECTS = "Related Projects";
 	public static final String PREDICTABILITY_OF_FUNDING = "Predictability of Funding";
 	public static final String PRIMARY_PROGRAM = "Primary Program";
 	public static final String PRIMARY_PROGRAM_DETAIL = "Primary Program Detail";
@@ -267,7 +268,7 @@ public class ColumnConstants {
 	
 	public static final String REGIONAL_GROUP_DEPARTMENT_DIVISION = "Regional Group Department/Division";
 	public static final String REGIONAL_OBSERVATIONS = "Regional Observations";
-	public static final String RELATED_PROJECTS = "Related Projects";
+	public static final String RELATED_PLEDGES = "Related Pledges";
 	public static final String REPORTING_SYSTEM = "Reporting System";
 	public static final String RESPONSIBLE_ORGANIZATION = "Responsible Organization";
 	public static final String RESPONSIBLE_ORGANIZATION_ID = "Responsible Organization Id";

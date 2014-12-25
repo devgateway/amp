@@ -485,4 +485,17 @@ public class SQLUtils {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	/**
+	 * returns an ordered set of column names of a given ResultSet
+	 * @param rs
+	 * @return
+	 * @throws SQLException
+	 */
+	public static LinkedHashSet<String> collectColumnNames(ResultSet rs) throws SQLException {
+		LinkedHashSet<String> res = new LinkedHashSet<>();
+		for(int i = 0; i < rs.getMetaData().getColumnCount(); i++)
+			res.add(rs.getMetaData().getColumnName(i + 1));
+		return res;
+	}
 }

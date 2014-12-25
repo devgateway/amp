@@ -201,66 +201,97 @@
 		  <Level name="Month" column="month_code@@calendar@@" ordinalColumn="month_code@@calendar@@" nameColumn="month_name@@calendar@@" levelType="TimeMonths" type="Integer" translated="false" />
 		</Hierarchy>
 	</Dimension>
+	
+	<Dimension name="Entity Texts">
+		<Hierarchy hasAll="true" allMemberName="All Project Title" primaryKey="amp_activity_id" name="Project Title">
+			<Table name="mondrian_activity_texts@@locale@@" />
+			<Level name="Project Title" column="amp_activity_id" type="Integer" nameColumn="name" />
+		</Hierarchy>
+
+		<Hierarchy hasAll="true" allMemberName="All Team" primaryKey="amp_activity_id" name="Team">
+			<Table name="mondrian_activity_texts@@locale@@" />
+			<Level name="Team Id" column="team_id" type="Integer" visible="false"/> 
+			<Level name="Team" column="team_id" type="String" nameColumn="team_name"/> 
+		</Hierarchy>
+
+		<Hierarchy hasAll="true" allMemberName="All Activity Created By" primaryKey="amp_activity_id" name="Activity Created By">
+			<Table name="mondrian_activity_texts@@locale@@" />
+			<Level name="Activity Created By" column="creator_id" type="String" nameColumn="creator_name" /> 
+		</Hierarchy>
+
+		<Hierarchy hasAll="true" allMemberName="All Activity Updated By" primaryKey="amp_activity_id" name="Activity Updated By">
+			<Table name="mondrian_activity_texts@@locale@@" />
+			<Level name="Activity Updated By" column="modifier_id" type="String" nameColumn="modifier_name" /> 
+		</Hierarchy>
+
+		<Hierarchy hasAll="true" allMemberName="All Activity Approved By" primaryKey="amp_activity_id" name="Activity Approved By">
+			<Table name="mondrian_activity_texts@@locale@@" />
+			<Level name="Activity Approved By" column="approved_id" type="String" nameColumn="approver_name" /> 
+		</Hierarchy>
+
+		<Hierarchy hasAll="true" allMemberName="All Government Approval Procedures" primaryKey="amp_activity_id" name="Government Approval Procedures">
+			<Table name="mondrian_activity_trn_texts@@locale@@" />
+			<Level name="Government Approval Procedures" column="governmentapprovalprocedures_id" type="String" nameColumn="governmentapprovalprocedures_text" /> 
+		</Hierarchy>
+
+		<Hierarchy hasAll="true" allMemberName="All Joint Criteria" primaryKey="amp_activity_id" name="Joint Criteria">
+			<Table name="mondrian_activity_trn_texts@@locale@@" />
+			<Level name="Joint Criteria" column="jointcriteria_id" type="String" nameColumn="jointcriteria_text" /> 
+		</Hierarchy>
+
+		<Hierarchy hasAll="true" allMemberName="All Indirect On Budget" primaryKey="amp_activity_id" name="Indirect On Budget">
+			<Table name="mondrian_activity_trn_texts@@locale@@" />
+			<Level name="Indirect On Budget" column="iob_id" type="String" nameColumn="iob_text" /> 
+		</Hierarchy>
+			
+		<Hierarchy hasAll="true" allMemberName="All Locations" name="Implementation Level" primaryKey="amp_activity_id">
+			<Table name="mondrian_activity_trn_texts@@locale@@" />
+			<Level name="Implementation Level" column="impl_level_id" type="String" nameColumn="impl_level_name" />
+		</Hierarchy>
+			
+		<Hierarchy hasAll="true" allMemberName="All Locations" name="Implementation Location" primaryKey="amp_activity_id">
+			<Table name="mondrian_activity_trn_texts@@locale@@" />
+			<Level name="Implementation Location" column="impl_location_id" type="String" nameColumn="impl_location_name" />
+		</Hierarchy>
+	</Dimension>
+	
+	<Dimension name="AMP Location">
+		<Hierarchy hasAll="true" allMemberName="All Locations" name="Country" primaryKey="id">
+			<Table name="mondrian_locations@@locale@@" />
+			<Level name="Country" column="country_id" type="Integer" nameColumn="country_name" />
+		</Hierarchy>
+		<Hierarchy hasAll="true" allMemberName="All Locations" name="Region" primaryKey="id">
+			<Table name="mondrian_locations@@locale@@" />
+			<Level name="Region" column="region_id" type="Integer" nameColumn="region_name" />
+		</Hierarchy>
+		<Hierarchy hasAll="true" allMemberName="All Locations" name="Zone" primaryKey="id">
+			<Table name="mondrian_locations@@locale@@" />
+			<Level name="Zone" column="zone_id" type="Integer" nameColumn="zone_name" />
+		</Hierarchy>
+		<Hierarchy hasAll="true" allMemberName="All Locations" name="District" primaryKey="id">
+			<Table name="mondrian_locations@@locale@@" />
+			<Level name="District" column="district_id" type="Integer" nameColumn="district_name" />
+		</Hierarchy>
+		<Hierarchy hasAll="true" allMemberName="All Locations" name="GeoCode" primaryKey="id">
+			<Table name="mondrian_locations@@locale@@" />
+			<Level name="GeoId" column="id" type="String" nameColumn="geo_code" />
+		</Hierarchy>
+		<Hierarchy hasAll="true" allMemberName="All Locations" name="Specified Location" primaryKey="id">
+			<Table name="mondrian_locations@@locale@@" />
+			<Level name="Specified Location" column="id" type="String" nameColumn="location_name" />			
+		</Hierarchy>
+	</Dimension>
 		
 	<Cube name="Donor Funding">
 		<Table name="mondrian_fact_table" >
 			<SQL dialect="generic"><![CDATA[@@filteredActivities@@]]> </SQL>
 		</Table>
 
-		<Dimension name="Activity Texts" foreignKey="entity_id">
-			<Hierarchy hasAll="true" allMemberName="All Project Title" primaryKey="amp_activity_id" name="Project Title">
-				<Table name="mondrian_activity_texts@@locale@@" />
-				<Level name="Project Title" column="amp_activity_id" type="Integer" nameColumn="name" />
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Team" primaryKey="amp_activity_id" name="Team">
-				<Table name="mondrian_activity_texts@@locale@@" />
-				<Level name="Team Id" column="team_id" type="Integer" visible="false"/> 
-				<Level name="Team" column="team_id" type="String" nameColumn="team_name"/> 
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Activity Created By" primaryKey="amp_activity_id" name="Activity Created By">
-				<Table name="mondrian_activity_texts@@locale@@" />
-				<Level name="Activity Created By" column="creator_id" type="String" nameColumn="creator_name" /> 
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Activity Updated By" primaryKey="amp_activity_id" name="Activity Updated By">
-				<Table name="mondrian_activity_texts@@locale@@" />
-				<Level name="Activity Updated By" column="modifier_id" type="String" nameColumn="modifier_name" /> 
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Activity Approved By" primaryKey="amp_activity_id" name="Activity Approved By">
-				<Table name="mondrian_activity_texts@@locale@@" />
-				<Level name="Activity Approved By" column="approved_id" type="String" nameColumn="approver_name" /> 
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Government Approval Procedures" primaryKey="amp_activity_id" name="Government Approval Procedures">
-				<Table name="mondrian_activity_trn_texts@@locale@@" />
-				<Level name="Government Approval Procedures" column="governmentapprovalprocedures_id" type="String" nameColumn="governmentapprovalprocedures_text" /> 
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Joint Criteria" primaryKey="amp_activity_id" name="Joint Criteria">
-				<Table name="mondrian_activity_trn_texts@@locale@@" />
-				<Level name="Joint Criteria" column="jointcriteria_id" type="String" nameColumn="jointcriteria_text" /> 
-			</Hierarchy>
-
-			<Hierarchy hasAll="true" allMemberName="All Indirect On Budget" primaryKey="amp_activity_id" name="Indirect On Budget">
-				<Table name="mondrian_activity_trn_texts@@locale@@" />
-				<Level name="Indirect On Budget" column="iob_id" type="String" nameColumn="iob_text" /> 
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All Locations" name="Implementation Level" primaryKey="amp_activity_id">
-				<Table name="mondrian_activity_trn_texts@@locale@@" />
-				<Level name="Implementation Level" column="impl_level_id" type="String" nameColumn="impl_level_name" />
-			</Hierarchy>
-			
-			<Hierarchy hasAll="true" allMemberName="All Locations" name="Implementation Location" primaryKey="amp_activity_id">
-				<Table name="mondrian_activity_trn_texts@@locale@@" />
-				<Level name="Implementation Location" column="impl_location_id" type="String" nameColumn="impl_location_name" />
-			</Hierarchy>
-		</Dimension>
-
+		<DimensionUsage name="Activity Texts" source="Entity Texts" foreignKey="entity_id" />
+		<DimensionUsage name="Pledge Texts" source="Entity Texts" foreignKey="entity_id" />
+		
 		<DimensionUsage name="Activity Status" source="Category Value" foreignKey="status_id" />
+		<DimensionUsage name="Pledge Status" source="Category Value" foreignKey="status_id" />
 		<DimensionUsage name="Modalities" source="Category Value" foreignKey="modality_id" />
 		<DimensionUsage name="Type of Cooperation" source="Category Value" foreignKey="type_of_cooperation_id" />
 		<DimensionUsage name="Type of Implementation" source="Category Value" foreignKey="type_of_implementation_id" />
@@ -268,8 +299,23 @@
 		<DimensionUsage name="Funding Status" source="Category Value" foreignKey="funding_status_id" />
 		<DimensionUsage name="Mode of Payment" source="Category Value" foreignKey="mode_of_payment_id" />
 		<DimensionUsage name="Financing Instrument" source="Category Value" foreignKey="financing_instrument_id" />
-		<DimensionUsage name="Type Of Assistance" source="Category Value" foreignKey="terms_of_assistance_id" />		
+		<DimensionUsage name="Type Of Assistance" source="Category Value" foreignKey="terms_of_assistance_id" />
+		<DimensionUsage name="Pledges Type Of Assistance" source="Category Value" foreignKey="terms_of_assistance_id" />
+		<DimensionUsage name="Pledges Aid Modality" source="Category Value" foreignKey="modality_id" />
 
+		<Dimension name="Related Projects" foreignKey="related_entity_id">
+			<Hierarchy hasAll="true" allMemberName="All Related Projects" primaryKey="amp_activity_id" name="Related Projects">
+				<Table name="mondrian_activity_texts@@locale@@" />
+				<Level name="Related Projects" column="amp_activity_id" type="Integer" nameColumn="name" />
+			</Hierarchy>
+		</Dimension>
+
+		<Dimension name="Related Pledges" foreignKey="related_entity_id">
+			<Hierarchy hasAll="true" allMemberName="All Related Pledges" primaryKey="amp_activity_id" name="Related Pledges">
+				<Table name="mondrian_activity_texts@@locale@@" />
+				<Level name="Related Pledges" column="amp_activity_id" type="Integer" nameColumn="name" />
+			</Hierarchy>
+		</Dimension>
 
 		<Dimension name="Activity Dates" foreignKey="entity_id">
 			<Hierarchy hasAll="true" allMemberName="All Original Completion Date" primaryKey="amp_activity_id" name="Original Completion Date">
@@ -502,34 +548,7 @@
 				<Level name="Program Description" column="amp_activity_id" type="String" nameColumn="program_description_body" />
 			</Hierarchy>
 			
-		</Dimension>
-			
-		<Dimension name="Location" foreignKey="location_id">
-			<Hierarchy hasAll="true" allMemberName="All Locations" name="Country" primaryKey="id">
-				<Table name="mondrian_locations@@locale@@" />
-				<Level name="Country" column="country_id" type="Integer" nameColumn="country_name" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Locations" name="Region" primaryKey="id">
-				<Table name="mondrian_locations@@locale@@" />
-				<Level name="Region" column="region_id" type="Integer" nameColumn="region_name" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Locations" name="Zone" primaryKey="id">
-				<Table name="mondrian_locations@@locale@@" />
-				<Level name="Zone" column="zone_id" type="Integer" nameColumn="zone_name" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Locations" name="District" primaryKey="id">
-				<Table name="mondrian_locations@@locale@@" />
-				<Level name="District" column="district_id" type="Integer" nameColumn="district_name" />
-			</Hierarchy>
-				<Hierarchy hasAll="true" allMemberName="All Locations" name="GeoCode" primaryKey="id">
-				<Table name="mondrian_locations@@locale@@" />
-				<Level name="GeoId" column="id" type="String" nameColumn="geo_code" />
-			</Hierarchy>
-			<Hierarchy hasAll="true" allMemberName="All Locations" name="Specified Location" primaryKey="id">
-				<Table name="mondrian_locations@@locale@@" />
-				<Level name="Specified Location" column="id" type="String" nameColumn="location_name" />			
-			</Hierarchy>
-		</Dimension>
+		</Dimension>			
 		
 		<Dimension name="Component" foreignKey="component_id">
 			<Hierarchy hasAll="true" allMemberName="All Component Names" name="Component Name" primaryKey="amp_component_id">
@@ -560,7 +579,11 @@
 			</Hierarchy>
 		</Dimension>
 		
+		<DimensionUsage name="Location" source="AMP Location" foreignKey="location_id" />
+		<DimensionUsage name="Pledges Location" source="AMP Location" foreignKey="location_id" />
+		
 		<DimensionUsage name="Donor Agency" source="AMP Organization" foreignKey="donor_id" />
+		<DimensionUsage name="Pledges Donor Agency" source="AMP Organization" foreignKey="donor_id" />
 		<DimensionUsage name="Component Funding Organization" source="AMP Organization" foreignKey="donor_id" />
 		
 		<DimensionUsage name="Implementing Agency" source="AMP Organization" foreignKey="ia_org_id" />
@@ -576,9 +599,18 @@
 		<DimensionUsage name="Tertiary Program" source="AMP Program" foreignKey="tertiary_program_id" />
 		<DimensionUsage name="National Objectives" source="AMP Program" foreignKey="national_objectives_program_id" />
 
+		<DimensionUsage name="Pledges Primary Program" source="AMP Program" foreignKey="primary_program_id" />
+		<DimensionUsage name="Pledges Secondary Program" source="AMP Program" foreignKey="secondary_program_id" />
+		<DimensionUsage name="Pledges Tertiary Program" source="AMP Program" foreignKey="tertiary_program_id" />
+		<DimensionUsage name="Pledges National Objectives" source="AMP Program" foreignKey="national_objectives_program_id" />
+
 		<DimensionUsage name="Primary Sector"   source="AMP Sector" foreignKey="primary_sector_id" />
 		<DimensionUsage name="Secondary Sector" source="AMP Sector" foreignKey="secondary_sector_id" />
 		<DimensionUsage name="Tertiary Sector"  source="AMP Sector" foreignKey="tertiary_sector_id" />
+		
+		<DimensionUsage name="Pledge Primary Sector"	source="AMP Sector" foreignKey="primary_sector_id" />
+		<DimensionUsage name="Pledge Secondary Sector"	source="AMP Sector" foreignKey="secondary_sector_id" />
+		<DimensionUsage name="Pledge Tertiary Sector"	source="AMP Sector" foreignKey="tertiary_sector_id" />
 		
 		<DimensionUsage name="Dates" source="AMP Date" foreignKey="date_code" />
 
@@ -627,7 +659,20 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
-						
+			
+		<Measure name="Commitment Gap" aggregator="sum">
+			<MeasureExpression>
+				<SQL dialect="generic">
+					CASE 
+						WHEN mondrian_fact_table.transaction_type=0 AND mondrian_fact_table.adjustment_type=@@actual@@ AND src_role='DN'
+							THEN - "mondrian_fact_table".transaction_exch_@@currency@@ 
+						WHEN "mondrian_fact_table".transaction_type=7
+							THEN "mondrian_fact_table".transaction_exch_@@currency@@
+					END					
+				</SQL>
+			</MeasureExpression>
+		</Measure>	
+				
 		<Measure name="MTEF Projections" aggregator="sum">
 			<MeasureExpression>
 				<SQL dialect="generic">

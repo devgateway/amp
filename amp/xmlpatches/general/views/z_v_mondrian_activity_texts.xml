@@ -35,6 +35,13 @@
 						LEFT JOIN dg_user musr ON mtm.user_ = musr.id
 						LEFT JOIN amp_team_member aptm ON aav.approvedby = aptm.amp_team_mem_id
 						LEFT JOIN dg_user apusr ON aptm.user_ = apusr.id
+					UNION ALL
+						SELECT 999999999, 'Undefined',
+						999999999, 'Undefined',
+						999999999, 'Undefined',
+						999999999, 'Undefined',
+						999999999, 'Undefined';
+					
 			</lang>
 		</script>
 	</apply>

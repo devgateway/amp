@@ -119,6 +119,10 @@ public class MondrianMapping {
 		{
 			//Dimensions
 			addColumnDefinition(ColumnConstants.PROJECT_TITLE, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_PROJECT_TITLE, MoConstants.ATTR_PROJECT_TITLE));
+			addColumnDefinition(ColumnConstants.PLEDGES_TITLES, new MDXLevel(MoConstants.PLEDGE_TEXTS, MoConstants.H_PROJECT_TITLE, MoConstants.ATTR_PROJECT_TITLE));
+			addColumnDefinition(ColumnConstants.RELATED_PROJECTS, new MDXLevel("Related Projects", "Related Projects", "Related Projects"));
+			addColumnDefinition(ColumnConstants.RELATED_PLEDGES, new MDXLevel("Related Pledges", "Related Pledges", "Related Pledges"));
+			
 			addColumnDefinition(ColumnConstants.AMP_ID, new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_AMP_ID, MoConstants.ATTR_AMP_ID));
 			addColumnDefinition(ColumnConstants.CONSTANT, new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, ColumnConstants.CONSTANT, ColumnConstants.CONSTANT));
 			addColumnDefinition(ColumnConstants.APPROVAL_STATUS, new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_APPROVAL_STATUS, MoConstants.ATTR_APPROVAL_STATUS));
@@ -142,6 +146,8 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.MODE_OF_PAYMENT, new MDXLevel(MoConstants.MODE_OF_PAYMENT, MoConstants.H_MODE_OF_PAYMENT, MoConstants.ATTR_MODE_OF_PAYMENT));
 			addColumnDefinition(ColumnConstants.FINANCING_INSTRUMENT, new MDXLevel(MoConstants.FINANCING_INSTRUMENT, MoConstants.H_FINANCING_INSTRUMENT, MoConstants.ATTR_FINANCING_INSTRUMENT));
 			addColumnDefinition(ColumnConstants.TYPE_OF_ASSISTANCE, new MDXLevel(MoConstants.TYPE_OF_ASSISTANCE, MoConstants.H_TYPE_OF_ASSISTANCE, MoConstants.ATTR_TYPE_OF_ASSISTANCE));
+			addColumnDefinition(ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, new MDXLevel("Pledges " + MoConstants.TYPE_OF_ASSISTANCE, MoConstants.H_TYPE_OF_ASSISTANCE, MoConstants.ATTR_TYPE_OF_ASSISTANCE));
+			addColumnDefinition(ColumnConstants.PLEDGES_AID_MODALITY, new MDXLevel("Pledges Aid Modality", MoConstants.H_TYPE_OF_ASSISTANCE, MoConstants.ATTR_TYPE_OF_ASSISTANCE));
 			addColumnDefinition(ColumnConstants.PROJECT_DESCRIPTION, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_PROJECT_DESCRIPTION, MoConstants.ATTR_PROJECT_DESCRIPTION));
 			addColumnDefinition(ColumnConstants.OBJECTIVE, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_OBJECTIVE, MoConstants.ATTR_OBJECTIVE));
 			addColumnDefinition(ColumnConstants.RESULTS, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_RESULTS, MoConstants.ATTR_RESULTS));
@@ -186,6 +192,7 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.PROPOSED_PROJECT_LIFE, new MDXLevel(MoConstants.ACTIVITY_FIXED_TEXTS, MoConstants.H_PROPOSED_PROJECT_LIFE, MoConstants.ATTR_PROPOSED_PROJECT_LIFE));
 			addColumnDefinition(ColumnConstants.DONOR_TYPE, new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_TYPE_NAME, MoConstants.ATTR_ORG_TYPE_NAME));
 			addColumnDefinition(ColumnConstants.DONOR_GROUP, new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
+			addColumnDefinition(ColumnConstants.PLEDGES_DONOR_GROUP, new MDXLevel("Pledges " + MoConstants.DONOR_AGENCY, MoConstants.H_ORG_GROUP_NAME, MoConstants.ATTR_ORG_GROUP_NAME));
 			addColumnDefinition(ColumnConstants.DONOR_AGENCY, new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.ATTR_ORG_NAME, MoConstants.ATTR_ORG_NAME));
 			addColumnDefinition(ColumnConstants.DONOR_ACRONYM, new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.H_ORG_NAME, MoConstants.ATTR_ORG_ACRONYM));
 			addColumnDefinition(ColumnConstants.DONOR_ID, new MDXLevel(MoConstants.DONOR_AGENCY, MoConstants.ATTR_ORG_ID, MoConstants.ATTR_ORG_ID));
@@ -237,9 +244,10 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.TERTIARY_SECTOR_ID, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_ID, MoConstants.ATTR_LEVEL_0_SECTOR_ID));
 			addColumnDefinition(ColumnConstants.TERTIARY_SECTOR_SUB_SECTOR_ID, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.ATTR_LEVEL_1_SECTOR_ID, MoConstants.ATTR_LEVEL_1_SECTOR_ID));
 			addColumnDefinition(ColumnConstants.TERTIARY_SECTOR_SUB_SUB_SECTOR_ID, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.ATTR_LEVEL_2_SECTOR_ID, MoConstants.ATTR_LEVEL_2_SECTOR_ID));
-//			addColumnDefinition(ColumnConstants.PLEDGES_SECTORS, new MDXLevel(MoConstants.PRIMARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
-//			addColumnDefinition(ColumnConstants.PLEDGES_SECONDARY_SECTORS, new MDXLevel(MoConstants.SECONDARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
-//			addColumnDefinition(ColumnConstants.PLEDGES_TERTIARY_SECTORS, new MDXLevel(MoConstants.TERTIARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
+
+			addColumnDefinition(ColumnConstants.PLEDGES_SECTORS, new MDXLevel(MoConstants.PLEDGE_PRIMARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
+			addColumnDefinition(ColumnConstants.PLEDGES_SECONDARY_SECTORS, new MDXLevel(MoConstants.PLEDGE_SECONDARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
+			addColumnDefinition(ColumnConstants.PLEDGES_TERTIARY_SECTORS, new MDXLevel(MoConstants.PLEDGE_TERTIARY_SECTOR, MoConstants.H_LEVEL_0_SECTOR, MoConstants.ATTR_LEVEL_0_SECTOR_NAME));
 
 			final String[][] programConstantsList = {
 					{ColumnConstants.NATIONAL_PLANNING_OBJECTIVES, MoConstants.NATIONAL_OBJECTIVES, "National Planning Objectives Level "},
@@ -258,6 +266,10 @@ public class MondrianMapping {
 					addColumnDefinition(programConstants[2] + i + " Id", new MDXLevel(programConstants[1], "Level " + i + " Id", "Level " + i + " Id"));
 				}
 			}
+			addColumnDefinition(ColumnConstants.PLEDGES_PROGRAMS, new MDXLevel("Pledges " + MoConstants.PRIMARY_PROGRAMS, "Level 1", "Level 1 Name"));
+			addColumnDefinition(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS, new MDXLevel("Pledges " + MoConstants.SECONDARY_PROGRAMS, "Level 1", "Level 1 Name"));
+			addColumnDefinition(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS, new MDXLevel("Pledges " + MoConstants.TERTIARY_PROGRAMS, "Level 1", "Level 1 Name"));
+			addColumnDefinition(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES, new MDXLevel("Pledges " + MoConstants.NATIONAL_OBJECTIVES, "Level 1", "Level 1 Name"));
 								
 			addColumnDefinition(ColumnConstants.COUNTRY, new MDXLevel(MoConstants.LOCATION, MoConstants.H_COUNTRIES,  MoConstants.ATTR_COUNTRY_NAME));
 			addColumnDefinition(ColumnConstants.REGION, new MDXLevel(MoConstants.LOCATION, MoConstants.H_REGIONS,  MoConstants.ATTR_REGION_NAME));
@@ -266,12 +278,17 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.LOCATION, new MDXLevel(MoConstants.LOCATION, MoConstants.ATTR_LOCATION_NAME,  MoConstants.ATTR_LOCATION_NAME));
 			addColumnDefinition(ColumnConstants.GEOCODE, new MDXLevel(MoConstants.LOCATION, MoConstants.H_GEO_CODE, MoConstants.ATTR_GEO_ID));
 			
+			addColumnDefinition(ColumnConstants.PLEDGES_REGIONS, new MDXLevel("Pledges " + MoConstants.LOCATION, MoConstants.H_REGIONS,  MoConstants.ATTR_REGION_NAME));
+			addColumnDefinition(ColumnConstants.PLEDGES_ZONES, new MDXLevel("Pledges " + MoConstants.LOCATION, MoConstants.H_ZONES, MoConstants.ATTR_ZONE_NAME));
+			addColumnDefinition(ColumnConstants.PLEDGES_DISTRICTS, new MDXLevel("Pledges " + MoConstants.LOCATION, MoConstants.H_DISTRICTS, MoConstants.ATTR_DISTRICT_NAME));
+			
 			addColumnDefinition(ColumnConstants.COMPONENT_NAME, new MDXLevel(MoConstants.COMPONENT, MoConstants.H_COMPONENT_NAME, MoConstants.ATTR_COMPONENT_NAME));
 			addColumnDefinition(ColumnConstants.COMPONENT_DESCRIPTION, new MDXLevel(MoConstants.COMPONENT, MoConstants.H_COMPONENT_DESCRIPTION, MoConstants.ATTR_COMPONENT_DESCRIPTION));
 			addColumnDefinition(ColumnConstants.COMPONENT_TYPE, new MDXLevel(MoConstants.COMPONENT, MoConstants.H_COMPONENT_TYPE, MoConstants.ATTR_COMPONENT_TYPE));
 			addColumnDefinition(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, new MDXLevel(MoConstants.COMPONENT_FUNDING_ORGANIZATION, MoConstants.H_ORG_NAME, MoConstants.ATTR_ORG_NAME));
 			addColumnDefinition(ColumnConstants.PROPOSED_PROJECT_AMOUNT, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT));
-
+			addColumnDefinition(ColumnConstants.PLEDGE_STATUS, new MDXLevel("Pledge Status", MoConstants.H_CATEGORY_NAME, MoConstants.ATTR_CATEGORY_NAME));
+			
 			//put(new ReportColumn(ColumnConstants.ON_OFF_TREASURY_BUDGET, ReportEntityType.ENTITY_TYPE_ACTIVITY, new MDXAttribute(MoConstants., MoConstants.ATTR_));
 			
 			addColumnDefinition(ColumnConstants.FUNDING_YEAR, new MDXLevel(MoConstants.DATES, MoConstants.H_YEAR, MoConstants.ATTR_YEAR));
@@ -290,6 +307,7 @@ public class MondrianMapping {
 			addMeasureDefinition(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE);
 			addMeasureDefinition(MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL);
 			addMeasureDefinition(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT);
+			addMeasureDefinition(MeasureConstants.PLEDGES_COMMITMENT_GAP);
 			
 			addMeasureDefinition(MeasureConstants.ALWAYS_PRESENT);
 			//put(new ReportMeasure(MeasureConstants.REAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL), new MDXMeasure(MoConstants.REAL_DISBURSEMENTS));

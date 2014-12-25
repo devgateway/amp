@@ -57,6 +57,11 @@ public class MondrianETL {
 	 */
 	public final static Long MONDRIAN_DUMMY_ID_FOR_ETL = 999999999l;
 	
+	/**
+	 * the number to add to pledge ids in tables joined with activity tables
+	 */
+	public final static Long PLEDGE_ID_ADDER = 800000000l;
+	
 	//public final static ReadWriteLockHolder MONDRIAN_LOCK = new ReadWriteLockHolder("Mondrian reports/etl lock");
 	
 	/**
@@ -129,41 +134,59 @@ public class MondrianETL {
 	
 	protected EtlConfiguration calculateEtlConfiguration(List<ExceptionRunnable<? extends Exception>> fullEtlJobs) throws SQLException{
 		boolean etlFromScratch = shouldMakeFullEtl(fullEtlJobs);
-		Set<Long> activityIds = calculateAffectedActivities(etlFromScratch);
-		Set<Long> dateCodes = calculateAffectedDateCodes(etlFromScratch);
-		return new EtlConfiguration(activityIds, new HashSet<Long>(), dateCodes, etlFromScratch);
+		Set<Long> pledges = etlFromScratch ? 
+				new HashSet<>(SQLUtils.fetchLongs(conn, "SELECT DISTINCT(id) FROM amp_funding_pledges")) :
+					collectEtlEntities("pledge");
+		Set<Long> components = collectEtlEntities("component");
+		Set<Long> activities = etlFromScratch ? getAllValidatedAndLatestIds() : collectEtlEntities("activity");
+		int steps = 1;
+		while (iterateEtlEntities(activities, pledges, components)) {
+			steps ++;
+		}
+		pledges.remove(0l);
+		activities.remove(0l);
+		components.remove(0l);
+		if (etlFromScratch)
+			activities.add(999999999l);
+		logger.info(String.format("needed %d iterations to collect all the ETLable entities: %d activities, %d pledges, %d components", steps, activities.size(), pledges.size(), components.size()));
+		
+		//Set<Long> activityIds = calculateAffectedActivities(etlFromScratch, pledgeIds);
+		Set<Long> dateCodes = etlFromScratch ? null : collectEtlEntities("exchange_rate");
+		return new EtlConfiguration(activities, pledges, dateCodes, etlFromScratch);
 		//this.pledgesToRedo = new HashSet<>();
 		//if (pledgesToRedo != null)
 		//	this.pledgesToRedo.addAll(pledgesToRedo);
 	}
 	
-	private Set<Long> calculateAffectedActivities(boolean etlFromScratch) {
-		if (!etlFromScratch) {
-			String affectedRawActivitiesQuery = "SELECT DISTINCT(entity_id) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND (event_id < " + currentEtlEventId + ") AND (entity_name='activity')";
-			Set<Long> res = new TreeSet<>(SQLUtils.<Long>fetchAsList(conn, affectedRawActivitiesQuery, 1));
-			
-			String affectedComponentsQuery = "SELECT DISTINCT(entity_id) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND (event_id < " + currentEtlEventId + ") AND (entity_name='component')";
-			Set<Long> affectedComponents = new TreeSet<>(SQLUtils.<Long>fetchAsList(conn, affectedComponentsQuery, 1));
-			
-			String componentIdCondition = "amp_component_id IN (" + Util.toCSStringForIN(affectedComponents) + ")";
-			res.addAll(SQLUtils.fetchLongs(conn, "SELECT DISTINCT(activity_id) FROM amp_component_funding WHERE " + componentIdCondition));
-			res.addAll(SQLUtils.fetchLongs(conn, "SELECT DISTINCT(amp_activity_id) FROM amp_activity_components WHERE " + componentIdCondition));
-			
-			return res;
-		}
-		else
-			return getAllValidatedAndLatestIds();
+	/**
+	 * collect ETL entities from the window of the currently-running ETL
+	 * @param entityType
+	 * @return
+	 */
+	private Set<Long> collectEtlEntities(String entityType) {
+		String query = String.format("SELECT DISTINCT(entity_id) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND (event_id < " + currentEtlEventId + ") AND (entity_name='%s')", entityType);
+		return new TreeSet<>(SQLUtils.fetchLongs(conn, query));
 	}
 	
-	private Set<Long> calculateAffectedDateCodes(boolean etlFromScratch) {
-		if (!etlFromScratch) {
-			String affectedDatesQuery = "SELECT DISTINCT(entity_id) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND (event_id < " + currentEtlEventId + ") AND (entity_name='exchange_rate')";
-			Set<Long> res = new HashSet<>(SQLUtils.<Long>fetchAsList(conn, affectedDatesQuery, 1));
-			return res;
-		}
-		else
-			return null;
-	}
+	private boolean iterateEtlEntities(Set<Long> activities, Set<Long> pledges, Set<Long> components) {
+		int oldNrActivies = activities.size();
+		int oldNrPledges = pledges.size();
+		int oldNrComponents = components.size();
+
+		String componentIdCondition = "amp_component_id IN (" + Util.toCSStringForIN(components) + ")";
+		activities.addAll(SQLUtils.fetchLongs(conn, "SELECT DISTINCT(activity_id) FROM amp_component_funding WHERE " + componentIdCondition));
+		activities.addAll(SQLUtils.fetchLongs(conn, "SELECT DISTINCT(amp_activity_id) FROM amp_activity_components WHERE " + componentIdCondition));
+
+		String pledgeIdsCondition = "afd.pledge_id IN (" + Util.toCSStringForIN(pledges) + ")";
+		activities.addAll(SQLUtils.fetchLongs(conn, "select distinct(af.amp_activity_id) from amp_funding_detail afd JOIN amp_funding af on afd.amp_funding_id = af.amp_funding_id WHERE " + pledgeIdsCondition));
+		pledges.addAll(SQLUtils.fetchLongs(conn, "SELECT distinct(pledge_id) FROM amp_funding_detail afd JOIN amp_funding af ON afd.amp_funding_id = af.amp_funding_id WHERE af.amp_activity_id IN (" + Util.toCSStringForIN(activities) + ")"));
+
+		
+		components.addAll(SQLUtils.fetchLongs(conn, "SELECT DISTINCT(amp_component_id) FROM amp_component_funding WHERE activity_id IN (" + Util.toCSStringForIN(activities) + ")"));
+		components.addAll(SQLUtils.fetchLongs(conn, "SELECT DISTINCT(amp_component_id) FROM amp_activity_components WHERE amp_activity_id IN (" + Util.toCSStringForIN(activities) + ")"));
+		
+		return oldNrActivies != activities.size() || oldNrPledges != pledges.size() || oldNrComponents != components.size();
+	}	
 	
 	protected Set<Long> getAllValidatedAndLatestIds() {
 		Set<Long> latestIds = new TreeSet<Long>(SQLUtils.<Long>fetchAsList(conn, "SELECT amp_activity_id FROM amp_activity", 1));
@@ -240,8 +263,7 @@ private EtlResult execute() throws Exception {
 		SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('etl', " + currentEtlId + ")");
 		currentEtlEventId = SQLUtils.getLong(conn, "SELECT max(event_id) FROM amp_etl_changelog WHERE entity_name = 'etl'");
 
-		String fullEtlRequestedQuery = "SELECT count(*) FROM amp_etl_changelog WHERE (event_id > " + previousEtlEventId + ") AND (event_id < " + currentEtlEventId  + ") AND entity_name='full_etl_request'";
-		boolean fullEtlRequestedDB = SQLUtils.getLong(conn, fullEtlRequestedQuery) > 0;
+		boolean fullEtlRequestedDB = !collectEtlEntities("full_etl_request").isEmpty();
 		if (fullEtlRequestedDB) {
 			forceFullEtl |= fullEtlRequestedDB;
 			reasonsForFull.add("DB_requested");
@@ -259,9 +281,9 @@ private EtlResult execute() throws Exception {
 		etlConfig = calculateEtlConfiguration(fullEtlJobs);
 				
 		logger.info("running ETL, the configuration is: " + etlConfig.toString());
-		boolean redoTrnDimensions = SQLUtils.getLong(conn, "SELECT count(*) FROM amp_etl_changelog WHERE (entity_name='translation') AND (event_id > " + previousEtlEventId + ") AND (event_id < " + currentEtlEventId + ")") > 0;
+		boolean redoTrnDimensions = !collectEtlEntities("translation").isEmpty();
 				
-		boolean workToDo = etlConfig.fullEtl || redoTrnDimensions || !etlConfig.activityIds.isEmpty() || !etlConfig.dateCodes.isEmpty();
+		boolean workToDo = etlConfig.fullEtl || redoTrnDimensions || !etlConfig.activityIds.isEmpty() || !etlConfig.pledgeIds.isEmpty() || !etlConfig.dateCodes.isEmpty();
 		if ((!etlConfig.fullEtl) && (!fullEtlJobs.isEmpty()))
 			throw new RuntimeException("jss u r st00p33d");
 		if (workToDo) {
@@ -730,8 +752,45 @@ private EtlResult execute() throws Exception {
 				monetConn.copyEntries(mondrianTable.tableName, SQLUtils.rawRunQuery(conn, query, null));
 			}
 		}
-		
+		runPledgeLogue(mondrianTable);
 		//runLogue(mondrianTable.epilogue);
+	}
+	
+	/**
+	 * ignores translations for now, as all translated pledges contents lies in the fact table
+	 * @param mondrianTable
+	 * @throws SQLException
+	 */
+	protected void runPledgeLogue(MondrianTableDescription mondrianTable) throws SQLException {
+		
+		if (mondrianTable.pledgeView == null || etlConfig.pledgeIds.isEmpty())
+			return;
+
+		if (!SQLUtils.tableExists(mondrianTable.pledgeView))
+			throw new RuntimeException("Mondrian table " + mondrianTable.tableName + " has a pledge view defined which is missing: " + mondrianTable.pledgeView);
+		
+		Set<String> localeSuffixes = new LinkedHashSet<>(mondrianTable.isTranslated() ? locales : Arrays.asList(""));
+				
+		logger.warn("incrementally cloning pledges table " + mondrianTable.tableName + " into locales " + localeSuffixes);
+		List<String> columns = new ArrayList<String>(SQLUtils.getTableColumns(mondrianTable.pledgeView));
+		columns.set(0, "pledge_id AS amp_activity_id");
+		String columnsPart = SQLUtils.generateCSV(columns);
+		try(ResultSet rs = SQLUtils.rawRunQuery(conn, "SELECT " + columnsPart + " FROM " + mondrianTable.pledgeView + " WHERE " + etlConfig.pledgeIdsIn("pledge_id"), null)) {
+			List<List<Object>> entries = mondrianTable.readFetchedTable(rs, "en");
+			for(List<Object> entry:entries) {
+				if (entry.size() < 2)
+					throw new RuntimeException("while pledge-logueing MTD " + mondrianTable.tableName + ", found an empty structure in pledge-view " + mondrianTable.pledgeView + "; dying");
+				entry.set(0, PersistenceManager.getLong(entry.get(0)) + PLEDGE_ID_ADDER);
+			}
+			
+			for(String suffix:localeSuffixes) {
+				String usedSuffix = suffix.isEmpty() ? "" : ("_" + suffix);
+				String localizedTableName = mondrianTable.tableName + usedSuffix;
+				monetConn.executeQuery("DELETE FROM " + localizedTableName + " WHERE " + etlConfig.pledgeIdsIn("amp_activity_id - " + PLEDGE_ID_ADDER));
+				SQLUtils.insert(monetConn.conn, localizedTableName, null, null, monetConn.getTableColumns(localizedTableName), entries);
+			}
+		}
+		//monetConn.executeQuery("DELETE FROM " + mondrianTable.);
 	}
 	
 	//protected
@@ -765,26 +824,26 @@ private EtlResult execute() throws Exception {
 	 * @param tableName
 	 * @throws SQLException
 	 */
-	protected void runEtlOnTable(String query, String tableName) throws SQLException {
+	protected void runEtlOnTable(String query, String tableName, boolean forceIncremental) throws SQLException {
 		try (ResultSet rs = SQLUtils.rawRunQuery(conn, query, null)) {
 			// Map<activityId, percentages_on_sector_scheme
 			Map<Long, PercentagesDistribution> secs = PercentagesDistribution.readInput(rs);
-			serializeETLTable(secs, tableName, false);
+			serializeETLTable(secs, tableName, false, forceIncremental);
 		}
 	}
-	
+
 	protected void generateOrganisationsEtlTables() throws SQLException {
 		if (etlConfig.activityIds.isEmpty())
 			return;
 		//logger.warn("generating orgs ETL tables...");
 		String activitiesCondition = etlConfig.activityIdsIn("amp_activity_id");
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_executing_agency WHERE (%s)", activitiesCondition), "etl_executing_agencies");
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_beneficiary_agency WHERE (%s)", activitiesCondition), "etl_beneficiary_agencies");
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_implementing_agency WHERE (%s)", activitiesCondition), "etl_implementing_agencies");
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_responsible_organisation WHERE (%s)", activitiesCondition), "etl_responsible_agencies");
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_contracting_agency WHERE (%s)", activitiesCondition), "etl_contracting_agencies");
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_regional_group WHERE (%s)", activitiesCondition), "etl_regional_groups");
-		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_sector_group WHERE (%s)", activitiesCondition), "etl_sector_groups");
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_executing_agency WHERE (%s)", activitiesCondition), "etl_executing_agencies", false);
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_beneficiary_agency WHERE (%s)", activitiesCondition), "etl_beneficiary_agencies", false);
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_implementing_agency WHERE (%s)", activitiesCondition), "etl_implementing_agencies", false);
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_responsible_organisation WHERE (%s)", activitiesCondition), "etl_responsible_agencies", false);
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_contracting_agency WHERE (%s)", activitiesCondition), "etl_contracting_agencies", false);
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_regional_group WHERE (%s)", activitiesCondition), "etl_regional_groups", false);
+		runEtlOnTable(String.format("select amp_activity_id, amp_org_id, percentage from v_sector_group WHERE (%s)", activitiesCondition), "etl_sector_groups", false);
 	}
 	
 	/**
@@ -820,7 +879,11 @@ private EtlResult execute() throws Exception {
 		//logger.warn("generating location ETL tables...");
 		String activitiesCondition = etlConfig.activityIdsIn("aal.amp_activity_id");
 		String query = String.format("select aal.amp_activity_id, acvl.id, aal.location_percentage from amp_activity_location aal, amp_category_value_location acvl, amp_location al WHERE (%s) AND (aal.amp_location_id = al.amp_location_id) AND (al.location_id = acvl.id)", activitiesCondition);
-		runEtlOnTable(query, "etl_locations");
+		runEtlOnTable(query, "etl_locations", false);
+		
+		String pledgesCondition = etlConfig.pledgeIdsIn("pledge_id");
+		String pledgesQuery = String.format("select pledge_id + %d, location_id, location_percentage from amp_funding_pledges_location WHERE (%s)", PLEDGE_ID_ADDER, pledgesCondition);
+		runEtlOnTable(pledgesQuery, "etl_locations", true);		
 	}
 	
 	protected void generateProgramsEtlTables(String schemeName) throws SQLException {
@@ -828,7 +891,11 @@ private EtlResult execute() throws Exception {
 			return;
 		String activitiesCondition = etlConfig.activityIdsIn("aap.amp_activity_id");
 		String query = String.format("select aap.amp_activity_id, aap.amp_program_id, aap.program_percentage FROM amp_activity_program aap, v_mondrian_programs vmp WHERE (%s) AND (aap.amp_program_id = vmp.amp_theme_id) AND (vmp.program_setting_name = '%s')", activitiesCondition, schemeName);
-		runEtlOnTable(query, "etl_activity_program_" + schemeName.replace(' ', '_').toLowerCase());
+		runEtlOnTable(query, "etl_activity_program_" + schemeName.replace(' ', '_').toLowerCase(), false);
+		
+		String pledgesCondition = etlConfig.pledgeIdsIn("afpp.pledge_id");
+		String pledgesQuery = String.format("select afpp.pledge_id + %d, afpp.amp_program_id, afpp.program_percentage FROM amp_funding_pledges_program afpp, v_mondrian_programs vmp WHERE (%s) AND (afpp.amp_program_id = vmp.amp_theme_id) AND (vmp.program_setting_name = '%s')", PLEDGE_ID_ADDER, pledgesCondition, schemeName);
+		runEtlOnTable(pledgesQuery, "etl_activity_program_" + schemeName.replace(' ', '_').toLowerCase(), true);
 	}
 	
 	protected void generateSectorsEtlTables(String schemeName) throws SQLException {
@@ -836,28 +903,31 @@ private EtlResult execute() throws Exception {
 			return;
 		String activitiesCondition = etlConfig.activityIdsIn("aas.amp_activity_id");
 		String query = String.format("select aas.amp_activity_id, aas.amp_sector_id, aas.sector_percentage from amp_activity_sector aas, v_mondrian_sectors vms WHERE (%s) AND (aas.amp_sector_id = vms.amp_sector_id) AND (vms.typename='%s')", activitiesCondition, schemeName);
-		runEtlOnTable(query, "etl_activity_sector_" + schemeName.toLowerCase());
+		runEtlOnTable(query, "etl_activity_sector_" + schemeName.toLowerCase(), false);
+		
+		String pledgesCondition = etlConfig.pledgeIdsIn("afps.pledge_id");
+		String pledgesQuery = String.format("select afps.pledge_id + %d, afps.amp_sector_id, afps.sector_percentage from amp_funding_pledges_sector afps, v_mondrian_sectors vms WHERE (%s) AND (afps.amp_sector_id = vms.amp_sector_id) AND (vms.typename='%s')", PLEDGE_ID_ADDER, pledgesCondition, schemeName);
+		runEtlOnTable(pledgesQuery, "etl_activity_sector_" + schemeName.toLowerCase(), true);
 	}
 	
 	/**
 	 * (incremental or full) processes an ETL table with cleaned-up percentages
 	 * 	- full: DROP + CREATE + INSERT
 	 *  - incremental: DELETE + INSERT
-	 * TODO: generate one query per N activities instead of a huge SQL query
 	 * @param percs
 	 * @param tableName
 	 * @throws SQLException
 	 */
-	protected void serializeETLTable(Map<Long, PercentagesDistribution> percs, String tableName, boolean createIndices) throws SQLException {
-		if (etlConfig.fullEtl) {
+	protected void serializeETLTable(Map<Long, PercentagesDistribution> percs, String tableName, boolean createIndices, boolean forceIncremental) throws SQLException {
+		boolean recreateTable = etlConfig.fullEtl && (!forceIncremental);
+		
+		if (recreateTable) {
 			monetConn.dropTable(tableName);
 			monetConn.executeQuery("CREATE TABLE " + tableName + " (act_id integer, ent_id integer, percentage double)");
 		} else {
 			monetConn.executeQuery("DELETE FROM " + tableName + " WHERE act_id IN (" + Util.toCSStringForIN(percs.keySet()) + ")");
 		}
-		
-		createIndices &= etlConfig.fullEtl;
-		
+				
 		List<List<Object>> entries = new ArrayList<>();
 		for (long actId:percs.keySet()) {
 			PercentagesDistribution pd = percs.get(actId);
@@ -867,6 +937,7 @@ private EtlResult execute() throws Exception {
 		}
 		SQLUtils.insert(monetConn.conn, tableName, null, null, Arrays.asList("act_id", "ent_id", "percentage"), entries);
 
+		createIndices &= recreateTable;
 		if (createIndices) {
 			SQLUtils.executeQuery(conn, String.format("CREATE INDEX %s_act_id_idx ON %s(act_id)", tableName, tableName)); // create index on activityId
 			SQLUtils.executeQuery(conn, String.format("CREATE INDEX %s_ent_id_idx ON %s(ent_id)", tableName, tableName)); // create index on entityId (entity=sector/program/org)

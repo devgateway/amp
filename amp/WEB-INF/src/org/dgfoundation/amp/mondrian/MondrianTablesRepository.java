@@ -107,17 +107,19 @@ public class MondrianTablesRepository {
 	
 	public final static MondrianTableDescription MONDRIAN_ACTIVITY_TEXTS = 
 			new MondrianTableDescription("mondrian_activity_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
-				.withFingerprintedJob(Arrays.asList(
+				/*.withFingerprintedJob(Arrays.asList(
 						Fingerprint.buildTableHashingQuery("v_mondrian_activity_texts", "amp_activity_id"),
 						Fingerprint.buildTranslationHashingQuery(AmpActivityVersion.class),
 						Fingerprint.buildTranslationHashingQuery(AmpTeam.class)
-						))
+						))*/
 				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
 					@Override public I18nViewDescription getObject() {
 						return new I18nViewDescription("mondrian_activity_texts")
 							.addColumnDef(new I18nViewColumnDescription("name", "amp_activity_id", AmpActivityVersion.class, "name"))
 							.addColumnDef(new I18nViewColumnDescription("team_name", "team_id", AmpTeam.class, "name"));							
-					}});
+					}})
+				.withSupplimentalRows(1)
+				.withPledgeView("v_mondrian_pledge_texts");
 
 	public final static MondrianTableDescription MONDRIAN_COMPONENTS =
 			new MondrianTableDescription("mondrian_components", "amp_component_id", Arrays.asList("amp_component_id", "component_type_id"))
@@ -137,25 +139,27 @@ public class MondrianTablesRepository {
 	
 	public final static MondrianTableDescription MONDRIAN_ACTIVITY_FIXED_TEXTS = 
 			new MondrianTableDescription("mondrian_activity_fixed_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
-				.withFingerprintedJob(Arrays.asList("SELECT 1"));	
+				//.withFingerprintedJob(Arrays.asList("SELECT 1"))
+				.withPledgeView("v_mondrian_pledge_fixed_texts");
 
 	
 	public final static MondrianTableDescription MONDRIAN_ACTIVITY_CURRENCY_NUMBERS = 
 			new MondrianTableDescription("mondrian_activity_currency_numbers", "amp_activity_id", Arrays.asList("amp_activity_id"))
-				.withFingerprintedJob(Arrays.asList("SELECT 1"));
+				//.withFingerprintedJob(Arrays.asList("SELECT 1"))
+			/* no pledges addon */ ;
 	
-	public final static MondrianTableDescription MONDRIAN_ACTIVITY_TRN_TEXTS = 
+	public final static MondrianTableDescription MONDRIAN_ACTIVITY_TRN_TEXTS =
 			new MondrianTableDescription("mondrian_activity_trn_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
-				.withFingerprintedJob(Arrays.asList(Fingerprint.buildTableHashingQuery("v_mondrian_activity_trn_texts", "amp_activity_id")))
+				//.withFingerprintedJob(Arrays.asList(Fingerprint.buildTableHashingQuery("v_mondrian_activity_trn_texts", "amp_activity_id")))
 				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
 					@Override public I18nViewDescription getObject() {
 						return new I18nViewDescription("mondrian_activity_trn_texts")
 								.addTrnColDef("governmentapprovalprocedures_text", "governmentapprovalprocedures_id")
 								.addTrnColDef("jointcriteria_text", "jointcriteria_id")
 								.addTrnColDef("iob_text", "iob_id")
-								.addTrnColDef("impl_level_name", "impl_level_id")
-								.addTrnColDef("impl_loc_name", "impl_loc_id");
-					}});
+								.addTrnColDef("impl_level_name", "impl_level_id");
+					}})
+				/* no pledges addon */ ;
 	
 	public final static MondrianTableDescription MONDRIAN_CATEGORY_VALUES = 
 			new MondrianTableDescription("mondrian_category_values", "acv_id", Arrays.asList("acv_id"))
@@ -175,7 +179,7 @@ public class MondrianTablesRepository {
 				@Override public boolean rowIsRelevant(java.sql.ResultSet rs, String locale) throws java.sql.SQLException {
 					return rs.getString("language").equals(locale);
 				}}
-			.withFingerprintedJob(Arrays.asList("SELECT 1"))
+			//.withFingerprintedJob(Arrays.asList("SELECT 1"))
 			.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
 				@Override public I18nViewDescription getObject() {
 					I18nViewDescription res = new I18nViewDescription("mondrian_activity_long_texts");
@@ -185,10 +189,12 @@ public class MondrianTablesRepository {
 					}
 					return res;
 				}
-			});
+			})
+			/* no pledges addon */;
 	
 	public final static MondrianTableDescription MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE = 
-			new MondrianTableDescription("mondrian_raw_donor_transactions", "amp_fund_detail_id", Arrays.asList("amp_activity_id", "amp_fund_detail_id", "donor_id"));
+			new MondrianTableDescription("mondrian_raw_donor_transactions", "amp_fund_detail_id", Arrays.asList("amp_activity_id", "amp_fund_detail_id", "donor_id"))
+				.withPledgeView("v_mondrian_raw_pledge_transactions");
 	
 //	public final static MondrianTableDescription MONDRIAN_RAW_COMPONENT_TRANSACTIONS_TABLE = 
 //			new MondrianTableDescription("mondrian_component_transactions", "amp_component_funding_id", Arrays.asList("amp_activity_id", "amp_component_id", "component_organisation_id"));
@@ -278,7 +284,9 @@ public class MondrianTablesRepository {
 				
 				new DatabaseTableColumn("src_role", "text", true),  // amp_role.role_name
 				new DatabaseTableColumn("dest_role", "text", true), // amp_role.role_name
-				new DatabaseTableColumn("dest_org_id", "integer", true)   // amp_org_id
+				new DatabaseTableColumn("dest_org_id", "integer", true),   // amp_org_id
+				
+				new DatabaseTableColumn("related_entity_id", "integer", true) // mondrian_activity_texts id
 		));
 	
 	public final static List<CurrencyAmountGroup> CURRENCY_GROUPS = Arrays.asList(

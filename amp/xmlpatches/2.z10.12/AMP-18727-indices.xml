@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-18727</jira>
+	<keyword>Views</keyword>
+	<author>cdolghier</author>
+	<description>recreate view, this will always be the last version of the view</description>
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				CREATE INDEX idx_amp_activity_group_last_activity_id ON amp_activity_group(amp_activity_last_version_id);
+				CREATE INDEX idx_amp_funding_detail_pledge_id ON amp_funding_detail(pledge_id);
+				CREATE INDEX idx_amp_funding_detail_funding_id ON amp_funding_detail(amp_funding_id);
+				CREATE INDEX idx_amp_funding_amp_activity_id ON amp_funding(amp_activity_id);
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

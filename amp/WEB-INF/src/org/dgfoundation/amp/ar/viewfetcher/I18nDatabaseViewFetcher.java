@@ -7,6 +7,8 @@ import java.util.*;
 
 import org.dgfoundation.amp.ar.FilterParam;
 
+import com.google.common.base.Function;
+
 /**
  * fetches a view which contains internationalized String columns; feeds to the consumer the query result (plus translated values)
  * @author Dolghier Constantin
@@ -36,10 +38,10 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 	private Map<Integer, String> colNumberToColName;
 	
 	/**
-	 * if a column has an index-column value found in this set, then do not translate it
+	 * if the function is NOT null and returns true for the id of an entry, then this entry should not be translated
 	 */
-	public final Set<Long> indicesNotToTranslate = new HashSet<>();
-	
+	public Function<Long, Boolean> indicesNotToTranslate = null;
+		
 	public I18nDatabaseViewFetcher(String viewName, String condition, String locale, Map<PropertyDescription, ColumnValuesCacher> cachers, Connection connection, String... columnNames)
 	{
 		this(getViewDescription(viewName), condition, locale, cachers, connection, columnNames);
@@ -247,7 +249,7 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 				return value;
 			}
 						
-			if ((idToTranslate == null) || (idToTranslate.longValue() <= 0) || indicesNotToTranslate.contains(idToTranslate))
+			if ((idToTranslate == null) || (idToTranslate.longValue() <= 0) || (indicesNotToTranslate != null && indicesNotToTranslate.apply(idToTranslate)))
 				return super.getString(columnLabel); // this particular entry should not be translated
 			
 			

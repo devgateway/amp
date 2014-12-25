@@ -39,9 +39,18 @@ public class EtlConfiguration {
 		return prefix + activityIdsInQuery;
 	}
 	
+	protected String pledgeIdsInQuery;
+	public String pledgeIdsIn(String prefix) {
+		//if (fullEtl) return "1=1"; 
+		if (pledgeIdsInQuery == null)
+			pledgeIdsInQuery = " IN (" + Util.toCSStringForIN(pledgeIds) + ")";
+		return prefix + pledgeIdsInQuery;
+	}
+	
 	@Override public String toString() {
-		return String.format("activities: <%s>; dates: <%s>", 
+		return String.format("activities: <%s>; pledges: <%s>; dates: <%s>", 
 				activityIds.size() > 20 ? String.format("[%d] activities", activityIds.size()) : activityIds.toString(),
+				pledgeIds.size() > 20 ? String.format("[%d] pledges", pledgeIds.size()) : pledgeIds.toString(),
 				dateCodes == null ? "(all)" : dateCodes.toString());
 	}
 }

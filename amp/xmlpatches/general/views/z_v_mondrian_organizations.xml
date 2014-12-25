@@ -27,9 +27,16 @@
 						COALESCE(org.acronym, 'Undefined') as org_acronym  
 						FROM amp_organisation org 
 							LEFT JOIN amp_org_group grp ON org.org_grp_id = grp.amp_org_grp_id
-							LEFT JOIN amp_org_type tp ON grp.org_type = tp.amp_org_type_id						
+							LEFT JOIN amp_org_type tp ON grp.org_type = tp.amp_org_type_id
 					UNION ALL
-					SELECT 999999999, 'Undefined', 'Undefined', 999999999, 'Undefined', 999999999, 'Undefined', 'Undefined', 'Undefined'
+						SELECT 800000000 + grp.amp_org_grp_id AS amp_org_id, ('Org for group ' || grp.org_grp_name) AS org_name, '' AS org_code,
+							grp.amp_org_grp_id AS amp_org_grp_id, COALESCE(grp.org_grp_name, 'Undefined') AS org_grp_name,
+							COALESCE(tp.amp_org_type_id, 999999999) amp_org_type_id, COALESCE(tp.org_type, 'Undefined') org_type_name, tp.org_type_code,
+							'Undefined' as org_acronym  
+						FROM amp_org_group grp
+							LEFT JOIN amp_org_type tp ON grp.org_type = tp.amp_org_type_id
+					UNION ALL
+						SELECT 999999999, 'Undefined', 'Undefined', 999999999, 'Undefined', 999999999, 'Undefined', 'Undefined', 'Undefined'
 					ORDER BY amp_org_id;
 			</lang>
 		</script>

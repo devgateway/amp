@@ -1,6 +1,9 @@
 package org.digijava.kernel.ampapi.mondrian.util;
 
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
@@ -12,6 +15,7 @@ import mondrian.spi.DynamicSchemaProcessor;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -249,14 +253,12 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	 * @return
 	 */
 	protected String buildFilteringSubquery() {
-		MondrianReportFilters mrf = (currentReport.get().getFilters() != null) ? (MondrianReportFilters) currentReport
-				.get().getFilters() : null;
-		return String.format("(%s) AND (mondrian_fact_table.entity_id IN (%s)) %s",
-				getFilterByReportType(), getAllowedActivitiesIds(mrf), new FactTableFiltering(mrf).getQueryFragment());
+		MondrianReportFilters mrf = (currentReport.get().getFilters() != null) ? (MondrianReportFilters) currentReport.get().getFilters() : null;
+		String ret = String.format("(%s) %s", buildEntityIdFilteringSQL(mrf), new FactTableFiltering(mrf).getQueryFragment());
+		return ret;
 	}
 
-	protected String getFilterByReportType() {
-		int reportType = currentReport.get().getReportType();
+	protected String getFilterByReportType(int reportType) {
 		switch (reportType) {
 		
 			case ArConstants.DONOR_TYPE:
@@ -265,20 +267,55 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			case ArConstants.COMPONENT_TYPE:
 				return "component_id IS NOT NULL AND component_id <> 999999999";
 
+			case ArConstants.PLEDGES_TYPE:
+				return "entity_id >= " + MondrianETL.PLEDGE_ID_ADDER;
+						
 			default:
 				throw new RuntimeException("report type not implemented yet: " + reportType);
 		}
 	}
 	
-	protected String getAllowedActivitiesIds(MondrianReportFilters mrf) {
-		Set<Long> allowedActivities = currentEnvironment.get().workspaceFilter.getIds();
+	/**
+	 * constructs an SQL inline statement of the form <<(%s) AND (mondrian_fact_table.entity_id IN (%s))>>
+	 * @param mrf
+	 * @return
+	 */
+	protected String buildEntityIdFilteringSQL(MondrianReportFilters mrf) {
+		int reportType = currentReport.get().getReportType();
+		String reportTypeSubquery = getFilterByReportType(reportType);
+		String entityFilteringSubquery = getAllowedActivitiesSubquery(mrf, reportType);
+		return String.format("(%s) AND (%s)", reportTypeSubquery, entityFilteringSubquery);
+	}
+	
+	protected String getAllowedActivitiesSubquery(MondrianReportFilters mrf, int reportType) {
+		List<Set<Long>> sets = new ArrayList<>(); // list of all sets of ids which we'll have to intersect
+		
+		switch(reportType) {
+			case ArConstants.PLEDGES_TYPE:
+				if (currentEnvironment.get().pledgesFilter != null)
+					sets.add(currentEnvironment.get().pledgesFilter.getIds()); // pledges don't obey workspace filters
+				break;
+				
+			default:
+				if (currentEnvironment.get().workspaceFilter != null)
+					sets.add(currentEnvironment.get().workspaceFilter.getIds());
+				break;
+		}			
+		
 		if (mrf != null) {
 			String dateFiltersQuery = MondrianDateFilters.generateDateColumnsFilterQuery(mrf.getDateFilterRules());
 			if (dateFiltersQuery != null)
-				allowedActivities.retainAll(ActivityUtil.fetchLongs(dateFiltersQuery));
+				sets.add(ActivityUtil.fetchLongs(dateFiltersQuery));
 		}
-
-		return Util.toCSStringForIN(allowedActivities);
+		
+		if (sets.isEmpty())
+			return "1 = 1"; // no filtering to do whatsoever
+		
+		// compute intersection of all the sets in <sets>
+		Set<Long> result = new HashSet<>(sets.get(0));
+		for(int i = 1; i < sets.size(); i++)
+			result.retainAll(sets.get(i));
+		return String.format("mondrian_fact_table.entity_id IN (%s)", Util.toCSStringForIN(result));
 	}
 	
 	/**

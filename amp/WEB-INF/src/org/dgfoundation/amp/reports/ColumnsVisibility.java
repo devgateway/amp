@@ -379,6 +379,7 @@ public class ColumnsVisibility extends DataVisibility {
 		put("Project Description", ColumnConstants.PROJECT_DESCRIPTION);
 		put("Project Period", ColumnConstants.PROJECT_PERIOD);
 		put("Related Projects", ColumnConstants.RELATED_PROJECTS);
+		put("Related Pledges", ColumnConstants.RELATED_PLEDGES);
 		put("Sector Location", ColumnConstants.SECTOR_LOCATION);
 		put("Sector Tag", ColumnConstants.SECTOR_TAG);
 		put("Sector Tag Sub-Sector", ColumnConstants.SECTOR_TAG_SUB_SECTOR);
@@ -392,7 +393,9 @@ public class ColumnsVisibility extends DataVisibility {
 			ColumnConstants.ACTIVITY_COUNT,
 			ColumnConstants.FUNDING_YEAR,
 			ColumnConstants.TEAM,
-			ColumnConstants.DONOR_AGENCY
+			ColumnConstants.DONOR_AGENCY,
+			ColumnConstants.RELATED_PLEDGES,
+			ColumnConstants.RELATED_PROJECTS
 	);
 
 	/**

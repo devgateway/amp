@@ -138,7 +138,8 @@ public final class ArConstants {
 		put(DISBURSEMENT, Constants.DISBURSEMENT);
 		put(EXPENDITURE, Constants.EXPENDITURE);
 		put(RELEASE_OF_FUNDS, Constants.RELEASE_OF_FUNDS);
-		put(ESTIMATED_DISBURSEMENTS, Constants.ESTIMATED_DONOR_DISBURSEMENT);		
+		put(ESTIMATED_DISBURSEMENTS, Constants.ESTIMATED_DONOR_DISBURSEMENT);
+		put(PLEDGE, Constants.PLEDGE);
 	}};
 	
 	//public final static String PLEDGES_TOTAL_PLEDGED="Total Pledged";

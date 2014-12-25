@@ -8,6 +8,7 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.testutils.ActivityIdsFetcher;
 import org.dgfoundation.amp.testutils.AmpTestCase;
+import org.dgfoundation.amp.testutils.PledgeIdsFetcher;
 import org.dgfoundation.amp.testutils.ReportTestingUtils;
 import org.digijava.kernel.ampapi.endpoints.reports.ReportsUtil;
 import org.digijava.kernel.request.TLSUtils;
@@ -49,15 +50,21 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 //		assertNull(String.format("test %s, report %s: %s", testName, reportSpec, error), error);
 //	}
 	
-	protected GeneratedReport runReportOn(String reportName, String locale, List<String> activities) {
+	protected GeneratedReport runReportOn(String reportName, String locale, List<String> entities) {
 		AmpReports report = ReportTestingUtils.loadReportByName(reportName);
 		ReportSpecification spec = ReportsUtil.getReport(report.getAmpReportId());
-		return runReportOn(spec, locale, activities);
+		return runReportOn(spec, locale, entities);
 	}
 	
-	protected GeneratedReport runReportOn(ReportSpecification spec, String locale, List<String> activities) {
+	protected GeneratedReport runReportOn(ReportSpecification spec, String locale, List<String> entities) {
 		try {
-			ReportEnvironment env = new ReportEnvironment(locale, new ActivityIdsFetcher(activities), FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY));
+			IdsGeneratorSource activitiesSrc = null;
+			IdsGeneratorSource pledgesSrc = null;
+			if (spec.getReportType() == ArConstants.PLEDGES_TYPE)
+				pledgesSrc = new PledgeIdsFetcher(entities);
+			else
+				activitiesSrc = new ActivityIdsFetcher(entities);
+			ReportEnvironment env = new ReportEnvironment(locale, activitiesSrc, pledgesSrc, FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY));
 			MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, env);
 			GeneratedReport res = generator.executeReport(spec);
 			return res;
@@ -91,8 +98,8 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		return spec;
 	}
 	
-	protected void runMondrianTestCase(ReportSpecification spec, String locale, List<String> activities, ReportAreaForTests cor) {
-		GeneratedReport rep = this.runReportOn(spec, locale, activities);
+	protected void runMondrianTestCase(ReportSpecification spec, String locale, List<String> entities, ReportAreaForTests cor) {
+		GeneratedReport rep = this.runReportOn(spec, locale, entities);
 		//Iterator<ReportOutputColumn> bla = rep.reportContents.getChildren().get(0).getContents().keySet().iterator();
 		//ReportOutputColumn first = bla.next(), second = bla.next(), third = bla.next(), fourth = bla.next();
 		
@@ -173,7 +180,7 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 	public static String generateDisplayedName(ReportOutputColumn colKey) {
 		//return colKey.getHierarchicalName();
 		if (colKey.parentColumn == null)
-			return colKey.originalColumnName;
+			return colKey.originalColumnName == null ? "<null>" : colKey.originalColumnName;
 		return String.format("%s-%s", generateDisplayedName(colKey.parentColumn), colKey.originalColumnName);
 	}
 	

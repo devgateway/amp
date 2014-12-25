@@ -82,6 +82,8 @@ public class MeasuresVisibility extends DataVisibility {
 				}
 			}
 		}
+		visibleData.add(MeasureConstants.PLEDGES_ACTUAL_PLEDGE);
+		visibleData.add(MeasureConstants.PLEDGES_COMMITMENT_GAP);
 		logger.info("Not visible: " + invisibleData);
 		// avoid any tentative to change it  
 		return Collections.unmodifiableSet(visibleData);

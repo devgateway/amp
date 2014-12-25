@@ -51,7 +51,7 @@ public class MeasureConstants {
 	public static final String PLEDGES_COMMITMENT_GAP = "Commitment Gap";
 	public static final String PLEDGES_PERCENTAGE_OF_DISBURSEMENT = "Percentage of Disbursement";
 	public static final String PLEDGES_PLANNED_COMMITMENTS = "Planned Commitments";
-	public static final String PLEDGES_PLANNED_DISBURSEMENTS = "Planned Disbursements";
+	public static final String PLEDGES_PLANNED_DISBURSEMENTS = "Planned Disbursements"; 
 	//type unset
 	public static final String EXECUTION_RATE = "Execution Rate";
 	public static final String ALWAYS_PRESENT = "Always Present";

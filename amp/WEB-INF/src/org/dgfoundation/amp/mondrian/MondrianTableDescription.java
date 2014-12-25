@@ -25,6 +25,7 @@ import org.dgfoundation.amp.mondrian.jobs.MondrianTableLogue;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.SiteUtils;
 
+import com.google.common.base.Function;
 import com.google.common.collect.HashBiMap;
 
 import static org.dgfoundation.amp.mondrian.MondrianETL.MONDRIAN_DUMMY_ID_FOR_ETL;
@@ -38,6 +39,15 @@ public class MondrianTableDescription {
 	
 	public final static Set<MondrianTableDescription> ALL_TABLES = new HashSet<>();
 	
+	/**
+	 * callback for view fetchers not to try translating pledge-dummy-ids
+	 */
+	public final static Function<Long, Boolean> EXCLUDE_UNDEFINED_AND_PLEDGES = new Function<Long, Boolean>() {
+		@Override public Boolean apply(Long input) {			
+			return input == null || input == MONDRIAN_DUMMY_ID_FOR_ETL || input >= 800 * 1000l * 1000l;
+		}
+	};
+	
 	public final String tableName;
 	public final String primaryKeyColumnName;
 	
@@ -48,6 +58,14 @@ public class MondrianTableDescription {
 	
 	public Fingerprint fingerprint;
 	public boolean isFiltering = false;
+	
+	/**
+	 * companion pledge table
+	 */
+	public String pledgeView;
+	
+	public int supplementalRows = 0;
+	
 	//public MondrianTableLogue epilogue;
 	
 	//public final Set<String> idColumnNames; 
@@ -58,7 +76,7 @@ public class MondrianTableDescription {
 	 * constructs and initializes an instance
 	 * @param tableName the name of the table
 	 * @param idColumnNames - the internal ids column-names of the table. They are checked against 999999999 when multilingualising. If null, will mirror indexedColumns
-	 * @param indexedColumns - the column-names of cols to whoch to add indices
+	 * @param indexedColumns - the column-names of cols to which to add indices
 	 */
 	public MondrianTableDescription(String tableName, String primaryKeyColumnName, Collection<String> indexedColumns) {
 		if (indexedColumns == null)
@@ -85,6 +103,16 @@ public class MondrianTableDescription {
 		return this;
 	}
 	
+	public MondrianTableDescription withPledgeView(String pledgeView) {
+		this.pledgeView = pledgeView;
+		return this;
+	}
+	
+	public MondrianTableDescription withSupplimentalRows(int sRows) {
+		this.supplementalRows = sRows;
+		return this;
+	}
+	
 	public CurrencyAmountGroup getCurrencyBlock(String prefix) {
 		return new CurrencyAmountGroup(this.tableName, this.tableName, primaryKeyColumnName, primaryKeyColumnName, prefix);
 	}
@@ -106,26 +134,31 @@ public class MondrianTableDescription {
 		return res;
 	}
 	
+	
+	public List<List<Object>> readFetchedTable(java.sql.ResultSet rs, String locale) throws SQLException {
+		List<List<Object>> vals = new ArrayList<>();
+		LinkedHashSet<String> columns = SQLUtils.collectColumnNames(rs);
+		// Map<value-column-name, index-column-name>
+		Map<String, String> valueColToIndex = getI18nDescription() == null ? new HashMap<String, String>() : getI18nDescription().getMappedColumns();
+		Set<String> indexColumns = new HashSet<>(valueColToIndex.values());
+		String UNDEFINED_VALUE = "Undefined";
+		String translated_undefined = TranslatorWorker.translateText(UNDEFINED_VALUE, locale, SiteUtils.getDefaultSite());;
+		while (rs.next()) {
+			if (!rowIsRelevant(rs, locale))
+				continue;
+			List<Object> row = readMondrianDimensionRow(valueColToIndex, indexColumns, columns, UNDEFINED_VALUE, translated_undefined, rs);
+			vals.add(row);
+		}
+		return vals;
+	}
+	
 	public List<List<Object>> readTranslatedTable(java.sql.Connection conn, String locale, String condition) throws SQLException {
 		Map<PropertyDescription, ColumnValuesCacher> cachers = new HashMap<>();
 		I18nDatabaseViewFetcher fetcher = new I18nDatabaseViewFetcher(getI18nDescription(), condition, locale, cachers, conn, "*");
-		fetcher.indicesNotToTranslate.add(MONDRIAN_DUMMY_ID_FOR_ETL);
-		
-		LinkedHashSet<String> columns = SQLUtils.getTableColumns(tableName);
+		fetcher.indicesNotToTranslate = EXCLUDE_UNDEFINED_AND_PLEDGES;
+
 		try(ResultSet rs = fetcher.fetch(null)) {
-			List<List<Object>> vals = new ArrayList<>();
-			// Map<value-column-name, index-column-name>
-			Map<String, String> valueColToIndex = getI18nDescription().getMappedColumns();
-			Set<String> indexColumns = new HashSet<>(valueColToIndex.values());
-			String UNDEFINED_VALUE = "Undefined";
-			String translated_undefined = TranslatorWorker.translateText(UNDEFINED_VALUE, locale, SiteUtils.getDefaultSite());;
-			while (rs.next()) {
-				if (!rowIsRelevant(rs, locale))
-					continue;
-				List<Object> row = readMondrianDimensionRow(valueColToIndex, indexColumns, columns, UNDEFINED_VALUE, translated_undefined, rs);
-				vals.add(row);
-			}
-			return vals;
+			return readFetchedTable(rs, locale);
 		}
 	}
 	

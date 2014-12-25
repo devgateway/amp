@@ -65,6 +65,7 @@ public final class MoConstants {
 	public static final String TYPE_OF_ASSISTANCE = "Type Of Assistance";
 	public static final String ACTIVITY_LONG_TEXTS = "Activity Long Texts";
 	public static final String ACTIVITY_TEXTS = "Activity Texts";
+	public static final String PLEDGE_TEXTS = "Pledge Texts";
 	public static final String ACTIVITY_FIXED_TEXTS = "Activity Fixed Texts";
 	public static final String ACTIVITY_CURRENCY_AMOUNTS = "Activity Currency Amounts";
 	public static final String DATES = "Dates";
@@ -75,6 +76,11 @@ public final class MoConstants {
 	public static final String PRIMARY_SECTOR = "Primary Sector";
 	public static final String SECONDARY_SECTOR = "Secondary Sector";
 	public static final String TERTIARY_SECTOR = "Tertiary Sector";
+	
+	public static final String PLEDGE_PRIMARY_SECTOR = "Pledge Primary Sector";
+	public static final String PLEDGE_SECONDARY_SECTOR = "Pledge Secondary Sector";
+	public static final String PLEDGE_TERTIARY_SECTOR = "Pledge Tertiary Sector";
+
 	public static final String PRIMARY_PROGRAMS = "Primary Program";
 	public static final String SECONDARY_PROGRAMS = "Secondary Program";
 	public static final String TERTIARY_PROGRAMS = "Tertiary Program";
@@ -147,7 +153,7 @@ public final class MoConstants {
 	public static final String H_TEAM = "Team";
 	public static final String H_GOVERNMENT_APPROVAL_PROCEDURES = "Government Approval Procedures";
 	public static final String H_JOINT_CRITERIA = "Joint Criteria";
-	private static final String H_CATEGORY_NAME = "Category Name";
+	public static final String H_CATEGORY_NAME = "Category Name";
 	public static final String H_ACTIVITY_STATUS = H_CATEGORY_NAME;
 	public static final String H_MODALITIES = H_CATEGORY_NAME;
 	public static final String H_TYPE_OF_COOPERATION = H_CATEGORY_NAME;
@@ -179,7 +185,7 @@ public final class MoConstants {
 	public static final String ATTR_GOVERNMENT_APPROVAL_PROCEDURES = "Government Approval Procedures";
 	public static final String ATTR_JOINT_CRITERIA = "Joint Criteria";
 	public static final String ATTR_INDIRECT_ON_BUDGET = "Indirect On Budget";
-	private static final String ATTR_CATEGORY_NAME = "Category Name";
+	public static final String ATTR_CATEGORY_NAME = "Category Name";
 	public static final String ATTR_ACTIVITY_STATUS = ATTR_CATEGORY_NAME;
 	public static final String ATTR_MODALITIES = ATTR_CATEGORY_NAME;
 	public static final String ATTR_TYPE_OF_COOPERATION = ATTR_CATEGORY_NAME;

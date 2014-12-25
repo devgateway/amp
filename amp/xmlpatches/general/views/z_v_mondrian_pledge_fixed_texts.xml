@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="false" retryOnFail="true"
+	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+	<jira>AMP-17836</jira>
+	<keyword>Views</keyword>
+	<author>Constantin Dolghier</author>
+	<description>recreate view, this will always be the last version of the view</description>
+	<trigger type="all">
+		<condition type="custom">
+			<script returnVar="val">
+				<lang type="sql">
+					SELECT settingsvalue FROM amp_global_settings where settingsname='Recreate the views on the next server restart';
+				</lang>
+			</script>
+ 			<test>val.equalsIgnoreCase("true")</test>
+		</condition>
+	</trigger> 
+	<apply>
+		<script>
+			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_mondrian_pledge_fixed_texts;
+				CREATE OR REPLACE VIEW v_mondrian_pledge_fixed_texts AS
+					SELECT
+						p.id AS pledge_id,
+						CAST('constant' as varchar(10)) as constant,
+						'Undefined' AS approval_status,
+						999999999 AS approval_status_key,
+						
+						'Undefined' AS amp_id, 
+						'Undefined' AS gov_agreement_number, 'Undefined' AS budget_code_project_id, 'Undefined' as draft, 'Undefined' AS fy, 'Undefined' AS vote, 'Undefined' AS subvote, 'Undefined' AS subprogram, 'Undefined' AS project_code, 'Undefined' AS ministry_code, 'Undefined'  AS cris_number,
+						'Undefined' AS prj_implementation_unit, 'Undefined' AS imac_approved, 'Undefined' AS national_oversight, 'Undefined' AS on_budget, 'Undefined' AS on_parliament, 'Undefined' AS on_treasury, 'Undefined' AS national_financial_management, 'Undefined' AS national_procurement, 'Undefined' AS national_audit, CAST (NULL as int) AS proposed_project_life, 
+						
+						CAST (NULL AS DATE) AS original_comp_date,
+						999999999 AS original_comp_date_code,
+						
+						CAST (NULL AS DATE) AS contracting_date,
+						999999999 AS contracting_date_code,
+						
+						CAST (NULL AS DATE) AS disbursments_date,
+						999999999 AS disbursments_date_code,
+						
+						CAST (NULL AS DATE) AS proposed_start_date,
+						999999999 AS proposed_start_date_code,
+						
+						CAST (NULL AS DATE) AS actual_start_date,
+						999999999 AS actual_start_date_code,
+						
+						CAST (NULL AS DATE) AS proposed_approval_date,
+						999999999 AS proposed_approval_date_code,
+						
+						CAST (NULL AS DATE) AS actual_approval_date,
+						999999999 AS actual_approval_date_code,
+						
+						CAST (NULL AS DATE) AS actual_completion_date,
+						999999999 AS actual_completion_date_code,
+						
+						CAST (NULL AS DATE) AS proposed_completion_date,
+						999999999 AS proposed_completion_date_code,
+						
+						CAST (NULL AS DATE) AS date_created,
+						999999999 AS date_created_code,
+						
+						CAST (NULL AS DATE) AS date_updated,
+						999999999 AS date_updated_code
+						
+					FROM amp_funding_pledges p;
+			</lang>
+		</script>
+	</apply>
+</tns:patch>

@@ -33,14 +33,10 @@
 			   			CASE WHEN (aav.indirect_on_budget) THEN 1 ELSE 0 END AS iob_id,
 			   			
 			   			CASE WHEN (impl_level.level_code IS NOT NULL) THEN impl_level.level_code ELSE 999999999 END AS impl_level_id, 
-			   			CASE WHEN (impl_level.level_code IS NOT NULL) THEN impl_level.name ELSE 'Undefined' END AS impl_level_name,
-	
-			   			CASE WHEN (impl_loc.amp_status_id IS NOT NULL) THEN impl_loc.amp_status_id ELSE 999999999 END AS impl_loc_id, 
-			   			CASE WHEN (impl_loc.amp_status_id IS NOT NULL) THEN impl_loc.name ELSE 'Undefined' END AS impl_loc_name
-			   				   			
+			   			CASE WHEN (impl_level.level_code IS NOT NULL) THEN impl_level.name ELSE 'Undefined' END AS impl_level_name
+			   					   				   			
 						FROM amp_activity_version aav
-							LEFT JOIN v_implementation_level impl_level ON impl_level.amp_activity_id = aav.amp_activity_id
-							LEFT JOIN v_implementation_location impl_loc ON impl_loc.amp_activity_id = aav.amp_activity_id;
+							LEFT JOIN v_implementation_level impl_level ON impl_level.amp_activity_id = aav.amp_activity_id;
 							
 			</lang>
 		</script>

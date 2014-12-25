@@ -637,7 +637,8 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	 * @return
 	 */
 	public boolean isImplementedInMondrian() {
-		return (this.getType().intValue() == ArConstants.DONOR_TYPE || this.getType().intValue() == ArConstants.COMPONENT_TYPE && hasAvailableMeasures());
+		return (this.getType().intValue() == ArConstants.DONOR_TYPE || this.getType().intValue() == ArConstants.COMPONENT_TYPE || this.getType().intValue() == ArConstants.PLEDGES_TYPE)
+				&& hasAvailableMeasures();
 	}
 	
 	

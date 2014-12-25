@@ -7,7 +7,8 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
   primary_program_id, secondary_program_id, tertiary_program_id, national_objectives_program_id,
   ea_org_id, ba_org_id, ia_org_id, ro_org_id, ca_org_id, rg_org_id, sg_org_id,
   component_id,
-  capital_spend_percent, src_role, dest_role, dest_org_id)
+  capital_spend_percent, src_role, dest_role, dest_org_id,
+  related_entity_id)
   SELECT 
 	rawdonation.amp_activity_id AS entity_id,
 	rawdonation.amp_fund_detail_id AS entity_internal_id,
@@ -72,7 +73,9 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
      
      rawdonation.src_role AS src_role,
      rawdonation.dest_role AS dest_role,
-     rawdonation.dest_org_id AS dest_org_id
+     rawdonation.dest_org_id AS dest_org_id,
+     
+     rawdonation.related_entity_id AS related_entity_id
           
 	FROM mondrian_raw_donor_transactions rawdonation
     LEFT JOIN etl_activity_sector_primary prim_sect ON prim_sect.act_id = rawdonation.amp_activity_id

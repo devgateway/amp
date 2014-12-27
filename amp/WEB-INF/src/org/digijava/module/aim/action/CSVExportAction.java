@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.ecs.xml.XML;
 import org.apache.ecs.xml.XMLDocument;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -242,7 +243,8 @@ public class CSVExportAction
               } else {
 	            s = ccell.getStringCellValue();
                 if (asXml) {
-                    columnTag.addElement(ccell.getStringCellValue().replace("&", "&amp;"));
+                	String escapedXml = StringEscapeUtils.escapeXml(ccell.getStringCellValue());
+                    columnTag.addElement(escapedXml);
                 }
               }
 	          sb.append("\"").append(s).append("\"");

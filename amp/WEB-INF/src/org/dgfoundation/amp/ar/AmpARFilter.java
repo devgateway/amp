@@ -10,7 +10,6 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
@@ -22,11 +21,10 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,7 +33,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.search.Hits;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
 import org.digijava.kernel.request.TLSUtils;
@@ -1177,7 +1174,7 @@ public class AmpARFilter extends PropertyListable {
         Set<AmpTeam> checkedWorkspaces = null;
 
         if (loggedInTeamMember != null &&
-                loggedInTeamMember.getTeamAccessType().equals(Constants.ACCESS_TYPE_TEAM) &&
+        		Constants.ACCESS_TYPE_TEAM.equals(loggedInTeamMember.getTeamAccessType()) &&
                 !showWorkspaceFilterInTeamWorkspace) {
             checkedWorkspaces = new HashSet<AmpTeam>();
             AmpTeam selTeam = TeamUtil.getTeamByName(loggedInTeamMember.getTeamName());

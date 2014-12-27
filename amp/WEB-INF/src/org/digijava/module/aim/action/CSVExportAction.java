@@ -242,7 +242,7 @@ public class CSVExportAction
               } else {
 	            s = ccell.getStringCellValue();
                 if (asXml) {
-                    columnTag.addElement(ccell.getStringCellValue());
+                    columnTag.addElement(ccell.getStringCellValue().replace("&", "&amp;"));
                 }
               }
 	          sb.append("\"").append(s).append("\"");

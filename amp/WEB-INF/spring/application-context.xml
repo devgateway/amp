@@ -81,6 +81,7 @@
 	<http pattern="/gis/showPublicGis.do**" security="none" />
 	<http pattern="/gis/getFoundingDetails.do**" security="none" />
 	<http pattern="/gis/showAdditionalGraphics.do**" security="none" />
+	<http pattern="/budgetexport/budgetExportService.do**" security="none" />
 	
 	<http pattern="/esrigis/**" security="none" />
 	<http pattern="/rest/**" security="none" />
@@ -95,7 +96,8 @@
 
 	<http pattern="/saiku/rest/**" security="none" />
     <http pattern="/TEMPLATE/ampTemplate/saikuui/**" security="none" />
-
+    
+  
 	<!-- match images -->
 	<http pattern="[^ \t\r\n\v\f]+\.(gif|jpg|jpeg|tiff|png|js|css|swf)(\?)?.*$"
 		request-matcher="regex" security="none" />

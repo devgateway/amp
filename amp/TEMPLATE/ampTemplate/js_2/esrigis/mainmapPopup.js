@@ -61,9 +61,13 @@ function loadBaseMap() {
 	//var osmUrl = 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png';
 	var tileLayer;
 	if (isOsm) {
+		var subdomains = ['a','b','c'];
+		if (basemapurl.indexOf ("mqcdn")!=-1) {
+			subdomains = ['otile1','otile2','otile3','otile4'];
+		}
 		var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
 		tileLayer = new L.TileLayer(basemapurl, {minZoom: 0, maxZoom: 16, attribution: osmAttrib,
-				 subdomains: ['otile1','otile2','otile3','otile4']});	
+				 subdomains: subdomains });	
 	}
 	else {
 		tileLayer = new L.TileLayer(basemapurl, {minZoom: 0, maxZoom: 16});	

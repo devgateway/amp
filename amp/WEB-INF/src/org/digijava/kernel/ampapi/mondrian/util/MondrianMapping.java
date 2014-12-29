@@ -138,7 +138,7 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.JOINT_CRITERIA, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_JOINT_CRITERIA, MoConstants.ATTR_JOINT_CRITERIA));
 			addColumnDefinition(ColumnConstants.INDIRECT_ON_BUDGET, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.ATTR_INDIRECT_ON_BUDGET, MoConstants.ATTR_INDIRECT_ON_BUDGET));
 			addColumnDefinition(ColumnConstants.STATUS, new MDXLevel(MoConstants.ACTIVITY_STATUS, MoConstants.H_ACTIVITY_STATUS, MoConstants.ATTR_ACTIVITY_STATUS));
-			addColumnDefinition(ColumnConstants.MODALITIES, new MDXLevel(MoConstants.MODALITIES, MoConstants.H_MODALITIES, MoConstants.ATTR_ACTIVITY_STATUS));
+			addColumnDefinition(ColumnConstants.MODALITIES, new MDXLevel(MoConstants.MODALITIES, MoConstants.H_MODALITIES, MoConstants.ATTR_MODALITIES));
 			addColumnDefinition(ColumnConstants.TYPE_OF_COOPERATION, new MDXLevel(MoConstants.TYPE_OF_COOPERATION, MoConstants.H_TYPE_OF_COOPERATION, MoConstants.ATTR_TYPE_OF_COOPERATION));
 			addColumnDefinition(ColumnConstants.TYPE_OF_IMPLEMENTATION, new MDXLevel(MoConstants.TYPE_OF_IMPLEMENTATION, MoConstants.H_TYPE_OF_IMPLEMENTATION, MoConstants.ATTR_TYPE_OF_IMPLEMENTATION));
 			addColumnDefinition(ColumnConstants.PROCUREMENT_SYSTEM, new MDXLevel(MoConstants.PROCUREMENT_SYSTEM, MoConstants.H_PROCUREMENT_SYSTEM, MoConstants.ATTR_PROCUREMENT_SYSTEM));
@@ -146,8 +146,8 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.MODE_OF_PAYMENT, new MDXLevel(MoConstants.MODE_OF_PAYMENT, MoConstants.H_MODE_OF_PAYMENT, MoConstants.ATTR_MODE_OF_PAYMENT));
 			addColumnDefinition(ColumnConstants.FINANCING_INSTRUMENT, new MDXLevel(MoConstants.FINANCING_INSTRUMENT, MoConstants.H_FINANCING_INSTRUMENT, MoConstants.ATTR_FINANCING_INSTRUMENT));
 			addColumnDefinition(ColumnConstants.TYPE_OF_ASSISTANCE, new MDXLevel(MoConstants.TYPE_OF_ASSISTANCE, MoConstants.H_TYPE_OF_ASSISTANCE, MoConstants.ATTR_TYPE_OF_ASSISTANCE));
-			addColumnDefinition(ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, new MDXLevel("Pledges " + MoConstants.TYPE_OF_ASSISTANCE, MoConstants.H_TYPE_OF_ASSISTANCE, MoConstants.ATTR_TYPE_OF_ASSISTANCE));
-			addColumnDefinition(ColumnConstants.PLEDGES_AID_MODALITY, new MDXLevel("Pledges Aid Modality", MoConstants.H_TYPE_OF_ASSISTANCE, MoConstants.ATTR_TYPE_OF_ASSISTANCE));
+			addColumnDefinition(ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, new MDXLevel("Pledges Type Of Assistance", MoConstants.ATTR_CATEGORY_NAME, MoConstants.ATTR_CATEGORY_NAME));
+			addColumnDefinition(ColumnConstants.PLEDGES_AID_MODALITY, new MDXLevel("Pledges Aid Modality", MoConstants.ATTR_CATEGORY_NAME, MoConstants.ATTR_CATEGORY_NAME));
 			addColumnDefinition(ColumnConstants.PROJECT_DESCRIPTION, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_PROJECT_DESCRIPTION, MoConstants.ATTR_PROJECT_DESCRIPTION));
 			addColumnDefinition(ColumnConstants.OBJECTIVE, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_OBJECTIVE, MoConstants.ATTR_OBJECTIVE));
 			addColumnDefinition(ColumnConstants.RESULTS, new MDXLevel(MoConstants.ACTIVITY_LONG_TEXTS, MoConstants.H_RESULTS, MoConstants.ATTR_RESULTS));
@@ -287,7 +287,8 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.COMPONENT_TYPE, new MDXLevel(MoConstants.COMPONENT, MoConstants.H_COMPONENT_TYPE, MoConstants.ATTR_COMPONENT_TYPE));
 			addColumnDefinition(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, new MDXLevel(MoConstants.COMPONENT_FUNDING_ORGANIZATION, MoConstants.H_ORG_NAME, MoConstants.ATTR_ORG_NAME));
 			addColumnDefinition(ColumnConstants.PROPOSED_PROJECT_AMOUNT, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT));
-			addColumnDefinition(ColumnConstants.PLEDGE_STATUS, new MDXLevel("Pledge Status", MoConstants.H_CATEGORY_NAME, MoConstants.ATTR_CATEGORY_NAME));
+			//Can't fine this dimension in the cube, fell free to uncomment if i made a mistake 
+			//addColumnDefinition(ColumnConstants.PLEDGE_STATUS, new MDXLevel("Pledge Status", MoConstants.H_CATEGORY_NAME, MoConstants.ATTR_CATEGORY_NAME));
 			
 			//put(new ReportColumn(ColumnConstants.ON_OFF_TREASURY_BUDGET, ReportEntityType.ENTITY_TYPE_ACTIVITY, new MDXAttribute(MoConstants., MoConstants.ATTR_));
 			

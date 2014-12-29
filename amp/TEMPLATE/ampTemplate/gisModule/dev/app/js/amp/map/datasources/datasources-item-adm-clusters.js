@@ -29,10 +29,19 @@ module.exports = Backbone.View.extend({
           var ampFormatter = new chartUtils.DecimalFormat(self.app.data.settings.get('number-format').get('name'));
           project.tempDirtyForceJoin().then(function() {
 
-            var formattedCommitments = ampFormatter.format(project.toJSON()['Actual Commitments']);
-            var formattedDisbursements = ampFormatter.format(project.toJSON()['Actual Disbursements']);
+            // Get actual or planned based on funding type setting
+            var fundingType = 'Actual';
+            var selected = self.app.data.settings.get('0').get('selected');
+            if (selected.toLowerCase().indexOf('planned') >= 0) {
+              fundingType = 'Planned';
+            }
+
+            // Format values.
+            var formattedCommitments = ampFormatter.format(project.attributes[fundingType + ' Commitments']);
+            var formattedDisbursements = ampFormatter.format(project.attributes[fundingType + ' Disbursements']);
             var currencyCode = self.app.data.settings.get('1').get('selected');
 
+            // put them on the page.
             self.$el.append(self.template({
               activity: project.toJSON(),
               formattedCommitments: [formattedCommitments, ' ', currencyCode].join(''),

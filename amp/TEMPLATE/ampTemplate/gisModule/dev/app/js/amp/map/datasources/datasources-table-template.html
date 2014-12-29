@@ -5,8 +5,15 @@
       <th data-i18n="amp.gis:activities-project-title">Project Title</th>
       <th data-i18n="amp.gis:activities-donors">Funding Organizations</th>
       <th data-i18n="amp.gis:activities-sectors">Sectors</th>
-      <th data-i18n="amp.gis:activities-commitments">Actual Commitments</th>
-      <th data-i18n="amp.gis:activities-disbursements">Actual Disbursements</th>
+      <!-- TODO: translation needs to handle actual and planned, may need some DOM work.. -->
+      <th>
+        <span class="setting-actual" data-i18n="amp.gis:activities-commitments">Actual Commitments</span>
+        <span class="setting-planned" data-i18n="amp.gis:activities-planned-commitments">Planned Commitments</span>
+      </th>
+      <th>
+        <span class="setting-actual" data-i18n="amp.gis:activities-disbursements">Actual Disbursements</span>
+        <span class="setting-planned" data-i18n="amp.gis:activities-planned-disbursements">Planned Disbursements</span>
+      </th>
     </tr>
   </thead>
 </table>

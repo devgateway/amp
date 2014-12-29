@@ -10,15 +10,16 @@ var ProjectListTemplate = fs.readFileSync(__dirname + '/../templates/project-lis
 var Template = fs.readFileSync(__dirname + '/../templates/cluster-popup-template.html', 'utf8');
 var topsTooltipTemplate = _.template(fs.readFileSync(__dirname + '/../templates/tooltip-tops.html', 'UTF-8'));
 
-
+//TODO: put cluster popup code in own folder,
+// with seperate view for charts and table.
 // TODO: remove tempDOM and use this.$el
 module.exports = Backbone.View.extend({
   template: _.template(Template),
   projectListTemplate: _.template(ProjectListTemplate),
   PAGE_SIZE: 50,
-  _currentPage:0,
+  _currentPage: 0,
 
-  tempDOM:null,
+  tempDOM: null,
 
   initialize: function(options, popup, admLayer) {
     this.app = options.app;
@@ -37,6 +38,8 @@ module.exports = Backbone.View.extend({
     this.cluster = _.find(featureCollection, function(feature) {
       return feature.properties.admName === popup._source._clusterId;
     });
+
+    this.cluster.fundingType = this.app.data.settings.get('0').get('selected');
 
     // get appropriate cluster model:
     if (this.cluster) {
@@ -73,6 +76,7 @@ module.exports = Backbone.View.extend({
   },
 
   _generateBaseChart: function(model, selector) {
+    var self = this;
     var tmpTotal = 0;
     var data = _.map(model.values, function(org) {
       tmpTotal += org.amount;
@@ -146,11 +150,31 @@ module.exports = Backbone.View.extend({
       self._loadMoreProjects();
     });
 
+    this._updatePlannedActualUI();
+
     return this._loadMoreProjects();
   },
 
+  // If any of the 'planned' funding types are selected then the
+  // table should show planned comitments and dispursements,
+  // otherwise show actual values.
+  _updatePlannedActualUI: function() {
+    var self = this;
+    this.app.data.settings.load().then(function() {
+      var selected = self.app.data.settings.get('0').get('selected');
+      if (selected.toLowerCase().indexOf('planned') >= 0) {
+        self.tempDOM.find('.setting-actual').hide();
+        self.tempDOM.find('.setting-planned').show();
+      } else {
+        self.tempDOM.find('.setting-actual').show();
+        self.tempDOM.find('.setting-planned').hide();
+      }
+    });
+  },
 
-  //TODO: should be done in data.adm cluster..then we can render full list if someone closes and reopens
+
+
+  //TODO: should be done in data.adm cluster..then we can cache for if someone closes and reopens
   _loadMoreProjects: function() {
     var self = this;
     var startIndex = this._currentPage * this.PAGE_SIZE;
@@ -172,11 +196,16 @@ module.exports = Backbone.View.extend({
       /* Format the numerical columns */
         var ampFormatter = new util.DecimalFormat(self.app.data.settings.get('number-format').get('name'));
         var currencyCode = self.app.data.settings.get('1').get('selected');
+        var fundingType = 'Actual';
+        var selected = self.app.data.settings.get('0').get('selected');
+        if (selected.toLowerCase().indexOf('planned') >= 0) {
+          fundingType = 'Planned';
+        }
 
         var activityFormatted = _.map(activityCollection, function(activity) {
 
-          var formattedCommitments = ampFormatter.format(activity.get('Actual Commitments'));
-          var formattedDisbursements = ampFormatter.format(activity.get('Actual Disbursements'));
+          var formattedCommitments = ampFormatter.format(activity.get(fundingType + ' Commitments'));
+          var formattedDisbursements = ampFormatter.format(activity.get(fundingType + ' Disbursements'));
 
           //TODO: should be done elsewhere, for example in toJSON or parse.
           activity.set('formattedActualCommitments', [formattedCommitments, ' ', currencyCode].join(''));

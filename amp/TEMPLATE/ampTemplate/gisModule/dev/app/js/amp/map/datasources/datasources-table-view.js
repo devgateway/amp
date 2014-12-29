@@ -40,14 +40,11 @@ module.exports = Backbone.View.extend({
         app: self.app
       }).render().el;
 
-      self.$el.html(self.template(
-        self.collection.getPageDetails()
-      ));
-
       self.app.translator.translateDOM(
         self.template(self.collection.getPageDetails())).then(
         function(newEl) {
           self.$el.html(newEl);
+          self.updatePlannedActualUI();
         });
       // drs: review, inconsistant behaviour between chrome and FF
       if (!_.isEmpty(tableContent)) {
@@ -58,6 +55,23 @@ module.exports = Backbone.View.extend({
     });
 
     return this;
+  },
+
+  // If any of the 'planned' funding types are selected then the
+  // table should show planned comitments and dispursements,
+  // otherwise show actual values.
+  updatePlannedActualUI: function() {
+    var self = this;
+    this.app.data.settings.load().then(function() {
+      var selected = self.app.data.settings.get('0').get('selected');
+      if (selected.toLowerCase().indexOf('planned') >= 0) {
+        self.$('.setting-actual').hide();
+        self.$('.setting-planned').show();
+      } else {
+        self.$('.setting-actual').show();
+        self.$('.setting-planned').hide();
+      }
+    });
   },
 
   toggleDatasources: function() {

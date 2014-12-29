@@ -28,7 +28,6 @@ module.exports = Backbone.View
   ZOOM_BREAKPOINT: 11, //11 is real # for zoom resize
   SMALL_ICON_RADIUS: 4,
   BIG_ICON_RADIUS: 6,
-  MAXCLUSTERRADIUS: 2,
   MAX_NUM_FOR_ICONS: 400,
 
   // Calculate based on: var boundary0 = self.app.data.boundaries.get('adm-0');
@@ -155,7 +154,8 @@ module.exports = Backbone.View
     var filterVertical = this.structureMenuModel.get('filterVertical');
 
     if (feature.properties.activity.attributes &&
-        feature.properties.activity.attributes.matchesFilters[filterVertical]) {
+        feature.properties.activity.attributes.matchesFilters[filterVertical] &&
+        feature.properties.activity.attributes.matchesFilters[filterVertical].length >= 0) {
       if (feature.properties.activity.attributes.matchesFilters[filterVertical].length > 1) {
         sectorCode = '0';
         console.warn('TODO: need custom vairous sectors icon...different from  multi-sector');

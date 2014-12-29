@@ -61,9 +61,15 @@ module.exports = Backbone.Model.extend({
     // split matchesFilters
     if (data.matchesFilters) {
       _.each(data.matchesFilters, function(v, k) {
-        data.matchesFilters[k] = _(v.split(',')).map(function(v) {
-          return parseInt(v, 10);
-        });
+
+        // 999999999 means empy, we will change API soon...hopefully.. :(
+        if ( data.matchesFilters[k] === '999999999') {
+          data.matchesFilters[k] = null;
+        } else {
+          data.matchesFilters[k] = _(v.split(',')).map(function(v) {
+            return parseInt(v, 10);
+          });
+        }
       });
     }
     return data;

@@ -7,6 +7,8 @@ var PopupTemplate = fs.readFileSync(__dirname + '/../templates/structure-cluster
 
 module.exports = {
 
+  MAXCLUSTERRADIUS: 0.001,
+
   projectListTemplate: _.template(PopupTemplate),
 
   initCluster: function() {
@@ -70,7 +72,6 @@ module.exports = {
 
       var filterVertical = self.structureMenuModel.get('filterVertical');
       var sectorCode = 0; // 0 is 'various sectors icon'
-
       if (markers[0].feature) {
         var activity = markers[0].feature.properties.activity;
         sectorCode = activity.attributes.matchesFilters[filterVertical][0].get('code');

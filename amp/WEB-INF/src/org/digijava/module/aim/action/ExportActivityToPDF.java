@@ -2933,18 +2933,18 @@ public class ExportActivityToPDF extends Action {
 				}
 				
 				//TOTAL ACTUAL DISBURSEMENT ORDERS:
-				if(visibleModuleDisbOrders){
+				if (visibleModuleDisbOrders) {
 					addTotalsOutput(fundingTable, "TOTAL ACTUAL DISBURSEMENT ORDERS", myForm.getFunding().getTotalActualDisbursementsOrders(), currencyCode);
 				}
 				
 				//UNDISBURSED BALANCE
-				if(FeaturesUtil.isVisibleFeature("Undisbursed Balance"))
-				{
+				if (FeaturesUtil.isVisibleFeature("Undisbursed Balance")) {
 					addTotalsOutput(fundingTable, "UNDISBURSED BALANCE", myForm.getFunding().getUnDisbursementsBalance(), currencyCode);
 				}
-				
-				addTotalsOutput(fundingTable, "Consumption Rate", myForm.getFunding().getConsumptionRate(), currencyCode);
-				addTotalsOutput(fundingTable, "Delivery Rate", myForm.getFunding().getDeliveryRate(), currencyCode);
+
+                // do not pass the currencyCode. The measure unit for rate is percentages
+				addTotalsOutput(fundingTable, "Consumption Rate", myForm.getFunding().getConsumptionRate(), "");
+				addTotalsOutput(fundingTable, "Delivery Rate", myForm.getFunding().getDeliveryRate(), "");
 				
 			}				
 		}

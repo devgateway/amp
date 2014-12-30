@@ -109,12 +109,12 @@ SELECT <!-- undefined donor -->
 	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'funding_status')) AS funding_status_id,
 	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'mode_of_payment')) AS mode_of_payment_id,
 	
-	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'activity_status')) AS status_id,
-	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'modalities')) AS modality_id,
-	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'SSC_type_of_cooperation')) AS type_of_cooperation_id,
-	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'SSC_type_of_implementation')) AS type_of_implementation_id,
-	(SELECT min(acv.id) FROM amp_category_value acv WHERE acv.amp_category_class_id = (SELECT acc.id FROM amp_category_class acc WHERE acc.keyname = 'procurement_system')) AS  procurement_system_id,
-     
+	(SELECT max(amp_status_id) FROM v_status vs WHERE vs.amp_activity_id = aav.amp_activity_id) AS status_id,
+   	(SELECT max(level_code) FROM v_modalities vm WHERE vm.amp_activity_id =aav.amp_activity_id) AS modality_id,
+	(SELECT max(level_code) FROM v_type_of_cooperation vtoc WHERE vtoc.amp_activity_id = aav.amp_activity_id) AS type_of_cooperation_id,
+	(SELECT max(level_code) FROM v_type_of_implementation vtoi WHERE vtoi.amp_activity_id = aav.amp_activity_id) AS type_of_implementation_id,
+    (SELECT max(id) FROM v_procurement_system vps WHERE vps.amp_activity_id = aav.amp_activity_id) AS procurement_system_id,
+	
 	CAST(NULL as bigint) AS component_id,
 	NULL AS capital_spend_percent,
      

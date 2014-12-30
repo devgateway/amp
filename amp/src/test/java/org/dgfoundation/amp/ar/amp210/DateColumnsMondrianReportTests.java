@@ -7,12 +7,8 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
-import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
-import org.dgfoundation.amp.newreports.ReportAreaImpl;
-import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.junit.Test;
 
 public class DateColumnsMondrianReportTests extends MondrianReportsTestCase {
@@ -59,6 +55,21 @@ public class DateColumnsMondrianReportTests extends MondrianReportsTestCase {
 		runMondrianTestCase(
 				spec,
 				"en", acts, correctResult
+				);
+	}
+	
+	@Test
+	public void testActivityDateFilterConversion_AMP_19183() {
+		ReportAreaForTests correctResult = new ReportAreaForTests()
+		.withContents("Project Title", "Report Totals", "Donor Agency", "", "Actual Commitments", "0", "Actual Disbursements", "0")
+		.withChildren(
+				new ReportAreaForTests()
+				.withContents("Project Title", "Project with documents", "Donor Agency", "(Donor Agency Unspecified)", "Actual Commitments", "0", "Actual Disbursements", "0")  );
+		
+		runMondrianTestCase("AMP-19183", 
+				Arrays.asList("Project with documents"), 
+				correctResult,
+				"en"
 				);
 	}
 }

@@ -205,7 +205,7 @@ public class MondrianReportFilters implements ReportFilters {
 		MondrianUtils.getDateRangeFilterRule(from, to);
 		final String fromStr = from == null ? null : DateTimeUtil.toJulianDayString(from);  
 		final String toStr = to == null ? null : DateTimeUtil.toJulianDayString(to);
-		addFilterRule(dateFilterRules, column, new FilterRule(fromStr, toStr, true));
+		addFilterRule(dateFilterRules, column, new FilterRule(fromStr, toStr, true, true));
 	}
 	
 	/**

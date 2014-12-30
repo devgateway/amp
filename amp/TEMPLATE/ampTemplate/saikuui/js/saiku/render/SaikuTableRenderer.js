@@ -314,6 +314,16 @@ function sanitizeRows(rowData, data) {
 		var excessCells = _.where(data[0], {value:"null"}).length;
 		rowData[0][0].span = totalWidth - excessCells;
 		rowData[0][0].width = totalWidth - excessCells;
+		if(rowData[1]) {
+			var depuredCols = [];
+			for(var idx = rowData[1].length-1; idx >= 0; idx--) {
+				totalWidth -= rowData[1][idx].width;
+				if(totalWidth >= 0) {
+					depuredCols.unshift(rowData[1][idx]);
+				}
+			}
+			rowData[1] = depuredCols;
+		}
 	}
 	return rowData;
 }

@@ -408,7 +408,11 @@ public class DbHelper {
 	public static ArrayList<Long> getInActivities(String query)
 			throws Exception {
 		Session session = PersistenceManager.getRequestDBSession();
-		ArrayList<Long> result = (ArrayList<Long>) session.createSQLQuery(query).list();
+		List<Object> qResult = session.createSQLQuery(query).list();
+		ArrayList<Long> result = new ArrayList<Long>(qResult.size());
+		for (Object obj : qResult) {
+			result.add(PersistenceManager.getLong(obj));
+		}
 		return result;
 	}
 	

@@ -67,8 +67,13 @@ module.exports = Backbone.Model.extend({
           data.matchesFilters[k] = null;
         } else {
           data.matchesFilters[k] = _(v.split(',')).map(function(v) {
-            return parseInt(v, 10);
-          });
+        	  //AMP ID is a string on the DB, we shouldn't parse it to int
+        	  if (k!='AMP ID') {
+        		  return parseInt(v, 10);
+              }
+        	  	return v;
+          	}
+           );
         }
       });
     }

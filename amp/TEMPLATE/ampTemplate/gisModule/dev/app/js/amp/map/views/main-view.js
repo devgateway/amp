@@ -117,7 +117,7 @@ module.exports = Backbone.View.extend({
             }
 
           },
-          style:  {color: 'blue', fillColor:'none', weight: 1, dashArray: '1'}
+          style:  {color: '#29343F', fillColor:'none', weight: 1.4, dashArray: '1'}
         }).addTo(self.map);
 
       });

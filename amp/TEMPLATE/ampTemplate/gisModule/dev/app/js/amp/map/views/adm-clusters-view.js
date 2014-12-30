@@ -132,6 +132,7 @@ module.exports = Backbone.View.extend({
           style: {
             weight: 1,
             dashArray: '3',
+            color: '#243241',
             fillColor: 'transparent'
           }
         });

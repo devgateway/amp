@@ -109,17 +109,27 @@ module.exports = BackboneDash.View.extend({
       return;
     }
 
+    this.chartContainer.empty();
     this.message.html('<span data-i18n="amp.dashboard:loading">...</span>').fadeIn(100);
-    /* TODO: Do we really want to localize this and slow things?*/
-    //this.app.translator.translateDOM(this.el);
 
-    this.model.fetch({
-      type: 'POST',  // TODO: move fetch options to model?
-      data: JSON.stringify(this.app.filter.serialize())
-    })
-    .always(_(function() { this.chartContainer.empty(); }).bind(this))
-    .done(this.showChart)
-    .fail(this.failLoading);
+    this.app.translator.getTranslations()
+      .done(_(function() {  // defer here to prevent a race with translations loading
+
+        /* TODO: Do we really want to localize this and slow things?*/
+        //this.app.translator.translateDOM(this.el);
+
+        this.model.fetch({
+          type: 'POST',  // TODO: move fetch options to model?
+          data: JSON.stringify(this.app.filter.serialize())
+        })
+        .always(_(function() {  }).bind(this))
+        .done(this.showChart)
+        .fail(this.failLoading);
+      }).bind(this))
+      .fail(_(function() {
+        this.app.report('Could not load translations', [
+          'Refreshing the page may fix the issue.']);
+      }).bind(this));
 
   },
 

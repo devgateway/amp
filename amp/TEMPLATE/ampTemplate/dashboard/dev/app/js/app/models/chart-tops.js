@@ -33,7 +33,7 @@ module.exports = ChartModel.extend({
   parse: function(data) {
     if (!this.localizedLookup) {
       // we can't procede if we don't have translations yet :(
-      // TODO: fix the race!!!
+      // this code should now be unreachable, but y'never know...
       this.app.report('Loading error', [
       'Translations for the application were not loaded before rendering']);
     }

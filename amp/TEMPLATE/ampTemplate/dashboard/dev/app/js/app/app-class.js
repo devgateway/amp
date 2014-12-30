@@ -83,6 +83,7 @@ _.extend(App.prototype, BackboneDash.Events, {
         defaultKeys: dashboardTranslateKeys,
         ajax: BackboneDash.wrappedAjax
       });
+      // TODO: handle translations load failure
 
       this.filter = new Filter({
         draggable: true,

@@ -16,13 +16,13 @@ module.exports = Backbone.Model.extend({
     this._joinComplete = this._joinFilters();
   },
 
-
+  // currently we use: tempDirtyForceJoin instead, but should fix it.
   getJoinedVersion: function() {
     return this._joinComplete;
   },
 
-  //created this because the joins were being overriden after the initialize, not sure how/why
-  // ideally track down why and this won't be needed
+  // created this because the joins were being overriden after the initialize, not sure how/why
+  // ideally track down why and this won't be needed, then we can just use: getJoinedVersion
   tempDirtyForceJoin: function() {
     return this._joinFilters();
   },

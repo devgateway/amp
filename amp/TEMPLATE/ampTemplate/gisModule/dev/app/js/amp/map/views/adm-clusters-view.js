@@ -119,8 +119,8 @@ module.exports = Backbone.View.extend({
     });
   },
 
-  // TODO: currently creates boundary new everytime...
-  // instead it should do it once and cache it in a variable like boundaryLayerMap so not redoing topojson parse
+  // TODO: currently reparses topojson everytime settings/filters change...
+  // instead it should do it once and cache it in a variable like boundaryLayerMap
   getNewBoundary: function(admLayer) {
     var topoboundaries = admLayer.get('boundary');
 

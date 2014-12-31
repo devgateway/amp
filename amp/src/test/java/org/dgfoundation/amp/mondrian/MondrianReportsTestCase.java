@@ -1,11 +1,25 @@
 package org.dgfoundation.amp.mondrian;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.newreports.*;
+import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.IdsGeneratorSource;
+import org.dgfoundation.amp.newreports.ReportArea;
+import org.dgfoundation.amp.newreports.ReportAreaImpl;
+import org.dgfoundation.amp.newreports.ReportCell;
+import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportMeasure;
+import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.reports.PartialReportArea;
+import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.testutils.ActivityIdsFetcher;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.testutils.PledgeIdsFetcher;
@@ -32,12 +46,20 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 	 */
 	protected void runMondrianTestCase(String testName, String reportName, List<String> activities, ReportAreaForTests correctResult, String locale) {
 		
+		runMondrianTestCase(getReportSpecification(reportName), locale, activities, correctResult);
+	}
+	
+	protected ReportSpecification getReportSpecification(String reportName) {
 		org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
 		TLSUtils.populate(mockRequest);
 
 		AmpReports report = ReportTestingUtils.loadReportByName(reportName);
-		ReportSpecification spec = ReportsUtil.getReport(report.getAmpReportId());
-		runMondrianTestCase(spec, locale, activities, correctResult);
+		return ReportsUtil.getReport(report.getAmpReportId());
+	}
+	
+	protected void runMondrianTestCase(String reportName, List<String> activities, ReportAreaForTests correctResult, String locale,
+			Class<? extends ReportAreaImpl> areaType, Integer page, Integer pageSize) {
+			runMondrianTestCase(getReportSpecification(reportName), locale, activities, correctResult, areaType, page, pageSize);
 	}
 	
 	protected void runMondrianTestCase(String reportName, List<String> activities, ReportAreaForTests correctResult, String locale) {
@@ -50,13 +72,15 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 //		assertNull(String.format("test %s, report %s: %s", testName, reportSpec, error), error);
 //	}
 	
-	protected GeneratedReport runReportOn(String reportName, String locale, List<String> entities) {
+	protected GeneratedReport runReportOn(String reportName, String locale, List<String> entities, 
+			Class<? extends ReportAreaImpl> areaType) {
 		AmpReports report = ReportTestingUtils.loadReportByName(reportName);
 		ReportSpecification spec = ReportsUtil.getReport(report.getAmpReportId());
-		return runReportOn(spec, locale, entities);
+		return runReportOn(spec, locale, entities, ReportAreaImpl.class);
 	}
 	
-	protected GeneratedReport runReportOn(ReportSpecification spec, String locale, List<String> entities) {
+	protected GeneratedReport runReportOn(ReportSpecification spec, String locale, List<String> entities,
+			Class<? extends ReportAreaImpl> areaType) {
 		try {
 			IdsGeneratorSource activitiesSrc = null;
 			IdsGeneratorSource pledgesSrc = null;
@@ -65,7 +89,7 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 			else
 				activitiesSrc = new ActivityIdsFetcher(entities);
 			ReportEnvironment env = new ReportEnvironment(locale, activitiesSrc, pledgesSrc, FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.BASE_CURRENCY));
-			MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class, env);
+			MondrianReportGenerator generator = new MondrianReportGenerator(areaType, env);
 			GeneratedReport res = generator.executeReport(spec);
 			return res;
 		}
@@ -98,13 +122,38 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		return spec;
 	}
 	
+	/**
+	 * 
+	 * @param spec
+	 * @param locale
+	 * @param entities
+	 * @param cor
+	 */
 	protected void runMondrianTestCase(ReportSpecification spec, String locale, List<String> entities, ReportAreaForTests cor) {
-		GeneratedReport rep = this.runReportOn(spec, locale, entities);
+		runMondrianTestCase(spec, locale, entities, cor, ReportAreaImpl.class, null, null);
+	}
+	
+	/**
+	 * Runs Mondrian Test case with pagination option
+	 * 
+	 * @param spec
+	 * @param locale 
+	 * @param entities
+	 * @param cor
+	 * @param areaType normally for Pagination you would use {@link PartialReportArea}
+	 * @param page page number starting from 1 (as if it is selected by the user in the UI)
+	 * @param pageSize number of leaf records per page or null to use the default config (not recommended)
+	 */
+	protected void runMondrianTestCase(ReportSpecification spec, String locale, List<String> entities, 
+			ReportAreaForTests cor, Class<? extends ReportAreaImpl> areaType, Integer page, Integer pageSize) {
+		GeneratedReport rep = this.runReportOn(spec, locale, entities, areaType);
 		//Iterator<ReportOutputColumn> bla = rep.reportContents.getChildren().get(0).getContents().keySet().iterator();
 		//ReportOutputColumn first = bla.next(), second = bla.next(), third = bla.next(), fourth = bla.next();
 		
+		ReportArea reportContents = ReportPaginationUtils.getSinglePage(rep.reportContents, page, pageSize);
+		
 		//if (cor == null) return;
-		String delta = cor == null ? null : cor.getDifferenceAgainst(rep.reportContents);
+		String delta = cor == null ? null : cor.getDifferenceAgainst(reportContents);
 		
 		if (cor == null || delta != null) {
 			System.err.println("\n------------------------------------------------------------------------------------------");
@@ -117,7 +166,7 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 					break;
 				}
 			}
-			System.err.println("this is output for test " + spec.getReportName() + describeInCode(rep.reportContents, 1));
+			System.err.println("this is output for test " + spec.getReportName() + describeInCode(reportContents, 1));
 		}
 
         checkReportHeaders(rep, spec);
@@ -159,12 +208,15 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		if (area.getOwner() != null)
 			throw new RuntimeException("describing owned reports not implemented!");
 		
-		return String.format("%snew ReportAreaForTests()\n%s%s%s", prefixString(depth),
-				prefixString(depth), describeContents(area, depth),
+		boolean isPartialReportArea = PartialReportArea.class.isAssignableFrom(area.getClass());
+		String testAreaType = isPartialReportArea ? "PaginatedReportAreaForTests" : "ReportAreaForTests"; 
+		
+		return String.format("%snew %s()\n%s%s%s", prefixString(depth), testAreaType,
+				prefixString(depth), describeContents(area, depth, isPartialReportArea),
 				describeChildren(area, depth));
 	}
 	
-	public static String describeContents(ReportArea area, int depth) {
+	public static String describeContents(ReportArea area, int depth, boolean isPartialReportArea) {
 		if (area.getContents() == null) return "";
 		StringBuffer res = new StringBuffer(prefixString(depth) + ".withContents(");	
 		boolean first = true;
@@ -174,6 +226,11 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 			first = false;
 		}
 		res.append(")");
+		if (isPartialReportArea) {
+			PartialReportArea pArea = (PartialReportArea) area;
+			res.append(".withCounts(").append(pArea.getCurrentLeafActivitiesCount()).append(", ")
+			.append(pArea.getTotalLeafActivitiesCount()).append(")");
+		}
 		return res.toString();
 	}
 	

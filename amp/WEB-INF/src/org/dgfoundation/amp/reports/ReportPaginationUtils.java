@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
@@ -18,6 +19,7 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
  * @author Nadejda Mandrescu
  */
 public class ReportPaginationUtils {
+	private static Logger logger = Logger.getLogger(ReportPaginationUtils.class);
 	
 	/**
 	 * @return maximum records number per page, excluding rows that display sub-totals and totals
@@ -142,11 +144,11 @@ public class ReportPaginationUtils {
 			PartialReportArea newReportArea = new PartialReportArea();
 			newReportArea.setContents(current.getContents());
 			//based on Tabs, page records count includes only leaf entries, no totals
-			if (!hasChildren)
+			if (!hasChildren) {
 				size --;
-			else {
-				newReportArea.setTotalChildrenCount(current.getTotalChildrenCount());
-				newReportArea.setTotalLeafChildrenCount(current.getTotalLeafChildrenCount());
+				newReportArea.addAllInternalUseId(current.getLeafActivities());
+			} else {
+				newReportArea.setTotalLeafActivitiesCount(current.getTotalLeafActivitiesCount());
 			}
 			if (stack.peek() == null) {
 				stack.push(new ArrayList<ReportArea>());
@@ -168,5 +170,29 @@ public class ReportPaginationUtils {
 				size = convert(current.parent, stack, size, false);
 		}
 		return size;
+	}
+	
+	/**
+	 * Retrieves single page, without caching! Useful only for queries like
+	 * "get top 10 entries". Otherwise it is recommended to use 
+	 * {@link #cacheReportData(Long, GeneratedReport)}
+	 *  
+	 * @param area report area to paginate
+	 * @param page page number starting from 1 (as if it is selected by the user in the UI)
+	 * @param pageSize number of leaf records per page or null to use the default config
+	 * @return ReportArea for the requested page
+	 */
+	public static ReportArea getSinglePage(ReportArea area, Integer page, Integer pageSize) {
+		// no pagination
+		if (page == null || page < 1 || (pageSize != null && pageSize < 0)) {
+			logger.error("No pagination. Invalid pagination request: page = " + page 
+					+ ", pageSize = " + pageSize + ". Use page >= 1, pageSize >=0.");
+			return area;
+		} else if (pageSize == null) {
+			// use default page size if not specified
+			pageSize = ReportPaginationUtils.getRecordsNumberPerPage();
+		}
+		ReportAreaMultiLinked[] root = ReportPaginationUtils.convert(area);
+		return ReportPaginationUtils.getReportArea(root, page - 1, pageSize);
 	}
 }

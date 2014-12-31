@@ -48,21 +48,26 @@ public class CellDataSetToAmpHierachies {
 	private int noOfColumnsToMerge;
 	private SortedSet<String>[] sbList;
 	private List<ReportOutputColumn> leafHeaders;
+	private List<Integer> activities;
 	
-	private CellDataSetToAmpHierachies(ReportSpecification spec, CellDataSet cellDataSet, List<ReportOutputColumn> leafHeaders) {
+	private CellDataSetToAmpHierachies(ReportSpecification spec, CellDataSet cellDataSet, 
+			List<ReportOutputColumn> leafHeaders, List<Integer> activities) {
 		this.spec = spec;
 		this.cellDataSet = cellDataSet;
 		this.leafHeaders = leafHeaders;
+		this.activities = activities;
 	}
 
 	/**
 	 * Concatenates the non-hierarchical columns and updates the data of the cellDataSet
 	 * @param spec - report specification that provides hierarchies information
 	 * @param cellDataSet - the data set to update
-	 * @param leafHeaders 
+	 * @param leafHeaders - list of leaf headers 
+	 * @param activities - list of internal ids (those that are merged) 
 	 */
-	public static void concatenateNonHierarchicalColumns(ReportSpecification spec, CellDataSet cellDataSet, List<ReportOutputColumn> leafHeaders) {
-		(new CellDataSetToAmpHierachies(spec, cellDataSet, leafHeaders)).concatenate();
+	public static void concatenateNonHierarchicalColumns(ReportSpecification spec, CellDataSet cellDataSet, 
+			List<ReportOutputColumn> leafHeaders, List<Integer> activities) {
+		(new CellDataSetToAmpHierachies(spec, cellDataSet, leafHeaders, activities)).concatenate();
 	}
 	
 	private void init() {
@@ -134,7 +139,7 @@ public class CellDataSetToAmpHierachies {
 			mergeMeasureTotals(currentTotalMeasuresColumnTotals, rowId);
 			
 			//check if we reached the end of the sub-group
-			if (isEndOfGroup(rowId)){
+			if (isEndOfGroup(rowId)) {
 				if (groupStartRowId != rowId) { //no need to merge if this is 1 row group
 				
 					rowsRangesToDelte.add(new IntRange(groupStartRowId + 1, rowId)); //starting index will store the totals and will not be removed
@@ -159,12 +164,17 @@ public class CellDataSetToAmpHierachies {
 					measuresTotalsToKeep.add(currentTotalMeasuresColumnTotals.clone());
 					Arrays.fill(currentTotalMeasuresColumnTotals, 0d);
 				}
+				// remember the internal id
+				if (activities != null) {
+					activities.add(Integer.valueOf(cellDataSet.getCellSetBody()[groupStartRowId][startColumnIndex - 1].getFormattedValue()));
+				}
 				//update indexes
 				groupStartRowId = rowId + 1;
 				currentSubGroupIndex ++;
 				//reset string builders
-				for (int j = startColumnIndex; j < cellDataSet.getLeftOffset(); j++)
+				for (int j = startColumnIndex; j < cellDataSet.getLeftOffset(); j++) {
 					sbList[j - startColumnIndex].clear();
+				}
 			}
 		}
 		

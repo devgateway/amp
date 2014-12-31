@@ -36,6 +36,11 @@ public class ReportAreaMultiLinked extends PartialReportArea {
 	private void init(ReportArea area) {
 		this.owner = area.getOwner();
 		this.contents = area.getContents();
+		if (area instanceof PartialReportArea) {
+			PartialReportArea pra = (PartialReportArea) area;
+			this.totalLeafActivitiesCount = pra.totalLeafActivitiesCount;
+			this.leafActivities = pra.leafActivities;
+		}
 		if (area.getChildren() != null && area.getChildren().size() > 0) {
 			LinkedList<ReportArea> cList = new LinkedList<ReportArea>();
 			ListIterator<ReportArea> iter = area.getChildren().listIterator(area.getChildren().size());

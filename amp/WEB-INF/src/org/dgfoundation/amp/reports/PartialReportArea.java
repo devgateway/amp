@@ -3,6 +3,9 @@
  */
 package org.dgfoundation.amp.reports;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 
@@ -16,6 +19,10 @@ public class PartialReportArea extends ReportAreaImpl {
 	// configured to -1 to mark uninitialized state
 	protected int totalChildrenCount = -1;
 	protected int totalLeafChildrenCount = -1;
+	protected int totalLeafActivitiesCount = -1;
+	protected int currentLeafActivitiesCount = -1;
+	transient 
+	protected Set<Integer> leafActivities = new TreeSet<Integer>();
 	
 	public PartialReportArea() {
 		super();
@@ -75,5 +82,68 @@ public class PartialReportArea extends ReportAreaImpl {
 	 */
 	public void setTotalLeafChildrenCount(int totalLeafChildrenCount) {
 		this.totalLeafChildrenCount = totalLeafChildrenCount;
+	}
+
+	/**
+	 * A custom approach to build the total number of activities: 
+	 * @return the totalLeafActivitiesCount
+	 */
+	public int getTotalLeafActivitiesCount() {
+		if (totalLeafActivitiesCount == -1) {
+			if (this.getChildren() != null && this.getChildren().size() > 0) {
+				for (ReportArea areaChild : this.getChildren()) {
+					PartialReportArea child = (PartialReportArea) areaChild;
+					// init leaf activities list of the child
+					child.getTotalLeafActivitiesCount();
+					leafActivities.addAll(child.leafActivities);
+				}
+			}
+			totalLeafActivitiesCount = leafActivities.size();
+		}
+		return totalLeafActivitiesCount;
+	}
+
+	/**
+	 * @param totalLeafActivitiesCount the totalLeafActivitiesCount to set
+	 */
+	public void setTotalLeafActivitiesCount(int totalLeafActivitiesCount) {
+		this.totalLeafActivitiesCount = totalLeafActivitiesCount;
+	}
+	
+	/**
+	 * @return the currentLeafActivitiesCount
+	 */
+	public int getCurrentLeafActivitiesCount() {
+		if (currentLeafActivitiesCount == -1) {
+			if (this.getChildren() != null && this.getChildren().size() > 0) {
+				for (ReportArea areaChild : this.getChildren()) {
+					PartialReportArea child = (PartialReportArea) areaChild;
+					// init leaf activities list of the child
+					child.getCurrentLeafActivitiesCount();
+					leafActivities.addAll(child.leafActivities);
+				}
+			}
+			currentLeafActivitiesCount = leafActivities.size();
+		}
+		return currentLeafActivitiesCount;
+	}
+
+	/**
+	 * @param currentLeafActivitiesCount the currentLeafActivitiesCount to set
+	 */
+	public void setCurrentLeafActivitiesCount(int currentLeafActivitiesCount) {
+		this.currentLeafActivitiesCount = currentLeafActivitiesCount;
+	}
+
+	public void addInternalUseId(Integer id) {
+		leafActivities.add(id);
+	}
+	
+	public void addAllInternalUseId(Set<Integer> idSet) {
+		leafActivities.addAll(idSet);
+	}
+	
+	protected Set<Integer> getLeafActivities() {
+		return leafActivities;
 	}
 }

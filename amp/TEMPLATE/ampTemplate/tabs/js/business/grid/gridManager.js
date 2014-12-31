@@ -354,8 +354,10 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 										jQuery(item).append(auxTD);
 
 										var firstColumnHtml = jQuery(item.firstChild).html();
-										firstColumnHtml = firstColumnHtml.replace("@@totalChildrenCount@@",
-												partialTotals[i].totalChildrenCount);
+										firstColumnHtml = firstColumnHtml.replace("@@currentActivitiesCount@@",
+												partialTotals[i].currentActivitiesCount);
+										firstColumnHtml = firstColumnHtml.replace("@@totalActivitiesCount@@",
+												partialTotals[i].totalActivitiesCount);
 										jQuery(item.firstChild).html(firstColumnHtml);
 									});
 								});
@@ -470,7 +472,8 @@ define([ 'business/grid/columnsMapping', 'business/translations/translationManag
 					// Ignore top level because is 'Report Totals'.
 					partialTotals.push({
 						contents : obj.contents,
-						totalChildrenCount : obj.totalLeafChildrenCount,
+						totalActivitiesCount : obj.totalLeafActivitiesCount,
+						currentActivitiesCount : obj.currentLeafActivitiesCount,
 						level : level
 					});
 				}

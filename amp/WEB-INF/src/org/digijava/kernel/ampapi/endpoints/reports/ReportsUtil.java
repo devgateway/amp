@@ -119,11 +119,13 @@ public class ReportsUtil {
 	public static final JsonBean getReportResultByPage(Long reportId, JsonBean formParams) {
 		JsonBean result = new JsonBean();
 		
+		// read pagination data
 		int page = (Integer) EndpointUtils.getSingleValue(formParams, "page", 0);
 		int recordsPerPage = EndpointUtils.getSingleValue(formParams, "recordsPerPage", 
 				ReportPaginationUtils.getRecordsNumberPerPage());
 		int start = (page - 1) * recordsPerPage;
 		
+		// get the report (from cache if it was cached)
 		CachedReportData cachedReportData = getCachedReportData(reportId, formParams);
 		ReportAreaMultiLinked[] areas = null;
 		if (cachedReportData != null) {
@@ -131,10 +133,12 @@ public class ReportsUtil {
 			result.set("headers", cachedReportData.report.leafHeaders);
 		}
 		
+		// extract data for the requested page
 		ReportArea pageArea = recordsPerPage == -1 ? cachedReportData.report.reportContents :
 					ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
 		int totalPageCount = ReportPaginationUtils.getPageCount(areas, recordsPerPage);
 		
+		// configure the result
 		result.set("page", new JSONReportPage(pageArea, recordsPerPage, page, totalPageCount, 
 				(areas != null ? areas.length : 0)));
 		result.set(EPConstants.SETTINGS, cachedReportData != null ? 

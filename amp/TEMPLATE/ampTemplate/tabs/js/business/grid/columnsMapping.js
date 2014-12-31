@@ -171,7 +171,7 @@ define([ 'util/tabUtils' ], function(TabUtils) {
 				// styleText.push("<b>{0} - ({1} </b>" + "<b
 				// data-i18n='tabs.common:outOf'>out of</b>" +
 				// "<b>@@totalChildrenCount@@)</b>");
-				styleText.push("<b style='word-wrap: break-word;'>{0} - ({1}/@@totalChildrenCount@@)</b>");
+				styleText.push("<b style='word-wrap: break-word;'>{0} - (@@currentActivitiesCount@@/@@totalActivitiesCount@@)</b>");
 				summary.push(true);
 			});
 			ret.groupField = fields;

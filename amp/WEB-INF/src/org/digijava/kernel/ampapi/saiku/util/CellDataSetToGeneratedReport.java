@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.ReportArea;
@@ -25,6 +26,7 @@ import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.TextCell;
+import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.saiku.olap.dto.resultset.CellDataSet;
@@ -37,19 +39,24 @@ import org.saiku.service.olap.totals.aggregators.TotalAggregator;
  *
  */
 public class CellDataSetToGeneratedReport {
+	protected static final Logger logger = Logger.getLogger(CellDataSetToGeneratedReport.class);
+	
 	private ReportSpecification spec;
 	private CellDataSet cellDataSet;
 	private List<ReportOutputColumn> leafHeaders;
+	private List<Integer> cellDataSetActivities;
 	private DecimalFormat numberFormat;
 	private NumberFormat readingNumberFormat;
 	private TotalAggregator[][] measureTotals = null;
 	private List<TotalNode>[] rowTotals = null;
 	private int[] currentSubGroupIndex;
 	
-	public CellDataSetToGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, List<ReportOutputColumn> leafHeaders) {
+	public CellDataSetToGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, 
+			List<ReportOutputColumn> leafHeaders, List<Integer> cellDataSetActivities) {
 		this.spec = spec;
 		this.cellDataSet = cellDataSet;
 		this.leafHeaders = leafHeaders;
+		this.cellDataSetActivities = cellDataSetActivities;
 		init();
 	}
 	
@@ -73,6 +80,10 @@ public class CellDataSetToGeneratedReport {
 	
 	public ReportAreaImpl transformTo(Class<? extends ReportAreaImpl> reportAreaType) throws AMPException {
 		ReportAreaImpl root = MondrianReportUtils.getNewReportArea(reportAreaType);
+		boolean isSaikuReport = root instanceof SaikuReportArea;
+		boolean isPartialArea = root instanceof PartialReportArea;
+		Iterator<Integer> idIter =  isPartialArea && cellDataSetActivities != null 
+				? cellDataSetActivities.iterator() : null;
 		
 		Deque<List<ReportArea>> stack = new ArrayDeque<List<ReportArea>>();
 		//assumption that concatenation was done and totals are required starting for the 1st non-hierarchical column backwards
@@ -96,8 +107,16 @@ public class CellDataSetToGeneratedReport {
 			
 			reportArea.setContents(contents);
 			//remember the source row id that will be used during sorting
-			if (reportArea instanceof SaikuReportArea)
+			if (isSaikuReport) {
 				((SaikuReportArea)reportArea).setOrigId(rowId);
+			}
+			if (idIter != null) {
+				if (idIter.hasNext()) {
+					((PartialReportArea) reportArea).addInternalUseId(idIter.next());
+				} else {
+					logger.error("Abnormal case: each CellDataSet row must have an associated ID");
+				}
+			}
 			
 			boolean areaEnd = isEndOfArea(rowId, notNullColId, nextNotNullColId);
 			
@@ -119,6 +138,13 @@ public class CellDataSetToGeneratedReport {
 			root = (ReportAreaImpl) root.getChildren().get(0);
 		else if(root instanceof SaikuReportArea)
 			((SaikuReportArea)root).setOrigLeafId(getOrigLeafId((SaikuReportArea)root));
+		
+		/* if this is a partial report area and no ids are collected, 
+		 * means there are no hierarchies => activities count = children count
+		 */
+		if (isPartialArea && idIter == null) {
+			((PartialReportArea) root).setTotalLeafActivitiesCount(root.getChildren().size());
+		}
 		
 		return root;
 		//return (ReportAreaImpl) root.getChildren().get(1);

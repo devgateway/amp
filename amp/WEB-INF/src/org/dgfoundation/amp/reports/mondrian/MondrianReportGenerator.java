@@ -46,6 +46,7 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
+import org.dgfoundation.amp.reports.PartialReportArea;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.queries.MDXGenerator;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
@@ -106,6 +107,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 	private MDXGenerator generator = null;
 	
 	private List<ReportOutputColumn> leafHeaders = null; //leaf report columns list
+	// stores INTERNAL_USE_ID for each row from the CellDataSet, if this feature is required 
+	private List<Integer> cellDataSetActivities = null;
 	
 	private final ReportEnvironment environment;
 	
@@ -293,6 +296,14 @@ public class MondrianReportGenerator implements ReportExecutor {
 			}
 		
 		MondrianReportUtils.configureDefaults(spec);
+		
+		if (PartialReportArea.class.isAssignableFrom(reportAreaType)
+				/* if there are no leaf entries to be associated with internal use id, 
+				 * then we do not need to collect them
+				 */
+				&& spec.getHierarchies().size() < spec.getColumns().size()) {
+			cellDataSetActivities = new ArrayList<Integer>();
+		}
 	}
 	
 	/**
@@ -536,7 +547,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 		
 		applyFilterSetting(spec, cellDataSet);
 		
-		CellDataSetToAmpHierachies.concatenateNonHierarchicalColumns(spec, cellDataSet, leafHeaders);
+		CellDataSetToAmpHierachies.concatenateNonHierarchicalColumns(
+				spec, cellDataSet, leafHeaders, cellDataSetActivities);
 		postprocessUndefinedEntries(spec, cellDataSet);
 		
 		//clear totals if were enabled for non-hierarchical merges
@@ -717,7 +729,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 	
 	private GeneratedReport toGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, int duration) throws AMPException {
 		long start = System.currentTimeMillis();
-		CellDataSetToGeneratedReport translator = new CellDataSetToGeneratedReport(spec, cellDataSet, leafHeaders);
+		CellDataSetToGeneratedReport translator = new CellDataSetToGeneratedReport(
+				spec, cellDataSet, leafHeaders, cellDataSetActivities);
 		ReportAreaImpl root = translator.transformTo(reportAreaType);
 		GeneratedReport genRep = new GeneratedReport(spec, duration + (int)(System.currentTimeMillis() - start), null, root, getRootHeaders(leafHeaders), leafHeaders); 
 		return genRep;

@@ -15,29 +15,20 @@ module.exports = Backbone.Model
 
   attachListeners: function() {
     this.listenTo(this, 'change:selected', function(blah, show) {
-      // TODO: ideally only fetch if fitlers have changed, but trust cacheing...
-
-      // this is ugly, but necesesary to stop showLayers call to /load from triggering another fetch.
-      if (show) {
-        if (!this._loaded) {
-          this.load();
-        } else {
-          this.fetch();
-        }
-      }
-
-      // important to trigger after fetch / load.
       this.trigger(show ? 'show' : 'hide', this);
     });
-    this.listenTo(this, 'sync', this.updatePaletteRange);
+
     this.listenTo(this.collection.filter, 'apply', this.refreshModel);
     this.listenTo(this.collection.settings, 'change:selected', this.refreshModel);
   },
 
   // if filters change and layer is selected update it.
   refreshModel: function() {
+    // this forces next 'load' call to do a fresh fetch.
+    delete this._loaded;
+
     if (this.get('selected')) {
-      this.fetch();
+      this.load();
     }
   },
 
@@ -102,11 +93,5 @@ module.exports = Backbone.Model
     };
 
     return magicWords[admString];
-  },
-
-
-  updatePaletteRange: function() {
-    // TODO...
   }
-
 });

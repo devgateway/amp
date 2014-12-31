@@ -32,38 +32,41 @@ module.exports = Backbone.View.extend({
 
   showLayer: function(admLayer) {
     var self = this;
-    var leafletLayer = this.leafletLayerMap[admLayer.cid];
+    var leafletLayerGroup = this.leafletLayerMap[admLayer.cid];
 
-    if (_.isUndefined(leafletLayer)) {
-      leafletLayer = this.leafletLayerMap[admLayer.cid] = new L.layerGroup([]);
+    // if it's not loaded yet, we need to load it.
+    if (_.isUndefined(leafletLayerGroup)) {
+      leafletLayerGroup = this.leafletLayerMap[admLayer.cid] = new L.layerGroup([]);
       admLayer.load().then(_.bind(function() {
-        self._createClusters(admLayer, leafletLayer);
+        self._createClusters(admLayer, leafletLayerGroup);
       }, this));
       admLayer.loadAll().done(function() {
         self.boundary = self.getNewBoundary(admLayer);
-        leafletLayer.addLayer(self.boundary);
+        leafletLayerGroup.addLayer(self.boundary);
         self.moveBoundaryBack();
         $('#map-loading').hide();
       });
+    } else {
+      // else layer is already loaded.
+      $('#map-loading').hide();
     }
 
-    // TODO: may need to move this check to inside a 'load'
     if (admLayer.get('selected')) {
-      this.map.addLayer(leafletLayer);
+      this.map.addLayer(leafletLayerGroup);
     }
   },
 
   //TODO: make sure still selected
   refreshLayer: function(admLayer) {
     var self = this;
-    var leafletLayer = this.leafletLayerMap[admLayer.cid];
-    if (leafletLayer) {
-      leafletLayer.clearLayers();
-      self._createClusters(admLayer, leafletLayer);
+    var leafletLayerGroup = this.leafletLayerMap[admLayer.cid];
+    if (leafletLayerGroup) {
+      leafletLayerGroup.clearLayers();
+      self._createClusters(admLayer, leafletLayerGroup);
 
       this.boundary = self.getNewBoundary(admLayer);
       if (this.boundary) {
-        leafletLayer.addLayer(this.boundary);
+        leafletLayerGroup.addLayer(this.boundary);
         this.moveBoundaryBack();
         $('#map-loading').hide();
       }
@@ -82,10 +85,10 @@ module.exports = Backbone.View.extend({
     }
   },
 
-  _createClusters: function(admLayer, leafletLayer) {
+  _createClusters: function(admLayer, leafletLayerGroup) {
     var self = this;
     var clusters = this.getNewADMLayer(admLayer);
-    leafletLayer.addLayer(clusters);
+    leafletLayerGroup.addLayer(clusters);
     clusters.on('popupopen', function(e) {
       var clusterPopupView = new ClusterPopupView({app: self.app}, e.popup, admLayer);
       clusterPopupView.render();
@@ -93,9 +96,9 @@ module.exports = Backbone.View.extend({
   },
 
   hideLayer: function(admLayer) {
-    var leafletLayer = this.leafletLayerMap[admLayer.cid];
-    if (leafletLayer) {
-      this.map.removeLayer(leafletLayer);
+    var leafletLayerGroup = this.leafletLayerMap[admLayer.cid];
+    if (leafletLayerGroup) {
+      this.map.removeLayer(leafletLayerGroup);
     }
   },
 
@@ -116,6 +119,8 @@ module.exports = Backbone.View.extend({
     });
   },
 
+  // TODO: currently creates boundary new everytime...
+  // instead it should do it once and cache it in a variable like boundaryLayerMap so not redoing topojson parse
   getNewBoundary: function(admLayer) {
     var topoboundaries = admLayer.get('boundary');
 

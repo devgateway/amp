@@ -31,11 +31,11 @@ module.exports = IndicatorJoinModel.extend({
 
   // if layer gets selected update it.
   refreshModel: function() {
+    // this forces next 'load' call to do a fresh fetch.
+    delete this._loaded;
+
     if (this.get('selected')) {
-      this.fetch();
-    } else {
-      // this forces the load function to do a fresh fetch next time it's called.
-      delete this._loaded;
+      this.load();
     }
   },
 

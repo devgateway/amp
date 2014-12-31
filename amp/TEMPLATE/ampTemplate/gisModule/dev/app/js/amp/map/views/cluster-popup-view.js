@@ -76,7 +76,6 @@ module.exports = Backbone.View.extend({
   },
 
   _generateBaseChart: function(model, selector) {
-    var self = this;
     var tmpTotal = 0;
     var data = _.map(model.values, function(org) {
       tmpTotal += org.amount;

@@ -16,36 +16,26 @@ module.exports = IndicatorJoinModel.extend({
     this.set('type', 'joinBoundaries');
     IndicatorJoinModel.prototype.initialize.call(this, arguments);
 
-
-    this.listenTo(this, 'change:selected', function(blah, show) {
-      // this is ugly, but necesesary to stop showLayers call to /load from triggering another fetch.
-      if (show) {
-        if (!this._loaded) {
-          this.load();
-        } else {
-          this.fetch();
-        }
-      }
-
-      // important to trigger after fetch / load.
-      this.trigger(show ? 'show' : 'hide', this);
-    });
-
-
+    // if filters or settings change then get data from API and update model
     this.listenTo(this.collection.filter, 'apply', this.refreshModel);
     this.listenTo(this.collection.settings, 'change:selected', this.refreshModel);
-    this.listenTo(this, 'sync', this.refresh);
+
+    // If the model updates, then refresh dependencies.
+    this.listenTo(this, 'sync', this.refreshDependencies);
   },
 
-  refresh: function() {
+  refreshDependencies: function() {
     this.loadBoundary();
     this.updatePaletteRange();
   },
 
-  // if layer is selected update it.
+  // if layer gets selected update it.
   refreshModel: function() {
     if (this.get('selected')) {
       this.fetch();
+    } else {
+      // this forces the load function to do a fresh fetch next time it's called.
+      delete this._loaded;
     }
   },
 

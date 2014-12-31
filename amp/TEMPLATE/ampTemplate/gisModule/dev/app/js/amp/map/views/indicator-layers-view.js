@@ -17,6 +17,7 @@ module.exports = Backbone.View.extend({
       self.listenTo(self.app.data.indicators, 'show', self.showLayer);
       self.listenTo(self.app.data.indicators, 'hide', self.hideLayer);
 
+      self.listenTo(self.app.data.hilightFundingCollection, 'show', self.refreshLayer);
       self.listenTo(self.app.data.hilightFundingCollection, 'hide', self.hideLayer);
       self.listenTo(self.app.data.hilightFundingCollection, 'sync', self.refreshLayer);
     });
@@ -35,13 +36,15 @@ module.exports = Backbone.View.extend({
   showLayer: function(layer) {
     var self = this,
         loadedLayer = this.leafletLayerMap[layer.cid];
+
     if (loadedLayer === 'loading') {
       console.warn('tried to show a layer that is still loading, return');
       return;
-    } else if (typeof loadedLayer === 'undefined') {
-      this.leafletLayerMap[layer.cid] = 'loading';  // will be replaced in time...
+    } else {
+      //this will be replaced once loadAll is done,
+      //prevent race condition 'show' calls adding multiple versions of the layer.
+      this.leafletLayerMap[layer.cid] = 'loading';
     }
-
     layer.loadAll().done(function() {
       var layerType = layer.get('type');
       if (layerType === 'joinBoundaries') {  // geojson

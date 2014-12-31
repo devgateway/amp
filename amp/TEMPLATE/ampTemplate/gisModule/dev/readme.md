@@ -46,7 +46,7 @@ All commands are automated with [gulp](http://gulpjs.com), and configured in [gu
 
 ### Local development
 
-#### Build, watch for changes, serve, and livereload with mock API:
+#### Build, watch for changes, serve, and livereload:
 
 ```bash
 $ gulp dev
@@ -57,8 +57,6 @@ or simply
 ```bash
 $ gulp
 ```
-
-The site will be available at [localhost:3000](http://localhost:3000)
 
 Installing a [livereload browser extension](http://feedback.livereload.com/knowledgebase/articles/86242-how-do-i-install-and-use-the-browser-extensions-) is recommended.
 
@@ -74,7 +72,7 @@ $ cd [amp-folder]/TEMPLATE/ampTemplate/gisModule/dev/
 $ gulp dev
 ```
 
-3. http://localhost:8080/TEMPLATE/ampTemplate/gisModule/dev/app/index.html
+3. [//localhost:8080/TEMPLATE/ampTemplate/gisModule/dev/app/index.html](http://localhost:8080/TEMPLATE/ampTemplate/gisModule/dev/app/index.html)
 
 
 #### Run tests
@@ -89,6 +87,8 @@ The exit code will be `0` if all tests pass, or `1` if any fail.
 
 
 ##### In a web browser:
+
+!Currently Disabled, used to work with qunit and phantomjs, since switch to mocha wasn't redone.!
 
 ```bash
 $ gulp webtest
@@ -164,7 +164,7 @@ In short:
  4. `initialize`, if present
  5. `render`, if present (should probably always be present)
  6. Any specialized render-like functions
- 7. All other functions, ordered approximately by when they are expected t be called.
+ 7. All other functions, ordered approximately by when they are expected to be called.
 
 
 We treat `initialize` and `render` methods on views specially: they come before all other methods.

@@ -21,7 +21,7 @@
  *    Serve unit tests in browser
  *
  * $ gulp watch-and-test
- *    Runs tests, and re-runes tests when any of them changes. Good to run while writing tests.
+ *    Runs tests, and re-runs tests when any of them changes. Good to run while writing tests.
 
  * $ gulp lint
  *    Lint javascript and css -- currently only js

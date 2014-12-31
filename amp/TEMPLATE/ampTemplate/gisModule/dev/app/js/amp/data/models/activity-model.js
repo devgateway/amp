@@ -58,22 +58,21 @@ module.exports = Backbone.Model.extend({
   parse: function(data) {
     // make our id an int
     data['Activity Id'] = parseInt(data['Activity Id'], 10);
-    // split matchesFilters
+
     if (data.matchesFilters) {
       _.each(data.matchesFilters, function(v, k) {
 
-        // 999999999 means empy, we will change API soon...hopefully.. :(
-        if ( data.matchesFilters[k] === '999999999') {
-          data.matchesFilters[k] = null;
-        } else {
-          data.matchesFilters[k] = _(v.split(',')).map(function(v) {
-        	  //AMP ID is a string on the DB, we shouldn't parse it to int
-        	  if (k!='AMP ID') {
-        		  return parseInt(v, 10);
-              }
-        	  	return v;
-          	}
-           );
+        //AMP ID is a string on the DB, we shouldn't parse it's value
+        if (k !== 'AMP ID') { // TODO: <-- should change to a list of allowed ones: sector, donor, etc.
+          // 999999999 means empy, we will change API soon...hopefully.. :(
+          if (data.matchesFilters[k] === '999999999') {
+            data.matchesFilters[k] = null;
+          } else {
+            // split matchesFilters and turn into ints.
+            data.matchesFilters[k] = _(v.split(',')).map(function(v) {
+              return parseInt(v, 10);
+            });
+          }
         }
       });
     }

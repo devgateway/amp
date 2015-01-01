@@ -424,7 +424,29 @@ public class MondrianReportGenerator implements ReportExecutor {
 		((MDXAttribute)elem).setValue(filter.value);
 		return elem;
 	}
-	
+	/**
+	 * Determines if a ReportElement should be processed through SQL
+	 * 
+	 * @param element the ReportElement to be analyzed
+	 * @return boolean
+	 */
+	private boolean isProcessedBySQL(ReportElement element) {
+		boolean processedBySql = false;
+		// at the moment only dates are filtered out, but years, quarters and months are not :(
+		// ignore DATE filters, as those are now processed through the SQL  filter
+
+		if (element.type == ElementType.DATE) {
+			processedBySql = true;
+		}
+
+		// processed through SQL
+		else if (element.type == ElementType.ENTITY
+				&& (FiltersGroup.FILTER_GROUP.containsKey(element.entity.getEntityName()) || MondrianApprovalStatusFilters
+						.getSupportedColumn().equals(element.entity.getEntityName()))) {
+			processedBySql = true;
+		}
+		return processedBySql;
+	}
 	private void addFilters(ReportFilters reportFilter, MDXConfig config) throws AmpApiException {
 		if (reportFilter == null) return;
 		
@@ -432,18 +454,12 @@ public class MondrianReportGenerator implements ReportExecutor {
 		for(Entry<ReportElement, List<FilterRule>> entry : reportFilter.getFilterRules().entrySet()) {
 			ReportElement elem = entry.getKey();
 			MDXElement mdxElem = null;
-			
-			// at the moment only dates are filtered out, but years, quarters and months are not :(
-			if (elem.type == ElementType.DATE)
-				continue; // ignore DATE filters, as those are now processed through the SQL filter
+			if (isProcessedBySQL(elem)) {
+				continue;
+			}
 			
 			if (elem.type == ElementType.ENTITY) {
-				if (FiltersGroup.FILTER_GROUP.containsKey(elem.entity.getEntityName())) {
-					// processed through SQL
-					continue;
-				} else {
-					mdxElem = MondrianMapping.toMDXElement(elem.entity);
-				}
+				mdxElem = MondrianMapping.toMDXElement(elem.entity);
 			} else {
 				mdxElem = MondrianMapping.getElementByType(elem.type);
 			}

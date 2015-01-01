@@ -78,10 +78,9 @@ public class Filters {
 		JsonBean as=new JsonBean();
 
 		List<SimpleJsonBean> activityStatus = new ArrayList<SimpleJsonBean>();
-		Set<String> keys=AmpARFilter.activityStatusToNr.keySet();
-		for (String key : keys) {
+		for (String key : AmpARFilter.activityApprovalStatus.keySet()) {
 			SimpleJsonBean sjb = new SimpleJsonBean();
-			sjb.setId(AmpARFilter.activityStatusToNr.get(key));
+			sjb.setId(AmpARFilter.activityApprovalStatus.get(key));
 			sjb.setName(key);
 			activityStatus.add(sjb);
 		}

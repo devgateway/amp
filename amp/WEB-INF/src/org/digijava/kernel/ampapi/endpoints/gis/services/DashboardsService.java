@@ -151,9 +151,10 @@ public class DashboardsService {
 		// Format the report output return a simple list.
 		// this is the report totals, which is not for the top N, but for ALL
 		// results
+ 		ReportCell totals = null;
 		if (report.reportContents != null && report.reportContents.getContents() != null
 				&& report.reportContents.getContents().size() > 0) {
-			ReportCell totals = (ReportCell) report.reportContents.getContents().values().toArray()[1];
+			totals = (ReportCell) report.reportContents.getContents().values().toArray()[1];
 			retlist.set("total", totals.value);
 		} else {
 			retlist.set("total", 0);
@@ -164,7 +165,10 @@ public class DashboardsService {
 		retlist.set("currency", currcode);
 
 		retlist.set("numberformat", numberformat);
-
+		
+		
+		Integer maxLimit = report.reportContents.getChildren().size();
+		
 		for (Iterator iterator = report.reportContents.getChildren().iterator(); iterator.hasNext();) {
 			JsonBean amountObj = new JsonBean();
 			ReportAreaImpl reportArea = (ReportAreaImpl) iterator.next();
@@ -177,6 +181,13 @@ public class DashboardsService {
 				amountObj.set("name", dvalue);
 				amountObj.set("amount", reportcell.value);
 				values.add(amountObj);
+			}else{
+				//Subtract National from the total 
+				if ((Double) retlist.get("total") != 0){
+					retlist.set("total",(Double) retlist.get("total") - (Double) reportcell.value);
+				}
+				//Remove National's bar from the chart
+				maxLimit --;
 			}
 			
 			if (values.size() >= n) {
@@ -186,7 +197,7 @@ public class DashboardsService {
 		retlist.set("values", values);
 
 		// report the total number of tops available
-		retlist.set("maxLimit", report.reportContents.getChildren().size());
+		retlist.set("maxLimit", maxLimit );
 
 		return retlist;
 	}

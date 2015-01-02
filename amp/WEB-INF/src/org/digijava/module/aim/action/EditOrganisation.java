@@ -24,10 +24,8 @@ import org.apache.struts.action.ActionMessages;
 import org.apache.struts.actions.DispatchAction;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpAhsurvey;
-import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpContact;
 import org.digijava.module.aim.dbentity.AmpOrgLocation;
@@ -38,8 +36,6 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpOrganisationContact;
 import org.digijava.module.aim.dbentity.AmpOrganisationDocument;
 import org.digijava.module.aim.dbentity.AmpOrganizationBudgetInformation;
-import org.digijava.module.aim.dbentity.AmpPledge;
-import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.AddOrgForm;
@@ -55,7 +51,6 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.util.ParisUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.budget.dbentity.AmpBudgetSector;
@@ -66,6 +61,7 @@ import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.action.SelectDocumentDM;
 import org.digijava.module.contentrepository.helper.CrConstants;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.JDBCException;
 
@@ -957,7 +953,14 @@ public class EditOrganisation extends DispatchAction {
       	editForm.setPrimaryOrgContIds(null);
       }
       if(isAdmin){
-    	  organization.setName(editForm.getName());
+    	  if(ContentTranslationUtil.multilingualIsEnabled()){
+    		  organization.setName(editForm.getName());  
+    	  }else{
+    		  String name=MultilingualInputFieldValues.readParameter("AmpOrganisation_name_" + TLSUtils.getSite().getDefaultLanguage().getCode(), "AmpOrganisation_name", request).right;
+    		  organization.setName(name);
+    	  }
+    		  
+    	  
           organization.setAcronym(editForm.getAcronym());
           organization.setFundingorgid(editForm.getFundingorgid());
 
@@ -1284,7 +1287,9 @@ public class EditOrganisation extends DispatchAction {
          
       this.saveDocuments(request, organization);
       DbUtil.saveOrg(organization);
-      MultilingualInputFieldValues.serialize(organization, "name", null, null, request);
+	  if (ContentTranslationUtil.multilingualIsEnabled()) {
+		  MultilingualInputFieldValues.serialize(organization, "name", null, null, request);
+	  }
       return mapping.findForward("added");
   }
   

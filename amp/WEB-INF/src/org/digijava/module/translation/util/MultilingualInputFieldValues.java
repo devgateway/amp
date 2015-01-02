@@ -67,8 +67,10 @@ public class MultilingualInputFieldValues
 		this.id = id;
 		this.propertyName = propertyName;
 		
-		if (!ContentTranslationUtil.multilingualIsEnabled())
-			this.locales = Collections.unmodifiableList(new ArrayList<String>(){{add(TLSUtils.getEffectiveLangCode());}});
+		if (!ContentTranslationUtil.multilingualIsEnabled()){
+			//If content translation is no enabled we use the default language for the site 
+			this.locales = Collections.unmodifiableList(new ArrayList<String>(){{add(TLSUtils.getSite().getDefaultLanguage().getCode());}});
+		}
 		else if (locales == null || locales.isEmpty() || !ContentTranslationUtil.multilingualIsEnabled())
 			this.locales = Collections.unmodifiableList(TranslatorUtil.getLocaleCache(RequestUtils.getSite(TLSUtils.getRequest())));
 		else

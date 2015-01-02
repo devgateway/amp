@@ -53,6 +53,18 @@ var Query = Backbone.Model.extend({
         //End Custom Code for Pagination
     },
     
+    // AMP-18921: workaround to the filters until they will be properly initialized, 
+	// that should be done as part of filters widget improvement as a whole
+    initFilters: function() {
+    	if (!window.currentFilter.converted) {
+			window.currentFilter.converted = true;
+			var blob = FilterUtils.convertJavaFiltersToJS(this.get('filters'));
+			window.currentFilter.deserialize(blob, {
+				silent : true
+			});
+		}
+    },
+    
     parse: function(response) {
         // Assign id so Backbone knows to PUT instead of POST
         this.id = this.uuid;
@@ -122,6 +134,17 @@ var Query = Backbone.Model.extend({
         	if(!this.workspace.currentQueryModel)
             	this.workspace.currentQueryModel = exModel;
 
+        	/*
+        	 * We need filters & settings to be always applied
+        	 * See AMP-19159, AMP-19135 and AMP-18826
+        	 */
+        	if (filters == undefined) {
+        		filters = this.get('filters');
+        	}
+        	if (settings == undefined) {
+        		settings = this.get('settings');
+        	}
+        	
         	var filtersApplied = false;
         	if(filters) {
         		this.set('filters', filters);

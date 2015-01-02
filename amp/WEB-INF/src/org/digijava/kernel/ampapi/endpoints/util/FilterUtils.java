@@ -39,12 +39,14 @@ public class FilterUtils {
 				}
 				Map<String, Object> date = (LinkedHashMap<String, Object>) filter
 						.get("date");
-				String start = date.get("start").toString();
-				String end = date.get("end").toString();
-				SimpleDateFormat sdf = new SimpleDateFormat(
-						MoConstants.DATE_FORMAT);
-				filterRules.addDateRangeFilterRule(sdf.parse(start),
-						sdf.parse(end));
+				String start = String.valueOf(date.get("start"));
+				String end = String.valueOf(date.get("end"));
+				if (start !=null || end != null) {
+					SimpleDateFormat sdf = new SimpleDateFormat(
+							MoConstants.DATE_FORMAT);
+					filterRules.addDateRangeFilterRule(start == null ? null : sdf.parse(start),
+							end == null ? null : sdf.parse(end));
+				}
 			}
 		} catch (AmpApiException | ParseException e) {
 			logger.error("cannot process date", e);

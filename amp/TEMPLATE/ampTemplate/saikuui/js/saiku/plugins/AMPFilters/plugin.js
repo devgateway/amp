@@ -65,13 +65,7 @@ var AMPFilters = Backbone.View.extend({
 				if ($(event.target).hasClass('on')) {
 					// AMP-18921: workaround to the filters until they will be properly initialized, 
 					// that should be done as part of filters widget improvement as a whole
-					if (!window.currentFilter.converted) {
-						var blob = FilterUtils.convertJavaFiltersToJS(this.workspace.query.get('filters'));
-						window.currentFilter.deserialize(blob, {
-							silent : true
-						});
-						window.currentFilter.converted = true;
-					}
+					this.workspace.query.initFilters();
 					$('#filters-container').show();
 				} else {
 					$('#filters-container').hide();

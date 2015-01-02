@@ -166,144 +166,9 @@
 			<Table name="mondrian_programs@@locale@@" />
 			<Level name="Level 8 Id" type="Integer" column="id8"/>
 		</Hierarchy>
-	</Dimension>
-	
-	<Dimension name="Activity Status">
-		<Hierarchy hasAll="true" allMemberName="All Values" primaryKey="acv_id" name="Status Hierarchy">
-			<View alias="Activity Status">
-				<SQL dialect="generic">
-					<![CDATA[
-						select * from mondrian_category_values@@locale@@ cv 
-						where cv.acc_id in 
-						(select id from amp_category_class acc where acc.keyname ='activity_status')
-					]]> 
-				</SQL>
-			</View>
-			<Level name="Status Name" column="acv_id" type="Integer" nameColumn="acv_name"/>
-		</Hierarchy>
-	</Dimension>
-	
-	<Dimension name="Modalities">
-		<Hierarchy hasAll="true" allMemberName="All Values" primaryKey="acv_id" name="Modalities Hierarchy">
-			<View alias="Modalities_view">
-				<SQL dialect="generic">
-					<![CDATA[
-						select * from mondrian_category_values@@locale@@ cv 
-						where cv.acc_id in 
-						(select id from amp_category_class acc where acc.keyname ='modalities')
-					]]> 
-				</SQL>
-			</View>
-			<Level name="Modalities Name" column="acv_id" type="Integer" nameColumn="acv_name"/>
-		</Hierarchy>
-	</Dimension>
-	
-	<Dimension name="Type of Cooperation">
-		<Hierarchy hasAll="true" allMemberName="All Values" primaryKey="acv_id" name="Type of Cooperation Hierarchy">
-			<View alias="Type of Cooperation">
-				<SQL dialect="generic">
-					<![CDATA[
-						select * from mondrian_category_values@@locale@@ cv 
-						where cv.acc_id in 
-						(select id from amp_category_class acc where acc.keyname ='type_of_cooperation')
-					]]> 
-				</SQL>
-			</View>
-			<Level name="Type of Cooperation Name" column="acv_id" type="Integer" nameColumn="acv_name"/>
-		</Hierarchy>
-	</Dimension>
-	
-	<Dimension name="Type of Implementation">
-		<Hierarchy hasAll="true" allMemberName="All Values" primaryKey="acv_id" name="Type of Implementation Hierarchy">
-			<View alias="Type of Implementation">
-				<SQL dialect="generic">
-					<![CDATA[
-						select * from mondrian_category_values@@locale@@ cv 
-						where cv.acc_id in 
-						(select id from amp_category_class acc where acc.keyname ='type_of_implementation')
-					]]> 
-				</SQL>
-			</View>
-			<Level name="Type of Implementation Name" column="acv_id" type="Integer" nameColumn="acv_name"/>
-		</Hierarchy>
-	</Dimension>
-	
-	<Dimension name="Procurement System">
-		<Hierarchy hasAll="true" allMemberName="All Values" primaryKey="acv_id" name="Procurement System Hierarchy">
-			<View alias="Procurement System Name">
-				<SQL dialect="generic">
-					<![CDATA[
-						select * from mondrian_category_values@@locale@@ cv 
-						where cv.acc_id in 
-						(select id from amp_category_class acc where acc.keyname ='procurement_system')
-					]]> 
-				</SQL>
-			</View>
-			<Level name="Procurement System Name" column="acv_id" type="Integer" nameColumn="acv_name"/>
-		</Hierarchy>
-	</Dimension>
-	
-	<Dimension name="Funding Status">
-		<Hierarchy hasAll="true" allMemberName="All Values" primaryKey="acv_id" name="Funding Status Hierarchy">
-			<View alias="funding_status">
-				<SQL dialect="generic">
-					<![CDATA[
-						select * from mondrian_category_values@@locale@@ cv 
-						where cv.acc_id in 
-						(select id from amp_category_class acc where acc.keyname ='funding_status')
-					]]> 
-				</SQL>
-			</View>
-			<Level name="Funding Status Name" column="acv_id" type="Integer" nameColumn="acv_name"/>
-		</Hierarchy>
-	</Dimension>
-	
-	<Dimension name="Mode of Payment">
-		<Hierarchy hasAll="true" allMemberName="All Values" primaryKey="acv_id" name="Mode of Payment Hierarchy">
-			<View alias="Mode of Payment">
-				<SQL dialect="generic">
-					<![CDATA[
-						select * from mondrian_category_values@@locale@@ cv 
-						where cv.acc_id in 
-						(select id from amp_category_class acc where acc.keyname ='mode_of_payment')
-					]]> 
-				</SQL>
-			</View>
-			<Level name="Mode of Payment Name" column="acv_id" type="Integer" nameColumn="acv_name"/>
-		</Hierarchy>
-	</Dimension>
-	
-	<Dimension name="Financing Instrument">
-		<Hierarchy hasAll="true" allMemberName="All Values" primaryKey="acv_id" name="Financing Instrument Hierarchy">
-			<View alias="Financing Instrument">
-				<SQL dialect="generic">
-					<![CDATA[
-						select * from mondrian_category_values@@locale@@ cv 
-						where cv.acc_id in 
-						(select id from amp_category_class acc where acc.keyname ='financing_instrument')
-					]]> 
-				</SQL>
-			</View>
-			<Level name="Financing Instrument Name" column="acv_id" type="Integer" nameColumn="acv_name"/>
-		</Hierarchy>
-	</Dimension>
 		
-	<Dimension name="Type Of Assistance">
-		<Hierarchy hasAll="true" allMemberName="All Values" primaryKey="acv_id" name="Type Of Assistance Hierarchy">
-			<View alias="Type Of Assistance">
-				<SQL dialect="generic">
-					<![CDATA[
-						select * from mondrian_category_values@@locale@@ cv 
-						where cv.acc_id in 
-						(select id from amp_category_class acc where acc.keyname ='type_of_assistence')
-					]]> 
-				</SQL>
-			</View>
-			<Level name="Type Of Assistance Name" column="acv_id" type="Integer" nameColumn="acv_name"/>
-		</Hierarchy>
-	</Dimension>	
-	
-	<!-- Maybe need to be removed -->
+	</Dimension>
+
 	<Dimension name="Category Value">
 		<Hierarchy hasAll="true" allMemberName="All Values" primaryKey="acv_id" name="Category Name">
 			<Table name="mondrian_category_values@@locale@@" />
@@ -425,16 +290,16 @@
 		<DimensionUsage name="Activity Texts" source="Entity Texts" foreignKey="entity_id" />
 		<DimensionUsage name="Pledge Texts" source="Entity Texts" foreignKey="entity_id" />
 		
-			
-		<DimensionUsage name="Activity Status" source="Activity Status" foreignKey="status_id" />
-		<DimensionUsage name="Modalities" source="Modalities" foreignKey="modality_id" />
-		<DimensionUsage name="Type of Cooperation" source="Type of Cooperation" foreignKey="type_of_cooperation_id" />
-		<DimensionUsage name="Type of Implementation" source="Type of Implementation" foreignKey="type_of_implementation_id" />
-		<DimensionUsage name="Procurement System" source="Procurement System" foreignKey="procurement_system_id" />
-		<DimensionUsage name="Funding Status" source="Funding Status" foreignKey="funding_status_id" />
-		<DimensionUsage name="Mode of Payment" source="Mode of Payment" foreignKey="mode_of_payment_id" />
-		<DimensionUsage name="Financing Instrument" source="Financing Instrument" foreignKey="financing_instrument_id" />
-		<DimensionUsage name="Type Of Assistance" source="Type Of Assistance" foreignKey="terms_of_assistance_id" />	
+		<DimensionUsage name="Activity Status" source="Category Value" foreignKey="status_id" />
+		<DimensionUsage name="Pledge Status" source="Category Value" foreignKey="status_id" />
+		<DimensionUsage name="Modalities" source="Category Value" foreignKey="modality_id" />
+		<DimensionUsage name="Type of Cooperation" source="Category Value" foreignKey="type_of_cooperation_id" />
+		<DimensionUsage name="Type of Implementation" source="Category Value" foreignKey="type_of_implementation_id" />
+		<DimensionUsage name="Procurement System" source="Category Value" foreignKey="procurement_system_id" />
+		<DimensionUsage name="Funding Status" source="Category Value" foreignKey="funding_status_id" />
+		<DimensionUsage name="Mode of Payment" source="Category Value" foreignKey="mode_of_payment_id" />
+		<DimensionUsage name="Financing Instrument" source="Category Value" foreignKey="financing_instrument_id" />
+		<DimensionUsage name="Type Of Assistance" source="Category Value" foreignKey="terms_of_assistance_id" />
 		<DimensionUsage name="Pledges Type Of Assistance" source="Category Value" foreignKey="terms_of_assistance_id" />
 		<DimensionUsage name="Pledges Aid Modality" source="Category Value" foreignKey="modality_id" />
 

@@ -19,15 +19,19 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_pledges_sectors CASCADE;
 			   	CREATE OR REPLACE VIEW v_pledges_sectors AS 
-					SELECT ps.pledge_id, getsectorname(getparentsectorid(s.amp_sector_id)) AS sectorname, getparentsectorid(s.amp_sector_id) AS amp_sector_id, sum(ps.sector_percentage) AS sector_percentage, s.amp_sec_scheme_id AS amp_sector_scheme_id, ss.sec_scheme_name
-   						FROM amp_sector_scheme ss
-   						JOIN amp_sector s ON s.amp_sec_scheme_id = ss.amp_sec_scheme_id
-   						JOIN amp_funding_pledges_sector ps ON ps.amp_sector_id = s.amp_sector_id
-						JOIN amp_classification_config cc ON ((((cc.name)::text = 'Primary'::text) AND (cc.classification_id = ss.amp_sec_scheme_id))) 
-  						GROUP BY ps.pledge_id, getparentsectorid(s.amp_sector_id), s.amp_sec_scheme_id, ss.sec_scheme_name
-  						ORDER BY ps.pledge_id, getsectorname(getparentsectorid(s.amp_sector_id));
-        	</lang>
+					SELECT afps.pledge_id,
+    					rs.name AS sectorname,
+    					rs.amp_sector_id,
+    					sum(afps.sector_percentage) AS sector_percentage
+   						FROM amp_funding_pledges_sector afps
+     						JOIN all_sectors_with_levels aswl ON afps.amp_sector_id = aswl.amp_sector_id
+     						JOIN amp_sector rs ON rs.amp_sector_id = aswl.id0
+  					WHERE aswl.sector_config_name = 'Primary'
+  					GROUP BY afps.pledge_id, rs.amp_sector_id
+  					ORDER BY afps.pledge_id;
+  			</lang>
 		</script>
 	</apply>
 </tns:patch>

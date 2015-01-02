@@ -33,6 +33,7 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	private boolean displayEmptyFundingColumns = false;
 	private boolean displayEmptyFundingRows = false;
 	private boolean emptyOutputForUnspecifiedData = true;
+	private boolean alsoShowPledges = false;
 
     /**
      * If the report query results in empty data
@@ -299,11 +300,23 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	}
 
 	
-	public boolean isPopulateReportHeadersIfEmpty(){
+	@Override public boolean isPopulateReportHeadersIfEmpty(){
         return populateReportHeadersIfEmpty;
     }
 
+    /**
+     * Sets the flag, if the report query returns empty response the list of column headers is populated from the request
+     * @param populateReportHeadersIfEmpty
+     */
     public void setPopulateReportHeadersIfEmpty(boolean populateReportHeadersIfEmpty) {
         this.populateReportHeadersIfEmpty = populateReportHeadersIfEmpty;
+    }
+    
+    @Override public boolean isAlsoShowPledges() {
+    	return this.alsoShowPledges;
+    }
+    
+    public void setAlsoShowPledges(boolean alsoShowPledges) {
+    	this.alsoShowPledges = alsoShowPledges;
     }
 }

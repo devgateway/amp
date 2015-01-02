@@ -76,6 +76,16 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		contents = contents.replaceAll("@@currency@@", Long.toString(getReportCurrency().getAmpCurrencyId()));
 		contents = contents.replaceAll("@@calendar@@", getReportCalendarTag());
 		
+		// area for (pledges + activities) reports hacks. Holding my node while writing this - let whatever genius wanted Mondrian as a report engine maintain this PoS :D
+		boolean isDonorReportWithPledges = (currentReport.get().getReportType() != ArConstants.PLEDGES_TYPE && currentReport.get().isAlsoShowPledges());
+		String nonAcPledgeExcluderString = isDonorReportWithPledges ? "(mondrian_fact_table.entity_id &lt; 800000000) AND " : ""; // annulate non-Actual-Commitments trivial measures IFF running an "also show pledges" report
+		String actualCommitmentsDefinition = "__" + (isDonorReportWithPledges ? "Actual Commitments United" : "Actual Commitments Usual") + "__";
+		contents = contents.replace(actualCommitmentsDefinition, "Actual Commitments");
+		contents = contents.replace("@@non_ac_pledges_excluder@@", nonAcPledgeExcluderString);
+		
+		/*contents = contents.replace("&lt;", "<");
+		contents = contents.replace("&gt;", ">");*/
+		
 		String localeTag = getReportLocale();
 		contents = contents.replaceAll("@@locale@@", localeTag);
 		
@@ -87,7 +97,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 
 		//logger.info("BEFORE translation the schema is: " + contents);
 		contents = translateMeasuresAndColumns(contents, currentEnvironment.get().locale);
-		//logger.info("AFTER translation the schema is: " + contents);
+		logger.info("AFTER translation the schema is: " + contents);
 		
 		long delta = System.currentTimeMillis() - schemaProcessingStart;
 		logger.info("schema processing took " + delta + " ms");
@@ -203,6 +213,9 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			Integer trTypeId = ArConstants.TRANSACTION_TYPE_NAME_TO_ID.get(transactionType);
 			for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
 				String measureName = adj.getValue() + " " + transactionType;
+				if (measureName.equals(MoConstants.ACTUAL_COMMITMENTS))
+					continue; // this one is hardcoded in AMP.xml for the sake of "pledges + activities" reports
+				
 //				String newMeasureString = trivialMeasureString
 //						.replace("@@trivial_measure@@", measureName)
 //						.replace("@@trivial_measure_adjustment_type@@", adj.getId().toString());
@@ -214,7 +227,10 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 				Element newMeasureNode = (Element) trivialMeasureDefinitionNode.cloneNode(true);
 				newMeasureNode.setAttribute("name", measureName);
 				Node sqlNode = XMLGlobals.selectNode(newMeasureNode, "//SQL");
-				String newNodeText = sqlNode.getTextContent().replace("@@trivial_measure_adjustment_type@@", adj.getId().toString()).replace("@@trivial_measure_transaction_type@@", trTypeId.toString());
+								
+				String newNodeText = sqlNode.getTextContent()
+						.replace("@@trivial_measure_adjustment_type@@", adj.getId().toString())
+						.replace("@@trivial_measure_transaction_type@@", trTypeId.toString());
 				sqlNode.setTextContent(newNodeText);
 				trivialMeasureDefinitionNode.getParentNode().appendChild(newMeasureNode);
 				
@@ -284,9 +300,11 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	 */
 	protected String buildEntityIdFilteringSQL(MondrianReportFilters mrf) {
 		int reportType = currentReport.get().getReportType();
-		String reportTypeSubquery = getFilterByReportType(reportType);
 		String entityFilteringSubquery = getAllowedActivitiesSubquery(mrf, reportType);
-		return String.format("(%s) AND (%s)", reportTypeSubquery, entityFilteringSubquery);
+		String ret = currentReport.get().isAlsoShowPledges() ? 
+				String.format("((%s) AND (%s)) OR (%s)", getFilterByReportType(reportType), entityFilteringSubquery, getFilterByReportType(ArConstants.PLEDGES_TYPE)) :
+				String.format("(%s) AND (%s)", getFilterByReportType(reportType), entityFilteringSubquery);
+		return ret;
 	}
 	
 	protected String getAllowedActivitiesSubquery(MondrianReportFilters mrf, int reportType) {

@@ -19,15 +19,19 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_pledges_secondary_programs AS 
-			    		SELECT p.id AS pledge_id, t.name, fp.amp_program_id, fp.program_percentage 
-			    		FROM 
-			    			amp_funding_pledges p JOIN amp_funding_pledges_program fp ON ((p.id = fp.pledge_id)) 
-			    			JOIN amp_theme t ON (t.amp_theme_id = fp.amp_program_id),
-			    			amp_program_settings f
-			    		WHERE (f.name='Secondary Program') AND (f.amp_program_settings_id = getprogramsettingid(t.amp_theme_id))
-			    		ORDER BY p.id, t.name;;;
-        		</lang>
+				DROP VIEW IF EXISTS v_pledges_secondary_programs CASCADE;
+			    CREATE OR REPLACE VIEW v_pledges_secondary_programs AS 
+			    	SELECT afpp.pledge_id,
+    					level.name,
+    					level.amp_theme_id AS amp_program_id,
+    					sum(afpp.program_percentage) AS percentage
+   					FROM amp_funding_pledges_program afpp
+     					JOIN all_programs_with_levels apl ON afpp.amp_program_id = apl.amp_theme_id
+     					JOIN amp_theme level ON level.amp_theme_id = apl.id1
+  					WHERE apl.id1 IS NOT NULL AND apl.program_setting_name::text = 'Secondary Program'::text
+  					GROUP BY afpp.pledge_id, level.amp_theme_id
+  					ORDER BY afpp.pledge_id;
+       		</lang>
 		</script>
 	</apply>
 </tns:patch>

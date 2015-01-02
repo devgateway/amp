@@ -90,11 +90,11 @@ public interface ReportSpecification {
      * @return
      */
     public boolean isPopulateReportHeadersIfEmpty();
-
+    
     /**
-     * Sets the flag, if the report query returns empty response the list of column headers is populated from the request
-     * @param populateReportHeadersIfEmpty
+     * if the report type is different from ArConstants.PLEDGES_TYPE, this will lead to including the pledges which match the filter into the report
+     * @return
      */
-    public void setPopulateReportHeadersIfEmpty(boolean populateReportHeadersIfEmpty);
+    public boolean isAlsoShowPledges();
 	
 }

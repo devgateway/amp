@@ -26,7 +26,7 @@ import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
 
 /**
- * entry point for AMP 2.8 tests. Initializes standalone AMP as part of the discovery process.
+ * entry point for AMP 2.10 tests. Initializes standalone AMP as part of the discovery process.
  * standalone AMP configuration is taken off standAloneAmpHibernate.cfg.xml
  * @author Dolghier Constantin
  *
@@ -52,6 +52,7 @@ public class AllTests_amp210
 		suite.addTest(new JUnit4TestAdapter(MondrianComputedMeasuresReportTests.class));
 		suite.addTest(new JUnit4TestAdapter(ComponentReportsTests.class));
 		suite.addTest(new JUnit4TestAdapter(org.dgfoundation.amp.ar.amp210.PledgeReportsTests.class));
+		suite.addTest(new JUnit4TestAdapter(org.dgfoundation.amp.ar.amp210.DonorsAndPledgesReportsTests.class));
 		suite.addTest(new JUnit4TestAdapter(TabsPaginationTests.class));
 		
 		//suite.addTest(new JUnit4TestAdapter(EndpointsTests.class)); report testcases are not compatible with AMP running; while the testcases in EndpointsTests require a running AMP. please move them to a different test suite, which does not contain reports tests

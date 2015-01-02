@@ -77,6 +77,7 @@ public class AmpReportsToReportSpecification {
 		configureSorting();
 		
 		spec.setEmptyOutputForUnspecifiedData(report.getDrilldownTab() == null || !report.getDrilldownTab());
+		spec.setAlsoShowPledges(report.getAlsoShowPledges() == null ? false : report.getAlsoShowPledges());
 		
 		//configure filters & settings
 		AmpARFilterConverter arFilterTranslator = new AmpARFilterConverter(arFilter);

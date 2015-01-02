@@ -11,7 +11,7 @@ import org.dgfoundation.amp.onepager.translation.TrnLabel;
 
 /**
  * Represents a simple amp label field (text) 
- * This label is inmutable, if you need it to change 
+ * This label is immutable, if you need it to change 
  * based on changes of the model you should use {@link#AmpLabelInformationFieldPanel}
  * @author mpostelnicu@dgateway.org
  * since Nov 3, 2010

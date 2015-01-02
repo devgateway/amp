@@ -33,6 +33,8 @@ import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.codehaus.jackson.node.POJONode;
 import org.codehaus.jackson.node.TextNode;
+import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportArea;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.dto.Activity;
 import org.digijava.kernel.ampapi.endpoints.dto.gis.IndicatorLayers;

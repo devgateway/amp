@@ -29,6 +29,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
@@ -61,6 +62,8 @@ import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCateg
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.jdbc.Work;
+
+import clover.com.google.common.collect.ImmutableMap;
 
 /**
  * 
@@ -110,7 +113,7 @@ public class LocationService {
 		// also configures the measure(s) from funding type settings request
 		SettingsUtils.applyExtendedSettings(spec, config);
 		
-		MondrianReportFilters filterRules = new MondrianReportFilters(); 
+		 MondrianReportFilters filterRules = new MondrianReportFilters(); 
 		
 		if(config != null){
 			Object columnFilters = config.get("columnFilters");
@@ -118,6 +121,39 @@ public class LocationService {
 				filterRules = FilterUtils.getApiColumnFilter((LinkedHashMap<String, Object>) config.get("columnFilters"));	
 			}
  		}
+		Map<String, String> admLevelToGeoCode;
+		if (admlevel.equals(ColumnConstants.COUNTRY)) {
+			// If the admin level is country we filter only to show projects at
+			// the country of the current installation
+			final ValueWrapper<String> countryId = new ValueWrapper<String>("");
+			final ValueWrapper<String> countryName = new ValueWrapper<String>("");
+			PersistenceManager.getSession().doWork(new Work() {
+				public void execute(Connection conn) throws SQLException {
+					String countryIdQuery = "select acvl.id,acvl.location_name from amp_category_value_location acvl,amp_global_settings gs "
+							+ " where acvl.iso=gs.settingsvalue  " + " and gs.settingsname ='Default Country'";
+					ResultSet rs = SQLUtils.rawRunQuery(conn, countryIdQuery, null);
+					if (rs.next()) {
+						countryId.value = rs.getString(1);
+						countryName.value = rs.getString(2);
+					}
+					rs.close();
+				}
+			});
+
+			filterRules.addFilterRule(new ReportColumn(ColumnConstants.COUNTRY), new FilterRule(countryId.value, true));
+			//if country level we only return the current country with 0 has GeoCode
+			admLevelToGeoCode = Collections.unmodifiableMap(new HashMap<String, String>() {
+				{
+					this.put(countryName.value, "0");
+				}
+			});
+		} else {
+			//we only get the geocodes if !country level
+			admLevelToGeoCode = getAdmLevelGeoCodeMap(admlevel, admLevelCV);
+
+		}
+		
+
 		
 		spec.setFilters(filterRules);
 		
@@ -125,18 +161,18 @@ public class LocationService {
 		retlist.set("currency", currcode);
 		retlist.set("numberformat", numberformat);
 
+
 		GeneratedReport report = EndpointUtils.runReport(spec);
 		List<JsonBean> values = new ArrayList<JsonBean>();
 		
 		if (report != null && report.reportContents != null && report.reportContents.getChildren() != null) {
 			// find the admID (geocode) for each implementation location name
-			Map<String, String> admLevelToGeoCode = getAdmLevelGeoCodeMap(admlevel, admLevelCV);
-			
 			
 			for (ReportArea reportArea : report.reportContents.getChildren()) {
 				JsonBean item = new JsonBean();
 				Iterator<ReportCell> iter = reportArea.getContents().values().iterator();
-				String admid = admLevelToGeoCode.get(iter.next().displayedValue);
+				String displayedValue=iter.next().displayedValue;
+				String admid = admLevelToGeoCode.get(displayedValue);
 				item.set("admID", admid);
 				ReportCell reportcell = (ReportCell) iter.next();
 				item.set("amount", reportcell.value);

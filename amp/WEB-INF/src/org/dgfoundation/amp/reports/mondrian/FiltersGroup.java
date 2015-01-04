@@ -28,11 +28,16 @@ public class FiltersGroup {
 		Map<String, String> filterGroupMap = new HashMap<String, String>();
 		
 		// adding sector groups
-		addGroups(filterGroupMap, 
+		addGroups(filterGroupMap,
 				Arrays.asList(
 						ColumnConstants.PRIMARY_SECTOR,
-						ColumnConstants.SECONDARY_SECTOR, 
-						ColumnConstants.TERTIARY_SECTOR
+						ColumnConstants.PLEDGES_SECTORS,
+						
+						ColumnConstants.SECONDARY_SECTOR,
+						ColumnConstants.PLEDGES_SECONDARY_SECTORS,
+						
+						ColumnConstants.TERTIARY_SECTOR,
+						ColumnConstants.PLEDGES_TERTIARY_SECTORS
 						),
 				Arrays.asList("", " Sub-Sector", " Sub-Sub-Sector")
 				);
@@ -47,24 +52,41 @@ public class FiltersGroup {
 		addGroups(filterGroupMap, 
 				Arrays.asList(
 						ColumnConstants.PRIMARY_PROGRAM,
-						ColumnConstants.SECONDARY_PROGRAM, 
+						ColumnConstants.PLEDGES_PROGRAMS,
+						
+						ColumnConstants.SECONDARY_PROGRAM,
+						ColumnConstants.PLEDGES_SECONDARY_PROGRAMS,
+						
 						ColumnConstants.TERTIARY_PROGRAM,
-						ColumnConstants.NATIONAL_PLANNING_OBJECTIVES
+						ColumnConstants.PLEDGES_TERTIARY_PROGRAMS,
+						
+						ColumnConstants.NATIONAL_PLANNING_OBJECTIVES,
+						ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES
 						),
 						programSuffix
 				);
 		
-		filterGroupMap.put(ColumnConstants.COUNTRY, LOCATION_FILTER);
-		filterGroupMap.put(ColumnConstants.REGION, LOCATION_FILTER);
-		filterGroupMap.put(ColumnConstants.ZONE, LOCATION_FILTER);
-		filterGroupMap.put(ColumnConstants.DISTRICT, LOCATION_FILTER);
-		filterGroupMap.put(MoConstants.ATTR_LOCATION_NAME, LOCATION_FILTER);
+		List<String> locationColumns = Arrays.asList(
+				ColumnConstants.COUNTRY,
+				ColumnConstants.REGION,
+				ColumnConstants.ZONE,
+				ColumnConstants.DISTRICT,
+				MoConstants.ATTR_LOCATION_NAME,
+				
+				ColumnConstants.PLEDGES_REGIONS,
+				ColumnConstants.PLEDGES_ZONES,
+				ColumnConstants.PLEDGES_DISTRICTS
+			);
+		for(String locationColumn:locationColumns)
+			filterGroupMap.put(locationColumn, LOCATION_FILTER);
 		
 		
 		addIdentityMapping(filterGroupMap, ColumnConstants.DONOR_AGENCY);
 		filterGroupMap.put(ColumnConstants.DONOR_ID, ColumnConstants.DONOR_AGENCY);
 		addIdentityMapping(filterGroupMap, ColumnConstants.DONOR_GROUP);
+		filterGroupMap.put(ColumnConstants.PLEDGES_DONOR_GROUP, ColumnConstants.DONOR_GROUP);
 		addIdentityMapping(filterGroupMap, ColumnConstants.DONOR_TYPE);
+		//filterGroupMap.put(ColumnConstants.PLEDGES_D, ColumnConstants.DONOR_TYPE);
 		
 		addIdentityMapping(filterGroupMap, ColumnConstants.EXECUTING_AGENCY);
 		filterGroupMap.put(ColumnConstants.EXECUTING_AGENCY_ID, ColumnConstants.EXECUTING_AGENCY);
@@ -90,11 +112,20 @@ public class FiltersGroup {
 		//ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.TYPE_OF_COOPERATION, ColumnConstants.TYPE_OF_IMPLEMENTATION
 		addIdentityMapping(filterGroupMap, ColumnConstants.FINANCING_INSTRUMENT);
 		addIdentityMapping(filterGroupMap, ColumnConstants.MODE_OF_PAYMENT);
+		
 		addIdentityMapping(filterGroupMap, ColumnConstants.TYPE_OF_ASSISTANCE);
+		filterGroupMap.put(ColumnConstants.PLEDGES_TYPE_OF_ASSISTANCE, ColumnConstants.TYPE_OF_ASSISTANCE);
+		
 		addIdentityMapping(filterGroupMap, ColumnConstants.TYPE_OF_COOPERATION);
 		addIdentityMapping(filterGroupMap, ColumnConstants.TYPE_OF_IMPLEMENTATION);
 		addIdentityMapping(filterGroupMap, ColumnConstants.FUNDING_STATUS);
 		addIdentityMapping(filterGroupMap, ColumnConstants.PROCUREMENT_SYSTEM);
+		
+		addIdentityMapping(filterGroupMap, ColumnConstants.PLEDGES_AID_MODALITY);
+		addIdentityMapping(filterGroupMap, ColumnConstants.PROCUREMENT_SYSTEM);
+		
+		addIdentityMapping(filterGroupMap, ColumnConstants.STATUS);
+		filterGroupMap.put(ColumnConstants.PLEDGE_STATUS, ColumnConstants.STATUS);
 		
 		addIdentityMapping(filterGroupMap, ColumnConstants.CONTRACTING_AGENCY);
 		filterGroupMap.put(ColumnConstants.CONTRACTING_AGENCY_ID, ColumnConstants.CONTRACTING_AGENCY);
@@ -129,7 +160,7 @@ public class FiltersGroup {
 				final String group = parent + idSuffix;
 				for (String suffix: suffixList) {
 					final String current = parent + suffix + idSuffix;
-					filterGroupMap.put(current, group);
+					filterGroupMap.put(current, parent);
 				}
 			}
 		}

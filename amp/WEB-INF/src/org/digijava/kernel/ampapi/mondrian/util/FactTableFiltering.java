@@ -253,6 +253,8 @@ public class FactTableFiltering {
 			add(ColumnConstants.TYPE_OF_IMPLEMENTATION, new IdentityExpander("type_of_implementation_id"));
 			add(ColumnConstants.FUNDING_STATUS, new IdentityExpander("funding_status_id"));
 			add(ColumnConstants.PROCUREMENT_SYSTEM, new IdentityExpander("procurement_system_id"));
+			add(ColumnConstants.PLEDGES_AID_MODALITY, new IdentityExpander("modality_id"));
+			add(ColumnConstants.STATUS, new IdentityExpander("status_id"));
 		}
 		
 		void add(String mainColumn, IdsExpander expander) {

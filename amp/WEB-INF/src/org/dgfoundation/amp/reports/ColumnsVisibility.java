@@ -174,7 +174,7 @@ public class ColumnsVisibility extends DataVisibility {
 		put("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Funding Status", ColumnConstants.FUNDING_STATUS);
 		put("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Mode of Payment", ColumnConstants.MODE_OF_PAYMENT);
 		put("/Activity Form/Funding/Funding Group/Funding Item/Funding Classification/Type of Assistence", ColumnConstants.TYPE_OF_ASSISTANCE);
-		put("/Activity Form/Funding/Modalities", ColumnConstants.MODALITIES);
+		put("/Activity Form/Funding/Modalities", ColumnConstants.PLEDGES_AID_MODALITY);
 		put("/Activity Form/Funding/Proposed Project Cost", ColumnConstants.PROPOSED_PROJECT_AMOUNT);
 		put("/Activity Form/Location/Implementation Level", ColumnConstants.IMPLEMENTATION_LEVEL);
 		put("/Activity Form/Location/Locations", ColumnConstants.LOCATION);

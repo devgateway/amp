@@ -5,6 +5,7 @@ package org.dgfoundation.amp.reports.mondrian;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +20,21 @@ import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
  */
 public class FiltersGroup {
 	private static final String[] idList = new String[]{"", " Id"};
+
+	/**
+	 * map<Fundamental pledge column, Fundamental donor column>
+	 */
+	public final static Map<String, String> GENERIC_PARENT_COLUMNS = Collections.unmodifiableMap(new HashMap<String, String>() {{
+		put(ColumnConstants.PLEDGES_SECTORS, ColumnConstants.PRIMARY_SECTOR);
+		put(ColumnConstants.PLEDGES_SECONDARY_SECTORS, ColumnConstants.SECONDARY_SECTOR);
+		put(ColumnConstants.PLEDGES_TERTIARY_SECTORS, ColumnConstants.TERTIARY_SECTOR);
 		
+		put(ColumnConstants.PLEDGES_PROGRAMS, ColumnConstants.PRIMARY_PROGRAM);
+		put(ColumnConstants.PLEDGES_SECONDARY_PROGRAMS, ColumnConstants.SECONDARY_PROGRAM);
+		put(ColumnConstants.PLEDGES_TERTIARY_PROGRAMS, ColumnConstants.TERTIARY_PROGRAM);
+		put(ColumnConstants.PLEDGES_NATIONAL_PLAN_OBJECTIVES, ColumnConstants.NATIONAL_PLANNING_OBJECTIVES);
+	}});
+
 	/** map of column key to filter group that it belongs */
 	public static final Map<String, String> FILTER_GROUP = buildFilterGroupMap();
 	public static final String LOCATION_FILTER = "LOCATION_FILTER";
@@ -120,6 +135,7 @@ public class FiltersGroup {
 		addIdentityMapping(filterGroupMap, ColumnConstants.TYPE_OF_IMPLEMENTATION);
 		addIdentityMapping(filterGroupMap, ColumnConstants.FUNDING_STATUS);
 		addIdentityMapping(filterGroupMap, ColumnConstants.PROCUREMENT_SYSTEM);
+		addIdentityMapping(filterGroupMap, ColumnConstants.PLEDGES_AID_MODALITY);
 		
 		addIdentityMapping(filterGroupMap, ColumnConstants.PLEDGES_AID_MODALITY);
 		addIdentityMapping(filterGroupMap, ColumnConstants.PROCUREMENT_SYSTEM);
@@ -142,7 +158,7 @@ public class FiltersGroup {
 
 		addIdentityMapping(filterGroupMap, ColumnConstants.REGIONAL_GROUP);
 		filterGroupMap.put(ColumnConstants.REGIONAL_GROUP_ID, ColumnConstants.REGIONAL_GROUP);
-		addIdentityMapping(filterGroupMap, ColumnConstants.REGIONAL_GROUP_GROUP);
+		addIdentityMapping(filterGroupMap, ColumnConstants.REGIONAL_GROUP_GROUP);		
 
 		return filterGroupMap;
 	}
@@ -151,16 +167,24 @@ public class FiltersGroup {
 	private static void addIdentityMapping(Map<String, String> m, String key) {
 		m.put(key, key);
 	}
+		
 	
-	private static void addGroups(Map<String, String> filterGroupMap, 
-			List<String> parentList, 
-			List<String> suffixList) {
+	public static String columnToGenericColumn(String col) {
+		if (GENERIC_PARENT_COLUMNS.containsKey(col))
+			return GENERIC_PARENT_COLUMNS.get(col);
+		return col;
+	}
+	
+	private static void addGroups(Map<String, String> filterGroupMap, List<String> parentList, List<String> suffixList) {
 		for (String parent : parentList) {
+			if (parent == null)
+				throw new RuntimeException("no null parent allowed!");
+			String genericParent = columnToGenericColumn(parent);
 			for (String idSuffix : idList) {
-				final String group = parent + idSuffix;
+				//final String group = parent + idSuffix;
 				for (String suffix: suffixList) {
 					final String current = parent + suffix + idSuffix;
-					filterGroupMap.put(current, parent);
+					filterGroupMap.put(current, genericParent);
 				}
 			}
 		}

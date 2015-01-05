@@ -55,7 +55,7 @@ SELECT <!-- pledge-financed donor transactions -->
 	vmpt.transaction_amount,
 	vmpt.currency_id,
 	999999999 AS pledge_type,
-	vmpt.terms_of_assistance_id AS type_of_assistance,
+	999999999 AS type_of_assistance,
 	999999999 AS aid_modality,
 	'Undefined' as funding_range,
 	vmpt.donor_id,

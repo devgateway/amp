@@ -343,7 +343,7 @@ public class AmpARFilterConverter {
 	
 	private void addFinancingFilters() {
 		addCategoryValueNamesFilter(arFilter.getFinancingInstruments(), ColumnConstants.FINANCING_INSTRUMENT);
-		addCategoryValueNamesFilter(arFilter.getAidModalities(), ColumnConstants.MODALITIES);
+		addCategoryValueNamesFilter(arFilter.getAidModalities(), ColumnConstants.PLEDGES_AID_MODALITY);
 		addCategoryValueNamesFilter(arFilter.getTypeOfAssistance(), ColumnConstants.TYPE_OF_ASSISTANCE);
 		addCategoryValueNamesFilter(arFilter.getModeOfPayment(), ColumnConstants.MODE_OF_PAYMENT);
 		//TODO capital vs Recurrent

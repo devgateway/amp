@@ -304,7 +304,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 				&& spec.getHierarchies().size() < spec.getColumns().size()) {
 			cellDataSetActivities = new ArrayList<Integer>();
 		}
-	}
+	}	
 	
 	/**
 	 * Generates MDX Query string that can be passed to Saiku or any other MDX processor
@@ -344,7 +344,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 	}
 	
-	private MDXConfig toMDXConfig(ReportSpecification spec) throws AMPException {
+	protected MDXConfig toMDXConfig(ReportSpecification spec) throws AMPException {
 		MDXConfig config = new MDXConfig();
 		config.setCubeName(MoConstants.DEFAULT_CUBE_NAME);
 		config.setMdxName(spec.getReportName());

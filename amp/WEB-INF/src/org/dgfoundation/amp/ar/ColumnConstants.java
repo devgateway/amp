@@ -140,7 +140,7 @@ public class ColumnConstants {
 	public static final String MINISTRY_OF_FINANCE_CONTACT_PHONE = "Ministry Of Finance Contact Phone";
 	public static final String MINISTRY_OF_FINANCE_CONTACT_TITLE = "Ministry Of Finance Contact Title";
 	public static final String MINORITIES = "Minorities";
-	public static final String MODALITIES = "Modalities";
+	//public static final String MODALITIES = "Modalities";
 	public static final String MODE_OF_PAYMENT = "Mode of Payment";
 	public static final String MULTI_DONOR = "Multi Donor";
 	public static final String NATIONAL_PLANNING_OBJECTIVES = "National Planning Objectives";

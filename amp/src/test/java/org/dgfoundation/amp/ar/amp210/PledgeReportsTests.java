@@ -83,9 +83,9 @@ public class PledgeReportsTests extends MondrianReportsTestCase {
 	    .withContents("Pledges Titles", "Report Totals", "Pledges Type Of Assistance", "", "2012-Actual Pledge", "1 041 111,77", "2013-Actual Pledge", "1 800 000", "2014-Actual Pledge", "9 233 244,98", "Total Measures-Actual Pledge", "13 012 426,5")
 	    .withChildren(
 	      new ReportAreaForTests().withContents("Pledges Titles", "Test pledge 1", "Pledges Type Of Assistance", "default type of assistance, second type of assistance", "2012-Actual Pledge", "1,25", "2013-Actual Pledge", "0", "2014-Actual Pledge", "1 033 244,98", "Total Measures-Actual Pledge", "1 033 246,23"),
-	      new ReportAreaForTests().withContents("Pledges Titles", "ACVL Pledge Name 2", "Pledges Type Of Assistance", "default type of assistance", "2012-Actual Pledge", "0", "2013-Actual Pledge", "0", "2014-Actual Pledge", "0", "Total Measures-Actual Pledge", "938 069,75"),
+	      new ReportAreaForTests().withContents("Pledges Titles", "ACVL Pledge Name 2", "Pledges Type Of Assistance", "Undefined, default type of assistance", "2012-Actual Pledge", "0", "2013-Actual Pledge", "0", "2014-Actual Pledge", "0", "Total Measures-Actual Pledge", "938 069,75"),
 	      new ReportAreaForTests().withContents("Pledges Titles", "free text name 2", "Pledges Type Of Assistance", "default type of assistance", "2012-Actual Pledge", "1 041 110,52", "2013-Actual Pledge", "0", "2014-Actual Pledge", "0", "Total Measures-Actual Pledge", "1 041 110,52"),
-	      new ReportAreaForTests().withContents("Pledges Titles", "Heavily used pledge", "Pledges Type Of Assistance", "Undefined, default type of assistance, second type of assistance", "2012-Actual Pledge", "0", "2013-Actual Pledge", "1 800 000", "2014-Actual Pledge", "8 200 000", "Total Measures-Actual Pledge", "10 000 000"));
+	      new ReportAreaForTests().withContents("Pledges Titles", "Heavily used pledge", "Pledges Type Of Assistance", "Undefined, default type of assistance", "2012-Actual Pledge", "0", "2013-Actual Pledge", "1 800 000", "2014-Actual Pledge", "8 200 000", "Total Measures-Actual Pledge", "10 000 000"));
 		
 		runMondrianTestCase("AMP-17195-flat",
 			Arrays.asList("Test pledge 1", "ACVL Pledge Name 2", "free text name 2", "Heavily used pledge"), // pledge report -> pledge names

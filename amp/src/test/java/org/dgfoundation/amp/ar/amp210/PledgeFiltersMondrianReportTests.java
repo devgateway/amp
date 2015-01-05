@@ -69,7 +69,7 @@ public class PledgeFiltersMondrianReportTests extends MondrianReportsTestCase {
 					assertTrue(
 						String.format("while testing column %s, the SQL filters should have a superparent of %s, but instead have it as %s", column, genericParent, mrf.getSqlFilterRules().keySet().iterator().next()),
 						mrf.getSqlFilterRules().get(genericParent) != null);
-					System.err.println("aha: " + mrf.getSqlFilterRules().toString());
+					//System.err.println("aha: " + mrf.getSqlFilterRules().toString());
 					//System.err.println("aha: " + config.get);
 				};
 			};

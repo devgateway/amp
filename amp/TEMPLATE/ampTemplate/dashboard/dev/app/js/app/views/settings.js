@@ -19,7 +19,7 @@ module.exports = BackboneDash.View.extend({
     this.app.settings._loaded.done(_(function() {
       this.app.state.register(this, 'settings', {
         get: this.app.settings.toAPI,
-        set: this.app.settings.fromAPI
+        set: this.app.settings.fromState
       });
     }).bind(this));
   },

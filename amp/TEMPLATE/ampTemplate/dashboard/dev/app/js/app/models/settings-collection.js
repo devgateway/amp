@@ -4,6 +4,22 @@ var BackboneDash = require('../backbone-dash');
 var Setting = require('./setting');
 
 
+function isIntStr(n) {
+  // test whether a string starts with is a base-10 int
+  return !isNaN(parseInt(n, 10))
+}
+
+
+function tagIf(test, tag) {
+  return function(setting) {
+    if (test(setting)) {
+      setting[tag] = true;
+    }
+    return setting;
+  }
+}
+
+
 module.exports = BackboneDash.Collection.extend({
 
   url: '/rest/amp/settings',
@@ -15,24 +31,26 @@ module.exports = BackboneDash.Collection.extend({
   initialize: function(models, options) {
     this.app = options.app;
     this._loaded = new Deferred();
-    _.bindAll(this, 'toAPI', 'fromAPI');
+    _.bindAll(this, 'toAPI', 'fromState');
   },
 
   parse: function(settings) {
-    var goodSettings = _(settings).filter(function(setting) {
-      return !isNaN(parseInt(setting.id, 10));  // some settings are weird... take em out for now
-    }).map(function(setting) {  // mark defaults as selected
-      return _(setting).extend({
-        options: _(setting.options).map(function(option) {
-          if (option.id === setting.defaultId) {
-            return _(option).extend({ selected: true });
-          } else {
-            return option;
-          }
+    return _(settings).chain()
+      // mark weird options with non-int keys hidden
+      .map(tagIf(function(setting) { return !isIntStr(setting.id); }, 'ignore'))
+      // mark funding type setting hidden, since it's set per-chart...
+      .map(tagIf(function(setting) { return setting.id === '0'; }, 'ignore'))
+      // ...but also flag it so the charts can see the the funding type options
+      .map(tagIf(function(setting) { return setting.id === '0'; }, 'ftype'))
+      // mark all options as selected per the defaults provided
+      .map(function(setting) {
+        return _(setting).extend({
+          options: _(setting.options).map(tagIf(function(option) {
+            return option.id === setting.defaultId;
+          }, 'selected'))
         })
-      });
-    });
-    return goodSettings;
+      })
+      .value();
   },
 
   load: function() {
@@ -51,18 +69,32 @@ module.exports = BackboneDash.Collection.extend({
     return this._loaded.promise();
   },
 
-  toAPI: function() {
-    return this.reduce(function(payload, setting) {
-      payload[setting.id] = _(setting.get('options'))
-        .findWhere({selected: true}).id;
-      return payload;
-    }, {});
+  toAPI: function(overrides) {
+    // format selected filter options the way the api wants
+    // ignored filters are skipped (overrides are never removed though)
+    // overrides should be in the {settingId: settingOptionId} format the api expects
+    if (this.length === 0) { return {}; }  // cop out early if we don't have settings yet
+    return this.chain()
+      .map(function(model) { return model.toJSON(); })
+      .filter(function(setting) { return !setting.ignore; })
+      .reduce(function(apiFormatted, setting) {
+        apiFormatted[setting.id] = _(setting.options)
+          .findWhere({selected: true}).id;
+        return apiFormatted;
+      }, {})
+      .extend(overrides || {})
+      .value();
   },
 
-  fromAPI: function(state) {
+  fromState: function(state) {
+    // select options from an array with the same format we send to the api
     _(state).each(function(optId, settingId) {
       this.get(settingId).select(optId);
     }, this);
+  },
+
+  getVisible: function() {
+    return this.filter(function(setting) { return !setting.get('ignore'); });
   }
 
 });

@@ -1,7 +1,7 @@
 <div class="tab-content filter-options">
   <div class="tab-pane active">
     <ul class="sub-filters-titles nav nav-pills nav-stacked">
-      <% settings.each(function(setting) { %>
+      <% _(settings.getVisible()).each(function(setting) { %>
         <li <%= setting.id === current.id ? 'class="active"' : '' %>>
           <a class="setting-select" href="#<%= setting.id %>"><span><%= setting.get('name') %></span></a>
         </li>

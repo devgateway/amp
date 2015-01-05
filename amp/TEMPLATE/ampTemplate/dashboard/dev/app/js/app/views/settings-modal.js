@@ -17,7 +17,7 @@ module.exports = BackboneDash.View.extend({
   },
 
   render: function() {
-    if (!this.current) { this.current = this.app.settings.at(0); }
+    if (!this.current) { this.current = this.app.settings.getVisible()[0]; }
     this.$el.html(template({
       settings: this.app.settings,
       current: this.current

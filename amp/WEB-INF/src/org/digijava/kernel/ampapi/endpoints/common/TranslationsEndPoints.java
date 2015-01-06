@@ -41,7 +41,7 @@ public class TranslationsEndPoints {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@Consumes(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "Translations")
-	public JsonBean getLangPack(	final JsonBean param){
+	public JsonBean getLangPack(final JsonBean param){
 		
 		for (String key:param.any().keySet()) {
 			String newValue=

@@ -74,6 +74,9 @@ module.exports = Backbone.Model.extend({
             });
           }
         }
+        else {
+        	return v;
+        }
       });
     }
     return data;

@@ -97,7 +97,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 
 		//logger.info("BEFORE translation the schema is: " + contents);
 		contents = translateMeasuresAndColumns(contents, currentEnvironment.get().locale);
-		logger.info("AFTER translation the schema is: " + contents);
+		//logger.info("AFTER translation the schema is: " + contents);
 		
 		long delta = System.currentTimeMillis() - schemaProcessingStart;
 		logger.info("schema processing took " + delta + " ms");

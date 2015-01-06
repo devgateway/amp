@@ -73,17 +73,18 @@ public class AmpBudgetSectionFormTableFeature extends AmpFormTableFeaturePanel <
 		
 		//CategoryManagerUtil.getAmpCategoryValuesFromListByKey("budgetStructure")
 		Collection<AmpCategoryValue> posVal =  CategoryManagerUtil.getAmpCategoryValueCollectionByKey("budgetStructure");
-		
-		Iterator<AmpCategoryValue> it = posVal.iterator();
-		while(it.hasNext()){
-			AmpCategoryValue acv = it.next();
+		if(posVal!=null){
+			Iterator<AmpCategoryValue> it = posVal.iterator();
+			while (it.hasNext()) {
+				AmpCategoryValue acv = it.next();
 
-			AmpActivityBudgetStructure abs = new AmpActivityBudgetStructure();
-			abs.setActivity(am.getObject());
-			abs.setBudgetStructureName(TranslatorUtil.getTranslatedText(acv.getValue()));
-			abs.setBudgetStructurePercentage(new Float(0));
-			if(!setModel.getObject().contains(abs))
-				setModel.getObject().add(abs);
+				AmpActivityBudgetStructure abs = new AmpActivityBudgetStructure();
+				abs.setActivity(am.getObject());
+				abs.setBudgetStructureName(TranslatorUtil.getTranslatedText(acv.getValue()));
+				abs.setBudgetStructurePercentage(new Float(0));
+				if (!setModel.getObject().contains(abs))
+					setModel.getObject().add(abs);
+			}
 		}
 		
 		AbstractReadOnlyModel<List<AmpActivityBudgetStructure>> listModel = new AbstractReadOnlyModel<List<AmpActivityBudgetStructure>>() {

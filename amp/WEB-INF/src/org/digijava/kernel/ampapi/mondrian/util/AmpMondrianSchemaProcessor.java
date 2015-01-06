@@ -335,7 +335,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			return "1 = 1"; // no filtering to do whatsoever
 		
 		// compute intersection of all the sets in <sets>
-		Set<Long> result = sets.get(0);
+		Set<Long> result = new HashSet<>(sets.get(0));
 		for(int i = 1; i < sets.size(); i++)
 			result.retainAll(sets.get(i));
 		return String.format("mondrian_fact_table.entity_id IN (%s)", Util.toCSStringForIN(result));

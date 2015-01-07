@@ -73,9 +73,8 @@ module.exports = Backbone.Model.extend({
               return parseInt(v, 10);
             });
           }
-        }
-        else {
-        	return v;
+        } else {
+          return v;
         }
       });
     }

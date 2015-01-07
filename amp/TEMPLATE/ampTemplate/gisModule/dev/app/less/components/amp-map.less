@@ -92,28 +92,133 @@
   text-align:center;
 }
 
+/* 3 Less.js Mixin's for making 3 concentric semi-transparent circles */
+.circle-radius(@radius){
+  line-height: @radius - 2;
+  width: @radius;
+  /* TODO(thadk) try to use height as in project sites to avoid strange ovals for small sizes */
+  /* TODO(thadk): Adjust margin-left based on side, 15 is for 30 */
+  margin-left: 30px - (@radius/2px);
+
+}
+.shadow-radius(@radius) {
+  @bigger: 6;
+  @shadow-radius: @radius + @bigger;
+  margin-left: 0;
+  left: 0px;
+  top: -3px;
+  .circle-radius(@shadow-radius);
+}
+.outer-shadow-radius(@radius) {
+  @bigger: 12;
+  @shadow-radius: @radius + @bigger;
+  margin-left: 0;
+  left: 0px;
+  top: -5px;
+  .circle-radius(@shadow-radius);
+}
+
+/* The primary circle with four sizes (small, normal, medium, large) */
 .map-circle {
-  background: #f77;
-  border:1px solid rgb(205, 95, 95);
+  /* Normal size, 22 (minus 8 for smallest) is lowest recommended */
+  @base-radius: 22px;
+
+  /* hsva(0, 53.3, 100.0, 0.25) */
+  background: rgb(255,119,119);
+  /*border:1px solid rgb(205, 95, 95);*/
   color: #fff;
   font-weight: bold;
   text-align: center;
+  text-shadow: 0 0 3px #003;
   border-radius: 50%;
   -moz-border-radius: 50%;
-  line-height: 28px;
-  width: 30px;
-  margin-left: 15px;
+  .circle-radius(@base-radius);
+
+  /* If @base-radius <= 22 then line-height here should be = radius */
+  line-height: 22px;
+
+  &:before {
+    /* hsva(0, 62.7, 100.0, 0.25) */
+    background: rgba(205, 95, 95, 0.25);
+    /* Some content is needed */
+    content: ".";
+    z-index: -1;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    position: absolute;
+    .legend-sample & {
+      display: none;
+    }
+    .shadow-radius(@base-radius);
+  }
+  &:after {
+    background: rgba(205, 95, 95, 0.1);
+    content: ".";
+    z-index: -3;
+    border-radius: 50%;
+    -moz-border-radius: 50%;
+    position: absolute;
+    display: inline-block;
+    .legend-sample & {
+      display: none;
+    }
+    .outer-shadow-radius(@base-radius);
+  }
+
+  &.smaller {
+    @my-radius: @base-radius - 8;
+    .circle-radius(@my-radius);
+
+    /*TODO: add conditional mixin for this special case.
+      For small radii like less than 20, line-height should be the same */
+    line-height: @my-radius;
+
+    &:before {
+      .shadow-radius(@my-radius);
+      line-height: @my-radius + 6;
+    }
+    &:after {
+      .outer-shadow-radius(@my-radius);
+      line-height: @my-radius + 10;
+    }
+
+  }
+
+  &.medium {
+    @my-radius: @base-radius + 4;
+    .circle-radius(@my-radius);
+    &:before {
+      .shadow-radius(@my-radius);
+    }
+    &:after {
+      .outer-shadow-radius(@my-radius);
+    }
+  }
+
+  &.large {
+    @my-radius: 40px;
+    &:before {
+      .shadow-radius(@my-radius);
+    }
+    &:after {
+      .outer-shadow-radius(@my-radius);
+    }
+    .circle-radius(@my-radius);
+    margin-left: 10px;
+
+  }
+
+  &.invert {
+    border-color: rgb(255,119,119);
+    background: rgb(205, 95, 95);
+  }
 }
 
-.map-circle.large {
-  width:40px;
-  line-height:40px;
-  margin-left:12px;
-}
 
 .map-circle-label {
   font-size: 0.8em;
   background: rgba(255, 255, 255, 0.5);
+  /*text-shadow: 1px 1px 2px #FFF;*/
   padding:1px;
   border-radius: 2px;
 }

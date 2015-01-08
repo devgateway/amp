@@ -172,6 +172,7 @@
 -->
 
 <script type="text/javascript" src="js/saiku/plugins/I18n/plugin.js"></script>
+<script type="text/javascript" src="js/saiku/plugins/Sorting/plugin.js"></script>
 <!-- Saiku plugins -->
 
 
@@ -911,6 +912,47 @@
             </li>
         </ul>
         </script>
+	<script type="text/x-jquery-tmpl" id="template-sorting-popup">
+		<div>
+			<table style='width: 100%;'>
+				<tr style='width: 100%;'>
+					<td style='width: 100%;'>
+						<span>
+							Hierarchy Level:					
+							<select id='levelPicked'>
+								<% _.each(hierarchies, function(hierarchy) { %>
+                           			<option id='<%= hierarchy.entityName %>'><%= hierarchy.textValue %></option>
+                				<% }); %>
+							</select>
+						</span>
+					</td>
+				</tr>
+				<tr style='width: 100%;'>
+					<td style='width: 100%;'>
+						<span>
+							Sort By:					
+							<select id='levelSorter'>
+								<% _.each(columns, function(column) { %>
+                           			<option id='<%= column.entityName %>'><%= column.columnName %></option>
+                				<% }); %>
+							</select>
+						</span>
+					</td>
+				</tr>
+				<tr style='width: 100%;'>
+					<td style='width: 100%;'>
+						<span>
+							Sort Order:					
+							<select name="levelSortOrder" class="dropdwn_sm">
+								<option value="ascending">Ascending</option>
+								<option value="descending">Descending</option>
+							</select>
+						</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+    </script>
 	<!-- Start of changes for AMP Filters. Move this to the plugin functionality -->
 	<div id='filters-container' class='panel panel-primary' style="display:none;width:810px;"></div>
 	<div id="settings-container" class='panel panel-primary'

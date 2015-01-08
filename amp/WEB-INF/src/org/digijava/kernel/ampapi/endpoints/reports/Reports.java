@@ -321,7 +321,34 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final QueryResult getSaikuReport(JsonBean queryObject, @PathParam("report_id") Long reportId) {
 		QueryResult result;
+		List<Map<String, Object>> sorting = new ArrayList<Map<String, Object>>();
 		try {
+			// Convert frontend sorting params into ReportUtils sorting params.
+			if (((HashMap) queryObject.get("queryModel")).get(EPConstants.SORTING) != null) {				
+				List<Map> auxColumns = ((List) ((HashMap) queryObject.get("queryModel")).get(EPConstants.SORTING));
+				Iterator<Map> iCols = auxColumns.iterator();
+				while (iCols.hasNext()) {
+					Map<String, Object> newCol = new HashMap<String, Object>();
+					Boolean asc = true;
+					Map<String, Object> auxCol = iCols.next();
+					if (auxCol.get("asc").equals(true)) {
+						asc = true;
+					} else {
+						asc = false;
+					}
+					List<String> auxColNames = new ArrayList<String>();
+					String[] composedNames = auxCol.get("columnName").toString().split(",");
+					for(int i = 0; i < composedNames.length; i++) {
+						auxColNames.add(composedNames[i].toString().trim());
+						newCol.put("columns", auxColNames);
+						newCol.put("asc", asc);
+					}					
+					sorting.add(newCol);
+				}
+				queryObject.set(EPConstants.SORTING, sorting);				
+				logger.info(sorting);
+			}
+					
 			result = RestUtil.convert(getSaikuCellDataSet(queryObject, reportId));
 			result.setQuery(new ThinQuery());
 		} catch (Exception e) {
@@ -351,8 +378,11 @@ public class Reports {
 			if(filterRules != null) spec.setFilters(filterRules);
 			if(queryModel.containsKey("settingsApplied") && (Boolean)queryModel.get("settingsApplied")) {
 				SettingsUtils.applySettings(spec, extractSettings(queryModel));
-			}
+			}						
+						
+			boolean resort = ReportsUtil.configureSorting((ReportSpecificationImpl) spec, queryObject);			
 			report = (SaikuGeneratedReport) generator.executeReport(spec);
+			
 			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + report.generationTime + "(ms)");
 		} catch (Exception e) {
 			logger.error("Cannot execute report (" + ampReport + ")", e);

@@ -119,6 +119,7 @@ var QueryRouter = Backbone.Router.extend({
 			templateQuery.cube.connection = data.reportMetadata.connection;
 			templateQuery.cube.catalog = data.reportMetadata.catalog;
 			templateQuery.cube.schema = data.reportMetadata.schema;
+			templateQuery.reportSpec = data.reportSpec;
 			Settings.RESULTS_PER_PAGE = data.reportMetadata.recordsPerPage;
 
 			var model = Backbone.Model.extend({
@@ -126,7 +127,9 @@ var QueryRouter = Backbone.Router.extend({
 					file: data.reportMetadata.name,
 					report_id: report_id,
 					filters: data.reportMetadata.reportSpec.filters,
-					settings: data.reportMetadata.reportSpec.settings
+					settings: data.reportMetadata.reportSpec.settings,
+					hierarchies : data.reportMetadata.reportSpec.hierarchies,
+					columns : data.reportMetadata.reportSpec.columns
 				},
 				initialize: function(){
 					//console.log("model created");

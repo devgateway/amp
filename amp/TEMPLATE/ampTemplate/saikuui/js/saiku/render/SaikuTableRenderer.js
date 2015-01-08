@@ -73,10 +73,12 @@ SaikuTableRenderer.prototype._render = function(data, options) {
                         });
                     }
                 });
+                data.workspace.trigger('saikuTableRender:tableRenderedInDOM', self);
                 return html;
             });
         } else {
             var html =  this.internalRender(this._data, self._options);
+            data.workspace.trigger('saikuTableRender:tableRenderedInDOM', self);
             return html;
         }
         
@@ -418,7 +420,9 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
                     } else {
                     	if (totalsLists[ROWS])
                     		colSpan = totalsLists[ROWS][row + 1][scanIndexes[ROWS][row + 1]].span;
-                    	rowContent += '<th class="col" style="text-align: center;" colspan="' + colSpan + '" title="' + header.value + '"><div rel="' + row + ":" + col +'">' + header.value + '</div></th>';    
+                    	console.log(header);
+                    	var auxId = header.properties.uniquename.replace(/\]/gm, "").replace(/\[/gm, "").replace(/\./gm, "").replace(/ /gm, "");
+                    	rowContent += '<th id="' + auxId + '" class="col" style="text-align: center;" colspan="' + colSpan + '" title="' + header.value + '" data-uniquename="' + header.properties.uniquename + '" data-dimension="' + header.properties.dimension + '" data-hierarchy="'+ header.properties.hierarchy + '" data-level="' + header.properties.level + '"><div rel="' + row + ":" + col +'">' + header.value + '</div></th>';
                     }
                     
                 } else {
@@ -434,7 +438,8 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
                         } else {
                         	if (totalsLists[ROWS])
                         		colSpan = totalsLists[ROWS][row + 1][scanIndexes[ROWS][row + 1]].span;
-                            rowContent += '<th class="col" style="text-align: center;" colspan="' + (colSpan == 0 ? 1 : colSpan) + '" title="' + header.value + '"><div rel="' + row + ":" + col +'">' + header.value + '</div></th>';
+                        	var auxId = header.properties.uniquename.replace(/\]/gm, "").replace(/\[/gm, "").replace(/\./gm, "").replace(/ /gm, "");
+                            rowContent += '<th id="' + auxId + '" class="col" style="text-align: center;" colspan="' + (colSpan == 0 ? 1 : colSpan) + '" title="' + header.value + '" data-uniquename="' + header.properties.uniquename + '" data-dimension="' + header.properties.dimension + '" data-hierarchy="'+ header.properties.hierarchy + '" data-level="' + header.properties.level + '"><div rel="' + row + ":" + col +'">' + header.value + '</div></th>';
                         }
                         colSpan = 1;
                     } else {
@@ -498,7 +503,9 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
                 rowContent += '<th class="' + cssclass + '" ' + (colspan > 0 ? ' colspan="' + colspan + '"' : "") + tipsy + '>' + value + '</th>';
             }
             else if (header.type === "ROW_HEADER_HEADER") {
-                rowContent += '<th class="row_header"><div>' + header.value + '</div></th>';
+            	var auxId = header.properties.level.replace(/\]/gm, "").replace(/\[/gm, "").replace(/\./gm, "").replace(/ /gm, "");
+				rowContent += '<th id="'+ auxId + '" class="row_header" data-dimension="' + header.properties.dimension + '" data-hierarchy="'+ header.properties.hierarchy + 
+					'" data-level="' + header.properties.level + '"><div>' + header.value + '</div></th>';
                 isHeaderLowestLvl = true;
                 processedRowHeader = true;
                 lowestRowLvl = col;

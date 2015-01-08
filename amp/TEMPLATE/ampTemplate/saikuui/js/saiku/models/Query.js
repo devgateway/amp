@@ -156,6 +156,10 @@ var Query = Backbone.Model.extend({
         		this.set('settings', settings);
         		settingsApplied = true;
         	}
+        	
+        	if(Saiku.Sorting != undefined && Saiku.Sorting.currentSorting.length > 0) {
+        		this.set('sorting', Saiku.Sorting.currentSorting);
+        	}
 
         	exModel = this.workspace.currentQueryModel;
         	exModel.queryModel.filters = this.get('filters');
@@ -165,6 +169,7 @@ var Query = Backbone.Model.extend({
         	if(Settings.PAGINATION) {
         		exModel.queryModel.page = this.get('page');
         	}
+        	exModel.queryModel.sorting = this.get('sorting');     
         }
         else if (exModel.queryType == "OLAP") {
             if (exModel.type == "QUERYMODEL") {

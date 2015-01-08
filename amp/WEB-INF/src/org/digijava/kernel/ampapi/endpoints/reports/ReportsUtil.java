@@ -295,7 +295,7 @@ public class ReportsUtil {
 	 * @param formParams
 	 * @return true if sorting configuration changed
 	 */
-	private static boolean configureSorting(ReportSpecificationImpl spec, JsonBean formParams) {
+	public static boolean configureSorting(ReportSpecificationImpl spec, JsonBean formParams) {
 		List<SortingInfo> newSorters = new ArrayList<SortingInfo>();
 		
 		if (formParams.get(EPConstants.SORTING) != null) {

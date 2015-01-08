@@ -89,7 +89,7 @@ public class AmpDonorFundingFormSectionFeature extends
 	private final static String[] ACTIVITY_ROLE_FILTER = { Constants.FUNDING_AGENCY };
 	private final static String[] SSC_ROLE_FILTER = { Constants.FUNDING_AGENCY,
 			Constants.EXECUTING_AGENCY, Constants.BENEFICIARY_AGENCY };
-	public final static String[] DISBURSEMENTS_ROLE_FILTER = new String[] {
+	public final static String[] FUNDING_FLOW_ROLE_FILTER = new String[] {
 			Constants.IMPLEMENTING_AGENCY, Constants.EXECUTING_AGENCY,
 			Constants.BENEFICIARY_AGENCY };
 	private final ValueWrapper<Boolean> isOverviewVisible=new ValueWrapper<Boolean>(false);

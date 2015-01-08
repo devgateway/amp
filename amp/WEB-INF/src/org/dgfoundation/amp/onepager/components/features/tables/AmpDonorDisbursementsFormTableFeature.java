@@ -140,7 +140,7 @@ public class AmpDonorDisbursementsFormTableFeature extends
 				AmpOrgRoleSelectorComponent orgRoleSelector=new AmpOrgRoleSelectorComponent("orgRoleSelector", 
 						new PropertyModel<AmpActivityVersion>(model,"ampActivityId"), new PropertyModel<AmpRole>(item.getModel(),"recipientRole"),
                         new PropertyModel<AmpOrganisation>(item.getModel(),"recipientOrg"),
-                        true, AmpDonorFundingFormSectionFeature.DISBURSEMENTS_ROLE_FILTER, true);
+                        true, AmpDonorFundingFormSectionFeature.FUNDING_FLOW_ROLE_FILTER, true);
 				
 				item.add(orgRoleSelector);
 				

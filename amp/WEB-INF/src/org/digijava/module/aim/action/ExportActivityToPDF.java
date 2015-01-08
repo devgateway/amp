@@ -274,8 +274,7 @@ public class ExportActivityToPDF extends Action {
 				createGeneralInfoRow(mainLayout,columnName,columnVal);
 			}
 
-			if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Modalities")){
-				
+			if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Modalities")) {
 				columnName=TranslatorWorker.translateText("Modalities");
 				columnVal=identification.getSscModalitiesAsString("\n");
 				createGeneralInfoRow(mainLayout,columnName,columnVal);

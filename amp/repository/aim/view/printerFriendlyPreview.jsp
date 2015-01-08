@@ -156,7 +156,7 @@ body {background:none;}
 									<c:out value="${aimEditActivityForm.identification.ssc_typeOfImplementation}"/>
 									</tr>
 								</module:display>
-								<module:display name="/Activity Form/Funding/Overview Section/Modalities" parentModule="/Activity Form/Funding/Overview Section">
+								<module:display name="/Activity Form/Funding/Modalities" parentModule="/Activity Form/Funding">
 								<tr>
 									<td width="27%" align="right" valign="top" nowrap="nowrap">
 									<b><digi:trn>Modalities</digi:trn></b>

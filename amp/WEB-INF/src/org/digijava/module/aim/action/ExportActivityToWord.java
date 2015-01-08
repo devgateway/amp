@@ -2858,12 +2858,10 @@ public class ExportActivityToWord extends Action {
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 
-		if(FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Modalities")){
-			
+		if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Modalities")) {
 			columnName=TranslatorWorker.translateText("Modalities");
 			//for AMP-17127 they are multiple modalities for activities of SSC
 			columnVal=identification.getSscModalitiesAsString("\n");
-			
 			generateOverAllTableRows(identificationSubTable1,columnName,columnVal,null);
 		}
 

@@ -262,6 +262,7 @@ public static List<JsonBean> getOrgGroups() {
 						" o.org_grp_id grpId  "+
 						" from amp_org_role aor,amp_organisation o "+
 						" where aor.organisation=o.amp_org_id " +
+						" AND o.amp_org_id IN (select DISTINCT(amp_donor_org_id) FROM amp_funding) " +
 						" and aor.role IN " +
 							"(SELECT r.amp_role_id FROM amp_role r WHERE r.role_code IN (" + 
 							Util.toCSStringForIN(roleCodes) + "))" +

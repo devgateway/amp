@@ -14,6 +14,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
@@ -24,11 +25,14 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
-import org.digijava.module.translation.form.TranslationForm;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.translation.util.TranslationManager;
 
 @Path("translations")
 public class TranslationsEndPoints {
+	
+	private static final Logger LOGGER = Logger.getLogger(TranslationsEndPoints.class); 
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
@@ -84,4 +88,41 @@ public class TranslationsEndPoints {
         locale.setCode(langCode);
         DgUtil.switchLanguage(locale, TLSUtils.getRequest(), response);
 	}
+	
+	
+	/**
+	 * Gets the list of available languages for a site when multilingual is enabled.
+	 * When multilingual is disabled it returns the effective language (e.g. either the currently-set one OR 
+	 * the default one ("en")). 
+	 * @return List <SimpleJsonBean> with the available Locale
+	 */
+	@SuppressWarnings("rawtypes")
+	@GET
+	@Path("/multilingual-languages/")
+	@ApiMethod(ui = false, id = "multilingualLanguages")
+	public List<SimpleJsonBean> getMultilingualLanguages() {
+		List<SimpleJsonBean> languages = new ArrayList<SimpleJsonBean>();
+		try {
+			List locales = TranslationManager.getLocale(PersistenceManager.getRequestDBSession());
+			boolean onlyCurrentLanguage = !"true".equalsIgnoreCase(FeaturesUtil
+					.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL));
+			Iterator iter = locales.iterator();
+			while (iter.hasNext()) {
+				Object[] localeRecord = (Object[]) iter.next();
+				if (onlyCurrentLanguage) {
+					if (localeRecord[0].equals(TLSUtils.getEffectiveLangCode())) {
+						languages.add(new SimpleJsonBean((String) localeRecord[0], (String) localeRecord[1]));
+						break;
+					}
+				} else {
+					languages.add(new SimpleJsonBean((String) localeRecord[0], (String) localeRecord[1]));
+				}
+			}
+
+		} catch (DgException e) {
+			LOGGER.warn("Couldn't obtain the list of locales", e);
+		}
+		return languages;
+	}
+
 }

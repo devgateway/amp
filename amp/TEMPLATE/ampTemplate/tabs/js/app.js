@@ -12,6 +12,9 @@ define(
 				FilterManager, TranslationManager, DocumentsWidgetManager, jQuery) {
 
 			var tabContainer = jQuery('#tabs-container');
+			
+			//the languages should be retrieved when the tabs are loading.
+			TranslationManager.getAvailableLanguages();
 
 			// Create our Marionette app.
 			app.TabsApp = new Marionette.Application();

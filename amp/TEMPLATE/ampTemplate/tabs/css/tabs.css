@@ -471,3 +471,51 @@ th.ui-th-column div {
 .ui-jqgrid tr.ui-row-ltr td a img:hover {
 	opacity: 0.6;
 }
+
+.tab.active li a{
+	background-color:grey;
+}
+
+.save-tab {
+	border-collapse: separate;
+	border: 1px solid #999;
+	padding: .25em .5em;
+	background: #edf5ff;
+}
+
+.save-text {
+	border-radius: 4px !important;
+	padding: 0.05em !important;
+	margin: 0.4em 0.12em !important;
+	width: 85%;
+}
+
+.nav > ul {
+	border-bottom: 1px solid #ddd;
+} 
+.nav > li.tab {
+border: 1px solid #BEBDB6;
+background-color: #ededed;
+margin-right: 3px;
+float: left;
+margin-bottom: -1px;
+position: relative;
+display: block;
+}
+
+.nav > li.tab.focused {
+font-weight: bold;
+background-color: white;
+}
+
+.nav > li.tab.focused > a {
+background-color: white;
+}
+
+.nav > li.tab > a {
+padding: 5px 5px;
+margin-right: 2px;
+line-height: 1.42857143;
+border: 1px solid transparent;
+border-radius: 4px 4px 0 0;
+}

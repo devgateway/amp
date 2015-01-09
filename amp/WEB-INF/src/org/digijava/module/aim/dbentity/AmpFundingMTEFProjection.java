@@ -14,6 +14,9 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 public class AmpFundingMTEFProjection implements Cloneable, Serializable, Comparable<AmpFundingMTEFProjection>, FundingInformationItem {
 	
 	
+
+	private static final long serialVersionUID = -1583797313318079006L;
+
 	public static class FundingMTEFProjectionComparator implements Comparator<AmpFundingMTEFProjection>, Serializable {
 
 		/**
@@ -44,6 +47,9 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 		private Date projectionDate;
 		private AmpFunding  ampFunding;
 		private Date reportingDate;
+		
+		private AmpOrganisation recipientOrg;
+		private AmpRole recipientRole;
 		
 		public Date getReportingDate() {
 			return reportingDate;
@@ -125,14 +131,21 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 				
 		public AmpOrganisation getRecipientOrg()
 		{
-			return null;
+			return recipientOrg;
 		}
 		
 		public AmpRole getRecipientRole()
 		{
-			return null;
+			return recipientRole;
 		}
 		
+		
+		public void setRecipientOrg(AmpOrganisation recipientOrg) {
+			this.recipientOrg = recipientOrg;
+		}
+		public void setRecipientRole(AmpRole recipientRole) {
+			this.recipientRole = recipientRole;
+		}
 		public Integer getTransactionType()
 		{
 			return Constants.MTEFPROJECTION;

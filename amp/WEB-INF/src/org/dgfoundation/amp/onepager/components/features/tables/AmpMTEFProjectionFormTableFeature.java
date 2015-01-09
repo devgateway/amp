@@ -14,13 +14,18 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;
+import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -37,7 +42,7 @@ public class AmpMTEFProjectionFormTableFeature extends
 	 * @throws Exception
 	 */
 	public AmpMTEFProjectionFormTableFeature(String id, String fmName,
-			IModel<AmpFunding> model) throws Exception {
+			final IModel<AmpFunding> model) throws Exception {
 		super(id, model, fmName);
 		
 		getTableId().add(new AttributeModifier("width", "620"));
@@ -82,6 +87,8 @@ public class AmpMTEFProjectionFormTableFeature extends
 						target.appendJavaScript(OnePagerUtil.getClickToggleJS(parent.getFundingInfo().getSlider()));
 					};
 				});
+				//we create the role selector for recipient organization for commitments
+				item.add(OnePagerUtil.getFundingFlowRoleSelector(model, item.getModel()));
 			}
 		};
 		add(list);

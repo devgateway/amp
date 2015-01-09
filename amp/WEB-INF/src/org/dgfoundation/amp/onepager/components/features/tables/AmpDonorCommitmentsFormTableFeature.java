@@ -132,13 +132,10 @@ public class AmpDonorCommitmentsFormTableFeature extends
 					};
 				});
 				//we create the role selector for recipient organization for commitments
-				AmpOrgRoleSelectorComponent orgRoleSelector=new AmpOrgRoleSelectorComponent("orgRoleSelector", 
-						new PropertyModel<AmpActivityVersion>(model,"ampActivityId"), new PropertyModel<AmpRole>(item.getModel(),"recipientRole"),
-                        new PropertyModel<AmpOrganisation>(item.getModel(),"recipientOrg"),
-                        true, AmpDonorFundingFormSectionFeature.FUNDING_FLOW_ROLE_FILTER, true);
-				
-				item.add(orgRoleSelector);
+				item.add(OnePagerUtil.getFundingFlowRoleSelector(model, item.getModel()));
 			}
+
+			
 		};
 		add(list);
 	}

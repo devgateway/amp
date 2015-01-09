@@ -13,6 +13,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module"%>
 
 <digi:instance property="aimEditActivityForm" />
+			<c:set var="transaction" value="MTEF Projections/MTEF Projections Table" scope="page"/>
 <c:if test="${!empty funding.mtefDetails}">
     <tr bgcolor="#FFFFCC">
         <td height="20" colspan="3" valign="bottom" bgcolor="#FFFFCC" style="text-transform: uppercase;">
@@ -29,7 +30,7 @@
 		<logic:equal name="fundingDetail" property="transactionType" value="3">
 			<c:set var="showFiscalYear" value="true" />
 			<%@include file="previewActivityFundingDetail.jspf" %>
-			<c:remove var="showFiscalYear"/> 
+			<c:remove var="showFiscalYear"/>
 		</logic:equal>
    	</logic:iterate>
 
@@ -50,6 +51,6 @@
 <tr>
     <td colspan="4" height="7px"></td>
 </tr>
-
+<c:remove var="transaction"/>
 
 

@@ -18,7 +18,7 @@
 <!--start commitments-->
 <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Commitments" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
-														
+<c:set var="transaction" value="Commitments/Commitments Table" scope="page"/>
 <c:if test="${aimEditActivityForm.funding.showPlanned}">
 	
 <c:if test="${!empty funding.plannedCommitmentsDetails}">
@@ -248,5 +248,6 @@
         </c:if>
 </c:if>	
         <tr><td colspan="4" height="7px"></td></tr>
+			<c:remove var="transaction"/>
      </module:display>
 <!-- End commitments-->

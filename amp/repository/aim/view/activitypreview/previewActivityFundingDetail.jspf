@@ -14,7 +14,17 @@ second row (if any):
 other rows (if any): capital spending percent / classification / attached pledge
 	col 1: spacing
 	col 2,3,4:  	
+ 
+ 	/**
+	 * values of transactionType
+	 * public static final int COMMITMENT = 0 ;
+	 * public static final int DISBURSEMENT = 1 ;
+	 * public static final int EXPENDITURE = 2 ;
+	 * public static final int DISBURSEMENT_ORDER = 4 ;
+	 * public static final int MTEFPROJECTION = 3 ;
+
  --%>
+
 <tr bgcolor="#ffffff">
 	<td width="40%" align="right"  bgcolor="#FFFFFF">
 		<digi:trn><b><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></b></digi:trn>
@@ -59,12 +69,15 @@ other rows (if any): capital spending percent / classification / attached pledge
 	</tr>
 </logic:present>
 <logic:present name="fundingDetail" property="recipientOrganisation">
+<module:display name="/Activity Form/Funding/Funding Group/Funding Item/${transaction}/Recipient Org Role"  
+													parentModule="/Activity Form/Funding/Funding Group/Funding Item/${transaction}">
 	<tr>
 		<td colspan="1">&nbsp;</td>
 		<td colspan="3" align="right">
 			<digi:trn>Recipient</digi:trn>:&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><digi:trn>&nbsp;as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;			
 		</td>
 	</tr>
+	</module:display>
 </logic:present>
 <logic:present name="fundingDetail" property="classification">
 	<tr>

@@ -14,6 +14,7 @@
 <digi:instance property="aimEditActivityForm" />
 <module:display name="/Activity Form/Funding/Funding Group/Funding Item/Disbursements" 
 														parentModule="/Activity Form/Funding/Funding Group/Funding Item">
+<c:set var="transaction" value="Disbursements/Disbursements Table" scope="page"/>
 <c:if test="${aimEditActivityForm.funding.showPlanned}">
 <c:if test="${!empty funding.plannedDisbursementDetails}">
 	<tr bgcolor="#ffffff">
@@ -34,7 +35,7 @@
 	<logic:iterate name="funding" property="fundingDetails"
 		id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 		<logic:equal name="fundingDetail" property="transactionType" value="1">
-			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Planned">			
+			<logic:equal name="fundingDetail" property="adjustmentTypeName.value" value="Planned">
 				<%@include file="previewActivityFundingDetail.jspf" %>
 			</logic:equal>
 		</logic:equal>
@@ -144,6 +145,7 @@
 	</c:if>
 	
 	<tr><td colspan="4" height="7px"></td></tr>
+	<c:remove var="transaction"/>
 </module:display>
 
 

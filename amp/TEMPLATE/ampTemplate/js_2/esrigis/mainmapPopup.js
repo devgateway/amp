@@ -109,7 +109,9 @@ function onMapClick (e) {
 	circlePoint.on('contextmenu', function(e) {
 		selectedPointEvent = e;
 		isMenuOpen = true;
-		showMenu (e.originalEvent.clientY,e.originalEvent.clientX);
+	     var y = e.originalEvent.clientY;
+	     var x = e.originalEvent.clientX;
+		showMenu (y,x);
 	});
 	
 }
@@ -171,8 +173,9 @@ function showNewResults(candidates) {
 							+ "<br>Score: " + feature.properties.score
 							+ "<br>FCL:" + feature.geometry.type);
 					layer.on('contextmenu', function(e) {
-					   
-					    showMenu (e.originalEvent.y,e.originalEvent.x);
+						var y = e.originalEvent.clientY;
+					    var x = e.originalEvent.clientX;
+					    showMenu (y,x);
 						isMenuOpen = true;
 						selectedPointEvent = e;
 					});

@@ -628,8 +628,7 @@ public class ReportWizardAction extends MultiAction {
 	 * @throws Exception
 	 */
 	protected ActionForward serializeReportAndOpen(AmpReports ampReport, TeamMember teamMember, 
-			HttpServletRequest request, HttpServletResponse response) throws Exception
-	{
+			HttpServletRequest request, HttpServletResponse response) throws Exception {
 		if (ampReport.getOwnerId() == null)
 			throw new RuntimeException("should not save a report without an ownerId!");
 		
@@ -641,8 +640,7 @@ public class ReportWizardAction extends MultiAction {
 		//public static void serialize(Object obj, String prefix, String propertyName, Session session, HttpServletRequest request)
 		MultilingualInputFieldValues.serialize(ampReport, "name", null, null, request);			
 		
-		if ((request.getParameter("openReport") != null) && request.getParameter("openReport").equals("true"))
-		{
+		if ((request.getParameter("openReport") != null) && request.getParameter("openReport").equals("true")) {
 			PrintWriter out = response.getWriter();
 			out.write("openReportId=" + ampReport.getAmpReportId());
 			out.flush();
@@ -651,7 +649,7 @@ public class ReportWizardAction extends MultiAction {
 		return null;		
 	}
 	
-	private AmpReports loadSourceReport(HttpServletRequest request){
+	private AmpReports loadSourceReport(HttpServletRequest request) {
 		String ampReportId			= request.getParameter("reportId");
 		String backupAmpReportId = (String) request.getSession().getAttribute("report_wizard_current_id");
 		

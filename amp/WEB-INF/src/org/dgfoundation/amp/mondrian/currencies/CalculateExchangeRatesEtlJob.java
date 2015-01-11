@@ -60,7 +60,7 @@ public class CalculateExchangeRatesEtlJob {
 		 */
 
 		String condition = etlConfig.fullEtl ? "" : 
-			String.format(" WHERE (%s) OR (%s.%sdate_code IN (%s))", etlConfig.activityIdsIn(cag.entityIdColumn), cag.destinationTable, cag.prefix, Util.toCSStringForIN(usedDates));
+			String.format(" WHERE (%s) OR (%s.%sdate_code IN (%s))", etlConfig.entityIdsIn(cag.entityIdColumn), cag.destinationTable, cag.prefix, Util.toCSStringForIN(usedDates));
 				
 		if (currencyIds.size() > 2) {
 			// smart
@@ -137,7 +137,7 @@ public class CalculateExchangeRatesEtlJob {
 			res.addAll(etlConfig.dateCodes);
 		
 		for (CurrencyAmountGroup cag:MondrianTablesRepository.CURRENCY_GROUPS) {
-			String where = etlConfig.fullEtl ? "" : ("WHERE " + etlConfig.activityIdsIn(cag.containingEntityIdColumn));
+			String where = etlConfig.fullEtl ? "" : ("WHERE " + etlConfig.entityIdsIn(cag.containingEntityIdColumn));
 			String query = String.format("select distinct(%sdate_code) as day_code from %s %s", cag.prefix, cag.containingTable, where);
 			res.addAll(SQLUtils.fetchLongs(monetConn.conn, query));
 		}

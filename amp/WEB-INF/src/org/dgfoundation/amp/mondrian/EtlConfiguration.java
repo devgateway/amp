@@ -32,6 +32,12 @@ public class EtlConfiguration {
 	}
 	
 	protected String activityIdsInQuery;
+	
+	/**
+	 * builds an SQL subfragment which filters based on the activity IDs
+	 * @param prefix
+	 * @return
+	 */
 	public String activityIdsIn(String prefix) {
 		//if (fullEtl) return "1=1"; 
 		if (activityIdsInQuery == null)
@@ -40,12 +46,38 @@ public class EtlConfiguration {
 	}
 	
 	protected String pledgeIdsInQuery;
+	
+	/**
+	 * builds an SQL subfragment which filters based on the pledge IDs
+	 * @param prefix
+	 * @return
+	 */
 	public String pledgeIdsIn(String prefix) {
 		//if (fullEtl) return "1=1"; 
 		if (pledgeIdsInQuery == null)
 			pledgeIdsInQuery = " IN (" + Util.toCSStringForIN(pledgeIds) + ")";
 		return prefix + pledgeIdsInQuery;
 	}
+	
+	protected String entityIdsInQuery;
+	/**
+	 * builds an SQL subfragment which filters based on the entity IDs (activity IDs + shifted pledge IDs)
+	 * @param prefix
+	 * @return
+	 */
+	public String entityIdsIn(String prefix) {
+		//if (fullEtl) return "1=1"; 
+		if (entityIdsInQuery == null)
+			entityIdsInQuery = " IN (" + Util.toCSStringForIN(getAllEntityIds()) + ")";
+		return prefix + entityIdsInQuery;
+	}
+	public Set<Long> getAllEntityIds() {
+		Set<Long> res = new java.util.HashSet<>(this.activityIds);
+		for(long pledgeId:this.pledgeIds)
+			res.add(pledgeId + MondrianETL.PLEDGE_ID_ADDER);
+		return res;
+	}
+	
 	
 	@Override public String toString() {
 		return String.format("activities: <%s>; pledges: <%s>; dates: <%s>", 

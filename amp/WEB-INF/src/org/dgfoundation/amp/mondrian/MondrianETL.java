@@ -253,8 +253,7 @@ private EtlResult execute() throws Exception {
 		
 		previousEtlEventId = Long.valueOf(
 				monetConn.tableExists(Fingerprint.FINGERPRINT_TABLE) ? 
-					ETL_TIME_FINGERPRINT.readOrReturnDefaultFingerprint(monetConn) : ETL_TIME_FINGERPRINT.defaultValue
-				);		
+					ETL_TIME_FINGERPRINT.readOrReturnDefaultFingerprint(monetConn) : ETL_TIME_FINGERPRINT.defaultValue);
 		List<ExceptionRunnable<? extends Exception>> fullEtlJobs = new ArrayList<>();
 				
 		// log the ETL start and get its ids
@@ -316,7 +315,7 @@ private EtlResult execute() throws Exception {
 				FULL_ETL_LOCK.writeUnlock();
 			}
 
-			generateActivitiesEntries();			
+			generateActivitiesEntries();
 		
 			new CalculateExchangeRatesEtlJob(null, conn, monetConn, etlConfig).work();
 			StopWatch.next(MONDRIAN_ETL, true, "generateExchangeRates");
@@ -588,7 +587,7 @@ private EtlResult execute() throws Exception {
 	}
 	
 	/**
-	 * makes a localized version of a Mondrian dimension table, using the i18n fetchers
+	 * makes a localized version of the activities portion of a Mondrian dimension table, using the i18n fetchers
 	 * @param mondrianTable
 	 * @param locale
 	 * @throws SQLException
@@ -874,7 +873,7 @@ private EtlResult execute() throws Exception {
 	 * @throws SQLException
 	 */
 	protected void generateLocationsEtlTables() throws SQLException {
-		if (etlConfig.activityIds.isEmpty())
+		if (etlConfig.activityIds.isEmpty() && etlConfig.pledgeIds.isEmpty())
 			return;
 		//logger.warn("generating location ETL tables...");
 		String activitiesCondition = etlConfig.activityIdsIn("aal.amp_activity_id");
@@ -882,31 +881,31 @@ private EtlResult execute() throws Exception {
 		runEtlOnTable(query, "etl_locations", false);
 		
 		String pledgesCondition = etlConfig.pledgeIdsIn("pledge_id");
-		String pledgesQuery = String.format("select pledge_id + %d, location_id, location_percentage from amp_funding_pledges_location WHERE (%s)", PLEDGE_ID_ADDER, pledgesCondition);
+		String pledgesQuery = String.format("select pledge_id + %d AS amp_activity_id, location_id, location_percentage from amp_funding_pledges_location WHERE (%s)", PLEDGE_ID_ADDER, pledgesCondition);
 		runEtlOnTable(pledgesQuery, "etl_locations", true);		
 	}
 	
 	protected void generateProgramsEtlTables(String schemeName) throws SQLException {
-		if (etlConfig.activityIds.isEmpty())
+		if (etlConfig.activityIds.isEmpty() && etlConfig.pledgeIds.isEmpty())
 			return;
 		String activitiesCondition = etlConfig.activityIdsIn("aap.amp_activity_id");
 		String query = String.format("select aap.amp_activity_id, aap.amp_program_id, aap.program_percentage FROM amp_activity_program aap, v_mondrian_programs vmp WHERE (%s) AND (aap.amp_program_id = vmp.amp_theme_id) AND (vmp.program_setting_name = '%s')", activitiesCondition, schemeName);
 		runEtlOnTable(query, "etl_activity_program_" + schemeName.replace(' ', '_').toLowerCase(), false);
 		
 		String pledgesCondition = etlConfig.pledgeIdsIn("afpp.pledge_id");
-		String pledgesQuery = String.format("select afpp.pledge_id + %d, afpp.amp_program_id, afpp.program_percentage FROM amp_funding_pledges_program afpp, v_mondrian_programs vmp WHERE (%s) AND (afpp.amp_program_id = vmp.amp_theme_id) AND (vmp.program_setting_name = '%s')", PLEDGE_ID_ADDER, pledgesCondition, schemeName);
+		String pledgesQuery = String.format("select afpp.pledge_id + %d AS amp_activity_id, afpp.amp_program_id, afpp.program_percentage FROM amp_funding_pledges_program afpp, v_mondrian_programs vmp WHERE (%s) AND (afpp.amp_program_id = vmp.amp_theme_id) AND (vmp.program_setting_name = '%s')", PLEDGE_ID_ADDER, pledgesCondition, schemeName);
 		runEtlOnTable(pledgesQuery, "etl_activity_program_" + schemeName.replace(' ', '_').toLowerCase(), true);
 	}
 	
 	protected void generateSectorsEtlTables(String schemeName) throws SQLException {
-		if (etlConfig.activityIds.isEmpty())
+		if (etlConfig.activityIds.isEmpty() && etlConfig.activityIds.isEmpty())
 			return;
 		String activitiesCondition = etlConfig.activityIdsIn("aas.amp_activity_id");
 		String query = String.format("select aas.amp_activity_id, aas.amp_sector_id, aas.sector_percentage from amp_activity_sector aas, v_mondrian_sectors vms WHERE (%s) AND (aas.amp_sector_id = vms.amp_sector_id) AND (vms.typename='%s')", activitiesCondition, schemeName);
 		runEtlOnTable(query, "etl_activity_sector_" + schemeName.toLowerCase(), false);
 		
 		String pledgesCondition = etlConfig.pledgeIdsIn("afps.pledge_id");
-		String pledgesQuery = String.format("select afps.pledge_id + %d, afps.amp_sector_id, afps.sector_percentage from amp_funding_pledges_sector afps, v_mondrian_sectors vms WHERE (%s) AND (afps.amp_sector_id = vms.amp_sector_id) AND (vms.typename='%s')", PLEDGE_ID_ADDER, pledgesCondition, schemeName);
+		String pledgesQuery = String.format("select afps.pledge_id + %d AS amp_activity_id, afps.amp_sector_id, afps.sector_percentage from amp_funding_pledges_sector afps, v_mondrian_sectors vms WHERE (%s) AND (afps.amp_sector_id = vms.amp_sector_id) AND (vms.typename='%s')", PLEDGE_ID_ADDER, pledgesCondition, schemeName);
 		runEtlOnTable(pledgesQuery, "etl_activity_sector_" + schemeName.toLowerCase(), true);
 	}
 	
@@ -982,11 +981,12 @@ private EtlResult execute() throws Exception {
 			String str = builder.toString().trim();
 			StringTokenizer stok = new StringTokenizer(str, ";");
 			List<String> res = new ArrayList<>();
+			Set<Long> allEntities = etlConfig.getAllEntityIds();
 			while (stok.hasMoreTokens()) {
 				String q = stok.nextToken();
-				if (q.indexOf("@@activityIdCondition@@") != 0 && etlConfig.activityIds.isEmpty())
+				if (q.indexOf("@@activityIdCondition@@") != 0 && allEntities.isEmpty())
 					continue; // query references activities, but these are empty -> it is useless
-				String activityCondition = etlConfig.fullEtl ? " >0 " : (" IN (" +Util.toCSStringForIN(etlConfig.activityIds) + ")");
+				String activityCondition = etlConfig.fullEtl ? " >0 " : (" IN (" +Util.toCSStringForIN(allEntities) + ")");
 				res.add(q.replace("@@activityIdCondition@@", activityCondition));
 			}
 			return res;

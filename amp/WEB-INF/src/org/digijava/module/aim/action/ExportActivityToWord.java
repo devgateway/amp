@@ -28,6 +28,7 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.ServletContextWriter;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
@@ -2521,8 +2522,22 @@ public class ExportActivityToWord extends Action {
                                             exchangeRateStr += DECIMAL_FORMAT.format(fndDet.getFixedExchangeRate());
                                             currentRowData.addRowData(exchangeRateStr);
                                         }
+                                        //create the FM to check funding flows
+									String fmForFundingFlows = "/Activity Form/Funding/Funding Group/Funding Item/";
+									switch (fndDet.getTransactionType()) {
+									case Constants.COMMITMENT:
+										fmForFundingFlows += "Commitments/Commitments Table";
+										break;
+									case Constants.DISBURSEMENT:
+										fmForFundingFlows += "Disbursements/Disbursements Table";
+										break;
+									default:
+										System.out.println("paso por default");
+										break;
 
-                                        if (fndDet.getRecipientOrg() != null && fndDet.getRecipientRole() != null) {
+									}
+                                        fmForFundingFlows+="/Funding Flows OrgRole Selector";
+                                        if (fndDet.getRecipientOrg() != null && fndDet.getRecipientRole() != null && FeaturesUtil.isVisibleModule(fmForFundingFlows)) {
                                             String recStr = TranslatorWorker.translateText("Recipient:") + " ";
                                             recStr += fndDet.getRecipientOrg().getName() + "\n" + TranslatorWorker.translateText("as the") + " " + fndDet.getRecipientRole().getName();
                                             currentRowData.addRowData(recStr);

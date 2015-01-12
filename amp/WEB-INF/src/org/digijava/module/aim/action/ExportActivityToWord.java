@@ -2523,21 +2523,7 @@ public class ExportActivityToWord extends Action {
                                             currentRowData.addRowData(exchangeRateStr);
                                         }
                                         //create the FM to check funding flows
-									String fmForFundingFlows = "/Activity Form/Funding/Funding Group/Funding Item/";
-									switch (fndDet.getTransactionType()) {
-									case Constants.COMMITMENT:
-										fmForFundingFlows += "Commitments/Commitments Table";
-										break;
-									case Constants.DISBURSEMENT:
-										fmForFundingFlows += "Disbursements/Disbursements Table";
-										break;
-									default:
-										System.out.println("paso por default");
-										break;
-
-									}
-                                        fmForFundingFlows+="/Funding Flows OrgRole Selector";
-                                        if (fndDet.getRecipientOrg() != null && fndDet.getRecipientRole() != null && FeaturesUtil.isVisibleModule(fmForFundingFlows)) {
+                                        if (fndDet.getRecipientOrg() != null && fndDet.getRecipientRole() != null && FeaturesUtil.isVisibleModule(ActivityUtil.getFmForFundingFlows(fndDet.getTransactionType() ))) {
                                             String recStr = TranslatorWorker.translateText("Recipient:") + " ";
                                             recStr += fndDet.getRecipientOrg().getName() + "\n" + TranslatorWorker.translateText("as the") + " " + fndDet.getRecipientRole().getName();
                                             currentRowData.addRowData(recStr);
@@ -2828,7 +2814,8 @@ public class ExportActivityToWord extends Action {
         
         return retVal;
     }
-    
+
+
 	private void generateIdentificationPart(HttpServletRequest request,	ServletContext ampContext, Paragraph p1, Table identificationSubTable1) 
 		throws WorkerException, Exception {
 		AmpCategoryValue catVal;

@@ -3249,26 +3249,11 @@ public class ExportActivityToPDF extends Action {
             innerCell.setBorder(0);
             infoTable.addCell(innerCell);
 
-            /*
-            PdfPTable pdfPTable = new PdfPTable(1);
-
-			innerCell = new PdfPCell(new Paragraph(output, plainFont));
-			innerCell.setBorder(0);
-            pdfPTable.addCell(innerCell);
-
-            innerCell = new PdfPCell(new Paragraph(fd.getFormattedRate(), plainFont));
-            innerCell.setBorder(0);
-            pdfPTable.addCell(innerCell);
-            */
-
-			//infoTable.addCell(pdfPTable);
-
-
 		} else {
 			addEmptyCell(infoTable);
 		}		
 		
-		if (fd.getRecipientOrganisation() != null && fd.getRecipientOrganisationRole() != null) {
+		if (fd.getRecipientOrganisation() != null && fd.getRecipientOrganisationRole() != null  && FeaturesUtil.isVisibleModule(ActivityUtil.getFmForFundingFlows(fd.getTransactionType()))) {
 			String output=TranslatorWorker.translateText("Recipient:") + " ";
 			output += fd.getRecipientOrganisation().getName() + "\n" + TranslatorWorker.translateText("as the") + " " + fd.getRecipientOrganisationRole().getName();
 

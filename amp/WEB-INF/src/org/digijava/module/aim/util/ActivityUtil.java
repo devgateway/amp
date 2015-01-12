@@ -5213,4 +5213,22 @@ public static Collection<AmpActivityVersion> getOldActivities(Session session,in
 			}
 			return aidEffectivenesForExport;
 		}
+		public static String getFmForFundingFlows(Integer transactionType) {
+			String fmForFundingFlows = "/Activity Form/Funding/Funding Group/Funding Item/";
+			switch (transactionType) {
+			case Constants.COMMITMENT:
+				fmForFundingFlows += "Commitments/Commitments Table";
+				break;
+			case Constants.DISBURSEMENT:
+				fmForFundingFlows += "Disbursements/Disbursements Table";
+				break;
+			default:
+				System.out.println("paso por default");
+				break;
+
+			}
+			    fmForFundingFlows+="/Funding Flows OrgRole Selector";
+			return fmForFundingFlows;
+		}
+	    	 
 } // End

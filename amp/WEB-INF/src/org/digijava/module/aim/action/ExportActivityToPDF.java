@@ -8,7 +8,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,7 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.derby.iapi.types.ConcatableDataValue;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -58,9 +56,28 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.Identification;
 import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.module.aim.helper.*;
+import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.ChartGenerator;
+import org.digijava.module.aim.helper.ChartParams;
+import org.digijava.module.aim.helper.Components;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.Documents;
+import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.Funding;
+import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.GlobalSettings;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.Location;
+import org.digijava.module.aim.helper.Measures;
+import org.digijava.module.aim.helper.OrgProjectId;
+import org.digijava.module.aim.helper.PhysicalProgress;
+import org.digijava.module.aim.helper.ReferenceDoc;
+import org.digijava.module.aim.helper.RegionalFunding;
+import org.digijava.module.aim.helper.RelatedLinks;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
@@ -99,8 +116,6 @@ import com.lowagie.text.pdf.PdfPTableEvent;
 import com.lowagie.text.pdf.PdfWriter;
 import com.lowagie.text.pdf.draw.LineSeparator;
 
-import org.digijava.module.aim.helper.GlobalSettings;
-
 /**
  * Export Activity to PDF
  * @author Dare
@@ -133,7 +148,8 @@ public class ExportActivityToPDF extends Action {
             "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/MTEF Projection",
             "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/Projection Date",
             "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/Amount",
-            "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/Currency"
+            "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/Currency",
+            "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/Funding Flows OrgRole Selector"
     };
 	
 	private static BaseFont getBaseFont()
@@ -2938,11 +2954,18 @@ public class ExportActivityToPDF extends Action {
 
                                         PdfPCell innerCell = new PdfPCell(new Paragraph(output, plainFont));
                                         innerCell.setBorder(0);
-                                        innerCell.setColspan(2);
+                                        innerCell.setColspan(1);
                                         cells.add(innerCell);
+                                        
+                                        
                                     } else {
                                         cells.add(getEmptyCell());
                                     }
+									if (FeaturesUtil.isVisibleModule(mtefProjectionFields[4])) {
+										cells.add(getRoleOrgForFundingFlows(mtefProjection));
+									} else {
+										cells.add(getEmptyCell());
+									}
                                 }
                             } 
                             
@@ -3254,12 +3277,7 @@ public class ExportActivityToPDF extends Action {
 		}		
 		
 		if (fd.getRecipientOrganisation() != null && fd.getRecipientOrganisationRole() != null  && FeaturesUtil.isVisibleModule(ActivityUtil.getFmForFundingFlows(fd.getTransactionType()))) {
-			String output=TranslatorWorker.translateText("Recipient:") + " ";
-			output += fd.getRecipientOrganisation().getName() + "\n" + TranslatorWorker.translateText("as the") + " " + fd.getRecipientOrganisationRole().getName();
-
-            innerCell = new PdfPCell(new Paragraph(output, plainFont));
-            innerCell.setBorder(0);
-            infoTable.addCell(innerCell);
+			infoTable.addCell(getRoleOrgForFundingFlows( fd));
 		} else {
 			addEmptyCell(infoTable);
 		}
@@ -3272,6 +3290,16 @@ public class ExportActivityToPDF extends Action {
 			plCommCell1.setColspan(4);
 			fundingTable.addCell(plCommCell1);
 		}
+	}
+
+	private PdfPCell getRoleOrgForFundingFlows( FundingDetail fd) {
+		PdfPCell innerCell;
+		String output=TranslatorWorker.translateText("Recipient:") + " ";
+		output += fd.getRecipientOrganisation().getName() + "\n" + TranslatorWorker.translateText("as the") + " " + fd.getRecipientOrganisationRole().getName();
+		innerCell = new PdfPCell(new Paragraph(output, plainFont));
+		innerCell.setBorder(0);
+		return innerCell;
+
 	}	
 	
 	private PdfPCell getEmptyCell() {

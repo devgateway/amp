@@ -2827,11 +2827,8 @@ public class ExportActivityToPDF extends Action {
                                     } else {
                                         cells.add(getEmptyCell());
                                     }
-                                    if (FeaturesUtil.isVisibleModule(mtefProjectionFields[4])) {
-										cells.add(getRoleOrgForFundingFlows(mtefProjection));
-									} else {
-										cells.add(getEmptyCell());
-									}                                    
+
+                                    cells.add(getRoleOrgForFundingFlows(mtefProjection,mtefProjectionFields[4]));
                                 }
                             } 
                             
@@ -3141,12 +3138,8 @@ public class ExportActivityToPDF extends Action {
 			addEmptyCell(infoTable);
 		}		
 		
-		if (fd.getRecipientOrganisation() != null && fd.getRecipientOrganisationRole() != null && FeaturesUtil.isVisibleModule(ActivityUtil.getFmForFundingFlows(fd.getTransactionType()))) {
-            infoTable.addCell(getRoleOrgForFundingFlows( fd));
-		} else {
-			addEmptyCell(infoTable);
-		}
-		
+
+		infoTable.addCell(getRoleOrgForFundingFlows( fd,ActivityUtil.getFmForFundingFlows(fd.getTransactionType())));
 		if (fd.getAttachedPledgeName() != null) {
 			
 			PdfPCell plCommCell1=new PdfPCell(new Paragraph(postprocessText(TranslatorWorker.translateText("Source Pledge") + ": " + fd.getAttachedPledgeName()), titleFont));
@@ -3157,13 +3150,19 @@ public class ExportActivityToPDF extends Action {
 		}
 	}	
 	
-	private PdfPCell getRoleOrgForFundingFlows( FundingDetail fd) {
-		PdfPCell innerCell;
-		String output=TranslatorWorker.translateText("Recipient:") + " ";
-		output += fd.getRecipientOrganisation().getName() + "\n" + TranslatorWorker.translateText("as the") + " " + fd.getRecipientOrganisationRole().getName();
-		innerCell = new PdfPCell(new Paragraph(output, plainFont));
-		innerCell.setBorder(0);
-		return innerCell;
+	private PdfPCell getRoleOrgForFundingFlows(FundingDetail fd,String fm) {
+		if (fd.getRecipientOrganisation() != null && fd.getRecipientOrganisationRole() != null
+				&& FeaturesUtil.isVisibleModule( fm)) {
+			PdfPCell innerCell;
+			String output = TranslatorWorker.translateText("Recipient:") + " ";
+			output += fd.getRecipientOrganisation().getName() + "\n" + TranslatorWorker.translateText("as the") + " "
+					+ fd.getRecipientOrganisationRole().getName();
+			innerCell = new PdfPCell(new Paragraph(output, plainFont));
+			innerCell.setBorder(0);
+			return innerCell;
+		} else {
+			return getEmptyCell();
+		}
 
 	}
 	

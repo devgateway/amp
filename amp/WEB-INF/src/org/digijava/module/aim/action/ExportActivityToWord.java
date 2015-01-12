@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -25,10 +24,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.util.ServletContextWriter;
-import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
-import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
@@ -36,20 +32,61 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
+import org.digijava.module.aim.dbentity.AmpActivityContact;
+import org.digijava.module.aim.dbentity.AmpActivityProgram;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
+import org.digijava.module.aim.dbentity.AmpComments;
+import org.digijava.module.aim.dbentity.AmpContactProperty;
+import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpFundingMTEFProjection;
+import org.digijava.module.aim.dbentity.AmpImputation;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpIssues;
+import org.digijava.module.aim.dbentity.AmpMeasure;
+import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.AmpRole;
+import org.digijava.module.aim.dbentity.AmpStructure;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.FundingInformationItem;
+import org.digijava.module.aim.dbentity.IPAContract;
+import org.digijava.module.aim.dbentity.IPAContractDisbursement;
+import org.digijava.module.aim.dbentity.IndicatorActivity;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.EditActivityForm.Identification;
 import org.digijava.module.aim.form.EditActivityForm.Planning;
 import org.digijava.module.aim.form.EditActivityForm.Programs;
-import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
 import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.module.aim.helper.*;
+import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.ChartGenerator;
+import org.digijava.module.aim.helper.ChartParams;
+import org.digijava.module.aim.helper.Components;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.Documents;
+import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.Funding;
+import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.GlobalSettings;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.Location;
+import org.digijava.module.aim.helper.MTEFProjection;
+import org.digijava.module.aim.helper.OrgProjectId;
+import org.digijava.module.aim.helper.PhysicalProgress;
+import org.digijava.module.aim.helper.ReferenceDoc;
+import org.digijava.module.aim.helper.RelatedLinks;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.ExportActivityToPdfUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
@@ -59,7 +96,6 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.contentrepository.helper.DocumentData;
-import org.digijava.module.aim.helper.GlobalSettings;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -76,8 +112,6 @@ import com.lowagie.text.Image;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Table;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.lowagie.text.rtf.table.RtfCell;
 
@@ -2522,12 +2556,10 @@ public class ExportActivityToWord extends Action {
                                             exchangeRateStr += DECIMAL_FORMAT.format(fndDet.getFixedExchangeRate());
                                             currentRowData.addRowData(exchangeRateStr);
                                         }
-                                        //create the FM to check funding flows
-                                        if (fndDet.getRecipientOrg() != null && fndDet.getRecipientRole() != null && FeaturesUtil.isVisibleModule(ActivityUtil.getFmForFundingFlows(fndDet.getTransactionType() ))) {
-                                            String recStr = TranslatorWorker.translateText("Recipient:") + " ";
-                                            recStr += fndDet.getRecipientOrg().getName() + "\n" + TranslatorWorker.translateText("as the") + " " + fndDet.getRecipientRole().getName();
-                                            currentRowData.addRowData(recStr);
-                                        }
+                                        	String rolesOrgFundingFlows=getRoleAndOrgForFundingFlows(fndDet,ActivityUtil.getFmForFundingFlows(fndDet.getTransactionType() ));
+                                        	if(rolesOrgFundingFlows!=null){
+                                        		currentRowData.addRowData(rolesOrgFundingFlows);
+                                        	}
 
                                         eshDonorFundingDetails.addRowData(sectionHelperRowData);
 									}
@@ -2616,6 +2648,14 @@ public class ExportActivityToWord extends Action {
                             sectionHelperRowData.addRowData(DateConversion.convertDateToFiscalYearString(projection.getProjectionDate()));
                             
                             sectionHelperRowData.addRowData(FormatHelper.formatNumber(projection.getAmount()) + " " + projection.getAmpCurrency().getCurrencyCode());
+
+						String roleAndOrgForFundingFlows = getRoleAndOrgForFundingFlows(
+								projection,
+								"/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/Funding Flows OrgRole Selector");
+						if (roleAndOrgForFundingFlows != null) {
+							sectionHelperRowData.addRowData(roleAndOrgForFundingFlows);
+						}
+
                             mtefProjections.addRowData(sectionHelperRowData);
                         }
                         
@@ -2814,6 +2854,17 @@ public class ExportActivityToWord extends Action {
         
         return retVal;
     }
+
+	private String getRoleAndOrgForFundingFlows(FundingInformationItem fndDet,String fm) {
+		if(fndDet.getRecipientOrg() != null && fndDet.getRecipientRole() != null 
+        		&& FeaturesUtil.isVisibleModule(fm)){
+		String recStr = TranslatorWorker.translateText("Recipient:") + " ";
+		recStr += fndDet.getRecipientOrg().getName() + "\n" + TranslatorWorker.translateText("as the") + " " + fndDet.getRecipientRole().getName();
+		return recStr;
+		}else{
+			return null;
+		}
+	}
 
 
 	private void generateIdentificationPart(HttpServletRequest request,	ServletContext ampContext, Paragraph p1, Table identificationSubTable1) 

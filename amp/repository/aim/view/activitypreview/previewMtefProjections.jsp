@@ -14,7 +14,7 @@
 
 <!-- mtefs -->
 <digi:instance property="aimEditActivityForm" />
-
+<c:set var="transaction" value="MTEF Projections/MTEF Projections Table" scope="page"/>
 <c:if test="${!empty funding.mtefDetails}">
 	<tr bgcolor="#FFFFCC">
 		<td colspan="3" style="text-transform: uppercase">
@@ -54,6 +54,6 @@
 	<tr>
 		<td colspan="5" height="7px"></td>
 	</tr>
-
+<c:remove var="transaction"/>
 <!-- MTEFs end -->
 

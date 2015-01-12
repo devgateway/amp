@@ -133,7 +133,9 @@ public class ExportActivityToPDF extends Action {
             "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/MTEF Projection",
             "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/Projection Date",
             "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/Amount",
-            "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/Currency"
+            "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/Currency",
+            "/Activity Form/Funding/Funding Group/Funding Item/MTEF Projections/MTEF Projections Table/Funding Flows OrgRole Selector"
+
     };
 	
 	private static BaseFont getBaseFont()
@@ -2820,11 +2822,16 @@ public class ExportActivityToPDF extends Action {
 
                                         PdfPCell innerCell = new PdfPCell(new Paragraph(output, plainFont));
                                         innerCell.setBorder(0);
-                                        innerCell.setColspan(2);
+                                        innerCell.setColspan(1);
                                         cells.add(innerCell);
                                     } else {
                                         cells.add(getEmptyCell());
                                     }
+                                    if (FeaturesUtil.isVisibleModule(mtefProjectionFields[4])) {
+										cells.add(getRoleOrgForFundingFlows(mtefProjection));
+									} else {
+										cells.add(getEmptyCell());
+									}                                    
                                 }
                             } 
                             
@@ -3130,32 +3137,12 @@ public class ExportActivityToPDF extends Action {
             innerCell.setBorder(0);
             infoTable.addCell(innerCell);
 
-            /*
-            PdfPTable pdfPTable = new PdfPTable(1);
-
-			innerCell = new PdfPCell(new Paragraph(output, plainFont));
-			innerCell.setBorder(0);
-            pdfPTable.addCell(innerCell);
-
-            innerCell = new PdfPCell(new Paragraph(fd.getFormattedRate(), plainFont));
-            innerCell.setBorder(0);
-            pdfPTable.addCell(innerCell);
-            */
-
-			//infoTable.addCell(pdfPTable);
-
-
 		} else {
 			addEmptyCell(infoTable);
 		}		
 		
-		if (fd.getRecipientOrganisation() != null && fd.getRecipientOrganisationRole() != null) {
-			String output=TranslatorWorker.translateText("Recipient:") + " ";
-			output += fd.getRecipientOrganisation().getName() + "\n" + TranslatorWorker.translateText("as the") + " " + fd.getRecipientOrganisationRole().getName();
-
-            innerCell = new PdfPCell(new Paragraph(output, plainFont));
-            innerCell.setBorder(0);
-            infoTable.addCell(innerCell);
+		if (fd.getRecipientOrganisation() != null && fd.getRecipientOrganisationRole() != null && FeaturesUtil.isVisibleModule(ActivityUtil.getFmForFundingFlows(fd.getTransactionType()))) {
+            infoTable.addCell(getRoleOrgForFundingFlows( fd));
 		} else {
 			addEmptyCell(infoTable);
 		}
@@ -3169,6 +3156,16 @@ public class ExportActivityToPDF extends Action {
 			fundingTable.addCell(plCommCell1);
 		}
 	}	
+	
+	private PdfPCell getRoleOrgForFundingFlows( FundingDetail fd) {
+		PdfPCell innerCell;
+		String output=TranslatorWorker.translateText("Recipient:") + " ";
+		output += fd.getRecipientOrganisation().getName() + "\n" + TranslatorWorker.translateText("as the") + " " + fd.getRecipientOrganisationRole().getName();
+		innerCell = new PdfPCell(new Paragraph(output, plainFont));
+		innerCell.setBorder(0);
+		return innerCell;
+
+	}
 	
 	private PdfPCell getEmptyCell() {
 		PdfPCell innerCell = new PdfPCell();

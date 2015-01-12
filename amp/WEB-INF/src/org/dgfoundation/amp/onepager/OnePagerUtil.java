@@ -18,20 +18,16 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.util.SetModel;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
-import org.dgfoundation.amp.onepager.components.AmpOrgRoleSelectorComponent;
-import org.dgfoundation.amp.onepager.components.features.sections.AmpDonorFundingFormSectionFeature;
+import org.dgfoundation.amp.onepager.components.AmpFundingFlowsOrgRoleSelector;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.hibernate.Criteria;
@@ -231,12 +227,10 @@ public final class OnePagerUtil {
 		return list;	
 	}
 
-	public static AmpOrgRoleSelectorComponent getFundingFlowRoleSelector(final IModel<AmpFunding> model,
+	public static AmpFundingFlowsOrgRoleSelector getFundingFlowRoleSelector(final IModel<AmpFunding> model,
 			IModel itemModel) {
-		AmpOrgRoleSelectorComponent orgRoleSelector=new AmpOrgRoleSelectorComponent("orgRoleSelector", 
-				new PropertyModel<AmpActivityVersion>(model,"ampActivityId"), new PropertyModel<AmpRole>(itemModel,"recipientRole"),
-                new PropertyModel<AmpOrganisation>(itemModel,"recipientOrg"),
-                true, AmpDonorFundingFormSectionFeature.FUNDING_FLOW_ROLE_FILTER, true);
+		AmpFundingFlowsOrgRoleSelector orgRoleSelector=
+		new AmpFundingFlowsOrgRoleSelector("orgRoleSelector",model, itemModel,"Funding Flows OrgRole Selector");
 		return orgRoleSelector;
 	}
 }

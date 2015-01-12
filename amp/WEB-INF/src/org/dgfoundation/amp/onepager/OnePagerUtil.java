@@ -23,9 +23,11 @@ import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
+import org.dgfoundation.amp.onepager.components.AmpFundingFlowsOrgRoleSelector;
 import org.dgfoundation.amp.onepager.util.FMUtil;
 import org.dgfoundation.amp.onepager.web.pages.OnePager;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.hibernate.Criteria;
@@ -225,5 +227,10 @@ public final class OnePagerUtil {
 		return list;	
 	}
 
-
+	public static AmpFundingFlowsOrgRoleSelector getFundingFlowRoleSelector(final IModel<AmpFunding> model,
+			IModel itemModel) {
+		AmpFundingFlowsOrgRoleSelector orgRoleSelector=
+		new AmpFundingFlowsOrgRoleSelector("orgRoleSelector",model, itemModel,"Funding Flows OrgRole Selector");
+		return orgRoleSelector;
+	}
 }

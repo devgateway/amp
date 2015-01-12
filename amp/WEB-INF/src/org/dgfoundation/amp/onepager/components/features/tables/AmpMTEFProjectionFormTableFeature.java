@@ -4,16 +4,15 @@
  */
 package org.dgfoundation.amp.onepager.components.features.tables;
 
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpFundingAmountComponent;
+import org.dgfoundation.amp.onepager.components.AmpFundingFlowsOrgRoleSelector;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.ListEditorRemoveButton;
 import org.dgfoundation.amp.onepager.components.features.items.AmpFundingItemFeaturePanel;

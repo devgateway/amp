@@ -8,14 +8,34 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 		}
 	}
 
+	FilterUtils.getDateIntervalType = function(element) {
+		var min = element.attributes.min;
+		var max = element.attributes.max;
+		if (min == undefined)
+			return "max";
+		if (max == undefined)
+			return "min";
+		if (element.get('valueToName').attributes[min] == undefined) {
+			return "max";
+		}
+		if (element.get('valueToName').attributes[max] == undefined) {
+			return "min";
+		}		
+		return "both";
+	}
+	
 	FilterUtils.extractFilters = function(content) {
 		var filters = new Filters();
 		var filtersColumnsJson = content.get('columnFilterRules');
 		jQuery(filtersColumnsJson.keys()).each(function(i, item) {
 			var subElement = filtersColumnsJson.get(item);
 			if (subElement instanceof Backbone.Collection) {
+
 				var element = subElement.models[0];
 				var content = [];
+				if (subElement.name == 'DATE') {
+					var dateIntervalType = FilterUtils.getDateIntervalType(element, item, i)
+				}				
 				if (element.get('value') != null) {
 					var auxItem = {};
 					auxItem.id = element.get('value');
@@ -31,6 +51,8 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 							var item = {};
 							item.id = i;
 							item.name = item_;
+							if (dateIntervalType != undefined)
+								item.dateIntervalType = dateIntervalType;
 							content.push(item);
 						}
 					});
@@ -95,6 +117,61 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 		app.TabsApp.dynamicContentRegion.currentView.filters.currentView.render();
 	};
 
+	//copypasted from years-filter-model.js
+	  FilterUtils._dateConvert = function(input){
+		    var output = null;
+		    if(input){
+		      if(input.indexOf('/')>-1){
+		        input = input.split('/');
+		        output = input[2] + '-' + input[1] + '-' + input[0];
+		      } else if(input.indexOf('-')>-1){
+		        input = input.split('-');
+		        output = input[2] + '/' + input[1] + '/' + input[0];
+		      }
+		    }
+		    return output;
+		  }	
+	  
+  FilterUtils.pushDateLimit = function(_name, value){
+	if(app.TabsApp.filters.models[_name] == undefined) {
+		var filter = new Filter({
+			name : _name,
+			values : [ {
+				id : value,
+				name : value
+			} ]
+		});
+		app.TabsApp.filters.models.push(filter);
+	} else {
+		app.TabsApp.filters.models[_name].id = value;
+		app.TabsApp.filters.models[_name].name = value;
+	}
+	
+  }
+	  
+	FilterUtils.fillDateBlob = function(dateBlob, attributes){
+		if (attributes.values.length == 1) {
+			if (attributes.values[0].dateIntervalType == "min") {
+				dateBlob.start = FilterUtils._dateConvert(attributes.values[0].name);
+				FilterUtils.pushDateLimit("Start Date", FilterUtils._dateConvert(attributes.values[0].name));
+			} else {
+				dateBlob.end = FilterUtils._dateConvert(attributes.values[0].name);
+				FilterUtils.pushDateLimit("End Date", FilterUtils._dateConvert(attributes.values[0].name));				
+			}
+		}
+		else if (attributes.values.length == 2) {
+			dateBlob.start = FilterUtils._dateConvert(attributes.values[0].name);
+			FilterUtils.pushDateLimit("Start Date", FilterUtils._dateConvert(attributes.values[0].name));
+
+			dateBlob.end = FilterUtils._dateConvert(attributes.values[1].name);
+			FilterUtils.pushDateLimit("End Date", FilterUtils._dateConvert(attributes.values[1].name));			
+		}
+		else {
+			//error. why doesn't it have dates
+		}
+
+	}
+	
 	FilterUtils.convertJavaFiltersToJS = function(data) {
 		// This conversion is needed only one time when we load default
 		// filters for a tab not after applying a new filter.
@@ -103,8 +180,8 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 			var blob = {
 				otherFilters : {
 					date : {
-						end : '2015-12-31',
-						start : '1980-01-01'
+						end : '',
+						start : ''
 					}
 				},
 				columnFilters : {
@@ -181,6 +258,19 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 					blob.columnFilters['Secondary Sector Sub-Sector Id'] = blob.columnFilters['Secondary Sector Id'];
 					blob.columnFilters['Secondary Sector Sub-Sub-Sector Id'] = blob.columnFilters['Secondary Sector Id'];
 					break;
+					
+//				case 'Start Date':
+//					blob.otherFilters.date.start = '2019-12-31';
+//					break;
+//					
+//				case 'End Date':
+//					blob.otherFilters.date.end = '2029-12-31';
+//					break;
+
+				case 'DATE':
+					FilterUtils.fillDateBlob(blob.otherFilters.date, item.attributes);
+					break;
+					
 				default:
 					console.error(item);
 					break;

@@ -46,7 +46,6 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 			app.TabsApp.filters = FilterUtils.extractFilters(firstContent.get('reportMetadata').get('reportSpec').get('filters'));
 			// Variable to save the current serialized filters from widget.
 			app.TabsApp.serializedFilters = null;
-
 			// Define the views.
 			var FilterItemView = Marionette.ItemView.extend({
 				tagName : 'div',
@@ -82,7 +81,6 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 			});
 			app.TabsApp.dynamicContentRegion.show(dynamicLayoutView);
 			dynamicLayoutView.filters.show(compositeView);
-
 			// Create accordion for filters area.
 			jQuery("#main-dynamic-content-region_" + app.TabsApp.currentTab.get('id') + " #filters-collapsible-area").accordion({
 				collapsible : true,

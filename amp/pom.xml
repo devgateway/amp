@@ -12,7 +12,7 @@
 		<springSecurityVersion>3.1.4.RELEASE</springSecurityVersion>
 		<springVersion>3.0.7.RELEASE</springVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<buildVersion>2.10-SNAPSHOT</buildVersion>
+		<buildVersion>2.11-SNAPSHOT</buildVersion>
  		<jersey.version>1.18</jersey.version>
 		<saiku.version>3.0-RC2</saiku.version> 
 		<saiku3.version>3.0-RC2-DG</saiku3.version> 

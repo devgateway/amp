@@ -47,6 +47,7 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 					jQuery("#main-dynamic-content-region_" + reportId + " #filters-collapsible-area").accordion('option', 'active', false);
 
 					console.log('filter widget loaded');
+					
 					// Convert report filters to filterwidget filters.
 					var blob = FilterUtils.convertJavaFiltersToJS(reportFilters);
 					app.TabsApp.filtersWidget.reset({
@@ -55,6 +56,12 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 					app.TabsApp.filtersWidget.deserialize(blob, {
 						silent : true
 					});
+					
+					datesFilterView = app.TabsApp.filtersWidget.view.filterViewsInstances.others.viewList.filter(function(v) {
+					  return v.model.get('name') === 'Dates';
+					})[0];
+					datesFilterView._renderDatePickers();
+
 
 					// Show the dialog and fix the position.
 					jQuery(containerName).show();

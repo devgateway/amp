@@ -366,9 +366,8 @@ public class DashboardsService {
 					case ColumnConstants.TYPE_OF_ASSISTANCE:
 						amountObj.set("type", value.displayedValue);
 						break;
-					case MoConstants.ACTUAL_COMMITMENTS:
-						amountObj.set("amount", value.value);
 					default:
+						amountObj.set("amount", value.value);
 						break;
 					}
 					if (amountObj.getSize()==2){

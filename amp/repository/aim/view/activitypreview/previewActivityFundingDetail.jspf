@@ -59,6 +59,8 @@ other rows (if any): capital spending percent / classification / attached pledge
 	</tr>
 </logic:present>
 <logic:present name="fundingDetail" property="recipientOrganisation">
+<logic:present name="fundingDetail" property="recipientOrganisationRole">
+
 <module:display name="/Activity Form/Funding/Funding Group/Funding Item/${transaction}/Funding Flows OrgRole Selector"  
 													parentModule="/Activity Form/Funding/Funding Group/Funding Item/${transaction}">
 	<tr>
@@ -67,6 +69,8 @@ other rows (if any): capital spending percent / classification / attached pledge
 			<digi:trn>Recipient</digi:trn>:&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisation.name" /></b><digi:trn>&nbsp;as the</digi:trn>&nbsp;<b><bean:write name="fundingDetail" property="recipientOrganisationRole.name" /></b>&nbsp;			
 		</td>
 	</tr>
+	</module:display>
+</logic:present>
 </logic:present>
 <logic:present name="fundingDetail" property="classification">
 	<tr>

@@ -57,6 +57,7 @@ function getSecretRenderArea(height, width) {
     secretArea.id = 'super-secret-render-area-shh';
     secretArea.style.position = 'absolute';
     secretArea.style.left = '-9999em';
+    secretArea.style.top = '-9999em';  // for IE :(
     document.body.appendChild(secretArea);
   }
   if (height) { secretArea.style.height = height + 'px'; }

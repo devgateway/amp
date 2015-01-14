@@ -109,6 +109,10 @@ public class FundingCalculationsHelper {
 			}
 			fundingDetail.setIndexId(indexId++);
 			fundingDetail.setAdjustmentTypeName(fundDet.getAdjustmentType());
+			if(fundDet.getTransactionType().equals(Constants.MTEFPROJECTION)){
+				fundingDetail.setProjectionTypeName(((AmpFundingMTEFProjection)fundDet).getProjected());	
+			}
+			
 			fundingDetail.setContract(fundDet.getContract());
 			java.sql.Date dt = new java.sql.Date(fundDet.getTransactionDate().getTime());
 			

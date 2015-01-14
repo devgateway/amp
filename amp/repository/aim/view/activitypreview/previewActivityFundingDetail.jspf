@@ -17,7 +17,15 @@ other rows (if any): capital spending percent / classification / attached pledge
  --%>
 <tr bgcolor="#ffffff">
 	<td width="40%" align="right"  bgcolor="#FFFFFF">
-		<digi:trn><b><bean:write name="fundingDetail" property="adjustmentTypeName.value" /></b></digi:trn>
+		<digi:trn><b><c:choose>
+		<c:when test="${fundingDetail.transactionType == 3}">
+			<bean:write name="fundingDetail" property="projectionTypeName.value" />
+		</c:when>
+		<c:otherwise>
+			<bean:write name="fundingDetail" property="adjustmentTypeName.value" />
+		</c:otherwise>
+		</c:choose>
+		</b></digi:trn>
 	</td>
 	<td height="18" align="right">
 		<c:choose>

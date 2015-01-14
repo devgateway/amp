@@ -2796,7 +2796,7 @@ public class ExportActivityToPDF extends Action {
                                 for (FundingDetail mtefProjection : funding.getMtefDetails()) {
                                     if (FeaturesUtil.isVisibleModule(mtefProjectionFields[0])) {
                                     	anythingAdded = true;
-                                        String projectedType = mtefProjection.getAdjustmentTypeNameTrimmed();
+                                        String projectedType = mtefProjection.getProjectionTypeName().getValue();
                                     	PdfPCell innerCell = new PdfPCell(new Paragraph(TranslatorWorker.translateText(projectedType), plainFont));
                                         innerCell.setBorder(0);
                                         cells.add(innerCell);

@@ -267,6 +267,7 @@ public class EndpointUtils {
 						filter.setEndpoint(endpoint);
 						filter.setUi(apiAnnotation.ui());
 						filter.setId(apiAnnotation.id());
+						filter.setFilterType(apiAnnotation.filterType());
 						//we check the method exposed
 						if (((Method) mbr).getAnnotation(javax.ws.rs.POST.class) != null){
 							filter.setMethod("POST");

@@ -87,7 +87,8 @@ _.extend(App.prototype, BackboneDash.Events, {
 
       this.filter = new Filter({
         draggable: true,
-        sync: options.sync || BackboneDash.sync
+        sync: options.sync || BackboneDash.sync,
+        caller: 'DASHBOARD'
       });
 
       // initialize app components

@@ -20,7 +20,8 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 		// Create the FilterWidget instance.
 		app.TabsApp.filtersWidget = new FiltersWidget({
 			el : containerName,
-			draggable : true
+			draggable : true,
+			caller: 'TAB'
 		});
 
 		// Register apply and cancel buttons.

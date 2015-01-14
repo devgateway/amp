@@ -10,6 +10,7 @@ public class AvailableMethod {
 	private String endpoint;
 	private String method;
 	private String id;
+	private FilterType [] filterType;
 
 	public String getName() {
 		return name;
@@ -49,6 +50,14 @@ public class AvailableMethod {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public FilterType[] getFilterType() {
+		return filterType;
+	}
+
+	public void setFilterType(FilterType[] filterType) {
+		this.filterType = filterType;
 	}
 	
 

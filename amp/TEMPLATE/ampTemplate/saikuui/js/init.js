@@ -21,7 +21,8 @@ define([ 'filtersWidget' ], function(FiltersWidget) {
 	// Create the FilterWidget instance.
 	app.SaikuApp.filtersWidget = new FiltersWidget({
 		el : containerName,
-		draggable : true
+		draggable : true,
+		caller: 'REPORTS' 
 	});
 	app.SaikuApp.filtersWidget.showFilters();
 	

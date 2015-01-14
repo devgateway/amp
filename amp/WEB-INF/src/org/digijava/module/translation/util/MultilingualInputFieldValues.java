@@ -270,12 +270,21 @@ public class MultilingualInputFieldValues
 	{
 		if (obj == null)
 			throw new RuntimeException("cannot serialize null!");
+		long entityId = ContentTranslationUtil.getObjectId(obj);
+		Map<String, AmpContentTranslation> translations = readTranslationsFromRequest(obj.getClass(), entityId, propertyName, suffix, request);		
+		serialize (obj,propertyName,suffix,session,translations);
+	}
+	
+	
+	public static void serialize(Object obj, String propertyName, String suffix, Session session, Map<String, AmpContentTranslation> translations)
+	{
+		if (obj == null)
+			throw new RuntimeException("cannot serialize null!");
 					
 		if (session == null)
 			session = PersistenceManager.getRequestDBSession(true);
 		
 		long entityId = ContentTranslationUtil.getObjectId(obj);
-		Map<String, AmpContentTranslation> translations = readTranslationsFromRequest(obj.getClass(), entityId, propertyName, suffix, request);		
 		
 		// overwrite property and update entity
 		String translationToSet = translations.get("currentLanguage").getTranslation();
@@ -291,7 +300,6 @@ public class MultilingualInputFieldValues
 		ContentTranslationUtil.saveFieldTranslations(entityId, ftp);
 		//ContentTranslationUtil.saveOrUpdateContentTrns(translations.values());
 	}
-	
 	
 //	private static String chooseBaseLanguageTranslation(Object obj, String propertyName, String baseLanguageTranslation)
 //	{

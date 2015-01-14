@@ -47,10 +47,12 @@ import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.digijava.kernel.ampapi.saiku.util.SaikuUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.action.ReportsFilterPicker;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
+import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpDesktopTabSelection;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -59,6 +61,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
+import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
@@ -351,8 +355,9 @@ public class Reports {
 			if(filterRules != null) spec.setFilters(filterRules);
 			if(queryModel.containsKey("settingsApplied") && (Boolean)queryModel.get("settingsApplied")) {
 				SettingsUtils.applySettings(spec, extractSettings(queryModel));
-			}
+			}						
 			report = (SaikuGeneratedReport) generator.executeReport(spec);
+			
 			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + report.generationTime + "(ms)");
 		} catch (Exception e) {
 			logger.error("Cannot execute report (" + ampReport + ")", e);
@@ -565,7 +570,8 @@ public class Reports {
 				logger.info(newFilters);
 
 				// Code borrowed from ReportWizardAction.
-				report.setName(formParams.get("reportName").toString());
+				List <LinkedHashMap <String,String>> reportData = (ArrayList) formParams.get("reportData");
+				Map<String, AmpContentTranslation> translations = populateContentTranslations (reportData,reportId);
 				Set<AmpFilterData> fdSet = AmpFilterData.createFilterDataSet(report, newFilters);
 				if (report.getFilterDataSet() == null)
 					report.setFilterDataSet(fdSet);
@@ -573,13 +579,34 @@ public class Reports {
 					report.getFilterDataSet().clear();
 					report.getFilterDataSet().addAll(fdSet);
 				}
-				Session session = null;
-				session = PersistenceManager.getSession();
-				// session.saveOrUpdate(fdSet);
+				Session session = PersistenceManager.getSession();
+				MultilingualInputFieldValues.serialize(report, "name", null, session, translations);
 				logger.info(report);
-				session.saveOrUpdate(report);
 			}
 		}
+	}
+	
+	private Map<String, AmpContentTranslation> populateContentTranslations (List <LinkedHashMap <String,String>> reportData,Long reportId) {
+		Map<String, AmpContentTranslation> translations = new HashMap<String, AmpContentTranslation>();
+		String baseLanguage = ContentTranslationUtil.getBaseLanguage();
+		String baseLanguageTranslation = null; 
+		for (LinkedHashMap <String,String> langAndName : reportData) {
+			String locale = langAndName.get("lang");
+			String translation = langAndName.get("name");
+			AmpContentTranslation trans = new AmpContentTranslation(AmpReports.class.getName(), reportId, "name", locale, translation);
+			translations.put(locale, trans);
+			if (baseLanguageTranslation == null && (translation != null) && !translation.trim().isEmpty())
+				baseLanguageTranslation = translation;
+		}
+		if (!translations.containsKey(baseLanguage)){ 
+			translations.put(baseLanguage, new AmpContentTranslation(AmpReports.class.getName(), reportId, "name", baseLanguage, baseLanguageTranslation));
+		}
+	
+		String currentLanguage = TLSUtils.getEffectiveLangCode();
+		AmpContentTranslation currentLanguageTranslation = translations.containsKey(currentLanguage) ? translations.get(currentLanguage) : translations.get(baseLanguage);
+		translations.put("currentLanguage", currentLanguageTranslation);
+		return translations;
+	
 	}
 	
 	@POST

@@ -3,17 +3,44 @@ define([ 'underscore', 'jquery', 'i18next' ], function(_, jQuery) {
 	"use strict";
 
 	var prefix = 'tabs.common:';
-
+	var availableLanguages = null;
+	
 	function TranslationManager() {
 		if (!(this instanceof TranslationManager)) {
 			throw new TypeError("TranslationManager constructor cannot be called as a function.");
 		}
+		getAvailableLanguages ();
 	}
-
+	
 	TranslationManager.prototype = {
 		constructor : TranslationManager
 	};
+	TranslationManager.getAvailableLanguages = function () {
+		var deferred = $.Deferred();
+	    if (availableLanguages) {
+	      deferred.resolve(availableLanguages);
+	    } else {
+	      _fetchLanguages().then(function(languages) {
+	    	availableLanguages =  _.pluck(languages, 'id');
+	        deferred.resolve(availableLanguages);
+	      });
+	    }
 
+	    return deferred;
+		
+	}
+	function _fetchLanguages (){
+	return jQuery.ajax({
+		headers : {
+			'Accept' : 'application/json',
+			'Content-Type' : 'application/json'
+		},
+		'type' : 'GET',
+		'url' : '/rest/translations/multilingual-languages'
+	});
+	}
+
+	
 	TranslationManager.searchAndTranslate = function() {
 		initializeGlobalTranslationsCache();
 

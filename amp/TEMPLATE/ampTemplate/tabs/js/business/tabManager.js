@@ -15,28 +15,48 @@ define([ 'marionette', 'text!views/html/saveTabDialogTemplate.html', 'models/tab
 	};
 
 	TabManager.openSaveTabDialog = function(id, name) {
-		var trnTitle = TranslationManager.getTranslated("Please enter a title for this tab:");
+		TranslationManager.getAvailableLanguages().done (function (languages){
+			var trnTitle = TranslationManager.getTranslated("Please enter a title for this tab:");
+			var renderOptions = {
+		    languages: languages
+		    };
+			var SaveTabDialogView = Marionette.ItemView.extend({
+				template : _.template(saveTabDialogTemplate,renderOptions),
+				events: {
+				        'click .tab': 'openTab'
+				    },
+			openTab: function (e) {
+				$('.tab').removeClass('focused');
+				var el = $(e.currentTarget);
+				el.addClass('focused');
+				var language = el.attr('data-label');
+				$('.save-tab').hide();
+				$('.save-tab.'+language).show();
+				e.preventDefault();
+			}
+			});
+			var auxTab = app.TabsApp.currentTab;
+			var dialogView = new SaveTabDialogView({
+				model : auxTab
+			});
+			dialogView.render();
+			jQuery(dialogView.el).dialog({
+				modal : true,
+				title : trnTitle,
+				width : 400,
+				close: function(event, ui) 
+		        { 
+					jQuery(this).remove();
+		        } 
+			});
+			jQuery(".buttonify").button();
+			TranslationManager.searchAndTranslate();
 
-		var SaveTabDialogView = Marionette.ItemView.extend({
-			template : _.template(saveTabDialogTemplate)
+			jQuery(".ui-dialog-content #saveTabsBtn").on("click", function() {
+				FilterManager.saveTab(dialogView);
+			});			
 		});
-		var auxTab = app.TabsApp.currentTab;
-		var dialogView = new SaveTabDialogView({
-			model : auxTab
-		});
-		dialogView.render();
-		jQuery(dialogView.el).dialog({
-			modal : true,
-			title : trnTitle,
-			width : 400
-		});
-		jQuery(".buttonify").button();
-		TranslationManager.searchAndTranslate();
 
-		jQuery(".save-tab-container #saveTabsBtn").on("click", function() {
-			FilterManager.saveTab(dialogView);
-		});
 	};
-
 	return TabManager;
 });

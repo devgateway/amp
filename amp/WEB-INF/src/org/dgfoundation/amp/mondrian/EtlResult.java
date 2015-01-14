@@ -3,6 +3,11 @@ package org.dgfoundation.amp.mondrian;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * postfactum data of an ETL run: statistics, whether it the Mondrian cache should be flushed as a result, etc
+ * @author Dolghier Constantin
+ *
+ */
 public class EtlResult {
 	/**
 	 * etl duration in seconds
@@ -34,7 +39,7 @@ public class EtlResult {
 	public EtlResult(long eventId, double duration, boolean cacheInvalidated, long nrAffectedEntities, long nrAffectedDates, List<String> fullEtlReasons) {
 		this.eventId = eventId;
 		this.duration = duration;
-		this.cacheInvalidated = true || cacheInvalidated;
+		this.cacheInvalidated = cacheInvalidated;
 		this.nrAffectedEntities = nrAffectedEntities;
 		this.nrAffectedDates = nrAffectedDates;
 		this.fullEtlReasons = new ArrayList<>(fullEtlReasons);

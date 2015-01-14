@@ -70,6 +70,9 @@ public class MondrianTableDescription {
 	
 	//public final Set<String> idColumnNames; 
 			
+	/**
+	 * AMP-15571-compatible i18n specification
+	 */
 	protected ObjectSource<I18nViewDescription> translations;
 	
 	/**
@@ -134,7 +137,13 @@ public class MondrianTableDescription {
 		return res;
 	}
 	
-	
+	/**
+	 * reads a (potentially translated through indirection) table as a list of rows, each row being a list of column values
+	 * @param rs
+	 * @param locale
+	 * @return
+	 * @throws SQLException
+	 */
 	public List<List<Object>> readFetchedTable(java.sql.ResultSet rs, String locale) throws SQLException {
 		List<List<Object>> vals = new ArrayList<>();
 		LinkedHashSet<String> columns = SQLUtils.collectColumnNames(rs);
@@ -152,6 +161,14 @@ public class MondrianTableDescription {
 		return vals;
 	}
 	
+	/**
+	 * reads a translated table as a list of rows, each row being a list of column values
+	 * @param conn
+	 * @param locale
+	 * @param condition
+	 * @return
+	 * @throws SQLException
+	 */
 	public List<List<Object>> readTranslatedTable(java.sql.Connection conn, String locale, String condition) throws SQLException {
 		Map<PropertyDescription, ColumnValuesCacher> cachers = new HashMap<>();
 		I18nDatabaseViewFetcher fetcher = new I18nDatabaseViewFetcher(getI18nDescription(), condition, locale, cachers, conn, "*");
@@ -162,6 +179,13 @@ public class MondrianTableDescription {
 		}
 	}
 	
+	/**
+	 * to be overridden in filtered tables
+	 * @param rs
+	 * @param locale
+	 * @return
+	 * @throws SQLException
+	 */
 	protected boolean rowIsRelevant(ResultSet rs, String locale) throws SQLException {
 		return true;
 	}

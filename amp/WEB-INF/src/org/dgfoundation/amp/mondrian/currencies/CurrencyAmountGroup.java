@@ -1,5 +1,11 @@
 package org.dgfoundation.amp.mondrian.currencies;
 
+/**
+ * encodes a group of related columns which signify a single type of an amount entered in an arbitrary currency at an arbitrary date
+ * for explanation see https://wiki.dgfoundation.org/display/AMPDOC/AMP+2.10+ETL+process
+ * @author Dolghier Constantin
+ *
+ */
 public class CurrencyAmountGroup {
 	public final String containingTable;
 	public final String destinationTable;

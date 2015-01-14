@@ -4,6 +4,11 @@ import java.util.Set;
 
 import org.dgfoundation.amp.Util;
 
+/**
+ * the configuration data of an ETL run, e.g. which entities it should touch
+ * @author Dolghier Constantin
+ *
+ */
 public class EtlConfiguration {
 	
 	/**

@@ -22,7 +22,7 @@ import org.digijava.module.aim.helper.Constants;
 
 /**
  * this class wraps a connection to MonetDB
- * @author simple
+ * @author Dolghier Constantin
  *
  */
 public class MonetConnection implements AutoCloseable {

@@ -18,14 +18,22 @@ import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 
-import static org.dgfoundation.amp.mondrian.MondrianTablesRepository.FACT_TABLE;
 import static org.dgfoundation.amp.mondrian.MondrianETL.MONDRIAN_EXCHANGE_RATES_TABLE;
 
+/**
+ * entry point for exchange-rates-connected ETL: exchange rates table & currency-specified amounts (CAGs)
+ * @author Dolghier Constantin
+ *
+ */
 public class CalculateExchangeRatesEtlJob {
 	
 	protected final Connection conn;
 	protected final MonetConnection monetConn;
 	protected final List<Long> currencyIds;
+	
+	/**
+	 * the dates on which to run the incremental ETL
+	 */
 	protected final SortedSet<Long> usedDates;
 	
 	protected final EtlConfiguration etlConfig;	
@@ -40,12 +48,20 @@ public class CalculateExchangeRatesEtlJob {
 		this.usedDates = getCurrencyDates();
 	}
 			
+	/**
+	 * incrementally updates the exchange rates table and then incrementally updates the CAGs
+	 * @throws SQLException
+	 */
 	public void work() throws SQLException {
 		generateExchangeRatesTable();
 		for(CurrencyAmountGroup cag:MondrianTablesRepository.CURRENCY_GROUPS)
 			generateExchangeRatesColumns(cag);
 	}
 
+	/**
+	 * incrementally updates a CAG
+	 * @param cag
+	 */
 	private void generateExchangeRatesColumns(CurrencyAmountGroup cag) {
 		Set<String> destTableColumns = monetConn.getTableColumns(cag.destinationTable);
 		for (long currId:currencyIds) {

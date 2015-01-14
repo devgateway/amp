@@ -33,13 +33,10 @@
 
 		    <%--  Only one locale in this loop --%>
             <c:forEach items="${dta.locales}" var="cur_locale">
-                <c:if test="${fn:length(dta.locales) gt 1}">
-                    <c:set var="placeholder" value="${cur_locale}" />
-                </c:if>
                 <div>
                     <input type="text" name="${dta.prefix}_${cur_locale}"
                         value="<c:out value="${dta.translations[cur_locale]}"/>"
-                        placeholder="(${placeholder})"
+
                         <c:if test="${not empty param.onkeyup}">
                             onkeyup="${param.onkeyup}"
                         </c:if>

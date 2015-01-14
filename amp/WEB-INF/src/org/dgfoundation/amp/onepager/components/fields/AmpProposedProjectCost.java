@@ -57,7 +57,7 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 
 		if (!FeaturesUtil.isVisibleModule("/Activity Form/Funding/Overview Section/Proposed Project Cost/Annual Proposed Project Cost")) {
 			amount = new AmpTextFieldPanel<Double>("proposedAmount", new PropertyModel<Double>(am,
-					CategoryConstants.PROPOSE_PRJC_AMOUNT_KEY), CategoryConstants.PROPOSE_PRJC_AMOUNT_NAME, false) {
+					CategoryConstants.PROPOSE_PRJC_AMOUNT_KEY), CategoryConstants.PROPOSE_PRJC_AMOUNT_NAME, false,false,true) {
 				public IConverter getInternalConverter(java.lang.Class<?> type) {
 					DoubleConverter converter = (DoubleConverter) DoubleConverter.INSTANCE;
 					NumberFormat formatter = FormatHelper.getDecimalFormat(true);

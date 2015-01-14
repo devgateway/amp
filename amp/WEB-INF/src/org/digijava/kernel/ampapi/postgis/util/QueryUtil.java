@@ -261,9 +261,11 @@ public static List<JsonBean> getOrgGroups() {
 						" o.acronym ,  "+
 						" aor.role roleId , "+ 
 						" o.org_grp_id grpId  "+
+						" , EXISTS(SELECT af.amp_donor_org_id FROM amp_funding af WHERE o.amp_org_id = af.amp_donor_org_id) AS hasFundings " +
 						" from amp_org_role aor,amp_organisation o "+
 						" where aor.organisation=o.amp_org_id " +
-						" AND o.amp_org_id IN (select DISTINCT(amp_donor_org_id) FROM amp_funding) " +
+						" and (o.deleted is null or o.deleted = false) " +
+						/*" AND o.amp_org_id IN (select DISTINCT(amp_donor_org_id) FROM amp_funding) " +*/
 						" and aor.role IN " +
 							"(SELECT r.amp_role_id FROM amp_role r WHERE r.role_code IN (" + 
 							Util.toCSStringForIN(roleCodes) + "))" +
@@ -285,6 +287,7 @@ public static List<JsonBean> getOrgGroups() {
 						org.set("acronym", rs.getString("acronym"));
 						org.set("groupId", rs.getLong("grpId"));	
 						org.set("rolesIds", rolesId);
+						org.set("hasFundings", rs.getBoolean("hasFundings"));
 						orgs.add(org);
 					}
 					rolesId.add(rs.getLong("roleId"));

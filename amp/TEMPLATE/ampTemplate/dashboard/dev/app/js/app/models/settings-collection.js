@@ -6,7 +6,7 @@ var Setting = require('./setting');
 
 function isIntStr(n) {
   // test whether a string starts with is a base-10 int
-  return !isNaN(parseInt(n, 10))
+  return !isNaN(parseInt(n, 10));
 }
 
 
@@ -16,7 +16,7 @@ function tagIf(test, tag) {
       setting[tag] = true;
     }
     return setting;
-  }
+  };
 }
 
 
@@ -48,7 +48,7 @@ module.exports = BackboneDash.Collection.extend({
           options: _(setting.options).map(tagIf(function(option) {
             return option.id === setting.defaultId;
           }, 'selected'))
-        })
+        });
       })
       .value();
   },

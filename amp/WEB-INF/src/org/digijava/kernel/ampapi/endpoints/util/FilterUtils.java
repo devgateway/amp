@@ -35,7 +35,8 @@ public class FilterUtils {
 	public static MondrianReportFilters getApiOtherFilters(Map<String, Object> filter, MondrianReportFilters filterRules) {
 		for (String columnName : COLUMN_DATES_FILTER) {
 			if (filter.get(columnName) != null) {
-				filterRules = addDateFilterRule(columnName, filter, filterRules);
+				//TODO right now it is not filtering correctly, check this problem
+				//filterRules = addDateFilterRule(columnName, filter, filterRules);
 			}
 		}
 		if (filter.get("date") != null) {

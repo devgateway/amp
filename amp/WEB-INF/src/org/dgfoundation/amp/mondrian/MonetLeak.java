@@ -11,7 +11,11 @@ import java.util.List;
 
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
 
-
+/**
+ * stress test class for Monet memory leaks / instabilities. Do not call in production!
+ * @author Dolghier Constantin
+ *
+ */
 public class MonetLeak {
 	
 	public MonetLeak() throws Exception {

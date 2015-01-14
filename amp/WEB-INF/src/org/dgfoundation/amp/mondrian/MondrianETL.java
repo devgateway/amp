@@ -43,6 +43,7 @@ import static org.dgfoundation.amp.mondrian.MondrianTablesRepository.FACT_TABLE;
 
 /**
  * the entry point for doing ETL for Mondrian in AMP
+ * Please see https://wiki.dgfoundation.org/display/AMPDOC/AMP+2.10+ETL+process
  * @author Dolghier Constantin
  *
  */
@@ -65,12 +66,12 @@ public class MondrianETL {
 	//public final static ReadWriteLockHolder MONDRIAN_LOCK = new ReadWriteLockHolder("Mondrian reports/etl lock");
 	
 	/**
-	 * ETL lock
+	 * ETL lock - used for serializing ETL runs
 	 */
 	private final static Object ETL_LOCK = new Object();
 	
 	/**
-	 * FULL ETL lock, shared with reports
+	 * FULL ETL lock, shared with reports - used to prevent a report from running while a FULL ETL is performed and the database is in unusable shape
 	 */
 	public final static ReaderWriterLock FULL_ETL_LOCK = new ReaderWriterLock();
 		
@@ -84,13 +85,25 @@ public class MondrianETL {
 	protected EtlConfiguration etlConfig;
 	
 	/**
-	 * only access it in steps BEFORE "calculateEtl" is available!
+	 * only access it in steps BEFORE "etlConfig" is available. Superseded by etlConfig.fullEtl once the instance has been constructed
 	 */
 	protected boolean forceFullEtl;
 	
 	protected final static Fingerprint ETL_TIME_FINGERPRINT = new Fingerprint("etl_event_id", new ArrayList<String>(), "-1");
+	
+	/**
+	 * fingerprint for triggering FULL ETL once a currency has been (re)(un)defined
+	 */
 	protected final static Fingerprint CURRENCIES_FINGERPRINT = new Fingerprint("amp_currency", Arrays.asList(Fingerprint.buildTableHashingQuery("amp_currency", "amp_currency_id")));
+	
+	/**
+	 * fingerprint for triggering FULL ETL once a locale has been added/removed
+	 */
 	protected final static Fingerprint LOCALES_FINGERPRINT = new Fingerprint("locales", Arrays.asList("select code from DG_SITE_TRANS_LANG_MAP where site_id = 3 order by code"));
+	
+	/**
+	 * fingerprint for triggering FULL ETL once a calendar has been added/removed
+	 */
 	protected final static Fingerprint CALENDARS_FINGERPRINT = new Fingerprint("calendars", Arrays.asList(Fingerprint.buildTableHashingQuery("amp_fiscal_calendar", "amp_fiscal_cal_id")));
 	
 	protected static Logger logger = Logger.getLogger(MondrianETL.class);
@@ -98,7 +111,7 @@ public class MondrianETL {
 	protected LinkedHashSet<String> locales;
 	
 	/**
-	 * the Postgres timestamp when this ETL process started
+	 * the amp_etl_changelog::event_id of the currently-running ETL process (e.g. the end of the EEW)
 	 */
 	protected long currentEtlEventId;
 	
@@ -108,10 +121,11 @@ public class MondrianETL {
 	protected long currentEtlId;
 	
 	/**
-	 * the amp_etl_changelog::event_id when the previous ETL was started
+	 * the amp_etl_changelog::event_id when the previous ETL was started (e.g. the beginning of the EEW)
 	 */
 	protected long previousEtlEventId;
 		
+	// the following fields are local copies of the would-be-built EtlResult instance
 	private boolean cacheInvalidated = false;
 	private long nrAffectedDates;
 		
@@ -132,6 +146,12 @@ public class MondrianETL {
 		this.locales = new LinkedHashSet<>(TranslatorUtil.getLocaleCache(SiteUtils.getDefaultSite()));
 	}
 	
+	/**
+	 * scans the EEW and analyzes fingerprints in order to decide the kind of ETL to do
+	 * @param fullEtlJobs
+	 * @return
+	 * @throws SQLException
+	 */
 	protected EtlConfiguration calculateEtlConfiguration(List<ExceptionRunnable<? extends Exception>> fullEtlJobs) throws SQLException{
 		boolean etlFromScratch = shouldMakeFullEtl(fullEtlJobs);
 		Set<Long> pledges = etlFromScratch ? 
@@ -159,7 +179,7 @@ public class MondrianETL {
 	}
 	
 	/**
-	 * collect ETL entities from the window of the currently-running ETL
+	 * collect ETL entities from the EEW
 	 * @param entityType
 	 * @return
 	 */
@@ -168,6 +188,13 @@ public class MondrianETL {
 		return new TreeSet<>(SQLUtils.fetchLongs(conn, query));
 	}
 	
+	/**
+	 * does an iteration of BFS on (activity, pledge, component) IDs
+	 * @param activities
+	 * @param pledges
+	 * @param components
+	 * @return true iff anything changed
+	 */
 	private boolean iterateEtlEntities(Set<Long> activities, Set<Long> pledges, Set<Long> components) {
 		int oldNrActivies = activities.size();
 		int oldNrPledges = pledges.size();
@@ -204,7 +231,10 @@ public class MondrianETL {
 	protected final static String MONDRIAN_ETL = "Mondrian-etl";
 	
 	/**
-	 * cleanup for ease-of-debugging - normally not needed and not triggered
+	 * cleanup for ease-of-debugging - triggered at FULL ETL in order to enforce clean state
+	 * cleans up: 
+	 * 	1. all Mondrian tables Monet-side and PSQL-side
+	 * 	2. all tables with names starting with "etl_" Monet-side and PSQL-side
 	 */
 	protected void cleanupTables() {
 		logger.warn("Full etl requested, cleaning up preexisting tables");
@@ -238,7 +268,7 @@ public class MondrianETL {
 	}
 	
 	/**
-	 * runs the ETL
+	 * the ETL main function
 	 */
 private EtlResult execute() throws Exception {
 	boolean fullEtlLockAcquired = false;
@@ -254,7 +284,8 @@ private EtlResult execute() throws Exception {
 		previousEtlEventId = Long.valueOf(
 				monetConn.tableExists(Fingerprint.FINGERPRINT_TABLE) ? 
 					ETL_TIME_FINGERPRINT.readOrReturnDefaultFingerprint(monetConn) : ETL_TIME_FINGERPRINT.defaultValue);
-		List<ExceptionRunnable<? extends Exception>> fullEtlJobs = new ArrayList<>();
+		
+		List<ExceptionRunnable<? extends Exception>> fullEtlJobs = new ArrayList<>(); // will collect all "FULL ETL" pieces of code to run under the FULL ETL lock
 				
 		// log the ETL start and get its ids
 		SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_log (duration) VALUES (null)");
@@ -262,7 +293,7 @@ private EtlResult execute() throws Exception {
 		SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('etl', " + currentEtlId + ")");
 		currentEtlEventId = SQLUtils.getLong(conn, "SELECT max(event_id) FROM amp_etl_changelog WHERE entity_name = 'etl'");
 
-		boolean fullEtlRequestedDB = !collectEtlEntities("full_etl_request").isEmpty();
+		boolean fullEtlRequestedDB = !collectEtlEntities("full_etl_request").isEmpty(); // was full_etl requested?
 		if (fullEtlRequestedDB) {
 			forceFullEtl |= fullEtlRequestedDB;
 			reasonsForFull.add("DB_requested");
@@ -282,13 +313,16 @@ private EtlResult execute() throws Exception {
 		logger.info("running ETL, the configuration is: " + etlConfig.toString());
 		boolean redoTrnDimensions = !collectEtlEntities("translation").isEmpty();
 				
-		boolean workToDo = etlConfig.fullEtl || redoTrnDimensions || !etlConfig.activityIds.isEmpty() || !etlConfig.pledgeIds.isEmpty() || !etlConfig.dateCodes.isEmpty();
+		boolean workToDo = etlConfig.fullEtl || redoTrnDimensions 
+				|| !etlConfig.activityIds.isEmpty() || !etlConfig.pledgeIds.isEmpty() || !etlConfig.dateCodes.isEmpty(); // is there anything to do?
+		
 		if ((!etlConfig.fullEtl) && (!fullEtlJobs.isEmpty()))
 			throw new RuntimeException("jss u r st00p33d");
+		
 		if (workToDo) {
 			if (etlConfig.fullEtl) {
+				// doing full ETL
 				FULL_ETL_LOCK.writeLock();
-				//if (forceFullEtl) Thread.sleep(15000);
 				fullEtlLockAcquired = true;
 				logger.info("doing full ETL");
 				for(ExceptionRunnable<?> job:fullEtlJobs)
@@ -303,11 +337,12 @@ private EtlResult execute() throws Exception {
 					});
 				}
 			
-				recreateFactTable();
+				recreateFactTable(); // since fact table manipulation is incremental in nature (even if doing a FULL ETL) -> insure a clean state of it
 				generateMondrianDateTable();
 			}
 					
 			if (redoTrnDimensions && !etlConfig.fullEtl) {
+				// some trn-translation changed, but not requested FULL ETL -> fully redo the trn-backed dimensions
 				FULL_ETL_LOCK.writeLock();
 				logger.info("redoing trn-backed dimensions, as some translations have changed and doing just an incremental ETL");
 				for(MondrianTableDescription table:MondrianTablesRepository.TRN_BACKED_DIMENSIONS)
@@ -315,7 +350,7 @@ private EtlResult execute() throws Exception {
 				FULL_ETL_LOCK.writeUnlock();
 			}
 
-			generateActivitiesEntries();
+			generateActivitiesEntries(); // update/generate all the per-activity tables
 		
 			new CalculateExchangeRatesEtlJob(null, conn, monetConn, etlConfig).work();
 			StopWatch.next(MONDRIAN_ETL, true, "generateExchangeRates");
@@ -435,6 +470,7 @@ private EtlResult execute() throws Exception {
 			}
 		});
 		
+		// if any of the dimension tables changed -> redo the whole thing
 		for (final MondrianTableDescription mondrianTable:MondrianTablesRepository.MONDRIAN_DIMENSION_TABLES)
 			mondrianTable.fingerprint.runIfFingerprintChangedOr(conn, monetConn, res.value, stepSkipped, new ExceptionRunnable<SQLException>() {
 				@Override public void run() throws SQLException {
@@ -667,7 +703,7 @@ private EtlResult execute() throws Exception {
 	}
 	
 	/**
-	 * generates the fact table's Cartesian Product sources (prim/sec/tert sectors + programs + locations + orgs) and then, the fact table
+	 * incremental ETL for the per-activity data structures
 	 * @throws SQLException
 	 */
 	protected void generateActivitiesEntries() throws SQLException {
@@ -831,6 +867,10 @@ private EtlResult execute() throws Exception {
 		}
 	}
 
+	/**
+	 * incremental ETL for the etl_ tables pertaining to orgs
+	 * @throws SQLException
+	 */
 	protected void generateOrganisationsEtlTables() throws SQLException {
 		if (etlConfig.activityIds.isEmpty())
 			return;
@@ -846,7 +886,7 @@ private EtlResult execute() throws Exception {
 	}
 	
 	/**
-	 * cleans up percentages and NULLs for sectors and generates the tables which are the base for the Cartesian Product
+	 * incremental ETL for the etl_ tables pertaining to sectors
 	 * @throws SQLException
 	 */
 	protected void generateSectorsEtlTables() throws SQLException {
@@ -857,7 +897,7 @@ private EtlResult execute() throws Exception {
 	}
 
 	/**
-	 * cleans up percentages and NULLs for programs and generates the tables which are the base for the Cartesian Product
+	 * incremental ETL for the etl_ tables pertaining to programs
 	 * @throws SQLException
 	 */
 	protected void generateProgramsEtlTables() throws SQLException {
@@ -869,7 +909,7 @@ private EtlResult execute() throws Exception {
 	}
 
 	/**
-	 * cleans up percentages and NULLs for locations and generates the tables which are the base for the Cartesian Product
+	 * incremental ETL for the etl_ tables pertaining to locations
 	 * @throws SQLException
 	 */
 	protected void generateLocationsEtlTables() throws SQLException {
@@ -960,7 +1000,7 @@ private EtlResult execute() throws Exception {
 //	}
 	
 	/**
-	 * reads from factTableQuery the list of queries, filtering out those which would do nothing anyway
+	 * reads from factTableQuery the list of queries, inserts entity IDs in it and then filtering out those queries which would do nothing anyway
 	 * @return
 	 */
 	protected List<String> generateFactTableQueries() {

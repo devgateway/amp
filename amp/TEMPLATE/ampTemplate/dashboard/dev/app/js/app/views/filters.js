@@ -73,10 +73,10 @@ module.exports = BackboneDash.View.extend({
 
   showFilterDetails: function() {
     var filters = this.app.filter.serializeToModels();
-    console.log('f', filters);
     var applied = _(filters.columnFilters).map(function(filter, key) {
       return {
         name: key,
+        id: key.replace(/[^\w]/g, ''),  // remove anything non-alphanum
         detail: _(filter).map(function(value) {
           return value.get('name');
         })

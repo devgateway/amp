@@ -30,7 +30,7 @@ module.exports = BackboneDash.Collection.extend({
 
   initialize: function(models, options) {
     this.app = options.app;
-    this._loaded = new Deferred();
+    this._loaded = null;
     _.bindAll(this, 'toAPI', 'fromState');
   },
 
@@ -54,7 +54,11 @@ module.exports = BackboneDash.Collection.extend({
   },
 
   load: function() {
-    if (this._loaded.state() !== 'pending') { return this._loaded.promise(); }
+    if (this._loaded) {
+      return this._loaded.promise();
+    } else {
+      this._loaded = new Deferred();
+    }
 
     this.fetch({app: this.app })
       .then(_(function() {

@@ -16,7 +16,7 @@ module.exports = BackboneDash.View.extend({
     this.app = options.app;
     this.modalView = new ModalView({ app: this.app, collection: this.collection });
 
-    this.app.settings._loaded.done(_(function() {
+    this.app.settings.load().done(_(function() {
       this.app.state.register(this, 'settings', {
         get: this.app.settings.toAPI,
         set: this.app.settings.fromState

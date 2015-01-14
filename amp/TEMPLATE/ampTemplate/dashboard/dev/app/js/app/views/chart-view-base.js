@@ -104,7 +104,8 @@ module.exports = BackboneDash.View.extend({
 
   updateData: function() {
     if (!this.rendered) { return; }  // short-circuit on early filters apply event
-    if (this._stateWait.state() === 'pending') {  // short-circuit until we have state
+    if (this._stateWait.state() === 'pending' ||  // short-circuit until we have state
+        this.app.settings.load().state() === 'pending') {  // short-circuit until we have settings
       this.message.html('Loading saved settings...').fadeIn(100);
       return;
     }

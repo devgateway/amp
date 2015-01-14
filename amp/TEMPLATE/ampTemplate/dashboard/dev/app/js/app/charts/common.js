@@ -88,6 +88,7 @@ function nvBoiler(nvData, chart, svg, specific, trimLabels, addLegend, width) {
     .datum(nvData)
     .call(chart);
   nv.utils.windowResize(chart.update);  // uuuuuguggggh
+  window.setTimeout(chart.update, 0);  // fixes wierd slightly-off bugs
   nv.addGraph(function() { return chart; });  // uuuuugly is nvd3
   return svg;
 }

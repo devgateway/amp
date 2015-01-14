@@ -77,7 +77,6 @@ import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.GlobalSettings;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.Location;
-import org.digijava.module.aim.helper.MTEFProjection;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.ReferenceDoc;
@@ -2636,14 +2635,8 @@ public class ExportActivityToWord extends Action {
 
                         	mtefExisting = true;
                             String projectedType = "";
-                            if (MTEFProjection.PROJECTION_ID == projection.getProjected().getId()) {
-                                projectedType = "Projection";
-                            }
 
-                            if (MTEFProjection.PIPELINE_ID == projection.getProjected().getId()) {
-                                projectedType = "Pipeline";
-                            }
-
+                            projectedType = projection.getProjected().getValue();
                             sectionHelperRowData = new ExportSectionHelperRowData(TranslatorWorker.translateText(projectedType), null, null, true);
                             sectionHelperRowData.addRowData(DateConversion.convertDateToFiscalYearString(projection.getProjectionDate()));
                             

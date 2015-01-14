@@ -84,6 +84,9 @@ function nvBoiler(nvData, chart, svg, specific, trimLabels, addLegend, width) {
   } else if (!addLegend && specific.removeLegend) {
     specific.removeLegend(chart);
   }
+  if (specific.staggerX) {
+    specific.staggerX(chart, nvData);
+  }
   d3.select(svg)
     .datum(nvData)
     .call(chart);

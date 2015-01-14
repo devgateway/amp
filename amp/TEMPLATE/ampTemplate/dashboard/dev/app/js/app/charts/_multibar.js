@@ -17,6 +17,15 @@ function countCategories(data) {
 }
 
 
+function staggerX(chart, nvData) {
+  if (!nvData[0]) { return; }
+  if (nvData[0].values.length < 5) { return; }
+  chart
+    .staggerLabels(true)
+    .margin({bottom: 40});
+}
+
+
 function chart(options) {
   var maxValue = 10;
   var _chart = nv.models.multiBarChart()
@@ -41,5 +50,6 @@ module.exports = {
   dispatchName: 'multibar',
   countCategories: countCategories,
   dataToNv: dataToNv,
+  staggerX: staggerX,
   chart: chart
 };

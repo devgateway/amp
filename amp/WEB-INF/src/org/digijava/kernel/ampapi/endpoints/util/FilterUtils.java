@@ -3,6 +3,7 @@ package org.digijava.kernel.ampapi.endpoints.util;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,7 +16,6 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.utils.ConstantsUtil;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
@@ -28,30 +28,47 @@ import org.digijava.module.search.util.SearchUtil;
 
 public class FilterUtils {
 	protected static Logger logger = Logger.getLogger(FilterUtils.class);
+	private static List<String> COLUMN_DATES_FILTER = Arrays.asList(ColumnConstants.PROPOSED_START_DATE,
+			ColumnConstants.ACTUAL_START_DATE, ColumnConstants.ACTUAL_COMPLETION_DATE,
+			ColumnConstants.FINAL_DATE_FOR_CONTRACTING, ColumnConstants.PROPOSED_COMPLETION_DATE);
 	
-	
-	public static MondrianReportFilters getApiOtherFilters(Map<String, Object> filter,
+	public static MondrianReportFilters getApiOtherFilters(Map<String, Object> filter, MondrianReportFilters filterRules) {
+		for (String columnName : COLUMN_DATES_FILTER) {
+			if (filter.get(columnName) != null) {
+				filterRules = addDateFilterRule(columnName, filter, filterRules);
+			}
+		}
+		if (filter.get("date") != null) {
+			filterRules = addDateFilterRule("date", filter, filterRules);
+		}
+
+		return filterRules;
+	}
+
+	private static MondrianReportFilters addDateFilterRule(String dateColumn, Map<String, Object> filter,
 			MondrianReportFilters filterRules) {
 		try {
-			if (filter.get("date") != null) {
-				if (filterRules == null) {
-					filterRules = new MondrianReportFilters();
-				}
-				Map<String, Object> date = (LinkedHashMap<String, Object>) filter
-						.get("date");
-				String start = String.valueOf(date.get("start"));
-				String end = String.valueOf(date.get("end"));
-				if (start !=null || end != null) {
-					SimpleDateFormat sdf = new SimpleDateFormat(
-							MoConstants.DATE_FORMAT);
-					filterRules.addDateRangeFilterRule(start == null ? null : sdf.parse(start),
-							end == null ? null : sdf.parse(end));
+			if (filterRules == null) {
+				filterRules = new MondrianReportFilters();
+			}
+			Map<String, Object> date = (LinkedHashMap<String, Object>) filter.get(dateColumn);
+			String start = String.valueOf(date.get("start"));
+			String end = String.valueOf(date.get("end"));
+			if (start != null || end != null) {
+				SimpleDateFormat sdf = new SimpleDateFormat(MoConstants.DATE_FORMAT);
+				if (COLUMN_DATES_FILTER.contains(dateColumn)) {
+					//filterRules.addDateRangeFilterRule(new ReportColumn(dateColumn),
+						//	start == null ? null : sdf.parse(start), end == null ? null : sdf.parse(end));
+				} else {
+					filterRules.addDateRangeFilterRule(start == null ? null : sdf.parse(start), end == null ? null
+							: sdf.parse(end));
 				}
 			}
 		} catch (AmpApiException | ParseException e) {
 			logger.error("cannot process date", e);
 		}
 		return filterRules;
+
 	}
 
 	/**

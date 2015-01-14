@@ -231,13 +231,16 @@ public class EndpointUtils {
 		}
 		return mapId;
 	}
-		
+	
+	public static List<AvailableMethod> getAvailableMethods(String className){
+	return getAvailableMethods(className,false);
+	}
 	/**
 	 * 
 	 * @param className
 	 * @return
 	 */
-	public static List<AvailableMethod> getAvailableMethods(String className){
+	public static List<AvailableMethod> getAvailableMethods(String className,boolean includeColumn){
 		List<AvailableMethod> availableFilters=new ArrayList<AvailableMethod>(); 
 		try {
 			Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
@@ -268,6 +271,9 @@ public class EndpointUtils {
 						filter.setUi(apiAnnotation.ui());
 						filter.setId(apiAnnotation.id());
 						filter.setFilterType(apiAnnotation.filterType());
+						if (includeColumn) {
+							filter.setColumn(apiAnnotation.column());
+						}
 						//we check the method exposed
 						if (((Method) mbr).getAnnotation(javax.ws.rs.POST.class) != null){
 							filter.setMethod("POST");

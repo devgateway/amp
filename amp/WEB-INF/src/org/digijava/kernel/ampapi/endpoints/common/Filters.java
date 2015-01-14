@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -62,7 +61,7 @@ public class Filters {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public List<AvailableMethod> getAvailableFilters() {
-		return EndpointUtils.getAvailableMethods(Filters.class.getName());
+		return EndpointUtils.getAvailableMethods(Filters.class.getName(),true);
 	}
 
 	
@@ -176,7 +175,8 @@ public class Filters {
 	@GET
 	@Path("/proposedStartDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Proposed Start Date", id = "ProposedStartDate", filterType={FilterType.REPORTS,FilterType.TAB})
+	@ApiMethod(ui = true, name = "Proposed Start Date", column = ColumnConstants.PROPOSED_START_DATE, id = "ProposedStartDate", filterType = {
+			FilterType.REPORTS, FilterType.TAB })
 	public JsonBean getProposedStartDate(){
 		JsonBean date = getDefaultDate();
 		return date;
@@ -185,7 +185,8 @@ public class Filters {
 	@GET
 	@Path("/actualStartDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Actual Start Date", id = "ActualStartDate", filterType={FilterType.REPORTS,FilterType.TAB})
+	@ApiMethod(ui = true, name = "Actual Start Date", column = ColumnConstants.ACTUAL_START_DATE, id = "ActualStartDate", filterType = {
+			FilterType.REPORTS, FilterType.TAB })
 	public JsonBean getActualStartDate(){
 		JsonBean date = getDefaultDate();
 		return date;
@@ -194,7 +195,8 @@ public class Filters {
 	@GET
 	@Path("/plannedCompletionDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Planned Completion Date", id = "PlannedCompletionDate", filterType={FilterType.REPORTS,FilterType.TAB})
+	@ApiMethod(ui = true, name = "Planned Completion Date", column = ColumnConstants.PROPOSED_COMPLETION_DATE, id = "PlannedCompletionDate", filterType = {
+			FilterType.REPORTS, FilterType.TAB })
 	public JsonBean getPlannedCompletionDate(){
 		JsonBean date = getDefaultDate();
 		return date;
@@ -203,7 +205,8 @@ public class Filters {
 	@GET
 	@Path("/actualCompletionDate/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Actual Completion Date", id = "ActualCompletionDate", filterType={FilterType.REPORTS,FilterType.TAB})
+	@ApiMethod(ui = true, name = "Actual Completion Date", column = ColumnConstants.ACTUAL_COMPLETION_DATE, id = "ActualCompletionDate", filterType = {
+			FilterType.REPORTS, FilterType.TAB })
 	public JsonBean getActualCompletionDate(){
 		JsonBean date = getDefaultDate();
 		return date;
@@ -212,7 +215,8 @@ public class Filters {
 	@GET
 	@Path("/dateOfAgreement/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Date of Agreement", id = "DateOfAgreement", filterType={FilterType.REPORTS,FilterType.TAB})
+	@ApiMethod(ui = true, name = "Date of Agreement", column = ColumnConstants.FINAL_DATE_FOR_CONTRACTING, id = "DateOfAgreement", filterType = {
+			FilterType.REPORTS, FilterType.TAB })
 	public JsonBean getDateOfAgreement(){
 		JsonBean date = getDefaultDate();
 		return date;

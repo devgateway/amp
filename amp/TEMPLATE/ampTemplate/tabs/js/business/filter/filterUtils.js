@@ -94,25 +94,32 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 			}
 		}
 		if (filtersFromWidgetWithNames.otherFilters != undefined) {
-			var dateContent = filtersFromWidgetWithNames.otherFilters["date"];
-			if (dateContent != undefined) {
-				var filter = new Filter({
-					name : "Start Date",
-					values : [ {
-						id : dateContent.start,
-						name : dateContent.start
-					} ]
-				});
-				app.TabsApp.filters.models.push(filter);
-				var filter = new Filter({
-					name : "End Date",
-					values : [ {
-						id : dateContent.end,
-						name : dateContent.end
-					} ]
-				});
-				app.TabsApp.filters.models.push(filter);
+		
+			for ( var propertyName in filtersFromWidgetWithNames.otherFilters) {
+				var dateContent = filtersFromWidgetWithNames.otherFilters[propertyName];
+				if (dateContent != undefined && dateContent.start != undefined) {
+					var prefix = "";
+					if (propertyName != 'date') {
+						prefix = propertyName + " - ";
+					}
+					var filter = new Filter({
+						name : prefix + "Start Date",
+						values : [ {
+							id : dateContent.start,
+							name : dateContent.start
+						} ]
+					});
+					app.TabsApp.filters.models.push(filter);
+					var filter = new Filter({
+						name : prefix + "End Date",
+						values : [ {
+							id : dateContent.end,
+							name : dateContent.end
+						} ]
+					});
+					app.TabsApp.filters.models.push(filter);
 			}
+		 }
 		}
 		app.TabsApp.dynamicContentRegion.currentView.filters.currentView.render();
 	};

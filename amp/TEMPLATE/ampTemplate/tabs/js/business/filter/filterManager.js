@@ -1,5 +1,5 @@
-define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUtils', 'jquery' ], function(
-		FiltersWidget, GridManager, FilterUtils, jQuery) {
+define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUtils', 'jquery','underscore' ], function(
+		FiltersWidget, GridManager, FilterUtils, jQuery,_) {
 
 	"use strict";
 
@@ -20,7 +20,8 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 		// Create the FilterWidget instance.
 		app.TabsApp.filtersWidget = new FiltersWidget({
 			el : containerName,
-			draggable : true
+			draggable : true,
+			caller: 'TAB'
 		});
 
 		// Register apply and cancel buttons.
@@ -62,18 +63,28 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 
 	FilterManager.saveTab = function(dialogView) {
 		var transformedFilters = FilterUtils.widgetFiltersToJavaFilters(app.TabsApp.serializedFilters);
+		var reportsInputs = jQuery('[id^="newTabNameInput"]');
+		var reportNames = _.map(reportsInputs, function(input)
+				{ 
+				var id= input.id;
+				var lang = id.substring(id.indexOf('_') + 1);
+				var value=input.value;
+				return {lang:lang,name:value}; 
+		});
 		var data = JSON.stringify({
 			filters : transformedFilters,
-			reportName : jQuery('#newTabNameInput').val()
+			reportData : reportNames
 		});
+		var tabId = app.TabsApp.currentTab.get('id');
 		jQuery.ajax({
-			url : "/rest/data/report/saveTab/" + app.TabsApp.currentTab.get('id'),
+			url : "/rest/data/report/saveTab/" + tabId,
 			dataType : 'text',
 			method : 'post',
 			contentType : 'application/json; charset=utf-8',
 			data : data
-		}).done(function(data) {
-			console.log(data);
+		}).done(function(data, textStatus, jqXHR) {
+			jQuery('#tab-link-'+tabId).prop('title',jQuery('[id^="newTabNameInput"]')[0].value);
+			jQuery('#tab-link-'+tabId).html(jQuery('[id^="newTabNameInput"]')[0].value);
 			jQuery(dialogView.el).dialog('close');
 		});
 	};

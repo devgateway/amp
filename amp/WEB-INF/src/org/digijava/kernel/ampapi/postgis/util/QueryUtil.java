@@ -12,6 +12,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.ValueWrapper;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
@@ -260,8 +261,11 @@ public static List<JsonBean> getOrgGroups() {
 						" o.acronym ,  "+
 						" aor.role roleId , "+ 
 						" o.org_grp_id grpId  "+
+						" , EXISTS(SELECT af.amp_donor_org_id FROM amp_funding af WHERE o.amp_org_id = af.amp_donor_org_id) AS hasFundings " +
 						" from amp_org_role aor,amp_organisation o "+
 						" where aor.organisation=o.amp_org_id " +
+						" and (o.deleted is null or o.deleted = false) " +
+						/*" AND o.amp_org_id IN (select DISTINCT(amp_donor_org_id) FROM amp_funding) " +*/
 						" and aor.role IN " +
 							"(SELECT r.amp_role_id FROM amp_role r WHERE r.role_code IN (" + 
 							Util.toCSStringForIN(roleCodes) + "))" +
@@ -283,6 +287,7 @@ public static List<JsonBean> getOrgGroups() {
 						org.set("acronym", rs.getString("acronym"));
 						org.set("groupId", rs.getLong("grpId"));	
 						org.set("rolesIds", rolesId);
+						org.set("hasFundings", rs.getBoolean("hasFundings"));
 						orgs.add(org);
 					}
 					rolesId.add(rs.getLong("roleId"));
@@ -429,13 +434,15 @@ public static List<JsonBean> getOrgGroups() {
 						if (rs.next()) {
 							location.set("id", rs.getLong("id"));
 							location.set("name", rs.getString("location_name"));
-							location.set("level", rs.getInt("level"));
+							location.set("level",rs.getInt("level") );
+							setFilterIdToJsonBean (location,rs.getInt("level"));
 							location.set("children", new ArrayList<JsonBean>());
 							while (rs.next()) {
 								JsonBean l = new JsonBean();
 								l.set("id", rs.getLong("id"));
 								l.set("name", rs.getString("location_name"));
 								l.set("level", rs.getInt("level"));
+								setFilterIdToJsonBean (l,rs.getInt("level"));
 								addLocationToJsonBean(location,
 										rs.getLong("parent_id"), l);
 							}
@@ -444,6 +451,25 @@ public static List<JsonBean> getOrgGroups() {
 					}
 				}
 
+				private void setFilterIdToJsonBean (JsonBean loc,Integer level) {
+					String columnName = null;
+					switch (level) {
+					case 1:
+						columnName = ColumnConstants.COUNTRY;
+						break;
+					case 2:
+						columnName = ColumnConstants.REGION;
+						break;
+					case 3:
+						columnName = ColumnConstants.ZONE;
+						break;
+					case 4:
+						columnName = ColumnConstants.DISTRICT;
+						break;
+				
+					}
+					loc.set("filterId", columnName);
+				}
 				private void addLocationToJsonBean(JsonBean loc, Long id,
 						JsonBean beanToAdd) {
 					if (loc.get("id").equals(id)) {

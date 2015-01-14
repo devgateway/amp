@@ -1,7 +1,6 @@
 package org.digijava.kernel.ampapi.endpoints.common;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -19,6 +18,7 @@ import org.dgfoundation.amp.reports.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;
+import org.digijava.kernel.ampapi.endpoints.util.FilterType;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
@@ -61,7 +61,7 @@ public class Filters {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public List<AvailableMethod> getAvailableFilters() {
-		return EndpointUtils.getAvailableMethods(Filters.class.getName());
+		return EndpointUtils.getAvailableMethods(Filters.class.getName(),true);
 	}
 
 	
@@ -169,13 +169,67 @@ public class Filters {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = true, name = "Dates", id = "Dates")
 	public JsonBean getDates(){
+		return getDefaultDate();
+	}
+	
+	@GET
+	@Path("/proposedStartDate/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, name = "Proposed Start Date", column = ColumnConstants.PROPOSED_START_DATE, id = "ProposedStartDate", filterType = {
+			FilterType.REPORTS, FilterType.TAB })
+	public JsonBean getProposedStartDate(){
+		JsonBean date = getDefaultDate();
+		return date;
+	}
+	
+	@GET
+	@Path("/actualStartDate/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, name = "Actual Start Date", column = ColumnConstants.ACTUAL_START_DATE, id = "ActualStartDate", filterType = {
+			FilterType.REPORTS, FilterType.TAB })
+	public JsonBean getActualStartDate(){
+		JsonBean date = getDefaultDate();
+		return date;
+	}
+	
+	@GET
+	@Path("/plannedCompletionDate/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, name = "Planned Completion Date", column = ColumnConstants.PROPOSED_COMPLETION_DATE, id = "PlannedCompletionDate", filterType = {
+			FilterType.REPORTS, FilterType.TAB })
+	public JsonBean getPlannedCompletionDate(){
+		JsonBean date = getDefaultDate();
+		return date;
+	}
+	
+	@GET
+	@Path("/actualCompletionDate/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, name = "Actual Completion Date", column = ColumnConstants.ACTUAL_COMPLETION_DATE, id = "ActualCompletionDate", filterType = {
+			FilterType.REPORTS, FilterType.TAB })
+	public JsonBean getActualCompletionDate(){
+		JsonBean date = getDefaultDate();
+		return date;
+	}
+
+	@GET
+	@Path("/dateOfAgreement/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, name = "Date of Agreement", column = ColumnConstants.FINAL_DATE_FOR_CONTRACTING, id = "DateOfAgreement", filterType = {
+			FilterType.REPORTS, FilterType.TAB })
+	public JsonBean getDateOfAgreement(){
+		JsonBean date = getDefaultDate();
+		return date;
+	}
+	
+	private JsonBean getDefaultDate () {
 		JsonBean date=new JsonBean();
 		date.set("startYear", FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.GIS_DEFAUL_MIN_YEAR_RANGE));
 		date.set("endYear", FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.GIS_DEFAUL_MAX_YEAR_RANGE));
 		return date;
+		
 	}
 	
-
 	/**
 	 * Return the programs filtered by the given sectorName
 	 * 
@@ -344,6 +398,19 @@ public class Filters {
 	public JsonBean getTypeOfAssistance() {
 		return getCategoryValue(CategoryConstants.TYPE_OF_ASSISTENCE_KEY,ColumnConstants.TYPE_OF_ASSISTANCE);
 	}
+	
+	/**
+	 * Return mode of payment 
+	 * 
+	 * @return
+	 */
+	@GET
+	@Path("/modeOfPayment/")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = true, id = "ModeOfPaymentList", column = ColumnConstants.MODE_OF_PAYMENT,name="Mode of Payment")
+	public JsonBean getModeOfPayment() {
+		return getCategoryValue(CategoryConstants.MODE_OF_PAYMENT_KEY,ColumnConstants.MODE_OF_PAYMENT);
+	}
 	/**
 	 * Return Activitystatus 
 	 * 
@@ -400,14 +467,14 @@ public class Filters {
 	}
 	
 	/**
-	 * Return financing instruments 
+	 * Return locations
 	 * 
 	 * @return
 	 */
 	@GET
 	@Path("/locations/")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "LocationList", column = ColumnConstants.LOCATION,name="Locations")
+	@ApiMethod(ui = true, id = "LocationList", column = ColumnConstants.LOCATION,name="Locations")
 	public JsonBean getLocations() {
 		return QueryUtil.getLocationsForFilter();
 	}
@@ -572,4 +639,5 @@ public class Filters {
 	}
 	
 
+	
 }

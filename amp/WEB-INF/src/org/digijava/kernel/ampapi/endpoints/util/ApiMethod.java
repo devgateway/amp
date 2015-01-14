@@ -11,4 +11,5 @@ public @interface  ApiMethod {
 	String name() default "";
 	String id() ;
 	String column() default EPConstants.NA;
+	FilterType [] filterType() default FilterType.ALL;
 }

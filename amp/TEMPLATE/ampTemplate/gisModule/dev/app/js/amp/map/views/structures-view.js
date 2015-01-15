@@ -152,15 +152,17 @@ module.exports = Backbone.View
   _createSectorMarker: function(latlng, feature) {
     var sectorCode = 0; // temp code for catchall...
     var filterVertical = this.structureMenuModel.get('filterVertical');
-
+//feature.properties.activity.attributes.matchesFilters[filterVertical]
     if (feature.properties.activity.attributes &&
-        feature.properties.activity.attributes.matchesFilters[filterVertical] &&
-        feature.properties.activity.attributes.matchesFilters[filterVertical].length >= 0) {
-      if (feature.properties.activity.attributes.matchesFilters[filterVertical].length > 1) {
-        sectorCode = '0';
-        console.warn('TODO: need custom vairous sectors icon...different from  multi-sector');
+      	_.has(feature.properties.activity.attributes.matchesFilters, filterVertical)) {
+      if (feature.properties.activity.attributes.matchesFilters[filterVertical] == null) {
+    	  //It has no sector/donor
+    	  sectorCode = '1';
+      } else if (feature.properties.activity.attributes.matchesFilters[filterVertical].length > 1) {
+       sectorCode = '0';
+       console.warn('TODO: need custom vairous sectors icon...different from  multi-sector');
       } else {
-        sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
+       sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
       }
     }
 

@@ -176,15 +176,27 @@ module.exports = Backbone.Collection
               return '';
             }
           } else {
-            console.warn('Activity is missing desired vertical');
-            return 'n/a';
+        	 //In cases where projects do not have sectors or donors (for example draft projects
+        	  //or planned project with no funding) there needs to be a 'none' option for project sites
+        	  //in the GIS legends
+        	 if (activity.get('matchesFilters')[filterVertical] !== undefined) {
+    	  	 return 'None';
+             }
+        	 else {
+        		 console.warn('Activity is missing desired vertical');
+         	  	 return 'n/a';
+        	 }
+        	 
           }
         })
         .map(function(sites, orgId) {
           var code = -1;
-          if (sites[0].get('activity').get('matchesFilters')[filterVertical] &&
-            sites[0].get('activity').get('matchesFilters')[filterVertical][0].get) {
-            if (sites[0].get('activity').get('matchesFilters')[filterVertical].length > 1) {
+          if (_.has(sites[0].get('activity').get('matchesFilters'),filterVertical)) {
+        	if (sites[0].get('activity').get('matchesFilters')[filterVertical] == null) {
+        		//no value for sector/donor
+        		code = '1';
+        	}else if (sites[0].get('activity').get('matchesFilters')[filterVertical][0].get &&
+            	sites[0].get('activity').get('matchesFilters')[filterVertical].length > 1) {
               code = '0';
             } else {
               code = sites[0].get('activity').get('matchesFilters')[filterVertical][0].get('code');

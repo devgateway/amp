@@ -423,7 +423,7 @@ public class SaikuUtils {
 	          String value = rowData[ x ][ y ].getFormattedValue();
 	          if ( !SaikuProperties.webExportCsvUseFormattedValue ) {
 	            if ( rowData[ x ][ y ] instanceof DataCell && ( (DataCell) rowData[ x ][ y ] ).getRawNumber() != null ) {
-	              value = ( (DataCell) rowData[ x ][ y ] ).getRawNumber().toString();
+	              value = ( (DataCell) rowData[ x ][ y ] ).getFormattedValue().toString();
 	            }
 	          }
 	          if ( rowData[ x ][ y ] instanceof MemberCell && StringUtils.isNotBlank( value ) && !"null".equals( value ) ) {

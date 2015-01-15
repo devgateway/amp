@@ -35,6 +35,7 @@
 		<set name="sectors" table="AMP_SECTOR" lazy="true" inverse="true" cascade="none">
 			<key column="parent_sector_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpSector"/>
+			<filter name="isDeletedFilter" condition="(deleted is null or deleted = :deleted )"/>
 		</set>
 
 		<set name="aidlist" table="AMP_ACTIVITY_SECTOR" lazy="true" cascade="all">
@@ -43,4 +44,6 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivitySector" />
 		</set>
 	</class>
+	  <filter-def name="isDeletedFilter"><filter-param name="deleted" type="boolean"/>
+ 	</filter-def>
 </hibernate-mapping>

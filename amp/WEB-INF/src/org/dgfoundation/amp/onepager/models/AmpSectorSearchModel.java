@@ -46,7 +46,8 @@ public class AmpSectorSearchModel extends
 		try {
 			ret = new ArrayList<AmpSector>();
 			session = PersistenceManager.getRequestDBSession();
-			
+			session.enableFilter("isDeletedFilter").setParameter("deleted", Boolean.FALSE);
+
 //			BOZO, CONSTANTIN			
 //			debug / research code: please leave it here until I remove it later
 //			String myQuery = "select sec from " + AmpSector.class.getName() + " sec where sec.name like '%у%'";
@@ -81,8 +82,8 @@ public class AmpSectorSearchModel extends
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			PersistenceManager.releaseSession(session);
-		}
+			session.disableFilter("isDeletedFilter");		
+			}
 		return ret;
 	}
 

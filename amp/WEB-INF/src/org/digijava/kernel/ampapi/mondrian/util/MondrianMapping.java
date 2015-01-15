@@ -133,7 +133,9 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.ACTIVITY_APPROVED_BY, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.ATTR_ACTIVITY_APPROVED_BY, MoConstants.ATTR_ACTIVITY_APPROVED_BY));
 			addColumnDefinition(ColumnConstants.IMPLEMENTATION_LEVEL, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_IMPLEMENTATION_LEVEL, MoConstants.ATTR_IMPLEMENTATION_LEVEL));
 			addColumnDefinition(ColumnConstants.IMPLEMENTATION_LOCATION, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_IMPLEMENTATION_LOCATION, MoConstants.ATTR_IMPLEMENTATION_LOCATION));
+			addColumnDefinition(ColumnConstants.ON_OFF_TREASURY_BUDGET, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_ON_OFF_TREASURY_BUDGET, MoConstants.ATTR_ON_OFF_TREASURY_BUDGET));
 
+			
 			addColumnDefinition(ColumnConstants.GOVERNMENT_APPROVAL_PROCEDURES, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_GOVERNMENT_APPROVAL_PROCEDURES, MoConstants.ATTR_GOVERNMENT_APPROVAL_PROCEDURES));
 			addColumnDefinition(ColumnConstants.JOINT_CRITERIA, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.H_JOINT_CRITERIA, MoConstants.ATTR_JOINT_CRITERIA));
 			addColumnDefinition(ColumnConstants.INDIRECT_ON_BUDGET, new MDXLevel(MoConstants.ACTIVITY_TEXTS, MoConstants.ATTR_INDIRECT_ON_BUDGET, MoConstants.ATTR_INDIRECT_ON_BUDGET));

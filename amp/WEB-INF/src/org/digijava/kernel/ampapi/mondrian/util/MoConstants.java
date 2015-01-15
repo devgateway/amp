@@ -138,6 +138,7 @@ public final class MoConstants {
 	public static final String H_REGIONS = "Region";
 	public static final String H_ZONES = "Zone";
 	public static final String H_IMPLEMENTATION_LEVEL = "Implementation Level";
+	public static final String H_ON_OFF_TREASURY_BUDGET = "On/Off/Treasury Budget";
 	public static final String H_IMPLEMENTATION_LOCATION = "Implementation Location";
 	public static final String H_GEO_CODE = "GeoCode";
 	public static final String H_DISTRICTS = "District";
@@ -249,6 +250,7 @@ public final class MoConstants {
 	public static final String ATTR_DISTRICT_NAME = "District";
 	public static final String ATTR_LOCATION_NAME = "Specified Location";
 	public static final String ATTR_IMPLEMENTATION_LEVEL = "Implementation Level";
+	public static final String ATTR_ON_OFF_TREASURY_BUDGET = "On/Off/Treasury Budget";
 	public static final String ATTR_IMPLEMENTATION_LOCATION = "Implementation Location";
 	public static final String ATTR_COMPONENT_NAME = "Component Name";
 	public static final String ATTR_COMPONENT_DESCRIPTION = "Component Description";

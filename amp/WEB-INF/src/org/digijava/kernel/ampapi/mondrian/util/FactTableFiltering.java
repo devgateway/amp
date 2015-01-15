@@ -245,7 +245,6 @@ public class FactTableFiltering {
 			
 			add(ColumnConstants.IMPLEMENTATION_LEVEL, new ActACVIdsExpander("entity_id"));
 			
-			
 			//ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.TYPE_OF_COOPERATION, ColumnConstants.TYPE_OF_IMPLEMENTATION
 			add(ColumnConstants.FINANCING_INSTRUMENT, new IdentityExpander("financing_instrument_id"));
 			add(ColumnConstants.MODE_OF_PAYMENT, new IdentityExpander("mode_of_payment_id"));

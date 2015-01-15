@@ -85,7 +85,8 @@ module.exports = Backbone.Model
   },
 
   iconMappings: {
-    0: 'Multiple2.svg',  // used for 'various'
+	0: 'Multiple2.svg',  // used for 'various'
+	1: 'None.svg',
     100: 'Social.svg',
     110: 'Education.svg',
     120: 'Health.svg',

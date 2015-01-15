@@ -157,7 +157,8 @@ public class MondrianTablesRepository {
 								.addTrnColDef("governmentapprovalprocedures_text", "governmentapprovalprocedures_id")
 								.addTrnColDef("jointcriteria_text", "jointcriteria_id")
 								.addTrnColDef("iob_text", "iob_id")
-								.addTrnColDef("impl_level_name", "impl_level_id");
+								.addTrnColDef("impl_level_name", "impl_level_id")
+								.addTrnColDef("on_off_budget_name", "on_off_budget_id");
 					}})
 				/* no pledges addon */ ;
 	

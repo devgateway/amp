@@ -76,16 +76,24 @@ public class Filters {
 	@ApiMethod(ui = true, id = "ActivityApprovalStatus", column = ColumnConstants.APPROVAL_STATUS,name="Approval Status")
 	public JsonBean getActivityApprovalStatus() {
 		JsonBean as=new JsonBean();
-
-		List<SimpleJsonBean> activityStatus = new ArrayList<SimpleJsonBean>();
-		for (String key : AmpARFilter.activityApprovalStatus.keySet()) {
-			SimpleJsonBean sjb = new SimpleJsonBean();
-			sjb.setId(AmpARFilter.activityApprovalStatus.get(key));
-			sjb.setName(key);
-			activityStatus.add(sjb);
+		TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(
+				org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+		AmpTeam ampTeam = null;
+		if (teamMember != null) {
+			ampTeam = TeamUtil.getAmpTeam(teamMember.getTeamId());
 		}
-		as.set("filterId", ColumnConstants.APPROVAL_STATUS);
-		as.set("values",activityStatus);
+		//Hide in public view
+		if (ampTeam!=null){
+			List<SimpleJsonBean> activityStatus = new ArrayList<SimpleJsonBean>();
+			for (String key : AmpARFilter.activityApprovalStatus.keySet()) {
+				SimpleJsonBean sjb = new SimpleJsonBean();
+				sjb.setId(AmpARFilter.activityApprovalStatus.get(key));
+				sjb.setName(key);
+				activityStatus.add(sjb);
+			}
+			as.set("filterId", ColumnConstants.APPROVAL_STATUS);
+			as.set("values",activityStatus);
+		}
 		return as;
 	}
 
@@ -621,8 +629,7 @@ public class Filters {
 	
 	private boolean hasToShowWorkspaceFilter () {
 		boolean showWorkspaceFilter = true;
-		boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil
-				.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
+		boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
 		TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(
 				org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
 		AmpTeam ampTeam = null;
@@ -632,6 +639,9 @@ public class Filters {
 
 		if (ampTeam != null && ampTeam.getAccessType().equals(Constants.ACCESS_TYPE_TEAM)
 				&& ampTeam.getComputation() == false && !showWorkspaceFilterInTeamWorkspace) {
+			showWorkspaceFilter = false;
+		//Hide Workspace in public view
+		}else if(ampTeam == null){
 			showWorkspaceFilter = false;
 		}
 		return showWorkspaceFilter;

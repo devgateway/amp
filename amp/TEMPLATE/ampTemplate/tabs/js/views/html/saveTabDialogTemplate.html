@@ -10,7 +10,7 @@
  <% _(languages).each(function(language,index) { %>
    <div width="100%"  class="save-tab <%=language %>" align="center" <% if(index!=0){%>style="display:none" <%}%> >
 		
-					<input class="save-text" type="text" id="newTabNameInput_<%= language %>" value="<%=name%>">
+					<input class="save-text" type="text" id="newTabNameInput_<%= language %>" value="<%=translatedNames[language]%>">
 	</div>
 	<% }) %>
     

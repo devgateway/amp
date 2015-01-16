@@ -4,7 +4,6 @@ var BackboneDash = require('../backbone-dash');
 
 var StateLoadError = require('amp-state/index').StateLoadError;
 
-var Header = require('./header');
 var Controls = require('./controls');
 var ChartsView = require('./charts');
 var Charts = require('../models/charts-collection');
@@ -38,7 +37,6 @@ module.exports = BackboneDash.View.extend({
       }
     }
 
-    this.header = new Header({ app: this.app });
     this.controls = new Controls({ app: this.app });
     this.app.settings.load();  // maybe should go in render or something
                                // but we already do other fetches on init so...
@@ -70,7 +68,6 @@ module.exports = BackboneDash.View.extend({
   render: function() {
     this.$el.html(template());
     this.$('.container').html([
-      this.header.render().el,
       this.controls.render().el,
       this.charts.render().el,
       this.footer.render().el

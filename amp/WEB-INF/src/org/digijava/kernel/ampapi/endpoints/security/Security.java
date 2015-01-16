@@ -7,10 +7,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.ColumnConstants;
-import org.digijava.kernel.ampapi.endpoints.common.Filters;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.security.DgSecurityManager;
@@ -64,16 +63,21 @@ public class Security {
 		JsonBean user = new JsonBean();
 		if (tm != null) {
 			Site site = RequestUtils.getSite(TLSUtils.getRequest());
-			User u = UserUtils.getUser(tm.getMemberId());
+			User u;
+			try {
+				u = UserUtils.getUserByEmail(tm.getEmail());
+			} catch (DgException e) {
+				user.set("email", null);
+				return user;
+			}
 			Subject subject = UserUtils.getUserSubject(u);
 
 			boolean siteAdmin = DgSecurityManager.permitted(subject, site, ResourcePermission.INT_ADMIN);
-			boolean badmin = DgSecurityManager.permitted(subject, site, ResourcePermission.INT_ADMIN);
 			user.set("email", u.getEmail());
 			user.set("firstName", u.getFirstNames());
 			user.set("lastName", u.getLastName());
-			user.set("administratorMode", badmin);
-			if (!badmin) {
+			user.set("administratorMode", siteAdmin);
+			if (!siteAdmin) {
 				AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
 
 				if (ampTeamMember.getAmpTeam() != null) { 

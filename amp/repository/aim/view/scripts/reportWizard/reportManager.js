@@ -463,7 +463,7 @@ NormalReportManager.prototype.checkColumns	= function () {
 	}
 };
 
-NormalReportManager.prototype.checkReportName	= function () { 
+NormalReportManager.prototype.checkReportName	= function () {
 	var saveBtn = document.getElementById("last_save_button");
 	var saveBtnY = new YAHOO.util.Element(saveBtn);
 	
@@ -720,5 +720,3 @@ ShowHideElement.prototype.toggle	= function( ) {
 		return false;
 	}
 };
-
-

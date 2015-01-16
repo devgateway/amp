@@ -642,7 +642,11 @@ public class ReportWizardAction extends MultiAction {
 		
 		if ((request.getParameter("openReport") != null) && request.getParameter("openReport").equals("true")) {
 			PrintWriter out = response.getWriter();
-			out.write("openReportId=" + ampReport.getAmpReportId());
+            StringBuilder responseString = new StringBuilder();
+            responseString.append("openReportId=" + ampReport.getAmpReportId());
+            responseString.append(",");
+            responseString.append("saiku=" + FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS));
+            out.write(responseString.toString());
 			out.flush();
 			out.close();
 		}

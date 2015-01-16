@@ -1,4 +1,3 @@
-
 function getReportType() {
 	var radioEls		= aimReportWizardForm.reportType;
 	for (var i=0; i < radioEls.length +1; i++) {
@@ -149,13 +148,20 @@ SaveReportEngine.prototype.checkEnter = function (e) {
 	return true;
 };
 
-SaveReportEngine.prototype.openReport = function(reportId) {
-	globalOpenPopup(null, '/TEMPLATE/ampTemplate/saikuui/index.html#report/open/' + reportId);
+SaveReportEngine.prototype.openReport = function(reportId, isSaiku) {
+    var reportUrl = '';
+    if (isSaiku) {
+         reportUrl = '/TEMPLATE/ampTemplate/saikuui/index.html#report/open/' + reportId;
+    } else {
+         reportUrl = '/viewNewAdvancedReport.do?view=reset&widget=false&resetSettings=true&ampReportId=' + reportId;
+    }
+
+	globalOpenPopup(null, reportUrl);
 };
 
-SaveReportEngine.prototype.success	= function (o) {
+SaveReportEngine.prototype.success = function (o) {
 	var response = '';
-	if ( o.responseText.length > 2 ) {
+	if (o.responseText.length > 2) {
 		response = o.responseText;
 	}
 	var shouldOpenReport = (response.length > 2) && (/openReportId/i.test(response));
@@ -163,16 +169,30 @@ SaveReportEngine.prototype.success	= function (o) {
 	if (shouldShowError) {
 		this.divEl.innerHTML = response;
 		if (response.indexOf("duplicateName") >= 0 ) {
-			getReportTitleEl().value	= "";
+			getReportTitleEl().value = "";
 		}
 		return;
 	}
 	
 	// got till here -> no error
+	// example response string: {openReportId=1344,saiku=false}
 	if (shouldOpenReport && getDesktopTab()=="false") {
 		//if it's not a tab we do open it
-		var arr = response.split('=');
-		this.openReport(arr[1]); // open report in a new browser tab/window
+		// parsing without the jQuery
+		var parametersArray = response.split(',');
+		var openSaiku = false;
+		var openReportId = '';
+		if (parametersArray.length == 2) {
+		    var saikuParamArray = parametersArray[1].split("=");
+		    openSaiku = ("saiku" === saikuParamArray[0] && "true" === saikuParamArray[1]);
+
+		    var reportIdParamArray = parametersArray[0].split("=");
+		    if ("openReportId" === reportIdParamArray[0]) {
+		        openReportId = reportIdParamArray[1];
+		    }
+		}
+
+		this.openReport(openReportId, openSaiku); // open report in a new browser tab/window
 	}
 	
 	window.location.replace("/aim/viewTeamReports.do?tabs=" + getDesktopTab()); // open tabs/reports list in current window

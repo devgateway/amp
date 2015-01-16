@@ -48,21 +48,12 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.util.DbUtil;
 
 public class ReportsUtil {
 	protected static final Logger logger = Logger.getLogger(ReportsUtil.class);
 
-	public static JSONTab convert(AmpReports report, Boolean visible) {
-		JSONTab tab = new JSONTab();
-		tab.setId(report.getAmpReportId());
-		tab.setName(TranslatorWorker.translateText(report.getName()));
-		tab.setVisible(visible);
-		return tab;
-	}
-	
 	/**
 	 * Retrieves the page for the  result for the specified reportId and a given page number
 	 *  

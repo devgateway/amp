@@ -275,7 +275,7 @@ public class Reports {
 		AmpApplicationSettings ampAppSettings = DbUtil.getTeamAppSettings(ampTeamMember.getAmpTeam().getAmpTeamId());
 		AmpReports defaultTeamReport = ampAppSettings.getDefaultTeamReport();
 		if (defaultTeamReport != null) {
-			tabs.add(ReportsUtil.convert(defaultTeamReport, true));
+			tabs.add(new JSONTab(defaultTeamReport.getAmpReportId(),true));
 		}
 
 		// Get the visible tabs of the currently logged user
@@ -286,7 +286,7 @@ public class Reports {
 
 			while (iter.hasNext()) {
 				AmpReports report = iter.next().getReport();
-				JSONTab tab = new JSONTab(report.getAmpReportId(), TranslatorWorker.translateText(report.getName()), true);
+				JSONTab tab = new JSONTab(report.getAmpReportId(), true);
 				tabs.add(tab);
 			}
 		}
@@ -298,7 +298,7 @@ public class Reports {
 
 		while (iter.hasNext()) {
 			AmpReports report = iter.next();
-			JSONTab tab = new JSONTab(report.getAmpReportId(), TranslatorWorker.translateText(report.getName()), false);
+			JSONTab tab = new JSONTab(report.getAmpReportId(), false);
 			boolean found = false;
 			Iterator<JSONTab> iTabs = tabs.iterator();
 			while (iTabs.hasNext() && !found) {

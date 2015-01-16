@@ -86,6 +86,7 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 			jQuery('#tab-link-'+tabId).prop('title',jQuery('[id^="newTabNameInput"]')[0].value);
 			jQuery('#tab-link-'+tabId).html(jQuery('[id^="newTabNameInput"]')[0].value);
 			jQuery(dialogView.el).dialog('close');
+			app.TabsApp.tabsCollection.fetchData();
 		});
 	};
 

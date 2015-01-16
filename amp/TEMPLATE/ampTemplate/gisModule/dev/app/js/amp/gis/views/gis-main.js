@@ -57,7 +57,7 @@ module.exports = Backbone.View.extend({
 
   // not a view, because it's static and just for testing.
   renderStaticAmpTemplate: function() {
-    $('#amp-menu').html(boilerplate.header);
+    $('#amp-header').html(boilerplate.header);
     // TODO: If it's our responsibility...
     // render translation selector using: this.translator.getAvailableLanguages
   },

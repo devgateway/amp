@@ -611,7 +611,7 @@ public class Filters {
 	@GET
 	@Path("/workspaces")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Workspaces", id = "Workspaces")
+	@ApiMethod(ui = true, name = "Workspaces", id = "Workspaces",visibilityCheck="hasToShowWorkspaceFilter")
 	public List<SimpleJsonBean> getWorkspaces() {
 		List<SimpleJsonBean> teamsListJson = new ArrayList<SimpleJsonBean>();
 		Collection<AmpTeam> ampTeamList = TeamUtil.getAllRelatedTeams();
@@ -627,7 +627,7 @@ public class Filters {
 
 	}
 	
-	private boolean hasToShowWorkspaceFilter () {
+	public boolean hasToShowWorkspaceFilter () {
 		boolean showWorkspaceFilter = true;
 		boolean showWorkspaceFilterInTeamWorkspace = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SHOW_WORKSPACE_FILTER_IN_TEAM_WORKSPACES));
 		TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(

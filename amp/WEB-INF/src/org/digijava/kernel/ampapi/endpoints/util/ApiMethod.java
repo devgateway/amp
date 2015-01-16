@@ -12,4 +12,5 @@ public @interface  ApiMethod {
 	String id() ;
 	String column() default EPConstants.NA;
 	FilterType [] filterType() default FilterType.ALL;
+	String visibilityCheck() default "";
 }

@@ -3,6 +3,7 @@
  */
 package org.digijava.kernel.ampapi.endpoints.common;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
@@ -245,6 +246,7 @@ public class EndpointUtils {
 		try {
 			Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
 			Class<?> c = Class.forName(className);
+			
 			javax.ws.rs.Path p=c.getAnnotation(javax.ws.rs.Path.class);
 			String path="/rest/"+p.value();
 			Member[] mbrs=c.getMethods();
@@ -290,7 +292,30 @@ public class EndpointUtils {
 								}
 							}
 						}
-						availableFilters.add(filter);
+						//special check if the method shoud be added
+						Boolean shouldCheck=false;
+						Boolean result=false;
+						if (apiAnnotation.visibilityCheck().length() > 0) {
+							shouldCheck=true;
+							try {
+								Method shouldAddApiMethod = c.getMethod(apiAnnotation.visibilityCheck(), null);
+								shouldAddApiMethod.setAccessible(true);
+								 result =(Boolean) shouldAddApiMethod.invoke(c.newInstance(), null);
+								System.out.println("Resultado:" + result);
+							} catch (NoSuchMethodException | SecurityException | IllegalAccessException
+									| IllegalArgumentException | InvocationTargetException e) {
+							} catch (InstantiationException e) {
+								logger.error(e);
+							}
+						}
+						if (shouldCheck) {
+							if (result) {
+								availableFilters.add(filter);
+								shouldCheck = false;
+							}
+						} else {
+							availableFilters.add(filter);
+						}
 					}
 				}
 			}

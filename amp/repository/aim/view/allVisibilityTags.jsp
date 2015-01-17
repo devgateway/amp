@@ -206,6 +206,7 @@
 <feature:display name="Actual Disbursements - Recurrent" module="Measures"></feature:display>
 <feature:display name="Actual Disbursements - Capital" module="Measures"></feature:display> 
 <feature:display name="Actual Expenditures" module="Measures"></feature:display> 
+<feature:display name="Annual Proposed Project Cost" module="Measures"></feature:display>
 <feature:display name="AddMessageButton" module="Messages"></feature:display> 
 <feature:display name="Admin - Component Type" module="Components"></feature:display> 
 <feature:display name="Admin - Component" module="Components"></feature:display> 

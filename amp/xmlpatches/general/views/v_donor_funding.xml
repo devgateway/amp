@@ -19,6 +19,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
+				DROP VIEW IF EXISTS v_donor_funding CASCADE;
 				CREATE OR REPLACE VIEW v_donor_funding AS 
 		    	SELECT f.amp_activity_id, f.amp_funding_id, fd.amp_fund_detail_id, d.name AS donor_name, fd.transaction_type, fd.adjustment_type, cval5.category_value AS adjustment_type_name, 
 		    			fd.transaction_date, fd.transaction_amount, fd.pledge_id, c.currency_code, cval.id AS terms_assist_id, cval.category_value AS terms_assist_name, fd.fixed_exchange_rate, 
@@ -38,8 +39,21 @@
 						LEFT JOIN amp_organisation recipient_org ON fd.recipient_org_id = recipient_org.amp_org_id
 						LEFT JOIN amp_role recipient_role ON fd.recipient_role_id = recipient_role.amp_role_id, amp_category_value cval, amp_currency c, amp_organisation d, amp_org_group b, amp_org_type ot
 					WHERE c.amp_currency_id = fd.amp_currency_id AND f.amp_funding_id = fd.amp_funding_id AND cval.id = f.type_of_assistance_category_va AND d.amp_org_id = f.amp_donor_org_id AND d.org_grp_id = b.amp_org_grp_id AND ot.amp_org_type_id = b.org_type
-					ORDER BY f.amp_activity_id;
-        		</lang>
+					
+				UNION ALL
+				
+				SELECT 
+					apb.amp_activity_id, apb.amp_annual_project_budget_id AS amp_funding_id, apb.amp_annual_project_budget_id AS amp_fund_detailid, NULL as donor_name, 15 AS transaction_type, (select acv.id from amp_category_value acv JOIN amp_category_class acc ON acv.amp_category_class_id = acc.id WHERE acc.keyname='adjustment_type' and acv.category_value='Actual') AS adjustment_type, 'Actual' as adjustment_type_name,
+					apb.year AS transaction_date, apb.amount AS transaction_amount, NULL as pledge_id, c.currency_code AS currency_code, NULL as terms_assist_id, NULL as terms_assist_name, NULL as fixed_exchange_rate,
+					NULL as org_grp_name, NULL as donor_type_name, NULL as financing_instrument_name, NULL as financing_instrument_id, NULL as org_id, NULL as org_grp_id,
+					NULL as org_type_id, NULL AS mode_of_payment_name, NULL AS mode_of_payment_id, NULL as funding_status_name, NULL as funding_status_id,
+					NULL as capital_spend_percent, NULL as agreement_code, NULL as agreement_title_code, NULL as recipient_id,
+					NULL as recipient_name, NULL as recipient_role_code, NULL AS recipient_role_name,
+					'DN' AS source_role_code, 'Donor' AS source_role_name, NULL as activity_pledges_title_name, NULL as activity_pledges_title_id
+				FROM amp_annual_project_budget apb JOIN amp_currency c ON c.amp_currency_id = apb.amp_currency_id
+					
+				ORDER BY amp_activity_id;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
@@ -33,7 +34,10 @@ import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.mondrian.MonetLeak;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
+import org.dgfoundation.amp.reports.DateColumns;
+import org.dgfoundation.amp.reports.mondrian.FiltersGroup;
 import org.dgfoundation.amp.utils.BoundedList;
+import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -78,6 +82,16 @@ public class ViewNewAdvancedReport extends Action {
 		return mapping.findForward("index");
 	}
 	
+	protected String checkSqlFilters() {
+		StringBuilder res = new StringBuilder();
+		for (String columnName:new TreeSet<>(MondrianMapping.definedColumns)) {
+			boolean doneThroughSql = FiltersGroup.FILTER_GROUP.containsKey(columnName) || DateColumns.ACTIVITY_DATES.contains(columnName);
+			if (!doneThroughSql)
+				res.append("\t->" + columnName + "\n");
+		}
+		return res.toString();
+	}
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
@@ -91,6 +105,11 @@ public class ViewNewAdvancedReport extends Action {
 			String[] args = null;
 			if (request.getParameter("steps") != null) args = new String[] {request.getParameter("steps")};
 			ARUtil.writeResponse(response, String.format("round duration: %.2f millies", MonetLeak.main(args)));
+			return null;
+		}
+		
+		if (request.getParameter("check_sql_filter") != null) {
+			ARUtil.writeResponse(response, checkSqlFilters());
 			return null;
 		}
 		

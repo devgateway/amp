@@ -164,11 +164,6 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		Double pledgetotal = null;
 		Double capitalPercent	= null;
 		
-		//the most important meta name, the source name (donor name, region name, component name)
-		String headMetaName=rsmd.getColumnName(4).toLowerCase();
-		if (this.getViewName().equals("v_proposed_cost"))
-			headMetaName = null; // no source name for v_proposed_cost
-
 		if (columnsMetaData.containsKey("fixed_exchange_rate")){
 		    fixedExchangeRate = rs.getDouble("fixed_exchange_rate");
 		}
@@ -198,6 +193,11 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 			capitalPercent	= rs.getDouble("capital_spend_percent");
 		}
 		
+		//the most important meta name, the source name (donor name, region name, component name)
+		String headMetaName=rsmd.getColumnName(4).toLowerCase();
+		if (this.getViewName().equals("v_proposed_cost") || tr_type == Constants.ANNUAL_PROPOSED_PROJECT_COST)
+			headMetaName = null; // no source name for v_proposed_cost
+
 //		String value = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.SPLIT_BY_TYPE_OF_ASSISTANCE);
 /*		boolean skpyCategorize = ("false".equalsIgnoreCase(value));
         //if (generator.getReportMetadata().getHierarchies().contains()
@@ -311,12 +311,14 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		case Constants.ESTIMATED_DONOR_DISBURSEMENT:
 			trStr = ArConstants.ESTIMATED_DISBURSEMENTS;
 			break;
-			
+		case Constants.ANNUAL_PROPOSED_PROJECT_COST:
+			trStr = ArConstants.ANNUAL_PROPOSED_PROJECT_COST;
+			break;			
 		}
 
 		if(trStr != null) {
 			MetaInfo trMs = this.getCachedMetaInfo(ArConstants.TRANSACTION_TYPE, trStr);
-			String fundMes = (String) adjMs.getValue()+ " " + (String) trMs.getValue();
+			String fundMes = tr_type == Constants.ANNUAL_PROPOSED_PROJECT_COST ? trStr : ((String) adjMs.getValue()+ " " + (String) trMs.getValue());
 			Integer order = this.generator.getReportMetadata().getMeasureOrder(fundMes);
 			MetaInfo fundMs = this.getCachedMetaInfo(ArConstants.FUNDING_TYPE, new FundingTypeSortedString(fundMes, order));
 			acc.getMetaData().add(trMs);
@@ -390,13 +392,14 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		acc.getMetaData().add(mMs);	
 		acc.getMetaData().add(faMs);
 		acc.getMetaData().add(fmMs);
+		boolean headMetaCanBeNull = headMetaName == null || "v_pledges_funding_st".equals(this.getViewName());
 		if (headMeta != null)
 		{
 			acc.getMetaData().add(headMeta);
 		}
 		else
 		{
-			if (!"v_pledges_funding_st".equals(this.getViewName()) && !this.getViewName().equals("v_proposed_cost"))
+			if (!headMetaCanBeNull)
 				throw new RuntimeException("headMeta is null!");
 		}
 		

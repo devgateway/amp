@@ -127,6 +127,7 @@ public final class ArConstants {
 	public final static String EXPENDITURE="Expenditures";
 	public final static String RELEASE_OF_FUNDS = "Release of Funds";
 	public final static String ESTIMATED_DISBURSEMENTS = "Estimated Disbursements";
+	public final static String ANNUAL_PROPOSED_PROJECT_COST = "Annual Proposed Project Cost";
 	public final static String PLEDGES_COMMITMENT="Pledges Commitments";
 	public final static String PLEDGES_DISBURSEMENT="Pledges Disbursements";
 	public final static String PLEDGE="Pledge";

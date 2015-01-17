@@ -19,8 +19,9 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_pledges_date_hierarchy AS SELECT fd.year, pl.id AS pledge_id, fd.id AS amp_fund_detail_id FROM (amp_funding_pledges_details fd JOIN amp_funding_pledges pl ON ((fd.pledge_id = pl.id))) WHERE (pl.id = fd.pledge_id);;;
-        		</lang>
+				DROP VIEW IF EXISTS v_pledges_date_hierarchy CASCADE;
+			    CREATE OR REPLACE VIEW v_pledges_date_hierarchy AS SELECT fd.year, pl.id AS pledge_id, fd.id AS amp_fund_detail_id FROM (amp_funding_pledges_details fd JOIN amp_funding_pledges pl ON ((fd.pledge_id = pl.id))) WHERE (pl.id = fd.pledge_id);;;
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

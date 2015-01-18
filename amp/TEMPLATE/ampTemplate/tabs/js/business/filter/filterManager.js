@@ -83,10 +83,14 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 			contentType : 'application/json; charset=utf-8',
 			data : data
 		}).done(function(data, textStatus, jqXHR) {
-			jQuery('#tab-link-'+tabId).prop('title',jQuery('[id^="newTabNameInput"]')[0].value);
-			jQuery('#tab-link-'+tabId).html(jQuery('[id^="newTabNameInput"]')[0].value);
-			jQuery(dialogView.el).dialog('close');
-			app.TabsApp.tabsCollection.fetchData();
+			if(data == undefined) {
+				jQuery('#tab-link-'+tabId).prop('title',jQuery('[id^="newTabNameInput"]')[0].value);
+				jQuery('#tab-link-'+tabId).html(jQuery('[id^="newTabNameInput"]')[0].value);
+				jQuery(dialogView.el).dialog('close');
+				app.TabsApp.tabsCollection.fetchData();
+			} else {
+				alert(data);
+			}
 		});
 	};
 

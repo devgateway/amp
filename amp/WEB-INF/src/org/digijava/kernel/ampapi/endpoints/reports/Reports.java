@@ -577,42 +577,58 @@ public class Reports {
 	@POST
 	@Path("/report/saveTab/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public void saveTab(JsonBean formParams, @PathParam("report_id") Long reportId) {
-		// Open AmpReport.
-		AmpReports report = DbUtil.getAmpReport(reportId);
-		AmpARFilter oldFilters = FilterUtil.buildFilter(null, reportId);
-		AmpARFilter newFilters = null;
+	public String saveTab(JsonBean formParams, @PathParam("report_id") Long reportId) {
+		String message = null;
+		try {
+			// Open AmpReport.
+			AmpReports report = DbUtil.getAmpReport(reportId);
+			// AmpARFilter oldFilters = FilterUtil.buildFilter(null, reportId);
+			AmpARFilter newFilters = null;
 
-		// Convert json object back to the new format: MondrianReportFilters.
-		if (formParams.get("filters") != null) {
-			JsonBean filters = new JsonBean();
-			LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get("filters");
-			MondrianReportFilters mondrianReportFilters = null;
-			if (requestFilters != null) {
-				filters.any().putAll(requestFilters);
-				mondrianReportFilters = FilterUtils.getFilters(filters);
+			// Convert json object back to the new format: MondrianReportFilters.
+			if (formParams.get("filters") != null) {
+				JsonBean filters = new JsonBean();
+				LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get("filters");
+				MondrianReportFilters mondrianReportFilters = null;
+				if (requestFilters != null) {
+					filters.any().putAll(requestFilters);
+					mondrianReportFilters = FilterUtils.getFilters(filters);
 
-				// Transform back to legacy AmpARFilters.
-				MondrianReportFiltersConverter converter = new MondrianReportFiltersConverter(mondrianReportFilters);
-				newFilters = converter.buildFilters();
-				// converter.mergeWithOldFilters(oldFilters);
-				logger.info(newFilters);
+					// Transform back to legacy AmpARFilters.
+					MondrianReportFiltersConverter converter = new MondrianReportFiltersConverter(mondrianReportFilters);
+					newFilters = converter.buildFilters();
+					// converter.mergeWithOldFilters(oldFilters);
+					logger.info(newFilters);
 
-				// Code borrowed from ReportWizardAction.
-				List <LinkedHashMap <String,String>> reportData = (ArrayList) formParams.get("reportData");
-				Map<String, AmpContentTranslation> translations = populateContentTranslations (reportData,reportId);
-				Set<AmpFilterData> fdSet = AmpFilterData.createFilterDataSet(report, newFilters);
-				if (report.getFilterDataSet() == null)
-					report.setFilterDataSet(fdSet);
-				else {
-					report.getFilterDataSet().clear();
-					report.getFilterDataSet().addAll(fdSet);
+					Set<AmpFilterData> fdSet = AmpFilterData.createFilterDataSet(report, newFilters);
+					if (report.getFilterDataSet() == null)
+						report.setFilterDataSet(fdSet);
+					else {
+						report.getFilterDataSet().clear();
+						report.getFilterDataSet().addAll(fdSet);
+					}
 				}
-				Session session = PersistenceManager.getSession();
+			}
+			
+			Session session = PersistenceManager.getSession();			
+			List<LinkedHashMap<String, String>> reportData = (ArrayList) formParams.get("reportData");
+			boolean emptyDefaultName = true;
+			for(LinkedHashMap<String, String> name : reportData) {
+				if (TLSUtils.getEffectiveLangCode().equals(name.get("lang")) && !"".equals(name.get("name").toString())) {
+					emptyDefaultName = false;
+				}
+			}
+			if(!emptyDefaultName) {
+				Map<String, AmpContentTranslation> translations = populateContentTranslations(reportData, reportId);			
 				MultilingualInputFieldValues.serialize(report, "name", null, session, translations);
 				logger.info(report);
+			} else {
+				message = TranslatorWorker.translateText("Invalid report name.");
 			}
+		} catch (Exception e) {
+			message = e.getLocalizedMessage();
 		}
+		return message;
 	}
 	
 	private Map<String, AmpContentTranslation> populateContentTranslations (List <LinkedHashMap <String,String>> reportData,Long reportId) {

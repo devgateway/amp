@@ -58,7 +58,7 @@ define([ 'marionette', 'text!views/html/dynamicContentTemplate.html', 'text!view
 					});
 					
 					datesFilterView = app.TabsApp.filtersWidget.view.filterViewsInstances.others.viewList.filter(function(v) {
-					  return v.model.get('name') === 'Dates';
+					  return v.model.get('id') === 'Dates';
 					})[0];
 					datesFilterView._renderDatePickers();
 

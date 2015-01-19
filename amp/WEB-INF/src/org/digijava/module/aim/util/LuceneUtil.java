@@ -1131,6 +1131,7 @@ public class LuceneUtil implements Serializable {
 
             String fieldName = "name";
             if (langCode != null) {
+                fieldName += "_";
                 fieldName += langCode;
             }
 

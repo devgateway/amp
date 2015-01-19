@@ -305,7 +305,15 @@ button.toolbar-dis {
 	width: 138px;
 }
 
+#wizard_container #searchBox .buttonx
+{
+	padding-left: 3px;
+	padding-right: 3px;
+}
+
 #wizard_container #searchBox #prevSearchButton, #wizard_container #searchBox #nextSearchButton
 {
-	width: 38px;
+	width: 25px;
+	padding-left: 2px;
+	padding-right: 2px;
 }

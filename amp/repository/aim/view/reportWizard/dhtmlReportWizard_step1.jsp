@@ -165,7 +165,7 @@
 															<c:set var="alsoShowPledgesExplanation">
 																<digi:trn>Checking this box will lead to pledges being included in this report, with their commitment gap being displayed as Actual Commitments</digi:trn>
 															</c:set>
-															<nested:checkbox property="alsoShowPledges" title="${alsoShowPledgesExplanation}" />
+															<nested:checkbox property="alsoShowPledges" title="${alsoShowPledgesExplanation}" onclick="javascript:if (this.checked) {selectMeasure('Actual Commitments');}" />
 															<digi:trn key="aim:alsoShowPledges">Also show pledges</digi:trn> <br />
 														</c:if>
 			                                    	</feature:display>

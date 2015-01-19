@@ -28,23 +28,26 @@
 	see more documentation here: http://yui.github.io/yui2/docs/yui_2.9.0_full/tabview/
  --%>
 <c:if test="${fn:length(dta.locales) eq 1}">
-	<div id="${dta.prefix}_holder">
-		<c:forEach items="${dta.locales}" var="cur_locale">
-			<%
-				// will have only one item
-			%>
+	<div class="yui-skin-sam smallish">
+		<div id="${dta.prefix}_holder" class="yui-navset">
 
-			<input type="text" name="${dta.prefix}_${cur_locale}"
-				value="<c:out value="${dta.translations[cur_locale]}"/>"
-				<c:if test="${not empty param.onkeyup}">
-								onkeyup="${param.onkeyup}"							
-							</c:if>
-				<c:if test="${not empty param.onkeypress}">
-								onkeypress="${param.onkeypress}"
-							</c:if>
-				style="font-size: 8pt; font-weight: bolder;"
-				class="inp-text multilingual_input_element" />
-		</c:forEach>
+		    <%--  Only one locale in this loop --%>
+            <c:forEach items="${dta.locales}" var="cur_locale">
+                <div>
+                    <input type="text" name="${dta.prefix}_${cur_locale}"
+                        value="<c:out value="${dta.translations[cur_locale]}"/>"
+
+                        <c:if test="${not empty param.onkeyup}">
+                            onkeyup="${param.onkeyup}"
+                        </c:if>
+                        <c:if test="${not empty param.onkeypress}">
+                            onkeypress="${param.onkeypress}"
+                        </c:if>
+                        style="font-size: 8pt; font-weight: bolder;"
+                        class="inp-text multilingual_input_element" />
+                </div>
+            </c:forEach>
+        </div>
 	</div>
 </c:if>
 <c:if test="${fn:length(dta.locales) gt 1}">

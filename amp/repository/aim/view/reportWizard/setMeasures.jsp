@@ -17,6 +17,7 @@
 								<digi:trn key="aim:reportBuilder:${ampMeasures.measureName}">
 									<c:out value="${ampMeasures.measureName}"/>
 								</digi:trn>
+								<span style="display: none" original_measure_name="<c:out value='${ampMeasures.measureName}' />"></span>
 								<logic:notEmpty name="ampMeasures" property="description" >
 									<img src= "../ampTemplate/images/help.gif" border="0" title="<digi:trn>${ampMeasures.description}</digi:trn>">
 								</logic:notEmpty>

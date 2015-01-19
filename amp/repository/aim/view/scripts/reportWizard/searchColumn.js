@@ -123,6 +123,11 @@ function searchFunction(no_match_msg)
 	
 }
 
+function selectMeasure(measureEnglishName) {
+	$('#source_measures_ul input[type=checkbox]').attr('checked', false);
+	$('#source_measures_ul span[original_measure_name="' + measureEnglishName + '"]').closest('li').find('input[type=checkbox]').attr('checked', true);
+	MyDragAndDropObject.selectObjs('source_measures_ul', 'dest_measures_ul');
+}
 
 function resetSearch(){
 	disableSearchButtons();

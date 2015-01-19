@@ -261,7 +261,7 @@ public static List<JsonBean> getOrgGroups() {
 						" o.acronym ,  "+
 						" aor.role roleId , "+ 
 						" o.org_grp_id grpId  "+
-						" , EXISTS(SELECT af.amp_donor_org_id FROM amp_funding af WHERE o.amp_org_id = af.amp_donor_org_id) AS hasFundings " +
+						" , EXISTS(SELECT af.amp_donor_org_id FROM amp_funding af WHERE o.amp_org_id = af.amp_donor_org_id AND af.source_role_id = (select amp_role_id from amp_role WHERE role_code='DN')) AS hasFundings " +
 						" from amp_org_role aor,amp_organisation o "+
 						" where aor.organisation=o.amp_org_id " +
 						" and (o.deleted is null or o.deleted = false) " +

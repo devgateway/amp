@@ -29,4 +29,5 @@ public interface FundingInformationItem {
 	public FundingPledges getPledgeid();
 	public Float getCapitalSpendingPercentage();
 	public Long getDbId();
+	public void setTransactionAmount(Double transactionAmount);
 }

@@ -719,8 +719,12 @@ public class DbHelper {
         for(Object[] item:fundingDets)
         {
         	FundingInformationItem fd = (FundingInformationItem) item[0];
-        	AmpFundingDetail currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
-        	
+        	FundingInformationItem currentFd;
+			if(fd.getTransactionType().equals(Constants.MTEFPROJECTION)){
+				currentFd=new AmpFundingMTEFProjection(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+			}else{
+				currentFd = new AmpFundingDetail(fd.getTransactionType(),fd.getAdjustmentType(),fd.getAbsoluteTransactionAmount(),fd.getTransactionDate(),fd.getAmpCurrencyId(),fd.getFixedExchangeRate());
+			}
         	Double finalAmount = currentFd.getAbsoluteTransactionAmount();
         	for(int i = 3; i < item.length; i++)
         		if (item[i] != null)

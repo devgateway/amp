@@ -147,7 +147,7 @@ body {background:none;}
 								</tr>
 								</module:display>
 
-								<module:display name="/Activity Form/Funding/Overview Section/Type of Implementation" parentModule="/Activity Form/Funding/Overview Section">
+								<module:display name="/Activity Form/Identification/Type of Implementation" parentModule="/Activity Form/Identification">
 									<tr>
 									<td width="27%" align="right" valign="top" nowrap="nowrap">
 										<b><digi:trn>Type of Implementation</digi:trn></b>

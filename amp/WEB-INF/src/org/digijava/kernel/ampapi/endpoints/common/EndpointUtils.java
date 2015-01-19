@@ -301,7 +301,6 @@ public class EndpointUtils {
 								Method shouldAddApiMethod = c.getMethod(apiAnnotation.visibilityCheck(), null);
 								shouldAddApiMethod.setAccessible(true);
 								 result =(Boolean) shouldAddApiMethod.invoke(c.newInstance(), null);
-								System.out.println("Resultado:" + result);
 							} catch (NoSuchMethodException | SecurityException | IllegalAccessException
 									| IllegalArgumentException | InvocationTargetException e) {
 							} catch (InstantiationException e) {

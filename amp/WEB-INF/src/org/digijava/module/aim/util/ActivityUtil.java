@@ -40,6 +40,7 @@ import org.digijava.module.aim.dbentity.AmpActivityLocation;
 import org.digijava.module.aim.dbentity.AmpActivityProgram;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpComments;
@@ -49,6 +50,7 @@ import org.digijava.module.aim.dbentity.AmpContentTranslation;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIndicator;
+import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -68,6 +70,7 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
+import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -1727,6 +1730,24 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 		return false;
 	}
 	
+	public static ArrayList<org.digijava.module.aim.helper.Issues>  getIssues(Long actId) {
+		ArrayList<org.digijava.module.aim.helper.Issues> col = new ArrayList<>();
+		
+		AmpActivityVersion activity = null;
+		try {
+			Session session = PersistenceManager.getRequestDBSession();
+			activity = (AmpActivityVersion) session.load(AmpActivityVersion.class, actId);
+
+			for (AmpIssues issue: activity.getIssues()) {
+				col.add(new org.digijava.module.aim.helper.Issues(issue));
+			}
+		}    catch (Exception e) {
+	         logger.debug("Exception in getAmpMeasures() " + e.getMessage());
+	       }
+		return col;
+
+	}
+
 	
 	 public static void changeActivityArchiveStatus(Collection<Long> activityIds, boolean status) {
 			try {

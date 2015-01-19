@@ -7,12 +7,29 @@ package org.digijava.module.aim.helper;
 
 import java.util.ArrayList;
 
+import org.digijava.module.aim.dbentity.AmpIssues;
+import org.digijava.module.aim.dbentity.AmpMeasure;
+
 public class Issues {
 	private Long id;
 	private String name;
 	private String issueDate;
 	private String nameTrimmed ;
 	private ArrayList<Measures> measures;
+	
+	
+	public Issues() {}
+	public Issues(AmpIssues ampIssue) {
+		this.id = ampIssue.getAmpIssueId();
+		this.name = ampIssue.getName();
+		this.issueDate = FormatHelper.formatDate(ampIssue.getIssueDate());
+		this.nameTrimmed = (name!=null)?name.replace(" ", ""):"";
+		for (AmpMeasure measure: ampIssue.getMeasures()) {
+			this.measures = new ArrayList<Measures>();
+			this.measures.add(new Measures(measure));
+		}
+	}
+	
 	/**
 	 * @return Returns the id.
 	 */
@@ -60,7 +77,7 @@ public class Issues {
 		throw new ClassCastException();
 	}
 	public String getNameTrimmed() {
-		return name.replace(" ", "");
+		return this.nameTrimmed;
 	}
 	public void setNameTrimmed(String nameTrimmed) {
 		this.nameTrimmed = nameTrimmed;

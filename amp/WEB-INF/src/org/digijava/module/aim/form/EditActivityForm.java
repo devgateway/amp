@@ -3472,6 +3472,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public Issues() {
 		}
 		
+
+		
 		@java.lang.SuppressWarnings("all")
 		public ArrayList<org.digijava.module.aim.helper.Issues> getIssues() {
 			return this.issues;

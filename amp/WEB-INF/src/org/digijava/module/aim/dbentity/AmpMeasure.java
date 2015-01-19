@@ -15,7 +15,7 @@ public class AmpMeasure  implements Serializable, Cloneable
 	@TranslatableField
 	private String name ;
 	private AmpIssues issue;
-	private Set actors;
+	private Set<AmpActor> actors;
 	private Date measureDate;
 	
 	
@@ -45,10 +45,10 @@ public class AmpMeasure  implements Serializable, Cloneable
 		this.issue = issue;
 	}
 
-	public Set getActors() {
+	public Set<AmpActor> getActors() {
 		return actors;
 	}
-	public void setActors(Set actors) {
+	public void setActors(Set<AmpActor> actors) {
 		this.actors = actors;
 	}
 	

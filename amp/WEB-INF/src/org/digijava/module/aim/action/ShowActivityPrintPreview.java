@@ -68,7 +68,7 @@ import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.FundingValidator;
-import org.digijava.module.aim.helper.Issues;
+//import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.ManagedDocument;
 import org.digijava.module.aim.helper.Measures;
@@ -689,8 +689,35 @@ public class ShowActivityPrintPreview
                 eaForm.getAgencies().setSectGroups(sectGroups);
                 eaForm.getAgencies().setRegGroups(regGroups);
                 eaForm.getAgencies().setRespOrganisations(respOrganisations);
+                //llk here!!
                 
-                eaForm.getIssues().setIssues(null);
+                
+                
+                ArrayList<org.digijava.module.aim.helper.Issues> colIssues = ActivityUtil.getIssues(activity.getAmpActivityId());
+				if(colIssues != null && colIssues.size() > 0) {
+//					ArrayList<Issues> issueList = new ArrayList();
+//					for (org.digijava.module.aim.helper.Issues externalIssue : colIssues) {
+//						AmpIssues ampIssue = (AmpIssues) iItr.next();
+//						Issues issue = new Issues();
+//						issue.setId(ampIssue.getAmpIssueId());
+//						issue.setName(ampIssue.getName());
+//						issue.setIssueDate(FormatHelper.formatDate(ampIssue.getIssueDate()));
+//						ArrayList measureList = new ArrayList();
+//						issue.setMeasures(measureList);
+//						issueList.add(issue);
+					
+					eaForm.getIssues().setIssues(colIssues);
+				} else {
+					eaForm.getIssues().setIssues(null);
+				}
+                
+                
+                
+                
+                
+                
+//                eaForm.getIssues().setIssues(new ArrayList<>(ActivityUtil.getIssues(actId)));
+//                eaForm.getIssues().setIssues(null);
 
                 // loading the contact person details and condition
                 eaForm.getContactInfo().setDnrCntFirstName(activity.getContFirstName());

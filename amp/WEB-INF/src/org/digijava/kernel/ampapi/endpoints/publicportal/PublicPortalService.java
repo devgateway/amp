@@ -102,10 +102,11 @@ public class PublicPortalService {
 		if (months == null)
 			months = getPublicPortalPeriodInMonths();
 		Calendar cal = Calendar.getInstance();
+		Calendar currentCal = Calendar.getInstance();
 		cal.add(Calendar.MONTH, -months);
 		MondrianReportFilters filters = new MondrianReportFilters();
 		try {
-			filters.addDateRangeFilterRule(cal.getTime(), null);
+			filters.addDateRangeFilterRule(cal.getTime(), currentCal.getTime());
 		} catch (AmpApiException e) {
 			logger.error(e);
 		}

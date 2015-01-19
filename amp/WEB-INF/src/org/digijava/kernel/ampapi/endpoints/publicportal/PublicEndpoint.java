@@ -41,7 +41,7 @@ public class PublicEndpoint {
 	}
 	
 	/**
-	 * Get donor funding for the specific funding type 1 for commitnet 2 for disbursement default 1
+	 * Get donor funding for the specific funding type 1 for commitment 2 for disbursement default 1
 	 * count max amount of records, default is all
 	 * months the last x months default
 	 */

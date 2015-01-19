@@ -36,12 +36,12 @@ public class AmpActor  implements Serializable, Cloneable
 		this.measure = measure;
 	}
 	public String getNameTrimmed() {
-		if (name == null)
-			return null;
-		return name.replace(" ", "");
+		return nameTrimmed;
 	}
-	public void setNameTrimmed(String nameTrimmed) {
-		this.nameTrimmed = nameTrimmed;
+	public void setNameTrimmed(String name) {
+		if (name == null)
+			this.nameTrimmed = "";
+		else this.nameTrimmed = name.replace(" ", "");
 	}
 	
 	@Override

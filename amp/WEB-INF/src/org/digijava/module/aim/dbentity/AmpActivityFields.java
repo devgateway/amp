@@ -133,7 +133,7 @@ LoggerIdentifiable, Cloneable {
 	@Deprecated
 	protected Set documents ;
 	@VersionableCollection(fieldTitle = "Issues")
-	protected Set issues;
+	protected Set<AmpIssues> issues;
 
 	@VersionableCollection(fieldTitle = "Regional Observations")
 	protected Set<AmpRegionalObservation> regionalObservations;
@@ -629,7 +629,7 @@ LoggerIdentifiable, Cloneable {
 		return sectors;
 	}
 
-	public Set getIssues() {
+	public Set<AmpIssues> getIssues() {
 		return issues;
 	}
 

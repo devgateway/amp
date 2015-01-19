@@ -15,7 +15,7 @@ public class AmpIssues  implements Serializable, Versionable, Cloneable
 	private Long ampIssueId ;
 	private String name ;
 	private AmpActivityVersion activity;
-	private Set measures;
+	private Set<AmpMeasure> measures;
 	private Date issueDate;
  
 	public String getName() {
@@ -38,10 +38,10 @@ public class AmpIssues  implements Serializable, Versionable, Cloneable
 		this.activity = activity;
 	}
 
-	public Set getMeasures() {
+	public Set<AmpMeasure> getMeasures() {
 		return measures;
 	}
-	public void setMeasures(Set measures) {
+	public void setMeasures(Set<AmpMeasure> measures) {
 		this.measures = measures;
 	}
 	

@@ -7,6 +7,7 @@ package org.digijava.module.aim.helper;
 import java.util.ArrayList;
 
 import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpMeasure;
 
 public class Measures {
 	private Long id;
@@ -14,6 +15,16 @@ public class Measures {
 	private String nameTrimmed ;
 	private String measureDate;
 	private ArrayList<AmpActor> actors;
+	
+	public Measures() {}
+	public Measures(AmpMeasure measure) {
+		this.id = measure.getAmpMeasureId();
+		this.name = measure.getName();
+		this.nameTrimmed = (name!=null)?name.replace(" ", ""):"";
+		this.measureDate = FormatHelper.formatDate(measure.getMeasureDate());
+		this.actors = new ArrayList<AmpActor>(measure.getActors());
+	}
+	
 	/**
 	 * @return Returns the actors.
 	 */
@@ -61,7 +72,7 @@ public class Measures {
 		throw new ClassCastException();
 	}
 	public String getNameTrimmed() {
-		return (name!=null)?name.replace(" ", ""):"";
+		return nameTrimmed;
 	}
 	public void setNameTrimmed(String nameTrimmed) {
 		this.nameTrimmed = nameTrimmed;

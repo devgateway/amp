@@ -151,6 +151,12 @@ implements AmpRequiredComponentContainer{
                 String langCode = null;
                 if (ContentTranslationUtil.multilingualIsEnabled() && title.get("trnContainer") != null) {
                     langCode = ((TranslationDecorator) title.get("trnContainer")).getLangModel().getObject();
+
+                    // if it is a default (first tab) that has never been clicked, the language is not populated yet
+                    // the first tab is always the default language
+                    if (langCode == null) {
+                        langCode = getSession().getLocale().getLanguage();
+                    }
                 }
 
                 ServletContext context = ((WebApplication) Application.get())

@@ -2895,8 +2895,8 @@ body {background:none;}
                                                           <c:if test="${aimEditActivityForm.funding.proProjCost.funAmount!=null}">
 																 	<FONT color=blue>*</FONT> ${aimEditActivityForm.funding.proProjCost.funAmount}                                                          
 														  </c:if>&nbsp;
-														  <c:if test="${aimEditActivityForm.funding.proProjCost.currencyCode!=null}"> 
-																${aimEditActivityForm.funding.proProjCost.currencyCode} </c:if>                                                        
+														  <c:if test="${aimEditActivityForm.funding.proProjCost.currencyName!=null}"> 
+																${aimEditActivityForm.funding.proProjCost.currencyName} </c:if>                                                        
 														</td>
 												      </tr>
 													  <tr bgcolor="#ffffff">

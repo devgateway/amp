@@ -1592,15 +1592,15 @@ public class ExportActivityToWord extends Action {
 		if (FeaturesUtil.isVisibleModule("/Activity Form/Funding/Proposed Project Cost")) {
 	        ExportSectionHelper eshTitle = new ExportSectionHelper("Proposed Project Cost", true).setWidth(100f).setAlign("left");
 	        retVal.add(createSectionTable(eshTitle, request, ampContext));
-	        String currencyCode = null;
+	        String currencyName = null;
 	        if(myForm.getFunding().getProProjCost()!=null){
-	        	currencyCode = myForm.getFunding().getProProjCost().getCurrencyCode();
+	        	currencyName = myForm.getFunding().getProProjCost().getCurrencyName();
 	        }
-	        if(currencyCode == null) {
-	            currencyCode = Constants.DEFAULT_CURRENCY;
+	        if(currencyName == null) {
+	        	currencyName = CurrencyUtil.getCurrencyByCode(Constants.DEFAULT_CURRENCY).getCurrencyName();
 	        }
-	        String translatedCurrency = TranslatorWorker.translateText(currencyCode);
-	        translatedCurrency=("".equalsIgnoreCase(currencyCode))?currencyCode:translatedCurrency;
+	        String translatedCurrency = TranslatorWorker.translateText(currencyName);
+	        translatedCurrency=("".equalsIgnoreCase(currencyName))?currencyName:translatedCurrency;
 	//        FundingCalculationsHelper fch = new FundingCalculationsHelper();
 	//        fch.doCalculations(allComponents, currencyCode);
             ExportSectionHelper eshProjectCostTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
@@ -1626,7 +1626,7 @@ public class ExportActivityToWord extends Action {
                 eshProjectCostTable.addRowData(new ExportSectionHelperRowData(
                         ppc.getFunDate(), null, null, true).addRowData(
                         FormatHelper.formatNumber(ppc.getFunAmountAsDouble()))
-                        .addRowData(ppc.getCurrencyCode()));
+                        .addRowData(ppc.getCurrencyName()));
             }
 	        retVal.add(createSectionTable(eshProjectCostTable, request, ampContext));
 		}

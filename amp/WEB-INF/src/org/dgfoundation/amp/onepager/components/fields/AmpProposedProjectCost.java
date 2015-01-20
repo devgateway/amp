@@ -11,7 +11,9 @@ import java.util.Set;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
@@ -125,7 +127,14 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 		}
 
 		AmpSelectFieldPanel<String> currency = new AmpSelectFieldPanel<String>("proposedCurrency", currencyModel,
-				currencyList, "Currency", false, false);
+				currencyList, "Currency", false, false) {
+			protected void onAjaxOnUpdate(AjaxRequestTarget target) {
+				send(findParent(AmpProposedProjectCost.class), Broadcast.BREADTH, new ProposedProjectCostUpdateEvent(
+						target));
+			}
+		};
+		currency.setOutputMarkupId(true);
+	     
 		add(currency);
 		AmpComponentAnnualBudgetSubsectionFeature annualBudgets;
 		try {

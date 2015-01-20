@@ -1245,8 +1245,8 @@ public class ExportActivityToPDF extends Action {
 					if(myForm.getFunding().getProProjCost().getFunAmount()!=null){
 						costOutput+=" "+myForm.getFunding().getProProjCost().getFunAmount();
 					}
-					if(myForm.getFunding().getProProjCost().getCurrencyCode()!=null){
-						costOutput+=" "+myForm.getFunding().getProProjCost().getCurrencyCode();
+					if(myForm.getFunding().getProProjCost().getCurrencyName()!=null){
+						costOutput+=" "+myForm.getFunding().getProProjCost().getCurrencyName();
 					}
 					if(myForm.getFunding().getProProjCost().getFunDate()!=null){
 						costOutput+="\n"+TranslatorWorker.translateText("Date")+ "\t: "+myForm.getFunding().getProProjCost().getFunDate();
@@ -3085,7 +3085,7 @@ public class ExportActivityToPDF extends Action {
 				ProposedProjCost ppc = it.next();
 				innerCell = new PdfPCell();
 				innerCell.setBorder(0);
-				innerCell = new PdfPCell(new Paragraph(ppc.getFunAmount() + " " + ppc.getCurrencyCode(), plainFont));
+				innerCell = new PdfPCell(new Paragraph(ppc.getFunAmount() + " " + ppc.getCurrencyName(), plainFont));
 				dataTable.addCell(innerCell);
 				innerCell = new PdfPCell();
 				innerCell.setBorder(0);

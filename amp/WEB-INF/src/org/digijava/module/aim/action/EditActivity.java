@@ -763,21 +763,19 @@ public class EditActivity extends Action {
 					ProposedProjCost ppc = new ProposedProjCost();
 					AmpAnnualProjectBudget anProjBudget = it.next();
 					java.sql.Date dt = new java.sql.Date(anProjBudget.getYear().getTime());
-					double frmExRt = Util.getExchange(activity.getCurrencyCode(), dt);
-					double toExRt;
-					String workspaceCurrency = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId())
-							.getCurrencyCode();
-					if (workspaceCurrency == null) {
-						toExRt = frmExRt;
-						ppc.setCurrencyCode(activity.getCurrencyCode());
-						ppc.setCurrencyName(CurrencyUtil.getCurrencyByCode(activity.getCurrencyCode()).getCurrencyName());
-			              
-					} else {
-						toExRt = Util.getExchange(workspaceCurrency, dt);
-						ppc.setCurrencyCode(workspaceCurrency);
-						ppc.setCurrencyName(CurrencyUtil.getCurrencyByCode(workspaceCurrency).getCurrencyName());
-			              
+					if (anProjBudget.getAmpCurrencyId()!=null) {
+						ppc.setCurrencyCode(anProjBudget.getAmpCurrencyId().getCurrencyCode());
+						ppc.setCurrencyName(anProjBudget.getAmpCurrencyId().getCurrencyName());
+						
 					}
+					else {
+						AmpCurrency currency = CurrencyUtil.getCurrencyByCode(activity.getCurrencyCode());
+						ppc.setCurrencyCode(currency.getCurrencyCode());
+						ppc.setCurrencyName(currency.getCurrencyName());
+						
+					}
+					double frmExRt = Util.getExchange(ppc.getCurrencyCode(), dt);
+					double toExRt = frmExRt;
 					DecimalWraper amt = CurrencyWorker.convertWrapper(anProjBudget.getAmount(), frmExRt,
 							toExRt, dt);
 					ppc.setFunAmount(amt.getCalculations());

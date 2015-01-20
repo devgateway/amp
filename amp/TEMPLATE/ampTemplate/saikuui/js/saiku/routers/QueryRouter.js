@@ -121,7 +121,8 @@ var QueryRouter = Backbone.Router.extend({
 			templateQuery.cube.schema = data.reportMetadata.schema;
 			templateQuery.reportSpec = data.reportSpec;
 			Settings.RESULTS_PER_PAGE = data.reportMetadata.recordsPerPage;
-
+			Settings.NUMBER_FORMAT_OPTIONS = Settings.Util.extractSettings(data.reportMetadata.settings);
+			
 			var model = Backbone.Model.extend({
 				defaults: {
 					file: data.reportMetadata.name,
@@ -205,3 +206,4 @@ XmlTemplates['templateMDX'] = '<?xml version="1.0" encoding="UTF-8"?> \
 	    <Property name="saiku.olap.query.automatic_execution" value="true" /> \
 	  </Properties> \
 	</Query> ';
+

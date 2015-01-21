@@ -1271,33 +1271,12 @@ public class AmpARFilter extends PropertyListable {
 			}			
 		}
 		
-		StringBuffer actStatusValue = new StringBuffer("");
+		String ACTIVITY_STATUS = "";
 		if(approvalStatusSelected!=null){
-			for(String valOption:approvalStatusSelected){
-				switch (Integer.parseInt(valOption)) {
-				case -1:
-					actStatusValue.append("1=1 ");					
-					break;
-				case 0://Existing Un-validated - This will show all the activities that have been approved at least once and have since been edited and not validated.
-					actStatusValue.append(" (approval_status IN ('edited', 'not_approved', 'rejected') and draft <> true)");break;
-				case 1://New Draft - This will show all the activities that have never been approved and are saved as drafts.
-					actStatusValue.append(" (approval_status in ('started', 'startedapproved') and draft is true) ");break;
-				case 2://New Un-validated - This will show all activities that are new and have never been approved by the workspace manager.
-					actStatusValue.append(" (approval_status='started' and draft <> true)");break;
-				case 3://existing draft. This is because when you filter by Existing Unvalidated you get draft activites that were edited and saved as draft
-					actStatusValue.append(" ( (approval_status='edited' or approval_status='approved') and draft is true ) ");break;
-				case 4://Validated Activities 
-					actStatusValue.append(" (approval_status in ('approved', 'startedapproved') and draft<>true)");break;
-				default:actStatusValue.append("1=1 ");	break;
-				}
-				actStatusValue.append(" OR ");
-			}
-		    int posi = actStatusValue.lastIndexOf("OR");
-		    if(posi>0)
-		    	actStatusValue.delete(posi, posi+2);
+			SQLQueryGenerator approvalStatusGenerator = new ApprovalStatusQueryBuilder();
+			ACTIVITY_STATUS = approvalStatusGenerator.generateSQLQuery(approvalStatusSelected);
 		}    
-		String ACTIVITY_STATUS="select amp_activity_id from amp_activity where "+actStatusValue.toString();
-
+		
 		String TYPE_OF_ASSISTANCE_FILTER = "SELECT amp_activity_id FROM v_terms_assist WHERE terms_assist_code IN ("
 			+ Util.toCSString(typeOfAssistance) + ")";
 

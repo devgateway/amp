@@ -17,18 +17,14 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.mondrian.MondrianETL;
 import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
-import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
-import org.dgfoundation.amp.reports.mondrian.FiltersGroup;
-import org.dgfoundation.amp.reports.mondrian.MondrianApprovalStatusFilters;
-import org.dgfoundation.amp.reports.mondrian.MondrianDateFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
+import org.dgfoundation.amp.reports.mondrian.MondrianSQLFilters;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -323,12 +319,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		}			
 		
 		if (mrf != null) {
-			String dateFiltersQuery = MondrianDateFilters.generateDateColumnsFilterQuery(mrf.getDateFilterRules());
-			if (dateFiltersQuery != null) 
-				sets.add(ActivityUtil.fetchLongs(dateFiltersQuery));
-			String approvalStatusQuery = MondrianApprovalStatusFilters.generateFilterQuery (mrf.getFilterRules());
-			if (approvalStatusQuery != null)
-				sets.add(ActivityUtil.fetchLongs(approvalStatusQuery));
+			sets.add(MondrianSQLFilters.getActivityIds (mrf.getDateFilterRules(),mrf.getFilterRules())); 
 		}
 		
 		if (sets.isEmpty())

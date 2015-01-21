@@ -12,6 +12,7 @@ import java.util.Set;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.model.IModel;
@@ -19,22 +20,18 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.convert.IConverter;
 import org.apache.wicket.util.convert.converter.DoubleConverter;
-import org.apache.wicket.validation.validator.RangeValidator;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.features.subsections.AmpComponentAnnualBudgetSubsectionFeature;
 import org.dgfoundation.amp.onepager.events.ProposedProjectCostUpdateEvent;
 import org.dgfoundation.amp.onepager.events.UpdateEventBehavior;
-import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
 import org.dgfoundation.amp.onepager.models.AmpCurrencyCodeStringListReadOnlyModel;
 import org.dgfoundation.amp.onepager.models.ProposedProjectCostModel;
-import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
 /**
@@ -128,7 +125,13 @@ public class AmpProposedProjectCost extends AmpComponentPanel<Void> implements A
 		}
 
 		AmpSelectFieldPanel<String> currency = new AmpSelectFieldPanel<String>("proposedCurrency", currencyModel,
-				currencyList, "Currency", false, false);
+				currencyList, "Currency", false, false) {
+			protected void onAjaxOnUpdate(AjaxRequestTarget target) {
+				send(findParent(AmpProposedProjectCost.class), Broadcast.BREADTH, new ProposedProjectCostUpdateEvent(
+						target));
+			}
+		};
+		currency.setOutputMarkupId(true);
 		add(currency);
 		AmpComponentAnnualBudgetSubsectionFeature annualBudgets;
 		try {

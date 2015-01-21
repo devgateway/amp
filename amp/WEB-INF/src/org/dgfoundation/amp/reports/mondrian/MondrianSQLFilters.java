@@ -19,11 +19,12 @@ import org.digijava.module.aim.util.ActivityUtil;
 import clover.org.apache.log4j.Logger;
 
 /**
- * Applies all the SQL filters for the selected date filters (Map<ReportColumn, List<FilterRule>>) and filters
- * (Map<ReportElement, List<FilterRule>>) and returns the ids of the activities that match the criteria
- *
+ * Applies all the SQL filters for the selected date filters (Map<ReportColumn,
+ * List<FilterRule>>) and filters (Map<ReportElement, List<FilterRule>>) and
+ * returns the ids of the activities that match the criteria
+ * 
  * @author eperez
- *
+ * 
  */
 public class MondrianSQLFilters {
 
@@ -44,7 +45,7 @@ public class MondrianSQLFilters {
 			put(ColumnConstants.ACTIVITY_UPDATED_ON, "date_updated");
 		}
 	};
-	
+
 	// Each ColumnConstant should have it's SQLQueryGenerator
 	public static final Map<String, Class<? extends SQLQueryGenerator>> FILTER_RULE_CLASSES_MAP = new HashMap<String, Class<? extends SQLQueryGenerator>>() {
 		{
@@ -53,23 +54,30 @@ public class MondrianSQLFilters {
 	};
 
 	/**
-	 * Executes the SQL filters and returns the activities ids that match the criteria
+	 * Executes the SQL filters and returns the activities ids that match the
+	 * criteria
+	 * 
 	 * @param dateFilters
 	 * @param filters
-	 * @return
+	 * @return Set with the list of activities ids, null if not filter was applied
 	 */
 	public static Set<Long> getActivityIds(Map<ReportColumn, List<FilterRule>> dateFilters,
 			Map<ReportElement, List<FilterRule>> filters) {
-		Set<Long> activityIds = new HashSet<Long>();
-		
-		//first generate the sql to filter by date
-		String dateFiltersQuery = generateDateColumnsFilterQuery(dateFilters);
-		if (dateFiltersQuery != null)
-			activityIds.addAll(ActivityUtil.fetchLongs(dateFiltersQuery));
+		Set<Long> activityIds = null;
 
-		//then generate the sql for other fields
+		// first generate the sql to filter by date
+
+		String dateFiltersQuery = generateDateColumnsFilterQuery(dateFilters);
+		if (dateFiltersQuery != null) {
+			if (activityIds == null) {
+				activityIds = new HashSet<Long>();
+			}
+			activityIds.addAll(ActivityUtil.fetchLongs(dateFiltersQuery));
+		}
+
+		// then generate the sql for other fields
 		for (String entityName : FILTER_RULE_CLASSES_MAP.keySet()) {
-			//check if a given column should be filtered
+			// check if a given column should be filtered
 			List<FilterRule> rules = getFilterRules(filters, entityName);
 			if (rules == null || rules.size() == 0) {
 				continue;
@@ -77,15 +85,18 @@ public class MondrianSQLFilters {
 			Map<String, Boolean> ids = getIdsFromFilterRule(rules);
 			SQLQueryGenerator sqlQueryGenerator;
 			try {
-				//get the class that is in charge of generating the sql query
+				// get the class that is in charge of generating the sql query
 				sqlQueryGenerator = FILTER_RULE_CLASSES_MAP.get(entityName).newInstance();
 				String filterQuery = sqlQueryGenerator.generateSQLQuery(ids);
 				if (filterQuery != null) {
+					if (activityIds == null) {
+						activityIds = new HashSet<Long>();
+					}
 					activityIds.addAll(ActivityUtil.fetchLongs(filterQuery));
 				}
 
 			} catch (InstantiationException | IllegalAccessException e) {
-				LOGGER.warn("Could not generate the sql query for "+entityName, e);
+				LOGGER.warn("Could not generate the sql query for " + entityName, e);
 			}
 		}
 		return activityIds;

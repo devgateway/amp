@@ -319,7 +319,10 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		}			
 		
 		if (mrf != null) {
-			sets.add(MondrianSQLFilters.getActivityIds (mrf.getDateFilterRules(),mrf.getFilterRules())); 
+			Set <Long> ids = MondrianSQLFilters.getActivityIds (mrf.getDateFilterRules(),mrf.getFilterRules());
+			if (ids != null) {
+				sets.add(ids); 
+			}
 		}
 		
 		if (sets.isEmpty())

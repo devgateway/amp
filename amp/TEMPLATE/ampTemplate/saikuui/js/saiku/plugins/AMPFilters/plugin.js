@@ -22,7 +22,7 @@ var AMPFilters = Backbone.View.extend({
 
 				$(this.workspace.el).find('.workspace_results').prepend($(this.el).hide());
 
-				window.currentFilter = new ampFilter({el:$('#filters-container'), draggable:true})
+				window.currentFilter = new ampFilter({el:$('#filters-container'), draggable:true, caller: 'REPORTS'});
 				window.currentFilter.showFilters();
 				$('#filters-container').hide();
 

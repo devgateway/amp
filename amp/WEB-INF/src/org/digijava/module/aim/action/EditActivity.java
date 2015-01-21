@@ -787,11 +787,21 @@ public class EditActivity extends Action {
 			Collections.sort(proposedAnnualBudgets);
 			eaForm.getFunding().setProposedAnnualBudgets(proposedAnnualBudgets);
         	ProposedProjCost pg = new ProposedProjCost();
-        	if (activity.getFunAmount() != null)
+        	if (activity.getFunAmount() != null){
         		pg.setFunAmountAsDouble(activity.getFunAmount());
+        		pg.setFunAmount(FormatHelper.formatNumber(activity.getFunAmount()));
+        	}
         	pg.setCurrencyCode(activity.getCurrencyCode());
+        	if (pg.getCurrencyCode() != null) {
+    			AmpCurrency currency = CurrencyUtil.getCurrencyByCode(pg.getCurrencyCode());
+    			if (currency != null) 
+    				pg.setCurrencyName(currency.getCurrencyName());
+        	}
+        	else {
+        		pg.setCurrencyCode(CurrencyUtil.getWorkspaceCurrency(tm).getCurrencyCode());
+        		pg.setCurrencyName(CurrencyUtil.getWorkspaceCurrency(tm).getCurrencyName());
+        	}
         	pg.setFunDate(FormatHelper.formatDate(activity.getFunDate()));
-        	pg = ProposedProjCostHelper.getProposedProjCost(pg, CurrencyUtil.getWorkspaceCurrency(tm).getCurrencyCode());
         	eaForm.getFunding().setProProjCost(pg);
 
           //load programs by type

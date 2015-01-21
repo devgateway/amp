@@ -202,10 +202,7 @@ public class MondrianReportFilters implements ReportFilters {
 	 */
 	public void addDateRangeFilterRule(ReportColumn column, Date from, Date to) throws AmpApiException {
 		//validate
-		MondrianUtils.getDateRangeFilterRule(from, to);
-		final String fromStr = from == null ? null : DateTimeUtil.toJulianDayString(from);  
-		final String toStr = to == null ? null : DateTimeUtil.toJulianDayString(to);
-		addFilterRule(dateFilterRules, column, new FilterRule(fromStr, toStr, true, true));
+		addFilterRule(dateFilterRules, column, MondrianUtils.getDateRangeFilterRule(from, to));
 	}
 	
 	/**

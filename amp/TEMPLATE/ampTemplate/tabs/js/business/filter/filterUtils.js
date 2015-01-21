@@ -22,7 +22,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 			return "min";
 		}		
 		return "both";
-	}
+	};
 	
 	FilterUtils.extractFilters = function(content) {
 		var filters = new Filters();
@@ -34,7 +34,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 				var element = subElement.models[0];
 				var content = [];
 				if (subElement.name == 'DATE') {
-					var dateIntervalType = FilterUtils.getDateIntervalType(element, item, i)
+					var dateIntervalType = FilterUtils.getDateIntervalType(element, item, i);
 				}				
 				if (element.get('value') != null) {
 					var auxItem = {};
@@ -64,7 +64,39 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 				filters.add(auxFilter);
 			}
 		});
-		// TODO: implement the same for content.get('columnDateFilterRules')
+
+		var filtersDateColumnsJson = content.get('columnDateFilterRules');
+		jQuery(filtersDateColumnsJson.keys()).each(function(i, item) {
+			var subElement = filtersDateColumnsJson.get(item);
+			if (subElement instanceof Backbone.Collection) {
+				var element = subElement.models[0];
+				var content = [];	
+				if (element.get('value') != null) {
+					var auxItem = {};
+					auxItem.id = element.get('value');
+					auxItem.name = element.get('valueToName').attributes[element.get('value')];
+					content.push(auxItem);
+				} else if (element.get('valueToName') != null) {
+					// This should be .models but the way the endpoint returns
+					// the data breaks backbone.
+					_.each(element.get('valueToName').attributes, function(j, item2) {
+						// Need to do this because of how js parses these data
+						// and adds an extra element.
+						if (j != undefined) {
+							var item_ = {};
+							item_.id = i;
+							item_.name = j;
+							content.push(item_);
+						}
+					});
+				}
+				var auxFilter = new Filter({
+					name : item,
+					values : content
+				});
+				filters.add(auxFilter);
+			}
+		});
 		return filters;
 	};
 
@@ -137,7 +169,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 		      }
 		    }
 		    return output;
-		  }	
+		  };	
 	  
   FilterUtils.pushDateLimit = function(_name, value){
 	if(app.TabsApp.filters.models[_name] == undefined) {
@@ -154,7 +186,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 		app.TabsApp.filters.models[_name].name = value;
 	}
 	
-  }
+  };
 	  
 	FilterUtils.fillDateBlob = function(dateBlob, attributes){
 		if (attributes.values.length == 1) {
@@ -177,7 +209,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 			//error. why doesn't it have dates
 		}
 
-	}
+	};
 	
 	FilterUtils.convertJavaFiltersToJS = function(data) {
 		// This conversion is needed only one time when we load default
@@ -206,7 +238,10 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 				case 'Approval Status':
 				case 'Donor Group':
 				case 'Donor Type':
+				case 'Mode of Payment':
 				case 'On/Off/Treasury Budget':
+				case 'Zone':
+				case 'Region':
 					blob.columnFilters[item.get('name')] = _.map(item.get('values'), function(item_) {
 						return parseInt(item_.id);
 					});
@@ -226,6 +261,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 							item_) {
 						return parseInt(item_.id);
 					});
+					blob.columnFilters['National Planning Objectives Level 2 Id'] = blob.columnFilters['National Planning Objectives Level 1 Id'];
 					break;
 				case 'Primary Program':
 					blob.columnFilters['Primary Program Level 1 Id'] = _.map(item.get('values'), function(item_) {
@@ -275,9 +311,41 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 //					break;
 
 				case 'DATE':
-					FilterUtils.fillDateBlob(blob.otherFilters.date, item.attributes);
+					//FilterUtils.fillDateBlob(blob.otherFilters.date, item.attributes);
+					var newDate = {};
+					_.map(item.get('values'), function(item_, i) {						
+						if(i == 0) {
+							newDate['start'] = item_.name;
+						} else if(i == 1) {
+							newDate['end'] = item_.name;
+						}
+						return newDate;
+					});
+					blob.otherFilters['date'] = newDate;
 					break;
-					
+				case 'Tertiary Sector':
+					blob.columnFilters['Tertiary Program Level 1 Id'] = _.map(item.get('values'), function(item_) {
+						return parseInt(item_.id);
+					});
+					break;					
+				case 'Team':
+					blob.columnFilters['Workspaces'] = _.map(item.get('values'), function(item_) {
+						return parseInt(item_.id);
+					});
+					break;
+				case 'Actual Start Date':
+				case 'Actual Completion Date':
+					var newDate = {};
+					_.map(item.get('values'), function(item_, i) {						
+						if(i == 0) {
+							newDate['start'] = item_.name;
+						} else if(i == 1) {
+							newDate['end'] = item_.name;
+						}
+						return newDate;
+					});
+					blob.otherFilters[item.get('name')] = newDate;
+					break;
 				default:
 					console.error(item);
 					break;
@@ -305,6 +373,38 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 		 * Sector Id"] .concat(originalFilters.columnFilters["Primary Sector Sub-Sub-Sector Id"]); } }
 		 */
 		return originalFilters;
+	};
+	
+
+	FilterUtils.julianToDate = function(julian) {
+		var X = parseFloat(julian) + 0.5;
+		var Z = Math.floor(X); // Get day without time
+		var F = X - Z; // Get time
+		var Y = Math.floor((Z - 1867216.25) / 36524.25);
+		var A = Z + 1 + Y - Math.floor(Y / 4);
+		var B = A + 1524;
+		var C = Math.floor((B - 122.1) / 365.25);
+		var D = Math.floor(365.25 * C);
+		var G = Math.floor((B - D) / 30.6001);
+		// must get number less than or equal to 12)
+		var month = (G < 13.5) ? (G - 1) : (G - 13);
+		// if Month is January or February, or the rest of year
+		var year = (month < 2.5) ? (C - 4715) : (C - 4716);
+		month -= 1; // Handle JavaScript month format
+		var UT = B - D - Math.floor(30.6001 * G) + F;
+		var day = Math.floor(UT);
+		// Determine time
+		UT -= Math.floor(UT);
+		UT *= 24;
+		var hour = Math.floor(UT);
+		UT -= Math.floor(UT);
+		UT *= 60;
+		var minute = Math.floor(UT);
+		UT -= Math.floor(UT);
+		UT *= 60;
+		var second = Math.round(UT);
+		return new Date(year, month, day);
+		//return new Date(Date.UTC(year, month, day, hour, minute, second));
 	};
 
 	FilterUtils.prototype = {

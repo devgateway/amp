@@ -23,6 +23,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.hibernate.Query;
@@ -83,7 +84,7 @@ public class MondrianReportFiltersConverter {
 		addFilter(ColumnConstants.FINANCING_INSTRUMENT, AmpCategoryValue.class, "financingInstruments", true);
 		addFilter(ColumnConstants.TYPE_OF_ASSISTANCE, AmpCategoryValue.class, "typeOfAssistance", true);
 		addFilter(ColumnConstants.ON_OFF_TREASURY_BUDGET, AmpCategoryValue.class, "budget", true);
-		addFilter(ColumnConstants.WORKSPACES, AmpTheme.class, "workspaces", true);
+		addFilter(ColumnConstants.WORKSPACES, AmpTeam.class, "workspaces", true);
 		addFilter(ColumnConstants.STATUS, AmpCategoryValue.class, "statuses", true);
 		addFilter(ColumnConstants.APPROVAL_STATUS, String.class, "approvalStatusSelected", true);
 

@@ -611,8 +611,8 @@ public class Filters {
 	@GET
 	@Path("/workspaces")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, name = "Workspaces", id = "Workspaces",visibilityCheck="hasToShowWorkspaceFilter")
-	public List<SimpleJsonBean> getWorkspaces() {
+	@ApiMethod(ui = true, name = "Workspaces", id = "Workspaces", visibilityCheck = "hasToShowWorkspaceFilter"/*, column = ColumnConstants.WORKSPACES*/)
+	public JsonBean getWorkspaces() {
 		List<SimpleJsonBean> teamsListJson = new ArrayList<SimpleJsonBean>();
 		Collection<AmpTeam> ampTeamList = TeamUtil.getAllRelatedTeams();
 		if (hasToShowWorkspaceFilter()) {
@@ -623,8 +623,10 @@ public class Filters {
 				teamsListJson.add(ampTeamJson);
 			}
 		}
-		return teamsListJson;
-
+		JsonBean js = new JsonBean();
+		js.set("filterId", "Workspaces");
+		js.set("values", teamsListJson);
+		return js;
 	}
 	
 	public boolean hasToShowWorkspaceFilter () {

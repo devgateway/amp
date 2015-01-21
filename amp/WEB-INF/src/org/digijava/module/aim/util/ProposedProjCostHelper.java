@@ -30,37 +30,6 @@ public class ProposedProjCostHelper {
     ProposedProjCostHelper() {
     }
     
-public static ProposedProjCost getProposedProjCost(ProposedProjCost ppc,String currCode){
-    	
-    	ProposedProjCost propProjCost = new ProposedProjCost();
-    	propProjCost.setCurrencyCode(ppc.getCurrencyCode());
-    	if (propProjCost.getCurrencyCode() != null) {
-    			AmpCurrency currency = CurrencyUtil.getCurrencyByCode(propProjCost.getCurrencyCode());
-    			if (currency != null) 
-    				propProjCost.setCurrencyName(currency.getCurrencyName());
-    	}
-    	propProjCost.setFunAmount(ppc.getFunAmount());
-    	propProjCost.setFunDate(ppc.getFunDate());
-    	if(ppc.getCurrencyCode()==null || ppc.getCurrencyCode().equals(currCode)|| ppc.getFunDate()==null)
-    		return propProjCost;
-    	GregorianCalendar gc;
-		try {
-			gc = FormatHelper.parseDate(ppc.getFunDate());
-		
-	    	Date dt = gc.getTime();
-			double frmExRt = Util.getExchange(ppc.getCurrencyCode(),new java.sql.Date(dt.getTime()));
-			double toExRt = Util.getExchange(currCode,new java.sql.Date(dt.getTime()));
-			double amt = CurrencyWorker.convert1(ppc.getFunAmountAsDouble(),frmExRt,toExRt);
-			propProjCost.setFunAmount(FormatHelper.formatNumber(amt));
-			propProjCost.setCurrencyCode(currCode);
-			propProjCost.setCurrencyName(CurrencyUtil.getCurrencyByCode(currCode).getCurrencyName());
-		    
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		return propProjCost;
-	}
 
     public String getCurrencyCode() {
         return currencyCode;

@@ -441,8 +441,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 
 		// processed through SQL
 		else if (element.type == ElementType.ENTITY
-				&& (FiltersGroup.FILTER_GROUP.containsKey(element.entity.getEntityName()) || MondrianApprovalStatusFilters
-						.getSupportedColumn().equals(element.entity.getEntityName()))) {
+				&& (FiltersGroup.FILTER_GROUP.containsKey(element.entity.getEntityName()) || MondrianSQLFilters.FILTER_RULE_CLASSES_MAP
+						.containsKey(element.entity.getEntityName()))) {
 			processedBySql = true;
 		}
 		return processedBySql;

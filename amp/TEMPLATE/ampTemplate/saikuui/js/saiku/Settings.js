@@ -189,3 +189,97 @@ var isIE = (function(){
     return false;
 
 }());
+
+
+Settings.Util = {};
+Settings.Util.numberToString = function(number, settings) {
+	var format = "";
+	var stringNumber = null;
+
+	// Create the formatting string to be applied.
+	if (settings.useGrouping) {
+		format = "0,0";
+	}
+	if (settings.maxDecimalDigits > 0) {
+		format = format + "." + new Array(settings.maxDecimalDigits + 1).join("0");
+	}
+	// Define a new "language" for Numeral where we can change the default
+	// delimiters.
+	numeral.language('amp', Settings.Util.createLanguage(settings));
+	// Apply new language.
+	numeral.language('amp');
+	// Apply the format.
+	stringNumber = new numeral(number).format(format);
+	return stringNumber;
+};
+Settings.Util.stringToNumber = function(stringNumber, settings) {
+	var format = "";
+	var number = null;
+
+	// Create the formatting string to be applied.
+	if (settings.useGrouping) {
+		format = "0" + settings.currentThousandSeparator + "0";
+	}
+	if (settings.maxDecimalDigits > 0) {
+		format = format + settings.currentDecimalSeparator + new Array(settings.maxDecimalDigits + 1).join("0");
+	}
+	// Define a new "language" for Numeral where we can change the default
+	// delimiters.
+	numeral.language('amp', Settings.Util.createLanguage(settings));
+	// Apply new language.
+	numeral.language('amp');
+	// Apply the format.
+	numeral.defaultFormat = format;
+	number = new numeral().unformat(stringNumber);
+	return number;
+};
+
+
+Settings.Util.createLanguage = function(auxSettings) {
+	var ret = {
+		delimiters : {
+			thousands : auxSettings.currentThousandSeparator,
+			decimal : auxSettings.currentDecimalSeparator
+		},
+		abbreviations : {
+			thousand : 'k',
+			million : 'm',
+			billion : 'b',
+			trillion : 't'
+		},
+		ordinal : function(number) {
+			return number === 1 ? 'st' : 'rds';
+		},
+		currency : {
+			symbol : '$'
+		}
+	};
+	return ret;
+}
+
+Settings.Util.extractSettings = function(settings) {
+	var options = {
+		currentThousandSeparator : null,
+		currentDecimalSeparator : null,
+		useGrouping : false,
+		maxDecimalDigits : 0,
+		groupSize : 0
+	};
+
+	var amountFormat = _.findWhere(settings, {id:"amountFormat"});
+	var decimalSymbolDefinitions = _.findWhere(amountFormat.value, {id:"decimalSymbol"}).value;
+	var decimalSymbol = _.findWhere(decimalSymbolDefinitions.options, {id: decimalSymbolDefinitions.defaultId}).value;
+	options.currentDecimalSeparator = decimalSymbol;
+	var decimalPlacesDefinitions = _.findWhere(amountFormat.value, {id:"maxFracDigits"}).value;
+	var decimalPlaces = _.findWhere(decimalPlacesDefinitions.options, {id: decimalPlacesDefinitions.defaultId}).value;
+	options.maxDecimalDigits = decimalPlaces;
+	var useGrouping = _.findWhere(amountFormat.value, {id:"useGrouping"}).value;
+	options.useGrouping = useGrouping;
+	var groupSize = _.findWhere(amountFormat.value, {id:"groupSize"}).value;
+	options.groupSize = groupSize;
+	var groupSeparatorDefinitions = _.findWhere(amountFormat.value, {id:"groupSeparator"}).value;
+	var groupSeparator = _.findWhere(groupSeparatorDefinitions.options, {id: groupSeparatorDefinitions.defaultId}).value;
+	options.currentThousandSeparator = groupSeparator;
+
+	return options;
+}

@@ -120,7 +120,8 @@ var QueryRouter = Backbone.Router.extend({
 			templateQuery.cube.catalog = data.reportMetadata.catalog;
 			templateQuery.cube.schema = data.reportMetadata.schema;
 			Settings.RESULTS_PER_PAGE = data.reportMetadata.recordsPerPage;
-
+			Settings.NUMBER_FORMAT_OPTIONS = Settings.Util.extractSettings(data.reportMetadata.settings);
+			
 			var model = Backbone.Model.extend({
 				defaults: {
 					file: data.reportMetadata.name,

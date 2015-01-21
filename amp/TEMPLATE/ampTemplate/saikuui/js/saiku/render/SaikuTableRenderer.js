@@ -187,15 +187,14 @@ function genTotalHeaderCells(currentIndex, bottom, scanSums, scanIndexes, lists)
 	return contents;
 }
 
-function totalIntersectionCells(currentIndex, bottom, scanSums, scanIndexes, lists) {
+function totalIntersectionCells(currentIndex, bottom, scanSums, scanIndexes, lists, partialTotal) {
 	var contents = '';
 	for (var i = bottom; i >= 0; i--) {
 		if (currentIndex == scanSums[i]) {
 			var currentListNode = lists[i][scanIndexes[i]];
 			var cssClass = "data total intersection";
 			for (var m = 0; m < currentListNode.cells.length; m++) {
-				var text = '&nbsp;';
-				contents += '<td class="' + cssClass + '">' + text + '</td>';
+				contents += '<td class="' + cssClass + '">' + Settings.Util.numberToString(partialTotal.shift(), Settings.NUMBER_FORMAT_OPTIONS) + '</td>';
 			}
 			scanIndexes[i]++;
 			if (scanIndexes[i] < lists[i].length)
@@ -267,10 +266,23 @@ function genTotalHeaderRowCells(currentIndex, scanSums, scanIndexes, totalsLists
 						scanSums[z] = totalsLists[ROWS][z][scanIndexes[z]].width;
 					}
 				}
+				var partialTotal = [];
+				var buckets = totalsLists[ROWS][0][0].cells.length;
+				var currentBucket = 0;
+				debugger;
 				for (var k = 0; k < colLists[i][colScanIndexes[i]].cells[m].length; k++) {
+					
 					contents += '<td class="data total">' + colLists[i][colScanIndexes[i]].cells[m][k].value + '</td>';
+					if(partialTotal[currentBucket] === undefined) {
+						partialTotal[currentBucket] = 0;
+					}
+					partialTotal[currentBucket] += Settings.Util.stringToNumber(colLists[i][colScanIndexes[i]].cells[m][k].value, Settings.NUMBER_FORMAT_OPTIONS);
 					if (totalsLists[ROWS]) {
-						contents += totalIntersectionCells(k + 1, totalsLists[ROWS].length - 1, scanSums, scanIndexes, totalsLists[ROWS]);
+						contents += totalIntersectionCells(k + 1, totalsLists[ROWS].length - 1, scanSums, scanIndexes, totalsLists[ROWS], partialTotal);
+					}
+					currentBucket++;
+					if(currentBucket == buckets) {
+						currentBucket = 0;
 					}
 				}
 				contents += '</tr>';

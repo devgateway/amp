@@ -267,9 +267,8 @@ function genTotalHeaderRowCells(currentIndex, scanSums, scanIndexes, totalsLists
 					}
 				}
 				var partialTotal = [];
-				var buckets = totalsLists[ROWS][0][0].cells.length;
+				var buckets = totalsLists[ROWS] === null ? 1 : totalsLists[ROWS][0][0].cells.length;
 				var currentBucket = 0;
-				debugger;
 				for (var k = 0; k < colLists[i][colScanIndexes[i]].cells[m].length; k++) {
 					
 					contents += '<td class="data total">' + colLists[i][colScanIndexes[i]].cells[m][k].value + '</td>';

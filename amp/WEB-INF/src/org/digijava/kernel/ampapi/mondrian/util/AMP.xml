@@ -730,5 +730,15 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
+		
+		<!-- For SSC specific calculated members please include SSC in the name 
+		or define a special attr/tag to exclude them for AMP without SSC config (see AmpMondrianSchemaProcessor.removeSSCComputedMembers) 
+		 -->
+		<CalculatedMember name="Cumulated SSC Commitments" dimension="Measures">
+		 	<Formula>
+				[Measures].[Bilateral SSC Commitments] + [Measures].[Triangular SSC Commitments]
+			</Formula>
+		</CalculatedMember>
+		
 	</Cube>
  </Schema>

@@ -283,6 +283,37 @@ public class TeamUtil {
     
     
     /**
+     * Retrieves all SSC workspaces
+     * @return
+     */
+    public static List<AmpTeam> getAllSSCWorkspaces() {
+    	return getAllTeamsByPrefix(Constants.SSC_WORKSPACE_PREFIX);
+    }
+    
+    /**
+     * Retrieves all workspaces by the given workspace prefix
+     * @param prefix
+     * @return
+     */
+    public static List<AmpTeam> getAllTeamsByPrefix(String wsPrefix) {
+        Session session = null;
+        List<AmpTeam> teams = new ArrayList<AmpTeam>();
+        
+        try {
+            session = PersistenceManager.getSession();
+            String query = "select team from "
+                + AmpTeam.class.getName()
+                + " team where (team.workspacePrefix.value=:wsPrefix)";
+            Query qry = session.createQuery(query);
+            qry.setParameter("wsPrefix", wsPrefix);
+            teams = (List<AmpTeam>) qry.list();
+        } catch(Exception e) {
+            throw new RuntimeException(e);
+        }
+        return teams;
+    }
+    
+    /**
      * Creates a new team
      *
      * @param team

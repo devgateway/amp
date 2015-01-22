@@ -144,6 +144,11 @@ public final class ArConstants {
 		put(PLEDGE, Constants.PLEDGE);
 	}};
 	
+	public final static Map<String, Integer> SSC_TRANSACTION_TYPE_NAME_TO_ID = new LinkedHashMap<String, Integer>() {{
+		put(COMMITMENT, Constants.COMMITMENT);
+		put(DISBURSEMENT, Constants.DISBURSEMENT);
+	}};
+	
 	//public final static String PLEDGES_TOTAL_PLEDGED="Total Pledged";
 	public final static java.sql.Date PLEDGE_FAKE_YEAR = new java.sql.Date(0);
     

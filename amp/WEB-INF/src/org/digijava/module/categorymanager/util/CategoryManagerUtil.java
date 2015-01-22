@@ -493,9 +493,12 @@ List<AmpEventType> eventTypeList = new ArrayList<AmpEventType>();
 	 */
 	public static Collection<AmpCategoryValue> getAmpCategoryValueCollectionByKeyExcludeDeleted(String categoryKey){
 		Collection<AmpCategoryValue> visibleValues = new ArrayList<AmpCategoryValue>(); 
-		for (AmpCategoryValue acvalue: CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey)) {
-			if (acvalue.isVisible()) {
-				visibleValues.add(acvalue);
+		Collection<AmpCategoryValue> acvList = CategoryManagerUtil.getAmpCategoryValueCollectionByKey(categoryKey);
+		if (acvList != null) {
+			for (AmpCategoryValue acvalue : acvList) {
+				if (acvalue.isVisible()) {
+					visibleValues.add(acvalue);
+				}
 			}
 		}
 		return visibleValues;		

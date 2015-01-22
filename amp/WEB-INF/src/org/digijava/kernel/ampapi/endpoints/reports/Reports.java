@@ -171,10 +171,8 @@ public class Reports {
 	 * @see ReportsUtil#getReportResultByPage
 	 */
 	public final JsonBean getCustomReport(JsonBean formParams) {
-		List<String> errors = ReportsUtil.validateReportConfig(formParams, true);
-		if (errors.size() > 0) {
-			JsonBean result = new JsonBean();
-			result.set(EPConstants.ERROR, errors);
+		JsonBean result = ReportsUtil.validateReportConfig(formParams, true);
+		if (result != null) {
 			return result;
 		}
 		// we need reportId only to store the report result in cache

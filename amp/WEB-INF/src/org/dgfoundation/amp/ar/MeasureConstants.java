@@ -20,6 +20,7 @@ public class MeasureConstants {
 	public static final String BILATERAL_SSC_COMMITMENTS = "Bilateral SSC Commitments";
 	public static final String CONSUMPTION_RATE = "Consumption Rate";
 	public static final String CUMULATED_DISBURSEMENTS = "Cumulated Disbursements"; 
+	public static final String CUMULATED_SSC_COMMITMENTS = "Cumulated SSC Commitments";
 	public static final String DISBURSMENT_RATIO = "Disbursment Ratio";
 	public static final String OFFICIAL_DEVELOPMENT_AID_COMMITMENTS = "Official Development Aid Commitments";
 	public static final String PIPELINE_COMMITMENTS = "Pipeline Commitments";

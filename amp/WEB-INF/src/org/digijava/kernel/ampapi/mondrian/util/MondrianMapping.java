@@ -298,11 +298,19 @@ public class MondrianMapping {
 			
 			//Measures - Entity type - All
 			
+			// standard trivial measures
 			for (String transactionType:ArConstants.TRANSACTION_TYPE_NAME_TO_ID.keySet())
 				for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
 					String measureName = adj.getValue() + " " + transactionType;
 					addMeasureDefinition(measureName);
 				}
+			// ssc custom trivial measures
+			for (String transactionType : ArConstants.SSC_TRANSACTION_TYPE_NAME_TO_ID.keySet()) {
+				for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY)) {
+					addMeasureDefinition(adj.getValue() + " " + transactionType);
+				}
+			}
+			addMeasureDefinition(MeasureConstants.CUMULATED_SSC_COMMITMENTS);
 					
 			addMeasureDefinition(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL);
 			addMeasureDefinition(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE);

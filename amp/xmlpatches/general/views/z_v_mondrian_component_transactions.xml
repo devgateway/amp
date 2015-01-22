@@ -25,7 +25,7 @@
 SELECT
 	f.activity_id AS amp_activity_id, f.amp_component_funding_id, 
 	f.amp_component_id AS amp_component_id, 
-	COALESCE(f.rep_organization_id, 999888777) AS component_organisation_id,
+	COALESCE(f.rep_organization_id, 999999999) AS component_organisation_id,
 	f.transaction_type, f.adjustment_type, 
 	f.transaction_date, 
 	to_char(f.transaction_date, 'J')::integer AS date_code,

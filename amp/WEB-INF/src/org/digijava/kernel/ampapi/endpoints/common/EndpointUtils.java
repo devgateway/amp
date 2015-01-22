@@ -17,10 +17,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.WebApplicationException;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ColumnsVisibility;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
@@ -103,6 +105,23 @@ public class EndpointUtils {
 		if(appSettings != null &&appSettings.getReportEndYear()!=null&& appSettings.getReportEndYear() > 0)
 			return String.valueOf(appSettings.getReportEndYear());
 		return FeaturesUtil.getGlobalSettingValue(Constants.GlobalSettings.END_YEAR_DEFAULT_VALUE);
+	}
+	
+	/**
+	 * Retrieves a common specification configuration based on the incoming json request
+	 * 
+	 * @param config
+	 * @return report specification
+	 */
+	public static ReportSpecificationImpl getReportSpecification(JsonBean config, String reportName) {
+		// identify report type
+		String typeCode = getSingleValue(config, EPConstants.REPORT_TYPE, EPConstants.DEFAULT_REPORT_TYPE);
+		Integer reportType = EPConstants.REPORT_TYPE_ID_MAP.get(typeCode);
+		if (reportType == null) {
+			reportType = ArConstants.DONOR_TYPE;
+		}
+		
+		return new ReportSpecificationImpl(reportName, reportType);
 	}
 	
 	/**

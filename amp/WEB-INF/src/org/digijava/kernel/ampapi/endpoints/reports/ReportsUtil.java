@@ -30,6 +30,7 @@ import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.reports.ActivityType;
 import org.dgfoundation.amp.reports.CachedReportData;
 import org.dgfoundation.amp.reports.ColumnsVisibility;
 import org.dgfoundation.amp.reports.PartialReportArea;
@@ -48,8 +49,11 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 public class ReportsUtil {
 	protected static final Logger logger = Logger.getLogger(ReportsUtil.class);
@@ -80,31 +84,42 @@ public class ReportsUtil {
 	 *  "add_hierarchies" : ["Approval Status"], 									<br/>
 	 *  "add_measures"    : ["Custom Measure"], 									<br/>
 	 *  "rowTotals"       : true													<br/>
+	 *  "reportType"      : "C"														<br/>
+	 *  "projectType"	  : ["S"]													<br/>
 	 * } 																			<br/>
-	 * where:
-	 * <ul>
-	 * 	 <li>name</li>        mandatory to be provided for custom reports, otherwise is skipped <br>  
-	 *   <li>page</li>        optional, page number, starting from 1. Use 0 to retrieve only <br>
-	 *                        pagination information, without any records. Default to 0 <br>
-	 *   <li>recordsPerPage</li> optional, the number of records per page to return. Default
+	 * 
+	 * where: <br>
+	 * <dl>
+	 * 	 <dt>name</dt>			<dd>mandatory to be provided for custom reports, otherwise is skipped</dd> 
+	 *   <dt>page</dt>        	<dd>optional, page number, starting from 1. Use 0 to retrieve only
+	 *                        pagination information, without any records. Default to 0</dd>
+	 *   <dt>recordsPerPage</dt> <dd>optional, the number of records per page to return. Default
 	 *   					  will be set to the number configured in AMP. Set it to -1
-	 *                        to get the unlimited records, that will provide all records.
-	 *   <li>sorting</li>     optional, a list of sorting maps. Each map has 'columns' list 
+	 *                        to get the unlimited records, that will provide all records.</dd>
+	 *   <dt>sorting</dt>     	<dd>optional, a list of sorting maps. Each map has 'columns' list 
 	 *                        and 'asc' flag, that is true for sorting ascending. Hierarchical 
-	 *                        sorting will define a column list as a tuple to sort by.
-	 *   <li>regenerate</li>  optional, set to true for all first access and any changes and <br> 
-	 *                        to false for consequent page navigation. Default to true <br>
-	 *   <li>add_columns</li> optional, a list of columns names to be added to the <br>
-	 *                        report configuration <br>
-	 *   <li>add_hierarchies</li>  optional, a list of hierarchies to be added to the <br> 
-	 *                             report configuration <br>
-	 *   <li>add_measures</li> optional, a list of measures to be added to the <br>
-	 *                         report configuration <br>
-	 *   <li>rowTotals</li>    optional, flag to request row totals to be build
-     *   <li>forceHeaders</li>    optional, flag, if the report query returns empty response
-     *                    the list of column headers is populated from the request. Default is false
-	 *   <li>settings</li>	   Report settings	
-	 * </ol>
+	 *                        sorting will define a column list as a tuple to sort by.</dd>
+	 *   <dt>regenerate</dt>	<dd>optional, set to true for all first access and any changes and 
+	 *                        to false for consequent page navigation. Default to true</dd>
+	 *   <dt>add_columns</dt> 	<dd>optional, a list of columns names to be added to the
+	 *                        report configuration</dd>
+	 *   <dt>add_hierarchies</dt>  <dd>optional, a list of hierarchies to be added to the
+	 *                             report configuration</dd>
+	 *   <dt>add_measures</dt> 	<dd>optional, a list of measures to be added to the
+	 *                         report configuration</dd>
+	 *   <dt>rowTotals</dt>    	<dd>optional, flag to request row totals to be build</dd>
+     *   <dt>forceHeaders</dt>   <dd>optional, flag, if the report query returns empty response
+     *                    the list of column headers is populated from the request. Default is false</dd>
+	 *   <dt>settings</dt>	   	<dd>Report settings</dd>
+	 *   <dt>reportType</dt>	<dd>can be on of "D" (Donor), "C" (Component), "P" (Pledge) report type.
+	 *   						Default is "D" if not provided.</dd>
+	 *   <dt>projectType</dt>   <dd>an optional list of projects, mainly used to change usual default project
+	 *   						types included in the report. The list option per report type:
+	 *   						"D" : ["A", "S", "P"], where default is ["A", "S"] if both are reachable
+	 *   						"C" : ["A", "S"], where default is ["A", "S"]
+	 *   						"P" : ["P"], where default is ["P"]
+	 *   						where "A" - standard activity, "S" - SSC Activity, "P" - pledge</dd>
+	 * </dl>
 	 * @return JsonBean result for the requested page and pagination information
 	 */
 	public static final JsonBean getReportResultByPage(Long reportId, JsonBean formParams) {
@@ -147,7 +162,7 @@ public class ReportsUtil {
 			ReportSpecificationImpl spec = null;
 			if (Boolean.TRUE.equals(formParams.get(EPConstants.IS_CUSTOM))) { 
 				String reportName = formParams.getString(EPConstants.REPORT_NAME);
-				spec = new ReportSpecificationImpl(reportName, ArConstants.DONOR_TYPE);
+				spec = EndpointUtils.getReportSpecification(formParams, reportName);
 			} else {
 				spec = ReportsUtil.getReport(reportId);
 			}
@@ -206,17 +221,20 @@ public class ReportsUtil {
 		}
 		ReportSpecificationImpl specImpl = (ReportSpecificationImpl) spec;
 		
-		//update report structure
+		// update report structure
 		addColumns(specImpl, formParams);
 		addHierarchies(specImpl, formParams);
 		addMeasures(specImpl, formParams);
 		
-		//update report data presentation
+		// update report data presentation
+		SettingsUtils.applySettings(specImpl, formParams);
 		configureFilters(specImpl, formParams);
 		configureSorting(specImpl, formParams);
-		SettingsUtils.applySettings(specImpl, formParams);
 		
-		//update other settings
+		// update report data
+		configureProjectTypes(specImpl, formParams);
+		
+		// update other settings
 		setOtherOptions(specImpl, formParams);
 		
 		return spec;
@@ -268,16 +286,75 @@ public class ReportsUtil {
 		}
 	}
 	
-	private static void configureFilters(ReportSpecificationImpl spec, JsonBean formParams) {
+	public static void configureFilters(ReportSpecificationImpl spec, JsonBean formParams) {
 		JsonBean filters = new JsonBean();
-		LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) formParams.get("filters");
+		LinkedHashMap<String, Object> requestFilters = (LinkedHashMap<String, Object>) 
+				formParams.get(EPConstants.FILTERS);
 		MondrianReportFilters mondrianReportFilters = null;
 		if (requestFilters != null) {
 			filters.any().putAll(requestFilters);
 			mondrianReportFilters = FilterUtils.getFilters(filters);
 			// set filters even if they are empty, that means filters are cleared up
-			((ReportSpecificationImpl)spec).setFilters(mondrianReportFilters);
+			spec.setFilters(mondrianReportFilters);
 		}
+	}
+	
+	/**
+	 * Explicitly configures projects that has to be included into the report. 
+	 * If nothing specified, then the default project types are used for the given report type.
+	 * 
+	 * @param spec 
+	 * @param formParams
+	 */
+	public static void configureProjectTypes(ReportSpecificationImpl spec, JsonBean formParams) {
+		List<String> projectTypeOptions = (List<String>) formParams.get(EPConstants.PROJECT_TYPE);
+		if (projectTypeOptions == null || projectTypeOptions.size() == 0) 
+			return;
+		// no validation is done here, use "validateReportConfig" before creating report specification
+		boolean hasPledge = projectTypeOptions.contains(ActivityType.PLEDGE.toString());
+		boolean hasSSCActivity = projectTypeOptions.contains(ActivityType.SSC_ACTIVITY.toString());
+		
+		switch(spec.getReportType()) {
+		case ArConstants.DONOR_TYPE:
+			spec.setAlsoShowPledges(hasPledge);
+			// no break, following same rule for SSC filters in both Donor & Component reports
+		case ArConstants.COMPONENT_TYPE:
+			if (hasSSCActivity && projectTypeOptions.size() == 1) {
+				configureSSCWorkspaceFilter(spec, true);
+			} else if (!hasSSCActivity) {
+				configureSSCWorkspaceFilter(spec, false);
+			}
+			break;
+		case ArConstants.PLEDGES_TYPE:
+			// only pledges are allowed so far, no special rule
+			break;
+		}	
+	}
+	
+	/**
+	 * Configures SSC workspaces to be the only one selected or excluded from the report
+	 * 
+	 * @param spec 	report specification
+	 * @param add 	has to be configured to true if only SSC workspaces are selected, 
+	 * 				and to false if they are excluded  
+	 */
+	public static void configureSSCWorkspaceFilter(ReportSpecificationImpl spec, boolean add) {
+		List<AmpTeam> sscWorkspaces = TeamUtil.getAllSSCWorkspaces();
+		if (sscWorkspaces.size() == 0) {
+			logger.error("Cannot configure SSC Workspace filter, no SSC Workspace found");
+			return;
+		}
+		List<String> sscWorkspacesIds = new ArrayList<String>(sscWorkspaces.size());
+		for (AmpTeam sscWs : sscWorkspaces) {
+			sscWorkspacesIds.add(sscWs.getIdentifier().toString());
+		}
+		MondrianReportFilters filters = (MondrianReportFilters) spec.getFilters();
+		if (filters == null) {
+			AmpFiscalCalendar calendar = spec.getSettings() == null ? null : spec.getSettings().getCalendar();
+			filters = new MondrianReportFilters(calendar);
+			spec.setFilters(filters);
+		}
+		filters.addFilterRule(new ReportColumn(ColumnConstants.TEAM), new FilterRule(sscWorkspacesIds, add));
 	}
 	
 	/**
@@ -372,14 +449,15 @@ public class ReportsUtil {
 	 * Validates the report config data provide via formParams
 	 * 
 	 * @param formParams input parameters used 
-	 * @return a list of errors
+	 * @return JsonBean with errors or null if no error
 	 */
-	public static final List<String> validateReportConfig(JsonBean formParams,
+	public static final JsonBean validateReportConfig(JsonBean formParams,
 			boolean isCustom) {
 		List<String> errors = new ArrayList<String>();
 		// validate the name
-		if (isCustom && StringUtils.isBlank(formParams.getString(EPConstants.REPORT_NAME)))
+		if (isCustom && StringUtils.isBlank(formParams.getString(EPConstants.REPORT_NAME))) {
 			errors.add("report name not specified");
+		}
 		
 		// validate the columns
 		String err = validateList("columns", (List<String>) formParams.get(EPConstants.ADD_COLUMNS),
@@ -396,13 +474,27 @@ public class ReportsUtil {
 				(List<String>) formParams.get(EPConstants.ADD_COLUMNS), false);
 		if (err != null) errors.add(err);
 		
-		return errors;
+		// validate the project types
+		err = validateList("project types", (List<String>) formParams.get(EPConstants.PROJECT_TYPE),
+				ActivityType.STR_VALUES, false);
+		if (err != null) errors.add(err);
+		
+		// validate the report type
+		err = validateReportType(formParams);
+		if (err != null) errors.add(err);
+		
+		JsonBean result = null;
+		if (errors.size() > 0) {
+			result = new JsonBean();
+			result.set(EPConstants.ERROR, errors);
+		}
+		return result;
 	}
 	
 	private static String validateList(String listName, List<String> values, 
-			Collection<String> allowedValues, boolean isCustom) {
+			Collection<String> allowedValues, boolean isMandatory) {
 		if (values == null || values.size() == 0) {
-			if (isCustom)
+			if (isMandatory)
 				return "no " + listName + " are specified";
 		} else {
 			List<String> copy = new ArrayList<String>(values);
@@ -413,15 +505,34 @@ public class ReportsUtil {
 		return null;
 	}
 	
+	private static String validateReportType(JsonBean config) {
+		String reportType = EndpointUtils.getSingleValue(config, 
+				EPConstants.REPORT_TYPE, EPConstants.DEFAULT_REPORT_TYPE);
+		Integer reportTypeId = EPConstants.REPORT_TYPE_ID_MAP.get(reportType);
+		if (reportTypeId == null) {
+			return "Invalid report type = " + config.getString(EPConstants.REPORT_TYPE);
+		}
+		List<String> activityTypes = (List<String>) config.get(EPConstants.PROJECT_TYPE);
+		if (activityTypes != null) {
+			if (activityTypes.size() == 0) {
+				return "Invalid empty '" + EPConstants.PROJECT_TYPE + "'";
+			}
+			if (!EPConstants.REPORT_TYPE_ACTIVITY_MAP.get(reportType).containsAll(activityTypes)) {
+				return "Invalid list of activity types = " + activityTypes;
+			}
+		}
+		return null;
+	}
+	
 	private static void setOtherOptions(ReportSpecificationImpl spec, JsonBean formParams) {
 		Boolean doRowTotals = (Boolean) formParams.get(EPConstants.DO_ROW_TOTALS);
 		if (doRowTotals != null) {
-            spec.setCalculateRowTotals(doRowTotals);
-        }
-
+			spec.setCalculateRowTotals(doRowTotals);
+		}
+		
         Boolean forceHeaders = (Boolean) formParams.get(EPConstants.FORCE_HEADERS);
         if (forceHeaders != null) {
-            spec.setPopulateReportHeadersIfEmpty(forceHeaders);
+        	spec.setPopulateReportHeadersIfEmpty(forceHeaders);
         }
 	}
 	

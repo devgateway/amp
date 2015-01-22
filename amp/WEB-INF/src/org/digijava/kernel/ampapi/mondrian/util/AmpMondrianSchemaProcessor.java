@@ -2,9 +2,11 @@ package org.digijava.kernel.ampapi.mondrian.util;
 
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
@@ -192,6 +194,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 				dimUsage.getParentNode().replaceChild(newDimensionDefinition, dimUsage);
 			}
 			insertCommonMeasuresDefinitions(xmlSchema);
+			moveCalculatedMembersToEnd(xmlSchema);
 			contents = XMLGlobals.saveToString(xmlSchema);
 			expandedSchema = contents;
 			// System.err.println("the expanded schema is: " + expandedSchema);
@@ -205,6 +208,8 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	protected void insertCommonMeasuresDefinitions(Document xmlSchema) {
 		Node trivialMeasureDefinitionNode = XMLGlobals.selectNode(xmlSchema, "//Measure[@name='@@trivial_measure@@']");
 		//String trivialMeasureString = XMLGlobals.saveToString(trivialMeasureDefinitionNode);
+		
+		// add the default trivial measures
 		for (String transactionType:ArConstants.TRANSACTION_TYPE_NAME_TO_ID.keySet()) {
 			Integer trTypeId = ArConstants.TRANSACTION_TYPE_NAME_TO_ID.get(transactionType);
 			for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
@@ -220,23 +225,75 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 //				xmlSchema.createElement("someElement").
 //				newMeasureNode.setTextContent(newMeasureString);
 				
-				Element newMeasureNode = (Element) trivialMeasureDefinitionNode.cloneNode(true);
-				newMeasureNode.setAttribute("name", measureName);
-				Node sqlNode = XMLGlobals.selectNode(newMeasureNode, "//SQL");
-								
-				String newNodeText = sqlNode.getTextContent()
-						.replace("@@trivial_measure_adjustment_type@@", adj.getId().toString())
-						.replace("@@trivial_measure_transaction_type@@", trTypeId.toString());
-				sqlNode.setTextContent(newNodeText);
-				trivialMeasureDefinitionNode.getParentNode().appendChild(newMeasureNode);
+				
+				addTrivialMeasure(trivialMeasureDefinitionNode, measureName, adj, trTypeId);
 				
 //				String elementSql = newMeasureDefinition.getTextContent();
 //				@@trivial_measure_transaction_type@@
 			}
 		}
+		
+		// add custom SSC trivial measures
+		Collection<AmpCategoryValue> sscAdjTypes = 
+				CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY);
+		 
+		if (sscAdjTypes.size() > 0) {
+			for (Entry<String, Integer> pair : ArConstants.SSC_TRANSACTION_TYPE_NAME_TO_ID.entrySet()) {
+				String transactionType = pair.getKey();
+				Integer trTypeId = pair.getValue();
+				for (AmpCategoryValue adj : sscAdjTypes) {
+					String measureName = adj.getValue() + " " + transactionType;
+					addTrivialMeasure(trivialMeasureDefinitionNode, measureName, adj, trTypeId);
+				}
+			}
+		} else {
+			// if SSC measures are not used, then we need to cleanup SSC computed measures to have a valid schema definition 
+			removeSSCComputedMembers(xmlSchema);
+		}
+		
 		trivialMeasureDefinitionNode.getParentNode().removeChild(trivialMeasureDefinitionNode);
 	}
 	
+	private void addTrivialMeasure(Node trivialMeasureDefinitionNode, String measureName, AmpCategoryValue adj,
+			Integer trTypeId) {
+		Element newMeasureNode = (Element) trivialMeasureDefinitionNode.cloneNode(true);
+		newMeasureNode.setAttribute("name", measureName);
+		Node sqlNode = XMLGlobals.selectNode(newMeasureNode, "//SQL");
+						
+		String newNodeText = sqlNode.getTextContent()
+				.replace("@@trivial_measure_adjustment_type@@", adj.getId().toString())
+				.replace("@@trivial_measure_transaction_type@@", trTypeId.toString());
+		sqlNode.setTextContent(newNodeText);
+		
+		trivialMeasureDefinitionNode.getParentNode().appendChild(newMeasureNode);
+	}
+	
+	private void removeSSCComputedMembers(Document xmlSchema) {
+		NodeList calculatedMembers = XMLGlobals.selectNodes(xmlSchema, "//CalculatedMember[contains(@name, 'SSC')]");
+		
+		for (int idx = 0; idx < calculatedMembers.getLength(); idx++) {
+			Node calculatedMember = calculatedMembers.item(idx);
+			calculatedMember.getParentNode().removeChild(calculatedMember);
+		}
+	}
+	
+	/**
+	 * Calculated members depend on existing definitions during the parsing 
+	 * and thus has to be defined after other measures
+	 * 
+	 * @param xmlSchema
+	 */
+	private void moveCalculatedMembersToEnd(Document xmlSchema) {
+		NodeList calculatedMembers = XMLGlobals.selectNodes(xmlSchema, "//CalculatedMember");
+		if (calculatedMembers == null || calculatedMembers.getLength() == 0)
+			return;
+		Node parent = calculatedMembers.item(0).getParentNode();
+		for (int idx = 0; idx < calculatedMembers.getLength(); idx++) {
+			Node calculatedMember = calculatedMembers.item(idx);
+			parent.removeChild(calculatedMember);
+			parent.appendChild(calculatedMember);
+		}
+	}
 	
 //	protected String buildActivityStatusSQL() {
 //		StringBuilder res = new StringBuilder("CASE");

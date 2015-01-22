@@ -290,6 +290,7 @@ public class Constants
 	public static final String DIRTY_ACTIVITY_LIST = "dirtyActivityList";
 	public static final String TYPE_MNGMT = "Management";
 	public static final String TYPE_TEAM = "Team";
+	public static final String SSC_WORKSPACE_PREFIX = "SSC_";
 
 	public static final String DEFAULT_TEAM_REPORT		= "defaultTeamReport";
 	

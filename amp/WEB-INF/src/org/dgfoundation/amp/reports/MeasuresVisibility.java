@@ -126,6 +126,11 @@ public class MeasuresVisibility extends DataVisibility {
 				put(adj.getValue() + " " + trType, new ArrayList<String>() {{  add(trType);}});
 			}
 		}
+		for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.SSC_ADJUSTMENT_TYPE_KEY)) {
+			for (final String trType: ArConstants.SSC_TRANSACTION_TYPE_NAME_TO_ID.keySet()) {
+				put(adj.getValue() + " " + trType, new ArrayList<String>() {{  add(trType);}});
+			}
+		}
 		put(MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL, new ArrayList<String>() {{     add(ArConstants.DISBURSEMENT); add("Capital"); add(ADJUSTMENT_PREFIX + "Actual"); }});
 		put(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT, new ArrayList<String>() {{   add(ArConstants.DISBURSEMENT); add("Capital"); add(ADJUSTMENT_PREFIX + "Actual"); }});
 		put(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL, new ArrayList<String>() {{    add(ArConstants.DISBURSEMENT); add("Capital"); add(ADJUSTMENT_PREFIX + "Planned"); }});

@@ -150,18 +150,27 @@ public class GroupColumn extends Column<Column> {
        	List<Column> columns = this.getItems();
        	for(Column column:columns)
        	{
-       		////System.out.println("column = " + column);
-       		if (column.getName().equals(ArConstants.ACTUAL_DISBURSEMENTS) || column.getName().equals(ArConstants.REAL_DISBURSEMENTS))
-       		{
+       		//System.out.println("column = " + column);
+       		if (ArConstants.NONDIRECTED_MEASURE_TO_DIRECTED_MEASURE.containsKey(column.getName()) || ArConstants.NONDIRECTED_MEASURE_TO_DIRECTED_MEASURE.containsValue(column.getName())) {
        			detachCells(column);
        		}
        	}
        	// these cycles HAVE to be separated, as we can remove metadata from a cell only after it has been throughoutly detached
        	for(Column column:columns)
-       		if (column.getName().equals(ArConstants.ACTUAL_DISBURSEMENTS))
+       		if (ArConstants.NONDIRECTED_MEASURE_TO_DIRECTED_MEASURE.containsKey(column.getName()))
        		{
        			removeDirectFundingMetadata(column);
        		}
+    }
+    
+    public static boolean itemIsRelevant(CategAmountCell item, String trType) {
+    	for (String rawTr:ArConstants.NONDIRECTED_MEASURE_TO_DIRECTED_MEASURE.keySet()) {
+    		String directedTr = ArConstants.NONDIRECTED_MEASURE_TO_DIRECTED_MEASURE.get(rawTr);
+    		if (trType.equals(rawTr) || trType.equals(directedTr))
+    			if (item.isDirectedTransaction(rawTr))
+    				return true;
+    	}
+    	return false;
     }
     
     /**
@@ -397,15 +406,14 @@ public class GroupColumn extends Column<Column> {
     					continue;
     			}
     			
-    			// if now we are creating a REAL DISBURSEMENTS column, we do it by cloning the ACTUAL DISBURSEMENTS cells
+       			// if now we are creating a REAL DISBURSEMENTS column, we do it by cloning the ACTUAL DISBURSEMENTS cells
     			// the cloning is followed by a deep copy of metadata, because as a further step, metadata in ACTUAL/REAL disbursements cells is altered and just doing a clone() does not duplicate metaData in deep mergedCells
     			if (category.equals(ArConstants.FUNDING_TYPE) &&
     				element.getCategory().equals(ArConstants.FUNDING_TYPE) &&
-    				(element.getValue().toString().equals(ArConstants.REAL_DISBURSEMENTS) || element.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS)) &&
-    				item.isRealDisbursement())
+    				itemIsRelevant(item, element.getValue().toString()))
     			{
     				//
-    				if (element.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS) && (!item.isEstimatedDisbursement()))
+    				if (ArConstants.NONDIRECTED_MEASURE_TO_DIRECTED_MEASURE.containsKey(element.getValue().toString()) && (!item.isNonDirectedTransaction(element.getValue().toString())))
     					continue;
     				try
     				{
@@ -494,7 +502,7 @@ public class GroupColumn extends Column<Column> {
         }
         // End AMP-2724
 
-        if (ret.getItems().isEmpty() && category.equals(ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE))
+        if (ret.getItems().isEmpty() && ArConstants.TRANSACTION_TYPE_TO_DIRECTED_TRANSACTION_VALUE.values().contains(category))
         	return ret; // empty, drop everything else to the hell
         
 //        if (ret.getItems().isEmpty() && category.equals(ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE) && 

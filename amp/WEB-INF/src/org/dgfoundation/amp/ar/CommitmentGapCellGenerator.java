@@ -53,7 +53,7 @@ public class CommitmentGapCellGenerator extends SyntheticCellGenerator{
 			CategAmountCell newCell = (CategAmountCell) src.clone();
 			newCell.setAmount(src.getInitialAmount() * multiplier);
 			newCell.setMetaData(new MetaInfoSet(src.getMetaData()));
-			newCell.getMetaData().removeItemsByCategory(COMMITMENT_GAP_FUNDING_TYPE.category);
+			newCell.getMetaData().removeItemsByCategory(Arrays.asList(COMMITMENT_GAP_FUNDING_TYPE.category));
 			newCell.getMetaData().add(COMMITMENT_GAP_FUNDING_TYPE);
 
 			return newCell;

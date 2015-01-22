@@ -295,5 +295,10 @@ public class FundingPledgesDetails implements FundingInformationItem, Identifiab
 	
 	@Override public String toString(){
 		return String.format("%.2f %s", this.getAmount(), this.getCurrency().getCurrencyCode());
-	}	
+	}
+	
+	@Override
+	public void setTransactionAmount(Double transactionAmount) {
+		this.setAmount(transactionAmount);
+	}
 }

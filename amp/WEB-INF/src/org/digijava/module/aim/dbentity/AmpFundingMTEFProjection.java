@@ -8,12 +8,14 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
-import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
 public class AmpFundingMTEFProjection implements Cloneable, Serializable, Comparable<AmpFundingMTEFProjection>, FundingInformationItem {
 	
 	
+
+	private static final long serialVersionUID = -1583797313318079006L;
+
 	public static class FundingMTEFProjectionComparator implements Comparator<AmpFundingMTEFProjection>, Serializable {
 
 		/**
@@ -45,12 +47,24 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 		private AmpFunding  ampFunding;
 		private Date reportingDate;
 		
+		private AmpOrganisation recipientOrg;
+		private AmpRole recipientRole;
+		
+		public AmpFundingMTEFProjection(){
+			
+		}
+		public AmpFundingMTEFProjection(Integer transactionType, AmpCategoryValue adjustmentType, Double transactionAmount, Date transactionDate, AmpCurrency ampCurrencyId, Double fixedExchangeRate) {
+			this.amount=transactionAmount;
+			this.projectionDate=transactionDate;
+			this.ampCurrency=ampCurrencyId;
+		}
 		public Date getReportingDate() {
 			return reportingDate;
 		}
 		public void setReportingDate(Date reportingDate) {
 			this.reportingDate = reportingDate;
 		}
+		
 		public Double getAmount() {
 			return FeaturesUtil.applyThousandsForVisibility(amount);
 		}
@@ -125,14 +139,21 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 				
 		public AmpOrganisation getRecipientOrg()
 		{
-			return null;
+			return recipientOrg;
 		}
 		
 		public AmpRole getRecipientRole()
 		{
-			return null;
+			return recipientRole;
 		}
 		
+		
+		public void setRecipientOrg(AmpOrganisation recipientOrg) {
+			this.recipientOrg = recipientOrg;
+		}
+		public void setRecipientRole(AmpRole recipientRole) {
+			this.recipientRole = recipientRole;
+		}
 		public Integer getTransactionType()
 		{
 			return Constants.MTEFPROJECTION;
@@ -205,5 +226,10 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 			String transText = (this.getAdjustmentType() == null ? "NOADJUST" : this.getAdjustmentType().getLabel()) + " " + trTypeName;			
 			
 			return String.format("%s %s %s to %s", transText, this.getAbsoluteTransactionAmount(), currency, recipient);
+		}
+		@Override
+		public void setTransactionAmount(Double transactionAmount) {
+			this.setAmount(transactionAmount);
+			
 		}
 }

@@ -200,7 +200,9 @@
 <field:display name="Archived Activities" feature="Workspace Info"></field:display>
 <feature:display name="Language Option" module="Tools"></feature:display>
 <feature:display name="Activity" module="M & E"></feature:display> 
-<feature:display name="Actual Commitments" module="Measures"></feature:display> 
+<feature:display name="Actual Commitments" module="Measures"></feature:display>
+<feature:display name="Real Commitments" module="Measures"></feature:display>
+<feature:display name="Real MTEFs" module="Measures"></feature:display> 
 <feature:display name="Actual Disbursement Orders Measure" module="Measures"></feature:display> 
 <feature:display name="Actual Disbursements" module="Measures"></feature:display>
 <feature:display name="Actual Disbursements - Recurrent" module="Measures"></feature:display>

@@ -23,7 +23,7 @@ import clover.org.apache.log4j.Logger;
  * List<FilterRule>>) and filters (Map<ReportElement, List<FilterRule>>) and
  * returns the ids of the activities that match the criteria
  * 
- * @author eperez
+ * @author Nadejda Mandrescu
  * 
  */
 public class MondrianSQLFilters {

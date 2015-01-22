@@ -16,4 +16,6 @@
 	<entry key="CoordinatesValidator">Les coordonnées n’ont pas été saisies dans un format correct.</entry>
 	<entry key="AmpCommitmentsCollectionsSumComparatorValidator">Les décaissements sont supérieurs à la somme des engagements</entry>
 	<entry key="AmpExpendituresCollectionsSumComparatorValidator">Les dépenses sont supérieures à la somme des décaissements</entry>
+	<entry key="StrictPatternDateConverter">Please enter the date in the following format: ${format}</entry>
+	
 </properties>

@@ -17,4 +17,6 @@
 	<entry key="CoordinatesValidator">Las coordenadas ingresadas no están en el formato correcto.</entry>
 	<entry key="AmpCommitmentsCollectionsSumComparatorValidator">Los desembolsos son más grandes que la suma de los compromisos</entry>
 	<entry key="AmpExpendituresCollectionsSumComparatorValidator">Los gastos son mayores que la suma de los desembolsos</entry>
+	<entry key="StrictPatternDateConverter">Please enter the date in the following format: ${format}</entry>
+	
 </properties>

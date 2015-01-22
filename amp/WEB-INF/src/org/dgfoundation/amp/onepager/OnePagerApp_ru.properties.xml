@@ -16,4 +16,6 @@
 	<entry key="CoordinatesValidator">Координаты в неправильном формате.</entry>
 	<entry key="AmpCommitmentsCollectionsSumComparatorValidator">Выплаты больше, чем сумма обязательств</entry>
 	<entry key="AmpExpendituresCollectionsSumComparatorValidator">Расходы больше, чем сумма выплат</entry>
+	<entry key="StrictPatternDateConverter">Пожалуйста, введите дату в формате: ${format}</entry>
+	
 </properties>

@@ -16,4 +16,6 @@
 	<entry key="CoordinatesValidator">Coordonatele nu sunt în formatul corect.</entry>
 	<entry key="AmpCommitmentsCollectionsSumComparatorValidator">Vărsămintele sunt mai mari decât suma angajamentelor</entry>
 	<entry key="AmpExpendituresCollectionsSumComparatorValidator">Plățile sunt mai mari decât suma vărsămintelor</entry>
+	<entry key="StrictPatternDateConverter">Data trebuie introdusă în formatul: ${format}</entry>
+	
 </properties>

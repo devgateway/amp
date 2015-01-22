@@ -47,17 +47,24 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 		public AmpFundingMTEFProjection(){
 			
 		}
+		
 		public AmpFundingMTEFProjection(Integer transactionType, AmpCategoryValue adjustmentType, Double transactionAmount, Date transactionDate, AmpCurrency ampCurrencyId, Double fixedExchangeRate) {
 			this.amount=transactionAmount;
 			this.projectionDate=transactionDate;
 			this.ampCurrency=ampCurrencyId;
 		}
+		
+		private AmpOrganisation recipientOrg;
+		private AmpRole recipientRole;
+		
 		public Date getReportingDate() {
 			return reportingDate;
 		}
+		
 		public void setReportingDate(Date reportingDate) {
 			this.reportingDate = reportingDate;
 		}
+		
 		
 		public Double getAmount() {
 			return FeaturesUtil.applyThousandsForVisibility(amount);
@@ -133,14 +140,21 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 				
 		public AmpOrganisation getRecipientOrg()
 		{
-			return null;
+			return recipientOrg;
 		}
 		
 		public AmpRole getRecipientRole()
 		{
-			return null;
+			return recipientRole;
 		}
 		
+		
+		public void setRecipientOrg(AmpOrganisation recipientOrg) {
+			this.recipientOrg = recipientOrg;
+		}
+		public void setRecipientRole(AmpRole recipientRole) {
+			this.recipientRole = recipientRole;
+		}
 		public Integer getTransactionType()
 		{
 			return Constants.MTEFPROJECTION;
@@ -214,6 +228,7 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 			
 			return String.format("%s %s %s to %s", transText, this.getAbsoluteTransactionAmount(), currency, recipient);
 		}
+		
 		@Override
 		public void setTransactionAmount(Double transactionAmount) {
 			this.setAmount(transactionAmount);

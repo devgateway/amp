@@ -19,17 +19,31 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-					DROP VIEW IF EXISTS v_mtef_funding;
+				DROP VIEW IF EXISTS v_mtef_funding CASCADE;
 					
-			    	CREATE OR REPLACE VIEW v_mtef_funding AS 
-			    	SELECT f.amp_activity_id, m.amp_fund_mtef_projection_id, m.amount, c.currency_code, m.projection_date AS currency_date, org.name AS donor_name, org.amp_org_id AS org_id, grp.org_grp_name, grp.amp_org_grp_id AS org_grp_id, otype.org_type AS donor_type_name, otype.amp_org_type_id AS org_type_id, tos.category_value AS terms_assist_name, tos.id AS terms_assist_id, fin.category_value AS financing_instrument_name, fin.id AS financing_instrument_id, role.role_code AS source_role_code 
-			    	FROM amp_funding f, amp_funding_mtef_projection m, amp_currency c, amp_category_class acc, amp_category_value acv, amp_organisation org, amp_category_value tos, amp_category_value fin, amp_org_group grp, amp_org_type otype, amp_role role 
-			    	WHERE ((m.amp_funding_id = f.amp_funding_id) AND (m.amp_currency_id = c.amp_currency_id) AND 
-			    	(acv.amp_category_class_id = acc.id) AND (f.amp_donor_org_id = org.amp_org_id) AND 
-			    	(tos.id = f.type_of_assistance_category_va) AND (fin.id = f.financing_instr_category_value) AND 
-			    	(grp.amp_org_grp_id = org.org_grp_id) AND (otype.amp_org_type_id = grp.org_type) AND 
-			    	((acc.keyname)::text = 'mtef_projection'::text) AND ((acv.category_value)::text = 'projection'::text) AND 
-			    	(m.amp_projected_categoryvalue_id = acv.id) AND (f.source_role_id = role.amp_role_id));
+			    CREATE OR REPLACE VIEW v_mtef_funding AS
+			    	
+			    	SELECT 
+			    		f.amp_activity_id, m.amp_fund_mtef_projection_id, m.amount, c.currency_code, m.projection_date AS currency_date, 
+			    		donor.name AS donor_name, donor.amp_org_id AS org_id, grp.org_grp_name, grp.amp_org_grp_id AS org_grp_id, otype.org_type AS donor_type_name, otype.amp_org_type_id AS org_type_id, 
+			    		tos.category_value AS terms_assist_name, tos.id AS terms_assist_id, fin.category_value AS financing_instrument_name, fin.id AS financing_instrument_id, 
+			    		src_role.amp_role_id AS source_role_id, src_role.role_code AS source_role_code, src_role.name AS source_role_name,
+			    		recipient.name AS recipient_name, recipient.amp_org_id AS recipient_id,
+			    		dest_role.role_code AS recipient_role_code, dest_role.name AS recipient_role_name
+			    	FROM
+			    		amp_funding f
+			    		JOIN amp_funding_mtef_projection m ON m.amp_funding_id = f.amp_funding_id
+			    		JOIN amp_currency c ON m.amp_currency_id = c.amp_currency_id
+			    		JOIN amp_organisation donor ON f.amp_donor_org_id = donor.amp_org_id
+			    			JOIN amp_org_group grp ON grp.amp_org_grp_id = donor.org_grp_id
+			    				JOIN amp_org_type otype ON otype.amp_org_type_id = grp.org_type
+			    		JOIN amp_category_value acv ON m.amp_projected_categoryvalue_id = acv.id AND acv.category_value = 'projection'
+			    			JOIN amp_category_class acc ON acv.amp_category_class_id = acc.id AND acc.keyname = 'mtef_projection'
+			    		JOIN amp_category_value tos ON tos.id = f.type_of_assistance_category_va
+			    		JOIN amp_category_value fin ON fin.id = f.financing_instr_category_value
+			    		LEFT JOIN amp_role src_role ON f.source_role_id = src_role.amp_role_id
+			    		LEFT JOIN amp_organisation recipient ON recipient.amp_org_id = m.recipient_org_id
+			    		LEFT JOIN amp_role dest_role ON dest_role.amp_role_id = m.recipient_role_id
         		</lang>
 		</script>
 	</apply>

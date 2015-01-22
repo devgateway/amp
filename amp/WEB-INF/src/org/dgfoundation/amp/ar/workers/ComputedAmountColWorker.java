@@ -135,11 +135,9 @@ public class ComputedAmountColWorker extends MetaCellColumnWorker {
 		if (usedCurrency != null && !baseCurrency.equals(usedCurrency))
 			ret.setToExchangeRate(Util.getExchange(usedCurrency, currencyDate));
 
-		if (this.getViewName().equals("v_mtef_funding"))
-		{
+		if (this.getViewName().equals("v_mtef_funding")) {
 			AmpReportGenerator arg = (AmpReportGenerator) this.getGenerator();
-			if (arg.getMtefExtractOnlyDonorData())
-			{
+			if (arg.getMtefExtractOnlyDonorData()) {
 				String srcRole = ret.getMetaValueString(ArConstants.SOURCE_ROLE_CODE);
 				if ((srcRole != null) && (!srcRole.equals(Constants.ROLE_CODE_DONOR)))
 					return null;
@@ -147,7 +145,10 @@ public class ComputedAmountColWorker extends MetaCellColumnWorker {
 				
 			MetaInfo minfo = this.getCachedMetaInfo(ArConstants.IS_AN_MTEF_FUNDING, "yes");
 			ret.getMetaData().add(minfo);
-		}
+			
+			fetchDirectedDisbursementMeta(rs, ret, Constants.MTEFPROJECTION);
+			fillDirectedDisbursementTypes(ret);
+		}		
 		return ret;
 	}
 

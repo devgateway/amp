@@ -180,12 +180,12 @@ public class DirectedDisbursementsTests extends ReportsTestCase
 								GroupColumnModel.withSubColumns("2013", 
 										GroupColumnModel.withSubColumns("Real Disbursements", 
 												SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "300 000"),
-												SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "40 000")
+												SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "80 000")
 												))),
 						GroupColumnModel.withSubColumns("Total Costs", 
 										GroupColumnModel.withSubColumns("Real Disbursements", 
 												SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "300 000"),
-												SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "40 000")
+												SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "80 000")
 						))),
 						ColumnReportDataModel.withColumns("Executing Agency: World Bank", 
 								SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
@@ -193,12 +193,12 @@ public class DirectedDisbursementsTests extends ReportsTestCase
 										GroupColumnModel.withSubColumns("2013", 
 												GroupColumnModel.withSubColumns("Real Disbursements", 
 														SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "245 000"),
-														SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "10 000")
+														SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "20 000")
 														))),
 								GroupColumnModel.withSubColumns("Total Costs", 
 												GroupColumnModel.withSubColumns("Real Disbursements", 
 														SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "245 000"),
-														SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "10 000")
+														SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "20 000")
 								)))
 						
 				));	

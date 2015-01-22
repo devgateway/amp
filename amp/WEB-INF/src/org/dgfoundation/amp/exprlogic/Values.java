@@ -149,8 +149,6 @@ public class Values extends HashMap<String, BigDecimal> {
 	 */
 	public void collectCellVariables(CategAmountCell cell) {
 
-		if (cell.getMergedCells().size() > 0)
-			//System.out.println("BOZO BOZO BREAK POINT");
 		this.addValue(ArConstants.TOTAL_COMMITMENTS, tokens.get(TokenNames.TOTAL_COMMITMENTS).evaluate(cell));
 
 		this.addValue(ArConstants.ACTUAL_COMMITMENT, tokens.get(TokenNames.ACTUAL_COMMITMENTS).evaluate(cell));
@@ -184,14 +182,15 @@ public class Values extends HashMap<String, BigDecimal> {
 
 		if (cell.getMetaValueString(ArConstants.ADJUSTMENT_TYPE) != null) {
 			if (cell.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equalsIgnoreCase(ArConstants.ACTUAL)) {
-				if (cell.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.COMMITMENT)) {
+//				if (cell.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.COMMITMENT)) {
+//					this.incrementValue(ArConstants.ACTUAL_COMMITMENT_COUNT);
+//				}
+				if (cell.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.COMMITMENT) && cell.isNonDirectedTransaction(ArConstants.ACTUAL_COMMITMENTS)) {
 					this.incrementValue(ArConstants.ACTUAL_COMMITMENT_COUNT);
-				}
-				if (cell.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.DISBURSEMENT) && cell.isEstimatedDisbursement())
-				{
+				}				
+				if (cell.getMetaValueString(ArConstants.TRANSACTION_TYPE).equalsIgnoreCase(ArConstants.DISBURSEMENT) && cell.isNonDirectedTransaction(ArConstants.ACTUAL_DISBURSEMENTS)) {
 					this.incrementValue(ArConstants.ACTUAL_DISBURSEMENT_COUNT);
 				}
-
 			}
 
 			if (cell.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equalsIgnoreCase(ArConstants.PLANNED)) {

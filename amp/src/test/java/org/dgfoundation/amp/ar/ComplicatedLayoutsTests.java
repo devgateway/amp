@@ -133,111 +133,95 @@ public class ComplicatedLayoutsTests extends ReportsTestCase
 	public void testMultipleDonorAgenciesByExecuting()
 	{
 		// ========================= one more report ===============================
-		GroupReportModel fddr_correct = GroupReportModel.withGroupReports("AMP-15337-real-disbursements-by-executing", 
-				GroupReportModel.withColumnReports("AMP-15337-real-disbursements-by-executing", 
-					ColumnReportDataModel.withColumns("Executing Agency: 72 Local Public Administrations from RM", 
-						SimpleColumnModel.withContents("Project Title", "AMP-15967-activity-1", "AMP-15967-activity-1", "AMP-15967-activity-2", "AMP-15967-activity-2"),
-						GroupColumnModel.withSubColumns("Funding", 
+		GroupReportModel fddr_correct = GroupReportModel.withGroupReports("AMP-15337-real-disbursements-by-executing",
+				GroupReportModel.withColumnReports("AMP-15337-real-disbursements-by-executing",
+						ColumnReportDataModel.withColumns("Executing Agency: 72 Local Public Administrations from RM",
+							SimpleColumnModel.withContents("Project Title", "AMP-15967-activity-1", "AMP-15967-activity-1", "AMP-15967-activity-2", "AMP-15967-activity-2").setIsPledge(false), 
+							GroupColumnModel.withSubColumns("Funding",
 								GroupColumnModel.withSubColumns("2011",
 									GroupColumnModel.withSubColumns("Real Disbursements",
-										SimpleColumnModel.withContents("DN-EXEC", "AMP-15967-activity-1", "11 222"))),
-
+										SimpleColumnModel.withContents("DN-EXEC", "AMP-15967-activity-1", "11 222").setIsPledge(false))), 
 								GroupColumnModel.withSubColumns("2012",
 									GroupColumnModel.withSubColumns("Real Disbursements",
-										SimpleColumnModel.withContents("DN-EXEC", "AMP-15967-activity-1", "55 666", "AMP-15967-activity-2", "32 000"))),
-
+										SimpleColumnModel.withContents("DN-EXEC", "AMP-15967-activity-1", "55 666", "AMP-15967-activity-2", "32 000").setIsPledge(false))), 
 								GroupColumnModel.withSubColumns("2013",
 									GroupColumnModel.withSubColumns("Real Disbursements",
-										SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY),
-										SimpleColumnModel.withContents("EXEC-IMPL", MUST_BE_EMPTY),
-										SimpleColumnModel.withContents("IMPL-EXEC", MUST_BE_EMPTY)))),
-																						
-								GroupColumnModel.withSubColumns("Total Costs",
-										GroupColumnModel.withSubColumns("Real Disbursements", 
-											SimpleColumnModel.withContents("DN-EXEC", "AMP-15967-activity-1", "66 888", "AMP-15967-activity-2", "32 000"),
-											SimpleColumnModel.withContents("EXEC-IMPL", MUST_BE_EMPTY),
-											SimpleColumnModel.withContents("IMPL-EXEC", MUST_BE_EMPTY))))
+										SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY).setIsPledge(false), 
+										SimpleColumnModel.withContents("EXEC-IMPL", MUST_BE_EMPTY).setIsPledge(false), 
+										SimpleColumnModel.withContents("IMPL-EXEC", MUST_BE_EMPTY).setIsPledge(false)))), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								GroupColumnModel.withSubColumns("Real Disbursements",
+									SimpleColumnModel.withContents("DN-EXEC", "AMP-15967-activity-1", "66 888", "AMP-15967-activity-2", "32 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("EXEC-IMPL", MUST_BE_EMPTY).setIsPledge(false), 
+									SimpleColumnModel.withContents("IMPL-EXEC", MUST_BE_EMPTY).setIsPledge(false))))
 						.withTrailCells(null, "11 222", "87 666", "0", "0", "0", "98 888", "0", "0"),
-						
-						ColumnReportDataModel.withColumns("Executing Agency: UNDP", 
-								SimpleColumnModel.withContents("Project Title", "Eth Water", "Eth Water"),
-								GroupColumnModel.withSubColumns("Funding", 
-										GroupColumnModel.withSubColumns("2011",
-											GroupColumnModel.withSubColumns("Real Disbursements",
-												SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY))),
-
-										GroupColumnModel.withSubColumns("2012",
-											GroupColumnModel.withSubColumns("Real Disbursements",
-												SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY))),
-
-										GroupColumnModel.withSubColumns("2013",
-											GroupColumnModel.withSubColumns("Real Disbursements",
-												SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "300 000"),
-												SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "40 000"),
-												SimpleColumnModel.withContents("IMPL-EXEC", MUST_BE_EMPTY)))),
-																								
-										GroupColumnModel.withSubColumns("Total Costs",
-												GroupColumnModel.withSubColumns("Real Disbursements", 
-													SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "300 000"),
-													SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "40 000"),
-													SimpleColumnModel.withContents("IMPL-EXEC", MUST_BE_EMPTY))))
-								.withTrailCells(null, "0", "0", "300 000", "40 000", "0", "300 000", "40 000", "0"),
-
-						ColumnReportDataModel.withColumns("Executing Agency: World Bank", 
-							SimpleColumnModel.withContents("Project Title", "Eth Water", "Eth Water"),
-								GroupColumnModel.withSubColumns("Funding", 
-									GroupColumnModel.withSubColumns("2011",
-										GroupColumnModel.withSubColumns("Real Disbursements",
-											SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY))),
-
-									GroupColumnModel.withSubColumns("2012",
-										GroupColumnModel.withSubColumns("Real Disbursements",
-											SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY))),
-
-									GroupColumnModel.withSubColumns("2013",
-										GroupColumnModel.withSubColumns("Real Disbursements",
-											SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "245 000"),
-											SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "10 000"),
-											SimpleColumnModel.withContents("IMPL-EXEC", MUST_BE_EMPTY)))),
-																										
-								GroupColumnModel.withSubColumns("Total Costs",
-									GroupColumnModel.withSubColumns("Real Disbursements", 
-										SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "245 000"),
-										SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "10 000"),
-										SimpleColumnModel.withContents("IMPL-EXEC", MUST_BE_EMPTY))))
-							.withTrailCells(null, "0", "0", "245 000", "10 000", "0", "245 000", "10 000", "0"),
-
-							ColumnReportDataModel.withColumns("Executing Agency: Water Foundation", 
-									SimpleColumnModel.withContents("Project Title", "Test MTEF directed", "Test MTEF directed"),
-										GroupColumnModel.withSubColumns("Funding", 
-											GroupColumnModel.withSubColumns("2011",
-												GroupColumnModel.withSubColumns("Real Disbursements",
-													SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY))),
-
-											GroupColumnModel.withSubColumns("2012",
-												GroupColumnModel.withSubColumns("Real Disbursements",
-													SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY))),
-
-											GroupColumnModel.withSubColumns("2013",
-												GroupColumnModel.withSubColumns("Real Disbursements",
-													SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY),
-													SimpleColumnModel.withContents("EXEC-IMPL", MUST_BE_EMPTY),
-													SimpleColumnModel.withContents("IMPL-EXEC", "Test MTEF directed", "44 333")))),
-																												
-										GroupColumnModel.withSubColumns("Total Costs",
-												GroupColumnModel.withSubColumns("Real Disbursements",
-														SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY),
-														SimpleColumnModel.withContents("EXEC-IMPL", MUST_BE_EMPTY),
-														SimpleColumnModel.withContents("IMPL-EXEC", "Test MTEF directed", "44 333"))))
-									.withTrailCells(null, "0", "0", "0", "0", "44 333", "0", "0", "44 333")))
-									.withTrailCells(null, "11 222", "87 666", "545 000", "50 000", "44 333", "643 888", "50 000", "44 333")
-									.withPositionDigest(
-											"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 4, totalRowSpan: 4, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colSpan: 5), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 4, colSpan: 3))",
-											"(line 1:RHLC 2011: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colSpan: 1), RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colSpan: 1), RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colSpan: 3))", 
-											"(line 2:RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colSpan: 3), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colSpan: 3))", 
-											"(line 3:RHLC DN-EXEC: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC DN-EXEC: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC DN-EXEC: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC EXEC-IMPL: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC IMPL-EXEC: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC DN-EXEC: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC EXEC-IMPL: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colSpan: 1), RHLC IMPL-EXEC: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colSpan: 1))"
-											);
-											
+						ColumnReportDataModel.withColumns("Executing Agency: UNDP",
+							SimpleColumnModel.withContents("Project Title", "Eth Water", "Eth Water").setIsPledge(false), 
+							GroupColumnModel.withSubColumns("Funding",
+								GroupColumnModel.withSubColumns("2011",
+									GroupColumnModel.withSubColumns("Real Disbursements",
+										SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY).setIsPledge(false))), 
+								GroupColumnModel.withSubColumns("2012",
+									GroupColumnModel.withSubColumns("Real Disbursements",
+										SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY).setIsPledge(false))), 
+								GroupColumnModel.withSubColumns("2013",
+									GroupColumnModel.withSubColumns("Real Disbursements",
+										SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "300 000").setIsPledge(false), 
+										SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "80 000").setIsPledge(false), 
+										SimpleColumnModel.withContents("IMPL-EXEC", MUST_BE_EMPTY).setIsPledge(false)))), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								GroupColumnModel.withSubColumns("Real Disbursements",
+									SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "300 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "80 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("IMPL-EXEC", MUST_BE_EMPTY).setIsPledge(false))))
+						.withTrailCells(null, "0", "0", "300 000", "80 000", "0", "300 000", "80 000", "0"),
+						ColumnReportDataModel.withColumns("Executing Agency: Water Foundation",
+							SimpleColumnModel.withContents("Project Title", "Test MTEF directed", "Test MTEF directed").setIsPledge(false), 
+							GroupColumnModel.withSubColumns("Funding",
+								GroupColumnModel.withSubColumns("2011",
+									GroupColumnModel.withSubColumns("Real Disbursements",
+										SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY).setIsPledge(false))), 
+								GroupColumnModel.withSubColumns("2012",
+									GroupColumnModel.withSubColumns("Real Disbursements",
+										SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY).setIsPledge(false))), 
+								GroupColumnModel.withSubColumns("2013",
+									GroupColumnModel.withSubColumns("Real Disbursements",
+										SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY).setIsPledge(false), 
+										SimpleColumnModel.withContents("EXEC-IMPL", MUST_BE_EMPTY).setIsPledge(false), 
+										SimpleColumnModel.withContents("IMPL-EXEC", "Test MTEF directed", "44 333").setIsPledge(false)))), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								GroupColumnModel.withSubColumns("Real Disbursements",
+									SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY).setIsPledge(false), 
+									SimpleColumnModel.withContents("EXEC-IMPL", MUST_BE_EMPTY).setIsPledge(false), 
+									SimpleColumnModel.withContents("IMPL-EXEC", "Test MTEF directed", "44 333").setIsPledge(false))))
+						.withTrailCells(null, "0", "0", "0", "0", "44 333", "0", "0", "44 333"),
+						ColumnReportDataModel.withColumns("Executing Agency: World Bank",
+							SimpleColumnModel.withContents("Project Title", "Eth Water", "Eth Water").setIsPledge(false), 
+							GroupColumnModel.withSubColumns("Funding",
+								GroupColumnModel.withSubColumns("2011",
+									GroupColumnModel.withSubColumns("Real Disbursements",
+										SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY).setIsPledge(false))), 
+								GroupColumnModel.withSubColumns("2012",
+									GroupColumnModel.withSubColumns("Real Disbursements",
+										SimpleColumnModel.withContents("DN-EXEC", MUST_BE_EMPTY).setIsPledge(false))), 
+								GroupColumnModel.withSubColumns("2013",
+									GroupColumnModel.withSubColumns("Real Disbursements",
+										SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "245 000").setIsPledge(false), 
+										SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "20 000").setIsPledge(false), 
+										SimpleColumnModel.withContents("IMPL-EXEC", MUST_BE_EMPTY).setIsPledge(false)))), 
+							GroupColumnModel.withSubColumns("Total Costs",
+								GroupColumnModel.withSubColumns("Real Disbursements",
+									SimpleColumnModel.withContents("DN-EXEC", "Eth Water", "245 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "20 000").setIsPledge(false), 
+									SimpleColumnModel.withContents("IMPL-EXEC", MUST_BE_EMPTY).setIsPledge(false))))
+						.withTrailCells(null, "0", "0", "245 000", "20 000", "0", "245 000", "20 000", "0"))
+					.withTrailCells(null, "11 222", "87 666", "545 000", "100 000", "44 333", "643 888", "100 000", "44 333"))
+				.withTrailCells(null, "11 222", "87 666", "545 000", "100 000", "44 333", "643 888", "100 000", "44 333")
+				.withPositionDigest(true,
+					"(line 0:RHLC Project Title: (startRow: 0, rowSpan: 4, totalRowSpan: 4, colStart: 0, colSpan: 1), RHLC Funding: (startRow: 0, rowSpan: 1, totalRowSpan: 4, colStart: 1, colSpan: 5), RHLC Total Costs: (startRow: 0, rowSpan: 2, totalRowSpan: 4, colStart: 6, colSpan: 3))",
+					"(line 1:RHLC 2011: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 1, colSpan: 1), RHLC 2012: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 2, colSpan: 1), RHLC 2013: (startRow: 1, rowSpan: 1, totalRowSpan: 3, colStart: 3, colSpan: 3))",
+					"(line 2:RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 1, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 2, colSpan: 1), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 3, colSpan: 3), RHLC Real Disbursements: (startRow: 2, rowSpan: 1, totalRowSpan: 2, colStart: 6, colSpan: 3))",
+					"(line 3:RHLC DN-EXEC: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 1, colSpan: 1), RHLC DN-EXEC: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 2, colSpan: 1), RHLC DN-EXEC: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 3, colSpan: 1), RHLC EXEC-IMPL: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 4, colSpan: 1), RHLC IMPL-EXEC: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 5, colSpan: 1), RHLC DN-EXEC: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 6, colSpan: 1), RHLC EXEC-IMPL: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 7, colSpan: 1), RHLC IMPL-EXEC: (startRow: 3, rowSpan: 1, totalRowSpan: 1, colStart: 8, colSpan: 1))");											
 		
 		runReportTest("complicated Real Disbursements report with lots of activities and nonstandard RD by executing agency", "AMP-15337-real-disbursements-by-executing", 
 				new String[] {"AMP-15967-activity-1", "AMP-15967-activity-2", "Eth Water", "Test MTEF directed", "mtef activity 1", "ptc activity 2", "SSC Project 2", "date-filters-activity"}, fddr_correct);

@@ -30,5 +30,4 @@ public interface FundingInformationItem {
 	public Float getCapitalSpendingPercentage();
 	public Long getDbId();
 	public void setTransactionAmount(Double transactionAmount);
-	public void setTransactionAmount(Double transactionAmount);
 }

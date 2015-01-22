@@ -137,7 +137,9 @@
 <module:display name="Map configuration" parentModule="ADMINISTRATIVE SECTION"></module:display>
 
 <feature:display name="Activity" module="M & E"></feature:display> 
-<feature:display name="Actual Commitments" module="Measures"></feature:display> 
+<feature:display name="Actual Commitments" module="Measures"></feature:display>
+<feature:display name="Real Commitments" module="Measures"></feature:display> 
+<feature:display name="Real MTEFs" module="Measures"></feature:display>
 <feature:display name="Actual Disbursement Orders Measure" module="Measures"></feature:display> 
 <feature:display name="Actual Disbursements" module="Measures"></feature:display> 
 <feature:display name="Actual Expenditures" module="Measures"></feature:display>

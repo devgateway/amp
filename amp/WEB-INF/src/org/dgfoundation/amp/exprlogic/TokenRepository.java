@@ -18,11 +18,15 @@ public class TokenRepository {
 			this.put(TokenNames.TOTAL_COMMITMENTS, buildTotalCommitmentsLogicalToken());
 			this.put(TokenNames.PLEDGES_TOTAL, buildTotalPledgedLogicalToken());
 			this.put(TokenNames.TOTAL_PLEDGE_ACTIVITY_ACTUAL_COMMITMENT, buildTotalPledgeActivityCommitmentsLogicalToken());
+			
+			LogicalToken NOT_REAL_COMMITMENT = new NonDirectedTransactionLogicalToken(ArConstants.ACTUAL_COMMITMENTS, false);
+			this.put(TokenNames.ACTUAL_COMMITMENTS, buildSimpleTransactionLogicalToken(ArConstants.COMMITMENT, ArConstants.ACTUAL, NOT_REAL_COMMITMENT));
+			//this.put(TokenNames.ACTUAL_COMMITMENTS, buildSimpleTransactionLogicalToken(ArConstants.COMMITMENT, ArConstants.ACTUAL, null));
+			
 			this.put(TokenNames.PLANED_COMMITMENTS, buildSimpleTransactionLogicalToken(ArConstants.COMMITMENT, ArConstants.PLANNED, null));
 			this.put(TokenNames.PLANED_DISBURSEMENT, buildSimpleTransactionLogicalToken(ArConstants.DISBURSEMENT, ArConstants.PLANNED, null));
-			this.put(TokenNames.ACTUAL_COMMITMENTS, buildSimpleTransactionLogicalToken(ArConstants.COMMITMENT, ArConstants.ACTUAL, null));
 				
-			LogicalToken NOT_REAL_DISBURSEMENT = new EstimatedDisbursementLogicalToken(false);
+			LogicalToken NOT_REAL_DISBURSEMENT = new NonDirectedTransactionLogicalToken(ArConstants.ACTUAL_DISBURSEMENTS, false);
 			this.put(TokenNames.ACTUAL_DISBURSEMENT, buildSimpleTransactionLogicalToken(ArConstants.DISBURSEMENT, ArConstants.ACTUAL, NOT_REAL_DISBURSEMENT));
 			this.put(TokenNames.UNCOMMITTED, buildUncommittedLogicalToken());
 			this.put(TokenNames.COSTING_GRAND_TOTAL, 

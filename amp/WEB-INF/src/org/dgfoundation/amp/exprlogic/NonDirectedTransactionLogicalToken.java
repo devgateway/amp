@@ -2,15 +2,18 @@ package org.dgfoundation.amp.exprlogic;
 
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 
-public class EstimatedDisbursementLogicalToken extends LogicalToken
+public class NonDirectedTransactionLogicalToken extends LogicalToken
 {
-	public EstimatedDisbursementLogicalToken(boolean negation) {
+	protected final String rawMeasure;
+	
+	public NonDirectedTransactionLogicalToken(String rawMeasure, boolean negation) {
+		this.rawMeasure = rawMeasure;
 		this.negation = negation;
 	}
 	
 	@Override
 	public boolean evaluate(CategAmountCell c) {
-		ret = c.isEstimatedDisbursement();
+		ret = c.isNonDirectedTransaction(rawMeasure);
 		return super.evaluate(c);
 	}
 	

@@ -224,7 +224,8 @@ public void applyMetaFilter(String columnName,Cell metaCell,CategAmountCell ret,
 	
 	public void removeDirectedFundingMetadata()
 	{		
-		this.metaData.removeItemsByCategory(ArConstants.RECIPIENT_NAME, ArConstants.RECIPIENT_ROLE_NAME, ArConstants.RECIPIENT_ROLE_CODE, ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE, ArConstants.SOURCE_ROLE_CODE);
+		this.metaData.removeItemsByCategory(Arrays.asList(ArConstants.RECIPIENT_NAME, ArConstants.RECIPIENT_ROLE_NAME, ArConstants.RECIPIENT_ROLE_CODE, ArConstants.SOURCE_ROLE_CODE));
+		this.metaData.removeItemsByCategory(ArConstants.TRANSACTION_TYPE_TO_DIRECTED_TRANSACTION_VALUE.values());
 		for(AmountCell amCell:mergedCells)
 			if (amCell instanceof CategAmountCell)
 				((CategAmountCell) amCell).removeDirectedFundingMetadata();
@@ -312,18 +313,34 @@ public Cell filter(Cell metaCell, Set ids) {
 		// if column by which we are doing the hierarchy is one of the related organisations' column
 		String relatedOrgRole = this.getMetaValueString(ArConstants.RECIPIENT_ROLE_NAME);
 		String relatedOrgName = this.getMetaValueString(ArConstants.RECIPIENT_NAME);
+		
+		String srcOrgRole = this.getMetaValueString(ArConstants.SOURCE_ROLE_NAME);
+		String srcOrgName = this.getMetaValueString(ArConstants.DONOR);
+
+		String currentOrgName = metaCell.getValue().toString();
+		
 		if (metaCell.getColumn().getName().equals(relatedOrgRole))
 		{
 			// doing hierarchy by "Implementing Agency" and this is a transaction towards an Implementing Agency org
-			if (relatedOrgName != null)
-			{
+			if (relatedOrgName != null) {
 				// this funding is directed to a certain organisation only
-				String currentOrgName = metaCell.getValue().toString();
 				if (!currentOrgName.equals(relatedOrgName))
 					return null; // filter out
 				disablePercentage = true;
 			}
 		}
+		
+		if (metaCell.getColumn().getName().equals(srcOrgRole))
+		{
+			// doing hierarchy by "Implementing Agency" and this is a transaction towards an Implementing Agency org
+			if (relatedOrgName != null) {
+				// this funding is directed to a certain organisation only
+				if (!currentOrgName.equals(srcOrgName))
+					return null; // filter out
+				disablePercentage = true;
+			}
+		}
+
 	}
 	
 
@@ -335,14 +352,18 @@ public Cell filter(Cell metaCell, Set ids) {
 	 * 
 	 * also see AmpReportGenerator.removeUnusedRealDisbursementsFlowsFromReport
 	 */
-	String directedType = this.getMetaValueString(ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE);
-	boolean isDirectedActualDisbursement = directedType != null;
+	String directedType = null;
+	for(String directed_tr_type:ArConstants.TRANSACTION_TYPE_TO_DIRECTED_TRANSACTION_VALUE.values())
+		if (directedType == null)
+			directedType = this.getMetaValueString(directed_tr_type);
+	
+	boolean isDirectedTransaction = directedType != null;
 	boolean isMtefCell = this.existsMetaString(ArConstants.IS_AN_MTEF_FUNDING);
 	
-	boolean doingADirectedDisbursementFilter = isDirectedActualDisbursement && mergedCells.isEmpty() && ArConstants.COLUMN_ROLE_CODES.containsKey(metaCell.getColumn().getName());
+	boolean doingADirectedTransactionFilter = isDirectedTransaction && mergedCells.isEmpty() && ArConstants.COLUMN_ROLE_CODES.containsKey(metaCell.getColumn().getName());
 	boolean doingAMtefFilter = isMtefCell && mergedCells.isEmpty() && ArConstants.COLUMN_ROLE_CODES.containsKey(metaCell.getColumn().getName());
 	
-	if (doingADirectedDisbursementFilter || doingAMtefFilter)
+	if (doingADirectedTransactionFilter || doingAMtefFilter)
 	{
 		boolean passesTest = passesDirectedTransactionFilter(metaCell);
 		if (!passesTest)
@@ -350,17 +371,7 @@ public Cell filter(Cell metaCell, Set ids) {
 	}
 		
     //apply metatext filters
-	if(metaCell instanceof MetaTextCell) {
-			//apply metatext filters for column Sector
-//		 applyMetaFilter("Sector", ArConstants.SECTOR_PERCENTAGE, metaCell, ret);
-//		 applyMetaFilter("Executing Agency", ArConstants.EXECUTING_AGENCY_PERCENTAGE, metaCell, ret);
-//		 applyMetaFilter("Sub-Sector", ArConstants.SECTOR_PERCENTAGE, metaCell, ret);
-//		 applyMetaFilter("Region", ArConstants.LOCATION_PERCENTAGE, metaCell, ret);
-//		 applyMetaFilter("Componente", ArConstants.COMPONENTE_PERCENTAGE, metaCell, ret);
-//		 applyMetaFilter("National Planning Objectives", ArConstants.NPO_PERCENTAGE, metaCell, ret);
-//		 applyMetaFilter("Primary Program", ArConstants.PROGRAM_PERCENTAGE, metaCell, ret);
-//		 applyMetaFilter("Secondary Program", ArConstants.PROGRAM_PERCENTAGE, metaCell, ret);
-			
+	if (metaCell instanceof MetaTextCell) {
 		for (AmpReportHierarchy col : this.getNearestReportData().getReportMetadata().getHierarchies()) {
 //			AmpReportHierarchy col = (AmpReportHierarchy) iterator.next();
 			if(col.getColumn().getCellType().contains(MetaTextCell.class.getSimpleName()))
@@ -425,12 +436,16 @@ public Cell filter(Cell metaCell, Set ids) {
      * @param item
      * @return
      */
-    public boolean isRealDisbursement()
-    {
+    public boolean isDirectedTransaction(String rawTransaction) {
+    	if (rawTransaction == null)
+    		return false;
+    	if (!ArConstants.NONDIRECTED_MEASURE_TO_DIRECTED_MEASURE.containsKey(rawTransaction))
+    		return false;
+    		
     	MetaInfoSet metaData = this.getMetaData();
     	MetaInfo fundingTypeMetaInfo = metaData.getMetaInfo(ArConstants.FUNDING_TYPE); 
     	
-    	boolean isActualDisbursement = (fundingTypeMetaInfo != null) && fundingTypeMetaInfo.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS);
+    	boolean isActualDisbursement = (fundingTypeMetaInfo != null) && fundingTypeMetaInfo.getValue().toString().equals(rawTransaction);
     	boolean hasDestination = metaData.hasMetaInfo(ArConstants.RECIPIENT_NAME);    	
     	   	
     	return isActualDisbursement && hasDestination;
@@ -441,13 +456,17 @@ public Cell filter(Cell metaCell, Set ids) {
      * @param item
      * @return
      */
-    public boolean isEstimatedDisbursement()
-    {
+    public boolean isNonDirectedTransaction(String rawTransaction) {
+    	if (rawTransaction == null)
+    		return false;
+    	if (!ArConstants.NONDIRECTED_MEASURE_TO_DIRECTED_MEASURE.containsKey(rawTransaction))
+    		return false;
+
        	MetaInfoSet metaData = this.getMetaData();
     	MetaInfo fundingTypeMetaInfo = metaData.getMetaInfo(ArConstants.FUNDING_TYPE);
     	MetaInfo sourceRoleMetaInfo = metaData.getMetaInfo(ArConstants.SOURCE_ROLE_CODE);
     	
-    	boolean isActualDisbursement = (fundingTypeMetaInfo != null) && fundingTypeMetaInfo.getValue().toString().equals(ArConstants.ACTUAL_DISBURSEMENTS);
+    	boolean isActualDisbursement = (fundingTypeMetaInfo != null) && fundingTypeMetaInfo.getValue().toString().equals(rawTransaction);
     	boolean hasSource = sourceRoleMetaInfo != null;
     	boolean hasDonorSource = hasSource && (sourceRoleMetaInfo.getValue().toString().equals(Constants.ROLE_CODE_DONOR));
 

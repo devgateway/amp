@@ -495,9 +495,10 @@ public class CellColumn<K extends Cell> extends Column<K> {
 	
 	@Override
 	public GroupColumn verticalSplitByCateg(String category, Set ids, boolean generateTotalCols, AmpReports reportMetadata)
-	{//this.toString().equals("Fiscal Year 2011 (6 items)")
-		if (category.equals(ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE) && (!this.getName().equals(ArConstants.REAL_DISBURSEMENTS)))
-			return null; // only REAL DISBURSEMENTS columns can be split by real disbursements
+	{
+		for(Entry<String, String> meas:ArConstants.DIRECTED_MEASURE_TO_DIRECTED_TRANSACTION_VALUE.entrySet())
+			if (category.equals(meas.getValue()) && (!this.getName().equals(meas.getKey())))
+				return null; // only REAL DISBURSEMENTS columns can be split by real disbursements
 		return GroupColumn.verticalSplitByCateg_internal((CellColumn<? extends CategAmountCell>)this, category, ids, generateTotalCols, reportMetadata);
 	}
 	

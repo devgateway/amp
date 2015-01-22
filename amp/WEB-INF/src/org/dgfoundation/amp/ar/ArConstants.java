@@ -106,6 +106,7 @@ public final class ArConstants {
 	public final static String RECIPIENT_ROLE_NAME = "Recipient Role Name";
 	public final static String RECIPIENT_ROLE_CODE = "Recipient Role Code";
 	public final static String SOURCE_ROLE_CODE = "Source Role Code";
+	public final static String SOURCE_ROLE_NAME = "Source Role Name";
 
 	public final static String UNALLOCATED="Unallocated";
 	
@@ -226,6 +227,36 @@ public final class ArConstants {
 				put(ROLE_NAME_BENEFICIARY_AGENCY, Constants.ROLE_CODE_BENEFICIARY_AGENCY);
 			}};
 
+	public final static Map<String, String> TRANSACTION_TYPE_TO_DIRECTED_TRANSACTION_VALUE = new HashMap<String, String>() {{
+		put(ArConstants.COMMITMENT, ArConstants.TRANSACTION_REAL_COMMITMENT_TYPE);
+		put(ArConstants.DISBURSEMENT, ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE);
+		put(ArConstants.MTEF_PROJECTION, ArConstants.TRANSACTION_REAL_MTEF_TYPE);
+	}};
+	
+	public final static Map<String, String> DIRECTED_MEASURE_TO_DIRECTED_TRANSACTION_VALUE = new HashMap<String, String>() {{
+		put(ArConstants.REAL_DISBURSEMENTS, ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE);
+		put(ArConstants.REAL_COMMITMENTS, ArConstants.TRANSACTION_REAL_COMMITMENT_TYPE);
+		put(ArConstants.REAL_MTEFS, ArConstants.TRANSACTION_REAL_MTEF_TYPE);
+	}};
+	
+	public final static Map<String, String> NONDIRECTED_MEASURE_TO_DIRECTED_MEASURE = new HashMap<String, String>() {{
+		put(ArConstants.ACTUAL_COMMITMENTS, ArConstants.REAL_COMMITMENTS);
+		put(ArConstants.ACTUAL_DISBURSEMENTS, ArConstants.REAL_DISBURSEMENTS);
+		put(ArConstants.ACTUAL_MTEF_PROJECTION, ArConstants.REAL_MTEFS);
+	}};
+	
+	public final static Map<String, String> DIRECTED_MEASURE_TO_NONDIRECTED_MEASURE = new HashMap<String, String>() {{
+		put(ArConstants.REAL_COMMITMENTS, ArConstants.ACTUAL_COMMITMENTS);
+		put(ArConstants.REAL_DISBURSEMENTS, ArConstants.ACTUAL_DISBURSEMENTS);
+		put(ArConstants.REAL_MTEFS, ArConstants.ACTUAL_MTEF_PROJECTION);
+	}};
+
+	
+	public final static Map<String, String> NONDIRECTED_MEASURE_TO_TRANSACTION = new HashMap<String, String>() {{
+		put(ArConstants.ACTUAL_COMMITMENTS, ArConstants.COMMITMENT);
+		put(ArConstants.ACTUAL_DISBURSEMENTS, ArConstants.DISBURSEMENT);
+		put(ArConstants.MTEF_PROJECTION, ArConstants.MTEF_PROJECTION);
+	}};
 	
 	public final static String COLUMN_COUNTRY = "Country";
 	public final static String COLUMN_REGION = "Region";
@@ -281,10 +312,15 @@ public final class ArConstants {
 	public final static String UNDISBURSED_BALANCE="Undisbursed Balance";
 	public final static String ACTUAL_COMMITMENTS="Actual Commitments";
 	public final static String ACTUAL_DISBURSEMENTS = "Actual Disbursements";
+	public final static String ACTUAL_MTEF_PROJECTION = "Actual MTEF Projections";
+	public final static String MTEF_PROJECTION = "MTEF Projections";
 	public final static String PLANNED_COMMITMENTS = "Planned Commitments";
 	public final static String PLANNED_DISBURSEMENTS = "Planned Disbursements";
 	
 	public final static String REAL_DISBURSEMENTS = "Real Disbursements";
+	public final static String REAL_COMMITMENTS = "Real Commitments";
+	public final static String REAL_MTEFS = "Real MTEFs";
+	
 	public final static String UNCOMMITTED_BALANCE="Uncommitted Balance";
 	public final static String TOTAL_COMMITMENTS="Total Commitments";
 	//public final static String TOTAL_PERCENTAGE_OF_TOTAL_DISBURSEMENTS="Percentage Of Total Disbursements";
@@ -295,7 +331,9 @@ public final class ArConstants {
 	
 	public final static String PERCENTAGE="Percentage";
 	
+	public final static String TRANSACTION_REAL_COMMITMENT_TYPE = "Real Commitment Type";
 	public final static String TRANSACTION_REAL_DISBURSEMENT_TYPE = "Real Disbursement Type";
+	public final static String TRANSACTION_REAL_MTEF_TYPE = "Real MTEF Type";
 	
 	public final static String TRANSACTION_DN_EXEC = userFriendlyNameOfRole(Constants.FUNDING_AGENCY) + "-" + userFriendlyNameOfRole(Constants.EXECUTING_AGENCY);
 	public final static String TRANSACTION_EXEC_IMPL = userFriendlyNameOfRole(Constants.EXECUTING_AGENCY) + "-" + userFriendlyNameOfRole(Constants.IMPLEMENTING_AGENCY);

@@ -83,7 +83,7 @@ public class MetaInfoSet implements Iterable<MetaInfo>
 		return this.metadata.values().iterator();
 	}
 	
-	public void removeItemsByCategory(String... categories)
+	public void removeItemsByCategory(Collection<String> categories)
 	{
 		for(String cat:categories)
 		{

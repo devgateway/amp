@@ -220,18 +220,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		addMetaIfExists(rs, acc, "component_type", ArConstants.COMPONENT_TYPE_S, null, true);
 		addMetaIfExists(rs, acc, "component_name", ArConstants.COMPONENT_NAME, null, true);
 		
-		boolean isDirectedMetadataRelevant = (tr_type == Constants.DISBURSEMENT);
-		if (isDirectedMetadataRelevant)
-		{
-			/**
-			 * this way we cut off SSC directed metadata (Ben's specification says to ignore it for SSC, and all SSC are commitments)
-			 * also we only have directed disbursements IRL, it is / should be ignored for non-disbursements
-			 */
-			addMetaIfExists(rs, acc, "recipient_name", ArConstants.RECIPIENT_NAME, null, false);
-			addMetaIfExists(rs, acc, "recipient_role_name", ArConstants.RECIPIENT_ROLE_NAME, null, false);
-			addMetaIfExists(rs, acc, "recipient_role_code", ArConstants.RECIPIENT_ROLE_CODE, null, false);
-			addMetaIfExists(rs, acc, "source_role_code", ArConstants.SOURCE_ROLE_CODE, null, false);
-		}
+		fetchDirectedDisbursementMeta(rs, acc, tr_type);
 		
 		addMetaIfExists(rs, acc, "activity_pledges_title_name", ArConstants.ACTIVITY_PLEDGES_TITLE_NAME, null, false);
 		
@@ -289,6 +278,10 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		case Constants.DISBURSEMENT:
 			trStr = ArConstants.DISBURSEMENT;
 			break;
+		case Constants.MTEFPROJECTION:
+			trStr = ArConstants.MTEF_PROJECTION;
+			break;
+			
 		case Constants.EXPENDITURE:
 			trStr = ArConstants.EXPENDITURE;
 			break;
@@ -449,36 +442,10 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		else 
 			logger.error("The filter.currency property should not be null !");
 						
-		fillRealDisbursementTypes(acc);
-		
+		fillDirectedDisbursementTypes(acc);
 		return acc;
 	}
-	
-	protected void fillRealDisbursementTypes(CategAmountCell acc)
-	{
-		String recipientRoleTypeCode = acc.getMetaValueString(ArConstants.RECIPIENT_ROLE_CODE);
-		String sourceRoleTypeCode = acc.getMetaValueString(ArConstants.SOURCE_ROLE_CODE);
-		if (recipientRoleTypeCode != null && sourceRoleTypeCode != null)
-		{
-			// we have a directed transaction!
-			String recognizedTransactionType = null;
-			if (sourceRoleTypeCode.equals(Constants.FUNDING_AGENCY) && recipientRoleTypeCode.equals(Constants.EXECUTING_AGENCY))
-				recognizedTransactionType = ArConstants.TRANSACTION_DN_EXEC;
-			
-			if (sourceRoleTypeCode.equals(Constants.EXECUTING_AGENCY) && recipientRoleTypeCode.equals(Constants.IMPLEMENTING_AGENCY))
-				recognizedTransactionType = ArConstants.TRANSACTION_EXEC_IMPL;
-
-			if (sourceRoleTypeCode.equals(Constants.IMPLEMENTING_AGENCY) && recipientRoleTypeCode.equals(Constants.BENEFICIARY_AGENCY))
-				recognizedTransactionType = ArConstants.TRANSACTION_IMPL_BENF;
-			
-			if (recognizedTransactionType == null)
-				recognizedTransactionType = ArConstants.userFriendlyNameOfRole(sourceRoleTypeCode) + "-" + ArConstants.userFriendlyNameOfRole(recipientRoleTypeCode);
-			
-			if (recognizedTransactionType != null)
-				acc.getMetaData().add(this.getCachedMetaInfo(ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE, recognizedTransactionType));
-		}
-	}
-	
+		
 	/*
 	 * (non-Javadoc)
 	 * 

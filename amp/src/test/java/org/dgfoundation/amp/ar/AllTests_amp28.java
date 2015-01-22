@@ -9,6 +9,7 @@ import org.dgfoundation.amp.ar.amp28.MultilingualTests28;
 import org.dgfoundation.amp.ar.amp28.PledgeReportsTests;
 import org.dgfoundation.amp.ar.amp28.PledgesFormTests;
 import org.dgfoundation.amp.ar.amp28.ProgramsTests;
+import org.dgfoundation.amp.ar.amp28.RealCommitmentsAndMTEFs;
 import org.digijava.kernel.persistence.HibernateClassLoader;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -46,6 +47,7 @@ public class AllTests_amp28
 		suite.addTest(CombinedPledgeAndActivitiesReportsTests.suite());
 		suite.addTest(MiscReportsTest28.suite());
 		suite.addTest(DashboardsTests.suite());
+		suite.addTest(RealCommitmentsAndMTEFs.suite());
 		//$JUnit-END$
 		return suite;
 	}

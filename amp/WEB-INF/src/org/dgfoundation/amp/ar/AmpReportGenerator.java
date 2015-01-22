@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -134,10 +135,9 @@ public class AmpReportGenerator extends ReportGenerator {
 				ret.add(ArConstants.MODE_OF_PAYMENT);
 			}
 			
-			if (ARUtil.containsMeasure(ArConstants.REAL_DISBURSEMENTS, reportMetadata.getMeasures()))
-			{
-				ret.add(ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE);
-			}
+			for(Entry<String, String> entry:ArConstants.DIRECTED_MEASURE_TO_DIRECTED_TRANSACTION_VALUE.entrySet())
+				if (ARUtil.containsMeasure(entry.getKey(), reportMetadata.getMeasures()))
+					ret.add(entry.getValue());
 
 		}
 		return ret;
@@ -729,26 +729,28 @@ public class AmpReportGenerator extends ReportGenerator {
 				Iterator<CategAmountCell> it = funding.iterator();
 				while (it.hasNext()) {
 					CategAmountCell item = (CategAmountCell) it.next();
-					boolean shouldAddRealDisbursement = element.getMeasureName().equals(ArConstants.REAL_DISBURSEMENTS) &&
-		    				item.isRealDisbursement(); // add ACTUAL DISBURSEMENT items to the REAL DISBURSEMENTS column - as they have the same datasource (ACTUAL DISBURSEMENTS), they have the same metadata
 					
-					boolean shouldAddEstimatedDisbursement = element.getMeasureName().equals(ArConstants.ACTUAL_DISBURSEMENTS) && 
-							item.isEstimatedDisbursement();
+					boolean shouldAddDirectedTransaction = ArConstants.NONDIRECTED_MEASURE_TO_DIRECTED_MEASURE.containsValue(element.getMeasureName()) &&
+		    				item.isDirectedTransaction(ArConstants.DIRECTED_MEASURE_TO_NONDIRECTED_MEASURE.get(element.getMeasureName())); // add ACTUAL DISBURSEMENT items to the REAL DISBURSEMENTS column - as they have the same datasource (ACTUAL DISBURSEMENTS), they have the same metadata
 					
-					boolean shouldAddGenericFunding = item.hasMetaInfo(metaInfo) && (!(element.getMeasureName().equals(ArConstants.ACTUAL_DISBURSEMENTS) || element.getMeasureName().equals(ArConstants.REAL_DISBURSEMENTS)));
+					boolean shouldAddNonDirectedTransaction = ArConstants.NONDIRECTED_MEASURE_TO_DIRECTED_MEASURE.containsKey(element.getMeasureName()) && 
+							item.isNonDirectedTransaction(element.getMeasureName());
 					
-					boolean shouldAddCellToColumn = shouldAddGenericFunding || shouldAddEstimatedDisbursement || shouldAddRealDisbursement; // ugly hack because the same data source (actual disbursements) should fill two columns: actual disbursements + real disbursements
+					boolean shouldAddGenericFunding = item.hasMetaInfo(metaInfo) && (!
+							(ArConstants.NONDIRECTED_MEASURE_TO_DIRECTED_MEASURE.containsKey(element.getMeasureName()) || 
+							 ArConstants.NONDIRECTED_MEASURE_TO_DIRECTED_MEASURE.containsValue(element.getMeasureName())
+							));
+					
+					boolean shouldAddCellToColumn = shouldAddGenericFunding || shouldAddNonDirectedTransaction || shouldAddDirectedTransaction; // ugly hack because the same data source (actual disbursements) should fill two columns: actual disbursements + real disbursements
 					
 					if (!shouldAddCellToColumn)
 						continue;
 					CategAmountCell cellToAdd = null;
-					try
-    				{
+					try {
 						cellToAdd = (CategAmountCell)(item.clone());
         				cellToAdd.cloneMetaData();
     				}
-    				catch(Exception e)
-    				{
+    				catch(Exception e) {
     					throw new RuntimeException("while generating totals column DISBURSEMENTS, error cloning cell " + item.toString());
     				}
 					
@@ -756,15 +758,13 @@ public class AmpReportGenerator extends ReportGenerator {
 				}
 			}
 			
-			boolean shouldSplitTotalsByRealDisbursements = element.getMeasureName().equals(ArConstants.REAL_DISBURSEMENTS);
-			if (funding != null && shouldSplitTotalsByRealDisbursements)
-			{
-				// DO SOMETHING, BOZO!
-				this.addTotalsVerticalSplit(newcol, ArConstants.TRANSACTION_REAL_DISBURSEMENT_TYPE);
+			if (funding != null) {
+				for(String measureName:ArConstants.DIRECTED_MEASURE_TO_DIRECTED_TRANSACTION_VALUE.keySet()) {
+					if (element.getMeasureName().equals(measureName))
+						this.addTotalsVerticalSplit(newcol, ArConstants.DIRECTED_MEASURE_TO_DIRECTED_TRANSACTION_VALUE.get(measureName));
+				}
 			}
-
 		}
-		
 		newcol.detachCells();
 		return !totalActualCommitmentsLoaded && totalActualCommitmentsAdded;
 	}
@@ -1011,8 +1011,8 @@ public class AmpReportGenerator extends ReportGenerator {
 //			return;
 //		}
 		
-		filterRealDisbursementsSubcolumns(rawColumns.getColumnByName("Funding"), allMandatoryRoles);
-		filterRealDisbursementsSubcolumns(rawColumns.getColumnByName(ArConstants.COLUMN_TOTAL), allMandatoryRoles);
+		filterDirectedTransactionsSubcolumns(rawColumns.getColumnByName("Funding"), allMandatoryRoles);
+		filterDirectedTransactionsSubcolumns(rawColumns.getColumnByName(ArConstants.COLUMN_TOTAL), allMandatoryRoles);
 	}
 	
 	/**
@@ -1020,7 +1020,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * @param realDisbursementsCol
 	 * @param allLegalFlows
 	 */
-	protected void cleanupRealDisbursements(GroupColumn realDisbursementsCol, Set<String> allMandatoryRoles)
+	protected void cleanupDirectedTransactions(GroupColumn realDisbursementsCol, Set<String> allMandatoryRoles)
 	{
 		Iterator<Column> cols = realDisbursementsCol.iterator();
 		Set<String> allMandatoryUserFriendlyRoles = new HashSet<String>();
@@ -1081,19 +1081,18 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * @param col
 	 * @param allLegalFlows
 	 */
-	protected void filterRealDisbursementsSubcolumns(Column col, Set<String> allMandatoryRoles)
+	protected void filterDirectedTransactionsSubcolumns(Column col, Set<String> allMandatoryRoles)
 	{
 		if (!(col instanceof GroupColumn))
 			return;
 		
 		GroupColumn gc = (GroupColumn) col;
-		if (gc.getName().equals(ArConstants.REAL_DISBURSEMENTS))
-		{
-			cleanupRealDisbursements((GroupColumn) col, allMandatoryRoles);
+		if (ArConstants.DIRECTED_MEASURE_TO_DIRECTED_TRANSACTION_VALUE.containsKey(gc.getName())) {
+			cleanupDirectedTransactions((GroupColumn) col, allMandatoryRoles);
 			return;
 		}
 		for(Column column:gc.getItems())
-			filterRealDisbursementsSubcolumns(column, allMandatoryRoles);
+			filterDirectedTransactionsSubcolumns(column, allMandatoryRoles);
 	}
 	
 //	/**
@@ -1136,13 +1135,13 @@ public class AmpReportGenerator extends ReportGenerator {
 			categorizeData();
 		}
 
-		if (reportMetadata.getMeasureNames().contains(ArConstants.REAL_DISBURSEMENTS) && !fundingOrgHiers.isEmpty())
-		{
-			removeUnusedRealDisbursementsFlowsFromReport(fundingOrgHiers);
-		}
+		for(String directedMeasure:ArConstants.DIRECTED_MEASURE_TO_NONDIRECTED_MEASURE.keySet())
+			if (reportMetadata.getMeasureNames().contains(directedMeasure) && !fundingOrgHiers.isEmpty())
+				removeUnusedRealDisbursementsFlowsFromReport(fundingOrgHiers);
 		
 		// do not allow empty GroupColumns; replace them with empty CellColumns
-		fixEmptyGroupColumns(rawColumns.getColumnByName("Funding"), ArConstants.REAL_DISBURSEMENTS);
+		for(String directedMeasure:ArConstants.DIRECTED_MEASURE_TO_NONDIRECTED_MEASURE.keySet())
+			fixEmptyGroupColumns(rawColumns.getColumnByName("Funding"), directedMeasure);
 		fixEmptyGroupColumns(rawColumns.getColumnByName(ArConstants.COLUMN_TOTAL), null);
 		
 		/**

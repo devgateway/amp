@@ -98,7 +98,8 @@ public abstract class ReportGenerator {
 		prepareData();
 //		String popa = this.report.prettyPrint();
 		//logger.error("the report is " + report.prettyPrint());
-		//logger.error("report is, in code, " + describeReportInCode(report, 0, true));
+//		if (report.getName().equals("AMP-15863-mode-of-payment-undisbursed-balance") || report.getName().equals("AMP-15337-real-disbursements-by-executing"))
+//			logger.error("report is, in code, " + describeReportInCode(report, 0, true));
 		long endTS = System.currentTimeMillis();
 		columnCachers.clear(); // cleanup memory used for holding columns
 		logger.info("Report "+getReport().getName()+" generated in "+(endTS-startTS)/1000.0+" seconds. Data retrieval completed in "+(retrTS-startTS)/1000.0+" seconds");

@@ -414,11 +414,11 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
 										GroupColumnModel.withSubColumns("2013", 
 												GroupColumnModel.withSubColumns("Real Disbursements", 
 													SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "50 000"),
-													SimpleColumnModel.withContents("IMPL-BENF", "Eth Water", "2 500")))),
+													SimpleColumnModel.withContents("IMPL-BENF", "Eth Water", "5 000")))),
 									GroupColumnModel.withSubColumns("Total Costs", 
 											GroupColumnModel.withSubColumns("Real Disbursements", 
 													SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "50 000"),
-													SimpleColumnModel.withContents("IMPL-BENF", "Eth Water", "2 500")))),										
+													SimpleColumnModel.withContents("IMPL-BENF", "Eth Water", "5 000")))),										
 
 						ColumnReportDataModel.withColumns("Implementing Agency: Ministry of Finance", 
 								SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
@@ -426,11 +426,11 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
 										GroupColumnModel.withSubColumns("2013", 
 												GroupColumnModel.withSubColumns("Real Disbursements", 
 													SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "50 000"),
-													SimpleColumnModel.withContents("IMPL-BENF", "Eth Water", "5 000")))),
+													SimpleColumnModel.withContents("IMPL-BENF", "Eth Water", "10 000")))),
 												GroupColumnModel.withSubColumns("Total Costs", 
 													GroupColumnModel.withSubColumns("Real Disbursements", 
 														SimpleColumnModel.withContents("EXEC-IMPL", "Eth Water", "50 000"),
-														SimpleColumnModel.withContents("IMPL-BENF", "Eth Water", "5 000"))))										
+														SimpleColumnModel.withContents("IMPL-BENF", "Eth Water", "10 000"))))										
 													
 			));
 		
@@ -448,11 +448,11 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
 										GroupColumnModel.withSubColumns("2013", 
 												GroupColumnModel.withSubColumns("Real Disbursements", 
 													SimpleColumnModel.withContents("EXEC-IMPL", "Вода Eth", "50 000"),
-													SimpleColumnModel.withContents("IMPL-BENF", "Вода Eth", "2 500")))),
+													SimpleColumnModel.withContents("IMPL-BENF", "Вода Eth", "5 000")))),
 									GroupColumnModel.withSubColumns("Total Costs", 
 											GroupColumnModel.withSubColumns("Real Disbursements", 
 													SimpleColumnModel.withContents("EXEC-IMPL", "Вода Eth", "50 000"),
-													SimpleColumnModel.withContents("IMPL-BENF", "Вода Eth", "2 500")))),										
+													SimpleColumnModel.withContents("IMPL-BENF", "Вода Eth", "5 000")))),										
 
 						ColumnReportDataModel.withColumns("Implementing Agency: Министерство финансов", 
 								SimpleColumnModel.withContents("Project Title", NULL_PLACEHOLDER),
@@ -460,11 +460,11 @@ public class DirectedDisbursementsTests_amp27 extends ReportsTestCase
 										GroupColumnModel.withSubColumns("2013", 
 												GroupColumnModel.withSubColumns("Real Disbursements", 
 													SimpleColumnModel.withContents("EXEC-IMPL", "Вода Eth", "50 000"),
-													SimpleColumnModel.withContents("IMPL-BENF", "Вода Eth", "5 000")))),
+													SimpleColumnModel.withContents("IMPL-BENF", "Вода Eth", "10 000")))),
 												GroupColumnModel.withSubColumns("Total Costs", 
 													GroupColumnModel.withSubColumns("Real Disbursements", 
 														SimpleColumnModel.withContents("EXEC-IMPL", "Вода Eth", "50 000"),
-														SimpleColumnModel.withContents("IMPL-BENF", "Вода Eth", "5 000"))))										
+														SimpleColumnModel.withContents("IMPL-BENF", "Вода Eth", "10 000"))))										
 													
 			));
 		

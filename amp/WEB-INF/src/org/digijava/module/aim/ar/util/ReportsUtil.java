@@ -82,7 +82,7 @@ public class ReportsUtil {
             boolean roleCodeNeededInQuery;
             if (roleCode.equals(Constants.ROLE_CODE_DONOR))
             {
-            	orgIdsSource = "select DISTINCT(amp_donor_org_id) FROM amp_funding WHERE source_role_id = (select amp_role_id from amp_role WHERE role_code='DN')";
+            	orgIdsSource = "select DISTINCT(amp_donor_org_id) FROM amp_funding WHERE (source_role_id IS NULL) OR (source_role_id = (select amp_role_id from amp_role WHERE role_code='DN'))";
             	roleCodeNeededInQuery = false;
             }
             else

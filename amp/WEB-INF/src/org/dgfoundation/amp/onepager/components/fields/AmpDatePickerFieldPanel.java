@@ -15,6 +15,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 
@@ -57,6 +58,8 @@ public class AmpDatePickerFieldPanel extends AmpFieldPanel<Date> {
 		String readonly = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.READONLY_DATES);
 	    if (readonly != null && "TRUE".equals(readonly.toUpperCase()))
             date.add(new AttributeModifier("readonly","readonly"));
+	    String datePattern = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+	    date.add(new AttributeModifier("placeholder", datePattern));
 		dateWrapper.add(date);
 		initFormComponent(date);
 		sameAsOtherDatePicker = new AmpAjaxCheckBoxFieldPanel(

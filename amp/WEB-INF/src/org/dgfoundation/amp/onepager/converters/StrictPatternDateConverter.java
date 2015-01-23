@@ -2,6 +2,7 @@ package org.dgfoundation.amp.onepager.converters;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -14,8 +15,6 @@ import org.digijava.module.aim.util.FeaturesUtil;
 
 public class StrictPatternDateConverter extends PatternDateConverter {
 
-    public static final String REGEX_PATTERN =
-            "^(\\d{2})/(\\d{2})/(\\d{4})$";
 
     public StrictPatternDateConverter() {
         super(Constants.GLOBALSETTINGS_DATEFORMAT, false);
@@ -38,6 +37,17 @@ public class StrictPatternDateConverter extends PatternDateConverter {
 			if (date == null) {
 				throw getException();
 			}
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.YEAR, 1900);
+    		if (date.before(cal.getTime())){
+				throw getException();
+			}
+			cal.set(Calendar.YEAR, 2099);
+    		if (date.after(cal.getTime())){
+				throw getException();
+			}
+    			
+
 		} catch (ParseException e) {
 			throw getException();
 		}

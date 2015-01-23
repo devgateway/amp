@@ -828,14 +828,14 @@ public class ExportActivityToPDF extends Action {
                         outputValue += "\t: " + duration.toString() + " " + TranslatorWorker.translateText("Months") + "\n";
                     }
 				}
-				String commColumnName = "Final Date for Disbursements Comments";
-				if(FeaturesUtil.isVisibleField(commColumnName)){
-					this.buildCommentsPart("Final Date for Disbursements", commColumnName, allComments, locale, siteId, mainLayout);
-				}
-				columnName = "Current Completion Date Comments";
-				if(FeaturesUtil.isVisibleField(columnName)){
-					this.buildCommentsPart("current completion date", commColumnName, allComments, locale, siteId, mainLayout);
-				}				
+//				String commColumnName = "Final Date for Disbursements Comments";
+//				if(FeaturesUtil.isVisibleField(commColumnName)){
+//					this.buildCommentsPart("Final Date for Disbursements", commColumnName, allComments, locale, siteId, mainLayout);
+//				}
+//				commColumnName = "Current Completion Date Comments";
+//				if(FeaturesUtil.isVisibleField(commColumnName)){
+//					this.buildCommentsPart("current completion date", commColumnName, allComments, locale, siteId, mainLayout);
+//				}				
 				columnName=TranslatorWorker.translateText("Planning");
 				createGeneralInfoRow(mainLayout,columnName,outputValue);
 				
@@ -856,8 +856,8 @@ public class ExportActivityToPDF extends Action {
 			if(FeaturesUtil.isVisibleField(commColumnName)){
 				this.buildCommentsPart("Final Date for Disbursements", commColumnName, allComments, locale, siteId, mainLayout);
 			}
-			columnName = "Current Completion Date Comments";
-			if(FeaturesUtil.isVisibleField(columnName)){
+			commColumnName = "Current Completion Date Comments";
+			if(FeaturesUtil.isVisibleField(commColumnName)){
 				this.buildCommentsPart("current completion date", commColumnName, allComments, locale, siteId, mainLayout);
 			}			
 			//References

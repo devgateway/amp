@@ -1456,8 +1456,8 @@ public class ExportActivityToWord extends Action {
 		if(FeaturesUtil.isVisibleField(commColumnName)){
 			this.buildCommentsPart("Final Date for Disbursements", commColumnName, allComments, planningSubTable1);
 		}
-		columnName = "Current Completion Date Comments";
-		if(FeaturesUtil.isVisibleField(columnName)){
+		commColumnName = "Current Completion Date Comments";
+		if(FeaturesUtil.isVisibleField(commColumnName)){
 			this.buildCommentsPart("current completion date", commColumnName, allComments, planningSubTable1);
 		}			
 		

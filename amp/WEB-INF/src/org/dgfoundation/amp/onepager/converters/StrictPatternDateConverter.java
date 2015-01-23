@@ -5,9 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.regex.Pattern;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.datetime.PatternDateConverter;
 import org.apache.wicket.util.convert.ConversionException;
 import org.digijava.module.aim.helper.Constants;
@@ -29,11 +27,8 @@ public class StrictPatternDateConverter extends PatternDateConverter {
     
     @Override
     public Date convertToObject(String value, Locale locale) {
-    	SimpleDateFormat formatter = new SimpleDateFormat();
-    	formatter.setLenient(false);  
-    	formatter.applyPattern(FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT));
     	try {
-    		Date date = formatter.parse(value);
+    		Date date = getDateFormatter().parse(value);
 			if (date == null) {
 				throw getException();
 			}
@@ -53,4 +48,22 @@ public class StrictPatternDateConverter extends PatternDateConverter {
 		}
         return super.convertToObject(value, locale);
     }
+
+	private SimpleDateFormat getDateFormatter() {
+		SimpleDateFormat formatter = new SimpleDateFormat();
+    	formatter.setLenient(false);  
+    	formatter.applyPattern(FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT));
+		return formatter;
+	}
+
+	@Override
+	public String convertToString(Date date, Locale locale) {
+		String strValue = getDateFormatter().format(date);
+
+		if (date == null) {
+			throw getException();
+		}
+		return strValue;
+
+	}
 }

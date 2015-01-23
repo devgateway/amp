@@ -8,6 +8,7 @@ var SidebarView = require('../../sidebar/sidebar-view');
 var boilerplate = require('amp-boilerplate');
 var ModuleTemplate = fs.readFileSync(__dirname + '/../templates/module-template.html', 'utf8');
 
+var UserModel = require('../../data/models/amp-user-model.js');
 
 module.exports = Backbone.View.extend({
 
@@ -57,7 +58,24 @@ module.exports = Backbone.View.extend({
 
   // not a view, because it's static and just for testing.
   renderStaticAmpTemplate: function() {
-    $('#amp-header').html(boilerplate.header);
+
+    /* Prepare the user data for the appropriate header */
+    var userModel = new UserModel();
+
+    var $header = $('#amp-header');
+
+    $header.html(boilerplate.header);
+
+    userModel.load().then(function(user) {
+      if (user.get('email')) {
+        $('.container-fluid', $header).toggleClass('ampUserLoggedIn');
+        $('#header-workspace', $header).text(user.get('workspace'));
+        $('#header-name #header-first-name', $header).text(user.get('firstName'));
+        $('#header-name #header-last-name', $header).text(user.get('lastName'));
+      }
+    });
+
+
     // TODO: If it's our responsibility...
     // render translation selector using: this.translator.getAvailableLanguages
   },

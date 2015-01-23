@@ -11,7 +11,7 @@ var ProjectSiteTemplate = fs.readFileSync(__dirname + '/../templates/structure-t
 function breathAfter(func, context) {
   return function(/* arguments */) {
     var finished = new $.Deferred(),
-        result = func.apply(context, arguments);
+    result = func.apply(context, arguments);
     window.setTimeout(function() {
       finished.resolve(result);
     }, 50);
@@ -75,13 +75,13 @@ module.exports = Backbone.View
     // Phil note: I'm not sure if the extra complexity will be worth it. We can make joins fast,
     //   it's the clustering and just drawing dots on the map that is hard to optimize.
     self.structureMenuModel.structuresCollection.getStructuresWithActivities()
-      .then(function() {  // 160ms on Phil's computer
-        self.rawData = self.structureMenuModel.structuresCollection.toGeoJSON();
-        self._renderFeatures()
-          .then(function() {
-            self.map.addLayer(self.markerCluster);  // maybe TODO: chunk (takes 271ms on Phil's computer)
-          });
+    .then(function() {  // 160ms on Phil's computer
+      self.rawData = self.structureMenuModel.structuresCollection.toGeoJSON();
+      self._renderFeatures()
+      .then(function() {
+        self.map.addLayer(self.markerCluster);  // maybe TODO: chunk (takes 271ms on Phil's computer)
       });
+    });
 
     return this.featureGroup;
   },
@@ -98,27 +98,27 @@ module.exports = Backbone.View
     self.featureGroup = L.layerGroup();
 
     return $.Deferred().resolve()  // kick things off, so we can async this sequence with breathAfter
-      .then(breathAfter(function() {  // wait 50ms, then:
-        return _(self.rawData.features)
-          .map(_(self._featureToMarker).bind(self));
-      }))
-      .then(function(markers) {
-        self.markerCluster.addLayers(markers);
-        _(markers).each(function(marker) {
-          self.featureGroup.addLayer(marker);
-        });
+    .then(breathAfter(function() {  // wait 50ms, then:
+      return _(self.rawData.features)
+      .map(_(self._featureToMarker).bind(self));
+    }))
+    .then(function(markers) {
+      self.markerCluster.addLayers(markers);
+      _(markers).each(function(marker) {
+        self.featureGroup.addLayer(marker);
       });
+    });
   },
 
 
   _featureToMarker: function(feature) {  // 152ms on Phil's computer
     var self = this,
-        marker,
-        latlng = L.latLng(feature.geometry.coordinates[1],
-                          feature.geometry.coordinates[0]);
+    marker,
+    latlng = L.latLng(feature.geometry.coordinates[1],
+                      feature.geometry.coordinates[0]);
 
     if (self.rawData.features.length < self.MAX_NUM_FOR_ICONS &&
-      self.structureMenuModel.get('filterVertical') === 'Primary Sector Id') {
+        self.structureMenuModel.get('filterVertical') === 'Primary Sector Id') {
       // create icon
       marker = self._createSectorMarker(latlng, feature);
     } else {
@@ -127,7 +127,7 @@ module.exports = Backbone.View
     }
 
     marker.feature = feature;  // L.geoJSON would do this implicitely
-                               // so add it manually to keep the same API
+    // so add it manually to keep the same API
 
     // self.markerCluster.addLayer(marker);
 
@@ -152,17 +152,17 @@ module.exports = Backbone.View
   _createSectorMarker: function(latlng, feature) {
     var sectorCode = 0; // temp code for catchall...
     var filterVertical = this.structureMenuModel.get('filterVertical');
-//feature.properties.activity.attributes.matchesFilters[filterVertical]
+    //feature.properties.activity.attributes.matchesFilters[filterVertical]
     if (feature.properties.activity.attributes &&
-      	_.has(feature.properties.activity.attributes.matchesFilters, filterVertical)) {
-      if (feature.properties.activity.attributes.matchesFilters[filterVertical] == null) {
-    	  //It has no sector/donor
-    	  sectorCode = '1';
+        _.has(feature.properties.activity.attributes.matchesFilters, filterVertical)) {
+      if (feature.properties.activity.attributes.matchesFilters[filterVertical] === null) {
+        //It has no sector/donor
+        sectorCode = '1';
       } else if (feature.properties.activity.attributes.matchesFilters[filterVertical].length > 1) {
-       sectorCode = '0';
-       console.warn('TODO: need custom vairous sectors icon...different from  multi-sector');
+        sectorCode = '0';
+        console.warn('TODO: need custom vairous sectors icon...different from  multi-sector');
       } else {
-       sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
+        sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
       }
     }
 
@@ -239,7 +239,7 @@ module.exports = Backbone.View
   // Create pop-ups
   _bindPopup: function(marker) {
     var self = this,
-        feature = marker.feature;
+    feature = marker.feature;
 
     /* TODO(thadk) switch individual feature to this standard parsed model input*/
     /*var parsedProjectSitesList = this.app.data.structures.model.prototype.parse(feature);*/

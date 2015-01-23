@@ -58,7 +58,7 @@ module.exports = Backbone.Collection
     // TODO: re-enable?? check for listener....?
     /*if (this.appData.settings) {
       payload.settings = this.appData.settings.serialize();
-    }*/
+      }*/
 
     options = _.defaults((options || {}), {
       type: 'POST',
@@ -123,13 +123,13 @@ module.exports = Backbone.Collection
   _getActivityIds: function() {
     // reduces to a single unique list
     return this
-      .chain()
-      .reduce(function(memo, structure) {
-        memo.push(structure.get('activityZero'));
-        return memo;
-      }, [])
-      .uniq()
-      .value();
+    .chain()
+    .reduce(function(memo, structure) {
+      memo.push(structure.get('activityZero'));
+      return memo;
+    }, [])
+    .uniq()
+    .value();
   },
 
   toGeoJSON: function() {
@@ -150,7 +150,7 @@ module.exports = Backbone.Collection
     };
   },
 
-// Migrated from Collection-Model
+  // Migrated from Collection-Model
   updatePaletteSet: function() {
     var self = this;
     var deferred = $.Deferred();
@@ -160,61 +160,59 @@ module.exports = Backbone.Collection
     this.getStructuresWithActivities().done(function() {
       // TODO: this is running twice on structures load?!?
       var orgSites = self.chain()
-        .groupBy(function(site) {
-          var activity = site.get('activity');
+      .groupBy(function(site) {
+        var activity = site.get('activity');
 
-          // TODO: Choosing a vertical will need to be configurable from drop down..
-          if (!_.isEmpty(activity.get('matchesFilters')[filterVertical])) {
-            if (activity.get('matchesFilters')[filterVertical].length > 1) {
-              return 'Multiple ' +
-                (filterVertical === 'Primary Sector Id' ? 'Sectors' : 'Donors');
-            } else if (activity.get('matchesFilters')[filterVertical][0].get) {
-              var name = activity.get('matchesFilters')[filterVertical][0].get('name');
-              return name;
-            } else {
-              console.warn('matchFilters are not models.', activity.get('matchesFilters'));
-              return '';
-            }
+        // TODO: Choosing a vertical will need to be configurable from drop down..
+        if (!_.isEmpty(activity.get('matchesFilters')[filterVertical])) {
+          if (activity.get('matchesFilters')[filterVertical].length > 1) {
+            return 'Multiple ' +
+              (filterVertical === 'Primary Sector Id' ? 'Sectors' : 'Donors');
+          } else if (activity.get('matchesFilters')[filterVertical][0].get) {
+            var name = activity.get('matchesFilters')[filterVertical][0].get('name');
+            return name;
           } else {
-        	 //In cases where projects do not have sectors or donors (for example draft projects
-        	  //or planned project with no funding) there needs to be a 'none' option for project sites
-        	  //in the GIS legends
-        	 if (activity.get('matchesFilters')[filterVertical] !== undefined) {
-    	  	 return 'None';
-             }
-        	 else {
-        		 console.warn('Activity is missing desired vertical');
-         	  	 return 'n/a';
-        	 }
-        	 
+            console.warn('matchFilters are not models.', activity.get('matchesFilters'));
+            return '';
           }
-        })
-        .map(function(sites, orgId) {
-          var code = -1;
-          if (_.has(sites[0].get('activity').get('matchesFilters'),filterVertical)) {
-        	if (sites[0].get('activity').get('matchesFilters')[filterVertical] == null) {
-        		//no value for sector/donor
-        		code = '1';
-        	}else if (sites[0].get('activity').get('matchesFilters')[filterVertical][0].get &&
-            	sites[0].get('activity').get('matchesFilters')[filterVertical].length > 1) {
-              code = '0';
-            } else {
-              code = sites[0].get('activity').get('matchesFilters')[filterVertical][0].get('code');
-            }
+        } else {
+          //In cases where projects do not have sectors or donors (for example draft projects
+          //or planned project with no funding) there needs to be a 'none' option for project sites
+          //in the GIS legends
+          if (activity.get('matchesFilters')[filterVertical] !== undefined) {
+            return 'None';
+          } else {
+            console.warn('Activity is missing desired vertical');
+            return 'n/a';
           }
+        }
+      })
+      .map(function(sites, orgId) {
+        var code = -1;
+        if (_.has(sites[0].get('activity').get('matchesFilters'), filterVertical)) {
+          if (sites[0].get('activity').get('matchesFilters')[filterVertical] === null) {
+            //no value for sector/donor
+            code = '1';
+          }else if (sites[0].get('activity').get('matchesFilters')[filterVertical][0].get &&
+                    sites[0].get('activity').get('matchesFilters')[filterVertical].length > 1) {
+            code = '0';
+          } else {
+            code = sites[0].get('activity').get('matchesFilters')[filterVertical][0].get('code');
+          }
+        }
 
-          return {
-            id: orgId,
-            name: orgId,
-            code: code,
-            sites: _(sites).map(function(site) { return site.get('id'); })
-          };
-        })
-        .sortBy(function(item) {
-          return item.sites.length;
-        })
-        .reverse()
-        .value();
+        return {
+          id: orgId,
+          name: orgId,
+          code: code,
+          sites: _(sites).map(function(site) { return site.get('id'); })
+        };
+      })
+      .sortBy(function(item) {
+        return item.sites.length;
+      })
+      .reverse()
+      .value();
 
       self.palette.set('elements', orgSites);
 

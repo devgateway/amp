@@ -27,8 +27,9 @@ public class StrictPatternDateConverter extends PatternDateConverter {
     
     @Override
     public Date convertToObject(String value, Locale locale) {
+    	Date date = null;
     	try {
-    		Date date = getDateFormatter().parse(value);
+    		date = getDateFormatter().parse(value);
 			if (date == null) {
 				throw getException();
 			}
@@ -41,12 +42,10 @@ public class StrictPatternDateConverter extends PatternDateConverter {
     		if (date.after(cal.getTime())){
 				throw getException();
 			}
-    			
-
 		} catch (ParseException e) {
 			throw getException();
 		}
-        return super.convertToObject(value, locale);
+        return date;
     }
 
 	private SimpleDateFormat getDateFormatter() {

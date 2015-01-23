@@ -43,7 +43,7 @@ $options['structure-tables']['common'] = array('cache', 'cache_*', 'history', 's
  */
 $options['shell-aliases']['pull'] = '!git pull'; // We've all done it.
 $options['shell-aliases']['pulldb'] = '!git pull && drush updatedb';
-$options['shell-aliases']['setup'] = '!drush updatedb && drush usr all --yes && drush usr task/revert.features.php --yes';
+$options['shell-aliases']['setup'] = '!drush updatedb --yes && drush usr all --yes && drush usr task/revert.features.php --yes';
 
 $options['shell-aliases']['wipe'] = 'cache-clear all';
 

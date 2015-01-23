@@ -1133,22 +1133,31 @@ class EntityformType extends Entity {
    * Get A path property for this EntityformType with tokens replaced
    */
   public function get_path_property($property, $entityform = NULL) {
-    $path = $this->data[$property];
+    $path = $this->getTranslation($property);
     if (empty($path)) {
       return '';
     }
-    if ($this->data[$property] == '<front>') {
-      return $this->data[$property];
+    if ($path == '<front>') {
+      return $path;
     }
-    $path = _entityform_format_text($path,
-      array('entityform_type' => $this, 'entityform' => $entityform));
+    $path = _entityform_format_text($path, array('entityform_type' => $this, 'entityform' => $entityform));
     $options = drupal_parse_url(decode_entities($path));
     return array($options['path'], array('query' => $options['query']));
   }
 
   public function get_prop($key, $entityform = NULL) {
     if (isset($this->data[$key])) {
-      $value = $this->data[$key];
+      if (is_array($this->data[$key]) && !empty($this->data[$key]['value'])) {
+        $value = array(
+          'value' => $this->getTranslation($key),
+        );
+        if (!empty($this->data[$key]['format'])) {
+          $value['format'] = $this->data[$key]['format'];
+        }
+      }
+      else {
+        $value = $this->getTranslation($key);
+      }
     }
     else {
       $value = '';
@@ -1174,6 +1183,37 @@ class EntityformType extends Entity {
     return _entityform_format_text($value, $token_types);
   }
 
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getTranslation($property, $langcode = NULL) {
+    $all_info = entity_get_all_property_info($this->entityType);
+    // Assign by reference to avoid triggering notices if metadata is missing.
+    $property_info = &$all_info[$property];
+    $property_value = isset($this->$property)
+      ? $this->$property
+      : (isset($this->data[$property])
+        ? $this->data[$property]
+        : NULL);
+
+    if (is_array($property_value) && isset($property_value['value'])) {
+      $property_value = $property_value['value'];
+    }
+    if (!empty($property_info['translatable'])) {
+      if (!empty($property_info['field'])) {
+        return field_get_items($this->entityType, $this, $property, $langcode);
+      }
+      elseif (!empty($property_info['i18n string'])) {
+        $name = $this->entityInfo['module'] . ':' . $this->entityType . ':' . $this->identifier() . ':' . $property;
+
+        return html_entity_decode(entity_i18n_string($name, $property_value, $langcode), ENT_QUOTES);
+      }
+    }
+    return $property_value;
+  }
+
+
   /**
    * Clears values default text values so global text values can be used.
    */
@@ -1183,6 +1223,13 @@ class EntityformType extends Entity {
       $this->data[$key] = '';
     }
   }
+  /**
+   * Return a list of property labels used for translation forms.
+   */
+  public function getLabelsForTranslation() {
+    return entity_get_controller('entityform_type')->get_text_labels();
+  }
+
 }
 
 
@@ -1253,7 +1300,6 @@ class EntityformController extends EntityAPIController {
     $content['info']['#weight'] = -99;
     return $content;
   }
-
 }
 
 
@@ -1314,18 +1360,37 @@ class EntityformTypeController extends EntityAPIControllerExportable {
    */
   public function get_default_text_values() {
     return array(
+      'instructions_pre' => '',
       'submit_confirm_msg' => t('Your submission has been saved.'),
       'submission_page_title' => t('Thank You.'),
       'draft_button_text' => t('Save Draft'),
       'submit_button_text' => t('Submit'),
-      'your_submissions' => t('Your Submissions: @label',
-        array('@label' => '[entityform_type:label]')),
+      'your_submissions' => t('Your Submissions: @label', array('@label' => '[entityform_type:label]')),
       'disallow_resubmit_msg' => t('You already submitted this form'),
-      'delete_confirm_msg' => t('Are you sure you want to delete this Submission for @label',
-        array('@label' => '[entityform_type:label]?')),
+      'delete_confirm_msg' =>  t('Are you sure you want to delete this Submission for @label', array('@label' => '[entityform_type:label]?')),
       'draft_save_text' => '',
-      'page_title_view' => t('Form Submission: @label',
-        array('@label' => '[entityform_type:label]')),
+      'page_title_view' => t('Form Submission: @label', array('@label' => '[entityform_type:label]')),
+      );
+     }
+
+  /**
+   * Returns text labels.
+   */
+  public function get_text_labels() {
+    return array(
+      'draft_redirect_path' => t('Draft Redirect path'),
+      'draft_button_text' => t('Override draft button text'),
+      'draft_save_text' => t('Draft save text'),
+      'submit_button_text' => t('Submit Button Text'),
+      'submit_confirm_msg' => t('Submission Confirmation Text'),
+      'your_submissions' => t('Your Submissions Text'),
+      'disallow_resubmit_msg' => t('Form Disallow Resubmit Text'),
+      'delete_confirm_msg' => t('Submission Delete Text'),
+      'submission_page_title' => t('Thank You.'),
+      'page_title_view' => t('Submission View Title'),
+      'submission_text' => t('Submission reply'),
+      'redirect_path' => t('Redirect path'),
+      'instruction_pre' => t('Intro form instructions'),
     );
   }
 
@@ -1395,6 +1460,15 @@ class EntityformTypeController extends EntityAPIControllerExportable {
           catch (Exception $e) {
           }
         }
+      }
+      // Delete all menu module links that point to this entityform type.
+      $submit_paths = array();
+      foreach ($entities as $id => $entity) {
+        $submit_paths[] = _entityform_type_get_submit_url($entity->type);
+      }
+      $result = db_query("SELECT mlid FROM {menu_links} WHERE link_path IN (:path) AND module = 'entityform'", array(':path' => $submit_paths), array('fetch' => PDO::FETCH_ASSOC));
+      foreach ($result as $m) {
+        menu_link_delete($m['mlid']);
       }
       parent::delete($ids, $transaction);
 

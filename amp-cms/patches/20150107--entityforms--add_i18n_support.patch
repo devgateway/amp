@@ -1,0 +1,414 @@
+diff --git a/entityform.admin.inc b/entityform.admin.inc
+index f998b00..40497e4 100644
+--- a/entityform.admin.inc
++++ b/entityform.admin.inc
+@@ -212,7 +212,7 @@ function entityform_form_wrapper($entityform, $mode = 'submit', $form_context =
+   $make_form = TRUE;
+   $entityform_type = entityform_type_load($entityform->type);
+   if ($form_context == 'page') {
+-    drupal_set_title($entityform_type->label);
++    drupal_set_title($entityform_type->getTranslation('label'));
+   }
+   if (!empty($entityform->is_new)) {
+     $draft = FALSE;
+@@ -261,7 +261,7 @@ function entityform_form_wrapper($entityform, $mode = 'submit', $form_context =
+   if (!empty($entityform_type->data['instruction_pre'])) {
+     $output['intro'] = array(
+       '#type' => 'markup',
+-      '#markup' => "<div class='pre-instructions' >" . _entityform_format_text($entityform_type->data['instruction_pre'], array('entityform_type' => $entityform_type)) . "</div>",
++      '#markup' => "<div class='pre-instructions' >" . $entityform_type->get_prop('instruction_pre') . "</div>",
+       '#weight' => -100,
+     );
+   }
+diff --git a/entityform.info.inc b/entityform.info.inc
+index 2070eb1..f167a63 100644
+--- a/entityform.info.inc
++++ b/entityform.info.inc
+@@ -62,6 +62,23 @@ class EntityformTypeMetadataController extends EntityDefaultMetadataController {
+     $info = parent::entityPropertyInfo();
+     $properties = &$info[$this->type]['properties'];
+     $properties['type']['type'] = 'text';
++    // Add properties for translatable fields.
++    $labels = entity_get_controller('entityform_type')->get_text_labels();
++    foreach ($labels as $text_prop => $label) {
++      $properties[$text_prop] = array(
++        'label' => $label,
++        'getter callback' => 'entityformtype_metadata_get_properties',
++        'setter callback' => 'entityformtype_metadata_set_properties',
++        'type' => 'text',
++        'translatable' => TRUE,
++        'i18n string' => TRUE,
++      );
++      // Testing if this will allow property to be translated.
++      // @todo remove flag all formatted properties.
++      if (in_array($text_prop, array('instruction_pre', 'submission_text'))) {
++        $properties[$text_prop]['format'] = 'format';
++      }
++    }
+     return $info;
+   }
+ }
+diff --git a/entityform.module b/entityform.module
+index 76bc6d6..89c561b 100644
+--- a/entityform.module
++++ b/entityform.module
+@@ -1133,22 +1133,31 @@ class EntityformType extends Entity {
+    * Get A path property for this EntityformType with tokens replaced
+    */
+   public function get_path_property($property, $entityform = NULL) {
+-    $path = $this->data[$property];
++    $path = $this->getTranslation($property);
+     if (empty($path)) {
+       return '';
+     }
+-    if ($this->data[$property] == '<front>') {
+-      return $this->data[$property];
++    if ($path == '<front>') {
++      return $path;
+     }
+-    $path = _entityform_format_text($path,
+-      array('entityform_type' => $this, 'entityform' => $entityform));
++    $path = _entityform_format_text($path, array('entityform_type' => $this, 'entityform' => $entityform));
+     $options = drupal_parse_url(decode_entities($path));
+     return array($options['path'], array('query' => $options['query']));
+   }
+ 
+   public function get_prop($key, $entityform = NULL) {
+     if (isset($this->data[$key])) {
+-      $value = $this->data[$key];
++      if (is_array($this->data[$key]) && !empty($this->data[$key]['value'])) {
++        $value = array(
++          'value' => $this->getTranslation($key),
++        );
++        if (!empty($this->data[$key]['format'])) {
++          $value['format'] = $this->data[$key]['format'];
++        }
++      }
++      else {
++        $value = $this->getTranslation($key);
++      }
+     }
+     else {
+       $value = '';
+@@ -1174,6 +1183,37 @@ class EntityformType extends Entity {
+     return _entityform_format_text($value, $token_types);
+   }
+ 
++
++  /**
++   * {@inheritdoc}
++   */
++  public function getTranslation($property, $langcode = NULL) {
++    $all_info = entity_get_all_property_info($this->entityType);
++    // Assign by reference to avoid triggering notices if metadata is missing.
++    $property_info = &$all_info[$property];
++    $property_value = isset($this->$property)
++      ? $this->$property
++      : (isset($this->data[$property])
++        ? $this->data[$property]
++        : NULL);
++
++    if (is_array($property_value) && isset($property_value['value'])) {
++      $property_value = $property_value['value'];
++    }
++    if (!empty($property_info['translatable'])) {
++      if (!empty($property_info['field'])) {
++        return field_get_items($this->entityType, $this, $property, $langcode);
++      }
++      elseif (!empty($property_info['i18n string'])) {
++        $name = $this->entityInfo['module'] . ':' . $this->entityType . ':' . $this->identifier() . ':' . $property;
++
++        return html_entity_decode(entity_i18n_string($name, $property_value, $langcode), ENT_QUOTES);
++      }
++    }
++    return $property_value;
++  }
++
++
+   /**
+    * Clears values default text values so global text values can be used.
+    */
+@@ -1183,6 +1223,13 @@ class EntityformType extends Entity {
+       $this->data[$key] = '';
+     }
+   }
++  /**
++   * Return a list of property labels used for translation forms.
++   */
++  public function getLabelsForTranslation() {
++    return entity_get_controller('entityform_type')->get_text_labels();
++  }
++
+ }
+ 
+ 
+@@ -1314,18 +1361,37 @@ class EntityformTypeController extends EntityAPIControllerExportable {
+    */
+   public function get_default_text_values() {
+     return array(
++      'instructions_pre' => '',
+       'submit_confirm_msg' => t('Your submission has been saved.'),
+       'submission_page_title' => t('Thank You.'),
+       'draft_button_text' => t('Save Draft'),
+       'submit_button_text' => t('Submit'),
+-      'your_submissions' => t('Your Submissions: @label',
+-        array('@label' => '[entityform_type:label]')),
++      'your_submissions' => t('Your Submissions: @label', array('@label' => '[entityform_type:label]')),
+       'disallow_resubmit_msg' => t('You already submitted this form'),
+-      'delete_confirm_msg' => t('Are you sure you want to delete this Submission for @label',
+-        array('@label' => '[entityform_type:label]?')),
++      'delete_confirm_msg' =>  t('Are you sure you want to delete this Submission for @label', array('@label' => '[entityform_type:label]?')),
+       'draft_save_text' => '',
+-      'page_title_view' => t('Form Submission: @label',
+-        array('@label' => '[entityform_type:label]')),
++      'page_title_view' => t('Form Submission: @label', array('@label' => '[entityform_type:label]')),
++      );
++     }
++
++  /**
++   * Returns text labels.
++   */
++  public function get_text_labels() {
++    return array(
++      'draft_redirect_path' => t('Draft Redirect path'),
++      'draft_button_text' => t('Override draft button text'),
++      'draft_save_text' => t('Draft save text'),
++      'submit_button_text' => t('Submit Button Text'),
++      'submit_confirm_msg' => t('Submission Confirmation Text'),
++      'your_submissions' => t('Your Submissions Text'),
++      'disallow_resubmit_msg' => t('Form Disallow Resubmit Text'),
++      'delete_confirm_msg' => t('Submission Delete Text'),
++      'submission_page_title' => t('Thank You.'),
++      'page_title_view' => t('Submission View Title'),
++      'submission_text' => t('Submission reply'),
++      'redirect_path' => t('Redirect path'),
++      'instruction_pre' => t('Intro form instructions'),
+     );
+   }
+ 
+diff --git a/entityform_i18n/entityform_i18n.info b/entityform_i18n/entityform_i18n.info
+new file mode 100644
+index 0000000..2fb288b
+--- /dev/null
++++ b/entityform_i18n/entityform_i18n.info
+@@ -0,0 +1,6 @@
++name = Entityform translation
++description = Translate entityform types.
++dependencies[] = entityform
++dependencies[] = i18n_string
++package = Multilingual - Internationalization
++core = 7.x
+diff --git a/entityform_i18n/entityform_i18n.module b/entityform_i18n/entityform_i18n.module
+new file mode 100644
+index 0000000..768aaa0
+--- /dev/null
++++ b/entityform_i18n/entityform_i18n.module
+@@ -0,0 +1,79 @@
++<?php
++
++/**
++ * @file
++ * Entityform i18n integration module via entity API i18n support.
++ *
++ * @see EntityDefaultI18nController
++ */
++
++/**
++ * Implements hook_entity_info_alter().
++ */
++function entityform_i18n_entity_info_alter(&$info) {
++  // Enable i18n support via the entity API.
++  $info['entityform_type']['i18n controller class'] = 'EntityDefaultI18nStringController';
++}
++
++/**
++ * Implements hook_i18n_object_info_alter().
++ */
++function entityform_i18n_i18n_object_info_alter(&$info) {
++  if (empty($info['entityform_type']['string translation']['properties'])) {
++    return;
++  }
++  $properties = &$info['entityform_type']['string translation']['properties'];
++  foreach ($properties as $key => $property) {
++    if (in_array($key, array('submission_text', 'instruction_pre', 'draft_save_text'))) {
++      $properties[$key]['format'] = "data.{$key}.format";
++    }
++  }
++}
++
++/**
++ * Implements hook_i18n_string_list_TEXTGROUP_alter().
++ */
++function entityform_i18n_i18n_string_list_entityform_alter(&$strings, $type = NULL, $object = NULL) {
++  if ($type == 'entityform_type' && $object && !empty($strings['entityform'][$type])) {
++    foreach ($strings['entityform'][$type] as $entityform_type => $string_keys) {
++      foreach ($string_keys as $string_key => $string) {
++        if (empty($string['string'])) {
++          $strings['entityform'][$type][$entityform_type][$string_key]['string'] = '';
++          if (!empty($object->data[$string_key])) {
++            if (is_array($object->data[$string_key]) && isset($object->data[$string_key]['value'])) {
++              $strings['entityform'][$type][$entityform_type][$string_key]['string'] = $object->data[$string_key]['value'];
++            }
++            else {
++              $strings['entityform'][$type][$entityform_type][$string_key]['string'] = $object->data[$string_key];
++            }
++          }
++        }
++      }
++    }
++  }
++}
++
++/**
++ * Implements hook_entityform_type_insert().
++ */
++function entityform_i18n_entityform_type_insert($entityform_type) {
++  i18n_string_object_update('entityform_type', $entityform_type);
++}
++
++/**
++ * Implements hook_entityform_type_update().
++ */
++function entityform_i18n_entityform_type_update($entityform_type) {
++  // Account for name changes.
++  if ($entityform_type->original->type != $entityform_type->type) {
++    i18n_string_update_context("entityform:entityform_type:{$entityform_type->original->type}:*", "entityform:entityform_type:{$entityform_type->type}:*");
++  }
++  i18n_string_object_update('entityform_type', $entityform_type);
++}
++
++/**
++ * Implements hook_entityform_type_delete().
++ */
++function entityform_i18n_entityform_type_delete($entityform_type) {
++  i18n_string_object_remove('entityform_type', $entityform_type);
++}
+diff --git a/entityform_type.admin.inc b/entityform_type.admin.inc
+index bbe2f48..41bcacd 100644
+--- a/entityform_type.admin.inc
++++ b/entityform_type.admin.inc
+@@ -40,7 +40,7 @@ class EntityformTypeUIController extends EntityDefaultUIController {
+  * Generates the entityform type editing form.
+  */
+ function entityform_type_form($form, &$form_state, $entityform_type, $op = 'edit') {
+-
++  $labels = $entityform_type->getLabelsForTranslation();
+   if ($op == 'clone') {
+     $entityform_type->label .= ' (cloned)';
+     $entityform_type->type = '';
+@@ -82,13 +82,13 @@ function entityform_type_form($form, &$form_state, $entityform_type, $op = 'edit
+ 
+   $form['data']['redirect_path'] = array(
+     '#type' => 'textfield',
+-    '#title' => t('Redirect path'),
++    '#title' => $labels['redirect_path'],
+     '#default_value' => empty($entityform_type->data['redirect_path']) ? '' : $entityform_type->data['redirect_path'],
+     '#description' => t('What relative path should the user be redirected to on a correct submission?  Leave blank for default action.'),
+   );
+   $form['data']['instruction_pre'] = array(
+     '#type' => 'text_format',
+-    '#title' => t('Intro form instructions'),
++    '#title' => $labels['instruction_pre'],
+     '#default_value' => empty($entityform_type->data['instruction_pre']['value']) ? '' : $entityform_type->data['instruction_pre']['value'],
+     '#format' => empty($entityform_type->data['instruction_pre']['format']) ? NULL : $entityform_type->data['instruction_pre']['format'],
+     '#description' => t('These user instructions will appear at the top of every page within this form.'),
+@@ -322,6 +322,8 @@ function entityform_settings($form, &$form_state) {
+  */
+ function _entityform_type_settings_elements($entityform_type, $op) {
+   $default_value_message = $op != 'defaults' ? ' ' . ENTITYFORM_TYPE_DEFAULT_PROP_TEXT : '';
++  $labels = $entityform_type->getLabelsForTranslation();
++
+   //****************DRAFT FIELDSET SETTINGS *********************//
+   $form['data']['draft_set'] = array(
+     '#type' => 'fieldset',
+@@ -338,19 +340,19 @@ function _entityform_type_settings_elements($entityform_type, $op) {
+   );
+   $form['data']['draft_set']['draft_redirect_path'] = array(
+     '#type' => 'textfield',
+-    '#title' => t('Draft Redirect path'),
++    '#title' => $labels['draft_redirect_path'],
+     '#default_value' => empty($entityform_type->data['draft_redirect_path']) ? '' : $entityform_type->data['draft_redirect_path'],
+     '#description' => t('What relative path should the user be redirected to on draft submission?  Leave blank for default action.'),
+   );
+   $form['data']['draft_set']['draft_button_text'] = array(
+     '#type' => 'textfield',
+-    '#title' => t('Override draft button text'),
++    '#title' => $labels['draft_button_text'],
+     '#default_value' => empty($entityform_type->data['draft_button_text']) ? '' : $entityform_type->data['draft_button_text'],
+     '#description' => t('Text to use for draft save button.') . $default_value_message,
+   );
+   $form['data']['draft_set']['draft_save_text'] = array(
+     '#type' => 'text_format',
+-    '#title' => t('Draft save text'),
++    '#title' => $labels['draft_save_text'],
+     '#default_value' => empty($entityform_type->data['draft_save_text']['value']) ? '' : $entityform_type->data['draft_save_text']['value'],
+     '#format' => empty($entityform_type->data['draft_save_text']['format']) ? NULL : $entityform_type->data['draft_save_text']['format'],
+     '#description' => t('This text will be displayed to the user when the form is saved as a draft.') . $default_value_message,
+@@ -367,37 +369,37 @@ function _entityform_type_settings_elements($entityform_type, $op) {
+   );
+   $form['data']['formoverride_set']['submit_button_text'] = array(
+     '#type' => 'textfield',
+-    '#title' => t('Submit Button Text'),
++    '#title' => $labels['submit_button_text'],
+     '#default_value' => empty($entityform_type->data['submit_button_text']) ? '' : $entityform_type->data['submit_button_text'],
+     '#description' => t('Text to use for submit button.') . $default_value_message,
+   );
+   $form['data']['formoverride_set']['submit_confirm_msg'] = array(
+     '#type' => 'textfield',
+-    '#title' => t('Submission Confirmation Text'),
++    '#title' => $labels['submit_confirm_msg'],
+     '#default_value' => empty($entityform_type->data['submit_confirm_msg']) ? '' : $entityform_type->data['submit_confirm_msg'],
+     '#description' => t('Text to use for Submission Conformation.') . $default_value_message,
+   );
+   $form['data']['formoverride_set']['your_submissions'] = array(
+     '#type' => 'textfield',
+-    '#title' => t('Your Submissions Text'),
++    '#title' => $labels['your_submissions'],
+     '#default_value' => empty($entityform_type->data['your_submissions']) ? '' : $entityform_type->data['your_submissions'],
+     '#description' => t('Text to use for "Your Submissions".') . $default_value_message,
+   );
+   $form['data']['formoverride_set']['disallow_resubmit_msg'] = array(
+     '#type' => 'textfield',
+-    '#title' => t('Form Disallow Resubmit Text'),
++    '#title' => $labels['disallow_resubmit_msg'],
+     '#default_value' => empty($entityform_type->data['disallow_resubmit_msg']) ? '' : $entityform_type->data['disallow_resubmit_msg'],
+     '#description' => t('Text to use for "Your already submitted this form".') . $default_value_message,
+   );
+   $form['data']['formoverride_set']['delete_confirm_msg'] = array(
+     '#type' => 'textfield',
+-    '#title' => t('Submission Delete Text'),
++    '#title' => $labels['delete_confirm_msg'],
+     '#default_value' => empty($entityform_type->data['delete_confirm_msg']) ? '' : $entityform_type->data['delete_confirm_msg'],
+     '#description' => t('Text to use for "Delete Conformation".') . $default_value_message,
+   );
+   $form['data']['formoverride_set']['page_title_view'] = array(
+     '#type' => 'textfield',
+-    '#title' => t('Submission View Title'),
++    '#title' => $labels['page_title_view'],
+     '#default_value' => empty($entityform_type->data['page_title_view']) ? '' : $entityform_type->data['page_title_view'],
+     '#description' => t('Text to use for page title of submission view.') . $default_value_message,
+   );
+@@ -418,14 +420,14 @@ function _entityform_type_settings_elements($entityform_type, $op) {
+   );
+   $form['data']['submission_page_set']['submission_page_title'] = array(
+     '#type' => 'textfield',
+-    '#title' => t('Submission page title'),
++    '#title' => $labels['submission_page_title'],
+     '#default_value' => empty($entityform_type->data['submission_page_title']) ? '' : $entityform_type->data['submission_page_title'],
+     '#description' => t('Page title for correct submission.') . $default_value_message,
+   );
+ 
+   $form['data']['submission_page_set']['submission_text'] = array(
+     '#type' => 'text_format',
+-    '#title' => t('Submission reply'),
++    '#title' => $labels['submission_text'],
+     '#default_value' => empty($entityform_type->data['submission_text']['value']) ? '' : $entityform_type->data['submission_text']['value'],
+     '#format' => empty($entityform_type->data['submission_text']['format']) ? NULL : $entityform_type->data['submission_text']['format'],
+     '#description' => t('This text will be displayed to the user when a correct form is submitted.') . $default_value_message,
+@@ -598,4 +600,4 @@ function entityform_type_form_submit(&$form, &$form_state) {
+  */
+ function entityform_type_form_submit_delete(&$form, &$form_state) {
+   $form_state['redirect'] = 'admin/structure/entityform_types/manage/' . $form_state['entityform_type']->type . '/delete';
+-}
+\ No newline at end of file
++}

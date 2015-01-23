@@ -11,7 +11,7 @@ module_load_include('inc', 'contentblock', 'contentblock.admin');
  */
 function _contentblock_form_contentblock_form_alter(&$form, &$form_state, $form_id) {
   // Get the type info.
-  $cbreference_info = contentblock_get_hidden_types($form['#entity']->machine_name);
+  $cbreference_info = contentblock_get_fixed_types($form['#entity']->machine_name);
 
   // Only show available fields for predefined entities.
   foreach (element_children($form) as $element_child) {
@@ -27,7 +27,7 @@ function _contentblock_form_contentblock_form_alter(&$form, &$form_state, $form_
   // Add a description on add form.
   if ($form_state['op'] == 'add' || !in_array('field_title', $cbreference_info['available_fields'])) {
     $title_suffix = '';
-    if (!empty($form['#entity']->language)) {
+    if (!empty($form['#entity']->language) && $form['#entity']->language != LANGUAGE_NONE) {
       $languages = language_list();
       $title_suffix = ' [' . t($languages[$form['#entity']->language]->name) . ']';
     }

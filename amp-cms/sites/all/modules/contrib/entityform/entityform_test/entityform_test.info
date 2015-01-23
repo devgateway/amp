@@ -11,11 +11,9 @@ features[entityform_type][] = simpletest_entityform
 features[features_api][] = api:1
 features[field][] = entityform-simpletest_entityform-field_text
 
-hidden = TRUE
-
-; Information added by Drupal.org packaging script on 2014-10-21
-version = "7.x-2.0-rc1"
+; Information added by Drupal.org packaging script on 2014-12-09
+version = "7.x-2.0-rc1+1-dev"
 core = "7.x"
 project = "entityform"
-datestamp = "1413913852"
+datestamp = "1418136532"
 

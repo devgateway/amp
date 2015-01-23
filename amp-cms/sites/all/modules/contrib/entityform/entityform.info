@@ -21,9 +21,9 @@ files[] = views/entityform.views_default.inc
 files[] = views/entityform_type_handler_submit_link_field.inc
 files[] = entityform.test
 
-; Information added by Drupal.org packaging script on 2014-10-21
-version = "7.x-2.0-rc1"
+; Information added by Drupal.org packaging script on 2014-12-09
+version = "7.x-2.0-rc1+1-dev"
 core = "7.x"
 project = "entityform"
-datestamp = "1413913852"
+datestamp = "1418136532"
 

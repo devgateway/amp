@@ -3,10 +3,13 @@
  */
 package org.dgfoundation.amp.newreports;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Filter rule that can be of one of {@link FilterType} type
@@ -61,7 +64,7 @@ public class FilterRule {
 	
 	public FilterRule(String min, String max, String minName, String maxName, 
 			boolean minInclusive, boolean maxInclusive) {
-		this(FilterType.RANGE, null, null, min, max, minName, maxName, minInclusive, maxInclusive, null, null, false);
+		this(FilterType.RANGE, null, null, min, max, minName, maxName, minInclusive, maxInclusive, null, null, true);
 	}
 
 	/**
@@ -148,5 +151,38 @@ public class FilterRule {
 	
 	@Override public Object clone() {
 		try {return super.clone();}catch(Exception e){throw new RuntimeException(e);}
+	}
+	
+	
+	/**
+	 * merges a list of rules into a shorter list of rules which would yield the same result.
+	 * ATM range merging of range not implemented, although it would be a nice algo-muscle flexing 
+	 * @param initRules
+	 * @return
+	 */
+	public static List<FilterRule> mergeRules(List<FilterRule> initRules) {
+		if (initRules == null || initRules.isEmpty() || initRules.size() == 1)
+			return initRules;
+		
+		List<FilterRule> res = new ArrayList<>();
+		Set<String> mergedValues = new HashSet<>();
+		for(FilterRule rule:initRules) {
+			switch(rule.filterType) {
+			case RANGE:
+				res.add(rule);
+				break;
+				
+			case SINGLE_VALUE:
+				mergedValues.add(rule.value);
+				break;
+				
+			case VALUES:
+				mergedValues.addAll(rule.values);
+				break;
+			}
+		}
+		if (!mergedValues.isEmpty())
+			res.add(new FilterRule(new ArrayList<String>(mergedValues), true));
+		return res;
 	}
 }

@@ -206,6 +206,16 @@ public class MondrianReportFilters implements ReportFilters {
 	}
 	
 	/**
+	 * adds a rule relating to a date column
+	 * @param dateColumnName
+	 * @param rule
+	 */
+	public void addDateFilterRule(String dateColumnName, FilterRule rule) {
+		ReportColumn col = new ReportColumn(dateColumnName);
+		addFilterRule(dateFilterRules, col, rule);
+	}
+	
+	/**
 	 * Adds a measures filter for list of years 
 	 * @param years - years to filter by
 	 * @param valuesToInclude - true if this years to be kept, false if this years must be excluded

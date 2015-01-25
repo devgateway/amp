@@ -87,7 +87,8 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		String localeTag = getReportLocale();
 		contents = contents.replaceAll("@@locale@@", localeTag);
 		
-		contents = contents.replaceAll("@@filteredActivities@@", buildFilteringSubquery());
+		String entityFilteringSubquery = buildFilteringSubquery();
+		contents = contents.replaceAll("@@filteredActivities@@", entityFilteringSubquery);
 		//contents = contents.replaceAll("@@filteredActivities@@", "mondrian_fact_table.entity_id > 0");
 		int pos = contents.indexOf("@@");
 		if (pos >= 0)
@@ -376,10 +377,9 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		}			
 		
 		if (mrf != null) {
-			Set <Long> ids = MondrianSQLFilters.getActivityIds (mrf.getDateFilterRules(),mrf.getFilterRules());
-			if (ids != null) {
-				sets.add(ids); 
-			}
+			Set<Long> filteredIds = MondrianSQLFilters.getActivityIds(mrf);
+			if (filteredIds != null)
+				sets.add(filteredIds);
 		}
 		
 		if (sets.isEmpty())

@@ -5,11 +5,12 @@ import java.util.Map.Entry;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
 import org.dgfoundation.amp.newreports.FilterRule;
-import org.dgfoundation.amp.newreports.FilterRule.FilterType;
 import org.dgfoundation.amp.newreports.ReportElement;
+import org.dgfoundation.amp.reports.mondrian.ActivityFilter;
 import org.dgfoundation.amp.reports.mondrian.FiltersGroup;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 
@@ -41,11 +42,12 @@ public class FactTableFiltering {
 				String fragment = buildQuerySubfragment(mainColumnName, sqlFilterRule.getValue());
 				subquery.append(fragment);
 			}
-			
+
+			ActivityFilter flt = new ActivityFilter("date_code");
 			// process the funding-date filter(s)
 			for(Entry<ReportElement, List<FilterRule>> filterElement:mrf.getFilterRules().entrySet())
 				if (filterElement.getKey().type.equals(ReportElement.ElementType.DATE)) {
-					String dateQuery = buildDateQuery(filterElement.getValue());
+					String dateQuery = flt.buildQuery(filterElement.getValue());
 					if (dateQuery != null && !dateQuery.isEmpty())
 						subquery.append(dateQuery);
 				}
@@ -60,41 +62,6 @@ public class FactTableFiltering {
 		return ret;
 	}
 	
-	protected String buildDateQuery(List<FilterRule> dateFilterElements) {
-		List<String> statements = new ArrayList<>();
-		String COLUMN_NAME = "date_code";
-		
-		for(FilterRule rule:dateFilterElements) {
-			String statement = "";
-			switch(rule.filterType) {
-			
-				case RANGE:
-					if (rule.min != null)
-						statement = COLUMN_NAME.concat(rule.minInclusive ? " >= " : " > ").concat(rule.min);
-					if (rule.min != null && rule.max != null)
-						statement += " AND ";
-					if (rule.max != null)
-						statement = statement.concat(COLUMN_NAME).concat(rule.maxInclusive ? " <= " : " < ").concat(rule.max);
-					break;
-				
-				case SINGLE_VALUE:
-					statement = COLUMN_NAME + " = " + rule.value;
-					break;
-				
-				case VALUES:
-					if (rule.values != null && rule.values.size() > 0) {
-						statement = COLUMN_NAME.concat(" IN (") + Util.toCSStringForIN(AlgoUtils.collectLongs(rule.values));
-					}
-			
-				default:
-					throw new RuntimeException("unimplemented type of sql filter type: " + rule.filterType);
-			}
-			if (statement != null && !statement.isEmpty())
-				statements.add(statement);
-		}
-		return mergeStatements(statements);
-	}
-	
 	/**
 	 * builds a subquery of the form AND (primary_sector_id IN (...))
 	 * @param mainColumnName
@@ -106,7 +73,7 @@ public class FactTableFiltering {
 		if (expander == null)
 			throw new RuntimeException("the following SQL mainColumn filter not implemented: " + mainColumnName);
 		
-		List<FilterRule> rules = mergeRules(initRules);
+		List<FilterRule> rules = FilterRule.mergeRules(initRules);
 		List<String> statements = new ArrayList<>();
 		for(FilterRule rule:rules) {
 			
@@ -114,60 +81,7 @@ public class FactTableFiltering {
 			if (statement != null && (!statement.isEmpty()))
 				statements.add(statement);
 		}
-		return mergeStatements(statements);
-	}
-	
-	/**
-	 * returns:
-	 * 		"", if statements.empty
-	 * 		AND (statements[0]), if statements.len = 1
-	 * 		AND ((statements[0]) OR (statements[1]) OR (statements[2])), if statements.len > 1
-	 * @param statements
-	 * @return
-	 */
-	public static String mergeStatements(List<String> statements) {
-		if (statements.isEmpty())
-			return "";
-		if (statements.size() == 1)
-			return String.format(" AND (%s)", statements.get(0));
-					
-		StringBuilder ret = new StringBuilder(" AND (");
-		
-		for(int i = 0; i < statements.size(); i++) {
-			if (i > 0) {
-				ret.append(" OR ");
-			}
-			ret.append("(").append(statements.get(i)).append(")");
-		}
-		ret.append(" )");
-		return ret.toString();
-	}
-	
-	public static List<FilterRule> mergeRules(List<FilterRule> initRules) {
-		
-		if (initRules == null || initRules.isEmpty() || initRules.size() == 1)
-			return initRules;
-		
-		List<FilterRule> res = new ArrayList<>();
-		Set<String> mergedValues = new HashSet<>();
-		for(FilterRule rule:initRules) {
-			switch(rule.filterType) {
-			case RANGE:
-				res.add(rule);
-				break;
-				
-			case SINGLE_VALUE:
-				mergedValues.add(rule.value);
-				break;
-				
-			case VALUES:
-				mergedValues.addAll(rule.values);
-				break;
-			}
-		}
-		if (!mergedValues.isEmpty())
-			res.add(new FilterRule(new ArrayList<String>(mergedValues), true));
-		return res;
+		return AmpARFilter.mergeStatements(statements);
 	}
 	
 	protected String buildRuleStatement(FilterRule rule, IdsExpander expander) {

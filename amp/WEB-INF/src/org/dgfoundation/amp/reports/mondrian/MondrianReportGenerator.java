@@ -424,6 +424,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		((MDXAttribute)elem).setValue(filter.value);
 		return elem;
 	}
+	
 	/**
 	 * Determines if a ReportElement should be processed through SQL
 	 * 
@@ -431,22 +432,21 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * @return boolean
 	 */
 	private boolean isProcessedBySQL(ReportElement element) {
-		boolean processedBySql = false;
 		// at the moment only dates are filtered out, but years, quarters and months are not :(
 		// ignore DATE filters, as those are now processed through the SQL  filter
 
-		if (element.type == ElementType.DATE) {
-			processedBySql = true;
-		}
+		if (element.type == ElementType.DATE)
+			return true;
 
-		// processed through SQL
-		else if (element.type == ElementType.ENTITY
-				&& (FiltersGroup.FILTER_GROUP.containsKey(element.entity.getEntityName()) || MondrianSQLFilters.FILTER_RULE_CLASSES_MAP
-						.containsKey(element.entity.getEntityName()))) {
-			processedBySql = true;
+		if (element.type == ElementType.ENTITY) {
+			String columnName = element.entity.getEntityName();
+			if (FiltersGroup.FILTER_GROUP.containsKey(columnName) || MondrianSQLFilters.SQL_COLUMNS.containsKey(columnName))
+				return true;
 		}
-		return processedBySql;
+		
+		return false;
 	}
+	
 	private void addFilters(ReportFilters reportFilter, MDXConfig config) throws AmpApiException {
 		if (reportFilter == null) return;
 		

@@ -332,7 +332,7 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 		filters.addDateRangeFilterRule(null, new GregorianCalendar(2009, 2 - 1, 2).getTime());
 		spec.setFilters(filters);
 		
-		runMondrianTestCase(spec, "en", Arrays.asList("date-filters-activity"), correctResult);
+ 		runMondrianTestCase(spec, "en", Arrays.asList("date-filters-activity"), correctResult);
 	}
 	
 	@Test
@@ -424,6 +424,34 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 			Arrays.asList("Project with documents", "Eth Water", "mtef activity 1", "crazy funding 1", "Activity with Zones"), 
 			filteredCor);
 	}
-
 	
+	@Test
+	public void testApprovalStatusDraft() {
+		List<String> activities = Arrays.asList("new activity with contracting", "Unvalidated activity", "ptc activity 1", "Eth Water");
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "12 000", "Actual Disbursements", "0")
+	    .withChildren(new ReportAreaForTests().withContents("Project Title", "new activity with contracting", "Actual Commitments", "12 000", "Actual Disbursements", "0"));
+		runMondrianTestCase("AMP-18485-draft-existing-new", activities, cor, "en");
+	}
+
+	@Test
+	public void testApprovalStatusValidated() {
+		List<String> activities = Arrays.asList("new activity with contracting", "Unvalidated activity", "ptc activity 1", "Eth Water");
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "666 777", "Actual Disbursements", "545 000")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "Eth Water", "Actual Commitments", "0", "Actual Disbursements", "545 000"),
+	      new ReportAreaForTests().withContents("Project Title", "ptc activity 1", "Actual Commitments", "666 777", "Actual Disbursements", "0"));
+		runMondrianTestCase("AMP-18485-validated", activities, cor, "en");
+	}
+	
+	@Test
+	public void testApprovalStatusUnvalidated() {
+		List<String> activities = Arrays.asList("new activity with contracting", "Unvalidated activity", "ptc activity 1", "Eth Water");
+		ReportAreaForTests cor = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "45 000", "Actual Disbursements", "0")
+	    .withChildren(new ReportAreaForTests().withContents("Project Title", "Unvalidated activity", "Actual Commitments", "45 000", "Actual Disbursements", "0"));
+		
+		runMondrianTestCase("AMP-18485-unvalidated-existing-new", activities, cor, "en");
+	}	
 }

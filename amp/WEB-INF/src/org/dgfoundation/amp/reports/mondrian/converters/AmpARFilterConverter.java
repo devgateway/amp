@@ -187,7 +187,7 @@ public class AmpARFilterConverter {
 		try {
 			filterRules.addDateRangeFilterRule(new ReportColumn(columnName), fromTo[0], fromTo[1]);
 		} catch (AmpApiException ex) {
-			logger.error(ex.getMessage());
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 	

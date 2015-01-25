@@ -1,14 +1,20 @@
 package org.dgfoundation.amp.ar.amp210;
 
+import java.sql.Date;
 import java.util.Arrays;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
+import org.digijava.kernel.ampapi.exception.AmpApiException;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.junit.Test;
 
 public class DateColumnsMondrianReportTests extends MondrianReportsTestCase {
@@ -71,5 +77,68 @@ public class DateColumnsMondrianReportTests extends MondrianReportsTestCase {
 				correctResult,
 				"en"
 				);
+	}
+	
+	@Test
+	public void testMondrianDateFiltersSimple() {
+		List<String> acts = Arrays.asList("TAC_activity_1", "Project with documents", "Eth Water", "activity with contracting agency");
+		ReportSpecificationImpl spec = buildSpecification("report with activity columns",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.ACTIVITY_CREATED_ON, ColumnConstants.ACTUAL_START_DATE),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+				null, 
+				GroupingCriteria.GROUPING_TOTALS_ONLY);
+		
+		//DateTimeUtil.toJulianDayString(Date.valueOf("2009-01-01"));
+		MondrianReportFilters mrf = new MondrianReportFilters(); // positive filter ("equals")
+		mrf.addDateFilterRule(ColumnConstants.ACTIVITY_CREATED_ON, new FilterRule(DateTimeUtil.toJulianDayString(Date.valueOf("2013-08-23")), true));
+		spec.setFilters(mrf);
+		
+		ReportAreaForTests correctResult = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Activity Created On", "", "Actual Start Date", "", "Actual Commitments", "213 231", "Actual Disbursements", "123 321")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "TAC_activity_1", "Activity Created On", "2013-08-23", "Actual Start Date", "", "Actual Commitments", "213 231", "Actual Disbursements", "123 321"));
+		
+		spec.setDisplayEmptyFundingRows(true);
+		
+		runMondrianTestCase(spec, "en", acts, correctResult);
+		
+		mrf = new MondrianReportFilters(); // negative filter ("does not equal")
+		mrf.addDateFilterRule(ColumnConstants.ACTIVITY_CREATED_ON, new FilterRule(DateTimeUtil.toJulianDayString(Date.valueOf("2013-08-23")), false));
+		spec.setFilters(mrf);
+		
+		correctResult = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Activity Created On", "", "Actual Start Date", "", "Actual Commitments", "96 840,58", "Actual Disbursements", "595 000")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "Project with documents", "Activity Created On", "2013-11-18", "Actual Start Date", "2014-10-08", "Actual Commitments", "0", "Actual Disbursements", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "Eth Water", "Activity Created On", "2013-08-01", "Actual Start Date", "", "Actual Commitments", "0", "Actual Disbursements", "545 000"),
+	      new ReportAreaForTests().withContents("Project Title", "activity with contracting agency", "Activity Created On", "2014-11-26", "Actual Start Date", "", "Actual Commitments", "96 840,58", "Actual Disbursements", "50 000"));
+		runMondrianTestCase(spec, "en", acts, correctResult);
+	}
+	
+	@Test
+	public void testMondrianDateFiltersMultiple() throws AmpApiException {
+		List<String> acts = Arrays.asList("TAC_activity_1", "Project with documents", "Eth Water", "activity with contracting agency");
+		ReportSpecificationImpl spec = buildSpecification("report with activity columns",
+				Arrays.asList(ColumnConstants.PROJECT_TITLE, ColumnConstants.ACTIVITY_CREATED_ON, ColumnConstants.ACTUAL_START_DATE),
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS),
+				null, 
+				GroupingCriteria.GROUPING_TOTALS_ONLY);
+		
+		//DateTimeUtil.toJulianDayString(Date.valueOf("2009-01-01"));
+		MondrianReportFilters mrf = new MondrianReportFilters(); // positive filter ("equals")
+		mrf.addDateFilterRule(ColumnConstants.ACTIVITY_CREATED_ON, new FilterRule(DateTimeUtil.toJulianDayString(Date.valueOf("2013-08-23")), false));
+		mrf.addDateFilterRule(ColumnConstants.ACTIVITY_UPDATED_ON, new FilterRule(DateTimeUtil.toJulianDayString(Date.valueOf("2013-11-18")), false));
+		mrf.addDateRangeFilterRule(new GregorianCalendar(1990, 2 - 1, 2).getTime(), new GregorianCalendar(2019, 2 - 1, 2).getTime());	
+		spec.setFilters(mrf);
+		
+		ReportAreaForTests correctResult = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Activity Created On", "", "Actual Start Date", "", "Actual Commitments", "96 840,58", "Actual Disbursements", "595 000")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "Eth Water", "Activity Created On", "2013-08-01", "Actual Start Date", "", "Actual Commitments", "0", "Actual Disbursements", "545 000"),
+	      new ReportAreaForTests().withContents("Project Title", "activity with contracting agency", "Activity Created On", "2014-11-26", "Actual Start Date", "", "Actual Commitments", "96 840,58", "Actual Disbursements", "50 000"));		
+		spec.setDisplayEmptyFundingRows(true);
+		
+		runMondrianTestCase(spec, "en", acts, correctResult);
 	}
 }

@@ -35,6 +35,8 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
+import org.dgfoundation.amp.newreports.IdsGeneratorSource;
+import org.dgfoundation.amp.reports.mondrian.ActivityFilter;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
@@ -57,6 +59,7 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.AmpARFilterHelper;
 import org.digijava.module.aim.logic.Logic;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -1271,10 +1274,9 @@ public class AmpARFilter extends PropertyListable {
 			}			
 		}
 		
-		String ACTIVITY_STATUS = "";
-		if(approvalStatusSelected!=null){
-			SQLQueryGenerator approvalStatusGenerator = new ApprovalStatusQueryBuilder();
-			ACTIVITY_STATUS = approvalStatusGenerator.generateSQLQuery(approvalStatusSelected);
+		String approvalStatusQuery = "";
+		if (approvalStatusSelected != null) { 
+			approvalStatusQuery = "select amp_activity_id from amp_activity_version where 1=1 " + buildApprovalStatusQuery(approvalStatusSelected, false); 
 		}    
 		
 		String TYPE_OF_ASSISTANCE_FILTER = "SELECT amp_activity_id FROM v_terms_assist WHERE terms_assist_code IN ("
@@ -1601,8 +1603,8 @@ public class AmpARFilter extends PropertyListable {
 		if (!REGION_SELECTED_FILTER.equals("")) {
 			queryAppend(REGION_SELECTED_FILTER);
 		}
-		if(approvalStatusSelected!=null)
-			queryAppend(ACTIVITY_STATUS);
+		
+		queryAppend(approvalStatusQuery);
 
 		if (typeOfAssistance != null && typeOfAssistance.size() > 0)
 			queryAppend(TYPE_OF_ASSISTANCE_FILTER);
@@ -3343,4 +3345,96 @@ public class AmpARFilter extends PropertyListable {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	/**
+	 * Generates a fragment of the query to filter for a given approval status 
+	 * 
+	 * @param id, the approval status to query
+	 * @param inclusive, whether the element should be included or if it is a negative filter 
+	 * @return the fragment of the query
+	 */
+	public static String buildApprovalStatusQuery(int id, boolean negative) {
+		String verb = negative ? "NOT " : "";
+		
+		switch (id) {
+			case -1:
+				return "1=1";
+				
+			case 0:// Existing Un-validated - This will show all the activities that
+				// have been approved at least once and have since been edited
+				// and not validated.			
+				return String.format("%s(approval_status IN ('edited', 'not_approved', 'rejected') and draft <> true)", verb);
+		
+			case 1:// New Draft - This will show all the activities that have never
+				// been approved and are saved as drafts.
+				return String.format("%s(approval_status IN ('started', 'startedapproved') and draft is true) ", verb);
+				
+			case 2:// New Un-validated - This will show all activities that are new
+				// and have never been approved by the workspace manager.
+				return String.format("%s(approval_status = 'started' and draft <> true)", verb);
+			
+			case 3:// existing draft. This is because when you filter by Existing
+				// Unvalidated you get draft activites that were edited and
+				// saved as draft
+				return String.format("%s(approval_status IN ('edited', 'approved') AND (draft is true))", verb);
+			
+			case 4:// Validated Activities
+				return String.format("%s(approval_status IN ('approved', 'startedapproved') and (draft<>true))", verb);
+			
+			default:
+				throw new RuntimeException("unrecognized approval status value: " + id);
+		}
+	}
+
+	/**
+	 * Generates a fragment of the query to filter for a given approval status options (e.g., OR between options)
+	 * @param ids - a series of IDs which could be recognized by {@link #buildApprovalStatusQuery(int, boolean)}
+	 * @param negative
+	 * @return
+	 */
+	public static String buildApprovalStatusQuery(Collection<String> ids, boolean negative) {
+		List<String> queries = new ArrayList<>();
+		for(String id:ids)
+			queries.add(buildApprovalStatusQuery(Integer.parseInt(id), negative));
+		
+		return mergeStatements(queries, "OR");
+	}
+	
+	/**
+	 * returns:
+	 * 		"", if statements.empty
+	 * 		AND (statements[0]), if statements.len = 1
+	 * 		AND ((statements[0]) OR (statements[1]) OR (statements[2])), if statements.len > 1
+	 * @param statements
+	 * @return
+	 */
+	public static String mergeStatements(List<String> statements) {
+		return mergeStatements(statements, "OR");
+	}	
+
+	/**
+	 * returns:
+	 * 		"", if statements.empty <br />
+	 * 		AND (statements[0]), if statements.len = 1 <br />
+	 * 		AND ((statements[0]) [separator] (statements[1]) [separator] (statements[2])), if statements.len > 1 <br />
+	 * @param statements
+	 * @return
+	 */
+	public static String mergeStatements(List<String> statements, String separator) {
+		if (statements.isEmpty())
+			return "";
+		if (statements.size() == 1)
+			return String.format(" AND (%s)", statements.get(0));
+					
+		StringBuilder ret = new StringBuilder(" AND (");
+		
+		for(int i = 0; i < statements.size(); i++) {
+			if (i > 0) {
+				ret.append(" " + separator + " ");
+			}
+			ret.append("(").append(statements.get(i)).append(")");
+		}
+		ret.append(" )");
+		return ret.toString();
+	}	
 }

@@ -41,9 +41,9 @@ public class SqlFilterUtilsTests extends AmpTestCase
 	
 	@Test
 	public void testMergingCornerCases() {
-		assertNull(FactTableFiltering.mergeRules(null));
-		assertEquals(0, FactTableFiltering.mergeRules(new ArrayList<FilterRule>()).size() );
-		assertEquals(1, FactTableFiltering.mergeRules(Arrays.asList(new FilterRule("1", true))).size());
+		assertNull(FilterRule.mergeRules(null));
+		assertEquals(0, FilterRule.mergeRules(new ArrayList<FilterRule>()).size() );
+		assertEquals(1, FilterRule.mergeRules(Arrays.asList(new FilterRule("1", true))).size());
 	}
 
 	@Test
@@ -51,7 +51,7 @@ public class SqlFilterUtilsTests extends AmpTestCase
 		List<FilterRule> in = new ArrayList<>();
 		for(int i = 1; i < 10; i++)
 			in.add(new FilterRule(Integer.toString(i), true));
-		List<FilterRule> out = FactTableFiltering.mergeRules(in);
+		List<FilterRule> out = FilterRule.mergeRules(in);
 		assertEquals(1, out.size());
 		FilterRule outRule = out.get(0);
 		assertEquals(FilterType.VALUES, outRule.filterType);
@@ -64,7 +64,7 @@ public class SqlFilterUtilsTests extends AmpTestCase
 		in.add(new FilterRule(Arrays.asList("1", "3", "4", "6"), true));
 		in.add(new FilterRule(Arrays.asList("1", "3", "4", "5"), true));
 		in.add(new FilterRule("2", true));
-		List<FilterRule> out = FactTableFiltering.mergeRules(in);
+		List<FilterRule> out = FilterRule.mergeRules(in);
 		assertEquals(1, out.size());
 		FilterRule outRule = out.get(0);
 		assertEquals(FilterType.VALUES, outRule.filterType);

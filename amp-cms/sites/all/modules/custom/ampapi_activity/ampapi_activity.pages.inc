@@ -66,6 +66,20 @@ function ampapi_activity_search_export() {
 
   $data = $view->render($display_id);
 
+  // Make sure data is UTF-8 with BOM for Microsoft Excel compliance
+  if (function_exists('mb_detect_encoding')) {
+    $encoding = mb_detect_encoding($data);
+    if ($encoding != 'UTF-8') {
+      $new_data = drupal_convert_to_utf8($data, $encoding);
+      if ($new_data) {
+        $data = $new_data
+      }
+    }
+  }
+  if (!strncmp($data, "\xEF\xBB\xBF", 3)) {
+    $data = "\xEF\xBB\xBF" . $data;
+  }
+
   // Prepare the destination directory.
   $directory = 'public://temp-downloads';
   if (!file_prepare_directory($directory, FILE_CREATE_DIRECTORY)) {

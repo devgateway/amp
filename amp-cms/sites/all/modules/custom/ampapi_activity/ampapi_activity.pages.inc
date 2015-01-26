@@ -72,7 +72,7 @@ function ampapi_activity_search_export() {
     if ($encoding != 'UTF-8') {
       $new_data = drupal_convert_to_utf8($data, $encoding);
       if ($new_data) {
-        $data = $new_data
+        $data = $new_data;
       }
     }
   }

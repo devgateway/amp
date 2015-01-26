@@ -76,7 +76,7 @@ function ampapi_activity_search_export() {
       }
     }
   }
-  if (!strncmp($data, "\xEF\xBB\xBF", 3)) {
+  if (strncmp($data, "\xEF\xBB\xBF", 3)) {
     $data = "\xEF\xBB\xBF" . $data;
   }
 

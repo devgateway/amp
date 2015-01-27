@@ -81,7 +81,7 @@ public class Security {
 				AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
 
 				if (ampTeamMember.getAmpTeam() != null) { 
-					user.set("workspace", ampTeamMember.getAmpTeam().getDescription());
+					user.set("workspace", ampTeamMember.getAmpTeam().getName());
 					user.set("workspaceId", ampTeamMember.getAmpTeam().getIdentifier());
 				}
 				

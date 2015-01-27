@@ -178,7 +178,7 @@ body {
 			selectedMeas.push('${dbId}');
 		</c:forEach>
 			
-		//If ptoject title is enable in GS add it to the donor array
+		//If project title is enable in GS add it to the donor array
 		var ptitle='${myForm.projecttitle}';
 		YAHOO.amp.reportwizard.fundingGroups["donor"].push(ptitle);
 	</script>

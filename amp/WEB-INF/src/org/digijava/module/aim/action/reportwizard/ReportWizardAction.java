@@ -65,6 +65,8 @@ import org.digijava.module.gateperm.util.PermissionUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
 
+import com.google.common.collect.HashBiMap;
+
 /**
  * @author Alex Gartner
  *
@@ -73,8 +75,23 @@ public class ReportWizardAction extends MultiAction {
 
     public static final String MULTILINGUAL_REPORT_PREFIX = "multilingual_report";
 
+    
+    
     private static Logger logger 		= Logger.getLogger(ReportWizardAction.class);
 
+    public final static Map<String, Long> reportTypesMap = new HashMap<String, Long>()
+    	{
+    		{
+    			put("donor", new Long(ArConstants.DONOR_TYPE));
+    			put("regional", new Long(ArConstants.REGIONAL_TYPE));
+    			put("component", new Long(ArConstants.COMPONENT_TYPE));
+    			put("contribution", new Long(ArConstants.CONTRIBUTION_TYPE));
+    			put("pledge", new Long(ArConstants.PLEDGES_TYPE));
+    		}
+    	};
+    	public static HashBiMap<String, Long> reportTypesBiMap = HashBiMap.create(reportTypesMap);    
+    
+    
     public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
                                      HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
     {
@@ -221,6 +238,7 @@ public class ReportWizardAction extends MultiAction {
         myForm.setBudgetExporter(false);
         myForm.setReportCategory(new Long(0));
         myForm.setAlsoShowPledges(false);
+        myForm.setReportBeingEdited(false);
 
         ReportContextData.getFromRequest(true).resetFilters();
     }
@@ -371,17 +389,7 @@ public class ReportWizardAction extends MultiAction {
         }
         else
             myForm.setBudgetExporter(false);
-
-        if ( new Long(ArConstants.DONOR_TYPE).equals(ampReport.getType()) )
-            myForm.setReportType("donor");
-        if ( new Long(ArConstants.REGIONAL_TYPE).equals(ampReport.getType()) )
-            myForm.setReportType("regional");
-        if ( new Long(ArConstants.COMPONENT_TYPE).equals(ampReport.getType()) )
-            myForm.setReportType("component");
-        if ( new Long(ArConstants.CONTRIBUTION_TYPE).equals(ampReport.getType()) )
-            myForm.setReportType("contribution");
-        if ( new Long(ArConstants.PLEDGES_TYPE).equals(ampReport.getType()) )
-            myForm.setReportType("pledge");
+        myForm.setReportType(reportTypesBiMap.inverse().get(ampReport.getType()));
 
 
         TreeSet<AmpReportColumn> cols		= new TreeSet<AmpReportColumn> ( new FieldsComparator() );
@@ -455,17 +463,7 @@ public class ReportWizardAction extends MultiAction {
         boolean createReportFromScratch = (oldReport == null || saveACopy);
         if (createReportFromScratch){
             ampReport = new AmpReports();
-            if ( "donor".equals(myForm.getReportType()) )
-                ampReport.setType( new Long(ArConstants.DONOR_TYPE) );
-            if ( "regional".equals(myForm.getReportType()) )
-                ampReport.setType( new Long(ArConstants.REGIONAL_TYPE) );
-            if ( "component".equals(myForm.getReportType()) )
-                ampReport.setType( new Long(ArConstants.COMPONENT_TYPE) );
-            if ( "contribution".equals(myForm.getReportType()) )
-                ampReport.setType( new Long(ArConstants.CONTRIBUTION_TYPE) );
-            if ( "pledge".equals(myForm.getReportType()) )
-                ampReport.setType( new Long(ArConstants.PLEDGES_TYPE) );
-
+            ampReport.setType(reportTypesBiMap.get(myForm.getReportType()));
             ampReport.setDrilldownTab( myForm.getDesktopTab() );
         } else
             ampReport = oldReport;

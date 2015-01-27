@@ -33,6 +33,10 @@
 								<tr>
 									<td width="340px" valign="top">
 										<fieldset class="main_side_cont">
+										
+										<c:if test="${myForm.reportBeingEdited == true }">
+										<c:set var="disableFundingType">true</c:set>
+										</c:if>
 											<legend><span class="legend_label"><digi:trn>Funding Grouping</digi:trn></span></legend>
 											<div id="reportGroupDiv" class="inputx" style="text-align: left;">
 										<c:set var="pledges_type_const"><%=ArConstants.PLEDGES_TYPE%></c:set>
@@ -74,7 +78,10 @@
                                            </c:otherwise>
                                          </c:choose>
                                          </div>
+
+                                         
 										</fieldset>
+										
 									</td>
 									<td>&nbsp;</td>
 									<td width="340px" valign="top">

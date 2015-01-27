@@ -9,6 +9,11 @@ module.exports = Backbone.Model.extend({
    */
   defaults: {
     email: undefined
+  },
+  fetch: function(options) {
+    options = options || {};
+    options.cache = false;
+    return Backbone.Model.prototype.fetch.call(this, options);
   }
 
 

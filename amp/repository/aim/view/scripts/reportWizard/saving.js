@@ -275,7 +275,7 @@ SaveReportEngine.prototype.saveAndOrOpenReport = function (openReport) {
 	this.divEl.style.visibility		= "";
 	this.divEl.innerHTML			= this.savingMessage + 
 			"... <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>";
-	debugger;
+	
 	var reportTitles = getReportTitles();
 	var noReportNameSupplied = "";
 	if (reportTitles == null ) {

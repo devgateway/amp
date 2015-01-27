@@ -480,7 +480,15 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
     
     export_amp_xls: function(event) {
-    	$.postDownload("/rest/data/saikureport/export/xls/" + this.workspace.query.get('report_id'),
+    	var runUrl='';
+    	var reportIdentification; //this may be the actual ID or the report token if we are running the report without saving
+    	if(this.workspace.query.get('report_id')){
+    		reportIdentification=this.workspace.query.get('report_id');
+    	}else{
+    		runUrl='run/';
+    		reportIdentification=this.workspace.query.get('report_token');
+    	}
+    	$.postDownload("/rest/data/saikureport/export/xls/"+runUrl + reportIdentification,
     			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
     },
 
@@ -490,7 +498,15 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
 
     export_amp_csv: function(event) {
-    	$.postDownload("/rest/data/saikureport/export/csv/" + this.workspace.query.get('report_id'),
+    	var runUrl='';
+    	var reportIdentification; //this may be the actual ID or the report token if we are running the report without saving
+    	if(this.workspace.query.get('report_id')){
+    		reportIdentification=this.workspace.query.get('report_id');
+    	}else{
+    		runUrl='run/';
+    		reportIdentification=this.workspace.query.get('report_token');
+    	}
+    	$.postDownload("/rest/data/saikureport/export/csv/" + runUrl + reportIdentification,
     			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
     },
 
@@ -500,7 +516,15 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
 
     export_amp_pdf: function(event) {
-    	$.postDownload("/rest/data/saikureport/export/pdf/" + this.workspace.query.get('report_id'),
+    	var runUrl='';
+    	var reportIdentification; //this may be the actual ID or the report token if we are running the report without saving
+    	if(this.workspace.query.get('report_id')){
+    		reportIdentification=this.workspace.query.get('report_id');
+    	}else{
+    		runUrl='run/';
+    		reportIdentification=this.workspace.query.get('report_token');
+    	}    	
+    	$.postDownload("/rest/data/saikureport/export/pdf/" +  runUrl + reportIdentification,
     			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
     },
 

@@ -100,13 +100,14 @@ var SavedQuery = Backbone.Model.extend({
             json: json,
             formatter: Settings.CELLSET_FORMATTER,
             report_id: model.get('report_id'),
+            report_token: model.get('report_token'),
             filters: model.get('filters'),
             raw_settings: model.get('settings')
         },{
             name: filename
         });
         
-        if(model.get('report_id')) {
+        if(model.get('report_id') || model.get('report_token')) {
         	Settings.AMP_REPORT_API_BRIDGE = true;
         }
         query.set('name', filename);

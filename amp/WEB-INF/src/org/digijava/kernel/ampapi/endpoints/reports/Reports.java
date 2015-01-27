@@ -16,6 +16,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -42,6 +43,7 @@ import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JSONResult;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
+import org.digijava.kernel.ampapi.endpoints.util.MaxSizeLinkedHashMap;
 import org.digijava.kernel.ampapi.endpoints.util.ReportMetadata;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
@@ -99,8 +101,17 @@ public class Reports {
 	@Path("/report/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JSONResult getReport(@PathParam("report_id") Long reportId) {
-		AmpReports ampReport = DbUtil.getAmpReport(reportId);
+		return getReport(DbUtil.getAmpReport(reportId));
+	}
 
+	@GET
+	@Path("/report/run/{report_token}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public final JSONResult getReport(@PathParam("report_token") String reportToken) {
+		return getReport(getAmpReportFromSession(reportToken));
+	}	
+	
+	private JSONResult getReport(AmpReports ampReport) {
 		// TODO: for now we do not translate other types of reports than Donor
 		// Type reports (hide icons for non-donor-type reports?)
 		ReportSpecificationImpl spec = null;
@@ -322,8 +333,34 @@ public class Reports {
 	@Path("/saikureport/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final QueryResult getSaikuReport(JsonBean queryObject, @PathParam("report_id") Long reportId) {
+		//here we fetch te report by reportId
+		return getSaikuReport(queryObject, DbUtil.getAmpReport(reportId));
+	}
+	@POST
+	@Path("/saikureport/run/{report_token}")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	public final QueryResult getSaikuReport(JsonBean queryObject, @PathParam("report_token") String reportToken) {
+		//here we fetch the report by reportToken in session
+		return getSaikuReport(queryObject,getAmpReportFromSession(reportToken));
+	}
+
+	private AmpReports getAmpReportFromSession(String reportToken) {
+		MaxSizeLinkedHashMap<String, AmpReports>rerpotsList=(MaxSizeLinkedHashMap<String, AmpReports>)TLSUtils.getRequest().getSession().getAttribute("reportStack");
+		if(rerpotsList==null){
+			throw new WebApplicationException(Response.Status.NO_CONTENT);
+		}
+		
+		AmpReports ampReport = rerpotsList.get(reportToken);
+		if(ampReport==null){
+			throw new WebApplicationException(Response.Status.NO_CONTENT);
+		}
+		return ampReport;
+	}
+	
+	private QueryResult getSaikuReport(JsonBean queryObject, AmpReports ampReport) {
 		QueryResult result;
 		List<Map<String, Object>> sorting = new ArrayList<Map<String, Object>>();
+		
 		try {
 			// Convert frontend sorting params into ReportUtils sorting params.
 			if (((HashMap) queryObject.get("queryModel")).get(EPConstants.SORTING) != null) {				
@@ -351,7 +388,7 @@ public class Reports {
 				logger.info(sorting);
 			}
 					
-			result = RestUtil.convert(getSaikuCellDataSet(queryObject, reportId));
+			result = RestUtil.convert(getSaikuCellDataSet(queryObject, ampReport));
 			result.setQuery(new ThinQuery());
 		} catch (Exception e) {
 			String error = ExceptionUtils.getRootCauseMessage(e);
@@ -361,7 +398,7 @@ public class Reports {
 		return result;
 	}	
 
-	public final CellDataSet getSaikuCellDataSet(JsonBean queryObject, Long reportId) throws Exception {
+	public final CellDataSet getSaikuCellDataSet(JsonBean queryObject, AmpReports ampReport) throws Exception {
 
 		//TODO: Move this to util classes, check with Tabs to see how it's done there for uniformity
 		MondrianReportFilters filterRules = null;
@@ -371,7 +408,7 @@ public class Reports {
 			filterRules = FilterUtils.getFilterRules((LinkedHashMap<String, Object>)filters.get("columnFilters"), (LinkedHashMap<String, Object>)filters.get("otherFilters"), null);
 		}
 		
-		AmpReports ampReport = DbUtil.getAmpReport(reportId);
+		
 
 		MondrianReportGenerator generator = new MondrianReportGenerator(SaikuReportArea.class, ReportEnvironment.buildFor(httpRequest));
 		SaikuGeneratedReport report = null;
@@ -447,32 +484,60 @@ public class Reports {
 	@Path("/saikureport/export/xls/{report_id}")
 	@Produces({"application/vnd.ms-excel" })
 	public final Response exportXlsSaikuReport(String query, @PathParam("report_id") Long reportId) {
-		return exportSaikuReport(query, reportId, "xls");
-		
+		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), "xls");
 	}
+	@POST
+	@Path("/saikureport/export/xls/run/{report_token}")
+	@Produces({"application/vnd.ms-excel" })
+	public final Response exportXlsSaikuReport(String query, @PathParam("report_token") String reportToken) {
+		return exportSaikuReport(query,getAmpReportFromSession(reportToken), "xls");
+	}	
 	@POST
 	@Path("/saikureport/export/csv/{report_id}")
 	@Produces({"text/csv"})
 	public final Response exportCsvSaikuReport(String query, @PathParam("report_id") Long reportId) {
-		return exportSaikuReport(query, reportId, "csv");
-	}
+		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), "csv");
 
+	}
+	@POST
+	@Path("/saikureport/export/csv/run/{report_token}")
+	@Produces({"text/csv"})
+	public final Response exportCsvSaikuReport(String query, @PathParam("report_token") String reportToken) {
+		return exportSaikuReport(query, getAmpReportFromSession(reportToken), "csv");
+
+	}
+	
 	@POST
 	@Path("/saikureport/export/pdf/{report_id}")
 	@Produces({"application/pdf"})
 	public final Response exportPdfSaikuReport(String query, @PathParam("report_id") Long reportId) {
-		return exportSaikuReport(query, reportId, "pdf");
+
+		return exportSaikuReport(query, DbUtil.getAmpReport(reportId), "pdf");
 	}
 
-	public final Response exportSaikuReport(String query, Long reportId, String type) {
-        CellDataSet result;
+	@POST
+	@Path("/saikureport/export/pdf/run/{report_token}")
+	@Produces({"application/pdf"})
+	public final Response exportPdfSaikuReport(String query, @PathParam("report_token") String reportToken) {
+
+		return exportSaikuReport(query, getAmpReportFromSession(reportToken), "pdf");
+	}
+	
+	public final Response exportSaikuReport(String query, AmpReports ampReport, String type) {
+		return exportSaikuReport(query, type, ampReport);
+        
+	}
+
+	private Response exportSaikuReport(String query, String type, AmpReports ampReport) {
+		CellDataSet result;
 		try {
 			String decodedQuery = java.net.URLDecoder.decode(query);
 			decodedQuery = decodedQuery.replace("query=", "");
 			JsonBean queryObject = JsonBean.getJsonBeanFromString(decodedQuery);
 			LinkedHashMap<String, Object> queryModel = (LinkedHashMap<String, Object>) queryObject.get("queryModel");
 			queryModel.remove("page");
-			result = getSaikuCellDataSet(queryObject, reportId);
+
+			result = getSaikuCellDataSet(queryObject, ampReport);
 
 			byte[] doc = null;
 			String filename = "";
@@ -514,7 +579,6 @@ public class Reports {
 			e.printStackTrace();
 			return Response.serverError().build();
 		}
-        
 	}
 
 	private JsonBean extractSettings(LinkedHashMap<String, Object> queryModel) {

@@ -130,6 +130,7 @@ function SaveReportEngine ( savingMessage, failureMessage ) {
 	this.divEl			=  document.getElementById("savingReportDiv");
 	this.titlePanel		= null;
 	this.forceOverwrite	= false;
+	this.runReport	= false;
 }
 
 SaveReportEngine.prototype.checkEnter = function (e) {
@@ -147,10 +148,16 @@ SaveReportEngine.prototype.checkEnter = function (e) {
 	}
 	return true;
 };
+SaveReportEngine.prototype.runReportInSaiku = function(reportToken) {
+	var reportUrl = '/TEMPLATE/ampTemplate/saikuui/index.html#report/run/' + reportToken;
+	globalOpenPopup(null, reportUrl);
 
+}
 SaveReportEngine.prototype.openReport = function(reportId, isSaiku) {
     var reportUrl = '';
+
     if (isSaiku) {
+    	console.write(this.runReport);
          reportUrl = '/TEMPLATE/ampTemplate/saikuui/index.html#report/open/' + reportId;
     } else {
          reportUrl = '/viewNewAdvancedReport.do?view=reset&widget=false&resetSettings=true&ampReportId=' + reportId;
@@ -165,7 +172,8 @@ SaveReportEngine.prototype.success = function (o) {
 		response = o.responseText;
 	}
 	var shouldOpenReport = (response.length > 2) && (/openReportId/i.test(response));
-	var shouldShowError = (response.length > 2) && (!shouldOpenReport);
+	var shouldRunReport = (response.length > 2) && (/runReportToken/i.test(response));
+	var shouldShowError = (response.length > 2) && (!shouldOpenReport && !shouldRunReport);
 	if (shouldShowError) {
 		this.divEl.innerHTML = response;
 		if (response.indexOf("duplicateName") >= 0 ) {
@@ -176,10 +184,11 @@ SaveReportEngine.prototype.success = function (o) {
 	
 	// got till here -> no error
 	// example response string: {openReportId=1344,saiku=false}
+	var parametersArray = response.split(',');
+
 	if (shouldOpenReport && getDesktopTab()=="false") {
 		//if it's not a tab we do open it
 		// parsing without the jQuery
-		var parametersArray = response.split(',');
 		var openSaiku = false;
 		var openReportId = '';
 		if (parametersArray.length == 2) {
@@ -193,6 +202,12 @@ SaveReportEngine.prototype.success = function (o) {
 		}
 
 		this.openReport(openReportId, openSaiku); // open report in a new browser tab/window
+	}else{ 
+		//we test if we have to run the report in saiku
+		if(shouldRunReport){
+		    var runSaikuParamArray = parametersArray[0].split("=");
+			this.runReportInSaiku(runSaikuParamArray[1]);
+		}
 	}
 	
 	window.location.replace("/aim/viewTeamReports.do?tabs=" + getDesktopTab()); // open tabs/reports list in current window
@@ -204,6 +219,7 @@ SaveReportEngine.prototype.failure			= function(o) {
 
 SaveReportEngine.prototype.saveNoOverwrite	= function () // actually this is the "Save" button
 {
+	this.runReport = false;
 	this.forceOverwrite = false;
 	this.showTitlePanel();
 };
@@ -211,13 +227,20 @@ SaveReportEngine.prototype.saveNoOverwrite	= function () // actually this is the
 
 SaveReportEngine.prototype.saveOverwrite	= function () // actually this is the "Save" button
 {
+	this.runReport = false;
 	this.forceOverwrite = true;
 	this.showTitlePanel();
 };
 
+SaveReportEngine.prototype.executeReport	= function () // actually this is the "Save" button
+{
+	this.runReport = true;
+	this.saveAndOrOpenReport(false);
+};
 
 
 SaveReportEngine.prototype.showTitlePanel	= function () {
+
 	if ( this.titlePanel == null ) {
 		document.getElementById("titlePanel").style.display	= "block";
 		this.titlePanel	= new YAHOO.widget.Panel("titlePanel", 
@@ -246,17 +269,17 @@ SaveReportEngine.prototype.saveAndOpenReport = function() {
 };
 
 SaveReportEngine.prototype.saveAndOrOpenReport = function (openReport) {
-	//debugger;
+	
 	if (this.titlePanel != null)
 		this.titlePanel.hide();
 	this.divEl.style.visibility		= "";
 	this.divEl.innerHTML			= this.savingMessage + 
 			"... <img src='/repository/aim/view/images/images_dhtmlsuite/ajax-loader-darkblue.gif' border='0' height='17px'/>";
-	
+	debugger;
 	var reportTitles = getReportTitles();
 	var noReportNameSupplied = "";
-	if (reportTitles == null) {
-		reportTitles = "";
+	if (reportTitles == null ) {
+		reportTitles = ""; 
 		noReportNameSupplied = "&noReportNameSupplied=true";
 	}
 	if (reportTitles != null) {
@@ -264,6 +287,7 @@ SaveReportEngine.prototype.saveAndOrOpenReport = function (openReport) {
 							"&reportType="+getReportType() + "&" + getSelectedFields("dest_col_ul", "selectedColumns") + 
 							"&reportCategory="+ getReportCategory()+
 							"&forceNameOverwrite=" + this.forceOverwrite+
+							"&runReport=" + this.runReport +
 							"&desktopTab="+getDesktopTab() +
 							"&publicReport="+getPublicReport() +
 							"&workspaceLinked="+getWorkspaceLinked() +

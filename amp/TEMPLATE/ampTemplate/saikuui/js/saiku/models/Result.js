@@ -57,9 +57,14 @@ var Result = Backbone.Model.extend({
     },
     
     url: function() {
+    	debugger;
     	if(this.query.get('report_id')){
 	    	return encodeURI("../../../rest/data/saikureport/" + this.query.get('report_id'));
     	}
+    	else if(this.query.get('report_token'))
+    	{
+    		return encodeURI("../../../rest/data/saikureport/run/" + this.query.get('report_token'));
+    	}    	
         return "api/query/execute";
     },
 

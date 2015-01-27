@@ -5,6 +5,7 @@ package org.digijava.module.aim.action.reportwizard;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.lang.reflect.Field;
@@ -28,6 +29,7 @@ import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
+import org.digijava.kernel.ampapi.endpoints.util.MaxSizeLinkedHashMap;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.action.ReportsFilterPicker;
@@ -448,7 +450,12 @@ public class ReportWizardAction extends MultiAction {
         boolean noReportNameSupplied = Boolean.valueOf( request.getParameter("noReportNameSupplied") );
         if (noReportNameSupplied)
         {
-            throw new NoReportNameSuppliedException("No report name supplied");
+        	if(myForm.getRunReport()){
+        		//If we are running the report with out being saved we use a generic translatable name
+        		myForm.setReportTitle(TranslatorWorker.translateText("Dynamic report"));
+        	}else{
+        		throw new NoReportNameSuppliedException("No report name supplied");
+        	}
         }
         myForm.setWorkspaceLinked(Boolean.valueOf(request.getParameter("workspaceLinked"))); //Struts for some reason ignores this field and I am tired of it
         myForm.setAlsoShowPledges(Boolean.valueOf(request.getParameter("alsoShowPledges")));
@@ -467,11 +474,16 @@ public class ReportWizardAction extends MultiAction {
             ampReport.setDrilldownTab( myForm.getDesktopTab() );
         } else
             ampReport = oldReport;
-
-        String newName = MultilingualInputFieldValues.getDefaultName(AmpReports.class, "name", null, request);
-        if (otherReportsWithSameNameExist(ampReport, newName)) {
-            throw new DuplicateReportNameException("a different report with the same name exists");
+        String newName ;
+        if(!myForm.getRunReport()){
+        	newName = MultilingualInputFieldValues.getDefaultName(AmpReports.class, "name", null, request);
+        	if (otherReportsWithSameNameExist(ampReport, newName)) {
+                throw new DuplicateReportNameException("a different report with the same name exists");
+            }
+        }else{
+        	newName=myForm.getReportTitle();
         }
+        
 
         if (myForm.getPublicReport() != null && myForm.getPublicReport()){
             boolean updatingPublishedDate = ampReport.getPublicReport() == null || (!ampReport.getPublicReport()); // report was NOT public but is public now
@@ -481,6 +493,7 @@ public class ReportWizardAction extends MultiAction {
         }
 
         ampReport.setUpdatedDate( new Date(System.currentTimeMillis()) );
+        
         ampReport.setName(newName); // set the default
         ampReport.setWorkspaceLinked(myForm.getWorkspaceLinked());
         ampReport.setAlsoShowPledges(myForm.getAlsoShowPledges());
@@ -573,10 +586,34 @@ public class ReportWizardAction extends MultiAction {
         }
 
         modeReset(mapping, form, request, response);
-        return serializeReportAndOpen(ampReport, teamMember, request, response);
-    }
+        if ((request.getParameter("runReport") != null) && request.getParameter("runReport").equals("true")) {
+        	return runReport(ampReport,request,response);
+        }else{
 
-    /**
+        	return serializeReportAndOpen(ampReport, teamMember, request, response);
+        }
+    }
+/**
+ * Will store the current report with a generated GUID in session's LinkedHashMap(the list is limited to {@link#Constants.MAX_REPORTS_IN_SESSION}
+ * @param ampReport
+ * @param request
+ * @param response
+ * @return
+ * @throws Exception
+ */
+    private ActionForward runReport(AmpReports ampReport, HttpServletRequest request, HttpServletResponse response)throws Exception {
+    	String reportToken=UUID.randomUUID().toString();
+    	MaxSizeLinkedHashMap<String, AmpReports>rerpotsList=(MaxSizeLinkedHashMap<String, AmpReports>)request.getSession().getAttribute("reportStack");
+    	if(rerpotsList==null){
+    		rerpotsList=new MaxSizeLinkedHashMap<String, AmpReports>(Constants.MAX_REPORTS_IN_SESSION);
+    	}
+    	rerpotsList.put(reportToken, ampReport);
+    	request.getSession().setAttribute("reportStack", rerpotsList);
+        callSaikuReport(reportToken, response,"runReportToken");
+		return null;
+		
+	}
+	/**
      * returns true if a report with the same name exists in the database AND that report is not going to be overwritten by the in-memory representation
      * @param ampReport
      * @return
@@ -639,17 +676,21 @@ public class ReportWizardAction extends MultiAction {
         MultilingualInputFieldValues.serialize(ampReport, "name", null, null, request);
 
         if ((request.getParameter("openReport") != null) && request.getParameter("openReport").equals("true")) {
-            PrintWriter out = response.getWriter();
-            StringBuilder responseString = new StringBuilder();
-            responseString.append("openReportId=" + ampReport.getAmpReportId());
-            responseString.append(",");
-            responseString.append("saiku=" + FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS));
-            out.write(responseString.toString());
-            out.flush();
-            out.close();
+            callSaikuReport(ampReport.getAmpReportId().toString(), response,"openReportId");
         }
         return null;
     }
+
+	private void callSaikuReport(String reportId, HttpServletResponse response,String varName) throws IOException {
+		PrintWriter out = response.getWriter();
+		StringBuilder responseString = new StringBuilder();
+		responseString.append(varName + "=" + reportId);
+		responseString.append(",");
+		responseString.append("saiku=" + FeaturesUtil.getGlobalSettingValueBoolean(GlobalSettingsConstants.ONLY_SAIKU_FOR_DONOR_REPORTS));
+		out.write(responseString.toString());
+		out.flush();
+		out.close();
+	}
 
     private AmpReports loadSourceReport(HttpServletRequest request) {
         String ampReportId			= request.getParameter("reportId");

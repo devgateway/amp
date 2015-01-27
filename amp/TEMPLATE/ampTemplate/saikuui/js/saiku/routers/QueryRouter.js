@@ -22,12 +22,51 @@ var QueryRouter = Backbone.Router.extend({
         'query/open/*query_name': 'open_query',
         'query/new_query': 'new_query',
         'query/open': 'open_query_repository',
-        'report/open/:report_id': 'open_report'
+        'report/open/:report_id': 'open_report',
+        'report/run/:report_token': 'run_report'
     },
     new_query: function() {
     	Saiku.tabs.add(new Workspace());
     },
+       run_report: function(report_token) {
+            $.getJSON(Settings.AMP_PATH + "/run/" + report_token, function( data ) {
+            	if(data.errorMessage)
+        		{
+            		//TODO: Replace with friendlier message
+            		alert("Error opening report: " + data.errorMessage);
+            		window.close();
+        		}
+    			var query = new SavedQuery({file:'amp_source_file'});
     
+            	templateQuery.name = data.reportMetadata.queryName;
+            	templateQuery.mdx = "WITH\r\nSET [~ROWS] AS\r\n     {[Activity Texts.AMP ID].[AMP ID].Members}\r\nSELECT\r\nNON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS,\r\nNON EMPTY [~ROWS] ON ROWS\r\nFROM [Donor Funding]";
+    			templateQuery.cube.uniqueName = data.reportMetadata.uniqueName;
+    			templateQuery.cube.name = data.reportMetadata.cube;
+    			templateQuery.cube.connection = data.reportMetadata.connection;
+    			templateQuery.cube.catalog = data.reportMetadata.catalog;
+    			templateQuery.cube.schema = data.reportMetadata.schema;
+    			templateQuery.reportSpec = data.reportSpec;
+    			Settings.RESULTS_PER_PAGE = data.reportMetadata.recordsPerPage;
+    			Settings.NUMBER_FORMAT_OPTIONS = Settings.Util.extractSettings(data.reportMetadata.settings);
+    			
+    			var model = Backbone.Model.extend({
+    			defaults: {
+    					file: data.reportMetadata.name,
+    					report_token: report_token,
+    					filters: data.reportMetadata.reportSpec.filters,
+    					settings: data.reportMetadata.reportSpec.settings,
+    					hierarchies : data.reportMetadata.reportSpec.hierarchies,
+    					columns : data.reportMetadata.reportSpec.columns
+    				},
+    				initialize: function(){
+    					//console.log("model created");
+    				}
+    			});
+    			query.move_query_to_workspace_json(new model(), templateQuery);
+            });
+        	
+        	
+        },    
     open_query: function(query_name) {
         Settings.ACTION = "OPEN_QUERY";
         var options = {};

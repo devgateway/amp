@@ -48,6 +48,7 @@ public class ReportWizardForm extends ActionForm {
 	private Boolean budgetExporter = false;
 	private Long reportCategory = new Long(0);
 	private Boolean forceNameOverwrite = false;
+	private Boolean runReport = false;
 	
 	@java.lang.SuppressWarnings("all")
 	public ReportWizardForm() {
@@ -312,6 +313,14 @@ public class ReportWizardForm extends ActionForm {
 		this.forceNameOverwrite = forceNameOverwrite;
 	}
 	
+	public Boolean getRunReport() {
+		return runReport;
+	}
+
+	public void setRunReport(Boolean runReport) {
+		this.runReport = runReport;
+	}
+
 	public boolean getAlsoShowPledges() {
 		return this.alsoShowPledges;
 	}

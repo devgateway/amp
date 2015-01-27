@@ -423,7 +423,8 @@ public class Constants
     public static final int PAGES_TO_SHOW=5;
     //Pagination for Reports and Tabs
      public static final int DRAFRT_GO_TO_DESKTOP=1;
-     public static final int DRAFRT_STAY_TO_ACTIVITY_PAGE=2;     
+     public static final int DRAFRT_STAY_TO_ACTIVITY_PAGE=2;
+     public static final int MAX_REPORTS_IN_SESSION=5;     
      //Action type loggers
      public static final String LOGIN_ACTION="login";
      public static final String SENT_REMINDER="sentReminder";

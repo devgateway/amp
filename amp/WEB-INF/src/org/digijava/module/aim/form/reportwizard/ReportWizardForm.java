@@ -39,6 +39,7 @@ public class ReportWizardForm extends ActionForm {
 	private Boolean publicReport = false;
 	private Boolean workspaceLinked = false;
 	private Boolean alsoShowPledges = false;
+	private Boolean reportBeingEdited = false;
 	private Boolean onlyShowProjectsRelatedPledges = false;
 	private Boolean useFilters = false;
 	private Boolean allowEmptyFundingColumns = false;
@@ -319,6 +320,15 @@ public class ReportWizardForm extends ActionForm {
 		this.alsoShowPledges = alsoShowPledges == null ? false : alsoShowPledges;
 	}
 
+	public boolean getReportBeingEdited() {
+		return this.reportBeingEdited;
+	}	
+	
+	public void setReportBeingEdited(Boolean reportBeingEdited) {
+		this.reportBeingEdited = reportBeingEdited == null ? false : reportBeingEdited;
+	}
+	
+	
 	@java.lang.Override
 	@java.lang.SuppressWarnings("all")
 	public boolean equals(final java.lang.Object o) {

@@ -119,21 +119,14 @@ public class TranslationManager {
 
             session = PersistenceManager.getRequestDBSession();
 
-            
-
-
-            
-            
-
-            List locales = getLocale(session, rightPart);
+            List<String[]> locales = getLocale(session, rightPart);
 
             String queryString  = trnQuery + rightPart;
             logger.debug(queryString);
 
             Query query  = session.createQuery(queryString);
             query.setCacheable(true);
-
-            List translations = query.list();
+            List<String[]> translations = query.list();
 
             if (request.isSecure()) {
                 queryString = unSecDomainQuery + rightPart;
@@ -149,21 +142,16 @@ public class TranslationManager {
             List domains = query.list();
 
             int trnCounter = 0, domCounter = 0;
-            Iterator iter = locales.iterator();
-            while (iter.hasNext()) {
-                Object[] localeRecord = (Object[]) iter.next();
-
-                TranslationForm.TranslationInfo ti = new TranslationForm.
-                    TranslationInfo();
-                String langCode = (String) localeRecord[0];
+            for (String[] localeRecord:locales) {
+                TranslationForm.TranslationInfo ti = new TranslationForm.TranslationInfo();
+                String langCode = localeRecord[0];
                 ti.setLangCode(langCode);
-
-                String langName = (String) localeRecord[1];
+                String langName = localeRecord[1];
 
                 if (trnCounter < translations.size()) {
-                    Object[] trnRow = (Object[]) translations.get(trnCounter);
-                    if (langCode.equals( (String) trnRow[0])) {
-                        langName = (String) trnRow[1];
+                    String[] trnRow = translations.get(trnCounter);
+                    if (langCode.equals(trnRow[0])) {
+                        langName = trnRow[1];
                         trnCounter++;
                     }
                 }
@@ -655,18 +643,31 @@ public class TranslationManager {
             }
         };
     }
-    public static List getLocale(Session session) {
-    	String righPart=getRightPart(RequestUtils.getSite(TLSUtils.getRequest()), DgUtil.isLocalTranslatorForSite(TLSUtils.getRequest()));
+    
+    
+    public static List<String[]> getLocale(Session session) {
+    	String righPart = getRightPart(RequestUtils.getSite(TLSUtils.getRequest()), DgUtil.isLocalTranslatorForSite(TLSUtils.getRequest()));
     	return getLocale(session,righPart);
     }
-	public static List getLocale(Session session, String rightPart) {
+    
+    /**
+     * 
+     * @param session
+     * @param rightPart
+     * @return List[locale.code, locale.name]
+     */
+	public static List<String[]> getLocale(Session session, String rightPart) {
 		String queryString = localeQuery + rightPart;
 		logger.debug(queryString);
 
 		Query query = session.createQuery(queryString);
 		query.setCacheable(true);
 
-		List locales = query.list();
-		return locales;
+		List<Object[]> locales = query.list();
+		List<String[]> res = new ArrayList<>();
+		for(Object[] entry:locales)
+			res.add(new String[] {(String) entry[0], (String) entry[1]});
+		
+		return res;
 	}
 }

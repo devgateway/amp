@@ -50,15 +50,10 @@ public abstract class AmpImporter {
 			initializeReader(fr);
 		} catch (FileNotFoundException e) {
 			logger.error(e);
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		
-		try {
-			session = PersistenceManager.getSession();
-		} catch (HibernateException e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
+		session = PersistenceManager.getSession();
 		
 		Map<String, String> o = null;
 		do {

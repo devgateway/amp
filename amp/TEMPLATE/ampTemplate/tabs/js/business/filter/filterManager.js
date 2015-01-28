@@ -84,8 +84,13 @@ define([ 'filtersWidget', 'business/grid/gridManager', 'business/filter/filterUt
 			data : data
 		}).done(function(data, textStatus, jqXHR) {
 			if(data == undefined) {
-				jQuery('#tab-link-'+tabId).prop('title',jQuery('[id^="newTabNameInput"]')[0].value);
-				jQuery('#tab-link-'+tabId).html(jQuery('[id^="newTabNameInput"]')[0].value);
+				var searchedId = 'newTabNameInput_' + window.currentLocale;
+				var searchedIdEn = 'newTabNameInput_en';
+				var newTabName = jQuery('[id="' + searchedId + '"]').val();
+				if (!newTabName)
+					newTabName = jQuery('[id="' + searchedIdEn + '"]').val();
+				jQuery('#tab-link-'+tabId).prop('title', newTabName);
+				jQuery('#tab-link-'+tabId).html(newTabName);
 				jQuery(dialogView.el).dialog('close');
 				app.TabsApp.tabsCollection.fetchData();
 			} else {

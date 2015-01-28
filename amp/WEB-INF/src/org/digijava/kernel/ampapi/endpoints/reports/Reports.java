@@ -20,6 +20,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import mondrian.util.Pair;
+
 import org.apache.commons.lang.exception.ExceptionUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -611,16 +613,16 @@ public class Reports {
 			}
 			
 			Session session = PersistenceManager.getSession();			
-			List<LinkedHashMap<String, String>> reportData = (ArrayList) formParams.get("reportData");
+			List<Map<String, String>> reportData = (List<Map<String, String>>) formParams.get("reportData");
 			boolean emptyDefaultName = true;
-			for(LinkedHashMap<String, String> name : reportData) {
+			for (Map<String, String> name : reportData) {
 				if (TLSUtils.getEffectiveLangCode().equals(name.get("lang")) && !"".equals(name.get("name").toString())) {
 					emptyDefaultName = false;
 				}
 			}
 			if(!emptyDefaultName) {
 				Map<String, AmpContentTranslation> translations = populateContentTranslations(reportData, reportId);			
-				MultilingualInputFieldValues.serialize(report, "name", null, session, translations);
+				MultilingualInputFieldValues.serialize(report, "name", session, translations);
 				logger.info(report);
 			} else {
 				message = TranslatorWorker.translateText("Invalid report name.");
@@ -631,27 +633,21 @@ public class Reports {
 		return message;
 	}
 	
-	private Map<String, AmpContentTranslation> populateContentTranslations (List <LinkedHashMap <String,String>> reportData,Long reportId) {
-		Map<String, AmpContentTranslation> translations = new HashMap<String, AmpContentTranslation>();
-		String baseLanguage = ContentTranslationUtil.getBaseLanguage();
-		String baseLanguageTranslation = null; 
-		for (LinkedHashMap <String,String> langAndName : reportData) {
+	/**
+	 * a front end for {@link MultilingualInputFieldValues#readTranslationsFromRequest(Class, long, String, String, HttpServletRequest)}
+	 * co-evolve the two routines!
+	 * @param reportData
+	 * @param reportId
+	 * @return
+	 */
+	private Map<String, AmpContentTranslation> populateContentTranslations (List<Map<String,String>> reportData, long reportId) {
+		List<Pair<String, String>> rawData = new ArrayList<>();
+		for (Map<String,String> langAndName : reportData) {
 			String locale = langAndName.get("lang");
 			String translation = langAndName.get("name");
-			AmpContentTranslation trans = new AmpContentTranslation(AmpReports.class.getName(), reportId, "name", locale, translation);
-			translations.put(locale, trans);
-			if (baseLanguageTranslation == null && (translation != null) && !translation.trim().isEmpty())
-				baseLanguageTranslation = translation;
+			rawData.add(new Pair<>(locale, translation));
 		}
-		if (!translations.containsKey(baseLanguage)){ 
-			translations.put(baseLanguage, new AmpContentTranslation(AmpReports.class.getName(), reportId, "name", baseLanguage, baseLanguageTranslation));
-		}
-	
-		String currentLanguage = TLSUtils.getEffectiveLangCode();
-		AmpContentTranslation currentLanguageTranslation = translations.containsKey(currentLanguage) ? translations.get(currentLanguage) : translations.get(baseLanguage);
-		translations.put("currentLanguage", currentLanguageTranslation);
-		return translations;
-	
+		return MultilingualInputFieldValues.populateContentTranslations(rawData, AmpReports.class, reportId, "name");
 	}
 	
 	@POST

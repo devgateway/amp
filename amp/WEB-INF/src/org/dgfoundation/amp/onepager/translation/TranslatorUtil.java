@@ -99,8 +99,8 @@ public final class TranslatorUtil {
     	}
     	return defaultLocaleCache;
     }
-    public static void insertAvailableLanguages(javax.servlet.http.HttpServletRequest request)
-    {
+    
+    public static void insertAvailableLanguages(javax.servlet.http.HttpServletRequest request) {
     	request.setAttribute("all_locales", getLocaleCache(RequestUtils.getSite(request)));
     }
 

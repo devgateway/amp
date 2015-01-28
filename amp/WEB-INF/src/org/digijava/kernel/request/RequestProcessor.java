@@ -389,7 +389,8 @@ public class RequestProcessor
     {
     	TLSUtils.populate(request);
     	DocumentManagerUtil.initJCRSessions(request);
-    	//TranslatorUtil.insertAvailableLanguages(request);
+    	TranslatorUtil.insertAvailableLanguages(request);
+    	request.setAttribute("currentLocale", TLSUtils.getEffectiveLangCode());
     	return true;
     }
         

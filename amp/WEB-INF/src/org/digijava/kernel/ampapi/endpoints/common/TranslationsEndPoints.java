@@ -27,6 +27,7 @@ import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.translation.util.TranslationManager;
 
 @Path("translations")
@@ -60,21 +61,11 @@ public class TranslationsEndPoints {
 	@Path("/languages/")
 	@ApiMethod(ui = false, id = "languajes")
 	public List<SimpleJsonBean> getLanguages(){
-		 List<SimpleJsonBean> languages=new  ArrayList<SimpleJsonBean>();
-         try {
-			List locales = TranslationManager.getLocale(PersistenceManager.getRequestDBSession());
-            Iterator iter = locales.iterator();
-            while (iter.hasNext()) {
-                Object[] localeRecord = (Object[]) iter.next();
-                
-                languages.add(new SimpleJsonBean((String)localeRecord[0],(String)localeRecord[1]));
-            }
-			
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		List<SimpleJsonBean> languages=new  ArrayList<SimpleJsonBean>();
+		List<String[]> locales = TranslationManager.getLocale(PersistenceManager.getSession());
+		for(String[] localeInfo:locales) {                
+			languages.add(new SimpleJsonBean(localeInfo[0], localeInfo[1]));
+		}			
 //		 languages.add(new SimpleJsonBean("lang", "))
 		 return languages;
 	}
@@ -102,27 +93,14 @@ public class TranslationsEndPoints {
 	@ApiMethod(ui = false, id = "multilingualLanguages")
 	public List<SimpleJsonBean> getMultilingualLanguages() {
 		List<SimpleJsonBean> languages = new ArrayList<SimpleJsonBean>();
-		try {
-			List locales = TranslationManager.getLocale(PersistenceManager.getRequestDBSession());
-			boolean onlyCurrentLanguage = !"true".equalsIgnoreCase(FeaturesUtil
-					.getGlobalSettingValue(GlobalSettingsConstants.MULTILINGUAL));
-			Iterator iter = locales.iterator();
-			while (iter.hasNext()) {
-				Object[] localeRecord = (Object[]) iter.next();
-				if (onlyCurrentLanguage) {
-					if (localeRecord[0].equals(TLSUtils.getEffectiveLangCode())) {
-						languages.add(new SimpleJsonBean((String) localeRecord[0], (String) localeRecord[1]));
-						break;
-					}
-				} else {
-					languages.add(new SimpleJsonBean((String) localeRecord[0], (String) localeRecord[1]));
-				}
+		List<String[]> locales = TranslationManager.getLocale(PersistenceManager.getSession());
+		boolean onlyCurrentLanguage = !ContentTranslationUtil.multilingualIsEnabled();
+		for(String[] localeRecord:locales) {
+			boolean entryRelevant = onlyCurrentLanguage ? localeRecord[0].equals(TLSUtils.getEffectiveLangCode()) : true;
+			if (entryRelevant) {
+				languages.add(new SimpleJsonBean(localeRecord[0], localeRecord[1]));
 			}
-
-		} catch (DgException e) {
-			LOGGER.warn("Couldn't obtain the list of locales", e);
 		}
 		return languages;
 	}
-
 }

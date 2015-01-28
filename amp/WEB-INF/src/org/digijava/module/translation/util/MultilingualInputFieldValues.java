@@ -13,6 +13,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.action.reportwizard.ReportWizardAction;
 import org.digijava.module.aim.dbentity.AmpContentTranslation;
+import org.digijava.module.aim.dbentity.AmpReports;
 import org.hibernate.Session;
 
 /**
@@ -69,7 +70,7 @@ public class MultilingualInputFieldValues
 		this.propertyName = propertyName;
 		
 		if (!ContentTranslationUtil.multilingualIsEnabled()){
-			//If content translation is no enabled we use the effective language 
+			//If content translation is not enabled we use the effective language 
 			this.locales = Collections.unmodifiableList(new ArrayList<String>(){{add(TLSUtils.getEffectiveLangCode());}});
 		}
 		else if (locales == null || locales.isEmpty() || !ContentTranslationUtil.multilingualIsEnabled())
@@ -223,18 +224,33 @@ public class MultilingualInputFieldValues
 	 * @param request
 	 * @return
 	 */
-	public static Map<String, AmpContentTranslation> readTranslationsFromRequest(Class<?> clazz, long entityId, String propertyName, String suffix, HttpServletRequest request){
-		
-		Map<String, AmpContentTranslation> translations = new HashMap<String, AmpContentTranslation>();
-		
-		String baseLanguage = ContentTranslationUtil.getBaseLanguage();
-		String baseLanguageTranslation = null; // the translation which would be put in place of "base language" if it turns out this does not exist
-		
+	public static Map<String, AmpContentTranslation> readTranslationsFromRequest(Class<?> clazz, long entityId, String propertyName, String suffix, HttpServletRequest request) {
+		List<Pair<String, String>> rawData = new ArrayList<>();
 		String prefix = build_prefix(clazz, propertyName, suffix);
 		
-		for(String param:request.getParameterMap().keySet())
-		{
+		for(String param:request.getParameterMap().keySet()) {
 			Pair<String, String> localeValuePair = readParameter(param, prefix, request);
+			if (localeValuePair != null)
+				rawData.add(localeValuePair);
+		}
+		return populateContentTranslations(rawData, clazz, entityId, propertyName);
+	}
+	
+	/**
+	 * please see the javadoc for {@link #readTranslationsFromRequest(Class, long, String, String, HttpServletRequest)} (which calls back to this) for a detailed description
+	 * @param rawData
+	 * @param clazz
+	 * @param entityId
+	 * @param propertyName
+	 * @return
+	 */
+	public static Map<String, AmpContentTranslation> populateContentTranslations(List<Pair<String,String>> rawData, Class<?> clazz, long entityId, String propertyName) {
+		Map<String, AmpContentTranslation> translations = new HashMap<String, AmpContentTranslation>();
+		String baseLanguage = ContentTranslationUtil.getBaseLanguage();
+		String baseLanguageTranslation = null; // the translation which would be put in place of "base language" if it turns out this does not exist
+				
+		for(Pair<String, String> localeValuePair:rawData)
+		{
 			if (localeValuePair == null)
 				continue;
 			String locale = localeValuePair.getKey(); 
@@ -271,13 +287,22 @@ public class MultilingualInputFieldValues
 	{
 		if (obj == null)
 			throw new RuntimeException("cannot serialize null!");
+		
 		long entityId = ContentTranslationUtil.getObjectId(obj);
 		Map<String, AmpContentTranslation> translations = readTranslationsFromRequest(obj.getClass(), entityId, propertyName, suffix, request);		
-		serialize (obj,propertyName,suffix,session,translations);
+		serialize (obj, propertyName, session, translations);
 	}
 	
-	
-	public static void serialize(Object obj, String propertyName, String suffix, Session session, Map<String, AmpContentTranslation> translations)
+	/**
+	 * 1. sets Object.(translated-property)
+	 * 2. builds AmpContentTranslation entries (if multilingual is enabled) and writes these to the database
+	 * 3. writes the object to the DB 
+	 * @param obj the object whose property must be serialized in multiple languages
+	 * @param propertyName the obj's property which must be serialized
+	 * @param session the Hibernate session which should be used to save the object. If null, then #PersistenceManager#getRequestDBSession(boolean) will be used
+	 * @param translations the translations to set
+	 */
+	public static void serialize(Object obj, String propertyName, Session session, Map<String, AmpContentTranslation> translations)
 	{
 		if (obj == null)
 			throw new RuntimeException("cannot serialize null!");

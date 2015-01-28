@@ -51,6 +51,8 @@
 		    window.require = {
 		        waitSeconds: 0
 		    };
+		    window.currentLocale = '<%= request.getAttribute("currentLocale") %>';
+		    //alert('currentLocale: ' + currentLocale);
 		</script>		
 		
 		<!-- END LOADING NEW TABS NECESSARY FILES -->

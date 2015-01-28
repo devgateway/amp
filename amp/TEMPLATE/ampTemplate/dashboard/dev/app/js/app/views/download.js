@@ -66,8 +66,15 @@ module.exports = BackboneDash.View.extend({
         adjType = this.model.get('adjtype');
 
     if (adjType) {
+      var adjSettings = this.app.settings.get('0');  // id for Funding Type
+      if (!adjSettings) { this.app.report('Could not find Funding Type settings'); }
+      var adjName = _(adjSettings.get('options')).find(function(s) {
+        return s.id === adjType;
+      }).name;
+
+      // var localAdj = this.app.translator.translateSync()
       // TODO: localize adjtype? is that necessary?
-      moneyContext = adjType + ' (' + moneyContext + ')';
+      moneyContext = adjName + ' (' + moneyContext + ')';
     }
 
     // size the canvas
@@ -83,7 +90,9 @@ module.exports = BackboneDash.View.extend({
     // Add the chart title
     ctx.fillStyle = '#163f66';
     ctx.font = 'bold 22px "Open Sans"';
-    ctx.fillText(this.model.get('name').toUpperCase(), 10, 10 + 22);
+    var localName = this.app.translator.translateSync('amp.dashboard:chart-' +
+      this.model.get('name').replace(/ /g, ''), this.model.get('name'));
+    ctx.fillText(localName.toUpperCase(), 10, 10 + 22);
     // what money are we talking about?
     ctx.fillStyle = '#333';
     ctx.textAlign = 'right';
@@ -166,7 +175,8 @@ module.exports = BackboneDash.View.extend({
   makeDownloadable: function(stuff, what, ext) {
     var fileName = this.model.get('name') + ext,
         dlButton = this.$('.download-chart').removeClass('disabled');
-    dlButton.find('.word').text('Download ' + what);
+    dlButton.find('.word').text('Download ' + what).attr('data-i18n', 'amp.dashboard:download-download-' + what);
+    app.translator.translateDOM(dlButton);
 
     if (this.app.hasIssue('download')) {
       if (this.app.hasIssue('flash')) {

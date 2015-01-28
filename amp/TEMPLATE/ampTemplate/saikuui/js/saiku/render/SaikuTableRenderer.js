@@ -206,8 +206,10 @@ function totalIntersectionCells(currentIndex, bottom, scanSums, scanIndexes, lis
 	return contents;
 }
 
-function genTotalHeaderRowCells(currentIndex, scanSums, scanIndexes, totalsLists) {
-    if(Settings.AMP_REPORT_API_BRIDGE) {
+function genTotalHeaderRowCells(currentIndex, scanSums, scanIndexes, totalsLists, dryrun) {
+	// The dryrun parameter is useful to run this function that affects global variables without moving the currentIndex
+	// Used to allow correct alignment of totals by hierarchy
+    if(Settings.AMP_REPORT_API_BRIDGE && !dryrun) {
 		var rowOffset = this.currentQuery.get('page')*Settings.RESULTS_PER_PAGE;
 		currentIndex += rowOffset;
     }
@@ -272,7 +274,6 @@ function genTotalHeaderRowCells(currentIndex, scanSums, scanIndexes, totalsLists
 				var buckets = totalsLists[ROWS] === null ? 1 : totalsLists[ROWS][0][0].cells.length;
 				var currentBucket = 0;
 				for (var k = 0; k < colLists[i][colScanIndexes[i]].cells[m].length; k++) {
-					
 					contents += '<td class="data total">' + colLists[i][colScanIndexes[i]].cells[m][k].value + '</td>';
 					if(partialTotal[currentBucket] === undefined) {
 						partialTotal[currentBucket] = 0;
@@ -374,21 +375,26 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
         totalsLists[COLUMNS] = allData.rowTotalsLists;
         totalsLists[ROWS] = allData.colTotalsLists;
 	}
-    
+    //Initializes the scanSums and scanIndexes. These are local variables that will change as the grid is rendered
     var scanSums = {};
     var scanIndexes = {};
     
     var dirs = [ROWS, COLUMNS];
+    //Now scanSums[COLUMNS] and scanSums[ROWS]
+    //and scanIndexes[COLUMNS] and scanIndexes[ROWS]
     
     for (var i = 0; i < dirs.length; i++) {
         scanSums[dirs[i]] = new Array();
         scanIndexes[dirs[i]] = new Array();
     }
-    if (totalsLists[COLUMNS])
+    if (totalsLists[COLUMNS]) {
 		for (var i = 0; i < totalsLists[COLUMNS].length; i++) {
+			//Initialize scanIndexes to 0 for each item in totalsLists[COLUMNS]
 	    	scanIndexes[COLUMNS][i] = 0;
+			//Initialize scanSums[COLUMNS] to the width of each item in totalsLists[COLUMNS][i][0]
 	    	scanSums[COLUMNS][i] = totalsLists[COLUMNS][i][scanIndexes[COLUMNS][i]].width;
 	    }
+    }
 
     for (var row = 0, rowLen = table.length; row < rowLen; row++) {
     	var rowShifted = row - allData.topOffset;
@@ -556,7 +562,17 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
         rowContent += "</tr>";
         var totals = "";
         if (totalsLists[COLUMNS] && rowShifted >= 0) {
-            totals += genTotalHeaderRowCells(rowShifted + 1, scanSums, scanIndexes, totalsLists);
+            if(Settings.AMP_REPORT_API_BRIDGE) {
+	        	var currentPage = currentQuery.get('page');
+	        	if(currentPage > 0 ) { //Recalculate indexes
+	        		var prevRecCount = currentPage * Settings.RESULTS_PER_PAGE;
+	        		for(var p = 0; p < prevRecCount; p++) {
+	        			genTotalHeaderRowCells(p + 1, scanSums, scanIndexes, totalsLists, true);
+	        		}
+	        	}
+        	}
+
+            totals += genTotalHeaderRowCells(rowShifted + 1, scanSums, scanIndexes, totalsLists, false);
         }
         
         if (batchStarted && batchSize) {

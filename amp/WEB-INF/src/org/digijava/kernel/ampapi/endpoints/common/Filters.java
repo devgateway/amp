@@ -24,6 +24,7 @@ import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.postgis.util.QueryUtil;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -88,7 +89,7 @@ public class Filters {
 			for (String key : AmpARFilter.activityApprovalStatus.keySet()) {
 				SimpleJsonBean sjb = new SimpleJsonBean();
 				sjb.setId(AmpARFilter.activityApprovalStatus.get(key));
-				sjb.setName(key);
+				sjb.setName(TranslatorWorker.translateText(key));
 				activityStatus.add(sjb);
 			}
 			as.set("filterId", ColumnConstants.APPROVAL_STATUS);

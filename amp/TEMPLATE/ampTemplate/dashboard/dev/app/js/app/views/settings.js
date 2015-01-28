@@ -25,15 +25,20 @@ module.exports = BackboneDash.View.extend({
   },
 
   render: function() {
-    this.$el.html(template());
+    this.$el.html(template());  
     return this;
   },
 
   editSettings: function() {
-    this.app.modal('Settings', {  // TODO: translate "Settings"
-      specialClass: 'dash-settings-modal',
-      bodyEl: this.modalView.render().el
+	var specialClass = 'dash-settings-modal';
+    this.app.modal('Settings', {
+      specialClass: specialClass,
+      bodyEl: this.modalView.render().el,
+      i18nTitle: 'amp.dashboard:dashboard-settings'
     });
+    
+    // Translate modal popup.
+    app.translator.translateDOM($("." + specialClass));
   }
 
 });

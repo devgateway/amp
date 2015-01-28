@@ -16,7 +16,7 @@ module.exports = BackboneDash.View.extend({
     this.app = options.app;
     this.modalView = new ModalView({ app: this.app, collection: this.collection });
 
-    this.app.settings.load().done(_(function() {
+    this.app.settings._loaded.done(_(function() {
       this.app.state.register(this, 'settings', {
         get: this.app.settings.toAPI,
         set: this.app.settings.fromState
@@ -25,20 +25,15 @@ module.exports = BackboneDash.View.extend({
   },
 
   render: function() {
-    this.$el.html(template());  
+    this.$el.html(template());
     return this;
   },
 
   editSettings: function() {
-	var specialClass = 'dash-settings-modal';
-    this.app.modal('Settings', {
-      specialClass: specialClass,
-      bodyEl: this.modalView.render().el,
-      i18nTitle: 'amp.dashboard:dashboard-settings'
+    this.app.modal('Settings', {  // TODO: translate "Settings"
+      specialClass: 'dash-settings-modal',
+      bodyEl: this.modalView.render().el
     });
-    
-    // Translate modal popup.
-    app.translator.translateDOM($("." + specialClass));
   }
 
 });

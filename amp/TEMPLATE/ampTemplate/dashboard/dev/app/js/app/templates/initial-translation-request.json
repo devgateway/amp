@@ -52,7 +52,7 @@
 "amp.dashboard:of": "of",
 "amp.dashboard:tooltip-predict-otherseries": "TRANSLATEME",
 "amp.dashboard:total": "total",
-"amp.common:title": "AMP Toolbar",
+ "amp.common:title": "AMP Toolbar",
 "amp.common:title-filters": "Filters",
 "amp.dashboard:chart-TopDonorAgencies": "Top Donor Agencies",
 "amp.dashboard:chart-TopRegions": "Top Regions",
@@ -68,16 +68,7 @@
 "amp.dashboard:chart-TopRegions-others": "Others",
 "amp.dashboard:chart-TopSectors-others": "Others",
 "amp.dashboard:chart-TopDonorAgencies-others": "Others",
-"amp.dashboard:filters-edit":"edit filters",
-"amp.dashboard:dashboard-settings":"Settings",
-"amp.dashboard:settings-edit":"edit settings",
-"amp.dashboard:download-preview":"Preview:",
-"amp.dashboard:download-rendering":"Rendering...",
-"amp.dashboard:download-download-chart":"Download chart",
-"amp.dashboard:download-download-data":"Download data",
-"amp.dashboard:chart-no-data-available":"No Data Available",
-"amp.dashboard:chart-loading-saved-settings":"Loading saved settings...",
-"amp.dashboard:filters-show-settings":"Show filter settings"
+"amp.dashboard:filters-edit":"edit filters"
 
 }
 

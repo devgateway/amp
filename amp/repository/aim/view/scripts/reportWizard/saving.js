@@ -157,7 +157,6 @@ SaveReportEngine.prototype.openReport = function(reportId, isSaiku) {
     var reportUrl = '';
 
     if (isSaiku) {
-    	console.write(this.runReport);
          reportUrl = '/TEMPLATE/ampTemplate/saikuui/index.html#report/open/' + reportId;
     } else {
          reportUrl = '/viewNewAdvancedReport.do?view=reset&widget=false&resetSettings=true&ampReportId=' + reportId;
@@ -207,10 +206,15 @@ SaveReportEngine.prototype.success = function (o) {
 		if(shouldRunReport){
 		    var runSaikuParamArray = parametersArray[0].split("=");
 			this.runReportInSaiku(runSaikuParamArray[1]);
+			//we hide the
+			debugger;
+			//this.divEl			=  document.getElementById("savingReportDiv");
+			this.divEl.style.visibility = 'hidden';
 		}
 	}
-	
-	window.location.replace("/aim/viewTeamReports.do?tabs=" + getDesktopTab()); // open tabs/reports list in current window
+	if(!shouldRunReport){
+		window.location.replace("/aim/viewTeamReports.do?tabs=" + getDesktopTab()); // open tabs/reports list in current window
+	}
 };
 
 SaveReportEngine.prototype.failure			= function(o) {

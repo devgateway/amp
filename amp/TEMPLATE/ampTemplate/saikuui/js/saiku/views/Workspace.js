@@ -777,7 +777,10 @@ var Workspace = Backbone.View.extend({
     },
 
     cancel: function(event) {
-        var self = this;
+    	//AMP-19253 close windows when query is canceled
+    	window.top.close();
+    	/*
+    	var self = this;
         if (event) {
             event.preventDefault();
         }
@@ -785,7 +788,7 @@ var Workspace = Backbone.View.extend({
             success: function() {
                 self.cancelled();
             }
-        });
+        });*/
     },
     
     cancelled: function(args) {

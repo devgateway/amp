@@ -166,7 +166,8 @@ module.exports = BackboneDash.View.extend({
   makeDownloadable: function(stuff, what, ext) {
     var fileName = this.model.get('name') + ext,
         dlButton = this.$('.download-chart').removeClass('disabled');
-    dlButton.find('.word').text('Download ' + what);
+    dlButton.find('.word').text('Download ' + what).attr('data-i18n', 'amp.dashboard:download-download-' + what);
+    app.translator.translateDOM(dlButton);
 
     if (this.app.hasIssue('download')) {
       if (this.app.hasIssue('flash')) {

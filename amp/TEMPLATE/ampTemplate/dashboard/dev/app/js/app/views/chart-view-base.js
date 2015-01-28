@@ -105,7 +105,9 @@ module.exports = BackboneDash.View.extend({
   updateData: function() {
     if (!this.rendered) { return; }  // short-circuit on early filters apply event
     if (this._stateWait.state() === 'pending') {  // short-circuit until we have state
-      this.message.html('Loading saved settings...').fadeIn(100);
+      this.message.html('Loading saved settings...').attr('data-i18n', 'amp.dashboard:chart-loading-saved-settings');
+      app.translator.translateDOM($('.chart-container'));
+      //this.message.fadeIn(100);
       return;
     }
 
@@ -137,7 +139,8 @@ module.exports = BackboneDash.View.extend({
     // TODO: why are we triggering twice on load???
 
     if (!this.model.hasData()) {
-      this.message.html('No Data Available');
+      this.message.html('No Data Available').attr('data-i18n','amp.dashboard:chart-no-data-available');
+      app.translator.translateDOM($('.chart-container'));
       this.resetNumbers();
       return;
     }
@@ -212,10 +215,15 @@ module.exports = BackboneDash.View.extend({
       model: this.model,
       chartOptions: _(this.getChartOptions()).omit('height', 'width')
     });
+    var specialClass = 'dash-download-modal';
     this.app.modal('Download chart', {
       bodyEl: downloadView.render().el,
-      specialClass: 'download'
+      specialClass: specialClass,
+      i18nTitle: 'amp.dashboard:download-download-chart'
     });
+    
+    // Translate modal popup.	
+   	app.translator.translateDOM($("." + specialClass));
   }
 
 });

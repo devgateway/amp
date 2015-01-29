@@ -185,8 +185,9 @@ body {
 	
 	<html:hidden name="aimReportWizardForm" property="projecttitle"/>
 	<html:hidden name="aimReportWizardForm" property="desktopTab"/>
-	<bean:define id="member" name="currentMember" scope="session" toScope="request" />
-	
+	<logic:present name="currentMember" scope="session">
+		<bean:define id="member" name="currentMember" scope="session" toScope="request" />
+	</logic:present>
 	<div id="savingReportDiv" style="color: red; text-align: center;<c:if test='${not param.isOnePager}'>visibility: hidden</c:if> ">
 	</div>
 	

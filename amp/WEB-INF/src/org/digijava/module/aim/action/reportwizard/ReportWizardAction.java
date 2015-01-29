@@ -461,7 +461,11 @@ public class ReportWizardAction extends MultiAction {
         myForm.setAlsoShowPledges(Boolean.valueOf(request.getParameter("alsoShowPledges")));
 
         TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
-        AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
+        
+        AmpTeamMember ampTeamMember = null;
+        if(teamMember!=null){
+        	ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
+        }
         Collection<AmpColumns> availableCols	= AdvancedReportUtil.getColumnList();
         Collection<AmpMeasures> availableMeas	= AdvancedReportUtil.getMeasureList();
 

@@ -206,9 +206,6 @@ SaveReportEngine.prototype.success = function (o) {
 		if(shouldRunReport){
 		    var runSaikuParamArray = parametersArray[0].split("=");
 			this.runReportInSaiku(runSaikuParamArray[1]);
-			//we hide the
-			debugger;
-			//this.divEl			=  document.getElementById("savingReportDiv");
 			this.divEl.style.visibility = 'hidden';
 		}
 	}
@@ -238,6 +235,7 @@ SaveReportEngine.prototype.saveOverwrite	= function () // actually this is the "
 
 SaveReportEngine.prototype.executeReport	= function () // actually this is the "Save" button
 {
+	debugger;
 	this.runReport = true;
 	this.saveAndOrOpenReport(false);
 };

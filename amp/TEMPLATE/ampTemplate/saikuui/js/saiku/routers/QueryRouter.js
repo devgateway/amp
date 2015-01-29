@@ -28,45 +28,12 @@ var QueryRouter = Backbone.Router.extend({
     new_query: function() {
     	Saiku.tabs.add(new Workspace());
     },
-       run_report: function(report_token) {
-            $.getJSON(Settings.AMP_PATH + "/run/" + report_token, function( data ) {
-            	if(data.errorMessage)
-        		{
-            		//TODO: Replace with friendlier message
-            		alert("Error opening report: " + data.errorMessage);
-            		window.close();
-        		}
-    			var query = new SavedQuery({file:'amp_source_file'});
-    
-            	templateQuery.name = data.reportMetadata.queryName;
-            	templateQuery.mdx = "WITH\r\nSET [~ROWS] AS\r\n     {[Activity Texts.AMP ID].[AMP ID].Members}\r\nSELECT\r\nNON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS,\r\nNON EMPTY [~ROWS] ON ROWS\r\nFROM [Donor Funding]";
-    			templateQuery.cube.uniqueName = data.reportMetadata.uniqueName;
-    			templateQuery.cube.name = data.reportMetadata.cube;
-    			templateQuery.cube.connection = data.reportMetadata.connection;
-    			templateQuery.cube.catalog = data.reportMetadata.catalog;
-    			templateQuery.cube.schema = data.reportMetadata.schema;
-    			templateQuery.reportSpec = data.reportSpec;
-    			Settings.RESULTS_PER_PAGE = data.reportMetadata.recordsPerPage;
-    			Settings.NUMBER_FORMAT_OPTIONS = Settings.Util.extractSettings(data.reportMetadata.settings);
-    			
-    			var model = Backbone.Model.extend({
-    			defaults: {
-    					file: data.reportMetadata.name,
-    					report_token: report_token,
-    					filters: data.reportMetadata.reportSpec.filters,
-    					settings: data.reportMetadata.reportSpec.settings,
-    					hierarchies : data.reportMetadata.reportSpec.hierarchies,
-    					columns : data.reportMetadata.reportSpec.columns
-    				},
-    				initialize: function(){
-    					//console.log("model created");
-    				}
-    			});
-    			query.move_query_to_workspace_json(new model(), templateQuery);
-            });
-        	
-        	
-        },    
+    run_report: function(report_token) {
+    	$.getJSON(Settings.AMP_PATH + "/run/" + report_token, process_spec);	
+    },    
+    open_report: function(report_id) {
+        $.getJSON(Settings.AMP_PATH + "/" + report_id, process_spec);
+    },
     open_query: function(query_name) {
         Settings.ACTION = "OPEN_QUERY";
         var options = {};
@@ -103,79 +70,6 @@ var QueryRouter = Backbone.Router.extend({
         };
 
         var repositoryFile = new Repository({}, { dialog: dialog }).fetch({ async: false, data: { path: options.file }});
-
-        
-
-
-        
-
-    },
-    open_report_old: function(report_id) {
-        $.getJSON(Settings.AMP_PATH + "/" + report_id, function( data ) {
-        	if(data.errorMessage)
-    		{
-        		//TODO: Replace with friendlier message
-        		alert("Error opening report: " + data.errorMessage);
-        		window.close();
-    		}
-			var query = new SavedQuery({file:'amp_source_file'});
-			var xmlTemplate = XmlTemplates.templateMDX;
-			xmlTemplate = xmlTemplate.replace("__MDX__", "");
-			xmlTemplate = xmlTemplate.replace("__CUBE__", data.reportMetadata.cube);
-			xmlTemplate = xmlTemplate.replace("__NAME__", data.reportMetadata.queryName);
-			xmlTemplate = xmlTemplate.replace("__CONNECTION__", data.reportMetadata.connection);
-            xmlTemplate = xmlTemplate.replace("__CATALOG__", data.reportMetadata.catalog);
-			xmlTemplate = xmlTemplate.replace("__SCHEMA__", data.reportMetadata.schema);
-
-			var model = Backbone.Model.extend({
-				defaults: {
-					file: data.reportMetadata.name,
-					report_id: report_id
-				},
-				initialize: function(){
-					console.log("model created");
-				}
-			});
-			query.move_query_to_workspace(new model(), xmlTemplate, true);
-        });
-    	
-    	
-    },    
-    open_report: function(report_id) {
-        $.getJSON(Settings.AMP_PATH + "/" + report_id, function( data ) {
-        	if(data.errorMessage)
-    		{
-        		//TODO: Replace with friendlier message
-        		alert("Error opening report: " + data.errorMessage);
-        		window.close();
-    		}
-			var query = new SavedQuery({file:'amp_source_file'});
-
-        	templateQuery.name = data.reportMetadata.queryName;
-        	templateQuery.mdx = "WITH\r\nSET [~ROWS] AS\r\n     {[Activity Texts.AMP ID].[AMP ID].Members}\r\nSELECT\r\nNON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS,\r\nNON EMPTY [~ROWS] ON ROWS\r\nFROM [Donor Funding]";
-			templateQuery.cube.uniqueName = data.reportMetadata.uniqueName;
-			templateQuery.cube.name = data.reportMetadata.cube;
-			templateQuery.cube.connection = data.reportMetadata.connection;
-			templateQuery.cube.catalog = data.reportMetadata.catalog;
-			templateQuery.cube.schema = data.reportMetadata.schema;
-			Settings.RESULTS_PER_PAGE = data.reportMetadata.recordsPerPage;
-			Settings.NUMBER_FORMAT_OPTIONS = Settings.Util.extractSettings(data.reportMetadata.settings);
-			
-			var model = Backbone.Model.extend({
-				defaults: {
-					file: data.reportMetadata.name,
-					report_id: report_id,
-					filters: data.reportMetadata.reportSpec.filters,
-					settings: data.reportMetadata.reportSpec.settings
-				},
-				initialize: function(){
-					//console.log("model created");
-				}
-			});
-			query.move_query_to_workspace_json(new model(), templateQuery);
-        });
-    	
-    	
     },
     open_query_repository: function( ) {
         Toolbar.prototype.open_query( );
@@ -185,6 +79,44 @@ var QueryRouter = Backbone.Router.extend({
 Saiku.routers.push(new QueryRouter());
 
 
+var process_spec = function(data) {
+	if(data.errorMessage)
+	{
+		//TODO: Replace with friendlier message
+		alert("Error opening report: " + data.errorMessage);
+		window.close();
+	}
+	var query = new SavedQuery({file:'amp_source_file'});
+
+	templateQuery.name = data.reportMetadata.queryName;
+	templateQuery.mdx = "WITH\r\nSET [~ROWS] AS\r\n     {[Activity Texts.AMP ID].[AMP ID].Members}\r\nSELECT\r\nNON EMPTY {[Measures].[Actual Commitments]} ON COLUMNS,\r\nNON EMPTY [~ROWS] ON ROWS\r\nFROM [Donor Funding]";
+	templateQuery.cube.uniqueName = data.reportMetadata.uniqueName;
+	templateQuery.cube.name = data.reportMetadata.cube;
+	templateQuery.cube.connection = data.reportMetadata.connection;
+	templateQuery.cube.catalog = data.reportMetadata.catalog;
+	templateQuery.cube.schema = data.reportMetadata.schema;
+	templateQuery.reportSpec = data.reportSpec;
+	Settings.RESULTS_PER_PAGE = data.reportMetadata.recordsPerPage;
+	Settings.NUMBER_FORMAT_OPTIONS = Settings.Util.extractSettings(data.reportMetadata.settings);
+	var report_type = data.reportMetadata.reportType;
+	var report_fieldname = (report_type === "IN_MEMORY") ? "report_token" : "report_id";
+	var report_identifier = data.reportMetadata.reportIdentifier;
+	var defaults = {
+		file: data.reportMetadata.name,
+		filters: data.reportMetadata.reportSpec.filters,
+		settings: data.reportMetadata.reportSpec.settings,
+		hierarchies : data.reportMetadata.reportSpec.hierarchies,
+		columns : data.reportMetadata.reportSpec.columns
+	};
+	defaults[report_fieldname] = report_identifier;
+	var model = Backbone.Model.extend({
+		defaults: defaults,
+		initialize: function(){
+			//console.log("model created");
+		}
+	});
+	query.move_query_to_workspace_json(new model(), templateQuery);
+};
 
 var templateQuery = {
    "queryModel":{

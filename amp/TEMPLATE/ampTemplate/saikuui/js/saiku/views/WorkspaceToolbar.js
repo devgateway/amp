@@ -30,7 +30,8 @@ var WorkspaceToolbar = Backbone.View.extend({
         // Maintain `this` in callbacks
         _.bindAll(this, "call", "reflect_properties", "run_query",
             "swap_axes_on_dropzones", "display_drillthrough","clicked_cell_drillthrough_export",
-            "clicked_cell_drillthrough","activate_buttons", "switch_to_mdx","post_mdx_transform", "toggle_fields_action");
+            "clicked_cell_drillthrough","activate_buttons", "switch_to_mdx","post_mdx_transform", "toggle_fields_action",
+            "export_amp_xls", "export_amp_csv","export_amp_pdf","calculate_url");
         
         // Redraw the toolbar to reflect properties
         this.workspace.bind('properties:loaded', this.reflect_properties);
@@ -478,35 +479,18 @@ var WorkspaceToolbar = Backbone.View.extend({
         window.location = Settings.REST_URL +
             this.workspace.query.url() + "/export/xls/" + this.workspace.query.getProperty('saiku.olap.result.formatter');
     },
-    
     export_amp_xls: function(event) {
-    	var runUrl='';
-    	var reportIdentification; //this may be the actual ID or the report token if we are running the report without saving
-    	if(this.workspace.query.get('report_id')){
-    		reportIdentification=this.workspace.query.get('report_id');
-    	}else{
-    		runUrl='run/';
-    		reportIdentification=this.workspace.query.get('report_token');
-    	}
-    	$.postDownload("/rest/data/saikureport/export/xls/"+runUrl + reportIdentification,
+    	$.postDownload("/rest/data/saikureport/export/xls/" + this.calculate_url(),
     			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
     },
-
     export_csv: function(event) {
         window.location = Settings.REST_URL +
             this.workspace.query.url() + "/export/csv";
     },
 
     export_amp_csv: function(event) {
-    	var runUrl='';
-    	var reportIdentification; //this may be the actual ID or the report token if we are running the report without saving
-    	if(this.workspace.query.get('report_id')){
-    		reportIdentification=this.workspace.query.get('report_id');
-    	}else{
-    		runUrl='run/';
-    		reportIdentification=this.workspace.query.get('report_token');
-    	}
-    	$.postDownload("/rest/data/saikureport/export/csv/" + runUrl + reportIdentification,
+
+    	$.postDownload("/rest/data/saikureport/export/csv/" + this.calculate_url(),
     			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
     },
 
@@ -516,15 +500,8 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
 
     export_amp_pdf: function(event) {
-    	var runUrl='';
-    	var reportIdentification; //this may be the actual ID or the report token if we are running the report without saving
-    	if(this.workspace.query.get('report_id')){
-    		reportIdentification=this.workspace.query.get('report_id');
-    	}else{
-    		runUrl='run/';
-    		reportIdentification=this.workspace.query.get('report_token');
-    	}    	
-    	$.postDownload("/rest/data/saikureport/export/pdf/" +  runUrl + reportIdentification,
+   
+    	$.postDownload("/rest/data/saikureport/export/pdf/" +  this.calculate_url(),
     			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
     },
 
@@ -760,7 +737,19 @@ var WorkspaceToolbar = Backbone.View.extend({
 
         return false;
 
+    },
+    calculate_url : function() {
+    	var runUrl='';
+    	var reportIdentification; //this may be the actual ID or the report token if we are running the report without saving
+    	if(this.workspace.query.get('report_id')){
+    		reportIdentification=this.workspace.query.get('report_id');
+    	}else{
+    		runUrl='run/';
+    		reportIdentification=this.workspace.query.get('report_token');
+    	}
+    	return runUrl + reportIdentification;
     }
+
 });
 
 

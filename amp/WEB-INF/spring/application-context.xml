@@ -72,7 +72,13 @@
 	<http pattern="/visualization/excelExport.do**" security="none" />
 	
 	<http pattern="/visualization/showProjectsList.do**" security="none" />
-	
+		<!-- report wizard --> 
+	<http pattern="/reportWizard.do**" security="none" />
+	<http pattern="/aim/reportWizard.do**" security="none" />
+  	<!-- 
+  	<http pattern="/aim/default/reportWizard.do**" security="none" />
+  	<http pattern="/aim/reportWizard.do**" security="none" />
+  	-->
 	<!-- move this to the reports module -->
 	<http pattern="/reportsPublicView.do**" security="none" />
 	<http pattern="/aim/default/reportsPublicView.do**" security="none" />

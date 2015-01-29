@@ -94,6 +94,9 @@ public class Reports {
 	private static final String DEFAULT_CONNECTION_NAME = "amp";
 	private static final String DEFAULT_SCHEMA_NAME = "AMP";
 
+	private static final String IN_MEMORY = "IN_MEMORY";
+	private static final String SAVED = "SAVED";
+
 	protected static final Logger logger = Logger.getLogger(Reports.class);
 
 	@Context
@@ -103,14 +106,20 @@ public class Reports {
 	@Path("/report/{report_id}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JSONResult getReport(@PathParam("report_id") Long reportId) {
-		return getReport(DbUtil.getAmpReport(reportId));
+		JSONResult report = getReport(DbUtil.getAmpReport(reportId));
+		report.getReportMetadata().setReportType(SAVED);
+		report.getReportMetadata().setReportIdentifier(reportId.toString());
+		return report;
 	}
 
 	@GET
 	@Path("/report/run/{report_token}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JSONResult getReport(@PathParam("report_token") String reportToken) {
-		return getReport(getAmpReportFromSession(reportToken));
+		JSONResult report = getReport(getAmpReportFromSession(reportToken));
+		report.getReportMetadata().setReportType(IN_MEMORY);
+		report.getReportMetadata().setReportIdentifier(reportToken);
+		return report;
 	}	
 	
 	private JSONResult getReport(AmpReports ampReport) {

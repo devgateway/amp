@@ -35,6 +35,8 @@
 		<action login-required="false" pattern="/reportTableProxy" />
 		<action login-required="false" pattern="/exportActToPDF" />
 		<action login-required="false" pattern="/exportActToWord" />
+		<action login-required="false" pattern="/reportWizard" />
+		
 </security>
 
 	<!-- AIM classes Begin-->

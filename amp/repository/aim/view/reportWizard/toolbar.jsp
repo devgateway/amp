@@ -1,4 +1,5 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@page import="org.dgfoundation.amp.ar.ReportContextData"%>
@@ -32,15 +33,19 @@
 				<digi:trn key="btn:repFilters">Settings</digi:trn>
 			</button>
 		</feature:display>
-		<button style="margin-right:2px;" type="button" name="save" disabled="disabled" onclick="saveReportEngine.saveOverwrite()" class="buttonx_dis"/>
-			<digi:trn key="rep:wizard:Save">Save</digi:trn>
-		</button>
-		<button style="margin-right:2px;" type="button" name="save" disabled="disabled" onclick="saveReportEngine.saveNoOverwrite()" class="buttonx_dis"/>
-			<digi:trn key="rep:wizard:SaveAs">Save As..</digi:trn>
-		</button>
+		<logic:present name="currentMember" scope="session">
+			<button style="margin-right:2px;" type="button" name="save" disabled="disabled" onclick="saveReportEngine.saveOverwrite()" class="buttonx_dis"/>
+				<digi:trn key="rep:wizard:Save">Save</digi:trn>
+			</button>
+			<button style="margin-right:2px;" type="button" name="save" disabled="disabled" onclick="saveReportEngine.saveNoOverwrite()" class="buttonx_dis"/>
+				<digi:trn key="rep:wizard:SaveAs">Save As..</digi:trn>
+			</button>
+		</logic:present>
+		<logic:notPresent name="currentMember" scope="session">
 			<button style="margin-right:2px;" type="button" name="save" disabled="disabled" onclick="saveReportEngine.executeReport()" class="buttonx_dis"/>
-				<digi:trn key="rep:wizard:SaveAs">Run report..</digi:trn>
+				<digi:trn key="rep:wizard:RunReport">Run report...</digi:trn>
 			</button>		
+		</logic:notPresent>
 		<button style="margin-right:2px;" type="button" value="Cancel" class="buttonx" id="step${stepNum}_cancel" onclick="repManager.cancelWizard();"/>
 			<digi:trn key="btn:wizard:Cancel">Cancel</digi:trn>
 		</button>

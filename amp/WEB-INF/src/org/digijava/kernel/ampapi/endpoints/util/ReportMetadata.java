@@ -17,7 +17,9 @@ public class ReportMetadata {
 	private String catalog = "";
 	private String schema = "";
 	private String queryName = "";
-	
+	private String reportType = "";
+	private String reportIdentifier = ""; // This will either be a report ID from the DB for saved reports, or a token for temporary reports
+
 	public String getName() {
 		return name;
 	}
@@ -83,6 +85,18 @@ public class ReportMetadata {
 	}
 	public void setRecordsPerPage(int recordsPerPage) {
 		this.recordsPerPage = recordsPerPage;
+	}
+	public String getReportType() {
+		return reportType;
+	}
+	public void setReportType(String reportType) {
+		this.reportType = reportType;
+	}
+	public String getReportIdentifier() {
+		return reportIdentifier;
+	}
+	public void setReportIdentifier(String reportIdentifier) {
+		this.reportIdentifier = reportIdentifier;
 	}
 	
 }

@@ -60,6 +60,7 @@ import org.digijava.module.contentrepository.dbentity.NodeLastApprovedVersion;
 import org.digijava.module.contentrepository.dbentity.TeamNodePendingVersion;
 import org.digijava.module.contentrepository.dbentity.TeamNodeState;
 import org.digijava.module.contentrepository.exception.CrException;
+import org.digijava.module.contentrepository.exception.JCRSessionException;
 import org.digijava.module.contentrepository.exception.NoNodeInVersionNodeException;
 import org.digijava.module.contentrepository.exception.NoVersionsFoundException;
 import org.digijava.module.contentrepository.form.DocumentManagerForm;
@@ -300,9 +301,8 @@ public class DocumentManagerUtil {
 					logger.warn("trying to open a JCR write session for the second time...");
 					jcrSession = getSession(request.getSession().getServletContext(), creden);
 				}
-					
 				if (jcrSession == null)
-					throw new RuntimeException("could not open a JCR WriteSession");
+					throw new JCRSessionException("could not open a JCR WriteSession");
 			}
 	
 			

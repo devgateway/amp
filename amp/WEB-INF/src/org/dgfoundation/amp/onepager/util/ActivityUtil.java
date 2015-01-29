@@ -65,6 +65,7 @@ import org.digijava.module.aim.util.ContactInfoUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
 import org.digijava.module.aim.util.LuceneUtil;
+import org.digijava.module.contentrepository.exception.JCRSessionException;
 import org.digijava.module.contentrepository.helper.CrConstants;
 import org.digijava.module.contentrepository.helper.NodeWrapper;
 import org.digijava.module.contentrepository.helper.TemporaryDocumentData;
@@ -809,13 +810,18 @@ public class ActivityUtil {
 				tdd.setWebLink(temp.getWebLink());
 				
 				ActionMessages messages = new ActionMessages();
-				NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest(), messages);
-				
-				AmpActivityDocument aad = new AmpActivityDocument();
-				aad.setAmpActivity(a);
-				aad.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
-				aad.setUuid(node.getUuid());
-				a.getActivityDocuments().add(aad);
+				try {
+					NodeWrapper node = tdd.saveToRepository(SessionUtil.getCurrentServletRequest(), messages);
+
+					AmpActivityDocument aad = new AmpActivityDocument();
+					aad.setAmpActivity(a);
+					aad.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
+					aad.setUuid(node.getUuid());
+					a.getActivityDocuments().add(aad);
+				} catch (JCRSessionException ex) {
+					//we catch the exception and show a warning, but allow the activity to be saved
+					logger.warn("The JCR Session couldn't be opened. The document "+tdd.getName() +" will not be saved.",ex);
+				}
 			}
 		}
 	}

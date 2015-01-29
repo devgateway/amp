@@ -8,7 +8,7 @@
 	<param name="schema" value="postgresql" />
     </FileSystem>
     
-    
+	<RepositoryLockMechanism class="org.apache.jackrabbit.core.util.CooperativeFileLock" />
     <!-- Security configuration -->
     <Security appName="Jackrabbit">
         <AccessManager class="org.apache.jackrabbit.core.security.SimpleAccessManager">
@@ -91,4 +91,5 @@
     <SearchIndex class="org.apache.jackrabbit.core.query.lucene.SearchIndex">
         <param name="path" value="${rep.home}/repository/index" />
     </SearchIndex>
+    
 </Repository>

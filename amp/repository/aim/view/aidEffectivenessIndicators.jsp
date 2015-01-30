@@ -10,7 +10,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<script type="text/javascript" src='<digi:file src="module/aim/scripts/table_utils.js"/>' />
+<script type="text/javascript" src='<digi:file src="module/aim/scripts/table_utils.js"/>'>.</script>
 
 <h1 class="admintitle"><digi:trn>Aid Effectiveness Indicator Manager</digi:trn></h1>
 
@@ -71,15 +71,16 @@
 <%-- Search result list--%>
 <logic:present name="searchResult">
     <table class="inside" width="100%" cellpadding="4" id="searchResultsTableId">
-
-        <tr align="center" bgcolor="#c7d4db" style="font-size:12px; font-weight:bold">
-            <td><digi:trn>Indicator Name</digi:trn></td>
-            <td><digi:trn>Indicator Tooltip</digi:trn></td>
-            <td><digi:trn>Is Active</digi:trn></td>
-            <td><digi:trn>Is Mandatory</digi:trn></td>
-            <td><digi:trn>Indicator Type</digi:trn></td>
-            <td></td>
-        </tr>
+        <thead>
+            <tr style="font-size:12px; font-weight:bold">
+                <th align="center" bgcolor="#c7d4db"><digi:trn>Indicator Name</digi:trn></th>
+                <th align="center" bgcolor="#c7d4db"><digi:trn>Indicator Tooltip</digi:trn></th>
+                <th align="center" bgcolor="#c7d4db"><digi:trn>Is Active</digi:trn></th>
+                <th align="center" bgcolor="#c7d4db"><digi:trn>Is Mandatory</digi:trn></th>
+                <th align="center" bgcolor="#c7d4db"><digi:trn>Indicator Type</digi:trn></th>
+                <th align="center" bgcolor="#c7d4db"></td>
+            </tr>
+        </thead>
 
         <logic:iterate name="searchResult" id="indicator" type="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator">
             <tr>
@@ -135,5 +136,5 @@
     }
 
     setStripsTable("searchResultsTableId", "tableEven", "tableOdd");
-    setHoveredTable("searchResultsTableId", false);
+    setHoveredTable("searchResultsTableId", true);
 </script>

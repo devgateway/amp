@@ -162,7 +162,7 @@ module.exports = Backbone.View
        sectorCode = '0';
        console.warn('TODO: need custom vairous sectors icon...different from  multi-sector');
       } else {
-       sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
+       sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0];
       }
     }
 

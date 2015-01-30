@@ -72,6 +72,14 @@
 "amp.gis:activities-commitments": "Actual Commitments",
 "amp.gis:activities-disbursements": "Actual Disbursements",
 "amp.gis:admclusters-projectlist": "Project List",
-"amp.gis:popup-loadmore": "load more"
+"amp.gis:popup-loadmore": "load more",
+"amp.gis:popup-word-has":" has ",
+"amp.gis:popup-word-projects":" projects",
+"amp.gis:activities-projectlist":"Project List",
+"amp.gis.fundingType-ActualCommitments":"(Actual Commitments)",
+"amp.gis.fundingType-PlannedCommitments":"(Planned Commitments)",
+"amp.gis.fundingType-ActualDisbursements":"(Actual Disbursements)",
+"amp.gis.fundingType-PlannedDisbursements":"(Planned Disbursements)",
+"amp.gis.cluster.tooltip-of-total":"of total"
 }
 

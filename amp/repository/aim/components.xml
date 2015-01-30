@@ -14,7 +14,7 @@
 
 	<page name="viewPortfolioDashboard" title=" - Portfolio Dashboard " />
 	<page name="addQuickLink" title="Add link" />
-  <page name="editQuickLink" title="Edit link" />
+    <page name="editQuickLink" title="Edit link" />
 	<page name="showMyTask" title=" - My Task List " />
 	<page name="addAmpOrganisations" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="editAmpOrganisations" title="AMP: Ethiopia: AIM Dashboard: Detail" />
@@ -78,6 +78,7 @@
 	<page name="deleteCurrency" title=" - Delete Currency" />
 	<page name="currencyManager" title=" - Currency Manager" />
 	<page name="currencyRates" title=" - Currency Rates" />
+    <page name="aidEffectivenessIndicators" title=" - Aid Effectiveness Indicators" />
 	<page name="selectFilteredRates" title=" - Select Filtered Currency Rates" />
 	<page name="searchSector" title=" - Search Sector" />
 	<page name="searchSectResults" title=" - Search Sector Results" />
@@ -115,7 +116,7 @@
 	<page name="addMemberActivities" title=" - Add Team Member Activities" />
 	<page name="teamMemberActivities" title=" - Team Member Activities" />
 	<page name="userRegistrationSuccess" title=" - Successfully registered user" />
-        <page name="waitingRegConfirmation" title=" - Successfully registered user" />
+    <page name="waitingRegConfirmation" title=" - Successfully registered user" />
 	<page name="getEmail" title=" - Forgot Password" />
 	<page name="resetEmailSuccess" title=" - Forgot Password" />
 
@@ -144,7 +145,7 @@
 	<page page="viewActivityDetails" name="aim_viewActivityDetails" title="AMP - View Activity Details" />
 
 	<page name="locationManager" title=" - Region Manager" />
-        <page name="newLocationManager" title=" - Region Manager" />
+    <page name="newLocationManager" title=" - Region Manager" />
     <page page="dynLocationManager/dynLocationManager" name="aim_dynLocationManager" title=" - Region Manager" />
 	<page name="addLocation" title=" - Region Manager" />
     <page page="addNewRegion" name="addNewLocation" title=" - Region Manager" />

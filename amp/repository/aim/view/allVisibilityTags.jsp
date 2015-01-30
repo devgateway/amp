@@ -144,6 +144,7 @@
 <feature:display name="USAID logo" module="Map Module"></feature:display>
 <field:display feature="Structures" name="Structures Column"></field:display>
 <module:display name="Map configuration" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 
 <feature:display name="Synergy Client" module="Activity Import Manager"></feature:display>
 

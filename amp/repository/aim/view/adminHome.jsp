@@ -263,7 +263,8 @@
     </td>  
   </tr>
   </module:display>
-    <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION">
+
+  <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION">
 	<tr>
 		<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
 		<td class="admin_box_label">
@@ -275,7 +276,21 @@
  			</digi:link>                                                                   
     	</td>
     </tr>
-    </module:display>
+  </module:display>
+
+  <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION">
+  	<tr>
+  		<td><img width="16" align="left" src="/TEMPLATE/ampTemplate/module/aim/images/arrow-th-BABAB9.gif"></td>
+  		<td class="admin_box_label">
+   			<c:set var="translation">
+   			    <digi:trn invisibleLinks="true">Click here to manage Aid Effectiveness Indicators</digi:trn>
+   			</c:set>
+   			<digi:link href="/aidEffectivenessIndicatorsManager.do">
+   			    <digi:trn>Aid Effectiveness Indicators Manager</digi:trn>
+   			</digi:link>
+      	</td>
+    </tr>
+  </module:display>
     
     <module:display name="Map configuration" parentModule="ADMINISTRATIVE SECTION">
   	<tr>

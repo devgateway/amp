@@ -174,7 +174,8 @@
     <form-bean name="lastVersionsForm" type="org.digijava.module.versioning.form.AmpLastVersionsForm"/>
     <form-bean name="aimOrgProfileReport" type="org.digijava.module.aim.form.OrgProfileReportForm"/>
     <form-bean name="emptyForm" type="org.digijava.module.aim.form.EmptyForm"/>
-    
+    <form-bean name="aidEffectivenessIndicatorsForm" type="org.digijava.module.aim.form.AidEffectivenessIndicatorForm"/>
+
 </form-beans>
 
   <global-forwards>
@@ -876,6 +877,12 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
       <forward name="toAdditionOfIndiForStep9" path="/showLayout.do?layout=aim_selectCreateIndicatorForStep9" />
     </action>
+
+    <action name="aidEffectivenessIndicatorsForm" path="/aim/aidEffectivenessIndicatorsManager" scope="request" type="org.digijava.module.aim.action.AidEffectivenessIndicatorsAction" validate="false">
+        <forward name="list" path="/showLayout.do?layout=aidEffectivenessIndicators" />
+        <forward name="search" path="/showLayout.do?layout=aidEffectivenessIndicators" />
+    </action>
+
     <action name="aimDonorTeamsForm" path="/aim/donorActivityList" scope="request" type="org.digijava.module.aim.action.GetDonorTeams" validate="false">
       <forward name="forward" path="/showLayout.do?layout=donorTeamList" />
       <forward name="index" path="/aim/index.do" redirect="true" />

@@ -102,7 +102,8 @@ module.exports = Backbone.View.extend({
           label: raw.point.label,
           value: d3.format(',')(Math.round(raw.value)),
           currency: model.currency,
-          percent: d3.format('%')(raw.value / model.total)
+          percent: d3.format('%')(raw.value / model.total),
+          totalLegend: app.translator.translateSync("amp.gis.cluster.tooltip-of-total","of total")
         });
       });
 

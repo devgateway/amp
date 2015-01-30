@@ -1,5 +1,5 @@
 <div class="cluster-popup">
-  <h5><%= obj.properties.admName%> has <%= obj.properties.activityid.length %> projects </h5>
+  <h5><%= obj.properties.admName%><span data-i18n="amp.gis:popup-word-has"> has </span><%= obj.properties.activityid.length %><span data-i18n="amp.gis:popup-word-projects"> projects </span></h5>
 
   <ul class="nav nav-tabs" role="tablist">
     <li class="active"><a href="#charts-pane-sector" role="tab" data-toggle="tab" data-i18n="amp.gis:activities-sectors">Sectors</a></li>
@@ -10,14 +10,14 @@
   <!-- Tab panes -->
   <div class="tab-content">
     <div class="tab-pane active" id="charts-pane-sector">
-      <h5><span data-i18n="amp.gis:activities-sectors">Sectors</span> <small>(<%= obj.fundingType %>)</small></h5>
+      <h5><span data-i18n="amp.gis:activities-sectors">Sectors</span> <small data-i18n="amp.gis.fundingType-<%= obj.fundingType.replace(/ /g,'') %>"><%= obj.fundingType %></small></h5>
       <div class="amp-chart">
           <img class="loading" src="img/loading-icon.gif" />
           <svg></svg>
       </div>
     </div>
     <div class="tab-pane" id="charts-pane-donor">
-      <h5><span data-i18n="amp.gis:activities-donors">Funding Organizations</span> <small>(<%= obj.fundingType %>)</small></h5>
+      <h5><span data-i18n="amp.gis:activities-donors">Funding Organizations</span> <small data-i18n="amp.gis.fundingType-<%= obj.fundingType.replace(/ /g,'') %>"><%= obj.fundingType %></small></h5>
     	<div class="amp-chart">
         <img class="loading" src="img/loading-icon.gif" />
         <svg class="dash-chart"></svg>

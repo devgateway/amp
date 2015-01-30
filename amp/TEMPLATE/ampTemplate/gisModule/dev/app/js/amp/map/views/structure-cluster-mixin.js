@@ -74,7 +74,7 @@ module.exports = {
       var sectorCode = 0; // 0 is 'various sectors icon'
       if (markers[0].feature) {
         var activity = markers[0].feature.properties.activity;
-        sectorCode = activity.attributes.matchesFilters[filterVertical][0].get('code');
+        sectorCode = activity.attributes.matchesFilters[filterVertical][0];
       } else if (!markers[0].feature) {
         //TODO: this sometimes happen if loads are being strange / slow....
         //  gives cluster wrong colour / icon on first load / initial zoom level.
@@ -147,5 +147,6 @@ module.exports = {
       });
 
     a.layer.openPopup(self.map);
+    app.translator.translateDOM($('.cluster-popup'));
   }
 };

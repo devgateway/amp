@@ -121,7 +121,12 @@
                     </c:choose>
                 </td>
                 <td width="17%" align="center">
-                    edit | delete
+                    <digi:link href="/aidEffectivenessIndicatorsManager.do?actionParam=edit&ampIndicatorId=${indicator.ampIndicatorId}">
+                        <img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" title="<digi:trn>Edit</digi:trn>"/>
+                    </digi:link>
+                    <digi:link href="/aidEffectivenessIndicatorsManager.do?actionParam=delete&ampIndicatorId=${indicator.ampIndicatorId}" onclick="return confirmDelete(); return false;">
+                        <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete</digi:trn>"/>
+                    </digi:link>
                 </td>
             </tr>
         </logic:iterate>
@@ -133,6 +138,10 @@
         document.getElementById('searchIndicatorType').value = -1;
         document.getElementById('searchAmpIndicatorName').value = '';
         document.getElementById('searchActive').checked  = false;
+    }
+
+    function confirmDelete() {
+        alert('Are you sure?');
     }
 
     setStripsTable("searchResultsTableId", "tableEven", "tableOdd");

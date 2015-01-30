@@ -300,6 +300,5 @@ public class FundingPledgesDetails implements FundingInformationItem, Identifiab
 	@Override
 	public void setTransactionAmount(Double transactionAmount) {
 		this.setAmount(transactionAmount);
-		
 	}	
 }

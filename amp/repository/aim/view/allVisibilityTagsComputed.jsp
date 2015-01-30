@@ -70,6 +70,7 @@
 <module:display name="REPORTING"></module:display> 
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Report Generator" parentModule="REPORTING"></module:display>
+<module:display name="Public Report Generator" parentModule="REPORTING"></module:display>
 <module:display name="Multi-dimensional Reports" parentModule="REPORTING"></module:display>
 <module:display name="Multi-dimensional Reports Public View" parentModule="REPORTING"></module:display> 
 <module:display name="Pledge Reports" parentModule="REPORTING"></module:display>

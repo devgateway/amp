@@ -97,6 +97,11 @@ public class ReportWizardAction extends MultiAction {
     public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
                                      HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
     {
+    	//if not logged in we have to check if Reporting/Public Report Generator is enabled if not 
+    	//we redirect to login page
+    	if(request.getSession().getAttribute( Constants.CURRENT_MEMBER )==null && !FeaturesUtil.isVisibleModule("Public Report Generator")){
+    		response.sendRedirect("/showLayout.do?layout=login");
+    	}
         if (request.getParameter("repType")!=null && request.getParameter("repType").length()>0)
             return this.getJSONrepType(mapping, form, request, response);
 

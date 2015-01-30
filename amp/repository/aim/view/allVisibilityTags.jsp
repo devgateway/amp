@@ -66,6 +66,7 @@
 <module:display name="REPORTING"></module:display> 
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Report Generator" parentModule="REPORTING"></module:display>
+<module:display name="Public Report Generator" parentModule="REPORTING"></module:display>
 <module:display name="Resource Label Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Template Documents Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Donor Profile Report" parentModule="REPORTING"></module:display>

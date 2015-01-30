@@ -17,8 +17,10 @@ var AMPGisExport = Backbone.View.extend({
 
 		_.bindAll(this, "export_to_map");
 
-		this.add_button();
-		this.workspace.toolbar.export_to_map = this.export_to_map;
+    	if(this.workspace.query.get('report_id')){
+			this.add_button();
+			this.workspace.toolbar.export_to_map = this.export_to_map;
+    	}
 		
 	},
 	

@@ -185,6 +185,11 @@
 
 		<!-- Saiku Reports Classes -->
 		<hibernate-class>org.digijava.module.aim.dbentity.AmpAnalyticalReport</hibernate-class>
+
+        <!-- Aid Effectiveness Indicators -->
+        <hibernate-class>org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator</hibernate-class>
+        <hibernate-class>org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption</hibernate-class>
+
 	</hibernate-classes>
 	<!-- AIM classes End-->
 

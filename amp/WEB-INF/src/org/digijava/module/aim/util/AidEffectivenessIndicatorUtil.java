@@ -14,9 +14,9 @@ public class AidEffectivenessIndicatorUtil {
 
     /**
      * Returns list of indicators by the criteria
-     * @param indicatorType
-     * @param keyword
-     * @return
+     * @param indicatorType - the indicator type 0 or 1
+     * @param keyword - the keyword will be used to search in name
+     * @return list of indicators
      */
     public static List<AmpAidEffectivenessIndicator> searchIndicators(
             int indicatorType, String keyword, boolean activeOnly) {
@@ -44,5 +44,17 @@ public class AidEffectivenessIndicatorUtil {
 
         return  (List<AmpAidEffectivenessIndicator>)query.list();
     }
+
+    public static AmpAidEffectivenessIndicator loadById(Long indicatorId) {
+        Session session = PersistenceManager.getSession();
+        return (AmpAidEffectivenessIndicator) session.load(AmpAidEffectivenessIndicator.class, indicatorId);
+    }
+
+    public static void saveIndicator(AmpAidEffectivenessIndicator indicator) {
+        Session session = PersistenceManager.getSession();
+        session.saveOrUpdate(indicator);
+    }
+
+
 }
 

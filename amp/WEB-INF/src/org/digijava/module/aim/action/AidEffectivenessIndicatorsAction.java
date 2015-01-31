@@ -23,7 +23,9 @@ public class AidEffectivenessIndicatorsAction extends Action {
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
         AidEffectivenessIndicatorForm indicatorForm = (AidEffectivenessIndicatorForm)form;
+        AmpAidEffectivenessIndicator indicator = null;
         String actionParam = request.getParameter("actionParam");
+        String indicatorIdParam = request.getParameter("ampIndicatorId");
 
         if (actionParam == null) {
             // the default one is "list"
@@ -41,11 +43,28 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 return mapping.findForward("search");
             case "list" :;
                 return mapping.findForward("list");
-            case "edit" :;
+            case "edit" :
+                long indicatorId = 0;
+                try {
+                    indicatorId = Long.parseLong(indicatorIdParam);
+                } catch (NumberFormatException nfe) {
+                    // todo handleMe
+                }
+
+                indicator = AidEffectivenessIndicatorUtil.loadById(indicatorId);
+                entityToForm(indicator, indicatorForm);
                 return mapping.findForward("edit");
             case "add" :;
                 return mapping.findForward("add");
-            case "save": ;
+            case "save":
+                // update
+                if (indicatorForm.getAmpIndicatorId() != null && indicatorForm.getAmpIndicatorId() > 0){
+                    indicator = AidEffectivenessIndicatorUtil.loadById(indicatorForm.getAmpIndicatorId());
+                    indicator = formToEntity(indicatorForm, indicator);
+                } else { // create
+                    indicator = formToEntity(indicatorForm, null);
+                }
+                AidEffectivenessIndicatorUtil.saveIndicator(indicator);
                 return mapping.findForward("save");
             case "delete" : ;
                 return mapping.findForward("delete");
@@ -54,4 +73,50 @@ public class AidEffectivenessIndicatorsAction extends Action {
 
         }
     }
+
+    /**
+     * We can use BeanUtils.copy instead, but there are not so many fields here
+     * @param form
+     * @param entity
+     * @return
+     */
+    private AmpAidEffectivenessIndicator formToEntity(
+            AidEffectivenessIndicatorForm form,
+            AmpAidEffectivenessIndicator entity) {
+        if (entity == null) {
+            entity = new AmpAidEffectivenessIndicator();
+        }
+
+        entity.setAmpIndicatorName(form.getAmpIndicatorName());
+        entity.setTooltipText(form.getTooltipText());
+        entity.setMandatory(form.isMandatory());
+        entity.setActive(form.isActive());
+        entity.setIndicatorType(form.getIndicatorType());
+
+        // todo add options copying
+
+        return entity;
+    }
+
+    /**
+     * We can use BeanUtils.copy instead, but there are not so many fields here
+     * @param entity
+     * @param form
+     * @return
+     */
+    private AidEffectivenessIndicatorForm entityToForm(
+            AmpAidEffectivenessIndicator entity,
+            AidEffectivenessIndicatorForm form) {
+
+        form.setAmpIndicatorName(entity.getAmpIndicatorName());
+        form.setTooltipText(entity.getTooltipText());
+        form.setMandatory(entity.isMandatory());
+        form.setActive(entity.isActive());
+        form.setIndicatorType(entity.getIndicatorType());
+
+        // todo copy options
+
+        return form;
+    }
+
 }

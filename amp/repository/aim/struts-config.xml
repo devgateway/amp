@@ -881,6 +881,9 @@
     <action name="aidEffectivenessIndicatorsForm" path="/aim/aidEffectivenessIndicatorsManager" scope="request" type="org.digijava.module.aim.action.AidEffectivenessIndicatorsAction" validate="false">
         <forward name="list" path="/showLayout.do?layout=aidEffectivenessIndicators" />
         <forward name="search" path="/showLayout.do?layout=aidEffectivenessIndicators" />
+        <forward name="edit" path="/showLayout.do?layout=editEffectivenessIndicator" />
+        <forward name="save" path="/showLayout.do?layout=aidEffectivenessIndicators" />
+        <forward name="delete" path="/showLayout.do?layout=aidEffectivenessIndicators" />
     </action>
 
     <action name="aimDonorTeamsForm" path="/aim/donorActivityList" scope="request" type="org.digijava.module.aim.action.GetDonorTeams" validate="false">

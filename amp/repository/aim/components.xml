@@ -79,6 +79,7 @@
 	<page name="currencyManager" title=" - Currency Manager" />
 	<page name="currencyRates" title=" - Currency Rates" />
     <page name="aidEffectivenessIndicators" title=" - Aid Effectiveness Indicators" />
+    <page name="editEffectivenessIndicator" title=" - Aid Effectiveness Indicators" />
 	<page name="selectFilteredRates" title=" - Select Filtered Currency Rates" />
 	<page name="searchSector" title=" - Search Sector" />
 	<page name="searchSectResults" title=" - Search Sector Results" />

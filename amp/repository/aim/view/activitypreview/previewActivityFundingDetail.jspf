@@ -22,7 +22,7 @@ other rows (if any): capital spending percent / classification / attached pledge
 	<td height="18" align="right">
 		<c:choose>
 			<c:when test="${showFiscalYear}">
-				<b><bean:write name="fundingDetail" property="fiscalYear" /></b>
+				<b><digi:trn><bean:write name="fundingDetail" property="fiscalYear" /></digi:trn></b>
 			</c:when>
 			<c:otherwise>
 				<b><bean:write name="fundingDetail" property="transactionDate" /></b>

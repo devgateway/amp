@@ -241,7 +241,6 @@ public class FundingPledgesDetails implements FundingInformationItem, Identifiab
 	public static String getDatesDescriptionOf(Long fundingYear, Object fundingDateStart, Object fundingDateEnd){
 		String unspecified = TranslatorWorker.translateText("unspecified");
 		String year = fundingYear == null ? null : fundingYear.toString();
-		
 		String dates = (fundingDateStart != null && fundingDateEnd != null) ? 
 				formatDate(fundingDateStart) + " - " + formatDate(fundingDateEnd) : null;
 		List<String> values = new ArrayList<>(); 

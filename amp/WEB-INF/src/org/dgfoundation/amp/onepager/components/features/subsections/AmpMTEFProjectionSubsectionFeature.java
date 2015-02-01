@@ -63,11 +63,8 @@ public class AmpMTEFProjectionSubsectionFeature extends
                 int currentYear = Util.getCurrentFiscalYear();
 
 				Set<AmpFundingMTEFProjection> mtefSet = setModel.getObject();
-                if (mtefSet != null){
-					Iterator<AmpFundingMTEFProjection> it = mtefSet.iterator();
-					while (it.hasNext()) {
-						AmpFundingMTEFProjection mtefItem = (AmpFundingMTEFProjection) it
-								.next();
+                if (mtefSet != null) {
+					for(AmpFundingMTEFProjection mtefItem : mtefSet) {
 						calendar.setTime(mtefItem.getProjectionDate());
 						int mtefItemYear = calendar.get(Calendar.YEAR);
 						if (mtefItemYear + 1 > currentYear)

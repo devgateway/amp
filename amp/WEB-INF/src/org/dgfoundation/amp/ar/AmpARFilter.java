@@ -627,7 +627,7 @@ public class AmpARFilter extends PropertyListable {
 		
 		initRenderStartEndYears(settings);
 	}
-
+	
 	/**
 	 * computes the current user's effective AmpApplicationSettings, searching through the hierarchy
 	 * returns null if there is no current user
@@ -3211,29 +3211,6 @@ public class AmpARFilter extends PropertyListable {
 	public boolean haveSettingsBeenApplied()
 	{
 		return settingsHaveBeenAppliedFlag;
-	}
-	
-	/**
-	 * multiplies the input value by 1, 1000 or 1000000; depending on the amountInThousand option value
-	 * @param val
-	 * @return
-	 */
-	public double adaptAmountToThousandsSetting(double val)
-	{
-		switch(this.computeEffectiveAmountInThousand())
-		{
-			case AMOUNT_OPTION_IN_MILLIONS:
-				return val * 0.001d * 0.001d;
-				
-			case AMOUNT_OPTION_IN_THOUSANDS:
-				return val * 0.001d;
-				
-			case AMOUNT_OPTION_IN_UNITS:
-				return val;
-				
-			default:
-				throw new RuntimeException("unsupported amountInThousand option: " + this.computeEffectiveAmountInThousand());
-		}
 	}
 	
 	/**

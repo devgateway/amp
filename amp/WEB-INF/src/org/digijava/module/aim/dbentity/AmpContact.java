@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
@@ -13,12 +15,16 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * @author Dare
  *
  */
+@TranslatableClass (displayName = "Contact")
 public class AmpContact implements Comparable, Serializable, Cloneable {
 	private Long id;
 	private String name;
 	private String lastname;
 	private AmpCategoryValue title;
+
+	@TranslatableField
 	private String organisationName;
+	@TranslatableField
 	private String function;
 	private String officeaddress;
 	private String temporaryId;

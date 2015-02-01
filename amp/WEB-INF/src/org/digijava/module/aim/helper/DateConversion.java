@@ -7,6 +7,10 @@ import java.util.Comparator;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.common.util.DateTimeUtil;
 
@@ -41,14 +45,16 @@ public class DateConversion
 	};
 
 	public static String convertDateToFiscalYearString(Date inputDate ) {
-
-		String textDate = "";
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(inputDate);
-		int year = cal.get(Calendar.YEAR);
-		return String.valueOf(year + "/" + (year + 1)); 
-//		inputDate.
-		
+		return MTEFYearsModel.convert(inputDate, AmpARFilter.getDefaultCalendar().getIsFiscal()).value;
+/*		try {
+			AmpFiscalCalendar calendar = AmpARFilter.getDefaultCalendar();
+			ICalendarWorker worker = calendar.getworker();
+			worker.setTime(inputDate);
+			return worker.getFiscalYear();
+		}
+		catch(Exception e) {
+			throw new RuntimeException(e);
+		}*/
 	}
 	
 	

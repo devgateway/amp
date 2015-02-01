@@ -27,10 +27,13 @@ import org.dgfoundation.amp.ar.ReportContextData;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.onepager.models.MTEFYearsModel;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.helper.fiscalcalendar.GregorianBasedWorker;
 import org.digijava.module.aim.helper.fiscalcalendar.ComparableMonth;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -338,7 +341,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 		
 		if (filter.getCalendarType() != null) {
 			try {
-			ICalendarWorker worker = filter.getCalendarType().getworker();
+				ICalendarWorker worker = filter.getCalendarType().getworker();
 				worker.setTime(td);
 				month = worker.getMonth();
 				quarter = "Q" + worker.getQuarter();
@@ -347,14 +350,27 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 				fiscalYear=worker.getFiscalYear();
 				fiscalMonth=worker.getFiscalMonth();
 				
-				
+				// very very very ugly workaround for AMP-19405
+				if (tr_type == Constants.MTEFPROJECTION) {
+					year = td.getYear() + 1900;
+					fiscalYear = filter.getCalendarType().getIsFiscal() ?
+							(filter.getCalendarType().getStartMonthNum() == 1 ?
+									"Fiscal Year " + (year) : 
+									("Fiscal Year " + (year) + " - " + (year + 1))) :
+							Integer.toString(year);
+					String check = worker.getFiscalYear();
+//					fiscalYear = new GregorianBasedWorker(td).getFiscalYear(); 
+//					String check = DateConversion.convertDateToFiscalYearString(td);
+					System.err.format("FY vs Check: %s vs %s\n", fiscalYear, check);
+							//DateConversion.convertDateToFiscalYearString(td); // AMP-19405 - emulate AF bug in AP and reports
+				}
 				
 				//The complete will be used to see if the cell is showable
 				MetaInfo dateInfo = this.getCachedMetaInfo(ArConstants.TRANSACTION_DATE, worker.getDate());
 				acc.getMetaData().add(dateInfo);
 				
 			} catch (Exception e) {
-				logger.error("Error gettin fiscal year of activity id =" + id);
+				logger.error("Error doing calendar calc for activity id =" + id, e);
 			}
 		}
 

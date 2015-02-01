@@ -615,6 +615,28 @@ public class AmpARFilter extends PropertyListable {
 	}
 	
 	/**
+	 * gets the calendar to be used when a running a report which has no per-report calendar settings
+	 * @return
+	 */
+	public static AmpFiscalCalendar getWorkspaceCalendar() {
+		
+		AmpApplicationSettings settings = getEffectiveSettings();
+		AmpFiscalCalendar res = null;
+		
+		if (settings != null)
+			res = settings.getFiscalCalendar();
+		
+		if (res == null) { // still no calendar source -> use Global Setting
+			String gvalue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+			if (gvalue != null) {
+				Long fiscalCalId = Long.parseLong(gvalue);
+				res = DbUtil.getAmpFiscalCalendar(fiscalCalId);
+			}
+		}
+		return res;
+	}
+
+	/**
 	 * fills the "Report / Tab Settings" part of the instance with the default values
 	 */
 	public void fillWithDefaultsSettings()
@@ -622,25 +644,12 @@ public class AmpARFilter extends PropertyListable {
 		fillWithDefaultGroupingSettings();
 		this.setAmountinthousand(Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
 		
-		calendarType = null;
+		setCalendarType(getWorkspaceCalendar());
 		AmpApplicationSettings settings = getEffectiveSettings();
 		if (settings != null)
-		{
-			this.setCalendarType(settings.getFiscalCalendar());
 			this.setCurrency(settings.getCurrency());
-		}
-		
-		if (calendarType == null) // still no calendar source -> use Global Setting
-		{
-			String gvalue = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
-			if (gvalue != null){
-				Long fiscalCalId = Long.parseLong(gvalue);
-				setCalendarType(DbUtil.getAmpFiscalCalendar(fiscalCalId));
-			}
-		}
 		initRenderStartEndYears(settings);
 	}
-
 	/**
 	 * computes the current user's effective AmpApplicationSettings, searching through the hierarchy
 	 * returns null if there is no current user

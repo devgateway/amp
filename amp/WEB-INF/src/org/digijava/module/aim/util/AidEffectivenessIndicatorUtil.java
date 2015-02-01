@@ -55,6 +55,19 @@ public class AidEffectivenessIndicatorUtil {
         session.saveOrUpdate(indicator);
     }
 
+    /**
+     * Do not delete via Id, but load first
+     * Because we want to delete related options as well
+     * @param indicatorId
+     */
+    public static void deleteIndicator(long indicatorId) {
+        Session session = PersistenceManager.getSession();
+        // todo handle if not found
+        AmpAidEffectivenessIndicator indicator = (AmpAidEffectivenessIndicator) session.load(AmpAidEffectivenessIndicator.class, indicatorId);
+        // TODO Handle if there are alreary exist activities with this indicator
+        // The deletion is impossible and we should fire corresponding message to the user
+        session.delete(indicator);
+    }
 
 }
 

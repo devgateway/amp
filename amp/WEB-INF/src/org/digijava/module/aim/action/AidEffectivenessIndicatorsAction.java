@@ -41,7 +41,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
                         indicatorForm.isActive());
                 request.setAttribute("searchResult", searchResult);
                 return mapping.findForward("search");
-            case "list" :;
+            case "list" :
                 return mapping.findForward("list");
             case "edit" :
                 long indicatorId = 0;
@@ -54,7 +54,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 indicator = AidEffectivenessIndicatorUtil.loadById(indicatorId);
                 entityToForm(indicator, indicatorForm);
                 return mapping.findForward("edit");
-            case "add" :;
+            case "add" :
                 return mapping.findForward("add");
             case "save":
                 // update
@@ -65,9 +65,16 @@ public class AidEffectivenessIndicatorsAction extends Action {
                     indicator = formToEntity(indicatorForm, null);
                 }
                 AidEffectivenessIndicatorUtil.saveIndicator(indicator);
-                return mapping.findForward("save");
-            case "delete" : ;
-                return mapping.findForward("delete");
+                return mapping.findForward("search");
+            case "delete" :
+                indicatorId = 0;
+                try {
+                    indicatorId = Long.parseLong(indicatorIdParam);
+                } catch (NumberFormatException nfe) {
+                    // todo handleMe
+                }
+                AidEffectivenessIndicatorUtil.deleteIndicator(indicatorId);
+                return mapping.findForward("list");
             default: //process "list"
                 return mapping.findForward("list");
 

@@ -124,7 +124,8 @@
                     <digi:link href="/aidEffectivenessIndicatorsManager.do?actionParam=edit&ampIndicatorId=${indicator.ampIndicatorId}">
                         <img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" title="<digi:trn>Edit</digi:trn>"/>
                     </digi:link>
-                    <digi:link href="/aidEffectivenessIndicatorsManager.do?actionParam=delete&ampIndicatorId=${indicator.ampIndicatorId}" onclick="return confirmDelete(); return false;">
+                    <c:set var="deleteAction">/aidEffectivenessIndicatorsManager.do?actionParam=delete&ampIndicatorId=${indicator.ampIndicatorId}</c:set>
+                    <digi:link href="${deleteAction}" onclick="return confirmDelete('${deleteAction}'); return false;">
                         <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete</digi:trn>"/>
                     </digi:link>
                 </td>
@@ -133,6 +134,11 @@
     </table>
 </logic:present>
 
+</br>
+
+<input type="button" class="dr-menu" onclick="javascript: addIndicator(); return false"
+    value='<digi:trn key="btn:add">Add</digi:trn>'>
+
 <script type="text/javascript">
     function cleanUpForm() {
         document.getElementById('searchIndicatorType').value = -1;
@@ -140,8 +146,15 @@
         document.getElementById('searchActive').checked  = false;
     }
 
-    function confirmDelete() {
-        alert('Are you sure?');
+    function confirmDelete(deleteAction) {
+        var confirmMessage = '<digi:trn>Are you sure you want to delete this aid effectiveness indicator?</digi:trn>';
+        if (confirm(confirmMessage)) {
+            window.location.href = deleteAction;
+        }
+    }
+
+    function addIndicator() {
+        window.location.href = "/aidEffectivenessIndicatorsManager.do?actionParam=add";
     }
 
     setStripsTable("searchResultsTableId", "tableEven", "tableOdd");

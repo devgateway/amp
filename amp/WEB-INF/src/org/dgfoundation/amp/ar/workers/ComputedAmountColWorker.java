@@ -77,8 +77,8 @@ public class ComputedAmountColWorker extends MetaCellColumnWorker {
 
 		ComputedAmountCell ret = new ComputedAmountCell(ownerId);
 		ret.setId(id);
-		ret.setAmount(filter.adaptAmountToThousandsSetting(value.doubleValue()));
-		
+		ret.setAmount(value.doubleValue());
+				
 		ret.setFromExchangeRate(Util.getExchange(currencyCode, currencyDate));
 		//ret.setFromExchangeRate(exchangeRate);
 		ret.setCurrencyDate(currencyDate);

@@ -158,6 +158,8 @@ public class FactTableFiltering {
 			add(ColumnConstants.REGIONAL_GROUP_GROUP, new OrgGrpIdsExpander("rg_org_id"));
 			
 			add(ColumnConstants.IMPLEMENTATION_LEVEL, new ActACVIdsExpander("entity_id"));
+			add(ColumnConstants.IMPLEMENTATION_LOCATION, new ActACVIdsExpander("entity_id"));
+
 			
 			//ColumnConstants.FINANCING_INSTRUMENT, ColumnConstants.MODE_OF_PAYMENT, ColumnConstants.TYPE_OF_ASSISTANCE, ColumnConstants.TYPE_OF_COOPERATION, ColumnConstants.TYPE_OF_IMPLEMENTATION
 			add(ColumnConstants.FINANCING_INSTRUMENT, new IdentityExpander("financing_instrument_id"));
@@ -168,7 +170,15 @@ public class FactTableFiltering {
 			add(ColumnConstants.FUNDING_STATUS, new IdentityExpander("funding_status_id"));
 			add(ColumnConstants.PROCUREMENT_SYSTEM, new IdentityExpander("procurement_system_id"));
 			add(ColumnConstants.PLEDGES_AID_MODALITY, new IdentityExpander("modality_id"));
-			add(ColumnConstants.STATUS, new IdentityExpander("status_id"));
+			add(ColumnConstants.STATUS, new IdentityExpander("status_id"));			
+			
+			add(ColumnConstants.ACTIVITY_ID, new IdentityExpander("entity_id"));
+			
+			// non-direct-fact-table-filtering entries
+			add(ColumnConstants.TEAM_ID, new CustomQueryIdExpander("entity_id", "SELECT amp_activity_id FROM amp_activity_version WHERE amp_team_id IN (QQQ)"));
+			add(ColumnConstants.ACTIVITY_APPROVED_BY, new CustomQueryIdExpander("entity_id", "SELECT amp_activity_id FROM amp_activity_version WHERE approvedby IN (QQQ)"));
+			add(ColumnConstants.ACTIVITY_CREATED_BY, new CustomQueryIdExpander("entity_id", "SELECT amp_activity_id FROM amp_activity_version WHERE activity_creator IN (QQQ)"));
+			add(ColumnConstants.ACTIVITY_UPDATED_BY, new CustomQueryIdExpander("entity_id", "SELECT amp_activity_id FROM amp_activity_version WHERE modified_by IN (QQQ)"));
 		}
 		
 		void add(String mainColumn, IdsExpander expander) {

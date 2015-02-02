@@ -1,13 +1,17 @@
 package org.dgfoundation.amp.ar.amp210;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.junit.Test;
 
 public class BasicMondrianReportTests extends MondrianReportsTestCase {
@@ -371,6 +375,52 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 				Arrays.asList("TAC_activity_2"), 
 				correctResult
 				);
+	}
+	
+	@Test
+	public void testAmpActivityIdFilter() {
+		List<String> myaaids = Arrays.asList("24"); // eth water
+		
+		ReportSpecificationImpl spec = buildSpecification("simple report filtered by aaid", 
+				Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+				null, 
+				GroupingCriteria.GROUPING_TOTALS_ONLY);
+		spec.setDisplayEmptyFundingColumns(true);
+		spec.setDisplayEmptyFundingRows(true);
+		
+		MondrianReportFilters mrf = new MondrianReportFilters();
+		mrf.addFilterRule(new ReportColumn(ColumnConstants.INTERNAL_USE_ID), new FilterRule(myaaids, true));
+		spec.setFilters(mrf);
+		
+		ReportAreaForTests cr1 = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "0", "Actual Disbursements", "545 000")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "Eth Water", "Actual Commitments", "0", "Actual Disbursements", "545 000"));
+
+		runMondrianTestCase(
+			spec,
+			"en", 
+			Arrays.asList("Eth Water", "Pure MTEF Project", "crazy funding 1"), 
+			cr1
+		);
+		
+		mrf = new MondrianReportFilters();
+		mrf.addFilterRule(new ReportColumn(ColumnConstants.INTERNAL_USE_ID), new FilterRule(myaaids, false));
+		spec.setFilters(mrf);
+		
+		ReportAreaForTests cr2 =  new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "333 333", "Actual Disbursements", "0")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "Pure MTEF Project", "Actual Commitments", "0", "Actual Disbursements", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "crazy funding 1", "Actual Commitments", "333 333", "Actual Disbursements", "0"));
+
+		runMondrianTestCase(
+			spec,
+			"en", 
+			Arrays.asList("Eth Water", "Pure MTEF Project", "crazy funding 1"), 
+			cr2
+		);
 	}
 	
 }

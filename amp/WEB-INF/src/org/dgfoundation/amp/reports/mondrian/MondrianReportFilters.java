@@ -4,13 +4,17 @@
 package org.dgfoundation.amp.reports.mondrian;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.NamedTypedEntity;
 import org.dgfoundation.amp.newreports.ReportColumn;
@@ -113,12 +117,13 @@ public class MondrianReportFilters implements ReportFilters {
 	 * @param filterRule
 	 */
 	private void addFilterRule(ReportElement elem, FilterRule filterRule) {
+		Set<String> RAW_COLUMNS_WITH_NAMES_ENDING_IN_ID = new HashSet<>(Arrays.asList(ColumnConstants.ACTIVITY_ID, ColumnConstants.INTERNAL_USE_ID));
 		// Check if this is a filter that must be in a group
 		if (ElementType.ENTITY.equals(elem.type) 
 				&& FiltersGroup.FILTER_GROUP.containsKey(elem.entity.getEntityName())) {
 			
 			String filterGroup = FiltersGroup.FILTER_GROUP.get(elem.entity.getEntityName());
-			if (filterGroup.endsWith(" Id")) {
+			if (filterGroup.endsWith(" Id") && !RAW_COLUMNS_WITH_NAMES_ENDING_IN_ID.contains(filterGroup)) {
 				// hack: do we really need to be able to filter by id fields instead of filtering by id the natural value field?
 				// idea of hack: filtering by "Primary Sector Id" (irrespective of whether by id or value) is the exact same thing as filtering by "Primary Sector" by id
 				filterGroup = filterGroup.substring(0, filterGroup.length() - 3); // Delete " Id"
@@ -138,7 +143,7 @@ public class MondrianReportFilters implements ReportFilters {
 			filterRules.put(elem, filtersList);
 		}
 		filtersList.add(filterRule);
-	}	
+	}
 	
 	/**
 	 * Add a column/measure filter
@@ -146,6 +151,10 @@ public class MondrianReportFilters implements ReportFilters {
 	 * @param filterRule - the filter rule to apply
 	 */
 	public void addFilterRule(NamedTypedEntity entity,  FilterRule filterRule) {
+		if (entity.getEntityName().equals(ColumnConstants.GEOCODE)) {
+			addFilterRule(new ReportColumn(ColumnConstants.LOCATION), MondrianReportUtils.postprocessGeocodeRule(filterRule));
+			return;
+		}
 		addFilterRule(new ReportElement(entity), filterRule);
 	}
 	

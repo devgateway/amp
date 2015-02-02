@@ -221,7 +221,7 @@ public class SQLUtils {
 			throw new RuntimeException("query should have returned exactly one result, but returned instead: " + res.size());
 		return PersistenceManager.getLong(res.get(0));
 	}
-	
+		
 	public static <T> List<T> fetchAsList(ResultSet rs, int n, String errMsgAdd)
 	{
 		try

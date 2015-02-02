@@ -73,7 +73,9 @@ public class AmpFundingItemFeaturePanel extends AmpFeaturePanel<AmpFunding> {
 			fundingModel.getObject().setFundingDetails(new TreeSet<AmpFundingDetail>());
 		//this should be changed to a propertyModel
 		Label itemNumber=new Label("itemNumber", new Model(item+1));
-		add(itemNumber); 
+		add(itemNumber);
+		Label itemNumberLabel=new TrnLabel("itemNumberLabel", new Model<String>("Funding Item"));
+		add(itemNumberLabel);
 		AmpFundingSummaryPanel fundingSummary = new AmpFundingSummaryPanel(
 				"fundingSumary", "Funding Section Summary", fundingModel);
 		

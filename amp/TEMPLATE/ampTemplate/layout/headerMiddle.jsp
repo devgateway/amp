@@ -161,19 +161,23 @@ ${fn:replace(message,quote,escapedQuote)}
 													<!-- New GIS Module-->
 											<module:display name="PUBLIC VIEW">
 												<module:display name="Public GIS" parentModule="PUBLIC VIEW">
-													<li class="yuiampmenuitem_drop">
-														<a target="_blank" class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/gisModule/dist/index.html" onclick="return canExit()"> 
-															<digi:trn key="fm:gis">NEW GIS</digi:trn>
-														</a>
-													</li>
+													<module:display name="/GIS">
+														<li class="yuiampmenuitem_drop">
+															<a target="_blank" class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/gisModule/dist/index.html" onclick="return canExit()"> 
+																<digi:trn key="fm:gis">NEW GIS</digi:trn>
+															</a>
+														</li>
+													</module:display>
 												</module:display>
 											</module:display>
 											<!-- New Dashboard Module-->
+											<module:display name="/Dashboards">
 												<li class="yuiampmenuitem_drop">
 													<a target="_blank" class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/dashboard/build/index.html" onclick="return canExit()"> 
 														<digi:trn key="fm:gis">NEW DASHBOARD (BETA)</digi:trn>
 													</a>
 												</li>
+											</module:display>
 												
 											<module:display name="GIS DASHBOARD">
 												<feature:display name="Show in public view" module="GIS DASHBOARD">
@@ -716,18 +720,22 @@ function openAdmin () {
 							</module:display>
 							
 							<!-- New GIS Module-->
-							<li class="yuiampmenuitem_drop">
-								<a target="_blank" class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/gisModule/dist/index.html" onclick="return canExit()"> 
-									<digi:trn key="fm:gis">NEW GIS (BETA)</digi:trn>
-								</a>
-							</li>
+							<module:display name="/GIS">
+								<li class="yuiampmenuitem_drop">
+									<a target="_blank" class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/gisModule/dist/index.html" onclick="return canExit()"> 
+										<digi:trn key="fm:gis">NEW GIS (BETA)</digi:trn>
+									</a>
+								</li>
+							</module:display>
 
 							<!-- New Dashboard Module-->
-							<li class="yuiampmenuitem_drop">
-								<a target="_blank" class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/dashboard/build/index.html" onclick="return canExit()"> 
-									<digi:trn key="fm:gis">NEW DASHBOARD (BETA)</digi:trn>
-								</a>
-							</li>
+							<module:display name="/Dashboards">
+								<li class="yuiampmenuitem_drop">
+									<a target="_blank" class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/dashboard/build/index.html" onclick="return canExit()"> 
+										<digi:trn key="fm:gis">NEW DASHBOARD (BETA)</digi:trn>
+									</a>
+								</li>
+							</module:display>
 							
 							<module:display name="Dashboard Generator" parentModule="Visualization Dashboards">
 								<li class="yuiampmenuitem_drop">

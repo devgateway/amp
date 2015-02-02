@@ -10,7 +10,7 @@ public class AmpAidEffectivenessIndicatorOption implements Serializable {
 
     private Long ampIndicatorOptionId;
     private String ampIndicatorOptionName;
-    private boolean isDefault;
+    private boolean defaultOption;
 
     public AmpAidEffectivenessIndicator getIndicator() {
         return indicator;
@@ -38,12 +38,12 @@ public class AmpAidEffectivenessIndicatorOption implements Serializable {
         this.ampIndicatorOptionName = ampIndicatorOptionName;
     }
 
-    public boolean isDefault() {
-        return isDefault;
+    public boolean isDefaultOption() {
+        return defaultOption;
     }
 
-    public void setDefault(boolean isDefault) {
-        this.isDefault = isDefault;
+    public void setDefaultOption(boolean defaultOption) {
+        this.defaultOption = defaultOption;
     }
 
 

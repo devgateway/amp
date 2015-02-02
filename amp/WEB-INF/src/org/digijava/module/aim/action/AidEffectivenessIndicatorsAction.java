@@ -121,7 +121,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
         form.setActive(entity.isActive());
         form.setIndicatorType(entity.getIndicatorType());
 
-        // todo copy options
+        form.setOptions(entity.getOptions());
 
         return form;
     }

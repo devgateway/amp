@@ -10,6 +10,8 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
+<script type="text/javascript" src='<digi:file src="module/aim/scripts/table_utils.js"/>'>.</script>
+
 <h1 class="admintitle"><digi:trn>Aid Effectiveness Indicator Manager - Edit Indicator</digi:trn></h1>
 
 <digi:form action="/aidEffectivenessIndicatorsManager.do" method="post" styleId="editForm">
@@ -82,17 +84,51 @@
             </td>
         </tr>
 
-        <tr>
-            <td colspan="4" align="center">
-                <html:submit styleClass="dr-menu"><digi:trn key="btn:save">Save</digi:trn></html:submit>
-                &nbsp; &nbsp;
-                <html:submit styleClass="dr-menu" onclick="cancelSave(); return false;">
-                    <digi:trn key="btn:cancel">Cancel</digi:trn>
-                </html:submit>
-            </td>
-        </tr>
-
     </table>
+
+    <div valign="30px">
+        <c:set var="addOptionText"><digi:trn>Add Option</digi:trn></c:set>
+        <input type="button" class="dr-menu" value="${addOptionText}" onclick="javascript: addOptionRow(); "/>
+    </div>
+
+    <logic:present name="aidEffectivenessIndicatorsForm" property="options">
+        <table style="font-family: verdana; font-size: 11px; font-weight: bold" cellpadding="4" id="optionsTableId" width="50%">
+            <tr>
+                <th align="center" bgcolor="#c7d4db"><digi:trn>Option Text</digi:trn></th>
+                <th align="center" bgcolor="#c7d4db"><digi:trn>Is Default</digi:trn></th>
+            </tr>
+
+            <logic:iterate name="aidEffectivenessIndicatorsForm" property="options" id="option" type="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption">
+                <tr>
+                    <td width="50%">${option.ampIndicatorOptionName}</td>
+
+                    <td width="50%">
+                        <c:choose>
+                            <c:when test="${option.defaultOption}">
+                                <digi:trn key="aim:yes">Yes</digi:trn>
+                            </c:when>
+                            <c:otherwise>
+                                <digi:trn key="aim:no">No</digi:trn>
+                            </c:otherwise>
+                        </c:choose>
+                    </td>
+                </tr>
+            </logic:iterate>
+        </table>
+    </logic:present>
+
+    <div style='height: 30px'>
+        <%-- some empty space --%>&nbsp;
+    </div>
+
+    <div>
+        <html:submit styleClass="dr-menu"><digi:trn key="btn:save">Save</digi:trn></html:submit>
+        &nbsp; &nbsp;
+        <html:submit styleClass="dr-menu" onclick="cancelSave(); return false;">
+            <digi:trn key="btn:cancel">Cancel</digi:trn>
+        </html:submit>
+    </div>
+
 </digi:form>
 
 <script type="text/javascript">
@@ -102,4 +138,23 @@
         editForm.reset();
         editForm.submit();
     }
+
+    function addOptionRow() {
+        var table = document.getElementById("optionsTableId");
+
+        // Create an empty <tr> element and add it to the 1st position of the table:
+        var row = table.insertRow();
+
+        // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+
+        // Add some text to the new cells:
+        cell1.innerHTML = "NEW CELL1";
+        cell2.innerHTML = "NEW CELL2";
+    }
+
+    setStripsTable("optionsTableId", "tableEven", "tableOdd");
+    setHoveredTable("optionsTableId", true);
+
 </script>

@@ -15,7 +15,7 @@
         <property name="mandatory" column="MANDATORY" type="boolean" />
         <property name="indicatorType" column="INDICATOR_TYPE" type="java.lang.Integer" />
 
-        <list name="options" table="AMP_AID_EFFECTIVENESS_INDICATOR_OPTION" lazy="true" cascade="all">
+        <list name="options" table="AMP_AID_EFFECTIVENESS_INDICATOR_OPTION" lazy="false" cascade="all">
             <cache usage="read-write"/>
             <key column="amp_indicator_id"/>
             <index column="idx"/>

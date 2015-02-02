@@ -157,6 +157,17 @@
            </field>           
 	</form>
 
+    <form name="aidEffectivenessIndicatorsForm">
+        <field property="role" depends="required">
+            <arg key="display.aim.role"/>
+        </field>
+        <field property="description" depends="required">
+            <arg key="display.aim.description"/>
+        </field>
+    </form>
+
+
+
 <!-- Aim Add Role -->
 
 	<form name="aimUpdateRoleForm">

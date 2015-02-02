@@ -160,6 +160,16 @@ public class FiltersGroup {
 		filterGroupMap.put(ColumnConstants.REGIONAL_GROUP_ID, ColumnConstants.REGIONAL_GROUP);
 		addIdentityMapping(filterGroupMap, ColumnConstants.REGIONAL_GROUP_GROUP);		
 
+		addIdentityMapping(filterGroupMap, ColumnConstants.ACTIVITY_ID);
+		filterGroupMap.put(ColumnConstants.INTERNAL_USE_ID, ColumnConstants.ACTIVITY_ID);
+		
+		addIdentityMapping(filterGroupMap, ColumnConstants.TEAM_ID);
+		filterGroupMap.put(ColumnConstants.TEAM, ColumnConstants.TEAM_ID);
+		
+		addIdentityMapping(filterGroupMap, ColumnConstants.ACTIVITY_APPROVED_BY);
+		addIdentityMapping(filterGroupMap, ColumnConstants.ACTIVITY_CREATED_BY);
+		addIdentityMapping(filterGroupMap, ColumnConstants.ACTIVITY_UPDATED_BY);
+		
 		return filterGroupMap;
 	}
 	

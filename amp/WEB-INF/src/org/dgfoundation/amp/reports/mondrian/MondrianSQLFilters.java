@@ -31,7 +31,7 @@ public class MondrianSQLFilters {
 		addDateColumn(ColumnConstants.PROPOSED_COMPLETION_DATE, "proposed_completion_date");
 		addDateColumn(ColumnConstants.ACTIVITY_CREATED_ON, "date_created");
 		addDateColumn(ColumnConstants.ACTIVITY_UPDATED_ON, "date_updated");		
-		put(ColumnConstants.APPROVAL_STATUS, new MondrianApprovalStatusFilter());
+		put(ColumnConstants.APPROVAL_STATUS, new MondrianApprovalStatusFilter());		
 	}
 		private void addDateColumn(String ampColumn, String aavColumn) {
 			put(ampColumn, new MondrianDateFilters(ampColumn, aavColumn));

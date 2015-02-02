@@ -3,6 +3,7 @@
  */
 package org.dgfoundation.amp.reports.mondrian;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -13,7 +14,9 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
@@ -32,12 +35,14 @@ import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.SaikuReportSorter;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.hibernate.jdbc.ReturningWork;
 
 /**
  * Reports utility methods
@@ -196,5 +201,45 @@ public class MondrianReportUtils {
 			return 0.000001;
 		}
 		return 1;
+	}
+		
+	/**
+	 * returns a list of all the ACVL IDs 
+	 * @param geoid
+	 * @return
+	 */
+	public static List<String> geoIdToLocationIds(String geoid) {
+		List<?> acvlIds = PersistenceManager.getSession().createSQLQuery("SELECT id FROM amp_category_value_location WHERE geo_code=" + SQLUtils.stringifyObject(geoid)).list();
+
+		List<String> res = new ArrayList<>();
+		for(Object geoId:acvlIds)
+			if (geoId != null)
+				res.add(PersistenceManager.getLong(geoId).toString());
+		return res;
+	}
+	
+	/**
+	 * switches geocodes for location IDs
+	 * @param in
+	 * @return
+	 */
+	public static FilterRule postprocessGeocodeRule(FilterRule in) {
+		if (in == null) return null;
+		Set<String> locationIds = new HashSet<>();
+		
+		switch(in.filterType) {
+			case RANGE:
+				throw new RuntimeException("no range for geoids!");
+				
+			case SINGLE_VALUE:
+				locationIds.addAll(geoIdToLocationIds(in.value));
+				break;
+				
+			case VALUES:
+				for(String value:in.values)
+					locationIds.addAll(geoIdToLocationIds(value));
+				break;
+		}
+		return new FilterRule(new ArrayList<>(locationIds), in.valuesInclusive);
 	}
 }

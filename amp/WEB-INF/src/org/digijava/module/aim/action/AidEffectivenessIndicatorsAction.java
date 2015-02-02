@@ -5,11 +5,13 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator;
+import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
 import org.digijava.module.aim.form.AidEffectivenessIndicatorForm;
 import org.digijava.module.aim.util.AidEffectivenessIndicatorUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -120,8 +122,11 @@ public class AidEffectivenessIndicatorsAction extends Action {
         form.setMandatory(entity.isMandatory());
         form.setActive(entity.isActive());
         form.setIndicatorType(entity.getIndicatorType());
-
-        form.setOptions(entity.getOptions());
+        if (entity.getOptions() != null) {
+            for (AmpAidEffectivenessIndicatorOption option : entity.getOptions()) {
+                form.getOptions().add(option);
+            }
+        }
 
         return form;
     }

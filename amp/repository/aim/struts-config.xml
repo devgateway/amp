@@ -878,7 +878,7 @@
       <forward name="toAdditionOfIndiForStep9" path="/showLayout.do?layout=aim_selectCreateIndicatorForStep9" />
     </action>
 
-    <action name="aidEffectivenessIndicatorsForm" path="/aim/aidEffectivenessIndicatorsManager" scope="request" type="org.digijava.module.aim.action.AidEffectivenessIndicatorsAction" validate="false">
+    <action name="aidEffectivenessIndicatorsForm" path="/aim/aidEffectivenessIndicatorsManager" scope="session" type="org.digijava.module.aim.action.AidEffectivenessIndicatorsAction" validate="false">
         <forward name="list" path="/showLayout.do?layout=aidEffectivenessIndicators" />
         <forward name="search" path="/showLayout.do?layout=aidEffectivenessIndicators" />
         <forward name="edit" path="/showLayout.do?layout=editEffectivenessIndicator" />

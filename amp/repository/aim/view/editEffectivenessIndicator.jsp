@@ -11,6 +11,9 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
 <script type="text/javascript" src='<digi:file src="module/aim/scripts/table_utils.js"/>'>.</script>
+<script type="text/javascript">
+    var optionsTableCounter = 0;
+</script>
 
 <h1 class="admintitle"><digi:trn>Aid Effectiveness Indicator Manager - Edit Indicator</digi:trn></h1>
 
@@ -98,19 +101,29 @@
                 <th align="center" bgcolor="#c7d4db"><digi:trn>Is Default</digi:trn></th>
             </tr>
 
-            <logic:iterate name="aidEffectivenessIndicatorsForm" property="options" id="option" type="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption">
-                <tr>
-                    <td width="50%">${option.ampIndicatorOptionName}</td>
+            <logic:iterate name="aidEffectivenessIndicatorsForm" property="options" id="option" indexId="idx" type="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption">
+                <script type="text/javascript">
+                    var optionsTableCounter = ++;
+                </script>
 
+                <html:hidden property="options[${idx}].ampIndicatorOptionId" />
+
+                <tr>
                     <td width="50%">
-                        <c:choose>
+                        <html:text property="options[${idx}].ampIndicatorOptionName" styleId="editAmpIndicatorName" />
+                        <%-- ${option.ampIndicatorOptionName} --%>
+                    </td>
+
+                    <td width="50%" align="center">
+                        <html:checkbox property="options[${idx}].defaultOption" styleId="editDefaultOption" />
+                        <%--c:choose>
                             <c:when test="${option.defaultOption}">
                                 <digi:trn key="aim:yes">Yes</digi:trn>
                             </c:when>
                             <c:otherwise>
                                 <digi:trn key="aim:no">No</digi:trn>
                             </c:otherwise>
-                        </c:choose>
+                        </c:choose--%>
                     </td>
                 </tr>
             </logic:iterate>
@@ -140,6 +153,7 @@
     }
 
     function addOptionRow() {
+        optionsTableCounter ++;
         var table = document.getElementById("optionsTableId");
 
         // Create an empty <tr> element and add it to the 1st position of the table:
@@ -147,11 +161,13 @@
 
         // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
         var cell1 = row.insertCell(0);
+
         var cell2 = row.insertCell(1);
+        cell2.style.textAlign = 'center';
 
         // Add some text to the new cells:
-        cell1.innerHTML = "NEW CELL1";
-        cell2.innerHTML = "NEW CELL2";
+        cell1.innerHTML = '<input type="text" name="options[' + optionsTableCounter + '].ampIndicatorOptionName" id="ampIndicatorOptionNameId" />';
+        cell2.innerHTML = '<input type="checkbox" name="options[' + optionsTableCounter + '].defaultOption" id="defaultOptionId" />';
     }
 
     setStripsTable("optionsTableId", "tableEven", "tableOdd");

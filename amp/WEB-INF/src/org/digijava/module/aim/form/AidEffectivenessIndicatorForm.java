@@ -3,7 +3,7 @@ package org.digijava.module.aim.form;
 import org.apache.struts.action.ActionForm;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Form class is used to edit/add new indicators
@@ -24,7 +24,7 @@ public class AidEffectivenessIndicatorForm extends ActionForm {
     // 0 - selectbox list, 1 - dropdown list
     private int indicatorType = -1;
 
-    private List<AmpAidEffectivenessIndicatorOption> options;
+    private ArrayList<AmpAidEffectivenessIndicatorOption> options = new ArrayList<AmpAidEffectivenessIndicatorOption>();
 
 
 
@@ -76,11 +76,11 @@ public class AidEffectivenessIndicatorForm extends ActionForm {
         this.indicatorType = indicatorType;
     }
 
-    public List<AmpAidEffectivenessIndicatorOption> getOptions() {
+    public ArrayList<AmpAidEffectivenessIndicatorOption> getOptions() {
         return options;
     }
 
-    public void setOptions(List<AmpAidEffectivenessIndicatorOption> options) {
+    public void setOptions(ArrayList<AmpAidEffectivenessIndicatorOption> options) {
         this.options = options;
     }
 

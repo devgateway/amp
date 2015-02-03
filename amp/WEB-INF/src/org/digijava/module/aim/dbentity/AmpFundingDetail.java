@@ -4,6 +4,8 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
+
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
@@ -239,7 +241,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	
 	@java.lang.SuppressWarnings("all")
 	public Double getTransactionAmount() {
-		return this.transactionAmount;
+		return FeaturesUtil.applyThousandsForVisibility(transactionAmount);
 	}
 	
 	@java.lang.SuppressWarnings("all")
@@ -382,7 +384,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	
 	@java.lang.SuppressWarnings("all")
 	public void setTransactionAmount(final Double transactionAmount) {
-		this.transactionAmount = transactionAmount;
+		this.transactionAmount = FeaturesUtil.applyThousandsForEntry(transactionAmount);
 	}
 	
 	@java.lang.SuppressWarnings("all")

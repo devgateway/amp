@@ -480,8 +480,14 @@ var WorkspaceToolbar = Backbone.View.extend({
             this.workspace.query.url() + "/export/xls/" + this.workspace.query.getProperty('saiku.olap.result.formatter');
     },
     export_amp_xls: function(event) {
-    	$.postDownload("/rest/data/saikureport/export/xls/" + this.calculate_url(),
-    			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
+    	if(Settings.AMP_REPORT_API_BRIDGE) {
+	    	$.postDownload("/rest/data/saikureport/export/xls/" + this.calculate_url(),
+	    			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
+    	}
+    	else
+		{
+    		this.export_xls();
+		}
     },
     export_csv: function(event) {
         window.location = Settings.REST_URL +
@@ -489,9 +495,14 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
 
     export_amp_csv: function(event) {
-
-    	$.postDownload("/rest/data/saikureport/export/csv/" + this.calculate_url(),
-    			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
+    	if(Settings.AMP_REPORT_API_BRIDGE) {
+	    	$.postDownload("/rest/data/saikureport/export/csv/" + this.calculate_url(),
+	    			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
+    	}
+    	else
+		{
+    		this.export_csv();
+		}
     },
 
     export_pdf: function(event) {
@@ -500,9 +511,14 @@ var WorkspaceToolbar = Backbone.View.extend({
     },
 
     export_amp_pdf: function(event) {
-   
-    	$.postDownload("/rest/data/saikureport/export/pdf/" +  this.calculate_url(),
-    			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
+    	if(Settings.AMP_REPORT_API_BRIDGE) {
+	    	$.postDownload("/rest/data/saikureport/export/pdf/" +  this.calculate_url(),
+	    			{query: JSON.stringify(this.workspace.currentQueryModel)}, "post");
+    	}
+    	else
+		{
+    		this.export_pdf();
+		}
     },
 
     switch_to_mdx: function(event) {

@@ -4,6 +4,8 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Date;
+
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
@@ -121,9 +123,9 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 		}
 	}
 	// used in org profile for indicator 4
-	public AmpFundingDetail(Integer transactionType, AmpCategoryValue adjustmentType, Double transactionAmount, Date transactionDate, AmpCurrency ampCurrencyId, Double fixedExchangeRate, Long ahsureyId) {
-		this(null, transactionType, adjustmentType, transactionDate, ampCurrencyId, fixedExchangeRate);
-		this.transactionAmount = transactionAmount * OrgProfileUtil.getQ4Value(ahsureyId);
+		public AmpFundingDetail(Integer transactionType, AmpCategoryValue adjustmentType, Double transactionAmount, Date transactionDate, AmpCurrency ampCurrencyId, Double fixedExchangeRate, Long ahsureyId) {
+			this(null, transactionType, adjustmentType, transactionDate, ampCurrencyId, fixedExchangeRate);
+			this.transactionAmount = transactionAmount * OrgProfileUtil.getQ4Value(ahsureyId);
 	}
 	// used in org profile 
 	public AmpFundingDetail(Integer transactionType, AmpCategoryValue adjustmentType, Double transactionAmount, Date transactionDate, AmpCurrency ampCurrencyId, Double fixedExchangeRate) {
@@ -245,7 +247,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	
 	@java.lang.SuppressWarnings("all")
 	public Double getTransactionAmount() {
-		return this.transactionAmount;
+		return FeaturesUtil.applyThousandsForVisibility(transactionAmount);
 	}
 	
 	@java.lang.SuppressWarnings("all")
@@ -388,7 +390,7 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	
 	@java.lang.SuppressWarnings("all")
 	public void setTransactionAmount(final Double transactionAmount) {
-		this.transactionAmount = transactionAmount;
+		this.transactionAmount = FeaturesUtil.applyThousandsForEntry(transactionAmount);
 	}
 	
 	@java.lang.SuppressWarnings("all")

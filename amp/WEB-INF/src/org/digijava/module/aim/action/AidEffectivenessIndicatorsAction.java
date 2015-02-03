@@ -28,6 +28,9 @@ public class AidEffectivenessIndicatorsAction extends Action {
         AmpAidEffectivenessIndicator indicator = null;
         String actionParam = request.getParameter("actionParam");
         String indicatorIdParam = request.getParameter("ampIndicatorId");
+        String optionIdParam = request.getParameter("ampIndicatorOptionId");
+        String optionIndexParam = request.getParameter("optionIndex");
+
 
         if (actionParam == null) {
             // the default one is "list"
@@ -62,6 +65,27 @@ public class AidEffectivenessIndicatorsAction extends Action {
             case "addOption" :
                 AmpAidEffectivenessIndicatorOption fo = new AmpAidEffectivenessIndicatorOption();
                 indicatorForm.getOptions().add(fo);
+                return mapping.findForward("edit");
+            case "deleteOption" :
+                long optionId = 0;
+                try {
+                    optionId = Long.parseLong(optionIdParam);
+                } catch (NumberFormatException nfe) {
+                    // todo handleMe
+                }
+                if (optionId > 0) {
+                    // deleting already saved option
+                    indicator = AidEffectivenessIndicatorUtil.deleteOption(optionId);
+                    entityToForm(indicator, indicatorForm);
+                } else {
+                    // deleting just added option from the form
+                    try {
+                        int optionIndex = Integer.parseInt(optionIndexParam);
+                        indicatorForm.getOptions().remove(optionIndex);
+                    } catch (RuntimeException rte) {
+                    }
+                }
+
                 return mapping.findForward("edit");
             case "save":
                 // update

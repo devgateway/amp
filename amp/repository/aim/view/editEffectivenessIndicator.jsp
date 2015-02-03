@@ -99,6 +99,7 @@
             <tr>
                 <th align="center" bgcolor="#c7d4db"><digi:trn>Option Text</digi:trn></th>
                 <th align="center" bgcolor="#c7d4db"><digi:trn>Is Default</digi:trn></th>
+                <th align="center" bgcolor="#c7d4db">&nbsp;</th>
             </tr>
 
             <logic:iterate name="aidEffectivenessIndicatorsForm" property="options" id="option" indexId="idx" type="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption">
@@ -109,12 +110,12 @@
                 <html:hidden property="options[${idx}].ampIndicatorOptionId" />
 
                 <tr>
-                    <td width="50%">
+                    <td width="40%">
                         <html:text property="options[${idx}].ampIndicatorOptionName" styleId="editAmpIndicatorName" />
                         <%-- ${option.ampIndicatorOptionName} --%>
                     </td>
 
-                    <td width="50%" align="center">
+                    <td width="40%" align="center">
                         <html:checkbox property="options[${idx}].defaultOption" styleId="editDefaultOption" />
                         <%--c:choose>
                             <c:when test="${option.defaultOption}">
@@ -124,6 +125,12 @@
                                 <digi:trn key="aim:no">No</digi:trn>
                             </c:otherwise>
                         </c:choose--%>
+                    </td>
+                    <td width="20%" align="center">
+                        <c:set var="deleteOptionAction">/aidEffectivenessIndicatorsManager.do?actionParam=deleteOption&ampIndicatorOptionId=${option.ampIndicatorOptionId}&optionIndex=${idx}</c:set>
+                        <digi:link href="${deleteOptionAction}" onclick="return confirmDelete('${deleteOptionAction}'); return false;">
+                            <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete</digi:trn>"/>
+                        </digi:link>
                     </td>
                 </tr>
             </logic:iterate>
@@ -152,7 +159,7 @@
         editForm.submit();
     }
 
-    /*
+    /* The dynamic (javascript) adding does not work because of struts beans populator
     function addOptionRow() {
         optionsTableCounter ++;
         var table = document.getElementById("optionsTableId");

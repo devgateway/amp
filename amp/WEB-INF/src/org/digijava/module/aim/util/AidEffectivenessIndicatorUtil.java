@@ -2,6 +2,7 @@ package org.digijava.module.aim.util;
 
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator;
+import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -67,6 +68,24 @@ public class AidEffectivenessIndicatorUtil {
         // TODO Handle if there are alreary exist activities with this indicator
         // The deletion is impossible and we should fire corresponding message to the user
         session.delete(indicator);
+    }
+
+    public static AmpAidEffectivenessIndicator deleteOption(long optionId) {
+        Session session = PersistenceManager.getSession();
+        AmpAidEffectivenessIndicatorOption option = (AmpAidEffectivenessIndicatorOption)
+            session.load(AmpAidEffectivenessIndicatorOption.class, optionId);
+        AmpAidEffectivenessIndicator indicator = option.getIndicator();
+        indicator.getOptions().remove(option);
+        session.delete(option);
+        return indicator;
+
+        /*
+        Session session = PersistenceManager.getSession();
+        String queryString = "delete from " + AmpAidEffectivenessIndicatorOption.class.getName() + " where ampIndicatorOptionId =:ampIndicatorOptionId";
+        Query query = session.createQuery(queryString);
+        query.setLong("ampIndicatorOptionId", optionId);
+        query.executeUpdate();
+        */
     }
 
 }

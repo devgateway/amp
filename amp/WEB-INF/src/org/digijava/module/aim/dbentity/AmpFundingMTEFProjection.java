@@ -119,7 +119,7 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 		
 		public Double getTransactionAmount()
 		{
-			return FeaturesUtil.applyThousandsForVisibility(this.getAmount());
+			return this.getAmount();
 		}
 		
 		public Double getAbsoluteTransactionAmount()

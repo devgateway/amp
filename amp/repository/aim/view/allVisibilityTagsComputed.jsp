@@ -34,6 +34,8 @@
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display>
 <module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/> 
 <module:display name="GIS DASHBOARD"></module:display> 
+<module:display name="/GIS"></module:display>
+<module:display name="/Dashboards"></module:display>
 <module:display name="HELP"></module:display> 
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display> 
@@ -871,6 +873,9 @@
 
 <!-- new gis -->
 <module:display name="Public GIS" parentModule="PUBLIC VIEW"></module:display>
+<!--  -->
+<!-- new dashboard -->
+<module:display name="Public Dashboards" parentModule="PUBLIC VIEW"></module:display>
 <!--  -->
 <module:display name="Visualization Dashboards"></module:display>
 

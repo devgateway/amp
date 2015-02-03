@@ -161,17 +161,15 @@ ${fn:replace(message,quote,escapedQuote)}
 													<!-- New GIS Module-->
 											<module:display name="PUBLIC VIEW">
 												<module:display name="Public GIS" parentModule="PUBLIC VIEW">
-													<module:display name="/GIS">
-														<li class="yuiampmenuitem_drop">
-															<a target="_blank" class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/gisModule/dist/index.html" onclick="return canExit()"> 
-																<digi:trn key="fm:gis">NEW GIS</digi:trn>
-															</a>
-														</li>
-													</module:display>
+													<li class="yuiampmenuitem_drop">
+														<a target="_blank" class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/gisModule/dist/index.html" onclick="return canExit()"> 
+															<digi:trn key="fm:gis">NEW GIS</digi:trn>
+														</a>
+													</li>
 												</module:display>
 											</module:display>
 											<!-- New Dashboard Module-->
-											<module:display name="/Dashboards">
+											<module:display name="Public Dashboards" parentModule="PUBLIC VIEW">
 												<li class="yuiampmenuitem_drop">
 													<a target="_blank" class="yuiampmenuitemlabel" href="/TEMPLATE/ampTemplate/dashboard/build/index.html" onclick="return canExit()"> 
 														<digi:trn key="fm:gis">NEW DASHBOARD (BETA)</digi:trn>

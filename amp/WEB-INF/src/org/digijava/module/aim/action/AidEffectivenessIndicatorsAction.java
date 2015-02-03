@@ -40,7 +40,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 List<AmpAidEffectivenessIndicator> searchResult = AidEffectivenessIndicatorUtil.searchIndicators(
                         indicatorForm.getIndicatorType(),
                         indicatorForm.getAmpIndicatorName(),
-                        indicatorForm.isActive());
+                        indicatorForm.getActive());
                 request.setAttribute("searchResult", searchResult);
                 return mapping.findForward("search");
             case "list" :
@@ -57,7 +57,12 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 entityToForm(indicator, indicatorForm);
                 return mapping.findForward("edit");
             case "add" :
+                clearForm(indicatorForm);
                 return mapping.findForward("add");
+            case "addOption" :
+                AmpAidEffectivenessIndicatorOption fo = new AmpAidEffectivenessIndicatorOption();
+                indicatorForm.getOptions().add(fo);
+                return mapping.findForward("edit");
             case "save":
                 // update
                 if (indicatorForm.getAmpIndicatorId() != null && indicatorForm.getAmpIndicatorId() > 0){
@@ -98,11 +103,27 @@ public class AidEffectivenessIndicatorsAction extends Action {
 
         entity.setAmpIndicatorName(form.getAmpIndicatorName());
         entity.setTooltipText(form.getTooltipText());
-        entity.setMandatory(form.isMandatory());
-        entity.setActive(form.isActive());
+        entity.setMandatory(form.getMandatory());
+        entity.setActive(form.getActive());
         entity.setIndicatorType(form.getIndicatorType());
 
-        // todo add options copying
+        // todo consider use collection.retainAll
+        if (entity.getOptions() == null) {
+            entity.setOptions(form.getOptions());
+        } else {
+            for (int i = 0; i < form.getOptions().size() ; i++) {
+                if (entity.getOptions().size() > i) {
+                    entity.getOptions().get(i).setAmpIndicatorOptionName(form.getOptions().get(i).getAmpIndicatorOptionName());
+                    entity.getOptions().get(i).setDefaultOption(form.getOptions().get(i).getDefaultOption());
+                    entity.getOptions().get(i).setIndicator(entity);
+                } else {
+                    AmpAidEffectivenessIndicatorOption formOption = form.getOptions().get(i);
+                    formOption.setIndicator(entity);
+                    entity.getOptions().add(formOption);
+                }
+            }
+        }
+
 
         return entity;
     }
@@ -119,16 +140,40 @@ public class AidEffectivenessIndicatorsAction extends Action {
 
         form.setAmpIndicatorName(entity.getAmpIndicatorName());
         form.setTooltipText(entity.getTooltipText());
-        form.setMandatory(entity.isMandatory());
-        form.setActive(entity.isActive());
+        form.setMandatory(entity.getMandatory());
+        form.setActive(entity.getActive());
         form.setIndicatorType(entity.getIndicatorType());
+
+
+
+        /*
         if (entity.getOptions() != null) {
-            for (AmpAidEffectivenessIndicatorOption option : entity.getOptions()) {
-                form.getOptions().add(option);
+            form.setOptions(new ArrayList<AmpAidEffectivenessIndicatorOption>());
+            for (AmpAidEffectivenessIndicatorOption eo : entity.getOptions()) {
+                AmpAidEffectivenessIndicatorOption fo = new AmpAidEffectivenessIndicatorOption();
+                fo.setDefaultOption(eo.getDefaultOption());
+                fo.setAmpIndicatorOptionName(eo.getAmpIndicatorOptionName());
+                fo.setAmpIndicatorOptionId(eo.getAmpIndicatorOptionId());
+                form.getOptions().add(fo);
             }
-        }
+        }*/
+        form.setOptions(entity.getOptions());
 
         return form;
+    }
+
+    /**
+     * Do not push this method to form clear
+     * We are using session form and it will be cleared each time!!!
+     */
+    public void clearForm(AidEffectivenessIndicatorForm indicatorForm) {
+        indicatorForm.setTooltipText(null);
+        indicatorForm.setAmpIndicatorName(null);
+        indicatorForm.setMandatory(false);
+        indicatorForm.setActive(false);
+        indicatorForm.setAmpIndicatorId(null);
+        indicatorForm.setIndicatorType(-1);
+        indicatorForm.setOptions(new ArrayList<AmpAidEffectivenessIndicatorOption>());
     }
 
 }

@@ -882,6 +882,7 @@
         <forward name="list" path="/showLayout.do?layout=aidEffectivenessIndicators" />
         <forward name="search" path="/showLayout.do?layout=aidEffectivenessIndicators" />
         <forward name="edit" path="/showLayout.do?layout=editEffectivenessIndicator" />
+        <forward name="addOption" path="/showLayout.do?layout=editEffectivenessIndicator" />
         <forward name="add" path="/showLayout.do?layout=editEffectivenessIndicator" />
         <forward name="save" path="/showLayout.do?layout=aidEffectivenessIndicators" />
         <forward name="delete" path="/showLayout.do?layout=aidEffectivenessIndicators" />

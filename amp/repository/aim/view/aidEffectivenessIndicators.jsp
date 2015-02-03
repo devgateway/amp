@@ -69,7 +69,7 @@
 <br/>
 
 <%-- Search result list--%>
-<logic:present name="searchResult">
+<logic:notEmpty name="searchResult">
     <table class="inside" width="100%" cellpadding="4" id="searchResultsTableId">
         <thead>
             <tr style="font-size:12px; font-weight:bold">
@@ -132,7 +132,12 @@
             </tr>
         </logic:iterate>
     </table>
-</logic:present>
+</logic:notEmpty>
+<logic:empty name="searchResult">
+    <div height="40px">
+        <digi:trn>No results matching search criteria found</digi:trn>
+    </div>
+</logic:empty>
 
 </br>
 

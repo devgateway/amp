@@ -152,6 +152,7 @@
         editForm.submit();
     }
 
+    /*
     function addOptionRow() {
         optionsTableCounter ++;
         var table = document.getElementById("optionsTableId");
@@ -168,6 +169,12 @@
         // Add some text to the new cells:
         cell1.innerHTML = '<input type="text" name="options[' + optionsTableCounter + '].ampIndicatorOptionName" id="ampIndicatorOptionNameId" />';
         cell2.innerHTML = '<input type="checkbox" name="options[' + optionsTableCounter + '].defaultOption" id="defaultOptionId" />';
+    }*/
+
+    function addOptionRow() {
+        var editForm = document.getElementById("editForm");
+        editForm.action = "/aidEffectivenessIndicatorsManager.do?actionParam=addOption";
+        editForm.submit();
     }
 
     setStripsTable("optionsTableId", "tableEven", "tableOdd");

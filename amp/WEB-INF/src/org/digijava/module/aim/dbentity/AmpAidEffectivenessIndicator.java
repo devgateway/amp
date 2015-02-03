@@ -30,7 +30,7 @@ public class AmpAidEffectivenessIndicator implements Serializable {
     }
 
     public void setAmpIndicatorId(Long ampIndicatorId) {
-        this.ampIndicatorId = ampIndicatorId;
+        this.ampIndicatorId = ampIndicatorId == 0 ? null : ampIndicatorId;
     }
 
     public String getAmpIndicatorName() {
@@ -49,7 +49,7 @@ public class AmpAidEffectivenessIndicator implements Serializable {
         this.tooltipText = tooltipText;
     }
 
-    public boolean isActive() {
+    public boolean getActive() {
         return active;
     }
 
@@ -57,7 +57,7 @@ public class AmpAidEffectivenessIndicator implements Serializable {
         this.active = active;
     }
 
-    public boolean isMandatory() {
+    public boolean getMandatory() {
         return mandatory;
     }
 

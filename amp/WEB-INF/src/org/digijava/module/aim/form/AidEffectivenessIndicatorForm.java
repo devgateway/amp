@@ -1,9 +1,12 @@
 package org.digijava.module.aim.form;
 
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Form class is used to edit/add new indicators
@@ -24,7 +27,7 @@ public class AidEffectivenessIndicatorForm extends ActionForm {
     // 0 - selectbox list, 1 - dropdown list
     private int indicatorType = -1;
 
-    private ArrayList<AmpAidEffectivenessIndicatorOption> options = new ArrayList<AmpAidEffectivenessIndicatorOption>();
+    private List<AmpAidEffectivenessIndicatorOption> options = new ArrayList<AmpAidEffectivenessIndicatorOption>();
 
 
 
@@ -52,7 +55,7 @@ public class AidEffectivenessIndicatorForm extends ActionForm {
         this.tooltipText = tooltipText;
     }
 
-    public boolean isActive() {
+    public boolean getActive() {
         return active;
     }
 
@@ -60,7 +63,7 @@ public class AidEffectivenessIndicatorForm extends ActionForm {
         this.active = active;
     }
 
-    public boolean isMandatory() {
+    public boolean getMandatory() {
         return mandatory;
     }
 
@@ -76,13 +79,24 @@ public class AidEffectivenessIndicatorForm extends ActionForm {
         this.indicatorType = indicatorType;
     }
 
-    public ArrayList<AmpAidEffectivenessIndicatorOption> getOptions() {
+    public List<AmpAidEffectivenessIndicatorOption> getOptions() {
         return options;
     }
 
-    public void setOptions(ArrayList<AmpAidEffectivenessIndicatorOption> options) {
+    public void setOptions(List<AmpAidEffectivenessIndicatorOption> options) {
         this.options = options;
     }
 
+    public void reset(ActionMapping mapping, HttpServletRequest request) {
+        setMandatory(false);
+        setActive(false);
+        if (options != null) {
+            for (AmpAidEffectivenessIndicatorOption option : options) {
+                if (option != null) {
+                    option.setDefaultOption(false);
+                }
+            }
+        }
+    }
 
 }

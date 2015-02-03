@@ -40,6 +40,8 @@
 <module:display name="Funding" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/> 
 <module:display name="GIS DASHBOARD"></module:display> 
+<module:display name="/GIS"></module:display>
+<module:display name="/Dashboards"></module:display>
 <module:display name="HELP"></module:display> 
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Regional Observations" parentModule="PROJECT MANAGEMENT"></module:display>
@@ -1154,6 +1156,7 @@ deleted 6 fields, do not reinsert
 <module:display name="Public Documents" parentModule="PUBLIC VIEW"></module:display>
 
 <module:display name="Public GIS" parentModule="PUBLIC VIEW"></module:display>
+<module:display name="Public Dashboards" parentModule="PUBLIC VIEW"></module:display>
 
 <module:display name="Public Reports" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Public Calendar" parentModule="PUBLIC VIEW"></module:display>

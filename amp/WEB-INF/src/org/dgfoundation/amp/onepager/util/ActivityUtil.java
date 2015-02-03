@@ -565,9 +565,9 @@ public class ActivityUtil {
         if (existingTitles != null && !existingTitles.isEmpty()) {
             for (TemporaryDocument d : existingTitles) {
                 Node node = DocumentManagerUtil.getWriteNode(d.getExistingDocument().getUuid(), req);
-                if (node != null) {
+                if (node != null && d != null) {
                     NodeWrapper nw = new NodeWrapper(node);
-                    if (!nw.getTitle().equals(d.getTitle())) {
+                    if (nw != null && !nw.getTitle().equals(d.getTitle())) {
                         if (d.getWebLink() != null && d.getWebLink().trim().length() > 0 &&
                                 (d.getFileName() == null || d.getFileName().trim().length()==0)) {
                             d.setFileName(d.getWebLink());

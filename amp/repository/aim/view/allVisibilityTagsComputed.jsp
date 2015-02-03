@@ -86,6 +86,7 @@
 <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Indicator Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <feature:display name="Synergy Client" module="Activity Import Manager"></feature:display>
 <feature:display module="Activity Costing" name="Costing"></feature:display> 
 <feature:display module="Contact Information" name="Government Contact Information"></feature:display> 

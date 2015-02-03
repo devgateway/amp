@@ -90,6 +90,7 @@
 <module:display name="Budget Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Indicator Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Structure Types Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
+<module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Map Module"></module:display>
 
 <module:display name="Aid Effectiveness" parentModule="PROJECT MANAGEMENT"></module:display>

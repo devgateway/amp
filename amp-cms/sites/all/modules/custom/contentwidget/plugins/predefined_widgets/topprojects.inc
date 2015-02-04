@@ -107,15 +107,19 @@ function contentwidget_topprojects_widget_render($plugin, $widget_settings, $ent
     if (empty($widget_settings['visible_columns'])) {
       $widget_settings['visible_columns'] = array_keys((array) $data->headers);
     }
-
+    
     // Create the table headers.
     foreach ($widget_settings['visible_columns'] as $key) {
       if (!isset($data->headers->$key)) {
         continue;
       }
-
+			
+      $label = $data->headers->$key;
+    	if (!empty($data->Currency) && in_array($key, array('actual-commitments', 'actual-disbursements'))) {
+    		$label = $label . ' (' . $data->Currency . ')';
+    	}
       $header[$key] = array(
-        'data' => check_plain($data->headers->$key),
+        'data' => check_plain($label),
         'class' => array(
           drupal_html_class('col-' . $key)
         ),

@@ -24,14 +24,14 @@ function ampapi_activity_views_data_alter(&$data) {
       unset($data[$efq_data_key]['external_url']['filter']);
       unset($data[$efq_data_key]['external_url']['sort']);
     }
-
+    
     // Get information from all available mapper plugins.
     foreach (ampapi_get_mappers() as $plugin) {
       if (empty($plugin['property name'])) {
         continue;
       }
       $property_name = $plugin['property name'];
-
+      
       if (isset($plugin['property info']['options list'])) {
         $data[$efq_data_key][$property_name]['filter']['handler'] = 'ampapi_activity_views_handler_filter_in_operator';
         $data[$efq_data_key][$property_name]['filter']['options arguments'] = array($plugin['name']);
@@ -39,6 +39,10 @@ function ampapi_activity_views_data_alter(&$data) {
 
       if (isset($plugin['report filter endpoint'])) {
         $data[$efq_data_key][$property_name]['filter']['handler'] = 'ampapi_activity_views_handler_filter_in_operator';
+      }
+      
+    	if (isset($plugin['report field type']) && ($plugin['report field type'] == 'currency')) {
+      	$data[$efq_data_key][$property_name]['field']['handler'] = 'ampapi_activity_views_handler_field_with_currency';
       }
 
       // Remove sort from fields that do not support it.

@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -1079,6 +1080,25 @@ public class FeaturesUtil {
 			logger.error(ex);
 		}    
 		return col;
+	}
+	
+	public static Set<String> getMainModulesNames() {
+		Session session = null;
+		Set<String> modules = new HashSet<String>();
+		String qryStr = null;
+		Query qry = null;
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			qryStr = "select f.name from " + AmpModulesVisibility.class.getName() +
+			" f where f.parent is null";
+			qry = session.createQuery(qryStr);
+			modules.addAll(qry.list());
+		}
+		catch (Exception ex) {
+			logger.error(ex);
+		}    
+		return modules;
 	}
 
 	/**

@@ -1,0 +1,80 @@
+/**
+ * 
+ */
+package org.dgfoundation.amp.visibility.data;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.digijava.module.aim.util.FeaturesUtil;
+
+/**
+ * Detects which main FM modules are enabled, that depends on root module being enabled 
+ * @author Nadejda Mandrescu
+ */
+public class ModulesVisibility extends DataVisibility implements FMSettings {
+	protected static final Logger logger = Logger.getLogger(ModulesVisibility.class);
+	
+	protected ModulesVisibility() {
+	}
+	
+	@Override
+	public Set<String> getEnabledSettings() {
+		return getCurrentVisibleData();
+	}
+
+	@Override
+	protected List<String> getVisibleByDefault() {
+		return noDataList;
+	}
+
+	@Override
+	protected Set<String> getAllData() {
+		return mainModulesSet;
+	}
+
+	@Override
+	protected Map<String, String> getDataMap(DataMapType dataMapType) {
+		switch(dataMapType) {
+		case MODULES:
+			return mainModulesMap;
+		default:
+			return noDataMap;
+		}
+	}
+
+	@Override
+	protected Map<String, Collection<String>> getDependancyMapTypeAny() {
+		return noDataCollectionMap;
+	}
+
+	@Override
+	protected Map<String, Collection<String>> getDependancyMapTypeAll() {
+		return noDataCollectionMap;
+	}
+	
+	protected static final Map<String, String> mainModulesMap = getModules();
+	
+	protected static Map<String, String> getModules() {
+		Map<String, String> parentModules = new HashMap<String, String>();
+		Set<String> moduleNames = FeaturesUtil.getMainModulesNames();
+		for (String name : moduleNames) {
+			// remove any slashes from modules
+			String displayedName = StringUtils.strip(name, "/");
+			// skip some invalid root modules which have sub-elements in their name
+			if (!displayedName.contains("/")) {
+				parentModules.put(name, displayedName.toUpperCase());
+			}
+		}
+		return parentModules;
+	}
+	
+	protected static final Set<String> mainModulesSet = new HashSet<String>(mainModulesMap.values());
+	
+}

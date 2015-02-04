@@ -1,10 +1,9 @@
 /**
  * 
  */
-package org.dgfoundation.amp.reports;
+package org.dgfoundation.amp.visibility.data;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -12,26 +11,24 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
-import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCategoryValue;
 
 /**
  * Detects which measures are visible in Activity Form and can be further used, 
  * e.g. in report generation & filtering 
  * @author Alexandru Cartaleanu
  */
-public class MeasuresVisibility extends DataVisibility {
+public class MeasuresVisibility extends DataVisibility implements FMSettings {
 	protected static final Logger logger = Logger.getLogger(MeasuresVisibility.class);	
 
 	@SuppressWarnings("serial")
@@ -50,11 +47,6 @@ public class MeasuresVisibility extends DataVisibility {
 		}
 	}};
 	
-	 
-	
-
-	private static MeasuresVisibility currentMeasuresVisibility = null;
-
 	
 	@Override
 	protected Set<String> detectVisibleData() {
@@ -94,29 +86,16 @@ public class MeasuresVisibility extends DataVisibility {
 	 * @return the current set of visible measures
 	 */
 	synchronized public static Set<String> getVisibleMeasures() {
-		if (currentMeasuresVisibility == null)
-			currentMeasuresVisibility = new MeasuresVisibility();
-		return currentMeasuresVisibility.getCurrentVisibleMeasures();
+		return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MEASURES);
 	}
-	
-	private Set<String> visibleMeasures = null;
-	
-	private MeasuresVisibility() {
 
-	}
-	/** keeps track of visibility changes */
-	private static AtomicBoolean atomicVisibilityChanged = new AtomicBoolean(false);
-	
-	protected static void setVisibilityChanged() {
-		atomicVisibilityChanged.set(true);
-	}
-	private Set<String> getCurrentVisibleMeasures() {
-		if (visibleMeasures == null)
-			visibleMeasures = detectVisibleData();
-		return visibleMeasures;
+	protected MeasuresVisibility() {
 	}
 	
-
+	@Override
+	public Set<String> getEnabledSettings() {
+		return getCurrentVisibleData();
+	}
 	
 	@SuppressWarnings("serial")
 	public static final Map<String, Collection<String>> dependencyMapTypeAll = new HashMap<String, Collection<String>>() {{
@@ -155,7 +134,6 @@ public class MeasuresVisibility extends DataVisibility {
 	
 	@Override
 	protected Set<String> getAllData() {
-		
 		return allPossibleValuesSet;
 	}
 	

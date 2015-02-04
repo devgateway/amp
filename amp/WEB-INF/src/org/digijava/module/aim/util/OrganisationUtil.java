@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.reports.ColumnsVisibility;
+import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.module.aim.helper.Constants;
 
 /**

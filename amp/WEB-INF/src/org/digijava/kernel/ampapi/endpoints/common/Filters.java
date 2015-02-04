@@ -14,7 +14,7 @@ import javax.ws.rs.core.MediaType;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.reports.ColumnsVisibility;
+import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.AvailableMethod;

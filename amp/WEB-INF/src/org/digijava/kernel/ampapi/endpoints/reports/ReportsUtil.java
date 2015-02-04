@@ -31,7 +31,6 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.CachedReportData;
-import org.dgfoundation.amp.reports.ColumnsVisibility;
 import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
 import org.dgfoundation.amp.reports.ReportCacher;
@@ -40,6 +39,7 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.utils.ConstantsUtil;
+import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
@@ -80,31 +80,33 @@ public class ReportsUtil {
 	 *  "add_hierarchies" : ["Approval Status"], 									<br/>
 	 *  "add_measures"    : ["Custom Measure"], 									<br/>
 	 *  "rowTotals"       : true													<br/>
+	 *  "projectType"     : see {@link ProjectType}									<br/>
 	 * } 																			<br/>
-	 * where:
-	 * <ul>
-	 * 	 <li>name</li>        mandatory to be provided for custom reports, otherwise is skipped <br>  
-	 *   <li>page</li>        optional, page number, starting from 1. Use 0 to retrieve only <br>
-	 *                        pagination information, without any records. Default to 0 <br>
-	 *   <li>recordsPerPage</li> optional, the number of records per page to return. Default
+	 * 
+	 * where: <br>
+	 * <dl>
+	 * 	 <dt>name</dt>			<dd>mandatory to be provided for custom reports, otherwise is skipped</dd> 
+	 *   <dt>page</dt>        	<dd>optional, page number, starting from 1. Use 0 to retrieve only
+	 *                        pagination information, without any records. Default to 0</dd>
+	 *   <dt>recordsPerPage</dt> <dd>optional, the number of records per page to return. Default
 	 *   					  will be set to the number configured in AMP. Set it to -1
-	 *                        to get the unlimited records, that will provide all records.
-	 *   <li>sorting</li>     optional, a list of sorting maps. Each map has 'columns' list 
+	 *                        to get the unlimited records, that will provide all records.</dd>
+	 *   <dt>sorting</dt>     	<dd>optional, a list of sorting maps. Each map has 'columns' list 
 	 *                        and 'asc' flag, that is true for sorting ascending. Hierarchical 
-	 *                        sorting will define a column list as a tuple to sort by.
-	 *   <li>regenerate</li>  optional, set to true for all first access and any changes and <br> 
-	 *                        to false for consequent page navigation. Default to true <br>
-	 *   <li>add_columns</li> optional, a list of columns names to be added to the <br>
-	 *                        report configuration <br>
-	 *   <li>add_hierarchies</li>  optional, a list of hierarchies to be added to the <br> 
-	 *                             report configuration <br>
-	 *   <li>add_measures</li> optional, a list of measures to be added to the <br>
-	 *                         report configuration <br>
-	 *   <li>rowTotals</li>    optional, flag to request row totals to be build
-     *   <li>forceHeaders</li>    optional, flag, if the report query returns empty response
-     *                    the list of column headers is populated from the request. Default is false
-	 *   <li>settings</li>	   Report settings	
-	 * </ol>
+	 *                        sorting will define a column list as a tuple to sort by.</dd>
+	 *   <dt>regenerate</dt>	<dd>optional, set to true for all first access and any changes and 
+	 *                        to false for consequent page navigation. Default to true</dd>
+	 *   <dt>add_columns</dt> 	<dd>optional, a list of columns names to be added to the
+	 *                        report configuration</dd>
+	 *   <dt>add_hierarchies</dt>  <dd>optional, a list of hierarchies to be added to the
+	 *                             report configuration</dd>
+	 *   <dt>add_measures</dt> 	<dd>optional, a list of measures to be added to the
+	 *                         report configuration</dd>
+	 *   <dt>rowTotals</dt>    	<dd>optional, flag to request row totals to be build</dd>
+     *   <dt>forceHeaders</dt>   <dd>optional, flag, if the report query returns empty response
+     *                    the list of column headers is populated from the request. Default is false</dd>
+	 *   <dt>settings</dt>	   	<dd>Report settings</dd>
+	 * </dl>
 	 * @return JsonBean result for the requested page and pagination information
 	 */
 	public static final JsonBean getReportResultByPage(Long reportId, JsonBean formParams) {

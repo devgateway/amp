@@ -143,6 +143,11 @@ function ampactivities_views_default_views() {
   $handler->display->display_options['fields']['actual_disbursements']['table'] = 'efq_activity';
   $handler->display->display_options['fields']['actual_disbursements']['field'] = 'actual_disbursements';
   $handler->display->display_options['fields']['actual_disbursements']['link_to_entity'] = 0;
+  /* Sort criterion: Activity: Actual Start Date */
+  $handler->display->display_options['sorts']['actual_start_date']['id'] = 'actual_start_date';
+  $handler->display->display_options['sorts']['actual_start_date']['table'] = 'efq_activity';
+  $handler->display->display_options['sorts']['actual_start_date']['field'] = 'actual_start_date';
+  $handler->display->display_options['sorts']['actual_start_date']['order'] = 'DESC';
 
   /* Display: Search Page */
   $handler = $view->new_display('page', 'Search Page', 'search_page');

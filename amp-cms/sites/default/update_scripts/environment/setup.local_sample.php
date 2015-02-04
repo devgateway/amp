@@ -18,11 +18,11 @@ $DEVEL_MODE = TRUE;
 // watchdog('us-environment', 'Setup LOCAL Environment');
 
 // Reset the admin password.
-// if (!variable_get('update_scripts_user_one_updated', FALSE)) {
-//   $user = user_load(1);
-//   $user_object = user_save($user, array('pass' => $user->name));
-//   variable_set('update_scripts_user_one_updated', TRUE);
-// }
+if (!variable_get('update_scripts_user_one_updated', FALSE)) {
+  $user = user_load(1);
+  $user_object = user_save($user, array('pass' => $user->name));
+  variable_set('update_scripts_user_one_updated', TRUE);
+}
 
 if ($DEVEL_MODE) {
   // Disable CSS and JavaScript aggregation.

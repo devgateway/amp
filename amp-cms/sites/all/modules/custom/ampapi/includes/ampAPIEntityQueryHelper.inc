@@ -91,16 +91,32 @@ class ampAPIEntityQueryHelper {
     $columns_data = ampapi_request('get', 'data/report/columns', TRUE);
     // GET /rest/data/report/measures
     $measures_data = ampapi_request('get', 'data/report/measures', TRUE);
-
+    // GET /rest/amp/settings
+    $settings_data = ampapi_request('get', 'amp/settings', TRUE);
+    
+    $currency = '';
+  	foreach ($settings_data as $setting) {
+	    // @HACK: The id for currency is "1"!!!
+	    // @see: Documentation for /rest/gis/settings
+	    if ($setting->id == '1') {
+	      $currency = $setting->defaultId;
+	    }
+  	}
+  	
+  	if (!empty($currency)) {
+    	$query->addMetaData('report_currency', $currency);
+    }
+  
     // Add a list of fields to load.
     // @TODO: Add a settings page.
     if (!empty($query->metaData['view']->field)) {
+        
       foreach ($query->metaData['view']->field as $field_name => $field_handler) {
         $plugin = ampapi_get_mapper_by_property_name($field_name);
         if (empty($plugin['report field key'])) {
           continue;
         }
-
+        
         switch ($plugin['report field group']) {
           case 'columns':
             if (empty($columns_data->{$plugin['report field key']})) {

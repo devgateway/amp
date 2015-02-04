@@ -398,8 +398,11 @@ function theme_amp_report_info($variables) {
 /**
  * Returns HTML for the activities search footer totals.
  */
-function theme_amp_report_totals($totals) {
+function theme_amp_report_totals($variables) {
   $elements = array();
+
+  $totals = $variables['totals'];
+  $currency = $variables['currency'];
 
   $elements['#prefix'] = '<div class="activity-search-totals clearfix">';
   $elements['#suffix'] = '</div>';
@@ -410,7 +413,11 @@ function theme_amp_report_totals($totals) {
     if (!isset($totals[$key]['amount'])) {
       continue;
     }
-    $header[] = $totals[$key]['header'];
+    $label = $totals[$key]['header'];
+    if (!empty($currency)) {
+    	$label .= ' (' . check_plain($currency) . ')';
+    }
+    $header[] = $label;
     $data[] = $totals[$key]['amount'];
   }
 

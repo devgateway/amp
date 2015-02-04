@@ -14,6 +14,7 @@ $plugin = array(
   ),
 
   'report field group' => 'measures',
+  'report field type' => 'currency',
   'report field key' => 'Actual Disbursements',
 
   'handler' => 'actualDisbursementsMapper',

@@ -14,6 +14,7 @@ $plugin = array(
   ),
 
   'report field group' => 'measures',
+  'report field type' => 'currency',
   'report field key' => 'Actual Commitments',
 
   'handler' => 'actualCommitmentsMapper',
@@ -21,3 +22,4 @@ $plugin = array(
 
 class actualCommitmentsMapper extends activityMapperBase {
 }
+

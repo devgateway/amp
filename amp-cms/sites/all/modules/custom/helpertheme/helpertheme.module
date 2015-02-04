@@ -242,6 +242,10 @@ function helpertheme_theme() {
       'file' => 'helpertheme.theme.inc',
     ),
     'amp_report_totals' => array(
+    	'variables' => array(
+        'totals' => NULL,
+        'currency' => NULL,
+     	),
       'file' => 'helpertheme.theme.inc',
     ),
   );

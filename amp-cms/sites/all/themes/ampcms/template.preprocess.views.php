@@ -104,7 +104,11 @@ function __ampcms_preprocess_views_view__activities(&$vars) {
 
       if (!empty($vars['view']->query->query->metaData['report_totals'])) {
         $report_totals = $vars['view']->query->query->metaData['report_totals'];
-        $vars['attachment_after'] .= theme('amp_report_totals', $report_totals);
+        if (isset($vars['view']->query->query->metaData['report_currency'])) {
+        	$report_currency = $vars['view']->query->query->metaData['report_currency'];
+      	}
+
+        $vars['attachment_after'] .= theme('amp_report_totals', array('totals' => $report_totals, 'currency' => $report_currency));
       }
 
       break;

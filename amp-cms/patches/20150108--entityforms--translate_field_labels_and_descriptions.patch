@@ -1,0 +1,48 @@
+diff --git a/sites/all/modules/contrib/entityform/entityform.admin.inc b/sites/all/modules/contrib/entityform/entityform.admin.inc
+index 40497e4..d0a521a 100644
+--- a/sites/all/modules/contrib/entityform/entityform.admin.inc
++++ b/sites/all/modules/contrib/entityform/entityform.admin.inc
+@@ -329,6 +329,8 @@ function entityform_edit_form($form, &$form_state, $entityform, $mode = 'submit'
+   if (!$is_review) {
+     field_attach_form('entityform', $entityform, $form, $form_state);
+   }
++  // @HACK: Translate field labels and descriptions.
++  _entityform_translate_attached_fields($form);
+ 
+   $form['actions'] = array(
+     '#type' => 'container',
+@@ -420,6 +422,34 @@ function entityform_edit_form($form, &$form_state, $entityform, $mode = 'submit'
+ }
+ 
+ /**
++ * Translate field labels and descriptions
++ *
++ * @param $elements
++ */
++function _entityform_translate_attached_fields(&$elements) {
++  // @HACK: Translate field labels and descriptions.
++  foreach (element_children($elements) as $key) {
++    if (!isset($elements[$key]['#language'])) {
++      continue;
++    }
++
++    if (!empty($elements[$key]['#type'])) {
++      if (!empty($elements[$key]['#title'])) {
++        $elements[$key]['#title'] = t($elements[$key]['#title']);
++      }
++      if (!empty($elements[$key]['#description'])) {
++        $elements[$key]['#description'] = t($elements[$key]['#description']);
++      }
++    }
++
++    $has_children = (bool) element_children($elements[$key]);
++    if ($has_children) {
++      _entityform_translate_attached_fields($elements[$key]);
++    }
++  }
++}
++
++/**
+  * Modify an Entityform add/edit form to use as a preview.
+  * @param $form
+  */

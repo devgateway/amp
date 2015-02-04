@@ -138,9 +138,9 @@ function contentblock_entity_info() {
 function contentblock_get_types() {
   $items = array();
 
-  $items['hidden'] = array(
-    'label' => t('Hidden'),
-    'description' => t('Hidden content blocks are regular blocks to be used by developers.'),
+  $items['fixed'] = array(
+    'label' => t('Fixed'),
+    'description' => t('Fixed content blocks are regular blocks to be used by developers.'),
   );
 
   $items['predefined'] = array(
@@ -159,7 +159,7 @@ function contentblock_get_types() {
 /**
  * Returns a list of question types.
  */
-function contentblock_get_hidden_types($type = NULL) {
+function contentblock_get_fixed_types($type = NULL) {
   $items = array();
 
   $items['linkedmap'] = array(
@@ -284,10 +284,10 @@ function contentblock_access($op, $entity = NULL, $account = NULL) {
     return $allow;
   }
 
-  // Only allow UID1 to delete 'hidden' contentblocks using the normal UI.
+  // Only allow UID1 to delete 'fixed' contentblocks using the normal UI.
   $bundle = is_object($entity) ? $entity->bundle() : NULL;
   $restriected_operations = array('delete');
-  if ($account->uid != 1 && $bundle == 'hidden' && in_array($op, $restriected_operations)) {
+  if ($account->uid != 1 && $bundle == 'fixed' && in_array($op, $restriected_operations)) {
     if ($cid) {
       $rights[$account->uid][$cid][$op] = FALSE;
     }
@@ -308,9 +308,9 @@ function contentblock_access($op, $entity = NULL, $account = NULL) {
 }
 
 /**
- * Access callback for hidden contentblock entities create page.
+ * Access callback for fixed contentblock entities create page.
  */
-function contentblock_create_hidden_access($op, $entity = NULL, $account = NULL) {
+function contentblock_create_fixed_access($op, $entity = NULL, $account = NULL) {
   $rights = &drupal_static(__FUNCTION__, array());
 
   if (isset($rights['permission'])) {
@@ -318,16 +318,16 @@ function contentblock_create_hidden_access($op, $entity = NULL, $account = NULL)
   }
 
   if (empty($_GET['machine_name']) || !preg_match('/^[a-z0-9_]+$/', $_GET['machine_name'])) {
-    if (arg(2) == 'hidden') {
+    if (arg(2) == 'fixed') {
       drupal_set_message('Valid name required!', 'warning');
     }
     $rights['permission'] = FALSE;
     return FALSE;
   }
 
-  $info = contentblock_get_hidden_types($_GET['machine_name']);
+  $info = contentblock_get_fixed_types($_GET['machine_name']);
   if (empty($info)) {
-    if (arg(2) == 'hidden') {
+    if (arg(2) == 'fixed') {
       drupal_set_message('Invalid name provided!', 'warning');
     }
     $rights['permission'] = FALSE;
@@ -336,7 +336,7 @@ function contentblock_create_hidden_access($op, $entity = NULL, $account = NULL)
 
   $entities = entity_load('contentblock', array(), array('machine_name' => $_GET['machine_name']));
   if (!empty($entities)) {
-    if (arg(2) == 'hidden') {
+    if (arg(2) == 'fixed') {
       drupal_set_message('Content block already exists!', 'warning');
     }
     $rights['permission'] = FALSE;
@@ -405,7 +405,7 @@ function contentblock_menu() {
   );
 
   $weight = 0;
-  foreach (contentblock_get_hidden_types() as $machine_name => $info) {
+  foreach (contentblock_get_fixed_types() as $machine_name => $info) {
     $items['admin/settings/content-sections/' . $machine_name] = array(
       'title' => $info['title'],
       'description' => $info['description'],
@@ -428,7 +428,7 @@ function contentblock_menu() {
 }
 
 /**
- * Menu callback for hidden ContentBlock entities admin pages.
+ * Menu callback for fixed ContentBlock entities admin pages.
  */
 function contentblock_drupal_goto_form($machine_name) {
   $options = array();
@@ -446,7 +446,7 @@ function contentblock_drupal_goto_form($machine_name) {
     $path = 'contentblock/' . $entity->identifier() . '/edit';
   }
   else {
-    $path = 'contentblock/add/hidden';
+    $path = 'contentblock/add/fixed';
     $options['query']['machine_name'] = $machine_name;
   }
 
@@ -598,7 +598,7 @@ function contentblock_field_display_contentblock_alter(&$display, $context) {
     module_load_include('inc', 'contentblock', 'contentblock.cbreference');
     contentblock_field_display_contentblock_alter__generic($display, $context);
 
-    $info = contentblock_get_hidden_types($context['entity']->machine_name);
+    $info = contentblock_get_fixed_types($context['entity']->machine_name);
     if (!empty($info['is section'])) {
       contentblock_field_display_contentblock_alter__section($display, $context);
     }
@@ -617,13 +617,13 @@ function contentblock_form_contentblock_form_alter(&$form, &$form_state, $form_i
   // Do not allow redirects to be created from the entity edit forms.
   $form['redirect']['#access'] = FALSE;
 
-  if ($form_id == 'contentblock_edit_hidden_form') {
+  if ($form_id == 'contentblock_edit_fixed_form') {
     if ($form_state['op'] == 'add' && !empty($_GET['machine_name'])) {
       $form['#entity']->machine_name = $_GET['machine_name'];
     }
 
     // By now the machine_name has already been validated.
-    $info = contentblock_get_hidden_types($form['#entity']->machine_name);
+    $info = contentblock_get_fixed_types($form['#entity']->machine_name);
     if (!empty($info)) {
       _contentblock_form_contentblock_form_alter($form, $form_state, $form_id);
     }

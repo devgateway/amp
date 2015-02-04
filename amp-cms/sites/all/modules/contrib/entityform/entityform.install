@@ -215,3 +215,24 @@ function entityform_update_7004(&$sandbox = NULL) {
  * Update 7005 is unused.
  */
 function entityform_update_7005(&$sandbox = NULL) { }
+
+/**
+ * Delete old Entityform menu links.
+ *
+ * Implements hook_update_N().
+ */
+function entityform_update_7006(&$sandbox) {
+  $message = NULL;
+  $entityform_types = db_query("SELECT type FROM {entityform_type}")->fetchCol();
+  $result = db_query("SELECT mlid, link_path FROM {menu_links} WHERE router_path = 'eform/submit/%'", array(), array('fetch' => PDO::FETCH_ASSOC));
+  foreach ($result as $m) {
+    $link_parts = explode('/', $m['link_path']);
+    $entityform_type = str_replace('-', '_', $link_parts[2]);
+    if (!in_array($entityform_type, $entityform_types)) {
+      $message = t('Deleted old entityform type menu links.');
+      menu_link_delete($m['mlid']);
+    }
+
+  }
+  return $message;
+}

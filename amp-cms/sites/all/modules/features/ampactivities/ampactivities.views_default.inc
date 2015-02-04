@@ -154,7 +154,7 @@ function ampactivities_views_default_views() {
   $handler->display->display_options['fields']['external_url']['label'] = '';
   $handler->display->display_options['fields']['external_url']['element_label_colon'] = FALSE;
   $handler->display->display_options['fields']['external_url']['link_to_entity'] = 0;
-  $handler->display->display_options['fields']['external_url']['display_as_link_text'] = 'view';
+  $handler->display->display_options['fields']['external_url']['display_as_link_text'] = 'details';
   /* Field: Activity: Title */
   $handler->display->display_options['fields']['title']['id'] = 'title';
   $handler->display->display_options['fields']['title']['table'] = 'efq_activity';

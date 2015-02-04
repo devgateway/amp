@@ -162,8 +162,12 @@ function contentblock_cbreference_render__welcome($entity, $pane_conf) {
   $view['title_field'][0]['#prefix'] = '<div class="welcome-content-wrapper">';
   $view['field_cbbody']['#suffix'] = '</div>';
 
+  // Because of entity_translation, the provided $langcode is the original entity language.
+  $entity_langcode = entity_translation_get_existing_language($entity->entityType(), $entity);
+
   // Load the metadata wrapper.
   $wrapper = entity_metadata_wrapper($entity->entityType(), $entity);
+  $wrapper->language($entity_langcode);
 
   // Get the link.
   $link = $wrapper->field_cblinks->value();
@@ -210,8 +214,12 @@ function contentblock_cbreference_render__linkedmap($entity, $pane_conf) {
     return;
   }
 
+  // Because of entity_translation, the provided $langcode is the original entity language.
+  $entity_langcode = entity_translation_get_existing_language($entity->entityType(), $entity);
+
   // Load the metadata wrapper.
   $wrapper = entity_metadata_wrapper($entity->entityType(), $entity);
+  $wrapper->language($entity_langcode);
 
   // Get the link.
   $link = $wrapper->field_cblinks->value();
@@ -253,7 +261,7 @@ function contentblock_cbreference_render__totalactivities($entity, $pane_conf) {
   $plugin = contentwidget_get_predefined_widget('totalactivities');
   if ($function = ctools_plugin_get_function($plugin, 'render callback')) {
     // Because of entity_translation, the provided $langcode is the original entity language.
-    $entity_langcode = entity_translation_get_existing_language($entity->entitYType(), $entity);
+    $entity_langcode = entity_translation_get_existing_language($entity->entityType(), $entity);
     $view[] = $function($plugin, array(), $entity, $entity_langcode);
   }
 

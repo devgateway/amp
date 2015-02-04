@@ -10,9 +10,9 @@
 function ampcontentblock_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'contentblock-hidden-field_cbblocks'
-  $field_instances['contentblock-hidden-field_cbblocks'] = array(
-    'bundle' => 'hidden',
+  // Exported field_instance: 'contentblock-fixed-field_cbblocks'
+  $field_instances['contentblock-fixed-field_cbblocks'] = array(
+    'bundle' => 'fixed',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => 'To create new content blocks you can go to "Content > Content Blocks > Add content block".',
@@ -48,9 +48,9 @@ function ampcontentblock_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'contentblock-hidden-field_cbbody'
-  $field_instances['contentblock-hidden-field_cbbody'] = array(
-    'bundle' => 'hidden',
+  // Exported field_instance: 'contentblock-fixed-field_cbbody'
+  $field_instances['contentblock-fixed-field_cbbody'] = array(
+    'bundle' => 'fixed',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -84,9 +84,9 @@ function ampcontentblock_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'contentblock-hidden-field_cbimage'
-  $field_instances['contentblock-hidden-field_cbimage'] = array(
-    'bundle' => 'hidden',
+  // Exported field_instance: 'contentblock-fixed-field_cbimage'
+  $field_instances['contentblock-fixed-field_cbimage'] = array(
+    'bundle' => 'fixed',
     'deleted' => 0,
     'description' => '',
     'display' => array(
@@ -165,9 +165,9 @@ function ampcontentblock_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'contentblock-hidden-field_cblinks'
-  $field_instances['contentblock-hidden-field_cblinks'] = array(
-    'bundle' => 'hidden',
+  // Exported field_instance: 'contentblock-fixed-field_cblinks'
+  $field_instances['contentblock-fixed-field_cblinks'] = array(
+    'bundle' => 'fixed',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',
@@ -215,9 +215,9 @@ function ampcontentblock_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'contentblock-hidden-title_field'
-  $field_instances['contentblock-hidden-title_field'] = array(
-    'bundle' => 'hidden',
+  // Exported field_instance: 'contentblock-fixed-title_field'
+  $field_instances['contentblock-fixed-title_field'] = array(
+    'bundle' => 'fixed',
     'default_value' => NULL,
     'deleted' => 0,
     'description' => '',

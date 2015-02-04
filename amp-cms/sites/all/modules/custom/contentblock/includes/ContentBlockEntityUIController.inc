@@ -123,7 +123,7 @@ class ContentBlockEntityUIController extends EntityBundleableUIController {
           'description' => $bundle_info['description'],
           'page callback' => 'entity_ui_get_bundle_add_form',
           'page arguments' => array($this->entityType, $bundle_type),
-          'access callback' => ($bundle_type == 'hidden') ? 'contentblock_create_hidden_access' : 'entity_access',
+          'access callback' => ($bundle_type == 'fixed') ? 'contentblock_create_fixed_access' : 'entity_access',
           'access arguments' => array('create', $this->entityType),
           'weight' => isset($bundle_info['weight']) ? $bundle_info['weight'] : 0,
         ) + $defaults;
@@ -204,8 +204,8 @@ class ContentBlockEntityUIController extends EntityBundleableUIController {
     $query = new EntityFieldQuery();
     $query->entityCondition('entity_type', $this->entityType);
 
-    // Do not show "Hidden" entities on the admin form.
-    $query->entityCondition('bundle', 'hidden', '!=');
+    // Do not show "Fixed" entities on the admin form.
+    $query->entityCondition('bundle', 'fixed', '!=');
 
     // Add all conditions to query.
     foreach ($conditions as $key => $value) {

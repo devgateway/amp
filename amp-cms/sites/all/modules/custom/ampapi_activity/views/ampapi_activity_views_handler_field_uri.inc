@@ -39,7 +39,7 @@ class ampapi_activity_views_handler_field_uri extends entity_views_handler_field
       $this->options['alter']['absolute'] = TRUE;
       $this->options['alter']['link_attributes'] = array('target' => '_blank');
       $this->options['alter']['path'] = $value;
-      $text = !empty($this->options['display_as_link_text']) ? $this->sanitize_value($this->options['display_as_link_text']) : $this->sanitize_value($value, 'url');
+      $text = !empty($this->options['display_as_link_text']) ? t($this->sanitize_value($this->options['display_as_link_text'])) : $this->sanitize_value($value, 'url');
 
       $svgicon = helpertheme_get_svg_icons('reports', array('width' => '2em', 'height' => '2em'));
       return $svgicon . '<span class="title">' . $text . '</span>';

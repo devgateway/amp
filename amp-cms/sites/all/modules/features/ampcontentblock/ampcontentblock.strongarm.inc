@@ -13,7 +13,7 @@ function ampcontentblock_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'entity_translation_settings_contentblock__hidden';
+  $strongarm->name = 'entity_translation_settings_contentblock__fixed';
   $strongarm->value = array(
     'default_language' => 'und',
     'hide_language_selector' => 0,
@@ -21,7 +21,7 @@ function ampcontentblock_strongarm() {
     'lock_language' => 1,
     'shared_fields_original_only' => 1,
   );
-  $export['entity_translation_settings_contentblock__hidden'] = $strongarm;
+  $export['entity_translation_settings_contentblock__fixed'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
@@ -52,7 +52,7 @@ function ampcontentblock_strongarm() {
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */
   $strongarm->api_version = 1;
-  $strongarm->name = 'field_bundle_settings_contentblock__hidden';
+  $strongarm->name = 'field_bundle_settings_contentblock__fixed';
   $strongarm->value = array(
     'view_modes' => array(),
     'extra_fields' => array(
@@ -70,7 +70,7 @@ function ampcontentblock_strongarm() {
       'display' => array(),
     ),
   );
-  $export['field_bundle_settings_contentblock__hidden'] = $strongarm;
+  $export['field_bundle_settings_contentblock__fixed'] = $strongarm;
 
   $strongarm = new stdClass();
   $strongarm->disabled = FALSE; /* Edit this to true to make a default strongarm disabled initially */

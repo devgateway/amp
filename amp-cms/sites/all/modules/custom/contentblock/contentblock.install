@@ -29,7 +29,7 @@ function contentblock_schema() {
         'type' => 'varchar',
         'length' => 128,
         'default' => '',
-        'description' => 'The contentblock machine name, used only by "Hidden" contentblocks.',
+        'description' => 'The contentblock machine name, used only by "Fixed" contentblocks.',
       ),
       'type' => array(
         'description' => 'The contentblock type.',
@@ -108,7 +108,7 @@ function contentblock_update_7001() {
     'type' => 'varchar',
     'length' => 128,
     'default' => '',
-    'description' => 'The contentblock machine name, used only by "Hidden" contentblocks.',
+    'description' => 'The contentblock machine name, used only by "Fixed" contentblocks.',
   ));
   db_add_index('contentblock', 'entity_machine_name', array('machine_name'));
 }
@@ -146,4 +146,30 @@ function contentblock_update_7003() {
     'length' => 32,
     'default' => '',
   ));
+}
+
+/**
+ * Rename "Hidden" contentblock type to "Fixed"
+ */
+function contentblock_update_7004() {
+  db_update('contentblock')
+    ->fields(array('type' => 'fixed'))
+    ->condition('type', 'hidden')
+    ->execute();
+
+  db_update('field_config_instance')
+    ->fields(array('bundle' => 'fixed'))
+    ->condition('bundle', 'hidden')
+    ->condition('entity_type', 'contentblock')
+    ->execute();
+
+  // Update variables.
+  db_update('variable')
+    ->fields(array('name' => 'field_bundle_settings_contentblock__fixed'))
+    ->condition('name', 'field_bundle_settings_contentblock__hidden')
+    ->execute();
+  db_update('variable')
+    ->fields(array('name' => 'entity_translation_settings_contentblock__fixed'))
+    ->condition('name', 'entity_translation_settings_contentblock__hidden')
+    ->execute();
 }

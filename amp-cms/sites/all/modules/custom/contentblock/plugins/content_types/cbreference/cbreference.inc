@@ -30,7 +30,7 @@ function contentblock_cbreference_content_type_render($subtype, $conf, $panel_ar
     return;
   }
 
-  $cbreference_info = contentblock_get_hidden_types($conf['machine_name']);
+  $cbreference_info = contentblock_get_fixed_types($conf['machine_name']);
   if (empty($cbreference_info)) {
     return;
   }

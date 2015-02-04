@@ -15,5 +15,11 @@ function ampcontact_organization_values_callback($field, $instance, $entity_type
     return array();
   }
 
-  return drupal_map_assoc($organizations);
+  $values = array();
+  foreach ($organizations as $org) {
+    $org = check_plain($org);
+    $values[$org] = t($org);
+  }
+
+  return $values;
 }

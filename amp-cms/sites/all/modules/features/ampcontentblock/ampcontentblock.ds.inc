@@ -12,9 +12,9 @@ function ampcontentblock_ds_field_settings_info() {
 
   $ds_fieldsetting = new stdClass();
   $ds_fieldsetting->api_version = 1;
-  $ds_fieldsetting->id = 'contentblock|hidden|default';
+  $ds_fieldsetting->id = 'contentblock|fixed|default';
   $ds_fieldsetting->entity_type = 'contentblock';
-  $ds_fieldsetting->bundle = 'hidden';
+  $ds_fieldsetting->bundle = 'fixed';
   $ds_fieldsetting->view_mode = 'default';
   $ds_fieldsetting->settings = array(
     'title_field' => array(
@@ -32,7 +32,7 @@ function ampcontentblock_ds_field_settings_info() {
       ),
     ),
   );
-  $export['contentblock|hidden|default'] = $ds_fieldsetting;
+  $export['contentblock|fixed|default'] = $ds_fieldsetting;
 
   $ds_fieldsetting = new stdClass();
   $ds_fieldsetting->api_version = 1;
@@ -86,9 +86,9 @@ function ampcontentblock_ds_layout_settings_info() {
 
   $ds_layout = new stdClass();
   $ds_layout->api_version = 1;
-  $ds_layout->id = 'contentblock|hidden|default';
+  $ds_layout->id = 'contentblock|fixed|default';
   $ds_layout->entity_type = 'contentblock';
-  $ds_layout->bundle = 'hidden';
+  $ds_layout->bundle = 'fixed';
   $ds_layout->view_mode = 'default';
   $ds_layout->layout = 'simplelayout';
   $ds_layout->settings = array(
@@ -123,7 +123,7 @@ function ampcontentblock_ds_layout_settings_info() {
     'layout_link_attribute' => '',
     'layout_link_custom' => '',
   );
-  $export['contentblock|hidden|default'] = $ds_layout;
+  $export['contentblock|fixed|default'] = $ds_layout;
 
   $ds_layout = new stdClass();
   $ds_layout->api_version = 1;

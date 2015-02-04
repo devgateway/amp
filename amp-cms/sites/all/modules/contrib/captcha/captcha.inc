@@ -227,14 +227,9 @@ function _captcha_get_description($lang_code = NULL) {
   $lang_code = isset($lang_code) ? $lang_code : $language->language;
   // The hardcoded but localizable default.
   $default = t('This question is for testing whether or not you are a human visitor and to prevent automated spam submissions.', array(), array('langcode' => $lang_code));
-  // Look up the configured CAPTCHA description or fall back on the (localized) default.
-  if (module_exists('locale')) {
-    $description = variable_get("captcha_description_$lang_code", $default);
-  }
-  else {
-    $description = variable_get('captcha_description', $default);
-  }
-  return filter_xss_admin($description);
+
+  $description = variable_get('captcha_description', $default);
+  return t(filter_xss_admin($description));
 }
 
 /**

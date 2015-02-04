@@ -36,9 +36,9 @@ function contentblock_form($form, &$form_state, $entity) {
     '#weight' => 95,
   );
 
-  // Allow uses to configure the style and title icon for all content blocks except hidden ones.
-  // @see contentblock_get_hidden_types()
-  if ($entity->type != 'hidden') {
+  // Allow uses to configure the style and title icon for all content blocks except fixed ones.
+  // @see contentblock_get_fixed_types()
+  if ($entity->type != 'fixed') {
     $form['title'] = array(
       '#type' => 'textfield',
       '#title' => t('Title'),
@@ -85,7 +85,7 @@ function contentblock_form($form, &$form_state, $entity) {
     '#weight' => 98,
   );
   if ($entity->machine_name) {
-    $info = contentblock_get_hidden_types($entity->machine_name);
+    $info = contentblock_get_fixed_types($entity->machine_name);
     if (!empty($info['is section'])) {
       $form['options']['status']['#default_value'] = TRUE;
       $form['options']['status']['#description'] = t('Content sections are always published.');
@@ -189,7 +189,7 @@ function _contentblock_entity_form_submit($form, &$form_state) {
   // Prepare the messages.
   $entity_label = $entity->label();
   if (empty($entity_label) && !empty($entity->machine_name)) {
-    $info = contentblock_get_hidden_types($entity->machine_name);
+    $info = contentblock_get_fixed_types($entity->machine_name);
     if (!empty($info['title'])) {
       $entity_label = $info['title'];
     }

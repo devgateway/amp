@@ -96,7 +96,49 @@ function helpergeneric_menu() {
     'weight' => -18,
   );
 
+  $items['amp-redirect'] = array(
+    'title' => 'Redirecting...',
+    'page callback' => 'helpergeneric_amp_redirect',
+    'access arguments' => array('access content'),
+  );
+
   return $items;
+}
+
+/**
+ * Redirects to AMP /TEMPLATE links.
+ *
+ * @TODO: Remove in v2.11 when the JS pages support a language parameter.
+ */
+function helpergeneric_amp_redirect() {
+  if (empty($_GET['d'])) {
+    return drupal_not_found();
+  }
+  global $language_content;
+
+  // Only redirect to relative URLs starting with 'TEMPLATE'.
+  $destination = trim($_GET['d'], '/');
+  if (strpos($destination, 'TEMPLATE') !== 0) {
+    return drupal_not_found();
+  }
+
+  // Set the default js options.
+  $js_options = array(
+    'type' => 'external',
+    'every_page' => FALSE,
+    'preprocess' => FALSE,
+  );
+
+  $amp_baseurl = helpergeneric_detect_amp_baseurl();
+  if ($language_content->language != LANGUAGE_NONE) {
+    drupal_add_js($amp_baseurl . '/rest/translations/languages/' . $language_content->language, $js_options);
+  }
+
+  $destination = $amp_baseurl . '/' . $destination;
+  $inline = "jQuery(document).ready(function(){window.location = '$destination';});";
+  drupal_add_js($inline, array('type' => 'inline', 'scope' => 'footer'));
+
+  return t('Please wait!');
 }
 
 /**
@@ -498,7 +540,8 @@ function helpergeneric_menu_local_tasks_alter(&$data, $router_item, $root_path) 
 
     // Attach "Cancel" link to the entity edit and translate page title.
     if (count($router_item['original_map']) >= 3 && in_array($router_item['original_map'][2], array('edit', 'translate'))) {
-      $alt_path= NULL;
+      $alt_path = NULL;
+      $url_options = array();
       if (!empty($_GET['destination'])) {
         $url_options = drupal_parse_url($_GET['destination']);
         unset($_GET['destination']);
@@ -645,6 +688,10 @@ function helpergeneric_detect_amp_baseurl() {
   $amp_hostname = variable_get('helpergeneric_amp_hostname', NULL);
   if (!empty($amp_hostname)) {
     $url = $amp_hostname;
+
+    // Trim the trailing slash.
+    $url = rtrim($url, '/');
+
     return $url;
   }
 
@@ -671,6 +718,16 @@ function helpergeneric_detect_amp_baseurl() {
   }
 
   return $url;
+}
+
+/**
+ * Returns the content language.
+ */
+function helpergeneric_get_amp_language_parameter() {
+  global $language_content;
+
+  // @TODO: Use /rest/translations/languages
+  return '~language=' . $language_content->language;
 }
 
 /**

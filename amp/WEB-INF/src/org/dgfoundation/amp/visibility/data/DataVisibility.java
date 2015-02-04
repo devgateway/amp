@@ -1,16 +1,18 @@
 /**
  * 
  */
-package org.dgfoundation.amp.reports;
+package org.dgfoundation.amp.visibility.data;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
@@ -36,12 +38,36 @@ public abstract class DataVisibility {
 	
 	protected static final Logger logger = Logger.getLogger(DataVisibility.class);
 	
+	private static List<DataVisibility> registeredUsers = 
+			Collections.synchronizedList(new ArrayList<DataVisibility>());
+	
 	/**
 	 * Notifies that FM visibility changed
 	 */
+	synchronized
 	public static void notifyVisibilityChanged() {
-		ColumnsVisibility.setVisibilityChanged();
-		MeasuresVisibility.setVisibilityChanged();
+		for (DataVisibility visibilityUser : registeredUsers) {
+			visibilityUser.atomicVisibilityChanged.set(true);
+		}
+	}
+	
+	/** keeps track of visibility changes */
+	protected AtomicBoolean atomicVisibilityChanged = new AtomicBoolean(false);
+
+	private Set<String> visibleData = null;
+	
+	/**
+	 * Base constructor that also registers for visibility changes notifications
+	 */
+	protected DataVisibility() {
+		registeredUsers.add(this);
+	}
+	
+	synchronized
+	protected Set<String> getCurrentVisibleData() {
+		if (atomicVisibilityChanged.compareAndSet(true, false) || visibleData == null)
+			visibleData = detectVisibleData();
+		return visibleData;
 	}
 	
 	protected Set<String> detectVisibleData() {
@@ -154,9 +180,9 @@ public abstract class DataVisibility {
 		unmapped.removeAll(getDependancyMapTypeAll().keySet());
 		unmapped.removeAll(getDependancyMapTypeAny().keySet());
 		if (unmapped.size() > 0)
-			logger.warn("Unmapped columns for which by default visibility = false: " + unmapped);
+			logger.warn("Unmapped data for which by default visibility = false: " + unmapped);
 		else
-			logger.info("All columns are mapped and visibility can be detected.");
+			logger.info("All data is mapped and visibility can be detected.");
 	}
 	
 	/**
@@ -206,6 +232,18 @@ public abstract class DataVisibility {
 		}
 	}
 	
+	
+	/* Default no data storage */
+	protected static final List<String> noDataList = new ArrayList<String>();
+	protected static final Set<String> noDataSet = new HashSet<String>();
+	protected static final Map<String, String> noDataMap = new HashMap<String, String>();
+	protected static final Map<String, Collection<String>> noDataCollectionMap = new HashMap<String, Collection<String>>(); 
+	
+	/* ******************************************************************************************
+	 * We need all children to make conscious decisions re which data to provide and which not.
+	 * When some documentation will be available we can configure default options here. 
+	 * ******************************************************************************************/
+	
 	/** provides data visible by default */ 
 	abstract protected List<String> getVisibleByDefault();
 	
@@ -219,5 +257,5 @@ public abstract class DataVisibility {
 	abstract protected Map<String, Collection<String>> getDependancyMapTypeAny();
 	
 	/** provides the dependencies that can be considered visible if ANY dependent by element is visible */ 
-	abstract protected Map<String, Collection<String>> getDependancyMapTypeAll();	
+	abstract protected Map<String, Collection<String>> getDependancyMapTypeAll();
 }

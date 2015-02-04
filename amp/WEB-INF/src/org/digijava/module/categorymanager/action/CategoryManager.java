@@ -23,7 +23,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
-import org.dgfoundation.amp.reports.DataVisibility;
+import org.dgfoundation.amp.visibility.data.DataVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryClass;

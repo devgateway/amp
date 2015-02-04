@@ -63,4 +63,10 @@ public class EPConstants {
 	public static final String API_STATE_LAYERS_VIEW = "layers-view";
 	public static final String API_STATE_REPORT_EXPORT_DESCRIPTION = "Export to Map";
 	public static final String API_STATE_REPORT_EXPORT = "reportExportId=";
+	
+	// fm constants
+	public static final String REPORTING_FIELDS = "reporting-fields";
+	public static final String ENABLED_MODULES = "enabled-modules";
+	public static final String DETAIL_MODULES = "detail-modules";
+	public static final String DETAIL_ALL_ENABLED_MODULES = "all-enabled";
 }

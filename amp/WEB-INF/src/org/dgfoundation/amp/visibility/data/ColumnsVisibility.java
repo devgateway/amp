@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.dgfoundation.amp.reports;
+package org.dgfoundation.amp.visibility.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ColumnConstants;
@@ -26,42 +25,25 @@ import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCateg
  * 
  * @author Nadejda Mandrescu
  */
-public class ColumnsVisibility extends DataVisibility {
+public class ColumnsVisibility extends DataVisibility implements FMSettings {
 	protected static final Logger logger = Logger.getLogger(ColumnsVisibility.class);
 	
 	private static final Set<String> columnsSet = ConstantsUtil.getConstantsSet(ColumnConstants.class);
-	
-	/** keeps track of visibility changes */
-	private static AtomicBoolean atomicVisibilityChanged = new AtomicBoolean(false);
-
-	private static ColumnsVisibility currentColumnsVisibility = null;
 	
 	/**
 	 * @return the current set of visible columns
 	 */
 	synchronized
 	public static Set<String> getVisibleColumns() {
-		if (currentColumnsVisibility == null)
-			currentColumnsVisibility = new ColumnsVisibility();
-		return currentColumnsVisibility.getCurrentVisibleColumns();
+		return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_COLUMNS);
 	}
 	
-	/**
-	 * Notifies that FM visibility changed
-	 */
-	protected static void setVisibilityChanged() {
-		atomicVisibilityChanged.set(true);
+	protected ColumnsVisibility() {
 	}
 	
-	private Set<String> visibleColumns = null;
-	
-	private ColumnsVisibility() {
-	}
-	
-	private Set<String> getCurrentVisibleColumns() {
-		if (atomicVisibilityChanged.compareAndSet(true, false) || visibleColumns == null)
-			visibleColumns = detectVisibleData();
-		return visibleColumns;
+	@Override
+	public Set<String> getEnabledSettings() {
+		return getCurrentVisibleData();
 	}
 	
 	@Override

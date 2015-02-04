@@ -24,7 +24,7 @@ import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
-import org.dgfoundation.amp.reports.MeasuresVisibility;
+import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;

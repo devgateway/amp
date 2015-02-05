@@ -25,7 +25,7 @@ function ampcontact_default_rules_configuration() {
           }
         },
         { "mail_to_users_of_role" : {
-            "roles" : { "value" : { "3" : "3" } },
+            "roles" : { "value" : { "5" : "5" } },
             "subject" : "New contact form submission [[site:name]]",
             "message" : "[entityform:textexport-email]\\r\\n"
           }

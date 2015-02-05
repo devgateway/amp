@@ -22,5 +22,11 @@ function amppermissions_user_default_roles() {
     'weight' => 2,
   );
 
+  // Exported role: notification user.
+  $roles['notification user'] = array(
+    'name' => 'notification user',
+    'weight' => 4,
+  );
+
   return $roles;
 }

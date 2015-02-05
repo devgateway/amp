@@ -125,9 +125,9 @@
                         <img src="/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png" border="0" title="<digi:trn>Edit</digi:trn>"/>
                     </digi:link>
                     <c:set var="deleteAction">/aidEffectivenessIndicatorsManager.do?actionParam=delete&ampIndicatorId=${indicator.ampIndicatorId}</c:set>
-                    <digi:link href="${deleteAction}" onclick="return confirmDelete('${deleteAction}'); return false;">
+                    <a onclick="return confirmDelete('${deleteAction}'); return false;">
                         <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete</digi:trn>"/>
-                    </digi:link>
+                    </a>
                 </td>
             </tr>
         </logic:iterate>
@@ -153,7 +153,7 @@
 
     function confirmDelete(deleteAction) {
         var confirmMessage = '<digi:trn>Are you sure you want to delete this aid effectiveness indicator?</digi:trn>';
-        if (confirm(confirmMessage)) {
+        if (confirm(confirmMessage) === true) {
             window.location.href = deleteAction;
         }
     }

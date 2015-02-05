@@ -1,9 +1,6 @@
 package org.digijava.module.aim.action;
 
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.*;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
 import org.digijava.module.aim.form.AidEffectivenessIndicatorForm;
@@ -88,6 +85,9 @@ public class AidEffectivenessIndicatorsAction extends Action {
 
                 return mapping.findForward("edit");
             case "save":
+                if (validateData(indicatorForm, request).size() > 0) {
+                    return mapping.findForward("error");
+                }
                 // update
                 if (indicatorForm.getAmpIndicatorId() != null && indicatorForm.getAmpIndicatorId() > 0){
                     indicator = AidEffectivenessIndicatorUtil.loadById(indicatorForm.getAmpIndicatorId());
@@ -198,6 +198,43 @@ public class AidEffectivenessIndicatorsAction extends Action {
         indicatorForm.setAmpIndicatorId(null);
         indicatorForm.setIndicatorType(-1);
         indicatorForm.setOptions(new ArrayList<AmpAidEffectivenessIndicatorOption>());
+    }
+
+    public ActionMessages validateData(AidEffectivenessIndicatorForm indicatorForm, HttpServletRequest request) {
+        ActionMessages errors = new ActionMessages();
+        if (indicatorForm.getAmpIndicatorName() == null || "".equals(indicatorForm.getAmpIndicatorName())) {
+            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.admin.aidEffectivenessIndicator.indicatorName.required"));
+        }
+
+        if (indicatorForm.getIndicatorType() == -1) {
+            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.admin.aidEffectivenessIndicator.indicatorType"));
+        }
+
+        int numberOfDefaultOptions = 0;
+        if (indicatorForm.getOptions() != null && indicatorForm.getOptions().size() > 0) {
+            for (AmpAidEffectivenessIndicatorOption option : indicatorForm.getOptions()) {
+                if (option.getAmpIndicatorOptionName() == null || "".equals(option.getAmpIndicatorOptionName())) {
+                    errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.admin.aidEffectivenessIndicator.options.optionName.required"));
+                    // do not repeat the error message
+                    break;
+                }
+            }
+
+            for (AmpAidEffectivenessIndicatorOption option : indicatorForm.getOptions()) {
+                if (option.getDefaultOption()) {
+                    numberOfDefaultOptions++;
+                }
+            }
+        } else {
+            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.admin.aidEffectivenessIndicator.atLeastOne"));
+        }
+
+        if (numberOfDefaultOptions != 1) {
+            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.admin.aidEffectivenessIndicator.options.oneDefault"));
+        }
+
+        saveErrors(request, errors);
+        return errors;
     }
 
 }

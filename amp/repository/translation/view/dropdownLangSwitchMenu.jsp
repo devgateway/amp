@@ -26,16 +26,16 @@
                   <c:otherwise>
                     <li class="yuiampmenuitem_drop">
                   </c:otherwise>
-                </c:choose>                
+                </c:choose>
 				<a class="yuiampmenuitemlabel"  href="#" onclick="SwitchLanguageMenu('<%= langReferUrl %>')">
 					<digi:trn key="aim:${languages.langName}"><bean:write name="languages" property="langName"/></digi:trn>
 				</a>
                 </li>
 			</logic:iterate>
 	</logic:present>
-	
+
 <script>
-function 
+function
 SwitchLanguageMenu(value) {
 		if(typeof quitRnot1 != 'function'||quitRnot1('${msg}')!=false){
                 var referrer = document.location.href;
@@ -46,7 +46,7 @@ SwitchLanguageMenu(value) {
                     var wantContinue="<digi:trn>Are you sure you want to continue?</digi:trn>";
                    	 window.onbeforeunload = null;
                    	 confirm (wicketLanguageChange+"\n"+wantContinue);
-                    
+
                 }
                 var newLoc = value + referrer;
 
@@ -56,12 +56,12 @@ SwitchLanguageMenu(value) {
             		referLink.target = "_self";
             		document.body.appendChild(referLink);
             		referLink.click();
-            		
+
             	}
             	else{
             		 document.location.href = newLoc;
             	}
-            	
+
             }
     }
 </script>

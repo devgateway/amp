@@ -16,7 +16,7 @@
 </script>
 
 <h1 class="admintitle"><digi:trn>Aid Effectiveness Indicator Manager - Edit Indicator</digi:trn></h1>
-
+<digi:errors/>
 <digi:form action="/aidEffectivenessIndicatorsManager.do" method="post" styleId="editForm">
     <html:hidden property="actionParam" value="save"/>
     <html:hidden property="ampIndicatorId" />
@@ -66,7 +66,7 @@
 
         <tr>
             <td>
-                <digi:trn>Indicator Title</digi:trn>:</b>
+                <digi:trn>Indicator Tooltip</digi:trn>:</b>
             </td>
             <td>
                 <html:text property="tooltipText" styleId="editAmpIndicatorTitle" />
@@ -128,7 +128,7 @@
                     </td>
                     <td width="20%" align="center">
                         <c:set var="deleteOptionAction">/aidEffectivenessIndicatorsManager.do?actionParam=deleteOption&ampIndicatorOptionId=${option.ampIndicatorOptionId}&optionIndex=${idx}</c:set>
-                        <digi:link href="${deleteOptionAction}" onclick="return confirmDelete('${deleteOptionAction}'); return false;">
+                        <digi:link href="${deleteOptionAction}">
                             <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete</digi:trn>"/>
                         </digi:link>
                     </td>

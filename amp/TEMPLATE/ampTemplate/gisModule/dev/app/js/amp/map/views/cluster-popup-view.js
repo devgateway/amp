@@ -29,6 +29,7 @@ module.exports = Backbone.View.extend({
 
   render: function() {
     this.generateInfoWindow(this.popup, this.admLayer);
+    app.translator.translateDOM($('.cluster-popup'));
     return this;
   },
 

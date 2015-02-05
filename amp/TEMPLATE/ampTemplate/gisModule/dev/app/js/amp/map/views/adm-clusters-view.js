@@ -26,6 +26,7 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
+    app.translator.translateDOM($('.cluster-popup'));
     return this;
   },
 

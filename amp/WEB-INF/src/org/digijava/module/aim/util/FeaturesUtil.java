@@ -1082,23 +1082,13 @@ public class FeaturesUtil {
 		return col;
 	}
 	
+	/**
+	 * @return names of the root FM groups 
+	 */
 	public static Set<String> getMainModulesNames() {
-		Session session = null;
-		Set<String> modules = new HashSet<String>();
-		String qryStr = null;
-		Query qry = null;
-
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			qryStr = "select f.name from " + AmpModulesVisibility.class.getName() +
-			" f where f.parent is null";
-			qry = session.createQuery(qryStr);
-			modules.addAll(qry.list());
-		}
-		catch (Exception ex) {
-			logger.error(ex);
-		}    
-		return modules;
+		return new HashSet<String>(PersistenceManager.getSession().createQuery(
+			"select f.name from " + AmpModulesVisibility.class.getName() +
+			" f where f.parent is null").list());
 	}
 
 	/**

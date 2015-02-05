@@ -136,12 +136,19 @@ public class ReportsUtil {
 		ReportAreaMultiLinked[] areas = null;
 		if (cachedReportData != null) {
 			areas = cachedReportData.areas;
-			result.set("headers", cachedReportData.report.leafHeaders);
+			if (cachedReportData.report != null) {
+				result.set("headers", cachedReportData.report.leafHeaders);
+			}
 		}
 		
 		// extract data for the requested page
-		ReportArea pageArea = recordsPerPage == -1 ? cachedReportData.report.reportContents :
-					ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
+		ReportArea pageArea = null;
+		if (recordsPerPage != -1) {
+			pageArea = ReportPaginationUtils.getReportArea(areas, start, recordsPerPage);
+		} else if (cachedReportData != null && cachedReportData.report !=null) {
+			pageArea = cachedReportData.report.reportContents;
+		}
+		
 		int totalPageCount = ReportPaginationUtils.getPageCount(areas, recordsPerPage);
 		
 		// configure the result

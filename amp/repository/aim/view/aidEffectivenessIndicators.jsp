@@ -13,7 +13,7 @@
 <script type="text/javascript" src='<digi:file src="module/aim/scripts/table_utils.js"/>'>.</script>
 
 <h1 class="admintitle"><digi:trn>Aid Effectiveness Indicator Manager</digi:trn></h1>
-
+<digi:errors/>
 <%-- This is the search form --%>
 <digi:form action="/aidEffectivenessIndicatorsManager.do" method="post" styleId="searchForm">
     <html:hidden property="actionParam" value="search"/>

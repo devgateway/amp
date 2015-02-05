@@ -1,5 +1,6 @@
 package org.digijava.module.aim.action;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator;
 import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
@@ -16,6 +17,9 @@ import java.util.List;
  * view, add, delete, edit
  */
 public class AidEffectivenessIndicatorsAction extends Action {
+
+    private static Logger logger = Logger.getLogger(AidEffectivenessIndicatorsAction.class);
+
     @Override
     public ActionForward execute(ActionMapping mapping,
                                  ActionForm form,
@@ -49,11 +53,12 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 long indicatorId = 0;
                 try {
                     indicatorId = Long.parseLong(indicatorIdParam);
-                } catch (NumberFormatException nfe) {
-                    // todo handleMe
+                    indicator = AidEffectivenessIndicatorUtil.loadById(indicatorId);
+                } catch (RuntimeException nfe) {
+                    handleLocalException(request, nfe, "error.admin.aidEffectivenessIndicator.notExist", indicatorIdParam);
+                    return mapping.findForward("search");
                 }
 
-                indicator = AidEffectivenessIndicatorUtil.loadById(indicatorId);
                 entityToForm(indicator, indicatorForm);
                 return mapping.findForward("edit");
             case "add" :
@@ -68,18 +73,26 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 try {
                     optionId = Long.parseLong(optionIdParam);
                 } catch (NumberFormatException nfe) {
-                    // todo handleMe
+                    handleLocalException(request, nfe, "error.admin.aidEffectivenessIndicator.options.option.notExist", optionIdParam);
+                    return mapping.findForward("error");
                 }
                 if (optionId > 0) {
                     // deleting already saved option
-                    indicator = AidEffectivenessIndicatorUtil.deleteOption(optionId);
-                    entityToForm(indicator, indicatorForm);
+                    try {
+                        indicator = AidEffectivenessIndicatorUtil.deleteOption(optionId);
+                        entityToForm(indicator, indicatorForm);
+                    } catch (RuntimeException rte) {
+                        handleLocalException(request, rte, "error.admin.aidEffectivenessIndicator.options.option.notExist", optionIdParam);
+                        return mapping.findForward("error");
+                    }
                 } else {
                     // deleting just added option from the form
                     try {
                         int optionIndex = Integer.parseInt(optionIndexParam);
                         indicatorForm.getOptions().remove(optionIndex);
                     } catch (RuntimeException rte) {
+                        handleLocalException(request, rte, "error.admin.aidEffectivenessIndicator.options.option.notExist", optionIndexParam);
+                        return mapping.findForward("error");
                     }
                 }
 
@@ -96,16 +109,17 @@ public class AidEffectivenessIndicatorsAction extends Action {
                     indicator = formToEntity(indicatorForm, null);
                 }
                 AidEffectivenessIndicatorUtil.saveIndicator(indicator);
-                return mapping.findForward("search");
+                return mapping.findForward("error");
             case "delete" :
                 indicatorId = 0;
                 try {
                     indicatorId = Long.parseLong(indicatorIdParam);
-                } catch (NumberFormatException nfe) {
-                    // todo handleMe
+                    AidEffectivenessIndicatorUtil.deleteIndicator(indicatorId);
+                } catch (RuntimeException nfe) {
+                    handleLocalException(request, nfe, "error.admin.aidEffectivenessIndicator.notExist", indicatorIdParam);
+                    return mapping.findForward("search");
                 }
-                AidEffectivenessIndicatorUtil.deleteIndicator(indicatorId);
-                return mapping.findForward("list");
+                return mapping.findForward("search");
             default: //process "list"
                 return mapping.findForward("list");
 
@@ -235,6 +249,19 @@ public class AidEffectivenessIndicatorsAction extends Action {
 
         saveErrors(request, errors);
         return errors;
+    }
+
+    private void handleLocalException(HttpServletRequest request, Exception ex, String exceptionKey, Object param) {
+        logger.error(ex.getStackTrace());
+        ActionMessages errors = new ActionMessages();
+        ActionMessage message = null;
+        if (param != null) {
+            message = new ActionMessage(exceptionKey, param);
+        } else {
+            message = new ActionMessage(exceptionKey);
+        }
+        errors.add(ActionMessages.GLOBAL_MESSAGE, message);
+        saveErrors(request, errors);
     }
 
 }

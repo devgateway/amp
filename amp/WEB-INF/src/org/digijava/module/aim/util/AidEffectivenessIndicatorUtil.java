@@ -28,8 +28,12 @@ public class AidEffectivenessIndicatorUtil {
 
         session = PersistenceManager.getSession();
         queryBuilder.append("select ind from ").append(AmpAidEffectivenessIndicator.class.getName()).append(" ind")
-                .append(" where ampIndicatorName like '%"+ keyword +"%'")
-                .append(" and active = :active");
+                .append(" where ampIndicatorName like '%"+ keyword +"%'");
+
+        // show active only, otherwise return all
+        if (activeOnly) {
+            queryBuilder.append(" and active = :active");
+        }
 
         // the indicator type is selected
         if (indicatorType >= 0) {
@@ -37,8 +41,10 @@ public class AidEffectivenessIndicatorUtil {
         }
 
         query = session.createQuery(queryBuilder.toString());
-        query.setBoolean("active", activeOnly);
 
+        if (activeOnly) {
+            query.setBoolean("active", true);
+        }
         if (indicatorType >= 0) {
             query.setInteger("indicatorType", indicatorType);
         }
@@ -59,21 +65,43 @@ public class AidEffectivenessIndicatorUtil {
     /**
      * Do not delete via Id, but load first
      * Because we want to delete related options as well
-     * @param indicatorId
+     * @param indicatorId the indicator Id to delete
      */
     public static void deleteIndicator(long indicatorId) {
         Session session = PersistenceManager.getSession();
-        // todo handle if not found
-        AmpAidEffectivenessIndicator indicator = (AmpAidEffectivenessIndicator) session.load(AmpAidEffectivenessIndicator.class, indicatorId);
+        AmpAidEffectivenessIndicator indicator = null;
+        try {
+            indicator = (AmpAidEffectivenessIndicator) session.load(AmpAidEffectivenessIndicator.class, indicatorId);
+        }  catch (org.hibernate.ObjectNotFoundException nfe) {
+            /*
+             * Throwing Runtime here to prevent handling Hibernate exceptions in the action class
+             * I do not want to create business level exception for this
+             */
+            throw new RuntimeException("Indicator with id " + indicatorId + " not found");
+        }
         // TODO Handle if there are alreary exist activities with this indicator
         // The deletion is impossible and we should fire corresponding message to the user
         session.delete(indicator);
     }
 
+    /**
+     * Delete option and the relationship with indicator
+     * @param optionId the option id to be deleted
+     * @return returns the indicator for data be refreshed after deletion
+     */
     public static AmpAidEffectivenessIndicator deleteOption(long optionId) {
         Session session = PersistenceManager.getSession();
-        AmpAidEffectivenessIndicatorOption option = (AmpAidEffectivenessIndicatorOption)
-            session.load(AmpAidEffectivenessIndicatorOption.class, optionId);
+        AmpAidEffectivenessIndicatorOption option = null;
+        try {
+            option = (AmpAidEffectivenessIndicatorOption)
+                    session.load(AmpAidEffectivenessIndicatorOption.class, optionId);
+        } catch (org.hibernate.ObjectNotFoundException nfe) {
+            /*
+             * Throwing Runtime here to prevent handling Hibernate exceptions in the action class
+             * I do not want to create business level exception for this
+             */
+            throw new RuntimeException("Option with id " + optionId + " not found");
+        }
         AmpAidEffectivenessIndicator indicator = option.getIndicator();
         indicator.getOptions().remove(option);
         session.delete(option);

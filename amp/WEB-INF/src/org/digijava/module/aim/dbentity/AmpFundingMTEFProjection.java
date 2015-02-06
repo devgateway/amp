@@ -61,16 +61,27 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 		public Date getReportingDate() {
 			return reportingDate;
 		}
+		
 		public void setReportingDate(Date reportingDate) {
 			this.reportingDate = reportingDate;
 		}
 		
 		public Double getAmount() {
-			return FeaturesUtil.applyThousandsForVisibility(amount);
+			return amount;
 		}
+		
+		public Double getDisplayedAmount() {
+			return FeaturesUtil.applyThousandsForVisibility(getAmount());
+		}
+		
 		public void setAmount(Double amount) {
-			this.amount = FeaturesUtil.applyThousandsForEntry(amount);
+			this.amount = amount;
 		}
+		
+		public void setDisplayedAmount(Double displayedAmount) {
+			setAmount(FeaturesUtil.applyThousandsForEntry(displayedAmount));
+		}
+		
 		public AmpFunding getAmpFunding() {
 			return ampFunding;
 		}

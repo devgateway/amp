@@ -256,7 +256,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 //			filter.setAmountinthousand(Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
 //		} 
 		
-		acc.setAmount(filter.adaptAmountToThousandsSetting(tr_amount));
+		acc.setAmount(tr_amount * 1.0 / FeaturesUtil.getAmountMultiplier(filter.getAmountinthousand()));
 				
 		//use fixed exchange rate only if it has been entered. Else use Agency
 		if (fixedExchangeRate != null && fixedExchangeRate != 0) {

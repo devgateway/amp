@@ -43,6 +43,7 @@ import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.ExportActivityToPdfUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.IndicatorUtil;
@@ -2362,7 +2363,15 @@ public class ExportActivityToWord extends Action {
     	}
     	
     }
-					
+	
+	protected String formatNumber(Double val) {
+		return FormatHelper.formatNumber(FeaturesUtil.applyThousandsForVisibility(val));
+	}
+
+	protected String formatTotals(DecimalWraper val) {
+		return formatNumber(val.doubleValue());
+	}
+	
     /*
      * Donor funding section
      */
@@ -2491,7 +2500,7 @@ public class ExportActivityToWord extends Action {
                                         ExportSectionHelperRowData currentRowData = sectionHelperRowData.
 		                                        addRowData(fndDet.getAdjustmentType().getLabel(), true).
 		                                        addRowData(DateConversion.ConvertDateToString(fndDet.getTransactionDate())).
-		                                        addRowData(FormatHelper.formatNumber(fndDet.getTransactionAmount())).
+		                                        addRowData(formatNumber(fndDet.getTransactionAmount())).
 		                                        addRowData(fndDet.getAmpCurrencyId().getCurrencyCode());
 
 
@@ -2521,49 +2530,49 @@ public class ExportActivityToWord extends Action {
 
 	                            if (transTypeKey.equals("Commitment")&&adjTypeKey.equals("Actual")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Commitment")+" "+TranslatorWorker.translateText("Actual")+ ":";
-	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotActualComm().doubleValue());
+	                            	subTotalValue = formatNumber(calculationsSubtotal.getTotActualComm().doubleValue());
 	                            } else if (transTypeKey.equals("Commitment")&&adjTypeKey.equals("Planned")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Commitment")+" "+TranslatorWorker.translateText("Planned")+ ":";
-	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue());
+	                            	subTotalValue = formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue());
 	                            } else if (transTypeKey.equals("Commitment")&&adjTypeKey.equals("Pipeline")) {
 	                             	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Commitment")+" "+TranslatorWorker.translateText("Pipeline")+ ":";
-	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineComm().doubleValue());
+	                            	subTotalValue = formatNumber(calculationsSubtotal.getTotPipelineComm().doubleValue());
 	                            } else if (transTypeKey.equals("Disbursement")&&adjTypeKey.equals("Actual")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Disbursement")+" "+TranslatorWorker.translateText("Actual")+ ":";
-	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisb().doubleValue());
+	                            	subTotalValue = formatNumber(calculationsSubtotal.getTotActualDisb().doubleValue());
 	                            } else if (transTypeKey.equals("Disbursement")&&adjTypeKey.equals("Planned")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Disbursement")+" "+TranslatorWorker.translateText("Planned")+ ":";
-	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotPlanDisb().doubleValue());
+	                            	subTotalValue = formatNumber(calculationsSubtotal.getTotPlanDisb().doubleValue());
 	                            } else if (transTypeKey.equals("Disbursement")&&adjTypeKey.equals("Pipeline")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Disbursement")+" "+TranslatorWorker.translateText("Pipeline")+ ":";
-	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineDisb().doubleValue());
+	                            	subTotalValue = formatNumber(calculationsSubtotal.getTotPipelineDisb().doubleValue());
 	                            } else if (transTypeKey.equals("Estimated Disbursement")&&adjTypeKey.equals("Actual")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Estimated Disbursement")+" "+TranslatorWorker.translateText("Actual")+ ":";
-	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotActualEDD().doubleValue());
+	                            	subTotalValue = formatNumber(calculationsSubtotal.getTotActualEDD().doubleValue());
 	                            } else if (transTypeKey.equals("Estimated Disbursement")&&adjTypeKey.equals("Planned")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Estimated Disbursement")+" "+TranslatorWorker.translateText("Planned")+ ":";
-	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedEDD().doubleValue());
+	                            	subTotalValue = formatNumber(calculationsSubtotal.getTotPlannedEDD().doubleValue());
 	                            } else if (transTypeKey.equals("Estimated Disbursement")&&adjTypeKey.equals("Pipeline")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Estimated Disbursement")+" "+TranslatorWorker.translateText("Pipeline")+ ":";
-	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineEDD().doubleValue());
+	                            	subTotalValue = formatNumber(calculationsSubtotal.getTotPipelineEDD().doubleValue());
 	                            } else if (transTypeKey.equals("Expenditure")&&adjTypeKey.equals("Actual")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Expenditure")+" "+TranslatorWorker.translateText("Actual")+ ":";
-	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotActualExp().doubleValue());
+	                            	subTotalValue = formatNumber(calculationsSubtotal.getTotActualExp().doubleValue());
 	                            } else if (transTypeKey.equals("Expenditure")&&adjTypeKey.equals("Planned")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Expenditure")+" "+TranslatorWorker.translateText("Planned")+ ":";
-	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedExp().doubleValue());
+	                            	subTotalValue = formatNumber(calculationsSubtotal.getTotPlannedExp().doubleValue());
 	                            } else if (transTypeKey.equals("Expenditure")&&adjTypeKey.equals("Pipeline")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Expenditure")+" "+TranslatorWorker.translateText("Pipeline")+ ":";
-	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineExp().doubleValue());
+	                            	subTotalValue = formatNumber(calculationsSubtotal.getTotPipelineExp().doubleValue());
 	                            } else if (transTypeKey.equals("Release of Funds")&&adjTypeKey.equals("Pipeline")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Release of Funds")+" "+TranslatorWorker.translateText("Pipeline")+ ":";
-	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineReleaseOfFunds().doubleValue());
+	                            	subTotalValue = formatNumber(calculationsSubtotal.getTotPipelineReleaseOfFunds().doubleValue());
 	                            } else if (transTypeKey.equals("Release of Funds")&&adjTypeKey.equals("Actual")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Release of Funds")+" "+TranslatorWorker.translateText("Actual")+ ":";
-	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotActualReleaseOfFunds().doubleValue());
+	                            	subTotalValue = formatNumber(calculationsSubtotal.getTotActualReleaseOfFunds().doubleValue());
 	                            } else if (transTypeKey.equals("Release of Funds")&&adjTypeKey.equals("Planned")){
 	                            	subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("Release of Funds")+" "+TranslatorWorker.translateText("Planned")+ ":";
-	                            	subTotalValue = FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedReleaseOfFunds().doubleValue());
+	                            	subTotalValue = formatNumber(calculationsSubtotal.getTotPlannedReleaseOfFunds().doubleValue());
 	                            }
 	                            
 	                            eshDonorFundingDetails.addRowData(new ExportSectionHelperRowData(subTotal).addRowData(subTotalValue + " " + toCurrCode));
@@ -2595,7 +2604,7 @@ public class ExportActivityToWord extends Action {
                             sectionHelperRowData = new ExportSectionHelperRowData(TranslatorWorker.translateText(projectedType), null, null, true);
                             sectionHelperRowData.addRowData(DateConversion.convertDateToFiscalYearString(projection.getProjectionDate()));
                             
-                            sectionHelperRowData.addRowData(FormatHelper.formatNumber(projection.getAmount()) + " " + projection.getAmpCurrency().getCurrencyCode());
+                            sectionHelperRowData.addRowData(formatNumber(projection.getAmount()) + " " + projection.getAmpCurrency().getCurrencyCode());
                             mtefProjections.addRowData(sectionHelperRowData);
                         }
                         
@@ -2605,7 +2614,7 @@ public class ExportActivityToWord extends Action {
                         FundingCalculationsHelper calc = new FundingCalculationsHelper();
                         calc.doCalculations(fnd, toCurrCode);
                     	String subTotal = TranslatorWorker.translateText("Sub-Total")+" "+TranslatorWorker.translateText("MTEF Projections");
-                    	String subTotalValue = FormatHelper.formatNumber(calc.getTotalMtef().doubleValue());
+                    	String subTotalValue = formatNumber(calc.getTotalMtef().doubleValue());
 
                         mtefProjections.addRowData(new ExportSectionHelperRowData(null).setSeparator(true));
                         mtefProjections.addRowData(new ExportSectionHelperRowData(subTotal).addRowData(subTotalValue + " " + toCurrCode));

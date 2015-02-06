@@ -68,7 +68,7 @@ public class AmpMTEFProjectionFormTableFeature extends
 				}
 
                 AmpFundingAmountComponent<AmpFundingMTEFProjection> fundingAmount = new AmpFundingAmountComponent<AmpFundingMTEFProjection>(
-                        "fundingAmount", item.getModel(), "Amount", "amount",
+                        "fundingAmount", item.getModel(), "Amount", "displayedAmount",
                         "Currency", "ampCurrency", "Projection Date", "projectionDate", true);
                 item.add(fundingAmount);
 

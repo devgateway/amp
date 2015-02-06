@@ -18,6 +18,7 @@ define(
 
 			// Create our Marionette app.
 			app.TabsApp = new Marionette.Application();
+			TranslationManager.searchAndTranslate();
 
 			// Define 2 regions where the tab and the content will be drawn.
 			// Each region is mapped to a <section> element on the html.

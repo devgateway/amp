@@ -241,9 +241,14 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	
 	@java.lang.SuppressWarnings("all")
 	public Double getTransactionAmount() {
-		return FeaturesUtil.applyThousandsForVisibility(transactionAmount);
+		return transactionAmount;
 	}
-	
+
+	@java.lang.SuppressWarnings("all")
+	public Double getDisplayedTransactionAmount() {
+		return FeaturesUtil.applyThousandsForVisibility(getTransactionAmount());
+	}
+
 	@java.lang.SuppressWarnings("all")
 	public Double getThousandsTransactionAmount() {
 		return this.thousandsTransactionAmount;
@@ -384,7 +389,12 @@ public class AmpFundingDetail implements Serializable, Cloneable, FundingInforma
 	
 	@java.lang.SuppressWarnings("all")
 	public void setTransactionAmount(final Double transactionAmount) {
-		this.transactionAmount = FeaturesUtil.applyThousandsForEntry(transactionAmount);
+		this.transactionAmount = transactionAmount;
+	}
+	
+	@java.lang.SuppressWarnings("all")
+	public void setDisplayedTransactionAmount(final Double displayedTransactionAmount) {
+		setTransactionAmount(FeaturesUtil.applyThousandsForEntry(displayedTransactionAmount));
 	}
 	
 	@java.lang.SuppressWarnings("all")

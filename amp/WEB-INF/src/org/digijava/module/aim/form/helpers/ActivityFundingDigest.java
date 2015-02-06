@@ -2,6 +2,7 @@
 package org.digijava.module.aim.form.helpers;
 
 import java.util.*;
+
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityFields;
@@ -24,11 +25,14 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.FundingCalculationsHelper;
+import org.digijava.module.aim.util.DecimalWraper;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.fundingpledges.dbentity.FundingPledges;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+
 import javax.servlet.http.HttpSession;
 
 /**
@@ -122,7 +126,7 @@ public class ActivityFundingDigest {
 	
 	public ActivityFundingDigest() {
 	}
-	
+		
 	/**
 	 * calculates various totals, populates {@link #fundingOrganizations} with funding sorted and digested by organization
 	 * @param fundings
@@ -172,23 +176,23 @@ public class ActivityFundingDigest {
 				if (currFunding.getFundingDetails() != null) {
 					try {
 						calculationsSubtotal.doCalculations(currFunding.getAmpRawFunding(), toCurrCode, true);
-						currFunding.setSubtotalPlannedCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue()));
-						currFunding.setSubtotalActualCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotActualComm().doubleValue()));
-						currFunding.setSubtotalPipelineCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineComm().doubleValue()));
-						currFunding.setSubtotalOfficialDevelopmentAidCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotOdaSscComm().doubleValue()));
-						currFunding.setSubtotalBilateralSscCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotBilateralSscComm().doubleValue()));
-						currFunding.setSubtotalTriangularSscCommitments(FormatHelper.formatNumber(calculationsSubtotal.getTotTriangularSscComm().doubleValue()));
-						currFunding.setSubtotalPlannedDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotPlanDisb().doubleValue()));
-						currFunding.setSubtotalPipelineDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineDisb().doubleValue()));
-						currFunding.setSubtotalDisbursements(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisb().doubleValue()));
-						currFunding.setSubtotalPlannedExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedExp().doubleValue()));
-						currFunding.setSubtotalPipelineExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineExp().doubleValue()));
-						currFunding.setSubtotalExpenditures(FormatHelper.formatNumber(calculationsSubtotal.getTotActualExp().doubleValue()));
-						currFunding.setSubtotalMTEFs(FormatHelper.formatNumber(calculationsSubtotal.getTotalMtef().doubleValue()));
-						currFunding.setSubtotalActualDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotActualDisbOrder().doubleValue()));
-						currFunding.setSubtotalPlannedDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotPlannedDisbOrder().doubleValue()));
-						currFunding.setSubtotalPipelineDisbursementsOrders(FormatHelper.formatNumber(calculationsSubtotal.getTotPipelineDisbOrder().doubleValue()));
-						currFunding.setUndisbursementbalance(FormatHelper.formatNumber(calculationsSubtotal.getUnDisbursementsBalance().doubleValue()));
+						currFunding.setSubtotalPlannedCommitments(formatNumber(calculationsSubtotal.getTotPlannedComm().doubleValue()));
+						currFunding.setSubtotalActualCommitments(formatNumber(calculationsSubtotal.getTotActualComm().doubleValue()));
+						currFunding.setSubtotalPipelineCommitments(formatNumber(calculationsSubtotal.getTotPipelineComm().doubleValue()));
+						currFunding.setSubtotalOfficialDevelopmentAidCommitments(formatNumber(calculationsSubtotal.getTotOdaSscComm().doubleValue()));
+						currFunding.setSubtotalBilateralSscCommitments(formatNumber(calculationsSubtotal.getTotBilateralSscComm().doubleValue()));
+						currFunding.setSubtotalTriangularSscCommitments(formatNumber(calculationsSubtotal.getTotTriangularSscComm().doubleValue()));
+						currFunding.setSubtotalPlannedDisbursements(formatNumber(calculationsSubtotal.getTotPlanDisb().doubleValue()));
+						currFunding.setSubtotalPipelineDisbursements(formatNumber(calculationsSubtotal.getTotPipelineDisb().doubleValue()));
+						currFunding.setSubtotalDisbursements(formatNumber(calculationsSubtotal.getTotActualDisb().doubleValue()));
+						currFunding.setSubtotalPlannedExpenditures(formatNumber(calculationsSubtotal.getTotPlannedExp().doubleValue()));
+						currFunding.setSubtotalPipelineExpenditures(formatNumber(calculationsSubtotal.getTotPipelineExp().doubleValue()));
+						currFunding.setSubtotalExpenditures(formatNumber(calculationsSubtotal.getTotActualExp().doubleValue()));
+						currFunding.setSubtotalMTEFs(formatNumber(calculationsSubtotal.getTotalMtef().doubleValue()));
+						currFunding.setSubtotalActualDisbursementsOrders(formatNumber(calculationsSubtotal.getTotActualDisbOrder().doubleValue()));
+						currFunding.setSubtotalPlannedDisbursementsOrders(formatNumber(calculationsSubtotal.getTotPlannedDisbOrder().doubleValue()));
+						currFunding.setSubtotalPipelineDisbursementsOrders(formatNumber(calculationsSubtotal.getTotPipelineDisbOrder().doubleValue()));
+						currFunding.setUndisbursementbalance(formatNumber(calculationsSubtotal.getUnDisbursementsBalance().doubleValue()));
 						currFunding.cleanAmpRawFunding();
 					} catch (Exception ex) {
 						ex.printStackTrace();
@@ -216,27 +220,27 @@ public class ActivityFundingDigest {
 			this.setUnDisbursementsBalance(activityTotalCalculations.getUnDisbursementsBalance().getCalculations());
 		} else {
 			// actual
-			this.setTotalCommitments(activityTotalCalculations.getTotActualComm().toString());
-			this.setTotalDisbursements(activityTotalCalculations.getTotActualDisb().toString());
-			this.setTotalExpenditures(activityTotalCalculations.getTotActualExp().toString());
-			this.setTotalActualDisbursementsOrders(activityTotalCalculations.getTotActualDisbOrder().toString());
-			this.setTotalActualRoF(activityTotalCalculations.getTotActualReleaseOfFunds().toString());
-			this.setTotalActualEDD(activityTotalCalculations.getTotActualEDD().toString());
+			this.setTotalCommitments(formatTotals(activityTotalCalculations.getTotActualComm()));
+			this.setTotalDisbursements(formatTotals(activityTotalCalculations.getTotActualDisb()));
+			this.setTotalExpenditures(formatTotals(activityTotalCalculations.getTotActualExp()));
+			this.setTotalActualDisbursementsOrders(formatTotals(activityTotalCalculations.getTotActualDisbOrder()));
+			this.setTotalActualRoF(formatTotals(activityTotalCalculations.getTotActualReleaseOfFunds()));
+			this.setTotalActualEDD(formatTotals(activityTotalCalculations.getTotActualEDD()));
 			// planned
-			this.setTotalPlannedDisbursements(activityTotalCalculations.getTotPlanDisb().toString());
-			this.setTotalPlannedCommitments(activityTotalCalculations.getTotPlannedComm().toString());
-			this.setTotalPlannedExpenditures(activityTotalCalculations.getTotPlannedExp().toString());
-			this.setTotalPlannedDisbursementsOrders(activityTotalCalculations.getTotPlannedDisbOrder().toString());
-			this.setTotalPlannedRoF(activityTotalCalculations.getTotPlannedReleaseOfFunds().toString());
-			this.setTotalPlannedEDD(activityTotalCalculations.getTotPlannedEDD().toString());
-			this.setUnDisbursementsBalance(activityTotalCalculations.getUnDisbursementsBalance().toString());
-			this.setTotalMtefProjections(activityTotalCalculations.getTotalMtef().toString());
+			this.setTotalPlannedDisbursements(formatTotals(activityTotalCalculations.getTotPlanDisb()));
+			this.setTotalPlannedCommitments(formatTotals(activityTotalCalculations.getTotPlannedComm()));
+			this.setTotalPlannedExpenditures(formatTotals(activityTotalCalculations.getTotPlannedExp()));
+			this.setTotalPlannedDisbursementsOrders(formatTotals(activityTotalCalculations.getTotPlannedDisbOrder()));
+			this.setTotalPlannedRoF(formatTotals(activityTotalCalculations.getTotPlannedReleaseOfFunds()));
+			this.setTotalPlannedEDD(formatTotals(activityTotalCalculations.getTotPlannedEDD()));
+			this.setUnDisbursementsBalance(formatTotals(activityTotalCalculations.getUnDisbursementsBalance()));
+			this.setTotalMtefProjections(formatTotals(activityTotalCalculations.getTotalMtef()));
 			// pipeline
-			this.setTotalPipelineCommitments(activityTotalCalculations.getTotPipelineComm().toString());
+			this.setTotalPipelineCommitments(formatTotals(activityTotalCalculations.getTotPipelineComm()));
 			// ssc
-			this.setTotalOdaSscCommitments(activityTotalCalculations.getTotOdaSscComm().toString());
-			this.setTotalBilateralSscCommitments(activityTotalCalculations.getTotBilateralSscComm().toString());
-			this.setTotalTriangularSscCommitments(activityTotalCalculations.getTotTriangularSscComm().toString());
+			this.setTotalOdaSscCommitments(formatTotals(activityTotalCalculations.getTotOdaSscComm()));
+			this.setTotalBilateralSscCommitments(formatTotals(activityTotalCalculations.getTotBilateralSscComm()));
+			this.setTotalTriangularSscCommitments(formatTotals(activityTotalCalculations.getTotTriangularSscComm()));
 		}
 		// calculate consumption and delivery rates
 		if (activityTotalCalculations.getTotActualExp() != null && activityTotalCalculations.getTotActualExp().doubleValue() != 0 && activityTotalCalculations.getTotActualDisb() != null && activityTotalCalculations.getTotActualDisb().doubleValue() != 0) {
@@ -250,6 +254,15 @@ public class ActivityFundingDigest {
 			this.setDeliveryRate(formatter.format(deliveryRate));
 		}
 	}
+	
+	protected String formatNumber(Double val) {
+		return FormatHelper.formatNumber(FeaturesUtil.applyThousandsForVisibility(val));
+	}
+
+	protected String formatTotals(DecimalWraper val) {
+		return formatNumber(val.doubleValue());
+	}
+	
 	// TODO: Constantin - when doing the rewrite, all we need are flags, not lists
 	public List<FundingDetail> getCommitmentsDetails() {
 		if (fundingDetails != null) {

@@ -255,8 +255,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 //			filter.setAmountinthousand(Integer.valueOf(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AMOUNTS_IN_THOUSANDS)));
 //		} 
 		
-		acc.setAmount(filter.adaptAmountToThousandsSetting(tr_amount));
-		
+		acc.setAmount(tr_amount * 1.0 / FeaturesUtil.getAmountMultiplier(filter.getAmountinthousand()));
 				
 		//use fixed exchange rate only if it has been entered. Else use Agency
 		if (fixedExchangeRate != null && fixedExchangeRate != 0) {
@@ -361,7 +360,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 					String check = worker.getFiscalYear();
 //					fiscalYear = new GregorianBasedWorker(td).getFiscalYear(); 
 //					String check = DateConversion.convertDateToFiscalYearString(td);
-					System.err.format("FY vs Check: %s vs %s\n", fiscalYear, check);
+					//System.err.format("FY vs Check: %s vs %s\n", fiscalYear, check);
 							//DateConversion.convertDateToFiscalYearString(td); // AMP-19405 - emulate AF bug in AP and reports
 				}
 				

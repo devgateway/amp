@@ -93,7 +93,6 @@ Backbone.emulateHTTP = false;
 if (! Settings.BIPLUGIN) {
     $(document).ready(function() {
         var plugins = new PluginCollection();
-
         plugins.fetch({
             success: function() {
                 var i = plugins.size();
@@ -109,6 +108,16 @@ if (! Settings.BIPLUGIN) {
                         });
 
                         Saiku.toolbar = new Toolbar();
+                        if(!Settings.AMP_REPORT_API_BRIDGE) {
+                            Saiku.session.bind("tab:add", function ()
+                                    {
+                            			_.delay(function() {
+                            				$(".cubes").val("amp/AMP/AMP/Donor%20Funding");
+                            				$(".cubes").change();
+                            			}, 500);
+                                    });
+                        }
+                        
                     }
                 });
             }

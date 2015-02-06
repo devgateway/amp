@@ -235,7 +235,6 @@ SaveReportEngine.prototype.saveOverwrite	= function () // actually this is the "
 
 SaveReportEngine.prototype.executeReport	= function () // actually this is the "Save" button
 {
-	debugger;
 	this.runReport = true;
 	this.saveAndOrOpenReport(false);
 };

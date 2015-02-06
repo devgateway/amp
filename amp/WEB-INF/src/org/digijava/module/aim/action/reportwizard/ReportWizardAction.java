@@ -468,7 +468,7 @@ public class ReportWizardAction extends MultiAction {
         TeamMember teamMember		=(TeamMember)request.getSession().getAttribute( Constants.CURRENT_MEMBER );
         
         AmpTeamMember ampTeamMember = null;
-        if(teamMember!=null){
+        if (teamMember != null) {
         	ampTeamMember = TeamUtil.getAmpTeamMember(teamMember.getMemberId());
         }
         Collection<AmpColumns> availableCols	= AdvancedReportUtil.getColumnList();
@@ -483,14 +483,15 @@ public class ReportWizardAction extends MultiAction {
             ampReport.setDrilldownTab( myForm.getDesktopTab() );
         } else
             ampReport = oldReport;
+        
         String newName ;
-        if(!myForm.getRunReport()){
+        if (!myForm.getRunReport()){
         	newName = MultilingualInputFieldValues.getDefaultName(AmpReports.class, "name", null, request);
         	if (otherReportsWithSameNameExist(ampReport, newName)) {
                 throw new DuplicateReportNameException("a different report with the same name exists");
             }
         }else{
-        	newName=myForm.getReportTitle();
+        	newName = myForm.getReportTitle();
         }
         
 
@@ -611,14 +612,14 @@ public class ReportWizardAction extends MultiAction {
  * @throws Exception
  */
     private ActionForward runReport(AmpReports ampReport, HttpServletRequest request, HttpServletResponse response)throws Exception {
-    	String reportToken=UUID.randomUUID().toString();
-    	MaxSizeLinkedHashMap<String, AmpReports>rerpotsList=(MaxSizeLinkedHashMap<String, AmpReports>)request.getSession().getAttribute("reportStack");
-    	if(rerpotsList==null){
-    		rerpotsList=new MaxSizeLinkedHashMap<String, AmpReports>(Constants.MAX_REPORTS_IN_SESSION);
+    	String reportToken = UUID.randomUUID().toString();
+    	MaxSizeLinkedHashMap<String, AmpReports> reportsList = (MaxSizeLinkedHashMap<String, AmpReports>)request.getSession().getAttribute("reportStack");
+    	if (reportsList == null) {
+    		reportsList = new MaxSizeLinkedHashMap<String, AmpReports>(Constants.MAX_REPORTS_IN_SESSION);
     	}
-    	rerpotsList.put(reportToken, ampReport);
-    	request.getSession().setAttribute("reportStack", rerpotsList);
-        callSaikuReport(reportToken, response,"runReportToken");
+    	reportsList.put(reportToken, ampReport);
+    	request.getSession().setAttribute("reportStack", reportsList);
+        callSaikuReport(reportToken, response, "runReportToken");
 		return null;
 		
 	}
@@ -690,7 +691,7 @@ public class ReportWizardAction extends MultiAction {
         return null;
     }
 
-	private void callSaikuReport(String reportId, HttpServletResponse response,String varName) throws IOException {
+	private void callSaikuReport(String reportId, HttpServletResponse response, String varName) throws IOException {
 		PrintWriter out = response.getWriter();
 		StringBuilder responseString = new StringBuilder();
 		responseString.append(varName + "=" + reportId);

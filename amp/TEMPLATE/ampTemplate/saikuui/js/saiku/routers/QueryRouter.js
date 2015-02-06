@@ -80,11 +80,12 @@ Saiku.routers.push(new QueryRouter());
 
 
 var process_spec = function(data) {
-	if(data.errorMessage)
+	if (data.errorMessage)
 	{
 		//TODO: Replace with friendlier message
 		alert("Error opening report: " + data.errorMessage);
 		window.close();
+		return;
 	}
 	var query = new SavedQuery({file:'amp_source_file'});
 

@@ -180,8 +180,8 @@ saveReportEngine	= null;
 		var currentReportId	= -1;
 		<% 
 		//We override currentReportId only if the user is logged in
-		if (session.getAttribute("currentMember")!=null){%>
-		currentReportId = <%=ReportContextData.contextIdExists() ? ReportContextData.getCurrentReportContextId(request, true) : "-1" %>
+		if (session.getAttribute("currentMember") != null) {%>
+			currentReportId = <%=ReportContextData.contextIdExists() ? ReportContextData.getCurrentReportContextId(request, true) : "-1" %>
 		<%}%>
 		YAHOO.namespace("YAHOO.amptab");
 		YAHOO.amptab.init = function() {

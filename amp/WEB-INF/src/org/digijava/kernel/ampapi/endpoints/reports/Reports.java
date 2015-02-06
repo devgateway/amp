@@ -302,10 +302,8 @@ public class Reports {
 		if (ampTeamMember.getDesktopTabSelections() != null && ampTeamMember.getDesktopTabSelections().size() > 0) {
 			TreeSet<AmpDesktopTabSelection> sortedSelection = new TreeSet<AmpDesktopTabSelection>(AmpDesktopTabSelection.tabOrderComparator);
 			sortedSelection.addAll(ampTeamMember.getDesktopTabSelections());
-			Iterator<AmpDesktopTabSelection> iter = sortedSelection.iterator();
-
-			while (iter.hasNext()) {
-				AmpReports report = iter.next().getReport();
+			for (AmpDesktopTabSelection adts:sortedSelection) {
+				AmpReports report = adts.getReport();
 				JSONTab tab = new JSONTab(report.getAmpReportId(), true);
 				tabs.add(tab);
 			}
@@ -352,17 +350,17 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final QueryResult getSaikuReport(JsonBean queryObject, @PathParam("report_token") String reportToken) {
 		//here we fetch the report by reportToken in session
-		return getSaikuReport(queryObject,getAmpReportFromSession(reportToken));
+		return getSaikuReport(queryObject, getAmpReportFromSession(reportToken));
 	}
 
 	private AmpReports getAmpReportFromSession(String reportToken) {
-		MaxSizeLinkedHashMap<String, AmpReports>rerpotsList=(MaxSizeLinkedHashMap<String, AmpReports>)TLSUtils.getRequest().getSession().getAttribute("reportStack");
-		if(rerpotsList==null){
+		MaxSizeLinkedHashMap<String, AmpReports> reportsList = (MaxSizeLinkedHashMap<String, AmpReports>) TLSUtils.getRequest().getSession().getAttribute("reportStack");
+		if (reportsList == null) {
 			throw new WebApplicationException(Response.Status.NO_CONTENT);
 		}
 		
-		AmpReports ampReport = rerpotsList.get(reportToken);
-		if(ampReport==null){
+		AmpReports ampReport = reportsList.get(reportToken);
+		if (ampReport == null) {
 			throw new WebApplicationException(Response.Status.NO_CONTENT);
 		}
 		return ampReport;
@@ -375,12 +373,11 @@ public class Reports {
 		try {
 			// Convert frontend sorting params into ReportUtils sorting params.
 			if (((HashMap) queryObject.get("queryModel")).get(EPConstants.SORTING) != null) {				
-				List<Map> auxColumns = ((List) ((HashMap) queryObject.get("queryModel")).get(EPConstants.SORTING));
-				Iterator<Map> iCols = auxColumns.iterator();
-				while (iCols.hasNext()) {
+				List<Map<String, Object>> auxColumns = ((List) ((HashMap) queryObject.get("queryModel")).get(EPConstants.SORTING));
+				for (Map<String, Object> auxCol:auxColumns) {
 					Map<String, Object> newCol = new HashMap<String, Object>();
 					Boolean asc = true;
-					Map<String, Object> auxCol = iCols.next();
+					
 					if (auxCol.get("asc").equals(true)) {
 						asc = true;
 					} else {
@@ -417,9 +414,7 @@ public class Reports {
 		if(queryModel.containsKey("filtersApplied") && (Boolean)queryModel.get("filtersApplied")) {
 			LinkedHashMap<String, Object> filters = (LinkedHashMap<String, Object>) queryModel.get("filters");
 			filterRules = FilterUtils.getFilterRules((LinkedHashMap<String, Object>)filters.get("columnFilters"), (LinkedHashMap<String, Object>)filters.get("otherFilters"), null);
-		}
-		
-		
+		}	
 
 		MondrianReportGenerator generator = new MondrianReportGenerator(SaikuReportArea.class, ReportEnvironment.buildFor(httpRequest));
 		SaikuGeneratedReport report = null;

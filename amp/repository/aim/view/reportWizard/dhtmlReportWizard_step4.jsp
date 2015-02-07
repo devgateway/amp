@@ -48,13 +48,14 @@
 								</tr>
 								<tr>
 									<td align="center" valign="top">
-										<span id="measuresMust" style="visibility: visible">
-											<font color="red">* 
-												<digi:trn key="rep:wizard:hint:mustselectmeasure">
+										<div id="measuresMust" style="color: red">
+											* <digi:trn key="rep:wizard:hint:mustselectmeasure">
 													Must select at least one measure
 												</digi:trn>
-											</font>
-										</span>
+										</div>
+										<div id="actualCommitmentsMust" style="color: red; display: none">
+											* "<digi:trn>Actual Commitments</digi:trn>" <digi:trn>should be selected when a report is configured to also show pledges</digi:trn>
+										</div>
 									</td>
 									<td>&nbsp;</td>
 									<td align="center" valign="top">

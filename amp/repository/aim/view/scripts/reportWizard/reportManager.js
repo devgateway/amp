@@ -367,11 +367,24 @@ NormalReportManager.prototype.checkReportDetails	= function () {
 };
 
 NormalReportManager.prototype.checkMeasures	= function () {
+	// show the "you should select actual commitmens" message in case we're doing a Donor Report with "also show pledes"
+	var actualCommitmentsMustEl = $('#actualCommitmentsMust');
+	var alsoIncludePledgesCheckBox = $('input[name="alsoShowPledges"]').prop('checked');
+	var showActualCommitmentsMessage = false;
+	if (alsoIncludePledgesCheckBox) {
+		var actualCommitmentsMeasureSelected = $('#dest_measures_ul span[original_measure_name="Actual Commitments"]').length > 0;
+		showActualCommitmentsMessage = !actualCommitmentsMeasureSelected;
+	};
+	if (showActualCommitmentsMessage) {
+		actualCommitmentsMustEl.show();
+		return false;
+	}
+	actualCommitmentsMustEl.hide();
+	
 	var ulEl			= document.getElementById("dest_measures_ul") ;
 	var items			= ulEl.getElementsByTagName("li");
 	measuresMustEl		= document.getElementById("measuresMust");
-	if ( items.length > 0 ) {
-		
+	if ( items.length > 0 ) {		
 		measuresMustEl.style.visibility="hidden";
 		this.enableSave();
 		return true;

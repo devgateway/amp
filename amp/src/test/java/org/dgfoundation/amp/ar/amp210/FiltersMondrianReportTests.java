@@ -454,4 +454,131 @@ public class FiltersMondrianReportTests extends MondrianReportsTestCase {
 		
 		runMondrianTestCase("AMP-18485-unvalidated-existing-new", activities, cor, "en");
 	}	
+	
+	@Test
+	public void testAmpActivityIdFilter() {
+		List<String> myaaids = Arrays.asList("24"); // eth water
+		
+		ReportSpecificationImpl spec = buildActivityListingReportSpec("simple report filtered by aaid");
+		spec.setFilters(buildSimpleFilter(ColumnConstants.INTERNAL_USE_ID, myaaids, true));
+		
+		ReportAreaForTests cr1 = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "0", "Actual Disbursements", "545 000")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "Eth Water", "Actual Commitments", "0", "Actual Disbursements", "545 000"));
+
+		runMondrianTestCase(spec, "en", Arrays.asList("Eth Water", "Pure MTEF Project", "crazy funding 1"), cr1);
+		
+		spec.setFilters(buildSimpleFilter(ColumnConstants.INTERNAL_USE_ID, myaaids, false));
+		
+		ReportAreaForTests cr2 =  new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "333 333", "Actual Disbursements", "0")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "Pure MTEF Project", "Actual Commitments", "0", "Actual Disbursements", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "crazy funding 1", "Actual Commitments", "333 333", "Actual Disbursements", "0"));
+
+		runMondrianTestCase(spec, "en", Arrays.asList("Eth Water", "Pure MTEF Project", "crazy funding 1"), cr2);
+	}
+	
+	@Test
+	public void testTeamIdFilter() {
+		List<String> teamid = Arrays.asList("5"); // ssc workspace
+		List<String> activities = Arrays.asList("Activity with Zones", "Real SSC Activity 1", "Real SSC Activity 2", "TAC_activity_1");
+		
+		ReportSpecificationImpl spec = buildActivityListingReportSpec("simple report filtered by team id"); 
+		spec.setFilters(buildSimpleFilter(ColumnConstants.TEAM, teamid, true));
+		
+		ReportAreaForTests cr1 = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "0", "Actual Disbursements", "0")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "Real SSC Activity 2", "Actual Commitments", "0", "Actual Disbursements", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "Real SSC Activity 1", "Actual Commitments", "0", "Actual Disbursements", "0"));	
+		runMondrianTestCase(spec, "en", activities, cr1);
+		
+		spec.setFilters(buildSimpleFilter(ColumnConstants.TEAM_ID, teamid, false));
+		ReportAreaForTests cr2 = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "783 231", "Actual Disbursements", "123 321")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "TAC_activity_1", "Actual Commitments", "213 231", "Actual Disbursements", "123 321"),
+	      new ReportAreaForTests().withContents("Project Title", "Activity with Zones", "Actual Commitments", "570 000", "Actual Disbursements", "0"));
+
+		
+		runMondrianTestCase(spec, "en", activities, cr2);
+	}
+	
+	@Test
+	public void testAmpIdFilter() {
+		List<String> ampid = Arrays.asList("872113null", "87211351"); // ssc workspace
+		List<String> activities = Arrays.asList("TAC_activity_1",
+				"TAC_activity_2",
+				"date-filters-activity",
+				"activity with contracting agency",
+				"Eth Water");
+		
+		ReportSpecificationImpl spec = buildActivityListingReportSpec("simple report filtered by amp id"); 
+		spec.setFilters(buildSimpleFilter(ColumnConstants.AMP_ID, ampid, true));
+		
+		ReportAreaForTests cr1 = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "1 434 959,58", "Actual Disbursements", "698 534")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "TAC_activity_1", "Actual Commitments", "213 231", "Actual Disbursements", "123 321"),
+	      new ReportAreaForTests().withContents("Project Title", "TAC_activity_2", "Actual Commitments", "999 888", "Actual Disbursements", "453 213"),
+	      new ReportAreaForTests().withContents("Project Title", "date-filters-activity", "Actual Commitments", "125 000", "Actual Disbursements", "72 000"),
+	      new ReportAreaForTests().withContents("Project Title", "activity with contracting agency", "Actual Commitments", "96 840,58", "Actual Disbursements", "50 000"));
+		runMondrianTestCase(spec, "en", activities, cr1);
+		
+		spec.setFilters(buildSimpleFilter(ColumnConstants.AMP_ID, ampid, false));
+		ReportAreaForTests cr2 = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "0", "Actual Disbursements", "545 000")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "Eth Water", "Actual Commitments", "0", "Actual Disbursements", "545 000"));
+
+		runMondrianTestCase(spec, "en", activities, cr2);
+		
+		spec.setFilters(buildSimpleFilter(ColumnConstants.AMP_ID, "87211351", true));
+		ReportAreaForTests cr3 = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "96 840,58", "Actual Disbursements", "50 000")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "activity with contracting agency", "Actual Commitments", "96 840,58", "Actual Disbursements", "50 000"));
+
+		runMondrianTestCase(spec, "en", activities, cr3);
+	}
+	
+	@Test
+	public void testDraftFilter() {
+		List<String> draft = Arrays.asList("true"); // ssc workspace
+		List<String> activities = Arrays.asList("TAC_activity_1", "new activity with contracting");
+		
+		ReportSpecificationImpl spec = buildActivityListingReportSpec("simple report filtered by draft"); 
+		
+		// draft selected area
+		ReportAreaForTests cr1 = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "12 000", "Actual Disbursements", "0")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "new activity with contracting", "Actual Commitments", "12 000", "Actual Disbursements", "0"));
+		
+		spec.setFilters(buildSimpleFilter(ColumnConstants.DRAFT, draft, true));
+		runMondrianTestCase(spec, "en", activities, cr1);
+		
+		spec.setFilters(buildSimpleFilter(ColumnConstants.DRAFT, "true", true));
+		runMondrianTestCase(spec, "en", activities, cr1);
+		
+		spec.setFilters(buildSimpleFilter(ColumnConstants.DRAFT, "true", true));
+		runMondrianTestCase(spec, "en", activities, cr1);
+		
+		// draft unselected area
+		ReportAreaForTests cr2 = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Actual Commitments", "213 231", "Actual Disbursements", "123 321")
+	    .withChildren(
+	      new ReportAreaForTests().withContents("Project Title", "TAC_activity_1", "Actual Commitments", "213 231", "Actual Disbursements", "123 321"));
+		
+		spec.setFilters(buildSimpleFilter(ColumnConstants.DRAFT, draft, false));
+		runMondrianTestCase(spec, "en", activities, cr2);
+		
+		spec.setFilters(buildSimpleFilter(ColumnConstants.DRAFT, "true", false));
+		runMondrianTestCase(spec, "en", activities, cr2);
+		
+		spec.setFilters(buildSimpleFilter(ColumnConstants.DRAFT, "false", true));
+		runMondrianTestCase(spec, "en", activities, cr2);
+	}
 }

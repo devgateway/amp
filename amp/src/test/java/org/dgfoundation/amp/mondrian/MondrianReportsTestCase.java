@@ -1,10 +1,14 @@
 package org.dgfoundation.amp.mondrian;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.IdsGeneratorSource;
@@ -19,6 +23,7 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.testutils.ActivityIdsFetcher;
 import org.dgfoundation.amp.testutils.AmpTestCase;
@@ -174,6 +179,30 @@ public abstract class MondrianReportsTestCase extends AmpTestCase
 		if (delta != null) {
             fail("test " + spec.getReportName() + " failed: " + delta);
         }
+	}
+	
+	protected ReportSpecificationImpl buildActivityListingReportSpec(String name) {
+		ReportSpecificationImpl spec = buildSpecification(name, 
+				Arrays.asList(ColumnConstants.PROJECT_TITLE), 
+				Arrays.asList(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS), 
+				null, 
+				GroupingCriteria.GROUPING_TOTALS_ONLY);
+		spec.setDisplayEmptyFundingColumns(true);
+		spec.setDisplayEmptyFundingRows(true);
+		return spec;
+	}
+	
+	protected MondrianReportFilters buildSimpleFilter(String column, List<String> ids, boolean inclusive) {
+		MondrianReportFilters mrf = new MondrianReportFilters();
+		mrf.addFilterRule(new ReportColumn(column), new FilterRule(ids, inclusive));
+		return mrf;
+
+	}
+	
+	protected MondrianReportFilters buildSimpleFilter(String column, String value, boolean inclusive) {
+		MondrianReportFilters mrf = new MondrianReportFilters();
+		mrf.addFilterRule(new ReportColumn(column), new FilterRule(value, inclusive));
+		return mrf;
 	}
 
     /**

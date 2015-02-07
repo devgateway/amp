@@ -175,8 +175,7 @@ public class FactTableFiltering {
 			add(ColumnConstants.ACTIVITY_ID, new IdentityExpander("entity_id"));
 			
 			// non-direct-fact-table-filtering entries
-			add(ColumnConstants.TEAM_ID, new CustomQueryIdExpander("entity_id", "SELECT amp_activity_id FROM amp_activity_version WHERE amp_team_id IN (QQQ)"));
-			add(ColumnConstants.TEAM, get(ColumnConstants.TEAM_ID));
+			add(ColumnConstants.TEAM, new CustomQueryIdExpander("entity_id", "SELECT amp_activity_id FROM amp_activity_version WHERE amp_team_id IN (QQQ)"));
 			add(ColumnConstants.ACTIVITY_APPROVED_BY, new CustomQueryIdExpander("entity_id", "SELECT amp_activity_id FROM amp_activity_version WHERE approvedby IN (QQQ)"));
 			add(ColumnConstants.ACTIVITY_CREATED_BY, new CustomQueryIdExpander("entity_id", "SELECT amp_activity_id FROM amp_activity_version WHERE activity_creator IN (QQQ)"));
 			add(ColumnConstants.ACTIVITY_UPDATED_BY, new CustomQueryIdExpander("entity_id", "SELECT amp_activity_id FROM amp_activity_version WHERE modified_by IN (QQQ)"));

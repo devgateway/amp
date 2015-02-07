@@ -163,8 +163,8 @@ public class FiltersGroup {
 		addIdentityMapping(filterGroupMap, ColumnConstants.ACTIVITY_ID);
 		filterGroupMap.put(ColumnConstants.INTERNAL_USE_ID, ColumnConstants.ACTIVITY_ID);
 		
-		addIdentityMapping(filterGroupMap, ColumnConstants.TEAM_ID);
-		filterGroupMap.put(ColumnConstants.TEAM, ColumnConstants.TEAM_ID);
+		addIdentityMapping(filterGroupMap, ColumnConstants.TEAM);
+		filterGroupMap.put(ColumnConstants.TEAM_ID, ColumnConstants.TEAM);
 		
 		addIdentityMapping(filterGroupMap, ColumnConstants.ACTIVITY_APPROVED_BY);
 		addIdentityMapping(filterGroupMap, ColumnConstants.ACTIVITY_CREATED_BY);

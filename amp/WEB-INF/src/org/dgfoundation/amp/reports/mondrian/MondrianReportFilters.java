@@ -117,7 +117,7 @@ public class MondrianReportFilters implements ReportFilters {
 	 * @param filterRule
 	 */
 	private void addFilterRule(ReportElement elem, FilterRule filterRule) {
-		Set<String> RAW_COLUMNS_WITH_NAMES_ENDING_IN_ID = new HashSet<>(Arrays.asList(ColumnConstants.ACTIVITY_ID, ColumnConstants.INTERNAL_USE_ID));
+		Set<String> RAW_COLUMNS_WITH_NAMES_ENDING_IN_ID = new HashSet<>(Arrays.asList(ColumnConstants.ACTIVITY_ID, ColumnConstants.INTERNAL_USE_ID, ColumnConstants.AMP_ID));
 		// Check if this is a filter that must be in a group
 		if (ElementType.ENTITY.equals(elem.type) 
 				&& FiltersGroup.FILTER_GROUP.containsKey(elem.entity.getEntityName())) {

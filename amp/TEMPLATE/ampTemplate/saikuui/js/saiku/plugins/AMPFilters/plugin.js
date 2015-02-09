@@ -128,7 +128,7 @@ Saiku.events.bind('session:new', function(session) {
 
 var FilterUtils = {};
 
-FilterUtils.mapping = {
+/*FilterUtils.mapping = {
 		"Contracting Agency": "Contracting Agency Id",
 		"Executing Agency": "Executing Agency Id",
 		"Implementing Agency": "Implementing Agency Id",
@@ -182,5 +182,180 @@ FilterUtils.convertJavaFiltersToJS = function(data) {
 		blob.columnFilters[filterName] =  values;
 	});
 	return blob;
-};
+};*/
 
+FilterUtils.convertJavaFiltersToJS = function(data) {
+	// Define some basic defaults needed in the widget filter.
+	var blob = {
+		otherFilters : {
+			date : {
+				end : '',
+				start : ''
+			}
+		},
+		columnFilters : {
+			"Donor Id" : []
+		}
+	};
+	_.each(data.columnDateFilterRules, function(item, i) {
+		switch (i) {
+		case 'Actual Completion Date':
+			var newDate = {};
+			var i = -1;
+			_.map(item[0]['valueToName'], function(item_) {
+				i++;
+				if(i == 0) {
+					newDate['start'] = item_;
+				} else if(i == 1) {
+					newDate['end'] = item_;
+				}
+				return newDate;
+			});
+			blob.otherFilters['Actual Completion Date'] = newDate;
+			break;
+		case 'Actual Start Date':
+			var newDate = {};
+			var i = -1;
+			_.map(item[0]['valueToName'], function(item_) {
+				i++;
+				if(i == 0) {
+					newDate['start'] = item_;
+				} else if(i == 1) {
+					newDate['end'] = item_;
+				}
+				return newDate;
+			});
+			blob.otherFilters['Actual Start Date'] = newDate;
+			break;
+		}
+	});
+	_.each(data.columnFilterRules, function(item, i) {
+		switch (i) {
+
+		// cases where columnFilter matches item name
+		case 'Responsible Organization':
+		case 'Type Of Assistance':
+		case 'Financing Instrument':
+		case 'Status':
+		case 'Approval Status':
+		case 'Donor Group':
+		case 'Donor Type':
+		case 'Mode of Payment':
+		case 'On/Off/Treasury Budget':
+		case 'Zone':
+		case 'Region':
+			blob.columnFilters[i] = _.map(item[0]['values'], function(item_) {
+				return parseInt(item_);
+			});
+			break;
+
+		// cases where columnFilter matches item name + ' Id'
+		case 'Contracting Agency':
+		case 'Executing Agency':
+		case 'Implementing Agency':
+		case 'Beneficiary Agency':
+			blob.columnFilters[i+ ' Id'] = _.map(item[0]['values'], function(item_) {
+				return parseInt(item_);
+			});
+			break;
+		case 'National Planning Objectives':
+			blob.columnFilters['National Planning Objectives Level 1 Id'] = _.map(item[0]['values'], function(
+					item_) {
+				return parseInt(item_);
+			});
+			blob.columnFilters['National Planning Objectives Level 2 Id'] = blob.columnFilters['National Planning Objectives Level 1 Id'];
+			break;
+		case 'Primary Program':
+			blob.columnFilters['Primary Program Level 1 Id'] = _.map(item[0]['values'], function(item_) {
+				return parseInt(item_);
+			});
+			break;
+		case 'Secondary Program':
+			blob.columnFilters['Secondary Program Level 3 Id'] = _.map(item[0]['values'], function(item_) {
+				return parseInt(item_);
+			});
+			break;
+		case 'Donor Agency':
+			blob.columnFilters['Donor Id'] = _.map(item[0]['values'], function(item_) {
+				return parseInt(item_);
+			});
+			break;
+		/*case 'Contracting Agency Groups':
+			blob.columnFilters['Contracting Agency Id'] = _.map(item[0]['values'], function(item_) {
+				return parseInt(item_);
+			});
+			break;*/
+		case 'Primary Sector':
+			// NOTE: Since the filter widget (arbitrarily) uses 3 different fields for Primary Sectors we
+			// triplicate the values coming from the endpoint.
+			blob.columnFilters['Primary Sector Id'] = _.map(item[0]['values'], function(item_) {
+				return parseInt(item_);
+			});
+			blob.columnFilters['Primary Sector Sub-Sector Id'] = blob.columnFilters['Primary Sector Id'];
+			blob.columnFilters['Primary Sector Sub-Sub-Sector Id'] = blob.columnFilters['Primary Sector Id'];
+			break;
+		case 'Secondary Sector':
+			// NOTE: Since the filter widget (arbitrarily) uses 3 different fields for Secondary Sectors we
+			// triplicate the values coming from the endpoint.
+			blob.columnFilters['Secondary Sector Id'] = _.map(item[0]['values'], function(item_) {
+				return parseInt(item_);
+			});
+			blob.columnFilters['Secondary Sector Sub-Sector Id'] = blob.columnFilters['Secondary Sector Id'];
+			blob.columnFilters['Secondary Sector Sub-Sub-Sector Id'] = blob.columnFilters['Secondary Sector Id'];
+			break;
+			
+//		case 'Start Date':
+//			blob.otherFilters.date.start = '2019-12-31';
+//			break;
+//			
+//		case 'End Date':
+//			blob.otherFilters.date.end = '2029-12-31';
+//			break;
+
+		case 'DATE':
+			//FilterUtils.fillDateBlob(blob.otherFilters.date, item.attributes);
+			var newDate = {};
+			var i = -1;
+			_.map(item[0]['valueToName'], function(item_) {
+				i++;
+				if(i == 0) {
+					newDate['start'] = item_;
+				} else if(i == 1) {
+					newDate['end'] = item_;
+				}
+				return newDate;
+			});
+			blob.otherFilters['date'] = newDate;
+			break;
+		case 'Tertiary Sector':
+			blob.columnFilters['Tertiary Program Level 1 Id'] = _.map(item[0]['values'], function(item_) {
+				return parseInt(item_);
+			});
+			break;					
+		case 'Team':
+			blob.columnFilters['Workspaces'] = _.map(item[0]['values'], function(item_) {
+				return parseInt(item_);
+			});
+			break;
+		case 'Actual Start Date':
+		case 'Actual Completion Date':
+			var newDate = {};
+			_.map(item[0]['values'], function(item_, i) {						
+				if(i == 0) {
+					newDate['start'] = item_.name;
+				} else if(i == 1) {
+					newDate['end'] = item_.name;
+				}
+				return newDate;
+			});
+			blob.otherFilters[i] = newDate;
+			break;
+		default:
+			console.error(i + "-"+item);
+			break;
+		}
+	});
+	console.log("use blob");
+	console.log(blob);
+	return blob;
+};

@@ -60,6 +60,13 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			}}
 		if (contents == null)
 			throw new RuntimeException("could not read schema");
+
+		//If the connection is Stand Alone (coming from Saiku UI), we reset the Report Environment to refresh language
+		String standAlone = connectInfo.get("Standalone");
+		if(standAlone != null) {
+			currentEnvironment.set(null);
+			currentReport.set(null);
+		}
 		return processContents(contents);
 	};
 	

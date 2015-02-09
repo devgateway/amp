@@ -18,7 +18,7 @@
  * The user's current locale
  */
 Saiku.i18n = {
-    locale: (navigator.language || navigator.browserLanguage ||
+    locale: (window.currentLanguage || navigator.language || navigator.browserLanguage ||
         navigator.systemLanguage || navigator.userLanguage).substring(0, 2).toLowerCase(),
     po_file: {},
     translate: function (specificElement) {
@@ -255,7 +255,18 @@ var TranslationTab = Backbone.View.extend({
 /**
  * Automatically internationalize the UI based on the user's locale
  */
-Saiku.i18n.automatic_i18n();
+if(Settings.USE_AMP_LANGUAGE) {
+	$.getJSON("/rest/amp/settings", function(data) {
+		var language = _.findWhere(data, {id : "language"}).name || Settings.DEFAULT_LANGUAGE;
+		window.currentLanguage = language;
+		Saiku.i18n.locale = language;
+		Saiku.i18n.automatic_i18n();
+	});
+}
+else
+{
+	Saiku.i18n.automatic_i18n();
+}
 
 
 /**

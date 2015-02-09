@@ -278,11 +278,11 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 						return parseInt(item_.id);
 					});
 					break;
-				case 'Contracting Agency Groups':
+				/*case 'Contracting Agency Groups':
 					blob.columnFilters['Contracting Agency Id'] = _.map(item.get('values'), function(item_) {
 						return parseInt(item_.id);
 					});
-					break;
+					break;*/
 				case 'Primary Sector':
 					// NOTE: Since the filter widget (arbitrarily) uses 3 different fields for Primary Sectors we
 					// triplicate the values coming from the endpoint.

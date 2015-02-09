@@ -45,6 +45,8 @@ var WorkspaceToolbar = Backbone.View.extend({
         this.workspace.bind('query:new', this.activate_buttons);
         this.workspace.bind('query:result', this.activate_buttons);
         
+        Saiku.Sorting.initialize(this);
+        
     },
     
     activate_buttons: function(args) {

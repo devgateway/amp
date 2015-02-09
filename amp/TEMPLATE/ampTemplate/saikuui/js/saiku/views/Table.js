@@ -21,7 +21,9 @@ var Table = Backbone.View.extend({
     className: 'table_wrapper',
     events: {
         'click th.row' : 'clicked_cell',
-        'click th.col' : 'clicked_cell'
+        /*'click th.col' : 'clicked_cell',*/
+        'click th.col' : 'clicked_header_cell_measure',
+        'click th.row_header' : 'clicked_header_cell'
     },
 
     initialize: function(args) {
@@ -33,6 +35,18 @@ var Table = Backbone.View.extend({
         this.workspace.bind('query:result', this.render);
         this.id = _.uniqueId("table_");
         $(this.el).attr('id', this.id);
+    },
+    
+    clicked_header_cell : function(event) {
+    	if(Saiku.Sorting != undefined) {
+    		Saiku.Sorting.processClickOnHeader(event, 'HEADER_CELL');
+    	}
+    },
+    
+    clicked_header_cell_measure : function(event) {
+    	if(Saiku.Sorting != undefined) {
+    		Saiku.Sorting.processClickOnHeader(event, 'HEADER_CELL_MEASURE');
+    	}
     },
     
     clicked_cell: function(event) {
@@ -292,6 +306,7 @@ var Table = Backbone.View.extend({
         // Append the table
         this.clearOut();
         $(this.el).html('<table></table>');
+        data.workspace = this.workspace;
         var contents = this.renderer.render(data, { 
             htmlObject:         $(this.el).find('table'),
             batch:              Settings.TABLE_LAZY, 

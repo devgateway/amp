@@ -103,7 +103,7 @@ Saiku.events.bind('session:new', function(session) {
 function addSortButton() {
 	if (getSortingHierarchies().length > 0) {
 		var sortButton = $(
-				'<a href="#" id="saiku_sort_button" class="amp_sorting button i18n" title="Sorting">Sorting</a>').css({
+				'<a href="#amp_sorting" id="saiku_sort_button" class="amp_sorting button i18n" title="Sorting">Sorting</a>').css({
 			'width' : "44px"
 		});
 		var $sorting_li = $('<li class="seperator"></li>').append(sortButton);

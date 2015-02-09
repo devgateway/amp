@@ -362,6 +362,9 @@ public class SettingsUtils {
 					, null, null));
 			settings.add(new SettingOptions("workspace_type", false, String.valueOf(EndpointUtils.getAppSettings().getTeam().getAccessType())
 					, null, null));
+			settings.add(new SettingOptions("language", false, 
+					tm.getAppSettings().getLanguage(), null, null)); 
+			
 		}
 		return settings;
 	}

@@ -62,12 +62,14 @@ var Settings = {
     DEFAULT_VIEW_STATE: 'view', // could be 'edit' as well
     DEMO: false,
     TELEMETRY_SERVER: 'http://telemetry.analytical-labs.com:7000',
-    LOCALSTORAGE_EXPIRATION: 10 * 60 * 60 * 1000 /* 10 hours, in ms */,
+    LOCALSTORAGE_EXPIRATION: 0 /* 10 hours, in ms */,
     UPGRADE: false,    
     AMP_PATH: '/rest/data/report',
     AMP_REPORT_API_BRIDGE: false,
     PAGINATION: true,
-    RESULTS_PER_PAGE: 10
+    RESULTS_PER_PAGE: 10,
+    USE_AMP_LANGUAGE: true,
+    DEFAULT_LANGUAGE: "en"
 };
 
 /**

@@ -76,10 +76,13 @@ var Session = Backbone.Model.extend({
             this.isadmin = response.isadmin;
             this.username = encodeURIComponent(response.username);
             this.language = response.language;
+            /* Skipping setting the language with the Saiku Session since we already have it from AMP
+				
             if (typeof this.language != "undefined" && this.language != Saiku.i18n.locale) {
                 Saiku.i18n.locale = this.language;
                 Saiku.i18n.automatic_i18n();
             }
+            */
             this.load_session();
         }
         

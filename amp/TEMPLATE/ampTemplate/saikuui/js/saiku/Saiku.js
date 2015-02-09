@@ -108,15 +108,16 @@ if (! Settings.BIPLUGIN) {
                         });
 
                         Saiku.toolbar = new Toolbar();
-                        if(!Settings.AMP_REPORT_API_BRIDGE) {
                             Saiku.session.bind("tab:add", function ()
                                     {
                             			_.delay(function() {
-                            				$(".cubes").val("amp/AMP/AMP/Donor%20Funding");
-                            				$(".cubes").change();
+                                            if(!Settings.AMP_REPORT_API_BRIDGE) {
+                                            	
+	                            				$(".cubes").val("amp/AMP/AMP/Donor%20Funding");
+	                            				$(".cubes").change();
+                                            }
                             			}, 500);
                                     });
-                        }
                         
                     }
                 });

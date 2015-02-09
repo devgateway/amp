@@ -95,5 +95,16 @@
    "Edit":"Editează",
    "Delete":"Șterge",
    "New Folder":"Directoriu nou",
-   " Open ":" Deschide "
+   " Open ":" Deschide ",
+   "Table Mode":"Table Mode",
+   "Chart Mode":"Chart Mode",
+   "First Page":"First Page",
+   "Prev Page":"Prev Page",
+   "Next Page":"Next Page",
+   "Last Page":"Last Page",
+   "Fullscreen":"Fullscreen",
+   "Clear Axis":"Clear Axis",
+   "You need to include at least one level on rows for a valid query.":"You need to include at least one level on rows for a valid query.",
+   "You need to include at least one measure or a level on columns for a valid query.":"You need to include at least one measure or a level on columns for a valid query."
+   
 }

@@ -31,6 +31,8 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -129,6 +131,13 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			elem.setAttribute("caption", TranslatorWorker.translateText(measureName, locale, 3l));
 		}
 		
+		NodeList dimensions = XMLGlobals.selectNodes(xmlSchema, "/Schema/Cube/Dimension");
+		for(int i = 0; i < dimensions.getLength(); i++) {
+			Element elem = (Element) dimensions.item(i);
+			String dimensionName = elem.getAttribute("name");
+			elem.setAttribute("caption", TranslatorWorker.translateText(dimensionName, locale, 3l));
+		}
+
 		NodeList columns = XMLGlobals.selectNodes(xmlSchema, "/Schema/Cube/Dimension//Level");
 		for(int i = 0; i < columns.getLength(); i++) {
 			Element columnElem = (Element) columns.item(i);
@@ -405,7 +414,15 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("default", ArConstants.DONOR_TYPE);
 		MondrianReportSettings settings = new MondrianReportSettings();
 		spec.setSettings(settings);
-		registerReport(spec, new ReportEnvironment("en", new CompleteWorkspaceFilter(null, null), "EUR"));
+
+		if(RequestContextHolder.getRequestAttributes() != null) {
+			ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+			registerReport(spec, ReportEnvironment.buildFor(sra.getRequest()));
+		}
+		else
+		{
+			registerReport(spec, new ReportEnvironment("en", new CompleteWorkspaceFilter(null, null), "EUR"));
+		}
 	}
 
 }

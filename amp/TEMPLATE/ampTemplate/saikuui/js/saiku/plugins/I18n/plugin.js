@@ -126,6 +126,18 @@ function recursive_menu_translate(object, po_file) {
 					element.removeClass('i18n');
 				}
 			}
+			if (element.attr('original-title')) {
+				translated_title = translate( element.attr('original-title'), po_file );
+                if (Saiku.i18n.elements.indexOf && 
+                    Saiku.i18n.elements.indexOf(element.attr('original-title')) === -1) {
+                    Saiku.i18n.elements.push(element.attr('original-title'));
+                }
+				if (translated_title) {
+					element.data('original', element.attr('title'));
+					element.attr({ 'original-title': translated_title });
+					element.removeClass('i18n');
+				}
+			}
 			
 			if (element.attr('value')) {
 				translated_value = translate( element.attr('value'), po_file );

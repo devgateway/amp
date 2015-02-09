@@ -34,9 +34,9 @@
         <!-- START LOADING NEW TABS NECESSARY FILES -->
         
         <!-- Open Sans -->
-		<link href='//fonts.googleapis.com/css?family=Open+Sans:300,400italic,600,700italic,400,700,800italic' rel='stylesheet' type='text/css'>
+		<link href='tabs/fonts/open-sans.css' rel='stylesheet' type='text/css'>
 		<!-- Icon Font - Font Awesome -->
-		<link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+		<link href="tabs/fonts/font-awesome.min.css" rel="stylesheet">
 
         <link rel="stylesheet" href="node_modules/amp-filter/dist/amp-filter.css">
 		<link rel="stylesheet" href="tabs/css/bootstrap.css">

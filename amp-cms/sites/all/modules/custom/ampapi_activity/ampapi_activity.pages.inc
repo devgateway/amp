@@ -61,6 +61,8 @@ function ampapi_activity_search_export() {
 
   $exposed_input = $_GET;
   unset($exposed_input['q']);
+  unset($exposed_input['_']);
+  unset($exposed_input['attach']);
   $exposed_input = array_filter($exposed_input);
   $view->set_exposed_input($exposed_input);
 

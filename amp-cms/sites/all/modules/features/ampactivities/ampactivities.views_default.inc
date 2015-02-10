@@ -373,6 +373,16 @@ function ampactivities_views_default_views() {
   $handler->display->display_options['fields']['actual_disbursements']['table'] = 'efq_activity';
   $handler->display->display_options['fields']['actual_disbursements']['field'] = 'actual_disbursements';
   $handler->display->display_options['fields']['actual_disbursements']['link_to_entity'] = 0;
+  /* Field: Activity: Bilateral SSC Commitments */
+  $handler->display->display_options['fields']['ssc_bilateral_commitments']['id'] = 'ssc_bilateral_commitments';
+  $handler->display->display_options['fields']['ssc_bilateral_commitments']['table'] = 'efq_activity';
+  $handler->display->display_options['fields']['ssc_bilateral_commitments']['field'] = 'ssc_bilateral_commitments';
+  $handler->display->display_options['fields']['ssc_bilateral_commitments']['link_to_entity'] = 0;
+  /* Field: Activity: Triangular SSC Commitments */
+  $handler->display->display_options['fields']['ssc_triangular_commitments']['id'] = 'ssc_triangular_commitments';
+  $handler->display->display_options['fields']['ssc_triangular_commitments']['table'] = 'efq_activity';
+  $handler->display->display_options['fields']['ssc_triangular_commitments']['field'] = 'ssc_triangular_commitments';
+  $handler->display->display_options['fields']['ssc_triangular_commitments']['link_to_entity'] = 0;
   $handler->display->display_options['defaults']['filter_groups'] = FALSE;
   $handler->display->display_options['defaults']['filters'] = FALSE;
   /* Filter criterion: Activity: Title */
@@ -386,12 +396,6 @@ function ampactivities_views_default_views() {
   $handler->display->display_options['filters']['title']['expose']['description'] = 'search keywords within activities';
   $handler->display->display_options['filters']['title']['expose']['operator'] = 'title_op';
   $handler->display->display_options['filters']['title']['expose']['identifier'] = 'search';
-  $handler->display->display_options['filters']['title']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    4 => 0,
-    3 => 0,
-  );
   /* Filter criterion: Activity: Donor Agency */
   $handler->display->display_options['filters']['donor_agency']['id'] = 'donor_agency';
   $handler->display->display_options['filters']['donor_agency']['table'] = 'efq_activity';
@@ -404,12 +408,6 @@ function ampactivities_views_default_views() {
   $handler->display->display_options['filters']['donor_agency']['expose']['description'] = 'filter activities by donor agency';
   $handler->display->display_options['filters']['donor_agency']['expose']['operator'] = 'donor_agency_op';
   $handler->display->display_options['filters']['donor_agency']['expose']['identifier'] = 'da';
-  $handler->display->display_options['filters']['donor_agency']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    4 => 0,
-    3 => 0,
-  );
   $handler->display->display_options['filters']['donor_agency']['type'] = 'tokeninput';
   /* Filter criterion: Activity: Beneficiary Agency */
   $handler->display->display_options['filters']['beneficiary_agency']['id'] = 'beneficiary_agency';
@@ -423,12 +421,6 @@ function ampactivities_views_default_views() {
   $handler->display->display_options['filters']['beneficiary_agency']['expose']['description'] = 'filter activities by beneficiary agency';
   $handler->display->display_options['filters']['beneficiary_agency']['expose']['operator'] = 'beneficiary_agency_op';
   $handler->display->display_options['filters']['beneficiary_agency']['expose']['identifier'] = 'ba';
-  $handler->display->display_options['filters']['beneficiary_agency']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    4 => 0,
-    3 => 0,
-  );
   $handler->display->display_options['filters']['beneficiary_agency']['type'] = 'tokeninput';
   /* Filter criterion: Activity: Primary Sector */
   $handler->display->display_options['filters']['primary_sector']['id'] = 'primary_sector';
@@ -441,12 +433,6 @@ function ampactivities_views_default_views() {
   $handler->display->display_options['filters']['primary_sector']['expose']['description'] = 'filter activities by primary sector';
   $handler->display->display_options['filters']['primary_sector']['expose']['operator'] = 'primary_sector_op';
   $handler->display->display_options['filters']['primary_sector']['expose']['identifier'] = 'psec';
-  $handler->display->display_options['filters']['primary_sector']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    4 => 0,
-    3 => 0,
-  );
   $handler->display->display_options['filters']['primary_sector']['type'] = 'tokeninput';
   /* Filter criterion: Activity: Location */
   $handler->display->display_options['filters']['location']['id'] = 'location';
@@ -459,13 +445,19 @@ function ampactivities_views_default_views() {
   $handler->display->display_options['filters']['location']['expose']['description'] = 'filter activities by location';
   $handler->display->display_options['filters']['location']['expose']['operator'] = 'location_op';
   $handler->display->display_options['filters']['location']['expose']['identifier'] = 'loc';
-  $handler->display->display_options['filters']['location']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    4 => 0,
-    3 => 0,
-  );
   $handler->display->display_options['filters']['location']['type'] = 'tokeninput';
+  /* Filter criterion: Activity: Activities Search Type */
+  $handler->display->display_options['filters']['activities_search_type']['id'] = 'activities_search_type';
+  $handler->display->display_options['filters']['activities_search_type']['table'] = 'efq_activity';
+  $handler->display->display_options['filters']['activities_search_type']['field'] = 'activities_search_type';
+  $handler->display->display_options['filters']['activities_search_type']['value'] = array(
+    'standard' => 'standard',
+  );
+  $handler->display->display_options['filters']['activities_search_type']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['activities_search_type']['expose']['operator_id'] = 'activities_search_type_op';
+  $handler->display->display_options['filters']['activities_search_type']['expose']['label'] = 'Activities Search Type';
+  $handler->display->display_options['filters']['activities_search_type']['expose']['operator'] = 'activities_search_type_op';
+  $handler->display->display_options['filters']['activities_search_type']['expose']['identifier'] = 'stype';
   $handler->display->display_options['path'] = 'activities/export/csv';
   $handler->display->display_options['displays'] = array(
     'search_page' => 'search_page',

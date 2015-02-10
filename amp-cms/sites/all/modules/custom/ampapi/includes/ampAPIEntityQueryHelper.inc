@@ -365,12 +365,18 @@ class ampAPIEntityQueryHelper {
       }
       $values = array();
 
+      // @TODO: Find a different list of fields that also includes the ID.
+      // Removing the external URL will also remove the ID.
       foreach ($query->metaData['view']->field as $field_handler) {
-        $plugin = ampapi_get_mapper_by_property_name($field_handler->real_field);
+        if ($field_handler->real_field == 'external_url') {
+          $plugin = ampapi_get_mapper_by_property_name('id');
+        }
+        else {
+          $plugin = ampapi_get_mapper_by_property_name($field_handler->real_field);
+        }
 
         // Switch between SSC fields and normal fields.
         if ($plugin['report field group'] == 'measures') {
-
           // Filter SSC fields or normal fields based on the settings.
           $is_visible = FALSE;
           if ($ssc_search_enabled && !empty($plugin['report field ssc'])) {
@@ -401,10 +407,16 @@ class ampAPIEntityQueryHelper {
         }
 
         if ($plugin['property name'] == 'id') {
-          $amp_baseurl = helpergeneric_detect_amp_baseurl();
-          $url_prefix = '/aim/viewActivityPreview.do~public=true~pageId=2~activityId=';
-          $language_suffix = helpergeneric_get_amp_language_parameter();
-          $values['external_url'] = $amp_baseurl . $url_prefix . $values['id'] . $language_suffix;
+          // Get the entity id.
+          if ($hierarchical_name && $class_name = ctools_plugin_get_class($plugin, 'handler')) {
+            $values[$plugin['property name']] = call_user_func_array(array($class_name, 'getValue'), array($plugin, $row->contents->$hierarchical_name, $formatter));
+
+            // Create the external url for this entity.
+            $amp_baseurl = helpergeneric_detect_amp_baseurl();
+            $url_prefix = '/aim/viewActivityPreview.do~public=true~pageId=2~activityId=';
+            $language_suffix = helpergeneric_get_amp_language_parameter();
+            $values['external_url'] = $amp_baseurl . $url_prefix . $values[$plugin['property name']] . $language_suffix;
+          }
         }
 
         $request_body['add_measures'][] = $plugin['report field key'];

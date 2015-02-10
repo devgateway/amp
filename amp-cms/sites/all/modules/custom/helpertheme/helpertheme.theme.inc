@@ -401,24 +401,22 @@ function theme_amp_report_info($variables) {
 function theme_amp_report_totals($variables) {
   $elements = array();
 
-  $totals = $variables['totals'];
-  $currency = $variables['currency'];
-
   $elements['#prefix'] = '<div class="activity-search-totals clearfix">';
   $elements['#suffix'] = '</div>';
 
+  // Add the first table column including.
   $header = array('');
-  $data = array(t('Totals'));
-  foreach (array('Actual Commitments', 'Actual Disbursements') as $key) {
-    if (!isset($totals[$key]['amount'])) {
+  $data = array(
+    (isset($variables['currency'])) ? t('Totals') . " (${variables['currency']})" : t('Totals'),
+  );
+
+  foreach (array_keys($variables['totals']) as $key) {
+    if (!isset($variables['totals'][$key]['amount'])) {
       continue;
     }
-    $label = $totals[$key]['header'];
-    if (!empty($currency)) {
-    	$label .= ' (' . check_plain($currency) . ')';
-    }
-    $header[] = $label;
-    $data[] = $totals[$key]['amount'];
+
+    $header[] = $variables['totals'][$key]['header'];
+    $data[] = $variables['totals'][$key]['amount'];
   }
 
   $elements['totals'] = array(

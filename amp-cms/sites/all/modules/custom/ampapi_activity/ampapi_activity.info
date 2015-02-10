@@ -12,8 +12,9 @@ files[] = includes/ActivityEntityController.inc
 
 ; Views handlers.
 files[] = views/ampapi_activity_views_handler_field_uri.inc
-files[] = views/ampapi_activity_views_handler_filter_in_operator.inc
 files[] = views/ampapi_activity_views_handler_field_with_currency.inc
+files[] = views/ampapi_activity_views_handler_filter_in_operator.inc
+files[] = views/ampapi_activity_views_handler_filter_ssc.inc
 
 ; Custom handlers.
 files[] = includes/activityMapper.inc

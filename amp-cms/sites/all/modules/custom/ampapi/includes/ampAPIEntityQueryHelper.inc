@@ -51,7 +51,7 @@ class ampAPIEntityQueryHelper {
   }
 
   /**
-   * Queries entity collections storred in AMP.
+   * Queries entity collections stored in AMP.
    *
    * @see EntityFieldQuery::queryCallback().
    *
@@ -60,6 +60,7 @@ class ampAPIEntityQueryHelper {
    */
   function executeQuery(EntityFieldQuery $query) {
     global $language_content;
+    $ssc_search_enabled = NULL;
 
     static $api_status;
     if (!isset($api_status)) {
@@ -86,62 +87,21 @@ class ampAPIEntityQueryHelper {
     $plugin = ampapi_get_mapper_by_property_name('id');
     $request_body['add_columns'][] = $plugin['report field key'];
 
-    // Get a list of enabled columns and measures.
-    // GET /rest/data/report/columns
-    $columns_data = ampapi_request('get', 'data/report/columns', TRUE);
-    // GET /rest/data/report/measures
-    $measures_data = ampapi_request('get', 'data/report/measures', TRUE);
-    // GET /rest/amp/settings
-    $settings_data = ampapi_request('get', 'amp/settings', TRUE);
-    
-    $currency = '';
-  	foreach ($settings_data as $setting) {
-	    // @HACK: The id for currency is "1"!!!
-	    // @see: Documentation for /rest/gis/settings
-	    if ($setting->id == '1') {
-	      $currency = $setting->defaultId;
-	    }
-  	}
-  	
-  	if (!empty($currency)) {
-    	$query->addMetaData('report_currency', $currency);
-    }
-  
-    // Add a list of fields to load.
-    // @TODO: Add a settings page.
-    if (!empty($query->metaData['view']->field)) {
-        
-      foreach ($query->metaData['view']->field as $field_name => $field_handler) {
-        $plugin = ampapi_get_mapper_by_property_name($field_name);
-        if (empty($plugin['report field key'])) {
-          continue;
-        }
-        
-        switch ($plugin['report field group']) {
-          case 'columns':
-            if (empty($columns_data->{$plugin['report field key']})) {
-              continue;
-            }
-            if (!in_array($plugin['report field key'], $request_body['add_columns'])) {
-              $request_body['add_columns'][] = $plugin['report field key'];
-            }
-            break;
-          case 'measures':
-            if (empty($measures_data->{$plugin['report field key']})) {
-              continue;
-            }
-            if (!in_array($plugin['report field key'], $request_body['add_measures'])) {
-              $request_body['add_measures'][] = $plugin['report field key'];
-            }
-            break;
-        }
-      }
-    }
-
     // Build an array of parameters for the API.
     foreach ($query->entityConditions as $column => $condition) {
       // Exclude entity_type condition since we use a collection per entity.
       if ($column == 'entity_type') {
+        continue;
+      }
+
+      // Special filter for requesting SSC activities.
+      if ($column == 'activities_search_type') {
+        if ($condition['value'] && variable_get('helpergeneric_amp_ssc_status', FALSE)) {
+          $ssc_search_enabled = TRUE;
+          // Some magic strings, see the API docs.
+          $request_body['reportType'] = 'C';
+          $request_body['projectType'] = array('S');
+        }
         continue;
       }
 
@@ -159,6 +119,12 @@ class ampAPIEntityQueryHelper {
         $handler = new $class_name();
         $handler->filter($plugin, $api_parameters, $request_body, $condition);
       }
+    }
+
+    // Add a list of fields to load.
+    // @TODO: Add a settings page.
+    if (!empty($query->metaData['view']->field)) {
+      $this->_api_add_fields($query, $request_body, $ssc_search_enabled);
     }
 
     // Add a "report" name, required for API cache.
@@ -227,7 +193,6 @@ class ampAPIEntityQueryHelper {
       return ($query->count) ? 0 : array();
     }
 
-
     $response_data = json_decode($response->data);
     if (!empty($response_data->error)) {
       foreach ($response_data->error as $error_message) {
@@ -248,9 +213,8 @@ class ampAPIEntityQueryHelper {
       return $response_data->page->totalRecords;
     }
 
-    $entities = array();
-
     // We have a different format when there is only one result.
+    // @TODO: Request a fix in the API.
     if ($response_data->page->totalRecords == 1 && empty($response_data->page->pageArea->children)) {
       $row = clone $response_data->page->pageArea;
       unset($response_data->page->pageArea->contents);
@@ -266,55 +230,132 @@ class ampAPIEntityQueryHelper {
       $number_format = $info->value;
     }
 
+    $entities = array();
     if (!empty($response_data->page->pageArea->children)) {
-      $this->process_response_data($response_data, $entities, $number_format);
+      $entities = $this->process_response_data($response_data, $query, $ssc_search_enabled, $number_format);
     }
 
     // Tell efq_views that the entities are already loaded.
     if (!empty($query->metaData['view'])) {
-      $query->addMetaData('entities_preloaded', TRUE);
-
-      if (!empty($response_data->page->pageArea->contents)) {
-        $response_totals = $response_data->page->pageArea->contents;
-
-        // @see https://php.net/manual/en/numberformatter.create.php
-        // @see http://www.icu-project.org/apiref/icu4c/classDecimalFormat.html#details
-        $formatter_locale = NULL;
-        $formatter = new NumberFormatter($formatter_locale, NumberFormatter::PATTERN_DECIMAL, $number_format);
-
-        $report_totals = array();
-        foreach ($response_data->headers as $h_info) {
-          // @TODO: user mappers.
-          if (!in_array($h_info->hierarchicalName, array('[Actual Commitments]', '[Actual Disbursements]'))) {
-            continue;
-          }
-
-          if (!isset($response_totals->{$h_info->hierarchicalName}->value)) {
-            continue;
-          }
-
-          if ($formatter) {
-            $amount = $formatter->format($response_totals->{$h_info->hierarchicalName}->value);
-          }
-          else {
-            $amount = check_plain($response_totals->{$h_info->hierarchicalName}->displayedValue);
-          }
-
-          $report_totals[$h_info->originalColumnName] = array(
-            'header' => filter_xss($h_info->columnName, array()),
-            'amount' => $amount,
-          );
-        }
-        $query->addMetaData('report_totals', $report_totals);
-      }
+      $this->_api_add_query_metadata($response_data, $query, $number_format);
     }
 
     return array($this->entityType => $entities);
   }
 
-  function process_response_data($data, &$entities, $number_format = NULL) {
-    // Get all available mapper plugins.
-    $mappers = ampapi_get_mappers();
+  /**
+   * Adds fields enabled in the view to the API request.
+   */
+  function _api_add_fields($query, &$request_body, $ssc_search_enabled) {
+
+    // Get a list of enabled columns and measures.
+    // GET /rest/data/report/columns
+    $columns_data = ampapi_request('get', 'data/report/columns', TRUE);
+    // GET /rest/data/report/measures
+    $measures_data = ampapi_request('get', 'data/report/measures', TRUE);
+
+    foreach ($query->metaData['view']->field as $field_name => $field_handler) {
+      $plugin = ampapi_get_mapper_by_property_name($field_name);
+      if (empty($plugin['report field key'])) {
+        continue;
+      }
+
+      switch ($plugin['report field group']) {
+        case 'columns':
+          if (empty($columns_data->{$plugin['report field key']})) {
+            continue;
+          }
+          if (!in_array($plugin['report field key'], $request_body['add_columns'])) {
+            $request_body['add_columns'][] = $plugin['report field key'];
+          }
+          break;
+        case 'measures':
+          if (empty($measures_data->{$plugin['report field key']})) {
+            continue;
+          }
+          if (in_array($plugin['report field key'], $request_body['add_measures'])) {
+            continue;
+          }
+
+          // Switch between SSC fields and normal fields.
+          $is_visible = FALSE;
+          if ($ssc_search_enabled && !empty($plugin['report field ssc'])) {
+            $is_visible = TRUE;
+          }
+          else if (!$ssc_search_enabled && empty($plugin['report field ssc'])) {
+            $is_visible = TRUE;
+          }
+
+          if ($is_visible) {
+            $request_body['add_measures'][] = $plugin['report field key'];
+          }
+          break;
+      }
+    }
+  }
+
+  /**
+   * Adds extra information from the API to be used in Views at a later point.
+   */
+  function _api_add_query_metadata($response_data, $query, $number_format) {
+    $query->addMetaData('entities_preloaded', TRUE);
+
+    // Add the currency to the query metadata.
+    foreach ($response_data->settings as $setting) {
+      // @HACK: The id for currency is "1"!!!
+      // @see: Documentation for /rest/gis/settings
+      if ($setting->id == '1' && isset($setting->value->defaultId)) {
+        $query->addMetaData('report_currency', $setting->value->defaultId);
+      }
+    }
+
+    // Add the totals to the query metadata.
+    if (!empty($response_data->page->pageArea->contents)) {
+      $response_totals = $response_data->page->pageArea->contents;
+
+      // @see https://php.net/manual/en/numberformatter.create.php
+      // @see http://www.icu-project.org/apiref/icu4c/classDecimalFormat.html#details
+      $formatter_locale = NULL;
+      $formatter = new NumberFormatter($formatter_locale, NumberFormatter::PATTERN_DECIMAL, $number_format);
+
+      $headers_list = array(
+        '[Actual Commitments]',
+        '[Actual Disbursements]',
+        '[Bilateral SSC Commitments]',
+        '[Triangular SSC Commitments]',
+      );
+      $report_totals = array();
+      foreach ($response_data->headers as $h_info) {
+        // @TODO: use mappers.
+        if (!in_array($h_info->hierarchicalName, $headers_list)) {
+          continue;
+        }
+
+        if (!isset($response_totals->{$h_info->hierarchicalName}->value)) {
+          continue;
+        }
+
+        if ($formatter) {
+          $amount = $formatter->format($response_totals->{$h_info->hierarchicalName}->value);
+        }
+        else {
+          $amount = check_plain($response_totals->{$h_info->hierarchicalName}->displayedValue);
+        }
+
+        $report_totals[$h_info->originalColumnName] = array(
+          'header' => filter_xss($h_info->columnName, array()),
+          'amount' => $amount,
+        );
+      }
+      $query->addMetaData('report_totals', $report_totals);
+    }
+  }
+
+  /**
+   * Creates entities out of data from the API.
+   */
+  function process_response_data($data, $query, $ssc_search_enabled, $number_format = NULL) {
+    $entities = array();
 
     $headers = $data->headers;
     $rows = $data->page->pageArea->children;
@@ -324,9 +365,24 @@ class ampAPIEntityQueryHelper {
       }
       $values = array();
 
-      foreach ($mappers as $plugin) {
-        if (empty($plugin['property name'])) {
-          continue;
+      foreach ($query->metaData['view']->field as $field_handler) {
+        $plugin = ampapi_get_mapper_by_property_name($field_handler->real_field);
+
+        // Switch between SSC fields and normal fields.
+        if ($plugin['report field group'] == 'measures') {
+
+          // Filter SSC fields or normal fields based on the settings.
+          $is_visible = FALSE;
+          if ($ssc_search_enabled && !empty($plugin['report field ssc'])) {
+            $is_visible = TRUE;
+          }
+          else if (!$ssc_search_enabled && empty($plugin['report field ssc'])) {
+            $is_visible = TRUE;
+          }
+
+          if (!$is_visible) {
+            continue;
+          }
         }
 
         $formatter = NULL;
@@ -344,20 +400,23 @@ class ampAPIEntityQueryHelper {
           }
         }
 
-        if ($hierarchical_name && $class_name = ctools_plugin_get_class($plugin, 'handler')) {
-          $values[$plugin['property name']] = call_user_func_array(array($class_name, 'getValue'), array($plugin, $row->contents->$hierarchical_name, $formatter));
-        }
-
         if ($plugin['property name'] == 'id') {
           $amp_baseurl = helpergeneric_detect_amp_baseurl();
           $url_prefix = '/aim/viewActivityPreview.do~public=true~pageId=2~activityId=';
           $language_suffix = helpergeneric_get_amp_language_parameter();
           $values['external_url'] = $amp_baseurl . $url_prefix . $values['id'] . $language_suffix;
         }
+
+        $request_body['add_measures'][] = $plugin['report field key'];
+        if ($hierarchical_name && $class_name = ctools_plugin_get_class($plugin, 'handler')) {
+          $values[$plugin['property name']] = call_user_func_array(array($class_name, 'getValue'), array($plugin, $row->contents->$hierarchical_name, $formatter));
+        }
       }
 
       // Create an entity.
       $entities[$delta] = entity_create('activity', $values);
     }
+
+    return $entities;
   }
 }

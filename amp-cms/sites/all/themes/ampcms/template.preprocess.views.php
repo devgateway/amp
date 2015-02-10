@@ -34,6 +34,16 @@ function ampcms_preprocess_views_view_fields(&$variables) {
   }
 }
 
+/**
+ * Implements template_preprocess_views_view_table().
+ */
+function ampcms_preprocess_views_view_table(&$variables) {
+  $function = '__' . __FUNCTION__ . '__' . $variables['view']->name;
+  if (function_exists($function)) {
+    $function($variables);
+  }
+}
+
 /*******************************************************************************
  * Helper functions for template_preprocess_HOOK() implementations.
  */
@@ -105,12 +115,41 @@ function __ampcms_preprocess_views_view__activities(&$vars) {
       if (!empty($vars['view']->query->query->metaData['report_totals'])) {
         $report_totals = $vars['view']->query->query->metaData['report_totals'];
         if (isset($vars['view']->query->query->metaData['report_currency'])) {
-        	$report_currency = $vars['view']->query->query->metaData['report_currency'];
-      	}
+          $report_currency = $vars['view']->query->query->metaData['report_currency'];
+        }
 
         $vars['attachment_after'] .= theme('amp_report_totals', array('totals' => $report_totals, 'currency' => $report_currency));
       }
 
+      break;
+  }
+}
+
+/**
+ * Implements ampcms_preprocess_views_view_table() for activities view.
+ */
+function __ampcms_preprocess_views_view_table__activities(&$vars) {
+  switch ($vars['view']->current_display) {
+    case 'search_page':
+      $mappers = ampapi_get_mappers();
+      foreach ($mappers as $key => $plugin) {
+        if (empty($plugin['property name'])) {
+          continue;
+        }
+        if (empty($plugin['report field type'])) {
+          continue;
+        }
+
+        $extra_class = drupal_clean_css_identifier(drupal_strtolower(' type-' . $plugin['report field type']));
+        if (isset($vars['header_classes'][$plugin['property name']])) {
+          $vars['header_classes'][$plugin['property name']] .= $extra_class;
+        }
+        if (isset($vars['field_classes'][$plugin['property name']])) {
+          foreach ($vars['field_classes'][$plugin['property name']] as &$class_attribute) {
+            $class_attribute .= $extra_class;
+          }
+        }
+      }
       break;
   }
 }

@@ -17,3 +17,5 @@ core = "7.x"
 project = "entityform"
 datestamp = "1418136532"
 
+hidden = TRUE
+

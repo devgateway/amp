@@ -4,8 +4,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
+import org.digijava.module.aim.annotations.translation.TranslatableField;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.Output;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 
 /**
@@ -13,12 +17,16 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
  * @author Dare
  *
  */
-public class AmpContact implements Comparable, Serializable, Cloneable {
+@TranslatableClass (displayName = "Contact")
+public class AmpContact implements Comparable, Serializable, Cloneable, Versionable {
 	private Long id;
 	private String name;
 	private String lastname;
 	private AmpCategoryValue title;
+
+	@TranslatableField
 	private String organisationName;
+	@TranslatableField
 	private String function;
 	private String officeaddress;
 	private String temporaryId;
@@ -184,4 +192,42 @@ public class AmpContact implements Comparable, Serializable, Cloneable {
 		}		
 		return emails;
 	}
+	
+	@Override
+	public boolean equalsForVersioning(Object obj) {
+		AmpContact aux = (AmpContact) obj;
+		String original = "" + this.getId();
+		String copy = "" + aux.getId();
+		if (original.equals(copy)) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public Output getOutput() {
+		Output out = new Output();
+		out.setOutputs(new ArrayList<Output>());
+		out.getOutputs().add(
+				new Output(null, new String[] { "Contact" }, new Object[] { this.getLastname() + " "
+						+ this.getName() }));
+		return out;
+	}
+
+	@Override
+	public Object getValue() {
+		return "" + this.name + "-" + this.lastname;
+	}
+	
+	@Override
+	public Object prepareMerge(AmpActivityVersion newActivity) throws CloneNotSupportedException {
+		AmpContact aux = (AmpContact) clone();
+		aux.id = null;
+        if(this.getActivityContacts()==null){
+            this.setActivityContacts(new TreeSet<AmpActivityContact>());
+        }
+		return aux;
+	}
+
+
 }

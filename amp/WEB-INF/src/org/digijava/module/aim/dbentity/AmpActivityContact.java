@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
+import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.Output;
 
+@TranslatableClass (displayName="ActivityContact")
 public class AmpActivityContact implements Versionable, Comparable, Serializable, Cloneable {
 	
 	private Long id;

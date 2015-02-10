@@ -26,6 +26,9 @@ if (PROJECT_ENVIRONMENT == 'production') {
   //   ERROR_REPORTING_DISPLAY_SOME => Errors and warnings
   //   ERROR_REPORTING_DISPLAY_ALL => All messages
   variable_set('error_level', ERROR_REPORTING_HIDE);
+
+  // By default cleanup the UI for all users.
+  variable_del('helpergeneric_cleanup_ui_force');
 }
 
 // Provide a list of modules to be disabled and uninstalled.

@@ -20,6 +20,7 @@ $plugin = array(
     'period' => '12',
     'count' => '10',
     'sort' => 'default',
+    'ssc' => FALSE,
     'visible_columns' => array(),
   ),
 );
@@ -30,6 +31,7 @@ function contentwidget_topprojects_widget_retrieve_data($widget_settings, $langc
   $api_status = helpergeneric_check_api_status();
   if (!$api_status['online']) {
     drupal_set_message($api_status['message'], 'warning');
+
     return $data;
   }
 
@@ -37,8 +39,8 @@ function contentwidget_topprojects_widget_retrieve_data($widget_settings, $langc
   $cache_id = "contentblock:widget:{$langcode}:topprojects:" . md5(serialize($widget_settings));
 
   // Try to get the response from cache.
-  if ($cached = cache_get($cache_id, 'cache')) {
-   $response = $cached->data;
+  if (FALSE && $cached = cache_get($cache_id, 'cache')) {
+    $response = $cached->data;
   }
   else {
     // Prepare a list of parameters for the request.
@@ -46,6 +48,7 @@ function contentwidget_topprojects_widget_retrieve_data($widget_settings, $langc
 
     if (!empty($widget_settings['period'])) {
       $parameters['months'] = $widget_settings['period'];
+      $parameters['months'] = 36;
     }
     if (!empty($widget_settings['count'])) {
       $parameters['count'] = $widget_settings['count'];
@@ -59,8 +62,17 @@ function contentwidget_topprojects_widget_retrieve_data($widget_settings, $langc
       'Accept' => 'application/json',
       'Content-Type' => 'application/json',
     );
-    // Required, even though we pass the parameters in the URL like for GET requests.
-    $variables['body'] = '{}';
+
+    $request_body = array();
+
+    // Display SSC projects instead.
+    if (!empty($widget_settings['ssc']) && variable_get('helpergeneric_amp_ssc_status', FALSE)) {
+      // Some magic strings, see the API docs.
+      $request_body['reportType'] = 'C';
+      $request_body['projectType'] = array('S');
+    }
+
+    $variables['body'] = empty($request_body) ? '{}' : json_encode($request_body);
 
     // Set the API Resource Endpoint.
     $resource_path = 'public/topprojects';
@@ -101,23 +113,24 @@ function contentwidget_topprojects_widget_render($plugin, $widget_settings, $ent
   if (!empty($data)) {
     if (empty($data->headers)) {
       drupal_set_message(t('Headers information missing from the API.'), 'error');
+
       return NULL;
     }
 
     if (empty($widget_settings['visible_columns'])) {
       $widget_settings['visible_columns'] = array_keys((array) $data->headers);
     }
-    
+
     // Create the table headers.
     foreach ($widget_settings['visible_columns'] as $key) {
       if (!isset($data->headers->$key)) {
         continue;
       }
-			
+
       $label = $data->headers->$key;
-    	if (!empty($data->Currency) && in_array($key, array('actual-commitments', 'actual-disbursements'))) {
-    		$label = $label . ' (' . $data->Currency . ')';
-    	}
+      if (!empty($data->Currency) && in_array($key, array('actual-commitments', 'actual-disbursements'))) {
+        $label = $label . ' (' . $data->Currency . ')';
+      }
       $header[$key] = array(
         'data' => check_plain($label),
         'class' => array(
@@ -169,7 +182,22 @@ function contentwidget_topprojects_widget_settings(&$element, &$form_state, $plu
   );
   $form_state['topprojects']['wrapper_id'] = drupal_html_class($form_state['topprojects']['input_name_prefix'] . '-options');
 
-  $period_options = drupal_map_assoc(array(1, 2, 3, 4, 5, 6, 9, 12, 15, 18, 24));
+  if (variable_get('helpergeneric_amp_ssc_status', FALSE)) {
+    $settings_form['ssc'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('South-South Cooperation'),
+      '#description' => t('Display the top SSC projects instead.'),
+      '#default_value' => $widget_settings['ssc'],
+    );
+  }
+  else {
+    $settings_form['ssc'] = array(
+      '#type' => 'value',
+      '#value' => FALSE,
+    );
+  }
+
+  $period_options = drupal_map_assoc(array(1, 2, 3, 4, 5, 6, 9, 12, 15, 18, 24, 30, 36));
   foreach ($period_options as $key => &$value) {
     $value = format_plural($value, 'Previous month', 'Previous @count months');
   }
@@ -192,7 +220,7 @@ function contentwidget_topprojects_widget_settings(&$element, &$form_state, $plu
   $settings_form['sort'] = array(
     '#type' => 'select',
     '#title' => t('Default Sort'),
-    '#description' => t('The order in which to display the projects.') .  ' <b>(not implemented yet!)</b>',
+    '#description' => t('The order in which to display the projects.') . ' <b>(not implemented yet!)</b>',
     '#default_value' => $widget_settings['sort'],
     '#options' => array(
       'default' => t('Default'),
@@ -212,7 +240,6 @@ function contentwidget_topprojects_widget_settings(&$element, &$form_state, $plu
     '#title' => t('Display all columns'),
     '#description' => t('Whether or not to display all table columns. Un-check to select visible columns.'),
     '#default_value' => $display_all_columns,
-
     '#ajax' => array(
       'event' => 'click',
       'callback' => 'contentwidget_widget_ajax_callback',
@@ -326,7 +353,6 @@ function contentwidget_topprojects_widget_settings_storage($widget_name, $form_v
 
   if (isset($form_values[$widget_name]) && is_array($form_values[$widget_name])) {
     $settings = array_filter($form_values[$widget_name]);
-    $settings = $form_values[$widget_name];
   }
 
   if (empty($form_values[$widget_name]['display_all_columns']) && !empty($settings['visible_columns'])) {

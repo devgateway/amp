@@ -61,6 +61,7 @@ public class MenuStructure {
 		for (AmpMenuEntry ame : orderedEntries) {
 			MenuItem mi = new MenuItem(ame.getName(), ame.getTitle(), ame.getTooltip(), ame.getUrl(), ame.getFlags());
 			itemsMap.put(ame, mi);
+			configureCommonDynamicMenu(mi);
 		}
 		for (AmpMenuEntry ame : orderedEntries) {
 			MenuItem item = itemsMap.get(ame);
@@ -87,6 +88,20 @@ public class MenuStructure {
 	protected Object clone() throws CloneNotSupportedException {
 		throw new CloneNotSupportedException();
 	}
-	
+
+	/**
+	 * Configures dynamic menu entries
+	 * @param mi
+	 */
+	private void configureCommonDynamicMenu(MenuItem mi) {
+		switch(mi.name) {
+		case MenuConstants.LANGUAGE:
+		case MenuConstants.PUBLIC_LANGUAGE:
+			(new LanguageMenu()).process(mi);
+			break;
+		default:
+			break;
+		}
+	}
 }
 

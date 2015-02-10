@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.digijava.module.aim.dbentity.AmpMenuEntry" table="AMP_MENU_ENTRY" lazy="false">
+        <cache usage="read-write" />
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="native">
+                <param name="sequence">AMP_MENU_ENTRY_seq</param>
+            </generator>
+        </id>
+
+        <many-to-one name="parent" column="PARENT_ID" class="org.digijava.module.aim.dbentity.AmpMenuEntry" />
+        <property name="name" column="NAME" type="java.lang.String" not-null="true" unique-key="menuNameUniqueKey"/>
+		<property name="title" column="TITLE" type="java.lang.String" />
+		<property name="tooltip" column="TOOLTIP" type="java.lang.String" />
+		<property name="url" column="URL" type="java.lang.String"/>
+		<property name="publicView" column="IS_PUBLIC" type="boolean"/>
+        <property name="adminView" column="IS_ADMIN" type="boolean" />
+        <property name="teamView" column="IS_TEAM" type="boolean" />
+        <property name="flags" column="FLAGS" type="java.lang.String"/>
+        <property name="position" column="POSITION" type="int" />
+        
+        <set name="items" cascade="all" inverse="true" lazy="true">
+			<cache usage="read-write" />
+			<key column="PARENT_ID" />
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpMenuEntry" />
+		</set>
+
+    </class>
+</hibernate-mapping>

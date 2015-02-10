@@ -84,6 +84,7 @@ public class MenuConstants {
 	public static final String ADDRESS_BOOK = "Address Book";
 	public static final String EMAIL = "Email";
 	// dynamic entries
+	public static final String PUBLIC_LANGUAGE_ITEM = "Public Language Item";
 	public static final String LANGUAGE_ITEM = "Language Item";
 	public static final String WORKSPACE_ITEM = "Workspace Item";
 }

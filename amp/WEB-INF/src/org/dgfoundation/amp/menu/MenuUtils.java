@@ -28,8 +28,8 @@ public class MenuUtils {
 	 */
 	public static List<AmpMenuEntry> getMenuEntries(AmpView view, boolean orderByPosition) {
 		String query = "select ame from " + AmpMenuEntry.class.getName() 
-				+ " ame where ame.%s = true order by ame.id asc"
-				+ (orderByPosition ? ", ame.position asc" : "");
+				+ " ame where ame.%s = true"
+				+ (orderByPosition ? " order by ame.position asc" : "");
 		switch(view) {
 		case ADMIN: query = String.format(query, "adminView"); break;
 		case PUBLIC: query = String.format(query, "publicView"); break;

@@ -93,4 +93,9 @@ public class MenuItem {
 	public void setParent(MenuItem parent) {
 		this.parent = parent;
 	}
+	
+	@Override
+	public String toString() {
+		return (parent == null ? "" : parent) + "/" + name + (url == null ? "" : "[" + url + "]"); 
+	}
 }

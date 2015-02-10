@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ReportContextData;
+import org.dgfoundation.amp.menu.MenuStructure;
 import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiCacheManager;
@@ -111,6 +112,8 @@ public class GlobalSettings extends Action {
 			dailyCurrencyRatesChanges(null);
 			auditTrialCleanerChanges();
 			DigiCacheManager.getInstance().getCache(ArConstants.EXCHANGE_RATES_CACHE).clear();
+			// update menu if support email changed
+			MenuStructure.recreate();
 		}
 		
 		List<AmpGlobalSettings> col = FeaturesUtil.getGlobalSettings();

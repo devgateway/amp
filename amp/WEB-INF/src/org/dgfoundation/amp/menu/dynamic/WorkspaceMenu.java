@@ -1,10 +1,12 @@
 /**
  * 
  */
-package org.dgfoundation.amp.menu;
+package org.dgfoundation.amp.menu.dynamic;
 
 import java.util.Collection;
 
+import org.dgfoundation.amp.menu.MenuConstants;
+import org.dgfoundation.amp.menu.MenuItem;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
@@ -14,10 +16,14 @@ import org.digijava.module.aim.helper.Constants;
  * @author Nadejda Mandrescu
  */
 public class WorkspaceMenu implements DynamicMenu {
-	private static final String WORKSPACE_SWITCH_URL = "/selectTeam.do?id=%s";
 	
 	@Override
 	public void process(MenuItem menuItem) {
+		if (menuItem.getChildren().size() == 0)
+			return;
+		MenuItem template = menuItem.getChildren().iterator().next();
+		menuItem.getChildren().clear();
+		
 		Collection<AmpTeamMember> wsList = (Collection<AmpTeamMember>) 
 				TLSUtils.getRequest().getSession().getAttribute(Constants.USER_WORKSPACES);
 		if (wsList == null || wsList.size() == 0)
@@ -25,7 +31,8 @@ public class WorkspaceMenu implements DynamicMenu {
 		
 		for (AmpTeamMember atm : wsList) {
 			MenuItem mi = new MenuItem(MenuConstants.WORKSPACE_ITEM, atm.getAmpTeam().getName(),
-					atm.getAmpTeam().getName(), String.format(WORKSPACE_SWITCH_URL, atm.getAmpTeamMemId()), null);
+					atm.getAmpTeam().getName(), String.format(template.url, atm.getAmpTeamMemId()), null);
+			mi.setParent(menuItem);
 			menuItem.appendChild(mi);
 		}
 	}

@@ -1,10 +1,12 @@
 /**
  * 
  */
-package org.dgfoundation.amp.menu;
+package org.dgfoundation.amp.menu.dynamic;
 
 import java.util.List;
 
+import org.dgfoundation.amp.menu.MenuConstants;
+import org.dgfoundation.amp.menu.MenuItem;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.translation.util.TranslationManager;
 
@@ -13,14 +15,19 @@ import org.digijava.module.translation.util.TranslationManager;
  * @author Nadejda Mandrescu
  */
 public class LanguageMenu implements DynamicMenu {
-	private static final String LANGUAGE_URL = "/rest/translations/languages/%s";
 	
 	@Override
 	public void process(MenuItem langMenuItem) {
+		if (langMenuItem.getChildren().size() == 0)
+			return;
+		MenuItem template = langMenuItem.getChildren().iterator().next();
+		langMenuItem.getChildren().clear();
+		
 		List<String[]> locales = TranslationManager.getLocale(PersistenceManager.getSession());
 		for (String[] langOption : locales) {
 			MenuItem mi = new MenuItem(MenuConstants.LANGUAGE_ITEM, langOption[1], 
-					langOption[1], String.format(LANGUAGE_URL, langOption[0]), null);
+					langOption[1], String.format(template.url, langOption[0]), null);
+			mi.setParent(langMenuItem);
 			langMenuItem.appendChild(mi);
 		}
 	}

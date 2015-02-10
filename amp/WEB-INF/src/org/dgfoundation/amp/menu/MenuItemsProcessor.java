@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.dgfoundation.amp.menu.dynamic.DynamicMenu;
+import org.dgfoundation.amp.menu.dynamic.EmailMenu;
+import org.dgfoundation.amp.menu.dynamic.LanguageMenu;
+import org.dgfoundation.amp.menu.dynamic.WorkspaceMenu;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 
@@ -76,7 +80,7 @@ public class MenuItemsProcessor {
 	} 
 
 	/***********************************************************
-	 * 					NOT USED
+	 * 					PARTIALY USED
 	 ***********************************************************/
 	/* This is an abstract approach that may be useful when many dynamic menu structures are built,
 	 * but so far it is easier to use it directly to speed things up
@@ -84,6 +88,7 @@ public class MenuItemsProcessor {
 	private static final Map<String, DynamicMenu> dynamicCommon = new HashMap<String, DynamicMenu>() {{
 		put(MenuConstants.LANGUAGE, new LanguageMenu());
 		put(MenuConstants.PUBLIC_LANGUAGE, new LanguageMenu());
+		put(MenuConstants.EMAIL, new EmailMenu());
 	}};
 	
 	private static final Map<String, DynamicMenu> dynamicPerRequest = new HashMap<String, DynamicMenu>() {{
@@ -112,6 +117,7 @@ public class MenuItemsProcessor {
 			if (dm != null) {
 				dm.process(item);
 			}
+			processDynamicEntries(item.getChildren(), dynamicItems);
 		}
 	}
 }

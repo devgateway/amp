@@ -1,7 +1,9 @@
 /**
  * 
  */
-package org.dgfoundation.amp.menu;
+package org.dgfoundation.amp.menu.dynamic;
+
+import org.dgfoundation.amp.menu.MenuItem;
 
 /**
  * Interface for menu entries that need a dynamic adjustment of their structure and properties

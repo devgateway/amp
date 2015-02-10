@@ -61,7 +61,6 @@ public class MenuStructure {
 		for (AmpMenuEntry ame : orderedEntries) {
 			MenuItem mi = new MenuItem(ame.getName(), ame.getTitle(), ame.getTooltip(), ame.getUrl(), ame.getFlags());
 			itemsMap.put(ame, mi);
-			configureCommonDynamicMenu(mi);
 		}
 		for (AmpMenuEntry ame : orderedEntries) {
 			MenuItem item = itemsMap.get(ame);
@@ -74,6 +73,7 @@ public class MenuStructure {
 				item.setParent(parentItem);
 			}
 		}
+		MenuItemsProcessor.processCommonDynamicItems(root.getChildren());
 		menuItems = Collections.unmodifiableList(root.getChildren());
 	}
 	
@@ -93,6 +93,7 @@ public class MenuStructure {
 	 * Configures dynamic menu entries
 	 * @param mi
 	 */
+	/* candidate for removal
 	private void configureCommonDynamicMenu(MenuItem mi) {
 		switch(mi.name) {
 		case MenuConstants.LANGUAGE:
@@ -103,5 +104,6 @@ public class MenuStructure {
 			break;
 		}
 	}
+	*/
 }
 

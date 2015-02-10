@@ -1,5 +1,7 @@
 package org.digijava.kernel.ampapi.endpoints.security;
 
+import java.util.List;
+
 import javax.security.auth.Subject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -94,4 +96,11 @@ public class Security {
 		return user;
 	}
 
+	@GET
+	@Path("/menus")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = false, id = "Menu", name = "Menu")
+	public List<JsonBean> getMenu() {
+		return SecurityService.getMenu();
+	}
 }

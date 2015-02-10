@@ -69,4 +69,13 @@ public class EPConstants {
 	public static final String ENABLED_MODULES = "enabled-modules";
 	public static final String DETAIL_MODULES = "detail-modules";
 	public static final String DETAIL_ALL_ENABLED_MODULES = "all-enabled";
+	
+	// menu constants
+	public static final String MENU_NAME = "name"; 
+	public static final String MENU_TOOLTIP = "tooltip";
+	public static final String MENU_URL = "url";
+	public static final String MENU_CHILDREN = "children";
+	public static final String MENU_OPEN_POPUP = "popup";
+	public static final String MENU_OPEN_TAB = "tab";
+	public static final String MENU_POST = "post";
 }

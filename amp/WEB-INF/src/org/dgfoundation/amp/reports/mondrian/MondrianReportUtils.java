@@ -173,11 +173,7 @@ public class MondrianReportUtils {
 	public static Set<String> getConfigurableMeasures() {
 		Set<String> configurableMeasures = new HashSet<String>(
 				MeasuresVisibility.getVisibleMeasures());
-		/*This line is commented in order to allow user to create reports with any measure
-		 * and open then in the old report generator - once we finish adding missing measures this 
-		 * wont be needed for now saiku will ignore missing measures 
-		 */
-		//configurableMeasures.retainAll(MondrianMapping.definedMeasures);
+		configurableMeasures.retainAll(MondrianMapping.definedMeasures);
 		return configurableMeasures;
 	}
 	

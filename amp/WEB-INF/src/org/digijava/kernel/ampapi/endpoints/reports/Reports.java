@@ -30,7 +30,6 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
@@ -421,10 +420,6 @@ public class Reports {
 		SaikuGeneratedReport report = null;
 		try {
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
-			//Add columns to apply styles base on the aproval status
-			spec.addColumn(new ReportColumn(ColumnConstants.APPROVAL_STATUS));
-			spec.addColumn(new ReportColumn(ColumnConstants.DRAFT));
-			
 			if(filterRules != null) spec.setFilters(filterRules);
 			if(queryModel.containsKey("settingsApplied") && (Boolean)queryModel.get("settingsApplied")) {
 				SettingsUtils.applySettings(spec, extractSettings(queryModel));

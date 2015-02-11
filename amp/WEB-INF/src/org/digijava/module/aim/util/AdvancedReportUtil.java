@@ -212,9 +212,8 @@ public final class AdvancedReportUtil {
 		List <AmpMeasures> am_out = new ArrayList<AmpMeasures>();
 		Set<String> visMesNames = MondrianReportUtils.getConfigurableMeasures();
 		for (AmpMeasures meas : am_in) {
-			if (visMesNames.contains(meas.getMeasureName())){
+			//if (visMesNames.contains(meas.getMeasureName()))
 				am_out.add(meas);
-			}
 		}
 		return am_out;
 	}

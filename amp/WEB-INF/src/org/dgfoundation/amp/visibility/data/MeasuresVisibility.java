@@ -15,7 +15,10 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.visibility.data.DataVisibility.DataMapType;
+import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -35,7 +38,7 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 	protected static final Map<String, String> modulesToMeasuresMap = new HashMap<String, String>() {{
 		for(String transactionName:ArConstants.TRANSACTION_TYPE_NAME_TO_ID.keySet())
 			put("/Activity Form/Funding/Funding Group/Funding Item/" + transactionName, transactionName);
-		put("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Capital Spending Percentage", "Capital");
+			put("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Capital Spending Percentage", "Capital");
 	}};
 	
 	@SuppressWarnings("serial")
@@ -54,15 +57,16 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		Set<String> visiblePrecursors = new HashSet<String>(); 
 		Set<String> invisiblePrecursors = new HashSet<String>(getAllPrecursors());
 		Set<String> visibleData = new HashSet<String>(); 
-		//visibleData.addAll(getVisibleByDefault());
 		Set<String> invisibleData = new HashSet<String>(getAllData());
-		//invisibleData.removeAll(getVisibleByDefault());
 		AmpTemplatesVisibility currentTemplate = FeaturesUtil.getCurrentTemplate();
 
 		//check modules
 		List<AmpModulesVisibility> modules = FeaturesUtil.getAmpModulesVisibility(getDataMap(DataMapType.MODULES).keySet(), currentTemplate.getId());
 		processVisbleObjects(modules, getDataMap(DataMapType.MODULES), visiblePrecursors, invisiblePrecursors);
-		//processVisbleObjects(null, getDataMap(DataMapType.DEPENDENCY), visiblePrecursors, invisiblePrecursors);
+		
+		List<AmpFeaturesVisibility> features = FeaturesUtil.getAmpFeaturesVisibility(getDataMap(DataMapType.FEATURES).keySet(), currentTemplate.getId());
+		processVisbleObjects(features, getDataMap(DataMapType.FEATURES), visibleData, invisibleData);
+		
 		visiblePrecursors.addAll(getVisibleByDefault());
 		
 		Map<String, Collection<String>> allDependenciesMap = getDependancyMapTypeAll();
@@ -74,8 +78,6 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 				}
 			}
 		}
-		visibleData.add(MeasureConstants.PLEDGES_ACTUAL_PLEDGE);
-		visibleData.add(MeasureConstants.PLEDGES_COMMITMENT_GAP);
 		logger.info("Not visible: " + invisibleData);
 		// avoid any tentative to change it  
 		return Collections.unmodifiableSet(visibleData);
@@ -117,7 +119,55 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 		
 	}};
 	
-	protected static final Map<String, String> featuresToMeasuresMap = new HashMap<String, String>();
+	@SuppressWarnings("serial")
+	protected static final Map<String, String> featuresToMeasuresMap = new HashMap<String, String>() {{
+		//Add measures listed under measures features in the feature manager
+		//I think this list should come from the measures table - Let's discuss about it
+			put(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_COMMITMENTS);
+			put(MeasureConstants.ACTUAL_DISBURSEMENT_ORDERS, MeasureConstants.ACTUAL_DISBURSEMENT_ORDERS);
+			put(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS);
+			put(MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL, MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL);
+			put(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT, MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT);
+			put(MeasureConstants.ACTUAL_EXPENDITURES, MeasureConstants.ACTUAL_EXPENDITURES);
+			put(MeasureConstants.BILATERAL_SSC_COMMITMENTS, MeasureConstants.BILATERAL_SSC_COMMITMENTS);
+			put(MeasureConstants.CONSUMPTION_RATE, MeasureConstants.CONSUMPTION_RATE);
+			put(MeasureConstants.CUMULATED_DISBURSEMENTS, MeasureConstants.CUMULATED_DISBURSEMENTS);
+			put(MeasureConstants.DISBURSMENT_RATIO, MeasureConstants.DISBURSMENT_RATIO);
+			put(MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS, MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS);
+			put(MeasureConstants.PIPELINE_COMMITMENTS, MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS);
+			put(MeasureConstants.PLANNED_COMMITMENTS, MeasureConstants.PLANNED_COMMITMENTS);
+			put(MeasureConstants.PLANNED_DISBURSEMENT_ORDERS, MeasureConstants.PLANNED_DISBURSEMENT_ORDERS);
+			put(MeasureConstants.PLANNED_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS);
+			put(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL, MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL);
+			put(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE, MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE);
+			put(MeasureConstants.PLANNED_EXPENDITURES, MeasureConstants.PLANNED_EXPENDITURES);
+			put(MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS, MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS);
+			put(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS);
+			put(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS,MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS);
+			put(MeasureConstants.TOTAL_COMMITMENTS, MeasureConstants.TOTAL_COMMITMENTS);
+			put(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS, MeasureConstants.TRIANGULAR_SSC_COMMITMENTS);
+			put(MeasureConstants.UNCOMMITTED_BALANCE, MeasureConstants.UNCOMMITTED_BALANCE);
+			put(MeasureConstants.UNDISBURSED_BALANCE, MeasureConstants.UNDISBURSED_BALANCE);
+			put(MeasureConstants.REAL_DISBURSEMENTS, MeasureConstants.REAL_DISBURSEMENTS);
+			put(MeasureConstants.REAL_COMMITMENTS, MeasureConstants.REAL_COMMITMENTS);
+			put(MeasureConstants.REAL_MTFS, MeasureConstants.REAL_MTFS);
+
+			put(MeasureConstants.ACTUAL_ESTIMATED_DISBURSEMENTS, MeasureConstants.ACTUAL_ESTIMATED_DISBURSEMENTS);
+			put(MeasureConstants.ACTUAL_RELEASE_OF_FUNDS, MeasureConstants.ACTUAL_RELEASE_OF_FUNDS);
+			put(MeasureConstants.PIPELINE_ESTIMATED_DISBURSEMENTS, MeasureConstants.PIPELINE_ESTIMATED_DISBURSEMENTS);
+			put(MeasureConstants.PIPELINE_RELEASE_OF_FUNDS, MeasureConstants.PIPELINE_RELEASE_OF_FUNDS);
+			put(MeasureConstants.PLANNED_ESTIMATED_DISBURSEMENTS, MeasureConstants.PLANNED_ESTIMATED_DISBURSEMENTS);
+			put(MeasureConstants.PLANNED_RELEASE_OF_FUNDS, MeasureConstants.PLANNED_RELEASE_OF_FUNDS);
+
+			put(MeasureConstants.PLEDGES_ACTUAL_COMMITMENTS, MeasureConstants.PLEDGES_ACTUAL_COMMITMENTS);
+			put(MeasureConstants.PLEDGES_ACTUAL_DISBURSEMENTS, MeasureConstants.PLEDGES_ACTUAL_DISBURSEMENTS);
+			put(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, MeasureConstants.PLEDGES_ACTUAL_PLEDGE);
+			put(MeasureConstants.PLEDGES_COMMITMENT_GAP, MeasureConstants.PLEDGES_COMMITMENT_GAP);
+			put(MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT,MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT);
+			put(MeasureConstants.PLEDGES_PLANNED_COMMITMENTS, MeasureConstants.PLEDGES_PLANNED_COMMITMENTS);
+			put(MeasureConstants.PLEDGES_PLANNED_DISBURSEMENTS, MeasureConstants.PLEDGES_PLANNED_DISBURSEMENTS);
+		
+	}};
 	
 	protected static final Map<String, String> fieldsToMeasuresMap = new HashMap<String, String>();
 	protected final static String ADJUSTMENT_PREFIX = "adjustment_type: ";

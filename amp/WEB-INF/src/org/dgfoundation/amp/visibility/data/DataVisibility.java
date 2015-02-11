@@ -90,29 +90,6 @@ public abstract class DataVisibility {
 		//check modules
 		List<AmpModulesVisibility> modules = FeaturesUtil.getAmpModulesVisibility(getDataMap(DataMapType.MODULES).keySet(), currentTemplate.getId());
 		processVisbleObjects(modules, getDataMap(DataMapType.MODULES), visibleData, invisibleData);
-		
-			/* old implementation of fields is not up, cannot rely on this approach as a general rule
-		for(AmpFieldsVisibility field : fields) {
-			String name = field.getName();
-		//for(String name : COLUMNS.keySet()) {
-			unmapped.remove(name);
-			boolean visibleField = FeaturesUtil.isVisibleField(name); 
-			boolean visibleFeature = FeaturesUtil.isVisibleFeature(field.getParent().getName());
-			boolean visibleModule = FeaturesUtil.isVisibleModule(field.getParent().getParent().getName());
-			logger.info(
-					String.format("Field = [%b][%s], "
-							+ "Feature = [%b][%s], "
-							+ "Module = [%b][%s]", 
-							visibleField, name, 
-							visibleFeature, field.getParent().getName(), 
-							visibleModule, field.getParent().getParent().getName()));
-			if (visibleField && visibleFeature && visibleModule)
-				visibleColumns.add(name);
-			else
-				notVisible.add(name);
-		}
-		*/
-		
 		dependencyCheck(visibleData, invisibleData);
 		
 		logger.info("Not visible: " + invisibleData);
@@ -192,46 +169,17 @@ public abstract class DataVisibility {
 	 * @param visibleColumns
 	 * @param invisibleColumns
 	 */
-	protected <T extends AmpObjectVisibility> void  processVisbleObjects(List<T> visibilityList, 
-			Map<String, String> nameToColumnMap,
-			Set<String> visibleColumns, Set<String> invisibleColumns) {
-//		Set<AmpObjectVisibility> visibleParents = new HashSet<AmpObjectVisibility>();
-//		Set<AmpObjectVisibility> invisibleParents = new HashSet<AmpObjectVisibility>();
-		
-		for (AmpObjectVisibility o: visibilityList) {
-			
-			// no need to check that parents are visible (actually, I think it is a bug - on Tanzania prod, for example, you can have a visible child of invisible parent (Funding Item) and the AF interprets it as Commitments being visible
-/*			AmpObjectVisibility o = iter.next();
-			
-			//check if all ancestors are visible
-			AmpObjectVisibility parent = o.getParent();
-			boolean visible = true;
-			while (parent != null && visible) {
-				if (invisibleParents.contains(parent))
-					visible = false;
-				else if (!visibleParents.contains(parent)) {
-					visible = true || FeaturesUtil.isVisible(parent);
-					if (visible)
-						visibleParents.add(parent);
-				}
-				parent = parent.getParent();
-			}
-			
-			if (visible) */ 
+	protected <T extends AmpObjectVisibility> void processVisbleObjects(List<T> visibilityList,
+			Map<String, String> nameToColumnMap, Set<String> visibleColumns, Set<String> invisibleColumns) {
+
+		for (AmpObjectVisibility o : visibilityList) {
 			{
 				String columnName = nameToColumnMap.get(o.getName());
 				invisibleColumns.remove(columnName);
 				visibleColumns.add(columnName);
-			} /*else {
-				//if current parent is invisible, then place all children to invisible
-				while (o != null && (parent == null || !o.equals(parent))) {
-					invisibleParents.add(o);
-					o = o.getParent();
-				}
-			}*/
+			}
 		}
 	}
-	
 	
 	/* Default no data storage */
 	protected static final List<String> noDataList = new ArrayList<String>();

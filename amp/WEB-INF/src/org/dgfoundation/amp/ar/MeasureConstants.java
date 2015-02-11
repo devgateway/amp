@@ -31,12 +31,15 @@ public class MeasureConstants {
 	public static final String PLANNED_EXPENDITURES = "Planned Expenditures";
 	public static final String PREVIOUS_MONTH_DISBURSEMENTS = "Previous Month Disbursements";
 	public static final String PRIOR_ACTUAL_DISBURSEMENTS = "Prior Actual Disbursements";
-	public static final String REAL_DISBURSEMENTS = "Real Disbursements";
 	public static final String SELECTED_YEAR_PLANNED_DISBURSEMENTS = "Selected Year Planned Disbursements";
 	public static final String TOTAL_COMMITMENTS = "Total Commitments";
 	public static final String TRIANGULAR_SSC_COMMITMENTS = "Triangular SSC Commitments";
 	public static final String UNCOMMITTED_BALANCE = "Uncommitted Balance";
 	public static final String UNDISBURSED_BALANCE = "Undisbursed Balance";
+	public static final String REAL_DISBURSEMENTS = "Real Disbursements";
+	public static final String REAL_COMMITMENTS = "Real Commitments";
+	public static final String REAL_MTFS = "Real MTEFs";
+	 
 	//type = D (?)
 	public static final String ACTUAL_ESTIMATED_DISBURSEMENTS = "Actual Estimated Disbursements";
 	public static final String ACTUAL_RELEASE_OF_FUNDS = "Actual Release of Funds";

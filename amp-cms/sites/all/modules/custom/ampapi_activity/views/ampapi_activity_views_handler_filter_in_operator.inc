@@ -49,14 +49,18 @@ class ampapi_activity_views_handler_filter_in_operator extends efq_views_handler
       $js_setting[$field_name]['values'] = array();
       if (isset($form_state['input'][$identifier])) {
         $values = $form_state['input'][$identifier];
-        $values = explode(',', $values);
+        if (!empty($values)) {
+          $values = explode(',', $values);
 
-        $plugin = ampapi_get_mapper_by_property_name($this->options['field']);
-        $class_name = ctools_plugin_get_class($plugin, 'handler');
+          $plugin = ampapi_get_mapper_by_property_name($this->options['field']);
+          $class_name = ctools_plugin_get_class($plugin, 'handler');
 
-        // If we have previously validated input, override.
-        $handler = new $class_name();
-        $js_setting[$field_name]['values'] = $handler->getAutocompleteValue($plugin, $values, 'tokeninputids');
+          // If we have previously validated input, override.
+          /** @var activityMapperAutocompleteInterface $handler */
+          $handler = new $class_name();
+
+          $js_setting[$field_name]['values'] = $handler->getAutocompleteValue($plugin, $values, 'tokeninputids');
+        }
       }
       drupal_add_js(array('viewsTokeninput' => $js_setting), 'setting');
 
@@ -167,6 +171,7 @@ class ampapi_activity_views_handler_filter_in_operator extends efq_views_handler
       }
 
       // If we have previously validated input, override.
+      /** @var activityMapperAutocompleteInterface $handler */
       $handler = new $class_name();
       $value = $handler->getAutocompleteValue($plugin, array($raw_value), 'autocompleteids');
       if (isset($value)) {
@@ -178,6 +183,9 @@ class ampapi_activity_views_handler_filter_in_operator extends efq_views_handler
     return FALSE;
   }
 
+  /**
+   * @TODO: Add validation!
+   */
   function exposed_validate(&$form, &$form_state) {
     if (empty($this->options['exposed'])) {
       return;
@@ -216,6 +224,7 @@ class ampapi_activity_views_handler_filter_in_operator extends efq_views_handler
       '#default_value' => !empty($this->options['error_message']),
     );
   }
+
   function admin_summary() {
     return '';
   }

@@ -3,16 +3,58 @@
 /**
  * @file
  * Shared classes and interfaces for the API mapper system.
+ *
+ * @TODO: Reduce complexity!!
  */
 
-class activityMapperAutocompleteBase extends activityMapperBase {
-  public function getMatchedValues($data, $type, $entries, &$matches) {
+class activityMapperAutocompleteBase extends activityMapperBase implements activityMapperAutocompleteInterface {
+  public function autocomplete($plugin, $data, $type = 'autocomplete') {
+    $info = $this->getAutocompleteInfo($plugin, $data, $type);
+
+    if (empty($info)) {
+      return array();
+    }
+
+    $returned_data = ampapi_request('get', $info['endpoint'], TRUE);
+
+    // Because we like to be consistent.
+    switch ($plugin['report filter endpoint']) {
+      case 'filters/locations':
+        $returned_data = array($returned_data);
+        break;
+      case 'filters/sectors':
+        $returned_data = array($returned_data);
+        break;
+    }
+
+    return $this->getMatchedValues($info, $returned_data);
+  }
+
+  public function getAutocompleteInfo($plugin, $data, $type) {
+    $info = array();
+
+    if (in_array($type, array('autocomplete', 'tokeninput'))) {
+      $info['string'] = reset($data);
+    }
+    else {
+      $info['values'] = $data;
+    }
+
+    $info['plugin'] = $plugin;
+    $info['type'] = $type;
+
+    $info['endpoint'] = $plugin['report filter endpoint'];
+
+    return $info;
+  }
+
+  public function getMatchedValues(array $info, array $entries) {
     global $language;
+    $matches = array();
 
     $search_string = '';
-    if (in_array($type, array('autocomplete', 'autocompleteids', 'tokeninput'))) {
-      $search_string = reset($data);
-      $search_string = transliteration_get($search_string, '', $language->language);
+    if (in_array($info['type'], array('autocomplete', 'tokeninput'))) {
+      $search_string = transliteration_get($info['string'], '', $language->language);
     }
 
     foreach ($entries as $entry) {
@@ -22,11 +64,14 @@ class activityMapperAutocompleteBase extends activityMapperBase {
 
       // Match full codes and codes starting with the provided string.
       $prepend_entry = FALSE;
-      if (isset($entry->code) && is_numeric($search_string) && $search_string == $entry->code) {
-        $prepend_entry = TRUE;
+      if ($info['plugin']['report filter endpoint'] == 'filters/sectors') {
+        if (isset($entry->code) && is_numeric($search_string) && $search_string == $entry->code) {
+          $prepend_entry = TRUE;
+        }
       }
 
-      switch ($type) {
+
+      switch ($info['type']) {
         case 'tokeninput':
         case 'autocomplete':
           $skip = TRUE;
@@ -36,12 +81,21 @@ class activityMapperAutocompleteBase extends activityMapperBase {
             $skip = FALSE;
           }
 
-          if (stripos($entry->name, $search_string) !== FALSE) {
-            $skip = FALSE;
+          if ($info['plugin']['report filter endpoint'] == 'filters/orgs') {
+            if (isset($entry->acronym) && stripos($entry->acronym, $search_string) !== FALSE) {
+              $skip = FALSE;
+            }
           }
 
-          if (isset($entry->acronym) && stripos($entry->acronym, $search_string) !== FALSE) {
-            $skip = FALSE;
+          // Filter out donors without funding.
+          // @TODO: Refactor.
+          if ($info['plugin']['property name'] == 'donor_agency') {
+            if (!$skip && !empty($entry->hasFundings)) {
+              $skip = FALSE;
+            }
+            else {
+              $skip = TRUE;
+            }
           }
 
           if ($skip) {
@@ -49,12 +103,14 @@ class activityMapperAutocompleteBase extends activityMapperBase {
           }
           break;
         case 'autocompleteids':
+          // Special case for autocomplete powered view filters.
+          // Not using the jQuery TokenInput library.
           if ($entry->name != $search_string) {
             continue 2;
           }
           break;
         case 'tokeninputids':
-          if (!in_array($entry->id, $data)) {
+          if (!in_array($entry->id, $info['values'])) {
             continue 2;
           }
           break;
@@ -75,32 +131,31 @@ class activityMapperAutocompleteBase extends activityMapperBase {
       //   $name = $entry->level . ' - ' . $name;
       // }
 
+      $new_value = array(
+        'id' => intval($entry->id),
+        'name' => filter_xss_admin($name),
+      );
+
       if (!$prepend_entry) {
-        $matches[] = array(
-          'id' => intval($entry->id),
-          'name' => filter_xss_admin($name),
-        );
+        $matches[] = $new_value;
       }
       else {
-        $new_value = array(
-          'id' => intval($entry->id),
-          'name' => filter_xss_admin($name),
-        );
         $matches = array_shift($new_value, $matches);
       }
     }
 
-    if (count($matches) >= 10) {
-      return;
+    // Search sub-levels, if any.
+    foreach ($entries as $entry) {
+      if (count($matches) >= 10) {
+        break;
+      }
+
+      if (!empty($entry->children)) {
+        $matches += $this->getMatchedValues($info, $entry->children);
+      }
     }
 
-    // Search sub-levels.
-    foreach ($entries as $entry) {
-      if (empty($entry->children)) {
-        continue;
-      }
-      $this->getMatchedValues($data, $type, $entry->children, $matches);
-    }
+    return $matches;
   }
 
   public function getAutocompleteValue($plugin, $data, $type) {
@@ -109,6 +164,8 @@ class activityMapperAutocompleteBase extends activityMapperBase {
       return NULL;
     }
 
+    // Special case for autocomplete powered view filters.
+    // Not using the jQuery TokenInput library.
     if ($type == 'autocompleteids') {
       $entry = reset($matches);
       if (isset($entry['id'])) {
@@ -120,19 +177,18 @@ class activityMapperAutocompleteBase extends activityMapperBase {
   }
 }
 
-class activityMapperRoleAutocomplete extends activityMapperAutocompleteBase implements activityMapperAutocompleteInterface {
-  public function autocomplete($plugin, $data, $type = 'autocomplete') {
-    $matches = array();
+class activityMapperRoleAutocomplete extends activityMapperAutocompleteBase {
+  public function getAutocompleteInfo($plugin, $data, $type) {
+    $info = parent::getAutocompleteInfo($plugin, $data, $type);
 
     $role_id = $this->getRoleId($plugin);
     if (empty($role_id)) {
-      return $matches;
+      return NULL;
     }
 
-    $request_data = ampapi_request('get', $plugin['report filter endpoint'], TRUE);
-    $this->getMatchedValues($data, $type, $request_data, $matches);
+    $info['role_id'] = $role_id;
 
-    return $matches;
+    return $info;
   }
 
   // @TODO: Request ID from the API.
@@ -160,29 +216,19 @@ class activityMapperRoleAutocomplete extends activityMapperAutocompleteBase impl
   }
 }
 
-class activityMapperLocationAutocomplete extends activityMapperAutocompleteBase implements activityMapperAutocompleteInterface {
-  public function autocomplete($plugin, $data, $type = 'autocomplete') {
-    $matches = array();
+class activityMapperSectorAutocomplete extends activityMapperAutocompleteBase {
+  public function getAutocompleteInfo($plugin, $data, $type) {
+    $info = parent::getAutocompleteInfo($plugin, $data, $type);
 
-    $request_data = ampapi_request('get', $plugin['report filter endpoint'], TRUE);
-    $this->getMatchedValues($data, $type, array($request_data), $matches);
-
-    return $matches;
-  }
-}
-
-class activityMapperSectorAutocomplete extends activityMapperAutocompleteBase implements activityMapperAutocompleteInterface {
-  public function autocomplete($plugin, $data, $type = 'autocomplete') {
-    $matches = array();
     $sector_id = $this->getSectorId($plugin);
     if (empty($sector_id)) {
-      return $matches;
+      return NULL;
     }
 
-    $request_data = ampapi_request('get', $plugin['report filter endpoint'] . '/' . $sector_id, TRUE);
-    $this->getMatchedValues($data, $type, array($request_data), $matches);
+    $info['sector_id'] = $sector_id;
+    $info['endpoint'] = $plugin['report filter endpoint'] . '/' . $sector_id;
 
-    return $matches;
+    return $info;
   }
 
   // @TODO: Request ID from the API.

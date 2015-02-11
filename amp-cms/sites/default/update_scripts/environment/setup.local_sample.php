@@ -59,8 +59,12 @@ variable_del('file_temporary_path');
 // Disable the loading of external fonts.
 // variable_set('helpertheme_load_external_fonts', FALSE);
 
-// Disable the ui cleanup.
+// Disable the UI cleanup.
 variable_set('helpergeneric_cleanup_ui_force', FALSE);
+
+// Reset the hostname for the AMP API rest endpoint
+// variable_set('restclient_hostname', 'http://amp210-local.dev/rest');
+// variable_set('restclient_hostname', 'http://amp211-local.dev/rest');
 
 // Provide a list of modules to be disabled and uninstalled.
 $modules = array(

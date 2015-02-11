@@ -18,8 +18,5 @@ $plugin = array(
 
   'report filter endpoint' => 'filters/locations',
 
-  'handler' => 'activityLocationMapper',
+  'handler' => 'activityMapperAutocompleteBase',
 );
-
-class activityLocationMapper extends activityMapperLocationAutocomplete {
-}

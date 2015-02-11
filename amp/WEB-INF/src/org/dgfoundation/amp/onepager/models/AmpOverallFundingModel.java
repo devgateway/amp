@@ -10,10 +10,8 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.logic.FundingCalculationsHelper;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DecimalWraper;
-import org.digijava.module.categorymanager.util.CategoryConstants;
 
 public class AmpOverallFundingModel implements IModel {
 
@@ -65,7 +63,9 @@ public class AmpOverallFundingModel implements IModel {
 			processFunding(toCurrCode, amount, singleFundingModel.getObject());
 		} else {
 			for (AmpFunding funding : fundingModel.getObject()) {
-				processFunding(toCurrCode, amount, funding);
+				if (Constants.ROLE_CODE_DONOR.equals(funding.getSourceRole().getRoleCode())) {
+					processFunding(toCurrCode, amount, funding);
+				}
 			}
 		}
 		return amount;

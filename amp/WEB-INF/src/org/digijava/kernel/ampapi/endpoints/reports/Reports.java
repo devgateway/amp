@@ -383,8 +383,8 @@ public class Reports {
 		try {
 			ReportSpecificationImpl spec = AmpReportsToReportSpecification.convert(ampReport);
 			//Add columns to apply styles base on the aproval status
-			spec.addColumn(new ReportColumn(ColumnConstants.APPROVAL_STATUS));
-			spec.addColumn(new ReportColumn(ColumnConstants.DRAFT));
+			//spec.addColumn(new ReportColumn(ColumnConstants.APPROVAL_STATUS));
+			//spec.addColumn(new ReportColumn(ColumnConstants.DRAFT));
 			
 			if(filterRules != null) spec.setFilters(filterRules);
 			if(queryModel.containsKey("settingsApplied") && (Boolean)queryModel.get("settingsApplied")) {

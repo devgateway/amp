@@ -63,7 +63,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 
 		//If the connection is Stand Alone (coming from Saiku UI), we reset the Report Environment to refresh language
 		String standAlone = connectInfo.get("Standalone");
-		if(standAlone != null) {
+		if (standAlone != null) {
 			currentEnvironment.set(null);
 			currentReport.set(null);
 		}
@@ -422,14 +422,15 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		MondrianReportSettings settings = new MondrianReportSettings();
 		spec.setSettings(settings);
 
-		if(RequestContextHolder.getRequestAttributes() != null) {
+		registerReport(spec, buildReportEnvironment());
+	}
+	
+	private ReportEnvironment buildReportEnvironment() {
+		if (RequestContextHolder.getRequestAttributes() != null) {
 			ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-			registerReport(spec, ReportEnvironment.buildFor(sra.getRequest()));
+			return ReportEnvironment.buildFor(sra.getRequest());
 		}
-		else
-		{
-			registerReport(spec, new ReportEnvironment("en", new CompleteWorkspaceFilter(null, null), "EUR"));
-		}
+		return new ReportEnvironment("en", new CompleteWorkspaceFilter(null, null), "EUR");
 	}
 
 }

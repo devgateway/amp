@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -38,6 +39,7 @@ import org.dgfoundation.amp.onepager.helper.EditorStore;
 import org.dgfoundation.amp.onepager.helper.ResourceTranslation;
 import org.dgfoundation.amp.onepager.helper.TemporaryDocument;
 import org.dgfoundation.amp.onepager.models.AmpActivityModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
@@ -567,7 +569,20 @@ public class ActivityUtil {
                 Node node = DocumentManagerUtil.getWriteNode(d.getExistingDocument().getUuid(), req);
                 if (node != null && d != null) {
                     NodeWrapper nw = new NodeWrapper(node);
-                    if (nw != null && !nw.getTitle().equals(d.getTitle())) {
+                 
+                    //NodeWrapper's title will be null if the document is multilingual
+            		//and it was saved in ONLY one language. Then language was changed
+            		// and jackrabbit tries to retrieve the title for the other language.
+            		//The call to -> getTranslatedTitleByLang(TLSUtils.getLangCode()); 
+                    //returns null. 
+                    //In that scenario we act as if we were changing the document name
+                    boolean onlyOneLanguageSaved = nw.getTitle () == null;
+                    if (onlyOneLanguageSaved || !nw.getTitle().equals(d.getTitle())) {
+                        logger.warn("lang "+TLSUtils.getLangCode());
+                    	if (onlyOneLanguageSaved) {
+							populateTranslatedTitles(d, nw);
+						}
+
                         if (d.getWebLink() != null && d.getWebLink().trim().length() > 0 &&
                                 (d.getFileName() == null || d.getFileName().trim().length()==0)) {
                             d.setFileName(d.getWebLink());
@@ -685,7 +700,7 @@ public class ActivityUtil {
 
                             FileUpload file = new FileUpload(new FileItemEx(fileName, contentType, fileData, fileSize));
                             d.setFile(file);
-                            newResources.add(d);
+						    newResources.add(d);
                             deletedResources.add(d.getExistingDocument());
                         }
                     }
@@ -723,27 +738,35 @@ public class ActivityUtil {
 				TemporaryDocument temp = (TemporaryDocument) it2
 				.next();
 				TemporaryDocumentData tdd = new TemporaryDocumentData(); 
+                
 				tdd.setTitle(temp.getTitle());
 				tdd.setName(temp.getFileName());
 				tdd.setDescription(temp.getDescription());
 				tdd.setNotes(temp.getNote());
-				Map <String,String> translatedTitleMap = new HashMap<String,String>();
-				for (ResourceTranslation titleTranslation:temp.getTranslatedTitleList()) {
-					translatedTitleMap.put(titleTranslation.getLocale(), titleTranslation.getTranslation());
+				if (temp.getTranslatedTitleList() != null) {
+					Map <String,String> translatedTitleMap = new HashMap<String,String>();
+					for (ResourceTranslation titleTranslation:temp.getTranslatedTitleList()) {
+						translatedTitleMap.put(titleTranslation.getLocale(), titleTranslation.getTranslation());
+					}
+					tdd.setTranslatedTitles(translatedTitleMap);
 				}
-				tdd.setTranslatedTitles(translatedTitleMap);
 			
-				Map <String,String> translatedDescMap = new HashMap<String,String>();
-				for (ResourceTranslation descTranslation:temp.getTranslatedDescriptionList()) {
-					translatedDescMap.put(descTranslation.getLocale(), descTranslation.getTranslation());
+				
+				if (temp.getTranslatedDescriptionList() != null) {
+					Map<String, String> translatedDescMap = new HashMap<String, String>();
+					for (ResourceTranslation descTranslation : temp.getTranslatedDescriptionList()) {
+						translatedDescMap.put(descTranslation.getLocale(), descTranslation.getTranslation());
+					}
+					tdd.setTranslatedDescriptions(translatedDescMap);
 				}
-				tdd.setTranslatedDescriptions(translatedDescMap);
-			
-				Map <String,String> translatedNoteMap = new HashMap<String,String>();
-				for (ResourceTranslation noteTranslation:temp.getTranslatedDescriptionList()) {
-					translatedNoteMap.put(noteTranslation.getLocale(), noteTranslation.getTranslation());
+				
+				if (temp.getTranslatedNoteList() != null) {
+					Map<String, String> translatedNoteMap = new HashMap<String, String>();
+					for (ResourceTranslation noteTranslation : temp.getTranslatedDescriptionList()) {
+						translatedNoteMap.put(noteTranslation.getLocale(), noteTranslation.getTranslation());
+					}
+					tdd.setTranslatedNotes(translatedNoteMap);
 				}
-				tdd.setTranslatedNotes(translatedNoteMap);
 				
 				if(temp.getType()!=null)
 					tdd.setCmDocTypeId(temp.getType().getId());
@@ -816,7 +839,12 @@ public class ActivityUtil {
 					AmpActivityDocument aad = new AmpActivityDocument();
 					aad.setAmpActivity(a);
 					aad.setDocumentType(ActivityDocumentsConstants.RELATED_DOCUMENTS);
-					aad.setUuid(node.getUuid());
+					if (node != null) {
+						aad.setUuid(node.getUuid());
+					}
+					else  {
+						aad.setUuid(temp.getExistingDocument().getUuid());
+					}
 					a.getActivityDocuments().add(aad);
 				} catch (JCRSessionException ex) {
 					//we catch the exception and show a warning, but allow the activity to be saved
@@ -824,6 +852,26 @@ public class ActivityUtil {
 				}
 			}
 		}
+	}
+
+	private static void populateTranslatedTitles(TemporaryDocument d, NodeWrapper nw) {
+		List<ResourceTranslation> translatedTitles = d.getTranslatedTitleList();
+		if (translatedTitles == null) {
+			translatedTitles = new ArrayList<ResourceTranslation>();
+		}
+		List<String> languages = TranslatorUtil.getLocaleCache();
+		for (String locale : languages) {
+			String translation = nw.getTranslatedTitleByLang(locale);
+			if (translation != null && locale != TLSUtils.getLangCode()) {
+				ResourceTranslation resource = new ResourceTranslation(d.getExistingDocument()
+						.getUuid(), translation, locale);
+				translatedTitles.add(resource);
+			}
+		}
+
+		translatedTitles.add(new ResourceTranslation(d.getExistingDocument().getUuid(), d
+				.getTitle(), TLSUtils.getLangCode()));
+		d.setTranslatedTitleList(translatedTitles);
 	}
 
 	private static void saveIndicators(AmpActivityVersion a, Session session) throws Exception {

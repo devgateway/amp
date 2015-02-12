@@ -20,10 +20,12 @@ class activityMapperAutocompleteBase extends activityMapperBase implements activ
     // Because we like to be consistent.
     switch ($plugin['report filter endpoint']) {
       case 'filters/locations':
+        // Include top level (the country name) in the autocomplete suggestions.
         $returned_data = array($returned_data);
         break;
       case 'filters/sectors':
-        $returned_data = array($returned_data);
+        // Do not include top level (Primary/Secondary) in the autocomplete suggestions.
+        $returned_data = $returned_data->children;
         break;
     }
 
@@ -120,20 +122,23 @@ class activityMapperAutocompleteBase extends activityMapperBase implements activ
           break;
       }
 
-      // Include acronym in name, if any.
-      $name = $entry->name;
-      if (isset($entry->acronym)) {
-        $name .= ' (' . $entry->acronym . ')';
+      // Include parent Location Administrative Levels in name, if any.
+      $name = '';
+      if ($info['plugin']['report filter endpoint'] == 'filters/locations' && isset($info['parents'])) {
+        foreach ($info['parents'] as $parent) {
+          $name .= filter_xss_admin($parent->name) . ' > ';
+        }
       }
 
-      // Include Location Administrative Level in name, if any.
-      // if (isset($entry->level)) {
-      //   $name = $entry->level . ' - ' . $name;
-      // }
+      // Include acronym in name, if any.
+      $name .= filter_xss_admin($entry->name);
+      if (isset($entry->acronym)) {
+        $name .= ' (' . filter_xss_admin($entry->acronym) . ')';
+      }
 
       $new_value = array(
         'id' => intval($entry->id),
-        'name' => filter_xss_admin($name),
+        'name' => $name,
       );
 
       if (!$prepend_entry) {
@@ -151,7 +156,10 @@ class activityMapperAutocompleteBase extends activityMapperBase implements activ
       }
 
       if (!empty($entry->children)) {
-        $matches += $this->getMatchedValues($info, $entry->children);
+        // We need to change the info only for the current children.
+        $temp_info = $info;
+        $temp_info['parents'][] = $entry;
+        $matches += $this->getMatchedValues($temp_info, $entry->children);
       }
     }
 
@@ -220,19 +228,18 @@ class activityMapperSectorAutocomplete extends activityMapperAutocompleteBase {
   public function getAutocompleteInfo($plugin, $data, $type) {
     $info = parent::getAutocompleteInfo($plugin, $data, $type);
 
-    $sector_id = $this->getSectorId($plugin);
-    if (empty($sector_id)) {
+    $sector_type_id = $this->getSectorTypeId($plugin);
+    if (empty($sector_type_id)) {
       return NULL;
     }
 
-    $info['sector_id'] = $sector_id;
-    $info['endpoint'] = $plugin['report filter endpoint'] . '/' . $sector_id;
+    $info['sector_id'] = $sector_type_id;
+    $info['endpoint'] = $plugin['report filter endpoint'] . '/' . $sector_type_id;
 
     return $info;
   }
 
-  // @TODO: Request ID from the API.
-  public function getSectorId($plugin) {
+  public function getSectorTypeId($plugin) {
     static $sectors_data;
 
     if (!isset($sectors_data)) {

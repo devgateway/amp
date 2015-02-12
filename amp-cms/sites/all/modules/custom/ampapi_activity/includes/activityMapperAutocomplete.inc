@@ -50,7 +50,7 @@ class activityMapperAutocompleteBase extends activityMapperBase implements activ
     return $info;
   }
 
-  public function getMatchedValues(array $info, array $entries) {
+  public function getMatchedValues(array $info, array $entries, $top_level = TRUE) {
     global $language;
     $matches = array();
 
@@ -126,7 +126,9 @@ class activityMapperAutocompleteBase extends activityMapperBase implements activ
       $name = '';
       if ($info['plugin']['report filter endpoint'] == 'filters/locations' && isset($info['parents'])) {
         foreach ($info['parents'] as $parent) {
-          $name .= filter_xss_admin($parent->name) . ' > ';
+          if (empty($parent->top_level)) {
+            $name .= filter_xss_admin($parent->name) . ' > ';
+          }
         }
       }
 
@@ -158,8 +160,12 @@ class activityMapperAutocompleteBase extends activityMapperBase implements activ
       if (!empty($entry->children)) {
         // We need to change the info only for the current children.
         $temp_info = $info;
+        if ($top_level) {
+          $entry->top_level = TRUE;
+        }
         $temp_info['parents'][] = $entry;
-        $matches += $this->getMatchedValues($temp_info, $entry->children);
+
+        $matches = array_merge($matches, $this->getMatchedValues($temp_info, $entry->children, FALSE));
       }
     }
 

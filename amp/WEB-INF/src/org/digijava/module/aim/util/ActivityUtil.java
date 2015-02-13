@@ -1770,8 +1770,9 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 	 public static AmpStructureImg getMostRecentlyUploadedStructureImage(Long structureId) {
 		 return DbUtil.getMostRecentlyUploadedStructureImage(structureId);
 	 }
-	 
-	 public static  java.util.List<String[]> getAidEffectivenesForExport( AmpActivityVersion activity) {
+
+    /*
+	 public static  java.util.List<String[]> getAidEffectivenesForExport(AmpActivityVersion activity) {
 		 java.util.List<String[]>aidEffectivenesForExport= new ArrayList<String[]>();
 			String aidEffectivenesToAdd[];
 
@@ -1797,7 +1798,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 				aidEffectivenesForExport.add(aidEffectivenesToAdd);
 
 			}
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes/Project has been approved by IMAC")) {
+			if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes")) {
 				aidEffectivenesToAdd= new String[2];
 
 				aidEffectivenesToAdd [0]= TranslatorWorker.translateText("Project has been approved by IMAC") ;
@@ -1808,93 +1809,12 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 				}
 				aidEffectivenesForExport.add(aidEffectivenesToAdd);
 			}
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes/Government is meber of project steering committee")) {
-				 aidEffectivenesToAdd= new String[2];
 
-				aidEffectivenesToAdd [0] = TranslatorWorker.translateText("Government is meber of project steering committee");
-				if(activity.getNationalOversight()!=null){
-					aidEffectivenesToAdd [1]= activity.getNationalOversight() ; 
-				}
-				else{
-					aidEffectivenesToAdd [1]="";
-				}
-				aidEffectivenesForExport.add(aidEffectivenesToAdd);
-			}
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes/Project is on budget")) {
-				 aidEffectivenesToAdd= new String[2];
 
-				aidEffectivenesToAdd [0]= TranslatorWorker.translateText("Project is on budget") ;
-				if(activity.getOnBudget()!=null){
-					aidEffectivenesToAdd [1]= activity.getOnBudget();	
-				}
-				else{
-					aidEffectivenesToAdd [1]="";
-				}
-				aidEffectivenesForExport.add(aidEffectivenesToAdd);
-			}
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes/Project is on parliament")) {
-				aidEffectivenesToAdd= new String[2];
-
-				aidEffectivenesToAdd [0]= TranslatorWorker
-						.translateText("Project is on parliament") ;
-				if(activity.getOnParliament()!=null){
-					aidEffectivenesToAdd [1]= activity.getOnParliament() ;
-				}
-				else{
-					aidEffectivenesToAdd [1]="";
-				}
-				aidEffectivenesForExport.add(aidEffectivenesToAdd);
-			}
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes/Project disburses directly into the Goverment single treasury account")) {
-				aidEffectivenesToAdd= new String[2];
-
-				aidEffectivenesToAdd [0]= TranslatorWorker.translateText("Project disburses directly into the Goverment single treasury account");
-				if(activity.getOnTreasury()!=null){
-					aidEffectivenesToAdd [1]= activity.getOnTreasury();	
-				}
-				else{
-					aidEffectivenesToAdd [1]="";
-				}
-				aidEffectivenesForExport.add(aidEffectivenesToAdd);
-			}
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes/Project uses national financial management systems")) {
-				aidEffectivenesToAdd= new String[2];
-
-				aidEffectivenesToAdd [0]= TranslatorWorker.translateText("Project uses national financial management systems");
-				if(activity.getNationalFinancialManagement()!=null){
-					aidEffectivenesToAdd [1]= activity.getNationalFinancialManagement();	
-				}
-				else{
-					aidEffectivenesToAdd [1]="";
-				}
-				aidEffectivenesForExport.add(aidEffectivenesToAdd);
-			}
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes/Project uses national procurement systems")) {
-				aidEffectivenesToAdd= new String[2];
-
-				aidEffectivenesToAdd [0]= TranslatorWorker.translateText("Project uses national procurement systems");
-				if(activity.getNationalProcurement()!=null){
-					aidEffectivenesToAdd [1]= activity.getNationalProcurement();
-				}
-				else{
-					aidEffectivenesToAdd [1]="";
-				}
-				aidEffectivenesForExport.add(aidEffectivenesToAdd);
-			}
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes/Project uses national audit systems")) {
-				aidEffectivenesToAdd = new String[2];
-
-				aidEffectivenesToAdd [0]= TranslatorWorker.translateText("Project uses national audit systems");
-				if(activity.getNationalAudit()!=null){
-					aidEffectivenesToAdd [1]= activity.getNationalAudit();
-				}
-				else{
-					aidEffectivenesToAdd [1]="";
-				}
-				aidEffectivenesForExport.add(aidEffectivenesToAdd);
-			}
 			return aidEffectivenesForExport;
 		}
+		*/
+
 		public static String getFmForFundingFlows(Integer transactionType) {
 			String fmForFundingFlows = "/Activity Form/Funding/Funding Group/Funding Item/";
 			switch (transactionType) {

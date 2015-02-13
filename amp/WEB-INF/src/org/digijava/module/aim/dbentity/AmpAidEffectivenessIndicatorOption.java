@@ -11,6 +11,7 @@ public class AmpAidEffectivenessIndicatorOption implements Serializable {
     private Long ampIndicatorOptionId;
     private String ampIndicatorOptionName;
     private Boolean defaultOption;
+    private AmpAidEffectivenessIndicator indicator;
 
     public AmpAidEffectivenessIndicator getIndicator() {
         return indicator;
@@ -19,8 +20,6 @@ public class AmpAidEffectivenessIndicatorOption implements Serializable {
     public void setIndicator(AmpAidEffectivenessIndicator indicator) {
         this.indicator = indicator;
     }
-
-    private AmpAidEffectivenessIndicator indicator;
 
     public Long getAmpIndicatorOptionId() {
         return ampIndicatorOptionId;

@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
@@ -24,20 +23,7 @@ import org.apache.struts.upload.FormFile;
 import org.apache.struts.util.LabelValueBean;
 import org.dgfoundation.amp.exprlogic.MathExpression;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpActivityBudgetStructure;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
-import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
-import org.digijava.module.aim.dbentity.AmpAhsurvey;
-import org.digijava.module.aim.dbentity.AmpChapter;
-import org.digijava.module.aim.dbentity.AmpComponentType;
-import org.digijava.module.aim.dbentity.AmpContact;
-import org.digijava.module.aim.dbentity.AmpField;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.form.helpers.ActivityFundingDigest;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -6558,7 +6544,10 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		}
 	}
 	private Identification identification;
-	private AidEffectivenes aidEffectivenes;
+
+    private AmpAidEffectivenessIndicatorOption[] selectedEffectivenessIndicatorOptions;
+    private List<AmpAidEffectivenessIndicator> allEffectivenessIndicators;
+
 	private Planning planning;
 	private Location location;
 	private Sector sectors;
@@ -6667,13 +6656,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public void clearMessages() {
 		this.errors.clear();
 		this.messages.clear();
-	}
-	
-	public AidEffectivenes getAidEffectivenes() {
-		if (this.aidEffectivenes == null) {
-			this.aidEffectivenes = new AidEffectivenes();
-		}
-		return this.aidEffectivenes;
 	}
 	
 	public Identification getIdentification() {
@@ -6845,102 +6827,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 			this.contactInformation = new ActivityContactInfo();
 		}
 		return this.contactInformation;
-	}
-	
-	public class AidEffectivenes {
-		private String projectImplementationUnit;
-		private String projectImplementationMode;
-		private String imacApproved;
-		private String nationalOversight;
-		private String onBudget;
-		private String onParliament;
-		private String onTreasury;
-		private String nationalFinancialManagement;
-		private String nationalProcurement;
-		private String nationalAudit;
-		
-		public AidEffectivenes() {
-		}
-		
-		public String getProjectImplementationMode() {
-			return projectImplementationMode;
-		}
-		
-		public void setProjectImplementationMode(String projectImplementationMode) {
-			this.projectImplementationMode = projectImplementationMode;
-		}
-		
-		public String getProjectImplementationUnit() {
-			return projectImplementationUnit;
-		}
-		
-		public void setProjectImplementationUnit(String projectImplementationUnit) {
-			this.projectImplementationUnit = projectImplementationUnit;
-		}
-		
-		public String getImacApproved() {
-			return imacApproved;
-		}
-		
-		public void setImacApproved(String imacApproved) {
-			this.imacApproved = imacApproved;
-		}
-		
-		public String getNationalOversight() {
-			return nationalOversight;
-		}
-		
-		public void setNationalOversight(String nationalOversight) {
-			this.nationalOversight = nationalOversight;
-		}
-		
-		public String getOnBudget() {
-			return onBudget;
-		}
-		
-		public void setOnBudget(String onBudget) {
-			this.onBudget = onBudget;
-		}
-		
-		public String getOnParliament() {
-			return onParliament;
-		}
-		
-		public void setOnParliament(String onParliament) {
-			this.onParliament = onParliament;
-		}
-		
-		public String getOnTreasury() {
-			return onTreasury;
-		}
-		
-		public void setOnTreasury(String onTreasury) {
-			this.onTreasury = onTreasury;
-		}
-		
-		public String getNationalFinancialManagement() {
-			return nationalFinancialManagement;
-		}
-		
-		public void setNationalFinancialManagement(String nationalFinancialManagement) {
-			this.nationalFinancialManagement = nationalFinancialManagement;
-		}
-		
-		public String getNationalProcurement() {
-			return nationalProcurement;
-		}
-		
-		public void setNationalProcurement(String nationalProcurement) {
-			this.nationalProcurement = nationalProcurement;
-		}
-		
-		public String getNationalAudit() {
-			return nationalAudit;
-		}
-		
-		public void setNationalAudit(String nationalAudit) {
-			this.nationalAudit = nationalAudit;
-		}
 	}
 	
 	@java.lang.SuppressWarnings("all")
@@ -7373,11 +7259,6 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	}
 	
 	@java.lang.SuppressWarnings("all")
-	public void setAidEffectivenes(final AidEffectivenes aidEffectivenes) {
-		this.aidEffectivenes = aidEffectivenes;
-	}
-	
-	@java.lang.SuppressWarnings("all")
 	public void setPlanning(final Planning planning) {
 		this.planning = planning;
 	}
@@ -7495,6 +7376,22 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	public void setTotDisbIsBiggerThanTotCom(final boolean totDisbIsBiggerThanTotCom) {
 		this.totDisbIsBiggerThanTotCom = totDisbIsBiggerThanTotCom;
 	}
+
+    public AmpAidEffectivenessIndicatorOption[] getSelectedEffectivenessIndicatorOptions() {
+        return selectedEffectivenessIndicatorOptions;
+    }
+
+    public void setSelectedEffectivenessIndicatorOptions(AmpAidEffectivenessIndicatorOption[] selectedEffectivenessIndicatorOptions) {
+        this.selectedEffectivenessIndicatorOptions = selectedEffectivenessIndicatorOptions;
+    }
+
+    public List<AmpAidEffectivenessIndicator> getAllEffectivenessIndicators() {
+        return allEffectivenessIndicators;
+    }
+
+    public void setAllEffectivenessIndicators(List<AmpAidEffectivenessIndicator> allEffectivenessIndicators) {
+        this.allEffectivenessIndicators = allEffectivenessIndicators;
+    }
 	
 	@java.lang.Override
 	@java.lang.SuppressWarnings("all")
@@ -7595,8 +7492,8 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		final java.lang.Object this$identification = this.getIdentification();
 		final java.lang.Object other$identification = other.getIdentification();
 		if (this$identification == null ? other$identification != null : !this$identification.equals(other$identification)) return false;
-		final java.lang.Object this$aidEffectivenes = this.getAidEffectivenes();
-		final java.lang.Object other$aidEffectivenes = other.getAidEffectivenes();
+		final java.lang.Object this$aidEffectivenes = this.getSelectedEffectivenessIndicatorOptions();
+		final java.lang.Object other$aidEffectivenes = other.getSelectedEffectivenessIndicatorOptions();
 		if (this$aidEffectivenes == null ? other$aidEffectivenes != null : !this$aidEffectivenes.equals(other$aidEffectivenes)) return false;
 		final java.lang.Object this$planning = this.getPlanning();
 		final java.lang.Object other$planning = other.getPlanning();
@@ -7739,7 +7636,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		result = result * PRIME + ($warningMessges == null ? 0 : $warningMessges.hashCode());
 		final java.lang.Object $identification = this.getIdentification();
 		result = result * PRIME + ($identification == null ? 0 : $identification.hashCode());
-		final java.lang.Object $aidEffectivenes = this.getAidEffectivenes();
+		final java.lang.Object $aidEffectivenes = this.getSelectedEffectivenessIndicatorOptions();
 		result = result * PRIME + ($aidEffectivenes == null ? 0 : $aidEffectivenes.hashCode());
 		final java.lang.Object $planning = this.getPlanning();
 		result = result * PRIME + ($planning == null ? 0 : $planning.hashCode());
@@ -7789,9 +7686,9 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	
 	@java.lang.Override
 	@java.lang.SuppressWarnings("all")
-	public java.lang.String toString() {
-		return "EditActivityForm(errors=" + this.getErrors() + ", messages=" + this.getMessages() + ", activityId=" + this.getActivityId() + ", context=" + this.getContext() + ", editAct=" + this.isEditAct() + ", editKey=" + this.getEditKey() + ", reset=" + this.isReset() + ", svAction=" + this.getSvAction() + ", isPreview=" + this.getIsPreview() + ", buttonText=" + this.getButtonText() + ", activityExists=" + this.getActivityExists() + ", workingTeamLeadFlag=" + this.getWorkingTeamLeadFlag() + ", teamLead=" + this.isTeamLead() + ", pageId=" + this.getPageId() + ", fileImport=" + this.getFileImport() + ", popupView=" + this.isPopupView() + ", currCode=" + this.getCurrCode() + ", currencies=" + this.getCurrencies() + ", serializeFlag=" + this.isSerializeFlag() +  ", fundingCurrCode=" + this.getFundingCurrCode() + ", regFundingPageCurrCode=" + this.getRegFundingPageCurrCode() + ", contactInformation=" + this.getContactInformation() + ", activityContacts=" + this.getActivityContacts() + ", mofedContacts=" + this.getMofedContacts() + ", donorContacts=" + this.getDonorContacts() + ", sectorMinistryContacts=" + this.getSectorMinistryContacts() + ", projCoordinatorContacts=" + this.getProjCoordinatorContacts() + ", implExecutingAgencyContacts=" + this.getImplExecutingAgencyContacts() + ", structures=" + this.getStructures() + ", lineMinistryObservations=" + this.getLineMinistryObservations() + ", esriapiurl=" + this.getEsriapiurl() + ", displayProgram=" + this.getDisplayProgram() + ", surveyFundings=" + this.getSurveyFundings() + ", draftRedirectedPage=" + this.getDraftRedirectedPage() + ", warningMessges=" + this.getWarningMessges() + ", identification=" + this.getIdentification() + ", aidEffectivenes=" + this.getAidEffectivenes() + ", planning=" + this.getPlanning() + ", location=" + this.getLocation() + ", sectors=" + this.getSectors() + ", components=" + this.getComponents() + ", programs=" + this.getPrograms() + ", crossIssues=" + this.getCrossIssues() + ", funding=" + this.getFunding() + ", documents=" + this.getDocuments() + ", agencies=" + this.getAgencies() + ", survey=" + this.getSurvey() + ", surveys=" + this.getSurveys() + ", ampAhsurveys=" + this.getAmpAhsurveys() + ", contactInfo=" + this.getContactInfo() + ", comments=" + this.getComments() + ", phisycalProgress=" + this.getPhisycalProgress() + ", indicatorME=" + this.getIndicatorME() + ", contracts=" + this.getContracts() + ", costing=" + this.getCosting() + ", issues=" + this.getIssues() + ", observations=" + this.getObservations() + ", totDisbIsBiggerThanTotCom=" + this.isTotDisbIsBiggerThanTotCom() + ")";
-	}
+    public java.lang.String toString() {
+        return "EditActivityForm(errors=" + this.getErrors() + ", messages=" + this.getMessages() + ", activityId=" + this.getActivityId() + ", context=" + this.getContext() + ", editAct=" + this.isEditAct() + ", editKey=" + this.getEditKey() + ", reset=" + this.isReset() + ", svAction=" + this.getSvAction() + ", isPreview=" + this.getIsPreview() + ", buttonText=" + this.getButtonText() + ", activityExists=" + this.getActivityExists() + ", workingTeamLeadFlag=" + this.getWorkingTeamLeadFlag() + ", teamLead=" + this.isTeamLead() + ", pageId=" + this.getPageId() + ", fileImport=" + this.getFileImport() + ", popupView=" + this.isPopupView() + ", currCode=" + this.getCurrCode() + ", currencies=" + this.getCurrencies() + ", serializeFlag=" + this.isSerializeFlag() + ", fundingCurrCode=" + this.getFundingCurrCode() + ", regFundingPageCurrCode=" + this.getRegFundingPageCurrCode() + ", contactInformation=" + this.getContactInformation() + ", activityContacts=" + this.getActivityContacts() + ", mofedContacts=" + this.getMofedContacts() + ", donorContacts=" + this.getDonorContacts() + ", sectorMinistryContacts=" + this.getSectorMinistryContacts() + ", projCoordinatorContacts=" + this.getProjCoordinatorContacts() + ", implExecutingAgencyContacts=" + this.getImplExecutingAgencyContacts() + ", structures=" + this.getStructures() + ", lineMinistryObservations=" + this.getLineMinistryObservations() + ", esriapiurl=" + this.getEsriapiurl() + ", displayProgram=" + this.getDisplayProgram() + ", surveyFundings=" + this.getSurveyFundings() + ", draftRedirectedPage=" + this.getDraftRedirectedPage() + ", warningMessges=" + this.getWarningMessges() + ", identification=" + this.getIdentification() + ", aidEffectivenes=" + this.getSelectedEffectivenessIndicatorOptions() + ", planning=" + this.getPlanning() + ", location=" + this.getLocation() + ", sectors=" + this.getSectors() + ", components=" + this.getComponents() + ", programs=" + this.getPrograms() + ", crossIssues=" + this.getCrossIssues() + ", funding=" + this.getFunding() + ", documents=" + this.getDocuments() + ", agencies=" + this.getAgencies() + ", survey=" + this.getSurvey() + ", surveys=" + this.getSurveys() + ", ampAhsurveys=" + this.getAmpAhsurveys() + ", contactInfo=" + this.getContactInfo() + ", comments=" + this.getComments() + ", phisycalProgress=" + this.getPhisycalProgress() + ", indicatorME=" + this.getIndicatorME() + ", contracts=" + this.getContracts() + ", costing=" + this.getCosting() + ", issues=" + this.getIssues() + ", observations=" + this.getObservations() + ", totDisbIsBiggerThanTotCom=" + this.isTotDisbIsBiggerThanTotCom() + ")";
+    }
 
 	
 

@@ -1,25 +1,17 @@
 <wicket:extend>
-	<tr>
-		<td width="350"><span wicket:id="projectImplementationUnit" />
-		<p/>
-		<span wicket:id="projectImplementationMode" />
-		<p/>
-		<span wicket:id="imacApproved" />
-		<p/>
-		<span wicket:id="nationalOversight" />
-		<p/>
-		<span wicket:id="onBudget" />
-		</td>
-		<td width="350">
-		<span wicket:id="onParliament" />
-		<p/>
-		<span wicket:id="onTreasury" />
-		<p/>
-		<span wicket:id="nationalFinancialManagement" />
-		<p/>
-		<span wicket:id="nationalProcurement" />
-		<p/>
-		<span wicket:id="nationalAudit" />
-		</td>
-	</tr>
+    <!--tr wicket:id="listIndicators">
+        <td class="inside" align="left">
+            <span wicket:id="effectivenessIndicator"/>
+        </td>
+    </tr-->
+
+
+    <tr wicket:id="listOptions">
+        <td><input type="text" wicket:id="ampIndicatorOptionId" /></td>
+    </tr>
+
+    <!--tr wicket:id="selectedEffectivenessIndicatorOptions">
+        <td wicket:id="name"></td>
+    </tr-->
 </wicket:extend>
+

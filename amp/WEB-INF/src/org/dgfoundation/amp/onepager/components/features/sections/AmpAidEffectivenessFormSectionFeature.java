@@ -1,31 +1,25 @@
 package org.dgfoundation.amp.onepager.components.features.sections;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.markup.html.form.ChoiceRenderer;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.RadioChoice;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.markup.html.basic.Label;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
-import org.dgfoundation.amp.onepager.components.fields.AmpCategoryGroupFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
-import org.dgfoundation.amp.onepager.components.fields.AmpTextAreaFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
-import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.util.AidEffectivenessIndicatorUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 
@@ -33,7 +27,7 @@ public class AmpAidEffectivenessFormSectionFeature extends
 		AmpFormSectionFeaturePanel 
 		implements AmpRequiredComponentContainer {
 	
-	private List<FormComponent<?>> requiredFormComponents = new ArrayList<FormComponent<?>>();
+	private List<org.apache.wicket.markup.html.form.FormComponent<?>> requiredFormComponents = new ArrayList<org.apache.wicket.markup.html.form.FormComponent<?>>();
 
 	public AmpAidEffectivenessFormSectionFeature(String id, String fmName,
 			IModel<AmpActivityVersion> am) throws Exception {
@@ -76,10 +70,76 @@ public class AmpAidEffectivenessFormSectionFeature extends
 				+ " i.e. accountable to donors rather than national agencies, with staff appointed by the donor, "
 				+ " and/or national staff salaries higher than those in the civil service.";
 
-		addFields(yesNoDontKnowList, projectImplementationUnitTitle,
-				"projectImplementationUnit", "projectImplementationUnit",
-				"Project uses parallel project implementation unit",true);
+		//addFields(yesNoDontKnowList, projectImplementationUnitTitle,
+		//		"projectImplementationUnit", "projectImplementationUnit",
+		//		"Project uses parallel project implementation unit", true);
 
+
+        // final IModel<Set<AmpActivityInternalId>> setModel=new PropertyModel<Set<AmpActivityInternalId>>(am,"internalIds");
+        //if (setModel.getObject() == null)
+        //    setModel.setObject(new HashSet<AmpActivityInternalId>());
+
+        //AbstractReadOnlyModel<List<AmpActivityInternalId>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel);
+
+
+
+//**********************************************************//
+
+        //RepeatingView listItems = new RepeatingView("selectedEffectivenessIndicatorOptions");
+
+        List<AmpAidEffectivenessIndicator> indicators = AidEffectivenessIndicatorUtil.getAllActiveIndicators();
+        AmpActivityVersion activity = am.getObject();
+        if (activity.getSelectedEffectivenessIndicatorOptions() == null) {
+            activity.setSelectedEffectivenessIndicatorOptions(new LinkedHashSet<AmpAidEffectivenessIndicatorOption>());
+        }
+        activity.getSelectedEffectivenessIndicatorOptions().clear();
+
+        int i = 0;
+        for (AmpAidEffectivenessIndicator indicator : indicators) {
+            AmpAidEffectivenessIndicatorOption defaultOption = indicator.getDefaultOption();
+            activity.getSelectedEffectivenessIndicatorOptions().add(defaultOption);
+        }
+        final IModel<Set<AmpAidEffectivenessIndicatorOption>> setModel
+                = new PropertyModel<Set<AmpAidEffectivenessIndicatorOption>>(am, "selectedEffectivenessIndicatorOptions");
+        AbstractReadOnlyModel<List<AmpAidEffectivenessIndicatorOption>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel);
+
+        ListView<AmpAidEffectivenessIndicatorOption>idsList = new ListView<AmpAidEffectivenessIndicatorOption>("listOptions", listModel) {
+
+            @Override
+            protected void populateItem(ListItem<AmpAidEffectivenessIndicatorOption> component) {
+                component.add(new TextField("ampIndicatorOptionId", new PropertyModel(component.getModelObject(), "ampIndicatorOptionId")));
+
+            }
+        };
+        add(idsList);
+
+
+
+        /*
+            IChoiceRenderer renderer = new IChoiceRenderer() {
+                public Object getDisplayValue(Object object) {
+                    return object;
+                }
+
+                public String getIdValue(Object object, int index) {
+                    return object != null ? object.toString() : "";
+                }
+            };
+
+            AmpGroupFieldPanel<String> selectListField = new AmpGroupFieldPanel<String>(
+                    "name", new PropertyModel<String>(am, "selectedEffectivenessIndicatorOptions"), yesNoDontKnowList,
+                    "", false, false, renderer, "");
+
+*/
+            //add(selectListField);
+            //i++;
+
+            //listItems.add(new Label(listItems.newChildId(), defaultOption.getAmpIndicatorOptionName()));
+            //add(listItems);
+        //}
+       // add(listItems);
+
+/*
 		AmpCategorySelectFieldPanel projectImplementationMode = new AmpCategorySelectFieldPanel(
 				"projectImplementationMode",
 				CategoryConstants.PROJECT_IMPLEMENTATION_MODE_KEY,
@@ -90,9 +150,15 @@ public class AmpAidEffectivenessFormSectionFeature extends
 				CategoryConstants.PROJECT_IMPLEMENTATION_MODE_NAME, true,
 				false, null, AmpFMTypes.MODULE);
 		projectImplementationMode.getChoiceContainer().setRequired(true);
-		requiredFormComponents.add(projectImplementationMode.getChoiceContainer());
-		add(projectImplementationMode);
+*/
 
+
+
+
+
+		//requiredFormComponents.add(projectImplementationMode.getChoiceContainer());
+		//add(projectImplementationMode);
+/*
 		// imacApproved
 		String imacTitle = "If the total project budget is $20m or higher then "
 				+ "it has to be approved by the Inter-Ministerial Approval Committee (IMAC)";
@@ -143,18 +209,21 @@ public class AmpAidEffectivenessFormSectionFeature extends
 				"Project uses national procurement systems",true);
 		// nationalAudit
 		String nationalAuditTitle = "The project uses national audit systems if project finances are audited by National Audit Chamber.";
+*/
 
-		addFields(yesNoDontKnowList, nationalAuditTitle,
-				"nationalAudit", "nationalAudit",
-				"Project uses national audit systems",true);		
+
+		//addFields(yesNoDontKnowList, nationalAuditTitle,
+		//		"nationalAudit", "nationalAudit",
+		//		"Project uses national audit systems",true);
 
 	}
 
-	private void addFields(List<String> l, String fieldTitle, String wicketId,
+	private void addFields(List<AmpAidEffectivenessIndicatorOption> options, String fieldTitle, String wicketId,
 			String modelProperty, String label, boolean required) {
-		if(fieldTitle==null){
-				fieldTitle="";
+		if (fieldTitle==null) {
+				fieldTitle = "";
 		}
+
 		IChoiceRenderer renderer = new IChoiceRenderer() {
 			public Object getDisplayValue(Object object) {
 				return object;
@@ -165,16 +234,18 @@ public class AmpAidEffectivenessFormSectionFeature extends
 			}
 		};
 
-		AmpGroupFieldPanel<String> yesNoDontKnowField = new AmpGroupFieldPanel<String>(
-				wicketId, new PropertyModel<String>(am, modelProperty), l,
-				label, false, false, renderer,fieldTitle);
+		AmpGroupFieldPanel<AmpAidEffectivenessIndicatorOption> selectListField = new AmpGroupFieldPanel<AmpAidEffectivenessIndicatorOption>(
+				wicketId, new PropertyModel<AmpAidEffectivenessIndicatorOption>(am, modelProperty), options,
+				label, false, false, renderer, fieldTitle);
 
-		yesNoDontKnowField.getChoiceContainer().setRequired(required);
-		requiredFormComponents.add(yesNoDontKnowField.getChoiceContainer());
-		add(yesNoDontKnowField);
+        selectListField.getChoiceContainer().setRequired(required);
+		requiredFormComponents.add(selectListField.getChoiceContainer());
+		add(selectListField);
 	}
 
-	public List<FormComponent<?>> getRequiredFormComponents() {
+	public List<org.apache.wicket.markup.html.form.FormComponent<?>> getRequiredFormComponents() {
 		return requiredFormComponents;
 	}
+
+
 }

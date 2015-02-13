@@ -498,7 +498,7 @@ public class ExportActivityToWord extends Action {
 				
 				//AiddEffectiveness
 	            if(FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes")){
-	            	java.util.List<String[]> aidEffectivenesToAdd = ActivityUtil.getAidEffectivenesForExport( activity);
+	            	java.util.List<String[]> aidEffectivenesToAdd = null;//ActivityUtil.getAidEffectivenesForExport( activity);
 	            	if(aidEffectivenesToAdd!=null&&aidEffectivenesToAdd.size()>0){
 	            		addEffectivenessTable( doc,aidEffectivenesToAdd);
 	            	}

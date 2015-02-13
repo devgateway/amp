@@ -116,5 +116,17 @@ public class AidEffectivenessIndicatorUtil {
         */
     }
 
+    /**
+     * Returns all active (visible) indicators for the activity form to display
+     * @return
+     */
+    public static List<AmpAidEffectivenessIndicator> getAllActiveIndicators() {
+        Session session = PersistenceManager.getSession();
+        String queryStr = "select ind from " + AmpAidEffectivenessIndicator.class.getName() + " ind where active = true";
+        Query query = session.createQuery(queryStr.toString());
+        return  (List<AmpAidEffectivenessIndicator>)query.list();
+
+    }
+
 }
 

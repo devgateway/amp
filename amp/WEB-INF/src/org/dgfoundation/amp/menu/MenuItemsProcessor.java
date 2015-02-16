@@ -52,6 +52,11 @@ public class MenuItemsProcessor {
 	private MenuItemsProcessor(AmpView view) {
 		this.view = view;
 		this.tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+		// pledgers were defined for some reason as a flag instead of a group, 
+		// thus we have to deal with it in a custom way
+		if (tm != null && tm.getPledger()) {
+			currentUserGroupKeys.add(Group.PLEDGERS);
+		}
 		if (tm != null && tm.getMemberId() != null) {
 			AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId()); 
 			Set<Group> userGroups = atm != null && atm.getUser() != null ? atm.getUser().getGroups() : null;

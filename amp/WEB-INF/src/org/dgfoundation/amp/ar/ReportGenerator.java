@@ -14,7 +14,9 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.filtercacher.FastFilterCacher;
 import org.dgfoundation.amp.ar.filtercacher.FilterCacher;
+import org.dgfoundation.amp.ar.filtercacher.NopFilterCacher;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedPropertyDescription;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
@@ -34,7 +36,7 @@ import org.digijava.module.fundingpledges.dbentity.PledgesEntityHelper;
 public abstract class ReportGenerator {
 
 	protected GroupColumn rawColumns;
-	protected Map<String, CellColumn> rawColumnsByName;
+	protected Map<String, CellColumn> rawColumnsByName = new HashMap<String,CellColumn>();
 	
 	protected GroupReportData report;
 	
@@ -58,6 +60,11 @@ public abstract class ReportGenerator {
 	protected abstract void prepareData();
 	
 	/**
+	 * true = use FastFilterCachier, false = use NopFilterCacher
+	 */
+	public final static boolean USE_FILTER_CACHING = true;
+	
+	/**
 	 * shit workaround for stupid Pledges architecture
 	 * @return
 	 */
@@ -76,12 +83,6 @@ public abstract class ReportGenerator {
 	 */
 	protected abstract List getColumnSubCategories(String columnName);
 	
-	public ReportGenerator(FilterCacher filterCacher)
-	{
-		rawColumnsByName=new HashMap<String,CellColumn>();
-		this.filterCacher = filterCacher;
-	}
-	
 	/**
 	 * the main method of this class. it generates a displayable report object
 	 */
@@ -89,9 +90,16 @@ public abstract class ReportGenerator {
 				
 		//GroupReportData.totalMergedCells = 0;
 		long startTS = System.currentTimeMillis();
-		columnCachers = new java.util.HashMap<PropertyDescription, ColumnValuesCacher>();
-		retrieveData();
-		filterCacher.closeConnection();
+		this.filterCacher = USE_FILTER_CACHING ? new FastFilterCacher(filter) : new NopFilterCacher(filter);
+		try {
+			columnCachers = new java.util.HashMap<PropertyDescription, ColumnValuesCacher>();
+			retrieveData();
+		}
+		finally {
+			if (this.filterCacher != null)
+				this.filterCacher.closeConnection();
+			this.filterCacher = null;
+		}
 		long retrTS = System.currentTimeMillis();
 		
 //		String jopa = this.rawColumns.prettyPrint();

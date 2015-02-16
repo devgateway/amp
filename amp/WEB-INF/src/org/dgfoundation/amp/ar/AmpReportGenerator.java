@@ -37,6 +37,7 @@ import org.dgfoundation.amp.ar.dimension.ARDimensionable;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.ar.filtercacher.FastFilterCacher;
+import org.dgfoundation.amp.ar.filtercacher.FilterCacher;
 import org.dgfoundation.amp.ar.filtercacher.NopFilterCacher;
 import org.dgfoundation.amp.ar.viewfetcher.GeneratedPropertyDescription;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
@@ -72,11 +73,6 @@ import org.digijava.module.translation.util.ContentTranslationUtil;
  * 
  */
 public class AmpReportGenerator extends ReportGenerator {
-
-	/**
-	 * true = use FastFilterCachier, false = use NopFilterCacher
-	 */
-	public final static boolean USE_FILTER_CACHING = true;
 	
 	public final static long PLEDGES_IDS_START = 1000 * 1000l * 1000l;
 	
@@ -350,12 +346,21 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 		ce.setInternalCondition(columnFilterSQLClause);
 		ce.setSession(null); // not needed for CategAmountColWorker
-		ce.setFilterCacher(new NopFilterCacher(filter));
+		FilterCacher filterCacher = new NopFilterCacher(filter);
+		Column<Cell> column;
+		try {
+			ce.setFilterCacher(new NopFilterCacher(filter));
 		
-		ce.setDebugMode(debugMode);
-		ce.setPledge(true);
+			ce.setDebugMode(debugMode);
+			ce.setPledge(true);
 		
-		Column<Cell> column = ce.populateCellColumn();
+			column = ce.populateCellColumn();
+		}
+		finally {
+			if (filterCacher != null)
+				filterCacher.closeConnection();
+		}
+		
 		List<Cell> res;
 		
 		// hack: pledge titles are TextCells, while activity titles are MetaTextCells. We need to convert some in others
@@ -1471,8 +1476,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * @param condition
 	 */
 	public AmpReportGenerator(AmpReports reportMetadata, AmpARFilter filter, boolean regenerateFilterQuery) {
-		super(USE_FILTER_CACHING ? new FastFilterCacher(filter) : new NopFilterCacher(filter));
-		
+	
 		if (TLSUtils.getRequest() != null)
 			this.session		= TLSUtils.getRequest().getSession();
 		else

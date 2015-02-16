@@ -52,6 +52,15 @@
 	float: left;
 }
 
+.round-filter-group {
+	border: 1px solid #376091;
+	border-radius: 4px;
+	padding-left: 7px;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	float: left;
+}
+
 .pointer {
 	cursor: pointer;
 }
@@ -94,10 +103,11 @@
 	border: 2px solid rgb(56, 121, 146);
 	max-height: 300px;
 	min-height: 200px;
-	/*padding: 5px;*/
+	padding: 5px;
 	position: absolute;
 	z-index: 2;
 	width: inherit;
+	overflow-x: hidden;
 }
 
 #dynamic-filters-region hr {

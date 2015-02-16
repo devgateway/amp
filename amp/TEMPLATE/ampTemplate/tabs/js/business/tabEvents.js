@@ -49,7 +49,7 @@ define([ 'marionette', 'models/content', 'models/legend', 'views/dynamicContentV
 			// Define the views.
 			var FilterItemView = Marionette.ItemView.extend({
 				tagName : 'div',
-				/* className : 'round-filter', */
+				className : 'round-filter-group',
 				template : jQuery(filtersItemTemplate, '#template-filters').html(),
 				events : {
 					'click' : "testclick"

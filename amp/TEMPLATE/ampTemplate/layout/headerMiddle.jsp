@@ -194,6 +194,8 @@ ${fn:replace(message,quote,escapedQuote)}
 													</a>
 												</li>
 											</module:display>
+											
+											<module:display name="Visualization Dashboards">
 											<logic:present name="MENU_DASHBOARDS" scope="session">
 												<logic:iterate id="item" name="MENU_DASHBOARDS" scope="session">
 													<li class="yuiampmenuitem_drop">
@@ -205,6 +207,7 @@ ${fn:replace(message,quote,escapedQuote)}
 													</li>
 												</logic:iterate>
 											</logic:present>
+											</module:display>
 
 										</ul>
 									</div>
@@ -743,6 +746,7 @@ function openAdmin () {
 								</li>
 							</module:display>
 
+							<module:display name="Visualization Dashboards">
 							<logic:present name="MENU_DASHBOARDS" scope="session">
 								<logic:iterate id="item" name="MENU_DASHBOARDS" scope="session">
 									<li class="yuiampmenuitem_drop">
@@ -752,6 +756,7 @@ function openAdmin () {
 									</li>
 								</logic:iterate>
 							</logic:present>
+							</module:display>
 						</ul>
 					</div>
 				</div></li>

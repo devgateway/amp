@@ -41,11 +41,13 @@ public class Group
     public static final String MEMBERS = "MEM";
     public static final String TRANSLATORS = "TRN";
     public static final String EDITORS = "EDT";
+    public static final String PLEDGERS = "PLE";
 
     public static final String ADMINISTRATORS_NAME = "Administrators";
     public static final String MEMBERS_NAME = "Members";
     public static final String TRANSLATORS_NAME = "Translators";
     public static final String EDITORS_NAME = "Editors";
+    public static final String PLEDGERS_NAME = "Pledgers";
 
     public static final HashMap defaultGroups;
 
@@ -55,6 +57,7 @@ public class Group
         defaultGroups.put(MEMBERS, MEMBERS_NAME);
         defaultGroups.put(TRANSLATORS, TRANSLATORS_NAME);
         defaultGroups.put(EDITORS, EDITORS_NAME);
+        defaultGroups.put(PLEDGERS, PLEDGERS_NAME);
     }
 
     private Site site;

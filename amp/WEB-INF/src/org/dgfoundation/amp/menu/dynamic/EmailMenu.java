@@ -23,7 +23,7 @@ public class EmailMenu implements DynamicMenu {
 			int pos = parent.getChildren().indexOf(menuItem);
 			menuItem = new MenuItem(menuItem.name, menuItem.title, menuItem.tooltip,
 					String.format(menuItem.url, email.trim()),
-					menuItem.flags);
+					menuItem.flags, menuItem.groupKeys);
 			parent.getChildren().set(pos, menuItem);
 		} else {
 			logger.warn(menuItem.name + " cannot be configured: no email specified");

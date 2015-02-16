@@ -5,6 +5,7 @@ package org.dgfoundation.amp.menu;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Stores a menu item
@@ -23,6 +24,8 @@ public class MenuItem {
 	public final String url;
 	/** any specific flags */
 	public final String flags;
+	/** group_keys */
+	public final Set<String> groupKeys;
 	/** whether the action should open a new popup window */
 	public final boolean isPopup;
 	/** whether the action should open a new tab */
@@ -40,19 +43,20 @@ public class MenuItem {
 	 * @param tooltip
 	 * @param flags
 	 */
-	public MenuItem(String name, String title, String tooltip, String url, String flags) {
+	public MenuItem(String name, String title, String tooltip, String url, String flags, Set<String> groupKeys) {
 		this.name = name;
 		this.title = title;
 		this.tooltip = tooltip;
 		this.url = url;
 		this.flags = flags;
+		this.groupKeys = groupKeys;
 		this.isPopup = flags != null && flags.contains(MenuFlags.OPEN_POPUP);
 		this.isTab = flags != null && flags.contains(MenuFlags.OPEN_TAB);
 		this.isPost = flags != null && flags.contains(MenuFlags.POST_REQUEST);
 	}
 	
 	public MenuItem(MenuItem other) {
-		this(other.name, other.title, other.tooltip, other.url, other.flags);
+		this(other.name, other.title, other.tooltip, other.url, other.flags, other.groupKeys);
 		this.parent = other.parent;
 		this.children = new ArrayList<MenuItem>(other.getChildren());
 	}

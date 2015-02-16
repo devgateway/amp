@@ -31,7 +31,7 @@ public class WorkspaceMenu implements DynamicMenu {
 		
 		for (AmpTeamMember atm : wsList) {
 			MenuItem mi = new MenuItem(MenuConstants.WORKSPACE_ITEM, atm.getAmpTeam().getName(),
-					atm.getAmpTeam().getName(), String.format(template.url, atm.getAmpTeamMemId()), null);
+					atm.getAmpTeam().getName(), String.format(template.url, atm.getAmpTeamMemId()), template.flags, template.groupKeys);
 			mi.setParent(menuItem);
 			menuItem.appendChild(mi);
 		}

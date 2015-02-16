@@ -5,6 +5,8 @@ package org.dgfoundation.amp.menu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,6 +17,13 @@ import org.dgfoundation.amp.menu.dynamic.LanguageMenu;
 import org.dgfoundation.amp.menu.dynamic.WorkspaceMenu;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.user.Group;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.kernel.user.User;
 
 /**
  * Updates current menu structure based on the current user & state
@@ -28,18 +37,39 @@ public class MenuItemsProcessor {
 	 * @param items
 	 * @return
 	 */
-	public static List<MenuItem> processForCurrentRequest(List<MenuItem> items) {
+	
+	public static List<MenuItem> processForCurrentRequest(List<MenuItem> items, AmpView view) {
 		// TODO for AMP-19518
 		Set<String> visibleMenuEntries = null;
-		return process(items, visibleMenuEntries);
+		
+		return (new MenuItemsProcessor(view)).process(items, visibleMenuEntries);
 	}
 	
-	private static List<MenuItem> process(List<MenuItem> items, Set<String> visibleMenuEntries) {
+	private AmpView view;
+	private TeamMember tm;
+	private Set<String> currentUserGroupKeys = new HashSet<String>();
+	
+	private MenuItemsProcessor(AmpView view) {
+		this.view = view;
+		this.tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+		if (tm != null && tm.getMemberId() != null) {
+			AmpTeamMember atm = TeamMemberUtil.getAmpTeamMember(tm.getMemberId()); 
+			Set<Group> userGroups = atm != null && atm.getUser() != null ? atm.getUser().getGroups() : null;
+			if (userGroups != null) {
+				for(Group group : userGroups) {
+					currentUserGroupKeys.add(group.getKey());
+				}
+			}
+		}
+	}
+	
+	protected List<MenuItem> process(List<MenuItem> items, Set<String> visibleMenuEntries) {
 		List<MenuItem> newList = new ArrayList<MenuItem>();
 		for (MenuItem item : items) {
 			// add only items that are visible based on FM & custom visibility rules
 			// TODO: remove visibleMenuEntries == null when AMP-19518 is done
-			if ((visibleMenuEntries == null || visibleMenuEntries.contains(item.name)) && isVisible(item.name)) {
+			if ((visibleMenuEntries == null || visibleMenuEntries.contains(item.name)) 
+					&& isVisible(item.name) && isAllowedUserGroup(item)) {
 				MenuItem newItem = new MenuItem(item);
 				newList.add(newItem);
 				newItem.setChildren(process(item.getChildren(), visibleMenuEntries));
@@ -54,7 +84,7 @@ public class MenuItemsProcessor {
 	 * @param menuName
 	 * @return 
 	 */
-	private static boolean isVisible(String menuName) {
+	private boolean isVisible(String menuName) {
 		switch(menuName) {
 		case MenuConstants.TRANSLATOR_VIEW:
 			return !TranslatorWorker.isTranslationMode(TLSUtils.getRequest());
@@ -63,6 +93,17 @@ public class MenuItemsProcessor {
 		default:
 			return true;
 		}
+	}
+	
+	private boolean isAllowedUserGroup(MenuItem mi) {
+		if (mi.groupKeys == null || mi.groupKeys.size() == 0 
+				|| AmpView.ADMIN == view && mi.groupKeys.contains(Group.ADMINISTRATORS)) {
+			return true;
+		}
+		
+		Set<String> intersect = new HashSet<String>(currentUserGroupKeys);
+		intersect.retainAll(mi.groupKeys);
+		return intersect.size() > 0;
 	}
 	
 	/**
@@ -80,7 +121,7 @@ public class MenuItemsProcessor {
 	} 
 
 	/***********************************************************
-	 * 					PARTIALY USED
+	 * 					
 	 ***********************************************************/
 	/* This is an abstract approach that may be useful when many dynamic menu structures are built,
 	 * but so far it is easier to use it directly to speed things up

@@ -6,6 +6,8 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Set;
 
+import org.digijava.kernel.user.Group;
+
 /**
  * Stores one menu entry details
  * 
@@ -24,6 +26,7 @@ public class AmpMenuEntry implements Serializable {
 	private String flags;
 	private int position = 0;
 	private Set<AmpMenuEntry> items;
+	private Set<Group> groups;
 	
 	/**
 	 * @return the id
@@ -192,6 +195,20 @@ public class AmpMenuEntry implements Serializable {
 	 */
 	public void setItems(Set<AmpMenuEntry> items) {
 		this.items = items;
+	}
+
+	/**
+	 * @return the groups
+	 */
+	public Set<Group> getGroups() {
+		return groups;
+	}
+
+	/**
+	 * @param groups the groups to set
+	 */
+	public void setGroups(Set<Group> groups) {
+		this.groups = groups;
 	}
 	
 }

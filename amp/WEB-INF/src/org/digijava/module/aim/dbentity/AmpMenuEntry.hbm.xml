@@ -25,6 +25,11 @@
 			<key column="PARENT_ID" />
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpMenuEntry" />
 		</set>
+		
+		<set name="groups" cascade="all" table="AMP_MENU_ENTRY_DG_GROUP">
+	         <key column="MENU_ID"/>
+	         <many-to-many column="GROUP_ID" class="org.digijava.kernel.user.Group"/>
+      	</set>
 
     </class>
 </hibernate-mapping>

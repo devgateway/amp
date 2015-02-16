@@ -28,7 +28,7 @@ public class SecurityService {
 	public static List<JsonBean> getMenu() {
 		AmpView currentView = MenuUtils.getCurrentView();
 		List<MenuItem> items = MenuStructure.getMenuStructure(currentView);
-		items = MenuItemsProcessor.processForCurrentRequest(items);
+		items = MenuItemsProcessor.processForCurrentRequest(items, currentView);
 		
 		return convert(items);
 	}

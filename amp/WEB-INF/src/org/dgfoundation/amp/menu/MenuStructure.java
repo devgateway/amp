@@ -5,11 +5,14 @@ package org.dgfoundation.amp.menu;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.user.Group;
 import org.digijava.module.aim.dbentity.AmpMenuEntry;
 
 /**
@@ -55,11 +58,15 @@ public class MenuStructure {
 	private List<MenuItem> menuItems;
 	private MenuStructure(List<AmpMenuEntry> orderedEntries, AmpView view) {
 		String warnMsg = "Skipping menu entry '%s' that is enabled for " + view + " view while its ancestor '%s' is not.";
-		MenuItem root = new MenuItem("root", null, null, null, null);
+		MenuItem root = new MenuItem("root", null, null, null, null, null);
 		Map<AmpMenuEntry, MenuItem> itemsMap = new HashMap<AmpMenuEntry, MenuItem>();
 		itemsMap.put(null, root);
 		for (AmpMenuEntry ame : orderedEntries) {
-			MenuItem mi = new MenuItem(ame.getName(), ame.getTitle(), ame.getTooltip(), ame.getUrl(), ame.getFlags());
+			Set<String> groupKeys = new HashSet<String>();
+			for (Group group : ame.getGroups()) {
+				groupKeys.add(group.getKey());
+			}
+			MenuItem mi = new MenuItem(ame.getName(), ame.getTitle(), ame.getTooltip(), ame.getUrl(), ame.getFlags(), groupKeys);
 			itemsMap.put(ame, mi);
 		}
 		for (AmpMenuEntry ame : orderedEntries) {
@@ -88,22 +95,6 @@ public class MenuStructure {
 	protected Object clone() throws CloneNotSupportedException {
 		throw new CloneNotSupportedException();
 	}
-
-	/**
-	 * Configures dynamic menu entries
-	 * @param mi
-	 */
-	/* candidate for removal
-	private void configureCommonDynamicMenu(MenuItem mi) {
-		switch(mi.name) {
-		case MenuConstants.LANGUAGE:
-		case MenuConstants.PUBLIC_LANGUAGE:
-			(new LanguageMenu()).process(mi);
-			break;
-		default:
-			break;
-		}
-	}
-	*/
+	
 }
 

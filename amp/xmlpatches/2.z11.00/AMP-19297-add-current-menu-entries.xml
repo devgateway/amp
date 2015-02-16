@@ -2,13 +2,19 @@
 <tns:patch closeOnSuccess="true" retryOnFail="true"
 	xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
-	<jira>AMP-19519</jira>
+	<jira>AMP-19297</jira>
 	<keyword>menu</keyword>
 	<author>nmandrescu</author>
 	<description>adds current menu entries to the new menu table</description>
 	<apply>
 		<script>
-			<lang delimiter=";" type="postgres">
+			<lang delimiter="@@@" type="postgres">
+			<!-- This plpgsql "IF" test is a fix for xml patch rename needed to execute these statements before other patch,   
+				  but to not execute if already ran on some dev setup. First release will not need it though. -->
+			DO LANGUAGE plpgsql &#36;&#36;
+			BEGIN
+			IF (SELECT count(*) FROM amp_menu_entry) = 0 THEN
+			
 				INSERT INTO amp_menu_entry(SELECT nextval('amp_menu_entry_seq'), null, 'Home Page', 'Home Page', null, '/', true, true, false, null, 1);
 				INSERT INTO amp_menu_entry(SELECT nextval('amp_menu_entry_seq'), null, 'Public Site', 'Public Site', null, '/reportsPublicView.do', true, false, false, null, 2);
 				INSERT INTO amp_menu_entry(SELECT nextval('amp_menu_entry_seq'), null, 'Public Documents', 'Public Documents', null, '/contentrepository/publicDocTabManager.do?action=publicShow', true, false, false, null, 3);
@@ -131,6 +137,10 @@
 				INSERT INTO amp_menu_entry(SELECT nextval('amp_menu_entry_seq'), (SELECT id FROM amp_menu_entry WHERE name = 'Messages'), 
 					'Create Message', 'Create Message', null, '/message/messageActions.do?editingMessage=false&amp;actionType=fillTypesAndLevels', false, false, true, null, 2);
 				
+			END IF;
+			END;
+			&#36;&#36;
+			@@@
 			</lang>
 		</script>
 	</apply>

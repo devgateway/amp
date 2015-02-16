@@ -87,6 +87,7 @@ public class FiltersGroup {
 				ColumnConstants.ZONE,
 				ColumnConstants.DISTRICT,
 				MoConstants.ATTR_LOCATION_NAME,
+				ColumnConstants.LOCATION,
 				
 				ColumnConstants.PLEDGES_REGIONS,
 				ColumnConstants.PLEDGES_ZONES,

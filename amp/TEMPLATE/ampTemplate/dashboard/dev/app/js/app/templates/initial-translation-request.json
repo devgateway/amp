@@ -77,7 +77,9 @@
 "amp.dashboard:download-download-data":"Download data",
 "amp.dashboard:chart-no-data-available":"No Data Available",
 "amp.dashboard:chart-loading-saved-settings":"Loading saved settings...",
-"amp.dashboard:filters-show-settings":"Show filter settings"
-
+"amp.dashboard:filters-show-settings":"Show filter settings",
+"amp.dashboard:filters-chart-legends-Grouped":"Grouped",
+"amp.dashboard:filters-chart-legends-Stacked":"Stacked",
+"amp.dashboard:of-total": "of total"
 }
 

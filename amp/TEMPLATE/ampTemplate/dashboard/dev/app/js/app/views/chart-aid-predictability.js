@@ -24,12 +24,13 @@ module.exports = ChartViewBase.extend({
   },
 
   getTTContent: function(context) {
+	var of = app.translator.translateSync("amp.dashboard:of","of");
+	var total = app.translator.translateSync("amp.dashboard:total","total");
     var otherSeries = context.data[1 - context.series.index],  // WARNING: assumes only 2 series
         otherHere = otherSeries.values[context.x.index],
         line2;
     if (otherHere.y > 0) {
-      line2 = '<b>' + d3.format('%')(context.y.raw / otherHere.y) + '</b> of ' +
-        context.x.raw + ' total';
+      line2 = '<b>' + d3.format('%')(context.y.raw / otherHere.y) + '</b>&nbsp<span>' + of + '</span>&nbsp' + context.x.raw + '&nbsp<span>' + total + '</span>';
     } else {
       line2 = context.x.raw + ' ' + otherSeries.key + ': <b>' + otherHere.y + '</b>';
     }

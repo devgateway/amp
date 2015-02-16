@@ -3,6 +3,7 @@
  */
 
 var nv = window.nv;  // nvd3 is a pain
+var customizedMultiBarChart = require('./customized/multiBarChart.js');
 // var d3 = require('d3-browserify');
 
 
@@ -28,7 +29,7 @@ function staggerX(chart, nvData) {
 
 function chart(options) {
   var maxValue = 10;
-  var _chart = nv.models.multiBarChart()
+  var _chart = nv.models.customizedMultiBarChart()  
     .forceY([0, maxValue])  // ensures yAxis is showing at least 0 and 10, but won't restrict the domain
                             // (meaning if the are values falling outside the range it will show then).
     .reduceXTicks(false)

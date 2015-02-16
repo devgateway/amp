@@ -1,5 +1,17 @@
 #amp_info_filters {
 	width: 500px;
+	position: relative;
+	float:left;
+}
+
+#amp_info_settings  {
+	width: 100px;
+	position: relative;
+	float:left;
+	padding-left: 10px;
+	padding-top: 3px;
+	top: 2px;
+	height: 24px;
 }
 
 .round-filter {
@@ -19,7 +31,7 @@
 	z-index: 2;
 	width: inherit;
 	position: absolute;
-	top:130px;
+	top:26px;
 }
 
 .ui-widget {

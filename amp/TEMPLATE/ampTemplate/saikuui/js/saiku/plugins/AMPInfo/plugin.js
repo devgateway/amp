@@ -8,7 +8,7 @@ var AMPInfo = Backbone.View.extend({
         this.id = _.uniqueId("amp_info_");
         $(this.el).attr({ id: this.id });
         
-        _.bindAll(this, "render", "receive_info", "process_info", "render_filter");
+        _.bindAll(this, "render", "receive_info", "process_info", "render_info");
         this.workspace.bind('query:result', this.receive_info);
         
         $(this.workspace.el).find('.workspace_results')
@@ -16,24 +16,33 @@ var AMPInfo = Backbone.View.extend({
     },
     
     render: function() {
-		var filters = this.workspace.query.get('filters'); //Initial filters for now, then we'll see how it goes when changing them using the widget
-		var content = this.render_filter(filters);
+    	
+		var filters = this.workspace.query.get('filters');
+		var settings = window.currentSettings;
+		var content = this.render_info(filters, settings);
 		$(this.el).html(content);
-		$("#amp_info_filters").accordion({
+		$("#amp_info_filters").accordion({	
 			collapsible : true,
-			active : false
+			active : false,
+			animate : "linear" 
 		});
         $(this.el).show();
     },
     
-    render_filter: function(filters) {
-    	//TODO: Move the HTML to a template
+    render_info: function(filters, settings) {
     	var content = "<div id='amp_info_filters'>";
     	content += "<h3><span class='i18n'>Applied filters</span></h3>";
     	content += "<div id='amp_info_filters_block'>";
     	var processed_items = {};
     	if(filters.columnFilterRules !== undefined) {
     		_.each(filters.columnFilterRules, function(v, k){
+    			var key = k;
+    			var values = extract_values(v[0]);
+    			processed_items[k] = values;
+    		});
+    	}
+    	if(filters.columnDateFilterRules !== undefined) {
+    		_.each(filters.columnDateFilterRules, function(v, k){
     			var key = k;
     			var values = extract_values(v[0]);
     			processed_items[k] = values;
@@ -48,7 +57,11 @@ var AMPInfo = Backbone.View.extend({
         	content += "<hr></div>";
     	});
     	content += "</div>";
-    	console.log(content);
+    	content += "</div>";
+    	if(settings){
+        	content += "<div id='amp_info_settings'><span class='i18n'>Currency</span>: " +  settings["1"];
+        	content += "</div>";
+    	} 
     	return content;
     },
     

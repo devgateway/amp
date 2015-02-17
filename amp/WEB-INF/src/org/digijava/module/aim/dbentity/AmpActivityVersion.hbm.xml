@@ -110,11 +110,11 @@
 		<many-to-one name="modifiedBy" column="modified_by"
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none" />
 
-		<set name="selectedEffectivenessIndicatorOptions" table="AMP_ACTIVITY_EFFECTIVENESS_INDICATOR_OPTIONS" lazy="true" cascade="all-delete-orphan">
+		<set name="selectedEffectivenessIndicatorOptions" inverse="true" table="AMP_ACTIVITY_EFFECTIVENESS_INDICATOR_OPTIONS" lazy="false" cascade="none">
 			<cache usage="read-write" />
 			<key column="amp_activity_id" />
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption"
-				column="amp_indicator_id" />
+				column="amp_indicator_option_id" />
 		</set>
 
 

@@ -46,4 +46,18 @@ public class AmpAidEffectivenessIndicatorOption implements Serializable {
     }
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AmpAidEffectivenessIndicatorOption)) return false;
+
+        AmpAidEffectivenessIndicatorOption that = (AmpAidEffectivenessIndicatorOption) o;
+
+        return !(ampIndicatorOptionId != null ? !ampIndicatorOptionId.equals(that.ampIndicatorOptionId) : that.ampIndicatorOptionId != null);
+    }
+
+    @Override
+    public int hashCode() {
+        return ampIndicatorOptionId != null ? ampIndicatorOptionId.hashCode() : 0;
+    }
 }

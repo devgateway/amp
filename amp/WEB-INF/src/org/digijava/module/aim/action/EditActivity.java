@@ -778,13 +778,7 @@ public class EditActivity extends Action {
             }
 
           //aid Effectiveness Section
-          AmpAidEffectivenessIndicatorOption[] selectedOptions = new AmpAidEffectivenessIndicatorOption[activity.getSelectedEffectivenessIndicatorOptions().size()];
-          int currentOptionIndex = 0;
-          for (AmpAidEffectivenessIndicatorOption option : activity.getSelectedEffectivenessIndicatorOptions()) {
-              selectedOptions[currentOptionIndex] = option;
-
-          }
-          eaForm.setSelectedEffectivenessIndicatorOptions(selectedOptions);
+          eaForm.setSelectedEffectivenessIndicatorOptions(activity.getSelectedEffectivenessIndicatorOptions());
           eaForm.setAllEffectivenessIndicators(AidEffectivenessIndicatorUtil.getAllActiveIndicators());
 
 

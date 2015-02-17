@@ -6545,7 +6545,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 	}
 	private Identification identification;
 
-    private AmpAidEffectivenessIndicatorOption[] selectedEffectivenessIndicatorOptions;
+    private Set<AmpAidEffectivenessIndicatorOption> selectedEffectivenessIndicatorOptions;
     private List<AmpAidEffectivenessIndicator> allEffectivenessIndicators;
 
 	private Planning planning;
@@ -7377,11 +7377,11 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		this.totDisbIsBiggerThanTotCom = totDisbIsBiggerThanTotCom;
 	}
 
-    public AmpAidEffectivenessIndicatorOption[] getSelectedEffectivenessIndicatorOptions() {
+    public Set<AmpAidEffectivenessIndicatorOption> getSelectedEffectivenessIndicatorOptions() {
         return selectedEffectivenessIndicatorOptions;
     }
 
-    public void setSelectedEffectivenessIndicatorOptions(AmpAidEffectivenessIndicatorOption[] selectedEffectivenessIndicatorOptions) {
+    public void setSelectedEffectivenessIndicatorOptions(Set<AmpAidEffectivenessIndicatorOption> selectedEffectivenessIndicatorOptions) {
         this.selectedEffectivenessIndicatorOptions = selectedEffectivenessIndicatorOptions;
     }
 

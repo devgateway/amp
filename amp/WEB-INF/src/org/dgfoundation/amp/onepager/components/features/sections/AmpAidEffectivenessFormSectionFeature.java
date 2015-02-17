@@ -2,12 +2,14 @@ package org.dgfoundation.amp.onepager.components.features.sections;
 
 import java.util.*;
 
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerUtil;
@@ -15,6 +17,7 @@ import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.fields.AmpCategorySelectFieldPanel;
 import org.dgfoundation.amp.onepager.components.fields.AmpGroupFieldPanel;
 import org.dgfoundation.amp.onepager.models.AmpCategoryValueByKeyModel;
+import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.dgfoundation.amp.onepager.util.AmpFMTypes;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -86,32 +89,115 @@ public class AmpAidEffectivenessFormSectionFeature extends
 //**********************************************************//
 
         //RepeatingView listItems = new RepeatingView("selectedEffectivenessIndicatorOptions");
-
-        List<AmpAidEffectivenessIndicator> indicators = AidEffectivenessIndicatorUtil.getAllActiveIndicators();
         AmpActivityVersion activity = am.getObject();
-        if (activity.getSelectedEffectivenessIndicatorOptions() == null) {
-            activity.setSelectedEffectivenessIndicatorOptions(new LinkedHashSet<AmpAidEffectivenessIndicatorOption>());
-        }
-        activity.getSelectedEffectivenessIndicatorOptions().clear();
 
-        int i = 0;
-        for (AmpAidEffectivenessIndicator indicator : indicators) {
-            AmpAidEffectivenessIndicatorOption defaultOption = indicator.getDefaultOption();
-            activity.getSelectedEffectivenessIndicatorOptions().add(defaultOption);
-        }
+        AidEffectivenessIndicatorUtil.populateSelectedOptions(activity);
+
         final IModel<Set<AmpAidEffectivenessIndicatorOption>> setModel
                 = new PropertyModel<Set<AmpAidEffectivenessIndicatorOption>>(am, "selectedEffectivenessIndicatorOptions");
         AbstractReadOnlyModel<List<AmpAidEffectivenessIndicatorOption>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel);
 
-        ListView<AmpAidEffectivenessIndicatorOption>idsList = new ListView<AmpAidEffectivenessIndicatorOption>("listOptions", listModel) {
+        final ListView<AmpAidEffectivenessIndicatorOption>indicatorsList = new ListView<AmpAidEffectivenessIndicatorOption>(
+                "selectedEffectivenessIndicatorOptions", new ArrayList(am.getObject().getSelectedEffectivenessIndicatorOptions())) {
 
+            private int i = 0;
             @Override
-            protected void populateItem(ListItem<AmpAidEffectivenessIndicatorOption> component) {
-                component.add(new TextField("ampIndicatorOptionId", new PropertyModel(component.getModelObject(), "ampIndicatorOptionId")));
+            protected void populateItem(ListItem<AmpAidEffectivenessIndicatorOption> componentOuter) {
+
+
+                /*
+                RadioGroup group = new RadioGroup("group", componentOuter.getModel());
+
+                ListView<AmpAidEffectivenessIndicatorOption>optionsList = new ListView<AmpAidEffectivenessIndicatorOption>("listOptions",
+                        new ArrayList<AmpAidEffectivenessIndicatorOption>(componentOuter.getModelObject().getIndicator().getOptions())) {
+                    @Override
+                    protected void populateItem(ListItem<AmpAidEffectivenessIndicatorOption> componentInner) {
+
+                        componentInner.add(new Radio("id", componentInner.getModel()));
+                        componentInner.add(new org.apache.wicket.markup.html.basic.Label("label", componentInner.getModelObject().getAmpIndicatorOptionName()));
+
+                    }
+                };
+                group.add(optionsList);
+                componentOuter.add(group);
+                */
+
+                /*
+                final RadioChoice<AmpAidEffectivenessIndicatorOption> indicatorChoices = new RadioChoice<AmpAidEffectivenessIndicatorOption>
+                        ("ampIndicatorOptionId", new Model<AmpAidEffectivenessIndicatorOption>(componentOuter.getModelObject()),
+                                componentOuter.getModelObject().getIndicator().getOptions(), new ChoiceRenderer<AmpAidEffectivenessIndicatorOption>(/*"ampIndicatorOptionName", "ampIndicatorOptionId"*//*){
+                    @Override
+                    public Object getDisplayValue(AmpAidEffectivenessIndicatorOption object) {
+                        return object.getAmpIndicatorOptionName();
+                    }
+
+                    @Override
+                    public String getIdValue(AmpAidEffectivenessIndicatorOption object, int index) {
+                        return String.valueOf(object.getAmpIndicatorOptionId());
+                    }
+
+                });*/
+
+
+                IChoiceRenderer<AmpAidEffectivenessIndicatorOption> renderer = new IChoiceRenderer<AmpAidEffectivenessIndicatorOption>() {
+                    @Override
+                    public Object getDisplayValue(AmpAidEffectivenessIndicatorOption object) {
+                        return object.getAmpIndicatorOptionName();
+                    }
+
+                    @Override
+                    public String getIdValue(AmpAidEffectivenessIndicatorOption object, int index) {
+                        return String.valueOf(object.getAmpIndicatorOptionId());
+                    }
+                };
+
+                //Label indicatorName = new Label("indicatorName", componentOuter.getModelObject().getIndicator().getAmpIndicatorName() + ":");
+                //componentOuter.add(indicatorName);
+                AmpAidEffectivenessIndicator indicator = componentOuter.getModelObject().getIndicator();
+                if (true/*indicator.getIndicatorType() == 0*/) {
+                    AmpGroupFieldPanel<AmpAidEffectivenessIndicatorOption> indicatorChoices = new AmpGroupFieldPanel<AmpAidEffectivenessIndicatorOption>(
+                            "ampIndicatorOptionId", new Model<AmpAidEffectivenessIndicatorOption>(componentOuter.getModelObject()), indicator.getOptions(),
+                            indicator.getAmpIndicatorName() + ":", false, false, renderer, indicator.getTooltipText());
+
+                    componentOuter.add(indicatorChoices);
+                } else {
+                    DropDownChoice indicatorChoices = new DropDownChoice("ampIndicatorOptionId",
+                            new Model<AmpAidEffectivenessIndicatorOption>(componentOuter.getModelObject()),
+                            indicator.getOptions(), renderer);
+                    componentOuter.add(indicatorChoices);
+                }
+
+
+
+
+                //componentOuter.add(optionsList);
+
+
+                //RadioGroup group = new RadioGroup("group", component.getModel());
+
+                /*
+                RepeatingView listItems = new RepeatingView("listOptions");
+                for (AmpAidEffectivenessIndicatorOption option : component.getModelObject().getIndicator().getOptions()) {
+                    listItems.add(new Radio("id", component.getModel()));
+                    listItems.add(new org.apache.wicket.markup.html.basic.Label("label", option.getAmpIndicatorOptionName()));
+                }*/
+
+                //component.add(new TextField("ampIndicatorOptionId", new PropertyModel(component.getModelObject(), "ampIndicatorOptionId")));
+                /*
+                for (AmpAidEffectivenessIndicatorOption option : component.getModelObject().getIndicator().getOptions()) {
+                    group.add(new Radio("id", component.getModel()));
+                    group.add(new org.apache.wicket.markup.html.basic.Label("label", option.getAmpIndicatorOptionName()));
+                }
+                */
+
+
+                //component.add(group);
+                //component.add(listItems);
 
             }
         };
-        add(idsList);
+        indicatorsList.setReuseItems(true);
+        add(indicatorsList);
 
 
 
@@ -218,7 +304,7 @@ public class AmpAidEffectivenessFormSectionFeature extends
 
 	}
 
-	private void addFields(List<AmpAidEffectivenessIndicatorOption> options, String fieldTitle, String wicketId,
+    private void addFields(List<AmpAidEffectivenessIndicatorOption> options, String fieldTitle, String wicketId,
 			String modelProperty, String label, boolean required) {
 		if (fieldTitle==null) {
 				fieldTitle = "";

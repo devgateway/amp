@@ -162,10 +162,14 @@ module.exports = Backbone.View
        sectorCode = '0';
        console.warn('TODO: need custom vairous sectors icon...different from  multi-sector');
       } else {
-       sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0];
+       if (feature.properties.activity.attributes.matchesFilters[filterVertical][0] instanceof Object) {
+    	  sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
+       }
+       else {
+    	   sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0];
+       }
       }
     }
-
     var pointIcon = L.icon({
       iconUrl: 'img/map-icons/' + this.structureMenuModel.iconMappings[sectorCode],
       iconSize:     [25, 25], // size of the icon

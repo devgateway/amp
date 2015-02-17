@@ -155,17 +155,21 @@ module.exports = Backbone.View
 //feature.properties.activity.attributes.matchesFilters[filterVertical]
     if (feature.properties.activity.attributes &&
       	_.has(feature.properties.activity.attributes.matchesFilters, filterVertical)) {
-      if (feature.properties.activity.attributes.matchesFilters[filterVertical] === null) {
+      if (feature.properties.activity.attributes.matchesFilters[filterVertical] == null) {
     	  //It has no sector/donor
     	  sectorCode = '1';
       } else if (feature.properties.activity.attributes.matchesFilters[filterVertical].length > 1) {
        sectorCode = '0';
        console.warn('TODO: need custom vairous sectors icon...different from  multi-sector');
       } else {
-       sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0];
+       if (feature.properties.activity.attributes.matchesFilters[filterVertical][0] instanceof Object) {
+    	  sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
+       }
+       else {
+    	   sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0];
+       }
       }
     }
-
     var pointIcon = L.icon({
       iconUrl: 'img/map-icons/' + this.structureMenuModel.iconMappings[sectorCode],
       iconSize:     [25, 25], // size of the icon

@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -18,8 +20,6 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.hibernate.jdbc.Work;
 
-@TranslatableClass (displayName = "Organisation Type")
-	
 public class OrgTypeSkeleton implements Comparable<OrgTypeSkeleton>, HierarchyListable {
 	private String orgTypeName;
 	private Long orgTypeId;
@@ -92,7 +92,8 @@ public class OrgTypeSkeleton implements Comparable<OrgTypeSkeleton>, HierarchyLi
 				public void execute(Connection conn) throws SQLException {
 					ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_org_type", 
 							"", TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");
-					ResultSet rs = v.fetch(null);
+					RsInfo rsi = v.fetch(null);
+					ResultSet rs = rsi.rs;
 					while (rs.next()) {
 						orgTypes.add(new OrgTypeSkeleton(nullInsteadOfZero(rs.getLong("amp_org_type_id")), 
 													 	rs.getString("org_type"), 
@@ -100,6 +101,7 @@ public class OrgTypeSkeleton implements Comparable<OrgTypeSkeleton>, HierarchyLi
 													 	rs.getBoolean("org_type_is_governmental"),
 													 	rs.getString("org_type_classification")));
 					}
+					rsi.close();
 				}
 			});
         return orgTypes;

@@ -12,5 +12,5 @@ import org.dgfoundation.amp.ar.FilterParam;
  */
 public interface ViewFetcher 
 {
-	public ResultSet fetch(ArrayList<FilterParam> params);
+	public RsInfo fetch(ArrayList<FilterParam> params);
 }

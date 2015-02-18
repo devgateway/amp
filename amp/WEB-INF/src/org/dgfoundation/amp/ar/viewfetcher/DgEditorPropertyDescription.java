@@ -125,21 +125,24 @@ public class DgEditorPropertyDescription implements PropertyDescription
 	public Map<Long, String> generateValues(java.sql.Connection connection, Collection<Long> ids, String locale) throws SQLException{ // will only be called for non-calculated
 		Map<Long, String> res = new HashMap<Long, String>();
 		
-		// import values in the requested locale
-		importValues(res, SQLUtils.rawRunQuery(connection, generateGeneralizedQuery(ids, locale), null));
+		try(RsInfo rsi = SQLUtils.rawRunQuery(connection, generateGeneralizedQuery(ids, locale), null)) {
+			// import values in the requested locale
+			importValues(res, rsi.rs);
+		}
 		
 		List<String> baseLanguages = SQLUtils.fetchAsList(connection, "SELECT default_language FROM dg_site WHERE site_id='amp' AND default_language IS NOT NULL", 1);
 		String baseLanguage = baseLanguages.isEmpty() ? "en" : baseLanguages.get(0);
 		
-		if (!locale.equals(baseLanguage)){
+		if (!locale.equals(baseLanguage)) {
 			// compute ids which have no translation in the requested language -> use English for those
 			java.util.HashSet<Long> remainingIds = new java.util.HashSet<Long>(ids);
 			remainingIds.removeAll(res.keySet());
 		
-			// import values which have no locale-translation in English
-			importValues(res, SQLUtils.rawRunQuery(connection, generateGeneralizedQuery(remainingIds, baseLanguage), null));			
+			try(RsInfo rsi = SQLUtils.rawRunQuery(connection, generateGeneralizedQuery(remainingIds, baseLanguage), null)) {
+				// import values which have no locale-translation in English
+				importValues(res, rsi.rs);
+			}
 		}
-		
 		return res;
 	}
 	

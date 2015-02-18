@@ -93,7 +93,7 @@ public class SQLUtils {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static ResultSet rawRunQuery(Connection connection, String query, ArrayList<FilterParam> params) throws SQLException
+	public static RsInfo rawRunQuery(Connection connection, String query, ArrayList<FilterParam> params) throws SQLException
 	{
 		//logger.info("Running raw SQL query: " + query);
 		
@@ -111,7 +111,7 @@ public class SQLUtils {
 		ResultSet rs = ps.executeQuery();
 		rs.setFetchSize(500);
 		
-		return rs;
+		return new RsInfo(rs, ps);
 	}
 	
 	/**
@@ -123,14 +123,10 @@ public class SQLUtils {
 	 */
 	public static <T> List<T> fetchAsList(Connection connection, String query, int n)
 	{
-		ResultSet rs = null;
-		try
-		{
-			rs = rawRunQuery(connection, query, null);
-			return fetchAsList(rs, n, " with query " + query);
+		try(RsInfo rsi = rawRunQuery(connection, query, null)) {
+			return fetchAsList(rsi.rs, n, " with query " + query);
 		}
-		catch(SQLException e)
-		{
+		catch(SQLException e) {
 			throw new RuntimeException("Error fetching list of values with query " + query, e);
 		}
 //		finally

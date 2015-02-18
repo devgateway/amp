@@ -24,6 +24,7 @@ import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.filtercacher.FilterCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpColumns;
@@ -163,9 +164,9 @@ public abstract class ColumnWorker {
 			String locale = TLSUtils.getEffectiveLangCode();
 			
 			ViewFetcher fetcher = DatabaseViewFetcher.getFetcherForView(queryView, queryCondition, locale, generator.getColumnCachers(), conn, "*");			
-			ResultSet rs = fetcher.fetch(generator.getFilter().getIndexedParams());
+			RsInfo rs = fetcher.fetch(generator.getFilter().getIndexedParams());
 			
-			rsmd = rs.getMetaData();
+			rsmd = rs.rs.getMetaData();
 			
 			//Set parameters to query
 			//generator.getFilter().getYearFrom();
@@ -188,10 +189,10 @@ public abstract class ColumnWorker {
 			  * org.dgfoundation.amp.ar.AmpReportGenerator.retrieveData(): from 5200ms to 3500ms
 			  * org.dgfoundation.amp.ar.workers.ColumnWorker.extractCellColumn() 5200ms to 3500ms
 			  */
-			while (rs.next())
+			while (rs.rs.next())
 			{
-				Cell c = getCellFromRow(rs);
-				if(c != null)
+				Cell c = getCellFromRow(rs.rs);
+				if (c != null)
 					cc.addCell(c);
 			}
 

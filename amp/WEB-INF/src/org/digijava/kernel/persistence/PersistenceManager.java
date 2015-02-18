@@ -22,6 +22,7 @@
 
 package org.digijava.kernel.persistence;
 
+import java.io.Closeable;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -775,7 +776,7 @@ public class PersistenceManager {
 	 * closes a JDBC connection, swallowing any exceptions which have appeared in the meantime
 	 * @param connection
 	 */
-	public static void closeQuietly(Connection connection)
+	public static void closeQuietly(AutoCloseable connection)
 	{
 		if (connection == null)
 			return;

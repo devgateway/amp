@@ -30,13 +30,14 @@ public class NameFilteringTeamFilter implements StringGenerator {
 		try
 		{
 			ViewFetcher fetcher = DatabaseViewFetcher.getFetcherForView("amp_activity", " WHERE 1=1 ", locale, cachers, connection, "amp_activity_id", "name");
-			java.sql.ResultSet rs = fetcher.fetch(null);
-			while (rs.next())
-			{
-				long id = rs.getInt(1);
-				String actName = rs.getString(2);
-				if (activityNames.contains(actName))
-					ids.add(id);
+			try(RsInfo rsi = fetcher.fetch(null)) {
+				while (rsi.rs.next())
+				{
+					long id = rsi.rs.getInt(1);
+					String actName = rsi.rs.getString(2);
+					if (activityNames.contains(actName))
+						ids.add(id);
+				}
 			}
 		}
 		catch(Exception e)

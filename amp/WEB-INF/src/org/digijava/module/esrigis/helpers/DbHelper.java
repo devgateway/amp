@@ -23,6 +23,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -676,12 +677,13 @@ public class DbHelper {
 		{
 			public void execute(java.sql.Connection conn) throws java.sql.SQLException
 			{
-				java.sql.ResultSet rs = SQLUtils.rawRunQuery(conn, findLocationRegionsQuery, null);
-				while (rs.next())
-				{
-					Long locId = rs.getLong(1);
-					Long regionLocId = rs.getLong(2);
-					locationToRegion.put(locId, regionLocId);
+				try(RsInfo rsi = SQLUtils.rawRunQuery(conn, findLocationRegionsQuery, null)) {
+					while (rsi.rs.next())
+					{
+						Long locId = rsi.rs.getLong(1);
+						Long regionLocId = rsi.rs.getLong(2);
+						locationToRegion.put(locId, regionLocId);
+					}
 				}
 			}
 		});

@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.DatabaseWaver;
 import org.digijava.kernel.exception.DgException;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;

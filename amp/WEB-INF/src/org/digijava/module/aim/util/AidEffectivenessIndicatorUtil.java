@@ -153,14 +153,14 @@ public class AidEffectivenessIndicatorUtil {
             AmpAidEffectivenessIndicatorOption selectedOption = isIndicatorPresentOnThisActivity(indicator, selectedOptions);
             // if this indicator has already been presented on the activity and an option was selected
             if (selectedOption != null) {
-                AmpAidEffectivenessIndicatorOption selOpt = new AmpAidEffectivenessIndicatorOption();
-                selOpt.setAmpIndicatorOptionId(selectedOption.getAmpIndicatorOptionId());
+                /*AmpAidEffectivenessIndicatorOption selOpt = new AmpAidEffectivenessIndicatorOption();
+                selOpt.setAmpIndicatorOptionId(selectedOption.getAmpIndicatorOptionId());*/
                 activity.getSelectedEffectivenessIndicatorOptions().add(selectedOption);
             } else { // otherwise add the default option
                 AmpAidEffectivenessIndicatorOption defaultOption = indicator.getDefaultOption();
-                AmpAidEffectivenessIndicatorOption defOpt = new AmpAidEffectivenessIndicatorOption();
-                defOpt.setAmpIndicatorOptionId(defaultOption.getAmpIndicatorOptionId());
-                activity.getSelectedEffectivenessIndicatorOptions().add(defOpt);
+                /*AmpAidEffectivenessIndicatorOption defOpt = new AmpAidEffectivenessIndicatorOption();
+                defOpt.setAmpIndicatorOptionId(defaultOption.getAmpIndicatorOptionId());*/
+                activity.getSelectedEffectivenessIndicatorOptions().add(defaultOption);
             }
         }
 

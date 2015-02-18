@@ -122,24 +122,8 @@ public class AmpAidEffectivenessFormSectionFeature extends
                 componentOuter.add(group);
                 */
 
-                /*
-                final RadioChoice<AmpAidEffectivenessIndicatorOption> indicatorChoices = new RadioChoice<AmpAidEffectivenessIndicatorOption>
-                        ("ampIndicatorOptionId", new Model<AmpAidEffectivenessIndicatorOption>(componentOuter.getModelObject()),
-                                componentOuter.getModelObject().getIndicator().getOptions(), new ChoiceRenderer<AmpAidEffectivenessIndicatorOption>(/*"ampIndicatorOptionName", "ampIndicatorOptionId"*//*){
-                    @Override
-                    public Object getDisplayValue(AmpAidEffectivenessIndicatorOption object) {
-                        return object.getAmpIndicatorOptionName();
-                    }
 
-                    @Override
-                    public String getIdValue(AmpAidEffectivenessIndicatorOption object, int index) {
-                        return String.valueOf(object.getAmpIndicatorOptionId());
-                    }
-
-                });*/
-
-
-                IChoiceRenderer<AmpAidEffectivenessIndicatorOption> renderer = new IChoiceRenderer<AmpAidEffectivenessIndicatorOption>() {
+               IChoiceRenderer<AmpAidEffectivenessIndicatorOption> renderer = new IChoiceRenderer<AmpAidEffectivenessIndicatorOption>() {
                     @Override
                     public Object getDisplayValue(AmpAidEffectivenessIndicatorOption object) {
                         return object.getAmpIndicatorOptionName();
@@ -151,10 +135,29 @@ public class AmpAidEffectivenessFormSectionFeature extends
                     }
                 };
 
-                //Label indicatorName = new Label("indicatorName", componentOuter.getModelObject().getIndicator().getAmpIndicatorName() + ":");
-                //componentOuter.add(indicatorName);
+                if (true) {
+                    final RadioChoice<AmpAidEffectivenessIndicatorOption> indicatorChoices = new RadioChoice<AmpAidEffectivenessIndicatorOption>
+                            ("ampIndicatorOptionId", new Model<AmpAidEffectivenessIndicatorOption>(componentOuter.getModelObject()),
+                                    componentOuter.getModelObject().getIndicator().getOptions(), renderer);
+
+                    componentOuter.add(indicatorChoices);
+
+                } /*else {
+                    DropDownChoice indicatorChoices = new DropDownChoice("ampIndicatorOptionId",
+                            new Model<AmpAidEffectivenessIndicatorOption>(componentOuter.getModelObject()),
+                            componentOuter.getModelObject().getIndicator().getOptions(), renderer);
+                    componentOuter.add(indicatorChoices);
+                    componentOuter.add(indicatorChoices);
+                }*/
+
+
+                Label indicatorName = new Label("indicatorName", componentOuter.getModelObject().getIndicator().getAmpIndicatorName() + ":");
+                componentOuter.add(indicatorName);
+
+
+                /*
                 AmpAidEffectivenessIndicator indicator = componentOuter.getModelObject().getIndicator();
-                if (true/*indicator.getIndicatorType() == 0*/) {
+                if (indicator.getIndicatorType() == 0) {
                     AmpGroupFieldPanel<AmpAidEffectivenessIndicatorOption> indicatorChoices = new AmpGroupFieldPanel<AmpAidEffectivenessIndicatorOption>(
                             "ampIndicatorOptionId", new Model<AmpAidEffectivenessIndicatorOption>(componentOuter.getModelObject()), indicator.getOptions(),
                             indicator.getAmpIndicatorName() + ":", false, false, renderer, indicator.getTooltipText());
@@ -165,7 +168,7 @@ public class AmpAidEffectivenessFormSectionFeature extends
                             new Model<AmpAidEffectivenessIndicatorOption>(componentOuter.getModelObject()),
                             indicator.getOptions(), renderer);
                     componentOuter.add(indicatorChoices);
-                }
+                }*/
 
 
 

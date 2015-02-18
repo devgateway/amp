@@ -42,23 +42,7 @@ import org.dgfoundation.amp.onepager.models.AmpActivityModel;
 import org.dgfoundation.amp.onepager.translation.TranslatorUtil;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpActivityContact;
-import org.digijava.module.aim.dbentity.AmpActivityDocument;
-import org.digijava.module.aim.dbentity.AmpActivityFields;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpAgreement;
-import org.digijava.module.aim.dbentity.AmpAnnualProjectBudget;
-import org.digijava.module.aim.dbentity.AmpComments;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpStructure;
-import org.digijava.module.aim.dbentity.AmpStructureImg;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
-import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.ActivityDocumentsConstants;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -225,6 +209,7 @@ public class ActivityUtil {
 			setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity,rejected);
 			
 			saveIndicators(a, session);
+            //processEffectivenessIndicators(a, session);
 
 			saveResources(a); 
 			saveEditors(session, createNewVersion); 
@@ -917,6 +902,18 @@ public class ActivityUtil {
 			}
 		}
 	}
+
+    private static void processEffectivenessIndicators(AmpActivityVersion a, Session session) {
+        if (a.getSelectedEffectivenessIndicatorOptions() != null) {
+            Set<AmpAidEffectivenessIndicatorOption> refreshedOptions = new HashSet<AmpAidEffectivenessIndicatorOption>();
+            for (AmpAidEffectivenessIndicatorOption option : a.getSelectedEffectivenessIndicatorOptions()) {
+                refreshedOptions.add((AmpAidEffectivenessIndicatorOption)session
+                        .load(AmpAidEffectivenessIndicatorOption.class, option.getAmpIndicatorOptionId()));
+            }
+            a.getSelectedEffectivenessIndicatorOptions().clear();
+            a.getSelectedEffectivenessIndicatorOptions().addAll(refreshedOptions);
+        }
+    }
 
     public static void saveContacts(AmpActivityVersion a, Session session,boolean checkForContactsRemoval) throws Exception {
         Set<AmpActivityContact> activityContacts=a.getActivityContacts();

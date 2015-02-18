@@ -16,6 +16,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.ampapi.endpoints.dto.SimpleJsonBean;
@@ -116,7 +117,8 @@ public class QueryUtil {
 
 				@Override
 				public void execute(Connection connection) throws SQLException {
-					try(java.sql.ResultSet rs = SQLUtils.rawRunQuery(connection, queryString, null)) {
+					try(RsInfo rsi = SQLUtils.rawRunQuery(connection, queryString, null)) {
+						ResultSet rs = rsi.rs;
 						while (rs.next()) {
 							AmpLocator locator = new AmpLocator();
 							locator.setId(rs.getLong("id"));
@@ -157,7 +159,7 @@ public class QueryUtil {
 	}
 
 	/**
-	 * Filter organization skelleton by orgGrpId
+	 * Filter organization skeleton by orgGrpId
 	 * 
 	 * @param orgGrpId
 	 * @return
@@ -181,26 +183,27 @@ public class QueryUtil {
 								" from amp_org_group aog,amp_org_type aot " +
 								" where aot.amp_org_type_id=aog.org_type" +
 								" order by orgTypeId";
-					ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
-					Long lastOrgTypeId = 0L;
-					List<Long> orgsGrpId = null;
-					while (rs.next()) {
-						if (!lastOrgTypeId.equals(rs.getLong("orgTypeId"))) {
-							lastOrgTypeId = rs.getLong("orgTypeId");
-							JsonBean orgType = new JsonBean();
-							orgsGrpId = new ArrayList<Long>();
-							orgType.set("id", rs.getLong("orgTypeId"));
-							if (orgTypesName != null){
-								orgType.set("name", orgTypesName.get(lastOrgTypeId));
-							} else {
-								orgType.set("name", rs.getString("orgTypeName"));
+					try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
+						ResultSet rs = rsi.rs;
+						Long lastOrgTypeId = 0L;
+						List<Long> orgsGrpId = null;
+						while (rs.next()) {
+							if (!lastOrgTypeId.equals(rs.getLong("orgTypeId"))) {
+								lastOrgTypeId = rs.getLong("orgTypeId");
+								JsonBean orgType = new JsonBean();
+								orgsGrpId = new ArrayList<Long>();
+								orgType.set("id", rs.getLong("orgTypeId"));
+								if (orgTypesName != null){
+									orgType.set("name", orgTypesName.get(lastOrgTypeId));
+								} else {
+									orgType.set("name", rs.getString("orgTypeName"));
+								}
+								orgType.set("groupIds", orgsGrpId);
+								orgTypes.add(orgType);
 							}
-							orgType.set("groupIds", orgsGrpId);
-							orgTypes.add(orgType);
+							orgsGrpId.add(rs.getLong("orgGrpId"));
 						}
-						orgsGrpId.add(rs.getLong("orgGrpId"));
 					}
-	
 				}
 	    });
 	    return orgTypes;
@@ -219,29 +222,30 @@ public static List<JsonBean> getOrgGroups() {
 							 " from amp_org_group aog "+ 
 							 " left outer join amp_organisation o on aog.amp_org_grp_id=o.org_grp_id "+
 							 " order by orgGrpId";
-				ResultSet rs=SQLUtils.rawRunQuery(conn, query, null);
-				Long lastOrgGrpId=0L;
-				List <Long>orgsId=null;
-				while(rs.next()){
-				if(!lastOrgGrpId.equals(rs.getLong("orgGrpId"))){
-					lastOrgGrpId=rs.getLong("orgGrpId");
-					JsonBean orgGrp=new JsonBean();
-					orgsId=new ArrayList<Long>();
-					orgGrp.set("id", rs.getLong("orgGrpId"));
-						if(orgGroupsNames!=null){
-							orgGrp.set("name", orgGroupsNames.get(lastOrgGrpId));	
-						}else{
-							orgGrp.set("name", rs.getString("grpName"));
+				try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
+					ResultSet rs = rsi.rs;
+					Long lastOrgGrpId=0L;
+					List <Long>orgsId=null;
+					while (rs.next()){
+						if (!lastOrgGrpId.equals(rs.getLong("orgGrpId"))) {
+							lastOrgGrpId = rs.getLong("orgGrpId");
+							JsonBean orgGrp = new JsonBean();
+							orgsId = new ArrayList<Long>();
+							orgGrp.set("id", rs.getLong("orgGrpId"));
+							if	(orgGroupsNames != null) {
+								orgGrp.set("name", orgGroupsNames.get(lastOrgGrpId));	
+							} else{
+								orgGrp.set("name", rs.getString("grpName"));
+							}
+							orgGrp.set("typeId", rs.getLong("orgType"));
+							orgGrp.set("orgIds", orgsId);
+							orgGroups.add(orgGrp);
 						}
-					orgGrp.set("typeId", rs.getLong("orgType"));
-					orgGrp.set("orgIds",orgsId);
-					orgGroups.add(orgGrp);
-				}
-					if(rs.getLong("orgId")!=0){
-						orgsId.add(rs.getLong("orgId"));
+						if (rs.getLong("orgId") != 0){
+							orgsId.add(rs.getLong("orgId"));
+						}
 					}
 				}
-
 			}
     });
     return orgGroups;
@@ -270,35 +274,36 @@ public static List<JsonBean> getOrgGroups() {
 							"(SELECT r.amp_role_id FROM amp_role r WHERE r.role_code IN (" + 
 							Util.toCSStringForIN(roleCodes) + "))" +
 						" order by o.amp_org_id";
-				ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
-				Long lastOrgId = 0L;
-				List<Long> rolesId = null;
-				while (rs.next()) {
-					if (!lastOrgId .equals(rs.getLong("orgId"))) {
-						lastOrgId  = rs.getLong("orgId");
-						JsonBean org = new JsonBean();
-						rolesId = new ArrayList<Long>();
-						org.set("id", lastOrgId);
-						if(ContentTranslationUtil.multilingualIsEnabled()){
-							org.set("name", organisationsNames.get(lastOrgId));
-						}else{
-							org.set("name", rs.getString("name"));
+				try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
+					ResultSet rs = rsi.rs;
+					Long lastOrgId = 0L;
+					List<Long> rolesId = null;
+					while (rs.next()) {
+						if (!lastOrgId .equals(rs.getLong("orgId"))) {
+							lastOrgId  = rs.getLong("orgId");
+							JsonBean org = new JsonBean();
+							rolesId = new ArrayList<Long>();
+							org.set("id", lastOrgId);
+							if (ContentTranslationUtil.multilingualIsEnabled()) {
+								org.set("name", organisationsNames.get(lastOrgId));
+							} else {
+								org.set("name", rs.getString("name"));
+							}
+							org.set("acronym", rs.getString("acronym"));
+							org.set("groupId", rs.getLong("grpId"));	
+							org.set("rolesIds", rolesId);
+							org.set("hasFundings", rs.getBoolean("hasFundings"));
+							orgs.add(org);
 						}
-						org.set("acronym", rs.getString("acronym"));
-						org.set("groupId", rs.getLong("grpId"));	
-						org.set("rolesIds", rolesId);
-						org.set("hasFundings", rs.getBoolean("hasFundings"));
-						orgs.add(org);
+						rolesId.add(rs.getLong("roleId"));
 					}
-					rolesId.add(rs.getLong("roleId"));
 				}
 
 			}
-
-
 		});
 		return orgs;
 	}
+	
 	private static Map<Long, String> getTranslatedName(Connection conn,String tableName,String id,String name)
 			throws SQLException {
 		Map<Long, String> names = null;
@@ -306,9 +311,10 @@ public static List<JsonBean> getOrgGroups() {
 			names  = new HashMap<Long, String>();
 			ViewFetcher v = DatabaseViewFetcher.getFetcherForView(tableName,"",TLSUtils.getEffectiveLangCode(),
 					new HashMap<PropertyDescription, ColumnValuesCacher>(),conn, "*");
-			ResultSet rs = v.fetch(null);
-			while (rs.next()) {
-				names .put(rs.getLong(id),rs.getString(name));
+			try(RsInfo rs = v.fetch(null)) {
+				while (rs.rs.next()) {
+					names.put(rs.rs.getLong(id),rs.rs.getString(name));
+				}
 			}
 
 		}
@@ -321,13 +327,11 @@ public static List<JsonBean> getOrgGroups() {
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
 
-				try (java.sql.ResultSet rs = SQLUtils.rawRunQuery(conn,
-						"select amp_role_id,name from amp_role", null)) {
-
+				try(RsInfo rsi = SQLUtils.rawRunQuery(conn,	"select amp_role_id,name from amp_role", null)) {
+					ResultSet rs = rsi.rs;
 					while (rs.next()) {
 						rogRoles.add(new SimpleJsonBean(rs.getLong("amp_role_id"), rs.getString("name"),
-								null, TranslatorWorker.translateText(rs
-										.getString("name"))));
+								null, TranslatorWorker.translateText(rs.getString("name"))));
 					}
 				}
 
@@ -357,21 +361,19 @@ public static List<JsonBean> getOrgGroups() {
 		 
 	 }
 	 
-	 @SuppressWarnings("unchecked")
-		public static List<AmpCategoryValue> getClusterLevels() {
-			List<AmpCategoryValue> al = null;
-			String queryString = "select distinct a.parentCategoryValue from " + AmpCategoryValueLocations.class.getName()+ " a";
-				Query q = PersistenceManager.getSession().createQuery(queryString);
-				q.setMaxResults(100);
-				al = q.list();
-			return al;
-
-		}
-	 public static List<String>getImplementationLocationsInUse(){
-		 final List<String>list=new ArrayList<String>();
-		 
-		 
-		
+	@SuppressWarnings("unchecked")
+	public static List<AmpCategoryValue> getClusterLevels() {
+		List<AmpCategoryValue> al = null;
+		String queryString = "select distinct a.parentCategoryValue from " + AmpCategoryValueLocations.class.getName()+ " a";
+		Query q = PersistenceManager.getSession().createQuery(queryString);
+		q.setMaxResults(100);
+		al = q.list();
+		return al;
+	}
+	 
+	public static List<String>getImplementationLocationsInUse() {
+		final List<String>list = new ArrayList<String>();
+		 		 
 		PersistenceManager.getSession().doWork(new Work() {
 			public void execute(Connection conn) throws SQLException {
 				String query = "select * from amp_category_value cv,amp_category_class cc "
@@ -379,11 +381,11 @@ public static List<JsonBean> getOrgGroups() {
 						+ " and keyname ='"+ CategoryConstants.IMPLEMENTATION_LOCATION_KEY +"'  "
 						+ " and cv.id in(select distinct parent_category_value from amp_category_value_location )  "
 						+ " order by cv.index_column ";		
-				ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
-				while (rs.next()) {
-					list.add(rs.getString("category_value"));
+				try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
+					while (rsi.rs.next()) {
+						list.add(rsi.rs.getString("category_value"));
+					}
 				}
-				rs.close();
 			}});
 				
 		return list;
@@ -429,8 +431,8 @@ public static List<JsonBean> getOrgGroups() {
 
 				@Override
 				public void execute(Connection connection) throws SQLException {
-					try (java.sql.ResultSet rs = SQLUtils.rawRunQuery(
-							connection, qry.value, null)) {
+					try (RsInfo rsi = SQLUtils.rawRunQuery(connection, qry.value, null)) {
+						ResultSet rs = rsi.rs;
 						if (rs.next()) {
 							location.set("id", rs.getLong("id"));
 							location.set("name", rs.getString("location_name"));
@@ -443,8 +445,7 @@ public static List<JsonBean> getOrgGroups() {
 								l.set("name", rs.getString("location_name"));
 								l.set("level", rs.getInt("level"));
 								setFilterIdToJsonBean (l,rs.getInt("level"));
-								addLocationToJsonBean(location,
-										rs.getLong("parent_id"), l);
+								addLocationToJsonBean(location, rs.getLong("parent_id"), l);
 							}
 						}
 

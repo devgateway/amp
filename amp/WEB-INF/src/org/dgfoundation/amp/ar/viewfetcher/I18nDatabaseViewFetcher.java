@@ -70,11 +70,11 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 	 * 4. return a proxying/delegating ResultSet which is a passthrough for all the columns except the translated ones. The translated columns are seeked in O(1) in the caches
 	 */
 	@Override
-	public ResultSet fetchRows(ArrayList<FilterParam> params) throws SQLException
+	public RsInfo fetchRows(ArrayList<FilterParam> params) throws SQLException
 	{
 		String queryColumnsPart = buildColumnsPart(); // rewrite query's SELECT part
 		String query = "SELECT " + queryColumnsPart + " FROM " + this.viewName + " " + this.condition;
-		ResultSet rawResults = SQLUtils.rawRunQuery(connection, query, params);
+		RsInfo rawResults = SQLUtils.rawRunQuery(connection, query, params);
 				
 		// scan all ids of all i18n'ed columns, fetch all results into cache IF NOT ALREADY EXISTING, return a delegator which reads the cache
 		Map<Integer, Set<Long>> usedIds = new HashMap<Integer, Set<Long>>(); // Map<columnNumber, Set<TranslatedElementId>> - everything which the user requested
@@ -97,17 +97,17 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 		
 		// FIRST STEP: scan ids of entities to translate
 		// first iteration -> scan all the columns' indices
-		while (rawResults.next())
+		while (rawResults.rs.next())
 		{
 			for(int colNr:this.colNumberToColName.keySet())
 				if (usedIds.containsKey(colNr)) // no usedIds kept for calculated columns
 				{
-					Long id = rawResults.getLong(indexColumnNames.get(colNr));
+					Long id = rawResults.rs.getLong(indexColumnNames.get(colNr));
 					if (id != null)
 						usedIds.get(colNr).add(id);
 				}
 		}		
-		rawResults.beforeFirst(); // reset for the wrapper
+		rawResults.rs.beforeFirst(); // reset for the wrapper
 		
 		// SECOND STEP: subtract the ids of translatable entities which are already in the cacher
 		for(int colNr:this.colNumberToColName.keySet())
@@ -137,7 +137,7 @@ public class I18nDatabaseViewFetcher extends DatabaseViewFetcher{
 				cachers.get(prop).importValues(values);
 			}
 		}
-		return new TranslatingResultSet(rawResults); // STEP 4: return delegating ResultSet
+		return new RsInfo(new TranslatingResultSet(rawResults.rs), rawResults.statement); // STEP 4: return delegating ResultSet
 	}
 	
 	/**

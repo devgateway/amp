@@ -126,9 +126,11 @@ public class DgEditorPropertyDescription implements PropertyDescription
 	@Override
 	public Map<Long, String> generateValues(java.sql.Connection connection, Collection<Long> ids, String locale) throws SQLException{ // will only be called for non-calculated
 		Map<Long, String> res = new HashMap<Long, String>();
-		
-		// import values in the requested locale
-		importValues(res, SQLUtils.rawRunQuery(connection, generateGeneralizedQuery(ids, locale), null));
+	
+		try(RsInfo rsi = SQLUtils.rawRunQuery(connection, generateGeneralizedQuery(ids, locale), null)) {
+			// import values in the requested locale
+			importValues(res, rsi.rs);
+		}
 		
 		importBaseLanguageTranslations(connection, res, locale, ids);
 		
@@ -145,8 +147,10 @@ public class DgEditorPropertyDescription implements PropertyDescription
 			java.util.HashSet<Long> remainingIds = new java.util.HashSet<Long>(ids);
 			remainingIds.removeAll(res.keySet());
 	
-			// import values which have no locale-translation in English
-			importValues(res, SQLUtils.rawRunQuery(connection, generateGeneralizedQuery(remainingIds, baseLanguage), null));
+			try(RsInfo rsi = SQLUtils.rawRunQuery(connection, generateGeneralizedQuery(remainingIds, baseLanguage), null)) {
+				// import values which have no locale-translation in English
+				importValues(res, rsi.rs);
+			}
 		}
 	}
 	

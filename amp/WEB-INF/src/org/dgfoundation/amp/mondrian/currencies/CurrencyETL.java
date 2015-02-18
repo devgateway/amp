@@ -11,6 +11,7 @@ import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -140,9 +141,11 @@ public class CurrencyETL {
 	
 	public static ExchangeRates importRates(java.sql.Connection conn, AmpCurrency fromCurrency, AmpCurrency toCurrency) throws SQLException {
 		ExchangeRates rates = new ExchangeRates(fromCurrency.getAmpCurrencyId(), toCurrency.getAmpCurrencyId());
-		rates.importRates(SQLUtils.rawRunQuery(conn, 
+		try(RsInfo rsi = SQLUtils.rawRunQuery(conn, 
 				String.format("SELECT to_char(exchange_rate_date, 'J')::integer, exchange_rate FROM amp_currency_rate WHERE (exchange_rate IS NOT NULL) AND (exchange_rate > 0) AND (from_currency_code = '%s') and (to_currency_code='%s')", 
-						fromCurrency.getCurrencyCode(), toCurrency.getCurrencyCode()), null));
+						fromCurrency.getCurrencyCode(), toCurrency.getCurrencyCode()), null)){
+			rates.importRates(rsi.rs);
+		}
 		return rates;
 	}
 }

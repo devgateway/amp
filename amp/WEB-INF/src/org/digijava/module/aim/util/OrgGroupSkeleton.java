@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -97,13 +99,15 @@ public class OrgGroupSkeleton implements Comparable<OrgGroupSkeleton>, Hierarchy
 				public void execute(Connection conn) throws SQLException {
 					ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_org_group", 
 							"", TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");
-					ResultSet rs = v.fetch(null);
+					RsInfo rsi = v.fetch(null);
+					ResultSet rs = rsi.rs;
 					while (rs.next()) {
 						orgGroups.add(new OrgGroupSkeleton(nullInsteadOfZero(rs.getLong("amp_org_grp_id")), 
 													 	rs.getString("org_grp_name"), 
 													 	rs.getString("org_grp_code"), 
 													 	nullInsteadOfZero(rs.getLong("org_type"))));
 					}
+					rsi.close();
 				}
 			});
         return orgGroups;

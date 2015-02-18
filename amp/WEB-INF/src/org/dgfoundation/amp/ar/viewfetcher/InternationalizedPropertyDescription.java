@@ -94,14 +94,14 @@ public class InternationalizedPropertyDescription implements PropertyDescription
 	 * rs.getLong(1) and rs.getString(2) - this is useful if you are supplying a mock implementation
 	 * @param rs
 	 */
-	public void importValues(Map<Long, String> values, ResultSet rs)
+	public void importValues(Map<Long, String> values, RsInfo rawRs)
 	{
-		try
+		try(RsInfo rs = rawRs)
 		{
-			while (rs.next())
+			while (rs.rs.next())
 			{
-				Long id = rs.getLong(1);
-				String value = rs.getString(2);
+				Long id = rs.rs.getLong(1);
+				String value = rs.rs.getString(2);
 			
 				values.put(id, value);
 			}

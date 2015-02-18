@@ -20,8 +20,6 @@ import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.util.HierarchyListable;
 import org.hibernate.jdbc.Work;
 
-@TranslatableClass (displayName = "Organisation Type")
-	
 public class OrgTypeSkeleton implements Comparable<OrgTypeSkeleton>, HierarchyListable {
 	private String orgTypeName;
 	private Long orgTypeId;
@@ -103,6 +101,7 @@ public class OrgTypeSkeleton implements Comparable<OrgTypeSkeleton>, HierarchyLi
 													 	rs.getBoolean("org_type_is_governmental"),
 													 	rs.getString("org_type_classification")));
 					}
+					rsi.close();
 				}
 			});
         return orgTypes;

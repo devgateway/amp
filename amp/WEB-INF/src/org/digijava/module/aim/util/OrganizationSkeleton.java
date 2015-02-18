@@ -197,6 +197,7 @@ public class OrganizationSkeleton implements Comparable<OrganizationSkeleton>, H
 									rs.getString("description"),
 									nullInsteadOfZero(rs.getLong("org_grp_id"))));
 					}
+					rsi.close();
 				}
 			});
         return organizations;

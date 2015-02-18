@@ -20,7 +20,7 @@ public class RawDatabaseViewFetcher extends DatabaseViewFetcher
 	}
 	
 	@Override
-	public ResultSet fetchRows(ArrayList<FilterParam> params) throws SQLException
+	public RsInfo fetchRows(ArrayList<FilterParam> params) throws SQLException
 	{
 		StringBuilder columns = new StringBuilder();
 		for(String columnName:columnNames){

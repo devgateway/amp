@@ -16,6 +16,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.Constants;
@@ -144,17 +145,17 @@ public class MonetConnection implements AutoCloseable {
 	 * @throws SQLException
 	 */
 	public void createTableFromQuery(java.sql.Connection srcConn, String srcQuery, String destTableName) throws SQLException {
-		ResultSet rs = SQLUtils.rawRunQuery(srcConn, srcQuery, null);
-		if (tableExists(destTableName)) {
-			dropTable(destTableName);
-		};
-		/*else */{
-			// create table based on the results structure
-			DatabaseTableDescription tableDescription = DatabaseTableDescription.describeResultSet(destTableName, getMapper(), rs);
-			tableDescription.create(this.conn, false);
+		try(RsInfo rs = SQLUtils.rawRunQuery(srcConn, srcQuery, null)) {
+			if (tableExists(destTableName)) {
+				dropTable(destTableName);
+			};
+			/*else */{
+				// create table based on the results structure
+				DatabaseTableDescription tableDescription = DatabaseTableDescription.describeResultSet(destTableName, getMapper(), rs.rs);
+				tableDescription.create(this.conn, false);
+			}
+			copyEntries(destTableName, rs.rs);
 		}
-			
-		copyEntries(destTableName, rs);
 	}
 	
 	public void copyTableFromPostgres(java.sql.Connection srcConn, String tableName) throws SQLException {
@@ -193,9 +194,11 @@ public class MonetConnection implements AutoCloseable {
 	}
 	
 	public void copyTableStructureFromPostgres(Connection srcConn, String srcTable, String destTable) throws SQLException {
-		DatabaseTableDescription tableDescription = DatabaseTableDescription.describeResultSet(destTable, getMapper(), SQLUtils.rawRunQuery(srcConn, "select * from " + srcTable, null));
-		dropTable(tableDescription.tableName);
-		tableDescription.create(this.conn, false);
+		try(RsInfo rs = SQLUtils.rawRunQuery(srcConn, "select * from " + srcTable, null)) {
+			DatabaseTableDescription tableDescription = DatabaseTableDescription.describeResultSet(destTable, getMapper(), rs.rs);
+			dropTable(tableDescription.tableName);
+			tableDescription.create(this.conn, false);
+		}
 	}
 	
 	public void executeQuery(String query){

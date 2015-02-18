@@ -12,6 +12,7 @@ import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -154,7 +155,8 @@ public class OrganizationSkeleton implements Comparable<OrganizationSkeleton>, H
 										" and amp_org_id in (" + orgIdsSource + ")";
 					ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_organisation", 
 							condition, TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");		
-					ResultSet rs = v.fetch(null);
+					RsInfo rsi = v.fetch(null);
+					ResultSet rs = rsi.rs;
 					while (rs.next()) {
 						organizations.add(new OrganizationSkeleton(nullInsteadOfZero(rs.getLong("amp_org_id")), 
 									rs.getString("name"),
@@ -185,7 +187,8 @@ public class OrganizationSkeleton implements Comparable<OrganizationSkeleton>, H
 		            		"(deleted is null or deleted = false) ";
 					ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_organisation", 
 							condition, TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");		
-					ResultSet rs = v.fetch(null);
+					RsInfo rsi = v.fetch(null);
+					ResultSet rs = rsi.rs;
 					while (rs.next()) {
 						organizations.add(new OrganizationSkeleton(nullInsteadOfZero(rs.getLong("amp_org_id")), 
 									rs.getString("name"),

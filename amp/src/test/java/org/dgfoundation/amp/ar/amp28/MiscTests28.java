@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.testutils.AmpTestCase;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
@@ -92,7 +93,8 @@ public class MiscTests28 extends AmpTestCase
 
 			@Override
 			public void execute(Connection connection) throws SQLException {				
-				ResultSet rs = SQLUtils.rawRunQuery(connection, "SELECT * from all_programs_with_levels where amp_theme_id IN (1, 4, 8)", null);
+			try(RsInfo rsi = SQLUtils.rawRunQuery(connection, "SELECT * from all_programs_with_levels where amp_theme_id IN (1, 4, 8)", null)) {				
+				ResultSet rs = rsi.rs;
 				while (rs.next()) {
 					int themeId = rs.getInt("amp_theme_id");
 					switch (themeId) {
@@ -122,6 +124,7 @@ public class MiscTests28 extends AmpTestCase
 						fail("should not have a row with amp_theme_id of " + themeId);
 					}
 				}
+			}
 			}			
 		});
 	}
@@ -130,16 +133,17 @@ public class MiscTests28 extends AmpTestCase
 		PersistenceManager.getSession().doWork(new Work() {
 
 			protected void checkSingleValue(java.sql.Connection conn, Long v, String query) throws SQLException {
-				ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
-				if (!rs.next())
-					fail("query returned no results");
-				Long l = rs.getLong(1);
-				Object obj = rs.getObject(1);
-				if (v == null) {
-					assertTrue("result should have been null but is " + obj + " for query " + query, obj == null);
-					return;
+				try(RsInfo rs = SQLUtils.rawRunQuery(conn, query, null)) {
+					if (!rs.rs.next())
+						fail("query returned no results");
+					Long l = rs.rs.getLong(1);
+					Object obj = rs.rs.getObject(1);
+					if (v == null) {
+						assertTrue("result should have been null but is " + obj + " for query " + query, obj == null);
+						return;
+					}
+					assertEquals("while running " + query, v.longValue(), l.longValue());
 				}
-				assertEquals("while running " + query, v.longValue(), l.longValue());
 			}
 			
 			@Override

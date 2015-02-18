@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
 import org.dgfoundation.amp.algo.DatabaseWaver;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -1143,10 +1144,10 @@ public class SectorUtil {
 
 			@Override public void execute(Connection connection) throws SQLException {
 				String query = String.format("SELECT amp_sector_id, sector_config_name FROM all_sectors_with_levels WHERE amp_sector_id IN (%s)", Util.toCSStringForIN(in));
-				try(java.sql.ResultSet rs = SQLUtils.rawRunQuery(connection, query, null)) {
-					while (rs.next()) {
-						Long secId = rs.getLong(1);
-						String secScheme = rs.getString(2);
+				try(RsInfo rs = SQLUtils.rawRunQuery(connection, query, null)) {
+					while (rs.rs.next()) {
+						Long secId = rs.rs.getLong(1);
+						String secScheme = rs.rs.getString(2);
 					
 						if (!ret.containsKey(secScheme)) ret.put(secScheme, new ArrayList<Long>());
 						ret.get(secScheme).add(secId);

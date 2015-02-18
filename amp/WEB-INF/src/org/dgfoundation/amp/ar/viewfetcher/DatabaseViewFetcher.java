@@ -57,7 +57,7 @@ public abstract class DatabaseViewFetcher implements ViewFetcher
 	}
 	
 	@Override
-	public ResultSet fetch(ArrayList<FilterParam> params)
+	public RsInfo fetch(ArrayList<FilterParam> params)
 	{
 		if (columnNames == null)
 			columnNames = generateColumnNames();
@@ -105,7 +105,7 @@ public abstract class DatabaseViewFetcher implements ViewFetcher
 	 * the implementation-dependent way of fetching rows from a database - either rawly or through translations
 	 * @return
 	 */
-	protected abstract ResultSet fetchRows(ArrayList<FilterParam> params) throws SQLException;
+	protected abstract RsInfo fetchRows(ArrayList<FilterParam> params) throws SQLException;
 	
 	@Override
 	public String toString()
@@ -163,12 +163,12 @@ public abstract class DatabaseViewFetcher implements ViewFetcher
 			public void execute(Connection conn) throws SQLException
 			{
 				ViewFetcher fetcher = getFetcherForView(viewName, condition, TLSUtils.getEffectiveLangCode(), new java.util.HashMap<PropertyDescription, ColumnValuesCacher>(), conn, idColumnName, payloadColumnName);
-				ResultSet rs = fetcher.fetch(null);
-				while (rs.next())
-				{
-					Long id = rs.getLong(idColumnName);
-					String val = rs.getString(payloadColumnName);
-					res.put(id, val);
+				try(RsInfo rs = fetcher.fetch(null)) {
+					while (rs.rs.next()) {
+						Long id = rs.rs.getLong(idColumnName);
+						String val = rs.rs.getString(payloadColumnName);
+						res.put(id, val);
+					}
 				}
 			}
 		});

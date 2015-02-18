@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.algo.BooleanWrapper;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.currencies.CalculateExchangeRatesEtlJob;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
@@ -33,6 +34,8 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.time.StopWatch;
+import org.digijava.module.message.jobs.CloseExpiredActivitiesJob;
+import org.hibernate.Session;
 
 import clover.com.google.common.base.Joiner;
 
@@ -538,10 +541,13 @@ private EtlResult execute() throws Exception {
 		SQLUtils.executeQuery(conn, "ALTER TABLE " + MONDRIAN_DATE_TABLE + " ADD month_name_" + calendar.getAmpFiscalCalId() + " text");
 		SQLUtils.executeQuery(conn, "ALTER TABLE " + MONDRIAN_DATE_TABLE + " ADD quarter_code_" + calendar.getAmpFiscalCalId() + " bigint");
 		SQLUtils.executeQuery(conn, "ALTER TABLE " + MONDRIAN_DATE_TABLE + " ADD quarter_name_" + calendar.getAmpFiscalCalId() + " text");
-		ResultSet rs = SQLUtils.rawRunQuery(conn, "SELECT day_code, full_date FROM " + MONDRIAN_DATE_TABLE, null);
+		
 		List<List<Object>> wr = new ArrayList<>();
-		while (rs.next()) {
-			wr.add(buildDateRowForCalendar(rs, worker));
+
+		try(RsInfo rs = SQLUtils.rawRunQuery(conn, "SELECT day_code, full_date FROM " + MONDRIAN_DATE_TABLE, null)) {
+			while (rs.rs.next()) {
+				wr.add(buildDateRowForCalendar(rs.rs, worker));
+			}
 		}
 		//'9999-1-1', 9999, 'Undefined', 99, 'Undefined', 99, 'Undefined'
 		//wr.add(Arrays.<Object>asList(999999999l, 9999l, "Undefined", "Undefined", 99l, "Undefined"));
@@ -784,7 +790,9 @@ private EtlResult execute() throws Exception {
 					incrementallyCloneMondrianTableForLocale(mondrianTable, locale);
 			} else {
 				monetConn.executeQuery("DELETE FROM " + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id"));
-				monetConn.copyEntries(mondrianTable.tableName, SQLUtils.rawRunQuery(conn, query, null));
+				try(RsInfo rs = SQLUtils.rawRunQuery(conn, query, null)) {
+					monetConn.copyEntries(mondrianTable.tableName, rs.rs);
+				}
 			}
 		}
 		runPledgeLogue(mondrianTable);
@@ -810,7 +818,8 @@ private EtlResult execute() throws Exception {
 		List<String> columns = new ArrayList<String>(SQLUtils.getTableColumns(mondrianTable.pledgeView));
 		columns.set(0, "pledge_id AS amp_activity_id");
 		String columnsPart = SQLUtils.generateCSV(columns);
-		try(ResultSet rs = SQLUtils.rawRunQuery(conn, "SELECT " + columnsPart + " FROM " + mondrianTable.pledgeView + " WHERE " + etlConfig.pledgeIdsIn("pledge_id"), null)) {
+		try(RsInfo rsi = SQLUtils.rawRunQuery(conn, "SELECT " + columnsPart + " FROM " + mondrianTable.pledgeView + " WHERE " + etlConfig.pledgeIdsIn("pledge_id"), null)) {
+			ResultSet rs = rsi.rs;
 			List<List<Object>> entries = mondrianTable.readFetchedTable(rs, "en");
 			for(List<Object> entry:entries) {
 				if (entry.size() < 2)
@@ -860,9 +869,9 @@ private EtlResult execute() throws Exception {
 	 * @throws SQLException
 	 */
 	protected void runEtlOnTable(String query, String tableName, boolean forceIncremental) throws SQLException {
-		try (ResultSet rs = SQLUtils.rawRunQuery(conn, query, null)) {
+		try (RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
 			// Map<activityId, percentages_on_sector_scheme
-			Map<Long, PercentagesDistribution> secs = PercentagesDistribution.readInput(rs);
+			Map<Long, PercentagesDistribution> secs = PercentagesDistribution.readInput(rsi.rs);
 			serializeETLTable(secs, tableName, false, forceIncremental);
 		}
 	}
@@ -1038,6 +1047,7 @@ private EtlResult execute() throws Exception {
 	
 	public static EtlResult runETL(boolean forceFull) {
 		synchronized(ETL_LOCK) {
+			Session session = PersistenceManager.getSession();
 			try(Connection conn = PersistenceManager.getJdbcConnection()) {
 				try(MonetConnection monetConn = MonetConnection.getConnection()) {
 					MondrianETL etl = new MondrianETL(conn, monetConn, forceFull);
@@ -1046,10 +1056,14 @@ private EtlResult execute() throws Exception {
 					return etlResult;
 				}
 			}
+			//CloseExpiredActivitiesJob.cleanupSession(session);
 			catch(Exception e) {
 				if (e instanceof RuntimeException)
 					throw (RuntimeException) e;
 				throw new RuntimeException(e);
+			}
+			finally {
+				CloseExpiredActivitiesJob.cleanupSession(session);
 			}
 		}
 	}

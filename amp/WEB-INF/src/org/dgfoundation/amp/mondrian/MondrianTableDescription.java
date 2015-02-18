@@ -18,6 +18,7 @@ import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.I18nDatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewDescription;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.currencies.CurrencyAmountGroup;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
@@ -174,8 +175,8 @@ public class MondrianTableDescription {
 		I18nDatabaseViewFetcher fetcher = new I18nDatabaseViewFetcher(getI18nDescription(), condition, locale, cachers, conn, "*");
 		fetcher.indicesNotToTranslate = EXCLUDE_UNDEFINED_AND_PLEDGES;
 
-		try(ResultSet rs = fetcher.fetch(null)) {
-			return readFetchedTable(rs, locale);
+		try(RsInfo rsi = fetcher.fetch(null)) {
+			return readFetchedTable(rsi.rs, locale);
 		}
 	}
 	

@@ -68,10 +68,10 @@ public class SQLUtils {
 	 */
 	public static LinkedHashMap<String, String> getTableColumnsWithTypes(Connection jdbcConnection, String tableName, String query, boolean crashOnDuplicates) {
 		LinkedHashMap<String, String> res = new LinkedHashMap<>();
-		try(ResultSet rs = rawRunQuery(jdbcConnection, query, null)) {
-			while (rs.next()) {
-				String columnName = rs.getString(1);
-				String columnType = rs.getString(2);
+		try(RsInfo rsi = rawRunQuery(jdbcConnection, query, null)) {
+			while (rsi.rs.next()) {
+				String columnName = rsi.rs.getString(1);
+				String columnType = rsi.rs.getString(2);
 					
 				if (crashOnDuplicates && res.containsKey(columnName))
 					throw new RuntimeException("not allowed to have duplicate column names in table " + tableName);
@@ -145,7 +145,7 @@ public class SQLUtils {
 	 * @return
 	 * @throws SQLException
 	 */
-	public static ResultSet rawRunQuery(Connection connection, String query, ArrayList<FilterParam> params) throws SQLException
+	public static RsInfo rawRunQuery(Connection connection, String query, ArrayList<FilterParam> params) throws SQLException
 	{
 		//logger.info("Running raw SQL query: " + query);
 		
@@ -164,7 +164,7 @@ public class SQLUtils {
 		if (!connection.getMetaData().getDatabaseProductName().equals("MonetDB"))
 			rs.setFetchSize(500);
 		
-		return rs;
+		return new RsInfo(rs, ps);
 	}
 	
 	/**
@@ -175,9 +175,9 @@ public class SQLUtils {
 	 */
 	public static List<Long> fetchLongs(Connection connection, String query) {
 		List<Long> res = new ArrayList<>();
-		try(ResultSet rs = rawRunQuery(connection, query, null)) {
-			while (rs.next()) {
-				res.add(rs.getLong(1));
+		try(RsInfo rsi = rawRunQuery(connection, query, null)) {
+			while (rsi.rs.next()) {
+				res.add(rsi.rs.getLong(1));
 			}
 		}
 		catch(SQLException ex) {
@@ -195,10 +195,8 @@ public class SQLUtils {
 	 */
 	public static <T> List<T> fetchAsList(Connection connection, String query, int n)
 	{
-		ResultSet rs = null;
-		try {
-			rs = rawRunQuery(connection, query, null);
-			return fetchAsList(rs, n, " with query " + query);
+		try(RsInfo rsi = rawRunQuery(connection, query, null)) {
+			return fetchAsList(rsi.rs, n, " with query " + query);
 		}
 		catch(SQLException e) {
 			throw new RuntimeException("Error fetching list of values with query " + query, e);

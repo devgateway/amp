@@ -27,6 +27,7 @@ import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.FilterRule;
@@ -131,12 +132,12 @@ public class LocationService {
 				public void execute(Connection conn) throws SQLException {
 					String countryIdQuery = "select acvl.id,acvl.location_name from amp_category_value_location acvl,amp_global_settings gs "
 							+ " where acvl.iso=gs.settingsvalue  " + " and gs.settingsname ='Default Country'";
-					ResultSet rs = SQLUtils.rawRunQuery(conn, countryIdQuery, null);
-					if (rs.next()) {
-						countryId.value = rs.getString(1);
-						countryName.value = rs.getString(2);
+					RsInfo rsi = SQLUtils.rawRunQuery(conn, countryIdQuery, null);
+					if (rsi.rs.next()) {
+						countryId.value = rsi.rs.getString(1);
+						countryName.value = rsi.rs.getString(2);
 					}
-					rs.close();
+					rsi.close();
 				}
 			});
 
@@ -361,15 +362,17 @@ public class LocationService {
 							+ "where  geo_code in ("
 							+ org.dgfoundation.amp.Util.toCSString(geoCodesId)
 							+ ")";
-					ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
-					while (rs.next()) {
-						Activity a = new Activity();
-						String geoCode = rs.getString("geo_code");
-						a.setLocationName(rs.getString("location_name"));
-						a.setLatitude(rs.getString("gs_lat"));
-						a.setLongitude(rs.getString("gs_long"));
-						a.setGeoCode(geoCode);
-						geocodeInfo.put(geoCode, a);
+					try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
+						ResultSet rs = rsi.rs;
+						while (rs.next()) {
+							Activity a = new Activity();
+							String geoCode = rs.getString("geo_code");
+							a.setLocationName(rs.getString("location_name"));
+							a.setLatitude(rs.getString("gs_lat"));
+							a.setLongitude(rs.getString("gs_long"));
+							a.setGeoCode(geoCode);
+							geocodeInfo.put(geoCode, a);
+						}
 					}
 				}
 			});
@@ -493,34 +496,34 @@ public class LocationService {
 						"  from amp_activity_structures ast , amp_structure s  " +
 						" where ast.amp_structure_id=s.amp_structure_id "+
 						" and ast.amp_activity_id in("+ org.dgfoundation.amp.Util.toCSString(activities.keySet()) +")";
-	    		ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
-	    		while (rs.next()){
-	    			Activity a= activities.get(rs.getLong("amp_activity_id"));
-	    			Activity newActivity=new Activity();
-	    			newActivity.setId(a.getId());
-	    			newActivity.setAmpId(a.getAmpId());
-	    			newActivity.setName(a.getName());
-	    			newActivity.setTotalCommitments(a.getTotalCommitments());
-	    			newActivity.setTotalDisbursments(a.getTotalDisbursments());
-	    			newActivity.setDonorAgency(a.getDonorAgency());
-	    			newActivity.setImplementationLevel(a.getImplementationLevel());
-	    			newActivity.setPrimarySector(a.getPrimarySector());
+	    		try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {
+	    			ResultSet rs = rsi.rs;
+	    			while (rs.next()) {
+	    				Activity a = activities.get(rs.getLong("amp_activity_id"));
+	    				Activity newActivity = new Activity();
+	    				newActivity.setId(a.getId());
+	    				newActivity.setAmpId(a.getAmpId());
+	    				newActivity.setName(a.getName());
+	    				newActivity.setTotalCommitments(a.getTotalCommitments());
+	    				newActivity.setTotalDisbursments(a.getTotalDisbursments());
+	    				newActivity.setDonorAgency(a.getDonorAgency());
+	    				newActivity.setImplementationLevel(a.getImplementationLevel());
+	    				newActivity.setPrimarySector(a.getPrimarySector());
 
-	    			newActivity.setStructureName(rs.getString("title"));
-	    			newActivity.setLatitude(rs.getString("latitude"));
-	    			newActivity.setLongitude(rs.getString("longitude"));
-	    			newActivity.setDescription(rs.getString("description"));
+	    				newActivity.setStructureName(rs.getString("title"));
+	    				newActivity.setLatitude(rs.getString("latitude"));
+	    				newActivity.setLongitude(rs.getString("longitude"));
+	    				newActivity.setDescription(rs.getString("description"));
 	    			
-	    			mapExportBean.add(newActivity);
-	    			
-	    		}
-				
+	    				mapExportBean.add(newActivity);
+	    			}	
+	    		}	
 			}
 			});
-		
 		}
 		return mapExportBean;
 	}
+	
 	private static void  getActivityIdForReports(
 			Activity activity, Map<ReportOutputColumn, ReportCell> row,
 			ReportOutputColumn reportOutputColumn) {
@@ -684,7 +687,8 @@ public class LocationService {
 
 				@Override
 				public void execute(Connection connection) throws SQLException {
-					try(java.sql.ResultSet rs = SQLUtils.rawRunQuery(connection, qry.value, null)) {
+					try(RsInfo rsi = SQLUtils.rawRunQuery(connection, qry.value, null)) {
+						ResultSet rs = rsi.rs;
 						ClusteredPoints cp = null;
 						Long rootLocationId = 0L;
 						while (rs.next()) {

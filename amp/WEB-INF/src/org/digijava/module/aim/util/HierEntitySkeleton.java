@@ -13,6 +13,7 @@ import java.util.TreeSet;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -168,10 +169,11 @@ public abstract class HierEntitySkeleton<K extends HierEntitySkeleton<?>> implem
         PersistenceManager.getSession().doWork(new Work(){
 				public void execute(Connection conn) throws SQLException {
 					ViewFetcher v = DatabaseViewFetcher.getFetcherForView(tableName, where, TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");		
-					ResultSet rs = v.fetch(null);
-					while (rs.next()) {
-						K entity = fetcher.fetch(rs);
-						entities.put(entity.id, entity);
+					try(RsInfo rs = v.fetch(null)) {
+						while (rs.rs.next()) {
+							K entity = fetcher.fetch(rs.rs);
+							entities.put(entity.id, entity);
+						}
 					}
 					setParentChildRelationships(entities);				
 				}

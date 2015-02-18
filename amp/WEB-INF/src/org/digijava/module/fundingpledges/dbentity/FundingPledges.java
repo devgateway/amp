@@ -12,6 +12,7 @@ import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
@@ -494,30 +495,17 @@ public class FundingPledges implements Comparable<FundingPledges>, Serializable 
     public static Collection<String> getPledgeDocumentUuids() {
     	final Collection<String> uuids = new HashSet<String>();
         PersistenceManager.getSession().doWork(new Work(){
-				public void execute(Connection conn) throws SQLException {
-					
+			public void execute(Connection conn) throws SQLException {
 	            
-		    		String query = "SELECT uuid FROM amp_funding_pledges_document";
-		    		//the only limitation here might be that 500 results are fetched only there -- look out for it
-		    		ResultSet rs = SQLUtils.rawRunQuery(conn, query, null);
-		            
-		            
-		            
-
-					
-					while (rs.next()) {
-						uuids.add(rs.getString("uuid"));
-						}
-				}
-			});    	
-    	
-    	
+	    		String query = "SELECT uuid FROM amp_funding_pledges_document";
+	    		//the only limitation here might be that 500 results are fetched only there -- look out for it
+	    		try(RsInfo rsi = SQLUtils.rawRunQuery(conn, query, null)) {		            					
+	    			while (rsi.rs.next()) {
+	    				uuids.add(rsi.rs.getString("uuid"));
+	    			}
+	    		}
+			}
+		});    	
     	return uuids;
     }
-    
-    
-    
-    
-    
-    
 }

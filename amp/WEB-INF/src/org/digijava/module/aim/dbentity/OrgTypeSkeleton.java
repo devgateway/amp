@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
+import org.dgfoundation.amp.ar.viewfetcher.RsInfo;
 import org.dgfoundation.amp.ar.viewfetcher.ViewFetcher;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
@@ -92,7 +94,8 @@ public class OrgTypeSkeleton implements Comparable<OrgTypeSkeleton>, HierarchyLi
 				public void execute(Connection conn) throws SQLException {
 					ViewFetcher v = DatabaseViewFetcher.getFetcherForView("amp_org_type", 
 							"", TLSUtils.getEffectiveLangCode(), new HashMap<PropertyDescription, ColumnValuesCacher>(), conn, "*");
-					ResultSet rs = v.fetch(null);
+					RsInfo rsi = v.fetch(null);
+					ResultSet rs = rsi.rs;
 					while (rs.next()) {
 						orgTypes.add(new OrgTypeSkeleton(nullInsteadOfZero(rs.getLong("amp_org_type_id")), 
 													 	rs.getString("org_type"), 

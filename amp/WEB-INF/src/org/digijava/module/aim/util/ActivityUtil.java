@@ -34,33 +34,7 @@ import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.module.admin.helper.AmpActivityFake;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpActivityGroup;
-import org.digijava.module.aim.dbentity.AmpActivityLocation;
-import org.digijava.module.aim.dbentity.AmpActivityProgram;
-import org.digijava.module.aim.dbentity.AmpActivitySector;
-import org.digijava.module.aim.dbentity.AmpActivityVersion;
-import org.digijava.module.aim.dbentity.AmpActor;
-import org.digijava.module.aim.dbentity.AmpAhsurvey;
-import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
-import org.digijava.module.aim.dbentity.AmpComments;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpComponentFunding;
-import org.digijava.module.aim.dbentity.AmpContentTranslation;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpFundingDetail;
-import org.digijava.module.aim.dbentity.AmpIndicator;
-import org.digijava.module.aim.dbentity.AmpIssues;
-import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRole;
-import org.digijava.module.aim.dbentity.AmpStructureImg;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.dbentity.IPAContract;
-import org.digijava.module.aim.dbentity.IPAContractDisbursement;
-import org.digijava.module.aim.dbentity.IndicatorActivity;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.ActivityItem;
 import org.digijava.module.aim.helper.Components;
@@ -1771,49 +1745,22 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 		 return DbUtil.getMostRecentlyUploadedStructureImage(structureId);
 	 }
 
-    /*
+
 	 public static  java.util.List<String[]> getAidEffectivenesForExport(AmpActivityVersion activity) {
 		 java.util.List<String[]>aidEffectivenesForExport= new ArrayList<String[]>();
-			String aidEffectivenesToAdd[];
+         if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes")
+                 && activity.getSelectedEffectivenessIndicatorOptions() != null) {
+             for (AmpAidEffectivenessIndicatorOption option : activity.getSelectedEffectivenessIndicatorOptions()) {
+                 String[] aidEffectivenesToAdd = new String[2];
+                 aidEffectivenesToAdd[0] = option.getIndicator().getAmpIndicatorName();
+                 aidEffectivenesToAdd[1] = option.getAmpIndicatorOptionName();
+                 aidEffectivenesForExport.add(aidEffectivenesToAdd);
+             }
+         }
 
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes/Project uses parallel project implementation unit")) {
-				 aidEffectivenesToAdd= new String[2];
+		 return aidEffectivenesForExport;
+	 }
 
-				aidEffectivenesToAdd[0]= TranslatorWorker.translateText("Project uses parallel project implementation unit");
-				if(activity.getProjectImplementationUnit()!=null){
-					aidEffectivenesToAdd[1]= activity.getProjectImplementationUnit();
-				}	else{
-					aidEffectivenesToAdd[1]="";
-				}
-				aidEffectivenesForExport.add(aidEffectivenesToAdd);
-			}
-			AmpCategoryValue ampCategoryValue = CategoryManagerUtil
-					.getAmpCategoryValueFromListByKey(CategoryConstants.PROJECT_IMPLEMENTATION_MODE_KEY, activity.getCategories());
-
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes/Project Implementation Mode") && ampCategoryValue != null) {
-				aidEffectivenesToAdd= new String[2];
-
-				aidEffectivenesToAdd [0] = TranslatorWorker.translateText("Project Implementation Mode") + ":";
-				aidEffectivenesToAdd [1]= ampCategoryValue.getValue() + "";
-				aidEffectivenesForExport.add(aidEffectivenesToAdd);
-
-			}
-			if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes")) {
-				aidEffectivenesToAdd= new String[2];
-
-				aidEffectivenesToAdd [0]= TranslatorWorker.translateText("Project has been approved by IMAC") ;
-				if(activity.getImacApproved()!=null){
-					aidEffectivenesToAdd [1]= activity.getImacApproved() ;
-				}else{
-					aidEffectivenesToAdd [1]="";
-				}
-				aidEffectivenesForExport.add(aidEffectivenesToAdd);
-			}
-
-
-			return aidEffectivenesForExport;
-		}
-		*/
 
 		public static String getFmForFundingFlows(Integer transactionType) {
 			String fmForFundingFlows = "/Activity Form/Funding/Funding Group/Funding Item/";

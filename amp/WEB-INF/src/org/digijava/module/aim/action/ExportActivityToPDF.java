@@ -1074,10 +1074,9 @@ public class ExportActivityToPDF extends Action {
 			/*
 			 * AidEffectiveness
 			 */
-			if(FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes")){
-				
-				java.util.List<String[]> aidEffectivenesToAdd = null;//ActivityUtil.getAidEffectivenesForExport( activity);
-				if(aidEffectivenesToAdd!=null && aidEffectivenesToAdd.size()>0){
+			if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes")) {
+				java.util.List<String[]> aidEffectivenesToAdd = ActivityUtil.getAidEffectivenesForExport(activity);
+				if (aidEffectivenesToAdd != null && aidEffectivenesToAdd.size() > 0) {
 					buildAidEffectivenessInformationPart(mainLayout,aidEffectivenesToAdd);
 				}
 			}			
@@ -1484,9 +1483,9 @@ public class ExportActivityToPDF extends Action {
 	
 	
 	private void buildAidEffectivenessInformationPart(PdfPTable mainLayout, List<String[]> aidEffectivenesToAdd) throws WorkerException {
-		String columnName="";		
-		columnName=TranslatorWorker.translateText("Aid Effectivenes");
-		createGeneralInfoRowAid(mainLayout,columnName,aidEffectivenesToAdd);
+		String columnName = "";
+		columnName = TranslatorWorker.translateText("Aid Effectivenes");
+		createGeneralInfoRowAid(mainLayout, columnName, aidEffectivenesToAdd);
 	}
 
 	/**
@@ -3007,12 +3006,12 @@ public class ExportActivityToPDF extends Action {
 		fundingTable.addCell(lineCell);
 	}
 		
-	private void createGeneralInfoRowAid(PdfPTable mainLayout,String columnName,List<String[]> values){
+	private void createGeneralInfoRowAid(PdfPTable mainLayout, String columnName, List<String[]> values) {
 		if (values == null || values.isEmpty())
 			return;
-		PdfPCell cell1=new PdfPCell();
+		PdfPCell cell1 = new PdfPCell();
 		Paragraph p2;
-		Paragraph p1=new Paragraph(postprocessText(columnName),titleFont);
+		Paragraph p1 = new Paragraph(postprocessText(columnName), titleFont);
 		p1.setAlignment(Element.ALIGN_RIGHT);
 		cell1.addElement(p1);
 		cell1.setBackgroundColor(new Color(244,244,242));
@@ -3021,15 +3020,13 @@ public class ExportActivityToPDF extends Action {
 		PdfPCell cell2=new PdfPCell();
 
 		for (String[] value : values) {
-				
-			
-			p1=new Paragraph(postprocessText(value[0]), plainFont);
-			p2=new Paragraph(postprocessText(value[1]), titleFont);
+			p1 = new Paragraph(postprocessText(value[0]), plainFont);
+			p2 = new Paragraph(postprocessText(value[1]), titleFont);
 	
 			cell2.addElement(p1);
 			cell2.addElement(p2);
-
 		}
+
 		cell2.setBorder(0);
 		mainLayout.addCell(cell2);
 	}

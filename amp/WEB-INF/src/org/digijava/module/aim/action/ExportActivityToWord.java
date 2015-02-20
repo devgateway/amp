@@ -497,10 +497,10 @@ public class ExportActivityToWord extends Action {
 				}
 				
 				//AiddEffectiveness
-	            if(FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes")){
-	            	java.util.List<String[]> aidEffectivenesToAdd = null;//ActivityUtil.getAidEffectivenesForExport( activity);
-	            	if(aidEffectivenesToAdd!=null&&aidEffectivenesToAdd.size()>0){
-	            		addEffectivenessTable( doc,aidEffectivenesToAdd);
+	            if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes")) {
+	            	java.util.List<String[]> aidEffectivenesToAdd = ActivityUtil.getAidEffectivenesForExport(activity);
+	            	if (aidEffectivenesToAdd != null && aidEffectivenesToAdd.size() >0 ) {
+	            		addEffectivenessTable(doc, aidEffectivenesToAdd);
 	            	}
 	            }
 
@@ -598,10 +598,10 @@ public class ExportActivityToWord extends Action {
 
 	
 	private void addEffectivenessTable(com.lowagie.text.Document doc,List<String[]> aidEffectivenesToAdd) throws DocumentException {
-		if(aidEffectivenesToAdd==null || ! (aidEffectivenesToAdd.size()>0)){
+		if(aidEffectivenesToAdd == null || !(aidEffectivenesToAdd.size() > 0)) {
 			return;
 		}
-        Table addEffectiveness= new Table(1);
+        Table addEffectiveness = new Table(1);
         addEffectiveness.setWidth(100);
         RtfCell aidTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Aid Effectivenes").toUpperCase(), HEADERFONT));
         aidTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -612,13 +612,13 @@ public class ExportActivityToWord extends Action {
         RtfCell cell = new RtfCell();
 		cell.setBorder(0);
 		for (String[] a : aidEffectivenesToAdd) {
-			cell.add(new Paragraph(a[0],PLAINFONT));
-			cell.add(new Paragraph(a[1],BOLDFONT));			
+			cell.add(new Paragraph(a[0], PLAINFONT));
+			cell.add(new Paragraph(a[1], BOLDFONT));
 		}
 
 
 		addEffectiveness.addCell(cell);
-		applyEmptyCell(addEffectiveness,1);
+		applyEmptyCell(addEffectiveness, 1);
 		doc.add(addEffectiveness);
 	}
 

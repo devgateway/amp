@@ -7,9 +7,7 @@ import org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicatorOption;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * List of utility methods to operate with effectiveness indicators
@@ -138,9 +136,13 @@ public class AidEffectivenessIndicatorUtil {
      * (if it has not been added before)
      *
      * @param activity the activity to add options to
+     * @return all options for all indicators as a set
      */
-    public static void populateSelectedOptions(AmpActivityVersion activity) {
+    public static Map<Long, AmpAidEffectivenessIndicatorOption> populateSelectedOptions(AmpActivityVersion activity) {
         List<AmpAidEffectivenessIndicator> indicators = getAllActiveIndicators();
+
+        Map<Long, AmpAidEffectivenessIndicatorOption> allOptions = new HashMap<Long, AmpAidEffectivenessIndicatorOption>();
+
         if (activity.getSelectedEffectivenessIndicatorOptions() == null) {
             activity.setSelectedEffectivenessIndicatorOptions(new HashSet<AmpAidEffectivenessIndicatorOption>());
         }
@@ -150,6 +152,11 @@ public class AidEffectivenessIndicatorUtil {
 
 
         for (AmpAidEffectivenessIndicator indicator : indicators) {
+
+            for (AmpAidEffectivenessIndicatorOption indicatorOption : indicator.getOptions()) {
+                allOptions.put(indicatorOption.getAmpIndicatorOptionId(), indicatorOption);
+            }
+
             AmpAidEffectivenessIndicatorOption selectedOption = isIndicatorPresentOnThisActivity(indicator, selectedOptions);
             // if this indicator has already been presented on the activity and an option was selected
             if (selectedOption != null) {
@@ -173,6 +180,8 @@ public class AidEffectivenessIndicatorUtil {
             }
         }
         */
+
+        return allOptions;
     }
 
     /**
@@ -194,7 +203,6 @@ public class AidEffectivenessIndicatorUtil {
         // iterate in this way only!!!
         for (AmpAidEffectivenessIndicatorOption selectedOption : selectedOptions) {
             for (AmpAidEffectivenessIndicatorOption indicatorOption : indicator.getOptions()) {
-                session.evict(indicatorOption);
                 if (selectedOption.equals(indicatorOption)) {
                     return selectedOption;
                 }

@@ -6,9 +6,12 @@ import java.util.*;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
+import org.dgfoundation.amp.onepager.OnePagerUtil;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
 import org.dgfoundation.amp.onepager.components.ListEditor;
 import org.dgfoundation.amp.onepager.components.fields.AmpFieldPanel;
@@ -25,19 +28,6 @@ public class AmpAidEffectivenessFormSectionFeature extends
 	private List<org.apache.wicket.markup.html.form.FormComponent<?>> requiredFormComponents = new ArrayList<org.apache.wicket.markup.html.form.FormComponent<?>>();
 
 
-    final IChoiceRenderer<AmpAidEffectivenessIndicatorOption> renderer = new IChoiceRenderer<AmpAidEffectivenessIndicatorOption>() {
-        @Override
-        public Object getDisplayValue(AmpAidEffectivenessIndicatorOption object) {
-            return object.getAmpIndicatorOptionName();
-        }
-
-        @Override
-        public String getIdValue(AmpAidEffectivenessIndicatorOption object, int index) {
-            return String.valueOf(object.getAmpIndicatorOptionId());
-        }
-    };
-
-
 	public AmpAidEffectivenessFormSectionFeature(String id, String fmName,
 			IModel<AmpActivityVersion> am) throws Exception {
 		super(id, fmName, am);
@@ -47,16 +37,28 @@ public class AmpAidEffectivenessFormSectionFeature extends
         //RepeatingView listItems = new RepeatingView("selectedEffectivenessIndicatorOptions");
         AmpActivityVersion activity = am.getObject();
 
-        AidEffectivenessIndicatorUtil.populateSelectedOptions(activity);
+        final Map<Long, AmpAidEffectivenessIndicatorOption> allOptions = AidEffectivenessIndicatorUtil.populateSelectedOptions(activity);
 
-        /*
+        final IChoiceRenderer<Long> renderer = new IChoiceRenderer<Long>() {
+            @Override
+            public Object getDisplayValue(Long object) {
+                return allOptions.get(object).getAmpIndicatorOptionName();
+            }
+
+            @Override
+            public String getIdValue(Long object, int index) {
+                return object.toString();
+            }
+        };
+
+
         final IModel<Set<AmpAidEffectivenessIndicatorOption>> setModel
                 = new PropertyModel<Set<AmpAidEffectivenessIndicatorOption>>(am, "selectedEffectivenessIndicatorOptions");
-        AbstractReadOnlyModel<List<AmpAidEffectivenessIndicatorOption>> listModel = OnePagerUtil.getReadOnlyListModelFromSetModel(setModel);
-        */
+
+
 
         final ListEditor<AmpAidEffectivenessIndicatorOption> indicatorsList = new ListEditor<AmpAidEffectivenessIndicatorOption>(
-                "selectedEffectivenessIndicatorOptions", new Model(new HashSet(am.getObject().getSelectedEffectivenessIndicatorOptions()))) {
+                "selectedEffectivenessIndicatorOptions", setModel) {
 
             @Override
             protected void onPopulateItem(org.dgfoundation.amp.onepager.components.ListItem<AmpAidEffectivenessIndicatorOption> componentOuter) {
@@ -64,15 +66,22 @@ public class AmpAidEffectivenessFormSectionFeature extends
 
 
                 AmpAidEffectivenessIndicator indicator = componentOuter.getModelObject().getIndicator();
-                AmpFieldPanel<AmpAidEffectivenessIndicatorOption> indicatorChoices = null;
+                AmpFieldPanel<Long> indicatorChoices = null;
+
+                List<Long> options = new ArrayList<Long>();
+                for (AmpAidEffectivenessIndicatorOption o : indicator.getOptions()) {
+                    options.add(o.getAmpIndicatorOptionId());
+                }
+
+
                 if (indicator.getIndicatorType() == 0) {
-                    indicatorChoices = new AmpGroupFieldPanel<AmpAidEffectivenessIndicatorOption>(
-                            "ampIndicatorOptionId", new Model<AmpAidEffectivenessIndicatorOption>(componentOuter.getModelObject()), indicator.getOptions(),
+                    indicatorChoices = new AmpGroupFieldPanel<Long>(
+                            "ampIndicatorOptionId", new PropertyModel<Long>(componentOuter.getModel(), "ampIndicatorOptionId"), options,
                             indicator.getAmpIndicatorName() + ":", false, false, renderer, indicator.getTooltipText());
 
                 } else {
-                    indicatorChoices = new AmpSelectFieldPanel <AmpAidEffectivenessIndicatorOption>(
-                            "ampIndicatorOptionId", new Model<AmpAidEffectivenessIndicatorOption>(componentOuter.getModelObject()), indicator.getOptions(),
+                    indicatorChoices = new AmpSelectFieldPanel <Long>(
+                            "ampIndicatorOptionId", new PropertyModel<Long>(componentOuter.getModel(), "ampIndicatorOptionId"), options,
                             indicator.getAmpIndicatorName() + ":", false, false, renderer, true);
 
                 }

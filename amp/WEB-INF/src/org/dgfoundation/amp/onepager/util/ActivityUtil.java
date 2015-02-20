@@ -209,7 +209,7 @@ public class ActivityUtil {
 			setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity,rejected);
 			
 			saveIndicators(a, session);
-            //processEffectivenessIndicators(a, session);
+            processEffectivenessIndicators(a, session);
 
 			saveResources(a); 
 			saveEditors(session, createNewVersion); 

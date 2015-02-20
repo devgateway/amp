@@ -1600,14 +1600,11 @@ public class DbUtil {
 	public static void delete(Object object) throws JDBCException {
 		PersistenceManager.getSession().delete(object);
 	}
-
+	
 	public static void deleteOrg(AmpOrganisation org) throws JDBCException {
 		Session sess = PersistenceManager.getSession();
-		Transaction tx = sess.beginTransaction();
 		org.setDeleted(true);
 		sess.saveOrUpdate(org);
-		// sess.flush();
-		tx.commit();
 	}
 
 	public static void deleteAllStamps(final String idxName) {

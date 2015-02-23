@@ -209,7 +209,6 @@ public class ActivityUtil {
 			setActivityStatus(ampCurrentMember, draft, a, oldA, newActivity,rejected);
 			
 			saveIndicators(a, session);
-            processEffectivenessIndicators(a, session);
 
 			saveResources(a); 
 			saveEditors(session, createNewVersion); 
@@ -902,18 +901,6 @@ public class ActivityUtil {
 			}
 		}
 	}
-
-    private static void processEffectivenessIndicators(AmpActivityVersion a, Session session) {
-        if (a.getSelectedEffectivenessIndicatorOptions() != null) {
-            Set<AmpAidEffectivenessIndicatorOption> refreshedOptions = new HashSet<AmpAidEffectivenessIndicatorOption>();
-            for (AmpAidEffectivenessIndicatorOption option : a.getSelectedEffectivenessIndicatorOptions()) {
-                refreshedOptions.add((AmpAidEffectivenessIndicatorOption)session
-                        .load(AmpAidEffectivenessIndicatorOption.class, option.getAmpIndicatorOptionId()));
-            }
-            a.getSelectedEffectivenessIndicatorOptions().clear();
-            a.getSelectedEffectivenessIndicatorOptions().addAll(refreshedOptions);
-        }
-    }
 
     public static void saveContacts(AmpActivityVersion a, Session session,boolean checkForContactsRemoval) throws Exception {
         Set<AmpActivityContact> activityContacts=a.getActivityContacts();

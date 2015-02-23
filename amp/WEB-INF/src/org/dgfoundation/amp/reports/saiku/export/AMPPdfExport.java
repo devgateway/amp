@@ -45,7 +45,7 @@ public class AMPPdfExport extends PdfReport {
         CssFile cssFile = XMLWorkerHelper.getCSS(getClass().getResourceAsStream("saiku.table.pdf.css"));
         cssResolver.addCss(cssFile);
         // HTML
-        XMLWorkerFontProvider fontProvider = new XMLWorkerFontProvider();
+        XMLWorkerFontProvider fontProvider = new XMLWorkerFontProvider(this.getClass().getResource("").getPath());
         fontProvider.defaultEncoding = "UTF-8";
         CssAppliers cssAppliers = new CssAppliersImpl(fontProvider);
         HtmlPipelineContext htmlContext = new HtmlPipelineContext(cssAppliers);

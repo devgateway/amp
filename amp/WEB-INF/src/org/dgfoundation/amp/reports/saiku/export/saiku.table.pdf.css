@@ -1,14 +1,15 @@
 
 body {
-    font-family: "Helvetica", "Arial";
-    margin-right: 10px;
+    font-family: arial unicode ms;
+	margin-right: 10px;
     margin-left: 10px;
     padding-top: 10px;
     overflow: auto;
     font-size: 10px;
 }
 table {
-    border-bottom-width: 1px;
+    font-family: arial unicode ms;
+	border-bottom-width: 1px;
     border-bottom-color: #d5d5d5;
     border-right-width: 1px;
     border-right-color: #d5d5d5;

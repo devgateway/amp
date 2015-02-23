@@ -51,7 +51,7 @@
                 <digi:trn>Indicator Name</digi:trn>:</b>
             </td>
             <td>
-                <html:text property="ampIndicatorName" styleId="editAmpIndicatorName" />
+                <html:text property="ampIndicatorName" styleId="editAmpIndicatorName" size="50" maxlength="250"/>
             </td>
 
 
@@ -69,7 +69,7 @@
                 <digi:trn>Indicator Tooltip</digi:trn>:</b>
             </td>
             <td>
-                <html:text property="tooltipText" styleId="editAmpIndicatorTitle" />
+                <html:textarea property="tooltipText" styleId="editAmpIndicatorTitle" rows="5" cols="50" />
             </td>
 
             <td>
@@ -111,7 +111,7 @@
 
                 <tr>
                     <td width="40%">
-                        <html:text property="options[${idx}].ampIndicatorOptionName" styleId="editAmpIndicatorName" />
+                        <html:text property="options[${idx}].ampIndicatorOptionName" styleId="editAmpIndicatorName" size="50" maxlength="250"/>
                         <%-- ${option.ampIndicatorOptionName} --%>
                     </td>
 

@@ -10,7 +10,7 @@
         </id>
 
         <property name="ampIndicatorName" column="amp_indicator_name" type="java.lang.String" />
-        <property name="tooltipText" column="tooltip_text" type="java.lang.String" />
+        <property name="tooltipText" column="tooltip_text" type="text" />
         <property name="active" column="ACTIVE" type="boolean" />
         <property name="mandatory" column="MANDATORY" type="boolean" />
         <property name="indicatorType" column="INDICATOR_TYPE" type="java.lang.Integer" />

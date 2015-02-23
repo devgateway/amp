@@ -21,13 +21,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.SortedSet;
 
-import net.htmlparser.jericho.Renderer;
-import net.htmlparser.jericho.Segment;
-import net.htmlparser.jericho.Source;
-
 import org.apache.commons.lang.StringUtils;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.util.HTMLUtil;
 import org.digijava.module.aim.dbentity.AmpAnalyticalReport;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
@@ -438,7 +435,7 @@ public class SaikuUtils {
 	          }
 
 	          //Remove HTML if it exists
-	          value = removeHtml(value, false);
+	          value = HTMLUtil.removeHtml(value, false);
 
 	          if ( value == null || "null".equals( value ) ) {
 	            value = "";
@@ -457,39 +454,6 @@ public class SaikuUtils {
 	    return new byte[ 0 ];
 	  }
 	
-	/**
-	 * removes HTML formatting from a string, using a proper HTML parser
-	 * @param src
-	 * @param removeNewLines
-	 * @return
-	 * TODO: This code is duplicated from class XlsHelper.java which belongs to the old Excel and will be removed eventually
-	 * Remove this notice once the Old GIS code is removed.
-	 */
-	public final static String removeHtml(String src, boolean removeNewLines)
-	{
-		if (src == null)
-			return null;
-		src = src.trim();
-		if (src.isEmpty())
-			return null;
-		
-		Source htmlSource = new Source(src);
-		Segment htmlSeg = new Segment(htmlSource, 0, htmlSource.length());
-		Renderer htmlRend = new Renderer(htmlSeg);
-		String result = htmlRend.toString();
-		if (result == null)
-			return null;
-		result = result.trim();
-		
-		if (result.isEmpty())
-			return null;
-		
-		if (removeNewLines)
-			result = result.replace('\n', ' ').replace('\r', ' ').replaceAll("  ", " ");
-		
-		return result.replaceAll("  ", " ");
-	}	
-
 	  private static byte[] export( String[][] resultSet, String delimiter ) {
 		    try {
 		      String output = "";

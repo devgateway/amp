@@ -30,6 +30,7 @@ import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.HTMLUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityLocation;
@@ -137,37 +138,6 @@ public class XlsHelper {
 //		}
 //		return calculations;
 //	}
-	
-	/**
-	 * removes HTML formatting from a string, using a proper HTML parser
-	 * @param src
-	 * @param removeNewLines
-	 * @return
-	 */
-	public final static String removeHtml(String src, boolean removeNewLines)
-	{
-		if (src == null)
-			return null;
-		src = src.trim();
-		if (src.isEmpty())
-			return null;
-		
-		Source htmlSource = new Source(src);
-		Segment htmlSeg = new Segment(htmlSource, 0, htmlSource.length());
-		Renderer htmlRend = new Renderer(htmlSeg);
-		String result = htmlRend.toString();
-		if (result == null)
-			return null;
-		result = result.trim();
-		
-		if (result.isEmpty())
-			return null;
-		
-		if (removeNewLines)
-			result = result.replace('\n', ' ').replace('\r', ' ').replaceAll("  ", " ");
-		
-		return result.replaceAll("  ", " ");
-	}	
 	
 	/**
 	 * returns Map<ampActivityId, TotalsForActivity>
@@ -302,7 +272,7 @@ public class XlsHelper {
 			String donors = donorStrings.get(ampActivityId).toString();			
 			FundingCalculationsHelper calculations = calculators.get(ampActivityId);
 			String descriptionBodyRaw = activityDescriptions.get(ampActivityId);
-			String description = removeHtml(descriptionBodyRaw, true); 
+			String description = HTMLUtil.removeHtml(descriptionBodyRaw, true); 
 
 			Set<Long> actStructIds = structsByAmpIds.get(ampActivityId);
 			if (actStructIds != null && (!actStructIds.isEmpty()))

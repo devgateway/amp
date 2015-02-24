@@ -37,6 +37,7 @@ module.exports = Backbone.View.extend({
     /* this.dataQualityView.setElement(this.$('#quality-indicator')).render();*/
     this.sidebarView.setElement(this.$('#sidebar-tools')).render();
 
+
     // just for testing...
     this.renderStaticAmpTemplate();
 
@@ -63,12 +64,17 @@ module.exports = Backbone.View.extend({
     var userModel = new UserModel();
 
     var $header = $('#amp-header');
+    var headerWidget = new boilerplate.headerObj(
+      {
+        caller: 'GIS'
+      });
+    window.boilerh = $header;
 
-    $header.html(boilerplate.header);
+    $header.html(headerWidget.view.render().el);
 
     userModel.load().then(function(user) {
       if (user.get('email')) {
-        $('.container-fluid', $header).toggleClass('ampUserLoggedIn');
+        //$('.container-fluid', $header).toggleClass('ampUserLoggedIn');
         $('#header-workspace', $header).text(user.get('workspace'));
         $('#header-name #header-first-name', $header).text(user.get('firstName'));
         $('#header-name #header-last-name', $header).text(user.get('lastName'));

@@ -74,7 +74,7 @@ module.exports = Backbone.View.extend({
 
     userModel.load().then(function(user) {
       if (user.get('email')) {
-        //$('.container-fluid', $header).toggleClass('ampUserLoggedIn');
+        $('.container-fluid', $header).toggleClass('ampUserLoggedIn');
         $('#header-workspace', $header).text(user.get('workspace'));
         $('#header-name #header-first-name', $header).text(user.get('firstName'));
         $('#header-name #header-last-name', $header).text(user.get('lastName'));

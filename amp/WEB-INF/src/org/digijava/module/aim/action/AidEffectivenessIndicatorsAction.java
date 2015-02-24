@@ -41,11 +41,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
         // String switches already work in java7
         switch(actionParam) {
             case "search" :
-                List<AmpAidEffectivenessIndicator> searchResult = AidEffectivenessIndicatorUtil.searchIndicators(
-                        indicatorForm.getIndicatorType(),
-                        indicatorForm.getAmpIndicatorName(),
-                        indicatorForm.getActive());
-                request.setAttribute("searchResult", searchResult);
+                executeSearch(mapping, request, indicatorForm);
                 return mapping.findForward("search");
             case "list" :
                 return mapping.findForward("list");
@@ -124,12 +120,24 @@ public class AidEffectivenessIndicatorsAction extends Action {
                     handleLocalException(request, nfe, "error.admin.aidEffectivenessIndicator.notExist", indicatorIdParam);
                     return mapping.findForward("search");
                 }
+
+                // display list of indicators after one has been deleted
+                executeSearch(mapping, request, indicatorForm);
                 return mapping.findForward("search");
             default: //process "list"
                 return mapping.findForward("list");
 
         }
     }
+
+    private void executeSearch(ActionMapping mapping, HttpServletRequest request, AidEffectivenessIndicatorForm indicatorForm) {
+        List<AmpAidEffectivenessIndicator> searchResult = AidEffectivenessIndicatorUtil.searchIndicators(
+                indicatorForm.getIndicatorType(),
+                indicatorForm.getAmpIndicatorName(),
+                indicatorForm.getActive());
+        request.setAttribute("searchResult", searchResult);
+    }
+
 
     /**
      * We can use BeanUtils.copy instead, but there are not so many fields here

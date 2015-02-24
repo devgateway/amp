@@ -217,6 +217,7 @@ Settings.Util.numberToString = function(number, settings) {
 Settings.Util.stringToNumber = function(stringNumber, settings) {
 	var format = "";
 	var number = null;
+	if(settings === undefined) return new numeral().unformat(stringNumber);
 
 	// Create the formatting string to be applied.
 	if (settings.useGrouping) {

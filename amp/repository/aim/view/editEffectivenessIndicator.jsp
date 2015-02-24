@@ -127,10 +127,9 @@
                         </c:choose--%>
                     </td>
                     <td width="20%" align="center">
-                        <c:set var="deleteOptionAction">/aidEffectivenessIndicatorsManager.do?actionParam=deleteOption&ampIndicatorOptionId=${option.ampIndicatorOptionId}&optionIndex=${idx}</c:set>
-                        <digi:link href="${deleteOptionAction}">
+                        <a onclick="deleteOptionRow('${option.ampIndicatorOptionId}', '${idx}'); return false;">
                             <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete</digi:trn>"/>
-                        </digi:link>
+                        </a>
                     </td>
                 </tr>
             </logic:iterate>
@@ -181,6 +180,12 @@
     function addOptionRow() {
         var editForm = document.getElementById("editForm");
         editForm.action = "/aidEffectivenessIndicatorsManager.do?actionParam=addOption";
+        editForm.submit();
+    }
+
+    function deleteOptionRow(ampIndicatorOptionId, idx) {
+        var editForm = document.getElementById("editForm");
+        editForm.action = '/aidEffectivenessIndicatorsManager.do?actionParam=deleteOption&ampIndicatorOptionId=' + ampIndicatorOptionId + '&optionIndex=' + idx;
         editForm.submit();
     }
 

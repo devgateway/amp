@@ -69,9 +69,15 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 indicatorForm.getOptions().add(fo);
                 return mapping.findForward("edit");
             case "deleteOption" :
-                long optionId = 0;
+                long optionId = -1;
+                int optionIndex = -1;
                 try {
-                    optionId = Long.parseLong(optionIdParam);
+                    if (!"".equals(optionIdParam)) {
+                        optionId = Long.parseLong(optionIdParam);
+                    }
+                    if (!"".equals(optionIndexParam)) {
+                        optionIndex = Integer.parseInt(optionIndexParam);
+                    }
                 } catch (NumberFormatException nfe) {
                     handleLocalException(request, nfe, "error.admin.aidEffectivenessIndicator.options.option.notExist", optionIdParam);
                     return mapping.findForward("error");
@@ -88,7 +94,6 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 } else {
                     // deleting just added option from the form
                     try {
-                        int optionIndex = Integer.parseInt(optionIndexParam);
                         indicatorForm.getOptions().remove(optionIndex);
                     } catch (RuntimeException rte) {
                         handleLocalException(request, rte, "error.admin.aidEffectivenessIndicator.options.option.notExist", optionIndexParam);
@@ -148,6 +153,9 @@ public class AidEffectivenessIndicatorsAction extends Action {
         // todo consider use collection.retainAll
         if (entity.getOptions() == null) {
             entity.setOptions(form.getOptions());
+            for (AmpAidEffectivenessIndicatorOption option : entity.getOptions()) {
+                option.setIndicator(entity);
+            }
         } else {
             for (int i = 0; i < form.getOptions().size() ; i++) {
                 if (entity.getOptions().size() > i) {

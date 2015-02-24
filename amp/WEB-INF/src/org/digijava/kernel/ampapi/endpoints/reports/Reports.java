@@ -38,6 +38,7 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.dgfoundation.amp.reports.mondrian.converters.AmpReportsToReportSpecification;
 import org.dgfoundation.amp.reports.mondrian.converters.MondrianReportFiltersConverter;
+import org.dgfoundation.amp.reports.saiku.export.AMPExcelExport;
 import org.dgfoundation.amp.reports.saiku.export.AMPPdfExport;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
@@ -552,7 +553,7 @@ public class Reports {
 				case "xls": 
 					ExcelBuilderOptions options = new ExcelBuilderOptions();
 					options.repeatValues = true;
-			        ExcelWorksheetBuilder worksheetBuilder = new ExcelWorksheetBuilder(result, new ArrayList<ThinHierarchy>(), options);
+					AMPExcelExport worksheetBuilder = new AMPExcelExport(result, new ArrayList<ThinHierarchy>(), options);
 			        doc = worksheetBuilder.build();
 					filename = "export.xls";
 					break;

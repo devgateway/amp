@@ -76,6 +76,8 @@ public class AmpAidEffectivenessFormSectionFeature extends
 
             @Override
             public void updateModel() {
+                // OVERRDING OF THIS METHOD IS VERY IMPORTANT!!!
+                // we update the model "on the fly". This method overrides these efforts in the end (before save)
                 //super.updateModel();
             }
 
@@ -107,12 +109,12 @@ public class AmpAidEffectivenessFormSectionFeature extends
                 if (indicator.getIndicatorType() == 0) {
                     indicatorChoices = new AmpGroupFieldPanel<Long>(
                             "ampIndicatorOptionId", decoratorModel, options,
-                            indicator.getAmpIndicatorName() + ":", false, false, renderer, indicator.getTooltipText());
+                            indicator.getAmpIndicatorName(), false, false, renderer, indicator.getTooltipText());
 
                 } else {
                     indicatorChoices = new AmpSelectFieldPanel <Long>(
                             "ampIndicatorOptionId", decoratorModel, options,
-                            indicator.getAmpIndicatorName() + ":", false, false, renderer, false);
+                            indicator.getAmpIndicatorName(), false, false, renderer, false);
 
                 }
 

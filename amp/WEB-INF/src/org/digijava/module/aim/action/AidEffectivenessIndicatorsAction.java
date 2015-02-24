@@ -110,6 +110,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
                     indicator = formToEntity(indicatorForm, null);
                 }
                 AidEffectivenessIndicatorUtil.saveIndicator(indicator);
+                request.setAttribute("confirmationMessage", "saveSuccess");
                 return mapping.findForward("search");
             case "delete" :
                 indicatorId = 0;

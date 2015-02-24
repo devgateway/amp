@@ -107,3 +107,8 @@ td.configToolsSeparator {
 	background-repeat : repeat-y;
 }
 
+.confirmationMessage {
+    font-weight: bold;
+    color: #00bb00;
+}
+

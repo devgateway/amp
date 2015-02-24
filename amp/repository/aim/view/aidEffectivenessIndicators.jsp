@@ -10,10 +10,17 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
+<link rel="stylesheet" href="<digi:file src="module/admin/css/admin.css"/>">
+
 <script type="text/javascript" src='<digi:file src="module/aim/scripts/table_utils.js"/>'>.</script>
 
 <h1 class="admintitle"><digi:trn>Aid Effectiveness Indicator Manager</digi:trn></h1>
 <digi:errors/>
+<div class="confirmationMessage">
+    <c:if test="${'saveSuccess' == confirmationMessage}">
+        <digi:trn>Indicator has been saved successfully</digi:trn>
+    </c:if>
+</div>
 <%-- This is the search form --%>
 <digi:form action="/aidEffectivenessIndicatorsManager.do" method="post" styleId="searchForm">
     <html:hidden property="actionParam" value="search"/>

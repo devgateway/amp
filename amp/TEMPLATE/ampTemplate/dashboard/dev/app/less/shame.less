@@ -215,11 +215,20 @@ h3 {
   position: absolute;
   left: -99999em;
 }
-@preview-width: 700px;  // sync with views/download.js
+
+@preview-width: 1000px;  // sync with views/download.js
+@preview-height: 400px;  // sync with views/download.js
+.dash-download-modal {
+	width: @preview-width;
+}
 .preview-area .svg-wrap {
-  height: 400px;  // sync with views/download.js
-  width: @preview-width;
-  opacity: 0.5;
+  height: @preview-height;
+  width: @preview-width - (15px * 2);
+  opacity: 0.0;
+}
+.preview-area .canvas-wrap {
+  height: @preview-height + 50px;
+  width: @preview-width - (15px * 2);
 }
 .modal-dialog.download {
   width: @preview-width + (15px * 2);

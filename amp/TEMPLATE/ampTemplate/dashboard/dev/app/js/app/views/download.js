@@ -17,8 +17,8 @@ module.exports = BackboneDash.View.extend({
   initialize: function(options) {
     this.app = options.app;
     this.dashChartOptions = _({}).extend(options.chartOptions, {
-      height: 400,  // sync with css
-      width: 700,
+      height: 450,  // sync with css!!!
+      width: 970,	// sync with css!!!
       trimLabels: false
     });
   },
@@ -29,9 +29,12 @@ module.exports = BackboneDash.View.extend({
     if (this.model.get('view') === 'table') {
       this.renderCSV(this.$('.preview-area .table-wrap').removeClass('hidden'));
     } else {
-      this.renderChart(
-        this.$('.preview-area .svg-wrap').removeClass('hidden'),
-        this.$('.preview-area .canvas-wrap').removeClass('hidden'));
+    	window.setTimeout(_(function() {  // stupid bootstrap modals...
+    	    // this setTimeout is needed for chart to be drawn correctly
+    		this.renderChart(
+    		        this.$('.preview-area .svg-wrap').removeClass('hidden'),
+    		        this.$('.preview-area .canvas-wrap'));
+    	    }).bind(this), 500);      
     }
     return this;
   },
@@ -55,7 +58,8 @@ module.exports = BackboneDash.View.extend({
       var img = new Image();
       img.src = canvas.toDataURL('image/png');
       canvasContainer.html(img);
-      this.makeDownloadable(img.src, 'chart', '.png');
+      $(canvasContainer).removeClass('hidden');
+      this.makeDownloadable(img.src, 'chart', '.png');      
     });
 
   },

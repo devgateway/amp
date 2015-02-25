@@ -87,8 +87,9 @@ public class AmpAidEffectivenessFormSectionFeature extends
 
                 AmpAidEffectivenessIndicator indicator = componentOuter.getModelObject().getIndicator();
                 AmpFieldPanel<Long> indicatorChoices = null;
+                AbstractChoice choiceContainer = null;
 
-                List<Long> options = new ArrayList<Long>();
+                        List<Long> options = new ArrayList<Long>();
                 for (AmpAidEffectivenessIndicatorOption o : indicator.getOptions()) {
                     options.add(o.getAmpIndicatorOptionId());
                 }
@@ -111,15 +112,18 @@ public class AmpAidEffectivenessFormSectionFeature extends
                     indicatorChoices = new AmpGroupFieldPanel<Long>(
                             "ampIndicatorOptionId", decoratorModel, options,
                             indicator.getAmpIndicatorName(), false, false, renderer, indicator.getTooltipText());
-
+                    choiceContainer = ((AmpGroupFieldPanel)indicatorChoices).getChoiceContainer();
                 } else {
                     indicatorChoices = new AmpSelectFieldPanel <Long>(
                             "ampIndicatorOptionId", decoratorModel, options,
                             indicator.getAmpIndicatorName(), false, false, renderer, false);
 
-                    AbstractChoice choiceContainer = ((AmpSelectFieldPanel)indicatorChoices).getChoiceContainer();
+                    choiceContainer = ((AmpSelectFieldPanel)indicatorChoices).getChoiceContainer();
+                }
+
+                if (indicator.getMandatory()) {
+                    choiceContainer.setRequired(true);
                     requiredFormComponents.add(choiceContainer);
-                    // indicatorChoices.getTitleLabel().add(new AttributeModifier("style", "padding: 40px; height: 100px;"));
                 }
 
 

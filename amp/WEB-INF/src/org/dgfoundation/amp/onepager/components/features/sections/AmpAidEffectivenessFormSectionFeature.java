@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.*;
 
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.IModel;
@@ -116,10 +117,14 @@ public class AmpAidEffectivenessFormSectionFeature extends
                             "ampIndicatorOptionId", decoratorModel, options,
                             indicator.getAmpIndicatorName(), false, false, renderer, false);
 
+                    AbstractChoice choiceContainer = ((AmpSelectFieldPanel)indicatorChoices).getChoiceContainer();
+                    requiredFormComponents.add(choiceContainer);
+                    // indicatorChoices.getTitleLabel().add(new AttributeModifier("style", "padding: 40px; height: 100px;"));
                 }
 
+
+
                 indicatorChoices.setTitleTooltip(new Label("tooltip", indicator.getTooltipText()));
-                //requiredFormComponents.add(componentOuter);
                 componentOuter.add(indicatorChoices);
             }
 

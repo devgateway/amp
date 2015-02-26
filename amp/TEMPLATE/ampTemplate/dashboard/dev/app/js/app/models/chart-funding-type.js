@@ -6,7 +6,8 @@ module.exports = ChartModel.extend({
 
   defaults: {
     typed: true,
-    limit: 3
+    limit: 3,
+    title: ''
   },
 
   _prepareTranslations: function() {
@@ -33,6 +34,8 @@ module.exports = ChartModel.extend({
   },
 
   parse: function(data) {
+	this.set('title', data.title);
+	
     var self = this;
     var years;
     if (data.values.length > 0 && !isNaN(parseInt((data.values)[0].Year, 10))) {

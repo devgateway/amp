@@ -6,7 +6,8 @@ var ChartModel = require('./chart-model-base');
 module.exports = ChartModel.extend({
 
   defaults: {
-    limit: 5
+    limit: 5,
+    title: ''
   },
 
   _prepareTranslations: function() {
@@ -30,6 +31,8 @@ module.exports = ChartModel.extend({
   },
 
   parse: function(data) {
+	this.set('title', data.title);
+	  
     if (!this.localizedLookup) {
       // we can't procede if we don't have translations yet :(
       // this code should now be unreachable, but y'never know...

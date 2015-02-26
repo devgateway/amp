@@ -49,10 +49,13 @@ import org.digijava.kernel.lucene.LucModule;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.translation.entity.MessageGroup;
 import org.digijava.module.translation.entity.PatcherMessageGroup;
 import org.digijava.module.translation.lucene.TrnLuceneModule;
@@ -572,7 +575,7 @@ public class TrnUtil {
 			//if we do not have group yet
 			if (null == group){
 				//create new group for current message
-				group = factory.createGroup(message.getKey());
+				group = factory.createGroup(message.getKey(),message.getPrefix());
 				//put it in map to find next time for same key
 				groupByKey.put(message.getKey(), group);
 			}
@@ -601,7 +604,7 @@ public class TrnUtil {
      * @param <E>
      */
     public static interface MessageGroupFactory<E extends MessageGroup>{
-    	public E createGroup(String key);
+    	public E createGroup(String key,String prefix);
     }
     
     /**
@@ -611,8 +614,8 @@ public class TrnUtil {
      */
     public static class StandardMessageGroupFactory implements MessageGroupFactory<MessageGroup>{
 		@Override
-		public MessageGroup createGroup(String key) {
-			return new MessageGroup(key);
+		public MessageGroup createGroup(String key,String prefix) {
+			return new MessageGroup(key,prefix);
 		}
     }
     
@@ -623,7 +626,7 @@ public class TrnUtil {
      */
     public static class PatcherMessageGroupFactory implements MessageGroupFactory<PatcherMessageGroup>{
 		@Override
-		public PatcherMessageGroup createGroup(String key) {
+		public PatcherMessageGroup createGroup(String key, String prefix) {
 			return new PatcherMessageGroup(key);
 		}
 
@@ -831,6 +834,24 @@ public class TrnUtil {
 			}
 			return w1.compareTo(w2);
 		}
+    }
+    /**
+     * Returns the current workspace prefix
+     * @return ws prefix
+     */
+    public static String getTrnPrefix(){
+        if (TLSUtils.getRequest() != null && TLSUtils.getRequest().getSession() != null){
+            HttpSession session = TLSUtils.getRequest().getSession();
+            TeamMember tm = (TeamMember) session.getAttribute(org.digijava.module.aim.helper.Constants.CURRENT_MEMBER);
+            if (tm != null){
+                AmpCategoryValue trnPrefix = tm.getWorkspacePrefix();
+                if (trnPrefix != null){
+                    String prefix = trnPrefix.getValue();
+                    return prefix;
+                }
+            }
+        }
+        return null;
     }
 
 }

@@ -254,7 +254,8 @@ th {
 										<table>
 											<tr>
 												<td>
-													Key: ${msgGroup.key}
+													Key: ${msgGroup.key}  Prefix : ${msgGroup.prefix}
+
 												</td>
 												<td>
 													<input class="addTranslations" type="button" value="<digi:trn>Add Translation</digi:trn>" onclick="addTranslations(this,'${msgGroup.key}','<c:forEach items="${msgGroup.sortedMessages}" var="msg">${msg.locale},</c:forEach>')">

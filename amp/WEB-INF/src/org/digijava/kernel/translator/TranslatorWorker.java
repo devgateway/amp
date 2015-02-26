@@ -23,14 +23,12 @@
 package org.digijava.kernel.translator;
 
 import java.io.UnsupportedEncodingException;
-import java.sql.SQLException;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,7 +41,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LuceneWorker;
@@ -55,18 +52,16 @@ import org.digijava.kernel.service.ServiceManager;
 import org.digijava.kernel.services.UrlTouchService;
 import org.digijava.kernel.translator.util.TrnAccesTimeSaver;
 import org.digijava.kernel.translator.util.TrnAccessUpdateQueue;
+import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.I18NHelper;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.util.AmpMath;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 /**
  * @author Shamanth Murthy
@@ -1011,13 +1006,15 @@ public class TranslatorWorker {
      * @param text any text that but usually this should be body for trn tag or default translation text.
      * @return key for translation, actually it is hash code of the text.
      */
-    public static String generateTrnKey(String text){
-    	if(text != null) {
-    		return Integer.toString(text.trim().toLowerCase().hashCode());
-    	} else {
-    		return "";
-    	}
-    }
+	public static String generateTrnKey(String text) {
+
+		if (text != null) {
+			String trnPrefix = TrnUtil.getTrnPrefix();
+			return Integer.toString(((trnPrefix != null ? trnPrefix : "") + text).trim().toLowerCase().hashCode());
+		} else {
+			return "";
+		}
+	}
     
     /**
      * Puts message in update queue.
@@ -1065,6 +1062,9 @@ public class TranslatorWorker {
             
             //Remove from queue if this message is there because here we are doing same.
             //timeStampQueue.remove(message);
+            //we set the workspace prefix if present that was used to calculate the hash
+            //if its null it remains null
+            message.setPrefix(TrnUtil.getTrnPrefix());
             
             ses.saveOrUpdate(message);
             //tx.commit();

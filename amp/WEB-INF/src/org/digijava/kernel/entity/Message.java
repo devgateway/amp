@@ -51,7 +51,7 @@ public class Message implements Serializable{
     private int hashCode;
     private boolean hasHashCode;
     private String originalMessage;
-
+    private String prefix;
 	public Message(){
         hasHashCode = false;
 	}
@@ -224,6 +224,12 @@ public class Message implements Serializable{
 	}
 	public String getOriginalMessage() {
 		return originalMessage;
+	}
+	public String getPrefix() {
+		return prefix;
+	}
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
 	}
 
 }

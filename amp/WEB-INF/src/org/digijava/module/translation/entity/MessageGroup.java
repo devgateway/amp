@@ -1,13 +1,19 @@
 package org.digijava.module.translation.entity;
 
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
-import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.translator.util.TrnUtil;
@@ -30,6 +36,7 @@ public class MessageGroup {
     private static Logger logger = Logger.getLogger(MessageGroup.class);	
 	
 	private String key = null;
+	private String prefix = null;
 	private String keyWords = null;
 	private Long siteId = null;
 	/**
@@ -50,9 +57,14 @@ public class MessageGroup {
 	 * Constructs group for particular key.
 	 * @param key
 	 */
-	public MessageGroup(String key){
+	public MessageGroup(String key, String prefix){
 		this.key = key;
+		this.prefix=prefix;
 		this.messages = new HashMap<String, Message>();
+	}
+	
+	public MessageGroup(String key){
+		this(key,null);
 	}
 
 	/**
@@ -60,7 +72,7 @@ public class MessageGroup {
 	 * @param message
 	 */
 	public MessageGroup(Message message){
-		this(message.getKey());
+		this(message.getKey(),message.getPrefix());
 		this.setKeyWords(message.getKeyWords());
 		this.setSiteId(Long.parseLong(message.getSiteId())); // we can be sure that message.getSiteId() is numeric, because there is a filter in the setter. If not -> it is a bug that SHOULD be fixed elsewhere in AMP
 		addMessage(message);
@@ -322,4 +334,13 @@ public class MessageGroup {
 	public Float getScore() {
 		return score;
 	}
+
+	public String getPrefix() {
+		return prefix;
+	}
+
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
+	}
+	
 }

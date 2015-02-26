@@ -4,19 +4,19 @@
 */
 package org.dgfoundation.amp.onepager.translation;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.Session;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.persistence.WorkerException;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
-
-import java.util.*;
 
 /**
  * @author mpostelnicu@dgateway.org

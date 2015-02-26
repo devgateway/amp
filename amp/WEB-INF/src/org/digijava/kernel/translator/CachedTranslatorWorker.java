@@ -130,32 +130,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
     	return getByKey(key, locale, siteId, true, keyWords);
     }
 
-
-    private String getTrnPrefix(){
-        if (TLSUtils.getRequest() != null && TLSUtils.getRequest().getSession() != null){
-            HttpSession session = TLSUtils.getRequest().getSession();
-            TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
-            if (tm != null){
-                AmpCategoryValue trnPrefix = tm.getWorkspacePrefix();
-                if (trnPrefix != null){
-                    String prefix = trnPrefix.getValue();
-                    return prefix;
-                }
-            }
-        }
-        return null;
-    }
-
-
     public Message getByKey(String key, String locale, Long siteId, boolean overwriteKeywords,String keywords) {
-        String prefix = getTrnPrefix();
-
-        if (prefix != null){
-            String newKey = prefix + key;
-            Message ret = internalGetByKey(newKey, locale, siteId, overwriteKeywords, keywords);
-            if (ret != null)
-                return ret;
-        }
         return internalGetByKey(key, locale, siteId, overwriteKeywords, keywords);
     }
 
@@ -203,13 +178,8 @@ public class CachedTranslatorWorker extends TranslatorWorker {
     
 
     public void save(Message message) {
-        //add prefix to the message key if we're in the right workspace
-        String prefix = getTrnPrefix();
-        if (prefix != null){
-            message.setKey(prefix+message.getKey());
-        }
 
-        saveDb(message); //message key and body will be processed there 
+    	saveDb(message); //message key and body will be processed there 
         
         messageCache.put(message, message);
         fireRefreshAlert(message);
@@ -222,16 +192,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
      * @throws WorkerException
      */
     public void update(Message message) throws WorkerException {
-        //check if we're updating a prefixed message or a regular one
-        String prefix = getTrnPrefix();
-        if (prefix != null){
-            String key = message.getKey();
-            if (!key.startsWith(prefix)){
-                //we need to save a new translation
-                save(message);
-                return;
-            }
-        }
+
         updateDb(message);//message key and body will be processed there
 
         messageCache.put(message, message);

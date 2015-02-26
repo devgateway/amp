@@ -72,7 +72,7 @@ public class AidEffectivenessIndicatorUtil {
         Session session = PersistenceManager.getSession();
         AmpAidEffectivenessIndicator indicator = null;
         try {
-            indicator = (AmpAidEffectivenessIndicator) session.load(AmpAidEffectivenessIndicator.class, indicatorId);
+            indicator = loadById(indicatorId);
         }  catch (org.hibernate.ObjectNotFoundException nfe) {
             /*
              * Throwing Runtime here to prevent handling Hibernate exceptions in the action class
@@ -80,9 +80,10 @@ public class AidEffectivenessIndicatorUtil {
              */
             throw new RuntimeException("Indicator with id " + indicatorId + " not found");
         }
-        // TODO Handle if there are alreary exist activities with this indicator
-        // The deletion is impossible and we should fire corresponding message to the user
+
+        // these two methods should be executed withing the transaction context
         session.delete(indicator);
+        cleanUpModulesVisibility(indicator);
     }
 
     /**
@@ -129,6 +130,45 @@ public class AidEffectivenessIndicatorUtil {
 
     }
 
+    /**
+     * When indicator is physically deleted we need to clean up the reference in the amp_modules_visibility table
+     * To clean up trash in the Global FM tree
+     * @param indicator
+     */
+    public static void cleanUpModulesVisibility(AmpAidEffectivenessIndicator indicator) {
+        Session session = PersistenceManager.getSession();
+
+        String queryStr = "delete from amp_modules_templates where module in " +
+                "(select id from amp_modules_visibility where name like '%Aid Effectivenes/"
+              + indicator.getAmpIndicatorName() + "%') ";
+        Query query = session.createSQLQuery(queryStr);
+        query.executeUpdate();
+
+
+        queryStr = "delete from amp_modules_visibility where name like '%Aid Effectivenes/"
+                + indicator.getAmpIndicatorName() +"%'";
+        query = session.createSQLQuery(queryStr);
+        query.executeUpdate();
+    }
+
+
+    public static boolean hasIndicatorActivities(long indicatorId) {
+        Session session = PersistenceManager.getSession();
+        String queryStr = "select \n" +
+                "    count(a.amp_indicator_option_id) \n" +
+                "from \n" +
+                "    AMP_ACTIVITY_EFFECTIVENESS_INDICATOR_OPTIONS a,\n" +
+                "    AMP_AID_EFFECTIVENESS_INDICATOR_OPTION o\t\n" +
+                "where \n" +
+                "    a.amp_indicator_option_id = o.amp_indicator_option_id\n" +
+                "    and o.amp_indicator_id=:indicatorId";
+
+        Query query = session.createSQLQuery(queryStr);
+        query.setParameter("indicatorId", indicatorId);
+
+        long count = ((Number) query.uniqueResult()).longValue();
+        return count > 0;
+    }
 
 
     /**

@@ -122,12 +122,19 @@ public class AidEffectivenessIndicatorsAction extends Action {
 
                 return mapping.findForward("search");
             case "delete" :
-                indicatorId = 0;
                 try {
                     indicatorId = Long.parseLong(indicatorIdParam);
-                    AidEffectivenessIndicatorUtil.deleteIndicator(indicatorId);
+                    indicator = AidEffectivenessIndicatorUtil.loadById(indicatorId);
                 } catch (RuntimeException nfe) {
                     handleLocalException(request, nfe, "error.admin.aidEffectivenessIndicator.notExist", indicatorIdParam);
+                    return mapping.findForward("search");
+                }
+
+                if (! AidEffectivenessIndicatorUtil.hasIndicatorActivities(indicatorId)) {
+                    AidEffectivenessIndicatorUtil.deleteIndicator(indicatorId);
+                }  else {
+                    handleLocalException(request, new RuntimeException(), "error.admin.aidEffectivenessIndicator.hasRelatedActivities",
+                            indicator.getAmpIndicatorName());
                     return mapping.findForward("search");
                 }
 

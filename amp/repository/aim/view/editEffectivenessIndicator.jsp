@@ -153,7 +153,7 @@
 <script type="text/javascript">
     function cancelSave() {
         var editForm = document.getElementById("editForm");
-        editForm.elements["actionParam"].value = "search";
+        editForm.elements["actionParam"].value = "list";
         editForm.reset();
         editForm.submit();
     }

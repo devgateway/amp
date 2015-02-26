@@ -160,8 +160,9 @@ public class MondrianETL {
 		Set<Long> pledges = etlFromScratch ? 
 				new HashSet<>(SQLUtils.fetchLongs(conn, "SELECT DISTINCT(id) FROM amp_funding_pledges")) :
 					collectEtlEntities("pledge");
-		Set<Long> components = collectEtlEntities("component");
 		Set<Long> activities = etlFromScratch ? getAllValidatedAndLatestIds() : collectEtlEntities("activity");
+		Set<Long> components = collectEtlEntities("component"); // in case of FULL ETL, all relevant componentIDs will be collected anyway - we just make sure no past version slips through
+
 		int steps = 1;
 		while (iterateEtlEntities(activities, pledges, components)) {
 			steps ++;
@@ -175,7 +176,7 @@ public class MondrianETL {
 		
 		//Set<Long> activityIds = calculateAffectedActivities(etlFromScratch, pledgeIds);
 		Set<Long> dateCodes = etlFromScratch ? null : collectEtlEntities("exchange_rate");
-		return new EtlConfiguration(activities, pledges, dateCodes, etlFromScratch);
+		return new EtlConfiguration(activities, pledges, components, dateCodes, etlFromScratch);
 		//this.pledgesToRedo = new HashSet<>();
 		//if (pledgesToRedo != null)
 		//	this.pledgesToRedo.addAll(pledgesToRedo);
@@ -320,7 +321,7 @@ private EtlResult execute() throws Exception {
 				|| !etlConfig.activityIds.isEmpty() || !etlConfig.pledgeIds.isEmpty() || !etlConfig.dateCodes.isEmpty(); // is there anything to do?
 		
 		if ((!etlConfig.fullEtl) && (!fullEtlJobs.isEmpty()))
-			throw new RuntimeException("jss u r st00p33d");
+			throw new RuntimeException("jss u r st00p33d");		
 		
 		if (workToDo) {
 			if (etlConfig.fullEtl) {
@@ -329,16 +330,7 @@ private EtlResult execute() throws Exception {
 				fullEtlLockAcquired = true;
 				logger.info("doing full ETL");
 				for(ExceptionRunnable<?> job:fullEtlJobs)
-					job.run();
-				
-				for (final MondrianTableDescription mtd:MondrianTablesRepository.MONDRIAN_ACTIVITY_DEPENDENT_DIMENSIONS) {
-					boolean tableExists = monetConn.tableExists(mtd.tableName);
-					mtd.fingerprint.runIfFingerprintChangedOr(conn, monetConn, !tableExists, stepSkipped, new ExceptionRunnable<SQLException>() {
-						@Override public void run() throws SQLException {
-							generateStarTable(mtd);
-						}
-					});
-				}
+					job.run();				
 			
 				recreateFactTable(); // since fact table manipulation is incremental in nature (even if doing a FULL ETL) -> insure a clean state of it
 				generateMondrianDateTable();
@@ -369,6 +361,8 @@ private EtlResult execute() throws Exception {
 							
 			logger.error("done generating ETL");
 		}
+		
+		generateIncrementalTable(MondrianTablesRepository.MONDRIAN_COMPONENTS, etlConfig.componentIdsIn("amp_component_id"));
 				
 		ETL_TIME_FINGERPRINT.serializeFingerprint(monetConn, Long.toString(currentEtlEventId));
 
@@ -634,7 +628,7 @@ private EtlResult execute() throws Exception {
 	 * @param locale
 	 * @throws SQLException
 	 */
-	protected void incrementallyCloneMondrianTableForLocale(MondrianTableDescription mondrianTable, String locale) throws SQLException {
+	protected void incrementallyCloneMondrianTableForLocale(MondrianTableDescription mondrianTable, String locale, String incrementalQuery) throws SQLException {
 		if (!mondrianTable.isTranslated())
 			return;
 		if (etlConfig.activityIds.isEmpty())
@@ -642,9 +636,9 @@ private EtlResult execute() throws Exception {
 		logger.warn("incrementally cloning table " + mondrianTable.tableName + " into locale " + locale);
 		String localizedTableName = mondrianTable.tableName + "_" + locale;
 		
-		List<List<Object>> vals = mondrianTable.readTranslatedTable(this.conn, locale, " WHERE " + etlConfig.activityIdsIn("amp_activity_id"));
+		List<List<Object>> vals = mondrianTable.readTranslatedTable(this.conn, locale, " WHERE " + incrementalQuery);
 //		monetConn.copyTableStructureFromPostgres(this.conn, mondrianTable.tableName, localizedTableName);
-		monetConn.executeQuery("DELETE FROM " + localizedTableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id"));
+		monetConn.executeQuery("DELETE FROM " + localizedTableName + " WHERE " + incrementalQuery);
 		SQLUtils.insert(monetConn.conn, localizedTableName, null, null, monetConn.getTableColumns(localizedTableName), vals);
 		
 		// -> cannot check sanity because a write to the db might have just happened during the ETL, thus un-consistenting the cloning <-
@@ -753,13 +747,17 @@ private EtlResult execute() throws Exception {
 			generatePerActivityTables(mondrianTable);
 	}
 	
+	protected void generatePerActivityTables(MondrianTableDescription mondrianTable) throws SQLException {
+		generateIncrementalTable(mondrianTable, etlConfig.activityIdsIn("amp_activity_id"));
+	}
+	
 	/**
 	 * syncs a mondrian table between its view psql-side and materialization monet-side
 	 * @param mondrianTable
 	 * @throws SQLException
 	 */
-	protected void generatePerActivityTables(MondrianTableDescription mondrianTable) throws SQLException {
-		String query = "SELECT * FROM v_" + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id");
+	protected void generateIncrementalTable(MondrianTableDescription mondrianTable, String incrementalQuery) throws SQLException {
+		String query = "SELECT * FROM v_" + mondrianTable.tableName + " WHERE " + incrementalQuery;
 		
 		/**
 		 * table not translated -> original only exists in Monet
@@ -784,12 +782,12 @@ private EtlResult execute() throws Exception {
 		} else {
 			// relation exists in Monet IF (table is not translated) OR (isTranslated AND is not filtered)
 			if (mondrianTable.isTranslated()) {
-				SQLUtils.executeQuery(conn, "DELETE FROM " + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id"));
+				SQLUtils.executeQuery(conn, "DELETE FROM " + mondrianTable.tableName + " WHERE " + incrementalQuery);
 				SQLUtils.executeQuery(conn, "INSERT INTO " + mondrianTable.tableName + " " + query);
 				for (String locale:locales)
-					incrementallyCloneMondrianTableForLocale(mondrianTable, locale);
+					incrementallyCloneMondrianTableForLocale(mondrianTable, locale, incrementalQuery);
 			} else {
-				monetConn.executeQuery("DELETE FROM " + mondrianTable.tableName + " WHERE " + etlConfig.activityIdsIn("amp_activity_id"));
+				monetConn.executeQuery("DELETE FROM " + mondrianTable.tableName + " WHERE " + incrementalQuery);
 				try(RsInfo rs = SQLUtils.rawRunQuery(conn, query, null)) {
 					monetConn.copyEntries(mondrianTable.tableName, rs.rs);
 				}

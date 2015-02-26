@@ -35,6 +35,8 @@ public class AidEffectivenessIndicatorsAction extends Action {
 
         if (actionParam == null) {
             // the default one is "list"
+            clearForm(indicatorForm);
+            executeSearch(mapping, request, indicatorForm);
             return mapping.findForward("list");
         }
 
@@ -44,6 +46,8 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 executeSearch(mapping, request, indicatorForm);
                 return mapping.findForward("search");
             case "list" :
+                clearForm(indicatorForm);
+                executeSearch(mapping, request, indicatorForm);
                 return mapping.findForward("list");
             case "edit" :
                 long indicatorId = 0;
@@ -110,7 +114,12 @@ public class AidEffectivenessIndicatorsAction extends Action {
                     indicator = formToEntity(indicatorForm, null);
                 }
                 AidEffectivenessIndicatorUtil.saveIndicator(indicator);
+
                 request.setAttribute("confirmationMessage", "saveSuccess");
+                clearForm(indicatorForm);
+                // display list of indicators after one has been deleted
+                executeSearch(mapping, request, indicatorForm);
+
                 return mapping.findForward("search");
             case "delete" :
                 indicatorId = 0;
@@ -222,8 +231,8 @@ public class AidEffectivenessIndicatorsAction extends Action {
      * We are using session form and it will be cleared each time!!!
      */
     public void clearForm(AidEffectivenessIndicatorForm indicatorForm) {
-        indicatorForm.setTooltipText(null);
-        indicatorForm.setAmpIndicatorName(null);
+        indicatorForm.setTooltipText("");
+        indicatorForm.setAmpIndicatorName("");
         indicatorForm.setMandatory(false);
         indicatorForm.setActive(false);
         indicatorForm.setAmpIndicatorId(null);

@@ -55,7 +55,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 long indicatorId = 0;
                 try {
                     indicatorId = Long.parseLong(indicatorIdParam);
-                    indicator = AidEffectivenessIndicatorUtil.loadById(indicatorId);
+                    indicator = AidEffectivenessIndicatorUtil.loadIndicatorById(indicatorId);
                 } catch (RuntimeException nfe) {
                     handleLocalException(request, nfe, "error.admin.aidEffectivenessIndicator.notExist", indicatorIdParam);
                     return mapping.findForward("search");
@@ -87,10 +87,19 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 if (optionId > 0) {
                     // deleting already saved option
                     try {
-                        indicator = AidEffectivenessIndicatorUtil.deleteOption(optionId);
-                        entityToForm(indicator, indicatorForm);
+                        if (! AidEffectivenessIndicatorUtil.hasOptionActivities(optionId)) {
+                            indicator = AidEffectivenessIndicatorUtil.deleteOption(optionId);
+                            entityToForm(indicator, indicatorForm);
+                        } else {
+                            AmpAidEffectivenessIndicatorOption option = AidEffectivenessIndicatorUtil.loadOptionById(optionId);
+                            handleLocalException(request, new RuntimeException(), "error.admin.aidEffectivenessIndicator.option.hasRelatedActivities",
+                                    option.getAmpIndicatorOptionName());
+                            executeSearch(mapping, request, indicatorForm);
+                            return mapping.findForward("error");
+                        }
                     } catch (RuntimeException rte) {
                         handleLocalException(request, rte, "error.admin.aidEffectivenessIndicator.options.option.notExist", optionIdParam);
+                        executeSearch(mapping, request, indicatorForm);
                         return mapping.findForward("error");
                     }
                 } else {
@@ -110,7 +119,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 }
                 // update
                 if (indicatorForm.getAmpIndicatorId() != null && indicatorForm.getAmpIndicatorId() > 0){
-                    indicator = AidEffectivenessIndicatorUtil.loadById(indicatorForm.getAmpIndicatorId());
+                    indicator = AidEffectivenessIndicatorUtil.loadIndicatorById(indicatorForm.getAmpIndicatorId());
                     indicator = formToEntity(indicatorForm, indicator);
                 } else { // create
                     indicator = formToEntity(indicatorForm, null);
@@ -126,9 +135,10 @@ public class AidEffectivenessIndicatorsAction extends Action {
             case "delete" :
                 try {
                     indicatorId = Long.parseLong(indicatorIdParam);
-                    indicator = AidEffectivenessIndicatorUtil.loadById(indicatorId);
+                    indicator = AidEffectivenessIndicatorUtil.loadIndicatorById(indicatorId);
                 } catch (RuntimeException nfe) {
                     handleLocalException(request, nfe, "error.admin.aidEffectivenessIndicator.notExist", indicatorIdParam);
+                    executeSearch(mapping, request, indicatorForm);
                     return mapping.findForward("search");
                 }
 
@@ -137,6 +147,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 }  else {
                     handleLocalException(request, new RuntimeException(), "error.admin.aidEffectivenessIndicator.hasRelatedActivities",
                             indicator.getAmpIndicatorName());
+                    executeSearch(mapping, request, indicatorForm);
                     return mapping.findForward("search");
                 }
 

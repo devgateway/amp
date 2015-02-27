@@ -29,7 +29,7 @@ public class AidEffectivenessIndicatorUtil {
 
         session = PersistenceManager.getSession();
         queryBuilder.append("select ind from ").append(AmpAidEffectivenessIndicator.class.getName()).append(" ind")
-                .append(" where ampIndicatorName like '%"+ keyword +"%' order by ampIndicatorId");
+                .append(" where ampIndicatorName like '%"+ keyword +"%'");
 
         // show active only, otherwise return all
         if (activeOnly) {
@@ -40,6 +40,8 @@ public class AidEffectivenessIndicatorUtil {
         if (indicatorType >= 0) {
             queryBuilder.append(" and indicatorType = :indicatorType");
         }
+
+        queryBuilder.append(" order by ampIndicatorId");
 
         query = session.createQuery(queryBuilder.toString());
 
@@ -53,9 +55,14 @@ public class AidEffectivenessIndicatorUtil {
         return  (List<AmpAidEffectivenessIndicator>)query.list();
     }
 
-    public static AmpAidEffectivenessIndicator loadById(Long indicatorId) {
+    public static AmpAidEffectivenessIndicator loadIndicatorById(Long indicatorId) {
         Session session = PersistenceManager.getSession();
         return (AmpAidEffectivenessIndicator) session.load(AmpAidEffectivenessIndicator.class, indicatorId);
+    }
+
+    public static AmpAidEffectivenessIndicatorOption loadOptionById(Long optionId) {
+        Session session = PersistenceManager.getSession();
+        return (AmpAidEffectivenessIndicatorOption) session.load(AmpAidEffectivenessIndicatorOption.class, optionId);
     }
 
     public static void saveIndicator(AmpAidEffectivenessIndicator indicator) {
@@ -72,7 +79,7 @@ public class AidEffectivenessIndicatorUtil {
         Session session = PersistenceManager.getSession();
         AmpAidEffectivenessIndicator indicator = null;
         try {
-            indicator = loadById(indicatorId);
+            indicator = loadIndicatorById(indicatorId);
         }  catch (org.hibernate.ObjectNotFoundException nfe) {
             /*
              * Throwing Runtime here to prevent handling Hibernate exceptions in the action class
@@ -166,6 +173,22 @@ public class AidEffectivenessIndicatorUtil {
 
         Query query = session.createSQLQuery(queryStr);
         query.setParameter("indicatorId", indicatorId);
+
+        long count = ((Number) query.uniqueResult()).longValue();
+        return count > 0;
+    }
+
+    public static boolean hasOptionActivities(long optionId) {
+        Session session = PersistenceManager.getSession();
+        String queryStr = "select \n" +
+                "    count(a.amp_indicator_option_id) \n" +
+                "from \n" +
+                "    AMP_ACTIVITY_EFFECTIVENESS_INDICATOR_OPTIONS a\n" +
+                "where \n" +
+                "    a.amp_indicator_option_id=:optionId";
+
+        Query query = session.createSQLQuery(queryStr);
+        query.setParameter("optionId", optionId);
 
         long count = ((Number) query.uniqueResult()).longValue();
         return count > 0;

@@ -23,7 +23,7 @@
     <table style="font-family: verdana; font-size: 11px; font-weight: bold" cellpadding="4">
         <tr>
             <td>
-                <digi:trn key="aim:indicatorType">Indicator Type</digi:trn>:
+                <digi:trn key="aim:indicatorType">Indicator Type</digi:trn><font color="red">*</font>:
             </td>
             <td>
                 <html:select style="inp-text" property="indicatorType" styleId="searchIndicatorType">
@@ -48,7 +48,7 @@
 
         <tr>
             <td>
-                <digi:trn>Indicator Name</digi:trn>:</b>
+                <digi:trn>Indicator Name</digi:trn><font color="red">*</font>:
             </td>
             <td>
                 <html:text property="ampIndicatorName" styleId="editAmpIndicatorName" size="50" maxlength="250"/>
@@ -66,7 +66,7 @@
 
         <tr>
             <td>
-                <digi:trn>Indicator Tooltip</digi:trn>:</b>
+                <digi:trn>Indicator Tooltip</digi:trn>:
             </td>
             <td>
                 <html:textarea property="tooltipText" styleId="editAmpIndicatorTitle" rows="5" cols="50" />
@@ -74,7 +74,7 @@
 
             <td>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <digi:trn>Is Mandatory</digi:trn>:</b>
+                <digi:trn>Is Mandatory</digi:trn>:
             </td>
             <td>
                 <html:checkbox property="mandatory" styleId="editMandatory" />
@@ -97,7 +97,7 @@
     <logic:present name="aidEffectivenessIndicatorsForm" property="options">
         <table style="font-family: verdana; font-size: 11px; font-weight: bold" cellpadding="4" id="optionsTableId" width="50%">
             <tr>
-                <th align="center" bgcolor="#c7d4db"><digi:trn>Option Text</digi:trn></th>
+                <th align="center" bgcolor="#c7d4db"><digi:trn>Option Text<font color="red">*</font></digi:trn></th>
                 <th align="center" bgcolor="#c7d4db"><digi:trn>Is Default</digi:trn></th>
                 <th align="center" bgcolor="#c7d4db">&nbsp;</th>
             </tr>

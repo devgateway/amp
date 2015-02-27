@@ -30,13 +30,16 @@ import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
+import org.digijava.kernel.ampapi.endpoints.util.DashboardConstans;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.request.TLSUtils;
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.visualization.util.DashboardUtil;
 
 /**
  * 
@@ -93,6 +96,8 @@ public class DashboardsService {
 		String err = null;
 		String column = "";
 		JsonBean retlist = new JsonBean();
+		String name = "";
+		String title = "";
 		List<JsonBean> values = new ArrayList<JsonBean>();
 
 		switch (type.toUpperCase()) {
@@ -102,18 +107,28 @@ public class DashboardsService {
 			} else {
 				column = MoConstants.DONOR_AGENCY;
 			}
+			title = TranslatorWorker.translateText(DashboardConstans.TOP_DONOR_AGENCIES);
+			name = DashboardConstans.TOP_DONOR_AGENCIES;
 			break;
 		case "RE":
 			column = MoConstants.H_REGIONS;
+			title = TranslatorWorker.translateText(DashboardConstans.TOP_REGIONS);
+			name = DashboardConstans.TOP_REGIONS;
 			break;
 		case "PS":
 			column = MoConstants.PRIMARY_SECTOR;
+			title = TranslatorWorker.translateText(DashboardConstans.TOP_SECTORS);
+			name = DashboardConstans.TOP_SECTORS;
 			break;
 		case "DG":
 			column = ColumnConstants.DONOR_GROUP;
+			title = TranslatorWorker.translateText(DashboardConstans.TOP_DONOR_GROUPS);
+			name = DashboardConstans.TOP_DONOR_GROUPS;
 			break;
 		default:
 			column = MoConstants.DONOR_AGENCY;
+			title = TranslatorWorker.translateText(DashboardConstans.TOP_DONOR_AGENCIES);
+			name = DashboardConstans.TOP_DONOR_AGENCIES;
 			break;
 		}
 
@@ -199,6 +214,9 @@ public class DashboardsService {
 
 		// report the total number of tops available
 		retlist.set("maxLimit", maxLimit );
+		
+		retlist.set("name", name);
+		retlist.set("title", title);
 
 		return retlist;
 	}
@@ -284,6 +302,9 @@ public class DashboardsService {
 		retlist.put("currency", currcode);
 		
 		retlist.put("numberformat", numberformat);
+		
+		retlist.put("name", DashboardConstans.AID_PREDICTABILITY);
+		retlist.put("title", TranslatorWorker.translateText(DashboardConstans.AID_PREDICTABILITY));
 		return retlist;
 	}
 
@@ -380,6 +401,9 @@ public class DashboardsService {
 			values.add(year);
 		}
 		retlist.set("values", values);
+		
+		retlist.set("name", DashboardConstans.FUNDING_TYPE);
+		retlist.set("title", TranslatorWorker.translateText(DashboardConstans.FUNDING_TYPE));
 		
 		return retlist;
 	}

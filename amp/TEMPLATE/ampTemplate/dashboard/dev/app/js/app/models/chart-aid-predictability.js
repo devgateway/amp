@@ -3,6 +3,11 @@ var ChartModel = require('./chart-model-base');
 
 
 module.exports = ChartModel.extend({
+	
+
+	defaults : {
+		title : ''
+	},
 
   _prepareTranslations: function() {
     var self = this;
@@ -19,6 +24,8 @@ module.exports = ChartModel.extend({
   },
 
   parse: function(data) {
+	this.set('title', data.title);
+	
     function pick(which) {
       return function(d) {
         return {

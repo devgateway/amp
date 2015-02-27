@@ -6,7 +6,7 @@
         <b class="chart-total"></b>
         <span class="chart-currency"></span>
       </span>
-      <h2 data-i18n="amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>"><%= model.get('name') %></h2>
+      <h2 data-i18n="amp.dashboard:chart-<%= model.get('name').replace(/ /g,'') %>"><%= model.get('title') %></h2>
     </div>
 
     <div class="panel-body">
@@ -39,7 +39,7 @@
         <div class="btn-group">
           <a
             class="btn btn-sm btn-default download"
-            download="AMP <%= model.get('name') %> - <%= (new Date()).toISOString().split('T')[0] %>.png"
+            download="AMP <%= model.get('title') %> - <%= (new Date()).toISOString().split('T')[0] %>.png"
             target="_blank">
             <span class="glyphicon glyphicon-cloud-download"></span>
           </a>

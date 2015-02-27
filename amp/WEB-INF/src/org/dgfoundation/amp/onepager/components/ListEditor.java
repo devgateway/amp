@@ -86,5 +86,9 @@ public abstract class ListEditor<T> extends RepeatingView implements IFormModelU
 		//setObject last, in order to work with custom set models
 		model.setObject(set);
 	}
+
+    public IModel<Set<T>> getModel() {
+        return model;
+    }
 	
 }

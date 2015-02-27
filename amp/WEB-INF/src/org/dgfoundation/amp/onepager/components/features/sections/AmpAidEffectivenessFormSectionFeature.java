@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.*;
 
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.components.AmpRequiredComponentContainer;
@@ -51,7 +51,7 @@ public class AmpAidEffectivenessFormSectionFeature extends
 		AmpAuthWebSession session = (AmpAuthWebSession) getSession();
 
 
-        allOptions = AidEffectivenessIndicatorUtil.populateSelectedOptions(am.getObject());
+        allOptions = AidEffectivenessIndicatorUtil.getAllOptions();
 
         final IChoiceRenderer<Long> renderer = new IChoiceRenderer<Long>() {
             @Override
@@ -65,18 +65,18 @@ public class AmpAidEffectivenessFormSectionFeature extends
             }
         };
 
+        Set<AmpAidEffectivenessIndicatorOption> optionList = AidEffectivenessIndicatorUtil.populateSelectedOptions(am.getObject());
 
-        final IModel<Set<AmpAidEffectivenessIndicatorOption>> setModel
-                = new PropertyModel<Set<AmpAidEffectivenessIndicatorOption>>(am, "selectedEffectivenessIndicatorOptions");
-
-
+        final IModel<Set<AmpAidEffectivenessIndicatorOption>> listModel = new Model((Serializable)optionList);
 
         final ListEditor<AmpAidEffectivenessIndicatorOption> indicatorsList = new ListEditor<AmpAidEffectivenessIndicatorOption>(
-                "selectedEffectivenessIndicatorOptions", setModel) {
+                "selectedEffectivenessIndicatorOptions", listModel) {
 
 
             @Override
             public void updateModel() {
+                am.getObject().getSelectedEffectivenessIndicatorOptions().clear();
+                am.getObject().getSelectedEffectivenessIndicatorOptions().addAll(getModel().getObject());
                 // OVERRDING OF THIS METHOD IS VERY IMPORTANT!!!
                 // we update the model "on the fly". This method overrides these efforts in the end (before save)
                 //super.updateModel();
@@ -101,8 +101,8 @@ public class AmpAidEffectivenessFormSectionFeature extends
                     public void setObject(Long object) {
                         AmpAidEffectivenessIndicatorOption option = new AmpAidEffectivenessIndicatorOption();
                         option.setAmpIndicatorOptionId(getObject());
-                        setModel.getObject().remove(option);
-                        setModel.getObject().add(AmpAidEffectivenessFormSectionFeature.this.allOptions.get(object));
+                        listModel.getObject().remove(option);
+                        listModel.getObject().add(AmpAidEffectivenessFormSectionFeature.this.allOptions.get(object));
 
                         super.setObject(object);
                     }
@@ -141,6 +141,5 @@ public class AmpAidEffectivenessFormSectionFeature extends
     public List<org.apache.wicket.markup.html.form.FormComponent<?>> getRequiredFormComponents() {
 		return requiredFormComponents;
 	}
-
 
 }

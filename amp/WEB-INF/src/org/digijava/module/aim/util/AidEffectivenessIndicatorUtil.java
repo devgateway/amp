@@ -29,7 +29,7 @@ public class AidEffectivenessIndicatorUtil {
 
         session = PersistenceManager.getSession();
         queryBuilder.append("select ind from ").append(AmpAidEffectivenessIndicator.class.getName()).append(" ind")
-                .append(" where ampIndicatorName like '%"+ keyword +"%'");
+                .append(" where ampIndicatorName like '%"+ keyword +"%' order by ampIndicatorId");
 
         // show active only, otherwise return all
         if (activeOnly) {
@@ -124,7 +124,8 @@ public class AidEffectivenessIndicatorUtil {
      */
     public static List<AmpAidEffectivenessIndicator> getAllActiveIndicators() {
         Session session = PersistenceManager.getSession();
-        String queryStr = "select ind from " + AmpAidEffectivenessIndicator.class.getName() + " ind where active = true";
+        String queryStr = "select ind from " + AmpAidEffectivenessIndicator.class.getName()
+                + " ind where active = true order by ampIndicatorId";
         Query query = session.createQuery(queryStr.toString());
         return  (List<AmpAidEffectivenessIndicator>)query.list();
 
@@ -172,57 +173,66 @@ public class AidEffectivenessIndicatorUtil {
 
 
     /**
-     * Add the configured indicators (actually, the default option of each indicator) to the activity
-     * (if it has not been added before)
-     *
-     * @param activity the activity to add options to
-     * @return all options for all indicators as a set
+     * Returns all options from all indicators
+     * @return
      */
-    public static Map<Long, AmpAidEffectivenessIndicatorOption> populateSelectedOptions(AmpActivityVersion activity) {
-        List<AmpAidEffectivenessIndicator> indicators = getAllActiveIndicators();
-
+    public static Map<Long, AmpAidEffectivenessIndicatorOption> getAllOptions() {
         Map<Long, AmpAidEffectivenessIndicatorOption> allOptions = new HashMap<Long, AmpAidEffectivenessIndicatorOption>();
-
-        if (activity.getSelectedEffectivenessIndicatorOptions() == null) {
-            activity.setSelectedEffectivenessIndicatorOptions(new HashSet<AmpAidEffectivenessIndicatorOption>());
-        }
-        Set<AmpAidEffectivenessIndicatorOption> selectedOptions = new HashSet<AmpAidEffectivenessIndicatorOption>();
-        selectedOptions.addAll(activity.getSelectedEffectivenessIndicatorOptions());
-        activity.getSelectedEffectivenessIndicatorOptions().clear();
-
+        List<AmpAidEffectivenessIndicator> indicators = getAllActiveIndicators();
 
         for (AmpAidEffectivenessIndicator indicator : indicators) {
 
             for (AmpAidEffectivenessIndicatorOption indicatorOption : indicator.getOptions()) {
                 allOptions.put(indicatorOption.getAmpIndicatorOptionId(), indicatorOption);
             }
-
-            AmpAidEffectivenessIndicatorOption selectedOption = isIndicatorPresentOnThisActivity(indicator, selectedOptions);
-            // if this indicator has already been presented on the activity and an option was selected
-            if (selectedOption != null) {
-                /*AmpAidEffectivenessIndicatorOption selOpt = new AmpAidEffectivenessIndicatorOption();
-                selOpt.setAmpIndicatorOptionId(selectedOption.getAmpIndicatorOptionId());*/
-                activity.getSelectedEffectivenessIndicatorOptions().add(selectedOption);
-            } else { // otherwise add the default option
-                AmpAidEffectivenessIndicatorOption defaultOption = indicator.getDefaultOption();
-                /*AmpAidEffectivenessIndicatorOption defOpt = new AmpAidEffectivenessIndicatorOption();
-                defOpt.setAmpIndicatorOptionId(defaultOption.getAmpIndicatorOptionId());*/
-                activity.getSelectedEffectivenessIndicatorOptions().add(defaultOption);
-            }
         }
-
-        /*
-        // remove inactive options
-        Set<AmpAidEffectivenessIndicatorOption> selectedOptions = activity.getSelectedEffectivenessIndicatorOptions();
-        for (AmpAidEffectivenessIndicatorOption option : selectedOptions) {
-            if (!option.getIndicator().getActive()) {
-                selectedOptions.remove(option);
-            }
-        }
-        */
 
         return allOptions;
     }
+
+
+    /**
+     * Add the configured indicators (actually, the default option of each indicator) to the activity
+     * (if it has not been added before)
+     *
+     * @param activity the activity to add options to
+     * @return all options for all indicators as a set
+     */
+    public static Set<AmpAidEffectivenessIndicatorOption> populateSelectedOptions(AmpActivityVersion activity) {
+        List<AmpAidEffectivenessIndicator> indicators = getAllActiveIndicators();
+        LinkedHashSet<AmpAidEffectivenessIndicatorOption> optionList = new LinkedHashSet<>();
+
+        if (activity.getSelectedEffectivenessIndicatorOptions() == null) {
+            activity.setSelectedEffectivenessIndicatorOptions(new HashSet<AmpAidEffectivenessIndicatorOption>());
+        }
+
+        for (AmpAidEffectivenessIndicator indicator : indicators) {
+
+            AmpAidEffectivenessIndicatorOption selectedOption = isIndicatorPresentOnThisActivity(indicator,
+                    activity.getSelectedEffectivenessIndicatorOptions());
+            // if this indicator has already been presented on the activity and an option was selected
+            if (selectedOption != null) {
+                optionList.add(selectedOption);
+            } else { // otherwise add the default option
+                AmpAidEffectivenessIndicatorOption defaultOption = indicator.getDefaultOption();
+                optionList.add(defaultOption);
+            }
+        }
+
+        return optionList;
+    }
+    /*
+    private static Comparator<AmpAidEffectivenessIndicatorOption> optionsComparator = new Comparator<AmpAidEffectivenessIndicatorOption>(){
+
+        @Override
+        // sort by indicator's id
+        public int compare(AmpAidEffectivenessIndicatorOption o1, AmpAidEffectivenessIndicatorOption o2) {
+            if (o1 != null && o2 != null && o1.getIndicator() != null && o2.getIndicator() != null) {
+                return (int)(o1.getIndicator().getAmpIndicatorId() - o2.getIndicator().getAmpIndicatorId());
+            }
+            return 0;
+        }
+    };*/
 
     /**
      * Checks if particular indicator has already been selected/chosen in the activity

@@ -10,7 +10,9 @@ import org.digijava.module.aim.util.AidEffectivenessIndicatorUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Struts action that incapsulates actions for effectiveness indicators:
@@ -254,30 +256,30 @@ public class AidEffectivenessIndicatorsAction extends Action {
         }
 
         if (indicatorForm.getIndicatorType() == -1) {
-            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.admin.aidEffectivenessIndicator.indicatorType"));
+            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.admin.aidEffectivenessIndicator.indicatorType.required"));
         }
 
-        int numberOfDefaultOptions = 0;
+        Set<String> existingOptionNames = new HashSet<>();
+
         if (indicatorForm.getOptions() != null && indicatorForm.getOptions().size() > 0) {
             for (AmpAidEffectivenessIndicatorOption option : indicatorForm.getOptions()) {
                 if (option.getAmpIndicatorOptionName() == null || "".equals(option.getAmpIndicatorOptionName())) {
                     errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.admin.aidEffectivenessIndicator.options.optionName.required"));
                     // do not repeat the error message
                     break;
-                }
-            }
-
-            for (AmpAidEffectivenessIndicatorOption option : indicatorForm.getOptions()) {
-                if (option.getDefaultOption()) {
-                    numberOfDefaultOptions++;
+                } else {
+                    if (existingOptionNames.contains(option.getAmpIndicatorOptionName())) {
+                        errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.admin.aidEffectivenessIndicator.options.alreadyExists",
+                                option.getAmpIndicatorOptionName()));
+                        // do not repeat the error message
+                        break;
+                    } else {
+                        existingOptionNames.add(option.getAmpIndicatorOptionName());
+                    }
                 }
             }
         } else {
             errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.admin.aidEffectivenessIndicator.atLeastOne"));
-        }
-
-        if (numberOfDefaultOptions != 1) {
-            errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.admin.aidEffectivenessIndicator.options.oneDefault"));
         }
 
         saveErrors(request, errors);

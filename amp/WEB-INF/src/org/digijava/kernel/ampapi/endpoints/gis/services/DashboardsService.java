@@ -85,8 +85,6 @@ public class DashboardsService {
 	 * 
 	 * @param type
 	 *            (Donor, Regions, Primary Sector)
-	 * @param adjtype
-	 *            (Actual Commitments, Actual Disbursement)
 	 * @param n
 	 * @param config request configuration that stores filters, settings and any other options
 	 * @return
@@ -101,7 +99,7 @@ public class DashboardsService {
 		case "DO":
 			if (FeaturesUtil.isVisibleFeature("Show Names As Acronyms")){
 				column = MoConstants.ATTR_ORG_ACRONYM;
-			}else{
+			} else {
 				column = MoConstants.DONOR_AGENCY;
 			}
 			break;
@@ -110,6 +108,9 @@ public class DashboardsService {
 			break;
 		case "PS":
 			column = MoConstants.PRIMARY_SECTOR;
+			break;
+		case "DG":
+			column = ColumnConstants.DONOR_GROUP;
 			break;
 		default:
 			column = MoConstants.DONOR_AGENCY;

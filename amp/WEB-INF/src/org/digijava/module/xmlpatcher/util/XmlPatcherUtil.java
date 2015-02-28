@@ -269,8 +269,6 @@ public final class XmlPatcherUtil {
 			AmpXmlPatch p, AmpXmlPatchLog log) {
 		try 
 		{
-//			if (p.getPatchId().contains("create-cache-table-programs"))
-//				System.out.println("BOZO DOZO");
 			if ((!loadedPatches.containsKey(p)))
 			{
 				//perform XSLT transformation. See xmlpatcher.xsl

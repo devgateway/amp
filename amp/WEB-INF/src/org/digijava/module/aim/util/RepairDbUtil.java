@@ -86,7 +86,7 @@ public class RepairDbUtil {
 	
 	public static void repairDocumentNoLongerInContentRepository(String uuid, String className) {
 		logger.error("JACKRABBIT asked to cleanup non-existing node with uuid=" + uuid + ", className = " + className);
-		/*logger.error("TEMPORARY SHIM, NOT DELETING ANYTHING", new RuntimeException("BOZO"));
+		/*logger.error("TEMPORARY SHIM, NOT DELETING ANYTHING", new RuntimeException("TODO-CONSTANTIN"));
 		return;*//*
 		int numOfObjectsDeleted			= DocumentManagerUtil.deleteObjectsReferringDocument(uuid, className); 
 		if ( numOfObjectsDeleted > 0 )

@@ -156,7 +156,7 @@ public class DocumentManager extends Action {
 		String source	= null;
 		if ( myForm.getOtherUsername() != null && myForm.getOtherTeamId() != null ) {
 			source		= DocumentFilter.SOURCE_PRIVATE_DOCUMENTS;
-			myForm.setType("private"); //BOZO BOZO COPY SOURCE
+			myForm.setType("private"); //TODO-CONSTANTIN COPY SOURCE
 		}else if ( myForm.getOtherUsername() == null && myForm.getOtherTeamId() != null ) {
 			source		= DocumentFilter.SOURCE_TEAM_DOCUMENTS;
 			myForm.setType("team");

@@ -193,7 +193,7 @@ public class AMPStartupListener extends HttpServlet implements
 		jobForm.setName(jobClass.getName());
 //		jobForm.setTriggerGroupName(triggerGroupName);
 //		jobForm.setTriggerName(triggerName);
-		jobForm.setTriggerType(3); // BOZO - 1 = MINUTELY, 2 = HOURLY, 3 = daily
+		jobForm.setTriggerType(3); // TODO-CONSTANTIN: 1 = MINUTELY, 2 = HOURLY, 3 = daily
 		jobForm.setExeTimeH("1");
 		jobForm.setExeTimeM("1");
 		jobForm.setExeTimeS("1");

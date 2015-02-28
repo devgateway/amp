@@ -48,7 +48,7 @@ public class AmpSectorSearchModel extends
 			session = PersistenceManager.getRequestDBSession();
 			session.enableFilter("isDeletedFilter").setParameter("deleted", Boolean.FALSE);
 
-//			BOZO, CONSTANTIN			
+//			TODO-CONSTANTIN			
 //			debug / research code: please leave it here until I remove it later
 //			String myQuery = "select sec from " + AmpSector.class.getName() + " sec where sec.name like '%у%'";
 //			//System.out.println("aaaa start aaaa");

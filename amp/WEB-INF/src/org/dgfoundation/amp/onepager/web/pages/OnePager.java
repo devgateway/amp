@@ -199,9 +199,9 @@ public class OnePager extends AmpHeaderFooter {
 			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, session.getCurrentMember());
 			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.ACTIVITY, am.getObject());
 
-			// -----> BOZO BOZO DO NOT COMMIT THIS   <-----
-//			boolean canDo = am.getObject().canDo(GatePermConst.Actions.EDIT, PermissionUtil.getScope(session.getHttpSession()));
-//			if(!canDo)  throw new RedirectToUrlException(ActivityGatekeeper.buildPermissionRedirectLink(activityId));			
+			// -----> TODO-CONSTANTIN: comment lines below if you want to disable Permissions checking   <-----
+			boolean canDo = am.getObject().canDo(GatePermConst.Actions.EDIT, PermissionUtil.getScope(session.getHttpSession()));
+			if(!canDo)  throw new RedirectToUrlException(ActivityGatekeeper.buildPermissionRedirectLink(activityId));			
 		}
 
         if (!am.getObject().getActivityType().equals(session.getFormType()))

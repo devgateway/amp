@@ -821,7 +821,7 @@ public class AmpARFilter extends PropertyListable {
 			}
 		}
 		
-		//BOZO: strange conversion between calendars
+		//TODO-CONSTANTIN: strange conversion between calendars
 		if (result == null)
 			return -1;
 		
@@ -1267,8 +1267,6 @@ public class AmpARFilter extends PropertyListable {
 			Set<Long> allSelectedLocations = new HashSet<Long>(allDescendantsIds);
 			for(AmpCategoryValueLocations ascendant:allAscendingLocations)
 				allSelectedLocations.add(ascendant.getId());
-			
-			// blabla BOZO
 			
 			String allDescendantsIdsString			= Util.toCSStringForIN(allDescendantsIds);
 			String subSelect			= "SELECT aal.amp_activity_id FROM amp_activity_location aal, amp_location al " +

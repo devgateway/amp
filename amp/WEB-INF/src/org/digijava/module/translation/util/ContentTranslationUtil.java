@@ -63,7 +63,7 @@ public class ContentTranslationUtil {
      */
     public static boolean translateObject(Object obj, Serializable id, Object[] state, String[] propertyNames){
     	boolean stateModified = false;
-        String currentLocale = TLSUtils.getEffectiveLangCode(); // BOZO, Arty, please review this change: effectiveLangCode is NEVER null
+        String currentLocale = TLSUtils.getEffectiveLangCode(); // TODO-CONSTANTIN, Arty, please review this change: effectiveLangCode is NEVER null
         if (currentLocale == null)
             return stateModified;
 

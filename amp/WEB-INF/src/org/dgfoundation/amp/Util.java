@@ -294,14 +294,6 @@ public final class Util {
 					e.printStackTrace();
 				}
 
-				// BOZO SHMOZO CHANGE GETEXCHANGE FUNCTION IN POSTGRES
-				// select * from amp_currency_rate where to_currency_code='EUR'
-				// and date_trunc('day', exchange_rate_date)<='2010-12-31' order
-				// by exchange_rate_date desc
-
-				// logger.debug("rate for " + currency + " to " + baseCurrency +
-				// " on " + currencyDate
-				// + " is " + ret);
 				ratesCache.put(new String(currencyCode + currencyDate), new Double(ret));
 
 				return ret;

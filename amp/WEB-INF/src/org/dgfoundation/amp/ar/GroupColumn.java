@@ -50,7 +50,7 @@ public class GroupColumn extends Column<Column> {
 	 */
  	@Override
 	public int getVisibleRows() {
-    	//BOZO: is it sure that we don't have to return getOwnerIds().size() here (if reportMetaData.getHideActivities is not true)
+    	//TODO-CONSTANTIN: is it sure that we don't have to return getOwnerIds().size() here (if reportMetaData.getHideActivities is not true)
     	Iterator i=items.iterator();
     	int ret=0;
     	while (i.hasNext()) {
@@ -560,8 +560,7 @@ public class GroupColumn extends Column<Column> {
     public void addColumn(Column c) {
     	addColumnCalls ++;
     	addColumnTotalItems += items.size();
-//    	if (items.size() > 2015)
-//    		System.out.println("BOZO: " + items.size());
+    	
         if (!items.contains(c)){
         	getItems().add(c);        
         	c.setParent(this);

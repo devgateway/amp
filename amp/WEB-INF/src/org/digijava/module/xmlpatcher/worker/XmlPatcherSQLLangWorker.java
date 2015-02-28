@@ -71,8 +71,6 @@ public class XmlPatcherSQLLangWorker extends XmlPatcherLangWorker {
 	protected boolean processUpdateStatement()
 			throws XmlPatcherLangWorkerException {
 		try {
-			if (this.log.getPatch().getPatchId().contains("AMP-17863-enable-recreate-views-and-create-cache-table-programs.xml"))
-				System.out.println("BOZO breakpoint");
 			// get the jdbc connection from the Session Factory
 			Connection con = XmlPatcherUtil.getConnection();
 

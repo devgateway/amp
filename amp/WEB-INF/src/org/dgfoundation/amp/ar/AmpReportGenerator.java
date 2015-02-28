@@ -261,10 +261,10 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 //		if (pledgereport/* && extractorView.equals("v_pledges_funding_st")*/){
 			//columnFilterSQLClause = " AND (pledge_id IN (-1, 10))"; 
-			//columnFilterSQLClause = "AND (pledge_id IN (-1, 10)) AND (related_project_id IN (select distinct(vdf.amp_activity_id) from v_donor_funding vdf where vdf.pledge_id = 10))"; // BOZO! DELETE THIS FROM COMMIT!
-			//columnFilterSQLClause = "AND (pledge_id IN (-1, 21, 22, 23, 24, 25, 26, 27, 28, 29))"; // BOZO! DELETE THIS FROM COMMIT!
-//			columnFilterSQLClause = "AND (pledge_id IN (-1, 21, 22, 23, 24))"; // BOZO! DELETE THIS FROM COMMIT!
-//			columnFilterSQLClause = "AND (pledge_id IN (24))"; // BOZO! DELETE THIS FROM COMMIT!				
+			//columnFilterSQLClause = "AND (pledge_id IN (-1, 10)) AND (related_project_id IN (select distinct(vdf.amp_activity_id) from v_donor_funding vdf where vdf.pledge_id = 10))";
+			//columnFilterSQLClause = "AND (pledge_id IN (-1, 21, 22, 23, 24, 25, 26, 27, 28, 29))"; 
+//			columnFilterSQLClause = "AND (pledge_id IN (-1, 21, 22, 23, 24))"; 
+//			columnFilterSQLClause = "AND (pledge_id IN (24))"; 			
 			// select amp_activity_id from amp_activity where (name like '%A032462-001%') OR (name like '%A035206-001%') OR (name like '%S064713%')
 //			String relatedProjectsQuery = "SELECT amp_activity_id FROM amp_activity WHERE (name like '%A032462-001%') OR (name like '%A035206-001%') OR (name like '%S064713%')";
 //			String relatedProjectsQuery = "SELECT amp_activity_id FROM amp_activity WHERE (name like '%FED/2009/021-608%') OR (name like '%FED/2009/021-608%') OR (name like '%S064713%')";

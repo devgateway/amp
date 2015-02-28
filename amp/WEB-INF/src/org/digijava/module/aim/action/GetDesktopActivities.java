@@ -46,7 +46,7 @@ public class GetDesktopActivities extends Action {
 
 		session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
 		
-/*		BOZO: DON'T KNOW WHAT THIS CODE IS SUPPOSED TO DO. In case of bug, set up parameter forwarding to the relevant action and take care of it there.
+/*		TODO-CONSTANTIN: DON'T KNOW WHAT THIS CODE IS SUPPOSED TO DO. In case of bug, set up parameter forwarding to the relevant action and take care of it there.
  * 		impossible to do this here, as here we don't know what report & filter this parameter should apply to 
  *  
  		String risk=(String) request.getParameter("risk");

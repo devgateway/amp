@@ -52,7 +52,7 @@ public class GlobalSettings extends Action {
 	private void flushSessionObjects(HttpSession session) {
 		// probably should flush all RCD from all sessions
 		//session.removeAttribute(ArConstants.REPORTS_Z_FILTER);
-		//TODO:CONSTANTIN BOZO: should we:
+		// TODO-CONSTANTIN should we:
 		// 1) clean data for ALL sessions? (correct but disruptive) 
 		// 2) clean data for current session? (kinda useless for an admin)
 		// 3) do nothing?

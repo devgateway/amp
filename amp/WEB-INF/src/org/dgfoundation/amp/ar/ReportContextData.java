@@ -69,7 +69,7 @@ public class ReportContextData
 	private AmpCurrency selectedCurrency;					// the report's currency
 	
 	/**
-	 * BOZO: why is this done, if "report" has this same field?
+	 * TODO-CONSTANTIN: why is this done, if "report" has this same field?
 	 */
 	private boolean pledgeReport;
 	

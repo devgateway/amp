@@ -387,14 +387,6 @@ public final class ARUtil {
 		return false;
 	}
 	
-//	public static boolean containsMeasure(String measureName, Collection<AmpReportMeasures> measures)
-//	{
-//		boolean a = containsMeasureWhichContains(measureName, measures);
-//		boolean b = containsMeasureWithExact(measureName, measures);
-//		if (a != b)
-//			//System.out.println("BOZO CE XUINEA!");
-//		return a;
-//	}
 	
 	public static boolean hasHeaderValue(AmpColumns column){
 		return (column.getTotalExpression()!=null )|| column.getColumnName().equalsIgnoreCase(ArConstants.COLUMN_FUNDING);

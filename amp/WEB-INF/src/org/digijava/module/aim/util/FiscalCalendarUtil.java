@@ -210,7 +210,7 @@ public class FiscalCalendarUtil {
 		}
 			
 		if (defauCalendar == null) 
-			return pyear; //BOZO: was zero here
+			return pyear; //TODO-CONSTANTIN: was zero here
 		
 		Integer year = getYearOnCalendar(cal, pyear, defauCalendar);
 		return year;

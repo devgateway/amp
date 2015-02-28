@@ -165,7 +165,7 @@ public class ReportsFilterPicker extends Action {
 		{
 			if (applyFormatValue.equals("Reset"))
 			{
-				// BOZO: reset is now done client-side. If done server-side, should handle non-english translations of "Reset" here!
+				// TODO-CONSTANTIN: reset is now done client-side. If done server-side, should handle non-english translations of "Reset" here!
 				// reset tab/report settings
 				AmpARFilter arf = createOrResetFilter(filterForm, AmpARFilter.FILTER_SECTION_SETTINGS);
 				return decideNextForward(mapping, filterForm, request, arf);
@@ -1297,7 +1297,7 @@ public class ReportsFilterPicker extends Action {
 			
 		arf.setCurrency(currency);
 		
-		//BOZO: these fields are absent from the form (not rendered in html), so they are always NULL here
+		//TODO-CONSTANTIN: these fields are absent from the form (not rendered in html), so they are always NULL here
 		if (filterForm.getRenderStartYear() != null)
 			arf.setRenderStartYear(filterForm.getRenderStartYear());
 		

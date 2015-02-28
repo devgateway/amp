@@ -236,7 +236,7 @@ border-right: 1px solid rgb(208, 208, 208);
 
 <br/>
 
-<%-- BOZO: where does this "report" come from? if it is ReportContextData.generatedReport, where is the current context coming from?  --%>
+<%-- TODO-CONSTANTIN: where does this "report" come from? if it is ReportContextData.generatedReport, where is the current context coming from?  --%>
 <div id="allTabs" style="display: none;" onmouseout="if (mouseLeaves(this, event)) {allTabsPanel.hide();}">
     <div id="scrollableDiv" style="width:100%;height:200px;overflow:auto;">
 		<logic:iterate name="myForm" property="publicFiltersUnpositioned" id="filter">

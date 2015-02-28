@@ -226,7 +226,7 @@ public class ViewNewAdvancedReport extends Action {
 		request.setAttribute(MULTILINGUAL_TAB_PREFIX + "_title", new MultilingualInputFieldValues(AmpReports.class, Long.parseLong(ampReportId), "name", null, null));
 		
 		if (resetSettings && (ampReportId==null/* || !ampReportId.equals(lastReportId) */)){
-			//BOZO: isn't this "reset done wrong"?
+			//TODO-CONSTANTIN: isn't this "reset done wrong"?
 			filter.setCalendarType(null); //reset the calendar type to take the type from ws settings by default.
 			filter.setCurrency(null);
 		}

@@ -12,7 +12,9 @@ import org.digijava.module.fundingpledges.dbentity.FundingPledges;
 
 public class AmpFundingMTEFProjection implements Cloneable, Serializable, Comparable<AmpFundingMTEFProjection>, FundingInformationItem {
 	
-	
+
+	private static final long serialVersionUID = -1583797313318079006L;
+
 	public static class FundingMTEFProjectionComparator implements Comparator<AmpFundingMTEFProjection>, Serializable {
 
 		/**
@@ -44,19 +46,17 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 		private AmpFunding  ampFunding;
 		private Date reportingDate;
 		
+		private AmpOrganisation recipientOrg;
+		private AmpRole recipientRole;
+		
 		public AmpFundingMTEFProjection(){
 			
 		}
-		
 		public AmpFundingMTEFProjection(Integer transactionType, AmpCategoryValue adjustmentType, Double transactionAmount, Date transactionDate, AmpCurrency ampCurrencyId, Double fixedExchangeRate) {
 			this.amount=transactionAmount;
 			this.projectionDate=transactionDate;
 			this.ampCurrency=ampCurrencyId;
 		}
-		
-		private AmpOrganisation recipientOrg;
-		private AmpRole recipientRole;
-		
 		public Date getReportingDate() {
 			return reportingDate;
 		}
@@ -65,13 +65,22 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 			this.reportingDate = reportingDate;
 		}
 		
-		
 		public Double getAmount() {
-			return FeaturesUtil.applyThousandsForVisibility(amount);
+			return amount;
 		}
+		
+		public Double getDisplayedAmount() {
+			return FeaturesUtil.applyThousandsForVisibility(getAmount());
+		}
+		
 		public void setAmount(Double amount) {
-			this.amount = FeaturesUtil.applyThousandsForEntry(amount);
+			this.amount = amount;
 		}
+		
+		public void setDisplayedAmount(Double displayedAmount) {
+			setAmount(FeaturesUtil.applyThousandsForEntry(displayedAmount));
+		}
+		
 		public AmpFunding getAmpFunding() {
 			return ampFunding;
 		}
@@ -228,7 +237,6 @@ public class AmpFundingMTEFProjection implements Cloneable, Serializable, Compar
 			
 			return String.format("%s %s %s to %s", transText, this.getAbsoluteTransactionAmount(), currency, recipient);
 		}
-		
 		@Override
 		public void setTransactionAmount(Double transactionAmount) {
 			this.setAmount(transactionAmount);

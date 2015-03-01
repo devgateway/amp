@@ -4,7 +4,6 @@
 package org.digijava.kernel.startup;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -18,7 +17,6 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.hibernate.StaleObjectStateException;
-import org.hibernate.Transaction;
 
 /**
  * @author mihai
@@ -52,33 +50,28 @@ public class HibernateSessionRequestFilter implements Filter {
 
             log.debug("Starting a database transaction");
             
-            Transaction transaction = PersistenceManager.getCurrentSession().getTransaction();
-
-            if(transaction.isActive()) 
-            	transaction.commit();
-            transaction=PersistenceManager.getCurrentSession().beginTransaction();
+            PersistenceManager.cleanupSession(PersistenceManager.getSession());
+            PersistenceManager.cleanupSession(PersistenceManager.getCurrentSession());
+//            PersistenceManager.getSession().beginTransaction();
             
- 
             // Call the next filter (continue request processing)
-            chain.doFilter(request, response);
- 
-            // Commit and cleanup
-            log.debug("Committing the database transaction");
-            Transaction tx	= PersistenceManager.getCurrentSession().getTransaction();
-			if (tx!=null && tx.isActive())
-				try {
-					tx.commit();
-				} catch (RuntimeException e) {
-					tx.rollback();
-					log.error("Transaction has been rolled back after exception during commit "
-							+ e);
-				}
+            try {
+            	chain.doFilter(request, response);
+            }
+            finally {
+                // Commit and cleanup
+                //log.debug("Committing the database transaction");
+                //Session session = PersistenceManager.getCurrentSession();
+                //PersistenceManager.removeClosedSessionsFromMap();
+    			//CloseExpiredActivitiesJob.cleanupSession(session);
+    			
+            	PersistenceManager.cleanupSession(PersistenceManager.getSession());
+            	PersistenceManager.cleanupSession(PersistenceManager.getCurrentSession());
 
-            PersistenceManager.removeClosedSessionsFromMap();
-            //PersistenceManager.checkClosedOrLongSessionsFromTraceMap();
-            if ( request instanceof HttpServletRequest )
-            	DocumentManagerUtil.closeJCRSessions((HttpServletRequest)request);
- 
+                //PersistenceManager.checkClosedOrLongSessionsFromTraceMap();
+                if (request instanceof HttpServletRequest)
+                	DocumentManagerUtil.closeJCRSessions((HttpServletRequest)request);      	
+            }
         } catch (StaleObjectStateException staleEx) {
             log.error("This interceptor does not implement optimistic concurrency control!");
             log.error("Your application will not work until you add compensation actions!");

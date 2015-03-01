@@ -34,7 +34,6 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.fiscalcalendar.ICalendarWorker;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.time.StopWatch;
-import org.digijava.module.message.jobs.CloseExpiredActivitiesJob;
 import org.hibernate.Session;
 
 import clover.com.google.common.base.Joiner;
@@ -1061,7 +1060,7 @@ private EtlResult execute() throws Exception {
 				throw new RuntimeException(e);
 			}
 			finally {
-				CloseExpiredActivitiesJob.cleanupSession(session);
+				PersistenceManager.cleanupSession(session);
 			}
 		}
 	}

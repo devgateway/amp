@@ -197,7 +197,7 @@
 	 	</init-param>
 	 	<!-- Define tracing level Options (OFF (default), ON_DEMAND and ALL) -->
 	 	<init-param>
-        <param-name>jersey.config.server.provider.classnames</param-name>
+        	<param-name>jersey.config.server.provider.classnames</param-name>
         	<param-value>org.glassfish.jersey.filter.LoggingFilter</param-value>
     	</init-param>
     	 <init-param>
@@ -205,7 +205,7 @@
 			<param-value>org.digijava.kernel.ampapi.authentication.AuthRequestFilter</param-value>
 		</init-param>
     	<init-param>
-        <param-name>jersey.config.server.tracing</param-name>
+        	<param-name>jersey.config.server.tracing</param-name>
         	<param-value>ALL</param-value>
     	</init-param>
 		<load-on-startup>1</load-on-startup>
@@ -217,7 +217,7 @@
 	<!-- End Jersey  -->
 	
 	<!-- MDX Queries Servlet -->
-		<servlet>
+	<servlet>
 		<servlet-name>MDXQueryServlet</servlet-name>
 		<servlet-class>
 			mondrian.web.servlet.MDXQueryServlet

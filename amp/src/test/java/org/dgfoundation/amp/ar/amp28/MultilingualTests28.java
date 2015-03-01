@@ -1,14 +1,6 @@
 package org.dgfoundation.amp.ar.amp28;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import org.apache.struts.mock.MockHttpServletRequest;
 import org.dgfoundation.amp.Util;
@@ -21,26 +13,12 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.admin.helper.AmpActivityFake;
-import org.digijava.module.aim.ar.util.ReportsUtil;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.ComponentsUtil;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.message.jobs.CloseExpiredActivitiesJob;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
 
-import java.util.Arrays;
 
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
@@ -144,7 +122,7 @@ public class MultilingualTests28 extends AmpTestCase
 		}
 		finally
 		{
-			CloseExpiredActivitiesJob.cleanupSession(session);
+			PersistenceManager.cleanupSession(session);
 			session = PersistenceManager.getRequestDBSession(true);
 			session.createSQLQuery("UPDATE amp_reports SET name = 'victim_report' WHERE amp_report_id = 54").executeUpdate();
 			session.createSQLQuery("DELETE FROM amp_content_translation WHERE object_id = 54 AND object_class like '%AmpReports'").executeUpdate();
@@ -152,7 +130,7 @@ public class MultilingualTests28 extends AmpTestCase
 						"(nextval('amp_content_translation_seq'), 'org.digijava.module.aim.dbentity.AmpReports', 54, 'name', 'en', 'victim_report')").executeUpdate();
 			session.createSQLQuery("INSERT INTO amp_content_translation(id, object_class, object_id, field_name, locale, translation) VALUES " + 
 					"(nextval('amp_content_translation_seq'), 'org.digijava.module.aim.dbentity.AmpReports', 54, 'name', 'ru', 'дохлый отчет')").executeUpdate();
-			CloseExpiredActivitiesJob.cleanupSession(session);
+			PersistenceManager.cleanupSession(session);
 		}
 		
 		

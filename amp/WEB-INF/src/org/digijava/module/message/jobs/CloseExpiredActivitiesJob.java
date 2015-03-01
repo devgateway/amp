@@ -128,7 +128,7 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
 			Session session = PersistenceManager.getRequestDBSession();
 			
 			AmpBackgroundActivitiesCloser.createActivityCloserUserIfNeeded();
-			cleanupSession(session); // commit user in case it was created
+			PersistenceManager.cleanupSession(session); // commit user in case it was created
 			session = PersistenceManager.getRequestDBSession();
 		
     		Long closedCategoryValue = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.CLOSED_ACTIVITY_VALUE);
@@ -175,7 +175,7 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
 
     			logger.info(String.format("... done, new amp_activity_id=%d\n", newVer.getAmpActivityId()));
     		}
-    		cleanupSession(session); // close transaction and reopen it, for the changes to become visible to the rest of AMP and the next code run in this thread to have an available session
+    		PersistenceManager.cleanupSession(session); // close transaction and reopen it, for the changes to become visible to the rest of AMP and the next code run in this thread to have an available session
     	}
     	catch(Exception e) {
     		e.printStackTrace();

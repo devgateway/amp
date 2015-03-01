@@ -112,27 +112,6 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
         		auxActivity, prevVersion);
         return auxActivity;
 	}
-		
-	/**
-	 * commits & closes a session and then removes it from the SessionStackTraceMap
-	 * @param session
-	 */
-	public final static void cleanupSession(Session session)
-	{
-		try{session.getTransaction().commit();}catch(Exception e){
-			//System.out.println("error committing transaction");
-			e.printStackTrace();
-		}
-		try{session.close();}catch(Exception e){};
-		try{PersistenceManager.removeClosedSessionsFromMap();}catch(Exception e){};
-		try{
-			synchronized(PersistenceManager.sessionStackTraceMap)
-			{
-				PersistenceManager.sessionStackTraceMap.remove(session);
-			}
-		}
-		catch(Exception e){};
-	}
 	
     public void execute(JobExecutionContext context) throws JobExecutionException{
 
@@ -151,7 +130,7 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
 			Session session = PersistenceManager.getRequestDBSession();
 			
 			AmpBackgroundActivitiesCloser.createActivityCloserUserIfNeeded();
-			cleanupSession(session); // commit user in case it was created
+			PersistenceManager.cleanupSession(session); // commit user in case it was created
 			session = PersistenceManager.getRequestDBSession();
 		
     		Long closedCategoryValue = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.CLOSED_ACTIVITY_VALUE);
@@ -193,7 +172,7 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
 
     			logger.info(String.format("... done, new amp_activity_id=%d\n", newVer.getAmpActivityId()));
     		}
-    		cleanupSession(session); // close transaction and reopen it, for the changes to become visible to the rest of AMP and the next code run in this thread to have an available session
+    		PersistenceManager.cleanupSession(session); // close transaction and reopen it, for the changes to become visible to the rest of AMP and the next code run in this thread to have an available session
     	}
     	catch(Exception e)
     	{    		

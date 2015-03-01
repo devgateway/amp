@@ -44,7 +44,6 @@ import org.digijava.module.aim.util.QuartzJobUtils;
 import org.digijava.module.contentrepository.util.DocumentManagerUtil;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
-import org.digijava.module.message.jobs.CloseExpiredActivitiesJob;
 import org.hibernate.Session;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
@@ -357,7 +356,7 @@ public class AMPStartupListener extends HttpServlet implements
 		}catch(Exception e){
 			throw new Error("database does not conform to minimum sanity requirements, shutting down AMP", e);
 		}finally {
-			CloseExpiredActivitiesJob.cleanupSession(session);
+			PersistenceManager.cleanupSession(session);
 		}
 	}
 	
@@ -369,7 +368,7 @@ public class AMPStartupListener extends HttpServlet implements
 		}catch(Exception e){
 			throw new Error("database does not conform to minimum Mondrian ETL sanity requirements, shutting down AMP", e);
 		}finally {
-			CloseExpiredActivitiesJob.cleanupSession(session);
+			PersistenceManager.cleanupSession(session);
 		}
 	}
 	

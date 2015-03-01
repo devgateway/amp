@@ -8,7 +8,7 @@ clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTld
   <!-- PostgreSQL connection -->
   <Resource factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" defaultTransactionIsolation="READ_COMMITTED" driverClassName="org.postgresql.Driver" 
   		maxActive="500" maxIdle="30" maxWait="5000" jmxEnabled="true"
-  		name="ampDS"  removeAbandoned="true" removeAbandonedTimeout="3600" suspectTimeout="1800" logAbandoned="true" 
+  		name="ampDS"  removeAbandoned="true" removeAbandonedTimeout="270" suspectTimeout="180" logAbandoned="true" 
   		type="javax.sql.DataSource"
   		url="" 
   		username="" 

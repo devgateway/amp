@@ -700,7 +700,7 @@ public class PersistenceManager {
 //			}
 //		}
 	
-		if(transaction==null || !transaction.isActive()) sess.beginTransaction(); 
+		if (transaction==null || !transaction.isActive()) sess.beginTransaction(); 
 
 		addSessionToStackTraceMap(sess);
 		
@@ -844,6 +844,31 @@ public class PersistenceManager {
 	
 	public static SessionFactory sf() {
 		return sf;
+	}
+	
+	/**
+	 * commits & closes a session and then removes it from the SessionStackTraceMap
+	 * @param session
+	 */
+	public final static void cleanupSession(Session session)
+	{
+		Transaction transaction = session.getTransaction();
+		if (transaction != null) {
+			try {transaction.commit();}
+			catch(Exception e){
+				//System.out.println("error committing transaction");
+				//e.printStackTrace();
+			}
+		}
+		try{session.close();}catch(Exception e){};
+		try{PersistenceManager.removeClosedSessionsFromMap();}catch(Exception e){};
+		try{
+			synchronized(PersistenceManager.sessionStackTraceMap)
+			{
+				PersistenceManager.sessionStackTraceMap.remove(session);
+			}
+		}
+		catch(Exception e){};
 	}
 	
 }

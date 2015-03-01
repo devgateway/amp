@@ -23,12 +23,14 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianSQLFilters;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.hibernate.Session;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.w3c.dom.Document;
@@ -51,6 +53,8 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 
 	@Override
 	public String processSchema(String schemaURL, PropertyList connectInfo) throws Exception {
+		Session hibSession = PersistenceManager.getSession();
+	try {
 		String contents = null;
 		try(InputStreamReader isr = new InputStreamReader(this.getClass().getResourceAsStream("AMP.xml"), "utf-8")) { 
 			try(Scanner scanner = new Scanner(isr)) {
@@ -66,6 +70,10 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			currentReport.set(null);
 		}
 		return processContents(contents);
+	}
+	finally {
+		PersistenceManager.cleanupSession(hibSession);
+	}
 	};
 	
 	public String processContents(String contents) {

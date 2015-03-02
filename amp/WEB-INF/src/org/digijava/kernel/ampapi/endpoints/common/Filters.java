@@ -74,7 +74,7 @@ public class Filters {
 	@GET
 	@Path("/activityapprovalStatus")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "ActivityApprovalStatus", column = ColumnConstants.APPROVAL_STATUS,name="Approval Status")
+	@ApiMethod(ui = true, id = "ActivityApprovalStatus", column = ColumnConstants.APPROVAL_STATUS,name="Approval Status",visibilityCheck = "hasToShowActivityapprovalStatusFilter")
 	public JsonBean getActivityApprovalStatus() {
 		JsonBean as=new JsonBean();
 		TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(
@@ -98,6 +98,20 @@ public class Filters {
 		return as;
 	}
 
+	/**
+	 * Returns fi the approval status filter should be shown
+	 * @return
+	 */
+	public boolean hasToShowActivityapprovalStatusFilter() {
+		if(TLSUtils.getRequest().getSession().getAttribute(
+				org.digijava.module.aim.helper.Constants.CURRENT_MEMBER)==null){
+			return false;
+		}else{
+			return true;
+		}
+
+	}
+	
 	/**
 	 * Return the adminlevels for filtering
 	 * 

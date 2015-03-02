@@ -74,7 +74,7 @@ public class Filters {
 	@GET
 	@Path("/activityapprovalStatus")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = true, id = "ActivityApprovalStatus", column = ColumnConstants.APPROVAL_STATUS,name="Approval Status",visibilityCheck = "hasToShowActivityapprovalStatusFilter")
+	@ApiMethod(ui = true, id = "ActivityApprovalStatus", column = ColumnConstants.APPROVAL_STATUS,name="Approval Status")
 	public JsonBean getActivityApprovalStatus() {
 		JsonBean as=new JsonBean();
 		TeamMember teamMember = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(
@@ -97,20 +97,7 @@ public class Filters {
 		}
 		return as;
 	}
-	
-	/**
-	 * We should hide from filters the activity approval status if the uses is not logged in
-	 * @return
-	 */
-	public boolean hasToShowActivityapprovalStatusFilter() {
-		if(TLSUtils.getRequest().getSession().getAttribute(
-				org.digijava.module.aim.helper.Constants.CURRENT_MEMBER)==null){
-			return false;
-		}else{
-			return true;
-		}
 
-	}
 	/**
 	 * Return the adminlevels for filtering
 	 * 

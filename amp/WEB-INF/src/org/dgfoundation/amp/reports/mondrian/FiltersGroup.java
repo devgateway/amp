@@ -141,6 +141,8 @@ public class FiltersGroup {
 		addIdentityMapping(filterGroupMap, ColumnConstants.PLEDGES_AID_MODALITY);
 		addIdentityMapping(filterGroupMap, ColumnConstants.PROCUREMENT_SYSTEM);
 		
+		addIdentityMapping(filterGroupMap, ColumnConstants.ON_OFF_TREASURY_BUDGET);
+		
 		addIdentityMapping(filterGroupMap, ColumnConstants.STATUS);
 		filterGroupMap.put(ColumnConstants.PLEDGE_STATUS, ColumnConstants.STATUS);
 		

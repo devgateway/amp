@@ -8,7 +8,7 @@ import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.util.ActivityUtil;
 
 /**
- * set(org group) -> set(org type) expander
+ * set(acv_id) -> set(act_id) expander
  * @author Constantin Dolghier
  *
  */

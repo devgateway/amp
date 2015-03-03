@@ -12,6 +12,5 @@
         <many-to-one name="indicator" column="amp_indicator_id" class="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator" />
 
         <property name="ampIndicatorOptionName" column="amp_indicator_option_name" type="java.lang.String" />
-        <property name="defaultOption" column="IS_DEFAULT" type="boolean" />
     </class>
 </hibernate-mapping>

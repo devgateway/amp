@@ -90,13 +90,6 @@ public class AidEffectivenessIndicatorForm extends ActionForm {
     public void reset(ActionMapping mapping, HttpServletRequest request) {
         setMandatory(false);
         setActive(false);
-        if (options != null) {
-            for (AmpAidEffectivenessIndicatorOption option : options) {
-                if (option != null) {
-                    option.setDefaultOption(false);
-                }
-            }
-        }
     }
 
 }

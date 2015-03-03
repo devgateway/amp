@@ -98,7 +98,6 @@
         <table style="font-family: verdana; font-size: 11px; font-weight: bold" cellpadding="4" id="optionsTableId" width="50%">
             <tr>
                 <th align="center" bgcolor="#c7d4db"><digi:trn>Option Text<font color="red">*</font></digi:trn></th>
-                <th align="center" bgcolor="#c7d4db"><digi:trn>Is Default</digi:trn></th>
                 <th align="center" bgcolor="#c7d4db">&nbsp;</th>
             </tr>
 
@@ -110,23 +109,11 @@
                 <html:hidden property="options[${idx}].ampIndicatorOptionId" />
 
                 <tr>
-                    <td width="40%">
+                    <td width="70%">
                         <html:text property="options[${idx}].ampIndicatorOptionName" styleId="editAmpIndicatorName" size="50" maxlength="250"/>
                         <%-- ${option.ampIndicatorOptionName} --%>
                     </td>
-
-                    <td width="40%" align="center">
-                        <html:checkbox property="options[${idx}].defaultOption" styleId="editDefaultOption" />
-                        <%--c:choose>
-                            <c:when test="${option.defaultOption}">
-                                <digi:trn key="aim:yes">Yes</digi:trn>
-                            </c:when>
-                            <c:otherwise>
-                                <digi:trn key="aim:no">No</digi:trn>
-                            </c:otherwise>
-                        </c:choose--%>
-                    </td>
-                    <td width="20%" align="center">
+                    <td width="30%" align="center">
                         <a onclick="deleteOptionRow('${option.ampIndicatorOptionId}', '${idx}'); return false;">
                             <img src="/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif" border="0" title="<digi:trn>Delete</digi:trn>"/>
                         </a>
@@ -169,12 +156,8 @@
         // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
         var cell1 = row.insertCell(0);
 
-        var cell2 = row.insertCell(1);
-        cell2.style.textAlign = 'center';
-
         // Add some text to the new cells:
         cell1.innerHTML = '<input type="text" name="options[' + optionsTableCounter + '].ampIndicatorOptionName" id="ampIndicatorOptionNameId" />';
-        cell2.innerHTML = '<input type="checkbox" name="options[' + optionsTableCounter + '].defaultOption" id="defaultOptionId" />';
     }*/
 
     function addOptionRow() {

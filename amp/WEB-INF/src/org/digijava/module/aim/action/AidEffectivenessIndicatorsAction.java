@@ -198,7 +198,6 @@ public class AidEffectivenessIndicatorsAction extends Action {
             for (int i = 0; i < form.getOptions().size() ; i++) {
                 if (entity.getOptions().size() > i) {
                     entity.getOptions().get(i).setAmpIndicatorOptionName(form.getOptions().get(i).getAmpIndicatorOptionName());
-                    entity.getOptions().get(i).setDefaultOption(form.getOptions().get(i).getDefaultOption());
                     entity.getOptions().get(i).setIndicator(entity);
                 } else {
                     AmpAidEffectivenessIndicatorOption formOption = form.getOptions().get(i);

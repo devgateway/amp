@@ -81,19 +81,6 @@ public class AmpAidEffectivenessIndicator implements Serializable {
         this.options = options;
     }
 
-    public AmpAidEffectivenessIndicatorOption getDefaultOption() {
-        if (options == null || options.size() == 0) {
-            return null;
-        }
-        for (AmpAidEffectivenessIndicatorOption option : options) {
-            if (option.getDefaultOption() != null && option.getDefaultOption()) {
-                return option;
-            }
-        }
-        // if there's no default option, return the default one
-        return options.get(0);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

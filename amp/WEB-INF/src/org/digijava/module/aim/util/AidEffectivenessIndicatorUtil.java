@@ -133,8 +133,9 @@ public class AidEffectivenessIndicatorUtil {
         Session session = PersistenceManager.getSession();
         String queryStr = "select ind from " + AmpAidEffectivenessIndicator.class.getName()
                 + " ind where active = true order by ampIndicatorId";
-        Query query = session.createQuery(queryStr.toString());
-        return  (List<AmpAidEffectivenessIndicator>)query.list();
+        Query query = session.createQuery(queryStr);
+        List<AmpAidEffectivenessIndicator> indicators = (List<AmpAidEffectivenessIndicator>)query.list();
+        return indicators;
 
     }
 
@@ -223,7 +224,7 @@ public class AidEffectivenessIndicatorUtil {
      */
     public static Set<AmpAidEffectivenessIndicatorOption> populateSelectedOptions(AmpActivityVersion activity) {
         List<AmpAidEffectivenessIndicator> indicators = getAllActiveIndicators();
-        LinkedHashSet<AmpAidEffectivenessIndicatorOption> optionList = new LinkedHashSet<>();
+        Set<AmpAidEffectivenessIndicatorOption> optionList = new LinkedHashSet<>();
 
         if (activity.getSelectedEffectivenessIndicatorOptions() == null) {
             activity.setSelectedEffectivenessIndicatorOptions(new HashSet<AmpAidEffectivenessIndicatorOption>());
@@ -236,14 +237,16 @@ public class AidEffectivenessIndicatorUtil {
             // if this indicator has already been presented on the activity and an option was selected
             if (selectedOption != null) {
                 optionList.add(selectedOption);
-            } else { // otherwise add the default option
-                AmpAidEffectivenessIndicatorOption defaultOption = indicator.getDefaultOption();
-                optionList.add(defaultOption);
+            } else {
+                AmpAidEffectivenessIndicatorOption option = new AmpAidEffectivenessIndicatorOption();
+                option.setIndicator(indicator);
+                optionList.add(option);
             }
         }
 
         return optionList;
     }
+
     /*
     private static Comparator<AmpAidEffectivenessIndicatorOption> optionsComparator = new Comparator<AmpAidEffectivenessIndicatorOption>(){
 

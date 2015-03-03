@@ -94,5 +94,21 @@ public class AmpAidEffectivenessIndicator implements Serializable {
         return options.get(0);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AmpAidEffectivenessIndicator)) return false;
 
+        AmpAidEffectivenessIndicator indicator = (AmpAidEffectivenessIndicator) o;
+
+        if (ampIndicatorId != null ? !ampIndicatorId.equals(indicator.ampIndicatorId) : indicator.ampIndicatorId != null)
+            return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return ampIndicatorId != null ? ampIndicatorId.hashCode() : 0;
+    }
 }

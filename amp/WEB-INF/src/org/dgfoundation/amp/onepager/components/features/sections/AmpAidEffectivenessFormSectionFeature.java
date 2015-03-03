@@ -30,11 +30,13 @@ public class AmpAidEffectivenessFormSectionFeature extends
 
     private class OptionDecorator implements Serializable {
 
-        OptionDecorator(Long id) {
+        OptionDecorator(Long id, String indicatorName) {
             this.id = id;
         }
 
         private Long id;
+
+        private String indicatorName;
 
         public Long getId() {
             return id;
@@ -43,6 +45,11 @@ public class AmpAidEffectivenessFormSectionFeature extends
         public void setId(Long id) {
             this.id = id;
         }
+
+        public String getIndicatorName() {
+            return indicatorName;
+        }
+
     }
 
 	public AmpAidEffectivenessFormSectionFeature(String id, String fmName,
@@ -56,7 +63,7 @@ public class AmpAidEffectivenessFormSectionFeature extends
         final IChoiceRenderer<Long> renderer = new IChoiceRenderer<Long>() {
             @Override
             public Object getDisplayValue(Long object) {
-                return allOptions.get(object).getAmpIndicatorOptionName();
+                return /*allOptions.get(object) == null ? "Select One" : */allOptions.get(object).getAmpIndicatorOptionName();
             }
 
             @Override
@@ -66,6 +73,22 @@ public class AmpAidEffectivenessFormSectionFeature extends
         };
 
         Set<AmpAidEffectivenessIndicatorOption> optionList = AidEffectivenessIndicatorUtil.populateSelectedOptions(am.getObject());
+        /*
+        List<OptionDecorator> decoratorList = new ArrayList<>();
+        for (AmpAidEffectivenessIndicatorOption option : optionList) {
+            OptionDecorator decorator = null;
+            if (option.getAmpIndicatorOptionId() != null) {
+                decorator = new OptionDecorator(option.getAmpIndicatorOptionId(),
+                        option.getIndicator().getAmpIndicatorName());
+            } else {
+                decorator = new OptionDecorator(-1l,
+                        option.getIndicator().getAmpIndicatorName());
+            }
+
+            decoratorList.add(decorator);
+        }*/
+
+
 
         final IModel<Set<AmpAidEffectivenessIndicatorOption>> listModel = new Model((Serializable)optionList);
 
@@ -76,7 +99,13 @@ public class AmpAidEffectivenessFormSectionFeature extends
             @Override
             public void updateModel() {
                 am.getObject().getSelectedEffectivenessIndicatorOptions().clear();
-                am.getObject().getSelectedEffectivenessIndicatorOptions().addAll(getModel().getObject());
+                Set<AmpAidEffectivenessIndicatorOption> allOptionsOnFM = getModel().getObject();
+                for (AmpAidEffectivenessIndicatorOption o : allOptionsOnFM) {
+                    if (o.getAmpIndicatorOptionId() != null) {
+                        am.getObject().getSelectedEffectivenessIndicatorOptions().add(o);
+                    }
+                }
+
                 // OVERRDING OF THIS METHOD IS VERY IMPORTANT!!!
                 // we update the model "on the fly". This method overrides these efforts in the end (before save)
                 //super.updateModel();
@@ -87,21 +116,26 @@ public class AmpAidEffectivenessFormSectionFeature extends
 
                 AmpAidEffectivenessIndicator indicator = componentOuter.getModelObject().getIndicator();
                 AmpFieldPanel<Long> indicatorChoices = null;
-                AbstractChoice choiceContainer = null;
+                AbstractSingleSelectChoice choiceContainer = null;
 
                         List<Long> options = new ArrayList<Long>();
                 for (AmpAidEffectivenessIndicatorOption o : indicator.getOptions()) {
                     options.add(o.getAmpIndicatorOptionId());
                 }
 
+                AmpAidEffectivenessIndicatorOption option = componentOuter.getModelObject();
+                OptionDecorator decorator = new OptionDecorator(option.getAmpIndicatorOptionId(),
+                        option.getIndicator().getAmpIndicatorName());
 
-                OptionDecorator decorator = new OptionDecorator(componentOuter.getModelObject().getAmpIndicatorOptionId());
                 PropertyModel<Long> decoratorModel = new PropertyModel<Long>(decorator, "id") {
                     @Override
                     public void setObject(Long object) {
-                        AmpAidEffectivenessIndicatorOption option = new AmpAidEffectivenessIndicatorOption();
-                        option.setAmpIndicatorOptionId(getObject());
-                        listModel.getObject().remove(option);
+                        // it could be null because no value has been selected yet
+                        if (getObject() != null) {
+                            AmpAidEffectivenessIndicatorOption option = new AmpAidEffectivenessIndicatorOption();
+                            option.setAmpIndicatorOptionId(getObject());
+                            listModel.getObject().remove(option);
+                        }
                         listModel.getObject().add(AmpAidEffectivenessFormSectionFeature.this.allOptions.get(object));
 
                         super.setObject(object);
@@ -112,18 +146,20 @@ public class AmpAidEffectivenessFormSectionFeature extends
                     indicatorChoices = new AmpGroupFieldPanel<Long>(
                             "ampIndicatorOptionId", decoratorModel, options,
                             indicator.getAmpIndicatorName(), false, false, renderer, indicator.getTooltipText());
-                    choiceContainer = ((AmpGroupFieldPanel)indicatorChoices).getChoiceContainer();
+                    choiceContainer = (AbstractSingleSelectChoice)((AmpGroupFieldPanel)indicatorChoices).getChoiceContainer();
                 } else {
                     indicatorChoices = new AmpSelectFieldPanel <Long>(
                             "ampIndicatorOptionId", decoratorModel, options,
                             indicator.getAmpIndicatorName(), false, false, renderer, false);
 
-                    choiceContainer = ((AmpSelectFieldPanel)indicatorChoices).getChoiceContainer();
+                    choiceContainer = (AbstractSingleSelectChoice)((AmpSelectFieldPanel)indicatorChoices).getChoiceContainer();
                 }
 
                 if (indicator.getMandatory()) {
                     choiceContainer.setRequired(true);
                     requiredFormComponents.add(choiceContainer);
+                } else {
+                    choiceContainer.setNullValid(true);
                 }
 
 

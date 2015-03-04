@@ -29,12 +29,21 @@ module.exports = BackboneDash.View.extend({
     if (this.model.get('view') === 'table') {
       this.renderCSV(this.$('.preview-area .table-wrap').removeClass('hidden'));
     } else {
-    	window.setTimeout(_(function() {  // stupid bootstrap modals...
-    	    // this setTimeout is needed for chart to be drawn correctly
-    		this.renderChart(
-    		        this.$('.preview-area .svg-wrap').removeClass('hidden'),
-    		        this.$('.preview-area .canvas-wrap'));
-    	    }).bind(this), 500);      
+    	// Here we will define an interval that will check periodically if the bootstrap modal is fully rendered.
+    	// In that moment the interval is finished and the chart is rendered.
+    	var self = this;
+    	var rendered = false; // This flag is used to avoid triggering the render process twice in case the browser mess up the interval.
+    	var interval = window.setInterval(function() {
+    		if ($('.dash-download-modal').closest('.in').length > 0) {
+    			window.clearInterval(interval);    			   			
+    			nv.tooltip.cleanup();
+    			if (rendered === false) {
+    				rendered = true;
+    				self.renderChart(self.$('.preview-area .svg-wrap').removeClass('hidden'), 
+    						self.$('.preview-area .canvas-wrap'));
+    			}
+    		}
+    	}, 100);      
     }
     return this;
   },
@@ -59,6 +68,7 @@ module.exports = BackboneDash.View.extend({
       img.src = canvas.toDataURL('image/png');
       canvasContainer.html(img);
       $(canvasContainer).removeClass('hidden');
+      $('.modal-preview-area').remove();
       this.makeDownloadable(img.src, 'chart', '.png');      
     });
 

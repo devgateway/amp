@@ -153,6 +153,8 @@ module.exports = BackboneDash.View.extend({
       this.$('.reset')[limit === this.model.defaults.limit ? 'hide' : 'show']();
     }
     this.message.stop().fadeOut(200);
+    
+    this.beautifyLegends(this);
   },
 
   getChartOptions: function() {
@@ -224,6 +226,52 @@ module.exports = BackboneDash.View.extend({
     
     // Translate modal popup.	
    	app.translator.translateDOM($("." + specialClass));
+  },
+  
+  //AMP-18630: Here we setup a simple tooltip for each legend element.
+  beautifyLegends : function(self) {	  
+	  var hasValues = false;
+	  var hasProcessed = false;
+	  if(self.model != undefined && self.model.get('values') != undefined && self.model.get('values').length > 0) {
+		  hasValues = true;
+	  }
+	  if(self.model != undefined && self.model.get('processed') != undefined && self.model.get('processed').length > 1) {
+		  hasProcessed = true;
+	  }
+	  
+	  // Iterate the list of legend elements in DOM (only for this chart) and set a data element called 'data-title' that
+	  // will be then used when a hover event is fired.
+	  $(this.$el).find(".nv-series").each(function(i, elem) {
+		  if(hasValues && !hasProcessed) {
+			  // Top charts.
+			  if(self.model.get('values')[i] != undefined) {
+				  $(elem).data('data-title', self.model.get('values')[i].name);
+			  } else {
+				// This the last legend "Others" (doesnt come in the data).
+		    	$(elem).data('data-title', app.translator.translateSync("amp.dashboard:chart-FundingType-others", "Others"));
+			  }
+		  } else if(hasProcessed) {
+			  // Aid Predictability charts and Funding Type charts.
+			  if(self.model.get('processed')[i] != undefined) {
+				  // The extra check is for FT charts that have more legends (grouped, stacked, etc).
+				  $(elem).data('data-title', self.model.get('processed')[i].key);
+			  }
+		  }
+	    
+		  // Now bind NV tooltip mechanism to hover event for each legend.
+		  if($(elem).data('data-title')) {
+			  $(elem).hover(function() {
+	    		var offset = $(this).offset();
+	    		//TODO: Remove hardcoded html and use a template.
+	    	    nv.tooltip.show([offset.left, offset.top], "<div class='panel panel-primary panel-popover'><div class='panel-heading'>" + $(elem).data('data-title') + "</div></div>");
+	    	        
+	    	    // TODO: Find a way to trigger the mouseover on the bar.
+	    	    // $($(this).closest('svg').find(".nv-groups").find(".nv-bar")[i]).trigger('hover');
+	    	   }, function() {
+	    		   nv.tooltip.cleanup();
+	    	   });
+		  }
+	  });
   }
 
 });

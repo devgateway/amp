@@ -40,13 +40,18 @@ public class AmpAidEffectivenessIndicatorOption implements Serializable, Version
     }
 
     @Override
+    /**
+     * Having indicator here is essential because 2 options with null ids could be connected to different indicators
+     * And these should be treated as 2 different options
+     */
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof AmpAidEffectivenessIndicatorOption)) return false;
 
         AmpAidEffectivenessIndicatorOption that = (AmpAidEffectivenessIndicatorOption) o;
 
-        if (ampIndicatorOptionId != null ? !ampIndicatorOptionId.equals(that.ampIndicatorOptionId) : that.ampIndicatorOptionId != null)
+        if (ampIndicatorOptionId != null ? !ampIndicatorOptionId.equals(that.ampIndicatorOptionId)
+                : that.ampIndicatorOptionId != null)
             return false;
         if (indicator != null ? !indicator.equals(that.indicator) : that.indicator != null) return false;
 

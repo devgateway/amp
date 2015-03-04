@@ -54,7 +54,7 @@ public class MenuItemsProcessor {
 		this.tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
 		// pledgers were defined for some reason as a flag instead of a group, 
 		// thus we have to deal with it in a custom way
-		if (tm != null && tm.getPledger()) {
+		if (tm != null && Boolean.TRUE.equals(tm.getPledger())) {
 			currentUserGroupKeys.add(Group.PLEDGERS);
 		}
 		if (tm != null && tm.getMemberId() != null) {

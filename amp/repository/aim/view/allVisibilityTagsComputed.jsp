@@ -49,19 +49,7 @@
 <module:display name="PARIS INDICATORS"></module:display> 
 <module:display name="Aid Effectiveness Section" parentModule="PROJECT MANAGEMENT"></module:display>
 <feature:display name="Aid Effectiveness" module="Aid Effectiveness Section"></feature:display>
-<field:display name="Project uses parallel project implementation unit" 	feature="Aid Effectiveness"></field:display>
-<field:display name="Project Implementation Mode" feature="Aid Effectiveness"></field:display>
-<field:display name="Project has been approved by IMAC" feature="Aid Effectiveness"></field:display>
-<field:display name="Government is member of project steering committee" feature="Aid Effectiveness"></field:display>
-<field:display name="Project is on budget" feature="Aid Effectiveness"></field:display>
-<field:display name="Project is on parliament" feature="Aid Effectiveness"></field:display>
-<field:display	name="Project disburses directly into the Government single treasury account" 	feature="Aid Effectiveness"></field:display>
-<field:display name="Project uses national financial management systems" feature="Aid Effectiveness"></field:display>
-<field:display 	name="Project uses national procurement systems" feature="Aid Effectiveness"></field:display>
-<field:display name="Project uses national audit systems" feature="Aid Effectiveness"></field:display>
-
-
-<module:display name="PI Reports" parentModule="REPORTING"></module:display> 
+<module:display name="PI Reports" parentModule="REPORTING"></module:display>
 <module:display name="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Paris Indicators" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Portfolio" parentModule="PARIS INDICATORS"></module:display> 

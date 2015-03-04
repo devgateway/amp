@@ -110,7 +110,7 @@ public class ColumnConstants {
 	public static final String FY = "FY";
 	public static final String GOVERNMENT_AGREEMENT_NUMBER = "Government Agreement Number";
 	public static final String GOVERNMENT_APPROVAL_PROCEDURES = "Government Approval Procedures";
-	public static final String GOVERNMENT_IS_MEMBER_OF_PROJECT_STEERING_COMMITTEE = "Government is member of project steering committee";
+
 	public static final String GRAND_TOTAL_COST = "Grand Total Cost";
 	public static final String IMPLEMENTATION_LEVEL = "Implementation Level";
 	public static final String IMPLEMENTATION_LOCATION = "Implementation Location";
@@ -242,19 +242,11 @@ public class ColumnConstants {
 	public static final String PROJECT_COORDINATOR_CONTACT_PHONE = "Project Coordinator Contact Phone";
 	public static final String PROJECT_COORDINATOR_CONTACT_TITLE = "Project Coordinator Contact Title";
 	public static final String PROJECT_DESCRIPTION = "Project Description";
-	public static final String PROJECT_DISBURSES_DIRECTLY_INTO_THE_GOVERNMENT_SINGLE_TREASURY_ACCOUNT = "Project disburses directly into the Government single treasury account";
-	public static final String PROJECT_HAS_BEEN_APPROVED_BY_IMAC = "Project has been approved by IMAC";
+
 	public static final String PROJECT_IMPACT = "Project Impact";
-	public static final String PROJECT_IMPLEMENTATION_MODE = "Project Implementation Mode";
 	public static final String PROJECT_IMPLEMENTING_UNIT = "Project Implementing Unit";
-	public static final String PROJECT_IS_ON_BUDGET = "Project is on budget";
-	public static final String PROJECT_IS_ON_PARLIAMENT = "Project is on parliament";
 	public static final String PROJECT_PERIOD = "Project Period";
 	public static final String PROJECT_TITLE = "Project Title";
-	public static final String PROJECT_USES_NATIONAL_AUDIT_SYSTEMS = "Project uses national audit systems";
-	public static final String PROJECT_USES_NATIONAL_FINANCIAL_MANAGEMENT_SYSTEMS = "Project uses national financial management systems";
-	public static final String PROJECT_USES_NATIONAL_PROCUREMENT_SYSTEMS = "Project uses national procurement systems";
-	public static final String PROJECT_USES_PARALLEL_PROJECT_IMPLEMENTATION_UNIT = "Project uses parallel project implementation unit";
 	public static final String PROPOSED_APPROVAL_DATE = "Proposed Approval Date";
 	public static final String PROPOSED_COMPLETION_DATE = "Proposed Completion Date";
 	public static final String PROPOSED_PROJECT_AMOUNT = "Proposed Project Amount";

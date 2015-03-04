@@ -117,14 +117,6 @@ public final class MoConstants {
 	public static final String H_MINISTRY_CODE = "Ministry Code";
 	public static final String H_CRIS_NUMBER = "Cris Number";
 	public static final String H_PROJECT_IMPLEMENTING_UNIT = "Project Implementing Unit";
-	public static final String H_PROJECT_APPROVED_BY_IMAC = "Project has been approved by IMAC";
-	public static final String H_GOVERNMENT_IN_STEERING_COMMITTEE = "Government is member of project steering committee";
-	public static final String H_PROJECT_ON_BUDGET = "Project is on budget";
-	public static final String H_PROJECT_ON_PARLIAMENT = "Project is on parliament";
-	public static final String H_PROJECT_DISBURSES_DIRECTLY_INTO_GOVERNMENT_TREASURY = "Project disburses directly into the Government single treasury account";
-	public static final String H_PROJECT_USES_NATIONAL_FIN_MNG_SYSTEMS = "Project uses national financial management systems";
-	public static final String H_PROJECT_USES_NATIONAL_PROCURMENT_SYSTEMS = "Project uses national procurement systems";
-	public static final String H_PROJECT_USES_NATIONAL_AUDIT_SYSTEMS = "Project uses national audit systems";
 	public static final String H_PROPOSED_PROJECT_LIFE = "Proposed Project Life";
 	public static final String H_DATES = "Dates";
 	public static final String H_YEAR = "Year";

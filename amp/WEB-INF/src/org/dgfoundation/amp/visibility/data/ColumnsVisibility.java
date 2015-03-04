@@ -97,16 +97,6 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 	@SuppressWarnings("serial")
 	protected static final Map<String, String> modulesToColumnsMap = new HashMap<String, String>() {{
 		put("Activity Approval Process", ColumnConstants.APPROVAL_STATUS);
-		put("/Activity Form/Aid Effectivenes/Government is meber of project steering committee", ColumnConstants.GOVERNMENT_IS_MEMBER_OF_PROJECT_STEERING_COMMITTEE);
-		put("/Activity Form/Aid Effectivenes/Project Implementation Mode", ColumnConstants.PROJECT_IMPLEMENTATION_MODE);
-		put("/Activity Form/Aid Effectivenes/Project disburses directly into the Goverment single treasury account", ColumnConstants.PROJECT_DISBURSES_DIRECTLY_INTO_THE_GOVERNMENT_SINGLE_TREASURY_ACCOUNT);
-		put("/Activity Form/Aid Effectivenes/Project has been approved by IMAC", ColumnConstants.PROJECT_HAS_BEEN_APPROVED_BY_IMAC);
-		put("/Activity Form/Aid Effectivenes/Project is on budget", ColumnConstants.PROJECT_IS_ON_BUDGET); 
-		put("/Activity Form/Aid Effectivenes/Project is on parliament", ColumnConstants.PROJECT_IS_ON_PARLIAMENT);
-		put("/Activity Form/Aid Effectivenes/Project uses national audit systems", ColumnConstants.PROJECT_USES_NATIONAL_AUDIT_SYSTEMS);
-		put("/Activity Form/Aid Effectivenes/Project uses national financial management systems", ColumnConstants.PROJECT_USES_NATIONAL_FINANCIAL_MANAGEMENT_SYSTEMS);
-		put("/Activity Form/Aid Effectivenes/Project uses national procurement systems", ColumnConstants.PROJECT_USES_NATIONAL_PROCUREMENT_SYSTEMS);
-		put("/Activity Form/Aid Effectivenes/Project uses parallel project implementation unit", ColumnConstants.PROJECT_USES_PARALLEL_PROJECT_IMPLEMENTATION_UNIT);
 		put("/Activity Form/Contacts/Donor Contact Information", ColumnConstants.DONOR_CONTACT_ORGANIZATION);
 		put("/Activity Form/Contacts/Sector Ministry Contact Information", ColumnConstants.SECTOR_MINISTRY_CONTACT_ORGANIZATION);
 		put("/Activity Form/Contacts/Project Coordinator Contact Information", ColumnConstants.PROJECT_COORDINATOR_CONTACT_ORGANIZATION);

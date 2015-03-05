@@ -1114,7 +1114,7 @@ public class DynLocationManagerUtil {
 	}
 	
 	public enum ErrorCode{
-		NUMBER_NOT_MATCH,NAME_NOT_MATCH,INCORRECT_CONTENT,CORRECT_CONTENT,INEXISTANT_ADM_LEVEL
+		NUMBER_NOT_MATCH,NAME_NOT_MATCH,INCORRECT_CONTENT,CORRECT_CONTENT,INEXISTANT_ADM_LEVEL,LOCATION_NOT_FOUND
 	}
 
 	public static class NodeInfo {
@@ -1230,9 +1230,17 @@ public class DynLocationManagerUtil {
 		return (AmpLocationIndicatorValue)qry.uniqueResult(); 
  }
  
- 
- public static ErrorCode importIndicatorTableExcelFile(InputStream inputStream, Option option) throws AimException {
+ /**
+  * Return the errorc
+  * @param inputStream
+  * @param option
+  * @return returns 
+  * @throws AimException
+  */
+ public static ErrorWrapper importIndicatorTableExcelFile(InputStream inputStream, Option option) throws AimException {
      POIFSFileSystem fsFileSystem = null;
+     
+     Set<String> geoIdsWithProblems=new HashSet<String>();
      try {
          fsFileSystem = new POIFSFileSystem(inputStream);
          HSSFWorkbook workBook = new HSSFWorkbook(fsFileSystem);
@@ -1255,7 +1263,7 @@ public class DynLocationManagerUtil {
         	 }
          }
          if (selectedAdmLevel == null) {
-             return ErrorCode.INEXISTANT_ADM_LEVEL;
+             return new ErrorWrapper(ErrorCode.INEXISTANT_ADM_LEVEL);
          }
 
          int physicalNumberOfCells = hssfRow.getPhysicalNumberOfCells();
@@ -1263,7 +1271,7 @@ public class DynLocationManagerUtil {
  		
          int indicatorNumberOfCells=indicatorLayers.size();
          if (indicatorNumberOfCells+2 < physicalNumberOfCells) {
-             return ErrorCode.NUMBER_NOT_MATCH;
+             return new ErrorWrapper(ErrorCode.NUMBER_NOT_MATCH);
          }
          List <AmpIndicatorLayer>  orderedIndicators = new ArrayList ();
          for (int i=2;i<physicalNumberOfCells;i++) {
@@ -1277,7 +1285,7 @@ public class DynLocationManagerUtil {
         		 }
         	 }
         	 if (!found) {
-        	     return ErrorCode.NAME_NOT_MATCH;
+        	     return new ErrorWrapper(ErrorCode.NAME_NOT_MATCH);
         	 }
          }
          for (int j = 1; j < hssfSheet.getPhysicalNumberOfRows(); j++) {
@@ -1290,8 +1298,14 @@ public class DynLocationManagerUtil {
                  Cell geoCodeIdCell = hssfRow.getCell(1);
                  if (geoCodeIdCell != null) {
                 	 geoCodeId = getValue(geoCodeIdCell);
+                	 //some versions of excel converts to numeric and adds a .0 at the end
+                	 geoCodeId=geoCodeId.replace(".0", "");
                 	 if (geoCodeId != null && !geoCodeId.trim().equals("")) {
                 		   locationObject = DynLocationManagerUtil.getLocationByGeoCode(geoCodeId, selectedAdmLevel);
+                		   if(locationObject==null){
+                			   geoIdsWithProblems.add(geoCodeId);
+                			   continue;
+                		   }
                      }
                 	 else {
                 		 continue;
@@ -1330,18 +1344,21 @@ public class DynLocationManagerUtil {
      }
      catch (IllegalStateException e) {
          logger.error("file is not ok", e);
-         return ErrorCode.INCORRECT_CONTENT;
+         return new ErrorWrapper(ErrorCode.INCORRECT_CONTENT);
      }
      catch(IOException e){
          logger.error("file is not ok", e);
-         return ErrorCode.INCORRECT_CONTENT;
+         return new ErrorWrapper(ErrorCode.INCORRECT_CONTENT);
      }
      catch (Exception e) {
          logger.error(e);
          throw new AimException("Cannot import indicator values", e);
      }
-
-     return ErrorCode.CORRECT_CONTENT;
+     if(geoIdsWithProblems.size()>0){
+    	 //we have geoids with errors
+    	 return new ErrorWrapper(ErrorCode.LOCATION_NOT_FOUND,geoIdsWithProblems);	 
+     }else{
+     return new ErrorWrapper(ErrorCode.CORRECT_CONTENT);}
  }
  
 	/**
@@ -1377,7 +1394,22 @@ public class DynLocationManagerUtil {
 		}
 		return null;
 	}
-
+	public static class ErrorWrapper{
+		ErrorCode errorCode;
+		Set<String> moreinfo;
+		public ErrorWrapper(ErrorCode errorCode) {
+			this.errorCode=errorCode;
+		}
+		public ErrorWrapper(ErrorCode errorCode,Set<String>moreinfo){
+			this(errorCode);
+			this.moreinfo=moreinfo;
+		}
+		public ErrorCode getErrorCode() {return errorCode;}
+		public void setErrorCode(ErrorCode errorCode) {this.errorCode = errorCode;}
+		public Set<String> getMoreinfo() {return moreinfo;}
+		public void setMoreinfo(Set<String> moreinfo) {this.moreinfo = moreinfo;}
+		
+	}
 
 
 }

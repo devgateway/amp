@@ -18,6 +18,7 @@ import org.digijava.module.aim.form.DynLocationManagerForm;
 import org.digijava.module.aim.form.DynLocationManagerForm.Option;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil.ErrorCode;
+import org.digijava.module.aim.util.DynLocationManagerUtil.ErrorWrapper;
 
 
 public class ImportLocationIndicatorValuesXLS extends Action {
@@ -38,25 +39,27 @@ public class ImportLocationIndicatorValuesXLS extends Action {
 			InputStream inputStream = new ByteArrayInputStream(fileData);
 			Option option=(ioForm.getOption()==1)?Option.OVERWRITE:Option.NEW;
 			ActionMessages errors = new ActionMessages();
-			ErrorCode errorCode=DynLocationManagerUtil.importIndicatorTableExcelFile(inputStream, option);
+			ErrorWrapper errorWrapper = DynLocationManagerUtil.importIndicatorTableExcelFile(inputStream, option);
+			ErrorCode errorCode=errorWrapper.getErrorCode();
+			
 			switch (errorCode) {
-			case INCORRECT_CONTENT:errors.add(
-					ActionMessages.GLOBAL_MESSAGE,
-					new ActionMessage(
-							"error.aim.indImportWrongContent")); break;
-			case INEXISTANT_ADM_LEVEL:errors.add(
-					ActionMessages.GLOBAL_MESSAGE,
-					new ActionMessage(
-							"error.aim.indImportInexistantAdmLevel")); break;				
-			case NUMBER_NOT_MATCH:errors.add(
-					ActionMessages.GLOBAL_MESSAGE,
-					new ActionMessage(
-							"error.aim.indImportNumberMisMatch")); break;
-			case NAME_NOT_MATCH:errors.add(
-					ActionMessages.GLOBAL_MESSAGE,
-					new ActionMessage(
-							"error.aim.indImportNameMisMatch")); break;
-			case CORRECT_CONTENT: return mapping.findForward("success"); 
+			case INCORRECT_CONTENT:
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.indImportWrongContent"));
+				break;
+			case INEXISTANT_ADM_LEVEL:
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.indImportInexistantAdmLevel"));
+				break;
+			case NUMBER_NOT_MATCH:
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.indImportNumberMisMatch"));
+				break;
+			case NAME_NOT_MATCH:
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("error.aim.indImportNameMisMatch"));
+				break;
+			case LOCATION_NOT_FOUND:
+				errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("feedback.aim.locationNotFound",errorWrapper.getMoreinfo()));
+				break;
+			case CORRECT_CONTENT:
+				return mapping.findForward("success");
 			}
 			saveErrors(request, errors);
 		}

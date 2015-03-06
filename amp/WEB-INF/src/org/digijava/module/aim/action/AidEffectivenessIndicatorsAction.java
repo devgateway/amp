@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Struts action that incapsulates actions for effectiveness indicators:
+ * Struts action that encapsulates actions for effectiveness indicators:
  * view, add, delete, edit
  */
 public class AidEffectivenessIndicatorsAction extends Action {
@@ -227,19 +227,6 @@ public class AidEffectivenessIndicatorsAction extends Action {
         form.setActive(entity.getActive());
         form.setIndicatorType(entity.getIndicatorType());
 
-
-
-        /*
-        if (entity.getOptions() != null) {
-            form.setOptions(new ArrayList<AmpAidEffectivenessIndicatorOption>());
-            for (AmpAidEffectivenessIndicatorOption eo : entity.getOptions()) {
-                AmpAidEffectivenessIndicatorOption fo = new AmpAidEffectivenessIndicatorOption();
-                fo.setDefaultOption(eo.getDefaultOption());
-                fo.setAmpIndicatorOptionName(eo.getAmpIndicatorOptionName());
-                fo.setAmpIndicatorOptionId(eo.getAmpIndicatorOptionId());
-                form.getOptions().add(fo);
-            }
-        }*/
         form.setOptions(entity.getOptions());
 
         return form;

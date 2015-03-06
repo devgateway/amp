@@ -115,14 +115,6 @@ public class AidEffectivenessIndicatorUtil {
         indicator.getOptions().remove(option);
         session.delete(option);
         return indicator;
-
-        /*
-        Session session = PersistenceManager.getSession();
-        String queryString = "delete from " + AmpAidEffectivenessIndicatorOption.class.getName() + " where ampIndicatorOptionId =:ampIndicatorOptionId";
-        Query query = session.createQuery(queryString);
-        query.setLong("ampIndicatorOptionId", optionId);
-        query.executeUpdate();
-        */
     }
 
     /**
@@ -247,19 +239,6 @@ public class AidEffectivenessIndicatorUtil {
         return optionList;
     }
 
-    /*
-    private static Comparator<AmpAidEffectivenessIndicatorOption> optionsComparator = new Comparator<AmpAidEffectivenessIndicatorOption>(){
-
-        @Override
-        // sort by indicator's id
-        public int compare(AmpAidEffectivenessIndicatorOption o1, AmpAidEffectivenessIndicatorOption o2) {
-            if (o1 != null && o2 != null && o1.getIndicator() != null && o2.getIndicator() != null) {
-                return (int)(o1.getIndicator().getAmpIndicatorId() - o2.getIndicator().getAmpIndicatorId());
-            }
-            return 0;
-        }
-    };*/
-
     /**
      * Checks if particular indicator has already been selected/chosen in the activity
      * @param indicator - indicator from the total list of indicators
@@ -269,7 +248,6 @@ public class AidEffectivenessIndicatorUtil {
      */
     private static AmpAidEffectivenessIndicatorOption isIndicatorPresentOnThisActivity(AmpAidEffectivenessIndicator indicator,
                                                                                 Set<AmpAidEffectivenessIndicatorOption> selectedOptions) {
-        Session session = PersistenceManager.getSession();
         if (indicator == null || indicator.getOptions() == null
                 || selectedOptions == null
                 || selectedOptions.size() == 0) {

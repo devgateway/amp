@@ -23,6 +23,10 @@ public class AmpAidEffectivenessIndicator implements Serializable {
 
     private List<AmpAidEffectivenessIndicatorOption> options;
 
+    public static enum IndicatorType {
+        SELECT_LIST, DROPDOWN_LIST // 0 - selectbox list, 1 - dropdown list
+    }
+
 
 
     public Long getAmpIndicatorId() {

@@ -1551,7 +1551,8 @@ public class EditActivity extends Action {
     eaForm.getFunding().fillFinancialBreakdowns(activityId, DbUtil.getAmpFunding(activityId), debug);
     AmpApplicationSettings appSettings = AmpARFilter.getEffectiveSettings();
     String validationOption = appSettings != null ? appSettings.getValidation() : null;
-    Boolean crossteamvalidation = appSettings!= null && appSettings.getTeam()!=null ? appSettings.getTeam().getCrossteamvalidation() : false;
+    Boolean crossteamvalidation = appSettings != null && appSettings.getTeam() != null ? /*appSettings.getTeam().getCrossteamvalidation()*/
+            activity.getTeam().getCrossteamvalidation() : false;
     
     String actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
     

@@ -9,7 +9,7 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				 INSERT INTO amp_category_class VALUES (nextval('amp_category_class_seq'),'Budget Structure','budgetStructure','',false,false);
+	  			 INSERT INTO amp_category_class(id, category_name, keyname, description, is_multiselect, is_ordered) VALUES (nextval('amp_category_class_seq'),'Budget Structure','budgetStructure','',false,false);
 				 INSERT INTO amp_category_value VALUES (nextval('amp_category_value_seq'),'Salaries',(select id from amp_category_class where keyname='budgetStructure'),0);
 				 INSERT INTO amp_category_value VALUES (nextval('amp_category_value_seq'),'Operations',(select id from amp_category_class where keyname='budgetStructure'),1);
 				 INSERT INTO amp_category_value VALUES (nextval('amp_category_value_seq'),'Capital',(select id from amp_category_class where keyname='budgetStructure'),2);

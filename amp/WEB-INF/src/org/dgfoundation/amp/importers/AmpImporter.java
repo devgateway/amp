@@ -76,7 +76,10 @@ public abstract class AmpImporter {
 		} catch (IOException e) {
 			logger.error(e);
 			e.printStackTrace();
+		}finally{
+			PersistenceManager.cleanupSession(session);
 		}
+		
 	}
 
 	protected abstract String getFileType();

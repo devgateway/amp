@@ -402,7 +402,7 @@ public class AMPStartupListener extends HttpServlet implements
 					"featureCode", "countryIso", "cc2", "admin1", "admin2", "admin3", "admin4", "population", "elevation",
 					"gtopo30", "timezone", "lastModified" };
 			
-			GazeteerCSVImporter importer = new GazeteerCSVImporter(SERVLET_CONTEXT_ROOT_REAL_PATH+"//doc//gazeteer.csv",columnNames,prop);
+			GazeteerCSVImporter importer = new GazeteerCSVImporter(SERVLET_CONTEXT_ROOT_REAL_PATH+System.getProperty("file.separator")+ "doc"+System.getProperty("file.separator")+"gazeteer.csv",columnNames,prop);
 			
 			if (importer.isTableEmpty()) {
 				importer.performImport();

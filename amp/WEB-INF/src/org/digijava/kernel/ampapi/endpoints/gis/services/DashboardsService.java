@@ -26,6 +26,8 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
@@ -157,6 +159,12 @@ public class DashboardsService {
  		
  		}
  		
+		// AMP-18740: For dashboards we need to use the default number formatting and leave the rest of the settings
+		// configurable (calendar, currency, etc).
+		MondrianReportSettings defaultSettings = MondrianReportUtils.getCurrentUserDefaultSettings();
+		MondrianReportSettings currentSettings = (MondrianReportSettings) spec.getSettings();
+		currentSettings.setCurrencyFormat(defaultSettings.getCurrencyFormat());
+ 		
  		try {
 			report = generator.executeReport(spec);
 		} catch (Exception e) {
@@ -196,6 +204,7 @@ public class DashboardsService {
 			if(!dvalue.equalsIgnoreCase(MoConstants.REGION_UNDEFINED)){
 				amountObj.set("name", dvalue);
 				amountObj.set("amount", reportcell.value);
+				amountObj.set("formattedAmount", reportcell.displayedValue);
 				values.add(amountObj);
 			}else{
 				//Subtract National from the total 

@@ -1,6 +1,8 @@
 var nv = window.nv;  // nvd3 is a pain
 var d3 = require('d3-browserify');
 var util = require('../../ugly/util');
+var Numeral = require('numeral');
+var _ = require('underscore');
 
 
 // hack nvd3's calcApproxTextWidth because it is terrrrrrrrrrible
@@ -107,7 +109,8 @@ function nvColorifyCategories(chart, data, specific) {
 function defaultGetTTContent(context) {
   return {tt: {
     heading: context.x.raw,
-    bodyText: context.y.raw
+    bodyText: context.y.raw,
+    formattedAmount: context.z.raw
   }};
 }
 
@@ -128,14 +131,13 @@ function getNiceContext(raw, data, fmtY) {
     },
     y: {
       raw: raw.point.y,
-      fmt: fmtY || raw.point.y
+      fmt: raw.point.z || fmtY
     }
   };
 }
 
 
 function nvBindTooltip(chart, data, specific, template, getTTContent) {
-
   var nvTTHandler = function(seriesName, fmtX, fmtY, raw) {
     return template(getTTContent(getNiceContext(raw, data, fmtY)));
   };
@@ -172,6 +174,49 @@ function nvCharter(specific) {
   };
 }
 
+function formatNumber(number) {
+	var format = "";
+	if (app.numberFormatSettings.groupSeparator.length > 0) {
+		format = "0,0";
+	} else {
+		format = "0";
+	}
+	if (app.numberFormatSettings.numberFormat.indexOf('.') > 0) {
+		var decimalDigits = app.numberFormatSettings.numberFormat.length 
+			- app.numberFormatSettings.numberFormat.indexOf('.');
+		format = format + "." + new Array(decimalDigits).join("0");
+	}
+	
+	// Define a new "language" for Numeral where we can change the default
+	// delimiters.
+	var ampLang = {
+		delimiters : {
+			thousands : app.numberFormatSettings.groupSeparator || ',',
+			decimal : app.numberFormatSettings.decimalSeparator || '.'
+		},
+		abbreviations : {
+			thousand : 'K',
+			million : 'M',
+			billion : 'B',
+			trillion : 'T'
+		},
+		ordinal : function(number) {
+			return number === 1 ? 'st' : 'rds';
+		},
+		currency : {
+			symbol : '$'
+		}
+	};
+	Numeral.language('amp', ampLang);
+	// Apply new language.
+	Numeral.language('amp');
+	// Apply the format.
+	var stringNumber = new Numeral(number).format(format);
+	return stringNumber;
+}
+
+var ampLang = 
+
 
 module.exports = {
   fail: fail,
@@ -181,5 +226,6 @@ module.exports = {
   defaultClickHandler: defaultClickHandler,
   mkChartSVG: mkChartSVG,
   nvBoiler: nvBoiler,
-  nvCharter: nvCharter
+  nvCharter: nvCharter,
+  formatNumber: formatNumber
 };

@@ -3,11 +3,13 @@
 var d3 = require('d3-browserify');
 
 
-var formatKMB = function(precision) {
+var formatKMB = function(precision, decimalSeparator) {
   var formatSI = d3.format('.' + (precision || 3) + 's');
+  decimalSeparator = decimalSeparator || '.';
   return function(value) {
     return formatSI(value)
-      .replace('G', 'B');  // now just need to convert G Gigia -> B Billion
+      .replace('G', 'B')  // now just need to convert G Gigia -> B Billion
+      .replace('.', decimalSeparator);
   };
 };
 

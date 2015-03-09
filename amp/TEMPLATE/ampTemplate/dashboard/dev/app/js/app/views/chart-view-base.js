@@ -178,7 +178,7 @@ module.exports = BackboneDash.View.extend({
 
   renderNumbers: function() {
     if (this.model.get('total')) {
-      this.$('.chart-total').html(util.formatKMB()(this.model.get('total')));
+      this.$('.chart-total').html(util.formatKMB(3, app.numberFormatSettings.decimalSeparator)(this.model.get('total')));
     }
     this.$('.chart-currency').html(this.model.get('currency'));
   },

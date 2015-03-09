@@ -1,6 +1,7 @@
 var param = require('jquery').param;
 var _ = require('underscore');
 var ChartModel = require('./chart-model-base');
+var common = require('../charts/common');
 
 
 module.exports = ChartModel.extend({
@@ -53,7 +54,8 @@ module.exports = ChartModel.extend({
 
       return {
         x: localizedName,
-        y: v.amount
+        y: v.amount,
+        z: v.formattedAmount
       };
     }, this);
 
@@ -65,13 +67,15 @@ module.exports = ChartModel.extend({
     }
 
     if (data.maxLimit > values.length) {
-      values.push({
-        x: this.localizedOthers,
-        y: data.total -  // total minus the sum of what we have
-          _.chain(values).pluck('y').reduce(function(l, r) { return l + r; }, 0).value(),
-        color: '#777',
-        special: 'others'
-      });
+    	var other = {
+    			x: this.localizedOthers,
+    			y: data.total -  // total minus the sum of what we have
+                _.chain(values).pluck('y').reduce(function(l, r) { return l + r; }, 0).value(),
+                color: '#777',
+                special: 'others'
+        };
+        other.z = common.formatNumber(other.y);
+        values.push(other);
     }
 
     data.processed = [{values: values}];

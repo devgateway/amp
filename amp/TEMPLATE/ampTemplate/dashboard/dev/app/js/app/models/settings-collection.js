@@ -35,6 +35,7 @@ module.exports = BackboneDash.Collection.extend({
   },
 
   parse: function(settings) {
+	this.extractNumberFormatSettings(settings);
     return _(settings).chain()
       // mark weird options with non-int keys hidden
       .map(tagIf(function(setting) { return !isIntStr(setting.id); }, 'ignore'))
@@ -95,6 +96,20 @@ module.exports = BackboneDash.Collection.extend({
 
   getVisible: function() {
     return this.filter(function(setting) { return !setting.get('ignore'); });
+  },
+  
+  extractNumberFormatSettings: function(settings) {
+	  var numberFormat = {};
+	  numberFormat.groupSeparator = settings.find(function(item) {
+		  return item['id'] === 'number-group-separator';
+	  }).name || ',';
+	  numberFormat.decimalSeparator = settings.find(function(item) {
+			return item['id'] === 'number-decimal-separator';
+	  }).name || '.';
+	  numberFormat.numberFormat = settings.find(function(item) {
+			return item['id'] === 'number-format';
+	  }).name || 2;
+	  app.numberFormatSettings = numberFormat;
   }
 
 });

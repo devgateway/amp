@@ -438,7 +438,7 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
                     	if (totalsLists[ROWS])
                     		colSpan = totalsLists[ROWS][row + 1][scanIndexes[ROWS][row + 1]].span;
                     	var auxId = header.properties.uniquename.replace(/\]/gm, "").replace(/\[/gm, "").replace(/\./gm, "").replace(/ /gm, "");
-                    	rowContent += '<th id="' + auxId + '" class="col" style="text-align: center;" colspan="' + colSpan + '" title="' + header.value + '" data-uniquename="' + header.properties.uniquename + '" data-dimension="' + header.properties.dimension + '" data-hierarchy="'+ header.properties.hierarchy + '" data-level="' + header.properties.level + '"><div rel="' + row + ":" + col +'">' + header.value + '</div></th>';
+                    	rowContent += '<th id="' + auxId + '" class="col" style="text-align: center;" colspan="' + colSpan + '" title="' + header.value + '" data-uniquename="' + header.properties.uniquename + '" data-dimension="' + header.properties.dimension + '" data-hierarchy="'+ header.properties.hierarchy + '" data-level="' + header.properties.level + '" data-value="' + header.value + '"><div rel="' + row + ":" + col +'">' + header.value + '</div></th>';
                     }
                     
                 } else {
@@ -465,7 +465,7 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
                         		var parentCellSortingValue = data[0][col].value;
                         	}
                         	
-                            rowContent += '<th data-parentcellsortingvalue="' + parentCellSortingValue + '" data-sorting="' + sorting + '" id="' + auxId + '" class="col hand-pointer" style="text-align: center;" colspan="' + (colSpan == 0 ? 1 : colSpan) + '" title="' + header.value + '" data-uniquename="' + header.properties.uniquename + '" data-dimension="' + header.properties.dimension + '" data-hierarchy="'+ header.properties.hierarchy + '" data-level="' + header.properties.level + '"><div rel="' + row + ":" + col +'">' + header.value + '</div></th>';
+                            rowContent += '<th data-parentcellsortingvalue="' + parentCellSortingValue + '" data-sorting="' + sorting + '" id="' + auxId + '" class="col hand-pointer" style="text-align: center;" colspan="' + (colSpan == 0 ? 1 : colSpan) + '" title="' + header.value + '" data-uniquename="' + header.properties.uniquename + '" data-dimension="' + header.properties.dimension + '" data-hierarchy="'+ header.properties.hierarchy + '" data-level="' + header.properties.level + '" data-value="' + header.value + '"><div rel="' + row + ":" + col +'">' + header.value + '</div></th>';
                         }
                         colSpan = 1;
                     } else {
@@ -531,7 +531,7 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
             else if (header.type === "ROW_HEADER_HEADER") {
             	var auxId = header.properties.level.replace(/\]/gm, "").replace(/\[/gm, "").replace(/\./gm, "").replace(/ /gm, "");
 				rowContent += '<th id="'+ auxId + '" class="row_header hand-pointer" data-dimension="' + header.properties.dimension + '" data-hierarchy="'+ header.properties.hierarchy + 
-					'" data-level="' + header.properties.level + '"><div>' + header.value + '</div></th>';
+					'" data-level="' + header.properties.level + '" data-value="' + header.value + '"><div>' + header.value + '</div></th>';
                 isHeaderLowestLvl = true;
                 processedRowHeader = true;
                 lowestRowLvl = col;

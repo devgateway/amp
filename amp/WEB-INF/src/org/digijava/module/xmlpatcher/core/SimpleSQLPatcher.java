@@ -304,11 +304,43 @@ public class SimpleSQLPatcher {
 					"DROP TABLE IF EXISTS amp_api_state",
 					"DROP SEQUENCE IF EXISTS amp_map_state_seq"
 					));
-			
+
 			// update new locations for old patches that were moved to a different place and looks like no longer are mentained, but polute the output
 			addPatch(new SimpleSQLPatch("010",
 					XMLPatchesWrongPaths.SQL_PATCH
 					));
+
+            addPatch(new SimpleSQLPatch("011",
+                    "DROP VIEW IF EXISTS amp_activity CASCADE ",
+                    "DROP VIEW IF EXISTS v_amp_activity_expanded ",
+
+                    //Has Mondrian reference
+                    // "DELETE FROM amp_columns_filters where bean_field_name = 'projectImplementingUnits'",
+
+                    // Has Mondrian reference
+                    // "DELETE FROM amp_columns where columnname = 'Project Implementing Unit'",
+                    "DELETE FROM amp_columns where columnname = 'Project is on budget'",
+                    "DELETE FROM amp_columns where columnname = 'Project is on parliament'",
+                    "DELETE FROM amp_columns where columnname = 'Project has been approved by IMAC'",
+                    // Has Mondrian reference
+                    // "DELETE FROM amp_columns where columnname = 'Project uses parallel project implementation unit'",
+                    "DELETE FROM amp_columns where columnname = 'Government is member of project steering committee'",
+                    "DELETE FROM amp_columns where columnname = 'Project disburses directly into the Government single treasury account'",
+                    "DELETE FROM amp_columns where columnname = 'Project uses national financial management systems'",
+                    "DELETE FROM amp_columns where columnname = 'Project uses national procurement systems'",
+                    "DELETE FROM amp_columns where columnname = 'Project uses national audit systems'",
+
+                    // Has Mondrian reference
+                    // "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS prj_implementation_unit",
+                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS imac_approved",
+                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_oversight",
+                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS on_budget",
+                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS on_parliament",
+                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS on_treasury",
+                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_financial_management",
+                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_procurement",
+                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_audit"
+            ));
 	}};
 	DataSource dataSource;
 	

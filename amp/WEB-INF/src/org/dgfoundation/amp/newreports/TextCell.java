@@ -18,7 +18,8 @@ public class TextCell extends ReportCell {
 	
 	//TODO: we need to decide how to compare Unicode strings
 	@Override public int compareTo(ReportCell oth) {
-		return Normalizer.normalize(this.displayedValue, Form.NFD).compareTo(
+		return Normalizer.normalize(this.displayedValue, Form.NFD)
+				.compareToIgnoreCase(
 				Normalizer.normalize(oth.displayedValue, Form.NFD));
 	}
 }

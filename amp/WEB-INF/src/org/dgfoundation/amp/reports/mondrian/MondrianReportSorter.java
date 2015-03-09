@@ -83,7 +83,7 @@ public class MondrianReportSorter {
 				} else
 					throw new AMPException("Not supported sorting configuration for isTotals = true and non entity");
 			} else {
-				if (ElementType.ENTITY.equals(first.type))
+				if (ElementType.ENTITY.equals(first.type)) {
 					if(spec.getHierarchies().contains(first.entity)) {
 						sortByHierarchy(sortingInfo, wasSortedByMeasuresTotals);
 						sorted = true;
@@ -91,6 +91,7 @@ public class MondrianReportSorter {
 						sortByNonHierarchyColumn(sortingInfo);
 						sorted = true;
 					} //else -> this is a funding column sorting, which was already done in MDX and thus nothing to post-sort
+				}
 			} 
 		}
 		

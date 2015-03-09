@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
@@ -29,13 +30,11 @@ import org.saiku.service.olap.totals.aggregators.TotalAggregator;
 public class SaikuReportSorter extends MondrianReportSorter {
 	protected CellDataSet cellDataSet;
 	private int measuresCount;
-	private int measureWidth;
 	
 	private SaikuReportSorter(SaikuGeneratedReport report, ReportEnvironment environment) {
 		super(report, environment);
 		this.cellDataSet = report.cellDataSet;
 		this.measuresCount = spec.getMeasures() == null ? 0 : spec.getMeasures().size();
-		this.measureWidth = cellDataSet.getColTotalsLists() == null ? 0 : cellDataSet.getColTotalsLists()[0].get(0).getWidth();
 	}
 	
 	/**
@@ -45,8 +44,8 @@ public class SaikuReportSorter extends MondrianReportSorter {
 	 * @return sorting duration or -1 if no sorting was performed
 	 * @throws AMPException 
 	 */
-	public static int sort(SaikuGeneratedReport report, ReportEnvironment environment) throws AMPException {
-		return (new SaikuReportSorter(report, environment)).sort();
+	public static int sort(GeneratedReport report, ReportEnvironment environment) throws AMPException {
+		return (new SaikuReportSorter((SaikuGeneratedReport) report, environment)).sort();
 	}
 	
 	@Override
@@ -71,14 +70,14 @@ public class SaikuReportSorter extends MondrianReportSorter {
 		//will keep the reordered actual data
 		AbstractBaseCell[][] newData = new AbstractBaseCell[cellDataSet.getCellSetBody().length][cellDataSet.getCellSetBody()[0].length];
 		//will keep the reordered list of row totals
-		List<TotalNode>[] newRowTotalsList = (List<TotalNode>[])new ArrayList[cellDataSet.getRowTotalsLists().length];
+		List<TotalNode>[] newRowTotalsList = (List<TotalNode>[]) new ArrayList[cellDataSet.getRowTotalsLists().length];
 		int[] rowTotalsIds = new int[1 + spec.getHierarchies().size()];
 		initTotals(newRowTotalsList);
 		//will keep the reordered list of column totals
 		TotalAggregator[][] oldColTotals = cellDataSet.getColTotalsLists()[0].get(0).getTotalGroups();
 		TotalAggregator[][] newColTotals = new TotalAggregator[oldColTotals.length][oldColTotals[0].length]; 
 		
-		updateRecursively((SaikuReportArea)rootArea, 0, 0, newData, newRowTotalsList, rowTotalsIds, oldColTotals, newColTotals);
+		updateRecursively((SaikuReportArea) rootArea, 0, 0, newData, newRowTotalsList, rowTotalsIds, oldColTotals, newColTotals);
 		
 		cellDataSet.setCellSetBody(newData);
 		cellDataSet.setRowTotalsLists(newRowTotalsList);
@@ -98,7 +97,7 @@ public class SaikuReportSorter extends MondrianReportSorter {
 			//this is leaf with actual data
 			newData[rowId] = cellDataSet.getCellSetBody()[current.getOrigId()];
 			//update the measure totals as well
-			for (int measureId = measureWidth - measuresCount; measureId < measureWidth; measureId ++)
+			for (int measureId = 0; measureId < measuresCount; measureId ++)
 				newColTotals[measureId][rowId] = oldColTotals[measureId][current.getOrigId()];
 			current.setOrigId(rowId);//update origId
 			rowId ++;

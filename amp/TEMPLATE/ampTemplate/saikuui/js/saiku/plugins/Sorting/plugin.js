@@ -51,14 +51,20 @@ Saiku.Sorting = {
 					columnName : auxColumn.columnName,
 					type : type
 				});
-				sortColumn(columnName, id, type);
-				runQuery();
+				if (sortColumn(columnName, id, type) === true) {
+					runQuery();
+				} else {
+					event.preventDefault();
+				}
 			}
 			console.log(auxColumn);
 		} else if (type === 'HEADER_CELL_MEASURE') {
 			columnName = $(clickedColumn).data('uniquename');
-			sortColumn(columnName, id, type);
-			runQuery();
+			if (sortColumn(columnName, id, type) === true) {
+				runQuery();
+			} else {
+				event.preventDefault();
+			}
 		} else {
 			console.error('Invalid type parameter');
 		}
@@ -227,6 +233,7 @@ function resetSorting() {
  * send more than one column (ie: when clicking yearly totals).
  */
 function sortColumn(columnName, id, type) {
+	var sort = false;
 	// Look for this id in the list of currentSorting, if we find it then change the 'asc' param, otherwise
 	// cleanup currentSorting and add this new column.
 	var foundItem = _.find(Saiku.Sorting.currentSorting, function(item) {
@@ -247,25 +254,26 @@ function sortColumn(columnName, id, type) {
 					id : id
 				});
 			}
+			sort = true;
 		} else if (type === 'HEADER_CELL_MEASURE') {
 			// Measure columns like '2010 - Actual Commitments'.
 			if (foundItem != null) {
 				foundItem.asc = !foundItem.asc;
 				resetSorting();
 				Saiku.Sorting.currentSorting.push(foundItem);
+				sort = true;
 			} else {
-				// Find the related cell immediately below the clicked one.
-				// 1) Detect if we clicked on the upper cell (those cells share the same id), if not ignore the click.
-				if ($('[id="' + id + '"]').length == 1) {
+				// Detect if we clicked on the lower cell (upper cells share the same id), if not ignore the click.
+				if ($('[id="' + id + '"]').length === 1) {
 					resetSorting();
-					var relatedBelowCell = $('#' + id).closest('tr').next().children().eq($('#' + id).index());
-					var relatedBelowCellName = getFinalPartOfName($(relatedBelowCell).data('uniquename'));
+					var relatedUpperCellValue = $('#' + id).data('parentcellsortingvalue');
 					columnName = getFinalPartOfName(columnName);
 					Saiku.Sorting.currentSorting.push({
-						columnName : columnName + "," + relatedBelowCellName,
+						columnName : relatedUpperCellValue + "," + columnName,
 						asc : true,
 						id : id
 					});
+					sort = true;
 				}
 			}
 		}
@@ -277,6 +285,7 @@ function sortColumn(columnName, id, type) {
 				foundItem.asc = !foundItem.asc;
 				resetSorting();
 				Saiku.Sorting.currentSorting.push(foundItem);
+				sort = true;
 			} else {
 				resetSorting();
 				var isRegularColumn = _.find(getSortingColumns(), function(item) {
@@ -296,10 +305,11 @@ function sortColumn(columnName, id, type) {
 					var firstRegularColumn = getSortingColumns()[0].entityName;
 					Saiku.Sorting.currentSorting.push({
 						id : id,
-						columnName : hierarchicalColumn/* + "," + firstRegularColumn*/,
+						columnName : hierarchicalColumn + "," + firstRegularColumn,
 						asc : true
 					});
 				}
+				sort = true;
 			}
 		} else if (type === 'HEADER_CELL_MEASURE') {
 			// Measure columns like '2010 - Actual Commitments'.
@@ -307,23 +317,24 @@ function sortColumn(columnName, id, type) {
 				foundItem.asc = !foundItem.asc;
 				resetSorting();
 				Saiku.Sorting.currentSorting.push(foundItem);
+				sort = true;
 			} else {
-				// Find the related cell immediately below the clicked one.
-				// 1) Detect if we clicked on the upper cell (those cells share the same id), if not ignore the click.
-				if ($('[id="' + id + '"]').length == 1) {
+				// Detect if we clicked on the lower cell (upper cells share the same id), if not ignore the click.
+				if ($('[id="' + id + '"]').length === 1) {
 					resetSorting();
-					var relatedBelowCell = $('#' + id).closest('tr').next().children().eq($('#' + id).index());
-					var relatedBelowCellName = getFinalPartOfName($(relatedBelowCell).data('uniquename'));
+					var relatedUpperCellValue = $('#' + id).data('parentcellsortingvalue');
 					columnName = getFinalPartOfName(columnName);
 					Saiku.Sorting.currentSorting.push({
-						columnName : columnName + "," + relatedBelowCellName,
+						columnName : relatedUpperCellValue + "," + columnName,
 						asc : true,
 						id : id
 					});
+					sort = true;
 				}
 			}
 		}
 	}
+	return sort;
 }
 
 /*

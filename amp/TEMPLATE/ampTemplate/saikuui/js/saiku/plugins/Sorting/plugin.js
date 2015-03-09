@@ -21,7 +21,7 @@ Saiku.Sorting = {
 	 */
 	processClickOnHeader : function(event, type) {
 		var clickedColumn = event.currentTarget;
-		var columnName = $(clickedColumn).data('level');
+		var columnName = $(clickedColumn).data('value');
 
 		// Reprocess the columnName in specific cases:
 		if (columnName.indexOf("Category Name") > -1) {
@@ -268,8 +268,11 @@ function sortColumn(columnName, id, type) {
 					resetSorting();
 					var relatedUpperCellValue = $('#' + id).data('parentcellsortingvalue');
 					columnName = getFinalPartOfName(columnName);
+					if (relatedUpperCellValue) {
+						columnName : relatedUpperCellValue + "," + columnName; 
+					}
 					Saiku.Sorting.currentSorting.push({
-						columnName : relatedUpperCellValue + "," + columnName,
+						columnName : columnName,
 						asc : true,
 						id : id
 					});
@@ -284,7 +287,11 @@ function sortColumn(columnName, id, type) {
 			if (foundItem != null) {
 				foundItem.asc = !foundItem.asc;
 				resetSorting();
-				Saiku.Sorting.currentSorting.push(foundItem);
+				Saiku.Sorting.currentSorting.push({
+					columnName : columnName,
+					asc : foundItem.asc,
+					id : id
+				});
 				sort = true;
 			} else {
 				resetSorting();
@@ -301,11 +308,13 @@ function sortColumn(columnName, id, type) {
 				} else {
 					// In a hierarchical report, if we click on some of the hierarchical headers then we need to send
 					// another column for sorting too, in our case the first non-hierarchical column available.
+					/* why? this is not needed */
 					var hierarchicalColumn = getFinalPartOfName($('#' + id).data('level'));
 					var firstRegularColumn = getSortingColumns()[0].entityName;
 					Saiku.Sorting.currentSorting.push({
 						id : id,
-						columnName : hierarchicalColumn + "," + firstRegularColumn,
+						//columnName : hierarchicalColumn + "," + firstRegularColumn,
+						columnName : columnName,
 						asc : true
 					});
 				}
@@ -364,7 +373,12 @@ function updateArrowIcon(data) {
 
 function getFinalPartOfName(name) {
 	if (name != undefined && name != null) {
-		return name.substring(name.lastIndexOf('[') + 1, name.length - 1);
+		var start = name.lastIndexOf('[');
+		if (start == -1) {
+			return name;
+		} else {
+			return name.substring(start + 1, name.length - 1);
+		}
 	} else {
 		return "";
 	}

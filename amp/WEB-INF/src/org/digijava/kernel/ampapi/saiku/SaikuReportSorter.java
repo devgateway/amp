@@ -14,6 +14,7 @@ import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSorter;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
+import org.saiku.olap.dto.resultset.DataCell;
 import org.saiku.service.olap.totals.TotalNode;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
 
@@ -74,10 +75,20 @@ public class SaikuReportSorter extends MondrianReportSorter {
 		int[] rowTotalsIds = new int[1 + spec.getHierarchies().size()];
 		initTotals(newRowTotalsList);
 		//will keep the reordered list of column totals
-		TotalAggregator[][] oldColTotals = cellDataSet.getColTotalsLists()[0].get(0).getTotalGroups();
-		TotalAggregator[][] newColTotals = new TotalAggregator[oldColTotals.length][oldColTotals[0].length]; 
+		TotalAggregator[][] oldColTotals = cellDataSet.getColTotalsLists() == null ? null : 
+				cellDataSet.getColTotalsLists()[0].get(0).getTotalGroups();
+		TotalAggregator[][] newColTotals = oldColTotals == null ? oldColTotals : 
+			new TotalAggregator[oldColTotals.length][oldColTotals[0].length]; 
 		
 		updateRecursively((SaikuReportArea) rootArea, 0, 0, newData, newRowTotalsList, rowTotalsIds, oldColTotals, newColTotals);
+
+		// add unused row totals that are needed just for rendering
+		for (int idx = 0; idx < newRowTotalsList.length; idx++) {
+			if (newRowTotalsList[idx].size() == 0) {
+				newRowTotalsList[idx] = cellDataSet.getRowTotalsLists()[idx];
+			}
+			
+		}
 		
 		cellDataSet.setCellSetBody(newData);
 		cellDataSet.setRowTotalsLists(newRowTotalsList);
@@ -96,9 +107,15 @@ public class SaikuReportSorter extends MondrianReportSorter {
 		} else if (current.getContents() != null  && current.getContents().size() > 0) {
 			//this is leaf with actual data
 			newData[rowId] = cellDataSet.getCellSetBody()[current.getOrigId()];
-			//update the measure totals as well
-			for (int measureId = 0; measureId < measuresCount; measureId ++)
-				newColTotals[measureId][rowId] = oldColTotals[measureId][current.getOrigId()];
+			// update funding columns coordinates
+			for (int fundingDataColId = spec.getColumns().size(); fundingDataColId < newData[rowId].length; fundingDataColId++) {
+				((DataCell) newData[rowId][fundingDataColId]).getCoordinates().set(1,  rowId);
+			}
+			// update measure totals
+			if (newColTotals != null) {
+				for (int measureId = 0; measureId < measuresCount; measureId ++)
+					newColTotals[measureId][rowId] = oldColTotals[measureId][current.getOrigId()];
+			}
 			current.setOrigId(rowId);//update origId
 			rowId ++;
 		}	
@@ -131,8 +148,15 @@ public class SaikuReportSorter extends MondrianReportSorter {
 	}
 	
 	private void updateColTotals(TotalAggregator[][] oldColTotals, TotalAggregator[][] newColTotals) {
-		for (int idx = 0; idx < oldColTotals.length; idx ++) {
-			oldColTotals[idx] = newColTotals[idx];
+		if (newColTotals == null)
+			return;
+		
+		for (int i = 0; i < oldColTotals.length; i++) {
+			for (int j = 0; j < oldColTotals[i].length; j ++) {
+				if(newColTotals[i][j] != null) {
+					oldColTotals[i][j] = newColTotals[i][j];
+				}
+			}
 		}
 	}
 	

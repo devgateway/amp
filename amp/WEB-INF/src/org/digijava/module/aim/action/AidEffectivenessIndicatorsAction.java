@@ -53,11 +53,12 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 return mapping.findForward("list");
             case "edit" :
                 long indicatorId = 0;
-                try {
-                    indicatorId = Long.parseLong(indicatorIdParam);
-                    indicator = AidEffectivenessIndicatorUtil.loadIndicatorById(indicatorId);
-                } catch (RuntimeException nfe) {
-                    handleLocalException(request, nfe, "error.admin.aidEffectivenessIndicator.notExist", indicatorIdParam);
+
+                indicatorId = Long.parseLong(indicatorIdParam);
+                indicator = AidEffectivenessIndicatorUtil.loadIndicatorById(indicatorId);
+
+                if (indicator == null) {
+                    handleLocalException(request, null, "error.admin.aidEffectivenessIndicator.notExist", indicatorIdParam);
                     return mapping.findForward("search");
                 }
 
@@ -92,7 +93,13 @@ public class AidEffectivenessIndicatorsAction extends Action {
                             entityToForm(indicator, indicatorForm);
                         } else {
                             AmpAidEffectivenessIndicatorOption option = AidEffectivenessIndicatorUtil.loadOptionById(optionId);
-                            handleLocalException(request, new RuntimeException(), "error.admin.aidEffectivenessIndicator.option.hasRelatedActivities",
+                            if (option == null) {
+                                handleLocalException(request, null, "error.admin.aidEffectivenessIndicator.options.option.notExist", optionIdParam);
+                                executeSearch(mapping, request, indicatorForm);
+                                return mapping.findForward("error");
+                            }
+
+                            handleLocalException(request, null, "error.admin.aidEffectivenessIndicator.option.hasRelatedActivities",
                                     option.getAmpIndicatorOptionName());
                             executeSearch(mapping, request, indicatorForm);
                             return mapping.findForward("error");
@@ -120,6 +127,10 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 // update
                 if (indicatorForm.getAmpIndicatorId() != null && indicatorForm.getAmpIndicatorId() > 0){
                     indicator = AidEffectivenessIndicatorUtil.loadIndicatorById(indicatorForm.getAmpIndicatorId());
+                    if (indicator == null) {
+                        handleLocalException(request, null, "error.admin.aidEffectivenessIndicator.notExist", indicatorIdParam);
+                        return mapping.findForward("error");
+                    }
                     indicator = formToEntity(indicatorForm, indicator);
                 } else { // create
                     indicator = formToEntity(indicatorForm, null);
@@ -133,11 +144,12 @@ public class AidEffectivenessIndicatorsAction extends Action {
 
                 return mapping.findForward("search");
             case "delete" :
-                try {
-                    indicatorId = Long.parseLong(indicatorIdParam);
-                    indicator = AidEffectivenessIndicatorUtil.loadIndicatorById(indicatorId);
-                } catch (RuntimeException nfe) {
-                    handleLocalException(request, nfe, "error.admin.aidEffectivenessIndicator.notExist", indicatorIdParam);
+
+                indicatorId = Long.parseLong(indicatorIdParam);
+                indicator = AidEffectivenessIndicatorUtil.loadIndicatorById(indicatorId);
+
+                if (indicator == null) {
+                    handleLocalException(request, null, "error.admin.aidEffectivenessIndicator.notExist", indicatorIdParam);
                     executeSearch(mapping, request, indicatorForm);
                     return mapping.findForward("search");
                 }
@@ -284,7 +296,9 @@ public class AidEffectivenessIndicatorsAction extends Action {
     }
 
     private void handleLocalException(HttpServletRequest request, Exception ex, String exceptionKey, Object param) {
-        logger.error(ex.getStackTrace());
+        if (ex != null) {
+            logger.error(ex.getStackTrace());
+        }
         ActionMessages errors = new ActionMessages();
         ActionMessage message = null;
         if (param != null) {

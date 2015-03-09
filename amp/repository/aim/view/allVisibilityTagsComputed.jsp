@@ -35,7 +35,16 @@
 <module:display name="Pledges" parentModule="PROJECT MANAGEMENT"/> 
 <module:display name="GIS DASHBOARD"></module:display> 
 <module:display name="/GIS"></module:display>
-<module:display name="/Dashboards"></module:display>
+
+<module:display  name="/Dashboards"></module:display>
+<feature:display name="/Top Donors" module="/Dashboards"/>
+<field:display name="/Show Names As Acronyms" feature="/Top Donors""/>
+<feature:display name="/Top Regions" module="/Dashboards"/>
+<feature:display name="/Top Sectors" module="/Dashboards"/>
+<feature:display name="/Top Donor Group" module="/Dashboards"/>
+<feature:display name="/Aid Predictability" module="/Dashboards"/>
+<feature:display name="/Funding Type" module="/Dashboards"/>
+
 <module:display name="HELP"></module:display> 
 <module:display name="Issues" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="M & E" parentModule="MONITORING AND EVALUATING"></module:display> 

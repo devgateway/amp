@@ -212,7 +212,7 @@ public class AidEffectivenessIndicatorUtil {
 
 
     /**
-     * Returns all options from all indicators
+     * Returns all options from all Active indicators
      * @return
      */
     public static Map<Long, AmpAidEffectivenessIndicatorOption> getAllOptions() {
@@ -290,4 +290,3 @@ public class AidEffectivenessIndicatorUtil {
     }
 
 }
-

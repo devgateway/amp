@@ -309,7 +309,7 @@ public class SimpleSQLPatcher {
 			addPatch(new SimpleSQLPatch("010",
 					XMLPatchesWrongPaths.SQL_PATCH
 					));
-
+/* Commented temporarily until the Mondrian part is done AMP-19512
             addPatch(new SimpleSQLPatch("011",
                     "DROP VIEW IF EXISTS amp_activity CASCADE ",
                     "DROP VIEW IF EXISTS v_amp_activity_expanded ",
@@ -340,7 +340,7 @@ public class SimpleSQLPatcher {
                     "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_financial_management",
                     "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_procurement",
                     "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_audit"
-            ));
+            ));*/
 	}};
 	DataSource dataSource;
 	

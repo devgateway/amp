@@ -78,4 +78,5 @@ public class EPConstants {
 	public static final String MENU_OPEN_POPUP = "popup";
 	public static final String MENU_OPEN_TAB = "tab";
 	public static final String MENU_POST = "post";
+	public static final String MENU_LANUGAGE = "language";
 }

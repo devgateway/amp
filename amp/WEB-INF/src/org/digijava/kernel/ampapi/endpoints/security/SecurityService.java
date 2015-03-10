@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.dgfoundation.amp.menu.AmpView;
+import org.dgfoundation.amp.menu.MenuConstants;
 import org.dgfoundation.amp.menu.MenuItem;
 import org.dgfoundation.amp.menu.MenuItemsProcessor;
 import org.dgfoundation.amp.menu.MenuStructure;
@@ -60,6 +61,10 @@ public class SecurityService {
 			}
 			if (item.getChildren().size() > 0) {
 				jsonItem.set(EPConstants.MENU_CHILDREN, convert(item.getChildren()));
+			}
+			// special case to allow GIS/Dashboards to treat language action in their custom way 
+			if (MenuConstants.LANGUAGE_ITEM.equals(item.name)) {
+				jsonItem.set(EPConstants.MENU_LANUGAGE, true);
 			}
 			jsonItems.add(jsonItem);
 		}

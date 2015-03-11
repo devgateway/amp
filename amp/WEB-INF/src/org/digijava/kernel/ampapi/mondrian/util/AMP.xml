@@ -730,5 +730,18 @@
 				</SQL>
 			</MeasureExpression>
 		</Measure>
+		
+		<CalculatedMember name="Undisbursed Balance" dimension="Measures">
+		 	<Formula>
+				[Measures].[Actual Commitments] - [Measures].[Actual Disbursements]
+			</Formula>
+			<!-- some strange exception happens at last conversion call that implies some 
+				formats conversion for negative values, 
+				thus we need to define it explicitly,
+				but it is not used anyway in Saiku display
+				-->
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>			
+		</CalculatedMember>
+		
 	</Cube>
  </Schema>

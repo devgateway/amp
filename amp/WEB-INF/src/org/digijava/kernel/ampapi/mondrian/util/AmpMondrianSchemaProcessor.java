@@ -217,6 +217,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 				dimUsage.getParentNode().replaceChild(newDimensionDefinition, dimUsage);
 			}
 			insertCommonMeasuresDefinitions(xmlSchema);
+			moveCalculatedMembersToEnd(xmlSchema);
 			contents = XMLGlobals.saveToString(xmlSchema);
 			expandedSchema = contents;
 			// System.err.println("the expanded schema is: " + expandedSchema);
@@ -262,6 +263,23 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		trivialMeasureDefinitionNode.getParentNode().removeChild(trivialMeasureDefinitionNode);
 	}
 	
+	/**
+	 * Calculated members depend on existing definitions during the parsing 
+	 * and thus has to be defined after other measures
+	 * 
+	 * @param xmlSchema
+	 */
+	private void moveCalculatedMembersToEnd(Document xmlSchema) {
+		NodeList calculatedMembers = XMLGlobals.selectNodes(xmlSchema, "//CalculatedMember");
+		if (calculatedMembers == null || calculatedMembers.getLength() == 0)
+			return;
+		Node parent = calculatedMembers.item(0).getParentNode();
+		for (int idx = 0; idx < calculatedMembers.getLength(); idx++) {
+			Node calculatedMember = calculatedMembers.item(idx);
+			parent.removeChild(calculatedMember);
+			parent.appendChild(calculatedMember);
+		}
+	}
 	
 //	protected String buildActivityStatusSQL() {
 //		StringBuilder res = new StringBuilder("CASE");

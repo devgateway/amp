@@ -21,6 +21,7 @@ public class CurrencyRatesRunner {
 	private static Logger logger = Logger
 	.getLogger(CurrencyRatesRunner.class);
 	
+	
 	private SchedulerFactory schedulerFactory;
 	private Scheduler scheduler;
 	private JobDetail jobDetail;

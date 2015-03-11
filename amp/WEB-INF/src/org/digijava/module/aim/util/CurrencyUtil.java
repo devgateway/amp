@@ -191,8 +191,7 @@ public class CurrencyUtil {
 	 * @param cRate The AmpCurrencyRate object
 	 */
 	public static void saveCurrencyRate(AmpCurrencyRate cRate, boolean calledFromQuartzJob) {
-		//Session session = null;
-		//Transaction tx = null;
+		Session session = null;
 		Query qry = null;
 		String qryStr = null;
 		if (!calledFromQuartzJob)
@@ -201,34 +200,31 @@ public class CurrencyUtil {
 		}
 
 		try {
-            //session = PersistenceManager.getCurrentSession();
-            //tx = session.beginTransaction();
-
-			qryStr = "select cRate from " + AmpCurrencyRate.class.getName() + " cRate " +
+			 session = PersistenceManager.getRequestDBSession();
+             qryStr = "select cRate from " + AmpCurrencyRate.class.getName() + " cRate " +
 					"where (cRate.toCurrencyCode=:code) and (cRate.fromCurrencyCode=:fromCode) and" +
 					"(cRate.exchangeRateDate=:date)";
-			qry = PersistenceManager.getSession().createQuery(qryStr);
-			qry.setString("code", cRate.getToCurrencyCode());
-			qry.setString("fromCode",cRate.getFromCurrencyCode());
-			qry.setDate("date",cRate.getExchangeRateDate());
+             qry = PersistenceManager.getSession().createQuery(qryStr);
+             qry.setString("code", cRate.getToCurrencyCode());
+             qry.setString("fromCode",cRate.getFromCurrencyCode());
+             qry.setDate("date",cRate.getExchangeRateDate());
 
 			Iterator<AmpCurrencyRate> itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				// if the currency rate already exist update the rate
 				AmpCurrencyRate actRate = itr.next();
 				actRate.setExchangeRate(cRate.getExchangeRate());
-				PersistenceManager.getSession().update(actRate);
+				session.update(actRate);
 			} else {
 				// add the currency rate object if it does not exist
-				PersistenceManager.getSession().save(cRate);
+				session.save(cRate);
 			}
 			
-			//tx.commit();
 		} catch (Exception e) {
 			logger.error("Couldn't save Exchange Rates ",e);
 			throw new RuntimeException(e);
 		}
-		PersistenceManager.getSession().flush();
+		PersistenceManager.cleanupSession(session);
 	}
 
     public static Collection<AmpCurrency> getAllCurrencies(int active){

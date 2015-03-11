@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.mail.DgEmailManager;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
@@ -83,7 +84,7 @@ public class CurrencyRatesQuartzJob implements Job {
 					else
 						remainingCurrencies.add( ampCurrencies[i] );
 				}
-				ampCurrencies				= remainingCurrencies.toArray( new String[0] );
+				ampCurrencies = remainingCurrencies.toArray( new String[0] );
 		}
 		/* END - Remove currencies that need to skipped in automatic update */
 
@@ -97,8 +98,7 @@ public class CurrencyRatesQuartzJob implements Job {
 				
 				showValues(ampCurrencies, wsCurrencyValues);
 				save(ampCurrencies, wsCurrencyValues);
-				ampCurrencies = this.getWrongCurrencies(ampCurrencies,
-						wsCurrencyValues);
+				ampCurrencies = this.getWrongCurrencies(ampCurrencies, wsCurrencyValues);
 				mytries++;
 			}
 			this.lastExcecution = new Date();
@@ -137,12 +137,13 @@ public class CurrencyRatesQuartzJob implements Job {
 	}
 	private void save(String[] currencies,
 			HashMap<String, Double> wsCurrencyValues) {
+		
 		for (int i=0; i<currencies.length; i++) {
 			if(baseCurrency!=null && currencies[i]!=null && !currencies[i].equals(baseCurrency)){
 				AmpCurrencyRate currRate = new AmpCurrencyRate();
 				//currRate.setAmpCurrencyRateId(ampCurrency.getAmpCurrencyId());
 				Double value = wsCurrencyValues.get(currencies[i]);
-				if (value!=null && value .equals(WSCurrencyClient.INVALID_CURRENCY_CODE) && value >0D) {
+				if (value!=null && value.equals(WSCurrencyClient.INVALID_CURRENCY_CODE) && value >0D) {
 					logger.info(currencies[i]+ " Not Supported...");
 					continue;
 				} else if (value == WSCurrencyClient.CONNECTION_ERROR) {

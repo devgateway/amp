@@ -51,6 +51,11 @@ module.exports = BackboneDash.View.extend({
   	          { name: 'Top Donor Agencies' },
   	          { app: this.app, url: '/rest/dashboard/tops/do' }));
     }
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Top Donor Group'})) {
+    	col.push(new TopsChart(
+  	          { name: 'Top Donor Groups' },
+  	          { app: this.app, url: '/rest/dashboard/tops/dg' }));
+    }
     if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Top Regions'})) {
     	col.push(new TopsChart(
   	          { name: 'Top Regions' },

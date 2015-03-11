@@ -308,6 +308,7 @@ public class MondrianMapping {
 			addMeasureDefinition(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE);
 			addMeasureDefinition(MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL);
 			addMeasureDefinition(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT);
+			addMeasureDefinition(MeasureConstants.UNDISBURSED_BALANCE);
 			addMeasureDefinition(MeasureConstants.PLEDGES_COMMITMENT_GAP);
 			
 			addMeasureDefinition(MeasureConstants.ALWAYS_PRESENT);

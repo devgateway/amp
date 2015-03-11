@@ -31,6 +31,7 @@ _.extend(App.prototype, BackboneDash.Events, {
     this.initialized = _initDefer.promise();
 
     try {
+    	this.settings = new Settings([], { app: this });
 
       // check our support level
       this.browserIssues = supportCheck();
@@ -70,7 +71,6 @@ _.extend(App.prototype, BackboneDash.Events, {
 
       // initialize app services
       this.url = new URLService();
-      this.settings = new Settings([], { app: this });
       this.savedDashes = new SavedDashes([], { app: this });
       this.state = new State({
         url: this.url,

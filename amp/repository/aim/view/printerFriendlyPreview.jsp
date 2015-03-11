@@ -111,29 +111,27 @@ body {background:none;}
                                     </feature:display>
                                  
 										
-										<module:display name="/Activity Form/Identification/Status Reason" parentModule="/Activity Form/Identification">							
-                                            <tr>
-                                            	  <td align="right" valign="top" nowrap="nowrap" >
-                                                  	<b>
-                                                  	<digi:trn key="aim:status"> Status</digi:trn>
-                                                  	</b>                      	      
-                                                  	</td>
-													<td bgcolor="#FFFFFF">
-												   	  <category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}"/><br><br>
-												   	</td>
-											</tr>
-											<c:if test="${not empty aimEditActivityForm.identification.statusReason}">
-	                                            <tr>
-	                                            	  <td align="right" valign="top" nowrap="nowrap" >
-	                                                  	<b>
-	                                                  	<digi:trn>Status Reason</digi:trn>
-	                                                  	</b>                      	      
-	                                                  	</td>
-														<td bgcolor="#FFFFFF">${aimEditActivityForm.identification.statusReason}
-													   	</td>
-												</tr>
-											</c:if>                                                       			
-										</module:display>							
+                                    <module:display name="/Activity Form/Identification/Activity Status" parentModule="/Activity Form/Identification">
+                                        <tr>
+                                              <td align="right" valign="top" nowrap="nowrap" >
+                                                  <b><digi:trn key="aim:status">Status</digi:trn></b>
+                                              </td>
+                                              <td bgcolor="#FFFFFF">
+                                                  <category:getoptionvalue categoryValueId="${aimEditActivityForm.identification.statusId}" />
+                                              </td>
+                                        </tr>
+                                    </module:display>
+
+                                    <module:display name="/Activity Form/Identification/Status Reason" parentModule="/Activity Form/Identification">
+                                        <tr>
+                                              <td align="right" valign="top" nowrap="nowrap" >
+                                                  <b><digi:trn key="aim:statusReason">Status Reason</digi:trn></b>
+                                              </td>
+                                              <td bgcolor="#FFFFFF">
+                                                  <c:out value="${aimEditActivityForm.identification.statusReason}" escapeXml="false" />
+                                              </td>
+                                        </tr>
+                                    </module:display>
 
 								<module:display name="/Activity Form/Identification/Type of Cooperation" parentModule="/Activity Form/Identification">
 								<tr>

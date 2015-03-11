@@ -104,16 +104,16 @@ module.exports = BackboneDash.Collection.extend({
   
   extractNumberFormatSettings: function(settings) {
 	  var numberFormat = {};
-	  numberFormat.groupSeparator = settings.find(function(item) {
+	  numberFormat.groupSeparator = _.find(settings, function(item) {
 		  return item['id'] === 'number-group-separator';
 	  }).name || ',';
-	  numberFormat.decimalSeparator = settings.find(function(item) {
+	  numberFormat.decimalSeparator = _.find(settings, function(item) {
 			return item['id'] === 'number-decimal-separator';
 	  }).name || '.';
-	  numberFormat.numberFormat = settings.find(function(item) {
+	  numberFormat.numberFormat = _.find(settings, function(item) {
 			return item['id'] === 'number-format';
-	  }).name || 2;
-	  app.numberFormatSettings = numberFormat;
+	  }).name || '#,#.#';
+	  this.app.numberFormatSettings = numberFormat;
   }
 
 });

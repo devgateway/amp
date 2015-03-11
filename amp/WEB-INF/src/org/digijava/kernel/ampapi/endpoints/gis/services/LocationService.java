@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -50,6 +51,7 @@ import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.helpers.geojson.objects.ClusteredPoints;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
@@ -63,8 +65,6 @@ import org.digijava.module.categorymanager.util.CategoryConstants.HardCodedCateg
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.jdbc.Work;
-
-import clover.com.google.common.collect.ImmutableMap;
 
 /**
  * 
@@ -644,7 +644,8 @@ public class LocationService {
 		
 		final String usedAdminLevel = adminLevel;
 		//fetch activities filtered by mondrian
-		List<Long>activitiesId = getActivitiesForFiltering(config);
+		Set<Long> activitiesId = getActivitiesForFiltering(config, adminLevel);
+		
 		final Double countryLatitude=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LATITUDE);
 		final Double countryLongitude=FeaturesUtil.getGlobalSettingDouble(GlobalSettingsConstants.COUNTRY_LONGITUDE);
 		final ValueWrapper<String> qry = new ValueWrapper<String>(null);
@@ -721,26 +722,55 @@ public class LocationService {
 	
 		return l;
 	}
-
-	private static List<Long> getActivitiesForFiltering(JsonBean config)
+	private static Set<Long> getActivitiesForFiltering(JsonBean config, String adminLevel)
 			throws AmpApiException {
-		List<Long> activitiesId = new ArrayList<Long>();
-		boolean doTotals = true;
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("ActivityIds", ArConstants.DONOR_TYPE);
+		Set<Long> activitiesId = new HashSet<Long>();
+		 
+		MondrianReportGenerator generator = new MondrianReportGenerator(
+				ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils
+						.getRequest()), true);
+		GeneratedReport report = null;
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("ActivityIdsForCluster", ArConstants.DONOR_TYPE);
 
 		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_ID));
 		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
-		spec.setCalculateColumnTotals(doTotals);
-		spec.setCalculateRowTotals(doTotals);
-		MondrianReportFilters filterRules = FilterUtils.getFilters(config);
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
+		ReportColumn implementationLevelColumn = null;
+		if (adminLevel != null) {
+			switch (adminLevel) {
+				case ColumnConstants.COUNTRY:
+					implementationLevelColumn = new ReportColumn(MoConstants.H_COUNTRIES);
+					break;
+				case ColumnConstants.REGION:
+					implementationLevelColumn = new ReportColumn(MoConstants.H_REGIONS);
+					break;
+				case ColumnConstants.ZONE:
+					implementationLevelColumn = new ReportColumn(MoConstants.H_ZONES);
+					break;
+				case ColumnConstants.DISTRICT:
+					implementationLevelColumn = new ReportColumn(MoConstants.H_DISTRICTS);
+					break;
+			}
+		}
 
+		if(implementationLevelColumn != null){
+			spec.addColumn(implementationLevelColumn);
+			Set<ReportColumn>implementationLevelHierarchy=new HashSet<ReportColumn>();
+			implementationLevelHierarchy.add(implementationLevelColumn);
+			spec.setHierarchies(implementationLevelHierarchy);
+		}
+
+		spec.setCalculateColumnTotals(true);
+		spec.setCalculateRowTotals(true);
+		spec.setDisplayEmptyFundingRows(true);
+		
+		MondrianReportFilters filterRules = FilterUtils.getFilters(config);
+		
+		SettingsUtils.applyExtendedSettings(spec, config);
 		if (filterRules != null) {
 			spec.setFilters(filterRules);
 		}
-		MondrianReportGenerator generator = new MondrianReportGenerator(
-				ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils
-						.getRequest()), false);
-		GeneratedReport report = null;
+
 		try {
 			report = generator.executeReport(spec);
 		} catch (AMPException e) {
@@ -751,32 +781,41 @@ public class LocationService {
 		ll = report.reportContents.getChildren();
 		if (ll != null) {
 			for (ReportArea reportArea : ll) {
-				Map<ReportOutputColumn, ReportCell> row = reportArea
-						.getContents();
-				Set<ReportOutputColumn> col = row.keySet();
-				for (ReportOutputColumn reportOutputColumn : col) {
-					if (reportOutputColumn.originalColumnName
-							.equals(ColumnConstants.ACTIVITY_ID)) {
-						activitiesId.add(new Long(
-								row.get(reportOutputColumn).value.toString()));
+				if (implementationLevelColumn != null) {
+					List<ReportArea> childrenHierarchy = reportArea.getChildren();
+
+					for (ReportArea reportAreachi : childrenHierarchy) {
+						Map<ReportOutputColumn, ReportCell> row = reportAreachi.getContents();
+						Set<ReportOutputColumn> col = row.keySet();
+						for (ReportOutputColumn reportOutputColumn : col) {
+							if (reportOutputColumn.originalColumnName.equals(ColumnConstants.ACTIVITY_ID)) {
+								activitiesId.add(new Long(row.get(reportOutputColumn).value.toString()));
+							}
+						}
+					}
+
+				} else {
+					// we don't have hierarchy
+					Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
+					Set<ReportOutputColumn> col = row.keySet();
+					for (ReportOutputColumn reportOutputColumn : col) {
+						if (reportOutputColumn.originalColumnName.equals(ColumnConstants.ACTIVITY_ID)) {
+							activitiesId.add(new Long(row.get(reportOutputColumn).value.toString()));
+						}
 					}
 				}
 			}
-
 		}
 		return activitiesId;
 	}
 	@SuppressWarnings("unchecked")
 	public static List<AmpStructure> getStructures(JsonBean config) throws AmpApiException{
 		List<AmpStructure> al = null;
-		List<Long> activitiesId=getActivitiesForFiltering( config);
+		Set<Long> activitiesId = getActivitiesForFiltering( config,null);
 		String queryString = "select s from " + AmpStructure.class.getName() + " s inner join s.activities a where"
 					+ " a.ampActivityId in (" + Util.toCSStringForIN(activitiesId) + " )";
-			Query q = PersistenceManager.getSession().createQuery(queryString);
-			
-			al = q.list();
-
-		
+		Query q = PersistenceManager.getSession().createQuery(queryString);
+		al = q.list();
 		return al;
 
 	}	

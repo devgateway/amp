@@ -18,6 +18,7 @@ var template = _.template(fs.readFileSync(
 var modalTemplate = _.template(fs.readFileSync(
   __dirname + '/../templates/modal.html', 'UTF-8'));
 
+var EnabledChartsCollection = require('../models/enabled-charts-collection');
 
 module.exports = BackboneDash.View.extend({
 
@@ -41,25 +42,39 @@ module.exports = BackboneDash.View.extend({
     this.app.settings.load();  // maybe should go in render or something
                                // but we already do other fetches on init so...
 
+    // AMP-19545: We instantiate the collection of enabled charts (from FM) and use it to enable or not each chart.
+    var enabledChartsFM = new EnabledChartsCollection();
+    enabledChartsFM.fetchData();
+    var col = [];
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Top Donors'})) {
+    	col.push(new TopsChart(
+  	          { name: 'Top Donor Agencies' },
+  	          { app: this.app, url: '/rest/dashboard/tops/do' }));
+    }
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Top Regions'})) {
+    	col.push(new TopsChart(
+  	          { name: 'Top Regions' },
+	          { app: this.app, url: '/rest/dashboard/tops/re' }));
+    }
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Top Sectors'})) {
+    	col.push(new TopsChart(
+  	          { name: 'Top Sectors' },
+	          { app: this.app, url: '/rest/dashboard/tops/ps' }));
+    }
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Aid Predictability'})) {
+    	col.push(new PredictabilityChart(
+  	          { name: 'Aid Predictability' },
+	          { app: this.app, url: '/rest/dashboard/aid-predictability' }));
+    }
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Funding Type'})) {
+    	col.push(new FundingTypeChart(
+  	          { name: 'Funding Type' },
+	          { app: this.app, url: '/rest/dashboard/ftype' }));
+    }
+       
     this.charts = new ChartsView({
       app: this.app,
-      collection: new Charts([
-        new TopsChart(
-          { name: 'Top Donor Agencies' },
-          { app: this.app, url: '/rest/dashboard/tops/do' }),
-        new TopsChart(
-          { name: 'Top Regions' },
-          { app: this.app, url: '/rest/dashboard/tops/re' }),
-        new TopsChart(
-          { name: 'Top Sectors' },
-          { app: this.app, url: '/rest/dashboard/tops/ps' }),
-        new PredictabilityChart(
-          { name: 'Aid Predictability' },
-          { app: this.app, url: '/rest/dashboard/aid-predictability' }),
-        new FundingTypeChart(
-          { name: 'Funding Type' },
-          { app: this.app, url: '/rest/dashboard/ftype' })
-      ], { app: this.app })
+      collection: new Charts(col, { app: this.app })
     });
 
     this.footer = new Footer({ app: this.app });

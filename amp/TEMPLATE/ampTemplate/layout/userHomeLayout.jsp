@@ -28,6 +28,9 @@
 		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 		<META HTTP-EQUIV="Expires" CONTENT="0">
 		<META HTTP-EQUIV="Cache-Control" CONTENT="private">
+		
+		<!-- FIX ANNOYING ISSUE WITH IE 8-9 -->
+		<script type="text/javascript"> if (!window.console) console = {log: function() {}, warn: function() {}, error: function() {}}; </script>
         
         <link type="text/css" href="css_2/tabs.css" rel="stylesheet" />
         

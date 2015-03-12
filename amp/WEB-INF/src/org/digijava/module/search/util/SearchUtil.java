@@ -119,7 +119,6 @@ public class SearchUtil {
 		ArrayList<AmpReports> resultList = new ArrayList<AmpReports>(col);
 		Collections.sort(resultList);
 		return resultList;
-
 	}
 
 	public static Collection<? extends LoggerIdentifiable> getTabs(TeamMember tm,
@@ -219,8 +218,7 @@ public class SearchUtil {
 //			StopWatch.next("Search", true,"mycomment 3");
 
 		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Exception reading pledges", e);
 		}
 
 		
@@ -342,29 +340,28 @@ public class SearchUtil {
 				
 				HashMap<String, CrDocumentNodeAttributes> pd = CrDocumentNodeAttributes.getPublicDocumentsMap(false);
 				Set<String> keySet = pd.keySet();
-				for (Iterator iterator = keySet.iterator(); iterator.hasNext();) {
-					String uuid = (String) iterator.next();
-					Node lastVersion = DocumentManagerUtil.getReadNode(uuid, request);
-					NodeWrapper nw = new NodeWrapper(lastVersion);
-					if (nw!=null&&keywordMatches(nw, keyword)) {
-						Resource resource = new Resource();
-						resource.setName(nw.getTitle());
-						resource.setUuid(nw.getUuid());
-						resource.setWebLink(nw.getWebLink());
-						if(!resultList.contains(resource)){
-							resultList.add(resource);
-						}
-					}					
-				}
+                for (String uuid : keySet) {
+                    Node lastVersion = DocumentManagerUtil.getReadNode(uuid, request);
+                    NodeWrapper nw = new NodeWrapper(lastVersion);
+                    if (keywordMatches(nw, keyword)) {
+                        Resource resource = new Resource();
+                        resource.setName(nw.getTitle());
+                        resource.setUuid(nw.getUuid());
+                        resource.setWebLink(nw.getWebLink());
+                        if (!resultList.contains(resource)) {
+                            resultList.add(resource);
+                        }
+                    }
+                }
 
 			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
+				logger.error("Exception reading resources", e);
+				return Collections.emptyList();
 			}
 
 		} catch (RepositoryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+            logger.error("Exception reading resources from JCR repository", e);
+            return Collections.emptyList();
 		}
 		DocumentManagerUtil.logoutJcrSessions(request);
 		return resultList;
@@ -417,9 +414,9 @@ public class SearchUtil {
         query.append( ")");
         String orgNameHql = AmpOrganisation.hqlStringForName("org");
         if(hasComputedOrgs){
-              query.append( " or org.ampOrgId in (");
-              query.append( Util.toCSStringForIN(teamAO));
-              query.append( ")");
+            query.append( " or org.ampOrgId in (");
+            query.append( Util.toCSStringForIN(teamAO));
+            query.append( ")");
         }
         query.append(")");
         query.append(" and roleCode.roleCode=:roleCode ");

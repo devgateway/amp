@@ -1601,13 +1601,6 @@ public class ExportActivityToWord extends Action {
 	//        FundingCalculationsHelper fch = new FundingCalculationsHelper();
 	//        fch.doCalculations(allComponents, currencyCode);
             ExportSectionHelper eshProjectCostTable = new ExportSectionHelper(null, false).setWidth(100f).setAlign("left");
-            
-            if (act.getFundingSourcesNumber() != null)
-            {
-            	eshProjectCostTable
-            		.addRowData(new ExportSectionHelperRowData(TranslatorWorker.translateText("Total Number of Funding Sources"), null, null,  true)
-            		.addRowData(String.valueOf(act.getFundingSourcesNumber())));
-            }
 
 //            double convertedAmount = act.getFunAmount()==null?0D:act.getFunAmount();
 

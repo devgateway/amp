@@ -19,8 +19,21 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_on_off_budget AS SELECT a.amp_activity_id, CASE WHEN (acv.id IS NULL) THEN 'Unallocated'::text ELSE (acv.category_value)::text END AS budget, acv.id AS budget_id FROM (((amp_activities_categoryvalues aac JOIN amp_category_value acv ON ((aac.amp_categoryvalue_id = acv.id))) JOIN amp_category_class acc ON (((acc.id = acv.amp_category_class_id) AND ((acc.keyname)::text = 'activity_budget'::text)))) RIGHT JOIN amp_activity a ON ((a.amp_activity_id = aac.amp_activity_id))) ORDER BY a.amp_activity_id;;;
-        		</lang>
+			    CREATE OR REPLACE VIEW v_on_off_budget AS 
+			    	SELECT 
+			    		a.amp_activity_id, 
+			    		CASE 
+			    			WHEN (acv.id IS NULL) THEN 'Unallocated'::text 
+			    			ELSE (acv.category_value)::text
+			    		END AS budget, 
+			    		acv.id AS budget_id 
+			    	FROM 
+			    		amp_activity_version a
+			    			JOIN amp_activities_categoryvalues aac ON aac.amp_activity_id = a.amp_activity_id
+			    			JOIN amp_category_value acv ON acv.id = aac.amp_categoryvalue_id
+			    			JOIN amp_category_class acc ON acc.id = acv.amp_category_class_id AND acc.keyname='activity_budget';
+			    			
+        	</lang>
 		</script>
 	</apply>
 </tns:patch>

@@ -9,7 +9,9 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
+import org.digijava.module.aim.action.ViewNewAdvancedReport;
 import org.digijava.module.aim.helper.Constants;
 
 /**
@@ -20,6 +22,8 @@ import org.digijava.module.aim.helper.Constants;
  *
  */
 public class SimpleSQLPatcher {
+	
+	private static Logger logger = Logger.getLogger(SimpleSQLPatch.class) ;
 	
 	public SortedSet<SimpleSQLPatch> patches = new TreeSet<SimpleSQLPatch>(){
 			void addPatch(SimpleSQLPatch p){
@@ -164,7 +168,7 @@ public class SimpleSQLPatcher {
 					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS author",
 					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS plan_min_rank",
 					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS chapter_code",
-					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS funding_sources_number",
+					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS funding_sources_number CASCADE",
 					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS activity_start_date",
 					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS activity_close_date",
 					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS amp_activity_previous_version_id",
@@ -172,18 +176,7 @@ public class SimpleSQLPatcher {
 					
 					"DROP INDEX IF EXISTS amp_activity_version_comments_idx",
 					"DROP INDEX IF EXISTS amp_activity_version_contracting_arrangements_idx",
-					
-					" CREATE OR REPLACE VIEW v_amp_activity_expanded AS " + 
-	 				" SELECT av.*, dg_editor.body as expanded_description "  +
-				    " FROM amp_activity_version av "  +
-				    " LEFT JOIN dg_editor on av.description=dg_editor.editor_key, "  + 
-					" amp_activity_group "  +
-				    " WHERE av.amp_activity_id = amp_activity_group.amp_activity_last_version_id AND (av.deleted IS NULL OR av.deleted = false)",
-				    
-					" CREATE OR REPLACE VIEW amp_activity AS select amp_activity_version.* FROM amp_activity_version,amp_activity_group "+
-                    " WHERE amp_activity_version.amp_activity_id = amp_activity_group.amp_activity_last_version_id  "+
-                    " AND (amp_activity_version.deleted IS NULL OR amp_activity_version.deleted = false)",
-					
+										
 					" UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart'",
 					
 					" DELETE FROM amp_report_column where columnid in  ( SELECT columnid FROM  amp_columns WHERE extractorview = 'v_convenio_numcont')",
@@ -305,14 +298,12 @@ public class SimpleSQLPatcher {
 					"DROP SEQUENCE IF EXISTS amp_map_state_seq"
 					));
 
-			// update new locations for old patches that were moved to a different place and looks like no longer are mentained, but polute the output
+			// update new locations for old patches that were moved to a different place and looks like no longer are maintained, but pollute the output
 			addPatch(new SimpleSQLPatch("010",
 					XMLPatchesWrongPaths.SQL_PATCH
 					));
-/* Commented temporarily until the Mondrian part is done AMP-19512
+
             addPatch(new SimpleSQLPatch("011",
-                    "DROP VIEW IF EXISTS amp_activity CASCADE ",
-                    "DROP VIEW IF EXISTS v_amp_activity_expanded ",
 
                     //Has Mondrian reference
                     // "DELETE FROM amp_columns_filters where bean_field_name = 'projectImplementingUnits'",
@@ -323,7 +314,7 @@ public class SimpleSQLPatcher {
                     "DELETE FROM amp_columns where columnname = 'Project is on parliament'",
                     "DELETE FROM amp_columns where columnname = 'Project has been approved by IMAC'",
                     // Has Mondrian reference
-                    // "DELETE FROM amp_columns where columnname = 'Project uses parallel project implementation unit'",
+                    "DELETE FROM amp_columns where columnname = 'Project uses parallel project implementation unit'",
                     "DELETE FROM amp_columns where columnname = 'Government is member of project steering committee'",
                     "DELETE FROM amp_columns where columnname = 'Project disburses directly into the Government single treasury account'",
                     "DELETE FROM amp_columns where columnname = 'Project uses national financial management systems'",
@@ -331,16 +322,17 @@ public class SimpleSQLPatcher {
                     "DELETE FROM amp_columns where columnname = 'Project uses national audit systems'",
 
                     // Has Mondrian reference
+                    "DROP VIEW IF EXISTS v_mondrian_activity_fixed_texts CASCADE", 
                     // "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS prj_implementation_unit",
-                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS imac_approved",
-                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_oversight",
-                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS on_budget",
-                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS on_parliament",
-                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS on_treasury",
-                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_financial_management",
-                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_procurement",
-                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_audit"
-            ));*/
+                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS imac_approved CASCADE",
+                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_oversight CASCADE",
+                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS on_budget CASCADE",
+                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS on_parliament CASCADE",
+                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS on_treasury CASCADE",
+                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_financial_management CASCADE",
+                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_procurement CASCADE",
+                    "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_audit CASCADE"
+            ));
 	}};
 	DataSource dataSource;
 	
@@ -349,6 +341,31 @@ public class SimpleSQLPatcher {
    		this.dataSource = (javax.sql.DataSource) initialContext.lookup(Constants.UNIFIED_JNDI_ALIAS);
    		if (dataSource == null)
    			throw new RuntimeException("could not find data source!");
+	}
+	
+	protected void createDummyViewIfMissingOrTable(Connection conn, String viewName, String query, boolean force) {
+		if (!SQLUtils.isView(conn, viewName)) {
+			logger.error(viewName + " is not a view");
+			SQLUtils.executeQuery(conn, "DROP TABLE IF EXISTS " + viewName + " CASCADE");
+		}
+		// past this point: it is either be a view or does not exist
+		SQLUtils.executeQuery(conn, "DROP VIEW IF EXISTS " + viewName + " CASCADE");
+		SQLUtils.executeQuery(conn, "CREATE OR REPLACE VIEW " + viewName + " AS " + query);
+
+	}
+	
+	protected void createTrickyViewsIfNeeded(Connection conn) throws Exception {
+		boolean recreatingViews = SQLUtils.getLong(conn, "select count(*) from amp_global_settings where settingsvalue = 'true' and settingsname='Recreate the views on the next server restart'") > 0;
+		boolean ampActivityIsNotView = !SQLUtils.isView(conn, "amp_activity");
+		boolean ampActivityExpandedIsNotView = !SQLUtils.isView(conn, "v_amp_activity_expanded");
+		logger.warn(String.format("asked to recreate views: %b, amp_activity is not view: %b, v_amp_activity_expanded is not view: %b", recreatingViews, ampActivityIsNotView, ampActivityExpandedIsNotView));
+		if (recreatingViews || ampActivityExpandedIsNotView || ampActivityIsNotView) {
+			logger.error("forcing recreating views!");
+			SQLUtils.executeQuery(conn, "UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart'");
+			SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('full_etl_request', 999)");
+			createDummyViewIfMissingOrTable(conn, "amp_activity", "SELECT aav.* from amp_activity_version aav JOIN amp_activity_group aag ON aav.amp_activity_id = aag.amp_activity_last_version_id AND (aav.deleted IS NULL or aav.deleted = false)", recreatingViews);
+			createDummyViewIfMissingOrTable(conn, "v_amp_activity_expanded", "SELECT av.*, dg_editor.body AS expanded_description FROM amp_activity av LEFT JOIN dg_editor ON av.description = dg_editor.editor_key", recreatingViews);			
+		}
 	}
 	
 	/**
@@ -362,6 +379,7 @@ public class SimpleSQLPatcher {
    			
    			conn.setAutoCommit(true);
    			SQLUtils.executeQuery(conn, "UPDATE amp_xml_patch SET state = 0 WHERE state != 0 AND state != 4 AND location = 'xmlpatches/general/views/'");
+   			createTrickyViewsIfNeeded(conn);
    			SQLUtils.executeQuery(conn, 
    					"CREATE TABLE IF NOT EXISTS amp_simple_sql_patches(id varchar(255), hash text, date_applied bigint)");
    			for(SimpleSQLPatch patch:patches){
@@ -374,6 +392,7 @@ public class SimpleSQLPatcher {
    			}
    			
    			runDrcCleanup(conn);
+   			createTrickyViewsIfNeeded(conn);
    			conn.setAutoCommit(false);
    			
    			conn.setAutoCommit(autoCommit);

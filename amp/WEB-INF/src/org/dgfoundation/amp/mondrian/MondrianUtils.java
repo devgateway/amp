@@ -44,7 +44,7 @@ public class MondrianUtils {
 			long divider = table.isFiltering ? nrLangs : 1;
 			
 			if (nrRows - table.supplementalRows != corNrRows * divider)
-				throw new RuntimeException("the view corresponding to the Mondrian ETL table " + table.tableName + " has " + nrRows + " instead of " + corNrRows * divider);
+				throw new RuntimeException("the view corresponding to the Mondrian ETL table " + table.tableName + " has " + nrRows + " rows instead of " + corNrRows * divider);
 
 			Set<String> viewColumns = SQLUtils.getTableColumns("v_" + table.tableName);			
 			if (!viewColumns.iterator().next().equals("amp_activity_id"))

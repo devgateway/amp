@@ -98,6 +98,10 @@ public class SQLUtils {
 		return getTablesWithNameMatching(conn, "select table_name from information_schema.tables WHERE table_schema='public'", begin);
 	}
 
+	public static boolean isView(Connection conn, String viewName) {
+		return getLong(conn, "select count(*) from information_schema.tables WHERE table_schema='public' AND lower(table_type)='view' and table_name='" + viewName + "'") >= 0;
+	}
+	
 	/**
 	 * returns the rowcount in a table
 	 * @param conn

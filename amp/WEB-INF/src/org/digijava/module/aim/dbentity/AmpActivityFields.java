@@ -372,9 +372,6 @@ LoggerIdentifiable, Cloneable {
 	protected Boolean mergedActivity;
 	protected AmpActivityVersion mergeSource1;
 	protected AmpActivityVersion mergeSource2;
-
-    @VersionableFieldSimple(fieldTitle = CategoryConstants.FUNDING_SOURCES_NUMBER_NAME)
-    protected Integer fundingSourcesNumber;
     
     @VersionableFieldSimple(fieldTitle = "Proposed Project Life")
     protected Integer proposedProjectLife;
@@ -1718,14 +1715,6 @@ LoggerIdentifiable, Cloneable {
 
     public void setActivityType(Long activityType) {
         this.activityType = activityType;
-    }
-
-    public Integer getFundingSourcesNumber() {
-        return fundingSourcesNumber;
-    }
-
-    public void setFundingSourcesNumber(Integer fundingSourcesNumber) {
-        this.fundingSourcesNumber = fundingSourcesNumber;
     }
 
     @Override

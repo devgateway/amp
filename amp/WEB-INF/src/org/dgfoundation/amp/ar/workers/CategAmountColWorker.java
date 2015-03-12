@@ -361,7 +361,7 @@ public class CategAmountColWorker extends MetaCellColumnWorker {
 					String check = worker.getFiscalYear();
 //					fiscalYear = new GregorianBasedWorker(td).getFiscalYear(); 
 //					String check = DateConversion.convertDateToFiscalYearString(td);
-					System.err.format("FY vs Check: %s vs %s\n", fiscalYear, check);
+					//System.err.format("FY vs Check: %s vs %s\n", fiscalYear, check);
 							//DateConversion.convertDateToFiscalYearString(td); // AMP-19405 - emulate AF bug in AP and reports
 				}
 				

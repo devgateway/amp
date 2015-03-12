@@ -52,7 +52,7 @@ public class AllTests {
 		try
 		{ 
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
-			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_26_amp210";
+			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_26_amp211";
     	
 			ResourceStreamHandlerFactory.installIfNeeded();
 

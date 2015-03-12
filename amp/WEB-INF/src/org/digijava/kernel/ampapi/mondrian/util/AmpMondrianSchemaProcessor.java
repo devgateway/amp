@@ -91,7 +91,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		contents = contents.replaceAll("@@currency@@", Long.toString(getReportCurrency().getAmpCurrencyId()));
 		contents = contents.replaceAll("@@calendar@@", getReportCalendarTag());
 		
-		// area for (pledges + activities) reports hacks. Holding my node while writing this - let whatever genius wanted Mondrian as a report engine maintain this PoS :D
+		// area for (pledges + activities) reports hacks. Holding my nose while writing this - let whatever genius wanted Mondrian as a report engine maintain this PoS :D
 		boolean isDonorReportWithPledges = (currentReport.get().getReportType() != ArConstants.PLEDGES_TYPE && currentReport.get().isAlsoShowPledges());
 		String nonAcPledgeExcluderString = isDonorReportWithPledges ? "(mondrian_fact_table.entity_id &lt; 800000000) AND " : ""; // annulate non-Actual-Commitments trivial measures IFF running an "also show pledges" report
 		String actualCommitmentsDefinition = "__" + (isDonorReportWithPledges ? "Actual Commitments United" : "Actual Commitments Usual") + "__";
@@ -117,6 +117,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		
 		long delta = System.currentTimeMillis() - schemaProcessingStart;
 		logger.info("schema processing took " + delta + " ms");
+		//System.err.println("schema hashcode is: " + contents.hashCode());
 		return contents;
 	}
 	

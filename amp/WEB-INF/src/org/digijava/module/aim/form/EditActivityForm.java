@@ -1355,11 +1355,7 @@ public class EditActivityForm extends ActionForm implements Serializable {
 		public void setSsc_modalities(String[] ssc_modalities) {
 			this.ssc_modalities = ssc_modalities;
 		}
-		
-		@java.lang.SuppressWarnings("all")
-		public void setFundingSourcesNumber(final Integer fundingSourcesNumber) {
-			this.fundingSourcesNumber = fundingSourcesNumber;
-		}
+	
 		
 		@java.lang.SuppressWarnings("all")
 		public void setFY(final String FY) {

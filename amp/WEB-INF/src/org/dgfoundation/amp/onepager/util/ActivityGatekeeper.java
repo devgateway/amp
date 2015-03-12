@@ -8,8 +8,12 @@ import org.apache.wicket.util.time.Duration;
 import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.util.ShaCrypt;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ActivityVersionUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 public class ActivityGatekeeper {
@@ -136,19 +140,11 @@ public class ActivityGatekeeper {
 			
 			long ampActivityId = Long.parseLong(activityId);
 			
-			if (!WorkspaceFilter.isActivityWithinWorkspace(ampActivityId))
+			if (!WorkspaceFilter.isActivityWithinWorkspace(ampActivityId,teamMember))
 				return false;
 						
 			return true;
-//			org.digijava.module.aim.dbentity.AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
-//			if (team == null)
-//				return false;
-//			
-//			Boolean addActivity = team.getAddActivity();
-//			if (addActivity == null)
-//				return false;
-//			
-//			return addActivity;
+
 		}
 		catch(NumberFormatException ex)
 		{

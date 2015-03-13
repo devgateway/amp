@@ -16,11 +16,6 @@ public class TextCell extends ReportCell {
 		super(value, null);
 	}
 	
-	public TextCell(Comparable<?> value, SimpleDateFormat formatter) {
-		super(value, formatter);
-	}
-	
-	
 	//TODO: we need to decide how to compare Unicode strings
 	@Override public int compareTo(ReportCell oth) {
 		return Normalizer.normalize(this.displayedValue, Form.NFD)

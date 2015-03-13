@@ -3426,7 +3426,7 @@ public class AmpARFilter extends PropertyListable {
 		SimpleDateFormat sdfInput = new SimpleDateFormat(formatIn);
 		SimpleDateFormat sdfOutput = new SimpleDateFormat(formatOut);
 
-		String out = null;
+		String out = input;
 		try {
 			
 			Date parsedDate = sdfInput.parse(input);

@@ -721,19 +721,19 @@ public class ReportsFilterPicker extends Action {
 		StopWatch.next("Filters", true, "Donor stuff");
 		//------------------begin here-------------------------------------------------
  	 	// 	private void addAgencyFilter(ReportsFilterPickerForm filterForm, String featureName, String roleCode, String rootElementName, String filderDivId, String selectId, ServletContext ampContext)
- 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Executing Agency")){
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Executing Agency")){
  	 		addAgencyFilter(filterForm, "Executing", Constants.ROLE_CODE_EXECUTING_AGENCY, false);
  	 	}
- 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Contracting Agency")){
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Contracting Agency")){
  	 		addAgencyFilter(filterForm, "Contracting", Constants.ROLE_CODE_CONTRACTING_AGENCY, true);
  	 	}
- 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Implementing Agency")){
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Implementing Agency")){
  	 		addAgencyFilter(filterForm, "Implementing", Constants.ROLE_CODE_IMPLEMENTING_AGENCY, false);
  	 	}
- 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Responsible Organization")){
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Responsible Organization")){
 			addAgencyFilter(filterForm, "Responsible Organization", Constants.ROLE_CODE_RESPONSIBLE_ORG, "Responsible Agencies", "filter_responsible_agencies_div", "selectedresponsibleorg", false);
  	 	}
- 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Related Organizations/Beneficiary Agency")){
+ 	 	if(FeaturesUtil.isVisibleModule("/Activity Form/Organizations/Beneficiary Agency")){
 			addAgencyFilter(filterForm, "Beneficiary", Constants.ROLE_CODE_BENEFICIARY_AGENCY, false);
  	 	}
 
@@ -760,7 +760,9 @@ public class ReportsFilterPicker extends Action {
 		
 		//private void addFinancingLocationElement(ReportsFilterPickerForm filterForm, String fieldName, String rootLabel, String financingModeKey, String elementName, String filterId, String selectId, HttpServletRequest request, ServletContext ampContext) throws Exception
 		addFinancingLocationElement(filterForm, null, "All Financing Instrument Values", CategoryConstants.FINANCING_INSTRUMENT_KEY, "Financing Instrument", "filter_financing_instr_div", "selectedFinancingInstruments");
-		addFinancingLocationElement(filterForm, null, "All Aid Modality Values", CategoryConstants.AID_MODALITY_KEY, "Aid Modality", "filter_aid_modality_div", "selectedAidModalities");
+		
+		if (filterForm.getPledged() != null && filterForm.getPledged() && FeaturesUtil.isVisibleField("Pledge Funding - Aid Modality"))
+			addFinancingLocationElement(filterForm, null, "All Aid Modality Values", CategoryConstants.AID_MODALITY_KEY, "Aid Modality", "filter_aid_modality_div", "selectedAidModalities");
 		
 		addFinancingLocationElement(filterForm, null, "All Type of Assistance Values", CategoryConstants.TYPE_OF_ASSISTENCE_KEY, "Type of Assistance", "filter_type_of_assistance_div", "selectedTypeOfAssistance");
 		if (FeaturesUtil.isVisibleField("Mode of Payment") && isFalse(filterForm.getPledged())) {

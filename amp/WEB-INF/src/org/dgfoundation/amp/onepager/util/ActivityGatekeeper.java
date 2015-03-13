@@ -140,7 +140,7 @@ public class ActivityGatekeeper {
 			
 			long ampActivityId = Long.parseLong(activityId);
 			
-			if (!WorkspaceFilter.isActivityWithinWorkspace(ampActivityId,teamMember))
+			if (!WorkspaceFilter.isActivityWithinWorkspace(ampActivityId))
 				return false;
 						
 			return true;

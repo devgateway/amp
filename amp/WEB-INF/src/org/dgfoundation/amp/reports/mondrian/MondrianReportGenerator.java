@@ -137,15 +137,25 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * @param report, with formatted dates
 	 */
 	private void formatSaikuDates(SaikuGeneratedReport report) {
-		CellDataSet cellDataSet = report.cellDataSet;
-		AbstractBaseCell[][] result = cellDataSet.getCellSetBody();
-		for (int i = 0; i < result.length; i++) {
-			for (int j = 0; j < result[i].length; j++) {
-				AbstractBaseCell cell = result[i][j];
-				if (MondrianReportUtils.isDateColumn(report.leafHeaders.get(j).originalColumnName)) {
+		ArrayList<Integer> dateColumnsIndexes = new ArrayList<Integer>();
+		for (int index = 0; index < report.leafHeaders.size(); index++) {
+			ReportOutputColumn column = report.leafHeaders.get(index);
+			if (MondrianReportUtils.isDateColumn(column.originalColumnName)) {
+				dateColumnsIndexes.add(index);
+			}
+
+		}
+		if (dateColumnsIndexes.size() > 0) {
+			CellDataSet cellDataSet = report.cellDataSet;
+			AbstractBaseCell[][] result = cellDataSet.getCellSetBody();
+			for (int i = 0; i < result.length; i++) {
+				for (Integer cellIndex : dateColumnsIndexes) {
+					AbstractBaseCell cell = result[i][cellIndex];
 					cell.setFormattedValue(MondrianReportUtils.getDisplayableDate(cell.getFormattedValue()));
+
 				}
 			}
+
 		}
 
 	}
@@ -554,7 +564,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 				
 		logger.info("[" + spec.getReportName() + "]" +  "Starting conversion from Olap4J CellSet to Saiku CellDataSet via Saiku method...");
-		CellDataSet cellDataSet = OlapResultSetUtil.cellSet2Matrix(cellSet); // we can also pass a formater to cellSet2Matrix(cellSet, formatter)
+		CellDataSet cellDataSet = OlapResultSetUtil.cellSet2Matrix(cellSet); // we can also pass a formatter to cellSet2Matrix(cellSet, formatter)
 		logger.info("[" + spec.getReportName() + "]" +  "Conversion from Olap4J CellSet to Saiku CellDataSet ended.");
 
 		// AMP-18748

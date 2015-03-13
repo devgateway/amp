@@ -46,7 +46,7 @@ public class DateColumnsMondrianReportTests extends MondrianReportsTestCase {
 		ReportAreaForTests correctResult = new ReportAreaForTests()
 	    .withContents("Project Title", "Report Totals", "Proposed Start Date", "", "Actual Start Date", "", "Actual Disbursements", "995 000", "Actual Commitments", "7 070 000")
 	    .withChildren(
-	      new ReportAreaForTests().withContents("Project Title", "Project with documents", "Proposed Start Date", "2014-10-07", "Actual Start Date", "2014-10-08", "Actual Disbursements", "0", "Actual Commitments", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "Project with documents", "Proposed Start Date", "07/10/2014", "Actual Start Date", "08/10/2014", "Actual Disbursements", "0", "Actual Commitments", "0"),
 	      new ReportAreaForTests().withContents("Project Title", "Eth Water", "Proposed Start Date", "", "Actual Start Date", "", "Actual Disbursements", "545 000", "Actual Commitments", "0"),
 	      new ReportAreaForTests().withContents("Project Title", "pledged 2", "Proposed Start Date", "", "Actual Start Date", "", "Actual Disbursements", "450 000", "Actual Commitments", "7 070 000"));
 		
@@ -97,7 +97,7 @@ public class DateColumnsMondrianReportTests extends MondrianReportsTestCase {
 	    .withContents("Project Title", "Report Totals", "Activity Created On", "", "Actual Start Date", "", "Actual Commitments", "213 231", "Actual Disbursements", "123 321")
 	    .withChildren(
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "TAC_activity_1", "Activity Created On", "2013-08-23", "Actual Start Date", "", "Actual Commitments", "213 231", "Actual Disbursements", "123 321"));
+	          .withContents("Project Title", "TAC_activity_1", "Activity Created On", "23/08/2013", "Actual Start Date", "", "Actual Commitments", "213 231", "Actual Disbursements", "123 321"));
 		
 		spec.setDisplayEmptyFundingRows(true);
 		
@@ -110,9 +110,9 @@ public class DateColumnsMondrianReportTests extends MondrianReportsTestCase {
 		correctResult = new ReportAreaForTests()
 	    .withContents("Project Title", "Report Totals", "Activity Created On", "", "Actual Start Date", "", "Actual Commitments", "96 840,58", "Actual Disbursements", "595 000")
 	    .withChildren(
-	      new ReportAreaForTests().withContents("Project Title", "Project with documents", "Activity Created On", "2013-11-18", "Actual Start Date", "2014-10-08", "Actual Commitments", "0", "Actual Disbursements", "0"),
-	      new ReportAreaForTests().withContents("Project Title", "Eth Water", "Activity Created On", "2013-08-01", "Actual Start Date", "", "Actual Commitments", "0", "Actual Disbursements", "545 000"),
-	      new ReportAreaForTests().withContents("Project Title", "activity with contracting agency", "Activity Created On", "2014-11-26", "Actual Start Date", "", "Actual Commitments", "96 840,58", "Actual Disbursements", "50 000"));
+	      new ReportAreaForTests().withContents("Project Title", "Project with documents", "Activity Created On", "18/11/2013", "Actual Start Date", "08/10/2014", "Actual Commitments", "0", "Actual Disbursements", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "Eth Water", "Activity Created On", "01/08/2013", "Actual Start Date", "", "Actual Commitments", "0", "Actual Disbursements", "545 000"),
+	      new ReportAreaForTests().withContents("Project Title", "activity with contracting agency", "Activity Created On", "26/11/2014", "Actual Start Date", "", "Actual Commitments", "96 840,58", "Actual Disbursements", "50 000"));
 		runMondrianTestCase(spec, "en", acts, correctResult);
 	}
 	
@@ -135,8 +135,8 @@ public class DateColumnsMondrianReportTests extends MondrianReportsTestCase {
 		ReportAreaForTests correctResult = new ReportAreaForTests()
 	    .withContents("Project Title", "Report Totals", "Activity Created On", "", "Actual Start Date", "", "Actual Commitments", "96 840,58", "Actual Disbursements", "595 000")
 	    .withChildren(
-	      new ReportAreaForTests().withContents("Project Title", "Eth Water", "Activity Created On", "2013-08-01", "Actual Start Date", "", "Actual Commitments", "0", "Actual Disbursements", "545 000"),
-	      new ReportAreaForTests().withContents("Project Title", "activity with contracting agency", "Activity Created On", "2014-11-26", "Actual Start Date", "", "Actual Commitments", "96 840,58", "Actual Disbursements", "50 000"));		
+	      new ReportAreaForTests().withContents("Project Title", "Eth Water", "Activity Created On", "01/08/2013", "Actual Start Date", "", "Actual Commitments", "0", "Actual Disbursements", "545 000"),
+	      new ReportAreaForTests().withContents("Project Title", "activity with contracting agency", "Activity Created On", "26/11/2014", "Actual Start Date", "", "Actual Commitments", "96 840,58", "Actual Disbursements", "50 000"));		
 		spec.setDisplayEmptyFundingRows(true);
 		
 		runMondrianTestCase(spec, "en", acts, correctResult);

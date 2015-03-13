@@ -21,6 +21,7 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.AmountCell;
+import org.dgfoundation.amp.newreports.DateCell;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
@@ -165,7 +166,7 @@ public class CellDataSetToGeneratedReport {
 			//textual columns
 			if (colId < spec.getColumns().size()) { 
 				if (DateColumns.ACTIVITY_DATES.contains(leafHeaders.get(colId).originalColumnName)) {
-					cellData = new TextCell (value == null ? "" : value,new SimpleDateFormat (MoConstants.DATE_DISPLAY_FORMAT));
+					cellData = new DateCell (value == null ? "" : value,new SimpleDateFormat (MoConstants.DATE_DISPLAY_FORMAT));
 				}
 				else {
 					cellData = new TextCell(value == null ? "" : value);

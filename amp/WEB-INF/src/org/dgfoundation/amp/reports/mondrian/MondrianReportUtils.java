@@ -35,7 +35,9 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.helper.FormatHelper;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * Reports utility methods
@@ -234,5 +236,15 @@ public class MondrianReportUtils {
 				break;
 		}
 		return new FilterRule(new ArrayList<>(locationIds), in.valuesInclusive);
+	}
+	
+	public static boolean isDateColumn (String columnName) {
+		return DateColumns.ACTIVITY_DATES.contains(columnName);
+	}
+	public static String getDisplayableDate(String input) {
+		if (input == null || input.trim().equals("")) {
+			return "";
+		}
+		return AmpARFilter.getReformattedDate(input, "yyyy-MM-dd", MoConstants.DATE_DISPLAY_FORMAT);
 	}
 }

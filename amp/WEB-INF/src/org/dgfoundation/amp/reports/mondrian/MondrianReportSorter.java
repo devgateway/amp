@@ -4,6 +4,7 @@
 package org.dgfoundation.amp.reports.mondrian;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -208,7 +209,11 @@ public class MondrianReportSorter {
 		prevFirstChild = findFirstLeafArea(cellsToSort[0].area);
 		
 		//sorts ascending
-		Arrays.sort(cellsToSort);
+		Arrays.sort(cellsToSort, new Comparator<ReportCell>() {
+			public int compare(ReportCell o1, ReportCell o2) {
+				return o1.value.compareTo(o2.value);
+			}
+		});
 				
 		//update first child prefix
 		ReportArea currFirstChld = findFirstLeafArea(cellsToSort[first].area);

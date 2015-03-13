@@ -35,8 +35,6 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.dgfoundation.amp.PropertyListable;
 import org.dgfoundation.amp.Util;
-import org.dgfoundation.amp.newreports.IdsGeneratorSource;
-import org.dgfoundation.amp.reports.mondrian.ActivityFilter;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.reports.IgnorePersistence;
@@ -59,7 +57,6 @@ import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.logic.AmpARFilterHelper;
 import org.digijava.module.aim.logic.Logic;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
@@ -3421,4 +3418,23 @@ public class AmpARFilter extends PropertyListable {
 		ret.append(" )");
 		return ret.toString();
 	}	
+	
+	 /**
+	 *Reformats a date string from the the formatIn specified to the formatOut desired. 
+	 */
+	 public static String getReformattedDate(String input, String formatIn, String formatOut) {
+		SimpleDateFormat sdfInput = new SimpleDateFormat(formatIn);
+		SimpleDateFormat sdfOutput = new SimpleDateFormat(formatOut);
+
+		String out = null;
+		try {
+			
+			Date parsedDate = sdfInput.parse(input);
+			out = sdfOutput.format(parsedDate); 
+		}
+		catch(ParseException e) {
+			logger.error("invalid date trickled into AmpARFilter::changeFormat!", e); 
+		}
+		return out;
+	}
 }

@@ -261,7 +261,7 @@ public class PublicPortalService {
 				JsonBean jsonData = new JsonBean();
 				for (Entry<ReportOutputColumn, ReportCell> cell : data.getContents().entrySet()) {
 					if (columnsToIgnore == null || !columnsToIgnore.contains(cell.getKey().columnName)) {
-						jsonData.set(headersToId.get(cell.getKey().columnName), cell.getValue().value);
+						jsonData.set(headersToId.get(cell.getKey().columnName), cell.getValue().displayedValue);
 						if (calculateSubTotal) {
 							if (cell.getKey().columnName.equals(measureName)) {
 								total += (Double) cell.getValue().value;

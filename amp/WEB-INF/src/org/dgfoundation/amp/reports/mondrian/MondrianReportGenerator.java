@@ -47,6 +47,7 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.reports.PartialReportArea;
+import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.queries.MDXGenerator;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
@@ -132,6 +133,23 @@ public class MondrianReportGenerator implements ReportExecutor {
 	}
 	
 	/**
+	 * Formats Saiku dates to follow AMP date format
+	 * @param report, with formatted dates
+	 */
+	private void formatSaikuDates(SaikuGeneratedReport report) {
+		CellDataSet cellDataSet = report.cellDataSet;
+		AbstractBaseCell[][] result = cellDataSet.getCellSetBody();
+		for (int i = 0; i < result.length; i++) {
+			for (int j = 0; j < result[i].length; j++) {
+				AbstractBaseCell cell = result[i][j];
+				if (MondrianReportUtils.isDateColumn(report.leafHeaders.get(j).originalColumnName)) {
+					cell.setFormattedValue(MondrianReportUtils.getDisplayableDate(cell.getFormattedValue()));
+				}
+			}
+		}
+
+	}
+	/**
 	 * 1. checks that every column specified in "hierarchies" is also present in "columns"
 	 * 2. brings the columns specified as hierarchies to front
 	 * 
@@ -184,6 +202,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 						spec, report.generationTime, report.requestingUser,
 						(SaikuReportArea)report.reportContents, cellDataSet, report.rootHeaders, report.leafHeaders, environment);
 				SaikuReportSorter.sort(report, environment);
+				formatSaikuDates ((SaikuGeneratedReport)report);
 				if (printMode)
 					SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST_SORT");
 			} else 

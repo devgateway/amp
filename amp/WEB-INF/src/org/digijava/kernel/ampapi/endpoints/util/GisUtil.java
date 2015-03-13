@@ -13,6 +13,8 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class GisUtil {
 	public static final Logger logger = Logger.getLogger(GisUtil.class);
@@ -23,7 +25,8 @@ public class GisUtil {
 	 * @return
 	 */
 	public static String formatDate(Date d) {
-		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
+		String formatString = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+		DateFormat df = new SimpleDateFormat(formatString + "'T'HH:mm'Z'"); 
 		TimeZone tz = TimeZone.getTimeZone("UTC");
 
 		df.setTimeZone(tz);

@@ -26,7 +26,6 @@ import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
-import org.digijava.kernel.ampapi.endpoints.util.GisUtil;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
@@ -210,7 +209,7 @@ public class PublicPortalService {
 					ReportArea data = iter.next();
 					JsonBean jsonData = new JsonBean();
 					for (Entry<ReportOutputColumn, ReportCell> cell : data.getContents().entrySet()) {
-						jsonData.set(headersToId.get(cell.getKey().columnName), cell.getValue().value);
+						jsonData.set(headersToId.get(cell.getKey().columnName), cell.getValue().displayedValue);
 						if (calculateSubTotal) {
 							if (cell.getKey().columnName.equals(measureName)) {
 								total += (Double) cell.getValue().value;

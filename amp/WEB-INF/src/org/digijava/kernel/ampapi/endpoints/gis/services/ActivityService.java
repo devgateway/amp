@@ -32,7 +32,9 @@ import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
+import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
@@ -246,7 +248,7 @@ public class ActivityService {
 			for (ReportOutputColumn reportOutputColumn : col) {
 				if (!reportOutputColumn.originalColumnName.equals(MeasureConstants.ALWAYS_PRESENT)) {
 
-					activityObj.put(reportOutputColumn.originalColumnName, row.get(reportOutputColumn).value);
+					activityObj.put(reportOutputColumn.originalColumnName, row.get(reportOutputColumn).displayedValue);
 					String displayName = columnHeaders.get(reportOutputColumn.originalColumnName);
 					if (displayName == null) {
 						displayName = reportOutputColumn.originalColumnName;

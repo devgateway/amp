@@ -6,6 +6,7 @@ package org.digijava.kernel.ampapi.saiku.util;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -26,8 +27,10 @@ import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.TextCell;
+import org.dgfoundation.amp.reports.DateColumns;
 import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.service.olap.totals.TotalNode;
@@ -161,7 +164,12 @@ public class CellDataSetToGeneratedReport {
 			ReportCell cellData = null;
 			//textual columns
 			if (colId < spec.getColumns().size()) { 
-				cellData = new TextCell(value == null ? "" : value);
+				if (DateColumns.ACTIVITY_DATES.contains(leafHeaders.get(colId).originalColumnName)) {
+					cellData = new TextCell (value == null ? "" : value,new SimpleDateFormat (MoConstants.DATE_DISPLAY_FORMAT));
+				}
+				else {
+					cellData = new TextCell(value == null ? "" : value);
+				}
 				if (value == null)
 					notNullColId ++;
 			} else { //measure columns

@@ -137,15 +137,25 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * @param report, with formatted dates
 	 */
 	private void formatSaikuDates(SaikuGeneratedReport report) {
-		CellDataSet cellDataSet = report.cellDataSet;
-		AbstractBaseCell[][] result = cellDataSet.getCellSetBody();
-		for (int i = 0; i < result.length; i++) {
-			for (int j = 0; j < result[i].length; j++) {
-				AbstractBaseCell cell = result[i][j];
-				if (MondrianReportUtils.isDateColumn(report.leafHeaders.get(j).originalColumnName)) {
+		ArrayList<Integer> dateColumnsIndexes = new ArrayList<Integer>();
+		for (int index = 0; index < report.leafHeaders.size(); index++) {
+			ReportOutputColumn column = report.leafHeaders.get(index);
+			if (MondrianReportUtils.isDateColumn(column.originalColumnName)) {
+				dateColumnsIndexes.add(index);
+			}
+
+		}
+		if (dateColumnsIndexes.size() > 0) {
+			CellDataSet cellDataSet = report.cellDataSet;
+			AbstractBaseCell[][] result = cellDataSet.getCellSetBody();
+			for (int i = 0; i < result.length; i++) {
+				for (Integer cellIndex : dateColumnsIndexes) {
+					AbstractBaseCell cell = result[i][cellIndex];
 					cell.setFormattedValue(MondrianReportUtils.getDisplayableDate(cell.getFormattedValue()));
+
 				}
 			}
+
 		}
 
 	}

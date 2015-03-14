@@ -185,7 +185,7 @@ public class ReportPaginationUtils {
 	public static ReportArea getSinglePage(ReportArea area, Integer page, Integer pageSize) {
 		// no pagination
 		if (page == null || page < 1 || (pageSize != null && pageSize < 0)) {
-			logger.error("No pagination. Invalid pagination request: page = " + page 
+			logger.info("No pagination. Invalid pagination request: page = " + page 
 					+ ", pageSize = " + pageSize + ". Use page >= 1, pageSize >=0.");
 			return area;
 		} else if (pageSize == null) {

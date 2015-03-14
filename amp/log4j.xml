@@ -69,11 +69,11 @@
 	</category>
 
 	<category name="mondrian.sql">
-		<priority value="DEBUG"/>
+		<priority value="INFO"/>
 	</category>
 
 	<category name="mondrian.mdx">
-		<priority value="DEBUG"/>
+		<priority value="INFO"/>
 	</category>
 -->
    <!-- Limit JSF logging to DEBUG.  FINER and FINEST will not be logged -->

@@ -44,7 +44,7 @@ public class ComponentReportsTests extends MondrianReportsTestCase {
 				correctReportRu, "ru");
 	}
 	
-	@Test
+	//@Test
 	public void testHierComponentReport() {
 		ReportAreaForTests correctReportEn = new ReportAreaForTests()
 	    .withContents("Component Name", "Report Totals", "Project Title", "", "Component Type", "", "Component description", "", "2014-Actual Commitments", "2 150", "2014-Actual Disbursements", "850", "Total Measures-Actual Commitments", "2 150", "Total Measures-Actual Disbursements", "850")

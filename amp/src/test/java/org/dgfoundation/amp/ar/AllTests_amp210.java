@@ -5,6 +5,11 @@ import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.ConsoleAppender;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.PatternLayout;
 import org.dgfoundation.amp.ar.amp210.BasicMondrianReportTests;
 import org.dgfoundation.amp.ar.amp210.ComponentReportsTests;
 import org.dgfoundation.amp.ar.amp210.DateColumnsMondrianReportTests;
@@ -69,11 +74,19 @@ public class AllTests_amp210
 		junit.textui.TestRunner.run(suite());
 	}
 
+	
+	public static void configureLog4j() {
+		BasicConfigurator.configure();
+		LogManager.getRootLogger().setLevel(Level.ERROR);
+	}
+	
+	
 	public static void setUp() {
 		try {
+			configureLog4j();
 			HibernateClassLoader.HIBERNATE_CFG_XML = "/standAloneAmpHibernate.cfg.xml";
 			HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_tests_210_amp211";
-			MonetConnection.MONET_CFG_OVERRIDE_URL = "jdbc:monetdb://localhost/amp_tests_210";
+			MonetConnection.MONET_CFG_OVERRIDE_URL = "jdbc:monetdb://localhost/amp_tests_210_amp211";
 			
 			org.digijava.kernel.ampapi.mondrian.util.Connection.IS_TESTING = true;
 			//HibernateClassLoader.HIBERNATE_CFG_OVERRIDE_DATABASE = "jdbc:postgresql://localhost/amp_moldova_27";

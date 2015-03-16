@@ -122,7 +122,9 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 		rowsetHeader = table.getCellSetHeaders();
 		rowsetBody = table.getCellSetBody();
 
-		grandTotals = table.getColTotalsLists()[0].get(0);
+		if(table.getColTotalsLists() != null) {
+			grandTotals = table.getColTotalsLists()[0].get(0);
+		}
 		columnTotals = table.getRowTotalsLists()[0].get(0);
 
 		topLeftCornerWidth = findTopLeftCornerWidth();
@@ -649,35 +651,37 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 		int headerRowsOffset = 2;
 		Row titleRow = workbookSheet.getRow(1);
 		// Add missing grand total columns.
-		for (int i = 0; i < grandTotals.getMemberCaptions().length; i++) {
-			String columnHeader = TranslatorWorker.translateText(grandTotals.getMemberCaptions()[i] + " Grand Total");
-			fillHeaderCell(titleRow, columnHeader, lastCol + i);
-		}
-		// Calculate grand column totals for each column (not provided by saiku).
-		grandColumnsTotals = new Double[grandTotals.getMemberCaptions().length];
-
-		// Populate grand total columns.
-		for (int i = 0; i < grandTotals.getTotalGroups().length; i++) {
-			for (int j = headerRowsOffset; j < workbookSheet.getLastRowNum() + 1; j++) {
-				Row auxRow = workbookSheet.getRow(j);
-				auxRow.createCell(lastCol + i);
-
-				// Uncomment to manually create cell without any styling.
-				// auxRow.getCell(lastCol + i).setCellValue(grandTotals.getTotalGroups()[i][j -
-				// headerRowsOffset].getFormattedValue());*/
-
-				fillTotalCell(auxRow, grandTotals.getTotalGroups()[i][j - headerRowsOffset].getValue(), lastCol + i);
-				// Sum partial values for later.
-				if (grandColumnsTotals[i] == null) {
-					grandColumnsTotals[i] = new Double(0);
-				}
-				grandColumnsTotals[i] += grandTotals.getTotalGroups()[i][j - headerRowsOffset].getValue();
+		if(grandTotals != null) {
+			for (int i = 0; i < grandTotals.getMemberCaptions().length; i++) {
+				String columnHeader = TranslatorWorker.translateText(grandTotals.getMemberCaptions()[i] + " Grand Total");
+				fillHeaderCell(titleRow, columnHeader, lastCol + i);
 			}
-		}
+			// Calculate grand column totals for each column (not provided by saiku).
+			grandColumnsTotals = new Double[grandTotals.getMemberCaptions().length];
+	
+			// Populate grand total columns.
+			for (int i = 0; i < grandTotals.getTotalGroups().length; i++) {
+				for (int j = headerRowsOffset; j < workbookSheet.getLastRowNum() + 1; j++) {
+					Row auxRow = workbookSheet.getRow(j);
+					auxRow.createCell(lastCol + i);
+	
+					// Uncomment to manually create cell without any styling.
+					// auxRow.getCell(lastCol + i).setCellValue(grandTotals.getTotalGroups()[i][j -
+					// headerRowsOffset].getFormattedValue());*/
+	
+					fillTotalCell(auxRow, grandTotals.getTotalGroups()[i][j - headerRowsOffset].getValue(), lastCol + i);
+					// Sum partial values for later.
+					if (grandColumnsTotals[i] == null) {
+						grandColumnsTotals[i] = new Double(0);
+					}
+					grandColumnsTotals[i] += grandTotals.getTotalGroups()[i][j - headerRowsOffset].getValue();
+				}
+			}		
 
-		// Recalculate columns correct size.
-		for (int i = 0; i < grandTotals.getMemberCaptions().length; i++) {
-			workbookSheet.autoSizeColumn(lastCol + i);
+			// Recalculate columns correct size.
+			for (int i = 0; i < grandTotals.getMemberCaptions().length; i++) {
+				workbookSheet.autoSizeColumn(lastCol + i);
+			}
 		}
 	}
 
@@ -700,9 +704,11 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 		}
 
 		// Write grand column totals.
-		Row absoluteTotalsRow = workbookSheet.getRow(workbookSheet.getLastRowNum());
-		for (int i = 0; i < grandColumnsTotals.length; i++) {
-			fillTotalCell(absoluteTotalsRow, grandColumnsTotals[i], nonMeasureColumns + measureColumns + i);
+		if(grandColumnsTotals != null) {
+			Row absoluteTotalsRow = workbookSheet.getRow(workbookSheet.getLastRowNum());
+			for (int i = 0; i < grandColumnsTotals.length; i++) {
+				fillTotalCell(absoluteTotalsRow, grandColumnsTotals[i], nonMeasureColumns + measureColumns + i);
+			}
 		}
 	}
 

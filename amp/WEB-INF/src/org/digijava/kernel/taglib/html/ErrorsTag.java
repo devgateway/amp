@@ -25,11 +25,11 @@ package org.digijava.kernel.taglib.html;
 import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.ResourceBundle;
-import javax.servlet.ServletContext;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 
+import clover.org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.Logger;
 import org.apache.struts.Globals;
 import org.apache.struts.action.ActionMessage;
@@ -38,10 +38,7 @@ import org.apache.struts.taglib.TagUtils;
 import org.apache.struts.tiles.ComponentContext;
 import org.digijava.kernel.Constants;
 import org.digijava.kernel.entity.Locale;
-import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.entity.ModuleInstance;
-import org.digijava.kernel.exception.DgException;
-import org.digijava.kernel.lucene.LuceneWorker;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.util.RequestUtils;
@@ -223,16 +220,17 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
 						body = body.trim();
 					}
 
-					String translatedBody = TranslatorWorker.translateText(body);
+					String translatedBody = StringEscapeUtils.escapeHtml(TranslatorWorker.translateText(body));
 					String errorMsg = eliminatedPrefix + translatedBody + eliminatedSuffix;
-                  newErrors.add((property==null)?Globals.MESSAGE_KEY:property, new ActionMessage(errorMsg,false));
-                }catch(Exception e){
+                    newErrors.add((property == null) ? Globals.MESSAGE_KEY : property, new ActionMessage(errorMsg, false));
+                } catch (Exception e) {
                 	logger.error(e);
                 }
             }
 
-            if( !newErrors.isEmpty() )
+            if (!newErrors.isEmpty()) {
                 request.setAttribute(Globals.ERROR_KEY, newErrors);
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Filters, jQuery) {
+define([ 'models/filter', 'collections/filters', 'business/translations/translationManager', 'jquery' ], function(Filter, Filters, TranslationManager, jQuery) {
 
 	"use strict";
 
@@ -11,14 +11,14 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 	FilterUtils.getDateIntervalType = function(element) {
 		var min = element.attributes.min;
 		var max = element.attributes.max;
-		if (min == undefined)
+		if (min === undefined)
 			return "max";
-		if (max == undefined)
+		if (max === undefined)
 			return "min";
-		if (element.get('valueToName').attributes[min] == undefined) {
+		if (element.get('valueToName').attributes[min] === undefined) {
 			return "max";
 		}
-		if (element.get('valueToName').attributes[max] == undefined) {
+		if (element.get('valueToName').attributes[max] === undefined) {
 			return "min";
 		}		
 		return "both";
@@ -33,7 +33,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 
 				var element = subElement.models[0];
 				var content = [];
-				if (subElement.name == 'DATE') {
+				if (subElement.name === 'DATE') {
 					var dateIntervalType = FilterUtils.getDateIntervalType(element, item, i);
 				}				
 				if (element.get('value') != null) {
@@ -58,7 +58,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 					});
 				}
 				var auxFilter = new Filter({
-					name : item,
+					name : TranslationManager.getTranslated(item),
 					values : content
 				});
 				filters.add(auxFilter);
@@ -91,7 +91,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 					});
 				}
 				var auxFilter = new Filter({
-					name : item,
+					name : TranslationManager.getTranslated(item),
 					values : content
 				});
 				filters.add(auxFilter);
@@ -118,7 +118,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 					content.push(auxItem);
 				});
 				var filter = new Filter({
-					name : propertyName,
+					name : TranslationManager.getTranslated(propertyName),
 					values : content
 				});
 				// Update list collection of Filter used in legends.
@@ -135,7 +135,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 						prefix = propertyName + " - ";
 					}
 					var filter = new Filter({
-						name : prefix + "Start Date",
+						name : TranslationManager.getTranslated(prefix + "Start Date"),
 						values : [ {
 							id : dateContent.start,
 							name : dateContent.start
@@ -143,7 +143,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 					});
 					app.TabsApp.filters.models.push(filter);
 					var filter = new Filter({
-						name : prefix + "End Date",
+						name : TranslationManager.getTranslated(prefix + "End Date"),
 						values : [ {
 							id : dateContent.end,
 							name : dateContent.end
@@ -172,7 +172,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 		  };	
 	  
   FilterUtils.pushDateLimit = function(_name, value){
-	if(app.TabsApp.filters.models[_name] == undefined) {
+	if(app.TabsApp.filters.models[_name] === undefined) {
 		var filter = new Filter({
 			name : _name,
 			values : [ {
@@ -189,8 +189,8 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
   };
 	  
 	FilterUtils.fillDateBlob = function(dateBlob, attributes){
-		if (attributes.values.length == 1) {
-			if (attributes.values[0].dateIntervalType == "min") {
+		if (attributes.values.length === 1) {
+			if (attributes.values[0].dateIntervalType === "min") {
 				dateBlob.start = FilterUtils._dateConvert(attributes.values[0].name);
 				FilterUtils.pushDateLimit("Start Date", FilterUtils._dateConvert(attributes.values[0].name));
 			} else {
@@ -198,7 +198,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 				FilterUtils.pushDateLimit("End Date", FilterUtils._dateConvert(attributes.values[0].name));				
 			}
 		}
-		else if (attributes.values.length == 2) {
+		else if (attributes.values.length === 2) {
 			dateBlob.start = FilterUtils._dateConvert(attributes.values[0].name);
 			FilterUtils.pushDateLimit("Start Date", FilterUtils._dateConvert(attributes.values[0].name));
 
@@ -214,7 +214,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 	FilterUtils.convertJavaFiltersToJS = function(data) {
 		// This conversion is needed only one time when we load default
 		// filters for a tab not after applying a new filter.
-		if (app.TabsApp.serializedFilters == null) {
+		if (app.TabsApp.serializedFilters === null) {
 			// Define some basic defaults needed in the widget filter.
 			var blob = {
 				otherFilters : {
@@ -314,9 +314,9 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 					//FilterUtils.fillDateBlob(blob.otherFilters.date, item.attributes);
 					var newDate = {};
 					_.map(item.get('values'), function(item_, i) {						
-						if(i == 0) {
+						if(i === 0) {
 							newDate['start'] = item_.name;
-						} else if(i == 1) {
+						} else if(i === 1) {
 							newDate['end'] = item_.name;
 						}
 						return newDate;
@@ -337,9 +337,9 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 				case 'Actual Completion Date':
 					var newDate = {};
 					_.map(item.get('values'), function(item_, i) {						
-						if(i == 0) {
+						if(i === 0) {
 							newDate['start'] = item_.name;
-						} else if(i == 1) {
+						} else if(i === 1) {
 							newDate['end'] = item_.name;
 						}
 						return newDate;
@@ -366,7 +366,7 @@ define([ 'models/filter', 'collections/filters', 'jquery' ], function(Filter, Fi
 		 * if (originalFilters != null && originalFilters.columnFilters != undefined) { if
 		 * (originalFilters.columnFilters["Primary Sector Id"] != undefined || originalFilters.columnFilters["Primary
 		 * Sector Sub-Sector Id"] != undefined || originalFilters.columnFilters["Primary Sector Sub-Sub-Sector Id"] !=
-		 * undefined) { if (originalFilters.columnFilters["Primary Sector Id"] == undefined) {
+		 * undefined) { if (originalFilters.columnFilters["Primary Sector Id"] === undefined) {
 		 * originalFilters.columnFilters["Primary Sector Id"] = []; } originalFilters.columnFilters["Primary Sector Id"] =
 		 * originalFilters.columnFilters["Primary Sector Id"] .concat(originalFilters.columnFilters["Primary Sector
 		 * Sub-Sector Id"]); originalFilters.columnFilters["Primary Sector Id"] = originalFilters.columnFilters["Primary

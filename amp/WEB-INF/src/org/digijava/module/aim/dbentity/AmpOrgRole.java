@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Set;
 
+import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.util.Output;
 
 
@@ -105,7 +106,7 @@ public class AmpOrgRole implements Comparable<AmpOrgRole>, Serializable, Version
 		out.setOutputs(new ArrayList<Output>());
 		out.getOutputs().add(
 				new Output(null, new String[] { "Organization" }, new Object[] { this.organisation.getName() }));
-		out.getOutputs().add(new Output(null, new String[] { "Role" }, new Object[] { this.role.getName() }));
+		out.getOutputs().add(new Output(null, new String[] { "Role" }, new Object[] { TranslatorWorker.translateText(this.role.getName()) }));
 		if (this.percentage != null) {
 			out.getOutputs().add(new Output(null, new String[] { "Percentage" }, new Object[] { this.percentage }));
 		}

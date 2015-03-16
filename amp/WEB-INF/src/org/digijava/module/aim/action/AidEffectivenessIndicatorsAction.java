@@ -38,18 +38,18 @@ public class AidEffectivenessIndicatorsAction extends Action {
         if (actionParam == null) {
             // the default one is "list"
             clearForm(indicatorForm);
-            executeSearch(mapping, request, indicatorForm);
+            executeSearch(request, indicatorForm);
             return mapping.findForward("list");
         }
 
         // String switches already work in java7
         switch(actionParam) {
             case "search" :
-                executeSearch(mapping, request, indicatorForm);
+                executeSearch(request, indicatorForm);
                 return mapping.findForward("search");
             case "list" :
                 clearForm(indicatorForm);
-                executeSearch(mapping, request, indicatorForm);
+                executeSearch(request, indicatorForm);
                 return mapping.findForward("list");
             case "edit" :
                 long indicatorId = 0;
@@ -95,18 +95,18 @@ public class AidEffectivenessIndicatorsAction extends Action {
                             AmpAidEffectivenessIndicatorOption option = AidEffectivenessIndicatorUtil.loadOptionById(optionId);
                             if (option == null) {
                                 handleLocalException(request, null, "error.admin.aidEffectivenessIndicator.options.option.notExist", optionIdParam);
-                                executeSearch(mapping, request, indicatorForm);
+                                executeSearch(request, indicatorForm);
                                 return mapping.findForward("error");
                             }
 
                             handleLocalException(request, null, "error.admin.aidEffectivenessIndicator.option.hasRelatedActivities",
                                     option.getAmpIndicatorOptionName());
-                            executeSearch(mapping, request, indicatorForm);
+                            executeSearch(request, indicatorForm);
                             return mapping.findForward("error");
                         }
                     } catch (RuntimeException rte) {
                         handleLocalException(request, rte, "error.admin.aidEffectivenessIndicator.options.option.notExist", optionIdParam);
-                        executeSearch(mapping, request, indicatorForm);
+                        executeSearch(request, indicatorForm);
                         return mapping.findForward("error");
                     }
                 } else {
@@ -140,7 +140,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 request.setAttribute("confirmationMessage", "saveSuccess");
                 clearForm(indicatorForm);
                 // display list of indicators after one has been deleted
-                executeSearch(mapping, request, indicatorForm);
+                executeSearch(request, indicatorForm);
 
                 return mapping.findForward("search");
             case "delete" :
@@ -150,7 +150,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
 
                 if (indicator == null) {
                     handleLocalException(request, null, "error.admin.aidEffectivenessIndicator.notExist", indicatorIdParam);
-                    executeSearch(mapping, request, indicatorForm);
+                    executeSearch(request, indicatorForm);
                     return mapping.findForward("search");
                 }
 
@@ -159,12 +159,12 @@ public class AidEffectivenessIndicatorsAction extends Action {
                 }  else {
                     handleLocalException(request, new RuntimeException(), "error.admin.aidEffectivenessIndicator.hasRelatedActivities",
                             indicator.getAmpIndicatorName());
-                    executeSearch(mapping, request, indicatorForm);
+                    executeSearch(request, indicatorForm);
                     return mapping.findForward("search");
                 }
 
                 // display list of indicators after one has been deleted
-                executeSearch(mapping, request, indicatorForm);
+                executeSearch(request, indicatorForm);
                 return mapping.findForward("search");
             default: //process "list"
                 return mapping.findForward("list");
@@ -172,10 +172,12 @@ public class AidEffectivenessIndicatorsAction extends Action {
         }
     }
 
-    private void executeSearch(ActionMapping mapping, HttpServletRequest request, AidEffectivenessIndicatorForm indicatorForm) {
+    private void executeSearch(HttpServletRequest request, AidEffectivenessIndicatorForm indicatorForm) {
+        String indicatorName = indicatorForm.getAmpIndicatorName() == null ? "" :
+                indicatorForm.getAmpIndicatorName().trim().toLowerCase();
         List<AmpAidEffectivenessIndicator> searchResult = AidEffectivenessIndicatorUtil.searchIndicators(
                 indicatorForm.getIndicatorType(),
-                indicatorForm.getAmpIndicatorName(),
+                indicatorName,
                 indicatorForm.getActive());
         request.setAttribute("searchResult", searchResult);
     }

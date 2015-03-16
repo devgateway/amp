@@ -33,7 +33,7 @@ public class AidEffectivenessIndicatorUtil {
 
         session = PersistenceManager.getSession();
         queryBuilder.append("select ind from ").append(AmpAidEffectivenessIndicator.class.getName()).append(" ind")
-                .append(" where ampIndicatorName like '%"+ keyword +"%'");
+                .append(" where LOWER (ampIndicatorName) like '%"+ keyword +"%'");
 
         // show active only, otherwise return all
         if (activeOnly) {
@@ -287,6 +287,33 @@ public class AidEffectivenessIndicatorUtil {
         }
 
         return null;
+    }
+
+    /**
+     * Sorts the HashSet of options assigned to the activity, replacing it with the sorted LinkedHashSet
+     * The options are sorted by the ids of the related indicators
+     * @param activity
+     */
+    public static void sortSelectedEffectivenessOptions(AmpActivityVersion activity) {
+        List<AmpAidEffectivenessIndicatorOption> options = new ArrayList<>();
+        if (activity.getSelectedEffectivenessIndicatorOptions() == null
+                || activity.getSelectedEffectivenessIndicatorOptions().size() == 0) {
+            return;
+        }
+        options.addAll(activity.getSelectedEffectivenessIndicatorOptions());
+        Collections.sort(options, new Comparator<AmpAidEffectivenessIndicatorOption>() {
+            @Override
+            public int compare(AmpAidEffectivenessIndicatorOption o1, AmpAidEffectivenessIndicatorOption o2) {
+                if (o1 == null || o2 == null || o1.getIndicator() == null || o2.getIndicator() == null) {
+                    return 0;
+                } else {
+                    return (int)(o1.getIndicator().getAmpIndicatorId() - o2.getIndicator().getAmpIndicatorId());
+                }
+            }
+        });
+        Set<AmpAidEffectivenessIndicatorOption> optionsSet = new LinkedHashSet<>();
+        optionsSet.addAll(options);
+        activity.setSelectedEffectivenessIndicatorOptions(optionsSet);
     }
 
 }

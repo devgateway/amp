@@ -778,6 +778,7 @@ public class EditActivity extends Action {
             }
 
           //aid Effectiveness Section
+          AidEffectivenessIndicatorUtil.sortSelectedEffectivenessOptions(activity);
           eaForm.setSelectedEffectivenessIndicatorOptions(activity.getSelectedEffectivenessIndicatorOptions());
           eaForm.setAllEffectivenessIndicators(AidEffectivenessIndicatorUtil.getAllActiveIndicators());
 

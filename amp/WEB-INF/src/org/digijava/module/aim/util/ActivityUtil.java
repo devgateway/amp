@@ -31,7 +31,6 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.User;
 import org.digijava.module.admin.helper.AmpActivityFake;
 import org.digijava.module.aim.dbentity.*;
@@ -44,7 +43,6 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FormatHelper;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
-import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -1750,6 +1748,7 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 		 java.util.List<String[]>aidEffectivenesForExport= new ArrayList<String[]>();
          if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes")
                  && activity.getSelectedEffectivenessIndicatorOptions() != null) {
+             AidEffectivenessIndicatorUtil.sortSelectedEffectivenessOptions(activity);
              for (AmpAidEffectivenessIndicatorOption option : activity.getSelectedEffectivenessIndicatorOptions()) {
                  String[] aidEffectivenesToAdd = new String[2];
                  aidEffectivenesToAdd[0] = option.getIndicator().getAmpIndicatorName();

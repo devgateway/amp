@@ -45,16 +45,11 @@ public class DateConversion
 	};
 
 	public static String convertDateToFiscalYearString(Date inputDate ) {
-		return MTEFYearsModel.convert(inputDate, AmpARFilter.getDefaultCalendar().getIsFiscal()).value;
-/*		try {
-			AmpFiscalCalendar calendar = AmpARFilter.getDefaultCalendar();
-			ICalendarWorker worker = calendar.getworker();
-			worker.setTime(inputDate);
-			return worker.getFiscalYear();
+		String textDate ="";
+		if (inputDate != null) {
+		textDate = MTEFYearsModel.convert(inputDate, AmpARFilter.getDefaultCalendar().getIsFiscal()).value;
 		}
-		catch(Exception e) {
-			throw new RuntimeException(e);
-		}*/
+		return textDate;
 	}
 	
 	
@@ -62,8 +57,6 @@ public class DateConversion
 	{
 		String textDate ="";
 		if (mysqlDate != null) {
-			//SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-			//SimpleDateFormat formatter = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
 			  textDate = DateTimeUtil.formatDate(mysqlDate);
 		}
 		return textDate;

@@ -24,7 +24,7 @@ public class AidEffectivenessIndicatorForm extends ActionForm {
     // deafult is true
     private boolean mandatory;
 
-    // 0 - selectbox list, 1 - dropdown list
+    // 0 - dropdown list, 1 - selectbox list
     private int indicatorType = -1;
 
     private List<AmpAidEffectivenessIndicatorOption> options = new ArrayList<AmpAidEffectivenessIndicatorOption>();

@@ -10,6 +10,8 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
+<%@ page import="org.digijava.module.aim.dbentity.AmpAidEffectivenessIndicator" %>
+
 <script type="text/javascript" src='<digi:file src="module/aim/scripts/table_utils.js"/>'>.</script>
 <script type="text/javascript">
     var optionsTableCounter = 0;
@@ -30,10 +32,10 @@
                     <html:option value="-1">
                         -<digi:trn key="aim:selectIndicatorType">Choose One</digi:trn>-
                     </html:option>
-                    <html:option value="0">
+                    <html:option value="<%=AmpAidEffectivenessIndicator.IndicatorType.DROPDOWN_LIST.ordinal()%>">
                         <digi:trn key="aim:dropDownList">Drop down list</digi:trn>
                     </html:option>
-                    <html:option value="1">
+                    <html:option value="<%=AmpAidEffectivenessIndicator.IndicatorType.SELECT_LIST.ordinal()%>">
                         <digi:trn key="aim:radioOption">Radio option</digi:trn>
                     </html:option>
                 </html:select>

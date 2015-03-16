@@ -18,13 +18,13 @@ public class AmpAidEffectivenessIndicator implements Serializable {
     // deafult is true
     private boolean mandatory;
 
-    // 0 - selectbox list, 1 - dropdown list
+    // 0 - dropdown list, 1 - selectbox list
     private int indicatorType;
 
     private List<AmpAidEffectivenessIndicatorOption> options;
 
     public static enum IndicatorType {
-        SELECT_LIST, DROPDOWN_LIST // 0 - selectbox list, 1 - dropdown list
+        DROPDOWN_LIST, SELECT_LIST  // 0 - dropdown list, 1 - selectbox list
     }
 
 

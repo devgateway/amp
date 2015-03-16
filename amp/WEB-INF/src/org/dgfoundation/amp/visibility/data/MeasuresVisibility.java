@@ -116,26 +116,16 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 	
 	@SuppressWarnings("serial")
 	protected static final Map<String, String> featuresToMeasuresMap = new HashMap<String, String>() {{
-		//Add measures listed under measures features in the feature manager
-		//I think this list should come from the measures table - Let's discuss about it
-			put(MeasureConstants.ACTUAL_COMMITMENTS, MeasureConstants.ACTUAL_COMMITMENTS);
-			put(MeasureConstants.ACTUAL_DISBURSEMENT_ORDERS, MeasureConstants.ACTUAL_DISBURSEMENT_ORDERS);
-			put(MeasureConstants.ACTUAL_DISBURSEMENTS, MeasureConstants.ACTUAL_DISBURSEMENTS);
-			put(MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL, MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL);
+		//Add measures listed under measures features in the feature manager Reporting Section
 			put(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT, MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT);
-			put(MeasureConstants.ACTUAL_EXPENDITURES, MeasureConstants.ACTUAL_EXPENDITURES);
 			put(MeasureConstants.BILATERAL_SSC_COMMITMENTS, MeasureConstants.BILATERAL_SSC_COMMITMENTS);
 			put(MeasureConstants.CONSUMPTION_RATE, MeasureConstants.CONSUMPTION_RATE);
 			put(MeasureConstants.CUMULATED_DISBURSEMENTS, MeasureConstants.CUMULATED_DISBURSEMENTS);
 			put(MeasureConstants.DISBURSMENT_RATIO, MeasureConstants.DISBURSMENT_RATIO);
 			put(MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS, MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS);
 			put(MeasureConstants.PIPELINE_COMMITMENTS, MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS);
-			put(MeasureConstants.PLANNED_COMMITMENTS, MeasureConstants.PLANNED_COMMITMENTS);
-			put(MeasureConstants.PLANNED_DISBURSEMENT_ORDERS, MeasureConstants.PLANNED_DISBURSEMENT_ORDERS);
-			put(MeasureConstants.PLANNED_DISBURSEMENTS, MeasureConstants.PLANNED_DISBURSEMENTS);
 			put(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL, MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL);
 			put(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE, MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE);
-			put(MeasureConstants.PLANNED_EXPENDITURES, MeasureConstants.PLANNED_EXPENDITURES);
 			put(MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS, MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS);
 			put(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS);
 			put(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS,MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS);
@@ -146,14 +136,9 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 			put(MeasureConstants.REAL_DISBURSEMENTS, MeasureConstants.REAL_DISBURSEMENTS);
 			put(MeasureConstants.REAL_COMMITMENTS, MeasureConstants.REAL_COMMITMENTS);
 			put(MeasureConstants.REAL_MTFS, MeasureConstants.REAL_MTFS);
-
-			put(MeasureConstants.ACTUAL_ESTIMATED_DISBURSEMENTS, MeasureConstants.ACTUAL_ESTIMATED_DISBURSEMENTS);
-			put(MeasureConstants.ACTUAL_RELEASE_OF_FUNDS, MeasureConstants.ACTUAL_RELEASE_OF_FUNDS);
+			
 			put(MeasureConstants.PIPELINE_ESTIMATED_DISBURSEMENTS, MeasureConstants.PIPELINE_ESTIMATED_DISBURSEMENTS);
 			put(MeasureConstants.PIPELINE_RELEASE_OF_FUNDS, MeasureConstants.PIPELINE_RELEASE_OF_FUNDS);
-			put(MeasureConstants.PLANNED_ESTIMATED_DISBURSEMENTS, MeasureConstants.PLANNED_ESTIMATED_DISBURSEMENTS);
-			put(MeasureConstants.PLANNED_RELEASE_OF_FUNDS, MeasureConstants.PLANNED_RELEASE_OF_FUNDS);
-
 			put(MeasureConstants.PLEDGES_ACTUAL_COMMITMENTS, MeasureConstants.PLEDGES_ACTUAL_COMMITMENTS);
 			put(MeasureConstants.PLEDGES_ACTUAL_DISBURSEMENTS, MeasureConstants.PLEDGES_ACTUAL_DISBURSEMENTS);
 			put(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, MeasureConstants.PLEDGES_ACTUAL_PLEDGE);

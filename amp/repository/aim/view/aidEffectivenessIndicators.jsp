@@ -35,10 +35,10 @@
                     <html:option value="-1">
                         -<digi:trn key="aim:selectIndicatorType">Choose One</digi:trn>-
                     </html:option>
-                    <html:option value="<%=AmpAidEffectivenessIndicator.IndicatorType.DROPDOWN_LIST.ordinal()%>">
+                    <html:option value="<%=String.valueOf(AmpAidEffectivenessIndicator.IndicatorType.DROPDOWN_LIST.ordinal())%>">
                         <digi:trn key="aim:dropDownList">Drop down list</digi:trn>
                     </html:option>
-                    <html:option value="<%=AmpAidEffectivenessIndicator.IndicatorType.SELECT_LIST.ordinal()%>">
+                    <html:option value="<%=String.valueOf(AmpAidEffectivenessIndicator.IndicatorType.SELECT_LIST.ordinal())%>">
                         <digi:trn key="aim:radioOption">Radio option</digi:trn>
                     </html:option>
                 </html:select>
@@ -78,8 +78,13 @@
 <br/>
 
 <%-- Search result list--%>
+
+<table width="100%">
+<tr>
+<td width="85%">
 <logic:notEmpty name="searchResult">
     <table class="inside" width="100%" cellpadding="4" id="searchResultsTableId">
+
         <thead>
             <tr style="font-size:12px; font-weight:bold">
                 <th align="center" bgcolor="#c7d4db"><digi:trn>Indicator Name</digi:trn></th>
@@ -141,12 +146,65 @@
             </tr>
         </logic:iterate>
     </table>
+
+
+
+
+
 </logic:notEmpty>
 <logic:empty name="searchResult">
     <div height="40px">
         <digi:trn>No results matching search criteria found</digi:trn>
     </div>
 </logic:empty>
+</td>
+
+<td valign="top" align="right" width="15%">
+    <table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">
+        <tr>
+            <td>
+                <!-- Other Links -->
+                <table cellpadding="0" cellspacing="0" width="120">
+                    <tr>
+                        <td bgColor=#c9c9c7 class=box-title>
+                            <digi:trn key="aim:otherLinks">
+                            Other links
+                            </digi:trn>
+                        </td>
+                        <td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td bgColor=#ffffff class=box-border>
+                <table cellPadding=5 cellspacing="1" width="100%">
+                    <tr>
+                        <td class="inside">
+                            <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+                            <c:set var="translation">
+                                <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+                            </c:set>
+                            <digi:link href="/admin.do" title="${translation}" >
+                            <digi:trn key="aim:AmpAdminHome">
+                            Admin Home
+                            </digi:trn>
+                            </digi:link>
+                        </td>
+                    </tr>
+                    <!-- end of other links -->
+                </table>
+            </td>
+        </tr>
+    </table>
+<td>
+
+
+</tr>
+</table>
+
 
 </br>
 

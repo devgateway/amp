@@ -1957,26 +1957,6 @@ body {background:none;}
 															</c:if>
 															<tr><td bgcolor="#ffffff">&nbsp;</td>
 															</tr>
-															<field:display name="Components Physical Progress" feature="Activity - Component Step">
-															<tr><td bgcolor="#f4f4f2">
-																<b><digi:trn key="aim:physicalProgressOfTheComponent">
-																Physical progress of the component</digi:trn></b>
-															</td></tr>
-															<c:if test="${!empty comp.phyProgress}">
-																<c:forEach var="phyProg" items="${comp.phyProgress}">
-																	<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-																		<b>
-																			<c:out value="${phyProg.title}"/></b> -
-																			<c:out value="${phyProg.reportingDate}"/>
-																	</td></tr>
-																	<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-																		<i>
-																		<digi:trn key="aim:description">Description</digi:trn> :</i>
-																		<c:out value="${phyProg.description}"/>
-																	</td></tr>
-																</c:forEach>
-															</c:if>
-															</field:display>
 														</table>
 													</td></tr>
 													</table>
@@ -1985,7 +1965,7 @@ body {background:none;}
 										</td>
 									</tr>
 								  </module:display>
-									</logic:equal>
+								  </logic:equal>
 									
 									<logic:equal name="globalSettings" scope="application" property="showComponentFundingByYear" value="true">									
 									<module:display name="Components Resume" parentModule="PROJECT MANAGEMENT">

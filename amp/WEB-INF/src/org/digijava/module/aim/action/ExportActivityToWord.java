@@ -1973,12 +1973,6 @@ public class ExportActivityToWord extends Action {
 					retVal.add(createSectionTable(eshCompFundingDetails,
 							request, ampContext));
 
-					if (FeaturesUtil.isVisibleField(
-							"Components Physical Progress")) {
-						ExportSectionHelper sectionHelper = new ExportSectionHelper(
-								"Physical progress of the component", true);
-					}
-
 				} else if (GlobalSettings.getInstance()
 						.getShowComponentFundingByYear()
 						&& FeaturesUtil.isVisibleModule("Components Resume")) {

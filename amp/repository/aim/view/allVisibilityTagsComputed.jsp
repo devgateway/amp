@@ -404,8 +404,7 @@
 <field:display name="Components Grand Total Commitments" feature="Activity - Component Step"></field:display> 
 <field:display name="Components Grand Total Disbursements" feature="Activity - Component Step"></field:display> 
 <field:display name="Components Grand Total Expenditures" feature="Activity - Component Step"></field:display> 
-<field:display name="Components Physical Progress" feature="Activity - Component Step"></field:display> 
-<field:display name="Conditions for Fund Release" feature="Funding Information"></field:display> 
+<field:display name="Conditions for Fund Release" feature="Funding Information"></field:display>
 <field:display name="Contact Name" feature="Reports Contact Information"></field:display> 
 <field:display name="Contract Completion" feature="Contracting"></field:display> 
 <field:display name="Contract Description" feature="Contracting"></field:display> 

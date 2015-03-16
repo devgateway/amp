@@ -2441,20 +2441,8 @@ public class ExportActivityToPDF extends Action {
 							//fundingTable.addCell(amountsInThousandsCell1);
 							componentsNestedTable.addCell(amountsInMillionsCell1);
 						}
-						
-						//physical progress
-						if(FeaturesUtil.isVisibleField("Components Physical Progress")){
-							PdfPCell phProgressNestedCell=new PdfPCell();
-							p1=new Paragraph(TranslatorWorker.translateText("Physical progress of the component"),titleFont);
-							p1.setAlignment(Element.ALIGN_LEFT);
-							phProgressNestedCell.addElement(p1);
-							phProgressNestedCell.setBackgroundColor(new Color(244,244,242));
-							phProgressNestedCell.setBorder(0);
-							phProgressNestedCell.setColspan(2);
-							componentsNestedTable.addCell(phProgressNestedCell);
-								}
-								
-					}else if(GlobalSettings.getInstance().getShowComponentFundingByYear() && FeaturesUtil.isVisibleModule("Components Resume")){ //true case
+					} else if (GlobalSettings.getInstance().getShowComponentFundingByYear()
+                            && FeaturesUtil.isVisibleModule("Components Resume")) { //true case
 						//comp code
 						PdfPCell compNestedCell=new PdfPCell();
 						p1=new Paragraph(TranslatorWorker.translateText("Component Code")+":",titleFont);
@@ -2877,8 +2865,9 @@ public class ExportActivityToPDF extends Action {
 						}
 						
 						//amounts in millions
-						if(amountsUnitCode == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS){
-							PdfPCell amountsInMillionsCell1 = new PdfPCell(new Paragraph(TranslatorWorker.translateText("The amount entered are in millions (000 000)"),plainFont));
+						if (amountsUnitCode == AmpARFilter.AMOUNT_OPTION_IN_MILLIONS) {
+							PdfPCell amountsInMillionsCell1 = new PdfPCell(new Paragraph(
+                                    TranslatorWorker.translateText("The amount entered are in millions (000 000)"), plainFont));
 							amountsInMillionsCell1.setBorder(0);
 							amountsInMillionsCell1.setBackgroundColor(new Color(255,255,204));
 							amountsInMillionsCell1.setColspan(4);

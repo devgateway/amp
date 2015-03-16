@@ -320,16 +320,16 @@ public class AmpDonorFundingFormSectionFeature extends
 						+ (item.getIndex()+1));
 				l.add(new AttributePrepender("title", new Model<String>(item.getModel().getObject().getName()), ""));
 
-				PropertyModel<AmpRole>sourceRoleMOdel=null;
+				String translatedRoleCode = null;
 				for (AmpFunding f:fundingModel.getObject()){ 
 					if(f.getAmpDonorOrgId().getAmpOrgId().equals(item.getModel().getObject().getAmpOrgId())){
-						sourceRoleMOdel=new PropertyModel<>(f.getSourceRole(), "roleCode");
+						translatedRoleCode = TranslatorWorker.translateText(f.getSourceRole().getRoleCode());
 					}
 					
 				}
 				Label label=new Label("tabsLabel", new Model<String>(item.getModel().getObject().getAcronym()));
-
-				Label subScript=new Label("tabsOrgRole",sourceRoleMOdel); 
+				
+				Label subScript = new Label("tabsOrgRole", new Model<String>(translatedRoleCode));
 				subScript.add(new AttributePrepender("class", new Model<String>("subscript_role"), ""));
 				l.add(label);
 				l.add(subScript);

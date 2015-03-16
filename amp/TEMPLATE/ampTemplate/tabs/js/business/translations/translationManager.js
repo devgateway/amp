@@ -49,7 +49,7 @@ define([ 'underscore', 'jquery', 'i18next' ], function(_, jQuery) {
 			var key = $(i).attr('data-i18n');
 			var value = $(i).text();
 			var translationFromCache = lookForTranslationByKey(key);
-			if (translationFromCache == null) {
+			if (translationFromCache === null) {
 				postit[key] = value;
 			}
 		});
@@ -104,7 +104,7 @@ define([ 'underscore', 'jquery', 'i18next' ], function(_, jQuery) {
 	}
 
 	function initializeGlobalTranslationsCache() {
-		if (app.TabsApp.globalTranslationCache == undefined || app.TabsApp.globalTranslationCache == null) {
+		if (app.TabsApp.globalTranslationCache === undefined || app.TabsApp.globalTranslationCache === null) {
 			app.TabsApp.globalTranslationCache = {};
 		}
 	}

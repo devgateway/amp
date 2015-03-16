@@ -35,7 +35,11 @@ public class SaikuReportSorter extends MondrianReportSorter {
 	private SaikuReportSorter(SaikuGeneratedReport report, ReportEnvironment environment) {
 		super(report, environment);
 		this.cellDataSet = report.cellDataSet;
+		/* not all configured measures are always used
 		this.measuresCount = spec.getMeasures() == null ? 0 : spec.getMeasures().size();
+		=> will detect actually selected measures number */
+		this.measuresCount = report.cellDataSet.getSelectedMeasures() == null ? 0 :
+			report.cellDataSet.getSelectedMeasures().length;
 	}
 	
 	/**

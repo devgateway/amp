@@ -4,7 +4,6 @@
 package org.dgfoundation.amp.reports.mondrian;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -208,12 +207,12 @@ public class MondrianReportSorter {
 		int inc = asc ? 1 : -1;
 		prevFirstChild = findFirstLeafArea(cellsToSort[0].area);
 		
-		//sorts ascending
-		Arrays.sort(cellsToSort, new Comparator<ReportCell>() {
-			public int compare(ReportCell o1, ReportCell o2) {
-				return o1.value.compareTo(o2.value);
-			}
-		});
+		/* Sorts ascending.
+		 There is no need to declare the comparator over ReportCell, 
+		 because ReportCell has already compare method defined over value
+		 and each ReportCell can override the default mechanism, like TextCell ignore case comparison
+		 */
+		Arrays.sort(cellsToSort);
 				
 		//update first child prefix
 		ReportArea currFirstChld = findFirstLeafArea(cellsToSort[first].area);

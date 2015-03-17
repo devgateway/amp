@@ -2,10 +2,11 @@ package org.digijava.module.message.jobs;
 
 import java.util.List;
 
-import org.digijava.module.admin.util.hibernate.SeparateSessionManager;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.message.dbentity.AmpEmail;
 import org.digijava.module.message.util.AmpMessageUtil;
+import org.hibernate.Session;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
@@ -20,20 +21,19 @@ public class ClearEmailsJob implements StatefulJob{
 
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		/**
-		 * SELECT a1.email_Id FROM amp_email_receiver a1 join amp_email_receiver a2 on a1.email_id=a2.email_id 
-		 * where a1.status="failed"  group by a1.email_id 
-		 */
 		
-		SeparateSessionManager sessionManager	= null;
-		
+		Session session = null;
 		try {
-			sessionManager	= new SeparateSessionManager();
-			sessionManager.openSession();
-			List <AmpEmail> emailsForRemoval=AmpMessageUtil.loadSentEmails(sessionManager.getSession());
+			session = PersistenceManager.getRequestDBSession();
+		} catch (DgException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		try {
+			List <AmpEmail> emailsForRemoval=AmpMessageUtil.loadSentEmails(session);
 			if(emailsForRemoval!=null && emailsForRemoval.size()>0){
 				for (AmpEmail ampEmail : emailsForRemoval) {
-					sessionManager.getSession().delete(ampEmail);
+					session.delete(ampEmail);
 				}
 			}
 		}
@@ -41,8 +41,7 @@ public class ClearEmailsJob implements StatefulJob{
 			e.printStackTrace();
 		}
 		finally {
-			if (sessionManager != null)
-				sessionManager.closeSession();
+			PersistenceManager.cleanupSession(session);
 		}
 		
 	}

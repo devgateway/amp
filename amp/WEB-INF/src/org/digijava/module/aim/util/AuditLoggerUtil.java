@@ -268,7 +268,7 @@ public class AuditLoggerUtil {
 		Query qry = null;
 		
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			if(!withLogin){
 				qryStr = "select f from " + AmpAuditLogger.class.getName() + " f where action<>'"+Constants.LOGIN_ACTION+"' order by loggedDate desc";
 			}else{
@@ -278,7 +278,10 @@ public class AuditLoggerUtil {
 			col = qry.list();
 		} catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
+		}finally{
+			PersistenceManager.cleanupSession(session);
 		}
+		
 		return col;
 	}
 	/**
@@ -411,24 +414,24 @@ public class AuditLoggerUtil {
 	 * Delete all records whose date is less than the interval
 	 * @param interval
 	*/
-	public static void DeleteLogsByPeriod(String interval){
+	public static void DeleteLogsByPeriod(String interval) {
 		Session session = null;
 		String qryStr = null;
 		Query qry = null;
-		Transaction tx = null;
 		try {
-			session = PersistenceManager.getSession();
-			qryStr = "delete from "
-				+ AmpAuditLogger.class.getName()
-				+ " where action<>'login' and (loggedDate <= :dateParam or loggedDate=null)";
-			
+			session = PersistenceManager.getRequestDBSession();
+			qryStr = "delete from " + AmpAuditLogger.class.getName()
+					+ " where action<>'login' and (loggedDate <= :dateParam or loggedDate=null)";
+
 			qry = session.createQuery(qryStr);
-			qry.setParameter("dateParam",getDateRange(Integer.parseInt(interval)),DateType.INSTANCE);
+			qry.setParameter("dateParam", getDateRange(Integer.parseInt(interval)), DateType.INSTANCE);
 			int rowCount = qry.executeUpdate();
 			logger.info("Row deleted from audit logger = " + rowCount);
-		
-		} catch (HibernateException e) {
+
+		} catch (Exception e) {
 			logger.error("HibernateException", e);
+		} finally {
+			PersistenceManager.cleanupSession(session);
 		}
 }
 	/**

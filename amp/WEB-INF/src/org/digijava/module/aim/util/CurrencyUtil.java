@@ -242,6 +242,7 @@ public class CurrencyUtil {
 		String qryStr = null;
 		try {
 			session = PersistenceManager.getRequestDBSession();
+			
 			if (active == CurrencyUtil.ORDER_BY_CURRENCY_CODE) {
 				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  curr.countryLocation dg order by curr.currencyCode "+sortOrder;
 				qry = session.createQuery(qryStr);
@@ -261,7 +262,9 @@ public class CurrencyUtil {
 		} catch (Exception e) {
 			logger.error("Exception from getAllCurrencies()");
 			e.printStackTrace(System.out);
-		} 
+		} finally{
+			PersistenceManager.cleanupSession(session);
+		}
 
 		return col;
 	}

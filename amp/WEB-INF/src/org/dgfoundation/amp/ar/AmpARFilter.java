@@ -1754,11 +1754,12 @@ public class AmpARFilter extends PropertyListable {
 				/* do a somewhat ugly hack: the TEAM_FILTER will only contain the activities from within the workspace
 				 * here we run the filter part of the workspace and OR with the own activities returned in TEAM_FILTER
 				 */
-				String hideDraftSQL = TeamUtil.hideDraft(member)?"draft<>true":"1=1"; 
-				String allActivitiesInTheDatabaseQuery = "SELECT amp_activity_id from amp_activity WHERE "+hideDraftSQL;
+				String hideDraftSQL = TeamUtil.hideDraft(member) ? "draft <> true" : "1=1"; 
+				String allActivitiesInTheDatabaseQuery = "SELECT amp_activity_id from amp_activity WHERE " + hideDraftSQL;
 				String queryToAppend = allActivitiesInTheDatabaseQuery;
-				queryToAppend += " OR amp_activity_id IN (" + TEAM_FILTER + ")";
-				queryAppend("(" + queryToAppend + ")");
+				queryToAppend += " AND amp_activity_id IN (" + TEAM_FILTER + ")";
+				this.generatedFilterQuery = String.format("(%s) UNION (%s)", this.generatedFilterQuery, queryToAppend);
+				//this.generatedFilterQuery = String.format("(%s) OR (%s)", this.generatedFilterQuery, queryToAppend);
 			}
 			else
 			{

@@ -86,7 +86,7 @@ public class AmpARFilterParams {
 		HttpSession session = request.getSession();
 		ServletContext ampContext = session.getServletContext();
 		params.luceneRealPath = ampContext == null ? "/" : ampContext.getRealPath("/");
-		params.teamFilter = (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER);
+		params.teamFilter = workspaceFilter ? null : (AmpARFilter) request.getSession().getAttribute(ArConstants.TEAM_FILTER);
 		params.member = (TeamMember) request.getSession().getAttribute(Constants.CURRENT_MEMBER);
 		params.skipPledgeCheck = skipPledgeCheck;
 		params.workspaceFilter = workspaceFilter;

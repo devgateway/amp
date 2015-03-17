@@ -4,6 +4,8 @@
  */
 package org.dgfoundation.amp.onepager.models;
 
+import java.util.HashMap;
+
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -18,8 +20,6 @@ import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-import java.util.HashMap;
 
 /**
  * @author mpostelnicu@dgateway.org since Sep 24, 2010
@@ -39,12 +39,12 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	
 	
 	public AmpActivityModel() {
-	    beginConversation();
+	    beginConversation(true);
 		a = new AmpActivityVersion();
 	}	
 	
 	public AmpActivityModel(Long id, String editingKey) {
-		beginConversation();
+		beginConversation(true);
 		
 		this.id = id;
 		this.a = null;
@@ -56,18 +56,19 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	 * This creates a hibernate session that is kept in the HttpSession (thus one per each user session)
 	 * @see AmpSessionListener - the hibernate session is guaranteed to be closed on session death
 	 */
-	public void beginConversation() {
-		AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
-		s.setMetaData(OnePagerConst.RESOURCES_NEW_ITEMS, null);
-		s.setMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS, null);
-		s.setMetaData(OnePagerConst.EDITOR_ITEMS, null);
-		s.setMetaData(OnePagerConst.AGREEMENT_ITEMS, null);
-		s.setMetaData(OnePagerConst.COMMENTS_ITEMS, null);
-		s.setMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS, null);
-
-        translationHashMap = new HashMap<String, AmpContentTranslation>();
-
-		Session ses = getHibernateSession(true);
+	public void beginConversation(boolean reset) {
+		if(reset){
+			AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
+			s.setMetaData(OnePagerConst.RESOURCES_NEW_ITEMS, null);
+			s.setMetaData(OnePagerConst.RESOURCES_DELETED_ITEMS, null);
+			s.setMetaData(OnePagerConst.EDITOR_ITEMS, null);
+			s.setMetaData(OnePagerConst.AGREEMENT_ITEMS, null);
+			s.setMetaData(OnePagerConst.COMMENTS_ITEMS, null);
+			s.setMetaData(OnePagerConst.COMMENTS_DELETED_ITEMS, null);
+	
+	        translationHashMap = new HashMap<String, AmpContentTranslation>();
+		}
+		Session ses = getHibernateSession(reset);
 		ses.clear();
 	}
 	
@@ -94,6 +95,19 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 		if(hibernateSession==null || !hibernateSession.isOpen())  {
 			try {
 				hibernateSession = PersistenceManager.openNewSession();
+//				logger.error("**************");
+//				logger.error("session opened " +hibernateSession.hashCode());
+				
+//debug code will be removed upon final commit				
+//				hibernateSession.doWork(new Work() {
+//				    @Override
+//				    public void execute(Connection connection) throws SQLException {
+//				        //connection, finally!
+//						logger.error("**************");
+//						logger.error("connection :");
+//				    	System.out.print(connection);
+//				    }
+//				});
 				hibernateSession.setFlushMode(FlushMode.MANUAL);
 				hibernateSession.beginTransaction();
 				s.getHttpSession().setAttribute(OnePagerConst.ONE_PAGER_HIBERNATE_SESSION_KEY,hibernateSession);
@@ -109,7 +123,7 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
     }
 
     protected AmpActivityVersion load() {
-		beginConversation();
+		beginConversation(false);
 		AmpActivityVersion ret = ActivityUtil.load(this, id);
         if (ret.getActivityType() == null) //set default type for previously saved activities
             ret.setActivityType(ActivityUtil.ACTIVITY_TYPE_PROJECT);
@@ -136,6 +150,20 @@ public class AmpActivityModel extends LoadableDetachableModel<AmpActivityVersion
 	{		
 			AmpAuthWebSession s =  (AmpAuthWebSession) org.apache.wicket.Session.get();
 			Session hibernateSession = (Session) s.getHttpSession().getAttribute(OnePagerConst.ONE_PAGER_HIBERNATE_SESSION_KEY);
+//debug code will be removed upon final commit
+//			logger.error("**************");
+//			logger.error("trying to close " +hibernateSession.hashCode());
+//
+//			hibernateSession.doWork(new Work() {
+//			    @Override
+//			    public void execute(Connection connection) throws SQLException {
+//			        //connection, finally!
+//					logger.error("**************");
+//					logger.error("end connection hashcode:");
+//			    	System.out.print(connection);
+//			    }
+//			});
+//			
 			s.getHttpSession().setAttribute(OnePagerConst.ONE_PAGER_HIBERNATE_SESSION_KEY,null);
 			if(hibernateSession==null) throw new RuntimeException("Attempted to close an unexisting Hibernate session!");
 			if(!hibernateSession.isOpen()) throw new RuntimeException("Attempted to close an already closed session!");

@@ -5,13 +5,14 @@ import java.util.List;
 import javax.mail.internet.InternetAddress;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.mail.DgEmailManager;
-import org.digijava.module.admin.util.hibernate.SeparateSessionManager;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.message.dbentity.AmpEmail;
 import org.digijava.module.message.dbentity.AmpEmailReceiver;
 import org.digijava.module.message.helper.MessageConstants;
 import org.digijava.module.message.util.AmpMessageUtil;
-import org.hibernate.Transaction;
+import org.hibernate.Session;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
@@ -21,18 +22,21 @@ public class SendEmailsJob implements StatefulJob{
 	
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-        SeparateSessionManager sessionManager = null;
-        try {
-            sessionManager = new SeparateSessionManager();
-            sessionManager.openSession();
-
-            List<Long> receiversIds = AmpMessageUtil.loadReceiversIdsToGetEmails(sessionManager.getSession());
+        Session session = null;
+		try {
+			session = PersistenceManager.getRequestDBSession();
+		} catch (DgException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		try {
+            List<Long> receiversIds = AmpMessageUtil.loadReceiversIdsToGetEmails(session);
             if (receiversIds != null && receiversIds.size() > 0) {
                 AmpEmail email = null;
                 for (Long rec : receiversIds) {
                     InternetAddress[] ito;
                     try {
-                        AmpEmailReceiver receiver = AmpMessageUtil.getAmpEmailReceiverUsingSession(rec, sessionManager.getSession());
+                        AmpEmailReceiver receiver = AmpMessageUtil.getAmpEmailReceiverUsingSession(rec, session);
                         ito = new InternetAddress[]{new InternetAddress(receiver.getAddress())};
                         //email=AmpMessageUtil.getAmpEmail(rec.getEmail().getId()) ;
                         email = receiver.getEmail();
@@ -44,7 +48,7 @@ public class SendEmailsJob implements StatefulJob{
                         logger.info("Finished sending emails");
                         //update receiver status state to sent
                         receiver.setStatus(MessageConstants.SENT_STATUS);
-                        sessionManager.getSession().update(receiver);
+                        session.update(receiver);
                     } catch (Exception e) {
                         logger.error(e);
                     }
@@ -54,8 +58,7 @@ public class SendEmailsJob implements StatefulJob{
         } catch (Exception e1) {
             logger.error(e1);
         } finally {
-            if (sessionManager != null)
-                sessionManager.closeSession();
+        	PersistenceManager.cleanupSession(session);
         }
     }
 

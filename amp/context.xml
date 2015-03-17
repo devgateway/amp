@@ -6,16 +6,30 @@ clearReferencesThreadLocals="true" jndiExceptionOnFailedWrite="false" processTld
   <Environment name="hostname" value="" type="java.lang.String"/> 
   
   <!-- PostgreSQL connection -->
-  <Resource factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" defaultTransactionIsolation="READ_COMMITTED" driverClassName="org.postgresql.Driver" 
-  		maxActive="500" maxIdle="30" maxWait="5000" jmxEnabled="true"
-  		name="ampDS"  removeAbandoned="true" removeAbandonedTimeout="270" suspectTimeout="180" logAbandoned="true" 
-  		type="javax.sql.DataSource"
-  		url="" 
-  		username="" 
-  		password="" 
-  		validationQuery="SELECT 1" validationInterval="10000" testOnBorrow="true" testWhileIdle="false" timeBetweenEvictionRunsMillis="20000" 
-  		useDisposableConnectionFacade="true"  
-  		jdbcInterceptors="ConnectionState;StatementFinalizer;ResetAbandonedTimer;SlowQueryReport(threshold=60000)" />
+  <Resource factory="org.apache.tomcat.jdbc.pool.DataSourceFactory" 
+  	defaultTransactionIsolation="READ_COMMITTED" 
+  	driverClassName="org.postgresql.Driver" 
+  	maxActive="500" 
+  	maxIdle="30" 
+  	maxWait="5000" 
+  	jmxEnabled="true"
+  	name="ampDS"  
+  	removeAbandoned="true" 
+  	removeAbandonedTimeout="400" 
+  	suspectTimeout="250" 
+  	logAbandoned="true" 
+  	type="javax.sql.DataSource"
+  	url="" 
+  	username="" 
+  	password="" 
+  	validationQuery="SELECT 1" 
+  	validationInterval="10000" 
+  	testOnBorrow="true" 
+  	testWhileIdle="false" 
+  	timeBetweenEvictionRunsMillis="20000" 
+  	useDisposableConnectionFacade="true"  
+  	jdbcInterceptors="ConnectionState;StatementFinalizer;ResetAbandonedTimer;SlowQueryReport(threshold=60000)" 
+  />
   
   <!-- MonetDB connection. IT IS A DUMMY, DO NOT USE IT (now only used to shut up Saiku during AMP startup - will be removed in the near future -->
    

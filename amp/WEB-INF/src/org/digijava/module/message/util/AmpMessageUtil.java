@@ -1,7 +1,6 @@
 package org.digijava.module.message.util;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -13,7 +12,6 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
-import org.digijava.module.admin.util.hibernate.SeparateSessionManager;
 import org.digijava.module.aim.dbentity.AmpContactProperty;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.exception.AimException;
@@ -54,13 +52,13 @@ public class AmpMessageUtil {
 	
 	public static void saveOrUpdateMessage(AmpMessage message) throws AimException {
 		Session session= null;
-		Transaction tx=null;
 		try {
 			session=PersistenceManager.getRequestDBSession();
 			session.saveOrUpdate(message);
 		}catch(Exception ex) {
 			throw new AimException("update failed",ex);
 		}
+		PersistenceManager.cleanupSession(session);
 	}
 	
 	public static AmpMessage getMessage(Long messageId) throws AimException{

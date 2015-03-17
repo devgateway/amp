@@ -587,83 +587,9 @@ public class PersistenceManager {
 		return getRequestDBSession(true);
 	}
 
-//	private static void registerSession(Session session, String sessionData) {
-//		Map resMap = (Map) requestSession.get();
-//		if (resMap == null) {
-//			resMap = new HashMap();
-//			requestSession.set(resMap);
-//		}
-//
-//		ArrayList regSessions =  (ArrayList)resMap.get("ThreadRegisteredSessions");
-//		if (regSessions == null) {
-//			regSessions = new ArrayList();
-//		}
-//
-//		HashMap oneSessionData = new HashMap();
-//		oneSessionData.put("session", session);
-//		oneSessionData.put("stackTrace", sessionData);
-//
-//		regSessions.add(oneSessionData);
-//
-//		resMap.put("ThreadRegisteredSessions", regSessions);
-//	}
-
-//	public static List getThreadSessionData() {
-//		Map resMap = (Map) requestSession.get();
-//
-//		if (resMap == null) {
-//			return null;
-//		}
-//		;
-//
-//		ArrayList regSessions = (ArrayList) resMap.get(
-//				"ThreadRegisteredSessions");
-//		if (regSessions == null) {
-//			return null;
-//		}
-//		else {
-//			return regSessions.size() == 0 ? null :
-//				new ArrayList(regSessions);
-//		}
-//	}
-
-//	public static String getFormattedThreadSessionData() {
-//		List sessionData = getThreadSessionData();
-//		if (sessionData == null) {
-//			return null;
-//		}
-//
-//		StringBuffer sb = new StringBuffer(512);
-//		boolean one = false;
-//		sb.append("<thread-session-data>").append('\n');
-//		Iterator iter = sessionData.iterator();
-//		while (iter.hasNext()) {
-//			HashMap item = (HashMap) iter.next();
-//			Session session = (Session)item.get("session");
-//			String stackTrace = (String)item.get("stackTrace");
-//			//boolean isConnected = session.isConnected();
-//			if (session.isOpen() || session.isConnected()) {
-//				one = true;
-//				sb.append("    ")
-//				.append("<session isOpen=\"")
-//				.append(session.isOpen())
-//				.append("\" isConnected=\"")
-//				.append(session.isConnected())
-//				.append("\">")
-//				.append('\n');
-//				sb.append(stackTrace).append('\n');
-//				sb.append("</session>").append('\n');
-//			}
-//		}
-//
-//		sb.append("</thread-session-data>");
-//		if (one) {
-//			return sb.toString();
-//		} else {
-//			return null;
-//		}
-//	}
-
+	/**
+	 * 
+	 */
 	public static void rollbackCurrentSessionTx() {
 		try {
 			if (sf.getCurrentSession().getTransaction().isActive()

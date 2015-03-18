@@ -51,11 +51,21 @@ public class SQLUtils {
 	 */
 	public static LinkedHashMap<String, String> getTableColumnsWithTypes(final String tableName, boolean crashOnDuplicates){
 		String query = String.format("SELECT c.column_name, c.data_type FROM information_schema.columns As c WHERE table_schema='public' AND table_name = '%s' ORDER BY c.ordinal_position", tableName.toLowerCase());
-		try (Connection jdbcConnection = PersistenceManager.getJdbcConnection()) {
+		Connection jdbcConnection = null;
+		try  {
+			jdbcConnection=PersistenceManager.getJdbcConnection();
 			return getTableColumnsWithTypes(jdbcConnection, tableName, query, crashOnDuplicates);
 		}
 		catch(SQLException ex) {
 			throw new RuntimeException(ex);
+		}finally{
+			try {
+				if(!jdbcConnection.getAutoCommit())
+					jdbcConnection.commit();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			PersistenceManager.closeQuietly(jdbcConnection);
 		}
 	}
 	

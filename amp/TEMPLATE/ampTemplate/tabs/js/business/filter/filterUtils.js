@@ -58,7 +58,8 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 					});
 				}
 				var auxFilter = new Filter({
-					name : TranslationManager.getTranslated(item),
+					trnName : TranslationManager.getTranslated(item),
+					name: item,
 					values : content
 				});
 				filters.add(auxFilter);
@@ -91,7 +92,8 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 					});
 				}
 				var auxFilter = new Filter({
-					name : TranslationManager.getTranslated(item),
+					trnName : TranslationManager.getTranslated(item),
+					name: item,
 					values : content
 				});
 				filters.add(auxFilter);
@@ -118,7 +120,8 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 					content.push(auxItem);
 				});
 				var filter = new Filter({
-					name : TranslationManager.getTranslated(propertyName),
+					trnName : TranslationManager.getTranslated(propertyName),
+					name: propertyName,
 					values : content
 				});
 				// Update list collection of Filter used in legends.
@@ -135,7 +138,8 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 						prefix = propertyName + " - ";
 					}
 					var filter = new Filter({
-						name : TranslationManager.getTranslated(prefix + "Start Date"),
+						trnName : TranslationManager.getTranslated(prefix + "Start Date"),
+						name: prefix + "Start Date",
 						values : [ {
 							id : dateContent.start,
 							name : dateContent.start
@@ -143,7 +147,8 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 					});
 					app.TabsApp.filters.models.push(filter);
 					var filter = new Filter({
-						name : TranslationManager.getTranslated(prefix + "End Date"),
+						trnName : TranslationManager.getTranslated(prefix + "End Date"),
+						name: prefix + "End Date",
 						values : [ {
 							id : dateContent.end,
 							name : dateContent.end
@@ -278,6 +283,10 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 						return parseInt(item_.id);
 					});
 					break;
+				case 'Funding Organization':
+					blob.columnFilters['Donor Id'] = _.map(item.get('values'), function(item_) {
+						return parseInt(item_.id);
+					});
 				/*case 'Contracting Agency Groups':
 					blob.columnFilters['Contracting Agency Id'] = _.map(item.get('values'), function(item_) {
 						return parseInt(item_.id);

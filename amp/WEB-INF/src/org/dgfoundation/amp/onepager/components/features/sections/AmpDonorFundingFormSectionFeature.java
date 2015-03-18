@@ -296,7 +296,7 @@ public class AmpDonorFundingFormSectionFeature extends
 		final WebMarkupContainer overviewLinkContainer = new WebMarkupContainer("overviewLinkContainer");
 		overviewLinkContainer.setOutputMarkupId(true);
 
-		final ExternalLink overviewTab = new ExternalLink("overviewLink","#tab0","Overview"); 
+		final ExternalLink overviewTab = new ExternalLink("overviewLink","#tab0",TranslatorWorker.translateText("Overview")); 
 		
 		overviewTab.setOutputMarkupId(true);
 		

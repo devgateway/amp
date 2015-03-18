@@ -1,6 +1,21 @@
 enableComputateVisibleSections = false;
 onepagerMode = ${onepagerMode};
 isTabView = ${isTabView};
+
+function getFile(){
+    $("#upfile").click();
+}
+
+function setLabel(obj){
+          var file = obj.value;
+          var fileName = file.split("\\");
+          var text = fileName[fileName.length-1];
+          if (text.length > 15) {
+              text = text.substring (0,12) + "....";
+          }
+          $("#uploadLabel").text(text);
+}
+
 function isScrolledIntoView(docViewTop, docViewBottom, elem){
     var elemTop = $(elem).offset().top;
     var elemBottom = elemTop + $(elem).height();

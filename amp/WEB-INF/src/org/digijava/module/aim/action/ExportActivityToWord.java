@@ -598,10 +598,10 @@ public class ExportActivityToWord extends Action {
 
 	
 	private void addEffectivenessTable(com.lowagie.text.Document doc,List<String[]> aidEffectivenesToAdd) throws DocumentException {
-		if(aidEffectivenesToAdd == null || !(aidEffectivenesToAdd.size() > 0)) {
+		if (aidEffectivenesToAdd == null || !(aidEffectivenesToAdd.size() > 0)) {
 			return;
 		}
-        Table addEffectiveness = new Table(1);
+        Table addEffectiveness = new Table(2);
         addEffectiveness.setWidth(100);
         RtfCell aidTitleCell = new RtfCell(new Paragraph(TranslatorWorker.translateText("Aid Effectivenes").toUpperCase(), HEADERFONT));
         aidTitleCell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -609,16 +609,18 @@ public class ExportActivityToWord extends Action {
         addEffectiveness.addCell(aidTitleCell);
         addEffectiveness.addCell(new RtfCell());
 
-        RtfCell cell = new RtfCell();
-		cell.setBorder(0);
 		for (String[] a : aidEffectivenesToAdd) {
-			cell.add(new Paragraph(a[0], PLAINFONT));
-			cell.add(new Paragraph(a[1], BOLDFONT));
+            RtfCell cell1 = new RtfCell();
+            cell1.setBorder(0);
+            cell1.add(new Paragraph(a[0], BOLDFONT));
+            addEffectiveness.addCell(cell1);
+
+            RtfCell cell2 = new RtfCell();
+            cell2.setBorder(0);
+            cell2.add(new Paragraph(a[1], PLAINFONT));
+            addEffectiveness.addCell(cell2);
 		}
 
-
-		addEffectiveness.addCell(cell);
-		applyEmptyCell(addEffectiveness, 1);
 		doc.add(addEffectiveness);
 	}
 

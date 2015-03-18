@@ -2996,8 +2996,9 @@ public class ExportActivityToPDF extends Action {
 	}
 		
 	private void createGeneralInfoRowAid(PdfPTable mainLayout, String columnName, List<String[]> values) {
-		if (values == null || values.isEmpty())
-			return;
+		if (values == null || values.isEmpty()) {
+            return;
+        }
 		PdfPCell cell1 = new PdfPCell();
 		Paragraph p2;
 		Paragraph p1 = new Paragraph(postprocessText(columnName), titleFont);
@@ -3006,18 +3007,21 @@ public class ExportActivityToPDF extends Action {
 		cell1.setBackgroundColor(new Color(244,244,242));
 		cell1.setBorder(0);
 		mainLayout.addCell(cell1);
-		PdfPCell cell2=new PdfPCell();
+
+        PdfPTable effectivenessTable = new PdfPTable(2);
+        effectivenessTable.getDefaultCell().setBorder(0);
 
 		for (String[] value : values) {
-			p1 = new Paragraph(postprocessText(value[0]), plainFont);
-			p2 = new Paragraph(postprocessText(value[1]), titleFont);
-	
-			cell2.addElement(p1);
-			cell2.addElement(p2);
+            PdfPCell c1 = new PdfPCell(new Paragraph(postprocessText(value[0]), titleFont));
+            c1.setBorder(0);
+            PdfPCell c2 = new PdfPCell(new Paragraph(postprocessText(value[1]), plainFont));
+            c2.setBorder(0);
+
+            effectivenessTable.addCell(c1);
+            effectivenessTable.addCell(c2);
 		}
 
-		cell2.setBorder(0);
-		mainLayout.addCell(cell2);
+		mainLayout.addCell(effectivenessTable);
 	}
 	/**
 	 * Used to create simple two columned row

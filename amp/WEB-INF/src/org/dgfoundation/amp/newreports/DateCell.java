@@ -1,47 +1,45 @@
 package org.dgfoundation.amp.newreports;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import mondrian.util.Pair;
+
 import org.apache.log4j.Logger;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 
 /**
- * a @link {@link ReportCell} containing an amount 
- * @author Emanuel Perez
+ * a @link {@link ReportCell} containing a date
+ * @author Emanuel Perez, Dolghier Constantin
  *
  */
 public final class DateCell extends ReportCell {
 	
 protected static Logger logger = Logger.getLogger(TextCell.class);
 	
-
-	public DateCell(Comparable<?> value) {
-		super(value,null);
-	}
-	public DateCell(Comparable<?> value, SimpleDateFormat formatter) {
-		super(value, formatter);
+	public DateCell(Date value, String displayedValue) {
+		super(value, displayedValue);
 	}
 	
-	@Override
-	protected String getFormattedValue() {
-		String rawValue = (String) value;
-		String displayValue = "";
-		if (formatter == null || rawValue.trim().equals("")) {
-			return displayValue = rawValue;
-				
-		}
-		else { 
-			SimpleDateFormat sdfInput = new SimpleDateFormat("yyyy-MM-dd");
-			try {
-				Date parsedDate = sdfInput.parse(rawValue);
-				displayValue = (String)((SimpleDateFormat) formatter).format(parsedDate); 
-			}
-			catch(ParseException e) {
-				logger.warn("Invalid date for TextCell can't be parsed: "+ value); 
-			}
-		}
-		return displayValue;
+	public static DateCell buildDateCell(String mondrianOut) {
+		Pair<Date, String> p = parseMondrianDate(mondrianOut);
+		return new DateCell(p.left, p.right);
 	}
-
+	
+	/**
+	 * parses a Date string as output by Mondrian into the user-defined way of displaying dates
+	 * @param moOut
+	 * @return
+	 */
+	public static Pair<Date, String> parseMondrianDate(String moOut) {
+		if (moOut == null || moOut.trim().isEmpty()) moOut = null;
+		if (moOut == null) return new Pair<>(null, "");
+		try {
+			Date date = new SimpleDateFormat(MoConstants.DATE_FORMAT).parse(moOut);
+			return new Pair<>(date, new SimpleDateFormat(MoConstants.DATE_DISPLAY_FORMAT).format(date));
+		}
+		catch(Exception e) {
+			return new Pair<>(new Date(70, 2, 2), moOut); // could not parse date - at least save the displayed value
+		}
+	}
 }

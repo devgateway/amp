@@ -238,13 +238,7 @@ public class MondrianReportUtils {
 		return new FilterRule(new ArrayList<>(locationIds), in.valuesInclusive);
 	}
 	
-	public static boolean isDateColumn (String columnName) {
+	public static boolean isDateColumn(String columnName) {
 		return DateColumns.ACTIVITY_DATES.contains(columnName);
-	}
-	public static String getDisplayableDate(String input) {
-		if (input == null || input.trim().equals("")) {
-			return "";
-		}
-		return AmpARFilter.getReformattedDate(input, "yyyy-MM-dd", MoConstants.DATE_DISPLAY_FORMAT);
 	}
 }

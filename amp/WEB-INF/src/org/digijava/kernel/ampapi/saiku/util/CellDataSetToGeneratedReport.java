@@ -166,7 +166,7 @@ public class CellDataSetToGeneratedReport {
 			//textual columns
 			if (colId < spec.getColumns().size()) { 
 				if (DateColumns.ACTIVITY_DATES.contains(leafHeaders.get(colId).originalColumnName)) {
-					cellData = new DateCell (value == null ? "" : value,new SimpleDateFormat (MoConstants.DATE_DISPLAY_FORMAT));
+					cellData = DateCell.buildDateCell(value);
 				}
 				else {
 					cellData = new TextCell(value == null ? "" : value);

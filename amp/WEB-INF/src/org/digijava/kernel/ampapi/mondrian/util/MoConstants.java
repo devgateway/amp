@@ -307,7 +307,15 @@ public final class MoConstants {
 	public static final String Q3 = "Q3";
 	public static final String Q4 = "Q4";
 	
+	/**
+	 * date as it comes out of Mondrian running atop MonetDB
+	 */
 	public static final String DATE_FORMAT = "yyyy-MM-dd";
+	
+	/**
+	 * date as it should be displayed
+	 */
 	public static final String DATE_DISPLAY_FORMAT = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+	
 	public static final String HAS_AMP_PROPERTIES = "HAS_AMP_PROPERTIES";
 }

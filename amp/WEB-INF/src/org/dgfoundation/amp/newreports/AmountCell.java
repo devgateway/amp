@@ -11,17 +11,16 @@ import java.text.DecimalFormat;
 public final class AmountCell extends ReportCell {
 	
 	public AmountCell(BigDecimal value, DecimalFormat formatter) {
-		super(value, formatter);
+		super(value, format(formatter, value));
 	}
 	
 	public AmountCell(Double value, DecimalFormat formatter) {
-		super(value, formatter);
+		super(value, format(formatter, value));
 	}
-	
-	@Override
-	protected String getFormattedValue() {
-		if (formatter == null) 
+
+	protected static String format(DecimalFormat formatter, Object value) {
+		if (formatter == null || value == null) 
 			return String.valueOf(value);
-		return ((DecimalFormat)formatter).format(value instanceof BigDecimal ? ((BigDecimal)value).doubleValue() : (Double)value);
+		return (formatter).format(value instanceof BigDecimal ? ((BigDecimal)value).doubleValue() : (Double)value);
 	}
 }

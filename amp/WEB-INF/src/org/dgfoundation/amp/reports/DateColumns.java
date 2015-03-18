@@ -3,8 +3,8 @@
  */
 package org.dgfoundation.amp.reports;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import org.dgfoundation.amp.ar.ColumnConstants;
 
@@ -13,7 +13,7 @@ import org.dgfoundation.amp.ar.ColumnConstants;
  * @author Nadejda Mandrescu
  */
 public class DateColumns {
-	public final static List<String> ACTIVITY_DATES = new ArrayList<String>() {{
+	public final static Set<String> ACTIVITY_DATES = new LinkedHashSet<String>() {{
 		add(ColumnConstants.ACTIVITY_CREATED_ON);
 		add(ColumnConstants.ACTIVITY_UPDATED_ON);
 		add(ColumnConstants.ACTUAL_APPROVAL_DATE);

@@ -3420,24 +3420,5 @@ public class AmpARFilter extends PropertyListable {
 		}
 		ret.append(" )");
 		return ret.toString();
-	}	
-	
-	 /**
-	 *Reformats a date string from the the formatIn specified to the formatOut desired. 
-	 */
-	 public static String getReformattedDate(String input, String formatIn, String formatOut) {
-		SimpleDateFormat sdfInput = new SimpleDateFormat(formatIn);
-		SimpleDateFormat sdfOutput = new SimpleDateFormat(formatOut);
-
-		String out = input;
-		try {
-			
-			Date parsedDate = sdfInput.parse(input);
-			out = sdfOutput.format(parsedDate); 
-		}
-		catch(ParseException e) {
-			logger.error("invalid date trickled into AmpARFilter::changeFormat!", e); 
-		}
-		return out;
 	}
 }

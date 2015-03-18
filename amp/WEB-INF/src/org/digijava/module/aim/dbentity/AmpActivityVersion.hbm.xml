@@ -99,6 +99,8 @@
 
 		<property name="approvalStatus" column="approval_status" type="java.lang.String" />
 
+        <property name="fundingSourcesNumber" column="funding_sources_number" type="java.lang.Integer" />
+
 		<property name="lineMinRank" column="line_min_rank" type="java.lang.Integer" />
 		
 		<many-to-one name="ampActivityGroup" column="amp_activity_group_id"

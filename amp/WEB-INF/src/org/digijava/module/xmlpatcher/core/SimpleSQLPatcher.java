@@ -168,7 +168,6 @@ public class SimpleSQLPatcher {
 					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS author",
 					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS plan_min_rank",
 					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS chapter_code",
-					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS funding_sources_number CASCADE",
 					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS activity_start_date",
 					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS activity_close_date",
 					"ALTER TABLE  amp_activity_version DROP COLUMN IF EXISTS amp_activity_previous_version_id",

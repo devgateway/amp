@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-    <input type="file" multiple="true"/>
+	  <div id="uploadBtn" class="custom-file-input" onclick="getFile()"><span wicket:id="chooseFileLabel" /></div>
+      <div id="uploadLabel" class="custom-file-label"><span wicket:id="noFileLabel" /></div>
+<!--    this is file input tag, so i hide it! -->
+  <div class='hidden-file-input'><input type="file" id="upfile" onchange="setLabel(this)" /></div>
+	 	 	 		                                                                                
     <div role="fileUploadedMsg"></div>
     <!-- The global progress information -->
     <div class="span5 fileupload-progress fade">

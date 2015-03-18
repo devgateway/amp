@@ -16,6 +16,7 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
+import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.onepager.AmpAuthWebSession;
 import org.dgfoundation.amp.onepager.OnePagerConst;
 import org.dgfoundation.amp.onepager.components.AmpComponentPanel;
@@ -57,10 +58,14 @@ import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 
 import javax.servlet.http.HttpSession;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -157,11 +162,11 @@ public class OnePager extends AmpHeaderFooter {
             throw new AssertionError("unsuported form type");
 
 		String activityId = activityParam.toString();
-		boolean newActivity = false;
-        if ((activityId == null) || (activityId.compareTo("new") == 0)){
+		final ValueWrapper<Boolean>newActivity= new ValueWrapper<Boolean>(false);
+	    if ((activityId == null) || (activityId.compareTo("new") == 0)){
 			am = new AmpActivityModel();
 
-			newActivity = true;
+			newActivity.value = true;
 			
 			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.CURRENT_MEMBER, session.getCurrentMember());
 			PermissionUtil.putInScope(session.getHttpSession(), GatePermConst.ScopeKeys.ACTIVITY, am.getObject());
@@ -209,52 +214,65 @@ public class OnePager extends AmpHeaderFooter {
 		
 		try {
 			initializeFormComponents(am);
-			AmpActivityFormFeature formFeature= new AmpActivityFormFeature("activityFormFeature", am, "Activity Form", newActivity, listModel);
+			AmpActivityFormFeature formFeature= new AmpActivityFormFeature("activityFormFeature", am, "Activity Form", newActivity.value, listModel);
 			add(formFeature);
 		} catch (Exception e) {
 			logger.error(e);
 			throw new RuntimeException(e);
 		}
 		
-		if (DEBUG_ACTIVITY_LOCK)
-			editLockRefresher = new Label("editLockRefresher", "Locked [" + am.getEditingKey() + "] at:" + System.currentTimeMillis());
-		else
+		if (DEBUG_ACTIVITY_LOCK) {
+			editLockRefresher = new Label("editLockRefresher", "Locked [" + am.getEditingKey() + "] at:"
+					+ System.currentTimeMillis());
+		} else {
 			editLockRefresher = new WebMarkupContainer("editLockRefresher");
-		if (!newActivity){ 
-			timer = new AbstractAjaxTimerBehavior(ActivityGatekeeper.getRefreshInterval()){
-				private static final long serialVersionUID = 1L;
+		}
+		timer = new AbstractAjaxTimerBehavior(ActivityGatekeeper.getRefreshInterval()) {
+			private static final long serialVersionUID = 1L;
 
-				@Override
-				public boolean canCallListenerInterface(Component component,
-						Method method) {
-					return true;
+			@Override
+			public boolean canCallListenerInterface(Component component, Method method) {
+				return true;
+			}
+
+			@Override
+			protected void onTimer(AjaxRequestTarget target) {
+				if (!editLockRefresher.isEnabled()) {
+					this.stop(target);
 				}
-				
-				@Override
-				protected void onTimer(AjaxRequestTarget target) {
-					if(!editLockRefresher.isEnabled()){
-						this.stop(target);
-					}
-
-					long currentUserId = ((AmpAuthWebSession)getSession()).getCurrentMember().getMemberId();
-					Integer refreshStatus = ActivityGatekeeper.refreshLock(String.valueOf(am.getId()), am.getEditingKey(), currentUserId);
+				if (!newActivity.value) {
+					// we only refresh the lock if its not a new activity
+					long currentUserId = ((AmpAuthWebSession) getSession()).getCurrentMember().getMemberId();
+					Integer refreshStatus = ActivityGatekeeper.refreshLock(String.valueOf(am.getId()),
+							am.getEditingKey(), currentUserId);
 					if (editLockRefresher.isEnabled() && refreshStatus.equals(ActivityGatekeeper.REFRESH_LOCK_LOCKED))
-                        throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(String.valueOf(am.getId()), currentUserId));
+						throw new RedirectToUrlException(ActivityGatekeeper.buildRedirectLink(
+								String.valueOf(am.getId()), currentUserId));
 
-					if (DEBUG_ACTIVITY_LOCK){
+					if (DEBUG_ACTIVITY_LOCK) {
 						if (refreshStatus.equals(ActivityGatekeeper.REFRESH_LOCK_LOCKED))
 							editLockRefresher.setDefaultModelObject("FAILED to refresh lock!");
 						else
-							editLockRefresher.setDefaultModelObject("Locked [" + am.getEditingKey() + "] at:" + System.currentTimeMillis());
+							editLockRefresher.setDefaultModelObject("Locked [" + am.getEditingKey() + "] at:"
+									+ System.currentTimeMillis());
 						target.add(editLockRefresher);
 					}
 				}
-			};
-			editLockRefresher.add(timer);
-		}
-		else
-			if (DEBUG_ACTIVITY_LOCK)
-				editLockRefresher.setDefaultModelObject("");
+				// keep aliave jdbc connection
+				AmpActivityModel.getHibernateSession().doWork(new Work() {
+					@Override
+					public void execute(Connection connection) throws SQLException {
+						java.sql.Statement stm = connection.createStatement();
+						java.sql.ResultSet rs = stm.executeQuery("select 1");
+						if (rs.next())
+							;
+						rs.close();
+						stm.close();
+					}
+				});
+			}
+		};
+		editLockRefresher.add(timer);
 		add(editLockRefresher);
 	}
 	

@@ -6,20 +6,29 @@ package org.digijava.kernel.ampapi.endpoints.security;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.menu.MenuConstants;
 import org.dgfoundation.amp.menu.MenuItem;
 import org.dgfoundation.amp.menu.MenuUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.w3c.dom.Document;
 
 /**
- * Security Endpoint related services like 
+ * Security Endpoint related services like
  * 
  * @author Nadejda Mandrescu
  */
 public class SecurityService {
 
+	private static final Logger logger = Logger.getLogger(SecurityService.class);
+	private static String ampVersion;
+	private static String buildDate;
 	/**
 	 * @return json structure for the current view + user + state menu
 	 */
@@ -27,9 +36,10 @@ public class SecurityService {
 		List<MenuItem> items = MenuUtils.getCurrentRequestMenuItems();
 		return convert(items);
 	}
-	
+
 	/**
 	 * Converts menu items to JSON structure
+	 * 
 	 * @param items
 	 * @return JsonBean of menu items
 	 */
@@ -63,5 +73,49 @@ public class SecurityService {
 			jsonItems.add(jsonItem);
 		}
 		return jsonItems;
+	}
+
+	public static JsonBean getFooter(String xmlFilePath, String siteUrl, boolean isAdmin) {
+		JsonBean jsonItem = new JsonBean();
+		populateBuildValues(xmlFilePath);
+		Boolean trackingEnabled = FeaturesUtil
+				.getGlobalSettingValueBoolean(GlobalSettingsConstants.ENABLE_SITE_TRACKING);
+		String siteId = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.TRACKING_SITE_ID);
+		String trackingUrl = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.TRACKING_SITE_URL);
+		jsonItem.set(EPConstants.BUILD_DATE, buildDate);
+		jsonItem.set(EPConstants.AMP_VERSION, ampVersion);
+		jsonItem.set(EPConstants.TRACKING_ENABLED, trackingEnabled);
+		jsonItem.set(EPConstants.SITE_ID, siteId);
+		jsonItem.set(EPConstants.TRACKING_URL, trackingUrl);
+		jsonItem.set(EPConstants.FOOTER_TEXT, TranslatorWorker
+				.translateText("Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF"));
+		if (isAdmin) {
+			JsonBean adminLinks = new JsonBean();
+			adminLinks.set(EPConstants.ADMIN_LINK_NAME, siteUrl + "/admin");
+			adminLinks.set(EPConstants.USERDEV_LINK_NAME, siteUrl + "/admin/switchDevelopmentMode.do");
+			jsonItem.set(EPConstants.ADMIN_LINKS, adminLinks);
+		}
+		return jsonItem;
+
+	}
+	/**
+	 * Obtains and populates the values for  Amp Version and Build Date
+	 * @param filePath the path to the xml file containing 'buildDate' and
+	 * 'ampVersion' values
+	 */
+	private static void populateBuildValues(String filePath) {
+		if (buildDate == null || ampVersion == null) {
+			try {
+				DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder builder = docFactory.newDocumentBuilder();
+				Document doc;
+				doc = builder.parse(filePath);
+				buildDate = doc.getDoctype().getEntities().getNamedItem("buildDate").getTextContent();
+				ampVersion = doc.getDoctype().getEntities().getNamedItem("ampVersion").getTextContent();
+			} catch (Exception e) {
+				logger.error("Couldn't parse xml file " + filePath, e);
+			}
+		}
+
 	}
 }

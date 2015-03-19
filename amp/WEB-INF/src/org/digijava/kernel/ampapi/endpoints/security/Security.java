@@ -1,28 +1,35 @@
 package org.digijava.kernel.ampapi.endpoints.security;
 
+import java.io.IOException;
 import java.util.List;
 
 import javax.security.auth.Subject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.security.DgSecurityManager;
 import org.digijava.kernel.security.ResourcePermission;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamUtil;
+import org.xml.sax.SAXException;
 
 /**
  * This class should have all security / permisions related methods
@@ -33,6 +40,11 @@ import org.digijava.module.aim.util.TeamUtil;
 @Path("security")
 public class Security {
 	private static final Logger logger = Logger.getLogger(Security.class);
+	private static String SITE_CONFIG_PATH = "TEMPLATE" + System.getProperty("file.separator") + "ampTemplate"
+			+ System.getProperty("file.separator") + "site-config.xml";
+
+	@Context
+	private HttpServletRequest httpRequest;
 
 	/**
 	 * if there'is a looged user it returns
@@ -103,4 +115,18 @@ public class Security {
 	public List<JsonBean> getMenu() {
 		return SecurityService.getMenu();
 	}
+	
+	@GET
+	@Path("/footer")
+	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+	@ApiMethod(ui = false, id = "Footer", name = "Footer")
+	public JsonBean getFooter() throws ParserConfigurationException, SAXException, IOException { 
+		String ampAdmin = (String) httpRequest.getSession().getAttribute("ampAdmin");
+		boolean isAdmin = ampAdmin!=null && ampAdmin.equals("yes");
+		SiteDomain currentDomain = RequestUtils.getSiteDomain(httpRequest);
+		String siteUrl = SiteUtils.getSiteURL(currentDomain, httpRequest.getScheme(), httpRequest.getServerPort(), httpRequest
+				.getContextPath());
+		return SecurityService.getFooter(httpRequest.getServletContext().getRealPath("/")+SITE_CONFIG_PATH,siteUrl,isAdmin);
+	}
+
 }

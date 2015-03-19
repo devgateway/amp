@@ -6,7 +6,6 @@ package org.dgfoundation.amp.menu;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,6 +14,7 @@ import org.dgfoundation.amp.menu.dynamic.DynamicMenu;
 import org.dgfoundation.amp.menu.dynamic.EmailMenu;
 import org.dgfoundation.amp.menu.dynamic.LanguageMenu;
 import org.dgfoundation.amp.menu.dynamic.WorkspaceMenu;
+import org.dgfoundation.amp.visibility.data.FMSettingsMediator;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.kernel.user.Group;
@@ -22,8 +22,6 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.kernel.user.User;
 
 /**
  * Updates current menu structure based on the current user & state
@@ -39,8 +37,8 @@ public class MenuItemsProcessor {
 	 */
 	
 	public static List<MenuItem> processForCurrentRequest(List<MenuItem> items, AmpView view) {
-		// TODO for AMP-19518
-		Set<String> visibleMenuEntries = null;
+		// retrieve the list of enabled menu entries for the current FM Template
+		Set<String> visibleMenuEntries = FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MENU);
 		
 		return (new MenuItemsProcessor(view)).process(items, visibleMenuEntries);
 	}
@@ -72,8 +70,7 @@ public class MenuItemsProcessor {
 		List<MenuItem> newList = new ArrayList<MenuItem>();
 		for (MenuItem item : items) {
 			// add only items that are visible based on FM & custom visibility rules
-			// TODO: remove visibleMenuEntries == null when AMP-19518 is done
-			if ((visibleMenuEntries == null || visibleMenuEntries.contains(item.name)) 
+			if (visibleMenuEntries.contains(item.name)
 					&& isVisible(item.name) && isAllowedUserGroup(item)) {
 				MenuItem newItem = new MenuItem(item);
 				newList.add(newItem);

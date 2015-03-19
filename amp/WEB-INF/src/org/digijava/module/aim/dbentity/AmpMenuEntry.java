@@ -4,8 +4,10 @@
 package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Set;
 
+import org.dgfoundation.amp.menu.AmpView;
 import org.digijava.kernel.user.Group;
 
 /**
@@ -20,13 +22,12 @@ public class AmpMenuEntry implements Serializable {
 	private String title;
 	private String tooltip;
 	private String url;
-	private boolean publicView;
-	private boolean adminView;
-	private boolean teamView;
 	private String flags;
 	private int position = 0;
 	private Set<AmpMenuEntry> items;
 	private Set<Group> groups;
+	private Map<AmpView, AmpVisibilityRule> viewVisibilityMap;
+	private Map<AmpView, String> viewURLMap;
 	
 	/**
 	 * @return the id
@@ -114,48 +115,6 @@ public class AmpMenuEntry implements Serializable {
 	
 	
 	/**
-	 * @return the publicView
-	 */
-	public boolean isPublicView() {
-		return publicView;
-	}
-
-	/**
-	 * @param publicView the publicView to set
-	 */
-	public void setPublicView(boolean publicView) {
-		this.publicView = publicView;
-	}
-
-	/**
-	 * @return the adminView
-	 */
-	public boolean isAdminView() {
-		return adminView;
-	}
-
-	/**
-	 * @param adminView the adminView to set
-	 */
-	public void setAdminView(boolean adminView) {
-		this.adminView = adminView;
-	}
-
-	/**
-	 * @return the teamView
-	 */
-	public boolean isTeamView() {
-		return teamView;
-	}
-
-	/**
-	 * @param teamView the teamView to set
-	 */
-	public void setTeamView(boolean teamView) {
-		this.teamView = teamView;
-	}
-
-	/**
 	 * @return the flags
 	 */
 	public String getFlags() {
@@ -209,6 +168,35 @@ public class AmpMenuEntry implements Serializable {
 	 */
 	public void setGroups(Set<Group> groups) {
 		this.groups = groups;
+	}
+
+	/**
+	 * @return the viewVisibilityMap
+	 */
+	public Map<AmpView, AmpVisibilityRule> getViewVisibilityMap() {
+		return viewVisibilityMap;
+	}
+
+	/**
+	 * @param viewVisibilityMap the viewVisibilityMap to set
+	 */
+	public void setViewVisibilityMap(
+			Map<AmpView, AmpVisibilityRule> viewVisibilityMap) {
+		this.viewVisibilityMap = viewVisibilityMap;
+	}
+
+	/**
+	 * @return the viewURLMap
+	 */
+	public Map<AmpView, String> getViewURLMap() {
+		return viewURLMap;
+	}
+
+	/**
+	 * @param viewURLMap the viewURLMap to set
+	 */
+	public void setViewURLMap(Map<AmpView, String> viewURLMap) {
+		this.viewURLMap = viewURLMap;
 	}
 	
 }

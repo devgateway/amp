@@ -24,6 +24,7 @@ public class FMSettingsMediator {
 	public static final String FMGROUP_MODULES = "MODULES";
 	public static final String FMGROUP_GIS = "GIS";
 	public static final String FMGROUP_DASHBOARDS = "DASHBOARDS";
+	public static final String FMGROUP_MENU = "MENU";
 
 	/** stores all fm groups classes that are manageble via this proxy */
 	private static Map<String, Class<? extends FMSettings>> registeredFMGroups = initFMGroups();
@@ -40,6 +41,7 @@ public class FMSettingsMediator {
 		groups.put(FMGROUP_MODULES, ModulesVisibility.class);
 		groups.put(FMGROUP_GIS, GisFMSettings.class);
 		groups.put(FMGROUP_DASHBOARDS, DashboardsFMSettings.class);
+		groups.put(FMGROUP_MENU, MenuVisibility.class);
 		
 		return Collections.synchronizedMap(groups);
 	}

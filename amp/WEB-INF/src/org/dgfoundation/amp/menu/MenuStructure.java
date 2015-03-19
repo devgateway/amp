@@ -13,7 +13,7 @@ import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.user.Group;
-import org.digijava.module.aim.dbentity.AmpMenuEntry;
+import org.digijava.module.aim.dbentity.AmpMenuEntryInView;
 
 /**
  * Keeps all possible menu entries for a specific public/admin/team view, 
@@ -56,21 +56,23 @@ public class MenuStructure {
 	}
 	
 	private List<MenuItem> menuItems;
-	private MenuStructure(List<AmpMenuEntry> orderedEntries, AmpView view) {
+	private <T> MenuStructure(List<T> orderedEntries, AmpView view) {
 		String warnMsg = "Skipping menu entry '%s' that is enabled for " + view + " view while its ancestor '%s' is not.";
 		MenuItem root = new MenuItem("root", null, null, null, null, null);
-		Map<AmpMenuEntry, MenuItem> itemsMap = new HashMap<AmpMenuEntry, MenuItem>();
+		Map<T, MenuItem> itemsMap = new HashMap<T, MenuItem>();
 		itemsMap.put(null, root);
-		for (AmpMenuEntry ame : orderedEntries) {
+		for (T t : orderedEntries) {
+			AmpMenuEntryInView ame = (AmpMenuEntryInView) t;
 			Set<String> groupKeys = new HashSet<String>();
 			for (Group group : ame.getGroups()) {
 				groupKeys.add(group.getKey());
 			}
 			MenuItem mi = new MenuItem(ame.getName(), ame.getTitle(), ame.getTooltip(), ame.getUrl(), ame.getFlags(), groupKeys);
-			itemsMap.put(ame, mi);
+			itemsMap.put(t, mi);
 		}
-		for (AmpMenuEntry ame : orderedEntries) {
-			MenuItem item = itemsMap.get(ame);
+		for (T t : orderedEntries) {
+			AmpMenuEntryInView ame = (AmpMenuEntryInView) t; 
+			MenuItem item = itemsMap.get(t);
 			MenuItem parentItem = itemsMap.get(ame.getParent());
 			if (parentItem == null) {
 				// null ame parent is defined by "root", thus no NullPointer is expected

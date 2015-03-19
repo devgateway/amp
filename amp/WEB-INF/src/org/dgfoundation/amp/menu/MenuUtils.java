@@ -3,15 +3,12 @@
  */
 package org.dgfoundation.amp.menu;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
-import org.digijava.module.aim.dbentity.AmpMenuEntry;
+import org.digijava.module.aim.dbentity.AmpMenuEntryInView;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 
@@ -26,17 +23,13 @@ public class MenuUtils {
 	/**
 	 * @return list of menu entries for the current request view
 	 */
-	public static List<AmpMenuEntry> getMenuEntries(AmpView view, boolean orderByPosition) {
-		String query = "select ame from " + AmpMenuEntry.class.getName() 
-				+ " ame where ame.%s = true"
+	public static List<AmpMenuEntryInView> getMenuEntries(AmpView view, boolean orderByPosition) {
+		String query = "select ame from " + AmpMenuEntryInView.class.getName() 
+				+ " ame where ame.viewType=:viewType"
 				+ (orderByPosition ? " order by ame.position asc" : "");
-		switch(view) {
-		case ADMIN: query = String.format(query, "adminView"); break;
-		case PUBLIC: query = String.format(query, "publicView"); break;
-		case TEAM: query = String.format(query, "teamView"); break;
-		}
 		
-		List<AmpMenuEntry> entries = PersistenceManager.getSession().createQuery(query).list();
+		List<AmpMenuEntryInView> entries = PersistenceManager.getSession().createQuery(query)
+				.setParameter("viewType", view).list();
 		return entries;
 		//return filterWrongEntries(entries, view);
 	}
@@ -80,6 +73,9 @@ public class MenuUtils {
 	}
 	*/
 	
+	/**
+	 * @return detects current view type (Public, Team, Admin)
+	 */
 	public static AmpView getCurrentView() {
 		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
 		if (tm == null) 
@@ -87,5 +83,17 @@ public class MenuUtils {
 		if ("yes".equals(TLSUtils.getRequest().getSession().getAttribute("ampAdmin")))
 			return AmpView.ADMIN;
 		return AmpView.TEAM;
+	}
+	
+	/**
+	 * @return current menu items list
+	 */
+	public static List<MenuItem> getCurrentRequestMenuItems() {
+		// detect current view
+		AmpView currentView = getCurrentView();
+		// retrieve menu structure for the current view
+		List<MenuItem> items = MenuStructure.getMenuStructure(currentView);
+		// process menu structure for the current request, i.e. filter out anything hidden by FM or lack of user rights
+		return MenuItemsProcessor.processForCurrentRequest(items, currentView);
 	}
 }

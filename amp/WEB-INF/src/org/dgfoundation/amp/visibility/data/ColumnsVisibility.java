@@ -364,6 +364,7 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 	protected static final List<String> visibleByDefault = Arrays.asList(
 			ColumnConstants.ACTIVITY_COUNT,
 			ColumnConstants.FUNDING_YEAR,
+			ColumnConstants.TEAM_ID,
 			ColumnConstants.TEAM,
 			ColumnConstants.DONOR_AGENCY,
 			ColumnConstants.RELATED_PLEDGES,

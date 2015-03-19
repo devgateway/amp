@@ -6,11 +6,8 @@ package org.digijava.kernel.ampapi.endpoints.security;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.dgfoundation.amp.menu.AmpView;
 import org.dgfoundation.amp.menu.MenuConstants;
 import org.dgfoundation.amp.menu.MenuItem;
-import org.dgfoundation.amp.menu.MenuItemsProcessor;
-import org.dgfoundation.amp.menu.MenuStructure;
 import org.dgfoundation.amp.menu.MenuUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
@@ -27,10 +24,7 @@ public class SecurityService {
 	 * @return json structure for the current view + user + state menu
 	 */
 	public static List<JsonBean> getMenu() {
-		AmpView currentView = MenuUtils.getCurrentView();
-		List<MenuItem> items = MenuStructure.getMenuStructure(currentView);
-		items = MenuItemsProcessor.processForCurrentRequest(items, currentView);
-		
+		List<MenuItem> items = MenuUtils.getCurrentRequestMenuItems();
 		return convert(items);
 	}
 	
@@ -63,7 +57,7 @@ public class SecurityService {
 				jsonItem.set(EPConstants.MENU_CHILDREN, convert(item.getChildren()));
 			}
 			// special case to allow GIS/Dashboards to treat language action in their custom way 
-			if (MenuConstants.LANGUAGE_ITEM.equals(item.name)) {
+			if (MenuConstants.LANGUAGE_ITEM.equals(item.name) || MenuConstants.PUBLIC_LANGUAGE_ITEM.equals(item.name)) {
 				jsonItem.set(EPConstants.MENU_LANUGAGE, true);
 			}
 			jsonItems.add(jsonItem);

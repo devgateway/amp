@@ -192,6 +192,9 @@
         
         <!-- Menu -->
         <hibernate-class>org.digijava.module.aim.dbentity.AmpMenuEntry</hibernate-class>
+        
+        <!-- Visibility -->
+        <hibernate-class>org.digijava.module.aim.dbentity.AmpVisibilityRule</hibernate-class>
 
 	</hibernate-classes>
 	<!-- AIM classes End-->

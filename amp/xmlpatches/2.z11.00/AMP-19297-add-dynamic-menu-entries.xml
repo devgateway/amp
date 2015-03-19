@@ -10,11 +10,11 @@
 		<script>
 			<lang delimiter=";" type="postgres">
 				INSERT INTO amp_menu_entry(SELECT nextval('amp_menu_entry_seq'), (SELECT id FROM amp_menu_entry WHERE name = 'Public Language'),
-					'Public Language Item', null, null, '/rest/translations/languages/%s', true, false, false, null, 1);
+					'Public Language Item', null, null, '/rest/translations/languages/%s', null, 1);
 				INSERT INTO amp_menu_entry(SELECT nextval('amp_menu_entry_seq'), (SELECT id FROM amp_menu_entry WHERE name = 'Language'),
-					'Language Item', null, null, '/rest/translations/languages/%s', false, true, true, null, 1);
+					'Language Item', null, null, '/rest/translations/languages/%s', null, 1);
 				INSERT INTO amp_menu_entry(SELECT nextval('amp_menu_entry_seq'), (SELECT id FROM amp_menu_entry WHERE name = 'Change Workspace'),
-					'Workspace Item', null, null, '/selectTeam.do?id=%s', false, false, true, null, 1);
+					'Workspace Item', null, null, '/selectTeam.do?id=%s', null, 1);
 				UPDATE amp_menu_entry SET url = 'mailto:%s' WHERE name = 'Email';
 				
 			</lang>

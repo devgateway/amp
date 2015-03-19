@@ -11,7 +11,6 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
-import org.digijava.module.aim.action.ViewNewAdvancedReport;
 import org.digijava.module.aim.helper.Constants;
 
 /**
@@ -332,6 +331,13 @@ public class SimpleSQLPatcher {
                     "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_procurement CASCADE",
                     "ALTER TABLE amp_activity_version DROP COLUMN IF EXISTS national_audit CASCADE"
             ));
+            addPatch(new SimpleSQLPatch("012",
+
+            		"ALTER TABLE IF EXISTS amp_menu_entry DROP COLUMN IF EXISTS is_public CASCADE", 
+            		"ALTER TABLE IF EXISTS amp_menu_entry DROP COLUMN IF EXISTS is_admin CASCADE",
+            		"ALTER TABLE IF EXISTS amp_menu_entry DROP COLUMN IF EXISTS is_team CASCADE"
+            ));
+            
 	}};
 	DataSource dataSource;
 	

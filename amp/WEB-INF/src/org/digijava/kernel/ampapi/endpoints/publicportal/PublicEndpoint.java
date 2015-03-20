@@ -10,6 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.log4j.Logger;
 import org.digijava.kernel.ampapi.endpoints.util.ApiMethod;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 
@@ -19,6 +20,8 @@ import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
  */
 @Path("public")
 public class PublicEndpoint {
+	protected static final Logger logger = Logger.getLogger(PublicEndpoint.class);
+
 	/** the number of top projects to be provided */
 	//shouldn't it be configurable?
 	private static final String TOP_COUNT = "20";
@@ -37,6 +40,9 @@ public class PublicEndpoint {
 	public JsonBean getTopProjects(JsonBean config, 
 			@DefaultValue(TOP_COUNT) @QueryParam("count") Integer count, 
 			@QueryParam("months") Integer months) {
+		if(config!=null){
+			logger.debug(config.toString());
+		}
 		return PublicPortalService.getTopProjects(config, count, months);
 	}
 	

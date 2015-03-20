@@ -139,8 +139,6 @@ function contentwidget_totalactivities_widget_retrieve_data($widget_settings, $l
       // @TODO: Add configuration options.
       $value = $value / 1000 / 1000;
 
-      $value = intval($value);
-
       $amount = '<span class="amount">' . $formatter->format($value) . '</span> ';
       $amount .= '<span class="text">' . t('Millions !currencysymbol', array('!currencysymbol' => $currency)) . '</span>';
     }

@@ -97,22 +97,11 @@ public class ActivityService {
 		configureMeasures(spec, config);
 		
  		spec.setCalculateColumnTotals(doTotals);
+ 		
+ 		// AMP-19772: Needed to avoid problems on GIS js. 
+ 		spec.setDisplayEmptyFundingRows(true);
 		
  		spec.setCalculateRowTotals(doTotals);
-		//following ids are added only for testing purposes Please dont commit
-
-//		if(activitIds==null){
-//			activitIds=new ArrayList<String>();
-//			activitIds.add("42193");
-//			activitIds.add("42188");
-//			activitIds.add("42179");
-//			activitIds.add("42178");
-//			activitIds.add("42176");
-//			activitIds.add("42175");
-//			activitIds.add("42200");
-//	
-//		}
-	
 
 		MondrianReportFilters filterRules = FilterUtils.getFilterRules(
 				(LinkedHashMap<String, Object>) config.get("columnFilters"),

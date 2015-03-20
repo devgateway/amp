@@ -110,8 +110,13 @@ public class QueryUtil {
 		try {
 			int distance = ScoreCalculator.getMaxAllowedDistance(keyword);
 			keyword = keyword.toLowerCase();
-			final String queryString = "select  id,name,latitude,longitude,levenshtein('"+keyword+"',lower (name),1,1,1) as distance,thegeometry from amp_locator where levenshtein('"+keyword+"',lower (name),1,1,1) <= "+distance+
-					 " or lower (name) like '%"+keyword+"%'";
+			final String queryString = "select id, name, latitude,longitude, levenshtein(lower(SP_ASCII('"+keyword+"')), "
+					+ " lower(SP_ASCII(name)), 1, 1, 1) as distance, " 
+					+ " thegeometry ,"
+					+ " Sp_ascii(name) anglicizedName, "
+					+ " Sp_ascii('bălți') anglicizedKeyword " 
+					+ "from amp_locator where levenshtein(lower(SP_ASCII('"+keyword+"')), lower(SP_ASCII(name)),1,1,1) <= " + distance
+					+ " or SP_ASCII(name) like SP_ASCII('%"+keyword+"%')";
 			
 			PersistenceManager.getSession().doWork(new Work() {
 
@@ -126,6 +131,8 @@ public class QueryUtil {
 							locator.setLatitude(rs.getString("latitude"));
 							locator.setLongitude(rs.getString("longitude"));
 							locator.setDistance(rs.getInt("distance"));
+							locator.setAnglicizedKeyword(rs.getString("anglicizedKeyword"));
+							locator.setAnglicizedName(rs.getString("anglicizedName"));
 							locator.setTheGeometry(wktToGeometry ("POINT ("+locator.getLongitude()+" "+locator.getLatitude()+")"));
 							locationList.add(locator);
 						}

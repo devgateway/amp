@@ -81,16 +81,17 @@ public class EPConstants {
 	public static final String MENU_LANUGAGE = "language";
 	
 	//footer constants
-	public static final String BUILD_DATE = "build-date";
-	public static final String AMP_VERSION = "amp-version";
-	public static final String SITE_ID = "site-id";
-	public static final String TRACKING_URL = "tracking-url";
-	public static final String TRACKING_ENABLED = "tracking_enabled";
-	public static final String ADMIN_LINKS = "admin-links";
+	public static final String BUILD_DATE = "buildDate";
+	public static final String AMP_VERSION = "ampVersion";
+	public static final String SITE_ID = "siteId";
+	public static final String TRACKING_URL = "trackingUrl";
+	public static final String TRACKING_ENABLED = "trackingEnabled";
+	public static final String ADMIN_LINKS = "adminLinks";
 	public static final String ADMIN_LINK_NAME = "admin";
 	public static final String USERDEV_LINK_NAME = "User/Dev Mode";
-	public static final String FOOTER_TEXT = "footer-text";
-	
+	public static final String FOOTER_TEXT = "footerText";
+	public static final String LINK_NAME = "name";
+	public static final String LINK_URL = "url";
 	
 
 	

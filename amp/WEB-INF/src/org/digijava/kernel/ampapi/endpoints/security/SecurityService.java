@@ -90,10 +90,17 @@ public class SecurityService {
 		jsonItem.set(EPConstants.FOOTER_TEXT, TranslatorWorker
 				.translateText("Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF"));
 		if (isAdmin) {
-			JsonBean adminLinks = new JsonBean();
-			adminLinks.set(EPConstants.ADMIN_LINK_NAME, siteUrl + "/admin");
-			adminLinks.set(EPConstants.USERDEV_LINK_NAME, siteUrl + "/admin/switchDevelopmentMode.do");
-			jsonItem.set(EPConstants.ADMIN_LINKS, adminLinks);
+			List<JsonBean> links = new ArrayList<JsonBean>();
+			JsonBean adminLink = new JsonBean();
+			adminLink.set(EPConstants.LINK_NAME, EPConstants.ADMIN_LINK_NAME);
+			adminLink.set(EPConstants.LINK_URL, siteUrl + "/admin");
+
+			JsonBean userDevLink = new JsonBean();
+			userDevLink.set(EPConstants.LINK_NAME, EPConstants.USERDEV_LINK_NAME);
+			userDevLink.set(EPConstants.LINK_URL, siteUrl + "/admin/switchDevelopmentMode.do");
+			links.add(adminLink);
+			links.add(userDevLink);
+			jsonItem.set(EPConstants.ADMIN_LINKS, links);
 		}
 		return jsonItem;
 

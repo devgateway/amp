@@ -105,6 +105,10 @@ public class AmpLocator implements Serializable{
 	
 	@Type(type="org.hibernate.spatial.GeometryType")
     private Geometry theGeometry;
+
+	//internal use only
+	private String anglicizedName;
+	private String anglicizedKeyword;
 	
 	private transient int distance;
 
@@ -283,4 +287,21 @@ public class AmpLocator implements Serializable{
 	public void setDistance(int distance) {
 		this.distance = distance;
 	}
+
+	public String getAnglicizedName() {
+		return anglicizedName;
+	}
+
+	public void setAnglicizedName(String anglicizedName) {
+		this.anglicizedName = anglicizedName;
+	}
+
+	public String getAnglicizedKeyword() {
+		return anglicizedKeyword;
+	}
+
+	public void setAnglicizedKeyword(String anglicizedKeyword) {
+		this.anglicizedKeyword = anglicizedKeyword;
+	}
+	
 }

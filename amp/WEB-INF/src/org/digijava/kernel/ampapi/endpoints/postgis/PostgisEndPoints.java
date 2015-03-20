@@ -36,7 +36,7 @@ public class PostgisEndPoints {
 		List <Long> idLists = QueryUtil.getIdsList(locations);
 		FeatureCollectionGeoJSON featureCollection = new FeatureCollectionGeoJSON();
 		for (AmpLocator locator : locations) {
-			double score = ScoreCalculator.getScore(locationName, locator.getName(), locator.getDistance());
+			double score = ScoreCalculator.getScore(locator.getAnglicizedName(), locator.getAnglicizedName(), locator.getDistance());
 			featureCollection.features.add(getLocation(Double.valueOf(locator.getLatitude()),
 					Double.valueOf(locator.getLongitude()), locator.getName(), score));
 			if (includeCloseBy && locator.getDistance() == 0) {

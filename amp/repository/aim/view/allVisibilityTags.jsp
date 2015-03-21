@@ -326,31 +326,31 @@
 <feature:display name="NGO Form" module="Organization Manager"></feature:display>
 <feature:display name="Organization Form" module="Organization Manager"></feature:display>
 
-<feature:display name="Undisbursed Balance"module="Measures"></feature:display>
-<feature:display name="Total Commitments"module="Measures"></feature:display>
-<feature:display name="Uncommitted Balance"module="Measures"></feature:display>
-<feature:display name="Execution Rate"module="Measures"></feature:display>
-<feature:display name="Disbursment Ratio"module="Measures"></feature:display>
-<feature:display name="Prior Actual Disbursements"module="Measures"></feature:display>
-<feature:display name="Previous Month Disbursements"module="Measures"></feature:display>
-<feature:display name="Cumulated Disbursements "module="Measures"></feature:display>"
-<feature:display name="Consumption Rate"module="Measures"></feature:display>"
-<feature:display name="Selected Year Planned Disbursements"module="Measures"></feature:display>
-<feature:display name="Actual Pledge"module="Measures"></feature:display>
-<feature:display name="Percentage of Disbursement"module="Measures"></feature:display>
-<feature:display name="Pipeline Commitments"module="Measures"></feature:display>
-<feature:display name="Planned Disbursements - Expenditure"module="Measures"></feature:display>
-<feature:display name="Actual Disbursements - Recurrent"module="Measures"></feature:display>
-<feature:display name="Real Disbursements"module="Measures"></feature:display>
-<feature:display name="pipeline Estimated Disbursements"module="Measures"></feature:display>
-<feature:display name="pipeline Release of Funds"module="Measures"></feature:display>
-<feature:display name="Official Development Aid Commitments"module="Measures"></feature:display>
-<feature:display name="Bilateral SSC Commitments"module="Measures"></feature:display>
-<feature:display name="Triangular SSC Commitments"module="Measures"></feature:display>
-<feature:display name="Commitment Gap"module="Measures"></feature:display>
-<feature:display name="Annual Proposed Project Cost"module="Measures"></feature:display>
-<feature:display name="Real MTEFs"module="Measures"></feature:display>
-<feature:display name="Real Commitments"module="Measures"></feature:display>
+<feature:display name="Undisbursed Balance" module="Measures"></feature:display>
+<feature:display name="Total Commitments" module="Measures"></feature:display>
+<feature:display name="Uncommitted Balance" module="Measures"></feature:display>
+<feature:display name="Execution Rate" module="Measures"></feature:display>
+<feature:display name="Disbursment Ratio" module="Measures"></feature:display>
+<feature:display name="Prior Actual Disbursements" module="Measures"></feature:display>
+<feature:display name="Previous Month Disbursements" module="Measures"></feature:display>
+<feature:display name="Cumulated Disbursements " module="Measures"></feature:display>"
+<feature:display name="Consumption Rate" module="Measures"></feature:display>"
+<feature:display name="Selected Year Planned Disbursements" module="Measures"></feature:display>
+<feature:display name="Actual Pledge" module="Measures"></feature:display>
+<feature:display name="Percentage of Disbursement" module="Measures"></feature:display>
+<feature:display name="Pipeline Commitments" module="Measures"></feature:display>
+<feature:display name="Planned Disbursements - Expenditure" module="Measures"></feature:display>
+<feature:display name="Actual Disbursements - Recurrent" module="Measures"></feature:display>
+<feature:display name="Real Disbursements" module="Measures"></feature:display>
+<feature:display name="pipeline Estimated Disbursements" module="Measures"></feature:display>
+<feature:display name="pipeline Release of Funds" module="Measures"></feature:display>
+<feature:display name="Official Development Aid Commitments" module="Measures"></feature:display>
+<feature:display name="Bilateral SSC Commitments" module="Measures"></feature:display>
+<feature:display name="Triangular SSC Commitments" module="Measures"></feature:display>
+<feature:display name="Commitment Gap" module="Measures"></feature:display>
+<feature:display name="Annual Proposed Project Cost" module="Measures"></feature:display>
+<feature:display name="Real MTEFs" module="Measures"></feature:display>
+<feature:display name="Real Commitments" module="Measures"></feature:display>
 
  
 <field:display name="Regional Observations" feature="Regional Observations"></field:display> 

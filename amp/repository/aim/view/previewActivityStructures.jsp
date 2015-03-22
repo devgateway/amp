@@ -4,8 +4,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 
-<module:display name="/Activity Form/Structures"
-	parentModule="/Activity Form">
+<module:display name="/Activity Form/Structures" parentModule="/Activity Form">
 <c:set var="maxImagesCount" value="6"></c:set>
 <style type="text/css">
 
@@ -182,11 +181,8 @@ function moveDisplayedImages(structureId, imgCount, next){
 			<c:if test="${not empty structure.images}">
 				<tr bgcolor="#f0f0f0">
 					<td align="center"colspan="2">
-					
-					
-	
-				
-					<digi:trn key="trn:images">Images</digi:trn></td>
+						<digi:trn key="trn:images">Images</digi:trn>
+					</td>
 				</tr>
 				<tr>
 					<td class="inside" colspan="2">

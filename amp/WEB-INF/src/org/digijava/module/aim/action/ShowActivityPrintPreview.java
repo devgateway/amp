@@ -93,6 +93,7 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.digijava.module.editor.dbentity.Editor;
+import org.hibernate.Hibernate;
 
 public class ShowActivityPrintPreview
     extends Action {
@@ -849,15 +850,14 @@ public class ShowActivityPrintPreview
                         }
                         
                         eaForm.getComments().setAllComments(allComments);
-                //stuctures
-	                Set<AmpStructure> structures = activity.getStructures();
-	                ArrayList<AmpStructure> res = new ArrayList<AmpStructure>();
-	          	  for(AmpStructure struc:structures)
-	          	  {
-	          		  res.add(struc);
-	          	  }
-	                Collections.sort(res);
-	            	eaForm.setStructures(res);
+                        //stuctures
+                        ArrayList<AmpStructure> res = new ArrayList<AmpStructure>(activity.getStructures());
+                        for(AmpStructure struc:res) {
+                        	Hibernate.initialize(struc.getImages());
+                        	Hibernate.initialize(struc.getType());
+                        }
+                        Collections.sort(res);
+                        eaForm.setStructures(res);
                         
                  //purpose and results
                 if (activity.getPurpose() != null)

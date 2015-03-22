@@ -43,6 +43,8 @@ SELECT  <!-- regular transactions -->
 	(SELECT max(id) FROM v_procurement_system vps WHERE vps.amp_activity_id = vmpt.amp_activity_id) procurement_system_id,
 	
 	CAST(NULL as bigint) AS component_id,
+	vmpt.agreement_id AS agreement_id,
+	
     vmpt.capital_spend_percent, 
      
 	vmpt.src_role,
@@ -79,6 +81,8 @@ SELECT <!-- MTEFs -->
 	(SELECT max(id) FROM v_procurement_system vps WHERE vps.amp_activity_id = aa.amp_activity_id) procurement_system_id,
      
 	CAST(NULL as bigint) AS component_id,
+	COALESCE(f.agreement, 999999999) AS agreement_id,
+	
 	NULL AS capital_spend_percent,
     
 	src_role.role_code AS src_role,
@@ -116,6 +120,8 @@ SELECT <!-- undefined donor -->
     (SELECT max(id) FROM v_procurement_system vps WHERE vps.amp_activity_id = aav.amp_activity_id) AS procurement_system_id,
 	
 	CAST(NULL as bigint) AS component_id,
+	(999999999) AS agreement_id,
+	
 	NULL AS capital_spend_percent,
      
 	'DN' AS src_role,
@@ -159,6 +165,8 @@ SELECT <!-- component funding -->
 	(SELECT max(id) FROM v_procurement_system vps WHERE vps.amp_activity_id = ct.amp_activity_id) procurement_system_id,
      
 	ct.amp_component_id AS component_id,
+	999999999 AS agreement_id,
+	
 	NULL AS capital_spend_percent,
     
 	cast ('DN' as text) as src_role,

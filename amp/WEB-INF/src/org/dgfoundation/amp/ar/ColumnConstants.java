@@ -29,6 +29,7 @@ public class ColumnConstants {
 	public static final String AGREEMENT_CODE = "Agreement Code";
 	public static final String AGREEMENT_EFFECTIVE_DATE = "Agreement Effective Date";
 	public static final String AGREEMENT_SIGNATURE_DATE = "Agreement Signature Date";
+	public static final String AGREEMENT_PARLIAMENTARY_APPROVAL_DATE = "Agreement Parlimentary Approval Date";
 	public static final String AGREEMENT_TITLE_CODE = "Agreement Title + Code";
 	public static final String AMP_ID = "AMP ID";
 	

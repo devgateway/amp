@@ -49,6 +49,8 @@ SELECT
 	f.funding_status_category_va AS funding_status_id,
 	f.mode_of_payment_category_va AS mode_of_payment_id,
 	
+	COALESCE(f.agreement, 999999999) AS agreement_id,
+	
     fd.capital_spend_percent AS capital_spend_percent,
     fd.pledge_id AS pledge_id,
      

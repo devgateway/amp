@@ -42,6 +42,10 @@ public class I18nViewDescription {
 		return addColumnDef(new I18nViewColumnDescription(columnName, viewName, idColumnName, new ColumnValueTranslator(columnName)));
 	}
 	
+	public I18nViewDescription addCalculatedColDef(String columnName, ColumnValueCalculator calculator) {
+		return addColumnDef(new I18nViewColumnDescription(columnName, this.viewName, null, calculator));
+	}
+	
 	public I18nViewDescription addDgEditorColumnDef(String columnName, String languageColumnName) {
 		if (!viewColumns.contains(columnName))
 			throw new RuntimeException(String.format("cannot add dg_editor-backed translated column <%s> to view <%s>: column does not exist!", columnName, viewName));

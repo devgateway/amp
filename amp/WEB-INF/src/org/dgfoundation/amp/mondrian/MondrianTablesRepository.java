@@ -5,12 +5,14 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewColumnDescription;
 import org.dgfoundation.amp.ar.viewfetcher.I18nViewDescription;
+import org.dgfoundation.amp.ar.viewfetcher.InternationalizedViewsRepository;
 import org.dgfoundation.amp.mondrian.currencies.CurrencyAmountGroup;
 import org.dgfoundation.amp.mondrian.jobs.Fingerprint;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableColumn;
 import org.dgfoundation.amp.mondrian.monet.DatabaseTableDescription;
 import org.digijava.module.aim.dbentity.AmpActivityProgramSettings;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpAgreement;
 import org.digijava.module.aim.dbentity.AmpCategoryValueLocations;
 import org.digijava.module.aim.dbentity.AmpClassificationConfiguration;
 import org.digijava.module.aim.dbentity.AmpComponent;
@@ -135,7 +137,20 @@ public class MondrianTablesRepository {
 							.addColumnDef(new I18nViewColumnDescription("component_description", "amp_component_id", AmpComponent.class, "description"))
 							.addColumnDef(new I18nViewColumnDescription("component_type_name", "component_type_id", AmpComponentType.class, "name"));
 				}});
-						
+	
+	public final static MondrianTableDescription MONDRIAN_AGREEMENTS = 
+			new MondrianTableDescription("mondrian_agreements", "amp_agreement_id", Arrays.asList("amp_agreement_id"))
+				.withFingerprintedJob(Arrays.asList(
+						Fingerprint.buildTableHashingQuery("v_mondrian_agreements", "amp_agreement_id"),
+						Fingerprint.buildTranslationHashingQuery(AmpAgreement.class)
+						))
+				.withInternationalizedColumns(new ObjectSource<I18nViewDescription>() {
+					@Override public I18nViewDescription getObject() {
+						return new I18nViewDescription("mondrian_agreements")
+							.addColumnDef(new I18nViewColumnDescription("agreement_title", "amp_agreement_id", AmpAgreement.class, "title"))
+							.addCalculatedColDef("agreement_title_code", new InternationalizedViewsRepository.AgreementTitleCodeCalculator("agreement_code", "amp_agreement_id"));
+					}});
+		
 	
 	public final static MondrianTableDescription MONDRIAN_ACTIVITY_FIXED_TEXTS = 
 			new MondrianTableDescription("mondrian_activity_fixed_texts", "amp_activity_id", Arrays.asList("amp_activity_id"))
@@ -196,9 +211,6 @@ public class MondrianTablesRepository {
 	public final static MondrianTableDescription MONDRIAN_RAW_DONOR_TRANSACTIONS_TABLE = 
 			new MondrianTableDescription("mondrian_raw_donor_transactions", "amp_fund_detail_id", Arrays.asList("amp_activity_id", "amp_fund_detail_id", "donor_id"))
 				.withPledgeView("v_mondrian_raw_pledge_transactions");
-	
-//	public final static MondrianTableDescription MONDRIAN_RAW_COMPONENT_TRANSACTIONS_TABLE = 
-//			new MondrianTableDescription("mondrian_component_transactions", "amp_component_funding_id", Arrays.asList("amp_activity_id", "amp_component_id", "component_organisation_id"));
 	
 	public final static List<MondrianTableDescription> MONDRIAN_DIMENSION_TABLES = Arrays.asList(
 			MONDRIAN_LOCATIONS_DIMENSION_TABLE,
@@ -281,7 +293,8 @@ public class MondrianTablesRepository {
 				new DatabaseTableColumn("sg_org_id", "integer NOT NULL", true), // sector group amp_org_id, subject to Cartesian product
 				
 				new DatabaseTableColumn("component_id", "integer NOT NULL", true), // amp_component_id
-		
+				new DatabaseTableColumn("agreement_id", "integer NOT NULL", true), // amp_agreement_id
+						
 				new DatabaseTableColumn("capital_spend_percent", "double", true),
 				
 				new DatabaseTableColumn("src_role", "text", true),  // amp_role.role_name

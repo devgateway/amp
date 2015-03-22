@@ -34,13 +34,32 @@ import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 public class InternationalizedViewsRepository {
 	public final static String AGREEMENT_TITLE_AND_CODE = "Agreement Title + Code";
 	
-	public final static ColumnValueCalculator agreement_title_code_calculator = new SimpleColumnValueCalculator() {
+	public final static ColumnValueCalculator agreement_title_code_calculator = new AgreementTitleCodeCalculator("Agreement Code", null);
+	
+	/**
+	 * class which computes the title_code of an agreement
+	 * @author simple
+	 *
+	 */
+	public static class AgreementTitleCodeCalculator extends SimpleColumnValueCalculator {
 		
-		@Override
-		public String calculateValue(ResultSet resultSet) throws SQLException{
-			return sqlconcat(resultSet.getString("agreement_title"), " - ", resultSet.getString("Agreement Code"));
+		public final String agreementCodeColumnName;
+		public final String nullColumnName;
+		
+		public AgreementTitleCodeCalculator(String agrCodeColName, String nllColumnName) {
+			agreementCodeColumnName = agrCodeColName;
+			nullColumnName = nllColumnName;
 		}
-	};	
+		
+		@Override public String calculateValue(ResultSet resultSet) throws SQLException{
+			if (nullColumnName != null) {
+				Long id = resultSet.getLong(nullColumnName);
+				if (id == null || id.longValue() == 0 || id.longValue() == 999999999)
+					return null;
+			}
+			return sqlconcat(resultSet.getString("agreement_title"), " - ", resultSet.getString(agreementCodeColumnName));
+		}
+	}
 	
 	public final static ColumnValueCalculator budget_sector_calculator = new SimpleColumnValueCalculator() {
 		
@@ -125,44 +144,44 @@ public class InternationalizedViewsRepository {
 				
 				addViewDef(this, new I18nViewDescription("v_agreement_close_date").
 						addColumnDef(new I18nViewColumnDescription("agreement_title", "id", AmpAgreement.class, "title")).
-						addColumnDef(new I18nViewColumnDescription(AGREEMENT_TITLE_AND_CODE, "v_agreement_close_date", agreement_title_code_calculator)).
+						addCalculatedColDef(AGREEMENT_TITLE_AND_CODE, agreement_title_code_calculator).
 						addColumnDef(new I18nViewColumnDescription("Donor Agency", "amp_org_id", AmpOrganisation.class, "name")));
 
 				addViewDef(this, new I18nViewDescription("v_agreement_code").
 						addColumnDef(new I18nViewColumnDescription("agreement_title", "id", AmpAgreement.class, "title")).
-						addColumnDef(new I18nViewColumnDescription(AGREEMENT_TITLE_AND_CODE, "v_agreement_code", agreement_title_code_calculator)).
+						addCalculatedColDef(AGREEMENT_TITLE_AND_CODE, agreement_title_code_calculator).
 						addColumnDef(new I18nViewColumnDescription("Donor Agency", "amp_org_id", AmpOrganisation.class, "name")));
 				
 				addViewDef(this, new I18nViewDescription("v_agreement_effective_date").
 						addColumnDef(new I18nViewColumnDescription("agreement_title", "id", AmpAgreement.class, "title")).
-						addColumnDef(new I18nViewColumnDescription(AGREEMENT_TITLE_AND_CODE, "v_agreement_effective_date", agreement_title_code_calculator)).
+						addCalculatedColDef(AGREEMENT_TITLE_AND_CODE, agreement_title_code_calculator).
 						addColumnDef(new I18nViewColumnDescription("Donor Agency", "amp_org_id", AmpOrganisation.class, "name")));			
 
 				addViewDef(this, new I18nViewDescription("v_agreement_signature_date").
 						addColumnDef(new I18nViewColumnDescription("agreement_title", "id", AmpAgreement.class, "title")).
-						addColumnDef(new I18nViewColumnDescription(AGREEMENT_TITLE_AND_CODE, "v_agreement_signature_date", agreement_title_code_calculator)).
+						addCalculatedColDef(AGREEMENT_TITLE_AND_CODE, agreement_title_code_calculator).
 						addColumnDef(new I18nViewColumnDescription("Donor Agency", "amp_org_id", AmpOrganisation.class, "name")));			
 
 				addViewDef(this, new I18nViewDescription("v_agreement_title_code").
 						addColumnDef(new I18nViewColumnDescription("agreement_title", "id", AmpAgreement.class, "title")).
-						addColumnDef(new I18nViewColumnDescription(AGREEMENT_TITLE_AND_CODE, "v_agreement_title_code", agreement_title_code_calculator)).
+						addCalculatedColDef(AGREEMENT_TITLE_AND_CODE, agreement_title_code_calculator).
 						addColumnDef(new I18nViewColumnDescription("Donor Agency", "amp_org_id", AmpOrganisation.class, "name")));			
 
 
 				addViewDef(this, new I18nViewDescription("v_budget_organization").
-						addColumnDef(new I18nViewColumnDescription("budget_sector", "v_budget_organization", budget_sector_calculator)).
+						addCalculatedColDef("budget_sector", budget_sector_calculator).
 						addColumnDef(new I18nViewColumnDescription("orgname", "amp_org_id", AmpOrganisation.class, "name")));
 
 				addViewDef(this, new I18nViewDescription("v_budget_program").
-						addColumnDef(new I18nViewColumnDescription("budget_program", "v_budget_program", budget_program_calculator)).
+						addCalculatedColDef("budget_program", budget_program_calculator).
 						addColumnDef(new I18nViewColumnDescription("progname", "amp_theme_id", AmpTheme.class, "name")));
 
 				addViewDef(this, new I18nViewDescription("v_organization_projectid").
-						addColumnDef(new I18nViewColumnDescription("name", "v_organization_projectid", organization_projectid_calculator)).
+						addCalculatedColDef("name", organization_projectid_calculator).
 						addColumnDef(new I18nViewColumnDescription("orgname", "amp_org_id", AmpOrganisation.class, "name")));
 
 				addViewDef(this, new I18nViewDescription("v_project_id").
-						addColumnDef(new I18nViewColumnDescription("proj_id", "v_project_id", projectid_calculator)).
+						addCalculatedColDef("proj_id", projectid_calculator).
 						addColumnDef(new I18nViewColumnDescription("orgname", "amp_org_id", AmpOrganisation.class, "name")));
 
 				

@@ -6,7 +6,7 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
   primary_sector_id, secondary_sector_id, tertiary_sector_id, location_id,
   primary_program_id, secondary_program_id, tertiary_program_id, national_objectives_program_id,
   ea_org_id, ba_org_id, ia_org_id, ro_org_id, ca_org_id, rg_org_id, sg_org_id,
-  component_id,
+  component_id, agreement_id,
   capital_spend_percent, src_role, dest_role, dest_org_id,
   related_entity_id)
   SELECT 
@@ -68,6 +68,7 @@ INSERT INTO mondrian_fact_table (entity_id, entity_internal_id, transaction_type
      COALESCE(sg.ent_id, 999999999) AS sg_org_id,
      
      COALESCE(rawdonation.component_id, 999999999) AS component_id,
+     COALESCE(rawdonation.agreement_id, 999999999) AS agreement_id,
      
      capital_spend_percent AS capital_spend_percent,
      

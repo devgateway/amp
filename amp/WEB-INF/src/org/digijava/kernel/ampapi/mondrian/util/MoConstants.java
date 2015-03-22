@@ -72,6 +72,7 @@ public final class MoConstants {
 	public static final String ACTIVITY_DATES = "Activity Dates";
 	public static final String LOCATION = "Location"; 
 	public static final String COMPONENT = "Component";
+	public static final String AGREEMENT = "Agreement";
 	public static final String COMPONENT_FUNDING_ORGANIZATION = "Component Funding Organization";
 	public static final String PRIMARY_SECTOR = "Primary Sector";
 	public static final String SECONDARY_SECTOR = "Secondary Sector";

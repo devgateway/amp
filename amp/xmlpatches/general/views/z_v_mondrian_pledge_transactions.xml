@@ -35,6 +35,7 @@ SELECT	<!-- pledged money -->
 	afpd.pledge_type AS pledge_type,
 	afpd.type_of_assistance AS type_of_assistance,
 	afpd.aid_modality AS aid_modality,
+	999999999 AS agreement_id,
 	CASE 
 		WHEN afpd.datestart IS NOT NULL AND afpd.dateend IS NOT NULL THEN (date(afpd.datestart) || ' - '::text) || date(afpd.dateend)
 		ELSE 'Undefined'
@@ -57,6 +58,7 @@ SELECT <!-- pledge-financed donor transactions -->
 	999999999 AS pledge_type,
 	999999999 AS type_of_assistance,
 	999999999 AS aid_modality,
+	vmpt.agreement_id AS agreement_id,
 	'Undefined' as funding_range,
 	vmpt.donor_id,
 	afp.status AS status_id

@@ -42,6 +42,8 @@ SELECT <!-- pledge funding -->
 	999999999 AS procurement_system_id,
 	
 	CAST(NULL as bigint) AS component_id,
+	pf.agreement_id AS agreement_id,
+	
 	NULL AS capital_spend_percent,
 	
 	cast ('DN' as text) as src_role,

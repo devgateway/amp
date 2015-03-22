@@ -580,7 +580,39 @@
 				<Level name="Component Type Code" column="component_type_id" type="Integer" nameColumn="component_type_code" />
 			</Hierarchy>
 		</Dimension>
+		
+		<Dimension name="Agreement" foreignKey="agreement_id">
+			<Hierarchy hasAll="true" allMemberName="All Agreement Codes" name="Agreement Code" primaryKey="amp_agreement_id">
+				<Table name="mondrian_agreements@@locale@@" />
+				<Level name="Agreement Code" column="amp_agreement_id" type="Integer" nameColumn="agreement_code" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Agreement Title + Codes" name="Agreement Title + Code" primaryKey="amp_agreement_id">
+				<Table name="mondrian_agreements@@locale@@" />
+				<Level name="Agreement Title + Code" column="amp_agreement_id" type="Integer" nameColumn="agreement_title_code" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Agreement Close Dates" name="Agreement Close Date" primaryKey="amp_agreement_id">
+				<Table name="mondrian_agreements@@locale@@" />
+				<Level name="Agreement Close Date" column="close_date_code" type="Integer" nameColumn="close_date" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Agreement Signature Dates" name="Agreement Signature Date" primaryKey="amp_agreement_id">
+				<Table name="mondrian_agreements@@locale@@" />
+				<Level name="Agreement Signature Date" column="signature_date_code" type="Integer" nameColumn="signature_date" />
+			</Hierarchy>
 
+			<Hierarchy hasAll="true" allMemberName="All Agreement Effective Dates" name="Agreement Effective Date" primaryKey="amp_agreement_id">
+				<Table name="mondrian_agreements@@locale@@" />
+				<Level name="Agreement Effective Date" column="effective_date_code" type="Integer" nameColumn="effective_date" />
+			</Hierarchy>
+
+			<Hierarchy hasAll="true" allMemberName="All Agreement Parlimentary Approval Dates" name="Agreement Parlimentary Approval Date" primaryKey="amp_agreement_id">
+				<Table name="mondrian_agreements@@locale@@" />
+				<Level name="Agreement Parlimentary Approval Date" column="parliamentary_date_code" type="Integer" nameColumn="parliamentary_date" />
+			</Hierarchy>
+		</Dimension>
+				
 		<Dimension name="Activity Currency Amounts" foreignKey="entity_id">
 			<Hierarchy hasAll="true" allMemberName="All Proposed Project Amount" primaryKey="amp_activity_id" name="Proposed Project Amount">
 				<Table name="mondrian_activity_currency_numbers" />

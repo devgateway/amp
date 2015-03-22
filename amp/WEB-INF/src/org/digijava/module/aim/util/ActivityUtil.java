@@ -55,6 +55,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.MatchMode;
+import org.digijava.module.aim.dbentity.AmpStructure;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.engine.spi.SessionImplementor;
 import org.hibernate.jdbc.ReturningWork;
@@ -398,9 +399,9 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 			Hibernate.initialize(result.getLocations());
 			Hibernate.initialize(result.getSectors());
 			Hibernate.initialize(result.getFunding());
-			if(result.getFunding()!=null){
+			if (result.getFunding() != null) {
 				for(Object obj:result.getFunding()){
-					AmpFunding funding=(AmpFunding)obj;
+					AmpFunding funding = (AmpFunding) obj;
 					Hibernate.initialize(funding.getFundingDetails());
 					Hibernate.initialize(funding.getMtefProjections());
 				}
@@ -411,6 +412,10 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
 			Hibernate.initialize(result.getIssues());
 			Hibernate.initialize(result.getRegionalObservations());
 			Hibernate.initialize(result.getStructures());
+			for(AmpStructure str:result.getStructures()) {
+				Hibernate.initialize(str.getImages());
+				Hibernate.initialize(str.getType());
+			}
 		} catch (ObjectNotFoundException e) {
 			logger.debug("AmpActivityVersion with id=" + id + " not found");
 		} catch (Exception e) {

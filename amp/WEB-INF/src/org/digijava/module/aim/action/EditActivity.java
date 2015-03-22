@@ -1615,6 +1615,7 @@ public class EditActivity extends Action {
     // force images load to avoid LazyInitializationException
     for (AmpStructure structure : structures) {
         Hibernate.initialize(structure.getImages());
+        Hibernate.initialize(structure.getType());
     }
 
     eaForm.setStructures(structures);

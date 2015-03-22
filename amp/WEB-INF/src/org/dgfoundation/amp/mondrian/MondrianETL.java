@@ -171,8 +171,13 @@ public class MondrianETL {
 		activities.remove(0l);
 		components.remove(0l);
 		agreements.remove(0l);
-		if (etlFromScratch)
-			activities.add(999999999l);
+		if (etlFromScratch) {
+			long ud = 999999999l;
+			activities.add(ud);
+			pledges.add(ud);
+			components.add(ud);
+			agreements.add(ud);
+		}
 		logger.info(String.format("needed %d iterations to collect all the ETLable entities: %d activities, %d pledges, %d components, %d agreements", steps, activities.size(), pledges.size(), components.size(), agreements.size()));
 		
 		//Set<Long> activityIds = calculateAffectedActivities(etlFromScratch, pledgeIds);
@@ -366,7 +371,7 @@ private EtlResult execute() throws Exception {
 			nrAffectedDates = etlConfig.dateCodes == null ? -1 : etlConfig.dateCodes.size();
 			StopWatch.reset(MONDRIAN_ETL);
 							
-			logger.error("done generating ETL");
+			logger.error("done executing ETL");
 		}
 		
 		processAutonomousTable(MondrianTablesRepository.MONDRIAN_COMPONENTS, etlConfig.componentIdsIn("amp_component_id"));
@@ -771,8 +776,9 @@ private EtlResult execute() throws Exception {
 		 * table translated and not filtered: original only exists in postgres, translated only exist in Monet
 		 *  
 		 */
+		String incrementalQuery = "SELECT * FROM v_" + mondrianTable.tableName + " WHERE " + idFilterSubquery;
 		if (etlConfig.fullEtl) {
-			String fullQuery = "SELECT * FROM v_" + mondrianTable.tableName;
+			String fullQuery = incrementalQuery;
 			long start = System.currentTimeMillis();
 			
 			if (!mondrianTable.isTranslated()) {
@@ -787,7 +793,6 @@ private EtlResult execute() throws Exception {
 			logger.info("full ETL on " + mondrianTable.tableName + ", base table took " + (baseDone - start) + " ms");
 			logger.info("\tfull ETL on " + mondrianTable.tableName + ", cloning for locales " + locales + " took " + (cloningDone - baseDone) + " ms");
 		} else {
-			String incrementalQuery = "SELECT * FROM v_" + mondrianTable.tableName + " WHERE " + idFilterSubquery;
 			// relation exists in Monet IF (table is not translated) OR (isTranslated AND is not filtered)
 			if (mondrianTable.isTranslated()) {
 				SQLUtils.executeQuery(conn, "DELETE FROM " + mondrianTable.tableName + " WHERE " + idFilterSubquery);

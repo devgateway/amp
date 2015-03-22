@@ -59,7 +59,6 @@ public final class EtlConfiguration {
 			put("agreementIds", Util.toCSStringForIN(EtlConfiguration.this.agreementIds));
 			put("allEntityIds", Util.toCSStringForIN(getAllEntityIds()));
 		}});
-		System.out.println("debug only");
 	}
 	
 	

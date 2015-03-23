@@ -342,6 +342,10 @@ public class SettingsUtils {
 		measures.retainAll(MondrianReportUtils.getConfigurableMeasures());
 		settings.add(getFundingTypeSettings(measures));
 		
+		settings.add(new SettingOptions("use-icons-for-sectors-in-project-list", false, new Boolean(FeaturesUtil
+				.isVisibleFeature(GlobalSettingsConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST)).toString(), null,
+				null));
+		
 		settings.add(new SettingOptions("number-format", false, 
 				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT), null, null));
 		int amountOptionId = Integer.valueOf(

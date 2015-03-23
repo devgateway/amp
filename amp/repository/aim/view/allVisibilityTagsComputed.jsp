@@ -869,6 +869,7 @@
 <field:display name="Measure Disbursement" feature="GIS DASHBOARD"></field:display>
 <field:display name="Measure Expenditure" feature="GIS DASHBOARD"></field:display>
 
+<feature:display name="Use icons for Sectors in Project List" module="/GIS"></feature:display>
 
 <feature:display name="Undisbursed Balance"module="Measures"></feature:display>
 <feature:display name="Total Commitments"module="Measures"></feature:display>

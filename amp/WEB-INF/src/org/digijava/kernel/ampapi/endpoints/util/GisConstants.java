@@ -19,6 +19,7 @@ public class GisConstants {
 	public static final String DISBURSEMENTS = "Disbursements";
 	public static final String EXPENDITURES = "Expenditures";
 	*/
+	public static final String USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST =  "Use icons for Sectors in Project List";
 	
 	/**
 	 * The order is important - this is the priority order between measures, 

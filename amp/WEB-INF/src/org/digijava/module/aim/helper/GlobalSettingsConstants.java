@@ -182,7 +182,5 @@ public class GlobalSettingsConstants {
     public static final String DEFAULT_STRUCTURE_TYPE="Default Structure Type";
     
     public static final String ACTIVITY_FORM_FUNDING_SECTION_DESIGN="Activity Form - Funding Section - Tab View";
-    public static final String ONLY_SAIKU_FOR_DONOR_REPORTS = "Use only Saiku for donor reports";
-    
-    public static final String USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST =  "Use icons for Sectors in Project List";
+    public static final String ONLY_SAIKU_FOR_DONOR_REPORTS = "Use only Saiku for donor reports";       
 }

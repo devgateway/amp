@@ -53,7 +53,6 @@ public class AmpSearchOrganizationComponent<T> extends AmpComponentPanel<T>  imp
 		};
 
 		IModel<List<? extends AmpOrgGroup>> orgGroupsModel = Model.ofList(availableChoices == null ? DbUtil.getAllOrgGroups() : availableChoices);
-//			orgGroupsModel = Model.ofList((List<AmpOrgGroup>) DbUtil.searchForOrganisationGroupByType(1l)); // UGLY!
 		orgGroupPanel = new AmpSelectFieldPanel<AmpOrgGroup>("selectOrgType", new Model<AmpOrgGroup>(),  orgGroupsModel, "Select Organization Type", true, true, cr, true);
 		orgGroupPanel.getChoiceContainer().setChoices(orgGroupsModel);
 		orgGroupPanel.getChoiceContainer().add(new AjaxFormComponentUpdatingBehavior("onchange") {

@@ -114,7 +114,7 @@ public class QueryUtil {
 					+ " lower(SP_ASCII(name)), 1, 1, 1) as distance, " 
 					+ " thegeometry ,"
 					+ " Sp_ascii(name) anglicizedName, "
-					+ " Sp_ascii('bălți') anglicizedKeyword " 
+					+ " Sp_ascii('"+ keyword +"') anglicizedKeyword " 
 					+ "from amp_locator where levenshtein(lower(SP_ASCII('"+keyword+"')), lower(SP_ASCII(name)),1,1,1) <= " + distance
 					+ " or SP_ASCII(name) like SP_ASCII('%"+keyword+"%')";
 			

@@ -246,7 +246,8 @@ public class MondrianReportSorter {
 			//update context
 			Entry<ReportOutputColumn, ReportCell> currEntry = currIter.next();
 			Entry<ReportOutputColumn, ReportCell> prevEntry = prevIter.next();
-			isPrefix = StringUtils.isBlank(((TextCell)currEntry.getValue()).displayedValue);
+			
+			isPrefix = StringUtils.isBlank(currEntry.getValue().displayedValue);
 			if (isPrefix) {
 				ReportCell tmp = prevEntry.getValue();
 				prevEntry.setValue(currEntry.getValue());

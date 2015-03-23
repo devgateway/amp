@@ -19,9 +19,17 @@ module.exports = Backbone.View.extend({
         colourBuckets: self.model.structuresCollection.palette.colours,
         selectedVertical: self.model.get('filterVertical')
       };
-
+      
+      //TODO: Move this code to a config class.
+      var MAX_NUM_FOR_ICONS = 0;
+      var useIconsForSectors = _.find(self.model.appData.settings.models, function(item) {
+          return (item.id === 'use-icons-for-sectors-in-project-list');
+      });
+      if (useIconsForSectors !== undefined && useIconsForSectors.get('name') === 'true') {
+          MAX_NUM_FOR_ICONS = 300;
+      }
       // render icons if available
-      if (self.model.structuresCollection.length < 400 && //TODO: use MAX_NUM_FOR_ICONS instead...
+      if (self.model.structuresCollection.length < MAX_NUM_FOR_ICONS &&
           self.model.get('filterVertical') === 'Primary Sector Id') {
         renderObject.imageBuckets = self.model.iconMappings;
         renderObject.palletteElements = self.model.structuresCollection.palette.get('elements');

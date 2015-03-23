@@ -870,6 +870,8 @@
 <field:display name="Measure Disbursement" feature="GIS DASHBOARD"></field:display>
 <field:display name="Measure Expenditure" feature="GIS DASHBOARD"></field:display>
 
+<feature:display name="Use icons for Sectors in Project List" module="/GIS"></feature:display>
+
 <!-- new gis -->
 <module:display name="Public GIS" parentModule="PUBLIC VIEW"></module:display>
 <!--  -->

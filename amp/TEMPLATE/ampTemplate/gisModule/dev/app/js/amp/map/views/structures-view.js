@@ -28,7 +28,7 @@ module.exports = Backbone.View
   ZOOM_BREAKPOINT: 11, //11 is real # for zoom resize
   SMALL_ICON_RADIUS: 4,
   BIG_ICON_RADIUS: 6,
-  MAX_NUM_FOR_ICONS: 400,
+  MAX_NUM_FOR_ICONS: -1,
 
   // Calculate based on: var boundary0 = self.app.data.boundaries.get('adm-0');
   currentRadius: null,
@@ -116,7 +116,20 @@ module.exports = Backbone.View
         marker,
         latlng = L.latLng(feature.geometry.coordinates[1],
                           feature.geometry.coordinates[0]);
-
+    
+    // Calculate only one time and not for all points (we can have thousands).
+    if (self.MAX_NUM_FOR_ICONS === -1) {
+        //TODO: Move this code to a config class.
+        var useIconsForSectors = _.find(feature.properties.activity.collection.appData.settings.models, function(item) {
+        	return (item.id === 'use-icons-for-sectors-in-project-list');
+        });
+        if (useIconsForSectors !== undefined && useIconsForSectors.get('name') === 'true') {
+        	self.MAX_NUM_FOR_ICONS = 300;
+        } else {
+        	self.MAX_NUM_FOR_ICONS = 0;
+        }
+        console.log('MAX_NUM_FOR_ICONS: ' + self.MAX_NUM_FOR_ICONS);
+    }
     if (self.rawData.features.length < self.MAX_NUM_FOR_ICONS &&
       self.structureMenuModel.get('filterVertical') === 'Primary Sector Id') {
       // create icon

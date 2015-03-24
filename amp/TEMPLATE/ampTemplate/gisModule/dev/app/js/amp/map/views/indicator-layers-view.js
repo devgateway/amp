@@ -38,7 +38,7 @@ module.exports = Backbone.View.extend({
         loadedLayer = this.leafletLayerMap[layer.cid];
 
     if (loadedLayer === 'loading') {
-      console.warn('tried to show a layer that is still loading, return');
+      console.warn('tried to show a lyer that is still loading, return');
       return;
     } else {
       //this will be replaced once loadAll is done,
@@ -118,9 +118,13 @@ module.exports = Backbone.View.extend({
       // TODO: drs append  format value.
       var unit = (layerModel.get('unit') ? layerModel.get('unit') : '');
       self.app.data.settings.load().then(function() {
+        var fundingTypeString = "";
+        if ( self.app.data.settings.get('0') ) {
+          fundingTypeString = ['<strong>',self.app.data.settings.get('0').get('selected'),': ','</strong>'].join('');
+        }
         var ampFormatter = new util.DecimalFormat(self.app.data.settings.get('number-format').get('name'));
         layer.bindPopup('<strong>' + feature.properties.name + '</strong>' +
-                        '<br/>' + ampFormatter.format(feature.properties.value) + ' ' + unit);
+                        '<br/>' + fundingTypeString + ''+ ampFormatter.format(feature.properties.value) + ' ' + unit);
       });
     }
 

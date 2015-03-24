@@ -99,7 +99,7 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
 			orgtoadd.setAcronymAndName(rs.getString("acronym"));
 			ret.add(orgtoadd);
 		    }
-		    rs.close();
+		    rsi.close();
 		}
 	    });
 	} catch (DgException e) {

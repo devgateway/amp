@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.swing.text.html.HTMLDocument.HTMLReader.FormAction;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -176,9 +177,9 @@ public class Reports {
 	 */
 	public final JsonBean getCustomReport(JsonBean formParams) {
 		if(formParams!=null){ 
-			System.out.println("****** running public report " + formParams.toString());
+			logger.error("****** running public report " + formParams.toString());
 		}else{
-			System.out.println("*********empty params**** " );
+			logger.error("*********empty params**** " );
 		}
 		List<String> errors = ReportsUtil.validateReportConfig(formParams, true);
 		if (errors.size() > 0) {
@@ -205,6 +206,9 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JsonBean getReportResultByPage(JsonBean formParams,
 			@PathParam("report_id") Long reportId) {
+		if(formParams !=null){
+			logger.error("AMP-19783 formparam: " +formParams.toString());
+		}
 		return ReportsUtil.getReportResultByPage(reportId, formParams);
 	}
 	

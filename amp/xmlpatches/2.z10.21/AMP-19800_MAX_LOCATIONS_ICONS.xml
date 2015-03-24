@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:patch closeOnSuccess="true" retryOnFail="false"
+        xmlns:tns="http://docs.ampdev.net/schemas/xmlpatcher" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://docs.ampdev.net/schemas/xmlpatcher ../doc/xmlpatcher.xsd ">
+        <jira>AMP-19800</jira>
+        <keyword>Global settings</keyword>
+        <author>mihai</author>
+        <description>Add the ability to configure the number of locations to show icons on the Project Sites map</description>
+        <apply>
+                <script>
+                        <lang delimiter=";" type="postgres">
+                                INSERT INTO amp_global_settings (id, settingsname, settingsvalue, possiblevalues, description, section)
+                                VALUES (nextval('amp_global_settings_seq'), 'Show icons for Project Sites for locations up to', '0', 't_Integer', 'If 0 then it will show colored points, otherwise it will set the upper limit (for the number of locations) to show icons (if lower) or points (if higher).', 'general');
+                        </lang>
+                </script>
+        </apply>
+</tns:patch>

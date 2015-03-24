@@ -183,4 +183,6 @@ public class GlobalSettingsConstants {
     
     public static final String ACTIVITY_FORM_FUNDING_SECTION_DESIGN="Activity Form - Funding Section - Tab View";
     public static final String ONLY_SAIKU_FOR_DONOR_REPORTS = "Use only Saiku for donor reports";
+    
+    public static final String MAX_LOCATIONS_ICONS = "Show icons for Project Sites for locations up to";
 }

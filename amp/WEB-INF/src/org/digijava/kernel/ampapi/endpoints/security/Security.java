@@ -67,46 +67,46 @@ public class Security {
 	 * 
 	 * @return
 	 */
-	@GET
-	@Path("/user")
-	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "LoggedUser", name = "Logged user")
-	public JsonBean getUser() {
-		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
-
-		JsonBean user = new JsonBean();
-		if (tm != null) {
-			Site site = RequestUtils.getSite(TLSUtils.getRequest());
-			User u;
-			try {
-				u = UserUtils.getUserByEmail(tm.getEmail());
-			} catch (DgException e) {
-				user.set("email", null);
-				return user;
-			}
-			Subject subject = UserUtils.getUserSubject(u);
-
-			boolean siteAdmin = DgSecurityManager.permitted(subject, site, ResourcePermission.INT_ADMIN);
-			user.set("email", u.getEmail());
-			user.set("firstName", u.getFirstNames());
-			user.set("lastName", u.getLastName());
-			user.set("administratorMode", siteAdmin);
-			if (!siteAdmin) {
-				AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
-
-				if (ampTeamMember.getAmpTeam() != null) { 
-					user.set("workspace", ampTeamMember.getAmpTeam().getName());
-					user.set("workspaceId", ampTeamMember.getAmpTeam().getIdentifier());
-				}
-				
-			} else {
-				return user;
-			}
-		} else {
-			user.set("email", null);
-		}
-		return user;
-	}
+//	@GET
+//	@Path("/user")
+//	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
+//	@ApiMethod(ui = false, id = "LoggedUser", name = "Logged user")
+//	public JsonBean getUser() {
+//		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
+//
+//		JsonBean user = new JsonBean();
+//		if (tm != null) {
+//			Site site = RequestUtils.getSite(TLSUtils.getRequest());
+//			User u;
+//			try {
+//				u = UserUtils.getUserByEmail(tm.getEmail());
+//			} catch (DgException e) {
+//				user.set("email", null);
+//				return user;
+//			}
+//			Subject subject = UserUtils.getUserSubject(u);
+//
+//			boolean siteAdmin = DgSecurityManager.permitted(subject, site, ResourcePermission.INT_ADMIN);
+//			user.set("email", u.getEmail());
+//			user.set("firstName", u.getFirstNames());
+//			user.set("lastName", u.getLastName());
+//			user.set("administratorMode", siteAdmin);
+//			if (!siteAdmin) {
+//				AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
+//
+//				if (ampTeamMember.getAmpTeam() != null) { 
+//					user.set("workspace", ampTeamMember.getAmpTeam().getName());
+//					user.set("workspaceId", ampTeamMember.getAmpTeam().getIdentifier());
+//				}
+//				
+//			} else {
+//				return user;
+//			}
+//		} else {
+//			user.set("email", null);
+//		}
+//		return user;
+//	}
 
 	@GET
 	@Path("/menus")
@@ -116,17 +116,76 @@ public class Security {
 		return SecurityService.getMenu();
 	}
 	
+	
+	/**
+	 * For the user response
+	 * if there'is a logged user it returns
+	 * 
+	 * <code>
+	 *  {
+       	"id": "45678",
+       	"email": "atl@amp.org",
+       	"firstName": "ATL",
+       	"lastName": "ATL",
+       	"workspace": "Ministry of Finance",
+       	"administratorMode": "false"
+   		}   
+   		</code> <code>
+		if not logged it it returns 
+		{
+   			username: null
+		}
+		</code>
+	 * 
+	 * @return
+	 */
 	@GET
-	@Path("/footer")
+	@Path("/layout")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
-	@ApiMethod(ui = false, id = "Footer", name = "Footer")
-	public JsonBean getFooter() throws ParserConfigurationException, SAXException, IOException { 
+	@ApiMethod(ui = false, id = "Layout", name = "Layout")
+	public JsonBean getLayout() throws ParserConfigurationException, SAXException, IOException 
+	{
+		TeamMember tm = (TeamMember) TLSUtils.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
 		String ampAdmin = (String) httpRequest.getSession().getAttribute("ampAdmin");
 		boolean isAdmin = ampAdmin!=null && ampAdmin.equals("yes");
 		SiteDomain currentDomain = RequestUtils.getSiteDomain(httpRequest);
 		String siteUrl = SiteUtils.getSiteURL(currentDomain, httpRequest.getScheme(), httpRequest.getServerPort(), httpRequest
 				.getContextPath());
-		return SecurityService.getFooter(httpRequest.getServletContext().getRealPath("/")+SITE_CONFIG_PATH,siteUrl,isAdmin);
+		JsonBean layout = SecurityService.getFooter(httpRequest.getServletContext().getRealPath("/")+SITE_CONFIG_PATH,siteUrl,isAdmin);
+		if (tm != null) {
+			Site site = RequestUtils.getSite(TLSUtils.getRequest());
+			User u;
+			try {
+				u = UserUtils.getUserByEmail(tm.getEmail());
+			} catch (DgException e) {
+				layout.set("email", null);
+				return layout;
+			}
+			Subject subject = UserUtils.getUserSubject(u);
+
+			boolean siteAdmin = DgSecurityManager.permitted(subject, site, ResourcePermission.INT_ADMIN);
+			layout.set("email", u.getEmail());
+			layout.set("firstName", u.getFirstNames());
+			layout.set("lastName", u.getLastName());
+			layout.set("administratorMode", siteAdmin);
+			if (!siteAdmin) {
+				AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
+
+				if (ampTeamMember.getAmpTeam() != null) { 
+					layout.set("workspace", ampTeamMember.getAmpTeam().getName());
+					layout.set("workspaceId", ampTeamMember.getAmpTeam().getIdentifier());
+				}
+				
+			} else {
+				return layout;
+			}
+		} else {
+			layout.set("email", null);
+		}
+
+		return layout;
+		
 	}
+
 
 }

@@ -11,7 +11,12 @@ module.exports = BackboneDash.View.extend({
   },
 
   render: function() {
-    this.$el.html(boilerplate.footer);
+	var headerWidget = new boilerplate.layout(
+      {
+        caller: 'DASHBOARD'
+	  });
+	window.boilerh = $header;
+    this.$el.html(headerWidget.headerFooter.render().el);
     return this;
   }
 

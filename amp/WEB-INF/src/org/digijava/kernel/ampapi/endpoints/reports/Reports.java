@@ -176,7 +176,9 @@ public class Reports {
 	 */
 	public final JsonBean getCustomReport(JsonBean formParams) {
 		if(formParams!=null){ 
-			logger.debug("running public report " + formParams.toString());
+			System.out.println("****** running public report " + formParams.toString());
+		}else{
+			System.out.println("*********empty params**** " );
 		}
 		List<String> errors = ReportsUtil.validateReportConfig(formParams, true);
 		if (errors.size() > 0) {

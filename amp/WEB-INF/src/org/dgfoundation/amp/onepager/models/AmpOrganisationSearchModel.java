@@ -54,7 +54,7 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
 		@Override
 		public void execute(Connection connection) throws SQLException {
 		    String sqlQuery = "SELECT org.amp_org_id, org.name, org.acronym, org.org_type, orgname.translation  from amp_organisation org"
-				    + " JOIN amp_content_translation orgname ON org.amp_org_id = orgname.object_id"
+				    + " LEFT OUTER JOIN amp_content_translation orgname ON org.amp_org_id = orgname.object_id"
 				    + " AND orgname.field_name = 'name'"
 				    + " AND orgname.object_class ='org.digijava.module.aim.dbentity.AmpOrganisation'"
 				    + " AND orgname.locale = '"
@@ -99,6 +99,7 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
 			orgtoadd.setAcronymAndName(rs.getString("acronym"));
 			ret.add(orgtoadd);
 		    }
+		    rs.close();
 		}
 	    });
 	} catch (DgException e) {

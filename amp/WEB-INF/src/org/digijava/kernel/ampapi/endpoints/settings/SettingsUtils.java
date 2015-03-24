@@ -345,6 +345,8 @@ public class SettingsUtils {
 		settings.add(new SettingOptions("use-icons-for-sectors-in-project-list", false, new Boolean(FeaturesUtil
 				.isVisibleFeature(GisConstants.USE_ICONS_FOR_SECTORS_IN_PROJECT_LIST)).toString(), null,
 				null));
+		settings.add(new SettingOptions("max-locations-icons", false, FeaturesUtil
+				.getGlobalSettingValue(GlobalSettingsConstants.MAX_LOCATIONS_ICONS), null, null));
 		
 		settings.add(new SettingOptions("number-format", false, 
 				FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.NUMBER_FORMAT), null, null));

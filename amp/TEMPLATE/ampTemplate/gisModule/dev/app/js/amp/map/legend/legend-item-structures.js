@@ -22,12 +22,21 @@ module.exports = Backbone.View.extend({
       
       //TODO: Move this code to a config class.
       var MAX_NUM_FOR_ICONS = 0;
-      var useIconsForSectors = _.find(self.model.appData.settings.models, function(item) {
+      var useIconsForSectors = _.find(app.data.settings.models, function(item) {
     	  return (item.id === 'use-icons-for-sectors-in-project-list');
       });
+      var maxLocationIcons = _.find(app.data.settings.models, function(item) {
+    	  return (item.id === 'max-locations-icons');
+      });
       if (useIconsForSectors !== undefined && useIconsForSectors.get('name') === 'true') {
-    	  MAX_NUM_FOR_ICONS = 300;
-      }
+    	  if (maxLocationIcons !== undefined && maxLocationIcons.get('name') !== "" && maxLocationIcons.get('name') !== "0") {
+    		  MAX_NUM_FOR_ICONS = parseInt(maxLocationIcons.get('name'));
+    	  } else {
+    		  MAX_NUM_FOR_ICONS = 0;
+    	  }	    	
+	  } else {
+		  MAX_NUM_FOR_ICONS = 0;
+	  }
       // render icons if available
       if (self.model.structuresCollection.length < MAX_NUM_FOR_ICONS &&
           self.model.get('filterVertical') === 'Primary Sector Id') {

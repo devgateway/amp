@@ -120,11 +120,18 @@ module.exports = Backbone.View
     // Calculate only one time and not for all points (we can have thousands).
     if (self.MAX_NUM_FOR_ICONS === -1) {
     	//TODO: Move this code to a config class.
-	    var useIconsForSectors = _.find(feature.properties.activity.collection.appData.settings.models, function(item) {
-	  	  return (item.id === 'use-icons-for-sectors-in-project-list');
+	    var useIconsForSectors = _.find(app.data.settings.models, function(item) {
+	  	  	return (item.id === 'use-icons-for-sectors-in-project-list');
 	    });
+	    var maxLocationIcons = _.find(app.data.settings.models, function(item) {
+	    	return (item.id === 'max-locations-icons');
+		});
 	    if (useIconsForSectors !== undefined && useIconsForSectors.get('name') === 'true') {
-	  	  self.MAX_NUM_FOR_ICONS = 300;
+	    	if (maxLocationIcons !== undefined && maxLocationIcons.get('name') !== "" && maxLocationIcons.get('name') !== "0") {
+	    		self.MAX_NUM_FOR_ICONS = parseInt(maxLocationIcons.get('name'));
+	    	} else {
+	    		self.MAX_NUM_FOR_ICONS = 0;
+	    	}	    	
 	    } else {
 	    	self.MAX_NUM_FOR_ICONS = 0;
 	    }

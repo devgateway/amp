@@ -4,8 +4,7 @@ var Backbone = require('backbone');
 var MapView = require('../../map/views/main-view');
 //var DataQualityView = require('../../dataquality/views/dataquality-view');
 var SidebarView = require('../../sidebar/sidebar-view');
-
-var boilerplate = require('amp-boilerplate');
+var LayoutView = require('../../layout/views/layout-view');
 var ModuleTemplate = fs.readFileSync(__dirname + '/../templates/module-template.html', 'utf8');
 
 var UserModel = require('../../data/models/amp-user-model.js');
@@ -27,6 +26,7 @@ module.exports = Backbone.View.extend({
     this.mapView = new MapView({app: this});
     /* this.dataQualityView = new DataQualityView({app: this}); */
     this.sidebarView = new SidebarView({app: this});
+    this.layoutView = new LayoutView ({app: this});
   },
 
   // Render entire geocoding view.
@@ -36,10 +36,8 @@ module.exports = Backbone.View.extend({
     this.mapView.setElement(this.$('#map-container')).render();
     /* this.dataQualityView.setElement(this.$('#quality-indicator')).render();*/
     this.sidebarView.setElement(this.$('#sidebar-tools')).render();
-
-
-    // just for testing...
-    this.renderStaticAmpTemplate();
+    this.layoutView.setElement(this.$('#amp-footer')).render();
+    this.renderLayout();
 
     // update translations
     this.translator.translateDOM(this.el);
@@ -55,35 +53,6 @@ module.exports = Backbone.View.extend({
         self.translator.translateDOM(self.el);
       });
     });
-  },
-
-  // not a view, because it's static and just for testing.
-  renderStaticAmpTemplate: function() {
-
-    /* Prepare the user data for the appropriate header */
-    var userModel = new UserModel();
-
-    var $header = $('#amp-header');
-    var headerWidget = new boilerplate.headerObj(
-      {
-        caller: 'GIS'
-      });
-    window.boilerh = $header;
-
-    $header.html(headerWidget.view.render().el);
-
-    userModel.load().then(function(user) {
-      if (user.get('email')) {
-        $('.container-fluid', $header).toggleClass('ampUserLoggedIn');
-        $('#header-workspace', $header).text(user.get('workspace'));
-        $('#header-name #header-first-name', $header).text(user.get('firstName'));
-        $('#header-name #header-last-name', $header).text(user.get('lastName'));
-      }
-    });
-
-
-    // TODO: If it's our responsibility...
-    // render translation selector using: this.translator.getAvailableLanguages
   },
 
   toggleIconOnlySidebar: function(ev) {

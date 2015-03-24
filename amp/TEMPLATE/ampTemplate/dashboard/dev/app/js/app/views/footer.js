@@ -15,8 +15,7 @@ module.exports = BackboneDash.View.extend({
       {
         caller: 'DASHBOARD'
 	  });
-	window.boilerh = $header;
-    this.$el.html(headerWidget.headerFooter.render().el);
+	this.$el.html(headerWidget.headerFooter.render().el);
     return this;
   }
 

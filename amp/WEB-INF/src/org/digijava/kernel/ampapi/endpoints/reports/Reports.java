@@ -175,6 +175,9 @@ public class Reports {
 	 * @see ReportsUtil#getReportResultByPage
 	 */
 	public final JsonBean getCustomReport(JsonBean formParams) {
+		if(formParams!=null){ 
+			logger.debug("running public report " + formParams.toString());
+		}
 		List<String> errors = ReportsUtil.validateReportConfig(formParams, true);
 		if (errors.size() > 0) {
 			JsonBean result = new JsonBean();

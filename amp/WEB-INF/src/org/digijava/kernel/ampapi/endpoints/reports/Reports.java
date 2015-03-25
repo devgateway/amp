@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.swing.text.html.HTMLDocument.HTMLReader.FormAction;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -30,7 +29,6 @@ import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
@@ -66,7 +64,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.translation.util.ContentTranslationUtil;
 import org.digijava.module.translation.util.MultilingualInputFieldValues;
 import org.hibernate.Session;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
@@ -74,7 +71,6 @@ import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.olap.query2.ThinHierarchy;
 import org.saiku.olap.query2.ThinQuery;
 import org.saiku.service.util.export.excel.ExcelBuilderOptions;
-import org.saiku.service.util.export.excel.ExcelWorksheetBuilder;
 import org.saiku.web.export.PdfReport;
 import org.saiku.web.rest.objects.resultset.QueryResult;
 import org.saiku.web.rest.util.RestUtil;
@@ -207,7 +203,9 @@ public class Reports {
 	public final JsonBean getReportResultByPage(JsonBean formParams,
 			@PathParam("report_id") Long reportId) {
 		if(formParams !=null){
+			logger.error("****************");
 			logger.error("AMP-19783 formparam: " +formParams.toString());
+			logger.error("for report id " + reportId);
 		}
 		return ReportsUtil.getReportResultByPage(reportId, formParams);
 	}

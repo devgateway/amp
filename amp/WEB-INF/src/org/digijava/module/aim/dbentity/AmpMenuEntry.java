@@ -9,12 +9,14 @@ import java.util.Set;
 
 import org.dgfoundation.amp.menu.AmpView;
 import org.digijava.kernel.user.Group;
+import org.hibernate.annotations.DiscriminatorOptions;
 
 /**
  * Stores one menu entry details
  * 
  * @author Nadejda Mandrescu
  */
+@DiscriminatorOptions(force=true)
 public class AmpMenuEntry implements Serializable {
 	private Long id;
 	private AmpMenuEntry parent;

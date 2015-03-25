@@ -172,11 +172,6 @@ public class Reports {
 	 * @see ReportsUtil#getReportResultByPage
 	 */
 	public final JsonBean getCustomReport(JsonBean formParams) {
-		if(formParams!=null){ 
-			logger.error("****** running public report " + formParams.toString());
-		}else{
-			logger.error("*********empty params**** " );
-		}
 		List<String> errors = ReportsUtil.validateReportConfig(formParams, true);
 		if (errors.size() > 0) {
 			JsonBean result = new JsonBean();
@@ -202,11 +197,6 @@ public class Reports {
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public final JsonBean getReportResultByPage(JsonBean formParams,
 			@PathParam("report_id") Long reportId) {
-		if(formParams !=null){
-			logger.error("****************");
-			logger.error("AMP-19783 formparam: " +formParams.toString());
-			logger.error("for report id " + reportId);
-		}
 		return ReportsUtil.getReportResultByPage(reportId, formParams);
 	}
 	

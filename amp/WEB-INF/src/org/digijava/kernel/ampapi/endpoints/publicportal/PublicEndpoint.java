@@ -40,9 +40,6 @@ public class PublicEndpoint {
 	public JsonBean getTopProjects(JsonBean config, 
 			@DefaultValue(TOP_COUNT) @QueryParam("count") Integer count, 
 			@QueryParam("months") Integer months) {
-		if(config!=null){
-			logger.debug(config.toString());
-		}
 		return PublicPortalService.getTopProjects(config, count, months);
 	}
 	

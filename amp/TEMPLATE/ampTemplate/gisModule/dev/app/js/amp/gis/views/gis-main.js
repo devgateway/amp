@@ -1,10 +1,10 @@
 var fs = require('fs');
 var $ = require('jquery');
 var Backbone = require('backbone');
+var boilerplate = require('amp-boilerplate');
 var MapView = require('../../map/views/main-view');
 //var DataQualityView = require('../../dataquality/views/dataquality-view');
 var SidebarView = require('../../sidebar/sidebar-view');
-var LayoutView = require('../../layout/views/layout-view');
 var ModuleTemplate = fs.readFileSync(__dirname + '/../templates/module-template.html', 'utf8');
 
 var UserModel = require('../../data/models/amp-user-model.js');
@@ -26,7 +26,7 @@ module.exports = Backbone.View.extend({
     this.mapView = new MapView({app: this});
     /* this.dataQualityView = new DataQualityView({app: this}); */
     this.sidebarView = new SidebarView({app: this});
-    this.layoutView = new LayoutView ({app: this});
+    
   },
 
   // Render entire geocoding view.
@@ -36,9 +36,16 @@ module.exports = Backbone.View.extend({
     this.mapView.setElement(this.$('#map-container')).render();
     /* this.dataQualityView.setElement(this.$('#quality-indicator')).render();*/
     this.sidebarView.setElement(this.$('#sidebar-tools')).render();
-    this.layoutView.setElement(this.$('#amp-footer')).render();
-    this.renderLayout();
-
+    
+    //auto-render the layout
+	var headerWidget = new boilerplate.layout(
+      {
+        caller: 'GIS'
+	  });
+	$.when(headerWidget.menu.menuRendered).then(function() {
+		$('.dropdown-toggle').dropdown();
+	});
+   
     // update translations
     this.translator.translateDOM(this.el);
     this.translationToggle();

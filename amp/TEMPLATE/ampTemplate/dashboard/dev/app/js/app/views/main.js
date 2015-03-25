@@ -7,8 +7,7 @@ var StateLoadError = require('amp-state/index').StateLoadError;
 var Controls = require('./controls');
 var ChartsView = require('./charts');
 var Charts = require('../models/charts-collection');
-var Footer = require('./footer');
-
+var boilerplate = require('amp-boilerplate');
 var TopsChart = require('../models/chart-tops');
 var PredictabilityChart = require('../models/chart-aid-predictability');
 var FundingTypeChart = require('../models/chart-funding-type');
@@ -81,8 +80,11 @@ module.exports = BackboneDash.View.extend({
       app: this.app,
       collection: new Charts(col, { app: this.app })
     });
-
-    this.footer = new Footer({ app: this.app });
+    //auto-renders the layout
+    this.headerWidget = new boilerplate.layout(
+      {
+        caller: 'DASHBOARD'
+	  });
   },
 
   render: function() {
@@ -90,7 +92,6 @@ module.exports = BackboneDash.View.extend({
     this.$('.container').html([
       this.controls.render().el,
       this.charts.render().el,
-      this.footer.render().el
     ]);
     return this;
   },

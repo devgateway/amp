@@ -37,8 +37,8 @@ import clover.com.atlassian.extras.common.log.Logger;
  * @author Nadejda Mandrescu
  */
 public class CellDataSetToAmpHierachies {
-	private ReportSpecification spec;
-	private CellDataSet cellDataSet;
+	private final ReportSpecification spec;
+	private final CellDataSet cellDataSet;
 
 	private final NumberFormat numberFormat = NumberFormat.getNumberInstance();
 
@@ -47,14 +47,16 @@ public class CellDataSetToAmpHierachies {
 	private int startColumnIndex;
 	private int noOfColumnsToMerge;
 	private SortedSet<String>[] sbList;
-	private List<ReportOutputColumn> leafHeaders;
-	private List<Integer> activities;
+	private final List<ReportOutputColumn> leafHeaders;
+	private final List<Integer> activities;
+	private final String translatedUndefined;
 	
 	private CellDataSetToAmpHierachies(ReportSpecification spec, CellDataSet cellDataSet, 
-			List<ReportOutputColumn> leafHeaders, List<Integer> activities) {
+			List<ReportOutputColumn> leafHeaders, String translatedUndefined, List<Integer> activities) {
 		this.spec = spec;
 		this.cellDataSet = cellDataSet;
 		this.leafHeaders = leafHeaders;
+		this.translatedUndefined = translatedUndefined;
 		this.activities = activities;
 	}
 
@@ -66,8 +68,8 @@ public class CellDataSetToAmpHierachies {
 	 * @param activities - list of internal ids (those that are merged) 
 	 */
 	public static void concatenateNonHierarchicalColumns(ReportSpecification spec, CellDataSet cellDataSet, 
-			List<ReportOutputColumn> leafHeaders, List<Integer> activities) {
-		(new CellDataSetToAmpHierachies(spec, cellDataSet, leafHeaders, activities)).concatenate();
+			List<ReportOutputColumn> leafHeaders, String translatedUndefined, List<Integer> activities) {
+		(new CellDataSetToAmpHierachies(spec, cellDataSet, leafHeaders, translatedUndefined, activities)).concatenate();
 	}
 	
 	private void init() {
@@ -183,8 +185,11 @@ public class CellDataSetToAmpHierachies {
 	
 	private void mergeNonHierarchicalText(int rowId) {
 		for (int colId = startColumnIndex; colId < cellDataSet.getLeftOffset(); colId++)
-			if (cellDataSet.getCellSetBody()[rowId][colId].getRawValue() != null) 
-				sbList[colId - startColumnIndex].add(cellDataSet.getCellSetBody()[rowId][colId].getFormattedValue());
+			if (cellDataSet.getCellSetBody()[rowId][colId].getRawValue() != null) {
+				String valueToConcat = cellDataSet.getCellSetBody()[rowId][colId].getFormattedValue();
+				if (!(valueToConcat.equals("#null") || valueToConcat.equals(translatedUndefined) || valueToConcat.equals("")))
+					sbList[colId - startColumnIndex].add(valueToConcat);
+			}
 	}
 	
 	private void mergeMeasureTotals(double[] currentTotalMeasuresColumnTotals, int rowId) {

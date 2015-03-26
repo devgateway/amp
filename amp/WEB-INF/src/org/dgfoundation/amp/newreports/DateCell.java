@@ -32,7 +32,7 @@ protected static Logger logger = Logger.getLogger(TextCell.class);
 	 * @return
 	 */
 	public static Pair<Date, String> parseMondrianDate(String moOut) {
-		if (moOut == null || moOut.trim().isEmpty()) moOut = null;
+		if (moOut == null || moOut.trim().isEmpty() || moOut.equals("#null")) moOut = null;
 		if (moOut == null) return new Pair<>(null, "");
 		try {
 			Date date = new SimpleDateFormat(MoConstants.DATE_FORMAT).parse(moOut);

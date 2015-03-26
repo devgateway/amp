@@ -48,7 +48,6 @@ import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
 import org.dgfoundation.amp.newreports.TextCell;
 import org.dgfoundation.amp.reports.PartialReportArea;
-import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
 import org.digijava.kernel.ampapi.mondrian.queries.MDXGenerator;
 import org.digijava.kernel.ampapi.mondrian.queries.entities.MDXAttribute;
@@ -113,6 +112,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	private List<Integer> cellDataSetActivities = null;
 	
 	private final ReportEnvironment environment;
+	protected final String translatedUndefined;
 	
 	/**
 	 * Mondrian Report Generator
@@ -123,6 +123,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		this.reportAreaType = reportAreaType;
 		this.environment = environment;
 		this.printMode = printMode; 
+		this.translatedUndefined = TranslatorWorker.translateText("Undefined", environment.locale, 3l);
 	}
 	
 	/**
@@ -137,17 +138,15 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * Formats Saiku dates to follow AMP date format
 	 * @param report, with formatted dates
 	 */
-	private void formatSaikuDates(SaikuGeneratedReport report) {
+	private void formatSaikuDates(CellDataSet cellDataSet) {
 		ArrayList<Integer> dateColumnsIndexes = new ArrayList<Integer>();
-		for (int index = 0; index < report.leafHeaders.size(); index++) {
-			ReportOutputColumn column = report.leafHeaders.get(index);
+		for (int index = 0; index < leafHeaders.size(); index++) {
+			ReportOutputColumn column = leafHeaders.get(index);
 			if (MondrianReportUtils.isDateColumn(column.originalColumnName)) {
 				dateColumnsIndexes.add(index);
 			}
-
 		}
 		if (dateColumnsIndexes.size() > 0) {
-			CellDataSet cellDataSet = report.cellDataSet;
 			AbstractBaseCell[][] result = cellDataSet.getCellSetBody();
 			for (int i = 0; i < result.length; i++) {
 				for (Integer cellIndex : dateColumnsIndexes) {
@@ -212,7 +211,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 						spec, report.generationTime, report.requestingUser,
 						(SaikuReportArea)report.reportContents, cellDataSet, report.rootHeaders, report.leafHeaders, environment);
 				SaikuReportSorter.sort(report, environment);
-				formatSaikuDates ((SaikuGeneratedReport)report);
+				//formatSaikuDates ((SaikuGeneratedReport)report);
 				if (printMode)
 					SaikuPrintUtils.print(cellDataSet, spec.getReportName() + "_POST_SORT");
 			} else 
@@ -589,12 +588,12 @@ public class MondrianReportGenerator implements ReportExecutor {
 				throw new AMPException(e.getMessage(), e);
 			}
 		}
-		
+		formatSaikuDates(cellDataSet);
 		applyFilterSetting(spec, cellDataSet);
 		
-		CellDataSetToAmpHierachies.concatenateNonHierarchicalColumns(
-				spec, cellDataSet, leafHeaders, cellDataSetActivities);
 		postprocessUndefinedEntries(spec, cellDataSet);
+		CellDataSetToAmpHierachies.concatenateNonHierarchicalColumns(spec, cellDataSet, leafHeaders, this.translatedUndefined, cellDataSetActivities);
+		
 		
 		//clear totals if were enabled for non-hierarchical merges
 		if (!spec.isCalculateColumnTotals())
@@ -614,8 +613,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * hacky, but doing it cleanly (via ETL + schema + MDX generator) would be a huge pain for little gain
 	 */
 	protected void postprocessUndefinedEntries(ReportSpecification spec, CellDataSet cellDataSet) {
-		String translatedUndefined = TranslatorWorker.translateText("Undefined", environment.locale, 3l);
-		String translatedUnspecified = TranslatorWorker.translateText("Unspecified", environment.locale, 3l);
+		String translatedUnspecified = TranslatorWorker.translateText("Unspecified", environment.locale, 3l);		
 		
 		for (int rowId = 0; rowId < cellDataSet.getCellSetBody().length; rowId++) {
 			AbstractBaseCell[] row = cellDataSet.getCellSetBody()[rowId];

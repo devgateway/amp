@@ -1575,9 +1575,12 @@ body {background:none;}
                 <td align="right" vAlign="top"><b><digi:trn>Aid Effectivenes</digi:trn></b></td>
                 <td>
                     <logic:iterate id="option" name="aimEditActivityForm" property="selectedEffectivenessIndicatorOptions">
-                        <b>${option.indicator.ampIndicatorName}</b> -
-                        ${option.ampIndicatorOptionName}
-                        </br>
+                        <module:display name="/Activity Form/Aid Effectivenes/${option.indicator.ampIndicatorName}"
+                            parentModule="/Activity Form/Aid Effectivenes">
+                            <b>${option.indicator.ampIndicatorName}</b> -
+                            ${option.ampIndicatorOptionName}
+                            </br>
+                        </module:display>
                     </logic:iterate>
                 </td>
             </tr>

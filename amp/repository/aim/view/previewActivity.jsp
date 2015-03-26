@@ -1616,10 +1616,13 @@ function collapseAll() {
 
             <logic:notEmpty name="aimEditActivityForm" property="selectedEffectivenessIndicatorOptions">
                 <logic:iterate id="option" name="aimEditActivityForm" property="selectedEffectivenessIndicatorOptions">
-                    <div>
-                        <b>${option.indicator.ampIndicatorName}</b> -
-                        ${option.ampIndicatorOptionName}
-                    </div>
+                    <module:display name="/Activity Form/Aid Effectivenes/${option.indicator.ampIndicatorName}"
+                        parentModule="/Activity Form/Aid Effectivenes">
+                        <div>
+                            <b>${option.indicator.ampIndicatorName}</b> -
+                            ${option.ampIndicatorOptionName}
+                        </div>
+                    </module:display>
                 </logic:iterate>
             </logic:notEmpty>
         </fieldset>

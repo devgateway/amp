@@ -1755,10 +1755,13 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
                  && activity.getSelectedEffectivenessIndicatorOptions() != null) {
              AidEffectivenessIndicatorUtil.sortSelectedEffectivenessOptions(activity);
              for (AmpAidEffectivenessIndicatorOption option : activity.getSelectedEffectivenessIndicatorOptions()) {
-                 String[] aidEffectivenesToAdd = new String[2];
-                 aidEffectivenesToAdd[0] = option.getIndicator().getAmpIndicatorName();
-                 aidEffectivenesToAdd[1] = option.getAmpIndicatorOptionName();
-                 aidEffectivenesForExport.add(aidEffectivenesToAdd);
+                 if (FeaturesUtil.isVisibleModule("/Activity Form/Aid Effectivenes/"
+                         + option.getIndicator().getAmpIndicatorName())) {
+                     String[] aidEffectivenesToAdd = new String[2];
+                     aidEffectivenesToAdd[0] = option.getIndicator().getAmpIndicatorName();
+                     aidEffectivenesToAdd[1] = option.getAmpIndicatorOptionName();
+                     aidEffectivenesForExport.add(aidEffectivenesToAdd);
+                 }
              }
          }
 

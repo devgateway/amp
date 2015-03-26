@@ -6,6 +6,7 @@ import java.util.Date;
 import mondrian.util.Pair;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.algo.AmpCollections;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 
 /**
@@ -41,5 +42,10 @@ protected static Logger logger = Logger.getLogger(TextCell.class);
 		catch(Exception e) {
 			return new Pair<>(new Date(70, 2, 2), moOut); // could not parse date - at least save the displayed value
 		}
+	}
+	@Override public int compareTo(ReportCell oth) {
+		if(value==null && (oth == null || oth.value==null))
+			return 0;
+		return AmpCollections.nullCompare(value, oth.value);
 	}
 }

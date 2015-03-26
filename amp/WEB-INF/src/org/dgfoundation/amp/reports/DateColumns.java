@@ -22,6 +22,7 @@ public class DateColumns {
 		add(ColumnConstants.AGREEMENT_CLOSE_DATE);
 		add(ColumnConstants.AGREEMENT_EFFECTIVE_DATE);
 		add(ColumnConstants.AGREEMENT_SIGNATURE_DATE);
+		add(ColumnConstants.AGREEMENT_PARLIAMENTARY_APPROVAL_DATE);
 		add(ColumnConstants.DONOR_COMMITMENT_DATE);
 		add(ColumnConstants.FINAL_DATE_FOR_CONTRACTING);
 		add(ColumnConstants.FINAL_DATE_FOR_DISBURSEMENTS);

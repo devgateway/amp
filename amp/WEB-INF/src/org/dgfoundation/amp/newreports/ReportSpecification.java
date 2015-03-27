@@ -34,6 +34,14 @@ public interface ReportSpecification {
 	public Set<ReportColumn> getColumns();
 	
 	/**
+	 * these are the simple names of the columns {@see #getColumns()}
+	 * @return the set of column names to use
+	 */
+	public Set<String> getColumnNames();
+	
+	public Set<ReportColumn> getDummyColumns();
+	
+	/**
 	 * @return the set of measures to use. <strong>The order of iteration of the set is meaningful</strong> - so please either use a @link {@link LinkedHashSet} or a @link {@link SortedSet} 
 	 */
 	public List<ReportMeasure> getMeasures();

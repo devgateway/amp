@@ -19,6 +19,8 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	private int reportType;	
 	private String reportName = null;
 	private Set<ReportColumn> columns = null;
+	private Set<String> columnNames = null;
+	private Set<ReportColumn> dummyColumns = null;
 	private Set<ReportColumn> hierarchies = null;
 	private List<ReportMeasure> measures = null;
 	private ReportFilters filters = null;
@@ -67,8 +69,20 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	 */
 	public void setColumns(Set<ReportColumn> columns) {
 		this.columns = columns;
+		this.getColumnNames().clear();
+		for (ReportColumn rc : columns) {
+			columnNames.add(rc.getColumnName());
+		}
 	}
 	
+	@Override
+	public Set<String> getColumnNames() {
+		if (columnNames == null) {
+			columnNames = new LinkedHashSet<String>();
+		}
+		return columnNames;
+	}
+
 	/**
 	 * Adds a column to the columns set. 
 	 * Order is important, i.e. first column added will be the first one displayed.
@@ -80,6 +94,26 @@ public class ReportSpecificationImpl implements ReportSpecification {
 			columns = new LinkedHashSet<ReportColumn>();
 		}
 		this.columns.add(column);
+		this.getColumnNames().add(column.getColumnName());
+	}
+
+	@Override
+	public Set<ReportColumn> getDummyColumns() {
+		if (dummyColumns == null) {
+			dummyColumns = new LinkedHashSet<ReportColumn>();
+		}
+		return dummyColumns;
+	}
+
+	/**
+	 * @param dummyColumns the dummyColumns to set
+	 */
+	public void setDummyColumns(Set<ReportColumn> dummyColumns) {
+		this.dummyColumns = dummyColumns;
+	}
+	
+	public void addDummyColumn(ReportColumn dummyColumn) {
+		this.getDummyColumns().add(dummyColumn);
 	}
 
 	@Override

@@ -88,6 +88,8 @@ public class MondrianMapping {
 	
 	public static final Set<String> definedColumns = new HashSet<String>();
 	public static final Set<String> definedMeasures = new HashSet<String>();
+//	public static final Set<String> totalsMeasures = new HashSet<String>();
+	public static final Map<String, String> dependency = new HashMap<String, String>();
 	
 	final static String[] idSuffixList = new String[] {"", " Id"};
 	
@@ -95,7 +97,7 @@ public class MondrianMapping {
 	 * Mappings between AMP Data and Mondrian Schema 
 	 */
 	public static final Map<NamedTypedEntity,MDXElement> entityMap = new HashMap<NamedTypedEntity, MDXElement>() {
-				
+		
 		void addColumnDefinition(String columnName, MDXLevel mdxLevel) {
 			definedColumns.add(columnName);
 			ReportColumn rc = new ReportColumn(columnName);
@@ -289,6 +291,7 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.COMPONENT_TYPE, new MDXLevel(MoConstants.COMPONENT, MoConstants.H_COMPONENT_TYPE, MoConstants.ATTR_COMPONENT_TYPE));
 			addColumnDefinition(ColumnConstants.COMPONENT_FUNDING_ORGANIZATION, new MDXLevel(MoConstants.COMPONENT_FUNDING_ORGANIZATION, MoConstants.H_ORG_NAME, MoConstants.ATTR_ORG_NAME));
 			addColumnDefinition(ColumnConstants.PROPOSED_PROJECT_AMOUNT, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT, MoConstants.ATTR_PROPOSED_PROJECT_AMOUNT));
+			addColumnDefinition(ColumnConstants.UNCOMMITTED_BALANCE, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_UNCOMMITTED_BALANCE, MoConstants.ATTR_UNCOMMITTED_BALANCE));
 			addColumnDefinition(ColumnConstants.PLEDGE_STATUS, new MDXLevel("Pledge Status", MoConstants.H_CATEGORY_NAME, MoConstants.ATTR_CATEGORY_NAME));
 			
 			for(String colName: Arrays.asList(ColumnConstants.AGREEMENT_CLOSE_DATE, ColumnConstants.AGREEMENT_CODE, 
@@ -302,24 +305,40 @@ public class MondrianMapping {
 			//TODO: review/complete mappings based on Mondrian Schema
 			
 			//Measures - Entity type - All
-			
+			AmpCategoryValue actualAdjType = CategoryConstants.ADJUSTMENT_TYPE_ACTUAL.getAmpCategoryValueFromDB();
 			for (String transactionType:ArConstants.TRANSACTION_TYPE_NAME_TO_ID.keySet())
 				for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
 					String measureName = adj.getValue() + " " + transactionType;
 					addMeasureDefinition(measureName);
-				}
 					
+					// adding Totals (unaffected by filters or % distribution)
+					// full name computed columns
+					String[] prefixList = {"Total ", "Total Grant "};
+					for (String prefix : prefixList) {
+						String computedTotals = prefix + measureName;
+						MDXLevel level = new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, computedTotals, computedTotals);
+						if (adj.equals(actualAdjType) && prefix.equals("Total ")) {
+							// current measures names for compatibility with old reports
+							computedTotals = "Total "  + transactionType;
+						}
+						addColumnDefinition(computedTotals, level);
+					}
+//					totalsMeasures.add(computedTotals);
+				}
+			
 			addMeasureDefinition(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL);
 			addMeasureDefinition(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE);
 			addMeasureDefinition(MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL);
 			addMeasureDefinition(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT);
+			addMeasureDefinition(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS);
+			addMeasureDefinition(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS);
+			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, "Total Grant Actual Commitments");
+			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, "Total Grant Actual Disbursements");
 			addMeasureDefinition(MeasureConstants.UNDISBURSED_BALANCE);
 			addMeasureDefinition(MeasureConstants.PLEDGES_COMMITMENT_GAP);
 			
 			addMeasureDefinition(MeasureConstants.ALWAYS_PRESENT);
 			//put(new ReportMeasure(MeasureConstants.REAL_DISBURSEMENTS, ReportEntityType.ENTITY_TYPE_ALL), new MDXMeasure(MoConstants.REAL_DISBURSEMENTS));
-			//put(new ReportMeasure(MeasureConstants.UNCOMMITTED_BALANCE, ReportEntityType.ENTITY_TYPE_ALL), new MDXMeasure(MoConstants.UNCOMMITTED_BALANCE));
-			//put(new ReportMeasure(MeasureConstants.TOTAL_COMMITMENTS, ReportEntityType.ENTITY_TYPE_ALL), new MDXMeasure(MoConstants.TOTAL_COMMITMENTS));
 			//put(new ReportMeasure(MeasureConstants.EXECUTION_RATE, ReportEntityType.ENTITY_TYPE_ALL), new MDXMeasure(MoConstants.EXECUTION_RATE));
 			//TODO: review/complete mappings based on Mondrian Schema
 			

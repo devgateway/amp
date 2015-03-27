@@ -245,4 +245,9 @@ public class MondrianReportUtils {
 	public static boolean isDateColumn(String columnName) {
 		return DateColumns.ACTIVITY_DATES.contains(columnName);
 	}
+	
+//	public static boolean hasTotalMeasures(ReportSpecification spec) {
+//		// for Saiku load spec.getColumnNames() == null
+//		return spec.getColumnNames() == null || !Collections.disjoint(spec.getColumnNames(), MondrianMapping.totalsMeasures);
+//	}
 }

@@ -33,12 +33,15 @@ public class MeasureConstants {
 	public static final String PRIOR_ACTUAL_DISBURSEMENTS = "Prior Actual Disbursements";
 	public static final String SELECTED_YEAR_PLANNED_DISBURSEMENTS = "Selected Year Planned Disbursements";
 	public static final String TOTAL_COMMITMENTS = "Total Commitments";
+	public static final String TOTAL_DISBURSEMENTS = "Total Disbursements";
 	public static final String TRIANGULAR_SSC_COMMITMENTS = "Triangular SSC Commitments";
 	public static final String UNCOMMITTED_BALANCE = "Uncommitted Balance";
 	public static final String UNDISBURSED_BALANCE = "Undisbursed Balance";
 	public static final String REAL_DISBURSEMENTS = "Real Disbursements";
 	public static final String REAL_COMMITMENTS = "Real Commitments";
 	public static final String REAL_MTFS = "Real MTEFs";
+	public static final String PERCENTAGE_OF_TOTAL_COMMITMENTS = "Percentage of Total Commitments";
+	public static final String PERCENTAGE_OF_TOTAL_DISBURSEMENTS = "Percentage Of Total Disbursements";
 	 
 	//type = D (?)
 	public static final String ACTUAL_ESTIMATED_DISBURSEMENTS = "Actual Estimated Disbursements";

@@ -38,7 +38,7 @@ public class IPAContractDisbursement implements Serializable, Cloneable {
         String disbDate = "";
         try {
             if (date != null) {
-                disbDate = DateTimeUtil.parseDateForPicker2(date);
+                disbDate = DateTimeUtil.parseDateForPicker2(date, null);
             }
         } catch (Exception ex) {
             Logger.getLogger(IPAContractDisbursement.class.getName()).log(Level.SEVERE, null, ex);

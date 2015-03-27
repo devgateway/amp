@@ -29,7 +29,7 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
-import org.digijava.kernel.ampapi.endpoints.util.DashboardConstans;
+import org.digijava.kernel.ampapi.endpoints.util.DashboardConstants;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
@@ -105,28 +105,28 @@ public class DashboardsService {
 			} else {
 				column = MoConstants.DONOR_AGENCY;
 			}
-			title = TranslatorWorker.translateText(DashboardConstans.TOP_DONOR_AGENCIES);
-			name = DashboardConstans.TOP_DONOR_AGENCIES;
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_AGENCIES);
+			name = DashboardConstants.TOP_DONOR_AGENCIES;
 			break;
 		case "RE":
 			column = MoConstants.H_REGIONS;
-			title = TranslatorWorker.translateText(DashboardConstans.TOP_REGIONS);
-			name = DashboardConstans.TOP_REGIONS;
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_REGIONS);
+			name = DashboardConstants.TOP_REGIONS;
 			break;
 		case "PS":
 			column = MoConstants.PRIMARY_SECTOR;
-			title = TranslatorWorker.translateText(DashboardConstans.TOP_SECTORS);
-			name = DashboardConstans.TOP_SECTORS;
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_SECTORS);
+			name = DashboardConstants.TOP_SECTORS;
 			break;
 		case "DG":
 			column = ColumnConstants.DONOR_GROUP;
-			title = TranslatorWorker.translateText(DashboardConstans.TOP_DONOR_GROUPS);
-			name = DashboardConstans.TOP_DONOR_GROUPS;
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_GROUPS);
+			name = DashboardConstants.TOP_DONOR_GROUPS;
 			break;
 		default:
 			column = MoConstants.DONOR_AGENCY;
-			title = TranslatorWorker.translateText(DashboardConstans.TOP_DONOR_AGENCIES);
-			name = DashboardConstans.TOP_DONOR_AGENCIES;
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_AGENCIES);
+			name = DashboardConstants.TOP_DONOR_AGENCIES;
 			break;
 		}
 
@@ -308,8 +308,8 @@ public class DashboardsService {
 		
 		retlist.put("numberformat", numberformat);
 		
-		retlist.put("name", DashboardConstans.AID_PREDICTABILITY);
-		retlist.put("title", TranslatorWorker.translateText(DashboardConstans.AID_PREDICTABILITY));
+		retlist.put("name", DashboardConstants.AID_PREDICTABILITY);
+		retlist.put("title", TranslatorWorker.translateText(DashboardConstants.AID_PREDICTABILITY));
 		return retlist;
 	}
 
@@ -407,8 +407,8 @@ public class DashboardsService {
 		}
 		retlist.set("values", values);
 		
-		retlist.set("name", DashboardConstans.FUNDING_TYPE);
-		retlist.set("title", TranslatorWorker.translateText(DashboardConstans.FUNDING_TYPE));
+		retlist.set("name", DashboardConstants.FUNDING_TYPE);
+		retlist.set("title", TranslatorWorker.translateText(DashboardConstants.FUNDING_TYPE));
 		
 		return retlist;
 	}

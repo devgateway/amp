@@ -28,6 +28,7 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
 import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
+import org.digijava.kernel.ampapi.endpoints.util.CalendarUtil;
 import org.digijava.kernel.ampapi.endpoints.util.GisConstants;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
@@ -41,6 +42,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.h2.util.StringUtils;
 
 /**
@@ -328,8 +330,10 @@ public class SettingsUtils {
 	 * Settings that can be reused by modules that rely upon Gis Originated settings UI panel.
 	 *      
 	 * @return list of GIS settings
+	 * @throws Exception 
+	 * @throws NumberFormatException 
 	 */
-	public static List<SettingOptions> getGisSettings() {
+	public static List<SettingOptions> getGisSettings() throws NumberFormatException, Exception {
 		HttpServletRequest request = TLSUtils.getRequest();
 		TeamMember tm = null;
 		if (request != null && request.getSession() != null) {
@@ -375,6 +379,28 @@ public class SettingsUtils {
 			settings.add(new SettingOptions("language", false, 
 					tm.getAppSettings().getLanguage(), null, null)); 
 			
+		}
+		
+		// Dashboard specific settings (some come directly from GS values and others require some processing).
+		String defaultDashboardMaxYearRange = FeaturesUtil
+				.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_DEFAULT_MAX_YEAR_RANGE);
+		String defaultDashboardMinYearRange = FeaturesUtil
+				.getGlobalSettingValue(GlobalSettingsConstants.DASHBOARD_DEFAULT_MIN_YEAR_RANGE);
+		String defaultCalendar = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DEFAULT_CALENDAR);
+		settings.add(new SettingOptions("dashboard-default-max-year-range", false, defaultDashboardMaxYearRange, null,
+				null));
+		settings.add(new SettingOptions("dashboard-default-min-year-range", false, defaultDashboardMinYearRange, null,
+				null));
+		settings.add(new SettingOptions("dashboard-default-calendar", false, defaultCalendar, null, null));
+		if (!defaultDashboardMaxYearRange.equals("-1")) {
+			settings.add(new SettingOptions("dashboard-default-max-date", false, DateTimeUtil
+					.parseDateForPicker2(CalendarUtil.getStartDate(new Long(defaultCalendar), new Integer(
+							defaultDashboardMaxYearRange).intValue()), Constants.CALENDAR_DATE_PICKER), null, null));
+		}
+		if (!defaultDashboardMinYearRange.equals("-1")) {
+			settings.add(new SettingOptions("dashboard-default-min-date", false, DateTimeUtil
+					.parseDateForPicker2(CalendarUtil.getEndDate(new Long(defaultCalendar), new Integer(
+							defaultDashboardMinYearRange).intValue()), Constants.CALENDAR_DATE_PICKER), null, null));
 		}
 		return settings;
 	}

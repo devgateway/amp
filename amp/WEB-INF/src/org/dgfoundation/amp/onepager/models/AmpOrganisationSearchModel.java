@@ -78,7 +78,9 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
 		    orgtype = (AmpOrgType) getParams().get(PARAM.TYPE_FILTER);
 			sqlQuery = sqlQuery + " AND org.orgtype = ?";
 		    }
-
+		    
+		    sqlQuery = sqlQuery + " ORDER BY org.name ASC";
+		    
 		    Integer maxResults = (Integer) getParams().get(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
 		    if (maxResults != null && maxResults.intValue() != 0) {
 			sqlQuery = sqlQuery + " LIMIT " + maxResults;
@@ -103,7 +105,7 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
 		    if (getParams() != null && getParams().get(PARAM.TYPE_FILTER) != null) {
 				params.add(new FilterParam(orgtype.getIdentifier(), java.sql.Types.BIGINT));
 		    }
-
+		    
 		    RsInfo rsi = SQLUtils.rawRunQuery(connection, sqlQuery, params);
 		    ResultSet rs = rsi.rs;
 		    while (rs.next()) {
@@ -114,7 +116,8 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
 			} else {
 			    orgtoadd.setName(rs.getString("name"));
 			}
-			orgtoadd.setAcronymAndName(rs.getString("acronym"));
+			orgtoadd.setAcronym(rs.getString("acronym"));
+			orgtoadd.setAcronymAndName(rs.getString("acronym") + "-" + (rs.getString("name")));
 			ret.add(orgtoadd);
 		    }
 		    rsi.close();

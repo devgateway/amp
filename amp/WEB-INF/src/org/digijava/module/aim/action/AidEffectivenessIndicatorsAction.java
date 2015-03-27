@@ -132,6 +132,9 @@ public class AidEffectivenessIndicatorsAction extends Action {
                         return mapping.findForward("error");
                     }
                     indicator = formToEntity(indicatorForm, indicator);
+                    if (indicatorForm.getOldAmpIndicatorName() != null && ! "".equals(indicatorForm.getOldAmpIndicatorName())) {
+                        AidEffectivenessIndicatorUtil.updateModulesVisibility(indicator, indicatorForm.getOldAmpIndicatorName());
+                    }
                 } else { // create
                     indicator = formToEntity(indicatorForm, null);
                 }
@@ -236,6 +239,7 @@ public class AidEffectivenessIndicatorsAction extends Action {
             AidEffectivenessIndicatorForm form) {
 
         form.setAmpIndicatorName(entity.getAmpIndicatorName());
+        form.setOldAmpIndicatorName(entity.getAmpIndicatorName());
         form.setTooltipText(entity.getTooltipText());
         form.setMandatory(entity.getMandatory());
         form.setActive(entity.getActive());

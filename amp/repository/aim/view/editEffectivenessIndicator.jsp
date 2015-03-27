@@ -22,6 +22,7 @@
 <digi:form action="/aidEffectivenessIndicatorsManager.do" method="post" styleId="editForm">
     <html:hidden property="actionParam" value="save"/>
     <html:hidden property="ampIndicatorId" />
+    <html:hidden property="oldAmpIndicatorName" />
 
     <table width="100%">
     <tr>

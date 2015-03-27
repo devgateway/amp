@@ -17,6 +17,7 @@ import java.util.*;
 public class AidEffectivenessIndicatorUtil {
 
     private static Logger logger = Logger.getLogger(AidEffectivenessIndicatorUtil.class);
+    private static final String AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX = "/Activity Form/Aid Effectivenes/";
 
     /**
      * Returns list of indicators by the criteria
@@ -163,18 +164,27 @@ public class AidEffectivenessIndicatorUtil {
         Session session = PersistenceManager.getSession();
 
         String queryStr = "delete from amp_modules_templates where module in " +
-                "(select id from amp_modules_visibility where name like '%Aid Effectivenes/"
-              + indicator.getAmpIndicatorName() + "%') ";
+                "(select id from amp_modules_visibility where name = :name)";
         Query query = session.createSQLQuery(queryStr);
+        query.setString("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicator.getAmpIndicatorName());
         query.executeUpdate();
 
 
-        queryStr = "delete from amp_modules_visibility where name like '%Aid Effectivenes/"
-                + indicator.getAmpIndicatorName() +"%'";
+        queryStr = "delete from amp_modules_visibility where name = :name";
         query = session.createSQLQuery(queryStr);
+        query.setString("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicator.getAmpIndicatorName());
         query.executeUpdate();
     }
 
+    public static void updateModulesVisibility(AmpAidEffectivenessIndicator indicator, String oldIndicatorName) {
+        Session session = PersistenceManager.getSession();
+
+        String queryStr = "update amp_modules_visibility set name = :name where name = :oldName";
+        Query query = session.createSQLQuery(queryStr);
+        query.setString("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicator.getAmpIndicatorName());
+        query.setString("oldName", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + oldIndicatorName);
+        query.executeUpdate();
+    }
 
     public static boolean hasIndicatorActivities(long indicatorId) {
         Session session = PersistenceManager.getSession();

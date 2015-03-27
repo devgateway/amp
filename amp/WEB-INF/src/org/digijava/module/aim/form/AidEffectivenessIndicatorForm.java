@@ -27,6 +27,8 @@ public class AidEffectivenessIndicatorForm extends ActionForm {
     // 0 - dropdown list, 1 - selectbox list
     private int indicatorType = -1;
 
+    private String oldAmpIndicatorName;
+
     private List<AmpAidEffectivenessIndicatorOption> options = new ArrayList<AmpAidEffectivenessIndicatorOption>();
 
 
@@ -85,6 +87,14 @@ public class AidEffectivenessIndicatorForm extends ActionForm {
 
     public void setOptions(List<AmpAidEffectivenessIndicatorOption> options) {
         this.options = options;
+    }
+
+    public String getOldAmpIndicatorName() {
+        return oldAmpIndicatorName;
+    }
+
+    public void setOldAmpIndicatorName(String oldAmpIndicatorName) {
+        this.oldAmpIndicatorName = oldAmpIndicatorName;
     }
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {

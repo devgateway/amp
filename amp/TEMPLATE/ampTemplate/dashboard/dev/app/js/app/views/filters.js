@@ -22,48 +22,14 @@ module.exports = BackboneDash.View.extend({
     this.listenTo(this.app.filter, 'cancel', this.hideFilter);
     this.listenTo(this.app.filter, 'apply', this.applyFilter);
 
-    this.app.settings.load().done(_(function() {
-    	// Extract default dates from Global Settings.
-    	var blob = {
-    		otherFilters : {
-    			date : {
-	    			start: '',
-	    			end: ''
-    			}
-    		}
-    	};
-    	var defaultMinDate = _.find(this.app.settings.models, function(item) {
-    		return item.get('id') === 'dashboard-default-min-date';
-    	});
-    	if (defaultMinDate !== undefined && defaultMinDate.get('name') !== '') {
-    		blob.otherFilters.date.start = defaultMinDate.get('name');
-    	}
-    	var defaultMaxDate = _.find(this.app.settings.models, function(item) {
-    		return item.get('id') === 'dashboard-default-max-date';
-    	});
-    	if (defaultMaxDate !== undefined && defaultMaxDate.get('name') !== '') {
-    		blob.otherFilters.date.end = defaultMaxDate.get('name');
-    	}
-    	
-	    this.app.filter.loaded.done(_(function() {
-	      this.app.state.register(this, 'filters', {
-	        // namespace serialized filters so we can hook in extra state to store
-	        // later if desired (anything dashboards-ui related, for example)
-	        get: _(function() { 
-	        	return {filter: this.app.filter.serialize() }; 
-	        }).bind(this),
-	        set: _(function(state) {
-	        	if (state.filter.otherFilters !== undefined && state.filter.otherFilters.date !== undefined) {
-	        		console.log('Using saved filters.');	        		
-	        	} else {
-	        		console.log('Using default filter dates.');
-	        		state.filter = blob;
-	        	}
-	        	this.app.filter.deserialize(state.filter); 
-	        }).bind(this),
-	        empty: {filter: {}}
-	      });
-	    }).bind(this));
+    this.app.filter.loaded.done(_(function() {
+      this.app.state.register(this, 'filters', {
+        // namespace serialized filters so we can hook in extra state to store
+        // later if desired (anything dashboards-ui related, for example)
+        get: _(function() { return {filter: this.app.filter.serialize() }; }).bind(this),
+        set: _(function(state) { this.app.filter.deserialize(state.filter); }).bind(this),
+        empty: {filter: {}}
+      });
     }).bind(this));
   },
 

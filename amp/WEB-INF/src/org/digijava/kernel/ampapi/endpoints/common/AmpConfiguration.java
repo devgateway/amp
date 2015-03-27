@@ -23,7 +23,7 @@ public class AmpConfiguration {
 	@Path("/settings")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = false, id = "Settings")
-	public List<SettingOptions> getSettings() throws NumberFormatException, Exception {
+	public List<SettingOptions> getSettings() {
 		return SettingsUtils.getGisSettings();
 	}
 }

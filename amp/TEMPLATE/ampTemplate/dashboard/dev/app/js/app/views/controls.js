@@ -9,9 +9,9 @@ module.exports = BackboneDash.View.extend({
   className: 'row',
 
   initialize: function(options) {
-    this.app = options.app;    
-    this.settings = new Settings({ app: this.app });
+    this.app = options.app;
     this.filters = new Filters({ app: this.app });
+    this.settings = new Settings({ app: this.app });
     this.share = new Share({ app: this.app });
   },
 

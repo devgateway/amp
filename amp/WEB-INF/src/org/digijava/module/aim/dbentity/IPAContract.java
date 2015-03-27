@@ -168,7 +168,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
         String formatted = "";
         try{
         if (startOfTendering != null) {
-            formatted = DateTimeUtil.parseDateForPicker2(startOfTendering, null);
+            formatted = DateTimeUtil.parseDateForPicker2(startOfTendering);
         }
         }
         catch(Exception ex){
@@ -181,7 +181,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
         String formatted = "";
         try {
             if (contractValidity != null) {
-                formatted = DateTimeUtil.parseDateForPicker2(contractValidity, null);
+                formatted = DateTimeUtil.parseDateForPicker2(contractValidity);
             }
         } catch (Exception ex) {
             Logger.getLogger(IPAContract.class.getName()).log(Level.SEVERE, null, ex);
@@ -195,7 +195,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
         String formatted = "";
         try {
             if (signatureOfContract != null) {
-                formatted = DateTimeUtil.parseDateForPicker2(signatureOfContract, null);
+                formatted = DateTimeUtil.parseDateForPicker2(signatureOfContract);
             }
         } catch (Exception ex) {
             Logger.getLogger(IPAContract.class.getName()).log(Level.SEVERE, null, ex);
@@ -209,7 +209,7 @@ public class IPAContract implements Serializable, Versionable, Cloneable {
         String formatted = "";
         try {
             if (contractCompletion != null) {
-                formatted = DateTimeUtil.parseDateForPicker2(contractCompletion, null);
+                formatted = DateTimeUtil.parseDateForPicker2(contractCompletion);
             }
         } catch (Exception ex) {
             Logger.getLogger(IPAContract.class.getName()).log(Level.SEVERE, null, ex);

@@ -72,6 +72,7 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 	private CellStyle lighterHeaderCellCS;
 	private CellStyle darkerHeaderCellCS;
 	private CellStyle darkNumberCS;
+	private CellStyle darkTotalTextCS;
 	private List<ThinHierarchy> queryFilters;
 	private Map<String, Integer> colorCodesMap;
 
@@ -155,6 +156,17 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 		darkNumberCS.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
 		darkNumberCS.setFillPattern(CellStyle.SOLID_FOREGROUND);
 		setCellBordersColor(darkNumberCS);
+		
+		Font fontTotals = excelWorkbook.createFont();
+		fontTotals.setFontHeightInPoints(font.getFontHeightInPoints());
+		fontTotals.setFontName(font.getFontName());
+		fontTotals.setBoldweight(Font.BOLDWEIGHT_BOLD);
+		darkTotalTextCS = excelWorkbook.createCellStyle();
+		darkTotalTextCS.setFont(fontTotals);
+		darkTotalTextCS.setAlignment(CellStyle.ALIGN_LEFT);
+		darkTotalTextCS.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+		darkTotalTextCS.setFillPattern(CellStyle.SOLID_FOREGROUND);
+		setCellBordersColor(darkTotalTextCS);
 
 		/*
 		 * justasg: Let's set default format, used if measure has no format at all. More info:
@@ -708,6 +720,14 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 			Row absoluteTotalsRow = workbookSheet.getRow(workbookSheet.getLastRowNum());
 			for (int i = 0; i < grandColumnsTotals.length; i++) {
 				fillTotalCell(absoluteTotalsRow, grandColumnsTotals[i], nonMeasureColumns + measureColumns + i);
+			}
+			Cell totalTextCell = absoluteTotalsRow.createCell(0);
+			totalTextCell.setCellValue(TranslatorWorker.translateText("Report Totals"));
+			totalTextCell.setCellStyle(darkTotalTextCS);
+			for (int j = 1; j < nonMeasureColumns; j++) {
+				Cell emptyTextCell = absoluteTotalsRow.createCell(j);
+				emptyTextCell.setCellValue("");
+				emptyTextCell.setCellStyle(darkTotalTextCS);
 			}
 		}
 	}

@@ -39,10 +39,10 @@ module.exports = BackboneDash.View.extend({
       }
     }
 
-    this.header = new Header({ app: this.app });
-    this.controls = new Controls({ app: this.app });
+    this.header = new Header({ app: this.app });    
     this.app.settings.load();  // maybe should go in render or something
                                // but we already do other fetches on init so...
+    this.controls = new Controls({ app: this.app });
 
     // AMP-19545: We instantiate the collection of enabled charts (from FM) and use it to enable or not each chart.
     var enabledChartsFM = new EnabledChartsCollection();

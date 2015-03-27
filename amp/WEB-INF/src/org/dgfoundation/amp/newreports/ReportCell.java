@@ -20,6 +20,8 @@ public abstract class ReportCell implements Comparable<ReportCell> {
 	}
 	
 	@Override public int compareTo(ReportCell oth) {
+		if (value==null && (oth == null || oth.value == null))
+			return 0;
 		return AmpCollections.nullCompare(value, oth.value);
 	}
 	

@@ -437,14 +437,7 @@ public class HelpUtil {
 			}
 			throw new AimException("Can't remove help topic", e);
 		}finally {
-            if (session != null) {
-                try {
-                    //PersistenceManager.releaseSession(session);
-                    session.close();
-                } catch (Exception ex1) {
-                    logger.warn("releaseSession() failed", ex1);
-                }
-            }
+            PersistenceManager.closeSession(session);
         }
 	}
 	
@@ -1179,34 +1172,7 @@ public class HelpUtil {
 				ex.printStackTrace(System.out);
 			} 
 		}
-	 
-	private static void insertHelp(Object o)
-		{
-			Session session = null;
-            Transaction tx = null;
-			HelpTopic help =(HelpTopic)o;
-			try{
-					session	= PersistenceManager.openNewSession();
-                    tx = session.beginTransaction();
-					session.save(help);
-					tx.commit();
-
-            }
-			catch (Exception ex) {
-				logger.error("Exception : " + ex.getMessage());
-				ex.printStackTrace(System.out);
-			} 
-			finally {
-				if (session != null) {
-					try {
-						session.close();
-					} catch (Exception rsf) {
-						logger.error("Release session failed :" + rsf.getMessage());
-					}
-				}
-			}
-		}
-	
+	 	
 	private String[] getChildTopicsIds(Collection <HelpTopicsTreeItem> items){
 		String[] retValue=new String[items.size()];
 		int i=0;
@@ -1219,113 +1185,116 @@ public class HelpUtil {
 	}
 
 
-    public static void saveNewTreeState(HelpTopic help,HashMap<Long,HelpTopic> storeMap, Site site){
+	public static void saveNewTreeState(HelpTopic help, HashMap<Long, HelpTopic> storeMap, Site site) {
 
-//         Thread th = new Thread();
-      try{
-                   HelpTopic helptopic = new HelpTopic();
-                   helptopic.setTopicKey(help.getTopicKey());
-				   helptopic.setSiteId("amp");
-				   helptopic.setTitleTrnKey(help.getTitleTrnKey());
-	    	       helptopic.setModuleInstance(help.getModuleInstance());
-	    	       helptopic.setKeywordsTrnKey(help.getKeywordsTrnKey());
-                   helptopic.setBodyEditKey(help.getBodyEditKey()); 
+		// Thread th = new Thread();
+		Session session = PersistenceManager.getSession();
+		try {
+			HelpTopic helptopic = new HelpTopic();
+			helptopic.setTopicKey(help.getTopicKey());
+			helptopic.setSiteId("amp");
+			helptopic.setTitleTrnKey(help.getTitleTrnKey());
+			helptopic.setModuleInstance(help.getModuleInstance());
+			helptopic.setKeywordsTrnKey(help.getKeywordsTrnKey());
+			helptopic.setBodyEditKey(help.getBodyEditKey());
 
-                   if(help.getParent() != null){
-                	   HelpTopic top = storeMap.get(help.getParent().getHelpTopicId());
-                       if(top!=null){
-                    	   helptopic.setParent(top);
-                       }
-                   }
-                   
-                   insertHelp(helptopic);
-                   List<HelpContent> helpContents = help.getHelpContent();
-                   if(helpContents!=null && helpContents.size()>0){
-                	   for (HelpContent helpContent : helpContents) {
-						Editor editor = helpContent.getEditor();
-						Sdm oldDoc = helpContent.getDocument();
-						
-						 
-						if(editor !=null){
-							if(oldDoc !=null){
-								//save sdm back in db
-								Sdm newDoc = new Sdm();							
-								newDoc.setInstanceId(oldDoc.getInstanceId());
-								newDoc.setName(oldDoc.getName());
-								newDoc.setSiteId(oldDoc.getSiteId());
-								
-								HashSet<SdmItem> items = new HashSet<SdmItem>();
-								 for (SdmItem sdmItem : oldDoc.getItems()) {
-									SdmItem newItem = new SdmItem();
-									newItem.setContentType(sdmItem.getContentType());
-									newItem.setRealType(sdmItem.getRealType());
-									newItem.setContent(sdmItem.getContent());
-									newItem.setContentText(sdmItem.getContentText());
-									newItem.setContentTitle(sdmItem.getContentTitle());
-									newItem.setParagraphOrder(sdmItem.getParagraphOrder());
-									
-									items.add(newItem);
-								}
-								 
-								 newDoc.setItems(items);
-								 newDoc=org.digijava.module.sdm.util.DbUtil.saveOrUpdateDocument(newDoc);
-								
-								//update editor
-								String imgPart="<img\\s.*?src\\=\"/sdm/showImage\\.do\\?.*?activeParagraphOrder\\=.*documentId="+oldDoc.getId()+".*\"\\s?/>" ;
-								Pattern pattern = Pattern.compile(imgPart,Pattern.MULTILINE);
-								String editorBody = editor.getBody();
-								Matcher matcher = pattern.matcher(editorBody);
-								String containsStr="documentId=";
-								while (matcher.find()){				
-									String imgTag = matcher.group(0);
-									if(imgTag.contains(containsStr)){
-										String docId = oldDoc.getId().toString();
-//										String docId = imgTag.substring(imgTag.indexOf("documentId=")+11);
-//										if(docId.contains("&")){
-//											docId = docId .substring(0,docId.indexOf("&"));
-//										}else{
-//											docId = docId .substring(0,docId.indexOf("\""));
-//										}
-										imgTag = imgTag.replace("documentId="+docId, "documentId="+newDoc.getId());
-										editorBody = matcher.replaceFirst(imgTag);
-										containsStr="documentId=" + docId;
-										matcher = pattern.matcher(editorBody);
-									}else{
-										break;
-									}
-								}
-								editor.setBody(editorBody);
+			if (help.getParent() != null) {
+				HelpTopic top = storeMap.get(help.getParent().getHelpTopicId());
+				if (top != null) {
+					helptopic.setParent(top);
+				}
+			}
+
+			session.save(helptopic);
+			List<HelpContent> helpContents = help.getHelpContent();
+			if (helpContents != null && helpContents.size() > 0) {
+				for (HelpContent helpContent : helpContents) {
+					Editor editor = helpContent.getEditor();
+					Sdm oldDoc = helpContent.getDocument();
+					if (editor != null) {
+						if (oldDoc != null) {
+							// save sdm back in db
+							Sdm newDoc = new Sdm();
+							newDoc.setInstanceId(oldDoc.getInstanceId());
+							newDoc.setName(oldDoc.getName());
+							newDoc.setSiteId(oldDoc.getSiteId());
+
+							HashSet<SdmItem> items = new HashSet<SdmItem>();
+							for (SdmItem sdmItem : oldDoc.getItems()) {
+								SdmItem newItem = new SdmItem();
+								newItem.setContentType(sdmItem.getContentType());
+								newItem.setRealType(sdmItem.getRealType());
+								newItem.setContent(sdmItem.getContent());
+								newItem.setContentText(sdmItem.getContentText());
+								newItem.setContentTitle(sdmItem.getContentTitle());
+								newItem.setParagraphOrder(sdmItem.getParagraphOrder());
+
+								items.add(newItem);
 							}
-							
-							org.digijava.module.editor.util.DbUtil.saveEditor(editor, true);
+
+							newDoc.setItems(items);
+							newDoc = org.digijava.module.sdm.util.DbUtil.saveOrUpdateDocument(newDoc);
+
+							// update editor
+							String imgPart = "<img\\s.*?src\\=\"/sdm/showImage\\.do\\?.*?activeParagraphOrder\\=.*documentId="
+									+ oldDoc.getId() + ".*\"\\s?/>";
+							Pattern pattern = Pattern.compile(imgPart, Pattern.MULTILINE);
+							String editorBody = editor.getBody();
+							Matcher matcher = pattern.matcher(editorBody);
+							String containsStr = "documentId=";
+							while (matcher.find()) {
+								String imgTag = matcher.group(0);
+								if (imgTag.contains(containsStr)) {
+									String docId = oldDoc.getId().toString();
+									// String docId =
+									// imgTag.substring(imgTag.indexOf("documentId=")+11);
+									// if(docId.contains("&")){
+									// docId = docId
+									// .substring(0,docId.indexOf("&"));
+									// }else{
+									// docId = docId
+									// .substring(0,docId.indexOf("\""));
+									// }
+									imgTag = imgTag.replace("documentId=" + docId, "documentId=" + newDoc.getId());
+									editorBody = matcher.replaceFirst(imgTag);
+									containsStr = "documentId=" + docId;
+									matcher = pattern.matcher(editorBody);
+								} else {
+									break;
+								}
+							}
+							editor.setBody(editorBody);
 						}
-							
+
+						org.digijava.module.editor.util.DbUtil.saveEditor(editor);
 					}
-                   }                   
-                   
-                    Thread.sleep(200); //TODO: WA...DA...FA. Constantin: 60% speedup! :D
-                 
-                    HelpTopic newTopic = getHelpTopic(help.getTopicKey(), site, help.getModuleInstance());
-        
-                     HelpTopic parent = new HelpTopic();
-	    	    	 parent.setBodyEditKey(newTopic.getBodyEditKey());
-	    	    	 parent.setHelpTopicId(newTopic.getHelpTopicId());
-	    	    	 parent.setKeywordsTrnKey(newTopic.getKeywordsTrnKey());
-	    	    	 parent.setModuleInstance(newTopic.getModuleInstance());
-	    	    	 parent.setSiteId(newTopic.getSiteId());
-	    	    	 parent.setParent(newTopic.getParent());
-	    	    	 parent.setTitleTrnKey(newTopic.getTitleTrnKey());
-	    	    	 parent.setTopicKey(newTopic.getTopicKey());
 
-                     Long oldid = help.getHelpTopicId();
-                     storeMap.put(oldid, parent);
-   
-        } catch (Exception e) {
-			logger.error("Unable to Save help data"+e.getMessage());
+				}
+			}
+
+			Thread.sleep(200); // TODO: WA...DA...FA. Constantin: 60% speedup!
+								// :D
+
+			HelpTopic newTopic = getHelpTopic(help.getTopicKey(), site, help.getModuleInstance());
+
+			HelpTopic parent = new HelpTopic();
+			parent.setBodyEditKey(newTopic.getBodyEditKey());
+			parent.setHelpTopicId(newTopic.getHelpTopicId());
+			parent.setKeywordsTrnKey(newTopic.getKeywordsTrnKey());
+			parent.setModuleInstance(newTopic.getModuleInstance());
+			parent.setSiteId(newTopic.getSiteId());
+			parent.setParent(newTopic.getParent());
+			parent.setTitleTrnKey(newTopic.getTitleTrnKey());
+			parent.setTopicKey(newTopic.getTopicKey());
+
+			Long oldid = help.getHelpTopicId();
+			storeMap.put(oldid, parent);
+
+		} catch (Exception e) {
+			logger.error("Unable to Save help data" + e.getMessage());
 		}
-
-
-    }
+	}
+	
     public static String HTMLEntityEncode(String s) {
         StringBuffer buf = new StringBuffer();
         int len = (s == null ? -1 : s.length());

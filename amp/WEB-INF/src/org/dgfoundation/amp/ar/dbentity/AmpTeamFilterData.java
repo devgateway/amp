@@ -53,19 +53,11 @@ public class AmpTeamFilterData extends AmpFilterData {
 			tx.commit();
 			
 		} catch (Exception e) {
-			logger.error("Rolling back transaction of deleting exising filters before saving new ones");
+			logger.error("Rolling back transaction of deleting exising filters before saving new ones", e);
 			tx.rollback();
-			e.printStackTrace();
 		}
 		finally{
-			if ( sess != null ) {
-				try {
-					sess.close();
-				}
-				catch (HibernateException e) {
-					logger.error("Unable to close manually opened hibernate session");
-				}
-			}
+			PersistenceManager.closeSession(sess);
 		}
 		
 	} 

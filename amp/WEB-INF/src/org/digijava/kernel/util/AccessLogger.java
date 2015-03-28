@@ -125,12 +125,7 @@ public class AccessLogger
 
 
         logger.debug("Saving log entry " + logEntry + " to database");
-        try {
-            PersistenceManager.createObject(logEntry);
-        }
-        catch (DgException ex) {
-            logger.error("Unable to add entry to log: " + logEntry, ex);
-        }
+        PersistenceManager.getSession().save(logEntry);
         logger.debug("Save complete");
     }
 

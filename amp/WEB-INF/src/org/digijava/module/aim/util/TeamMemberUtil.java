@@ -1260,165 +1260,121 @@ public class TeamMemberUtil {
 
 
     public static void removeTeamMembers(Long id[]) {
-        Session session = null;
-        Transaction tx = null;
-        String qryStr = null;
-        Query qry = null;
 
-        try {
-            session = PersistenceManager.openNewSession();
-            session.setFlushMode(FlushMode.COMMIT);
-            tx = session.beginTransaction();
+    	Session session = PersistenceManager.getSession();
 
-            for (Long anId : id) {
-                if (anId != null) {
-                    AmpTeamMember ampMember = (AmpTeamMember) session.load(AmpTeamMember.class, anId);
-                    if (isTeamLead(ampMember)) {
-                        AmpTeam team = ampMember.getAmpTeam();
-                        team.setTeamLead(null);
-                        session.update(team);
-                    }
+		for (Long anId : id) {
+			if (anId != null) {
+				AmpTeamMember ampMember = (AmpTeamMember) session.load(AmpTeamMember.class, anId);
+				if (isTeamLead(ampMember)) {
+					AmpTeam team = ampMember.getAmpTeam();
+					team.setTeamLead(null);
+					session.update(team);
+				}
 
-                    AmpTeamMember teamHead = getTeamHead(ampMember.getAmpTeam().getAmpTeamId());
+				AmpTeamMember teamHead = getTeamHead(ampMember.getAmpTeam().getAmpTeamId());
 
-                    Collection relatedActivities = ActivityUtil.getActivitiesRelatedToAmpTeamMember(session, ampMember.getAmpTeamMemId());
-                    removeLinksFromATMToActivity(session, relatedActivities, ampMember, teamHead);
+				Collection<AmpActivityVersion> relatedActivities = ActivityUtil.getActivitiesRelatedToAmpTeamMember(session,
+						ampMember.getAmpTeamMemId());
+				removeLinksFromATMToActivity(session, relatedActivities, ampMember, teamHead);
 
-                    String queryString = "select calatt from " + AmpCalendarAttendee.class.getName() + " calatt " + "where calatt.member.ampTeamMemId=:Id ";
-                    qry = session.createQuery(queryString);
-                    qry.setParameter("Id", ampMember.getAmpTeamMemId(), LongType.INSTANCE);
-                    Collection memevents = qry.list();
-                    if (memevents != null && !memevents.isEmpty()) {
-                        for (Object memevent : memevents) {
-                            AmpCalendarAttendee callatt = (AmpCalendarAttendee) memevent;
-                            session.delete(callatt);
-                        }
-                    }
-                    Set<AmpDesktopTabSelection> desktopTabSelections = ampMember
-                            .getDesktopTabSelections();
-                    if (desktopTabSelections != null) {
-                        for (Iterator<AmpDesktopTabSelection> iter = desktopTabSelections
-                                .iterator(); iter.hasNext(); ) {
-                            AmpDesktopTabSelection desktopTabSelection = iter
-                                    .next();
-                            AmpReports report = desktopTabSelection.getReport();
-                            report.getDesktopTabSelections().remove(desktopTabSelection);
-                            iter.remove();
-                            session.delete(desktopTabSelection);
-                        }
-                    }
+				String queryString = "select calatt from " + AmpCalendarAttendee.class.getName() + " calatt "
+						+ "where calatt.member.ampTeamMemId=:Id ";
+				Query qry = session.createQuery(queryString);
+				qry.setParameter("Id", ampMember.getAmpTeamMemId(), LongType.INSTANCE);
 
-                    //Remove refferences to AMP_CONTACT (creator_id field)
-                    StringBuilder queryStr = new StringBuilder("update ");
-                    queryStr.append(AmpContact.class.getName());
-                    queryStr.append(" as cont set cont.creator=null where cont.creator = :SEL_USER");
-                    Query contDetQuery = session.createQuery(queryStr.toString());
-                    contDetQuery.setLong("SEL_USER", anId);
-                    int success = contDetQuery.executeUpdate();
+				Collection<AmpCalendarAttendee> memevents = qry.list();
+				for (AmpCalendarAttendee callatt : memevents) {
+					session.delete(callatt);
+				}
+				Set<AmpDesktopTabSelection> desktopTabSelections = ampMember.getDesktopTabSelections();
+				if (desktopTabSelections != null) {
+					for (Iterator<AmpDesktopTabSelection> iter = desktopTabSelections.iterator(); iter.hasNext();) {
+						AmpDesktopTabSelection desktopTabSelection = iter.next();
+						AmpReports report = desktopTabSelection.getReport();
+						report.getDesktopTabSelections().remove(desktopTabSelection);
+						iter.remove();
+						session.delete(desktopTabSelection);
+					}
+				}
 
+				// Remove references to AMP_CONTACT (creator_id field)
+				StringBuilder queryStr = new StringBuilder("update ");
+				queryStr.append(AmpContact.class.getName());
+				queryStr.append(" as cont set cont.creator=null where cont.creator = :SEL_USER");
+				Query contDetQuery = session.createQuery(queryStr.toString());
+				contDetQuery.setLong("SEL_USER", anId);
+				int success = contDetQuery.executeUpdate();
 
-                    // Verify for reports that are owned by this user and delete them
-                    //DbUtil.deleteReportsForOwner(ampMember.getAmpTeamMemId());
-                    queryString = "select rep from " + AmpReports.class.getName() + " rep " + "where rep.ownerId=:oId ";
-                    qry = session.createQuery(queryString);
-                    qry.setParameter("oId", ampMember.getAmpTeamMemId(), LongType.INSTANCE);
+				// Verify for reports that are owned by this user and delete
+				// them
+				// DbUtil.deleteReportsForOwner(ampMember.getAmpTeamMemId());
+				queryString = "select rep from " + AmpReports.class.getName() + " rep " + "where rep.ownerId=:oId ";
+				qry = session.createQuery(queryString);
+				qry.setParameter("oId", ampMember.getAmpTeamMemId(), LongType.INSTANCE);
 
-                    Collection memReports = qry.list();
-                    if (memReports != null && !memReports.isEmpty()) {
-                        for (Object memReport : memReports) {
-                            AmpReports rep = (AmpReports) memReport;
-                            //verify Default Report in App Settings
-                            queryString = "select app from " + AmpApplicationSettings.class.getName() + " app " + "where app.defaultTeamReport=:rId ";
-                            qry = session.createQuery(queryString);
-                            qry.setLong("rId", rep.getAmpReportId());
+				Collection<AmpReports> memReports = qry.list();
+				for (AmpReports rep : memReports) {
+					// verify Default Report in App Settings
+					queryString = "select app from " + AmpApplicationSettings.class.getName() + " app "
+							+ "where app.defaultTeamReport=:rId ";
+					qry = session.createQuery(queryString);
+					qry.setLong("rId", rep.getAmpReportId());
 
-                            Collection memAppSettings = qry.list();
-                            if (memAppSettings != null && !memAppSettings.isEmpty()) {
-                                for (Object memAppSetting : memAppSettings) {
-                                    AmpApplicationSettings set = (AmpApplicationSettings) memAppSetting;
-                                    set.setDefaultTeamReport(null);
-                                    session.update(set);
-                                }
-                            }
+					Collection<AmpApplicationSettings> memAppSettings = qry.list();
+					for (AmpApplicationSettings set : memAppSettings) {
+						set.setDefaultTeamReport(null);
+						session.update(set);
+					}
 
-                            // delete related information before we delete the report
-                            String deleteTeamReports = " select tr from " + AmpTeamReports.class.getName() + " tr where (tr.report=:ampReportId)";
-                            Query qryaux = session.createQuery(deleteTeamReports);
-                            qryaux.setLong("ampReportId", rep.getAmpReportId());
+					// delete related information before we delete the report
+					String deleteTeamReports = " select tr from " + AmpTeamReports.class.getName()
+							+ " tr where (tr.report=:ampReportId)";
+					Query qryaux = session.createQuery(deleteTeamReports);
+					qryaux.setLong("ampReportId", rep.getAmpReportId());
 
-                            Collection tmReports = qryaux.list();
-                            if (tmReports != null && !tmReports.isEmpty()) {
-                                for (Object tmReport : tmReports) {
-                                    AmpTeamReports atr = (AmpTeamReports) tmReport;
-                                    session.delete(atr);
-                                }
-                            }
+					Collection tmReports = qryaux.list();
+					if (tmReports != null && !tmReports.isEmpty()) {
+						for (Object tmReport : tmReports) {
+							AmpTeamReports atr = (AmpTeamReports) tmReport;
+							session.delete(atr);
+						}
+					}
 
-                            // session.delete(deleteTeamReports);
-                            session.delete(rep);
-                        }
-                    }
+					// session.delete(deleteTeamReports);
+					session.delete(rep);
+				}
 
-                    qryStr = "select com from " + AmpComments.class.getName() +
-                            " com where (com.memberId.ampTeamMemId=:memberId)";
-                    qry = session.createQuery(qryStr);
-                    qry.setParameter("memberId", anId, LongType.INSTANCE);
-                    List<AmpComments> memComments = qry.list();
-                    if (memComments != null && memComments.size() > 0) {
-                        for (AmpComments comm : memComments) {
-                            comm.setMemberId(null);
-                            session.saveOrUpdate(comm);
-                        }
-                    }
-                    qryStr = "select cal   from " + AmpCalendar.class.getName() + " cal where (cal.member.ampTeamMemId=:memberId) ";
-                    qry = session.createQuery(qryStr);
-                    qry.setLong("memberId", anId);
-                    List<AmpCalendar> ampCalendarEvents = qry.list();
-                    if (ampCalendarEvents != null && ampCalendarEvents.size() > 0) {
-                        for (AmpCalendar ampCal : ampCalendarEvents) {
-                            Calendar cal = ampCal.getCalendarPK().getCalendar();
-                            session.delete(ampCal);
-                            session.delete(cal);
-                        }
-                    }
+				String qryStr = "select com from " + AmpComments.class.getName()
+						+ " com where (com.memberId.ampTeamMemId=:memberId)";
+				qry = session.createQuery(qryStr).setParameter("memberId", anId, LongType.INSTANCE);
+				List<AmpComments> memComments = qry.list();
+				for (AmpComments comm : memComments) {
+					comm.setMemberId(null);
+					session.saveOrUpdate(comm);
+				}
+				qryStr = "select cal   from " + AmpCalendar.class.getName() + " cal where (cal.member.ampTeamMemId=:memberId) ";
+				qry = session.createQuery(qryStr).setLong("memberId", anId);
+				List<AmpCalendar> ampCalendarEvents = qry.list();
+				for (AmpCalendar ampCal : ampCalendarEvents) {
+					Calendar cal = ampCal.getCalendarPK().getCalendar();
+					session.delete(ampCal);
+					session.delete(cal);
+				}
 
+				qryStr = "select cont from " + AmpContact.class.getName() + " cont where (cont.creator=:memberId) ";
+				qry = session.createQuery(qryStr).setLong("memberId", anId);
+				List<AmpContact> ampContacts = qry.list();
+				if (ampContacts != null && ampContacts.size() > 0) {
+					for (AmpContact ampCont : ampContacts) {
+						session.delete(ampCont);
+					}
+				}
 
-                    qryStr = "select cont from " + AmpContact.class.getName() + " cont where (cont.creator=:memberId) ";
-                    qry = session.createQuery(qryStr);
-                    qry.setLong("memberId", anId);
-                    List<AmpContact> ampContacts = qry.list();
-                    if (ampContacts != null && ampContacts.size() > 0) {
-                        for (AmpContact ampCont : ampContacts) {
-                            session.delete(ampCont);
-                        }
-                    }
+				session.delete(ampMember);
 
-                    session.delete(ampMember);
-
-                }
-            }
-            tx.commit();
-        } catch (Exception e) {
-            logger.error("Unable to removeTeamMembers " + e.getMessage());
-            e.printStackTrace();
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                } catch (Exception rbf) {
-                    logger.error("Roll back failed");
-                }
-            }
-            throw new RuntimeException(e);
-        } finally {
-            if (session != null) {
-                try {
-                    //PersistenceManager.releaseSession(session);
-                    session.close();
-                } catch (Exception ex1) {
-                    logger.warn("releaseSession() failed", ex1);
-                }
-            }
-        }
+			}
+		}
     }
 
 	private static boolean isTeamLead(AmpTeamMember member) {

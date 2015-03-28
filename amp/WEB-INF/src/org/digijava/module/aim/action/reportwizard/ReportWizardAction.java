@@ -928,20 +928,14 @@ public class ReportWizardAction extends MultiAction {
 	public static AmpReports loadAmpReport(Long ampReportId, HttpServletRequest request)
 	{
 		AmpReports ampReport	= null;
-		Session session			= null;
 		try {
-			session				= PersistenceManager.openNewSession();
 			if (ampReportId > 0)
-				ampReport	=  (AmpReports) session.load(AmpReports.class, ampReportId );
+				ampReport	=  (AmpReports) PersistenceManager.getSession().load(AmpReports.class, ampReportId );
 			else 
 				ampReport	= ReportContextData.getFromRequest().getReportMeta();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
-		}
-		finally {
-			if ( session != null )
-				session.close();
+			throw new RuntimeException(e);
 		}
 		return ampReport;
 	}

@@ -261,29 +261,20 @@ public class AuditLoggerUtil {
 	/**
 	 * @author dan
 	 */
-	public static Collection getLogObjects(boolean withLogin) {
-		Session session = null;
-		Collection<AmpAuditLogger> col = new ArrayList<AmpAuditLogger>();
-		String qryStr = null;
-		Query qry = null;
-		
+	public static Collection<AmpAuditLogger> getLogObjects(boolean withLogin) {
 		try {
-			session = PersistenceManager.getRequestDBSession();
-			if(!withLogin){
+			String qryStr = null;
+			if (!withLogin){
 				qryStr = "select f from " + AmpAuditLogger.class.getName() + " f where action<>'"+Constants.LOGIN_ACTION+"' order by loggedDate desc";
-			}else{
+			}else {
 				qryStr = "select f from " + AmpAuditLogger.class.getName() + " f order by loggedDate desc";
 			}
-			qry = session.createQuery(qryStr);
-			col = qry.list();
+			return PersistenceManager.getSession().createQuery(qryStr).list();
 		} catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-		}finally{
-			PersistenceManager.cleanupSession(session);
+			throw new RuntimeException(ex);
 		}
-		
-		return col;
 	}
+	
 	/**
 	 * 
 	 * @return
@@ -414,26 +405,20 @@ public class AuditLoggerUtil {
 	 * Delete all records whose date is less than the interval
 	 * @param interval
 	*/
-	public static void DeleteLogsByPeriod(String interval) {
-		Session session = null;
-		String qryStr = null;
-		Query qry = null;
+	public static void deleteLogsByPeriod(String interval) {
 		try {
-			session = PersistenceManager.getRequestDBSession();
-			qryStr = "delete from " + AmpAuditLogger.class.getName()
+			String qryStr = "delete from " + AmpAuditLogger.class.getName()
 					+ " where action<>'login' and (loggedDate <= :dateParam or loggedDate=null)";
 
-			qry = session.createQuery(qryStr);
-			qry.setParameter("dateParam", getDateRange(Integer.parseInt(interval)), DateType.INSTANCE);
-			int rowCount = qry.executeUpdate();
+			int rowCount = PersistenceManager.getSession().createQuery(qryStr)
+					.setParameter("dateParam", getDateRange(Integer.parseInt(interval)), DateType.INSTANCE).executeUpdate();
 			logger.info("Row deleted from audit logger = " + rowCount);
 
 		} catch (Exception e) {
-			logger.error("HibernateException", e);
-		} finally {
-			PersistenceManager.cleanupSession(session);
+			throw new RuntimeException(e);
 		}
-}
+	}
+	
 	/**
      * This class is used for sorting by name.
      * @author Diego Dimunzio

@@ -113,8 +113,7 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
         return auxActivity;
 	}
 	
-    public void execute(JobExecutionContext context) throws JobExecutionException{
-
+    @Override public void execute(JobExecutionContext context) throws JobExecutionException {
     	try
     	{
     		String val = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTOMATICALLY_CLOSE_ACTIVITIES);
@@ -172,7 +171,7 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
 
     			logger.info(String.format("... done, new amp_activity_id=%d\n", newVer.getAmpActivityId()));
     		}
-    		PersistenceManager.cleanupSession(session); // close transaction and reopen it, for the changes to become visible to the rest of AMP and the next code run in this thread to have an available session
+    		PersistenceManager.endSessionLifecycle();
     	}
     	catch(Exception e)
     	{    		

@@ -46,10 +46,5 @@ public class ActivityDisbursementsDatesJob implements StatefulJob {
                 }
             }
         }
-        try {
-            PersistenceManager.closeRequestDBSessionIfNeeded();
-        } catch (DgException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -282,7 +282,7 @@ public class LuceneUtil implements Serializable {
     				break checkStamp;
     			}
     			else{
-    				logger.info("Lucene Index algorithm serial ID is OK");
+    				logger.info("Lucene Index algforithm serial ID is OK");
     			}
     			
     			//getting DB timestamp
@@ -290,7 +290,7 @@ public class LuceneUtil implements Serializable {
     			try {
 					dbStamp = getIdxStamp(ACTIVITY_INDEX_SUFFIX).getStamp();
 				} catch (Exception e) {
-					logger.error(e);
+					logger.error("", e);
 				}
     			
     			//checking the database for timestamp
@@ -804,7 +804,7 @@ public class LuceneUtil implements Serializable {
 		            }
 	            } catch (Exception e) {
 	            	logger.error("Error reindexing document - field:" + field + " - value:" + luceneValue);
-	            	logger.error(e);
+	            	logger.error("", e);
 	            }
 	            all = all.concat(" " + luceneValue);
 	        }
@@ -878,7 +878,7 @@ public class LuceneUtil implements Serializable {
                         } catch (Exception e) {
                             logger.error("Error reindexing document - field:" + field +
                                     " - value:" + translation.getTranslation() + " locale:" + translation.getLocale());
-                            logger.error(e);
+                            logger.error("", e);
                         }
                         all = all.concat(" " + translation.getTranslation());
                     }
@@ -986,7 +986,7 @@ public class LuceneUtil implements Serializable {
 					}
 				}
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error("", e);
 			}
 	    }
 	    
@@ -1042,7 +1042,7 @@ public class LuceneUtil implements Serializable {
 				}
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("", e);
 		}
     }
     
@@ -1329,7 +1329,7 @@ public class LuceneUtil implements Serializable {
     			}
     		}
     	} catch (Exception ex) {
-    		logger.error(ex);
+    		logger.error("", ex);
     		throw new DgException(ex);
     	}
     }
@@ -1489,7 +1489,7 @@ public class LuceneUtil implements Serializable {
     		writer.optimize();
     		writer.close();
     	} catch (IOException e) {
-    		logger.error(e);
+    		logger.error("", e);
     		throw e;
     	}
     }

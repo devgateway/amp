@@ -51,14 +51,7 @@ public class AmpMessageUtil {
 	}
 	
 	public static void saveOrUpdateMessage(AmpMessage message) throws AimException {
-		Session session= null;
-		try {
-			session=PersistenceManager.getRequestDBSession();
-			session.saveOrUpdate(message);
-		}catch(Exception ex) {
-			throw new AimException("update failed",ex);
-		}
-		PersistenceManager.cleanupSession(session);
+		PersistenceManager.getSession().saveOrUpdate(message);
 	}
 	
 	public static AmpMessage getMessage(Long messageId) throws AimException{

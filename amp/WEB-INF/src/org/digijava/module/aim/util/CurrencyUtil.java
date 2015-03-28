@@ -191,8 +191,6 @@ public class CurrencyUtil {
 	 * @param cRate The AmpCurrencyRate object
 	 */
 	public static void saveCurrencyRate(AmpCurrencyRate cRate, boolean calledFromQuartzJob) {
-		Session session = null;
-		Query qry = null;
 		String qryStr = null;
 		if (!calledFromQuartzJob)
 		{
@@ -200,14 +198,14 @@ public class CurrencyUtil {
 		}
 
 		try {
-			 session = PersistenceManager.getRequestDBSession();
+			Session session = PersistenceManager.getSession();
              qryStr = "select cRate from " + AmpCurrencyRate.class.getName() + " cRate " +
 					"where (cRate.toCurrencyCode=:code) and (cRate.fromCurrencyCode=:fromCode) and" +
 					"(cRate.exchangeRateDate=:date)";
-             qry = PersistenceManager.getSession().createQuery(qryStr);
+             Query qry = session.createQuery(qryStr);
              qry.setString("code", cRate.getToCurrencyCode());
-             qry.setString("fromCode",cRate.getFromCurrencyCode());
-             qry.setDate("date",cRate.getExchangeRateDate());
+             qry.setString("fromCode", cRate.getFromCurrencyCode());
+             qry.setDate("date", cRate.getExchangeRateDate());
 
 			Iterator<AmpCurrencyRate> itr = qry.list().iterator();
 			if (itr.hasNext()) {
@@ -224,31 +222,30 @@ public class CurrencyUtil {
 			logger.error("Couldn't save Exchange Rates ",e);
 			throw new RuntimeException(e);
 		}
-		PersistenceManager.cleanupSession(session);
 	}
 
     public static Collection<AmpCurrency> getAllCurrencies(int active){
         return getAllCurrencies(active, "");
     }
 
-	public static Collection<AmpCurrency> getAllCurrencies(int active,String sortOrder) {
+	public static Collection<AmpCurrency> getAllCurrencies(int active, String sortOrder) {
 		Collection<AmpCurrency> col = new ArrayList<AmpCurrency>();
 		Session session = null;
 		Query qry = null;
 		String qryStr = null;
 		try {
-			session = PersistenceManager.getRequestDBSession();
+			session = PersistenceManager.getSession();
 			
 			if (active == CurrencyUtil.ORDER_BY_CURRENCY_CODE) {
 				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  curr.countryLocation dg order by curr.currencyCode "+sortOrder;
 				qry = session.createQuery(qryStr);
-			}else if(active == CurrencyUtil.ORDER_BY_CURRENCY_NAME){
+			} else if(active == CurrencyUtil.ORDER_BY_CURRENCY_NAME){
 				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left join fetch  curr.countryLocation dg order by curr.currencyName "+sortOrder;
 			qry = session.createQuery(qryStr);
-			}else if(active == CurrencyUtil.ORDER_BY_CURRENCY_COUNTRY_NAME){
+			} else if(active == CurrencyUtil.ORDER_BY_CURRENCY_COUNTRY_NAME){
 				qryStr = "select curr from " + AmpCurrency.class.getName() + " as curr left outer join curr.countryLocation dg order by dg.name "+sortOrder;
 			qry = session.createQuery(qryStr);
-			}else {
+			} else {
 				qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
 					"where (curr.activeFlag=:flag) order by curr.currencyCode "+sortOrder;
 				qry = session.createQuery(qryStr);
@@ -256,12 +253,8 @@ public class CurrencyUtil {
 			}
 			col = qry.list();
 		} catch (Exception e) {
-			logger.error("Exception from getAllCurrencies()");
-			e.printStackTrace(System.out);
-		} finally{
-			PersistenceManager.cleanupSession(session);
+			logger.error("Exception from getAllCurrencies()", e);
 		}
-
 		return col;
 	}
 	

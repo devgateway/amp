@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.FormatHelper;
@@ -31,18 +32,26 @@ public class AuditCleanerMsgJob implements Job {
 	public static final String BODY_1 = "All logs older than  ";
 	public static final String BODY_2 = " days will be deleted from the Audit Trail on ";
 
-	public void execute(JobExecutionContext context)
+	@Override
+	public void execute(JobExecutionContext context) throws JobExecutionException {
+		try {
+			executeInternal(context);
+		}
+		finally {
+			PersistenceManager.endSessionLifecycle();
+		}
+	}
+	
+	public void executeInternal(JobExecutionContext context)
 			throws JobExecutionException {
 
-		String strreceiveirs = null;
+		String strReceivers = "";
 
 		try {
 			Collection<AmpTeamMember> alllead = TeamMemberUtil.getMembersUsingRole(new Long("1"));
-
-			for (Iterator iterator = alllead.iterator(); iterator.hasNext();) {
-				AmpTeamMember ampTeamMember = (AmpTeamMember) iterator.next();
+			for(AmpTeamMember ampTeamMember:alllead) {
 				if (ampTeamMember != null) {
-					strreceiveirs += ampTeamMember.getUser().getFirstNames()
+					strReceivers += ampTeamMember.getUser().getFirstNames()
 							+ " " + ampTeamMember.getUser().getLastName() + "<"
 							+ ampTeamMember.getUser().getEmail() + ">,";
 				}
@@ -69,8 +78,7 @@ public class AuditCleanerMsgJob implements Job {
 				AmpMessageUtil.saveOrUpdateMessageState(state);
                              
 				
-				for (Iterator iterator = alllead.iterator(); iterator.hasNext();) {
-					AmpTeamMember tm = (AmpTeamMember) iterator.next();
+				for (AmpTeamMember tm:alllead) {
 					if (tm != null && tm.getAmpTeamMemId() != null) {
 						AmpMessageUtil.createMessageState(message, tm);
 					}

@@ -159,7 +159,7 @@ public class CellDataSetToGeneratedReport {
 		//adds data to the content
 		for(int colId = 0; colId < rowLength; colId++) {
 			String value = cellDataSet.getCellSetBody()[rowId][colId].getFormattedValue();
-			ReportCell cellData = null;
+			ReportCell cellData;
 			//textual columns
 			if (colId < spec.getColumns().size()) { 
 				if (DateColumns.ACTIVITY_DATES.contains(leafHeaders.get(colId).originalColumnName)) {

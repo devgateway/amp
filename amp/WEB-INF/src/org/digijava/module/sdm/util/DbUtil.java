@@ -444,20 +444,8 @@ public class DbUtil {
             //tx.commit();
         }
         catch (Exception ex) {
-
-            logger.debug("Unable to update document information into database",
-                         ex);
-
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                }
-                catch (HibernateException ex1) {
-                    logger.warn("rollback() failed", ex1);
-                }
-            }
-            throw new SDMException(
-                "Unable to update document information into database", ex);
+            logger.debug("Unable to update document information into database", ex);
+            throw new SDMException( "Unable to update document information into database", ex);
         }
 
     }
@@ -534,13 +522,7 @@ public class DbUtil {
             throw new SDMException("Unable to update document information into database", ex);
         }
         finally {
-            if (session != null) {
-                try {
-                    session.close();
-                } catch (Exception ex1) {
-                    logger.warn("releaseSession() failed", ex1);
-                }
-            }
+            PersistenceManager.closeSession(session);
         }
         return document;
     }

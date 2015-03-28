@@ -478,7 +478,7 @@ public class OnePager extends AmpHeaderFooter {
             session.getTransaction().rollback();
             return null;
         } finally {
-            PersistenceManager.cleanupSession(session);
+           PersistenceManager.closeSession(session);
         }
     }
 

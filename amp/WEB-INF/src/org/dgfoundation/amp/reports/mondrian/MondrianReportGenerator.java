@@ -123,6 +123,8 @@ public class MondrianReportGenerator implements ReportExecutor {
 		this.reportAreaType = reportAreaType;
 		this.environment = environment;
 		this.printMode = printMode; 
+		if (printMode)
+			System.out.println("print mode ON");
 		this.translatedUndefined = TranslatorWorker.translateText("Undefined", environment.locale, 3l);
 	}
 	

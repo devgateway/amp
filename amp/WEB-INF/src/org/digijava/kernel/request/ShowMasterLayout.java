@@ -78,7 +78,6 @@ public class ShowMasterLayout
                 RequestUtils.getRequestInfo(httpRequest));
         }
 
-        try {
             String uri = httpRequest.getRequestURI();
             int customPartStart = httpRequest.getContextPath().length();
             if (customPartStart == 1) {
@@ -125,19 +124,5 @@ public class ShowMasterLayout
                     }
                 }
             }
-        }
-        finally {
-            //Close DB Session related with this request if it exists
-            try {
-                PersistenceManager.closeRequestDBSessionIfNeeded();
-            }
-            catch (DgException ex) {
-                logger.warn("Error closing hibernate session", ex);
-            }
-            //String sessions = PersistenceManager.getFormattedThreadSessionData();
-//            if (sessions != null) {
-//                logger.warn("UNCLOSED SESSIONS for the request\n"+ sessions);
-//            }
-        }
     }
 }

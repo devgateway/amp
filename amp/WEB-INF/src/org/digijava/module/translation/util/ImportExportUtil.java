@@ -84,8 +84,6 @@ public class ImportExportUtil {
 	 */
 	public static void importTranslations(Translations translations, ImportExportOption option) throws DgException{
 		List<Trn> groups = translations.getTrn();
-		Session session = null;
-		Transaction tx = null;
 		TranslatorWorker worker = TranslatorWorker.getInstance("");
 		if (worker instanceof CachedTranslatorWorker)
 		{
@@ -97,9 +95,9 @@ public class ImportExportUtil {
 		TranslatorWorker.FREEZE_TIMESTAMP_UPDATING = true;
 		if (groups!=null && groups.size() > 0){
 			try {
-				session = PersistenceManager.openNewSession();
+				Session session = PersistenceManager.openNewSession();
 				session.setFlushMode(FlushMode.MANUAL);
-				tx = session.beginTransaction();
+				Transaction tx = session.beginTransaction();
 				
 				//set session in parameter
 				option.setDbSession(session);
@@ -115,8 +113,7 @@ public class ImportExportUtil {
 				//update translation cache after commit is success.
 				//refreshWorker(option);
 				tx.commit();
-				session.flush();
-				session.close();
+				PersistenceManager.closeSession(session);
 			}
 //			catch (WorkerException e) {
 //				logger.error(e);

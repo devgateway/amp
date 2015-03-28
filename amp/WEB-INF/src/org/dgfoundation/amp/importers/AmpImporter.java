@@ -53,33 +53,18 @@ public abstract class AmpImporter {
 			//e.printStackTrace();
 		}
 		
-		session = PersistenceManager.getSession();
-		
-		Map<String, String> o = null;
-		do {
-			try {
-				o = parseNextLine();
-			} catch (IOException e) {
-				logger.error(e);
-				e.printStackTrace();
-			}
-			if (o != null)
-				try {
-					saveToDB(o);
-				} catch (HibernateException e) {
-					logger.error(e);
-					e.printStackTrace();
-				}
-		} while (o != null);
+		session = PersistenceManager.getSession(); // ensure a clean Session exists
 		try {
-			fr.close();
-		} catch (IOException e) {
-			logger.error(e);
-			e.printStackTrace();
-		}finally{
-			PersistenceManager.cleanupSession(session);
+			while (true) {			
+				Map<String, String> o = parseNextLine();
+				if (o == null) break;
+				saveToDB(o);
+			};
+		} catch (Exception e) {
+			logger.error("error while running import on " + this.getClass().getName(), e);
 		}
-		
+		PersistenceManager.endSessionLifecycle();
+		PersistenceManager.closeQuietly(fr);
 	}
 
 	protected abstract String getFileType();

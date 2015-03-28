@@ -261,56 +261,37 @@ public class CategoryManager extends Action {
 	 */
 	private Collection<AmpCategoryClass> loadCategories(Long categoryId) {
 		logger.info("Getting category with id " + categoryId);
-		
-		Session dbSession			= null;
-		Collection<AmpCategoryClass> returnCollection	= null;
+		Collection<AmpCategoryClass> returnCollection = null;
 		try {
-			dbSession			= PersistenceManager.openNewSession();
 			String queryString;
 			Query qry;
-			if ( categoryId != null ){
-				queryString = "select c from "
-					+ AmpCategoryClass.class.getName()
-					+ " c where c.id=:id";
-				qry			= dbSession.createQuery(queryString);
-				qry.setParameter("id", categoryId, LongType.INSTANCE);
+			if (categoryId != null) {
+				queryString = "select c from " + AmpCategoryClass.class.getName() + " c where c.id=:id";
+				qry = PersistenceManager.getSession().createQuery(queryString).setParameter("id", categoryId, LongType.INSTANCE);
 			}
 			else {
-				queryString = "select c from "
-					+ AmpCategoryClass.class.getName()
-					+ " c ";
-				qry 		= dbSession.createQuery(queryString);
+				queryString = "select c from " + AmpCategoryClass.class.getName() + " c ";
+				qry = PersistenceManager.getSession().createQuery(queryString);
 			}
+			returnCollection = qry.list();
 			
-			returnCollection	= qry.list();
-			
-			
-			Iterator<AmpCategoryClass> iter	= returnCollection.iterator();
-			while ( iter.hasNext() ) {
-				iter.next().getUsedCategories().size();
-			}
-			
-		} catch (Exception ex) {
-			logger.error("Unable to get Categories: " + ex.getMessage());
-			ex.printStackTrace();
-		} finally {
-			try {
-				dbSession.close();
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
+			for(AmpCategoryClass acc:returnCollection)
+				acc.getUsedCategories().size();
+			return returnCollection;
 		}
-		return returnCollection;
+		catch(Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
+
 	private void deleteCategory (Long categoryId) {
-		Session dbSession			= null;
-		Transaction transaction		= null;
+		Session dbSession = PersistenceManager.openNewSession();
+		Transaction transaction = null;
 		try{
-			dbSession		= PersistenceManager.openNewSession();
 //beginTransaction();
 			transaction = dbSession.beginTransaction();
 			dbSession.createQuery("delete from " + AmpLinkedCategoriesState.class.getName() +" s where s.mainCategory.id=:categoryId")
-			.setLong("categoryId", categoryId).executeUpdate();
+				.setLong("categoryId", categoryId).executeUpdate();
 			//transaction.commit();
 			
 			String queryString 	= "select c from "	+ AmpCategoryClass.class.getName()+ " c where c.id=:id";
@@ -318,7 +299,6 @@ public class CategoryManager extends Action {
 			qry.setParameter("id", categoryId, LongType.INSTANCE);
 			dbSession.delete( qry.uniqueResult() );	
 			transaction.commit();
-			
 		} 
 		catch (Exception ex) {
 			ActionMessage error	= (ActionMessage) new ActionMessage("error.aim.categoryManager.cannotDeleteCategory");
@@ -333,56 +313,31 @@ public class CategoryManager extends Action {
 			}
 		} 
 		finally {
-            if (dbSession != null) {
-                try {
-                    //PersistenceManager.releaseSession(session);
-                	dbSession.close();
-                } catch (Exception ex1) {
-                    logger.warn("releaseSession() failed", ex1);
-                }
-            }
+            PersistenceManager.closeSession(dbSession);
         }
 	}
-	/**
-	 * 
-	 * @param myForm
-	 * @param errors
-	 * @throws Exception
-	 */
 
-
-		
-	
 	private boolean saveCategoryToDatabase(CategoryManagerForm myForm, ActionMessages errors) throws Exception {
 		
-		Session dbSession					= null;	
-		Transaction tx						= null;
-		String undeletableCategoryValues	= null; 
-		
-		boolean retValue					= true;
-		
+		Session dbSession = PersistenceManager.openNewSession();
+		Transaction tx = dbSession.beginTransaction();
+		String undeletableCategoryValues = null;
+		boolean retValue = true;
 		
 		try {
 			/* Testing if entered category key is not already used */
-			if ( myForm.getEditedCategoryId() == null && 
-					CategoryManagerUtil.isCategoryKeyInUse( myForm.getKeyName() )  ) 
-			{
+			if (myForm.getEditedCategoryId() == null && CategoryManagerUtil.isCategoryKeyInUse( myForm.getKeyName())) {
 				ActionMessage duplicateKeyError	= new ActionMessage("error.aim.categoryManager.duplicateKey");
-				errors.add("title",duplicateKeyError);
+				errors.add("title", duplicateKeyError);
 				return false;
 			}
-			
-			dbSession						= PersistenceManager.openNewSession();
-			tx								= dbSession.beginTransaction();
-			AmpCategoryClass dbCategory		= new AmpCategoryClass();
-			dbCategory.setPossibleValues( new Vector() );
+	
+			AmpCategoryClass dbCategory = new AmpCategoryClass();
+			dbCategory.setPossibleValues(new ArrayList<AmpCategoryValue>());
 			if (myForm.getEditedCategoryId() != null) {
-				String queryString	= "select c from " + AmpCategoryClass.class.getName() + " c where c.id=:id";
-				Query query			= dbSession.createQuery(queryString);
-				query.setParameter("id", myForm.getEditedCategoryId(), LongType.INSTANCE);
-				Collection col		= query.list();
-				if (col !=null && col.size() > 0)
-					dbCategory			= (AmpCategoryClass)col.toArray()[0];
+				AmpCategoryClass cc = (AmpCategoryClass) dbSession.get(AmpCategoryClass.class, myForm.getEditedCategoryId());
+				if (cc != null)
+					dbCategory = cc;
 			}
 
 			dbCategory.setName( myForm.getCategoryName() );
@@ -410,41 +365,33 @@ public class CategoryManager extends Action {
 			String unaddableCategoryValues = null;
 
 			for ( int i=0; i<possibleVals.size(); i++ ) {
-				PossibleValue pVal		= possibleVals.get(i);
-				if ( !pVal.isDisable() && 
-						(pVal.getId() == null || pVal.getId() == 0L) ) {
+				PossibleValue pVal = possibleVals.get(i);
+				if ( !pVal.isDisable() && (pVal.getId() == null || pVal.getId() == 0L)) {
 					AmpCategoryValue newVal			= new AmpCategoryValue();
 					newVal.setValue( pVal.getValue() );
 					newVal.setAmpCategoryClass( dbCategory );
 					newVal.setIndex(i);
 					dbCategory.getPossibleValues().add(i, newVal);
 					
-					try{
+					try {
 						//trying to add 
 						dbSession.flush();
 					}
 					catch (Exception e) {
-						if (unaddableCategoryValues ==  null) 
-							unaddableCategoryValues = new String() + newVal.getValue();
-						else
-							unaddableCategoryValues += ", " + newVal.getValue(); 
-					}			
-					
-					
+						unaddableCategoryValues = (unaddableCategoryValues == null ? "" : (unaddableCategoryValues + ", ")) + newVal.getValue();
+					}
 				}
-
-
 			}
-			
-			
 			
 			/**
 			 * Save modifications to existing values only if we are in advanced mode
 			 */
-			if ( myForm.isAdvancedMode() )
-				for ( int i=0; i<possibleVals.size(); i++ ) {
+			if ( myForm.isAdvancedMode() ) {
+				for ( int i = 0; i < possibleVals.size(); i++ ) {
 					dbCategory.getPossibleValues().get(i).setValue( possibleVals.get(i).getValue() );
 				}
+			}
+			
 			/**
 			 * Remove deleted values from database
 			 */
@@ -460,13 +407,12 @@ public class CategoryManager extends Action {
 						
 						AmpCategoryValue ampCategoryValue	= iterCV.next();
 						
-						//LLK HACK
+						// hack
 						if (ampCategoryValue == null)
 							continue;
+						
 						if ( pVal.getId().equals(ampCategoryValue.getId()) ) {
 							if (!pVal.isDeleted()) {
-								
-							
 								try{
 									ampCategoryValue.setDeleted(true);
 									dbSession.flush();
@@ -477,7 +423,7 @@ public class CategoryManager extends Action {
 								}
 								catch (Exception e) {
 									if (undeletableCategoryValues ==  null) 
-										undeletableCategoryValues = new String() + ampCategoryValue.getValue();
+										undeletableCategoryValues = ampCategoryValue.getValue();
 									else
 										undeletableCategoryValues += ", " + ampCategoryValue.getValue(); 
 								}
@@ -485,6 +431,7 @@ public class CategoryManager extends Action {
 						}
 					}
 				}
+				
 				//restore undeleted values
 				if (pVal.isDeleted() && !pVal.isDisable()) {
 					if ( pVal.getId() == null ) {
@@ -500,13 +447,10 @@ public class CategoryManager extends Action {
 								dbSession.flush();
 							}
 							catch (Exception e) {
-								//something went wrong, hz
+								logger.error("could not mark ACV as deleted", e);
 							}
-							
 						}
 					}
-
-					
 				}
 			}
 			
@@ -514,14 +458,14 @@ public class CategoryManager extends Action {
 			
 			CategoryLabelsUtil.populateCategoryWithLabels(myForm, dbCategory);
 			
-			String dupValue		= CategoryManager.checkDuplicateValues(dbCategory.getPossibleValues()); 
+			String dupValue		= checkDuplicateValues(dbCategory.getPossibleValues()); 
 			
 			if ( dupValue != null ) {
 				if (tx != null)
 					tx.rollback();
 				ActionMessage error	= new ActionMessage("error.aim.categoryManager.duplicateValue", dupValue);
 				errors.add("title",error);
-				retValue			= false;
+				retValue = false;
 			}
 			else {
 			
@@ -530,7 +474,7 @@ public class CategoryManager extends Action {
 						tx.rollback();
 					ActionMessage error2	= new ActionMessage("error.aim.categoryManager.cannotDeleteValues", undeletableCategoryValues);
 					errors.add("title",error2);
-					retValue			= false;
+					retValue = false;
 				}
 				
 				else {
@@ -552,7 +496,6 @@ public class CategoryManager extends Action {
 						}						
 
 					}
-					
 					tx.commit();
 				}
 			}
@@ -561,44 +504,27 @@ public class CategoryManager extends Action {
 			ActionMessage error1	= new ActionMessage("error.aim.categoryManager.cannotSaveOrUpdate");
 			errors.add("title",error1);
 			if (tx != null)
-					tx.rollback();
-			retValue			= false;
-			
+				tx.rollback();
+			return false;
 		} finally {
-			try {
-				dbSession.close();
-			} catch (Exception ex2) {
-				logger.error("close hibernate session failed in saveCategoryToDatabase :", ex2);
-			}
+			PersistenceManager.closeSession(dbSession);
 		}
 		return retValue;
 	}
 	
-	private void reindexAmpCategoryValueList( List<AmpCategoryValue> values ) {
-		for (int i=0; i<values.size(); i++) 
+	private void reindexAmpCategoryValueList(List<AmpCategoryValue> values) {
+		for (int i = 0; i < values.size(); i++) 
 			if (values.get(i) != null)
 				values.get(i).setIndex(i);
 	}
 	
 	public static String checkDuplicateValues( List<AmpCategoryValue>  values) {
-		HashSet<String> set					= new HashSet<String>( values.size() );
-		
-		
+		HashSet<String> set	= new HashSet<String>( values.size());		
 		for (AmpCategoryValue val: values) {
-			if (val != null) {
-				String value					= val.getValue(); 
-				if ( !set.add( value ) )
-					return value;
+			if (val != null && !set.add(val.getValue())) {
+				return val.getValue();
 			}
 		}
-//		Iterator<AmpCategoryValue> iter		= values.iterator();
-//		
-//		while ( iter.hasNext() ) {
-//			
-//			String value					= iter.next().getValue(); 
-//			if ( !set.add( value ) )
-//				return value;
-//		}
 		return null;
 	}
 	

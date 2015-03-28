@@ -97,9 +97,9 @@ public class SaveText
         editor.setUrl(formBean.getReturnUrl());
 
         if (exists) {
-            PersistenceManager.updateObject(editor);
+            PersistenceManager.getSession().update(editor);
         } else {
-            PersistenceManager.createObject(editor);
+        	PersistenceManager.getSession().save(editor);
         }
 
         return new ActionForward((formBean.getReturnUrl() == null ? "/" : formBean.getReturnUrl()), true);

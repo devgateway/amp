@@ -41,10 +41,5 @@ public class UserVerifiedDateJob implements StatefulJob {
                 }
             }
         }
-        try {
-            PersistenceManager.closeRequestDBSessionIfNeeded();
-        } catch (DgException e) {
-            e.printStackTrace();
-        }
     }
 }

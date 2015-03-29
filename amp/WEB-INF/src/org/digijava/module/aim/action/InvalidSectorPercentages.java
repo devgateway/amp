@@ -38,8 +38,8 @@ public class InvalidSectorPercentages extends Action{
 	}
 
 	private void makeActivityDraft(Long actId) throws Exception{
-		AmpActivityVersion activity=ActivityUtil.loadActivity(actId);
+		AmpActivityVersion activity = ActivityUtil.loadActivity(actId);
 		activity.setDraft(true);
-		PersistenceManager.updateObject(activity);
+		PersistenceManager.getSession().update(activity);
 	}
 }

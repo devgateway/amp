@@ -4,6 +4,8 @@
 package org.digijava.module.categorymanager.dbentity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -67,7 +69,12 @@ public class AmpCategoryClass implements Serializable, Comparable<AmpCategoryCla
 		return possibleValues;
 	}
 	public void setPossibleValues(List<AmpCategoryValue> possibleValues) {
-		this.possibleValues = possibleValues;
+		if (this.possibleValues == null)
+			this.possibleValues = possibleValues;
+		else {
+			this.possibleValues.clear();
+			this.possibleValues.addAll(possibleValues);
+		}
 	}
 
 	public String getKeyName() {

@@ -47,10 +47,5 @@ public class ActivityProposedApprovalDateJob implements StatefulJob {
                 }
             }
         }
-        try {
-            PersistenceManager.closeRequestDBSessionIfNeeded();
-        } catch (DgException e) {
-            e.printStackTrace();
-        }
     }
 }

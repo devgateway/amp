@@ -30,17 +30,13 @@ import org.digijava.module.aim.util.AuditLoggerUtil;
 
 public class AuditLoggerManager extends MultiAction {
 	
-	private static Logger logger = Logger.getLogger(AuditLoggerManager.class);
-	
-	private ServletContext ampContext = null;
-	
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 		AuditLoggerManagerForm vForm = (AuditLoggerManagerForm) form;
 		if (request.getParameter("clean") != null) {
 			if (vForm.getUseraction().equalsIgnoreCase("delete")) {
-				AuditLoggerUtil.DeleteLogsByPeriod(vForm.getFrecuency());
+				AuditLoggerUtil.deleteLogsByPeriod(vForm.getFrecuency());
 			} else if (vForm.getUseraction().equalsIgnoreCase("export")) {
 
 				OutputStream out = response.getOutputStream();

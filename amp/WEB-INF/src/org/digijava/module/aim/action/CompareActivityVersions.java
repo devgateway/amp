@@ -665,7 +665,7 @@ public class CompareActivityVersions extends DispatchAction {
 			logger.error("Can't save merged activity:", e);
             transaction.rollback();
 		} finally {
-            session.close();
+            PersistenceManager.closeSession(session);
         }
         return mapping.findForward("index");
 	}

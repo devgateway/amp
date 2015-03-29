@@ -419,22 +419,11 @@ public class DbUtil {
         catch (Exception ex) {
             logger.debug("Unable to update editor information into database", ex);
 
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                }
-                catch (HibernateException ex1) {
-                    logger.warn("rollback() failed", ex1);
-                }
-            }
             throw new EditorException(
                 "Unable to update editor information into database", ex);
         }
     }
 
-    public static void saveEditor(Editor editor) throws EditorException {
-        saveEditor(editor, false);
-    }
 
     /**
      * Save editor
@@ -442,42 +431,8 @@ public class DbUtil {
      * @param editor
      * @throws EditorException
      */
-    public static void saveEditor(Editor editor, boolean newSess) throws EditorException {
-
-        Session session = null;
-        Transaction tx = null;
-        try {
-            if (!newSess) {
-                session = PersistenceManager.getRequestDBSession();
-            } else {
-                session = PersistenceManager.openNewSession();
-                tx = session.beginTransaction();
-            }
-//beginTransaction();
-            session.save(editor);
-            if (newSess) {
-                tx.commit();
-            }
-        }
-        catch (Exception ex) {
-            logger.debug("Unable to save editor information into database",
-                         ex);
-
-            if (tx != null) {
-                try {
-                    tx.rollback();
-                }
-                catch (HibernateException ex1) {
-                    logger.warn("rollback() failed", ex1);
-                }
-            }
-            throw new EditorException(
-                "Unable to save editor information into database", ex);
-        } finally {
-            if (newSess && session != null) {
-                session.close();
-            }
-        }
+    public static void saveEditor(Editor editor) throws EditorException {
+        PersistenceManager.getSession().save(editor);
     }
 
     /**

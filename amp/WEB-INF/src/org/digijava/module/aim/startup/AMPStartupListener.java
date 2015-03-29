@@ -347,7 +347,7 @@ public class AMPStartupListener extends HttpServlet implements
 	{
 		Session session = null; 
 		try{
-			session = PersistenceManager.getRequestDBSession();
+			session = PersistenceManager.getSession();
 			
 			ReportsUtil.checkDatabaseSanity(session);
 			ReportsUtil.checkPledgesViewsSanity(session);
@@ -363,7 +363,7 @@ public class AMPStartupListener extends HttpServlet implements
 	protected void checkMondrianETLSanity() {
 		Session session = null; 
 		try {
-			session = PersistenceManager.getRequestDBSession();
+			session = PersistenceManager.getSession();
 			MondrianUtils.checkMondrianViewsSanity(session);
 		}catch(Exception e){
 			throw new Error("database does not conform to minimum Mondrian ETL sanity requirements, shutting down AMP", e);
@@ -375,8 +375,7 @@ public class AMPStartupListener extends HttpServlet implements
 	public void maintainMondrianCaches()
 	{
 		java.sql.Connection connection = null;
-		try
-		{
+		try {
 			connection = PersistenceManager.getJdbcConnection();	
 			connection.setAutoCommit(false);
 		
@@ -385,17 +384,16 @@ public class AMPStartupListener extends HttpServlet implements
 			PublicViewColumnsUtil.maintainPublicViewCaches(connection, false); // let Java do all the repetitive work
 			connection.setAutoCommit(false); // this will commit any unfinished transaction started by PublicViewColumnsUtil
 		}		
-		catch(Exception e)
-		{
+		catch(Exception e) {
 			logger.error("some serious error happened while maintaining Mondrian caches", e);
 		}
-		finally
-		{
+		finally {
 			PersistenceManager.closeQuietly(connection);
 		}
 	}
+	
 	public void importGazeteer () {
-		try{ 
+		try { 
 			Properties prop = new Properties();
 			prop.put("token", "\t");
 			String[] columnNames = { "geonameId", "name", "asciiName", "alternateNames", "latitude", "longitude", "featureClass",

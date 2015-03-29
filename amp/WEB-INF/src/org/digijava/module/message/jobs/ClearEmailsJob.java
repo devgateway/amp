@@ -17,31 +17,21 @@ import org.quartz.StatefulJob;
  * @author Dare
  *
  */
-public class ClearEmailsJob implements StatefulJob{
+public class ClearEmailsJob implements StatefulJob {
 
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-		
-		Session session = null;
+		Session session = PersistenceManager.getSession();
 		try {
-			session = PersistenceManager.getRequestDBSession();
-		} catch (DgException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		try {
-			List <AmpEmail> emailsForRemoval=AmpMessageUtil.loadSentEmails(session);
-			if(emailsForRemoval!=null && emailsForRemoval.size()>0){
+			List<AmpEmail> emailsForRemoval = AmpMessageUtil.loadSentEmails(session);
+			if (emailsForRemoval != null && emailsForRemoval.size() > 0) {
 				for (AmpEmail ampEmail : emailsForRemoval) {
 					session.delete(ampEmail);
 				}
 			}
 		}
-		catch ( Exception e ) {
-			e.printStackTrace();
-		}
 		finally {
-			PersistenceManager.cleanupSession(session);
+			PersistenceManager.endSessionLifecycle();
 		}
 		
 	}

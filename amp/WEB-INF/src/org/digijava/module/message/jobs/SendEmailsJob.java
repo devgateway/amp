@@ -22,13 +22,7 @@ public class SendEmailsJob implements StatefulJob{
 	
 	@Override
 	public void execute(JobExecutionContext arg0) throws JobExecutionException {
-        Session session = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-		} catch (DgException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
+        Session session = PersistenceManager.getSession();
 		try {
             List<Long> receiversIds = AmpMessageUtil.loadReceiversIdsToGetEmails(session);
             if (receiversIds != null && receiversIds.size() > 0) {
@@ -58,7 +52,7 @@ public class SendEmailsJob implements StatefulJob{
         } catch (Exception e1) {
             logger.error(e1);
         } finally {
-        	PersistenceManager.cleanupSession(session);
+        	PersistenceManager.endSessionLifecycle();
         }
     }
 

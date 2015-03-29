@@ -50,8 +50,7 @@ public class HibernateSessionRequestFilter implements Filter {
 
             log.debug("Starting a database transaction");
             
-            PersistenceManager.cleanupSession(PersistenceManager.getSession());
-            PersistenceManager.cleanupSession(PersistenceManager.getCurrentSession());
+            PersistenceManager.endSessionLifecycle();
 //            PersistenceManager.getSession().beginTransaction();
             
             // Call the next filter (continue request processing)
@@ -65,8 +64,7 @@ public class HibernateSessionRequestFilter implements Filter {
                 //PersistenceManager.removeClosedSessionsFromMap();
     			//CloseExpiredActivitiesJob.cleanupSession(session);
     			
-            	PersistenceManager.cleanupSession(PersistenceManager.getSession());
-            	PersistenceManager.cleanupSession(PersistenceManager.getCurrentSession());
+            	PersistenceManager.endSessionLifecycle();
 
                 //PersistenceManager.checkClosedOrLongSessionsFromTraceMap();
                 if (request instanceof HttpServletRequest)

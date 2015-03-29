@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionServlet;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.Constants;
 
 /**
@@ -135,7 +136,12 @@ public class AMPActionServlet
         }
       }
     }
-    // Call the struts default ActionServlet process() method
-    super.process(request, response);
+    try {
+    	// Call the struts default ActionServlet process() method
+    	super.process(request, response);
+    }
+    finally {
+    	PersistenceManager.endSessionLifecycle();
+    }
     }  
 }

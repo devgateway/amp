@@ -96,8 +96,7 @@ public class ShowLayout
     // Calculate layout path
     String layoutConfigPath = viewConfig.getMainLayoutPath(layout);
     
-    Session session = PersistenceManager.getSession();
-    
+    Session session = PersistenceManager.getSession(); // ensure a properly-initialized session exists
     try {
     	//Sets the dashboards to be available on the menu. 
     	List<AmpDashboard> dashboards 	= org.digijava.module.visualization.util.DbUtil.getDashboardsToShowInMenu();
@@ -105,8 +104,7 @@ public class ShowLayout
     	return new ActionForward(layoutConfigPath);
     }
     finally {
-    	PersistenceManager.cleanupSession(session);
-    	PersistenceManager.cleanupSession(PersistenceManager.getCurrentSession());
+        PersistenceManager.endSessionLifecycle();
     }
 
   }

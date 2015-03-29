@@ -951,26 +951,20 @@ public class ReportWizardAction extends MultiAction {
      * @param request
      * @return
      */
-    public static AmpReports loadAmpReport(Long ampReportId, HttpServletRequest request)
-    {
-        AmpReports ampReport	= null;
-        Session session			= null;
-        try {
-            session				= PersistenceManager.openNewSession();
-            if (ampReportId > 0)
-                ampReport	=  (AmpReports) session.load(AmpReports.class, ampReportId );
-            else
-                ampReport	= ReportContextData.getFromRequest().getReportMeta();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        finally {
-            if ( session != null )
-                session.close();
-        }
-        return ampReport;
-    }
+	public static AmpReports loadAmpReport(Long ampReportId, HttpServletRequest request)
+	{
+		AmpReports ampReport	= null;
+		try {
+			if (ampReportId > 0)
+				ampReport	=  (AmpReports) PersistenceManager.getSession().load(AmpReports.class, ampReportId );
+			else 
+				ampReport	= ReportContextData.getFromRequest().getReportMeta();
+		}
+		catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+		return ampReport;
+	}
 
     /**
      * detaches a report from the DB, effectively creating a new, identical one

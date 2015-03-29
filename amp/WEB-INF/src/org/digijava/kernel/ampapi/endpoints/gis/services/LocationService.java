@@ -728,7 +728,7 @@ public class LocationService {
 		 
 		MondrianReportGenerator generator = new MondrianReportGenerator(
 				ReportAreaImpl.class, ReportEnvironment.buildFor(TLSUtils
-						.getRequest()), true);
+						.getRequest()), false);
 		GeneratedReport report = null;
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("ActivityIdsForCluster", ArConstants.DONOR_TYPE);
 

@@ -191,9 +191,6 @@ public class CurrencyUtil {
 	 * @param cRate The AmpCurrencyRate object
 	 */
 	public static void saveCurrencyRate(AmpCurrencyRate cRate, boolean calledFromQuartzJob) {
-		//Session session = null;
-		//Transaction tx = null;
-		Query qry = null;
 		String qryStr = null;
 		if (!calledFromQuartzJob)
 		{
@@ -207,7 +204,7 @@ public class CurrencyUtil {
 			qryStr = "select cRate from " + AmpCurrencyRate.class.getName() + " cRate " +
 					"where (cRate.toCurrencyCode=:code) and (cRate.fromCurrencyCode=:fromCode) and" +
 					"(cRate.exchangeRateDate=:date)";
-			qry = PersistenceManager.getSession().createQuery(qryStr);
+			Query qry = PersistenceManager.getSession().createQuery(qryStr);
 			qry.setString("code", cRate.getToCurrencyCode());
 			qry.setString("fromCode",cRate.getFromCurrencyCode());
 			qry.setDate("date",cRate.getExchangeRateDate());
@@ -228,14 +225,13 @@ public class CurrencyUtil {
 			logger.error("Couldn't save Exchange Rates ",e);
 			throw new RuntimeException(e);
 		}
-		PersistenceManager.getSession().flush();
 	}
 
     public static Collection<AmpCurrency> getAllCurrencies(int active){
         return getAllCurrencies(active, "");
     }
 
-	public static Collection<AmpCurrency> getAllCurrencies(int active,String sortOrder) {
+	public static Collection<AmpCurrency> getAllCurrencies(int active, String sortOrder) {
 		Collection<AmpCurrency> col = new ArrayList<AmpCurrency>();
 		Session session = null;
 		Query qry = null;
@@ -260,12 +256,8 @@ public class CurrencyUtil {
 			}
 			col = qry.list();
 		} catch (Exception e) {
-			logger.error("Exception from getAllCurrencies()");
-			e.printStackTrace(System.out);
-		} finally{
-			PersistenceManager.cleanupSession(session);
+			logger.error("Exception from getAllCurrencies()", e);
 		}
-
 		return col;
 	}
 	

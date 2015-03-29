@@ -85,11 +85,9 @@ public class TrnAccesTimeSaver implements Runnable {
 					}
 				}
 			}
-			
 			//logger.info("Saved timestamp for key:"+message.getKey()+" lang="+message.getLocale()+" Thread name="+Thread.currentThread().getName());
-			
 		}  catch (Exception e) {
-			logger.error("Saved timestamp for key:"+message.getKey()+" lang="+message.getLocale());	
+			logger.error("Could not save timestamp for key: " + message.getKey() + " lang=" + message.getLocale());	
             if (tx != null) {
                 try {
                     tx.rollback();
@@ -98,13 +96,7 @@ public class TrnAccesTimeSaver implements Runnable {
                 }
             }
         } finally {
-            if (session != null) {
-                try {
-                    session.close();
-                } catch (Exception ex1) {
-                    logger.warn("releaseSession() failed", ex1);
-                }
-            }
+        	PersistenceManager.closeSession(session);
         }
 	}
 	

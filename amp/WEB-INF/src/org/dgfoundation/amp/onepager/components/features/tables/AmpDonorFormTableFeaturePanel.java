@@ -94,7 +94,7 @@ public abstract class AmpDonorFormTableFeaturePanel extends
 		}
 
 		IModel<Set<AmpCategoryValue>> dependantModel = null;
-		AmpCategoryClass categClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.TRANSACTION_TYPE_KEY, false);
+		AmpCategoryClass categClass = CategoryManagerUtil.loadAmpCategoryClassByKey(CategoryConstants.TRANSACTION_TYPE_KEY);
 		List<AmpCategoryValue> values = categClass.getPossibleValues();
 		Iterator<AmpCategoryValue> it = values.iterator();
 		while (it.hasNext()) {

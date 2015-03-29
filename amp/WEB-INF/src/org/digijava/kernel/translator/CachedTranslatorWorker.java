@@ -64,17 +64,18 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         //cache the first 5000 entries based on their access date     
         logger.info("Caching the last accessed 5000 translation entries...");
        	Session session = PersistenceManager.openNewSession();
-       	Criteria criteria = session.createCriteria(Message.class);
-       	criteria.setMaxResults(5000);
-       	criteria.addOrder(Order.desc("lastAccessed"));
-       	criteria.add(Restrictions.isNotNull("lastAccessed"));
+       	try {
+       		Criteria criteria = session.createCriteria(Message.class);
+       		criteria.setMaxResults(5000);
+       		criteria.addOrder(Order.desc("lastAccessed"));
+       		criteria.add(Restrictions.isNotNull("lastAccessed"));
        	
-       	List<Message> lastAccessedMessages=criteria.list();
-       	for (Message message : lastAccessedMessages) messageCache.put(message, message);
-			
-		
-       	
-       	session.close();
+       		List<Message> lastAccessedMessages = criteria.list();
+       		for (Message message : lastAccessedMessages) messageCache.put(message, message);
+       	}
+       	finally {
+       		PersistenceManager.closeSession(session);
+       	}
 
        	logger.info("Caching done.");
 

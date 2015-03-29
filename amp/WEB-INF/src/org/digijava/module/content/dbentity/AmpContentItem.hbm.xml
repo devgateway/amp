@@ -14,7 +14,7 @@
 		<property name="htmlblock_1" column="HTMLBLOCK_1" type="java.lang.String" />
 		<property name="htmlblock_2" column="HTMLBLOCK_2" type="java.lang.String" />
 		<property name="title" column="TITLE" type="java.lang.String" />
-		<set name="contentThumbnails" cascade="all" inverse="true" order-by="PLACEHOLDER asc">
+		<set name="contentThumbnails" cascade="all" inverse="true" order-by="PLACEHOLDER asc" lazy="false">
 			<cache usage="read-write" />
 			<key column="AMP_CONTENT_ITEM_ID" />
 			<one-to-many class="org.digijava.module.content.dbentity.AmpContentItemThumbnail" />

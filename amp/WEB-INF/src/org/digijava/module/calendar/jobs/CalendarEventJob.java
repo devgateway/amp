@@ -45,11 +45,6 @@ public class CalendarEventJob implements StatefulJob{
                 new CalendarEventTrigger(cal);
             }
         }
-        try {
-            PersistenceManager.closeRequestDBSessionIfNeeded();
-        } catch (DgException e) {
-            e.printStackTrace();
-        }
     }
 
     public CalendarEventJob() {

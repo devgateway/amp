@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.mail.DgEmailManager;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
@@ -56,26 +57,34 @@ public class CurrencyRatesQuartzJob implements Job {
 				.info("START Getting Currencies Rates from WS.............................");
 
 	}
+	
+	@Override
+	public void execute(JobExecutionContext context) throws JobExecutionException {
+		try {
+			executeInternal(context);
+		}
+		finally {
+			PersistenceManager.endSessionLifecycle();
+		}
+	}
 
-	public void execute(JobExecutionContext context)
-			throws JobExecutionException {
+	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		//we check for username and password stored on GlobalSettigs 
 		this.myWSCurrencyClient.setUsername(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CURRENCY_WS_USERNAME));
 		this.myWSCurrencyClient.setPassword(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CURRENCY_WS_PASSWORD));
 		logger.info("START Getting Currencies Rates from WS.............................");
 
-		Collection<AmpCurrency> currencies = CurrencyUtil
-				.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE);
+		Collection<AmpCurrency> currencies = CurrencyUtil.getAllCurrencies(CurrencyUtil.ORDER_BY_CURRENCY_CODE);
 
 		String[] ampCurrencies = this.getCurrencies(currencies);
-		HashMap<String, Double> wsCurrencyValues=null;
+		HashMap<String, Double> wsCurrencyValues = null;
 		
 		/* Remove currencies that need to skipped in automatic update */
 		if ( ampCurrencies != null ) {
 				FilteredCurrencyRateUtil filteredCurrencyUtil		= new FilteredCurrencyRateUtil();
 				List<String> remainingCurrencies								= new ArrayList<String>();
-				for (int i=0; i<ampCurrencies.length; i++) {
-					if ( filteredCurrencyUtil.checkPairExistanceUsingCache(ampCurrencies[i], this.baseCurrency) || 
+				for (int i=0; i < ampCurrencies.length; i ++) {
+					if (filteredCurrencyUtil.checkPairExistanceUsingCache(ampCurrencies[i], this.baseCurrency) || 
 							filteredCurrencyUtil.checkPairExistanceUsingCache(this.baseCurrency, ampCurrencies[i]) ) {
 						logger.info("Skipping update for currency " + ampCurrencies[i] + ". Base currency beeing: " + this.baseCurrency );
 						continue;
@@ -92,18 +101,16 @@ public class CurrencyRatesQuartzJob implements Job {
 			int mytries = 1;			
 			while (mytries <= tries && ampCurrencies!=null) {
 				logger.info("Attempt.........................." + mytries);
-				wsCurrencyValues = this.myWSCurrencyClient
-						.getCurrencyRates(ampCurrencies, baseCurrency);
+				wsCurrencyValues = this.myWSCurrencyClient.getCurrencyRates(ampCurrencies, baseCurrency);
 				
 				showValues(ampCurrencies, wsCurrencyValues);
 				save(ampCurrencies, wsCurrencyValues);
 				ampCurrencies = this.getWrongCurrencies(ampCurrencies,
 						wsCurrencyValues);
-				mytries++;
+				mytries ++;
 			}
 			this.lastExcecution = new Date();
-			DailyCurrencyRateSingleton.getInstance().setLastExcecution(
-					this.lastExcecution);
+			DailyCurrencyRateSingleton.getInstance().setLastExcecution(this.lastExcecution);
 
 		} catch (Exception e) {
 			logger.error("Could not get exchange rate, caused by: " + e.getMessage());
@@ -137,8 +144,8 @@ public class CurrencyRatesQuartzJob implements Job {
 	}
 	private void save(String[] currencies,
 			HashMap<String, Double> wsCurrencyValues) {
-		for (int i=0; i<currencies.length; i++) {
-			if(baseCurrency!=null && currencies[i]!=null && !currencies[i].equals(baseCurrency)){
+		for (int i=0; i < currencies.length; i++) {
+			if (baseCurrency != null && currencies[i] != null && !currencies[i].equals(baseCurrency)) {
 				AmpCurrencyRate currRate = new AmpCurrencyRate();
 				//currRate.setAmpCurrencyRateId(ampCurrency.getAmpCurrencyId());
 				Double value = wsCurrencyValues.get(currencies[i]);
@@ -149,15 +156,14 @@ public class CurrencyRatesQuartzJob implements Job {
 					logger.info("Connection Error trying to get "+ currencies[i]);
 					continue;
 				}else{
-					if (value==null || value<=0D){
+					if (value == null || value <= 0D){
 						logger.info("0 rate for  "+ currencies[i]);
 						continue;
 					}
-				}
-				
+				}				
 				
 				currRate.setExchangeRate(value);
-				Date aDate=new Date();
+				Date aDate = new Date();
 				try {
 					String sDate = DateTimeUtil.formatDate(aDate);
 					aDate = DateTimeUtil.parseDate(sDate);

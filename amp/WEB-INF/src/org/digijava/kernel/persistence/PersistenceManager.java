@@ -155,14 +155,13 @@ public class PersistenceManager {
 	}
 	
 	/**
-	 * Opens a new Hibernate session. Use this with caucion. 
+	 * Opens a new Hibernate session. Use this with caution. 
 	 * For servlets you will not require to use this, use {@link #getSession()} instead!
 	 * This method returns you an unmanaged Hibernate session, that you need to close yourself! 
 	 * @return
 	 */
 	public static Session openNewSession() {
 		 org.hibernate.Session openSession = sf.openSession();
-		 addSessionToStackTraceMap(openSession);
 		 return openSession;
 	}
 	
@@ -234,15 +233,6 @@ public class PersistenceManager {
 			if(found) logger.info("Check the code around the above stack traces, commit transactions only if not using HTTP threads:");
 		}
 	}
-	
-
-//	/**
-//	 * initialize PersistenceManager
-//	 * @deprecated use initialize(boolean) instead
-//	 */
-//	public static void initialize() {
-//		initialize(true, null);
-//	}
 
 	/**
 	 * initialize PersistenceManager
@@ -497,47 +487,6 @@ public class PersistenceManager {
 
 	}
 
-	/**
-	 * Update hibernate-persisted object into database. This method gets session
-	 * based on current configuration and updates objet
-	 * @param object Object Hibernate-persisted object
-	 * @throws DgException If error occurs during update
-	 */
-	public static void updateObject(Object object) throws DgException {
-		Session session = null;
-
-		try {
-			session = getSession();
-//beginTransaction();
-			session.update(object);
-			//tx.commit();
-		}
-		catch (Exception ex) {
-			throw new DgException(
-					"Unable to update object into database", ex);
-		}
-	}
-
-	/**
-	 * Create hibernate-persisted object into database. This method gets session
-	 * based on current configuration and creates object
-	 * @param object Object Hibernate-persisted object
-	 * @throws DgException If error occurs during update
-	 */
-	public static void createObject(Object object) throws DgException {
-		Session session = null;
-
-		try {
-			session = getSession();
-//beginTransaction();
-			session.save(object);
-			//tx.commit();
-		}
-		catch (Exception ex) {
-			throw new DgException(
-					"Unable to save object into database", ex);
-		}
-	}
 
     /**
      * Loads all objects of T from database, using request (thread) session.
@@ -645,15 +594,6 @@ public class PersistenceManager {
 	}
 
 	/**
-	 * Closes hibernate session if it exists and removes it from
-	 * ThreadLocal resource map
-	 * @throws DgException
-	 * @deprecated
-	 */
-	public static void closeRequestDBSessionIfNeeded() throws DgException {
-	}
-
-	/**
 	 * Removes object from Hibernate second-level cache, loads it from database
 	 * and initializes
 	 * @param objectClass target class
@@ -697,7 +637,7 @@ public class PersistenceManager {
 	}
 
 	/**
-	 * extracts a Long from an object returned by a Hibernate SQLQuery
+	 * extracts a Long from an object
 	 * @param obj
 	 * @return
 	 */
@@ -715,7 +655,7 @@ public class PersistenceManager {
 	}
 	
 	/**
-	 * extracts a Long from an object returned by a Hibernate SQLQuery
+	 * extracts an Integer from an object
 	 * @param obj
 	 * @return
 	 */
@@ -733,7 +673,7 @@ public class PersistenceManager {
 	}
 	
 	/**
-	 * extracts a Long from an object returned by a Hibernate SQLQuery
+	 * extracts a String from an object
 	 * @param obj
 	 * @return
 	 */
@@ -747,7 +687,7 @@ public class PersistenceManager {
 	}
 	
 	/**
-	 * extracts a Long from an object returned by a Hibernate SQLQuery
+	 * extracts a Double from an object
 	 * @param obj
 	 * @return
 	 */
@@ -773,13 +713,15 @@ public class PersistenceManager {
 	}
 	
 	/**
-	 * commits & closes a session and then removes it from the SessionStackTraceMap
+	 * cleanly closes an unmanaged Hibernate session
+	 * ONLY USE IT FOR CONNECTIONS CREATED WITH {@link #openNewSession()}
 	 * @param session
 	 */
-	public final static void cleanupSession(Session session)
-	{
+	public final static void closeSession(Session session) {
+		if (session == null) return;
 		Transaction transaction = session.getTransaction();
 		if (transaction != null) {
+			try{if (transaction.isActive()) session.flush();}catch(Exception e){logger.error("error while flushing HSession", e);};
 			try {transaction.commit();}
 			catch(Exception e){
 				//System.out.println("error committing transaction");
@@ -787,6 +729,28 @@ public class PersistenceManager {
 			}
 		}
 		try{session.close();}catch(Exception e){};
+	}
+	
+	/**
+	 * this function should ONLY be called at the end of a Session's lifecycle, being the last a "cycle" sees.
+	 * UNDER NO CIRCUMSTANCES CALL IT IN A "USER" (non-framework, non-job) ENVIRONMENT
+	 * @see #cleanupSession(Session)
+	 */
+	public final static void endSessionLifecycle() {
+		cleanupSession(getSession());
+		cleanupSession(getCurrentSession());
+	}
+	
+	/**
+	 * commits & closes a session and then removes it from the SessionStackTraceMap
+	 * this function should ONLY be called at the end of a Session's lifecycle, being the last a "cycle" sees.
+	 * UNDER NO CIRCUMSTANCES CALL IT IN A "USER" (non-framework, non-job) ENVIRONMENT
+	 * @see PersistenceManager#endSessionLifecycle()
+	 * @param session
+	 */
+	public final static void cleanupSession(Session session)
+	{
+		closeSession(session);
 		try{PersistenceManager.removeClosedSessionsFromMap();}catch(Exception e){};
 		try{
 			synchronized(PersistenceManager.sessionStackTraceMap)

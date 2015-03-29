@@ -475,38 +475,20 @@ public class DbUtil {
 		return moduleInstance;
 	}
 
-	public static List getReferencedInstances(Long siteId) throws
-	AdminException {
-		List sites = null;
-		Session session = null;
+	public static List<ModuleInstance> getReferencedInstances(Long siteId) throws AdminException {
 		try {
-			session = PersistenceManager.openNewSession();
 			String queryString = " from " + ModuleInstance.class.getName() +
 			 					 " m where m.site.id != :siteId and m.realInstance is not null" +
 			 					 " and m.realInstance.site.id = :siteId " +
 			 					 " order by m.site.name, m.moduleName, m.instanceName";
-			Query query = session.createQuery(queryString);
+			Query query = PersistenceManager.getSession().createQuery(queryString);
 			query.setLong("siteId", siteId);
-
-			sites = query.list();
+			return query.list();
 		}
 		catch (Exception ex) {
-			logger.debug("Unable to get Referenced Instances from database ",
-					ex);
-			throw new AdminException(
-					"Unable to get Referenced Instances from database ", ex);
+			logger.debug("Unable to get Referenced Instances from database ", ex);
+			throw new AdminException("Unable to get Referenced Instances from database ", ex);
 		}
-		finally {
-			try {
-				if (session != null) {
-					session.close();
-				}
-			}
-			catch (Exception ex1) {
-				logger.warn("releaseSession() failed ", ex1);
-			}
-		}
-		return sites;
 	}
 
 	public static List getSitesToReference(Long siteId, String module) throws

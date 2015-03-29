@@ -733,8 +733,7 @@ public class ContentTranslationUtil {
         } catch (Exception e) {
             logger.error("Can't delete field translations", e);
         } finally {
-            if (session != null)
-                session.close();
+            PersistenceManager.closeSession(session);
         }
     }
 

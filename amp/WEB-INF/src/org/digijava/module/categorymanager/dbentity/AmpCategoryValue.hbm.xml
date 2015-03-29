@@ -13,7 +13,7 @@
 		<property name="deleted" column="deleted" type="java.lang.Boolean" />
 		
 		
-		<properties name="class_index_uniqueness" unique="true">
+ 		<properties name="class_index_uniqueness">
 			<many-to-one name="ampCategoryClass" column="amp_category_class_id" lazy="false"
 				class="org.digijava.module.categorymanager.dbentity.AmpCategoryClass" cascade="none" />
 			<property name="index" column="index_column" type="int" update="true" insert="true" />

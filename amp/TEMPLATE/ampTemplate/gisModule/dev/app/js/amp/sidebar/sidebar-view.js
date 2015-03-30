@@ -39,7 +39,7 @@ module.exports = Backbone.View.extend({
 
     // sidebar popover init
     this.popovers = this.$('.layer-info');
-    this.popovers.popover();
+    //this.popovers.popover();
 
     // Temp dirty popover fix until 'exclusiveShowPopover' is fixed in next sprint.
     $('body').on('click', function(e) {
@@ -51,7 +51,7 @@ module.exports = Backbone.View.extend({
     });
 
     // Open default:
-    this.$(this.defaultOpenCollapsable).collapse('show');
+    $(this.defaultOpenCollapsable).collapse('show');
 
     return this;
   },

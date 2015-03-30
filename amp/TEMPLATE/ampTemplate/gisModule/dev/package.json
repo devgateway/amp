@@ -98,5 +98,8 @@
     "watchify": "^0.10.2",
     "zeroclipboard": "^2.1.6",
     "gulp-mocha": "~2.0.0"
+  },
+  "dependencies": {
+    "chokidar": "^1.0.0-rc5"
   }
 }

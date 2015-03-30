@@ -5,7 +5,6 @@ package org.dgfoundation.amp.reports.mondrian.converters;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -17,7 +16,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GroupingCriteria;
@@ -27,7 +26,7 @@ import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
-import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
+import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.module.aim.ar.util.FilterUtil;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
@@ -97,9 +96,24 @@ public class AmpReportsToReportSpecification {
 				spec.addColumn(new ReportColumn(column.getColumnName()));
 		}
 		
+		boolean measuresMovedAsColumns = false;
 		for (String measureName: report.getOrderedMeasureNames()) {
-			spec.addMeasure(new ReportMeasure((measureName)));
+			// if old reports will become obsolete, then remove these compatibility adjustments
+			if (MondrianMapping.definedColumns.contains(measureName)) {
+				spec.addColumn(new ReportColumn(measureName));
+				measuresMovedAsColumns = true;
+			} else {
+				spec.addMeasure(new ReportMeasure((measureName)));
+			}
 		}
+		/* workaround for reports that have all measures that are now columns in Mondrian based reports:
+		 * add a dummy measure (most common Actual Commitments) & follow up ticket: AMP-19808
+		 * => remove this workaround when a proper fix is available
+		 */
+		if (measuresMovedAsColumns && spec.getMeasures().size() == 0) {
+			spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+		}
+		// end AMP-19808 workaround
 		
 		spec.setCalculateColumnTotals(true);
 		spec.setCalculateRowTotals(true);

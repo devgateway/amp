@@ -7,17 +7,11 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.commons.lang.math.IntRange;
-import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
@@ -28,8 +22,6 @@ import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.service.olap.totals.TotalNode;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
-
-import clover.com.atlassian.extras.common.log.Logger;
 
 /**
  * Merges non-hierarchical columns of a Saiku CellDataSet structure, based on ReportSpecification configuration. 
@@ -257,23 +249,6 @@ public class CellDataSetToAmpHierachies {
 			start = range.getMaximumInteger() + 1;
 		}
 		cellDataSet.setCellSetBody(newData);
-		
-		removeDummyHierarchy();
 	}
 	
-	private void removeDummyHierarchy() {
-		cellDataSet.setLeftOffset(cellDataSet.getLeftOffset() - 1);
-		cellDataSet.setWidth(cellDataSet.getWidth() - 1);
-		Set<ReportColumn> newColumns = new LinkedHashSet<ReportColumn>(spec.getColumns().size() - 1);
-		ReportColumn dummyHierarchy = null;
-		for (ReportColumn col : spec.getColumns()) 
-			if (!ColumnConstants.INTERNAL_USE_ID.equals(col.getColumnName()))
-				newColumns.add(col);
-			else 
-				dummyHierarchy = col;
-		spec.getColumns().clear();
-		spec.getColumns().addAll(newColumns);
-		leafHeaders.remove(spec.getHierarchies().size() - 1);
-		spec.getHierarchies().remove(dummyHierarchy);
-	}
 }

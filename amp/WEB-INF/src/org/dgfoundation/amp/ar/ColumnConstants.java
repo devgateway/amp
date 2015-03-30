@@ -251,6 +251,7 @@ public class ColumnConstants {
 	public static final String PROPOSED_APPROVAL_DATE = "Proposed Approval Date";
 	public static final String PROPOSED_COMPLETION_DATE = "Proposed Completion Date";
 	public static final String PROPOSED_PROJECT_AMOUNT = "Proposed Project Amount";
+	public static final String UNCOMMITTED_BALANCE = "Uncommitted Balance";
 	public static final String PROPOSED_PROJECT_LIFE = "Proposed Project Life";
 	public static final String PROPOSED_START_DATE = "Proposed Start Date";
 	public static final String PURPOSE = "Purpose";

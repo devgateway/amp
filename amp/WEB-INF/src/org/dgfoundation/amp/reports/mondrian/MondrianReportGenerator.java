@@ -21,7 +21,6 @@ import java.util.TreeSet;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ColumnConstants;
-import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.mondrian.MondrianETL;
@@ -64,6 +63,7 @@ import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.digijava.kernel.ampapi.saiku.SaikuReportSorter;
+import org.digijava.kernel.ampapi.saiku.util.CellDataSetPostProcessing;
 import org.digijava.kernel.ampapi.saiku.util.CellDataSetToAmpHierachies;
 import org.digijava.kernel.ampapi.saiku.util.CellDataSetToGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.util.SaikuPrintUtils;
@@ -259,7 +259,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 	private CellDataSet generateReportAsSaikuCellDataSet(final ReportSpecification spec) throws AMPException {
 		//reorderColumnsByHierarchies(spec);
 		init(spec);
-		addDummyHierarchy(spec);
+		addDummyColumns(spec);
 		reorderColumnsByHierarchies(spec);
 		AmpMondrianSchemaProcessor.registerReport(spec, environment);
 		CellDataSet cellDataSet = null;
@@ -365,12 +365,22 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 *  Adds a dummy hierarchy by internal id (which is entity id) to group by non-hierarchical columns,
 	 *  but only if there are non-hierarchical columns
 	 */
-	private void addDummyHierarchy(ReportSpecification spec) {
+	private void addDummyColumns(ReportSpecification spec) {
 		//if we have more columns than hierarchies, then add the dummy hierarchy to group non-hierarchical columns by it
 		if (spec.getHierarchies().size() < spec.getColumns().size()) {
 			ReportColumn internalId = new ReportColumn(ColumnConstants.INTERNAL_USE_ID);
 			spec.getColumns().add(internalId);
 			spec.getHierarchies().add(internalId);
+			spec.getDummyColumns().add(internalId);
+		}
+		
+		for (ReportMeasure rm : spec.getMeasures()) {
+			String dependency = MondrianMapping.dependency.get(rm.getMeasureName());
+			if (dependency != null && !spec.getColumnNames().contains(dependency)) {
+				ReportColumn rc = new ReportColumn(dependency);
+				((ReportSpecificationImpl) spec).addColumn(rc);
+				((ReportSpecificationImpl) spec).addDummyColumn(rc);
+			}
 		}
 	}
 	
@@ -565,7 +575,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		CellSetAxis columnAxis = cellSet.getAxes().get(Axis.COLUMNS.axisOrdinal());
 				
 		logger.info("[" + spec.getReportName() + "]" +  "Starting conversion from Olap4J CellSet to Saiku CellDataSet via Saiku method...");
-		CellDataSet cellDataSet = OlapResultSetUtil.cellSet2Matrix(cellSet); // we can also pass a formatter to cellSet2Matrix(cellSet, formatter)
+		CellDataSet cellDataSet = OlapResultSetUtil.cellSet2Matrix(cellSet);  // we can also pass a formatter to cellSet2Matrix(cellSet, formatter)
 		logger.info("[" + spec.getReportName() + "]" +  "Conversion from Olap4J CellSet to Saiku CellDataSet ended.");
 
 		// AMP-18748
@@ -577,7 +587,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		//SaikuUtils.removeColumns(cellDataSet, dummyColumnsToRemove);
 		
 		boolean calculateTotalsOnRows = spec.isCalculateRowTotals()
-				//enable totals for non-hierarhical columns
+				//enable totals for non-hierarchical columns
 				|| spec.getHierarchies().size() < spec.getColumns().size();
 		
 		if (spec.isCalculateColumnTotals() || calculateTotalsOnRows) {
@@ -590,12 +600,14 @@ public class MondrianReportGenerator implements ReportExecutor {
 				throw new AMPException(e.getMessage(), e);
 			}
 		}
+		CellDataSetPostProcessing postProcessor = new CellDataSetPostProcessing(spec, cellDataSet, leafHeaders, environment); 
+		
 		formatSaikuDates(cellDataSet);
 		applyFilterSetting(spec, cellDataSet);
 		
 		postprocessUndefinedEntries(spec, cellDataSet);
 		CellDataSetToAmpHierachies.concatenateNonHierarchicalColumns(spec, cellDataSet, leafHeaders, this.translatedUndefined, cellDataSetActivities);
-		
+		postProcessor.removeDummyColumns();
 		
 		//clear totals if were enabled for non-hierarchical merges
 		if (!spec.isCalculateColumnTotals())
@@ -603,7 +615,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		if (!spec.isCalculateRowTotals())
 			cellDataSet.setRowTotalsLists(null);
 		
-		// update coordintates after data reshufle
+		// update coordinates after data re-shuffle
 		SaikuUtils.updateCoordinates(cellDataSet);
 		
 		return cellDataSet;

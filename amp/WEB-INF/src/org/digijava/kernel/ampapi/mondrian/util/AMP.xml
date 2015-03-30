@@ -612,11 +612,70 @@
 				<Level name="Agreement Parlimentary Approval Date" column="parliamentary_date_code" type="Integer" nameColumn="parliamentary_date" />
 			</Hierarchy>
 		</Dimension>
-				
+		
 		<Dimension name="Activity Currency Amounts" foreignKey="entity_id">
 			<Hierarchy hasAll="true" allMemberName="All Proposed Project Amount" primaryKey="amp_activity_id" name="Proposed Project Amount">
 				<Table name="mondrian_activity_currency_numbers" />
 				<Level name="Proposed Project Amount" type="Numeric" column="ppc_transaction_exch_@@currency@@" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All Uncommitted Balance" primaryKey="amp_activity_id" name="Uncommitted Balance">
+				<View alias="v_uncommitted_balance">
+					<SQL dialect="generic">
+						<![CDATA[
+						SELECT mondrian_activity_currency_numbers.amp_activity_id, 
+							(mondrian_activity_currency_numbers.ppc_transaction_exch_@@currency@@-
+								COALESCE((
+									SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
+												FROM "mondrian_fact_table"
+												WHERE (mondrian_fact_table.transaction_type=0) AND (mondrian_fact_table.adjustment_type=@@actual@@) 
+												AND @@filteredActivities@@
+												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_currency_numbers"."amp_activity_id"
+								), 0)
+							)
+							AS "Uncommitted_Balance"
+						FROM mondrian_activity_currency_numbers
+						]]>
+					</SQL>
+				</View>
+				<Level name="Uncommitted Balance" type="Numeric" column="Uncommitted_Balance" />
+			</Hierarchy>
+		</Dimension>
+			
+		<Dimension name="Activity Total Amounts" foreignKey="entity_id">
+			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" 
+						name="Total Amounts">
+				<View alias='v_total_@@adj_name@@_@@trn_name@@'>
+					<!-- full outer join or union are not working properly in MonetDB -->
+					<SQL dialect="generic">
+						<![CDATA[
+						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", COALESCE((
+							SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
+												FROM "mondrian_fact_table"
+												WHERE (mondrian_fact_table.transaction_type=@@trn_type@@) AND (mondrian_fact_table.adjustment_type=@@adj_id@@) 
+												AND @@report_totals_filter@@
+												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 0) AS "Total_@@adj_name@@_@@trn_name@@"
+						FROM "mondrian_activity_fixed_texts"
+						]]>
+					</SQL>
+				</View>
+				<Level name="Total Amount" type="Numeric" column="Total_Amount" />
+			</Hierarchy>
+			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" 
+						name="Grant Total Filtered Amounts" visible="false">
+				<View alias='v_grant_total_@@adj_name@@_@@trn_name@@'>
+					<SQL dialect="generic">
+						<![CDATA[
+						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", (
+							SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
+												FROM "mondrian_fact_table"
+												WHERE (mondrian_fact_table.transaction_type=@@trn_type@@) AND (mondrian_fact_table.adjustment_type=@@adj_id@@) 
+												AND (@@filteredActivities@@)
+												) AS "Total_Grant_@@adj_name@@_@@trn_name@@"
+						FROM "mondrian_activity_fixed_texts"
+						]]>
+					</SQL>
+				</View>
+				<Level name="Grant Total Amount" type="Numeric" column="Grant_Total_Amount" />
 			</Hierarchy>
 		</Dimension>
 		
@@ -781,6 +840,34 @@
 				thus we need to define it explicitly,
 				but it is not used anyway in Saiku display
 				-->
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>			
+		</CalculatedMember>
+
+		<CalculatedMember name="Total Commitments" dimension="Measures" visible="false">
+		 	<Formula>
+				Cast([Activity Total Amounts.Total Grant Actual Commitments].[Total Grant Actual Commitments].CurrentMember.name as Numeric)
+			</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>			
+		</CalculatedMember>
+		
+		<CalculatedMember name="Percentage of Total Commitments" dimension="Measures">
+		 	<Formula>
+				IIf(Measures.[Total Commitments]=0, null, [Measures].[Actual Commitments] / Measures.[Total Commitments] * 100)
+			</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>			
+		</CalculatedMember>
+
+		<CalculatedMember name="Total Disbursements" dimension="Measures" visible="false">
+		 	<Formula>
+				Cast([Activity Total Amounts.Total Grant Actual Disbursements].[Total Grant Actual Disbursements].CurrentMember.name as Numeric)
+			</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>			
+		</CalculatedMember>
+ 
+		<CalculatedMember name="Percentage Of Total Disbursements" dimension="Measures">
+		 	<Formula>
+				IIf(Measures.[Total Disbursements]=0, null, [Measures].[Actual Disbursements] / Measures.[Total Disbursements] * 100)
+			</Formula>
 			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>			
 		</CalculatedMember>
 		

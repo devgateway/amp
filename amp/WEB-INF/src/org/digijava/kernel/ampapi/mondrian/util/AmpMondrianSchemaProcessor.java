@@ -35,6 +35,7 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.Session;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.w3c.dom.CDATASection;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -106,6 +107,8 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		
 		String entityFilteringSubquery = buildFilteringSubquery();
 		contents = contents.replaceAll("@@filteredActivities@@", entityFilteringSubquery);
+		contents = contents.replaceAll("@@report_totals_filter@@", getComputedTotalsFilter());
+		
 		//contents = contents.replaceAll("@@filteredActivities@@", "mondrian_fact_table.entity_id > 0");
 		int pos = contents.indexOf("@@");
 		if (pos >= 0)
@@ -233,6 +236,9 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	
 	protected void insertCommonMeasuresDefinitions(Document xmlSchema) {
 		Node trivialMeasureDefinitionNode = XMLGlobals.selectNode(xmlSchema, "//Measure[@name='@@trivial_measure@@']");
+		Node computedTotDefNode = XMLGlobals.selectNode(xmlSchema, "//Hierarchy[@name='Total Amounts']");
+		Node grantTotFilteredDefNode = XMLGlobals.selectNode(xmlSchema, "//Hierarchy[@name='Grant Total Filtered Amounts']");
+		
 		//String trivialMeasureString = XMLGlobals.saveToString(trivialMeasureDefinitionNode);
 		
 		// add the default trivial measures
@@ -240,6 +246,10 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			Integer trTypeId = ArConstants.TRANSACTION_TYPE_NAME_TO_ID.get(transactionType);
 			for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
 				String measureName = adj.getValue() + " " + transactionType;
+				
+				insertComputedTotals(computedTotDefNode, adj, trTypeId, transactionType, measureName, false);
+				insertComputedTotals(grantTotFilteredDefNode, adj, trTypeId, transactionType, measureName, true);
+				
 				if (measureName.equals(MoConstants.ACTUAL_COMMITMENTS))
 					continue; // this one is hardcoded in AMP.xml for the sake of "pledges + activities" reports
 				
@@ -278,6 +288,53 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		}
 		
 		trivialMeasureDefinitionNode.getParentNode().removeChild(trivialMeasureDefinitionNode);
+		computedTotDefNode.getParentNode().removeChild(computedTotDefNode);
+		grantTotFilteredDefNode.getParentNode().removeChild(grantTotFilteredDefNode);
+	}
+	
+	protected void insertComputedTotals(Node computedTotalsDefinitionNode, AmpCategoryValue adj, 
+			Integer trnType, String trnName, String measureName, boolean filtered) {
+		if (filtered) {
+			measureName = "Grant " + measureName;
+		}
+		Element newComputedTotals = (Element) computedTotalsDefinitionNode.cloneNode(true);
+		newComputedTotals.setAttribute("allMemberName", "All Total " + measureName);
+		newComputedTotals.setAttribute("name", "Total " + measureName);
+		
+		Element viewNode = (Element) XMLGlobals.selectNode(newComputedTotals, "//View");
+		viewNode.setAttribute("alias", "v_total_" + measureName.replace(" ", "_").toLowerCase());
+		
+		Element sqlNode = (Element) XMLGlobals.selectNode(viewNode, "//SQL");
+		CDATASection cdata = null;
+		for(int pos = 0; pos < sqlNode.getChildNodes().getLength(); pos++) {
+			if (sqlNode.getChildNodes().item(pos).getNodeType() == Document.CDATA_SECTION_NODE) {
+				cdata = (CDATASection) sqlNode.getChildNodes().item(pos);
+				break;
+			}
+		}
+		cdata.setTextContent(cdata.getTextContent()
+			.replace("@@adj_name@@", adj.getLabel())
+			.replace("@@trn_name@@", trnName)
+			.replace("@@adj_id@@", String.valueOf(adj.getId()))
+			.replace("@@trn_type@@", String.valueOf(trnType)));
+			
+		Element levelNode = (Element) XMLGlobals.selectNode(newComputedTotals, "//Level");
+		String name = "Total " + measureName;
+		levelNode.setAttribute("name", name);
+		levelNode.setAttribute("column", name.replace(" ", "_"));
+		
+		computedTotalsDefinitionNode.getParentNode().appendChild(newComputedTotals);
+	}
+	
+	protected String getComputedTotalsFilter() {
+		String filter = "(" + getFilterByReportType(currentReport.get().getReportType()) + ")";
+		switch(currentReport.get().getReportType()) {
+		case ArConstants.DONOR_TYPE:
+		case ArConstants.COMPONENT_TYPE:
+			filter += " AND (src_role='DN')";
+			break;
+		}
+		return filter;
 	}
 	
 	private void addTrivialMeasure(Node trivialMeasureDefinitionNode, String measureName, AmpCategoryValue adj,

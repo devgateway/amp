@@ -283,6 +283,24 @@ function collapseAll() {
 	</table>
 </logic:present>
 
+<c:if test="${aimEditActivityForm.identification.team.isolated}">
+	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
+	     <tr>
+		     <td align="center">
+		        <font color="red" size="3">
+		                <digi:trn key="aim:workspaceIsPrivate">This activity has been created in a private workspace. It 
+		                will not be visible in other workspaces.</digi:trn>
+		        </font>
+		     </td>
+	     </tr>           
+	     <tr>
+	         <td>&nbsp;
+	             
+	         </td>
+	     </tr>
+	</table>
+</c:if>
+
 <logic:present scope="request" parameter="editPermissionError">
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
 	     <tr>

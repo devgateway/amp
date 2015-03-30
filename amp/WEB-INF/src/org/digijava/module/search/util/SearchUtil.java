@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.WorkspaceFilter;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.admin.helper.AmpActivityFake;
@@ -228,6 +229,10 @@ public class SearchUtil {
 	public static Collection<LoggerIdentifiable> getActivities(String keyword, HttpServletRequest request, TeamMember tm) {
 		Collection<LoggerIdentifiable> resultList = new ArrayList<LoggerIdentifiable>();
 		StopWatch.reset("Search");
+
+		
+		String workspaceQuery = WorkspaceFilter.generateWorkspaceFilterQuery(tm);
+		
 		
 		AmpARFilter filter = new AmpARFilter();
 
@@ -235,14 +240,13 @@ public class SearchUtil {
          * AmpARFilter.FILTER_SECTION_ALL, null - parameters were added on merge, might not be right
          */
 		filter.readRequestData(request, AmpARFilter.FILTER_SECTION_ALL, null); // init teamAO and other auxiliary info
-
 		filter.setIndexText(keyword);
 		filter.generateFilterQuery(request, false, true);
 
-		String hsqlQuery = filter.getGeneratedFilterQuery().replaceAll(
-				"FROM amp_activity", "FROM " + AmpActivity.class.getName());
-		hsqlQuery.replaceAll("FROM amp_team_activities", "FROM "
-				+ AmpActivity.class.getName());
+//		String hsqlQuery = filter.getGeneratedFilterQuery().replaceAll(
+//				"FROM amp_activity", "FROM " + AmpActivity.class.getName());
+//		hsqlQuery.replaceAll("FROM amp_team_activities", "FROM "
+//				+ AmpActivity.class.getName());
 		//hsqlQuery isn't actually used anywhere
 		Session session = null;
 		List<AmpActivity> col = new ArrayList<AmpActivity>();
@@ -250,7 +254,9 @@ public class SearchUtil {
 			session = PersistenceManager.getRequestDBSession();
 
 			//not a very nice solution, but I kept the old code and idea and just added some speed
-			String newQueryString = "SELECT f.amp_activity_id, f.amp_id, " + AmpActivityVersion.sqlStringForName("f.amp_activity_id") + " AS name, f.approval_status, f.draft FROM amp_activity f WHERE f.amp_activity_id in ("+filter.getGeneratedFilterQuery()+")";
+			String newQueryString = "SELECT f.amp_activity_id, f.amp_id, " + AmpActivityVersion.sqlStringForName("f.amp_activity_id")
+					+ " AS name, f.approval_status, f.draft FROM amp_activity f WHERE f.amp_activity_id in ("+filter.getGeneratedFilterQuery()+""
+							/*+ "INTERSECT "+ workspaceQuery */+")";
 			SQLQuery newQuery = session.createSQLQuery(newQueryString).addScalar("amp_activity_id", LongType.INSTANCE);
 			newQuery		  = newQuery.addScalar("amp_id", org.hibernate.type.StandardBasicTypes.STRING);
 			newQuery		  = newQuery.addScalar("name", org.hibernate.type.StandardBasicTypes.STRING);

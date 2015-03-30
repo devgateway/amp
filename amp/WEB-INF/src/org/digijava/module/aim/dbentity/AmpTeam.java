@@ -34,6 +34,7 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 	private String name;
 	
 	private Boolean addActivity;
+	private Boolean isolated;//called thus because 'private' is a reserved keyword in Java
 	private Boolean computation;
 	private Boolean hideDraftActivities;
 	private Boolean useFilter;
@@ -357,6 +358,17 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable, /*Versi
 
 	public void setCrossteamvalidation(Boolean crossteamvalidation) {
 		this.crossteamvalidation = crossteamvalidation;
+	}
+
+	public Boolean getIsolated() {
+		return isolated;
+	}
+
+	public void setIsolated(Boolean isolated) {
+		if (isolated == null)
+			this.isolated = false;
+		else
+			this.isolated = isolated;
 	}
     
     

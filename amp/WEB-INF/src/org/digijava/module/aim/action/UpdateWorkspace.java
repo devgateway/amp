@@ -102,6 +102,10 @@ public class UpdateWorkspace extends Action {
 			newTeam.setAddActivity(uwForm.getAddActivity());
 			newTeam.setComputation(uwForm.getComputation());
 			newTeam.setCrossteamvalidation(uwForm.getCrossteamvalidation());
+			newTeam.setIsolated(uwForm.getIsolated());
+			if (newTeam.getIsolated()) {
+                TeamUtil.unlinkParentWorkspace(uwForm.getTeamId());
+			}
 			newTeam.setUseFilter(uwForm.getUseFilter());
 			newTeam.setHideDraftActivities(uwForm.getHideDraftActivities());
                 newTeam.setWorkspaceGroup(CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getWorkspaceGroup()));
@@ -151,6 +155,7 @@ public class UpdateWorkspace extends Action {
 			uwForm.setHideDraftActivities(false);
 			uwForm.setComputation(null);
 			uwForm.setCrossteamvalidation(null);
+			uwForm.setIsolated(null);
 			uwForm.setUseFilter(null);
 			if (uwForm.getChildWorkspaces() != null) {
                 uwForm.getChildWorkspaces().clear();

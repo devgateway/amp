@@ -29,6 +29,7 @@ public class TeamMember implements Comparable, Serializable{
 	private Boolean addActivity;
 	private boolean teamHead;
 	private Boolean pledger;
+	private Boolean teamIsolated;
 
 	private ApplicationSettings appSettings; /*
 											  * Application settings of the
@@ -61,6 +62,7 @@ public class TeamMember implements Comparable, Serializable{
 			init(tm.getAmpTeam());
 			this.memberId = tm.getAmpTeamMemId();
 			this.publishDocuments = tm.getPublishDocPermission();
+			
 		}
 	}
 	/**
@@ -99,6 +101,7 @@ public class TeamMember implements Comparable, Serializable{
 			this.useFilters = t.getUseFilter();
 			this.addActivity = t.getAddActivity();
 			this.workspacePrefix = t.getWorkspacePrefix();
+			this.setTeamIsolated(t.getIsolated());
 		}
 	}
         
@@ -274,6 +277,12 @@ public class TeamMember implements Comparable, Serializable{
 		if(arg0!=null || !(arg0 instanceof Long)) return -1;
 		Long newId = (Long)arg0;
 		return this.getMemberId().compareTo(newId); 
+	}
+	public Boolean getTeamIsolated() {
+		return teamIsolated;
+	}
+	public void setTeamIsolated(Boolean teamIsolated) {
+		this.teamIsolated = teamIsolated;
 	}
     
 

@@ -589,6 +589,11 @@ public class AmpARFilter extends PropertyListable {
 			generatedFilterQuery += " AND id IN (" + filter + ")";
 	}
 	
+	private void queryOrAppend(String filter) {
+		if (filter != null && !filter.isEmpty())
+			generatedFilterQuery += " OR amp_activity_id IN (" + filter + ")";
+	}
+	
 	/**
 	 * fills the "grouping" subpart of the settings part of filters with defaults
 	 * @return
@@ -1350,9 +1355,10 @@ public class AmpARFilter extends PropertyListable {
 		
 		boolean dateFilterHidesProjects = "true".equalsIgnoreCase(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.DATE_FILTER_HIDES_PROJECTS));
 		
-		String[] dates = this.calculateDateFilters(fromDate, toDate, dynDateFilterCurrentPeriod, dynDateFilterAmount, dynDateFilterOperator, dynDateFilterXPeriod);
-		String fromDate = dates[0];
-		String toDate = dates[1];
+//		String[] dates = this.calculateDateFilters(fromDate, toDate, dynDateFilterCurrentPeriod, dynDateFilterAmount, dynDateFilterOperator, dynDateFilterXPeriod);
+//		String fromDate = dates[0];
+//		String toDate = dates[1];
+		setToFromDate(fromDate, toDate, dynDateFilterCurrentPeriod, dynDateFilterAmount, dynDateFilterOperator, dynDateFilterXPeriod);
 		
 		if(dateFilterHidesProjects && fromDate !=null && fromDate.length()>0) {
 			String FROM_DATE_FILTER=null;
@@ -1380,39 +1386,40 @@ public class AmpARFilter extends PropertyListable {
 			queryAppend(TO_DATE_FILTER);
 		}
 		
-		dates = this.calculateDateFilters(fromActivityStartDate, toActivityStartDate, dynActivityStartFilterCurrentPeriod, dynActivityStartFilterAmount, dynActivityStartFilterOperator, dynActivityStartFilterXPeriod);
-		fromDate = dates[0];
-		toDate = dates[1];
+		setToFromDate(fromActivityStartDate, toActivityStartDate, dynActivityStartFilterCurrentPeriod, dynActivityStartFilterAmount, dynActivityStartFilterOperator, dynActivityStartFilterXPeriod);
+//		dates = this.calculateDateFilters(fromActivityStartDate, toActivityStartDate, dynActivityStartFilterCurrentPeriod, dynActivityStartFilterAmount, dynActivityStartFilterOperator, dynActivityStartFilterXPeriod);
+//		fromDate = dates[0];
+//		toDate = dates[1];
 
 		String ACTIVITY_START_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "asd.actual_start_date");
 		if ( ACTIVITY_START_DATE_FILTER.length() > 0 ) {
 			ACTIVITY_START_DATE_FILTER = "SELECT asd.amp_activity_id from v_actual_start_date asd WHERE " + ACTIVITY_START_DATE_FILTER;
 			queryAppend(ACTIVITY_START_DATE_FILTER);
 		}
-		
-		dates = this.calculateDateFilters(fromActivityActualCompletionDate, toActivityActualCompletionDate, dynActivityActualCompletionFilterCurrentPeriod, dynActivityActualCompletionFilterAmount, dynActivityActualCompletionFilterOperator, dynActivityActualCompletionFilterXPeriod);
-		fromDate = dates[0];
-		toDate = dates[1];
+		setToFromDate(fromActivityActualCompletionDate, toActivityActualCompletionDate, dynActivityActualCompletionFilterCurrentPeriod, dynActivityActualCompletionFilterAmount, dynActivityActualCompletionFilterOperator, dynActivityActualCompletionFilterXPeriod);
+//		dates = this.calculateDateFilters(fromActivityActualCompletionDate, toActivityActualCompletionDate, dynActivityActualCompletionFilterCurrentPeriod, dynActivityActualCompletionFilterAmount, dynActivityActualCompletionFilterOperator, dynActivityActualCompletionFilterXPeriod);
+//		fromDate = dates[0];
+//		toDate = dates[1];
 
 		String ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "acd.actual_completion_date");
 		if ( ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER.length() > 0 ) {
 			ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER = "SELECT acd.amp_activity_id from v_actual_completion_date acd WHERE " + ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER;
 			queryAppend(ACTIVITY_ACTUAL_COMPLETION_DATE_FILTER);
 		}
-		
-		dates = this.calculateDateFilters(fromActivityFinalContractingDate, toActivityFinalContractingDate, dynActivityFinalContractingFilterCurrentPeriod, dynActivityFinalContractingFilterAmount, dynActivityFinalContractingFilterOperator, dynActivityFinalContractingFilterXPeriod);
-		fromDate = dates[0];
-		toDate = dates[1];
+		setToFromDate(fromActivityFinalContractingDate, toActivityFinalContractingDate, dynActivityFinalContractingFilterCurrentPeriod, dynActivityFinalContractingFilterAmount, dynActivityFinalContractingFilterOperator, dynActivityFinalContractingFilterXPeriod);
+//		dates = this.calculateDateFilters(fromActivityFinalContractingDate, toActivityFinalContractingDate, dynActivityFinalContractingFilterCurrentPeriod, dynActivityFinalContractingFilterAmount, dynActivityFinalContractingFilterOperator, dynActivityFinalContractingFilterXPeriod);
+//		fromDate = dates[0];
+//		toDate = dates[1];
 
 		String ACTIVITY_FINAL_CONTRACTING_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "ctrd.contracting_date");
 		if ( ACTIVITY_FINAL_CONTRACTING_DATE_FILTER.length() > 0 ) {
 			ACTIVITY_FINAL_CONTRACTING_DATE_FILTER = "SELECT ctrd.amp_activity_id from v_contracting_date ctrd WHERE " + ACTIVITY_FINAL_CONTRACTING_DATE_FILTER;
 			queryAppend(ACTIVITY_FINAL_CONTRACTING_DATE_FILTER);
 		}
-		
-		dates = this.calculateDateFilters(fromProposedApprovalDate, toProposedApprovalDate, dynProposedApprovalFilterCurrentPeriod, dynProposedApprovalFilterAmount, dynProposedApprovalFilterOperator, dynProposedApprovalFilterXPeriod);
-		fromDate = dates[0];
-		toDate = dates[1];
+		setToFromDate(fromProposedApprovalDate, toProposedApprovalDate, dynProposedApprovalFilterCurrentPeriod, dynProposedApprovalFilterAmount, dynProposedApprovalFilterOperator, dynProposedApprovalFilterXPeriod);
+//		dates = this.calculateDateFilters(fromProposedApprovalDate, toProposedApprovalDate, dynProposedApprovalFilterCurrentPeriod, dynProposedApprovalFilterAmount, dynProposedApprovalFilterOperator, dynProposedApprovalFilterXPeriod);
+//		fromDate = dates[0];
+//		toDate = dates[1];
 		
 		String ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER	 	= this.createDateCriteria(toDate, fromDate, "apsd.proposed_approval_date");
 		if ( ACTIVITY_PROPOSED_APPROVAL_DATE_FILTER.length() > 0 ) {
@@ -1553,6 +1560,9 @@ public class AmpARFilter extends PropertyListable {
 		String RISK_FILTER = "SELECT v.activity_id from AMP_ME_INDICATOR_VALUE v, AMP_INDICATOR_RISK_RATINGS r where v.risk=r.amp_ind_risk_ratings_id and r.amp_ind_risk_ratings_id in ("
 				+ Util.toCSString(risks) + ")";
 
+		
+		
+		
 		if (budget != null)
 			queryAppend(BUDGET_FILTER);
 
@@ -1676,11 +1686,19 @@ public class AmpARFilter extends PropertyListable {
 		if (params.getActivityIdFilter() != null) {
 			queryAppend(ACTIVITY_ID_FILTER);
 		}
+		String ISOLATED_FILTER = "SELECT amp_activity_id FROM amp_activity WHERE amp_activity_id IN (select amp_activity_id FROM amp_activity_version aav WHERE " 
+				+ "aav.amp_team_id IN (select amp_team_id from amp_team WHERE isolated = true)) ";
+		
 
+		
 		
 		/* TEAM FILTER HACK ZONE
 		 * because in certain situations this zone can add an OR, any queryAppend calls MUST be done BEFORE THIS AREA
 		 */
+		if (!loggedInTeamMember.getTeamIsolated()) {
+			queryNotAppend(ISOLATED_FILTER);
+		}
+		
 		
 		processTeamFilter(loggedInTeamMember, params.getWorkspaceFilter());
 		
@@ -1746,10 +1764,13 @@ public class AmpARFilter extends PropertyListable {
 				/* do a somewhat ugly hack: the TEAM_FILTER will only contain the activities from within the workspace
 				 * here we run the filter part of the workspace and OR with the own activities returned in TEAM_FILTER
 				 */
-				String hideDraftSQL = TeamUtil.hideDraft(member) ? "draft <> true" : "1=1"; 
+				String hideDraftSQL = TeamUtil.hideDraft(member) ? "draft <> true" : "1=1";
 				String allActivitiesInTheDatabaseQuery = "SELECT amp_activity_id from amp_activity WHERE " + hideDraftSQL;
 				String queryToAppend = allActivitiesInTheDatabaseQuery;
+
 				queryToAppend += " AND amp_activity_id IN (" + TEAM_FILTER + ")";
+				
+				 
 				this.generatedFilterQuery = String.format("(%s) UNION (%s)", this.generatedFilterQuery, queryToAppend);
 				//this.generatedFilterQuery = String.format("(%s) OR (%s)", this.generatedFilterQuery, queryToAppend);
 			}
@@ -1759,6 +1780,13 @@ public class AmpARFilter extends PropertyListable {
 				queryAppend(TEAM_FILTER);
 			}
 		}
+	}
+	
+	
+	private void setToFromDate(String startDate, String lastDate, String currentPeriod, Integer amount, String op, String xPeriod) {
+		String[] dates = this.calculateDateFilters(startDate, lastDate, currentPeriod, amount, op, xPeriod);
+		this.fromDate = dates[0];
+		this.toDate = dates[1];
 	}
 	
 	private String[] calculateDateFilters(String startDate, String lastDate, String currentPeriod, Integer amount, String op, String xPeriod){

@@ -210,16 +210,18 @@ function childOrgsAdded() {
 									align="left" border="0">
 									<c:forEach var="workspaces"
 										items="${aimUpdateWorkspaceForm.availChildWorkspaces}">
-										<c:if
-											test="${workspaces.ampTeamId != aimUpdateWorkspaceForm.teamId}">
-											<tr>
-												<td width="3" align="left">
-												<html:multibox property="selChildWorkspaces">
-													<c:out value="${workspaces.ampTeamId}" />
-												</html:multibox>
-												</td>
-												<td width="98%"><c:out value="${workspaces.name}" /></td>
-											</tr>
+										<c:if test="${workspaces.isolated == false}">
+											<c:if
+												test="${workspaces.ampTeamId != aimUpdateWorkspaceForm.teamId}">
+												<tr>
+													<td width="3" align="left">
+													<html:multibox property="selChildWorkspaces">
+														<c:out value="${workspaces.ampTeamId}" />
+													</html:multibox>
+													</td>
+													<td width="98%"><c:out value="${workspaces.name}" /></td>
+												</tr>
+											</c:if>
 										</c:if>
 									</c:forEach>									<tr>
 										<td colspan="2" align="center">

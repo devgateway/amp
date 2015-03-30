@@ -125,6 +125,8 @@ public class GetWorkspace extends Action {
 
                 uwForm.setTeamId(new Long(workspace.getId()));
                 uwForm.setTeamName(workspace.getName());
+                uwForm.setParentTeamId(workspace.getParentTeamId());
+                uwForm.setParentTeamName(workspace.getParentTeamName());
 //                uwForm.setCategory(workspace.getTeamCategory());
                 uwForm.setTypeId(typeId);
                 uwForm.setWorkspaceType(workspace.getWorkspaceType());
@@ -144,7 +146,10 @@ public class GetWorkspace extends Action {
                 uwForm.setAddActivity(workspace.getAddActivity());
                 uwForm.setComputation(workspace.getComputation());
                 uwForm.setCrossteamvalidation(workspace.getCrossteamvalidation());
+                uwForm.setIsolated(workspace.getIsolated());
                 uwForm.setUseFilter(workspace.getUseFilter());
+                uwForm.setParentTeamName(workspace.getParentTeamName());
+                uwForm.setParentTeamId(workspace.getParentTeamId());
                 uwForm.setRelatedTeam(workspace.getRelatedTeam());
                 uwForm.setTeamAccessType(tmember.getTeamAccessType());
                 uwForm.setHideDraftActivities(workspace.getHideDraftActivities() );
@@ -159,7 +164,7 @@ public class GetWorkspace extends Action {
 
 
                 if (null == uwForm.getRelatedTeam()) {
-{
+                	{
                         uwForm.setRelatedTeamFlag("nil");
                     }
                 }

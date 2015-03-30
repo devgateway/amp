@@ -20,6 +20,8 @@ public class Workspace {
 	private String workspaceType;
 	private AmpCategoryValue workspaceGroup;
 	private Long relatedTeam;
+	private Long parentTeamId;
+	private String parentTeamName;
 	private boolean hasActivities;
 	private boolean hasMembers;
 	private Collection childWorkspaces;
@@ -33,6 +35,7 @@ public class Workspace {
     private AmpCategoryValue workspacePrefix;
     
     private Boolean crossteamvalidation;
+    private Boolean isolated;
 	
 	public Boolean getAddActivity() {
 		return addActivity;
@@ -231,5 +234,30 @@ public class Workspace {
 	public void setCrossteamvalidation(Boolean crossteamvalidation) {
 		this.crossteamvalidation = crossteamvalidation;
 	}
-    
+
+	public Boolean getIsolated() {
+		return isolated;
+	}
+
+	public void setIsolated(Boolean isolated) {
+		this.isolated = isolated;
+	}
+
+	public Long getParentTeamId() {
+		return parentTeamId;
+	}
+
+	public void setParentTeamId(Long parentTeamId) {
+		this.parentTeamId = parentTeamId;
+	}
+
+	public String getParentTeamName() {
+		return parentTeamName;
+	}
+
+	public void setParentTeamName(String parentTeamName) {
+		this.parentTeamName = parentTeamName;
+	}
+
+   
 }

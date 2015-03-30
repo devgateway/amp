@@ -172,6 +172,7 @@ public class TeamUtil {
 		return teamAssignedOrgs;
 	}
     
+	
     public static Collection getAllTeams(Long teamId[]) {
         Session session = null;
         Collection col = new ArrayList();
@@ -468,7 +469,16 @@ public class TeamUtil {
                 workspace.setFmTemplate(team.getFmTemplate());
                 workspace.setWorkspacePrefix(team.getWorkspacePrefix());
                 workspace.setCrossteamvalidation(team.getCrossteamvalidation());
-                
+                workspace.setIsolated(team.getIsolated());
+                if (team.getParentTeamId() != null){
+                	workspace.setParentTeamId(team.getParentTeamId().getAmpTeamId());
+                	workspace.setParentTeamName(team.getParentTeamId().getName());
+                }
+                else {
+                	workspace.setParentTeamId(null);
+                	workspace.setParentTeamName(null);
+                	
+                }
                 if(null == team.getRelatedTeamId())
                     workspace.setRelatedTeam(null);
                 else
@@ -575,6 +585,7 @@ public class TeamUtil {
                 updTeam.setAddActivity(team.getAddActivity());
                 updTeam.setComputation(team.getComputation());
                 updTeam.setCrossteamvalidation(team.getCrossteamvalidation());
+                updTeam.setIsolated(team.getIsolated());
                 updTeam.setUseFilter(team.getUseFilter());
                 updTeam.setHideDraftActivities(team.getHideDraftActivities() );
                 updTeam.setWorkspaceGroup(team.getWorkspaceGroup());
@@ -920,14 +931,9 @@ public class TeamUtil {
             if(qry.list()==null||qry.list().size()==0){
                memberExist=false;
             }
-           
-            
         } catch(Exception e) {
             throw new RuntimeException(e);
-
-        
         }
-
         return memberExist;
     }
 
@@ -1018,9 +1024,7 @@ public class TeamUtil {
     		Map<Long, List<AmpActivityDocument>> result = new java.util.TreeMap<Long, List<AmpActivityDocument>>();
     		
     		if(activityIds.size()==0) return result;
-    		
     		String queryString = "select doc, doc.ampActivity.ampActivityId FROM " + AmpActivityDocument.class.getName() + " doc WHERE doc.ampActivity.ampActivityId IN (" + getCommaSeparatedList(activityIds) + ")";
-    		
             Session session = PersistenceManager.getRequestDBSession();
             Query qry = session.createQuery(queryString.toString());
             for(Object[] rs:(List<Object[]>) qry.list())
@@ -1050,7 +1054,6 @@ public class TeamUtil {
     public static Map<Long, Object[]> getAllTeamAmpActivitiesResume(Long teamId, boolean includedraft, String keyword, String...fieldsList) {
     	Session session = null;
     	String activityNameHql = AmpActivityVersion.hqlStringForName("g.ampActivityLastVersion");
-    	
         StringBuilder fieldsQuery = new StringBuilder();
         for(String field:fieldsList)
         {
@@ -1063,9 +1066,7 @@ public class TeamUtil {
         	else
         		fieldsQuery.append("g.ampActivityLastVersion." + field);
         }
-        
         List<Object[]> col = new ArrayList<Object[]>();
-
         try {
             session = PersistenceManager.getRequestDBSession();
             StringBuilder queryString = new StringBuilder("select " + fieldsQuery.toString() + " from "+ AmpActivityGroup.class.getName()+" g where");
@@ -1090,14 +1091,11 @@ public class TeamUtil {
           	if(teamId!=null){
           		qry.setLong("teamId", teamId);
           	}          
-   
             col  = qry.list();
-            
             Map<Long, Object[]> res = new TreeMap<Long, Object[]>();
             for(Object[] obj:col)
             	res.put((Long) obj[0], obj);
             return res;
-                
         } catch(Exception e) {
             logger.debug("Exception from getAllTeamAmpActivitiesResume()");
             logger.debug(e.toString());
@@ -1194,9 +1192,7 @@ public class TeamUtil {
         Session session = null;
         Collection<AmpActivityVersion> activities=null;
         Query qry = null;
-
         try {
-            
             Collection childIds = DesktopUtil.getAllChildrenIds(teamId);
             childIds.add(teamId);
             if(childIds != null && childIds.size() > 0) { 
@@ -1226,16 +1222,12 @@ public class TeamUtil {
     public static Collection<AmpActivityVersion> getAllTeamActivities(Long teamId, boolean includedraft, String keyword) {
     	Session session = null;
 		Collection<AmpActivityVersion> col = new ArrayList();
-
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			
 			String queryString = "";
 			Query qry = null;
-			
 			String activityNameHql = AmpActivityVersion.hqlStringForName("act");	
 			queryString = "select new AmpActivityVersion(act.ampActivityId, " + activityNameHql + ", act.ampId,act.archived) from "+ AmpActivity.class.getName()	+ " act  ";
-			
 			if(teamId!=null){
 				queryString+="where act.team="+teamId;
 			}else{
@@ -1252,9 +1244,7 @@ public class TeamUtil {
             if(keyword!=null){
             	qry.setParameter("name", "%" + keyword + "%", StringType.INSTANCE);
             } 
-			
 			col=(ArrayList) qry.list();
-
 		} catch (Exception e) {
 			logger.debug("Exception from getAllTeamActivities()");
 			logger.debug(e.toString());
@@ -1294,14 +1284,10 @@ public class TeamUtil {
             	//no reports to fetch
             	return col;
             }
-            
             String idsList = getCommaSeparatedList(map.keySet());
-            
             col = new ArrayList();
-
             queryString = String.format("select r from " + AmpReports.class.getName()
 	                    + " r " + "where (r.ampReportId in (%s)) ", idsList);
-            
             if (tabs != null) {
             	if (tabs) {
             		queryString += " and r.drilldownTab=true ";
@@ -1309,19 +1295,15 @@ public class TeamUtil {
             		queryString += " and r.drilldownTab=false ";
             		}
             }
-            
         	String reportNameHql = AmpReports.hqlStringForName("r");
-        	
             if(keyword != null && keyword.trim().length() > 0){
             	queryString += " and (lower(" + reportNameHql + ") like lower(:keyword) )";
             }
-	                
             queryString += " order by " + reportNameHql;
             qry = session.createQuery(queryString);
             if(keyword != null && keyword.trim().length() > 0){
             	qry.setString("keyword", '%' + keyword + '%');
             }
-            
             //qry.setLong("id", ampTeamRep.getReport().getAmpReportId());
             Iterator<AmpReports> itrTemp = qry.list().iterator();
             while(itrTemp.hasNext()) {

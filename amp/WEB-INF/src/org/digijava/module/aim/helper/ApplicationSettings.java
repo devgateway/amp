@@ -23,6 +23,7 @@ public class ApplicationSettings {
         this.language = ampAppSettings.getLanguage();
         this.defaultAmpReport = ampAppSettings.getDefaultTeamReport();
         this.validation = ampAppSettings.getValidation();
+        
         this.crossteamvalidation = ampAppSettings.getTeam().getCrossteamvalidation();
         this.reportStartYear = ampAppSettings.getReportStartYear();
         this.reportEndYear = ampAppSettings.getReportEndYear();

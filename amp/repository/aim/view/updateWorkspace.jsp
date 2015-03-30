@@ -11,6 +11,7 @@
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
+
 <%	
 	ReportContextData.createWithId(request.getSession(), ReportContextData.REPORT_ID_WORKSPACE_EDITOR, false);
 	request.setAttribute(ReportContextData.BACKUP_REPORT_ID_KEY, ReportContextData.REPORT_ID_WORKSPACE_EDITOR);
@@ -53,6 +54,10 @@
  </style>
 <!-- Jquery Base Library -->
 <script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.js"/>"> </script>
+
+<link rel="stylesheet" type="text/css" href="<digi:file src= 'module/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.css'/>">
+<link rel="stylesheet" type="text/css" href="<digi:file src= 'gisModule/dev/node_modules/jquery-ui/themes/smoothness/jquery-ui.min.css'/>">
 
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" ></script>
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/filters/filters.js'/>?version=fantastic_15" ></script>
@@ -506,14 +511,48 @@ function cancel()
 -->
 </script>
 
+  <script>
+  
+  function showSiloDialog() {
+	  if((document.aimUpdateWorkspaceForm.parentTeamName.value != "") && 
+			  (document.aimUpdateWorkspaceForm.isolated.checked )) {
+  		$( "#dialog-confirm" ).dialog( "open" );
+	  } else {
+      	update('edit');
+	  }
+  	
+  	
+  }
+  
+  
+  $(function() {
+    $( "#dialog-confirm" ).dialog({
+    	   //resizable: false,
+    	      //height:640,
+    	      modal: true,
+    	      autoOpen: false,
+    	      buttons: {
+    	        "Confirm": function() {
+    	        	update('edit');
+    	          //$( this ).dialog( "close" );
+    	        },
+    	        Cancel: function() {
+    	          $( this ).dialog( "close" );
+    	        }
+    	      }
 
+    	
+    	
+    });
+  });
+  </script>
 
 
 <html:hidden property="teamId" />
 <html:hidden property="actionEvent" />
 <html:hidden property="id" />
 <html:hidden property="mainAction" />
-
+<html:hidden property="parentTeamName" value="${aimUpdateWorkspaceForm.parentTeamName}"/>
 <html:hidden property="stepInWizard" value="1" />
 
 <html:hidden property="relatedTeamFlag" />
@@ -524,6 +563,15 @@ function cancel()
 <input type="hidden" name="dest">
 
 <input type="hidden" name="currUrl">
+
+
+
+
+<div id="dialog-confirm" title="Workspace marked as child">
+  <p>This workspace is marked as the child of ${aimUpdateWorkspaceForm.parentTeamName}.</p>
+  <p>Marking it as private will remove this workspace from ${aimUpdateWorkspaceForm.parentTeamName}.</p>
+  <p>Are you sure you want to set this workspace as private?</p>
+</div>
 
 <table width="1000" cellPadding="0" cellSpacing="0" vAlign="top" align="center">
 <tr><td vAlign="top" align="left">
@@ -780,6 +828,20 @@ function cancel()
 															
 														</td>
 													</tr>
+													<tr>
+														<td colspan="4">
+															<table>
+																<tr>
+																	<td style="font-size:12px; font-weight:bold;">
+																		<html:checkbox property="isolated" value="true">
+																			<digi:trn>Private workspace</digi:trn>
+																		</html:checkbox>
+																	</td>
+																</tr>
+															</table>
+															
+														</td>
+													</tr>													
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
 														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'no'}">
 															<tr  id="relTeamRow">
@@ -978,7 +1040,7 @@ function cancel()
 																			onclick="update('add')"/>
 																		</c:if>
 																		<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'edit'}">
-																			<input type="button" value="${translation}" class="buttonx" onclick="update('edit')"/>
+																			<input type="button" value="${translation}" class="buttonx" onclick="showSiloDialog()"/>
 																		</c:if>
 																	</td>
 																	<td>

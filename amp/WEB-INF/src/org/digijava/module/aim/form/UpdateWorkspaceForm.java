@@ -27,8 +27,14 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 	@Checkbox(step=1, resetValue="false")
 	private Boolean hideDraftActivities=null;
 	
+
+
 	@Checkbox(step=1, resetValue="false")
 	private Boolean crossteamvalidation=null;
+	
+	@Checkbox(step=1, resetValue="false")
+	private Boolean isolated=null;
+	
 	
 	private Collection organizations;
 	private String id = null;
@@ -37,6 +43,9 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 	private Long teamId = null;
 	private String teamLead = null;
 	private String actionEvent = null;
+	private Long parentTeamId = null;
+	private String parentTeamName = null;
+	
 	private Long relatedTeam = null;			// MOFED team mapped to DONOR team
 	private String relatedTeamName = null;
 	// Available bilateral mofed-teams for mapping with donor-team
@@ -424,6 +433,8 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 			relatedTeamMutilatColl = new ArrayList();
 			relatedTeamFlag = "no";
 			relatedTeamBilatCollSize = null;
+			parentTeamId = null;
+			parentTeamName = null;
 			deleteFlag = null;
 			updateFlag = false;
             fmTemplate = null;
@@ -436,6 +447,7 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
 			addActivity=null;
 			computation=null;
 			crossteamvalidation=null;
+			isolated = null;
 			useFilter=true;
 			workspacePrefix=null;
             fmTemplate=null;
@@ -698,7 +710,31 @@ public class UpdateWorkspaceForm extends MultiStepActionForm{
         return workspacePrefix;
     }
 
+	public Boolean getIsolated() {
+		return isolated;
+	}
+
+	public void setIsolated(Boolean isolated) {
+		this.isolated = isolated;
+	}    
+    
     public void setWorkspacePrefix(Long workspacePrefix) {
         this.workspacePrefix = workspacePrefix;
     }
+
+	public Long getParentTeamId() {
+		return parentTeamId;
+	}
+
+	public void setParentTeamId(Long parentTeamId) {
+		this.parentTeamId = parentTeamId;
+	}
+
+	public String getParentTeamName() {
+		return parentTeamName;
+	}
+
+	public void setParentTeamName(String parentTeamName) {
+		this.parentTeamName = parentTeamName;
+	}
 }

@@ -14,6 +14,7 @@
 		<property name="description" column="description" type="text" />
 
 		<property name="addActivity" column="add_activity" type="java.lang.Boolean" />
+		<property name="isolated" column="isolated" type="java.lang.Boolean" />
 		<property name="computation" column="computation" type="java.lang.Boolean" />
 		<property name="hideDraftActivities" column="hide_draft" type="java.lang.Boolean" />
 		<property name="useFilter" column="use_filter" type="java.lang.Boolean" />

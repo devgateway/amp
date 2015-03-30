@@ -77,7 +77,6 @@
 <module:display name="REPORTING"></module:display> 
 <module:display name="References" parentModule="PROJECT MANAGEMENT"></module:display> 
 <module:display name="Report Generator" parentModule="REPORTING"></module:display>
-<module:display name="Public Report Generator" parentModule="REPORTING"></module:display>
 <module:display name="Resource Label Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Template Documents Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 <module:display name="Donor Profile Report" parentModule="REPORTING"></module:display>
@@ -116,7 +115,8 @@
 <feature:display name="FM Template" module="Workspace Manager" ></feature:display>
 <feature:display name="Workspace Prefix" module="Workspace Manager" ></feature:display>
  
-<module:display name="PUBLIC VIEW"></module:display> 
+<module:display name="PUBLIC VIEW"></module:display>
+<module:display name="Public Report Generator" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Menu Options" parentModule="PUBLIC VIEW"></module:display>
 <module:display name="Login - User Management" parentModule="PUBLIC VIEW"></module:display>
 

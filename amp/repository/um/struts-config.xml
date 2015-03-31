@@ -75,7 +75,7 @@
       <forward name="success" path="/showLayout.do" />
     </action>
     <action name="userResetForm" type="org.digijava.module.um.action.UserResetPassword" input="/showLayout.do?layout=userReset" path="/um/userResetPassword">
-      <forward name="success" path="/" redirect="true" />
+      <forward name="success" path="/index.do" redirect="true" />
       <forward name="error" path="/showLayout.do?layout=errorResetPassword" />
     </action>
     <action name="userEmailForm" type="org.digijava.module.um.action.UserEmail" input="/showLayout.do?layout=userEmail" path="/um/userEmail">

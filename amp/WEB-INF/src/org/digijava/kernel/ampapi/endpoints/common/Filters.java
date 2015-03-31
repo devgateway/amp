@@ -632,10 +632,12 @@ public class Filters {
 		Collection<AmpTeam> ampTeamList = TeamUtil.getAllRelatedTeams();
 		if (hasToShowWorkspaceFilter()) {
 			for (AmpTeam ampTeam : ampTeamList) {
-				SimpleJsonBean ampTeamJson = new SimpleJsonBean();
-				ampTeamJson.setId(ampTeam.getIdentifier());
-				ampTeamJson.setName(ampTeam.getName());
-				teamsListJson.add(ampTeamJson);
+				if(!ampTeam.getIsolated()){
+					SimpleJsonBean ampTeamJson = new SimpleJsonBean();
+					ampTeamJson.setId(ampTeam.getIdentifier());
+					ampTeamJson.setName(ampTeam.getName());
+					teamsListJson.add(ampTeamJson);
+				}
 			}
 		}
 		JsonBean js = new JsonBean();

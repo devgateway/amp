@@ -589,11 +589,6 @@ public class AmpARFilter extends PropertyListable {
 			generatedFilterQuery += " AND id IN (" + filter + ")";
 	}
 	
-	private void queryOrAppend(String filter) {
-		if (filter != null && !filter.isEmpty())
-			generatedFilterQuery += " OR amp_activity_id IN (" + filter + ")";
-	}
-	
 	/**
 	 * fills the "grouping" subpart of the settings part of filters with defaults
 	 * @return

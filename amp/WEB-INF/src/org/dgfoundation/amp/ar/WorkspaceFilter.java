@@ -9,7 +9,6 @@ import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -82,21 +81,6 @@ public class WorkspaceFilter
 			// nothing to do?
 		}
 	}
-	
-	private Set<AmpTeam> filterOutPrivateWorkspaces(Set<AmpTeam> teams) {
-//		return teams;
-		Set<AmpTeam> outTeam = new HashSet<AmpTeam>(); 
-		for (AmpTeam team : teams) {
-			if (!team.getIsolated()) {
-				outTeam.add(team);
-			} else {
-				outTeam.size();
-			}
-		}
-		return outTeam;
-		
-	}
-	
 	/**
 	 * HACK: for computed Workspaces With Filters, will return a query which only selects activities from within the workspace
 	 * AmpARFilter is responsible for fetching / filtering the other activities and doing the OR
@@ -156,15 +140,13 @@ public class WorkspaceFilter
 		//AMP-4495 - in computed workspace, the unapproved or draft activities from other
 		//worskpaces should not be displayed
 			if (teamAssignedOrgs != null && teamAssignedOrgs.size() > 0) {
-//				String ISOLATED_FILTER = "amp_team_id NOT IN ( SELECT apt.amp_team_id FROM amp_team apt WHERE apt.isolated = TRUE)";
-				
+
 				TEAM_FILTER += " OR amp_activity_id IN (SELECT DISTINCT(aor.activity) FROM amp_org_role aor, amp_activity a WHERE aor.organisation IN ("
 						+ Util.toCSStringForIN(teamAssignedOrgs) + ") AND aor.activity=a.amp_activity_id AND a.amp_team_id IS NOT NULL AND a.approval_status IN (" +
-						used_approval_status	+") " + (hideDraft ? "AND draft<>true ":"");
+						used_approval_status	+") ) " + (hideDraft ? "AND draft<>true ":"");
 				TEAM_FILTER += " OR amp_activity_id IN (SELECT distinct(af.amp_activity_id) FROM amp_funding af, amp_activity b WHERE af.amp_donor_org_id IN ("
 						+ Util.toCSStringForIN(teamAssignedOrgs) + ") AND af.amp_activity_id=b.amp_activity_id AND b.amp_team_id IS NOT NULL AND b.approval_status IN (" +
-						used_approval_status	+") " + (hideDraft ? "AND draft<>true ":"");
-//				TEAM_FILTER += ISOLATED_FILTER;
+						used_approval_status	+") )" + (hideDraft ? "AND draft<>true ":"");
 			}
 				
 
@@ -184,11 +166,9 @@ public class WorkspaceFilter
 		//return "20, 21"; // masha
 		//return "17041";
 		//return "SELECT amp_activity_id from amp_activity WHERE name IN ('activity with components', 'activity-with-unfunded-components', 'activity with funded components', 'crazy funding 1', 'Eth Water')";
-//			TEAM_FILTER = String.format("%s AND (NOT amp_activity_id IN (select amp_activity_id FROM amp_activity_version aav WHERE "
-//					+ "aav.amp_team_id IN (select amp_team_id from amp_team WHERE isolated = true))) ", TEAM_FILTER);
 		String isolated_filter = " amp_activity_id IN (select amp_activity_id FROM amp_activity_version aav WHERE "
 					+ "aav.amp_team_id IN (select amp_team_id from amp_team WHERE isolated = true)) ";
-		if (this.teamMember.getTeamIsolated()) {
+		if (this.teamMember !=null && this.teamMember.getTeamIsolated()) {
 			TEAM_FILTER = String.format("%s OR  %s", TEAM_FILTER, isolated_filter );
 		}
 		else {

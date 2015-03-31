@@ -101,10 +101,12 @@ public class GisEndPoints {
 		List<ClusteredPoints> c = LocationService.getClusteredPoints(config);
 		FeatureCollectionGeoJSON result = new FeatureCollectionGeoJSON();
 		for (ClusteredPoints clusteredPoints : c) {
-			result.features.add(getPoint(new Double(clusteredPoints.getLon()),
+		    if (!clusteredPoints.getLon().equalsIgnoreCase("") && !clusteredPoints.getLat().equalsIgnoreCase("")){ 
+		    result.features.add(getPoint(new Double(clusteredPoints.getLon()),
 					new Double(clusteredPoints.getLat()),
 					clusteredPoints.getActivityids(),
 					clusteredPoints.getAdmin()));
+		    }
 		}
 
 		return result;

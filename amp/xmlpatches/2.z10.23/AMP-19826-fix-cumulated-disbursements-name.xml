@@ -18,7 +18,8 @@
 				UPDATE amp_features_templates_tmp SET feature = (SELECT min(id) FROM amp_features_visibility WHERE name = 'Cumulated Disbursements');
 				DELETE FROM amp_features_templates WHERE feature in (SELECT id FROM amp_features_visibility WHERE name = 'Cumulated Disbursements');
 				INSERT INTO amp_features_templates(template, feature) SELECT template, min(feature) FROM amp_features_templates_tmp GROUP BY template;
-				DELETE FROM amp_features_visibility WHERE id = (SELECT max(id) FROM amp_features_visibility WHERE name = 'Cumulated Disbursements');
+				DELETE FROM amp_features_visibility WHERE id = (SELECT max(id) FROM amp_features_visibility WHERE name = 'Cumulated Disbursements')
+				AND (SELECT count(id) FROM amp_features_visibility WHERE name = 'Cumulated Disbursements') &gt; 1;
 			</lang>
 		</script>
 	</apply>

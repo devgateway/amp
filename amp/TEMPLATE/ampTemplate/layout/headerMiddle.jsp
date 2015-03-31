@@ -103,8 +103,8 @@ ${fn:replace(message,quote,escapedQuote)}
 								</a>
 							</li>
 						</module:display>
-
-						<module:display name="Public Reports" parentModule="PUBLIC VIEW">
+						<%//since we can't mix calls to module display we use jstl variables %>
+						<%if(FeaturesUtil.isVisibleModule("Public Reports")  ||  FeaturesUtil.isVisibleModule("Public Report Generator")) {%>
 							<li class="yuiampmenuitem">
 								<span class="yuiampmenuitemlabel" href="#"> 
 									<digi:trn>Reports</digi:trn>
@@ -115,15 +115,27 @@ ${fn:replace(message,quote,escapedQuote)}
 								<div id="reports" class="yuiampmenu">
 									<div class="bd bd_drop">
 										<ul>
+										<module:display name="Public Reports" parentModule="PUBLIC VIEW">
+										
 											<li class="yuiampmenuitem_drop">
 												<a class="yuiampmenuitemlabel" href="/viewTeamReports.do?tabs=false&reset=true" onclick="return canExit()"> 
 													<digi:trn>Public Reports</digi:trn>
 												</a>
 											</li>
+										</module:display>
+										<module:display name="Public Report Generator" parentModule="PUBLIC VIEW">
+											<li class="yuiampmenuitem_drop">
+												<a class="yuiampmenuitemlabel" href="/reportWizard.do?tabs=false&reset=true" onclick="return canExit()"> 
+													<digi:trn>Public Report Generator</digi:trn>
+												</a>
+											</li>
+										</module:display>
 										</ul>
 									</div>
-								</div></li>
-						</module:display>
+								</div>
+								</li>
+						<%} %>
+						
 
 
 						<module:display name="Calendar" parentModule="PROJECT MANAGEMENT">

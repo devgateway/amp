@@ -444,6 +444,7 @@ function update(action) {
   
 function workspaceChangeType(){
 	if(document.aimUpdateWorkspaceForm.workspaceType.value == "Team"){
+		$("tr[id^='private_workspace']").show(); //show  private ws
 		$("tr[id^='management_']").hide();
 		$("tr[id^='team_']").show('fast');
 		//document.aimUpdateWorkspaceForm.addActivity.checked = true;
@@ -455,16 +456,21 @@ function workspaceChangeType(){
 	if(document.aimUpdateWorkspaceForm.workspaceType.value == "Management"){
 		//document.aimUpdateWorkspaceForm.addActivity.checked = false;
 		//document.aimUpdateWorkspaceForm.computation.checked = false;
+			$("tr[id^='private_workspace']").hide(); //hide private ws
+			//unchecking private workspace checkbox in case its selected
+			$( "input[name='isolated']" ).prop('checked',false)
 			$("tr[id^='team_']").hide();
 			$("tr[id^='management_']").show('fast');
 			$("tr[id^='computation_']").hide()
 	}
 
 }
- 
+
 function   computationChange(){
-	if(document.aimUpdateWorkspaceForm.computation.checked == true)
+	if(document.aimUpdateWorkspaceForm.computation.checked == true){
 		$("tr[id^='computation_']").show('fast');
+		$("tr[id^='private_workspace']").show(); //Show private ws when its computation ws
+		ç
 	else $("tr[id^='computation_']").hide();
 }
   
@@ -828,7 +834,7 @@ function cancel()
 															
 														</td>
 													</tr>
-													<tr>
+													<tr id="private_workspace">
 														<td colspan="4">
 															<table>
 																<tr>
@@ -841,7 +847,7 @@ function cancel()
 															</table>
 															
 														</td>
-													</tr>													
+													</tr>	
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
 														<c:if test="${aimUpdateWorkspaceForm.relatedTeamFlag != 'no'}">
 															<tr  id="relTeamRow">

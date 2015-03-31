@@ -82,6 +82,9 @@
 "amp.dashboard:filters-show-settings":"Show filter settings",
 "amp.dashboard:filters-chart-legends-Grouped":"Grouped",
 "amp.dashboard:filters-chart-legends-Stacked":"Stacked",
-"amp.dashboard:of-total": "of total"
+"amp.dashboard:of-total": "of total",
+"amp.dashboard:aid-predictability-actual-disbursements": "Actual Disbursements",
+"amp.dashboard:aid-predictability-planned-disbursements": "Planned Disbursements"
+
 }
 

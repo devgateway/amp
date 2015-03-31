@@ -310,6 +310,7 @@ public class DashboardsService {
 		
 		retlist.put("name", DashboardConstants.AID_PREDICTABILITY);
 		retlist.put("title", TranslatorWorker.translateText(DashboardConstants.AID_PREDICTABILITY));
+		retlist.put("measure", "disbursements");
 		return retlist;
 	}
 

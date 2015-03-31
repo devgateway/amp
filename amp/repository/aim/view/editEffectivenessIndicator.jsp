@@ -163,7 +163,7 @@
     <logic:present name="aidEffectivenessIndicatorsForm" property="options">
         <table style="font-family: verdana; font-size: 11px; font-weight: bold" cellpadding="4" id="optionsTableId" width="50%">
             <tr>
-                <th align="center" bgcolor="#c7d4db"><digi:trn>Option Text<font color="red">*</font></digi:trn></th>
+                <th align="center" bgcolor="#c7d4db"><digi:trn>Option Text</digi:trn><font color="red">*</font></th>
                 <th align="center" bgcolor="#c7d4db">&nbsp;</th>
             </tr>
 

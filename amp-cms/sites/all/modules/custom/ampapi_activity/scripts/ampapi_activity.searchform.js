@@ -13,7 +13,9 @@ Drupal.behaviors.projectsSearchFormModalDialog = {
 
     $('.views-exposed-form-activities-search-page .tokeninput-textfield', context).each(function() {
       var field_name = $(this).attr('data-name');
-      var endpoint = settings.basePath + 'ampapi/autocomplete/' + field_name;
+      // @HACK: Add language code to requests, to prevent browser caching.
+      var lang_code = settings.viewsTokeninput['language'];
+      var endpoint = settings.basePath + 'ampapi/autocomplete/' + field_name + '?language=' + lang_code;
 
       $(this).tokenInput(endpoint, {
         theme: 'ampcms',

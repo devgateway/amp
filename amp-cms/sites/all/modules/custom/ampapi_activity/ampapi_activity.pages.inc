@@ -28,6 +28,7 @@ function ampapi_activity_autocomplete($property_name, $string = '') {
   }
 
   if ($string) {
+    /** @var activityMapperAutocompleteBase $handler */
     $handler = new $class_name();
     $autocomplete_values = $handler->autocomplete($plugin, array($string), $request_type);
     foreach ($autocomplete_values as $value) {

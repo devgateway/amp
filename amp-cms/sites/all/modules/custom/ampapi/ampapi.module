@@ -188,7 +188,6 @@ function ampapi_request($type, $endpoint, $use_cache = FALSE, $options = array()
   }
 
   if ($type == 'get') {
-    $url = $endpoint . '?' . drupal_http_build_query($parameters);
     $response = restclient_get($endpoint . '?' . drupal_http_build_query($parameters), $options);
   }
   else if ($type == 'post') {

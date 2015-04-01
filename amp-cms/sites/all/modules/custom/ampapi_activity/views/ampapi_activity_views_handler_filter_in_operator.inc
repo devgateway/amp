@@ -62,6 +62,7 @@ class ampapi_activity_views_handler_filter_in_operator extends efq_views_handler
           $js_setting[$field_name]['values'] = $handler->getAutocompleteValue($plugin, $values, 'tokeninputids');
         }
       }
+      $js_setting['language'] = $GLOBALS['language']->language;
       drupal_add_js(array('viewsTokeninput' => $js_setting), 'setting');
 
       // Load the "jQuery Tokeninput" JavaScript library.

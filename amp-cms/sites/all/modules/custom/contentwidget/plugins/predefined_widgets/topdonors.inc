@@ -37,7 +37,7 @@ function contentwidget_topdonors_widget_retrieve_data($widget_settings, $langcod
 
   // Try to get the response from cache.
   if ($cached = cache_get($cache_id, 'cache')) {
-   $response = $cached->data;
+    $response = $cached->data;
   }
   else {
     // Prepare a list of parameters for the request.
@@ -119,9 +119,9 @@ function contentwidget_topdonors_widget_render($plugin, $widget_settings, $entit
 
     // Create the table headers.
     foreach ($data->headers as $key => $label) {
-    	if (!empty($data->Currency) && in_array($key, array('actual-commitments', 'actual-disbursements'))) {
-    		$label .= ' (' . $data->Currency . ')';
-    	}
+      if (!empty($data->Currency) && in_array($key, array('actual-commitments', 'actual-disbursements'))) {
+        $label .= ' (' . $data->Currency . ')';
+      }
       $header[$key] = array(
         'data' => check_plain($label),
         'class' => array(
@@ -130,7 +130,7 @@ function contentwidget_topdonors_widget_render($plugin, $widget_settings, $entit
       );
     }
   }
-	
+
   $rows = array();
   if (isset($data->donorFunding)) {
     $number_format = isset($data->numberformat) ? $data->numberformat : NULL;

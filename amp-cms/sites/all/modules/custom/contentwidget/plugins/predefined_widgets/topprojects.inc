@@ -128,7 +128,16 @@ function contentwidget_topprojects_widget_render($plugin, $widget_settings, $ent
       }
 
       $label = $data->headers->$key;
-      if (!empty($data->Currency) && in_array($key, array('actual-commitments', 'actual-disbursements'))) {
+
+      // Add currency code to the columns that contain measures.
+      // @TODO: Request and API update in order to remove this hardcoding.
+      $currency_columns = array(
+        'actual-commitments',
+        'actual-disbursements',
+        'bilateral-ssc-commitments',
+        'triangular-ssc-commitments',
+      );
+      if (!empty($data->Currency) && in_array($key, $currency_columns)) {
         $label = $label . ' (' . $data->Currency . ')';
       }
       $header[$key] = array(

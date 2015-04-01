@@ -14,8 +14,8 @@ module.exports = ChartModel.extend({
     var predictabilityBaseLanguage = {};
 
     /* Prepare the translations for the chart */
-    predictabilityBaseLanguage['amp.dashboard:predictability-planned'] = 'Planned';
-    predictabilityBaseLanguage['amp.dashboard:predictability-actual'] = 'Actual';
+    predictabilityBaseLanguage['amp.dashboard:aid-predictability-planned-disbursements'] = 'Planned Disbursements';
+    predictabilityBaseLanguage['amp.dashboard:aid-predictability-actual-disbursements'] = 'Actual Disbursements';
 
     this.localizedPredictability = this.app.translator.translateList(predictabilityBaseLanguage).then(
       function(localizedPredictabilityList) {
@@ -38,14 +38,12 @@ module.exports = ChartModel.extend({
 
     data.processed = [
       {
-        key: this.localizedPredictabilityList['amp.dashboard:predictability-planned'],
-        originalKey: 'planned',
-        values: _(data.years).map(pick('planned'))
+        key: this.localizedPredictabilityList['amp.dashboard:aid-predictability-planned-disbursements'],
+        values: _(data.years).map(pick('planned disbursements'))
       },
       {
-        key: this.localizedPredictabilityList['amp.dashboard:predictability-actual'],
-        originalKey: 'actual',
-        values: _(data.years).map(pick('actual'))
+        key: this.localizedPredictabilityList['amp.dashboard:aid-predictability-actual-disbursements'],
+        values: _(data.years).map(pick('actual disbursements'))
       }
     ];
     return data;

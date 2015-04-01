@@ -283,11 +283,11 @@ public class DashboardsService {
 					
 				boolean isPlannedColumn = outputColumn.originalColumnName.equals(MoConstants.PLANNED_DISBURSEMENTS);
 				boolean isTotalColumn = outputColumn.parentColumn != null && outputColumn.parentColumn.originalColumnName.equals("Total Measures");
-				String destination = isPlannedColumn ? "planned" : "actual";
+				String destination = isPlannedColumn ? "planned disbursements" : "actual disbursements";
 				
 				String yearValue = isTotalColumn ? "totals" : outputColumn.parentColumn.columnName;
 				if (!results.containsKey(yearValue))
-					results.put(yearValue, buildEmptyJSon("planned", "actual"));
+					results.put(yearValue, buildEmptyJSon("planned disbursements", "actual disbursements"));
 				JSONObject amountObj = results.get(yearValue);
 	
 				amountObj.put(destination, report.reportContents.getContents().get(outputColumn).value);

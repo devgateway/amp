@@ -639,7 +639,13 @@ public class DashboardUtil {
 		}
 		return year;
 	}
-    
+	
+	/**
+	 * This was replaced by new class for new dashboards
+	 *
+	 * @deprecated use {@link org.digijava.kernel.ampapi.endpoints.util.CalendarUtil} instead.  
+	 */
+    @Deprecated
     public static Date getStartDate(Long AmpFiscalCalendarId, int year) {
     	AmpFiscalCalendar fiscalCalendar = null;
     	if(AmpFiscalCalendarId != null) {
@@ -647,7 +653,12 @@ public class DashboardUtil {
     	}
     	return getStartDate(fiscalCalendar, year);
     }
-    
+    /**
+	 * This was replaced by new class for new dashboards
+	 *
+	 * @deprecated use {@link org.digijava.kernel.ampapi.endpoints.util.CalendarUtil} instead.  
+	 */
+    @Deprecated
     public static Date getEndDate(Long AmpFiscalCalendarId, int year) {
     	AmpFiscalCalendar fiscalCalendar = null;
     	if(AmpFiscalCalendarId != null) {
@@ -655,7 +666,12 @@ public class DashboardUtil {
     	}
     	return getEndDate(fiscalCalendar, year);
     }
-
+    /**
+	 * This was replaced by new class for new dashboards
+	 *
+	 * @deprecated use {@link org.digijava.kernel.ampapi.endpoints.util.CalendarUtil} instead.  
+	 */
+    @Deprecated
     public static Date getStartDate(AmpFiscalCalendar calendar, int year) {
         Date startDate = null;
         if (calendar != null) {
@@ -673,7 +689,12 @@ public class DashboardUtil {
         }
         return startDate;
     }
-
+    /**
+	 * This was replaced by new class for new dashboards
+	 *
+	 * @deprecated use {@link org.digijava.kernel.ampapi.endpoints.util.CalendarUtil} instead.  
+	 */
+    @Deprecated
     public static Date getEndDate(AmpFiscalCalendar calendar, int year) {
         Date endDate = null;
         if (calendar != null) {
@@ -694,17 +715,32 @@ public class DashboardUtil {
         }
         return endDate;
     }
-
+    /**
+	 * This was replaced by new class for new dashboards
+	 *
+	 * @deprecated use {@link org.digijava.kernel.ampapi.endpoints.util.CalendarUtil} instead.  
+	 */
+    @Deprecated
     public static Date getStartOfYear(int year, int month, int day) {
         GregorianCalendar cal = new GregorianCalendar();
         cal.set(year, month, day, 0, 0, 0);
         return cal.getTime();
     }
-
+    /**
+	 * This was replaced by new class for new dashboards
+	 *
+	 * @deprecated use {@link org.digijava.kernel.ampapi.endpoints.util.CalendarUtil} instead.  
+	 */
+    @Deprecated
     public static Date getGregorianCalendarDate(AmpFiscalCalendar fiscalCalendar, int year, boolean startDate) {
        return getCalendar(fiscalCalendar, startDate, year);
     }
-    
+    /**
+	 * This was replaced by new class for new dashboards
+	 *
+	 * @deprecated use {@link org.digijava.kernel.ampapi.endpoints.util.CalendarUtil} instead.  
+	 */
+    @Deprecated
     public static Date getCalendar(AmpFiscalCalendar fiscalCalendar, boolean startDate, int year) {
         DateTime dt = null;
         String calendarType = fiscalCalendar.getBaseCal();

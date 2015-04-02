@@ -68,6 +68,7 @@
     "gulp-less": "^1.2.3",
     "gulp-livereload": "^2.1.0",
     "gulp-load-plugins": "^0.5.1",
+    "gulp-mocha": "~2.0.0",
     "gulp-plumber": "^0.6.2",
     "gulp-rename": "~1.2.0",
     "gulp-rev": "^0.4.2",
@@ -87,6 +88,7 @@
     "leaflet": "^0.7.3",
     "leaflet-div-style-icon": "^0.1.0",
     "leaflet.markercluster": "https://github.com/Leaflet/Leaflet.markercluster/archive/c0b5778dbcb08578ca8b51c715cf64ab1da0622b.tar.gz",
+    "mold-source-map": "^0.3.0",
     "nice-buckets": "^0.2.0",
     "nvd3": "~1.1.15",
     "rimraf": "^2.2.8",
@@ -96,7 +98,6 @@
     "underscore-groups-by": "0.0.1",
     "vinyl-source-stream": "^0.1.1",
     "watchify": "^0.10.2",
-    "zeroclipboard": "^2.1.6",
-    "gulp-mocha": "~2.0.0"
+    "zeroclipboard": "^2.1.6"
   }
 }

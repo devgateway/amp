@@ -1839,12 +1839,20 @@ function collapseAll() {
 							<table width="100%" cellSpacing="2" cellPadding="1" class="box-border-nopadding">
 								<tr>
 									<td>
-										<b> <c:out value="${comp.title}" /> </b>									</td>
+										<b> <c:out value="${comp.title}" /> </b>
+									</td>
 								</tr>
 								<tr>
 									<td>
 										<i> <digi:trn key="aim:description">Description</digi:trn>
-										:</i> <c:out value="${comp.description}" />									</td>
+										:</i> <c:out value="${comp.description}" />
+									</td>
+								</tr>
+                                <tr>
+									<td>
+										<i> <digi:trn key="aim:description">Component Type</digi:trn>
+										:</i> <c:out value="${comp.typeName}" />
+									</td>
 								</tr>
 								<tr>
 									<td class="prv_right">

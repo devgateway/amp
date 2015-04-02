@@ -1920,12 +1920,19 @@ public class ExportActivityToWord extends Action {
 					eshCompFundingDetails
 							.addRowData((new ExportSectionHelperRowData(comp
 									.getTitle(), null, null, false)));
-					String compDesc = comp.getDescription() != null ? comp
-							.getDescription() : "";
+
+					String compDesc = comp.getDescription() != null ? comp.getDescription() : "";
+                    String compTypeName = comp.getTypeName() != null ? comp.getTypeName() : "";
+
 					eshCompFundingDetails
 							.addRowData((new ExportSectionHelperRowData(
 									"Description", null, null, true))
 									.addRowData(compDesc));
+
+                    eshCompFundingDetails
+                            .addRowData((new ExportSectionHelperRowData(
+                                    "Component Type", null, null, true))
+                                    .addRowData(compTypeName));
 
 					eshCompFundingDetails
 							.addRowData((new ExportSectionHelperRowData(

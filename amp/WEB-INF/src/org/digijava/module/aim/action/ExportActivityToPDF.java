@@ -8,7 +8,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,7 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.derby.iapi.types.ConcatableDataValue;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -60,7 +58,6 @@ import org.digijava.module.aim.form.EditActivityForm.Identification;
 import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.*;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.AdvancedReportUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.EUActivityUtil;
@@ -2358,8 +2355,8 @@ public class ExportActivityToPDF extends Action {
 						descNestedCell.addElement(p1);
 						descNestedCell.setBackgroundColor(new Color(255,255,255));
 						descNestedCell.setBorder(0);
-						componentsNestedTable.addCell(descNestedCell);							
-						
+						componentsNestedTable.addCell(descNestedCell);
+
 						descNestedCell=new PdfPCell();
 						p1=new Paragraph(new Phrase(TranslatorWorker.translateText(comp.getDescription()) ,plainFont));
 						p1.setAlignment(Element.ALIGN_LEFT);
@@ -2367,6 +2364,23 @@ public class ExportActivityToPDF extends Action {
 						descNestedCell.setBackgroundColor(new Color(255,255,255));
 						descNestedCell.setBorder(0);
 						componentsNestedTable.addCell(descNestedCell);
+
+                        descNestedCell = new PdfPCell();
+                        p1 = new Paragraph(TranslatorWorker.translateText("Component Type")+":", plainFont);
+                        descNestedCell.addElement(p1);
+                        descNestedCell.setBackgroundColor(new Color(255,255,255));
+                        descNestedCell.setBorder(0);
+                        componentsNestedTable.addCell(descNestedCell);
+
+                        descNestedCell=new PdfPCell();
+                        p1=new Paragraph(new Phrase(TranslatorWorker.translateText(comp.getTypeName()), plainFont));
+                        p1.setAlignment(Element.ALIGN_LEFT);
+                        descNestedCell.addElement(p1);
+                        descNestedCell.setBackgroundColor(new Color(255,255,255));
+                        descNestedCell.setBorder(0);
+                        componentsNestedTable.addCell(descNestedCell);
+
+
 						//third row - finanse of comp.
 						PdfPCell financeCompNestedCell=new PdfPCell();
 						financeCompNestedCell.setBackgroundColor(new Color(244,244,242));

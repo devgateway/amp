@@ -23,7 +23,10 @@ public class Components<T> implements Comparable , Serializable{
 	private String currencyCode;
 	private String code;
 	private String url;
-	private Long  type_Id;
+	private Long type_Id;
+
+    // Used for display purposes only
+    private String typeName;
 	
 	private SortedMap<Integer,Map<String,Double>> financeByYearInfo;
 	
@@ -200,6 +203,12 @@ public class Components<T> implements Comparable , Serializable{
 		this.type_Id = type_Id;
 	}
 
+    public String getTypeName() {
+        return typeName;
+    }
 
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
 
 }

@@ -1915,6 +1915,12 @@ private void setLineMinistryObservationsToForm(AmpActivityVersion activity, Edit
 		int index = 0;
 		while (compIterator.hasNext()) {
 			Components components = (Components) compIterator.next();
+
+            if (components.getType_Id() != null) {
+                AmpComponentType type = ComponentsUtil.getComponentTypeById(components.getType_Id());
+                components.setTypeName(type.getName());
+            }
+
 			List list = null;
 			if (components.getCommitments() != null) {
 				list = new ArrayList(components.getCommitments());

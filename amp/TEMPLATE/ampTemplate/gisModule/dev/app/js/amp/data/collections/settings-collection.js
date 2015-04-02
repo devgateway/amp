@@ -11,6 +11,7 @@ module.exports = Backbone.Collection
 
   serialize: function() {
     var tmpJSON = {};
+    var self = this;
     this.each(function(setting) {
       if (setting.get('options')) {
 
@@ -18,6 +19,9 @@ module.exports = Backbone.Collection
         if (!setting.get('selected')) {
           setting.set('selected', setting.get('defaultId'));
         }
+
+        /* TODO: If selectedName is getting persisted in share url, consider removing here*/
+        self.setSettingSelectedName(setting);
 
         // find the match.
         var match = _.find(setting.get('options'), function(option) {
@@ -44,15 +48,43 @@ module.exports = Backbone.Collection
     return deferred;
   },
 
+  /* Make the server-side localized name of the chosen setting value
+   *   available as selectedName on setting model
+
+   * e.g. selected is: Planned Disbursements,
+   *      so then selectedName is: Debursări planificate
+   * e.g. selected is: EUR,
+   *      so then selectedName is: Euro
+   */
+  setSettingSelectedName: function (setting) {
+    if (setting && setting.get('options')) {
+      var settingObject = _(setting.get('options'))
+            .findWhere({
+              id: setting.get('selected')
+            });
+
+      var translatedSetting = settingObject.name;
+      setting.set('selectedName', translatedSetting );
+    }
+  }
+
   deserialize: function(jsonBlob) {
     var self = this;
     if (jsonBlob) {
       _.each(jsonBlob, function(v, k) {
         self.get(k).set('selected', v);
+
+        /* also stash translated item's name */
+        var setting = self.get(k);
+        self.setSettingSelectedName(setting);
+
       });
     } else {
       this.each(function(setting) {
         setting.set('selected', setting.get('defaultId'));
+        self.setSettingSelectedName(setting);
+        }
+
       });
     }
   }

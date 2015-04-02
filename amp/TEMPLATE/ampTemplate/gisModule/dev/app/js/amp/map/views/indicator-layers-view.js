@@ -120,7 +120,7 @@ module.exports = Backbone.View.extend({
       self.app.data.settings.load().then(function() {
         var fundingTypeString = "";
         if ( self.app.data.settings.get('0') ) {
-          fundingTypeString = ['<strong>',self.app.data.settings.get('0').get('selected'),': ','</strong>'].join('');
+          fundingTypeString = ['<strong>',self.app.data.settings.get('0').get('selectedName'),': ','</strong>'].join('');
         }
         var ampFormatter = new util.DecimalFormat(self.app.data.settings.get('number-format').get('name'));
         layer.bindPopup('<strong>' + feature.properties.name + '</strong>' +

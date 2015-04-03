@@ -145,13 +145,7 @@
 <module:display name="Aid Effectiveness Indicators Manager" parentModule="ADMINISTRATIVE SECTION"></module:display>
 
 <feature:display name="Activity" module="M & E"></feature:display> 
-<feature:display name="Actual Commitments" module="Measures"></feature:display>
-<feature:display name="Real Commitments" module="Measures"></feature:display> 
-<feature:display name="Real MTEFs" module="Measures"></feature:display>
-<feature:display name="Actual Disbursement Orders Measure" module="Measures"></feature:display> 
-<feature:display name="Actual Disbursements" module="Measures"></feature:display> 
-<feature:display name="Actual Expenditures" module="Measures"></feature:display>
-<feature:display name="Annual Proposed Project Cost" module="Measures"></feature:display> 
+
 <feature:display name="AddMessageButton" module="Messages"></feature:display> 
 <feature:display name="Admin - Component Type" module="Components"></feature:display> 
 <feature:display name="Admin - Component" module="Components"></feature:display> 
@@ -215,9 +209,6 @@
 <feature:display name="Paris Indicators Targets Manager" module="Admin Home"></feature:display> 
 <feature:display name="Paris Indicators" module="Paris Indicators"></feature:display> 
 <feature:display name="Physical Progress" module="Components"></feature:display> 
-<feature:display name="Planned Commitments" module="Measures"></feature:display> 
-<feature:display name="Planned Disbursements" module="Measures"></feature:display> 
-<feature:display name="Planned Expenditures" module="Measures"></feature:display> 
 <feature:display name="Portfolio Dashboard" module="M & E"></feature:display> 
 <feature:display name="Add Pledge Button" module="Pledges"></feature:display> 
 <feature:display name="Pledge Donor Information" module="Pledges"></feature:display> 
@@ -244,8 +235,7 @@
 <feature:display name="Sector Ministry Contact Information" module="Contact Information"></feature:display> 
 <feature:display name="Table Widgets" module="WIDGETS"></feature:display> 
 <feature:display name="Target Value" module="PI Reports"></feature:display> 
-<feature:display name="Total Commitments" module="Measures"></feature:display> 
-<feature:display name="Undisbursed Balance" module="Measures"></feature:display> 
+
 <feature:display name="User Help" module="HELP"></feature:display> 
 <feature:display name="Web Resources" module="Document"></feature:display> 
 <feature:display name="Widget Places" module="WIDGETS"></feature:display> 
@@ -877,6 +867,32 @@
 <field:display name="Measure Expenditure" feature="GIS DASHBOARD"></field:display>
 
 <feature:display name="Use icons for Sectors in Project List" module="/GIS"></feature:display>
+
+<feature:display name="Undisbursed Balance" module="Measures"></feature:display>
+<feature:display name="Total Commitments" module="Measures"></feature:display>
+<feature:display name="Uncommitted Balance" module="Measures"></feature:display>
+<feature:display name="Execution Rate" module="Measures"></feature:display>
+<feature:display name="Disbursment Ratio" module="Measures"></feature:display>
+<feature:display name="Prior Actual Disbursements" module="Measures"></feature:display>
+<feature:display name="Previous Month Disbursements" module="Measures"></feature:display>
+<feature:display name="Cumulated Disbursements" module="Measures"></feature:display>"
+<feature:display name="Consumption Rate" module="Measures"></feature:display>"
+<feature:display name="Selected Year Planned Disbursements" module="Measures"></feature:display>
+<feature:display name="Actual Pledge" module="Measures"></feature:display>
+<feature:display name="Percentage of Disbursement" module="Measures"></feature:display>
+<feature:display name="Pipeline Commitments" module="Measures"></feature:display>
+<feature:display name="Planned Disbursements - Expenditure" module="Measures"></feature:display>
+<feature:display name="Actual Disbursements - Recurrent" module="Measures"></feature:display>
+<feature:display name="Real Disbursements" module="Measures"></feature:display>
+<feature:display name="pipeline Estimated Disbursements" module="Measures"></feature:display>
+<feature:display name="pipeline Release of Funds" module="Measures"></feature:display>
+<feature:display name="Official Development Aid Commitments" module="Measures"></feature:display>
+<feature:display name="Bilateral SSC Commitments" module="Measures"></feature:display>
+<feature:display name="Triangular SSC Commitments" module="Measures"></feature:display>
+<feature:display name="Commitment Gap" module="Measures"></feature:display>
+<feature:display name="Annual Proposed Project Cost" module="Measures"></feature:display>
+<feature:display name="Real MTEFs" module="Measures"></feature:display>
+<feature:display name="Real Commitments" module="Measures"></feature:display>
 
 <!-- new gis -->
 <module:display name="Public GIS" parentModule="PUBLIC VIEW"></module:display>

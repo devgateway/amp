@@ -20,7 +20,7 @@ public final class AmountCell extends ReportCell {
 
 	protected static String format(DecimalFormat formatter, Object value) {
 		if (formatter == null || value == null) 
-			return String.valueOf(value);
+			return value == null ? "" : String.valueOf(value);
 		return (formatter).format(value instanceof BigDecimal ? ((BigDecimal)value).doubleValue() : (Double)value);
 	}
 }

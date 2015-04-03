@@ -95,7 +95,7 @@ public class ComponentReportsTests extends MondrianReportsTestCase {
 	    .withContents("Project Title", "Report Totals", "Component Funding Organization", "", "Actual Commitments", "2 150", "Actual Disbursements", "850")
 	    .withChildren(
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "activity with funded components", "Component Funding Organization", "UNDP, Undefined, World Bank", "Actual Commitments", "2 150", "Actual Disbursements", "850"));
+	          .withContents("Project Title", "activity with funded components", "Component Funding Organization", "UNDP, World Bank", "Actual Commitments", "2 150", "Actual Disbursements", "850"));
 
 		runMondrianTestCase("AMP-18720-component-funding-org",
 			Arrays.asList("activity with components", "activity-with-unfunded-components", "activity with funded components", "crazy funding 1", "Eth Water"),

@@ -4,11 +4,14 @@
 package org.dgfoundation.amp.newreports;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
 
 /**
  * Stores a report configuration by implementing {@link ReportSpecification} and defines all data required to generate a report. 
@@ -18,11 +21,10 @@ import org.dgfoundation.amp.ar.ArConstants;
 public class ReportSpecificationImpl implements ReportSpecification {
 	private int reportType;	
 	private String reportName = null;
-	private Set<ReportColumn> columns = null;
-	private Set<String> columnNames = null;
-	private Set<ReportColumn> dummyColumns = null;
-	private Set<ReportColumn> hierarchies = null;
-	private List<ReportMeasure> measures = null;
+	private Set<ReportColumn> columns = new LinkedHashSet<ReportColumn>();
+	private Set<ReportColumn> dummyColumns = new LinkedHashSet<ReportColumn>();
+	private Set<ReportColumn> hierarchies = new LinkedHashSet<ReportColumn>();
+	private List<ReportMeasure> measures = new ArrayList<ReportMeasure>();
 	private ReportFilters filters = null;
 	private ReportSettings settings = null;
 	private List<SortingInfo> sorters = null;
@@ -57,30 +59,15 @@ public class ReportSpecificationImpl implements ReportSpecification {
 
 	@Override
 	public Set<ReportColumn> getColumns() {
-		if (columns == null) {
-			columns = new LinkedHashSet<ReportColumn>();
-		}	
 		return columns;
-	}
-	
-	/**
-	 * Configures the columns set.
-	 * Refer to {@link #getColumns()} for more details
-	 */
-	public void setColumns(Set<ReportColumn> columns) {
-		this.columns = columns;
-		this.getColumnNames().clear();
-		for (ReportColumn rc : columns) {
-			columnNames.add(rc.getColumnName());
-		}
 	}
 	
 	@Override
 	public Set<String> getColumnNames() {
-		if (columnNames == null) {
-			columnNames = new LinkedHashSet<String>();
-		}
-		return columnNames;
+		LinkedHashSet<String> res = new LinkedHashSet<String>();
+		for(ReportColumn col:columns)
+			res.add(col.getColumnName());
+		return Collections.unmodifiableSet(res);
 	}
 
 	/**
@@ -90,49 +77,38 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	 * @param column - {@link ReportColumn}  
 	 */
 	public void addColumn(ReportColumn column) {
-		if (columns == null) {
-			columns = new LinkedHashSet<ReportColumn>();
-		}
-		this.columns.add(column);
-		this.getColumnNames().add(column.getColumnName());
+		addColumn(column, false);;
 	}
-
+	
 	@Override
 	public Set<ReportColumn> getDummyColumns() {
-		if (dummyColumns == null) {
-			dummyColumns = new LinkedHashSet<ReportColumn>();
+		return Collections.unmodifiableSet(dummyColumns);
+	}
+	
+	public void addColumn(ReportColumn dummyColumn, boolean dummy) {
+		this.columns.add(dummyColumn);
+		if (dummy) {
+			this.dummyColumns.add(dummyColumn);
 		}
-		return dummyColumns;
 	}
 
 	/**
-	 * @param dummyColumns the dummyColumns to set
+	 * remove the dummyColumns from the columns list; also clear {@link #dummyColumns}
 	 */
-	public void setDummyColumns(Set<ReportColumn> dummyColumns) {
-		this.dummyColumns = dummyColumns;
+	@Override public void removeDummyColumns() {
+		Iterator<ReportColumn> columnsIter = columns.iterator();
+		while(columnsIter.hasNext()) {
+			ReportColumn col = columnsIter.next();
+			if (dummyColumns.contains(col)) columnsIter.remove();
+		}
+		dummyColumns.clear();
 	}
 	
-	public void addDummyColumn(ReportColumn dummyColumn) {
-		this.getDummyColumns().add(dummyColumn);
-	}
-
 	@Override
 	public List<ReportMeasure> getMeasures() {
-		if (measures == null) {
-			measures = new ArrayList<ReportMeasure>();
-		}
 		return measures;
 	}
-	
-	/**
-	 * Configures measures list. 
-	 * Refer to {@link #getMeasures()} for more details
-	 * @param measures
-	 */
-	public void setMeasures(List<ReportMeasure> measures) {
-		this.measures = measures;
-	}
-	
+		
 	/**
 	 * Adds a measure to the measure list.
 	 * Order is important, i.e. first measure added will be the first one displayed.
@@ -140,16 +116,11 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	 * @param measure - {@link ReportMeasure}
 	 */
 	public void addMeasure(ReportMeasure measure) {
-		if (this.measures == null) {
-			this.measures = new ArrayList<ReportMeasure>();
-		}
 		this.measures.add(measure);
 	}
 
 	@Override
 	public Set<ReportColumn> getHierarchies() {
-		if (hierarchies == null)
-			hierarchies = new LinkedHashSet<ReportColumn>();
 		return hierarchies;
 	}
 	
@@ -165,7 +136,8 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	 * @param hierarchies
 	 */
 	public void setHierarchies(Set<ReportColumn> hierarchies) {
-		this.hierarchies = hierarchies;
+		this.hierarchies.clear();
+		this.hierarchies.addAll(hierarchies);
 	}
 
 	@Override
@@ -353,4 +325,38 @@ public class ReportSpecificationImpl implements ReportSpecification {
     public void setAlsoShowPledges(boolean alsoShowPledges) {
     	this.alsoShowPledges = alsoShowPledges;
     }
+    
+	/**
+	 * 1. checks that every column specified in "hierarchies" is also present in "columns"
+	 * 2. brings the columns specified as hierarchies to front
+	 * 
+	 * Somehow hacky, but faster to code than redoing the whole rest of the code to support input in any order. Sorry, Nadia :=)  
+	 * 
+	 * Nadia's note: I'm glad that you made up your mind to not change the rest of the code :P
+	 */
+	public void reorderColumnsByHierarchies() {
+		//if (getHierarchies() == null) return; // nothing to do
+		LinkedHashSet<ReportColumn> newCols = new LinkedHashSet<>();
+		for(ReportColumn hier:getHierarchies()) {
+			if (!columns.contains(hier))
+				throw new RuntimeException("column specified as hierarchy, but not as column: " + hier);
+			newCols.add(hier);
+		}
+		for(ReportColumn col:columns) {
+			if (!newCols.contains(col))
+				newCols.add(col);
+		}
+		this.columns = newCols;
+		
+		/**
+		 * ugly workaround for AMP-18558 when the report has no hierarchies - a saiku bug which is easier to workaround than fix
+		 */
+		if (getColumns().isEmpty() && getHierarchies().isEmpty()) {
+			ReportColumn constantDummyColumn = new ReportColumn(ColumnConstants.CONSTANT);
+			getColumns().add(constantDummyColumn);
+			getHierarchies().add(constantDummyColumn);
+			setCalculateRowTotals(false);
+			setCalculateColumnTotals(true);
+		}
+	}
 }

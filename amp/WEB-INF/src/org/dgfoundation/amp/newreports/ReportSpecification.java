@@ -40,6 +40,7 @@ public interface ReportSpecification {
 	public Set<String> getColumnNames();
 	
 	public Set<ReportColumn> getDummyColumns();
+	public void removeDummyColumns();
 	
 	/**
 	 * @return the set of measures to use. <strong>The order of iteration of the set is meaningful</strong> - so please either use a @link {@link LinkedHashSet} or a @link {@link SortedSet} 

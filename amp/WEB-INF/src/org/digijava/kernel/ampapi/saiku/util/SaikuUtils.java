@@ -229,16 +229,16 @@ public class SaikuUtils {
 		return retVal;
 	}
 	
-	public static AbstractBaseCell[][] removeCollumns(AbstractBaseCell[][] cellMatrix, SortedSet<Integer> leafColumnsNumberToRemove) {
+	public static AbstractBaseCell[][] removeColumns(AbstractBaseCell[][] cellMatrix, SortedSet<Integer> leafColumnsNumberToRemove) {
 		if (cellMatrix == null || cellMatrix.length == 0 || leafColumnsNumberToRemove.size() == 0) return cellMatrix; 
 		
 		AbstractBaseCell[][] newCellMatrix = new AbstractBaseCell[cellMatrix.length][cellMatrix[0].length - leafColumnsNumberToRemove.size()];
 		for (int i = 0; i < cellMatrix.length; i++) 
-			newCellMatrix[i] = removeCollumnsInArray(cellMatrix[i], leafColumnsNumberToRemove);
+			newCellMatrix[i] = removeColumnsInArray(cellMatrix[i], leafColumnsNumberToRemove);
 		return newCellMatrix;
 	}
 	
-	public static <T> T[] removeCollumnsInArray(T[] cellArray, SortedSet<Integer> leafColumnsNumberToRemove) {
+	public static <T> T[] removeColumnsInArray(T[] cellArray, SortedSet<Integer> leafColumnsNumberToRemove) {
 		if (cellArray == null || cellArray.length == 0 || leafColumnsNumberToRemove.size() == 0) return cellArray;
 		
 		@SuppressWarnings("unchecked")
@@ -269,7 +269,7 @@ public class SaikuUtils {
 			for(TotalNode totalNode : totalLists) {
 				if (totalNode.getTotalGroups() != null && totalNode.getTotalGroups().length > 0) {
 					for (int i = 0; i < totalNode.getTotalGroups().length; i++) {
-						totalNode.getTotalGroups()[i] = removeCollumnsInArray(totalNode.getTotalGroups()[i], leafColumnsNumberToRemove);
+						totalNode.getTotalGroups()[i] = removeColumnsInArray(totalNode.getTotalGroups()[i], leafColumnsNumberToRemove);
 					}
 				}
 			}
@@ -345,8 +345,8 @@ public class SaikuUtils {
 	 */
 	public static void removeColumns(CellDataSet cellDataSet, SortedSet<Integer> leafColumnsNumberToRemove) {
 		// update headers and body entries
-		cellDataSet.setCellSetHeaders(SaikuUtils.removeCollumns(cellDataSet.getCellSetHeaders(), leafColumnsNumberToRemove));
-		cellDataSet.setCellSetBody(SaikuUtils.removeCollumns(cellDataSet.getCellSetBody(), leafColumnsNumberToRemove));
+		cellDataSet.setCellSetHeaders(SaikuUtils.removeColumns(cellDataSet.getCellSetHeaders(), leafColumnsNumberToRemove));
+		cellDataSet.setCellSetBody(SaikuUtils.removeColumns(cellDataSet.getCellSetBody(), leafColumnsNumberToRemove));
 		cellDataSet.setWidth(cellDataSet.getWidth() - leafColumnsNumberToRemove.size());
 	}
 	

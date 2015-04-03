@@ -2,9 +2,6 @@ package org.digijava.module.aim.util;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,7 +12,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -25,6 +21,9 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.dgfoundation.amp.Util;
@@ -50,7 +49,6 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
 import org.hibernate.NonUniqueResultException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 public class DynLocationManagerUtil {
 	private static Logger logger = Logger
@@ -957,12 +955,9 @@ public class DynLocationManagerUtil {
 	};
 
     public static ErrorCode importExcelFile(InputStream inputStream, Option option) throws AimException {
-        POIFSFileSystem fsFileSystem = null;
         try {
-            fsFileSystem = new POIFSFileSystem(inputStream);
-            HSSFWorkbook workBook = new HSSFWorkbook(fsFileSystem);
-
-            HSSFSheet hssfSheet = workBook.getSheetAt(0);
+            Workbook workBook = WorkbookFactory.create(inputStream);
+            Sheet hssfSheet = workBook.getSheetAt(0);
             Row hssfRow = hssfSheet.getRow(0);
 
             int physicalNumberOfCells = hssfRow.getPhysicalNumberOfCells();

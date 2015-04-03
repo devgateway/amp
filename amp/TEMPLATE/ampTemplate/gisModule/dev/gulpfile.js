@@ -41,7 +41,6 @@ var watchify = require('watchify');
 var gulp = require('gulp');
 var g = require('gulp-load-plugins')();
 var gulpi18nScraper = require('gulp-i18n-scraper');
-var mold = require('mold-source-map');
 
 var paths = {
   app: {
@@ -105,8 +104,6 @@ function _bundlify(ifyer, entry, destFolder, destName) {
   var rebundle = function() {
     g.util.log('rebrowserifying ' + entry + '....');
     return bundler.bundle({debug: true})
-    /* Fix sourcemaps in firefox (not in amp-filters though) https://github.com/substack/node-browserify/issues/681#issuecomment-39530724 */
-      .pipe(mold.transformSourcesRelativeTo(__dirname)) 
       .on('error', function(e) { g.util.log('Browserify error: ', e); })
       .pipe(source(destName))
       .pipe(gulp.dest(destFolder));

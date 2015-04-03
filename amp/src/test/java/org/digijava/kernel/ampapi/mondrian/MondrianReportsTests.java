@@ -197,56 +197,7 @@ public class MondrianReportsTests extends AmpTestCase {
 		HttpServletRequest test = TLSUtils.getRequest();
 		System.out.println(test);
 	}
-	
-	public void testAmpReportToReportSpecification() {
-		ReportSpecificationImpl spec = getReportSpecification("NadiaMondrianTest");
-		generateAndValidate(spec, true);
-	}
-	
-	public void testGenerateReportAsSaikuCellDataSet() {
-		ReportSpecificationImpl spec = getReportSpecification("NadiaMondrianTest");
-		generateAndValidate(spec, true, true);
-	}
-	
-	public void testReportPagination() {
-		ReportSpecificationImpl spec = getReportSpecification("NadiaMondrianTest");
-		GeneratedReport report = generateAndValidate(spec, true, false);
-		ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
-		ReportArea page0_10 = ReportPaginationUtils.getReportArea(areasDFArray, 0, 10);
-		//doesn't work to print
-		Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls().serializeSpecialFloatingPointValues().create();
-		String res = gson.toJson(page0_10);
-		System.out.println(res);
-	}
-	
-	private ReportSpecificationImpl getReportSpecification(String reportName) {
-		//AmpReports report = (AmpReports) PersistenceManager.getSession().get(AmpReports.class, 1018L);//id is from Moldova DB, TODO: update for tests db 
-		AmpReports report = ReportTestingUtils.loadReportByName(reportName);
-
-		org.apache.struts.mock.MockHttpServletRequest mockRequest = new org.apache.struts.mock.MockHttpServletRequest(new org.apache.struts.mock.MockHttpSession());
-		mockRequest.setAttribute("ampReportId", report.getId().toString());
-		TLSUtils.populate(mockRequest);
-		ReportContextData.createWithId(report.getId().toString(), true);
-
-		ReportSpecificationImpl spec = null;
-		try {
-			spec = AmpReportsToReportSpecification.convert(report);
-		} catch (AMPException e) {
-			System.err.println(e.getMessage());
-		}
-		assertNotNull(spec);
 		
-		//TODO: remove
-		Set<ReportColumn> hierarchies = new LinkedHashSet<ReportColumn>();
-		Iterator<ReportColumn> iter = spec.getColumns().iterator();
-		hierarchies.add(iter.next());
-		//hierarchies.add(iter.next());
-		//hierarchies.add(iter.next());
-		//spec.setHierarchies(hierarchies);
-		//end to remove
-		return spec;
-	}
-	
 	public void testHeavyQuery() {
 		long start = System.currentTimeMillis();
 		ReportSpecificationImpl spec = new ReportSpecificationImpl("testHeavyQuery", ArConstants.DONOR_TYPE);

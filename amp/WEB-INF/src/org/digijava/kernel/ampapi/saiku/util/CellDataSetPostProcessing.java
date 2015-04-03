@@ -57,18 +57,13 @@ public class CellDataSetPostProcessing {
 		
 		cellDataSet.setLeftOffset(cellDataSet.getLeftOffset() - dummyNo);
 		cellDataSet.setWidth(cellDataSet.getWidth() - dummyNo);
-		spec.getColumnNames().clear();
-		Set<ReportColumn> newColumns = new LinkedHashSet<ReportColumn>(spec.getColumns().size() - dummyNo);
 		ReportColumn dummyHierarchy = null;
 		SortedSet<Integer> dummyColumnsIds = new TreeSet<Integer>();
 		SortedSet<Integer> dummyColumnsIdsIfInternalIdUsed = new TreeSet<Integer>();
 		int currentId = 0;
 		// collect real columns only
 		for (ReportColumn col : spec.getColumns()) { 
-			if (!spec.getDummyColumns().contains(col)) {
-				newColumns.add(col);
-				spec.getColumnNames().add(col.getColumnName());
-			} else {
+			if (spec.getDummyColumns().contains(col)) {
 				dummyColumnsIds.add(currentId);
 				// remember the hierarchy used by internal id
 				if (ColumnConstants.INTERNAL_USE_ID.equals(col.getColumnName())) {
@@ -94,14 +89,12 @@ public class CellDataSetPostProcessing {
 		}
 		removeDummyColumnsFromCellDataSet(dummyColumnsIds);
 		
-		spec.getColumns().clear();
-		spec.getDummyColumns().clear();
-		spec.getColumns().addAll(newColumns);
+		spec.removeDummyColumns();
 	}
 	
 	protected void removeDummyColumnsFromCellDataSet(SortedSet<Integer> dummyColumnsIds) {
-		cellDataSet.setCellSetHeaders(SaikuUtils.removeCollumns(cellDataSet.getCellSetHeaders(), dummyColumnsIds));
-		cellDataSet.setCellSetBody(SaikuUtils.removeCollumns(cellDataSet.getCellSetBody(), dummyColumnsIds));
+		cellDataSet.setCellSetHeaders(SaikuUtils.removeColumns(cellDataSet.getCellSetHeaders(), dummyColumnsIds));
+		cellDataSet.setCellSetBody(SaikuUtils.removeColumns(cellDataSet.getCellSetBody(), dummyColumnsIds));
 	}
 	
 }

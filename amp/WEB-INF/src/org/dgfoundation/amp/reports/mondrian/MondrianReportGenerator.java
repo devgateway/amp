@@ -160,45 +160,14 @@ public class MondrianReportGenerator implements ReportExecutor {
 		}
 
 	}
-	/**
-	 * 1. checks that every column specified in "hierarchies" is also present in "columns"
-	 * 2. brings the columns specified as hierarchies to front
-	 * 
-	 * Somehow hacky, but faster to code than redoing the whole rest of the code to support input in any order. Sorry, Nadia :=)  
-	 * 
-	 * Nadia's note: I'm glad that you made up your mind to not change the rest of the code :P
-	 */
-	protected void reorderColumnsByHierarchies(ReportSpecification spec) {
-		if (spec.getHierarchies() == null) return; // nothing to do
-		LinkedHashSet<ReportColumn> newCols = new LinkedHashSet<>();
-		for(ReportColumn hier:spec.getHierarchies()) {
-			if (!spec.getColumns().contains(hier))
-				throw new RuntimeException("column specified as hierarchy, but not as column: " + hier);
-			newCols.add(hier);
-		}
-		for(ReportColumn col:spec.getColumns()) {
-			if (!newCols.contains(col))
-				newCols.add(col);
-		}
-		spec.getColumns().clear();
-		spec.getColumns().addAll(newCols);
-		
-		/**
-		 * ugly workaround for AMP-18558 when the report has no hierarchies - a saiku bug which is easier to workaround than fix
-		 */
-		if (spec.getColumns().isEmpty() && spec.getHierarchies().isEmpty()) {
-			ReportColumn constantDummyColumn = new ReportColumn(ColumnConstants.CONSTANT);
-			spec.getColumns().add(constantDummyColumn);
-			spec.getHierarchies().add(constantDummyColumn);
-			((ReportSpecificationImpl) spec).setCalculateRowTotals(false);
-			((ReportSpecificationImpl) spec).setCalculateColumnTotals(true);
-		}
-	}
 	
 	@Override
-	public GeneratedReport executeReport(ReportSpecification spec) throws AMPException {
+	public GeneratedReport executeReport(ReportSpecification specOrig) throws AMPException {
 		try {
-			reorderColumnsByHierarchies(spec);
+			//TODO: current limitation: now we only accept ReportSpecificationImpl as input because of the in-place modifications done to the structure
+			// this should be changed in the bright future
+			ReportSpecificationImpl spec = (ReportSpecificationImpl) specOrig;
+			spec.reorderColumnsByHierarchies();
 			CellDataSetToGeneratedReport.counts.clear();
 			stats = new ReportGenerationStats();
 			CellDataSet cellDataSet = generateReportAsSaikuCellDataSet(spec);
@@ -256,11 +225,11 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 * @return {@link CellDataSet}
 	 * @throws AMPException
 	 */
-	private CellDataSet generateReportAsSaikuCellDataSet(final ReportSpecification spec) throws AMPException {
+	private CellDataSet generateReportAsSaikuCellDataSet(final ReportSpecificationImpl spec) throws AMPException {
 		//reorderColumnsByHierarchies(spec);
 		init(spec);
 		addDummyColumns(spec);
-		reorderColumnsByHierarchies(spec);
+		spec.reorderColumnsByHierarchies();
 		AmpMondrianSchemaProcessor.registerReport(spec, environment);
 		CellDataSet cellDataSet = null;
 		ValueWrapper<Boolean> forcedOut = new ValueWrapper<Boolean>(false);
@@ -365,21 +334,19 @@ public class MondrianReportGenerator implements ReportExecutor {
 	 *  Adds a dummy hierarchy by internal id (which is entity id) to group by non-hierarchical columns,
 	 *  but only if there are non-hierarchical columns
 	 */
-	private void addDummyColumns(ReportSpecification spec) {
+	private void addDummyColumns(ReportSpecificationImpl spec) {
 		//if we have more columns than hierarchies, then add the dummy hierarchy to group non-hierarchical columns by it
 		if (spec.getHierarchies().size() < spec.getColumns().size()) {
 			ReportColumn internalId = new ReportColumn(ColumnConstants.INTERNAL_USE_ID);
-			spec.getColumns().add(internalId);
 			spec.getHierarchies().add(internalId);
-			spec.getDummyColumns().add(internalId);
+			spec.addColumn(internalId, true);
 		}
 		
 		for (ReportMeasure rm : spec.getMeasures()) {
 			String dependency = MondrianMapping.dependency.get(rm.getMeasureName());
 			if (dependency != null && !spec.getColumnNames().contains(dependency)) {
 				ReportColumn rc = new ReportColumn(dependency);
-				((ReportSpecificationImpl) spec).addColumn(rc);
-				((ReportSpecificationImpl) spec).addDummyColumn(rc);
+				spec.addColumn(rc, true);
 			}
 		}
 	}

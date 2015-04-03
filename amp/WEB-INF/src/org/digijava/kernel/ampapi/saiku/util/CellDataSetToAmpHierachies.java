@@ -208,7 +208,7 @@ public class CellDataSetToAmpHierachies {
 		//remove the dummy hierarchy from headers
 		SortedSet<Integer> columnsToRemove = new TreeSet<Integer>();
 		columnsToRemove.add(spec.getHierarchies().size() - 1); //to remove the last dummy hierarchy
-		cellDataSet.setCellSetHeaders(SaikuUtils.removeCollumns(cellDataSet.getCellSetHeaders(), columnsToRemove));
+		cellDataSet.setCellSetHeaders(SaikuUtils.removeColumns(cellDataSet.getCellSetHeaders(), columnsToRemove));
 		
 		//update row totals to remove unneeded totals
 		if (spec.isCalculateRowTotals()) {
@@ -235,7 +235,7 @@ public class CellDataSetToAmpHierachies {
 		for (IntRange range : rowsRangesToDelte) {
 			for (int i = start; i < range.getMinimumInteger(); i++, newDataRowId ++ ) {
 				//remove dummy hierarchy
-				newData[newDataRowId] = SaikuUtils.removeCollumnsInArray(cellDataSet.getCellSetBody()[i], columnsToRemove);
+				newData[newDataRowId] = SaikuUtils.removeColumnsInArray(cellDataSet.getCellSetBody()[i], columnsToRemove);
 				
 				//update the measures totals
 				if (total != null) {

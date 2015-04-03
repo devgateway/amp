@@ -1,7 +1,13 @@
 package org.digijava.kernel.ampapi.mondrian.util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.AlgoUtils;
@@ -21,6 +27,10 @@ import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
  *
  */
 public class FactTableFiltering {
+	public static final String DATE_FILTERS_TAG_START = "@@date-filters-start@@";
+	public static final String DATE_FILTERS_TAG_END = "@@date-filters-end@@";
+	public static final String DATE_FILTERS_PATTERN = DATE_FILTERS_TAG_START + ".*" + DATE_FILTERS_TAG_END;
+	
 	protected final MondrianReportFilters mrf;
 	
 	public FactTableFiltering(MondrianReportFilters mrf) {
@@ -44,6 +54,8 @@ public class FactTableFiltering {
 			}
 
 			ActivityFilter flt = new ActivityFilter("date_code");
+			// tag date filters section to reuse "all filters without date filters" criteria in other queries 
+			subquery.append(DATE_FILTERS_TAG_START);
 			// process the funding-date filter(s)
 			for(Entry<ReportElement, List<FilterRule>> filterElement:mrf.getFilterRules().entrySet())
 				if (filterElement.getKey().type.equals(ReportElement.ElementType.DATE)) {
@@ -51,6 +63,7 @@ public class FactTableFiltering {
 					if (dateQuery != null && !dateQuery.isEmpty())
 						subquery.append(dateQuery);
 				}
+			subquery.append(DATE_FILTERS_TAG_END);
 		}
 		String ret = subquery.toString().trim();
 		long delta = System.currentTimeMillis() - start;

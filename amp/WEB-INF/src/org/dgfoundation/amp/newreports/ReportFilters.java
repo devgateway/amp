@@ -10,5 +10,7 @@ import java.util.Map;
  */
 public interface ReportFilters {
 	
-	public Map<ReportElement, List<FilterRule>> getFilterRules();
+	Map<ReportElement, List<FilterRule>> getFilterRules();
+	
+	Integer getComputedYear();
 }

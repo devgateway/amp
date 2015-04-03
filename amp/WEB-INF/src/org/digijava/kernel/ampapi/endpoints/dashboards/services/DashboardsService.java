@@ -108,6 +108,26 @@ public class DashboardsService {
 			title = TranslatorWorker.translateText(DashboardConstants.TOP_DONOR_AGENCIES);
 			name = DashboardConstants.TOP_DONOR_AGENCIES;
 			break;
+		case "RO":
+			column = MoConstants.RESPONSIBLE_AGENCY;
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_RESPONSIBLE_ORGS);
+			name = DashboardConstants.TOP_RESPONSIBLE_ORGS;
+			break;
+		case "BA":
+			column = MoConstants.BENEFICIARY_AGENCY;
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_BENEFICIARY_ORGS);
+			name = DashboardConstants.TOP_BENEFICIARY_ORGS;
+			break;
+		case "IA":
+			column = MoConstants.IMPLEMENTING_AGENCY;
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_IMPLEMENTING_ORGS);
+			name = DashboardConstants.TOP_IMPLEMENTING_ORGS;
+			break;
+		case "EA":
+			column = MoConstants.EXECUTING_AGENCY;
+			title = TranslatorWorker.translateText(DashboardConstants.TOP_EXECUTING_ORGS);
+			name = DashboardConstants.TOP_EXECUTING_ORGS;
+			break;
 		case "RE":
 			column = MoConstants.H_REGIONS;
 			title = TranslatorWorker.translateText(DashboardConstants.TOP_REGIONS);

@@ -34,6 +34,10 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 				add("Top Donor Group");
 				add("Top Regions");
 				add("Top Donors");
+				add("Responsible Organizations");
+				add("Implementing Agencies");
+				add("Beneficiary Agencies");
+				add("Executing Agencies");
 			}});
 	}};
 	
@@ -45,6 +49,10 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 		add("/Top Regions");
 		add("/Top Donor Group");
 		add("/Top Sectors");
+		add("/Responsible Organizations");
+		add("/Implementing Agencies");
+		add("/Beneficiary Agencies");
+		add("/Executing Agencies");
 	}};
 	
 	@SuppressWarnings("serial")
@@ -62,7 +70,11 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 		put("/Top Donors", "Top Donors");
 		put("/Top Regions", "Top Regions");
 		put("/Top Donor Group", "Top Donor Group");
+		put("/Responsible Organizations", "Responsible Organizations");
 		put("/Top Sectors", "Top Sectors");
+		put("/Implementing Agencies", "Implementing Agencies");
+		put("/Beneficiary Agencies", "Beneficiary Agencies");
+		put("/Executing Agencies", "Executing Agencies");
 		  
 	}};
 	
@@ -120,7 +132,12 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 		currentlyVisible.add("/Top Donors");
 		currentlyVisible.add("/Top Regions");
 		currentlyVisible.add("/Top Donor Group");
+		currentlyVisible.add("/Responsible Organizations");
 		currentlyVisible.add("/Top Sectors");
+		currentlyVisible.add("/Beneficiary Agencies");
+		currentlyVisible.add("/Implementing Agencies");
+		currentlyVisible.add("/Executing Agencies");
+		
 		return currentlyVisible;
 	}
 

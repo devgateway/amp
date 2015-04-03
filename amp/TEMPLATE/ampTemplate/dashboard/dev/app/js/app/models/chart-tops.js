@@ -42,6 +42,9 @@ module.exports = ChartModel.extend({
     }
 
     this.localizedOthers = this.localizedLookup[this.chartName + '-others'];
+    if (this.localizedOthers === undefined) {
+    	console.error('missing translation in .json file: ' + this.chartName + '-others');
+    }
 
     var values = _(data.values.slice()).map(function(v) {
       var cleanName = v.name.replace(/[ :.]/g, '');

@@ -78,6 +78,26 @@ module.exports = BackboneDash.View.extend({
   	          { name: 'Funding Type' },
 	          { app: this.app, url: '/rest/dashboard/ftype' }));
     }
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Responsible Organizations'})) {
+    	col.push(new TopsChart(
+  	          { name: 'Responsible Organizations' },
+	          { app: this.app, url: '/rest/dashboard/tops/ro' }));
+    }
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Beneficiary Agencies'})) {
+    	col.push(new TopsChart(
+  	          { name: 'Beneficiary Agencies' },
+	          { app: this.app, url: '/rest/dashboard/tops/ba' }));
+    }
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Executing Agencies'})) {
+    	col.push(new TopsChart(
+  	          { name: 'Executing Agencies' },
+	          { app: this.app, url: '/rest/dashboard/tops/ea' }));
+    }
+    if(_.find(enabledChartsFM.models[0].get('DASHBOARDS'), function(item) {return item ===  'Implementing Agencies'})) {
+    	col.push(new TopsChart(
+  	          { name: 'Implementing Agencies' },
+	          { app: this.app, url: '/rest/dashboard/tops/ia' }));
+    }
        
     this.charts = new ChartsView({
       app: this.app,

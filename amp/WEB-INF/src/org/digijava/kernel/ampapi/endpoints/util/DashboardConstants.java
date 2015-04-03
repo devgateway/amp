@@ -15,6 +15,10 @@ public class DashboardConstants {
 	public static final String AID_PREDICTABILITY = "Aid Predictability";
 	public static final String FUNDING_TYPE = "Funding Type";
 	public static final String TOP_DONOR_GROUPS = "Top Donor Groups";
+	public static final String TOP_RESPONSIBLE_ORGS = "Responsible Organizations";
+	public static final String TOP_BENEFICIARY_ORGS = "Beneficiary Agencies";
+	public static final String TOP_IMPLEMENTING_ORGS = "Implementing Agencies";
+	public static final String TOP_EXECUTING_ORGS = "Executing Agencies";
 
 	// Settings.
 	public static final String DASHBOARD_DEFAULT_MAX_YEAR_DAY = "";

@@ -1033,20 +1033,29 @@ public static List<AmpTheme> getActivityPrograms(Long activityId) {
   
   /**
    * @deprecated
-   * VERY SLOW. Use {@link #getAllTeamAmpActivitiesResume(Long, boolean, String, String...)}
+   *
+   * vlimansky
+   * Deprecated. But to refactor it a lot of efforts is needed
+   * Also, it is used in one place only
+   * In fact I do not see it's slow
+   *
+   * VERY SLOW. Use {@link #TeamUtil.getAllTeamAmpActivitiesResume(Long, boolean, String, String...)}
    * @param ampActIds
-   * @param session
    * @return
    */
   public static List<AmpActivity> getActivities(Set<Long> ampActIds){
-	  String queryString = "select a from "
-			  + AmpActivity.class.getName()
-	          + " a where a.ampActivityId in(:ampActIds) ";
-	          //+ " where (phyCompReport.ampActivityId=:ampActId)";
-	  return PersistenceManager.getSession().createQuery(queryString)
-			  .setParameterList("ampActIds", ampActIds == null ? new HashSet<Long>() : ampActIds)
-			  .setCacheable(false).list();
-  } 
+      if (ampActIds == null || ampActIds.size() == 0) {
+          return new ArrayList<AmpActivity>();
+      } else {
+          String queryString = "select a from "
+                  + AmpActivity.class.getName()
+                  + " a where a.ampActivityId in(:ampActIds) ";
+
+          return PersistenceManager.getSession().createQuery(queryString)
+                  .setParameterList("ampActIds", ampActIds)
+                  .setCacheable(false).list();
+      }
+  }
   
   public static void deleteActivityIndicatorsSession(Long ampActivityId,Session session) throws Exception{
 		Collection col = null;

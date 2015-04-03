@@ -21,10 +21,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.permissionmanager.web.PMUtil;
@@ -41,15 +39,12 @@ import org.digijava.module.aim.dbentity.AmpActivityVersion;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.DonorTeam;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.helper.ReportsCollection;
 import org.digijava.module.aim.helper.TeamMember;
@@ -1159,11 +1154,11 @@ public class TeamUtil {
   {
 	  final StringBuilder queryString = new StringBuilder("select distinct(amp_activity_id) from amp_activity A WHERE ");
         
-	  queryString.append(" (A.deleted is null or A.deleted=false) and ") ;
+	  queryString.append(" (A.deleted is null or A.deleted=false) ") ;
 	  if (teamId == null) {
-		  queryString.append(" (A.amp_team_id is null)") ;
+		  queryString.append(" and (A.amp_team_id is null)") ;
 	  }else{
-		  queryString.append(" (A.amp_team_id=" + teamId + ")") ;
+		  queryString.append(" and (A.amp_team_id=" + teamId + ")") ;
 	  }
 	  if (!includedraft){
 		  queryString.append("  and   (A.draft is null or A.draft=false) ");

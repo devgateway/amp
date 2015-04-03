@@ -933,13 +933,13 @@
                 var members;
                 try {
                     members = YAHOO.lang.JSON.parse(res.responseText);
-                    activityCurrentPage=1;
+                    activityCurrentPage = 1;
                     updateTableActivities(members);
                     document.getElementById('teamTitle').innerHTML=document.getElementsByName('teamName')[0].value;
                     document.getElementById('addNew').innerHTML='<a title="Click here to Assign Activity" style="font-size:12px; padding-left:5px;" href=\'JavaScript:addActivities('+id+')\'><digi:trn jsFriendly="true">Assign an activity</digi:trn></a>';
-
                 }
                 catch(e) {
+                    updateTableActivities("{}");
                     alert("Error getting members data");
                 }
                 finally {
@@ -950,6 +950,7 @@
                 }
             },
             failure : function () {
+                updateTableActivities("{}");
                 alert("Error getting members data");
             }
         

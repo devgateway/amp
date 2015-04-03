@@ -286,6 +286,10 @@ public class MondrianMapping {
 			addColumnDefinition(ColumnConstants.UNCOMMITTED_BALANCE, new MDXLevel(MoConstants.ACTIVITY_CURRENCY_AMOUNTS, MoConstants.ATTR_UNCOMMITTED_BALANCE, MoConstants.ATTR_UNCOMMITTED_BALANCE));
 			addColumnDefinition(ColumnConstants.PLEDGE_STATUS, new MDXLevel("Pledge Status", MoConstants.H_CATEGORY_NAME, MoConstants.ATTR_CATEGORY_NAME));
 			
+			addColumnDefinition(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_PRIOR_ACTUAL_DISBURSEMENTS, MoConstants.ATTR_PRIOR_ACTUAL_DISBURSEMENTS));
+			addColumnDefinition(MeasureConstants.CUMULATED_DISBURSEMENTS, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_CUMULATED_DISBURSEMENTS, MoConstants.ATTR_CUMULATED_DISBURSEMENTS));
+			addColumnDefinition(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS, new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, MoConstants.ATTR_SELECTED_YEAR_PLANNED_DISBURSEMENTS, MoConstants.ATTR_SELECTED_YEAR_PLANNED_DISBURSEMENTS));
+			
 			for(String colName: Arrays.asList(ColumnConstants.AGREEMENT_CLOSE_DATE, ColumnConstants.AGREEMENT_CODE, 
 					ColumnConstants.AGREEMENT_EFFECTIVE_DATE, ColumnConstants.AGREEMENT_SIGNATURE_DATE, ColumnConstants.AGREEMENT_TITLE_CODE, ColumnConstants.AGREEMENT_PARLIAMENTARY_APPROVAL_DATE))
 				addColumnDefinition(colName, new MDXLevel(MoConstants.AGREEMENT, colName, colName));

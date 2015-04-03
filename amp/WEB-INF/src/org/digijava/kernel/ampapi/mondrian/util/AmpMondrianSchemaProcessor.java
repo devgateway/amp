@@ -2,6 +2,7 @@ package org.digijava.kernel.ampapi.mondrian.util;
 
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -32,6 +33,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.hibernate.Session;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -91,6 +93,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		contents = contents.replaceAll("@@planned@@", Long.toString(CategoryConstants.ADJUSTMENT_TYPE_PLANNED.getIdInDatabase()));
 		contents = contents.replaceAll("@@currency@@", Long.toString(getReportCurrency().getAmpCurrencyId()));
 		contents = contents.replaceAll("@@calendar@@", getReportCalendarTag());
+		contents = updateDateLimits(contents, getReportSelectedYear());
 		
 		// area for (pledges + activities) reports hacks. Holding my nose while writing this - let whatever genius wanted Mondrian as a report engine maintain this PoS :D
 		boolean isDonorReportWithPledges = (currentReport.get().getReportType() != ArConstants.PLEDGES_TYPE && currentReport.get().isAlsoShowPledges());
@@ -105,8 +108,12 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		String localeTag = getReportLocale();
 		contents = contents.replaceAll("@@locale@@", localeTag);
 		
+		// process general filters & custom filters 
 		String entityFilteringSubquery = buildFilteringSubquery();
+		String noDatesEntityFilteringSubquery = getNoDatesFilter(entityFilteringSubquery); 
+		entityFilteringSubquery = entityFilteringSubquery.replaceAll(FactTableFiltering.DATE_FILTERS_TAG_START + "|" + FactTableFiltering.DATE_FILTERS_TAG_END, "");
 		contents = contents.replaceAll("@@filteredActivities@@", entityFilteringSubquery);
+		contents = contents.replaceAll("@@filteredActivitiesWithoutDateFilters@@", noDatesEntityFilteringSubquery);
 		contents = contents.replaceAll("@@report_totals_filter@@", getComputedTotalsFilter());
 		
 		//contents = contents.replaceAll("@@filteredActivities@@", "mondrian_fact_table.entity_id > 0");
@@ -128,6 +135,16 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		if (currentReport.get().getSettings().getCalendar() == null)
 			return "";
 		return "_" + currentReport.get().getSettings().getCalendar().getAmpFiscalCalId();
+	}
+	
+	protected int getReportSelectedYear() {
+		Integer year = currentReport.get().getFilters() == null ? 
+				null : currentReport.get().getFilters().getComputedYear();
+		// if not set, then it means Current Year
+		if (year == null) {
+			year = Calendar.getInstance().get(Calendar.YEAR);
+		}
+		return year;
 	}
 	
 	/**
@@ -475,6 +492,19 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	}
 	
 	/**
+	 * Removes dates filters
+	 * @param entityFilteringSubquery
+	 * @return
+	 */
+	protected String getNoDatesFilter(String entityFilteringSubquery) {
+		String noDatesFilter = entityFilteringSubquery.replaceAll(FactTableFiltering.DATE_FILTERS_PATTERN, "");
+		if ("()".equals(noDatesFilter.trim())) {
+			noDatesFilter = "(1 = 1)";
+		}
+		return noDatesFilter;
+	}
+	
+	/**
 	 * this should be called before each and every report run using Mondrian
 	 * @param spec
 	 */
@@ -497,6 +527,40 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			return ReportEnvironment.buildFor(sra.getRequest());
 		}
 		return new ReportEnvironment("en", new CompleteWorkspaceFilter(null, null), "EUR");
+	}
+	
+	/**
+	 * Update formulas with dates
+	 * @param contents schema content
+	 * @return updated schema content
+	 */
+	private String updateDateLimits(String contents, int selectedYear) {
+		Calendar c = Calendar.getInstance();
+		
+		// calculate the end of the last month (e.g. now is /03/2015, then this will be /02/2015)
+		c.set(Calendar.DAY_OF_MONTH, 1); // => 01/03/2015
+		c.add(Calendar.DAY_OF_MONTH, -1); // => 28/02/205
+		contents = contents.replaceAll("@@last_month_end@@", DateTimeUtil.toJulianDayString(c.getTime()));
+		
+		// calculate the end of the month before last month (this will be /01/2015)
+		c.add(Calendar.DAY_OF_MONTH, 1); // => 01/03/2015
+		c.add(Calendar.MONTH, -1); // => 01/02/2015
+		c.add(Calendar.DAY_OF_MONTH, -1); // => 31/01/2015
+		contents = contents.replaceAll("@@month_before_last_month_end@@", DateTimeUtil.toJulianDayString(c.getTime()));
+		
+		// calculate the beginning of the year date
+		c.set(Calendar.DAY_OF_YEAR, 1);
+		c.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR)); // reconfigure explicitly the year in case it moved back
+		contents = contents.replaceAll("@@current_year_start@@", DateTimeUtil.toJulianDayString(c.getTime()));
+		
+		// calculate the selected year start & end
+		c.set(Calendar.YEAR, selectedYear);
+		contents = contents.replaceAll("@@selected_year_start@@", DateTimeUtil.toJulianDayString(c.getTime()));
+		c.add(Calendar.YEAR, 1);
+		c.add(Calendar.DAY_OF_YEAR, -1);
+		contents = contents.replaceAll("@@selected_year_end@@", DateTimeUtil.toJulianDayString(c.getTime()));
+		
+		return contents;
 	}
 
 }

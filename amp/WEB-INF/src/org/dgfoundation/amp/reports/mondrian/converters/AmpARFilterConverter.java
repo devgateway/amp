@@ -155,21 +155,25 @@ public class AmpARFilterConverter {
 	}
 	
 	private void addFundingDatesFilters() {
-		//if (!arFilter.hasDateFilter()) return;
 		try {
-			if (arFilter.getYearFrom() != null || arFilter.getYearTo() != null)
-				if (arFilter.getYearFrom() == arFilter.getYearTo())
+			if (arFilter.getYearFrom() != null || arFilter.getYearTo() != null) {
+				if (arFilter.getYearFrom() == arFilter.getYearTo()) {
 					filterRules.addSingleYearFilterRule(arFilter.getYearFrom(), true);
-				else
+				} else {
 					filterRules.addYearsRangeFilterRule(arFilter.getYearFrom(), arFilter.getYearTo());
+				}
+			}
 	
 			Date from = arFilter.buildFromDateAsDate();
 			Date to = arFilter.buildToDateAsDate();
-			if (from != null || to != null)
-				if (from != null && from.equals(to))
+			if (from != null || to != null) {
+				if (from != null && from.equals(to)) {
 					filterRules.addSingleDateFilterRule(from, true);
-				else 
+				} else { 
 					filterRules.addDateRangeFilterRule(from, to);
+				}
+			}
+			filterRules.setComputedYear(arFilter.getComputedYear());
 		} catch(Exception ex) {
 			logger.error(ex.getMessage());
 		}

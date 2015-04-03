@@ -101,4 +101,17 @@ public class MondrianComputedMeasuresReportTests extends MondrianReportsTestCase
 				"en");
 	}
 	
+	@Test
+	public void test_AMP_19721_Selected_Year_Planned_Disbursements() {
+		ReportAreaForTests correctReport =  new ReportAreaForTests()
+	    	.withContents("Project Title", "Report Totals", "Selected Year Planned Disbursements", "", "2014-November-Planned Disbursements", "90 000", "Total Measures-Planned Disbursements", "90 000")
+	    	.withChildren(new ReportAreaForTests().withContents("Project Title", "activity with capital spending", "Selected Year Planned Disbursements", "90000", "2014-November-Planned Disbursements", "90 000", "Total Measures-Planned Disbursements", "90 000")  );
+		
+		List<String> activities = Arrays.asList("TAC_activity_1", "activity with capital spending");
+		runMondrianTestCase("AMP-19721-Selected-Year-Planned-Disbursements",
+				activities,
+				correctReport,
+				"en");
+	}
+	
 }

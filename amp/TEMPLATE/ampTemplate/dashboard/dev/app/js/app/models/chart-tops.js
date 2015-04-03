@@ -44,6 +44,9 @@ module.exports = ChartModel.extend({
 
     var chartName = ['amp.dashboard:chart-', this.get('name').replace(/ /g, ''), '-'].join('');
     this.localizedOthers = this.localizedLookup[chartName + 'others'];
+    if (this.localizedOthers === undefined) {
+    	console.error('missing translation in .json file: ' + chartName + 'others');
+    }
 
     var values = _(data.values.slice()).map(function(v) {
       var cleanName = v.name.replace(/[ :.]/g, '');

@@ -369,6 +369,8 @@ public class ColumnsVisibility extends DataVisibility implements FMSettings {
 		put("SSC Modalities", ColumnConstants.SSC_MODALITIES);
 		put("Variance Of Commitments", ColumnConstants.VARIANCE_OF_COMMITMENTS);
 		put("Variance Of Disbursements", ColumnConstants.VARIANCE_OF_DISBURSEMENTS);
+		put(ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE, ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE);
+		put(ColumnConstants.UNDISBURSED_CUMULATIVE_BALANCE, ColumnConstants.UNDISBURSED_CUMULATIVE_BALANCE);
 	}};
 	
 	protected static final List<String> visibleByDefault = Arrays.asList(

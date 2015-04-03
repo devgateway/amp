@@ -639,6 +639,27 @@
 				</View>
 				<Level name="Uncommitted Balance" type="Numeric" column="Uncommitted_Balance" />
 			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All Uncommited Cumulative Balance" primaryKey="amp_activity_id" name="Uncommitted Cumulative Balance">
+				<View alias="v_uncommitted_cumulative_balance">
+					<SQL dialect="generic">
+						<![CDATA[
+						SELECT mondrian_activity_currency_numbers.amp_activity_id, 
+							(mondrian_activity_currency_numbers.ppc_transaction_exch_@@currency@@-
+								COALESCE((SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
+												FROM "mondrian_fact_table"
+												WHERE (mondrian_fact_table.transaction_type=0) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (src_role='DN') 
+												AND (@@filteredActivitiesWithoutDateFilters@@)
+												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_currency_numbers"."amp_activity_id"), 
+										 0)
+							 ) AS "uncommitted_cumulative_balance"
+						FROM mondrian_activity_currency_numbers
+						]]>
+					</SQL>
+				</View>
+				<!--  Proposed project cost - Cumulative Commitments -->
+				<Level name="Uncommitted Cumulative Balance" type="Numeric" column="uncommitted_cumulative_balance" />
+			</Hierarchy>
 		</Dimension>
 			
 		<Dimension name="Activity Total Amounts" foreignKey="entity_id">
@@ -742,6 +763,91 @@
 				<Level name="Selected Year Planned Disbursements" type="Numeric" column="selected_year_planned_disbursements" />
 			</Hierarchy>
 			
+			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" name="Cumulative Commitment">
+				<View alias='v_cumulative_commitment'>
+					<SQL dialect="generic">
+						<![CDATA[
+						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", 
+								COALESCE((SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
+												FROM "mondrian_fact_table"
+												WHERE (mondrian_fact_table.transaction_type=0) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (src_role='DN') 
+												AND (@@filteredActivitiesWithoutDateFilters@@)
+												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 
+										 0) AS "cumulative_commitment"
+						FROM "mondrian_activity_fixed_texts"
+						]]>
+					</SQL>
+				</View>
+				<!-- actual commitment affected by hierarchy & filters percentage but not affected by dates filters -->
+				<Level name="Cumulative Commitment" type="Numeric" column="cumulative_commitment" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" name="Cumulative Disbursement">
+				<View alias='v_cumulative_disbursement'>
+					<SQL dialect="generic">
+						<![CDATA[
+						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", 
+								COALESCE((SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
+												FROM "mondrian_fact_table"
+												WHERE (mondrian_fact_table.transaction_type=1) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (src_role='DN') 
+												AND (@@filteredActivitiesWithoutDateFilters@@)
+												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 
+										 0) AS "cumulative_disbursement"
+						FROM "mondrian_activity_fixed_texts"
+						]]>
+					</SQL>
+				</View>
+				<!-- actual disbursement affected by hierarchy & filters percentage but not affected by dates filters -->
+				<Level name="Cumulative Disbursement" type="Numeric" column="cumulative_disbursement" />
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" name="Undisbursed Cumulative Balance">
+				<View alias='v_undisbursed_cumulative_balance'>
+					<SQL dialect="generic">
+						<![CDATA[
+						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", 
+								COALESCE((SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
+												FROM "mondrian_fact_table"
+												WHERE (mondrian_fact_table.transaction_type=0) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (src_role='DN') 
+												AND (@@filteredActivitiesWithoutDateFilters@@)
+												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 
+										 0) - 
+								COALESCE((SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
+												FROM "mondrian_fact_table"
+												WHERE (mondrian_fact_table.transaction_type=1) AND (mondrian_fact_table.adjustment_type=@@actual@@) AND (src_role='DN') 
+												AND (@@filteredActivitiesWithoutDateFilters@@)
+												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_fixed_texts"."amp_activity_id"), 
+										 0) AS "undisbursed_cumulative_balance"
+						FROM "mondrian_activity_fixed_texts"
+						]]>
+					</SQL>
+				</View>
+				<!-- Cumulative Commitment - Cumulative Disbursement -->
+				<Level name="Undisbursed Cumulative Balance" type="Numeric" column="undisbursed_cumulative_balance"/>
+			</Hierarchy>
+			
+			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" name="Cumulative Execution Rate">
+				<View alias='v_cumulative_execution_rate'>
+					<SQL dialect="generic">
+						<![CDATA[
+						SELECT cumulative_amounts.amp_activity_id, CASE "cumulative_amounts"."cc" WHEN 0 THEN null
+																	ELSE "cumulative_amounts"."cd" / "cumulative_amounts"."cc" * 100 END 
+																	as "cumulative_execution_rate"
+						FROM (SELECT "mondrian_activity_fixed_texts"."amp_activity_id", 
+									sum(CASE mondrian_fact_table.transaction_type WHEN 0 THEN mondrian_fact_table.transaction_exch_@@currency@@ ELSE 0 END) as "cc", 
+									sum(CASE mondrian_fact_table.transaction_type WHEN 1 THEN mondrian_fact_table.transaction_exch_@@currency@@ ELSE 0 END) as "cd"
+							FROM "mondrian_activity_fixed_texts", "mondrian_fact_table"
+							WHERE ("mondrian_fact_table"."src_role"='DN') 
+							AND "mondrian_fact_table"."adjustment_type"=@@actual@@ AND "mondrian_fact_table"."transaction_type" in (0, 1)
+							AND "mondrian_activity_fixed_texts"."amp_activity_id" = "mondrian_fact_table"."entity_id"
+							GROUP BY "mondrian_activity_fixed_texts"."amp_activity_id") as "cumulative_amounts"
+						]]>
+					</SQL>
+				</View>
+				<!-- (Cumulative Disbursement / Cumulative Commitment) * 100 -->
+				<Level name="Cumulative Execution Rate" type="Numeric" column="cumulative_execution_rate" >
+				</Level>
+			</Hierarchy>
 		</Dimension>
 		
 		<DimensionUsage name="Location" source="AMP Location" foreignKey="location_id" />

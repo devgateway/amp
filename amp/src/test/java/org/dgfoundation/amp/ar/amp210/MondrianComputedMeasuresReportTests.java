@@ -114,4 +114,21 @@ public class MondrianComputedMeasuresReportTests extends MondrianReportsTestCase
 				"en");
 	}
 	
+	@Test
+	public void test_AMP_19708_Cumulative_Amounts() {
+		// the output may change after AMP-19724
+		ReportAreaForTests correctReport = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Proposed Project Amount", "", "Uncommitted Cumulative Balance", "", "Cumulative Commitment", "", "Cumulative Disbursement", "", "Undisbursed Cumulative Balance", "", "Cumulative Execution Rate", "", "2010-Actual Commitments", "0", "2010-Actual Disbursements", "0", "2014-Actual Commitments", "75 000", "2014-Actual Disbursements", "0", "Total Measures-Actual Commitments", "75 000", "Total Measures-Actual Disbursements", "0")
+	    .withChildren(
+	  	new ReportAreaForTests().withContents("Project Title", "Test MTEF directed", "Proposed Project Amount", "", "Uncommitted Cumulative Balance", "", "Cumulative Commitment", "0", "Cumulative Disbursement", "143777", "Undisbursed Cumulative Balance", "-143777", "Cumulative Execution Rate", "", "2010-Actual Commitments", "0", "2010-Actual Disbursements", "0", "2014-Actual Commitments", "0", "2014-Actual Disbursements", "0", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "SubNational no percentages", "Proposed Project Amount", "60000", "Uncommitted Cumulative Balance", "-15000", "Cumulative Commitment", "75000", "Cumulative Disbursement", "0", "Undisbursed Cumulative Balance", "75000", "Cumulative Execution Rate", "0", "2010-Actual Commitments", "0", "2010-Actual Disbursements", "0", "2014-Actual Commitments", "75 000", "2014-Actual Disbursements", "0", "Total Measures-Actual Commitments", "75 000", "Total Measures-Actual Disbursements", "0"),
+	      new ReportAreaForTests().withContents("Project Title", "activity with capital spending", "Proposed Project Amount", "", "Uncommitted Cumulative Balance", "", "Cumulative Commitment", "79670.69446288673", "Cumulative Disbursement", "80000", "Undisbursed Cumulative Balance", "-329.305537113265", "Cumulative Execution Rate", "100.41333333333333", "2010-Actual Commitments", "0", "2010-Actual Disbursements", "0", "2014-Actual Commitments", "0", "2014-Actual Disbursements", "0", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0")  );
+		
+		List<String> activities = Arrays.asList("Test MTEF directed", "SubNational no percentages", "activity with capital spending");
+		runMondrianTestCase("AMP-19708 Cumulative Amounts",
+				activities,
+				correctReport,
+				"en");
+	}
+	
 }

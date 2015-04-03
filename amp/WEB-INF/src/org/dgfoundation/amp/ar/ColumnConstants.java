@@ -71,6 +71,7 @@ public class ColumnConstants {
 	public static final String CRIS_NUMBER = "Cris Number";
 	public static final String CUMULATIVE_COMMITMENT = "Cumulative Commitment";
 	public static final String CUMULATIVE_DISBURSEMENT = "Cumulative Disbursement";
+	public static final String CUMULATIVE_EXECUTION_RATE = "Cumulative Execution Rate";
 	public static final String CURRENT_COMPLETION_DATE_COMMENTS = "Current Completion Date Comments";
 	public static final String DESCRIPTION_OF_COMPONENT_FUNDING = "Description of Component Funding";
 	public static final String DISTRICT = "District";
@@ -251,7 +252,6 @@ public class ColumnConstants {
 	public static final String PROPOSED_APPROVAL_DATE = "Proposed Approval Date";
 	public static final String PROPOSED_COMPLETION_DATE = "Proposed Completion Date";
 	public static final String PROPOSED_PROJECT_AMOUNT = "Proposed Project Amount";
-	public static final String UNCOMMITTED_BALANCE = "Uncommitted Balance";
 	public static final String PROPOSED_PROJECT_LIFE = "Proposed Project Life";
 	public static final String PROPOSED_START_DATE = "Proposed Start Date";
 	public static final String PURPOSE = "Purpose";
@@ -341,6 +341,9 @@ public class ColumnConstants {
 	public static final String TYPE_OF_ASSISTANCE = "Type Of Assistance";
 	public static final String TYPE_OF_COOPERATION = "Type of Cooperation";
 	public static final String TYPE_OF_IMPLEMENTATION = "Type of Implementation";
+	public static final String UNCOMMITTED_BALANCE = "Uncommitted Balance";
+	public static final String UNCOMMITTED_CUMULATIVE_BALANCE = "Uncommitted Cumulative Balance";
+	public static final String UNDISBURSED_CUMULATIVE_BALANCE = "Undisbursed Cumulative Balance";
 	public static final String VARIANCE_OF_COMMITMENTS = "Variance Of Commitments";
 	public static final String VARIANCE_OF_DISBURSEMENTS = "Variance Of Disbursements";
 	public static final String VOTE = "Vote";

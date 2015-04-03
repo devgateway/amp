@@ -276,6 +276,11 @@ public final class MoConstants {
 	public static final String ATTR_PRIOR_ACTUAL_DISBURSEMENTS = "Prior Actual Disbursements";
 	public static final String ATTR_CUMULATED_DISBURSEMENTS = "Cumulated Disbursements";
 	public static final String ATTR_SELECTED_YEAR_PLANNED_DISBURSEMENTS = "Selected Year Planned Disbursements";
+	public static final String ATTR_CUMULATIVE_COMMITMENT = "Cumulative Commitment";
+	public static final String ATTR_CUMULATIVE_DISBURSEMENT = "Cumulative Disbursement";
+	public static final String ATTR_CUMULATIVE_EXECUTION_RATE = "Cumulative Execution Rate";
+	public static final String ATTR_UNDISBURSED_CUMULATIVE_BALANCE = "Undisbursed Cumulative Balance";
+	public static final String ATTR_UNCOMMITTED_CUMULATIVE_BALANCE = "Uncommitted Cumulative Balance";
 	
 	//properties
 	public static final String P_KEY = "Key";

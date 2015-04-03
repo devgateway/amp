@@ -20,16 +20,19 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.AmountCell;
 import org.dgfoundation.amp.newreports.DateCell;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.TextCell;
+import org.dgfoundation.amp.reports.AmountColumns;
 import org.dgfoundation.amp.reports.DateColumns;
 import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
+import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.service.olap.totals.TotalNode;
 import org.saiku.service.olap.totals.aggregators.TotalAggregator;
@@ -51,6 +54,7 @@ public class CellDataSetToGeneratedReport {
 	private TotalAggregator[][] measureTotals = null;
 	private List<TotalNode>[] rowTotals = null;
 	private int[] currentSubGroupIndex;
+	private boolean isTotalsOnlyReport = false;
 	
 	public CellDataSetToGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, 
 			List<ReportOutputColumn> leafHeaders, List<Integer> cellDataSetActivities) {
@@ -77,6 +81,7 @@ public class CellDataSetToGeneratedReport {
 			this.measureTotals = cellDataSet.getColTotalsLists()[0].get(0).getTotalGroups();
 		}
 		this.rowTotals = cellDataSet.getRowTotalsLists();
+		this.isTotalsOnlyReport = GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria());
 	}
 	
 	public ReportAreaImpl transformTo(Class<? extends ReportAreaImpl> reportAreaType) throws AMPException {
@@ -158,24 +163,31 @@ public class CellDataSetToGeneratedReport {
 		
 		//adds data to the content
 		for(int colId = 0; colId < rowLength; colId++) {
-			String value = cellDataSet.getCellSetBody()[rowId][colId].getFormattedValue();
+			boolean reformat = true;
+			AbstractBaseCell setCell = cellDataSet.getCellSetBody()[rowId][colId]; 
+			String value = setCell.getFormattedValue();
+			ReportOutputColumn roc = leafHeaders.get(colId);
 			ReportCell cellData;
 			//textual columns
-			if (colId < spec.getColumns().size()) { 
-				if (DateColumns.ACTIVITY_DATES.contains(leafHeaders.get(colId).originalColumnName)) {
+			if (colId < spec.getColumns().size() && !AmountColumns.ACTIVITY_AMOUNTS.contains(roc.originalColumnName)) { 
+				if (DateColumns.ACTIVITY_DATES.contains(roc.originalColumnName)) {
 					cellData = DateCell.buildDateCell(value);
-				}
-				else {
+				} else { 
+					// do not reformat only text cells (we rely upon formatted value == null) 
+					reformat = false;
 					cellData = new TextCell(value == null ? "" : value);
 				}
-				if (value == null)
+				if (value == null) {
 					notNullColId ++;
-			} else { //measure columns
-				double dVal = parseValue(value);
+				}
+			} else { // measure or amount columns
+				Double dVal = parseValue(value, !isTotalsOnlyReport || colId < spec.getColumns().size());
 				cellData = new AmountCell(dVal, this.numberFormat);
-				cellDataSet.getCellSetBody()[rowId][colId].setFormattedValue(this.numberFormat.format(dVal));
-			}	
-			contents.put(leafHeaders.get(colId), cellData);
+			}
+			if (reformat) {
+				setCell.setFormattedValue(cellData.displayedValue);
+			}
+			contents.put(roc, cellData);
 		}
 		
 		//adds measure totals to the content
@@ -183,7 +195,7 @@ public class CellDataSetToGeneratedReport {
 			int headerColId = rowLength;
 			for (int colId = 0; colId < measureTotals.length; colId ++) {
 				//Unfortunately cannot use getValue() because during concatenation we override the value, but the only way to override is via formatted value
-				double value = parseValue(measureTotals[colId][rowId].getFormattedValue()); 
+				double value = parseValue(measureTotals[colId][rowId].getFormattedValue(), false); 
 				contents.put(leafHeaders.get(headerColId++), new AmountCell(value, this.numberFormat));
 				//also re-format, via MDX formatting works a bit differently
 				measureTotals[colId][rowId].setFormattedValue(this.numberFormat.format(value));
@@ -211,26 +223,30 @@ public class CellDataSetToGeneratedReport {
 //	}
 	
 	public static Map<String, Integer> counts = new TreeMap<String, Integer>();
-	private double parseValue(String value) throws AMPException {
+	private Double parseValue(String value, boolean emptyAsNull) throws AMPException {
 		if (value == null)
 			throw new AMPException("Textual column value sent for parsing - invalid request. Please fix");
-		if (value.isEmpty() || value.equals("0"))
-			return 0;
+		// return null result only for computed columns or for measures that are distributed over the years
+		if (emptyAsNull && value.isEmpty()) {
+			return null;
+		}
 		
 //		Integer oldCount = counts.get(value);
 //		if (oldCount == null) oldCount = 0;
 //		counts.put(value, oldCount + 1);
 		
-		Number iVal = 0;
-		try {
-			iVal = readingNumberFormat.parse(value);
-		} catch (ParseException e) {
-			//empty string
-		} catch (Exception e) {
-			//should not get here, only parse exception can happen for empty string. If null -> this is textual column, not amounts
-			throw new AMPException("Cannot parse value=" + value + ", error=" + e.getMessage());
+		Double dValue = 0d;
+		if (!value.equals("0")) {
+			try {
+				dValue = readingNumberFormat.parse(value).doubleValue();
+			} catch (ParseException e) {
+				//empty string
+			} catch (Exception e) {
+				//should not get here, only parse exception can happen for empty string. If null -> this is textual column, not amounts
+				throw new AMPException("Cannot parse value=" + value + ", error=" + e.getMessage());
+			}
 		}
-		return iVal.doubleValue();
+		return dValue;
 	}
 	
 	private int nextNotNull(int rowId, int colId) {

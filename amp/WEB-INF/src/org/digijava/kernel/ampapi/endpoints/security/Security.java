@@ -164,6 +164,7 @@ public class Security {
 			Subject subject = UserUtils.getUserSubject(u);
 
 			boolean siteAdmin = DgSecurityManager.permitted(subject, site, ResourcePermission.INT_ADMIN);
+			layout.set("logged",true);
 			layout.set("email", u.getEmail());
 			layout.set("firstName", u.getFirstNames());
 			layout.set("lastName", u.getLastName());
@@ -181,6 +182,13 @@ public class Security {
 			}
 		} else {
 			layout.set("email", null);
+			if ("true".equals(TLSUtils.getRequest().getSession().getAttribute("isUserLogged"))) {
+				layout.set("logged",true);
+			}
+			else {
+				layout.set("logged",false);
+			}
+			
 		}
 
 		return layout;

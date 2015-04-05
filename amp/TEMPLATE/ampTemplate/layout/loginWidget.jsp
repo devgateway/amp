@@ -20,13 +20,3 @@
         </div>
     </logic:present>
 </digi:secure>
-
-<%--
-<logic:notPresent name="isUserLogged" scope="session">
-<div title='<digi:trn key="aim:aimGoToLogin">Go To Login Page</digi:trn>'>
-<digi:link styleClass="loginWidget" href="/"
-	module="aim">
-	<digi:trn key="aim:Login">Login</digi:trn>
-</digi:link></div>
-</logic:notPresent>
---%>

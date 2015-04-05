@@ -8,6 +8,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+	
 	<%-- request.setAttribute("compatibility_shim", String) - use it to overwrite specific pages' X-UA-Compatible meta tags --%>
 	<c:choose>
     	<c:when test="${empty compatibility_shim}">
@@ -43,13 +44,16 @@
 	<!-- Scripts  -->
 	
 	<script language="JavaScript" type="text/javascript" src="/repository/aim/view/scripts/common.js"></script>
-	 <digi:ref href="css/ampPrint.css" type="text/css" rel="stylesheet" media="print" />
+	<digi:ref href="css/ampPrint.css" type="text/css" rel="stylesheet" media="print" />
+	<link rel="stylesheet" href="tabs/css/bootstrap.css">
 
 	 
+	
 </head>
 
 
 <BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
+<div id="amp-header"></div>
 <div class="headerTop">
 	<logic:present name="currentMember" scope="session">
 		<jsp:include page="headerTop_2.jsp"/>
@@ -58,23 +62,6 @@
 		<digi:insert attribute="headerTop" />
 	</logic:notPresent>
 </div>
-	<div class="main_menu" >
-	
-		  	<div  width="1000">
-        	
-            	<div style="width:900px; vertical-align:top;" ><digi:insert attribute="headerMiddle"/></div>
-                <div><digi:secure authenticated="true">
-         <div class="workspace_info"> <!-- I think this class should be renamed to correspong the logout item -->   						
-   			<digi:link styleClass="loginWidget" href="/j_spring_logout" module="aim">
-				<digi:trn key="aim:logout">LOGOUT</digi:trn>
-			</digi:link>
-		</div>	
-		</digi:secure></div>
-            
-        </div>
-		
-	</div>
-
 <logic:notPresent name="bootstrap_insert" scope="request">
 	<div class="breadcrump_1">&nbsp;</div>
 	<div style="width:1000px;margin:0 auto;">

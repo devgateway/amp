@@ -28,16 +28,6 @@
     }
 </script>
 
-<!-- Core + Skin CSS -->
-<digi:ref href="/TEMPLATE/ampTemplate/css_2/menu.css" type="text/css"
-	rel="stylesheet" />
-
-<jsp:include page="/repository/aim/view/ar/aboutScripts.jsp" />
-<!--<div id="myAboutFilterWrapper" style="display: none;" >-->
-<div id="customAbout" class="invisible-item" class="content">
-	<jsp:include page="/repository/aim/view/helpAbout.jsp" />
-</div>
-<!--</div>-->
 
 <div id="myUserFilterWrapper" style="display: none;">
 	<div id="customUser" class="invisible-item" class="content">
@@ -253,15 +243,6 @@ ${fn:replace(message,quote,escapedQuote)}
 <logic:present name="ampAdmin" scope="session">
 	<logic:equal name="ampAdmin" value="yes">
 <script language="JavaScript">
-function help(){
-	 <digi:context name="rev" property="/help/help.do~blankPage=true" />
-		openURLinWindow("<%=rev%>",1024,768);
-	}
-function adminHelp(){
-		 <digi:context name="admin" property="/help/admin/help.do~blankPage=true" />
-		openURLinWindow("<%=admin%>",1024,768);
-}
-
 function openAdmin () {
 	document.location.href="/admin.do";
 }
@@ -303,11 +284,6 @@ function openAdmin () {
 													</div>
 												</li>
 											</feature:display>
-											<logic:notEmpty name="currentMember" scope="session">
-												<digi:secure actions="TRANSLATE">
-													<digi:insert  flush="false" attribute="transmode" />
-												</digi:secure>
-											</logic:notEmpty>
 										</ul>
 									</div>
 								</div>
@@ -855,11 +831,6 @@ function openAdmin () {
 										</a>
 									</li>
 								</feature:display>
-								<logic:notEmpty name="currentMember" scope="session">
-									<digi:secure actions="TRANSLATE">
-										<digi:insert flush="false" attribute="transmode" />
-									</digi:secure>
-								</logic:notEmpty>
 								<logic:notEmpty name="currentMember" scope="session">
 									<digi:secure group="UserSideAdmins">
 										<li class="yuiampmenuitem_drop">

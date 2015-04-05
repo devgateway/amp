@@ -63,93 +63,17 @@
 	</head>
      	
 	<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-	<digi:secure authenticated="false">
-		<logic:notPresent name="currentMember" scope="session">
-			<digi:insert attribute="headerTop" />	
-		</logic:notPresent>
-	</digi:secure>
+	<div id="amp-header"></div>
+<%-- 	 <digi:secure authenticated="false"> --%>
+<%-- 		<logic:notPresent name="currentMember" scope="session"> --%>
+<%-- 			<digi:insert attribute="headerTop" />	 --%>
+<%-- 		</logic:notPresent> --%>
+<%-- 	</digi:secure> --%>
 	<digi:secure authenticated="true">
 		<jsp:include page="headerForDesktopTabs.jsp"/>
-	</digi:secure><center>
-	<div class="main_menu" id="userHomeMenu" >
-    	<table cellpadding="0"cellspacing="0" width="1000">
-        	<tr>
-            	<td style="width:900px;" valign="top"><digi:insert attribute="headerMiddle"/></td>
-                <td><digi:secure authenticated="true">
-         <div class="workspace_info"> <!-- I think this class should be renamed to correspong the logout item -->   						
-   			<digi:link styleClass="loginWidget" href="/j_spring_logout" module="aim">
-				<digi:trn key="aim:logout">LOGOUT</digi:trn>
-			</digi:link>
-		</div>	
-		</digi:secure></td>
-            </tr>
-        </table>
-    	
-		
-	
-	</div>
-   
+	</digi:secure>
 	<div class="breadcrump_1">
-	</div></center>
-	<!-- BREADCRUMB START -->
-	<div class="breadcrump">
-		<div class="centering">
-			<div class="breadcrump_cont">
-			<digi:secure authenticated="false">
-				<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center">
-					<tr>
-    					<td width="740" valign="top">	
-		    				<div class="wlcm_txt_menu">
-				    			<b class="sel_mid">
-				    				<digi:trn>
-				    					Public Tab's
-				    				</digi:trn>
-				    			</b>
-				    			<span class="wlcm_txt_menu_spc">|</span>
-				    			<a onClick="showAbout(); return false;" style="text-decoration: underline;cursor: pointer;">
-				    				<digi:trn>
-				    					About AMP
-				    				</digi:trn>
-				    			</a>
-				    			<span class="wlcm_txt_menu_spc">|</span>
-				    			<a href="/viewTeamReports.do?tabs=false">
-				    				<digi:trn>
-				    					Reports
-				    				</digi:trn>
-				    			</a>
-				    			<span class="wlcm_txt_menu_spc">|</span>
-				    			<a href="/contentrepository/publicDocTabManager.do?action=publicShow" module="contentrepository" onClick="return quitRnot()">
-				    				<digi:trn>
-				    					Resources
-				    				</digi:trn>
-				    			</a><span class="wlcm_txt_menu_spc">|</span>
-				    			<a href=#>
-				    				<digi:trn>
-				    					Donor Profiles
-				    				</digi:trn>
-				    			</a>
-				    			<span class="wlcm_txt_menu_spc">|</span>
-				    				<a href=#>
-				    					<digi:trn>
-				    						Aid Map
-				    					</digi:trn>
-				    					</a>
-				    			<span class="wlcm_txt_menu_spc">|</span>
-				    				<a href=#>
-				    					<digi:trn>
-				    						Contact us
-				    					</digi:trn>		
-				    				</a>
-		    				</div>
-    					</td>
-    				</tr>
-    			</table>
-			</digi:secure>
-			</div>
-		</div>
-	</div>	
-    <center></center>
-	<!-- BREADCRUMB END -->
+	</div>
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center" id="main-desktop-container">
 		<tbody>
 			<tr>

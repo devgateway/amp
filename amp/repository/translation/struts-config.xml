@@ -47,7 +47,6 @@
     <action type="org.digijava.module.eproc.action.SwitchLanguageAction" path="/eproc/switchLanguage" />
     <action name="translationForm" type="org.digijava.module.translation.action.RenderTeaser" scope="request" path="/translation/renderTeaser" />
     <action name="translationForm" type="org.digijava.module.translation.action.SwitchLanguage" scope="request" path="/translation/switchLanguage" />
-    <action name="modeSwitchForm" type="org.digijava.module.translation.action.RenderModeSwitch" scope="request" path="/translation/renderModeSwitch" />
     <action name="modeSwitchForm" type="org.digijava.module.translation.action.SwitchMode" scope="request" path="/translation/switchMode" />
     <!-- advanced Translation -->
     <!-- Default view definition -->

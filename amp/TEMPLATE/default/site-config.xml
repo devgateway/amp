@@ -8,7 +8,6 @@
 			<put-item name="body" file="blank.jsp"/>
 		</layout>
 		<layout name="footerLayout" file="footerLayout.jsp">
-			<put-item name="transmode" module="translation" instance="default" teaser="modeSwitch"/>
 			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
 			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 		</layout>

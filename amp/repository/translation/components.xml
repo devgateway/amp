@@ -15,8 +15,6 @@
 </secondary-pages>
 <module>
 	<teaser-file>dropdownLangSwitch.jsp</teaser-file>
-	<teaser name="modeSwitchMenu" action="renderModeSwitch.do">modeSwitchMenu.jsp</teaser>
-	<teaser name="modeSwitch" action="renderModeSwitch.do">modeSwitch.jsp</teaser>
 	<teaser name="flatLangSwitch" action="renderTeaser.do">flatLangSwitch.jsp</teaser>
 	<teaser name="dropdownLangSwitch" action="renderTeaser.do">dropdownLangSwitch.jsp</teaser>
 	<teaser name="dropdownLangSwitchMenu" action="renderTeaser.do">dropdownLangSwitchMenu.jsp</teaser>

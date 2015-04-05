@@ -62,15 +62,6 @@
 		var param = "~edit=true~id="+id;
 		previewWorkspaceframe('/aim/default/userProfile.do',param);
 	}
-	function help(){
-		 <digi:context name="rev" property="/help/help.do~blankPage=true" />
-			openURLinWindow("<%=rev%>",1024,768);
-		}
-	function adminHelp(){
-			 <digi:context name="admin" property="/help/admin/help.do~blankPage=true" />
-			openURLinWindow("<%=admin%>",1024,768);
-	}
-	
 	function canExit(){
 	    if(typeof quitRnot1 == 'function') {
 	        return quitRnot1('${msg}');
@@ -109,11 +100,12 @@ table tr td {font-size:11px;}
 	 </logic:notEmpty>
  </logic:empty>
 
-<jsp:include page="/TEMPLATE/ampTemplate/layout/header.jsp"/>
+<%-- <jsp:include page="/TEMPLATE/ampTemplate/layout/header.jsp"/> --%>
 
 
 <script type="text/javascript">
 	function selectwkspace(id){
+		var a;
 		var url = "/selectTeam.do?id="+id;
 		document.location.href=url;
 	}

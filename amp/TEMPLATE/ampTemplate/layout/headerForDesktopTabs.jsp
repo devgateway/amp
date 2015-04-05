@@ -45,16 +45,7 @@
 		var param = "~edit=true~id="+id;
 		previewWorkspaceframe('/aim/default/userProfile.do',param);
 	}
-	function help(){
-		 <digi:context name="rev" property="/help/help.do~blankPage=true" />
-			openURLinWindow("<%=rev%>",1024,768);
-		}
-	function adminHelp(){
-			 <digi:context name="admin" property="/help/admin/help.do~blankPage=true" />
-			openURLinWindow("<%=admin%>", 1024, 768);
-		}
-
-		function canExit() {
+	function canExit() {
 			if (typeof quitRnot1 == 'function') {
 				return quitRnot1('${msg}');
 			} else {
@@ -96,7 +87,6 @@ table tr td {
 	</logic:notEmpty>
 </logic:empty>
 
-<jsp:include page="/TEMPLATE/ampTemplate/layout/header.jsp" />
 
 <script type="text/javascript">
 	function selectwkspace(id){

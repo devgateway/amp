@@ -9,10 +9,7 @@
 	<div align="center">
 	<table border="0" cellpadding="5" cellspacing="0">
       <tr>
-        <td nowrap valign="top">
-			<digi:insert attribute="transmode"/>
-		</td>
-		<td nowrap valign="top">
+       <td nowrap valign="top">
 			<digi:insert attribute="adminLink"/>
 		</td>
       </tr>

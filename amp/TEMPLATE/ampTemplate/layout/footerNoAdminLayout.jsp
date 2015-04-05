@@ -8,12 +8,13 @@
 <%@ page import="org.digijava.module.aim.helper.GlobalSettingsConstants" %>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
 
+<div id="amp-footer"></div>
 
 
-<!-- FOOTER START -->
-	<div class="footer">
-			AMP <b><tiles:getAsString name="version"/></b> build <b><tiles:getAsString name="build_version"/></b> - <digi:trn>Developed in partnership with OECD, UNDP, WB, Government of Ethiopia and DGF</digi:trn>
-	 </div>
-<!-- FOOTER END  -->
-	
-<%@include file="footerStaticText.jsp" %>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/node_modules/amp-boilerplate/dist/amp-boilerplate.js"/>"></script>
+<script language="JavaScript">
+var boilerplate = new window.boilerplate(
+     	 {
+     		showAdminFooter: false
+		  });
+</script>

@@ -254,7 +254,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 	protected void insertCommonMeasuresDefinitions(Document xmlSchema) {
 		Node trivialMeasureDefinitionNode = XMLGlobals.selectNode(xmlSchema, "//Measure[@name='@@trivial_measure@@']");
 		Node computedTotDefNode = XMLGlobals.selectNode(xmlSchema, "//Hierarchy[@name='Total Amounts']");
-		Node grantTotFilteredDefNode = XMLGlobals.selectNode(xmlSchema, "//Hierarchy[@name='Grant Total Filtered Amounts']");
+		Node grandTotFilteredDefNode = XMLGlobals.selectNode(xmlSchema, "//Hierarchy[@name='Grand Total Filtered Amounts']");
 		
 		//String trivialMeasureString = XMLGlobals.saveToString(trivialMeasureDefinitionNode);
 		
@@ -265,7 +265,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 				String measureName = adj.getValue() + " " + transactionType;
 				
 				insertComputedTotals(computedTotDefNode, adj, trTypeId, transactionType, measureName, false);
-				insertComputedTotals(grantTotFilteredDefNode, adj, trTypeId, transactionType, measureName, true);
+				insertComputedTotals(grandTotFilteredDefNode, adj, trTypeId, transactionType, measureName, true);
 				
 				if (measureName.equals(MoConstants.ACTUAL_COMMITMENTS))
 					continue; // this one is hardcoded in AMP.xml for the sake of "pledges + activities" reports
@@ -306,13 +306,13 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		
 		trivialMeasureDefinitionNode.getParentNode().removeChild(trivialMeasureDefinitionNode);
 		computedTotDefNode.getParentNode().removeChild(computedTotDefNode);
-		grantTotFilteredDefNode.getParentNode().removeChild(grantTotFilteredDefNode);
+		grandTotFilteredDefNode.getParentNode().removeChild(grandTotFilteredDefNode);
 	}
 	
 	protected void insertComputedTotals(Node computedTotalsDefinitionNode, AmpCategoryValue adj, 
 			Integer trnType, String trnName, String measureName, boolean filtered) {
 		if (filtered) {
-			measureName = "Grant " + measureName;
+			measureName = "Grand " + measureName;
 		}
 		Element newComputedTotals = (Element) computedTotalsDefinitionNode.cloneNode(true);
 		newComputedTotals.setAttribute("allMemberName", "All Total " + measureName);

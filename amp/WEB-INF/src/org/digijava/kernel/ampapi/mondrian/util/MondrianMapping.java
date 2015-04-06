@@ -317,7 +317,7 @@ public class MondrianMapping {
 					
 					// adding Totals (unaffected by filters or % distribution)
 					// full name computed columns
-					String[] prefixList = {"Total ", "Total Grant "};
+					String[] prefixList = {"Total ", "Total Grand "};
 					for (String prefix : prefixList) {
 						String computedTotals = prefix + measureName;
 						MDXLevel level = new MDXLevel(MoConstants.ACTIVITY_TOTAL_AMOUNTS, computedTotals, computedTotals);
@@ -344,8 +344,8 @@ public class MondrianMapping {
 			addMeasureDefinition(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT);
 			addMeasureDefinition(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS);
 			addMeasureDefinition(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS);
-			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, "Total Grant Actual Commitments");
-			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, "Total Grant Actual Disbursements");
+			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, "Total Grand Actual Commitments");
+			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, "Total Grand Actual Disbursements");
 			addMeasureDefinition(MeasureConstants.UNDISBURSED_BALANCE);
 			addMeasureDefinition(MeasureConstants.PLEDGES_COMMITMENT_GAP);
 			

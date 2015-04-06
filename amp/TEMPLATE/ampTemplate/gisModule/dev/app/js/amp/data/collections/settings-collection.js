@@ -66,7 +66,7 @@ module.exports = Backbone.Collection
       var translatedSetting = settingObject.name;
       setting.set('selectedName', translatedSetting );
     }
-  }
+  },
 
   deserialize: function(jsonBlob) {
     var self = this;
@@ -83,9 +83,8 @@ module.exports = Backbone.Collection
       this.each(function(setting) {
         setting.set('selected', setting.get('defaultId'));
         self.setSettingSelectedName(setting);
-        }
-
       });
+
     }
   }
 

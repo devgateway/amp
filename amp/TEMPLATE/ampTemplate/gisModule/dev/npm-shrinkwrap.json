@@ -616,6 +616,23 @@
         }
       }
     },
+    "mold-source-map": {
+      "version": "0.3.0",
+      "from": "mold-source-map@*",
+      "resolved": "https://registry.npmjs.org/mold-source-map/-/mold-source-map-0.3.0.tgz",
+      "dependencies": {
+        "through": {
+          "version": "2.2.7",
+          "from": "through@>=2.2.7 <2.3.0",
+          "resolved": "https://registry.npmjs.org/through/-/through-2.2.7.tgz"
+        },
+        "convert-source-map": {
+          "version": "0.3.5",
+          "from": "convert-source-map@>=0.3.1 <0.4.0",
+          "resolved": "https://registry.npmjs.org/convert-source-map/-/convert-source-map-0.3.5.tgz"
+        }
+      }
+    },
     "backbone": {
       "version": "1.1.2",
       "from": "backbone@1.1.2",

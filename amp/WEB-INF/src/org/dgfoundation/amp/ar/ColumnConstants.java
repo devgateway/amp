@@ -338,6 +338,8 @@ public class ColumnConstants {
 	public static final String TERTIARY_SECTOR_SUB_SECTOR_ID = "Tertiary Sector Sub-Sector Id";
 	public static final String TERTIARY_SECTOR_SUB_SUB_SECTOR = "Tertiary Sector Sub-Sub-Sector";
 	public static final String TERTIARY_SECTOR_SUB_SUB_SECTOR_ID = "Tertiary Sector Sub-Sub-Sector Id";
+	public static final String TOTAL_GRAND_ACTUAL_COMMITMENTS = "Total Grand Actual Commitments";
+	public static final String TOTAL_GRAND_ACTUAL_DISBURSEMENTS = "Total Grand Actual Disbursements";
 	public static final String TYPE_OF_ASSISTANCE = "Type Of Assistance";
 	public static final String TYPE_OF_COOPERATION = "Type of Cooperation";
 	public static final String TYPE_OF_IMPLEMENTATION = "Type of Implementation";

@@ -3,8 +3,15 @@ package org.dgfoundation.amp.ar.amp210;
 import java.util.Arrays;
 import java.util.List;
 
+import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.mondrian.MondrianReportsTestCase;
 import org.dgfoundation.amp.mondrian.ReportAreaForTests;
+import org.dgfoundation.amp.newreports.GroupingCriteria;
+import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportMeasure;
+import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.junit.Test;
 
 public class MondrianComputedMeasuresReportTests extends MondrianReportsTestCase {
@@ -117,6 +124,30 @@ public class MondrianComputedMeasuresReportTests extends MondrianReportsTestCase
 				activities,
 				correctReport,
 				"en");
+	}
+	
+	@Test
+	public void test_GrandTotals() {
+		ReportAreaForTests correctReport = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Total Grand Actual Commitments", "", "Total Grand Actual Disbursements", "", "2010-Actual Commitments", "0", "2010-Actual Disbursements", "267 098", "2011-Actual Commitments", "213 231", "2011-Actual Disbursements", "0", "Total Measures-Actual Commitments", "213 231", "Total Measures-Actual Disbursements", "267 098")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "TAC_activity_1", "Total Grand Actual Commitments", "213 231", "Total Grand Actual Disbursements", "267 098", "2010-Actual Commitments", "", "2010-Actual Disbursements", "123 321", "2011-Actual Commitments", "213 231", "2011-Actual Disbursements", "", "Total Measures-Actual Commitments", "213 231", "Total Measures-Actual Disbursements", "123 321"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "Test MTEF directed", "Total Grand Actual Commitments", "213 231", "Total Grand Actual Disbursements", "267 098", "2010-Actual Commitments", "", "2010-Actual Disbursements", "143 777", "2011-Actual Commitments", "", "2011-Actual Disbursements", "", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "143 777")  );
+		
+		List<String> activities = Arrays.asList("TAC_activity_1", "Test MTEF directed");
+		ReportSpecificationImpl spec = new ReportSpecificationImpl("AMP-15795-grand-totals", ArConstants.DONOR_TYPE);
+		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+		spec.addColumn(new ReportColumn(ColumnConstants.TOTAL_GRAND_ACTUAL_COMMITMENTS));
+		spec.addColumn(new ReportColumn(ColumnConstants.TOTAL_GRAND_ACTUAL_DISBURSEMENTS));
+		spec.setGroupingCriteria(GroupingCriteria.GROUPING_YEARLY);
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_COMMITMENTS));
+		spec.addMeasure(new ReportMeasure(MeasureConstants.ACTUAL_DISBURSEMENTS));
+		spec.setCalculateColumnTotals(true);
+		spec.setCalculateRowTotals(true);
+		
+		runMondrianTestCase(spec, "en", activities, correctReport);
 	}
 	
 	@Test

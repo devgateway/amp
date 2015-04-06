@@ -39,10 +39,12 @@ module.exports = ChartModel.extend({
     data.processed = [
       {
         key: this.localizedPredictabilityList['amp.dashboard:aid-predictability-planned-disbursements'],
+        originalKey: 'planned',
         values: _(data.years).map(pick('planned disbursements'))
       },
       {
         key: this.localizedPredictabilityList['amp.dashboard:aid-predictability-actual-disbursements'],
+        originalKey: 'actual',
         values: _(data.years).map(pick('actual disbursements'))
       }
     ];

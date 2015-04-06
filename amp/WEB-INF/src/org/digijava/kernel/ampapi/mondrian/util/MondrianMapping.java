@@ -343,8 +343,8 @@ public class MondrianMapping {
 			addMeasureDefinition(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT);
 			addMeasureDefinition(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS);
 			addMeasureDefinition(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS);
-			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, "Total Grand Actual Commitments");
-			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, "Total Grand Actual Disbursements");
+			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, ColumnConstants.TOTAL_GRAND_ACTUAL_COMMITMENTS);
+			dependency.put(MeasureConstants.PERCENTAGE_OF_TOTAL_DISBURSEMENTS, ColumnConstants.TOTAL_GRAND_ACTUAL_DISBURSEMENTS);
 			addMeasureDefinition(MeasureConstants.UNDISBURSED_BALANCE);
 			addMeasureDefinition(MeasureConstants.PLEDGES_COMMITMENT_GAP);
 			

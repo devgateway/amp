@@ -24,6 +24,8 @@ public class AmountColumns {
 		add(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS);
 		add(MeasureConstants.TOTAL_COMMITMENTS);
 		add(MeasureConstants.TOTAL_DISBURSEMENTS);
+		add(ColumnConstants.TOTAL_GRAND_ACTUAL_COMMITMENTS);
+		add(ColumnConstants.TOTAL_GRAND_ACTUAL_DISBURSEMENTS);
 		add(ColumnConstants.UNCOMMITTED_BALANCE);
 		add(ColumnConstants.UNCOMMITTED_CUMULATIVE_BALANCE);
 		add(ColumnConstants.UNDISBURSED_CUMULATIVE_BALANCE);

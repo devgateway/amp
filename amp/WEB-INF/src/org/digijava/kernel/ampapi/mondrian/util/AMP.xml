@@ -682,8 +682,8 @@
 				<Level name="Total Amount" type="Numeric" column="Total_Amount" />
 			</Hierarchy>
 			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" 
-						name="Grant Total Filtered Amounts" visible="false">
-				<View alias='v_grant_total_@@adj_name@@_@@trn_name@@'>
+						name="Grand Total Filtered Amounts" visible="false">
+				<View alias='v_grand_total_@@adj_name@@_@@trn_name@@'>
 					<SQL dialect="generic">
 						<![CDATA[
 						SELECT "mondrian_activity_fixed_texts"."amp_activity_id", (
@@ -692,12 +692,12 @@
 												WHERE (mondrian_fact_table.transaction_type=@@trn_type@@) AND (mondrian_fact_table.adjustment_type=@@adj_id@@)
 												AND (src_role='DN') 
 												AND (@@filteredActivities@@) 
-												) AS "Total_Grant_@@adj_name@@_@@trn_name@@"
+												) AS "Total_Grand_@@adj_name@@_@@trn_name@@"
 						FROM "mondrian_activity_fixed_texts"
 						]]>
 					</SQL>
 				</View>
-				<Level name="Grant Total Amount" type="Numeric" column="Grant_Total_Amount" />
+				<Level name="Grand Total Amount" type="Numeric" column="Grand_Total_Amount" />
 			</Hierarchy>
 			
 			<Hierarchy hasAll="true" allMemberName="All" primaryKey="amp_activity_id" name="Prior Actual Disbursements">
@@ -1005,30 +1005,30 @@
 			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>			
 		</CalculatedMember>
 
-		<CalculatedMember name="Total Grant Commitments" dimension="Measures" visible="false">
+		<CalculatedMember name="Total Grand Commitments" dimension="Measures" visible="false">
 		 	<Formula>
-				Cast([Activity Total Amounts.Total Grant Actual Commitments].[Total Grant Actual Commitments].CurrentMember.name as Numeric)
+				Cast([Activity Total Amounts.Total Grand Actual Commitments].[Total Grand Actual Commitments].CurrentMember.name as Numeric)
 			</Formula>
 			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>			
 		</CalculatedMember>
 		
 		<CalculatedMember name="Percentage of Total Commitments" dimension="Measures">
 		 	<Formula>
-				IIf(Measures.[Total Grant Commitments]=0, null, [Measures].[Actual Commitments] / Measures.[Total Grant Commitments] * 100)
+				IIf(Measures.[Total Grand Commitments]=0, null, [Measures].[Actual Commitments] / Measures.[Total Grand Commitments] * 100)
 			</Formula>
 			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>			
 		</CalculatedMember>
 
-		<CalculatedMember name="Total Grant Disbursements" dimension="Measures" visible="false">
+		<CalculatedMember name="Total Grand Disbursements" dimension="Measures" visible="false">
 		 	<Formula>
-				Cast([Activity Total Amounts.Total Grant Actual Disbursements].[Total Grant Actual Disbursements].CurrentMember.name as Numeric)
+				Cast([Activity Total Amounts.Total Grand Actual Disbursements].[Total Grand Actual Disbursements].CurrentMember.name as Numeric)
 			</Formula>
 			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>			
 		</CalculatedMember>
  
 		<CalculatedMember name="Percentage Of Total Disbursements" dimension="Measures">
 		 	<Formula>
-				IIf(Measures.[Total Grant Disbursements]=0, null, [Measures].[Actual Disbursements] / Measures.[Total Grant Disbursements] * 100)
+				IIf(Measures.[Total Grand Disbursements]=0, null, [Measures].[Actual Disbursements] / Measures.[Total Grand Disbursements] * 100)
 			</Formula>
 			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>			
 		</CalculatedMember>

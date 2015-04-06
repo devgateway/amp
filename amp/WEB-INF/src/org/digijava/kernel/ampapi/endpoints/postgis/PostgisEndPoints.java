@@ -32,7 +32,7 @@ public class PostgisEndPoints {
 	@Path("/location/{locationName}/{includeCloseBy}")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	public FeatureCollectionGeoJSON locations(@PathParam("locationName") String locationName,@PathParam ("includeCloseBy") Boolean includeCloseBy) {
-		List<AmpLocator> locations = QueryUtil.getLocationsFromKeyword(locationName);
+		List<AmpLocator> locations = QueryUtil.getLocationsFromKeyword(locationName.toLowerCase());
 		List <Long> idLists = QueryUtil.getIdsList(locations);
 		FeatureCollectionGeoJSON featureCollection = new FeatureCollectionGeoJSON();
 		for (AmpLocator locator : locations) {

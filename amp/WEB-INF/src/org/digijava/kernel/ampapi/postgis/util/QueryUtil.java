@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.algo.ValueWrapper;
 import org.dgfoundation.amp.ar.ColumnConstants;
+import org.dgfoundation.amp.ar.FilterParam;
 import org.dgfoundation.amp.ar.viewfetcher.ColumnValuesCacher;
 import org.dgfoundation.amp.ar.viewfetcher.DatabaseViewFetcher;
 import org.dgfoundation.amp.ar.viewfetcher.PropertyDescription;
@@ -105,19 +106,29 @@ public class QueryUtil {
 
 	}
 
-	public static List<AmpLocator> getLocationsFromKeyword(String keyword) {
+	public static List<AmpLocator> getLocationsFromKeyword(final String  keyword) {
 		final List <AmpLocator> locationList = new ArrayList <AmpLocator> ();
 		try {
 			int distance = ScoreCalculator.getMaxAllowedDistance(keyword);
-			//keyword = keyword.toLowerCase();
-			final String queryString = "select id, name, latitude,longitude, levenshtein(SP_ASCII('"+keyword+"'), SP_ASCII(name), 1, 1, 1) as distance, " 
-										+ "thegeometry from amp_locator where levenshtein(SP_ASCII('"+keyword+"'), SP_ASCII(name),1,1,1) <= " + distance
-										+ " or SP_ASCII(name) like SP_ASCII('%"+keyword+"%')";
+			final String queryString = "select id, name, latitude,longitude, levenshtein(lower(SP_ASCII(?)), "
+					+ " lower(SP_ASCII(name)), 1, 1, 1) as distance, " 
+					+ " thegeometry ,"
+					+ " Sp_ascii(name) anglicizedName, "
+					+ " Sp_ascii(?) anglicizedKeyword " 
+					+ "from amp_locator where levenshtein(lower(SP_ASCII(?)), lower(SP_ASCII(name)),1,1,1) <= " + distance
+					+ " or SP_ASCII(name) like SP_ASCII(?)";
 			
 			PersistenceManager.getSession().doWork(new Work() {
 
 				@Override
 				public void execute(Connection connection) throws SQLException {
+					
+					ArrayList<FilterParam> params = new ArrayList<FilterParam>();
+					params.add(new FilterParam(keyword,  java.sql.Types.VARCHAR));
+					params.add(new FilterParam(keyword,  java.sql.Types.VARCHAR));
+					params.add(new FilterParam(keyword,  java.sql.Types.VARCHAR));
+					params.add(new FilterParam(keyword,  java.sql.Types.VARCHAR));
+					
 					try(RsInfo rsi = SQLUtils.rawRunQuery(connection, queryString, null)) {
 						ResultSet rs = rsi.rs;
 						while (rs.next()) {

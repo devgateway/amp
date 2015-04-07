@@ -76,8 +76,7 @@
 	<!-- move this to the reports module -->
 	<http pattern="/reportsPublicView.do**" security="none" />
 	<http pattern="/aim/default/reportsPublicView.do**" security="none" />
-	
-	
+
 	<http pattern="/gis/showPublicGis.do**" security="none" />
 	<http pattern="/gis/getFoundingDetails.do**" security="none" />
 	<http pattern="/gis/showAdditionalGraphics.do**" security="none" />
@@ -151,7 +150,19 @@
     <http pattern="/aim/viewTeamReports.do*"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
         <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     </http>
-    
+
+    <http pattern="/um/user/showResetForm.do*"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    </http>
+
+    <http pattern="/um/userResetPassword.do*"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    </http>
+
+    <http pattern="/index.do*"  entry-point-ref="digestEntryPoint" realm="AMP-Realm" >
+        <intercept-url pattern="/**" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    </http>
+
    
 
 	<!-- set the digestEntryPoint to set up the HTTP headers for digest -->

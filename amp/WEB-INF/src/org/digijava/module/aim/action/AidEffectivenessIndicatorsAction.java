@@ -139,6 +139,12 @@ public class AidEffectivenessIndicatorsAction extends Action {
                     indicator = formToEntity(indicatorForm, null);
                 }
                 AidEffectivenessIndicatorUtil.saveIndicator(indicator);
+                // AMP-19893. Synch FM tree with the active/inactive flag
+                if (indicator.getActive()) {
+                    AidEffectivenessIndicatorUtil.createModulesVisibility(indicator.getAmpIndicatorName());
+                } else {
+                    AidEffectivenessIndicatorUtil.cleanUpModulesVisibility(indicator);
+                }
 
                 request.setAttribute("confirmationMessage", "saveSuccess");
                 clearForm(indicatorForm);

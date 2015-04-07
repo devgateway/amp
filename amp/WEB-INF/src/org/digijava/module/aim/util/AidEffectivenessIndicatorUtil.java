@@ -176,6 +176,40 @@ public class AidEffectivenessIndicatorUtil {
         query.executeUpdate();
     }
 
+    /**
+     * If indicator gets activated we need to "return it back" (create) to the Global FM tree
+     * @param indicatorName
+     */
+    public static void createModulesVisibility(String indicatorName) {
+        Session session = PersistenceManager.getSession();
+        String queryStr = "select count(*) from amp_modules_visibility where lower (name) = :name";
+        Query query = session.createSQLQuery(queryStr);
+        query.setString("name", (AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicatorName).toLowerCase());
+        int count = Integer.parseInt(query.uniqueResult().toString());
+
+        // if indicator with this name has not been found, we create one
+        if (count == 0) {
+            queryStr = "select parent from amp_modules_visibility values where name like '"
+                    + AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + "%'";
+            query = session.createSQLQuery(queryStr);
+            query.setMaxResults(1);
+            List resultList = query.list();
+            // if parent exists
+            if (resultList != null && resultList.size() > 0) {
+                queryStr = "insert into amp_modules_visibility values(nextval('amp_modules_visibility_seq'), :name, '', 't', :parent)";
+                query = session.createSQLQuery(queryStr);
+                query.setString("name", AID_EFFECTIVENESS_INDICATOR_VISIBILITY_PREFIX + indicatorName);
+                query.setLong("parent", Long.parseLong(resultList.get(0).toString()));
+                query.executeUpdate();
+            }
+        }
+    }
+
+    /**
+     * When indicator name is changed, the name in Global FM tree should be changed respectively
+     * @param indicator
+     * @param oldIndicatorName the name in FM tree to update
+     */
     public static void updateModulesVisibility(AmpAidEffectivenessIndicator indicator, String oldIndicatorName) {
         Session session = PersistenceManager.getSession();
 

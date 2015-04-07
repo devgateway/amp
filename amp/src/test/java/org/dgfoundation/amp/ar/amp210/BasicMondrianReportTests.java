@@ -377,4 +377,56 @@ public class BasicMondrianReportTests extends MondrianReportsTestCase {
 				);
 	}
 	
+	@Test
+	public void test_AMP_19799_Unsupported_Column1() {
+		ReportAreaForTests correctResult = new ReportAreaForTests()
+	    .withContents("Primary Sector", "Report Totals", "2013-Actual Commitments", "3 336 777", "2013-Actual Disbursements", "0", "2014-Actual Commitments", "4 479 670,69", "2014-Actual Disbursements", "530 000", "Total Measures-Actual Commitments", "7 816 447,69", "Total Measures-Actual Disbursements", "530 000")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Primary Sector", "110 - EDUCATION", "2013-Actual Commitments", "666 777", "2013-Actual Disbursements", "", "2014-Actual Commitments", "79 670,69", "2014-Actual Disbursements", "80 000", "Total Measures-Actual Commitments", "746 447,69", "Total Measures-Actual Disbursements", "80 000"),
+	      new ReportAreaForTests()
+	          .withContents("Primary Sector", "113 - SECONDARY EDUCATION", "2013-Actual Commitments", "2 670 000", "2013-Actual Disbursements", "", "2014-Actual Commitments", "4 400 000", "2014-Actual Disbursements", "450 000", "Total Measures-Actual Commitments", "7 070 000", "Total Measures-Actual Disbursements", "450 000")  );
+		
+		List<String> activities = Arrays.asList("pledged 2", "activity with capital spending", "ptc activity 1");
+		runMondrianTestCase("AMP-19799-Unsupported-Mondrian-Column1",
+				activities,
+				correctResult,
+				"en");
+	}
+	
+	@Test
+	public void test_AMP_19799_Unsupported_Column2() {
+		ReportAreaForTests correctResult = new ReportAreaForTests()
+	    .withContents("Primary Sector", "Report Totals", "Actual Commitments", "7 816 447,69", "Actual Disbursements", "530 000")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Primary Sector", "110 - EDUCATION", "Actual Commitments", "746 447,69", "Actual Disbursements", "80 000"),
+	      new ReportAreaForTests()
+	          .withContents("Primary Sector", "113 - SECONDARY EDUCATION", "Actual Commitments", "7 070 000", "Actual Disbursements", "450 000")  );
+		
+		List<String> activities = Arrays.asList("pledged 2", "activity with capital spending", "ptc activity 1");
+		runMondrianTestCase("AMP-19799-Unsupported-Mondrian-Column2",
+				activities,
+				correctResult,
+				"en");
+	}
+	
+	@Test
+	public void test_AMP_19799_Unsupported_Column3() {
+		ReportAreaForTests correctResult = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Primary Sector", "", "2013-Actual Commitments", "3 336 777", "2013-Actual Disbursements", "0", "2014-Actual Commitments", "4 479 670,69", "2014-Actual Disbursements", "530 000", "Total Measures-Actual Commitments", "7 816 447,69", "Total Measures-Actual Disbursements", "530 000")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "ptc activity 1", "Primary Sector", "110 - EDUCATION", "2013-Actual Commitments", "666 777", "2013-Actual Disbursements", "", "2014-Actual Commitments", "", "2014-Actual Disbursements", "", "Total Measures-Actual Commitments", "666 777", "Total Measures-Actual Disbursements", "0"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "pledged 2", "Primary Sector", "113 - SECONDARY EDUCATION", "2013-Actual Commitments", "2 670 000", "2013-Actual Disbursements", "", "2014-Actual Commitments", "4 400 000", "2014-Actual Disbursements", "450 000", "Total Measures-Actual Commitments", "7 070 000", "Total Measures-Actual Disbursements", "450 000"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "activity with capital spending", "Primary Sector", "110 - EDUCATION", "2013-Actual Commitments", "", "2013-Actual Disbursements", "", "2014-Actual Commitments", "79 670,69", "2014-Actual Disbursements", "80 000", "Total Measures-Actual Commitments", "79 670,69", "Total Measures-Actual Disbursements", "80 000")  );
+		
+		List<String> activities = Arrays.asList("pledged 2", "activity with capital spending", "ptc activity 1");
+		runMondrianTestCase("AMP-19799-Unsupported-Mondrian-Column3",
+				activities,
+				correctResult,
+				"en");
+	}
 }

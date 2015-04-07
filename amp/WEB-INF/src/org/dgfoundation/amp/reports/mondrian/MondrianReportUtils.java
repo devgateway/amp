@@ -23,6 +23,7 @@ import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.reports.AmountColumns;
 import org.dgfoundation.amp.reports.DateColumns;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
@@ -242,8 +243,28 @@ public class MondrianReportUtils {
 		return DateColumns.ACTIVITY_DATES.contains(columnName);
 	}
 	
-//	public static boolean hasTotalMeasures(ReportSpecification spec) {
-//		// for Saiku load spec.getColumnNames() == null
-//		return spec.getColumnNames() == null || !Collections.disjoint(spec.getColumnNames(), MondrianMapping.totalsMeasures);
+	
+	// this call makes test cases much slower and I expect an impact on the first report
+//	/**
+//	 * Cleans up ReportSpecification from columns unsupported by Mondrian 
+//	 * @param spec
+//	 */
+//	public static void removeUnsupportedColumns(ReportSpecification spec) {
+//		// there can be also some measures automatically moved as computed columns in Mondrian
+//		Set<String> allowedColumns = getConfigurableMeasures();
+//		allowedColumns.retainAll(AmountColumns.ACTIVITY_AMOUNTS);
+//		allowedColumns.addAll(getConfigurableColumns());
+//		
+//		removeUnsupportedColumns(spec.getColumns(), allowedColumns);
+//		removeUnsupportedColumns(spec.getHierarchies(), allowedColumns);
 //	}
+//	
+//	protected static void removeUnsupportedColumns(Set<ReportColumn> columnsSet, Set<String> allowedColumns) {
+//		for(Iterator<ReportColumn> iter = columnsSet.iterator(); iter.hasNext(); ) {
+//			if (!allowedColumns.contains(iter.next().getColumnName())) {
+//				iter.remove();
+//			}
+//		}
+//	}
+	
 }

@@ -119,8 +119,6 @@ public class PermissionsAndValidationsTest extends SeleneseTestCase {
 		selenium.type("j_password", "admin");
 		selenium.click("submitButton");
 		selenium.waitForPageToLoad("30000");
-		selenium.click("//a[@onclick=\"SwitchLanguageMenu('/translation/switchLanguage.do?code=en&rfr=%2Fadmin.do')\"]");
-		selenium.waitForPageToLoad("30000");
 		selenium.click("//a[contains(@href, \"/aim/visibilityManager.do\")]");
 		selenium.waitForPageToLoad("30000");
 		boolean done = false;

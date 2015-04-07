@@ -113,7 +113,7 @@ td.inside_inner_title { border-width: 1px 1px 1px 1px;border-color: #CCC; border
 .top_nav a {color:#FFFFFF;}
 .login_nav {float:right;  font-size:11px; padding-top:13px; width:500px;text-align:right;z-index:9999; height:51px;overflow:visible;margin:0px 20px 0px 0px;}
 #loginForm {margin:0;z-index:9999;}
-.login_nav a {color:#FFFFFF;}
+.login_nav a {color:#000000;}
 .login_nav input { width:150px;}
 .login_nav .buttonx_sm_lgn {width:auto !important; display: block; float: right;}
 .login_label {padding-right:5px; padding-left:10px; color:#000000;}

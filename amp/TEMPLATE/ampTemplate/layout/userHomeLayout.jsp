@@ -72,6 +72,7 @@
 	<digi:secure authenticated="true">
 		<jsp:include page="headerForDesktopTabs.jsp"/>
 	</digi:secure>
+	<digi:insert attribute="headerMiddle"/>
 	<div class="breadcrump_1">
 	</div>
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align="center" id="main-desktop-container">

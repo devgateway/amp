@@ -50,10 +50,6 @@
 												<td width="1"><digi:img src="images/ui/header/navLinkSep.gif"/></td>
 											</digi:secure>
 			
-												<%--<digi:insert attribute="showNavigation" />--%>
-											<td width="99%" align="right">
-											<digi:insert attribute="dropdownLangSwitch" />
-											</td>
 											
 										</tr>
 									</table>										

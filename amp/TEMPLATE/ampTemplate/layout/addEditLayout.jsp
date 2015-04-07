@@ -48,10 +48,7 @@
 			<digi:insert attribute="headerMiddle" />
 		</TD>
     	<TD>
-      	<DIV style="PADDING-RIGHT: 12px" align=right>
-				<digi:insert attribute="dropdownLangSwitch" />
-  	  </DIV>
-		</TD>
+     	</TD>
 	</TR>
   	<TR background="<%= digiContext %>/TEMPLATE/ampTemplate/images/bg-header.gif">
     	<TD background="<%= digiContext %>/TEMPLATE/ampTemplate/images/bg-header.gif" 

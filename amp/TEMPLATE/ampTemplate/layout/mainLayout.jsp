@@ -62,6 +62,7 @@
 		<digi:insert attribute="headerTop" />
 	</logic:notPresent>
 </div>
+<digi:insert attribute="headerMiddle"/>
 <logic:notPresent name="bootstrap_insert" scope="request">
 	<div class="breadcrump_1">&nbsp;</div>
 	<div style="width:1000px;margin:0 auto;">

@@ -18,7 +18,6 @@
 		
 		<layout name="gisDashboardLayout" extends="default" file="gisDashboardlayout.jsp">
 			<put name="title">Results Matrix</put>
-<!--			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>-->
 			<put-item name="widget1" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="widget2" module="widget" instance="default" teaser="teaserOfWidget"/>
 			<put-item name="widget3" module="widget" instance="default" teaser="teaserOfWidget"/>
@@ -69,7 +68,6 @@
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
-			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="footer" layout="footerNoAdminLayout"/>
 			<put-item name="body" layout="helpBodyLayout"/>
 		</layout>
@@ -109,7 +107,6 @@
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
-			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="footer" layout="footerLayout"/>
 			<put-item name="body"  module="message" page="addMessages"/>			
 		</layout>
@@ -139,8 +136,7 @@
 			
 		
 		<layout name="headerMiddleLayout" file="headerMiddle.jsp">
-	    	<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitchMenu"/>
-			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
+	  	<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
 			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 		</layout>
 		
@@ -159,7 +155,6 @@
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
-			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="footer" layout="footerLayout"/>
 			<put-item name="body"/>
 		</layout>
@@ -168,7 +163,6 @@
 			<put name="title">AMP - Logout</put>
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
-			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="footer" layout="footerLayout"/>
 			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 		</layout>
@@ -185,7 +179,6 @@
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
-			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="footer" layout="footerLayout"/>
 			<put-item name="body" module="aim" instance="default"/>
 		</layout>
@@ -209,7 +202,6 @@
 			<put name="title">- Home</put>
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
-			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="footer" layout="footerLayout"/>
  			<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="body" module="content" instance="default" teaser="contentView"/>
@@ -233,7 +225,6 @@
 			<put name="title">AMP Tab Layout</put>
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
-			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="tabHeader" module="aim" instance="default" teaser="mainProjectDetails"/>
 			<put-item name="tabBody" module="aim" instance="default" teaser="blankTeaser"/>
 	 		<put-item name="footer" layout="footerLayout"/>
@@ -446,7 +437,6 @@
 		<layout name="userHomeLayout" file="userHomeLayout.jsp">
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
-			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="myDesktop" module="aim" instance="default" teaser="myDesktop"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="myReports" module="aim" instance="default" teaser="myReports"/>
@@ -461,7 +451,6 @@
 		<layout name="publicReportsViewLayout" file="userHomeLayout.jsp">
 			<put name="title">- Public View</put>
 			<put-item name="headerTop" layout="headerTopLayout"/>
-			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="body" module="aim" page="reportsPublicView"/>
@@ -493,7 +482,6 @@
 			<put name="title">AMP</put>
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
-			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="addEditNavigator" module="aim" instance="default" teaser="addEditNavigator"/>
 			<put-item name="addEditBody" module="aim" instance="default" teaser="blankTeaser"/>
 	 		<put-item name="footer" layout="footerLayout"/>
@@ -537,11 +525,10 @@
 			<put name="build_version">&buildDate;</put>
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
-	    	<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitchMenu"/>
-			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
-			
+	    	<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 			<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
+	
 		</layout>
 
 		<layout name="wicketAdminHeaderLayout" extends="noLayout" file="wicketAdminHeaderLayout.jsp">
@@ -549,11 +536,8 @@
 			<put name="build_version">&buildDate;</put>
 			<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
-	    	<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitchMenu"/>
-			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
-			
+	    	<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 			<put-item name="loginWidget" file="loginWidget.jsp"/>
-			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 		</layout>
 
 		<page-group masterLayout="wicketHeaderLayout">

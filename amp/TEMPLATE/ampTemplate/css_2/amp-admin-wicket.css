@@ -69,7 +69,7 @@ td.inside {margin: 0; padding: 4px; border-width: 1px 1px 0 0; background-color:
 .top_nav {float:right; color:#FFFFFF; font-size:12px; font-weight:bold;}
 .top_nav a {color:#FFFFFF;}
 .login_nav {float:right; color:#FFFFFF; font-size:11px; padding-top:13px;}
-.login_nav a {color:#FFFFFF;}
+.login_nav a {color:#000000;}
 .login_label {padding-right:5px; padding-left:10px; color:#000000;}
 top_nav a {color:#FFFFFF;}
 .top_sep {margin-left:10px; margin-right:10px;}

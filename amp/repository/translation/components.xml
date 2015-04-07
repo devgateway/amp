@@ -17,6 +17,5 @@
 	<teaser-file>dropdownLangSwitch.jsp</teaser-file>
 	<teaser name="flatLangSwitch" action="renderTeaser.do">flatLangSwitch.jsp</teaser>
 	<teaser name="dropdownLangSwitch" action="renderTeaser.do">dropdownLangSwitch.jsp</teaser>
-	<teaser name="dropdownLangSwitchMenu" action="renderTeaser.do">dropdownLangSwitchMenu.jsp</teaser>
 </module>
 </config>

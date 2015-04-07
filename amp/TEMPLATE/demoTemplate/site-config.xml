@@ -18,7 +18,6 @@
 			<put-item teaser="showVerticalNavigation" name="showVerticalNavigation" module="editor" instance="default"/>
 		</layout>
 		<layout name="headerLayout" file="header.jsp">
-			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="sdm" module="sdm" instance="default"/>
 			<put-item teaser="showNavigation" name="showNavigation" module="editor" instance="default"/>
 		</layout>

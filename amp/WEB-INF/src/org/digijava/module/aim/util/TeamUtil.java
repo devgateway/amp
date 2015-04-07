@@ -1003,24 +1003,29 @@ public class TeamUtil {
      * gets list of documents attached any of the AmpActivityId's in the given list 
      * @return
      */
-    public static Map<Long, List<AmpActivityDocument>> getDocumentsByActivityIds(Collection<Long> activityIds)
-    {
-    	try
-    	{
-    		Map<Long, List<AmpActivityDocument>> result = new java.util.TreeMap<Long, List<AmpActivityDocument>>();
-    		
-    		if(activityIds.size()==0) return result;
-    		String queryString = "select doc, doc.ampActivity.ampActivityId FROM " + AmpActivityDocument.class.getName() + " doc WHERE doc.ampActivity.ampActivityId IN (" + getCommaSeparatedList(activityIds) + ")";
-            Session session = PersistenceManager.getRequestDBSession();
-            Query qry = session.createQuery(queryString.toString());
-            for(Object[] rs:(List<Object[]>) qry.list())
-            {
-            	Long actId = (Long) rs[1];
-            	if (result.get(actId) == null)
-            		result.put(actId, new ArrayList<AmpActivityDocument>());
-            	result.get(actId).add((AmpActivityDocument) rs[0]);
-            }
-            return result;
+    public static Map<Long, List<AmpActivityDocument>> getDocumentsByActivityIds(Collection<Long> activityIds) {
+	Map<Long, List<AmpActivityDocument>> result = new java.util.TreeMap<Long, List<AmpActivityDocument>>();
+	try {
+
+	    if (activityIds.size() == 0)
+		return result;
+	    String queryString = "select doc, doc.ampActivity.ampActivityId FROM "
+			    + AmpActivityDocument.class.getName() + " doc WHERE doc.ampActivity.ampActivityId IN ("
+			    + getCommaSeparatedList(activityIds) + ")";
+	    Session session = PersistenceManager.getRequestDBSession();
+	    Query qry = session.createQuery(queryString.toString());
+	    for (Object[] rs : (List<Object[]>) qry.list()) {
+		Long actId = (Long) rs[1];
+		if (result.get(actId) == null)
+		    result.put(actId, new ArrayList<AmpActivityDocument>());
+		result.get(actId).add((AmpActivityDocument) rs[0]);
+	    }
+
+	} catch (Exception e) {
+	    // TODO: handle exception
+	}
+	return result;
+
     }
     
     /**

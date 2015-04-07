@@ -81,7 +81,7 @@ public class AmpPMObjectVisibilitySearchModel extends AbstractAmpAutoCompleteMod
 		List<AmpObjectVisibility> ret = null;
 		try {
 			
-			session = PersistenceManager.getRequestDBSession();
+			session = PersistenceManager.getSession();
 			TreeSet<AmpObjectVisibility> fields = new TreeSet<AmpObjectVisibility>();
 			Criteria critFields = session.createCriteria(AmpFieldsVisibility.class);
 			critFields.setCacheable(true);
@@ -116,11 +116,8 @@ public class AmpPMObjectVisibilitySearchModel extends AbstractAmpAutoCompleteMod
 			ret = new ArrayList<AmpObjectVisibility>();
 			ret.addAll(fields);
 			
-		} catch (HibernateException e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		return ret;

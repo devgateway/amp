@@ -743,7 +743,6 @@ public class ContentTranslationUtil {
 
     public static List<AmpContentTranslation> getContentTranslationsByTypes(List<String> types) {
         List<AmpContentTranslation> retVal = null;
-        Session session = null;
         StringBuilder typesWhereClause = null;
         if (types != null && !types.isEmpty()) {
             typesWhereClause = new StringBuilder();
@@ -755,36 +754,22 @@ public class ContentTranslationUtil {
                 }
             }
         }
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            StringBuilder qs = new StringBuilder("from ").
-                    append(AmpContentTranslation.class.getName()).append(" ct");
 
-            if (typesWhereClause != null) {
-                qs.append(" where ct.objectClass in (").append(typesWhereClause).append(")");
-            }
-            qs.append(" order by ct.objectId");
+        StringBuilder qs = new StringBuilder("from ").append(AmpContentTranslation.class.getName()).append(" ct");
 
-            retVal = (List<AmpContentTranslation>) session.createQuery(qs.toString()).list();
-        } catch (DgException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        if (typesWhereClause != null) {
+        	qs.append(" where ct.objectClass in (").append(typesWhereClause).append(")");
         }
-        return retVal;
+        qs.append(" order by ct.objectId");
+
+        return (List<AmpContentTranslation>) PersistenceManager.getSession().createQuery(qs.toString()).list();
     }
 
     public static List<String[]> getContentTrnUniqueTypesAndLangs() {
-        List<String[]> retVal = null;
-        Session session = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            StringBuilder qs = new StringBuilder("select distinct ct.objectClass, ct.locale from ").
-                    append(AmpContentTranslation.class.getName()).
-                    append(" ct");
-            retVal = (List<String[]>) session.createQuery(qs.toString()).list();
-        } catch (DgException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        return retVal;
+    	StringBuilder qs = new StringBuilder("select distinct ct.objectClass, ct.locale from ").
+    			append(AmpContentTranslation.class.getName()).
+    			append(" ct");
+    	return (List<String[]>) PersistenceManager.getSession().createQuery(qs.toString()).list();
     }
 
     public static Collection<ContentTrnObjectType> getContentTranslationUniques() {

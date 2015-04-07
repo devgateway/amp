@@ -44,7 +44,7 @@ public class AmpPMWorkspaceSearchModel extends AbstractAmpAutoCompleteModel<AmpT
 		List<AmpTeam> ret = null;
 		try {
 			
-			session = PersistenceManager.getRequestDBSession();
+			session = PersistenceManager.getSession();
 			Criteria crit = session.createCriteria(AmpTeam.class);
 			crit.setCacheable(true);
 				
@@ -65,9 +65,6 @@ public class AmpPMWorkspaceSearchModel extends AbstractAmpAutoCompleteModel<AmpT
 			
 		} catch (HibernateException e) {
 			throw new RuntimeException(e);
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		return ret;

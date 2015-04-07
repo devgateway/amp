@@ -47,24 +47,19 @@ public class AmpDbUtil {
   public static AmpCalendar getAmpCalendar(Long ampCalendarId) {
 	  AmpCalendar ampCalendar=null;
 	  Calendar calendar=null;
-	  if(ampCalendarId!=null){
-		  try {
-			Session session = PersistenceManager.getRequestDBSession();
-	        //Calendar calendar = (Calendar) session.load(Calendar.class,ampCalendarId);
-			Query query=session.createQuery("from "+ Calendar.class.getName() + " c where c.id= :calendarId");
-			query.setParameter("calendarId", ampCalendarId);
-			calendar=(Calendar)query.uniqueResult();
-			if(calendar!=null){
-				AmpCalendarPK ampCalendarPK = new AmpCalendarPK(calendar);
-				query=session.createQuery("from "+ AmpCalendar.class.getName() + " c where c.calendarPK= :calendarPK");
-				query.setParameter("calendarPK", ampCalendarPK);
-				ampCalendar=(AmpCalendar)query.uniqueResult();
+	  if (ampCalendarId != null){
+		  Session session = PersistenceManager.getSession();
+	      //Calendar calendar = (Calendar) session.load(Calendar.class,ampCalendarId);
+		  Query query=session.createQuery("from "+ Calendar.class.getName() + " c where c.id= :calendarId");
+		  query.setParameter("calendarId", ampCalendarId);
+		  calendar=(Calendar)query.uniqueResult();
+		  if (calendar != null) {
+			  AmpCalendarPK ampCalendarPK = new AmpCalendarPK(calendar);
+			  query=session.createQuery("from "+ AmpCalendar.class.getName() + " c where c.calendarPK= :calendarPK");
+			  query.setParameter("calendarPK", ampCalendarPK);
+			  ampCalendar=(AmpCalendar)query.uniqueResult();
 				//ampCalendar = (AmpCalendar) session.load(AmpCalendar.class,ampCalendarPK);
 			}
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	  }
 	  return ampCalendar;
   }

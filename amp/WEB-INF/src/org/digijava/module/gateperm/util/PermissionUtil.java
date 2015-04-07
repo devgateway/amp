@@ -248,7 +248,7 @@ public final class PermissionUtil {
     	Session session = null;
 
     	try {
-    	    session = PersistenceManager.getRequestDBSession();
+    	    session = PersistenceManager.getSession();
     	    Query query = session.createQuery(" from " + Permission.class.getName()+" p WHERE p.name=:permissionName");
     	    query.setParameter("permissionName", name);
     	    List list = query.list();
@@ -258,9 +258,6 @@ public final class PermissionUtil {
     	} catch (HibernateException e) {
     	    logger.error(e);
     	    throw new RuntimeException("HibernateException Exception encountered", e);
-    	} catch (DgException e) {
-    	    logger.error(e);
-    	    throw new RuntimeException("DgException Exception encountered", e);
     	}
         }
 
@@ -269,16 +266,13 @@ public final class PermissionUtil {
     public static List<Permission> getAllUnDedicatedPermissions() {
 	Session session = null;
 	try {
-	    session = PersistenceManager.getRequestDBSession();
+	    session = PersistenceManager.getSession();
 	    Query query = session.createQuery(" from " + Permission.class.getName() +" p WHERE p.dedicated=false");
 	    List list = query.list();
 	    return list;
 	} catch (HibernateException e) {
 	    logger.error(e);
 	    throw new RuntimeException("HibernateException Exception encountered", e);
-	} catch (DgException e) {
-	    logger.error(e);
-	    throw new RuntimeException("DgException Exception encountered", e);
 	}
     }
 
@@ -287,7 +281,7 @@ public final class PermissionUtil {
     	Session session = null;
 
     	try {
-    	    session = PersistenceManager.getRequestDBSession();
+    	    session = PersistenceManager.getSession();
     	    Query query = session.createQuery(" from " + CompositePermission.class.getName() +" p WHERE p.dedicated=true");
     	    List list = query.list();
 
@@ -295,9 +289,6 @@ public final class PermissionUtil {
     	} catch (HibernateException e) {
     	    logger.error(e);
     	    throw new RuntimeException("HibernateException Exception encountered", e);
-    	} catch (DgException e) {
-    	    logger.error(e);
-    	    throw new RuntimeException("DgException Exception encountered", e);
     	}
         }
     
@@ -305,7 +296,7 @@ public final class PermissionUtil {
     public static Set<AmpPMFieldPermissionViewer> getAllAmpPMFieldPermissionViewers(Class permClass) {
 	Session session = null;
 	try {
-	    session = PersistenceManager.getRequestDBSession();
+	    session = PersistenceManager.getSession();
 
 	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
 		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier is not null");
@@ -323,17 +314,13 @@ public final class PermissionUtil {
 	} catch (HibernateException e) {
 	    logger.error(e);
 	    throw new RuntimeException("HibernateException Exception encountered", e);
-	} catch (DgException e) {
-	    logger.error(e);
-	    // TODO Auto-generated catch block
-	    throw new RuntimeException("DgException Exception encountered", e);
 	}
     }
     
     public static Map<Long, PermissionMap> getAllPermissionMapsForPermissibleClass(Class permClass) {
 	Session session = null;
 	try {
-	    session = PersistenceManager.getRequestDBSession();
+	    session = PersistenceManager.getSession();
 
 	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
 		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier is not null");
@@ -349,17 +336,13 @@ public final class PermissionUtil {
 	} catch (HibernateException e) {
 	    logger.error(e);
 	    throw new RuntimeException("HibernateException Exception encountered", e);
-	} catch (DgException e) {
-	    logger.error(e);
-	    // TODO Auto-generated catch block
-	    throw new RuntimeException("DgException Exception encountered", e);
 	}
 	}
     
     public static void cleanGlobalPermissionMapForPermissibleClass(Class permClass) {
     	Session session = null;
   	  try {
-  	    session = PersistenceManager.getRequestDBSession();
+  	    session = PersistenceManager.getSession();
   	    
   	  Query query = session.createQuery("delete from "+PermissionMap.class.getName()+
   			  " WHERE permissibleCategory=:categoryName AND objectIdentifier is null");
@@ -369,10 +352,7 @@ public final class PermissionUtil {
   	  } catch (HibernateException e) {
   	    logger.error(e);
   	    throw new RuntimeException( "HibernateException Exception encountered", e);
-  	} catch (DgException e) {
-  		  logger.error(e);
-  		   throw new RuntimeException( "DgException Exception encountered", e);
-  	} 
+  	}
     }
 	    
   	 
@@ -380,7 +360,7 @@ public final class PermissionUtil {
     public static Long getGlobalPermissionMapIdForPermissibleClass(Class permClass) {
 	Session session = null;
 	  try {
-	    session = PersistenceManager.getRequestDBSession();
+	    session = PersistenceManager.getSession();
 	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
 		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier is null");
 	    query.setParameter("categoryName", permClass.getSimpleName());
@@ -391,9 +371,6 @@ public final class PermissionUtil {
 	} catch (HibernateException e) {
 	    logger.error(e);
 	    throw new RuntimeException( "HibernateException Exception encountered", e);
-	} catch (DgException e) {
-		  logger.error(e);
-		   throw new RuntimeException( "DgException Exception encountered", e);
 	}
     }
 
@@ -402,7 +379,7 @@ public final class PermissionUtil {
     	Session sessionAux = null;
     	  try {
     	    if(session==null)
-    	    	sessionAux = PersistenceManager.getRequestDBSession();
+    	    	sessionAux = PersistenceManager.getSession();
     	    else sessionAux = session;
     	    Query query = sessionAux.createQuery("SELECT p from " + PermissionMap.class.getName()
     		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier is null");
@@ -414,17 +391,14 @@ public final class PermissionUtil {
     	} catch (HibernateException e) {
     	    logger.error(e);
     	    throw new RuntimeException( "HibernateException Exception encountered", e);
-    	} catch (DgException e) {
-    		  logger.error(e);
-    		   throw new RuntimeException( "DgException Exception encountered", e);
-    	} 
+    	}
     	}
     
     
     public static Permission getGlobalPermissionForPermissibleClass(Class permClass) {
 	Session session = null;
   	  try {
-	    session = PersistenceManager.getRequestDBSession();
+	    session = PersistenceManager.getSession();
   	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
   		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier is null");
   	    query.setParameter("categoryName", permClass.getSimpleName());
@@ -435,10 +409,7 @@ public final class PermissionUtil {
   	} catch (HibernateException e) {
   	    logger.error(e);
   	    throw new RuntimeException( "HibernateException Exception encountered", e);
-  	} catch (DgException e) {
-  	    logger.error(e);
-  	    throw new RuntimeException( "DgException Exception encountered", e);
-  	}   	  
+  	}	  
     }
 
     
@@ -450,7 +421,7 @@ public final class PermissionUtil {
     public static PermissionMap getOwnPermissionMapForPermissible(Permissible obj) {
 	Session session = null;
 	try {
-	    session = PersistenceManager.getRequestDBSession();
+	    session = PersistenceManager.getSession();
 
 	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
 		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier=:objectId ORDER BY p.objectIdentifier");
@@ -467,9 +438,6 @@ public final class PermissionUtil {
 	} catch (HibernateException e) {
 	    logger.error(e);
 	    throw new RuntimeException("HibernateException Exception encountered", e);
-	} catch (DgException e) {
-	    logger.error(e);
-	    throw new RuntimeException("DgException Exception encountered", e);
 	}
     }
 
@@ -483,7 +451,7 @@ public final class PermissionUtil {
     public static PermissionMap getPermissionMapForPermissible(Permissible obj) {
 	Session session = null;
 	try {
-	    session = PersistenceManager.getRequestDBSession();
+	    session = PersistenceManager.getSession();
 
 	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
 		    + " p WHERE p.permissibleCategory=:categoryName AND (p.objectIdentifier is null OR p.objectIdentifier=:objectId) ORDER BY p.objectIdentifier");
@@ -510,10 +478,7 @@ public final class PermissionUtil {
 	} catch (HibernateException e) {
 	    logger.error(e);
 	    throw new RuntimeException("HibernateException Exception encountered", e);
-	} catch (DgException e) {
-	    logger.error(e);
-	    throw new RuntimeException("SQLException Exception encountered", e);
-	}
+	} 
     }
 
     
@@ -523,7 +488,7 @@ public final class PermissionUtil {
     public static PermissionMap getPermissionMapForPermissible(Object permissibleIdentifier,Class permissibleClass) {
 	Session session = null;
 	try {
-	    session = PersistenceManager.getRequestDBSession();
+	    session = PersistenceManager.getSession();
 
 	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
 		    + " p WHERE p.permissibleCategory=:categoryName AND (p.objectIdentifier is null OR p.objectIdentifier=:objectId) ORDER BY p.objectIdentifier");
@@ -548,9 +513,6 @@ public final class PermissionUtil {
 	} catch (HibernateException e) {
 	    logger.error(e);
 	    throw new RuntimeException("HibernateException Exception encountered", e);
-	} catch (DgException e) {
-	    logger.error(e);
-	    throw new RuntimeException("SQLException Exception encountered", e);
 	}
     }
 
@@ -559,7 +521,7 @@ public final class PermissionUtil {
     public static Identifiable getIdentifiableByClusterIdentifier(String clusterIdentifier,Class permissibleClass) {
     	Session session = null;
     	try {
-    	    session = PersistenceManager.getRequestDBSession();
+    	    session = PersistenceManager.getSession();
 
     	    //get the cluster identifier (if any) from the db. if the cluster id is not available in the db then instantiating all
     	    //objects is the only way to get it
@@ -593,9 +555,6 @@ public final class PermissionUtil {
     	} catch (HibernateException e) {
     	    logger.error(e);
     	    throw new RuntimeException("HibernateException Exception encountered", e);
-    	} catch (DgException e) {
-    	    logger.error(e);
-    	    throw new RuntimeException("DgException Exception encountered", e);
     	}
         }
 
@@ -614,7 +573,7 @@ public final class PermissionUtil {
 	Map<Long, String> ret = new HashMap<Long, String>();
 	Session session = null;
 	try {
-	    session = PersistenceManager.getRequestDBSession();
+	    session = PersistenceManager.getSession();
 	    String idProperty = Permissible.getPermissiblePropertyName(permClass,
 		    Permissible.PermissibleProperty.PROPERTY_TYPE_ID);
 	    String labelProperty = Permissible.getPermissiblePropertyName(permClass,
@@ -632,9 +591,6 @@ public final class PermissionUtil {
 	} catch (HibernateException e) {
 
 	    throw new RuntimeException("HibernateException Exception encountered", e);
-	} catch (DgException e) {
-	    logger.error(e);
-	    throw new RuntimeException("DgException Exception encountered", e);
 	}
 }
 
@@ -667,7 +623,6 @@ public final class PermissionUtil {
 		hs.flush();
 
 		return null;//mapping.getInputForward();
-
 	}
 
 }

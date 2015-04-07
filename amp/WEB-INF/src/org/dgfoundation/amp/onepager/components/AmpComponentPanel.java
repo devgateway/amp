@@ -204,13 +204,9 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 				tmpOs.setPosition(tmpOs.getPosition() + 1);
 				os.setPosition(os.getPosition() - 1);
 
-                try {
-                    Session session = PersistenceManager.getRequestDBSession();
-                    session.update(os);
-                    session.update(tmpOs);
-                } catch (DgException e) {
-                    logger.error("Can't save onepager sections:", e);
-                }
+                Session session = PersistenceManager.getSession();
+                session.update(os);
+                session.update(tmpOs);
                 OnePager.sortSections(OnePager.sectionsList);
                 target.appendJavaScript("var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
 			}
@@ -228,13 +224,9 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 					return;
 				tmpOs.setPosition(tmpOs.getPosition() - 1);
 				os.setPosition(os.getPosition() + 1);
-                try {
-                    Session session = PersistenceManager.getRequestDBSession();
-                    session.update(os);
-                    session.update(tmpOs);
-                } catch (DgException e) {
-                    logger.error("Can't save onepager sections:", e);
-                }
+                Session session = PersistenceManager.getRequestDBSession();
+                session.update(os);
+                session.update(tmpOs);
                 OnePager.sortSections(OnePager.sectionsList);
                 target.appendJavaScript("var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
 			}
@@ -248,12 +240,7 @@ public abstract class AmpComponentPanel<T> extends Panel implements
 				if (os == null)
 					return;
 				os.setFolded(!os.getFolded());
-                try {
-                    Session session = PersistenceManager.getRequestDBSession();
-                    session.update(os);
-                } catch (DgException e) {
-                    logger.error("Can't save onepager sections:", e);
-                }
+                PersistenceManager.getSession().update(os);
                 target.appendJavaScript("var newLoc=window.location.href;newLoc=newLoc.substr(0,newLoc.lastIndexOf('?'));window.location.replace(newLoc);");
 			}
 		};

@@ -456,15 +456,6 @@ public class PersistenceManager {
 	public static synchronized Configuration getHibernateConfiguration() {
 		return cfg;
 	}
-	
-
-	public static Session getSession(){
-		try {
-			return getRequestDBSession();
-		} catch (DgException e) {
-			throw new RuntimeException(e);
-		}
-	}
 
 	private PersistenceManager() {
 	}
@@ -523,19 +514,6 @@ public class PersistenceManager {
         return col;
     }
 
-	
-	
-	/**
-	 * Managed by hibernate. Please do not use session.close nor transaction.commit over this session. 
-	 * This is transparently managed by Hibernate on each request thread
-	 * @see HibernateSessionRequestFilter
-	 * @return Session object
-	 * @throws DgException
-	 */
-	public static Session getRequestDBSession() throws DgException {
-		return getRequestDBSession(true);
-	}
-
 	/**
 	 * 
 	 */
@@ -553,33 +531,27 @@ public class PersistenceManager {
 					rbEx);
 		}
 	}
-	
+
 	/**
-	 * @see #getRequestDBSession()
-	 * @param createNew <b>ignored</b>
+	 * returns the current Session. If there is none, creates one and returns it
+	 * upon creating a new session, a transaction is created
 	 * @return
 	 */
-	public static Session getRequestDBSession(boolean createNew) {
+	public static Session getSession() {
 		Session sess = PersistenceManager.sf.getCurrentSession();
-		
-		Transaction transaction=sess.getTransaction();
-//		if(transaction!=null && transaction.isActive()) {
-//			try {
-//				SQLQuery testQuery = sess.createSQLQuery("SELECT 1");
-//				testQuery.uniqueResult();				
-//			} catch (RuntimeException e) {
-//				transaction.rollback();				
-//				logger.error("Transaction has been rolled back after exception "+ e);
-//				sess = PersistenceManager.sf.getCurrentSession();
-//				sess.beginTransaction(); 
-//			}
-//		}
-	
-		if (transaction==null || !transaction.isActive()) sess.beginTransaction(); 
-
+		Transaction transaction = sess.getTransaction();
+		if (transaction == null || !transaction.isActive()) {
+			sess.beginTransaction(); 
+		}
 		addSessionToStackTraceMap(sess);
-		
 		return sess;
+	}
+	
+	/**
+	 * an alias for {@link #getSession()}
+	 */
+	public static Session getRequestDBSession() {
+		return getSession();
 	}
 	
 	/**

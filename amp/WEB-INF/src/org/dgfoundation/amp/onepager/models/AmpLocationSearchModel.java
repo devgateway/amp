@@ -92,37 +92,30 @@ public class AmpLocationSearchModel extends
 		
 		Integer maxResults = (Integer) getParam(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);
 
-		Session dbSession = null;
-		try {
-			dbSession = PersistenceManager.getRequestDBSession();
+		Session dbSession = PersistenceManager.getSession();
 
-			Criteria criteria = dbSession
-					.createCriteria(AmpCategoryValueLocations.class);
-			criteria.setCacheable(true);
+		Criteria criteria = dbSession.createCriteria(AmpCategoryValueLocations.class);
+		criteria.setCacheable(true);
 
-            if (!CategoryConstants.IMPLEMENTATION_LOCATION_ALL.equalsCategoryValue(cvLayer)) {
-                criteria.add(Restrictions.eq("parentCategoryValue", cvLayer));
-            }
-
-			criteria.addOrder(Order.asc("name"));
-			if (maxResults != null && maxResults != 0)
-				criteria.setMaxResults(maxResults);			
-			List<AmpCategoryValueLocations> tempList = criteria.list();
-
-            if (assignedRegion != null){
-                Iterator<AmpCategoryValueLocations> it = tempList.iterator();
-                while (it.hasNext()) {
-                    AmpCategoryValueLocations location = it.next();
-                    AmpCategoryValueLocations locationRegion = DynLocationManagerUtil.getAncestorByLayer(location, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
-                    if (!assignedRegion.getId().equals(locationRegion.getId()))
-                        it.remove();
-                }
-            }
-
-			ret.addAll(tempList);
-		} catch (DgException e) {
-			logger.error(e);
+		if (!CategoryConstants.IMPLEMENTATION_LOCATION_ALL.equalsCategoryValue(cvLayer)) {
+			criteria.add(Restrictions.eq("parentCategoryValue", cvLayer));
 		}
+
+		criteria.addOrder(Order.asc("name"));
+		if (maxResults != null && maxResults != 0)
+			criteria.setMaxResults(maxResults);			
+		List<AmpCategoryValueLocations> tempList = criteria.list();
+
+		if (assignedRegion != null) {
+			Iterator<AmpCategoryValueLocations> it = tempList.iterator();
+			while (it.hasNext()) {
+				AmpCategoryValueLocations location = it.next();
+				AmpCategoryValueLocations locationRegion = DynLocationManagerUtil.getAncestorByLayer(location, CategoryConstants.IMPLEMENTATION_LOCATION_REGION);
+				if (!assignedRegion.getId().equals(locationRegion.getId()))
+					it.remove();
+			}
+		}
+        ret.addAll(tempList);
 		return ret;
 	}
 

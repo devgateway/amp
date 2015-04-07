@@ -49,10 +49,9 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
     protected List<AmpOrganisation> load() {
 	final List<AmpOrganisation> ret = new ArrayList<AmpOrganisation>();
 
-	try {
-	    session = PersistenceManager.getRequestDBSession();
+	session = PersistenceManager.getSession();
 
-	    session.doWork(new Work() {
+	session.doWork(new Work() {
 		@SuppressWarnings("deprecation")
 		@Override
 		public void execute(Connection connection) throws SQLException {
@@ -121,11 +120,8 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
 		    }
 		    rsi.close();
 		}
-	    });
-	} catch (DgException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
+    });
+
 	Collections.sort(ret);
 	return ret;
     }

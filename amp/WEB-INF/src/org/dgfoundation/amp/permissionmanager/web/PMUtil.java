@@ -235,19 +235,15 @@ public final class PMUtil {
 
 	public static void assignGlobalPermission(Set<AmpPMReadEditWrapper> gatesSet, Set<AmpPMReadEditWrapper> workspaceSet,	Class globalPermissibleClass) {
 		// TODO Auto-generated method stub
-		Session session = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-		} catch (DgException e) {
-			e.printStackTrace();
-		}
+		Session session = PersistenceManager.getSession();
+		
 		PermissionMap pm = PermissionUtil.getGlobalPermissionMapForPermissibleClass(globalPermissibleClass, session);
 		
-		if(pm!=null && session!=null) {
-		    Permission p=pm.getPermission();
-		    if (p!=null) {
-		    	if(p instanceof CompositePermission){
-					CompositePermission cp = (CompositePermission)p;
+		if (pm != null && session != null) {
+		    Permission p = pm.getPermission();
+		    if (p != null) {
+		    	if (p instanceof CompositePermission) {
+					CompositePermission cp = (CompositePermission) p;
 					PMUtil.deleteCompositePermission(cp, session,true);
 		    	}
 		    }
@@ -346,12 +342,7 @@ public final class PMUtil {
 	*/
 	
 	public static CompositePermission createCompositePermissionForFM(String name, Set<AmpPMReadEditWrapper> gatesSet, Set<AmpPMReadEditWrapper> workspacesSet){
-		Session session = null;
-		try {
-			session	=	PersistenceManager.getRequestDBSession();
-		} catch (DgException e) {
-			e.printStackTrace();
-		}
+		Session session = PersistenceManager.getSession();
 		CompositePermission cp = new CompositePermission(true);
 		cp.setDescription("This permission was created using the PM UI by admin user");
 		cp.setName(getFieldSimpleName(name));
@@ -401,13 +392,8 @@ public final class PMUtil {
 	
 	public static AmpTemplatesVisibility getDefaultAmpTemplateVisibility() {
 		// get the default amp template
-		Session session = null;
-		try {
-			session	=	PersistenceManager.getRequestDBSession();
-		} catch (DgException e) {
-			e.printStackTrace();
-		}
-		if(session == null) return null;
+		Session session = PersistenceManager.getSession();
+		if (session == null) return null;
 		AmpTemplatesVisibility currentTemplate = null;
 		currentTemplate = FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),session);
 		return currentTemplate;
@@ -625,7 +611,7 @@ public final class PMUtil {
     public static List<PermissionMap> getOwnPermissionMapListForPermissible(Permissible obj) {
     	Session session = null;
     	try {
-    	    session = PersistenceManager.getRequestDBSession();
+    	    session = PersistenceManager.getSession();
 
     	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
     		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier=:objectId ORDER BY p.objectIdentifier");
@@ -640,9 +626,6 @@ public final class PMUtil {
     	} catch (HibernateException e) {
     	    logger.error(e);
     	    throw new RuntimeException("HibernateException Exception encountered", e);
-    	} catch (DgException e) {
-    	    logger.error(e);
-    	    throw new RuntimeException("DgException Exception encountered", e);
     	} finally {
     	    try {
     		//PersistenceManager.releaseSession(session);
@@ -652,19 +635,12 @@ public final class PMUtil {
 
     	    }
     	}
-
     }
-
-    
-    
+  
 	public static void assignFieldsPermission(IModel<TreeModel> iTreeModel, IModel<Set<AmpPMReadEditWrapper>> gatesSetModel, IModel<Set<AmpPMReadEditWrapper>> workspacesSetModel) {
 		
-			Session session = null;
-			try {
-				session	=	PersistenceManager.getRequestDBSession();
-			} catch (DgException e) {
-				e.printStackTrace();
-			}
+			Session session = PersistenceManager.getSession();
+			
 			DefaultMutableTreeNode root = (DefaultMutableTreeNode)iTreeModel.getObject().getRoot();
 			AmpTreeVisibilityModelBean ampTreeRootObject = (AmpTreeVisibilityModelBean)root.getUserObject();
 //			List<PermissionMap> pmList = PMUtil.getOwnPermissionMapListForPermissible(ampTreeRootObject.getAmpObjectVisibility());
@@ -698,12 +674,7 @@ public final class PMUtil {
 
 	private static void deletePermissionMap(AmpObjectVisibility ampObjectVisibility) {
 		// TODO Auto-generated method stub
-		Session session = null;
-		try {
-			session	=	PersistenceManager.getRequestDBSession();
-		} catch (DgException e) {
-			e.printStackTrace();
-		}
+		Session session = PersistenceManager.getSession();
 		List<PermissionMap> pmList = PMUtil.getOwnPermissionMapListForPermissible(ampObjectVisibility);
 		if(pmList!=null)
 		for (PermissionMap permissionMap : pmList) {
@@ -739,7 +710,7 @@ public final class PMUtil {
     public static List<PermissionMap> getGlobalPermissionMapListForPermissibleClass(Class permClass) {
     	Session session = null;
     	  try {
-    	    session = PersistenceManager.getRequestDBSession();
+    	    session = PersistenceManager.getSession();
     	    Query query = session.createQuery("SELECT p from " + PermissionMap.class.getName()
     		    + " p WHERE p.permissibleCategory=:categoryName AND p.objectIdentifier is null");
     	    query.setParameter("categoryName", permClass.getSimpleName());
@@ -750,19 +721,7 @@ public final class PMUtil {
     	} catch (HibernateException e) {
     	    logger.error(e);
     	    throw new RuntimeException( "HibernateException Exception encountered", e);
-    	} catch (DgException e) {
-    		  logger.error(e);
-    		   throw new RuntimeException( "DgException Exception encountered", e);
-    	} finally { 
-    	    try {
-    		//PersistenceManager.releaseSession(session);
-    	    } catch (HibernateException e) {
-    		// TODO Auto-generated catch block
-    		throw new RuntimeException( "HibernateException Exception encountered", e);
-
-    	    }
-    	   }
-    	  
+    	}
         }
 
 	

@@ -45,7 +45,7 @@ public class AmpSectorSearchModel extends
 		Collection<AmpSector> ret = null;
 		try {
 			ret = new ArrayList<AmpSector>();
-			session = PersistenceManager.getRequestDBSession();
+			session = PersistenceManager.getSession();
 			session.enableFilter("isDeletedFilter").setParameter("deleted", Boolean.FALSE);
 
 //			TODO-CONSTANTIN			
@@ -78,9 +78,6 @@ public class AmpSectorSearchModel extends
 
 		} catch (HibernateException e) {
 			throw new RuntimeException(e);
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} finally {
 			session.disableFilter("isDeletedFilter");		
 			}

@@ -1675,20 +1675,12 @@ public class TranslatorWorker {
 
 		Session ses = null;
 		String queryString = "delete Message msg where msg.lastAccessed is null or msg.lastAccessed <=:stamp";
-		boolean recreateLuceneIndex=false;
+		boolean recreateLuceneIndex = false;
 
-		try {
-			ses = PersistenceManager.getRequestDBSession();
-			int deletedEntities = ses.createQuery(queryString).setTimestamp("stamp", new Timestamp(date.getTime())).executeUpdate();
-			if(deletedEntities>0){
-				recreateLuceneIndex=true;
-			}
-		}catch (HibernateException e) {
-			logger.error("Error getting translations", e);
-			throw new WorkerException("Error getting translations", e);
-		} catch (DgException e) {
-			logger.error("Error getting translations", e);
-			throw new WorkerException("Error getting translations", e);
+		ses = PersistenceManager.getSession();
+		int deletedEntities = ses.createQuery(queryString).setTimestamp("stamp", new Timestamp(date.getTime())).executeUpdate();
+		if (deletedEntities > 0) {
+			recreateLuceneIndex = true;
 		}
 		return recreateLuceneIndex;
 	}

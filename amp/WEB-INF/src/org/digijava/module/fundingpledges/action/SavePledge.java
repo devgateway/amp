@@ -125,7 +125,7 @@ public class SavePledge extends Action {
     
     protected List<ValidationError> do_save(PledgeForm plForm) throws Exception // it might die, ALWAYS check for exceptions and forward cleanly by AJAX
     {    	
-    	Session session = PersistenceManager.getRequestDBSession(false);
+    	Session session = PersistenceManager.getSession();
     	
     	List<ValidationError> res = new ArrayList<>();
     	

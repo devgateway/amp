@@ -1213,7 +1213,7 @@ public class ProgramUtil {
 				Session sess = null;
 				Transaction tx = null;
 				try {
-					sess = PersistenceManager.getRequestDBSession();
+					sess = PersistenceManager.getSession();
 //beginTransaction();
 					AmpTheme tempTheme = (AmpTheme) sess.load(AmpTheme.class,ampTh.getAmpThemeId());
 					sess.delete(tempTheme);
@@ -1221,8 +1221,6 @@ public class ProgramUtil {
 				} catch (HibernateException e) {
 					logger.error(e);
 					throw new AimException("Cannot delete theme with id "+themeId,e);
-				} catch (DgException e) {
-					logger.error(e);
 				}
 			}
 		}

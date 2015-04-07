@@ -106,7 +106,7 @@ public class MondrianReportFiltersConverter {
 	 */
 	private void addFilter(String mondrianFilterColumnName, Class ampARFilterFieldClass, String ampARFilterFieldName, boolean cleanup) {
 		try {
-			Session session = PersistenceManager.getRequestDBSession();
+			Session session = PersistenceManager.getSession();
 			// Use reflection to dynamically call the setter method on AmpARFilter class, that includes generating the setter
 			// name and inspecting the type of data it uses (Set, Collection, Wrapper, etc).
 			Method getterMethod = AmpARFilter.class.getDeclaredMethod(getGetterName(ampARFilterFieldName));
@@ -168,7 +168,7 @@ public class MondrianReportFiltersConverter {
 			} else {
 				// logger.info("Not found filter: " + mondrianFilterColumnName);
 			}
-		} catch (DgException | NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			logger.error(e);
 			e.printStackTrace();

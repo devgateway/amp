@@ -75,9 +75,6 @@ public class AmpPMUserSearchModel extends AbstractAmpAutoCompleteModel<User> {
 			
 		} catch (HibernateException e) {
 			throw new RuntimeException(e);
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		return ret;

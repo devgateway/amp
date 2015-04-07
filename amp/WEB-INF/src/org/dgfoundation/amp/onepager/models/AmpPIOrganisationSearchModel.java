@@ -37,7 +37,7 @@ public class AmpPIOrganisationSearchModel extends
 	protected Collection<AmpOrganisation> load() {
 		List<AmpOrganisation> ret = null;
 		try {
-			session = PersistenceManager.getRequestDBSession();
+			session = PersistenceManager.getSession();
 			Integer maxResults = (Integer) getParams().get(PARAM.MAX_RESULTS);
 			Criteria crit = session.createCriteria(AmpOrganisation.class);
 			crit.setCacheable(true);
@@ -61,9 +61,8 @@ public class AmpPIOrganisationSearchModel extends
 			ret = crit.list();
 
 		} 
-		catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 		return ret;
 	}

@@ -72,7 +72,7 @@ public class MultilingualTests28 extends AmpTestCase
 	 */
 	public void testSerializationAllLanguagesFilled()
 	{
-		Session session = PersistenceManager.getRequestDBSession(true);
+		Session session = PersistenceManager.getSession();
 		try
 		{
 			TLSUtils.getThreadLocalInstance().setForcedLangCode("en");
@@ -123,7 +123,7 @@ public class MultilingualTests28 extends AmpTestCase
 		finally
 		{
 			PersistenceManager.cleanupSession(session);
-			session = PersistenceManager.getRequestDBSession(true);
+			session = PersistenceManager.getSession();
 			session.createSQLQuery("UPDATE amp_reports SET name = 'victim_report' WHERE amp_report_id = 54").executeUpdate();
 			session.createSQLQuery("DELETE FROM amp_content_translation WHERE object_id = 54 AND object_class like '%AmpReports'").executeUpdate();
 			session.createSQLQuery("INSERT INTO amp_content_translation(id, object_class, object_id, field_name, locale, translation) VALUES " + 

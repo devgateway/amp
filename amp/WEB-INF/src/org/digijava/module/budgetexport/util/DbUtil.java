@@ -32,7 +32,7 @@ public class DbUtil {
         try {
             Session sess = PersistenceManager.getRequestDBSession();
             sess.saveOrUpdate(project);
-        } catch (DgException ex) {
+        } catch (Exception ex) {
             logger.debug("Unable to save or update Budget export project in to DB", ex);
             throw ex;
         }
@@ -47,7 +47,7 @@ public class DbUtil {
             queryStr.append(AmpBudgetExportProject.class.getName());
             Query q = sess.createQuery(queryStr.toString());
             retVal = (List<AmpBudgetExportProject>) q.list();
-        } catch (DgException ex) {
+        } catch (Exception ex) {
             logger.debug("Unable to get Budget export projects from DB", ex);
             throw ex;
         }
@@ -62,7 +62,7 @@ public class DbUtil {
             Session sess = PersistenceManager.getRequestDBSession();
             retVal = (AmpBudgetExportProject) sess.load(AmpBudgetExportProject.class, id);
 
-        } catch (DgException ex) {
+        } catch (Exception ex) {
             logger.debug("Unable to get Budget export project from DB", ex);
             throw ex;
         }
@@ -105,7 +105,7 @@ public class DbUtil {
             retVal = q.list();
 
 
-        } catch (DgException ex) {
+        } catch (Exception ex) {
             logger.debug("Unable to get Budget export rules from DB", ex);
             throw ex;
         }
@@ -142,7 +142,7 @@ public class DbUtil {
             queryStr.append(")");
             Query q = sess.createQuery(queryStr.toString());
             retVal = q.list();
-        } catch (DgException ex) {
+        } catch (Exception ex) {
             logger.debug("Unable to get AMP columns from DB", ex);
             throw ex;
         }
@@ -156,7 +156,7 @@ public class DbUtil {
             Session sess = PersistenceManager.getRequestDBSession();
             retVal = (AmpColumns) sess.load(AmpColumns.class, id);
 
-        } catch (DgException ex) {
+        } catch (Exception ex) {
             logger.debug("Unable to get AMP column from DB", ex);
             throw ex;
         }
@@ -174,7 +174,7 @@ public class DbUtil {
             Session sess = PersistenceManager.getRequestDBSession();
             retVal = (AmpBudgetExportMapRule) sess.load(AmpBudgetExportMapRule.class, id);
 
-        } catch (DgException ex) {
+        } catch (Exception ex) {
             logger.debug("Unable to get Budget export map rule from DB", ex);
             throw ex;
         }
@@ -191,7 +191,7 @@ public class DbUtil {
         try {
             Session sess = PersistenceManager.getRequestDBSession();
             sess.saveOrUpdate(rule);
-        } catch (DgException ex) {
+        } catch (Exception ex) {
             logger.debug("Unable to save or update Budget export map rule in to DB", ex);
             throw ex;
         }
@@ -211,7 +211,7 @@ public class DbUtil {
             retVal = q.list();
 
 
-        } catch (DgException ex) {
+        } catch (Exception ex) {
             logger.debug("Unable to get Budget export rule items from DB", ex);
             throw ex;
         }
@@ -226,7 +226,7 @@ public class DbUtil {
             Session sess = PersistenceManager.getRequestDBSession();
             retVal = (AmpBudgetExportMapItem) sess.load(AmpBudgetExportMapItem.class, id);
 
-        } catch (DgException ex) {
+        } catch (Exception ex) {
             logger.debug("Unable to get Budget export map item from DB", ex);
             throw ex;
         }
@@ -249,7 +249,7 @@ public class DbUtil {
             retVal = q.list();
 
 
-        } catch (DgException ex) {
+        } catch (Exception ex) {
             logger.debug("Unable to get Budget export rule CSV items from DB", ex);
             throw ex;
         }
@@ -276,7 +276,7 @@ public class DbUtil {
             retVal = q.list().size() > 0;
 
 
-        } catch (DgException ex) {
+        } catch (Exception ex) {
             logger.debug("Unable to check project in DB", ex);
             throw ex;
         }
@@ -301,7 +301,7 @@ public class DbUtil {
                 q.setLong("RULE_ID", ruleId);
             }
             retVal = q.list().size() > 0;
-        } catch (DgException ex) {
+        } catch (Exception ex) {
             logger.debug("Unable to check rule in DB", ex);
             throw ex;
         }
@@ -327,7 +327,7 @@ public class DbUtil {
                 q.setLong("RULE_ID", ruleId);
             }
             retVal = q.list().size() > 0;
-        } catch (DgException ex) {
+        } catch (Exception ex) {
             logger.debug("Unable to check rule in DB", ex);
             throw ex;
         }
@@ -357,7 +357,7 @@ public class DbUtil {
             }
 
 
-        } catch (DgException ex) {
+        } catch (Exception ex) {
             logger.debug("Unable to get available reports from DB", ex);
             throw ex;
         }

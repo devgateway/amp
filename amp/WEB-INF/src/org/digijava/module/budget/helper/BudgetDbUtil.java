@@ -26,30 +26,15 @@ public class BudgetDbUtil {
 	 * @return ArrayList of Departments
 	 */
 	public static ArrayList<AmpDepartments> getDepartments(){
-		ArrayList<AmpDepartments> departments = new ArrayList<AmpDepartments>();
-		AmpDepartments dep = null;
         Session session = null;
         Query q = null;
-        
-        try {
-			session = PersistenceManager.getRequestDBSession();
-			  String queryString = new String();
-		      queryString = "select d from " + AmpDepartments.class.getName()
-		      + " d order by d.name";
-		      q = session.createQuery(queryString);
-		      Iterator iter = q.list().iterator();
-		      while (iter.hasNext()) {
-		    	  dep  = (AmpDepartments) iter.next();
-		    	  departments.add(dep);
-	            }
-			 
-		} catch (DgException e) {
-			logger.error("Unable to get Amp Departments from database "
-                    + e.getMessage());
-		}
+        session = PersistenceManager.getSession();
+		String queryString = new String();
+		queryString = "select d from " + AmpDepartments.class.getName() + " d order by d.name";
+		q = session.createQuery(queryString);
+		ArrayList<AmpDepartments> departments =new ArrayList<AmpDepartments>(q.list());
 		Collections.sort(departments);
 		return departments;
-		
 	}
 	
 	/**
@@ -58,78 +43,27 @@ public class BudgetDbUtil {
 	 * @return
 	 */
 	public static AmpBudgetSector getBudgetSectorById(Long id){
-		AmpBudgetSector sector = new AmpBudgetSector();
-		Session session = null;
-        Query q = null;
-        
-        try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = new String();
-			queryString = "select s from " + AmpBudgetSector.class.getName()
-			+ " s where s.idsector=:id";
-			q = session.createQuery(queryString);
-			q.setLong("id", id);
-			Iterator iter = q.list().iterator();
-			while (iter.hasNext()) {
-	    	  sector = (AmpBudgetSector) iter.next();
-	    	}
-        } catch (DgException e) {
-        	logger.error("Unable to get Amp budget sectors from database "
-                    + e.getMessage());
-		}
-        
-		return sector;
+
+		String queryString = "select s from " + AmpBudgetSector.class.getName() + " s where s.idsector=:id";
+		return (AmpBudgetSector) PersistenceManager.getSession().createQuery(queryString).setLong("id", id).uniqueResult();
 	}
 	
 	public static boolean existsBudgetSector(String name ,String code , Long id){
-		Session session = null;
-        Query q = null;
-        boolean retVal=true;
-        try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select s from " + AmpBudgetSector.class.getName() +" s where (s.sectorname=:name or s.code=:code) " ;
-			if(id!=null){
-				queryString+=" and s.idsector!=:id" ;
-			}
-			q = session.createQuery(queryString);
-			if(id!=null){
-				q.setLong("id", id);
-			}			
-			q.setParameter("name", name);
-			q.setParameter("code", code);
-			Collection col = q.list();
-			if (col ==null || col.size()==0) {
-				retVal = false;
-	    	}
-        } catch (DgException e) {
-        	logger.error("Unable to get Amp budget sectors from database " + e.getMessage());
+		String queryString = "select s from " + AmpBudgetSector.class.getName() +" s where (s.sectorname=:name or s.code=:code) " ;
+		if (id != null) {
+			queryString += " and s.idsector != :id" ;
 		}
-        
-		return retVal;
+		Query q = PersistenceManager.getSession().createQuery(queryString);
+		if (id != null) {
+			q.setLong("id", id);
+		}			
+		q.setParameter("name", name);
+		q.setParameter("code", code);
+		return !(q.list().isEmpty());
 	}
 	
 	public static AmpDepartments getBudgetDepartmentById(Long id){
-		AmpDepartments dep = new AmpDepartments();
-		Session session = null;
-        Query q = null;
-        
-        try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = new String();
-			queryString = "select d from " + AmpDepartments.class.getName()
-			+ " d where d.id=:id";
-			q = session.createQuery(queryString);
-			q.setLong("id", id);
-			Iterator iter = q.list().iterator();
-			while (iter.hasNext()) {
-	    	  dep = (AmpDepartments) iter.next();
-	    	}
-        } catch (DgException e) {
-        	logger.error("Unable to get Amp budget sectors from database "
-                    + e.getMessage());
-		}
-        
-		return dep;
+		return (AmpDepartments) PersistenceManager.getSession().get(AmpDepartments.class, id);
 	}
 	
 	/**
@@ -137,29 +71,8 @@ public class BudgetDbUtil {
 	 * @return ArrayList of budget sectors
 	 */
 	public static ArrayList<AmpBudgetSector> getBudgetSectors(){
-		ArrayList<AmpBudgetSector> sectors = new ArrayList<AmpBudgetSector>();
-		AmpBudgetSector sector = null;
-		Session session = null;
-        Query q = null;
-        
-        try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = new String();
-			queryString = "select s from " + AmpBudgetSector.class.getName()
-			+ " s order by s.sectorname";
-			q = session.createQuery(queryString);
-			Iterator iter = q.list().iterator();
-			while (iter.hasNext()) {
-	    	  sector = (AmpBudgetSector) iter.next();
-	    	  sectors.add(sector);
-			}
-        } catch (DgException e) {
-        	logger.error("Unable to get Amp budget sectors from database "
-                    + e.getMessage());
-		}
-        Collections.sort(sectors);
-		return sectors;
-		
+		String queryString = "select s from " + AmpBudgetSector.class.getName() + " s order by s.sectorname";
+		return new ArrayList<>(PersistenceManager.getSession().createQuery(queryString).list());
 	}
 	
 	/**
@@ -168,27 +81,13 @@ public class BudgetDbUtil {
 	 * @return AmpDepartments ArrayList
 	 */
 	public static Collection<AmpDepartments> getDepartmentsbyOrg(Long orgid){
-		ArrayList<AmpDepartments> departments = new ArrayList<AmpDepartments>();
-		AmpDepartments dep= null;
-		Session session = null;
-		Query q = null;
+		ArrayList<AmpDepartments> departments;
 		
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select dep from " + AmpDepartments.class.getName() +
-			" dep inner join dep.organisations org"+
-			" where (org.ampOrgId=:orgid)";
+		String queryString = "select dep from " + AmpDepartments.class.getName() +
+		" dep inner join dep.organisations org"+
+		" where (org.ampOrgId=:orgid)";
 	        
-	        q = session.createQuery(queryString);
-	        q.setLong("orgid", orgid);
-	    	Iterator iter = q.list().iterator();
-	        while (iter.hasNext()) {
-				dep = (AmpDepartments) iter.next();
-				departments.add(dep);
-			}
-		} catch (DgException e) {
-			e.printStackTrace();
-		}
+        departments = new ArrayList<>(PersistenceManager.getSession().createQuery(queryString).setLong("orgid", orgid).list());
 		Collections.sort(departments);
         return departments;
 	}
@@ -199,62 +98,27 @@ public class BudgetDbUtil {
 	 * @return organizations ArrayList
 	 */
 	public static Collection<AmpOrganisation> getOrganizationsBySector(Long budgedsectorid){
-		ArrayList<AmpOrganisation> organizations = new ArrayList<AmpOrganisation>();
-		AmpOrganisation org= null;
-		Session session = null;
-		Query q = null;
-		
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select org from " + AmpOrganisation.class.getName() +
-			" org inner join org.budgetsectors s"+
+		String queryString = "select org from " + AmpOrganisation.class.getName() + " org inner join org.budgetsectors s" +
 			" where (s.idsector=:budgedsectorid) and (org.deleted is null or org.deleted = false) ";
 	        
-	        q = session.createQuery(queryString);
-	        q.setLong("budgedsectorid", budgedsectorid);
-	    	Iterator iter = q.list().iterator();
-	        while (iter.hasNext()) {
-				org = (AmpOrganisation) iter.next();
-				organizations.add(org);
-			}
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		Collections.sort(organizations);
-        return organizations;
+		ArrayList<AmpOrganisation> orgs = new ArrayList<>(PersistenceManager.getSession().createQuery(queryString).setLong("budgedsectorid", budgedsectorid).list());
+		Collections.sort(orgs);
+		return orgs;
 	}
 	/**
 	 * 
 	 * @param sector
 	 */
-	public static void SaveBudgetSector(AmpBudgetSector sector){
-		Session session;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			session.save(sector);
-		} catch (DgException e) {
-			logger.error("Can not save sector" + e.getMessage());
-		};
-		
+	public static void SaveBudgetSector(AmpBudgetSector sector) {
+		PersistenceManager.getSession().save(sector);
 	}
 	
 	/**
 	 * 
 	 * @param sector
 	 */
-	public static void UpdateBudgetSector(AmpBudgetSector sector){
-		Session session;
-		Transaction tx = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
-				session.update(sector);
-			//tx.commit();
-		} catch (DgException e) {
-			logger.error("Can not Update sector" + e.getMessage());
-		};
-		
+	public static void UpdateBudgetSector(AmpBudgetSector sector) {
+		PersistenceManager.getSession().update(sector);
 	}
 	
 	/**
@@ -264,45 +128,21 @@ public class BudgetDbUtil {
 	
 	public static void DeleteSector(Long id){
 		Session session;
-		AmpBudgetSector s= null;
-		Transaction tx = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			s = (AmpBudgetSector) session.load(AmpBudgetSector.class, id);
-//beginTransaction();
-			session.delete(s);
-			//tx.commit();
-		} catch (DgException e) {
-			logger.error("Can not delete sector" + e.getMessage());
-		};
+		AmpBudgetSector s = null;
+		session = PersistenceManager.getSession();
+		s = (AmpBudgetSector) session.load(AmpBudgetSector.class, id);
+		session.delete(s);
 	}
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public static ArrayList<AmpTheme> getBudgetPrograms(){
-		ArrayList<AmpTheme> programs = new ArrayList<AmpTheme>();
-		AmpTheme program= null;
-		Session session = null;
-		Query q = null;
-		
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select p from " + AmpTheme.class.getName() +
+	public static ArrayList<AmpTheme> getBudgetPrograms() {
+		String queryString = "select p from " + AmpTheme.class.getName() +
 			" p where p.parentThemeId IN(select pp.ampThemeId from " + AmpTheme.class.getName()+
 			" pp where pp.indlevel=0 and pp.isbudgetprogram=1)";
-	        q = session.createQuery(queryString);
-	    	Iterator iter = q.list().iterator();
-	        while (iter.hasNext()) {
-				program = (AmpTheme) iter.next();
-				programs.add(program);
-			}
-		} catch (DgException e) {
-			e.printStackTrace();
-		}
-        return programs;
-		
+		return new ArrayList<>(PersistenceManager.getSession().createQuery(queryString).list());
 	}
 	
 	/**
@@ -310,54 +150,16 @@ public class BudgetDbUtil {
 	 * @return
 	 */
 	public static ArrayList<AmpTheme> getBudgetProgramsLevel_0(){
-		ArrayList<AmpTheme> programs = new ArrayList<AmpTheme>();
-		AmpTheme program= null;
-		Session session = null;
-		Query q = null;
-		
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select p from " + AmpTheme.class.getName() +
-			" p where p.indlevel=0";
-	        q = session.createQuery(queryString);
-	    	Iterator iter = q.list().iterator();
-	        while (iter.hasNext()) {
-				program = (AmpTheme) iter.next();
-				programs.add(program);
-			}
-		} catch (DgException e) {
-			e.printStackTrace();
-		}
-        return programs;
-		
+		String queryString = "select p from " + AmpTheme.class.getName() + " p where p.indlevel = 0";
+		return new ArrayList<AmpTheme>(PersistenceManager.getSession().createQuery(queryString).list());
 	}
 	
 	/**
 	 * 
 	 * @param dep
 	 */
-	public static void saveDepartment(AmpDepartments dep) throws DgException{
-		Session session;
-                Transaction tx = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
-			session.save(dep);
-			//tx.commit();
-
-		} catch (DgException e) {
-			logger.error("Can not save department" + e.getMessage());
-                        if(tx!=null) {
-				try {
-					tx.rollback();					
-				}catch(Exception ex ) {
-					logger.error("...Rollback failed");
-					throw new DgException("Can't rollback", ex);
-				}			
-			}
-                        throw new DgException("Can't rollback", e);
-		};
-		
+	public static void saveDepartment(AmpDepartments dep) throws DgException {
+		PersistenceManager.getSession().save(dep);
 	}
 	
 	/**
@@ -366,56 +168,25 @@ public class BudgetDbUtil {
 	 */
 	public static void DeleteDepartment(Long id){
 		Session session;
-		AmpDepartments s= null;
-		Transaction tx = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-			s = (AmpDepartments) session.load(AmpDepartments.class, id);
-//beginTransaction();
-			session.delete(s);
-			//tx.commit();
-		} catch (DgException e) {
-			logger.error("Can not Delete Department" + e.getMessage());
-		};
+		AmpDepartments s;
+		session = PersistenceManager.getSession();
+		s = (AmpDepartments) session.load(AmpDepartments.class, id);
+		session.delete(s);
 	}
 	
 	public static void UpdateBudgetDepartment(AmpDepartments dep){
-		Session session;
-		Transaction tx = null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
-				session.update(dep);
-			//tx.commit();
-		} catch (DgException e) {
-			logger.error("Can not Update Department" + e.getMessage());
-		};
+		PersistenceManager.getSession().update(dep);
 	}	
 	
-	public static boolean existsDepartment(String name ,String code , Long id){
-		Session session = null;
-        Query q = null;
-        boolean retVal=true;
-        try {
-			session = PersistenceManager.getRequestDBSession();
-			String queryString = "select s from " + AmpDepartments.class.getName() +" s where (s.name=:name or s.code=:code) " ;
-			if(id!=null){
-				queryString+=" and s.id!=:id" ;
-			}
-			q = session.createQuery(queryString);
-			if(id!=null){
-				q.setLong("id", id);
-			}			
-			q.setParameter("name", name);
-			q.setParameter("code", code);
-			Collection col = q.list();
-			if (col ==null || col.size()==0) {
-				retVal = false;
-	    	}
-        } catch (DgException e) {
-        	logger.error("Unable to get Departments from database " + e.getMessage());
+	public static boolean existsDepartment(String name, String code, Long id) {
+		String queryString = "select s from " + AmpDepartments.class.getName() +" s where (s.name=:name or s.code=:code) " ;
+		if (id != null) {
+			queryString += " and s.id!=:id" ;
 		}
-        
-		return retVal;
+		Query q = PersistenceManager.getSession().createQuery(queryString).setParameter("name", name).setParameter("code", code);
+		if (id != null){
+			q.setLong("id", id);
+		}
+		return !q.list().isEmpty();
 	}
 }

@@ -523,13 +523,7 @@ public abstract class AmpAutocompleteFieldPanel<CHOICE> extends
      * @return
      */
     protected CHOICE getSelectedChoice(Long objId) {
-        Session session = null;
-        try {
-            session = PersistenceManager.getRequestDBSession();
-        } catch (DgException e) {
-            logger.error("Can't get hibernate session", e);
-        }
-        return (CHOICE)session.get(objClass, objId);
+        return (CHOICE) PersistenceManager.getSession().get(objClass, objId);
     }
 
 	/**

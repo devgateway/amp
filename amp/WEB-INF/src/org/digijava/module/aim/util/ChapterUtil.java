@@ -56,34 +56,13 @@ public class ChapterUtil {
 	}
 
 	public static Collection<Integer> getDistinctChapterYearList() {
-		Collection<Integer> ret = null;
-		try {
-			Session hs = PersistenceManager.getRequestDBSession();
-			Query query = hs.createQuery("SELECT distinct(year) FROM "
-					+ AmpChapter.class.getName());
-			ret = query.list();
-		} catch (DgException e) {
-			e.printStackTrace();
-			logger.error(e);
-		}
-		return ret;
+		return PersistenceManager.getSession().createQuery("SELECT distinct(year) FROM " + AmpChapter.class.getName()).list();
 	}
 
 	
 	
 	public static Collection<String> getChapterListForYear(Integer year) {
-		Collection<String> ret = null;
-		try {
-			Session hs = PersistenceManager.getRequestDBSession();
-			Query query = hs.createQuery("SELECT code from " + AmpChapter.class.getName()
-					+ " WHERE year=:year");
-			query.setInteger("year", year);
-			ret = query.list();
-		} catch (DgException e) {
-			e.printStackTrace();
-			logger.error(e);
-		}
-		return ret;
+		return PersistenceManager.getSession().createQuery("SELECT code from " + AmpChapter.class.getName() + " WHERE year=:year").setInteger("year", year).list();
 	}
 
 	public static String getNumberFromCell(Cell c) {

@@ -95,8 +95,6 @@ public class AmpAgreementSearchModel extends
 			ret = list;
 		} catch (HibernateException e) {
 			throw new RuntimeException(e);
-		} catch (DgException e) {
-			logger.error("Can't get session:", e);
 		}
 		return ret;
 	}

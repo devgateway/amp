@@ -1440,7 +1440,7 @@ public class DbUtil {
 			 query.setParameter("val", newValue);
 			 query.setParameter("id", id);
 			 query.executeUpdate();
-		} catch (DgException ex) {
+		} catch (Exception ex) {
 			logger.error(String.format("Could not update \"%s.%s\"=\"%s\". Cause: %s",  className, fieldName,  String.valueOf(newValue), ex.getMessage()));
 		}
 	}

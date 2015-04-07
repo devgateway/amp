@@ -62,13 +62,9 @@ public class QueryUtil {
 
 
 	public static AmpActivity getActivity(Long ampActivityId) {
-		try {
-			return (AmpActivity) PersistenceManager.getRequestDBSession().load(AmpActivity.class, ampActivityId);
-		} catch (DgException e) {
-			logger.error("cannot retrieve activity");
-			return null;
-		}
+		return (AmpActivity) PersistenceManager.getSession().load(AmpActivity.class, ampActivityId);
 	}
+	
 	/**
 	 * return a list of saved maps.
 	 * 
@@ -83,14 +79,8 @@ public class QueryUtil {
 	}
 
 	public static List<OrganizationSkeleton> getOrganizations(Long roleId) {
-		try {
-			AmpRole r = (AmpRole) PersistenceManager.getRequestDBSession().load(AmpRole.class, roleId);
-			return OrganizationSkeleton.populateOrganisationSkeletonList(r.getRoleCode());
-		} catch (DgException e) {
-			logger.error("cannot load orgs", e);
-			return null;
-		}
-
+		AmpRole r = (AmpRole) PersistenceManager.getSession().load(AmpRole.class, roleId);
+		return OrganizationSkeleton.populateOrganisationSkeletonList(r.getRoleCode());
 	}
 
 	@SuppressWarnings("unchecked")

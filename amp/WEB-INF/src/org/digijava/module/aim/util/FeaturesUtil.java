@@ -1020,7 +1020,7 @@ public class FeaturesUtil {
 				currentTemplate = FeaturesUtil.getTemplateVisibility(
 				        FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),
 				        PersistenceManager.getRequestDBSession());
-			} catch (HibernateException | DgException e) {
+			} catch (HibernateException e) {
 				logger.error(e);
 			} 
         }

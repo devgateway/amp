@@ -172,7 +172,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         	//try loading it from db
         	Session ses;
 			try {
-				ses = PersistenceManager.getRequestDBSession();
+				ses = PersistenceManager.getSession();
 				Message realMsg = (Message) ses.get(Message.class, message);
 				if(realMsg!=null) {
 					obj=realMsg;
@@ -180,9 +180,6 @@ public class CachedTranslatorWorker extends TranslatorWorker {
 					messageCache.put(identifier, realMsg);
 				}
 			} catch (HibernateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (DgException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

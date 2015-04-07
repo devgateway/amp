@@ -182,16 +182,11 @@ public class EndpointUtils {
 	}	
 	
 	public static AmpApiState getSavedMap(Long mapId) throws AmpApiException {
-		try {
-			Session s = PersistenceManager.getRequestDBSession();
-			AmpApiState map = (AmpApiState) s.load(AmpApiState.class, mapId);
-			map.setLastAccesedDate(new Date());
-			s.merge(map);
-			return map;
-		} catch (DgException ex) {
-			throw new AmpApiException(ex);
-		}
-		
+		Session s = PersistenceManager.getSession();
+		AmpApiState map = (AmpApiState) s.load(AmpApiState.class, mapId);
+		map.setLastAccesedDate(new Date());
+		s.merge(map);
+		return map;
 	}
 
 	public static JsonBean getApiState(Long mapId) {
@@ -199,8 +194,6 @@ public class EndpointUtils {
 		try {
 			AmpApiState map = getSavedMap(mapId);
 			jMap = getJsonBeanFromApiState(map, Boolean.TRUE);
-
-
 		} catch (ObjectNotFoundException e) {
 			jMap = new JsonBean();
 		} catch (AmpApiException e) {
@@ -209,6 +202,7 @@ public class EndpointUtils {
 		}
 		return jMap;
 	}	
+	
 	public static JsonBean saveApiState(final JsonBean pMap,String type) {
 		Date creationDate = new Date();
 		JsonBean mapId = new JsonBean();
@@ -222,11 +216,11 @@ public class EndpointUtils {
 		map.setLastAccesedDate(creationDate);
 		map.setType(type);
 		try {
-			Session s = PersistenceManager.getRequestDBSession();
+			Session s = PersistenceManager.getSession();
 			s.save(map);
 			s.flush();
 			mapId.set("mapId", map.getId());
-		} catch (DgException e) {
+		} catch (Exception e) {
 			logger.error("Cannot Save map", e);
 			throw new WebApplicationException(e);
 		}

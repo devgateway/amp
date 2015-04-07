@@ -1326,7 +1326,7 @@ public class HelpUtil {
     	//search db
 		List<String> rows = null;
 		try {
-			Session session = PersistenceManager.getRequestDBSession();
+			Session session = PersistenceManager.getSession();
 			//Group by module instances.
 			//Instead of such grouping we may have hardcoded admin and default instances.
 			String oql = "select h.moduleInstance ";
@@ -1335,8 +1335,6 @@ public class HelpUtil {
 			Query query = session.createQuery(oql);
 			rows = query.list();
 		} catch (HibernateException e) {
-			e.printStackTrace();
-		} catch (DgException e) {
 			e.printStackTrace();
 		}finally{
 			if (rows == null){

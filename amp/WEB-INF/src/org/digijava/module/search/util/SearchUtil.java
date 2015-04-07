@@ -195,8 +195,8 @@ public class SearchUtil {
          */
 		Session session = null;
 		List<FundingPledges> col = new ArrayList<FundingPledges>();
-		try {
-			session = PersistenceManager.getRequestDBSession();
+		
+		session = PersistenceManager.getSession();
 
 			//not a very nice solution, but I kept the old code and idea and just added some speed
 //			String newQueryString = "SELECT f.id " + AmpActivity.sqlStringForName("f.id") + " AS name, FROM amp_funding_pledges f";
@@ -216,12 +216,6 @@ public class SearchUtil {
                 resultList.add(pledge);
             }
 //			StopWatch.next("Search", true,"mycomment 3");
-
-		} catch (DgException e) {
-			logger.error("Exception reading pledges", e);
-		}
-
-		
 		return resultList;
 	}	
 	
@@ -246,8 +240,8 @@ public class SearchUtil {
 		//hsqlQuery isn't actually used anywhere
 		Session session = null;
 		List<AmpActivity> col = new ArrayList<AmpActivity>();
-		try {
-			session = PersistenceManager.getRequestDBSession();
+
+			session = PersistenceManager.getSession();
 
 			//not a very nice solution, but I kept the old code and idea and just added some speed
 			String newQueryString = "SELECT f.amp_activity_id, f.amp_id, " + AmpActivityVersion.sqlStringForName("f.amp_activity_id") + " AS name, f.approval_status, f.draft FROM amp_activity f WHERE f.amp_activity_id in ("+filter.getGeneratedFilterQuery()+")";
@@ -276,12 +270,6 @@ public class SearchUtil {
                 resultList.add(activity);
             }
 //			StopWatch.next("Search", true,"mycomment 3");
-
-		} catch (DgException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		return resultList;
 	}
 

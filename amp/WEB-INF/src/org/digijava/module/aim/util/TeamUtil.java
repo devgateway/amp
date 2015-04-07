@@ -148,8 +148,7 @@ public class TeamUtil {
     
 	public static Set getComputedOrgs(Collection relatedTeams) {
 		Set teamAssignedOrgs = new TreeSet();
-		try {
-			Session session = PersistenceManager.getRequestDBSession();
+			Session session = PersistenceManager.getSession();
 			Iterator i = relatedTeams.iterator();
 			while (i.hasNext()) {
 				AmpTeam team = (AmpTeam) i.next();
@@ -160,10 +159,6 @@ public class TeamUtil {
 					teamAssignedOrgs.addAll(loadedTeam.getOrganizations());
 				}
 			}
-		} catch (DgException e) {
-			logger.error(e);
-			e.printStackTrace();
-		}
 		return teamAssignedOrgs;
 	}
     
@@ -654,7 +649,7 @@ public class TeamUtil {
 		Session session = null;
 
 		try {
-			session = PersistenceManager.getRequestDBSession();
+			session = PersistenceManager.getSession();
 			
 //beginTransaction();
 			AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
@@ -664,11 +659,7 @@ public class TeamUtil {
 		} catch (HibernateException e) {
 			logger.error(e);
 			e.printStackTrace();
-		} catch (DgException e) {
-			logger.error(e);
-			e.printStackTrace();
 		}
-
 	}
         
     
@@ -977,15 +968,13 @@ public class TeamUtil {
      */
     public static Map<Long, List<AmpActivityDocument>> getDocumentsByActivityIds(Collection<Long> activityIds)
     {
-    	try
-    	{
     		Map<Long, List<AmpActivityDocument>> result = new java.util.TreeMap<Long, List<AmpActivityDocument>>();
     		
     		if(activityIds.size()==0) return result;
     		
     		String queryString = "select doc, doc.ampActivity.ampActivityId FROM " + AmpActivityDocument.class.getName() + " doc WHERE doc.ampActivity.ampActivityId IN (" + getCommaSeparatedList(activityIds) + ")";
     		
-            Session session = PersistenceManager.getRequestDBSession();
+            Session session = PersistenceManager.getSession();
             Query qry = session.createQuery(queryString.toString());
             for(Object[] rs:(List<Object[]>) qry.list())
             {
@@ -995,11 +984,6 @@ public class TeamUtil {
             	result.get(actId).add((AmpActivityDocument) rs[0]);
             }
             return result;
-    	}
-    	catch(DgException e)
-    	{
-    		throw new RuntimeException(e);
-    	}
     }
     
     /**

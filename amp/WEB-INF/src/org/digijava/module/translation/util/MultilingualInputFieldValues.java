@@ -308,7 +308,7 @@ public class MultilingualInputFieldValues
 			throw new RuntimeException("cannot serialize null!");
 					
 		if (session == null)
-			session = PersistenceManager.getRequestDBSession(true);
+			session = PersistenceManager.getSession();
 		
 		long entityId = ContentTranslationUtil.getObjectId(obj);
 		

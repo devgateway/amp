@@ -457,18 +457,12 @@ public class CurrencyUtil {
 	
 	public static Currency getCurrency(Long id) {
 		logger.debug("in getCurrency" + id);
-		Session sess = null;
+		Session sess = PersistenceManager.getSession();
 		Query qry1 = null;
 		Query qry2 = null;
 		Currency curr = null;
 		AmpCurrency ampCurrency = null;
 
-			try {
-				sess = PersistenceManager.getRequestDBSession();
-			} catch (DgException e) {
-				logger.error(e);
-				e.printStackTrace();
-			}
 			String queryString = "select c from " + AmpCurrency.class.getName()	+ " c where (c.ampCurrencyId=:id)";
 			qry1 = sess.createQuery(queryString);
 			qry1.setParameter("id", id, LongType.INSTANCE);

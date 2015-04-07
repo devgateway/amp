@@ -33,35 +33,19 @@ import org.hibernate.Session;
 public class DbUtil {
     private static Logger logger = Logger.getLogger(DbUtil.class);
 
-    public static void saveObjectSet (Set objs) {
-        try {
-            Session sess = PersistenceManager.getRequestDBSession();
-            for (Object o : objs) {
-                sess.saveOrUpdate(o);
-            }
-        } catch (DgException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+    public static void saveObjectSet(Set<?> objs) {
+    	Session sess = PersistenceManager.getSession();
+    	for (Object o : objs) {
+    		sess.saveOrUpdate(o);
+    	}
     }
 
-    public static void saveObject (Object obj) {
-        try {
-            Session sess = PersistenceManager.getRequestDBSession();
-            sess.saveOrUpdate(obj);
-        } catch (DgException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+    public static void saveObject(Object obj) {
+    	PersistenceManager.getSession().saveOrUpdate(obj);
     }
 
-    public static Object getObject (Class clazz, Long id) {
-        Object retVal = null;
-        try {
-            Session sess = PersistenceManager.getRequestDBSession();
-            retVal = sess.load(clazz, id);
-        } catch (DgException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        return retVal;
+    public static Object getObject(Class clazz, Long id) {
+    	return PersistenceManager.getSession().load(clazz, id);
     }
 
     public static AmpDEUploadSession getAmpDEUploadSession(Long id) {
@@ -70,32 +54,22 @@ public class DbUtil {
 
     public static AmpDEUploadSession getAmpDEUploadSession(Long id, boolean initFieldsCollection) {
         AmpDEUploadSession retVal = null;
-        try {
-            Session sess = PersistenceManager.getRequestDBSession();
-            Query q = sess.createQuery(new StringBuilder("from ").
-                    append(AmpDEUploadSession.class.getName()).append(" us where us.id=:US_ID").toString());
-            q.setLong("US_ID", id);
-            retVal = (AmpDEUploadSession) q.uniqueResult();
-            if (initFieldsCollection) {
-                Hibernate.initialize(retVal.getLogItems());
-            }
-        } catch (DgException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        Session sess = PersistenceManager.getRequestDBSession();
+        Query q = sess.createQuery(new StringBuilder("from ")
+        	.append(AmpDEUploadSession.class.getName())
+        	.append(" us where us.id=:US_ID").toString());
+        q.setLong("US_ID", id);
+        retVal = (AmpDEUploadSession) q.uniqueResult();
+        if (initFieldsCollection) {
+        	Hibernate.initialize(retVal.getLogItems());
         }
         return retVal;
     }
 
     public static List<AmpDEUploadSession> getAllAmpDEUploadSessions() {
-        List<AmpDEUploadSession> retVal = null;
-        try {
-            Session sess = PersistenceManager.getRequestDBSession();
-            Query q = sess.createQuery(new StringBuilder("from ").
-                    append(AmpDEUploadSession.class.getName()).append(" us order by us.uploadDate").toString());
-            retVal = (List<AmpDEUploadSession>) q.list();
-        } catch (DgException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        return retVal;
+    	return PersistenceManager.getSession().createQuery(new StringBuilder("from ").
+    			append(AmpDEUploadSession.class.getName()).append(" us order by us.uploadDate").toString())
+    			.list();
     }
 
     public static void deleteMappings (Set<Long> ids) {
@@ -151,18 +125,11 @@ public class DbUtil {
     }
 
     public static List<IatiCodeType> getCodetypeListByNames(Set<String> names) {
-        List<IatiCodeType> retVal = null;
-        try {
-            StringBuilder queryStr = new StringBuilder("from ").
-                    append(IatiCodeType.class.getName()).
-                    append(" ct where ct.name in (").append(generateNames(names)).
-                    append(")");
-            Session sess = PersistenceManager.getRequestDBSession();
-            retVal = sess.createQuery(queryStr.toString()).list();
-        } catch (DgException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        return retVal;
+        StringBuilder queryStr = new StringBuilder("from ").
+        		append(IatiCodeType.class.getName()).
+        		append(" ct where ct.name in (").append(generateNames(names)).
+        		append(")");
+        return PersistenceManager.getSession().createQuery(queryStr.toString()).list();
     }
 
     public static List<IatiCodeType> getAllCodetypes() {
@@ -186,7 +153,7 @@ public class DbUtil {
 			Query qry = PersistenceManager.getRequestDBSession().createQuery(queryStr);
 			qry.setParameter("name", codeTypeName.toString());
 			codeType = (IatiCodeType)qry.uniqueResult();
-		} catch (HibernateException | DgException e) {
+		} catch (HibernateException e) {
 			logger.error("Cannot retrieve getIatiCodeTypeByName("+codeTypeName+"): "+e.getMessage());
 			throw new AMPException(e.getCause());
 		}

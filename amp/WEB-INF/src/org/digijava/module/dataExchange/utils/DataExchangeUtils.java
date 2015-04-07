@@ -746,33 +746,13 @@ public class DataExchangeUtils {
 	}
 
 	
-	   public static List<AmpActivityProgramSettings> getAllAmpActivityProgramSettings(){
-	        String queryString = null;
-	        Session session = null;
-	        List<AmpActivityProgramSettings> configs = null;
-	        Query qry = null;
-
-	            try {
-						session = PersistenceManager.getRequestDBSession();
-			            queryString = "select cls from " + AmpActivityProgramSettings.class.getName() + " cls ";
-			            qry = session.createQuery(queryString);
-			            configs = qry.list();
-	            } catch (DgException e) {
-	            	// TODO Auto-generated catch block
-	            	e.printStackTrace();
-	            }
-	        
-
-	        return configs;
-	    }
+	public static List<AmpActivityProgramSettings> getAllAmpActivityProgramSettings() {
+		return PersistenceManager.getSession().createQuery("select cls from " + AmpActivityProgramSettings.class.getName() + " cls ").list();
+	}
 	
 	public static String renderActivityTree(AmpDEImportLog node) {
-
-		
 		StringBuffer retValue = new StringBuffer();
-
 		retValue.append(renderActivityTreeNode(node, "tree.getRoot()"));
-
 		return retValue.toString();
 	}
 	

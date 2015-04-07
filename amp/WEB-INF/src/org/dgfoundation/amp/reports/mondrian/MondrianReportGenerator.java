@@ -295,6 +295,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 			}
 		
 		MondrianReportUtils.configureDefaults(spec);
+//		MondrianReportUtils.removeUnsupportedColumns(spec);
 		
 		if (PartialReportArea.class.isAssignableFrom(reportAreaType)
 				/* if there are no leaf entries to be associated with internal use id, 
@@ -361,15 +362,20 @@ public class MondrianReportGenerator implements ReportExecutor {
 		config.setDoRowTotals(false); //we are moving totals calculation out of MDX. row totals in MDX are equivalent to what we perceive as column totals, e.g. this is for Total Actual Commitments
 		config.setColumnsHierarchiesTotals(0); //we are moving subtotals out of MDX.
 		config.setRowsHierarchiesTotals(0); //we are moving subtotals out of MDX.
-		//add requested columns
-		//if (!spec.isSummaryReport())
-			for (ReportColumn col:spec.getColumns()) {
-				MDXAttribute elem = (MDXAttribute)MondrianMapping.toMDXElement(col);
-				if (elem == null) 
-					reportError("No mapping found for column name = " + (col==null ? null : col.getColumnName()));
-				else 
-					config.addRowAttribute(elem);
+		
+		// add requested columns
+		for (Iterator<ReportColumn> iter = spec.getColumns().iterator(); iter.hasNext(); ) {
+			ReportColumn col = iter.next();
+			MDXAttribute elem = (MDXAttribute) MondrianMapping.toMDXElement(col);
+			if (elem == null) {
+				reportError("No mapping found for column name = " + (col==null ? null : col.getColumnName()));
+				iter.remove();
+				spec.getHierarchies().remove(col);
+			} else { 
+				config.addRowAttribute(elem);
 			}
+		}
+		
 		//add requested measures
 		for (ReportMeasure measure: spec.getMeasures()) {
 			MDXMeasure elem = (MDXMeasure)MondrianMapping.toMDXElement(measure);

@@ -129,17 +129,13 @@ public class ReportSpecificationImpl implements ReportSpecification {
 	 * Any data starting from the 2nd non-hierarchical column 
 	 * is merged up for the group associated to the 1st non-hierarchical column 
 	 * and are not displayed in a separate row (titles are concatenated in a single row). 
-	 * The hierarchies must be a set of first consecutive columns configured in the report 
-	 * (e.g. first 2 out of 4, i.e. column #1 and #2). 
-	 * If you want to display all columns as hierarchies, 
-	 * then you can simply .setHierarchies(spec.getColumns()).
 	 * @param hierarchies
 	 */
 	public void setHierarchies(Set<ReportColumn> hierarchies) {
 		this.hierarchies.clear();
 		this.hierarchies.addAll(hierarchies);
 	}
-
+	
 	@Override
 	public ReportFilters getFilters() {
 		return filters;
@@ -356,7 +352,9 @@ public class ReportSpecificationImpl implements ReportSpecification {
 			getColumns().add(constantDummyColumn);
 			getHierarchies().add(constantDummyColumn);
 			setCalculateRowTotals(false);
+			/* we must not reconfigure column totals to be calculated 
 			setCalculateColumnTotals(true);
+			*/
 		}
 	}
 }

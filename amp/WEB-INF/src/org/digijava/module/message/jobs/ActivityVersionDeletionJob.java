@@ -18,13 +18,12 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
-public class ActivityVersionDeletionJob implements StatefulJob {
-
-	private static final Logger logger = Logger
-			.getLogger(ActivityVersionDeletionJob.class);
-
-	@Override
-	public void execute(JobExecutionContext context) throws JobExecutionException {
+public class ActivityVersionDeletionJob extends ConnectionCleaningJob implements StatefulJob { 
+	
+	private static final Logger logger = Logger.getLogger(ActivityVersionDeletionJob.class);
+	
+	@Override 
+	public void executeInternal(JobExecutionContext context) throws JobExecutionException{		
 		
 		int period = 0;		
 		int queueSize = 0;

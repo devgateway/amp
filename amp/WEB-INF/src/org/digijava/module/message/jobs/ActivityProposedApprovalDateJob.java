@@ -14,11 +14,12 @@ import org.digijava.module.message.util.AmpMessageUtil;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
+
 import java.text.SimpleDateFormat;
 
-public class ActivityProposedApprovalDateJob implements StatefulJob {
-    public void execute(JobExecutionContext context) throws JobExecutionException{
-
+public class ActivityProposedApprovalDateJob extends ConnectionCleaningJob implements StatefulJob {
+    
+	@Override public void executeInternal(JobExecutionContext context) throws JobExecutionException{
         Date curDate=new Date();
         Date dateAfterDays=null;
         try{

@@ -10,16 +10,17 @@ import org.digijava.module.aim.util.AmpDateUtils;
 import org.digijava.module.calendar.dbentity.AmpCalendar;
 import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
+import org.digijava.module.message.jobs.ConnectionCleaningJob;
 import org.digijava.module.message.triggers.CalendarEventTrigger;
 import org.digijava.module.message.util.AmpMessageUtil;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
-public class CalendarEventJob implements StatefulJob{
-    private static Logger logger = Logger.getLogger(CalendarEventJob.class);
-
-    public void execute(JobExecutionContext context) throws JobExecutionException{
+public class CalendarEventJob extends ConnectionCleaningJob implements StatefulJob { 
+	
+	@Override 
+	public void executeInternal(JobExecutionContext context) throws JobExecutionException {		
 
         Date curDate=new Date();
         Date dateAfterDays;

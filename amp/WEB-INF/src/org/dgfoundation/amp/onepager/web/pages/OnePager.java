@@ -258,7 +258,8 @@ public class OnePager extends AmpHeaderFooter {
 						target.add(editLockRefresher);
 					}
 				}
-				// keep aliave jdbc connection
+				// AMP-19698
+				// keep alive jdbc connection 
 				AmpActivityModel.getHibernateSession().doWork(new Work() {
 					@Override
 					public void execute(Connection connection) throws SQLException {

@@ -46,12 +46,8 @@ public class HibernateSessionRequestFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
-		try {
-
-            log.debug("Starting a database transaction");
-            
+		try {            
             PersistenceManager.endSessionLifecycle();
-//            PersistenceManager.getSession().beginTransaction();
             
             // Call the next filter (continue request processing)
             try {
@@ -59,13 +55,7 @@ public class HibernateSessionRequestFilter implements Filter {
             }
             finally {
                 // Commit and cleanup
-                //log.debug("Committing the database transaction");
-                //Session session = PersistenceManager.getCurrentSession();
-                //PersistenceManager.removeClosedSessionsFromMap();
-    			//CloseExpiredActivitiesJob.cleanupSession(session);
-    			
             	PersistenceManager.endSessionLifecycle();
-
                 //PersistenceManager.checkClosedOrLongSessionsFromTraceMap();
                 if (request instanceof HttpServletRequest)
                 	DocumentManagerUtil.closeJCRSessions((HttpServletRequest)request);      	

@@ -16,8 +16,9 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
-public class ActivityFinalDateForDisbursementsJob implements StatefulJob {
-    public void execute(JobExecutionContext context) throws JobExecutionException{
+public class ActivityFinalDateForDisbursementsJob extends ConnectionCleaningJob implements StatefulJob {
+    
+	@Override public void executeInternal(JobExecutionContext context) throws JobExecutionException{
 
         Date curDate=new Date();
         Date dateAfterDays=null;

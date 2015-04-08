@@ -40,14 +40,15 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
-public class SendReminderEmailJob implements StatefulJob{
+public class SendReminderEmailJob extends ConnectionCleaningJob implements StatefulJob{
 	private static Logger logger = Logger.getLogger(SendReminderEmailJob.class);
 	
 	private static final String MAIL_SENDER="ampsite@dg.org";
 	private static final String MAIL_SUBJECT="Reminder to enter to amp site";
 	private static final String MAIL_BODY="You have a period of innactivity on ampsite, dont forget to use it";
+	
 	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+	public void executeInternal(JobExecutionContext arg0) throws JobExecutionException {
 		Collection<AmpGlobalSettings> col = FeaturesUtil.getGlobalSettings();
 		String name;
 		String value;

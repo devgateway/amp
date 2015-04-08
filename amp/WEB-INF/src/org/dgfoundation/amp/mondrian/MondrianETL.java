@@ -379,9 +379,6 @@ private EtlResult execute() throws Exception {
 				
 		ETL_TIME_FINGERPRINT.serializeFingerprint(monetConn, Long.toString(currentEtlEventId));
 
-		SQLUtils.flush(conn);
-		SQLUtils.flush(monetConn.conn);
-
 		long end = System.currentTimeMillis();
 		double secs = (end - start) / 1000.0;
 		EtlResult res = new EtlResult(currentEtlEventId, secs, cacheInvalidated,  
@@ -1064,6 +1061,8 @@ private EtlResult execute() throws Exception {
 					MondrianETL etl = new MondrianETL(conn, monetConn, forceFull);
 					EtlResult etlResult = etl.execute();
 					logger.error("Mondrian ETL result: " + etlResult);
+					SQLUtils.flush(monetConn.conn);
+					SQLUtils.flush(conn);
 					return etlResult;
 				}
 			}

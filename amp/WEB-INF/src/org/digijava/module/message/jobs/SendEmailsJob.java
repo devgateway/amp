@@ -17,11 +17,12 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
-public class SendEmailsJob implements StatefulJob{
+public class SendEmailsJob extends ConnectionCleaningJob implements StatefulJob { 
+	
 	private static Logger logger = Logger.getLogger(SendEmailsJob.class);
 	
-	@Override
-	public void execute(JobExecutionContext arg0) throws JobExecutionException {
+	@Override 
+	public void executeInternal(JobExecutionContext context) throws JobExecutionException{		
         Session session = PersistenceManager.getSession();
 		try {
             List<Long> receiversIds = AmpMessageUtil.loadReceiversIdsToGetEmails(session);

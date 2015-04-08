@@ -20,11 +20,13 @@ import org.quartz.StatefulJob;
  * @author Vazha Ezugbaia
  *
  */
-public class UserVerifiedDateJob implements StatefulJob {
-    public void execute(JobExecutionContext context) throws JobExecutionException{
+public class UserVerifiedDateJob extends ConnectionCleaningJob implements StatefulJob { 
+	
+	@Override 
+	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
 
-        Date curDate=new Date();
-        Date dateBeforeDays=AmpDateUtils.getDateBeforeDays(curDate,30);
+		Date curDate = new Date();
+        Date dateBeforeDays = AmpDateUtils.getDateBeforeDays(curDate,30);
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 

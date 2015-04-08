@@ -8,14 +8,13 @@
  */
 
 function ajaxLogin() {
-		$(".error_text_login").remove();
-		$('#result').before("<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/ajax-loader.gif' style='vertical-align:middle;'></div>");
+		$('#loader').show();
 
 		var digestAuth = new pl.arrowgroup.DigestAuthentication(
 	   			{
 					onSuccess : function(data) {
 						var error = jQuery.trim(data);
-						$(".error_text_login").remove();
+						$('#result').hide();
 						
 						//Suspended login
 						var suspendedLoginText = null;
@@ -40,17 +39,14 @@ function ajaxLogin() {
 						
 						switch (error) {
 						case 'noTeamMember':
-							$('#result')
-									.before(
-											"<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/login_error.gif' style='vertical-align:middle;'>&nbsp;&nbsp;&nbsp;<digi:trn>You can not login into AMP because you are not assigned to a workspace</digi:trn>.</div>");
+							reportError("unassigned_user");
 							break;
 						case 'invalidUser':
-							$('#result')
-									.before(
-											"<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/login_error.gif' style='vertical-align:middle;'>&nbsp;&nbsp;&nbsp;<digi:trn>Invalid User</digi:trn>.</div>");
+							// isn't the generic onFailure actually called for this use case?
+							reportError("invalid_user");
 							break;
 						case 'userSuspended':
-							var suspUserErrTxt = "<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/login_error.gif' style='vertical-align:middle;'>&nbsp;&nbsp;&nbsp;";
+							var suspUserErrTxt = "";
 							var reasonIdx = 0;
 							for (reasonIdx = 0; reasonIdx < suspendReasons.length; reasonIdx ++){
 								suspUserErrTxt += suspendReasons[reasonIdx];
@@ -58,9 +54,8 @@ function ajaxLogin() {
 									suspUserErrTxt += "<br>"
 								}
 							}
-							suspUserErrTxt += "</div>";
-							$('#result')
-									.before(suspUserErrTxt);
+							$('#suspend').text(suspUserErrTxt);
+							reportError("suspend");
 							break;
 						case 'noError':
 							location.href = '/index.do';
@@ -68,14 +63,18 @@ function ajaxLogin() {
 						}
 					},
 	   				onFailure : function(response){
-	   					$(".error_text_login").remove();
-						$('#result')
-						.before(
-								"<div class='error_text_login'><img src='/TEMPLATE/ampTemplate/img_2/login_error.gif' style='vertical-align:middle;'>&nbsp;&nbsp;&nbsp;<digi:trn>Invalid username or password</digi:trn>.</div>");	   			
+	   					reportError("invalid_user_pwd");
 	   				},
 	   				cnonce : 'testCnonce'
 	   			}
-	   		);	   		
+	   		);
+		
+			var reportError = function(id) {
+				$('#loader').hide();
+				$('#result').show();
+				$(".error_text_login > span").hide();
+				$("#" + id).show();
+			};
 
   			digestAuth.setCredentials($('#j_username').val(),$('#j_password').val());
    			digestAuth.call('/aim/postLogin.do');

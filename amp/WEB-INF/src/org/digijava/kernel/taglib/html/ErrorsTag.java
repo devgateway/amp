@@ -25,8 +25,8 @@ package org.digijava.kernel.taglib.html;
 import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.ResourceBundle;
-import javax.servlet.ServletContext;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 
@@ -193,11 +193,7 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
                 //Add the new string id if needed.
                 try {
 					String body = bundleApplication.getString(item.getKey());
-					if (item.getValues() != null) {
-						MessageFormat format = new MessageFormat(body);
-						body = format.format(item.getValues());
-					}
-					body = body.trim();
+					
 					/**
 					 * Constantin: atrocious hack - do not translate html tags from application.properties
 					 */
@@ -222,8 +218,21 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
 						body = body.substring(0, body.length() - eliminatedSuffix.length()); // delete suffix
 						body = body.trim();
 					}
-
-					String translatedBody = TranslatorWorker.translateText(body);
+					
+					String translatedBody = body;
+					// translate all parts and only afterwards format with additional arguments
+					for(String bodyPart : body.split("\\{[0-9]+\\}")) {
+						bodyPart = bodyPart.trim();
+						translatedBody = translatedBody.replace(bodyPart, TranslatorWorker.translateText(bodyPart));
+					}
+					
+					// formatting with custom arguments
+					if (item.getValues() != null) {
+						MessageFormat format = new MessageFormat(translatedBody);
+						translatedBody = format.format(item.getValues());
+					}
+					translatedBody = translatedBody.trim();
+					
 					String errorMsg = eliminatedPrefix + translatedBody + eliminatedSuffix;
                   newErrors.add((property==null)?Globals.MESSAGE_KEY:property, new ActionMessage(errorMsg,false));
                 }catch(Exception e){

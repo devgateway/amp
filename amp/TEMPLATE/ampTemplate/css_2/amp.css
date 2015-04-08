@@ -229,6 +229,7 @@ a.settingsbut{float:left;display:block;width:250px;}
 .selector_content {margin:10px; height:250px; overflow-y:auto; overflow-x:hidden; padding-right:20px;}
 .selector_tree_1 {padding-left:15px; padding-top:5px;}
 .error_login {position:absolute; top:40px; margin-left:10px; background-color:#DD0000; color:#FFFFFF; padding:3px; border:1px solid #990000;}
+#result img{vertical-align:middle;}
 .error_text_login {color:#DD0000; font-size: 12px;font-weight: bold ;margin-right:5px; text-align: left;}
 .opt_item {background-color:#F3F2F1; border:1px solid #C2C1C0; margin-top:10px; }
 .opt_item_tree_1 {background-color:#F3F2F1; border:1px solid #C2C1C0;  margin-top:10px;}

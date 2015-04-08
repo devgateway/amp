@@ -66,7 +66,11 @@ function SwitchLanguageMenu(value) {
 
         	}
         	else{
-        		 document.location.href = newLoc;
+        		//change the language
+        		$.get( newLoc, function() {
+        			// and then reload the page
+        			 location = location.href;
+        			});
         	}
 
         }

@@ -13,13 +13,6 @@ var boilerplate = new window.boilerplate(
      		showAdminFooter: true
 		  });
 
-
-$( document ).on( "switchLanguage", function(event) {
-  //alert( 'aa' );
-});
-$(boilerplate.menu).on( "switchLanguage", function(event) {
-	//  alert( 'bb' );
-	});
 </script>
 
 

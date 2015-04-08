@@ -521,9 +521,7 @@
 		
 		
 		<layout name="wicketHeaderLayout" extends="noLayout" file="wicketHeaderLayout.jsp">
-	    	<put name="version">&ampVersion;</put>
-			<put name="build_version">&buildDate;</put>
-			<put-item name="headerTop" layout="headerTopLayout"/>
+	 		<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	    	<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 			<put-item name="loginWidget" file="loginWidget.jsp"/>
@@ -532,9 +530,7 @@
 		</layout>
 
 		<layout name="wicketAdminHeaderLayout" extends="noLayout" file="wicketAdminHeaderLayout.jsp">
-	    	<put name="version">&ampVersion;</put>
-			<put name="build_version">&buildDate;</put>
-			<put-item name="headerTop" layout="headerTopLayout"/>
+	 		<put-item name="headerTop" layout="headerTopLayout"/>
 			<put-item name="headerMiddle" layout="headerMiddleLayout"/>
 	    	<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 			<put-item name="loginWidget" file="loginWidget.jsp"/>

@@ -136,7 +136,9 @@
 			
 		
 		<layout name="headerMiddleLayout" file="headerMiddle.jsp">
-	  	<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
+			<put name="version">&ampVersion;</put>
+			<put name="build_version">&buildDate;</put>
+	  		<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
 			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 		</layout>
 		

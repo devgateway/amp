@@ -623,6 +623,8 @@
 					<SQL dialect="generic">
 						<![CDATA[
 						SELECT mondrian_activity_currency_numbers.amp_activity_id, 
+							CASE WHEN mondrian_activity_currency_numbers.ppc_transaction_amount IS NULL THEN @@undefined_amount@@
+							ELSE 
 							(mondrian_activity_currency_numbers.ppc_transaction_exch_@@currency@@-
 								COALESCE((
 									SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
@@ -631,7 +633,7 @@
 												AND @@filteredActivities@@
 												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_currency_numbers"."amp_activity_id"
 								), 0)
-							)
+							) END
 							AS "Uncommitted_Balance"
 						FROM mondrian_activity_currency_numbers
 						]]>
@@ -644,7 +646,9 @@
 				<View alias="v_uncommitted_cumulative_balance">
 					<SQL dialect="generic">
 						<![CDATA[
-						SELECT mondrian_activity_currency_numbers.amp_activity_id, 
+						SELECT mondrian_activity_currency_numbers.amp_activity_id,
+							CASE WHEN mondrian_activity_currency_numbers.ppc_transaction_amount IS NULL THEN @@undefined_amount@@
+							ELSE  
 							(mondrian_activity_currency_numbers.ppc_transaction_exch_@@currency@@-
 								COALESCE((SELECT sum("mondrian_fact_table".transaction_exch_@@currency@@)
 												FROM "mondrian_fact_table"
@@ -652,7 +656,7 @@
 												AND (@@filteredActivitiesWithoutDateFilters@@)
 												AND "mondrian_fact_table"."entity_id" = "mondrian_activity_currency_numbers"."amp_activity_id"), 
 										 0)
-							 ) AS "uncommitted_cumulative_balance"
+							 ) END AS "uncommitted_cumulative_balance"
 						FROM mondrian_activity_currency_numbers
 						]]>
 					</SQL>
@@ -830,9 +834,11 @@
 				<View alias='v_cumulative_execution_rate'>
 					<SQL dialect="generic">
 						<![CDATA[
-						SELECT cumulative_amounts.amp_activity_id, CASE "cumulative_amounts"."cc" WHEN 0 THEN null
-																	ELSE "cumulative_amounts"."cd" / "cumulative_amounts"."cc" * 100 END 
-																	as "cumulative_execution_rate"
+						SELECT cumulative_amounts.amp_activity_id, 
+							CASE 
+								WHEN ("cumulative_amounts"."cc" IS NULL) OR ("cumulative_amounts"."cd" IS NULL) OR ("cumulative_amounts"."cc"=0) THEN @@undefined_amount@@
+								ELSE "cumulative_amounts"."cd" / "cumulative_amounts"."cc" * 100 
+							END as "cumulative_execution_rate"
 						FROM (SELECT "mondrian_activity_fixed_texts"."amp_activity_id", 
 									sum(CASE mondrian_fact_table.transaction_type WHEN 0 THEN mondrian_fact_table.transaction_exch_@@currency@@ ELSE 0 END) as "cc", 
 									sum(CASE mondrian_fact_table.transaction_type WHEN 1 THEN mondrian_fact_table.transaction_exch_@@currency@@ ELSE 0 END) as "cd"
@@ -1030,7 +1036,7 @@
 		 	<Formula>
 				IIf(Measures.[Total Grand Disbursements]=0, null, [Measures].[Actual Disbursements] / Measures.[Total Grand Disbursements] * 100)
 			</Formula>
-			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>			
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
 		</CalculatedMember>
 		
 	</Cube>

@@ -336,5 +336,11 @@ public final class MoConstants {
 	 */
 	public static final String DATE_DISPLAY_FORMAT = FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
 	
+	/** 
+	 * Undefined amount as minimum value supported by MonetDB, that is almost "-Double.MAX_VALUE".
+	 * Must be defined explicitly instead of null to help MonetDB joins succeed. 
+	 * */ 
+	public static final String UNDEFINED_AMOUNT_STR = "-1.7976931348623155E308";
+	
 	public static final String HAS_AMP_PROPERTIES = "HAS_AMP_PROPERTIES";
 }

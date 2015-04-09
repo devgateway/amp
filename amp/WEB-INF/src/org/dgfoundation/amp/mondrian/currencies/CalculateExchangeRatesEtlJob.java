@@ -15,6 +15,7 @@ import org.dgfoundation.amp.ar.viewfetcher.SQLUtils;
 import org.dgfoundation.amp.mondrian.EtlConfiguration;
 import org.dgfoundation.amp.mondrian.MondrianTablesRepository;
 import org.dgfoundation.amp.mondrian.monet.MonetConnection;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 
@@ -83,16 +84,17 @@ public class CalculateExchangeRatesEtlJob {
 			if (!destTableColumns.contains(cag.prefix + "amount_base_currency")) {
 				monetConn.executeQuery(String.format("ALTER TABLE %s ADD %s DOUBLE", cag.destinationTable, cag.prefix + "amount_base_currency"));
 			}
-			monetConn.executeQuery(String.format("UPDATE %s SET %samount_base_currency = %stransaction_amount * (select mer.exchange_rate from mondrian_exchange_rates mer WHERE mer.day_code = %s.%sdate_code AND mer.currency_id = %s.%scurrency_id) %s", 
-					cag.destinationTable, cag.prefix, cag.prefix, cag.destinationTable, cag.prefix, cag.destinationTable, cag.prefix,
+			monetConn.executeQuery(String.format("UPDATE %s SET %samount_base_currency = COALESCE("
+					+ "%stransaction_amount * (select mer.exchange_rate from mondrian_exchange_rates mer WHERE mer.day_code = %s.%sdate_code AND mer.currency_id = %s.%scurrency_id), %s) %s",
+					cag.destinationTable, cag.prefix, cag.prefix, cag.destinationTable, cag.prefix, cag.destinationTable, cag.prefix, MoConstants.UNDEFINED_AMOUNT_STR,
 					condition));
 			for (long currId:currencyIds) {
 				String query = String.format(
-						"UPDATE %s SET %s = " +  
-						"%samount_base_currency / (select mer.exchange_rate from mondrian_exchange_rates mer WHERE mer.day_code = %s.%sdate_code AND mer.currency_id = %d) %s ",
+						"UPDATE %s SET %s = COALESCE("  
+						+ "%samount_base_currency / (select mer.exchange_rate from mondrian_exchange_rates mer WHERE mer.day_code = %s.%sdate_code AND mer.currency_id = %d), %s) %s ",
 						cag.destinationTable, cag.getColumnName(currId),
 						cag.prefix, cag.destinationTable, cag.prefix,
-						currId, condition); 
+						currId, MoConstants.UNDEFINED_AMOUNT_STR, condition); 
 				monetConn.executeQuery(query);
 				monetConn.flush();
 			}
@@ -100,14 +102,14 @@ public class CalculateExchangeRatesEtlJob {
 			// stupid
 			for (long currId:currencyIds) {
 				String query = String.format(
-					"UPDATE %s SET %s = %stransaction_amount * (select mer.exchange_rate from %s mer WHERE mer.day_code = %s.%sdate_code AND mer.currency_id = %s.%scurrency_id) / (select mer2.exchange_rate from %s mer2 WHERE mer2.day_code = %s.%sdate_code AND mer2.currency_id = %s) %s",
+					"UPDATE %s SET %s = COALESCE(%stransaction_amount * (select mer.exchange_rate from %s mer WHERE mer.day_code = %s.%sdate_code AND mer.currency_id = %s.%scurrency_id) / (select mer2.exchange_rate from %s mer2 WHERE mer2.day_code = %s.%sdate_code AND mer2.currency_id = %s) , %s) %s",
 					cag.destinationTable, cag.getColumnName(currId),
 					cag.prefix, MONDRIAN_EXCHANGE_RATES_TABLE, 
 					cag.destinationTable, cag.prefix, 
 					cag.destinationTable, cag.prefix,
 					MONDRIAN_EXCHANGE_RATES_TABLE, 
 					cag.destinationTable, cag.prefix,
-					currId, condition);
+					currId, MoConstants.UNDEFINED_AMOUNT_STR, condition);
 				monetConn.executeQuery(query);
 			}
 			return;

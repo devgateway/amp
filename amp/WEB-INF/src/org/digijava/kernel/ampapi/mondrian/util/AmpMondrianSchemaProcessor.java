@@ -239,6 +239,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			insertCommonMeasuresDefinitions(xmlSchema);
 			moveCalculatedMembersToEnd(xmlSchema);
 			contents = XMLGlobals.saveToString(xmlSchema);
+			contents = contents.replaceAll("@@undefined_amount@@", MoConstants.UNDEFINED_AMOUNT_STR);
 			expandedSchema = contents;
 			// System.err.println("the expanded schema is: " + expandedSchema);
 		}

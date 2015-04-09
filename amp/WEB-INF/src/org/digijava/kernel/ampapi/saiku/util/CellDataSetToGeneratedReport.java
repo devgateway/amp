@@ -31,6 +31,7 @@ import org.dgfoundation.amp.reports.AmountColumns;
 import org.dgfoundation.amp.reports.DateColumns;
 import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
+import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
@@ -227,7 +228,7 @@ public class CellDataSetToGeneratedReport {
 		if (value == null)
 			throw new AMPException("Textual column value sent for parsing - invalid request. Please fix");
 		// return null result only for computed columns or for measures that are distributed over the years
-		if (emptyAsNull && value.isEmpty()) {
+		if (emptyAsNull && (value.isEmpty() || value.equalsIgnoreCase(MoConstants.UNDEFINED_AMOUNT_STR))) {
 			return null;
 		}
 		

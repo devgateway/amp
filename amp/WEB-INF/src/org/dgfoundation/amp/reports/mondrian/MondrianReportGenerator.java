@@ -64,7 +64,7 @@ import org.digijava.kernel.ampapi.saiku.SaikuGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.SaikuReportArea;
 import org.digijava.kernel.ampapi.saiku.SaikuReportSorter;
 import org.digijava.kernel.ampapi.saiku.util.CellDataSetPostProcessing;
-import org.digijava.kernel.ampapi.saiku.util.CellDataSetToAmpHierachies;
+import org.digijava.kernel.ampapi.saiku.util.CellDataSetToAmpHierarchies;
 import org.digijava.kernel.ampapi.saiku.util.CellDataSetToGeneratedReport;
 import org.digijava.kernel.ampapi.saiku.util.SaikuPrintUtils;
 import org.digijava.kernel.ampapi.saiku.util.SaikuUtils;
@@ -579,7 +579,7 @@ public class MondrianReportGenerator implements ReportExecutor {
 		applyFilterSetting(spec, cellDataSet);
 		
 		postprocessUndefinedEntries(spec, cellDataSet);
-		CellDataSetToAmpHierachies.concatenateNonHierarchicalColumns(spec, cellDataSet, leafHeaders, this.translatedUndefined, cellDataSetActivities);
+		CellDataSetToAmpHierarchies.concatenateNonHierarchicalColumns(spec, cellDataSet, leafHeaders, this.translatedUndefined, cellDataSetActivities);
 		postProcessor.removeDummyColumns();
 		
 		//clear totals if were enabled for non-hierarchical merges

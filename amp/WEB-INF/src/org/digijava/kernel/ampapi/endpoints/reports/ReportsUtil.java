@@ -656,4 +656,5 @@ public class ReportsUtil {
 		return (JsonBean) TLSUtils.getRequest().getSession()
 				.getAttribute(EPConstants.API_STATE_REPORT_EXPORT + reportConfigId);
 	}
+	
 }

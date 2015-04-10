@@ -23,6 +23,7 @@ import org.dgfoundation.amp.newreports.CompleteWorkspaceFilter;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
+import org.dgfoundation.amp.reports.CustomMeasures;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportSettings;
 import org.dgfoundation.amp.reports.mondrian.MondrianSQLFilters;
@@ -241,6 +242,7 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			}
 			insertCommonMeasuresDefinitions(xmlSchema);
 			moveCalculatedMembersToEnd(xmlSchema);
+			removeDefinitionsWithMissingDependencies(xmlSchema);
 			contents = XMLGlobals.saveToString(xmlSchema);
 			contents = contents.replaceAll("@@undefined_amount@@", MoConstants.UNDEFINED_AMOUNT_STR);
 			expandedSchema = contents;
@@ -250,7 +252,6 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 		//expandedSchema = expandedSchema.replace("@@activity_status_key@@", buildActivityStatusSQL());
 		return expandedSchema;
 	}
-	
 	
 	protected void insertCommonMeasuresDefinitions(Document xmlSchema) {
 		Node trivialMeasureDefinitionNode = XMLGlobals.selectNode(xmlSchema, "//Measure[@name='@@trivial_measure@@']");
@@ -393,6 +394,19 @@ public class AmpMondrianSchemaProcessor implements DynamicSchemaProcessor {
 			Node calculatedMember = calculatedMembers.item(idx);
 			parent.removeChild(calculatedMember);
 			parent.appendChild(calculatedMember);
+		}
+	}
+	
+	protected void removeDefinitionsWithMissingDependencies(Document xmlSchema) {
+		// remove calculated members whose dependencies are missing
+		for (Entry<String, List<String>> pair : CustomMeasures.MEASURE_DEPENDENCY.entrySet()) {
+			for (String measure : pair.getValue()) {
+				if (!MondrianMapping.definedMeasures.contains(measure)) {
+					Node calculatedMember = XMLGlobals.selectNode(xmlSchema, "//CalculatedMember[@name='" + pair.getKey() + "']");
+					calculatedMember.getParentNode().removeChild(calculatedMember);
+					break;
+				}
+			}
 		}
 	}
 	

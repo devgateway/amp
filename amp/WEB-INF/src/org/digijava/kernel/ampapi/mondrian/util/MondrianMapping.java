@@ -88,7 +88,6 @@ public class MondrianMapping {
 	
 	public static final Set<String> definedColumns = new HashSet<String>();
 	public static final Set<String> definedMeasures = new HashSet<String>();
-//	public static final Set<String> totalsMeasures = new HashSet<String>();
 	public static final Map<String, String> dependency = new HashMap<String, String>();
 	
 	final static String[] idSuffixList = new String[] {"", " Id"};
@@ -327,7 +326,6 @@ public class MondrianMapping {
 						}
 						addColumnDefinition(computedTotals, level);
 					}
-//					totalsMeasures.add(computedTotals);
 				}
 			
 			// ssc custom trivial measures
@@ -338,6 +336,11 @@ public class MondrianMapping {
 			}
 			addMeasureDefinition(MeasureConstants.CUMULATED_SSC_COMMITMENTS);
 					
+			// define Execution Rate only of dependent measures were also defined
+			if (definedMeasures.contains(MeasureConstants.ACTUAL_DISBURSEMENTS) && definedMeasures.contains(MeasureConstants.PLANNED_DISBURSEMENTS)) {
+				addMeasureDefinition(MeasureConstants.EXECUTION_RATE);
+			}
+			
 			addMeasureDefinition(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL);
 			addMeasureDefinition(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE);
 			addMeasureDefinition(MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL);

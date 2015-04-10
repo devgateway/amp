@@ -28,7 +28,7 @@ import org.saiku.service.olap.totals.aggregators.TotalAggregator;
  * This is AMP report specific feature, that is slow to be built via MDX queries.
  * @author Nadejda Mandrescu
  */
-public class CellDataSetToAmpHierachies {
+public class CellDataSetToAmpHierarchies {
 	private final ReportSpecification spec;
 	private final CellDataSet cellDataSet;
 
@@ -43,7 +43,7 @@ public class CellDataSetToAmpHierachies {
 	private final List<Integer> activities;
 	private final String translatedUndefined;
 	
-	private CellDataSetToAmpHierachies(ReportSpecification spec, CellDataSet cellDataSet, 
+	private CellDataSetToAmpHierarchies(ReportSpecification spec, CellDataSet cellDataSet, 
 			List<ReportOutputColumn> leafHeaders, String translatedUndefined, List<Integer> activities) {
 		this.spec = spec;
 		this.cellDataSet = cellDataSet;
@@ -61,7 +61,7 @@ public class CellDataSetToAmpHierachies {
 	 */
 	public static void concatenateNonHierarchicalColumns(ReportSpecification spec, CellDataSet cellDataSet, 
 			List<ReportOutputColumn> leafHeaders, String translatedUndefined, List<Integer> activities) {
-		(new CellDataSetToAmpHierachies(spec, cellDataSet, leafHeaders, translatedUndefined, activities)).concatenate();
+		(new CellDataSetToAmpHierarchies(spec, cellDataSet, leafHeaders, translatedUndefined, activities)).concatenate();
 	}
 	
 	private void init() {

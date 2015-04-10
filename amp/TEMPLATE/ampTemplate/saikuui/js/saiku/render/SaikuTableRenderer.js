@@ -189,14 +189,18 @@ function genTotalHeaderCells(currentIndex, bottom, scanSums, scanIndexes, lists)
 	return contents;
 }
 
-function totalIntersectionCells(currentIndex, bottom, scanSums, scanIndexes, lists, partialTotal) {
+function totalIntersectionCells(currentIndex, bottom, scanSums, scanIndexes, lists, partialTotal, emptyColRowTotalsMeasures) {
 	var contents = '';
+	var cssClass = "data total intersection";
 	for (var i = bottom; i >= 0; i--) {
 		if (currentIndex == scanSums[i]) {
 			var currentListNode = lists[i][scanIndexes[i]];
-			var cssClass = "data total intersection";
 			for (var m = 0; m < currentListNode.cells.length; m++) {
-				contents += '<td class="' + cssClass + '">' + Settings.Util.numberToString(partialTotal.shift(), Settings.NUMBER_FORMAT_OPTIONS) + '</td>';
+				var value = "";
+				if (emptyColRowTotalsMeasures.indexOf(m) == -1) {
+					value = Settings.Util.numberToString(partialTotal.shift(), Settings.NUMBER_FORMAT_OPTIONS);
+				}
+				contents += '<td class="' + cssClass + '">' + value + '</td>';
 			}
 			scanIndexes[i]++;
 			if (scanIndexes[i] < lists[i].length)
@@ -206,7 +210,7 @@ function totalIntersectionCells(currentIndex, bottom, scanSums, scanIndexes, lis
 	return contents;
 }
 
-function genTotalHeaderRowCells(currentIndex, scanSums, scanIndexes, totalsLists, dryrun) {
+function genTotalHeaderRowCells(currentIndex, scanSums, scanIndexes, totalsLists, dryrun, emptyColRowTotalsMeasures, emptyRowTotalsMeasures) {
 	// The dryrun parameter is useful to run this function that affects global variables without moving the currentIndex
 	// Used to allow correct alignment of totals by hierarchy
     if(Settings.AMP_REPORT_API_BRIDGE && !dryrun) {
@@ -274,13 +278,18 @@ function genTotalHeaderRowCells(currentIndex, scanSums, scanIndexes, totalsLists
 				var buckets = totalsLists[ROWS] === null ? 1 : totalsLists[ROWS][0][0].cells.length;
 				var currentBucket = 0;
 				for (var k = 0; k < colLists[i][colScanIndexes[i]].cells[m].length; k++) {
-					contents += '<td class="data total">' + colLists[i][colScanIndexes[i]].cells[m][k].value + '</td>';
+					var value = '';
+					if (emptyRowTotalsMeasures.indexOf(k) == -1) {
+						value = colLists[i][colScanIndexes[i]].cells[m][k].value;
+					}
+					contents += '<td class="data total">' + value + '</td>';
+//					contents += '<td class="data total">' + colLists[i][colScanIndexes[i]].cells[m][k].value + '</td>';
 					if(partialTotal[currentBucket] === undefined) {
 						partialTotal[currentBucket] = 0;
 					}
 					partialTotal[currentBucket] += Settings.Util.stringToNumber(colLists[i][colScanIndexes[i]].cells[m][k].value, Settings.NUMBER_FORMAT_OPTIONS);
 					if (totalsLists[ROWS]) {
-						contents += totalIntersectionCells(k + 1, totalsLists[ROWS].length - 1, scanSums, scanIndexes, totalsLists[ROWS], partialTotal);
+						contents += totalIntersectionCells(k + 1, totalsLists[ROWS].length - 1, scanSums, scanIndexes, totalsLists[ROWS], partialTotal, emptyColRowTotalsMeasures);
 					}
 					currentBucket++;
 					if(currentBucket == buckets) {
@@ -361,6 +370,9 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
     var batchSize = null;
     var batchStarted = false;
     var resultRows = [];
+    var emptyColRowTotalsMeasures = allData.query.properties.emptyColRowTotalsMeasures;
+    var emptyRowTotalsMeasures = allData.query.properties.emptyRowTotalsMeasures;
+    
     if (options) {
         batchSize = options.hasOwnProperty('batchSize') ? options.batchSize : null;
     }
@@ -578,12 +590,12 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
 	        	if(currentPage > 0 ) { //Recalculate indexes
 	        		var prevRecCount = currentPage * Settings.RESULTS_PER_PAGE;
 	        		for(var p = 0; p < prevRecCount; p++) {
-	        			genTotalHeaderRowCells(p + 1, scanSums, scanIndexes, totalsLists, true);
+	        			genTotalHeaderRowCells(p + 1, scanSums, scanIndexes, totalsLists, true, emptyColRowTotalsMeasures, emptyRowTotalsMeasures);
 	        		}
 	        	}
         	}
 
-            totals += genTotalHeaderRowCells(rowShifted + 1, scanSums, scanIndexes, totalsLists, false);
+            totals += genTotalHeaderRowCells(rowShifted + 1, scanSums, scanIndexes, totalsLists, false, emptyColRowTotalsMeasures, emptyRowTotalsMeasures);
         }
         
         if (batchStarted && batchSize) {

@@ -4,7 +4,6 @@
 package org.digijava.kernel.ampapi.saiku.util;
 
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -19,7 +18,7 @@ import org.saiku.olap.dto.resultset.CellDataSet;
 
 /**
  * Stores {@link CellDataSet} post-processing actions 
- * that do not require a separate class like {@link CellDataSetToAmpHierachies}
+ * that do not require a separate class like {@link CellDataSetToAmpHierarchies}
  * @author Nadejda Mandrescu
  *
  */
@@ -77,24 +76,35 @@ public class CellDataSetPostProcessing {
 		}
 		// remove associated headers for dummy columns
 		int origHeaderPos = 0;
+		SortedSet<Integer> rowTotalsColIdsToClear = new TreeSet<Integer>(); // stores column indexes from rows totals that must be cleared (until AMP-19940, then may have to be removed)
 		for (Iterator<ReportOutputColumn> iter = this.leafHeaders.iterator(); iter.hasNext(); origHeaderPos++ ) {
-			iter.next();
+			ReportOutputColumn roc = iter.next();
 			if (dummyColumnsIds.contains(origHeaderPos)) {
 				iter.remove();
 			}
+		/*	if (TotalsOnlyMeasures.MEASURES.contains(roc.originalColumnName) 
+					&& roc.parentColumn != null && !roc.parentColumn.originalColumnName.equals(MoConstants.TOTAL_MEASURES)) {
+				rowTotalsColIdsToClear.add(origHeaderPos - spec.getColumns().size());
+				 within AMP-19940 we may need to
+				iter.remove();
+				 
+			}*/
 		}
 		if (dummyHierarchy != null) {
 			spec.getHierarchies().remove(dummyHierarchy);
 			dummyColumnsIds = dummyColumnsIdsIfInternalIdUsed;
 		}
-		removeDummyColumnsFromCellDataSet(dummyColumnsIds);
+		
+		cleanupColumnsFromCellDataSet(dummyColumnsIds, rowTotalsColIdsToClear);
 		
 		spec.removeDummyColumns();
 	}
 	
-	protected void removeDummyColumnsFromCellDataSet(SortedSet<Integer> dummyColumnsIds) {
+	protected void cleanupColumnsFromCellDataSet(SortedSet<Integer> dummyColumnsIds, 
+			SortedSet<Integer> rowTotalsColIdsToClear) {
 		cellDataSet.setCellSetHeaders(SaikuUtils.removeColumns(cellDataSet.getCellSetHeaders(), dummyColumnsIds));
 		cellDataSet.setCellSetBody(SaikuUtils.removeColumns(cellDataSet.getCellSetBody(), dummyColumnsIds));
+		//SaikuUtils.clearRowTotals(cellDataSet, rowTotalsColIdsToClear);
 	}
 	
 }

@@ -22,6 +22,9 @@ import java.util.List;
 import java.util.SortedSet;
 
 import org.apache.commons.lang.StringUtils;
+import org.dgfoundation.amp.newreports.GeneratedReport;
+import org.dgfoundation.amp.newreports.ReportSpecification;
+import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.HTMLUtil;
@@ -42,6 +45,7 @@ import org.saiku.olap.dto.resultset.AbstractBaseCell;
 import org.saiku.olap.dto.resultset.CellDataSet;
 import org.saiku.olap.dto.resultset.DataCell;
 import org.saiku.olap.dto.resultset.MemberCell;
+import org.saiku.olap.query2.ThinQuery;
 import org.saiku.olap.util.SaikuProperties;
 import org.saiku.repository.IRepositoryObject;
 import org.saiku.repository.RepositoryFileObject;
@@ -242,7 +246,7 @@ public class SaikuUtils {
 		if (cellArray == null || cellArray.length == 0 || leafColumnsNumberToRemove.size() == 0) return cellArray;
 		
 		@SuppressWarnings("unchecked")
-		T[] newCellArra = (T[])Array.newInstance(cellArray.getClass().getComponentType(), cellArray.length - leafColumnsNumberToRemove.size());
+		T[] newCellArray = (T[]) Array.newInstance(cellArray.getClass().getComponentType(), cellArray.length - leafColumnsNumberToRemove.size());
 		Iterator<Integer> iter = leafColumnsNumberToRemove.iterator();
 		int start = 0;
 		int end = iter.next(); //non-inclusive end  
@@ -250,18 +254,47 @@ public class SaikuUtils {
 		int pos = 0;
 		while (start < cellArray.length) { 
 			if (start < end) {
-				System.arraycopy(cellArray, start, newCellArra, pos, end - start);
+				System.arraycopy(cellArray, start, newCellArray, pos, end - start);
 				pos += end - start;
 			} 
 			start = end + 1;
 			end = nextEnd;
 			nextEnd = iter.hasNext() ? iter.next() : cellArray.length;
 		}
-		return newCellArra;
+		return newCellArray;
+	}
+	
+//	public static AbstractBaseCell[][] hideColumns(AbstractBaseCell[][] cellMatrix, SortedSet<Integer> leafColumnsNumberToRemove) {
+//		if (cellMatrix == null || cellMatrix.length == 0 || leafColumnsNumberToRemove.size() == 0) return cellMatrix; 
+//		
+//		for (int i = 0; i < cellMatrix.length; i++) {
+//			for (Integer j : leafColumnsNumberToRemove) {
+//				cellMatrix[i][j].setProperty("hidden", "true");
+//			}
+//		}	
+//			
+//		return cellMatrix;
+//	}
+	
+	public static void clearRowTotals(CellDataSet cellDataSet, SortedSet<Integer> rowTotalsColIdsToClear) {
+		for (List<TotalNode> tnl : cellDataSet.getRowTotalsLists()) {
+			for (TotalNode tn : tnl) {
+				for (int rowId = 0; rowId < tn.getTotalGroups().length; rowId++) {
+					for (int colId : rowTotalsColIdsToClear) {
+						if (colId < tn.getTotalGroups()[rowId].length) {
+							tn.getTotalGroups()[rowId][colId] = 
+									tn.getTotalGroups()[rowId][colId].newInstance("empty");
+							tn.getTotalGroups()[rowId][colId].setFormattedValue("");
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public static void removeTotalsColumns(List<TotalNode>[] totalListsArray, SortedSet<Integer> leafColumnsNumberToRemove) {
-		if (totalListsArray == null || totalListsArray.length == 0)
+		if (totalListsArray == null || totalListsArray.length == 0 
+				|| leafColumnsNumberToRemove == null || leafColumnsNumberToRemove.size() == 0)
 			return;
 		
 		//navigate through the totals list and remember the totals only for the columns we display 
@@ -554,5 +587,19 @@ public class SaikuUtils {
 		TeamMember tm = (TeamMember) attr.getRequest().getSession().getAttribute(Constants.CURRENT_MEMBER);
 		AmpTeamMember ampTeamMember = TeamUtil.getAmpTeamMember(tm.getMemberId());
 		return ampTeamMember;
+	}
+	
+	/**
+	 * Configures additional custom properties that are needed to custom render some 
+	 * @param tq
+	 * @param cellDataSet
+	 * @param spec
+	 */
+	public static void addCustomProperties(ThinQuery tq, CellDataSet cellDataSet, GeneratedReport report) {
+		if (report != null && tq != null) {
+			tq.getProperties().put("emptyColRowTotalsMeasures", MondrianReportUtils.getEmptyColTotalsMeasuresIndexes(report.spec));
+			tq.getProperties().put("emptyRowTotalsMeasures", MondrianReportUtils.getEmptyRowTotalsMeasuresIndexes(report.spec, report.leafHeaders));
+		}
+		// other...
 	}
 }

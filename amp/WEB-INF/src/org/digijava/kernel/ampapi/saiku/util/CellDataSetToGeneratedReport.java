@@ -14,7 +14,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.error.AMPException;
@@ -56,6 +58,8 @@ public class CellDataSetToGeneratedReport {
 	private List<TotalNode>[] rowTotals = null;
 	private int[] currentSubGroupIndex;
 	private boolean isTotalsOnlyReport = false;
+	private Set<Integer> emptyColTotalsMeasuresIndexes = new TreeSet<Integer>();
+	private Set<Integer> emptyRowTotalsMeasuresIndexes = new TreeSet<Integer>();
 	
 	public CellDataSetToGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, 
 			List<ReportOutputColumn> leafHeaders, List<Integer> cellDataSetActivities) {
@@ -80,9 +84,13 @@ public class CellDataSetToGeneratedReport {
 				cellDataSet.getColTotalsLists() != null && cellDataSet.getColTotalsLists().length > 0 
 				&& cellDataSet.getColTotalsLists()[0] != null && cellDataSet.getColTotalsLists()[0].size() > 0) {
 			this.measureTotals = cellDataSet.getColTotalsLists()[0].get(0).getTotalGroups();
+			emptyColTotalsMeasuresIndexes = MondrianReportUtils.getEmptyColTotalsMeasuresIndexes(spec);
 		}
 		this.rowTotals = cellDataSet.getRowTotalsLists();
 		this.isTotalsOnlyReport = GroupingCriteria.GROUPING_TOTALS_ONLY.equals(spec.getGroupingCriteria());
+		if (!this.isTotalsOnlyReport) {
+			emptyRowTotalsMeasuresIndexes = MondrianReportUtils.getEmptyRowTotalsMeasuresIndexes(spec, leafHeaders);
+		}
 	}
 	
 	public ReportAreaImpl transformTo(Class<? extends ReportAreaImpl> reportAreaType) throws AMPException {
@@ -320,7 +328,13 @@ public class CellDataSetToGeneratedReport {
 		//adding data totals of the current area
 		for (int a = 0; a < totals.length; a ++) //normally totals.length == 1
 			for (int b = 0; b < totals[a].length; b++) {
-				contents.put(leafHeaders.get(headerPos++), new AmountCell(totals[a][b].getValue(), this.numberFormat));
+				Double value = totals[a][b].getValue();
+				if (emptyRowTotalsMeasuresIndexes.contains(b)) {
+					totals[a][b] = totals[a][b].newInstance("");
+					totals[a][b].setFormattedValue("");
+					value = null;
+				}
+				contents.put(leafHeaders.get(headerPos++), new AmountCell(value, this.numberFormat));
 				totals[a][b].setFormattedValue(this.numberFormat.format(totals[a][b].getValue()));
 			}
 			
@@ -330,13 +344,15 @@ public class CellDataSetToGeneratedReport {
 			for (ReportArea childArea : current.getChildren()) {
 				ReportCell[] childContent = childArea.getContents().values().toArray(new ReportCell[0]);
 				for (int a = headerPos; a < leafHeaders.size(); a ++) {
-					double value = (Double)((AmountCell)childContent[a]).value;
-					currentTotalMeasuresColumnTotals[a - headerPos] += value;
+					Double value = (Double)((AmountCell)childContent[a]).value;
+					currentTotalMeasuresColumnTotals[a - headerPos] += value == null ? 0 : value;
 				}
 			}
 			//adding total measures
-			for (int b = 0; b < currentTotalMeasuresColumnTotals.length; b++, headerPos++) 
-				contents.put(leafHeaders.get(headerPos), new AmountCell(currentTotalMeasuresColumnTotals[b], this.numberFormat));
+			for (int b = 0; b < currentTotalMeasuresColumnTotals.length; b++, headerPos++) {
+				Double total = emptyColTotalsMeasuresIndexes.contains(b) ? null : currentTotalMeasuresColumnTotals[b];
+				contents.put(leafHeaders.get(headerPos), new AmountCell(total, this.numberFormat));
+			}
 		}
 		
 		current.setContents(contents);

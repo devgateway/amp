@@ -63,10 +63,7 @@ public class PersistenceManager {
 
 	private static SessionFactory sf;
 	private static Configuration cfg;
-	private static Logger logger = I18NHelper.getKernelLogger(
-			PersistenceManager.class);
-
-
+	private static Logger logger = I18NHelper.getKernelLogger(PersistenceManager.class);
 	
 	public static String PRECACHE_REGION =
 		"org.digijava.kernel.persistence.PersistenceManager.precache_region";
@@ -561,6 +558,7 @@ public class PersistenceManager {
 	public static void addSessionToStackTraceMap(Session sess) {
 		synchronized (sessionStackTraceMap){			
 			if(sessionStackTraceMap.get(sess)==null) 
+				//logger.error(String.format("Thread #%d: storing new Session %d", Thread.currentThread().getId(), System.identityHashCode(sess)));
 				sessionStackTraceMap.put(sess,new Object[] {new Long(System.currentTimeMillis()),Thread.currentThread().getStackTrace()});
 		}
 	}
@@ -704,16 +702,18 @@ public class PersistenceManager {
 	}
 	
 	/**
+	 * <strong>This is a lifecycle management function</strong><br />
 	 * this function should ONLY be called at the end of a Session's lifecycle, being the last a "cycle" sees.
 	 * UNDER NO CIRCUMSTANCES CALL IT IN A "USER" (non-framework, non-job) ENVIRONMENT
 	 * @see #cleanupSession(Session)
 	 */
 	public final static void endSessionLifecycle() {
 		cleanupSession(getSession());
-		cleanupSession(getCurrentSession());
+		//cleanupSession(getCurrentSession());
 	}
 	
 	/**
+	 * <strong>This is a lifecycle management function</strong><br />
 	 * commits & closes a session and then removes it from the SessionStackTraceMap
 	 * this function should ONLY be called at the end of a Session's lifecycle, being the last a "cycle" sees.
 	 * UNDER NO CIRCUMSTANCES CALL IT IN A "USER" (non-framework, non-job) ENVIRONMENT
@@ -727,7 +727,12 @@ public class PersistenceManager {
 		try{
 			synchronized(PersistenceManager.sessionStackTraceMap)
 			{
-				PersistenceManager.sessionStackTraceMap.remove(session);
+				if (PersistenceManager.sessionStackTraceMap.containsKey(session)) {
+					//logger.error(String.format("Thread #%d: removing Session %d", Thread.currentThread().getId(), System.identityHashCode(session)));
+					PersistenceManager.sessionStackTraceMap.remove(session);
+				} else {
+					//logger.error(String.format("Thread #%d: trying to cleanup nonexisting Session %d", Thread.currentThread().getId(), System.identityHashCode(session)));
+				}
 			}
 		}
 		catch(Exception e){};

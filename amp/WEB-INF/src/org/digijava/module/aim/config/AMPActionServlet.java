@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionServlet;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.Constants;
@@ -38,7 +39,7 @@ public class AMPActionServlet
     extends ActionServlet {
 
   private ServletContext ampContext; // the application scope variable
-  //private static Logger logger = Logger.getLogger(AMPActionServlet.class);
+  private static Logger logger = Logger.getLogger(AMPActionServlet.class);
 
   public void init(ServletConfig servletConfig) throws ServletException {
     ampContext = servletConfig.getServletContext();
@@ -54,6 +55,7 @@ public class AMPActionServlet
       ServletException {
     request.setCharacterEncoding("UTF-8");
 
+//	log.error(String.format("URL IS: %s?%s", request.getRequestURI(), request.getQueryString()));
     HttpSession session = request.getSession();
     String sessId = session.getId();
     String url = request.getRequestURL().toString();
@@ -141,7 +143,7 @@ public class AMPActionServlet
     	super.process(request, response);
     }
     finally {
-    	PersistenceManager.endSessionLifecycle();
+    	//PersistenceManager.endSessionLifecycle();
     }
     }  
 }

@@ -115,19 +115,22 @@ public class EhCacheWrapper implements AbstractCache {
 		return Collections.unmodifiableMap( elements );
 	}
 	
+	private static Object ehCacheSyncObject = new Object();
+	
 	/**
 	 * @return the current cache handler
 	 */
 	private Cache getCache() {
-		Cache cache = CacheManager.getInstance().getCache(this.cacheName);
-		if (cache == null) {
-			CacheManager.getInstance().addCache(this.cacheName);
-			cache = CacheManager.getInstance().getCache(this.cacheName);
+		synchronized(ehCacheSyncObject) {
+			Cache cache = CacheManager.getInstance().getCache(this.cacheName);
 			if (cache == null) {
-				throw new IllegalStateException("Couldn't create cache: " + this.cacheName);
-			}
+				CacheManager.getInstance().addCache(this.cacheName);
+				cache = CacheManager.getInstance().getCache(this.cacheName);
+				if (cache == null) {
+					throw new IllegalStateException("Couldn't create cache: " + this.cacheName);
+				}
+			}		
+			return cache;
 		}
-		
-		return cache;
 	}
 }

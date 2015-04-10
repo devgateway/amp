@@ -40,6 +40,9 @@ public class HibernateSessionRequestFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
 		
+		HttpServletRequest hrequest = (HttpServletRequest) request;
+		//log.error(String.format("URL IS: %s?%s", hrequest.getRequestURI(), hrequest.getQueryString()));
+		//log.error(String.format("Thread #%d: running Hibernate filter", Thread.currentThread().getId()));
 		// Call the next filter (continue request processing)
 		try {
 			chain.doFilter(request, response);
@@ -50,6 +53,7 @@ public class HibernateSessionRequestFilter implements Filter {
 			throw ex;
 		}
 		finally {
+			//log.error(String.format("Thread #%d: ending session", Thread.currentThread().getId()));
 			// Commit and cleanup
 			PersistenceManager.endSessionLifecycle();
 			//PersistenceManager.checkClosedOrLongSessionsFromTraceMap();

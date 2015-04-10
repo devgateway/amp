@@ -45,6 +45,34 @@
 	<!--                 SEGMENT END                 -->
 	<!--  ADD ENTRIES BELOW -->
 
+   <filter>
+      <filter-name>characterEncodingFilter</filter-name>
+      <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+      <init-param>
+         <param-name>encoding</param-name>
+         <param-value>utf-8</param-value>
+      </init-param>
+   </filter>
+
+   <filter>
+      <filter-name>springSecurityFilterChain</filter-name>
+      <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+   </filter>
+   <filter-mapping>
+      <filter-name>springSecurityFilterChain</filter-name>
+      <url-pattern>/*</url-pattern>
+   </filter-mapping>
+
+	<filter>
+		<filter-name>HibernateFilter</filter-name>
+		<filter-class>org.digijava.kernel.startup.HibernateSessionRequestFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>HibernateFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
 	<!-- Web listener -->
 	<listener>
 		<listener-class>
@@ -60,22 +88,10 @@
 
     <listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
-    </listener>
-
- 	<filter>
-        <filter-name>HibernateFilter</filter-name>
-        <filter-class>org.digijava.kernel.startup.HibernateSessionRequestFilter</filter-class>
-    </filter>
-	
+    </listener>	
 	<listener>
     	<listener-class>org.digijava.kernel.startup.AmpSessionListener</listener-class>
 	</listener>
- 	
-    <filter-mapping>
-        <filter-name>HibernateFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
 
 	<!-- Correct EhCache shutdown -->
  	<listener>
@@ -100,25 +116,6 @@
 			/WEB-INF/saiku/context.xml
 		</param-value>
 	</context-param>
-
-   <filter>
-      <filter-name>characterEncodingFilter</filter-name>
-      <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-      <init-param>
-         <param-name>encoding</param-name>
-         <param-value>utf-8</param-value>
-      </init-param>
-   </filter>
-
-
-   <filter>
-      <filter-name>springSecurityFilterChain</filter-name>
-      <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-   </filter>
-   <filter-mapping>
-      <filter-name>springSecurityFilterChain</filter-name>
-      <url-pattern>/*</url-pattern>
-   </filter-mapping>
 
 
 	<!-- Apache Wicket -->

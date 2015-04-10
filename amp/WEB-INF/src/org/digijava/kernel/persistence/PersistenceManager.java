@@ -63,10 +63,7 @@ public class PersistenceManager {
 
 	private static SessionFactory sf;
 	private static Configuration cfg;
-	private static Logger logger = I18NHelper.getKernelLogger(
-			PersistenceManager.class);
-
-
+	private static Logger logger = I18NHelper.getKernelLogger(PersistenceManager.class);
 	
 	public static String PRECACHE_REGION =
 		"org.digijava.kernel.persistence.PersistenceManager.precache_region";

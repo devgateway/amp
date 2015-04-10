@@ -141,7 +141,7 @@ public class AMPActionServlet
     	super.process(request, response);
     }
     finally {
-    	PersistenceManager.endSessionLifecycle();
+    	//PersistenceManager.endSessionLifecycle();
     }
     }  
 }

@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.AmpARFilter;
@@ -20,10 +21,12 @@ import org.dgfoundation.amp.newreports.GroupingCriteria;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportColumn;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportMeasure;
+import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
-import org.dgfoundation.amp.reports.AmountColumns;
+import org.dgfoundation.amp.reports.CustomMeasures;
 import org.dgfoundation.amp.reports.DateColumns;
 import org.dgfoundation.amp.visibility.data.ColumnsVisibility;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
@@ -36,9 +39,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.helper.FormatHelper;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * Reports utility methods
@@ -245,6 +246,45 @@ public class MondrianReportUtils {
 	
 	public static boolean isDateColumn(String columnName) {
 		return DateColumns.ACTIVITY_DATES.contains(columnName);
+	}
+	
+	/**
+	 * Retrieves order indexes of measures without column row totals   
+	 * @param spec
+	 * @return set of indexes
+	 */
+	public static Set<Integer> getEmptyColTotalsMeasuresIndexes(ReportSpecification spec) {
+		Set<Integer> orderIds = new TreeSet<Integer>();
+		if (spec != null) {
+			int pos = 0;
+			for (ReportMeasure rm : spec.getMeasures()) {
+				if (CustomMeasures.NO_RAW_TOTALS.contains(rm.getMeasureName())) {
+					orderIds.add(pos);
+				}
+				pos++;
+			}
+		}
+		return orderIds;
+	}
+	
+	/**
+	 * Retrieves order indexes of measures without row totals 
+	 * @param leafHeaders
+	 * @return
+	 */
+	public static Set<Integer> getEmptyRowTotalsMeasuresIndexes(ReportSpecification spec, List<ReportOutputColumn> leafHeaders) {
+		Set<Integer> orderIds = new TreeSet<Integer>();
+		if (spec != null && leafHeaders != null) {
+			int pos = 0;
+			for (ReportOutputColumn roc : leafHeaders) {
+				if (CustomMeasures.NO_RAW_TOTALS.contains(roc.originalColumnName) 
+						&& roc.parentColumn != null && !MoConstants.TOTAL_MEASURES.equals(roc.parentColumn.originalColumnName)) {
+					orderIds.add(pos - spec.getColumns().size());
+				}
+				pos++;
+			}
+		}
+		return orderIds;
 	}
 	
 	

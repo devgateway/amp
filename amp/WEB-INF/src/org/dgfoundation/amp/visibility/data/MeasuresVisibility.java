@@ -122,6 +122,7 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 			put(MeasureConstants.CONSUMPTION_RATE, MeasureConstants.CONSUMPTION_RATE);
 			put(MeasureConstants.CUMULATED_DISBURSEMENTS, MeasureConstants.CUMULATED_DISBURSEMENTS);
 			put(MeasureConstants.DISBURSMENT_RATIO, MeasureConstants.DISBURSMENT_RATIO);
+			put(MeasureConstants.EXECUTION_RATE, MeasureConstants.EXECUTION_RATE);
 			put(MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS, MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS);
 			put(MeasureConstants.PIPELINE_COMMITMENTS, MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS);
 			put(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL, MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL);

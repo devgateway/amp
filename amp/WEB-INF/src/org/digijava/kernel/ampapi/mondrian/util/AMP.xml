@@ -1039,5 +1039,30 @@
 			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
 		</CalculatedMember>
 		
+		<CalculatedMember name="Total Filtered Actual Disbursements" dimension="Measures" visible="false">
+			<Formula>
+				SUM (NonEmptyCrossJoin([Dates.Year].[All Periods], {Measures.[Actual Disbursements]}))
+			</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
+		</CalculatedMember>
+		
+		<CalculatedMember name="Total Filtered Planned Disbursements" dimension="Measures" visible="false">
+			<Formula>
+				SUM (NonEmptyCrossJoin([Dates.Year].[All Periods], {Measures.[Planned Disbursements]}))
+			</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
+		</CalculatedMember>
+		
+		<CalculatedMember name="Execution Rate" dimension="Measures">
+		 	<Formula>
+				IIf((Measures.[Total Filtered Planned Disbursements]=0) 
+				OR IsEmpty(Measures.[Total Filtered Planned Disbursements])
+				OR IsEmpty([Measures].[Actual Disbursements]),
+				null, 
+				[Measures].[Actual Disbursements] / Measures.[Total Filtered Planned Disbursements] * 100)
+			</Formula>
+			<CalculatedMemberProperty name="FORMAT_STRING" value="#,##0.00"/>
+		</CalculatedMember>
+		
 	</Cube>
  </Schema>

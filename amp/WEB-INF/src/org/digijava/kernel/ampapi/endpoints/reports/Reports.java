@@ -30,6 +30,7 @@ import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.error.AMPException;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
+import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
@@ -356,6 +357,9 @@ public class Reports {
 					
 			result = RestUtil.convert(getSaikuCellDataSet(queryObject, reportId));
 			result.setQuery(new ThinQuery());
+			// set additional properties to be considered during front end processing
+			SaikuUtils.addCustomProperties((ThinQuery) result.getQuery(), cellDataSet, (GeneratedReport) queryObject.get("report"));
+
 		} catch (Exception e) {
 			String error = ExceptionUtils.getRootCauseMessage(e);
 			e.printStackTrace();
@@ -393,6 +397,7 @@ public class Reports {
 			report = (SaikuGeneratedReport) generator.executeReport(spec);
 			
 			System.out.println("[" + spec.getReportName() + "] total report generation duration = " + report.generationTime + "(ms)");
+			queryObject.set("report", report);
 		} catch (Exception e) {
 			logger.error("Cannot execute report (" + ampReport + ")", e);
 			String error = ExceptionUtils.getRootCauseMessage(e);
@@ -407,7 +412,6 @@ public class Reports {
 		}
 
 		return getPage(report.cellDataSet, queryModel.get("page"));
-//		return report.cellDataSet;
 	}
 	
 	private CellDataSet getPage(CellDataSet cellDataSet, Object pageParam) {

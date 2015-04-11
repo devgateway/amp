@@ -75,7 +75,7 @@ Under a Linux system:
 	14. Input in the admin console "bin\startService.sh"
 	15. You're done. You may now verify that AMP is able to connect properly to the Monet server.
 	
-	
+	 
 --Known issues:
 1) If throws error about conflicting JNA, you might have to remove JNA until the service is installed
 2) On Windows, make sure java is added to $PATH

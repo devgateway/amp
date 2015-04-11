@@ -1,0 +1,10 @@
+#
+#
+MONET_EXEC_PATH C:\Program Files\MonetDB\MonetDB5\M5server.bat
+MONET_FARM_PATH 
+TIMER_DELAY 4
+LOG_FILE_PATH logfile.log
+DB_NAME amp_moldova_211_prod
+#
+#
+#

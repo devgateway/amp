@@ -1,0 +1,51 @@
+**Application purpose**
+
+Monitor the status of the monetdb server (check if it's up) and restart if it's down. 
+**Checking monetdb server status**
+
+Checking whether the monetdb server is up is done by connecting via the JDBC driver 
+and running the "select tables.name from tables" query. 
+
+**Settings.conf**
+The settings.conf file has to be placed in the work directory (outside the .jar, 
+if you've packaged the app). 
+
+
+Settings.conf parameters 
+MONET_EXEC_PATH - path to the monet executable (a .bat for Windows, monetdbd for linux)
+MONET_FARM_PATH - blank in Windows, the path to the monet farm in Linux 
+TIMER_DELAY  - delay between attempts to connect to the monetdb server to check its status (seconds)
+LOG_FILE_PATH - path to the logfile 
+DB_NAME - database name
+NO_GUI - "true" for no GUI  status window to appear
+
+
+**Installation as service**
+	Under a Windows system:
+	0. Correctly configure settings.conf
+	1. Open the task manager
+	2. Notice the instances of 'java'
+	3. Run the monetmonitor_final.jar (java -jar monetmonitor_final.jar)
+		3.1 Should output "Starting beholder with timer delay=" "server running" or 
+		3.2 throw an exception twice (about server not responding) and then start the server
+			(after which output "server running")
+		3.3 if it doesn't, check configuration in settings.conf		
+	4. Notice the freshly appeared instance of 'java'
+	5. Write down its PID (do not stop the application!) -- later referenced as <THE_PID>
+	6. Extract the archive yajsw-stable-11.11.zip somewhere
+	7. Open a command prompt as admin and go to the directory with the checked out project
+		7.1 to open a command prompt as admin, either start->type in 'cmd'->ctrl+shift+enter->continue, or
+		7.2 start->all programs->accessories->right-click on 'command prompt'-> run as administrator
+	8. Input the following commands
+	 	cd yajsw-stable-11.11
+	 	bat\getConfig.bat <THE_PID>
+	 	bat\runConsole.bat 
+	 After the runConsole.bat, you should see output similar to what's happening after running the .jar.
+	9. Open conf/wrapper.conf
+	10. Find the line "wrapper.ntservice.name" and name the service in an appropriate manner (monetmonitor, for instance)
+	11. Do the same for "wrapper.ntservice.description" (sample text:
+		11.1 "A YAJSW-wrapped Java application for monitoring the status of the monetdb server and restarting it if it's down")
+	12. Save and close wrapper.conf
+	13. Input in the admin console "bat\installService.bat"
+	14. Input in the admin console "bat\startService.bat"
+	15. You're done. You may now verify that AMP is able to connect properly to the Monet server.

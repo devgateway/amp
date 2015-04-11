@@ -1,6 +1,6 @@
 package monetmonitor;
 
-import java.util.List;
+
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -16,14 +16,16 @@ public class MonitorTimer {
 		
 	
 	  MonitorTimer(long initialDelay, long delay){
-		    this.initialDelay = initialDelay;
-		    this.delay = delay;
-		    scheduler = Executors.newScheduledThreadPool(NUM_THREADS);    
-		  }
+		  this.initialDelay = initialDelay;
+		  this.delay = delay;
+		  scheduler = Executors.newScheduledThreadPool(NUM_THREADS);    
+	  }
 
 	  MonetBeholder beholder;
-//	  StatusShower shower;
+	  
 	  MonetStarter starter;
+	  
+	  boolean prevStatus = false;
 	  
 	  void startTimer(MonetBeholder beh,  MonetStarter st){
 		  this.beholder = beh;
@@ -35,7 +37,9 @@ public class MonitorTimer {
 			    	boolean serverStatus = beholder.checkMonetServerRunning();
 			    	String statusMessage = serverStatus ? "Server running" : "Server not running";
 			    	try{
-			    		Utils.broadcastStatus(statusMessage);
+			    		if (prevStatus != serverStatus)
+			    			Utils.broadcastStatus(statusMessage);
+			    		prevStatus = serverStatus;
 //			    	shower.showStatus(statusMessage);
 			    	} catch (Exception exc) {
 			    		System.err.println("Error in status shower:" + exc.getMessage());

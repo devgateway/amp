@@ -1,8 +1,8 @@
 package monetmonitor;
 
-import java.util.ArrayList;
+
 import java.util.HashMap;
-import java.util.List;
+
 import java.util.Map;
 
 
@@ -13,6 +13,11 @@ public class  Constants {
 	
 	public static String getMonetFarmPath() {
 		return parametersMap.get("MONET_FARM_PATH");
+	}
+	
+	public static boolean getNoGui() {
+		return parametersMap.get("NO_GUI").contains("true");
+		
 	}
 	
 	public static String getMonetExecPath() {

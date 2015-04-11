@@ -46,11 +46,14 @@ public class MonetMain {
 	}
 	
 	private static void parseArgs(String[] args) {
-		boolean nogui = false;
-		for (String arg: args) {
-			if (arg.equals("--nogui"))
-				nogui = true;
-		}
+		boolean nogui = Constants.getNoGui();
+//		for (String arg: args) {
+//			if (arg.equals("--nogui"))
+//				nogui = true;
+//		}
+//		nogui = true;
+		
+		
 		Utils.statusShowers.add(nogui ? new StatusShowerCLI() : new StatusShowerGUI());
 		Utils.logfile = new StatusShowerLog();
 		Utils.statusShowers.add(Utils.logfile);
@@ -64,9 +67,6 @@ public class MonetMain {
     	int timer_delay = Constants.getTimerDelay();
         System.out.println("Starting beholder with timer delay=" + timer_delay);
     	MonitorTimer timer = new MonitorTimer(1, timer_delay);
-//    	StatusShower sh = new StatusShowerGUI();
-//    	StatusShower sh = Constants.getGuiEnabled()? new StatusShowerGUI() : new StatusShowerCLI();
-//    	sh.start();
     	timer.startTimer(new MonetBeholder(), new MonetStarter());
     }
 }

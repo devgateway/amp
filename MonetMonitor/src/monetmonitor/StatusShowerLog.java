@@ -1,10 +1,8 @@
 package monetmonitor;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+
+
 import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.util.Date;
 

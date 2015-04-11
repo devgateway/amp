@@ -39,6 +39,7 @@ NO_GUI - "true" for no GUI  status window to appear
 	8. Input the following commands
 	 	cd yajsw-stable-11.11
 	 	bat\getConfig.bat <THE_PID>
+	 	//you may close the jar now
 	 	bat\runConsole.bat 
 	 After the runConsole.bat, you should see output similar to what's happening after running the .jar.
 	9. Open conf/wrapper.conf
@@ -49,3 +50,32 @@ NO_GUI - "true" for no GUI  status window to appear
 	13. Input in the admin console "bat\installService.bat"
 	14. Input in the admin console "bat\startService.bat"
 	15. You're done. You may now verify that AMP is able to connect properly to the Monet server.
+	
+Under a Linux system:
+	
+	0. Correctly configure settings.conf
+	1. Open a console; cd to the folder where this project is checked out
+	2. Run "pidof java"; write down the existing PIDs.
+	3. In a separate console, run "java -jar monetmonitor_final.jar" (same working dir as before)
+	4. Run "pidof java" in the first console again; notice the freshly appeared PID. 
+	5. Write down its PID (do not stop the application!) -- later referenced as <THE_PID>
+	6. Extract the archive yajsw-stable-11.11.zip somewhere (same directory is perfectly fine: "unzip yajsw-stable-11.11.zip")
+	7. Input the following commands
+	 	cd yajsw-stable-11.11
+	 	bin\getConfig.sh <THE_PID> 
+	 	//you may close the jar from the second console now
+	 	bin\runConsole.sh
+	 After the runConsole.sh, you should see output similar to what's happening after running the .jar.
+	9. Open conf/wrapper.conf
+	10. Find the line "wrapper.ntservice.name" and name the service in an appropriate manner (monetmonitor, for instance)
+	11. Do the same for "wrapper.ntservice.description" (sample text:
+		11.1 "A YAJSW-wrapped Java application for monitoring the status of the monetdb server and restarting it if it's down")
+	12. Save and close wrapper.conf
+	13. Input in the console  "bin\installService.sh" (it might ask you for the sudo password)
+	14. Input in the admin console "bin\startService.sh"
+	15. You're done. You may now verify that AMP is able to connect properly to the Monet server.
+	
+	
+--Known issues:
+1) If throws error about conflicting JNA, you might have to remove JNA until the service is installed
+2) On Windows, make sure java is added to $PATH

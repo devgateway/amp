@@ -104,7 +104,7 @@ public class ShowLayout
     	return new ActionForward(layoutConfigPath);
     }
     finally {
-        PersistenceManager.endSessionLifecycle();
+        //PersistenceManager.endSessionLifecycle();
     }
 
   }

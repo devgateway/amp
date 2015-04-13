@@ -398,7 +398,8 @@ public class Reports {
 				logger.info(sorting);
 			}
 					
-			result = RestUtil.convert(getSaikuCellDataSet(queryObject, ampReport));
+			CellDataSet cellDataSet = getSaikuCellDataSet(queryObject, ampReport);
+			result = RestUtil.convert(cellDataSet);
 			result.setQuery(new ThinQuery());
 			// set additional properties to be considered during front end processing
 			SaikuUtils.addCustomProperties((ThinQuery) result.getQuery(), cellDataSet, (GeneratedReport) queryObject.get("report"));

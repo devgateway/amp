@@ -8,6 +8,7 @@ var selectedPointEvent;
 var circlePoint;
 var latitude;
 var longitude;
+basemapurl = undefined; 
 var pointRadious = [8500,8500,8500,8500,8500,8500,8500,7500,5500,3500,2000,1000,600,400,300,200,200,170,150];
 var MapConstants = {
 		   "MapType": {
@@ -30,7 +31,6 @@ function MapPopup (lat,long) {
 }
 
 function initMap() {
-	basemapurl = undefined; 
 	$.getJSON( "/esrigis/datadispatcher.do?getconfig=true", function() {
 		  console.log( "Success retrieving Gazeteer map config" );
 		})
@@ -65,7 +65,6 @@ function loadBaseMap() {
 	map = L.map('map').setView([ latitude, longitude ], 7);
 	// create the tile layer with correct attribution
 	var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-	var tileLayer;
 	if (isOsm) {
 		var subdomains = ['a','b','c'];
 		if (basemapurl!== undefined && basemapurl.indexOf ("mqcdn")!=-1) {
@@ -76,8 +75,7 @@ function loadBaseMap() {
 				 subdomains: subdomains });	
 	}
 	else {
-		tileLayer = new L.TileLayer(basemapurl, {minZoom: 0, maxZoom: 16});	
-
+	    tileLayer = L.esri.tiledMapLayer(basemapurl, {maxZoom: 16});
 	}
 	
 	map.addLayer(tileLayer);

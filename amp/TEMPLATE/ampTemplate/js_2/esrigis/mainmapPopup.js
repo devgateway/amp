@@ -8,6 +8,7 @@ var selectedPointEvent;
 var circlePoint;
 var latitude;
 var longitude;
+basemapurl = undefined; 
 var pointRadious = [8500,8500,8500,8500,8500,8500,8500,7500,5500,3500,2000,1000,600,400,300,200,200,170,150];
 var MapConstants = {
 		   "MapType": {
@@ -34,11 +35,16 @@ function initMap() {
 		  console.log( "Success retrieving Gazeteer map config" );
 		})
 		  .done(function(jsonData) {
+			  if (jsonData.length ===0){
+				  isOsm = true;
+				  loadBaseMap();
+				  return;
+			  }
 			  $.each( jsonData, function(key,map) {
 			   		switch (map.mapType) {
 					case MapConstants.MapType.BASE_MAP:
 						basemapurl = map.mapUrl;
-						if (map.mapSubType == MapConstants.MapSubType.OSM){
+						if (basemapurl === undefined || map.mapSubType == MapConstants.MapSubType.OSM ){
 							isOsm = true;
 						}
 						break;
@@ -46,6 +52,7 @@ function initMap() {
 						break;
 					}
 			   	  });
+		  
 			  loadBaseMap();
 		  })
 		  .fail(function() {
@@ -57,22 +64,20 @@ function initMap() {
 function loadBaseMap() {
 	map = L.map('map').setView([ latitude, longitude ], 7);
 	// create the tile layer with correct attribution
-	//var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-	//var osmUrl = 'http://{s}.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.png';
-	var tileLayer;
+	var osmUrl='http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 	if (isOsm) {
 		var subdomains = ['a','b','c'];
-		if (basemapurl.indexOf ("mqcdn")!=-1) {
+		if (basemapurl!== undefined && basemapurl.indexOf ("mqcdn")!=-1) {
 			subdomains = ['otile1','otile2','otile3','otile4'];
 		}
 		var osmAttrib='Map data © <a href="http://openstreetmap.org">OpenStreetMap</a> contributors';
-		tileLayer = new L.TileLayer(basemapurl, {minZoom: 0, maxZoom: 16, attribution: osmAttrib,
+		tileLayer = new L.TileLayer(osmUrl, {minZoom: 0, maxZoom: 16, attribution: osmAttrib,
 				 subdomains: subdomains });	
 	}
 	else {
-		tileLayer = new L.TileLayer(basemapurl, {minZoom: 0, maxZoom: 16});	
-
+	    tileLayer = L.esri.tiledMapLayer(basemapurl, {maxZoom: 16});
 	}
+	
 	map.addLayer(tileLayer);
 
 	currentZoom = map.getZoom();

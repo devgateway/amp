@@ -184,10 +184,10 @@ public class UserEmail
                                         ">").getMessage();
 
 
-               InternetAddress address = new InternetAddress(email);
-               //DgEmailManager.sendMail(new Address[] {address}
-                //                        ,emailFrom,
-                 //                       subject, body, currentLocale, true);
+        InternetAddress address = new InternetAddress(email);
+        DgEmailManager.sendMail(new Address[] {address}
+                                  ,emailFrom,
+                                  subject, body, currentLocale, true);
     }
 
 }

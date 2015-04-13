@@ -112,7 +112,11 @@ module.exports = BackboneDash.View.extend({
       return {
         name: key,
         detail: _(filter).map(function(value) {
-          return value.get('name');
+        	if (value.attributes !== undefined) {
+        		return value.get('name');
+        	} else {
+        		return '';
+        	}
         })
       };
     });

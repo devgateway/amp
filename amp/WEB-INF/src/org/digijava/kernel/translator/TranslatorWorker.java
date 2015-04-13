@@ -23,14 +23,12 @@
 package org.digijava.kernel.translator;
 
 import java.io.UnsupportedEncodingException;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,7 +41,6 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.lucene.LuceneWorker;
@@ -58,15 +55,12 @@ import org.digijava.kernel.translator.util.TrnAccessUpdateQueue;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.I18NHelper;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteCache;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.util.AmpMath;
 import org.hibernate.HibernateException;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 /**
  * @author Shamanth Murthy
@@ -363,6 +357,15 @@ public class TranslatorWorker {
         WorkerException {
         logger.debug("getFromGroup() called");
         Long siteId = Site.getIdOf(site);
+
+        if (key != null && ! "".equals(key)) {
+            try {
+                // process the case when key is already hashed
+                int keyAsHash = Integer.parseInt(key);
+            } catch (NumberFormatException e) {
+                key = generateTrnKey(key);
+            }
+        }
 
         Message trnMess = getByKey(key, locale, siteId);
         if (trnMess != null) {

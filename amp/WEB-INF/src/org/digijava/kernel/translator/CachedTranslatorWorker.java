@@ -48,6 +48,7 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.engine.SessionImplementor;
 
 import javax.servlet.http.HttpSession;
 
@@ -168,44 +169,41 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         return internalGetByKey(key, locale, siteId, overwriteKeywords, keywords);
     }
 
-    private Message internalGetByKey(String key, String locale, Long siteId, boolean overwriteKeywords,String keywords) throws WorkerException {
-    	Message message = new Message();
-        //set up key trio
-        message.setKey(processKeyCase(key));
+    private Message internalGetByKey(String key, String locale, Long siteId, boolean overwriteKeywords, String keywords) {
+        Message message = new Message();
         message.setLocale(locale);
         message.setSite(SiteCache.lookupById(siteId));
+        message.setKey(key);
         //search message
-        Object obj = messageCache.get(message);   
-        if(obj==null) {
-        	//try loading it from db
-        	Session ses;
-			try {
-				ses = PersistenceManager.getRequestDBSession();
-				Message realMsg = (Message) ses.get(Message.class, message);
-				if(realMsg!=null) {
-					obj=realMsg;
-					Serializable identifier=PersistenceManager.getClassMetadata(Message.class).getIdentifier(realMsg, EntityMode.POJO);
-					messageCache.put(identifier, realMsg);
-				}
-			} catch (HibernateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (DgException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+        Object obj = messageCache.get(message);
+        if (obj == null) {
+            //try loading it from db
+            Session ses;
+            try {
+                ses = PersistenceManager.getRequestDBSession();
+                Message realMsg = (Message) ses.get(Message.class, message);
+                if (realMsg != null) {
+                    obj = realMsg;
+                    Serializable identifier =
+                            PersistenceManager.getClassMetadata(Message.class).getIdentifier(realMsg, (SessionImplementor)ses);
+                    messageCache.put(identifier, realMsg);
+                }
+            } catch (HibernateException e) {
+                logger.error("Failed reading message from database", e);
+            } catch (DgException e) {
+                logger.error("Failed reading message", e);
+            }
         }
-        
+
         if (obj == null) {
             logger.debug("No translation exists for siteId="+ siteId + ", key = " + key + ",locale=" + locale+", creating new");
             return null;
-        }
-        else {
-        	Message foundMessage = (Message)obj;
-        	if(overwriteKeywords && keywords!=null){
-        		foundMessage.setKeyWords(keywords);
-        	}
-        	updateTimeStamp(foundMessage);
+        } else {
+            Message foundMessage = (Message)obj;
+            if (overwriteKeywords && keywords != null) {
+                foundMessage.setKeyWords(keywords);
+            }
+            updateTimeStamp(foundMessage);
             return foundMessage;
         }
     }

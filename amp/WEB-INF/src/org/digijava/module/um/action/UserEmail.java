@@ -122,14 +122,15 @@ public class UserEmail
     }
 
     /**
-     * Send email alert
-     *
-     * @param user
+     * Sends reset password confirmation email
+     * @param email the email to send to
+     * @param code the security reset code
+     * @param request
      * @throws java.lang.Exception
      */
     public void sendEmail(String email, String code,
                           javax.servlet.http.HttpServletRequest request) throws
-        java.lang.Exception {
+            java.lang.Exception {
 
         Message message;
         String siteName;
@@ -145,12 +146,11 @@ public class UserEmail
         message = worker.getByBody(site.getName(),currentLocale.getCode(), site.getId());
         if (message == null) {
             siteName = site.getName();
-        }
-        else {
+        } else {
             siteName = message.getMessage();
         }
 
-        HashMap hMap = new HashMap();
+        HashMap<String, String> hMap = new HashMap<String, String>();
         hMap.put("siteName", siteName);
         hMap.put("email", email);
         hMap.put("link", domanName + "/um/user/showResetForm.do?email=" + email + "&code=" +code);
@@ -185,10 +185,10 @@ public class UserEmail
                                         ">").getMessage();
 
 
-               InternetAddress address = new InternetAddress(email);
-               DgEmailManager.sendMail(new Address[] {address}
-                                        ,emailFrom,
-                                        subject, body, currentLocale, true);
+        InternetAddress address = new InternetAddress(email);
+        DgEmailManager.sendMail(new Address[] {address}
+                                ,emailFrom,
+                                subject, body, currentLocale, true);
     }
 
 }

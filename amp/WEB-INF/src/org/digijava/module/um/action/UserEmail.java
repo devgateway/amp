@@ -59,7 +59,7 @@ import org.digijava.module.um.util.UmUtil;
  * @version 1.0 UserEmailAction
  */
 public class UserEmail
-    extends Action {
+        extends Action {
 
     // log4J class initialize String
     private static Logger logger = I18NHelper.getKernelLogger(UserEmail.class);
@@ -68,8 +68,8 @@ public class UserEmail
                                  ActionForm form,
                                  javax.servlet.http.HttpServletRequest request,
                                  javax.servlet.http.HttpServletResponse
-                                 response) throws
-        java.lang.Exception {
+                                         response) throws
+            java.lang.Exception {
 
         UserEmailForm userEmailForm = (UserEmailForm) form;
         if (StringUtils.isBlank(userEmailForm.getEmail())) {
@@ -95,13 +95,13 @@ public class UserEmail
             // send mail alert
 
             try {
-              sendEmail(email, code, request);
+                sendEmail(email, code, request);
             }
             catch (Exception ex) {
-              errors.add(ActionMessages.GLOBAL_MESSAGE,
-                         new ActionMessage("error.registration.sendmail"));
-              saveErrors(request, errors);
-              return (new ActionForward(mapping.getInput()));
+                errors.add(ActionMessages.GLOBAL_MESSAGE,
+                        new ActionMessage("error.registration.sendmail"));
+                saveErrors(request, errors);
+                return (new ActionForward(mapping.getInput()));
             }
             // -----------------------------------------
 
@@ -113,7 +113,7 @@ public class UserEmail
 
             // email not exists
             errors.add(ActionMessages.GLOBAL_MESSAGE,
-                       new ActionMessage("error.registration.noemail"));
+                    new ActionMessage("error.registration.noemail"));
             saveErrors(request, errors);
             return (new ActionForward(mapping.getInput()));
         }
@@ -122,14 +122,15 @@ public class UserEmail
     }
 
     /**
-     * Send email alert
-     *
-     * @param user
+     * Sends reset password confirmation email
+     * @param email the email to send to
+     * @param code the security reset code
+     * @param request
      * @throws java.lang.Exception
      */
     public void sendEmail(String email, String code,
                           javax.servlet.http.HttpServletRequest request) throws
-        java.lang.Exception {
+            java.lang.Exception {
 
         Message message;
         String siteName;
@@ -145,12 +146,11 @@ public class UserEmail
         message = worker.getByBody(site.getName(),currentLocale.getCode(), site.getId());
         if (message == null) {
             siteName = site.getName();
-        }
-        else {
+        } else {
             siteName = message.getMessage();
         }
 
-        HashMap hMap = new HashMap();
+        HashMap<String, String> hMap = new HashMap<String, String>();
         hMap.put("siteName", siteName);
         hMap.put("email", email);
         hMap.put("link", domanName + "/um/user/showResetForm.do?email=" + email + "&code=" +code);
@@ -158,9 +158,9 @@ public class UserEmail
         // get newpassword subject
         worker = TranslatorWorker.getInstance("alerts:newpassword:subject");
         String subject = worker.getFromGroup("alerts:newpassword:subject",
-                                             currentLocale.getCode(), site,
-                                             "New password - " + " {" +
-                                             siteName + "}").getMessage();
+                currentLocale.getCode(), site,
+                "New password - " + " {" +
+                        siteName + "}").getMessage();
 
         subject = DgUtil.fillPattern(subject, hMap);
         // -------------------------
@@ -168,27 +168,26 @@ public class UserEmail
         // get newpassword body
         worker = TranslatorWorker.getInstance("alerts:resetpassword:body");
         String body = worker.getFromGroup("alerts:resetpassword:body",
-                                          currentLocale.getCode(), site,
-                                          "PASSWORD\n\nSomeone using the e-mail {email} has asked the {siteName} to reset the password for this account.\n" +
-                                          "If the request came from you, click on the link below and create a new password.\n" +
-            "If you did not send the request, please disregard this e-mail.\n\n{link}").
-            getMessage();
+                currentLocale.getCode(), site,
+                "PASSWORD\n\nSomeone using the e-mail {email} has asked the {siteName} to reset the password for this account.\n" +
+                        "If the request came from you, click on the link below and create a new password.\n" +
+                        "If you did not send the request, please disregard this e-mail.\n\n{link}").getMessage();
 
         body = DgUtil.fillPattern(body, hMap);
         // -------------------------
 
         Smtp smtp = DigiConfigManager.getConfig().getSmtp();
         emailFrom = worker.getFromGroup("param:email:support",
-                                        currentLocale.getCode(),
-                                        site,
-                                        "\"" + siteName + "\" <" + smtp.getFrom() +
-                                        ">").getMessage();
+                currentLocale.getCode(),
+                site,
+                "\"" + siteName + "\" <" + smtp.getFrom() +
+                        ">").getMessage();
 
 
-               InternetAddress address = new InternetAddress(email);
-               DgEmailManager.sendMail(new Address[] {address}
-                                        ,emailFrom,
-                                        subject, body, currentLocale, true);
+        InternetAddress address = new InternetAddress(email);
+        DgEmailManager.sendMail(new Address[] {address}
+                               ,emailFrom,
+                               subject, body, currentLocale, true);
     }
 
 }

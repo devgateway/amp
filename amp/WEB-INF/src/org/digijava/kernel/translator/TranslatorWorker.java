@@ -359,6 +359,15 @@ public class TranslatorWorker {
         logger.debug("getFromGroup() called");
         Long siteId = Site.getIdOf(site);
 
+        if (key != null && ! "".equals(key)) {
+            try {
+                // process the case when key is already hashed
+                int keyAsHash = Integer.parseInt(key);
+            } catch (NumberFormatException e) {
+                key = generateTrnKey(key);
+            }
+        }
+
         Message trnMess = getByKey(key, locale, siteId);
         if (trnMess != null) {
             logger.debug("local translation exists");

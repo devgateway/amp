@@ -135,38 +135,36 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         return internalGetByKey(key, locale, siteId, overwriteKeywords, keywords);
     }
 
-    private Message internalGetByKey(String key, String locale, Long siteId, boolean overwriteKeywords,String keywords) {
+    private Message internalGetByKey(String key, String locale, Long siteId, boolean overwriteKeywords, String keywords) {
     	Message message = new Message();
-        //set up key trio
-        message.setKey(processKeyCase(key));
         message.setLocale(locale);
         message.setSite(SiteCache.lookupById(siteId));
+        message.setKey(key);
         //search message
         Object obj = messageCache.get(message);   
-        if(obj==null) {
+        if (obj == null) {
         	//try loading it from db
         	Session ses;
 			try {
 				ses = PersistenceManager.getSession();
 				Message realMsg = (Message) ses.get(Message.class, message);
-				if(realMsg!=null) {
-					obj=realMsg;
-					Serializable identifier=PersistenceManager.getClassMetadata(Message.class).getIdentifier(realMsg, (SessionImplementor)PersistenceManager.getSession());
+				if (realMsg != null) {
+					obj = realMsg;
+					Serializable identifier =
+                            PersistenceManager.getClassMetadata(Message.class).getIdentifier(realMsg, (SessionImplementor)ses);
 					messageCache.put(identifier, realMsg);
 				}
 			} catch (HibernateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                logger.error("Failed reading message from database", e);
 			}
         }
         
         if (obj == null) {
             logger.debug("No translation exists for siteId="+ siteId + ", key = " + key + ",locale=" + locale+", creating new");
             return null;
-        }
-        else {
+        } else {
         	Message foundMessage = (Message)obj;
-        	if(overwriteKeywords && keywords!=null){
+        	if (overwriteKeywords && keywords != null) {
         		foundMessage.setKeyWords(keywords);
         	}
         	updateTimeStamp(foundMessage);

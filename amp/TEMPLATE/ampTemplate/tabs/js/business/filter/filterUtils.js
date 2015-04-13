@@ -115,9 +115,13 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 				var content = [];
 				_.each(auxProperty, function(item, i) {
 					var auxItem = {};
-					auxItem.id = item.get('id');
-					auxItem.name = item.get('name');
-					content.push(auxItem);
+					if(item.get !== undefined) {
+						auxItem.id = item.get('id');
+						auxItem.name = item.get('name');
+						content.push(auxItem);
+					} else {
+						console.error(auxItem + " not mapped, we need to check why is not a model.");
+					}
 				});
 				var filter = new Filter({
 					trnName : TranslationManager.getTranslated(propertyName),

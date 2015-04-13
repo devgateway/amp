@@ -93,6 +93,7 @@ public class Filters {
 				activityStatus.add(sjb);
 			}
 			as.set("filterId", ColumnConstants.APPROVAL_STATUS);
+			as.set("name", TranslatorWorker.translateText(ColumnConstants.APPROVAL_STATUS));
 			as.set("values",activityStatus);
 		}
 		return as;
@@ -496,6 +497,7 @@ public class Filters {
 	private JsonBean getCategoryValue(String categoryKey,String filterId) {
 		JsonBean js=new JsonBean();
 		js.set("filterId",filterId);
+		js.set("name", TranslatorWorker.translateText(filterId));
 		js.set("values",getCategoryValue(categoryKey));
 		return js;
 		
@@ -626,6 +628,7 @@ public class Filters {
 		}
 		JsonBean js = new JsonBean();
 		js.set("filterId", "Workspaces");
+		js.set("name", TranslatorWorker.translateText("Workspaces"));
 		js.set("values", teamsListJson);
 		return js;
 	}

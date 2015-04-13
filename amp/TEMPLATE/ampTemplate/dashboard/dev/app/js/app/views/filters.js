@@ -112,7 +112,11 @@ module.exports = BackboneDash.View.extend({
         name: key,
         id: key.replace(/[^\w]/g, ''),  // remove anything non-alphanum
         detail: _(filter).map(function(value) {
-          return value.get('name');
+        	if (value.attributes !== undefined) {
+        		return value.get('name');
+        	} else {
+        		return '';
+        	}
         })
       };
     });

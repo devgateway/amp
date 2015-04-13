@@ -53,31 +53,31 @@ import org.hibernate.engine.spi.SessionImplementor;
 
 public class CachedTranslatorWorker extends TranslatorWorker {
 
-	private static Logger logger = Logger.getLogger(CachedTranslatorWorker.class);
+    private static Logger logger = Logger.getLogger(CachedTranslatorWorker.class);
 
     private AbstractCache messageCache;
 
     CachedTranslatorWorker() {
         super();
         messageCache = DigiCacheManager.getInstance().getCache("org.digijava.kernel.entity.Message.id_cache");
-        
-        //cache the first 5000 entries based on their access date     
-        logger.info("Caching the last accessed 5000 translation entries...");
-       	Session session = PersistenceManager.openNewSession();
-       	try {
-       		Criteria criteria = session.createCriteria(Message.class);
-       		criteria.setMaxResults(5000);
-       		criteria.addOrder(Order.desc("lastAccessed"));
-       		criteria.add(Restrictions.isNotNull("lastAccessed"));
-       	
-       		List<Message> lastAccessedMessages = criteria.list();
-       		for (Message message : lastAccessedMessages) messageCache.put(message, message);
-       	}
-       	finally {
-       		PersistenceManager.closeSession(session);
-       	}
 
-       	logger.info("Caching done.");
+        //cache the first 5000 entries based on their access date
+        logger.info("Caching the last accessed 5000 translation entries...");
+        Session session = PersistenceManager.openNewSession();
+        try {
+            Criteria criteria = session.createCriteria(Message.class);
+            criteria.setMaxResults(5000);
+            criteria.addOrder(Order.desc("lastAccessed"));
+            criteria.add(Restrictions.isNotNull("lastAccessed"));
+
+            List<Message> lastAccessedMessages = criteria.list();
+            for (Message message : lastAccessedMessages) messageCache.put(message, message);
+        }
+        finally {
+            PersistenceManager.closeSession(session);
+        }
+
+        logger.info("Caching done.");
 
     }
 
@@ -102,21 +102,21 @@ public class CachedTranslatorWorker extends TranslatorWorker {
             session = PersistenceManager.getSession();
             Message message = (Message) session.load(Message.class, mesageKey);
             processBodyChars(message);//if we run script on db which will do same action, do we need this here?
-            
+
             messageCache.put(message, message);
             logger.debug("Refreshed translation for siteId="
-                         + siteId + ", key = " + key + ",locale=" + locale);
+                    + siteId + ", key = " + key + ",locale=" + locale);
         }
         catch (ObjectNotFoundException onfe) {
         }
 
         catch (Exception ex) {
             throw new WorkerException("Unable to refresh translation[key=" +
-                                      key + ", locale=" + locale + ", siteId=" +
-                                      siteId + "]", ex);
+                    key + ", locale=" + locale + ", siteId=" +
+                    siteId + "]", ex);
         }
     }
-    
+
     //TODO may be bad idea!
     public void refresh(Message message) throws WorkerException {
         messageCache.put(message, message);
@@ -128,87 +128,55 @@ public class CachedTranslatorWorker extends TranslatorWorker {
      * @see TranslatorWorker#getByKey(String, String, String, String, String)
      */
     public Message getByKey(String key, String body, String keyWords, String locale, Long siteId) {
-    	return getByKey(key, locale, siteId, true, keyWords);
+        return getByKey(key, locale, siteId, true, keyWords);
     }
-
-
-    private String getTrnPrefix(){
-        if (TLSUtils.getRequest() != null && TLSUtils.getRequest().getSession() != null){
-            HttpSession session = TLSUtils.getRequest().getSession();
-            TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
-            if (tm != null){
-                AmpCategoryValue trnPrefix = tm.getWorkspacePrefix();
-                if (trnPrefix != null){
-                    String prefix = trnPrefix.getValue();
-                    return prefix;
-                }
-            }
-        }
-        return null;
-    }
-
 
     public Message getByKey(String key, String locale, Long siteId, boolean overwriteKeywords,String keywords) {
-        String prefix = getTrnPrefix();
-
-        if (prefix != null){
-            String newKey = prefix + key;
-            Message ret = internalGetByKey(newKey, locale, siteId, overwriteKeywords, keywords);
-            if (ret != null)
-                return ret;
-        }
         return internalGetByKey(key, locale, siteId, overwriteKeywords, keywords);
     }
 
-    private Message internalGetByKey(String key, String locale, Long siteId, boolean overwriteKeywords,String keywords) {
-    	Message message = new Message();
-        //set up key trio
-        message.setKey(processKeyCase(key));
+    private Message internalGetByKey(String key, String locale, Long siteId, boolean overwriteKeywords, String keywords) {
+        Message message = new Message();
         message.setLocale(locale);
         message.setSite(SiteCache.lookupById(siteId));
+        message.setKey(key);
         //search message
-        Object obj = messageCache.get(message);   
-        if(obj==null) {
-        	//try loading it from db
-        	Session ses;
-			try {
-				ses = PersistenceManager.getSession();
-				Message realMsg = (Message) ses.get(Message.class, message);
-				if(realMsg!=null) {
-					obj=realMsg;
-					Serializable identifier=PersistenceManager.getClassMetadata(Message.class).getIdentifier(realMsg, (SessionImplementor)PersistenceManager.getSession());
-					messageCache.put(identifier, realMsg);
-				}
-			} catch (HibernateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+        Object obj = messageCache.get(message);
+        if (obj == null) {
+            //try loading it from db
+            Session ses;
+            try {
+                ses = PersistenceManager.getRequestDBSession();
+                Message realMsg = (Message) ses.get(Message.class, message);
+                if (realMsg != null) {
+                    obj = realMsg;
+                    Serializable identifier =
+                            PersistenceManager.getClassMetadata(Message.class).getIdentifier(realMsg, (SessionImplementor)ses);
+                    messageCache.put(identifier, realMsg);
+                }
+            } catch (HibernateException e) {
+                logger.error("Failed reading message from database", e);
+            }
         }
-        
+
         if (obj == null) {
             logger.debug("No translation exists for siteId="+ siteId + ", key = " + key + ",locale=" + locale+", creating new");
             return null;
-        }
-        else {
-        	Message foundMessage = (Message)obj;
-        	if(overwriteKeywords && keywords!=null){
-        		foundMessage.setKeyWords(keywords);
-        	}
-        	updateTimeStamp(foundMessage);
+        } else {
+            Message foundMessage = (Message)obj;
+            if (overwriteKeywords && keywords != null) {
+                foundMessage.setKeyWords(keywords);
+            }
+            updateTimeStamp(foundMessage);
             return foundMessage;
         }
     }
-    
+
 
     public void save(Message message) {
-        //add prefix to the message key if we're in the right workspace
-        String prefix = getTrnPrefix();
-        if (prefix != null){
-            message.setKey(prefix+message.getKey());
-        }
 
-        saveDb(message); //message key and body will be processed there 
-        
+        saveDb(message); //message key and body will be processed there
+
         messageCache.put(message, message);
         fireRefreshAlert(message);
     }
@@ -220,16 +188,7 @@ public class CachedTranslatorWorker extends TranslatorWorker {
      * @throws WorkerException
      */
     public void update(Message message) throws WorkerException {
-        //check if we're updating a prefixed message or a regular one
-        String prefix = getTrnPrefix();
-        if (prefix != null){
-            String key = message.getKey();
-            if (!key.startsWith(prefix)){
-                //we need to save a new translation
-                save(message);
-                return;
-            }
-        }
+
         updateDb(message);//message key and body will be processed there
 
         messageCache.put(message, message);
@@ -247,15 +206,15 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         fireRefreshAlert(message);
     }
 
-	protected void setTimestamps(String key, Timestamp timestamp) throws WorkerException {
+    protected void setTimestamps(String key, Timestamp timestamp) throws WorkerException {
         if (key == null)
             return;
 
         Session ses = null;
-        
+
         @SuppressWarnings("unchecked")
         List messages;
-        
+
         String queryString = "from " + Message.class.getName() + " msg where msg.key=:msgKey";
 
         try {
@@ -264,9 +223,9 @@ public class CachedTranslatorWorker extends TranslatorWorker {
 //beginTransaction();
             Query q = ses.createQuery(queryString);
             q.setString("msgKey", processKeyCase(key.trim()));
-            
+
             messages = q.list();
-            
+
             @SuppressWarnings("unchecked")
             Iterator it = messages.iterator();
 
@@ -286,9 +245,9 @@ public class CachedTranslatorWorker extends TranslatorWorker {
         }
 
     }
-	
-	public void cleanMessageCache()
-	{
-		this.messageCache.clear();
-	}
+
+    public void cleanMessageCache()
+    {
+        this.messageCache.clear();
+    }
 }

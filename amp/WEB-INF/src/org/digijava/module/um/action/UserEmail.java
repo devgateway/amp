@@ -122,9 +122,10 @@ public class UserEmail
     }
 
     /**
-     * Send email alert
-     *
-     * @param user
+     * Sends reset password confirmation email
+     * @param email the email to send to
+     * @param code the security reset code
+     * @param request
      * @throws java.lang.Exception
      */
     public void sendEmail(String email, String code,
@@ -145,12 +146,11 @@ public class UserEmail
         message = worker.getByBody(site.getName(),currentLocale.getCode(), site.getId());
         if (message == null) {
             siteName = site.getName();
-        }
-        else {
+        } else {
             siteName = message.getMessage();
         }
 
-        HashMap hMap = new HashMap();
+        HashMap<String, String> hMap = new HashMap<String, String>();
         hMap.put("siteName", siteName);
         hMap.put("email", email);
         hMap.put("link", domanName + "/um/user/showResetForm.do?email=" + email + "&code=" +code);
@@ -171,8 +171,7 @@ public class UserEmail
                                           currentLocale.getCode(), site,
                                           "PASSWORD\n\nSomeone using the e-mail {email} has asked the {siteName} to reset the password for this account.\n" +
                                           "If the request came from you, click on the link below and create a new password.\n" +
-            "If you did not send the request, please disregard this e-mail.\n\n{link}").
-            getMessage();
+            "If you did not send the request, please disregard this e-mail.\n\n{link}").getMessage();
 
         body = DgUtil.fillPattern(body, hMap);
         // -------------------------
@@ -186,9 +185,9 @@ public class UserEmail
 
 
                InternetAddress address = new InternetAddress(email);
-               DgEmailManager.sendMail(new Address[] {address}
-                                        ,emailFrom,
-                                        subject, body, currentLocale, true);
+               //DgEmailManager.sendMail(new Address[] {address}
+                //                        ,emailFrom,
+                 //                       subject, body, currentLocale, true);
     }
 
 }

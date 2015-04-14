@@ -1,5 +1,4 @@
-html{background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x;width:100%;}
-body{background:url(/TEMPLATE/ampTemplate/img_2/bgamp.jpg) repeat-x;width:100%;font-family:arial;margin:0;padding:0}
+body{width:100%;font-family:arial;margin:0;padding:0}
 div#ampcontainer{width:1000px;margin:0 auto;}
 #content{z-index:1000;}
 div#ampcontainer{width:1000px;margin:0 auto;}
@@ -122,7 +121,6 @@ top_nav a {color:#FFFFFF;}
 .top_sep {margin-left:10px; margin-right:10px; height:30px;}
 .workspace_info {width:100px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px 10px;text-align:right;float:right;margin:-0px 0px 0px 50px;z-index:9990;}
 html.ie .workspace_info {width:100px; margin:0 auto; height:30px; color:#000000; font-size:11px; padding:5px 10px;text-align:right;margin:-0px 0px 0px 50px;z-index:9990;position:absolute; top:5px;right:10px;}
-.loginWidget{color: #376091; text-align: left; white-space: nowrap;font-family:  Arial, sans-serif;font-size: 11px;font-weight: bold;text-transform:uppercase;}
 .workspace_info select{width:150px;font-size:10px;}
 .workspace_choose {line-height:25px; font-size:13px; margin-top:25px;}
 #login_menu{width:330px; float:right; margin:10px 0px 0px 0px;color:#fff;}

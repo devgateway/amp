@@ -8,7 +8,7 @@
 <%@ taglib uri="/taglib/jstl-functions" prefix="fn" %>
 <digi:secure authenticated="true">
     <logic:present name="isUserLogged" scope="session">
-        <div title='<digi:trn key="aim:clickToLogoutTheSystem">Click here to logout from the system</digi:trn>'>
+        <div class="loginWidget" title='<digi:trn key="aim:clickToLogoutTheSystem">Click here to logout from the system</digi:trn>'>
         <c:set var="quote">'</c:set>
         <c:set var="escapedQuote">\'</c:set>
         <c:set var="msg">

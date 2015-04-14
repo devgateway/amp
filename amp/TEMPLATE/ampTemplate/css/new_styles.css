@@ -42,15 +42,22 @@ BODY
 .first-of-type{
 	background-color:#376091;
 }
-
+DIV.loginWidget {
+  border-color: #e7e7e7;
+  background-color: #F8F8F8;
+  border-style: solid;
+  border-width: 1px;
+  min-height: 40px;
+}
 A.loginWidget, A.loginWidget:link, a.loginWidget, A.loginWidget:active, A.loginWidget:visited {
-	font-family:Verdana,Arial,Helvetica,sans-serif;
-	font-size:10px;
-	font-weight:bolder;
-	text-transform:uppercase;
-	color:white;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  	font-size: 12px;
+    line-height: 1.42857143;
+    color: #333;
 	text-decoration:none;
-	display: inline;		  
+	display: inline;
+	font-weight: bold;	
+	margin-left: 15px;	  
 }
 
 .loginWidget:hover{

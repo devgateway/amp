@@ -76,7 +76,7 @@ public class AmpOrganisationSearchModel extends AbstractAmpAutoCompleteModel<Amp
 		    AmpOrgType orgtype =null;
 		    if (getParams()!=null && getParams().get(PARAM.TYPE_FILTER) != null) {
 		    orgtype = (AmpOrgType) getParams().get(PARAM.TYPE_FILTER);
-			sqlQuery = sqlQuery + " AND org.orgtype = ?";
+			sqlQuery = sqlQuery + " AND org.org_type = ?";
 		    }
 		    
 		    Integer maxResults = (Integer) getParams().get(AbstractAmpAutoCompleteModel.PARAM.MAX_RESULTS);

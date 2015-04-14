@@ -367,7 +367,9 @@ public class SimpleSQLPatcher {
 		if (recreatingViews || ampActivityExpandedIsNotView || ampActivityIsNotView) {
 			logger.error("forcing recreating views!");
 			SQLUtils.executeQuery(conn, "UPDATE amp_global_settings SET settingsvalue = 'true' WHERE settingsname='Recreate the views on the next server restart'");
-			SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('full_etl_request', 999)");
+			if (SQLUtils.tableExists(conn, "amp_etl_changelog")) {
+				SQLUtils.executeQuery(conn, "INSERT INTO amp_etl_changelog(entity_name, entity_id) VALUES ('full_etl_request', 999)");
+			}
 			createDummyViewIfMissingOrTable(conn, "amp_activity", "SELECT aav.* from amp_activity_version aav JOIN amp_activity_group aag ON aav.amp_activity_id = aag.amp_activity_last_version_id AND (aav.deleted IS NULL or aav.deleted = false)", recreatingViews);
 			createDummyViewIfMissingOrTable(conn, "v_amp_activity_expanded", "SELECT av.*, dg_editor.body AS expanded_description FROM amp_activity av LEFT JOIN dg_editor ON av.description = dg_editor.editor_key", recreatingViews);			
 		}

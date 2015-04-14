@@ -127,6 +127,10 @@ public class SQLUtils {
 		return !getTableColumns(tableName).isEmpty();
 	}
 	
+	public static boolean tableExists(Connection conn, String tableName) {
+		return getLong(conn, "select count(*) from information_schema.tables WHERE table_schema='public' AND lower(table_type)='table' and table_name='" + tableName + "'") > 0;
+	}
+	
 	public static void executeQuery(Connection conn, String query)
 	{
 		try

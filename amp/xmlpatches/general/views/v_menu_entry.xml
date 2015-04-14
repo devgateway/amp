@@ -31,6 +31,7 @@
 			    	END as url,
 			    	m.flags,
 			    	m.position,
+			    	m.request_url,
 			    	mv.view_type,
 			    	mv.rule_id
 			    	FROM amp_menu_entry m, amp_menu_entry_view mv

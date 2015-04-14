@@ -26,6 +26,7 @@ public class AmpMenuEntry implements Serializable {
 	private String url;
 	private String flags;
 	private int position = 0;
+	private String requestUrl;
 	private Set<AmpMenuEntry> items;
 	private Set<Group> groups;
 	private Map<AmpView, AmpVisibilityRule> viewVisibilityMap;
@@ -142,6 +143,20 @@ public class AmpMenuEntry implements Serializable {
 	 */
 	public void setPosition(int position) {
 		this.position = position;
+	}
+
+	/**
+	 * @return the requestUrl
+	 */
+	public String getRequestUrl() {
+		return requestUrl;
+	}
+
+	/**
+	 * @param requestUrl the requestUrl to set
+	 */
+	public void setRequestUrl(String requestUrl) {
+		this.requestUrl = requestUrl;
 	}
 
 	/**

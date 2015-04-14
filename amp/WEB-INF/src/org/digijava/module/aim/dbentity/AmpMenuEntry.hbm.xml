@@ -8,6 +8,7 @@
 		<property name="url" column="URL" type="java.lang.String"/>
 		<property name="flags" column="FLAGS" type="java.lang.String"/>
         <property name="position" column="POSITION" type="int" />
+        <property name="requestUrl" column="REQUEST_URL" type="text" />
         
         <set name="groups" cascade="all" table="AMP_MENU_ENTRY_DG_GROUP">
 	         <key column="MENU_ID"/>

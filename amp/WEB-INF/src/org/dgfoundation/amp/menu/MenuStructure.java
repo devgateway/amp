@@ -58,7 +58,7 @@ public class MenuStructure {
 	private List<MenuItem> menuItems;
 	private <T> MenuStructure(List<T> orderedEntries, AmpView view) {
 		String warnMsg = "Skipping menu entry '%s' that is enabled for " + view + " view while its ancestor '%s' is not.";
-		MenuItem root = new MenuItem("root", null, null, null, null, null);
+		MenuItem root = new MenuItem("root", null, null, null, null, null, null);
 		Map<T, MenuItem> itemsMap = new HashMap<T, MenuItem>();
 		itemsMap.put(null, root);
 		for (T t : orderedEntries) {
@@ -67,7 +67,7 @@ public class MenuStructure {
 			for (Group group : ame.getGroups()) {
 				groupKeys.add(group.getKey());
 			}
-			MenuItem mi = new MenuItem(ame.getName(), ame.getTitle(), ame.getTooltip(), ame.getUrl(), ame.getFlags(), groupKeys);
+			MenuItem mi = new MenuItem(ame.getName(), ame.getTitle(), ame.getTooltip(), ame.getUrl(), ame.getFlags(), ame.getRequestUrl(), groupKeys);
 			itemsMap.put(t, mi);
 		}
 		for (T t : orderedEntries) {

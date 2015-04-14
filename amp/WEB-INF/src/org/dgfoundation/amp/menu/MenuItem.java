@@ -24,6 +24,8 @@ public class MenuItem {
 	public final String url;
 	/** any specific flags */
 	public final String flags;
+	/** allowed request URL pattern*/
+	public final String requestUrl;
 	/** group_keys */
 	public final Set<String> groupKeys;
 	/** whether the action should open a new popup window */
@@ -43,12 +45,13 @@ public class MenuItem {
 	 * @param tooltip
 	 * @param flags
 	 */
-	public MenuItem(String name, String title, String tooltip, String url, String flags, Set<String> groupKeys) {
+	public MenuItem(String name, String title, String tooltip, String url, String flags, String requestUrl, Set<String> groupKeys) {
 		this.name = name;
 		this.title = title;
 		this.tooltip = tooltip;
 		this.url = url;
 		this.flags = flags;
+		this.requestUrl = requestUrl;
 		this.groupKeys = groupKeys;
 		this.isPopup = flags != null && flags.contains(MenuFlags.OPEN_POPUP);
 		this.isTab = flags != null && flags.contains(MenuFlags.OPEN_TAB);
@@ -56,7 +59,7 @@ public class MenuItem {
 	}
 	
 	public MenuItem(MenuItem other) {
-		this(other.name, other.title, other.tooltip, other.url, other.flags, other.groupKeys);
+		this(other.name, other.title, other.tooltip, other.url, other.flags, other.requestUrl, other.groupKeys);
 		this.parent = other.parent;
 		this.children = new ArrayList<MenuItem>(other.getChildren());
 	}

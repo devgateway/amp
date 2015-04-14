@@ -25,7 +25,7 @@ public class LanguageMenu implements DynamicMenu {
 		List<String[]> locales = TranslationManager.getLocale(PersistenceManager.getSession());
 		for (String[] langOption : locales) {
 			MenuItem mi = new MenuItem(template.name, langOption[1], 
-					langOption[1], String.format(template.url, langOption[0]), template.flags, template.groupKeys);
+					langOption[1], String.format(template.url, langOption[0]), template.flags, template.requestUrl, template.groupKeys);
 			mi.setParent(langMenuItem);
 			langMenuItem.appendChild(mi);
 		}

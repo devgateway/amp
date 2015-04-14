@@ -46,6 +46,7 @@ public class MenuItemsProcessor {
 	private AmpView view;
 	private TeamMember tm;
 	private Set<String> currentUserGroupKeys = new HashSet<String>();
+	private String referer;
 	
 	private MenuItemsProcessor(AmpView view) {
 		this.view = view;
@@ -64,6 +65,7 @@ public class MenuItemsProcessor {
 				}
 			}
 		}
+		this.referer = TLSUtils.getRequest().getHeader("referer");
 	}
 	
 	protected List<MenuItem> process(List<MenuItem> items, Set<String> visibleMenuEntries) {
@@ -71,7 +73,7 @@ public class MenuItemsProcessor {
 		for (MenuItem item : items) {
 			// add only items that are visible based on FM & custom visibility rules
 			if (visibleMenuEntries.contains(item.name)
-					&& isVisible(item.name) && isAllowedUserGroup(item)) {
+					&& isVisible(item) && isAllowedUserGroup(item)) {
 				MenuItem newItem = new MenuItem(item);
 				newList.add(newItem);
 				newItem.setChildren(process(item.getChildren(), visibleMenuEntries));
@@ -86,15 +88,20 @@ public class MenuItemsProcessor {
 	 * @param menuName
 	 * @return 
 	 */
-	private boolean isVisible(String menuName) {
-		switch(menuName) {
+	private boolean isVisible(MenuItem item) {
+		boolean visible = true;
+		switch(item.name) {
 		case MenuConstants.TRANSLATOR_VIEW:
-			return !TranslatorWorker.isTranslationMode(TLSUtils.getRequest());
+			visible = !TranslatorWorker.isTranslationMode(TLSUtils.getRequest());
+			break;
 		case MenuConstants.NON_TRANSLATOR_VIEW:
-			return TranslatorWorker.isTranslationMode(TLSUtils.getRequest());
-		default:
-			return true;
+			visible = TranslatorWorker.isTranslationMode(TLSUtils.getRequest());
+			break;
 		}
+		// if requestURL (the actual referrer) filter is specified, then display this menu item only for a referrer that matches it
+		visible = visible && (item.requestUrl == null || referer != null && referer.matches(item.requestUrl));
+		
+		return visible;
 	}
 	
 	private boolean isAllowedUserGroup(MenuItem mi) {

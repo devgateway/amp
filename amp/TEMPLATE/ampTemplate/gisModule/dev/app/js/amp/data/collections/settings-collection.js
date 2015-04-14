@@ -62,9 +62,11 @@ module.exports = Backbone.Collection
             .findWhere({
               id: setting.get('selected')
             });
-
-      var translatedSetting = settingObject.name;
-      setting.set('selectedName', translatedSetting );
+      //There is not selected attribute for Measures check if settingObject is undifined  
+      if (settingObject !== undefined){
+    	  var translatedSetting = settingObject.name;
+      	setting.set('selectedName', translatedSetting );
+      }
     }
   },
 

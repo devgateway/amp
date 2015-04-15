@@ -327,8 +327,8 @@
 <feature:display name="Disbursment Ratio" module="Measures"></feature:display>
 <feature:display name="Prior Actual Disbursements" module="Measures"></feature:display>
 <feature:display name="Previous Month Disbursements" module="Measures"></feature:display>
-<feature:display name="Cumulated Disbursements" module="Measures"></feature:display>"
-<feature:display name="Consumption Rate" module="Measures"></feature:display>"
+<feature:display name="Cumulated Disbursements" module="Measures"></feature:display>
+<feature:display name="Consumption Rate" module="Measures"></feature:display>
 <feature:display name="Selected Year Planned Disbursements" module="Measures"></feature:display>
 <feature:display name="Actual Pledge" module="Measures"></feature:display>
 <feature:display name="Percentage of Disbursement" module="Measures"></feature:display>

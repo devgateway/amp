@@ -390,7 +390,7 @@ public class GlobalSettings extends Action {
 		}
 		return true;
 	}
-	
+	/*POTENTIAL_BUG: this doesn't take into account leap years*/
 	public static int numOfDaysInMonth(int month) {
 		if (month > 0 && month < 13) {
 			int maxDays	= 0;

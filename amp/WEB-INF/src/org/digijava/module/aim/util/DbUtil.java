@@ -981,13 +981,13 @@ public class DbUtil {
 		String organizationName = AmpOrganisation.hqlStringForName("org");
 		queryString.append("select distinct org from ")
                    .append(AmpOrganisation.class.getName()).append(" org ")
-                   .append("where (lower(acronym) like '%").append(keyword)
-                   .append("%' or lower(" + organizationName + ") like '%").append(keyword)
-                   .append("%') and (org.deleted is null or org.deleted = false) ");
+                   .append("where (lower(acronym) like :keyword")//.append(keyword)
+                   .append(" or lower(" + organizationName + ") like :keyword")//.append(keyword) 
+                   .append(") and (org.deleted is null or org.deleted = false) ");
 
 		appendNotIn("org.ampOrgId", excludeIds, queryString);
-
-		return PersistenceManager.getSession().createQuery(queryString.toString()).list();
+		Query q = PersistenceManager.getSession().createQuery(queryString.toString()).setParameter("keyword", '%' + keyword + '%');
+		return q.list();
 	}
 
 	/**

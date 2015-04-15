@@ -1,7 +1,8 @@
-<h3 data-i18n="amp.gis:legend-item-indicator-arcgisdynamic"><%= title %></h3>
+<span class="templateBugWorkaround">
+  <h3 data-i18n="amp.gis:title-<%= title %>"><%= title %></h3>
 
 <% if (status === 'loading') { %>
-  <p><em>loading...</em></p>
+  <p><em data-18n="amp.gis:legend-loading">loading...</em></p>
 <% } else { %>
   <%  _.each(esriLegend, function(legend) {
       if (legend.label && legend.imageData) {
@@ -13,3 +14,4 @@
     <% }
    }); %>
 <% } %>
+</span>

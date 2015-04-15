@@ -1,12 +1,15 @@
-<h3 data-i18n="amp.gis:legend-item-indicator-arcgisfeature"><%= title %></h3>
+<span class="templateBugWorkaround">
 
-<% if (status === 'loading') { %>
-  <p><em>loading...</em></p>
-<% } else { %>
-  <% colourBuckets.each(function(bucket) { %>
-    <div>
-      <span style="background: <%= bucket.hex() %> !important" class="color-block legend-sample"></span>
-      <%= bucket.get('value')[0] %>&mdash;<%= bucket.get('value')[1] %>
-    </div>
-  <% }) %>
-<% } %>
+  <h3 data-i18n="amp.gis:title-<%= title %>"><%= title %></h3>
+
+  <% if (status === 'loading') { %>
+    <p><em data-18n="amp.gis:legend-loading">loading...</em></p>
+  <% } else { %>
+    <% colourBuckets.each(function(bucket) { %>
+      <div>
+        <span style="background: <%= bucket.hex() %> !important" class="color-block legend-sample"></span>
+        <%= bucket.get('value')[0] %>&mdash;<%= bucket.get('value')[1] %>
+      </div>
+    <% }) %>
+  <% } %>
+</span>

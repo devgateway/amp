@@ -10,6 +10,10 @@ module.exports = Backbone.View.extend({
   _loaded: null,
   className: 'legend-indicatorarcgisdynamic',
 
+  initialize: function(options) {
+    this.app = options.app;
+  },
+
   render: function() {
     var self = this;
 
@@ -23,11 +27,15 @@ module.exports = Backbone.View.extend({
   renderLegend: function(legendDefinition) {
     if (legendDefinition.layers.length > 0) {
       var esriLegend = legendDefinition.layers[0].legend;
-      this.$el.html(this.template(_.extend({}, this.model.toJSON(), {
-        status: 'loaded',
-        esriLegend: esriLegend
-      })));
+      var self = this;
+      this.app.translator.translateDOM(this.template(_.extend({}, this.model.toJSON(), {
+          status: 'loaded',
+          esriLegend: esriLegend
+        }))).then(function(legend) {
+            self.$el.html(legend);
+          });
     }
   }
+
 
 });

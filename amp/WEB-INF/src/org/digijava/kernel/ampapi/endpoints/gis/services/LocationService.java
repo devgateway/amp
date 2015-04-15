@@ -587,7 +587,7 @@ public class LocationService {
 		columnNames.add(TranslatorWorker.translateText("Time Stamp"));//0
 		columnNames.add(TranslatorWorker.translateText("Activity Id"));//1
 		columnNames.add(TranslatorWorker.translateText("Project Title"));//2
-		columnNames.add(TranslatorWorker.translateText("Description"));//3
+//		columnNames.add(TranslatorWorker.translateText("Description"));//3
 		columnNames.add(TranslatorWorker.translateText("Type"));//4
 		columnNames.add(TranslatorWorker.translateText("Location Name"));//5
 		columnNames.add(TranslatorWorker.translateText("Latitude"));//6

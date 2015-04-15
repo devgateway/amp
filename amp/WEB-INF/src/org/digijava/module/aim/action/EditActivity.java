@@ -198,19 +198,20 @@ public class EditActivity extends Action {
         		eaForm.getIdentification().setActAthLastName(activity.getCreatedBy().getUser().getLastName());
         		eaForm.getIdentification().setActAthEmail(activity.getCreatedBy().getUser().getEmail());
         	}
-            boolean hasTeamLead = true;
+            boolean hasTeamLeadOrValidator = false;
             if (currentTeam != null) {
                 AmpTeamMember teamHead = TeamMemberUtil.getTeamHead(currentTeam.getAmpTeamId());
-                if (teamHead == null) {
-                    hasTeamLead = false;
-                }
+                List<AmpTeamMember> valids =TeamMemberUtil.getTeamHeadAndApprovers(currentTeam.getAmpTeamId()); 
+                if ( valids != null && valids.size() > 0)
+                	hasTeamLeadOrValidator = true;
+                
             }
 
             if (activity.getDraft() != null && activity.getDraft()) {
                 eaForm.getWarningMessges().add("This is a draft activity");
             } else {
                 if (Constants.ACTIVITY_NEEDS_APPROVAL_STATUS.contains(activity.getApprovalStatus())) {
-                    if (hasTeamLead) {
+                    if (hasTeamLeadOrValidator) {
                         eaForm.getWarningMessges().add("The activity is awaiting approval.");
                     } else {
                         eaForm.getWarningMessges().add("This activity cannot be validated because there is no Workspace Manager.");

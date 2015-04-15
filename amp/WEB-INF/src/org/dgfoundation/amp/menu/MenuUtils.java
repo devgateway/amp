@@ -31,47 +31,7 @@ public class MenuUtils {
 		List<AmpMenuEntryInView> entries = PersistenceManager.getSession().createQuery(query)
 				.setParameter("viewType", view).list();
 		return entries;
-		//return filterWrongEntries(entries, view);
 	}
-	
-	/**
-	 * Filters out wrongly configured entries whose parents are not in the current view
-	 * @param entries
-	 * @param view current view
-	 * @return filtered list of entries
-	 */
-	/* Note: this method call can be skipped when menu definitions will be correctly verified 
-	 * as part of the menu UI administration
-	 */
-	/*
-	private static List<AmpMenuEntry> filterWrongEntries(List<AmpMenuEntry> entries, AmpView view) {
-		String warnMsg = "Skipping menu entry '%s' that is enabled for " + view + " while its ancestor '%s' is not.";
-		Set<AmpMenuEntry> entriesSet = new HashSet<AmpMenuEntry>(entries);
-		for (ListIterator<AmpMenuEntry> iter = entries.listIterator(); iter.hasNext(); ) {
-			AmpMenuEntry entry = iter.next();
-			AmpMenuEntry parent = entry.getParent();
-			while (parent != null) {
-				if (entriesSet.contains(parent)) {
-					parent = parent.getParent();
-				} else {
-					break;
-				}
-			}
-			// if we stopped at not null parent, then it is not in the current view set
-			if (parent != null) {
-				logger.warn(String.format(warnMsg, entry.getName(), parent.getName()));
-				iter.remove();
-				// set stop parent, i.e. the one that was not yet checked and may be valid
-				parent = parent.getParent();
-				while (entry != parent) {
-					entriesSet.remove(entry);
-					entry = entry.getParent();
-				}
-			}
-		}
-		return entries;
-	}
-	*/
 	
 	/**
 	 * @return detects current view type (Public, Team, Admin)

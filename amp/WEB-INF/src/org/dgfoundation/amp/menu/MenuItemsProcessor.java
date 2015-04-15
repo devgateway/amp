@@ -13,6 +13,7 @@ import java.util.Set;
 import org.dgfoundation.amp.menu.dynamic.DynamicMenu;
 import org.dgfoundation.amp.menu.dynamic.EmailMenu;
 import org.dgfoundation.amp.menu.dynamic.LanguageMenu;
+import org.dgfoundation.amp.menu.dynamic.VisualizationDashboardsMenu;
 import org.dgfoundation.amp.menu.dynamic.WorkspaceMenu;
 import org.dgfoundation.amp.visibility.data.FMSettingsMediator;
 import org.digijava.kernel.request.TLSUtils;
@@ -116,16 +117,13 @@ public class MenuItemsProcessor {
 	}
 	
 	/**
-	 * Configures dynamic menu entries
+	 * Configures dynamic menu entries per request
 	 * @param mi
 	 */
 	private static void configureCustomDynamicMenu(MenuItem mi) {
-		switch(mi.name) {
-		case MenuConstants.CHANGE_WORKSPACE:
-			(new WorkspaceMenu()).process(mi);
-			break;
-		default:
-			break;
+		DynamicMenu menuPerRequestBuilder = dynamicPerRequest.get(mi.name);
+		if (menuPerRequestBuilder != null) {
+			menuPerRequestBuilder.process(mi);
 		}
 	} 
 
@@ -142,11 +140,12 @@ public class MenuItemsProcessor {
 	}};
 	
 	private static final Map<String, DynamicMenu> dynamicPerRequest = new HashMap<String, DynamicMenu>() {{
-		put(MenuConstants.WORKSPACE_INFO, new WorkspaceMenu());
+		put(MenuConstants.CHANGE_WORKSPACE, new WorkspaceMenu());
+		put(MenuConstants.DASHBOARDS, new VisualizationDashboardsMenu());
 	}};
 	
 	/**
-	 * Updates menu items structure with dynamic structure that is common
+	 * Updates menu items structure with dynamic structure that is common per application setup
 	 * @param items
 	 */
 	public static void processCommonDynamicItems(List<MenuItem> items) {

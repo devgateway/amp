@@ -24,9 +24,14 @@
 		</script>
 		<script>
 			<lang delimiter=";" type="postgres">
-			    	CREATE OR REPLACE VIEW v_menu_entry AS 
-			    	SELECT m.id, m.parent_id, m.name, m.title, m.tooltip, 
-					CASE m.url 	WHEN null THEN m.url
+			    	CREATE OR REPLACE VIEW v_menu_entry AS
+			    	SELECT m.id,
+			    	(m.id * 10 + mv.view_type) as menu_view_id,
+			    	(m.parent_id * 10 + mv.view_type) as parent_id, 
+			    	m.name,
+			    	m.title, 
+			    	m.tooltip, 
+					CASE WHEN m.url is NULL THEN mv.url
 						   		ELSE m.url
 			    	END as url,
 			    	m.flags,

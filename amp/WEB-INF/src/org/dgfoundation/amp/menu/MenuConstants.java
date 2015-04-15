@@ -69,6 +69,7 @@ public class MenuConstants {
 	public static final String NEW_GIS_BETA = "NEW GIS (BETA)";
 	public static final String NEW_DASHBOARDS_BETA = "NEW DASHBOARD (BETA)";
 	public static final String DASHBOARD_GENERATOR = "Dashboard Generator";
+	public static final String VISUALIZATION_DASHBOARDS_ITEM = "Visualization Dashboards Item";
 	public static final String MESSAGES = "Messages";
 	public static final String MESSAGES_VIEW = "View Messages";
 	public static final String MESSAGES_TAB = "Messages Alert Tab";

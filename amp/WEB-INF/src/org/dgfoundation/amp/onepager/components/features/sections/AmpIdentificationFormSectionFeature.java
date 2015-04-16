@@ -160,8 +160,8 @@ implements AmpRequiredComponentContainer{
                 }
 
                 ServletContext context = ((WebApplication) Application.get())
-                        .getServletContext();
-
+                        .getServletContext();	
+                logger.info("Searching similar activity name for activity: "+ sTitle);
                 List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(
                         context.getRealPath("/") + LuceneUtil.ACTVITY_INDEX_DIRECTORY, sTitle, langCode, 2);
                 if (! list.isEmpty()) {
@@ -184,7 +184,9 @@ implements AmpRequiredComponentContainer{
                         if (activityId == null || (activity.getAmpId() != null
                                 && activityId.longValue() != Long.valueOf(activity.getAmpId()).longValue())) {
                             moreThanSelf = true;
-                            ret += " - " + activity.getName() + "\n";
+							logger.info("There is a similiarity match!. Current activity id: " + activityId
+									+ " Match activity id " + activity.getAmpId());
+							ret += " - " + activity.getName() + "\n";
                         }
                     if (moreThanSelf) {
                         return ret;

@@ -283,24 +283,6 @@ function collapseAll() {
 	</table>
 </logic:present>
 
-<c:if test="${aimEditActivityForm.identification.team.isolated}">
-	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
-	     <tr>
-		     <td align="center">
-		        <font color="red" size="3">
-		                <digi:trn key="aim:workspaceIsPrivate">This activity has been created in a private workspace. It 
-		                will not be visible in other workspaces.</digi:trn>
-		        </font>
-		     </td>
-	     </tr>           
-	     <tr>
-	         <td>&nbsp;
-	             
-	         </td>
-	     </tr>
-	</table>
-</c:if>
-
 <logic:present scope="request" parameter="editPermissionError">
 	<table width="1000" border="0" cellspacing="0" cellpadding="0" align=center style="margin-top:15px;">
 	     <tr>
@@ -1620,34 +1602,92 @@ function collapseAll() {
 		</fieldset>
 	</module:display>
 	<!-- END FUNDING SECTION -->
-
-
 	 <module:display name="/Activity Form/Aid Effectivenes" parentModule="/Activity Form">
-        <fieldset>
-            <legend>
-                <span class=legend_label id="aidEffectivenesLink"
-                    style="cursor: pointer;"> <digi:trn>Aid Effectivenes</digi:trn>
-                </span>
-            </legend>
-
-            <div id="aidEffectivenesdiv" class="toggleDiv">
-
-            <logic:notEmpty name="aimEditActivityForm" property="selectedEffectivenessIndicatorOptions">
-                <logic:iterate id="option" name="aimEditActivityForm" property="selectedEffectivenessIndicatorOptions">
-                    <module:display name="/Activity Form/Aid Effectivenes/${option.indicator.ampIndicatorName}"
-                        parentModule="/Activity Form/Aid Effectivenes">
-                        <div>
-                            <b>${option.indicator.ampIndicatorName}</b> -
-                            ${option.ampIndicatorOptionName}
-                        </div>
-                    </module:display>
-                </logic:iterate>
-            </logic:notEmpty>
-        </fieldset>
-     </module:display>
-
-<!-- REGIONAL FUNDING -->
-<module:display name="/Activity Form/Regional Funding" parentModule="/Activity Form">
+						<fieldset>
+							<legend>
+								<span class=legend_label id="aidEffectivenesLink"
+									style="cursor: pointer;"> <digi:trn>Aid Effectivenes</digi:trn>
+								</span>
+							</legend>
+						
+						<div id="aidEffectivenesdiv" class="toggleDiv">
+						
+							<module:display name="/Activity Form/Aid Effectivenes/Project uses parallel project implementation unit"
+								parentModule="/Activity Form/Aid Effectivenes">
+								<digi:trn key="aim:prjUsesParallel">Project uses parallel project implementation unit</digi:trn>:&nbsp;<br />
+								<b><c:out
+										value="${aimEditActivityForm.getAidEffectivenes().getProjectImplementationUnit()}" /></b>
+								<hr />
+							</module:display>
+							
+							<module:display name="/Activity Form/Aid Effectivenes/Project uses parallel project implementation unit"
+								parentModule="/Activity Form/Aid Effectivenes">
+								<digi:trn key="aim:projectImplementationMode">Project Implementation Mode </digi:trn>:&nbsp;<br />
+								<b><c:out
+										value="${aimEditActivityForm.getAidEffectivenes().getProjectImplementationMode()}" /></b>
+								<hr />
+							</module:display>
+							<module:display name="/Activity Form/Aid Effectivenes/Project has been approved by IMAC"
+								parentModule="/Activity Form/Aid Effectivenes">
+								<digi:trn key="aim:projectImacApproved">Project has been approved by IMAC</digi:trn>:&nbsp;<br />
+								<b><c:out
+										value="${aimEditActivityForm.getAidEffectivenes().getImacApproved()}" /></b>
+								<hr />
+							</module:display>
+							<module:display name="/Activity Form/Aid Effectivenes/Government is meber of project steering committee"
+								parentModule="/Activity Form/Aid Effectivenes">
+								<digi:trn key="aim:nationalOversight">Government is meber of project steering committee</digi:trn>:&nbsp;<br />
+								<b><c:out
+										value="${aimEditActivityForm.getAidEffectivenes().getNationalOversight()}" /></b>
+								<hr />
+							</module:display>
+							<module:display name="/Activity Form/Aid Effectivenes/Project is on budget"
+								parentModule="/Activity Form/Aid Effectivenes">
+								<digi:trn key="aim:onBudget">Project is on budget</digi:trn>:&nbsp;<br />
+								<b><c:out
+										value="${aimEditActivityForm.getAidEffectivenes().getOnBudget()}" /></b>
+								<hr />
+							</module:display>
+							<module:display name="/Activity Form/Aid Effectivenes/Project is on parliament"
+								parentModule="/Activity Form/Aid Effectivenes">
+								<digi:trn key="aim:onParliament">Project is on parliament</digi:trn>:&nbsp;<br />
+								<b><c:out
+										value="${aimEditActivityForm.getAidEffectivenes().getOnParliament()}" /></b>
+								<hr />
+							</module:display>
+							<module:display name="/Activity Form/Aid Effectivenes/Project disburses directly into the Goverment single treasury account"
+								parentModule="/Activity Form/Aid Effectivenes">
+								<digi:trn key="aim:onTreasury">Project disburses directly into the Goverment single treasury account</digi:trn>:&nbsp;<br />
+								<b><c:out
+										value="${aimEditActivityForm.getAidEffectivenes().getOnTreasury()}" /></b>
+								<hr />
+							</module:display>
+							<module:display name="/Activity Form/Aid Effectivenes/Project uses national financial management systems"
+								parentModule="/Activity Form/Aid Effectivenes">
+								<digi:trn key="aim:nationalFinancialManagement">Project uses national financial management systems</digi:trn>:&nbsp;<br />
+								<b><c:out
+										value="${aimEditActivityForm.getAidEffectivenes().getNationalFinancialManagement()}" /></b>
+								<hr />
+							</module:display>			
+							<module:display name="/Activity Form/Aid Effectivenes/Project uses national procurement systems"
+								parentModule="/Activity Form/Aid Effectivenes">
+								<digi:trn key="aim:nationalProcurement">Project uses national procurement systems</digi:trn>:&nbsp;<br />
+								<b><c:out
+										value="${aimEditActivityForm.getAidEffectivenes().getNationalProcurement()}" /></b>
+								<hr />
+							</module:display>
+							<module:display name="/Activity Form/Aid Effectivenes/Project uses national audit systems"
+								parentModule="/Activity Form/Aid Effectivenes">
+								<digi:trn key="aim:nationalAudit">Project uses national audit systems</digi:trn>:&nbsp;<br />
+								<b><c:out
+										value="${aimEditActivityForm.getAidEffectivenes().getNationalAudit()}" /></b>
+								<hr />
+							</module:display>					
+						</div>
+						</fieldset>
+					</module:display> 
+					<!-- REGIONAL FUNDING --> 
+					<module:display name="/Activity Form/Regional Funding" parentModule="/Activity Form">
 <fieldset>
 	<legend>
 		<span class=legend_label id="regionalfundinglink" style="cursor: pointer;">

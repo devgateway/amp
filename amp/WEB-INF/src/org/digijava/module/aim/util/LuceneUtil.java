@@ -867,6 +867,8 @@ public class LuceneUtil implements Serializable {
                         // Added try/catch because Field can throw an exception if any of the parameters is wrong and that would break the process.
                         try {
                             if ("name".equals(field)){
+                            	logger.info("Adding activity name to lucene index. Name: "+translation.getTranslation()
+                            			+" Locale: "+translation.getLocale());
                                 doc.add(new Field(field + "_" + translation.getLocale(),
                                         translation.getTranslation(),
                                         Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
@@ -1116,8 +1118,9 @@ public class LuceneUtil implements Serializable {
                                                                int maxLuceneResults) {
         Searcher indexSearcher = null;
         IndexReader ir = null;
-
-        try {
+		logger.info("Searching similar activities with title:  " + origSearchString + " with language " + langCode
+				+ " on Lucene directory: " + index);
+		try {
             ir = IndexReader.open(index);
             logger.info("Lucene index reader has " + ir.numDocs()
                     + " docs in it");
@@ -1163,7 +1166,9 @@ public class LuceneUtil implements Serializable {
                 activityWithIdAndTitle.setAmpId(doc.get(ID_FIELD));
                 // Set the title of the activity
                 activityWithIdAndTitle.setName(doc.get(fieldName));
-                activityTitles.add(activityWithIdAndTitle);
+				logger.info("Found similar named activity with a score: " + scoreDoc.score + " Title: "
+						+ activityWithIdAndTitle.getName() + " Id: " + activityWithIdAndTitle.getAmpId());
+				activityTitles.add(activityWithIdAndTitle);
             }
 
             return activityTitles;

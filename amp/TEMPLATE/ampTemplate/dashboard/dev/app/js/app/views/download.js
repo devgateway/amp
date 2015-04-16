@@ -223,6 +223,11 @@ module.exports = BackboneDash.View.extend({
         .attr('href', stuff)
         .attr('download', fileName);
     }
+    
+    // AMP-19813
+    if (ext.indexOf('csv') !== -1) {
+    	$('.modal-preview-area').remove();
+    }
   }
 
 });

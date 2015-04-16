@@ -105,7 +105,6 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 	// TODO: after we are sure tab's default filters are EXACTLY the same than
 	// widget filters we can simplify these 2 methods into just one.
 	FilterUtils.updateFiltersRegion = function(filtersFromWidgetWithNames) {
-		// First we cleanup current values.
 		app.TabsApp.filters.models = [];
 		app.TabsApp.dynamicContentRegion.currentView.filters.currentView.render();
 
@@ -120,47 +119,38 @@ define([ 'models/filter', 'collections/filters', 'business/translations/translat
 						auxItem.name = item.get('name');
 						content.push(auxItem);
 					} else {
-						console.error(auxItem + " not mapped, we need to check why is not a model.");
+						console.error(JSON.stringify(auxItem) + " not mapped, we need to check why is not a model.");
 					}
 				});
+				var name = TranslationManager.getTranslated(auxProperty.filterName) || TranslationManager.getTranslated(propertyName)
 				var filter = new Filter({
-					trnName : TranslationManager.getTranslated(propertyName),
+					trnName : name,
 					name: propertyName,
 					values : content
 				});
-				// Update list collection of Filter used in legends.
 				app.TabsApp.filters.models.push(filter);
 			}
 		}
 		if (filtersFromWidgetWithNames.otherFilters != undefined) {
-		
 			for ( var propertyName in filtersFromWidgetWithNames.otherFilters) {
 				var dateContent = filtersFromWidgetWithNames.otherFilters[propertyName];
-				if (dateContent != undefined && dateContent.start != undefined) {
-					var prefix = "";
-					if (propertyName != 'date') {
-						prefix = propertyName + " - ";
-					}
+				if (dateContent != undefined
+						&& dateContent.start != undefined) {
 					var filter = new Filter({
-						trnName : TranslationManager.getTranslated(prefix + "Start Date"),
-						name: prefix + "Start Date",
+						trnName : TranslationManager.getTranslated(propertyName),
+						name : propertyName,
 						values : [ {
 							id : dateContent.start,
 							name : dateContent.start
-						} ]
-					});
-					app.TabsApp.filters.models.push(filter);
-					var filter = new Filter({
-						trnName : TranslationManager.getTranslated(prefix + "End Date"),
-						name: prefix + "End Date",
-						values : [ {
+						},
+						{
 							id : dateContent.end,
 							name : dateContent.end
-						} ]
+						}]
 					});
 					app.TabsApp.filters.models.push(filter);
+				}
 			}
-		 }
 		}
 		app.TabsApp.dynamicContentRegion.currentView.filters.currentView.render();
 	};

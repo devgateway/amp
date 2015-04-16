@@ -249,32 +249,28 @@ public class Filters {
 	@Path("/programs")
 	@Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 	@ApiMethod(ui = true, name = "Programs", id = "Programs")
-	
 	public List<SimpleJsonBean> getPrograms() {
 		List<SimpleJsonBean> programs = new ArrayList<SimpleJsonBean>();
 		try {
 			Set<String> visibleColumns = ColumnsVisibility.getVisibleColumns();
-			
+
 			for (Object p : ProgramUtil.getAmpActivityProgramSettingsList()) {
-				
-				AmpActivityProgramSettings program=(AmpActivityProgramSettings)p;
-				final String columnName = ProgramUtil.NAME_TO_COLUMN_MAP
-						.get(program.getName()); 
-				//only add if its enabled 
-				if (visibleColumns.contains(columnName)){
-					programs.add( new SimpleJsonBean(program.getAmpProgramSettingsId(),
-							program.getName()) );
+				AmpActivityProgramSettings program = (AmpActivityProgramSettings) p;
+				final String columnName = ProgramUtil.NAME_TO_COLUMN_MAP.get(program.getName());
+				// only add if its enabled
+				if (visibleColumns.contains(columnName)) {
+					SimpleJsonBean bean = new SimpleJsonBean(program.getAmpProgramSettingsId(), TranslatorWorker.translateText(program.getName()));
+					bean.setFilterId(program.getName());
+					programs.add(bean);
 				}
-				
 			}
 			return programs;
 		} catch (DgException e) {
-			logger.error("cannot get program list",e);
+			logger.error("cannot get program list", e);
 			return programs;
 		}
-
-		
 	}
+	
 	/**
 	 * Return org types with its orgs groups
 	 * 
@@ -380,9 +376,11 @@ public class Filters {
 	public SimpleJsonBean getPrograms(@PathParam("programId") Long programId) {
 		try {
 			AmpActivityProgramSettings npd = ProgramUtil.getAmpActivityProgramSettings(programId);
-			
+
 			if (npd != null && npd.getDefaultHierarchy() != null) {
-				return getPrograms(npd.getDefaultHierarchy(),npd.getName(),0);
+				SimpleJsonBean bean = getPrograms(npd.getDefaultHierarchy(), npd.getName(), 0);
+				bean.setFilterId(npd.getName());
+				return bean;
 			} else {
 				return new SimpleJsonBean();
 			}

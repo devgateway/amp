@@ -109,13 +109,16 @@ module.exports = BackboneDash.View.extend({
     var filters = this.app.filter.serializeToModels();
     var applied = _(filters.columnFilters).map(function(filter, key) {
       return {
-        name: key,
+        name: filter.filterName || key,
         id: key.replace(/[^\w]/g, ''),  // remove anything non-alphanum
         detail: _(filter).map(function(value) {
         	if (value.attributes !== undefined) {
         		return value.get('name');
-        	} else {
-        		return '';
+        	} else {       		
+        		// To fix problem with dates.
+        		if (value !== key && value !== filter.filterName) {
+        			return value;
+        		}
         	}
         })
       };

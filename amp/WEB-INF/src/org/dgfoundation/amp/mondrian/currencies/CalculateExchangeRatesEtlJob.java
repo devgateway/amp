@@ -84,9 +84,9 @@ public class CalculateExchangeRatesEtlJob {
 			if (!destTableColumns.contains(cag.prefix + "amount_base_currency")) {
 				monetConn.executeQuery(String.format("ALTER TABLE %s ADD %s DOUBLE", cag.destinationTable, cag.prefix + "amount_base_currency"));
 			}
-			monetConn.executeQuery(String.format("UPDATE %s SET %samount_base_currency = COALESCE("
-					+ "%stransaction_amount * (select mer.exchange_rate from mondrian_exchange_rates mer WHERE mer.day_code = %s.%sdate_code AND mer.currency_id = %s.%scurrency_id), %s) %s",
-					cag.destinationTable, cag.prefix, cag.prefix, cag.destinationTable, cag.prefix, cag.destinationTable, cag.prefix, MoConstants.UNDEFINED_AMOUNT_STR,
+			monetConn.executeQuery(String.format("UPDATE %s SET %samount_base_currency = "
+					+ "%stransaction_amount * (select mer.exchange_rate from mondrian_exchange_rates mer WHERE mer.day_code = %s.%sdate_code AND mer.currency_id = %s.%scurrency_id) %s",
+					cag.destinationTable, cag.prefix, cag.prefix, cag.destinationTable, cag.prefix, cag.destinationTable, cag.prefix,
 					condition));
 			for (long currId:currencyIds) {
 				String query = String.format(

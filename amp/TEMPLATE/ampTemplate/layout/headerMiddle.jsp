@@ -86,6 +86,11 @@ function SwitchLanguageMenu(value) {
 		selectedLevelId=0; 
 		window.location.href="/aim/addActivity.do~pageId=1~reset=true~resetMessages=true~action=create~activityLevelId="+selectedLevelId;	
 	}
+	
+	function openGIS() {
+		openNewWindowWithMenubar(1100, 800);
+		popupPointer.location.href = "/gis/showGisDashboard.do";
+	}
 
 function addMessage(fillTypesAndLevels) {
 	window.location.href="/message/messageActions.do?editingMessage=false&actionType="+fillTypesAndLevels;

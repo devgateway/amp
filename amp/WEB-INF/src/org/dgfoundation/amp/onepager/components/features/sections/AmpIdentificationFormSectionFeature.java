@@ -160,8 +160,8 @@ implements AmpRequiredComponentContainer{
                 }
 
                 ServletContext context = ((WebApplication) Application.get())
-                        .getServletContext();
-
+                        .getServletContext();	
+                logger.info("Searching similar activity name for activity: "+ sTitle);
                 // change this NULL to langCode in 2.10
                 // for now it works equally for both multilingual and non-multilingual activities
                 List<AmpActivity> list = LuceneUtil.findActivitiesMoreLikeThis(
@@ -186,7 +186,9 @@ implements AmpRequiredComponentContainer{
                         if (activityId == null || (activity.getAmpId() != null
                                 && activityId.longValue() != Long.valueOf(activity.getAmpId()).longValue())) {
                             moreThanSelf = true;
-                            ret += " - " + activity.getName() + "\n";
+							logger.info("There is a similiarity match!. Current activity id: " + activityId
+									+ " Match activity id " + activity.getAmpId());
+							ret += " - " + activity.getName() + "\n";
                         }
                     if (moreThanSelf) {
                         return ret;

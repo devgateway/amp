@@ -338,7 +338,7 @@ public final class MoConstants {
 	
 	/** 
 	 * Undefined amount as minimum value supported by MonetDB, that is almost "-Double.MAX_VALUE".
-	 * Must be defined explicitly instead of null to help MonetDB joins succeed. 
+	 * Must be defined explicitly instead of null, otherwise measures data will also be empty even if it exists.
 	 * */ 
 	public static final String UNDEFINED_AMOUNT_STR = "-1.7976931348623155E308";
 	

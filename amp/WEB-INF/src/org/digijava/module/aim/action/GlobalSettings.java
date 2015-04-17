@@ -127,7 +127,7 @@ public class GlobalSettings extends Action {
 	    	ServletContext ampContext = this.getServlet().getServletContext();
 	    	
 			AmpTreeVisibility ampTreeVisibility=new AmpTreeVisibility();
-			AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateById(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE));
+			AmpTemplatesVisibility currentTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
 	    	ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 	    	FeaturesUtil.setAmpTreeVisibility(ampContext, session,ampTreeVisibility);
 	    	

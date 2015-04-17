@@ -185,4 +185,6 @@ public class GlobalSettingsConstants {
     public static final String ONLY_SAIKU_FOR_DONOR_REPORTS = "Use only Saiku for donor reports";
     
     public static final String MAX_LOCATIONS_ICONS = "Show icons for Project Sites for locations up to";
+    
+    public static final String REPORT_WIZARD_VISIBILITY_SOURCE = "Report wizard visibility source";
 }

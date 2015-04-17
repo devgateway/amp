@@ -150,8 +150,7 @@ public class VisibilityManagerExportHelper {
 	 * 
 	 * @param vtemplate
 	 */
-	
-	public void InportFm(VisibilityTemplates vtemplate) {
+	public void ImportFm(VisibilityTemplates vtemplate) {
 		Session hbsession;
 		try {
 			hbsession = PersistenceManager.getRequestDBSession();
@@ -164,11 +163,11 @@ public class VisibilityManagerExportHelper {
 			for (Iterator vtemplateiter = vtemplate.getTemplate().iterator(); vtemplateiter.hasNext();) {
 				TemplateType xmltemplate = (TemplateType) vtemplateiter.next();
 				String templatename = xmltemplate.getName()+"-"+ myFormatter.format(new Date());
-				currenttemplate = FeaturesUtil.getTemplateById(FeaturesUtil.insertreturnTemplate(templatename,hbsession));
+				currenttemplate = FeaturesUtil.getTemplateById(FeaturesUtil.insertreturnTemplate(templatename));
 				
 				
 				AmpTreeVisibility modeltree = new AmpTreeVisibility();
-				modeltree.buildAmpTreeVisibilityMultiLevel(FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),hbsession));
+				modeltree.buildAmpTreeVisibilityMultiLevel(FeaturesUtil.getDefaultAmpTemplateVisibility());
 				currenttemplate.setItems(new TreeSet());
 				currenttemplate.setFeatures(new TreeSet());
 				currenttemplate.setFields(new TreeSet());
@@ -246,8 +245,6 @@ public class VisibilityManagerExportHelper {
 				FeaturesUtil.updateAmpFieldsTreeVisibility(fields, currenttemplate.getId(), hbsession);
 			}
 		} catch (HibernateException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}

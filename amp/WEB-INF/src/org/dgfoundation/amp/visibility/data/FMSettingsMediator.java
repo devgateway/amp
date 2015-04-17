@@ -26,7 +26,7 @@ public class FMSettingsMediator {
 	public static final String FMGROUP_DASHBOARDS = "DASHBOARDS";
 	public static final String FMGROUP_MENU = "MENU";
 
-	/** stores all fm groups classes that are manageble via this proxy */
+	/** stores all fm groups classes that are manageable via this proxy */
 	private static Map<String, Class<? extends FMSettings>> registeredFMGroups = initFMGroups();
 	
 	/** stores all instances of fm settings per template */
@@ -63,7 +63,7 @@ public class FMSettingsMediator {
 	}
 	
 	/**
-	 * Identify the template group & create it if doesn't exists yet
+	 * Identify the template group & create it if doesn't exist yet
 	 * @param id
 	 * @return
 	 */
@@ -83,8 +83,7 @@ public class FMSettingsMediator {
 	 * @param fmGroupName
 	 * @return
 	 */
-	synchronized
-	private static FMSettings getFMSettings(Map<String, FMSettings> templateGroup, String fmGroupName) {
+	synchronized private static FMSettings getFMSettings(Map<String, FMSettings> templateGroup, String fmGroupName) {
 		FMSettings fmGroup = templateGroup.get(fmGroupName);
 		if (fmGroup == null) {
 			Class<? extends FMSettings> clazz = registeredFMGroups.get(fmGroupName);

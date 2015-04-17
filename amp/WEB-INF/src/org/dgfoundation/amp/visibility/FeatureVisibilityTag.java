@@ -5,7 +5,6 @@
  */
 package org.dgfoundation.amp.visibility;
 
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
@@ -20,7 +19,6 @@ import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.kernel.exception.*;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.gateperm.core.GatePermConst;
 import org.digijava.module.gateperm.util.PermissionUtil;
@@ -36,6 +34,8 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 	 */
 	private static final long serialVersionUID = 1296936554150626082L;
 	private static Logger logger = Logger.getLogger(FeatureVisibilityTag.class);
+	private static Object syncObj = new Object();
+	
 	private String name;
 	private String module;
 	private String enabled;
@@ -58,68 +58,63 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 	 */
 	public FeatureVisibilityTag() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
+	@Override
 	public int doStartTag() throws JspException {
-		
-	  ServletContext ampContext=pageContext.getServletContext();
- 	  AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, pageContext.getSession());
- try{
-	 String cache=(String) ampContext.getAttribute("FMcache");
-//	   if(cache==null || cache=="" || "read".compareTo(cache)==0) ;
-//	   else
-//	   if("readwrite".compareTo(cache)==0)
-//	   {
-		   //logger.info("	Feature visibility: cache is in writing mode...");
-		   if(ampTreeVisibility!=null){
-				 if(!existModule(ampTreeVisibility)) return SKIP_BODY;
+		return doTag(pageContext.getServletContext(), pageContext.getSession(), FeaturesUtil.getAmpTreeVisibility(pageContext.getServletContext(), pageContext.getSession()));
+	}
+	
+	public int doTag(ServletContext ampContext, HttpSession session, AmpTreeVisibility ampTreeVisibility) {
+		if (ampTreeVisibility == null)
+			return EVAL_BODY_BUFFERED; // does this make sense? reproducing old behaviour
 
-	 		   if(!existFeatureinDB(ampTreeVisibility)){
-	 			  synchronized (this) {
-	 				  if(FeaturesUtil.getFeatureVisibility(name)==null)
-	 				  {
-	                    AmpModulesVisibility moduleByNameFromRoot = ampTreeVisibility.getModuleByNameFromRoot(this.getModule());
-	                    Long id=null;
-	                    if(moduleByNameFromRoot!=null){
-	                       id = moduleByNameFromRoot.getId();
-	                       try {	
-	                    	   if(FeaturesUtil.getFeatureVisibility(this.getName())!=null)
-		   			        	{
-		   			        		FeaturesUtil.updateFeatureWithModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getModule()).getId(),this.getName());
-		   			        	}
-		   			        	else    
-	                    	   		FeaturesUtil.insertFeatureWithModuleVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName(), this.getHasLevel());
-		                            AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-		                            ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-		                            FeaturesUtil.setAmpTreeVisibility(ampContext, pageContext.getSession(),ampTreeVisibility);
-	                           	}
-	                           	catch (DgException ex) {throw new JspException(ex);}
-	                     }
-	                    else {
-	                    	logger.debug("Feature: "+this.getName() + " has the parent: "+this.getModule()+ " which doesn't exist in DB");
-	                    	return SKIP_BODY;
-	                    }
-	 				  }
-	 			  }
-	 		   }
-		   }
-		   ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(ampContext, pageContext.getSession());
-		   
-		   if(ampTreeVisibility!=null)
-	   		   if(!isModuleTheParent(ampTreeVisibility)){
-				   
-				   FeaturesUtil.updateFeatureWithModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getModule()).getId(),this.getName());
-				   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-	   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-	   			   FeaturesUtil.setAmpTreeVisibility(ampContext, pageContext.getSession(),ampTreeVisibility);
-			   }
-//	   }
-	   
- 	   
- 	}catch (Exception e) {e.printStackTrace();}
-	   
-		return EVAL_BODY_BUFFERED;//super.doStartTag();
+		if (!existModule(ampTreeVisibility)) return SKIP_BODY;
+
+		if (!existFeatureinDB(ampTreeVisibility)) {
+			boolean addResult = addFeatureToDb(ampTreeVisibility, ampContext, session);
+			if (!addResult)
+				return SKIP_BODY;
+		}
+				
+   	   if (!isModuleTheParent(ampTreeVisibility)) {
+   		   FeaturesUtil.updateFeatureWithModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getModule()).getId(),this.getName());
+   		   AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+   		   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+   		   FeaturesUtil.setAmpTreeVisibility(ampContext, session, ampTreeVisibility);
+   	   }
+   	   return EVAL_BODY_BUFFERED;		
+	}
+	
+	/**
+	 * returns false if asked to add a feature under a non-existing module
+	 * @param ampTreeVisibility
+	 * @return
+	 */
+	protected boolean addFeatureToDb(AmpTreeVisibility ampTreeVisibility, ServletContext ampContext, HttpSession session) {
+		synchronized (syncObj) {
+			if (FeaturesUtil.getFeatureVisibility(name) == null) {
+				AmpModulesVisibility moduleByNameFromRoot = ampTreeVisibility.getModuleByNameFromRoot(this.getModule());
+				Long id = null;
+				if (moduleByNameFromRoot != null) {
+                   id = moduleByNameFromRoot.getId();
+                   if (FeaturesUtil.getFeatureVisibility(this.getName()) != null) {
+                	   FeaturesUtil.updateFeatureWithModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getModule()).getId(),this.getName());
+                   }
+                   else {    
+                	   FeaturesUtil.insertFeatureWithModuleVisibility(ampTreeVisibility.getRoot().getId(),id, this.getName(), this.getHasLevel());
+                   }
+                   AmpTemplatesVisibility currentTemplate = (AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+                   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+                   FeaturesUtil.setAmpTreeVisibility(ampContext, session, ampTreeVisibility);
+				}
+				else {
+					logger.debug("Feature: "+this.getName() + " has the parent: "+this.getModule()+ " which doesn't exist in DB");
+					return false;
+				}
+			}
+			return true;
+		}
 	}
 	
 	public boolean shouldDisplayFeature() throws JspTagException

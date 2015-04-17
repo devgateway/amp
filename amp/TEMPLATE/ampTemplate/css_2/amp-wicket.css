@@ -562,3 +562,42 @@ tr.wicketFundingRowItem:nth-child(odd) {background: #FFFFFF}
 	width: 0px;
 	overflow: hidden;
 }
+
+#uploadBtn {
+	/* IMPORTANT STUFF */
+	overflow: hidden;
+	position: relative;
+	cursor: pointer;
+	/* SOME CUSTOM STYLING */
+	width: 100px;
+	padding: 2px;
+	text-align: center;
+	vertical-align: middle;
+	border: 1px solid green;
+	font-weight: bold;
+}
+
+#uploadBtn:hover {
+	background: #83D847;
+	color: black;
+}
+
+#upfile {
+	height: 30px;
+	cursor: pointer;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	font-size: 100px;
+	z-index: 2;
+	opacity: 0.0; /* Standard: FF gt 1.5, Opera, Safari */
+	filter: alpha(opacity = 0); /* IE lt 8 */
+	-ms-filter: "alpha(opacity=0)"; /* IE 8 */
+	-khtml-opacity: 0.0; /* Safari 1.x */
+	-moz-opacity: 0.0; /* FF lt 1.5, Netscape */
+}
+
+#chooseFileLabel {
+	position: relative;
+	top: -11px;
+}

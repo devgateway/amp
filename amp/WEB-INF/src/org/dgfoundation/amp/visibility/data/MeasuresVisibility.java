@@ -3,6 +3,7 @@
  */
 package org.dgfoundation.amp.visibility.data;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -15,16 +16,18 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.ArConstants;
-import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
-import org.dgfoundation.amp.visibility.data.DataVisibility.DataMapType;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
+import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
 import org.digijava.module.categorymanager.util.CategoryManagerUtil;
+
+import clover.com.google.common.collect.Sets;
 
 /**
  * Detects which measures are visible in Activity Form and can be further used, 
@@ -32,56 +35,143 @@ import org.digijava.module.categorymanager.util.CategoryManagerUtil;
  * @author Alexandru Cartaleanu
  */
 public class MeasuresVisibility extends DataVisibility implements FMSettings {
-	protected static final Logger logger = Logger.getLogger(MeasuresVisibility.class);	
-
+	protected static final Logger logger = Logger.getLogger(MeasuresVisibility.class);
+	
+	protected final static String CAPITAL_SPENDING_PERCENTAGE_ID_NAME = "Capital";
+	protected final static String ANNUAL_PROPOSED_PROJECT_COST_ID_NAME = "AnnualPropProjCost";
+	protected final static String DIRECTED_DISBURSEMENTS_ID_NAME = "DirectedDisbursements";
+	protected final static String PROPOSED_PROJECT_COST_ID_NAME = "ProposedProjectCost";
+	protected final static Map<String, String> fieldsToMeasuresMap = new HashMap<String, String>();
+	protected final static String ADJUSTMENT_PREFIX = "adjustment_type: ";
+	
+	public MeasuresVisibility() {
+		System.out.println("mwahaha");
+	}
+	
 	@SuppressWarnings("serial")
+	/**
+	 * Map<FM Module full path, name of said path as an Element>
+	 */
 	protected static final Map<String, String> modulesToMeasuresMap = new HashMap<String, String>() {{
 		for(String transactionName:ArConstants.TRANSACTION_TYPE_NAME_TO_ID.keySet())
 			put("/Activity Form/Funding/Funding Group/Funding Item/" + transactionName, transactionName);
-			put("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Capital Spending Percentage", "Capital");
+			put("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Capital Spending Percentage", CAPITAL_SPENDING_PERCENTAGE_ID_NAME);
+			put("/Activity Form/Funding/Proposed Project Cost/Annual Proposed Project Cost/Add Projection", ANNUAL_PROPOSED_PROJECT_COST_ID_NAME);
+			put("/Activity Form/Funding/Proposed Project Cost/Amount", PROPOSED_PROJECT_COST_ID_NAME);
+			put("/Activity Form/Funding/Funding Group/Funding Item/Disbursements/Disbursements Table/Recipient Organization", DIRECTED_DISBURSEMENTS_ID_NAME);
 	}};
 	
 	@SuppressWarnings("serial")
-	private static final Set<String> allPossibleValuesSet = new HashSet<String>() {{
+	/**
+	 * Map<Measure_Name, List<Elements it depends on>>
+	 */
+	public static final Map<String, Collection<String>> measuresCustomDependencies = new HashMap<String, Collection<String>>() {{
+		//Collection<AmpCategoryValue> adjustmentTypes = new ArrayList<AmpCategoryValue>(); 
 		for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
-			for (String trans: modulesToMeasuresMap.values()) {
-				add(adj.getLabel() + " " + trans);
+			for (final String trType: ArConstants.TRANSACTION_TYPE_NAME_TO_ID.keySet()) {
+				put(adj.getValue() + " " + trType, Arrays.asList(trType, ADJUSTMENT_PREFIX + adj.getValue()));
 			}
 		}
+		put(MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL, Arrays.asList(ArConstants.DISBURSEMENT, CAPITAL_SPENDING_PERCENTAGE_ID_NAME, ADJUSTMENT_PREFIX + "Actual"));
+		put(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT, Arrays.asList(ArConstants.DISBURSEMENT, CAPITAL_SPENDING_PERCENTAGE_ID_NAME, ADJUSTMENT_PREFIX + "Actual"));
+		put(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL, Arrays.asList(ArConstants.DISBURSEMENT, CAPITAL_SPENDING_PERCENTAGE_ID_NAME, ADJUSTMENT_PREFIX + "Planned"));
+		put(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE, Arrays.asList(ArConstants.DISBURSEMENT, CAPITAL_SPENDING_PERCENTAGE_ID_NAME, ADJUSTMENT_PREFIX + "Planned"));
+		put(MeasureConstants.ANNUAL_PROPOSED_PROJECT_COST, Arrays.asList(ANNUAL_PROPOSED_PROJECT_COST_ID_NAME));
+		put(MeasureConstants.PLEDGES_COMMITMENT_GAP, Arrays.asList(ArConstants.COMMITMENT, MeasureConstants.PLEDGES_ACTUAL_PLEDGE, ADJUSTMENT_PREFIX + "Actual"));
+		put(MeasureConstants.CONSUMPTION_RATE, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", ADJUSTMENT_PREFIX + "Planned"));
+		put(MeasureConstants.CUMULATED_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
+		put(MeasureConstants.DISBURSMENT_RATIO, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));		
+		put(MeasureConstants.EXECUTION_RATE, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", ADJUSTMENT_PREFIX + "Planned"));
+		put(MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", MeasureConstants.PLEDGES_ACTUAL_PLEDGE));
+		put(MeasureConstants.PERCENTAGE_OF_TOTAL_COMMITMENTS, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual"));
+		put(MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
+		put(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual"));
+		put(MeasureConstants.REAL_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Actual", DIRECTED_DISBURSEMENTS_ID_NAME));
+		// skipping REAL_COMMITMENTS and REAL_MTEF, as could not find support for those in the AF
+		put(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS, Arrays.asList(ArConstants.DISBURSEMENT, ADJUSTMENT_PREFIX + "Planned"));
+		put(MeasureConstants.TOTAL_COMMITMENTS, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual"));
+		put(MeasureConstants.UNCOMMITTED_BALANCE, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual", PROPOSED_PROJECT_COST_ID_NAME));
+		put(MeasureConstants.UNDISBURSED_BALANCE, Arrays.asList(ArConstants.COMMITMENT, ADJUSTMENT_PREFIX + "Actual", ArConstants.DISBURSEMENT));
 	}};
-	
-	
-	@Override
-	protected Set<String> detectVisibleData() {
-		sanityCheck();
-		Set<String> visiblePrecursors = new HashSet<String>(); 
-		Set<String> invisiblePrecursors = new HashSet<String>(getAllPrecursors());
-		Set<String> visibleData = new HashSet<String>(); 
-		Set<String> invisibleData = new HashSet<String>(getAllData());
-		AmpTemplatesVisibility currentTemplate = FeaturesUtil.getCurrentTemplate();
 
-		//check modules
-		List<AmpModulesVisibility> modules = FeaturesUtil.getAmpModulesVisibility(getDataMap(DataMapType.MODULES).keySet(), currentTemplate.getId());
-		processVisbleObjects(modules, getDataMap(DataMapType.MODULES), visiblePrecursors, invisiblePrecursors);
+	@SuppressWarnings("serial")
+	public static final Set<String> allMeasures = Collections.unmodifiableSet(new HashSet<String>(PersistenceManager.getSession().createSQLQuery("select distinct(measurename) from amp_measures").list()));	
+	
+	/**
+	 * this should be {@link #detectVisibleData()} in case AF is taken into account
+	 * @return
+	 */
+	public Set<String> detectVisibleData_AF(long visibilityTemplateId) {
+		sanityCheck();
+		Set<String> visiblePrecursors = new HashSet<String>(); // Measure Names
+		Set<String> visibleData = new HashSet<String>(); // Measure Names
+		Set<String> invisibleData = new HashSet<String>(getAllData()); // Measure Names
+
+		Set<String> invisiblePrecursors = new HashSet<String>(); // Measure Names
+		List<AmpModulesVisibility> modules = FeaturesUtil.getAmpModulesVisibility(modulesToMeasuresMap.keySet(), visibilityTemplateId);
+		splitObjectsByVisibility(modules, modulesToMeasuresMap, visiblePrecursors, invisiblePrecursors);
 		
-		List<AmpFeaturesVisibility> features = FeaturesUtil.getAmpFeaturesVisibility(getDataMap(DataMapType.FEATURES).keySet(), currentTemplate.getId());
-		processVisbleObjects(features, getDataMap(DataMapType.FEATURES), visibleData, invisibleData);
-		
-		visiblePrecursors.addAll(getVisibleByDefault());
+		visiblePrecursors.addAll(getVisibleAdjustments());
 		
 		Map<String, Collection<String>> allDependenciesMap = getDependancyMapTypeAll();
-		if (allDependenciesMap != null && allDependenciesMap.size() > 0) {
-			for (Entry<String, Collection<String>> entry : allDependenciesMap.entrySet()) {
-				if (visiblePrecursors.containsAll(entry.getValue())) {
-					visibleData.add(entry.getKey());
-					invisibleData.remove(entry.getKey());
-				}
+		for (Entry<String, Collection<String>> entry : allDependenciesMap.entrySet()) {
+			if (visiblePrecursors.containsAll(entry.getValue())) {
+				visibleData.add(entry.getKey());
+				invisibleData.remove(entry.getKey());
 			}
 		}
-		logger.info("Not visible: " + invisibleData);
-		// avoid any tentative to change it  
 		return Collections.unmodifiableSet(visibleData);
+	}
 		
+	/**
+	 * this should be {@link #detectVisibleData()} in case FM is taken into account
+	 * @return
+	 */
+	protected Set<String> detectVisibleData_FM() {
+		Set<String> visibleData = new HashSet<String>(); // Measure Names
+		Set<String> invisibleData = new HashSet<String>(getAllData()); // Measure Names
+		AmpTemplatesVisibility currentTemplate = FeaturesUtil.getCurrentTemplate();
+		
+		List<AmpFeaturesVisibility> features = FeaturesUtil.getAmpFeaturesVisibility(allMeasures, currentTemplate.getId());
+		splitObjectsByVisibility(features, featuresToMeasuresMap, visibleData, invisibleData);
+		return Collections.unmodifiableSet(visibleData);
+	}
+
+	@Override
+	/**
+	 * uses a Global Settings to decide whether to use FM or AF to return a Set of measures which should be visible
+	 * @param visibilityEnum
+	 * @return
+	 */
+	public Set<String> detectVisibleData() {
+		String measVS = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.REPORT_WIZARD_VISIBILITY_SOURCE);
+		return detectVisibleData(Integer.parseInt(measVS));
+	}
+
+	/**
+	 * uses either FM or AF to return a Set of measures which should be visible
+	 * @param src - one of {@link VisibilitySourceEnum} codes
+	 * @return
+	 */
+	public Set<String> detectVisibleData(int src) {
+		long visibilityTemplateId = FeaturesUtil.getCurrentTemplateId();
+
+		switch(src) {
+			case VisibilitySourceEnum.ACTIVITY_FORM_VISIBILITY:
+				return detectVisibleData_AF(visibilityTemplateId);
+			
+			case VisibilitySourceEnum.FEATURE_MANAGER_VISIBILITY:
+				return detectVisibleData_FM();
+				
+			case VisibilitySourceEnum.FEATURE_MANAGER_AND_ACTIVITY_FORM_VISIBILITY:
+				return Sets.intersection(detectVisibleData_AF(visibilityTemplateId), detectVisibleData_FM()).immutableCopy();
+				
+			case VisibilitySourceEnum.FEATURE_MANAGER_OR_ACTIVITY_FORM_VISIBILITY:
+				return Sets.union(detectVisibleData_AF(visibilityTemplateId), detectVisibleData_FM()).immutableCopy();
+			
+			default:
+				throw new RuntimeException("unknown value in ReportWizardVisibilitySource: " + src);
+		}
 	}
 	
 	/**
@@ -90,97 +180,44 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 	synchronized public static Set<String> getVisibleMeasures() {
 		return FMSettingsMediator.getEnabledSettings(FMSettingsMediator.FMGROUP_MEASURES);
 	}
-
-	protected MeasuresVisibility() {
-	}
 	
 	@Override
 	public Set<String> getEnabledSettings() {
 		return getCurrentVisibleData();
 	}
-	
-	@SuppressWarnings("serial")
-	public static final Map<String, Collection<String>> dependencyMapTypeAll = new HashMap<String, Collection<String>>() {{
-		//Collection<AmpCategoryValue> adjustmentTypes = new ArrayList<AmpCategoryValue>(); 
-		for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
-			for (final String trType: ArConstants.TRANSACTION_TYPE_NAME_TO_ID.keySet()) {
-				put(adj.getValue() + " " + trType, new ArrayList<String>() {{  add(trType);}});
-			}
-		}
-		put(MeasureConstants.ACTUAL_DISBURSEMENTS_CAPITAL, new ArrayList<String>() {{     add(ArConstants.DISBURSEMENT); add("Capital"); add(ADJUSTMENT_PREFIX + "Actual"); }});
-		put(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT, new ArrayList<String>() {{   add(ArConstants.DISBURSEMENT); add("Capital"); add(ADJUSTMENT_PREFIX + "Actual"); }});
-		put(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL, new ArrayList<String>() {{    add(ArConstants.DISBURSEMENT); add("Capital"); add(ADJUSTMENT_PREFIX + "Planned"); }});
-		put(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE, new ArrayList<String>(){{ add(ArConstants.DISBURSEMENT); add("Capital"); add(ADJUSTMENT_PREFIX + "Planned"); }});
 		
-	}};
-	
 	@SuppressWarnings("serial")
+	// identity mapping
 	protected static final Map<String, String> featuresToMeasuresMap = new HashMap<String, String>() {{
-		//Add measures listed under measures features in the feature manager Reporting Section
-			put(MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT, MeasureConstants.ACTUAL_DISBURSEMENTS_RECURRENT);
-			put(MeasureConstants.BILATERAL_SSC_COMMITMENTS, MeasureConstants.BILATERAL_SSC_COMMITMENTS);
-			put(MeasureConstants.CONSUMPTION_RATE, MeasureConstants.CONSUMPTION_RATE);
-			put(MeasureConstants.CUMULATED_DISBURSEMENTS, MeasureConstants.CUMULATED_DISBURSEMENTS);
-			put(MeasureConstants.DISBURSMENT_RATIO, MeasureConstants.DISBURSMENT_RATIO);
-			put(MeasureConstants.EXECUTION_RATE, MeasureConstants.EXECUTION_RATE);
-			put(MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS, MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS);
-			put(MeasureConstants.PIPELINE_COMMITMENTS, MeasureConstants.OFFICIAL_DEVELOPMENT_AID_COMMITMENTS);
-			put(MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL, MeasureConstants.PLANNED_DISBURSEMENTS_CAPITAL);
-			put(MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE, MeasureConstants.PLANNED_DISBURSEMENTS_EXPENDITURE);
-			put(MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS, MeasureConstants.PREVIOUS_MONTH_DISBURSEMENTS);
-			put(MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS, MeasureConstants.PRIOR_ACTUAL_DISBURSEMENTS);
-			put(MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS,MeasureConstants.SELECTED_YEAR_PLANNED_DISBURSEMENTS);
-			put(MeasureConstants.TOTAL_COMMITMENTS, MeasureConstants.TOTAL_COMMITMENTS);
-			put(MeasureConstants.TRIANGULAR_SSC_COMMITMENTS, MeasureConstants.TRIANGULAR_SSC_COMMITMENTS);
-			put(MeasureConstants.UNCOMMITTED_BALANCE, MeasureConstants.UNCOMMITTED_BALANCE);
-			put(MeasureConstants.UNDISBURSED_BALANCE, MeasureConstants.UNDISBURSED_BALANCE);
-			put(MeasureConstants.REAL_DISBURSEMENTS, MeasureConstants.REAL_DISBURSEMENTS);
-			put(MeasureConstants.REAL_COMMITMENTS, MeasureConstants.REAL_COMMITMENTS);
-			put(MeasureConstants.REAL_MTFS, MeasureConstants.REAL_MTFS);
-			
-			put(MeasureConstants.PIPELINE_ESTIMATED_DISBURSEMENTS, MeasureConstants.PIPELINE_ESTIMATED_DISBURSEMENTS);
-			put(MeasureConstants.PIPELINE_RELEASE_OF_FUNDS, MeasureConstants.PIPELINE_RELEASE_OF_FUNDS);
-			put(MeasureConstants.PLEDGES_ACTUAL_COMMITMENTS, MeasureConstants.PLEDGES_ACTUAL_COMMITMENTS);
-			put(MeasureConstants.PLEDGES_ACTUAL_DISBURSEMENTS, MeasureConstants.PLEDGES_ACTUAL_DISBURSEMENTS);
-			put(MeasureConstants.PLEDGES_ACTUAL_PLEDGE, MeasureConstants.PLEDGES_ACTUAL_PLEDGE);
-			put(MeasureConstants.PLEDGES_COMMITMENT_GAP, MeasureConstants.PLEDGES_COMMITMENT_GAP);
-			put(MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT,MeasureConstants.PLEDGES_PERCENTAGE_OF_DISBURSEMENT);
-			put(MeasureConstants.PLEDGES_PLANNED_COMMITMENTS, MeasureConstants.PLEDGES_PLANNED_COMMITMENTS);
-			put(MeasureConstants.PLEDGES_PLANNED_DISBURSEMENTS, MeasureConstants.PLEDGES_PLANNED_DISBURSEMENTS);
-		
+		for(String measureName:allMeasures)
+			put(measureName, measureName);
 	}};
-	
-	protected static final Map<String, String> fieldsToMeasuresMap = new HashMap<String, String>();
-	protected final static String ADJUSTMENT_PREFIX = "adjustment_type: ";
-
-	@Override
-	protected List<String> getVisibleByDefault() {
-		List<String> currentlyVisible = new ArrayList<>();
 		
+	/**
+	 * computes a list of Elements which contain the adjustments which exist in the system
+	 * @return
+	 */
+	protected List<String> getVisibleAdjustments() {
+		List<String> currentlyVisible = new ArrayList<>();
 		for (AmpCategoryValue adj: CategoryManagerUtil.getAmpCategoryValueCollectionByKeyExcludeDeleted(CategoryConstants.ADJUSTMENT_TYPE_KEY)) {
 				currentlyVisible.add(ADJUSTMENT_PREFIX + adj.getValue());
 		}
 		return currentlyVisible;
 	}
 
-	
-	protected Collection<String> getAllPrecursors() {
-		return MeasuresVisibility.modulesToMeasuresMap.keySet();
-	}	
-	
 	@Override
 	protected Set<String> getAllData() {
-		return allPossibleValuesSet;
+		return allMeasures;
 	}
 	
 	@Override
 	protected Map<String, String> getDataMap(DataMapType dataMapType) {
 		switch(dataMapType) {
-		case MODULES: return modulesToMeasuresMap; 
-		case FEATURES: return featuresToMeasuresMap;
-		case FIELDS: return fieldsToMeasuresMap;
-		case DEPENDENCY: return new HashMap<String, String>();
-		default: return null; //shouldn't come here
+			case MODULES: return modulesToMeasuresMap; 
+			case FEATURES: return featuresToMeasuresMap;
+			case FIELDS: return fieldsToMeasuresMap;
+			case DEPENDENCY: return new HashMap<String, String>();
+			default: throw new RuntimeException("unknown dataMapType: " + dataMapType);
 		}
 	}
 
@@ -191,7 +228,12 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 
 	@Override
 	protected Map<String, Collection<String>> getDependancyMapTypeAll() {
-		return dependencyMapTypeAll;
+		return measuresCustomDependencies;
+	}
+
+	@Override
+	protected List<String> getVisibleByDefault() {
+		return new ArrayList<>();
 	}
 	
 }

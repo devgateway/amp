@@ -239,14 +239,13 @@ public class AMPStartupListener extends HttpServlet implements
 				ampContext.setAttribute(Constants.DEF_FLAG_EXIST, new Boolean(true));
 
 			AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
-			// get the default amp template!!!
-			Session session = PersistenceManager.getSession();
-
-			AmpTemplatesVisibility currentTemplate = FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE), session);
+			// get the default amp template
+			AmpTemplatesVisibility currentTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
 			ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 			FeaturesUtil.setAmpTreeVisibility(ampContext, null, ampTreeVisibility);
 
 			ampContext.setAttribute("FMcache", "read");
+			new RecreateFMEntries().doIt(ampContext);
 
 			// currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility
 			// Template"),session);

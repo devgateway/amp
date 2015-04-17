@@ -45,7 +45,6 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 	protected final static String ADJUSTMENT_PREFIX = "adjustment_type: ";
 	
 	public MeasuresVisibility() {
-		System.out.println("mwahaha");
 	}
 	
 	@SuppressWarnings("serial")

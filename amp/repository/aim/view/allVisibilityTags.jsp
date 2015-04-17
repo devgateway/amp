@@ -334,7 +334,6 @@
 <!-- create entries for each and every available measure -->
 <%
 	pageContext.setAttribute("allMeasuresList", MeasuresVisibility.allMeasures);
-	System.out.println("hahaha");	
 %>
 <logic:iterate id="measureName" name="allMeasuresList" scope="page" type="java.lang.String">
 	<feature:display name="${measureName}" module="Measures"></feature:display>

@@ -40,7 +40,6 @@
 		<ul id="dhtmlgoodies_tree" class="DHTMLSuite_tree">
 			<bean:define name="aimReportWizardForm" property="ampTreeColumns" id="ampTreeColumns" type="java.util.Map"  toScope="page"/>
 			<li noDrag="true">
-				<!--<input type=checkbox id="root" name="root" value="root" onclick="checkUncheckAll3();"/>-->
 				<a id="1" style="font-size: 12px;color:#0e69b3;text-decoration:none"><digi:trn key="aim:report:AMP" >AMP</digi:trn></a>
 				<ul class="nodragul" style="margin-left: 0px;" >
 					<logic:iterate name="ampTreeColumns" id="ampTreeColumn" type="java.util.Map.Entry" >
@@ -74,5 +73,3 @@
 		</font>
 	</c:if>
 </p>
-
-<jsp:include page="../allVisibilityTags.jsp"></jsp:include>

@@ -5,7 +5,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-/*scheduler class for repeatedly invoking MonetBeholder to check server's status
+/**
+ * @author acartaleanu
+ * scheduler class for repeatedly invoking MonetBeholder to check server's status
  * if server is down, calls MonetStarter*/
 public class MonitorTimer {
 	private final ScheduledExecutorService scheduler;

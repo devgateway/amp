@@ -6,7 +6,10 @@ import javax.swing.SwingUtilities;
 
 public class StatusShowerGUI implements StatusShower {
 	
-/*status shower that updates the label in GUI*/	
+/**
+ * @author acartaleanu
+ * status shower that updates the label in GUI
+ */	
 	public void showStatus(final String  status) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override

@@ -1,7 +1,12 @@
 package monetmonitor;
 
+/**
+ * 
+ * @author acartaleanu
+ * Interface for showing messages (status, errors etc.)
+ *
+ */
 
-/*interface for abstractization of output method*/
 public interface StatusShower {
 	public void showStatus(String status) throws Exception;
 	public void start();

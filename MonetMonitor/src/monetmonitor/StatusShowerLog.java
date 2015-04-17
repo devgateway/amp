@@ -9,16 +9,11 @@ import java.util.Date;
 
 /**
  * 
- * @author llenterak
+ * @author acartaleanu
  * StatusShower outputting to log file
- * path to logfile in settings.conf 
+ * path to logfile should be specified in settings.conf 
  */
 public class StatusShowerLog implements StatusShower {
-	
-	
-	
-	public StatusShowerLog() {
-	}
 	
 	public void showStatus(String status) throws Exception {
 		FileWriter writer = new FileWriter(Constants.getLogfilePath(), true);
@@ -26,7 +21,6 @@ public class StatusShowerLog implements StatusShower {
 		writer.append(DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(now));
 		writer.append(status);
 		writer.append("\r\n");
-		
 		writer.close();		
 	}
 

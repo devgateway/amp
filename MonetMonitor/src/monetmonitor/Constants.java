@@ -5,7 +5,12 @@ import java.util.HashMap;
 
 import java.util.Map;
 
-
+/**
+ * 
+ * @author acartaleanu
+ * Class for keeping parameters extracted from settings.conf
+ *
+ */
 public class  Constants {
 	
 	public static Map<String, String> parametersMap = new HashMap<String, String>();
@@ -27,6 +32,7 @@ public class  Constants {
 	public static String getLogfilePath() {
 		return parametersMap.get("LOG_FILE_PATH");
 	}
+	
 	public static int getTimerDelay() {
 		//remove eventual trailing spaces
 		return Integer.parseInt(parametersMap.get("TIMER_DELAY").replaceAll(" ", ""));

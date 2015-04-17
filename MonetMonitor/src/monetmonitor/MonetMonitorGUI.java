@@ -7,7 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-/*
+/**
+ * @author acartaleanu
  * Swing window for displaying status
  * */
 public class MonetMonitorGUI {

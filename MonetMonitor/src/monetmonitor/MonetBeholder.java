@@ -25,10 +25,14 @@ public class MonetBeholder{
 		try {
 			Class.forName("nl.cwi.monetdb.jdbc.MonetDriver");
 		} catch(Exception exc) {
-			
 		}
-
 	}
+	/**
+	 * 
+	 * @param conn 
+	 * @param query 
+	 * @throws SQLException 
+	 */
 	void runSelect(Connection conn, String query) throws SQLException {
 		PreparedStatement ps = conn.prepareStatement(query, ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
 		try(ResultSet rs = ps.executeQuery()) {
@@ -37,8 +41,6 @@ public class MonetBeholder{
 				List<Object> res = new ArrayList<>();
 				for(int i = 0; i < nrColumns; i++)
 					res.add(rs.getObject(i + 1));
-//				if (res.size() > 100)
-//					System.out.println("should not happen");
 			}
 			rs.close();
 			ps.close();
@@ -46,15 +48,14 @@ public class MonetBeholder{
 			
 		}
 	}
-	
+	/**
+	 * runs a select that will always return something 
+	 * @throws SQLException
+	 */
 	void work() throws SQLException {
-//		String query = "select count(*) from (select distinct \"amp_org_id\" from \"mondrian_organizations_en\") as \"init\"";
 		String query = "select tables.name from tables";
-
-		
 		String url = "jdbc:monetdb://localhost/"+ Constants.getDbName();
 		runSelect(DriverManager.getConnection(url, "monetdb", "monetdb"), query);
-//		DriverManager.getConnection(url).close();
 	}
 	
 	/**

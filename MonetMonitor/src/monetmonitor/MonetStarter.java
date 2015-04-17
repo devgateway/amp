@@ -4,7 +4,8 @@ import java.io.BufferedReader;
 
 import java.io.InputStreamReader;
 
-/*
+/**
+ * @author acartaleanu
  * starts the server, based on Constants, eventually imported from settings.conf
  * runs the server in a separate thread for listening to output
  * doesn't start it if server already running 
@@ -58,8 +59,6 @@ public class MonetStarter {
 			try {
 				thread.join();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				//wtf, why do I need this
 				e.printStackTrace();
 			}
 			thread = new MonetThread();

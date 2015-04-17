@@ -3,7 +3,7 @@ package monetmonitor;
 
 /**
  * 
- * @author llenterak
+ * @author acartaleanu
  * Command line interface output 
  */
 public class StatusShowerCLI implements StatusShower {
@@ -13,8 +13,6 @@ public class StatusShowerCLI implements StatusShower {
 
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
-		
 	}
 }
  

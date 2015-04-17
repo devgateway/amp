@@ -10,7 +10,8 @@ import java.util.Map;
 public class MonetMain {
     
 
-/*
+/**
+ * @author acartaleanu
  * parses settings from settings.conf
  * settings are stored in a <name> <value> structure 
  * if parameter is not found, will write an error to stdout, but will still continue with defaults
@@ -41,19 +42,11 @@ public class MonetMain {
 		br.close();
 		for (Map.Entry<String, String> entry : parsedValues.entrySet()) {
 			Constants.parametersMap.put(entry.getKey(), entry.getValue());
-//			Constants.class.getField(entry.getKey()).set(null, entry.getValue());
 		}
 	}
 	
-	private static void parseArgs(String[] args) {
+	private static void initStatusShowers(String[] args) {
 		boolean nogui = Constants.getNoGui();
-//		for (String arg: args) {
-//			if (arg.equals("--nogui"))
-//				nogui = true;
-//		}
-//		nogui = true;
-		
-		
 		Utils.statusShowers.add(nogui ? new StatusShowerCLI() : new StatusShowerGUI());
 		Utils.logfile = new StatusShowerLog();
 		Utils.statusShowers.add(Utils.logfile);
@@ -63,9 +56,9 @@ public class MonetMain {
 	
 	public static void main(String[] args) throws Exception {
 		parseSettings();
-		parseArgs(args);
+		initStatusShowers(args);
     	int timer_delay = Constants.getTimerDelay();
-        System.out.println("Starting beholder with timer delay=" + timer_delay);
+    	Utils.broadcastStatus("Starting beholder with timer delay = "+ timer_delay);
     	MonitorTimer timer = new MonitorTimer(1, timer_delay);
     	timer.startTimer(new MonetBeholder(), new MonetStarter());
     }

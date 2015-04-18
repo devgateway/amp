@@ -718,7 +718,7 @@ $(document).ready(function() {
 						                                  									<bean:write name="report" property="ampReportId" />
 						                                								</c:set>
 																						<%
-																							if (report.isImplementedInMondrian() && !onlySaikuButton) {
+																							if (!report.isTab() && !onlySaikuButton) {
 																						%>
 																							<%@ include file="saiku_button.jspf" %> 
 																						<% } %>

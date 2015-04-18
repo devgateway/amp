@@ -364,6 +364,10 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	public void setDrilldownTab(Boolean drilldownTab) {
 		this.drilldownTab = drilldownTab;
 	}
+	
+	public boolean isTab() {
+		return isTrueBoolean(drilldownTab);
+	}
 
 	public Boolean getPublicReport() {
 		return publicReport;
@@ -487,6 +491,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 			String elementClassName, String value) {
 		return new AmpFilterData(filterRelObj, propertyName, propertyClassName, elementClassName, value);
 	}
+	
 	@Override
 	public Set<AmpFilterData> getFilterDataSet() {
 		return filterDataSet;

@@ -468,7 +468,7 @@ function submitForm(action){
 																						</c:set>
 																						<c:set target="${urlParams}" property="event" value="edit" />
 																						<%
-																							if (report.isImplementedInMondrian() && !onlySaikuButton) {
+																							if (!onlySaikuButton) {	
 																						%>
 																							<%@ include file="saiku_button.jspf" %> 
 																						<% } %>

@@ -985,7 +985,6 @@ public class ReportWizardAction extends MultiAction {
             ampReport.setLocale(null);
             ampReport.setSiteId(null);
             ampReport.setMembers(null);
-            ampReport.setNameTrn(null);
             ampReport.setOwnerId(null);
             ampReport.setDesktopTabSelections(null);
 

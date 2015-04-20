@@ -259,8 +259,10 @@ public class ViewAmp
             //template settings are load for him
             AmpTeam currentTeam = member.getAmpTeam();
             AmpTemplatesVisibility currentTemplate = currentTeam.getFmTemplate();
-            if (currentTemplate == null) {
-                currentTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
+            if (currentTemplate == null){
+                currentTemplate = FeaturesUtil.getTemplateVisibility(
+                        FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),
+                        PersistenceManager.getRequestDBSession());
             }
             AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
             ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);

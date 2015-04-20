@@ -43,11 +43,11 @@ public class AmpTreeVisibility implements Serializable{
 	// key-> name
 	// object-> AmpTreeVisibility(template,module,feature,field)
 
-	private ConcurrentHashMap<String, AmpTreeVisibility> items;
+	private ConcurrentHashMap items;
 
 	private LinkedHashMap sorteditems;
 
-	public Map<String, AmpTreeVisibility> getItems() {
+	public Map getItems() {
 		/*
 		 * TreeMap mySet=new TreeMap(FeaturesUtil.ALPHA_AMP_TREE_ORDER);
 		 * mySet.putAll(this.getItems()); LinkedHashMap sortedItems=new
@@ -57,7 +57,7 @@ public class AmpTreeVisibility implements Serializable{
 	
 	}
 
-	public void setItems(ConcurrentHashMap<String, AmpTreeVisibility> items) {
+	public void setItems(ConcurrentHashMap items) {
 		this.items = items;
 	}
 

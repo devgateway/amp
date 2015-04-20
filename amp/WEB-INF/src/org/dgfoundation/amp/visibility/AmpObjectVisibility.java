@@ -135,7 +135,7 @@ public abstract class AmpObjectVisibility  extends Permissible implements Serial
 	}
 	
 	public String toString() {
-		return String.format("%s %s (id: %d)", this.getClass().getSimpleName(), this.getName(), this.getId());
+		return this.name+" - id="+super.toString();
 	}
 
 	@Override

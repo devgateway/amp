@@ -65,7 +65,7 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
 	}
 	
 	public boolean isDefault(){
-		return this.getId().equals(FeaturesUtil.getDefaultAmpTemplateVisibility());
+		return this.getId().equals(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE));
 	}
 
 	@Override

@@ -42,7 +42,6 @@ public class MeasureConstants {
 	public static final String REAL_MTFS = "Real MTEFs";
 	public static final String PERCENTAGE_OF_TOTAL_COMMITMENTS = "Percentage of Total Commitments";
 	public static final String PERCENTAGE_OF_TOTAL_DISBURSEMENTS = "Percentage Of Total Disbursements";
-	public static final String ANNUAL_PROPOSED_PROJECT_COST = "Annual Proposed Project Cost";
 	 
 	//type = D (?)
 	public static final String ACTUAL_ESTIMATED_DISBURSEMENTS = "Actual Estimated Disbursements";

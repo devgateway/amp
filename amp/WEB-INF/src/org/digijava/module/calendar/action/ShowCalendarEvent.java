@@ -428,7 +428,7 @@ public class ShowCalendarEvent extends Action {
             calendarItem.setCreationIp(RequestUtils.getRemoteAddress(request));
             calendarItem.setCreationDate(new Date());
             calendarItem.setDescription(ceform.getDescription());
-            Long templId = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE);
+            Long templId=FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE);
 	 	 	AmpFeaturesVisibility eventApprove = FeaturesUtil.getFeatureByName("Event Approve", "Calendar", templId);
 	 	 	if (eventApprove == null || isManager){
 	 	 	 	calendarItem.setApprove(new Integer(MessageConstants.CALENDAR_EVENT_APPROVED)); // 1 - Approve by default;

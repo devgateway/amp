@@ -365,7 +365,7 @@ public final class PMUtil {
 	
 	
 	public static AmpTreeVisibilityModelBean getAmpTreeFMPermissions() {
-		return generateAmpTreeFMPermissions(FeaturesUtil.getDefaultAmpTemplateVisibility());
+		return generateAmpTreeFMPermissions(getDefaultAmpTemplateVisibility());
 	}
 	
 	public static AmpTreeVisibilityModelBean generateAmpTreeFMPermissions(AmpTemplatesVisibility currentTemplate) {
@@ -390,10 +390,20 @@ public final class PMUtil {
 		return tree;
 	}
 	
+	public static AmpTemplatesVisibility getDefaultAmpTemplateVisibility() {
+		// get the default amp template
+		Session session = PersistenceManager.getSession();
+		if (session == null) return null;
+		AmpTemplatesVisibility currentTemplate = null;
+		currentTemplate = FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),session);
+		return currentTemplate;
+	}
+	
+	
 	public static AmpTreeVisibilityModelBean buildTreeObjectFMPermissions(AmpObjectVisibility currentAOV) {
 		AmpTreeVisibilityModelBean tree = new AmpTreeVisibilityModelBean(currentAOV.getName(), new ArrayList<Object>(), currentAOV);
-		Set itemsSet = null;
-		if(currentAOV instanceof AmpModulesVisibility && ((AmpModulesVisibility) currentAOV).getSortedAlphaSubModules().size() > 0)
+		Set itemsSet=null;
+		if(currentAOV instanceof AmpModulesVisibility && ((AmpModulesVisibility) currentAOV).getSortedAlphaSubModules().size()>0)
 			itemsSet = ((AmpModulesVisibility) currentAOV).getSortedAlphaSubModules();
 		else itemsSet = currentAOV.getSortedAlphaItems();
 		if (itemsSet != null && itemsSet.iterator() != null)

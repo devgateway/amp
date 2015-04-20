@@ -93,11 +93,11 @@ public class DashboardsFMSettings extends DataVisibility implements FMSettings {
 
 		//check modules
 		List<AmpModulesVisibility> modules = FeaturesUtil.getAmpModulesVisibility(getDataMap(DataMapType.MODULES).keySet(), currentTemplate.getId());
-		splitObjectsByVisibility(modules, getDataMap(DataMapType.MODULES), visiblePrecursors, invisiblePrecursors);
+		processVisbleObjects(modules, getDataMap(DataMapType.MODULES), visiblePrecursors, invisiblePrecursors);
 		
 		//check features
 		List<AmpFeaturesVisibility> features = FeaturesUtil.getAmpFeaturesVisibility(getDataMap(DataMapType.FEATURES).keySet(), currentTemplate.getId());
-		splitObjectsByVisibility(features, getDataMap(DataMapType.FEATURES), visibleData, invisibleData);
+		processVisbleObjects(features, getDataMap(DataMapType.FEATURES), visibleData, invisibleData);
 		
 		visiblePrecursors.addAll(getVisibleByDefault());
 		

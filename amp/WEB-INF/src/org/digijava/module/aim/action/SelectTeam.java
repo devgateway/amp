@@ -128,8 +128,10 @@ public class SelectTeam extends Action {
             //See if current workspace has a FM Template attached to it
             AmpTeam currentTeam = member.getAmpTeam();
             AmpTemplatesVisibility currentTemplate = currentTeam.getFmTemplate();
-            if (currentTemplate == null) {
-                currentTemplate = FeaturesUtil.getDefaultAmpTemplateVisibility();
+            if (currentTemplate == null){
+                currentTemplate = FeaturesUtil.getTemplateVisibility(
+                        FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),
+                        PersistenceManager.getRequestDBSession());
             }
             AmpTreeVisibility ampTreeVisibility = new AmpTreeVisibility();
             ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);

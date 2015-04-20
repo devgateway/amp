@@ -81,18 +81,18 @@ public abstract class DataVisibility {
 		
 		//check fields
 		List<AmpFieldsVisibility> fields = FeaturesUtil.getAmpFieldsVisibility(getDataMap(DataMapType.FIELDS).keySet(), currentTemplate.getId());
-		splitObjectsByVisibility(fields, getDataMap(DataMapType.FIELDS), visibleData, invisibleData);
+		processVisbleObjects(fields, getDataMap(DataMapType.FIELDS), visibleData, invisibleData);
 		
 		//check features
 		List<AmpFeaturesVisibility> features = FeaturesUtil.getAmpFeaturesVisibility(getDataMap(DataMapType.FEATURES).keySet(), currentTemplate.getId());
-		splitObjectsByVisibility(features, getDataMap(DataMapType.FEATURES), visibleData, invisibleData);
+		processVisbleObjects(features, getDataMap(DataMapType.FEATURES), visibleData, invisibleData);
 		
 		//check modules
 		List<AmpModulesVisibility> modules = FeaturesUtil.getAmpModulesVisibility(getDataMap(DataMapType.MODULES).keySet(), currentTemplate.getId());
-		splitObjectsByVisibility(modules, getDataMap(DataMapType.MODULES), visibleData, invisibleData);
+		processVisbleObjects(modules, getDataMap(DataMapType.MODULES), visibleData, invisibleData);
 		dependencyCheck(visibleData, invisibleData);
 		
-		//logger.info("Not visible: " + invisibleData);
+		logger.info("Not visible: " + invisibleData);
 		
 		// avoid any tentative to change it  
 		return Collections.unmodifiableSet(visibleData);
@@ -163,19 +163,21 @@ public abstract class DataVisibility {
 	}
 	
 	/**
-	 * adds to visibleColumns the list of items which are visible, mapped
+	 * adds to visibleColumns the list of items which are visible
 	 * @param visibilityList
-	 * @param nameToColumnMap Map<FM_path, data>
-	 * @param visibleColumns - data
-	 * @param invisibleColumns - data
+	 * @param nameToColumnMap
+	 * @param visibleColumns
+	 * @param invisibleColumns
 	 */
-	protected <T extends AmpObjectVisibility> void splitObjectsByVisibility(List<T> visibilityList,
+	protected <T extends AmpObjectVisibility> void processVisbleObjects(List<T> visibilityList,
 			Map<String, String> nameToColumnMap, Set<String> visibleColumns, Set<String> invisibleColumns) {
 
 		for (AmpObjectVisibility o : visibilityList) {
-			String columnName = nameToColumnMap.get(o.getName());
-			invisibleColumns.remove(columnName);
-			visibleColumns.add(columnName);
+			{
+				String columnName = nameToColumnMap.get(o.getName());
+				invisibleColumns.remove(columnName);
+				visibleColumns.add(columnName);
+			}
 		}
 	}
 	

@@ -54,7 +54,7 @@ public abstract class DataVisibility {
 	/** keeps track of visibility changes */
 	protected AtomicBoolean atomicVisibilityChanged = new AtomicBoolean(false);
 
-	protected Set<String> visibleData = null;
+	private Set<String> visibleData = null;
 	
 	/**
 	 * Base constructor that also registers for visibility changes notifications
@@ -65,7 +65,7 @@ public abstract class DataVisibility {
 	
 	synchronized
 	protected Set<String> getCurrentVisibleData() {
-		//if (atomicVisibilityChanged.compareAndSet(true, false) || visibleData == null)
+		if (atomicVisibilityChanged.compareAndSet(true, false) || visibleData == null)
 			visibleData = detectVisibleData();
 		return visibleData;
 	}
@@ -177,11 +177,6 @@ public abstract class DataVisibility {
 			invisibleColumns.remove(columnName);
 			visibleColumns.add(columnName);
 		}
-	}
-	
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		throw new CloneNotSupportedException();
 	}
 	
 	/* Default no data storage */

@@ -965,8 +965,8 @@ public class FeaturesUtil {
 		else if (clazz.isAssignableFrom(AmpFeaturesVisibility.class))
 			joinBy = "features";
 		
-		if (names == null) {
-			names = new ArrayList<>();
+		if (names == null || names.isEmpty()) {
+			return new ArrayList<>();
 		}
 
 		try {
@@ -974,15 +974,11 @@ public class FeaturesUtil {
 					+ AmpTemplatesVisibility.class.getName() + " as templ"
 					+ " join templ." + joinBy + " aov"
 					+ " where templ.id=:templateId"
-					+ (!names.isEmpty() ? " and aov.name in (:names)" : "")
+					+ " and aov.name in (:names)"
 					+ " order by aov.name asc";
 			Query qry = PersistenceManager.getSession().createQuery(qryStr);
 			qry.setParameter("templateId", templateId);
-			if (!names.isEmpty()) {
-				qry.setParameterList("names", names);
-			} else {
-				logger.warn("names parameter is empty");
-			}
+			qry.setParameterList("names", names);
 			return qry.list();
 		}
 		catch (Exception ex) {

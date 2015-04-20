@@ -65,7 +65,7 @@ public abstract class DataVisibility {
 	
 	synchronized
 	protected Set<String> getCurrentVisibleData() {
-		//if (atomicVisibilityChanged.compareAndSet(true, false) || visibleData == null)
+		if (atomicVisibilityChanged.compareAndSet(true, false) || visibleData == null)
 			visibleData = detectVisibleData();
 		return visibleData;
 	}

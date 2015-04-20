@@ -974,11 +974,15 @@ public class FeaturesUtil {
 					+ AmpTemplatesVisibility.class.getName() + " as templ"
 					+ " join templ." + joinBy + " aov"
 					+ " where templ.id=:templateId"
-					+ " and aov.name in (:names)"
+					+ (!names.isEmpty() ? " and aov.name in (:names)" : "")
 					+ " order by aov.name asc";
 			Query qry = PersistenceManager.getSession().createQuery(qryStr);
 			qry.setParameter("templateId", templateId);
-			qry.setParameterList("names", names);
+			if (!names.isEmpty()) {
+				qry.setParameterList("names", names);
+			} else {
+				logger.warn("names parameter is empty");
+			}
 			return qry.list();
 		}
 		catch (Exception ex) {

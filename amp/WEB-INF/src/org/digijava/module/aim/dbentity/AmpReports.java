@@ -16,7 +16,6 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.ObjectUtils;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
@@ -24,7 +23,7 @@ import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.dbentity.AmpFilterData;
 import org.dgfoundation.amp.ar.dbentity.FilterDataSetInterface;
 import org.dgfoundation.amp.ar.viewfetcher.InternationalizedModelDescription;
-import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
+import org.digijava.kernel.ampapi.mondrian.util.MondrianMapping;
 import org.digijava.kernel.translator.TranslatorWorker;
 import org.digijava.module.aim.annotations.translation.TranslatableClass;
 import org.digijava.module.aim.annotations.translation.TranslatableField;
@@ -97,8 +96,6 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	private AmpTeamMember ownerId; // the member that created the report
 
 	private Date updatedDate; // last date when the report was modified
-
-	private String nameTrn;
 
 	/*
 	 *  to be set in order to get information for translation purposes in pdf and excel reports
@@ -254,7 +251,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 		this.members = members;
 	}
 
-	public int compareTo(AmpReports rep) {	
+	@Override public int compareTo(AmpReports rep) {	
 		return ObjectUtil4Amp.nullSafeIgnoreCaseStringCompare(this.name, rep.getName(), true);
 	}
 
@@ -418,13 +415,11 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 		this.siteId = siteId;
 	}
 
-	public Object getObjectType() {
-		// TODO Auto-generated method stub
+	@Override public Object getObjectType() {
 		return this.getClass().getName();
 	}
 
-	public Object getIdentifier() {
-		// TODO Auto-generated method stub
+	@Override public Object getIdentifier() {
 		return this.getAmpReportId().toString();
 	}
 
@@ -432,17 +427,12 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 		return this.getAmpReportId();
 	}
 
-	public String getObjectName() {
-		// TODO Auto-generated method stub
+	@Override public String getObjectName() {
 		return this.getName();
 	}
 
 	public String getNameTrn() {
 		return this.name.toLowerCase().replaceAll(" ", "");
-	}
-
-	public void setNameTrn(String nameTrn) {
-		this.nameTrn = nameTrn;
 	}
 
 	public Set<AmpMeasures> getReportMeasures() {
@@ -632,7 +622,7 @@ public class AmpReports implements Comparable<AmpReports>, LoggerIdentifiable, S
 	 */
 	public boolean hasAvailableMeasures() {
 		Set<String> reportMeasures = getMeasureNames();
-		Set<String> availableMeasures = MeasuresVisibility.getVisibleMeasures();
+		Set<String> availableMeasures = new HashSet<>(MondrianMapping.definedMeasures);
 		reportMeasures.retainAll(availableMeasures);
 		return !reportMeasures.isEmpty();
 	}

@@ -654,7 +654,6 @@
 			<module name="aim">
 				<page>aim_showDocumentsInPopup</page>
 				<page>viewStatusDescription</page>
-				<page>viewNpdSettings</page>
 				<page>addSectorToIndicator</page>
 				<page>PI_Filter</page>
 				<page>aim_euActivityDetails</page>

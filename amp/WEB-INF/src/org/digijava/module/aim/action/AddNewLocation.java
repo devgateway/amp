@@ -1,10 +1,6 @@
 package org.digijava.module.aim.action;
 
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +20,6 @@ import org.digijava.module.aim.exception.dynlocation.DuplicateLocationCodeExcept
 import org.digijava.module.aim.form.NewAddLocationForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DynLocationManagerUtil;
-import org.digijava.module.aim.util.GPISetupUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.categorymanager.dbentity.AmpCategoryValue;
 import org.digijava.module.categorymanager.util.CategoryConstants;
@@ -42,22 +37,28 @@ public class AddNewLocation extends Action {
             HttpServletRequest request,
             HttpServletResponse response) throws java.lang.Exception {
         
-    	ActionMessages errors		= new ActionMessages();
+    	ActionMessages errors = new ActionMessages();
     	
         NewAddLocationForm addRegForm = (NewAddLocationForm) form;
-        if (addRegForm.getEvent().equals("add")) {
-            addRegForm.setCode(null);
-            addRegForm.setGeoCode(null);
-            addRegForm.setName(null);
-            addRegForm.setIso(null);
-            addRegForm.setIso3(null);
-            addRegForm.setDescription(null);
-            addRegForm.setGsLat(null);
-            addRegForm.setGsLong(null);
-            addRegForm.setEditedId(null);
-            return mapping.findForward("addEdit");
-        } else {
-            if (addRegForm.getEvent().equals("edit")) {
+
+        String event = addRegForm.getEvent();
+        if (event == null) {
+            event = "default";
+        }
+
+        switch(event) {
+            case "add" :
+                addRegForm.setCode(null);
+                addRegForm.setGeoCode(null);
+                addRegForm.setName(null);
+                addRegForm.setIso(null);
+                addRegForm.setIso3(null);
+                addRegForm.setDescription(null);
+                addRegForm.setGsLat(null);
+                addRegForm.setGsLong(null);
+                addRegForm.setEditedId(null);
+                return mapping.findForward("addEdit");
+            case "edit" :
                 AmpCategoryValueLocations location = LocationUtil.getAmpCategoryValueLocationById(addRegForm.getEditedId());
                 Collection <AmpLocationIndicatorValue> indicatorValues = getIndicatorValuesListForCategory (location.getParentCategoryValue().getId(),location);
                 addRegForm.setLocationIndicatorValues (indicatorValues);
@@ -71,36 +72,59 @@ public class AddNewLocation extends Action {
                 addRegForm.setGsLong(location.getGsLong());
                 addRegForm.setParentCatValId(location.getParentCategoryValue().getId());
                 return mapping.findForward("addEdit");
-            } 
-            if (addRegForm.getEvent().equals("saveLocationValues")) {
-            	
-            	Enumeration<String> params = request.getParameterNames();
-        		while (params.hasMoreElements()) {
-        			String paramName = params.nextElement().toString();
-        			if (paramName.startsWith("indicator_")) {
-        				String indId = paramName.substring(10);
-        				Collection <AmpLocationIndicatorValue> values = addRegForm.getLocationIndicatorValues ();
-        				for (AmpLocationIndicatorValue value :values) {
-        					if (value.getIndicator().getId().equals(new Long (indId)) && 
-        						value.getLocation().getId().equals(addRegForm.getEditedId())) {
-        						value.setValue(new Double(request.getParameter(paramName)));
-        						DbUtil.saveOrUpdateObject(value);
-        						break;
-        					}
-        				}
-        			}
-        		}
-        		
-            	addRegForm.setEvent(null);
-            	return mapping.findForward("addEdit");
-            }
-         
-            else {
-                AmpCategoryValueLocations location = null;
+            case "saveLocationValues" :
+                Enumeration<String> params = request.getParameterNames();
+                while (params.hasMoreElements()) {
+                    String paramName = params.nextElement();
+
+                    String paramValueString = request.getParameter(paramName);
+
+
+                    if (paramName.startsWith("indicator_")) {
+                        String indId = paramName.substring(10);
+                        Collection <AmpLocationIndicatorValue> values = addRegForm.getLocationIndicatorValues ();
+                        for (AmpLocationIndicatorValue value : values) {
+                            if (value.getIndicator().getId() == Long.parseLong(indId) &&
+                                    value.getLocation().getId().equals(addRegForm.getEditedId())) {
+                                // empty values should also be accepted
+                                if (paramValueString == null || "".equals(paramValueString)) {
+                                    value.setValue(null);
+                                } else {
+
+                                    // Ugly solution, but the requirement is to accept both values: 12.56 and 12,56
+                                    paramValueString = paramValueString.replace(',', '.');
+
+                                    /*
+                                    This does not work as needed
+                                    Number n = null;
+                                    NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
+                                    try {
+                                        n = nf.parse(paramValueString);
+                                    } catch (RuntimeException e) {// French accepts "," instead of "."
+                                        nf = NumberFormat.getInstance(Locale.FRANCE);
+                                        n = nf.parse(paramValueString);
+                                    }
+                                    double paramValue = n.doubleValue();
+                                    */
+
+                                    value.setValue(Double.parseDouble(paramValueString));
+                                }
+                                DbUtil.saveOrUpdateObject(value);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                addRegForm.setEvent(null);
+                return mapping.findForward("addEdit");
+            default :
+                location = null;
                 if (addRegForm.getEditedId() == null) {
                     location = new AmpCategoryValueLocations();
                     AmpCategoryValueLocations parentLoc=null;
-					if(addRegForm.getParentLocationId()!=-1) parentLoc = DynLocationManagerUtil.getLocation(addRegForm.getParentLocationId(), true);
+                    if (addRegForm.getParentLocationId() != -1)
+                        parentLoc = DynLocationManagerUtil.getLocation(addRegForm.getParentLocationId(), true);
                     AmpCategoryValue parentCatVal = CategoryManagerUtil.getAmpCategoryValueFromDb(addRegForm.getParentCatValId());
                     location.setParentLocation(parentLoc);
                     location.setParentCategoryValue(parentCatVal);
@@ -115,32 +139,29 @@ public class AddNewLocation extends Action {
                 location.setDescription(addRegForm.getDescription());
                 location.setGsLat(addRegForm.getGsLat());
                 location.setGsLong(addRegForm.getGsLong());
-                
+
                 try {
-                	
-                	if (addRegForm.getEditedId() != null)
-                		LocationUtil.saveLocation(location, true);
-                	else
-                		LocationUtil.saveLocation(location, false);
-                	
-                	if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(location.getParentCategoryValue())) {
-                		DynLocationManagerUtil.synchronizeCountries();
-                	}
+
+                    if (addRegForm.getEditedId() != null)
+                        LocationUtil.saveLocation(location, true);
+                    else
+                        LocationUtil.saveLocation(location, false);
+
+                    if (CategoryConstants.IMPLEMENTATION_LOCATION_COUNTRY.equalsCategoryValue(location.getParentCategoryValue())) {
+                        DynLocationManagerUtil.synchronizeCountries();
+                    }
                 }
                 catch (DuplicateLocationCodeException e) {
-                	errors.add("title" ,  
-                			new ActionMessage("error.aim.addLocation.duplicateCode", TranslatorWorker.translateText("Duplicate") + " " +  TranslatorWorker.translateText(e.getCodeType())) 
-                	);
-					this.saveErrors(request, errors);
-					return mapping.findForward("addEdit");
-				}
+                    errors.add("title" ,
+                            new ActionMessage("error.aim.addLocation.duplicateCode", TranslatorWorker.translateText("Duplicate")
+                                    + " " +  TranslatorWorker.translateText(e.getCodeType()))
+                    );
+                    this.saveErrors(request, errors);
+                    return mapping.findForward("addEdit");
+                }
 
                 return mapping.findForward("added");
-
-            }
-
         }
-
     }
     
     private Collection <AmpLocationIndicatorValue> getIndicatorValuesListForCategory (Long id,AmpCategoryValueLocations location) {

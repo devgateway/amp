@@ -22,18 +22,12 @@ public class ClearEmailsJob extends ConnectionCleaningJob implements StatefulJob
 	@Override 
 	public void executeInternal(JobExecutionContext context) throws JobExecutionException{		
 		Session session = PersistenceManager.getSession();
-		try {
-			List<AmpEmail> emailsForRemoval = AmpMessageUtil.loadSentEmails(session);
-			if (emailsForRemoval != null && emailsForRemoval.size() > 0) {
-				for (AmpEmail ampEmail : emailsForRemoval) {
-					session.delete(ampEmail);
-				}
+		List<AmpEmail> emailsForRemoval = AmpMessageUtil.loadSentEmails(session);
+		if (emailsForRemoval != null && emailsForRemoval.size() > 0) {
+			for (AmpEmail ampEmail : emailsForRemoval) {
+				session.delete(ampEmail);
 			}
 		}
-		finally {
-			PersistenceManager.endSessionLifecycle();
-		}
-		
 	}
 
 }

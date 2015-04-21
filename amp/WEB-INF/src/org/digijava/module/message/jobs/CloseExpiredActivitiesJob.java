@@ -54,7 +54,7 @@ import org.quartz.StatefulJob;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 
-public class CloseExpiredActivitiesJob implements StatefulJob {
+public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements StatefulJob {
 	
 	private static Logger logger = Logger.getLogger(CloseExpiredActivitiesJob.class);
 	
@@ -113,9 +113,8 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
         return auxActivity;
 	}
 	
-    @Override public void execute(JobExecutionContext context) throws JobExecutionException {
-    	try
-    	{
+    @Override public void executeInternal(JobExecutionContext context) throws JobExecutionException {
+    	try {
     		String val = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTOMATICALLY_CLOSE_ACTIVITIES);
     		boolean autoClosingEnabled = "true".equalsIgnoreCase(val);
     		if (!autoClosingEnabled)
@@ -126,11 +125,11 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
     		//no longer available: TLSUtils.forceLocaleUpdate(org.digijava.module.um.util.DbUtil.getLanguageByCode("en"));
     		TLSUtils.getThreadLocalInstance().site = SiteUtils.getDefaultSite();
     		
-			Session session = PersistenceManager.getRequestDBSession();
+			Session session = PersistenceManager.getSession();
 			
 			AmpBackgroundActivitiesCloser.createActivityCloserUserIfNeeded();
 			PersistenceManager.cleanupSession(session); // commit user in case it was created
-			session = PersistenceManager.getRequestDBSession();
+			session = PersistenceManager.getSession();
 		
     		Long closedCategoryValue = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.CLOSED_ACTIVITY_VALUE);
     		
@@ -145,16 +144,14 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
     		List<AmpActivityVersion> closeableActivities;
     		if (eligibleIds.isEmpty())
     			closeableActivities = new ArrayList<AmpActivityVersion>();
-    		else
-    		{
+    		else {
         		String queryString = "select aav from " + AmpActivityVersion.class.getName() +
       		          " aav " + "where aav.ampActivityId IN (" + Util.toCSString(eligibleIds) + ")";
     			closeableActivities = session.createQuery(queryString).list();
     		}
     		
     		String newStatus = Constants.APPROVED_STATUS;
-    		for(AmpActivityVersion ver:closeableActivities)
-    		{
+    		for(AmpActivityVersion ver:closeableActivities) {
     			if ("On".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION))) {
     				 newStatus = ver.getApprovalStatus().equals(Constants.STARTED_APPROVED_STATUS) ? Constants.STARTED_STATUS : Constants.EDITED_STATUS;
     			}
@@ -171,12 +168,10 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
 
     			logger.info(String.format("... done, new amp_activity_id=%d\n", newVer.getAmpActivityId()));
     		}
-    		PersistenceManager.endSessionLifecycle();
     	}
-    	catch(Exception e)
-    	{    		
-    		e.printStackTrace();
+    	catch(Exception e) {
     		// not rethrowing, because we don't want the thread to die
+    		logger.error("error while closing expired activities: ", e);
     	}
     }
 }

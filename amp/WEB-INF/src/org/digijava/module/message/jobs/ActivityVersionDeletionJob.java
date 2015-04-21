@@ -49,7 +49,6 @@ public class ActivityVersionDeletionJob extends ConnectionCleaningJob implements
 					hibernateSession.flush();
 					hibernateSession.delete(act);
 					hibernateSession.flush();
-
 				}
 			}
 			hibernateSession.getTransaction().commit();
@@ -64,7 +63,5 @@ public class ActivityVersionDeletionJob extends ConnectionCleaningJob implements
 		} finally {
 			PersistenceManager.closeSession(hibernateSession);
 		}
-		PersistenceManager.endSessionLifecycle();
 	}
-
 }

@@ -709,7 +709,6 @@ public class PersistenceManager {
 	 */
 	public final static void endSessionLifecycle() {
 		cleanupSession(getSession());
-		//cleanupSession(getCurrentSession());
 	}
 	
 	/**

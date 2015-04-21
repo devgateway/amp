@@ -50,9 +50,7 @@ public class AMPActionServlet
     return ampContext;
   }
 
-  protected void process(HttpServletRequest request,
-                         HttpServletResponse response) throws IOException,
-      ServletException {
+  protected void process(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     request.setCharacterEncoding("UTF-8");
 
 //	log.error(String.format("URL IS: %s?%s", request.getRequestURI(), request.getQueryString()));
@@ -138,12 +136,7 @@ public class AMPActionServlet
         }
       }
     }
-    try {
-    	// Call the struts default ActionServlet process() method
-    	super.process(request, response);
+   	// Call the struts default ActionServlet process() method
+   	super.process(request, response);  // JSP rendered here
     }
-    finally {
-    	//PersistenceManager.endSessionLifecycle();
-    }
-    }  
 }

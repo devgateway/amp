@@ -24,12 +24,6 @@ import org.hibernate.StaleObjectStateException;
  */
 public class HibernateSessionRequestFilter implements Filter {
 	private static Logger log = Logger.getLogger(HibernateSessionRequestFilter.class);
-	/**
-	 * 
-	 */
-	public HibernateSessionRequestFilter() {
-		// TODO Auto-generated constructor stub
-	}
 
 	@Override
 	public void destroy() {
@@ -53,10 +47,9 @@ public class HibernateSessionRequestFilter implements Filter {
 			throw ex;
 		}
 		finally {
-			//log.error(String.format("Thread #%d: ending session", Thread.currentThread().getId()));
+			// log.error(String.format("Thread #%d: ending session", Thread.currentThread().getId()));
 			// Commit and cleanup
 			PersistenceManager.endSessionLifecycle();
-			//PersistenceManager.checkClosedOrLongSessionsFromTraceMap();
 			if (request instanceof HttpServletRequest)
 				DocumentManagerUtil.closeJCRSessions((HttpServletRequest)request);      	
 		}

@@ -5,7 +5,7 @@ package org.dgfoundation.amp.visibility.data;
  * @author simple
  *
  */
-public final class VisibilitySourceEnum {
+public final class VisibilitySourceOptions {
 	public final static int ACTIVITY_FORM_VISIBILITY = 1;
 	public final static int FEATURE_MANAGER_VISIBILITY = 2;
 	public final static int FEATURE_MANAGER_AND_ACTIVITY_FORM_VISIBILITY = 3;

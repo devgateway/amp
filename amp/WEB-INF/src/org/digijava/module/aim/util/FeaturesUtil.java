@@ -960,6 +960,7 @@ public class FeaturesUtil {
 	
 	private static <T extends AmpObjectVisibility> List<T> getAmpObjectVisibility(Class<T> clazz, Collection<String> names, Long templateId) {
 		String joinBy = "items";
+		
 		if (clazz.isAssignableFrom(AmpFieldsVisibility.class))
 			joinBy = "fields";
 		else if (clazz.isAssignableFrom(AmpFeaturesVisibility.class))
@@ -969,21 +970,16 @@ public class FeaturesUtil {
 			return new ArrayList<>();
 		}
 
-		try {
-			String qryStr = "select aov from " 
-					+ AmpTemplatesVisibility.class.getName() + " as templ"
-					+ " join templ." + joinBy + " aov"
-					+ " where templ.id=:templateId"
-					+ " and aov.name in (:names)"
-					+ " order by aov.name asc";
-			Query qry = PersistenceManager.getSession().createQuery(qryStr);
-			qry.setParameter("templateId", templateId);
-			qry.setParameterList("names", names);
-			return qry.list();
-		}
-		catch (Exception ex) {
-			throw new RuntimeException(ex);
-		}
+		String qryStr = "select aov from " 
+				+ AmpTemplatesVisibility.class.getName() + " as templ"
+				+ " join templ." + joinBy + " aov"
+				+ " where templ.id=:templateId"
+				+ " and aov.name in (:names)"
+				+ " order by aov.name asc";
+		Query qry = PersistenceManager.getSession().createQuery(qryStr);
+		qry.setParameter("templateId", templateId);
+		qry.setParameterList("names", names);
+		return qry.list();
 	}
 	
 	/**

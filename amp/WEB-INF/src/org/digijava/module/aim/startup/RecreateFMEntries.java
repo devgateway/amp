@@ -1,7 +1,6 @@
 package org.digijava.module.aim.startup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,18 +9,12 @@ import java.util.TreeSet;
 import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
-import org.dgfoundation.amp.visibility.AmpTreeVisibility;
-import org.dgfoundation.amp.visibility.FeatureVisibilityTag;
 import org.dgfoundation.amp.visibility.data.MeasuresVisibility;
-import org.dgfoundation.amp.visibility.data.VisibilitySourceEnum;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
-import org.digijava.module.aim.helper.GlobalSettingsConstants;
-import org.digijava.module.aim.util.FeaturesUtil;
 import org.hibernate.Session;
 
 /**

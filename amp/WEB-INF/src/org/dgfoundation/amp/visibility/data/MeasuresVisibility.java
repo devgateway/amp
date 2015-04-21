@@ -45,7 +45,6 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 	protected final static String ADJUSTMENT_PREFIX = "adjustment_type: ";
 	
 	public MeasuresVisibility() {
-		System.out.println("mwahaha");
 	}
 	
 	@SuppressWarnings("serial")
@@ -130,9 +129,9 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 	protected Set<String> detectVisibleData_FM() {
 		Set<String> visibleData = new HashSet<String>(); // Measure Names
 		Set<String> invisibleData = new HashSet<String>(getAllData()); // Measure Names
-		AmpTemplatesVisibility currentTemplate = FeaturesUtil.getCurrentTemplate();
+		long currentTemplateId = FeaturesUtil.getCurrentTemplateId();
 		
-		List<AmpFeaturesVisibility> features = FeaturesUtil.getAmpFeaturesVisibility(allMeasures, currentTemplate.getId());
+		List<AmpFeaturesVisibility> features = FeaturesUtil.getAmpFeaturesVisibility(allMeasures, currentTemplateId);
 		splitObjectsByVisibility(features, featuresToMeasuresMap, visibleData, invisibleData);
 		return Collections.unmodifiableSet(visibleData);
 	}
@@ -150,23 +149,23 @@ public class MeasuresVisibility extends DataVisibility implements FMSettings {
 
 	/**
 	 * uses either FM or AF to return a Set of measures which should be visible
-	 * @param src - one of {@link VisibilitySourceEnum} codes
+	 * @param src - one of {@link VisibilitySourceOptions} codes
 	 * @return
 	 */
 	public Set<String> detectVisibleData(int src) {
 		long visibilityTemplateId = FeaturesUtil.getCurrentTemplateId();
 
 		switch(src) {
-			case VisibilitySourceEnum.ACTIVITY_FORM_VISIBILITY:
+			case VisibilitySourceOptions.ACTIVITY_FORM_VISIBILITY:
 				return detectVisibleData_AF(visibilityTemplateId);
 			
-			case VisibilitySourceEnum.FEATURE_MANAGER_VISIBILITY:
+			case VisibilitySourceOptions.FEATURE_MANAGER_VISIBILITY:
 				return detectVisibleData_FM();
 				
-			case VisibilitySourceEnum.FEATURE_MANAGER_AND_ACTIVITY_FORM_VISIBILITY:
+			case VisibilitySourceOptions.FEATURE_MANAGER_AND_ACTIVITY_FORM_VISIBILITY:
 				return Sets.intersection(detectVisibleData_AF(visibilityTemplateId), detectVisibleData_FM()).immutableCopy();
 				
-			case VisibilitySourceEnum.FEATURE_MANAGER_OR_ACTIVITY_FORM_VISIBILITY:
+			case VisibilitySourceOptions.FEATURE_MANAGER_OR_ACTIVITY_FORM_VISIBILITY:
 				return Sets.union(detectVisibleData_AF(visibilityTemplateId), detectVisibleData_FM()).immutableCopy();
 			
 			default:

@@ -87,3 +87,4 @@ Under a Linux system:
 --Known issues:
 1) If throws error about conflicting JNA, you might have to remove JNA until the service is installed
 2) On Windows, make sure java is added to $PATH
+3) If the monet's .bat file has been modified as i was in Uganda production it won't take the dbfarm parameter and server will not start

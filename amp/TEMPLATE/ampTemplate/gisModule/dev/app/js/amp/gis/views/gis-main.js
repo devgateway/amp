@@ -40,7 +40,8 @@ module.exports = Backbone.View.extend({
     //auto-render the layout
 	var headerWidget = new boilerplate.layout(
       {
-        caller: 'GIS'
+        caller: 'GIS',
+        showDGFooter: false
 	  });
 	$.when(headerWidget.menu.menuRendered).then(function() {
 		$('.dropdown-toggle').dropdown();

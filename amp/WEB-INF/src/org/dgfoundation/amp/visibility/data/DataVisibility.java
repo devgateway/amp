@@ -54,7 +54,7 @@ public abstract class DataVisibility {
 	/** keeps track of visibility changes */
 	protected AtomicBoolean atomicVisibilityChanged = new AtomicBoolean(false);
 
-	private Set<String> visibleData = null;
+	protected Set<String> visibleData = null;
 	
 	/**
 	 * Base constructor that also registers for visibility changes notifications
@@ -179,11 +179,18 @@ public abstract class DataVisibility {
 		}
 	}
 	
+	/**
+	 * do not clone DataVisibility. If you're trying to do it, you're doing it wrong
+	 */
+	@Override public Object clone() throws CloneNotSupportedException {
+	 	throw new CloneNotSupportedException();
+	}
+    
 	/* Default no data storage */
-	protected static final List<String> noDataList = new ArrayList<String>();
-	protected static final Set<String> noDataSet = new HashSet<String>();
-	protected static final Map<String, String> noDataMap = new HashMap<String, String>();
-	protected static final Map<String, Collection<String>> noDataCollectionMap = new HashMap<String, Collection<String>>(); 
+	protected static final List<String> noDataList = Collections.emptyList();
+	protected static final Set<String> noDataSet = Collections.emptySet();
+	protected static final Map<String, String> noDataMap = Collections.emptyMap();
+	protected static final Map<String, Collection<String>> noDataCollectionMap = Collections.emptyMap(); 
 	
 	/* ******************************************************************************************
 	 * We need all children to make conscious decisions re which data to provide and which not.

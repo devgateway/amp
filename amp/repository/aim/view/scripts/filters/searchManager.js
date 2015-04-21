@@ -97,9 +97,9 @@ SearchManager.prototype.findNext	= function() {
 				var spanString	= spans[i].innerHTML.toLowerCase();
 				var additionalSrchDivString	= '';
 				if(additionalSrchDivs.length > 0){
-					if (i>0) {
-						additionalSrchDivString = additionalSrchDivs[i-1].innerHTML.toLowerCase();
-					}
+					//if (i>0) {
+						additionalSrchDivString = additionalSrchDivs[i].innerHTML.toLowerCase();
+					//}
 				}				 
 				
 				if ( spanString.indexOf(searchStr) >= 0 || additionalSrchDivString.indexOf(searchStr) >= 0) {
@@ -148,9 +148,9 @@ SearchManager.prototype.findPrev	= function() {
 			var spanString	= spans[i].innerHTML.toLowerCase();
 			var additionalSrchDivString	= '';
 			if(additionalSrchDivs.length > 0){
-				if (i>0) {
-					additionalSrchDivString = additionalSrchDivs[i-1].innerHTML.toLowerCase();
-				}
+				//if (i>0) {
+					additionalSrchDivString = additionalSrchDivs[i].innerHTML.toLowerCase();
+				//}
 			}
 			
 			if (spanString.indexOf(searchStr) >= 0 || additionalSrchDivString.indexOf(searchStr) >= 0) {

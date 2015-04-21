@@ -91,7 +91,7 @@
   						</div>
                         
   					</div>
-  					<div id="login_menu">
+  					<div id="login_menu" class="header_links">
 					<feature:display name="Enable New User Registration" module="Login - User Management">
 					<c:set var="trn3">
 						<digi:trn key="aim:clickforNewUserRegistration">Click here for new user registration</digi:trn>

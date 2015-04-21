@@ -15,10 +15,13 @@
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 
+<digi:context name="digiContext" property="context"/>
+
+<digi:instance property="aimNewAddLocationForm" />
 
 <script language="JavaScript">
 
-    function validate(string,length) {
+    function validate(string, length) {
 
         if (string.length > length) {
 
@@ -32,11 +35,7 @@
 
         }
 
-
-
         var valid="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
-
 
         for (var i=0; i<length; i++) {
 
@@ -144,11 +143,24 @@
             }
 
         }
-
         document.aimNewAddLocationForm.event.value = "save";
 
         document.aimNewAddLocationForm.submit();
 
+    }
+
+    function validateLocale() {
+        <c:forEach var="value" items="${aimNewAddLocationForm.locationIndicatorValues}" varStatus="_ind">
+            var value${_ind.index} = document.aimLocationIndicatorValueForm.indicator_${value.indicator.id}.value;
+
+            if (isNaN(value${_ind.index}) && isNaN(value${_ind.index}.replace(",","."))) {
+                alert('Please enter only numerical values into ${value.indicator.name} Field.');
+                document.aimLocationIndicatorValueForm.indicator_${value.indicator.id}.focus();
+                return false;
+            }
+        </c:forEach>
+
+        document.aimLocationIndicatorValueForm.submit();
     }
 
 
@@ -227,18 +239,8 @@ function unload() {
 
 <!-- End of Logo -->
 
-
-
-<digi:context name="digiContext" property="context"/>
-
-<digi:instance property="aimNewAddLocationForm" />
-
-
-
     <table cellPadding=5 cellspacing="0" width="600">
-        
 
-        
         <tr>
             
             <td height=16 valign="center" width=600 ><span class=subtitle-blue>
@@ -502,14 +504,17 @@ function unload() {
 													<table style="margin-top:25px;">
 													<c:forEach var="value" items="${aimNewAddLocationForm.locationIndicatorValues}">
 														<tr>
-														
-														<td align="right" width="50%">${value.indicator.name}</td> 
-														<td  width="50%"><input type="text" name="indicator_${value.indicator.id}" value="${value.value}"/></td>
+                                                            <td align="right" width="50%">${value.indicator.name}</td>
+                                                            <td  width="50%"><input type="text" name="indicator_${value.indicator.id}" value="${value.value}"/></td>
 														</tr>
 													</c:forEach>
+
 														<tr><td></td>
 														<td align="left">
-														 <html:submit ><digi:trn key="btn:regionManagerSave">Save</digi:trn></html:submit>                                                                                  
+														    <c:set var="translation">
+														        <digi:trn key="btn:regionManagerSave">Save</digi:trn>
+														    </c:set>
+														    <input type="button" value="${translation}" class="dr-menu" onclick="validateLocale(); return false();">
 														</td>
 														</tr>
 													
@@ -583,7 +588,7 @@ function unload() {
 												<c:set var="translation">
 													<digi:trn key="aim:clickToViewIndicatorLayerManager">Click here to go to Indicator Layer Manager</digi:trn>
 												</c:set>
-												<digi:link href="/indicatorLayerManager.do" title="${translation}" >
+												<digi:link href="/indicatorLayerManager.do?event=manager" title="${translation}" >
 												<digi:trn key="aim:indicatorLayerManager">Indicator Layer Manager</digi:trn>
 												</digi:link>
 											</td>
@@ -606,10 +611,3 @@ function unload() {
         <td>
         </td>
         </tr>
-        
-    
-
-
-
-
-

@@ -237,55 +237,7 @@ function unload() {
 
     <table cellPadding=5 cellspacing="0" width="600">
         
-        <tr>
-            
-            <!-- Start Navigation -->
 
-            <td height=33 width="600"><span class=crumb>
-                
-                <c:set var="translation">
-                    
-                    <digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-                    
-                </c:set>
-                
-                <digi:link href="/admin.do" styleClass="comment" title="${translation}" >
-                    
-                    <digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
-                    
-                </digi:link>&nbsp;&gt;&nbsp;
-                
-                <c:set var="translation">
-                    
-                    <digi:trn key="aim:clickToViewRegionManager">Click here to goto Region Manager</digi:trn>
-                    
-                </c:set>
-                
-                <digi:link href="/dynLocationManager.do" styleClass="comment" title="${translation}" >
-                    
-                    <digi:trn key="aim:regionManager">Region Manager</digi:trn>
-                    
-                </digi:link>&nbsp;&gt;&nbsp;
-                
-                <c:if test="${aimNewAddLocationForm.event == 'add'}">
-                    
-                    <digi:trn key="aim:AmpAddALocation">Add</digi:trn>
-                    <c:out value="${aimNewAddLocationForm.parentCatValName}"/>
-                    
-                </c:if>
-                
-                <c:if test="${aimNewAddLocationForm.event == 'edit'}">
-                    
-                    <digi:trn key="aim:AmpEditALocation">Edit</digi:trn>
-                    <c:out value="${aimNewAddLocationForm.parentCatValName}"/>
-                    
-                </c:if>
-                
-            </td>
-            
-            <!-- End navigation -->
-            
-        </tr>
         
         <tr>
             
@@ -580,19 +532,81 @@ function unload() {
                             </table>
          
                         </td>
-                        
+
+					<td noWrap width="100%" vAlign="top">
+						<table align="center" cellpadding="0" cellspacing="0" width="90%" border="0">	
+							<tr>
+								<td>
+									<!-- Other Links -->
+									<table cellpadding="0" cellspacing="0" width="120">
+										<tr>
+											<td bgColor=#c9c9c7 class=box-title>
+												<digi:trn key="aim:otherLinks">
+												Other links
+												</digi:trn>
+											</td>
+											<td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
+												
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td bgColor=#ffffff class=box-border>
+									<table cellPadding=5 cellspacing="1" width="100%">
+										<tr>
+											<td class="inside">
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<c:set var="translation">
+													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+												</c:set>
+												<digi:link href="/admin.do" title="${translation}" >
+												<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
+												</digi:link>
+											</td>
+										</tr>
+										<tr>
+											<td class="inside">
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<c:set var="translation">
+													<digi:trn key="aim:clickToViewRegionManager">Click here to view Region Manager</digi:trn>
+												</c:set>
+												<digi:link href="/dynLocationManager.do" title="${translation}" >
+												<digi:trn key="aim:regionManager">Region Manager</digi:trn>
+												</digi:link>
+											</td>
+										</tr>
+										<tr>
+											<td class="inside">
+												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+												<c:set var="translation">
+													<digi:trn key="aim:clickToViewIndicatorLayerManager">Click here to go to Indicator Layer Manager</digi:trn>
+												</c:set>
+												<digi:link href="/indicatorLayerManager.do" title="${translation}" >
+												<digi:trn key="aim:indicatorLayerManager">Indicator Layer Manager</digi:trn>
+												</digi:link>
+											</td>
+										</tr>
+										<!-- end of other links -->
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+							</tr>
+						</table>
+					</td>
                     </tr>
                    
                 </table>
-			   </td>
             
-        </tr>
+
         <tr>
         <td>
         </td>
         </tr>
         
-    </table>
     
 
 

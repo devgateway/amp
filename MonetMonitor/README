@@ -50,6 +50,14 @@ NO_GUI - "true" for no GUI  status window to appear
 	13. Input in the admin console "bat\installService.bat"
 	14. Input in the admin console "bat\startService.bat"
 	15. You're done. You may now verify that AMP is able to connect properly to the Monet server.
+	16. Make sure Tomcat starts after Monet Monitor
+	Dependency on one other service:
+		sc config ServiceA depend= ServiceB
+	Above means that ServiceA will not start until ServiceB has started. If you stop ServiceB, ServiceA will stop automatically.
+	To remove all dependencies:
+		sc config ServiceA depend= /
+	To list current dependencies:
+		sc qc ServiceA
 	
 Under a Linux system:
 	

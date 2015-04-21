@@ -19,6 +19,7 @@ import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.FilteredCurrencyRateUtil;
 import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.common.util.DateTimeUtil;
+import org.digijava.module.message.jobs.ConnectionCleaningJob;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -28,7 +29,7 @@ import org.quartz.JobExecutionException;
  * @author Marcelo Sotero
  * 
  */
-public class CurrencyRatesQuartzJob implements Job {
+public class CurrencyRatesQuartzJob extends ConnectionCleaningJob {
 	private static Logger logger = Logger.getLogger(CurrencyRatesQuartzJob.class);
 	private WSCurrencyClient myWSCurrencyClient;
 	private String baseCurrency;
@@ -59,15 +60,6 @@ public class CurrencyRatesQuartzJob implements Job {
 	}
 	
 	@Override
-	public void execute(JobExecutionContext context) throws JobExecutionException {
-		try {
-			executeInternal(context);
-		}
-		finally {
-			PersistenceManager.endSessionLifecycle();
-		}
-	}
-
 	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		//we check for username and password stored on GlobalSettigs 
 		this.myWSCurrencyClient.setUsername(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.CURRENCY_WS_USERNAME));

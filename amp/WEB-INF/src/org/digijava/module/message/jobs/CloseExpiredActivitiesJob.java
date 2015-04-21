@@ -1,7 +1,9 @@
 package org.digijava.module.message.jobs;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -14,6 +16,7 @@ import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivityContact;
 import org.digijava.module.aim.dbentity.AmpActivityGroup;
 import org.digijava.module.aim.dbentity.AmpActivityVersion;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.GlobalSettingsConstants;
 import org.digijava.module.aim.startup.AMPStartupListener;
@@ -31,8 +34,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.StatefulJob;
 
-
-public class CloseExpiredActivitiesJob implements StatefulJob {
+public class CloseExpiredActivitiesJob extends ConnectionCleaningJob implements StatefulJob {
 	
 	private static Logger logger = Logger.getLogger(CloseExpiredActivitiesJob.class);
 	
@@ -40,18 +42,15 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
 	/**
 	 * clones activity, sets modifying member, modification date, etc
 	 * @param session
+	 * @param member
 	 * @param oldActivity
 	 * @return
 	 * @throws CloneNotSupportedException
 	 */
-	protected AmpActivityVersion cloneActivity(Session session,
-                                               AmpActivityVersion oldActivity,
-                                               String newStatus,
-                                               Long closedProjectStatusCategoryValue) throws CloneNotSupportedException
-	{		
+	protected AmpActivityVersion cloneActivity(Session session, AmpTeamMember member, AmpActivityVersion oldActivity, String newStatus, Long closedProjectStatusCategoryValue) throws CloneNotSupportedException {
         ContentTranslationUtil.cloneTranslations(oldActivity);
         Long ampActivityGroupId = oldActivity.getAmpActivityGroup().getAmpActivityGroupId();
-		AmpActivityVersion auxActivity = ActivityVersionUtil.cloneActivity(oldActivity, oldActivity.getModifiedBy());
+		AmpActivityVersion auxActivity = ActivityVersionUtil.cloneActivity(oldActivity, member);
 		auxActivity.setAmpActivityId(null);
 
 		session.evict(oldActivity);
@@ -63,16 +62,17 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
 		auxActivityGroup.setAutoClosedOnExpiration(true);
 		session.save(auxActivityGroup);
 		auxActivity.setAmpActivityGroup(auxActivityGroup);
-		auxActivity.setModifiedDate(oldActivity.getModifiedDate());
-		auxActivity.setModifiedBy(oldActivity.getModifiedBy());
+		auxActivity.setModifiedDate(Calendar.getInstance().getTime());
+		auxActivity.setModifiedBy(member);
 		       
 		// don't ask me why is this done
         AmpActivityContact actCont;
         Set<AmpActivityContact> contacts = new HashSet<AmpActivityContact>();
         Set<AmpActivityContact> activityContacts = auxActivity.getActivityContacts();
-        if (activityContacts != null) {
-            for (AmpActivityContact activityContact : activityContacts) {
-                actCont = activityContact;
+        if (activityContacts != null){
+            Iterator<AmpActivityContact> it = activityContacts.iterator();
+            while(it.hasNext()){
+                actCont = it.next();
                 actCont.setId(null);
                 actCont.setActivity(auxActivity);
                 session.save(actCont);
@@ -91,29 +91,8 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
         		auxActivity, prevVersion);
         return auxActivity;
 	}
-		
-	/**
-	 * commits & closes a session and then removes it from the SessionStackTraceMap
-	 * @param session
-	 */
-	public final static void cleanupSession(Session session)
-	{
-		try{session.getTransaction().commit();}catch(Exception e){
-			//logger.info("error committing transaction");
-			e.printStackTrace();
-		}
-		try{session.close();}catch(Exception e){};
-		try{PersistenceManager.removeClosedSessionsFromMap();}catch(Exception e){};
-		try{
-			synchronized(PersistenceManager.sessionStackTraceMap)
-			{
-				PersistenceManager.sessionStackTraceMap.remove(session);
-			}
-		}
-		catch(Exception e){};
-	}
-
-    @Override public void execute(JobExecutionContext context) throws JobExecutionException {
+	
+    @Override public void executeInternal(JobExecutionContext context) throws JobExecutionException {
     	try {
     		String val = FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.AUTOMATICALLY_CLOSE_ACTIVITIES);
     		boolean autoClosingEnabled = "true".equalsIgnoreCase(val);
@@ -125,20 +104,16 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
     		//no longer available: TLSUtils.forceLocaleUpdate(org.digijava.module.um.util.DbUtil.getLanguageByCode("en"));
     		TLSUtils.getThreadLocalInstance().site = SiteUtils.getDefaultSite();
     		
-			Session session = PersistenceManager.getRequestDBSession();
+			Session session = PersistenceManager.getSession();
 			
 			AmpBackgroundActivitiesCloser.createActivityCloserUserIfNeeded();
 			PersistenceManager.cleanupSession(session); // commit user in case it was created
-			session = PersistenceManager.getRequestDBSession();
+			session = PersistenceManager.getSession();
 		
     		Long closedCategoryValue = FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.CLOSED_ACTIVITY_VALUE);
-
-    		String filterQuery = "SELECT amp_activity_last_version_id FROM amp_activity_group aag WHERE aag.autoclosedonexpiration = false AND " +
-				" aag.amp_activity_last_version_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft IS NULL or draft=false) " +
-                    "AND (amp_team_id IS NOT NULL) " +
-                    "AND (deleted IS NULL OR deleted = false) " +
-                    "AND approval_status IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") " +
-                    "AND actual_completion_date < now())" +
+    		
+    		String filterQuery = "SELECT amp_activity_last_version_id FROM amp_activity_group aag WHERE aag.autoclosedonexpiration = false AND " + 
+				" aag.amp_activity_last_version_id IN (SELECT amp_activity_id FROM amp_activity WHERE (draft IS NULL or draft=false) AND (amp_team_id IS NOT NULL) AND (deleted IS NULL OR deleted = false) AND approval_status IN (" + Util.toCSString(AmpARFilter.validatedActivityStatus) + ") AND actual_completion_date < now())" +
 				" AND aag.amp_activity_last_version_id IN (select amp_activity_id FROM v_status WHERE amp_status_id != " + closedCategoryValue + ")" +
 				"";
 		
@@ -146,18 +121,16 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
     		//java.util.Map<Long, Long> statusIdsByActivityIds = getStatuses(session, eligibleIds);		            	
     		
     		List<AmpActivityVersion> closeableActivities;
-    		if (eligibleIds.isEmpty()) {
-                closeableActivities = new ArrayList<AmpActivityVersion>();
-            } else {
+    		if (eligibleIds.isEmpty())
+    			closeableActivities = new ArrayList<AmpActivityVersion>();
+    		else {
         		String queryString = "select aav from " + AmpActivityVersion.class.getName() +
       		          " aav " + "where aav.ampActivityId IN (" + Util.toCSString(eligibleIds) + ")";
     			closeableActivities = session.createQuery(queryString).list();
     		}
-
-            logger.info("Total " + closeableActivities.size() + " expired activities found");
     		
     		String newStatus = Constants.APPROVED_STATUS;
-    		for (AmpActivityVersion ver : closeableActivities) {
+    		for(AmpActivityVersion ver:closeableActivities) {
     			if ("On".equals(FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION))) {
     				 newStatus = ver.getApprovalStatus().equals(Constants.STARTED_APPROVED_STATUS) ? Constants.STARTED_STATUS : Constants.EDITED_STATUS;
     			}
@@ -167,19 +140,17 @@ public class CloseExpiredActivitiesJob implements StatefulJob {
     			logger.info(String.format("\tautoclosing activity %d, changing status ID from %s to %d and approvalStatus from <%s> to <%s>...", 
     					ver.getAmpActivityId(), oldActivityStatus == null ?  "<null>" : Long.toString(oldActivityStatus.getId()), closedCategoryValue, 
     					ver.getApprovalStatus(), newStatus));
-
-                // Copy the member from the previous version https://jira.dgfoundation.org/browse/AMP-18329
-        		// AmpTeamMember ampClosingMember = AmpBackgroundActivitiesCloser.createActivityCloserTeamMemberIfNeeded(ver.getTeam());
-
-                AmpActivityVersion newVer = cloneActivity(session, ver, newStatus, closedCategoryValue);
+    			
+        		AmpTeamMember ampClosingMember = AmpBackgroundActivitiesCloser.createActivityCloserTeamMemberIfNeeded(ver.getTeam());
+        		        		
+    			AmpActivityVersion newVer = cloneActivity(session, ampClosingMember, ver, newStatus/*, projectStatusCategoryClass.getId()*/, closedCategoryValue);
 
     			logger.info(String.format("... done, new amp_activity_id=%d\n", newVer.getAmpActivityId()));
     		}
-    		PersistenceManager.endSessionLifecycle();
     	}
     	catch(Exception e) {
-    		e.printStackTrace();
     		// not rethrowing, because we don't want the thread to die
+    		logger.error("error while closing expired activities: ", e);
     	}
     }
 }

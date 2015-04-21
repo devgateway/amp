@@ -99,6 +99,7 @@ public class ShowMasterLayout
                     // Remove context path and append "index.do"
                     /**
                      * @todo needs to be refactored but not today. Mikheil
+                     * 7 years later: not today either. Constantin
                      */
                     newPath = uri.substring(httpRequest.getContextPath().length()) +
                         (lastSlash ? "" : "/") + newPath;
@@ -112,8 +113,7 @@ public class ShowMasterLayout
                 else {
                     boolean processed = false;
                     try {
-                        processed = FriendlyRequestProcessor.forwardRequest(
-                            httpRequest, httpResponse);
+                        processed = FriendlyRequestProcessor.forwardRequest(httpRequest, httpResponse);
                     }
                     catch (DgException ex1) {
                         throw new ServletException(ex1);

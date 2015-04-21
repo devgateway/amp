@@ -53,9 +53,7 @@ public class SendReminderEmailJob extends ConnectionCleaningJob implements State
 		String name;
 		String value;
 		int period = 0;
-		int quequeSize = 0;
-		for (Iterator iterator = col.iterator(); iterator.hasNext();) {
-			AmpGlobalSettings ampGls = (AmpGlobalSettings) iterator.next();
+		for (AmpGlobalSettings ampGls: col) {
 			name = ampGls.getGlobalSettingsName();
 			value = ampGls.getGlobalSettingsValue();
 			if (name.equalsIgnoreCase(GlobalSettingsConstants.REMINDER_TIME)) {
@@ -78,7 +76,7 @@ public class SendReminderEmailJob extends ConnectionCleaningJob implements State
 	        String from;
 	        String subject;
 	        String text;
-			if(reminderUsers!=null && reminderUsers.size()>0){
+			if (reminderUsers != null && reminderUsers.size() > 0) {
 				
 				logger.info("Enter DG Reminder Email manager");
 				for(int i=0;i<reminderUsers.size();i++){
@@ -98,14 +96,13 @@ public class SendReminderEmailJob extends ConnectionCleaningJob implements State
 			hibernateSession.flush();
 			hibernateSession.setFlushMode(FlushMode.AUTO);
 		} catch (Throwable t) {
-				if (hibernateSession.getTransaction().isActive()) {
-					logger.info("Trying to rollback database transaction after exception");
-					hibernateSession.getTransaction().rollback();
-				}
+			if (hibernateSession.getTransaction().isActive()) {
+				logger.info("Trying to rollback database transaction after exception");
+				hibernateSession.getTransaction().rollback();
+			}
 		} finally {
 			PersistenceManager.closeSession(hibernateSession);
 		}
-		PersistenceManager.endSessionLifecycle();
 	}
 
 }

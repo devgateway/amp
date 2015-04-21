@@ -16,6 +16,7 @@ import org.digijava.module.message.dbentity.AmpMessage;
 import org.digijava.module.message.dbentity.AmpMessageSettings;
 import org.digijava.module.message.dbentity.AmpMessageState;
 import org.digijava.module.message.helper.MessageConstants;
+import org.digijava.module.message.jobs.ConnectionCleaningJob;
 import org.digijava.module.message.util.AmpMessageUtil;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -26,24 +27,14 @@ import org.quartz.JobExecutionException;
  * @author Diego Dimunzio
  * 
  */
-public class AuditCleanerMsgJob implements Job {
+public class AuditCleanerMsgJob extends ConnectionCleaningJob {
 	public static final String FROM = "Administrator";
 	public static final String MESSAGE_TITLE = "Audit Cleanup Sevice";
 	public static final String BODY_1 = "All logs older than  ";
 	public static final String BODY_2 = " days will be deleted from the Audit Trail on ";
-
-	@Override
-	public void execute(JobExecutionContext context) throws JobExecutionException {
-		try {
-			executeInternal(context);
-		}
-		finally {
-			PersistenceManager.endSessionLifecycle();
-		}
-	}
 	
-	public void executeInternal(JobExecutionContext context)
-			throws JobExecutionException {
+	@Override
+	public void executeInternal(JobExecutionContext context) throws JobExecutionException {
 
 		String strReceivers = "";
 

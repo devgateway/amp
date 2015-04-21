@@ -613,7 +613,6 @@
 			<module name="aim">
 				<page>aim_showDocumentsInPopup</page>
 				<page>viewStatusDescription</page>
-				<page>viewNpdSettings</page>
 				<page>addSectorToIndicator</page>
 				<page>PI_Filter</page>
 				<page>aim_euActivityDetails</page>
@@ -697,7 +696,7 @@
 				<page>aim_pIPrintSurvey</page>
 				<page>aim_pIPrintReports</page>
 				<page>aim_pIPrintReports2</page>
-		<page>aim_contactComponentPopIn</page>
+		        <page>aim_contactComponentPopIn</page>
                 <page>addProposedProjFunding</page>
                 <page>addQuickLink</page>
                 <page>editQuickLink</page>

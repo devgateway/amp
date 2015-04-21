@@ -238,7 +238,7 @@
                 elCell.innerHTML = 
                     "<a onclick='setViewTemDetails()' href=/aim/getWorkspace.do~dest=admin~event=edit~tId=" +oRecord.getData( 'ID' )+' title="<digi:trn>Click here to Edit Workspace</digi:trn>">' + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/application_edit.png'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
                     "<a href='javascript:deleteWorkspace(" + oRecord.getData( 'ID' )+ ")'" + ' title="<digi:trn>Click here to Delete Workspace</digi:trn>">' + "<img vspace='2' border='0' src='/TEMPLATE/ampTemplate/imagesSource/common/trash_16.gif'/>" + "</a>&nbsp;&nbsp;&nbsp;&nbsp;"+
-                    "[<a href=\"JavaScript:openNpdSettingsWindow(" +oRecord.getData( 'ID' )+ ");\">"+'<digi:trn>Npd Settings</digi:trn>'+"</a>]"+"<input type='hidden' class='teamsOnpage' value='"+oRecord.getData( 'ID' )+"'/>"
+                    "<input type='hidden' class='teamsOnpage' value='"+oRecord.getData( 'ID' )+"'/>"
             };
         
             this.formatActionsName = function(elCell, oRecord, oColumn, sData) {
@@ -590,18 +590,7 @@
         var flag = confirm('<digi:trn key="admin:workSpaceManager.deleteQuestion">Delete this workspace?</digi:trn>');
         return flag;
     }
-    
-    function openNpdSettingsWindow(ampTeamId){
-        var msg='\n<digi:trn>AMP View Settings</digi:trn>';
-        myPanel.cfg.setProperty("width","450px");
-        myPanel.cfg.setProperty("height","250px");
-        showPanelLoading(msg);
-            <digi:context name="commentUrl" property="context/module/moduleinstance/npdSettingsAction.do"/>  
-            var url = "<%=commentUrl %>";
-        url+='?actionType=viewCurrentSettings&ampTeamId='+ampTeamId
-        YAHOO.util.Connect.asyncRequest("POST",url, callback, '');
-    }
-    
+
     function addActionToURL(actionName){
         var fullURL=document.URL;
         var lastSlash=fullURL.lastIndexOf("/");
@@ -678,21 +667,13 @@
 		 
         //***Validate error messages
         if (errmsg==''){
-            saveSettings(ampTeamId,width,height,angle,pageSize);
+
         } else{
             alert(errmsg);
             return false;
         }
     }
 
-    function saveSettings(ampTeamId,width,height,angle,pageSize){
-        lastTimeStamp = new Date().getTime();
-            <digi:context name="changeSett" property="context/module/moduleinstance/npdSettingsAction.do?actionType=changeSettings"/>
-            var params="&ampTeamId="+ampTeamId+"&width="+width+"&height="+height+"&angle="+angle+"&pageSize="+pageSize;
-        var url = "${changeSett}"+params+'&timeStamp='+lastTimeStamp;
-        checkAndClose=true;
-        YAHOO.util.Connect.asyncRequest("POST",url+"?"+params, callback, '');
-    }
 </script>
 <script language="JavaScript">
 

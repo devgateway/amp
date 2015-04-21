@@ -93,7 +93,6 @@
 	<page name="updateTeamMembers" title=" - Team Members" />
 	<page name="login" title=" - Login" />
 	<page name="selectTeam" title=" - Select Team" />
-	<page name="viewNpdSettings" title="View Settings" />
 	<page name="viewStatusDescription" title="View Status Description"/>
 
 	<!--

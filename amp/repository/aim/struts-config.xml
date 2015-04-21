@@ -147,7 +147,6 @@
     <form-bean name="aimNPDForm" type="org.digijava.module.aim.form.NpdForm" />
     <form-bean name="aimActiityListForm" type="org.digijava.module.aim.form.ActivitiesForm" />
     <form-bean name="aimNPDgraphForm" type="org.digijava.module.aim.form.NpdGraphForm" />
-	<form-bean name="npdSettingsForm" type="org.digijava.module.aim.form.NpdSettingsForm"/>
 	<form-bean name="aimViewIndicatorsForm" type="org.digijava.module.aim.form.ViewIndicatorsForm" />
     <form-bean name="aimNewIndicatorForm" type="org.digijava.module.aim.form.NewIndicatorForm"/>
     <form-bean name="aimActivityProgramSettingsForm" type="org.digijava.module.aim.form.AmpActivityProgramSettingsForm"/>
@@ -1303,9 +1302,7 @@
       <forward name="forward" path="/showLayout.do?layout=viewEditIndicator" />
       <forward name="showList" path="/aim/viewIndicators.do" redirect="true"/>
     </action>
-    <action input="/showLayout.do?layout=viewNpdSettings" name="npdSettingsForm" scope="request" path="/aim/npdSettingsAction" parameter="actionType" type="org.digijava.module.aim.action.NpdSettingsAction" validate="false">
-		<forward name="forward" path="/showLayout.do?layout=viewNpdSettings"/>
-	</action>
+
     <action name="aimThemeForm" path="/aim/selectLocationForIndicatorValue" scope="session" type="org.digijava.module.aim.action.SelectLocationForIndicatorValue" validate="false">
       <forward name="forward" path="/showLayout.do?layout=selectLocationForIndicatorValue" />
       <forward name="backToAddDataPage" path="/aim/addEditData.do" />

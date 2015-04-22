@@ -1108,3 +1108,42 @@ table.component-funding-table tr
 	position: relative;
 	top: 10px;
 }
+
+
+
+#actions-table {
+  background-color: rgb(242, 242, 242);
+  display: table;
+  border-collapse: separate;
+  border-spacing: 2px;
+  border-color: gray;
+  margin-bottom: 10px;
+}
+.amp-table {
+  display: table;
+  border-collapse: separate;
+  border-spacing: 2px;
+  border-color: gray;
+  margin-bottom: 10px;
+  border-collapse: initial;
+  border: 1px #cccccc solid;
+  padding:1px;
+}
+
+.workspace-table {
+  display: table;
+  border-collapse: separate;
+  border-color: gray;
+  margin-bottom: 10px;
+  border-collapse: initial;
+}
+
+.workspace-table td {
+ border: 1px #cccccc solid;
+ padding: 3px
+}
+
+.workspace-table table td {
+ border: 0px;
+ padding: 3px
+}

@@ -1167,7 +1167,7 @@
     <td noWrap width="100%" vAlign="top">
         <table width="100%" cellspacing="1" cellpadding=""="1" border="0">
                <tr><td noWrap width="50%" vAlign="top">
-                    <table bgColor="#cccccc" cellPadding="1" cellSpacing="1" width="100%" valign="top">
+                    <table bgColor="#cccccc" cellPadding="1" cellSpacing="1" width="100%" valign="top" class="amp-table">
                         <tr bgColor="#ffffff">
                             <td vAlign="top" width="100%">
                                 <table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left" style="font-size:12px;">
@@ -1256,8 +1256,8 @@
 </td>
 
 <!--details-->
-<td  width="50%" vAlign="top">
-    <table bgColor="#cccccc" cellPadding="1" cellSpacing="1" width="100%" valign="top">
+<td  width="50%" vAlign="top" style="padding-left: 4px;">
+    <table bgColor="#cccccc" cellPadding="1" cellSpacing="1" width="100%" valign="top" class="amp-table">
         <tr bgColor="#ffffff">
             <td vAlign="top" width="100%">
                 <table width="100%" cellspacing="1" cellpadding="1" valign="top" align="left" style="font-size:12px;">

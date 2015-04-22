@@ -5,7 +5,7 @@ var LoadOnceMixin = require('../../mixins/load-once-mixin');
 
 var Activity = require('../models/activity-model');
 
-/*Backbone Collection Activities (TODO RENAME FILE)*/
+/*Backbone Collection Activities (TODO RENAME FILE) */
 module.exports = Backbone.Collection
 .extend(LoadOnceMixin).extend({
   url: '/rest/gis/activities',

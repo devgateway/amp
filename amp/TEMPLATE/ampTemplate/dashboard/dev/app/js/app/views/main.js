@@ -105,13 +105,6 @@ module.exports = BackboneDash.View.extend({
       {
         caller: 'DASHBOARD'
 	  });
-    var self = this;
-    this.listenTo(this.headerWidget.menu, 'switchLanguage', function(lng) {
-    	self.app.translator.setLanguage(lng.language).then(function() {
-            self.app.translator.translateDOM(document); 
-         });
-    	
-    });
   },
 
   render: function() {

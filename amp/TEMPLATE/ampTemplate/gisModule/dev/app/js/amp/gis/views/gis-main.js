@@ -46,13 +46,7 @@ module.exports = Backbone.View.extend({
 	$.when(headerWidget.menu.menuRendered).then(function() {
 		$('.dropdown-toggle').dropdown();
 	});
-	var self = this;
-	this.listenTo(headerWidget.menu, 'switchLanguage', function(lng) {
-	   	self.app.translator.setLanguage(lng.language).then(function() {
-	           self.app.translator.translateDOM(document); 
-	        });
-	    	
-	   });
+
     // update translations
     this.translator.translateDOM(this.el);
     this.translationToggle();

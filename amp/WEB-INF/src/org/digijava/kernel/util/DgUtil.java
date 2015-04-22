@@ -281,6 +281,7 @@ public class DgUtil {
           	saveUserLanguagePreferences(request, language);
             saveWorkspaceLanguagePreferences(request, language);
             request.setAttribute(Constants.NAVIGATION_LANGUAGE, language);
+            request.getSession().setAttribute(Constants.NAVIGATION_LANGUAGE, language);
             setLanguageCookie(language, request, response);
         }
     }

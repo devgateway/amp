@@ -52,11 +52,8 @@
     	background-color: #D1D1D1;
     }
  </style>
-<!-- Jquery Base Library -->
-<script type="text/javascript" src="<digi:file src="/TEMPLATE/ampTemplate/js_2/jquery/jquery-min.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.js"/>"> </script>
 
-<link rel="stylesheet" type="text/css" href="<digi:file src= 'module/aim/scripts/jquery-ui-1.11.0/jquery-ui.min.css'/>">
+<link rel="stylesheet" type="text/css" href="<digi:file src= '/repository/aim/view/scripts/jquery-ui-1.11.0/jquery-ui.min.css'/>">
 <link rel="stylesheet" type="text/css" href="<digi:file src= 'gisModule/dev/node_modules/jquery-ui/themes/smoothness/jquery-ui.min.css'/>">
 
 <script type="text/javascript" src="<digi:file src='module/aim/scripts/reportWizard/prefilters.js'/>" ></script>
@@ -470,7 +467,7 @@ function   computationChange(){
 	if(document.aimUpdateWorkspaceForm.computation.checked == true){
 		$("tr[id^='computation_']").show('fast');
 		$("tr[id^='private_workspace']").show(); //Show private ws when its computation ws
-		ç
+	}
 	else $("tr[id^='computation_']").hide();
 }
   
@@ -657,7 +654,7 @@ function cancel()
 										</tr>
 										<tr>
 											<td bgColor=#ffffff class=box-border>
-												<table border="0" cellPadding=3 cellspacing="1" width="100%" bgcolor="#dddddd">
+												<table border="0" cellPadding=3 cellspacing="1" width="100%" bgcolor="#dddddd" class="workspace-table">
 													<tr>
 														<td width="150" align="right" bgcolor="#FFFFFF" style="font-size:12px; font-weight:bold;">
 															<font color="red"><b>*</b></font>
@@ -821,10 +818,10 @@ function cancel()
 														</td>
 													</tr>
 													<tr>
-														<td colspan="4">
+														<td colspan="4" style="background-color: #dddddd;">
 															<table>
 																<tr>
-																	<td style="font-size:12px; font-weight:bold;">
+																	<td style="font-size:12px; font-weight:bold;border:0px;">
 																		<html:checkbox property="crossteamvalidation" value="true">
 																			<digi:trn>Cross Team Validation</digi:trn>
 																		</html:checkbox>

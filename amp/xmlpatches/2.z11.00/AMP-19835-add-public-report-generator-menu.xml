@@ -16,7 +16,7 @@
 				INSERT INTO amp_visibility_rule(SELECT nextval('amp_visibility_rule_seq'), null, 1);
 				UPDATE amp_menu_entry_view SET rule_id=(SELECT currval('amp_visibility_rule_seq')) WHERE menu_id= (SELECT id FROM amp_menu_entry WHERE name = 'Public Report Generator') AND view_type=0;
 				INSERT INTO amp_visibility_rule_amp_modules_visibility(SELECT currval('amp_visibility_rule_seq'), 
-				(SELECT * FROM amp_modules_visibility WHERE name = 'Public Report Generator' 
+				(SELECT id FROM amp_modules_visibility WHERE name = 'Public Report Generator' 
 				AND parent IN (SELECT id FROM amp_modules_visibility WHERE name = 'PUBLIC VIEW')));			
 			</lang>
 		</script>

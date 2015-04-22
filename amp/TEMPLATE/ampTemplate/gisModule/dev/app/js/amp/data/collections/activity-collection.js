@@ -65,8 +65,8 @@ module.exports = Backbone.Collection
        * payload.size = this._pageSize;
        * payload.start = this._currentStartPosition;
        */
-
-      this.url = ['/rest/gis/activities?start=', this._currentStartPosition, '&size=', this._pageSize].join('');
+      
+      this.url = ['/rest/gis/activities?start=', this.getPageDetails().currentPage, '&size=', this._pageSize].join('');
     }
 
     options = _.defaults((options || {}), {

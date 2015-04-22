@@ -9,12 +9,10 @@
 	<apply>
 		<script>
 			<lang delimiter=";" type="postgres">
-				insert into amp_menu_entry
-				(id,parent_id,name,title,tooltip,url,position) values
-				(nextval('amp_menu_entry_seq'),4,'Public Report Generator','Public Report Generator','Public Report Generator','/reportWizard.do?tabs=false&reset=true',2);
+				insert into amp_menu_entry (id,parent_id,name,title,tooltip,url,position) values
+				(nextval('amp_menu_entry_seq'),(select id from amp_menu_entry where name='Reports Menu'),'Public Report Generator','Public Report Generator','Public Report Generator','/reportWizard.do?tabs=false&amp;reset=true',2);
 				INSERT INTO amp_menu_entry_view(menu_id, view_type) 
 				VALUES ((SELECT id FROM amp_menu_entry WHERE name = 'Public Report Generator'), 0);
-
 				UPDATE amp_menu_entry_view SET rule_id=(SELECT currval('amp_visibility_rule_seq')) WHERE menu_id= (SELECT id FROM amp_menu_entry WHERE name = 'Public Report Generator') AND view_type=0;
 				INSERT INTO amp_visibility_rule_amp_modules_visibility(SELECT currval('amp_visibility_rule_seq'), 
 				(SELECT * FROM amp_modules_visibility WHERE name = 'Public Report Generator' 

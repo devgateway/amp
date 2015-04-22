@@ -80,6 +80,7 @@ module.exports = Backbone.View.extend({
 
   /*TODO(thadk) do not redraw entire view and lose the user their scrolling *
    *
+   *
    **/
   loadMoreFromCollection: function() {
     var self = this;

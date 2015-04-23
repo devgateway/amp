@@ -2,7 +2,7 @@ package org.dgfoundation.amp.visibility.data;
 
 /**
  * possible values for the GlobalSettings value which dictates the source of visibility for a ReportWizard item (Measures - as of 15/April/2015)
- * @author simple
+ * @author Constantin Dolghier
  *
  */
 public final class VisibilitySourceOptions {

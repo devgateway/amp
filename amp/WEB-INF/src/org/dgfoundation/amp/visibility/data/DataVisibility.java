@@ -77,19 +77,19 @@ public abstract class DataVisibility {
 		Set<String> invisibleData = new HashSet<String>(getAllData());
 		invisibleData.removeAll(getVisibleByDefault());
 		
-		AmpTemplatesVisibility currentTemplate = FeaturesUtil.getCurrentTemplate();
+		long currentTemplateId = FeaturesUtil.getCurrentTemplateId();
 		
 		//check fields
-		List<AmpFieldsVisibility> fields = FeaturesUtil.getAmpFieldsVisibility(getDataMap(DataMapType.FIELDS).keySet(), currentTemplate.getId());
-		processVisbleObjects(fields, getDataMap(DataMapType.FIELDS), visibleData, invisibleData);
+		List<AmpFieldsVisibility> fields = FeaturesUtil.getAmpFieldsVisibility(getDataMap(DataMapType.FIELDS).keySet(), currentTemplateId);
+		splitObjectsByVisibility(fields, getDataMap(DataMapType.FIELDS), visibleData, invisibleData);
 		
 		//check features
-		List<AmpFeaturesVisibility> features = FeaturesUtil.getAmpFeaturesVisibility(getDataMap(DataMapType.FEATURES).keySet(), currentTemplate.getId());
-		processVisbleObjects(features, getDataMap(DataMapType.FEATURES), visibleData, invisibleData);
+		List<AmpFeaturesVisibility> features = FeaturesUtil.getAmpFeaturesVisibility(getDataMap(DataMapType.FEATURES).keySet(), currentTemplateId);
+		splitObjectsByVisibility(features, getDataMap(DataMapType.FEATURES), visibleData, invisibleData);
 		
 		//check modules
-		List<AmpModulesVisibility> modules = FeaturesUtil.getAmpModulesVisibility(getDataMap(DataMapType.MODULES).keySet(), currentTemplate.getId());
-		processVisbleObjects(modules, getDataMap(DataMapType.MODULES), visibleData, invisibleData);
+		List<AmpModulesVisibility> modules = FeaturesUtil.getAmpModulesVisibility(getDataMap(DataMapType.MODULES).keySet(), currentTemplateId);
+		splitObjectsByVisibility(modules, getDataMap(DataMapType.MODULES), visibleData, invisibleData);
 		dependencyCheck(visibleData, invisibleData);
 		
 		logger.info("Not visible: " + invisibleData);
@@ -163,21 +163,19 @@ public abstract class DataVisibility {
 	}
 	
 	/**
-	 * adds to visibleColumns the list of items which are visible
+	 * adds to visibleColumns the list of items which are visible, mapped
 	 * @param visibilityList
-	 * @param nameToColumnMap
-	 * @param visibleColumns
-	 * @param invisibleColumns
+	 * @param nameToColumnMap Map<FM_path, data>
+	 * @param visibleColumns - data
+	 * @param invisibleColumns - data
 	 */
-	protected <T extends AmpObjectVisibility> void processVisbleObjects(List<T> visibilityList,
+	protected <T extends AmpObjectVisibility> void splitObjectsByVisibility(List<T> visibilityList,
 			Map<String, String> nameToColumnMap, Set<String> visibleColumns, Set<String> invisibleColumns) {
 
 		for (AmpObjectVisibility o : visibilityList) {
-			{
-				String columnName = nameToColumnMap.get(o.getName());
-				invisibleColumns.remove(columnName);
-				visibleColumns.add(columnName);
-			}
+			String columnName = nameToColumnMap.get(o.getName());
+			invisibleColumns.remove(columnName);
+			visibleColumns.add(columnName);
 		}
 	}
 	

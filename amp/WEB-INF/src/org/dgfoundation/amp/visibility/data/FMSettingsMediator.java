@@ -25,7 +25,7 @@ public class FMSettingsMediator {
 	public static final String FMGROUP_GIS = "GIS";
 	public static final String FMGROUP_DASHBOARDS = "DASHBOARDS";
 
-	/** stores all fm groups classes that are manageble via this proxy */
+	/** stores all fm groups classes that are manageable via this proxy */
 	private static Map<String, Class<? extends FMSettings>> registeredFMGroups = initFMGroups();
 	
 	/** stores all instances of fm settings per template */
@@ -50,8 +50,8 @@ public class FMSettingsMediator {
 	 * @return
 	 */
 	public static Set<String> getEnabledSettings(String fmGroupName) {
-		AmpTemplatesVisibility currentTemplate = FeaturesUtil.getCurrentTemplate();
-		Map<String, FMSettings> templateGroup = getTemplate(currentTemplate.getId());
+		long currentTemplateId = FeaturesUtil.getCurrentTemplateId();
+		Map<String, FMSettings> templateGroup = getTemplate(currentTemplateId);
 		FMSettings fmGroup = getFMSettings(templateGroup, fmGroupName);
 		
 		if (fmGroup != null) {
@@ -61,7 +61,7 @@ public class FMSettingsMediator {
 	}
 	
 	/**
-	 * Identify the template group & create it if doesn't exists yet
+	 * Identify the template group & create it if doesn't exist yet
 	 * @param id
 	 * @return
 	 */
@@ -81,8 +81,7 @@ public class FMSettingsMediator {
 	 * @param fmGroupName
 	 * @return
 	 */
-	synchronized
-	private static FMSettings getFMSettings(Map<String, FMSettings> templateGroup, String fmGroupName) {
+	synchronized private static FMSettings getFMSettings(Map<String, FMSettings> templateGroup, String fmGroupName) {
 		FMSettings fmGroup = templateGroup.get(fmGroupName);
 		if (fmGroup == null) {
 			Class<? extends FMSettings> clazz = registeredFMGroups.get(fmGroupName);

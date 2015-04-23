@@ -66,6 +66,8 @@ public class FeaturesUtil {
 
 	public static String errorLog="";
 	
+	public final static String AMP_TREE_VISIBILITY_ATTR = "ampTreeVisibility";
+	
 	public static void logGlobalSettingsCache() {
 		String log = "";
 		for (AmpGlobalSettings ampGlobalSetting:globalSettingsCache.values()) {
@@ -956,39 +958,28 @@ public class FeaturesUtil {
 		return getAmpObjectVisibility(AmpModulesVisibility.class, modulesNames, templateId);
 	}
 	
-	private static <T extends AmpObjectVisibility> List<T> getAmpObjectVisibility(Class<T> clazz, 
-			Collection<String> names, Long templateId) {
-		Session session = null;
-		List<T> col = new ArrayList<T>();
-		String qryStr = null;
-		Query qry = null;
-		
+	private static <T extends AmpObjectVisibility> List<T> getAmpObjectVisibility(Class<T> clazz, Collection<String> names, Long templateId) {
 		String joinBy = "items";
+		
 		if (clazz.isAssignableFrom(AmpFieldsVisibility.class))
 			joinBy = "fields";
 		else if (clazz.isAssignableFrom(AmpFeaturesVisibility.class))
 			joinBy = "features";
-
-		if (names != null && names.size() > 0) {
-			try {
-				session = PersistenceManager.getRequestDBSession();
-				qryStr = "select aov from " 
-						+ AmpTemplatesVisibility.class.getName() + " as templ"
-						+ " join templ." + joinBy + " aov"
-						+ " where templ.id=:templateId"
-						+ " and aov.name in (:names)"
-						+ " order by aov.name asc";
-				qry = session.createQuery(qryStr);
-				qry.setParameter("templateId", templateId);
-				qry.setParameterList("names", names);
-				col = qry.list();
-			}
-			catch (Exception ex) {
-				logger.error(ex);
-			}
-		}
-		return col;
 		
+		if (names == null || names.isEmpty()) {
+			return new ArrayList<>();
+		}
+
+		String qryStr = "select aov from " 
+				+ AmpTemplatesVisibility.class.getName() + " as templ"
+				+ " join templ." + joinBy + " aov"
+				+ " where templ.id=:templateId"
+				+ " and aov.name in (:names)"
+				+ " order by aov.name asc";
+		Query qry = PersistenceManager.getSession().createQuery(qryStr);
+		qry.setParameter("templateId", templateId);
+		qry.setParameterList("names", names);
+		return qry.list();
 	}
 	
 	/**
@@ -1000,30 +991,39 @@ public class FeaturesUtil {
 		AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(TLSUtils.getRequest().getServletContext(), TLSUtils.getRequest().getSession());
 		return object.isVisibleTemplateObj((AmpTemplatesVisibility)ampTreeVisibility.getRoot());
 	}
+
+	/**
+	 * gets the currently-relevant FM template ID.
+	 * if running inside a team, returns the FM template relevant for the team. Else, returns the global FM
+	 * @return
+	 */
+	public static long getCurrentTemplateId() {
+		Long teamId = (Long) TLSUtils.getRequest().getSession().getAttribute(Constants.TEAM_ID);
+		if (teamId != null) {
+			AmpTeam ampTeam = TeamUtil.getAmpTeam(teamId);
+			if (ampTeam != null) {
+				AmpTemplatesVisibility vis = ampTeam.getFmTemplate();
+				if (vis != null)
+					return vis.getId();
+			}
+		}
+		//if outside the workspace, then provide the default one
+		return FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE);
+	}
 	
 	/**
 	 * Detects current visibility template: used by the current workspace or default one if outside the workspace
 	 * @return AmpTemplatesVisibility
 	 */
 	public static AmpTemplatesVisibility getCurrentTemplate() {
-		AmpTemplatesVisibility currentTemplate = null;
-		//check if this is inside a workspace and retreive its template
-		Long teamId = (Long) TLSUtils.getRequest().getSession().getAttribute(Constants.TEAM_ID);
-		if (teamId != null) {
-			AmpTeam ampTeam = TeamUtil.getAmpTeam(teamId);
-			if (ampTeam != null)
-				currentTemplate = ampTeam.getFmTemplate();
-		}
-		//if outside the workspace, then provide the default one
-		if (currentTemplate == null) {
-			try {
-				currentTemplate = FeaturesUtil.getTemplateVisibility(
-				        FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE),
-				        PersistenceManager.getRequestDBSession());
-			} catch (HibernateException e) {
-				logger.error(e);
-			} 
-        }
+		long tId = getCurrentTemplateId();
+		AmpTemplatesVisibility currentTemplate = getTemplateVisibility(tId);
+		return currentTemplate;
+	}
+	
+	public static AmpTemplatesVisibility getDefaultAmpTemplateVisibility() {
+		// get the default amp template
+		AmpTemplatesVisibility currentTemplate = getTemplateVisibility(getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE));
 		return currentTemplate;
 	}
 	
@@ -1114,21 +1114,10 @@ public class FeaturesUtil {
 		return;
 	}
 	
-	public static Long insertreturnTemplate(String templateName, Session session) {
-		Transaction tx = null;
-		Long id =null;
-		try {
-			session = PersistenceManager.getRequestDBSession();
-//beginTransaction();
-			AmpTemplatesVisibility ampTemplate = new AmpTemplatesVisibility();
-			ampTemplate.setName(templateName);
-			id = (Long)session.save(ampTemplate);
-			//tx.commit();
-		}
-		catch (Exception ex) {
-			logger.error(ex);
-		}    
-		return id;
+	public static Long insertreturnTemplate(String templateName) {
+		AmpTemplatesVisibility ampTemplate = new AmpTemplatesVisibility();
+		ampTemplate.setName(templateName);
+		return (Long) PersistenceManager.getSession().save(ampTemplate);
 	}
 
 	/**
@@ -1189,12 +1178,10 @@ public class FeaturesUtil {
 	 * @param session
 	 * @throws HibernateException
 	 */
-	public static AmpTemplatesVisibility getTemplateVisibility(Long id,	Session session) throws HibernateException {
-		AmpTemplatesVisibility ft = new AmpTemplatesVisibility();
-		ft = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class, id);
-		List list = session.createQuery("from " + AmpModulesVisibility.class.getName()).list();
-		TreeSet mySet=new TreeSet(FeaturesUtil.ALPHA_ORDER);
-		mySet.addAll(list);
+	public static AmpTemplatesVisibility getTemplateVisibility(Long id) {
+		AmpTemplatesVisibility ft = (AmpTemplatesVisibility) PersistenceManager.getSession().load(AmpTemplatesVisibility.class, id);
+		TreeSet<AmpTemplatesVisibility> mySet = new TreeSet<>(FeaturesUtil.ALPHA_ORDER);
+		mySet.addAll(PersistenceManager.getSession().createQuery("from " + AmpModulesVisibility.class.getName()).list());
 		ft.setAllItems(mySet);
 		return ft;
 	}
@@ -1633,22 +1620,17 @@ public class FeaturesUtil {
 	 * @author dan
 	 *
 	 * @return
-	 * @throws SQLException
 	 * @throws HibernateException
 	 */
-	public static void updateAmpFeaturesTreeVisibility(Collection features,
-			Long templateId, Session session) throws HibernateException, SQLException {
-		AmpTemplatesVisibility ampTemplate = new AmpTemplatesVisibility();
-		ampTemplate = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class,
-				templateId);
-		if (ampTemplate.getFeatures()!=null){
+	public static void updateAmpFeaturesTreeVisibility(Collection<AmpFeaturesVisibility> features, Long templateId, Session session) throws HibernateException {
+		AmpTemplatesVisibility ampTemplate = (AmpTemplatesVisibility) session.load(AmpTemplatesVisibility.class, templateId);
+		if (ampTemplate.getFeatures() != null) {
 			ampTemplate.getFeatures().retainAll(features);
 			ampTemplate.getFeatures().addAll(features);
-		}else{
+		} else{
 			ampTemplate.setFeatures(new TreeSet<AmpFeaturesVisibility>());
 			ampTemplate.getFeatures().addAll(features);
 		}
-		return;
 	}
 
 	/**
@@ -1730,8 +1712,7 @@ public class FeaturesUtil {
 	/**
 	 * @author dan
 	 */
-	public static void insertFeatureWithModuleVisibility(Long templateId,
-			Long moduleId, String featureName, String hasLevel) throws DgException {
+	public static void insertFeatureWithModuleVisibility(Long templateId, Long moduleId, String featureName, String hasLevel) {
 		Session session = null;
 		AmpModulesVisibility module = new AmpModulesVisibility();
 		AmpFeaturesVisibility feature = new AmpFeaturesVisibility();
@@ -1759,7 +1740,7 @@ public class FeaturesUtil {
 		}
 		catch (Exception ex) {
 			logger.error(ex);
-			throw new DgException(ex);
+			throw new RuntimeException(ex);
 		}
 		return;
 	}
@@ -2372,7 +2353,7 @@ public class FeaturesUtil {
 	}
 	
 	
-	public static boolean isVisibleFeature(String featureName){
+	public static boolean isVisibleFeature(String featureName) {
 		HttpSession session = TLSUtils.getRequest().getSession();
 		ServletContext ampContext = session.getServletContext();
 		AmpTreeVisibility ampTreeVisibility = FeaturesUtil.getAmpTreeVisibility(session.getServletContext(), session);
@@ -2385,74 +2366,61 @@ public class FeaturesUtil {
 	public static boolean isVisibleModule(String moduleName){
 		AmpTreeVisibility ampTreeVisibility=FeaturesUtil.getAmpTreeVisibility(TLSUtils.getRequest().getServletContext(), TLSUtils.getRequest().getSession());
 		AmpModulesVisibility moduleToTest=ampTreeVisibility.getModuleByNameFromRoot(moduleName);
-		if(moduleToTest!=null)
+		if (moduleToTest != null)
 			return moduleToTest.isVisibleTemplateObj((AmpTemplatesVisibility) ampTreeVisibility.getRoot());
 		return false;
 	}
 	
-	
-	public static AmpTreeVisibility getAmpTreeVisibility(ServletContext ampContext, HttpSession session){
-			if (session != null
-				&& session.getAttribute("ampTreeVisibility") != null) {
-			AmpTreeVisibility currentOnSession = (AmpTreeVisibility) session
-					.getAttribute("ampTreeVisibility");
+	/**
+	 * gets the visibility tree relevant for this session. Does that by trying to get the tree of the session; if none exists, then falls back to the global one
+	 * @param ampContext
+	 * @param session
+	 * @return
+	 */
+	public static AmpTreeVisibility getAmpTreeVisibility(ServletContext ampContext, HttpSession session) {
+		if (session != null && session.getAttribute(AMP_TREE_VISIBILITY_ATTR) != null) {
+			AmpTreeVisibility currentOnSession = (AmpTreeVisibility) session.getAttribute(AMP_TREE_VISIBILITY_ATTR);
 			// if there is an object in session we should check if its valid, if
 			// not we should go and fetch it again
 			// from database
-			ConcurrentHashMap<Long, Date> contextModificationDateMap = null;
+			ConcurrentHashMap<Long, Date> contextModificationDateMap = (ConcurrentHashMap<Long, Date>) ampContext.getAttribute("templateVisibilityChangeDate");;
 			// we should save the time of last actualization
-			contextModificationDateMap = (ConcurrentHashMap<Long, Date>) ampContext
-					.getAttribute("templateVisibilityChangeDate");
-			Date sessionModificationDate = (Date) session
-					.getAttribute("ampTreeVisibilityModificationDate");
-			if (contextModificationDateMap.get(
-					currentOnSession.getRoot().getId()).after(
-					sessionModificationDate)) {
-
-				AmpTemplatesVisibility currentTemplate = null;
-				try {
-					currentTemplate = FeaturesUtil.getTemplateVisibility(
-							currentOnSession.getRoot().getId(),PersistenceManager.getRequestDBSession());
-				} catch (Exception e) {
-					logger.debug("Cannot get new template ");
-					throw new RuntimeException(e);
-
-				}
+			Date sessionModificationDate = (Date) session.getAttribute("ampTreeVisibilityModificationDate");
+			if (contextModificationDateMap.get(currentOnSession.getRoot().getId()).after(sessionModificationDate)) {
+				AmpTemplatesVisibility currentTemplate = FeaturesUtil.getTemplateVisibility(currentOnSession.getRoot().getId());
 				currentOnSession.buildAmpTreeVisibility(currentTemplate);
-				session.setAttribute("ampTreeVisibility", currentOnSession);
+				session.setAttribute(AMP_TREE_VISIBILITY_ATTR, currentOnSession);
 				// we store the new date where the visibility has been modified
 				// for the current session
-				session.setAttribute("ampTreeVisibilityModificationDate",new Date());
+				session.setAttribute("ampTreeVisibilityModificationDate", new Date());
 			}
 
 			return currentOnSession;
 		} else {
-			return (AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+			return (AmpTreeVisibility) ampContext.getAttribute(AMP_TREE_VISIBILITY_ATTR);
 		}
 	}
 
-	public static void setAmpTreeVisibility(ServletContext ampContext,
-			HttpSession session, AmpTreeVisibility ampTreeVisibility) {
-		Date modificationDate=new Date();
-		ConcurrentHashMap<Long,Date> ampVisibilityModification=null;
+	public static void setAmpTreeVisibility(ServletContext ampContext, HttpSession session, AmpTreeVisibility ampTreeVisibility) {
+		Date modificationDate = new Date();
+		ConcurrentHashMap<Long, Date> ampVisibilityModification = null;
 		//we should save the time of last actualization 
-		ampVisibilityModification=(ConcurrentHashMap<Long,Date>)ampContext.getAttribute("templateVisibilityChangeDate");
-		if(ampVisibilityModification==null){
-			ampVisibilityModification=new ConcurrentHashMap<Long, Date>();
+		ampVisibilityModification = (ConcurrentHashMap<Long,Date>) ampContext.getAttribute("templateVisibilityChangeDate");
+		if (ampVisibilityModification == null) {
+			ampVisibilityModification = new ConcurrentHashMap<Long, Date>();
 		}
 
-		//we set the modification date for the corresponding teamplate
-		ampVisibilityModification.put(ampTreeVisibility.getRoot().getId(),modificationDate);
-		ampContext.setAttribute("templateVisibilityChangeDate",ampVisibilityModification);
+		//we set the modification date for the corresponding template
+		ampVisibilityModification.put(ampTreeVisibility.getRoot().getId(), modificationDate);
+		ampContext.setAttribute("templateVisibilityChangeDate", ampVisibilityModification);
 		
-		//we only save on context the default template so we dont messup the administrative
-		//section
-		if(FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE).equals(ampTreeVisibility.getRoot().getId())) {
-			ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);			
+		//we only save on context the default template so we don't mess the administrative section
+		if (FeaturesUtil.getGlobalSettingValueLong(GlobalSettingsConstants.VISIBILITY_TEMPLATE).equals(ampTreeVisibility.getRoot().getId())) {
+			ampContext.setAttribute(AMP_TREE_VISIBILITY_ATTR, ampTreeVisibility);			
 		}
 		
-		if (session != null && session != null) {
-			session.setAttribute("ampTreeVisibility", ampTreeVisibility);
+		if (session != null) {
+			session.setAttribute(AMP_TREE_VISIBILITY_ATTR, ampTreeVisibility);
 			//after setting the session visibility tree we set the date for that session
 			session.setAttribute("ampTreeVisibilityModificationDate", modificationDate);
 		}

@@ -264,18 +264,6 @@ public class SaikuUtils {
 		return newCellArray;
 	}
 	
-//	public static AbstractBaseCell[][] hideColumns(AbstractBaseCell[][] cellMatrix, SortedSet<Integer> leafColumnsNumberToRemove) {
-//		if (cellMatrix == null || cellMatrix.length == 0 || leafColumnsNumberToRemove.size() == 0) return cellMatrix; 
-//		
-//		for (int i = 0; i < cellMatrix.length; i++) {
-//			for (Integer j : leafColumnsNumberToRemove) {
-//				cellMatrix[i][j].setProperty("hidden", "true");
-//			}
-//		}	
-//			
-//		return cellMatrix;
-//	}
-	
 	public static void clearRowTotals(CellDataSet cellDataSet, SortedSet<Integer> rowTotalsColIdsToClear) {
 		for (List<TotalNode> tnl : cellDataSet.getRowTotalsLists()) {
 			for (TotalNode tn : tnl) {

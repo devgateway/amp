@@ -186,16 +186,15 @@ public class MondrianComputedMeasuresReportTests extends MondrianReportsTestCase
 	
 	@Test
 	public void test_AMP_19723_Execution_Rate() {
-		// output must change after AMP-19940 (disagregated Execution Rate per year will disapear)
 		ReportAreaForTests correctReport = new ReportAreaForTests()
-	    .withContents("Project Title", "Report Totals", "2010-Planned Disbursements", "0", "2010-Actual Disbursements", "123 321", "2010-Execution Rate", "", "2014-Planned Disbursements", "90 300", "2014-Actual Disbursements", "80 200", "2014-Execution Rate", "", "2015-Planned Disbursements", "500", "2015-Actual Disbursements", "570", "2015-Execution Rate", "", "Total Measures-Planned Disbursements", "90 800", "Total Measures-Actual Disbursements", "204 091", "Total Measures-Execution Rate", "")
+	    .withContents("Project Title", "Report Totals", "2010-Planned Disbursements", "0", "2010-Actual Disbursements", "123 321", "2014-Planned Disbursements", "90 300", "2014-Actual Disbursements", "80 200", "2015-Planned Disbursements", "500", "2015-Actual Disbursements", "570", "Total Measures-Planned Disbursements", "90 800", "Total Measures-Actual Disbursements", "204 091", "Total Measures-Execution Rate", "")
 	    .withChildren(
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "TAC_activity_1", "2010-Planned Disbursements", "", "2010-Actual Disbursements", "123 321", "2010-Execution Rate", "", "2014-Planned Disbursements", "", "2014-Actual Disbursements", "", "2014-Execution Rate", "", "2015-Planned Disbursements", "", "2015-Actual Disbursements", "", "2015-Execution Rate", "", "Total Measures-Planned Disbursements", "0", "Total Measures-Actual Disbursements", "123 321", "Total Measures-Execution Rate", "0"),
+	          .withContents("Project Title", "TAC_activity_1", "2010-Planned Disbursements", "", "2010-Actual Disbursements", "123 321", "2014-Planned Disbursements", "", "2014-Actual Disbursements", "", "2015-Planned Disbursements", "", "2015-Actual Disbursements", "", "Total Measures-Planned Disbursements", "0", "Total Measures-Actual Disbursements", "123 321", "Total Measures-Execution Rate", "0"),
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "activity with capital spending", "2010-Planned Disbursements", "", "2010-Actual Disbursements", "", "2010-Execution Rate", "", "2014-Planned Disbursements", "90 000", "2014-Actual Disbursements", "80 000", "2014-Execution Rate", "88,89", "2015-Planned Disbursements", "", "2015-Actual Disbursements", "", "2015-Execution Rate", "", "Total Measures-Planned Disbursements", "90 000", "Total Measures-Actual Disbursements", "80 000", "Total Measures-Execution Rate", "88,89"),
+	          .withContents("Project Title", "activity with capital spending", "2010-Planned Disbursements", "", "2010-Actual Disbursements", "", "2014-Planned Disbursements", "90 000", "2014-Actual Disbursements", "80 000", "2015-Planned Disbursements", "", "2015-Actual Disbursements", "", "Total Measures-Planned Disbursements", "90 000", "Total Measures-Actual Disbursements", "80 000", "Total Measures-Execution Rate", "88,89"),
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "Activity with planned disbursements", "2010-Planned Disbursements", "", "2010-Actual Disbursements", "", "2010-Execution Rate", "", "2014-Planned Disbursements", "300", "2014-Actual Disbursements", "200", "2014-Execution Rate", "25", "2015-Planned Disbursements", "500", "2015-Actual Disbursements", "570", "2015-Execution Rate", "71,25", "Total Measures-Planned Disbursements", "800", "Total Measures-Actual Disbursements", "770", "Total Measures-Execution Rate", "96,25")  );
+	          .withContents("Project Title", "Activity with planned disbursements", "2010-Planned Disbursements", "", "2010-Actual Disbursements", "", "2014-Planned Disbursements", "300", "2014-Actual Disbursements", "200", "2015-Planned Disbursements", "500", "2015-Actual Disbursements", "570", "Total Measures-Planned Disbursements", "800", "Total Measures-Actual Disbursements", "770", "Total Measures-Execution Rate", "96,25")  );
 		
 		List<String> activities = Arrays.asList("TAC_activity_1", "activity with capital spending", "Activity with planned disbursements");
 		runMondrianTestCase("AMP-19723-Execution-Rate",
@@ -207,23 +206,23 @@ public class MondrianComputedMeasuresReportTests extends MondrianReportsTestCase
 	@Test
 	public void test_AMP_19723_Execution_Rate_with_Hierarchy() {
 		ReportAreaForTests correctReport = new ReportAreaForTests()
-	    .withContents("Donor Agency", "Report Totals", "Project Title", "", "2010-Planned Disbursements", "0", "2010-Actual Disbursements", "123 321", "2010-Execution Rate", "", "2014-Planned Disbursements", "300", "2014-Actual Disbursements", "200", "2014-Execution Rate", "", "2015-Planned Disbursements", "500", "2015-Actual Disbursements", "570", "2015-Execution Rate", "", "Total Measures-Planned Disbursements", "800", "Total Measures-Actual Disbursements", "124 091", "Total Measures-Execution Rate", "")
+	    .withContents("Donor Agency", "Report Totals", "Project Title", "", "2010-Planned Disbursements", "0", "2010-Actual Disbursements", "123 321", "2014-Planned Disbursements", "300", "2014-Actual Disbursements", "200", "2015-Planned Disbursements", "500", "2015-Actual Disbursements", "570", "Total Measures-Planned Disbursements", "800", "Total Measures-Actual Disbursements", "124 091", "Total Measures-Execution Rate", "")
 	    .withChildren(
 	      new ReportAreaForTests()
-	          .withContents("Donor Agency", "Norway Totals", "Project Title", "", "2010-Planned Disbursements", "0", "2010-Actual Disbursements", "0", "2010-Execution Rate", "", "2014-Planned Disbursements", "300", "2014-Actual Disbursements", "200", "2014-Execution Rate", "", "2015-Planned Disbursements", "400", "2015-Actual Disbursements", "500", "2015-Execution Rate", "", "Total Measures-Planned Disbursements", "700", "Total Measures-Actual Disbursements", "700", "Total Measures-Execution Rate", "")
+	          .withContents("Donor Agency", "Norway Totals", "Project Title", "", "2010-Planned Disbursements", "0", "2010-Actual Disbursements", "0", "2014-Planned Disbursements", "300", "2014-Actual Disbursements", "200", "2015-Planned Disbursements", "400", "2015-Actual Disbursements", "500", "Total Measures-Planned Disbursements", "700", "Total Measures-Actual Disbursements", "700", "Total Measures-Execution Rate", "")
 	      .withChildren(
 	        new ReportAreaForTests()
-	              .withContents("Donor Agency", "Norway", "Project Title", "Activity with planned disbursements", "2010-Planned Disbursements", "", "2010-Actual Disbursements", "", "2010-Execution Rate", "", "2014-Planned Disbursements", "300", "2014-Actual Disbursements", "200", "2014-Execution Rate", "28,57", "2015-Planned Disbursements", "400", "2015-Actual Disbursements", "500", "2015-Execution Rate", "71,43", "Total Measures-Planned Disbursements", "700", "Total Measures-Actual Disbursements", "700", "Total Measures-Execution Rate", "100")    ),
+	              .withContents("Donor Agency", "Norway", "Project Title", "Activity with planned disbursements", "2010-Planned Disbursements", "", "2010-Actual Disbursements", "", "2014-Planned Disbursements", "300", "2014-Actual Disbursements", "200", "2015-Planned Disbursements", "400", "2015-Actual Disbursements", "500", "Total Measures-Planned Disbursements", "700", "Total Measures-Actual Disbursements", "700", "Total Measures-Execution Rate", "100")    ),
 	      new ReportAreaForTests()
-	          .withContents("Donor Agency", "USAID Totals", "Project Title", "", "2010-Planned Disbursements", "0", "2010-Actual Disbursements", "0", "2010-Execution Rate", "", "2014-Planned Disbursements", "0", "2014-Actual Disbursements", "0", "2014-Execution Rate", "", "2015-Planned Disbursements", "100", "2015-Actual Disbursements", "70", "2015-Execution Rate", "", "Total Measures-Planned Disbursements", "100", "Total Measures-Actual Disbursements", "70", "Total Measures-Execution Rate", "")
+	          .withContents("Donor Agency", "USAID Totals", "Project Title", "", "2010-Planned Disbursements", "0", "2010-Actual Disbursements", "0", "2014-Planned Disbursements", "0", "2014-Actual Disbursements", "0", "2015-Planned Disbursements", "100", "2015-Actual Disbursements", "70", "Total Measures-Planned Disbursements", "100", "Total Measures-Actual Disbursements", "70", "Total Measures-Execution Rate", "")
 	      .withChildren(
 	        new ReportAreaForTests()
-	              .withContents("Donor Agency", "USAID", "Project Title", "Activity with planned disbursements", "2010-Planned Disbursements", "", "2010-Actual Disbursements", "", "2010-Execution Rate", "", "2014-Planned Disbursements", "", "2014-Actual Disbursements", "", "2014-Execution Rate", "", "2015-Planned Disbursements", "100", "2015-Actual Disbursements", "70", "2015-Execution Rate", "70", "Total Measures-Planned Disbursements", "100", "Total Measures-Actual Disbursements", "70", "Total Measures-Execution Rate", "70")    ),
+	              .withContents("Donor Agency", "USAID", "Project Title", "Activity with planned disbursements", "2010-Planned Disbursements", "", "2010-Actual Disbursements", "", "2014-Planned Disbursements", "", "2014-Actual Disbursements", "", "2015-Planned Disbursements", "100", "2015-Actual Disbursements", "70", "Total Measures-Planned Disbursements", "100", "Total Measures-Actual Disbursements", "70", "Total Measures-Execution Rate", "70")    ),
 	      new ReportAreaForTests()
-	          .withContents("Donor Agency", "World Bank Totals", "Project Title", "", "2010-Planned Disbursements", "0", "2010-Actual Disbursements", "123 321", "2010-Execution Rate", "", "2014-Planned Disbursements", "0", "2014-Actual Disbursements", "0", "2014-Execution Rate", "", "2015-Planned Disbursements", "0", "2015-Actual Disbursements", "0", "2015-Execution Rate", "", "Total Measures-Planned Disbursements", "0", "Total Measures-Actual Disbursements", "123 321", "Total Measures-Execution Rate", "")
+	          .withContents("Donor Agency", "World Bank Totals", "Project Title", "", "2010-Planned Disbursements", "0", "2010-Actual Disbursements", "123 321", "2014-Planned Disbursements", "0", "2014-Actual Disbursements", "0", "2015-Planned Disbursements", "0", "2015-Actual Disbursements", "0", "Total Measures-Planned Disbursements", "0", "Total Measures-Actual Disbursements", "123 321", "Total Measures-Execution Rate", "")
 	      .withChildren(
 	        new ReportAreaForTests()
-	              .withContents("Donor Agency", "World Bank", "Project Title", "TAC_activity_1", "2010-Planned Disbursements", "", "2010-Actual Disbursements", "123 321", "2010-Execution Rate", "", "2014-Planned Disbursements", "", "2014-Actual Disbursements", "", "2014-Execution Rate", "", "2015-Planned Disbursements", "", "2015-Actual Disbursements", "", "2015-Execution Rate", "", "Total Measures-Planned Disbursements", "0", "Total Measures-Actual Disbursements", "123 321", "Total Measures-Execution Rate", "0")    )  );
+	              .withContents("Donor Agency", "World Bank", "Project Title", "TAC_activity_1", "2010-Planned Disbursements", "", "2010-Actual Disbursements", "123 321", "2014-Planned Disbursements", "", "2014-Actual Disbursements", "", "2015-Planned Disbursements", "", "2015-Actual Disbursements", "", "Total Measures-Planned Disbursements", "0", "Total Measures-Actual Disbursements", "123 321", "Total Measures-Execution Rate", "0")    )  );
 
 		
 		List<String> activities = Arrays.asList("TAC_activity_1", "Activity with planned disbursements");
@@ -232,5 +231,55 @@ public class MondrianComputedMeasuresReportTests extends MondrianReportsTestCase
 				correctReport,
 				"en");
 		
+	}
+	
+	@Test 
+	public void test_AMP_19940_Partial_measure_columns_removed() {
+		ReportAreaForTests correctReport = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "2014-Planned Disbursements", "300", "2015-Planned Disbursements", "500", "Total Measures-Planned Disbursements", "800", "Total Measures-Execution Rate", "")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "TAC_activity_1", "2014-Planned Disbursements", "", "2015-Planned Disbursements", "", "Total Measures-Planned Disbursements", "0", "Total Measures-Execution Rate", "0"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "Activity with planned disbursements", "2014-Planned Disbursements", "300", "2015-Planned Disbursements", "500", "Total Measures-Planned Disbursements", "800", "Total Measures-Execution Rate", "96,25")  );
+		List<String> activities = Arrays.asList("TAC_activity_1", "Activity with planned disbursements");
+		runMondrianTestCase("AMP-19940-Partial-measure-columns-removed",
+				activities,
+				correctReport,
+				"en");
+	}
+	
+	@Test 
+	public void test_AMP_19940_Quarterly_measure_columns_removed() {
+		ReportAreaForTests correctReport = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "2014-Q4-Planned Disbursements", "90 000", "2014-Q4-Actual Disbursements", "80 000", "2015-Q2-Planned Disbursements", "500", "2015-Q2-Actual Disbursements", "570", "Total Measures-Planned Disbursements", "90 500", "Total Measures-Actual Disbursements", "80 570", "Total Measures-Execution Rate", "")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "activity with capital spending", "2014-Q4-Planned Disbursements", "90 000", "2014-Q4-Actual Disbursements", "80 000", "2015-Q2-Planned Disbursements", "", "2015-Q2-Actual Disbursements", "", "Total Measures-Planned Disbursements", "90 000", "Total Measures-Actual Disbursements", "80 000", "Total Measures-Execution Rate", "88,89"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "Activity with planned disbursements", "2014-Q4-Planned Disbursements", "", "2014-Q4-Actual Disbursements", "", "2015-Q2-Planned Disbursements", "500", "2015-Q2-Actual Disbursements", "570", "Total Measures-Planned Disbursements", "500", "Total Measures-Actual Disbursements", "570", "Total Measures-Execution Rate", "114")  );
+		List<String> activities = Arrays.asList("TAC_activity_1", "Activity with planned disbursements", "activity with capital spending");
+		runMondrianTestCase("AMP-19940-Quarterly-measure-columns-removed",
+				activities,
+				correctReport,
+				"en");
+	}
+	
+	@Test 
+	public void test_AMP_19940_All_measure_columns_removed() {
+		ReportAreaForTests correctReport = new ReportAreaForTests()
+	    .withContents("Project Title", "Report Totals", "Total Measures-Execution Rate", "")
+	    .withChildren(
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "TAC_activity_1", "Total Measures-Execution Rate", "0"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "activity with capital spending", "Total Measures-Execution Rate", "88,89"),
+	      new ReportAreaForTests()
+	          .withContents("Project Title", "Activity with planned disbursements", "Total Measures-Execution Rate", "96,25")  );
+		List<String> activities = Arrays.asList("TAC_activity_1", "Activity with planned disbursements", "activity with capital spending");
+		runMondrianTestCase("AMP-19940-All-measure-columns-removed",
+				activities,
+				correctReport,
+				"en");
 	}
 }

@@ -1,5 +1,8 @@
 package org.dgfoundation.amp.newreports;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
@@ -25,7 +28,8 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	 */
 	public final String originalColumnName;
 	
-	//private List<ReportOutputColumn> children;
+	transient
+	public final List<ReportOutputColumn> children = new ArrayList<ReportOutputColumn>();
 	
 	public ReportOutputColumn(String columnName, ReportOutputColumn parentColumn, String originalColumnName) {
 		this.columnName = columnName;
@@ -33,6 +37,9 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 			throw new NullPointerException();
 		this.parentColumn = parentColumn;
 		this.originalColumnName = originalColumnName;
+		if (parentColumn !=null) {
+			this.parentColumn.children.add(this);
+		}
 	}
 	
 	public static ReportOutputColumn buildTranslated(String originalColumnName, String locale, ReportOutputColumn parentColumn){
@@ -67,21 +74,5 @@ public class ReportOutputColumn implements Comparable<ReportOutputColumn> {
 	@Override public int compareTo(ReportOutputColumn oth) {
 		return this.getHierarchicalName().compareTo(oth.getHierarchicalName());
 	}
-	
-	/**
-	 * @return {@link ReportOutputColumn} list of direct children 
-	 */
-	/*
-	public List<ReportOutputColumn> getChildren() {
-		return children;
-	}
-	
-	public void addChild(ReportOutputColumn child) {
-		if (children == null) {
-			children = new ArrayList<ReportOutputColumn>();
-		}
-		children.add(child);
-	}
-	*/
 
 }

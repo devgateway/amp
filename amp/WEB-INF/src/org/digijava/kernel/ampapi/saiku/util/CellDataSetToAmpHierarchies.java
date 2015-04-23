@@ -148,8 +148,9 @@ public class CellDataSetToAmpHierarchies {
 					TotalAggregator[][] totals = rowTotals[startColumnIndex].get(currentSubGroupIndex).getTotalGroups();
 					//b) update data with totals
 					for (int a = cellDataSet.getLeftOffset(); a < cellDataSet.getCellSetBody()[groupStartRowId].length; a++) {
-						String newVal = numberFormat.format(totals[0][a - cellDataSet.getLeftOffset()].getValue());
-						cellDataSet.getCellSetBody()[groupStartRowId][a].setRawValue(String.valueOf(totals[0][a - cellDataSet.getLeftOffset()].getValue()));
+						Double totalAmount = getValidAmount(totals[0][a - cellDataSet.getLeftOffset()].getValue(), a, groupStartRowId, rowId);
+						String newVal = totalAmount == null ? "" : numberFormat.format(totalAmount);
+						cellDataSet.getCellSetBody()[groupStartRowId][a].setRawValue(String.valueOf(totalAmount));
 						cellDataSet.getCellSetBody()[groupStartRowId][a].setFormattedValue(newVal);
 					}
 				}
@@ -249,6 +250,33 @@ public class CellDataSetToAmpHierarchies {
 			start = range.getMaximumInteger() + 1;
 		}
 		cellDataSet.setCellSetBody(newData);
+	}
+	
+	/** 
+	 * For any 0 total amount we need to know the right formatting:
+	 * a) 0 if there are amounts that compensate each other (positive & negative) 
+	 * b) EMPTY if all group entries are empty
+	 * @param totalAmount
+	 * @param colId
+	 * @param startRowId
+	 * @param endRowId
+	 * @return
+	 */
+	protected Double getValidAmount(Double totalAmount, int colId, int startRowId, int endRowId) {
+		if (totalAmount == 0) {
+			boolean invalid0Amount = true;
+			for (int rowId = startRowId; rowId <= endRowId; rowId ++) {
+				String value = cellDataSet.getCellSetBody()[rowId][colId].getFormattedValue();
+				if (value != null && !value.isEmpty()) {
+					invalid0Amount = false;
+					break;
+				}
+			}
+			if (invalid0Amount) {
+				totalAmount = null;
+			}
+		}
+		return totalAmount;
 	}
 	
 }

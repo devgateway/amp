@@ -27,9 +27,10 @@ import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
+import org.dgfoundation.amp.newreports.ReportSettings;
 import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.newreports.TextCell;
-import org.dgfoundation.amp.reports.AmountColumns;
+import org.dgfoundation.amp.reports.CustomAmounts;
 import org.dgfoundation.amp.reports.DateColumns;
 import org.dgfoundation.amp.reports.PartialReportArea;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
@@ -60,6 +61,8 @@ public class CellDataSetToGeneratedReport {
 	private boolean isTotalsOnlyReport = false;
 	private Set<Integer> emptyColTotalsMeasuresIndexes = new TreeSet<Integer>();
 	private Set<Integer> emptyRowTotalsMeasuresIndexes = new TreeSet<Integer>();
+	private Set<Integer> amountMultiplierColumns = new TreeSet<Integer>();
+	private double amountMultiplier = 1.0d;
 	
 	public CellDataSetToGeneratedReport(ReportSpecification spec, CellDataSet cellDataSet, 
 			List<ReportOutputColumn> leafHeaders, List<Integer> cellDataSetActivities) {
@@ -71,10 +74,15 @@ public class CellDataSetToGeneratedReport {
 	}
 	
 	private void init() {
-		if (spec.getSettings() != null && spec.getSettings().getCurrencyFormat() != null )
-			this.numberFormat = spec.getSettings().getCurrencyFormat();
-		else 
+		ReportSettings settings = spec.getSettings() == null ? 
+				MondrianReportUtils.getCurrentUserDefaultSettings() : spec.getSettings(); 
+		if (settings.getCurrencyFormat() != null ) {
+			this.numberFormat = settings.getCurrencyFormat();
+		} else { 
 			this.numberFormat = MondrianReportUtils.getCurrentUserDefaultSettings().getCurrencyFormat();
+		}
+		amountMultiplier = settings.getUnitsMultiplier();
+		initColumnIdsToApplyAmountsMultiplier();
 		// This is a bit ugly it will fix end points and tabs with number formating issues 
 		// Ensure Locale is always US
 		Locale locale  = new Locale("en", "US");
@@ -178,7 +186,7 @@ public class CellDataSetToGeneratedReport {
 			ReportOutputColumn roc = leafHeaders.get(colId);
 			ReportCell cellData;
 			//textual columns
-			if (colId < spec.getColumns().size() && !AmountColumns.ACTIVITY_AMOUNTS.contains(roc.originalColumnName)) { 
+			if (colId < spec.getColumns().size() && !CustomAmounts.ACTIVITY_AMOUNTS.contains(roc.originalColumnName)) { 
 				if (DateColumns.ACTIVITY_DATES.contains(roc.originalColumnName)) {
 					cellData = DateCell.buildDateCell(value);
 				} else { 
@@ -190,7 +198,7 @@ public class CellDataSetToGeneratedReport {
 					notNullColId ++;
 				}
 			} else { // measure or amount columns
-				Double dVal = parseValue(value, !isTotalsOnlyReport || colId < spec.getColumns().size());
+				Double dVal = parseValue(value, !isTotalsOnlyReport || colId < spec.getColumns().size(), colId);
 				cellData = new AmountCell(dVal, this.numberFormat);
 			}
 			if (reformat) {
@@ -204,7 +212,7 @@ public class CellDataSetToGeneratedReport {
 			int headerColId = rowLength;
 			for (int colId = 0; colId < measureTotals.length; colId ++) {
 				//Unfortunately cannot use getValue() because during concatenation we override the value, but the only way to override is via formatted value
-				double value = parseValue(measureTotals[colId][rowId].getFormattedValue(), false); 
+				double value = parseValue(measureTotals[colId][rowId].getFormattedValue(), false, headerColId); 
 				contents.put(leafHeaders.get(headerColId++), new AmountCell(value, this.numberFormat));
 				//also re-format, via MDX formatting works a bit differently
 				measureTotals[colId][rowId].setFormattedValue(this.numberFormat.format(value));
@@ -232,7 +240,7 @@ public class CellDataSetToGeneratedReport {
 //	}
 	
 	public static Map<String, Integer> counts = new TreeMap<String, Integer>();
-	private Double parseValue(String value, boolean emptyAsNull) throws AMPException {
+	private Double parseValue(String value, boolean emptyAsNull, int colId) throws AMPException {
 		if (value == null)
 			throw new AMPException("Textual column value sent for parsing - invalid request. Please fix");
 		// return null result only for computed columns or for measures that are distributed over the years
@@ -248,6 +256,9 @@ public class CellDataSetToGeneratedReport {
 		if (!value.equals("0")) {
 			try {
 				dValue = readingNumberFormat.parse(value).doubleValue();
+				if (amountMultiplierColumns.contains(colId)) {
+					dValue *= amountMultiplier;
+				}
 			} catch (ParseException e) {
 				//empty string
 			} catch (Exception e) {
@@ -331,11 +342,12 @@ public class CellDataSetToGeneratedReport {
 				Double value = totals[a][b].getValue();
 				if (emptyRowTotalsMeasuresIndexes.contains(b)) {
 					totals[a][b] = totals[a][b].newInstance("");
-					totals[a][b].setFormattedValue("");
 					value = null;
+				} else if (amountMultiplierColumns.contains(headerPos)) {
+					value *= amountMultiplier; 
 				}
 				contents.put(leafHeaders.get(headerPos++), new AmountCell(value, this.numberFormat));
-				totals[a][b].setFormattedValue(this.numberFormat.format(totals[a][b].getValue()));
+				totals[a][b].setFormattedValue(value == null ? "" : this.numberFormat.format(value));
 			}
 			
 		//calculate total measures of the current area
@@ -404,5 +416,20 @@ public class CellDataSetToGeneratedReport {
 		}
 	}
 	
+	/**
+	 * @return column ids to apply the amounts multiplier
+	 */
+	private void initColumnIdsToApplyAmountsMultiplier() {
+		// if this is a standard amount unit, then nothing to multiply and leave it as it is
+		if (Math.abs(1.0d - amountMultiplier) < 0.000000001)
+			return;
+		int headerPos = 0;
+		for (ReportOutputColumn roc : leafHeaders) {
+			if (!CustomAmounts.UNIT_MULTIPLIER_NOT_APPLICABLE.contains(roc.originalColumnName)) {
+				amountMultiplierColumns.add(headerPos);
+			}
+			headerPos ++;
+		}	 
+	}
 	
 }

@@ -292,7 +292,7 @@ public class MondrianReportUtils {
 //	public static void removeUnsupportedColumns(ReportSpecification spec) {
 //		// there can be also some measures automatically moved as computed columns in Mondrian
 //		Set<String> allowedColumns = getConfigurableMeasures();
-//		allowedColumns.retainAll(AmountColumns.ACTIVITY_AMOUNTS);
+//		allowedColumns.retainAll(CustomAmounts.ACTIVITY_AMOUNTS);
 //		allowedColumns.addAll(getConfigurableColumns());
 //		
 //		removeUnsupportedColumns(spec.getColumns(), allowedColumns);

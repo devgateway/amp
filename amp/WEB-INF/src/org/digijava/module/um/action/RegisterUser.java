@@ -121,7 +121,7 @@ public class RegisterUser extends Action {
 			// set navigation language
 			userLangPreferences.setNavigationLanguage(language);
 			user.setUserLangPreferences(userLangPreferences);
-
+			
             // ===== start user extension setup =====
 			AmpUserExtension userExt=new AmpUserExtension();
 			// org type
@@ -150,13 +150,13 @@ public class RegisterUser extends Action {
  				String pti1 = "Please change your password when you first login to AMP in order to keep it private.";
 				
 				
-
-				des1 = TranslatorWorker.translateText(des1);
-				des2 = TranslatorWorker.translateText(des2);
-				des3 = TranslatorWorker.translateText(des3);
-				des4 = TranslatorWorker.translateText(des4);
-				cri1 = TranslatorWorker.translateText(cri1); 
-				pti1 = TranslatorWorker.translateText(pti1); 
+ 				String langCode = language.getCode();
+				des1 = TranslatorWorker.translateText(des1, langCode, siteDomain.getSite());
+				des2 = TranslatorWorker.translateText(des2, langCode, siteDomain.getSite());
+				des3 = TranslatorWorker.translateText(des3, langCode, siteDomain.getSite());
+				des4 = TranslatorWorker.translateText(des4, langCode, siteDomain.getSite());
+				cri1 = TranslatorWorker.translateText(cri1, langCode, siteDomain.getSite()); 
+				pti1 = TranslatorWorker.translateText(pti1, langCode, siteDomain.getSite()); 
 				
 				
 				String des = des1+ '\n'+'\n'+des2 +'\n'+ des3 +'\n'+'\n'+'\t'+'\t'+ des4;
@@ -166,13 +166,12 @@ public class RegisterUser extends Action {
 				DbUtil.registerUser(user);
                 DgUtil.saveUserLanguagePreferences(user, request, language);
 
-	            if (isMailAvtive){
-	                if(userRegisterForm.isSendEmail()){
-	        		    
-	                    String description = des + user.getEmail() + cri + userRegisterForm.getPassword()+pti;
-
-	                    DgEmailManager.sendMail(user.getEmail(), "Registration Confirmation", description);
-	                }	
+	            if (isMailAvtive) {
+	                if(userRegisterForm.isSendEmail()) {
+	                    String description = des + user.getEmail() + cri + userRegisterForm.getPassword() + pti;
+	                    String title = TranslatorWorker.translateText("Registration Confirmation", langCode, siteDomain.getSite());
+	                    DgEmailManager.sendMail(user.getEmail(), title, description);
+	                }
 	            } else {
 		            user.setEmailVerified(true);
 	            }

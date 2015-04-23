@@ -122,7 +122,7 @@
         }
         else {
 
-            if (isNaN(document.aimNewAddLocationForm.gsLat.value)) {
+            if (! checkDecimal(document.aimNewAddLocationForm.gsLat.value)) {
 
                 alert('Please enter only numerical values into Latitude Field.');
 
@@ -132,7 +132,7 @@
 
             }
 
-            if (isNaN(document.aimNewAddLocationForm.gsLong.value)) {
+            if (! checkDecimal(document.aimNewAddLocationForm.gsLong.value)) {
 
                 alert('Please enter only numerical values into Longitude Field.');
 
@@ -153,7 +153,8 @@
         <c:forEach var="value" items="${aimNewAddLocationForm.locationIndicatorValues}" varStatus="_ind">
             var value${_ind.index} = document.aimLocationIndicatorValueForm.indicator_${value.indicator.id}.value;
 
-            if (isNaN(value${_ind.index}) && isNaN(value${_ind.index}.replace(",","."))) {
+            var inputValue = value${_ind.index}.replace(",",".");
+            if (! checkDecimal(inputValue)) {
                 alert('Please enter only numerical values into ${value.indicator.name} Field.');
                 document.aimLocationIndicatorValueForm.indicator_${value.indicator.id}.focus();
                 return false;
@@ -161,6 +162,11 @@
         </c:forEach>
 
         document.aimLocationIndicatorValueForm.submit();
+    }
+
+    function checkDecimal(inputText) {
+        var decimal=  /^[-+]?[0-9]+\.[0-9]+$/;
+        return inputText.match(decimal);
     }
 
 

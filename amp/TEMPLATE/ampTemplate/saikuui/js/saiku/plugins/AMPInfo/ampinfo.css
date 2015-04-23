@@ -2,6 +2,11 @@
 	float: right;
 	width: 500px;
 }
+#amp_notification {
+	color: red;
+	font-weight:800;
+	margin-bottom: 5px;
+}
 
 .round-filter {
 	border: 1px solid #376091;

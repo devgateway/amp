@@ -33,7 +33,8 @@ var AMPSettings = Backbone.View.extend({
 				var raw_settings = this.workspace.query.get('raw_settings');
 				settings = {
 						"1": raw_settings.currencyCode,
-						"2": raw_settings.calendar.ampFiscalCalId
+						"2": raw_settings.calendar.ampFiscalCalId,
+						"3": raw_settings.unitsMultiplier
 					};
 				window.currentSettings = settings;
 

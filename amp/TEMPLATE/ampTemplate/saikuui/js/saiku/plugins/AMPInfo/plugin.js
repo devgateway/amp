@@ -30,7 +30,8 @@ var AMPInfo = Backbone.View.extend({
     },
     
     render_info: function(filters, settings) {
-    	var content = "<div id='amp_info_filters'>";
+    	var content = "<div id='amp_notification' class='amp_notification'><span class='i18n'>{0}</span></div>" 
+    		+ "<div id='amp_info_filters'>";
     	content += "<h3><span class='i18n'>Applied filters</span></h3>";
     	content += "<div id='amp_info_filters_block'>";
     	var processed_items = {};
@@ -61,8 +62,22 @@ var AMPInfo = Backbone.View.extend({
     	if(settings){
         	content += "<div id='amp_info_settings'><span class='i18n'>Currency</span>: " +  settings["1"];
         	content += "</div>";
-    	} 
+    	}
+    	content = content.replace("{0}", this.build_notification(settings));
     	return content;
+    },
+    
+    build_notification: function(settings) {
+    	var notification = "";
+    	if(settings){
+    		switch(settings["3"]) {
+        	case 0.001: notification = "Amounts in Thousands"; 
+        	break;
+        	case 0.000001 : notification ="Amounts in Million"; 
+        	break;
+        	}
+    	}
+    	return notification;
     },
     
     receive_info: function(args) {
@@ -104,7 +119,8 @@ var extract_values = function(object_value) {
  Saiku.events.bind('session:new', function(session) {
 
         function new_workspace(args) {
-            if (typeof args.workspace.stats == "undefined") {
+            if (typeof args.workspace.stats == "undefined"
+            	|| typeof args.workspace.amp_info == "undefined") {
                 args.workspace.amp_info = new AMPInfo({ workspace: args.workspace });
             }
         }

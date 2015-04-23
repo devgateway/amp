@@ -23,7 +23,6 @@ import java.util.SortedSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.dgfoundation.amp.newreports.GeneratedReport;
-import org.dgfoundation.amp.newreports.ReportSpecification;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportUtils;
 import org.digijava.kernel.ampapi.mondrian.util.MoConstants;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -424,6 +423,7 @@ public class SaikuUtils {
 	            {
 	              value = ""; //$NON-NLS-1$
 	            }
+	            value=HTMLUtil.removeHtml(value, false);
 	            if ( col == null && StringUtils.isNotBlank( value ) ) {
 	              col = value;
 	            } else if ( col != null && StringUtils.isNotBlank( value ) ) {

@@ -426,8 +426,10 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
         for (var col = 0, colLen = table[row].length; col < colLen; col++) {
 		    var colShifted = col - allData.leftOffset;
             var header = data[row][col];
-
-
+            
+            if (table[row].length == col+1)
+                isLastColumn = true;
+            	
             // If the cell is a column header and is null (top left of table)
             if (header.type === "COLUMN_HEADER" && header.value === "null" && (firstColumn == null || col < firstColumn)) {
                 rowContent += '<th class="all_null"><div>&nbsp;</div></th>';
@@ -436,9 +438,8 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
                 if (firstColumn == null) {
                     firstColumn = col;
                 }
-                if (table[row].length == col+1)
-                    isLastColumn = true;
-                else
+                
+                if (!isLastColumn)
                     nextHeader = data[row][col+1];
 
 
@@ -540,6 +541,9 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
                     col = col + colspan -1;
                 }
                 rowContent += '<th class="' + cssclass + '" ' + (colspan > 0 ? ' colspan="' + colspan + '"' : "") + tipsy + '>' + value + '</th>';
+                if (isLastColumn && totalsLists[ROWS]) {
+                    rowContent += genTotalDataCells(colShifted + 1, rowShifted, scanSums[ROWS], scanIndexes[ROWS], totalsLists);
+                }
             }
             else if (header.type === "ROW_HEADER_HEADER") {
             	var auxId = header.properties.level.replace(/\]/gm, "").replace(/\[/gm, "").replace(/\./gm, "").replace(/ /gm, "");
@@ -554,6 +558,9 @@ SaikuTableRenderer.prototype.internalRender = function(allData, options) {
                         rowGroups[group] = [];
                     }
                     rowGroups[group].push(header.properties.level);
+                }
+                if (isLastColumn && totalsLists[ROWS]) {
+                  		rowContent += genTotalHeaderCells(col - allData.leftOffset + 1, row + 1, scanSums[ROWS], scanIndexes[ROWS], totalsLists[ROWS]);
                 }
             } // If the cell is a normal data cell
             else if (header.type === "DATA_CELL") {

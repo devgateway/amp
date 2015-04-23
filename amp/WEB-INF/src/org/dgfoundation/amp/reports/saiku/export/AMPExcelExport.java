@@ -38,6 +38,7 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.HTMLUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -115,8 +116,6 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 		} else {
 			excelWorkbook = new XSSFWorkbook();
 		}
-
-		CreationHelper createHelper = excelWorkbook.getCreationHelper();
 
 		colorCodesMap = new HashMap<String, Integer>();
 		this.sheetName = options.sheetName;
@@ -351,7 +350,6 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 
 		Row sheetRow = null;
 		Cell cell = null;
-		String formatString = null;
 
 		if ((startingRow + rowsetBody.length) > maxRows) {
 			log.warn("Excel sheet is truncated, only outputting " + maxRows + " rows of "
@@ -380,7 +378,7 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 					applyCellFormatting(cell, x, y);
 				} else {
 					cell.setCellStyle(basicCS);
-					cell.setCellValue(value);
+					cell.setCellValue(HTMLUtil.removeHtml(value, false));
 				}
 			}
 		}
@@ -616,7 +614,7 @@ public class AMPExcelExport extends ExcelWorksheetBuilder {
 
 	private void fillHeaderCell(Row sheetRow, String formattedValue, int y) {
 		Cell cell = sheetRow.createCell(y);
-		cell.setCellValue(formattedValue);
+		cell.setCellValue(HTMLUtil.removeHtml(formattedValue, false));
 		cell.setCellStyle(lighterHeaderCellCS);
 	}
 

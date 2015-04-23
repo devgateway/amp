@@ -521,9 +521,7 @@ public class Reports {
 			}
 			
 		} catch (Exception e) {
-			String error = ExceptionUtils.getRootCauseMessage(e);
-			logger.error(e.getMessage());
-			e.printStackTrace();
+			logger.error(e);
 			return Response.serverError().build();
 		}
         

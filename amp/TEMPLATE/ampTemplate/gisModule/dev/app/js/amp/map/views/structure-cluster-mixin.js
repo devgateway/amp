@@ -152,6 +152,6 @@ module.exports = {
       });
 
     a.layer.openPopup(self.map);
-    app.translator.translateDOM($('.cluster-popup'));
+	app.translator.translateDOM($('.cluster-popup'));
   }
 };

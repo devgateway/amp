@@ -26,7 +26,6 @@ import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 
@@ -219,9 +218,10 @@ public class ErrorsTag extends org.apache.struts.taglib.html.ErrorsTag {
 					
 					String translatedBody = body;
 					// translate all parts and only afterwards format with additional arguments
-					for(String bodyPart : body.split("\\{[0-9]+\\}")) {
+					for (String bodyPart : body.split("\\{[0-9]+\\}")) {
 						bodyPart = bodyPart.trim();
-						translatedBody = translatedBody.replace(bodyPart, StringEscapeUtils.escapeHtml(TranslatorWorker.translateText(bodyPart)));
+                        bodyPart = StringEscapeUtils.escapeHtml(bodyPart);
+						translatedBody = translatedBody.replace(bodyPart, TranslatorWorker.translateText(bodyPart));
 					}
 					
 					// formatting with custom arguments

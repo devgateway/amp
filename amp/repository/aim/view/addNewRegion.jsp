@@ -165,7 +165,7 @@
     }
 
     function checkDecimal(inputText) {
-        var decimal=  /^[-+]?[0-9]+\.[0-9]+$/;
+        var decimal=  /^[-+]?[0-9]+(\.[0-9])?$/;
         return inputText.match(decimal);
     }
 

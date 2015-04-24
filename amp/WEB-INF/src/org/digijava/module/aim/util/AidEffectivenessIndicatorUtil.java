@@ -34,7 +34,7 @@ public class AidEffectivenessIndicatorUtil {
 
         session = PersistenceManager.getSession();
         queryBuilder.append("select ind from ").append(AmpAidEffectivenessIndicator.class.getName()).append(" ind")
-                .append(" where LOWER (ampIndicatorName) like '%"+ keyword +"%'");
+                .append(" where LOWER (ampIndicatorName) like :keyword");
 
         // show active only, otherwise return all
         if (activeOnly) {
@@ -49,6 +49,7 @@ public class AidEffectivenessIndicatorUtil {
         queryBuilder.append(" order by ampIndicatorId");
 
         query = session.createQuery(queryBuilder.toString());
+        query.setParameter("keyword", "%" + keyword + "%");
 
         if (activeOnly) {
             query.setBoolean("active", true);

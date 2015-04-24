@@ -131,7 +131,7 @@ module.exports = Backbone.View
 	    		self.MAX_NUM_FOR_ICONS = parseInt(maxLocationIcons.get('name'));
 	    	} else {
 	    		self.MAX_NUM_FOR_ICONS = 0;
-	    	}	    	
+	    	}
 	    } else {
 	    	self.MAX_NUM_FOR_ICONS = 0;
 	    }
@@ -286,6 +286,7 @@ module.exports = Backbone.View
         var projectId = feature.properties.activity.id;
         self._hilightProject(projectId);
       }
+      app.translator.translateDOM($('.cluster-popup'));
     });
 
     marker.on('popupclose', function(evt) {

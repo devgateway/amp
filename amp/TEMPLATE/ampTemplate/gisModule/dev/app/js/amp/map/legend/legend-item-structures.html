@@ -1,43 +1,45 @@
-<h3 data-i18n="amp.gis:legend-item-structures"><%= title %>
-  <select class="form-control" >
-    <option value="Primary Sector Id" <%= (obj.selectedVertical == "Primary Sector Id"? 'selected': '') %>>
-       By Sector
-    </option>
+<span class="templateBugWorkaround">
+  <h3><span data-i18n="amp.gis:legend-item-structures"><%= title %></span>
+    <select class="form-control" >
+      <option data-i18n="amp.gis:legend-by-sector" value="Primary Sector Id" <%= (obj.selectedVertical == "Primary Sector Id"? 'selected': '') %>>
+         By Sector
+      </option>
 
-    <option value="Donor Id" <%= (obj.selectedVertical == "Donor Id"? 'selected': '') %>>
-      By Donor
-    </option>
-  </select>
+      <option data-i18n="amp.gis:legend-by-donor" value="Donor Id" <%= (obj.selectedVertical == "Donor Id"? 'selected': '') %>>
+        By Donor
+      </option>
+    </select>
 
-<% if (obj.selectedVertical == "Primary Sector Id"){ %>
-  <button class="info-icon"
-    data-toggle="popover"
-    data-container="body"
-    data-placement="left"
-    data-trigger="focus"
-    data-content="If there are less than 400 points the map shows icons otherwise it will show coloured circles.">
-    <span class="glyphicon glyphicon-info-sign"></span>
-  </button>
-<% } %>
+  <% if (obj.selectedVertical == "Primary Sector Id"){ %>
+    <button class="info-icon"
+      data-toggle="popover"
+      data-container="body"
+      data-placement="left"
+      data-content="&nbsp;"
+      data-trigger="focus">
+      <span class="glyphicon glyphicon-info-sign"></span>
+    </button>
+  <% } %>
 
-</h3>
+  </h3>
 
 
-<% if (status === 'loading') { %>
-  <p><em>loading...</em></p>
+  <% if (status === 'loading') { %>
+    <p><em data-18n="amp.gis:legend-loading">loading...</em>></p>
 
-<% } else if (obj.imageBuckets) {
-  _.each(palletteElements ,function(element) {
-    if(element.code && element.name){ %>
-      <div><img src="img/map-icons/<%= obj.imageBuckets[element.code] %>" width="19px"> <%= element.name %></div>
-<% }
- }); %>
+  <% } else if (obj.imageBuckets) {
+    _.each(palletteElements ,function(element) {
+      if(element.code && element.name){ %>
+        <div><img src="img/map-icons/<%= obj.imageBuckets[element.code] %>" width="19px"> <%= element.name %></div>
+  <% }
+   }); %>
 
-<% } else {  %>
-  <% colourBuckets.each(function(bucket) { %>
-    <div>
-      <span style="background: <%= bucket.hex() %> !important" class="legend-sample color-circle"></span>
-      <%= bucket.get('value') %>
-    </div>
-  <% }) %>
-<% }%>
+  <% } else {  %>
+    <% colourBuckets.each(function(bucket) { %>
+      <div>
+        <span style="background: <%= bucket.hex() %> !important" class="legend-sample color-circle"></span>
+        <%= bucket.get('value') %>
+      </div>
+    <% }) %>
+  <% }%>
+</span>

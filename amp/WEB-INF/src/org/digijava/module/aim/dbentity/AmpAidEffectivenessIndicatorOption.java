@@ -50,12 +50,6 @@ public class AmpAidEffectivenessIndicatorOption implements Serializable, Version
 
         AmpAidEffectivenessIndicatorOption that = (AmpAidEffectivenessIndicatorOption) o;
 
-        /* The generated code does not work as expected for some reason
-        if (ampIndicatorOptionId != null ? !ampIndicatorOptionId.equals(that.ampIndicatorOptionId)
-                : that.ampIndicatorOptionId != null)
-            return false;
-        if (indicator != null ? !indicator.equals(that.indicator) : that.indicator != null) return false;
-        */
         if (ampIndicatorOptionId != null && that.ampIndicatorOptionId != null) {
             return ampIndicatorOptionId.equals(that.ampIndicatorOptionId);
         } else if (indicator != null && that.indicator != null) {

@@ -115,7 +115,7 @@ public class EditActivity extends Action {
     String computeTotals = FeaturesUtil.getGlobalSettingValue(Constants.
         GLOBALSETTINGS_COMPUTE_TOTALS);
 
-    boolean debug = (request.getParameter("debug")!=null)?true:false;
+    boolean debug = request.getParameter("debug") != null;
 
     //if("true".compareTo(request.getParameter("public"))!=0)
     //return mapping.findForward("forward");
@@ -1553,29 +1553,29 @@ public class EditActivity extends Action {
     eaForm.getFunding().fillFinancialBreakdowns(activityId, DbUtil.getAmpFunding(activityId), debug);
     AmpApplicationSettings appSettings = AmpARFilter.getEffectiveSettings();
     String validationOption = appSettings != null ? appSettings.getValidation() : null;
-    Boolean crossteamvalidation = appSettings != null && appSettings.getTeam() != null ? /*appSettings.getTeam().getCrossteamvalidation()*/
-            activity.getTeam().getCrossteamvalidation() : false;
-    
-    String actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
+    Boolean crossteamvalidation =
+            (appSettings != null && appSettings.getTeam() != null)
+                    ? appSettings.getTeam().getCrossteamvalidation()
+                    : false;
     
     //Check if cross team validation is enable
     Boolean crossteamcheck = false;
-    if (crossteamvalidation){
+    if (crossteamvalidation) {
     	crossteamcheck = true;
-    }else{
+    } else {
     	//check if the activity belongs to the team where the user is logged.
-    	if (teamMember!=null){
+    	if (teamMember != null) {
     		crossteamcheck = teamMember.getTeamId().equals(activity.getTeam().getAmpTeamId());
     	}
     }
     
-    if(teamMember != null){
+    if (teamMember != null){
     	Long ampTeamId = teamMember.getTeamId();
     	boolean teamLeadFlag    = teamMember.getTeamHead() || teamMember.isApprover();
     	boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
 
     	String globalProjectsValidation		= FeaturesUtil.getGlobalSettingValue(GlobalSettingsConstants.PROJECTS_VALIDATION);
-    	if("Management".toLowerCase().compareTo(teamMember.getTeamAccessType().toLowerCase()) == 0) {
+    	if ("Management".toLowerCase().compareTo(teamMember.getTeamAccessType().toLowerCase()) == 0) {
     		eaForm.setButtonText("none");
     	}
     	else{ //not a management team

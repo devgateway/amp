@@ -1147,3 +1147,15 @@ table.component-funding-table tr
  border: 0px;
  padding: 3px
 }
+
+#TipLayer table  {
+	border: 1px rgb(128, 128, 128) solid;
+}
+
+#TipLayer table td table:first-of-type {
+	background-color: rgb(128, 128, 128);
+}
+
+#TipLayer table td table:nth-of-type(2) {
+	background-color: #F2F2F2;
+}

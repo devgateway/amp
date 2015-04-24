@@ -186,27 +186,26 @@ module.exports = Backbone.Collection
         		 console.warn('Activity is missing desired vertical');
          	  	 return 'n/a';
         	 }
-        	 
           }
         })
         .map(function(sites, orgId) {
           var code = -1;
           if (_.has(sites[0].get('activity').get('matchesFilters'),filterVertical)) {
-        	if (sites[0].get('activity').get('matchesFilters')[filterVertical] == null) {
-        		//no value for sector/donor
-        		code = '1';
-        	}else if (sites[0].get('activity').get('matchesFilters')[filterVertical][0].get &&
-            	sites[0].get('activity').get('matchesFilters')[filterVertical].length > 1) {
-              code = '0';
-            } else {
-            	if (sites[0].get('activity').get('matchesFilters')[filterVertical][0] instanceof Object)
-                   {
-            		code = sites[0].get('activity').get('matchesFilters')[filterVertical][0].get('code');
-                   }
-            	else {
-            		code = sites[0].get('activity').get('matchesFilters')[filterVertical][0];
-            	}
-            }
+          	if (sites[0].get('activity').get('matchesFilters')[filterVertical] == null) {
+          		//no value for sector/donor
+          		code = '1';
+          	}else if (sites[0].get('activity').get('matchesFilters')[filterVertical][0].get &&
+              	sites[0].get('activity').get('matchesFilters')[filterVertical].length > 1) {
+                code = '0';
+              } else {
+              	if (sites[0].get('activity').get('matchesFilters')[filterVertical][0] instanceof Object)
+                     {
+              		code = sites[0].get('activity').get('matchesFilters')[filterVertical][0].get('code');
+                     }
+              	else {
+              		code = sites[0].get('activity').get('matchesFilters')[filterVertical][0];
+              	}
+              }
           }
 
           return {

@@ -17,28 +17,31 @@ import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.ColumnConstants;
 import org.dgfoundation.amp.ar.MeasureConstants;
 import org.dgfoundation.amp.error.AMPException;
+import org.dgfoundation.amp.newreports.FilterRule;
 import org.dgfoundation.amp.newreports.GeneratedReport;
 import org.dgfoundation.amp.newreports.ReportArea;
 import org.dgfoundation.amp.newreports.ReportAreaImpl;
 import org.dgfoundation.amp.newreports.ReportCell;
 import org.dgfoundation.amp.newreports.ReportColumn;
+import org.dgfoundation.amp.newreports.ReportElement;
 import org.dgfoundation.amp.newreports.ReportEnvironment;
 import org.dgfoundation.amp.newreports.ReportMeasure;
 import org.dgfoundation.amp.newreports.ReportOutputColumn;
 import org.dgfoundation.amp.newreports.ReportSpecificationImpl;
 import org.dgfoundation.amp.newreports.SortingInfo;
+import org.dgfoundation.amp.newreports.ReportElement.ElementType;
 import org.dgfoundation.amp.onepager.util.ActivityGatekeeper;
 import org.dgfoundation.amp.reports.ReportAreaMultiLinked;
 import org.dgfoundation.amp.reports.ReportPaginationUtils;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportFilters;
 import org.dgfoundation.amp.reports.mondrian.MondrianReportGenerator;
 import org.digijava.kernel.ampapi.endpoints.common.EPConstants;
-import org.digijava.kernel.ampapi.endpoints.common.EndpointUtils;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsConstants;
 import org.digijava.kernel.ampapi.endpoints.settings.SettingsUtils;
 import org.digijava.kernel.ampapi.endpoints.util.FilterUtils;
 import org.digijava.kernel.ampapi.endpoints.util.JsonBean;
 import org.digijava.kernel.ampapi.exception.AmpApiException;
+import org.digijava.kernel.ampapi.mondrian.util.MondrianUtils;
 import org.digijava.kernel.request.TLSUtils;
 import org.digijava.kernel.translator.TranslatorWorker;
 
@@ -120,6 +123,7 @@ public class ActivityService {
 		List<ReportArea> ll=null;
 		if(page !=null && pageSize !=null && page>=0 && pageSize>0){
 			ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
+			
 			ReportArea pagedReport = ReportPaginationUtils.getReportArea(areasDFArray, page, pageSize);
 			ll=pagedReport.getChildren();
 		}else{ 
@@ -190,72 +194,74 @@ public class ActivityService {
 	 */
 	
 	public static JSONObject getLastUpdatedActivities(List<String> extraColumns, Integer pageSize, JsonBean config) {
-		JSONObject responseJson = new JSONObject();
-		if (pageSize == null) {
-			pageSize = new Integer(10);
+	JSONObject responseJson = new JSONObject();
+	if (pageSize == null) {
+	    pageSize = new Integer(10);
+	}
+	ReportSpecificationImpl spec = new ReportSpecificationImpl("LastUpdated", ArConstants.DONOR_TYPE);
+	spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
+	spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
+	spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
+	for (String columnName : extraColumns) {
+	    if (!columnName.equals(ColumnConstants.ACTIVITY_UPDATED_ON)
+			    && !columnName.equals(ColumnConstants.DONOR_AGENCY)
+			    && !columnName.equals(ColumnConstants.PROJECT_TITLE)) {
+		spec.addColumn(new ReportColumn(columnName));
+
+	    }
+	}
+
+	spec.addMeasure(new ReportMeasure(MeasureConstants.ALWAYS_PRESENT));
+	spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
+	
+	if (config != null) {
+	    SettingsUtils.applySettings(spec, config);
+	}
+	
+	GeneratedReport report = null;
+	MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
+			ReportEnvironment.buildFor(TLSUtils.getRequest()), true);
+	try {
+	    report = generator.executeReport(spec);
+	} catch (Exception e) {
+	    System.err.println(e.getClass().getName() + ": " + e.getMessage());
+	}
+	ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
+	ReportArea pagedReport = ReportPaginationUtils.getReportArea(areasDFArray, 0, pageSize);
+	List<ReportArea> area = pagedReport.getChildren();
+	JSONArray activities = new JSONArray();
+	JSONArray headers = new JSONArray();
+	boolean headerAdded = false;
+	for (Iterator<ReportArea> iterator = area.iterator(); iterator.hasNext();) {
+	    JSONObject activityObj = new JSONObject();
+	    JSONObject header = new JSONObject();
+	    ReportArea reportArea = iterator.next();
+
+	    Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
+	    Set<ReportOutputColumn> col = row.keySet();
+	    for (ReportOutputColumn reportOutputColumn : col) {
+
+		if (!reportOutputColumn.originalColumnName.equals(MeasureConstants.ALWAYS_PRESENT)) {
+		    activityObj.put(reportOutputColumn.originalColumnName, row.get(reportOutputColumn).displayedValue);
+		    String displayName = columnHeaders.get(reportOutputColumn.originalColumnName);
+		    if (displayName == null) {
+			displayName = reportOutputColumn.originalColumnName;
+		    }
+		    displayName = TranslatorWorker.translateText(displayName);
+		    header.put(reportOutputColumn.originalColumnName, displayName);
 		}
-		ReportSpecificationImpl spec = new ReportSpecificationImpl("LastUpdated", ArConstants.DONOR_TYPE);
-		spec.addColumn(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON));
-		spec.addColumn(new ReportColumn(ColumnConstants.PROJECT_TITLE));
-		spec.addColumn(new ReportColumn(ColumnConstants.DONOR_AGENCY));
-		for (String columnName : extraColumns) {
-			if (!columnName.equals(ColumnConstants.ACTIVITY_UPDATED_ON)
-					&& !columnName.equals(ColumnConstants.DONOR_AGENCY)
-					&& !columnName.equals(ColumnConstants.PROJECT_TITLE)) {
-				spec.addColumn(new ReportColumn(columnName));
 
-			}
-		}
+	    }
 
-		spec.addMeasure(new ReportMeasure(MeasureConstants.ALWAYS_PRESENT));
-		spec.addSorter(new SortingInfo(new ReportColumn(ColumnConstants.ACTIVITY_UPDATED_ON), false));
-		if (config !=null) {
-			SettingsUtils.applySettings(spec, config);
-		}
-		GeneratedReport report = null;
-		MondrianReportGenerator generator = new MondrianReportGenerator(ReportAreaImpl.class,
-				ReportEnvironment.buildFor(TLSUtils.getRequest()), false);
-		try {
-			report = generator.executeReport(spec);
-		} catch (Exception e) {
-			System.err.println(e.getClass().getName() + ": " + e.getMessage());
-		}
-		ReportAreaMultiLinked[] areasDFArray = ReportPaginationUtils.convert(report.reportContents);
-		ReportArea pagedReport = ReportPaginationUtils.getReportArea(areasDFArray, 0, pageSize);
-		List<ReportArea> area = pagedReport.getChildren();
-		JSONArray activities = new JSONArray();
-		JSONArray headers = new JSONArray();
-		boolean headerAdded = false;
-		for (Iterator<ReportArea> iterator = area.iterator(); iterator.hasNext();) {
-			JSONObject activityObj = new JSONObject();
-			JSONObject header = new JSONObject();
-			ReportArea reportArea = iterator.next();
-
-			Map<ReportOutputColumn, ReportCell> row = reportArea.getContents();
-			Set<ReportOutputColumn> col = row.keySet();
-			for (ReportOutputColumn reportOutputColumn : col) {
-				if (!reportOutputColumn.originalColumnName.equals(MeasureConstants.ALWAYS_PRESENT)) {
-
-					activityObj.put(reportOutputColumn.originalColumnName, row.get(reportOutputColumn).displayedValue);
-					String displayName = columnHeaders.get(reportOutputColumn.originalColumnName);
-					if (displayName == null) {
-						displayName = reportOutputColumn.originalColumnName;
-					}
-					displayName = TranslatorWorker.translateText(displayName);
-					header.put(reportOutputColumn.originalColumnName, displayName);
-				}
-
-			}
-
-			if (!headerAdded) {
-				headers.add(header);
-			}
-			activities.add(activityObj);
-			headerAdded = true;
-		}
-		responseJson.put("activities", activities);
-		responseJson.put("headers", headers);
-		return responseJson;
+	    if (!headerAdded) {
+		headers.add(header);
+	    }
+	    activities.add(activityObj);
+	    headerAdded = true;
+	}
+	responseJson.put("activities", activities);
+	responseJson.put("headers", headers);
+	return responseJson;
 
 	}
 }

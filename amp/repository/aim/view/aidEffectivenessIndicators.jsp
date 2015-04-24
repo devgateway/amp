@@ -166,10 +166,12 @@
                 <!-- Other Links -->
                 <table cellpadding="0" cellspacing="0" width="120">
                     <tr>
-                        <td bgColor=#c9c9c7 class=box-title>
-                            <digi:trn key="aim:otherLinks">
-                            Other links
-                            </digi:trn>
+                        <td bgColor=#c9c9c7 class="box-title">
+                            <b style="font-size:12px; padding-left:5px;">
+                                <digi:trn key="aim:otherLinks">
+                                    Other links
+                                </digi:trn>
+                            </b>
                         </td>
                         <td background="module/aim/images/corner-r.gif" height="17" width=17>&nbsp;
 

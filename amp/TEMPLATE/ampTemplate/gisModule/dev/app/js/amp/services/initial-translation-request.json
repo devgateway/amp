@@ -53,6 +53,7 @@
 "amp.gis:subtitle-share": "Share",
 "amp.gis:subtitle-export-projectsites": "Export Project Sites",
 "amp.gis:subtitle-export-admclusters": "Export Administrative Locations",
+"amp.gis:subtitle-export-copypaste": "Copy and paste this link to share this map",
 "amp.gis:menu-title-share": "Download the data in this map or share a link to it",
 "amp.gis:title-datasources": "Data Sources",
 "amp.gis:legend-desc": "Number of activities at this",

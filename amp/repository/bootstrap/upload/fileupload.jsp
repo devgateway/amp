@@ -1,3 +1,5 @@
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+
 <%--
 	renders a ajax-file-upload-with-progress (progress only works according to about.txt)
 	params:

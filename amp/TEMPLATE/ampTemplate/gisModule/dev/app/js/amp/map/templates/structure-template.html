@@ -1,21 +1,21 @@
-<h5>
-  <a target="_blank" href="<%= activityJSON.ampUrl %>" title="<%= activityJSON["Project Title"] %>">
-    <%= activityJSON["Project Title"]%>
-  </a>
-</h5>
-<p>
-  <strong>AMP ID:</strong>
-  <%= activityJSON['matchesFilters']['AMP ID'] %><br/>
-  <strong data-i18n="amp.gis:activities-project-title">Site:</strong>
-  <%=  properties.title %><br/>
-  <strong data-i18n="amp.gis:activities-donors">Funding Organization:</strong>
-  <%= activityJSON["donorNames"] %><br/>
-  <strong data-i18n="amp.gis:activities-sectors">Sectors:</strong>
-  <%= activityJSON["sectorNames"] %><br/><br/>
-  <strong>Description:</strong>
-  <%= properties.description %><br/>
-</p>
-
-
-
-
+<span class="cluster-popup">
+  <span class="templateBugWorkaround">
+    <h5>
+      <a target="_blank" href="<%= activityJSON.ampUrl %>" title="<%= activityJSON["Project Title"] %>">
+        <%= activityJSON["Project Title"]%>
+      </a>
+    </h5>
+    <p>
+      <strong><span data-i18n="amp.gis:activities-project-id">AMP ID</span>:</strong>
+      <%= activityJSON['matchesFilters']['AMP ID'] %><br/>
+      <strong><span data-i18n="amp.gis:activities-project-title">Site</span>:</strong>
+      <%=  properties.title %><br/>
+      <strong><span data-i18n="amp.gis:activities-donors">Funding Organization</span>:</strong>
+      <%= activityJSON["donorNames"] %><br/>
+      <strong><span data-i18n="amp.gis:activities-sectors">Sectors</span>:</strong>
+      <%= activityJSON["sectorNames"] %><br/><br/>
+      <strong><span data-i18n="amp.gis:activities-project-description">Description</span>:</strong>
+      <%= properties.description %><br/>
+    </p>
+  </span>
+</span>

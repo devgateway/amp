@@ -286,6 +286,7 @@ module.exports = Backbone.View
         var projectId = feature.properties.activity.id;
         self._hilightProject(projectId);
       }
+      app.translator.translateDOM($('.cluster-popup'));
     });
 
     marker.on('popupclose', function(evt) {

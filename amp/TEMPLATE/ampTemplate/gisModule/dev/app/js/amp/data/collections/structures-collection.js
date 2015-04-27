@@ -162,12 +162,20 @@ module.exports = Backbone.Collection
       var orgSites = self.chain()
         .groupBy(function(site) {
           var activity = site.get('activity');
+          var filterVerticalText = (filterVertical === 'Primary Sector Id' ? 'Sectors' : 'Donors');
 
           // TODO: Choosing a vertical will need to be configurable from drop down..
           if (!_.isEmpty(activity.get('matchesFilters')[filterVertical])) {
             if (activity.get('matchesFilters')[filterVertical].length > 1) {
-              return 'Multiple ' +
-                (filterVertical === 'Primary Sector Id' ? 'Sectors' : 'Donors');
+
+              var localizedMultipleItem = [
+                  '<span data-i18n="amp.gis:legend-multiple-', filterVerticalText.toLowerCase(), '">',
+                  'Multiple ',
+                  filterVerticalText,
+                  '</span>'
+                ].join('');
+              return localizedMultipleItem;
+
             } else if (activity.get('matchesFilters')[filterVertical][0].get) {
               var name = activity.get('matchesFilters')[filterVertical][0].get('name');
               return name;

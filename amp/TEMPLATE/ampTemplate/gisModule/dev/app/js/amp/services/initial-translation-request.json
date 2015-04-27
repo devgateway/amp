@@ -61,6 +61,8 @@
 "amp.gis:legend-item-structures": "Project Sites",
 "amp.gis:legend-by-sector": "By Sector",
 "amp.gis:legend-by-donor": "By Donor",
+"amp.gis:legend-multiple-donor": "Multiple Donors",
+"amp.gis:legend-multiple-sectors": "Multiple Sectors",
 "amp.gis:legend-title": "Legend",
 "amp.gis:legend-no-item": "No layers loaded",
 "amp.gis:legend-no-symbols": "This space is used to explain symbols on the map when Indicator Layers or Point Layers are loaded.",

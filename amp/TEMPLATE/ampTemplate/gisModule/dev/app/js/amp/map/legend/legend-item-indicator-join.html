@@ -1,15 +1,17 @@
-<h3  data-i18n="amp.gis:legend-item-indicator-join"><%= title %></h3>
-<small><%= obj.description %></small>
+<span class="templateBugWorkaround">
+    <h3 data-i18n="amp.gis:title-<%= title %>"><%= title %></h3>
+  <small><%= obj.description %></small>
 
-<% if (status === 'loading') { %>
-  <p><em>loading...</em></p>
-<% } else { %>
-  <% colourBuckets.each(function(bucket) { %>
-    <% if(bucket.get('value')){ %>
-    <div>
-      <span style="background: <%= bucket.hex() %> !important" class="color-block legend-sample"></span>
-      <%= util.formatKMB()(bucket.get('value')[0]) %>&mdash;<%= util.formatKMB()(bucket.get('value')[1]) %> <%= unit %>
-    </div>
-    <% } %>
-  <% }) %>
-<% } %>
+  <% if (status === 'loading') { %>
+    <p><em data-18n="amp.gis:legend-loading">loading...</em>></p>
+  <% } else { %>
+    <% colourBuckets.each(function(bucket) { %>
+      <% if(bucket.get('value') && bucket.get('value')[0] ) { %>
+      <div>
+        <span style="background: <%= bucket.hex() %> !important" class="color-block legend-sample"></span>
+        <%= util.formatKMB()(bucket.get('value')[0]) %>&mdash;<%= util.formatKMB()(bucket.get('value')[1]) %> <%= unit %>
+      </div>
+      <% } %>
+    <% }) %>
+  <% } %>
+</span>

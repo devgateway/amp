@@ -8,13 +8,24 @@ module.exports = Backbone.View.extend({
 
   template: _.template(Template),
   className: 'legend-indicatorarcgisfeature',
+  initialize: function(options) {
+    this.app = options.app;
+  },
 
   render: function() {
     var drawLegend = _.bind(function() {
-      this.$el.html(this.template(_.extend({}, this.model.toJSON(), {
-        status: 'loaded',
-        colourBuckets: this.model.palette.colours
-      })));
+      /* we still need self for inside the promise */
+      var self = this;
+
+      this.app.translator.translateDOM(
+        this.template(_.extend({}, this.model.toJSON(), {
+          status: 'loaded',
+          colourBuckets: this.model.palette.colours
+        })
+      )).then(function(legend) {
+        self.$el.html(legend);
+      });
+
     }, this);
 
     drawLegend();

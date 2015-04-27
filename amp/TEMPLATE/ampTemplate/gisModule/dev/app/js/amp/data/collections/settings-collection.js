@@ -56,16 +56,16 @@ module.exports = Backbone.Collection
    * e.g. selected is: EUR,
    *      so then selectedName is: Euro
    */
-  setSettingSelectedName: function (setting) {
+  setSettingSelectedName: function(setting) {
     if (setting && setting.get('options')) {
       var settingObject = _(setting.get('options'))
             .findWhere({
               id: setting.get('selected')
             });
-      //There is not selected attribute for Measures check if settingObject is undifined  
-      if (settingObject !== undefined){
-    	  var translatedSetting = settingObject.name;
-      	setting.set('selectedName', translatedSetting );
+      //There is not selected attribute for Measures check if settingObject is undifined
+      if (settingObject !== undefined) {
+        var translatedSetting = settingObject.name;
+        setting.set('selectedName', translatedSetting);
       }
     }
   },

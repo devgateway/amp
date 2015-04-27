@@ -118,13 +118,19 @@ module.exports = Backbone.View.extend({
       // TODO: drs append  format value.
       var unit = (layerModel.get('unit') ? layerModel.get('unit') : '');
       self.app.data.settings.load().then(function() {
-        var fundingTypeString = "";
-        if ( self.app.data.settings.get('0') ) {
-          fundingTypeString = ['<strong>',self.app.data.settings.get('0').get('selectedName'),': ','</strong>'].join('');
+        var fundingTypeString = '';
+        if (self.app.data.settings.get('0')) {
+          fundingTypeString = ['<strong>',
+            self.app.data.settings.get('0').get('selectedName'),
+            ': ',
+            '</strong>'].join('');
         }
         var ampFormatter = new util.DecimalFormat(self.app.data.settings.get('number-format').get('name'));
-        layer.bindPopup('<strong>' + feature.properties.name + '</strong>' +
-                        '<br/>' + fundingTypeString + ''+ ampFormatter.format(feature.properties.value) + ' ' + unit);
+        var fundingPopupTemplate = ['<strong>', feature.properties.name, '</strong>',
+                        '<br/>', fundingTypeString, '',
+                        ampFormatter.format(feature.properties.value), ' ', unit].join('');
+
+        layer.bindPopup(fundingPopupTemplate);
       });
     }
 

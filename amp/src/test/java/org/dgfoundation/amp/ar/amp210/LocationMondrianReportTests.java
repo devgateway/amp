@@ -28,9 +28,9 @@ public class LocationMondrianReportTests extends MondrianReportsTestCase {
 	      new ReportAreaForTests()
 	          .withContents("Project Title", "SSC Project 2", "Region", "Edinet County", "Zone", "", "2013-Actual Commitments", "567 421", "2013-Actual Disbursements", "131 845", "Total Measures-Actual Commitments", "567 421", "Total Measures-Actual Disbursements", "131 845"),
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "Activity with Zones", "Region", "Anenii Noi County, Balti County", "Zone", "Bulboaca, Glodeni", "2013-Actual Commitments", "570 000", "2013-Actual Disbursements", "0", "Total Measures-Actual Commitments", "570 000", "Total Measures-Actual Disbursements", "0"),
+	          .withContents("Project Title", "Activity with Zones", "Region", "Anenii Noi County, Balti County", "Zone", "Bulboaca, Glodeni", "2013-Actual Commitments", "570 000", "2013-Actual Disbursements", "", "Total Measures-Actual Commitments", "570 000", "Total Measures-Actual Disbursements", "0"),
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "Activity With Zones and Percentages", "Region", "Anenii Noi County, Balti County", "Zone", "Dolboaca, Glodeni", "2013-Actual Commitments", "890 000", "2013-Actual Disbursements", "0", "Total Measures-Actual Commitments", "890 000", "Total Measures-Actual Disbursements", "0")  );
+	          .withContents("Project Title", "Activity With Zones and Percentages", "Region", "Anenii Noi County, Balti County", "Zone", "Dolboaca, Glodeni", "2013-Actual Commitments", "890 000", "2013-Actual Disbursements", "", "Total Measures-Actual Commitments", "890 000", "Total Measures-Actual Disbursements", "0")  );
 
 		runMondrianTestCase(
 				"testing-locations-raw-data",						

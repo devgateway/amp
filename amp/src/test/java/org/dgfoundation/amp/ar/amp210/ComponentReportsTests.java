@@ -24,7 +24,7 @@ public class ComponentReportsTests extends MondrianReportsTestCase {
 	      new ReportAreaForTests()
 	          .withContents("Project Title", "activity with components", "Component Name", "First Component", "Component Type", "Component Type 1", "Component description", "First Component Description", "2014-Actual Commitments", "", "2014-Actual Disbursements", "", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0"),
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "activity-with-unfunded-components", "Component Name", "Monkey Business Component, Unfunded C-EN", "Component Type", "Component Type 2", "Component description", "MB Comp Desc, Unfunded C Desc - EN", "2014-Actual Commitments", "0", "2014-Actual Disbursements", "0", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0"),
+	          .withContents("Project Title", "activity-with-unfunded-components", "Component Name", "Monkey Business Component, Unfunded C-EN", "Component Type", "Component Type 2", "Component description", "MB Comp Desc, Unfunded C Desc - EN", "2014-Actual Commitments", "", "2014-Actual Disbursements", "", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0"),
 	      new ReportAreaForTests()
 	          .withContents("Project Title", "activity with funded components", "Component Name", "Funded Component Title En, Funded EN", "Component Type", "some component type", "Component description", "Funded Component Description, Funded Desc en", "2014-Actual Commitments", "2 150", "2014-Actual Disbursements", "850", "Total Measures-Actual Commitments", "2 150", "Total Measures-Actual Disbursements", "850")  );
 
@@ -34,10 +34,9 @@ public class ComponentReportsTests extends MondrianReportsTestCase {
 	      new ReportAreaForTests()
 	          .withContents("Project Title", "проект с подпроектами", "Component Name", "Первый подпроект", "Component Type", "Component Type 1", "Component description", "Описание первого подпроекта", "2014-Actual Commitments", "", "2014-Actual Disbursements", "", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0"),
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "activity-with-unfunded-components", "Component Name", "Monkey Business Component, Unfunded C - RU", "Component Type", "Component Type 2", "Component description", "MB Comp Desc, Unfunded C Desc - EN", "2014-Actual Commitments", "0", "2014-Actual Disbursements", "0", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0"),
+	          .withContents("Project Title", "activity-with-unfunded-components", "Component Name", "Monkey Business Component, Unfunded C - RU", "Component Type", "Component Type 2", "Component description", "MB Comp Desc, Unfunded C Desc - EN", "2014-Actual Commitments", "", "2014-Actual Disbursements", "", "Total Measures-Actual Commitments", "0", "Total Measures-Actual Disbursements", "0"),
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "activity with funded components", "Component Name", "Funded Component Title Ru, Funded RU", "Component Type", "some component type", "Component description", "Funded Component Description, hooray ru!", "2014-Actual Commitments", "2 150", "2014-Actual Disbursements", "850", "Total Measures-Actual Commitments", "2 150", "Total Measures-Actual Disbursements", "850")  )
-;
+	          .withContents("Project Title", "activity with funded components", "Component Name", "Funded Component Title Ru, Funded RU", "Component Type", "some component type", "Component description", "Funded Component Description, hooray ru!", "2014-Actual Commitments", "2 150", "2014-Actual Disbursements", "850", "Total Measures-Actual Commitments", "2 150", "Total Measures-Actual Disbursements", "850")  );
 
 		runMondrianTestCase("AMP-18720-no-hier",
 			Arrays.asList("activity with components", "activity-with-unfunded-components", "activity with funded components", "crazy funding 1", "Eth Water"), 

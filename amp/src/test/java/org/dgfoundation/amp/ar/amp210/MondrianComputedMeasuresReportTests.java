@@ -48,7 +48,7 @@ public class MondrianComputedMeasuresReportTests extends MondrianReportsTestCase
 	      new ReportAreaForTests()
 	          .withContents("Project Title", "TAC_activity_1", "Mode of Payment", "", "2010-Undisbursed Balance", "-123 321", "2011-Undisbursed Balance", "213 231", "2013-Undisbursed Balance", "", "Total Measures-Undisbursed Balance", "89 910"),
 	      new ReportAreaForTests()
-	          .withContents("Project Title", "Test MTEF directed", "Mode of Payment", "Cash", "2010-Undisbursed Balance", "-143 777", "2011-Undisbursed Balance", "0", "2013-Undisbursed Balance", "0", "Total Measures-Undisbursed Balance", "-143 777"),
+	          .withContents("Project Title", "Test MTEF directed", "Mode of Payment", "Cash", "2010-Undisbursed Balance", "-143 777", "2011-Undisbursed Balance", "", "2013-Undisbursed Balance", "", "Total Measures-Undisbursed Balance", "-143 777"),
 	      new ReportAreaForTests()
 	          .withContents("Project Title", "Project with documents", "Mode of Payment", "Cash", "2010-Undisbursed Balance", "", "2011-Undisbursed Balance", "", "2013-Undisbursed Balance", "", "Total Measures-Undisbursed Balance", "0"),
 	      new ReportAreaForTests()

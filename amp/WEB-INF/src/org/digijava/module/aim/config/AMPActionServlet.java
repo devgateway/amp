@@ -53,7 +53,6 @@ public class AMPActionServlet
   protected void process(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
     request.setCharacterEncoding("UTF-8");
 
-//	log.error(String.format("URL IS: %s?%s", request.getRequestURI(), request.getQueryString()));
     HttpSession session = request.getSession();
     String sessId = session.getId();
     String url = request.getRequestURL().toString();

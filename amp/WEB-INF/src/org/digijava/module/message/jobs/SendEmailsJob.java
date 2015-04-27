@@ -23,32 +23,36 @@ public class SendEmailsJob extends ConnectionCleaningJob implements StatefulJob 
 	
 	@Override 
 	public void executeInternal(JobExecutionContext context) throws JobExecutionException{		
-        Session session = PersistenceManager.getSession();
-		try {
-            List<Long> receiversIds = AmpMessageUtil.loadReceiversIdsToGetEmails(session);
-            if (receiversIds != null && receiversIds.size() > 0) {
-                AmpEmail email = null;
-                for (Long rec : receiversIds) {
-                    InternetAddress[] ito;
-                    AmpEmailReceiver receiver = AmpMessageUtil.getAmpEmailReceiverUsingSession(rec, session);
-                    ito = new InternetAddress[]{new InternetAddress(receiver.getAddress())};
-                    //email=AmpMessageUtil.getAmpEmail(rec.getEmail().getId()) ;
-                    email = receiver.getEmail();
-                    boolean asHtml = true;
-                    boolean log = true;
-                    boolean rtl = false;
-                    logger.info("Enter DG Email manager for email");
-                    DgEmailManager.sendMail(ito, email.getSender(), null, null, email.getSubject(), email.getBody(), "UTF8", asHtml, log, rtl);
-                    logger.info("Finished sending emails");
-                    //update receiver status state to sent
-                    receiver.setStatus(MessageConstants.SENT_STATUS);
-                    session.update(receiver);
-                }
-            }
-            logger.info("Finished changing messages status in database");
-        } catch (Exception e1) {
-            logger.error("error changing message status in the database", e1);
-        }
+		List<Long> receiversIds = AmpMessageUtil.loadReceiversIdsToGetEmails();
+		for (Long rec : receiversIds) {
+			try {
+				sendEmailToReceiver(rec);
+			}
+			catch (Exception e) {
+				logger.error("cound not send an email to receiver " + rec, e);
+			}
+		}
+		logger.info("Finished changing messages status in database");
     }
 
+	/**
+	 * sends the email configured by the AmpEmailReceiver instance with an id of receiverId
+	 * @param receiverId
+	 * @throws Exception
+	 */
+	protected void sendEmailToReceiver(long receiverId) throws Exception {
+        Session session = PersistenceManager.getSession();
+        AmpEmailReceiver receiver = AmpMessageUtil.getAmpEmailReceiver(receiverId);
+        InternetAddress[] ito = new InternetAddress[] { new InternetAddress(receiver.getAddress())};
+        AmpEmail email = receiver.getEmail();
+        boolean asHtml = true;
+        boolean log = true;
+        boolean rtl = false;
+        logger.info("Enter DG Email manager for email");
+        DgEmailManager.sendMail(ito, email.getSender(), null, null, email.getSubject(), email.getBody(), "UTF8", asHtml, log, rtl);
+        logger.info("Email sent");
+        //update receiver status state to sent
+        receiver.setStatus(MessageConstants.SENT_STATUS);
+        session.update(receiver);
+	}
 }

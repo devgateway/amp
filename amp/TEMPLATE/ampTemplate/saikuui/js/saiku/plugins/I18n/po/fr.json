@@ -76,5 +76,7 @@
    "Spark Line":"Mini Ligne",
    "Export":"Export",
    "Stacked Bar":"Barre empilées",
-   "Bar 100%":"Barre 100%"
+   "Bar 100%":"Barre 100%",
+   "Amounts in Thousands":"Montants en Milliers",
+   "Amounts in Millions":"Montants en Millions"
 }

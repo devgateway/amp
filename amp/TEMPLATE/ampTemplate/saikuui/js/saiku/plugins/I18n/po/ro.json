@@ -111,5 +111,5 @@
    "You need to include at least one level on rows for a valid query.":"You need to include at least one level on rows for a valid query.",
    "You need to include at least one measure or a level on columns for a valid query.":"You need to include at least one measure or a level on columns for a valid query.",
    "Amounts in Thousands":"Valori în Mii",
-   "Amounts in Million":"Valori în Milioane"
+   "Amounts in Millions":"Valori în Milioane"
 }

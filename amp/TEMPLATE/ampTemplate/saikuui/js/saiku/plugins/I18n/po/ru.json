@@ -136,5 +136,5 @@
 	"You need to include at least one level on rows for a valid query.":"Вы должны включить хотя бы одно измерение по строкам для корректного запроса.",
 	"You need to include at least one measure or a level on columns for a valid query.":"Вы должны включить хотя бы одну меру или измерение по колонкам для корректного запроса.",
 	"Amounts in Thousands":"Суммы в Тысячах",
-	"Amounts in Million":"Суммы в Миллионах"
+	"Amounts in Millions":"Суммы в Миллионах"
 }

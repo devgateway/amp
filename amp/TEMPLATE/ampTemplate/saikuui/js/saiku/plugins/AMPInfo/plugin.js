@@ -71,9 +71,9 @@ var AMPInfo = Backbone.View.extend({
     	var notification = "";
     	if(settings){
     		switch(settings["3"]) {
-        	case 0.001: notification = "Amounts in Thousands"; 
+        	case 0.001: notification = "Amounts in Thousands";
         	break;
-        	case 0.000001 : notification ="Amounts in Million"; 
+        	case 0.000001 : notification = "Amounts in Millions";
         	break;
         	}
     	}

@@ -21,7 +21,12 @@ module.exports = Backbone.View.extend({
   },
 
   render: function() {
-    this.$el.html(this.template());
+    var self = this;
+    this.app.translator.translateDOM(this.template()).then(
+        function(sharelinktemplate) {
+          self.$el.html(sharelinktemplate);
+        }
+      );
 
     // set up and render the zeroclipboard copy thing
     var button = this.$('[data-toggle="tooltip"]');

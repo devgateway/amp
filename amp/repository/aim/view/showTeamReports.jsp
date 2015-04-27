@@ -56,6 +56,9 @@
 	<c:set var="generator">
 		<digi:trn key="aim:tabGenerator">Tab Generator</digi:trn>
 	</c:set>
+	<c:set var="tabActivationLimit">
+		<digi:trn>Please deactivate other tabs first!</digi:trn>
+	</c:set>
 	
 	<jsp:include page="tabManager/tabManager.jsp" />
 </c:if>
@@ -144,7 +147,7 @@ function activate(id){
 				$(".savePosition"+id).show();	
 			}
 			else{
-				alert("Please deactivate other tabs first!");
+				alert("${tabActivationLimit}");
 			}
 		   },
 	   	   error : function(XMLHttpRequest, textStatus, errorThrown){alert('Error, cannot get tab list.');} 

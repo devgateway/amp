@@ -1,3 +1,4 @@
+/* global app */
 var $ = require('jquery');
 var fs = require('fs');
 var _ = require('underscore');
@@ -76,8 +77,7 @@ module.exports = {
         var activity = markers[0].feature.properties.activity;
         if (activity.attributes.matchesFilters[filterVertical][0] instanceof Object) {
           sectorCode = activity.attributes.matchesFilters[filterVertical][0].get('code');
-        }
-        else {
+        } else {
           sectorCode = activity.attributes.matchesFilters[filterVertical][0];
         }
       } else if (!markers[0].feature) {

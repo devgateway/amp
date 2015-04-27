@@ -33,13 +33,12 @@ module.exports = Backbone.View.extend({
   },
 
   clickBasemap: function(e) {
-	var newId;
-	if (e.currentTarget.dataset === undefined) {
-		newId = e.currentTarget.getAttribute('data-id');
-	}
-	else {
-		newId = e.currentTarget.dataset.id;
-	}
+    var newId;
+    if (e.currentTarget.dataset === undefined) {
+      newId = e.currentTarget.getAttribute('data-id');
+    } else {
+      newId = e.currentTarget.dataset.id;
+    }
     this.collection.selectBasemap(newId);
   },
 

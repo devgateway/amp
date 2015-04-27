@@ -1,3 +1,4 @@
+/* global app */
 var $ = require('jquery');
 var fs = require('fs');
 var _ = require('underscore');
@@ -116,26 +117,31 @@ module.exports = Backbone.View
         marker,
         latlng = L.latLng(feature.geometry.coordinates[1],
                           feature.geometry.coordinates[0]);
-    
+
     // Calculate only one time and not for all points (we can have thousands).
     if (self.MAX_NUM_FOR_ICONS === -1) {
-    	//TODO: Move this code to a config class.
-	    var useIconsForSectors = _.find(app.data.settings.models, function(item) {
-	  	  	return (item.id === 'use-icons-for-sectors-in-project-list');
-	    });
-	    var maxLocationIcons = _.find(app.data.settings.models, function(item) {
-	    	return (item.id === 'max-locations-icons');
-		});
-	    if (useIconsForSectors !== undefined && useIconsForSectors.get('name') === 'true') {
-	    	if (maxLocationIcons !== undefined && maxLocationIcons.get('name') !== "" && maxLocationIcons.get('name') !== "0") {
-	    		self.MAX_NUM_FOR_ICONS = parseInt(maxLocationIcons.get('name'));
-	    	} else {
-	    		self.MAX_NUM_FOR_ICONS = 0;
-	    	}	    	
-	    } else {
-	    	self.MAX_NUM_FOR_ICONS = 0;
-	    }
-	    console.log('MAX_NUM_FOR_ICONS: ' + self.MAX_NUM_FOR_ICONS);
+      //TODO: Move this code to a config class.
+      //IT IS REPEATED IN map/views/legend-item-structures.js
+      var useIconsForSectors = _.find(app.data.settings.models, function(item) {
+        return (item.id === 'use-icons-for-sectors-in-project-list');
+      });
+
+      /* maxIcons is short for maxLocationIcons */
+      var maxIcons = _.find(app.data.settings.models, function(item) {
+        return (item.id === 'max-locations-icons');
+      });
+
+      if (useIconsForSectors !== undefined && useIconsForSectors.get('name') === 'true') {
+        if (maxIcons && maxIcons.get('name') !== '' && maxIcons.get('name') !== '0') {
+          self.MAX_NUM_FOR_ICONS = parseInt(maxIcons.get('name'), 10);
+        } else {
+          self.MAX_NUM_FOR_ICONS = 0;
+        }
+      } else {
+        self.MAX_NUM_FOR_ICONS = 0;
+      }
+
+      console.log('MAX_NUM_FOR_ICONS: ' + self.MAX_NUM_FOR_ICONS);
     }
     if (self.rawData.features.length < self.MAX_NUM_FOR_ICONS &&
       self.structureMenuModel.get('filterVertical') === 'Primary Sector Id') {
@@ -174,20 +180,19 @@ module.exports = Backbone.View
     var filterVertical = this.structureMenuModel.get('filterVertical');
 //feature.properties.activity.attributes.matchesFilters[filterVertical]
     if (feature.properties.activity.attributes &&
-      	_.has(feature.properties.activity.attributes.matchesFilters, filterVertical)) {
+        _.has(feature.properties.activity.attributes.matchesFilters, filterVertical)) {
       if (feature.properties.activity.attributes.matchesFilters[filterVertical] == null) {
-    	  //It has no sector/donor
-    	  sectorCode = '1';
+        //It has no sector/donor
+        sectorCode = '1';
       } else if (feature.properties.activity.attributes.matchesFilters[filterVertical].length > 1) {
-       sectorCode = '0';
-       console.warn('TODO: need custom vairous sectors icon...different from  multi-sector');
+        sectorCode = '0';
+        console.warn('TODO: need custom vairous sectors icon...different from  multi-sector');
       } else {
-       if (feature.properties.activity.attributes.matchesFilters[filterVertical][0] instanceof Object) {
-    	  sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
-       }
-       else {
-    	   sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0];
-       }
+        if (feature.properties.activity.attributes.matchesFilters[filterVertical][0] instanceof Object) {
+          sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0].get('code');
+        } else {
+          sectorCode = feature.properties.activity.attributes.matchesFilters[filterVertical][0];
+        }
       }
     }
     var pointIcon = L.icon({

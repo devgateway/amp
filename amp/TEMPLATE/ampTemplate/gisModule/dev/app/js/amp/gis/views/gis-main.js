@@ -7,8 +7,6 @@ var MapView = require('../../map/views/main-view');
 var SidebarView = require('../../sidebar/sidebar-view');
 var ModuleTemplate = fs.readFileSync(__dirname + '/../templates/module-template.html', 'utf8');
 
-var UserModel = require('../../data/models/amp-user-model.js');
-
 module.exports = Backbone.View.extend({
 
   data: null,  // data attaches here
@@ -26,7 +24,7 @@ module.exports = Backbone.View.extend({
     this.mapView = new MapView({app: this});
     /* this.dataQualityView = new DataQualityView({app: this}); */
     this.sidebarView = new SidebarView({app: this});
-    
+
   },
 
   // Render entire geocoding view.
@@ -36,16 +34,16 @@ module.exports = Backbone.View.extend({
     this.mapView.setElement(this.$('#map-container')).render();
     /* this.dataQualityView.setElement(this.$('#quality-indicator')).render();*/
     this.sidebarView.setElement(this.$('#sidebar-tools')).render();
-    
+
     //auto-render the layout
-	var headerWidget = new boilerplate.layout(
+    var headerWidget = new boilerplate.layout(
       {
         caller: 'GIS',
         showDGFooter: false
-	  });
-	$.when(headerWidget.menu.menuRendered).then(function() {
-		$('.dropdown-toggle').dropdown();
-	});
+    });
+    $.when(headerWidget.menu.menuRendered).then(function() {
+      $('.dropdown-toggle').dropdown();
+    });
 
     // update translations
     this.translator.translateDOM(this.el);

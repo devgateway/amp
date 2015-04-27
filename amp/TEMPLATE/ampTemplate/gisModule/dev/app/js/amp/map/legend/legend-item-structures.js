@@ -1,3 +1,4 @@
+/* global app */
 var fs = require('fs');
 var _ = require('underscore');
 var Backbone = require('backbone');
@@ -25,6 +26,7 @@ module.exports = Backbone.View.extend({
       };
 
       //TODO: Move this code to a config class.
+      //IT IS REPEATED IN map/views/structures-view.js
       var MAX_NUM_FOR_ICONS = 0;
       var useIconsForSectors = _.find(app.data.settings.models, function(item) {
         return (item.id === 'use-icons-for-sectors-in-project-list');
@@ -33,13 +35,13 @@ module.exports = Backbone.View.extend({
         return (item.id === 'max-locations-icons');
       });
       if (useIconsForSectors !== undefined && useIconsForSectors.get('name') === 'true') {
-        if (maxLocationIcons !== undefined && maxLocationIcons.get('name') !== "" && maxLocationIcons.get('name') !== "0") {
-          MAX_NUM_FOR_ICONS = parseInt(maxLocationIcons.get('name'));
+        if (maxLocationIcons !== undefined && maxLocationIcons.get('name') !== '' && maxLocationIcons.get('name') !== '0') {
+          MAX_NUM_FOR_ICONS = parseInt(maxLocationIcons.get('name'), 10);
+        } else {
+          MAX_NUM_FOR_ICONS = 0;
+        }
       } else {
         MAX_NUM_FOR_ICONS = 0;
-      }
-    } else {
-      MAX_NUM_FOR_ICONS = 0;
       }
 
       // render icons if available

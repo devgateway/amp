@@ -1,3 +1,4 @@
+/* global app */
 var fs = require('fs');
 var _ = require('underscore');
 var $ = require('jquery');
@@ -104,7 +105,7 @@ module.exports = Backbone.View.extend({
           value: d3.format(',')(Math.round(raw.value)),
           currency: model.currency,
           percent: d3.format('%')(raw.value / model.total),
-          totalLegend: app.translator.translateSync("amp.gis.cluster.tooltip-of-total","of total")
+          totalLegend: app.translator.translateSync('amp.gis.cluster.tooltip-of-total', 'of total')
         });
       });
 

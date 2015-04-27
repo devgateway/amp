@@ -818,18 +818,9 @@ public class AmpMessageUtil {
 		return receivers;
 	}
 	
-	public static List<Long> loadReceiversIdsToGetEmails(Session session){
-		List<Long> ids=null;
-		String queryString =null;
-		Query query=null;
-		try {			
-			queryString="select rec.id from " + AmpEmailReceiver.class.getName() +" rec where rec.status not like '"+MessageConstants.SENT_STATUS+"'";
-			query=session.createQuery(queryString);
-			ids=query.list();
-		} catch (Exception e) {
-			logger.error("couldn't load Receivers" + e.getMessage());	
-		}
-		return ids;
+	public static List<Long> loadReceiversIdsToGetEmails() {
+		String queryString = "select rec.id from " + AmpEmailReceiver.class.getName() + " rec where rec.status not like '" + MessageConstants.SENT_STATUS + "'";
+		return PersistenceManager.getSession().createQuery(queryString).list();
 	}
 	
 	public static AmpEmail getAmpEmail(Long id){
@@ -843,25 +834,9 @@ public class AmpMessageUtil {
 		}
 		return email;
 	}
-	
-	public static AmpEmailReceiver getAmpEmailReceiver(Long id){
-		AmpEmailReceiver email=null;
-		Session session=null;
-		try {
-			session	= PersistenceManager.getRequestDBSession();
-			email	= getAmpEmailReceiverUsingSession(id, session); 
-		} catch (Exception e) {
-			logger.error("couldn't load Email Receiver" + e.getMessage());	
-		}
-		return email;
-	}
-	public static AmpEmailReceiver getAmpEmailReceiverUsingSession(Long id, Session session){
-		AmpEmailReceiver email=null;
-		try {
-			email=(AmpEmailReceiver)session.load(AmpEmailReceiver.class, id);
-		} catch (Exception e) {
-			logger.error("couldn't load Email Receiver" + e.getMessage());	
-		}
+		
+	public static AmpEmailReceiver getAmpEmailReceiver(long id) {
+		AmpEmailReceiver email = (AmpEmailReceiver) PersistenceManager.getSession().load(AmpEmailReceiver.class, id);
 		return email;
 	}
 	

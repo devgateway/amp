@@ -64,7 +64,7 @@ module.exports = Backbone.Model.extend({
 
         //AMP ID is a string on the DB, we shouldn't parse it's value
         if (k !== 'AMP ID') { // TODO: <-- should change to a list of allowed ones: sector, donor, etc.
-          // 999999999 means empy, we will change API soon...hopefully.. :(
+          // TODO: 999999999 means empy, we will change API soon...hopefully.. :(
           if (data.matchesFilters[k] === '999999999') {
             data.matchesFilters[k] = null;
           } else {
@@ -73,9 +73,8 @@ module.exports = Backbone.Model.extend({
               return parseInt(v, 10);
             });
           }
-        }
-        else {
-        	return v;
+        } else {
+          return v;
         }
       });
     }

@@ -393,28 +393,49 @@ public class GlobalSettings extends Action {
 		}
 		return true;
 	}
-	
-	public static int numOfDaysInMonth(int month) {
+
+
+    /**
+     * This method is potentially dangerous since does not consider leap years
+     * Do not use java.util.Calendar since it will be much slower
+     * @param month number of month starting from 1
+     * @return
+     */
+    public static int numOfDaysInMonth(int month) {
+        return numOfDaysInMonth(month, -1);
+    }
+
+    /**
+     * Do not use java.util.Calendar since it will be much slower
+     * @param month number of month starting from 1
+     * @param year the year (leap year matters)
+     * @return
+     */
+	public static int numOfDaysInMonth(int month, int year) {
 		if (month > 0 && month < 13) {
 			int maxDays	= 0;
 			switch (month) {
-				case 1: ;
-				case 3: ;
-				case 5: ;
-				case 7: ;
-				case 8: ;
-				case 10: ;
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+				case 8:
+				case 10:
 				case 12:
 					maxDays	= 31;
 					break;
-				case 4: ;
-				case 6: ;
-				case 9: ;
+				case 4:
+				case 6:
+				case 9:
 				case 11: 
 					maxDays = 30;
 					break;
-				case 2: 
-					maxDays = 28;
+				case 2:
+                    if (year > 0) {
+                        maxDays = year % 4 == 0 ? 29 : 28;
+                    } else {
+                        maxDays = 28;
+                    }
 					break;
 			}
 			return maxDays;

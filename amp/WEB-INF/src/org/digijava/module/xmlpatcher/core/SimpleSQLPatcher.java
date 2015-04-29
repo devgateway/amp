@@ -301,6 +301,16 @@ public class SimpleSQLPatcher {
 					XMLPatchesWrongPaths.SQL_PATCH
 					));
 
+			//AMP 2.10 patches written after AMP 2.11 has been branched off go to the 010xxxx patchnames
+			addPatch(new SimpleSQLPatch("010001", // adds measures which are not present, for some reason, in the amp_measures table
+					"INSERT INTO amp_measures(measureid, measurename, aliasname, type, expression, description) " +  
+					" SELECT nextval('amp_measures_seq'), 'Percentage of Total Commitments', 'Percentage of Total Commitments', 'A', 'percentageOfTotalCommitments', 'Actual commitments for the project / Total actual commitments * 100' " + 
+					" WHERE (select count(*) FROM amp_measures where measurename='Percentage of Total Commitments') = 0",
+
+					"INSERT INTO amp_measures(measureid, measurename, aliasname, type, expression, description) " +  
+					" SELECT nextval('amp_measures_seq'), 'Percentage of Total Disbursements', 'Percentage of Total Disbursements', 'A', 'percentageOfTotalDisbursements', 'Actual disbursements for the project / Total actual disbursements * 100' " + 
+					" WHERE (select count(*) FROM amp_measures where measurename='Percentage of Total Disbursements') = 0"));
+
             addPatch(new SimpleSQLPatch("011",
 
                     //Has Mondrian reference
